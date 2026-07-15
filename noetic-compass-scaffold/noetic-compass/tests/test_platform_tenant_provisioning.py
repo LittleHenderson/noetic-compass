@@ -221,6 +221,28 @@ def test_account_config_rejects_short_platform_provisioning_secret(
     monkeypatch.setattr(settings, "debug", True)
     monkeypatch.setattr(settings, "jwt_secret", "j" * 32)
     monkeypatch.setattr(settings, "account_credential_pepper", "p" * 32)
+    monkeypatch.setattr(
+        settings,
+        "human_attestation_pseudonym_active_key_id",
+        "hatk_0123456789abcdef0123456789abcdef",
+    )
+    monkeypatch.setattr(
+        settings,
+        "human_attestation_pseudonym_keyring_json",
+        '{"hatk_0123456789abcdef0123456789abcdef":'
+        '"base64url:5EfvyXp5BYNrpodyw-DoiFemHziedgI06tZHVjtmvow"}',
+    )
+    monkeypatch.setattr(
+        settings,
+        "customer_production_pseudonym_active_key_id",
+        "cpk_89abcdef0123456789abcdef01234567",
+    )
+    monkeypatch.setattr(
+        settings,
+        "customer_production_pseudonym_keyring_json",
+        '{"cpk_89abcdef0123456789abcdef01234567":'
+        '"base64url:ba72v6mRNqQ2kA0GZljcsAF4HpatDbaOpVkvpGl_QmA"}',
+    )
     monkeypatch.setattr(settings, "platform_tenant_provisioning_secret", "short")
     monkeypatch.setattr(settings, "accounts_allow_single_host_sqlite", True)
     monkeypatch.setattr(settings, "state_ledger_path", str(tmp_path / "state.db"))

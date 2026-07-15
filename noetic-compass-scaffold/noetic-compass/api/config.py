@@ -17,6 +17,8 @@ _BILLING_REFERENCE_CREDENTIAL_FIELDS = (
     "jwt_secret",
     "auth_mint_secret",
     "account_credential_pepper",
+    "human_attestation_pseudonym_keyring_json",
+    "customer_production_pseudonym_keyring_json",
     "account_bootstrap_secret",
     "platform_tenant_provisioning_secret",
     "evidence_share_token_pepper",
@@ -262,6 +264,41 @@ class Settings(BaseSettings):
         default="primary",
         validation_alias=AliasChoices(
             "NC_ACCOUNTS_BOOTSTRAP_TENANT_ID", "ACCOUNTS_BOOTSTRAP_TENANT_ID"
+        ),
+    )
+    # Dedicated rotation-aware keys for public human-attestation pseudonyms.
+    # The JSON object maps non-secret key IDs to server-only keys. New records
+    # use the active ID; every key referenced by an existing immutable record
+    # must remain present until that record is permanently retired.
+    human_attestation_pseudonym_keyring_json: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_HUMAN_ATTESTATION_PSEUDONYM_KEYRING_JSON",
+            "HUMAN_ATTESTATION_PSEUDONYM_KEYRING_JSON",
+        ),
+    )
+    human_attestation_pseudonym_active_key_id: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_HUMAN_ATTESTATION_PSEUDONYM_ACTIVE_KEY_ID",
+            "HUMAN_ATTESTATION_PSEUDONYM_ACTIVE_KEY_ID",
+        ),
+    )
+    # Dedicated rotation-aware keys for identifiers in public customer-
+    # production authorities and their secret-safe source receipts.  This is a
+    # separate failure/rotation domain from human-attestation pseudonyms.
+    customer_production_pseudonym_keyring_json: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_CUSTOMER_PRODUCTION_PSEUDONYM_KEYRING_JSON",
+            "CUSTOMER_PRODUCTION_PSEUDONYM_KEYRING_JSON",
+        ),
+    )
+    customer_production_pseudonym_active_key_id: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_CUSTOMER_PRODUCTION_PSEUDONYM_ACTIVE_KEY_ID",
+            "CUSTOMER_PRODUCTION_PSEUDONYM_ACTIVE_KEY_ID",
         ),
     )
     # SQLite account storage is single-host and requires an explicit operator acknowledgement
@@ -963,6 +1000,150 @@ class Settings(BaseSettings):
                 "Fleet service auth requires NC_FLEET_SERVICE_CREDENTIAL_PEPPER "
                 "with at least 32 bytes."
             )
+
+        keyring_configured = bool(
+            str(self.human_attestation_pseudonym_keyring_json or "").strip()
+        )
+        active_key_configured = bool(
+            str(self.human_attestation_pseudonym_active_key_id or "").strip()
+        )
+        if keyring_configured != active_key_configured:
+            raise RuntimeError(
+                "NC_HUMAN_ATTESTATION_PSEUDONYM_KEYRING_JSON and "
+                "NC_HUMAN_ATTESTATION_PSEUDONYM_ACTIVE_KEY_ID must be "
+                "configured together."
+            )
+        if self.accounts_enabled and not keyring_configured:
+            raise RuntimeError(
+                "Account mode requires both "
+                "NC_HUMAN_ATTESTATION_PSEUDONYM_KEYRING_JSON and "
+                "NC_HUMAN_ATTESTATION_PSEUDONYM_ACTIVE_KEY_ID."
+            )
+        attestation_pseudonym_keys: dict[str, bytes] = {}
+        if keyring_configured:
+            from api.services.human_attestations import (
+                human_attestation_pseudonym_key_matches_secret,
+                parse_human_attestation_pseudonym_keyring,
+            )
+
+            try:
+                attestation_pseudonym_keys = dict(
+                    parse_human_attestation_pseudonym_keyring(
+                        self.human_attestation_pseudonym_keyring_json,
+                        active_key_id=(
+                            self.human_attestation_pseudonym_active_key_id
+                        ),
+                    )
+                )
+            except ValueError as exc:
+                raise RuntimeError(str(exc)) from exc
+            other_attestation_authorities: set[str] = {
+                self.billing_provider_reference_hash_key
+            }
+            for field_name in _BILLING_REFERENCE_CREDENTIAL_FIELDS:
+                if field_name == "human_attestation_pseudonym_keyring_json":
+                    continue
+                value = str(getattr(self, field_name, "") or "")
+                if field_name == "atlas_live_invite_codes":
+                    other_attestation_authorities.update(
+                        code.strip() for code in value.split(",") if code.strip()
+                    )
+                elif value:
+                    other_attestation_authorities.add(value)
+            database_url_for_key_isolation = str(self.database_url or "").strip()
+            if database_url_for_key_isolation:
+                try:
+                    database_password = urlsplit(
+                        database_url_for_key_isolation
+                    ).password
+                except ValueError:
+                    database_password = None
+                if database_password:
+                    other_attestation_authorities.add(unquote(database_password))
+            if any(
+                human_attestation_pseudonym_key_matches_secret(key, authority)
+                for key in attestation_pseudonym_keys.values()
+                for authority in other_attestation_authorities
+            ):
+                raise RuntimeError(
+                    "Human attestation pseudonym keys must be dedicated; do "
+                    "not reuse another server authority or credential secret."
+                )
+
+        customer_keyring_configured = bool(
+            str(self.customer_production_pseudonym_keyring_json or "").strip()
+        )
+        customer_active_key_configured = bool(
+            str(self.customer_production_pseudonym_active_key_id or "").strip()
+        )
+        if customer_keyring_configured != customer_active_key_configured:
+            raise RuntimeError(
+                "NC_CUSTOMER_PRODUCTION_PSEUDONYM_KEYRING_JSON and "
+                "NC_CUSTOMER_PRODUCTION_PSEUDONYM_ACTIVE_KEY_ID must be "
+                "configured together."
+            )
+        if self.accounts_enabled and not customer_keyring_configured:
+            raise RuntimeError(
+                "Account mode requires both "
+                "NC_CUSTOMER_PRODUCTION_PSEUDONYM_KEYRING_JSON and "
+                "NC_CUSTOMER_PRODUCTION_PSEUDONYM_ACTIVE_KEY_ID."
+            )
+        if customer_keyring_configured:
+            from api.services.customer_production_pseudonyms import (
+                customer_production_pseudonym_key_matches_secret,
+                parse_customer_production_pseudonym_keyring,
+            )
+
+            try:
+                customer_pseudonym_keys = dict(
+                    parse_customer_production_pseudonym_keyring(
+                        self.customer_production_pseudonym_keyring_json,
+                        active_key_id=(
+                            self.customer_production_pseudonym_active_key_id
+                        ),
+                    )
+                )
+            except ValueError as exc:
+                raise RuntimeError(str(exc)) from exc
+            other_customer_authorities: set[str] = {
+                self.billing_provider_reference_hash_key
+            }
+            for field_name in _BILLING_REFERENCE_CREDENTIAL_FIELDS:
+                if field_name == "customer_production_pseudonym_keyring_json":
+                    continue
+                value = str(getattr(self, field_name, "") or "")
+                if field_name == "atlas_live_invite_codes":
+                    other_customer_authorities.update(
+                        code.strip() for code in value.split(",") if code.strip()
+                    )
+                elif value:
+                    other_customer_authorities.add(value)
+            database_url_for_customer_key_isolation = str(
+                self.database_url or ""
+            ).strip()
+            if database_url_for_customer_key_isolation:
+                try:
+                    database_password = urlsplit(
+                        database_url_for_customer_key_isolation
+                    ).password
+                except ValueError:
+                    database_password = None
+                if database_password:
+                    other_customer_authorities.add(unquote(database_password))
+            if any(
+                customer_production_pseudonym_key_matches_secret(key, authority)
+                for key in customer_pseudonym_keys.values()
+                for authority in other_customer_authorities
+            ) or any(
+                customer_key == attestation_key
+                for customer_key in customer_pseudonym_keys.values()
+                for attestation_key in attestation_pseudonym_keys.values()
+            ):
+                raise RuntimeError(
+                    "Customer-production pseudonym keys must be dedicated; do "
+                    "not reuse human-attestation keys or another server "
+                    "authority or credential secret."
+                )
         if not self.accounts_enabled:
             return
 

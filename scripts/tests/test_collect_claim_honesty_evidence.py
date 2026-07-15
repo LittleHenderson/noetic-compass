@@ -448,7 +448,35 @@ class DraftReportContractTests(unittest.TestCase):
         self.assertTrue(draft["draft_only"])
         self.assertFalse(draft["authoritative"])
         self.assertFalse(draft["eligible_for_acceptance"])
-        self.assertEqual(len(draft["scanned_surfaces"]), 6)
+        subject = report["machine_subject"]
+        self.assertEqual(
+            subject["schema_version"], collector.MACHINE_SUBJECT_SCHEMA_VERSION
+        )
+        self.assertEqual(len(subject["scanned_surfaces"]), 6)
+        maximum = subject["scanner"]["maximum_response_bytes"]
+        for surface in subject["scanned_surfaces"]:
+            self.assertLessEqual(
+                surface["visible_word_count"],
+                surface["visible_text_characters"],
+            )
+            self.assertLessEqual(
+                surface["visible_text_characters"], surface["byte_length"]
+            )
+            self.assertLessEqual(surface["byte_length"], maximum)
+            if surface["kind"] not in {"product_app", "audit_console"}:
+                self.assertIs(
+                    surface["prerender_contract_matches_requested_route"],
+                    False,
+                )
+        self.assertEqual(subject["findings"], [])
+        self.assertEqual(
+            report["machine_subject_sha256"],
+            collector.machine_subject_sha256(subject),
+        )
+        self.assertEqual(
+            draft["machine_subject_sha256"], report["machine_subject_sha256"]
+        )
+        self.assertTrue(subject["scan"]["machine_scan_passed"])
         self.assertIn(
             "unsigned_draft_requires_independent_human_review", report["blockers"]
         )
@@ -470,6 +498,34 @@ class DraftReportContractTests(unittest.TestCase):
         )
         self.assertFalse(report["draft_payload"]["coverage_complete"])
         self.assertFalse(report["draft_payload"]["machine_scan_passed"])
+
+    def test_subject_digest_binds_exact_surface_and_finding_facts(self) -> None:
+        bodies = {kind: _html(kind) for kind, _url in collector.PINNED_SURFACES}
+
+        def fetcher(kind: str, _url: str) -> collector.SurfaceFetch:
+            return _completed_fetch(kind, bodies[kind])
+
+        report = collector.collect_claim_honesty_report(
+            fetcher=fetcher, clock=lambda: NOW
+        )
+        original = report["machine_subject_sha256"]
+        subject = json.loads(json.dumps(report["machine_subject"]))
+
+        subject["scanned_surfaces"][0]["content_sha256"] = "f" * 64
+        self.assertNotEqual(collector.machine_subject_sha256(subject), original)
+
+        subject = json.loads(json.dumps(report["machine_subject"]))
+        subject["findings"].append(
+            {
+                "category": "misleading_claim",
+                "rule_id": "customer_production_ready",
+                "surface_kind": "landing",
+                "match_start": 0,
+                "match_end": 10,
+                "match_sha256": "a" * 64,
+            }
+        )
+        self.assertNotEqual(collector.machine_subject_sha256(subject), original)
 
 
 if __name__ == "__main__":

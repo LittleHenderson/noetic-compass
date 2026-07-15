@@ -40,7 +40,7 @@ LIVE_GATES = tuple(
     gate for gate in acceptance.REQUIRED_GATES if gate != ROOT_CI_GATE
 )
 LIVE_AUTHORITIES = (*LIVE_GATES, "release_decision")
-CANDIDATE_SCHEMA_VERSION = "cas_harness_customer_production_candidate.v1"
+CANDIDATE_SCHEMA_VERSION = "cas_harness_customer_production_candidate.v2"
 FINAL_WORKFLOW = ".github/workflows/customer-production-accept.yml"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
@@ -237,6 +237,13 @@ def _preflight_receipt_identity(
         raise AssemblyError("root-CI receipt is expired")
     if expires < issued:
         raise AssemblyError("root-CI receipt expires before issuance")
+    if expires - issued != timedelta(
+        minutes=acceptance.ROOT_CI_RECEIPT_TTL_MINUTES
+    ):
+        raise AssemblyError(
+            "root-CI receipt TTL must be exactly "
+            f"{acceptance.ROOT_CI_RECEIPT_TTL_MINUTES} minutes"
+        )
     evidence = receipt.get("evidence")
     if not isinstance(evidence, Mapping):
         raise AssemblyError("root-CI receipt evidence is invalid")
@@ -244,6 +251,8 @@ def _preflight_receipt_identity(
         raise AssemblyError("root-CI receipt evidence master_head_sha mismatches")
     if evidence.get("deploy_id") != expected_deploy_id:
         raise AssemblyError("root-CI receipt evidence deploy_id mismatches")
+    if evidence.get("root_ci_schema_version") != acceptance.ROOT_CI_SCHEMA_VERSION:
+        raise AssemblyError("root-CI receipt evidence schema marker mismatches")
     if evidence.get("artifact_uri") != receipt.get("subject_uri"):
         raise AssemblyError("root-CI receipt subject URI binding mismatches")
     if evidence.get("artifact_sha256") != receipt.get("subject_sha256"):

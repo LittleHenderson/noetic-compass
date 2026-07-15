@@ -17,6 +17,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 import hashlib
+import hmac
 import json
 import re
 from typing import Any
@@ -31,9 +32,20 @@ from api.services.production.state_substrate import (
     StateStore,
     VersionConflict,
 )
+from api.services.customer_production_pseudonyms import (
+    CustomerProductionPseudonymizer,
+    PUBLICATION_ACCOUNT_DOMAIN,
+    PUBLICATION_CONTENT_BINDING_DOMAIN,
+    PUBLICATION_TENANT_DOMAIN,
+    validate_public_pseudonym_metadata,
+    validate_public_pseudonym_subject,
+)
 
 
-SCHEMA_VERSION = "cas_harness_acceptance_publication_authorization.v1"
+SCHEMA_VERSION = "cas_harness_acceptance_publication_authorization.v2"
+IDENTITY_BINDING_SCHEMA_VERSION = (
+    "cas_harness_acceptance_publication_authorization_identity_binding.v1"
+)
 RECORD_TYPE = "authority_operation"
 ACTION = "AUTHORIZE"
 OPERATION = "publish"
@@ -42,6 +54,9 @@ ENVIRONMENT = "public-production"
 REPOSITORY = "LittleHenderson/noetic-compass"
 AUTHORIZATION_TENANT_ID = "cas-harness-customer-production-authorizations"
 AUTHORIZATION_KIND = "customer_production_acceptance_publication_authorization"
+IDENTITY_BINDING_KIND = (
+    "customer_production_acceptance_publication_authorization_identity_binding"
+)
 AUTHORIZATION_TTL_SECONDS = 15 * 60
 
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
@@ -74,7 +89,25 @@ _RECORD_KEYS = frozenset(
         "authorized_by",
     }
 )
-_ACTOR_KEYS = frozenset({"tenant_id_sha256", "account_id_sha256", "role"})
+_ACTOR_KEYS = frozenset(
+    {
+        "pseudonymization_scheme",
+        "pseudonym_key_id",
+        "tenant_subject",
+        "account_subject",
+        "role",
+    }
+)
+_IDENTITY_BINDING_KEYS = frozenset(
+    {
+        "schema_version",
+        "authorization_sha256",
+        "actor_tenant_id",
+        "actor_account_id",
+        "pseudonym_key_id",
+        "content_binding_hmac",
+    }
+)
 
 
 class AcceptancePublicationAuthorizationError(RuntimeError):
@@ -111,14 +144,23 @@ class AcceptancePublicationAuthorization:
 class AcceptancePublicationAuthorizationStore:
     """Create-only authorization records over one shared StateStore."""
 
-    def __init__(self, store: StateStore, *, primary_tenant_id: str) -> None:
+    def __init__(
+        self,
+        store: StateStore,
+        *,
+        primary_tenant_id: str,
+        pseudonymizer: CustomerProductionPseudonymizer,
+    ) -> None:
         if (
             not isinstance(primary_tenant_id, str)
             or _TENANT_ID_RE.fullmatch(primary_tenant_id) is None
         ):
             raise ValueError("primary_tenant_id is invalid")
+        if not isinstance(pseudonymizer, CustomerProductionPseudonymizer):
+            raise ValueError("customer-production pseudonymizer is required")
         self._store = store
         self._primary_tenant_id = primary_tenant_id
+        self._pseudonymizer = pseudonymizer
 
     def create(
         self,
@@ -159,6 +201,8 @@ class AcceptancePublicationAuthorizationStore:
         )
         stamp = _utc_now(now)
         expires = stamp + timedelta(seconds=AUTHORIZATION_TTL_SECONDS)
+        key_id = self._pseudonymizer.active_key_id
+        pseudonym_metadata = self._pseudonymizer.metadata(key_id=key_id)
         payload: dict[str, Any] = {
             "schema_version": SCHEMA_VERSION,
             "record_type": RECORD_TYPE,
@@ -178,13 +222,31 @@ class AcceptancePublicationAuthorizationStore:
             "authorized_at_utc": _format_utc(stamp),
             "expires_at_utc": _format_utc(expires),
             "authorized_by": {
-                "tenant_id_sha256": _tenant_id_sha256(actor_tenant_id),
-                "account_id_sha256": _account_id_sha256(actor_account_id),
+                **pseudonym_metadata,
+                "tenant_subject": self._pseudonymizer.subject(
+                    domain=PUBLICATION_TENANT_DOMAIN,
+                    tenant_scope=actor_tenant_id,
+                    value=actor_tenant_id,
+                    key_id=key_id,
+                ),
+                "account_subject": self._pseudonymizer.subject(
+                    domain=PUBLICATION_ACCOUNT_DOMAIN,
+                    tenant_scope=actor_tenant_id,
+                    value=actor_account_id,
+                    key_id=key_id,
+                ),
                 "role": actor_role,
             },
         }
         canonical = _canonical_json_bytes(payload)
         digest = hashlib.sha256(canonical).hexdigest()
+        content_binding_hmac = _private_content_binding_hmac(
+            self._pseudonymizer,
+            authorization_sha256=digest,
+            actor_tenant_id=actor_tenant_id,
+            actor_account_id=actor_account_id,
+            pseudonym_key_id=key_id,
+        )
         record = LedgerRecord.new(
             tenant_id=AUTHORIZATION_TENANT_ID,
             kind=AUTHORIZATION_KIND,
@@ -194,18 +256,50 @@ class AcceptancePublicationAuthorizationStore:
             trace_id=digest,
             now=stamp,
         )
+        identity_payload = {
+            "schema_version": IDENTITY_BINDING_SCHEMA_VERSION,
+            "authorization_sha256": digest,
+            "actor_tenant_id": actor_tenant_id,
+            "actor_account_id": actor_account_id,
+            "pseudonym_key_id": key_id,
+            "content_binding_hmac": content_binding_hmac,
+        }
+        identity = LedgerRecord.new(
+            tenant_id=AUTHORIZATION_TENANT_ID,
+            kind=IDENTITY_BINDING_KIND,
+            record_id=_identity_binding_record_id(digest),
+            payload=identity_payload,
+            parent_ids=(record.record_id,),
+            source="acceptance_publication_authorization",
+            trace_id=digest,
+            now=stamp,
+        )
         try:
             stored = self._store.put(record, expected_version=0)
         except VersionConflict:
-            # A byte-identical same-second retry is idempotent.  Nothing is
-            # updated: the existing version-1 content-addressed row is read and
-            # compared under the same integrity checks.
-            existing = self.load(digest, now=stamp)
-            if existing.body != canonical:
+            # Recover a crash between the immutable public row and its private
+            # identity binding.  Exact bytes may proceed to binding creation;
+            # a conflicting row never becomes live.
+            try:
+                existing = self._store.get(
+                    AUTHORIZATION_TENANT_ID, AUTHORIZATION_KIND, _record_id(digest)
+                )
+            except Exception as exc:
+                raise AcceptancePublicationAuthorizationUnavailable(
+                    "publication authorization store is unavailable"
+                ) from exc
+            if (
+                existing is None
+                or existing.version != 1
+                or existing.source != "acceptance_publication_authorization"
+                or existing.trace_id != digest
+                or existing.parent_ids
+                or _canonical_json_bytes(existing.payload) != canonical
+            ):
                 raise AcceptancePublicationAuthorizationUnavailable(
                     "content-addressed publication authorization conflicted"
                 )
-            return existing
+            stored = existing
         except Exception as exc:
             raise AcceptancePublicationAuthorizationUnavailable(
                 "publication authorization persistence failed"
@@ -214,7 +308,39 @@ class AcceptancePublicationAuthorizationStore:
             raise AcceptancePublicationAuthorizationUnavailable(
                 "publication authorization version is invalid"
             )
-        return self._decode_record(stored, expected_digest=digest, now=stamp)
+        try:
+            stored_identity = self._store.put(identity, expected_version=0)
+        except VersionConflict:
+            try:
+                stored_identity = self._store.get(
+                    AUTHORIZATION_TENANT_ID,
+                    IDENTITY_BINDING_KIND,
+                    _identity_binding_record_id(digest),
+                )
+            except Exception as exc:
+                raise AcceptancePublicationAuthorizationUnavailable(
+                    "publication authorization identity binding is unavailable"
+                ) from exc
+            _validate_identity_binding_record(
+                stored_identity,
+                expected_digest=digest,
+                content_record_id=record.record_id,
+                expected_payload=identity_payload,
+            )
+        except Exception as exc:
+            raise AcceptancePublicationAuthorizationUnavailable(
+                "publication authorization identity binding persistence failed"
+            ) from exc
+        if stored_identity is None or stored_identity.version != 1:
+            raise AcceptancePublicationAuthorizationUnavailable(
+                "publication authorization identity binding version is invalid"
+            )
+        return self._decode_record(
+            stored,
+            stored_identity,
+            expected_digest=digest,
+            now=stamp,
+        )
 
     def load(
         self, authorization_sha256: str, *, now: datetime | None = None
@@ -234,6 +360,11 @@ class AcceptancePublicationAuthorizationStore:
                 AUTHORIZATION_KIND,
                 _record_id(authorization_sha256),
             )
+            identity = self._store.get(
+                AUTHORIZATION_TENANT_ID,
+                IDENTITY_BINDING_KIND,
+                _identity_binding_record_id(authorization_sha256),
+            )
         except Exception as exc:
             raise AcceptancePublicationAuthorizationUnavailable(
                 "publication authorization store is unavailable"
@@ -242,8 +373,17 @@ class AcceptancePublicationAuthorizationStore:
             raise AcceptancePublicationAuthorizationNotFound(
                 "publication authorization is unavailable"
             )
+        if identity is None:
+            # v1 rows deliberately cannot be promoted after the keyed schema
+            # migration. A new owner authorization is required.
+            raise AcceptancePublicationAuthorizationUnavailable(
+                "keyed publication authorization identity binding is unavailable"
+            )
         return self._decode_record(
-            record, expected_digest=authorization_sha256, now=_utc_now(now)
+            record,
+            identity,
+            expected_digest=authorization_sha256,
+            now=_utc_now(now),
         )
 
     def assert_matches(
@@ -302,6 +442,7 @@ class AcceptancePublicationAuthorizationStore:
     def _decode_record(
         self,
         record: LedgerRecord,
+        identity: LedgerRecord,
         *,
         expected_digest: str,
         now: datetime,
@@ -318,9 +459,44 @@ class AcceptancePublicationAuthorizationStore:
             raise AcceptancePublicationAuthorizationUnavailable(
                 "publication authorization traceability is invalid"
             )
-        payload = _validate_payload(
-            record.payload, primary_tenant_id=self._primary_tenant_id
+        identity_payload = _validate_identity_binding_record(
+            identity,
+            expected_digest=expected_digest,
+            content_record_id=record.record_id,
         )
+        actor_tenant_id = str(identity_payload["actor_tenant_id"])
+        actor_account_id = str(identity_payload["actor_account_id"])
+        if actor_tenant_id != self._primary_tenant_id:
+            raise AcceptancePublicationAuthorizationUnavailable(
+                "publication authorization tenant identity is invalid"
+            )
+        payload = _validate_payload(
+            record.payload,
+            primary_tenant_id=self._primary_tenant_id,
+            actor_account_id=actor_account_id,
+            pseudonymizer=self._pseudonymizer,
+        )
+        actor = payload["authorized_by"]
+        assert isinstance(actor, Mapping)
+        if actor.get("pseudonym_key_id") != identity_payload.get(
+            "pseudonym_key_id"
+        ):
+            raise AcceptancePublicationAuthorizationUnavailable(
+                "publication authorization identity binding does not match public evidence"
+            )
+        expected_binding = _private_content_binding_hmac(
+            self._pseudonymizer,
+            authorization_sha256=expected_digest,
+            actor_tenant_id=actor_tenant_id,
+            actor_account_id=actor_account_id,
+            pseudonym_key_id=str(identity_payload["pseudonym_key_id"]),
+        )
+        if not hmac.compare_digest(
+            str(identity_payload.get("content_binding_hmac")), expected_binding
+        ):
+            raise AcceptancePublicationAuthorizationUnavailable(
+                "publication authorization private content binding is invalid"
+            )
         try:
             canonical = _canonical_json_bytes(payload)
         except AcceptancePublicationAuthorizationInvalid as exc:
@@ -432,7 +608,11 @@ def _validate_bindings(
 
 
 def _validate_payload(
-    payload: Mapping[str, Any], *, primary_tenant_id: str
+    payload: Mapping[str, Any],
+    *,
+    primary_tenant_id: str,
+    actor_account_id: str,
+    pseudonymizer: CustomerProductionPseudonymizer,
 ) -> Mapping[str, Any]:
     if not isinstance(payload, Mapping) or set(payload) != _RECORD_KEYS:
         raise AcceptancePublicationAuthorizationUnavailable(
@@ -464,14 +644,35 @@ def _validate_payload(
     except AcceptancePublicationAuthorizationInvalid as exc:
         raise AcceptancePublicationAuthorizationUnavailable(str(exc)) from exc
     actor = payload.get("authorized_by")
-    if (
-        not isinstance(actor, Mapping)
-        or set(actor) != _ACTOR_KEYS
-        or actor.get("tenant_id_sha256") != _tenant_id_sha256(primary_tenant_id)
-        or actor.get("role") != "owner"
-        or not isinstance(actor.get("account_id_sha256"), str)
-        or _SHA256_RE.fullmatch(str(actor.get("account_id_sha256"))) is None
-    ):
+    if not isinstance(actor, Mapping) or set(actor) != _ACTOR_KEYS:
+        raise AcceptancePublicationAuthorizationUnavailable(
+            "publication authorization actor is invalid"
+        )
+    try:
+        key_id = validate_public_pseudonym_metadata(
+            actor, available_key_ids=pseudonymizer.key_ids
+        )
+        validate_public_pseudonym_subject(actor.get("tenant_subject"))
+        validate_public_pseudonym_subject(actor.get("account_subject"))
+        pseudonymizer.assert_subject(
+            actor.get("tenant_subject"),
+            domain=PUBLICATION_TENANT_DOMAIN,
+            tenant_scope=primary_tenant_id,
+            value=primary_tenant_id,
+            key_id=key_id,
+        )
+        pseudonymizer.assert_subject(
+            actor.get("account_subject"),
+            domain=PUBLICATION_ACCOUNT_DOMAIN,
+            tenant_scope=primary_tenant_id,
+            value=actor_account_id,
+            key_id=key_id,
+        )
+    except ValueError as exc:
+        raise AcceptancePublicationAuthorizationUnavailable(
+            "publication authorization actor is invalid"
+        ) from exc
+    if actor.get("role") != "owner":
         raise AcceptancePublicationAuthorizationUnavailable(
             "publication authorization actor is invalid"
         )
@@ -484,16 +685,75 @@ def _record_id(digest: str) -> str:
     return f"acceptance-publication-authorization-{digest}"
 
 
-def _account_id_sha256(account_id: str) -> str:
-    return hashlib.sha256(
-        b"cas-harness-acceptance-authorizer.v1\x00" + account_id.encode("utf-8")
-    ).hexdigest()
+def _identity_binding_record_id(digest: str) -> str:
+    return f"acceptance-publication-authorization-identity-{digest}"
 
 
-def _tenant_id_sha256(tenant_id: str) -> str:
-    return hashlib.sha256(
-        b"cas-harness-acceptance-tenant.v1\x00" + tenant_id.encode("utf-8")
-    ).hexdigest()
+def _private_content_binding_hmac(
+    pseudonymizer: CustomerProductionPseudonymizer,
+    *,
+    authorization_sha256: str,
+    actor_tenant_id: str,
+    actor_account_id: str,
+    pseudonym_key_id: str,
+) -> str:
+    facts = _canonical_json_bytes(
+        {
+            "authorization_sha256": authorization_sha256,
+            "actor_tenant_id": actor_tenant_id,
+            "actor_account_id": actor_account_id,
+            "pseudonym_key_id": pseudonym_key_id,
+        }
+    ).decode("ascii")
+    return pseudonymizer.subject(
+        domain=PUBLICATION_CONTENT_BINDING_DOMAIN,
+        tenant_scope=actor_tenant_id,
+        value=facts,
+        key_id=pseudonym_key_id,
+    )
+
+
+def _validate_identity_binding_record(
+    record: LedgerRecord | None,
+    *,
+    expected_digest: str,
+    content_record_id: str,
+    expected_payload: Mapping[str, Any] | None = None,
+) -> Mapping[str, Any]:
+    if (
+        record is None
+        or record.version != 1
+        or record.tenant_id != AUTHORIZATION_TENANT_ID
+        or record.kind != IDENTITY_BINDING_KIND
+        or record.record_id != _identity_binding_record_id(expected_digest)
+        or record.parent_ids != (content_record_id,)
+        or record.source != "acceptance_publication_authorization"
+        or record.trace_id != expected_digest
+        or not isinstance(record.payload, Mapping)
+        or set(record.payload) != _IDENTITY_BINDING_KEYS
+        or record.payload.get("schema_version") != IDENTITY_BINDING_SCHEMA_VERSION
+        or record.payload.get("authorization_sha256") != expected_digest
+        or record.payload.get("actor_tenant_id") is None
+        or _TENANT_ID_RE.fullmatch(str(record.payload.get("actor_tenant_id"))) is None
+        or _ACCOUNT_ID_RE.fullmatch(str(record.payload.get("actor_account_id") or ""))
+        is None
+        or not isinstance(record.payload.get("pseudonym_key_id"), str)
+        or not isinstance(record.payload.get("content_binding_hmac"), str)
+    ):
+        raise AcceptancePublicationAuthorizationUnavailable(
+            "publication authorization identity binding is invalid"
+        )
+    if expected_payload is not None and dict(record.payload) != dict(expected_payload):
+        raise AcceptancePublicationAuthorizationUnavailable(
+            "publication authorization identity binding conflicted"
+        )
+    try:
+        validate_public_pseudonym_subject(record.payload.get("content_binding_hmac"))
+    except ValueError as exc:
+        raise AcceptancePublicationAuthorizationUnavailable(
+            "publication authorization identity binding is invalid"
+        ) from exc
+    return record.payload
 
 
 def _utc_now(value: datetime | None) -> datetime:

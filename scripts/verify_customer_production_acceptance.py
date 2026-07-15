@@ -37,9 +37,12 @@ TRUSTED_ISSUER_REGISTRY = Path(
 )
 SCHEMA_VERSION = "cas_harness_customer_production_acceptance.v2"
 REPORT_SCHEMA_VERSION = "cas_harness_customer_production_acceptance_report.v2"
-EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v2"
+EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v3"
 RECEIPT_SCHEMA_VERSION = "cas_harness_authoritative_receipt.v1"
 REGISTRY_SCHEMA_VERSION = "cas_harness_trusted_issuer_registry.v2"
+ROOT_CI_SCHEMA_VERSION = "cas_harness_root_ci_protected_deploy_observation.v1"
+ROOT_CI_OBSERVATION_SEMANTICS = "fresh_current_state_with_historical_release_provenance.v1"
+ROOT_CI_RECEIPT_TTL_MINUTES = 120
 MANIFEST_ID = "cas-harness-customer-production"
 REPOSITORY = "LittleHenderson/noetic-compass"
 REPOSITORY_ID = 1203465584
@@ -55,6 +58,7 @@ RENDER_API_ORIGIN = "https://api.render.com"
 PRODUCTION_SERVICE_ID = "srv-d9bijbjtqb8s73cn4n20"
 PRODUCTION_SERVICE_NAME = "cas-harness-customer-api"
 CRM_SOURCE_SCHEMA_VERSION = "cas_harness_airtable_crm_acceptance_source.v2"
+CUSTOMER_PSEUDONYMIZATION_SCHEME = "hmac-sha256-tenant-scoped-v1"
 CRM_PRIVACY_NOTICE_URL = "https://cascompass.ai/privacy"
 CRM_PRIVACY_NOTICE_PRESENT_STATUS = "present"
 CRM_AIRTABLE_API_BASE_URL = "https://api.airtable.com/v0"
@@ -159,6 +163,68 @@ CLAIM_SURFACE_KINDS = frozenset(
 CLAIM_APPROVER_ROLES = frozenset(
     {"legal_owner", "product_owner", "research_owner"}
 )
+CLAIM_MACHINE_SUBJECT_SCHEMA_VERSION = (
+    "cas_harness_claim_honesty_machine_subject.v1"
+)
+CLAIM_MACHINE_RULESET_VERSION = "cas_harness_claim_honesty_rules.v1"
+CLAIM_COLLECTOR_REPOSITORY_PATH = "scripts/collect_claim_honesty_evidence.py"
+CLAIM_MACHINE_SUBJECT_KEYS = {
+    "schema_version",
+    "generated_at_utc",
+    "scanner",
+    "scanned_surfaces",
+    "scan",
+    "findings",
+}
+CLAIM_MACHINE_SCANNER_KEYS = {
+    "ruleset_version",
+    "collector_sha256",
+    "request_method",
+    "redirects_allowed",
+    "maximum_response_bytes",
+    "javascript_executed",
+}
+CLAIM_MACHINE_SCAN_KEYS = {
+    "misleading_claim_count",
+    "unsupported_compliance_claim_count",
+    "unsupported_universality_claim_count",
+    "unsupported_ip_claim_count",
+    "status_vocabulary_exact",
+    "scanned_surface_count",
+    "covered_surface_count",
+    "finding_count",
+    "coverage_complete",
+    "machine_scan_passed",
+}
+CLAIM_MACHINE_SURFACE_KEYS = {
+    "kind",
+    "url",
+    "http_status",
+    "final_url_matches_requested",
+    "content_type",
+    "byte_length",
+    "content_sha256",
+    "verified_at_utc",
+    "coverage_established",
+    "visibility_basis",
+    "visible_text_sha256",
+    "visible_text_characters",
+    "visible_word_count",
+    "client_rendered_shell_detected",
+    "prerendered_application_mount_detected",
+    "prerender_contract_matches_requested_route",
+    "route_identity_established",
+    "error_count",
+    "errors_sha256",
+}
+CLAIM_MACHINE_FINDING_KEYS = {
+    "category",
+    "rule_id",
+    "surface_kind",
+    "match_start",
+    "match_end",
+    "match_sha256",
+}
 TABLETOP_ROLES = frozenset(
     {"incident_commander", "legal", "operations", "security", "support"}
 )
@@ -181,6 +247,16 @@ CLAIM_STATUS_VOCABULARY = (
     "present",
     "unavailable",
 )
+HUMAN_ASSURANCE_BOUNDARY = {
+    "schema_version": "cas_harness_human_assurance_boundary.v1",
+    "account_identity": "authenticated_platform_account",
+    "functional_role": "self_asserted_platform_role_authorized",
+    "natural_person_identity": "unverified",
+    "professional_qualification": "unverified",
+    "distinct_natural_persons": "unverified",
+    "qualification_authority": "unavailable",
+    "distinctness_authority": "unavailable",
+}
 GATE_ALLOWED_ORIGINS = {
     "runtime_worm": frozenset({PRODUCTION_API_ORIGIN, RENDER_API_ORIGIN}),
     "root_ci_protected_deploy": frozenset(
@@ -278,6 +354,8 @@ CRM_SOURCE_RECEIPT_KEYS = {
 }
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 TAGGED_SHA256_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
+PSEUDONYM_RE = re.compile(r"^hmac-sha256:[0-9a-f]{64}$")
+CUSTOMER_PSEUDONYM_KEY_ID_RE = re.compile(r"^cpk_[0-9a-f]{32}$")
 PRIVACY_NOTICE_VERSION_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
 SHA1_RE = re.compile(r"^[0-9a-f]{40}$")
 UTC_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
@@ -427,6 +505,14 @@ def _canonical_bytes(value: Mapping[str, Any]) -> bytes:
     ).encode("utf-8")
 
 
+def _canonical_claim_machine_subject_bytes(value: Mapping[str, Any]) -> bytes:
+    """Match the collector/API ASCII canonicalization for one machine subject."""
+
+    return json.dumps(
+        value, sort_keys=True, separators=(",", ":"), ensure_ascii=True
+    ).encode("ascii")
+
+
 def _is_mapping(value: Any, path: str, errors: list[str]) -> bool:
     if not isinstance(value, Mapping):
         _error(errors, path, "must be an object")
@@ -453,6 +539,28 @@ def _nonempty_string(value: Any, path: str, errors: list[str]) -> str | None:
     return value
 
 
+def _claim_html_content_type_is_supported(value: str) -> bool:
+    """Mirror the claim collector's HTML media type and UTF-8 rules exactly."""
+
+    media_type = value.split(";", 1)[0].strip().lower()
+    if media_type not in {"text/html", "application/xhtml+xml"}:
+        return False
+    charset_declarations = list(
+        re.finditer(r"(?:^|;)\s*charset\s*=", value, re.IGNORECASE)
+    )
+    charset_matches = list(
+        re.finditer(
+            r"(?:^|;)\s*charset\s*=\s*[\"']?([^;\"']+)",
+            value,
+            re.IGNORECASE,
+        )
+    )
+    if len(charset_declarations) != 1 or len(charset_matches) != 1:
+        return False
+    charset = charset_matches[0].group(1).strip().lower()
+    return charset in {"utf-8", "utf8"}
+
+
 def _sha256(value: Any, path: str, errors: list[str]) -> str | None:
     if not isinstance(value, str) or SHA256_RE.fullmatch(value) is None:
         _error(errors, path, "must be a lowercase SHA-256 digest")
@@ -465,6 +573,37 @@ def _tagged_sha256(value: Any, path: str, errors: list[str]) -> str | None:
         _error(errors, path, "must be sha256:<64 lowercase hex>")
         return None
     return value
+
+
+def _pseudonym(value: Any, path: str, errors: list[str]) -> str | None:
+    if not isinstance(value, str) or PSEUDONYM_RE.fullmatch(value) is None:
+        _error(errors, path, "must be hmac-sha256:<64 lowercase hex>")
+        return None
+    return value
+
+
+def _validate_customer_pseudonym_metadata(
+    value: Mapping[str, Any], path: str, errors: list[str]
+) -> str | None:
+    _require(
+        value.get("pseudonymization_scheme")
+        == CUSTOMER_PSEUDONYMIZATION_SCHEME,
+        f"{path}.pseudonymization_scheme",
+        f"must be {CUSTOMER_PSEUDONYMIZATION_SCHEME}",
+        errors,
+    )
+    key_id = value.get("pseudonym_key_id")
+    if (
+        not isinstance(key_id, str)
+        or CUSTOMER_PSEUDONYM_KEY_ID_RE.fullmatch(key_id) is None
+    ):
+        _error(
+            errors,
+            f"{path}.pseudonym_key_id",
+            "must be an opaque cpk_<32 lowercase hex> identifier",
+        )
+        return None
+    return key_id
 
 
 def _commit_sha(value: Any, path: str, errors: list[str]) -> str | None:
@@ -675,6 +814,43 @@ def _repository_commit(repo_root: Path) -> str | None:
     return value if SHA1_RE.fullmatch(value) else None
 
 
+def _read_git_blob(
+    repo_root: Path, revision: str | None, repository_path: str
+) -> bytes | None:
+    """Read exact immutable Git-blob bytes without consulting the checkout."""
+
+    if revision is None or SHA1_RE.fullmatch(revision) is None:
+        return None
+    if (
+        not repository_path
+        or repository_path.startswith(("/", "\\"))
+        or "\\" in repository_path
+        or any(part in {"", ".", ".."} for part in repository_path.split("/"))
+    ):
+        return None
+    object_name = f"{revision}:{repository_path}"
+    try:
+        size_result = subprocess.run(
+            ["git", "-C", str(repo_root), "cat-file", "-s", object_name],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
+        size = int(size_result.stdout.strip())
+        if size < 0 or size > MAX_EVIDENCE_BYTES:
+            return None
+        blob_result = subprocess.run(
+            ["git", "-C", str(repo_root), "cat-file", "blob", object_name],
+            check=True,
+            capture_output=True,
+            timeout=10,
+        )
+    except (OSError, ValueError, subprocess.SubprocessError):
+        return None
+    return blob_result.stdout if len(blob_result.stdout) == size else None
+
+
 def _load_trusted_issuer_registry(
     repo_root: Path,
 ) -> tuple[dict[tuple[str, str], dict[str, Any]], str]:
@@ -865,6 +1041,14 @@ def _validate_receipt(
         _require(expires >= context.verification_time, f"{path}.expires_at_utc", "must still be active at verification", errors)
     if issued is not None and expires is not None:
         _require(issued <= expires, f"{path}.expires_at_utc", "must be at or after receipt issuance", errors)
+        if gate == "root_ci_protected_deploy":
+            _require(
+                expires - issued
+                == timedelta(minutes=ROOT_CI_RECEIPT_TTL_MINUTES),
+                f"{path}.expires_at_utc",
+                f"must be exactly {ROOT_CI_RECEIPT_TTL_MINUTES} minutes after issuance",
+                errors,
+            )
     subject_uri = _safe_https_url(
         receipt.get("subject_uri"),
         f"{path}.subject_uri",
@@ -1187,6 +1371,48 @@ def _runtime_deployment_timestamp(
     return timestamp
 
 
+def _root_ci_historical_timestamp(
+    value: Any,
+    *,
+    event: datetime | None,
+    observed: datetime | None,
+    context: ValidationContext,
+    path: str,
+) -> datetime | None:
+    """Validate immutable root-CI provenance outside the freshness clock.
+
+    Protected workflow runs and the exact ``new_commit`` deployment can
+    legitimately predate a fresh observation of their still-current state.
+    They must already exist when that observation begins, while every mutable
+    observation timestamp continues to use the fixed 24-hour policy.
+    """
+
+    errors = context.errors
+    timestamp = _timestamp(value, path, errors)
+    if timestamp is not None:
+        if event is not None:
+            _require(
+                timestamp <= event,
+                path,
+                "must be at or before the fresh root-CI observation",
+                errors,
+            )
+        if observed is not None:
+            _require(
+                timestamp <= observed,
+                path,
+                "must be at or before evidence observation",
+                errors,
+            )
+        _require(
+            timestamp <= context.verification_time,
+            path,
+            "must be at or before verification",
+            errors,
+        )
+    return timestamp
+
+
 def _validate_runtime_worm(
     evidence: Mapping[str, Any], context: ValidationContext
 ) -> None:
@@ -1371,6 +1597,7 @@ def _validate_root_ci(
         evidence,
         COMMON_EVIDENCE_KEYS
         | {
+            "root_ci_schema_version",
             "github_repository",
             "branch",
             "workflow_directory",
@@ -1379,12 +1606,19 @@ def _validate_root_ci(
             "branch_protection",
             "checks",
             "deployment",
+            "observation",
         },
         path,
         errors,
     )
     event, observed = _validate_common_evidence(
         evidence, "root_ci_protected_deploy", context
+    )
+    _require(
+        evidence.get("root_ci_schema_version") == ROOT_CI_SCHEMA_VERSION,
+        f"{path}.root_ci_schema_version",
+        f"must be {ROOT_CI_SCHEMA_VERSION}",
+        errors,
     )
     repository = evidence.get("github_repository")
     if _is_mapping(repository, f"{path}.github_repository", errors):
@@ -1406,17 +1640,19 @@ def _validate_root_ci(
         _exact_keys(app, set(GITHUB_ACTIONS_APP), f"{path}.github_app", errors)
         _require(dict(app) == GITHUB_ACTIONS_APP, f"{path}.github_app", "must be the pinned GitHub Actions App identity", errors)
 
+    protection_observed: datetime | None = None
     protection = evidence.get("branch_protection")
     if _is_mapping(protection, f"{path}.branch_protection", errors):
         _exact_keys(protection, {"strict", "required_checks", "source", "observed_at_utc"}, f"{path}.branch_protection", errors)
         _require(protection.get("strict") is True, f"{path}.branch_protection.strict", "must be true", errors)
         _set_of_strings(protection.get("required_checks"), frozenset(REQUIRED_CHECKS), f"{path}.branch_protection.required_checks", errors)
         _require(protection.get("source") == "github-api", f"{path}.branch_protection.source", "must be github-api", errors)
-        _critical_proof_timestamp(protection.get("observed_at_utc"), gate="root_ci_protected_deploy", event=event, observed=observed, context=context, path=f"{path}.branch_protection.observed_at_utc")
+        protection_observed = _critical_proof_timestamp(protection.get("observed_at_utc"), gate="root_ci_protected_deploy", event=event, observed=observed, context=context, path=f"{path}.branch_protection.observed_at_utc")
 
     checks = _list_by_key(evidence.get("checks"), "name", frozenset(REQUIRED_CHECKS), f"{path}.checks", errors)
     run_ids: set[int] = set()
     check_run_ids: set[int] = set()
+    completed_times: list[datetime] = []
     for name, check in checks.items():
         item_path = f"{path}.checks[{name}]"
         _exact_keys(
@@ -1440,6 +1676,7 @@ def _validate_root_ci(
                 "app_node_id",
                 "app_slug",
                 "details_url",
+                "run_created_at_utc",
                 "completed_at_utc",
             },
             item_path,
@@ -1472,7 +1709,28 @@ def _validate_root_ci(
         if check_run_id is not None:
             _require(check_run_id not in check_run_ids, f"{item_path}.check_run_id", "must be unique", errors)
             check_run_ids.add(check_run_id)
-        _critical_proof_timestamp(check.get("completed_at_utc"), gate="root_ci_protected_deploy", event=event, observed=observed, context=context, path=f"{item_path}.completed_at_utc")
+        run_created = _root_ci_historical_timestamp(
+            check.get("run_created_at_utc"),
+            event=event,
+            observed=observed,
+            context=context,
+            path=f"{item_path}.run_created_at_utc",
+        )
+        completed = _root_ci_historical_timestamp(
+            check.get("completed_at_utc"),
+            event=event,
+            observed=observed,
+            context=context,
+            path=f"{item_path}.completed_at_utc",
+        )
+        if run_created is not None and completed is not None:
+            _require(
+                run_created <= completed,
+                f"{item_path}.completed_at_utc",
+                "must be at or after workflow run creation",
+                errors,
+            )
+            completed_times.append(completed)
 
     deployment = evidence.get("deployment")
     if _is_mapping(deployment, f"{path}.deployment", errors):
@@ -1490,6 +1748,7 @@ def _validate_root_ci(
                 "commit_sha",
                 "auto_deploy_trigger",
                 "health_check_path",
+                "created_at_utc",
                 "deployed_at_utc",
             },
             f"{path}.deployment",
@@ -1510,7 +1769,176 @@ def _validate_root_ci(
         }
         for field, value in expected.items():
             _require(_json_scalar_equals(deployment.get(field), value), f"{path}.deployment.{field}", f"must equal {value!r}", errors)
-        _critical_proof_timestamp(deployment.get("deployed_at_utc"), gate="root_ci_protected_deploy", event=event, observed=observed, context=context, path=f"{path}.deployment.deployed_at_utc")
+        deploy_created = _root_ci_historical_timestamp(
+            deployment.get("created_at_utc"),
+            event=event,
+            observed=observed,
+            context=context,
+            path=f"{path}.deployment.created_at_utc",
+        )
+        deployed = _root_ci_historical_timestamp(
+            deployment.get("deployed_at_utc"),
+            event=event,
+            observed=observed,
+            context=context,
+            path=f"{path}.deployment.deployed_at_utc",
+        )
+        if deploy_created is not None and deployed is not None:
+            _require(
+                deploy_created <= deployed,
+                f"{path}.deployment.deployed_at_utc",
+                "must be at or after deployment creation",
+                errors,
+            )
+            for completed in completed_times:
+                _require(
+                    completed <= deploy_created,
+                    f"{path}.deployment.created_at_utc",
+                    "must be at or after every required check completion",
+                    errors,
+                )
+
+    observation = evidence.get("observation")
+    if _is_mapping(observation, f"{path}.observation", errors):
+        timestamp_fields = (
+            "started_at_utc",
+            "render_preflight_verified_at_utc",
+            "github_controls_verified_at_utc",
+            "health_verified_at_utc",
+            "github_master_verified_at_utc",
+            "github_controls_final_verified_at_utc",
+            "render_final_verified_at_utc",
+            "completed_at_utc",
+        )
+        digest_fields = (
+            "github_master_preflight_sha256",
+            "github_master_final_sha256",
+            "github_repository_preflight_sha256",
+            "github_repository_final_sha256",
+            "github_protection_preflight_sha256",
+            "github_protection_final_sha256",
+            "github_workflows_preflight_sha256",
+            "github_workflows_final_sha256",
+            "render_service_preflight_sha256",
+            "render_service_final_sha256",
+            "render_deploy_initial_sha256",
+            "render_deploy_preflight_sha256",
+            "render_deploy_final_sha256",
+            "render_active_preflight_sha256",
+            "render_active_final_sha256",
+            "render_latest_preflight_sha256",
+            "render_latest_final_sha256",
+        )
+        _exact_keys(
+            observation,
+            {
+                "semantics",
+                *timestamp_fields,
+                *digest_fields,
+                "current_master_head_sha",
+                "current_active_deploy_id",
+            },
+            f"{path}.observation",
+            errors,
+        )
+        _require(
+            observation.get("semantics") == ROOT_CI_OBSERVATION_SEMANTICS,
+            f"{path}.observation.semantics",
+            f"must be {ROOT_CI_OBSERVATION_SEMANTICS}",
+            errors,
+        )
+        _require(
+            observation.get("current_master_head_sha")
+            == context.expected_master_head,
+            f"{path}.observation.current_master_head_sha",
+            "must match the current expected master HEAD",
+            errors,
+        )
+        _require(
+            observation.get("current_active_deploy_id")
+            == context.expected_deploy_id,
+            f"{path}.observation.current_active_deploy_id",
+            "must match the current active production deployment",
+            errors,
+        )
+        observation_times: list[datetime] = []
+        for field in timestamp_fields:
+            timestamp = _critical_proof_timestamp(
+                observation.get(field),
+                gate="root_ci_protected_deploy",
+                event=event,
+                observed=observed,
+                context=context,
+                path=f"{path}.observation.{field}",
+            )
+            if timestamp is not None:
+                observation_times.append(timestamp)
+        if event is not None and observation_times:
+            _require(
+                observation_times[0] == event,
+                f"{path}.observation.started_at_utc",
+                "must equal the root-CI gate event",
+                errors,
+            )
+        if observed is not None and len(observation_times) == len(timestamp_fields):
+            _require(
+                observation_times[-1] == observed,
+                f"{path}.observation.completed_at_utc",
+                "must equal the evidence observation time",
+                errors,
+            )
+            _require(
+                all(
+                    left <= right
+                    for left, right in zip(
+                        observation_times, observation_times[1:]
+                    )
+                ),
+                f"{path}.observation",
+                "timestamps must be monotonic",
+                errors,
+            )
+        if protection_observed is not None and len(observation_times) >= 6:
+            _require(
+                protection_observed == observation_times[5],
+                f"{path}.branch_protection.observed_at_utc",
+                "must equal the final GitHub controls observation timestamp",
+                errors,
+            )
+        for field in digest_fields:
+            _sha256(observation.get(field), f"{path}.observation.{field}", errors)
+        for preflight, final in (
+            ("github_master_preflight_sha256", "github_master_final_sha256"),
+            (
+                "github_repository_preflight_sha256",
+                "github_repository_final_sha256",
+            ),
+            (
+                "github_protection_preflight_sha256",
+                "github_protection_final_sha256",
+            ),
+            (
+                "github_workflows_preflight_sha256",
+                "github_workflows_final_sha256",
+            ),
+            ("render_service_preflight_sha256", "render_service_final_sha256"),
+            ("render_deploy_preflight_sha256", "render_deploy_final_sha256"),
+            ("render_active_preflight_sha256", "render_active_final_sha256"),
+            ("render_latest_preflight_sha256", "render_latest_final_sha256"),
+        ):
+            _require(
+                observation.get(preflight) == observation.get(final),
+                f"{path}.observation.{final}",
+                "must equal the canonical preflight provider record",
+                errors,
+            )
+        _require(
+            observation.get("render_deploy_initial_sha256")
+            == observation.get("render_deploy_preflight_sha256"),
+            f"{path}.observation.render_deploy_preflight_sha256",
+            "must equal the canonical initial live deployment record",
+            errors,
+        )
 
 
 def _validate_hosted_customer(
@@ -1600,7 +2028,7 @@ def _validate_accounts_billing(
 ) -> None:
     path = "$.required_gates.accounts_billing.evidence.payload"
     errors = context.errors
-    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"api_base_url", "service_id", "customer_lane", "tenant_subject_sha256", "account_session", "quota", "billing"}, path, errors)
+    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"api_base_url", "service_id", "customer_lane", "pseudonymization_scheme", "pseudonym_key_id", "tenant_subject", "account_subject", "account_session", "quota", "billing"}, path, errors)
     event, observed = _validate_common_evidence(evidence, "accounts_billing", context)
     for field, value in {
         "api_base_url": PRODUCTION_API_ORIGIN,
@@ -1608,7 +2036,9 @@ def _validate_accounts_billing(
         "customer_lane": "public-customer",
     }.items():
         _require(_json_scalar_equals(evidence.get(field), value), f"{path}.{field}", f"must equal {value!r}", errors)
-    _sha256(evidence.get("tenant_subject_sha256"), f"{path}.tenant_subject_sha256", errors)
+    _validate_customer_pseudonym_metadata(evidence, path, errors)
+    _pseudonym(evidence.get("tenant_subject"), f"{path}.tenant_subject", errors)
+    _pseudonym(evidence.get("account_subject"), f"{path}.account_subject", errors)
     session = evidence.get("account_session")
     if _is_mapping(session, f"{path}.account_session", errors):
         _exact_keys(session, {"invite_redeem_http_status", "login_http_status", "logout_http_status", "revoked_session_http_status", "durable_session_restart_verified", "disabled_account_http_status", "cross_tenant_http_status", "verified_at_utc"}, f"{path}.account_session", errors)
@@ -1640,7 +2070,7 @@ def _validate_accounts_billing(
         _critical_proof_timestamp(quota.get("verified_at_utc"), gate="accounts_billing", event=event, observed=observed, context=context, path=f"{path}.quota.verified_at_utc")
     billing = evidence.get("billing")
     if _is_mapping(billing, f"{path}.billing", errors):
-        _exact_keys(billing, {"provider", "mode", "currency", "checkout_status", "subscription_status", "invoice_status", "receipt_download_http_status", "webhook_signature_verified", "entitlement_status", "meter_to_invoice_reconciled", "provider_customer_id_sha256", "provider_subscription_id_sha256", "invoice_id_sha256", "paid_at_utc"}, f"{path}.billing", errors)
+        _exact_keys(billing, {"provider", "mode", "currency", "checkout_status", "subscription_status", "invoice_status", "receipt_download_http_status", "webhook_signature_verified", "entitlement_status", "meter_to_invoice_reconciled", "provider_customer_subject", "provider_subscription_subject", "invoice_subject", "paid_at_utc"}, f"{path}.billing", errors)
         expected = {
             "provider": "stripe",
             "mode": "live",
@@ -1655,9 +2085,26 @@ def _validate_accounts_billing(
         }
         for field, value in expected.items():
             _require(_json_scalar_equals(billing.get(field), value), f"{path}.billing.{field}", f"must equal {value!r}", errors)
-        for field in ("provider_customer_id_sha256", "provider_subscription_id_sha256", "invoice_id_sha256"):
-            _sha256(billing.get(field), f"{path}.billing.{field}", errors)
+        for field in ("provider_customer_subject", "provider_subscription_subject", "invoice_subject"):
+            _pseudonym(billing.get(field), f"{path}.billing.{field}", errors)
         _critical_proof_timestamp(billing.get("paid_at_utc"), gate="accounts_billing", event=event, observed=observed, context=context, path=f"{path}.billing.paid_at_utc")
+
+
+def _validate_human_assurance_boundary(
+    evidence: Mapping[str, Any], path: str, errors: list[str]
+) -> None:
+    boundary = evidence.get("human_assurance_boundary")
+    boundary_path = f"{path}.human_assurance_boundary"
+    if not _is_mapping(boundary, boundary_path, errors):
+        return
+    _exact_keys(boundary, set(HUMAN_ASSURANCE_BOUNDARY), boundary_path, errors)
+    for field, expected in HUMAN_ASSURANCE_BOUNDARY.items():
+        _require(
+            boundary.get(field) == expected,
+            f"{boundary_path}.{field}",
+            f"must equal {expected!r}",
+            errors,
+        )
 
 
 def _validate_legal(
@@ -1665,8 +2112,9 @@ def _validate_legal(
 ) -> None:
     path = "$.required_gates.legal_publication_approval.evidence.payload"
     errors = context.errors
-    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"public_base_url", "documents", "approvals", "claim_status_vocabulary"}, path, errors)
+    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"public_base_url", "documents", "approvals", "claim_status_vocabulary", "human_assurance_boundary"}, path, errors)
     event, observed = _validate_common_evidence(evidence, "legal_publication_approval", context)
+    _validate_human_assurance_boundary(evidence, path, errors)
     _require(evidence.get("public_base_url") == LANDING_ORIGIN, f"{path}.public_base_url", f"must be {LANDING_ORIGIN}", errors)
     documents = _list_by_key(evidence.get("documents"), "kind", LEGAL_DOCUMENT_KINDS, f"{path}.documents", errors)
     for kind, document in documents.items():
@@ -1903,8 +2351,9 @@ def _validate_incident_tabletop(
 ) -> None:
     path = "$.required_gates.incident_tabletop.evidence.payload"
     errors = context.errors
-    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"api_base_url", "service_id", "incident", "tabletop"}, path, errors)
+    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"api_base_url", "service_id", "incident", "tabletop", "human_assurance_boundary"}, path, errors)
     event, observed = _validate_common_evidence(evidence, "incident_tabletop", context)
+    _validate_human_assurance_boundary(evidence, path, errors)
     _require(evidence.get("api_base_url") == PRODUCTION_API_ORIGIN, f"{path}.api_base_url", f"must be {PRODUCTION_API_ORIGIN}", errors)
     _require(evidence.get("service_id") == PRODUCTION_SERVICE_ID, f"{path}.service_id", "must be the public production service", errors)
     incident = evidence.get("incident")
@@ -2003,9 +2452,114 @@ def _validate_claim_honesty(
 ) -> None:
     path = "$.required_gates.claim_honesty.evidence.payload"
     errors = context.errors
-    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"scanned_surfaces", "scan", "boundaries", "approvals"}, path, errors)
+    _exact_keys(
+        evidence,
+        COMMON_EVIDENCE_KEYS
+        | {
+            "machine_subject",
+            "machine_subject_sha256",
+            "boundaries",
+            "claim_status_vocabulary",
+            "approvals",
+            "human_assurance_boundary",
+        },
+        path,
+        errors,
+    )
     event, observed = _validate_common_evidence(evidence, "claim_honesty", context)
-    surfaces = _list_by_key(evidence.get("scanned_surfaces"), "kind", CLAIM_SURFACE_KINDS, f"{path}.scanned_surfaces", errors)
+    _validate_human_assurance_boundary(evidence, path, errors)
+    machine_subject = evidence.get("machine_subject")
+    generated: datetime | None = None
+    surfaces: dict[Any, Mapping[str, Any]] = {}
+    if _is_mapping(machine_subject, f"{path}.machine_subject", errors):
+        _exact_keys(
+            machine_subject,
+            CLAIM_MACHINE_SUBJECT_KEYS,
+            f"{path}.machine_subject",
+            errors,
+        )
+        _require(
+            machine_subject.get("schema_version")
+            == CLAIM_MACHINE_SUBJECT_SCHEMA_VERSION,
+            f"{path}.machine_subject.schema_version",
+            "must match the pinned machine-subject schema",
+            errors,
+        )
+        generated = _critical_proof_timestamp(
+            machine_subject.get("generated_at_utc"),
+            gate="claim_honesty",
+            event=event,
+            observed=observed,
+            context=context,
+            path=f"{path}.machine_subject.generated_at_utc",
+        )
+        scanner = machine_subject.get("scanner")
+        maximum: int | None = None
+        if _is_mapping(scanner, f"{path}.machine_subject.scanner", errors):
+            _exact_keys(
+                scanner,
+                CLAIM_MACHINE_SCANNER_KEYS,
+                f"{path}.machine_subject.scanner",
+                errors,
+            )
+            expected_scanner = {
+                "ruleset_version": CLAIM_MACHINE_RULESET_VERSION,
+                "request_method": "GET",
+                "redirects_allowed": False,
+                "javascript_executed": False,
+            }
+            for field, expected in expected_scanner.items():
+                _require(
+                    _json_scalar_equals(scanner.get(field), expected),
+                    f"{path}.machine_subject.scanner.{field}",
+                    f"must equal {expected!r}",
+                    errors,
+                )
+            collector_digest = _sha256(
+                scanner.get("collector_sha256"),
+                f"{path}.machine_subject.scanner.collector_sha256",
+                errors,
+            )
+            maximum = _positive_int(
+                scanner.get("maximum_response_bytes"),
+                f"{path}.machine_subject.scanner.maximum_response_bytes",
+                errors,
+            )
+            if maximum is not None:
+                _require(
+                    maximum <= MAX_EVIDENCE_BYTES,
+                    f"{path}.machine_subject.scanner.maximum_response_bytes",
+                    "must not exceed the verifier evidence bound",
+                    errors,
+                )
+            collector_blob = _read_git_blob(
+                context.repo_root,
+                context.expected_master_head,
+                CLAIM_COLLECTOR_REPOSITORY_PATH,
+            )
+            if collector_blob is None:
+                expected_collector_digest = None
+                _error(
+                    errors,
+                    f"{path}.machine_subject.scanner.collector_sha256",
+                    "cannot read the collector Git blob at expected master HEAD",
+                )
+            else:
+                expected_collector_digest = hashlib.sha256(collector_blob).hexdigest()
+            if collector_digest is not None and expected_collector_digest is not None:
+                _require(
+                    collector_digest == expected_collector_digest,
+                    f"{path}.machine_subject.scanner.collector_sha256",
+                    "must hash the exact collector source at expected master HEAD",
+                    errors,
+                )
+        surfaces = _list_by_key(
+            machine_subject.get("scanned_surfaces"),
+            "kind",
+            CLAIM_SURFACE_KINDS,
+            f"{path}.machine_subject.scanned_surfaces",
+            errors,
+        )
     expected_urls = {
         "product_app": PRODUCTION_APP_ORIGIN,
         "audit_console": f"{PRODUCTION_APP_ORIGIN}/audit-console",
@@ -2015,31 +2569,188 @@ def _validate_claim_honesty(
         "terms": f"{LANDING_ORIGIN}/terms",
     }
     for kind, surface in surfaces.items():
-        item_path = f"{path}.scanned_surfaces[{kind}]"
-        _exact_keys(surface, {"kind", "url", "http_status", "content_sha256", "verified_at_utc"}, item_path, errors)
+        item_path = f"{path}.machine_subject.scanned_surfaces[{kind}]"
+        _exact_keys(surface, CLAIM_MACHINE_SURFACE_KEYS, item_path, errors)
         _require(surface.get("url") == expected_urls[kind], f"{item_path}.url", f"must equal {expected_urls[kind]!r}", errors)
         _require(_json_scalar_equals(surface.get("http_status"), 200), f"{item_path}.http_status", "must be 200", errors)
+        for field, expected in {
+            "final_url_matches_requested": True,
+            "coverage_established": True,
+            "route_identity_established": True,
+            "client_rendered_shell_detected": False,
+            "error_count": 0,
+        }.items():
+            _require(
+                _json_scalar_equals(surface.get(field), expected),
+                f"{item_path}.{field}",
+                f"must equal {expected!r}",
+                errors,
+            )
+        _require(
+            surface.get("errors_sha256") == hashlib.sha256(b"[]").hexdigest(),
+            f"{item_path}.errors_sha256",
+            "must hash the exact empty error list",
+            errors,
+        )
+        content_type = _nonempty_string(
+            surface.get("content_type"), f"{item_path}.content_type", errors
+        )
+        if content_type is not None:
+            _require(
+                _claim_html_content_type_is_supported(content_type),
+                f"{item_path}.content_type",
+                "must be HTML decoded under the collector's UTF-8 rules",
+                errors,
+            )
+        byte_length = _positive_int(
+            surface.get("byte_length"), f"{item_path}.byte_length", errors
+        )
         _sha256(surface.get("content_sha256"), f"{item_path}.content_sha256", errors)
-        _critical_proof_timestamp(surface.get("verified_at_utc"), gate="claim_honesty", event=event, observed=observed, context=context, path=f"{item_path}.verified_at_utc")
-    scan = evidence.get("scan")
-    if _is_mapping(scan, f"{path}.scan", errors):
-        _exact_keys(scan, {"misleading_claim_count", "unsupported_compliance_claim_count", "unsupported_universality_claim_count", "status_vocabulary_exact"}, f"{path}.scan", errors)
-        for field in ("misleading_claim_count", "unsupported_compliance_claim_count", "unsupported_universality_claim_count"):
-            _require(_json_scalar_equals(scan.get(field), 0), f"{path}.scan.{field}", "must be zero", errors)
-        _require(scan.get("status_vocabulary_exact") is True, f"{path}.scan.status_vocabulary_exact", "must be true", errors)
+        _sha256(surface.get("visible_text_sha256"), f"{item_path}.visible_text_sha256", errors)
+        characters = _positive_int(
+            surface.get("visible_text_characters"),
+            f"{item_path}.visible_text_characters",
+            errors,
+        )
+        words = _positive_int(
+            surface.get("visible_word_count"),
+            f"{item_path}.visible_word_count",
+            errors,
+        )
+        if characters is not None:
+            _require(characters >= 32, f"{item_path}.visible_text_characters", "must establish substantive coverage", errors)
+        if words is not None:
+            _require(words >= 5, f"{item_path}.visible_word_count", "must establish substantive coverage", errors)
+        if (
+            words is not None
+            and characters is not None
+            and byte_length is not None
+            and maximum is not None
+        ):
+            _require(
+                words <= characters <= byte_length <= maximum,
+                item_path,
+                "must satisfy 0 < visible_word_count <= visible_text_characters <= byte_length <= maximum_response_bytes",
+                errors,
+            )
+        basis = surface.get("visibility_basis")
+        prerendered = surface.get("prerendered_application_mount_detected")
+        contract_matches = surface.get("prerender_contract_matches_requested_route")
+        expected_prerendered = kind in {"product_app", "audit_console"}
+        _require(
+            prerendered is expected_prerendered,
+            f"{item_path}.prerendered_application_mount_detected",
+            "must match the pinned route rendering contract",
+            errors,
+        )
+        if expected_prerendered:
+            _require(
+                basis == "prerendered_same_route_application_mount"
+                and contract_matches is True,
+                f"{item_path}.visibility_basis",
+                "must bind a matching same-route prerender contract",
+                errors,
+            )
+        else:
+            _require(
+                basis == "static_same_route_html"
+                and contract_matches is False,
+                f"{item_path}.visibility_basis",
+                "must bind static same-route HTML with exact JSON false prerender contract",
+                errors,
+            )
+        verified = _critical_proof_timestamp(surface.get("verified_at_utc"), gate="claim_honesty", event=event, observed=observed, context=context, path=f"{item_path}.verified_at_utc")
+        if verified is not None and generated is not None:
+            _require(
+                verified <= generated,
+                f"{item_path}.verified_at_utc",
+                "must not follow machine-subject generation",
+                errors,
+            )
+    if isinstance(machine_subject, Mapping):
+        scan = machine_subject.get("scan")
+        if _is_mapping(scan, f"{path}.machine_subject.scan", errors):
+            _exact_keys(scan, CLAIM_MACHINE_SCAN_KEYS, f"{path}.machine_subject.scan", errors)
+            for field in (
+                "misleading_claim_count",
+                "unsupported_compliance_claim_count",
+                "unsupported_universality_claim_count",
+                "unsupported_ip_claim_count",
+                "finding_count",
+            ):
+                _require(_json_scalar_equals(scan.get(field), 0), f"{path}.machine_subject.scan.{field}", "must be zero", errors)
+            for field, expected in {
+                "status_vocabulary_exact": True,
+                "scanned_surface_count": len(CLAIM_SURFACE_KINDS),
+                "covered_surface_count": len(CLAIM_SURFACE_KINDS),
+                "coverage_complete": True,
+                "machine_scan_passed": True,
+            }.items():
+                _require(
+                    _json_scalar_equals(scan.get(field), expected),
+                    f"{path}.machine_subject.scan.{field}",
+                    f"must equal {expected!r}",
+                    errors,
+                )
+        findings = machine_subject.get("findings")
+        if not isinstance(findings, list):
+            _error(errors, f"{path}.machine_subject.findings", "must be an array")
+        else:
+            for index, finding in enumerate(findings):
+                item_path = f"{path}.machine_subject.findings[{index}]"
+                if _is_mapping(finding, item_path, errors):
+                    _exact_keys(finding, CLAIM_MACHINE_FINDING_KEYS, item_path, errors)
+            _require(
+                findings == [],
+                f"{path}.machine_subject.findings",
+                "must be the exact empty finding list",
+                errors,
+            )
+        machine_digest = hashlib.sha256(
+            _canonical_claim_machine_subject_bytes(machine_subject)
+        ).hexdigest()
+        _require(
+            evidence.get("machine_subject_sha256") == machine_digest,
+            f"{path}.machine_subject_sha256",
+            "must hash the exact canonical machine subject",
+            errors,
+        )
+        _require(
+            evidence.get("artifact_sha256") == machine_digest,
+            f"{path}.artifact_sha256",
+            "must equal machine_subject_sha256 and hash the exact canonical machine subject",
+            errors,
+        )
+    _sha256(
+        evidence.get("machine_subject_sha256"),
+        f"{path}.machine_subject_sha256",
+        errors,
+    )
     boundaries = evidence.get("boundaries")
     if _is_mapping(boundaries, f"{path}.boundaries", errors):
-        _exact_keys(boundaries, {"research_scope_disclosed", "research_accept_not_product_accept", "worm_retention_not_verdict_upgrade", "flag_for_human_review_not_accept", "compliance_certification_claims_absent", "rendered_product_status"}, f"{path}.boundaries", errors)
+        _exact_keys(boundaries, {"research_scope_disclosed", "research_accept_not_product_accept", "worm_retention_not_verdict_upgrade", "flag_for_human_review_not_accept", "compliance_certification_claims_absent"}, f"{path}.boundaries", errors)
         for field in ("research_scope_disclosed", "research_accept_not_product_accept", "worm_retention_not_verdict_upgrade", "flag_for_human_review_not_accept", "compliance_certification_claims_absent"):
             _require(boundaries.get(field) is True, f"{path}.boundaries.{field}", "must be true", errors)
-        _require(boundaries.get("rendered_product_status") == product_status, f"{path}.boundaries.rendered_product_status", "must match the declared product status", errors)
+    _require(
+        evidence.get("claim_status_vocabulary") == list(CLAIM_STATUS_VOCABULARY),
+        f"{path}.claim_status_vocabulary",
+        "must preserve the exact bounded claim vocabulary and casing",
+        errors,
+    )
     approvals = _list_by_key(evidence.get("approvals"), "role", CLAIM_APPROVER_ROLES, f"{path}.approvals", errors)
     for role, approval in approvals.items():
         item_path = f"{path}.approvals[{role}]"
         _exact_keys(approval, {"role", "approval_artifact_uri", "approval_sha256", "approved_at_utc"}, item_path, errors)
         _safe_https_url(approval.get("approval_artifact_uri"), f"{item_path}.approval_artifact_uri", errors, allowed_origins={PRODUCTION_API_ORIGIN, LANDING_ORIGIN})
         _sha256(approval.get("approval_sha256"), f"{item_path}.approval_sha256", errors)
-        _critical_proof_timestamp(approval.get("approved_at_utc"), gate="claim_honesty", event=event, observed=observed, context=context, path=f"{item_path}.approved_at_utc")
+        approved = _critical_proof_timestamp(approval.get("approved_at_utc"), gate="claim_honesty", event=event, observed=observed, context=context, path=f"{item_path}.approved_at_utc")
+        if approved is not None and generated is not None:
+            _require(
+                approved >= generated,
+                f"{item_path}.approved_at_utc",
+                "must be at or after machine-subject generation",
+                errors,
+            )
 
 
 GateValidator = Callable[[Mapping[str, Any], ValidationContext], None]
@@ -2237,10 +2948,11 @@ def _validate_release_decision(
     if evidence is None:
         return
     path = "$.product.release_decision.evidence.payload"
-    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"status", "approved_at_utc", "approver_roles", "decision_record_uri", "decision_record_sha256"}, path, context.errors)
+    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"status", "approved_at_utc", "approver_roles", "decision_record_uri", "decision_record_sha256", "human_assurance_boundary"}, path, context.errors)
     event, observed = _validate_common_evidence(
         evidence, "release_decision", context
     )
+    _validate_human_assurance_boundary(evidence, path, context.errors)
     _require(evidence.get("status") == "ACCEPT", f"{path}.status", "must be ACCEPT", context.errors)
     approved = _critical_proof_timestamp(
         evidence.get("approved_at_utc"),
@@ -2271,10 +2983,21 @@ def _cross_validate(
     docs: dict[Any, Any] = {}
     if legal and isinstance(legal.get("documents"), list):
         docs = {item.get("kind"): item.get("content_sha256") for item in legal["documents"] if isinstance(item, Mapping)}
-    if legal and honesty and docs and isinstance(honesty.get("scanned_surfaces"), list):
-        surfaces = {item.get("kind"): item.get("content_sha256") for item in honesty["scanned_surfaces"] if isinstance(item, Mapping)}
+    honesty_subject = honesty.get("machine_subject") if honesty else None
+    if (
+        legal
+        and honesty
+        and docs
+        and isinstance(honesty_subject, Mapping)
+        and isinstance(honesty_subject.get("scanned_surfaces"), list)
+    ):
+        surfaces = {
+            item.get("kind"): item.get("content_sha256")
+            for item in honesty_subject["scanned_surfaces"]
+            if isinstance(item, Mapping)
+        }
         for kind in LEGAL_DOCUMENT_KINDS:
-            _require(docs.get(kind) == surfaces.get(kind), f"$.required_gates.claim_honesty.evidence.payload.scanned_surfaces[{kind}].content_sha256", "must match the authoritative legal publication hash", errors)
+            _require(docs.get(kind) == surfaces.get(kind), f"$.required_gates.claim_honesty.evidence.payload.machine_subject.scanned_surfaces[{kind}].content_sha256", "must match the authoritative legal publication hash", errors)
     support = gate_payloads.get("support_crm")
     if support and docs:
         consent = support.get("consent")

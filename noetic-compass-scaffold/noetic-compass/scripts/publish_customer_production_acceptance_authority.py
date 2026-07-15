@@ -43,6 +43,8 @@ from api.services.customer_production_acceptance_authority import (
     PRODUCTION_SERVICE_ID,
     REPOSITORY,
     AcceptanceAuthorityConflict,
+    AcceptanceAuthorityAccountsBillingSourceUnavailable,
+    AcceptanceAuthorityHumanAttestationUnavailable,
     AcceptanceAuthorityInvalid,
     AcceptanceAuthorityNotFound,
     AcceptanceAuthorityUnavailable,
@@ -59,6 +61,7 @@ from api.services.acceptance_publication_authorizations import (
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 _SHA1_RE = re.compile(r"^[0-9a-f]{40}$")
 _DEPLOY_ID_RE = re.compile(r"^dep-[A-Za-z0-9]+$")
+_PRIVATE_SOURCE_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,199}$")
 _POSTGRES_SCHEMES = ("postgres://", "postgresql://", "postgresql+asyncpg://")
 
 
@@ -159,6 +162,30 @@ def _prepare_evidence(
     return evidence, canonical, digest
 
 
+def _read_accounts_billing_source(path: Path) -> tuple[str, str]:
+    """Read private source selectors without copying them into public evidence."""
+
+    value = _read_evidence(path)
+    if set(value) != {"tenant_id", "invoice_record_id"}:
+        raise PublisherInputError(
+            "accounts_billing_source_invalid",
+            "accounts/billing source file must contain only tenant_id and invoice_record_id",
+        )
+    tenant_id = value.get("tenant_id")
+    invoice_record_id = value.get("invoice_record_id")
+    if (
+        not isinstance(tenant_id, str)
+        or _PRIVATE_SOURCE_ID_RE.fullmatch(tenant_id) is None
+        or not isinstance(invoice_record_id, str)
+        or _PRIVATE_SOURCE_ID_RE.fullmatch(invoice_record_id) is None
+    ):
+        raise PublisherInputError(
+            "accounts_billing_source_invalid",
+            "accounts/billing source identifiers are invalid",
+        )
+    return tenant_id, invoice_record_id
+
+
 def _assert_production_binding(
     settings: Any,
     *,
@@ -217,7 +244,20 @@ def _production_authority(
     # Imports stay inside the production-only path so ``validate`` never opens a
     # database connection or initializes an object-store client.
     from api.config import Settings
-    from api.services.human_attestations import HumanAttestationStore
+    from api.services.human_attestations import (
+        HumanAttestationStore,
+        parse_human_attestation_pseudonym_keyring,
+    )
+    from api.services.customer_production_pseudonyms import (
+        CustomerProductionPseudonymizer,
+        parse_customer_production_pseudonym_keyring,
+    )
+    from api.services.accounts_billing_acceptance_binding import (
+        AccountsBillingAcceptanceSourceBindingStore,
+    )
+    from api.services.accounts import build_account_store
+    from api.services.billing_entitlements import BillingEntitlementStore
+    from api.services.billing_reconciliation import BillingReconciliationStore
     from api.state_ledger_bootstrap import _build_state_store
 
     settings = Settings()
@@ -239,17 +279,68 @@ def _production_authority(
             )
 
             immutable_repository = build_s3_evidence_packet_repository(state_store)
+        customer_production_pseudonymizer = CustomerProductionPseudonymizer(
+            parse_customer_production_pseudonym_keyring(
+                settings.customer_production_pseudonym_keyring_json,
+                active_key_id=(
+                    settings.customer_production_pseudonym_active_key_id
+                ),
+            ),
+            active_key_id=settings.customer_production_pseudonym_active_key_id,
+        )
+        accounts_billing_source_bindings = None
+        if settings.billing_reconciliation_enabled:
+            account_store = build_account_store(settings, store=state_store)
+            entitlement_store = BillingEntitlementStore(state_store)
+            billing_store = BillingReconciliationStore(
+                state_store,
+                entitlement_store,
+                provider_reference_hash_key=(
+                    settings.billing_provider_reference_hash_key
+                ),
+                usage_price_id=settings.stripe_usage_price_id,
+                meter_event_name=settings.billing_usage_meter_event_name,
+                meter_event_version=settings.billing_usage_meter_version,
+                currency=settings.billing_usage_currency,
+                livemode=settings.stripe_livemode,
+                customer_receipt_allowed_hosts=tuple(
+                    host.strip()
+                    for host in settings.billing_customer_receipt_allowed_hosts.split(",")
+                    if host.strip()
+                ),
+            )
+            accounts_billing_source_bindings = (
+                AccountsBillingAcceptanceSourceBindingStore(
+                    state_store,
+                    accounts=account_store,
+                    billing=billing_store,
+                    pseudonymizer=customer_production_pseudonymizer,
+                )
+            )
         yield CustomerProductionAcceptanceAuthorityStore(
             state_store,
             human_attestation_store=HumanAttestationStore(
                 state_store,
                 primary_tenant_id=settings.accounts_bootstrap_tenant_id,
+                pseudonym_keyring=parse_human_attestation_pseudonym_keyring(
+                    settings.human_attestation_pseudonym_keyring_json,
+                    active_key_id=(
+                        settings.human_attestation_pseudonym_active_key_id
+                    ),
+                ),
+                active_pseudonym_key_id=(
+                    settings.human_attestation_pseudonym_active_key_id
+                ),
             ),
             publication_authorization_store=(
                 AcceptancePublicationAuthorizationStore(
                     state_store,
                     primary_tenant_id=settings.accounts_bootstrap_tenant_id,
+                    pseudonymizer=customer_production_pseudonymizer,
                 )
+            ),
+            accounts_billing_source_binding_store=(
+                accounts_billing_source_bindings
             ),
             immutable_backend=(
                 immutable_repository.backend
@@ -312,6 +403,14 @@ def _build_parser() -> argparse.ArgumentParser:
     publish.add_argument("--authorization-artifact-uri", required=True)
     publish.add_argument("--authorization-artifact-sha256", required=True)
     publish.add_argument("--operation-reason", required=True)
+    publish.add_argument(
+        "--accounts-billing-source",
+        type=Path,
+        help=(
+            "private JSON file containing tenant_id and invoice_record_id; "
+            "required only for accounts_billing"
+        ),
+    )
     publish.add_argument(
         "--expected-previous-evidence-sha256",
         help="required when expected-head-version is greater than zero",
@@ -499,6 +598,21 @@ def run(
             expected_evidence_sha256=args.expected_evidence_sha256,
             now=now,
         )
+        accounts_billing_source: tuple[str, str] | None = None
+        if args.gate == "accounts_billing":
+            if args.accounts_billing_source is None:
+                raise PublisherInputError(
+                    "accounts_billing_source_required",
+                    "accounts/billing publication requires a private source file",
+                )
+            accounts_billing_source = _read_accounts_billing_source(
+                args.accounts_billing_source
+            )
+        elif args.accounts_billing_source is not None:
+            raise PublisherInputError(
+                "accounts_billing_source_unexpected",
+                "accounts/billing source file is valid only for accounts_billing",
+            )
         with _production_authority(
             expected_master_head=args.expected_master_head,
             environ=runtime_environ,
@@ -524,6 +638,14 @@ def run(
                     "publication_authorization_invalid",
                     "publication authorization is absent, expired, or mismatched",
                 ) from exc
+            if accounts_billing_source is not None:
+                tenant_id, invoice_record_id = accounts_billing_source
+                authority.create_accounts_billing_source_binding(
+                    evidence,
+                    tenant_id=tenant_id,
+                    invoice_record_id=invoice_record_id,
+                    now=now,
+                )
             try:
                 published = authority.publish(
                     args.gate,
@@ -548,6 +670,15 @@ def run(
             except AcceptanceAuthorityAuthorizationUnavailable:
                 # Same pre-write guarantee as above; state is unavailable, not
                 # mutation-unknown.
+                raise
+            except AcceptanceAuthorityHumanAttestationUnavailable:
+                # Human-attestation dereferencing also completes before any
+                # revision/WORM/operation/head write, so its failure has a
+                # known pre-mutation state.
+                raise
+            except AcceptanceAuthorityAccountsBillingSourceUnavailable:
+                # Raw account/invoice dereferencing also completes before any
+                # public revision, WORM object, operation, or head write.
                 raise
             except AcceptanceAuthorityUnavailable as exc:
                 # A failed return does not prove the transaction rolled back.

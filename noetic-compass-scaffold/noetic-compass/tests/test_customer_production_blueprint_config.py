@@ -10,6 +10,24 @@ from api.config import Settings
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 CUSTOMER_BLUEPRINT = REPOSITORY_ROOT / "render.customer.yaml"
+PSEUDONYM_KEY_ID = "hatk_0123456789abcdef0123456789abcdef"
+PSEUDONYM_KEY_SECRET = (
+    "base64url:5EfvyXp5BYNrpodyw-DoiFemHziedgI06tZHVjtmvow"
+)
+PSEUDONYM_KEYRING_JSON = (
+    '{"' + PSEUDONYM_KEY_ID + '":"' + PSEUDONYM_KEY_SECRET + '"}'
+)
+CUSTOMER_PSEUDONYM_KEY_ID = "cpk_89abcdef0123456789abcdef01234567"
+CUSTOMER_PSEUDONYM_KEY_SECRET = (
+    "base64url:ba72v6mRNqQ2kA0GZljcsAF4HpatDbaOpVkvpGl_QmA"
+)
+CUSTOMER_PSEUDONYM_KEYRING_JSON = (
+    '{"'
+    + CUSTOMER_PSEUDONYM_KEY_ID
+    + '":"'
+    + CUSTOMER_PSEUDONYM_KEY_SECRET
+    + '"}'
+)
 
 
 def _env_value(key: str) -> str:
@@ -45,6 +63,14 @@ def _safe_customer_settings(**overrides: object) -> Settings:
         "NC_ACCOUNTS_ENABLED": True,
         "NC_ACCOUNT_CREDENTIAL_PEPPER": (
             "account-pepper-000000000000000000000000000001"
+        ),
+        "NC_HUMAN_ATTESTATION_PSEUDONYM_ACTIVE_KEY_ID": PSEUDONYM_KEY_ID,
+        "NC_HUMAN_ATTESTATION_PSEUDONYM_KEYRING_JSON": PSEUDONYM_KEYRING_JSON,
+        "NC_CUSTOMER_PRODUCTION_PSEUDONYM_ACTIVE_KEY_ID": (
+            CUSTOMER_PSEUDONYM_KEY_ID
+        ),
+        "NC_CUSTOMER_PRODUCTION_PSEUDONYM_KEYRING_JSON": (
+            CUSTOMER_PSEUDONYM_KEYRING_JSON
         ),
         "NC_ACCOUNT_BOOTSTRAP_SECRET": (
             "bootstrap-secret-00000000000000000000000000001"
@@ -125,6 +151,10 @@ def test_customer_blueprint_enables_airtable_while_privacy_intake_stays_closed()
         "AWS_SECRET_ACCESS_KEY",
         "ATLAS_LIVE_WORKER_URL",
         "ATLAS_LIVE_WORKER_TOKEN",
+        "NC_HUMAN_ATTESTATION_PSEUDONYM_ACTIVE_KEY_ID",
+        "NC_HUMAN_ATTESTATION_PSEUDONYM_KEYRING_JSON",
+        "NC_CUSTOMER_PRODUCTION_PSEUDONYM_ACTIVE_KEY_ID",
+        "NC_CUSTOMER_PRODUCTION_PSEUDONYM_KEYRING_JSON",
         "NC_AIRTABLE_TOKEN",
         "NC_AIRTABLE_BASE_ID",
         "NC_AIRTABLE_TABLE_NAME",
@@ -157,6 +187,144 @@ def test_customer_startup_configuration_is_valid_without_effect_providers(
     assert configured.fleet_service_auth_enabled is False
     assert configured.evidence_packet_object_store_enabled is True
     assert configured.evidence_shares_enabled is True
+
+
+def test_customer_attestation_keyring_is_required_bound_and_dedicated(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", "s3")
+    monkeypatch.setenv(
+        "CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE", "GOVERNANCE"
+    )
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", "31")
+
+    with pytest.raises(RuntimeError, match="configured together"):
+        _safe_customer_settings(
+            NC_HUMAN_ATTESTATION_PSEUDONYM_KEYRING_JSON=""
+        ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="active pseudonym key is unavailable"):
+        _safe_customer_settings(
+            NC_HUMAN_ATTESTATION_PSEUDONYM_ACTIVE_KEY_ID=(
+                "hatk_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            )
+        ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="must be dedicated"):
+        _safe_customer_settings(
+            NC_ACCOUNT_CREDENTIAL_PEPPER=PSEUDONYM_KEY_SECRET,
+        ).validate_account_storage()
+
+
+def test_customer_production_keyring_is_required_bound_and_dedicated(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", "s3")
+    monkeypatch.setenv(
+        "CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE", "GOVERNANCE"
+    )
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", "31")
+
+    with pytest.raises(RuntimeError, match="configured together"):
+        _safe_customer_settings(
+            NC_CUSTOMER_PRODUCTION_PSEUDONYM_KEYRING_JSON=""
+        ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="active pseudonym key is unavailable"):
+        _safe_customer_settings(
+            NC_CUSTOMER_PRODUCTION_PSEUDONYM_ACTIVE_KEY_ID=(
+                "cpk_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            )
+        ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="must be dedicated"):
+        _safe_customer_settings(
+            NC_ACCOUNT_CREDENTIAL_PEPPER=CUSTOMER_PSEUDONYM_KEY_SECRET,
+        ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="must be dedicated"):
+        _safe_customer_settings(
+            NC_CUSTOMER_PRODUCTION_PSEUDONYM_KEYRING_JSON=(
+                '{"'
+                + CUSTOMER_PSEUDONYM_KEY_ID
+                + '":"'
+                + PSEUDONYM_KEY_SECRET
+                + '"}'
+            ),
+        ).validate_account_storage()
+
+
+def test_attestation_key_validation_precedes_accounts_disabled_return() -> None:
+    accounts_off = Settings.model_construct(
+        accounts_enabled=False,
+        human_attestation_pseudonym_active_key_id="",
+        human_attestation_pseudonym_keyring_json="",
+    )
+    accounts_off.validate_account_storage()
+
+    with pytest.raises(RuntimeError, match="configured together"):
+        Settings.model_construct(
+            accounts_enabled=False,
+            human_attestation_pseudonym_active_key_id=PSEUDONYM_KEY_ID,
+            human_attestation_pseudonym_keyring_json="",
+        ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="configured together"):
+        Settings.model_construct(
+            accounts_enabled=False,
+            human_attestation_pseudonym_active_key_id="",
+            human_attestation_pseudonym_keyring_json=PSEUDONYM_KEYRING_JSON,
+        ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="independently random"):
+        Settings.model_construct(
+            accounts_enabled=False,
+            human_attestation_pseudonym_active_key_id=PSEUDONYM_KEY_ID,
+            human_attestation_pseudonym_keyring_json=(
+                '{"' + PSEUDONYM_KEY_ID + '":'
+                '"base64url:YWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWE"}'
+            ),
+        ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="must be dedicated"):
+        Settings.model_construct(
+            accounts_enabled=False,
+            account_credential_pepper=PSEUDONYM_KEY_SECRET,
+            human_attestation_pseudonym_active_key_id=PSEUDONYM_KEY_ID,
+            human_attestation_pseudonym_keyring_json=PSEUDONYM_KEYRING_JSON,
+        ).validate_account_storage()
+
+
+def test_customer_key_validation_precedes_accounts_disabled_return() -> None:
+    with pytest.raises(RuntimeError, match="configured together"):
+        Settings.model_construct(
+            accounts_enabled=False,
+            customer_production_pseudonym_active_key_id=(
+                CUSTOMER_PSEUDONYM_KEY_ID
+            ),
+            customer_production_pseudonym_keyring_json="",
+        ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="must be independently random"):
+        Settings.model_construct(
+            accounts_enabled=False,
+            customer_production_pseudonym_active_key_id=(
+                CUSTOMER_PSEUDONYM_KEY_ID
+            ),
+            customer_production_pseudonym_keyring_json=(
+                '{"'
+                + CUSTOMER_PSEUDONYM_KEY_ID
+                + '":'
+                '"base64url:YWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWE"}'
+            ),
+        ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="must be dedicated"):
+        Settings.model_construct(
+            accounts_enabled=False,
+            human_attestation_pseudonym_active_key_id=PSEUDONYM_KEY_ID,
+            human_attestation_pseudonym_keyring_json=PSEUDONYM_KEYRING_JSON,
+            customer_production_pseudonym_active_key_id=(
+                CUSTOMER_PSEUDONYM_KEY_ID
+            ),
+            customer_production_pseudonym_keyring_json=(
+                '{"'
+                + CUSTOMER_PSEUDONYM_KEY_ID
+                + '":"'
+                + PSEUDONYM_KEY_SECRET
+                + '"}'
+            ),
+        ).validate_account_storage()
 
 
 def test_customer_effect_gate_mutation_fails_startup_validation(

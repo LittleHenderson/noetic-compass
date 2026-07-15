@@ -40,6 +40,11 @@ from api.services.production.state_substrate import (
     VersionConflict,
 )
 from api.services.production.worm_writes import RetentionPolicy
+from api.services.accounts_billing_acceptance_binding import (
+    AccountsBillingAcceptanceSourceBindingStore,
+    AccountsBillingSourceBindingInvalid,
+    AccountsBillingSourceBindingUnavailable,
+)
 from api.services.acceptance_publication_authorizations import (
     AcceptancePublicationAuthorizationInvalid,
     AcceptancePublicationAuthorizationNotFound,
@@ -50,16 +55,22 @@ from api.services.acceptance_publication_authorizations import (
 from api.services.cas_harness_retention_disclosure import (
     revalidate_object_lock_verification,
 )
+from api.services.customer_production_pseudonyms import (
+    KEY_ID_PATTERN as CUSTOMER_PSEUDONYM_KEY_ID_PATTERN,
+    PSEUDONYMIZATION_SCHEME as CUSTOMER_PSEUDONYMIZATION_SCHEME,
+    SUBJECT_PATTERN as CUSTOMER_PSEUDONYM_SUBJECT_PATTERN,
+)
 from api.services.human_attestations import (
     HumanAttestationInvalid,
     HumanAttestationNotFound,
     HumanAttestationStore,
     HumanAttestationUnavailable,
+    PUBLIC_HUMAN_ASSURANCE_BOUNDARY,
     canonical_evidence_binding_sha256,
 )
 
 
-EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v2"
+EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v3"
 RECORD_SCHEMA_VERSION = "cas_harness_acceptance_authority_revision.v2"
 HEAD_SCHEMA_VERSION = "cas_harness_acceptance_authority_head.v3"
 OPERATION_SCHEMA_VERSION = "cas_harness_acceptance_authority_operation.v1"
@@ -71,6 +82,10 @@ PRODUCTION_SERVICE_ID = "srv-d9bijbjtqb8s73cn4n20"
 PRODUCTION_SERVICE_NAME = "cas-harness-customer-api"
 EXPECTED_MODEL_ID = "EleutherAI/pythia-160m"
 EXPECTED_REALMODE_VERDICT = "REAL_PYTHIA_WEIGHTS_LOADED"
+CLAIM_MACHINE_SUBJECT_SCHEMA_VERSION = (
+    "cas_harness_claim_honesty_machine_subject.v1"
+)
+CLAIM_MACHINE_RULESET_VERSION = "cas_harness_claim_honesty_rules.v1"
 CRM_SOURCE_SCHEMA_VERSION = "cas_harness_airtable_crm_acceptance_source.v2"
 CRM_PRIVACY_NOTICE_URL = "https://cascompass.ai/privacy"
 CRM_PRIVACY_NOTICE_PRESENT_STATUS = "present"
@@ -128,6 +143,14 @@ _TABLETOP_SCENARIOS = frozenset(
 _ALERT_DESTINATIONS = frozenset({"incident_channel", "primary_on_call"})
 _RELEASE_APPROVER_ROLES = frozenset(
     {"legal_owner", "operations_owner", "product_owner", "security_owner"}
+)
+_HUMAN_ATTESTATION_GATES = frozenset(
+    {
+        "legal_publication_approval",
+        "claim_honesty",
+        "incident_tabletop",
+        "release_decision",
+    }
 )
 _CLAIM_STATUS_VOCABULARY = [
     "ACCEPT",
@@ -189,14 +212,23 @@ _EXTRA_FIELDS: dict[str, frozenset[str]] = {
             "api_base_url",
             "service_id",
             "customer_lane",
-            "tenant_subject_sha256",
+            "pseudonymization_scheme",
+            "pseudonym_key_id",
+            "tenant_subject",
+            "account_subject",
             "account_session",
             "quota",
             "billing",
         }
     ),
     "legal_publication_approval": frozenset(
-        {"public_base_url", "documents", "approvals", "claim_status_vocabulary"}
+        {
+            "public_base_url",
+            "documents",
+            "approvals",
+            "claim_status_vocabulary",
+            "human_assurance_boundary",
+        }
     ),
     "support_crm": frozenset(
         {
@@ -210,7 +242,13 @@ _EXTRA_FIELDS: dict[str, frozenset[str]] = {
         }
     ),
     "incident_tabletop": frozenset(
-        {"api_base_url", "service_id", "incident", "tabletop"}
+        {
+            "api_base_url",
+            "service_id",
+            "incident",
+            "tabletop",
+            "human_assurance_boundary",
+        }
     ),
     "alert_delivery": frozenset(
         {
@@ -223,7 +261,14 @@ _EXTRA_FIELDS: dict[str, frozenset[str]] = {
         }
     ),
     "claim_honesty": frozenset(
-        {"scanned_surfaces", "scan", "boundaries", "approvals"}
+        {
+            "machine_subject",
+            "machine_subject_sha256",
+            "boundaries",
+            "claim_status_vocabulary",
+            "approvals",
+            "human_assurance_boundary",
+        }
     ),
     "release_decision": frozenset(
         {
@@ -232,6 +277,7 @@ _EXTRA_FIELDS: dict[str, frozenset[str]] = {
             "approver_roles",
             "decision_record_uri",
             "decision_record_sha256",
+            "human_assurance_boundary",
         }
     ),
 }
@@ -357,6 +403,9 @@ _OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
             {"foreign_audit_http_status", "foreign_packet_http_status", "verified_at_utc"}
         ),
     },
+    "legal_publication_approval": {
+        "human_assurance_boundary": frozenset(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
+    },
     "accounts_billing": {
         "account_session": frozenset(
             {
@@ -394,9 +443,9 @@ _OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
                 "webhook_signature_verified",
                 "entitlement_status",
                 "meter_to_invoice_reconciled",
-                "provider_customer_id_sha256",
-                "provider_subscription_id_sha256",
-                "invoice_id_sha256",
+                "provider_customer_subject",
+                "provider_subscription_subject",
+                "invoice_subject",
                 "paid_at_utc",
             }
         ),
@@ -448,6 +497,7 @@ _OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
         ),
     },
     "incident_tabletop": {
+        "human_assurance_boundary": frozenset(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
         "incident": frozenset(
             {
                 "record_id",
@@ -490,14 +540,7 @@ _OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
         ),
     },
     "claim_honesty": {
-        "scan": frozenset(
-            {
-                "misleading_claim_count",
-                "unsupported_compliance_claim_count",
-                "unsupported_universality_claim_count",
-                "status_vocabulary_exact",
-            }
-        ),
+        "human_assurance_boundary": frozenset(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
         "boundaries": frozenset(
             {
                 "research_scope_disclosed",
@@ -505,11 +548,81 @@ _OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
                 "worm_retention_not_verdict_upgrade",
                 "flag_for_human_review_not_accept",
                 "compliance_certification_claims_absent",
-                "rendered_product_status",
             }
         ),
     },
+    "release_decision": {
+        "human_assurance_boundary": frozenset(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
+    },
 }
+
+_CLAIM_MACHINE_SUBJECT_FIELDS = frozenset(
+    {
+        "schema_version",
+        "generated_at_utc",
+        "scanner",
+        "scanned_surfaces",
+        "scan",
+        "findings",
+    }
+)
+_CLAIM_MACHINE_SCANNER_FIELDS = frozenset(
+    {
+        "ruleset_version",
+        "collector_sha256",
+        "request_method",
+        "redirects_allowed",
+        "maximum_response_bytes",
+        "javascript_executed",
+    }
+)
+_CLAIM_MACHINE_SCAN_FIELDS = frozenset(
+    {
+        "misleading_claim_count",
+        "unsupported_compliance_claim_count",
+        "unsupported_universality_claim_count",
+        "unsupported_ip_claim_count",
+        "status_vocabulary_exact",
+        "scanned_surface_count",
+        "covered_surface_count",
+        "finding_count",
+        "coverage_complete",
+        "machine_scan_passed",
+    }
+)
+_CLAIM_MACHINE_SURFACE_FIELDS = frozenset(
+    {
+        "kind",
+        "url",
+        "http_status",
+        "final_url_matches_requested",
+        "content_type",
+        "byte_length",
+        "content_sha256",
+        "verified_at_utc",
+        "coverage_established",
+        "visibility_basis",
+        "visible_text_sha256",
+        "visible_text_characters",
+        "visible_word_count",
+        "client_rendered_shell_detected",
+        "prerendered_application_mount_detected",
+        "prerender_contract_matches_requested_route",
+        "route_identity_established",
+        "error_count",
+        "errors_sha256",
+    }
+)
+_CLAIM_MACHINE_FINDING_FIELDS = frozenset(
+    {
+        "category",
+        "rule_id",
+        "surface_kind",
+        "match_start",
+        "match_end",
+        "match_sha256",
+    }
+)
 
 _LIST_OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
     "legal_publication_approval": {
@@ -533,9 +646,6 @@ _LIST_OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
         )
     },
     "claim_honesty": {
-        "scanned_surfaces": frozenset(
-            {"kind", "url", "http_status", "content_sha256", "verified_at_utc"}
-        ),
         "approvals": frozenset(
             {"role", "approval_artifact_uri", "approval_sha256", "approved_at_utc"}
         ),
@@ -544,6 +654,7 @@ _LIST_OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
 
 _TOP_LEVEL_LIST_FIELDS: dict[str, frozenset[str]] = {
     "legal_publication_approval": frozenset({"claim_status_vocabulary"}),
+    "claim_honesty": frozenset({"claim_status_vocabulary"}),
     "release_decision": frozenset({"approver_roles"}),
 }
 _NESTED_LIST_FIELDS: dict[tuple[str, str], frozenset[str]] = {
@@ -728,6 +839,18 @@ class AcceptanceAuthorityAuthorizationUnavailable(AcceptanceAuthorityUnavailable
     """The pre-write publication-authorization store failed integrity/readback."""
 
 
+class AcceptanceAuthorityHumanAttestationUnavailable(
+    AcceptanceAuthorityUnavailable
+):
+    """Human-attestation verification failed before authority mutation."""
+
+
+class AcceptanceAuthorityAccountsBillingSourceUnavailable(
+    AcceptanceAuthorityUnavailable
+):
+    """The private accounts/billing source binding cannot be verified."""
+
+
 @dataclass(frozen=True, slots=True)
 class AcceptanceEvidenceDocument:
     gate: str
@@ -778,6 +901,9 @@ class CustomerProductionAcceptanceAuthorityStore:
             AcceptancePublicationAuthorizationStore | None
         ) = None,
         human_attestation_store: HumanAttestationStore | None = None,
+        accounts_billing_source_binding_store: (
+            AccountsBillingAcceptanceSourceBindingStore | None
+        ) = None,
     ) -> None:
         if (immutable_backend is None) != (retention_policy is None):
             raise ValueError(
@@ -786,18 +912,85 @@ class CustomerProductionAcceptanceAuthorityStore:
         self._store = store
         self._immutable_backend = immutable_backend
         self._retention_policy = retention_policy
-        self._publication_authorizations = (
-            publication_authorization_store
-            if publication_authorization_store is not None
-            else AcceptancePublicationAuthorizationStore(
-                store, primary_tenant_id="primary"
-            )
-        )
-        # Optional only for backwards-compatible offline/schema-only callers.
-        # The production composition always supplies this store and therefore
-        # cannot publish or serve a human-gated revision without dereferencing
-        # every nested attestation at request time.
+        self._publication_authorizations = publication_authorization_store
+        # ``None`` preserves non-human offline callers. Human-gated publish and
+        # serving paths fail closed below rather than treating an omitted
+        # verifier as permission to skip dereferencing.
         self._human_attestations = human_attestation_store
+        self._accounts_billing_source_bindings = (
+            accounts_billing_source_binding_store
+        )
+
+    def configure_accounts_billing_source_binding_store(
+        self, bindings: AccountsBillingAcceptanceSourceBindingStore
+    ) -> None:
+        """Install the startup-built source verifier before the app is served."""
+
+        if not isinstance(bindings, AccountsBillingAcceptanceSourceBindingStore):
+            raise ValueError("accounts/billing source binding store is invalid")
+        if self._accounts_billing_source_bindings is not None:
+            raise ValueError("accounts/billing source binding store is already configured")
+        self._accounts_billing_source_bindings = bindings
+
+    def assert_accounts_billing_source_binding(
+        self,
+        gate: str,
+        evidence: Mapping[str, Any],
+        *,
+        evidence_sha256: str,
+    ) -> None:
+        if gate != "accounts_billing":
+            return
+        bindings = self._accounts_billing_source_bindings
+        if bindings is None:
+            raise AcceptanceAuthorityAccountsBillingSourceUnavailable(
+                "accounts/billing authoritative source binding is unavailable"
+            )
+        try:
+            bindings.assert_matches(evidence, evidence_sha256=evidence_sha256)
+        except AccountsBillingSourceBindingInvalid as exc:
+            raise AcceptanceAuthorityInvalid(
+                "accounts/billing evidence does not match its authoritative source"
+            ) from exc
+        except AccountsBillingSourceBindingUnavailable as exc:
+            raise AcceptanceAuthorityAccountsBillingSourceUnavailable(
+                "accounts/billing authoritative source binding is unavailable"
+            ) from exc
+
+    def create_accounts_billing_source_binding(
+        self,
+        evidence: Mapping[str, Any],
+        *,
+        tenant_id: str,
+        invoice_record_id: str,
+        now: datetime | None = None,
+    ) -> str:
+        """Create the private pre-publication binding from live durable facts."""
+
+        bindings = self._accounts_billing_source_bindings
+        if bindings is None:
+            raise AcceptanceAuthorityAccountsBillingSourceUnavailable(
+                "accounts/billing authoritative source binding is unavailable"
+            )
+        stamp = _utc_now(now)
+        canonicalize_acceptance_evidence(
+            "accounts_billing", evidence, now=stamp
+        )
+        try:
+            return bindings.create(
+                evidence,
+                tenant_id=tenant_id,
+                invoice_record_id=invoice_record_id,
+                now=stamp,
+            )
+        except AccountsBillingSourceBindingInvalid as exc:
+            raise AcceptanceAuthorityInvalid(
+                "accounts/billing evidence does not match its authoritative source"
+            ) from exc
+        except AccountsBillingSourceBindingUnavailable as exc:
+            raise AcceptanceAuthorityAccountsBillingSourceUnavailable(
+                "accounts/billing authoritative source binding is unavailable"
+            ) from exc
 
     def assert_human_attestations(
         self,
@@ -809,18 +1002,54 @@ class CustomerProductionAcceptanceAuthorityStore:
     ) -> None:
         """Dereference and bind every human artifact used by ``gate``."""
 
-        if gate not in {
-            "legal_publication_approval",
-            "claim_honesty",
-            "incident_tabletop",
-            "release_decision",
-        }:
+        if gate not in _HUMAN_ATTESTATION_GATES:
             return
-        if self._human_attestations is None:
-            return
+        attestations = self._human_attestations
+        if attestations is None:
+            raise AcceptanceAuthorityHumanAttestationUnavailable(
+                "human attestation storage is unavailable"
+            )
         stamp = _utc_now(now)
         event = _parse_utc(evidence.get("event_at_utc"), "event_at_utc")
         observed = _parse_utc(evidence.get("observed_at_utc"), "observed_at_utc")
+        if event > observed or observed > stamp:
+            raise AcceptanceAuthorityInvalid(
+                "human-gated evidence chronology is invalid"
+            )
+        approval_floor = event
+        if gate == "claim_honesty":
+            machine_subject = evidence.get("machine_subject")
+            if not isinstance(machine_subject, Mapping):
+                raise AcceptanceAuthorityInvalid(
+                    "claim machine subject is unavailable for attestation binding"
+                )
+            generated = _parse_utc(
+                machine_subject.get("generated_at_utc"),
+                "machine_subject.generated_at_utc",
+            )
+            if generated < event or generated > observed or generated > stamp:
+                raise AcceptanceAuthorityInvalid(
+                    "claim machine-subject chronology is invalid"
+                )
+            surfaces = machine_subject.get("scanned_surfaces")
+            if not isinstance(surfaces, list):
+                raise AcceptanceAuthorityInvalid(
+                    "claim surface chronology is unavailable"
+                )
+            for index, surface in enumerate(surfaces):
+                if not isinstance(surface, Mapping):
+                    raise AcceptanceAuthorityInvalid(
+                        "claim surface chronology is invalid"
+                    )
+                verified = _parse_utc(
+                    surface.get("verified_at_utc"),
+                    f"machine_subject.scanned_surfaces[{index}].verified_at_utc",
+                )
+                if verified < event or verified > generated:
+                    raise AcceptanceAuthorityInvalid(
+                        "claim surface chronology is invalid"
+                    )
+            approval_floor = generated
         binding = canonical_evidence_binding_sha256(gate, evidence)
         master = str(evidence.get("master_head_sha") or "")
         deploy = str(evidence.get("deploy_id") or "")
@@ -839,7 +1068,7 @@ class CustomerProductionAcceptanceAuthorityStore:
                     if not isinstance(approval, Mapping):
                         raise HumanAttestationInvalid("approval reference is invalid")
                     records.append(
-                        self._human_attestations.assert_reference(
+                        attestations.assert_reference(
                             uri=str(approval.get("approval_artifact_uri") or ""),
                             sha256=str(approval.get("approval_sha256") or ""),
                             purpose=purpose,
@@ -859,7 +1088,7 @@ class CustomerProductionAcceptanceAuthorityStore:
                     raise HumanAttestationInvalid("incident/tabletop references are invalid")
                 records.extend(
                     [
-                        self._human_attestations.assert_reference(
+                        attestations.assert_reference(
                             uri=str(incident.get("postmortem_uri") or ""),
                             sha256=str(incident.get("postmortem_sha256") or ""),
                             purpose="incident_postmortem",
@@ -870,7 +1099,7 @@ class CustomerProductionAcceptanceAuthorityStore:
                             evidence_binding_sha256=binding,
                             now=stamp,
                         ),
-                        self._human_attestations.assert_reference(
+                        attestations.assert_reference(
                             uri=str(tabletop.get("evidence_uri") or ""),
                             sha256=str(tabletop.get("evidence_sha256") or ""),
                             purpose="tabletop_evidence",
@@ -885,7 +1114,7 @@ class CustomerProductionAcceptanceAuthorityStore:
                 )
             else:
                 records.append(
-                    self._human_attestations.assert_reference(
+                    attestations.assert_reference(
                         uri=str(evidence.get("decision_record_uri") or ""),
                         sha256=str(evidence.get("decision_record_sha256") or ""),
                         purpose="release_decision_record",
@@ -897,7 +1126,7 @@ class CustomerProductionAcceptanceAuthorityStore:
                         now=stamp,
                     )
                 )
-            actor_hashes: set[str] = set()
+            actor_accounts: set[str] = set()
             for record in records:
                 # ``load`` has already dereferenced and validated every child,
                 # but the authority must also bind each individual action to
@@ -919,7 +1148,7 @@ class CustomerProductionAcceptanceAuthorityStore:
                             "supporting attestation graph is cyclic"
                         )
                     seen.add(child_sha)
-                    child = self._human_attestations.load(child_sha, now=stamp)
+                    child = attestations.load(child_sha, now=stamp)
                     timestamp_records.append(child)
                     pending.extend(
                         child.payload.get("supporting_attestations") or []
@@ -929,20 +1158,17 @@ class CustomerProductionAcceptanceAuthorityStore:
                         timestamp_record.payload.get("attested_at_utc"),
                         "attestation.attested_at_utc",
                     )
-                    if attested < event or attested > observed:
+                    if attested < approval_floor or attested > observed:
                         raise HumanAttestationInvalid(
                             "attestation timestamp is outside the evidence window"
                         )
-                actor = record.payload.get("actor")
-                if not isinstance(actor, Mapping):
-                    raise HumanAttestationUnavailable("attestation actor is invalid")
-                actor_hash = str(actor.get("account_id_sha256") or "")
                 if gate in {"legal_publication_approval", "claim_honesty"}:
-                    if actor_hash in actor_hashes:
+                    if record.actor_account_id in actor_accounts:
                         raise HumanAttestationInvalid(
-                            "approvals require distinct authenticated accounts"
+                            "approvals require distinct authenticated platform accounts; "
+                            "account separation does not prove distinct people"
                         )
-                    actor_hashes.add(actor_hash)
+                    actor_accounts.add(record.actor_account_id)
         except (HumanAttestationInvalid, HumanAttestationNotFound) as exc:
             if serving_active_revision:
                 raise AcceptanceAuthorityUnavailable(
@@ -952,7 +1178,7 @@ class CustomerProductionAcceptanceAuthorityStore:
                 "acceptance evidence references an invalid or revoked attestation"
             ) from exc
         except HumanAttestationUnavailable as exc:
-            raise AcceptanceAuthorityUnavailable(
+            raise AcceptanceAuthorityHumanAttestationUnavailable(
                 "human attestation storage is unavailable"
             ) from exc
 
@@ -972,6 +1198,10 @@ class CustomerProductionAcceptanceAuthorityStore:
     ) -> None:
         """Resolve and exactly match one local owner authorization record."""
 
+        if self._publication_authorizations is None:
+            raise AcceptanceAuthorityAuthorizationUnavailable(
+                "publication authorization storage is unavailable"
+            )
         try:
             self._publication_authorizations.assert_matches(
                 authorization_artifact_uri=authorization_artifact_uri,
@@ -1502,6 +1732,11 @@ class CustomerProductionAcceptanceAuthorityStore:
         )
         self.assert_human_attestations(gate, evidence, now=stamp)
         digest = hashlib.sha256(canonical).hexdigest()
+        # Revalidate private raw account/Stripe sources before a revision,
+        # immutable object, operation, or head can be mutated.
+        self.assert_accounts_billing_source_binding(
+            gate, evidence, evidence_sha256=digest
+        )
         self.assert_publication_authorized(
             gate=gate,
             master_head_sha=str(evidence["master_head_sha"]),
@@ -1825,6 +2060,9 @@ class CustomerProductionAcceptanceAuthorityStore:
         self.assert_human_attestations(
             gate, document, now=stamp, serving_active_revision=True
         )
+        self.assert_accounts_billing_source_binding(
+            gate, document, evidence_sha256=expected_hash
+        )
         return AcceptanceEvidenceDocument(
             gate=gate, sha256=expected_hash, body=body
         )
@@ -1915,6 +2153,9 @@ def _validate_structure(evidence: Mapping[str, Any], gate: str) -> None:
     list_specs = _LIST_OBJECT_FIELDS.get(gate, {})
     top_lists = _TOP_LEVEL_LIST_FIELDS.get(gate, frozenset())
     structured = set(object_specs) | set(list_specs) | set(top_lists)
+    if gate == "claim_honesty":
+        structured.add("machine_subject")
+        _validate_claim_machine_subject_structure(evidence.get("machine_subject"))
 
     for field, expected_keys in object_specs.items():
         value = evidence.get(field)
@@ -1953,6 +2194,64 @@ def _validate_structure(evidence: Mapping[str, Any], gate: str) -> None:
             raise AcceptanceAuthorityInvalid(f"{field} must be a JSON scalar")
 
 
+def _validate_claim_machine_subject_structure(value: Any) -> None:
+    if not isinstance(value, Mapping) or set(value) != _CLAIM_MACHINE_SUBJECT_FIELDS:
+        raise AcceptanceAuthorityInvalid(
+            "machine_subject does not match its exact object schema"
+        )
+    scanner = value.get("scanner")
+    if not isinstance(scanner, Mapping) or set(scanner) != _CLAIM_MACHINE_SCANNER_FIELDS:
+        raise AcceptanceAuthorityInvalid(
+            "machine_subject.scanner does not match its exact object schema"
+        )
+    if any(not _is_json_scalar(item) for item in scanner.values()):
+        raise AcceptanceAuthorityInvalid(
+            "machine_subject.scanner values must be JSON scalars"
+        )
+    scan = value.get("scan")
+    if not isinstance(scan, Mapping) or set(scan) != _CLAIM_MACHINE_SCAN_FIELDS:
+        raise AcceptanceAuthorityInvalid(
+            "machine_subject.scan does not match its exact object schema"
+        )
+    if any(not _is_json_scalar(item) for item in scan.values()):
+        raise AcceptanceAuthorityInvalid(
+            "machine_subject.scan values must be JSON scalars"
+        )
+    surfaces = value.get("scanned_surfaces")
+    if not isinstance(surfaces, list):
+        raise AcceptanceAuthorityInvalid(
+            "machine_subject.scanned_surfaces must be an array"
+        )
+    for index, surface in enumerate(surfaces):
+        if (
+            not isinstance(surface, Mapping)
+            or set(surface) != _CLAIM_MACHINE_SURFACE_FIELDS
+            or any(not _is_json_scalar(item) for item in surface.values())
+        ):
+            raise AcceptanceAuthorityInvalid(
+                "machine_subject.scanned_surfaces"
+                f"[{index}] does not match its exact object schema"
+            )
+    findings = value.get("findings")
+    if not isinstance(findings, list):
+        raise AcceptanceAuthorityInvalid("machine_subject.findings must be an array")
+    for index, finding in enumerate(findings):
+        if (
+            not isinstance(finding, Mapping)
+            or set(finding) != _CLAIM_MACHINE_FINDING_FIELDS
+            or any(not _is_json_scalar(item) for item in finding.values())
+        ):
+            raise AcceptanceAuthorityInvalid(
+                "machine_subject.findings"
+                f"[{index}] does not match its exact object schema"
+            )
+    for field in ("schema_version", "generated_at_utc"):
+        if not _is_json_scalar(value.get(field)):
+            raise AcceptanceAuthorityInvalid(
+                f"machine_subject.{field} must be a JSON scalar"
+            )
+
+
 def _require_scalar_list(value: Any, path: str) -> None:
     if not isinstance(value, list) or any(not _is_json_scalar(item) for item in value):
         raise AcceptanceAuthorityInvalid(f"{path} must be an array of JSON scalars")
@@ -1970,6 +2269,17 @@ def _validate_gate_semantics(
     observed: datetime,
     now: datetime,
 ) -> None:
+    if gate in {
+        "legal_publication_approval",
+        "claim_honesty",
+        "incident_tabletop",
+        "release_decision",
+    }:
+        boundary = _object(evidence, "human_assurance_boundary")
+        if dict(boundary) != dict(PUBLIC_HUMAN_ASSURANCE_BOUNDARY):
+            raise AcceptanceAuthorityInvalid(
+                "human_assurance_boundary does not match the fail-closed claim boundary"
+            )
     if gate == "runtime_worm":
         _validate_runtime_worm_semantics(evidence, event, observed, now)
     elif gate == "hosted_customer_journey":
@@ -2241,7 +2551,9 @@ def _validate_accounts_billing_semantics(
         "customer_lane": "public-customer",
     }.items():
         _equal(evidence, field, expected)
-    _sha_value(evidence["tenant_subject_sha256"], "tenant_subject_sha256")
+    _validate_customer_pseudonym_metadata(evidence, "accounts_billing")
+    _pseudonym_value(evidence["tenant_subject"], "tenant_subject")
+    _pseudonym_value(evidence["account_subject"], "account_subject")
 
     session = _object(evidence, "account_session")
     if session["invite_redeem_http_status"] not in {200, 201}:
@@ -2304,11 +2616,11 @@ def _validate_accounts_billing_semantics(
     }.items():
         _equal(billing, field, expected, "billing")
     for field in (
-        "provider_customer_id_sha256",
-        "provider_subscription_id_sha256",
-        "invoice_id_sha256",
+        "provider_customer_subject",
+        "provider_subscription_subject",
+        "invoice_subject",
     ):
-        _sha_value(billing[field], f"billing.{field}")
+        _pseudonym_value(billing[field], f"billing.{field}")
     _proof_time(
         billing["paid_at_utc"],
         "accounts_billing",
@@ -2793,8 +3105,47 @@ def _validate_claim_honesty_semantics(
     observed: datetime,
     now: datetime,
 ) -> None:
+    machine_subject = _object(evidence, "machine_subject")
+    _equal(
+        machine_subject,
+        "schema_version",
+        CLAIM_MACHINE_SUBJECT_SCHEMA_VERSION,
+        "machine_subject",
+    )
+    generated = _proof_time(
+        machine_subject["generated_at_utc"],
+        "claim_honesty",
+        event,
+        observed,
+        now,
+        "machine_subject.generated_at_utc",
+    )
+    scanner = _object(machine_subject, "scanner")
+    for field, expected in {
+        "ruleset_version": CLAIM_MACHINE_RULESET_VERSION,
+        "request_method": "GET",
+        "redirects_allowed": False,
+        "javascript_executed": False,
+    }.items():
+        _equal(scanner, field, expected, "machine_subject.scanner")
+    _sha_value(
+        scanner["collector_sha256"],
+        "machine_subject.scanner.collector_sha256",
+    )
+    maximum_response_bytes = _positive_int(
+        scanner["maximum_response_bytes"],
+        "machine_subject.scanner.maximum_response_bytes",
+    )
+    if maximum_response_bytes > MAX_EVIDENCE_BYTES:
+        raise AcceptanceAuthorityInvalid(
+            "machine_subject.scanner.maximum_response_bytes is too large"
+        )
+
     surfaces = _mapping_list_by_key(
-        evidence["scanned_surfaces"], "kind", _CLAIM_SURFACE_KINDS, "scanned_surfaces"
+        machine_subject["scanned_surfaces"],
+        "kind",
+        _CLAIM_SURFACE_KINDS,
+        "machine_subject.scanned_surfaces",
     )
     expected_urls = {
         "product_app": PRODUCTION_APP_ORIGIN,
@@ -2805,25 +3156,98 @@ def _validate_claim_honesty_semantics(
         "terms": f"{LANDING_ORIGIN}/terms",
     }
     for kind, surface in surfaces.items():
-        _equal(surface, "url", expected_urls[kind], f"scanned_surfaces[{kind}]")
-        _equal(surface, "http_status", 200, f"scanned_surfaces[{kind}]")
-        _sha_value(surface["content_sha256"], f"scanned_surfaces[{kind}].content_sha256")
-        _proof_time(
+        path = f"machine_subject.scanned_surfaces[{kind}]"
+        _equal(surface, "url", expected_urls[kind], path)
+        _equal(surface, "http_status", 200, path)
+        _equal(surface, "final_url_matches_requested", True, path)
+        _equal(surface, "coverage_established", True, path)
+        _equal(surface, "route_identity_established", True, path)
+        _equal(surface, "client_rendered_shell_detected", False, path)
+        _equal(surface, "error_count", 0, path)
+        _equal(
+            surface,
+            "errors_sha256",
+            hashlib.sha256(b"[]").hexdigest(),
+            path,
+        )
+        content_type = _nonempty(surface["content_type"], f"{path}.content_type")
+        if not _claim_html_content_type_is_supported(content_type):
+            raise AcceptanceAuthorityInvalid(f"{path}.content_type is invalid")
+        byte_length = _positive_int(surface["byte_length"], f"{path}.byte_length")
+        _sha_value(surface["content_sha256"], f"{path}.content_sha256")
+        _sha_value(surface["visible_text_sha256"], f"{path}.visible_text_sha256")
+        visible_characters = _positive_int(
+            surface["visible_text_characters"], f"{path}.visible_text_characters"
+        )
+        if visible_characters < 32:
+            raise AcceptanceAuthorityInvalid(
+                f"{path}.visible_text_characters is insufficient"
+            )
+        visible_words = _positive_int(
+            surface["visible_word_count"], f"{path}.visible_word_count"
+        )
+        if visible_words < 5:
+            raise AcceptanceAuthorityInvalid(
+                f"{path}.visible_word_count is insufficient"
+            )
+        if not (
+            visible_words
+            <= visible_characters
+            <= byte_length
+            <= maximum_response_bytes
+        ):
+            raise AcceptanceAuthorityInvalid(
+                f"{path} visible-text and response lengths are inconsistent"
+            )
+        basis = _nonempty(surface["visibility_basis"], f"{path}.visibility_basis")
+        prerendered = surface["prerendered_application_mount_detected"]
+        contract_matches = surface["prerender_contract_matches_requested_route"]
+        expected_prerendered = kind in {"product_app", "audit_console"}
+        if prerendered is not expected_prerendered:
+            raise AcceptanceAuthorityInvalid(f"{path} route rendering mode is invalid")
+        if expected_prerendered:
+            if basis != "prerendered_same_route_application_mount" or contract_matches is not True:
+                raise AcceptanceAuthorityInvalid(f"{path} prerender contract is invalid")
+        else:
+            if basis != "static_same_route_html" or contract_matches is not False:
+                raise AcceptanceAuthorityInvalid(f"{path} static route contract is invalid")
+        verified = _proof_time(
             surface["verified_at_utc"],
             "claim_honesty",
             event,
             observed,
             now,
-            f"scanned_surfaces[{kind}].verified_at_utc",
+            f"{path}.verified_at_utc",
         )
-    scan = _object(evidence, "scan")
+        if verified > generated:
+            raise AcceptanceAuthorityInvalid(
+                f"{path}.verified_at_utc is after machine subject generation"
+            )
+    scan = _object(machine_subject, "scan")
     for field in (
         "misleading_claim_count",
         "unsupported_compliance_claim_count",
         "unsupported_universality_claim_count",
+        "unsupported_ip_claim_count",
+        "finding_count",
     ):
-        _equal(scan, field, 0, "scan")
-    _equal(scan, "status_vocabulary_exact", True, "scan")
+        _equal(scan, field, 0, "machine_subject.scan")
+    for field, expected in {
+        "status_vocabulary_exact": True,
+        "scanned_surface_count": len(_CLAIM_SURFACE_KINDS),
+        "covered_surface_count": len(_CLAIM_SURFACE_KINDS),
+        "coverage_complete": True,
+        "machine_scan_passed": True,
+    }.items():
+        _equal(scan, field, expected, "machine_subject.scan")
+    if machine_subject["findings"] != []:
+        raise AcceptanceAuthorityInvalid("machine_subject.findings must be empty")
+    machine_digest = hashlib.sha256(
+        _canonical_json_bytes(machine_subject)
+    ).hexdigest()
+    _equal(evidence, "machine_subject_sha256", machine_digest, "claim_honesty")
+    _equal(evidence, "artifact_sha256", machine_digest, "claim_honesty")
+
     boundaries = _object(evidence, "boundaries")
     for field in (
         "research_scope_disclosed",
@@ -2833,8 +3257,8 @@ def _validate_claim_honesty_semantics(
         "compliance_certification_claims_absent",
     ):
         _equal(boundaries, field, True, "boundaries")
-    if boundaries["rendered_product_status"] not in {"OPEN", "ACCEPT"}:
-        raise AcceptanceAuthorityInvalid("boundaries.rendered_product_status is invalid")
+    if evidence["claim_status_vocabulary"] != _CLAIM_STATUS_VOCABULARY:
+        raise AcceptanceAuthorityInvalid("claim_status_vocabulary is not exact")
     approvals = _mapping_list_by_key(
         evidence["approvals"], "role", _CLAIM_APPROVER_ROLES, "approvals"
     )
@@ -2845,7 +3269,7 @@ def _validate_claim_honesty_semantics(
             allowed_origins=_API_LANDING_ORIGINS,
         )
         _sha_value(approval["approval_sha256"], f"approvals[{role}].approval_sha256")
-        _proof_time(
+        approved = _proof_time(
             approval["approved_at_utc"],
             "claim_honesty",
             event,
@@ -2853,6 +3277,10 @@ def _validate_claim_honesty_semantics(
             now,
             f"approvals[{role}].approved_at_utc",
         )
+        if approved < generated:
+            raise AcceptanceAuthorityInvalid(
+                f"approvals[{role}].approved_at_utc precedes machine subject generation"
+            )
 
 
 def _validate_release_decision_semantics(
@@ -2983,10 +3411,59 @@ def _tagged_sha_value(value: Any, path: str) -> str:
     return value
 
 
+def _pseudonym_value(value: Any, path: str) -> str:
+    if (
+        not isinstance(value, str)
+        or CUSTOMER_PSEUDONYM_SUBJECT_PATTERN.fullmatch(value) is None
+    ):
+        raise AcceptanceAuthorityInvalid(
+            f"{path} must be hmac-sha256:<64 lowercase hex>"
+        )
+    return value
+
+
+def _validate_customer_pseudonym_metadata(
+    value: Mapping[str, Any], path: str
+) -> str:
+    if value.get("pseudonymization_scheme") != CUSTOMER_PSEUDONYMIZATION_SCHEME:
+        raise AcceptanceAuthorityInvalid(
+            f"{path}.pseudonymization_scheme is invalid"
+        )
+    key_id = value.get("pseudonym_key_id")
+    if (
+        not isinstance(key_id, str)
+        or CUSTOMER_PSEUDONYM_KEY_ID_PATTERN.fullmatch(key_id) is None
+    ):
+        raise AcceptanceAuthorityInvalid(f"{path}.pseudonym_key_id is invalid")
+    return key_id
+
+
 def _nonempty(value: Any, path: str) -> str:
     if not isinstance(value, str) or not value.strip():
         raise AcceptanceAuthorityInvalid(f"{path} must be non-empty")
     return value
+
+
+def _claim_html_content_type_is_supported(value: str) -> bool:
+    """Mirror the claim collector's HTML media type and UTF-8 rules exactly."""
+
+    media_type = value.split(";", 1)[0].strip().lower()
+    if media_type not in {"text/html", "application/xhtml+xml"}:
+        return False
+    charset_declarations = list(
+        re.finditer(r"(?:^|;)\s*charset\s*=", value, re.IGNORECASE)
+    )
+    charset_matches = list(
+        re.finditer(
+            r"(?:^|;)\s*charset\s*=\s*[\"']?([^;\"']+)",
+            value,
+            re.IGNORECASE,
+        )
+    )
+    if len(charset_declarations) != 1 or len(charset_matches) != 1:
+        return False
+    charset = charset_matches[0].group(1).strip().lower()
+    return charset in {"utf-8", "utf8"}
 
 
 def _positive_int(value: Any, path: str) -> int:
@@ -3514,6 +3991,7 @@ __all__ = [
     "AcceptanceAuthorityConflict",
     "AcceptanceAuthorityError",
     "AcceptanceAuthorityHead",
+    "AcceptanceAuthorityHumanAttestationUnavailable",
     "AcceptanceAuthorityInvalid",
     "AcceptanceAuthorityNotFound",
     "AcceptanceAuthorityUnavailable",

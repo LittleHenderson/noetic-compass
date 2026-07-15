@@ -59,7 +59,7 @@ except ImportError:
         )
 
 
-EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v2"
+EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v3"
 SAFE_ARTIFACT_SCHEMA_VERSION = "cas_runtime_worm_source_receipt.v2"
 REPOSITORY = "LittleHenderson/noetic-compass"
 ENVIRONMENT = "public-production"

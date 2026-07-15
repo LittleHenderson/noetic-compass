@@ -149,6 +149,109 @@ Response behavior is fail-closed and non-cacheable:
 - no provider error, storage pointer, Object-Lock version ID, secret, or PII is
   copied into an error response.
 
+### Human-attestation assurance and pseudonym-key rotation
+
+Every human-gated authority document and every public human-attestation record
+must carry the exact `cas_harness_human_assurance_boundary.v1` boundary. It
+means only that an authenticated platform account made the attestation and
+that its self-asserted functional role was allowed for that account's platform
+role. Natural-person identity, professional qualification, and whether two
+accounts belong to distinct people are all `unverified`; qualification and
+distinctness authorities are `unavailable`.
+
+Role labels such as `legal_counsel`, `legal_owner`, and `product_owner` are
+functional workflow labels. They do not prove a licence, employment status,
+legal authority, or any other professional qualification. Existing checks for
+different account IDs are platform-account separation controls only; they do
+not prove different natural people. A small company may legitimately have one
+person perform several functions, but changing a gate that currently requires
+different platform accounts is a separate acceptance-policy decision, not an
+identity fact that an operator or role label may invent. If a contract or
+policy requires licensed counsel, independently qualified roles, or distinct
+natural people, these records cannot satisfy it. Keep the affected gate `OPEN`
+until a separately governed qualification or distinctness authority and a new
+versioned evidence contract are implemented.
+
+Public actor identifiers inside `cas_harness_human_attestation.v2` records use
+tenant-scoped, domain-separated HMAC-SHA-256 pseudonyms. The private ledger row
+HMAC-binds the complete canonical public-attestation SHA-256, raw tenant and
+account IDs, and opaque key ID; the private status row pins the same binding.
+Because the canonical digest covers every public field and the exact supporting
+attestation references, a different valid support graph cannot reuse the
+binding. Configure both dedicated settings before enabling account-backed
+attestations or publishing human-gated authority evidence:
+
+- `NC_HUMAN_ATTESTATION_PSEUDONYM_KEYRING_JSON`: a JSON object mapping key IDs
+  to `base64url:` followed by the canonical unpadded base64url encoding of
+  32--64 independently CSPRNG-generated random bytes;
+- `NC_HUMAN_ATTESTATION_PSEUDONYM_ACTIVE_KEY_ID`: the key ID used for new
+  records. It must be an opaque 128-bit label in exact
+  `hatk_<32 lowercase hex>` form, never an email, account ID, name, role, date,
+  or other descriptive/PII-bearing value.
+
+The configuration shape is
+`{"hatk_<32-lowercase-hex>":"base64url:<unpadded-encoding-of-random-bytes>"}`.
+Both bracketed values are placeholders, not production values. Generate the
+raw bytes and opaque ID with the provider's secure secret/CSPRNG mechanism,
+never commit or log the keyring, and never reuse an account, billing, database,
+provider, or signing credential. Startup fails closed for half-configuration,
+noncanonical encoding, a descriptive/non-opaque ID, duplicated key material,
+too-short or trivially predictable material, cross-secret reuse, or an
+active-key-missing keyring. The same parsing, strength, and secret-isolation
+checks run when the variables are present even if accounts are disabled;
+accounts-disabled with neither variable remains valid.
+
+Publication authorizations and accounts/billing evidence use a second,
+independent rotation domain. Configure both settings before enabling accounts:
+
+- `NC_CUSTOMER_PRODUCTION_PSEUDONYM_KEYRING_JSON`: the same canonical
+  `base64url:` 32--64 byte keyring shape, with independently generated key
+  material that is not reused from human attestations or any account, billing,
+  database, provider, signing, or authentication secret;
+- `NC_CUSTOMER_PRODUCTION_PSEUDONYM_ACTIVE_KEY_ID`: an opaque
+  `cpk_<32 lowercase hex>` label used for new records.
+
+`cas_harness_acceptance_publication_authorization.v2` publishes only keyed
+tenant/account subjects. Its private content-addressed identity row retains the
+raw platform IDs and HMAC-binds them to the exact public authorization digest.
+Legacy v1 rows have no such binding and cannot authorize a new publication.
+
+`accounts_billing` gate evidence v3 publishes keyed tenant, account, Stripe
+customer, subscription, and invoice subjects. Before publication, the
+operational publisher requires a private JSON selector containing only
+`tenant_id` and `invoice_record_id`. The API re-reads one matched live paid
+invoice plus one active same-tenant account, recomputes all five subjects, and
+persists a private content-addressed binding. It repeats that source validation
+immediately before any authority revision/WORM/operation/head mutation and on
+every active serve. The offline public verifier can validate only pseudonym
+shape; it is not a substitute for this private live-source check. Do not reuse
+the billing provider-reference hash key for this purpose.
+
+This remains a deliberately bounded migration. Hosted-customer-journey and
+support/CRM raw-source bindings are not migrated by this checkpoint and their
+gates remain `OPEN`. Alert acknowledgement evidence discards the raw actor ID
+after validating the required human role/type instead of publishing a stable
+actor hash. Do not claim that every CAS artifact has completed the keyed
+migration until the deferred source-bound contracts are implemented and
+independently verified.
+
+Rotate without rewriting evidence:
+
+1. Add the new key while retaining every key referenced by a durable record,
+   deploy, and verify that old public attestations still load exactly.
+2. Change only the active key ID, deploy, and create new attestations under the
+   new key ID.
+3. Re-attest any evidence that must move to the new key; do not transform an
+   old digest or copy its asserted facts into a new record automatically.
+4. Remove an old key only after no retained attestation or revocation status
+   references it. A referenced but missing key makes the record unavailable
+   and the gate fails closed.
+
+Legacy `cas_harness_human_attestation.v1` records used stable unkeyed hashes and
+have no durable private identity binding. They remain historical artifacts but
+are not authoritative under this contract and cannot be promoted or migrated
+in place. Re-attestation by the authenticated account under v2 is required.
+
 ### Publish one verified authority document
 
 `scripts.publish_customer_production_acceptance_authority` is the operational
@@ -243,6 +346,13 @@ python -m scripts.publish_customer_production_acceptance_authority publish \
   --authorization-artifact-sha256 <sha256-returned-by-owner-authorization-post> \
   --operation-reason authorized_publication
 ```
+
+For `--gate accounts_billing`, also pass
+`--accounts-billing-source /path/to/mode-0600-private-source.json`; the file
+must contain exactly `{"tenant_id":"...","invoice_record_id":"..."}` and
+must be deleted through the operator's approved secure-file procedure after
+the exact readback succeeds. Never add that private selector to the public gate
+document or evidence bundle.
 
 The publisher parses that URI as an exact same-service content-addressed path,
 loads the record directly from the shared StateStore (it never dereferences an
@@ -349,14 +459,38 @@ python scripts/collect_root_ci_protected_deploy_facts.py `
   --output root-ci-protected-deploy.json
 ```
 
-The collector queries only `/deploys/<expected-deploy-id>` while waiting; it
-never substitutes the latest deploy. It fails closed on repository, workflow,
-job, check, GitHub App, branch-protection, Render service, commit, trigger,
-health, freshness, pagination, or local workflow-layout drift. HTTP reads are
-bounded, redirects are forbidden, and response bodies and credentials are not
-printed on errors. Exit zero produces only a canonical unsigned v2 facts
-document; it does not create authority, mark a gate `present`, or dispatch
-`ACCEPT`.
+While waiting, the collector polls only
+`/deploys/<expected-deploy-id>` and never substitutes another deployment. Once
+that exact `new_commit` deployment is `live`, it begins a clean final
+observation cycle. During that cycle it proves that the supplied SHA is still
+GitHub's current protected `master`, that the supplied deployment is Render's
+sole current `live` deployment, and that the required root workflows/checks
+remain exact. It reads and validates the full GitHub repository, protected
+master, branch-protection, and workflow-registry records before and after the
+public health probe. The signed subject binds canonical preflight/final hashes
+for every one of those records plus the timestamp of the completed final
+controls readback. It also retains the first exact live-deploy response and
+requires that record to be canonically identical to both the Render preflight
+and final exact-deploy responses. The full Render service, current-live list,
+and latest-deploy list are likewise sampled before and after health; any
+canonical provider-record change fails closed. It also fails closed
+on repository, workflow, job, check, GitHub App, branch-protection, Render
+service, commit, trigger, health, 24-hour observation freshness, pagination, or
+local workflow-layout drift. HTTP reads are bounded, redirects are forbidden,
+and response bodies and credentials are not printed on errors. Exit zero
+produces only a canonical unsigned v2 gate document with root-specific schema
+`cas_harness_root_ci_protected_deploy_observation.v1`; it does not create
+authority, mark a gate `present`, or dispatch `ACCEPT`.
+
+The check-run creation/completion times and Render deployment
+creation/completion times are historical release provenance. They must retain
+their exact chronology: push checks complete before the `new_commit`
+deployment, and the deployment is live before the fresh observation begins.
+They do not become false merely because an unchanged protected release is
+older than 24 hours. The 24-hour limit applies to the new current-master,
+protection, workflow, current-live-deploy, provider-stability, and health
+observations. Therefore an unchanged, still-current protected release can
+receive a fresh receipt without a no-op commit or redeploy.
 
 Only an exact Render deployment whose actual trigger is `new_commit` can
 satisfy `root_ci_protected_deploy`. The service policy
@@ -386,9 +520,10 @@ available only to the signing step and is never logged. The uploaded artifact
 contains the receipt, its exact SHA-256 pin, and the subject checksum; the
 checked-in manifest remains `OPEN`, and the workflow never dispatches final
 `ACCEPT`. The signed receipt expires, so candidate assembly must use the exact
-current receipt rather than recycling an older successful run. The current
-signer default is 120 minutes; both candidate assembly and the final workflow
-must finish before the receipt's exact `expires_at_utc`.
+current receipt rather than recycling an older successful run. Root-CI
+receipts have an exact, fail-closed 120-minute TTL (not merely a default); both
+candidate assembly and the final workflow must finish before the receipt's
+exact `expires_at_utc`.
 
 ```powershell
 gh release upload customer-production-evidence `
@@ -512,6 +647,35 @@ production/verdict language, unsupported compliance and universal claims,
 unsupported patent language, and noncanonical status vocabulary. Matched text
 is not copied into the report; only the rule, offsets, and matched-text digest
 are recorded.
+
+The report's `machine_subject` is the only claim-scan subject eligible to be
+carried into later authority evidence. Its canonical SHA-256 is returned as
+`machine_subject_sha256`. The subject binds the exact collector source hash,
+ruleset, request policy, generation time, all six raw-response and visible-text
+hashes, byte/text lengths, route and prerender coverage facts, error-list
+hashes, the complete secret-free finding list, and the final machine-pass
+summary. Changing any one of those values changes the subject digest. Keep the
+exact subject bytes; do not transcribe a shorter summary by hand.
+
+The claim-honesty authority document embeds that exact `machine_subject` and
+digest, the fixed seven-term `claim_status_vocabulary`, the five explicit
+research/product/WORM/review/compliance boundaries, and three independent
+`claim_approval` references (`legal_owner`, `product_owner`, and
+`research_owner`). Each human attestation's `evidence_binding_sha256` is
+computed over the complete machine subject and digest, boundaries, vocabulary,
+protected-master SHA, and deploy ID. Approval references are excluded from that
+pre-approval hash to avoid self-reference, then are dereferenced and checked
+against it during publication and on every active authority read.
+
+There is deliberately no `rendered_product_status` field in claim-honesty
+evidence. Supplying either `OPEN` or `ACCEPT` there is a schema error. A clean
+unsigned machine report remains `OPEN`; final claim-gate satisfaction is
+derived only when the canonical machine subject passes, all boundary and
+vocabulary checks pass, and the live authority has revalidated all three real
+attestations. The final verifier additionally requires the subject's
+`collector_sha256` to match `scripts/collect_claim_honesty_evidence.py` at the
+exact expected protected-master checkout. This removes the circular pattern of
+copying the candidate manifest's desired `ACCEPT` value into its own evidence.
 
 The collector does not execute JavaScript. A client-routed application shell,
 insufficient visible text, or a primary heading that does not identify the
@@ -741,12 +905,15 @@ For every evidence item, time must move forward monotonically:
 
 `event_at_utc <= observed_at_utc <= manifest generated_at_utc <= verification time`
 
-Every critical nested proof time—workflow run, audit, packet,
+Every mutable critical nested proof time—runtime readiness, audit, packet,
 share, billing payment, publication, approval, support, CRM, incident, alert,
 or claim scan—must fall between its gate's `event_at_utc` and
-`observed_at_utc`. The event itself and every nested proof time must satisfy the
-same gate-specific age limit, so a fresh observation cannot wrap a stale 2020
-event.
+`observed_at_utc`. The event itself and every mutable nested proof time must
+satisfy the same gate-specific age limit, so a fresh observation cannot wrap a
+stale mutable event. Root-CI is the explicit historical-provenance exception:
+its exact protected check-run and `new_commit` deployment timestamps must be at
+or before the fresh observation and in valid release order, while its current
+GitHub/Render/health observations remain inside the 24-hour window.
 
 For `runtime_worm`, the exact deployment completion is historical provenance:
 it must be at or before the gate event, but it is not itself a fresh runtime
@@ -763,7 +930,7 @@ fails:
 | Gate | Maximum age |
 |---|---:|
 | Runtime/WORM | 30 minutes |
-| Root CI/protected deploy | 24 hours |
+| Root CI/protected deploy current-state observation | 24 hours |
 | Hosted customer journey | 72 hours |
 | Accounts/billing | 72 hours |
 | Legal publication/approval | 30 days |

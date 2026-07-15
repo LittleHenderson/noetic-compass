@@ -15,6 +15,40 @@ BILLING_REFERENCE_KEY = "billing-ref-HMAC-v1-7f3a9c2e5d8b1a6f4c0e"
 POSTGRES_DATABASE_URL = (
     "postgresql+asyncpg://cas:database-password@db.internal/cas"
 )
+PSEUDONYM_KEY_ID = "hatk_0123456789abcdef0123456789abcdef"
+PSEUDONYM_KEYRING_JSON = (
+    '{"' + PSEUDONYM_KEY_ID + '":"base64url:'
+    "5EfvyXp5BYNrpodyw-DoiFemHziedgI06tZHVjtmvow" + '"}'
+)
+CUSTOMER_PSEUDONYM_KEY_ID = "cpk_89abcdef0123456789abcdef01234567"
+CUSTOMER_PSEUDONYM_KEYRING_JSON = (
+    '{"' + CUSTOMER_PSEUDONYM_KEY_ID + '":"base64url:'
+    "ba72v6mRNqQ2kA0GZljcsAF4HpatDbaOpVkvpGl_QmA" + '"}'
+)
+
+
+@pytest.fixture(autouse=True)
+def _stable_human_attestation_pseudonym_keyring(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        settings, "human_attestation_pseudonym_active_key_id", PSEUDONYM_KEY_ID
+    )
+    monkeypatch.setattr(
+        settings,
+        "human_attestation_pseudonym_keyring_json",
+        PSEUDONYM_KEYRING_JSON,
+    )
+    monkeypatch.setattr(
+        settings,
+        "customer_production_pseudonym_active_key_id",
+        CUSTOMER_PSEUDONYM_KEY_ID,
+    )
+    monkeypatch.setattr(
+        settings,
+        "customer_production_pseudonym_keyring_json",
+        CUSTOMER_PSEUDONYM_KEYRING_JSON,
+    )
 
 
 def _settings(**overrides) -> Settings:
@@ -28,6 +62,14 @@ def _settings(**overrides) -> Settings:
         "jwt_secret": "j" * 32,
         "jwt_algorithm": "HS256",
         "account_credential_pepper": "p" * 32,
+        "human_attestation_pseudonym_active_key_id": PSEUDONYM_KEY_ID,
+        "human_attestation_pseudonym_keyring_json": PSEUDONYM_KEYRING_JSON,
+        "customer_production_pseudonym_active_key_id": (
+            CUSTOMER_PSEUDONYM_KEY_ID
+        ),
+        "customer_production_pseudonym_keyring_json": (
+            CUSTOMER_PSEUDONYM_KEYRING_JSON
+        ),
         "account_bootstrap_secret": "b" * 32,
         "accounts_allow_single_host_sqlite": True,
         "state_ledger_path": str(Path(tempfile.gettempdir()).resolve() / "cas-billing-test.db"),

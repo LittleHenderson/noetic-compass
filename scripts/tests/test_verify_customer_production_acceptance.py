@@ -5,6 +5,7 @@ import copy
 import hashlib
 import io
 import json
+import subprocess
 import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
@@ -23,7 +24,19 @@ EVENT = "2026-07-14T11:30:00Z"
 OBSERVED = "2026-07-14T11:50:00Z"
 ISSUED = "2026-07-14T11:55:00Z"
 EXPIRES = "2026-07-15T12:00:00Z"
-MASTER_SHA = "a" * 40
+ROOT_CI_EXPIRES = "2026-07-14T13:55:00Z"
+MASTER_SHA = subprocess.run(
+    ["git", "-C", str(ROOT), "rev-parse", "HEAD"],
+    check=True,
+    capture_output=True,
+    text=True,
+).stdout.strip().lower()
+COLLECTOR_BLOB = verifier._read_git_blob(
+    ROOT, MASTER_SHA, verifier.CLAIM_COLLECTOR_REPOSITORY_PATH
+)
+if COLLECTOR_BLOB is None:  # pragma: no cover - repository test invariant
+    raise RuntimeError("claim collector Git blob is unavailable at test HEAD")
+COLLECTOR_BLOB_SHA256 = hashlib.sha256(COLLECTOR_BLOB).hexdigest()
 DEPLOY_ID = "dep-publicacceptance001"
 TEST_ISSUER = "customer-production-test-issuer"
 TEST_KEY_ID = "test-rs256-2026"
@@ -37,6 +50,10 @@ RSA_D = 869948675825681047081293226034402056462018799417644119987167627850028888
 
 def _digest(label: str) -> str:
     return hashlib.sha256(label.encode("utf-8")).hexdigest()
+
+
+def _pseudonym(label: str) -> str:
+    return "hmac-sha256:" + _digest(label)
 
 
 def _canonical(value: dict) -> bytes:
@@ -81,10 +98,14 @@ CRITICAL_TIMESTAMP_PATHS: dict[str, list[tuple[str | int, ...]]] = {
     ],
     "root_ci_protected_deploy": [
         ("branch_protection", "observed_at_utc"),
-        ("checks", 0, "completed_at_utc"),
-        ("checks", 1, "completed_at_utc"),
-        ("checks", 2, "completed_at_utc"),
-        ("deployment", "deployed_at_utc"),
+        ("observation", "started_at_utc"),
+        ("observation", "render_preflight_verified_at_utc"),
+        ("observation", "github_controls_verified_at_utc"),
+        ("observation", "health_verified_at_utc"),
+        ("observation", "github_master_verified_at_utc"),
+        ("observation", "github_controls_final_verified_at_utc"),
+        ("observation", "render_final_verified_at_utc"),
+        ("observation", "completed_at_utc"),
     ],
     "hosted_customer_journey": [
         ("audit", "completed_at_utc"),
@@ -125,7 +146,8 @@ CRITICAL_TIMESTAMP_PATHS: dict[str, list[tuple[str | int, ...]]] = {
         ("escalation", "delivered_at_utc"),
     ],
     "claim_honesty": [
-        *(("scanned_surfaces", index, "verified_at_utc") for index in range(6)),
+        ("machine_subject", "generated_at_utc"),
+        *(("machine_subject", "scanned_surfaces", index, "verified_at_utc") for index in range(6)),
         *(("approvals", index, "approved_at_utc") for index in range(3)),
     ],
 }
@@ -162,7 +184,7 @@ class SignedBundle:
         evidence: dict,
         *,
         issued: str = ISSUED,
-        expires: str = EXPIRES,
+        expires: str | None = None,
         issuer: str = TEST_ISSUER,
         key_id: str = TEST_KEY_ID,
         subject_uri: str | None = None,
@@ -170,7 +192,13 @@ class SignedBundle:
     ) -> dict:
         self.counter += 1
         subject_uri = subject_uri or SUBJECT_URIS[gate]
-        subject_hash = _digest(f"subject-{gate}-{self.counter}")
+        if expires is None:
+            expires = ROOT_CI_EXPIRES if gate == "root_ci_protected_deploy" else EXPIRES
+        subject_hash = (
+            str(evidence.get("machine_subject_sha256"))
+            if gate == "claim_honesty"
+            else _digest(f"subject-{gate}-{self.counter}")
+        )
         evidence["artifact_uri"] = subject_uri
         evidence["artifact_sha256"] = subject_hash
         unsigned = {
@@ -205,7 +233,7 @@ class SignedBundle:
 
 
 def _common(gate: str, *, event: str = EVENT, observed: str = OBSERVED) -> dict:
-    return {
+    result = {
         "schema_version": verifier.EVIDENCE_SCHEMA_VERSION,
         "gate": gate,
         "environment": "public-production",
@@ -217,6 +245,16 @@ def _common(gate: str, *, event: str = EVENT, observed: str = OBSERVED) -> dict:
         "artifact_uri": "filled-by-signed-receipt",
         "artifact_sha256": "0" * 64,
     }
+    if gate in {
+        "legal_publication_approval",
+        "claim_honesty",
+        "incident_tabletop",
+        "release_decision",
+    }:
+        result["human_assurance_boundary"] = dict(
+            verifier.HUMAN_ASSURANCE_BOUNDARY
+        )
+    return result
 
 
 def _approval(role: str, prefix: str) -> dict:
@@ -224,8 +262,12 @@ def _approval(role: str, prefix: str) -> dict:
         "role": role,
         "approval_artifact_uri": f"{verifier.PRODUCTION_API_ORIGIN}/internal/approvals/{prefix}-{role}",
         "approval_sha256": _digest(f"{prefix}-{role}"),
-        "approved_at_utc": "2026-07-14T11:45:00Z",
+        "approved_at_utc": "2026-07-14T11:49:00Z",
     }
+
+
+def _human_assurance_boundary() -> dict[str, str]:
+    return dict(verifier.HUMAN_ASSURANCE_BOUNDARY)
 
 
 def _gate_payloads() -> dict[str, dict]:
@@ -282,9 +324,11 @@ def _gate_payloads() -> dict[str, dict]:
         }
     )
 
-    ci = _common("root_ci_protected_deploy")
+    root_ci_event = "2026-07-14T11:43:00Z"
+    ci = _common("root_ci_protected_deploy", event=root_ci_event)
     ci.update(
         {
+            "root_ci_schema_version": verifier.ROOT_CI_SCHEMA_VERSION,
             "github_repository": {
                 "id": verifier.REPOSITORY_ID,
                 "node_id": verifier.REPOSITORY_NODE_ID,
@@ -300,7 +344,7 @@ def _gate_payloads() -> dict[str, dict]:
                 "strict": True,
                 "required_checks": list(verifier.REQUIRED_CHECKS),
                 "source": "github-api",
-                "observed_at_utc": "2026-07-14T11:49:00Z",
+                "observed_at_utc": "2026-07-14T11:48:00Z",
             },
             "checks": [],
             "deployment": {
@@ -315,7 +359,38 @@ def _gate_payloads() -> dict[str, dict]:
                 "commit_sha": MASTER_SHA,
                 "auto_deploy_trigger": "checksPass",
                 "health_check_path": "/health",
+                "created_at_utc": "2026-07-14T11:41:00Z",
                 "deployed_at_utc": "2026-07-14T11:42:00Z",
+            },
+            "observation": {
+                "semantics": verifier.ROOT_CI_OBSERVATION_SEMANTICS,
+                "started_at_utc": root_ci_event,
+                "render_preflight_verified_at_utc": "2026-07-14T11:43:00Z",
+                "github_controls_verified_at_utc": "2026-07-14T11:46:00Z",
+                "health_verified_at_utc": "2026-07-14T11:47:00Z",
+                "github_master_verified_at_utc": "2026-07-14T11:48:00Z",
+                "github_controls_final_verified_at_utc": "2026-07-14T11:48:00Z",
+                "render_final_verified_at_utc": "2026-07-14T11:49:00Z",
+                "completed_at_utc": OBSERVED,
+                "github_master_preflight_sha256": _digest("root-master"),
+                "github_master_final_sha256": _digest("root-master"),
+                "github_repository_preflight_sha256": _digest("root-repository"),
+                "github_repository_final_sha256": _digest("root-repository"),
+                "github_protection_preflight_sha256": _digest("root-protection"),
+                "github_protection_final_sha256": _digest("root-protection"),
+                "github_workflows_preflight_sha256": _digest("root-workflows"),
+                "github_workflows_final_sha256": _digest("root-workflows"),
+                "render_service_preflight_sha256": _digest("root-service"),
+                "render_service_final_sha256": _digest("root-service"),
+                "render_deploy_initial_sha256": _digest("root-deploy"),
+                "render_deploy_preflight_sha256": _digest("root-deploy"),
+                "render_deploy_final_sha256": _digest("root-deploy"),
+                "render_active_preflight_sha256": _digest("root-active"),
+                "render_active_final_sha256": _digest("root-active"),
+                "render_latest_preflight_sha256": _digest("root-latest"),
+                "render_latest_final_sha256": _digest("root-latest"),
+                "current_master_head_sha": MASTER_SHA,
+                "current_active_deploy_id": DEPLOY_ID,
             },
         }
     )
@@ -340,6 +415,7 @@ def _gate_payloads() -> dict[str, dict]:
                 "app_node_id": verifier.GITHUB_ACTIONS_APP["node_id"],
                 "app_slug": verifier.GITHUB_ACTIONS_APP["slug"],
                 "details_url": f"{verifier.REPOSITORY_URL}/actions/runs/{run_id}/job/{check_run_id}",
+                "run_created_at_utc": "2026-07-14T11:30:00Z",
                 "completed_at_utc": "2026-07-14T11:40:00Z",
             }
         )
@@ -397,7 +473,10 @@ def _gate_payloads() -> dict[str, dict]:
             "api_base_url": verifier.PRODUCTION_API_ORIGIN,
             "service_id": verifier.PRODUCTION_SERVICE_ID,
             "customer_lane": "public-customer",
-            "tenant_subject_sha256": _digest("billing-tenant"),
+            "pseudonymization_scheme": "hmac-sha256-tenant-scoped-v1",
+            "pseudonym_key_id": "cpk_0123456789abcdef0123456789abcdef",
+            "tenant_subject": _pseudonym("billing-tenant"),
+            "account_subject": _pseudonym("billing-account"),
             "account_session": {
                 "invite_redeem_http_status": 201,
                 "login_http_status": 200,
@@ -429,9 +508,9 @@ def _gate_payloads() -> dict[str, dict]:
                 "webhook_signature_verified": True,
                 "entitlement_status": "active",
                 "meter_to_invoice_reconciled": True,
-                "provider_customer_id_sha256": _digest("customer-id"),
-                "provider_subscription_id_sha256": _digest("subscription-id"),
-                "invoice_id_sha256": _digest("invoice-id"),
+                "provider_customer_subject": _pseudonym("customer-id"),
+                "provider_subscription_subject": _pseudonym("subscription-id"),
+                "invoice_subject": _pseudonym("invoice-id"),
                 "paid_at_utc": "2026-07-14T11:44:00Z",
             },
         }
@@ -455,6 +534,7 @@ def _gate_payloads() -> dict[str, dict]:
             ],
             "approvals": [_approval(role, "legal") for role in sorted(verifier.LEGAL_APPROVER_ROLES)],
             "claim_status_vocabulary": list(verifier.CLAIM_STATUS_VOCABULARY),
+            "human_assurance_boundary": _human_assurance_boundary(),
         }
     )
 
@@ -591,6 +671,7 @@ def _gate_payloads() -> dict[str, dict]:
         {
             "api_base_url": verifier.PRODUCTION_API_ORIGIN,
             "service_id": verifier.PRODUCTION_SERVICE_ID,
+            "human_assurance_boundary": _human_assurance_boundary(),
             "incident": {
                 "record_id": "IR-2026-07-13-001",
                 "status": "CLOSED",
@@ -664,33 +745,77 @@ def _gate_payloads() -> dict[str, dict]:
         "privacy": f"{verifier.LANDING_ORIGIN}/privacy",
         "terms": f"{verifier.LANDING_ORIGIN}/terms",
     }
+    machine_subject = {
+        "schema_version": verifier.CLAIM_MACHINE_SUBJECT_SCHEMA_VERSION,
+        "generated_at_utc": "2026-07-14T11:48:00Z",
+        "scanner": {
+            "ruleset_version": verifier.CLAIM_MACHINE_RULESET_VERSION,
+            "collector_sha256": COLLECTOR_BLOB_SHA256,
+            "request_method": "GET",
+            "redirects_allowed": False,
+            "maximum_response_bytes": 1_000_000,
+            "javascript_executed": False,
+        },
+        "scanned_surfaces": [
+            {
+                "kind": kind,
+                "url": urls[kind],
+                "http_status": 200,
+                "final_url_matches_requested": True,
+                "content_type": "text/html; charset=utf-8",
+                "byte_length": 512,
+                "content_sha256": surface_hashes[kind],
+                "verified_at_utc": "2026-07-14T11:47:00Z",
+                "coverage_established": True,
+                "visibility_basis": (
+                    "prerendered_same_route_application_mount"
+                    if kind in {"product_app", "audit_console"}
+                    else "static_same_route_html"
+                ),
+                "visible_text_sha256": _digest(f"visible-{kind}"),
+                "visible_text_characters": 256,
+                "visible_word_count": 32,
+                "client_rendered_shell_detected": False,
+                "prerendered_application_mount_detected": kind
+                in {"product_app", "audit_console"},
+                "prerender_contract_matches_requested_route": kind
+                in {"product_app", "audit_console"},
+                "route_identity_established": True,
+                "error_count": 0,
+                "errors_sha256": hashlib.sha256(b"[]").hexdigest(),
+            }
+            for kind in sorted(verifier.CLAIM_SURFACE_KINDS)
+        ],
+        "scan": {
+            "misleading_claim_count": 0,
+            "unsupported_compliance_claim_count": 0,
+            "unsupported_universality_claim_count": 0,
+            "unsupported_ip_claim_count": 0,
+            "status_vocabulary_exact": True,
+            "scanned_surface_count": 6,
+            "covered_surface_count": 6,
+            "finding_count": 0,
+            "coverage_complete": True,
+            "machine_scan_passed": True,
+        },
+        "findings": [],
+    }
     honesty.update(
         {
-            "scanned_surfaces": [
-                {
-                    "kind": kind,
-                    "url": urls[kind],
-                    "http_status": 200,
-                    "content_sha256": surface_hashes[kind],
-                    "verified_at_utc": "2026-07-14T11:47:00Z",
-                }
-                for kind in sorted(verifier.CLAIM_SURFACE_KINDS)
-            ],
-            "scan": {
-                "misleading_claim_count": 0,
-                "unsupported_compliance_claim_count": 0,
-                "unsupported_universality_claim_count": 0,
-                "status_vocabulary_exact": True,
-            },
+            "machine_subject": machine_subject,
+            "machine_subject_sha256": hashlib.sha256(
+                _canonical(machine_subject)
+            ).hexdigest(),
             "boundaries": {
                 "research_scope_disclosed": True,
                 "research_accept_not_product_accept": True,
                 "worm_retention_not_verdict_upgrade": True,
                 "flag_for_human_review_not_accept": True,
                 "compliance_certification_claims_absent": True,
-                "rendered_product_status": "ACCEPT",
             },
+            "claim_status_vocabulary": list(verifier.CLAIM_STATUS_VOCABULARY),
             "approvals": [_approval(role, "claim") for role in sorted(verifier.CLAIM_APPROVER_ROLES)],
+            "human_assurance_boundary": _human_assurance_boundary(),
         }
     )
     return {
@@ -739,6 +864,7 @@ def _accepting_manifest(
             "approver_roles": sorted(verifier.RELEASE_APPROVER_ROLES),
             "decision_record_uri": f"{verifier.PRODUCTION_API_ORIGIN}/internal/acceptance/release-record",
             "decision_record_sha256": _digest("release-record"),
+            "human_assurance_boundary": _human_assurance_boundary(),
         }
     )
     manifest["product"] = {
@@ -989,6 +1115,311 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
         self.assertEqual(report["expected_master_head"], MASTER_SHA)
         self.assertEqual(report["expected_deploy_id"], DEPLOY_ID)
         self.assertTrue(all(authority["mode"] == "signed_receipt" for authority in report["authorities"].values()))
+
+    def test_human_gates_reject_any_upgrade_or_omission_of_the_unverified_boundary(self) -> None:
+        for gate in (
+            "legal_publication_approval",
+            "incident_tabletop",
+            "claim_honesty",
+        ):
+            with self.subTest(gate=gate):
+                def mutate(payloads: dict[str, dict], selected: str = gate) -> None:
+                    payloads[selected]["human_assurance_boundary"][
+                        "professional_qualification"
+                    ] = "verified"
+
+                report = _verify(
+                    _accepting_manifest(self.bundle, mutate_payloads=mutate),
+                    self.bundle,
+                )
+                self.assertEqual(report["result"], "INVALID")
+                self.assertTrue(
+                    any(
+                        "professional_qualification" in error
+                        for error in report["errors"]
+                    )
+                )
+
+        def remove_boundary(payloads: dict[str, dict]) -> None:
+            payloads["claim_honesty"].pop("human_assurance_boundary")
+
+        report = _verify(
+            _accepting_manifest(self.bundle, mutate_payloads=remove_boundary),
+            self.bundle,
+        )
+        self.assertEqual(report["result"], "INVALID")
+        self.assertTrue(
+            any("human_assurance_boundary" in error for error in report["errors"])
+        )
+
+    def test_claim_accept_is_derived_and_cannot_be_supplied_by_the_manifest(self) -> None:
+        manifest = _accepting_manifest(self.bundle)
+        claim_receipt = manifest["required_gates"]["claim_honesty"]["evidence"]
+        self.assertNotIn(
+            "rendered_product_status",
+            json.dumps(claim_receipt, sort_keys=True),
+        )
+        self.assertEqual(_verify(manifest, self.bundle)["result"], "ACCEPT")
+
+        def inject_circular_status(payloads: dict) -> None:
+            payloads["claim_honesty"]["boundaries"][
+                "rendered_product_status"
+            ] = "ACCEPT"
+
+        bundle = SignedBundle()
+        try:
+            circular = _accepting_manifest(
+                bundle, mutate_payloads=inject_circular_status
+            )
+            report = _verify(circular, bundle)
+            self.assertEqual(report["result"], "INVALID")
+            self.assertTrue(
+                any(
+                    "boundaries" in error
+                    and "rendered_product_status" in error
+                    for error in report["errors"]
+                )
+            )
+        finally:
+            bundle.close()
+
+    def test_claim_machine_subject_rejects_tamper_findings_and_collector_replay(self) -> None:
+        def rehash(payload: dict) -> None:
+            payload["machine_subject_sha256"] = hashlib.sha256(
+                _canonical(payload["machine_subject"])
+            ).hexdigest()
+
+        cases = {
+            "surface bytes changed without subject rehash": lambda payload: payload[
+                "machine_subject"
+            ]["scanned_surfaces"][0].update(content_sha256="f" * 64),
+            "finding inserted and subject rehashed": lambda payload: (
+                payload["machine_subject"]["findings"].append(
+                    {
+                        "category": "misleading_claim",
+                        "rule_id": "customer_production_ready",
+                        "surface_kind": "landing",
+                        "match_start": 0,
+                        "match_end": 10,
+                        "match_sha256": "a" * 64,
+                    }
+                ),
+                rehash(payload),
+            ),
+            "different collector source replayed and subject rehashed": lambda payload: (
+                payload["machine_subject"]["scanner"].update(
+                    collector_sha256="b" * 64
+                ),
+                rehash(payload),
+            ),
+        }
+        for label, mutate_claim in cases.items():
+            with self.subTest(label=label):
+                bundle = SignedBundle()
+                try:
+                    def mutate(payloads: dict) -> None:
+                        mutate_claim(payloads["claim_honesty"])
+
+                    manifest = _accepting_manifest(bundle, mutate_payloads=mutate)
+                    report = _verify(manifest, bundle)
+                    self.assertEqual(report["result"], "INVALID")
+                finally:
+                    bundle.close()
+
+    def test_claim_chronology_requires_surfaces_then_subject_then_approvals(self) -> None:
+        def rehash(payload: dict) -> None:
+            payload["machine_subject_sha256"] = hashlib.sha256(
+                _canonical(payload["machine_subject"])
+            ).hexdigest()
+
+        cases = {
+            "surface follows subject generation": lambda payload: (
+                payload["machine_subject"]["scanned_surfaces"][0].update(
+                    verified_at_utc="2026-07-14T11:49:00Z"
+                ),
+                rehash(payload),
+            ),
+            "approval precedes subject generation": lambda payload: payload[
+                "approvals"
+            ][0].update(approved_at_utc="2026-07-14T11:47:00Z"),
+        }
+        for label, mutate_claim in cases.items():
+            with self.subTest(label=label):
+                bundle = SignedBundle()
+                try:
+                    def mutate(payloads: dict) -> None:
+                        mutate_claim(payloads["claim_honesty"])
+
+                    report = _verify(
+                        _accepting_manifest(bundle, mutate_payloads=mutate),
+                        bundle,
+                    )
+                    self.assertEqual(report["result"], "INVALID")
+                finally:
+                    bundle.close()
+
+    def test_claim_artifact_hash_must_equal_machine_subject_hash(self) -> None:
+        manifest = _accepting_manifest(self.bundle)
+        reference = manifest["required_gates"]["claim_honesty"]["evidence"]
+
+        def detach_artifact(receipt: dict) -> None:
+            receipt["subject_sha256"] = "f" * 64
+            receipt["evidence"]["artifact_sha256"] = "f" * 64
+
+        _mutate_signed_reference(self.bundle, reference, detach_artifact)
+        report = _verify(manifest, self.bundle)
+        self.assertEqual(report["result"], "INVALID")
+        self.assertTrue(
+            any(
+                "artifact_sha256" in error
+                and "machine_subject_sha256" in error
+                for error in report["errors"]
+            )
+        )
+
+    def test_claim_surface_contract_rejects_charset_type_and_length_drift(self) -> None:
+        def rehash(payload: dict) -> None:
+            payload["machine_subject_sha256"] = hashlib.sha256(
+                _canonical(payload["machine_subject"])
+            ).hexdigest()
+
+        cases = {
+            "missing charset": lambda payload, surface: surface.update(
+                content_type="text/html"
+            ),
+            "empty charset": lambda payload, surface: surface.update(
+                content_type="text/html; charset="
+            ),
+            "conflicting duplicate charset": lambda payload, surface: surface.update(
+                content_type="text/html; charset=utf-8; charset=iso-8859-1"
+            ),
+            "non-UTF-8 charset": lambda payload, surface: surface.update(
+                content_type="text/html; charset=windows-1252"
+            ),
+            "static prerender null": lambda payload, surface: surface.update(
+                prerender_contract_matches_requested_route=None
+            ),
+            "static prerender integer": lambda payload, surface: surface.update(
+                prerender_contract_matches_requested_route=0
+            ),
+            "boolean word count": lambda payload, surface: surface.update(
+                visible_word_count=True
+            ),
+            "words exceed characters": lambda payload, surface: surface.update(
+                visible_word_count=257
+            ),
+            "characters exceed bytes": lambda payload, surface: surface.update(
+                visible_text_characters=513
+            ),
+            "bytes exceed maximum": lambda payload, surface: payload[
+                "machine_subject"
+            ]["scanner"].update(maximum_response_bytes=511),
+        }
+        for label, mutate_surface in cases.items():
+            with self.subTest(label=label):
+                bundle = SignedBundle()
+                try:
+                    def mutate(payloads: dict) -> None:
+                        claim = payloads["claim_honesty"]
+                        static_surface = next(
+                            surface
+                            for surface in claim["machine_subject"][
+                                "scanned_surfaces"
+                            ]
+                            if surface["kind"] == "landing"
+                        )
+                        mutate_surface(claim, static_surface)
+                        rehash(claim)
+
+                    report = _verify(
+                        _accepting_manifest(bundle, mutate_payloads=mutate),
+                        bundle,
+                    )
+                    self.assertEqual(report["result"], "INVALID")
+                finally:
+                    bundle.close()
+
+    def test_claim_collector_hash_uses_commit_blob_not_dirty_checkout(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            repo = Path(temporary)
+            collector_path = repo / verifier.CLAIM_COLLECTOR_REPOSITORY_PATH
+            collector_path.parent.mkdir(parents=True)
+            committed = b"# immutable committed collector\n"
+            collector_path.write_bytes(committed)
+            for command in (
+                ["git", "init"],
+                ["git", "config", "user.email", "cas-test@example.test"],
+                ["git", "config", "user.name", "CAS Test"],
+                ["git", "add", verifier.CLAIM_COLLECTOR_REPOSITORY_PATH],
+                ["git", "commit", "-m", "commit collector"],
+            ):
+                subprocess.run(
+                    command,
+                    cwd=repo,
+                    check=True,
+                    capture_output=True,
+                )
+            commit = subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=repo,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip().lower()
+            collector_path.write_bytes(b"# dirty uncommitted collector\n")
+
+            payload = _gate_payloads()["claim_honesty"]
+            payload["master_head_sha"] = commit
+            payload["artifact_uri"] = SUBJECT_URIS["claim_honesty"]
+            payload["machine_subject"]["scanner"]["collector_sha256"] = (
+                hashlib.sha256(committed).hexdigest()
+            )
+            payload["machine_subject_sha256"] = hashlib.sha256(
+                _canonical(payload["machine_subject"])
+            ).hexdigest()
+            payload["artifact_sha256"] = payload["machine_subject_sha256"]
+            context = verifier.ValidationContext(
+                repo_root=repo,
+                evidence_root=repo,
+                verification_time=NOW,
+                generated_at=NOW,
+                expected_master_head=commit,
+                expected_deploy_id=DEPLOY_ID,
+                repository_commit=commit,
+                live=False,
+                trusted_issuers={},
+                registry_sha256=_digest("registry"),
+            )
+
+            verifier._validate_claim_honesty(payload, context, None)
+            self.assertEqual(context.errors, [])
+
+    def test_claim_collector_git_blob_unavailable_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            repo = Path(temporary)
+            payload = _gate_payloads()["claim_honesty"]
+            payload["artifact_uri"] = SUBJECT_URIS["claim_honesty"]
+            payload["artifact_sha256"] = payload["machine_subject_sha256"]
+            context = verifier.ValidationContext(
+                repo_root=repo,
+                evidence_root=repo,
+                verification_time=NOW,
+                generated_at=NOW,
+                expected_master_head=MASTER_SHA,
+                expected_deploy_id=DEPLOY_ID,
+                repository_commit=MASTER_SHA,
+                live=False,
+                trusted_issuers={},
+                registry_sha256=_digest("registry"),
+            )
+
+            verifier._validate_claim_honesty(payload, context, None)
+            self.assertTrue(
+                any(
+                    "cannot read the collector Git blob" in error
+                    for error in context.errors
+                )
+            )
 
     def test_sanitized_archive_contains_only_verified_referenced_documents(self) -> None:
         manifest = _accepting_manifest(self.bundle)
@@ -1773,6 +2204,132 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
         self.assertEqual(
             len(chronology_errors),
             sum(len(paths) for paths in CRITICAL_TIMESTAMP_PATHS.values()),
+        )
+
+    def test_root_ci_old_release_provenance_can_be_wrapped_only_by_fresh_current_observations(self) -> None:
+        def old_release(payloads):
+            ci = payloads["root_ci_protected_deploy"]
+            for check in ci["checks"]:
+                check["run_created_at_utc"] = "2020-01-01T00:00:00Z"
+                check["completed_at_utc"] = "2020-01-01T01:00:00Z"
+            ci["deployment"]["created_at_utc"] = "2020-01-01T02:00:00Z"
+            ci["deployment"]["deployed_at_utc"] = "2020-01-01T03:00:00Z"
+
+        manifest = _accepting_manifest(self.bundle, mutate_payloads=old_release)
+        report = _verify(manifest, self.bundle)
+
+        self.assertEqual(report["result"], "ACCEPT", report["errors"])
+        self.assertEqual(report["errors"], [])
+
+    def test_root_ci_historical_provenance_chronology_fails_closed(self) -> None:
+        cases = {
+            "run completes before creation": lambda ci: ci["checks"][0].update(
+                run_created_at_utc="2026-07-14T11:41:00Z",
+                completed_at_utc="2026-07-14T11:40:00Z",
+            ),
+            "deploy starts before checks": lambda ci: ci["deployment"].update(
+                created_at_utc="2026-07-14T11:39:00Z"
+            ),
+            "deploy finishes before creation": lambda ci: ci["deployment"].update(
+                created_at_utc="2026-07-14T11:42:30Z",
+                deployed_at_utc="2026-07-14T11:42:00Z",
+            ),
+            "historical proof after fresh event": lambda ci: ci["deployment"].update(
+                deployed_at_utc="2026-07-14T11:44:00Z"
+            ),
+        }
+        for label, mutate in cases.items():
+            with self.subTest(label=label):
+                bundle = SignedBundle()
+                try:
+                    manifest = _accepting_manifest(
+                        bundle,
+                        mutate_payloads=lambda payloads: mutate(
+                            payloads["root_ci_protected_deploy"]
+                        ),
+                    )
+                    report = _verify(manifest, bundle)
+                    self.assertEqual(report["result"], "INVALID")
+                finally:
+                    bundle.close()
+
+    def test_root_ci_current_observation_schema_and_provider_pairs_fail_closed(self) -> None:
+        cases = {
+            "schema marker": lambda ci: ci.update(
+                root_ci_schema_version="legacy-root-ci"
+            ),
+            "semantics": lambda ci: ci["observation"].update(
+                semantics="fresh-deploy-required"
+            ),
+            "current master": lambda ci: ci["observation"].update(
+                current_master_head_sha="b" * 40
+            ),
+            "current deploy": lambda ci: ci["observation"].update(
+                current_active_deploy_id="dep-attacker"
+            ),
+            "service changed": lambda ci: ci["observation"].update(
+                render_service_final_sha256=_digest("changed-service")
+            ),
+            "master changed": lambda ci: ci["observation"].update(
+                github_master_final_sha256=_digest("changed-master")
+            ),
+            "repository changed": lambda ci: ci["observation"].update(
+                github_repository_final_sha256=_digest("changed-repository")
+            ),
+            "protection changed": lambda ci: ci["observation"].update(
+                github_protection_final_sha256=_digest("changed-protection")
+            ),
+            "workflow registry changed": lambda ci: ci["observation"].update(
+                github_workflows_final_sha256=_digest("changed-workflows")
+            ),
+            "initial deploy changed": lambda ci: ci["observation"].update(
+                render_deploy_initial_sha256=_digest("changed-initial-deploy")
+            ),
+            "latest deploy changed": lambda ci: ci["observation"].update(
+                render_latest_final_sha256=_digest("changed-latest")
+            ),
+            "non-monotonic": lambda ci: ci["observation"].update(
+                health_verified_at_utc="2026-07-14T11:45:00Z",
+                github_controls_verified_at_utc="2026-07-14T11:46:00Z",
+            ),
+            "unbound branch protection": lambda ci: ci[
+                "branch_protection"
+            ].update(observed_at_utc="2026-07-14T11:46:00Z"),
+        }
+        for label, mutate in cases.items():
+            with self.subTest(label=label):
+                bundle = SignedBundle()
+                try:
+                    manifest = _accepting_manifest(
+                        bundle,
+                        mutate_payloads=lambda payloads: mutate(
+                            payloads["root_ci_protected_deploy"]
+                        ),
+                    )
+                    report = _verify(manifest, bundle)
+                    self.assertEqual(report["result"], "INVALID")
+                finally:
+                    bundle.close()
+
+    def test_root_ci_signed_receipt_ttl_is_exactly_120_minutes(self) -> None:
+        manifest = _accepting_manifest(
+            self.bundle,
+            receipt_options={
+                "root_ci_protected_deploy": {
+                    "expires": "2026-07-14T14:00:00Z"
+                }
+            },
+        )
+
+        report = _verify(manifest, self.bundle)
+
+        self.assertEqual(report["result"], "INVALID")
+        self.assertTrue(
+            any(
+                "root_ci_protected_deploy" in error
+                and "exactly 120 minutes" in error
+                for error in report["errors"]
+            )
         )
 
     def test_alert_chronology_and_reported_latency_bind_actual_clock_delta(self) -> None:

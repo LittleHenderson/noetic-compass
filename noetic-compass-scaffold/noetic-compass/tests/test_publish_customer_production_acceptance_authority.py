@@ -21,10 +21,11 @@ from api.services.customer_production_acceptance_authority import (
     CustomerProductionAcceptanceAuthorityStore,
     canonicalize_acceptance_evidence,
 )
-from api.services.acceptance_publication_authorizations import (
-    AcceptancePublicationAuthorizationStore,
-)
 from api.services.production.state_substrate.memory_store import InMemoryStateStore
+from tests.acceptance_attestation_test_support import (
+    materialize_human_attestations,
+)
+from api.services.human_attestations import PUBLIC_HUMAN_ASSURANCE_BOUNDARY
 import scripts.publish_customer_production_acceptance_authority as publisher
 
 
@@ -42,8 +43,8 @@ def _isolate_existing_publisher_tests_from_the_new_record_plane(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setattr(
-        AcceptancePublicationAuthorizationStore,
-        "assert_matches",
+        CustomerProductionAcceptanceAuthorityStore,
+        "assert_publication_authorized",
         lambda self, **kwargs: None,
     )
 
@@ -71,7 +72,7 @@ def _utc(value: datetime) -> str:
 def _legal_evidence(now: datetime) -> dict[str, object]:
     stamp = _utc(now)
     return {
-        "schema_version": "cas_harness_customer_production_gate_evidence.v2",
+        "schema_version": "cas_harness_customer_production_gate_evidence.v3",
         "gate": "legal_publication_approval",
         "environment": "public-production",
         "repository": "LittleHenderson/noetic-compass",
@@ -114,7 +115,19 @@ def _legal_evidence(now: datetime) -> dict[str, object]:
             "present",
             "unavailable",
         ],
+        "human_assurance_boundary": dict(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
     }
+
+
+def _bound_legal_authority(
+    now: datetime,
+) -> tuple[dict[str, object], CustomerProductionAcceptanceAuthorityStore]:
+    state = InMemoryStateStore()
+    evidence = _legal_evidence(now)
+    attestations = materialize_human_attestations(state, evidence)
+    return evidence, CustomerProductionAcceptanceAuthorityStore(
+        state, human_attestation_store=attestations
+    )
 
 
 def _write(path: Path, value: object) -> Path:
@@ -169,6 +182,111 @@ def _publish_args(
     if previous_digest is not None:
         args.extend(["--expected-previous-evidence-sha256", previous_digest])
     return args
+
+
+def _accounts_publish_args(
+    path: Path, digest: str, source_path: Path | None = None
+) -> list[str]:
+    args = _publish_args(path, digest)
+    gate_index = args.index("legal_publication_approval")
+    args[gate_index] = "accounts_billing"
+    if source_path is not None:
+        args.extend(["--accounts-billing-source", str(source_path)])
+    return args
+
+
+def test_accounts_publish_requires_private_source_file_before_provider_access(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    digest = _sha("accounts-evidence")
+    monkeypatch.setattr(
+        publisher,
+        "_prepare_evidence",
+        lambda **kwargs: ({"master_head_sha": MASTER, "deploy_id": DEPLOY}, b"{}", digest),
+    )
+
+    @contextmanager
+    def forbidden_authority(**kwargs):  # type: ignore[no-untyped-def]
+        raise AssertionError("production authority must not open")
+        yield
+
+    monkeypatch.setattr(publisher, "_production_authority", forbidden_authority)
+    stdout, stderr = io.StringIO(), io.StringIO()
+
+    result = publisher.run(
+        _accounts_publish_args(tmp_path / "unused.json", digest),
+        now=datetime(2026, 7, 15, 18, 0, tzinfo=UTC),
+        stdout=stdout,
+        stderr=stderr,
+    )
+
+    assert result == 2
+    assert json.loads(stderr.getvalue())["code"] == "accounts_billing_source_required"
+
+
+def test_accounts_publish_creates_source_binding_before_authority_publish(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    digest = _sha("accounts-evidence")
+    canonical = b"{}"
+    source = _write(
+        tmp_path / "private-source.json",
+        {"tenant_id": "tenant-one", "invoice_record_id": "invoice-record-001"},
+    )
+    monkeypatch.setattr(
+        publisher,
+        "_prepare_evidence",
+        lambda **kwargs: ({"master_head_sha": MASTER, "deploy_id": DEPLOY}, canonical, digest),
+    )
+    calls: list[str] = []
+
+    class TrackingAuthority:
+        def assert_publication_authorized(self, **kwargs):  # type: ignore[no-untyped-def]
+            calls.append("authorization")
+
+        def create_accounts_billing_source_binding(self, evidence, **kwargs):  # type: ignore[no-untyped-def]
+            calls.append("source_binding")
+            assert kwargs["tenant_id"] == "tenant-one"
+            assert kwargs["invoice_record_id"] == "invoice-record-001"
+            return digest
+
+        def publish(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+            calls.append("publish")
+            return SimpleNamespace(
+                sha256=digest,
+                gate="accounts_billing",
+                head_version=1,
+                operation_record_id="operation-001",
+                operation_sha256=_sha("operation"),
+                storage_mode="state_store",
+            )
+
+        def load(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+            return SimpleNamespace(sha256=digest, body=canonical)
+
+        def current_head(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+            return SimpleNamespace(
+                active=True,
+                head_version=1,
+                operation_record_id="operation-001",
+                operation_sha256=_sha("operation"),
+            )
+
+    @contextmanager
+    def local_authority(**kwargs):  # type: ignore[no-untyped-def]
+        yield TrackingAuthority()
+
+    monkeypatch.setattr(publisher, "_production_authority", local_authority)
+    stdout, stderr = io.StringIO(), io.StringIO()
+    result = publisher.run(
+        _accounts_publish_args(tmp_path / "unused.json", digest, source),
+        now=datetime(2026, 7, 15, 18, 0, tzinfo=UTC),
+        stdout=stdout,
+        stderr=stderr,
+    )
+
+    assert result == 0, stderr.getvalue()
+    assert calls == ["authorization", "source_binding", "publish"]
 
 
 def _render_environ() -> dict[str, str]:
@@ -279,14 +397,12 @@ def test_publish_uses_expected_head_and_verifies_exact_readback(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     now = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
-    evidence = _legal_evidence(now)
+    evidence, authority = _bound_legal_authority(now)
     path = _write(tmp_path / "legal.json", evidence)
     canonical = canonicalize_acceptance_evidence(
         "legal_publication_approval", evidence, now=now
     )
     digest = hashlib.sha256(canonical).hexdigest()
-    authority = CustomerProductionAcceptanceAuthorityStore(InMemoryStateStore())
-
     @contextmanager
     def fake_production_authority(**_: object):
         yield authority
@@ -317,12 +433,46 @@ def test_publish_uses_expected_head_and_verifies_exact_readback(
     assert authority.load("legal_publication_approval", now=now).body == canonical
 
 
-def test_head_returns_version_hash_and_active_state(
+def test_missing_attestation_store_is_known_prewrite_authority_unavailable(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     now = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
     evidence = _legal_evidence(now)
+    path = _write(tmp_path / "legal.json", evidence)
+    digest = hashlib.sha256(
+        canonicalize_acceptance_evidence(
+            "legal_publication_approval", evidence, now=now
+        )
+    ).hexdigest()
     authority = CustomerProductionAcceptanceAuthorityStore(InMemoryStateStore())
+
+    @contextmanager
+    def fake_production_authority(**_: object):
+        yield authority
+
+    monkeypatch.setattr(
+        publisher, "_production_authority", fake_production_authority
+    )
+    stdout, stderr = io.StringIO(), io.StringIO()
+    result = publisher.run(
+        _publish_args(path, digest), now=now, stdout=stdout, stderr=stderr
+    )
+
+    assert result == 4
+    assert stdout.getvalue() == ""
+    assert json.loads(stderr.getvalue()) == {
+        "code": "authority_unavailable",
+        "detail": "authority persistence or readback is unavailable",
+        "status": "error",
+    }
+    assert authority.current_head_version("legal_publication_approval") == 0
+
+
+def test_head_returns_version_hash_and_active_state(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    now = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
+    evidence, authority = _bound_legal_authority(now)
     published = authority.publish(
         "legal_publication_approval",
         evidence,
@@ -370,8 +520,7 @@ def test_deactivate_tombstones_exact_hash_and_verifies_readback(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     now = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
-    evidence = _legal_evidence(now)
-    authority = CustomerProductionAcceptanceAuthorityStore(InMemoryStateStore())
+    evidence, authority = _bound_legal_authority(now)
     published = authority.publish(
         "legal_publication_approval",
         evidence,
@@ -435,7 +584,7 @@ def test_replacement_requires_previous_hash_before_opening_production(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     now = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
-    evidence = _legal_evidence(now)
+    evidence, base = _bound_legal_authority(now)
     path = _write(tmp_path / "legal.json", evidence)
     digest = hashlib.sha256(
         canonicalize_acceptance_evidence(
@@ -487,14 +636,12 @@ def test_post_mutation_readback_failure_reports_unknown_state(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     now = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
-    evidence = _legal_evidence(now)
+    evidence, base = _bound_legal_authority(now)
     path = _write(tmp_path / "legal.json", evidence)
     canonical = canonicalize_acceptance_evidence(
         "legal_publication_approval", evidence, now=now
     )
     digest = hashlib.sha256(canonical).hexdigest()
-    base = CustomerProductionAcceptanceAuthorityStore(InMemoryStateStore())
-
     class FailingReadback:
         def assert_publication_authorized(self, **kwargs):  # type: ignore[no-untyped-def]
             return base.assert_publication_authorized(**kwargs)
@@ -532,14 +679,12 @@ def test_publish_commit_then_disconnect_reports_unknown_state(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     now = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
-    evidence = _legal_evidence(now)
+    evidence, base = _bound_legal_authority(now)
     path = _write(tmp_path / "legal.json", evidence)
     canonical = canonicalize_acceptance_evidence(
         "legal_publication_approval", evidence, now=now
     )
     digest = hashlib.sha256(canonical).hexdigest()
-    base = CustomerProductionAcceptanceAuthorityStore(InMemoryStateStore())
-
     class CommitThenDisconnect:
         def assert_publication_authorized(self, **kwargs):  # type: ignore[no-untyped-def]
             return base.assert_publication_authorized(**kwargs)
@@ -570,8 +715,7 @@ def test_deactivate_commit_then_disconnect_reports_unknown_state(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     now = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
-    evidence = _legal_evidence(now)
-    base = CustomerProductionAcceptanceAuthorityStore(InMemoryStateStore())
+    evidence, base = _bound_legal_authority(now)
     published = base.publish(
         "legal_publication_approval",
         evidence,
@@ -628,13 +772,12 @@ def test_stale_head_fails_closed_without_replacing_active_revision(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     now = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
-    evidence = _legal_evidence(now)
+    evidence, authority = _bound_legal_authority(now)
     path = _write(tmp_path / "legal.json", evidence)
     canonical = canonicalize_acceptance_evidence(
         "legal_publication_approval", evidence, now=now
     )
     digest = hashlib.sha256(canonical).hexdigest()
-    authority = CustomerProductionAcceptanceAuthorityStore(InMemoryStateStore())
     authority.publish(
         "legal_publication_approval",
         evidence,
@@ -746,6 +889,21 @@ def test_head_and_deactivate_authority_setup_does_not_touch_s3(
     class Settings:
         evidence_packet_object_store_enabled = True
         accounts_bootstrap_tenant_id = "primary"
+        human_attestation_pseudonym_active_key_id = (
+            "hatk_0123456789abcdef0123456789abcdef"
+        )
+        human_attestation_pseudonym_keyring_json = (
+            '{"hatk_0123456789abcdef0123456789abcdef":'
+            '"base64url:5EfvyXp5BYNrpodyw-DoiFemHziedgI06tZHVjtmvow"}'
+        )
+        customer_production_pseudonym_active_key_id = (
+            "cpk_89abcdef0123456789abcdef01234567"
+        )
+        customer_production_pseudonym_keyring_json = (
+            '{"cpk_89abcdef0123456789abcdef01234567":'
+            '"base64url:ba72v6mRNqQ2kA0GZljcsAF4HpatDbaOpVkvpGl_QmA"}'
+        )
+        billing_reconciliation_enabled = False
 
         def validate_object_lock_receipt_attestation(self) -> None:
             calls["s3"] += 1
