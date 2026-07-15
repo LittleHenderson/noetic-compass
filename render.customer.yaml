@@ -1,0 +1,215 @@
+# Render Blueprint - CAS Harness customer-production lane
+# yaml-language-server: $schema=https://render.com/schema/render.yaml.json
+#
+# DEPLOYMENT SAFETY: Blueprint Auto Sync MUST stay disabled in Render.
+# Create and manually sync this as a separate Blueprint only after
+# `cas-ci-gate` and `cas-postgres-live-gate` pass for the exact Blueprint source SHA.
+# The existing `render.yaml` service remains the accounts-off
+# legacy lane and must not be adopted into this Blueprint.
+# SOURCE PREREQUISITE: the deployed service SHA must contain protected master
+# commit ed6a0f9fa433052fa48ce4d70dbbbc990042538e (the fail-closed public
+# support privacy guard). Prove ancestry and exact-SHA CI before first creation;
+# never deploy a branch that does not contain that guard.
+#
+# Render assigns the Blueprint and service IDs. Do not add guessed IDs to
+# `.render/blueprint-control.json`; identity-lock them in a follow-up commit
+# after provider readback. Customer-production `ACCEPT` remains `OPEN` until
+# the hosted account journey and every independent acceptance gate pass.
+#
+# Initial operator inputs are limited to the two dedicated AWS credentials
+# and the temporary live-worker URL/token. Render generates every other
+# authority independently only while its env key is absent. Deleting a declared
+# generateValue key makes a later sync create a different value; that is a
+# destructive rotation, not recovery. Secure provider-side backup, restore, and
+# continuity proof are required before customer traffic. Never commit or print
+# a secret. After the first owner is verified, first remove the bootstrap
+# declaration in a protected commit and sync that exact SHA; only then delete
+# its Render value so a later sync cannot recreate the bootstrap authority.
+
+projects:
+  - name: cas-harness-customer
+    environments:
+      - name: production
+        networking:
+          isolation: enabled
+        permissions:
+          protection: enabled
+
+        databases:
+          - name: cas-harness-customer-postgres
+            plan: basic-256mb
+            region: oregon
+            postgresMajorVersion: "16"
+            databaseName: cas_harness_customer
+            user: cas_harness_customer
+            diskSizeGB: 1
+            storageAutoscalingEnabled: false
+            # This 1 GB, autoscaling-off database is an intentionally small
+            # bootstrap tier, not customer-production capacity evidence.
+            # Require Render private networking; no public database ingress.
+            ipAllowList: []
+
+        services:
+          - type: web
+            name: cas-harness-customer-api
+            runtime: docker
+            repo: https://github.com/LittleHenderson/noetic-compass
+            branch: master
+            rootDir: noetic-compass-scaffold/noetic-compass
+            dockerfilePath: ./Dockerfile.api
+            dockerContext: .
+            plan: starter
+            region: oregon
+            # The attached disk forces one instance and disables Render's
+            # zero-downtime deploy path. The runbook blocks customer `ACCEPT`
+            # until the file-backed surfaces migrate and a two-replica path is proven.
+            numInstances: 1
+            autoDeployTrigger: checksPass
+            healthCheckPath: /health
+            # This disk keeps customer support/CRM records and the existing
+            # file-backed Evidence Packet/hash-log surface durable. Account,
+            # session, quota, entitlement, and tenant object-store metadata use
+            # the dedicated Postgres DB; immutable packet bytes also use S3.
+            disk:
+              name: cas-harness-customer-support
+              mountPath: /var/customer-support
+              sizeGB: 1
+            envVars:
+              - key: NC_DEBUG
+                value: "false"
+              - key: NC_DEPLOYMENT_PROFILE
+                value: customer-production
+              - key: NC_JWT_ALGORITHM
+                value: HS256
+              - key: NC_JWT_SECRET
+                generateValue: true
+              - key: NC_JWT_EXPIRY_MINUTES
+                value: "60"
+
+              # One isolated Postgres authority for all customer identity and
+              # tenant state. Never point this lane at the legacy production DB.
+              - key: NC_DATABASE_URL
+                fromDatabase:
+                  name: cas-harness-customer-postgres
+                  property: connectionString
+              - key: NC_STATE_LEDGER_ENABLED
+                value: "true"
+              - key: NC_STATE_LEDGER_READ_AUTHORITY
+                value: "true"
+
+              # Customer identity and server-owned quota/entitlement policy.
+              - key: NC_ACCOUNTS_ENABLED
+                value: "true"
+              - key: NC_ACCOUNT_CREDENTIAL_PEPPER
+                generateValue: true
+              - key: NC_ACCOUNT_BOOTSTRAP_SECRET
+                generateValue: true
+              - key: NC_PLATFORM_TENANT_PROVISIONING_SECRET
+                generateValue: true
+              - key: NC_ACCOUNTS_BOOTSTRAP_TENANT_ID
+                value: primary
+              - key: NC_ACCOUNTS_ALLOW_SINGLE_HOST_SQLITE
+                value: "false"
+              - key: NC_QUOTAS_ENABLED
+                value: "true"
+              - key: NC_BILLING_ENTITLEMENTS_ENABLED
+                value: "true"
+              - key: NC_BILLING_ADMIN_SECRET
+                generateValue: true
+              # Manual entitlements are active, but every provider/effect lane
+              # remains dark until its own hosted proof and release decision.
+              - key: NC_BILLING_PROVIDER
+                value: "null"
+              - key: NC_BILLING_RECONCILIATION_ENABLED
+                value: "false"
+              - key: NC_BILLING_WORKER_MEASUREMENT_ENABLED
+                value: "false"
+              - key: NC_BILLING_USAGE_DISPATCH_ENABLED
+                value: "false"
+              - key: NC_FLEET_SERVICE_AUTH_ENABLED
+                value: "false"
+
+              # Tenant-scoped immutable packet bytes and anonymous read-only
+              # shares are intentionally enabled together for the customer lane.
+              - key: NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED
+                value: "true"
+              - key: CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR
+                value: /var/customer-support/evidence_packets
+              - key: NC_EVIDENCE_SHARES_ENABLED
+                value: "true"
+              - key: NC_EVIDENCE_SHARE_TOKEN_PEPPER
+                generateValue: true
+              - key: NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY
+                generateValue: true
+
+              # Reuse the proven Object-Lock bucket with a customer-only prefix.
+              # The injected IAM principal must be restricted to this prefix plus
+              # the minimum bucket-level readiness calls documented in the runbook.
+              - key: CAS_HARNESS_EVIDENCE_ANCHOR_MODE
+                value: s3
+              - key: CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET
+                value: cas-harness-runpod-92754088
+              - key: CAS_HARNESS_EVIDENCE_ANCHOR_S3_PREFIX
+                value: cas-harness/customer-production/evidence-anchors
+              - key: CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION
+                value: us-west-2
+              - key: CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE
+                value: GOVERNANCE
+              - key: CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS
+                value: "31"
+              - key: AWS_ACCESS_KEY_ID
+                sync: false
+              - key: AWS_SECRET_ACCESS_KEY
+                sync: false
+
+              # Temporary reuse of the proven worker is server-to-server only.
+              # Billing measurement, usage dispatch, and fleet auth stay off.
+              - key: ATLAS_LIVE_WORKER_URL
+                sync: false
+              - key: ATLAS_LIVE_WORKER_TOKEN
+                sync: false
+
+              # Protected commit ed6a0f9fa433052fa48ce4d70dbbbc990042538e
+              # makes the server-owned privacy notice a prerequisite for both
+              # CRM and support persistence. While the notice is OPEN, public
+              # intake must return 503 and persist zero PII.
+              - key: NC_CRM_PROVIDER
+                value: "null"
+              - key: NC_CRM_LEAD_STORE_PATH
+                value: /var/customer-support/leads.jsonl
+              - key: NC_CRM_PRIVACY_NOTICE_PUBLICATION_STATUS
+                value: OPEN
+              - key: NC_CRM_PRIVACY_NOTICE_VERSION
+                value: draft-2026-07-14
+              - key: NC_CRM_PRIVACY_NOTICE_CONTENT_SHA256
+                value: e94df1615dde4122836b47a74e32d45c79b63c1603db3bd1aee01f62d7ddae28
+              - key: NC_CRM_PUBLIC_LEAD_RATE_LIMIT_MAX
+                value: "5"
+              - key: NC_CRM_PUBLIC_LEAD_RATE_LIMIT_WINDOW_SECONDS
+                value: "3600"
+              - key: NC_SUPPORT_TICKET_STORE_PATH
+                value: /var/customer-support/support_tickets.jsonl
+              - key: NC_SUPPORT_ACK_SLA_SECONDS
+                value: "86400"
+              - key: NC_SUPPORT_PUBLIC_TICKET_RATE_LIMIT_MAX
+                value: "5"
+              - key: NC_SUPPORT_PUBLIC_TICKET_RATE_LIMIT_WINDOW_SECONDS
+                value: "3600"
+
+              # Exact browser allowlist for the Atlas customer client. No
+              # dashboard, localhost, wildcard, or Vercel-preview regex origin.
+              - key: ATLAS_ALLOWED_ORIGINS
+                value: https://atlas.noeticcompass.com,https://atlas-viewer-app.onrender.com,https://cascompass.ai,https://www.cascompass.ai
+              - key: NC_CORS_ORIGIN_REGEX
+                value: "^$"
+
+              # Deterministic API-local model posture; live traces use the
+              # separately authenticated worker above.
+              - key: NC_DEFAULT_LLM_PROVIDER
+                value: mock
+              - key: NC_MOCK_LLM
+                value: "true"
+              - key: NC_RATE_LIMIT_TIER
+                value: enterprise
+              - key: NC_RATE_LIMIT_RPM
+                value: "120"

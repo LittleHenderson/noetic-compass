@@ -18,9 +18,10 @@ compliance, or customer-readiness `ACCEPT` claim. Preserve any `OPEN` or
 |---|---|---|---|
 | Production | `exs-d82lpanaqgkc7399m1g0` | `render.yaml` / `master` | `noetic-compass-api` / `master` |
 | Account canary | `exs-d9aknt8458ps73ftpkc0` | `render.canary.yaml` / `master` | `cas-harness-api-accounts-canary` / `release/accounts-canary-20260713` |
+| Customer production (identity pending) | `pending` | `render.customer.yaml` / `master` | `cas-harness-customer-api` / `master` |
 
-Both Blueprint Settings pages must show **Auto Sync: No**. Both stable service
-IDs must show their policy-bound branch, service type, repository, region, and
+The two identity-locked Blueprint Settings pages must show **Auto Sync: No**.
+Both stable service IDs must show their policy-bound branch, service type, repository, region, and
 `autoDeployTrigger: checksPass`; production must also keep
 `healthCheckPath: /health`. The required aggregate GitHub checks are:
 
@@ -30,6 +31,148 @@ IDs must show their policy-bound branch, service type, repository, region, and
 The account canary intentionally has two commit identities. The Blueprint file
 comes from `master`, while its service source comes from the release branch.
 Never collapse those identities into a single ambiguous `commit_sha` field.
+
+`render.customer.yaml` is repository-controlled but deliberately absent from
+the live-ID list until Render creates it. Its pending manifest entry contains no
+guessed `exs-*` or `srv-*` value. Before first creation, require exact-master CI,
+select this custom Blueprint path, keep Auto Sync disabled, and provide only the
+dedicated-prefix AWS credentials plus the temporary worker URL/token. Review the
+plan for exactly one new web service, one new Postgres database, and one new disk.
+After provider readback, a protected identity-lock commit must move this entry
+from `pendingBlueprints` to `blueprints` with the exact Render-assigned IDs. Until
+that commit passes and the live verifier reads those IDs, the customer lane is
+not under live drift control and customer-production `ACCEPT` remains `OPEN`.
+
+### Customer source prerequisite
+
+The public support privacy guard is protected on `master` at exact commit
+`ed6a0f9fa433052fa48ce4d70dbbbc990042538e`. It makes the server-owned privacy
+notice a prerequisite for both CRM and support persistence: while publication
+status is `OPEN`, public intake returns `503` and persists zero PII. The current
+customer-Blueprint source must contain that guard and must not be deployed
+directly. Before first creation, the final `service_source_sha` must pass:
+
+```bash
+git merge-base --is-ancestor \
+  ed6a0f9fa433052fa48ce4d70dbbbc990042538e \
+  <service_source_sha>
+```
+
+Exit status zero plus exact-SHA CI is required. An `OPEN` privacy notice still
+blocks public persistence and legal publication `ACCEPT`; containing the guard
+does not convert the draft notice into `present`.
+
+### Customer AWS principal
+
+Create a distinct, programmatic-only IAM principal for this service. Its inline
+policy must use these exact actions and resources (replace nothing in this
+customer-specific policy):
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "CustomerEvidenceBucketReadiness",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetBucketObjectLockConfiguration",
+        "s3:GetBucketVersioning"
+      ],
+      "Resource": "arn:aws:s3:::cas-harness-runpod-92754088"
+    },
+    {
+      "Sid": "CustomerEvidencePrefixObjects",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:GetObjectVersion",
+        "s3:PutObjectRetention",
+        "s3:GetObjectRetention"
+      ],
+      "Resource": "arn:aws:s3:::cas-harness-runpod-92754088/cas-harness/customer-production/evidence-anchors/*"
+    }
+  ]
+}
+```
+
+Do not grant `s3:*`, bucket mutation, list, delete, version delete,
+`s3:BypassGovernanceRetention`, or access to another prefix. The application
+needs no `AWS_SESSION_TOKEN` for a long-lived IAM access key. If the bucket is
+later moved to a customer-managed KMS key, add only `kms:GenerateDataKey` and
+`kms:Decrypt`, scoped to that exact key and bucket encryption context, in a
+separately reviewed policy change.
+
+### Render secret continuity and `sync: false`
+
+Render prompts for `sync: false` values only during initial Blueprint creation.
+On later Blueprint updates it ignores those declarations and preserves the
+dashboard-managed values; adding, changing, or removing a `sync: false` line in
+YAML is not a provider update or rotation. Set or rotate such values in Render,
+redeploy, and read back only presence/fingerprint evidence. Never copy a value
+to a command argument, repository file, Actions log, artifact, issue, PR, or
+chat. See Render's [Blueprint secret-value semantics](https://render.com/docs/blueprint-spec#prompting-for-secret-values).
+
+`generateValue: true` creates a random value only when the env key is absent.
+If an operator deletes a still-declared key, the next sync recreates a different
+value. That breaks continuity and is a rotation, not a recovery. Before first
+bootstrap or customer traffic, use a provider-side one-off path with no stdout
+to copy the exact generated values into an approved encrypted secret manager
+under separate records. The backup role must be distinct from the S3 runtime
+principal. Preserve only secret-manager version IDs and SHA-256 fingerprints in
+release evidence, then perform an exact-value restore drill without exposing
+the values.
+
+Continuity requirements are:
+
+| Authority | Accidental rotation impact | Required recovery/rotation control |
+|---|---|---|
+| `NC_JWT_SECRET` | Existing JWTs stop verifying. | Restore the exact value; no deliberate rotation without a dual-key/session migration. |
+| `NC_ACCOUNT_CREDENTIAL_PEPPER` | Every stored customer credential becomes unusable. | Restore exactly; a rotation requires credential re-issuance/migration first. |
+| `NC_EVIDENCE_SHARE_TOKEN_PEPPER` | Every active evidence share stops verifying. | Restore exactly, or record an explicit all-shares revocation decision before rotation. |
+| `NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY` | Existing serialized Object-Lock receipts fail verification. | Restore exactly; do not rotate until a receipt keyring/migration exists. |
+| `NC_ACCOUNT_BOOTSTRAP_SECRET` | First-owner bootstrap/recovery authority changes. | Back up until owner login is verified; retire by removing the YAML declaration, syncing that exact SHA, then deleting the Render value. |
+| `NC_BILLING_ADMIN_SECRET` | Manual entitlement administration clients lose authority. | Restore exactly or rotate in an audited client-and-server cutover while provider billing remains dark. |
+| `NC_PLATFORM_TENANT_PROVISIONING_SECRET` | Platform tenant provisioning clients lose authority. | Restore exactly or rotate in an audited client-and-server cutover. |
+
+All seven values must remain distinct. A Render service replacement must restore
+the same continuity-sensitive values before traffic; letting the replacement
+generate new values does not constitute recovery.
+
+### Bootstrap capacity and availability boundary
+
+The customer Blueprint is deliberately cheap bootstrap infrastructure:
+
+- The attached 1 GB service disk forces `numInstances: 1`, prevents horizontal
+  scaling, and disables Render zero-downtime deploys. Deploys include an outage.
+- The Postgres disk is 1 GB with `storageAutoscalingEnabled: false`; the
+  `basic-256mb` plan also has limited compute/memory headroom.
+
+Wire provider alerts before any customer journey: warning at 60% and critical
+at 75% for both service-disk and Postgres storage; warning/critical at 70%/85%
+for Postgres CPU, memory, and connection utilization sustained for 15 minutes.
+Route critical alerts through the primary on-call ACK and secondary escalation
+path, and preserve one non-secret delivery/readback drill.
+
+The following are hard prerequisites before customer-production `ACCEPT`:
+
+1. Migrate support tickets, CRM JSONL, and the file-backed Evidence Packet/hash
+   log off the attached service disk to shared Postgres/S3-backed stores, remove
+   the disk, run at least two API replicas, and prove a rolling deploy plus
+   replica/restart continuity with no lost records.
+2. Increase Postgres storage to at least 5 GB and enable storage autoscaling.
+   Start that upgrade earlier if actual storage reaches 60% or the 30-day
+   forecast reaches 70% of the 1 GB bootstrap disk.
+3. Upgrade from `basic-256mb` before acceptance if representative hosted load
+   reaches 70% CPU, memory, or connections for 15 minutes, then repeat the load,
+   restart, quota, tenant-isolation, and Evidence Packet readback proof.
+4. Show all capacity alerts healthy with at least 30 days projected storage
+   headroom. A quiet alert caused by missing telemetry is `unavailable`, not
+   healthy.
+
+Until those migrations, upgrades, alerts, and proofs exist, this lane may earn
+bounded staging evidence only; customer-production `ACCEPT` remains `OPEN`.
 
 ## 1. Prepare exact source commits
 
@@ -89,7 +232,8 @@ Control** on `master`, or run its live verifier in an environment where
 python scripts/verify_render_blueprint_control.py --live
 ```
 
-The command must report `autoSync=false` for both Blueprint IDs and a service
+Before the customer identity-lock commit, the command reports `autoSync=false`
+for both stable Blueprint IDs and a service
 control PASS for `srv-d82ph683kofs73d210e0` and
 `srv-d9akoolaeets73bp3e7g`. It reads each stable service through Render's
 authenticated service endpoint and fails closed on branch, service type,
@@ -105,6 +249,9 @@ to another origin. Authentication, invalid JSON, non-object payloads, and
 policy drift are never retried. Do not put the API key, a Blueprint sync hook,
 or any dashboard credential in a command argument, evidence file, issue, PR,
 or chat transcript.
+
+After the customer identity-lock commit, the same command must also read the
+new exact customer Blueprint/service IDs and fail closed on their drift.
 
 If the optional GitHub live job says `RENDER_API_KEY` is not configured, the
 offline policy still ran, but live drift has not been checked. Verify **Auto
@@ -129,7 +276,7 @@ For the synchronized environment, record at least:
 ```json
 {
   "blueprint_id": "<exs-...>",
-  "blueprint_path": "<render.yaml or render.canary.yaml>",
+  "blueprint_path": "<render.yaml, render.canary.yaml, or render.customer.yaml>",
   "blueprint_source_sha": "<40-character SHA>",
   "service_name": "<Render service name>",
   "service_source_sha": "<40-character SHA>",
