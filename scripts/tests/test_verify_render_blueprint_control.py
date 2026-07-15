@@ -453,6 +453,35 @@ class CustomerBlueprintPolicyTests(unittest.TestCase):
         with self.assertRaisesRegex(ControlError, "env key inventory drifted"):
             assert_customer_blueprint_contract(injected_billing, "test.yaml")
 
+    def test_customer_postgres_storage_headroom_pins_blueprint_and_api_names(
+        self,
+    ) -> None:
+        self.assertIn("            diskSizeGB: 5\n", self.text)
+        self.assertIn("            storageAutoscalingEnabled: true\n", self.text)
+        self.assertNotIn("            diskAutoscalingEnabled:", self.text)
+
+        database = EXPECTED_CUSTOMER_BLUEPRINT["databases"][0]
+        self.assertEqual(database["diskSizeGB"], 5)
+        self.assertTrue(database["diskAutoscalingEnabled"])
+        self.assertNotIn("storageAutoscalingEnabled", database)
+
+    def test_customer_postgres_storage_headroom_drift_fails_closed(self) -> None:
+        for original, replacement in (
+            ("            diskSizeGB: 5\n", "            diskSizeGB: 4\n"),
+            (
+                "            storageAutoscalingEnabled: true\n",
+                "            storageAutoscalingEnabled: false\n",
+            ),
+        ):
+            with self.subTest(replacement=replacement.strip()):
+                self.assertIn(original, self.text)
+                drifted = self.text.replace(original, replacement, 1)
+                with self.assertRaisesRegex(
+                    ControlError,
+                    "dedicated customer Postgres contract drifted",
+                ):
+                    assert_customer_blueprint_contract(drifted, "test.yaml")
+
     def test_customer_identity_contract_pins_provider_resources(self) -> None:
         self.assertEqual(EXPECTED_PENDING_BLUEPRINTS, [])
         customer = EXPECTED_CUSTOMER_BLUEPRINT
@@ -485,8 +514,8 @@ class CustomerBlueprintPolicyTests(unittest.TestCase):
         self.assertEqual(database["plan"], "basic_256mb")
         self.assertEqual(database["region"], "oregon")
         self.assertEqual(database["version"], "16")
-        self.assertEqual(database["diskSizeGB"], 1)
-        self.assertFalse(database["diskAutoscalingEnabled"])
+        self.assertEqual(database["diskSizeGB"], 5)
+        self.assertTrue(database["diskAutoscalingEnabled"])
         self.assertIsNone(database["ipAllowList"])
         self.assertEqual(
             customer["services"][0]["id"],
@@ -635,7 +664,7 @@ class LiveCustomerResourcePolicyTests(unittest.TestCase):
             ("databaseUser", "shared"),
             ("plan", "basic_1gb"),
             ("diskSizeGB", 2),
-            ("diskAutoscalingEnabled", True),
+            ("diskAutoscalingEnabled", False),
             ("ipAllowList", [{"cidrBlock": "0.0.0.0/0"}]),
         ):
             with self.subTest(key=key):

@@ -37,7 +37,7 @@ locked to project `prj-d9biitbtqb8s73cn3le0`, protected isolated environment
 `evm-d9biitbtqb8s73cn3leg`, Blueprint `exs-d9biqt37uimc73ajh99g`, web service
 `srv-d9bijbjtqb8s73cn4n20`, database URL identity
 `dpg-d9biitbtqb8s73cn3mgg-a`, and service disk
-`dsk-d9bijbjtqb8s73cn4o60`. The disk must remain named
+`dsk-d9bijbjtqb8s73cn4o60`. The service disk must remain named
 `cas-harness-customer-support`, mounted at `/var/customer-support`, and exactly
 1 GB while this bootstrap topology exists. A replacement, re-association, or
 different provider identity requires fresh readback and a protected manifest
@@ -189,12 +189,15 @@ generate new values does not constitute recovery.
 
 ### Bootstrap capacity and availability boundary
 
-The customer Blueprint is deliberately cheap bootstrap infrastructure:
+The customer Blueprint remains bootstrap infrastructure:
 
 - The attached 1 GB service disk forces `numInstances: 1`, prevents horizontal
   scaling, and disables Render zero-downtime deploys. Deploys include an outage.
-- The Postgres disk is 1 GB with `storageAutoscalingEnabled: false`; the
-  `basic-256mb` plan also has limited compute/memory headroom.
+- The Postgres storage floor is 5 GB with
+  `storageAutoscalingEnabled: true`; Render's live API exposes that same policy
+  as `diskAutoscalingEnabled: true`. The `basic-256mb` plan still has limited
+  compute/memory headroom, and this storage change does not prove HA or load
+  capacity.
 
 Wire provider alerts before any customer journey: warning at 60% and critical
 at 75% for both service-disk and Postgres storage; warning/critical at 70%/85%
@@ -208,9 +211,11 @@ The following are hard prerequisites before customer-production `ACCEPT`:
    log off the attached service disk to shared Postgres/S3-backed stores, remove
    the disk, run at least two API replicas, and prove a rolling deploy plus
    replica/restart continuity with no lost records.
-2. Increase Postgres storage to at least 5 GB and enable storage autoscaling.
-   Start that upgrade earlier if actual storage reaches 60% or the 30-day
-   forecast reaches 70% of the 1 GB bootstrap disk.
+2. Keep Postgres storage at or above 5 GB with storage autoscaling enabled, and
+   prove both the Blueprint declaration and the live API readback after sync.
+   A source-only change is not provider evidence. Increase storage headroom
+   again if actual use reaches 60% or the 30-day forecast reaches 70% of the
+   current allocation.
 3. Upgrade from `basic-256mb` before acceptance if representative hosted load
    reaches 70% CPU, memory, or connections for 15 minutes, then repeat the load,
    restart, quota, tenant-isolation, and Evidence Packet readback proof.
