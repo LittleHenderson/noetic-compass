@@ -52,6 +52,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
@@ -311,7 +312,16 @@ def _now_iso_utc() -> str:
 
 
 def _git_head_sha() -> str | None:
-    """Return the current ``git rev-parse HEAD`` SHA, or ``None`` on failure."""
+    """Return the provider-bound deployed SHA, then local git as a fallback.
+
+    Render's production image has no ``git`` executable. A present malformed
+    provider value fails closed so packet verification cannot silently switch
+    to a different checkout identity.
+    """
+    render_commit = os.environ.get("RENDER_GIT_COMMIT")
+    if render_commit is not None:
+        normalized = render_commit.strip()
+        return normalized if re.fullmatch(r"[0-9a-f]{40}", normalized) else None
     try:
         result = subprocess.run(
             ["git", "rev-parse", "HEAD"],

@@ -524,30 +524,47 @@ class RuntimeWormCollector:
             "live_audit.request.method_config",
         )
         provenance = _mapping(packet.get("provenance"), "packet", "provenance")
-        if (
-            packet.get("trace_id") != trace_id
-            or packet_input.get("text") != prompt
-            or packet_input.get("audit_id") != audit_id
-            or packet_input.get("audit_mode") != AUDIT_MODE
-            or packet_input.get("selected_modules") != selected_modules
-            or packet_model.get("model_key") != MODEL_ID
-            or packet_model.get("runtime") != "atlas_live_worker"
-            or manifest.get("is_real_model") is not True
-            or scope.get("kind") != "open_weight_live_trace"
-            or scope.get("verdict_disposition") != "held_for_human_review"
-            or "accepted" not in packet_verification
-            or packet_verification.get("accepted") is not None
-            or live_audit.get("audit_id") != audit_id
-            or live_request.get("prompt") != prompt
-            or live_request.get("model_id") != MODEL_ID
-            or method_config.get("audit_mode") != AUDIT_MODE
-            or method_config.get("selected_modules") != selected_modules
-            or method_config.get("source") != "cas_harness_audit_run"
-            or provenance.get("method_label") != "cas_harness_live_worker_v1"
-            or provenance.get("code_commit_sha") != self.master_head_sha
-        ):
+        packet_bindings = {
+            "trace_id": packet.get("trace_id") == trace_id,
+            "input.text": packet_input.get("text") == prompt,
+            "input.audit_id": packet_input.get("audit_id") == audit_id,
+            "input.audit_mode": packet_input.get("audit_mode") == AUDIT_MODE,
+            "input.selected_modules": packet_input.get("selected_modules")
+            == selected_modules,
+            "model.model_key": packet_model.get("model_key") == MODEL_ID,
+            "model.runtime": packet_model.get("runtime") == "atlas_live_worker",
+            "model.manifest.is_real_model": manifest.get("is_real_model") is True,
+            "audit_scope.kind": scope.get("kind") == "open_weight_live_trace",
+            "audit_scope.verdict_disposition": scope.get("verdict_disposition")
+            == "held_for_human_review",
+            "verification.accepted.present": "accepted" in packet_verification,
+            "verification.accepted.value": packet_verification.get("accepted") is None,
+            "live_audit.audit_id": live_audit.get("audit_id") == audit_id,
+            "live_audit.request.prompt": live_request.get("prompt") == prompt,
+            "live_audit.request.model_id": live_request.get("model_id") == MODEL_ID,
+            "live_audit.request.method_config.audit_mode": method_config.get(
+                "audit_mode"
+            )
+            == AUDIT_MODE,
+            "live_audit.request.method_config.selected_modules": method_config.get(
+                "selected_modules"
+            )
+            == selected_modules,
+            "live_audit.request.method_config.source": method_config.get("source")
+            == "cas_harness_audit_run",
+            "provenance.method_label": provenance.get("method_label")
+            == "cas_harness_live_worker_v1",
+            "provenance.code_commit_sha": provenance.get("code_commit_sha")
+            == self.master_head_sha,
+        }
+        failed_packet_bindings = sorted(
+            name for name, matched in packet_bindings.items() if not matched
+        )
+        if failed_packet_bindings:
             raise RuntimeWormFailure(
-                "packet", "packet is not the exact nonce-bound real-model audit"
+                "packet",
+                "packet is not the exact nonce-bound real-model audit; mismatched "
+                f"bindings: {', '.join(failed_packet_bindings)}",
             )
 
         verify_result = self._call(

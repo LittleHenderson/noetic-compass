@@ -443,7 +443,7 @@ def test_rejects_accept_verdict_instead_of_promoting_it() -> None:
 def test_rejects_replayed_packet_that_does_not_echo_probe_nonce() -> None:
     with pytest.raises(
         collector_module.RuntimeWormFailure,
-        match="nonce-bound real-model audit",
+        match="input.text.*live_audit.request.prompt",
     ):
         _collector(
             FakeTransport(packet_prompt="older runtime WORM evidence probe")
@@ -453,7 +453,7 @@ def test_rejects_replayed_packet_that_does_not_echo_probe_nonce() -> None:
 def test_rejects_packet_produced_by_a_different_code_commit() -> None:
     with pytest.raises(
         collector_module.RuntimeWormFailure,
-        match="nonce-bound real-model audit",
+        match="provenance.code_commit_sha",
     ):
         _collector(FakeTransport(packet_commit="b" * 40)).collect()
 

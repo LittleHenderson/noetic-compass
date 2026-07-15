@@ -28,6 +28,8 @@ from pathlib import Path
 from typing import Any, Callable, Mapping
 import hashlib
 import json
+import os
+import re
 import subprocess
 
 from api.errors import LLMError
@@ -532,7 +534,11 @@ def _chip(chip_id: str, status: str, detail: str) -> dict[str, str]:
 
 
 def _code_commit_sha() -> str:
-    """Resolve the current git HEAD sha so every packet is reproducible."""
+    """Resolve the provider-bound deployed SHA, then local git as a fallback."""
+    render_commit = os.environ.get("RENDER_GIT_COMMIT")
+    if render_commit is not None:
+        normalized = render_commit.strip()
+        return normalized if re.fullmatch(r"[0-9a-f]{40}", normalized) else "unknown"
     try:
         result = subprocess.run(
             ["git", "rev-parse", "HEAD"],

@@ -17,6 +17,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 import hashlib
 import json
+import os
+import re
 import subprocess
 from typing import Any, Callable, Mapping
 
@@ -913,12 +915,18 @@ def _mean(values: list[float]) -> float | None:
 
 
 def _code_commit_sha() -> str:
-    """Resolve the current git HEAD sha so every live packet is reproducible.
+    """Resolve the deployed source SHA so every live packet is reproducible.
 
-    Falls back to ``"unknown"`` only when git is unavailable — the packet is
-    still written, but the traceability gap is recorded honestly rather than
-    claimed.
+    Render's production image intentionally has no ``git`` executable, but the
+    platform injects the exact deployed commit as ``RENDER_GIT_COMMIT``. Trust
+    that provider value only when it is a canonical 40-character SHA; a present
+    malformed value fails closed instead of being hidden by a local checkout.
+    Outside Render, fall back to ``git rev-parse HEAD`` for development and CI.
     """
+    render_commit = os.environ.get("RENDER_GIT_COMMIT")
+    if render_commit is not None:
+        normalized = render_commit.strip()
+        return normalized if re.fullmatch(r"[0-9a-f]{40}", normalized) else "unknown"
     try:
         result = subprocess.run(
             ["git", "rev-parse", "HEAD"],
