@@ -15,6 +15,7 @@ from api.middleware.auth import (
     is_public_account_capability_request,
     is_public_acceptance_authority_request,
     is_public_path,
+    is_public_support_privacy_notice_request,
 )
 
 # Tier definitions: (requests_per_minute, monthly_limit)
@@ -32,6 +33,7 @@ _EVIDENCE_SHARE_CLIENT_RPM = 120
 _EVIDENCE_SHARE_CLIENT_AND_SHARE_RPM = 60
 _ACCEPTANCE_AUTHORITY_CLIENT_RPM = 120
 _PUBLIC_CAPABILITY_CLIENT_RPM = 120
+_PUBLIC_SUPPORT_NOTICE_CLIENT_RPM = 120
 
 
 class TokenBucket:
@@ -167,6 +169,27 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
                 return JSONResponse(
                     status_code=429,
                     content={"detail": "Rate limit exceeded (public capability)"},
+                    headers={
+                        "Cache-Control": "no-store, max-age=0",
+                        "Pragma": "no-cache",
+                        "Expires": "0",
+                        "X-Content-Type-Options": "nosniff",
+                    },
+                )
+            return await call_next(request)
+        if is_public_support_privacy_notice_request(
+            request.url.path, request.method, request.url.query
+        ):
+            # The landing form needs a current server-owned notice identity
+            # before it may submit PII. Keep this exact anonymous GET bounded
+            # without retaining notice bytes or request headers in the key.
+            if not self._consume_sensitive_bucket(
+                key=f"public-support-notice-client:{client_host}",
+                rpm=_PUBLIC_SUPPORT_NOTICE_CLIENT_RPM,
+            ):
+                return JSONResponse(
+                    status_code=429,
+                    content={"detail": "Rate limit exceeded (public support notice)"},
                     headers={
                         "Cache-Control": "no-store, max-age=0",
                         "Pragma": "no-cache",

@@ -9,7 +9,10 @@ import pytest
 from fastapi.testclient import TestClient
 
 from api.config import settings
-from api.middleware.auth import create_token
+from api.middleware.auth import (
+    create_token,
+    is_public_support_privacy_notice_request,
+)
 from api.services.accounts.store import AccountStore
 from api.services.crm.abuse import PublicLeadAbuseGuard
 from api.services.crm.privacy import (
@@ -491,6 +494,96 @@ def _public_payload(**updates: object) -> dict[str, object]:
     }
     payload.update(updates)
     return payload
+
+
+def test_public_privacy_notice_metadata_returns_only_the_server_owned_present_contract(
+    support_client,
+) -> None:
+    response = support_client.get("/api/support/public/privacy-notice")
+
+    assert response.status_code == 200, response.text
+    assert response.json() == {
+        "privacy_url": SUPPORT_PRIVACY_URL,
+        "privacy_notice_version": TEST_PRIVACY_VERSION,
+        "privacy_notice_content_sha256": TEST_PRIVACY_CONTENT_SHA256,
+        "privacy_notice_publication_status": CRM_PRIVACY_NOTICE_PRESENT_STATUS,
+    }
+    assert "no-store" in response.headers["Cache-Control"]
+    assert response.headers["Pragma"] == "no-cache"
+    assert response.headers["Expires"] == "0"
+    assert response.headers["X-Content-Type-Options"] == "nosniff"
+
+
+def test_public_privacy_notice_metadata_round_trips_into_ticket_acknowledgement(
+    support_client,
+) -> None:
+    metadata = support_client.get("/api/support/public/privacy-notice")
+    assert metadata.status_code == 200, metadata.text
+    notice = metadata.json()
+
+    response = support_client.post(
+        "/api/support/public/tickets",
+        json=_public_payload(
+            privacy_notice_version=notice["privacy_notice_version"],
+            privacy_notice_content_sha256=notice[
+                "privacy_notice_content_sha256"
+            ],
+        ),
+    )
+
+    assert response.status_code == 201, response.text
+    assert response.json()["privacy_notice_version"] == notice[
+        "privacy_notice_version"
+    ]
+    assert response.json()["privacy_notice_content_sha256"] == notice[
+        "privacy_notice_content_sha256"
+    ]
+
+
+@pytest.mark.parametrize(
+    "contract",
+    [
+        CRMPrivacyNoticeContract(
+            publication_status=CRM_PRIVACY_NOTICE_OPEN_STATUS,
+            version=CRM_CURRENT_OPEN_DRAFT_VERSION,
+            content_sha256=CRM_CURRENT_OPEN_DRAFT_CONTENT_SHA256,
+        ).validated(),
+        CRMPrivacyNoticeContract(
+            publication_status=CRM_PRIVACY_NOTICE_PRESENT_STATUS,
+            version=CRM_CURRENT_OPEN_DRAFT_VERSION,
+            content_sha256=CRM_CURRENT_OPEN_DRAFT_CONTENT_SHA256,
+        ),
+        None,
+    ],
+    ids=("open", "draft-relabeled-present", "unavailable"),
+)
+def test_public_privacy_notice_metadata_fails_closed_without_a_published_notice(
+    support_client, contract
+) -> None:
+    support_client.app.state.crm_privacy_notice_contract = contract
+
+    response = support_client.get("/api/support/public/privacy-notice")
+
+    assert response.status_code == 503
+    assert set(response.json()) == {"detail"}
+    assert "privacy_notice_version" not in response.text
+    assert TEST_PRIVACY_CONTENT_SHA256 not in response.text
+    assert "no-store" in response.headers["Cache-Control"]
+
+
+def test_only_exact_query_free_get_can_read_public_privacy_notice_metadata(
+    support_client,
+) -> None:
+    path = "/api/support/public/privacy-notice"
+    assert is_public_support_privacy_notice_request(path, "GET") is True
+    assert is_public_support_privacy_notice_request(path, "GET", "debug=true") is False
+    assert is_public_support_privacy_notice_request(path, "HEAD") is False
+    assert is_public_support_privacy_notice_request(f"{path}/extra", "GET") is False
+
+    assert support_client.get(f"{path}?debug=true").status_code == 401
+    assert support_client.head(path).status_code == 401
+    assert support_client.post(path, json={}).status_code == 401
+    assert support_client.get(f"{path}/extra").status_code == 401
 
 
 def test_public_create_returns_non_pii_receipt_and_exact_privacy_url(support_client) -> None:

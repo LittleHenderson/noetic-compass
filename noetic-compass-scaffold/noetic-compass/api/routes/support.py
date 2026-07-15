@@ -71,6 +71,32 @@ def _privacy_notice_contract(request: Request) -> CRMPrivacyNoticeContract:
     return contract.validated()
 
 
+def _published_privacy_notice(request: Request) -> CRMPrivacyNoticeContract:
+    """Return only a validated published notice; never expose an ``OPEN`` draft."""
+
+    try:
+        notice = _privacy_notice_contract(request)
+    except CRMPrivacyNoticeConfigError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail=(
+                "public support intake is unavailable because the server privacy "
+                "notice contract is invalid or unavailable"
+            ),
+            headers={"Cache-Control": "no-store"},
+        ) from exc
+    if not notice.permits_contact_capture:
+        raise HTTPException(
+            status_code=503,
+            detail=(
+                "public support intake is unavailable while privacy notice publication "
+                f"status is {notice.publication_status}"
+            ),
+            headers={"Cache-Control": "no-store"},
+        )
+    return notice
+
+
 def _client_key(request: Request) -> str:
     forwarded_for = request.headers.get("x-forwarded-for", "")
     if forwarded_for.strip():
@@ -128,6 +154,13 @@ class PublicTicketReceipt(BaseModel):
     message: str
 
 
+class PublicPrivacyNoticeMetadata(BaseModel):
+    privacy_url: str
+    privacy_notice_version: str
+    privacy_notice_content_sha256: str
+    privacy_notice_publication_status: str
+
+
 class RouteTicketRequest(BaseModel):
     owner: str = Field(..., min_length=1, max_length=200)
 
@@ -136,28 +169,38 @@ class ResolveTicketRequest(BaseModel):
     resolution_summary: str = Field(..., min_length=1, max_length=4000)
 
 
+@router.get(
+    "/public/privacy-notice",
+    response_model=PublicPrivacyNoticeMetadata,
+)
+async def get_public_privacy_notice_metadata(
+    request: Request, response: Response
+) -> PublicPrivacyNoticeMetadata:
+    """Return the exact server-owned notice identity accepted by support intake.
+
+    The route stays unavailable while publication is ``OPEN`` or the contract
+    is invalid. A browser therefore cannot invent, pin, or relabel legal notice
+    bytes in order to make a support submission persist.
+    """
+
+    notice = _published_privacy_notice(request)
+    response.headers["Cache-Control"] = "no-store, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    return PublicPrivacyNoticeMetadata(
+        privacy_url=notice.url,
+        privacy_notice_version=notice.version,
+        privacy_notice_content_sha256=notice.content_sha256,
+        privacy_notice_publication_status=notice.publication_status,
+    )
+
+
 @router.post("/public/tickets", response_model=PublicTicketReceipt, status_code=201)
 async def create_public_ticket(
     request: Request, payload: PublicTicketRequest, response: Response
 ) -> PublicTicketReceipt:
-    try:
-        notice = _privacy_notice_contract(request)
-    except CRMPrivacyNoticeConfigError as exc:
-        raise HTTPException(
-            status_code=503,
-            detail=(
-                "public support intake is unavailable because the server privacy "
-                "notice contract is invalid or unavailable"
-            ),
-        ) from exc
-    if not notice.permits_contact_capture:
-        raise HTTPException(
-            status_code=503,
-            detail=(
-                "public support intake is unavailable while privacy notice publication "
-                f"status is {notice.publication_status}"
-            ),
-        )
+    notice = _published_privacy_notice(request)
 
     if (
         payload.privacy_notice_version is None
@@ -171,6 +214,7 @@ async def create_public_ticket(
                 "the submitted privacy notice acknowledgement is missing or stale; "
                 "reload the form"
             ),
+            headers={"Cache-Control": "no-store"},
         )
 
     service = _service(request)

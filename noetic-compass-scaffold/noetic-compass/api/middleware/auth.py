@@ -43,6 +43,7 @@ PUBLIC_PATHS = {
 }
 
 PUBLIC_ACCOUNT_CAPABILITIES_PATH = "/public/capabilities"
+PUBLIC_SUPPORT_PRIVACY_NOTICE_PATH = "/api/support/public/privacy-notice"
 # ALWAYS public, in EVERY posture: these never carry per-tenant evidence ownership, so identity is
 # never required for them. Atlas LIVE has its own invite-code/session-token gate; target/verify and
 # scale-plan are stateless validators/planners; live-worker/health is a liveness probe; /api/crm/public
@@ -107,6 +108,18 @@ def is_public_account_capability_request(
         method.upper() == "GET"
         and not query
         and path == PUBLIC_ACCOUNT_CAPABILITIES_PATH
+    )
+
+
+def is_public_support_privacy_notice_request(
+    path: str, method: str, query: str = ""
+) -> bool:
+    """Allow only the exact, query-free public support notice metadata GET."""
+
+    return (
+        method.upper() == "GET"
+        and not query
+        and path == PUBLIC_SUPPORT_PRIVACY_NOTICE_PATH
     )
 
 
@@ -176,6 +189,9 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
         if (
             is_public_path(request.url.path)
             or is_public_account_capability_request(
+                request.url.path, request.method, request.url.query
+            )
+            or is_public_support_privacy_notice_request(
                 request.url.path, request.method, request.url.query
             )
             or is_public_acceptance_authority_request(

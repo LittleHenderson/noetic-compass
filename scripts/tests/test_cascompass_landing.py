@@ -195,6 +195,28 @@ class NetlifyContractTests(unittest.TestCase):
             "https://cas-harness-customer-api.onrender.com/api/support/public/tickets",
             script,
         )
+        self.assertIn(
+            "https://cas-harness-customer-api.onrender.com/api/support/public/privacy-notice",
+            script,
+        )
+        self.assertIn(
+            "privacy_notice_version: notice.privacy_notice_version", script
+        )
+        self.assertIn(
+            "privacy_notice_content_sha256: notice.privacy_notice_content_sha256",
+            script,
+        )
+        self.assertLess(
+            script.index("const notice = await fetchPublishedNotice()"),
+            script.index("await fetch(ticketEndpoint"),
+        )
+        self.assertGreaterEqual(script.count("credentials: 'omit'"), 2)
+        self.assertGreaterEqual(script.count("cache: 'no-store'"), 2)
+        self.assertNotIn("draft-2026-07-14", script)
+        self.assertNotIn(
+            "e94df1615dde4122836b47a74e32d45c79b63c1603db3bd1aee01f62d7ddae28",
+            script,
+        )
         self.assertIn(r"Submitting your support request\u2026", script)
         for mojibake in ("â€¦", "Ã¢", "Â"):
             self.assertNotIn(mojibake, script)
