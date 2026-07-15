@@ -36,6 +36,8 @@ from api.acceptance_authority_contract import (
     PRODUCTION_API_ORIGIN,
 )
 from api.services.customer_production_acceptance_authority import (
+    AcceptanceAuthorityAuthorizationInvalid,
+    AcceptanceAuthorityAuthorizationUnavailable,
     MAX_EVIDENCE_BYTES,
     PRODUCTION_SERVICE_NAME,
     PRODUCTION_SERVICE_ID,
@@ -46,6 +48,11 @@ from api.services.customer_production_acceptance_authority import (
     AcceptanceAuthorityUnavailable,
     CustomerProductionAcceptanceAuthorityStore,
     canonicalize_acceptance_evidence,
+)
+from api.services.acceptance_publication_authorizations import (
+    AcceptancePublicationAuthorizationInvalid,
+    AcceptancePublicationAuthorizationStore,
+    validate_publication_authorization_reference,
 )
 
 
@@ -233,6 +240,12 @@ def _production_authority(
             immutable_repository = build_s3_evidence_packet_repository(state_store)
         yield CustomerProductionAcceptanceAuthorityStore(
             state_store,
+            publication_authorization_store=(
+                AcceptancePublicationAuthorizationStore(
+                    state_store,
+                    primary_tenant_id=settings.accounts_bootstrap_tenant_id,
+                )
+            ),
             immutable_backend=(
                 immutable_repository.backend
                 if immutable_repository is not None
@@ -463,6 +476,16 @@ def run(
                 "expected_previous_evidence_sha256_required",
                 "a valid previous evidence SHA-256 is required for an existing head",
             )
+        try:
+            validate_publication_authorization_reference(
+                args.authorization_artifact_uri,
+                args.authorization_artifact_sha256,
+            )
+        except AcceptancePublicationAuthorizationInvalid as exc:
+            raise PublisherInputError(
+                "publication_authorization_reference_invalid",
+                "publication requires an exact local content-addressed authorization URI/hash",
+            ) from exc
         evidence, canonical, digest = _prepare_evidence(
             gate=args.gate,
             evidence_path=args.evidence,
@@ -477,6 +500,26 @@ def run(
             include_immutable_backend=True,
         ) as authority:
             try:
+                authority.assert_publication_authorized(
+                    gate=args.gate,
+                    master_head_sha=args.expected_master_head,
+                    deploy_id=args.expected_deploy_id,
+                    evidence_sha256=digest,
+                    expected_head_version=args.expected_head_version,
+                    expected_previous_sha256=previous_sha,
+                    authorization_artifact_uri=args.authorization_artifact_uri,
+                    authorization_artifact_sha256=(
+                        args.authorization_artifact_sha256
+                    ),
+                    operation_reason=args.operation_reason,
+                    now=now,
+                )
+            except AcceptanceAuthorityAuthorizationInvalid as exc:
+                raise PublisherInputError(
+                    "publication_authorization_invalid",
+                    "publication authorization is absent, expired, or mismatched",
+                ) from exc
+            try:
                 published = authority.publish(
                     args.gate,
                     evidence,
@@ -489,6 +532,18 @@ def run(
                     operation_reason=args.operation_reason,
                     now=now,
                 )
+            except AcceptanceAuthorityAuthorizationInvalid as exc:
+                # The service guarantees this class is raised only by the
+                # local authorization lookup before any revision/WORM/operation
+                # or head write.
+                raise PublisherInputError(
+                    "publication_authorization_invalid",
+                    "publication authorization is absent, expired, or mismatched",
+                ) from exc
+            except AcceptanceAuthorityAuthorizationUnavailable:
+                # Same pre-write guarantee as above; state is unavailable, not
+                # mutation-unknown.
+                raise
             except AcceptanceAuthorityUnavailable as exc:
                 # A failed return does not prove the transaction rolled back.
                 raise PublicationReadbackError from exc

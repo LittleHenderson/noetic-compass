@@ -30,6 +30,9 @@ from api.services.customer_production_acceptance_authority import (
     AcceptanceAuthorityUnavailable,
     CustomerProductionAcceptanceAuthorityStore,
 )
+from api.services.acceptance_publication_authorizations import (
+    AcceptancePublicationAuthorizationStore,
+)
 from api.services.production.state_substrate import LedgerRecord
 from api.services.production.state_substrate.memory_store import InMemoryStateStore
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
@@ -39,10 +42,11 @@ from api.services.cas_harness_retention_disclosure import (
 )
 
 
-_AUTHORIZATION_URI = (
-    f"{authority.PRODUCTION_API_ORIGIN}/internal/acceptance-authorizations/test"
-)
 _AUTHORIZATION_SHA256 = hashlib.sha256(b"test-authorization").hexdigest()
+_AUTHORIZATION_URI = (
+    f"{authority.PRODUCTION_API_ORIGIN}/internal/acceptance-authorizations/"
+    f"{_AUTHORIZATION_SHA256}"
+)
 
 
 def _operation_authorization(action: str) -> dict[str, str]:
@@ -69,6 +73,24 @@ def _stable_test_receipt_attestation_key(
         value,
     )
     monkeypatch.setattr(settings, "object_lock_receipt_attestation_key", value)
+
+
+@pytest.fixture(autouse=True)
+def _isolate_preexisting_authority_tests_from_the_new_record_plane(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """These tests exercise the older revision/head/WORM invariants.
+
+    The authorization plane has its own hostile tests.  Keep this existing
+    suite focused by replacing only its local record lookup, while retaining
+    the exact URI/hash syntax validation on every operation.
+    """
+
+    monkeypatch.setattr(
+        AcceptancePublicationAuthorizationStore,
+        "assert_matches",
+        lambda self, **kwargs: None,
+    )
 
 
 def _sha(label: str) -> str:
@@ -473,7 +495,7 @@ def test_invalid_authorization_pointer_writes_no_authority_state() -> None:
     now = datetime.now(UTC).replace(microsecond=0)
     state = InMemoryStateStore()
     store = CustomerProductionAcceptanceAuthorityStore(state)
-    with pytest.raises(AcceptanceAuthorityInvalid, match="origin"):
+    with pytest.raises(AcceptanceAuthorityInvalid, match="reference"):
         store.publish(
             "legal_publication_approval",
             _legal_evidence(now),

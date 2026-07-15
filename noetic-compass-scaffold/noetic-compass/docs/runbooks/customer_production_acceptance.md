@@ -181,8 +181,52 @@ python -m scripts.publish_customer_production_acceptance_authority head \
   --expected-master-head <40-character-protected-master-sha>
 ```
 
-Only after independently checking every required approval and receipt, publish
-the same document. For a replacement or reactivation, also pass the exact
+Only after independently checking every required approval and receipt, an
+authenticated `owner` of the configured primary tenant creates one short-lived
+publication-operation authorization through:
+
+```http
+POST /accounts/acceptance-authorizations
+Authorization: Bearer <primary-owner-account-session-token>
+Content-Type: application/json
+
+{
+  "record_type": "authority_operation",
+  "action": "AUTHORIZE",
+  "gate": "claim_honesty",
+  "master_head_sha": "<40-character-protected-master-sha>",
+  "deploy_id": "<public-render-deploy-id>",
+  "evidence_sha256": "<canonical-sha256-from-validate>",
+  "expected_head_version": 0,
+  "expected_previous_evidence_sha256": null,
+  "reason": "authorized_publication"
+}
+```
+
+The server derives the tenant, role, and account from the live account session;
+the body cannot supply identity. The response contains the exact
+`authorization_artifact_uri`, its canonical-body
+`authorization_artifact_sha256`, and `expires_at_utc`. The record has a fixed
+15-minute lifetime, is create-only/content-addressed in the shared StateStore,
+and has only one anonymous query-free read:
+`GET /internal/acceptance-authorizations/<64-lowercase-hex-sha256>`. There is no
+list, head, update, or delete API.
+
+The short-lived authorization row is intentionally StateStore-only; it is not
+mirrored to the Evidence Packet Object-Lock/WORM backend. The published
+authority operation durably binds its URI and SHA-256, but loss of the shared
+StateStore can make an unexpired authorization unavailable and requires the
+owner to create a fresh record. The publisher fails closed in that case.
+
+This record authorizes only the exactly bound authority publication operation.
+It is not evidence for the named gate and cannot create or replace a legal,
+privacy, claim-honesty, product, security, operations, or final release
+approval. Those independent artifacts must already exist inside the validated
+gate evidence. `release_decision` remains `OPEN` unless its own required human
+decision artifacts genuinely exist.
+
+Publish the same document before that fixed expiry. For a replacement or
+reactivation, both the authorization request and publish command must carry the exact
 `evidence_sha256` returned by `head` as
 `--expected-previous-evidence-sha256`; omit it only when `head_version` is `0`:
 
@@ -195,10 +239,19 @@ python -m scripts.publish_customer_production_acceptance_authority publish \
   --expected-evidence-sha256 <canonical-sha256-from-validate> \
   --expected-head-version <version-from-head> \
   --expected-previous-evidence-sha256 <hash-from-head-if-version-is-nonzero> \
-  --authorization-artifact-uri <clean-api-or-landing-https-uri> \
-  --authorization-artifact-sha256 <sha256-of-independent-authorization-artifact> \
+  --authorization-artifact-uri <uri-returned-by-owner-authorization-post> \
+  --authorization-artifact-sha256 <sha256-returned-by-owner-authorization-post> \
   --operation-reason authorized_publication
 ```
+
+The publisher parses that URI as an exact same-service content-addressed path,
+loads the record directly from the shared StateStore (it never dereferences an
+operator-supplied URL), and matches `authority_operation`, `AUTHORIZE`,
+`publish`, gate, protected-master SHA, Render deploy ID, evidence SHA-256, head
+version, previous evidence SHA-256, reason, primary tenant, owner role, and
+expiry before any evidence revision, WORM object, authority operation, or head
+write. A missing, expired, dummy, query-bearing, external, or mismatched record
+fails closed.
 
 If an approval is withdrawn or evidence is suspected, immediately tombstone the
 exact active head. This retains its content-addressed/WORM revision for audit but
@@ -222,26 +275,26 @@ and active bit, then either verify the public bytes or deactivate them.
 
 The command applies the serving API's exact schema, freshness, secret/PII, and
 gate-semantic checks before connecting to production. Publication uses the
-StateStore compare-and-swap head, then reloads and byte-compares the active
+local owner-authorization record plus the StateStore compare-and-swap head,
+then reloads and byte-compares the active
 revision and operation binding before reporting success. When the immutable Evidence Packet backend
 is enabled, it uses that same verified Object-Lock backend and never falls back
 to inline bytes. It does not collect evidence, create approvals, sign receipts,
-dereference an approval artifact, or change the acceptance manifest. Its Render
+dereference an authorization artifact, or change the acceptance manifest. Its Render
 runtime checks independently bind the service, repository, branch, and commit;
 Render exposes no documented runtime deploy-ID variable, so the operator-supplied
 deploy ID still requires provider readback and the final root-CI/protected-deploy
 receipt. The final manifest verifier remains mandatory for cross-gate hashes,
 product-status alignment, release timing, and authoritative `ACCEPT`.
 
-The authorization URI/hash is an append-only audit pointer, not authentication
-by itself: this command deliberately does not dereference it or manufacture an
-approval. Publish access therefore remains restricted to the production Render
-service's least-privilege root-operator role with provider MFA, protected
-environment controls, and retained Render session/audit event evidence. The
-pointed artifact must independently prove the human/provider authorization
-required by the gate. Deactivation is the emergency fail-closed action: it
-requires a reason and incident/session artifact pointer for audit, but never a
-second approval or a live artifact fetch before tombstoning an active head.
+The content-addressed authorization record is only the authenticated primary-
+tenant owner's short-lived capability for one exact publication operation. It
+is not legal, product, research, release, incident, or other gate evidence, and
+the evidence validator rejects its URI in every gate-evidence URL field. Human
+and provider artifacts inside the evidence must remain independently sourced.
+Deactivation is the emergency fail-closed action: it requires a reason and
+incident/session artifact pointer for audit, but never a second approval or a
+live artifact fetch before tombstoning an active head.
 
 ### Onboard a signing issuer
 

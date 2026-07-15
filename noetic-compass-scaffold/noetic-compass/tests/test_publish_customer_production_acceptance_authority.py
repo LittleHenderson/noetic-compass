@@ -20,16 +20,31 @@ from api.services.customer_production_acceptance_authority import (
     CustomerProductionAcceptanceAuthorityStore,
     canonicalize_acceptance_evidence,
 )
+from api.services.acceptance_publication_authorizations import (
+    AcceptancePublicationAuthorizationStore,
+)
 from api.services.production.state_substrate.memory_store import InMemoryStateStore
 import scripts.publish_customer_production_acceptance_authority as publisher
 
 
 MASTER = "a" * 40
 DEPLOY = "dep-publishertest001"
-AUTHORIZATION_URI = (
-    f"{publisher.PRODUCTION_API_ORIGIN}/internal/acceptance-authorizations/test"
-)
 AUTHORIZATION_SHA256 = hashlib.sha256(b"test-authorization").hexdigest()
+AUTHORIZATION_URI = (
+    f"{publisher.PRODUCTION_API_ORIGIN}/internal/acceptance-authorizations/"
+    f"{AUTHORIZATION_SHA256}"
+)
+
+
+@pytest.fixture(autouse=True)
+def _isolate_existing_publisher_tests_from_the_new_record_plane(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        AcceptancePublicationAuthorizationStore,
+        "assert_matches",
+        lambda self, **kwargs: None,
+    )
 
 
 def _authority_auth(action: str) -> dict[str, str]:
@@ -480,6 +495,9 @@ def test_post_mutation_readback_failure_reports_unknown_state(
     base = CustomerProductionAcceptanceAuthorityStore(InMemoryStateStore())
 
     class FailingReadback:
+        def assert_publication_authorized(self, **kwargs):  # type: ignore[no-untyped-def]
+            return base.assert_publication_authorized(**kwargs)
+
         def publish(self, *args, **kwargs):  # type: ignore[no-untyped-def]
             return base.publish(*args, **kwargs)
 
@@ -522,6 +540,9 @@ def test_publish_commit_then_disconnect_reports_unknown_state(
     base = CustomerProductionAcceptanceAuthorityStore(InMemoryStateStore())
 
     class CommitThenDisconnect:
+        def assert_publication_authorized(self, **kwargs):  # type: ignore[no-untyped-def]
+            return base.assert_publication_authorized(**kwargs)
+
         def publish(self, *args, **kwargs):  # type: ignore[no-untyped-def]
             base.publish(*args, **kwargs)
             raise publisher.AcceptanceAuthorityUnavailable("driver secret")
@@ -723,6 +744,7 @@ def test_head_and_deactivate_authority_setup_does_not_touch_s3(
 
     class Settings:
         evidence_packet_object_store_enabled = True
+        accounts_bootstrap_tenant_id = "primary"
 
         def validate_object_lock_receipt_attestation(self) -> None:
             calls["s3"] += 1

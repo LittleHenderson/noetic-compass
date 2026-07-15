@@ -155,6 +155,12 @@ python scripts/publish_customer_production_acceptance_authority.py validate \
 ```
 
 Publication is a separate compare-and-swap operation. Read the current gate
-head, use an independently recorded authorization artifact, pin the validated
-evidence SHA-256, publish, and verify the public authority endpoint readback.
+head, then have an authenticated owner of the configured primary tenant create
+the exact fixed-15-minute `authority_operation` / `AUTHORIZE` record through
+`POST /accounts/acceptance-authorizations` as documented in
+`customer_production_acceptance.md`. Pin its returned URI/SHA-256 together with
+the validated evidence SHA-256, publish before expiry, and verify the public
+authority endpoint readback. That operation record is permission to publish
+the already validated evidence only; it is not journey evidence or a release
+approval.
 Never convert a failed or partial collector result into `present` manually.

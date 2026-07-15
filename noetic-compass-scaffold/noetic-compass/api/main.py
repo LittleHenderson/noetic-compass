@@ -22,6 +22,7 @@ from api.middleware.rate_limit import RateLimitMiddleware
 from api.middleware.audit import AuditLogMiddleware
 from api.middleware.request_id import RequestIdMiddleware
 from api.routes import (
+    acceptance_publication_authorizations,
     accounts,
     assess,
     auth,
@@ -116,6 +117,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.support_public_abuse_guard = None
     app.state.crm_privacy_notice_contract = None
     app.state.acceptance_authority_store = None
+    app.state.acceptance_publication_authorization_store = None
     configure_evidence_packet_repository(None)
 
     if (not settings.debug or settings.accounts_enabled) and (
@@ -170,14 +172,25 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             configure_evidence_packet_repository(app.state.evidence_packet_repository)
 
         if shared_store is not None:
+            from api.services.acceptance_publication_authorizations import (
+                AcceptancePublicationAuthorizationStore,
+            )
             from api.services.customer_production_acceptance_authority import (
                 CustomerProductionAcceptanceAuthorityStore,
             )
 
             immutable_repository = app.state.evidence_packet_repository
+            publication_authorizations = AcceptancePublicationAuthorizationStore(
+                shared_store,
+                primary_tenant_id=settings.accounts_bootstrap_tenant_id,
+            )
+            app.state.acceptance_publication_authorization_store = (
+                publication_authorizations
+            )
             app.state.acceptance_authority_store = (
                 CustomerProductionAcceptanceAuthorityStore(
                     shared_store,
+                    publication_authorization_store=publication_authorizations,
                     immutable_backend=(
                         immutable_repository.backend
                         if immutable_repository is not None
@@ -376,6 +389,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.evidence_packet_repository = None
         app.state.evidence_share_service = None
         app.state.acceptance_authority_store = None
+        app.state.acceptance_publication_authorization_store = None
         app.state.shared_state_store = None
         app.state.crm = None
         app.state.crm_public_abuse_guard = None
@@ -451,6 +465,7 @@ app.include_router(batch.router)
 app.include_router(benchmark.router)
 app.include_router(cas_harness_audit.router)
 app.include_router(cas_harness_live_worker_health.router)
+app.include_router(acceptance_publication_authorizations.router)
 app.include_router(customer_production_acceptance_authority.router)
 app.include_router(cohort.router)
 app.include_router(config.router)
