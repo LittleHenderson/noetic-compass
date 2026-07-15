@@ -83,7 +83,7 @@
           "version": "16",
           "diskSizeGB": 1,
           "diskAutoscalingEnabled": false,
-          "ipAllowList": []
+          "ipAllowList": null
         }
       ],
       "services": [
