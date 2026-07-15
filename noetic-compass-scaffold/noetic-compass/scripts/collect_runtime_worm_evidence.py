@@ -13,7 +13,7 @@ from __future__ import annotations
 import argparse
 from collections.abc import Callable, Iterator, Mapping
 from dataclasses import dataclass
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime
 import hashlib
 import json
 import os
@@ -60,7 +60,7 @@ except ImportError:
 
 
 EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v2"
-SAFE_ARTIFACT_SCHEMA_VERSION = "cas_runtime_worm_source_receipt.v1"
+SAFE_ARTIFACT_SCHEMA_VERSION = "cas_runtime_worm_source_receipt.v2"
 REPOSITORY = "LittleHenderson/noetic-compass"
 ENVIRONMENT = "public-production"
 PRODUCTION_API_ORIGIN = "https://cas-harness-customer-api.onrender.com"
@@ -285,12 +285,14 @@ def read_exact_render_deployment(
     transport: Transport = _default_transport,
     clock: Callable[[], datetime] = lambda: datetime.now(UTC),
 ) -> tuple[HttpResult, Mapping[str, Any], datetime]:
-    """Read one caller-selected fresh Render deployment without mutations.
+    """Read one caller-selected exact Render deployment without mutations.
 
     The hosted wrapper uses this seam before it creates a synthetic account.
     ``RuntimeWormCollector`` also uses it for its pre/post collection reads, so
-    both paths enforce the same provider identity, trigger, timestamp, and
-    freshness contract.
+    both paths enforce the same provider identity, trigger, and timestamp
+    contract. Runtime freshness comes from the new readiness, worker, audit,
+    and WORM observations, not from forcing an otherwise unchanged service to
+    redeploy.
     """
 
     token = render_api_key.strip()
@@ -317,11 +319,6 @@ def read_exact_render_deployment(
     checked_before = checked_before.astimezone(UTC)
     if deployed_at > checked_before:
         raise RuntimeWormFailure("deployment", "deployment timestamp is in the future")
-    if checked_before - deployed_at > timedelta(minutes=30):
-        raise RuntimeWormFailure(
-            "deployment", "deployment is older than the 30-minute evidence window"
-        )
-
     result = transport(
         base_url=RENDER_API_ORIGIN,
         path=f"/v1/services/{PRODUCTION_SERVICE_ID}/deploys/{deploy_id}",
@@ -364,10 +361,6 @@ def read_exact_render_deployment(
     if finished > checked_after:
         raise RuntimeWormFailure(
             "render-deployment", "deployment finish time is in the future"
-        )
-    if checked_after - finished > timedelta(minutes=30):
-        raise RuntimeWormFailure(
-            "deployment", "deployment is older than the 30-minute evidence window"
         )
     return result, deploy, finished
 
@@ -435,10 +428,6 @@ class RuntimeWormCollector:
         checked_at = self._now()
         if self.deployed_at > checked_at:
             raise RuntimeWormFailure("deployment", "deployment timestamp is in the future")
-        if checked_at - self.deployed_at > timedelta(minutes=30):
-            raise RuntimeWormFailure(
-                "deployment", "deployment is older than the 30-minute evidence window"
-            )
 
     def _call(
         self,
@@ -554,7 +543,7 @@ class RuntimeWormCollector:
         render_preflight_result, render_preflight, deployed_at = (
             self._read_render_deploy()
         )
-        event_at = _stamp(deployed_at, "deployment")
+        deployed_at_stamp = _stamp(deployed_at, "deployment")
 
         readiness_result = self._call("/health/ready")
         readiness = self._expect(readiness_result, {200}, "readiness")
@@ -565,6 +554,10 @@ class RuntimeWormCollector:
         worker = self._expect(worker_result, {200}, "worker")
         worker_id = self._assert_worker(worker)
         worker_verified = self._now()
+        if readiness_verified > worker_verified:
+            raise RuntimeWormFailure(
+                "clock", "worker verification precedes readiness verification"
+            )
 
         prompt = (
             "Customer-production runtime WORM evidence probe. Return one short factual "
@@ -706,6 +699,11 @@ class RuntimeWormCollector:
         )
         written_at = lock["requested_at"]
         verified_at = _parse_timestamp(receipt.get("verified_at"), "worm")
+        if written_at < worker_verified - MAX_CLOCK_SKEW:
+            raise RuntimeWormFailure(
+                "worm",
+                "WORM write predates worker verification beyond allowed clock skew",
+            )
         if (
             verified_at < written_at
             or verified_at > evaluated_at + MAX_CLOCK_SKEW
@@ -715,9 +713,12 @@ class RuntimeWormCollector:
         render_final_result, render_final, final_deployed_at = (
             self._read_render_deploy()
         )
-        if final_deployed_at != deployed_at:
+        if (
+            final_deployed_at != deployed_at
+            or _canonical_bytes(render_final) != _canonical_bytes(render_preflight)
+        ):
             raise RuntimeWormFailure(
-                "render-deployment", "deployment identity changed during collection"
+                "render-deployment", "deployment record changed during collection"
             )
 
         # A verified issuer timestamp may be a few seconds ahead of the
@@ -725,6 +726,15 @@ class RuntimeWormCollector:
         # authoritative proof time as the evidence observation boundary rather
         # than emitting a document whose proof appears to be in its own future.
         observed = max(self._now(), verified_at)
+        # The gate event is the beginning of the fresh runtime proof window,
+        # not the historical deployment completion. Every current runtime/WORM
+        # proof remains at or after this event and inside the fixed 30-minute
+        # policy, while the exact deployment stays independently bound as
+        # protected provenance.
+        event_at = _stamp(
+            min(readiness_verified, worker_verified, written_at),
+            "runtime evidence event",
+        )
         probe_id = f"worm-probe-{self.nonce}"
         object_key_sha = _subject_digest(
             "s3-object-key", f"{lock['bucket']}/{lock['key']}"
@@ -738,7 +748,8 @@ class RuntimeWormCollector:
             "repository": REPOSITORY,
             "master_head_sha": self.master_head_sha,
             "deploy_id": self.deploy_id,
-            "deployed_at_utc": event_at,
+            "event_at_utc": event_at,
+            "deployed_at_utc": deployed_at_stamp,
             "service_id": PRODUCTION_SERVICE_ID,
             "api_base_url": PRODUCTION_API_ORIGIN,
             "probe_id": probe_id,
@@ -805,7 +816,7 @@ class RuntimeWormCollector:
                 "deploy_id": self.deploy_id,
                 "commit_sha": self.master_head_sha,
                 "status": "live",
-                "deployed_at_utc": event_at,
+                "deployed_at_utc": deployed_at_stamp,
             },
             "readiness": {
                 "path": "/health/ready",
@@ -874,9 +885,12 @@ def _validate_output_pair(
         or evidence.get("artifact_sha256") != _digest_bytes(_canonical_bytes(artifact))
         or artifact.get("master_head_sha") != evidence.get("master_head_sha")
         or artifact.get("deploy_id") != evidence.get("deploy_id")
+        or artifact.get("event_at_utc") != evidence.get("event_at_utc")
         or artifact.get("deployed_at_utc") != deployment.get("deployed_at_utc")
         or artifact.get("render_deploy_preflight_http_status") != 200
         or artifact.get("render_deploy_final_http_status") != 200
+        or artifact.get("render_deploy_preflight_sha256")
+        != artifact.get("render_deploy_final_sha256")
         or artifact.get("render_deploy_status") != deployment.get("status")
         or artifact.get("render_deploy_trigger") != "new_commit"
         or artifact.get("packet_code_commit_sha") != evidence.get("master_head_sha")

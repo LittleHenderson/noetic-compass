@@ -74,7 +74,6 @@ SUBJECT_URIS = {
 
 CRITICAL_TIMESTAMP_PATHS: dict[str, list[tuple[str | int, ...]]] = {
     "runtime_worm": [
-        ("deployment", "deployed_at_utc"),
         ("readiness", "verified_at_utc"),
         ("worker", "verified_at_utc"),
         ("worm", "written_at_utc"),
@@ -230,7 +229,7 @@ def _approval(role: str, prefix: str) -> dict:
 
 
 def _gate_payloads() -> dict[str, dict]:
-    runtime = _common("runtime_worm")
+    runtime = _common("runtime_worm", event="2026-07-14T11:47:00Z")
     runtime.update(
         {
             "api_base_url": verifier.PRODUCTION_API_ORIGIN,
@@ -242,7 +241,7 @@ def _gate_payloads() -> dict[str, dict]:
                 "deploy_id": DEPLOY_ID,
                 "commit_sha": MASTER_SHA,
                 "status": "live",
-                "deployed_at_utc": "2026-07-14T11:31:00Z",
+                "deployed_at_utc": "2026-07-14T10:00:00Z",
             },
             "readiness": {
                 "path": "/health/ready",
@@ -250,7 +249,7 @@ def _gate_payloads() -> dict[str, dict]:
                 "ready": True,
                 "status": "ok",
                 "authority": "verified",
-                "verified_at_utc": "2026-07-14T11:48:00Z",
+                "verified_at_utc": "2026-07-14T11:47:00Z",
             },
             "worker": {
                 "path": "/atlas/live/health/realmode",
@@ -275,8 +274,8 @@ def _gate_payloads() -> dict[str, dict]:
                 "probe_id": "worm-probe-20260714-001",
                 "object_key_sha256": _digest("worm-object"),
                 "version_id_sha256": _digest("worm-version"),
-                "written_at_utc": "2026-07-14T11:30:00Z",
-                "verified_at_utc": "2026-07-14T11:48:00Z",
+                "written_at_utc": "2026-07-14T11:49:00Z",
+                "verified_at_utc": "2026-07-14T11:49:00Z",
                 "retention_until_utc": "2026-08-15T11:30:00Z",
                 "receipt_sha256": _digest("worm-receipt"),
             },
@@ -1649,6 +1648,109 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
                 ),
                 gate,
             )
+
+    def test_runtime_deployment_may_predate_the_fresh_proof_window(self) -> None:
+        manifest = _accepting_manifest(
+            self.bundle,
+            mutate_payloads=lambda payloads: payloads["runtime_worm"][
+                "deployment"
+            ].update(deployed_at_utc="2020-01-01T00:00:00Z"),
+        )
+
+        report = _verify(manifest, self.bundle)
+
+        self.assertEqual(report["errors"], [])
+        self.assertEqual(report["result"], "ACCEPT")
+
+    def test_runtime_deployment_must_exist_before_the_fresh_event(self) -> None:
+        manifest = _accepting_manifest(
+            self.bundle,
+            mutate_payloads=lambda payloads: payloads["runtime_worm"][
+                "deployment"
+            ].update(deployed_at_utc="2026-07-14T11:47:01Z"),
+        )
+
+        report = _verify(manifest, self.bundle)
+
+        self.assertEqual(report["result"], "INVALID")
+        self.assertTrue(
+            any(
+                "runtime_worm.evidence.payload.deployment.deployed_at_utc"
+                in error
+                and "fresh runtime gate event" in error
+                for error in report["errors"]
+            )
+        )
+
+    def test_runtime_event_is_the_earliest_fresh_runtime_proof(self) -> None:
+        manifest = _accepting_manifest(
+            self.bundle,
+            mutate_payloads=lambda payloads: payloads["runtime_worm"].update(
+                event_at_utc="2026-07-14T11:46:59Z"
+            ),
+        )
+
+        report = _verify(manifest, self.bundle)
+
+        self.assertEqual(report["result"], "INVALID")
+        self.assertTrue(
+            any(
+                "runtime_worm.evidence.payload.event_at_utc" in error
+                and "earliest fresh runtime proof" in error
+                for error in report["errors"]
+            )
+        )
+
+    def test_runtime_chronology_accepts_bounded_provider_clock_skew(self) -> None:
+        manifest = _accepting_manifest(
+            self.bundle,
+            mutate_payloads=lambda payloads: payloads["runtime_worm"][
+                "worm"
+            ].update(written_at_utc="2026-07-14T11:47:55Z"),
+        )
+
+        report = _verify(manifest, self.bundle)
+
+        self.assertEqual(report["errors"], [])
+        self.assertEqual(report["result"], "ACCEPT")
+
+    def test_runtime_worm_write_cannot_predate_worker_beyond_skew(self) -> None:
+        manifest = _accepting_manifest(
+            self.bundle,
+            mutate_payloads=lambda payloads: payloads["runtime_worm"][
+                "worm"
+            ].update(written_at_utc="2026-07-14T11:47:54Z"),
+        )
+
+        report = _verify(manifest, self.bundle)
+
+        self.assertEqual(report["result"], "INVALID")
+        self.assertTrue(
+            any(
+                "runtime_worm.evidence.payload.worm.written_at_utc" in error
+                and "beyond allowed clock skew" in error
+                for error in report["errors"]
+            )
+        )
+
+    def test_runtime_worker_verification_cannot_precede_readiness(self) -> None:
+        def mutate(payloads: dict[str, dict]) -> None:
+            runtime = payloads["runtime_worm"]
+            runtime["event_at_utc"] = "2026-07-14T11:46:59Z"
+            runtime["worker"]["verified_at_utc"] = "2026-07-14T11:46:59Z"
+
+        manifest = _accepting_manifest(self.bundle, mutate_payloads=mutate)
+
+        report = _verify(manifest, self.bundle)
+
+        self.assertEqual(report["result"], "INVALID")
+        self.assertTrue(
+            any(
+                "runtime_worm.evidence.payload.worker.verified_at_utc" in error
+                and "after readiness verification" in error
+                for error in report["errors"]
+            )
+        )
 
     def test_every_critical_nested_proof_timestamp_is_event_bound_and_fresh(self) -> None:
         def mutate(payloads):

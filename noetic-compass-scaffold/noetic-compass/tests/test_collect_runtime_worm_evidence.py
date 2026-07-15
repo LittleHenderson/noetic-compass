@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from collections.abc import Mapping
-from datetime import UTC, datetime
+from collections.abc import Callable, Mapping
+from datetime import UTC, datetime, timedelta
 import importlib.util
 import json
 from pathlib import Path
@@ -46,6 +46,7 @@ BUCKET = "private-provider-bucket-name"
 OBJECT_KEY = f"packets/{TRACE_ID}.json"
 VERSION_ID = "private-provider-version-id"
 MANIFEST_SHA = "c" * 64
+WORM_WRITTEN_AT = "2026-07-14T20:10:00Z"
 EXPECTED_PROMPT = (
     "Customer-production runtime WORM evidence probe. Return one short factual "
     f"trace. probe_nonce={NONCE}"
@@ -106,12 +107,15 @@ def _worker(*, model_id: str | None = None) -> dict[str, Any]:
     }
 
 
-def _anchor(*, retention_days: int = 31) -> dict[str, Any]:
-    retain_until = (
-        "2026-08-14T20:01:00Z"
-        if retention_days == 31
-        else "2026-08-13T20:01:00Z"
-    )
+def _retain_until(requested_at: str, retention_days: int) -> str:
+    parsed = datetime.fromisoformat(requested_at.replace("Z", "+00:00"))
+    return (parsed + timedelta(days=retention_days)).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _anchor(
+    *, retention_days: int = 31, requested_at: str = WORM_WRITTEN_AT
+) -> dict[str, Any]:
+    retain_until = _retain_until(requested_at, retention_days)
     return {
         "status": "anchored",
         "mode": "s3",
@@ -120,10 +124,10 @@ def _anchor(*, retention_days: int = 31) -> dict[str, Any]:
         "key": OBJECT_KEY,
         "version_id": VERSION_ID,
         "manifest_sha256": MANIFEST_SHA,
-        "anchored_at": "2026-07-14T20:01:00Z",
+        "anchored_at": requested_at,
         "object_lock_mode": "GOVERNANCE",
         "retention_days": retention_days,
-        "retention_requested_at": "2026-07-14T20:01:00Z",
+        "retention_requested_at": requested_at,
         "object_lock_retain_until": retain_until,
     }
 
@@ -132,13 +136,10 @@ def _receipt(
     *,
     retention_days: int = 31,
     observed_version_id: str = VERSION_ID,
-    receipt_timestamp: str = "2026-07-14T20:05:00Z",
+    receipt_timestamp: str = "2026-07-14T20:10:00Z",
+    requested_at: str = WORM_WRITTEN_AT,
 ) -> dict[str, Any]:
-    retain_until = (
-        "2026-08-14T20:01:00Z"
-        if retention_days == 31
-        else "2026-08-13T20:01:00Z"
-    )
+    retain_until = _retain_until(requested_at, retention_days)
     return {
         "schema_version": "cas_harness_object_lock_verification.v1",
         "verified": True,
@@ -152,7 +153,7 @@ def _receipt(
             "content_sha256": MANIFEST_SHA,
             "mode": "GOVERNANCE",
             "retention_days": retention_days,
-            "requested_at": "2026-07-14T20:01:00Z",
+            "requested_at": requested_at,
             "retain_until": retain_until,
         },
         "observed": {
@@ -175,6 +176,7 @@ def _packet(
     retention_days: int = 31,
     prompt: str = EXPECTED_PROMPT,
     code_commit_sha: str = MASTER_SHA,
+    requested_at: str = WORM_WRITTEN_AT,
 ) -> dict[str, Any]:
     return {
         "trace_id": TRACE_ID,
@@ -213,7 +215,11 @@ def _packet(
             "method_label": "cas_harness_live_worker_v1",
             "code_commit_sha": code_commit_sha,
         },
-        "hashes": {"external_anchor": _anchor(retention_days=retention_days)},
+        "hashes": {
+            "external_anchor": _anchor(
+                retention_days=retention_days, requested_at=requested_at
+            )
+        },
     }
 
 
@@ -221,7 +227,8 @@ def _verification(
     *,
     retention_days: int = 31,
     observed_version_id: str = VERSION_ID,
-    receipt_timestamp: str = "2026-07-14T20:05:00Z",
+    receipt_timestamp: str = "2026-07-14T20:10:00Z",
+    requested_at: str = WORM_WRITTEN_AT,
 ) -> dict[str, Any]:
     return {
         "trace_id": TRACE_ID,
@@ -236,6 +243,7 @@ def _verification(
                     retention_days=retention_days,
                     observed_version_id=observed_version_id,
                     receipt_timestamp=receipt_timestamp,
+                    requested_at=requested_at,
                 ),
             }
         ],
@@ -254,7 +262,11 @@ class FakeTransport:
         render_commit: str = MASTER_SHA,
         packet_prompt: str = EXPECTED_PROMPT,
         packet_commit: str = MASTER_SHA,
-        receipt_timestamp: str = "2026-07-14T20:05:00Z",
+        receipt_timestamp: str = "2026-07-14T20:10:00Z",
+        worm_written_at: str = WORM_WRITTEN_AT,
+        render_created_at: str = "2026-07-14T19:58:00Z",
+        render_deployed_at: str = DEPLOYED_AT,
+        render_final_changes: Mapping[str, Any] | None = None,
     ) -> None:
         self.model_id = model_id
         self.worm_status = worm_status
@@ -265,6 +277,11 @@ class FakeTransport:
         self.packet_prompt = packet_prompt
         self.packet_commit = packet_commit
         self.receipt_timestamp = receipt_timestamp
+        self.worm_written_at = worm_written_at
+        self.render_created_at = render_created_at
+        self.render_deployed_at = render_deployed_at
+        self.render_final_changes = dict(render_final_changes or {})
+        self.render_reads = 0
         self.calls: list[dict[str, Any]] = []
 
     def __call__(
@@ -288,6 +305,7 @@ class FakeTransport:
             }
         )
         if base_url == collector_module.RENDER_API_ORIGIN:
+            self.render_reads += 1
             assert path == (
                 f"/v1/services/{collector_module.PRODUCTION_SERVICE_ID}"
                 f"/deploys/{DEPLOY_ID}"
@@ -295,17 +313,17 @@ class FakeTransport:
             assert method == "GET"
             assert payload is None
             assert headers == {"Authorization": f"Bearer {RENDER_TOKEN}"}
-            return _result(
-                200,
-                {
-                    "id": DEPLOY_ID,
-                    "status": "live",
-                    "trigger": "new_commit",
-                    "createdAt": "2026-07-14T19:58:00Z",
-                    "finishedAt": DEPLOYED_AT,
-                    "commit": {"id": self.render_commit},
-                },
-            )
+            render_deploy = {
+                "id": DEPLOY_ID,
+                "status": "live",
+                "trigger": "new_commit",
+                "createdAt": self.render_created_at,
+                "finishedAt": self.render_deployed_at,
+                "commit": {"id": self.render_commit},
+            }
+            if self.render_reads > 1:
+                render_deploy.update(self.render_final_changes)
+            return _result(200, render_deploy)
         assert base_url == collector_module.PRODUCTION_API_ORIGIN
         authenticated = path.startswith("/api/cas-harness/audit") or path.startswith(
             "/evidence/"
@@ -349,6 +367,7 @@ class FakeTransport:
                     retention_days=self.retention_days,
                     prompt=self.packet_prompt,
                     code_commit_sha=self.packet_commit,
+                    requested_at=self.worm_written_at,
                 ),
             )
         if method == "POST" and path == f"/evidence/{TRACE_ID}/verify":
@@ -358,12 +377,18 @@ class FakeTransport:
                     retention_days=self.retention_days,
                     observed_version_id=self.observed_version_id,
                     receipt_timestamp=self.receipt_timestamp,
+                    requested_at=self.worm_written_at,
                 ),
             )
         raise AssertionError(f"unexpected call: {method} {path}")
 
 
-def _collector(transport: Any, *, deployed_at: str = DEPLOYED_AT) -> Any:
+def _collector(
+    transport: Any,
+    *,
+    deployed_at: str = DEPLOYED_AT,
+    clock: Callable[[], datetime] = lambda: FIXED_NOW,
+) -> Any:
     return collector_module.RuntimeWormCollector(
         base_url=collector_module.PRODUCTION_API_ORIGIN,
         bearer_token=TOKEN,
@@ -372,7 +397,7 @@ def _collector(transport: Any, *, deployed_at: str = DEPLOYED_AT) -> Any:
         deploy_id=DEPLOY_ID,
         deployed_at_utc=deployed_at,
         transport=transport,
-        clock=lambda: FIXED_NOW,
+        clock=clock,
         nonce=NONCE,
     )
 
@@ -402,12 +427,20 @@ def test_collects_canonical_verifier_compatible_secret_safe_draft() -> None:
 
     assert evidence["deployment"]["commit_sha"] == MASTER_SHA
     assert evidence["deployment"]["deploy_id"] == DEPLOY_ID
+    assert evidence["deployment"]["deployed_at_utc"] == DEPLOYED_AT
+    assert evidence["event_at_utc"] == "2026-07-14T20:10:00Z"
     assert evidence["worker"]["model_id"] == collector_module.MODEL_ID
     assert evidence["worm"]["write_verified"] is True
     assert evidence["worm"]["readback_verified"] is True
     assert evidence["worm"]["configured_retention_days"] == 31
     assert artifact["authority_published"] is False
     assert artifact["customer_production_status"] == "OPEN"
+    assert artifact["schema_version"] == "cas_runtime_worm_source_receipt.v2"
+    assert artifact["event_at_utc"] == evidence["event_at_utc"]
+    assert (
+        artifact["render_deploy_preflight_sha256"]
+        == artifact["render_deploy_final_sha256"]
+    )
     assert evidence["artifact_sha256"] == collector_module._digest_bytes(
         collector_module._canonical_bytes(artifact)
     )
@@ -544,14 +577,109 @@ def test_rejects_receipt_issuer_clock_skew_beyond_bound() -> None:
         ).collect()
 
 
-def test_rejects_stale_deployment_before_network_or_worm_write() -> None:
+def test_accepts_bounded_worm_provider_clock_skew_after_worker_check() -> None:
+    evidence, _artifact = _collector(
+        FakeTransport(worm_written_at="2026-07-14T20:09:55Z")
+    ).collect()
+
+    assert evidence["event_at_utc"] == "2026-07-14T20:09:55Z"
+    assert evidence["worm"]["written_at_utc"] == "2026-07-14T20:09:55Z"
+
+
+def test_rejects_worm_write_that_predates_worker_beyond_clock_skew() -> None:
+    with pytest.raises(
+        collector_module.RuntimeWormFailure,
+        match="WORM write predates worker verification beyond allowed clock skew",
+    ):
+        _collector(
+            FakeTransport(worm_written_at="2026-07-14T20:09:54Z")
+        ).collect()
+
+
+def test_rejects_local_clock_rollback_between_readiness_and_worker() -> None:
+    worker_time = datetime(2026, 7, 14, 20, 9, 59, tzinfo=UTC)
+    clock_values = iter(
+        (FIXED_NOW, FIXED_NOW, FIXED_NOW, FIXED_NOW, worker_time)
+    )
+    transport = FakeTransport()
+
+    with pytest.raises(
+        collector_module.RuntimeWormFailure,
+        match="worker verification precedes readiness verification",
+    ):
+        _collector(transport, clock=lambda: next(clock_values)).collect()
+
+    assert [call["path"] for call in transport.calls] == [
+        f"/v1/services/{collector_module.PRODUCTION_SERVICE_ID}/deploys/{DEPLOY_ID}",
+        "/health/ready",
+        "/atlas/live/health/realmode",
+    ]
+
+
+def test_authority_rejects_worker_proof_before_readiness_proof() -> None:
+    evidence, _artifact = _collector(FakeTransport()).collect()
+    evidence["event_at_utc"] = "2026-07-14T20:09:59Z"
+    evidence["worker"]["verified_at_utc"] = "2026-07-14T20:09:59Z"
+
+    with pytest.raises(
+        collector_module.AcceptanceAuthorityInvalid,
+        match="worker.verified_at_utc precedes readiness.verified_at_utc",
+    ):
+        collector_module.canonicalize_acceptance_evidence(
+            "runtime_worm", evidence, now=FIXED_NOW
+        )
+
+
+def test_authority_rejects_worm_write_before_worker_beyond_skew() -> None:
+    evidence, _artifact = _collector(FakeTransport()).collect()
+    evidence["event_at_utc"] = "2026-07-14T20:09:54Z"
+    evidence["worm"]["written_at_utc"] = "2026-07-14T20:09:54Z"
+
+    with pytest.raises(
+        collector_module.AcceptanceAuthorityInvalid,
+        match="worm.written_at_utc predates worker verification beyond allowed clock skew",
+    ):
+        collector_module.canonicalize_acceptance_evidence(
+            "runtime_worm", evidence, now=FIXED_NOW
+        )
+
+
+def test_accepts_older_exact_deployment_with_fresh_runtime_and_worm_proof() -> None:
+    deployed_at = "2026-07-14T18:00:00Z"
+    transport = FakeTransport(
+        render_created_at="2026-07-14T17:58:00Z",
+        render_deployed_at=deployed_at,
+    )
+
+    evidence, artifact = _collector(transport, deployed_at=deployed_at).collect()
+
+    assert evidence["deployment"]["deployed_at_utc"] == deployed_at
+    assert evidence["event_at_utc"] == "2026-07-14T20:10:00Z"
+    assert artifact["deployed_at_utc"] == deployed_at
+    assert artifact["event_at_utc"] == evidence["event_at_utc"]
+    assert transport.render_reads == 2
+
+
+def test_rejects_future_deployment_before_network_or_worm_write() -> None:
     transport = FakeTransport()
     with pytest.raises(
         collector_module.RuntimeWormFailure,
-        match="older than the 30-minute evidence window",
+        match="deployment timestamp is in the future",
     ):
-        _collector(transport, deployed_at="2026-07-14T19:39:59Z")
+        _collector(transport, deployed_at="2026-07-14T20:10:01Z")
     assert transport.calls == []
+
+
+def test_rejects_any_render_deployment_record_drift_during_collection() -> None:
+    transport = FakeTransport(render_final_changes={"unexpected": "drift"})
+
+    with pytest.raises(
+        collector_module.RuntimeWormFailure,
+        match="deployment record changed during collection",
+    ):
+        _collector(transport).collect()
+
+    assert transport.render_reads == 2
 
 
 def test_output_pair_tamper_fails_before_persistence() -> None:
