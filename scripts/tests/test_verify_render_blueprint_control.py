@@ -16,6 +16,7 @@ from unittest.mock import patch
 
 from scripts.verify_render_blueprint_control import (
     AUXILIARY_BLUEPRINT_PATHS,
+    CUSTOMER_AIRTABLE_DASHBOARD_ENV_KEYS,
     CUSTOMER_BLUEPRINT_PATH,
     CUSTOMER_DATABASE_NAME,
     CUSTOMER_GENERATED_SECRET_ENV_KEYS,
@@ -315,6 +316,49 @@ class CustomerBlueprintPolicyTests(unittest.TestCase):
             | CUSTOMER_INJECTED_PROVIDER_ENV_KEYS
             | {"NC_DATABASE_URL"},
         )
+
+    def test_customer_airtable_contract_is_secret_safe_and_intake_stays_open(self) -> None:
+        by_key = {
+            item["key"]: item
+            for item in parse_service_env_blocks(
+                self.text,
+                CUSTOMER_SERVICE_NAME,
+            )
+        }
+        self.assertEqual(
+            by_key["NC_CRM_PROVIDER"],
+            {"key": "NC_CRM_PROVIDER", "value": "airtable"},
+        )
+        self.assertEqual(
+            by_key["NC_AIRTABLE_API_BASE_URL"],
+            {
+                "key": "NC_AIRTABLE_API_BASE_URL",
+                "value": "https://api.airtable.com/v0",
+            },
+        )
+        for key in CUSTOMER_AIRTABLE_DASHBOARD_ENV_KEYS:
+            with self.subTest(key=key):
+                self.assertEqual(by_key[key], {"key": key, "sync": "false"})
+        self.assertEqual(
+            by_key["NC_CRM_PRIVACY_NOTICE_PUBLICATION_STATUS"],
+            {
+                "key": "NC_CRM_PRIVACY_NOTICE_PUBLICATION_STATUS",
+                "value": "OPEN",
+            },
+        )
+
+    def test_customer_airtable_dashboard_values_cannot_be_committed(self) -> None:
+        for key in CUSTOMER_AIRTABLE_DASHBOARD_ENV_KEYS:
+            with self.subTest(key=key):
+                original = f"              - key: {key}\n                sync: false"
+                self.assertIn(original, self.text)
+                unsafe = self.text.replace(
+                    original,
+                    f"              - key: {key}\n                value: __committed_value__",
+                    1,
+                )
+                with self.assertRaisesRegex(ControlError, re.escape(key)):
+                    assert_customer_blueprint_contract(unsafe, "test.yaml")
 
     def test_customer_effect_gates_fail_closed_on_drift(self) -> None:
         cases = (

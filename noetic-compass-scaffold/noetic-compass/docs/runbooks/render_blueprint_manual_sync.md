@@ -87,6 +87,28 @@ Exit status zero plus exact-SHA CI is required. An `OPEN` privacy notice still
 blocks public persistence and legal publication `ACCEPT`; containing the guard
 does not convert the draft notice into `present`.
 
+### Customer Airtable provider inputs
+
+The customer Blueprint pins `NC_CRM_PROVIDER=airtable` and the only safe
+provider literal, `NC_AIRTABLE_API_BASE_URL=https://api.airtable.com/v0`.
+Before syncing the Blueprint, configure these exact service-local Render values
+without putting their contents in Git, CI output, deployment receipts, or chat:
+
+- `NC_AIRTABLE_TOKEN`
+- `NC_AIRTABLE_BASE_ID`
+- `NC_AIRTABLE_TABLE_NAME`
+- `NC_AIRTABLE_DEDUP_FIELD`
+- `NC_AIRTABLE_OWNER_FIELD`
+- `NC_AIRTABLE_OWNER_VALUE`
+- `NC_AIRTABLE_LIFECYCLE_FIELD`
+
+All seven declarations must remain `sync: false`. A missing value is a
+fail-loud startup error, not capture-only fallback. Provider activation does
+not open public lead or support intake: while
+`NC_CRM_PRIVACY_NOTICE_PUBLICATION_STATUS=OPEN`, both routes must continue to
+return HTTP `503` before PII persistence. Legal publication and the separate
+`support_crm` acceptance evidence remain `OPEN`.
+
 ### Customer AWS principal
 
 Create a distinct, programmatic-only IAM principal for this service. Its inline

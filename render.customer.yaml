@@ -19,15 +19,16 @@
 # remains `OPEN` until the hosted account journey and every independent gate
 # pass.
 #
-# Provider-injected operator inputs are limited to the two dedicated AWS credentials
-# and the temporary live-worker URL/token. Render generates every other
-# authority independently only while its env key is absent. Deleting a declared
-# generateValue key makes a later sync create a different value; that is a
-# destructive rotation, not recovery. Secure provider-side backup, restore, and
-# continuity proof are required before customer traffic. Never commit or print
-# a secret. After the first owner is verified, first remove the bootstrap
-# declaration in a protected commit and sync that exact SHA; only then delete
-# its Render value so a later sync cannot recreate the bootstrap authority.
+# Provider-injected operator inputs are the two dedicated AWS credentials, the
+# temporary live-worker URL/token, and the Airtable provider contract below.
+# Render generates every other authority independently only while its env key is
+# absent. Deleting a declared generateValue key makes a later sync create a
+# different value; that is a destructive rotation, not recovery. Secure
+# provider-side backup, restore, and continuity proof are required before
+# customer traffic. Never commit or print a secret. After the first owner is
+# verified, first remove the bootstrap declaration in a protected commit and
+# sync that exact SHA; only then delete its Render value so a later sync cannot
+# recreate the bootstrap authority.
 
 projects:
   - name: cas-harness-customer
@@ -177,7 +178,23 @@ projects:
               # CRM and support persistence. While the notice is OPEN, public
               # intake must return 503 and persist zero PII.
               - key: NC_CRM_PROVIDER
-                value: "null"
+                value: airtable
+              - key: NC_AIRTABLE_TOKEN
+                sync: false
+              - key: NC_AIRTABLE_BASE_ID
+                sync: false
+              - key: NC_AIRTABLE_TABLE_NAME
+                sync: false
+              - key: NC_AIRTABLE_API_BASE_URL
+                value: https://api.airtable.com/v0
+              - key: NC_AIRTABLE_DEDUP_FIELD
+                sync: false
+              - key: NC_AIRTABLE_OWNER_FIELD
+                sync: false
+              - key: NC_AIRTABLE_OWNER_VALUE
+                sync: false
+              - key: NC_AIRTABLE_LIFECYCLE_FIELD
+                sync: false
               - key: NC_CRM_LEAD_STORE_PATH
                 value: /var/customer-support/leads.jsonl
               - key: NC_CRM_PRIVACY_NOTICE_PUBLICATION_STATUS
