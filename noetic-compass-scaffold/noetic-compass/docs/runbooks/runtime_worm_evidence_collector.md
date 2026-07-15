@@ -144,7 +144,7 @@ validator's bounded five-second provider clock skew is accepted.
 ## Outputs and boundary
 
 `runtime-worm.json` is a canonical
-`cas_harness_customer_production_gate_evidence.v2` document. The
+`cas_harness_customer_production_gate_evidence.v3` document. The
 `cas_runtime_worm_source_receipt.v2` source receipt binds that fresh event and
 the historical exact deployment separately. It
 hashes the audit ID, trace ID, S3 object key, and S3 version ID; it also hashes

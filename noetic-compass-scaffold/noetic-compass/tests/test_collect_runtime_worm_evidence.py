@@ -32,6 +32,10 @@ verifier = importlib.util.module_from_spec(VERIFIER_SPEC)
 sys.modules[VERIFIER_SPEC.name] = verifier
 VERIFIER_SPEC.loader.exec_module(verifier)
 
+from api.services import (  # noqa: E402
+    customer_production_acceptance_authority as authority_service,
+)
+
 
 FIXED_NOW = datetime(2026, 7, 14, 20, 10, tzinfo=UTC)
 MASTER_SHA = "a" * 40
@@ -458,6 +462,18 @@ def test_collects_canonical_verifier_compatible_secret_safe_draft() -> None:
         VERSION_ID,
     ):
         assert raw.encode("utf-8") not in output
+
+
+def test_gate_schema_is_exactly_aligned_across_collector_authority_and_verifier() -> None:
+    evidence, _ = _collector(FakeTransport()).collect()
+
+    assert (
+        collector_module.EVIDENCE_SCHEMA_VERSION
+        == authority_service.EVIDENCE_SCHEMA_VERSION
+        == verifier.EVIDENCE_SCHEMA_VERSION
+        == "cas_harness_customer_production_gate_evidence.v3"
+    )
+    assert evidence["schema_version"] == authority_service.EVIDENCE_SCHEMA_VERSION
 
 
 def test_sends_bearer_only_to_authenticated_audit_and_packet_routes() -> None:

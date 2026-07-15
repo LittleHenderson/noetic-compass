@@ -20,8 +20,8 @@ from pathlib import Path
 from typing import Any, Mapping, Sequence
 
 
-EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v2"
-SAFE_ARTIFACT_SCHEMA = "cas_alert_delivery_drill_safe_receipts.v1"
+EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v3"
+SAFE_ARTIFACT_SCHEMA = "cas_alert_delivery_drill_safe_receipts.v2"
 DRILL_EVENT_SCHEMA = "cas_alert_delivery_drill_event.v1"
 DRILL_REQUEST_SCHEMA = "cas_alert_delivery_drill_adapter_request.v1"
 DRILL_KIND = "non_disruptive_p1_alert_delivery_drill"
@@ -301,7 +301,6 @@ def build_payload(
             "acknowledged_at_utc",
             "actor_role",
             "actor_type",
-            "actor_id_sha256",
             "synthetic",
             "latency_seconds",
         },
@@ -340,7 +339,6 @@ def build_payload(
         <= acknowledgement_requested + timedelta(seconds=MAX_CLOCK_SKEW_SECONDS)
     ):
         raise EvidenceError("acknowledgement readback clock is implausible")
-    _sha256(acknowledgement.get("actor_id_sha256"), "acknowledgement actor")
     _sha256(acknowledgement.get("request_sha256"), "acknowledgement request")
     _sha256(acknowledgement.get("receipt_id_sha256"), "acknowledgement receipt")
     _sha256(acknowledgement.get("response_sha256"), "acknowledgement response")

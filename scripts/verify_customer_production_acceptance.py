@@ -37,7 +37,7 @@ TRUSTED_ISSUER_REGISTRY = Path(
 )
 SCHEMA_VERSION = "cas_harness_customer_production_acceptance.v2"
 REPORT_SCHEMA_VERSION = "cas_harness_customer_production_acceptance_report.v2"
-EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v2"
+EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v3"
 RECEIPT_SCHEMA_VERSION = "cas_harness_authoritative_receipt.v1"
 REGISTRY_SCHEMA_VERSION = "cas_harness_trusted_issuer_registry.v2"
 ROOT_CI_SCHEMA_VERSION = "cas_harness_root_ci_protected_deploy_observation.v1"
@@ -58,6 +58,7 @@ RENDER_API_ORIGIN = "https://api.render.com"
 PRODUCTION_SERVICE_ID = "srv-d9bijbjtqb8s73cn4n20"
 PRODUCTION_SERVICE_NAME = "cas-harness-customer-api"
 CRM_SOURCE_SCHEMA_VERSION = "cas_harness_airtable_crm_acceptance_source.v2"
+CUSTOMER_PSEUDONYMIZATION_SCHEME = "hmac-sha256-tenant-scoped-v1"
 CRM_PRIVACY_NOTICE_URL = "https://cascompass.ai/privacy"
 CRM_PRIVACY_NOTICE_PRESENT_STATUS = "present"
 CRM_AIRTABLE_API_BASE_URL = "https://api.airtable.com/v0"
@@ -353,6 +354,8 @@ CRM_SOURCE_RECEIPT_KEYS = {
 }
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 TAGGED_SHA256_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
+PSEUDONYM_RE = re.compile(r"^hmac-sha256:[0-9a-f]{64}$")
+CUSTOMER_PSEUDONYM_KEY_ID_RE = re.compile(r"^cpk_[0-9a-f]{32}$")
 PRIVACY_NOTICE_VERSION_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
 SHA1_RE = re.compile(r"^[0-9a-f]{40}$")
 UTC_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
@@ -570,6 +573,37 @@ def _tagged_sha256(value: Any, path: str, errors: list[str]) -> str | None:
         _error(errors, path, "must be sha256:<64 lowercase hex>")
         return None
     return value
+
+
+def _pseudonym(value: Any, path: str, errors: list[str]) -> str | None:
+    if not isinstance(value, str) or PSEUDONYM_RE.fullmatch(value) is None:
+        _error(errors, path, "must be hmac-sha256:<64 lowercase hex>")
+        return None
+    return value
+
+
+def _validate_customer_pseudonym_metadata(
+    value: Mapping[str, Any], path: str, errors: list[str]
+) -> str | None:
+    _require(
+        value.get("pseudonymization_scheme")
+        == CUSTOMER_PSEUDONYMIZATION_SCHEME,
+        f"{path}.pseudonymization_scheme",
+        f"must be {CUSTOMER_PSEUDONYMIZATION_SCHEME}",
+        errors,
+    )
+    key_id = value.get("pseudonym_key_id")
+    if (
+        not isinstance(key_id, str)
+        or CUSTOMER_PSEUDONYM_KEY_ID_RE.fullmatch(key_id) is None
+    ):
+        _error(
+            errors,
+            f"{path}.pseudonym_key_id",
+            "must be an opaque cpk_<32 lowercase hex> identifier",
+        )
+        return None
+    return key_id
 
 
 def _commit_sha(value: Any, path: str, errors: list[str]) -> str | None:
@@ -1994,7 +2028,7 @@ def _validate_accounts_billing(
 ) -> None:
     path = "$.required_gates.accounts_billing.evidence.payload"
     errors = context.errors
-    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"api_base_url", "service_id", "customer_lane", "tenant_subject_sha256", "account_session", "quota", "billing"}, path, errors)
+    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"api_base_url", "service_id", "customer_lane", "pseudonymization_scheme", "pseudonym_key_id", "tenant_subject", "account_subject", "account_session", "quota", "billing"}, path, errors)
     event, observed = _validate_common_evidence(evidence, "accounts_billing", context)
     for field, value in {
         "api_base_url": PRODUCTION_API_ORIGIN,
@@ -2002,7 +2036,9 @@ def _validate_accounts_billing(
         "customer_lane": "public-customer",
     }.items():
         _require(_json_scalar_equals(evidence.get(field), value), f"{path}.{field}", f"must equal {value!r}", errors)
-    _sha256(evidence.get("tenant_subject_sha256"), f"{path}.tenant_subject_sha256", errors)
+    _validate_customer_pseudonym_metadata(evidence, path, errors)
+    _pseudonym(evidence.get("tenant_subject"), f"{path}.tenant_subject", errors)
+    _pseudonym(evidence.get("account_subject"), f"{path}.account_subject", errors)
     session = evidence.get("account_session")
     if _is_mapping(session, f"{path}.account_session", errors):
         _exact_keys(session, {"invite_redeem_http_status", "login_http_status", "logout_http_status", "revoked_session_http_status", "durable_session_restart_verified", "disabled_account_http_status", "cross_tenant_http_status", "verified_at_utc"}, f"{path}.account_session", errors)
@@ -2034,7 +2070,7 @@ def _validate_accounts_billing(
         _critical_proof_timestamp(quota.get("verified_at_utc"), gate="accounts_billing", event=event, observed=observed, context=context, path=f"{path}.quota.verified_at_utc")
     billing = evidence.get("billing")
     if _is_mapping(billing, f"{path}.billing", errors):
-        _exact_keys(billing, {"provider", "mode", "currency", "checkout_status", "subscription_status", "invoice_status", "receipt_download_http_status", "webhook_signature_verified", "entitlement_status", "meter_to_invoice_reconciled", "provider_customer_id_sha256", "provider_subscription_id_sha256", "invoice_id_sha256", "paid_at_utc"}, f"{path}.billing", errors)
+        _exact_keys(billing, {"provider", "mode", "currency", "checkout_status", "subscription_status", "invoice_status", "receipt_download_http_status", "webhook_signature_verified", "entitlement_status", "meter_to_invoice_reconciled", "provider_customer_subject", "provider_subscription_subject", "invoice_subject", "paid_at_utc"}, f"{path}.billing", errors)
         expected = {
             "provider": "stripe",
             "mode": "live",
@@ -2049,8 +2085,8 @@ def _validate_accounts_billing(
         }
         for field, value in expected.items():
             _require(_json_scalar_equals(billing.get(field), value), f"{path}.billing.{field}", f"must equal {value!r}", errors)
-        for field in ("provider_customer_id_sha256", "provider_subscription_id_sha256", "invoice_id_sha256"):
-            _sha256(billing.get(field), f"{path}.billing.{field}", errors)
+        for field in ("provider_customer_subject", "provider_subscription_subject", "invoice_subject"):
+            _pseudonym(billing.get(field), f"{path}.billing.{field}", errors)
         _critical_proof_timestamp(billing.get("paid_at_utc"), gate="accounts_billing", event=event, observed=observed, context=context, path=f"{path}.billing.paid_at_utc")
 
 

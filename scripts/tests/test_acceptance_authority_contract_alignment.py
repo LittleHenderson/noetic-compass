@@ -23,6 +23,9 @@ from api.services.customer_production_acceptance_authority import (  # noqa: E40
 from api.services.acceptance_publication_authorizations import (  # noqa: E402
     AcceptancePublicationAuthorizationStore,
 )
+from api.services.customer_production_pseudonyms import (  # noqa: E402
+    CustomerProductionPseudonymizer,
+)
 from api import acceptance_authority_contract as authority_contract  # noqa: E402
 from api.services import customer_production_acceptance_authority as authority_service  # noqa: E402
 from api.services.production.state_substrate.memory_store import (  # noqa: E402
@@ -337,6 +340,22 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
         )
 
     def test_every_live_route_accepts_the_verifiers_exact_gate_shape(self) -> None:
+        pseudonym_key_id = "cpk_0123456789abcdef0123456789abcdef"
+        pseudonymizer = CustomerProductionPseudonymizer(
+            {
+                pseudonym_key_id: hashlib.sha256(
+                    b"contract-alignment-publication-pseudonym-key"
+                ).digest()
+            },
+            active_key_id=pseudonym_key_id,
+        )
+
+        class ShapeOnlyAccountsBinding:
+            """This test covers schema alignment; live source binding is separate."""
+
+            def assert_matches(self, evidence, *, evidence_sha256):  # type: ignore[no-untyped-def]
+                return None
+
         payloads = _gate_payloads()
         release = _common(
             "release_decision",
@@ -392,7 +411,9 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
                 else None
             )
             authorization_store = AcceptancePublicationAuthorizationStore(
-                backend, primary_tenant_id="primary"
+                backend,
+                primary_tenant_id="primary",
+                pseudonymizer=pseudonymizer,
             )
             evidence_sha256 = hashlib.sha256(
                 canonicalize_acceptance_evidence(gate, payload, now=NOW)
@@ -414,6 +435,11 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
                 backend,
                 human_attestation_store=attestations,
                 publication_authorization_store=authorization_store,
+                accounts_billing_source_binding_store=(
+                    ShapeOnlyAccountsBinding()
+                    if gate == "accounts_billing"
+                    else None
+                ),
             )
             published = store.publish(
                 gate,

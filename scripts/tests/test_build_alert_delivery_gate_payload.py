@@ -92,7 +92,6 @@ def _artifact() -> dict:
         "acknowledged_at_utc": "2026-07-14T11:43:00Z",
         "actor_role": "incident_commander",
         "actor_type": "human",
-        "actor_id_sha256": _digest("human-incident-commander"),
         "synthetic": False,
         "latency_seconds": 180,
     }

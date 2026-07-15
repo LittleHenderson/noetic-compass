@@ -36,7 +36,7 @@ DRILL_KIND = "non_disruptive_p1_alert_delivery_drill"
 EVENT_SCHEMA = "cas_alert_delivery_drill_event.v1"
 REQUEST_SCHEMA = "cas_alert_delivery_drill_adapter_request.v1"
 RECEIPT_SCHEMA = "cas_alert_delivery_drill_provider_receipt.v1"
-SAFE_ARTIFACT_SCHEMA = "cas_alert_delivery_drill_safe_receipts.v1"
+SAFE_ARTIFACT_SCHEMA = "cas_alert_delivery_drill_safe_receipts.v2"
 ACK_WINDOW_SECONDS = 600
 DEFAULT_POLL_SECONDS = 15.0
 MAX_CLOCK_SKEW_SECONDS = hardened.MAX_CLOCK_SKEW_SECONDS
@@ -328,7 +328,6 @@ def _acknowledgement_receipt(
             "acknowledged_at_utc": hardened._format_utc(acknowledged),
             "actor_role": "incident_commander",
             "actor_type": "human",
-            "actor_id_sha256": hashlib.sha256(actor_id.encode("utf-8")).hexdigest(),
             "synthetic": False,
             "latency_seconds": int(latency_delta.total_seconds()),
         }
