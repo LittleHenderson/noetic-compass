@@ -80,6 +80,12 @@ jobs:
           -s scripts/tests
           -p 'test_production_runtime_alert_delivery.py'
 
+      - name: Run the non-disruptive alert-delivery drill tests
+        run: |
+          python -m unittest discover -s scripts/tests -p 'test_alert_delivery_drill.py'
+          python -m unittest discover -s scripts/tests -p 'test_build_alert_delivery_gate_payload.py'
+          python -m unittest discover -s scripts/tests -p 'test_alert_delivery_drill_workflow.py'
+
       - name: Install the isolated RS256 signing dependency
         run: python -m pip install --disable-pip-version-check 'cryptography==49.0.0'
 

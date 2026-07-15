@@ -183,15 +183,60 @@ provider, verifies the provider result, and translates it into this contract:
 | `CAS_ALERT_SECONDARY_WEBHOOK_TOKEN` | Actions secret | Bearer credential for the secondary endpoint |
 
 The manual `workflow_dispatch` input `secondary_escalation_drill` defaults to
-`false`. Set it to `true` only for a documented customer-production delivery
-drill. After the incident is at least 600 seconds old and the bridge verifies a
-timely `incident_commander` acknowledgement, the adapter deliberately sends one
-idempotent `secondary_on_call` escalation as well. This is the only normal path
-that preserves both a timely human ACK and a secondary-delivery receipt in the
-same safe artifact. Scheduled runs and manual runs with the default input keep
-the ordinary policy: a timely ACK suppresses secondary escalation. The drill
-is accepted only while the runtime incident is still failing, because a
-recovery run does not replay the original primary-delivery receipt.
+`false`. It exists only to exercise escalation during a real, still-failing
+runtime incident. After the incident is at least 600 seconds old and the bridge
+verifies a timely `incident_commander` acknowledgement, the adapter deliberately
+sends one idempotent `secondary_on_call` escalation as well. Scheduled runs and
+manual runs with the default input keep the ordinary policy: a timely ACK
+suppresses secondary escalation. This incident-bound artifact cannot satisfy
+the standalone customer-production `alert_delivery` gate and is rejected by
+`scripts/build_alert_delivery_gate_payload.py`.
+
+### Dedicated non-disruptive acceptance drill
+
+Use the dispatch-only root workflow `.github/workflows/alert-delivery-drill.yml`
+for the standalone `alert_delivery` evidence candidate. It has no schedule,
+holds no `issues: write` permission, and does not create, label, comment on,
+reopen, or close the runtime incident. Before any provider write it requires:
+
+1. dispatch from protected `master` at the exact supplied 40-character HEAD;
+2. the exact supplied live Render deploy ID, revalidated with
+   `scripts/collect_root_ci_protected_deploy_facts.py` against protected CI and
+   provider state; and
+3. the exact typed confirmation `RUN-NON-DISRUPTIVE-P1-DRILL`.
+
+Configure the custom receipt bridge in the `customer-production` Actions
+environment. These are separate from the runtime-incident settings above:
+
+| GitHub setting | Kind | Purpose |
+|---|---|---|
+| `CAS_ALERT_DRILL_PROVIDER_MODE=webhook_v1` | Actions variable | Explicitly enables the lane; absent/empty/`disabled` performs no provider write and fails the drill `OPEN` |
+| `CAS_ALERT_DRILL_INCIDENT_WEBHOOK_URL` / `CAS_ALERT_DRILL_INCIDENT_WEBHOOK_TOKEN` | Actions secrets | Authenticated `incident_channel` delivery and exact receipt readback |
+| `CAS_ALERT_DRILL_PRIMARY_WEBHOOK_URL` / `CAS_ALERT_DRILL_PRIMARY_WEBHOOK_TOKEN` | Actions secrets | Authenticated `primary_on_call` delivery and exact receipt readback |
+| `CAS_ALERT_DRILL_ACK_WEBHOOK_URL` / `CAS_ALERT_DRILL_ACK_WEBHOOK_TOKEN` | Actions secrets | Human acknowledgement readback for the same drill identity |
+| `CAS_ALERT_DRILL_SECONDARY_WEBHOOK_URL` / `CAS_ALERT_DRILL_SECONDARY_WEBHOOK_TOKEN` | Actions secrets | Forced `secondary_on_call` drill escalation and exact receipt readback |
+
+All four endpoints are resolved and validated before the first write. The
+bridge contract is `cas_alert_delivery_drill_adapter_request.v1` /
+`cas_alert_delivery_drill_provider_receipt.v1`; direct Slack, Teams, PagerDuty,
+SMS, or email webhooks do not satisfy it unless a separately operated adapter
+authenticates the provider result and returns the exact event-bound contract.
+Delivery/escalation idempotency uses clock-independent canonical request bytes;
+ACK polling is observation-bound so a later poll cannot reuse a cached answer.
+
+A complete run requires real delivery to both `incident_channel` and
+`primary_on_call`, a non-synthetic human with role `incident_commander`
+acknowledging within 600 seconds, and a forced `secondary_on_call` delivery.
+Raw tokens, URLs, receipt IDs, response bodies, and actor identity are never
+written; the safe artifact retains only exact timestamps and SHA-256 digests.
+The uploaded safe artifact and generated gate payload remain unpublished and
+`OPEN`. The workflow has no authority-publication route and cannot dispatch
+customer-production `ACCEPT`; an authenticated configured-primary-tenant owner
+must independently review and publish the exact candidate through the fixed
+owner-bound authority path. Do not run the lane until the actual provider,
+named incident commander, and primary/secondary participants are in place.
+
+### Runtime-incident adapter validation and lifecycle
 
 Enabling the mode is fail-closed: all three authenticated endpoints are
 required. URLs must use public HTTPS on port 443, cannot contain credentials,

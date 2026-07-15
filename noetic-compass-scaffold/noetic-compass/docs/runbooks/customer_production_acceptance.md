@@ -719,10 +719,13 @@ All nine gates must be `present`, current, and authoritative:
 7. `incident_tabletop`: closed incident and actions, verified recovery and
    rotation, hashed postmortem, and current cross-functional tabletop.
 8. `alert_delivery`: P1 delivery to on-call and incident channel,
-   acknowledgement within ten minutes, and secondary escalation receipts. All
-   deliveries, acknowledgement, and escalation must follow emission; recorded
-   latency must equal the actual timestamp delta and that delta must be at most
-   600 seconds.
+    acknowledgement within ten minutes, and secondary escalation receipts. All
+    deliveries, acknowledgement, and escalation must follow emission; recorded
+    latency must equal the actual timestamp delta and that delta must be at most
+    600 seconds. Collect the unpublished `OPEN` candidate through the dedicated
+    dispatch-only `.github/workflows/alert-delivery-drill.yml` lane described in
+    `docs/runbooks/production_runtime_monitor.md`; a runtime failure issue or its
+    legacy incident-bound secondary exercise is not this gate.
 9. `claim_honesty`: fetched and hashed product/landing/legal surfaces, no
    unsupported claims, explicit research/product and verdict boundaries, and
    legal/product/research approvals.

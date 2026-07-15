@@ -1,0 +1,150 @@
+name: CAS Alert Delivery Drill
+
+on:
+  workflow_dispatch:
+    inputs:
+      expected_master_head:
+        description: Exact protected master HEAD deployed to public production
+        required: true
+        type: string
+      expected_deploy_id:
+        description: Exact public Render deployment ID (dep-...)
+        required: true
+        type: string
+      confirmation:
+        description: Type RUN-NON-DISRUPTIVE-P1-DRILL to page all drill destinations
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: cas-alert-delivery-drill
+  cancel-in-progress: false
+
+jobs:
+  alert_delivery_drill:
+    name: non-disruptive-alert-delivery-drill
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: customer-production
+    env:
+      CAS_ALERT_DRILL_PROVIDER_MODE: ${{ vars.CAS_ALERT_DRILL_PROVIDER_MODE }}
+      CAS_ALERT_DRILL_INCIDENT_WEBHOOK_URL: ${{ secrets.CAS_ALERT_DRILL_INCIDENT_WEBHOOK_URL }}
+      CAS_ALERT_DRILL_INCIDENT_WEBHOOK_TOKEN: ${{ secrets.CAS_ALERT_DRILL_INCIDENT_WEBHOOK_TOKEN }}
+      CAS_ALERT_DRILL_PRIMARY_WEBHOOK_URL: ${{ secrets.CAS_ALERT_DRILL_PRIMARY_WEBHOOK_URL }}
+      CAS_ALERT_DRILL_PRIMARY_WEBHOOK_TOKEN: ${{ secrets.CAS_ALERT_DRILL_PRIMARY_WEBHOOK_TOKEN }}
+      CAS_ALERT_DRILL_ACK_WEBHOOK_URL: ${{ secrets.CAS_ALERT_DRILL_ACK_WEBHOOK_URL }}
+      CAS_ALERT_DRILL_ACK_WEBHOOK_TOKEN: ${{ secrets.CAS_ALERT_DRILL_ACK_WEBHOOK_TOKEN }}
+      CAS_ALERT_DRILL_SECONDARY_WEBHOOK_URL: ${{ secrets.CAS_ALERT_DRILL_SECONDARY_WEBHOOK_URL }}
+      CAS_ALERT_DRILL_SECONDARY_WEBHOOK_TOKEN: ${{ secrets.CAS_ALERT_DRILL_SECONDARY_WEBHOOK_TOKEN }}
+      RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Require deliberate protected exact-master dispatch
+        shell: bash
+        env:
+          DISPATCH_REPOSITORY: ${{ github.repository }}
+          DISPATCH_REF: ${{ github.ref }}
+          DISPATCH_SHA: ${{ github.sha }}
+          DISPATCH_REF_PROTECTED: ${{ github.ref_protected }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          EXPECTED_MASTER_HEAD: ${{ inputs.expected_master_head }}
+          EXPECTED_DEPLOY_ID: ${{ inputs.expected_deploy_id }}
+          CONFIRMATION: ${{ inputs.confirmation }}
+        run: |
+          set -euo pipefail
+          test "$DISPATCH_REPOSITORY" = "LittleHenderson/noetic-compass"
+          test "$DEFAULT_BRANCH" = "master"
+          test "$DISPATCH_REF" = "refs/heads/master"
+          test "$DISPATCH_REF_PROTECTED" = "true"
+          [[ "$EXPECTED_MASTER_HEAD" =~ ^[0-9a-f]{40}$ ]]
+          test "$DISPATCH_SHA" = "$EXPECTED_MASTER_HEAD"
+          [[ "$EXPECTED_DEPLOY_ID" =~ ^dep-[a-z0-9]{20}$ ]]
+          test "$CONFIRMATION" = "RUN-NON-DISRUPTIVE-P1-DRILL"
+
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.expected_master_head }}
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Run the fail-closed drill and evidence tests
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s scripts/tests -p 'test_alert_delivery_drill.py'
+          python -m unittest discover -s scripts/tests -p 'test_build_alert_delivery_gate_payload.py'
+
+      - name: Verify protected CI and the exact live Render deploy before paging
+        env:
+          EXPECTED_MASTER_HEAD: ${{ inputs.expected_master_head }}
+          EXPECTED_DEPLOY_ID: ${{ inputs.expected_deploy_id }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python scripts/collect_root_ci_protected_deploy_facts.py \
+            --expected-master-head "$EXPECTED_MASTER_HEAD" \
+            --expected-deploy-id "$EXPECTED_DEPLOY_ID" \
+            --output "$RUNNER_TEMP/root-ci-protected-deploy.json"
+
+      - name: Deliver the distinct non-disruptive P1 drill
+        id: drill
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          emitted_at="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+          python scripts/deliver_alert_delivery_drill.py \
+            --mode "${CAS_ALERT_DRILL_PROVIDER_MODE:-disabled}" \
+            --repository "$GITHUB_REPOSITORY" \
+            --run-id "$GITHUB_RUN_ID" \
+            --run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --emitted-at-utc "$emitted_at" \
+            --output "$RUNNER_TEMP/alert-delivery-drill-safe-receipts.json"
+
+      - name: Build the unpublished OPEN gate-evidence candidate
+        if: ${{ steps.drill.outcome == 'success' }}
+        env:
+          EXPECTED_MASTER_HEAD: ${{ inputs.expected_master_head }}
+          EXPECTED_DEPLOY_ID: ${{ inputs.expected_deploy_id }}
+        run: |
+          set -euo pipefail
+          python scripts/build_alert_delivery_gate_payload.py \
+            --provider-artifact "$RUNNER_TEMP/alert-delivery-drill-safe-receipts.json" \
+            --master-head-sha "$EXPECTED_MASTER_HEAD" \
+            --deploy-id "$EXPECTED_DEPLOY_ID" \
+            --output "$RUNNER_TEMP/alert-delivery-gate-evidence-OPEN.json"
+
+      - name: Upload only secret-safe unpublished drill artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: alert-delivery-drill-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/alert-delivery-drill-safe-receipts.json
+            ${{ runner.temp }}/alert-delivery-gate-evidence-OPEN.json
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Preserve the OPEN boundary and require the complete drill
+        if: ${{ always() }}
+        env:
+          DRILL_OUTCOME: ${{ steps.drill.outcome }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo '### Alert delivery drill'
+            echo '- This exercise never asserts or mutates a production runtime incident.'
+            echo '- Its safe receipts and gate payload remain unpublished and `OPEN`.'
+            echo '- A real human incident-commander ACK and both on-call deliveries are required.'
+            echo '- This workflow cannot publish authority or dispatch customer-production `ACCEPT`.'
+          } >> "$GITHUB_STEP_SUMMARY"
+          test "$DRILL_OUTCOME" = "success"
+          test -s "$RUNNER_TEMP/alert-delivery-drill-safe-receipts.json"
+          test -s "$RUNNER_TEMP/alert-delivery-gate-evidence-OPEN.json"
