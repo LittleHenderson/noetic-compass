@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
+import hashlib
 import hmac
 from typing import Annotated, Literal, Mapping
 
@@ -18,6 +19,12 @@ from api.services.billing_entitlements import (
     PLAN_CATALOG,
     get_plan,
     process_stripe_event,
+)
+from api.services.billing_reconciliation import (
+    BillingReconciliationConflict as InvoiceReconciliationConflict,
+    BillingReconciliationError as InvoiceReconciliationError,
+    BillingReconciliationStore,
+    BillingReconciliationUnresolved,
 )
 from api.services.stripe_billing import (
     BillingProvider,
@@ -99,6 +106,10 @@ class ManualCompedResponse(BaseModel):
     expires_at: str
 
 
+class BillingReceiptListResponse(BaseModel):
+    receipts: list[dict[str, object]]
+
+
 def _billing_store(request: Request) -> BillingEntitlementStore:
     store = getattr(request.app.state, "billing_entitlement_store", None)
     if not settings.billing_entitlements_enabled or store is None:
@@ -114,6 +125,16 @@ def _billing_provider(request: Request) -> BillingProvider:
     if provider is None or settings.billing_provider.strip().lower() != "stripe":
         raise HTTPException(status_code=503, detail="Stripe billing is not configured.")
     return provider
+
+
+def _billing_reconciliation_store(request: Request) -> BillingReconciliationStore:
+    store = getattr(request.app.state, "billing_reconciliation_store", None)
+    if not settings.billing_reconciliation_enabled or store is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Billing invoice reconciliation is not enabled on this deployment.",
+        )
+    return store
 
 
 def _tenant_id(request: Request) -> str:
@@ -219,6 +240,64 @@ async def get_billing_entitlement(
     response.headers["Cache-Control"] = "no-store"
     decision = _billing_store(request).resolve_entitlement(_tenant_id(request))
     return EntitlementResponse.model_validate(decision.to_dict())
+
+
+@router.get("/billing/receipts", response_model=BillingReceiptListResponse)
+async def list_billing_receipts(
+    request: Request,
+    response: Response,
+    _role: str = Depends(require_role("owner", "admin")),
+) -> BillingReceiptListResponse:
+    """List terminal receipt projections for the authenticated tenant only."""
+
+    response.headers["Cache-Control"] = "private, no-store"
+    projections = _billing_reconciliation_store(
+        request
+    ).list_matched_invoice_projections(tenant_id=_tenant_id(request))
+    return BillingReceiptListResponse(
+        receipts=[_customer_receipt_projection(item) for item in projections]
+    )
+
+
+@router.get("/billing/receipts/{reconciliation_ref}/download")
+async def download_billing_receipt(
+    reconciliation_ref: str,
+    request: Request,
+    _role: str = Depends(require_role("owner", "admin")),
+) -> Response:
+    """Proxy exact immutable PDF bytes without exposing the provider URL."""
+
+    reconciliation = _billing_reconciliation_store(request)
+    invoice = reconciliation.matched_invoice_for_public_ref(
+        tenant_id=_tenant_id(request),
+        reconciliation_ref=reconciliation_ref,
+    )
+    if invoice is None:
+        raise HTTPException(status_code=404, detail="Billing receipt not found.")
+    try:
+        receipt = await _billing_provider(request).download_invoice_receipt(
+            url=invoice.invoice_pdf,
+            expected_sha256=invoice.invoice_pdf_sha256,
+            expected_size_bytes=invoice.invoice_pdf_size_bytes,
+            customer_receipt_allowed_hosts=(
+                reconciliation.customer_receipt_allowed_hosts
+            ),
+        )
+    except StripeBillingProviderError as exc:
+        raise HTTPException(
+            status_code=502,
+            detail="The immutable billing receipt could not be retrieved.",
+        ) from exc
+    return Response(
+        content=receipt.content,
+        media_type="application/pdf",
+        headers={
+            "Cache-Control": "private, no-store",
+            "Content-Disposition": 'attachment; filename="cas-billing-receipt.pdf"',
+            "Content-Security-Policy": "sandbox",
+            "X-Content-Type-Options": "nosniff",
+        },
+    )
 
 
 @router.post("/billing/checkout", response_model=CheckoutResponse)
@@ -344,6 +423,45 @@ async def stripe_billing_webhook(
 
     lease = None
     try:
+        if event_type == "invoice.paid" and settings.billing_reconciliation_enabled:
+            reconciliation = getattr(
+                request.app.state, "billing_reconciliation_store", None
+            )
+            if reconciliation is None:
+                raise InvoiceReconciliationError(
+                    "billing invoice reconciliation store is unavailable"
+                )
+            paid_invoice = await provider.retrieve_paid_invoice(
+                event=plain_event,
+                raw_event_sha256=hashlib.sha256(raw_payload).hexdigest(),
+                contract=reconciliation.usage_dispatch_contract,
+                customer_receipt_allowed_hosts=(
+                    reconciliation.customer_receipt_allowed_hosts
+                ),
+            )
+            reconciled = reconciliation.reconcile_paid_invoice(paid_invoice)
+            if reconciled.reconciliation_state != "matched":
+                store.finish_webhook_event(
+                    event_id=event_id,
+                    state="unresolved",
+                    tenant_id=reconciled.tenant_id,
+                    detail="paid invoice usage reconciliation remains unresolved",
+                )
+                raise HTTPException(
+                    status_code=422,
+                    detail="Paid invoice usage reconciliation remains unresolved.",
+                )
+            store.finish_webhook_event(
+                event_id=event_id,
+                state="applied",
+                tenant_id=reconciled.tenant_id,
+                detail="paid invoice usage reconciliation matched",
+            )
+            return {
+                "event_id": event_id,
+                "applied": True,
+                "reconciled": True,
+            }
         subscription_id = _subscription_id_for_event(plain_event)
         lease = (
             store.acquire_subscription_refresh_lock(
@@ -400,6 +518,39 @@ async def stripe_billing_webhook(
             detail=str(exc),
         )
         raise HTTPException(status_code=409, detail=str(exc)) from exc
+    except BillingReconciliationUnresolved as exc:
+        store.finish_webhook_event(
+            event_id=event_id,
+            state="unresolved",
+            tenant_id=None,
+            detail="paid invoice usage reconciliation remains unresolved",
+        )
+        raise HTTPException(
+            status_code=422,
+            detail="Paid invoice usage reconciliation remains unresolved.",
+        ) from exc
+    except InvoiceReconciliationConflict as exc:
+        store.finish_webhook_event(
+            event_id=event_id,
+            state="unresolved",
+            tenant_id=None,
+            detail="paid invoice reconciliation conflict",
+        )
+        raise HTTPException(
+            status_code=409,
+            detail="Paid invoice reconciliation conflicted with durable billing facts.",
+        ) from exc
+    except InvoiceReconciliationError as exc:
+        store.finish_webhook_event(
+            event_id=event_id,
+            state="unresolved",
+            tenant_id=None,
+            detail="paid invoice reconciliation failed closed",
+        )
+        raise HTTPException(
+            status_code=422,
+            detail="Paid invoice reconciliation failed closed.",
+        ) from exc
     except BillingEntitlementError as exc:
         store.finish_webhook_event(
             event_id=event_id,
@@ -413,6 +564,57 @@ async def stripe_billing_webhook(
     finally:
         if lease is not None:
             store.release_subscription_refresh_lock(lease)
+
+
+def _customer_receipt_projection(
+    projection: Mapping[str, object],
+) -> dict[str, object]:
+    """Reduce the durable projection to the receipt facts needed by collectors."""
+
+    fields = (
+        "schema_version",
+        "reconciliation_ref",
+        "invoice_ref",
+        "customer_ref",
+        "subscription_ref",
+        "provider_event_ref",
+        "provider_request_ref",
+        "invoice_pdf_ref",
+        "invoice_pdf_http_status",
+        "invoice_pdf_content_type",
+        "invoice_pdf_size_bytes",
+        "invoice_pdf_sha256",
+        "invoice_pdf_retrieved_at",
+        "provider_status",
+        "currency",
+        "amount_due_minor",
+        "amount_paid_minor",
+        "usage_period_start",
+        "usage_period_end",
+        "paid_at",
+        "meter_event_version",
+        "livemode",
+        "provider_quantity_milliseconds",
+        "local_quantity_milliseconds",
+        "usage_set_sha256",
+        "reconciliation_state",
+        "reconciled_at",
+        "provider_snapshot_sha256",
+        "provider_snapshot_facts_sha256",
+        "provider_snapshot_retrieved_at",
+        "provider_observation_count",
+        "raw_event_sha256",
+        "provider_event_facts_sha256",
+        "invoice_created",
+        "invoice_finalized_at",
+    )
+    result = {field: projection[field] for field in fields}
+    result["meter_to_invoice_reconciled"] = bool(
+        result["reconciliation_state"] == "matched"
+        and result["provider_quantity_milliseconds"]
+        == result["local_quantity_milliseconds"]
+    )
+    return result
 
 
 @router.post(

@@ -30,13 +30,13 @@ reconciliation need exact values.  Public projections replace every provider
 identifier with a keyed HMAC reference so API callers cannot recover or correlate
 raw Stripe ids outside this deployment.
 
-Customer receipt fetching is intentionally not implemented here.  The future
-trusted adapter must enforce the configured exact HTTPS-host allowlist on the
-initial URL and every redirect, reject credentials/fragments/non-public DNS or IP
-targets, stream no more than ``MAX_CUSTOMER_RECEIPT_BYTES``, require HTTP 200 and
-``application/pdf``, and hash the exact returned bytes before it constructs
-``ProviderPaidInvoice``.  This service re-validates the stable URL/response facts
-before persistence; a DTO alone is not proof that the adapter followed them.
+Customer receipt fetching lives in the signature-verifying Stripe adapter.  It
+enforces the configured exact HTTPS-host allowlist, refuses private/reserved DNS
+answers and socket peers, refuses redirects, streams no more than
+``MAX_CUSTOMER_RECEIPT_BYTES``, requires HTTP 200 and ``application/pdf``, and
+hashes the exact returned bytes before constructing ``ProviderPaidInvoice``.
+This service independently re-validates the stable URL/response facts before
+persistence; a DTO alone is not proof that the adapter followed them.
 """
 
 from __future__ import annotations
@@ -990,6 +990,12 @@ class BillingReconciliationStore:
             currency=self._currency,
             livemode=self._livemode,
         )
+
+    @property
+    def customer_receipt_allowed_hosts(self) -> tuple[str, ...]:
+        """Return the normalized exact-host contract used by the Stripe adapter."""
+
+        return tuple(sorted(self._customer_receipt_allowed_hosts))
 
     def require_active_usage_dispatch_contract(
         self, usage: UsageOutboxRecord
@@ -2083,6 +2089,46 @@ class BillingReconciliationStore:
             "invoice_created": invoice.invoice_created,
             "invoice_finalized_at": invoice.invoice_finalized_at,
         }
+
+    def list_matched_invoice_projections(
+        self, *, tenant_id: str
+    ) -> tuple[dict[str, object], ...]:
+        """Return only terminal, secret-safe receipts for the authenticated tenant."""
+
+        projections = [
+            self.public_invoice_projection(
+                tenant_id=tenant_id,
+                invoice_record_id=invoice.invoice_record_id,
+            )
+            for invoice in self.list_invoices(tenant_id)
+            if invoice.reconciliation_state == "matched"
+        ]
+        result = [projection for projection in projections if projection is not None]
+        result.sort(
+            key=lambda projection: (
+                str(projection["paid_at"]),
+                str(projection["reconciliation_ref"]),
+            ),
+            reverse=True,
+        )
+        return tuple(result)
+
+    def matched_invoice_for_public_ref(
+        self, *, tenant_id: str, reconciliation_ref: str
+    ) -> PaidInvoiceReconciliationRecord | None:
+        """Resolve one opaque receipt reference without crossing tenant scope."""
+
+        if not re.fullmatch(r"hmac-sha256:[0-9a-f]{64}", reconciliation_ref):
+            return None
+        for invoice in self.list_invoices(tenant_id):
+            if invoice.reconciliation_state != "matched":
+                continue
+            expected = self._provider_ref(
+                "reconciliation", invoice.invoice_record_id
+            )
+            if hmac.compare_digest(expected, reconciliation_ref):
+                return invoice
+        return None
 
     def _usage_from_record(self, record: LedgerRecord) -> UsageOutboxRecord:
         usage = UsageOutboxRecord.from_ledger(record)
@@ -4054,6 +4100,15 @@ def validate_customer_receipt_allowed_hosts(
 
     normalized = _normalize_receipt_hosts(values)
     return tuple(sorted(normalized))
+
+
+def validate_customer_receipt_url(
+    value: object, *, allowed_hosts: tuple[str, ...]
+) -> str:
+    """Validate one exact HTTPS receipt URL before any provider-network call."""
+
+    normalized = _normalize_receipt_hosts(allowed_hosts)
+    return _canonical_https_url(value, allowed_hosts=normalized)
 
 
 def _is_repeated_key_pattern(value: str) -> bool:

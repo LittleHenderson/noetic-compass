@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 import hashlib
 import hmac
 import json
@@ -8,8 +9,11 @@ import time
 from pathlib import Path
 from types import ModuleType, SimpleNamespace
 
+import httpx
 import pytest
 
+from api.services import stripe_billing as stripe_billing_module
+from api.services.billing_reconciliation import UsageDispatchContract
 from api.services.stripe_billing import (
     STRIPE_API_VERSION,
     STRIPE_SDK_VERSION,
@@ -198,9 +202,9 @@ async def test_existing_customer_and_portal_use_bound_customer(provider) -> None
         tenant_id="tenant-a",
         account_id="acct-a",
         email="ignored@example.com",
-        plan_id="enterprise_live",
+        plan_id="professional_live",
         external_customer_id="cus_bound",
-        idempotency_key="req-enterprise",
+        idempotency_key="req-professional",
     )
     portal = await provider.create_portal_session(external_customer_id="cus_bound")
     client = _StripeClient.instances[0]
@@ -214,6 +218,33 @@ async def test_existing_customer_and_portal_use_bound_customer(provider) -> None
         "return_url": "https://app.example.com/billing",
     }
     assert portal_options is None
+
+
+@pytest.mark.asyncio
+async def test_enterprise_price_is_optional_and_non_checkout_plan_stays_closed(
+    monkeypatch,
+) -> None:
+    _install_fake_stripe(monkeypatch)
+    provider = StripeBillingProvider(
+        secret_key="sk_test_private",
+        webhook_secret="whsec_private",
+        price_by_plan={"professional_live": "price_pro"},
+        livemode=False,
+        success_url="https://app.example.com/billing/success",
+        cancel_url="https://app.example.com/billing/cancel",
+        portal_return_url="https://app.example.com/billing",
+    )
+
+    with pytest.raises(StripeBillingProviderError, match="no Stripe price"):
+        await provider.create_checkout_session(
+            tenant_id="tenant-a",
+            account_id="acct-a",
+            email="owner@example.com",
+            plan_id="enterprise_live",
+            external_customer_id=None,
+            idempotency_key="req-enterprise",
+        )
+    assert _StripeClient.instances[0].checkout.calls == []
 
 
 def test_raw_webhook_signature_is_verified_by_sdk_client(provider) -> None:
@@ -284,7 +315,403 @@ async def test_subscription_webhook_refresh_reads_latest_provider_state(provider
     assert client.subscription.to_dict_calls == [(True, True)]
 
 
-def _real_sdk_provider(*, webhook_secret: str) -> StripeBillingProvider:
+def _paid_invoice_payload(*, clock: int | None = None) -> dict[str, object]:
+    now = int(time.time()) if clock is None else clock
+    return {
+        "id": "in_paid_exact",
+        "object": "invoice",
+        "livemode": False,
+        "status": "paid",
+        "created": now - 7_200,
+        "customer": "cus_bound",
+        "parent": {
+            "type": "subscription_details",
+            "subscription_details": {"subscription": "sub_bound"},
+        },
+        "currency": "usd",
+        "amount_due": 4999,
+        "amount_paid": 4999,
+        "status_transitions": {
+            "finalized_at": now - 240,
+            "paid_at": now - 180,
+        },
+        "hosted_invoice_url": (
+            "https://invoice.stripe.test/i/in_paid_exact?token=opaque"
+        ),
+        "invoice_pdf": (
+            "https://invoice.stripe.test/i/in_paid_exact/pdf?token=opaque"
+        ),
+        "lines": {
+            "object": "list",
+            "has_more": False,
+            "data": [
+                {
+                    "id": "il_usage_exact",
+                    "object": "line_item",
+                    "invoice": "in_paid_exact",
+                    "livemode": False,
+                    "currency": "usd",
+                    "pricing": {
+                        "type": "price_details",
+                        "price_details": {
+                            "price": "price_usage",
+                            "product": "prod_usage",
+                        },
+                    },
+                    "parent": {
+                        "type": "subscription_item_details",
+                        "subscription_item_details": {
+                            "subscription": "sub_bound",
+                            "subscription_item": "si_usage_exact",
+                            "proration": False,
+                        },
+                    },
+                    "period": {"start": now - 3_600, "end": now - 300},
+                    "quantity": 900_000,
+                    "quantity_decimal": "900000",
+                }
+            ],
+        },
+    }
+
+
+def _paid_invoice_event(*, clock: int | None = None) -> dict[str, object]:
+    now = int(time.time()) if clock is None else clock
+    return {
+        "id": "evt_paid_exact",
+        "object": "event",
+        "api_version": STRIPE_API_VERSION,
+        "type": "invoice.paid",
+        "created": now - 120,
+        "livemode": False,
+        "data": {
+            "object": {
+                "id": "in_paid_exact",
+                "object": "invoice",
+            }
+        },
+    }
+
+
+def _install_paid_invoice_response(
+    provider: StripeBillingProvider,
+    payload: dict[str, object],
+    *, raw_payload: dict[str, object] | None = None,
+) -> _AsyncRetrieve:
+    response = _StripeObject(payload)
+    response.last_response = SimpleNamespace(
+        body=json.dumps(
+            payload if raw_payload is None else raw_payload,
+            sort_keys=True,
+            separators=(",", ":"),
+        ),
+        request_id="req_PaidInvoiceExact",
+    )
+    retriever = _AsyncRetrieve(response)
+    provider._client.v1.invoices = retriever
+    return retriever
+
+
+@pytest.mark.asyncio
+async def test_paid_invoice_is_freshly_read_and_pdf_bytes_are_hash_bound(provider) -> None:
+    clock = int(time.time())
+    invoice = _paid_invoice_payload(clock=clock)
+    retriever = _install_paid_invoice_response(provider, invoice)
+    pdf = b"%PDF-1.7\nexact customer receipt\n%%EOF\n"
+    requests: list[httpx.Request] = []
+
+    def fetch(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(
+            200,
+            headers={
+                "Content-Type": "application/pdf",
+                "Content-Length": str(len(pdf)),
+            },
+            stream=httpx.ByteStream(pdf),
+        )
+
+    provider._receipt_transport = httpx.MockTransport(fetch)
+    raw_event = json.dumps(
+        _paid_invoice_event(clock=clock), sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
+    result = await provider.retrieve_paid_invoice(
+        event=_paid_invoice_event(clock=clock),
+        raw_event_sha256=hashlib.sha256(raw_event).hexdigest(),
+        contract=UsageDispatchContract(
+            meter_event_name="cas.accelerator_milliseconds",
+            meter_event_version="stripe_meter_event.v1",
+            usage_price_id="price_usage",
+            currency="usd",
+            livemode=False,
+        ),
+        customer_receipt_allowed_hosts=("invoice.stripe.test",),
+    )
+
+    assert retriever.calls == ["in_paid_exact"]
+    assert [str(request.url) for request in requests] == [invoice["invoice_pdf"]]
+    assert requests[0].headers["accept-encoding"] == "identity"
+    assert result.external_invoice_id == "in_paid_exact"
+    assert result.external_customer_id == "cus_bound"
+    assert result.external_subscription_id == "sub_bound"
+    assert result.usage_quantity_milliseconds == 900_000
+    assert result.invoice_pdf_sha256 == hashlib.sha256(pdf).hexdigest()
+    assert result.invoice_pdf_size_bytes == len(pdf)
+    assert result.provider_request_id == "req_PaidInvoiceExact"
+    assert result.provider_snapshot_sha256 == hashlib.sha256(
+        response_body := json.dumps(
+            invoice, sort_keys=True, separators=(",", ":")
+        ).encode("utf-8")
+    ).hexdigest()
+    assert response_body
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("mutation", "message"),
+    (
+        (lambda payload: payload["lines"].update(has_more=True), "incomplete"),
+        (lambda payload: payload["lines"].update(object="attacker"), "incomplete"),
+        (
+            lambda payload: payload["lines"]["data"][0].update(
+                invoice="in_different"
+            ),
+            "different invoice",
+        ),
+        (
+            lambda payload: payload["lines"]["data"][0]["parent"][
+                "subscription_item_details"
+            ].update(proration=True),
+            "may not be a proration",
+        ),
+        (
+            lambda payload: payload["lines"]["data"][0].update(
+                quantity_decimal="900000.5"
+            ),
+            "quantity views are contradictory",
+        ),
+    ),
+)
+async def test_paid_invoice_rejects_incomplete_or_ambiguous_usage_lines(
+    provider, mutation, message: str
+) -> None:
+    clock = int(time.time())
+    invoice = deepcopy(_paid_invoice_payload(clock=clock))
+    mutation(invoice)
+    _install_paid_invoice_response(provider, invoice)
+    fetches = 0
+
+    def fetch(_request: httpx.Request) -> httpx.Response:
+        nonlocal fetches
+        fetches += 1
+        return httpx.Response(
+            200, stream=httpx.ByteStream(b"%PDF-1.7\nshould not fetch")
+        )
+
+    provider._receipt_transport = httpx.MockTransport(fetch)
+    with pytest.raises(StripeBillingProviderError, match=message):
+        await provider.retrieve_paid_invoice(
+            event=_paid_invoice_event(clock=clock),
+            raw_event_sha256="a" * 64,
+            contract=UsageDispatchContract(
+                meter_event_name="cas.accelerator_milliseconds",
+                meter_event_version="stripe_meter_event.v1",
+                usage_price_id="price_usage",
+                currency="usd",
+                livemode=False,
+            ),
+            customer_receipt_allowed_hosts=("invoice.stripe.test",),
+        )
+    assert fetches == 0
+
+
+@pytest.mark.asyncio
+async def test_paid_invoice_raw_provider_receipt_must_match_converted_object(
+    provider,
+) -> None:
+    clock = int(time.time())
+    invoice = _paid_invoice_payload(clock=clock)
+    raw_invoice = deepcopy(invoice)
+    raw_invoice["amount_paid"] = 1
+    _install_paid_invoice_response(provider, invoice, raw_payload=raw_invoice)
+    with pytest.raises(StripeBillingProviderError, match="contradicts"):
+        await provider.retrieve_paid_invoice(
+            event=_paid_invoice_event(clock=clock),
+            raw_event_sha256="b" * 64,
+            contract=UsageDispatchContract(
+                meter_event_name="cas.accelerator_milliseconds",
+                meter_event_version="stripe_meter_event.v1",
+                usage_price_id="price_usage",
+                currency="usd",
+                livemode=False,
+            ),
+            customer_receipt_allowed_hosts=("invoice.stripe.test",),
+        )
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("url", "status", "headers", "content", "message"),
+    (
+        (
+            "https://attacker.example/receipt.pdf",
+            200,
+            {"Content-Type": "application/pdf"},
+            b"%PDF-1.7\nreceipt",
+            "outside the allowlist",
+        ),
+        (
+            "https://invoice.stripe.test/redirect.pdf",
+            302,
+            {
+                "Location": "https://attacker.example/receipt.pdf",
+                "Content-Type": "application/pdf",
+            },
+            b"%PDF-1.7\nreceipt",
+            "HTTP 200",
+        ),
+        (
+            "https://invoice.stripe.test/html.pdf",
+            200,
+            {"Content-Type": "text/html"},
+            b"%PDF-1.7\nreceipt",
+            "not application/pdf",
+        ),
+        (
+            "https://invoice.stripe.test/compressed.pdf",
+            200,
+            {
+                "Content-Type": "application/pdf",
+                "Content-Encoding": "gzip",
+            },
+            b"%PDF-1.7\nreceipt",
+            "content encoding",
+        ),
+        (
+            "https://invoice.stripe.test/not-pdf.pdf",
+            200,
+            {"Content-Type": "application/pdf"},
+            b"not actually a pdf",
+            "PDF signature",
+        ),
+    ),
+)
+async def test_customer_receipt_download_refuses_redirects_and_unsafe_responses(
+    provider, url: str, status: int, headers: dict[str, str], content: bytes, message: str
+) -> None:
+    fetches: list[str] = []
+
+    def fetch(request: httpx.Request) -> httpx.Response:
+        fetches.append(str(request.url))
+        return httpx.Response(
+            status, headers=headers, stream=httpx.ByteStream(content)
+        )
+
+    provider._receipt_transport = httpx.MockTransport(fetch)
+    with pytest.raises(StripeBillingProviderError, match=message):
+        await provider.download_invoice_receipt(
+            url=url,
+            expected_sha256=hashlib.sha256(content).hexdigest(),
+            expected_size_bytes=len(content),
+            customer_receipt_allowed_hosts=("invoice.stripe.test",),
+        )
+    assert fetches == ([] if "attacker.example" in url else [url])
+
+
+@pytest.mark.asyncio
+async def test_customer_receipt_download_requires_immutable_size_and_digest(
+    provider,
+) -> None:
+    pdf = b"%PDF-1.7\nreceipt-v2\n%%EOF\n"
+    provider._receipt_transport = httpx.MockTransport(
+        lambda _request: httpx.Response(
+            200,
+            headers={"Content-Type": "application/pdf"},
+            stream=httpx.ByteStream(pdf),
+        )
+    )
+    with pytest.raises(StripeBillingProviderError, match="no longer matches"):
+        await provider.download_invoice_receipt(
+            url="https://invoice.stripe.test/receipt.pdf",
+            expected_sha256="c" * 64,
+            expected_size_bytes=len(pdf),
+            customer_receipt_allowed_hosts=("invoice.stripe.test",),
+        )
+
+
+@pytest.mark.parametrize(
+    ("address", "expected"),
+    (
+        ("8.8.8.8", True),
+        ("2606:4700:4700::1111", True),
+        ("127.0.0.1", False),
+        ("10.0.0.1", False),
+        ("169.254.169.254", False),
+        ("::1", False),
+        ("not-an-address", False),
+    ),
+)
+def test_customer_receipt_network_boundary_recognizes_only_global_ips(
+    address: str, expected: bool
+) -> None:
+    assert stripe_billing_module._is_global_ip(address) is expected
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("addresses", "allowed"),
+    (
+        (("8.8.8.8", "2606:4700:4700::1111"), True),
+        (("8.8.8.8", "127.0.0.1"), False),
+        (("169.254.169.254",), False),
+        ((), False),
+    ),
+)
+async def test_customer_receipt_dns_rejects_any_non_public_answer(
+    monkeypatch, addresses: tuple[str, ...], allowed: bool
+) -> None:
+    class _Loop:
+        async def getaddrinfo(self, *_args, **_kwargs):
+            return [
+                (0, 0, 0, "", (address, 443)) for address in addresses
+            ]
+
+    monkeypatch.setattr(
+        stripe_billing_module.asyncio, "get_running_loop", lambda: _Loop()
+    )
+    if allowed:
+        await stripe_billing_module._require_public_receipt_dns(
+            "invoice.stripe.com"
+        )
+    else:
+        with pytest.raises(StripeBillingProviderError, match="public Internet"):
+            await stripe_billing_module._require_public_receipt_dns(
+                "invoice.stripe.com"
+            )
+
+
+def test_customer_receipt_socket_peer_must_still_be_public_after_dns() -> None:
+    class _Stream:
+        def __init__(self, address: str) -> None:
+            self.address = address
+
+        def get_extra_info(self, _name: str):
+            return (self.address, 443)
+
+    public = httpx.Response(
+        200, extensions={"network_stream": _Stream("8.8.8.8")}
+    )
+    stripe_billing_module._require_public_receipt_peer(public)
+    private = httpx.Response(
+        200, extensions={"network_stream": _Stream("127.0.0.1")}
+    )
+    with pytest.raises(StripeBillingProviderError, match="public Internet"):
+        stripe_billing_module._require_public_receipt_peer(private)
+
+
+def _real_sdk_provider(
+    *, webhook_secret: str, usage_price_id: str | None = None
+) -> StripeBillingProvider:
     return StripeBillingProvider(
         secret_key="sk_test_offline",
         webhook_secret=webhook_secret,
@@ -293,6 +720,7 @@ def _real_sdk_provider(*, webhook_secret: str) -> StripeBillingProvider:
             "enterprise_live": "price_ent",
         },
         livemode=False,
+        usage_price_id=usage_price_id,
         success_url="https://app.example.com/billing/success",
         cancel_url="https://app.example.com/billing/cancel",
         portal_return_url="https://app.example.com/billing",
@@ -373,6 +801,61 @@ async def test_real_sdk_subscription_object_is_converted_after_refresh() -> None
         "metadata": {"cas_tenant_id": "tenant-a"},
     }
     assert snapshot.provider_request_id is None
+
+
+@pytest.mark.asyncio
+async def test_real_sdk_paid_invoice_object_preserves_pinned_dahlia_contract() -> None:
+    import stripe
+    from stripe._stripe_response import StripeResponse
+
+    clock = int(time.time())
+    invoice_payload = _paid_invoice_payload(clock=clock)
+    response_body = json.dumps(invoice_payload, separators=(",", ":"))
+    invoice = stripe.Invoice.construct_from(
+        invoice_payload,
+        "sk_test_offline",
+        stripe_version=STRIPE_API_VERSION,
+        last_response=StripeResponse(
+            response_body,
+            200,
+            {"request-id": "req_RealPaidInvoice"},
+        ),
+    )
+    retriever = _AsyncRetrieve(invoice)
+    provider = _real_sdk_provider(
+        webhook_secret="whsec_paid_invoice_regression",
+        usage_price_id="price_usage",
+    )
+    provider._client = SimpleNamespace(v1=SimpleNamespace(invoices=retriever))
+    pdf = b"%PDF-1.7\nreal sdk contract\n%%EOF\n"
+    provider._receipt_transport = httpx.MockTransport(
+        lambda _request: httpx.Response(
+            200,
+            headers={"Content-Type": "application/pdf"},
+            stream=httpx.ByteStream(pdf),
+        )
+    )
+
+    result = await provider.retrieve_paid_invoice(
+        event=_paid_invoice_event(clock=clock),
+        raw_event_sha256="e" * 64,
+        contract=UsageDispatchContract(
+            meter_event_name="cas.accelerator_milliseconds",
+            meter_event_version="stripe_meter_event.v1",
+            usage_price_id="price_usage",
+            currency="usd",
+            livemode=False,
+        ),
+        customer_receipt_allowed_hosts=("invoice.stripe.test",),
+    )
+
+    assert retriever.calls == ["in_paid_exact"]
+    assert result.provider_request_id == "req_RealPaidInvoice"
+    assert result.provider_snapshot_sha256 == hashlib.sha256(
+        response_body.encode("utf-8")
+    ).hexdigest()
+    assert result.invoice_pdf_sha256 == hashlib.sha256(pdf).hexdigest()
+    assert result.usage_quantity_milliseconds == 900_000
 
 
 @pytest.mark.asyncio
