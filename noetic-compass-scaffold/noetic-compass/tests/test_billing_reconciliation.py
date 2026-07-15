@@ -1696,6 +1696,47 @@ def test_public_projections_hmac_every_provider_identifier() -> None:
     assert str(usage_public["meter_event_ref"]).startswith("hmac-sha256:")
 
 
+def test_matched_receipt_listing_and_opaque_resolution_are_tenant_scoped() -> None:
+    service, _, _ = _service()
+    _submit(service, _measurement())
+    invoice = service.reconcile_paid_invoice(_invoice())
+    projection = service.public_invoice_projection(
+        tenant_id="tenant-a", invoice_record_id=invoice.invoice_record_id
+    )
+    assert projection is not None
+    receipt_ref = str(projection["reconciliation_ref"])
+
+    assert service.list_matched_invoice_projections(tenant_id="tenant-a") == (
+        projection,
+    )
+    assert service.list_matched_invoice_projections(tenant_id="tenant-b") == ()
+    assert (
+        service.matched_invoice_for_public_ref(
+            tenant_id="tenant-a", reconciliation_ref=receipt_ref
+        )
+        == invoice
+    )
+    assert (
+        service.matched_invoice_for_public_ref(
+            tenant_id="tenant-b", reconciliation_ref=receipt_ref
+        )
+        is None
+    )
+    assert (
+        service.matched_invoice_for_public_ref(
+            tenant_id="tenant-a",
+            reconciliation_ref="hmac-sha256:" + "0" * 64,
+        )
+        is None
+    )
+    assert (
+        service.matched_invoice_for_public_ref(
+            tenant_id="tenant-a", reconciliation_ref="in_InvoiceA"
+        )
+        is None
+    )
+
+
 def test_hmac_provider_refs_are_deployment_keyed() -> None:
     first, _, _ = _service(key=HASH_KEY)
     second, _, _ = _service(key="another-dedicated-provider-reference-key-012345")

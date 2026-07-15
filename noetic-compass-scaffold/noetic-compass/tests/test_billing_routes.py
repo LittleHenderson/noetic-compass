@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
+import hashlib
 from types import SimpleNamespace
 
 from fastapi import FastAPI, Request
@@ -16,10 +17,13 @@ from api.services.billing_entitlements import (
     WEBHOOK_EVENT_KIND,
     BillingEntitlementStore,
 )
+from api.services.billing_reconciliation import UsageDispatchContract
 from api.services.production.state_substrate import InMemoryStateStore
 from api.services.stripe_billing import (
     CheckoutSessionResult,
+    CustomerInvoiceReceipt,
     PortalSessionResult,
+    StripeBillingProviderError,
     SubscriptionSnapshot,
 )
 
@@ -58,6 +62,11 @@ class _Provider:
         self.observed_payload: bytes | None = None
         self.retrieved_subscription_ids: list[str] = []
         self.retrieve_error = False
+        self.paid_invoice_result: object = object()
+        self.paid_invoice_calls: list[dict[str, object]] = []
+        self.download_receipt_calls: list[dict[str, object]] = []
+        self.download_receipt_error = False
+        self.download_receipt_content = b"%PDF-1.7\nreceipt\n%%EOF\n"
 
     async def create_checkout_session(self, **kwargs: object) -> CheckoutSessionResult:
         self.checkout_calls.append(kwargs)
@@ -91,10 +100,71 @@ class _Provider:
             provider_request_id="req_refresh_test",
         )
 
+    async def retrieve_paid_invoice(self, **kwargs: object):
+        self.paid_invoice_calls.append(kwargs)
+        return self.paid_invoice_result
+
+    async def download_invoice_receipt(
+        self, **kwargs: object
+    ) -> CustomerInvoiceReceipt:
+        self.download_receipt_calls.append(kwargs)
+        if self.download_receipt_error:
+            raise StripeBillingProviderError(
+                "provider detail containing https://private.invalid/token"
+            )
+        content = self.download_receipt_content
+        return CustomerInvoiceReceipt(
+            content=content,
+            url=str(kwargs["url"]),
+            http_status=200,
+            content_type="application/pdf",
+            size_bytes=len(content),
+            sha256=str(kwargs["expected_sha256"]),
+            retrieved_at=datetime.now(UTC).isoformat(),
+        )
+
+
+class _Reconciliation:
+    def __init__(self) -> None:
+        self.usage_dispatch_contract = UsageDispatchContract(
+            meter_event_name="cas.accelerator_milliseconds",
+            meter_event_version="stripe_meter_event.v1",
+            usage_price_id="price_usage",
+            currency="usd",
+            livemode=False,
+        )
+        self.customer_receipt_allowed_hosts = ("invoice.stripe.test",)
+        self.reconciliation_state = "matched"
+        self.reconcile_calls: list[object] = []
+        self.list_calls: list[str] = []
+        self.resolve_calls: list[tuple[str, str]] = []
+        self.projections_by_tenant: dict[str, tuple[dict[str, object], ...]] = {}
+        self.invoice_by_tenant_and_ref: dict[tuple[str, str], object] = {}
+
+    def reconcile_paid_invoice(self, invoice: object):
+        self.reconcile_calls.append(invoice)
+        return SimpleNamespace(
+            tenant_id="tenant-a",
+            reconciliation_state=self.reconciliation_state,
+        )
+
+    def list_matched_invoice_projections(
+        self, *, tenant_id: str
+    ) -> tuple[dict[str, object], ...]:
+        self.list_calls.append(tenant_id)
+        return self.projections_by_tenant.get(tenant_id, ())
+
+    def matched_invoice_for_public_ref(
+        self, *, tenant_id: str, reconciliation_ref: str
+    ):
+        self.resolve_calls.append((tenant_id, reconciliation_ref))
+        return self.invoice_by_tenant_and_ref.get((tenant_id, reconciliation_ref))
+
 
 @pytest.fixture
 def billing_client(monkeypatch):
     monkeypatch.setattr(settings, "billing_entitlements_enabled", True)
+    monkeypatch.setattr(settings, "billing_reconciliation_enabled", False)
     monkeypatch.setattr(settings, "billing_provider", "stripe")
     monkeypatch.setattr(settings, "billing_admin_secret", "s" * 32)
     monkeypatch.setattr(settings, "stripe_professional_price_id", "price_pro")
@@ -104,6 +174,7 @@ def billing_client(monkeypatch):
     provider = _Provider()
     store = BillingEntitlementStore(InMemoryStateStore())
     app.state.billing_entitlement_store = store
+    app.state.billing_reconciliation_store = None
     app.state.billing_provider = provider
     app.state.account_store = _AccountStore()
 
@@ -324,6 +395,239 @@ def test_webhook_receipt_precedes_provider_refresh_failure(billing_client) -> No
     assert receipt.payload["state"] == "unresolved"
     assert receipt.payload["payload_sha256"]
     assert store.get_subscription("tenant-a") is None
+
+
+def test_paid_invoice_webhook_reconciles_before_terminal_ack_and_is_idempotent(
+    billing_client, monkeypatch
+) -> None:
+    client, store, provider = billing_client
+    reconciliation = _Reconciliation()
+    client.app.state.billing_reconciliation_store = reconciliation
+    monkeypatch.setattr(settings, "billing_reconciliation_enabled", True)
+    provider.webhook_event = {
+        "id": "evt_paid_route",
+        "type": "invoice.paid",
+        "created": 1_900_000_000,
+        "data": {"object": {"id": "in_paid_route"}},
+    }
+    raw = b'{"signed":"invoice.paid"}'
+
+    response = client.post(
+        "/billing/webhook/stripe",
+        content=raw,
+        headers={"Stripe-Signature": "signed-test-event"},
+    )
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "event_id": "evt_paid_route",
+        "applied": True,
+        "reconciled": True,
+    }
+    assert reconciliation.reconcile_calls == [provider.paid_invoice_result]
+    assert provider.paid_invoice_calls == [
+        {
+            "event": provider.webhook_event,
+            "raw_event_sha256": hashlib.sha256(raw).hexdigest(),
+            "contract": reconciliation.usage_dispatch_contract,
+            "customer_receipt_allowed_hosts": (
+                reconciliation.customer_receipt_allowed_hosts
+            ),
+        }
+    ]
+    receipt = store._store.get(  # noqa: SLF001 - exact terminal receipt assertion
+        BILLING_PLATFORM_TENANT, WEBHOOK_EVENT_KIND, "evt_paid_route"
+    )
+    assert receipt is not None
+    assert receipt.payload["state"] == "applied"
+    assert receipt.payload["tenant_id"] == "tenant-a"
+
+    duplicate = client.post(
+        "/billing/webhook/stripe",
+        content=raw,
+        headers={"Stripe-Signature": "signed-test-event"},
+    )
+    assert duplicate.status_code == 200
+    assert duplicate.json() == {
+        "event_id": "evt_paid_route",
+        "applied": False,
+        "duplicate": True,
+    }
+    assert len(provider.paid_invoice_calls) == 1
+    assert len(reconciliation.reconcile_calls) == 1
+
+
+def test_unresolved_paid_invoice_remains_retryable_until_exact_match(
+    billing_client, monkeypatch
+) -> None:
+    client, store, provider = billing_client
+    reconciliation = _Reconciliation()
+    reconciliation.reconciliation_state = "unresolved"
+    client.app.state.billing_reconciliation_store = reconciliation
+    monkeypatch.setattr(settings, "billing_reconciliation_enabled", True)
+    provider.webhook_event = {
+        "id": "evt_paid_retry",
+        "type": "invoice.paid",
+        "created": 1_900_000_000,
+        "data": {"object": {"id": "in_paid_retry"}},
+    }
+    raw = b'{"signed":"invoice.retry"}'
+
+    unresolved = client.post(
+        "/billing/webhook/stripe",
+        content=raw,
+        headers={"Stripe-Signature": "signed-test-event"},
+    )
+    assert unresolved.status_code == 422
+    receipt = store._store.get(  # noqa: SLF001
+        BILLING_PLATFORM_TENANT, WEBHOOK_EVENT_KIND, "evt_paid_retry"
+    )
+    assert receipt is not None
+    assert receipt.payload["state"] == "unresolved"
+
+    reconciliation.reconciliation_state = "matched"
+    matched = client.post(
+        "/billing/webhook/stripe",
+        content=raw,
+        headers={"Stripe-Signature": "signed-test-event"},
+    )
+    assert matched.status_code == 200
+    assert matched.json()["reconciled"] is True
+    assert len(provider.paid_invoice_calls) == 2
+    assert len(reconciliation.reconcile_calls) == 2
+    terminal = store._store.get(  # noqa: SLF001
+        BILLING_PLATFORM_TENANT, WEBHOOK_EVENT_KIND, "evt_paid_retry"
+    )
+    assert terminal is not None
+    assert terminal.payload["state"] == "applied"
+
+
+def _receipt_projection(ref: str) -> dict[str, object]:
+    return {
+        "schema_version": "billing_reconciliation.v1",
+        "reconciliation_ref": ref,
+        "invoice_ref": "hmac-sha256:" + "2" * 64,
+        "customer_ref": "hmac-sha256:" + "3" * 64,
+        "subscription_ref": "hmac-sha256:" + "4" * 64,
+        "provider_event_ref": "hmac-sha256:" + "5" * 64,
+        "provider_request_ref": "hmac-sha256:" + "6" * 64,
+        "invoice_pdf_ref": "hmac-sha256:" + "7" * 64,
+        "invoice_pdf_http_status": 200,
+        "invoice_pdf_content_type": "application/pdf",
+        "invoice_pdf_size_bytes": 24,
+        "invoice_pdf_sha256": "8" * 64,
+        "invoice_pdf_retrieved_at": "2026-07-15T12:01:00+00:00",
+        "provider_status": "paid",
+        "currency": "usd",
+        "amount_due_minor": 4999,
+        "amount_paid_minor": 4999,
+        "usage_period_start": "2026-07-01T00:00:00+00:00",
+        "usage_period_end": "2026-07-15T12:00:00+00:00",
+        "paid_at": "2026-07-15T12:00:30+00:00",
+        "meter_event_version": "stripe_meter_event.v1",
+        "livemode": True,
+        "provider_quantity_milliseconds": 900_000,
+        "local_quantity_milliseconds": 900_000,
+        "usage_set_sha256": "9" * 64,
+        "reconciliation_state": "matched",
+        "reconciled_at": "2026-07-15T12:01:01+00:00",
+        "provider_snapshot_sha256": "a" * 64,
+        "provider_snapshot_facts_sha256": "b" * 64,
+        "provider_snapshot_retrieved_at": "2026-07-15T12:00:59+00:00",
+        "provider_observation_count": 1,
+        "raw_event_sha256": "c" * 64,
+        "provider_event_facts_sha256": "d" * 64,
+        "invoice_created": 1_752_000_000,
+        "invoice_finalized_at": 1_752_100_000,
+    }
+
+
+def test_receipt_listing_is_role_and_tenant_scoped_and_secret_safe(
+    billing_client, monkeypatch
+) -> None:
+    client, _, _ = billing_client
+    reconciliation = _Reconciliation()
+    ref = "hmac-sha256:" + "1" * 64
+    reconciliation.projections_by_tenant["tenant-a"] = (
+        _receipt_projection(ref),
+    )
+    client.app.state.billing_reconciliation_store = reconciliation
+    monkeypatch.setattr(settings, "billing_reconciliation_enabled", True)
+
+    forbidden = client.get(
+        "/billing/receipts", headers={"X-Test-Role": "viewer"}
+    )
+    assert forbidden.status_code == 403
+    tenant_a = client.get("/billing/receipts")
+    tenant_b = client.get(
+        "/billing/receipts",
+        headers={"X-Test-Tenant": "tenant-b", "X-Test-Account": "acct-b"},
+    )
+
+    assert tenant_a.status_code == 200
+    assert tenant_a.headers["cache-control"] == "private, no-store"
+    assert tenant_a.json()["receipts"][0]["reconciliation_ref"] == ref
+    assert tenant_a.json()["receipts"][0]["meter_to_invoice_reconciled"] is True
+    assert "https://" not in tenant_a.text
+    assert "in_secret" not in tenant_a.text
+    assert tenant_b.status_code == 200
+    assert tenant_b.json() == {"receipts": []}
+    assert reconciliation.list_calls == ["tenant-a", "tenant-b"]
+
+
+def test_receipt_download_proxies_only_exact_tenant_bound_immutable_bytes(
+    billing_client, monkeypatch
+) -> None:
+    client, _, provider = billing_client
+    reconciliation = _Reconciliation()
+    ref = "hmac-sha256:" + "1" * 64
+    invoice = SimpleNamespace(
+        invoice_pdf="https://invoice.stripe.test/i/private/pdf?token=opaque",
+        invoice_pdf_sha256="8" * 64,
+        invoice_pdf_size_bytes=len(provider.download_receipt_content),
+    )
+    reconciliation.invoice_by_tenant_and_ref[("tenant-a", ref)] = invoice
+    client.app.state.billing_reconciliation_store = reconciliation
+    monkeypatch.setattr(settings, "billing_reconciliation_enabled", True)
+
+    forbidden = client.get(
+        f"/billing/receipts/{ref}/download",
+        headers={"X-Test-Role": "viewer"},
+    )
+    cross_tenant = client.get(
+        f"/billing/receipts/{ref}/download",
+        headers={"X-Test-Tenant": "tenant-b", "X-Test-Account": "acct-b"},
+    )
+    missing = client.get(
+        "/billing/receipts/hmac-sha256:" + "f" * 64 + "/download"
+    )
+    response = client.get(f"/billing/receipts/{ref}/download")
+
+    assert forbidden.status_code == 403
+    assert cross_tenant.status_code == 404
+    assert missing.status_code == 404
+    assert response.status_code == 200
+    assert response.content == provider.download_receipt_content
+    assert response.headers["cache-control"] == "private, no-store"
+    assert response.headers["content-type"] == "application/pdf"
+    assert response.headers["content-security-policy"] == "sandbox"
+    assert response.headers["x-content-type-options"] == "nosniff"
+    assert provider.download_receipt_calls == [
+        {
+            "url": invoice.invoice_pdf,
+            "expected_sha256": invoice.invoice_pdf_sha256,
+            "expected_size_bytes": invoice.invoice_pdf_size_bytes,
+            "customer_receipt_allowed_hosts": (
+                reconciliation.customer_receipt_allowed_hosts
+            ),
+        }
+    ]
+
+    provider.download_receipt_error = True
+    failed = client.get(f"/billing/receipts/{ref}/download")
+    assert failed.status_code == 502
+    assert "private.invalid" not in failed.text
+    assert "immutable billing receipt could not be retrieved" in failed.text
 
 
 def test_manual_comped_route_is_secret_gated_expiring_and_tenant_checked(
