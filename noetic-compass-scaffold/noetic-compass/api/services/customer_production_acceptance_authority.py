@@ -45,6 +45,16 @@ from api.services.accounts_billing_acceptance_binding import (
     AccountsBillingSourceBindingInvalid,
     AccountsBillingSourceBindingUnavailable,
 )
+from api.services.hosted_customer_journey_acceptance_binding import (
+    HostedCustomerJourneyAcceptanceSourceBindingStore,
+    HostedCustomerJourneySourceBindingInvalid,
+    HostedCustomerJourneySourceBindingUnavailable,
+)
+from api.services.support_crm_acceptance_binding import (
+    SupportCRMAcceptanceSourceBindingStore,
+    SupportCRMSourceBindingInvalid,
+    SupportCRMSourceBindingUnavailable,
+)
 from api.services.acceptance_publication_authorizations import (
     AcceptancePublicationAuthorizationInvalid,
     AcceptancePublicationAuthorizationNotFound,
@@ -86,7 +96,7 @@ CLAIM_MACHINE_SUBJECT_SCHEMA_VERSION = (
     "cas_harness_claim_honesty_machine_subject.v1"
 )
 CLAIM_MACHINE_RULESET_VERSION = "cas_harness_claim_honesty_rules.v1"
-CRM_SOURCE_SCHEMA_VERSION = "cas_harness_airtable_crm_acceptance_source.v2"
+CRM_SOURCE_SCHEMA_VERSION = "cas_harness_airtable_crm_acceptance_source.v3"
 CRM_PRIVACY_NOTICE_URL = "https://cascompass.ai/privacy"
 CRM_PRIVACY_NOTICE_PRESENT_STATUS = "present"
 CRM_AIRTABLE_API_BASE_URL = "https://api.airtable.com/v0"
@@ -96,10 +106,6 @@ CRM_AIRTABLE_DEDUP_FIELD = "Dedup Key"
 CRM_AIRTABLE_OWNER_FIELD = "Owner"
 CRM_AIRTABLE_OWNER_VALUE = "CAS Harness"
 CRM_AIRTABLE_LIFECYCLE_FIELD = "Pipeline Status"
-CRM_RENDER_DISK_ID = "dsk-d9bijbjtqb8s73cn4o60"
-CRM_RENDER_DISK_NAME = "cas-harness-customer-support"
-CRM_RENDER_DISK_MOUNT_PATH = "/var/customer-support"
-CRM_LEAD_STORE_PATH = "/var/customer-support/leads.jsonl"
 
 AUTHORITY_TENANT_ID = "cas-harness-customer-production"
 REVISION_KIND = "customer_production_acceptance_authority_revision"
@@ -199,8 +205,11 @@ _EXTRA_FIELDS: dict[str, frozenset[str]] = {
             "api_base_url",
             "service_id",
             "customer_lane",
-            "tenant_subject_sha256",
-            "account_subject_sha256",
+            "pseudonymization_scheme",
+            "pseudonym_key_id",
+            "tenant_subject",
+            "account_subject",
+            "trace_subject",
             "audit",
             "packet_download",
             "share",
@@ -235,6 +244,8 @@ _EXTRA_FIELDS: dict[str, frozenset[str]] = {
             "public_support_url",
             "api_base_url",
             "service_id",
+            "pseudonymization_scheme",
+            "pseudonym_key_id",
             "support_ticket",
             "crm_lead",
             "consent",
@@ -289,8 +300,10 @@ _CRM_SOURCE_RECEIPT_FIELDS = frozenset(
         "render_auto_deploy_trigger", "render_service_response_sha256",
         "render_deploy_status", "render_deploy_commit_sha", "render_deploy_trigger",
         "render_deploy_finished_at_utc", "render_deploy_response_sha256",
-        "render_disk_id", "render_disk_name", "render_disk_mount_path",
-        "render_disk_size_gb", "lead_store_path", "provider", "airtable_api_base",
+        "pseudonymization_scheme", "pseudonym_key_id", "lead_subject",
+        "airtable_record_subject", "lead_store_backend", "state_store_backend",
+        "state_store_read_authority", "lead_migration_marker_verified",
+        "lead_head_revision_verified", "provider", "airtable_api_base",
         "airtable_base_id", "airtable_table_name", "airtable_dedup_field",
         "airtable_owner_field", "airtable_owner_value", "airtable_lifecycle_field",
         "airtable_consent_to_contact_field", "airtable_consent_recorded_at_field",
@@ -301,8 +314,8 @@ _CRM_SOURCE_RECEIPT_FIELDS = frozenset(
         "privacy_notice_publication_status", "privacy_notice_url", "privacy_notice_version",
         "privacy_notice_content_sha256", "privacy_notice_http_status",
         "privacy_notice_content_type", "privacy_notice_verified_at_utc",
-        "capture_http_status", "lead_id_sha256", "trace_id_sha256",
-        "airtable_record_id_sha256", "adapter_response_digest", "lead_schema_version",
+        "capture_http_status", "trace_subject", "adapter_response_digest",
+        "lead_schema_version",
         "lead_record_version", "persisted", "readback_verified", "deduplicated",
         "owner_assigned", "lifecycle_stage", "verified_at_utc", "consent_to_contact",
         "consent_schema_version", "consent_recorded_at_utc",
@@ -454,7 +467,8 @@ _OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
         "crm_source_receipt": _CRM_SOURCE_RECEIPT_FIELDS,
         "support_ticket": frozenset(
             {
-                "ticket_id_sha256",
+                "ticket_subject",
+                "ticket_record_version",
                 "create_http_status",
                 "persisted",
                 "routed",
@@ -469,8 +483,8 @@ _OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
             {
                 "system",
                 "provider",
-                "lead_id_sha256",
-                "airtable_record_id_sha256",
+                "lead_subject",
+                "airtable_record_subject",
                 "adapter_response_digest",
                 "source_receipt_sha256",
                 "persisted",
@@ -851,6 +865,18 @@ class AcceptanceAuthorityAccountsBillingSourceUnavailable(
     """The private accounts/billing source binding cannot be verified."""
 
 
+class AcceptanceAuthorityHostedJourneySourceUnavailable(
+    AcceptanceAuthorityUnavailable
+):
+    """The private hosted-journey source binding cannot be verified."""
+
+
+class AcceptanceAuthoritySupportCRMSourceUnavailable(
+    AcceptanceAuthorityUnavailable
+):
+    """The private support/CRM source binding cannot be verified."""
+
+
 @dataclass(frozen=True, slots=True)
 class AcceptanceEvidenceDocument:
     gate: str
@@ -904,6 +930,12 @@ class CustomerProductionAcceptanceAuthorityStore:
         accounts_billing_source_binding_store: (
             AccountsBillingAcceptanceSourceBindingStore | None
         ) = None,
+        hosted_journey_source_binding_store: (
+            HostedCustomerJourneyAcceptanceSourceBindingStore | None
+        ) = None,
+        support_crm_source_binding_store: (
+            SupportCRMAcceptanceSourceBindingStore | None
+        ) = None,
     ) -> None:
         if (immutable_backend is None) != (retention_policy is None):
             raise ValueError(
@@ -920,6 +952,134 @@ class CustomerProductionAcceptanceAuthorityStore:
         self._accounts_billing_source_bindings = (
             accounts_billing_source_binding_store
         )
+        self._hosted_journey_source_bindings = hosted_journey_source_binding_store
+        self._support_crm_source_bindings = support_crm_source_binding_store
+
+    def configure_hosted_journey_source_binding_store(
+        self, bindings: HostedCustomerJourneyAcceptanceSourceBindingStore
+    ) -> None:
+        """Install the startup-built hosted source verifier before serving."""
+
+        if not isinstance(
+            bindings, HostedCustomerJourneyAcceptanceSourceBindingStore
+        ):
+            raise ValueError("hosted journey source binding store is invalid")
+        if self._hosted_journey_source_bindings is not None:
+            raise ValueError("hosted journey source binding store is already configured")
+        self._hosted_journey_source_bindings = bindings
+
+    def configure_support_crm_source_binding_store(
+        self, bindings: SupportCRMAcceptanceSourceBindingStore
+    ) -> None:
+        """Install the startup-built global customer-operations source verifier."""
+
+        if not isinstance(bindings, SupportCRMAcceptanceSourceBindingStore):
+            raise ValueError("support/CRM source binding store is invalid")
+        if self._support_crm_source_bindings is not None:
+            raise ValueError("support/CRM source binding store is already configured")
+        self._support_crm_source_bindings = bindings
+
+    def assert_hosted_journey_source_binding(
+        self,
+        gate: str,
+        evidence: Mapping[str, Any],
+        *,
+        evidence_sha256: str,
+    ) -> None:
+        if gate != "hosted_customer_journey":
+            return
+        bindings = self._hosted_journey_source_bindings
+        if bindings is None:
+            raise AcceptanceAuthorityHostedJourneySourceUnavailable(
+                "hosted journey authoritative source binding is unavailable"
+            )
+        try:
+            bindings.assert_matches(evidence, evidence_sha256=evidence_sha256)
+        except HostedCustomerJourneySourceBindingInvalid as exc:
+            raise AcceptanceAuthorityInvalid(
+                "hosted journey evidence does not match its authoritative source"
+            ) from exc
+        except HostedCustomerJourneySourceBindingUnavailable as exc:
+            raise AcceptanceAuthorityHostedJourneySourceUnavailable(
+                "hosted journey authoritative source binding is unavailable"
+            ) from exc
+
+    def assert_support_crm_source_binding(
+        self,
+        gate: str,
+        evidence: Mapping[str, Any],
+        *,
+        evidence_sha256: str,
+    ) -> None:
+        if gate != "support_crm":
+            return
+        bindings = self._support_crm_source_bindings
+        if bindings is None:
+            raise AcceptanceAuthoritySupportCRMSourceUnavailable(
+                "support/CRM authoritative source binding is unavailable"
+            )
+        try:
+            bindings.assert_matches(evidence, evidence_sha256=evidence_sha256)
+        except SupportCRMSourceBindingInvalid as exc:
+            raise AcceptanceAuthorityInvalid(
+                "support/CRM evidence does not match its authoritative source"
+            ) from exc
+        except SupportCRMSourceBindingUnavailable as exc:
+            raise AcceptanceAuthoritySupportCRMSourceUnavailable(
+                "support/CRM authoritative source binding is unavailable"
+            ) from exc
+
+    def create_hosted_journey_source_binding(
+        self,
+        evidence: Mapping[str, Any],
+        *,
+        selector: Mapping[str, Any],
+        now: datetime | None = None,
+    ) -> str:
+        bindings = self._hosted_journey_source_bindings
+        if bindings is None:
+            raise AcceptanceAuthorityHostedJourneySourceUnavailable(
+                "hosted journey authoritative source binding is unavailable"
+            )
+        stamp = _utc_now(now)
+        canonicalize_acceptance_evidence(
+            "hosted_customer_journey", evidence, now=stamp
+        )
+        try:
+            return bindings.create(evidence, selector=selector, now=stamp)
+        except HostedCustomerJourneySourceBindingInvalid as exc:
+            raise AcceptanceAuthorityInvalid(
+                "hosted journey evidence does not match its authoritative source"
+            ) from exc
+        except HostedCustomerJourneySourceBindingUnavailable as exc:
+            raise AcceptanceAuthorityHostedJourneySourceUnavailable(
+                "hosted journey authoritative source binding is unavailable"
+            ) from exc
+
+    def create_support_crm_source_binding(
+        self,
+        evidence: Mapping[str, Any],
+        *,
+        selector: Mapping[str, Any],
+        now: datetime | None = None,
+    ) -> str:
+        bindings = self._support_crm_source_bindings
+        if bindings is None:
+            raise AcceptanceAuthoritySupportCRMSourceUnavailable(
+                "support/CRM authoritative source binding is unavailable"
+            )
+        stamp = _utc_now(now)
+        canonicalize_acceptance_evidence("support_crm", evidence, now=stamp)
+        try:
+            return bindings.create(evidence, selector=selector, now=stamp)
+        except SupportCRMSourceBindingInvalid as exc:
+            raise AcceptanceAuthorityInvalid(
+                "support/CRM evidence does not match its authoritative source"
+            ) from exc
+        except SupportCRMSourceBindingUnavailable as exc:
+            raise AcceptanceAuthoritySupportCRMSourceUnavailable(
+                "support/CRM authoritative source binding is unavailable"
+            ) from exc
 
     def configure_accounts_billing_source_binding_store(
         self, bindings: AccountsBillingAcceptanceSourceBindingStore
@@ -1737,6 +1897,12 @@ class CustomerProductionAcceptanceAuthorityStore:
         self.assert_accounts_billing_source_binding(
             gate, evidence, evidence_sha256=digest
         )
+        self.assert_hosted_journey_source_binding(
+            gate, evidence, evidence_sha256=digest
+        )
+        self.assert_support_crm_source_binding(
+            gate, evidence, evidence_sha256=digest
+        )
         self.assert_publication_authorized(
             gate=gate,
             master_head_sha=str(evidence["master_head_sha"]),
@@ -2061,6 +2227,12 @@ class CustomerProductionAcceptanceAuthorityStore:
             gate, document, now=stamp, serving_active_revision=True
         )
         self.assert_accounts_billing_source_binding(
+            gate, document, evidence_sha256=expected_hash
+        )
+        self.assert_hosted_journey_source_binding(
+            gate, document, evidence_sha256=expected_hash
+        )
+        self.assert_support_crm_source_binding(
             gate, document, evidence_sha256=expected_hash
         )
         return AcceptanceEvidenceDocument(
@@ -2441,8 +2613,10 @@ def _validate_customer_journey_semantics(
         "customer_lane": "public-customer",
     }.items():
         _equal(evidence, field, expected)
-    _sha_value(evidence["tenant_subject_sha256"], "tenant_subject_sha256")
-    _sha_value(evidence["account_subject_sha256"], "account_subject_sha256")
+    _validate_customer_pseudonym_metadata(evidence, "hosted_customer_journey")
+    _pseudonym_value(evidence["tenant_subject"], "tenant_subject")
+    _pseudonym_value(evidence["account_subject"], "account_subject")
+    _pseudonym_value(evidence["trace_subject"], "trace_subject")
 
     audit = _object(evidence, "audit")
     audit_id = audit["audit_id"]
@@ -2707,11 +2881,11 @@ def _validate_crm_source_receipt(
         "render_auto_deploy_trigger": "checksPass",
         "render_deploy_status": "live",
         "render_deploy_commit_sha": evidence["master_head_sha"],
-        "render_disk_id": CRM_RENDER_DISK_ID,
-        "render_disk_name": CRM_RENDER_DISK_NAME,
-        "render_disk_mount_path": CRM_RENDER_DISK_MOUNT_PATH,
-        "render_disk_size_gb": 1,
-        "lead_store_path": CRM_LEAD_STORE_PATH,
+        "lead_store_backend": "state_store",
+        "state_store_backend": "postgres",
+        "state_store_read_authority": True,
+        "lead_migration_marker_verified": True,
+        "lead_head_revision_verified": True,
         "provider": "airtable",
         "airtable_api_base": CRM_AIRTABLE_API_BASE_URL,
         "airtable_base_id": CRM_AIRTABLE_BASE_ID,
@@ -2747,16 +2921,22 @@ def _validate_crm_source_receipt(
         "persisted", "readback_verified", "deduplicated", "owner_assigned"
     ):
         _equal(source, field, True, "crm_source_receipt")
+    _validate_customer_pseudonym_metadata(source, "crm_source_receipt")
+    _pseudonym_value(source["lead_subject"], "crm_source_receipt.lead_subject")
+    _pseudonym_value(
+        source["airtable_record_subject"],
+        "crm_source_receipt.airtable_record_subject",
+    )
     for field in (
         "render_service_response_sha256",
         "render_deploy_response_sha256",
         "airtable_contract_sha256",
         "privacy_notice_content_sha256",
-        "lead_id_sha256",
-        "trace_id_sha256",
-        "airtable_record_id_sha256",
     ):
         _sha_value(source[field], f"crm_source_receipt.{field}")
+    _pseudonym_value(
+        source["trace_subject"], "crm_source_receipt.trace_subject"
+    )
     _tagged_sha_value(
         source["adapter_response_digest"],
         "crm_source_receipt.adapter_response_digest",
@@ -2836,14 +3016,25 @@ def _validate_support_crm_semantics(
     _equal(evidence, "public_support_url", f"{LANDING_ORIGIN}/contact")
     _equal(evidence, "api_base_url", PRODUCTION_API_ORIGIN)
     _equal(evidence, "service_id", PRODUCTION_SERVICE_ID)
+    _validate_customer_pseudonym_metadata(evidence, "support_crm")
     source = _object(evidence, "crm_source_receipt")
+    for field in ("pseudonymization_scheme", "pseudonym_key_id"):
+        if source[field] != evidence[field]:
+            raise AcceptanceAuthorityInvalid(
+                f"crm_source_receipt.{field} diverges from support_crm"
+            )
     source_hash = _validate_crm_source_receipt(
         source, evidence, event, observed, now
     )
     ticket = _object(evidence, "support_ticket")
-    _sha_value(ticket["ticket_id_sha256"], "support_ticket.ticket_id_sha256")
-    if ticket["create_http_status"] not in {200, 201, 202}:
-        raise AcceptanceAuthorityInvalid("support_ticket create status is invalid")
+    _pseudonym_value(ticket["ticket_subject"], "support_ticket.ticket_subject")
+    _positive_int(
+        ticket["ticket_record_version"], "support_ticket.ticket_record_version"
+    )
+    if ticket["create_http_status"] != 201:
+        raise AcceptanceAuthorityInvalid(
+            "support_ticket create status must be exact HTTP 201"
+        )
     for field in ("persisted", "routed", "acknowledged", "resolution_recorded"):
         _equal(ticket, field, True, "support_ticket")
     first_response = _nonnegative_int(
@@ -2863,10 +3054,10 @@ def _validate_support_crm_semantics(
     lead = _object(evidence, "crm_lead")
     _equal(lead, "system", "airtable", "crm_lead")
     _equal(lead, "provider", "airtable", "crm_lead")
-    _sha_value(lead["lead_id_sha256"], "crm_lead.lead_id_sha256")
-    _sha_value(
-        lead["airtable_record_id_sha256"],
-        "crm_lead.airtable_record_id_sha256",
+    _pseudonym_value(lead["lead_subject"], "crm_lead.lead_subject")
+    _pseudonym_value(
+        lead["airtable_record_subject"],
+        "crm_lead.airtable_record_subject",
     )
     _tagged_sha_value(
         lead["adapter_response_digest"],
@@ -2890,8 +3081,8 @@ def _validate_support_crm_semantics(
         "crm_lead.verified_at_utc",
     )
     for field in (
-        "lead_id_sha256",
-        "airtable_record_id_sha256",
+        "lead_subject",
+        "airtable_record_subject",
         "adapter_response_digest",
         "lifecycle_stage",
         "verified_at_utc",
@@ -3988,12 +4179,15 @@ def _is_sha1(value: Any) -> bool:
 __all__ = [
     "AcceptanceAuthorityAuthorizationInvalid",
     "AcceptanceAuthorityAuthorizationUnavailable",
+    "AcceptanceAuthorityAccountsBillingSourceUnavailable",
     "AcceptanceAuthorityConflict",
     "AcceptanceAuthorityError",
     "AcceptanceAuthorityHead",
     "AcceptanceAuthorityHumanAttestationUnavailable",
+    "AcceptanceAuthorityHostedJourneySourceUnavailable",
     "AcceptanceAuthorityInvalid",
     "AcceptanceAuthorityNotFound",
+    "AcceptanceAuthoritySupportCRMSourceUnavailable",
     "AcceptanceAuthorityUnavailable",
     "AcceptanceEvidenceDocument",
     "canonicalize_acceptance_evidence",

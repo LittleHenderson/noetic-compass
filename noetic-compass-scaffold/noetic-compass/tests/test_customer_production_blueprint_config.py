@@ -9,7 +9,10 @@ from api.config import Settings
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
+APP_ROOT = Path(__file__).resolve().parents[1]
 CUSTOMER_BLUEPRINT = REPOSITORY_ROOT / "render.customer.yaml"
+CUSTOMER_API_DOCKERFILE = APP_ROOT / "Dockerfile.api"
+ROOT_WORKFLOWS = REPOSITORY_ROOT / ".github" / "workflows"
 PSEUDONYM_KEY_ID = "hatk_0123456789abcdef0123456789abcdef"
 PSEUDONYM_KEY_SECRET = (
     "base64url:5EfvyXp5BYNrpodyw-DoiFemHziedgI06tZHVjtmvow"
@@ -112,10 +115,13 @@ def test_customer_blueprint_enables_airtable_while_privacy_intake_stays_closed()
         "NC_BILLING_WORKER_MEASUREMENT_ENABLED": "false",
         "NC_BILLING_USAGE_DISPATCH_ENABLED": "false",
         "NC_FLEET_SERVICE_AUTH_ENABLED": "false",
+        "NC_STATE_LEDGER_ENABLED": "true",
+        "NC_STATE_LEDGER_READ_AUTHORITY": "true",
         "NC_CRM_PROVIDER": "airtable",
         "NC_AIRTABLE_API_BASE_URL": "https://api.airtable.com/v0",
         "NC_CRM_LEAD_STORE_BACKEND": "state_store",
         "NC_SUPPORT_TICKET_STORE_BACKEND": "state_store",
+        "NC_SUPPORT_ACK_SLA_SECONDS": "86400",
         "NC_CRM_PRIVACY_NOTICE_PUBLICATION_STATUS": "OPEN",
         "NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED": "true",
         "CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR": (
@@ -165,6 +171,32 @@ def test_customer_blueprint_enables_airtable_while_privacy_intake_stays_closed()
     }
     assert {_declaration_mode(key) for key in injected} == {"sync:false"}
     assert _declaration_mode("NC_DATABASE_URL") == "fromDatabase:"
+
+
+def test_customer_api_image_contains_bounded_support_crm_finalizer() -> None:
+    dockerfile = CUSTOMER_API_DOCKERFILE.read_text(encoding="utf-8")
+    assert (
+        "COPY scripts/build_support_crm_acceptance_evidence.py "
+        "scripts/build_support_crm_acceptance_evidence.py"
+    ) in dockerfile
+
+
+def test_customer_pseudonym_key_material_is_absent_from_github_actions() -> None:
+    workflows = sorted(ROOT_WORKFLOWS.glob("*.yml")) + sorted(
+        ROOT_WORKFLOWS.glob("*.yaml")
+    )
+    assert workflows
+    forbidden_names = {
+        "NC_CUSTOMER_PRODUCTION_PSEUDONYM_ACTIVE_KEY_ID",
+        "NC_CUSTOMER_PRODUCTION_PSEUDONYM_KEYRING_JSON",
+    }
+    for workflow in workflows:
+        text = workflow.read_text(encoding="utf-8")
+        assert not any(name in text for name in forbidden_names), workflow
+        assert re.search(r"\bcpk_[0-9a-f]{32}\b", text) is None, workflow
+        assert (
+            re.search(r"base64url:[A-Za-z0-9_-]{43,86}", text) is None
+        ), workflow
 
 
 def test_customer_startup_configuration_is_valid_without_effect_providers(

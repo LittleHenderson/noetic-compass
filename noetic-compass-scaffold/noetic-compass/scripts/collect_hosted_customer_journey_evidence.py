@@ -34,8 +34,73 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import parse_qs, unquote, urlparse
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from api.services.customer_production_pseudonyms import (
+    ACCOUNT_DOMAIN,
+    HOSTED_JOURNEY_TRACE_DOMAIN,
+    SUBJECT_PATTERN,
+    TENANT_DOMAIN,
+    CustomerProductionPseudonymizer,
+    parse_customer_production_pseudonym_keyring,
+)
+
 EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v3"
-SAFE_ARTIFACT_SCHEMA_VERSION = "cas_hosted_customer_journey_receipt.v3"
+SAFE_ARTIFACT_SCHEMA_VERSION = "cas_hosted_customer_journey_receipt.v4"
+SAFE_ARTIFACT_KEYS = frozenset(
+    {
+        "schema_version",
+        "master_head_sha",
+        "deploy_id",
+        "render_service_id",
+        "render_deploy_commit_sha",
+        "render_deploy_status",
+        "render_deploy_trigger",
+        "render_deploy_created_at_utc",
+        "render_deploy_finished_at_utc",
+        "render_deploy_preflight_http_status",
+        "render_deploy_preflight_sha256",
+        "render_deploy_final_http_status",
+        "render_deploy_final_sha256",
+        "pseudonymization_scheme",
+        "pseudonym_key_id",
+        "tenant_subject",
+        "account_subject",
+        "audit_id",
+        "trace_subject",
+        "audit_create_http_status",
+        "audit_run_http_status",
+        "audit_completed_at_utc",
+        "packet_http_status",
+        "packet_sha256",
+        "packet_canonical_sha256",
+        "packet_verification_overall",
+        "packet_verification_sha256",
+        "anchor_receipt_sha256",
+        "object_lock_verification_sha256",
+        "worm_receipt_bound",
+        "share_create_http_status",
+        "share_metadata_readback_http_status",
+        "share_fetch_http_status",
+        "share_packet_canonical_sha256",
+        "share_token_write_http_status",
+        "share_token_sha256",
+        "share_revoke_http_status",
+        "share_revoke_readback_http_status",
+        "share_revoked_fetch_http_status",
+        "foreign_audit_http_status",
+        "foreign_packet_http_status",
+        "foreign_share_create_http_status",
+        "foreign_share_metadata_http_status",
+        "foreign_share_revoke_http_status",
+        "session_logout_http_statuses",
+        "observed_at_utc",
+    }
+)
+PRIVATE_SELECTOR_SCHEMA_VERSION = (
+    "cas_harness_hosted_customer_journey_acceptance_selector.v1"
+)
 REPOSITORY = "LittleHenderson/noetic-compass"
 PRODUCTION_APP_URL = "https://atlas.noeticcompass.com/audit-console"
 PRODUCTION_API_ORIGIN = "https://cas-harness-customer-api.onrender.com"
@@ -47,6 +112,10 @@ AUDIT_MODE = "BALANCED"
 PLATFORM_SECRET_ENV = "NC_PLATFORM_TENANT_PROVISIONING_SECRET"
 BILLING_SECRET_ENV = "NC_BILLING_ADMIN_SECRET"
 RENDER_API_KEY_ENV = "RENDER_API_KEY"
+PSEUDONYM_KEYRING_ENV = "NC_CUSTOMER_PRODUCTION_PSEUDONYM_KEYRING_JSON"
+PSEUDONYM_ACTIVE_KEY_ID_ENV = (
+    "NC_CUSTOMER_PRODUCTION_PSEUDONYM_ACTIVE_KEY_ID"
+)
 MAX_RESPONSE_BYTES = 2_000_000
 MIN_CONFIGURED_RETENTION_DAYS = 31
 MIN_REMAINING_RETENTION = timedelta(days=30)
@@ -311,6 +380,22 @@ class JourneyCollector:
         self.render_api_key = (
             render_api_key if isinstance(render_api_key, str) else ""
         )
+        try:
+            active_key_id = self.runtime_environment.get(
+                PSEUDONYM_ACTIVE_KEY_ID_ENV, ""
+            )
+            raw_keyring = self.runtime_environment.get(PSEUDONYM_KEYRING_ENV, "")
+            self.pseudonymizer = CustomerProductionPseudonymizer(
+                parse_customer_production_pseudonym_keyring(
+                    raw_keyring, active_key_id=active_key_id
+                ),
+                active_key_id=active_key_id,
+            )
+        except (TypeError, ValueError) as exc:
+            raise JourneyFailure(
+                "pseudonymization",
+                "customer-production pseudonym keyring is unavailable",
+            ) from exc
         self._active_tokens: list[str] = []
         self._active_shares: list[tuple[str, str]] = []
         self._validate_binding()
@@ -774,7 +859,9 @@ class JourneyCollector:
             except Exception:
                 continue
 
-    def collect(self) -> tuple[dict[str, Any], dict[str, Any]]:
+    def collect(
+        self,
+    ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
         try:
             return self._collect_once()
         finally:
@@ -805,7 +892,9 @@ class JourneyCollector:
             raise JourneyFailure("logout", "probe sessions were not revoked")
         return tuple(statuses)
 
-    def _collect_once(self) -> tuple[dict[str, Any], dict[str, Any]]:
+    def _collect_once(
+        self,
+    ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
         (
             render_preflight_result,
             render_preflight,
@@ -1048,8 +1137,22 @@ class JourneyCollector:
         revoked_at = _stamp(revoked_at_dt)
         observed_at = _stamp(observed_dt)
 
-        tenant_hash = _subject_digest("tenant", tenant_a)
-        account_hash = _subject_digest("account", account_a)
+        pseudonym_metadata = self.pseudonymizer.metadata()
+        tenant_subject = self.pseudonymizer.subject(
+            domain=TENANT_DOMAIN,
+            tenant_scope=tenant_a,
+            value=tenant_a,
+        )
+        account_subject = self.pseudonymizer.subject(
+            domain=ACCOUNT_DOMAIN,
+            tenant_scope=tenant_a,
+            value=account_a,
+        )
+        trace_subject = self.pseudonymizer.subject(
+            domain=HOSTED_JOURNEY_TRACE_DOMAIN,
+            tenant_scope=tenant_a,
+            value=trace_id,
+        )
         share_token_hash = _subject_digest("share-token", share_token)
         safe_artifact = {
             "schema_version": SAFE_ARTIFACT_SCHEMA_VERSION,
@@ -1065,10 +1168,11 @@ class JourneyCollector:
             "render_deploy_preflight_sha256": render_preflight_sha,
             "render_deploy_final_http_status": render_final_result.status,
             "render_deploy_final_sha256": render_final_sha,
-            "tenant_subject_sha256": tenant_hash,
-            "account_subject_sha256": account_hash,
+            **pseudonym_metadata,
+            "tenant_subject": tenant_subject,
+            "account_subject": account_subject,
             "audit_id": audit_id,
-            "trace_id_sha256": _subject_digest("trace", trace_id),
+            "trace_subject": trace_subject,
             "audit_create_http_status": create_result.status,
             "audit_run_http_status": run_result.status,
             "audit_completed_at_utc": audit_completed,
@@ -1114,8 +1218,10 @@ class JourneyCollector:
             "api_base_url": PRODUCTION_API_ORIGIN,
             "service_id": PRODUCTION_SERVICE_ID,
             "customer_lane": "public-customer",
-            "tenant_subject_sha256": tenant_hash,
-            "account_subject_sha256": account_hash,
+            **pseudonym_metadata,
+            "tenant_subject": tenant_subject,
+            "account_subject": account_subject,
+            "trace_subject": trace_subject,
             "audit": {
                 "audit_id": audit_id,
                 "create_http_status": create_result.status,
@@ -1152,8 +1258,22 @@ class JourneyCollector:
                 "verified_at_utc": isolation_verified,
             },
         }
+        private_selector = {
+            "schema_version": PRIVATE_SELECTOR_SCHEMA_VERSION,
+            "gate": "hosted_customer_journey",
+            "tenant_id": tenant_a,
+            "account_id": account_a,
+            "audit_id": audit_id,
+        }
         _validate_output_pair(evidence, safe_artifact)
-        return evidence, safe_artifact
+        _validate_private_selector(private_selector)
+        if trace_id in json.dumps(
+            [evidence, safe_artifact], sort_keys=True, ensure_ascii=True
+        ):
+            raise JourneyFailure(
+                "privacy", "public output contains the private packet trace ID"
+            )
+        return evidence, safe_artifact, private_selector
 
 
 def _validate_output_pair(
@@ -1174,6 +1294,21 @@ def _validate_output_pair(
     assert isinstance(share, Mapping)
     assert isinstance(isolation, Mapping)
     expected_artifact_hash = _digest_bytes(_canonical_bytes(artifact))
+    legacy_identity_fields = (
+        "tenant_subject_sha256",
+        "account_subject_sha256",
+        "trace_id_sha256",
+    )
+    if any(
+        field in container
+        for field in legacy_identity_fields
+        for container in (artifact, evidence)
+    ):
+        raise JourneyFailure(
+            "source-receipt", "legacy unkeyed identity digest is forbidden"
+        )
+    if set(artifact) != SAFE_ARTIFACT_KEYS:
+        raise JourneyFailure("source-receipt", "source receipt fields drifted")
     if (
         artifact.get("schema_version") != SAFE_ARTIFACT_SCHEMA_VERSION
         or evidence.get("artifact_sha256") != expected_artifact_hash
@@ -1188,10 +1323,12 @@ def _validate_output_pair(
         or artifact.get("render_deploy_final_http_status") != 200
         or artifact.get("render_deploy_preflight_sha256")
         != artifact.get("render_deploy_final_sha256")
-        or artifact.get("tenant_subject_sha256")
-        != evidence.get("tenant_subject_sha256")
-        or artifact.get("account_subject_sha256")
-        != evidence.get("account_subject_sha256")
+        or artifact.get("pseudonymization_scheme")
+        != evidence.get("pseudonymization_scheme")
+        or artifact.get("pseudonym_key_id") != evidence.get("pseudonym_key_id")
+        or artifact.get("tenant_subject") != evidence.get("tenant_subject")
+        or artifact.get("account_subject") != evidence.get("account_subject")
+        or artifact.get("trace_subject") != evidence.get("trace_subject")
         or artifact.get("audit_id") != audit.get("audit_id")
         or artifact.get("audit_create_http_status")
         != audit.get("create_http_status")
@@ -1220,6 +1357,8 @@ def _validate_output_pair(
         or artifact.get("observed_at_utc") != evidence.get("observed_at_utc")
     ):
         raise JourneyFailure("source-receipt", "evidence and source receipt diverged")
+    if SUBJECT_PATTERN.fullmatch(str(evidence.get("trace_subject") or "")) is None:
+        raise JourneyFailure("source-receipt", "trace_subject is invalid")
     for key in (
         "render_deploy_preflight_sha256",
         "render_deploy_final_sha256",
@@ -1246,6 +1385,20 @@ def _validate_output_pair(
         raise JourneyFailure(
             "source-receipt", "Render deployment timing is not monotonic"
         )
+
+
+def _validate_private_selector(selector: Mapping[str, Any]) -> None:
+    if (
+        set(selector)
+        != {"schema_version", "gate", "tenant_id", "account_id", "audit_id"}
+        or selector.get("schema_version") != PRIVATE_SELECTOR_SCHEMA_VERSION
+        or selector.get("gate") != "hosted_customer_journey"
+        or any(
+            not isinstance(selector.get(key), str) or not selector.get(key)
+            for key in ("tenant_id", "account_id", "audit_id")
+        )
+    ):
+        raise JourneyFailure("private-selector", "private selector is invalid")
 
 
 def _atomic_write(path: Path, payload: Mapping[str, Any]) -> None:
@@ -1276,6 +1429,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--deploy-id", required=True)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--safe-artifact-output", required=True, type=Path)
+    parser.add_argument("--private-selector-output", required=True, type=Path)
     return parser
 
 
@@ -1284,8 +1438,15 @@ def run(argv: list[str] | None = None) -> int:
     platform_secret = os.environ.get(PLATFORM_SECRET_ENV, "")
     billing_secret = os.environ.get(BILLING_SECRET_ENV, "")
     try:
-        if args.output.resolve() == args.safe_artifact_output.resolve():
-            raise JourneyFailure("output", "evidence and source-receipt paths must differ")
+        output_paths = {
+            args.output.resolve(),
+            args.safe_artifact_output.resolve(),
+            args.private_selector_output.resolve(),
+        }
+        if len(output_paths) != 3:
+            raise JourneyFailure(
+                "output", "evidence, receipt, and private-selector paths must differ"
+            )
         collector = JourneyCollector(
             base_url=args.base_url,
             platform_secret=platform_secret,
@@ -1293,15 +1454,16 @@ def run(argv: list[str] | None = None) -> int:
             master_head_sha=args.master_head,
             deploy_id=args.deploy_id,
         )
-        evidence, artifact = collector.collect()
+        evidence, artifact, private_selector = collector.collect()
         _validate_output_pair(evidence, artifact)
+        _validate_private_selector(private_selector)
         _atomic_write(args.safe_artifact_output, artifact)
         _atomic_write(args.output, evidence)
+        _atomic_write(args.private_selector_output, private_selector)
         print(
             json.dumps(
                 {
                     "artifact_sha256": evidence["artifact_sha256"],
-                    "audit_id": evidence["audit"]["audit_id"],
                     "evidence_sha256": _digest_bytes(_canonical_bytes(evidence)),
                     "gate": "hosted_customer_journey",
                     "status": "present",

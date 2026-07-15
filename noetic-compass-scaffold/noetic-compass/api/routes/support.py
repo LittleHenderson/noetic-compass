@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from pydantic import BaseModel, Field, StrictBool, StrictStr
 
@@ -18,9 +20,14 @@ from api.services.support_tickets import (
     SupportTicketService,
     SupportTicketValidationError,
 )
+from api.services.support_public_intake_receipts import (
+    SERVER_OWNED_REQUEST_SOURCE,
+    SupportPublicIntakeReceiptStore,
+)
 
 
 router = APIRouter(prefix="/api/support", tags=["support"])
+logger = logging.getLogger(__name__)
 # Tickets are one platform-global queue containing customer PII. ``system`` is service-only and
 # cannot be minted by any customer invite/provisioning route, so account-mode tenant roles (even
 # owner/admin/support) cannot turn their tenant authority into access to this global queue.
@@ -238,7 +245,9 @@ async def create_public_ticket(
             subject=payload.subject,
             message=payload.message,
             category=payload.category,
-            source=payload.source,
+            # Public provenance is a server fact.  Keep the request field only
+            # for wire compatibility; callers cannot relabel the intake path.
+            source=SERVER_OWNED_REQUEST_SOURCE,
             consent_to_contact=payload.consent_to_contact,
             privacy_notice_version=notice.version,
             privacy_notice_content_sha256=notice.content_sha256,
@@ -247,6 +256,27 @@ async def create_public_ticket(
         )
     except SupportTicketValidationError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
+    receipt_store = getattr(
+        request.app.state, "support_public_intake_receipt_store", None
+    )
+    if isinstance(receipt_store, SupportPublicIntakeReceiptStore):
+        for _attempt in range(2):
+            try:
+                # ``create`` returns only after it has reopened and revalidated
+                # the exact immutable ticket revision and private receipt.  The
+                # one bounded retry safely recovers a partial first write because
+                # receipt creation is immutable and idempotent.
+                receipt_store.create(ticket.ticket_id)
+                break
+            except Exception:
+                # A failed receipt must never be fabricated into acceptance
+                # evidence, but the already-persisted customer ticket remains
+                # customer-visible after the bounded retry is exhausted.
+                logger.warning(
+                    "auxiliary support public-intake receipt attempt failed; "
+                    "customer ticket remains authoritative and acceptance stays open"
+                )
+                continue
     response.headers["Cache-Control"] = "no-store"
     return PublicTicketReceipt(
         ticket_id=ticket.ticket_id,
