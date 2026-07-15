@@ -36,16 +36,18 @@ from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 
 EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v2"
-SAFE_ARTIFACT_SCHEMA_VERSION = "cas_hosted_customer_journey_receipt.v2"
+SAFE_ARTIFACT_SCHEMA_VERSION = "cas_hosted_customer_journey_receipt.v3"
 REPOSITORY = "LittleHenderson/noetic-compass"
 PRODUCTION_APP_URL = "https://atlas.noeticcompass.com/audit-console"
 PRODUCTION_API_ORIGIN = "https://cas-harness-customer-api.onrender.com"
 PRODUCTION_SERVICE_ID = "srv-d9bijbjtqb8s73cn4n20"
+RENDER_API_ORIGIN = "https://api.render.com"
 AUTHORITY_URI = f"{PRODUCTION_API_ORIGIN}/internal/acceptance/customer-journey"
 MODEL_ID = "EleutherAI/pythia-160m"
 AUDIT_MODE = "BALANCED"
 PLATFORM_SECRET_ENV = "NC_PLATFORM_TENANT_PROVISIONING_SECRET"
 BILLING_SECRET_ENV = "NC_BILLING_ADMIN_SECRET"
+RENDER_API_KEY_ENV = "RENDER_API_KEY"
 MAX_RESPONSE_BYTES = 2_000_000
 MIN_CONFIGURED_RETENTION_DAYS = 31
 MIN_REMAINING_RETENTION = timedelta(days=30)
@@ -249,6 +251,10 @@ class JourneyCollector:
         self.clock = clock
         self.nonce = nonce or secrets.token_hex(12)
         self.runtime_environment = runtime_environment
+        render_api_key = self.runtime_environment.get(RENDER_API_KEY_ENV)
+        self.render_api_key = (
+            render_api_key if isinstance(render_api_key, str) else ""
+        )
         self._active_tokens: list[str] = []
         self._active_shares: list[tuple[str, str]] = []
         self._validate_binding()
@@ -274,6 +280,16 @@ class JourneyCollector:
             raise JourneyFailure("binding", "deploy ID is invalid")
         if re.fullmatch(r"[0-9a-f]{24}", self.nonce) is None:
             raise JourneyFailure("binding", "run nonce is invalid")
+        if (
+            not self.render_api_key
+            or self.render_api_key != self.render_api_key.strip()
+            or len(self.render_api_key) > 8192
+            or any(character.isspace() for character in self.render_api_key)
+        ):
+            raise JourneyFailure(
+                "render-deploy",
+                "RENDER_API_KEY is required for exact live deploy proof",
+            )
         if self.runtime_environment.get("RENDER_SERVICE_ID") != PRODUCTION_SERVICE_ID:
             raise JourneyFailure(
                 "binding", "collector is not running in the pinned production service"
@@ -321,6 +337,46 @@ class JourneyCollector:
         if len(result.body) > MAX_RESPONSE_BYTES:
             raise JourneyFailure("http", "response exceeds the bounded size limit")
         return result
+
+    def _read_render_deploy(
+        self,
+    ) -> tuple[HttpResult, Mapping[str, Any], datetime, datetime, str]:
+        """Read and validate the caller-selected immutable Render deployment."""
+
+        result = self.transport(
+            base_url=RENDER_API_ORIGIN,
+            path=f"/v1/services/{PRODUCTION_SERVICE_ID}/deploys/{self.deploy_id}",
+            method="GET",
+            payload=None,
+            headers={"Authorization": f"Bearer {self.render_api_key}"},
+            timeout=30.0,
+        )
+        deploy = self._expect(result, {200}, "render-deploy")
+        commit = deploy.get("commit")
+        if (
+            deploy.get("id") != self.deploy_id
+            or deploy.get("status") != "live"
+            or deploy.get("trigger") != "new_commit"
+            or not isinstance(commit, Mapping)
+            or commit.get("id") != self.master_head_sha
+        ):
+            raise JourneyFailure(
+                "render-deploy",
+                "exact deployment is not live at the pinned commit and trigger",
+            )
+        created = _parse_timestamp(deploy.get("createdAt"), "render-deploy")
+        finished = _parse_timestamp(deploy.get("finishedAt"), "render-deploy")
+        observed = self._now()
+        if finished < created:
+            raise JourneyFailure(
+                "render-deploy", "deployment finished before it was created"
+            )
+        if finished > observed:
+            raise JourneyFailure(
+                "render-deploy", "deployment finish time is in the future"
+            )
+        deploy_sha = _digest_bytes(_canonical_bytes(deploy))
+        return result, deploy, created, finished, deploy_sha
 
     def _call_retry_safe(self, path: str, **kwargs: Any) -> HttpResult:
         """Retry once only for operations whose server contract is idempotent.
@@ -694,6 +750,14 @@ class JourneyCollector:
         return tuple(statuses)
 
     def _collect_once(self) -> tuple[dict[str, Any], dict[str, Any]]:
+        (
+            render_preflight_result,
+            render_preflight,
+            render_created_dt,
+            render_finished_dt,
+            render_preflight_sha,
+        ) = self._read_render_deploy()
+
         tenant_a, identity_a, credential_a, account_a = self._provision("a")
         self._grant_comped(tenant_a, account_a)
         token_a = self._login(identity_a, credential_a, "a")
@@ -891,6 +955,23 @@ class JourneyCollector:
         logout_statuses = self._logout_all(require_success=True)
         if len(logout_statuses) != 2:
             raise JourneyFailure("logout", "not all probe sessions were reconciled")
+
+        (
+            render_final_result,
+            render_final,
+            final_created_dt,
+            final_finished_dt,
+            render_final_sha,
+        ) = self._read_render_deploy()
+        if (
+            render_final_sha != render_preflight_sha
+            or final_created_dt != render_created_dt
+            or final_finished_dt != render_finished_dt
+            or render_final != render_preflight
+        ):
+            raise JourneyFailure(
+                "render-deploy", "deployment provider readback mutated during collection"
+            )
         observed_dt = self._now()
 
         critical_times = (
@@ -921,6 +1002,16 @@ class JourneyCollector:
             "schema_version": SAFE_ARTIFACT_SCHEMA_VERSION,
             "master_head_sha": self.master_head_sha,
             "deploy_id": self.deploy_id,
+            "render_service_id": PRODUCTION_SERVICE_ID,
+            "render_deploy_commit_sha": self.master_head_sha,
+            "render_deploy_status": "live",
+            "render_deploy_trigger": "new_commit",
+            "render_deploy_created_at_utc": _stamp(render_created_dt),
+            "render_deploy_finished_at_utc": _stamp(render_finished_dt),
+            "render_deploy_preflight_http_status": render_preflight_result.status,
+            "render_deploy_preflight_sha256": render_preflight_sha,
+            "render_deploy_final_http_status": render_final_result.status,
+            "render_deploy_final_sha256": render_final_sha,
             "tenant_subject_sha256": tenant_hash,
             "account_subject_sha256": account_hash,
             "audit_id": audit_id,
@@ -1035,6 +1126,15 @@ def _validate_output_pair(
         or evidence.get("artifact_sha256") != expected_artifact_hash
         or artifact.get("master_head_sha") != evidence.get("master_head_sha")
         or artifact.get("deploy_id") != evidence.get("deploy_id")
+        or artifact.get("render_service_id") != PRODUCTION_SERVICE_ID
+        or artifact.get("render_deploy_commit_sha")
+        != evidence.get("master_head_sha")
+        or artifact.get("render_deploy_status") != "live"
+        or artifact.get("render_deploy_trigger") != "new_commit"
+        or artifact.get("render_deploy_preflight_http_status") != 200
+        or artifact.get("render_deploy_final_http_status") != 200
+        or artifact.get("render_deploy_preflight_sha256")
+        != artifact.get("render_deploy_final_sha256")
         or artifact.get("tenant_subject_sha256")
         != evidence.get("tenant_subject_sha256")
         or artifact.get("account_subject_sha256")
@@ -1068,6 +1168,8 @@ def _validate_output_pair(
     ):
         raise JourneyFailure("source-receipt", "evidence and source receipt diverged")
     for key in (
+        "render_deploy_preflight_sha256",
+        "render_deploy_final_sha256",
         "packet_canonical_sha256",
         "packet_verification_sha256",
         "anchor_receipt_sha256",
@@ -1080,6 +1182,17 @@ def _validate_output_pair(
         "share_packet_canonical_sha256"
     ):
         raise JourneyFailure("source-receipt", "shared packet digest is cross-wired")
+    render_created = _parse_timestamp(
+        artifact.get("render_deploy_created_at_utc"), "source-receipt"
+    )
+    render_finished = _parse_timestamp(
+        artifact.get("render_deploy_finished_at_utc"), "source-receipt"
+    )
+    observed = _parse_timestamp(evidence.get("observed_at_utc"), "source-receipt")
+    if render_created > render_finished or render_finished > observed:
+        raise JourneyFailure(
+            "source-receipt", "Render deployment timing is not monotonic"
+        )
 
 
 def _atomic_write(path: Path, payload: Mapping[str, Any]) -> None:
