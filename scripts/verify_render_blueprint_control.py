@@ -12,8 +12,10 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import queue
 import re
 import sys
+import threading
 import time
 import urllib.error
 import urllib.parse
@@ -131,11 +133,38 @@ LIVE_REQUEST_TIMEOUT_SECONDS = 30.0
 LIVE_REQUEST_ATTEMPTS = 3
 LIVE_RETRY_BACKOFF_SECONDS = (2.0, 5.0)
 LIVE_TOTAL_TIMEOUT_SECONDS = 210.0
+LIVE_RESPONSE_MAX_BYTES = 1_048_576
 _RETRYABLE_RENDER_HTTP_STATUSES = frozenset({408, 429, 500, 502, 503, 504})
 
 
 class ControlError(RuntimeError):
     """A repository or live Blueprint control is missing or unsafe."""
+
+
+class _RejectRedirectHandler(urllib.request.HTTPRedirectHandler):
+    """Keep the Render Bearer token on the exact requested origin."""
+
+    def redirect_request(
+        self,
+        req: urllib.request.Request,
+        fp: Any,
+        code: int,
+        msg: str,
+        headers: Mapping[str, str],
+        newurl: str,
+    ) -> None:
+        if fp is not None:
+            fp.close()
+        raise urllib.error.HTTPError(
+            req.full_url,
+            code,
+            "Render API redirect rejected",
+            headers,
+            None,
+        )
+
+
+_RENDER_API_OPENER = urllib.request.build_opener(_RejectRedirectHandler())
 
 
 def _require(condition: bool, message: str) -> None:
@@ -680,6 +709,49 @@ def validate_live_service_payload(
         )
 
 
+def _open_and_parse_render_response(
+    request: urllib.request.Request,
+    timeout: float,
+) -> Any:
+    """Read one bounded response without following redirects."""
+
+    with _RENDER_API_OPENER.open(request, timeout=timeout) as response:
+        body = response.read(LIVE_RESPONSE_MAX_BYTES + 1)
+    _require(
+        len(body) <= LIVE_RESPONSE_MAX_BYTES,
+        "Render API response exceeded the maximum allowed size",
+    )
+    return json.loads(body)
+
+
+def _run_with_wall_clock_timeout(
+    operation: Callable[[], Any],
+    timeout: float,
+) -> Any:
+    """Bound connect, body read, and parsing even when socket reads keep trickling."""
+
+    outcome: queue.Queue[tuple[bool, Any]] = queue.Queue(maxsize=1)
+
+    def run() -> None:
+        try:
+            value = operation()
+        except Exception as exc:  # propagated unchanged on the calling thread
+            outcome.put((False, exc))
+        else:
+            outcome.put((True, value))
+
+    worker = threading.Thread(target=run, daemon=True)
+    worker.start()
+    worker.join(timeout)
+    if worker.is_alive():
+        raise TimeoutError()
+
+    succeeded, value = outcome.get_nowait()
+    if not succeeded:
+        raise value
+    return value
+
+
 def _read_json(
     request: urllib.request.Request,
     timeout: float,
@@ -715,14 +787,21 @@ def _read_json(
         failure = ""
         cause: BaseException | None = None
         try:
-            with urllib.request.urlopen(request, timeout=attempt_timeout) as response:
-                payload = json.load(response)
+            payload = _run_with_wall_clock_timeout(
+                lambda: _open_and_parse_render_response(
+                    request,
+                    timeout=attempt_timeout,
+                ),
+                attempt_timeout,
+            )
         except urllib.error.HTTPError as exc:
-            if exc.code not in _RETRYABLE_RENDER_HTTP_STATUSES:
+            status = exc.code
+            exc.close()
+            if status not in _RETRYABLE_RENDER_HTTP_STATUSES:
                 raise ControlError(
-                    f"Render API returned HTTP {exc.code}; response body suppressed"
+                    f"Render API returned HTTP {status}; response body suppressed"
                 ) from exc
-            failure = f"HTTP {exc.code}"
+            failure = f"HTTP {status}"
             cause = exc
         except urllib.error.URLError as exc:
             failure = f"network error ({type(exc.reason).__name__})"
@@ -730,11 +809,16 @@ def _read_json(
         except TimeoutError as exc:
             failure = type(exc).__name__
             cause = exc
-        except json.JSONDecodeError as exc:
+        except (json.JSONDecodeError, UnicodeError) as exc:
             raise ControlError(
-                "Render API response was unavailable or invalid: JSONDecodeError"
+                "Render API response was unavailable or invalid: "
+                f"{type(exc).__name__}"
             ) from exc
         else:
+            if deadline is not None and clock_fn() >= deadline:
+                raise ControlError(
+                    "Render API live-read window exhausted after response processing"
+                )
             _require(isinstance(payload, dict), "Render API response must be an object")
             return payload
 

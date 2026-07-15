@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import io
 import json
+import threading
+import time
 import unittest
 import urllib.error
 import urllib.request
-from contextlib import redirect_stdout
+from contextlib import contextmanager, redirect_stdout
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
@@ -35,6 +38,19 @@ from scripts.verify_render_blueprint_control import (
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+@contextmanager
+def _running_http_server(handler):  # noqa: ANN001
+    server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        yield server
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=2.0)
 
 
 def _blueprint_payload(expected: dict[str, object]) -> dict[str, object]:
@@ -342,54 +358,64 @@ class LiveReadRetryTests(unittest.TestCase):
         self.request = urllib.request.Request("https://render.invalid/v1/blueprints/example")
 
     @patch("scripts.verify_render_blueprint_control.time.sleep")
-    @patch("scripts.verify_render_blueprint_control.urllib.request.urlopen")
-    def test_transient_timeout_recovers_with_bounded_backoff(self, urlopen, sleep) -> None:
-        response = io.BytesIO(b'{"id":"example"}')
-        urlopen.side_effect = [TimeoutError(), TimeoutError(), response]
+    @patch("scripts.verify_render_blueprint_control._open_and_parse_render_response")
+    def test_transient_timeout_recovers_with_bounded_backoff(self, open_response, sleep) -> None:
+        open_response.side_effect = [TimeoutError(), TimeoutError(), {"id": "example"}]
 
         self.assertEqual(
             _read_json(self.request, 3.0, attempts=3, backoff_seconds=(0.25, 0.5)),
             {"id": "example"},
         )
 
-        self.assertEqual(urlopen.call_count, 3)
+        self.assertEqual(open_response.call_count, 3)
         self.assertEqual([call.args[0] for call in sleep.call_args_list], [0.25, 0.5])
 
     @patch("scripts.verify_render_blueprint_control.time.sleep")
-    @patch("scripts.verify_render_blueprint_control.urllib.request.urlopen")
-    def test_transient_failure_exhaustion_fails_closed(self, urlopen, sleep) -> None:
-        urlopen.side_effect = urllib.error.URLError(TimeoutError())
+    @patch("scripts.verify_render_blueprint_control._open_and_parse_render_response")
+    def test_transient_failure_exhaustion_fails_closed(self, open_response, sleep) -> None:
+        open_response.side_effect = urllib.error.URLError(TimeoutError())
 
         with self.assertRaisesRegex(ControlError, "unavailable after 3 attempts"):
             _read_json(self.request, 3.0, attempts=3, backoff_seconds=(0.25, 0.5))
 
-        self.assertEqual(urlopen.call_count, 3)
+        self.assertEqual(open_response.call_count, 3)
         self.assertEqual([call.args[0] for call in sleep.call_args_list], [0.25, 0.5])
 
     @patch("scripts.verify_render_blueprint_control.time.sleep")
-    @patch("scripts.verify_render_blueprint_control.urllib.request.urlopen")
-    def test_retryable_provider_status_recovers(self, urlopen, sleep) -> None:
-        unavailable = urllib.error.HTTPError(
-            self.request.full_url,
-            503,
-            "Service Unavailable",
-            hdrs=None,
-            fp=None,
-        )
-        urlopen.side_effect = [unavailable, io.BytesIO(b'{"id":"example"}')]
+    @patch("scripts.verify_render_blueprint_control._open_and_parse_render_response")
+    def test_retryable_provider_statuses_recover(self, open_response, sleep) -> None:
+        for status in (408, 429, 500, 502, 503, 504):
+            with self.subTest(status=status):
+                open_response.reset_mock()
+                sleep.reset_mock()
+                open_response.side_effect = [
+                    urllib.error.HTTPError(
+                        self.request.full_url,
+                        status,
+                        "Transient provider failure",
+                        hdrs=None,
+                        fp=None,
+                    ),
+                    {"id": "example"},
+                ]
 
-        self.assertEqual(
-            _read_json(self.request, 3.0, attempts=2, backoff_seconds=(0.25,)),
-            {"id": "example"},
-        )
+                self.assertEqual(
+                    _read_json(
+                        self.request,
+                        3.0,
+                        attempts=2,
+                        backoff_seconds=(0.25,),
+                    ),
+                    {"id": "example"},
+                )
 
-        self.assertEqual(urlopen.call_count, 2)
-        sleep.assert_called_once_with(0.25)
+                self.assertEqual(open_response.call_count, 2)
+                sleep.assert_called_once_with(0.25)
 
     @patch("scripts.verify_render_blueprint_control.time.sleep")
-    @patch("scripts.verify_render_blueprint_control.urllib.request.urlopen")
-    def test_authentication_failure_is_not_retried(self, urlopen, sleep) -> None:
-        urlopen.side_effect = urllib.error.HTTPError(
+    @patch("scripts.verify_render_blueprint_control._open_and_parse_render_response")
+    def test_authentication_failure_is_not_retried(self, open_response, sleep) -> None:
+        open_response.side_effect = urllib.error.HTTPError(
             self.request.full_url,
             401,
             "Unauthorized",
@@ -400,40 +426,52 @@ class LiveReadRetryTests(unittest.TestCase):
         with self.assertRaisesRegex(ControlError, "HTTP 401"):
             _read_json(self.request, 3.0, attempts=3, backoff_seconds=(0.25, 0.5))
 
-        self.assertEqual(urlopen.call_count, 1)
+        self.assertEqual(open_response.call_count, 1)
         sleep.assert_not_called()
 
     @patch("scripts.verify_render_blueprint_control.time.sleep")
-    @patch("scripts.verify_render_blueprint_control.urllib.request.urlopen")
-    def test_invalid_response_is_not_retried(self, urlopen, sleep) -> None:
-        urlopen.return_value = io.BytesIO(b'{"id":')
+    @patch("scripts.verify_render_blueprint_control._RENDER_API_OPENER.open")
+    def test_invalid_response_is_not_retried(self, opener, sleep) -> None:
+        cases = (
+            (b'{"id":', "JSONDecodeError"),
+            (b"\xff", "UnicodeDecodeError"),
+        )
+        for body, error in cases:
+            with self.subTest(error=error):
+                opener.reset_mock()
+                opener.return_value = io.BytesIO(body)
 
-        with self.assertRaisesRegex(ControlError, "JSONDecodeError"):
-            _read_json(self.request, 3.0, attempts=3, backoff_seconds=(0.25, 0.5))
+                with self.assertRaisesRegex(ControlError, error):
+                    _read_json(
+                        self.request,
+                        3.0,
+                        attempts=3,
+                        backoff_seconds=(0.25, 0.5),
+                    )
 
-        self.assertEqual(urlopen.call_count, 1)
+                self.assertEqual(opener.call_count, 1)
         sleep.assert_not_called()
 
     @patch("scripts.verify_render_blueprint_control.time.sleep")
-    @patch("scripts.verify_render_blueprint_control.urllib.request.urlopen")
-    def test_non_object_response_is_not_retried(self, urlopen, sleep) -> None:
-        urlopen.return_value = io.BytesIO(json.dumps(["unexpected"]).encode("utf-8"))
+    @patch("scripts.verify_render_blueprint_control._open_and_parse_render_response")
+    def test_non_object_response_is_not_retried(self, open_response, sleep) -> None:
+        open_response.return_value = json.loads('["unexpected"]')
 
         with self.assertRaisesRegex(ControlError, "must be an object"):
             _read_json(self.request, 3.0, attempts=3, backoff_seconds=(0.25, 0.5))
 
-        self.assertEqual(urlopen.call_count, 1)
+        self.assertEqual(open_response.call_count, 1)
         sleep.assert_not_called()
 
-    @patch("scripts.verify_render_blueprint_control.urllib.request.urlopen")
-    def test_shared_deadline_stops_retries(self, urlopen) -> None:
+    @patch("scripts.verify_render_blueprint_control._open_and_parse_render_response")
+    def test_shared_deadline_stops_retries(self, open_response) -> None:
         now = [0.0]
 
         def timeout_at_end_of_attempt(request, *, timeout):  # noqa: ANN001
             now[0] += timeout
             raise TimeoutError()
 
-        urlopen.side_effect = timeout_at_end_of_attempt
+        open_response.side_effect = timeout_at_end_of_attempt
 
         with self.assertRaisesRegex(ControlError, "live-read window exhausted"):
             _read_json(
@@ -446,7 +484,93 @@ class LiveReadRetryTests(unittest.TestCase):
                 sleep=lambda delay: now.__setitem__(0, now[0] + delay),
             )
 
-        self.assertEqual(urlopen.call_count, 1)
+        self.assertEqual(open_response.call_count, 1)
+
+    @patch("scripts.verify_render_blueprint_control._open_and_parse_render_response")
+    def test_delayed_success_after_shared_deadline_fails_closed(self, open_response) -> None:
+        now = [0.0]
+
+        def delayed_success(request, timeout):  # noqa: ANN001
+            now[0] = 31.0
+            return {"id": "too-late"}
+
+        open_response.side_effect = delayed_success
+
+        with self.assertRaisesRegex(ControlError, "after response processing"):
+            _read_json(
+                self.request,
+                30.0,
+                attempts=1,
+                deadline=30.0,
+                clock=lambda: now[0],
+            )
+
+        self.assertEqual(open_response.call_count, 1)
+
+    @patch("scripts.verify_render_blueprint_control._open_and_parse_render_response")
+    def test_attempt_watchdog_bounds_body_read_and_parse(self, open_response) -> None:
+        started = threading.Event()
+        release = threading.Event()
+
+        def blocked_response(request, timeout):  # noqa: ANN001
+            started.set()
+            release.wait(timeout=2.0)
+            return {"id": "too-late"}
+
+        open_response.side_effect = blocked_response
+        started_at = time.monotonic()
+        try:
+            with self.assertRaisesRegex(ControlError, "unavailable after 1 attempts"):
+                _read_json(self.request, 0.05, attempts=1)
+        finally:
+            release.set()
+
+        elapsed = time.monotonic() - started_at
+        self.assertTrue(started.wait(timeout=0.5))
+        self.assertLess(elapsed, 0.5)
+
+    def test_cross_origin_redirect_is_rejected_without_token_forwarding(self) -> None:
+        source_authorization: list[str | None] = []
+        destination_authorization: list[str | None] = []
+
+        class DestinationHandler(BaseHTTPRequestHandler):
+            def do_GET(self) -> None:
+                destination_authorization.append(self.headers.get("Authorization"))
+                body = b'{"id":"redirected"}'
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+
+            def log_message(self, format, *args) -> None:  # noqa: A002, ANN001
+                return None
+
+        with _running_http_server(DestinationHandler) as destination:
+            destination_url = (
+                f"http://127.0.0.1:{destination.server_address[1]}/redirect-target"
+            )
+
+            class SourceHandler(BaseHTTPRequestHandler):
+                def do_GET(self) -> None:
+                    source_authorization.append(self.headers.get("Authorization"))
+                    self.send_response(302)
+                    self.send_header("Location", destination_url)
+                    self.end_headers()
+
+                def log_message(self, format, *args) -> None:  # noqa: A002, ANN001
+                    return None
+
+            with _running_http_server(SourceHandler) as source:
+                request = urllib.request.Request(
+                    f"http://127.0.0.1:{source.server_address[1]}/source",
+                    headers={"Authorization": "Bearer must-not-forward"},
+                )
+                with self.assertRaisesRegex(ControlError, "HTTP 302"):
+                    _read_json(request, 2.0, attempts=1)
+
+        self.assertEqual(source_authorization, ["Bearer must-not-forward"])
+        self.assertEqual(destination_authorization, [])
 
 
 class WorkflowLocationPolicyTests(unittest.TestCase):
