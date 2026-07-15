@@ -40,6 +40,7 @@ from api.routes import (
     export,
     forecast,
     health,
+    human_attestations,
     idea_atlas,
     mode7,
     notation,
@@ -118,6 +119,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.crm_privacy_notice_contract = None
     app.state.acceptance_authority_store = None
     app.state.acceptance_publication_authorization_store = None
+    app.state.human_attestation_store = None
     configure_evidence_packet_repository(None)
 
     if (not settings.debug or settings.accounts_enabled) and (
@@ -178,6 +180,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             from api.services.customer_production_acceptance_authority import (
                 CustomerProductionAcceptanceAuthorityStore,
             )
+            from api.services.human_attestations import HumanAttestationStore
 
             immutable_repository = app.state.evidence_packet_repository
             publication_authorizations = AcceptancePublicationAuthorizationStore(
@@ -187,9 +190,15 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             app.state.acceptance_publication_authorization_store = (
                 publication_authorizations
             )
+            human_attestation_store = HumanAttestationStore(
+                shared_store,
+                primary_tenant_id=settings.accounts_bootstrap_tenant_id,
+            )
+            app.state.human_attestation_store = human_attestation_store
             app.state.acceptance_authority_store = (
                 CustomerProductionAcceptanceAuthorityStore(
                     shared_store,
+                    human_attestation_store=human_attestation_store,
                     publication_authorization_store=publication_authorizations,
                     immutable_backend=(
                         immutable_repository.backend
@@ -390,6 +399,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.evidence_share_service = None
         app.state.acceptance_authority_store = None
         app.state.acceptance_publication_authorization_store = None
+        app.state.human_attestation_store = None
         app.state.shared_state_store = None
         app.state.crm = None
         app.state.crm_public_abuse_guard = None
@@ -466,6 +476,7 @@ app.include_router(benchmark.router)
 app.include_router(cas_harness_audit.router)
 app.include_router(cas_harness_live_worker_health.router)
 app.include_router(acceptance_publication_authorizations.router)
+app.include_router(human_attestations.router)
 app.include_router(customer_production_acceptance_authority.router)
 app.include_router(cohort.router)
 app.include_router(config.router)
