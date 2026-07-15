@@ -52,6 +52,10 @@ def _digest(label: str) -> str:
     return hashlib.sha256(label.encode("utf-8")).hexdigest()
 
 
+def _pseudonym(label: str) -> str:
+    return "hmac-sha256:" + _digest(label)
+
+
 def _canonical(value: dict) -> bytes:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
 
@@ -469,7 +473,10 @@ def _gate_payloads() -> dict[str, dict]:
             "api_base_url": verifier.PRODUCTION_API_ORIGIN,
             "service_id": verifier.PRODUCTION_SERVICE_ID,
             "customer_lane": "public-customer",
-            "tenant_subject_sha256": _digest("billing-tenant"),
+            "pseudonymization_scheme": "hmac-sha256-tenant-scoped-v1",
+            "pseudonym_key_id": "cpk_0123456789abcdef0123456789abcdef",
+            "tenant_subject": _pseudonym("billing-tenant"),
+            "account_subject": _pseudonym("billing-account"),
             "account_session": {
                 "invite_redeem_http_status": 201,
                 "login_http_status": 200,
@@ -501,9 +508,9 @@ def _gate_payloads() -> dict[str, dict]:
                 "webhook_signature_verified": True,
                 "entitlement_status": "active",
                 "meter_to_invoice_reconciled": True,
-                "provider_customer_id_sha256": _digest("customer-id"),
-                "provider_subscription_id_sha256": _digest("subscription-id"),
-                "invoice_id_sha256": _digest("invoice-id"),
+                "provider_customer_subject": _pseudonym("customer-id"),
+                "provider_subscription_subject": _pseudonym("subscription-id"),
+                "invoice_subject": _pseudonym("invoice-id"),
                 "paid_at_utc": "2026-07-14T11:44:00Z",
             },
         }

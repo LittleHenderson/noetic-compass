@@ -40,7 +40,7 @@ LIVE_GATES = tuple(
     gate for gate in acceptance.REQUIRED_GATES if gate != ROOT_CI_GATE
 )
 LIVE_AUTHORITIES = (*LIVE_GATES, "release_decision")
-CANDIDATE_SCHEMA_VERSION = "cas_harness_customer_production_candidate.v1"
+CANDIDATE_SCHEMA_VERSION = "cas_harness_customer_production_candidate.v2"
 FINAL_WORKFLOW = ".github/workflows/customer-production-accept.yml"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 

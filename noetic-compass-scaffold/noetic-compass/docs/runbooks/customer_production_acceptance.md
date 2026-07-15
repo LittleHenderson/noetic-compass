@@ -201,16 +201,39 @@ active-key-missing keyring. The same parsing, strength, and secret-isolation
 checks run when the variables are present even if accounts are disabled;
 accounts-disabled with neither variable remains valid.
 
-This is a deliberately narrow privacy contract, not a claim that all public CAS
-artifacts use keyed pseudonyms. `acceptance_publication_authorizations.py`
-still emits unkeyed `tenant_id_sha256` and `account_id_sha256`, and hosted
-customer-journey plus accounts/billing evidence still carries unkeyed
-tenant/account/provider identifier hashes. Converting those separately
-versioned evidence contracts to a dedicated keyed scheme is an explicit privacy
-hardening item and remains `OPEN`. Until that work is implemented and migrated,
-do not describe CAS public evidence generally as free of stable unkeyed
-account-derived identifiers; the keyed guarantee applies only to v2 human
-attestation actor/revocation fields.
+Publication authorizations and accounts/billing evidence use a second,
+independent rotation domain. Configure both settings before enabling accounts:
+
+- `NC_CUSTOMER_PRODUCTION_PSEUDONYM_KEYRING_JSON`: the same canonical
+  `base64url:` 32--64 byte keyring shape, with independently generated key
+  material that is not reused from human attestations or any account, billing,
+  database, provider, signing, or authentication secret;
+- `NC_CUSTOMER_PRODUCTION_PSEUDONYM_ACTIVE_KEY_ID`: an opaque
+  `cpk_<32 lowercase hex>` label used for new records.
+
+`cas_harness_acceptance_publication_authorization.v2` publishes only keyed
+tenant/account subjects. Its private content-addressed identity row retains the
+raw platform IDs and HMAC-binds them to the exact public authorization digest.
+Legacy v1 rows have no such binding and cannot authorize a new publication.
+
+`accounts_billing` gate evidence v3 publishes keyed tenant, account, Stripe
+customer, subscription, and invoice subjects. Before publication, the
+operational publisher requires a private JSON selector containing only
+`tenant_id` and `invoice_record_id`. The API re-reads one matched live paid
+invoice plus one active same-tenant account, recomputes all five subjects, and
+persists a private content-addressed binding. It repeats that source validation
+immediately before any authority revision/WORM/operation/head mutation and on
+every active serve. The offline public verifier can validate only pseudonym
+shape; it is not a substitute for this private live-source check. Do not reuse
+the billing provider-reference hash key for this purpose.
+
+This remains a deliberately bounded migration. Hosted-customer-journey and
+support/CRM raw-source bindings are not migrated by this checkpoint and their
+gates remain `OPEN`. Alert acknowledgement evidence discards the raw actor ID
+after validating the required human role/type instead of publishing a stable
+actor hash. Do not claim that every CAS artifact has completed the keyed
+migration until the deferred source-bound contracts are implemented and
+independently verified.
 
 Rotate without rewriting evidence:
 
@@ -323,6 +346,13 @@ python -m scripts.publish_customer_production_acceptance_authority publish \
   --authorization-artifact-sha256 <sha256-returned-by-owner-authorization-post> \
   --operation-reason authorized_publication
 ```
+
+For `--gate accounts_billing`, also pass
+`--accounts-billing-source /path/to/mode-0600-private-source.json`; the file
+must contain exactly `{"tenant_id":"...","invoice_record_id":"..."}` and
+must be deleted through the operator's approved secure-file procedure after
+the exact readback succeeds. Never add that private selector to the public gate
+document or evidence bundle.
 
 The publisher parses that URI as an exact same-service content-addressed path,
 loads the record directly from the shared StateStore (it never dereferences an

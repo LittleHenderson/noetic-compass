@@ -34,8 +34,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import parse_qs, unquote, urlparse
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
-
-EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v2"
+EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v3"
 SAFE_ARTIFACT_SCHEMA_VERSION = "cas_hosted_customer_journey_receipt.v3"
 REPOSITORY = "LittleHenderson/noetic-compass"
 PRODUCTION_APP_URL = "https://atlas.noeticcompass.com/audit-console"

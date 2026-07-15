@@ -31,9 +31,6 @@ from api.services.customer_production_acceptance_authority import (
     AcceptanceAuthorityUnavailable,
     CustomerProductionAcceptanceAuthorityStore,
 )
-from api.services.acceptance_publication_authorizations import (
-    AcceptancePublicationAuthorizationStore,
-)
 from api.services.human_attestations import HumanAttestationStore
 from api.services.production.state_substrate import LedgerRecord, StateStore
 from api.services.production.state_substrate.memory_store import InMemoryStateStore
@@ -94,8 +91,8 @@ def _isolate_preexisting_authority_tests_from_the_new_record_plane(
     """
 
     monkeypatch.setattr(
-        AcceptancePublicationAuthorizationStore,
-        "assert_matches",
+        CustomerProductionAcceptanceAuthorityStore,
+        "assert_publication_authorized",
         lambda self, **kwargs: None,
     )
 

@@ -47,6 +47,11 @@ from api.services.customer_production_acceptance_authority import (
     CustomerProductionAcceptanceAuthorityStore,
     canonicalize_acceptance_evidence,
 )
+from api.services.customer_production_pseudonyms import (
+    PUBLICATION_ACCOUNT_DOMAIN,
+    PUBLICATION_TENANT_DOMAIN,
+    CustomerProductionPseudonymizer,
+)
 from api.services.human_attestations import PUBLIC_HUMAN_ASSURANCE_BOUNDARY
 from api.services.production.state_substrate.memory_store import InMemoryStateStore
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
@@ -67,6 +72,11 @@ ACTOR_ACCOUNT_ID = "acct-0123456789abcdef0123456789abcdef"
 OWNER_CREDENTIAL = "casak_0123456789abcdefghijklmnopqrstuvwxyzABCDEFG"
 MEMBER_CREDENTIAL = "casak_ZYXWVUTSRQPONMLKJIHGFEDCBA9876543210abcdefgh"
 OTHER_OWNER_CREDENTIAL = "casak_otherowner0123456789abcdefghijklmnopqrstuvwxyzABCD"
+PSEUDONYM_KEY_ID = "cpk_0123456789abcdef0123456789abcdef"
+PSEUDONYMIZER = CustomerProductionPseudonymizer(
+    {PSEUDONYM_KEY_ID: hashlib.sha256(b"publication-pseudonym-test-key").digest()},
+    active_key_id=PSEUDONYM_KEY_ID,
+)
 
 
 def _create(
@@ -109,7 +119,7 @@ def _request_body(**overrides: object) -> dict[str, object]:
 def _legal_evidence(now: datetime, *, evidence_master: str = MASTER) -> dict[str, object]:
     stamp = now.strftime("%Y-%m-%dT%H:%M:%SZ")
     return {
-        "schema_version": "cas_harness_customer_production_gate_evidence.v2",
+        "schema_version": "cas_harness_customer_production_gate_evidence.v3",
         "gate": "legal_publication_approval",
         "environment": "public-production",
         "repository": "LittleHenderson/noetic-compass",
@@ -158,7 +168,7 @@ def _legal_evidence(now: datetime, *, evidence_master: str = MASTER) -> dict[str
 def _base_evidence(gate: str, now: datetime) -> dict[str, object]:
     stamp = now.strftime("%Y-%m-%dT%H:%M:%SZ")
     return {
-        "schema_version": "cas_harness_customer_production_gate_evidence.v2",
+        "schema_version": "cas_harness_customer_production_gate_evidence.v3",
         "gate": gate,
         "environment": "public-production",
         "repository": "LittleHenderson/noetic-compass",
@@ -387,7 +397,7 @@ def test_publication_authorization_cannot_masquerade_as_gate_evidence(
 def test_create_is_canonical_content_addressed_create_only_and_idempotent() -> None:
     backend = InMemoryStateStore()
     store = AcceptancePublicationAuthorizationStore(
-        backend, primary_tenant_id="primary"
+        backend, primary_tenant_id="primary", pseudonymizer=PSEUDONYMIZER
     )
 
     first = _create(store)
@@ -407,12 +417,18 @@ def test_create_is_canonical_content_addressed_create_only_and_idempotent() -> N
     assert first.payload["action"] == ACTION
     assert first.payload["operation"] == OPERATION
     assert first.payload["authorized_by"] == {
-        "tenant_id_sha256": hashlib.sha256(
-            b"cas-harness-acceptance-tenant.v1\x00primary"
-        ).hexdigest(),
-        "account_id_sha256": hashlib.sha256(
-            b"cas-harness-acceptance-authorizer.v1\x00" + ACTOR_ACCOUNT_ID.encode()
-        ).hexdigest(),
+        "pseudonymization_scheme": PSEUDONYMIZER.scheme,
+        "pseudonym_key_id": PSEUDONYM_KEY_ID,
+        "tenant_subject": PSEUDONYMIZER.subject(
+            domain=PUBLICATION_TENANT_DOMAIN,
+            tenant_scope="primary",
+            value="primary",
+        ),
+        "account_subject": PSEUDONYMIZER.subject(
+            domain=PUBLICATION_ACCOUNT_DOMAIN,
+            tenant_scope="primary",
+            value=ACTOR_ACCOUNT_ID,
+        ),
         "role": "owner",
     }
     assert ACTOR_ACCOUNT_ID not in first.body.decode("ascii")
@@ -424,7 +440,9 @@ def test_create_is_canonical_content_addressed_create_only_and_idempotent() -> N
 
 def test_fixed_ttl_is_live_before_boundary_and_absent_at_boundary() -> None:
     store = AcceptancePublicationAuthorizationStore(
-        InMemoryStateStore(), primary_tenant_id="primary"
+        InMemoryStateStore(),
+        primary_tenant_id="primary",
+        pseudonymizer=PSEUDONYMIZER,
     )
     created = _create(store)
     assert store.load(
@@ -442,14 +460,18 @@ def test_create_only_record_survives_sqlite_restart(tmp_path: Path) -> None:
     path = tmp_path / "publication-authorizations.db"
     first_backend = SqliteStateStore(path)
     first_store = AcceptancePublicationAuthorizationStore(
-        first_backend, primary_tenant_id="primary"
+        first_backend,
+        primary_tenant_id="primary",
+        pseudonymizer=PSEUDONYMIZER,
     )
     created = _create(first_store)
     first_backend.close()
 
     second_backend = SqliteStateStore(path)
     second_store = AcceptancePublicationAuthorizationStore(
-        second_backend, primary_tenant_id="primary"
+        second_backend,
+        primary_tenant_id="primary",
+        pseudonymizer=PSEUDONYMIZER,
     )
     loaded = second_store.load(created.sha256, now=NOW)
     assert loaded.body == created.body
@@ -475,7 +497,7 @@ def test_create_only_record_survives_sqlite_restart(tmp_path: Path) -> None:
 def test_create_rejects_hostile_actor_or_binding(overrides: dict[str, object]) -> None:
     backend = InMemoryStateStore()
     store = AcceptancePublicationAuthorizationStore(
-        backend, primary_tenant_id="primary"
+        backend, primary_tenant_id="primary", pseudonymizer=PSEUDONYMIZER
     )
     with pytest.raises(AcceptancePublicationAuthorizationInvalid):
         _create(store, **overrides)
@@ -484,7 +506,9 @@ def test_create_rejects_hostile_actor_or_binding(overrides: dict[str, object]) -
 
 def test_replacement_requires_exact_previous_sha() -> None:
     store = AcceptancePublicationAuthorizationStore(
-        InMemoryStateStore(), primary_tenant_id="primary"
+        InMemoryStateStore(),
+        primary_tenant_id="primary",
+        pseudonymizer=PSEUDONYMIZER,
     )
     with pytest.raises(AcceptancePublicationAuthorizationInvalid, match="predecessor"):
         _create(store, expected_head_version=2)
@@ -548,7 +572,9 @@ def test_local_match_rejects_every_exact_binding(
     field: str, mismatch: object
 ) -> None:
     store = AcceptancePublicationAuthorizationStore(
-        InMemoryStateStore(), primary_tenant_id="primary"
+        InMemoryStateStore(),
+        primary_tenant_id="primary",
+        pseudonymizer=PSEUDONYMIZER,
     )
     created = _create(store)
     bindings: dict[str, object] = {
@@ -573,7 +599,7 @@ def test_local_match_rejects_every_exact_binding(
 def test_updated_or_tampered_record_fails_closed() -> None:
     backend = InMemoryStateStore()
     store = AcceptancePublicationAuthorizationStore(
-        backend, primary_tenant_id="primary"
+        backend, primary_tenant_id="primary", pseudonymizer=PSEUDONYMIZER
     )
     created = _create(store)
     record = backend.get(
@@ -615,7 +641,7 @@ def test_authority_publish_requires_local_exact_record_before_any_write() -> Non
         )
     ).hexdigest()
     authorizations = AcceptancePublicationAuthorizationStore(
-        backend, primary_tenant_id="primary"
+        backend, primary_tenant_id="primary", pseudonymizer=PSEUDONYMIZER
     )
     worm = _NoWriteImmutableBackend()
     authority = CustomerProductionAcceptanceAuthorityStore(
@@ -668,7 +694,7 @@ def test_authority_publish_binds_exact_record_but_deactivation_stays_available()
         )
     ).hexdigest()
     authorizations = AcceptancePublicationAuthorizationStore(
-        backend, primary_tenant_id="primary"
+        backend, primary_tenant_id="primary", pseudonymizer=PSEUDONYMIZER
     )
     authorization = _create(authorizations, evidence_sha256=digest)
     authority = CustomerProductionAcceptanceAuthorityStore(
@@ -728,7 +754,7 @@ def account_route_client(monkeypatch: pytest.MonkeyPatch):
     )
     session_store = SessionStore(backend)
     authorization_store = AcceptancePublicationAuthorizationStore(
-        backend, primary_tenant_id="primary"
+        backend, primary_tenant_id="primary", pseudonymizer=PSEUDONYMIZER
     )
     owner = account_store.bootstrap_owner(
         email_or_username="owner@example.test",
@@ -1002,7 +1028,7 @@ def test_publisher_locally_asserts_exact_record_before_publish(
         )
     ).hexdigest()
     authorization_store = AcceptancePublicationAuthorizationStore(
-        backend, primary_tenant_id="primary"
+        backend, primary_tenant_id="primary", pseudonymizer=PSEUDONYMIZER
     )
     authorization = _create(authorization_store, evidence_sha256=digest)
     base = CustomerProductionAcceptanceAuthorityStore(

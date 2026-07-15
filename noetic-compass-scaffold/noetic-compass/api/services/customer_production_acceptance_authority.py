@@ -40,6 +40,11 @@ from api.services.production.state_substrate import (
     VersionConflict,
 )
 from api.services.production.worm_writes import RetentionPolicy
+from api.services.accounts_billing_acceptance_binding import (
+    AccountsBillingAcceptanceSourceBindingStore,
+    AccountsBillingSourceBindingInvalid,
+    AccountsBillingSourceBindingUnavailable,
+)
 from api.services.acceptance_publication_authorizations import (
     AcceptancePublicationAuthorizationInvalid,
     AcceptancePublicationAuthorizationNotFound,
@@ -49,6 +54,11 @@ from api.services.acceptance_publication_authorizations import (
 )
 from api.services.cas_harness_retention_disclosure import (
     revalidate_object_lock_verification,
+)
+from api.services.customer_production_pseudonyms import (
+    KEY_ID_PATTERN as CUSTOMER_PSEUDONYM_KEY_ID_PATTERN,
+    PSEUDONYMIZATION_SCHEME as CUSTOMER_PSEUDONYMIZATION_SCHEME,
+    SUBJECT_PATTERN as CUSTOMER_PSEUDONYM_SUBJECT_PATTERN,
 )
 from api.services.human_attestations import (
     HumanAttestationInvalid,
@@ -60,7 +70,7 @@ from api.services.human_attestations import (
 )
 
 
-EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v2"
+EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v3"
 RECORD_SCHEMA_VERSION = "cas_harness_acceptance_authority_revision.v2"
 HEAD_SCHEMA_VERSION = "cas_harness_acceptance_authority_head.v3"
 OPERATION_SCHEMA_VERSION = "cas_harness_acceptance_authority_operation.v1"
@@ -202,7 +212,10 @@ _EXTRA_FIELDS: dict[str, frozenset[str]] = {
             "api_base_url",
             "service_id",
             "customer_lane",
-            "tenant_subject_sha256",
+            "pseudonymization_scheme",
+            "pseudonym_key_id",
+            "tenant_subject",
+            "account_subject",
             "account_session",
             "quota",
             "billing",
@@ -430,9 +443,9 @@ _OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
                 "webhook_signature_verified",
                 "entitlement_status",
                 "meter_to_invoice_reconciled",
-                "provider_customer_id_sha256",
-                "provider_subscription_id_sha256",
-                "invoice_id_sha256",
+                "provider_customer_subject",
+                "provider_subscription_subject",
+                "invoice_subject",
                 "paid_at_utc",
             }
         ),
@@ -832,6 +845,12 @@ class AcceptanceAuthorityHumanAttestationUnavailable(
     """Human-attestation verification failed before authority mutation."""
 
 
+class AcceptanceAuthorityAccountsBillingSourceUnavailable(
+    AcceptanceAuthorityUnavailable
+):
+    """The private accounts/billing source binding cannot be verified."""
+
+
 @dataclass(frozen=True, slots=True)
 class AcceptanceEvidenceDocument:
     gate: str
@@ -882,6 +901,9 @@ class CustomerProductionAcceptanceAuthorityStore:
             AcceptancePublicationAuthorizationStore | None
         ) = None,
         human_attestation_store: HumanAttestationStore | None = None,
+        accounts_billing_source_binding_store: (
+            AccountsBillingAcceptanceSourceBindingStore | None
+        ) = None,
     ) -> None:
         if (immutable_backend is None) != (retention_policy is None):
             raise ValueError(
@@ -890,17 +912,85 @@ class CustomerProductionAcceptanceAuthorityStore:
         self._store = store
         self._immutable_backend = immutable_backend
         self._retention_policy = retention_policy
-        self._publication_authorizations = (
-            publication_authorization_store
-            if publication_authorization_store is not None
-            else AcceptancePublicationAuthorizationStore(
-                store, primary_tenant_id="primary"
-            )
-        )
+        self._publication_authorizations = publication_authorization_store
         # ``None`` preserves non-human offline callers. Human-gated publish and
         # serving paths fail closed below rather than treating an omitted
         # verifier as permission to skip dereferencing.
         self._human_attestations = human_attestation_store
+        self._accounts_billing_source_bindings = (
+            accounts_billing_source_binding_store
+        )
+
+    def configure_accounts_billing_source_binding_store(
+        self, bindings: AccountsBillingAcceptanceSourceBindingStore
+    ) -> None:
+        """Install the startup-built source verifier before the app is served."""
+
+        if not isinstance(bindings, AccountsBillingAcceptanceSourceBindingStore):
+            raise ValueError("accounts/billing source binding store is invalid")
+        if self._accounts_billing_source_bindings is not None:
+            raise ValueError("accounts/billing source binding store is already configured")
+        self._accounts_billing_source_bindings = bindings
+
+    def assert_accounts_billing_source_binding(
+        self,
+        gate: str,
+        evidence: Mapping[str, Any],
+        *,
+        evidence_sha256: str,
+    ) -> None:
+        if gate != "accounts_billing":
+            return
+        bindings = self._accounts_billing_source_bindings
+        if bindings is None:
+            raise AcceptanceAuthorityAccountsBillingSourceUnavailable(
+                "accounts/billing authoritative source binding is unavailable"
+            )
+        try:
+            bindings.assert_matches(evidence, evidence_sha256=evidence_sha256)
+        except AccountsBillingSourceBindingInvalid as exc:
+            raise AcceptanceAuthorityInvalid(
+                "accounts/billing evidence does not match its authoritative source"
+            ) from exc
+        except AccountsBillingSourceBindingUnavailable as exc:
+            raise AcceptanceAuthorityAccountsBillingSourceUnavailable(
+                "accounts/billing authoritative source binding is unavailable"
+            ) from exc
+
+    def create_accounts_billing_source_binding(
+        self,
+        evidence: Mapping[str, Any],
+        *,
+        tenant_id: str,
+        invoice_record_id: str,
+        now: datetime | None = None,
+    ) -> str:
+        """Create the private pre-publication binding from live durable facts."""
+
+        bindings = self._accounts_billing_source_bindings
+        if bindings is None:
+            raise AcceptanceAuthorityAccountsBillingSourceUnavailable(
+                "accounts/billing authoritative source binding is unavailable"
+            )
+        stamp = _utc_now(now)
+        canonicalize_acceptance_evidence(
+            "accounts_billing", evidence, now=stamp
+        )
+        try:
+            return bindings.create(
+                evidence,
+                tenant_id=tenant_id,
+                invoice_record_id=invoice_record_id,
+                now=stamp,
+            )
+        except AccountsBillingSourceBindingInvalid as exc:
+            raise AcceptanceAuthorityInvalid(
+                "accounts/billing evidence does not match its authoritative source"
+            ) from exc
+        except AccountsBillingSourceBindingUnavailable as exc:
+            raise AcceptanceAuthorityAccountsBillingSourceUnavailable(
+                "accounts/billing authoritative source binding is unavailable"
+            ) from exc
 
     def assert_human_attestations(
         self,
@@ -1108,6 +1198,10 @@ class CustomerProductionAcceptanceAuthorityStore:
     ) -> None:
         """Resolve and exactly match one local owner authorization record."""
 
+        if self._publication_authorizations is None:
+            raise AcceptanceAuthorityAuthorizationUnavailable(
+                "publication authorization storage is unavailable"
+            )
         try:
             self._publication_authorizations.assert_matches(
                 authorization_artifact_uri=authorization_artifact_uri,
@@ -1638,6 +1732,11 @@ class CustomerProductionAcceptanceAuthorityStore:
         )
         self.assert_human_attestations(gate, evidence, now=stamp)
         digest = hashlib.sha256(canonical).hexdigest()
+        # Revalidate private raw account/Stripe sources before a revision,
+        # immutable object, operation, or head can be mutated.
+        self.assert_accounts_billing_source_binding(
+            gate, evidence, evidence_sha256=digest
+        )
         self.assert_publication_authorized(
             gate=gate,
             master_head_sha=str(evidence["master_head_sha"]),
@@ -1960,6 +2059,9 @@ class CustomerProductionAcceptanceAuthorityStore:
             )
         self.assert_human_attestations(
             gate, document, now=stamp, serving_active_revision=True
+        )
+        self.assert_accounts_billing_source_binding(
+            gate, document, evidence_sha256=expected_hash
         )
         return AcceptanceEvidenceDocument(
             gate=gate, sha256=expected_hash, body=body
@@ -2449,7 +2551,9 @@ def _validate_accounts_billing_semantics(
         "customer_lane": "public-customer",
     }.items():
         _equal(evidence, field, expected)
-    _sha_value(evidence["tenant_subject_sha256"], "tenant_subject_sha256")
+    _validate_customer_pseudonym_metadata(evidence, "accounts_billing")
+    _pseudonym_value(evidence["tenant_subject"], "tenant_subject")
+    _pseudonym_value(evidence["account_subject"], "account_subject")
 
     session = _object(evidence, "account_session")
     if session["invite_redeem_http_status"] not in {200, 201}:
@@ -2512,11 +2616,11 @@ def _validate_accounts_billing_semantics(
     }.items():
         _equal(billing, field, expected, "billing")
     for field in (
-        "provider_customer_id_sha256",
-        "provider_subscription_id_sha256",
-        "invoice_id_sha256",
+        "provider_customer_subject",
+        "provider_subscription_subject",
+        "invoice_subject",
     ):
-        _sha_value(billing[field], f"billing.{field}")
+        _pseudonym_value(billing[field], f"billing.{field}")
     _proof_time(
         billing["paid_at_utc"],
         "accounts_billing",
@@ -3305,6 +3409,33 @@ def _tagged_sha_value(value: Any, path: str) -> str:
     if not isinstance(value, str) or _TAGGED_SHA256_RE.fullmatch(value) is None:
         raise AcceptanceAuthorityInvalid(f"{path} must be sha256:<64 lowercase hex>")
     return value
+
+
+def _pseudonym_value(value: Any, path: str) -> str:
+    if (
+        not isinstance(value, str)
+        or CUSTOMER_PSEUDONYM_SUBJECT_PATTERN.fullmatch(value) is None
+    ):
+        raise AcceptanceAuthorityInvalid(
+            f"{path} must be hmac-sha256:<64 lowercase hex>"
+        )
+    return value
+
+
+def _validate_customer_pseudonym_metadata(
+    value: Mapping[str, Any], path: str
+) -> str:
+    if value.get("pseudonymization_scheme") != CUSTOMER_PSEUDONYMIZATION_SCHEME:
+        raise AcceptanceAuthorityInvalid(
+            f"{path}.pseudonymization_scheme is invalid"
+        )
+    key_id = value.get("pseudonym_key_id")
+    if (
+        not isinstance(key_id, str)
+        or CUSTOMER_PSEUDONYM_KEY_ID_PATTERN.fullmatch(key_id) is None
+    ):
+        raise AcceptanceAuthorityInvalid(f"{path}.pseudonym_key_id is invalid")
+    return key_id
 
 
 def _nonempty(value: Any, path: str) -> str:

@@ -94,6 +94,10 @@ projects:
                 sync: false
               - key: NC_HUMAN_ATTESTATION_PSEUDONYM_KEYRING_JSON
                 sync: false
+              - key: NC_CUSTOMER_PRODUCTION_PSEUDONYM_ACTIVE_KEY_ID
+                sync: false
+              - key: NC_CUSTOMER_PRODUCTION_PSEUDONYM_KEYRING_JSON
+                sync: false
               - key: NC_ACCOUNT_BOOTSTRAP_SECRET
                 sync: false
               - key: NC_PLATFORM_TENANT_PROVISIONING_SECRET

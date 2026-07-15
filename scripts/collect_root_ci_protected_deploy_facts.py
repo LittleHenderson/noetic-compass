@@ -2,7 +2,7 @@
 """Collect unsigned, fail-closed root-CI/deployment facts.
 
 This collector intentionally emits only a
-``cas_harness_customer_production_gate_evidence.v2`` payload.  It does not
+``cas_harness_customer_production_gate_evidence.v3`` payload.  It does not
 create an authoritative receipt, sign bytes, update the production manifest,
 or change a gate from ``OPEN`` to ``present``.  Authority remains the separate
 responsibility of a pinned issuer and the acceptance verifier.

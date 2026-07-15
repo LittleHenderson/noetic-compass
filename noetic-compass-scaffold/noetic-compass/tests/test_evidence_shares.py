@@ -625,6 +625,13 @@ def _share_settings(**overrides) -> Settings:
             '{"hatk_0123456789abcdef0123456789abcdef":'
             '"base64url:5EfvyXp5BYNrpodyw-DoiFemHziedgI06tZHVjtmvow"}'
         ),
+        "customer_production_pseudonym_active_key_id": (
+            "cpk_89abcdef0123456789abcdef01234567"
+        ),
+        "customer_production_pseudonym_keyring_json": (
+            '{"cpk_89abcdef0123456789abcdef01234567":'
+            '"base64url:ba72v6mRNqQ2kA0GZljcsAF4HpatDbaOpVkvpGl_QmA"}'
+        ),
         "object_lock_receipt_attestation_key": "r" * 32,
         "accounts_allow_single_host_sqlite": True,
         "state_ledger_path": str(Path.cwd().resolve() / "share-config-test.db"),

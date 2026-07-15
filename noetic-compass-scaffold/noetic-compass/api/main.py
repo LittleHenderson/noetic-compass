@@ -120,6 +120,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.acceptance_authority_store = None
     app.state.acceptance_publication_authorization_store = None
     app.state.human_attestation_store = None
+    app.state.customer_production_pseudonymizer = None
+    app.state.accounts_billing_source_binding_store = None
     configure_evidence_packet_repository(None)
 
     if (not settings.debug or settings.accounts_enabled) and (
@@ -184,12 +186,39 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
                 HumanAttestationStore,
                 parse_human_attestation_pseudonym_keyring,
             )
+            from api.services.customer_production_pseudonyms import (
+                CustomerProductionPseudonymizer,
+                parse_customer_production_pseudonym_keyring,
+            )
 
             immutable_repository = app.state.evidence_packet_repository
-            publication_authorizations = AcceptancePublicationAuthorizationStore(
-                shared_store,
-                primary_tenant_id=settings.accounts_bootstrap_tenant_id,
+            customer_production_pseudonymizer = None
+            if (
+                settings.accounts_enabled
+                or settings.customer_production_pseudonym_keyring_json
+                or settings.customer_production_pseudonym_active_key_id
+            ):
+                customer_production_pseudonymizer = CustomerProductionPseudonymizer(
+                    parse_customer_production_pseudonym_keyring(
+                        settings.customer_production_pseudonym_keyring_json,
+                        active_key_id=(
+                            settings.customer_production_pseudonym_active_key_id
+                        ),
+                    ),
+                    active_key_id=(
+                        settings.customer_production_pseudonym_active_key_id
+                    ),
+                )
+            app.state.customer_production_pseudonymizer = (
+                customer_production_pseudonymizer
             )
+            publication_authorizations = None
+            if customer_production_pseudonymizer is not None:
+                publication_authorizations = AcceptancePublicationAuthorizationStore(
+                    shared_store,
+                    primary_tenant_id=settings.accounts_bootstrap_tenant_id,
+                    pseudonymizer=customer_production_pseudonymizer,
+                )
             app.state.acceptance_publication_authorization_store = (
                 publication_authorizations
             )
@@ -285,6 +314,29 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
                         if host.strip()
                     ),
                 )
+        if (
+            app.state.acceptance_authority_store is not None
+            and app.state.account_store is not None
+            and app.state.billing_reconciliation_store is not None
+            and app.state.customer_production_pseudonymizer is not None
+        ):
+            from api.services.accounts_billing_acceptance_binding import (
+                AccountsBillingAcceptanceSourceBindingStore,
+            )
+
+            app.state.accounts_billing_source_binding_store = (
+                AccountsBillingAcceptanceSourceBindingStore(
+                    shared_store,
+                    accounts=app.state.account_store,
+                    billing=app.state.billing_reconciliation_store,
+                    pseudonymizer=(
+                        app.state.customer_production_pseudonymizer
+                    ),
+                )
+            )
+            app.state.acceptance_authority_store.configure_accounts_billing_source_binding_store(
+                app.state.accounts_billing_source_binding_store
+            )
         if (
             app.state.account_store is not None
             and not app.state.account_store.has_active_owner(
@@ -418,6 +470,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.acceptance_authority_store = None
         app.state.acceptance_publication_authorization_store = None
         app.state.human_attestation_store = None
+        app.state.customer_production_pseudonymizer = None
+        app.state.accounts_billing_source_binding_store = None
         app.state.shared_state_store = None
         app.state.crm = None
         app.state.crm_public_abuse_guard = None
