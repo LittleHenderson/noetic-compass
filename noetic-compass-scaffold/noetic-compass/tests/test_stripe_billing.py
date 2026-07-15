@@ -479,14 +479,27 @@ def test_stripe_financial_contract_is_exactly_pinned() -> None:
             if line.split("#", 1)[0].strip().startswith("stripe")
         ]
         assert dependency_lines == [f"stripe=={STRIPE_SDK_VERSION}"]
-    assert STRIPE_API_VERSION == "2026-05-27.dahlia"
+    assert STRIPE_API_VERSION == "2026-06-24.dahlia"
 
 
-def test_installed_stripe_package_matches_the_financial_contract() -> None:
+def test_installed_stripe_package_accepts_the_explicit_financial_contract() -> None:
     import stripe
 
     assert stripe.VERSION == STRIPE_SDK_VERSION
-    assert stripe.api_version == STRIPE_API_VERSION
+    # stripe-python's package default remains the API revision it was generated
+    # against. The adapter deliberately passes the provider-selectable revision
+    # to StripeClient instead; the real-client webhook and Subscription tests
+    # above prove that v15.2.1 parses that explicit revision offline.
+    assert stripe.api_version == "2026-05-27.dahlia"
+    provider = _real_sdk_provider(
+        webhook_secret="whsec_explicit_version_contract"
+    )
+    # This is an exact pinned-SDK integration assertion, not a production
+    # dependency on private attributes: prove v15.2.1 retained the explicit
+    # request version rather than silently falling back to its package default.
+    request_options = provider._client._requestor._options
+    assert request_options.stripe_version == STRIPE_API_VERSION
+    assert request_options.max_network_retries == 2
 
 
 def test_provider_rejects_an_unpinned_installed_stripe_package(monkeypatch) -> None:

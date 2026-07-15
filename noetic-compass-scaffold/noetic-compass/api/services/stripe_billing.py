@@ -19,7 +19,7 @@ from typing import Any, Mapping, Protocol
 
 
 STRIPE_SDK_VERSION = "15.2.1"
-STRIPE_API_VERSION = "2026-05-27.dahlia"
+STRIPE_API_VERSION = "2026-06-24.dahlia"
 _STRIPE_PRICE_ID_RE = re.compile(r"^price_[A-Za-z0-9_]{1,249}$")
 
 

@@ -363,7 +363,10 @@ jobs:
           # Import-only production-image proof: no Stripe client or provider
           # call is constructed while the billing flags remain dark below.
           assert stripe.VERSION == STRIPE_SDK_VERSION == "15.2.1"
-          assert stripe.api_version == STRIPE_API_VERSION == "2026-05-27.dahlia"
+          # The SDK-generated default is older; the adapter explicitly passes
+          # the provider-selectable webhook/request revision below.
+          assert stripe.api_version == "2026-05-27.dahlia"
+          assert STRIPE_API_VERSION == "2026-06-24.dahlia"
           assert settings.state_ledger_enabled is True
           assert settings.state_ledger_read_authority is True
           assert settings.accounts_enabled is False
