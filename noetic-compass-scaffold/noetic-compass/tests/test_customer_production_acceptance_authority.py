@@ -40,6 +40,7 @@ from api.services.production.worm_writes import RetentionPolicy
 from api.services.cas_harness_retention_disclosure import (
     _issue_live_s3_object_lock_receipt,
 )
+from api.services.human_attestations import PUBLIC_HUMAN_ASSURANCE_BOUNDARY
 
 
 _AUTHORIZATION_SHA256 = hashlib.sha256(b"test-authorization").hexdigest()
@@ -151,6 +152,7 @@ def _legal_evidence(now: datetime) -> dict[str, object]:
             "present",
             "unavailable",
         ],
+        "human_assurance_boundary": dict(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
     }
 
 

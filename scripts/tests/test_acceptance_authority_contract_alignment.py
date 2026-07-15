@@ -28,6 +28,9 @@ from api.services import customer_production_acceptance_authority as authority_s
 from api.services.production.state_substrate.memory_store import (  # noqa: E402
     InMemoryStateStore,
 )
+from api.services.human_attestations import (  # noqa: E402
+    PUBLIC_HUMAN_ASSURANCE_BOUNDARY,
+)
 from scripts import verify_customer_production_acceptance as verifier  # noqa: E402
 from scripts import build_alert_delivery_gate_payload as alert_builder  # noqa: E402
 from scripts import collect_customer_readiness_facts as readiness_collector  # noqa: E402
@@ -119,6 +122,10 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
         )
         self.assertEqual(route_contract["requiredApiBaseUrl"], f"{origin}/atlas")
         self.assertEqual(route_contract["requiredAccountsEnabled"], "true")
+        self.assertEqual(
+            dict(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
+            verifier.HUMAN_ASSURANCE_BOUNDARY,
+        )
 
     def test_every_live_route_accepts_the_verifiers_exact_gate_shape(self) -> None:
         payloads = _gate_payloads()
@@ -263,6 +270,45 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
 
         for gate, payload in cases:
             with self.subTest(gate=gate):
+                with self.assertRaises(AcceptanceAuthorityInvalid):
+                    canonicalize_acceptance_evidence(gate, payload, now=NOW)
+
+    def test_every_human_authority_rejects_a_falsely_upgraded_assurance_boundary(self) -> None:
+        payloads = _gate_payloads()
+        release = _common(
+            "release_decision",
+            event="2026-07-14T11:56:00Z",
+            observed="2026-07-14T11:58:00Z",
+        )
+        release.update(
+            {
+                "status": "ACCEPT",
+                "approved_at_utc": "2026-07-14T11:56:00Z",
+                "approver_roles": sorted(verifier.RELEASE_APPROVER_ROLES),
+                "decision_record_uri": (
+                    f"{verifier.PRODUCTION_API_ORIGIN}/internal/acceptance/release-record"
+                ),
+                "decision_record_sha256": _digest("release-record"),
+            }
+        )
+        payloads["release_decision"] = release
+        for gate in (
+            "legal_publication_approval",
+            "incident_tabletop",
+            "claim_honesty",
+            "release_decision",
+        ):
+            with self.subTest(gate=gate):
+                payload = deepcopy(payloads[gate])
+                payload["master_head_sha"] = MASTER_SHA
+                payload["deploy_id"] = DEPLOY_ID
+                payload["artifact_uri"] = verifier.LIVE_AUTHORITY_ENDPOINTS[gate][
+                    "noetic-production-live"
+                ]
+                payload["artifact_sha256"] = _digest(f"boundary-{gate}")
+                payload["human_assurance_boundary"][
+                    "distinct_natural_persons"
+                ] = "verified"
                 with self.assertRaises(AcceptanceAuthorityInvalid):
                     canonicalize_acceptance_evidence(gate, payload, now=NOW)
 

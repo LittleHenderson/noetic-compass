@@ -25,6 +25,7 @@ from api.services.acceptance_publication_authorizations import (
     AcceptancePublicationAuthorizationStore,
 )
 from api.services.production.state_substrate.memory_store import InMemoryStateStore
+from api.services.human_attestations import PUBLIC_HUMAN_ASSURANCE_BOUNDARY
 import scripts.publish_customer_production_acceptance_authority as publisher
 
 
@@ -114,6 +115,7 @@ def _legal_evidence(now: datetime) -> dict[str, object]:
             "present",
             "unavailable",
         ],
+        "human_assurance_boundary": dict(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
     }
 
 
@@ -746,6 +748,13 @@ def test_head_and_deactivate_authority_setup_does_not_touch_s3(
     class Settings:
         evidence_packet_object_store_enabled = True
         accounts_bootstrap_tenant_id = "primary"
+        human_attestation_pseudonym_active_key_id = (
+            "hatk_0123456789abcdef0123456789abcdef"
+        )
+        human_attestation_pseudonym_keyring_json = (
+            '{"hatk_0123456789abcdef0123456789abcdef":'
+            '"base64url:5EfvyXp5BYNrpodyw-DoiFemHziedgI06tZHVjtmvow"}'
+        )
 
         def validate_object_lock_receipt_attestation(self) -> None:
             calls["s3"] += 1

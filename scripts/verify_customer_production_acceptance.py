@@ -180,6 +180,16 @@ CLAIM_STATUS_VOCABULARY = (
     "present",
     "unavailable",
 )
+HUMAN_ASSURANCE_BOUNDARY = {
+    "schema_version": "cas_harness_human_assurance_boundary.v1",
+    "account_identity": "authenticated_platform_account",
+    "functional_role": "self_asserted_platform_role_authorized",
+    "natural_person_identity": "unverified",
+    "professional_qualification": "unverified",
+    "distinct_natural_persons": "unverified",
+    "qualification_authority": "unavailable",
+    "distinctness_authority": "unavailable",
+}
 GATE_ALLOWED_ORIGINS = {
     "runtime_worm": frozenset({PRODUCTION_API_ORIGIN, RENDER_API_ORIGIN}),
     "root_ci_protected_deploy": frozenset(
@@ -1583,13 +1593,31 @@ def _validate_accounts_billing(
         _critical_proof_timestamp(billing.get("paid_at_utc"), gate="accounts_billing", event=event, observed=observed, context=context, path=f"{path}.billing.paid_at_utc")
 
 
+def _validate_human_assurance_boundary(
+    evidence: Mapping[str, Any], path: str, errors: list[str]
+) -> None:
+    boundary = evidence.get("human_assurance_boundary")
+    boundary_path = f"{path}.human_assurance_boundary"
+    if not _is_mapping(boundary, boundary_path, errors):
+        return
+    _exact_keys(boundary, set(HUMAN_ASSURANCE_BOUNDARY), boundary_path, errors)
+    for field, expected in HUMAN_ASSURANCE_BOUNDARY.items():
+        _require(
+            boundary.get(field) == expected,
+            f"{boundary_path}.{field}",
+            f"must equal {expected!r}",
+            errors,
+        )
+
+
 def _validate_legal(
     evidence: Mapping[str, Any], context: ValidationContext
 ) -> None:
     path = "$.required_gates.legal_publication_approval.evidence.payload"
     errors = context.errors
-    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"public_base_url", "documents", "approvals", "claim_status_vocabulary"}, path, errors)
+    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"public_base_url", "documents", "approvals", "claim_status_vocabulary", "human_assurance_boundary"}, path, errors)
     event, observed = _validate_common_evidence(evidence, "legal_publication_approval", context)
+    _validate_human_assurance_boundary(evidence, path, errors)
     _require(evidence.get("public_base_url") == LANDING_ORIGIN, f"{path}.public_base_url", f"must be {LANDING_ORIGIN}", errors)
     documents = _list_by_key(evidence.get("documents"), "kind", LEGAL_DOCUMENT_KINDS, f"{path}.documents", errors)
     for kind, document in documents.items():
@@ -1826,8 +1854,9 @@ def _validate_incident_tabletop(
 ) -> None:
     path = "$.required_gates.incident_tabletop.evidence.payload"
     errors = context.errors
-    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"api_base_url", "service_id", "incident", "tabletop"}, path, errors)
+    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"api_base_url", "service_id", "incident", "tabletop", "human_assurance_boundary"}, path, errors)
     event, observed = _validate_common_evidence(evidence, "incident_tabletop", context)
+    _validate_human_assurance_boundary(evidence, path, errors)
     _require(evidence.get("api_base_url") == PRODUCTION_API_ORIGIN, f"{path}.api_base_url", f"must be {PRODUCTION_API_ORIGIN}", errors)
     _require(evidence.get("service_id") == PRODUCTION_SERVICE_ID, f"{path}.service_id", "must be the public production service", errors)
     incident = evidence.get("incident")
@@ -1926,8 +1955,9 @@ def _validate_claim_honesty(
 ) -> None:
     path = "$.required_gates.claim_honesty.evidence.payload"
     errors = context.errors
-    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"scanned_surfaces", "scan", "boundaries", "approvals"}, path, errors)
+    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"scanned_surfaces", "scan", "boundaries", "approvals", "human_assurance_boundary"}, path, errors)
     event, observed = _validate_common_evidence(evidence, "claim_honesty", context)
+    _validate_human_assurance_boundary(evidence, path, errors)
     surfaces = _list_by_key(evidence.get("scanned_surfaces"), "kind", CLAIM_SURFACE_KINDS, f"{path}.scanned_surfaces", errors)
     expected_urls = {
         "product_app": PRODUCTION_APP_ORIGIN,
@@ -2160,10 +2190,11 @@ def _validate_release_decision(
     if evidence is None:
         return
     path = "$.product.release_decision.evidence.payload"
-    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"status", "approved_at_utc", "approver_roles", "decision_record_uri", "decision_record_sha256"}, path, context.errors)
+    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"status", "approved_at_utc", "approver_roles", "decision_record_uri", "decision_record_sha256", "human_assurance_boundary"}, path, context.errors)
     event, observed = _validate_common_evidence(
         evidence, "release_decision", context
     )
+    _validate_human_assurance_boundary(evidence, path, context.errors)
     _require(evidence.get("status") == "ACCEPT", f"{path}.status", "must be ACCEPT", context.errors)
     approved = _critical_proof_timestamp(
         evidence.get("approved_at_utc"),

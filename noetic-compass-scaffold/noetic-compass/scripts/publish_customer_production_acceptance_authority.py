@@ -217,7 +217,10 @@ def _production_authority(
     # Imports stay inside the production-only path so ``validate`` never opens a
     # database connection or initializes an object-store client.
     from api.config import Settings
-    from api.services.human_attestations import HumanAttestationStore
+    from api.services.human_attestations import (
+        HumanAttestationStore,
+        parse_human_attestation_pseudonym_keyring,
+    )
     from api.state_ledger_bootstrap import _build_state_store
 
     settings = Settings()
@@ -244,6 +247,15 @@ def _production_authority(
             human_attestation_store=HumanAttestationStore(
                 state_store,
                 primary_tenant_id=settings.accounts_bootstrap_tenant_id,
+                pseudonym_keyring=parse_human_attestation_pseudonym_keyring(
+                    settings.human_attestation_pseudonym_keyring_json,
+                    active_key_id=(
+                        settings.human_attestation_pseudonym_active_key_id
+                    ),
+                ),
+                active_pseudonym_key_id=(
+                    settings.human_attestation_pseudonym_active_key_id
+                ),
             ),
             publication_authorization_store=(
                 AcceptancePublicationAuthorizationStore(

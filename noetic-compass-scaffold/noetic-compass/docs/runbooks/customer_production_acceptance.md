@@ -149,6 +149,86 @@ Response behavior is fail-closed and non-cacheable:
 - no provider error, storage pointer, Object-Lock version ID, secret, or PII is
   copied into an error response.
 
+### Human-attestation assurance and pseudonym-key rotation
+
+Every human-gated authority document and every public human-attestation record
+must carry the exact `cas_harness_human_assurance_boundary.v1` boundary. It
+means only that an authenticated platform account made the attestation and
+that its self-asserted functional role was allowed for that account's platform
+role. Natural-person identity, professional qualification, and whether two
+accounts belong to distinct people are all `unverified`; qualification and
+distinctness authorities are `unavailable`.
+
+Role labels such as `legal_counsel`, `legal_owner`, and `product_owner` are
+functional workflow labels. They do not prove a licence, employment status,
+legal authority, or any other professional qualification. Existing checks for
+different account IDs are platform-account separation controls only; they do
+not prove different natural people. A small company may legitimately have one
+person perform several functions, but changing a gate that currently requires
+different platform accounts is a separate acceptance-policy decision, not an
+identity fact that an operator or role label may invent. If a contract or
+policy requires licensed counsel, independently qualified roles, or distinct
+natural people, these records cannot satisfy it. Keep the affected gate `OPEN`
+until a separately governed qualification or distinctness authority and a new
+versioned evidence contract are implemented.
+
+Public actor identifiers inside `cas_harness_human_attestation.v2` records use
+tenant-scoped, domain-separated HMAC-SHA-256 pseudonyms. The private ledger row
+HMAC-binds the complete canonical public-attestation SHA-256, raw tenant and
+account IDs, and opaque key ID; the private status row pins the same binding.
+Because the canonical digest covers every public field and the exact supporting
+attestation references, a different valid support graph cannot reuse the
+binding. Configure both dedicated settings before enabling account-backed
+attestations or publishing human-gated authority evidence:
+
+- `NC_HUMAN_ATTESTATION_PSEUDONYM_KEYRING_JSON`: a JSON object mapping key IDs
+  to `base64url:` followed by the canonical unpadded base64url encoding of
+  32--64 independently CSPRNG-generated random bytes;
+- `NC_HUMAN_ATTESTATION_PSEUDONYM_ACTIVE_KEY_ID`: the key ID used for new
+  records. It must be an opaque 128-bit label in exact
+  `hatk_<32 lowercase hex>` form, never an email, account ID, name, role, date,
+  or other descriptive/PII-bearing value.
+
+The configuration shape is
+`{"hatk_<32-lowercase-hex>":"base64url:<unpadded-encoding-of-random-bytes>"}`.
+Both bracketed values are placeholders, not production values. Generate the
+raw bytes and opaque ID with the provider's secure secret/CSPRNG mechanism,
+never commit or log the keyring, and never reuse an account, billing, database,
+provider, or signing credential. Startup fails closed for half-configuration,
+noncanonical encoding, a descriptive/non-opaque ID, duplicated key material,
+too-short or trivially predictable material, cross-secret reuse, or an
+active-key-missing keyring. The same parsing, strength, and secret-isolation
+checks run when the variables are present even if accounts are disabled;
+accounts-disabled with neither variable remains valid.
+
+This is a deliberately narrow privacy contract, not a claim that all public CAS
+artifacts use keyed pseudonyms. `acceptance_publication_authorizations.py`
+still emits unkeyed `tenant_id_sha256` and `account_id_sha256`, and hosted
+customer-journey plus accounts/billing evidence still carries unkeyed
+tenant/account/provider identifier hashes. Converting those separately
+versioned evidence contracts to a dedicated keyed scheme is an explicit privacy
+hardening item and remains `OPEN`. Until that work is implemented and migrated,
+do not describe CAS public evidence generally as free of stable unkeyed
+account-derived identifiers; the keyed guarantee applies only to v2 human
+attestation actor/revocation fields.
+
+Rotate without rewriting evidence:
+
+1. Add the new key while retaining every key referenced by a durable record,
+   deploy, and verify that old public attestations still load exactly.
+2. Change only the active key ID, deploy, and create new attestations under the
+   new key ID.
+3. Re-attest any evidence that must move to the new key; do not transform an
+   old digest or copy its asserted facts into a new record automatically.
+4. Remove an old key only after no retained attestation or revocation status
+   references it. A referenced but missing key makes the record unavailable
+   and the gate fails closed.
+
+Legacy `cas_harness_human_attestation.v1` records used stable unkeyed hashes and
+have no durable private identity binding. They remain historical artifacts but
+are not authoritative under this contract and cannot be promoted or migrated
+in place. Re-attestation by the authenticated account under v2 is required.
+
 ### Publish one verified authority document
 
 `scripts.publish_customer_production_acceptance_authority` is the operational

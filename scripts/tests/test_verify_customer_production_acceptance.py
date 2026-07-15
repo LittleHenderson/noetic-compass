@@ -206,7 +206,7 @@ class SignedBundle:
 
 
 def _common(gate: str, *, event: str = EVENT, observed: str = OBSERVED) -> dict:
-    return {
+    result = {
         "schema_version": verifier.EVIDENCE_SCHEMA_VERSION,
         "gate": gate,
         "environment": "public-production",
@@ -218,6 +218,16 @@ def _common(gate: str, *, event: str = EVENT, observed: str = OBSERVED) -> dict:
         "artifact_uri": "filled-by-signed-receipt",
         "artifact_sha256": "0" * 64,
     }
+    if gate in {
+        "legal_publication_approval",
+        "claim_honesty",
+        "incident_tabletop",
+        "release_decision",
+    }:
+        result["human_assurance_boundary"] = dict(
+            verifier.HUMAN_ASSURANCE_BOUNDARY
+        )
+    return result
 
 
 def _approval(role: str, prefix: str) -> dict:
@@ -227,6 +237,10 @@ def _approval(role: str, prefix: str) -> dict:
         "approval_sha256": _digest(f"{prefix}-{role}"),
         "approved_at_utc": "2026-07-14T11:45:00Z",
     }
+
+
+def _human_assurance_boundary() -> dict[str, str]:
+    return dict(verifier.HUMAN_ASSURANCE_BOUNDARY)
 
 
 def _gate_payloads() -> dict[str, dict]:
@@ -456,6 +470,7 @@ def _gate_payloads() -> dict[str, dict]:
             ],
             "approvals": [_approval(role, "legal") for role in sorted(verifier.LEGAL_APPROVER_ROLES)],
             "claim_status_vocabulary": list(verifier.CLAIM_STATUS_VOCABULARY),
+            "human_assurance_boundary": _human_assurance_boundary(),
         }
     )
 
@@ -592,6 +607,7 @@ def _gate_payloads() -> dict[str, dict]:
         {
             "api_base_url": verifier.PRODUCTION_API_ORIGIN,
             "service_id": verifier.PRODUCTION_SERVICE_ID,
+            "human_assurance_boundary": _human_assurance_boundary(),
             "incident": {
                 "record_id": "IR-2026-07-13-001",
                 "status": "CLOSED",
@@ -692,6 +708,7 @@ def _gate_payloads() -> dict[str, dict]:
                 "rendered_product_status": "ACCEPT",
             },
             "approvals": [_approval(role, "claim") for role in sorted(verifier.CLAIM_APPROVER_ROLES)],
+            "human_assurance_boundary": _human_assurance_boundary(),
         }
     )
     return {
@@ -740,6 +757,7 @@ def _accepting_manifest(
             "approver_roles": sorted(verifier.RELEASE_APPROVER_ROLES),
             "decision_record_uri": f"{verifier.PRODUCTION_API_ORIGIN}/internal/acceptance/release-record",
             "decision_record_sha256": _digest("release-record"),
+            "human_assurance_boundary": _human_assurance_boundary(),
         }
     )
     manifest["product"] = {
@@ -990,6 +1008,42 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
         self.assertEqual(report["expected_master_head"], MASTER_SHA)
         self.assertEqual(report["expected_deploy_id"], DEPLOY_ID)
         self.assertTrue(all(authority["mode"] == "signed_receipt" for authority in report["authorities"].values()))
+
+    def test_human_gates_reject_any_upgrade_or_omission_of_the_unverified_boundary(self) -> None:
+        for gate in (
+            "legal_publication_approval",
+            "incident_tabletop",
+            "claim_honesty",
+        ):
+            with self.subTest(gate=gate):
+                def mutate(payloads: dict[str, dict], selected: str = gate) -> None:
+                    payloads[selected]["human_assurance_boundary"][
+                        "professional_qualification"
+                    ] = "verified"
+
+                report = _verify(
+                    _accepting_manifest(self.bundle, mutate_payloads=mutate),
+                    self.bundle,
+                )
+                self.assertEqual(report["result"], "INVALID")
+                self.assertTrue(
+                    any(
+                        "professional_qualification" in error
+                        for error in report["errors"]
+                    )
+                )
+
+        def remove_boundary(payloads: dict[str, dict]) -> None:
+            payloads["claim_honesty"].pop("human_assurance_boundary")
+
+        report = _verify(
+            _accepting_manifest(self.bundle, mutate_payloads=remove_boundary),
+            self.bundle,
+        )
+        self.assertEqual(report["result"], "INVALID")
+        self.assertTrue(
+            any("human_assurance_boundary" in error for error in report["errors"])
+        )
 
     def test_sanitized_archive_contains_only_verified_referenced_documents(self) -> None:
         manifest = _accepting_manifest(self.bundle)
