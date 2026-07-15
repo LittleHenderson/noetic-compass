@@ -183,26 +183,26 @@ function targetVerification(overrides: Record<string, unknown> = {}) {
     model_status: 'CONNECTED',
     can_run_audit: true,
     target: {
-      kind: 'demo_reference',
-      provider: 'cas_harness_reference',
+      kind: 'hosted_open_weight',
+      provider: 'cas_harness_live_worker',
       model_id: 'EleutherAI/pythia-160m',
       endpoint_url: null,
       credential_mode: 'none',
       timeout_ms: 10000,
     },
     detail:
-      'CAS Harness reference target verified locally. No external model call, credential, Evidence Packet, or audit verdict was created.',
+      'Hosted Pythia-160M target verified against authenticated worker real-mode metadata. No inference, Evidence Packet, or audit verdict was created by this connection check.',
     checked_at: '2026-05-26T10:00:00Z',
     provenance_chip: {
       id: 'model_proof',
       name: 'Model proof',
       status: 'verified',
-      detail: 'Reference target verified for non-secret Audit Console demos.',
+      detail: 'The configured live worker reported the exact real-weight readiness contract.',
     },
     verdict: null,
     confidence: null,
     evidence_packet_trace_id: null,
-    reference_evidence_packet_trace_id: 'cas_harness_reference_accept_001',
+    reference_evidence_packet_trace_id: null,
     atlas_deep_link: null,
     ...overrides,
   };
@@ -756,7 +756,7 @@ describe('AuditConsolePage', () => {
     expect(screen.queryByText('Not available')).not.toBeInTheDocument();
   });
 
-  it('creates a reference-backed backend session and shows the evidence-gated verdict', async () => {
+  it('creates a live-worker-backed session and shows the evidence-gated review verdict', async () => {
     const chips = allPresentChips();
     const fetchMock = vi
       .fn()
@@ -768,14 +768,7 @@ describe('AuditConsolePage', () => {
         ok: true,
         json: async () =>
           sessionResponse({
-            evidence_packet_trace_id: 'cas_harness_reference_accept_001',
             provenance_chips: chips,
-            verifier_decision: {
-              verdict: 'ACCEPT',
-              confidence: 0.9816,
-              source: 'stage19_verification_stack+stage20_generation_readiness',
-              reason: 'Stage 19 accepted the row and Stage 20 readiness action is allow.',
-            },
           }),
       })
       .mockResolvedValueOnce({
@@ -783,15 +776,15 @@ describe('AuditConsolePage', () => {
         json: async () =>
           sessionResponse({
             status: 'COMPLETE',
-            verdict: 'ACCEPT',
+            verdict: 'FLAG_FOR_HUMAN_REVIEW',
             confidence: 0.9816,
-            evidence_packet_trace_id: 'cas_harness_reference_accept_001',
+            evidence_packet_trace_id: 'cas-harness-live-pythia-001',
             provenance_chips: chips,
             verifier_decision: {
-              verdict: 'ACCEPT',
+              verdict: 'FLAG_FOR_HUMAN_REVIEW',
               confidence: 0.9816,
-              source: 'stage19_verification_stack+stage20_generation_readiness',
-              reason: 'Stage 19 accepted the row and Stage 20 readiness action is allow.',
+              source: 'cas_harness_live_worker_v1',
+              reason: 'Live evidence is present and remains gated for human review.',
             },
             updated_at: '2026-05-25T11:01:00Z',
             lifecycle: [
@@ -825,12 +818,12 @@ describe('AuditConsolePage', () => {
     fireEvent.click(customerAction('Connect selected model'));
     expect(await screen.findByText('Target verified')).toBeInTheDocument();
     expect(customerAction('Run CAS audit')).toBeEnabled();
-    expect(screen.getByRole('note', { name: /reference target verified/i })).toBeInTheDocument();
+    expect(screen.getByRole('note', { name: /Hosted Pythia-160M target verified/i })).toBeInTheDocument();
 
     fireEvent.click(customerAction('Run CAS audit'));
 
     expect(await screen.findByText('cas-audit-test-session')).toBeInTheDocument();
-    expect(await screen.findByRole('heading', { name: 'ACCEPT' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'FLAG FOR HUMAN REVIEW' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Audit complete' })).toBeInTheDocument();
     expect(screen.getByText('Confidence: 98%')).toBeInTheDocument();
     expect(container.querySelector('[data-launch-step="progress"]')).toHaveAttribute('data-state', 'done');
@@ -846,7 +839,10 @@ describe('AuditConsolePage', () => {
       expect.objectContaining({ method: 'POST' }),
     );
     expect(JSON.parse(String((fetchMock.mock.calls[0][1] as RequestInit).body))).toEqual({
-      target: { kind: 'demo_reference' },
+      target: {
+        kind: 'hosted_open_weight',
+        model_id: 'EleutherAI/pythia-160m',
+      },
     });
     expect(fetchMock).toHaveBeenNthCalledWith(
       2,
@@ -854,9 +850,10 @@ describe('AuditConsolePage', () => {
       expect.objectContaining({ method: 'POST' }),
     );
     expect(JSON.parse(String((fetchMock.mock.calls[1][1] as RequestInit).body))).toMatchObject({
-      evidence_packet_trace_id: 'cas_harness_reference_accept_001',
       model_id: 'EleutherAI/pythia-160m',
     });
+    expect(JSON.parse(String((fetchMock.mock.calls[1][1] as RequestInit).body)))
+      .not.toHaveProperty('evidence_packet_trace_id');
     expect(fetchMock).toHaveBeenNthCalledWith(
       3,
       '/api/cas-harness/audit/session/cas-audit-test-session/run',

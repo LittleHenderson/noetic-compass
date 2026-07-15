@@ -27,7 +27,7 @@ const MODELS: ModelOption[] = [
     layers: 12,
     available: true,
     notes:
-      'Reference/demo target for cached activations, replay, and Evidence Packet review. Hosted real-weight worker operation remains OPEN.',
+      'Hosted real-weight target. The connect step verifies the live Pythia worker before any audit runs.',
   },
   {
     id: 'qwen2.5-1.5b',
@@ -110,7 +110,7 @@ const rowNotesStyle: CSSProperties = {
   color: COLORS.textSecondary,
 };
 
-const tagStyle = (kind: 'reference' | 'soon'): CSSProperties => ({
+const tagStyle = (kind: 'live' | 'soon'): CSSProperties => ({
   fontSize: 10,
   fontWeight: 700,
   letterSpacing: 1,
@@ -118,12 +118,12 @@ const tagStyle = (kind: 'reference' | 'soon'): CSSProperties => ({
   padding: '3px 8px',
   borderRadius: 4,
   background:
-    kind === 'reference' ? 'rgba(251, 191, 36, 0.08)' : 'rgba(148, 163, 184, 0.06)',
+    kind === 'live' ? 'rgba(45, 212, 191, 0.08)' : 'rgba(148, 163, 184, 0.06)',
   border:
-    kind === 'reference'
-      ? '1px solid rgba(251, 191, 36, 0.35)'
+    kind === 'live'
+      ? '1px solid rgba(45, 212, 191, 0.35)'
       : '1px solid rgba(148, 163, 184, 0.20)',
-  color: kind === 'reference' ? '#fef3c7' : COLORS.textMuted,
+  color: kind === 'live' ? ACCENT_TEAL : COLORS.textMuted,
 });
 
 const buttonStyle: CSSProperties = {
@@ -159,8 +159,8 @@ export default function ModelConfigPage() {
       <GlassPanel intensity="regular" padding={24} ariaLabel="Choose a model">
         <h1 style={headingStyle}>Choose a model</h1>
         <p style={subheadingStyle}>
-          Pythia-160M is available as a reference/demo target for cached replay and
-          Evidence Packet review. Hosted real-weight worker operation remains OPEN.
+          Pythia-160M is available through the hosted live worker. The connect step
+          verifies real-weight authority before an audit can run.
         </p>
 
         <div style={listStyle} role="radiogroup" aria-label="Available models">
@@ -196,8 +196,8 @@ export default function ModelConfigPage() {
                   </div>
                   <div style={rowNotesStyle}>{model.notes}</div>
                 </div>
-                <span style={tagStyle(model.available ? 'reference' : 'soon')}>
-                  {model.available ? 'Reference' : 'Soon'}
+                <span style={tagStyle(model.available ? 'live' : 'soon')}>
+                  {model.available ? 'Live' : 'Soon'}
                 </span>
               </div>
             );

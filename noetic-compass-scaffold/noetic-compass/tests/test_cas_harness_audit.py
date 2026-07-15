@@ -4,6 +4,7 @@ from typing import get_args
 
 import pytest
 
+from api.routes import cas_harness_audit as audit_routes
 from api.routes.cas_harness_audit import Verdict
 from api.services.cas_harness_audit_sessions import reset_audit_sessions_for_tests
 from api.services.cas_harness_merged_evidence_packets import (
@@ -203,6 +204,100 @@ def test_verify_reference_model_target_success_without_secret(client, auth_heade
     assert "No external model call" in body["detail"]
     assert "Stage 9 40E scoped validation packet" in body["detail"]
     assert "not a per-customer production" in body["detail"]
+
+
+def test_verify_hosted_open_weight_target_requires_exact_real_weight_authority(
+    client, auth_headers, monkeypatch
+):
+    async def ready():
+        return {
+            "configured": True,
+            "required": True,
+            "status": "ok",
+            "authority": "verified",
+            "real_weights": True,
+            "model_id": "EleutherAI/pythia-160m",
+            "worker_version": "worker-test",
+        }
+
+    monkeypatch.setattr(audit_routes, "check_live_worker_readiness", ready)
+    resp = client.post(
+        "/api/cas-harness/audit/target/verify",
+        json={
+            "target": {
+                "kind": "hosted_open_weight",
+                "model_id": "EleutherAI/pythia-160m",
+            }
+        },
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["target"] == {
+        "kind": "hosted_open_weight",
+        "provider": "cas_harness_live_worker",
+        "model_id": "EleutherAI/pythia-160m",
+        "endpoint_url": None,
+        "credential_mode": "none",
+        "timeout_ms": 10000,
+    }
+    assert body["connection_state"] == "CONNECTED"
+    assert body["can_run_audit"] is True
+    assert body["provenance_chip"]["status"] == "verified"
+    assert body["reference_evidence_packet_trace_id"] is None
+    assert "No inference" in body["detail"]
+
+
+def test_verify_hosted_open_weight_target_fails_closed_when_worker_is_not_real(
+    client, auth_headers, monkeypatch
+):
+    async def unavailable():
+        return {
+            "configured": True,
+            "required": True,
+            "status": "error",
+            "reason": "realmode_contract_failed",
+            "real_weights": False,
+        }
+
+    monkeypatch.setattr(audit_routes, "check_live_worker_readiness", unavailable)
+    resp = client.post(
+        "/api/cas-harness/audit/target/verify",
+        json={"target": {"kind": "hosted_open_weight"}},
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 503
+    assert resp.json()["detail"] == {
+        "code": "hosted_open_weight_unavailable",
+        "status": "OPEN",
+        "reason": "realmode_contract_failed",
+    }
+
+
+@pytest.mark.parametrize(
+    "extra, detail",
+    (
+        ({"api_key": "should-not-leave-browser"}, "must not include credentials"),
+        (
+            {"model_id": "EleutherAI/gpt-neox-20b"},
+            "only supports EleutherAI/pythia-160m",
+        ),
+        ({"allow_unauthenticated": True}, "server-held service authentication"),
+    ),
+)
+def test_verify_hosted_open_weight_target_rejects_unsafe_overrides(
+    client, auth_headers, extra, detail
+):
+    resp = client.post(
+        "/api/cas-harness/audit/target/verify",
+        json={"target": {"kind": "hosted_open_weight", **extra}},
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert detail in resp.text
 
 
 def test_scale_plan_returns_open_weight_enterprise_worker_plan(client):
