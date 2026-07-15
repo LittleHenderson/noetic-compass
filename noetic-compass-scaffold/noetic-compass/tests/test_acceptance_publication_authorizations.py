@@ -183,32 +183,92 @@ def _claim_evidence(now: datetime) -> dict[str, object]:
         "privacy": "https://cascompass.ai/privacy",
         "terms": "https://cascompass.ai/terms",
     }
-    evidence.update(
-        {
-            "scanned_surfaces": [
+    machine_subject = {
+        "schema_version": "cas_harness_claim_honesty_machine_subject.v1",
+        "generated_at_utc": stamp,
+        "scanner": {
+            "ruleset_version": "cas_harness_claim_honesty_rules.v1",
+            "collector_sha256": hashlib.sha256(b"claim-collector").hexdigest(),
+            "request_method": "GET",
+            "redirects_allowed": False,
+            "maximum_response_bytes": 1_000_000,
+            "javascript_executed": False,
+        },
+        "scanned_surfaces": [
                 {
                     "kind": kind,
                     "url": url,
                     "http_status": 200,
+                    "final_url_matches_requested": True,
+                    "content_type": "text/html; charset=utf-8",
+                    "byte_length": 512,
                     "content_sha256": hashlib.sha256(kind.encode()).hexdigest(),
                     "verified_at_utc": stamp,
+                    "coverage_established": True,
+                    "visibility_basis": (
+                        "prerendered_same_route_application_mount"
+                        if kind in {"product_app", "audit_console"}
+                        else "static_same_route_html"
+                    ),
+                    "visible_text_sha256": hashlib.sha256(
+                        f"visible-{kind}".encode()
+                    ).hexdigest(),
+                    "visible_text_characters": 256,
+                    "visible_word_count": 32,
+                    "client_rendered_shell_detected": False,
+                    "prerendered_application_mount_detected": kind
+                    in {"product_app", "audit_console"},
+                    "prerender_contract_matches_requested_route": kind
+                    in {"product_app", "audit_console"},
+                    "route_identity_established": True,
+                    "error_count": 0,
+                    "errors_sha256": hashlib.sha256(b"[]").hexdigest(),
                 }
                 for kind, url in surfaces.items()
             ],
-            "scan": {
-                "misleading_claim_count": 0,
-                "unsupported_compliance_claim_count": 0,
-                "unsupported_universality_claim_count": 0,
-                "status_vocabulary_exact": True,
-            },
+        "scan": {
+            "misleading_claim_count": 0,
+            "unsupported_compliance_claim_count": 0,
+            "unsupported_universality_claim_count": 0,
+            "unsupported_ip_claim_count": 0,
+            "status_vocabulary_exact": True,
+            "scanned_surface_count": 6,
+            "covered_surface_count": 6,
+            "finding_count": 0,
+            "coverage_complete": True,
+            "machine_scan_passed": True,
+        },
+        "findings": [],
+    }
+    machine_subject_sha256 = hashlib.sha256(
+        json.dumps(
+            machine_subject,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=True,
+        ).encode("ascii")
+    ).hexdigest()
+    evidence.update(
+        {
+            "machine_subject": machine_subject,
+            "machine_subject_sha256": machine_subject_sha256,
+            "artifact_sha256": machine_subject_sha256,
             "boundaries": {
                 "research_scope_disclosed": True,
                 "research_accept_not_product_accept": True,
                 "worm_retention_not_verdict_upgrade": True,
                 "flag_for_human_review_not_accept": True,
                 "compliance_certification_claims_absent": True,
-                "rendered_product_status": "OPEN",
             },
+            "claim_status_vocabulary": [
+                "ACCEPT",
+                "FLAG_FOR_HUMAN_REVIEW",
+                "LICENSED",
+                "NOT LICENSED",
+                "OPEN",
+                "present",
+                "unavailable",
+            ],
             "approvals": [
                 {
                     "role": role,

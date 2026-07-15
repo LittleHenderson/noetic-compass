@@ -30,8 +30,9 @@ from pathlib import Path
 from typing import Any, Callable, Iterable, Mapping, Sequence
 
 
-REPORT_SCHEMA_VERSION = "cas_harness_claim_honesty_machine_report.v1"
-DRAFT_SCHEMA_VERSION = "cas_harness_claim_honesty_machine_evidence_draft.v1"
+REPORT_SCHEMA_VERSION = "cas_harness_claim_honesty_machine_report.v2"
+DRAFT_SCHEMA_VERSION = "cas_harness_claim_honesty_machine_evidence_draft.v2"
+MACHINE_SUBJECT_SCHEMA_VERSION = "cas_harness_claim_honesty_machine_subject.v1"
 RULESET_VERSION = "cas_harness_claim_honesty_rules.v1"
 DEFAULT_TIMEOUT_SECONDS = 15.0
 MAX_TIMEOUT_SECONDS = 30.0
@@ -290,6 +291,43 @@ class SurfaceAnalysis:
             "errors": list(self.errors),
         }
 
+    def machine_subject_record(self) -> dict[str, Any]:
+        """Return the exact secret-free facts covered by the machine subject.
+
+        The raw response bytes are intentionally not copied into an acceptance
+        artifact.  Their exact SHA-256 and byte length are, together with the
+        visible-text hash, route/coverage facts, and a digest of every error.
+        """
+
+        errors = sorted(set(self.errors))
+        return {
+            "kind": self.fetch.kind,
+            "url": self.fetch.url,
+            "http_status": self.fetch.http_status,
+            "final_url_matches_requested": self.fetch.final_url_matches_requested,
+            "content_type": self.fetch.content_type,
+            "byte_length": self.fetch.byte_length,
+            "content_sha256": self.fetch.raw_content_sha256,
+            "verified_at_utc": self.fetch.verified_at_utc,
+            "coverage_established": self.coverage_established,
+            "visibility_basis": self.visibility_basis,
+            "visible_text_sha256": self.visible_text_sha256,
+            "visible_text_characters": self.visible_text_characters,
+            "visible_word_count": self.visible_word_count,
+            "client_rendered_shell_detected": self.client_rendered_shell_detected,
+            "prerendered_application_mount_detected": (
+                self.prerendered_application_mount_detected
+            ),
+            "prerender_contract_matches_requested_route": (
+                self.prerender_contract_matches_requested_route
+            ),
+            "route_identity_established": self.route_identity_established,
+            "error_count": len(errors),
+            "errors_sha256": hashlib.sha256(
+                _canonical_json_bytes(errors)
+            ).hexdigest(),
+        }
+
 
 class _VisibleBodyParser(HTMLParser):
     def __init__(self) -> None:
@@ -544,12 +582,23 @@ def _decode_html(raw: bytes, content_type: str | None) -> tuple[str | None, str 
     media_type = (content_type or "").split(";", 1)[0].strip().lower()
     if media_type not in {"text/html", "application/xhtml+xml"}:
         return None, "unsupported_content_type"
-    charset_match = re.search(
-        r"(?:^|;)\s*charset\s*=\s*[\"']?([^;\"']+)",
-        content_type or "",
-        re.IGNORECASE,
+    charset_declarations = list(
+        re.finditer(
+            r"(?:^|;)\s*charset\s*=",
+            content_type or "",
+            re.IGNORECASE,
+        )
     )
-    charset = charset_match.group(1).strip().lower() if charset_match else "utf-8"
+    charset_matches = list(
+        re.finditer(
+            r"(?:^|;)\s*charset\s*=\s*[\"']?([^;\"']+)",
+            content_type or "",
+            re.IGNORECASE,
+        )
+    )
+    if len(charset_declarations) != 1 or len(charset_matches) != 1:
+        return None, "unsupported_charset"
+    charset = charset_matches[0].group(1).strip().lower()
     if charset not in {"utf-8", "utf8"}:
         return None, "unsupported_charset"
     try:
@@ -794,6 +843,21 @@ def _collector_sha256() -> str:
     return hashlib.sha256(raw).hexdigest()
 
 
+def _canonical_json_bytes(value: Any) -> bytes:
+    return json.dumps(
+        value,
+        ensure_ascii=True,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("ascii")
+
+
+def machine_subject_sha256(subject: Mapping[str, Any]) -> str:
+    """Hash the exact canonical machine subject embedded in later authority."""
+
+    return hashlib.sha256(_canonical_json_bytes(subject)).hexdigest()
+
+
 def collect_claim_honesty_report(
     *,
     fetcher: Callable[[str, str], SurfaceFetch] | None = None,
@@ -844,6 +908,13 @@ def collect_claim_honesty_report(
         ),
     }
     machine_scan_passed = coverage_complete and not findings
+    counts.update(
+        {
+            "finding_count": len(findings),
+            "coverage_complete": coverage_complete,
+            "machine_scan_passed": machine_scan_passed,
+        }
+    )
     blockers = [
         f"surface:{item.fetch.kind}:{error}"
         for item in analyses
@@ -854,6 +925,25 @@ def collect_claim_honesty_report(
     blockers.append("unsigned_draft_requires_independent_human_review")
 
     generated_at = _format_utc(clock())
+    scanner = {
+        "ruleset_version": RULESET_VERSION,
+        "collector_sha256": _collector_sha256(),
+        "request_method": "GET",
+        "redirects_allowed": False,
+        "maximum_response_bytes": max_response_bytes,
+        "javascript_executed": False,
+    }
+    machine_subject: dict[str, Any] = {
+        "schema_version": MACHINE_SUBJECT_SCHEMA_VERSION,
+        "generated_at_utc": generated_at,
+        "scanner": scanner,
+        "scanned_surfaces": [
+            item.machine_subject_record() for item in analyses
+        ],
+        "scan": counts,
+        "findings": findings,
+    }
+    subject_sha256 = machine_subject_sha256(machine_subject)
     draft_payload: dict[str, Any] = {
         "schema_version": DRAFT_SCHEMA_VERSION,
         "gate": "claim_honesty",
@@ -863,23 +953,16 @@ def collect_claim_honesty_report(
         "authoritative": False,
         "eligible_for_acceptance": False,
         "generated_at_utc": generated_at,
-        "scanner": {
-            "ruleset_version": RULESET_VERSION,
-            "collector_sha256": _collector_sha256(),
-            "request_method": "GET",
-            "redirects_allowed": False,
-            "maximum_response_bytes": max_response_bytes,
-            "javascript_executed": False,
-        },
-        "scanned_surfaces": [item.public_record() for item in analyses],
-        "scan": counts,
+        "machine_subject_schema_version": MACHINE_SUBJECT_SCHEMA_VERSION,
+        "machine_subject_sha256": subject_sha256,
         "coverage_complete": coverage_complete,
         "machine_scan_passed": machine_scan_passed,
     }
     return {
         "schema_version": REPORT_SCHEMA_VERSION,
         "draft_payload": draft_payload,
-        "findings": findings,
+        "machine_subject": machine_subject,
+        "machine_subject_sha256": subject_sha256,
         "blockers": sorted(set(blockers)),
     }
 
