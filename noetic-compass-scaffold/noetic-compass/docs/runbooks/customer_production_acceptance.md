@@ -512,6 +512,35 @@ unsupported patent language, and noncanonical status vocabulary. Matched text
 is not copied into the report; only the rule, offsets, and matched-text digest
 are recorded.
 
+The report's `machine_subject` is the only claim-scan subject eligible to be
+carried into later authority evidence. Its canonical SHA-256 is returned as
+`machine_subject_sha256`. The subject binds the exact collector source hash,
+ruleset, request policy, generation time, all six raw-response and visible-text
+hashes, byte/text lengths, route and prerender coverage facts, error-list
+hashes, the complete secret-free finding list, and the final machine-pass
+summary. Changing any one of those values changes the subject digest. Keep the
+exact subject bytes; do not transcribe a shorter summary by hand.
+
+The claim-honesty authority document embeds that exact `machine_subject` and
+digest, the fixed seven-term `claim_status_vocabulary`, the five explicit
+research/product/WORM/review/compliance boundaries, and three independent
+`claim_approval` references (`legal_owner`, `product_owner`, and
+`research_owner`). Each human attestation's `evidence_binding_sha256` is
+computed over the complete machine subject and digest, boundaries, vocabulary,
+protected-master SHA, and deploy ID. Approval references are excluded from that
+pre-approval hash to avoid self-reference, then are dereferenced and checked
+against it during publication and on every active authority read.
+
+There is deliberately no `rendered_product_status` field in claim-honesty
+evidence. Supplying either `OPEN` or `ACCEPT` there is a schema error. A clean
+unsigned machine report remains `OPEN`; final claim-gate satisfaction is
+derived only when the canonical machine subject passes, all boundary and
+vocabulary checks pass, and the live authority has revalidated all three real
+attestations. The final verifier additionally requires the subject's
+`collector_sha256` to match `scripts/collect_claim_honesty_evidence.py` at the
+exact expected protected-master checkout. This removes the circular pattern of
+copying the candidate manifest's desired `ACCEPT` value into its own evidence.
+
 The collector does not execute JavaScript. A client-routed application shell,
 insufficient visible text, or a primary heading that does not identify the
 requested route is a coverage failure. In particular, an HTTP `200` page

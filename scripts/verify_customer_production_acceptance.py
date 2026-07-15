@@ -158,6 +158,68 @@ CLAIM_SURFACE_KINDS = frozenset(
 CLAIM_APPROVER_ROLES = frozenset(
     {"legal_owner", "product_owner", "research_owner"}
 )
+CLAIM_MACHINE_SUBJECT_SCHEMA_VERSION = (
+    "cas_harness_claim_honesty_machine_subject.v1"
+)
+CLAIM_MACHINE_RULESET_VERSION = "cas_harness_claim_honesty_rules.v1"
+CLAIM_COLLECTOR_REPOSITORY_PATH = "scripts/collect_claim_honesty_evidence.py"
+CLAIM_MACHINE_SUBJECT_KEYS = {
+    "schema_version",
+    "generated_at_utc",
+    "scanner",
+    "scanned_surfaces",
+    "scan",
+    "findings",
+}
+CLAIM_MACHINE_SCANNER_KEYS = {
+    "ruleset_version",
+    "collector_sha256",
+    "request_method",
+    "redirects_allowed",
+    "maximum_response_bytes",
+    "javascript_executed",
+}
+CLAIM_MACHINE_SCAN_KEYS = {
+    "misleading_claim_count",
+    "unsupported_compliance_claim_count",
+    "unsupported_universality_claim_count",
+    "unsupported_ip_claim_count",
+    "status_vocabulary_exact",
+    "scanned_surface_count",
+    "covered_surface_count",
+    "finding_count",
+    "coverage_complete",
+    "machine_scan_passed",
+}
+CLAIM_MACHINE_SURFACE_KEYS = {
+    "kind",
+    "url",
+    "http_status",
+    "final_url_matches_requested",
+    "content_type",
+    "byte_length",
+    "content_sha256",
+    "verified_at_utc",
+    "coverage_established",
+    "visibility_basis",
+    "visible_text_sha256",
+    "visible_text_characters",
+    "visible_word_count",
+    "client_rendered_shell_detected",
+    "prerendered_application_mount_detected",
+    "prerender_contract_matches_requested_route",
+    "route_identity_established",
+    "error_count",
+    "errors_sha256",
+}
+CLAIM_MACHINE_FINDING_KEYS = {
+    "category",
+    "rule_id",
+    "surface_kind",
+    "match_start",
+    "match_end",
+    "match_sha256",
+}
 TABLETOP_ROLES = frozenset(
     {"incident_commander", "legal", "operations", "security", "support"}
 )
@@ -426,6 +488,14 @@ def _canonical_bytes(value: Mapping[str, Any]) -> bytes:
     ).encode("utf-8")
 
 
+def _canonical_claim_machine_subject_bytes(value: Mapping[str, Any]) -> bytes:
+    """Match the collector/API ASCII canonicalization for one machine subject."""
+
+    return json.dumps(
+        value, sort_keys=True, separators=(",", ":"), ensure_ascii=True
+    ).encode("ascii")
+
+
 def _is_mapping(value: Any, path: str, errors: list[str]) -> bool:
     if not isinstance(value, Mapping):
         _error(errors, path, "must be an object")
@@ -450,6 +520,28 @@ def _nonempty_string(value: Any, path: str, errors: list[str]) -> str | None:
         _error(errors, path, "must be a non-empty string")
         return None
     return value
+
+
+def _claim_html_content_type_is_supported(value: str) -> bool:
+    """Mirror the claim collector's HTML media type and UTF-8 rules exactly."""
+
+    media_type = value.split(";", 1)[0].strip().lower()
+    if media_type not in {"text/html", "application/xhtml+xml"}:
+        return False
+    charset_declarations = list(
+        re.finditer(r"(?:^|;)\s*charset\s*=", value, re.IGNORECASE)
+    )
+    charset_matches = list(
+        re.finditer(
+            r"(?:^|;)\s*charset\s*=\s*[\"']?([^;\"']+)",
+            value,
+            re.IGNORECASE,
+        )
+    )
+    if len(charset_declarations) != 1 or len(charset_matches) != 1:
+        return False
+    charset = charset_matches[0].group(1).strip().lower()
+    return charset in {"utf-8", "utf8"}
 
 
 def _sha256(value: Any, path: str, errors: list[str]) -> str | None:
@@ -672,6 +764,43 @@ def _repository_commit(repo_root: Path) -> str | None:
         return None
     value = result.stdout.strip().lower()
     return value if SHA1_RE.fullmatch(value) else None
+
+
+def _read_git_blob(
+    repo_root: Path, revision: str | None, repository_path: str
+) -> bytes | None:
+    """Read exact immutable Git-blob bytes without consulting the checkout."""
+
+    if revision is None or SHA1_RE.fullmatch(revision) is None:
+        return None
+    if (
+        not repository_path
+        or repository_path.startswith(("/", "\\"))
+        or "\\" in repository_path
+        or any(part in {"", ".", ".."} for part in repository_path.split("/"))
+    ):
+        return None
+    object_name = f"{revision}:{repository_path}"
+    try:
+        size_result = subprocess.run(
+            ["git", "-C", str(repo_root), "cat-file", "-s", object_name],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
+        size = int(size_result.stdout.strip())
+        if size < 0 or size > MAX_EVIDENCE_BYTES:
+            return None
+        blob_result = subprocess.run(
+            ["git", "-C", str(repo_root), "cat-file", "blob", object_name],
+            check=True,
+            capture_output=True,
+            timeout=10,
+        )
+    except (OSError, ValueError, subprocess.SubprocessError):
+        return None
+    return blob_result.stdout if len(blob_result.stdout) == size else None
 
 
 def _load_trusted_issuer_registry(
@@ -1926,9 +2055,112 @@ def _validate_claim_honesty(
 ) -> None:
     path = "$.required_gates.claim_honesty.evidence.payload"
     errors = context.errors
-    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"scanned_surfaces", "scan", "boundaries", "approvals"}, path, errors)
+    _exact_keys(
+        evidence,
+        COMMON_EVIDENCE_KEYS
+        | {
+            "machine_subject",
+            "machine_subject_sha256",
+            "boundaries",
+            "claim_status_vocabulary",
+            "approvals",
+        },
+        path,
+        errors,
+    )
     event, observed = _validate_common_evidence(evidence, "claim_honesty", context)
-    surfaces = _list_by_key(evidence.get("scanned_surfaces"), "kind", CLAIM_SURFACE_KINDS, f"{path}.scanned_surfaces", errors)
+    machine_subject = evidence.get("machine_subject")
+    generated: datetime | None = None
+    surfaces: dict[Any, Mapping[str, Any]] = {}
+    if _is_mapping(machine_subject, f"{path}.machine_subject", errors):
+        _exact_keys(
+            machine_subject,
+            CLAIM_MACHINE_SUBJECT_KEYS,
+            f"{path}.machine_subject",
+            errors,
+        )
+        _require(
+            machine_subject.get("schema_version")
+            == CLAIM_MACHINE_SUBJECT_SCHEMA_VERSION,
+            f"{path}.machine_subject.schema_version",
+            "must match the pinned machine-subject schema",
+            errors,
+        )
+        generated = _critical_proof_timestamp(
+            machine_subject.get("generated_at_utc"),
+            gate="claim_honesty",
+            event=event,
+            observed=observed,
+            context=context,
+            path=f"{path}.machine_subject.generated_at_utc",
+        )
+        scanner = machine_subject.get("scanner")
+        maximum: int | None = None
+        if _is_mapping(scanner, f"{path}.machine_subject.scanner", errors):
+            _exact_keys(
+                scanner,
+                CLAIM_MACHINE_SCANNER_KEYS,
+                f"{path}.machine_subject.scanner",
+                errors,
+            )
+            expected_scanner = {
+                "ruleset_version": CLAIM_MACHINE_RULESET_VERSION,
+                "request_method": "GET",
+                "redirects_allowed": False,
+                "javascript_executed": False,
+            }
+            for field, expected in expected_scanner.items():
+                _require(
+                    _json_scalar_equals(scanner.get(field), expected),
+                    f"{path}.machine_subject.scanner.{field}",
+                    f"must equal {expected!r}",
+                    errors,
+                )
+            collector_digest = _sha256(
+                scanner.get("collector_sha256"),
+                f"{path}.machine_subject.scanner.collector_sha256",
+                errors,
+            )
+            maximum = _positive_int(
+                scanner.get("maximum_response_bytes"),
+                f"{path}.machine_subject.scanner.maximum_response_bytes",
+                errors,
+            )
+            if maximum is not None:
+                _require(
+                    maximum <= MAX_EVIDENCE_BYTES,
+                    f"{path}.machine_subject.scanner.maximum_response_bytes",
+                    "must not exceed the verifier evidence bound",
+                    errors,
+                )
+            collector_blob = _read_git_blob(
+                context.repo_root,
+                context.expected_master_head,
+                CLAIM_COLLECTOR_REPOSITORY_PATH,
+            )
+            if collector_blob is None:
+                expected_collector_digest = None
+                _error(
+                    errors,
+                    f"{path}.machine_subject.scanner.collector_sha256",
+                    "cannot read the collector Git blob at expected master HEAD",
+                )
+            else:
+                expected_collector_digest = hashlib.sha256(collector_blob).hexdigest()
+            if collector_digest is not None and expected_collector_digest is not None:
+                _require(
+                    collector_digest == expected_collector_digest,
+                    f"{path}.machine_subject.scanner.collector_sha256",
+                    "must hash the exact collector source at expected master HEAD",
+                    errors,
+                )
+        surfaces = _list_by_key(
+            machine_subject.get("scanned_surfaces"),
+            "kind",
+            CLAIM_SURFACE_KINDS,
+            f"{path}.machine_subject.scanned_surfaces",
+            errors,
+        )
     expected_urls = {
         "product_app": PRODUCTION_APP_ORIGIN,
         "audit_console": f"{PRODUCTION_APP_ORIGIN}/audit-console",
@@ -1938,31 +2170,188 @@ def _validate_claim_honesty(
         "terms": f"{LANDING_ORIGIN}/terms",
     }
     for kind, surface in surfaces.items():
-        item_path = f"{path}.scanned_surfaces[{kind}]"
-        _exact_keys(surface, {"kind", "url", "http_status", "content_sha256", "verified_at_utc"}, item_path, errors)
+        item_path = f"{path}.machine_subject.scanned_surfaces[{kind}]"
+        _exact_keys(surface, CLAIM_MACHINE_SURFACE_KEYS, item_path, errors)
         _require(surface.get("url") == expected_urls[kind], f"{item_path}.url", f"must equal {expected_urls[kind]!r}", errors)
         _require(_json_scalar_equals(surface.get("http_status"), 200), f"{item_path}.http_status", "must be 200", errors)
+        for field, expected in {
+            "final_url_matches_requested": True,
+            "coverage_established": True,
+            "route_identity_established": True,
+            "client_rendered_shell_detected": False,
+            "error_count": 0,
+        }.items():
+            _require(
+                _json_scalar_equals(surface.get(field), expected),
+                f"{item_path}.{field}",
+                f"must equal {expected!r}",
+                errors,
+            )
+        _require(
+            surface.get("errors_sha256") == hashlib.sha256(b"[]").hexdigest(),
+            f"{item_path}.errors_sha256",
+            "must hash the exact empty error list",
+            errors,
+        )
+        content_type = _nonempty_string(
+            surface.get("content_type"), f"{item_path}.content_type", errors
+        )
+        if content_type is not None:
+            _require(
+                _claim_html_content_type_is_supported(content_type),
+                f"{item_path}.content_type",
+                "must be HTML decoded under the collector's UTF-8 rules",
+                errors,
+            )
+        byte_length = _positive_int(
+            surface.get("byte_length"), f"{item_path}.byte_length", errors
+        )
         _sha256(surface.get("content_sha256"), f"{item_path}.content_sha256", errors)
-        _critical_proof_timestamp(surface.get("verified_at_utc"), gate="claim_honesty", event=event, observed=observed, context=context, path=f"{item_path}.verified_at_utc")
-    scan = evidence.get("scan")
-    if _is_mapping(scan, f"{path}.scan", errors):
-        _exact_keys(scan, {"misleading_claim_count", "unsupported_compliance_claim_count", "unsupported_universality_claim_count", "status_vocabulary_exact"}, f"{path}.scan", errors)
-        for field in ("misleading_claim_count", "unsupported_compliance_claim_count", "unsupported_universality_claim_count"):
-            _require(_json_scalar_equals(scan.get(field), 0), f"{path}.scan.{field}", "must be zero", errors)
-        _require(scan.get("status_vocabulary_exact") is True, f"{path}.scan.status_vocabulary_exact", "must be true", errors)
+        _sha256(surface.get("visible_text_sha256"), f"{item_path}.visible_text_sha256", errors)
+        characters = _positive_int(
+            surface.get("visible_text_characters"),
+            f"{item_path}.visible_text_characters",
+            errors,
+        )
+        words = _positive_int(
+            surface.get("visible_word_count"),
+            f"{item_path}.visible_word_count",
+            errors,
+        )
+        if characters is not None:
+            _require(characters >= 32, f"{item_path}.visible_text_characters", "must establish substantive coverage", errors)
+        if words is not None:
+            _require(words >= 5, f"{item_path}.visible_word_count", "must establish substantive coverage", errors)
+        if (
+            words is not None
+            and characters is not None
+            and byte_length is not None
+            and maximum is not None
+        ):
+            _require(
+                words <= characters <= byte_length <= maximum,
+                item_path,
+                "must satisfy 0 < visible_word_count <= visible_text_characters <= byte_length <= maximum_response_bytes",
+                errors,
+            )
+        basis = surface.get("visibility_basis")
+        prerendered = surface.get("prerendered_application_mount_detected")
+        contract_matches = surface.get("prerender_contract_matches_requested_route")
+        expected_prerendered = kind in {"product_app", "audit_console"}
+        _require(
+            prerendered is expected_prerendered,
+            f"{item_path}.prerendered_application_mount_detected",
+            "must match the pinned route rendering contract",
+            errors,
+        )
+        if expected_prerendered:
+            _require(
+                basis == "prerendered_same_route_application_mount"
+                and contract_matches is True,
+                f"{item_path}.visibility_basis",
+                "must bind a matching same-route prerender contract",
+                errors,
+            )
+        else:
+            _require(
+                basis == "static_same_route_html"
+                and contract_matches is False,
+                f"{item_path}.visibility_basis",
+                "must bind static same-route HTML with exact JSON false prerender contract",
+                errors,
+            )
+        verified = _critical_proof_timestamp(surface.get("verified_at_utc"), gate="claim_honesty", event=event, observed=observed, context=context, path=f"{item_path}.verified_at_utc")
+        if verified is not None and generated is not None:
+            _require(
+                verified <= generated,
+                f"{item_path}.verified_at_utc",
+                "must not follow machine-subject generation",
+                errors,
+            )
+    if isinstance(machine_subject, Mapping):
+        scan = machine_subject.get("scan")
+        if _is_mapping(scan, f"{path}.machine_subject.scan", errors):
+            _exact_keys(scan, CLAIM_MACHINE_SCAN_KEYS, f"{path}.machine_subject.scan", errors)
+            for field in (
+                "misleading_claim_count",
+                "unsupported_compliance_claim_count",
+                "unsupported_universality_claim_count",
+                "unsupported_ip_claim_count",
+                "finding_count",
+            ):
+                _require(_json_scalar_equals(scan.get(field), 0), f"{path}.machine_subject.scan.{field}", "must be zero", errors)
+            for field, expected in {
+                "status_vocabulary_exact": True,
+                "scanned_surface_count": len(CLAIM_SURFACE_KINDS),
+                "covered_surface_count": len(CLAIM_SURFACE_KINDS),
+                "coverage_complete": True,
+                "machine_scan_passed": True,
+            }.items():
+                _require(
+                    _json_scalar_equals(scan.get(field), expected),
+                    f"{path}.machine_subject.scan.{field}",
+                    f"must equal {expected!r}",
+                    errors,
+                )
+        findings = machine_subject.get("findings")
+        if not isinstance(findings, list):
+            _error(errors, f"{path}.machine_subject.findings", "must be an array")
+        else:
+            for index, finding in enumerate(findings):
+                item_path = f"{path}.machine_subject.findings[{index}]"
+                if _is_mapping(finding, item_path, errors):
+                    _exact_keys(finding, CLAIM_MACHINE_FINDING_KEYS, item_path, errors)
+            _require(
+                findings == [],
+                f"{path}.machine_subject.findings",
+                "must be the exact empty finding list",
+                errors,
+            )
+        machine_digest = hashlib.sha256(
+            _canonical_claim_machine_subject_bytes(machine_subject)
+        ).hexdigest()
+        _require(
+            evidence.get("machine_subject_sha256") == machine_digest,
+            f"{path}.machine_subject_sha256",
+            "must hash the exact canonical machine subject",
+            errors,
+        )
+        _require(
+            evidence.get("artifact_sha256") == machine_digest,
+            f"{path}.artifact_sha256",
+            "must equal machine_subject_sha256 and hash the exact canonical machine subject",
+            errors,
+        )
+    _sha256(
+        evidence.get("machine_subject_sha256"),
+        f"{path}.machine_subject_sha256",
+        errors,
+    )
     boundaries = evidence.get("boundaries")
     if _is_mapping(boundaries, f"{path}.boundaries", errors):
-        _exact_keys(boundaries, {"research_scope_disclosed", "research_accept_not_product_accept", "worm_retention_not_verdict_upgrade", "flag_for_human_review_not_accept", "compliance_certification_claims_absent", "rendered_product_status"}, f"{path}.boundaries", errors)
+        _exact_keys(boundaries, {"research_scope_disclosed", "research_accept_not_product_accept", "worm_retention_not_verdict_upgrade", "flag_for_human_review_not_accept", "compliance_certification_claims_absent"}, f"{path}.boundaries", errors)
         for field in ("research_scope_disclosed", "research_accept_not_product_accept", "worm_retention_not_verdict_upgrade", "flag_for_human_review_not_accept", "compliance_certification_claims_absent"):
             _require(boundaries.get(field) is True, f"{path}.boundaries.{field}", "must be true", errors)
-        _require(boundaries.get("rendered_product_status") == product_status, f"{path}.boundaries.rendered_product_status", "must match the declared product status", errors)
+    _require(
+        evidence.get("claim_status_vocabulary") == list(CLAIM_STATUS_VOCABULARY),
+        f"{path}.claim_status_vocabulary",
+        "must preserve the exact bounded claim vocabulary and casing",
+        errors,
+    )
     approvals = _list_by_key(evidence.get("approvals"), "role", CLAIM_APPROVER_ROLES, f"{path}.approvals", errors)
     for role, approval in approvals.items():
         item_path = f"{path}.approvals[{role}]"
         _exact_keys(approval, {"role", "approval_artifact_uri", "approval_sha256", "approved_at_utc"}, item_path, errors)
         _safe_https_url(approval.get("approval_artifact_uri"), f"{item_path}.approval_artifact_uri", errors, allowed_origins={PRODUCTION_API_ORIGIN, LANDING_ORIGIN})
         _sha256(approval.get("approval_sha256"), f"{item_path}.approval_sha256", errors)
-        _critical_proof_timestamp(approval.get("approved_at_utc"), gate="claim_honesty", event=event, observed=observed, context=context, path=f"{item_path}.approved_at_utc")
+        approved = _critical_proof_timestamp(approval.get("approved_at_utc"), gate="claim_honesty", event=event, observed=observed, context=context, path=f"{item_path}.approved_at_utc")
+        if approved is not None and generated is not None:
+            _require(
+                approved >= generated,
+                f"{item_path}.approved_at_utc",
+                "must be at or after machine-subject generation",
+                errors,
+            )
 
 
 GateValidator = Callable[[Mapping[str, Any], ValidationContext], None]
@@ -2194,10 +2583,21 @@ def _cross_validate(
     docs: dict[Any, Any] = {}
     if legal and isinstance(legal.get("documents"), list):
         docs = {item.get("kind"): item.get("content_sha256") for item in legal["documents"] if isinstance(item, Mapping)}
-    if legal and honesty and docs and isinstance(honesty.get("scanned_surfaces"), list):
-        surfaces = {item.get("kind"): item.get("content_sha256") for item in honesty["scanned_surfaces"] if isinstance(item, Mapping)}
+    honesty_subject = honesty.get("machine_subject") if honesty else None
+    if (
+        legal
+        and honesty
+        and docs
+        and isinstance(honesty_subject, Mapping)
+        and isinstance(honesty_subject.get("scanned_surfaces"), list)
+    ):
+        surfaces = {
+            item.get("kind"): item.get("content_sha256")
+            for item in honesty_subject["scanned_surfaces"]
+            if isinstance(item, Mapping)
+        }
         for kind in LEGAL_DOCUMENT_KINDS:
-            _require(docs.get(kind) == surfaces.get(kind), f"$.required_gates.claim_honesty.evidence.payload.scanned_surfaces[{kind}].content_sha256", "must match the authoritative legal publication hash", errors)
+            _require(docs.get(kind) == surfaces.get(kind), f"$.required_gates.claim_honesty.evidence.payload.machine_subject.scanned_surfaces[{kind}].content_sha256", "must match the authoritative legal publication hash", errors)
     support = gate_payloads.get("support_crm")
     if support and docs:
         consent = support.get("consent")

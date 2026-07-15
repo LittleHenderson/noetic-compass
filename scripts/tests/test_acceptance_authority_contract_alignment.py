@@ -31,6 +31,7 @@ from api.services.production.state_substrate.memory_store import (  # noqa: E402
 from scripts import verify_customer_production_acceptance as verifier  # noqa: E402
 from scripts import build_alert_delivery_gate_payload as alert_builder  # noqa: E402
 from scripts import collect_customer_readiness_facts as readiness_collector  # noqa: E402
+from scripts import collect_claim_honesty_evidence as claim_collector  # noqa: E402
 from scripts import collect_hosted_customer_journey_evidence as journey_collector  # noqa: E402
 from scripts import collect_airtable_crm_acceptance_source as crm_collector  # noqa: E402
 from scripts import collect_operational_acceptance_draft as operational_collector  # noqa: E402
@@ -48,6 +49,211 @@ from scripts.tests.test_verify_customer_production_acceptance import (  # noqa: 
 
 
 class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
+    def test_claim_machine_subject_contract_is_exact_across_all_layers(self) -> None:
+        self.assertEqual(
+            claim_collector.MACHINE_SUBJECT_SCHEMA_VERSION,
+            verifier.CLAIM_MACHINE_SUBJECT_SCHEMA_VERSION,
+        )
+        self.assertEqual(
+            claim_collector.MACHINE_SUBJECT_SCHEMA_VERSION,
+            authority_service.CLAIM_MACHINE_SUBJECT_SCHEMA_VERSION,
+        )
+        self.assertEqual(
+            claim_collector.RULESET_VERSION,
+            verifier.CLAIM_MACHINE_RULESET_VERSION,
+        )
+        self.assertEqual(
+            claim_collector.RULESET_VERSION,
+            authority_service.CLAIM_MACHINE_RULESET_VERSION,
+        )
+        claim = _gate_payloads()["claim_honesty"]
+        self.assertNotIn("rendered_product_status", claim["boundaries"])
+        self.assertEqual(
+            claim["machine_subject_sha256"],
+            claim_collector.machine_subject_sha256(claim["machine_subject"]),
+        )
+
+    def test_claim_charset_contract_is_exact_across_all_layers(self) -> None:
+        for content_type in (
+            "text/html",
+            "text/html; charset=",
+            "text/html; charset=utf-8; charset=iso-8859-1",
+        ):
+            with self.subTest(content_type=content_type):
+                decoded, error = claim_collector._decode_html(
+                    b"<html></html>", content_type
+                )
+                self.assertIsNone(decoded)
+                self.assertEqual(error, "unsupported_charset")
+                self.assertFalse(
+                    authority_service._claim_html_content_type_is_supported(
+                        content_type
+                    )
+                )
+                self.assertFalse(
+                    verifier._claim_html_content_type_is_supported(content_type)
+                )
+
+        accepted = "Text/HTML; Charset=\"UTF-8\""
+        decoded, error = claim_collector._decode_html(
+            b"<html></html>", accepted
+        )
+        self.assertEqual(decoded, "<html></html>")
+        self.assertIsNone(error)
+        self.assertTrue(
+            authority_service._claim_html_content_type_is_supported(accepted)
+        )
+        self.assertTrue(verifier._claim_html_content_type_is_supported(accepted))
+
+    def test_claim_authority_rejects_circular_status_and_machine_subject_tamper(self) -> None:
+        base = _gate_payloads()["claim_honesty"]
+        base["master_head_sha"] = MASTER_SHA
+        base["deploy_id"] = DEPLOY_ID
+        base["artifact_uri"] = verifier.LIVE_AUTHORITY_ENDPOINTS["claim_honesty"][
+            "noetic-production-live"
+        ]
+        base["artifact_sha256"] = base["machine_subject_sha256"]
+        canonicalize_acceptance_evidence("claim_honesty", base, now=NOW)
+
+        circular = deepcopy(base)
+        circular["boundaries"]["rendered_product_status"] = "ACCEPT"
+        with self.assertRaises(AcceptanceAuthorityInvalid):
+            canonicalize_acceptance_evidence("claim_honesty", circular, now=NOW)
+
+        tampered = deepcopy(base)
+        tampered["machine_subject"]["scanned_surfaces"][0][
+            "content_sha256"
+        ] = "f" * 64
+        with self.assertRaises(AcceptanceAuthorityInvalid):
+            canonicalize_acceptance_evidence("claim_honesty", tampered, now=NOW)
+
+        finding = deepcopy(base)
+        finding["machine_subject"]["findings"].append(
+            {
+                "category": "misleading_claim",
+                "rule_id": "customer_production_ready",
+                "surface_kind": "landing",
+                "match_start": 0,
+                "match_end": 10,
+                "match_sha256": "a" * 64,
+            }
+        )
+        finding["machine_subject_sha256"] = claim_collector.machine_subject_sha256(
+            finding["machine_subject"]
+        )
+        with self.assertRaises(AcceptanceAuthorityInvalid):
+            canonicalize_acceptance_evidence("claim_honesty", finding, now=NOW)
+
+    def test_claim_authority_enforces_exact_machine_to_human_chronology(self) -> None:
+        def bound_claim() -> dict:
+            claim = _gate_payloads()["claim_honesty"]
+            claim["artifact_uri"] = verifier.LIVE_AUTHORITY_ENDPOINTS[
+                "claim_honesty"
+            ]["noetic-production-live"]
+            claim["artifact_sha256"] = claim["machine_subject_sha256"]
+            return claim
+
+        canonicalize_acceptance_evidence(
+            "claim_honesty", bound_claim(), now=NOW
+        )
+
+        surface_after_generation = bound_claim()
+        surface_after_generation["machine_subject"]["scanned_surfaces"][0][
+            "verified_at_utc"
+        ] = "2026-07-14T11:49:00Z"
+        digest = claim_collector.machine_subject_sha256(
+            surface_after_generation["machine_subject"]
+        )
+        surface_after_generation["machine_subject_sha256"] = digest
+        surface_after_generation["artifact_sha256"] = digest
+        with self.assertRaises(AcceptanceAuthorityInvalid):
+            canonicalize_acceptance_evidence(
+                "claim_honesty", surface_after_generation, now=NOW
+            )
+
+        approval_before_generation = bound_claim()
+        approval_before_generation["approvals"][0]["approved_at_utc"] = (
+            "2026-07-14T11:47:00Z"
+        )
+        with self.assertRaises(AcceptanceAuthorityInvalid):
+            canonicalize_acceptance_evidence(
+                "claim_honesty", approval_before_generation, now=NOW
+            )
+
+        artifact_mismatch = bound_claim()
+        artifact_mismatch["artifact_sha256"] = "f" * 64
+        with self.assertRaises(AcceptanceAuthorityInvalid):
+            canonicalize_acceptance_evidence(
+                "claim_honesty", artifact_mismatch, now=NOW
+            )
+
+    def test_claim_authority_enforces_collector_charset_types_and_lengths(self) -> None:
+        def bound_claim() -> dict:
+            claim = _gate_payloads()["claim_honesty"]
+            claim["artifact_uri"] = verifier.LIVE_AUTHORITY_ENDPOINTS[
+                "claim_honesty"
+            ]["noetic-production-live"]
+            return claim
+
+        def mutate_and_rebind(mutator) -> dict:
+            claim = bound_claim()
+            static_surface = next(
+                surface
+                for surface in claim["machine_subject"]["scanned_surfaces"]
+                if surface["kind"] == "landing"
+            )
+            mutator(claim, static_surface)
+            digest = claim_collector.machine_subject_sha256(
+                claim["machine_subject"]
+            )
+            claim["machine_subject_sha256"] = digest
+            claim["artifact_sha256"] = digest
+            return claim
+
+        cases = {
+            "missing charset": lambda _claim, surface: surface.update(
+                content_type="text/html"
+            ),
+            "empty charset": lambda _claim, surface: surface.update(
+                content_type="text/html; charset="
+            ),
+            "conflicting duplicate charset": lambda _claim, surface: surface.update(
+                content_type="text/html; charset=utf-8; charset=iso-8859-1"
+            ),
+            "non-UTF-8 declared charset": lambda _claim, surface: surface.update(
+                content_type="text/html; charset=iso-8859-1"
+            ),
+            "static prerender marker null": lambda _claim, surface: surface.update(
+                prerender_contract_matches_requested_route=None
+            ),
+            "static prerender marker integer": lambda _claim, surface: surface.update(
+                prerender_contract_matches_requested_route=0
+            ),
+            "boolean word count": lambda _claim, surface: surface.update(
+                visible_word_count=True
+            ),
+            "words exceed characters": lambda _claim, surface: surface.update(
+                visible_word_count=257
+            ),
+            "characters exceed bytes": lambda _claim, surface: surface.update(
+                visible_text_characters=513
+            ),
+            "bytes exceed scanner maximum": lambda claim, surface: (
+                claim["machine_subject"]["scanner"].update(
+                    maximum_response_bytes=511
+                ),
+                surface.update(byte_length=512),
+            ),
+        }
+        for label, mutator in cases.items():
+            with self.subTest(label=label):
+                with self.assertRaises(AcceptanceAuthorityInvalid):
+                    canonicalize_acceptance_evidence(
+                        "claim_honesty",
+                        mutate_and_rebind(mutator),
+                        now=NOW,
+                    )
+
     def test_customer_provider_identity_is_aligned_across_active_contracts(self) -> None:
         origin = "https://cas-harness-customer-api.onrender.com"
         service_id = "srv-d9bijbjtqb8s73cn4n20"
@@ -158,7 +364,11 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
             payload["master_head_sha"] = MASTER_SHA
             payload["deploy_id"] = DEPLOY_ID
             payload["artifact_uri"] = endpoint
-            payload["artifact_sha256"] = _digest(f"live-authority-{gate}")
+            payload["artifact_sha256"] = (
+                payload["machine_subject_sha256"]
+                if gate == "claim_honesty"
+                else _digest(f"live-authority-{gate}")
+            )
             backend = InMemoryStateStore()
             authorization_store = AcceptancePublicationAuthorizationStore(
                 backend, primary_tenant_id="primary"
@@ -224,7 +434,11 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
             payload["artifact_uri"] = verifier.LIVE_AUTHORITY_ENDPOINTS[gate][
                 "noetic-production-live"
             ]
-            payload["artifact_sha256"] = _digest(f"live-authority-{gate}")
+            payload["artifact_sha256"] = (
+                payload["machine_subject_sha256"]
+                if gate == "claim_honesty"
+                else _digest(f"live-authority-{gate}")
+            )
 
         cases: list[tuple[str, dict]] = []
         legal = deepcopy(payloads["legal_publication_approval"])

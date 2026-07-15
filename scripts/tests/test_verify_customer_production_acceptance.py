@@ -5,6 +5,7 @@ import copy
 import hashlib
 import io
 import json
+import subprocess
 import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
@@ -23,7 +24,18 @@ EVENT = "2026-07-14T11:30:00Z"
 OBSERVED = "2026-07-14T11:50:00Z"
 ISSUED = "2026-07-14T11:55:00Z"
 EXPIRES = "2026-07-15T12:00:00Z"
-MASTER_SHA = "a" * 40
+MASTER_SHA = subprocess.run(
+    ["git", "-C", str(ROOT), "rev-parse", "HEAD"],
+    check=True,
+    capture_output=True,
+    text=True,
+).stdout.strip().lower()
+COLLECTOR_BLOB = verifier._read_git_blob(
+    ROOT, MASTER_SHA, verifier.CLAIM_COLLECTOR_REPOSITORY_PATH
+)
+if COLLECTOR_BLOB is None:  # pragma: no cover - repository test invariant
+    raise RuntimeError("claim collector Git blob is unavailable at test HEAD")
+COLLECTOR_BLOB_SHA256 = hashlib.sha256(COLLECTOR_BLOB).hexdigest()
 DEPLOY_ID = "dep-publicacceptance001"
 TEST_ISSUER = "customer-production-test-issuer"
 TEST_KEY_ID = "test-rs256-2026"
@@ -126,7 +138,8 @@ CRITICAL_TIMESTAMP_PATHS: dict[str, list[tuple[str | int, ...]]] = {
         ("escalation", "delivered_at_utc"),
     ],
     "claim_honesty": [
-        *(("scanned_surfaces", index, "verified_at_utc") for index in range(6)),
+        ("machine_subject", "generated_at_utc"),
+        *(("machine_subject", "scanned_surfaces", index, "verified_at_utc") for index in range(6)),
         *(("approvals", index, "approved_at_utc") for index in range(3)),
     ],
 }
@@ -171,7 +184,11 @@ class SignedBundle:
     ) -> dict:
         self.counter += 1
         subject_uri = subject_uri or SUBJECT_URIS[gate]
-        subject_hash = _digest(f"subject-{gate}-{self.counter}")
+        subject_hash = (
+            str(evidence.get("machine_subject_sha256"))
+            if gate == "claim_honesty"
+            else _digest(f"subject-{gate}-{self.counter}")
+        )
         evidence["artifact_uri"] = subject_uri
         evidence["artifact_sha256"] = subject_hash
         unsigned = {
@@ -225,7 +242,7 @@ def _approval(role: str, prefix: str) -> dict:
         "role": role,
         "approval_artifact_uri": f"{verifier.PRODUCTION_API_ORIGIN}/internal/approvals/{prefix}-{role}",
         "approval_sha256": _digest(f"{prefix}-{role}"),
-        "approved_at_utc": "2026-07-14T11:45:00Z",
+        "approved_at_utc": "2026-07-14T11:49:00Z",
     }
 
 
@@ -665,32 +682,75 @@ def _gate_payloads() -> dict[str, dict]:
         "privacy": f"{verifier.LANDING_ORIGIN}/privacy",
         "terms": f"{verifier.LANDING_ORIGIN}/terms",
     }
+    machine_subject = {
+        "schema_version": verifier.CLAIM_MACHINE_SUBJECT_SCHEMA_VERSION,
+        "generated_at_utc": "2026-07-14T11:48:00Z",
+        "scanner": {
+            "ruleset_version": verifier.CLAIM_MACHINE_RULESET_VERSION,
+            "collector_sha256": COLLECTOR_BLOB_SHA256,
+            "request_method": "GET",
+            "redirects_allowed": False,
+            "maximum_response_bytes": 1_000_000,
+            "javascript_executed": False,
+        },
+        "scanned_surfaces": [
+            {
+                "kind": kind,
+                "url": urls[kind],
+                "http_status": 200,
+                "final_url_matches_requested": True,
+                "content_type": "text/html; charset=utf-8",
+                "byte_length": 512,
+                "content_sha256": surface_hashes[kind],
+                "verified_at_utc": "2026-07-14T11:47:00Z",
+                "coverage_established": True,
+                "visibility_basis": (
+                    "prerendered_same_route_application_mount"
+                    if kind in {"product_app", "audit_console"}
+                    else "static_same_route_html"
+                ),
+                "visible_text_sha256": _digest(f"visible-{kind}"),
+                "visible_text_characters": 256,
+                "visible_word_count": 32,
+                "client_rendered_shell_detected": False,
+                "prerendered_application_mount_detected": kind
+                in {"product_app", "audit_console"},
+                "prerender_contract_matches_requested_route": kind
+                in {"product_app", "audit_console"},
+                "route_identity_established": True,
+                "error_count": 0,
+                "errors_sha256": hashlib.sha256(b"[]").hexdigest(),
+            }
+            for kind in sorted(verifier.CLAIM_SURFACE_KINDS)
+        ],
+        "scan": {
+            "misleading_claim_count": 0,
+            "unsupported_compliance_claim_count": 0,
+            "unsupported_universality_claim_count": 0,
+            "unsupported_ip_claim_count": 0,
+            "status_vocabulary_exact": True,
+            "scanned_surface_count": 6,
+            "covered_surface_count": 6,
+            "finding_count": 0,
+            "coverage_complete": True,
+            "machine_scan_passed": True,
+        },
+        "findings": [],
+    }
     honesty.update(
         {
-            "scanned_surfaces": [
-                {
-                    "kind": kind,
-                    "url": urls[kind],
-                    "http_status": 200,
-                    "content_sha256": surface_hashes[kind],
-                    "verified_at_utc": "2026-07-14T11:47:00Z",
-                }
-                for kind in sorted(verifier.CLAIM_SURFACE_KINDS)
-            ],
-            "scan": {
-                "misleading_claim_count": 0,
-                "unsupported_compliance_claim_count": 0,
-                "unsupported_universality_claim_count": 0,
-                "status_vocabulary_exact": True,
-            },
+            "machine_subject": machine_subject,
+            "machine_subject_sha256": hashlib.sha256(
+                _canonical(machine_subject)
+            ).hexdigest(),
             "boundaries": {
                 "research_scope_disclosed": True,
                 "research_accept_not_product_accept": True,
                 "worm_retention_not_verdict_upgrade": True,
                 "flag_for_human_review_not_accept": True,
                 "compliance_certification_claims_absent": True,
-                "rendered_product_status": "ACCEPT",
             },
+            "claim_status_vocabulary": list(verifier.CLAIM_STATUS_VOCABULARY),
             "approvals": [_approval(role, "claim") for role in sorted(verifier.CLAIM_APPROVER_ROLES)],
         }
     )
@@ -990,6 +1050,275 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
         self.assertEqual(report["expected_master_head"], MASTER_SHA)
         self.assertEqual(report["expected_deploy_id"], DEPLOY_ID)
         self.assertTrue(all(authority["mode"] == "signed_receipt" for authority in report["authorities"].values()))
+
+    def test_claim_accept_is_derived_and_cannot_be_supplied_by_the_manifest(self) -> None:
+        manifest = _accepting_manifest(self.bundle)
+        claim_receipt = manifest["required_gates"]["claim_honesty"]["evidence"]
+        self.assertNotIn(
+            "rendered_product_status",
+            json.dumps(claim_receipt, sort_keys=True),
+        )
+        self.assertEqual(_verify(manifest, self.bundle)["result"], "ACCEPT")
+
+        def inject_circular_status(payloads: dict) -> None:
+            payloads["claim_honesty"]["boundaries"][
+                "rendered_product_status"
+            ] = "ACCEPT"
+
+        bundle = SignedBundle()
+        try:
+            circular = _accepting_manifest(
+                bundle, mutate_payloads=inject_circular_status
+            )
+            report = _verify(circular, bundle)
+            self.assertEqual(report["result"], "INVALID")
+            self.assertTrue(
+                any(
+                    "boundaries" in error
+                    and "rendered_product_status" in error
+                    for error in report["errors"]
+                )
+            )
+        finally:
+            bundle.close()
+
+    def test_claim_machine_subject_rejects_tamper_findings_and_collector_replay(self) -> None:
+        def rehash(payload: dict) -> None:
+            payload["machine_subject_sha256"] = hashlib.sha256(
+                _canonical(payload["machine_subject"])
+            ).hexdigest()
+
+        cases = {
+            "surface bytes changed without subject rehash": lambda payload: payload[
+                "machine_subject"
+            ]["scanned_surfaces"][0].update(content_sha256="f" * 64),
+            "finding inserted and subject rehashed": lambda payload: (
+                payload["machine_subject"]["findings"].append(
+                    {
+                        "category": "misleading_claim",
+                        "rule_id": "customer_production_ready",
+                        "surface_kind": "landing",
+                        "match_start": 0,
+                        "match_end": 10,
+                        "match_sha256": "a" * 64,
+                    }
+                ),
+                rehash(payload),
+            ),
+            "different collector source replayed and subject rehashed": lambda payload: (
+                payload["machine_subject"]["scanner"].update(
+                    collector_sha256="b" * 64
+                ),
+                rehash(payload),
+            ),
+        }
+        for label, mutate_claim in cases.items():
+            with self.subTest(label=label):
+                bundle = SignedBundle()
+                try:
+                    def mutate(payloads: dict) -> None:
+                        mutate_claim(payloads["claim_honesty"])
+
+                    manifest = _accepting_manifest(bundle, mutate_payloads=mutate)
+                    report = _verify(manifest, bundle)
+                    self.assertEqual(report["result"], "INVALID")
+                finally:
+                    bundle.close()
+
+    def test_claim_chronology_requires_surfaces_then_subject_then_approvals(self) -> None:
+        def rehash(payload: dict) -> None:
+            payload["machine_subject_sha256"] = hashlib.sha256(
+                _canonical(payload["machine_subject"])
+            ).hexdigest()
+
+        cases = {
+            "surface follows subject generation": lambda payload: (
+                payload["machine_subject"]["scanned_surfaces"][0].update(
+                    verified_at_utc="2026-07-14T11:49:00Z"
+                ),
+                rehash(payload),
+            ),
+            "approval precedes subject generation": lambda payload: payload[
+                "approvals"
+            ][0].update(approved_at_utc="2026-07-14T11:47:00Z"),
+        }
+        for label, mutate_claim in cases.items():
+            with self.subTest(label=label):
+                bundle = SignedBundle()
+                try:
+                    def mutate(payloads: dict) -> None:
+                        mutate_claim(payloads["claim_honesty"])
+
+                    report = _verify(
+                        _accepting_manifest(bundle, mutate_payloads=mutate),
+                        bundle,
+                    )
+                    self.assertEqual(report["result"], "INVALID")
+                finally:
+                    bundle.close()
+
+    def test_claim_artifact_hash_must_equal_machine_subject_hash(self) -> None:
+        manifest = _accepting_manifest(self.bundle)
+        reference = manifest["required_gates"]["claim_honesty"]["evidence"]
+
+        def detach_artifact(receipt: dict) -> None:
+            receipt["subject_sha256"] = "f" * 64
+            receipt["evidence"]["artifact_sha256"] = "f" * 64
+
+        _mutate_signed_reference(self.bundle, reference, detach_artifact)
+        report = _verify(manifest, self.bundle)
+        self.assertEqual(report["result"], "INVALID")
+        self.assertTrue(
+            any(
+                "artifact_sha256" in error
+                and "machine_subject_sha256" in error
+                for error in report["errors"]
+            )
+        )
+
+    def test_claim_surface_contract_rejects_charset_type_and_length_drift(self) -> None:
+        def rehash(payload: dict) -> None:
+            payload["machine_subject_sha256"] = hashlib.sha256(
+                _canonical(payload["machine_subject"])
+            ).hexdigest()
+
+        cases = {
+            "missing charset": lambda payload, surface: surface.update(
+                content_type="text/html"
+            ),
+            "empty charset": lambda payload, surface: surface.update(
+                content_type="text/html; charset="
+            ),
+            "conflicting duplicate charset": lambda payload, surface: surface.update(
+                content_type="text/html; charset=utf-8; charset=iso-8859-1"
+            ),
+            "non-UTF-8 charset": lambda payload, surface: surface.update(
+                content_type="text/html; charset=windows-1252"
+            ),
+            "static prerender null": lambda payload, surface: surface.update(
+                prerender_contract_matches_requested_route=None
+            ),
+            "static prerender integer": lambda payload, surface: surface.update(
+                prerender_contract_matches_requested_route=0
+            ),
+            "boolean word count": lambda payload, surface: surface.update(
+                visible_word_count=True
+            ),
+            "words exceed characters": lambda payload, surface: surface.update(
+                visible_word_count=257
+            ),
+            "characters exceed bytes": lambda payload, surface: surface.update(
+                visible_text_characters=513
+            ),
+            "bytes exceed maximum": lambda payload, surface: payload[
+                "machine_subject"
+            ]["scanner"].update(maximum_response_bytes=511),
+        }
+        for label, mutate_surface in cases.items():
+            with self.subTest(label=label):
+                bundle = SignedBundle()
+                try:
+                    def mutate(payloads: dict) -> None:
+                        claim = payloads["claim_honesty"]
+                        static_surface = next(
+                            surface
+                            for surface in claim["machine_subject"][
+                                "scanned_surfaces"
+                            ]
+                            if surface["kind"] == "landing"
+                        )
+                        mutate_surface(claim, static_surface)
+                        rehash(claim)
+
+                    report = _verify(
+                        _accepting_manifest(bundle, mutate_payloads=mutate),
+                        bundle,
+                    )
+                    self.assertEqual(report["result"], "INVALID")
+                finally:
+                    bundle.close()
+
+    def test_claim_collector_hash_uses_commit_blob_not_dirty_checkout(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            repo = Path(temporary)
+            collector_path = repo / verifier.CLAIM_COLLECTOR_REPOSITORY_PATH
+            collector_path.parent.mkdir(parents=True)
+            committed = b"# immutable committed collector\n"
+            collector_path.write_bytes(committed)
+            for command in (
+                ["git", "init"],
+                ["git", "config", "user.email", "cas-test@example.test"],
+                ["git", "config", "user.name", "CAS Test"],
+                ["git", "add", verifier.CLAIM_COLLECTOR_REPOSITORY_PATH],
+                ["git", "commit", "-m", "commit collector"],
+            ):
+                subprocess.run(
+                    command,
+                    cwd=repo,
+                    check=True,
+                    capture_output=True,
+                )
+            commit = subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=repo,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip().lower()
+            collector_path.write_bytes(b"# dirty uncommitted collector\n")
+
+            payload = _gate_payloads()["claim_honesty"]
+            payload["master_head_sha"] = commit
+            payload["artifact_uri"] = SUBJECT_URIS["claim_honesty"]
+            payload["machine_subject"]["scanner"]["collector_sha256"] = (
+                hashlib.sha256(committed).hexdigest()
+            )
+            payload["machine_subject_sha256"] = hashlib.sha256(
+                _canonical(payload["machine_subject"])
+            ).hexdigest()
+            payload["artifact_sha256"] = payload["machine_subject_sha256"]
+            context = verifier.ValidationContext(
+                repo_root=repo,
+                evidence_root=repo,
+                verification_time=NOW,
+                generated_at=NOW,
+                expected_master_head=commit,
+                expected_deploy_id=DEPLOY_ID,
+                repository_commit=commit,
+                live=False,
+                trusted_issuers={},
+                registry_sha256=_digest("registry"),
+            )
+
+            verifier._validate_claim_honesty(payload, context, None)
+            self.assertEqual(context.errors, [])
+
+    def test_claim_collector_git_blob_unavailable_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            repo = Path(temporary)
+            payload = _gate_payloads()["claim_honesty"]
+            payload["artifact_uri"] = SUBJECT_URIS["claim_honesty"]
+            payload["artifact_sha256"] = payload["machine_subject_sha256"]
+            context = verifier.ValidationContext(
+                repo_root=repo,
+                evidence_root=repo,
+                verification_time=NOW,
+                generated_at=NOW,
+                expected_master_head=MASTER_SHA,
+                expected_deploy_id=DEPLOY_ID,
+                repository_commit=MASTER_SHA,
+                live=False,
+                trusted_issuers={},
+                registry_sha256=_digest("registry"),
+            )
+
+            verifier._validate_claim_honesty(payload, context, None)
+            self.assertTrue(
+                any(
+                    "cannot read the collector Git blob" in error
+                    for error in context.errors
+                )
+            )
 
     def test_sanitized_archive_contains_only_verified_referenced_documents(self) -> None:
         manifest = _accepting_manifest(self.bundle)

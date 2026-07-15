@@ -673,9 +673,11 @@ def canonical_evidence_binding_sha256(
     elif gate == "claim_honesty":
         bound = {
             **common,
-            "scanned_surfaces": evidence.get("scanned_surfaces"),
-            "scan": evidence.get("scan"),
+            "artifact_sha256": evidence.get("artifact_sha256"),
+            "machine_subject": evidence.get("machine_subject"),
+            "machine_subject_sha256": evidence.get("machine_subject_sha256"),
             "boundaries": evidence.get("boundaries"),
+            "claim_status_vocabulary": evidence.get("claim_status_vocabulary"),
         }
     elif gate == "incident_tabletop":
         incident = dict(evidence.get("incident") or {})
