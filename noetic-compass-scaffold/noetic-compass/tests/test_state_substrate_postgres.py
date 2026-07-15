@@ -413,16 +413,18 @@ def test_fence_strictly_increases_per_resource(pg_schema):
         store.close()
 
 
-def test_billing_reconciliation_blocks_double_bill_across_independent_connections(
+def test_billing_reconciliation_races_fail_closed_across_independent_connections(
     pg_schema,
 ):
-    """Two application instances cannot bill one measurement under two receipts."""
+    """Two application instances mint one measurement and one dispatch authority."""
 
     from api.services.billing_entitlements import BillingEntitlementStore
     from api.services.billing_reconciliation import (
         BillingReconciliationConflict,
+        BillingReconciliationError,
         BillingReconciliationStore,
         FleetUsageMeasurement,
+        UsageOutboxRecord,
     )
     from api.services.production.state_substrate.postgres_store import PostgresStateStore
 
@@ -519,6 +521,70 @@ def test_billing_reconciliation_blocks_double_bill_across_independent_connection
         assert len(conflicts) == 1
         assert len(first_service.list_usage("tenant-billing-race")) == 1
         assert len(second_service.list_usage("tenant-billing-race")) == 1
+
+        usage = successes[0][0]
+        assert isinstance(usage, UsageOutboxRecord)
+        assert usage.outbox_state == "pending"
+
+        reserve_together = Barrier(2)
+
+        def reserve(service_instance):
+            reserve_together.wait(timeout=10)
+            try:
+                return service_instance.reserve_usage_delivery(
+                    tenant_id=usage.tenant_id,
+                    usage_id=usage.usage_id,
+                )
+            except BillingReconciliationError as exc:
+                return exc
+
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            reserve_futures = (
+                executor.submit(reserve, first_service),
+                executor.submit(reserve, second_service),
+            )
+            reserve_results = [
+                future.result(timeout=20) for future in reserve_futures
+            ]
+
+        authorities = [
+            result
+            for result in reserve_results
+            if isinstance(result, UsageOutboxRecord)
+        ]
+        rejected = [
+            result
+            for result in reserve_results
+            if isinstance(result, BillingReconciliationError)
+        ]
+        assert len(authorities) == 1
+        assert len(rejected) == 1
+        assert str(rejected[0]) in {
+            "another billing reconciliation transition is in progress",
+            "usage delivery reservation is non-replayable",
+        }
+
+        authority = authorities[0]
+        assert authority.outbox_state == "delivery_uncertain"
+        assert authority.attempt_count == 1
+        assert authority.last_failure_code == "delivery_outcome_unknown"
+        assert authority.last_attempt_at is not None
+        assert authority.ledger_version == usage.ledger_version + 1
+
+        first_readback = first_service.get_usage(usage.tenant_id, usage.usage_id)
+        second_readback = second_service.get_usage(usage.tenant_id, usage.usage_id)
+        assert first_readback == authority
+        assert second_readback == authority
+        assert first_service.pending_usage(usage.tenant_id) == ()
+        assert second_service.pending_usage(usage.tenant_id) == ()
+        for service_instance in (first_service, second_service):
+            with pytest.raises(
+                BillingReconciliationConflict, match="non-replayable"
+            ):
+                service_instance.reserve_usage_delivery(
+                    tenant_id=usage.tenant_id,
+                    usage_id=usage.usage_id,
+                )
     finally:
         second_store.close()
         first_store.close()
