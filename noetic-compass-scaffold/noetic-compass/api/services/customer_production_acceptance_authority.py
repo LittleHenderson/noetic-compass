@@ -149,6 +149,7 @@ _FRESHNESS_MINUTES = {
     "alert_delivery": 1440,
     "claim_honesty": 1440,
 }
+_RUNTIME_WORM_MAX_CLOCK_SKEW = timedelta(seconds=5)
 
 _COMMON_FIELDS = frozenset(
     {
@@ -2009,9 +2010,8 @@ def _validate_runtime_worm_semantics(
         "status": "live",
     }.items():
         _equal(deployment, field, expected, "deployment")
-    _proof_time(
+    _runtime_deployment_time(
         deployment["deployed_at_utc"],
-        "runtime_worm",
         event,
         observed,
         now,
@@ -2027,7 +2027,7 @@ def _validate_runtime_worm_semantics(
         "authority": "verified",
     }.items():
         _equal(readiness, field, expected, "readiness")
-    _proof_time(
+    readiness_verified = _proof_time(
         readiness["verified_at_utc"],
         "runtime_worm",
         event,
@@ -2050,7 +2050,7 @@ def _validate_runtime_worm_semantics(
     }.items():
         _equal(worker, field, expected, "worker")
     _nonempty(worker["worker_id"], "worker.worker_id")
-    _proof_time(
+    worker_verified = _proof_time(
         worker["verified_at_utc"],
         "runtime_worm",
         event,
@@ -2058,6 +2058,10 @@ def _validate_runtime_worm_semantics(
         now,
         "worker.verified_at_utc",
     )
+    if readiness_verified > worker_verified:
+        raise AcceptanceAuthorityInvalid(
+            "worker.verified_at_utc precedes readiness.verified_at_utc"
+        )
 
     worm = _object(evidence, "worm")
     for field, expected in {
@@ -2089,6 +2093,10 @@ def _validate_runtime_worm_semantics(
         now,
         "worm.written_at_utc",
     )
+    if written < worker_verified - _RUNTIME_WORM_MAX_CLOCK_SKEW:
+        raise AcceptanceAuthorityInvalid(
+            "worm.written_at_utc predates worker verification beyond allowed clock skew"
+        )
     verified = _proof_time(
         worm["verified_at_utc"],
         "runtime_worm",
@@ -2097,6 +2105,10 @@ def _validate_runtime_worm_semantics(
         now,
         "worm.verified_at_utc",
     )
+    if event != min(readiness_verified, worker_verified, written):
+        raise AcceptanceAuthorityInvalid(
+            "event_at_utc must equal the earliest fresh runtime proof timestamp"
+        )
     if written > verified:
         raise AcceptanceAuthorityInvalid("worm verification precedes its write")
     retention = _parse_utc(worm["retention_until_utc"], "worm.retention_until_utc")
@@ -2934,6 +2946,28 @@ def _proof_time(
     freshness = _FRESHNESS_MINUTES.get(gate)
     if freshness is not None and now - parsed > timedelta(minutes=freshness):
         raise AcceptanceAuthorityInvalid(f"{path} is stale")
+    return parsed
+
+
+def _runtime_deployment_time(
+    value: Any,
+    event: datetime,
+    observed: datetime,
+    now: datetime,
+    path: str,
+) -> datetime:
+    """Validate exact deployment provenance outside the runtime proof clock.
+
+    A stable protected deployment may predate a fresh runtime observation. It
+    must already exist when that observation begins; readiness, worker, and
+    WORM timestamps remain subject to the gate's fixed freshness policy.
+    """
+
+    parsed = _parse_utc(value, path)
+    if parsed > event or parsed > observed or parsed > now:
+        raise AcceptanceAuthorityInvalid(
+            f"{path} must be at or before the fresh runtime gate event"
+        )
     return parsed
 
 

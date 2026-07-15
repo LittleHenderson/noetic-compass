@@ -132,6 +132,7 @@ FRESHNESS_POLICY = {
     "worm_configured_min_retention_days": 31,
     "worm_min_remaining_retention_minutes": 43200,
 }
+RUNTIME_WORM_MAX_CLOCK_SKEW = timedelta(seconds=5)
 GATE_FRESHNESS_KEYS = {
     gate: f"{gate}_max_age_minutes" for gate in REQUIRED_GATES
 }
@@ -1144,6 +1145,48 @@ def _critical_proof_timestamp(
     return timestamp
 
 
+def _runtime_deployment_timestamp(
+    value: Any,
+    *,
+    event: datetime | None,
+    observed: datetime | None,
+    context: ValidationContext,
+    path: str,
+) -> datetime | None:
+    """Validate exact deployment provenance outside the runtime proof clock.
+
+    A stable protected deployment may legitimately predate a fresh runtime
+    observation. The deployment must already exist when the runtime event
+    begins, while readiness, worker, and WORM timestamps retain the fixed
+    runtime freshness policy through ``_critical_proof_timestamp``.
+    """
+
+    errors = context.errors
+    timestamp = _timestamp(value, path, errors)
+    if timestamp is not None:
+        if event is not None:
+            _require(
+                timestamp <= event,
+                path,
+                "must be at or before the fresh runtime gate event",
+                errors,
+            )
+        if observed is not None:
+            _require(
+                timestamp <= observed,
+                path,
+                "must be at or before evidence observation",
+                errors,
+            )
+        _require(
+            timestamp <= context.verification_time,
+            path,
+            "must be at or before verification",
+            errors,
+        )
+    return timestamp
+
+
 def _validate_runtime_worm(
     evidence: Mapping[str, Any], context: ValidationContext
 ) -> None:
@@ -1186,8 +1229,15 @@ def _validate_runtime_worm(
             _require(_json_scalar_equals(deployment.get(field), expected), f"{path}.deployment.{field}", f"must equal {expected!r}", errors)
         _require(deployment.get("deploy_id") == context.expected_deploy_id, f"{path}.deployment.deploy_id", "must match expected production deployment", errors)
         _require(deployment.get("commit_sha") == context.expected_master_head, f"{path}.deployment.commit_sha", "must match expected master HEAD", errors)
-        _critical_proof_timestamp(deployment.get("deployed_at_utc"), gate="runtime_worm", event=event, observed=observed, context=context, path=f"{path}.deployment.deployed_at_utc")
+        _runtime_deployment_timestamp(
+            deployment.get("deployed_at_utc"),
+            event=event,
+            observed=observed,
+            context=context,
+            path=f"{path}.deployment.deployed_at_utc",
+        )
 
+    readiness_verified: datetime | None = None
     readiness = evidence.get("readiness")
     if _is_mapping(readiness, f"{path}.readiness", errors):
         _exact_keys(readiness, {"path", "http_status", "ready", "status", "authority", "verified_at_utc"}, f"{path}.readiness", errors)
@@ -1199,8 +1249,9 @@ def _validate_runtime_worm(
             "authority": "verified",
         }.items():
             _require(_json_scalar_equals(readiness.get(field), expected), f"{path}.readiness.{field}", f"must equal {expected!r}", errors)
-        _critical_proof_timestamp(readiness.get("verified_at_utc"), gate="runtime_worm", event=event, observed=observed, context=context, path=f"{path}.readiness.verified_at_utc")
+        readiness_verified = _critical_proof_timestamp(readiness.get("verified_at_utc"), gate="runtime_worm", event=event, observed=observed, context=context, path=f"{path}.readiness.verified_at_utc")
 
+    worker_verified: datetime | None = None
     worker = evidence.get("worker")
     if _is_mapping(worker, f"{path}.worker", errors):
         _exact_keys(
@@ -1235,7 +1286,14 @@ def _validate_runtime_worm(
         for field, value in expected.items():
             _require(_json_scalar_equals(worker.get(field), value), f"{path}.worker.{field}", f"must equal {value!r}", errors)
         _nonempty_string(worker.get("worker_id"), f"{path}.worker.worker_id", errors)
-        _critical_proof_timestamp(worker.get("verified_at_utc"), gate="runtime_worm", event=event, observed=observed, context=context, path=f"{path}.worker.verified_at_utc")
+        worker_verified = _critical_proof_timestamp(worker.get("verified_at_utc"), gate="runtime_worm", event=event, observed=observed, context=context, path=f"{path}.worker.verified_at_utc")
+        if readiness_verified is not None and worker_verified is not None:
+            _require(
+                readiness_verified <= worker_verified,
+                f"{path}.worker.verified_at_utc",
+                "must be at or after readiness verification",
+                errors,
+            )
 
     worm = evidence.get("worm")
     if _is_mapping(worm, f"{path}.worm", errors):
@@ -1275,6 +1333,25 @@ def _validate_runtime_worm(
             _sha256(worm.get(field), f"{path}.worm.{field}", errors)
         written = _critical_proof_timestamp(worm.get("written_at_utc"), gate="runtime_worm", event=event, observed=observed, context=context, path=f"{path}.worm.written_at_utc")
         verified = _critical_proof_timestamp(worm.get("verified_at_utc"), gate="runtime_worm", event=event, observed=observed, context=context, path=f"{path}.worm.verified_at_utc")
+        if worker_verified is not None and written is not None:
+            _require(
+                written >= worker_verified - RUNTIME_WORM_MAX_CLOCK_SKEW,
+                f"{path}.worm.written_at_utc",
+                "must not predate worker verification beyond allowed clock skew",
+                errors,
+            )
+        if (
+            event is not None
+            and readiness_verified is not None
+            and worker_verified is not None
+            and written is not None
+        ):
+            _require(
+                event == min(readiness_verified, worker_verified, written),
+                f"{path}.event_at_utc",
+                "must equal the earliest fresh runtime proof timestamp",
+                errors,
+            )
         retention = _timestamp(worm.get("retention_until_utc"), f"{path}.worm.retention_until_utc", errors)
         if written is not None and verified is not None:
             _require(written <= verified, f"{path}.worm.verified_at_utc", "must be after the unique write", errors)

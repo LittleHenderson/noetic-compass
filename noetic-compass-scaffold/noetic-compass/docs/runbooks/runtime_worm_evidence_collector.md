@@ -9,8 +9,9 @@ manifest, or create customer-production `ACCEPT`.
 ## Required inputs
 
 - The exact protected `master` SHA deployed by the public Render service.
-- The exact Render deploy ID and its live completion timestamp. The deployment
-  must still be inside the gate's 30-minute freshness window.
+- The exact Render deploy ID and its live completion timestamp. A stable
+  deployment may predate the runtime proof window; it remains exact protected
+  provenance rather than being refreshed through a no-op redeploy.
 - For the existing account-token command only, a current account bearer token
   in `CAS_HARNESS_API_TOKEN`. The preferred hosted wrapper instead creates one
   synthetic session in memory and refuses an inherited bearer.
@@ -73,7 +74,7 @@ prompt, then revoke that key immediately after the command exits:
 
 Before the first account mutation, the wrapper re-reads and validates the
 caller-selected `live` / `new_commit` deployment, exact commit, exact finish
-time, and 30-minute freshness window. It refuses any inherited account bearer.
+time, and caller pin. It refuses any inherited account bearer.
 Only crash-resumable tenant provisioning is retried with the exact same
 payload; entitlement, login, and audit ambiguity are never retried. A
 collector failure triggers best-effort
@@ -87,7 +88,7 @@ the bearer is known; that unknowable session cannot be explicitly logged out
 and remains until the configured session expiry (normally 60 minutes). A
 process crash after login can likewise leave a session until expiry. These
 failure paths write no evidence, but their durable rows remain; run exactly one
-probe per fresh deployment and never loop this command.
+intentional probe per evidence cycle and never loop this command.
 
 ## Existing account-token command
 
@@ -111,8 +112,9 @@ output contains either credential.
 
 1. The exact Render deploy endpoint reports the pinned deploy ID at the pinned
    commit with `status=live`, `trigger=new_commit`, and the pinned finish time.
-   The collector checks it both before and after the runtime/WORM probe so a
-   deployment change during collection fails closed.
+   The collector checks the full canonical provider record both before and
+   after the runtime/WORM probe so any deployment-record change during
+   collection fails closed.
 2. `/health/ready` returns HTTP `200`, `ready=true`, and exact `ok` readback for
    API, CAS engine, database, real live worker, and S3 WORM configuration.
 3. `/atlas/live/health/realmode` returns the exact
@@ -131,10 +133,20 @@ output contains either credential.
 7. The resulting evidence document passes the same canonical gate validator
    used by the production authority store and the final manifest verifier.
 
+The gate event is the earliest of the fresh readiness observation, real-worker
+observation, and WORM write. Those runtime/WORM timestamps and the evidence
+observation remain inside the fixed 30-minute freshness window. The exact
+deployment completion must be at or before that event, but its age does not
+substitute for—or invalidate—fresh capability proof. Readiness must precede
+the worker check, and the WORM write must follow it; only the receipt
+validator's bounded five-second provider clock skew is accepted.
+
 ## Outputs and boundary
 
 `runtime-worm.json` is a canonical
-`cas_harness_customer_production_gate_evidence.v2` document. The source receipt
+`cas_harness_customer_production_gate_evidence.v2` document. The
+`cas_runtime_worm_source_receipt.v2` source receipt binds that fresh event and
+the historical exact deployment separately. It
 hashes the audit ID, trace ID, S3 object key, and S3 version ID; it also hashes
 the worker ID while the gate document preserves the contract-required raw
 worker ID. Public deployment identities (`service_id`, `deploy_id`, and commit

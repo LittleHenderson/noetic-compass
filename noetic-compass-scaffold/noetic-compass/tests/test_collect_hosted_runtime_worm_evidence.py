@@ -268,7 +268,42 @@ def test_render_drift_fails_before_first_mutation(
     assert [call["base_url"] for call in transport.calls] == [runtime.RENDER_API_ORIGIN]
 
 
-def test_stale_deployment_fails_before_first_mutation() -> None:
+def test_older_exact_deployment_reaches_fresh_runtime_collection() -> None:
+    deployed_at = "2026-07-15T18:00:00Z"
+    transport = FakeTransport(
+        render_changes={
+            "createdAt": "2026-07-15T17:59:00Z",
+            "finishedAt": deployed_at,
+        }
+    )
+    call_order: list[str] = []
+    factory = FakeRuntimeFactory(call_order)
+    collector = module.HostedRuntimeWormCollector(
+        base_url=runtime.PRODUCTION_API_ORIGIN,
+        platform_secret=PLATFORM_SECRET,
+        billing_secret=BILLING_SECRET,
+        render_api_key=RENDER_KEY,
+        master_head_sha=MASTER_SHA,
+        deploy_id=DEPLOY_ID,
+        deployed_at_utc=deployed_at,
+        runtime_environment=_environment(),
+        transport=transport,
+        clock=lambda: NOW,
+        identity_nonce=IDENTITY_NONCE,
+        runtime_nonce=RUNTIME_NONCE,
+        runtime_collector_factory=factory,
+    )
+
+    _evidence, _artifact, logout_status = collector.collect()
+
+    assert call_order == ["runtime"]
+    assert logout_status == 204
+    assert factory.kwargs is not None
+    assert factory.kwargs["deployed_at_utc"] == deployed_at
+    assert transport.calls[0]["base_url"] == runtime.RENDER_API_ORIGIN
+
+
+def test_future_deployment_fails_before_first_mutation() -> None:
     transport = FakeTransport()
     collector = module.HostedRuntimeWormCollector(
         base_url=runtime.PRODUCTION_API_ORIGIN,
@@ -277,7 +312,7 @@ def test_stale_deployment_fails_before_first_mutation() -> None:
         render_api_key=RENDER_KEY,
         master_head_sha=MASTER_SHA,
         deploy_id=DEPLOY_ID,
-        deployed_at_utc="2026-07-15T19:00:00Z",
+        deployed_at_utc="2026-07-15T20:10:01Z",
         runtime_environment=_environment(),
         transport=transport,
         clock=lambda: NOW,
@@ -285,34 +320,9 @@ def test_stale_deployment_fails_before_first_mutation() -> None:
         runtime_nonce=RUNTIME_NONCE,
         runtime_collector_factory=FakeRuntimeFactory([]),
     )
-    with pytest.raises(runtime.RuntimeWormFailure, match="older than"):
+    with pytest.raises(runtime.RuntimeWormFailure, match="timestamp is in the future"):
         collector.collect()
     assert transport.calls == []
-
-
-def test_render_read_crossing_freshness_boundary_fails_before_mutation() -> None:
-    before = datetime(2026, 7, 15, 20, 29, 59, tzinfo=UTC)
-    after = datetime(2026, 7, 15, 20, 30, 1, tzinfo=UTC)
-    clock_values = iter((before, before, after))
-    transport = FakeTransport()
-    collector = module.HostedRuntimeWormCollector(
-        base_url=runtime.PRODUCTION_API_ORIGIN,
-        platform_secret=PLATFORM_SECRET,
-        billing_secret=BILLING_SECRET,
-        render_api_key=RENDER_KEY,
-        master_head_sha=MASTER_SHA,
-        deploy_id=DEPLOY_ID,
-        deployed_at_utc=DEPLOYED_AT,
-        runtime_environment=_environment(),
-        transport=transport,
-        clock=lambda: next(clock_values),
-        identity_nonce=IDENTITY_NONCE,
-        runtime_nonce=RUNTIME_NONCE,
-        runtime_collector_factory=FakeRuntimeFactory([]),
-    )
-    with pytest.raises(runtime.RuntimeWormFailure, match="older than"):
-        collector.collect()
-    assert [call["base_url"] for call in transport.calls] == [runtime.RENDER_API_ORIGIN]
 
 
 def test_subsecond_provider_finish_cannot_match_truncated_pin() -> None:

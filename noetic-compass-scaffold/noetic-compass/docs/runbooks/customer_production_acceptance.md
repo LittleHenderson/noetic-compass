@@ -315,9 +315,10 @@ this is intentional.
 
 ### Collect the runtime/WORM evidence draft
 
-Run `scripts/collect_runtime_worm_evidence.py` within 30 minutes of the exact
-public Render deployment becoming live. Pin its protected `master` SHA, deploy
-ID, and live timestamp, and provide the account bearer token only through
+Run `scripts/collect_runtime_worm_evidence.py` to create a fresh 30-minute
+runtime proof for the exact current public Render deployment. Pin its protected
+`master` SHA, deploy ID, and live timestamp, and provide the account bearer
+token only through
 `CAS_HARNESS_API_TOKEN` plus a read-capable Render key through
 `RENDER_API_KEY`. The collector reads the exact Render deploy before and after
 the probe, verifies public readiness and exact real Pythia metadata, creates one
@@ -740,12 +741,19 @@ For every evidence item, time must move forward monotonically:
 
 `event_at_utc <= observed_at_utc <= manifest generated_at_utc <= verification time`
 
-Every critical nested proof time—deployment, workflow run, audit, packet,
+Every critical nested proof time—workflow run, audit, packet,
 share, billing payment, publication, approval, support, CRM, incident, alert,
 or claim scan—must fall between its gate's `event_at_utc` and
 `observed_at_utc`. The event itself and every nested proof time must satisfy the
 same gate-specific age limit, so a fresh observation cannot wrap a stale 2020
 event.
+
+For `runtime_worm`, the exact deployment completion is historical provenance:
+it must be at or before the gate event, but it is not itself a fresh runtime
+proof. That event must equal the earliest current readiness, real-worker, or
+WORM-write timestamp. All of those active proofs remain subject to the
+30-minute limit. Other gate-specific deployment timestamps retain their stated
+freshness policies.
 
 Receipts must be issued at or after the evidence observation, no later than
 manifest generation and verification, unexpired at verification, and within
