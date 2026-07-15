@@ -329,8 +329,12 @@ environment workflow downloads the asset, hashes and strict-parses it, runs
 the hostile verifier/producer tests, binds the expected SHA and deploy ID, and
 signs a receipt with `CUSTOMER_PRODUCTION_SIGNING_KEY_PEM`. The private key is
 available only to the signing step and is never logged. The uploaded artifact
-contains the receipt and the subject checksum; the checked-in manifest remains
-`OPEN`, and the workflow never dispatches final `ACCEPT`.
+contains the receipt, its exact SHA-256 pin, and the subject checksum; the
+checked-in manifest remains `OPEN`, and the workflow never dispatches final
+`ACCEPT`. The signed receipt expires, so candidate assembly must use the exact
+current receipt rather than recycling an older successful run. The current
+signer default is 120 minutes; both candidate assembly and the final workflow
+must finish before the receipt's exact `expires_at_utc`.
 
 ```powershell
 gh release upload customer-production-evidence `
@@ -338,6 +342,63 @@ gh release upload customer-production-evidence `
   --repo LittleHenderson/noetic-compass `
   --clobber
 ```
+
+### Assemble the ephemeral final candidate
+
+Do not hand-edit an `ACCEPT` manifest. After all eight non-root gates and the
+separate `release_decision` have independently been published to their exact
+read-only authority endpoints, dispatch
+`.github/workflows/customer-production-candidate.yml` from the same protected
+`master` SHA. Supply:
+
+- the `Customer Production Evidence` run ID and its exact
+  `root-ci-protected-deploy-receipt-<run-id>` artifact name;
+- the signed-receipt SHA-256 printed in that run summary and stored in
+  `receipts/root-ci-protected-deploy.sha256`;
+- the exact protected `master` SHA and exact live public Render deploy ID.
+
+```powershell
+gh workflow run customer-production-candidate.yml `
+  --repo LittleHenderson/noetic-compass `
+  --ref master `
+  -f root_ci_receipt_run_id=<receipt-run-id> `
+  -f root_ci_receipt_artifact_name=root-ci-protected-deploy-receipt-<receipt-run-id> `
+  -f root_ci_receipt_sha256=<exact-signed-receipt-sha256> `
+  -f expected_master_head=<40-character-protected-master-sha> `
+  -f expected_deploy_id=<public-render-deploy-id>
+```
+
+The workflow checks out that exact protected commit and invokes
+`scripts/assemble_customer_production_acceptance_candidate.py`. The assembler:
+
+1. byte-compares the root-CI receipt to the externally supplied SHA-256, then
+   verifies its pinned RS256 issuer, subject binding, expiry, full root-CI
+   schema, protected SHA, and deployment;
+2. performs credential-free `GET` requests against exactly eight live gate
+   endpoints plus `/internal/acceptance/release-decision`, rejecting non-`200`,
+   redirects, unsafe content, stale evidence, and SHA/deploy identity drift;
+3. creates a temporary manifest outside the repository and runs the existing
+   verifier in normal `--live` mode, which fetches every live document again and
+   catches a byte change between collection and verification;
+4. uploads only the verifier-sanitized candidate bundle for a separate final
+   workflow.
+
+Any `404`, `503`, stale timestamp, changed response hash, expired/tampered
+receipt, wrong commit, wrong deploy, cross-gate mismatch, missing approval, or
+release-order failure produces no candidate artifact. The assembler has no
+authority publisher, signing key, approval-creation path, or workflow-dispatch
+permission. Its local verifier result is evidence that a candidate was coherent
+at that instant; it does not replace the separate protected final workflow and
+does not change the checked-in `OPEN` manifest.
+
+After the candidate workflow succeeds, dispatch
+`.github/workflows/customer-production-accept.yml` with the candidate run ID,
+the exact `customer-production-candidate-<run-id>` artifact name, and the same
+master SHA/deploy ID. That final workflow independently downloads the bundle,
+re-fetches the live authorities, and runs the normal verifier under the
+`customer-production` environment. Never pass the root-receipt run directly to
+the final workflow: it is only a partial receipt bundle, not the assembled
+candidate.
 
 ## Commands
 
