@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping, MutableMapping
 from datetime import datetime
+import hashlib
 from typing import Any
 
 from api.services.human_attestations import (
@@ -18,6 +19,12 @@ from api.services.production.state_substrate import StateStore
 _ROLE_ACCOUNT_IDS = {
     role: f"acct-{index:032x}"
     for index, role in enumerate(sorted(ATTESTATION_ACCOUNT_ROLE), start=1)
+}
+_PSEUDONYM_KEY_ID = "hatk_89abcdef0123456789abcdef01234567"
+_PSEUDONYM_KEYRING = {
+    _PSEUDONYM_KEY_ID: hashlib.sha256(
+        b"cas-acceptance-attestation-test-key-v2"
+    ).digest()
 }
 
 
@@ -34,6 +41,21 @@ def _reference(record: HumanAttestation, role: str) -> dict[str, str]:
         "attestation_sha256": record.sha256,
         "attested_at_utc": str(record.payload["attested_at_utc"]),
     }
+
+
+def human_attestation_store(
+    state_store: StateStore,
+    *,
+    primary_tenant_id: str = "primary",
+) -> HumanAttestationStore:
+    """Build the production store with a stable test-only v2 keyring."""
+
+    return HumanAttestationStore(
+        state_store,
+        primary_tenant_id=primary_tenant_id,
+        pseudonym_keyring=_PSEUDONYM_KEYRING,
+        active_pseudonym_key_id=_PSEUDONYM_KEY_ID,
+    )
 
 
 def materialize_human_attestations(
@@ -62,7 +84,7 @@ def materialize_human_attestations(
     master_head_sha = str(evidence.get("master_head_sha") or "")
     deploy_id = str(evidence.get("deploy_id") or "")
     binding = canonical_evidence_binding_sha256(gate, evidence)
-    attestations = HumanAttestationStore(
+    attestations = human_attestation_store(
         state_store, primary_tenant_id=primary_tenant_id
     )
 
@@ -175,4 +197,4 @@ def materialize_human_attestations(
     return attestations
 
 
-__all__ = ["materialize_human_attestations"]
+__all__ = ["human_attestation_store", "materialize_human_attestations"]

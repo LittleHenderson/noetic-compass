@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import base64
+from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 import hashlib
+import json
 
 import pytest
 from fastapi import FastAPI
@@ -17,14 +20,19 @@ from api.services.customer_production_acceptance_authority import (
     CustomerProductionAcceptanceAuthorityStore,
 )
 from api.services.human_attestations import (
+    HumanAttestation,
     HumanAttestationInvalid,
     HumanAttestationNotFound,
     HumanAttestationStore,
+    HumanAttestationUnavailable,
+    PUBLIC_HUMAN_ASSURANCE_BOUNDARY,
     canonical_evidence_binding_sha256,
+    parse_human_attestation_pseudonym_keyring,
 )
 from api.services.accounts.store import AccountStore
 from api.services.production.state_substrate.memory_store import InMemoryStateStore
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
+from api.services.production.state_substrate import LedgerRecord
 from api.services.sessions import SessionStore
 from api.services import human_attestations as human_attestation_service
 
@@ -33,6 +41,19 @@ NOW = datetime(2026, 7, 15, 12, 0, 0, tzinfo=UTC)
 MASTER = "b911049453b45d9ee0c56e3dd20f0888d1c1435d"
 DEPLOY = "dep-humanattestation"
 TENANT = "primary"
+PSEUDONYM_KEY_ID = "hatk_0123456789abcdef0123456789abcdef"
+PSEUDONYM_KEY_ID_V2 = "hatk_fedcba9876543210fedcba9876543210"
+PSEUDONYM_KEYRING = {
+    PSEUDONYM_KEY_ID: hashlib.sha256(
+        b"cas-human-attestation-test-key-v1"
+    ).digest()
+}
+
+
+def _external_key(key: bytes) -> str:
+    return "base64url:" + base64.urlsafe_b64encode(key).rstrip(b"=").decode(
+        "ascii"
+    )
 
 ROLE_ACCOUNTS = {
     "legal_counsel": ("owner", "acct-00000000000000000000000000000001"),
@@ -50,6 +71,21 @@ ROLE_ACCOUNTS = {
 }
 
 
+def _attestation_store(
+    backend,
+    *,
+    keyring: dict[str, bytes] | None = None,
+    active_key_id: str = PSEUDONYM_KEY_ID,
+    primary_tenant_id: str = TENANT,
+) -> HumanAttestationStore:
+    return HumanAttestationStore(
+        backend,
+        primary_tenant_id=primary_tenant_id,
+        pseudonym_keyring=keyring or PSEUDONYM_KEYRING,
+        active_pseudonym_key_id=active_key_id,
+    )
+
+
 def _common(gate: str) -> dict[str, object]:
     stamp = NOW.strftime("%Y-%m-%dT%H:%M:%SZ")
     return {
@@ -60,6 +96,7 @@ def _common(gate: str) -> dict[str, object]:
         "deploy_id": DEPLOY,
         "event_at_utc": stamp,
         "observed_at_utc": stamp,
+        "human_assurance_boundary": dict(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
     }
 
 
@@ -99,7 +136,7 @@ def _reference(record, role: str) -> dict[str, str]:
 
 
 def test_role_is_derived_from_authenticated_account_not_request_body() -> None:
-    store = HumanAttestationStore(InMemoryStateStore(), primary_tenant_id=TENANT)
+    store = _attestation_store(InMemoryStateStore())
     with pytest.raises(HumanAttestationInvalid, match="account role"):
         store.create(
             actor_tenant_id=TENANT,
@@ -113,6 +150,346 @@ def test_role_is_derived_from_authenticated_account_not_request_body() -> None:
             evidence_binding_sha256="a" * 64,
             now=NOW,
         )
+
+
+def test_public_actor_is_keyed_tenant_scoped_and_carries_exact_claim_boundary() -> None:
+    account_id = ROLE_ACCOUNTS["legal_counsel"][1]
+    first = _create(
+        _attestation_store(InMemoryStateStore()),
+        purpose="legal_approval",
+        gate="legal_publication_approval",
+        role="legal_counsel",
+        binding="a" * 64,
+    )
+    actor = first.payload["actor"]
+    assert isinstance(actor, dict)
+    assert actor["assurance_boundary"] == dict(PUBLIC_HUMAN_ASSURANCE_BOUNDARY)
+    assert actor["pseudonymization_scheme"] == "hmac-sha256-tenant-scoped-v1"
+    assert actor["pseudonym_key_id"] == PSEUDONYM_KEY_ID
+    for field in ("tenant_subject", "account_subject"):
+        assert isinstance(actor[field], str)
+        assert actor[field].startswith("hmac-sha256:")
+        assert len(actor[field]) == len("hmac-sha256:") + 64
+    assert "identity_binding_hmac" not in actor
+    public_text = first.body.decode("ascii")
+    assert TENANT not in public_text
+    assert account_id not in public_text
+    assert hashlib.sha256(TENANT.encode()).hexdigest() not in public_text
+    assert hashlib.sha256(account_id.encode()).hexdigest() not in public_text
+
+    other_tenant = "other-primary"
+    other = _attestation_store(
+        InMemoryStateStore(), primary_tenant_id=other_tenant
+    ).create(
+        actor_tenant_id=other_tenant,
+        actor_account_id=account_id,
+        actor_account_role="owner",
+        purpose="legal_approval",
+        gate="legal_publication_approval",
+        attestation_role="legal_counsel",
+        master_head_sha=MASTER,
+        deploy_id=DEPLOY,
+        evidence_binding_sha256="a" * 64,
+        now=NOW,
+    )
+    other_actor = other.payload["actor"]
+    assert isinstance(other_actor, dict)
+    assert actor["account_subject"] != other_actor["account_subject"]
+
+
+@pytest.mark.parametrize(
+    ("raw", "active"),
+    [
+        ("", PSEUDONYM_KEY_ID),
+        (
+            json.dumps({PSEUDONYM_KEY_ID: "base64url:c2hvcnQ"}),
+            PSEUDONYM_KEY_ID,
+        ),
+        (
+            json.dumps(
+                {
+                    PSEUDONYM_KEY_ID: _external_key(
+                        PSEUDONYM_KEYRING[PSEUDONYM_KEY_ID]
+                    )
+                }
+            ),
+            PSEUDONYM_KEY_ID_V2,
+        ),
+        (
+            '{"'
+            + PSEUDONYM_KEY_ID
+            + '":"'
+            + _external_key(PSEUDONYM_KEYRING[PSEUDONYM_KEY_ID])
+            + '","'
+            + PSEUDONYM_KEY_ID
+            + '":"'
+            + _external_key(hashlib.sha256(b"another-key").digest())
+            + '"}',
+            PSEUDONYM_KEY_ID,
+        ),
+        (
+            json.dumps(
+                {
+                    PSEUDONYM_KEY_ID: _external_key(
+                        PSEUDONYM_KEYRING[PSEUDONYM_KEY_ID]
+                    ),
+                    PSEUDONYM_KEY_ID_V2: _external_key(
+                        PSEUDONYM_KEYRING[PSEUDONYM_KEY_ID]
+                    ),
+                }
+            ),
+            PSEUDONYM_KEY_ID_V2,
+        ),
+        (
+            json.dumps({PSEUDONYM_KEY_ID: "a" * 32}),
+            PSEUDONYM_KEY_ID,
+        ),
+        (
+            json.dumps(
+                {PSEUDONYM_KEY_ID: _external_key(b"a" * 32)}
+            ),
+            PSEUDONYM_KEY_ID,
+        ),
+        (
+            json.dumps(
+                {
+                    PSEUDONYM_KEY_ID: _external_key(
+                        b"0123456789abcdef" * 2
+                    )
+                }
+            ),
+            PSEUDONYM_KEY_ID,
+        ),
+        (
+            json.dumps(
+                {PSEUDONYM_KEY_ID: _external_key(bytes(range(32)))}
+            ),
+            PSEUDONYM_KEY_ID,
+        ),
+        (
+            json.dumps(
+                {
+                    "acct-00000000000000000000000000000001": _external_key(
+                        PSEUDONYM_KEYRING[PSEUDONYM_KEY_ID]
+                    )
+                }
+            ),
+            "acct-00000000000000000000000000000001",
+        ),
+    ],
+)
+def test_pseudonym_keyring_rejects_missing_weak_duplicate_or_unbound_keys(
+    raw: str, active: str
+) -> None:
+    with pytest.raises(ValueError, match="pseudonym"):
+        parse_human_attestation_pseudonym_keyring(raw, active_key_id=active)
+
+
+def test_pseudonym_keyring_accepts_only_canonical_random_key_contract() -> None:
+    raw = json.dumps(
+        {
+            PSEUDONYM_KEY_ID: _external_key(
+                PSEUDONYM_KEYRING[PSEUDONYM_KEY_ID]
+            )
+        }
+    )
+    assert dict(
+        parse_human_attestation_pseudonym_keyring(
+            raw, active_key_id=PSEUDONYM_KEY_ID
+        )
+    ) == PSEUDONYM_KEYRING
+
+
+@pytest.mark.parametrize(
+    "key_id",
+    [
+        "hat-test-v1",
+        "owner@example.test",
+        "acct-00000000000000000000000000000001",
+        "hatk_0123456789ABCDEF0123456789ABCDEF",
+    ],
+)
+def test_store_rejects_descriptive_or_account_like_key_ids(key_id: str) -> None:
+    with pytest.raises(ValueError, match="pseudonym"):
+        HumanAttestationStore(
+            InMemoryStateStore(),
+            primary_tenant_id=TENANT,
+            pseudonym_keyring={
+                key_id: PSEUDONYM_KEYRING[PSEUDONYM_KEY_ID]
+            },
+            active_pseudonym_key_id=key_id,
+        )
+
+
+@pytest.mark.parametrize(
+    "weak_key",
+    [b"a" * 32, b"0123456789abcdef" * 2, bytes(range(32))],
+)
+def test_store_constructor_rejects_predictable_32_byte_keys(
+    weak_key: bytes,
+) -> None:
+    with pytest.raises(ValueError, match="random"):
+        HumanAttestationStore(
+            InMemoryStateStore(),
+            primary_tenant_id=TENANT,
+            pseudonym_keyring={PSEUDONYM_KEY_ID: weak_key},
+            active_pseudonym_key_id=PSEUDONYM_KEY_ID,
+        )
+
+
+def test_rotation_retains_old_verification_and_missing_historical_key_fails_closed() -> None:
+    state = InMemoryStateStore()
+    old_key = PSEUDONYM_KEYRING[PSEUDONYM_KEY_ID]
+    new_key_id = PSEUDONYM_KEY_ID_V2
+    new_key = hashlib.sha256(b"cas-human-attestation-test-key-v2").digest()
+    old_store = _attestation_store(state)
+    old_record = _create(
+        old_store,
+        purpose="legal_approval",
+        gate="legal_publication_approval",
+        role="legal_counsel",
+        binding="a" * 64,
+    )
+
+    rotated = _attestation_store(
+        state,
+        keyring={PSEUDONYM_KEY_ID: old_key, new_key_id: new_key},
+        active_key_id=new_key_id,
+    )
+    assert rotated.load(old_record.sha256, now=NOW).body == old_record.body
+    new_record = _create(
+        rotated,
+        purpose="legal_approval",
+        gate="legal_publication_approval",
+        role="legal_counsel",
+        binding="b" * 64,
+    )
+    assert new_record.payload["actor"]["pseudonym_key_id"] == new_key_id
+    assert (
+        new_record.payload["actor"]["account_subject"]
+        != old_record.payload["actor"]["account_subject"]
+    )
+
+    missing_old = _attestation_store(
+        state, keyring={new_key_id: new_key}, active_key_id=new_key_id
+    )
+    with pytest.raises(HumanAttestationUnavailable, match="verification key"):
+        missing_old.load(old_record.sha256, now=NOW)
+    assert missing_old.load(new_record.sha256, now=NOW).body == new_record.body
+
+
+def test_private_identity_binding_tamper_and_legacy_v1_fail_closed() -> None:
+    state = InMemoryStateStore()
+    store = _attestation_store(state)
+    created = _create(
+        store,
+        purpose="legal_approval",
+        gate="legal_publication_approval",
+        role="legal_counsel",
+        binding="a" * 64,
+    )
+    binding = state.get(
+        human_attestation_service.ATTESTATION_TENANT_ID,
+        human_attestation_service.IDENTITY_BINDING_KIND,
+        human_attestation_service._identity_binding_record_id(created.sha256),
+    )
+    assert binding is not None
+    state.put(
+        binding.with_payload(
+            {**binding.payload, "actor_account_id": "acct-" + ("f" * 32)},
+            now=NOW,
+        ),
+        expected_version=1,
+    )
+    with pytest.raises(HumanAttestationUnavailable, match="identity binding"):
+        store.load(created.sha256, now=NOW)
+
+    legacy_state = InMemoryStateStore()
+    legacy_payload = {
+        "schema_version": "cas_harness_human_attestation.v1",
+        "record_type": "human_attestation",
+        "action": "ATTEST",
+        "purpose": "legal_approval",
+        "gate": "legal_publication_approval",
+        "environment": "public-production",
+        "repository": "LittleHenderson/noetic-compass",
+        "master_head_sha": MASTER,
+        "deploy_id": DEPLOY,
+        "evidence_binding_sha256": "a" * 64,
+        "attested_at_utc": "2026-07-15T12:00:00Z",
+        "actor": {
+            "tenant_id_sha256": hashlib.sha256(TENANT.encode()).hexdigest(),
+            "account_id_sha256": hashlib.sha256(
+                ROLE_ACCOUNTS["legal_counsel"][1].encode()
+            ).hexdigest(),
+            "account_role": "owner",
+            "attestation_role": "legal_counsel",
+        },
+        "supporting_attestations": [],
+    }
+    legacy_body = human_attestation_service._canonical_json_bytes(legacy_payload)
+    legacy_digest = hashlib.sha256(legacy_body).hexdigest()
+    content = LedgerRecord.new(
+        tenant_id=human_attestation_service.ATTESTATION_TENANT_ID,
+        kind=human_attestation_service.ATTESTATION_KIND,
+        record_id=human_attestation_service._attestation_record_id(legacy_digest),
+        payload=legacy_payload,
+        source="human_attestation",
+        trace_id=legacy_digest,
+        now=NOW,
+    )
+    legacy_state.put(content, expected_version=0)
+    legacy_status = LedgerRecord.new(
+        tenant_id=human_attestation_service.ATTESTATION_TENANT_ID,
+        kind=human_attestation_service.STATUS_KIND,
+        record_id=human_attestation_service._status_record_id(legacy_digest),
+        payload={
+            "schema_version": "cas_harness_human_attestation_status.v1",
+            "attestation_sha256": legacy_digest,
+            "active": True,
+            "revoked_at_utc": None,
+            "revoked_by_account_id_sha256": None,
+        },
+        parent_ids=(content.record_id,),
+        source="human_attestation",
+        trace_id=legacy_digest,
+        now=NOW,
+    )
+    legacy_state.put(legacy_status, expected_version=0)
+    with pytest.raises(HumanAttestationUnavailable, match="keyed.*unavailable"):
+        _attestation_store(legacy_state).load(legacy_digest, now=NOW)
+
+
+def test_revocation_status_uses_keyed_subject_not_raw_or_unkeyed_account_hash() -> None:
+    state = InMemoryStateStore()
+    store = _attestation_store(state)
+    created = _create(
+        store,
+        purpose="legal_approval",
+        gate="legal_publication_approval",
+        role="legal_counsel",
+        binding="a" * 64,
+    )
+    account_id = ROLE_ACCOUNTS["legal_counsel"][1]
+    store.revoke(
+        created.sha256,
+        actor_tenant_id=TENANT,
+        actor_account_id=account_id,
+        actor_account_role="owner",
+        now=NOW,
+    )
+    status = state.get(
+        human_attestation_service.ATTESTATION_TENANT_ID,
+        human_attestation_service.STATUS_KIND,
+        human_attestation_service._status_record_id(created.sha256),
+    )
+    assert status is not None
+    serialized = repr(dict(status.payload))
+    assert account_id not in serialized
+    assert hashlib.sha256(account_id.encode()).hexdigest() not in serialized
+    assert str(status.payload["revoked_by_account_subject"]).startswith(
+        "hmac-sha256:"
+    )
 
 
 @pytest.mark.parametrize(
@@ -134,7 +511,7 @@ def test_direct_approvals_are_dereferenced_bound_and_distinct(
     gate: str, purpose: str, roles: tuple[str, ...]
 ) -> None:
     state = InMemoryStateStore()
-    attestations = HumanAttestationStore(state, primary_tenant_id=TENANT)
+    attestations = _attestation_store(state)
     evidence = _common(gate)
     if gate == "legal_publication_approval":
         evidence.update(
@@ -173,7 +550,7 @@ def test_direct_approvals_are_dereferenced_bound_and_distinct(
 
 def test_legal_approvals_reject_two_roles_from_the_same_authenticated_account() -> None:
     state = InMemoryStateStore()
-    attestations = HumanAttestationStore(state, primary_tenant_id=TENANT)
+    attestations = _attestation_store(state)
     evidence = _common("legal_publication_approval")
     evidence.update(
         documents=[{"kind": "legal", "content_sha256": "1" * 64}],
@@ -230,9 +607,83 @@ def test_legal_approvals_reject_two_roles_from_the_same_authenticated_account() 
         )
 
 
+def test_distinct_account_control_survives_pseudonym_key_rotation() -> None:
+    state = InMemoryStateStore()
+    old_key = PSEUDONYM_KEYRING[PSEUDONYM_KEY_ID]
+    new_key = hashlib.sha256(b"cas-human-attestation-test-key-v2").digest()
+    old_store = _attestation_store(state)
+    evidence = _common("legal_publication_approval")
+    evidence.update(
+        documents=[{"kind": "legal", "content_sha256": "1" * 64}],
+        claim_status_vocabulary=["OPEN", "ACCEPT"],
+    )
+    binding = canonical_evidence_binding_sha256(
+        "legal_publication_approval", evidence
+    )
+    legal = _create(
+        old_store,
+        purpose="legal_approval",
+        gate="legal_publication_approval",
+        role="legal_counsel",
+        binding=binding,
+    )
+
+    rotated = _attestation_store(
+        state,
+        keyring={
+            PSEUDONYM_KEY_ID: old_key,
+            PSEUDONYM_KEY_ID_V2: new_key,
+        },
+        active_key_id=PSEUDONYM_KEY_ID_V2,
+    )
+    product = rotated.create(
+        actor_tenant_id=TENANT,
+        actor_account_id=ROLE_ACCOUNTS["legal_counsel"][1],
+        actor_account_role="owner",
+        purpose="legal_approval",
+        gate="legal_publication_approval",
+        attestation_role="product_owner",
+        master_head_sha=MASTER,
+        deploy_id=DEPLOY,
+        evidence_binding_sha256=binding,
+        now=NOW,
+    )
+    privacy = _create(
+        rotated,
+        purpose="legal_approval",
+        gate="legal_publication_approval",
+        role="privacy_owner",
+        binding=binding,
+    )
+    assert (
+        legal.payload["actor"]["account_subject"]
+        != product.payload["actor"]["account_subject"]
+    )
+    evidence["approvals"] = [
+        {
+            "role": role,
+            "approval_artifact_uri": record.uri,
+            "approval_sha256": record.sha256,
+            "approved_at_utc": record.payload["attested_at_utc"],
+        }
+        for role, record in (
+            ("legal_counsel", legal),
+            ("privacy_owner", privacy),
+            ("product_owner", product),
+        )
+    ]
+    authority = CustomerProductionAcceptanceAuthorityStore(
+        state, human_attestation_store=rotated
+    )
+    with pytest.raises(AcceptanceAuthorityInvalid, match="invalid or revoked"):
+        authority.assert_human_attestations(
+            "legal_publication_approval", evidence, now=NOW
+        )
+
+
 def test_incident_and_tabletop_aggregates_require_every_individual_actor() -> None:
     state = InMemoryStateStore()
-    attestations = HumanAttestationStore(state, primary_tenant_id=TENANT)
+    attestations = _attestation_store(state)
     evidence = _common("incident_tabletop")
     evidence.update(
         incident={
@@ -325,7 +776,7 @@ def test_incident_and_tabletop_aggregates_require_every_individual_actor() -> No
 
 def test_release_aggregate_requires_four_roles_and_child_revocation_fails_closed() -> None:
     state = InMemoryStateStore()
-    attestations = HumanAttestationStore(state, primary_tenant_id=TENANT)
+    attestations = _attestation_store(state)
     evidence = _common("release_decision")
     evidence.update(
         status="ACCEPT",
@@ -371,9 +822,98 @@ def test_release_aggregate_requires_four_roles_and_child_revocation_fails_closed
         attestations.load(decision.sha256, now=NOW)
 
 
+def test_different_valid_support_graph_cannot_reuse_private_content_binding() -> None:
+    state = InMemoryStateStore()
+    attestations = _attestation_store(state)
+
+    def closure_graph(stamp: datetime) -> HumanAttestation:
+        children = {
+            role: _create(
+                attestations,
+                purpose="incident_closure",
+                gate="incident_tabletop",
+                role=role,
+                binding="a" * 64,
+                now=stamp,
+            )
+            for role in ("incident_commander", "operations", "security")
+        }
+        return _create(
+            attestations,
+            purpose="incident_postmortem",
+            gate="incident_tabletop",
+            role="incident_commander",
+            binding="a" * 64,
+            supports=[
+                _reference(record, role) for role, record in children.items()
+            ],
+            now=stamp + timedelta(seconds=1),
+        )
+
+    first = closure_graph(NOW)
+    second = closure_graph(NOW + timedelta(seconds=2))
+    assert first.sha256 != second.sha256
+    assert (
+        first.payload["supporting_attestations"]
+        != second.payload["supporting_attestations"]
+    )
+
+    first_identity = state.get(
+        human_attestation_service.ATTESTATION_TENANT_ID,
+        human_attestation_service.IDENTITY_BINDING_KIND,
+        human_attestation_service._identity_binding_record_id(first.sha256),
+    )
+    second_identity = state.get(
+        human_attestation_service.ATTESTATION_TENANT_ID,
+        human_attestation_service.IDENTITY_BINDING_KIND,
+        human_attestation_service._identity_binding_record_id(second.sha256),
+    )
+    second_status = state.get(
+        human_attestation_service.ATTESTATION_TENANT_ID,
+        human_attestation_service.STATUS_KIND,
+        human_attestation_service._status_record_id(second.sha256),
+    )
+    assert first_identity is not None
+    assert second_identity is not None
+    assert second_status is not None
+    reused_binding = str(first_identity.payload["content_binding_hmac"])
+
+    # Simulate a storage attacker replacing both private pins while preserving
+    # their version/envelope metadata. Recomputing from the canonical public
+    # digest must still reject the otherwise valid alternate support graph.
+    identity_key = (
+        second_identity.tenant_id,
+        second_identity.kind,
+        second_identity.record_id,
+    )
+    status_key = (
+        second_status.tenant_id,
+        second_status.kind,
+        second_status.record_id,
+    )
+    state._records[identity_key] = replace(  # noqa: SLF001 - hostile-store probe
+        second_identity,
+        payload={
+            **second_identity.payload,
+            "content_binding_hmac": reused_binding,
+        },
+    )
+    state._records[status_key] = replace(  # noqa: SLF001 - hostile-store probe
+        second_status,
+        payload={
+            **second_status.payload,
+            "content_binding_hmac": reused_binding,
+        },
+    )
+    with pytest.raises(
+        HumanAttestationUnavailable, match="private content binding"
+    ):
+        attestations.load(second.sha256, now=NOW + timedelta(seconds=4))
+
+
 def test_release_aggregate_rejects_a_child_created_before_the_evidence_window() -> None:
     state = InMemoryStateStore()
-    attestations = HumanAttestationStore(state, primary_tenant_id=TENANT)
+    attestations = _attestation_store(state)
     evidence = _common("release_decision")
     evidence.update(
         status="ACCEPT",
@@ -425,7 +965,7 @@ def test_create_recovers_an_exact_content_row_left_before_activation() -> None:
             return super().put(record, expected_version=expected_version)
 
     state = FailFirstStatusWriteStore()
-    store = HumanAttestationStore(state, primary_tenant_id=TENANT)
+    store = _attestation_store(state)
     values = {
         "actor_tenant_id": TENANT,
         "actor_account_id": ROLE_ACCOUNTS["legal_counsel"][1],
@@ -458,7 +998,7 @@ def test_create_recovers_an_exact_content_row_left_before_activation() -> None:
 def test_sqlite_attestation_and_revocation_survive_restart(tmp_path) -> None:
     path = tmp_path / "human-attestations.db"
     first_backend = SqliteStateStore(path)
-    first = HumanAttestationStore(first_backend, primary_tenant_id=TENANT)
+    first = _attestation_store(first_backend)
     created = _create(
         first,
         purpose="legal_approval",
@@ -469,7 +1009,7 @@ def test_sqlite_attestation_and_revocation_survive_restart(tmp_path) -> None:
     first_backend.close()
 
     second_backend = SqliteStateStore(path)
-    second = HumanAttestationStore(second_backend, primary_tenant_id=TENANT)
+    second = _attestation_store(second_backend)
     assert second.load(created.sha256, now=NOW).body == created.body
     second.revoke(
         created.sha256,
@@ -481,7 +1021,7 @@ def test_sqlite_attestation_and_revocation_survive_restart(tmp_path) -> None:
     second_backend.close()
 
     third_backend = SqliteStateStore(path)
-    third = HumanAttestationStore(third_backend, primary_tenant_id=TENANT)
+    third = _attestation_store(third_backend)
     with pytest.raises(HumanAttestationNotFound, match="revoked"):
         third.load(created.sha256, now=NOW)
     third_backend.close()
@@ -513,9 +1053,7 @@ def test_authenticated_route_creates_reads_and_revokes_exact_attestation(
     app = FastAPI()
     app.state.account_store = account_store
     app.state.session_store = session_store
-    app.state.human_attestation_store = HumanAttestationStore(
-        backend, primary_tenant_id=TENANT
-    )
+    app.state.human_attestation_store = _attestation_store(backend)
     app.include_router(auth.router)
     app.include_router(human_attestations.router)
     app.add_middleware(RateLimitMiddleware, rpm=500)

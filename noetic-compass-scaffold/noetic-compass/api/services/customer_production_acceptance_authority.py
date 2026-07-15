@@ -55,6 +55,7 @@ from api.services.human_attestations import (
     HumanAttestationNotFound,
     HumanAttestationStore,
     HumanAttestationUnavailable,
+    PUBLIC_HUMAN_ASSURANCE_BOUNDARY,
     canonical_evidence_binding_sha256,
 )
 
@@ -204,7 +205,13 @@ _EXTRA_FIELDS: dict[str, frozenset[str]] = {
         }
     ),
     "legal_publication_approval": frozenset(
-        {"public_base_url", "documents", "approvals", "claim_status_vocabulary"}
+        {
+            "public_base_url",
+            "documents",
+            "approvals",
+            "claim_status_vocabulary",
+            "human_assurance_boundary",
+        }
     ),
     "support_crm": frozenset(
         {
@@ -218,7 +225,13 @@ _EXTRA_FIELDS: dict[str, frozenset[str]] = {
         }
     ),
     "incident_tabletop": frozenset(
-        {"api_base_url", "service_id", "incident", "tabletop"}
+        {
+            "api_base_url",
+            "service_id",
+            "incident",
+            "tabletop",
+            "human_assurance_boundary",
+        }
     ),
     "alert_delivery": frozenset(
         {
@@ -231,7 +244,13 @@ _EXTRA_FIELDS: dict[str, frozenset[str]] = {
         }
     ),
     "claim_honesty": frozenset(
-        {"scanned_surfaces", "scan", "boundaries", "approvals"}
+        {
+            "scanned_surfaces",
+            "scan",
+            "boundaries",
+            "approvals",
+            "human_assurance_boundary",
+        }
     ),
     "release_decision": frozenset(
         {
@@ -240,6 +259,7 @@ _EXTRA_FIELDS: dict[str, frozenset[str]] = {
             "approver_roles",
             "decision_record_uri",
             "decision_record_sha256",
+            "human_assurance_boundary",
         }
     ),
 }
@@ -365,6 +385,9 @@ _OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
             {"foreign_audit_http_status", "foreign_packet_http_status", "verified_at_utc"}
         ),
     },
+    "legal_publication_approval": {
+        "human_assurance_boundary": frozenset(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
+    },
     "accounts_billing": {
         "account_session": frozenset(
             {
@@ -456,6 +479,7 @@ _OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
         ),
     },
     "incident_tabletop": {
+        "human_assurance_boundary": frozenset(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
         "incident": frozenset(
             {
                 "record_id",
@@ -498,6 +522,7 @@ _OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
         ),
     },
     "claim_honesty": {
+        "human_assurance_boundary": frozenset(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
         "scan": frozenset(
             {
                 "misleading_claim_count",
@@ -516,6 +541,9 @@ _OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
                 "rendered_product_status",
             }
         ),
+    },
+    "release_decision": {
+        "human_assurance_boundary": frozenset(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
     },
 }
 
@@ -908,7 +936,7 @@ class CustomerProductionAcceptanceAuthorityStore:
                         now=stamp,
                     )
                 )
-            actor_hashes: set[str] = set()
+            actor_accounts: set[str] = set()
             for record in records:
                 # ``load`` has already dereferenced and validated every child,
                 # but the authority must also bind each individual action to
@@ -944,16 +972,13 @@ class CustomerProductionAcceptanceAuthorityStore:
                         raise HumanAttestationInvalid(
                             "attestation timestamp is outside the evidence window"
                         )
-                actor = record.payload.get("actor")
-                if not isinstance(actor, Mapping):
-                    raise HumanAttestationUnavailable("attestation actor is invalid")
-                actor_hash = str(actor.get("account_id_sha256") or "")
                 if gate in {"legal_publication_approval", "claim_honesty"}:
-                    if actor_hash in actor_hashes:
+                    if record.actor_account_id in actor_accounts:
                         raise HumanAttestationInvalid(
-                            "approvals require distinct authenticated accounts"
+                            "approvals require distinct authenticated platform accounts; "
+                            "account separation does not prove distinct people"
                         )
-                    actor_hashes.add(actor_hash)
+                    actor_accounts.add(record.actor_account_id)
         except (HumanAttestationInvalid, HumanAttestationNotFound) as exc:
             if serving_active_revision:
                 raise AcceptanceAuthorityUnavailable(
@@ -1981,6 +2006,17 @@ def _validate_gate_semantics(
     observed: datetime,
     now: datetime,
 ) -> None:
+    if gate in {
+        "legal_publication_approval",
+        "claim_honesty",
+        "incident_tabletop",
+        "release_decision",
+    }:
+        boundary = _object(evidence, "human_assurance_boundary")
+        if dict(boundary) != dict(PUBLIC_HUMAN_ASSURANCE_BOUNDARY):
+            raise AcceptanceAuthorityInvalid(
+                "human_assurance_boundary does not match the fail-closed claim boundary"
+            )
     if gate == "runtime_worm":
         _validate_runtime_worm_semantics(evidence, event, observed, now)
     elif gate == "hosted_customer_journey":
