@@ -135,6 +135,12 @@ def _write(path: Path, value: object) -> Path:
     return path
 
 
+def _restrict_to_owner(path: Path) -> Path:
+    if os.name == "posix":
+        path.chmod(0o600)
+    return path
+
+
 def _validate_args(path: Path, digest: str | None = None) -> list[str]:
     args = [
         "validate",
@@ -386,7 +392,9 @@ def test_source_bound_publish_creates_private_binding_before_public_mutation(
 ) -> None:
     digest = _sha(f"{gate}-evidence")
     canonical = b"{}"
-    source_path = _write(tmp_path / f"{gate}-private-source.json", selector)
+    source_path = _restrict_to_owner(
+        _write(tmp_path / f"{gate}-private-source.json", selector)
+    )
     monkeypatch.setattr(
         publisher,
         "_prepare_evidence",
@@ -471,6 +479,7 @@ def test_private_source_selector_duplicate_keys_fail_before_provider_access(
         '"audit_id":"audit-one"}',
         encoding="utf-8",
     )
+    _restrict_to_owner(source_path)
     monkeypatch.setattr(
         publisher,
         "_prepare_evidence",
