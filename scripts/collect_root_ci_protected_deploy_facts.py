@@ -46,6 +46,12 @@ RENDER_LATEST_DEPLOY_URL = f"{RENDER_SERVICE_URL}/deploys?limit=1"
 ROOT_CI_SCHEMA_VERSION = acceptance.ROOT_CI_SCHEMA_VERSION
 ROOT_CI_OBSERVATION_SEMANTICS = acceptance.ROOT_CI_OBSERVATION_SEMANTICS
 
+# GitHub emits a new short-lived clone credential on every authenticated
+# repository read.  It is neither repository state nor a control, so including
+# it in the preflight/final snapshot makes an otherwise stable observation
+# impossible and lets credential material influence the evidence digest.
+_GITHUB_REPOSITORY_VOLATILE_FIELDS = frozenset({"temp_clone_token"})
+
 _SHA1_RE = re.compile(r"^[0-9a-f]{40}$")
 _DEPLOY_RE = re.compile(r"^dep-[A-Za-z0-9]+$")
 _DETAILS_RE = re.compile(
@@ -419,6 +425,16 @@ def _validate_repository(payload: Mapping[str, Any]) -> None:
         _require(payload.get(field) == value, f"GitHub repository {field} drifted")
 
 
+def _stable_repository_record(payload: Mapping[str, Any]) -> dict[str, Any]:
+    """Remove provider-issued ephemeral credentials from the control snapshot."""
+
+    return {
+        field: value
+        for field, value in payload.items()
+        if field not in _GITHUB_REPOSITORY_VOLATILE_FIELDS
+    }
+
+
 def _validate_master_branch(
     payload: Mapping[str, Any], expected_master_head: str
 ) -> None:
@@ -704,6 +720,7 @@ def collect_root_ci_protected_deploy_facts(
         repository_preflight_document.payload, "GitHub repository preflight"
     )
     _validate_repository(repository_preflight)
+    stable_repository_preflight = _stable_repository_record(repository_preflight)
 
     master_url = f"{GITHUB_API}/branches/master"
     master_preflight_document = transport.get_json(
@@ -891,6 +908,7 @@ def collect_root_ci_protected_deploy_facts(
         repository_final_document.payload, "GitHub repository final"
     )
     _validate_repository(repository_final)
+    stable_repository_final = _stable_repository_record(repository_final)
     protection_final_document = transport.get_json(
         f"{GITHUB_API}/branches/master/protection",
         headers=github_headers,
@@ -986,8 +1004,8 @@ def collect_root_ci_protected_deploy_facts(
         "GitHub current master record changed during collection",
     )
     _require(
-        _canonical_bytes(repository_preflight)
-        == _canonical_bytes(repository_final),
+        _canonical_bytes(stable_repository_preflight)
+        == _canonical_bytes(stable_repository_final),
         "GitHub repository record changed during collection",
     )
     _require(
@@ -1089,9 +1107,9 @@ def collect_root_ci_protected_deploy_facts(
             "github_master_preflight_sha256": _sha256(master_preflight),
             "github_master_final_sha256": _sha256(master_final),
             "github_repository_preflight_sha256": _sha256(
-                repository_preflight
+                stable_repository_preflight
             ),
-            "github_repository_final_sha256": _sha256(repository_final),
+            "github_repository_final_sha256": _sha256(stable_repository_final),
             "github_protection_preflight_sha256": _sha256(
                 protection_preflight
             ),
