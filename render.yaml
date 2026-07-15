@@ -169,6 +169,15 @@ services:
       # database is the eventual backend behind the unchanged LeadStore seam.
       - key: NC_CRM_LEAD_STORE_PATH
         value: /var/data/leads.jsonl
+      # Server-owned consent notice contract. The currently served page is an OPEN draft,
+      # byte-bound below, so public CRM persistence deliberately returns 503. Legal publication
+      # must replace the version/hash and set exact `present`; the browser cannot choose them.
+      - key: NC_CRM_PRIVACY_NOTICE_PUBLICATION_STATUS
+        value: OPEN
+      - key: NC_CRM_PRIVACY_NOTICE_VERSION
+        value: draft-2026-07-14
+      - key: NC_CRM_PRIVACY_NOTICE_CONTENT_SHA256
+        value: e94df1615dde4122836b47a74e32d45c79b63c1603db3bd1aee01f62d7ddae28
       # Public support tickets are append-only and fsync'd on the persistent
       # disk. Lifecycle routes remain authenticated operator actions.
       - key: NC_SUPPORT_TICKET_STORE_PATH

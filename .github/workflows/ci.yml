@@ -489,7 +489,9 @@ jobs:
               stderr=subprocess.PIPE,
               text=True,
           )
-          assert "--privacy-notice-version" in crm_collector_help.stdout
+          assert "--privacy-notice-version" not in crm_collector_help.stdout
+          assert "--master-head" in crm_collector_help.stdout
+          assert "--deploy-id" in crm_collector_help.stdout
           assert "--source-receipt-output" in crm_collector_help.stdout
           assert "--fragment-output" in crm_collector_help.stdout
 

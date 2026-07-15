@@ -302,6 +302,8 @@ class AirtableCRMProvider(CRMSyncProvider):
             "consent schema version",
             "privacy notice url",
             "privacy notice version",
+            "privacy notice content sha-256",
+            "privacy notice publication status",
         }
         if dedup_field.casefold() in fixed_fields or owner_field.casefold() in fixed_fields:
             raise CRMConfigError(
@@ -423,6 +425,10 @@ class AirtableCRMProvider(CRMSyncProvider):
             "Consent Schema Version": lead.consent_schema_version,
             "Privacy Notice URL": lead.privacy_notice_url,
             "Privacy Notice Version": lead.privacy_notice_version,
+            "Privacy Notice Content SHA-256": lead.privacy_notice_content_sha256,
+            "Privacy Notice Publication Status": (
+                lead.privacy_notice_publication_status
+            ),
             "Metadata JSON": json.dumps(
                 dict(lead.metadata), sort_keys=True, separators=(",", ":")
             ),

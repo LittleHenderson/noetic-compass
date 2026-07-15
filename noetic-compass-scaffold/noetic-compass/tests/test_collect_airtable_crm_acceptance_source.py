@@ -12,6 +12,7 @@ import pytest
 
 from api.services.crm import (
     CRM_CONSENT_SCHEMA_VERSION,
+    CRM_PRIVACY_NOTICE_PRESENT_STATUS,
     CRM_PRIVACY_NOTICE_URL,
     CRM_SCHEMA_VERSION,
     CRMSyncResult,
@@ -43,22 +44,30 @@ PRIVACY_VERSION = "privacy-2026-07-15"
 CONSENT_AT = "2026-07-15T00:00:00Z"
 VERIFIED_AT = "2026-07-15T00:01:00Z"
 RESPONSE_DIGEST = "sha256:" + ("b" * 64)
+PRIVACY_BODY = b"<!doctype html><title>Final privacy notice</title>"
+PRIVACY_CONTENT_SHA256 = collector_module._digest_bytes(PRIVACY_BODY)
 
 
-def _runtime_env(path: Path) -> dict[str, str]:
+def _runtime_env() -> dict[str, str]:
     return {
         "RENDER_SERVICE_ID": collector_module.PRODUCTION_SERVICE_ID,
         "RENDER_GIT_COMMIT": MASTER_SHA,
+        "RENDER_API_KEY": "rnd-secret-never-output",
         "NC_CRM_PROVIDER": "airtable",
-        "NC_CRM_LEAD_STORE_PATH": str(path.resolve()),
+        "NC_CRM_LEAD_STORE_PATH": collector_module.PRODUCTION_LEAD_STORE_PATH,
         "NC_AIRTABLE_TOKEN": "pat-secret-never-output",
-        "NC_AIRTABLE_BASE_ID": "app123",
-        "NC_AIRTABLE_TABLE_NAME": "Leads",
+        "NC_AIRTABLE_BASE_ID": collector_module.PRODUCTION_AIRTABLE_BASE_ID,
+        "NC_AIRTABLE_TABLE_NAME": collector_module.PRODUCTION_AIRTABLE_TABLE_NAME,
         "NC_AIRTABLE_API_BASE_URL": collector_module.CANONICAL_AIRTABLE_API_BASE_URL,
-        "NC_AIRTABLE_DEDUP_FIELD": "Email Dedup Key",
-        "NC_AIRTABLE_OWNER_FIELD": "Owner",
-        "NC_AIRTABLE_OWNER_VALUE": "CAS Sales",
-        "NC_AIRTABLE_LIFECYCLE_FIELD": "Lifecycle",
+        "NC_AIRTABLE_DEDUP_FIELD": collector_module.PRODUCTION_AIRTABLE_DEDUP_FIELD,
+        "NC_AIRTABLE_OWNER_FIELD": collector_module.PRODUCTION_AIRTABLE_OWNER_FIELD,
+        "NC_AIRTABLE_OWNER_VALUE": collector_module.PRODUCTION_AIRTABLE_OWNER_VALUE,
+        "NC_AIRTABLE_LIFECYCLE_FIELD": collector_module.PRODUCTION_AIRTABLE_LIFECYCLE_FIELD,
+        "NC_CRM_PRIVACY_NOTICE_PUBLICATION_STATUS": (
+            CRM_PRIVACY_NOTICE_PRESENT_STATUS
+        ),
+        "NC_CRM_PRIVACY_NOTICE_VERSION": PRIVACY_VERSION,
+        "NC_CRM_PRIVACY_NOTICE_CONTENT_SHA256": PRIVACY_CONTENT_SHA256,
     }
 
 
@@ -70,6 +79,8 @@ def _synced_lead(**overrides: Any) -> Lead:
             metadata={"probe": "support_crm"},
             consent_to_contact=True,
             privacy_notice_version=PRIVACY_VERSION,
+            privacy_notice_content_sha256=PRIVACY_CONTENT_SHA256,
+            privacy_notice_publication_status=CRM_PRIVACY_NOTICE_PRESENT_STATUS,
         ).validated(),
         source="customer_production_acceptance_probe",
         trace_id="req-collector",
@@ -116,6 +127,8 @@ def _response(**overrides: Any) -> dict[str, Any]:
         "consent_to_contact": True,
         "privacy_notice_url": CRM_PRIVACY_NOTICE_URL,
         "privacy_notice_version": PRIVACY_VERSION,
+        "privacy_notice_content_sha256": PRIVACY_CONTENT_SHA256,
+        "privacy_notice_publication_status": CRM_PRIVACY_NOTICE_PRESENT_STATUS,
         "consent_recorded_at_utc": CONSENT_AT,
         "consent_schema_version": CRM_CONSENT_SCHEMA_VERSION,
         "message": "received",
@@ -150,16 +163,52 @@ def _collector(
     expected_lead = _synced_lead() if lead is None else lead
 
     def transport(**kwargs):
+        path = kwargs["path"]
+        if path == f"/v1/services/{collector_module.PRODUCTION_SERVICE_ID}":
+            return _http_result(
+                {
+                    "id": collector_module.PRODUCTION_SERVICE_ID,
+                    "name": collector_module.PRODUCTION_SERVICE_NAME,
+                    "type": "web_service",
+                    "repo": collector_module.REPOSITORY_URL,
+                    "branch": "master",
+                    "autoDeployTrigger": "checksPass",
+                    "serviceDetails": {
+                        "disk": {
+                            "id": collector_module.PRODUCTION_DISK_ID,
+                            "name": collector_module.PRODUCTION_DISK_NAME,
+                            "mountPath": collector_module.PRODUCTION_DISK_MOUNT_PATH,
+                            "sizeGB": 1,
+                        }
+                    },
+                }
+            )
+        if path == (
+            f"/v1/services/{collector_module.PRODUCTION_SERVICE_ID}/deploys/{DEPLOY_ID}"
+        ):
+            return _http_result(
+                {
+                    "id": DEPLOY_ID,
+                    "status": "live",
+                    "trigger": "service_updated",
+                    "commit": {"id": MASTER_SHA},
+                    "finishedAt": "2026-07-15T00:01:30Z",
+                }
+            )
+        if path == "/privacy":
+            return _http_result(
+                {}, content_type="text/html; charset=utf-8", raw=PRIVACY_BODY
+            )
         assert kwargs["base_url"] == collector_module.PRODUCTION_API_ORIGIN
-        assert kwargs["path"] == collector_module.PUBLIC_LEAD_PATH
+        assert path == collector_module.PUBLIC_LEAD_PATH
         assert kwargs["method"] == "POST"
         assert kwargs["payload"]["consent_to_contact"] is True
-        assert kwargs["payload"]["privacy_notice_version"] == PRIVACY_VERSION
+        assert "privacy_notice_version" not in kwargs["payload"]
         assert kwargs["payload"]["email"].endswith("@acceptance.invalid")
         return _http_result(expected_response)
 
     def read_lead(path: str, lead_id: str):
-        assert Path(path) == (tmp_path / "leads.jsonl").resolve()
+        assert path == collector_module.PRODUCTION_LEAD_STORE_PATH
         assert lead_id == LEAD_ID
         return expected_lead
 
@@ -167,11 +216,8 @@ def _collector(
         base_url=collector_module.PRODUCTION_API_ORIGIN,
         master_head_sha=MASTER_SHA,
         deploy_id=DEPLOY_ID,
-        privacy_notice_version=PRIVACY_VERSION,
         runtime_environment=(
-            _runtime_env(tmp_path / "leads.jsonl")
-            if environment is None
-            else environment
+            _runtime_env() if environment is None else environment
         ),
         transport=transport,
         lead_reader=read_lead,
@@ -188,7 +234,16 @@ def test_collects_provider_bound_pii_free_open_fragment(tmp_path: Path) -> None:
     assert source["lead_id_sha256"] != LEAD_ID
     assert source["trace_id_sha256"] != "req-collector"
     assert source["airtable_record_id_sha256"] != EXTERNAL_ID
+    assert source["render_deploy_status"] == "live"
+    assert source["render_deploy_commit_sha"] == MASTER_SHA
+    assert source["airtable_base_id"] == collector_module.PRODUCTION_AIRTABLE_BASE_ID
+    assert source["airtable_owner_value"] == collector_module.PRODUCTION_AIRTABLE_OWNER_VALUE
+    assert source["lead_store_path"] == collector_module.PRODUCTION_LEAD_STORE_PATH
     assert fragment["status"] == "OPEN"
+    assert fragment["source_receipt"] == source
+    assert collector_module._digest_bytes(
+        collector_module._canonical_bytes(fragment["source_receipt"])
+    ) == fragment["source_receipt_sha256"]
     assert fragment["missing_required_evidence"] == ["resolved_support_ticket_sla"]
     assert fragment["crm_lead"] == {
         "system": "airtable",
@@ -211,6 +266,8 @@ def test_collects_provider_bound_pii_free_open_fragment(tmp_path: Path) -> None:
         "privacy_notice_linked": True,
         "privacy_notice_url": CRM_PRIVACY_NOTICE_URL,
         "privacy_notice_version": PRIVACY_VERSION,
+        "privacy_notice_content_sha256": PRIVACY_CONTENT_SHA256,
+        "privacy_notice_publication_status": CRM_PRIVACY_NOTICE_PRESENT_STATUS,
         "consent_schema_version": CRM_CONSENT_SCHEMA_VERSION,
         "recorded_at_utc": CONSENT_AT,
     }
@@ -230,6 +287,8 @@ def test_collects_provider_bound_pii_free_open_fragment(tmp_path: Path) -> None:
         {"consent_to_contact": False},
         {"privacy_notice_url": "https://example.invalid/privacy"},
         {"privacy_notice_version": "stale"},
+        {"privacy_notice_content_sha256": "c" * 64},
+        {"privacy_notice_publication_status": "OPEN"},
     ],
 )
 def test_public_capture_response_must_be_exactly_bound(
@@ -255,6 +314,11 @@ def test_public_capture_response_rejects_extra_fields(tmp_path: Path) -> None:
         {"sync_status": "sync_pending", "external_id": None},
         {"consent_to_contact": False, "schema_version": "noetic_crm.v1"},
         {"privacy_notice_version": "stale"},
+        {"privacy_notice_content_sha256": "c" * 64},
+        {
+            "privacy_notice_publication_status": "OPEN",
+            "schema_version": "noetic_crm.v1",
+        },
         {"consent_recorded_at_utc": "2026-07-15T00:00:01Z"},
     ],
 )
@@ -332,23 +396,101 @@ def test_timestamp_order_fails_closed(tmp_path: Path) -> None:
         ("RENDER_GIT_COMMIT", "c" * 40, "runtime commit"),
         ("RENDER_SERVICE_ID", "srv-other", "pinned production service"),
         ("NC_CRM_PROVIDER", "null", "not exact airtable"),
-        ("NC_AIRTABLE_TOKEN", "", "provider contract is incomplete"),
+        ("NC_AIRTABLE_TOKEN", "", "provider token is absent"),
+        ("RENDER_API_KEY", "", "required for exact live deploy proof"),
         (
             "NC_AIRTABLE_API_BASE_URL",
             "https://evil.invalid/v0",
-            "origin is not canonical",
+            "does not match the exact production contract",
         ),
-        ("NC_CRM_LEAD_STORE_PATH", "relative/leads.jsonl", "absolute durable path"),
+        (
+            "NC_CRM_LEAD_STORE_PATH",
+            "/tmp/leads.jsonl",
+            "must be exact /var/data/leads.jsonl",
+        ),
     ],
 )
 def test_runtime_and_provider_binding_fail_closed(
     tmp_path: Path, field: str, value: str, message: str
 ) -> None:
-    environment = _runtime_env(tmp_path / "leads.jsonl")
+    environment = _runtime_env()
     environment[field] = value
 
     with pytest.raises(collector_module.CRMCollectionFailure, match=message):
         _collector(tmp_path, environment=environment)
+
+
+def test_open_privacy_notice_fails_before_public_lead_persistence(tmp_path: Path) -> None:
+    environment = _runtime_env()
+    environment["NC_CRM_PRIVACY_NOTICE_PUBLICATION_STATUS"] = "OPEN"
+    collector = _collector(tmp_path, environment=environment)
+    original_transport = collector.transport
+    public_posts = 0
+
+    def transport(**kwargs):
+        nonlocal public_posts
+        if kwargs["path"] == collector_module.PUBLIC_LEAD_PATH:
+            public_posts += 1
+        return original_transport(**kwargs)
+
+    collector.transport = transport
+    with pytest.raises(
+        collector_module.CRMCollectionFailure, match="publication remains OPEN"
+    ):
+        collector.collect()
+    assert public_posts == 0
+
+
+@pytest.mark.parametrize(
+    "deploy_change",
+    [
+        {"status": "deactivated"},
+        {"commit": {"id": "c" * 40}},
+        {"id": "dep-other"},
+    ],
+)
+def test_render_deploy_must_be_exact_live_commit(
+    tmp_path: Path, deploy_change: dict[str, Any]
+) -> None:
+    collector = _collector(tmp_path)
+    original_transport = collector.transport
+
+    def transport(**kwargs):
+        if kwargs["path"].endswith(f"/deploys/{DEPLOY_ID}"):
+            deploy = {
+                "id": DEPLOY_ID,
+                "status": "live",
+                "trigger": "service_updated",
+                "commit": {"id": MASTER_SHA},
+                "finishedAt": "2026-07-15T00:01:30Z",
+            }
+            deploy.update(deploy_change)
+            return _http_result(deploy)
+        return original_transport(**kwargs)
+
+    collector.transport = transport
+    with pytest.raises(
+        collector_module.CRMCollectionFailure, match="not the live production deploy"
+    ):
+        collector.collect()
+
+
+def test_live_privacy_bytes_must_match_server_owned_digest(tmp_path: Path) -> None:
+    collector = _collector(tmp_path)
+    original_transport = collector.transport
+
+    def transport(**kwargs):
+        if kwargs["path"] == "/privacy":
+            return _http_result(
+                {}, content_type="text/html", raw=b"different final notice"
+            )
+        return original_transport(**kwargs)
+
+    collector.transport = transport
+    with pytest.raises(
+        collector_module.CRMCollectionFailure, match="do not match the server-owned"
+    ):
+        collector.collect()
 
 
 def test_fragment_tampering_breaks_source_receipt_binding(tmp_path: Path) -> None:
@@ -356,6 +498,28 @@ def test_fragment_tampering_breaks_source_receipt_binding(tmp_path: Path) -> Non
     fragment["crm_lead"]["adapter_response_digest"] = "sha256:" + ("c" * 64)
 
     with pytest.raises(collector_module.CRMCollectionFailure, match="diverged"):
+        collector_module._validate_output_pair(source, fragment)
+
+
+def test_embedded_source_receipt_is_rehashed_not_shape_checked(tmp_path: Path) -> None:
+    source, fragment = _collector(tmp_path).collect()
+    fragment["source_receipt"]["render_deploy_trigger"] = "manual"
+
+    with pytest.raises(collector_module.CRMCollectionFailure, match="embedded source"):
+        collector_module._validate_output_pair(source, fragment)
+
+
+def test_airtable_contract_tampering_breaks_embedded_receipt(tmp_path: Path) -> None:
+    source, fragment = _collector(tmp_path).collect()
+    source["airtable_owner_value"] = "Someone Else"
+    fragment["source_receipt"] = dict(source)
+    rebound = collector_module._digest_bytes(collector_module._canonical_bytes(source))
+    fragment["source_receipt_sha256"] = rebound
+    fragment["crm_lead"]["source_receipt_sha256"] = rebound
+
+    with pytest.raises(
+        collector_module.CRMCollectionFailure, match="production contract drifted"
+    ):
         collector_module._validate_output_pair(source, fragment)
 
 

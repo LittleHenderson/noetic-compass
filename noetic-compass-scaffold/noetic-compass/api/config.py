@@ -128,6 +128,31 @@ class Settings(BaseSettings):
         ),
     )
 
+    # Server-owned privacy notice identity for public CRM consent. The checked-in/live page is
+    # currently an OPEN draft, so these defaults deliberately disable public lead persistence.
+    # A legal/publication operation must supply one different finalized digest and exact version,
+    # then change the status to exact ``present``. The browser never supplies these authorities.
+    crm_privacy_notice_publication_status: str = Field(
+        default="OPEN",
+        validation_alias=AliasChoices(
+            "NC_CRM_PRIVACY_NOTICE_PUBLICATION_STATUS",
+            "CRM_PRIVACY_NOTICE_PUBLICATION_STATUS",
+        ),
+    )
+    crm_privacy_notice_version: str = Field(
+        default="draft-2026-07-14",
+        validation_alias=AliasChoices(
+            "NC_CRM_PRIVACY_NOTICE_VERSION", "CRM_PRIVACY_NOTICE_VERSION"
+        ),
+    )
+    crm_privacy_notice_content_sha256: str = Field(
+        default="e94df1615dde4122836b47a74e32d45c79b63c1603db3bd1aee01f62d7ddae28",
+        validation_alias=AliasChoices(
+            "NC_CRM_PRIVACY_NOTICE_CONTENT_SHA256",
+            "CRM_PRIVACY_NOTICE_CONTENT_SHA256",
+        ),
+    )
+
     # Public support intake. The default in-memory store is deliberately dark;
     # production sets NC_SUPPORT_TICKET_STORE_PATH to a persistent-disk path.
     support_ticket_store_path: str | None = Field(

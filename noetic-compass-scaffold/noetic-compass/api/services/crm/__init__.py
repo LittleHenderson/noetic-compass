@@ -15,7 +15,6 @@ from __future__ import annotations
 
 from api.services.crm.models import (
     CRM_CONSENT_SCHEMA_VERSION,
-    CRM_PRIVACY_NOTICE_URL,
     CRM_SCHEMA_VERSION,
     CRMStateError,
     CRMSyncResult,
@@ -28,6 +27,16 @@ from api.services.crm.models import (
     VALID_PIPELINE_STATUSES,
     normalize_email,
     normalize_pipeline_status,
+)
+from api.services.crm.privacy import (
+    CRM_CURRENT_OPEN_DRAFT_CONTENT_SHA256,
+    CRM_CURRENT_OPEN_DRAFT_VERSION,
+    CRM_PRIVACY_NOTICE_OPEN_STATUS,
+    CRM_PRIVACY_NOTICE_PRESENT_STATUS,
+    CRM_PRIVACY_NOTICE_URL,
+    CRMPrivacyNoticeConfigError,
+    CRMPrivacyNoticeContract,
+    build_privacy_notice_contract,
 )
 from api.services.crm.service import (
     CRMService,
@@ -60,7 +69,13 @@ from api.services.crm.sync import (
 
 __all__ = [
     "CRM_CONSENT_SCHEMA_VERSION",
+    "CRM_CURRENT_OPEN_DRAFT_CONTENT_SHA256",
+    "CRM_CURRENT_OPEN_DRAFT_VERSION",
+    "CRM_PRIVACY_NOTICE_OPEN_STATUS",
+    "CRM_PRIVACY_NOTICE_PRESENT_STATUS",
     "CRM_PRIVACY_NOTICE_URL",
+    "CRMPrivacyNoticeConfigError",
+    "CRMPrivacyNoticeContract",
     "CRM_SCHEMA_VERSION",
     "AirtableCRMProvider",
     "CRMConfigError",
@@ -88,6 +103,7 @@ __all__ = [
     "build_dark_crm_service",
     "build_lead_store",
     "build_public_lead_abuse_guard",
+    "build_privacy_notice_contract",
     "airtable_email_dedup_key",
     "normalize_email",
     "normalize_pipeline_status",

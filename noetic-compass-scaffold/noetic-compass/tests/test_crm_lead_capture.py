@@ -24,7 +24,12 @@ from api.middleware.auth import create_token
 from api.services.crm import (
     AirtableCRMProvider,
     CRM_CONSENT_SCHEMA_VERSION,
+    CRM_CURRENT_OPEN_DRAFT_CONTENT_SHA256,
+    CRM_CURRENT_OPEN_DRAFT_VERSION,
+    CRM_PRIVACY_NOTICE_PRESENT_STATUS,
     CRM_PRIVACY_NOTICE_URL,
+    CRMPrivacyNoticeContract,
+    CRMPrivacyNoticeConfigError,
     CRMConfigError,
     CRMService,
     CRMStateError,
@@ -48,21 +53,33 @@ from api.services.crm.models import _now_iso
 
 
 _MISSING = object()
+TEST_PRIVACY_VERSION = "privacy-2026-07-15"
+TEST_PRIVACY_CONTENT_SHA256 = "a" * 64
 
 
 @pytest.fixture(autouse=True)
 def _isolate_public_lead_abuse_guard(client):
     """Keep route tests deterministic despite the process-local public lead limiter."""
     old_guard = getattr(client.app.state, "crm_public_abuse_guard", _MISSING)
+    old_notice = getattr(client.app.state, "crm_privacy_notice_contract", _MISSING)
     client.app.state.crm_public_abuse_guard = PublicLeadAbuseGuard(
         max_submissions=1000,
         window_seconds=3600,
     )
+    client.app.state.crm_privacy_notice_contract = CRMPrivacyNoticeContract(
+        publication_status=CRM_PRIVACY_NOTICE_PRESENT_STATUS,
+        version=TEST_PRIVACY_VERSION,
+        content_sha256=TEST_PRIVACY_CONTENT_SHA256,
+    ).validated()
     yield
     if old_guard is _MISSING:
         delattr(client.app.state, "crm_public_abuse_guard")
     else:
         client.app.state.crm_public_abuse_guard = old_guard
+    if old_notice is _MISSING:
+        delattr(client.app.state, "crm_privacy_notice_contract")
+    else:
+        client.app.state.crm_privacy_notice_contract = old_notice
 
 
 # ---------------------------------------------------------------------------
@@ -105,7 +122,9 @@ def _submission(email: str = "lead@example.com", **overrides: object) -> LeadSub
         "message": "Interested in the CAS Harness.",
         "interest": "cas_harness",
         "consent_to_contact": True,
-        "privacy_notice_version": "privacy-2026-07-15",
+        "privacy_notice_version": TEST_PRIVACY_VERSION,
+        "privacy_notice_content_sha256": TEST_PRIVACY_CONTENT_SHA256,
+        "privacy_notice_publication_status": CRM_PRIVACY_NOTICE_PRESENT_STATUS,
     }
     base.update(overrides)
     return LeadSubmission(**base)  # type: ignore[arg-type]
@@ -137,10 +156,21 @@ def test_validated_coerces_metadata_to_str() -> None:
         email="a@b.com",
         metadata={"utm": "spring", "n": 5},  # type: ignore[dict-item]
         consent_to_contact=True,
-        privacy_notice_version="privacy-2026-07-15",
+        privacy_notice_version=TEST_PRIVACY_VERSION,
+        privacy_notice_content_sha256=TEST_PRIVACY_CONTENT_SHA256,
+        privacy_notice_publication_status=CRM_PRIVACY_NOTICE_PRESENT_STATUS,
     )
     cleaned = sub.validated()
     assert cleaned.metadata == {"utm": "spring", "n": "5"}
+
+
+def test_current_open_draft_cannot_be_relabelled_present() -> None:
+    with pytest.raises(CRMPrivacyNoticeConfigError, match="cannot be relabelled"):
+        CRMPrivacyNoticeContract(
+            publication_status=CRM_PRIVACY_NOTICE_PRESENT_STATUS,
+            version=CRM_CURRENT_OPEN_DRAFT_VERSION,
+            content_sha256=CRM_CURRENT_OPEN_DRAFT_CONTENT_SHA256,
+        ).validated()
 
 
 # ---------------------------------------------------------------------------
@@ -198,7 +228,9 @@ def test_from_submission_captures_with_provenance() -> None:
     assert lead.version == 1
     assert lead.consent_to_contact is True
     assert lead.privacy_notice_url == CRM_PRIVACY_NOTICE_URL
-    assert lead.privacy_notice_version == "privacy-2026-07-15"
+    assert lead.privacy_notice_version == TEST_PRIVACY_VERSION
+    assert lead.privacy_notice_content_sha256 == TEST_PRIVACY_CONTENT_SHA256
+    assert lead.privacy_notice_publication_status == CRM_PRIVACY_NOTICE_PRESENT_STATUS
     assert lead.consent_schema_version == CRM_CONSENT_SCHEMA_VERSION
     assert len(lead.consent_recorded_at_utc) == 20
 
@@ -489,7 +521,11 @@ def test_airtable_provider_posts_record_and_reports_external_id() -> None:
     assert fields["Consent Recorded At UTC"] == lead.consent_recorded_at_utc
     assert fields["Consent Schema Version"] == CRM_CONSENT_SCHEMA_VERSION
     assert fields["Privacy Notice URL"] == CRM_PRIVACY_NOTICE_URL
-    assert fields["Privacy Notice Version"] == "privacy-2026-07-15"
+    assert fields["Privacy Notice Version"] == TEST_PRIVACY_VERSION
+    assert fields["Privacy Notice Content SHA-256"] == TEST_PRIVACY_CONTENT_SHA256
+    assert fields["Privacy Notice Publication Status"] == (
+        CRM_PRIVACY_NOTICE_PRESENT_STATUS
+    )
     assert len(captured_requests) == 3
 
 
@@ -615,7 +651,6 @@ def _public_payload(email: str, **overrides: object) -> dict[str, object]:
     payload: dict[str, object] = {
         "email": email,
         "consent_to_contact": True,
-        "privacy_notice_version": "privacy-2026-07-15",
     }
     payload.update(overrides)
     return payload
@@ -635,7 +670,11 @@ def test_public_capture_needs_no_auth_and_does_not_overclaim(client) -> None:
     assert "lead_id" in body
     assert body["consent_to_contact"] is True
     assert body["privacy_notice_url"] == CRM_PRIVACY_NOTICE_URL
-    assert body["privacy_notice_version"] == "privacy-2026-07-15"
+    assert body["privacy_notice_version"] == TEST_PRIVACY_VERSION
+    assert body["privacy_notice_content_sha256"] == TEST_PRIVACY_CONTENT_SHA256
+    assert body["privacy_notice_publication_status"] == (
+        CRM_PRIVACY_NOTICE_PRESENT_STATUS
+    )
     assert body["consent_schema_version"] == CRM_CONSENT_SCHEMA_VERSION
 
 
@@ -650,11 +689,10 @@ def test_public_capture_rejects_bad_email(client) -> None:
 @pytest.mark.parametrize(
     "payload",
     [
-        {"email": "missing@example.com", "privacy_notice_version": "privacy-2026-07-15"},
+        {"email": "missing@example.com"},
         {
             "email": "declined@example.com",
             "consent_to_contact": False,
-            "privacy_notice_version": "privacy-2026-07-15",
         },
         {
             "email": "bad-version@example.com",
@@ -663,7 +701,7 @@ def test_public_capture_rejects_bad_email(client) -> None:
         },
     ],
 )
-def test_public_capture_requires_explicit_consent_and_notice_version(
+def test_public_capture_requires_explicit_consent_and_rejects_malformed_legacy_version(
     client, payload: dict[str, object]
 ) -> None:
     before = client.get("/api/crm/leads", headers=_auth_headers()).json()["count"]
@@ -671,6 +709,33 @@ def test_public_capture_requires_explicit_consent_and_notice_version(
     response = client.post("/api/crm/public/leads", json=payload)
 
     assert response.status_code == 422
+    after = client.get("/api/crm/leads", headers=_auth_headers()).json()["count"]
+    assert after == before
+
+
+def test_public_capture_rejects_stale_legacy_notice_acknowledgement(client) -> None:
+    response = client.post(
+        "/api/crm/public/leads",
+        json=_public_payload("stale@example.com", privacy_notice_version="privacy-old"),
+    )
+    assert response.status_code == 409
+
+
+def test_public_capture_fails_closed_while_notice_is_open(client) -> None:
+    client.app.state.crm_privacy_notice_contract = CRMPrivacyNoticeContract(
+        publication_status="OPEN",
+        version=CRM_CURRENT_OPEN_DRAFT_VERSION,
+        content_sha256=CRM_CURRENT_OPEN_DRAFT_CONTENT_SHA256,
+    ).validated()
+    before = client.get("/api/crm/leads", headers=_auth_headers()).json()["count"]
+
+    response = client.post(
+        "/api/crm/public/leads",
+        json=_public_payload("privacy-open@example.com"),
+    )
+
+    assert response.status_code == 503
+    assert "status is OPEN" in response.json()["detail"]
     after = client.get("/api/crm/leads", headers=_auth_headers()).json()["count"]
     assert after == before
 
@@ -686,6 +751,8 @@ def test_consent_evidence_is_immutable_across_sync_and_pipeline_versions() -> No
         captured.consent_to_contact,
         captured.privacy_notice_url,
         captured.privacy_notice_version,
+        captured.privacy_notice_content_sha256,
+        captured.privacy_notice_publication_status,
         captured.consent_recorded_at_utc,
         captured.consent_schema_version,
     )
@@ -693,6 +760,8 @@ def test_consent_evidence_is_immutable_across_sync_and_pipeline_versions() -> No
         annotated.consent_to_contact,
         annotated.privacy_notice_url,
         annotated.privacy_notice_version,
+        annotated.privacy_notice_content_sha256,
+        annotated.privacy_notice_publication_status,
         annotated.consent_recorded_at_utc,
         annotated.consent_schema_version,
     ) == expected
@@ -700,6 +769,8 @@ def test_consent_evidence_is_immutable_across_sync_and_pipeline_versions() -> No
         contacted.consent_to_contact,
         contacted.privacy_notice_url,
         contacted.privacy_notice_version,
+        contacted.privacy_notice_content_sha256,
+        contacted.privacy_notice_publication_status,
         contacted.consent_recorded_at_utc,
         contacted.consent_schema_version,
     ) == expected

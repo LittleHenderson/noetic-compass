@@ -56,6 +56,20 @@ PRODUCTION_SERVICE_ID = "srv-d82ph683kofs73d210e0"
 PRODUCTION_SERVICE_NAME = "noetic-compass-api"
 EXPECTED_MODEL_ID = "EleutherAI/pythia-160m"
 EXPECTED_REALMODE_VERDICT = "REAL_PYTHIA_WEIGHTS_LOADED"
+CRM_SOURCE_SCHEMA_VERSION = "cas_harness_airtable_crm_acceptance_source.v2"
+CRM_PRIVACY_NOTICE_URL = "https://cascompass.ai/privacy"
+CRM_PRIVACY_NOTICE_PRESENT_STATUS = "present"
+CRM_AIRTABLE_API_BASE_URL = "https://api.airtable.com/v0"
+CRM_AIRTABLE_BASE_ID = "appXBoYskbfjNaFTs"
+CRM_AIRTABLE_TABLE_NAME = "Leads"
+CRM_AIRTABLE_DEDUP_FIELD = "Dedup Key"
+CRM_AIRTABLE_OWNER_FIELD = "Owner"
+CRM_AIRTABLE_OWNER_VALUE = "CAS Harness"
+CRM_AIRTABLE_LIFECYCLE_FIELD = "Pipeline Status"
+CRM_RENDER_DISK_ID = "dsk-d8fomrd8nd3s738rnee0"
+CRM_RENDER_DISK_NAME = "noetic-data"
+CRM_RENDER_DISK_MOUNT_PATH = "/var/data"
+CRM_LEAD_STORE_PATH = "/var/data/leads.jsonl"
 
 AUTHORITY_TENANT_ID = "cas-harness-customer-production"
 REVISION_KIND = "customer_production_acceptance_authority_revision"
@@ -176,6 +190,7 @@ _EXTRA_FIELDS: dict[str, frozenset[str]] = {
             "support_ticket",
             "crm_lead",
             "consent",
+            "crm_source_receipt",
         }
     ),
     "incident_tabletop": frozenset(
@@ -204,6 +219,34 @@ _EXTRA_FIELDS: dict[str, frozenset[str]] = {
         }
     ),
 }
+
+_CRM_SOURCE_RECEIPT_FIELDS = frozenset(
+    {
+        "schema_version", "environment", "repository", "master_head_sha", "deploy_id",
+        "service_id", "render_service_name", "render_repository", "render_branch",
+        "render_auto_deploy_trigger", "render_service_response_sha256",
+        "render_deploy_status", "render_deploy_commit_sha", "render_deploy_trigger",
+        "render_deploy_finished_at_utc", "render_deploy_response_sha256",
+        "render_disk_id", "render_disk_name", "render_disk_mount_path",
+        "render_disk_size_gb", "lead_store_path", "provider", "airtable_api_base",
+        "airtable_base_id", "airtable_table_name", "airtable_dedup_field",
+        "airtable_owner_field", "airtable_owner_value", "airtable_lifecycle_field",
+        "airtable_consent_to_contact_field", "airtable_consent_recorded_at_field",
+        "airtable_consent_schema_version_field", "airtable_privacy_notice_url_field",
+        "airtable_privacy_notice_version_field",
+        "airtable_privacy_notice_content_sha256_field",
+        "airtable_privacy_notice_publication_status_field", "airtable_contract_sha256",
+        "privacy_notice_publication_status", "privacy_notice_url", "privacy_notice_version",
+        "privacy_notice_content_sha256", "privacy_notice_http_status",
+        "privacy_notice_content_type", "privacy_notice_verified_at_utc",
+        "capture_http_status", "lead_id_sha256", "trace_id_sha256",
+        "airtable_record_id_sha256", "adapter_response_digest", "lead_schema_version",
+        "lead_record_version", "persisted", "readback_verified", "deduplicated",
+        "owner_assigned", "lifecycle_stage", "verified_at_utc", "consent_to_contact",
+        "consent_schema_version", "consent_recorded_at_utc",
+        "source_attribution_recorded", "observed_at_utc",
+    }
+)
 
 # Exact mapping-valued fields.  Values below these objects must be JSON scalars,
 # except for the explicitly allowlisted scalar lists in ``_NESTED_LIST_FIELDS``.
@@ -343,6 +386,7 @@ _OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
         ),
     },
     "support_crm": {
+        "crm_source_receipt": _CRM_SOURCE_RECEIPT_FIELDS,
         "support_ticket": frozenset(
             {
                 "ticket_id_sha256",
@@ -380,6 +424,8 @@ _OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
                 "privacy_notice_linked",
                 "privacy_notice_url",
                 "privacy_notice_version",
+                "privacy_notice_content_sha256",
+                "privacy_notice_publication_status",
                 "consent_schema_version",
                 "recorded_at_utc",
             }
@@ -2062,6 +2108,148 @@ def _validate_legal_semantics(
         raise AcceptanceAuthorityInvalid("claim_status_vocabulary is not exact")
 
 
+def _validate_crm_source_receipt(
+    source: Mapping[str, Any],
+    evidence: Mapping[str, Any],
+    event: datetime,
+    observed: datetime,
+    now: datetime,
+) -> str:
+    """Re-hash and semantically bind the embedded provider source receipt."""
+
+    exact = {
+        "schema_version": CRM_SOURCE_SCHEMA_VERSION,
+        "environment": ENVIRONMENT,
+        "repository": REPOSITORY,
+        "master_head_sha": evidence["master_head_sha"],
+        "deploy_id": evidence["deploy_id"],
+        "service_id": PRODUCTION_SERVICE_ID,
+        "render_service_name": PRODUCTION_SERVICE_NAME,
+        "render_repository": f"https://github.com/{REPOSITORY}",
+        "render_branch": "master",
+        "render_auto_deploy_trigger": "checksPass",
+        "render_deploy_status": "live",
+        "render_deploy_commit_sha": evidence["master_head_sha"],
+        "render_disk_id": CRM_RENDER_DISK_ID,
+        "render_disk_name": CRM_RENDER_DISK_NAME,
+        "render_disk_mount_path": CRM_RENDER_DISK_MOUNT_PATH,
+        "render_disk_size_gb": 1,
+        "lead_store_path": CRM_LEAD_STORE_PATH,
+        "provider": "airtable",
+        "airtable_api_base": CRM_AIRTABLE_API_BASE_URL,
+        "airtable_base_id": CRM_AIRTABLE_BASE_ID,
+        "airtable_table_name": CRM_AIRTABLE_TABLE_NAME,
+        "airtable_dedup_field": CRM_AIRTABLE_DEDUP_FIELD,
+        "airtable_owner_field": CRM_AIRTABLE_OWNER_FIELD,
+        "airtable_owner_value": CRM_AIRTABLE_OWNER_VALUE,
+        "airtable_lifecycle_field": CRM_AIRTABLE_LIFECYCLE_FIELD,
+        "airtable_consent_to_contact_field": "Consent to Contact",
+        "airtable_consent_recorded_at_field": "Consent Recorded At UTC",
+        "airtable_consent_schema_version_field": "Consent Schema Version",
+        "airtable_privacy_notice_url_field": "Privacy Notice URL",
+        "airtable_privacy_notice_version_field": "Privacy Notice Version",
+        "airtable_privacy_notice_content_sha256_field": (
+            "Privacy Notice Content SHA-256"
+        ),
+        "airtable_privacy_notice_publication_status_field": (
+            "Privacy Notice Publication Status"
+        ),
+        "privacy_notice_publication_status": CRM_PRIVACY_NOTICE_PRESENT_STATUS,
+        "privacy_notice_url": CRM_PRIVACY_NOTICE_URL,
+        "privacy_notice_http_status": 200,
+        "privacy_notice_content_type": "text/html",
+        "capture_http_status": 200,
+        "lead_schema_version": "noetic_crm.v2",
+        "consent_to_contact": True,
+        "consent_schema_version": "noetic_crm_consent.v2",
+        "source_attribution_recorded": True,
+    }
+    for field, expected in exact.items():
+        _equal(source, field, expected, "crm_source_receipt")
+    for field in (
+        "persisted", "readback_verified", "deduplicated", "owner_assigned"
+    ):
+        _equal(source, field, True, "crm_source_receipt")
+    for field in (
+        "render_service_response_sha256",
+        "render_deploy_response_sha256",
+        "airtable_contract_sha256",
+        "privacy_notice_content_sha256",
+        "lead_id_sha256",
+        "trace_id_sha256",
+        "airtable_record_id_sha256",
+    ):
+        _sha_value(source[field], f"crm_source_receipt.{field}")
+    _tagged_sha_value(
+        source["adapter_response_digest"],
+        "crm_source_receipt.adapter_response_digest",
+    )
+    if (
+        not isinstance(source["privacy_notice_version"], str)
+        or _PRIVACY_NOTICE_VERSION_RE.fullmatch(source["privacy_notice_version"])
+        is None
+    ):
+        raise AcceptanceAuthorityInvalid(
+            "crm_source_receipt.privacy_notice_version is invalid"
+        )
+    if source["lifecycle_stage"] not in {"new", "contacted", "qualified", "won", "lost"}:
+        raise AcceptanceAuthorityInvalid(
+            "crm_source_receipt.lifecycle_stage is invalid"
+        )
+    _positive_int(source["lead_record_version"], "crm_source_receipt.lead_record_version")
+    contract = {
+        "api_base_url": CRM_AIRTABLE_API_BASE_URL,
+        "base_id": CRM_AIRTABLE_BASE_ID,
+        "table_name": CRM_AIRTABLE_TABLE_NAME,
+        "dedup_field": CRM_AIRTABLE_DEDUP_FIELD,
+        "owner_field": CRM_AIRTABLE_OWNER_FIELD,
+        "owner_value": CRM_AIRTABLE_OWNER_VALUE,
+        "lifecycle_field": CRM_AIRTABLE_LIFECYCLE_FIELD,
+        "consent_to_contact_field": "Consent to Contact",
+        "consent_recorded_at_field": "Consent Recorded At UTC",
+        "consent_schema_version_field": "Consent Schema Version",
+        "privacy_notice_url_field": "Privacy Notice URL",
+        "privacy_notice_version_field": "Privacy Notice Version",
+        "privacy_notice_content_sha256_field": "Privacy Notice Content SHA-256",
+        "privacy_notice_publication_status_field": "Privacy Notice Publication Status",
+    }
+    contract_sha = hashlib.sha256(_canonical_json_bytes(contract)).hexdigest()
+    if source["airtable_contract_sha256"] != contract_sha:
+        raise AcceptanceAuthorityInvalid(
+            "crm_source_receipt Airtable contract digest does not match exact fields"
+        )
+    deployed = _proof_time(
+        source["render_deploy_finished_at_utc"],
+        "support_crm", event, observed, now,
+        "crm_source_receipt.render_deploy_finished_at_utc",
+    )
+    privacy_verified = _proof_time(
+        source["privacy_notice_verified_at_utc"],
+        "support_crm", event, observed, now,
+        "crm_source_receipt.privacy_notice_verified_at_utc",
+    )
+    consent_recorded = _proof_time(
+        source["consent_recorded_at_utc"],
+        "support_crm", event, observed, now,
+        "crm_source_receipt.consent_recorded_at_utc",
+    )
+    lead_verified = _proof_time(
+        source["verified_at_utc"],
+        "support_crm", event, observed, now,
+        "crm_source_receipt.verified_at_utc",
+    )
+    source_observed = _proof_time(
+        source["observed_at_utc"],
+        "support_crm", event, observed, now,
+        "crm_source_receipt.observed_at_utc",
+    )
+    if not deployed <= privacy_verified <= consent_recorded <= lead_verified <= source_observed:
+        raise AcceptanceAuthorityInvalid(
+            "crm_source_receipt timestamps are not monotonic"
+        )
+    return hashlib.sha256(_canonical_json_bytes(source)).hexdigest()
+
+
 def _validate_support_crm_semantics(
     evidence: Mapping[str, Any],
     event: datetime,
@@ -2071,6 +2259,10 @@ def _validate_support_crm_semantics(
     _equal(evidence, "public_support_url", f"{LANDING_ORIGIN}/contact")
     _equal(evidence, "api_base_url", PRODUCTION_API_ORIGIN)
     _equal(evidence, "service_id", PRODUCTION_SERVICE_ID)
+    source = _object(evidence, "crm_source_receipt")
+    source_hash = _validate_crm_source_receipt(
+        source, evidence, event, observed, now
+    )
     ticket = _object(evidence, "support_ticket")
     _sha_value(ticket["ticket_id_sha256"], "support_ticket.ticket_id_sha256")
     if ticket["create_http_status"] not in {200, 201, 202}:
@@ -2104,6 +2296,10 @@ def _validate_support_crm_semantics(
         "crm_lead.adapter_response_digest",
     )
     _sha_value(lead["source_receipt_sha256"], "crm_lead.source_receipt_sha256")
+    if lead["source_receipt_sha256"] != source_hash:
+        raise AcceptanceAuthorityInvalid(
+            "crm_lead.source_receipt_sha256 does not re-hash the embedded source receipt"
+        )
     for field in ("persisted", "readback_verified", "deduplicated", "owner_assigned"):
         _equal(lead, field, True, "crm_lead")
     if lead["lifecycle_stage"] not in {"new", "contacted", "qualified", "won", "lost"}:
@@ -2116,6 +2312,17 @@ def _validate_support_crm_semantics(
         now,
         "crm_lead.verified_at_utc",
     )
+    for field in (
+        "lead_id_sha256",
+        "airtable_record_id_sha256",
+        "adapter_response_digest",
+        "lifecycle_stage",
+        "verified_at_utc",
+    ):
+        if lead[field] != source[field]:
+            raise AcceptanceAuthorityInvalid(
+                f"crm_lead.{field} diverges from crm_source_receipt"
+            )
     consent = _object(evidence, "consent")
     for field in (
         "capture_consent_recorded",
@@ -2133,10 +2340,20 @@ def _validate_support_crm_semantics(
         raise AcceptanceAuthorityInvalid(
             "consent.privacy_notice_version is invalid"
         )
+    _sha_value(
+        consent["privacy_notice_content_sha256"],
+        "consent.privacy_notice_content_sha256",
+    )
+    _equal(
+        consent,
+        "privacy_notice_publication_status",
+        CRM_PRIVACY_NOTICE_PRESENT_STATUS,
+        "consent",
+    )
     _equal(
         consent,
         "consent_schema_version",
-        "noetic_crm_consent.v1",
+        "noetic_crm_consent.v2",
         "consent",
     )
     consent_recorded = _proof_time(
@@ -2151,6 +2368,21 @@ def _validate_support_crm_semantics(
         raise AcceptanceAuthorityInvalid(
             "consent.recorded_at_utc is after Airtable readback verification"
         )
+    consent_source_fields = {
+        "consent_to_contact": "consent_to_contact",
+        "privacy_notice_url": "privacy_notice_url",
+        "privacy_notice_version": "privacy_notice_version",
+        "privacy_notice_content_sha256": "privacy_notice_content_sha256",
+        "privacy_notice_publication_status": "privacy_notice_publication_status",
+        "consent_schema_version": "consent_schema_version",
+        "recorded_at_utc": "consent_recorded_at_utc",
+        "source_attribution_recorded": "source_attribution_recorded",
+    }
+    for consent_field, source_field in consent_source_fields.items():
+        if consent[consent_field] != source[source_field]:
+            raise AcceptanceAuthorityInvalid(
+                f"consent.{consent_field} diverges from crm_source_receipt"
+            )
 
 
 def _validate_incident_tabletop_semantics(

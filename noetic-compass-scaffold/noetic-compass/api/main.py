@@ -109,6 +109,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.evidence_share_service = None
     app.state.support_tickets = None
     app.state.support_public_abuse_guard = None
+    app.state.crm_privacy_notice_contract = None
     app.state.acceptance_authority_store = None
     configure_evidence_packet_repository(None)
 
@@ -286,9 +287,14 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             ),
         )
 
-        from api.services.crm import build_crm_service, build_public_lead_abuse_guard
+        from api.services.crm import (
+            build_crm_service,
+            build_privacy_notice_contract,
+            build_public_lead_abuse_guard,
+        )
 
         app.state.crm = build_crm_service(settings)
+        app.state.crm_privacy_notice_contract = build_privacy_notice_contract(settings)
         app.state.crm_public_abuse_guard = build_public_lead_abuse_guard(settings)
         from api.services.crm.abuse import PublicLeadAbuseGuard
         from api.services.support_tickets import build_support_ticket_service
@@ -314,6 +320,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.acceptance_authority_store = None
         app.state.shared_state_store = None
         app.state.support_tickets = None
+        app.state.crm_privacy_notice_contract = None
         app.state.support_public_abuse_guard = None
         try:
             if handle is not None:

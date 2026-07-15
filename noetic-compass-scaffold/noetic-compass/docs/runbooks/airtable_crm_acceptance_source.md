@@ -14,25 +14,32 @@ and authorized publication remain separate operations. Do not change
 
 ## Public intake contract
 
-New lead intake requires both fields explicitly:
+New lead intake requires explicit contact consent:
 
 ```json
 {
-  "consent_to_contact": true,
-  "privacy_notice_version": "<published-notice-version>"
+  "consent_to_contact": true
 }
 ```
 
-The server pins the notice URL to `https://cascompass.ai/privacy`, records a
-whole-second UTC consent timestamp, and stores
-`consent_schema_version=noetic_crm_consent.v1`. The lead is immutable; sync and
-pipeline updates preserve the exact consent boolean, URL, notice version,
-timestamp, and consent schema version.
+The server, not the browser, owns the exact notice publication status, version,
+URL, and byte-level content SHA-256. It pins the URL to
+`https://cascompass.ai/privacy`, records a whole-second UTC consent timestamp,
+and stores `consent_schema_version=noetic_crm_consent.v2`. An older caller may
+send `privacy_notice_version` only as a compatibility assertion; a mismatch is
+rejected and the value never becomes storage authority. The lead is immutable;
+sync and pipeline updates preserve the exact consent boolean, publication
+status, URL, notice version/content hash, timestamp, and consent schema version.
 
-`privacy_notice_version` is an identifier for the notice that was actually
-published and shown to the submitter. It is not legal text, and the collector
-does not choose or invent it. Use the approved release identifier or published
-content digest supplied by the legal/publication process.
+Current production defaults are deliberately fail-closed. The exact live page
+is SHA-256
+`e94df1615dde4122836b47a74e32d45c79b63c1603db3bd1aee01f62d7ddae28`,
+version `draft-2026-07-14`, and publication status `OPEN`; the page itself says
+`FLAG_FOR_HUMAN_REVIEW`. `POST /api/crm/public/leads` therefore returns HTTP
+`503` before persistence. A legal/publication operation must replace the
+server-owned version/hash with a different finalized notice and set exact
+`present`. The collector independently downloads `/privacy`, re-hashes its
+exact bytes, and rejects `OPEN`/draft markers before creating a probe lead.
 
 ## Airtable table fields
 
@@ -45,6 +52,9 @@ lifecycle fields plus these fixed consent/readback fields:
 - `Consent Schema Version` (single-line text)
 - `Privacy Notice URL` (URL or single-line text)
 - `Privacy Notice Version` (single-line text)
+- `Privacy Notice Content SHA-256` (single-line text)
+- `Privacy Notice Publication Status` (single-line text; accepted rows are
+  exact `present`)
 
 The adapter includes all five in the PATCH upsert and verifies their exact
 values in both subsequent reads. Any missing, stale, or changed value fails
@@ -54,10 +64,18 @@ closed as `sync_failed`; it cannot earn `synced`.
 
 - Run from Render Shell on service `srv-d82ph683kofs73d210e0`.
 - `RENDER_GIT_COMMIT` must equal the supplied exact protected `master` SHA.
+- Provide `RENDER_API_KEY` to that shell process only. The collector performs
+  authenticated, no-redirect reads of the exact service and supplied deploy,
+  requiring deploy status `live` and commit equal to `RENDER_GIT_COMMIT`. Never
+  write the key to either output or command line.
 - `NC_CRM_PROVIDER=airtable` and the complete `NC_AIRTABLE_*` provider contract
-  must be present. The API origin remains exactly `https://api.airtable.com/v0`.
-- `NC_CRM_LEAD_STORE_PATH` must be an absolute durable path shared with the API
-  process.
+  must match exact production: base `appXBoYskbfjNaFTs`, table `Leads`, dedup
+  field `Dedup Key`, owner field/value `Owner` / `CAS Harness`, lifecycle field
+  `Pipeline Status`, and API base `https://api.airtable.com/v0`.
+- `NC_CRM_LEAD_STORE_PATH` must be exact `/var/data/leads.jsonl`. The collector
+  also verifies Render disk `dsk-d8fomrd8nd3s738rnee0` (`noetic-data`) is
+  mounted at `/var/data`; `/tmp`, relative paths, and other absolute paths are
+  rejected.
 - The exact deployed build must include the v2 public lead contract. Existing
   v1 ledger rows remain readable, but they cannot satisfy this acceptance
   source because they have no explicit consent record.
@@ -73,12 +91,13 @@ From the exact production Render Shell:
 python scripts/collect_airtable_crm_acceptance_source.py \
   --master-head <exact-40-character-master-sha> \
   --deploy-id <exact-live-render-deploy-id> \
-  --privacy-notice-version <approved-published-version> \
   --source-receipt-output /tmp/airtable-crm-source-receipt.json \
   --fragment-output /tmp/support-crm-fragment.json
 ```
 
-The command creates one non-customer probe address below
+The `/tmp` paths above are output artifacts only; the lead authority remains
+the exact `/var/data/leads.jsonl` persistent-disk ledger. The command creates
+one non-customer probe address below
 `acceptance.invalid`. It is intentionally persisted in the local lead ledger
 and Airtable so the receipt proves a real provider effect and restart-safe
 readback. It outputs only domain-separated SHA-256 hashes of the local lead ID
@@ -89,6 +108,10 @@ and Airtable record ID plus the adapter's existing
 
 - The public route returns HTTP `200`, `captured=true`, `synced=true`, and exact
   `sync_status=synced` under `noetic_crm.v2`.
+- Render API proves the supplied deploy is exact `live` at the supplied commit,
+  and the source receipt binds the exact service/disk response hashes.
+- The live privacy page bytes match the server-owned SHA-256, publication is
+  exact `present`, and no checked-in `OPEN`/draft marker remains.
 - The durable lead readback matches the public response and retains the exact
   consent record.
 - The persisted receipt names exact provider `airtable`, binds one Airtable
@@ -98,7 +121,9 @@ and Airtable record ID plus the adapter's existing
   before observation time.
 - Neither output contains an email address, raw lead ID, raw Airtable record
   ID, credential, bearer token, or provider response body.
-- The fragment remains exact `OPEN` with
+- The fragment embeds the entire secret-safe source receipt, recomputes its
+  canonical SHA-256, and binds that digest into `crm_lead`; a same-shaped but
+  unrelated hash is insufficient. The fragment remains exact `OPEN` with
   `missing_required_evidence=["resolved_support_ticket_sla"]`.
 
 ## Complete the gate separately

@@ -15,6 +15,7 @@ from api.config import Settings
 from api.services.crm import (
     AirtableCRMProvider,
     CRMConfigError,
+    CRM_PRIVACY_NOTICE_PRESENT_STATUS,
     CRMProviderError,
     CRMService,
     CRMStateError,
@@ -120,6 +121,7 @@ class _FakeAirtable:
 
 
 _MISSING = object()
+TEST_PRIVACY_CONTENT_SHA256 = "a" * 64
 
 
 def _lead(email: str = "Lead@Example.com") -> Lead:
@@ -133,6 +135,8 @@ def _lead(email: str = "Lead@Example.com") -> Lead:
             metadata={"campaign": "acceptance"},
             consent_to_contact=True,
             privacy_notice_version="privacy-2026-07-15",
+            privacy_notice_content_sha256=TEST_PRIVACY_CONTENT_SHA256,
+            privacy_notice_publication_status=CRM_PRIVACY_NOTICE_PRESENT_STATUS,
         ).validated(),
         source="customer_production_acceptance_probe",
         trace_id="crm-verification-test",
@@ -229,6 +233,8 @@ def test_verification_receipt_survives_jsonl_restart(tmp_path) -> None:
             email="lead@example.com",
             consent_to_contact=True,
             privacy_notice_version="privacy-2026-07-15",
+            privacy_notice_content_sha256=TEST_PRIVACY_CONTENT_SHA256,
+            privacy_notice_publication_status=CRM_PRIVACY_NOTICE_PRESENT_STATUS,
         ),
         source="acceptance",
         trace_id="receipt-persistence",
@@ -316,6 +322,8 @@ def test_filtered_readback_rejects_even_an_empty_pagination_offset() -> None:
         ("Consent Recorded At UTC", "2026-01-01T00:00:00Z", "stale_readback"),
         ("Privacy Notice URL", "https://example.invalid/privacy", "stale_readback"),
         ("Privacy Notice Version", "stale-version", "stale_readback"),
+        ("Privacy Notice Content SHA-256", "b" * 64, "stale_readback"),
+        ("Privacy Notice Publication Status", "OPEN", "stale_readback"),
         ("Lifecycle", "qualified", "lifecycle_mismatch"),
         ("Email Dedup Key", "nc-email-sha256-v1:" + ("f" * 64), "dedup_key_mismatch"),
     ],
@@ -338,6 +346,8 @@ def test_cleared_optional_field_cannot_leave_stale_airtable_pii() -> None:
             email="lead@example.com",
             consent_to_contact=True,
             privacy_notice_version="privacy-2026-07-15",
+            privacy_notice_content_sha256=TEST_PRIVACY_CONTENT_SHA256,
+            privacy_notice_publication_status=CRM_PRIVACY_NOTICE_PRESENT_STATUS,
         ).validated(),
         source="acceptance",
         trace_id=None,
@@ -419,6 +429,8 @@ def test_v1_lead_without_consent_fields_remains_readable_but_not_acceptance_read
         "consent_to_contact",
         "privacy_notice_url",
         "privacy_notice_version",
+        "privacy_notice_content_sha256",
+        "privacy_notice_publication_status",
         "consent_recorded_at_utc",
         "consent_schema_version",
     ):

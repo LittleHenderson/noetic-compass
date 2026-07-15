@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import sys
 import unittest
+import hashlib
+import json
 from copy import deepcopy
 from pathlib import Path
 
@@ -168,6 +170,19 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
             "noetic-production-live"
         ]
         support["artifact_sha256"] = _digest("live-authority-support-crm")
+
+        def rebind_source(payload: dict, field: str, value: object) -> None:
+            payload["crm_source_receipt"][field] = value
+            canonical = json.dumps(
+                payload["crm_source_receipt"],
+                sort_keys=True,
+                separators=(",", ":"),
+                ensure_ascii=False,
+            ).encode("utf-8")
+            payload["crm_lead"]["source_receipt_sha256"] = hashlib.sha256(
+                canonical
+            ).hexdigest()
+
         cases = (
             lambda payload: payload["crm_lead"].update(provider="hubspot"),
             lambda payload: payload["crm_lead"].update(
@@ -182,6 +197,15 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
             ),
             lambda payload: payload["consent"].update(
                 recorded_at_utc="2026-07-14T11:46:00Z"
+            ),
+            lambda payload: rebind_source(
+                payload, "airtable_owner_value", "Other Owner"
+            ),
+            lambda payload: rebind_source(
+                payload, "lead_store_path", "/tmp/leads.jsonl"
+            ),
+            lambda payload: rebind_source(
+                payload, "render_deploy_status", "deactivated"
             ),
         )
         for mutate in cases:

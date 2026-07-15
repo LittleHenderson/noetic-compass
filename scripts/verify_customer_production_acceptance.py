@@ -54,6 +54,20 @@ GITHUB_API_ORIGIN = "https://api.github.com"
 RENDER_API_ORIGIN = "https://api.render.com"
 PRODUCTION_SERVICE_ID = "srv-d82ph683kofs73d210e0"
 PRODUCTION_SERVICE_NAME = "noetic-compass-api"
+CRM_SOURCE_SCHEMA_VERSION = "cas_harness_airtable_crm_acceptance_source.v2"
+CRM_PRIVACY_NOTICE_URL = "https://cascompass.ai/privacy"
+CRM_PRIVACY_NOTICE_PRESENT_STATUS = "present"
+CRM_AIRTABLE_API_BASE_URL = "https://api.airtable.com/v0"
+CRM_AIRTABLE_BASE_ID = "appXBoYskbfjNaFTs"
+CRM_AIRTABLE_TABLE_NAME = "Leads"
+CRM_AIRTABLE_DEDUP_FIELD = "Dedup Key"
+CRM_AIRTABLE_OWNER_FIELD = "Owner"
+CRM_AIRTABLE_OWNER_VALUE = "CAS Harness"
+CRM_AIRTABLE_LIFECYCLE_FIELD = "Pipeline Status"
+CRM_RENDER_DISK_ID = "dsk-d8fomrd8nd3s738rnee0"
+CRM_RENDER_DISK_NAME = "noetic-data"
+CRM_RENDER_DISK_MOUNT_PATH = "/var/data"
+CRM_LEAD_STORE_PATH = "/var/data/leads.jsonl"
 PRIVATE_CANARY_SERVICE_ID = "srv-d9akoolaeets73bp3e7g"
 PRIVATE_CANARY_BRANCH = "release/accounts-canary-20260713"
 EXPECTED_MODEL_ID = "EleutherAI/pythia-160m"
@@ -235,6 +249,31 @@ COMMON_EVIDENCE_KEYS = {
     "observed_at_utc",
     "artifact_uri",
     "artifact_sha256",
+}
+CRM_SOURCE_RECEIPT_KEYS = {
+    "schema_version", "environment", "repository", "master_head_sha", "deploy_id",
+    "service_id", "render_service_name", "render_repository", "render_branch",
+    "render_auto_deploy_trigger", "render_service_response_sha256",
+    "render_deploy_status", "render_deploy_commit_sha", "render_deploy_trigger",
+    "render_deploy_finished_at_utc", "render_deploy_response_sha256",
+    "render_disk_id", "render_disk_name", "render_disk_mount_path",
+    "render_disk_size_gb", "lead_store_path", "provider", "airtable_api_base",
+    "airtable_base_id", "airtable_table_name", "airtable_dedup_field",
+    "airtable_owner_field", "airtable_owner_value", "airtable_lifecycle_field",
+    "airtable_consent_to_contact_field", "airtable_consent_recorded_at_field",
+    "airtable_consent_schema_version_field", "airtable_privacy_notice_url_field",
+    "airtable_privacy_notice_version_field",
+    "airtable_privacy_notice_content_sha256_field",
+    "airtable_privacy_notice_publication_status_field", "airtable_contract_sha256",
+    "privacy_notice_publication_status", "privacy_notice_url", "privacy_notice_version",
+    "privacy_notice_content_sha256", "privacy_notice_http_status",
+    "privacy_notice_content_type", "privacy_notice_verified_at_utc",
+    "capture_http_status", "lead_id_sha256", "trace_id_sha256",
+    "airtable_record_id_sha256", "adapter_response_digest", "lead_schema_version",
+    "lead_record_version", "persisted", "readback_verified", "deduplicated",
+    "owner_assigned", "lifecycle_stage", "verified_at_utc", "consent_to_contact",
+    "consent_schema_version", "consent_recorded_at_utc",
+    "source_attribution_recorded", "observed_at_utc",
 }
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 TAGGED_SHA256_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
@@ -1573,16 +1612,156 @@ def _validate_legal(
     _require(evidence.get("claim_status_vocabulary") == list(CLAIM_STATUS_VOCABULARY), f"{path}.claim_status_vocabulary", "must preserve exact claim vocabulary and casing", errors)
 
 
+def _validate_crm_source_receipt(
+    source: Mapping[str, Any],
+    evidence: Mapping[str, Any],
+    *,
+    event: datetime | None,
+    observed: datetime | None,
+    context: ValidationContext,
+    path: str,
+) -> str:
+    errors = context.errors
+    _exact_keys(source, CRM_SOURCE_RECEIPT_KEYS, path, errors)
+    exact = {
+        "schema_version": CRM_SOURCE_SCHEMA_VERSION,
+        "environment": "public-production",
+        "repository": REPOSITORY,
+        "master_head_sha": evidence.get("master_head_sha"),
+        "deploy_id": evidence.get("deploy_id"),
+        "service_id": PRODUCTION_SERVICE_ID,
+        "render_service_name": PRODUCTION_SERVICE_NAME,
+        "render_repository": REPOSITORY_URL,
+        "render_branch": "master",
+        "render_auto_deploy_trigger": "checksPass",
+        "render_deploy_status": "live",
+        "render_deploy_commit_sha": evidence.get("master_head_sha"),
+        "render_disk_id": CRM_RENDER_DISK_ID,
+        "render_disk_name": CRM_RENDER_DISK_NAME,
+        "render_disk_mount_path": CRM_RENDER_DISK_MOUNT_PATH,
+        "render_disk_size_gb": 1,
+        "lead_store_path": CRM_LEAD_STORE_PATH,
+        "provider": "airtable",
+        "airtable_api_base": CRM_AIRTABLE_API_BASE_URL,
+        "airtable_base_id": CRM_AIRTABLE_BASE_ID,
+        "airtable_table_name": CRM_AIRTABLE_TABLE_NAME,
+        "airtable_dedup_field": CRM_AIRTABLE_DEDUP_FIELD,
+        "airtable_owner_field": CRM_AIRTABLE_OWNER_FIELD,
+        "airtable_owner_value": CRM_AIRTABLE_OWNER_VALUE,
+        "airtable_lifecycle_field": CRM_AIRTABLE_LIFECYCLE_FIELD,
+        "airtable_consent_to_contact_field": "Consent to Contact",
+        "airtable_consent_recorded_at_field": "Consent Recorded At UTC",
+        "airtable_consent_schema_version_field": "Consent Schema Version",
+        "airtable_privacy_notice_url_field": "Privacy Notice URL",
+        "airtable_privacy_notice_version_field": "Privacy Notice Version",
+        "airtable_privacy_notice_content_sha256_field": "Privacy Notice Content SHA-256",
+        "airtable_privacy_notice_publication_status_field": "Privacy Notice Publication Status",
+        "privacy_notice_publication_status": CRM_PRIVACY_NOTICE_PRESENT_STATUS,
+        "privacy_notice_url": CRM_PRIVACY_NOTICE_URL,
+        "privacy_notice_http_status": 200,
+        "privacy_notice_content_type": "text/html",
+        "capture_http_status": 200,
+        "lead_schema_version": "noetic_crm.v2",
+        "consent_to_contact": True,
+        "consent_schema_version": "noetic_crm_consent.v2",
+        "source_attribution_recorded": True,
+    }
+    for field, expected in exact.items():
+        _require(
+            _json_scalar_equals(source.get(field), expected),
+            f"{path}.{field}",
+            f"must equal {expected!r}",
+            errors,
+        )
+    for field in ("persisted", "readback_verified", "deduplicated", "owner_assigned"):
+        _require(source.get(field) is True, f"{path}.{field}", "must be true", errors)
+    for field in (
+        "render_service_response_sha256", "render_deploy_response_sha256",
+        "airtable_contract_sha256", "privacy_notice_content_sha256",
+        "lead_id_sha256", "trace_id_sha256", "airtable_record_id_sha256",
+    ):
+        _sha256(source.get(field), f"{path}.{field}", errors)
+    _tagged_sha256(source.get("adapter_response_digest"), f"{path}.adapter_response_digest", errors)
+    _nonempty_string(source.get("render_deploy_trigger"), f"{path}.render_deploy_trigger", errors)
+    _positive_int(source.get("lead_record_version"), f"{path}.lead_record_version", errors)
+    _require(
+        source.get("lifecycle_stage") in {"new", "contacted", "qualified", "won", "lost"},
+        f"{path}.lifecycle_stage",
+        "must be an exact canonical CRM lifecycle stage",
+        errors,
+    )
+    _require(
+        isinstance(source.get("privacy_notice_version"), str)
+        and PRIVACY_NOTICE_VERSION_RE.fullmatch(str(source.get("privacy_notice_version")))
+        is not None,
+        f"{path}.privacy_notice_version",
+        "must be an exact privacy notice version identifier",
+        errors,
+    )
+    contract = {
+        "api_base_url": CRM_AIRTABLE_API_BASE_URL,
+        "base_id": CRM_AIRTABLE_BASE_ID,
+        "table_name": CRM_AIRTABLE_TABLE_NAME,
+        "dedup_field": CRM_AIRTABLE_DEDUP_FIELD,
+        "owner_field": CRM_AIRTABLE_OWNER_FIELD,
+        "owner_value": CRM_AIRTABLE_OWNER_VALUE,
+        "lifecycle_field": CRM_AIRTABLE_LIFECYCLE_FIELD,
+        "consent_to_contact_field": "Consent to Contact",
+        "consent_recorded_at_field": "Consent Recorded At UTC",
+        "consent_schema_version_field": "Consent Schema Version",
+        "privacy_notice_url_field": "Privacy Notice URL",
+        "privacy_notice_version_field": "Privacy Notice Version",
+        "privacy_notice_content_sha256_field": "Privacy Notice Content SHA-256",
+        "privacy_notice_publication_status_field": "Privacy Notice Publication Status",
+    }
+    contract_sha = hashlib.sha256(_canonical_bytes(contract)).hexdigest()
+    _require(
+        source.get("airtable_contract_sha256") == contract_sha,
+        f"{path}.airtable_contract_sha256",
+        "must re-hash the exact Airtable base/table/field/owner contract",
+        errors,
+    )
+    timestamps = [
+        _critical_proof_timestamp(
+            source.get(field), gate="support_crm", event=event, observed=observed,
+            context=context, path=f"{path}.{field}"
+        )
+        for field in (
+            "render_deploy_finished_at_utc", "privacy_notice_verified_at_utc",
+            "consent_recorded_at_utc", "verified_at_utc", "observed_at_utc",
+        )
+    ]
+    if all(value is not None for value in timestamps):
+        ordered = [value for value in timestamps if value is not None]
+        _require(
+            ordered == sorted(ordered), path,
+            "deploy/privacy/consent/readback/observation timestamps must be monotonic",
+            errors,
+        )
+    return hashlib.sha256(_canonical_bytes(source)).hexdigest()
+
+
 def _validate_support_crm(
     evidence: Mapping[str, Any], context: ValidationContext
 ) -> None:
     path = "$.required_gates.support_crm.evidence.payload"
     errors = context.errors
-    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"public_support_url", "api_base_url", "service_id", "support_ticket", "crm_lead", "consent"}, path, errors)
+    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"public_support_url", "api_base_url", "service_id", "support_ticket", "crm_lead", "consent", "crm_source_receipt"}, path, errors)
     event, observed = _validate_common_evidence(evidence, "support_crm", context)
     _require(evidence.get("public_support_url") == f"{LANDING_ORIGIN}/contact", f"{path}.public_support_url", f"must be {LANDING_ORIGIN}/contact", errors)
     _require(evidence.get("api_base_url") == PRODUCTION_API_ORIGIN, f"{path}.api_base_url", f"must be {PRODUCTION_API_ORIGIN}", errors)
     _require(evidence.get("service_id") == PRODUCTION_SERVICE_ID, f"{path}.service_id", "must be the public production service", errors)
+    source = evidence.get("crm_source_receipt")
+    source_hash: str | None = None
+    if _is_mapping(source, f"{path}.crm_source_receipt", errors):
+        source_hash = _validate_crm_source_receipt(
+            source,
+            evidence,
+            event=event,
+            observed=observed,
+            context=context,
+            path=f"{path}.crm_source_receipt",
+        )
     ticket = evidence.get("support_ticket")
     if _is_mapping(ticket, f"{path}.support_ticket", errors):
         _exact_keys(ticket, {"ticket_id_sha256", "create_http_status", "persisted", "routed", "acknowledged", "first_response_minutes", "sla_minutes", "resolution_recorded", "resolved_at_utc"}, f"{path}.support_ticket", errors)
@@ -1605,21 +1784,41 @@ def _validate_support_crm(
         _sha256(lead.get("airtable_record_id_sha256"), f"{path}.crm_lead.airtable_record_id_sha256", errors)
         _tagged_sha256(lead.get("adapter_response_digest"), f"{path}.crm_lead.adapter_response_digest", errors)
         _sha256(lead.get("source_receipt_sha256"), f"{path}.crm_lead.source_receipt_sha256", errors)
+        if source_hash is not None:
+            _require(lead.get("source_receipt_sha256") == source_hash, f"{path}.crm_lead.source_receipt_sha256", "must re-hash the embedded source receipt", errors)
         for field in ("persisted", "readback_verified", "deduplicated", "owner_assigned"):
             _require(lead.get(field) is True, f"{path}.crm_lead.{field}", "must be true", errors)
         _require(lead.get("lifecycle_stage") in {"new", "contacted", "qualified", "won", "lost"}, f"{path}.crm_lead.lifecycle_stage", "must be an exact canonical CRM lifecycle stage", errors)
         lead_verified = _critical_proof_timestamp(lead.get("verified_at_utc"), gate="support_crm", event=event, observed=observed, context=context, path=f"{path}.crm_lead.verified_at_utc")
+        if isinstance(source, Mapping):
+            for field in ("lead_id_sha256", "airtable_record_id_sha256", "adapter_response_digest", "lifecycle_stage", "verified_at_utc"):
+                _require(lead.get(field) == source.get(field), f"{path}.crm_lead.{field}", "must match the embedded source receipt", errors)
     consent = evidence.get("consent")
     if _is_mapping(consent, f"{path}.consent", errors):
-        _exact_keys(consent, {"capture_consent_recorded", "consent_to_contact", "source_attribution_recorded", "privacy_notice_linked", "privacy_notice_url", "privacy_notice_version", "consent_schema_version", "recorded_at_utc"}, f"{path}.consent", errors)
+        _exact_keys(consent, {"capture_consent_recorded", "consent_to_contact", "source_attribution_recorded", "privacy_notice_linked", "privacy_notice_url", "privacy_notice_version", "privacy_notice_content_sha256", "privacy_notice_publication_status", "consent_schema_version", "recorded_at_utc"}, f"{path}.consent", errors)
         for field in ("capture_consent_recorded", "consent_to_contact", "source_attribution_recorded", "privacy_notice_linked"):
             _require(consent.get(field) is True, f"{path}.consent.{field}", "must be true", errors)
         _require(consent.get("privacy_notice_url") == f"{LANDING_ORIGIN}/privacy", f"{path}.consent.privacy_notice_url", f"must be {LANDING_ORIGIN}/privacy", errors)
         _require(isinstance(consent.get("privacy_notice_version"), str) and PRIVACY_NOTICE_VERSION_RE.fullmatch(str(consent.get("privacy_notice_version"))) is not None, f"{path}.consent.privacy_notice_version", "must be an exact privacy notice version identifier", errors)
-        _require(consent.get("consent_schema_version") == "noetic_crm_consent.v1", f"{path}.consent.consent_schema_version", "must be exact noetic_crm_consent.v1", errors)
+        _sha256(consent.get("privacy_notice_content_sha256"), f"{path}.consent.privacy_notice_content_sha256", errors)
+        _require(consent.get("privacy_notice_publication_status") == CRM_PRIVACY_NOTICE_PRESENT_STATUS, f"{path}.consent.privacy_notice_publication_status", "must be exact present", errors)
+        _require(consent.get("consent_schema_version") == "noetic_crm_consent.v2", f"{path}.consent.consent_schema_version", "must be exact noetic_crm_consent.v2", errors)
         consent_recorded = _critical_proof_timestamp(consent.get("recorded_at_utc"), gate="support_crm", event=event, observed=observed, context=context, path=f"{path}.consent.recorded_at_utc")
         if consent_recorded is not None and lead_verified is not None:
             _require(consent_recorded <= lead_verified, f"{path}.consent.recorded_at_utc", "must be at or before Airtable readback verification", errors)
+        if isinstance(source, Mapping):
+            source_fields = {
+                "consent_to_contact": "consent_to_contact",
+                "source_attribution_recorded": "source_attribution_recorded",
+                "privacy_notice_url": "privacy_notice_url",
+                "privacy_notice_version": "privacy_notice_version",
+                "privacy_notice_content_sha256": "privacy_notice_content_sha256",
+                "privacy_notice_publication_status": "privacy_notice_publication_status",
+                "consent_schema_version": "consent_schema_version",
+                "recorded_at_utc": "consent_recorded_at_utc",
+            }
+            for consent_field, source_field in source_fields.items():
+                _require(consent.get(consent_field) == source.get(source_field), f"{path}.consent.{consent_field}", "must match the embedded source receipt", errors)
 
 
 def _validate_incident_tabletop(
@@ -1992,11 +2191,31 @@ def _cross_validate(
         _require(runtime["deployment"].get("deploy_id") == ci["deployment"].get("deploy_id"), "$.required_gates.runtime_worm.evidence.payload.deployment.deploy_id", "must match protected deploy evidence", errors)
     legal = gate_payloads.get("legal_publication_approval")
     honesty = gate_payloads.get("claim_honesty")
-    if legal and honesty and isinstance(legal.get("documents"), list) and isinstance(honesty.get("scanned_surfaces"), list):
+    docs: dict[Any, Any] = {}
+    if legal and isinstance(legal.get("documents"), list):
         docs = {item.get("kind"): item.get("content_sha256") for item in legal["documents"] if isinstance(item, Mapping)}
+    if legal and honesty and docs and isinstance(honesty.get("scanned_surfaces"), list):
         surfaces = {item.get("kind"): item.get("content_sha256") for item in honesty["scanned_surfaces"] if isinstance(item, Mapping)}
         for kind in LEGAL_DOCUMENT_KINDS:
             _require(docs.get(kind) == surfaces.get(kind), f"$.required_gates.claim_honesty.evidence.payload.scanned_surfaces[{kind}].content_sha256", "must match the authoritative legal publication hash", errors)
+    support = gate_payloads.get("support_crm")
+    if support and docs:
+        consent = support.get("consent")
+        source = support.get("crm_source_receipt")
+        if isinstance(consent, Mapping):
+            _require(
+                consent.get("privacy_notice_content_sha256") == docs.get("privacy"),
+                "$.required_gates.support_crm.evidence.payload.consent.privacy_notice_content_sha256",
+                "must match the authoritative published privacy document hash",
+                errors,
+            )
+        if isinstance(source, Mapping):
+            _require(
+                source.get("privacy_notice_content_sha256") == docs.get("privacy"),
+                "$.required_gates.support_crm.evidence.payload.crm_source_receipt.privacy_notice_content_sha256",
+                "must match the authoritative published privacy document hash",
+                errors,
+            )
     hashes = [context.evidence_hashes.get(gate) for gate in REQUIRED_GATES if context.evidence_hashes.get(gate)]
     _require(len(hashes) == len(set(hashes)), "$.required_gates", "each gate must have a distinct authoritative evidence receipt", errors)
 

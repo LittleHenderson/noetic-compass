@@ -57,6 +57,12 @@ services:
       # render.yaml for the full note.
       - key: NC_CRM_LEAD_STORE_PATH
         value: /var/data/leads.jsonl
+      - key: NC_CRM_PRIVACY_NOTICE_PUBLICATION_STATUS
+        value: OPEN
+      - key: NC_CRM_PRIVACY_NOTICE_VERSION
+        value: draft-2026-07-14
+      - key: NC_CRM_PRIVACY_NOTICE_CONTENT_SHA256
+        value: e94df1615dde4122836b47a74e32d45c79b63c1603db3bd1aee01f62d7ddae28
       # Evidence Packet static-anchor receipts and hash logs must also live on
       # the durable disk, or /evidence/{trace_id}/verify loses them after deploy.
       - key: CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR

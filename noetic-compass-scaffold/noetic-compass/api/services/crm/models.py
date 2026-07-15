@@ -37,12 +37,17 @@ import re
 from typing import Literal, Mapping, cast
 from uuid import uuid4
 
+from api.services.crm.privacy import (
+    CRM_PRIVACY_NOTICE_PRESENT_STATUS,
+    CRM_PRIVACY_NOTICE_URL,
+)
+
 
 CRM_SCHEMA_VERSION = "noetic_crm.v2"
 LEGACY_CRM_SCHEMA_VERSION = "noetic_crm.v1"
-CRM_CONSENT_SCHEMA_VERSION = "noetic_crm_consent.v1"
-CRM_PRIVACY_NOTICE_URL = "https://cascompass.ai/privacy"
+CRM_CONSENT_SCHEMA_VERSION = "noetic_crm_consent.v2"
 _PRIVACY_NOTICE_VERSION_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
+_SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
 
 # --------------------------------------------------------------------------
@@ -142,6 +147,19 @@ def _normalize_privacy_notice_version(raw: object) -> str:
     return value
 
 
+def _normalize_privacy_notice_content_sha256(raw: object) -> str:
+    """Return the exact server-owned byte digest of the notice shown."""
+
+    if type(raw) is not str:
+        raise LeadValidationError("privacy_notice_content_sha256 must be a string")
+    value = raw.strip().lower()
+    if _SHA256_RE.fullmatch(value) is None:
+        raise LeadValidationError(
+            "privacy_notice_content_sha256 must be 64 lowercase hexadecimal characters"
+        )
+    return value
+
+
 def normalize_email(raw: str) -> str:
     """Canonicalize an email for identity/dedup: trimmed + lowercased.
 
@@ -168,14 +186,17 @@ class LeadSubmission:
     metadata: Mapping[str, str] = field(default_factory=dict)
     consent_to_contact: bool = False
     privacy_notice_version: str = ""
+    privacy_notice_content_sha256: str = ""
+    privacy_notice_publication_status: str = ""
 
     def validated(self) -> "LeadSubmission":
         """Return a normalized copy, or raise :class:`LeadValidationError`.
 
         The contact-address bar is deliberately low: one ``@`` with a dotted domain. Consent is
-        deliberately strict: the caller must send exact boolean ``true`` and one log-safe version
-        identifier for the privacy notice actually shown. The timestamp and canonical notice URL
-        are supplied later by :meth:`Lead.from_submission`, never trusted from the browser.
+        deliberately strict: the caller must supply exact boolean ``true`` plus the server-owned
+        notice version/content digest/publication status. The public route injects those values;
+        the browser never chooses them. The timestamp and canonical notice URL are supplied later
+        by :meth:`Lead.from_submission`.
         """
         email = self.email.strip()
         local, sep, domain = email.partition("@")
@@ -191,6 +212,13 @@ class LeadSubmission:
         privacy_notice_version = _normalize_privacy_notice_version(
             self.privacy_notice_version
         )
+        privacy_notice_content_sha256 = _normalize_privacy_notice_content_sha256(
+            self.privacy_notice_content_sha256
+        )
+        if self.privacy_notice_publication_status != CRM_PRIVACY_NOTICE_PRESENT_STATUS:
+            raise LeadValidationError(
+                "privacy_notice_publication_status must be exact present"
+            )
         # Keep string metadata values only — a public form must not smuggle structured payloads.
         clean_meta = {str(k): str(v) for k, v in dict(self.metadata).items()}
         return LeadSubmission(
@@ -202,6 +230,8 @@ class LeadSubmission:
             metadata=clean_meta,
             consent_to_contact=True,
             privacy_notice_version=privacy_notice_version,
+            privacy_notice_content_sha256=privacy_notice_content_sha256,
+            privacy_notice_publication_status=CRM_PRIVACY_NOTICE_PRESENT_STATUS,
         )
 
 
@@ -392,6 +422,8 @@ class Lead:
     consent_to_contact: bool = False
     privacy_notice_url: str = ""
     privacy_notice_version: str = ""
+    privacy_notice_content_sha256: str = ""
+    privacy_notice_publication_status: str = ""
     consent_recorded_at_utc: str = ""
     consent_schema_version: str = ""
     sync_status: LeadSyncStatus = "captured"
@@ -418,8 +450,15 @@ class Lead:
             )
         try:
             _normalize_privacy_notice_version(self.privacy_notice_version)
+            _normalize_privacy_notice_content_sha256(
+                self.privacy_notice_content_sha256
+            )
         except LeadValidationError as exc:
             raise CRMStateError(str(exc)) from exc
+        if self.privacy_notice_publication_status != CRM_PRIVACY_NOTICE_PRESENT_STATUS:
+            raise CRMStateError(
+                "v2 lead privacy_notice_publication_status must be exact present"
+            )
         _require_canonical_whole_second_utc(
             self.consent_recorded_at_utc,
             field_name="consent_recorded_at_utc",
@@ -459,6 +498,8 @@ class Lead:
             consent_to_contact=True,
             privacy_notice_url=CRM_PRIVACY_NOTICE_URL,
             privacy_notice_version=v.privacy_notice_version,
+            privacy_notice_content_sha256=v.privacy_notice_content_sha256,
+            privacy_notice_publication_status=v.privacy_notice_publication_status,
             consent_recorded_at_utc=recorded_at,
             consent_schema_version=CRM_CONSENT_SCHEMA_VERSION,
             sync_status="captured",
@@ -497,6 +538,8 @@ class Lead:
             consent_to_contact=self.consent_to_contact,
             privacy_notice_url=self.privacy_notice_url,
             privacy_notice_version=self.privacy_notice_version,
+            privacy_notice_content_sha256=self.privacy_notice_content_sha256,
+            privacy_notice_publication_status=self.privacy_notice_publication_status,
             consent_recorded_at_utc=self.consent_recorded_at_utc,
             consent_schema_version=self.consent_schema_version,
             sync_status=new_status,
@@ -535,6 +578,8 @@ class Lead:
             consent_to_contact=self.consent_to_contact,
             privacy_notice_url=self.privacy_notice_url,
             privacy_notice_version=self.privacy_notice_version,
+            privacy_notice_content_sha256=self.privacy_notice_content_sha256,
+            privacy_notice_publication_status=self.privacy_notice_publication_status,
             consent_recorded_at_utc=self.consent_recorded_at_utc,
             consent_schema_version=self.consent_schema_version,
             sync_status=self.sync_status,
@@ -562,6 +607,8 @@ class Lead:
             "consent_to_contact": self.consent_to_contact,
             "privacy_notice_url": self.privacy_notice_url,
             "privacy_notice_version": self.privacy_notice_version,
+            "privacy_notice_content_sha256": self.privacy_notice_content_sha256,
+            "privacy_notice_publication_status": self.privacy_notice_publication_status,
             "consent_recorded_at_utc": self.consent_recorded_at_utc,
             "consent_schema_version": self.consent_schema_version,
             "sync_status": self.sync_status,
@@ -605,6 +652,12 @@ class Lead:
             consent_to_contact=data.get("consent_to_contact") is True,
             privacy_notice_url=str(data.get("privacy_notice_url", "")),
             privacy_notice_version=str(data.get("privacy_notice_version", "")),
+            privacy_notice_content_sha256=str(
+                data.get("privacy_notice_content_sha256", "")
+            ),
+            privacy_notice_publication_status=str(
+                data.get("privacy_notice_publication_status", "")
+            ),
             consent_recorded_at_utc=str(data.get("consent_recorded_at_utc", "")),
             consent_schema_version=str(data.get("consent_schema_version", "")),
             sync_status=str(data.get("sync_status", "captured")),  # type: ignore[arg-type]
