@@ -88,6 +88,9 @@ def test_dark_defaults_are_inert() -> None:
         stripe_usage_price_id="",
         stripe_livemode=True,
         billing_customer_receipt_allowed_hosts="unsafe host",
+        billing_worker_measurement_enabled=False,
+        billing_worker_receipt_hmac_key="weak-unused-placeholder",
+        billing_usage_dispatch_enabled=False,
     )
     dark.validate_account_storage()
 
@@ -269,6 +272,7 @@ def test_reconciliation_rejects_blank_control_and_predictable_reference_keys(
             "billing_admin_secret",
             "stripe_secret_key",
             "stripe_webhook_secret",
+            "billing_worker_receipt_hmac_key",
             "openai_api_key",
             "anthropic_api_key",
             "google_api_key",
@@ -349,6 +353,78 @@ def test_lifespan_installs_billing_on_shared_store_and_clears_it(
     assert app.state.billing_provider is None
 
 
+def test_worker_measurement_and_dispatch_are_separate_dark_effect_gates() -> None:
+    reconciliation = {
+        "billing_reconciliation_enabled": True,
+        "billing_provider": "stripe",
+        "stripe_professional_price_id": "price_pro",
+        "stripe_enterprise_price_id": "price_ent",
+        "billing_provider_reference_hash_key": BILLING_REFERENCE_KEY,
+        "billing_usage_meter_event_name": "cas.accelerator_milliseconds",
+        "billing_usage_meter_version": "cas_meter.v1",
+        "billing_usage_currency": "usd",
+        "stripe_secret_key": "sk_test_private",
+        "stripe_usage_price_id": "price_usage",
+        "stripe_livemode": False,
+        "billing_customer_receipt_allowed_hosts": "receipts.stripe.test",
+        "database_url": "postgresql://cas:billing-db-test@db.internal/cas",
+    }
+    worker = {
+        **reconciliation,
+        "billing_worker_measurement_enabled": True,
+        "billing_worker_receipt_hmac_key": (
+            "worker-receipt-key-7f3a9c2e5d8b1a6f4c0e"
+        ),
+        "billing_worker_receipt_key_id": "worker-billing-2026-07",
+        "billing_worker_receipt_issuer": "atlas-live-worker",
+        "billing_worker_provider_id": "runpod-us-ca-2",
+        "billing_worker_id": "m2-real-pythia",
+    }
+
+    _settings(**worker).validate_account_storage()
+    _settings(
+        **{**worker, "billing_usage_dispatch_enabled": True}
+    ).validate_account_storage()
+
+    with pytest.raises(RuntimeError, match="MEASUREMENT_ENABLED=true requires"):
+        _settings(
+            billing_worker_measurement_enabled=True,
+            billing_reconciliation_enabled=False,
+        ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="DISPATCH_ENABLED=true requires"):
+        _settings(
+            **{
+                **reconciliation,
+                "billing_usage_dispatch_enabled": True,
+                "billing_worker_measurement_enabled": False,
+            }
+        ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="receipt configuration is invalid"):
+        _settings(
+            **{
+                **worker,
+                "billing_worker_receipt_hmac_key": "short",
+            }
+        ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="must be dedicated"):
+        _settings(
+            **{
+                **worker,
+                "billing_worker_receipt_hmac_key": BILLING_REFERENCE_KEY,
+            }
+        ).validate_account_storage()
+    receipt_key = worker["billing_worker_receipt_hmac_key"]
+    with pytest.raises(RuntimeError, match="must be dedicated"):
+        _settings(**{**worker, "jwt_secret": receipt_key}).validate_account_storage()
+    with pytest.raises(RuntimeError, match="must be dedicated"):
+        _settings(
+            **{
+                **worker,
+                "database_url": f"postgresql://cas:{receipt_key}@db.internal/cas",
+            }
+        ).validate_account_storage()
+
+
 def test_lifespan_rejects_enabled_reconciliation_on_debug_sqlite(
     tmp_path, monkeypatch
 ) -> None:
@@ -391,3 +467,78 @@ def test_lifespan_rejects_enabled_reconciliation_on_debug_sqlite(
             pass
 
     assert app.state.billing_reconciliation_store is None
+
+
+def test_lifespan_owns_dark_gated_meter_dispatch_task(tmp_path, monkeypatch) -> None:
+    import api.db as db_module
+    import api.state_ledger_bootstrap as state_bootstrap
+    from api.main import app
+    from api.services.production.state_substrate.sqlite_store import SqliteStateStore
+    from api.services import stripe_billing
+
+    async def no_database_io() -> None:
+        return None
+
+    monkeypatch.setattr(
+        stripe_billing,
+        "build_billing_provider",
+        lambda _settings: NullBillingProvider(),
+    )
+    monkeypatch.setattr(db_module, "init_db", no_database_io)
+    monkeypatch.setattr(db_module, "close_db", no_database_io)
+    monkeypatch.setattr(
+        state_bootstrap,
+        "_build_state_store",
+        lambda _settings: SqliteStateStore(tmp_path / "meter-dispatch-state.db"),
+    )
+    patches = {
+        "accounts_enabled": True,
+        "quotas_enabled": True,
+        "billing_entitlements_enabled": True,
+        "billing_provider": "stripe",
+        "billing_reconciliation_enabled": True,
+        "billing_provider_reference_hash_key": BILLING_REFERENCE_KEY,
+        "billing_usage_meter_event_name": "cas.accelerator_milliseconds",
+        "billing_usage_meter_version": "cas_meter.v1",
+        "billing_usage_currency": "usd",
+        "stripe_usage_price_id": "price_usage",
+        "stripe_professional_price_id": "price_pro",
+        "stripe_enterprise_price_id": "price_ent",
+        "stripe_secret_key": "sk_test_private",
+        "stripe_livemode": False,
+        "billing_customer_receipt_allowed_hosts": "receipts.stripe.test",
+        "billing_worker_measurement_enabled": True,
+        "billing_worker_receipt_hmac_key": (
+            "worker-receipt-key-7f3a9c2e5d8b1a6f4c0e"
+        ),
+        "billing_worker_receipt_key_id": "worker-billing-2026-07",
+        "billing_worker_receipt_issuer": "atlas-live-worker",
+        "billing_worker_provider_id": "runpod-us-ca-2",
+        "billing_worker_id": "m2-real-pythia",
+        "billing_worker_receipt_max_age_seconds": 300,
+        "billing_usage_dispatch_enabled": True,
+        "billing_usage_dispatch_interval_seconds": 0.1,
+        "billing_usage_dispatch_batch_size": 25,
+        "billing_usage_dispatch_preflight_retries": 3,
+        "billing_admin_secret": "a" * 32,
+        "debug": True,
+        "jwt_secret": "j" * 32,
+        "jwt_algorithm": "HS256",
+        "account_credential_pepper": "p" * 32,
+        "account_bootstrap_secret": "b" * 32,
+        "accounts_allow_single_host_sqlite": True,
+        "state_ledger_path": str((tmp_path / "meter-dispatch.db").resolve()),
+        "state_ledger_enabled": False,
+        "state_ledger_read_authority": False,
+        "database_url": POSTGRES_DATABASE_URL,
+    }
+    for name, value in patches.items():
+        monkeypatch.setattr(settings, name, value)
+
+    with TestClient(app):
+        assert app.state.billing_meter_dispatcher is not None
+        assert app.state.billing_meter_dispatch_task is not None
+        assert not app.state.billing_meter_dispatch_task.done()
+
+    assert app.state.billing_meter_dispatcher is None
+    assert app.state.billing_meter_dispatch_task is None

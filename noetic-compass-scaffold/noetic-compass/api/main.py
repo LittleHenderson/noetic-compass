@@ -81,6 +81,7 @@ def _browser_managed_cors_credentials_allowed(
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     """Own one durable backend and share it across every account-mode service."""
+    import asyncio
     import logging
 
     from api.db import close_db, init_db
@@ -105,6 +106,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.billing_entitlement_store = None
     app.state.billing_provider = None
     app.state.billing_reconciliation_store = None
+    app.state.billing_meter_dispatcher = None
+    app.state.billing_meter_dispatch_task = None
     app.state.evidence_packet_repository = None
     app.state.evidence_share_service = None
     app.state.support_tickets = None
@@ -133,6 +136,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     handle = None
     owned_state_store = None
     database_started = False
+    billing_dispatch_stop = None
+    billing_dispatch_task = None
     try:
         try:
             import cas_engine  # noqa: F401
@@ -266,8 +271,13 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             settings.billing_provider.strip().lower(),
         )
         logger.info(
-            "billing usage/invoice reconciliation: %s (no submission route)",
+            "billing usage/invoice reconciliation: %s (no public submission route)",
             "ENABLED" if settings.billing_reconciliation_enabled else "dark",
+        )
+        logger.info(
+            "trusted worker measurement: %s; Stripe meter dispatch: %s",
+            "ENABLED" if settings.billing_worker_measurement_enabled else "dark",
+            "ENABLED" if settings.billing_usage_dispatch_enabled else "dark",
         )
         logger.info(
             "evidence packet object storage: %s",
@@ -298,8 +308,48 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             max_submissions=settings.support_public_ticket_rate_limit_max,
             window_seconds=settings.support_public_ticket_rate_limit_window_seconds,
         )
+        if settings.billing_usage_dispatch_enabled:
+            if (
+                app.state.billing_reconciliation_store is None
+                or app.state.billing_provider is None
+            ):
+                raise RuntimeError(
+                    "Billing usage dispatch requires reconciliation and Stripe provider state."
+                )
+            from api.services.billing_meter_dispatch import (
+                StripeMeterEventDispatcher,
+            )
+
+            app.state.billing_meter_dispatcher = StripeMeterEventDispatcher(
+                reconciliation=app.state.billing_reconciliation_store,
+                provider=app.state.billing_provider,
+                batch_size=settings.billing_usage_dispatch_batch_size,
+                preflight_retries=settings.billing_usage_dispatch_preflight_retries,
+            )
+            billing_dispatch_stop = asyncio.Event()
+            billing_dispatch_task = asyncio.create_task(
+                app.state.billing_meter_dispatcher.run_forever(
+                    stop_event=billing_dispatch_stop,
+                    interval_seconds=settings.billing_usage_dispatch_interval_seconds,
+                ),
+                name="stripe-meter-event-dispatcher",
+            )
+            app.state.billing_meter_dispatch_task = billing_dispatch_task
         yield
     finally:
+        if billing_dispatch_stop is not None:
+            billing_dispatch_stop.set()
+        if billing_dispatch_task is not None:
+            try:
+                await asyncio.wait_for(billing_dispatch_task, timeout=5.0)
+            except TimeoutError:
+                billing_dispatch_task.cancel()
+                try:
+                    await billing_dispatch_task
+                except asyncio.CancelledError:
+                    pass
+            except asyncio.CancelledError:
+                pass
         # Clear wrappers before closing their shared backend so a repeated lifespan cannot reuse
         configure_audit_session_store(None)
         configure_evidence_packet_repository(None)
@@ -309,6 +359,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.billing_entitlement_store = None
         app.state.billing_provider = None
         app.state.billing_reconciliation_store = None
+        app.state.billing_meter_dispatcher = None
+        app.state.billing_meter_dispatch_task = None
         app.state.evidence_packet_repository = None
         app.state.evidence_share_service = None
         app.state.acceptance_authority_store = None

@@ -48,6 +48,7 @@ def test_dump_session_emits_full_event_sequence(client):
         json={"prompt": "Two short words.", "seed": 7, "max_new_tokens": 6},
     )
     assert r.status_code == 200
+    assert set(r.json()) == {"events"}
     events = r.json()["events"]
 
     # Manifest first, knob_resolution echo, then neuron_covers, complete last.
@@ -95,3 +96,22 @@ def test_dump_session_is_deterministic_under_seed(client):
     a_toks = [e for e in a if e["type"] == "token"]
     b_toks = [e for e in b if e["type"] == "token"]
     assert a_toks == b_toks
+
+
+def test_demo_worker_refuses_to_fabricate_a_billable_measurement(client):
+    response = client.post(
+        "/sessions/dump",
+        json={
+            "prompt": "Never bill fake compute.",
+            "billing_measurement_context": {
+                "tenant_id": "tenant-a",
+                "billing_account_id": "acct-a",
+                "run_id": "attempt-a",
+            },
+        },
+    )
+
+    assert response.status_code == 503
+    assert response.json() == {
+        "detail": "Trusted CUDA usage measurement is unavailable."
+    }

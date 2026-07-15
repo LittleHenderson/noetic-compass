@@ -153,6 +153,8 @@ def _measurement(
         billing_account_id=account_id,
         run_id=run_id,
         worker_id=worker_id,
+        worker_provider_id="runpod-test",
+        model_id="EleutherAI/pythia-160m",
         accelerator_milliseconds=quantity,
         accelerator_count=1,
         measurement_started_at=started_at.isoformat(),

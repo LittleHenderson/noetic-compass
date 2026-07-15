@@ -49,6 +49,87 @@ async def test_live_worker_runner_blocks_remote_url_without_service_token(monkey
 
 
 @pytest.mark.asyncio
+async def test_billing_context_requires_and_delivers_one_worker_receipt(monkeypatch):
+    receipt = {"schema_version": "signed-test-receipt"}
+    seen: list[dict[str, object]] = []
+
+    async def fake_dump(worker_base, payload):
+        assert worker_base == "http://worker.test"
+        assert payload["billing_measurement_context"] == {
+            "tenant_id": "tenant-a",
+            "billing_account_id": "acct-a",
+            "run_id": "attempt-a",
+        }
+        return {
+            "billing_measurement_receipt": receipt,
+            "events": [
+                {
+                    "type": "manifest",
+                    "manifest": {
+                        "model_id": "EleutherAI/pythia-160m",
+                        "runtime": "real_pythia",
+                    },
+                },
+                {
+                    "type": "token",
+                    "token_index": 0,
+                    "token": " measured",
+                    "confidence": 0.8,
+                    "top_activated_neurons": [],
+                    "mode7_attribution": [],
+                },
+                {"type": "complete", "total_tokens": 1},
+            ],
+        }
+
+    monkeypatch.setattr(settings, "atlas_live_worker_url", "http://worker.test")
+    monkeypatch.setattr(
+        "api.services.cas_harness_live_worker_runner._post_worker_dump", fake_dump
+    )
+
+    await run_live_worker_audit(
+        audit_id="cas-audit-metered",
+        model_id="EleutherAI/pythia-160m",
+        prompt="Meter this.",
+        audit_mode="BALANCED",
+        selected_modules=["active_trace"],
+        billing_measurement_context={
+            "tenant_id": "tenant-a",
+            "billing_account_id": "acct-a",
+            "run_id": "attempt-a",
+        },
+        on_billing_measurement_receipt=lambda value: seen.append(dict(value)),
+    )
+
+    assert seen == [receipt]
+
+
+@pytest.mark.asyncio
+async def test_billing_context_fails_closed_when_worker_omits_receipt(monkeypatch):
+    async def fake_dump(_worker_base, _payload):
+        return {"events": []}
+
+    monkeypatch.setattr(settings, "atlas_live_worker_url", "http://worker.test")
+    monkeypatch.setattr(
+        "api.services.cas_harness_live_worker_runner._post_worker_dump", fake_dump
+    )
+    with pytest.raises(LiveAuditRunnerUnavailable, match="was not returned"):
+        await run_live_worker_audit(
+            audit_id="cas-audit-unmetered",
+            model_id="EleutherAI/pythia-160m",
+            prompt="Do not guess usage.",
+            audit_mode="BALANCED",
+            selected_modules=["active_trace"],
+            billing_measurement_context={
+                "tenant_id": "tenant-a",
+                "billing_account_id": "acct-a",
+                "run_id": "attempt-a",
+            },
+            on_billing_measurement_receipt=lambda _value: None,
+        )
+
+
+@pytest.mark.asyncio
 async def test_live_worker_runner_writes_packet_loadable_harvest_record(monkeypatch):
     async def fake_dump(worker_base, payload):
         assert worker_base == "http://worker.test"
