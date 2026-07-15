@@ -191,6 +191,7 @@ CUSTOMER_LITERAL_ENV_VALUES = {
     "CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS": "31",
     "NC_CRM_PROVIDER": "airtable",
     "NC_AIRTABLE_API_BASE_URL": "https://api.airtable.com/v0",
+    "NC_CRM_LEAD_STORE_BACKEND": "state_store",
     "NC_CRM_LEAD_STORE_PATH": "/var/customer-support/leads.jsonl",
     "NC_CRM_PRIVACY_NOTICE_PUBLICATION_STATUS": "OPEN",
     "NC_CRM_PRIVACY_NOTICE_VERSION": "draft-2026-07-14",
@@ -199,6 +200,7 @@ CUSTOMER_LITERAL_ENV_VALUES = {
     ),
     "NC_CRM_PUBLIC_LEAD_RATE_LIMIT_MAX": "5",
     "NC_CRM_PUBLIC_LEAD_RATE_LIMIT_WINDOW_SECONDS": "3600",
+    "NC_SUPPORT_TICKET_STORE_BACKEND": "state_store",
     "NC_SUPPORT_TICKET_STORE_PATH": (
         "/var/customer-support/support_tickets.jsonl"
     ),

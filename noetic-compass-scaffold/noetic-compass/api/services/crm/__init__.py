@@ -6,7 +6,7 @@ platform's declared-vs-verified discipline: a lead **captured** on our side is n
 :mod:`.models` for the full honesty rule).
 
 Wiring: :func:`~api.services.crm.service.build_crm_service` constructs the service from settings
-(durable file store + sync provider, dark by default); ``api/main.py`` stashes it on
+(shared StateStore or legacy file/memory store + sync provider); ``api/main.py`` stashes it on
 ``app.state.crm`` and ``api/routes/crm.py`` exposes the public capture endpoint and the authed sales
 views over it.
 """
@@ -49,6 +49,10 @@ from api.services.crm.store import (
     JsonlFileLeadStore,
     LeadStore,
 )
+from api.services.crm.state_store import (
+    StateStoreLeadStore,
+    migrate_jsonl_leads_once,
+)
 from api.services.crm.abuse import (
     LeadAbuseRejected,
     PublicLeadAbuseDecision,
@@ -87,6 +91,7 @@ __all__ = [
     "CRMVerificationReceipt",
     "InMemoryLeadStore",
     "JsonlFileLeadStore",
+    "StateStoreLeadStore",
     "LeadAbuseRejected",
     "Lead",
     "LeadPipelineStatus",
@@ -102,6 +107,7 @@ __all__ = [
     "build_crm_service",
     "build_dark_crm_service",
     "build_lead_store",
+    "migrate_jsonl_leads_once",
     "build_public_lead_abuse_guard",
     "build_privacy_notice_contract",
     "airtable_email_dedup_key",

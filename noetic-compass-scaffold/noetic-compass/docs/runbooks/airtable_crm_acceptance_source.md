@@ -72,11 +72,13 @@ closed as `sync_failed`; it cannot earn `synced`.
   must match exact production: base `appXBoYskbfjNaFTs`, table `Leads`, dedup
   field `Dedup Key`, owner field/value `Owner` / `CAS Harness`, lifecycle field
   `Pipeline Status`, and API base `https://api.airtable.com/v0`.
-- `NC_CRM_LEAD_STORE_PATH` must be exact
-  `/var/customer-support/leads.jsonl`. The collector also verifies Render disk
-  `dsk-d9bijbjtqb8s73cn4o60` (`cas-harness-customer-support`) is mounted at
-  `/var/customer-support`; `/tmp`, relative paths, and other absolute paths are
-  rejected.
+- This collector is the legacy disk-authority collector. It requires
+  `NC_CRM_LEAD_STORE_PATH=/var/customer-support/leads.jsonl` and the mounted
+  Render disk. Once `NC_CRM_LEAD_STORE_BACKEND=state_store` is deployed, it must
+  not be used to claim current lead-store authority: the path is then only a
+  one-time migration source. A replacement collector must bind the shared-store
+  migration marker, immutable revision, and current head before `support_crm`
+  can move from `OPEN`.
 - The exact deployed build must include the v2 public lead contract. Existing
   v1 ledger rows remain readable, but they cannot satisfy this acceptance
   source because they have no explicit consent record.
@@ -96,7 +98,7 @@ python scripts/collect_airtable_crm_acceptance_source.py \
   --fragment-output /tmp/support-crm-fragment.json
 ```
 
-The `/tmp` paths above are output artifacts only; the lead authority remains
+The `/tmp` paths above are output artifacts only. In the legacy disk mode, the lead authority is
 the exact `/var/customer-support/leads.jsonl` persistent-disk ledger. The command creates
 one non-customer probe address below
 `acceptance.invalid`. It is intentionally persisted in the local lead ledger

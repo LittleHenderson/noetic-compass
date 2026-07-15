@@ -78,11 +78,18 @@ class Settings(BaseSettings):
     #     "airtable" is a real provider when its token/base/table settings are present;
     #     "hubspot" is a declared seam that currently FAILS LOUD at startup because no real
     #     integration has been built — refusing to look like sync works when it does not.
-    #   NC_CRM_LEAD_STORE_PATH (default unset) -> when set, leads persist to a durable append-only
-    #     JSONL file (single-host durable, survives restart). Unset uses an in-memory store that
-    #     forgets on restart and never pretends otherwise — a production deployment that means to
-    #     keep its leads MUST set this. See api/services/crm/.
+    #   NC_CRM_LEAD_STORE_PATH (default unset) -> JSONL authority in auto mode; strict one-time
+    #     migration source in state_store mode. Unset auto mode uses an in-memory dark store.
     crm_provider: str = "null"
+    # ``state_store`` keeps immutable domain revisions plus an OCC head in the
+    # lifespan-owned shared store. In that mode the retained JSONL path is a
+    # strict one-time migration source. ``auto`` preserves legacy behavior.
+    crm_lead_store_backend: str = Field(
+        default="auto",
+        validation_alias=AliasChoices(
+            "NC_CRM_LEAD_STORE_BACKEND", "CRM_LEAD_STORE_BACKEND"
+        ),
+    )
     crm_lead_store_path: str | None = None
     crm_airtable_token: str = Field(default="", validation_alias=AliasChoices("NC_AIRTABLE_TOKEN", "AIRTABLE_TOKEN"))
     crm_airtable_base_id: str = Field(default="", validation_alias=AliasChoices("NC_AIRTABLE_BASE_ID", "AIRTABLE_BASE_ID"))
@@ -155,8 +162,14 @@ class Settings(BaseSettings):
         ),
     )
 
-    # Public support intake. The default in-memory store is deliberately dark;
-    # production sets NC_SUPPORT_TICKET_STORE_PATH to a persistent-disk path.
+    # Public support intake. The default auto/no-path store is deliberately dark.
+    # Customer production uses state_store and retains the path only for migration.
+    support_ticket_store_backend: str = Field(
+        default="auto",
+        validation_alias=AliasChoices(
+            "NC_SUPPORT_TICKET_STORE_BACKEND", "SUPPORT_TICKET_STORE_BACKEND"
+        ),
+    )
     support_ticket_store_path: str | None = Field(
         default=None,
         validation_alias=AliasChoices(

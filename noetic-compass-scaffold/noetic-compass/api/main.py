@@ -110,6 +110,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.billing_meter_dispatch_task = None
     app.state.evidence_packet_repository = None
     app.state.evidence_share_service = None
+    app.state.crm = None
+    app.state.crm_public_abuse_guard = None
     app.state.support_tickets = None
     app.state.support_public_abuse_guard = None
     app.state.crm_privacy_notice_contract = None
@@ -305,13 +307,15 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             build_public_lead_abuse_guard,
         )
 
-        app.state.crm = build_crm_service(settings)
+        app.state.crm = build_crm_service(settings, state_store=shared_store)
         app.state.crm_privacy_notice_contract = build_privacy_notice_contract(settings)
         app.state.crm_public_abuse_guard = build_public_lead_abuse_guard(settings)
         from api.services.crm.abuse import PublicLeadAbuseGuard
         from api.services.support_tickets import build_support_ticket_service
 
-        app.state.support_tickets = build_support_ticket_service(settings)
+        app.state.support_tickets = build_support_ticket_service(
+            settings, state_store=shared_store
+        )
         app.state.support_public_abuse_guard = PublicLeadAbuseGuard(
             max_submissions=settings.support_public_ticket_rate_limit_max,
             window_seconds=settings.support_public_ticket_rate_limit_window_seconds,
@@ -373,6 +377,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.evidence_share_service = None
         app.state.acceptance_authority_store = None
         app.state.shared_state_store = None
+        app.state.crm = None
+        app.state.crm_public_abuse_guard = None
         app.state.support_tickets = None
         app.state.crm_privacy_notice_contract = None
         app.state.support_public_abuse_guard = None
