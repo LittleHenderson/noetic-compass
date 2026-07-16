@@ -1188,6 +1188,7 @@ def canonical_evidence_binding_sha256(
             "status": evidence.get("status"),
             "approved_at_utc": evidence.get("approved_at_utc"),
             "approver_roles": evidence.get("approver_roles"),
+            "evidence_hashes": evidence.get("evidence_hashes"),
         }
     else:
         raise HumanAttestationInvalid("gate has no human-attestation binding")

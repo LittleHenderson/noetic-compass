@@ -9,7 +9,13 @@ from threading import Event
 
 import pytest
 
-from api.services.billing_entitlements import BillingEntitlementStore
+from api.services.billing_entitlements import (
+    SUBSCRIPTION_KIND,
+    SUBSCRIPTION_RECORD_ID,
+    BillingEntitlementStore,
+    canonical_event_bytes,
+    process_stripe_event,
+)
 from api.services.billing_reconciliation import (
     BILLING_RECONCILIATION_PLATFORM_TENANT,
     PAID_INVOICE_KIND,
@@ -30,6 +36,7 @@ from api.services.production.state_substrate import (
     StateStoreError,
 )
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
+from tests.billing_test_support import install_verified_stripe_subscription
 
 
 HASH_KEY = "provider-reference-key-is-dedicated-0123456789"
@@ -85,22 +92,16 @@ def _install_stripe_subscription(
     customer_id: str = "cus_CustomerA",
     subscription_id: str = "sub_SubscriptionA",
 ) -> None:
-    entitlements.grant_manual_comped(
+    install_verified_stripe_subscription(
+        entitlements,
         tenant_id=tenant_id,
         billing_account_id=account_id,
-        expires_at=(datetime.now(UTC) + timedelta(days=30)).isoformat(),
-    )
-    entitlements.apply_stripe_subscription(
-        tenant_id=tenant_id,
-        plan_id="professional_live",
-        status="active",
-        external_customer_id=customer_id,
-        external_subscription_id=subscription_id,
+        customer_id=customer_id,
+        subscription_id=subscription_id,
         event_id=("evt_SubscriptionA" if tenant_id == "tenant-a" else "evt_SubscriptionB"),
         event_created=1,
-        current_period_start=START.isoformat(),
-        current_period_end=(START + timedelta(days=31)).isoformat(),
-        cancel_at_period_end=False,
+        period_start=START,
+        period_end=START + timedelta(days=31),
     )
 
 
@@ -329,12 +330,204 @@ def test_measurement_refuses_estimates_impossible_quantity_and_unbounded_receipt
         )
 
 
+def test_first_time_checkout_subscription_lineage_reaches_meter_outbox() -> None:
+    backend = InMemoryStateStore()
+    entitlements = BillingEntitlementStore(backend)
+    request_id = "request_first_meter_001"
+    session_id = "cs_first_meter_001"
+    metadata = {
+        "cas_tenant_id": "tenant-a",
+        "cas_account_id": "acct-a",
+        "cas_plan_id": "professional_live",
+        "cas_checkout_request_id": request_id,
+    }
+    entitlements.begin_checkout_intent(
+        tenant_id="tenant-a",
+        billing_account_id="acct-a",
+        plan_id="professional_live",
+        request_id=request_id,
+    )
+    entitlements.finish_checkout_intent(
+        tenant_id="tenant-a",
+        request_id=request_id,
+        checkout_session_id=session_id,
+        url=f"https://checkout.stripe.test/{session_id}",
+    )
+    checkout_event = {
+        "id": "evt_CheckoutFirstMeter",
+        "type": "checkout.session.completed",
+        "created": int(START.timestamp()),
+        "livemode": True,
+        "data": {
+            "object": {
+                "id": session_id,
+                "customer": "cus_CustomerA",
+                "subscription": "sub_SubscriptionA",
+                "mode": "subscription",
+                "livemode": True,
+                "client_reference_id": "tenant-a",
+                "metadata": metadata,
+            }
+        },
+    }
+    process_stripe_event(
+        entitlements,
+        event=checkout_event,
+        raw_payload=canonical_event_bytes(checkout_event),
+        price_to_plan={PRICE_ID: "professional_live"},
+        signature_verified=True,
+    )
+    subscription_event = {
+        "id": "evt_SubscriptionFirstMeter",
+        "type": "customer.subscription.created",
+        "created": int(START.timestamp()) + 1,
+        "livemode": True,
+        "data": {
+            "object": {
+                "id": "sub_SubscriptionA",
+                "customer": "cus_CustomerA",
+                "livemode": True,
+                "status": "active",
+                "metadata": metadata,
+                "items": {
+                    "data": [
+                        {
+                            "price": {"id": "price_ProfessionalLive"},
+                            "current_period_start": int(START.timestamp()),
+                            "current_period_end": int(
+                                (START + timedelta(days=31)).timestamp()
+                            ),
+                        }
+                    ]
+                },
+                "cancel_at_period_end": False,
+            }
+        },
+    }
+    lease = entitlements.acquire_subscription_refresh_lock(
+        external_subscription_id="sub_SubscriptionA",
+        event_id="evt_SubscriptionFirstMeter",
+    )
+    try:
+        raw_payload = canonical_event_bytes(subscription_event)
+        entitlements.begin_webhook_event(
+            event_id="evt_SubscriptionFirstMeter",
+            event_type="customer.subscription.created",
+            event_created=int(subscription_event["created"]),
+            raw_payload=raw_payload,
+            livemode=True,
+            signature_verified=True,
+        )
+        refresh_facts_sha256 = entitlements.record_webhook_refresh(
+            event_id="evt_SubscriptionFirstMeter",
+            external_subscription_id="sub_SubscriptionA",
+            refreshed_object=subscription_event["data"]["object"],
+            provider_request_id="req_SubscriptionFirstMeter",
+            refresh_lock_token=lease.token,
+        )
+        process_stripe_event(
+            entitlements,
+            event=subscription_event,
+            raw_payload=raw_payload,
+            price_to_plan={"price_ProfessionalLive": "professional_live"},
+            resource_refreshed=True,
+            refresh_lock_token=lease.token,
+            refresh_facts_sha256=refresh_facts_sha256,
+            locked_subscription_id="sub_SubscriptionA",
+            signature_verified=True,
+        )
+    finally:
+        entitlements.release_subscription_refresh_lock(lease)
+
+    service = BillingReconciliationStore(
+        backend,
+        entitlements,
+        provider_reference_hash_key=HASH_KEY,
+        usage_price_id=PRICE_ID,
+        meter_event_name=METER_NAME,
+        meter_event_version=METER_VERSION,
+        currency="usd",
+        livemode=True,
+        customer_receipt_allowed_hosts=(RECEIPT_HOST,),
+    )
+    usage, created = service.record_fleet_measurement(_measurement())
+    subscription = entitlements.get_subscription("tenant-a")
+    assert created is True
+    assert subscription is not None
+    assert subscription.billing_account_id == "acct-a"
+    assert usage.billing_account_id == "acct-a"
+    assert usage.external_customer_id == "cus_CustomerA"
+    assert usage.external_subscription_id == "sub_SubscriptionA"
+    assert usage.outbox_state == "pending"
+    assert usage.meter_event_request()["event_name"] == METER_NAME
+
+
 def test_measurement_binds_account_and_requires_stripe_subscription() -> None:
     service, _, _ = _service()
     with pytest.raises(BillingReconciliationConflict, match="billing account"):
         service.record_fleet_measurement(_measurement(account_id="acct-attacker"))
     with pytest.raises(BillingReconciliationError, match="Stripe-verified"):
         service.record_fleet_measurement(_measurement(tenant_id="tenant-missing"))
+
+
+@pytest.mark.parametrize("status", ("past_due", "canceled", "quarantined"))
+def test_metering_refuses_every_inactive_subscription_status(status: str) -> None:
+    service, _, backend = _service()
+    stored = backend.get("tenant-a", SUBSCRIPTION_KIND, SUBSCRIPTION_RECORD_ID)
+    assert stored is not None
+    payload = dict(stored.payload)
+    payload["status"] = status
+    backend.put(stored.with_payload(payload), expected_version=stored.version)
+    with pytest.raises(BillingReconciliationError, match="Stripe-verified"):
+        service.record_fleet_measurement(_measurement())
+
+
+@pytest.mark.parametrize("period_case", ("future", "ended", "naive"))
+def test_metering_refuses_non_live_or_malformed_provider_period(
+    period_case: str,
+) -> None:
+    service, _, backend = _service()
+    stored = backend.get("tenant-a", SUBSCRIPTION_KIND, SUBSCRIPTION_RECORD_ID)
+    assert stored is not None
+    payload = dict(stored.payload)
+    now = datetime.now(UTC).replace(microsecond=0)
+    if period_case == "future":
+        payload["current_period_start"] = (now + timedelta(days=1)).isoformat()
+        payload["current_period_end"] = (now + timedelta(days=2)).isoformat()
+    elif period_case == "ended":
+        payload["current_period_start"] = (now - timedelta(days=1)).isoformat()
+        payload["current_period_end"] = now.isoformat()
+    else:
+        payload["current_period_start"] = now.replace(tzinfo=None).isoformat()
+    backend.put(stored.with_payload(payload), expected_version=stored.version)
+    with pytest.raises(BillingReconciliationError):
+        service.record_fleet_measurement(_measurement())
+
+
+def test_metering_accepts_subscription_period_start_boundary() -> None:
+    backend = InMemoryStateStore()
+    entitlements = BillingEntitlementStore(backend)
+    now = datetime.now(UTC).replace(microsecond=0)
+    install_verified_stripe_subscription(
+        entitlements,
+        period_start=now,
+        period_end=now + timedelta(days=30),
+        event_created=int(now.timestamp()),
+    )
+    service = BillingReconciliationStore(
+        backend,
+        entitlements,
+        provider_reference_hash_key=HASH_KEY,
+        usage_price_id=PRICE_ID,
+        meter_event_name=METER_NAME,
+        meter_event_version=METER_VERSION,
+        currency="usd",
+        livemode=True,
+        customer_receipt_allowed_hosts=(RECEIPT_HOST,),
+    )
+    usage, created = service.record_fleet_measurement(_measurement())
+    assert created is True
+    assert usage.external_subscription_id == "sub_SubscriptionA"
 
 
 def test_usage_is_deterministic_idempotent_and_co_located_with_outbox() -> None:

@@ -18,6 +18,7 @@ from api.services.cas_harness_audit_sessions import (
 )
 from api.services.production.state_substrate import InMemoryStateStore
 from api.services.quotas import current_monthly_period_key, get_usage
+from tests.billing_test_support import install_verified_stripe_subscription
 
 
 LIVE_PAYLOAD = {
@@ -259,17 +260,14 @@ def test_paid_plan_limit_is_derived_from_verified_subscription(
     audit_billing_client, monkeypatch
 ) -> None:
     client, _, billing_store, _ = audit_billing_client
-    billing_store.apply_stripe_subscription(
+    install_verified_stripe_subscription(
+        billing_store,
         tenant_id="tenant-a",
-        plan_id="professional_live",
-        status="active",
-        external_customer_id="cus_paid",
-        external_subscription_id="sub_paid",
+        billing_account_id="acct-a",
+        customer_id="cus_paid",
+        subscription_id="sub_paid",
         event_id="evt_paid",
         event_created=1,
-        current_period_start=datetime.now(UTC).isoformat(),
-        current_period_end=(datetime.now(UTC) + timedelta(days=30)).isoformat(),
-        cancel_at_period_end=False,
     )
     observed_limits: list[int] = []
 
@@ -447,17 +445,14 @@ def test_distributed_fleet_capability_fails_closed_for_current_catalog(
     audit_billing_client,
 ) -> None:
     client, backend, billing_store, _ = audit_billing_client
-    billing_store.apply_stripe_subscription(
+    install_verified_stripe_subscription(
+        billing_store,
         tenant_id="tenant-a",
-        plan_id="professional_live",
-        status="active",
-        external_customer_id="cus_professional",
-        external_subscription_id="sub_professional",
+        billing_account_id="acct-a",
+        customer_id="cus_professional",
+        subscription_id="sub_professional",
         event_id="evt_professional",
         event_created=1,
-        current_period_start=datetime.now(UTC).isoformat(),
-        current_period_end=(datetime.now(UTC) + timedelta(days=30)).isoformat(),
-        cancel_at_period_end=False,
     )
     response = client.post(
         "/api/cas-harness/audit/distributed/session",

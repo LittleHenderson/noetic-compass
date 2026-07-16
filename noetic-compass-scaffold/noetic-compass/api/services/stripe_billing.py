@@ -134,6 +134,7 @@ class BillingProvider(Protocol):
         email: str,
         plan_id: str,
         external_customer_id: str | None,
+        checkout_request_id: str,
         idempotency_key: str,
     ) -> CheckoutSessionResult: ...
 
@@ -332,6 +333,7 @@ class StripeBillingProvider:
         email: str,
         plan_id: str,
         external_customer_id: str | None,
+        checkout_request_id: str,
         idempotency_key: str,
     ) -> CheckoutSessionResult:
         plan = PLAN_CATALOG.get(plan_id)
@@ -346,6 +348,7 @@ class StripeBillingProvider:
             "cas_tenant_id": tenant_id,
             "cas_account_id": account_id,
             "cas_plan_id": plan_id,
+            "cas_checkout_request_id": checkout_request_id,
         }
         line_items = [{"price": price_id, "quantity": 1}]
         if self._usage_price_id is not None:

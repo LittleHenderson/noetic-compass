@@ -38,6 +38,9 @@ TRUSTED_ISSUER_REGISTRY = Path(
 SCHEMA_VERSION = "cas_harness_customer_production_acceptance.v2"
 REPORT_SCHEMA_VERSION = "cas_harness_customer_production_acceptance_report.v2"
 EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v3"
+RELEASE_DECISION_EVIDENCE_SCHEMA_VERSION = (
+    "cas_harness_customer_production_release_decision_evidence.v1"
+)
 RECEIPT_SCHEMA_VERSION = "cas_harness_authoritative_receipt.v1"
 REGISTRY_SCHEMA_VERSION = "cas_harness_trusted_issuer_registry.v2"
 ROOT_CI_SCHEMA_VERSION = "cas_harness_root_ci_protected_deploy_observation.v1"
@@ -1219,7 +1222,12 @@ def _validate_common_evidence(
         else f"$.required_gates.{gate}.evidence.payload"
     )
     errors = context.errors
-    _require(evidence.get("schema_version") == EVIDENCE_SCHEMA_VERSION, f"{path}.schema_version", f"must be {EVIDENCE_SCHEMA_VERSION}", errors)
+    expected_schema_version = (
+        RELEASE_DECISION_EVIDENCE_SCHEMA_VERSION
+        if gate == "release_decision"
+        else EVIDENCE_SCHEMA_VERSION
+    )
+    _require(evidence.get("schema_version") == expected_schema_version, f"{path}.schema_version", f"must be {expected_schema_version}", errors)
     _require(evidence.get("gate") == gate, f"{path}.gate", "must match its manifest gate", errors)
     _require(evidence.get("environment") == "public-production", f"{path}.environment", "must be public-production; private canary proof is forbidden", errors)
     _require(evidence.get("repository") == REPOSITORY, f"{path}.repository", f"must be {REPOSITORY}", errors)
@@ -2967,7 +2975,7 @@ def _validate_release_decision(
     if evidence is None:
         return
     path = "$.product.release_decision.evidence.payload"
-    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"status", "approved_at_utc", "approver_roles", "decision_record_uri", "decision_record_sha256", "human_assurance_boundary"}, path, context.errors)
+    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"status", "approved_at_utc", "approver_roles", "evidence_hashes", "decision_record_uri", "decision_record_sha256", "human_assurance_boundary"}, path, context.errors)
     event, observed = _validate_common_evidence(
         evidence, "release_decision", context
     )
@@ -2984,6 +2992,23 @@ def _validate_release_decision(
     if approved is not None:
         _require(approved >= newest_gate_observed, f"{path}.approved_at_utc", "must be at or after the newest gate evidence", context.errors)
     _set_of_strings(evidence.get("approver_roles"), RELEASE_APPROVER_ROLES, f"{path}.approver_roles", context.errors)
+    evidence_hashes = evidence.get("evidence_hashes")
+    if _is_mapping(evidence_hashes, f"{path}.evidence_hashes", context.errors):
+        _exact_keys(
+            evidence_hashes,
+            set(REQUIRED_GATES),
+            f"{path}.evidence_hashes",
+            context.errors,
+        )
+        for gate in REQUIRED_GATES:
+            gate_path = f"{path}.evidence_hashes.{gate}"
+            _sha256(evidence_hashes.get(gate), gate_path, context.errors)
+            _require(
+                evidence_hashes.get(gate) == context.evidence_hashes.get(gate),
+                gate_path,
+                "must match the exact authoritative evidence SHA-256 resolved for this gate",
+                context.errors,
+            )
     _safe_https_url(evidence.get("decision_record_uri"), f"{path}.decision_record_uri", context.errors, allowed_origins={PRODUCTION_API_ORIGIN})
     _sha256(evidence.get("decision_record_sha256"), f"{path}.decision_record_sha256", context.errors)
 

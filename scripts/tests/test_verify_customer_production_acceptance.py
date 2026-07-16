@@ -234,7 +234,11 @@ class SignedBundle:
 
 def _common(gate: str, *, event: str = EVENT, observed: str = OBSERVED) -> dict:
     result = {
-        "schema_version": verifier.EVIDENCE_SCHEMA_VERSION,
+        "schema_version": (
+            verifier.RELEASE_DECISION_EVIDENCE_SCHEMA_VERSION
+            if gate == "release_decision"
+            else verifier.EVIDENCE_SCHEMA_VERSION
+        ),
         "gate": gate,
         "environment": "public-production",
         "repository": verifier.REPOSITORY,
@@ -872,6 +876,10 @@ def _accepting_manifest(
             "status": "ACCEPT",
             "approved_at_utc": "2026-07-14T11:56:00Z",
             "approver_roles": sorted(verifier.RELEASE_APPROVER_ROLES),
+            "evidence_hashes": {
+                gate: manifest["required_gates"][gate]["evidence"]["sha256"]
+                for gate in verifier.REQUIRED_GATES
+            },
             "decision_record_uri": f"{verifier.PRODUCTION_API_ORIGIN}/internal/acceptance/release-record",
             "decision_record_sha256": _digest("release-record"),
             "human_assurance_boundary": _human_assurance_boundary(),
@@ -1512,6 +1520,16 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
                 "key_id": None,
             },
         }
+        release_reference = manifest["product"]["release_decision"]["evidence"]
+        _mutate_signed_reference(
+            self.bundle,
+            release_reference,
+            lambda receipt: receipt["evidence"]["evidence_hashes"].update(
+                runtime_worm=manifest["required_gates"]["runtime_worm"][
+                    "evidence"
+                ]["sha256"]
+            ),
+        )
         with patch.object(verifier, "_fetch_https", return_value=raw) as fetch:
             report = _verify(manifest, self.bundle, live=True)
         self.assertEqual(report["errors"], [])
@@ -1572,6 +1590,16 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
                 "key_id": None,
             },
         }
+        release_reference = manifest["product"]["release_decision"]["evidence"]
+        _mutate_signed_reference(
+            self.bundle,
+            release_reference,
+            lambda receipt: receipt["evidence"]["evidence_hashes"].update(
+                legal_publication_approval=manifest["required_gates"][
+                    "legal_publication_approval"
+                ]["evidence"]["sha256"]
+            ),
+        )
         with patch.object(verifier, "_fetch_https", return_value=raw) as fetch:
             report = _verify(manifest, self.bundle, live=True)
         self.assertEqual(report["errors"], [])
@@ -2463,6 +2491,58 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
             any(
                 "approved_at_utc" in error
                 and "at or after the gate event" in error
+                for error in report["errors"]
+            )
+        )
+
+    def test_release_decision_binds_the_exact_required_gate_evidence_set(self) -> None:
+        mutations = {
+            "mismatched hash": lambda evidence: evidence["evidence_hashes"].update(
+                runtime_worm="f" * 64
+            ),
+            "missing gate": lambda evidence: evidence["evidence_hashes"].pop(
+                "alert_delivery"
+            ),
+            "extra gate": lambda evidence: evidence["evidence_hashes"].update(
+                release_decision="e" * 64
+            ),
+        }
+        for label, mutate in mutations.items():
+            with self.subTest(label=label):
+                bundle = SignedBundle()
+                try:
+                    manifest = _accepting_manifest(bundle)
+                    reference = manifest["product"]["release_decision"]["evidence"]
+                    _mutate_signed_reference(
+                        bundle,
+                        reference,
+                        lambda receipt: mutate(receipt["evidence"]),
+                    )
+                    report = _verify(manifest, bundle)
+                    self.assertEqual(report["result"], "INVALID")
+                    self.assertTrue(
+                        any("evidence_hashes" in error for error in report["errors"])
+                    )
+                finally:
+                    bundle.close()
+
+    def test_legacy_generic_release_evidence_schema_fails_closed(self) -> None:
+        manifest = _accepting_manifest(self.bundle)
+        reference = manifest["product"]["release_decision"]["evidence"]
+        _mutate_signed_reference(
+            self.bundle,
+            reference,
+            lambda receipt: receipt["evidence"].update(
+                schema_version=verifier.EVIDENCE_SCHEMA_VERSION
+            ),
+        )
+
+        report = _verify(manifest, self.bundle)
+
+        self.assertEqual(report["result"], "INVALID")
+        self.assertTrue(
+            any(
+                verifier.RELEASE_DECISION_EVIDENCE_SCHEMA_VERSION in error
                 for error in report["errors"]
             )
         )

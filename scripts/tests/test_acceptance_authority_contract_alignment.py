@@ -38,6 +38,7 @@ from tests.acceptance_attestation_test_support import (  # noqa: E402
 )
 from api.services.human_attestations import (  # noqa: E402
     PUBLIC_HUMAN_ASSURANCE_BOUNDARY,
+    canonical_evidence_binding_sha256,
 )
 from scripts import verify_customer_production_acceptance as verifier  # noqa: E402
 from scripts import build_alert_delivery_gate_payload as alert_builder  # noqa: E402
@@ -59,7 +60,71 @@ from scripts.tests.test_verify_customer_production_acceptance import (  # noqa: 
 )
 
 
+def _release_evidence_hashes() -> dict[str, str]:
+    return {
+        gate: _digest(f"release-required-evidence:{gate}")
+        for gate in verifier.REQUIRED_GATES
+    }
+
+
 class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
+    def test_release_schema_and_exact_evidence_set_binding_align_across_layers(
+        self,
+    ) -> None:
+        self.assertEqual(
+            verifier.RELEASE_DECISION_EVIDENCE_SCHEMA_VERSION,
+            authority_service.RELEASE_DECISION_EVIDENCE_SCHEMA_VERSION,
+        )
+        self.assertEqual(
+            tuple(verifier.REQUIRED_GATES),
+            authority_service.RELEASE_DECISION_EVIDENCE_HASH_GATES,
+        )
+        release = _common(
+            "release_decision",
+            event="2026-07-14T11:56:00Z",
+            observed="2026-07-14T11:58:00Z",
+        )
+        release.update(
+            {
+                "status": "ACCEPT",
+                "approved_at_utc": "2026-07-14T11:56:00Z",
+                "approver_roles": sorted(verifier.RELEASE_APPROVER_ROLES),
+                "evidence_hashes": _release_evidence_hashes(),
+                "decision_record_uri": (
+                    f"{verifier.PRODUCTION_API_ORIGIN}/internal/acceptance/release-record"
+                ),
+                "decision_record_sha256": _digest("release-record"),
+                "human_assurance_boundary": dict(
+                    verifier.HUMAN_ASSURANCE_BOUNDARY
+                ),
+            }
+        )
+        release["artifact_uri"] = verifier.LIVE_AUTHORITY_ENDPOINTS[
+            "release_decision"
+        ]["noetic-production-live"]
+        release["artifact_sha256"] = _digest("release-authority")
+        canonicalize_acceptance_evidence("release_decision", release, now=NOW)
+        binding = canonical_evidence_binding_sha256("release_decision", release)
+
+        changed = deepcopy(release)
+        changed["evidence_hashes"]["runtime_worm"] = _digest("different-runtime")
+        self.assertNotEqual(
+            binding,
+            canonical_evidence_binding_sha256("release_decision", changed),
+        )
+
+        legacy = deepcopy(release)
+        legacy["schema_version"] = verifier.EVIDENCE_SCHEMA_VERSION
+        with self.assertRaises(AcceptanceAuthorityInvalid):
+            canonicalize_acceptance_evidence("release_decision", legacy, now=NOW)
+
+        incomplete = deepcopy(release)
+        incomplete["evidence_hashes"].pop("root_ci_protected_deploy")
+        with self.assertRaises(AcceptanceAuthorityInvalid):
+            canonicalize_acceptance_evidence(
+                "release_decision", incomplete, now=NOW
+            )
+
     def test_claim_machine_subject_contract_is_exact_across_all_layers(self) -> None:
         self.assertEqual(
             claim_collector.MACHINE_SUBJECT_SCHEMA_VERSION,
@@ -375,6 +440,7 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
                 "status": "ACCEPT",
                 "approved_at_utc": "2026-07-14T11:56:00Z",
                 "approver_roles": sorted(verifier.RELEASE_APPROVER_ROLES),
+                "evidence_hashes": _release_evidence_hashes(),
                 "decision_record_uri": (
                     f"{verifier.PRODUCTION_API_ORIGIN}/internal/acceptance/release-record"
                 ),
@@ -616,6 +682,7 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
                 "status": "ACCEPT",
                 "approved_at_utc": "2026-07-14T11:56:00Z",
                 "approver_roles": sorted(verifier.RELEASE_APPROVER_ROLES),
+                "evidence_hashes": _release_evidence_hashes(),
                 "decision_record_uri": (
                     f"{verifier.PRODUCTION_API_ORIGIN}/internal/acceptance/release-record"
                 ),
@@ -689,6 +756,7 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
                 "status": "ACCEPT",
                 "approved_at_utc": "2026-07-14T11:56:00Z",
                 "approver_roles": sorted(verifier.RELEASE_APPROVER_ROLES),
+                "evidence_hashes": _release_evidence_hashes(),
                 "decision_record_uri": (
                     f"{verifier.PRODUCTION_API_ORIGIN}/internal/acceptance/release-record"
                 ),

@@ -103,7 +103,11 @@ def _require_exact_identity(
     verification_time: datetime,
 ) -> None:
     expected = {
-        "schema_version": acceptance.EVIDENCE_SCHEMA_VERSION,
+        "schema_version": (
+            acceptance.RELEASE_DECISION_EVIDENCE_SCHEMA_VERSION
+            if gate == "release_decision"
+            else acceptance.EVIDENCE_SCHEMA_VERSION
+        ),
         "gate": gate,
         "environment": "public-production",
         "repository": acceptance.REPOSITORY,
@@ -357,6 +361,17 @@ def _build_candidate_manifest(
 ) -> dict[str, Any]:
     if set(authorities) != set(LIVE_AUTHORITIES):
         raise AssemblyError("candidate manifest requires the exact live authority set")
+    release_document = _strict_document(
+        authorities["release_decision"].raw, "release_decision live authority"
+    )
+    expected_evidence_hashes = {
+        ROOT_CI_GATE: receipt.sha256,
+        **{gate: authorities[gate].sha256 for gate in LIVE_GATES},
+    }
+    if release_document.get("evidence_hashes") != expected_evidence_hashes:
+        raise AssemblyError(
+            "release_decision evidence_hashes do not bind the exact candidate evidence set"
+        )
     manifest = deepcopy(dict(template))
     manifest["generated_at_utc"] = _utc_seconds(generated_at)
     required_gates: dict[str, dict[str, Any]] = {}

@@ -228,11 +228,77 @@ customer, subscription, and invoice subjects. Before publication, the
 operational publisher requires a private JSON selector containing only
 `tenant_id` and `invoice_record_id`. The API re-reads one matched live paid
 invoice plus one active same-tenant account, recomputes all five subjects, and
-persists a private content-addressed binding. It repeats that source validation
-immediately before any authority revision/WORM/operation/head mutation and on
-every active serve. The offline public verifier can validate only pseudonym
-shape; it is not a substitute for this private live-source check. Do not reuse
-the billing provider-reference hash key for this purpose.
+revalidates the current `stripe_verified` subscription. The subscription must
+still be `active`, satisfy one timezone-aware half-open provider period
+`current_period_start <= now < current_period_end`, and exactly match the
+invoice's tenant, platform account, Stripe customer, and Stripe subscription.
+Private source-binding schema
+`cas_harness_accounts_billing_source_binding.v3` HMAC-binds those current
+subscription facts plus the exact Checkout request/session, Checkout completion
+event identity and payload hash, Checkout-lineage hash, current subscription
+webhook identity and payload hash, locked-refresh facts hash, and refreshed
+subscription-object hash. It also binds canonical hashes of both complete
+terminal webhook receipts, so changes to receipt detail or unknown fields are
+detected. It repeats that source validation immediately before any authority
+revision/WORM/operation/head mutation and on every active serve.
+Deletion, tampering, state/type/tenant/digest drift, cancellation, `past_due`,
+expiry, replacement, or cross-wiring therefore makes the authority unavailable
+until new evidence is collected and authorized. The offline public verifier can
+validate only pseudonym shape; it is not a substitute for this private
+live-source check. Do not reuse the billing provider-reference hash key for this
+purpose.
+
+The paid lineage must start at the authenticated server-side Checkout route.
+Before Stripe is called, the service durably reserves the exact
+tenant/account/plan/request tuple. After Stripe returns, it binds the exact
+Checkout session to that tuple in an immutable private reverse index. Both the
+Checkout session and subscription receive server-derived
+`cas_tenant_id`, `cas_account_id`, `cas_plan_id`, and
+`cas_checkout_request_id` metadata. In the production path, the webhook route
+marks a receipt signature-verified only after the Stripe adapter constructs the
+event from the exact raw bytes. A `checkout.session.completed` receipt must
+match the durable session, subscription mode, client reference, customer, subscription,
+and all four metadata fields before it creates the immutable
+Checkout-session-to-subscription binding. A current subscription webhook then
+requires a same-subscription provider read under the durable refresh lease. The
+locked refreshed object must match the same durable lineage, customer,
+subscription, plan price, aware live period, and active status before the
+platform stores a `stripe_verified` entitlement. A contradictory successfully
+read snapshot durably changes the already-bound grant to `quarantined` before
+the request returns non-2xx; an exact later snapshot may recover it. For an
+already-bound subscription, the route first durably changes the current grant
+to `pending_provider_revalidation` under a unique delivery-attempt lease,
+before creating the event receipt or attempting the provider read. That pending
+barrier survives process/database restart and denies live entitlement,
+metering, and `accounts_billing` acceptance. A provider transport/read failure
+therefore leaves an exact retryable `unresolved` receipt plus the pending
+barrier; it is not mislabeled as contradictory `quarantined` state. An exact
+retry may move the row to the provider's current active/canceled state or to
+`quarantined` when a successfully read snapshot contradicts durable lineage.
+The route rechecks the exact receipt while holding the attempt lease. Before a
+same-event retry writes pending, it CAS-claims any existing receipt with the
+exact subscription/resource, refresh fence, and unique attempt-token hash.
+Applied finalization requires that same receipt claim plus the exact current
+row and authority hash. PostgreSQL's monotonic fence rejects an older claim;
+the single-host SQLite/in-memory fence-zero posture uses the unique token hash
+and receipt version CAS as its stale-attempt fallback. Separately, the
+persisted provider-refresh fence is the subscription row's high-water mark.
+Together these prevent a concurrent duplicate or stalled holder from pairing
+an applied receipt with a pending/stale subscription row. Delivery before the completion
+receipt is durable remains `unresolved` and returns non-2xx so Stripe can retry;
+operators must not repair that ordering with a manual comped grant. Direct
+subscription application without the full receipt/refresh provenance is
+refused. Customer live access and acceptance additionally require exact
+`livemode=true` agreement across Checkout, subscription, and invoice facts;
+sandbox/test-mode lineage cannot grant customer live access. The persisted
+Stripe entitlement contains the server-authenticated platform
+`billing_account_id`, which is rechecked by entitlement, metering, invoice
+reconciliation, and the private acceptance binding.
+
+These are source-side fail-closed conditions, not proof of a live Stripe paid
+lifecycle. The `accounts_billing` gate remains `OPEN` until exact live
+product/payer/charge/invoice/receipt/meter evidence is independently collected,
+authorized, published, and revalidated.
 
 `hosted_customer_journey` gate evidence v3 publishes keyed `tenant_subject`,
 `account_subject`, and `trace_subject` values and binds its safe artifact to
@@ -951,7 +1017,10 @@ All nine gates must be `present`, current, and authoritative:
    valid final candidate remains `OPEN` operationally until publication and
    exact active-authority verification succeed.
 7. `incident_tabletop`: closed incident and actions, verified recovery and
-   rotation, hashed postmortem, and current cross-functional tabletop.
+   rotation, hashed postmortem, and current cross-functional tabletop. Every
+   postmortem/closure attestation must be made at or after
+   `incident.closed_at_utc`; every tabletop evidence/completion attestation
+   must be made at or after `tabletop.completed_at_utc`.
 8. `alert_delivery`: P1 delivery to on-call and incident channel,
     acknowledgement within ten minutes, and secondary escalation receipts. All
     deliveries, acknowledgement, and escalation must follow emission; recorded
@@ -966,7 +1035,14 @@ All nine gates must be `present`, current, and authoritative:
 
 After all gates pass, the signed or live `release_decision` must include exactly
 the legal, operations, product, and security owner approvals. Its approval and
-observation times must be after the newest gate observation.
+observation times must be at or after the newest gate observation. Release
+evidence uses the backwards-incompatible
+`cas_harness_customer_production_release_decision_evidence.v1` schema and must
+carry an exact `evidence_hashes` object with one SHA-256 for every one of the
+nine `required_gates`. The canonical human-attestation binding includes that
+complete map, every release approval/decision attestation must be at or after
+`approved_at_utc`, and the final verifier compares the map byte-identity hashes
+to the exact nine authoritative documents or receipts it dereferenced.
 
 ## Time and freshness rules
 

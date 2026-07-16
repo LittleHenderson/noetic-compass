@@ -434,6 +434,7 @@ def _production_authority(
                     state_store,
                     accounts=account_store,
                     billing=billing_store,
+                    entitlements=entitlement_store,
                     pseudonymizer=customer_production_pseudonymizer,
                 )
             )

@@ -45,6 +45,8 @@ from api.services.customer_production_acceptance_authority import (
     AcceptanceAuthorityAuthorizationUnavailable,
     AcceptanceAuthorityInvalid,
     CustomerProductionAcceptanceAuthorityStore,
+    RELEASE_DECISION_EVIDENCE_HASH_GATES,
+    RELEASE_DECISION_EVIDENCE_SCHEMA_VERSION,
     canonicalize_acceptance_evidence,
 )
 from api.services.customer_production_pseudonyms import (
@@ -168,7 +170,11 @@ def _legal_evidence(now: datetime, *, evidence_master: str = MASTER) -> dict[str
 def _base_evidence(gate: str, now: datetime) -> dict[str, object]:
     stamp = now.strftime("%Y-%m-%dT%H:%M:%SZ")
     return {
-        "schema_version": "cas_harness_customer_production_gate_evidence.v3",
+        "schema_version": (
+            RELEASE_DECISION_EVIDENCE_SCHEMA_VERSION
+            if gate == "release_decision"
+            else "cas_harness_customer_production_gate_evidence.v3"
+        ),
         "gate": gate,
         "environment": "public-production",
         "repository": "LittleHenderson/noetic-compass",
@@ -308,6 +314,10 @@ def _release_evidence(now: datetime) -> dict[str, object]:
                 "product_owner",
                 "security_owner",
             ],
+            "evidence_hashes": {
+                gate: hashlib.sha256(f"required-gate:{gate}".encode()).hexdigest()
+                for gate in RELEASE_DECISION_EVIDENCE_HASH_GATES
+            },
             "decision_record_uri": (
                 f"{publisher.PRODUCTION_API_ORIGIN}/internal/decisions/release"
             ),
@@ -362,6 +372,119 @@ def _incident_evidence(now: datetime) -> dict[str, object]:
         }
     )
     return evidence
+
+
+def test_human_attestation_graphs_cannot_predate_the_facts_they_approve() -> None:
+    observed = NOW + timedelta(minutes=10)
+    incident_closed = NOW + timedelta(minutes=5)
+    tabletop_completed = NOW + timedelta(minutes=6)
+    release_approved = NOW + timedelta(minutes=5)
+
+    def incident() -> dict[str, object]:
+        evidence = _incident_evidence(NOW)
+        evidence["observed_at_utc"] = observed.strftime("%Y-%m-%dT%H:%M:%SZ")
+        evidence["incident"]["closed_at_utc"] = incident_closed.strftime(  # type: ignore[index]
+            "%Y-%m-%dT%H:%M:%SZ"
+        )
+        evidence["tabletop"]["completed_at_utc"] = tabletop_completed.strftime(  # type: ignore[index]
+            "%Y-%m-%dT%H:%M:%SZ"
+        )
+        return evidence
+
+    def release() -> dict[str, object]:
+        evidence = _release_evidence(NOW)
+        evidence["observed_at_utc"] = observed.strftime("%Y-%m-%dT%H:%M:%SZ")
+        evidence["approved_at_utc"] = release_approved.strftime(
+            "%Y-%m-%dT%H:%M:%SZ"
+        )
+        return evidence
+
+    before_incident = incident_closed - timedelta(minutes=1)
+    before_tabletop = tabletop_completed - timedelta(minutes=1)
+    before_release = release_approved - timedelta(minutes=1)
+    incident_closure_roles = ("incident_commander", "operations", "security")
+    tabletop_roles = (
+        "incident_commander",
+        "legal",
+        "operations",
+        "security",
+        "support",
+    )
+    release_roles = (
+        "legal_owner",
+        "operations_owner",
+        "product_owner",
+        "security_owner",
+    )
+    cases = (
+        (
+            "incident closure support",
+            incident,
+            {("incident_closure", "operations"): before_incident},
+        ),
+        (
+            "incident postmortem aggregate",
+            incident,
+            {
+                **{
+                    ("incident_closure", role): before_incident
+                    for role in incident_closure_roles
+                },
+                ("incident_postmortem", "incident_commander"): before_incident,
+            },
+        ),
+        (
+            "tabletop completion support",
+            incident,
+            {("tabletop_completion", "support"): before_tabletop},
+        ),
+        (
+            "tabletop evidence aggregate",
+            incident,
+            {
+                **{
+                    ("tabletop_completion", role): before_tabletop
+                    for role in tabletop_roles
+                },
+                ("tabletop_evidence", "incident_commander"): before_tabletop,
+            },
+        ),
+        (
+            "release approval support",
+            release,
+            {("release_approval", "security_owner"): before_release},
+        ),
+        (
+            "release decision aggregate",
+            release,
+            {
+                **{
+                    ("release_approval", role): before_release
+                    for role in release_roles
+                },
+                ("release_decision_record", "product_owner"): before_release,
+            },
+        ),
+    )
+
+    for label, evidence_factory, overrides in cases:
+        backend = InMemoryStateStore()
+        evidence = evidence_factory()
+        gate = str(evidence["gate"])
+        canonicalize_acceptance_evidence(gate, evidence, now=observed)
+        attestations = materialize_human_attestations(
+            backend,
+            evidence,
+            attested_at_overrides=overrides,
+        )
+        authority = CustomerProductionAcceptanceAuthorityStore(
+            backend, human_attestation_store=attestations
+        )
+        with pytest.raises(
+            AcceptanceAuthorityInvalid,
+            match="invalid or revoked attestation",
+        ):
+            authority.assert_human_attestations(gate, evidence, now=observed)
 
 
 @pytest.mark.parametrize(

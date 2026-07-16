@@ -16,6 +16,7 @@ from api.services.billing_entitlements import (
     BILLING_PLATFORM_TENANT,
     WEBHOOK_EVENT_KIND,
     BillingEntitlementStore,
+    canonical_event_bytes,
 )
 from api.services.billing_reconciliation import UsageDispatchContract
 from api.services.production.state_substrate import InMemoryStateStore
@@ -26,6 +27,7 @@ from api.services.stripe_billing import (
     StripeBillingProviderError,
     SubscriptionSnapshot,
 )
+from tests.billing_test_support import install_verified_stripe_subscription
 
 
 class _AccountStore:
@@ -79,10 +81,23 @@ class _Provider:
         self.portal_calls.append(kwargs)
         return PortalSessionResult(url="https://billing.stripe.com/p/session/test")
 
+    def signed_payload(self) -> bytes:
+        self._prepare_webhook_event()
+        assert self.webhook_event is not None
+        return canonical_event_bytes(self.webhook_event)
+
+    def _prepare_webhook_event(self) -> None:
+        assert self.webhook_event is not None
+        self.webhook_event.setdefault("livemode", True)
+        data = self.webhook_event.get("data")
+        obj = data.get("object") if isinstance(data, dict) else None
+        if isinstance(obj, dict):
+            obj.setdefault("livemode", True)
+
     def construct_webhook_event(self, *, payload: bytes, signature: str):
         assert signature == "signed-test-event"
         self.observed_payload = payload
-        assert self.webhook_event is not None
+        self._prepare_webhook_event()
         return self.webhook_event
 
     async def retrieve_subscription(self, *, external_subscription_id: str):
@@ -92,11 +107,13 @@ class _Provider:
 
             raise StripeBillingProviderError("simulated Stripe refresh outage")
         assert self.webhook_event is not None
+        payload = dict(
+            self.latest_subscription
+            or self.webhook_event["data"]["object"]  # type: ignore[index]
+        )
+        payload.setdefault("livemode", True)
         return SubscriptionSnapshot(
-            payload=(
-                self.latest_subscription
-                or self.webhook_event["data"]["object"]  # type: ignore[index]
-            ),
+            payload=payload,
             provider_request_id="req_refresh_test",
         )
 
@@ -159,6 +176,49 @@ class _Reconciliation:
     ):
         self.resolve_calls.append((tenant_id, reconciliation_ref))
         return self.invoice_by_tenant_and_ref.get((tenant_id, reconciliation_ref))
+
+
+def _exact_seed_subscription_event(
+    subscription,
+    *,
+    event_id: str,
+    event_created: int,
+    period_start: datetime,
+    period_end: datetime,
+    status: str = "active",
+) -> dict[str, object]:
+    """Reconstruct the exact event emitted by the shared lineage test builder."""
+
+    return {
+        "id": event_id,
+        "type": "customer.subscription.updated",
+        "created": event_created,
+        "livemode": True,
+        "data": {
+            "object": {
+                "id": subscription.external_subscription_id,
+                "customer": subscription.external_customer_id,
+                "livemode": True,
+                "status": status,
+                "metadata": {
+                    "cas_tenant_id": subscription.tenant_id,
+                    "cas_account_id": subscription.billing_account_id,
+                    "cas_plan_id": subscription.plan_id,
+                    "cas_checkout_request_id": subscription.checkout_request_id,
+                },
+                "items": {
+                    "data": [
+                        {
+                            "price": {"id": "price_pro"},
+                            "current_period_start": period_start.isoformat(),
+                            "current_period_end": period_end.isoformat(),
+                        }
+                    ]
+                },
+                "cancel_at_period_end": False,
+            }
+        },
+    }
 
 
 @pytest.fixture
@@ -260,6 +320,7 @@ def test_checkout_requires_role_and_uses_server_identity(billing_client) -> None
             "email": "owner@example.com",
             "plan_id": "professional_live",
             "external_customer_id": None,
+            "checkout_request_id": "request_0123456789",
             "idempotency_key": (
                 "cas-checkout:tenant-a:professional_live:request_0123456789"
             ),
@@ -279,17 +340,14 @@ def test_checkout_requires_role_and_uses_server_identity(billing_client) -> None
 def test_portal_requires_server_linked_customer(billing_client) -> None:
     client, store, provider = billing_client
     assert client.post("/billing/portal").status_code == 409
-    store.apply_stripe_subscription(
+    install_verified_stripe_subscription(
+        store,
         tenant_id="tenant-a",
-        plan_id="professional_live",
-        status="active",
-        external_customer_id="cus_a",
-        external_subscription_id="sub_a",
+        billing_account_id="acct-a",
+        customer_id="cus_a",
+        subscription_id="sub_a",
         event_id="evt_portal",
         event_created=1,
-        current_period_start=datetime.now(UTC).isoformat(),
-        current_period_end=(datetime.now(UTC) + timedelta(days=30)).isoformat(),
-        cancel_at_period_end=False,
     )
     response = client.post("/billing/portal")
     assert response.status_code == 200
@@ -316,6 +374,41 @@ def test_webhook_requires_signature_and_applies_only_verified_event(billing_clie
         ).status_code
         == 413
     )
+    checkout_request_id = "request_webhook_012345"
+    checkout = client.post(
+        "/billing/checkout",
+        json={
+            "plan_id": "professional_live",
+            "request_id": checkout_request_id,
+        },
+    )
+    assert checkout.status_code == 200
+    provider.webhook_event = {
+        "id": "evt_route_checkout_complete",
+        "type": "checkout.session.completed",
+        "created": 0,
+        "data": {
+            "object": {
+                "id": "cs_test_server_derived",
+                "customer": "cus_route",
+                "subscription": "sub_route",
+                "mode": "subscription",
+                "client_reference_id": "tenant-a",
+                "metadata": {
+                    "cas_tenant_id": "tenant-a",
+                    "cas_account_id": "acct-a",
+                    "cas_plan_id": "professional_live",
+                    "cas_checkout_request_id": checkout_request_id,
+                },
+            }
+        },
+    }
+    completion = client.post(
+        "/billing/webhook/stripe",
+        content=provider.signed_payload(),
+        headers={"Stripe-Signature": "signed-test-event"},
+    )
+    assert completion.status_code == 200
     provider.webhook_event = {
         "id": "evt_route",
         "type": "customer.subscription.updated",
@@ -325,7 +418,12 @@ def test_webhook_requires_signature_and_applies_only_verified_event(billing_clie
                 "id": "sub_route",
                 "customer": "cus_route",
                 "status": "active",
-                "metadata": {"cas_tenant_id": "tenant-a"},
+                "metadata": {
+                    "cas_tenant_id": "tenant-a",
+                    "cas_account_id": "acct-a",
+                    "cas_plan_id": "professional_live",
+                    "cas_checkout_request_id": checkout_request_id,
+                },
                 "items": {
                     "data": [
                         {
@@ -344,7 +442,7 @@ def test_webhook_requires_signature_and_applies_only_verified_event(billing_clie
         **provider.webhook_event["data"]["object"],  # type: ignore[index]
         "status": "canceled",
     }
-    raw = b'{"the":"raw body must survive"}'
+    raw = provider.signed_payload()
     response = client.post(
         "/billing/webhook/stripe",
         content=raw,
@@ -372,6 +470,333 @@ def test_webhook_requires_signature_and_applies_only_verified_event(billing_clie
     assert provider.retrieved_subscription_ids == ["sub_route"]
 
 
+def test_same_event_race_rechecks_applied_receipt_under_attempt_lease(
+    billing_client, monkeypatch
+) -> None:
+    """A stale first preflight cannot overwrite a just-applied row with pending."""
+
+    client, store, provider = billing_client
+    now = datetime.now(UTC).replace(microsecond=0)
+    start = now - timedelta(days=1)
+    end = now + timedelta(days=30)
+    event_id = "evt_same_delivery_race"
+    event_created = 77
+    subscription, _ = install_verified_stripe_subscription(
+        store,
+        customer_id="cus_same_delivery_race",
+        subscription_id="sub_same_delivery_race",
+        price_id="price_pro",
+        event_id=event_id,
+        event_created=event_created,
+        period_start=start,
+        period_end=end,
+    )
+    provider.webhook_event = _exact_seed_subscription_event(
+        subscription,
+        event_id=event_id,
+        event_created=event_created,
+        period_start=start,
+        period_end=end,
+    )
+    real_preflight = store.preflight_webhook_event
+    preflight_calls = 0
+
+    def stale_then_current_preflight(**kwargs):
+        nonlocal preflight_calls
+        preflight_calls += 1
+        record = real_preflight(**kwargs)
+        assert record is not None
+        if preflight_calls == 1:
+            # Delivery B started while A's receipt was open. A then finished
+            # and released before B acquired; B's first read is now stale.
+            payload = dict(record.payload)
+            payload["state"] = "received"
+            for field in (
+                "tenant_id",
+                "detail",
+                "finished_at",
+                "applied_subscription_facts_sha256",
+            ):
+                payload.pop(field, None)
+            return record.with_payload(payload)
+        return record
+
+    monkeypatch.setattr(
+        store, "preflight_webhook_event", stale_then_current_preflight
+    )
+    response = client.post(
+        "/billing/webhook/stripe",
+        content=provider.signed_payload(),
+        headers={"Stripe-Signature": "signed-test-event"},
+    )
+    assert response.status_code == 200
+    assert response.json() == {
+        "event_id": event_id,
+        "applied": False,
+        "duplicate": True,
+    }
+    assert preflight_calls == 2
+    assert provider.retrieved_subscription_ids == []
+    final = store.get_subscription("tenant-a")
+    assert final is not None
+    assert final.status == "active"
+    assert final.provider_event_id == event_id
+    assert store.resolve_entitlement("tenant-a").can_run_live_audit is True
+
+
+def test_applied_receipt_same_event_pending_split_is_not_blindly_acked(
+    billing_client,
+) -> None:
+    client, store, provider = billing_client
+    now = datetime.now(UTC).replace(microsecond=0)
+    start = now - timedelta(days=1)
+    end = now + timedelta(days=30)
+    event_id = "evt_applied_pending_split"
+    event_created = 78
+    subscription, _ = install_verified_stripe_subscription(
+        store,
+        customer_id="cus_applied_pending_split",
+        subscription_id="sub_applied_pending_split",
+        price_id="price_pro",
+        event_id=event_id,
+        event_created=event_created,
+        period_start=start,
+        period_end=end,
+    )
+    provider.webhook_event = _exact_seed_subscription_event(
+        subscription,
+        event_id=event_id,
+        event_created=event_created,
+        period_start=start,
+        period_end=end,
+    )
+    record = store._store.get(  # noqa: SLF001 - injected legacy crash split
+        "tenant-a", "billing_subscription", "current"
+    )
+    assert record is not None
+    payload = dict(record.payload)
+    payload.update(
+        {
+            "status": "pending_provider_revalidation",
+            "provider_refresh_facts_sha256": None,
+            "provider_refreshed_object_sha256": None,
+            "quarantine_reason": "injected receipt/row crash split",
+        }
+    )
+    store._store.put(  # noqa: SLF001 - injected legacy crash split
+        record.with_payload(payload), expected_version=record.version
+    )
+
+    response = client.post(
+        "/billing/webhook/stripe",
+        content=provider.signed_payload(),
+        headers={"Stripe-Signature": "signed-test-event"},
+    )
+    assert response.status_code == 409
+    assert "contradicts current subscription state" in response.text
+    assert provider.retrieved_subscription_ids == []
+    assert store.resolve_entitlement("tenant-a").can_run_live_audit is False
+
+
+def test_historical_applied_duplicate_is_acked_after_proven_superseding_event(
+    billing_client,
+) -> None:
+    client, store, provider = billing_client
+    now = datetime.now(UTC).replace(microsecond=0)
+    start = now - timedelta(days=1)
+    end = now + timedelta(days=30)
+    old, _ = install_verified_stripe_subscription(
+        store,
+        customer_id="cus_historical_duplicate",
+        subscription_id="sub_historical_duplicate",
+        price_id="price_pro",
+        event_id="evt_historical_old",
+        event_created=79,
+        period_start=start,
+        period_end=end,
+    )
+    old_event = _exact_seed_subscription_event(
+        old,
+        event_id="evt_historical_old",
+        event_created=79,
+        period_start=start,
+        period_end=end,
+    )
+    current, _ = install_verified_stripe_subscription(
+        store,
+        customer_id="cus_historical_duplicate",
+        subscription_id="sub_historical_duplicate",
+        price_id="price_pro",
+        event_id="evt_historical_current",
+        event_created=80,
+        period_start=start,
+        period_end=end,
+    )
+    assert current.provider_event_id == "evt_historical_current"
+    provider.webhook_event = old_event
+    response = client.post(
+        "/billing/webhook/stripe",
+        content=provider.signed_payload(),
+        headers={"Stripe-Signature": "signed-test-event"},
+    )
+    assert response.status_code == 200
+    assert response.json() == {
+        "event_id": "evt_historical_old",
+        "applied": False,
+        "duplicate": True,
+    }
+    assert provider.retrieved_subscription_ids == []
+    final = store.get_subscription("tenant-a")
+    assert final is not None
+    assert final.provider_event_id == "evt_historical_current"
+
+
+def test_replaced_subscription_allows_late_applied_duplicate_of_old_subscription(
+    billing_client,
+) -> None:
+    client, store, provider = billing_client
+    now = datetime.now(UTC).replace(microsecond=0)
+    start = now - timedelta(days=1)
+    end = now + timedelta(days=30)
+    old, _ = install_verified_stripe_subscription(
+        store,
+        customer_id="cus_replaced_old",
+        subscription_id="sub_replaced_old",
+        price_id="price_pro",
+        status="canceled",
+        event_id="evt_replaced_old",
+        event_created=81,
+        period_start=start,
+        period_end=end,
+        checkout_now=now - timedelta(days=2),
+    )
+    old_event = _exact_seed_subscription_event(
+        old,
+        event_id="evt_replaced_old",
+        event_created=81,
+        period_start=start,
+        period_end=end,
+        status="canceled",
+    )
+    current, _ = install_verified_stripe_subscription(
+        store,
+        customer_id="cus_replaced_current",
+        subscription_id="sub_replaced_current",
+        price_id="price_pro",
+        event_id="evt_replaced_current",
+        event_created=82,
+        period_start=start,
+        period_end=end,
+        checkout_now=now,
+    )
+    assert current.external_subscription_id == "sub_replaced_current"
+    assert store.resolve_entitlement("tenant-a").can_run_live_audit is True
+
+    provider.webhook_event = old_event
+    response = client.post(
+        "/billing/webhook/stripe",
+        content=provider.signed_payload(),
+        headers={"Stripe-Signature": "signed-test-event"},
+    )
+    assert response.status_code == 200
+    assert response.json() == {
+        "event_id": "evt_replaced_old",
+        "applied": False,
+        "duplicate": True,
+    }
+    assert provider.retrieved_subscription_ids == []
+    final = store.get_subscription("tenant-a")
+    assert final is not None
+    assert final.external_subscription_id == "sub_replaced_current"
+    assert final.provider_event_id == "evt_replaced_current"
+
+
+def test_subscription_delivery_before_checkout_completion_returns_retryable_422(
+    billing_client,
+) -> None:
+    client, store, provider = billing_client
+    request_id = "request_route_out_of_order"
+    subscription_event = {
+        "id": "evt_route_out_of_order",
+        "type": "customer.subscription.created",
+        "created": 1,
+        "data": {
+            "object": {
+                "id": "sub_route_out_of_order",
+                "customer": "cus_route_out_of_order",
+                "status": "active",
+                "metadata": {
+                    "cas_tenant_id": "tenant-a",
+                    "cas_account_id": "acct-a",
+                    "cas_plan_id": "professional_live",
+                    "cas_checkout_request_id": request_id,
+                },
+                "items": {
+                    "data": [
+                        {
+                            "price": {"id": "price_pro"},
+                            "current_period_start": 1_700_000_000,
+                            "current_period_end": 4_000_000_000,
+                        }
+                    ]
+                },
+                "cancel_at_period_end": False,
+            }
+        },
+    }
+    provider.webhook_event = subscription_event
+    raw = provider.signed_payload()
+    unresolved = client.post(
+        "/billing/webhook/stripe",
+        content=raw,
+        headers={"Stripe-Signature": "signed-test-event"},
+    )
+    assert unresolved.status_code == 422
+    receipt = store._store.get(  # noqa: SLF001 - retry receipt assertion
+        BILLING_PLATFORM_TENANT,
+        WEBHOOK_EVENT_KIND,
+        "evt_route_out_of_order",
+    )
+    assert receipt is not None and receipt.payload["state"] == "unresolved"
+
+    checkout = client.post(
+        "/billing/checkout",
+        json={"plan_id": "professional_live", "request_id": request_id},
+    )
+    assert checkout.status_code == 200
+    provider.webhook_event = {
+        "id": "evt_route_out_of_order_checkout_complete",
+        "type": "checkout.session.completed",
+        "created": 2,
+        "data": {
+            "object": {
+                "id": "cs_test_server_derived",
+                "customer": "cus_route_out_of_order",
+                "subscription": "sub_route_out_of_order",
+                "mode": "subscription",
+                "client_reference_id": "tenant-a",
+                "metadata": subscription_event["data"]["object"]["metadata"],  # type: ignore[index]
+            }
+        },
+    }
+    completed = client.post(
+        "/billing/webhook/stripe",
+        content=provider.signed_payload(),
+        headers={"Stripe-Signature": "signed-test-event"},
+    )
+    assert completed.status_code == 200
+    provider.webhook_event = subscription_event
+    retried = client.post(
+        "/billing/webhook/stripe",
+        content=raw,
+        headers={"Stripe-Signature": "signed-test-event"},
+    )
+    assert retried.status_code == 200
+    subscription = store.get_subscription("tenant-a")
+    assert subscription is not None
+    assert subscription.billing_account_id == "acct-a"
+
+
 def test_webhook_receipt_precedes_provider_refresh_failure(billing_client) -> None:
     client, store, provider = billing_client
     provider.webhook_event = {
@@ -381,7 +806,7 @@ def test_webhook_receipt_precedes_provider_refresh_failure(billing_client) -> No
         "data": {"object": {"id": "sub_refresh_crash"}},
     }
     provider.retrieve_error = True
-    raw = b'{"signed":"snapshot"}'
+    raw = provider.signed_payload()
     response = client.post(
         "/billing/webhook/stripe",
         content=raw,
@@ -397,6 +822,146 @@ def test_webhook_receipt_precedes_provider_refresh_failure(billing_client) -> No
     assert store.get_subscription("tenant-a") is None
 
 
+def test_provider_refresh_outage_suspends_access_until_exact_recovery(
+    billing_client,
+) -> None:
+    client, store, provider = billing_client
+    seeded, _ = install_verified_stripe_subscription(
+        store,
+        customer_id="cus_outage",
+        subscription_id="sub_outage",
+        event_id="evt_outage_seed",
+        event_created=1,
+    )
+    provider.webhook_event = {
+        "id": "evt_refresh_outage",
+        "type": "customer.subscription.updated",
+        "created": 2,
+        "data": {"object": {"id": "sub_outage"}},
+    }
+    provider.retrieve_error = True
+    response = client.post(
+        "/billing/webhook/stripe",
+        content=provider.signed_payload(),
+        headers={"Stripe-Signature": "signed-test-event"},
+    )
+    assert response.status_code == 502
+    subscription = store.get_subscription("tenant-a")
+    assert subscription is not None
+    assert subscription.status == "pending_provider_revalidation"
+    assert store.resolve_entitlement("tenant-a").can_run_live_audit is False
+    receipt = store._store.get(  # noqa: SLF001 - durable retry assertion
+        BILLING_PLATFORM_TENANT, WEBHOOK_EVENT_KIND, "evt_refresh_outage"
+    )
+    assert receipt is not None and receipt.payload["state"] == "unresolved"
+
+    provider.retrieve_error = False
+    provider.latest_subscription = {
+        "id": "sub_outage",
+        "customer": "cus_outage",
+        "livemode": True,
+        "status": "active",
+        "metadata": {
+            "cas_tenant_id": "tenant-a",
+            "cas_account_id": "acct-a",
+            "cas_plan_id": "professional_live",
+            "cas_checkout_request_id": seeded.checkout_request_id,
+        },
+        "items": {
+            "data": [
+                {
+                    "price": {"id": "price_pro"},
+                    "current_period_start": 1_700_000_000,
+                    "current_period_end": 4_000_000_000,
+                }
+            ]
+        },
+        "cancel_at_period_end": False,
+    }
+    recovered = client.post(
+        "/billing/webhook/stripe",
+        content=provider.signed_payload(),
+        headers={"Stripe-Signature": "signed-test-event"},
+    )
+    assert recovered.status_code == 200
+    subscription = store.get_subscription("tenant-a")
+    assert subscription is not None and subscription.status == "active"
+    assert store.resolve_entitlement("tenant-a").can_run_live_audit is True
+
+
+def test_locked_provider_drift_quarantines_and_exact_snapshot_recovers(
+    billing_client,
+) -> None:
+    client, store, provider = billing_client
+    subscription, _ = install_verified_stripe_subscription(
+        store,
+        customer_id="cus_quarantine",
+        subscription_id="sub_quarantine",
+        event_id="evt_quarantine_seed",
+        event_created=1,
+    )
+    metadata = {
+        "cas_tenant_id": "tenant-a",
+        "cas_account_id": "acct-a",
+        "cas_plan_id": "professional_live",
+        "cas_checkout_request_id": subscription.checkout_request_id,
+    }
+    exact_object = {
+        "id": "sub_quarantine",
+        "customer": "cus_quarantine",
+        "status": "active",
+        "metadata": metadata,
+        "items": {
+            "data": [
+                {
+                    "price": {"id": "price_pro"},
+                    "current_period_start": 1_700_000_000,
+                    "current_period_end": 4_000_000_000,
+                }
+            ]
+        },
+        "cancel_at_period_end": False,
+    }
+    provider.webhook_event = {
+        "id": "evt_quarantine_drift",
+        "type": "customer.subscription.updated",
+        "created": 2,
+        "data": {"object": exact_object},
+    }
+    provider.latest_subscription = {
+        **exact_object,
+        "metadata": {**metadata, "cas_account_id": "acct-cross-wired"},
+    }
+    drift = client.post(
+        "/billing/webhook/stripe",
+        content=provider.signed_payload(),
+        headers={"Stripe-Signature": "signed-test-event"},
+    )
+    assert drift.status_code == 409
+    quarantined = store.get_subscription("tenant-a")
+    assert quarantined is not None and quarantined.status == "quarantined"
+    assert quarantined.provider_refreshed_object_sha256
+    assert store.resolve_entitlement("tenant-a").can_run_live_audit is False
+
+    provider.webhook_event = {
+        "id": "evt_quarantine_repair",
+        "type": "customer.subscription.updated",
+        "created": 3,
+        "data": {"object": exact_object},
+    }
+    provider.latest_subscription = exact_object
+    repaired = client.post(
+        "/billing/webhook/stripe",
+        content=provider.signed_payload(),
+        headers={"Stripe-Signature": "signed-test-event"},
+    )
+    assert repaired.status_code == 200
+    recovered = store.get_subscription("tenant-a")
+    assert recovered is not None and recovered.status == "active"
+    assert recovered.quarantine_reason is None
+    assert store.resolve_entitlement("tenant-a").can_run_live_audit is True
+
+
 def test_paid_invoice_webhook_reconciles_before_terminal_ack_and_is_idempotent(
     billing_client, monkeypatch
 ) -> None:
@@ -410,7 +975,7 @@ def test_paid_invoice_webhook_reconciles_before_terminal_ack_and_is_idempotent(
         "created": 1_900_000_000,
         "data": {"object": {"id": "in_paid_route"}},
     }
-    raw = b'{"signed":"invoice.paid"}'
+    raw = provider.signed_payload()
 
     response = client.post(
         "/billing/webhook/stripe",
@@ -471,7 +1036,7 @@ def test_unresolved_paid_invoice_remains_retryable_until_exact_match(
         "created": 1_900_000_000,
         "data": {"object": {"id": "in_paid_retry"}},
     }
-    raw = b'{"signed":"invoice.retry"}'
+    raw = provider.signed_payload()
 
     unresolved = client.post(
         "/billing/webhook/stripe",
