@@ -340,6 +340,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         if (
             app.state.acceptance_authority_store is not None
             and app.state.account_store is not None
+            and app.state.billing_entitlement_store is not None
             and app.state.billing_reconciliation_store is not None
             and app.state.customer_production_pseudonymizer is not None
         ):
@@ -352,6 +353,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
                     shared_store,
                     accounts=app.state.account_store,
                     billing=app.state.billing_reconciliation_store,
+                    entitlements=app.state.billing_entitlement_store,
                     pseudonymizer=(
                         app.state.customer_production_pseudonymizer
                     ),

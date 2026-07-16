@@ -230,6 +230,7 @@ def test_postgres_passes_state_store_contract(pg_admin):
     # (Cross-object SHARED storage is exercised separately by the reconnect tests via
     # the single-schema ``pg_schema`` fixture, which is where shared state is correct.)
     from api.services.production.state_substrate.postgres_store import PostgresStateStore
+    from tests.billing_test_support import install_verified_stripe_subscription
 
     created: list[str] = []
 
@@ -427,6 +428,7 @@ def test_billing_reconciliation_races_fail_closed_across_independent_connections
         UsageOutboxRecord,
     )
     from api.services.production.state_substrate.postgres_store import PostgresStateStore
+    from tests.billing_test_support import install_verified_stripe_subscription
 
     first_store = PostgresStateStore(pg_schema)
     second_store = PostgresStateStore(pg_schema)
@@ -436,22 +438,17 @@ def test_billing_reconciliation_races_fail_closed_across_independent_connections
         now = datetime.now(UTC).replace(microsecond=0)
         period_start = now - timedelta(days=1)
         period_end = now + timedelta(days=30)
-        first_entitlements.grant_manual_comped(
+        install_verified_stripe_subscription(
+            first_entitlements,
             tenant_id="tenant-billing-race",
             billing_account_id="account-billing-race",
-            expires_at=period_end.isoformat(),
-        )
-        first_entitlements.apply_stripe_subscription(
-            tenant_id="tenant-billing-race",
-            plan_id="professional_live",
-            status="active",
-            external_customer_id="cus_IndependentRace",
-            external_subscription_id="sub_IndependentRace",
+            customer_id="cus_IndependentRace",
+            subscription_id="sub_IndependentRace",
             event_id="evt_IndependentRace",
             event_created=int(now.timestamp()),
-            current_period_start=period_start.isoformat(),
-            current_period_end=period_end.isoformat(),
-            cancel_at_period_end=False,
+            livemode=False,
+            period_start=period_start,
+            period_end=period_end,
         )
 
         def service(store, entitlements):
@@ -587,6 +584,88 @@ def test_billing_reconciliation_races_fail_closed_across_independent_connections
                     tenant_id=usage.tenant_id,
                     usage_id=usage.usage_id,
                 )
+    finally:
+        second_store.close()
+        first_store.close()
+
+
+def test_billing_lineage_and_active_entitlement_survive_postgres_restart(pg_schema):
+    """The exact Checkout/webhook/refresh chain survives a new app instance."""
+
+    from api.services.billing_entitlements import BillingEntitlementStore
+    from api.services.production.state_substrate.postgres_store import PostgresStateStore
+    from tests.billing_test_support import install_verified_stripe_subscription
+
+    now = datetime.now(UTC).replace(microsecond=0)
+    first_store = PostgresStateStore(pg_schema)
+    try:
+        first_entitlements = BillingEntitlementStore(first_store)
+        subscription, _ = install_verified_stripe_subscription(
+            first_entitlements,
+            tenant_id="tenant-billing-restart",
+            billing_account_id="account-billing-restart",
+            customer_id="cus_PostgresRestart",
+            subscription_id="sub_PostgresRestart",
+            event_id="evt_PostgresRestart",
+            event_created=int(now.timestamp()),
+            period_start=now,
+            period_end=now + timedelta(days=30),
+        )
+        first_entitlements.assert_subscription_provenance(subscription)
+    finally:
+        first_store.close()
+
+    second_store = PostgresStateStore(pg_schema)
+    try:
+        second_entitlements = BillingEntitlementStore(second_store)
+        restored = second_entitlements.get_subscription("tenant-billing-restart")
+        assert restored is not None
+        second_entitlements.assert_subscription_provenance(restored)
+        assert (
+            second_entitlements.resolve_entitlement("tenant-billing-restart")
+            .can_run_live_audit
+            is True
+        )
+    finally:
+        second_store.close()
+
+
+def test_billing_same_event_attempts_are_unique_and_advance_postgres_fence(
+    pg_schema,
+):
+    """The billing wrapper does not trigger same-holder lease re-acquire."""
+
+    from api.services.billing_entitlements import (
+        BillingEntitlementError,
+        BillingEntitlementStore,
+    )
+    from api.services.production.state_substrate.postgres_store import PostgresStateStore
+
+    first_store = PostgresStateStore(pg_schema)
+    second_store = PostgresStateStore(pg_schema)
+    try:
+        first = BillingEntitlementStore(first_store)
+        second = BillingEntitlementStore(second_store)
+        first_attempt = first.acquire_subscription_refresh_lock(
+            external_subscription_id="sub_PostgresSameEvent",
+            event_id="evt_PostgresSameEvent",
+        )
+        assert first_attempt.fence > 0
+        with pytest.raises(
+            BillingEntitlementError, match="another subscription refresh"
+        ):
+            second.acquire_subscription_refresh_lock(
+                external_subscription_id="sub_PostgresSameEvent",
+                event_id="evt_PostgresSameEvent",
+            )
+        first.release_subscription_refresh_lock(first_attempt)
+        second_attempt = second.acquire_subscription_refresh_lock(
+            external_subscription_id="sub_PostgresSameEvent",
+            event_id="evt_PostgresSameEvent",
+        )
+        assert second_attempt.holder != first_attempt.holder
+        assert second_attempt.fence > first_attempt.fence
+        second.release_subscription_refresh_lock(second_attempt)
     finally:
         second_store.close()
         first_store.close()

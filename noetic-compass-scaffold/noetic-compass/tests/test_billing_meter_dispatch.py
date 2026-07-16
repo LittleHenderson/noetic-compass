@@ -19,6 +19,7 @@ from api.services.billing_reconciliation import (
     FleetUsageMeasurement,
 )
 from api.services.production.state_substrate import InMemoryStateStore
+from tests.billing_test_support import install_verified_stripe_subscription
 
 
 class _Provider:
@@ -86,22 +87,17 @@ def _service(
     if seed_entitlements:
         for suffix, tenant in enumerate(tenants):
             account = f"acct-{suffix}"
-            entitlements.grant_manual_comped(
+            install_verified_stripe_subscription(
+                entitlements,
                 tenant_id=tenant,
                 billing_account_id=account,
-                expires_at=(now + timedelta(days=30)).isoformat(),
-            )
-            entitlements.apply_stripe_subscription(
-                tenant_id=tenant,
-                plan_id="professional_live",
-                status="active",
-                external_customer_id=f"cus_Customer{suffix}",
-                external_subscription_id=f"sub_Subscription{suffix}",
+                customer_id=f"cus_Customer{suffix}",
+                subscription_id=f"sub_Subscription{suffix}",
                 event_id=f"evt_Subscription{suffix}",
                 event_created=suffix + 1,
-                current_period_start=(now - timedelta(days=1)).isoformat(),
-                current_period_end=(now + timedelta(days=30)).isoformat(),
-                cancel_at_period_end=False,
+                livemode=livemode,
+                period_start=now - timedelta(days=1),
+                period_end=now + timedelta(days=30),
             )
     return BillingReconciliationStore(
         backend,

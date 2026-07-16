@@ -54,8 +54,10 @@ from urllib.parse import urlsplit
 from uuid import uuid4
 
 from api.services.billing_entitlements import (
+    BillingEntitlementError,
     BillingEntitlementStore,
     SubscriptionRecord,
+    subscription_status_period_is_current,
 )
 from api.services.production.state_substrate.interface import (
     LeaseHeld,
@@ -1384,6 +1386,17 @@ class BillingReconciliationStore:
                     raise BillingReconciliationError("usage record not found")
                 current = self._usage_from_record(existing)
                 self.require_active_usage_dispatch_contract(current)
+                subscription = self._stripe_subscription_for_tenant(tenant_id)
+                if (
+                    subscription.billing_account_id != current.billing_account_id
+                    or subscription.external_customer_id
+                    != current.external_customer_id
+                    or subscription.external_subscription_id
+                    != current.external_subscription_id
+                ):
+                    raise BillingReconciliationConflict(
+                        "pending usage identity contradicts the current live subscription"
+                    )
                 if current.outbox_state == "submitted":
                     raise BillingReconciliationConflict(
                         "submitted usage cannot become delivery uncertain"
@@ -2402,10 +2415,17 @@ class BillingReconciliationStore:
         self, tenant_id: str
     ) -> SubscriptionRecord:
         tenant = _required_text(tenant_id, "tenant_id")
-        subscription = self._entitlements.get_subscription(tenant)
+        try:
+            subscription = self._entitlements.get_subscription(tenant)
+        except (BillingEntitlementError, ValueError, TypeError) as exc:
+            raise BillingReconciliationError(
+                "tenant subscription record is malformed"
+            ) from exc
         if (
             subscription is None
             or subscription.source != "stripe_verified"
+            or not subscription_status_period_is_current(subscription)
+            or subscription.provider_livemode is not self._livemode
             or not subscription.external_customer_id
             or not subscription.external_subscription_id
             or not subscription.billing_account_id
@@ -2413,6 +2433,12 @@ class BillingReconciliationStore:
             raise BillingReconciliationError(
                 "tenant does not have a Stripe-verified provider binding"
             )
+        try:
+            self._entitlements.assert_subscription_provenance(subscription)
+        except (BillingEntitlementError, ValueError, TypeError) as exc:
+            raise BillingReconciliationError(
+                "tenant subscription provenance is absent or invalid"
+            ) from exc
         customer_id = _stripe_id(
             subscription.external_customer_id, "external_customer_id", "customer"
         )

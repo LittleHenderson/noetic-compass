@@ -22,6 +22,7 @@ from api.services.live_worker_billing_receipts import (
     LiveWorkerMeasurementReceiptVerifier,
 )
 from api.services.production.state_substrate import InMemoryStateStore
+from tests.billing_test_support import install_verified_stripe_subscription
 
 
 HMAC_KEY = "live-worker-billing-key-0123456789-ABCDEFG"
@@ -139,22 +140,17 @@ def _store() -> BillingReconciliationStore:
     backend = InMemoryStateStore()
     entitlements = BillingEntitlementStore(backend)
     now = datetime.now(UTC)
-    entitlements.grant_manual_comped(
+    install_verified_stripe_subscription(
+        entitlements,
         tenant_id="tenant-a",
         billing_account_id="acct-a",
-        expires_at=(now + timedelta(days=30)).isoformat(),
-    )
-    entitlements.apply_stripe_subscription(
-        tenant_id="tenant-a",
-        plan_id="professional_live",
-        status="active",
-        external_customer_id="cus_CustomerA",
-        external_subscription_id="sub_SubscriptionA",
+        customer_id="cus_CustomerA",
+        subscription_id="sub_SubscriptionA",
         event_id="evt_SubscriptionA",
         event_created=1,
-        current_period_start=(now - timedelta(days=1)).isoformat(),
-        current_period_end=(now + timedelta(days=30)).isoformat(),
-        cancel_at_period_end=False,
+        livemode=False,
+        period_start=now - timedelta(days=1),
+        period_end=now + timedelta(days=30),
     )
     return BillingReconciliationStore(
         backend,

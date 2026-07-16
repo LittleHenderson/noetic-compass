@@ -19,6 +19,7 @@ from api.services.billing_entitlements import (
     PLAN_CATALOG,
     get_plan,
     process_stripe_event,
+    validate_constructed_stripe_event,
 )
 from api.services.billing_reconciliation import (
     BillingReconciliationConflict as InvoiceReconciliationConflict,
@@ -337,6 +338,14 @@ async def create_billing_checkout(
             request_id=body.request_id,
         )
         if not created and intent.get("state") == "completed":
+            # Revalidate/repair the immutable session reverse index after any
+            # crash between the two durable Checkout completion writes.
+            store.finish_checkout_intent(
+                tenant_id=tenant_id,
+                request_id=body.request_id,
+                checkout_session_id=str(intent["checkout_session_id"]),
+                url=str(intent["url"]),
+            )
             return CheckoutResponse(
                 checkout_session_id=str(intent["checkout_session_id"]),
                 url=str(intent["url"]),
@@ -347,6 +356,7 @@ async def create_billing_checkout(
             email=account.email_or_username,
             plan_id=plan.plan_id,
             external_customer_id=(current.external_customer_id if current else None),
+            checkout_request_id=body.request_id,
             idempotency_key=f"cas-checkout:{tenant_id}:{plan.plan_id}:{body.request_id}",
         )
         store.finish_checkout_intent(
@@ -406,22 +416,188 @@ async def stripe_billing_webhook(
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
     plain_event = dict(event)
-    event_id = str(plain_event.get("id") or "").strip()
-    event_type = str(plain_event.get("type") or "").strip()
-    if not event_id or not event_type:
-        raise HTTPException(status_code=400, detail="Stripe event identity is missing.")
+    try:
+        validate_constructed_stripe_event(plain_event, raw_payload)
+    except (BillingEntitlementError, BillingEventConflict) as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    event_id = plain_event.get("id")
+    event_type = plain_event.get("type")
+    event_livemode = plain_event.get("livemode")
+    event_created = plain_event.get("created")
+    if (
+        not isinstance(event_id, str)
+        or not event_id
+        or event_id != event_id.strip()
+        or not isinstance(event_type, str)
+        or not event_type
+        or event_type != event_type.strip()
+        or not isinstance(event_livemode, bool)
+        or not isinstance(event_created, int)
+        or isinstance(event_created, bool)
+        or event_created < 0
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail="Stripe event identity, timestamp, or livemode is invalid.",
+        )
+    try:
+        existing_receipt = store.preflight_webhook_event(
+            event_id=event_id,
+            event_type=event_type,
+            event_created=event_created,
+            raw_payload=raw_payload,
+            livemode=event_livemode,
+        )
+    except BillingEventConflict as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    except BillingEntitlementError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    try:
+        subscription_id = _subscription_id_for_event(plain_event)
+    except StripeBillingProviderError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    if (
+        existing_receipt is not None
+        and existing_receipt.payload.get("state") == "applied"
+    ):
+        if subscription_id is not None:
+            try:
+                store.assert_applied_subscription_replay_consistent(
+                    external_subscription_id=subscription_id,
+                    event_id=event_id,
+                )
+            except BillingEntitlementError as exc:
+                raise HTTPException(status_code=409, detail=str(exc)) from exc
+        return {"event_id": event_id, "applied": False, "duplicate": True}
+
+    lease = None
+    if subscription_id is not None:
+        try:
+            lease = store.acquire_subscription_refresh_lock(
+                external_subscription_id=subscription_id,
+                event_id=event_id,
+            )
+            # The first preflight happens before the lease and can race a live
+            # attempt that applies and finishes this exact receipt before we
+            # acquire. Re-read under the unique attempt lease before writing the
+            # deny-first barrier; an already-applied receipt must never be paired
+            # with a newly pending subscription row.
+            locked_receipt = store.preflight_webhook_event(
+                event_id=event_id,
+                event_type=event_type,
+                event_created=event_created,
+                raw_payload=raw_payload,
+                livemode=event_livemode,
+            )
+            if (
+                locked_receipt is not None
+                and locked_receipt.payload.get("state") == "applied"
+            ):
+                store.assert_applied_subscription_replay_consistent(
+                    external_subscription_id=subscription_id,
+                    event_id=event_id,
+                )
+                store.release_subscription_refresh_lock(lease)
+                lease = None
+                return {"event_id": event_id, "applied": False, "duplicate": True}
+            claimed_receipt = store.claim_subscription_webhook_attempt(
+                event_id=event_id,
+                external_subscription_id=subscription_id,
+                refresh_lock_token=lease.token,
+            )
+            if (
+                claimed_receipt is not None
+                and claimed_receipt.payload.get("state") == "applied"
+            ):
+                store.assert_applied_subscription_replay_consistent(
+                    external_subscription_id=subscription_id,
+                    event_id=event_id,
+                )
+                store.release_subscription_refresh_lock(lease)
+                lease = None
+                return {"event_id": event_id, "applied": False, "duplicate": True}
+            store.mark_subscription_pending_revalidation(
+                external_subscription_id=subscription_id,
+                event_id=event_id,
+                event_created=event_created,
+                raw_payload=raw_payload,
+                provider_event_payload_sha256=hashlib.sha256(
+                    raw_payload
+                ).hexdigest(),
+                refresh_lock_token=lease.token,
+            )
+        except BillingEventConflict as exc:
+            if lease is not None:
+                store.release_subscription_refresh_lock(lease)
+            raise HTTPException(status_code=409, detail=str(exc)) from exc
+        except BillingEntitlementError as exc:
+            if lease is not None:
+                store.release_subscription_refresh_lock(lease)
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
     try:
         receipt, created = store.begin_webhook_event(
             event_id=event_id,
             event_type=event_type,
+            event_created=event_created,
             raw_payload=raw_payload,
+            livemode=event_livemode,
+            signature_verified=True,
         )
     except BillingEventConflict as exc:
+        if lease is not None:
+            store.release_subscription_refresh_lock(lease)
         raise HTTPException(status_code=409, detail=str(exc)) from exc
+    except BillingEntitlementError as exc:
+        if lease is not None:
+            store.release_subscription_refresh_lock(lease)
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
     if not created and receipt.payload.get("state") == "applied":
+        if subscription_id is not None:
+            try:
+                store.assert_applied_subscription_replay_consistent(
+                    external_subscription_id=subscription_id,
+                    event_id=event_id,
+                )
+            except BillingEntitlementError as exc:
+                if lease is not None:
+                    store.release_subscription_refresh_lock(lease)
+                raise HTTPException(status_code=409, detail=str(exc)) from exc
+        if lease is not None:
+            store.release_subscription_refresh_lock(lease)
         return {"event_id": event_id, "applied": False, "duplicate": True}
+    if subscription_id is not None:
+        try:
+            claimed_receipt = store.claim_subscription_webhook_attempt(
+                event_id=event_id,
+                external_subscription_id=subscription_id,
+                refresh_lock_token=lease.token,
+            )
+        except (BillingEventConflict, BillingEntitlementError) as exc:
+            if lease is not None:
+                store.release_subscription_refresh_lock(lease)
+            raise HTTPException(status_code=409, detail=str(exc)) from exc
+        if claimed_receipt is None:
+            if lease is not None:
+                store.release_subscription_refresh_lock(lease)
+            raise HTTPException(
+                status_code=409,
+                detail="subscription webhook receipt disappeared before attempt claim",
+            )
+        if claimed_receipt.payload.get("state") == "applied":
+            try:
+                store.assert_applied_subscription_replay_consistent(
+                    external_subscription_id=subscription_id,
+                    event_id=event_id,
+                )
+            except BillingEntitlementError as exc:
+                if lease is not None:
+                    store.release_subscription_refresh_lock(lease)
+                raise HTTPException(status_code=409, detail=str(exc)) from exc
+            if lease is not None:
+                store.release_subscription_refresh_lock(lease)
+            return {"event_id": event_id, "applied": False, "duplicate": True}
 
-    lease = None
+    refresh_facts_sha256: str | None = None
     try:
         if event_type == "invoice.paid" and settings.billing_reconciliation_enabled:
             reconciliation = getattr(
@@ -462,24 +638,16 @@ async def stripe_billing_webhook(
                 "applied": True,
                 "reconciled": True,
             }
-        subscription_id = _subscription_id_for_event(plain_event)
-        lease = (
-            store.acquire_subscription_refresh_lock(
-                external_subscription_id=subscription_id,
-                event_id=event_id,
-            )
-            if subscription_id is not None
-            else None
-        )
         plain_event, snapshot = await _refresh_subscription_event(
             provider, plain_event
         )
         if subscription_id is not None and snapshot is not None:
-            store.record_webhook_refresh(
+            refresh_facts_sha256 = store.record_webhook_refresh(
                 event_id=event_id,
                 external_subscription_id=subscription_id,
                 refreshed_object=snapshot.payload,
                 provider_request_id=snapshot.provider_request_id,
+                refresh_lock_token=lease.token,
             )
         return process_stripe_event(
             store,
@@ -501,8 +669,14 @@ async def stripe_billing_webhook(
             },
             resource_refreshed=lease is not None,
             refresh_lock_token=lease.token if lease is not None else None,
+            refresh_facts_sha256=refresh_facts_sha256,
+            locked_subscription_id=subscription_id,
+            signature_verified=True,
         )
     except StripeBillingProviderError as exc:
+        # A transport/provider-read failure is not contradictory current state.
+        # Keep it unresolved and retryable, but quarantine only after an exact
+        # locked snapshot was durably recorded and then failed validation.
         store.finish_webhook_event(
             event_id=event_id,
             state="unresolved",

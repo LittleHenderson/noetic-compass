@@ -18,6 +18,14 @@ import re
 from typing import Any, Protocol
 
 from api.services.accounts.models import Account
+from api.services.billing_entitlements import (
+    BillingEntitlementError,
+    StripeSubscriptionProvenance,
+    SubscriptionRecord,
+    get_plan,
+    subscription_authority_facts_sha256,
+    subscription_is_live,
+)
 from api.services.billing_reconciliation import (
     PaidInvoiceReconciliationRecord,
 )
@@ -38,7 +46,7 @@ from api.services.production.state_substrate import (
 )
 
 
-SCHEMA_VERSION = "cas_harness_accounts_billing_source_binding.v1"
+SCHEMA_VERSION = "cas_harness_accounts_billing_source_binding.v3"
 BINDING_TENANT_ID = "cas-harness-customer-production-accounts-billing-bindings"
 BINDING_KIND = "customer_production_accounts_billing_source_binding"
 _EVIDENCE_SCHEMA = "cas_harness_customer_production_gate_evidence.v3"
@@ -53,6 +61,19 @@ _RECORD_KEYS = frozenset(
         "pseudonym_key_id",
         "invoice_ledger_version",
         "provider_snapshot_facts_sha256",
+        "subscription_facts_sha256",
+        "checkout_request_id",
+        "checkout_session_id",
+        "checkout_event_id",
+        "checkout_event_payload_sha256",
+        "checkout_lineage_sha256",
+        "provider_event_id",
+        "provider_event_payload_sha256",
+        "provider_refresh_facts_sha256",
+        "provider_refreshed_object_sha256",
+        "provider_refresh_fence",
+        "checkout_receipt_facts_sha256",
+        "provider_receipt_facts_sha256",
         "content_binding_hmac",
         "bound_at_utc",
     }
@@ -85,6 +106,16 @@ class AccountsBillingInvoiceSource(Protocol):
     ) -> PaidInvoiceReconciliationRecord | None: ...
 
 
+class AccountsBillingEntitlementSource(Protocol):
+    """Minimum current subscription interface used by acceptance binding."""
+
+    def get_subscription(self, tenant_id: str) -> SubscriptionRecord | None: ...
+
+    def assert_subscription_provenance(
+        self, subscription: SubscriptionRecord
+    ) -> StripeSubscriptionProvenance: ...
+
+
 class AccountsBillingAcceptanceSourceBindingStore:
     """Create and verify private evidence-to-source bindings."""
 
@@ -94,17 +125,25 @@ class AccountsBillingAcceptanceSourceBindingStore:
         *,
         accounts: AccountsBillingAccountSource,
         billing: AccountsBillingInvoiceSource,
+        entitlements: AccountsBillingEntitlementSource,
         pseudonymizer: CustomerProductionPseudonymizer,
     ) -> None:
         if not callable(getattr(accounts, "get_account_by_id", None)):
             raise ValueError("account store is required")
         if not callable(getattr(billing, "get_invoice", None)):
             raise ValueError("billing reconciliation store is required")
+        if not callable(getattr(entitlements, "get_subscription", None)):
+            raise ValueError("billing entitlement store is required")
+        if not callable(
+            getattr(entitlements, "assert_subscription_provenance", None)
+        ):
+            raise ValueError("billing entitlement provenance source is required")
         if not isinstance(pseudonymizer, CustomerProductionPseudonymizer):
             raise ValueError("customer-production pseudonymizer is required")
         self._store = store
         self._accounts = accounts
         self._billing = billing
+        self._entitlements = entitlements
         self._pseudonymizer = pseudonymizer
 
     def create(
@@ -119,7 +158,13 @@ class AccountsBillingAcceptanceSourceBindingStore:
 
         canonical = _canonical_json_bytes(evidence)
         evidence_sha256 = hashlib.sha256(canonical).hexdigest()
-        invoice, account, key_id = self._assert_authoritative_source(
+        (
+            invoice,
+            account,
+            subscription,
+            provenance,
+            key_id,
+        ) = self._assert_authoritative_source(
             evidence,
             tenant_id=tenant_id,
             invoice_record_id=invoice_record_id,
@@ -134,9 +179,15 @@ class AccountsBillingAcceptanceSourceBindingStore:
             "pseudonym_key_id": key_id,
             "invoice_ledger_version": invoice.ledger_version,
             "provider_snapshot_facts_sha256": invoice.provider_snapshot_facts_sha256,
+            "subscription_facts_sha256": _subscription_facts_sha256(
+                subscription
+            ),
+            **provenance.to_payload(),
             "content_binding_hmac": self._content_binding_hmac(
                 evidence_sha256=evidence_sha256,
                 invoice=invoice,
+                subscription=subscription,
+                provenance=provenance,
                 pseudonym_key_id=key_id,
             ),
             "bound_at_utc": _format_utc(stamp),
@@ -210,7 +261,13 @@ class AccountsBillingAcceptanceSourceBindingStore:
         payload = _validate_record(record, evidence_sha256)
         tenant_id = str(payload["tenant_id"])
         invoice_record_id = str(payload["invoice_record_id"])
-        invoice, account, key_id = self._assert_authoritative_source(
+        (
+            invoice,
+            account,
+            subscription,
+            provenance,
+            key_id,
+        ) = self._assert_authoritative_source(
             evidence,
             tenant_id=tenant_id,
             invoice_record_id=invoice_record_id,
@@ -220,14 +277,22 @@ class AccountsBillingAcceptanceSourceBindingStore:
             or invoice.ledger_version != payload["invoice_ledger_version"]
             or invoice.provider_snapshot_facts_sha256
             != payload["provider_snapshot_facts_sha256"]
+            or _subscription_facts_sha256(subscription)
+            != payload["subscription_facts_sha256"]
+            or any(
+                payload.get(field_name) != value
+                for field_name, value in provenance.to_payload().items()
+            )
             or key_id != payload["pseudonym_key_id"]
         ):
             raise AccountsBillingSourceBindingInvalid(
-                "accounts/billing source binding is stale or cross-wired"
+                "accounts/billing source provenance binding is stale or cross-wired"
             )
         expected_hmac = self._content_binding_hmac(
             evidence_sha256=evidence_sha256,
             invoice=invoice,
+            subscription=subscription,
+            provenance=provenance,
             pseudonym_key_id=key_id,
         )
         if not hmac.compare_digest(
@@ -243,7 +308,13 @@ class AccountsBillingAcceptanceSourceBindingStore:
         *,
         tenant_id: str,
         invoice_record_id: str,
-    ) -> tuple[PaidInvoiceReconciliationRecord, Account, str]:
+    ) -> tuple[
+        PaidInvoiceReconciliationRecord,
+        Account,
+        SubscriptionRecord,
+        StripeSubscriptionProvenance,
+        str,
+    ]:
         if evidence.get("schema_version") != _EVIDENCE_SCHEMA or evidence.get(
             "gate"
         ) != "accounts_billing":
@@ -265,11 +336,28 @@ class AccountsBillingAcceptanceSourceBindingStore:
                     "accounts/billing paid invoice source is absent"
                 )
             account = self._accounts.get_account_by_id(invoice.billing_account_id)
+            subscription = self._entitlements.get_subscription(tenant_id)
         except AccountsBillingSourceBindingInvalid:
             raise
         except Exception as exc:
             raise AccountsBillingSourceBindingUnavailable(
                 "accounts/billing authoritative source is unavailable"
+            ) from exc
+        if subscription is None:
+            raise AccountsBillingSourceBindingInvalid(
+                "accounts/billing authoritative source is not a matched live paid lifecycle"
+            )
+        try:
+            provenance = self._entitlements.assert_subscription_provenance(
+                subscription
+            )
+        except BillingEntitlementError as exc:
+            raise AccountsBillingSourceBindingInvalid(
+                "accounts/billing subscription provenance is invalid"
+            ) from exc
+        except Exception as exc:
+            raise AccountsBillingSourceBindingUnavailable(
+                "accounts/billing subscription provenance source is unavailable"
             ) from exc
         if (
             account is None
@@ -285,6 +373,16 @@ class AccountsBillingAcceptanceSourceBindingStore:
             != invoice.local_quantity_milliseconds
             or invoice.invoice_pdf_http_status != 200
             or not invoice.invoice_pdf_sha256
+            or subscription.tenant_id != invoice.tenant_id
+            or subscription.source != "stripe_verified"
+            or subscription.status != "active"
+            or subscription.provider_livemode is not True
+            or subscription.billing_account_id != invoice.billing_account_id
+            or subscription.external_customer_id != invoice.external_customer_id
+            or subscription.external_subscription_id
+            != invoice.external_subscription_id
+            or not subscription_is_live(subscription)
+            or not get_plan(subscription.plan_id).paid
         ):
             raise AccountsBillingSourceBindingInvalid(
                 "accounts/billing authoritative source is not a matched live paid lifecycle"
@@ -298,7 +396,11 @@ class AccountsBillingAcceptanceSourceBindingStore:
             billing.get("provider") != "stripe"
             or billing.get("mode") != "live"
             or billing.get("currency") != "USD"
+            or billing.get("checkout_status") != "complete"
+            or billing.get("subscription_status") != "active"
             or billing.get("invoice_status") != "paid"
+            or billing.get("webhook_signature_verified") is not True
+            or billing.get("entitlement_status") != "active"
             or billing.get("receipt_download_http_status")
             != invoice.invoice_pdf_http_status
             or billing.get("meter_to_invoice_reconciled") is not True
@@ -355,13 +457,15 @@ class AccountsBillingAcceptanceSourceBindingStore:
                 raise AccountsBillingSourceBindingInvalid(
                     f"accounts/billing {field} does not match the authoritative source"
                 ) from exc
-        return invoice, account, key_id
+        return invoice, account, subscription, provenance, key_id
 
     def _content_binding_hmac(
         self,
         *,
         evidence_sha256: str,
         invoice: PaidInvoiceReconciliationRecord,
+        subscription: SubscriptionRecord,
+        provenance: StripeSubscriptionProvenance,
         pseudonym_key_id: str,
     ) -> str:
         value = _canonical_json_bytes(
@@ -378,6 +482,10 @@ class AccountsBillingAcceptanceSourceBindingStore:
                 "provider_snapshot_facts_sha256": (
                     invoice.provider_snapshot_facts_sha256
                 ),
+                "subscription_facts_sha256": _subscription_facts_sha256(
+                    subscription
+                ),
+                **provenance.to_payload(),
             }
         ).decode("ascii")
         return self._pseudonymizer.subject(
@@ -411,10 +519,40 @@ def _validate_record(
             str(record.payload.get("provider_snapshot_facts_sha256") or "")
         )
         is None
+        or _SHA256_RE.fullmatch(
+            str(record.payload.get("subscription_facts_sha256") or "")
+        )
+        is None
+        or any(
+            _SHA256_RE.fullmatch(str(record.payload.get(field_name) or ""))
+            is None
+            for field_name in (
+                "checkout_event_payload_sha256",
+                "checkout_lineage_sha256",
+                "provider_event_payload_sha256",
+                "provider_refresh_facts_sha256",
+                "provider_refreshed_object_sha256",
+                "checkout_receipt_facts_sha256",
+                "provider_receipt_facts_sha256",
+            )
+        )
+        or not isinstance(record.payload.get("provider_refresh_fence"), int)
+        or isinstance(record.payload.get("provider_refresh_fence"), bool)
+        or int(record.payload.get("provider_refresh_fence", -1)) < 0
         or not isinstance(record.payload.get("tenant_id"), str)
         or not isinstance(record.payload.get("billing_account_id"), str)
         or not isinstance(record.payload.get("invoice_record_id"), str)
         or not isinstance(record.payload.get("pseudonym_key_id"), str)
+        or any(
+            not isinstance(record.payload.get(field_name), str)
+            or not record.payload.get(field_name)
+            for field_name in (
+                "checkout_request_id",
+                "checkout_session_id",
+                "checkout_event_id",
+                "provider_event_id",
+            )
+        )
         or not isinstance(record.payload.get("content_binding_hmac"), str)
     ):
         raise AccountsBillingSourceBindingUnavailable(
@@ -425,7 +563,9 @@ def _validate_record(
 
 
 def _record_id(evidence_sha256: str) -> str:
-    return f"accounts-billing-source-{evidence_sha256}"
+    # Version the immutable key as well as the payload schema. Historical rows
+    # cannot satisfy the stronger receipt/refresh provenance contract.
+    return f"accounts-billing-source-v3-{evidence_sha256}"
 
 
 def _canonical_json_bytes(value: Mapping[str, Any]) -> bytes:
@@ -441,6 +581,10 @@ def _canonical_json_bytes(value: Mapping[str, Any]) -> bytes:
         raise AccountsBillingSourceBindingInvalid(
             "accounts/billing evidence is not strict canonical JSON"
         ) from exc
+
+
+def _subscription_facts_sha256(subscription: SubscriptionRecord) -> str:
+    return subscription_authority_facts_sha256(subscription)
 
 
 def _utc_now(value: datetime | None = None) -> datetime:
@@ -477,6 +621,7 @@ def _canonical_timestamp(value: object) -> str:
 __all__ = [
     "AccountsBillingAcceptanceSourceBindingStore",
     "AccountsBillingAccountSource",
+    "AccountsBillingEntitlementSource",
     "AccountsBillingInvoiceSource",
     "AccountsBillingSourceBindingError",
     "AccountsBillingSourceBindingInvalid",

@@ -168,6 +168,7 @@ async def test_checkout_parameters_are_server_derived_and_idempotent(provider) -
         email="owner@example.com",
         plan_id="professional_live",
         external_customer_id=None,
+        checkout_request_id="req_1",
         idempotency_key="cas-checkout:tenant-a:professional_live:req_1",
     )
     client = _StripeClient.instances[0]
@@ -189,6 +190,7 @@ async def test_checkout_parameters_are_server_derived_and_idempotent(provider) -
         "cas_tenant_id": "tenant-a",
         "cas_account_id": "acct-a",
         "cas_plan_id": "professional_live",
+        "cas_checkout_request_id": "req_1",
     }
     assert params["subscription_data"] == {"metadata": params["metadata"]}
     assert options == {
@@ -204,6 +206,7 @@ async def test_existing_customer_and_portal_use_bound_customer(provider) -> None
         email="ignored@example.com",
         plan_id="professional_live",
         external_customer_id="cus_bound",
+        checkout_request_id="req-professional",
         idempotency_key="req-professional",
     )
     portal = await provider.create_portal_session(external_customer_id="cus_bound")
@@ -242,6 +245,7 @@ async def test_enterprise_price_is_optional_and_non_checkout_plan_stays_closed(
             email="owner@example.com",
             plan_id="enterprise_live",
             external_customer_id=None,
+            checkout_request_id="req-enterprise",
             idempotency_key="req-enterprise",
         )
     assert _StripeClient.instances[0].checkout.calls == []
@@ -1129,6 +1133,7 @@ async def test_builder_wires_usage_price_only_when_reconciliation_is_enabled(
         email="owner@example.com",
         plan_id="professional_live",
         external_customer_id=None,
+        checkout_request_id="req-builder",
         idempotency_key="req-builder",
     )
     params, _ = _StripeClient.instances[0].checkout.calls[0]
@@ -1200,6 +1205,7 @@ async def test_unknown_plan_and_invalid_sdk_response_fail_closed(provider) -> No
             email="owner@example.com",
             plan_id="attacker_plan",
             external_customer_id=None,
+            checkout_request_id="req",
             idempotency_key="req",
         )
     _StripeClient.instances[0].checkout.response = SimpleNamespace(
@@ -1212,5 +1218,6 @@ async def test_unknown_plan_and_invalid_sdk_response_fail_closed(provider) -> No
             email="owner@example.com",
             plan_id="professional_live",
             external_customer_id=None,
+            checkout_request_id="req",
             idempotency_key="req",
         )
