@@ -11,6 +11,18 @@ on:
         description: Exact public Render deployment ID (dep-...)
         required: true
         type: string
+      root_ci_receipt_run_id:
+        description: Same-repository Actions run ID containing the pinned signed root-CI receipt
+        required: true
+        type: string
+      root_ci_receipt_artifact_name:
+        description: Exact root-ci-protected-deploy-receipt-<run-id> artifact name
+        required: true
+        type: string
+      root_ci_receipt_sha256:
+        description: Externally recorded SHA-256 of the exact signed root-CI receipt bytes
+        required: true
+        type: string
       confirmation:
         description: Type RUN-NON-DISRUPTIVE-P1-DRILL to page all drill destinations
         required: true
@@ -30,18 +42,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     environment: customer-production
-    env:
-      CAS_ALERT_DRILL_PROVIDER_MODE: ${{ vars.CAS_ALERT_DRILL_PROVIDER_MODE }}
-      CAS_ALERT_DRILL_INCIDENT_WEBHOOK_URL: ${{ secrets.CAS_ALERT_DRILL_INCIDENT_WEBHOOK_URL }}
-      CAS_ALERT_DRILL_INCIDENT_WEBHOOK_TOKEN: ${{ secrets.CAS_ALERT_DRILL_INCIDENT_WEBHOOK_TOKEN }}
-      CAS_ALERT_DRILL_PRIMARY_WEBHOOK_URL: ${{ secrets.CAS_ALERT_DRILL_PRIMARY_WEBHOOK_URL }}
-      CAS_ALERT_DRILL_PRIMARY_WEBHOOK_TOKEN: ${{ secrets.CAS_ALERT_DRILL_PRIMARY_WEBHOOK_TOKEN }}
-      CAS_ALERT_DRILL_ACK_WEBHOOK_URL: ${{ secrets.CAS_ALERT_DRILL_ACK_WEBHOOK_URL }}
-      CAS_ALERT_DRILL_ACK_WEBHOOK_TOKEN: ${{ secrets.CAS_ALERT_DRILL_ACK_WEBHOOK_TOKEN }}
-      CAS_ALERT_DRILL_SECONDARY_WEBHOOK_URL: ${{ secrets.CAS_ALERT_DRILL_SECONDARY_WEBHOOK_URL }}
-      CAS_ALERT_DRILL_SECONDARY_WEBHOOK_TOKEN: ${{ secrets.CAS_ALERT_DRILL_SECONDARY_WEBHOOK_TOKEN }}
-      RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Require deliberate protected exact-master dispatch
         shell: bash
@@ -53,6 +53,9 @@ jobs:
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
           EXPECTED_MASTER_HEAD: ${{ inputs.expected_master_head }}
           EXPECTED_DEPLOY_ID: ${{ inputs.expected_deploy_id }}
+          ROOT_CI_RECEIPT_RUN_ID: ${{ inputs.root_ci_receipt_run_id }}
+          ROOT_CI_RECEIPT_ARTIFACT_NAME: ${{ inputs.root_ci_receipt_artifact_name }}
+          ROOT_CI_RECEIPT_SHA256: ${{ inputs.root_ci_receipt_sha256 }}
           CONFIRMATION: ${{ inputs.confirmation }}
         run: |
           set -euo pipefail
@@ -63,6 +66,9 @@ jobs:
           [[ "$EXPECTED_MASTER_HEAD" =~ ^[0-9a-f]{40}$ ]]
           test "$DISPATCH_SHA" = "$EXPECTED_MASTER_HEAD"
           [[ "$EXPECTED_DEPLOY_ID" =~ ^dep-[a-z0-9]{20}$ ]]
+          [[ "$ROOT_CI_RECEIPT_RUN_ID" =~ ^[1-9][0-9]*$ ]]
+          test "$ROOT_CI_RECEIPT_ARTIFACT_NAME" = "root-ci-protected-deploy-receipt-$ROOT_CI_RECEIPT_RUN_ID"
+          [[ "$ROOT_CI_RECEIPT_SHA256" =~ ^[0-9a-f]{64}$ ]]
           test "$CONFIRMATION" = "RUN-NON-DISRUPTIVE-P1-DRILL"
 
       - uses: actions/checkout@v7
@@ -79,27 +85,211 @@ jobs:
           set -euo pipefail
           python -m unittest discover -s scripts/tests -p 'test_alert_delivery_drill.py'
           python -m unittest discover -s scripts/tests -p 'test_build_alert_delivery_gate_payload.py'
+          python -m unittest discover -s scripts/tests -p 'test_verify_pinned_root_ci_receipt.py'
+          python -m unittest discover -s scripts/tests -p 'test_alert_delivery_drill_bootstrap.py'
 
-      - name: Verify protected CI and the exact live Render deploy before paging
+      - name: Download the exact signed root-CI receipt artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ inputs.root_ci_receipt_artifact_name }}
+          path: ${{ runner.temp }}/root-ci-receipt-input
+          github-token: ${{ github.token }}
+          repository: LittleHenderson/noetic-compass
+          run-id: ${{ inputs.root_ci_receipt_run_id }}
+
+      - name: Bootstrap immutable exact-head verification environment
+        shell: bash
         env:
           EXPECTED_MASTER_HEAD: ${{ inputs.expected_master_head }}
           EXPECTED_DEPLOY_ID: ${{ inputs.expected_deploy_id }}
-          GITHUB_TOKEN: ${{ github.token }}
+          ROOT_CI_RECEIPT_SHA256: ${{ inputs.root_ci_receipt_sha256 }}
+          ROOT_CI_RECEIPT_PATH: ${{ runner.temp }}/root-ci-receipt-input/receipts/root-ci-protected-deploy.json
+          ROOT_CI_CHECKSUM_PATH: ${{ runner.temp }}/root-ci-receipt-input/receipts/root-ci-protected-deploy.sha256
+          EXACT_HEAD_WORKTREE: ${{ runner.temp }}/alert-drill-verification-head
         run: |
           set -euo pipefail
-          python scripts/collect_root_ci_protected_deploy_facts.py \
+          dangerous_git_environment=(
+            'GIT_DIR'
+            'GIT_WORK_TREE'
+            'GIT_INDEX_FILE'
+            'GIT_OBJECT_DIRECTORY'
+            'GIT_ALTERNATE_OBJECT_DIRECTORIES'
+            'GIT_COMMON_DIR'
+            'GIT_REPLACE_REF_BASE'
+            'GIT_NAMESPACE'
+          )
+          for variable_name in "${dangerous_git_environment[@]}"; do
+            unset "$variable_name"
+          done
+          while IFS= read -r variable_name; do
+            unset "$variable_name"
+          done < <(compgen -A variable GIT_CONFIG_ || true)
+          export GIT_NO_REPLACE_OBJECTS=1
+          git_bootstrap() {
+            command git \
+              -c core.hooksPath=/dev/null \
+              -c core.autocrlf=false \
+              -c core.eol=lf \
+              "$@"
+          }
+          reject_git_substitutions() {
+            local grafts_path replacement_refs
+            replacement_refs="$(git_bootstrap for-each-ref --format='%(refname)' refs/replace)"
+            test -z "$replacement_refs"
+            grafts_path="$(git_bootstrap rev-parse --git-path info/grafts)"
+            test ! -e "$grafts_path"
+            test ! -L "$grafts_path"
+          }
+          reject_git_substitutions
+          test "$(git_bootstrap rev-parse HEAD)" = "$EXPECTED_MASTER_HEAD"
+          test -z "$(git_bootstrap status --porcelain=v1 --untracked-files=all)"
+          test ! -e "$EXACT_HEAD_WORKTREE"
+          git_bootstrap cat-file -e "${EXPECTED_MASTER_HEAD}^{commit}"
+          git_bootstrap worktree add --detach "$EXACT_HEAD_WORKTREE" "$EXPECTED_MASTER_HEAD"
+          reject_git_substitutions
+          test "$(git_bootstrap -C "$EXACT_HEAD_WORKTREE" rev-parse HEAD)" = "$EXPECTED_MASTER_HEAD"
+          test -z "$(git_bootstrap -C "$EXACT_HEAD_WORKTREE" status --porcelain=v1 --untracked-files=all)"
+          critical_paths=(
+            '.github/workflows/alert-delivery-drill.yml'
+            '.production/customer-production-trusted-issuers.json'
+            'scripts/assemble_customer_production_acceptance_candidate.py'
+            'scripts/build_alert_delivery_gate_payload.py'
+            'scripts/deliver_alert_delivery_drill.py'
+            'scripts/deliver_production_runtime_alert.py'
+            'scripts/verify_customer_production_acceptance.py'
+            'scripts/verify_pinned_root_ci_receipt.py'
+          )
+          for repository_path in "${critical_paths[@]}"; do
+            expected_blob="$(git_bootstrap -C "$EXACT_HEAD_WORKTREE" rev-parse "${EXPECTED_MASTER_HEAD}:$repository_path")"
+            actual_blob="$(git_bootstrap -C "$EXACT_HEAD_WORKTREE" hash-object --no-filters -- "$repository_path")"
+            test "$actual_blob" = "$expected_blob"
+          done
+          test -z "$(git_bootstrap -C "$EXACT_HEAD_WORKTREE" ls-files --others --ignored --exclude-standard)"
+          test -z "$(git_bootstrap -C "$EXACT_HEAD_WORKTREE" ls-files | grep -E '(^|/)(__pycache__/|.*\.(pyc|pyo)$)' || true)"
+          test -s "$ROOT_CI_RECEIPT_PATH"
+          test -s "$ROOT_CI_CHECKSUM_PATH"
+          python -I -B -S -c 'import runpy,sys; scripts,program,*arguments=sys.argv[1:]; sys.path.insert(0,scripts); sys.argv=[program,*arguments]; runpy.run_path(program,run_name="__main__")' \
+            "$EXACT_HEAD_WORKTREE/scripts" \
+            "$EXACT_HEAD_WORKTREE/scripts/verify_pinned_root_ci_receipt.py" \
+            --receipt "$ROOT_CI_RECEIPT_PATH" \
+            --checksum "$ROOT_CI_CHECKSUM_PATH" \
+            --receipt-sha256 "$ROOT_CI_RECEIPT_SHA256" \
             --expected-master-head "$EXPECTED_MASTER_HEAD" \
             --expected-deploy-id "$EXPECTED_DEPLOY_ID" \
-            --output "$RUNNER_TEMP/root-ci-protected-deploy.json"
+            --minimum-remaining-validity-seconds 1200
+          reject_git_substitutions
+          test -z "$(git_bootstrap -C "$EXACT_HEAD_WORKTREE" status --porcelain=v1 --untracked-files=all)"
+          test -z "$(git_bootstrap -C "$EXACT_HEAD_WORKTREE" ls-files --others --ignored --exclude-standard)"
+          test -z "$(git_bootstrap -C "$EXACT_HEAD_WORKTREE" ls-files | grep -E '(^|/)(__pycache__/|.*\.(pyc|pyo)$)' || true)"
+          find "$EXACT_HEAD_WORKTREE" -type f -exec chmod a-w {} +
+
+      - name: Recreate immutable exact-head environment immediately before delivery
+        shell: bash
+        env:
+          EXPECTED_MASTER_HEAD: ${{ inputs.expected_master_head }}
+          EXPECTED_DEPLOY_ID: ${{ inputs.expected_deploy_id }}
+          ROOT_CI_RECEIPT_SHA256: ${{ inputs.root_ci_receipt_sha256 }}
+          ROOT_CI_RECEIPT_PATH: ${{ runner.temp }}/root-ci-receipt-input/receipts/root-ci-protected-deploy.json
+          ROOT_CI_CHECKSUM_PATH: ${{ runner.temp }}/root-ci-receipt-input/receipts/root-ci-protected-deploy.sha256
+          EXACT_HEAD_WORKTREE: ${{ runner.temp }}/alert-drill-delivery-head
+        run: |
+          set -euo pipefail
+          dangerous_git_environment=(
+            'GIT_DIR'
+            'GIT_WORK_TREE'
+            'GIT_INDEX_FILE'
+            'GIT_OBJECT_DIRECTORY'
+            'GIT_ALTERNATE_OBJECT_DIRECTORIES'
+            'GIT_COMMON_DIR'
+            'GIT_REPLACE_REF_BASE'
+            'GIT_NAMESPACE'
+          )
+          for variable_name in "${dangerous_git_environment[@]}"; do
+            unset "$variable_name"
+          done
+          while IFS= read -r variable_name; do
+            unset "$variable_name"
+          done < <(compgen -A variable GIT_CONFIG_ || true)
+          export GIT_NO_REPLACE_OBJECTS=1
+          git_bootstrap() {
+            command git \
+              -c core.hooksPath=/dev/null \
+              -c core.autocrlf=false \
+              -c core.eol=lf \
+              "$@"
+          }
+          reject_git_substitutions() {
+            local grafts_path replacement_refs
+            replacement_refs="$(git_bootstrap for-each-ref --format='%(refname)' refs/replace)"
+            test -z "$replacement_refs"
+            grafts_path="$(git_bootstrap rev-parse --git-path info/grafts)"
+            test ! -e "$grafts_path"
+            test ! -L "$grafts_path"
+          }
+          reject_git_substitutions
+          test "$(git_bootstrap rev-parse HEAD)" = "$EXPECTED_MASTER_HEAD"
+          test -z "$(git_bootstrap status --porcelain=v1 --untracked-files=all)"
+          test ! -e "$EXACT_HEAD_WORKTREE"
+          git_bootstrap cat-file -e "${EXPECTED_MASTER_HEAD}^{commit}"
+          git_bootstrap worktree add --detach "$EXACT_HEAD_WORKTREE" "$EXPECTED_MASTER_HEAD"
+          reject_git_substitutions
+          test "$(git_bootstrap -C "$EXACT_HEAD_WORKTREE" rev-parse HEAD)" = "$EXPECTED_MASTER_HEAD"
+          test -z "$(git_bootstrap -C "$EXACT_HEAD_WORKTREE" status --porcelain=v1 --untracked-files=all)"
+          critical_paths=(
+            '.github/workflows/alert-delivery-drill.yml'
+            '.production/customer-production-trusted-issuers.json'
+            'scripts/assemble_customer_production_acceptance_candidate.py'
+            'scripts/build_alert_delivery_gate_payload.py'
+            'scripts/deliver_alert_delivery_drill.py'
+            'scripts/deliver_production_runtime_alert.py'
+            'scripts/verify_customer_production_acceptance.py'
+            'scripts/verify_pinned_root_ci_receipt.py'
+          )
+          for repository_path in "${critical_paths[@]}"; do
+            expected_blob="$(git_bootstrap -C "$EXACT_HEAD_WORKTREE" rev-parse "${EXPECTED_MASTER_HEAD}:$repository_path")"
+            actual_blob="$(git_bootstrap -C "$EXACT_HEAD_WORKTREE" hash-object --no-filters -- "$repository_path")"
+            test "$actual_blob" = "$expected_blob"
+          done
+          test -z "$(git_bootstrap -C "$EXACT_HEAD_WORKTREE" ls-files --others --ignored --exclude-standard)"
+          test -z "$(git_bootstrap -C "$EXACT_HEAD_WORKTREE" ls-files | grep -E '(^|/)(__pycache__/|.*\.(pyc|pyo)$)' || true)"
+          test -s "$ROOT_CI_RECEIPT_PATH"
+          test -s "$ROOT_CI_CHECKSUM_PATH"
+          python -I -B -S -c 'import runpy,sys; scripts,program,*arguments=sys.argv[1:]; sys.path.insert(0,scripts); sys.argv=[program,*arguments]; runpy.run_path(program,run_name="__main__")' \
+            "$EXACT_HEAD_WORKTREE/scripts" \
+            "$EXACT_HEAD_WORKTREE/scripts/verify_pinned_root_ci_receipt.py" \
+            --receipt "$ROOT_CI_RECEIPT_PATH" \
+            --checksum "$ROOT_CI_CHECKSUM_PATH" \
+            --receipt-sha256 "$ROOT_CI_RECEIPT_SHA256" \
+            --expected-master-head "$EXPECTED_MASTER_HEAD" \
+            --expected-deploy-id "$EXPECTED_DEPLOY_ID" \
+            --minimum-remaining-validity-seconds 1200
+          reject_git_substitutions
+          test -z "$(git_bootstrap -C "$EXACT_HEAD_WORKTREE" status --porcelain=v1 --untracked-files=all)"
+          test -z "$(git_bootstrap -C "$EXACT_HEAD_WORKTREE" ls-files --others --ignored --exclude-standard)"
+          test -z "$(git_bootstrap -C "$EXACT_HEAD_WORKTREE" ls-files | grep -E '(^|/)(__pycache__/|.*\.(pyc|pyo)$)' || true)"
+          find "$EXACT_HEAD_WORKTREE" -type f -exec chmod a-w {} +
 
       - name: Deliver the distinct non-disruptive P1 drill
         id: drill
         continue-on-error: true
         shell: bash
+        env:
+          CAS_ALERT_DRILL_PROVIDER_MODE: ${{ vars.CAS_ALERT_DRILL_PROVIDER_MODE }}
+          CAS_ALERT_DRILL_INCIDENT_WEBHOOK_URL: ${{ secrets.CAS_ALERT_DRILL_INCIDENT_WEBHOOK_URL }}
+          CAS_ALERT_DRILL_INCIDENT_WEBHOOK_TOKEN: ${{ secrets.CAS_ALERT_DRILL_INCIDENT_WEBHOOK_TOKEN }}
+          CAS_ALERT_DRILL_PRIMARY_WEBHOOK_URL: ${{ secrets.CAS_ALERT_DRILL_PRIMARY_WEBHOOK_URL }}
+          CAS_ALERT_DRILL_PRIMARY_WEBHOOK_TOKEN: ${{ secrets.CAS_ALERT_DRILL_PRIMARY_WEBHOOK_TOKEN }}
+          CAS_ALERT_DRILL_ACK_WEBHOOK_URL: ${{ secrets.CAS_ALERT_DRILL_ACK_WEBHOOK_URL }}
+          CAS_ALERT_DRILL_ACK_WEBHOOK_TOKEN: ${{ secrets.CAS_ALERT_DRILL_ACK_WEBHOOK_TOKEN }}
+          CAS_ALERT_DRILL_SECONDARY_WEBHOOK_URL: ${{ secrets.CAS_ALERT_DRILL_SECONDARY_WEBHOOK_URL }}
+          CAS_ALERT_DRILL_SECONDARY_WEBHOOK_TOKEN: ${{ secrets.CAS_ALERT_DRILL_SECONDARY_WEBHOOK_TOKEN }}
+          EXACT_HEAD_WORKTREE: ${{ runner.temp }}/alert-drill-delivery-head
         run: |
           set -euo pipefail
           emitted_at="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
-          python scripts/deliver_alert_delivery_drill.py \
+          python -I -B -S -c 'import runpy,sys; scripts,program,*arguments=sys.argv[1:]; sys.path.insert(0,scripts); sys.argv=[program,*arguments]; runpy.run_path(program,run_name="__main__")' \
+            "$EXACT_HEAD_WORKTREE/scripts" \
+            "$EXACT_HEAD_WORKTREE/scripts/deliver_alert_delivery_drill.py" \
             --mode "${CAS_ALERT_DRILL_PROVIDER_MODE:-disabled}" \
             --repository "$GITHUB_REPOSITORY" \
             --run-id "$GITHUB_RUN_ID" \
@@ -112,9 +302,12 @@ jobs:
         env:
           EXPECTED_MASTER_HEAD: ${{ inputs.expected_master_head }}
           EXPECTED_DEPLOY_ID: ${{ inputs.expected_deploy_id }}
+          EXACT_HEAD_WORKTREE: ${{ runner.temp }}/alert-drill-delivery-head
         run: |
           set -euo pipefail
-          python scripts/build_alert_delivery_gate_payload.py \
+          python -I -B -S -c 'import runpy,sys; scripts,program,*arguments=sys.argv[1:]; sys.path.insert(0,scripts); sys.argv=[program,*arguments]; runpy.run_path(program,run_name="__main__")' \
+            "$EXACT_HEAD_WORKTREE/scripts" \
+            "$EXACT_HEAD_WORKTREE/scripts/build_alert_delivery_gate_payload.py" \
             --provider-artifact "$RUNNER_TEMP/alert-delivery-drill-safe-receipts.json" \
             --master-head-sha "$EXPECTED_MASTER_HEAD" \
             --deploy-id "$EXPECTED_DEPLOY_ID" \
@@ -141,6 +334,7 @@ jobs:
           {
             echo '### Alert delivery drill'
             echo '- This exercise never asserts or mutates a production runtime incident.'
+            echo '- The externally pinned signed root-CI receipt was verified before provider delivery.'
             echo '- Its safe receipts and gate payload remain unpublished and `OPEN`.'
             echo '- A real human incident-commander ACK and both on-call deliveries are required.'
             echo '- This workflow cannot publish authority or dispatch customer-production `ACCEPT`.'

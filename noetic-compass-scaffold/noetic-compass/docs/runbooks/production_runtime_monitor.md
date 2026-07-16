@@ -200,12 +200,63 @@ holds no `issues: write` permission, and does not create, label, comment on,
 reopen, or close the runtime incident. Before any provider write it requires:
 
 1. dispatch from protected `master` at the exact supplied 40-character HEAD;
-2. the exact supplied live Render deploy ID, revalidated with
-   `scripts/collect_root_ci_protected_deploy_facts.py` against protected CI and
-   a fresh current-master/current-live-deploy provider observation (the
-   historical protected check and deploy timestamps do not require no-op
-   release churn); and
+2. an exact signed `root_ci_protected_deploy` receipt from a fresh
+   `.github/workflows/customer-production-evidence.yml` run for that same HEAD
+   and live Render deploy; and
 3. the exact typed confirmation `RUN-NON-DISRUPTIVE-P1-DRILL`.
+
+Run `Customer Production Evidence` first with the same
+`expected_master_head` and `expected_deploy_id`. Record its numeric run ID, the
+exact artifact name `root-ci-protected-deploy-receipt-<run-id>`, and the signed
+receipt SHA-256 shown in the run summary. Supply those values as
+`root_ci_receipt_run_id`, `root_ci_receipt_artifact_name`, and
+`root_ci_receipt_sha256` when dispatching the drill. The receipt expires exactly
+120 minutes after issuance, so create a fresh one instead of reusing an expired
+run.
+
+Before the first provider write, the drill downloads only that named
+same-repository artifact with `actions: read`. It does not use the default
+`github.token` to query branch protection and does not need `RENDER_API_KEY`.
+`scripts/verify_pinned_root_ci_receipt.py` requires the artifact's checksum to
+name the exact receipt, matches both that checksum and the downloaded bytes to
+the externally supplied SHA-256, verifies the pinned RS256 signature and exact
+120-minute lifetime, validates the complete embedded root-CI contract, and
+binds it to the checked-out protected HEAD and supplied deploy ID. Both the
+post-test verification and the immediate pre-delivery verification require the
+receipt to remain valid for **strictly more than 1,200 seconds**, covering the
+workflow's full 20-minute timeout; exactly 1,200 seconds remaining fails closed.
+
+The immutable workflow shell, before importing any repository Python, rejects
+tracked or untracked changes in the tested checkout and creates a fresh detached
+worktree at the exact expected commit. Before every bootstrap Git operation it
+removes dangerous `GIT_*` repository overrides, including every `GIT_CONFIG_*`
+entry and alternate common/replacement namespaces, exports
+`GIT_NO_REPLACE_OBJECTS=1`, disables hooks, and rejects any
+replacement refs or legacy grafts. Inside the new worktree it hashes the actual
+critical bytes with `git hash-object --no-filters` and compares them to the true
+commit blobs. Repository-local clean/smudge attributes and filters therefore
+cannot make hostile executable bytes appear committed. The critical set covers
+the workflow, trusted-issuer registry, receipt verifier and assembler,
+customer-production verifier, evidence builder, drill delivery script, and its
+hardened runtime-alert dependency. The shell also rejects any tracked,
+untracked, or ignored content in the isolated worktree and any tracked
+`__pycache__`, `.pyc`, or `.pyo` file. Repository-local ignored bytecode from the
+test checkout is never copied into the isolated execution tree.
+
+The receipt verifier, delivery adapter, and evidence builder run from the
+verified exact-commit paths with `python -I -B -S`. The immutable launcher adds
+only that isolated `scripts` directory, ignores environment Python paths and
+user sites, disables `site`, and neither reads nor writes repository bytecode
+caches. A checksum, signature, remaining-validity, checkout, master,
+deployment, workflow-placement, protected-CI, registry, executable source, or
+import-shadow mismatch stops the workflow before paging any destination.
+
+The provider mode, URLs, and tokens are injected only into the single delivery
+step. Checkout, repository tests, artifact download, and both immutable
+verification/bootstrap steps never inherit them. The second bootstrap creates
+a new exact-commit worktree, reruns the receipt and strict remaining-validity
+check, and seals the source files in the step immediately before delivery. Only
+the following delivery process receives the step-scoped provider environment.
 
 Configure the custom receipt bridge in the `customer-production` Actions
 environment. These are separate from the runtime-incident settings above:

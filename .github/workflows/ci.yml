@@ -84,6 +84,8 @@ jobs:
         run: |
           python -m unittest discover -s scripts/tests -p 'test_alert_delivery_drill.py'
           python -m unittest discover -s scripts/tests -p 'test_build_alert_delivery_gate_payload.py'
+          python -m unittest discover -s scripts/tests -p 'test_verify_pinned_root_ci_receipt.py'
+          python -m unittest discover -s scripts/tests -p 'test_alert_delivery_drill_bootstrap.py'
           python -m unittest discover -s scripts/tests -p 'test_alert_delivery_drill_workflow.py'
 
       - name: Install the isolated RS256 signing dependency
