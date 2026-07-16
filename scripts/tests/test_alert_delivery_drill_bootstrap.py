@@ -544,6 +544,9 @@ class AlertDeliveryDrillBootstrapTests(unittest.TestCase):
                     "--help",
                 ],
                 cwd=source,
+                # Keep the vulnerable control bound to the materialized source even
+                # when the parent test runner exports its own repository on PYTHONPATH.
+                env=os.environ | {"PYTHONPATH": str(source)},
                 capture_output=True,
                 text=True,
                 timeout=30,
