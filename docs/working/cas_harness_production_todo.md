@@ -183,15 +183,27 @@ code now tolerates either; the runner binding (450 bytes, SHA-256
 are retained in the official root `control/` and the local
 `ATTEMPT_06_PRE_ANCHOR_F3E3ADAD/control/`.
 
-The next executable actions, in order: (1) network guard plan
-(create-once); (2) PRE capture at the official root plus the independent
-same-host PRE re-verify; (3) the provider controller capture, which
-requires an authenticated RunPod UI DOM observation by the operator; (4)
-protocol, anchor payload, and the exact RFC3161 query, created once and
-left untransmitted. Any transmission then requires byte-specific owner
-approval for the exact new query bytes, and only after a verified anchor
-may the guarded GPU run and independent receiver execute. Attempt 1-5
-identities are never reused.
+The Attempt 6 network guard plan (`b1d25efd...`, frozen builder, live
+`EPERM` unshare probes, module-computed pod-instance hashes) and PRE are
+complete: the create-once PRE captured at the official root under the
+exact Attempt 5 import surface (bootstrap venv site-packages plus
+`jacobian_lens_v1` editable source, authentic pod-local `RUNPOD_POD_ID`),
+after two consumption-free fail-closed rejections that are retained in
+the checkpoint STATUS. PRE main record SHA-256
+`a999ade09f3ac028113fa4613c5ec6a962491e1476f27073b1173482dc2b997b`; the
+independent same-host re-verify exited `0` with
+`CURRENT_RUNTIME_FILES_MATCH_CAPTURE` over 17,007 file records and
+5,089,508,503 bytes; `provider_authenticated=false` remains the explicit
+limitation. All PRE, operator, and control artifacts are retained in
+`ATTEMPT_06_PRE_ANCHOR_F3E3ADAD/` and the local archive.
+
+The next executable actions, in order: (1) the provider controller
+capture, which requires an authenticated RunPod UI DOM observation by the
+operator; (2) protocol, anchor payload, and the exact RFC3161 query,
+created once and left untransmitted. Any transmission then requires
+byte-specific owner approval for the exact new query bytes, and only
+after a verified anchor may the guarded GPU run and independent receiver
+execute. Attempt 1-5 identities are never reused.
 
 ### Retained 2026-07-23 Attempt 5 pre-anchor freeze checkpoint (superseded by the Attempt 6 repair above)
 
