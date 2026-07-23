@@ -161,17 +161,29 @@ artifact exists. Evidence:
 (`ARTIFACT_MANIFEST.json` 1,651 bytes, SHA-256
 `5feee838884579d11a645aa4c813538ab54304a9d49145cfe576fb19b2cbc860`).
 
-The next executable action is the fresh Attempt 6 create-once identity
-ceremony: nonce record and run ID, official root
-`/workspace/cas-jlcv1-official-29551624-<run8>`, staged
-repo/dependency/frozen/model, PRE capture plus independent re-verify,
-protocol, tool bindings (pin the LF-emitting receiver OpenSSL
-`2c6f2c64...`; the repaired code tolerates either binary), network guard
-plan, anchor payload, and the exact RFC3161 query — the provider
-controller capture step requires an authenticated RunPod UI DOM
-observation by the operator. Any transmission then requires byte-specific
-owner approval for the exact new query bytes, and only after a verified
-anchor may the guarded GPU run and independent receiver execute.
+The Attempt 6 create-once identity now EXISTS: run
+`jlcv1-rfc3161-f3e3adad7ff2b94a335fa199a0cda440dcd767e6ac7c10db8d39465b662ed541`
+(nonce record 646 bytes, SHA-256 `a673d021...`, created by the frozen
+ceremony tool at commit `29551624`). The official root
+`/workspace/cas-jlcv1-official-29551624-f3e3adad` is staged create-once on
+research pod `zp2s9pscgncn0b`: verified repo clone at the exact commit,
+verified 15-file dependency bundle, 8 frozen publication inputs, control
+copies of the implementation manifest and nonce record, and empty
+output/runlog/post/environment_pre directories; zero `.pyc`; zero GPU
+compute applications; the persistent-volume 0777 limitation persists as
+documented since Attempt 3. Checkpoint:
+`project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_06_PRE_ANCHOR_F3E3ADAD/`.
+
+The next executable actions, in order: (1) runner/receiver tool bindings
+and network guard plan (pin the LF-emitting receiver OpenSSL
+`2c6f2c64...`; the repaired code tolerates either binary); (2) PRE capture
+at the official root plus the independent same-host PRE re-verify; (3) the
+provider controller capture, which requires an authenticated RunPod UI DOM
+observation by the operator; (4) protocol, anchor payload, and the exact
+RFC3161 query, created once and left untransmitted. Any transmission then
+requires byte-specific owner approval for the exact new query bytes, and
+only after a verified anchor may the guarded GPU run and independent
+receiver execute. Attempt 1-5 identities are never reused.
 
 ### Retained 2026-07-23 Attempt 5 pre-anchor freeze checkpoint (superseded by the Attempt 6 repair above)
 
