@@ -220,17 +220,38 @@ certificate-request flag, with the nonce deriving run
 `ATTEMPT_06_PRE_ANCHOR_F3E3ADAD/`, the pod control root, and the local
 archive.
 
-The next executable action is this exact single-use owner approval:
+OWNER APPROVAL WAS GIVEN with the exact byte-specific sentence, and the
+one-shot transmission COMPLETED on 2026-07-23: continuity was rechecked
+(identity, exact 104-byte query bytes on the pod, no prior response,
+zero compute applications), the exact bytes were transmitted to
+`http://timestamp.digicert.com` exactly once with retries disabled
+(curl exit `0`, HTTP `200`, finished `2026-07-23T16:38:53Z`), and the
+6,033-byte signed response (SHA-256
+`dd944b0f3dc3a87498cb2995fafb2dc258dc94612f064f0271d76878a6f72aa7`,
+headers 121 bytes `21233347...`) is retained with create-once
+started/finished receipts.
 
-`I approve sending the exact 104-byte RFC3161 query with SHA-256 c47ba9d88710deb3861f245252f48247b443e72d9a3c3cf756eddf4069578fc5 to DigiCert.`
+THE ANCHOR CEREMONY THEN PASSED — the exact stage that failed closed
+and consumed Attempt 5. The frozen create-once anchor receipt is 5,597
+bytes, SHA-256
+`842d65e0fc71cf893064bc0e2a121c2d55edb53fe813f40b3b625847a917be26`:
+`verified=true`, status
+`QUERY_NONCE_IMPRINT_POLICY_SIGNATURE_CHAIN_RESPONDER_AND_TRUST_ROOT_VERIFIED`,
+signed timestamp `Jul 23 16:38:53 2026 GMT` (unix `1784824733`), DigiCert
+policy OID `2.16.840.1.114412.7.1`, exact nonce and query/response
+hashes, verified with the pinned LF-emitting receiver OpenSSL 3.5.4
+(`2c6f2c64...`) through the repaired CRLF-safe parsing boundary. The
+CRLF/bare-CR repair is therefore validated in the live ceremony against
+real DigiCert bytes, not only in tests. No model or CUDA execution has
+occurred; claim status remains `SHADOW / NONE / NOT_LICENSED` and the
+score remains `0.33` until the technical canary itself passes.
 
-After approval: recheck continuity; transmit the exact bytes once with
-retries disabled; verify and freeze the signed response through the
-repaired CRLF-safe verification path with the pinned LF-emitting
-receiver OpenSSL (`2c6f2c64...`); create the anchor receipt and launch
-configuration; execute the guarded shadow canary; recover all evidence;
-and run the independent receiver. Attempt 1-5 identities are never
-reused.
+The next executable actions: build the Attempt 6 target-path mapping
+and create-once launch configuration, execute the guarded shadow canary
+on the research pod (phase-two TSYNC, post-guard CUDA proof, 213
+artifacts, 1,248 autograd calls, `IMMUTABLE_ENVIRONMENT_MATCH`), recover
+all evidence off-pod, and run the independent receiver. Attempt 1-5
+identities are never reused.
 
 ### Retained 2026-07-23 Attempt 5 pre-anchor freeze checkpoint (superseded by the Attempt 6 repair above)
 
