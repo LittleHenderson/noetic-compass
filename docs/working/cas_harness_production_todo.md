@@ -102,9 +102,12 @@ detached HEAD with `core.autocrlf=false` and `core.eol=lf`. The freeze
 handoff is
 `project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_06_IMPLEMENTATION_FREEZE_29551624/`.
 Its five non-manifest artifacts were independently rehashed against
-`ARTIFACT_MANIFEST.json` with zero mismatches; that manifest is 2,121 bytes
-with SHA-256
-`5d62bf350b0c9270d470a83bc85c20ccffffd12acf24d450503eb4d740f47182`.
+`ARTIFACT_MANIFEST.json` with zero mismatches. After the same-day Attempt 5
+transmission correction was folded into `STATUS.md` and the freeze record,
+the manifest was regenerated: it is 2,121 bytes with SHA-256
+`05a5b50ef4e21eb01535aa7665b95bc007f327552fd70773313869d175b51af1`
+(superseding the initially recorded
+`5d62bf350b0c9270d470a83bc85c20ccffffd12acf24d450503eb4d740f47182`).
 
 No TSA was contacted, no RunPod compute was started, stopped, or modified,
 and no model or CUDA execution occurred. No new PRE, protocol, nonce, run
@@ -114,10 +117,26 @@ exists. Therefore there is no new `ACCEPT`, scientific conclusion, or
 licensed capability, and the whole-project score remains approximately
 `0.33 / 1.00` with the existing `0.30-0.35` uncertainty band.
 
-The frozen Attempt 5 pre-anchor identity (run `jlcv1-rfc3161-dd55bc73...`)
-binds pre-repair commit `f72b89cd` and is superseded: its 104-byte query
-was never transmitted and must never be transmitted. Attempt 1-5
-identities, queries, and approvals may never be reused.
+Correction to this checkpoint's first publication (same day): the retained
+Attempt 5 post-anchor failure record
+(`.../ATTEMPT_05_PRE_ANCHOR_DD55BC73/ATTEMPT_05_POST_ANCHOR_VERIFIER_FAILURE_RECORD.json`)
+shows the Attempt 5 one-shot WAS consumed. The owner-approved 104-byte query
+(SHA-256 `e73850...`) was transmitted to DigiCert exactly once with zero
+retries; the 6,033-byte response (SHA-256 `2ea41173...`, signed timestamp
+`Jul 23 08:43:55 2026 GMT`) is retained. The anchor ceremony then FAILED
+CLOSED with `RFC3161 query text contains invalid controls` because the
+Attempt 5 tool binding pinned the CRLF-emitting `mingw64` OpenSSL
+(`060b787e...`) and the frozen verifier rejects any carriage return — the
+exact defect this Attempt 6 repair removes. A diagnostic-only rerun with the
+LF-emitting `usr/bin` OpenSSL (`2c6f2c64...`) fully verified the response
+cryptography but is not authoritative for a receipt. No Attempt 5 anchor
+receipt or launch configuration exists; Attempt 5 must never resume, its
+retained response stays retained, and this repair is therefore a repair of a
+real consumed-attempt failure, not only prospective hardening. Attempt 1-5
+identities, queries, and approvals may never be reused. The earlier wording
+of this checkpoint ("its 104-byte query was never transmitted") and the
+initially recorded freeze-manifest hash are superseded by this correction;
+the corrected freeze `ARTIFACT_MANIFEST.json` hash is recorded below.
 
 The next executable action is: start a fresh isolated research GPU root for
 Attempt 6 at commit `29551624f4de0eec61c4035e364203be55d6c08a` and complete
@@ -254,13 +273,21 @@ result exists from Attempt 5. The whole-project score remains approximately
 The next executable action recorded at this checkpoint was an exact
 single-use owner approval to send the 104-byte RFC3161 query with SHA-256
 `e73850302dc31015af2cd5624eed70d445ef553a7de9acca640d5ba9cca9a846` to
-DigiCert. That approval request is WITHDRAWN and superseded: the Attempt 6
-CRLF/bare-CR repair (current section above) advanced the implementation to
-commit `29551624f4de0eec61c4035e364203be55d6c08a`, so the Attempt 5 query
-bound to commit `f72b89cd` must never be transmitted. The frozen Attempt 5
-pre-anchor evidence, run identity `dd55bc73...`, and this section are
-retained unchanged as history. Attempt 1-5 identities and approvals may
-never be reused.
+DigiCert. HISTORY THAT FOLLOWED (recorded in
+`ATTEMPT_05_PRE_ANCHOR_DD55BC73/ATTEMPT_05_POST_ANCHOR_VERIFIER_FAILURE_RECORD.json`
+and its time correction): that approval was given and consumed — the exact
+query bytes were transmitted to DigiCert exactly once with retries
+disabled; the 6,033-byte signed response (SHA-256 `2ea41173...`, timestamp
+`Jul 23 08:43:55 2026 GMT`) is retained; and the anchor ceremony then
+failed closed at the protocol-pinned CRLF-emitting `mingw64` OpenSSL with
+`RFC3161 query text contains invalid controls`. No anchor receipt or launch
+configuration was created; `attempt_5_launch_authorized=false` and
+`attempt_5_must_not_resume=true` are the recorded disposition. The Attempt
+6 CRLF/bare-CR repair (current section above) at commit
+`29551624f4de0eec61c4035e364203be55d6c08a` repairs that failure class. The
+frozen Attempt 5 pre-anchor evidence, run identity `dd55bc73...`, retained
+response, and this section are retained unchanged as history. Attempt 1-5
+identities, queries, and approvals may never be reused.
 
 ### Retained 2026-07-23 Attempt 5 implementation-freeze checkpoint
 
@@ -930,7 +957,7 @@ one-command run:
 | Capability | Current evidence | Distance to the next honest test |
 |---|---|---|
 | Basic ablation | Real activation-level and forward-intervention machinery exists; historical outcomes include both positive activation-level disruption and negative forward-control results. | Already testable, but a new-design joined ablation requires the joined runner. |
-| `JACOBIAN_LENS_CANARY_V1` | Attempt 6 repaired source (CRLF/bare-CR normalization contract at commit `29551624`), canonical 31-file manifest, complete Git bundle, dependency archive, independent reconstruction, and complete `938 passed, 2 skipped` suite are present; no Attempt 6 PRE/query/CUDA/model execution exists; the frozen untransmitted Attempt 5 query is superseded and must never be sent. | Fresh isolated-GPU prestage, then a new PRE/protocol/nonce/run ID/query/anchor/config, exact query approval, one-time transmission, official execution, recovery, and independent receiver. |
+| `JACOBIAN_LENS_CANARY_V1` | Attempt 6 repaired source (CRLF/bare-CR normalization contract at commit `29551624`), canonical 31-file manifest, complete Git bundle, dependency archive, independent reconstruction, and complete `938 passed, 2 skipped` suite are present; no Attempt 6 PRE/query/CUDA/model execution exists; Attempt 5's one-shot was consumed on 2026-07-23 (query transmitted once, response `2ea41173...` retained, ceremony failed closed on the pinned CRLF-emitting verifier) and must never resume. | Fresh isolated-GPU prestage, then a new PRE/protocol/nonce/run ID/query/anchor/config, exact query approval, one-time transmission, official execution, recovery, and independent receiver. |
 | Joined steering/ablation smoke | Reusable intervention hooks and synthetic CJT/Bias/RPM/CAS-Ohm estimators exist. A source-bound planning package and negative-test matrix are present, but no executable `CJT_JSPACE_OHM_JOINED_CANARY_V0` protocol/runner or model result exists. | Independently verified Attempt 5 technical pass, then separate-worktree implementation, prompt-bank/power review, protocol freeze/anchor, and a separate GPU smoke. |
 | Hidden-state prompt-injection pilot | Surface/shadow instruction-integrity screening exists, but prior hidden-state lanes did not beat required text/control margins. | Joined runner and frozen behavioral functional, then held-out prompt families and controls. |
 | `LICENSED` steering or prompt-injection detection | `OPEN / NOT_LICENSED`. | Replicated untouched-data results, uncertainty, safety/utility floors, and architecture-diverse confirmation after the pilot. |
