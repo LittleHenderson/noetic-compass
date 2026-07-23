@@ -138,13 +138,40 @@ of this checkpoint ("its 104-byte query was never transmitted") and the
 initially recorded freeze-manifest hash are superseded by this correction;
 the corrected freeze `ARTIFACT_MANIFEST.json` hash is recorded below.
 
-The next executable action is: start a fresh isolated research GPU root for
-Attempt 6 at commit `29551624f4de0eec61c4035e364203be55d6c08a` and complete
-non-model prestaging; only if prestaging passes, create a fresh Attempt 6
-root, PRE, protocol, nonce, run ID, query, anchor payload, and launch
-configuration, obtain byte-specific owner approval for the exact new query
-bytes before any transmission, and only then execute the guarded GPU run
-and independent receiver.
+The Attempt 6 non-model remote prestage PASSED on research pod
+`zp2s9pscgncn0b` (same boot/machine/GPU identity as the frozen Attempt 5
+observations; endpoint `69.30.85.51:22111` bound via the authenticated
+RunPod REST API plus exact retained host-key-pin continuity,
+`StrictHostKeyChecking=yes`). At prestage root
+`/workspace/cas-jlcv1-attempt6-prestage-29551624-20260723`: bundle,
+manifest, dependency archive, and all 8 frozen input publications verified
+byte-exact; repository reconstructed clean at `29551624` with
+`git fsck --full --strict`; the remote manifest reconstruction was
+byte-identical (third independent reconstruction, now on Linux); the
+15-file dependency bundle verified under `python3.11 -I -B` with zero
+`.pyc`; the 5-file Pythia-160m snapshot rehashed without a model load; the
+OpenSSL empty-config and PEM-on-stdin paths passed with the exact root
+fingerprint; the CRLF normalization contract passed on the pod against
+real `openssl ts -query -text` output (receiver, helper, and sealed-memfd
+runner decode paths); the wrapper failed closed rc `2` both without `-I`
+and without `-B`; GPU compute applications were `0` after all checks; and
+no nonce, run ID, PRE, protocol, query, response, anchor, or launch
+artifact exists. Evidence:
+`project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_06_REMOTE_PRESTAGE_ZP2S9PSCGNCN0B_20260723/`
+(`ARTIFACT_MANIFEST.json` 1,651 bytes, SHA-256
+`5feee838884579d11a645aa4c813538ab54304a9d49145cfe576fb19b2cbc860`).
+
+The next executable action is the fresh Attempt 6 create-once identity
+ceremony: nonce record and run ID, official root
+`/workspace/cas-jlcv1-official-29551624-<run8>`, staged
+repo/dependency/frozen/model, PRE capture plus independent re-verify,
+protocol, tool bindings (pin the LF-emitting receiver OpenSSL
+`2c6f2c64...`; the repaired code tolerates either binary), network guard
+plan, anchor payload, and the exact RFC3161 query — the provider
+controller capture step requires an authenticated RunPod UI DOM
+observation by the operator. Any transmission then requires byte-specific
+owner approval for the exact new query bytes, and only after a verified
+anchor may the guarded GPU run and independent receiver execute.
 
 ### Retained 2026-07-23 Attempt 5 pre-anchor freeze checkpoint (superseded by the Attempt 6 repair above)
 
