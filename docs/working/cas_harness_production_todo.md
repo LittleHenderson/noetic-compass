@@ -174,16 +174,24 @@ compute applications; the persistent-volume 0777 limitation persists as
 documented since Attempt 3. Checkpoint:
 `project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_06_PRE_ANCHOR_F3E3ADAD/`.
 
-The next executable actions, in order: (1) runner/receiver tool bindings
-and network guard plan (pin the LF-emitting receiver OpenSSL
-`2c6f2c64...`; the repaired code tolerates either binary); (2) PRE capture
-at the official root plus the independent same-host PRE re-verify; (3) the
-provider controller capture, which requires an authenticated RunPod UI DOM
-observation by the operator; (4) protocol, anchor payload, and the exact
-RFC3161 query, created once and left untransmitted. Any transmission then
-requires byte-specific owner approval for the exact new query bytes, and
-only after a verified anchor may the guarded GPU run and independent
-receiver execute. Attempt 1-5 identities are never reused.
+The Attempt 6 tool bindings are created once: the receiver binding
+(747 bytes, SHA-256 `9409fc7b...`) pins the Windows Git and the
+LF-emitting `usr/bin` OpenSSL `2c6f2c64...` — deliberately NOT the
+CRLF-emitting `mingw64` binary that burned Attempt 5, though the repaired
+code now tolerates either; the runner binding (450 bytes, SHA-256
+`ce16acc6...`) pins the pod `/usr/bin/git` and `/usr/bin/openssl`. Both
+are retained in the official root `control/` and the local
+`ATTEMPT_06_PRE_ANCHOR_F3E3ADAD/control/`.
+
+The next executable actions, in order: (1) network guard plan
+(create-once); (2) PRE capture at the official root plus the independent
+same-host PRE re-verify; (3) the provider controller capture, which
+requires an authenticated RunPod UI DOM observation by the operator; (4)
+protocol, anchor payload, and the exact RFC3161 query, created once and
+left untransmitted. Any transmission then requires byte-specific owner
+approval for the exact new query bytes, and only after a verified anchor
+may the guarded GPU run and independent receiver execute. Attempt 1-5
+identities are never reused.
 
 ### Retained 2026-07-23 Attempt 5 pre-anchor freeze checkpoint (superseded by the Attempt 6 repair above)
 
