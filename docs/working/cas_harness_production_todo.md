@@ -197,13 +197,40 @@ independent same-host re-verify exited `0` with
 limitation. All PRE, operator, and control artifacts are retained in
 `ATTEMPT_06_PRE_ANCHOR_F3E3ADAD/` and the local archive.
 
-The next executable actions, in order: (1) the provider controller
-capture, which requires an authenticated RunPod UI DOM observation by the
-operator; (2) protocol, anchor payload, and the exact RFC3161 query,
-created once and left untransmitted. Any transmission then requires
-byte-specific owner approval for the exact new query bytes, and only
-after a verified anchor may the guarded GPU run and independent receiver
-execute. Attempt 1-5 identities are never reused.
+The Attempt 6 pre-anchor set is now FROZEN. The provider controller
+capture (`1e3c6b20...`, captured 2026-07-23T15:20:32.657Z) was taken from
+the operator's signed-in RunPod console read live through the operator's
+in-app browser session with an SSH runtime cross-check; `NVIDIA A40` was
+observed in the signed-in deploy-page GPU-card DOM attribute and the
+advertised `48 GB` VRAM from the card text; a first shorter-name capture
+pass is retained as superseded. The ceremony's ordering invariant
+(controller capture must precede PRE) rejected the original PRE twice,
+fail-closed with nothing consumed; the final PRE (main `73e04370...`)
+was captured after the controller observation and independently
+re-verified (exit `0`, 17,007 records, 5,089,508,503 bytes); both
+earlier PREs are retained as superseded-unused. The frozen V1 protocol
+is 8,141 bytes (`013c8b52...`); the anchor payload is 3,858 bytes
+(`f51eefa4...`); and the exact RFC3161 query is 104 bytes with SHA-256
+`c47ba9d88710deb3861f245252f48247b443e72d9a3c3cf756eddf4069578fc5`,
+UNSENT. Independent DER reconstruction matched byte-for-byte, and the
+pinned LF-emitting receiver OpenSSL decoded it through the repaired
+CRLF-safe parser, matching policy, nonce, imprint, and
+certificate-request flag, with the nonce deriving run
+`jlcv1-rfc3161-f3e3adad...`. All artifacts are in
+`ATTEMPT_06_PRE_ANCHOR_F3E3ADAD/`, the pod control root, and the local
+archive.
+
+The next executable action is this exact single-use owner approval:
+
+`I approve sending the exact 104-byte RFC3161 query with SHA-256 c47ba9d88710deb3861f245252f48247b443e72d9a3c3cf756eddf4069578fc5 to DigiCert.`
+
+After approval: recheck continuity; transmit the exact bytes once with
+retries disabled; verify and freeze the signed response through the
+repaired CRLF-safe verification path with the pinned LF-emitting
+receiver OpenSSL (`2c6f2c64...`); create the anchor receipt and launch
+configuration; execute the guarded shadow canary; recover all evidence;
+and run the independent receiver. Attempt 1-5 identities are never
+reused.
 
 ### Retained 2026-07-23 Attempt 5 pre-anchor freeze checkpoint (superseded by the Attempt 6 repair above)
 
