@@ -400,16 +400,24 @@ float64 for others). Values agree to 4+ significant figures throughout —
 NOT a gross defect, NOT a degeneracy. The `1e-4` gate is simply tighter than
 this cross-check method can reliably achieve on the pinned stack.
 
-The next executable action requires an OWNER SCIENTIFIC DECISION (must not
-be silently loosened to force a pass): (a) run the functional cross-check in
-float64 — fixes the precision-limited cases (a measurement-code change);
-and/or (b) recalibrate `GRADIENT_ANALYTIC_RELATIVE_ERROR_LIMIT` to the
-empirical forward-vs-reverse floor on this stack (full-distribution max
-`4.24e-3`), recorded with the justification above. Either is a change to the
-frozen implementation requiring tests, a full-suite pass, a fresh
-implementation freeze, and a fresh Attempt 9 identity. Attempt 1-8
-identities are never reused. A clean official canary PASS then earns Gate 1
-(`0.38`).
+CONCLUSIVE (full 24-measurement float32-vs-float64 sweep): float64 alone
+does NOT achieve a pass. float32 max relerr `1.51e-4` (2 of 24 over `1e-4`);
+float64 max `1.82e-4` (1 of 24 over `1e-4`) — a residual forward-vs-reverse
+method floor of ~`1.8e-4` persists at double precision on the worst
+measurement (`r7/l3`), and the fuller comparison set reaches `4.24e-3`. So a
+clean canary PASS is NOT reachable by a precision strengthening alone.
+
+The next executable action requires an OWNER SCIENTIFIC DECISION and must
+NOT be done silently to satisfy a score target: recalibrate
+`GRADIENT_ANALYTIC_RELATIVE_ERROR_LIMIT` to the empirical forward-vs-reverse
+floor on this stack (evidence: primary-check floor ~`1.8e-4` at float64,
+full-set max `4.24e-3`), recorded with that justification; optionally also
+move the cross-check to float64 as a strengthening. Because this changes a
+SCIENTIFIC ACCEPTANCE THRESHOLD — what a canary PASS means — it is the
+owner's call. It is a change to the frozen implementation requiring tests, a
+full-suite pass, a fresh implementation freeze, and a fresh Attempt 9
+identity. Attempt 1-8 identities are never reused. A clean official canary
+PASS then earns Gate 1 (`0.38`).
 
 Progress pattern across attempts: each cleared one blocker and reached the
 next stage — Attempt 5 anchor (CRLF), Attempt 6 phase-two (`/proc/net/unix`
