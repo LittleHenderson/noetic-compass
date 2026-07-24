@@ -1,0 +1,2 @@
+FAILED_CLOSED: producer runtime differs from pre/post environment captures
+RECEIVER_RC=2
