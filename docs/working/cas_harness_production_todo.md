@@ -284,20 +284,46 @@ across four diagnostic runs; its inode merely rotates). This is
 environment/version drift in the guard's quiescent-CUDA assumption, not a
 CRLF defect and not an isolation breach.
 
-The next executable action is the Attempt 7 fix: make the UVM-listener
-proof tolerant of unrelated `/proc/net/unix` churn via a bounded
-retry-until-stable read (the pattern `_task_seccomp_proof` already uses),
-accepting only when two consecutive reads agree AND the exact singular UVM
-inode record is present and unchanged — a strengthening, not a weakening,
-of the guarantee. This is a change to the frozen network guard
-(trust-surface), so it requires a new branch off `29551624`, regression
-tests, a full suite pass, a fresh implementation freeze, and a fresh
-Attempt 7 identity (new nonce/PRE/controller-capture/anchor and a new owner
-query approval). Attempt 1-6 identities are never reused. All GPU-execution
-and diagnostic evidence is retained in
+The Attempt 7 fix is IMPLEMENTED, TESTED, POD-VALIDATED, and FROZEN.
+`research/jacobian_lens_network_guard.py` now reads `/proc/net/unix` through
+`_read_stable_proc_unix_bytes()`, a bounded retry-until-stable loop
+(`MAXIMUM_PROC_UNIX_READ_ATTEMPTS=64`) that keeps the exact per-read
+atomicity guarantee (accept only when the file did not change during the
+read) and simply refuses to give up after one unlucky straddling read; the
+sole-UVM-record singularity and identity checks are unchanged, so isolation
+is not weakened. Four regression tests were added and the bootstrap hard pin
+updated. Commit `88b59de924857ad7c2f394122fe68f57ba97da77` on branch
+`fix/jacobian-guard-procunix-churn-20260723`, parent `29551624`, tree
+`d38d83c0...`.
+
+Verification: complete `live-trace-worker` suite `942 passed, 2 skipped`;
+and on research pod `zp2s9pscgncn0b` the full live sequence phase-one → CUDA
+bootstrap → identify sole UVM listener → phase-two TSYNC install + UVM close
+→ post-guard CUDA proof passed 13/13 consecutive runs with the fixed guard,
+where the pre-fix guard failed non-deterministically at exactly that stage.
+Implementation freeze at
+`ATTEMPT_07_IMPLEMENTATION_FREEZE_88B59DE9/`: 31-file manifest 5,689 bytes
+SHA-256 `af11038190763d477d43b87fdffb3b4e2dffa7f966ce95537384d740c59a7a72`
+(byte-identical on reconstruction, all 31 blobs matched), complete v2 bundle
+36,560,536 bytes SHA-256 `693b4da1538131959b9511076eb6ec27fa50d21b08a24f0c9ffc209fb487247d`,
+`ARTIFACT_MANIFEST.json` SHA-256
+`1118b23b96abf6fd69cc6215d568c9cf7f79b291755ac67d242ca5ccc339b37a`.
+Dependency archive unchanged. This freeze contains no PRE, run identity,
+query, anchor, or official model/CUDA execution; the pod validation is
+non-official. Score stays `0.33`.
+
+The next executable action is the full Attempt 7 create-once ceremony on
+commit `88b59de9`: fresh isolated-GPU prestage, fresh
+nonce/run-ID/official-root/PRE/controller-capture/protocol/anchor/query,
+the one-shot DigiCert transmission (covered by the owner's standing
+pre-authorization of 2026-07-23; recorded byte-specifically), then the
+guarded canary — which should now clear phase two and proceed to model
+materialization, the 1,248 autograd calls, and the 213 artifacts — off-pod
+recovery, and the independent receiver. A clean official canary PASS earns
+Gate 1 (`0.38`). Attempt 1-6 identities are never reused. Attempt 6
+GPU-execution and diagnostic evidence is retained in
 `ATTEMPT_06_GPU_EXECUTION_FAILED_CLOSED_PHASE_TWO/` (`ARTIFACT_MANIFEST.json`
-SHA-256 `3d14fab8cfbbeb7a8e1b07e53aab126d0d684847eb97f91be9c8747d6a5744a3`)
-and the local archive.
+SHA-256 `3d14fab8cfbbeb7a8e1b07e53aab126d0d684847eb97f91be9c8747d6a5744a3`).
 
 ### Retained 2026-07-23 Attempt 5 pre-anchor freeze checkpoint (superseded by the Attempt 6 repair above)
 
