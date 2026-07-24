@@ -246,12 +246,58 @@ real DigiCert bytes, not only in tests. No model or CUDA execution has
 occurred; claim status remains `SHADOW / NONE / NOT_LICENSED` and the
 score remains `0.33` until the technical canary itself passes.
 
-The next executable actions: build the Attempt 6 target-path mapping
-and create-once launch configuration, execute the guarded shadow canary
-on the research pod (phase-two TSYNC, post-guard CUDA proof, 213
-artifacts, 1,248 autograd calls, `IMMUTABLE_ENVIRONMENT_MATCH`), recover
-all evidence off-pod, and run the independent receiver. Attempt 1-5
-identities are never reused.
+The Attempt 6 launch configuration (`3113e05d...`) and target-path
+mapping were built create-once, the post-anchor prelaunch guard
+(`f9377332...`) passed, and the guarded shadow canary EXECUTED ONCE on
+research pod `zp2s9pscgncn0b` under the owner's standing pre-authorization
+of 2026-07-23. Wrapper exit `0`, producer status `FAILED_CLOSED`,
+execution receipt (v3) SHA-256
+`5dd76ac306aa67992f6b69de6a817ab92b58b33de3f3291e321e1505d1955c66`.
+
+THIS IS THE FIRST JLCV1 ATTEMPT EVER TO REACH LIVE CUDA EXECUTION. It
+passed live — under phase-one seccomp — the exact stages that killed the
+prior attempts: `PRE_CUDA_PREFLIGHT` (the CRLF-repaired RFC3161/anchor
+verification that consumed Attempt 5) and CUDA initialization, then ran a
+real GPU bootstrap tensor (torch `2.12.0+cu130`, CUDA `13.0`, A40; 1,024
+float32 ones summed to exactly 1024.0 on `cuda:0`) and identified the sole
+CUDA UVM listener. The CRLF/bare-CR repair is therefore validated end to
+end in the live guarded run, not only in tests and the anchor ceremony.
+
+It then FAILED CLOSED at `PHASE_TWO_TSYNC_INSTALL_AND_UVM_CLOSE` with zero
+artifacts, zero blocks measured, and zero of the registered 1,248 autograd
+calls. This is NOT a technical-canary pass, scientific result, or
+`LICENSED` capability; claim status stays `SHADOW / NONE / NOT_LICENSED`
+and the score stays `0.33` (Gate 1's `0.38` requires an independent
+canary PASS).
+
+Root cause (diagnosed with a bounded non-official reproduction, evidence
+in `ATTEMPT_06_GPU_EXECUTION_FAILED_CLOSED_PHASE_TWO/`): the seccomp
+two-phase network guard proves the sole CUDA UVM listener by reading the
+SYSTEM-WIDE `/proc/net/unix` and requiring the file `stat` to be stable
+across the read (`research/jacobian_lens_network_guard.py:_proc_unix_record`,
+lines 1080-1093). The installed `torch 2.12.0+cu130`/CUDA 13.0 runtime
+churns AF_UNIX sockets from CUDA background threads, so the system-wide
+file mutates mid-read and the check raises `/proc/net/unix changed while
+being read`. Confirmed non-deterministic and confirmed a read-stability
+RACE against unrelated churn (the CUDA UVM listener was the ONLY socket fd
+across four diagnostic runs; its inode merely rotates). This is
+environment/version drift in the guard's quiescent-CUDA assumption, not a
+CRLF defect and not an isolation breach.
+
+The next executable action is the Attempt 7 fix: make the UVM-listener
+proof tolerant of unrelated `/proc/net/unix` churn via a bounded
+retry-until-stable read (the pattern `_task_seccomp_proof` already uses),
+accepting only when two consecutive reads agree AND the exact singular UVM
+inode record is present and unchanged — a strengthening, not a weakening,
+of the guarantee. This is a change to the frozen network guard
+(trust-surface), so it requires a new branch off `29551624`, regression
+tests, a full suite pass, a fresh implementation freeze, and a fresh
+Attempt 7 identity (new nonce/PRE/controller-capture/anchor and a new owner
+query approval). Attempt 1-6 identities are never reused. All GPU-execution
+and diagnostic evidence is retained in
+`ATTEMPT_06_GPU_EXECUTION_FAILED_CLOSED_PHASE_TWO/` (`ARTIFACT_MANIFEST.json`
+SHA-256 `3d14fab8cfbbeb7a8e1b07e53aab126d0d684847eb97f91be9c8747d6a5744a3`)
+and the local archive.
 
 ### Retained 2026-07-23 Attempt 5 pre-anchor freeze checkpoint (superseded by the Attempt 6 repair above)
 
