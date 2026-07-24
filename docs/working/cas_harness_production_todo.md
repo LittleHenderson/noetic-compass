@@ -851,6 +851,25 @@ blueprint's 14-module implementation namespace
 (`research/joined_*.py` + 3 `scripts/*cjt_jspace_ohm_joined_canary_v0*.py`)
 is the build target; entry criteria per blueprint §21.
 
+Gate 2 progress — FIRST BLOCK IN PLACE (2026-07-24): the matched-control
+causal-gate apparatus is ported and unit-tested in the reconciliation
+worktree (`4bca901`, branch `feat/joined-canary-reconciliation-20260724`).
+`research/reconciled/causal_intervention.py` (ported verbatim with a
+provenance header from `f8a72008` `app/runtime/causal_intervention.py`,
+source sha `9044a78f`) provides the pure `refusal_direction` +
+`verify_causal_gates` (eight matched-control gates: effect size, permutation
+`p<0.001`, bootstrap CI, beats-random, random-small, opposite-direction,
+ignored/malformed stability). `tests/test_reconciled_causal_intervention.py`
+= 11 pure-function tests green (all-pass → `CAUSAL_PROOF_LICENSED`; six
+negative cases fail closed). This is Gate 2's "matched comparisons + honest
+error bars" GATE LOGIC. It earns nothing on its own: earning Gate 2 (`0.46`)
+still requires the full joined canary (the remaining 13 blueprint modules +
+prompt/causal banks + adapter + a real held-out GPU run + independent
+receiver reconstruction), a substantial multi-step build comparable to the
+Jacobian canary. Next port targets: the hidden-prompt-injection and
+CJT-bias causal banks + their surface-leakage screens, preserving every
+withdrawn/negative record.
+
 Historical score before Gate 1 (2026-07-23 and earlier): approximately
 `0.33 / 1.00` (band `0.30–0.35`). `1.00` means the owner's complete target is
 demonstrated rather than merely specified: repeatable hidden-state and
