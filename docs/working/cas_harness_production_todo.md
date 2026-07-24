@@ -359,32 +359,46 @@ the FULL Jacobian measurement — producing 212 real artifact files (all 8
 functional baseline logits and every jvp/vjp matrix across 8 ranks ×
 source layers 3/6/9). This is by far the deepest any attempt has reached.
 
-It FAILED CLOSED at `CANARY_EXECUTION` (execution receipt `e0a92216...`),
-with the autograd-call accounting at `0` of the contract `1248` even though
-all 212 measurement artifacts were produced. Leading hypothesis (not yet
-proven; the inner exception is a generic `NON_SUBPROCESS_FAIL_CLOSED` whose
-text is not serialized): the harness `TaggedAutogradGradCounter`
-(`research/jacobian_lens_canary_executor.py`, `require_exact_counts()` = 1248)
-did not intercept the `torch.autograd.grad` calls the pinned
-`jlens.fitting.jacobian_for_prompt` actually makes (`jlens/fitting.py:187`) —
-a measurement-accounting/instrumentation mismatch at the end of execution,
-NOT a failure of the computation itself. The actual Jacobian matrices ran.
+It FAILED CLOSED at `CANARY_EXECUTION` (execution receipt `e0a92216...`).
+The exact exception is now CAPTURED by a faithful reproduction (which wraps
+the lens in `ExactTokenLensModel` as the runner does and reproduces the same
+212 artifacts before failing): `functional analytic derivative differs from
+prepared gradient norm`, at `research/jacobian_lens_canary_torch.py:673` in
+`output_functional_measurements`. (An earlier hypothesis blaming the
+autograd counter was TESTED AND DISPROVEN — a direct probe shows the counter
+correctly counts 96 `MATRIX_ESTIMATOR` grad calls per `jacobian_for_prompt`;
+the receipt's `0 of 1248` is a failure-path reporting default, not the
+cause.)
+
+This is the canary's final SCIENTIFIC cross-check: per functional
+measurement it requires the reverse-mode `gradient_norm` and the
+forward-mode `torch.autograd.functional.jvp` `analytic` derivative to agree
+within `GRADIENT_ANALYTIC_RELATIVE_ERROR_LIMIT = 1e-4`. Instrumented on the
+pinned stack (torch 2.12.0+cu130 / CUDA 13.0 / A40 / float32): the last
+three comparisons were relerr `9.62e-6`, `3.86e-6`, and `1.5128e-4`; the
+third exceeds `1e-4` (`analytic 0.2004186809` vs `gradient_norm
+0.2004490048` — four-significant-figure agreement, `1.5x` over the limit).
+Forward vs reverse float32 GPU autodiff legitimately diverge at ~this scale;
+the `1e-4` limit was evidently calibrated on a tighter stack. This is a
+numerical-tolerance CALIBRATION question, not a crash or correctness break.
 Evidence: `ATTEMPT_08_GPU_EXECUTION_FAILED_CLOSED_CANARY_EXECUTION/`
-(`ARTIFACT_MANIFEST.json` SHA-256
-`fcde999099d786158de83b36...`; 212 raw artifact tensors retained on the pod).
+(`ARTIFACT_MANIFEST.json` SHA-256 `739d4c2ad797d474...`; 212 raw artifact
+tensors retained on the pod).
 
 Claim status `SHADOW / NONE / NOT_LICENSED`, score `0.33` (Gate 1's `0.38`
 still requires a clean official canary PASS).
 
-The next executable action: faithfully reproduce the canary-execution path
-with the preflight-built token manifest to capture the exact
-`CANARY_EXECUTION` exception, then reconcile the 1,248-call autograd
-accounting contract with the pinned jlens gradient path (intercept the
-exact callable jlens uses, or correct the expected-count contract to match
-the real call pattern). This touches the measurement-accounting trust
-surface, so it is a code change requiring tests, a full-suite pass, a fresh
-implementation freeze, and a fresh Attempt 9 identity. Attempt 1-8
-identities are never reused.
+The next executable action requires an OWNER DECISION, because it changes a
+scientific acceptance threshold (what a canary PASS means) and must not be
+silently loosened to force a pass: collect the full distribution of
+forward-vs-reverse relative errors across ALL functional measurements on the
+pinned stack, then set `GRADIENT_ANALYTIC_RELATIVE_ERROR_LIMIT` to a value
+justified by that distribution (e.g. `1e-3` comfortably covers the observed
+`1.5e-4` while remaining a strong agreement check), recorded with the
+empirical justification. That is a code change to the frozen implementation
+requiring tests, a full-suite pass, a fresh implementation freeze, and a
+fresh Attempt 9 identity. Attempt 1-8 identities are never reused. A clean
+official canary PASS then earns Gate 1 (`0.38`).
 
 Progress pattern across attempts: each cleared one blocker and reached the
 next stage — Attempt 5 anchor (CRLF), Attempt 6 phase-two (`/proc/net/unix`
