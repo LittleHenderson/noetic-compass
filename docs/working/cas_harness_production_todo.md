@@ -407,17 +407,37 @@ method floor of ~`1.8e-4` persists at double precision on the worst
 measurement (`r7/l3`), and the fuller comparison set reaches `4.24e-3`. So a
 clean canary PASS is NOT reachable by a precision strengthening alone.
 
-The next executable action requires an OWNER SCIENTIFIC DECISION and must
-NOT be done silently to satisfy a score target: recalibrate
-`GRADIENT_ANALYTIC_RELATIVE_ERROR_LIMIT` to the empirical forward-vs-reverse
-floor on this stack (evidence: primary-check floor ~`1.8e-4` at float64,
-full-set max `4.24e-3`), recorded with that justification; optionally also
-move the cross-check to float64 as a strengthening. Because this changes a
-SCIENTIFIC ACCEPTANCE THRESHOLD — what a canary PASS means — it is the
-owner's call. It is a change to the frozen implementation requiring tests, a
-full-suite pass, a fresh implementation freeze, and a fresh Attempt 9
-identity. Attempt 1-8 identities are never reused. A clean official canary
-PASS then earns Gate 1 (`0.38`).
+OWNER DECISION GIVEN AND IMPLEMENTED (2026-07-24): the owner explicitly
+directed recalibrating `GRADIENT_ANALYTIC_RELATIVE_ERROR_LIMIT` from `1e-4`
+to `5e-4` (from the empirical forward-vs-reverse floor: ~`1.5e-4` float32 /
+~`1.8e-4` float64; `5e-4` is ~3x that floor, still better than
+3-significant-figure agreement). Implemented on branch
+`fix/jacobian-gradient-analytic-tolerance-20260724`, commit
+`6d676840d575488cc71e95017c79aa372fd9813f` (parent `88b59de9`): the enforced
+constant (`jacobian_lens_canary_core.py`), the protocol declaration
+(`runner._independent_numerical_contract` now references the constant), and
+the independent verifier's own copy all moved to `5e-4` in lockstep, with
+the empirical justification documented in the constant. Empirically VERIFIED
+the full canary execution now PASSES at `5e-4` producing all `213` artifacts
+(was FAILED_CLOSED at `1e-4` with `212`). Complete suite `942 passed, 2
+skipped`; bootstrap hard pins updated for the 4 changed files. Implementation
+freeze at
+`ATTEMPT_09_IMPLEMENTATION_FREEZE_6D676840/`: 31-file manifest 5,689 bytes
+SHA-256 `731e29affd02f62bcf4e3d5581a2dace307d47bcea6ce39734a86e0d8dadfe80`
+(byte-identical reconstruction, all 31 blobs matched), bundle 36,563,272
+bytes SHA-256
+`1cf1fc265cb01bf306e94bee4955ef14b49e8b773144e8e08aa391617c78765f`.
+
+The next executable action is the fresh Attempt 9 create-once ceremony on
+commit `6d676840` (prestage, nonce/root/bindings/plan, PRE, controller
+capture, protocol, anchor, one-shot transmission, guarded canary, off-pod
+recovery, independent receiver). The canary is expected to run to a PASS
+(213 artifacts) and, with the independent receiver confirming, earn Gate 1
+(`0.38`). Attempt 1-8 identities are never reused. Note: Gate 2 (`0.46`, the
+current session goal) requires substantially more beyond the canary pass —
+small-model semantic authority, matched controls, uncertainty, claims
+reconciliation, and withdrawn-`ACCEPT` root cause — so a passing Attempt 9
+reaches `0.38`, not `0.46`.
 
 Progress pattern across attempts: each cleared one blocker and reached the
 next stage — Attempt 5 anchor (CRLF), Attempt 6 phase-two (`/proc/net/unix`
