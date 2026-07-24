@@ -1,0 +1,129 @@
+{
+  "best_layer_by_hidden_ba": 3,
+  "best_layer_is_primary": false,
+  "claim": "OPEN / NOT LICENSED \u2014 on the pre-registered primary layer the W0 hidden state did not beat surface controls at the pre-registered bar under fair grouped comparison.",
+  "claim_ceiling": "This is a W0 readout gate on a single pre-registered layer only. Secondary layers are exploratory context and license nothing. It does NOT prove causality (no forward-pass steering/ablation), does not license any product ACCEPT, and grants no semantic/universality/300B license.",
+  "created_at": "2026-07-24T20:57:14.341549+00:00",
+  "dataset": "research\\reconciled\\evidence\\w0_extractions\\w0_hidden_pi_v0.npz",
+  "dataset_sha256": "a02ad4c204ca82260a87ec5fb299719a40ac52ec52987df3160f49308fe04249",
+  "fold_count": 5,
+  "important_limits": [
+    "Only the pre-registered primary layer decides PASS/FAIL; other layers are exploratory.",
+    "Grouped folds keep each prompt_group_id fully inside one fold (no paraphrase leakage).",
+    "Char n-gram hash is the mandatory stronger surface control; the hidden claim must beat it by the margin.",
+    "Permutation shuffles labels only within payload class.",
+    "Bootstrap resamples whole prompt groups, not rows, to respect dependency structure.",
+    "This scorer does not prove causality and does not license a product ACCEPT."
+  ],
+  "label_distribution": {
+    "ABSENT": 320,
+    "PRESENT": 320
+  },
+  "layers_scored": [
+    3,
+    6,
+    9
+  ],
+  "model": "EleutherAI/pythia-160m",
+  "payload_class_count": 5,
+  "per_layer": [
+    {
+      "all_gates_pass": false,
+      "bootstrap_margin_vs_char_ngram": {
+        "ci_lower_2p5": -0.0125,
+        "ci_upper_97p5": 0.23334,
+        "margin_mean": 0.111374,
+        "rounds": 2000
+      },
+      "gates": {
+        "bootstrap_margin_ci_excludes_zero_pass": false,
+        "char_ngram_margin_pass": false,
+        "hidden_balanced_accuracy_pass": false,
+        "length_margin_pass": true,
+        "shuffled_control_pass": true,
+        "text_margin_pass": true,
+        "within_payload_permutation_pass": false
+      },
+      "hidden_balanced_accuracy": 0.7125,
+      "hidden_minus_char_ngram": 0.1125,
+      "hidden_minus_length": 0.2875,
+      "hidden_minus_text": 0.3125,
+      "layer": 3,
+      "role": "secondary_exploratory",
+      "shuffled_label_hidden_mean": 0.50275,
+      "within_payload_permutation_p": 0.004975
+    },
+    {
+      "all_gates_pass": false,
+      "bootstrap_margin_vs_char_ngram": {
+        "ci_lower_2p5": -0.030303,
+        "ci_upper_97p5": 0.231966,
+        "margin_mean": 0.099037,
+        "rounds": 2000
+      },
+      "gates": {
+        "bootstrap_margin_ci_excludes_zero_pass": false,
+        "char_ngram_margin_pass": false,
+        "hidden_balanced_accuracy_pass": false,
+        "length_margin_pass": true,
+        "shuffled_control_pass": true,
+        "text_margin_pass": true,
+        "within_payload_permutation_pass": true
+      },
+      "hidden_balanced_accuracy": 0.7,
+      "hidden_minus_char_ngram": 0.1,
+      "hidden_minus_length": 0.275,
+      "hidden_minus_text": 0.3,
+      "layer": 6,
+      "role": "primary_confirmatory",
+      "shuffled_label_hidden_mean": 0.50625,
+      "within_payload_permutation_p": 0.0005
+    },
+    {
+      "all_gates_pass": false,
+      "bootstrap_margin_vs_char_ngram": {
+        "ci_lower_2p5": -0.057379,
+        "ci_upper_97p5": 0.1875,
+        "margin_mean": 0.062908,
+        "rounds": 2000
+      },
+      "gates": {
+        "bootstrap_margin_ci_excludes_zero_pass": false,
+        "char_ngram_margin_pass": false,
+        "hidden_balanced_accuracy_pass": false,
+        "length_margin_pass": true,
+        "shuffled_control_pass": true,
+        "text_margin_pass": true,
+        "within_payload_permutation_pass": false
+      },
+      "hidden_balanced_accuracy": 0.6625,
+      "hidden_minus_char_ngram": 0.0625,
+      "hidden_minus_length": 0.2375,
+      "hidden_minus_text": 0.2625,
+      "layer": 9,
+      "role": "secondary_exploratory",
+      "shuffled_label_hidden_mean": 0.50675,
+      "within_payload_permutation_p": 0.004975
+    }
+  ],
+  "pre_registered_thresholds": {
+    "PASS_BA": 0.75,
+    "PASS_BASELINE_MARGIN": 0.15,
+    "PASS_PERMUTATION_P": 0.001,
+    "PASS_SHUFFLED_MEAN_MAX": 0.6,
+    "multiple_comparison_policy": "single pre-registered primary endpoint (no best-of-N correction needed)",
+    "primary_layer": 6
+  },
+  "primary_layer": 6,
+  "prompt_group_count": 80,
+  "row_count": 640,
+  "schema_version": "cas_harness_injection_detection_w0_scorer.v1",
+  "status": "FAIL",
+  "status_basis": "primary_confirmatory_layer_only",
+  "surface_baselines": {
+    "char_ngram_hash_balanced_accuracy": 0.6,
+    "length_balanced_accuracy": 0.425,
+    "text_hash_balanced_accuracy": 0.4
+  },
+  "task": "PROMPT_INJECTION_DETECTION (PRESENT vs ABSENT) \u2014 NOT comply/refuse"
+}

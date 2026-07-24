@@ -1,0 +1,32 @@
+{
+  "per_layer": {
+    "3": {
+      "all_gates_pass": false,
+      "boot_ci_lower": -0.0125,
+      "hidden_ba": 0.7125,
+      "minus_char_ngram": 0.1125,
+      "perm_p": 0.004975,
+      "role": "secondary_exploratory"
+    },
+    "6": {
+      "all_gates_pass": false,
+      "boot_ci_lower": -0.030303,
+      "hidden_ba": 0.7,
+      "minus_char_ngram": 0.1,
+      "perm_p": 0.0005,
+      "role": "primary_confirmatory"
+    },
+    "9": {
+      "all_gates_pass": false,
+      "boot_ci_lower": -0.057379,
+      "hidden_ba": 0.6625,
+      "minus_char_ngram": 0.0625,
+      "perm_p": 0.004975,
+      "role": "secondary_exploratory"
+    }
+  },
+  "primary_layer": 6,
+  "status": "FAIL",
+  "surface_char_ngram_ba": 0.6
+}
+[injection-detection] wrote research\reconciled\evidence\injection_detection_w0_report_pythia160m.json
