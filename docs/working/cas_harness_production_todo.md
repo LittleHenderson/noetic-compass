@@ -373,17 +373,16 @@ cause.)
 This is the canary's final SCIENTIFIC cross-check: per functional
 measurement it requires the reverse-mode `gradient_norm` and the
 forward-mode `torch.autograd.functional.jvp` `analytic` derivative to agree
-within `GRADIENT_ANALYTIC_RELATIVE_ERROR_LIMIT = 1e-4`. Instrumented on the
-pinned stack (torch 2.12.0+cu130 / CUDA 13.0 / A40 / float32): the last
-three comparisons were relerr `9.62e-6`, `3.86e-6`, and `1.5128e-4`; the
-third exceeds `1e-4` (`analytic 0.2004186809` vs `gradient_norm
-0.2004490048` — four-significant-figure agreement, `1.5x` over the limit).
-Forward vs reverse float32 GPU autodiff legitimately diverge at ~this scale;
-the `1e-4` limit was evidently calibrated on a tighter stack. This is a
-numerical-tolerance CALIBRATION question, not a crash or correctness break.
+within `GRADIENT_ANALYTIC_RELATIVE_ERROR_LIMIT = 1e-4`. Full distribution on the pinned stack (torch 2.12.0+cu130 / CUDA 13.0 /
+A40 / float32, shadow diagnostic across all functional measurements): of 40
+forward-vs-reverse comparisons, relerr median `1.07e-4`, MAX `4.24e-3`; 20
+of 40 exceed `1e-4`, 5 exceed `1e-3`. This is SYSTEMATIC — the forward-mode
+`torch.autograd.functional.jvp` and reverse-mode `torch.autograd.grad`
+derivatives of the same quantity disagree stack-wide at `1e-4`-`4e-3`
+(agreement only to 2-3 significant figures), not one borderline point.
 Evidence: `ATTEMPT_08_GPU_EXECUTION_FAILED_CLOSED_CANARY_EXECUTION/`
-(`ARTIFACT_MANIFEST.json` SHA-256 `739d4c2ad797d474...`; 212 raw artifact
-tensors retained on the pod).
+(`ARTIFACT_MANIFEST.json` SHA-256 `c2efcdc5ef0faad232f9...`; 212 raw
+artifact tensors retained on the pod).
 
 Claim status `SHADOW / NONE / NOT_LICENSED`, score `0.33` (Gate 1's `0.38`
 still requires a clean official canary PASS).
