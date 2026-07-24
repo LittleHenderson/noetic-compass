@@ -814,8 +814,28 @@ mutation logs are `unavailable`.
 
 ### Current evidence-gated whole-project completion score
 
-The current whole-project score is approximately `0.33 / 1.00` (reasonable
-uncertainty band `0.30–0.35`). `1.00` means the owner's complete target is
+The current whole-project score is `0.38 / 1.00` (reasonable uncertainty
+band `0.36–0.40`): GATE 1 WAS EARNED on 2026-07-24 by Attempt 11 — the
+first receiver-confirmed technical canary pass in project history. Producer
+`TECHNICAL_CANARY_PASS_CANDIDATE` (receipt `96c300fe…`, `failed_gates []`,
+`1248/1248` autograd, 213 artifacts) AND independent receiver
+`TECHNICAL_CANARY_PASS_OPERATOR_ATTESTED_PENDING_EXTERNAL_REPRODUCTION`
+(receipt `8744172d…`, `mathematical_consistency_verified`,
+`rfc3161_protocol_anchor_verified`), at commit `04cd32e7…`, run
+`jlcv1-rfc3161-2f7f8aa4…`, real DigiCert anchor tsr `88141b37…` (TSA
+`Jul 24 19:27:53 2026 GMT`). Three owner-directed metrology fixes earned it
+(functional 5e-4; local-VJP adjoint-vector metric at 1e-3; receiver
+NVML→torch GPU-ruler conversion). Boundaries per the receiver receipt:
+`SHADOW / NOT_LICENSED / verdict NONE`, no model-origin proof, no external
+reproduction, no semantic/CJT/RPM/J-Space/CAS-Ohm license. Evidence:
+`ATTEMPT_11_TECHNICAL_CANARY_PASS_GATE1/`. The line-1221 joined-study
+precondition ("after a future independently verified Jacobian technical
+pass") is now SATISFIED; Gate 2 work (`0.46`: small-model semantic
+authority, matched controls, uncertainty, claims reconciliation,
+withdrawn-`ACCEPT` root cause) is unblocked and next.
+
+Historical score before Gate 1 (2026-07-23 and earlier): approximately
+`0.33 / 1.00` (band `0.30–0.35`). `1.00` means the owner's complete target is
 demonstrated rather than merely specified: repeatable hidden-state and
 activation probing, licensed cross-architecture behavior, genuine 300B-class
 execution, validated prompt-injection detection, steering and ablation,
