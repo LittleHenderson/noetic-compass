@@ -834,6 +834,23 @@ pass") is now SATISFIED; Gate 2 work (`0.46`: small-model semantic
 authority, matched controls, uncertainty, claims reconciliation,
 withdrawn-`ACCEPT` root cause) is unblocked and next.
 
+GATE 2 KICKOFF (2026-07-24, same day as Gate 1): the joined-canary
+reconciliation worktree exists at `C:/tmp/cas-joined-canary-reconciliation`
+on branch `feat/joined-canary-reconciliation-20260724`, created from the
+PASSING commit `04cd32e7…` per the planning package's §20 rule (separate
+worktree; never merge `origin/codex/cas-harness-public-beta-candidate`
+wholesale). The historical behavioral apparatus at `f8a72008…` is confirmed
+PRESENT in the main repo: ~20 files identified for individual port + review
+(`app/runtime/causal_intervention.py`, hidden-prompt-injection banks v0/v1,
+CJT-bias causal banks v0/expanded, build/analyze/evaluate/screen scripts,
+`evaluate_timing_trajectory_break.py`, behavior-dataset tests). Negative
+records to preserve verbatim during the port: withdrawn hidden
+prompt-injection license, character-baseline loss, non-replicating expanded
+causal result, surface-clean injection-bank construction failure. The
+blueprint's 14-module implementation namespace
+(`research/joined_*.py` + 3 `scripts/*cjt_jspace_ohm_joined_canary_v0*.py`)
+is the build target; entry criteria per blueprint §21.
+
 Historical score before Gate 1 (2026-07-23 and earlier): approximately
 `0.33 / 1.00` (band `0.30–0.35`). `1.00` means the owner's complete target is
 demonstrated rather than merely specified: repeatable hidden-state and
