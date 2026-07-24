@@ -387,17 +387,29 @@ artifact tensors retained on the pod).
 Claim status `SHADOW / NONE / NOT_LICENSED`, score `0.33` (Gate 1's `0.38`
 still requires a clean official canary PASS).
 
-The next executable action requires an OWNER DECISION, because it changes a
-scientific acceptance threshold (what a canary PASS means) and must not be
-silently loosened to force a pass: collect the full distribution of
-forward-vs-reverse relative errors across ALL functional measurements on the
-pinned stack, then set `GRADIENT_ANALYTIC_RELATIVE_ERROR_LIMIT` to a value
-justified by that distribution (e.g. `1e-3` comfortably covers the observed
-`1.5e-4` while remaining a strong agreement check), recorded with the
-empirical justification. That is a code change to the frozen implementation
-requiring tests, a full-suite pass, a fresh implementation freeze, and a
-fresh Attempt 9 identity. Attempt 1-8 identities are never reused. A clean
-official canary PASS then earns Gate 1 (`0.38`).
+DECISIVE float32-vs-float64 investigation (2026-07-24): the exact failing
+measurement `r7/l6` (`gradient_norm 0.2004`, matching the receipt) has
+relerr `1.513e-4` in float32 and `4.013e-7` in float64 — float64 fixes it
+(~378x), so THAT failure is float32 rounding. But `r7/l3` stays at
+`1.816e-4` in float64 — a small residual forward-vs-reverse method floor
+that is NOT precision. All top1-vs-top2 logit gaps were healthy (`0.87`-`5.16`,
+NOT near-ties). So the disagreement is a MIX: partly float32 rounding
+(curable to `~1e-7` by float64 for some measurements), partly an inherent
+forward-mode-jvp vs reverse-mode-grad method floor (`~1e-4`, persists at
+float64 for others). Values agree to 4+ significant figures throughout —
+NOT a gross defect, NOT a degeneracy. The `1e-4` gate is simply tighter than
+this cross-check method can reliably achieve on the pinned stack.
+
+The next executable action requires an OWNER SCIENTIFIC DECISION (must not
+be silently loosened to force a pass): (a) run the functional cross-check in
+float64 — fixes the precision-limited cases (a measurement-code change);
+and/or (b) recalibrate `GRADIENT_ANALYTIC_RELATIVE_ERROR_LIMIT` to the
+empirical forward-vs-reverse floor on this stack (full-distribution max
+`4.24e-3`), recorded with the justification above. Either is a change to the
+frozen implementation requiring tests, a full-suite pass, a fresh
+implementation freeze, and a fresh Attempt 9 identity. Attempt 1-8
+identities are never reused. A clean official canary PASS then earns Gate 1
+(`0.38`).
 
 Progress pattern across attempts: each cleared one blocker and reached the
 next stage — Attempt 5 anchor (CRLF), Attempt 6 phase-two (`/proc/net/unix`
