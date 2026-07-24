@@ -1,0 +1,14 @@
+LOCAL JVP/VJP forward-vs-reverse relative error distribution
+Stack: EleutherAI/pythia-160m, torch 2.12.0+cu130, CUDA 13.0, NVIDIA A40, float32, deterministic.
+Measured via execute_canary_raw on the A9 official run inputs (run_id jlcv1-rfc3161-179fa0ff...).
+
+JVP (24 measurements): min 9.078e-05  median 2.559e-04  max 5.354e-04
+   >1e-4: 23/24   >2e-4: 17/24   >5e-4: 2/24   >1e-3: 0/24
+VJP (24 measurements): min 1.178e-06  median 2.552e-04  max 4.241e-03
+   >1e-4: 18/24   >2e-4: 14/24   >5e-4: 10/24   >1e-3: 5/24
+MAX_OVERALL: 4.241e-03  (this is the VJP local gate worst case; matches the "4.24e-3" the Attempt 8 STATUS attributed to the fuller comparison set)
+
+Enforced limits (jacobian_lens_canary_core.py):
+   JVP_RELATIVE_ERROR_LIMIT = 1e-4   -> LOCAL_JVP gate FAILED (max 5.354e-04)
+   VJP_RELATIVE_ERROR_LIMIT = 1e-4   -> LOCAL_VJP gate FAILED (max 4.241e-03)
+   GRADIENT_ANALYTIC_RELATIVE_ERROR_LIMIT = 5e-4  (owner-recalibrated; the functional gate now PASSES)

@@ -439,10 +439,46 @@ small-model semantic authority, matched controls, uncertainty, claims
 reconciliation, and withdrawn-`ACCEPT` root cause — so a passing Attempt 9
 reaches `0.38`, not `0.46`.
 
+ATTEMPT 9 RAN (2026-07-24) — 5e-4 FUNCTIONAL FIX VALIDATED, NEW WALL FOUND:
+the full Attempt 9 create-once ceremony ran on the live A40 pod
+`zp2s9pscgncn0b` at commit `6d676840` with a fresh identity (run
+`jlcv1-rfc3161-179fa0ff…`, nonce `7364d32a…`) and a real DigiCert RFC3161
+anchor (tsq `e68e955d…`, tsr `0299b29a…`, TSA time `Jul 24 07:57:24 2026
+GMT`, full chain verified). The owner-directed `5e-4` recalibration is
+VALIDATED in the official run: it cleared Attempt 8's exact failure. Attempt 9
+advanced strictly further than any prior attempt — the full **1248-autograd
+contract is MET** (`observed_total = 1248`), **all 213 artifacts produced**,
+and every numerical subgate passes EXCEPT two. Execution receipt
+`30d9891f…`, `producer_status = TECHNICAL_CANARY_FAIL`,
+`official_pass_authorized = false`, `failure_stage = NUMERICAL_SUBGATES`,
+`failed_gates = [LOCAL_JVP_RELATIVE_ERROR, LOCAL_VJP_RELATIVE_ERROR]`. Still
+`SHADOW / NONE / NOT_LICENSED`, score `0.33`. Evidence frozen in
+`ATTEMPT_09_GPU_EXECUTION_FAILED_CLOSED_LOCAL_JVP_VJP/`.
+
+THE REAL WALL (new finding): the two remaining failures are SEPARATE
+constants from the one the owner recalibrated —
+`JVP_RELATIVE_ERROR_LIMIT = 1e-4` and `VJP_RELATIVE_ERROR_LIMIT = 1e-4`
+(`jacobian_lens_canary_core.py:51-52`) — the same forward-vs-reverse
+autodiff cross-check but for the LOCAL per-block directional derivatives (72
+grad calls), which `execute_canary_raw` measures but does not itself gate (so
+the earlier `execute_canary_raw`-at-5e-4 confirmation did not exercise them).
+Empirical local floor on this stack (float32, A40, torch 2.12/cu13): JVP max
+`5.35e-4`; **VJP max `4.24e-3`** (5 of 24 exceed `1e-3`). The VJP `4.24e-3`
+is exactly the number the owner's Deep Dive flagged as making a gate "a weak
+agreement check (2 significant figures)" that "must NOT be silently loosened
+to force a pass." So the owner's `5e-4` is correct for the FUNCTIONAL gate but
+the LOCAL VJP gate is ~20x looser and is the binding constraint — no
+functional-gate recalibration alone can make the canary pass. This is an
+OWNER SCIENTIFIC DECISION on the local gates (recalibrate from the empirical
+floor vs investigate the VJP path first vs hold); it was NOT taken
+autonomously because the sensible-default widen-to-pass contradicts the
+owner's own stated concern.
+
 Progress pattern across attempts: each cleared one blocker and reached the
 next stage — Attempt 5 anchor (CRLF), Attempt 6 phase-two (`/proc/net/unix`
-churn), Attempt 7 model load (config path), Attempt 8 the full measurement,
-now blocked only at the final autograd-call accounting gate. Attempt 6
+churn), Attempt 7 model load (config path), Attempt 8 the functional
+derivative gate, Attempt 9 the full autograd contract + all subgates except
+the local JVP/VJP forward-vs-reverse floor. Attempt 6
 GPU-execution and diagnostic evidence is retained in
 `ATTEMPT_06_GPU_EXECUTION_FAILED_CLOSED_PHASE_TWO/` (`ARTIFACT_MANIFEST.json`
 SHA-256 `3d14fab8cfbbeb7a8e1b07e53aab126d0d684847eb97f91be9c8747d6a5744a3`).
