@@ -349,15 +349,47 @@ On the pod, `inventory_exact_model_snapshot` on that path returns the exact
 load + jlens-wrap + `_validate_exact_model_and_lens` +
 `validate_deterministic_runtime` path all pass.
 
-The next executable action is a fresh Attempt 8 identity on commit
-`88b59de9` with the corrected `model_snapshot_root` (the launch is
-create-once per official root, so a corrected run needs a fresh identity;
-the frozen implementation and guard fix carry forward unchanged). Attempt 8
-proceeds through model load into the canary execution stage — the 1,248
-autograd calls and 213 artifacts — which has not yet been exercised and may
-surface further torch 2.12 / transformers 5.9 interactions. A clean
-official canary PASS earns Gate 1 (`0.38`). Attempt 1-7 identities are
-never reused. Attempt 6
+Attempt 8 RAN on commit `88b59de9` (run `jlcv1-rfc3161-77097e7b...`) with
+the corrected `model_snapshot_root` and a third one-shot DigiCert
+transmission (query `539c9f90...` 105 bytes, response `b6f31213...`, anchor
+`ff661473...` verified, ts `Jul 24 04:53:33 2026 GMT`) under standing
+owner pre-authorization. It advanced TWO stages: `MODEL_LOAD` now PASSES
+(the config fix is validated in the official run), and the canary executed
+the FULL Jacobian measurement — producing 212 real artifact files (all 8
+functional baseline logits and every jvp/vjp matrix across 8 ranks ×
+source layers 3/6/9). This is by far the deepest any attempt has reached.
+
+It FAILED CLOSED at `CANARY_EXECUTION` (execution receipt `e0a92216...`),
+with the autograd-call accounting at `0` of the contract `1248` even though
+all 212 measurement artifacts were produced. Leading hypothesis (not yet
+proven; the inner exception is a generic `NON_SUBPROCESS_FAIL_CLOSED` whose
+text is not serialized): the harness `TaggedAutogradGradCounter`
+(`research/jacobian_lens_canary_executor.py`, `require_exact_counts()` = 1248)
+did not intercept the `torch.autograd.grad` calls the pinned
+`jlens.fitting.jacobian_for_prompt` actually makes (`jlens/fitting.py:187`) —
+a measurement-accounting/instrumentation mismatch at the end of execution,
+NOT a failure of the computation itself. The actual Jacobian matrices ran.
+Evidence: `ATTEMPT_08_GPU_EXECUTION_FAILED_CLOSED_CANARY_EXECUTION/`
+(`ARTIFACT_MANIFEST.json` SHA-256
+`fcde999099d786158de83b36...`; 212 raw artifact tensors retained on the pod).
+
+Claim status `SHADOW / NONE / NOT_LICENSED`, score `0.33` (Gate 1's `0.38`
+still requires a clean official canary PASS).
+
+The next executable action: faithfully reproduce the canary-execution path
+with the preflight-built token manifest to capture the exact
+`CANARY_EXECUTION` exception, then reconcile the 1,248-call autograd
+accounting contract with the pinned jlens gradient path (intercept the
+exact callable jlens uses, or correct the expected-count contract to match
+the real call pattern). This touches the measurement-accounting trust
+surface, so it is a code change requiring tests, a full-suite pass, a fresh
+implementation freeze, and a fresh Attempt 9 identity. Attempt 1-8
+identities are never reused.
+
+Progress pattern across attempts: each cleared one blocker and reached the
+next stage — Attempt 5 anchor (CRLF), Attempt 6 phase-two (`/proc/net/unix`
+churn), Attempt 7 model load (config path), Attempt 8 the full measurement,
+now blocked only at the final autograd-call accounting gate. Attempt 6
 GPU-execution and diagnostic evidence is retained in
 `ATTEMPT_06_GPU_EXECUTION_FAILED_CLOSED_PHASE_TWO/` (`ARTIFACT_MANIFEST.json`
 SHA-256 `3d14fab8cfbbeb7a8e1b07e53aab126d0d684847eb97f91be9c8747d6a5744a3`).
