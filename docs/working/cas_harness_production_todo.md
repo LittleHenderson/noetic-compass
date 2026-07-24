@@ -866,9 +866,19 @@ error bars" GATE LOGIC. It earns nothing on its own: earning Gate 2 (`0.46`)
 still requires the full joined canary (the remaining 13 blueprint modules +
 prompt/causal banks + adapter + a real held-out GPU run + independent
 receiver reconstruction), a substantial multi-step build comparable to the
-Jacobian canary. Next port targets: the hidden-prompt-injection and
-CJT-bias causal banks + their surface-leakage screens, preserving every
-withdrawn/negative record.
+Jacobian canary. Second block (same day): the fair-comparison + honest-error-bar ENGINE is
+ported + tested at reconciliation commit (research/reconciled/behavior_fair_comparison_v5.py
+from f8a72008 evaluate_behavior_v5_prespeech.py, source sha abda7380):
+grouped CV that blocks leakage, hashed surface baselines, permutation-p and
+label-shuffle nulls, balanced accuracy, control-probe battery. 6 new tests
+(17 reconciled total) prove the anti-leakage and honest-null guarantees. The
+two core methodology engines -- matched-control gates + fair-comparison CV --
+are now in place and tested; the remaining work to EARN Gate 2 (0.46) is the
+surface-leakage screen + the injection/causal banks + the joined adapter/
+runner + a REAL held-out pythia-160m GPU run whose gates pass with these
+honest error bars, plus independent-receiver reconstruction. Next port target:
+the surface-leakage screen (depends on this engine) + the injection/causal
+banks, preserving every withdrawn/negative record.
 
 Historical score before Gate 1 (2026-07-23 and earlier): approximately
 `0.33 / 1.00` (band `0.30–0.35`). `1.00` means the owner's complete target is
