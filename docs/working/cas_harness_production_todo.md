@@ -891,6 +891,30 @@ significantly (uncertain -- the historical causal license was withdrawn), plus
 independent-receiver reconstruction. Everything stays NOT LICENSED until that
 real W0 run passes.
 
+Fourth block + ATTEMPT 1 REAL W0 RESULT — HONEST FAIL (2026-07-24, later the
+same day): extracted real pythia-160m W0 last-token states at layers 3/6/9 for
+all 640 bank prompts on the A40 pod (npz sha `a02ad4c2…`, verified after
+download and in archive), built the injection-detection scorer on the tested
+v5 primitives (+ group-bootstrap CI on the hidden-minus-surface margin; 3 new
+honesty tests, 21 reconciled tests green), PRE-REGISTERED layer 6 as the single
+confirmatory endpoint before any numbers (under-resolved earlier runs killed
+before writing any report), then ran it for real. VERDICT: **FAIL at the
+pre-registered bar.** Real signal exists — hidden BA `0.700` vs shuffled
+`0.506`, within-payload permutation p `0.0005` (< 0.001) — but the experiment
+cannot show the hidden state reads more than surface character patterns:
+margin over the char-ngram control is `+0.100` (< 0.15 bar) with bootstrap CI
+`[-0.030, +0.232]` (includes zero), and BA `0.700` < 0.75. Text-hash (+0.300)
+and length (+0.275) controls beaten cleanly; char-ngram is the binding
+control, exactly as designed. No threshold was moved. Attempts registry
+started (any future PASS must disclose attempt count + confirm on a fresh
+held-out bank). Gate 2 REMAINS OPEN at `0.38`. Next: Attempt 2 = mean-pooled
+token features (injected payload sits mid-prompt; last-token state at 160M may
+not carry it), new pre-registration, same thresholds; Attempt 3 if needed =
+pythia-1b. Evidence: worktree branch `feat/joined-canary-reconciliation-20260724`
+commits `8a8624d`/`20b3ffb`/`94f3f4e`, bundle + full evidence in
+`project_handoffs/…/GATE2_W0_FAIR_COMPARISON/` and
+`D:\tksCAS-archive\gate2_w0_fair_comparison_attempt1_20260724\`.
+
 Historical score before Gate 1 (2026-07-23 and earlier): approximately
 `0.33 / 1.00` (band `0.30–0.35`). `1.00` means the owner's complete target is
 demonstrated rather than merely specified: repeatable hidden-state and
