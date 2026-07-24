@@ -312,15 +312,52 @@ Dependency archive unchanged. This freeze contains no PRE, run identity,
 query, anchor, or official model/CUDA execution; the pod validation is
 non-official. Score stays `0.33`.
 
-The next executable action is the full Attempt 7 create-once ceremony on
-commit `88b59de9`: fresh isolated-GPU prestage, fresh
-nonce/run-ID/official-root/PRE/controller-capture/protocol/anchor/query,
-the one-shot DigiCert transmission (covered by the owner's standing
-pre-authorization of 2026-07-23; recorded byte-specifically), then the
-guarded canary — which should now clear phase two and proceed to model
-materialization, the 1,248 autograd calls, and the 213 artifacts — off-pod
-recovery, and the independent receiver. A clean official canary PASS earns
-Gate 1 (`0.38`). Attempt 1-6 identities are never reused. Attempt 6
+The full Attempt 7 ceremony RAN on commit `88b59de9` (run
+`jlcv1-rfc3161-09995d91...`): prestage PASS; fresh
+nonce/root/bindings/network-plan/PRE (re-verify exit 0, 17,007 records) /
+controller-capture / protocol / anchor; one-shot DigiCert transmission
+(query `8a323e83...` 105 bytes, response `5641d58e...`, anchor receipt
+`8a9443b6...` verified, ts `Jul 24 03:08:29 2026 GMT`) under the owner's
+standing pre-authorization; then the guarded canary.
+
+RESULT: the `/proc/net/unix` fix is VALIDATED IN THE OFFICIAL RUN —
+`phase_two_full_tsync_installed_before_uvm_close_proven=true` and
+`post_guard_cuda_proof_completed=true`. Attempt 7 cleared the Attempt 6
+blocker and advanced one full stage, failing closed at `MODEL_LOAD`
+(execution receipt `f531be4f...`, zero artifacts, zero of 1,248 autograd
+calls; `SHADOW / NONE / NOT_LICENSED`, score `0.33`).
+
+MODEL_LOAD root cause (diagnosed and fix CONFIRMED, evidence in
+`ATTEMPT_07_GPU_EXECUTION_FAILED_CLOSED_MODEL_LOAD/`): the runner's
+`inventory_exact_model_snapshot` requires the pinned Hugging Face cache
+layout (`<...>/models--EleutherAI--pythia-160m/snapshots/50f5173.../` with
+a sibling `blobs/`), but the operator target-path mapping's
+`model_snapshot_root` pointed at a FLAT convenience copy
+`/workspace/cas-model-a8969eb7`, raising `model snapshot path does not
+match the pinned Hugging Face cache identity`. This is a configuration
+error in the operator-built mapping — latent since the Attempt 4/5 design,
+never exercised because no prior attempt reached MODEL_LOAD — NOT a code
+defect, torch/transformers drift, or model-integrity issue. The frozen
+implementation `88b59de9`, the anchored protocol, and the RFC3161 anchor
+are unaffected (the model path lives only in the post-anchor mapping).
+
+CONFIRMED FIX: set `model_snapshot_root` to
+`/workspace/cas-hf-cache/models--EleutherAI--pythia-160m/snapshots/50f5173d932e8e61f858120bcb800b97af589f46`.
+On the pod, `inventory_exact_model_snapshot` on that path returns the exact
+5 files, matches the frozen model manifest `files` and `files_sha256`, and
+`from_pretrained` loads `GPTNeoXForCausalLM`; the isolated
+load + jlens-wrap + `_validate_exact_model_and_lens` +
+`validate_deterministic_runtime` path all pass.
+
+The next executable action is a fresh Attempt 8 identity on commit
+`88b59de9` with the corrected `model_snapshot_root` (the launch is
+create-once per official root, so a corrected run needs a fresh identity;
+the frozen implementation and guard fix carry forward unchanged). Attempt 8
+proceeds through model load into the canary execution stage — the 1,248
+autograd calls and 213 artifacts — which has not yet been exercised and may
+surface further torch 2.12 / transformers 5.9 interactions. A clean
+official canary PASS earns Gate 1 (`0.38`). Attempt 1-7 identities are
+never reused. Attempt 6
 GPU-execution and diagnostic evidence is retained in
 `ATTEMPT_06_GPU_EXECUTION_FAILED_CLOSED_PHASE_TWO/` (`ARTIFACT_MANIFEST.json`
 SHA-256 `3d14fab8cfbbeb7a8e1b07e53aab126d0d684847eb97f91be9c8747d6a5744a3`).
