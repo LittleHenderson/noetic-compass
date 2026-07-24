@@ -876,9 +876,20 @@ two core methodology engines -- matched-control gates + fair-comparison CV --
 are now in place and tested; the remaining work to EARN Gate 2 (0.46) is the
 surface-leakage screen + the injection/causal banks + the joined adapter/
 runner + a REAL held-out pythia-160m GPU run whose gates pass with these
-honest error bars, plus independent-receiver reconstruction. Next port target:
-the surface-leakage screen (depends on this engine) + the injection/causal
-banks, preserving every withdrawn/negative record.
+honest error bars, plus independent-receiver reconstruction. Third block + FIRST REAL RESULT (same day): ported the 640-scenario
+matched-control hidden-prompt-injection bank v0 (sha 2df5b9ce) + the
+surface-leakage fairness screen, and RAN the screen on the real bank -- all 10
+fairness gates pass, status READY_FOR_W0_CAPTURE, surface baselines at chance
+under grouped CV (char+text hash 0.60 ceiling, text 0.40, length 0.425). The
+matched-control bank is genuinely surface-clean, so a hidden-state claim on it
+would be a FAIR comparison. This is a real fair-comparison result on real data
+with honest error bars. 18 reconciled tests green. REMAINING to EARN Gate 2
+(0.46): extract pythia-160m W0 hidden states for the 640 prompts on the GPU,
+then score a grouped-CV linear probe vs these surface baselines with balanced
+accuracy + permutation p + bootstrap CI; the probe must beat the surface
+significantly (uncertain -- the historical causal license was withdrawn), plus
+independent-receiver reconstruction. Everything stays NOT LICENSED until that
+real W0 run passes.
 
 Historical score before Gate 1 (2026-07-23 and earlier): approximately
 `0.33 / 1.00` (band `0.30–0.35`). `1.00` means the owner's complete target is
