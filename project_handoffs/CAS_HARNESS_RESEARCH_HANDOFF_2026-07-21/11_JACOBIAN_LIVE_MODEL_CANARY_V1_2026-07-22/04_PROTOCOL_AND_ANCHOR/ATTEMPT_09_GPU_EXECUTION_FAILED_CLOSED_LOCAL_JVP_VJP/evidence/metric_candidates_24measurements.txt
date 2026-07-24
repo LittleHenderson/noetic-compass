@@ -1,0 +1,35 @@
+=== CLEAN matrix (24 measurements): jvp_relerr | vjp_old(current) | vjp_natural | vjp_vector ===
+  r1 l3: jvp=4.787e-04  vjp_old=4.241e-03  vjp_nat=3.122e-05  vjp_vec=3.776e-04
+  r2 l9: jvp=2.225e-04  vjp_old=3.553e-03  vjp_nat=4.280e-06  vjp_vec=1.300e-04
+  r7 l6: jvp=2.185e-04  vjp_old=3.303e-03  vjp_nat=3.533e-06  vjp_vec=2.027e-04
+  r3 l3: jvp=2.384e-04  vjp_old=1.723e-03  vjp_nat=2.661e-06  vjp_vec=3.670e-04
+  r2 l6: jvp=5.354e-04  vjp_old=1.204e-03  vjp_nat=1.803e-05  vjp_vec=2.967e-04
+  r7 l3: jvp=4.656e-04  vjp_old=7.979e-04  vjp_nat=2.476e-05  vjp_vec=3.436e-04
+  r5 l3: jvp=3.520e-04  vjp_old=6.267e-04  vjp_nat=9.944e-06  vjp_vec=4.031e-04
+  r1 l6: jvp=2.986e-04  vjp_old=5.548e-04  vjp_nat=1.167e-05  vjp_vec=3.919e-04
+  r5 l6: jvp=4.271e-04  vjp_old=5.464e-04  vjp_nat=2.571e-05  vjp_vec=2.828e-04
+  r4 l3: jvp=4.229e-04  vjp_old=5.122e-04  vjp_nat=8.921e-06  vjp_vec=3.851e-04
+  r1 l9: jvp=1.702e-04  vjp_old=4.726e-04  vjp_nat=1.544e-06  vjp_vec=1.593e-04
+  r3 l9: jvp=1.524e-04  vjp_old=2.579e-04  vjp_nat=4.864e-06  vjp_vec=1.567e-04
+  r0 l6: jvp=2.579e-04  vjp_old=2.522e-04  vjp_nat=4.223e-06  vjp_vec=2.489e-04
+  r6 l6: jvp=2.368e-04  vjp_old=2.099e-04  vjp_nat=1.666e-06  vjp_vec=2.075e-04
+  r6 l9: jvp=1.276e-04  vjp_old=1.789e-04  vjp_nat=7.670e-06  vjp_vec=1.444e-04
+  r2 l3: jvp=5.188e-04  vjp_old=1.503e-04  vjp_nat=8.009e-06  vjp_vec=5.354e-04
+  r4 l6: jvp=4.009e-04  vjp_old=1.184e-04  vjp_nat=5.431e-06  vjp_vec=2.275e-04
+  r0 l3: jvp=2.539e-04  vjp_old=1.071e-04  vjp_nat=4.274e-06  vjp_vec=3.546e-04
+  r7 l9: jvp=1.592e-04  vjp_old=9.639e-05  vjp_nat=3.294e-06  vjp_vec=1.340e-04
+  r5 l9: jvp=1.181e-04  vjp_old=9.442e-05  vjp_nat=4.034e-06  vjp_vec=1.835e-04
+  r0 l9: jvp=9.078e-05  vjp_old=9.387e-05  vjp_nat=3.676e-06  vjp_vec=1.046e-04
+  r6 l3: jvp=4.072e-04  vjp_old=7.396e-05  vjp_nat=3.499e-06  vjp_vec=3.261e-04
+  r4 l9: jvp=1.095e-04  vjp_old=4.101e-05  vjp_nat=6.345e-07  vjp_vec=1.336e-04
+  r3 l6: jvp=4.034e-04  vjp_old=1.099e-06  vjp_nat=4.473e-08  vjp_vec=2.285e-04
+JVP: max=5.354e-04 median=2.579e-04 >1e-4=23 >1e-3=0
+VJP_old: max=4.241e-03 median=2.579e-04 >1e-4=18 >1e-3=5
+VJP_natural: max=3.122e-05 median=4.280e-06 >1e-4=0 >1e-3=0
+VJP_vector: max=5.354e-04 median=2.489e-04 >1e-4=24 >1e-3=0
+
+=== CORRUPTED matrix (M*1.005, +0.5% error) — must blow past gate to stay strict ===
+JVP: max=5.132e-03 median=5.020e-03 >1e-4=24 >1e-3=24
+VJP_old: max=8.516e-03 median=5.068e-03 >1e-4=24 >1e-3=23
+VJP_natural: max=2.745e-04 median=1.168e-04 >1e-4=12 >1e-3=0
+VJP_vector: max=5.086e-03 median=5.005e-03 >1e-4=24 >1e-3=24
