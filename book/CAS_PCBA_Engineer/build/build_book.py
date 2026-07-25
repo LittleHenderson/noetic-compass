@@ -63,10 +63,11 @@ APPENDICES = [
     "Appendix_F_Lab_Setup_Guide.md",
     "Appendix_G_Glossary.md",
     "Appendix_H_Further_Reading.md",
+    "Appendix_I_CAS_Ohm_Measurement_and_Calibration.md",
 ]
 
 CH_PREFIX = re.compile(r"^#\s+Chapter\s+\d+\s*[:\-—]\s*")
-APX_PREFIX = re.compile(r"^#\s+Appendix\s+[A-H]\s*[:\-—]\s*")
+APX_PREFIX = re.compile(r"^#\s+Appendix\s+[A-Z]\s*[:\-—–]\s*")
 
 
 def strip_h1_prefix(text: str, kind: str) -> str:

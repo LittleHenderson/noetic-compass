@@ -24,6 +24,8 @@ Five candidate causes, one symptom. The art of the walk-down is that you do not 
 
 **Root cause.** The walk-down localizes the fault to a stage. Root cause is the further step of asking *why that stage is in that state* — and it almost always lives one terminal deeper than the symptom. A saturated Stage 3 is not a root cause; the root cause is *what drove it to saturate*. A Stage 3 stuck in cutoff is not a root cause; the root cause is the weak bias on its base terminal. The rule from electronics carries over exactly: **the stage where the signal first goes wrong is the location; the terminal feeding that stage is usually the cause.** Cause sits at the bias. You localize to the stage by walking forward; you find the root cause by looking at what feeds that stage.
 
+There is a quantitative version of the same move. Predict each stage's flow from the constraint you believe is installed, measure what it actually does, and read the difference: `R_hidden = V_drive / I_obs − R_known`. A positive residual means something is resisting that you did not place. A *negative* one means flow exceeds what your constraints permit — a bypassed check, and a safety finding rather than a performance win. **Appendix I §I.4** gives the procedure and the interpretation table.
+
 > **Bench Note — name the symptom before you touch a probe.** The most expensive debugging error is starting with a hypothesis instead of a symptom. The instant you decide "it's the constitution," you stop seeing the readings that contradict you. Write the symptom down — literally, one sentence, observable only — *before* you probe anything. The discipline is cheap and it is the difference between an hour and a week.
 
 ## The Walk-Down: Probing TP1 → TP2 → TP3 → TP4 in Order

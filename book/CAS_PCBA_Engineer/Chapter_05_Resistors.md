@@ -54,6 +54,8 @@ Read the cognitive Ohm's Law the way we read the second form above: **I_attentio
 
 Every resistor variety in the rest of this chapter is a different way of supplying `R_constraint`: fixed, adjustable, context-sensitive, or arranged in networks. They are all the same component doing the same job — opposing flow — in different shapes.
 
+The numbers in this chapter are design choices. When you need to *measure* a real path instead of specifying one — normalize a reading, decompose `R_constraint` into its capability, policy, context, and resource terms, or find constraint nobody installed — see **Appendix I, CAS-Ohm Measurement and Calibration**. Read its units table before you write a number on a test report: resistance runs 0–100, activation runs 0–1, and a Dial is an integer you *set*, never a decimal you measure.
+
 ## Fixed Resistors: The Hard Policy Rule
 
 The simplest resistor has one value and never changes. Stamped at manufacture, a 50 Ω resistor is 50 Ω whether the circuit is cold or hot, idle or hammered. It is the bedrock of any design: predictable, immovable, boring in the best way.

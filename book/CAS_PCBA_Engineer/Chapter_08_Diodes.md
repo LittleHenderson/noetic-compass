@@ -120,6 +120,8 @@ That is *precisely* a diode. A prerequisite gate conducts when its satisfaction 
 
 So the diode is not a metaphor bolted onto RPM — it is the *same one-directional structure* showing up in component form. The Domain Descent diode chain (P→C→E→O) and the RPM prerequisite chain (A0→D→W→P→Outcome) are both expressions of the same fact: in CAS, prerequisite and precedence flow one way by construction. The diode is how you draw that fact on a schematic.
 
+(The letters: **D** is Desire, the motivational prerequisite; **W** is Wisdom, the know-how prerequisite; **P** is Power, the capability prerequisite. **Appendix I** maps each onto a term of Ohm's Law and shows how to score them.)
+
 ## Worked Build: A Domain Descent Diode Chain
 
 Here is a real CCDL build the reader can author: the four-domain descent stack with a Vf toll on the top seam, an LED flag on it for auditability, and a Zener safety clamp built from principled aversion. This is the directional skeleton of the Cognitive Safety Board's domain stack.
