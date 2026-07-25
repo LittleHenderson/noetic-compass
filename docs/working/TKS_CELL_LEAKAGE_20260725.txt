@@ -1,0 +1,51 @@
+cell  name                  leak%  uniq  words found ONLY in the held-out definition
+------------------------------------------------------------------------------------------------------------
+D2    Physical Positive     11.1%     8  attraction, functioning, growth, harmony, health, smooth
+A7    Rhythm                12.5%     7  ages, cosmic, creation, dissolution, great, pulse
+C3    Emotional Negative    15.4%    11  anger, anxiety, depression, despair, guilt, hatred
+D5    Physical Female       18.2%     9  female, hole, orifice, receiver, receptacle, receptivity
+C8    Emotional Above       19.2%    21  acting, actions, calm, composure, conversation, cultivated
+C5    Emotional Female      20.0%     8  acceptance, capacity, content, hold, receive, sensuality
+D7    Physical Rhythm       20.0%     8  breathing, heartbeat, natural, rhythms, routines, seasons
+B4    Mental Vibration      22.2%    14  alpha, beta, degree, delta, electromagnetic, emitted
+A2    Positive              25.0%     6  affinity, drive, source, towards, unconditional, unity
+A8    Spiritual Above       25.0%    15  alleviate, becoming, deep, doctor, esoteric, laws
+D3    Physical Negative     25.0%     6  decay, destruction, disease, friction, obstacles, weakness
+B8    Mental Above          26.1%    17  abstract, blueprint, cascade, changes, company, directive
+D8    Physical Above        26.1%    17  alarm, apple, authority, bang, clock, consequences
+B10   Mental Idea           27.3%     8  aspect, being, exclusively, manifested, perceived, solely
+D6    Physical Male         30.0%     7  giver, male, phallus, pillar, protrusion, technique
+A1    Mind                  33.3%    10  apprehension, collective, direct, gnosis, intelligence, intuitive
+B5    Mental Female         33.3%     6  creative, imaginative, mindedness, open, right, subconscious
+B3    Mental Negative       38.5%     8  confusion, dissonance, disturbs, indecision, insanity, malicious
+B1    Mental Mind           40.0%    12  coming, conclusions, continuously, contributed, experiences, have
+B6    Mental Male           40.0%     6  closed, critical, left, logical, minded, rigid
+C2    Emotional Positive    40.0%     9  courage, empathy, excitement, faith, hope, inspiration
+C4    Emotional Vibration   40.0%     6  atmosphere, gets, person, place, thing, vibe
+D4    Physical Vibration    41.7%     7  bright, force, impact, intensity, kinetic, sound
+B9    Mental Below          43.8%     9  answer, capital, conclusion, france, generated, memory
+A5    Female                44.4%     5  arise, matrix, receptive, sensitivity, ultimate
+D9    Physical Below        47.1%     9  bodily, button, email, felt, finishing, performed
+A3    Negative              50.0%     4  differentiation, level, principle, separation
+A4    Vibration             50.0%     3  frequencies, resonance, subtlest
+B7    Mental Rhythm         50.0%     5  activity, distraction, downs, engagement, sequences
+C9    Emotional Below       50.0%     6  good, news, receiving, relief, results, shift
+A9    Spiritual Below       53.3%     7  achieved, disconnection, meditation, received, resulting, symbolic
+B2    Mental Positive       54.5%     5  altruistic, benevolent, enlightened, optimistic, sane
+D1    Physical Mind         54.5%     5  body, brain, nervous, sensory, system
+C6    Emotional Male        55.6%     4  drive, expression, motion, transmitting
+C1    Emotional Mind        62.5%     6  based, emotions, heart, instinct, intuition, soul
+A6    Male                  66.7%     2  inherent, structure
+D10   Physical Idea         72.7%     3  chair, walking, warmth
+C7    Emotional Rhythm      75.0%     2  habits, swings
+C10   Emotional Idea        85.7%     1  longing
+A10   Spiritual Idea       100.0%     0  
+
+
+BEST HELD-OUT CANDIDATES (lowest vocabulary leakage = baseline at chance):
+  D2 (Physical Positive) — 11.1% of its vocabulary appears elsewhere
+  A7 (Rhythm) — 12.5% of its vocabulary appears elsewhere
+  C3 (Emotional Negative) — 15.4% of its vocabulary appears elsewhere
+  D5 (Physical Female) — 18.2% of its vocabulary appears elsewhere
+  C8 (Emotional Above) — 19.2% of its vocabulary appears elsewhere
+  C5 (Emotional Female) — 20.0% of its vocabulary appears elsewhere
