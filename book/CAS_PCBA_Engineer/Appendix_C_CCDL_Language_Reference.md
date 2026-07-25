@@ -8,7 +8,7 @@ A note on status, carried from the rest of the book: **CCDL is the language you 
 
 ---
 
-## C.1 Overview
+## Overview
 
 CCDL is a **declarative, schematic-as-text language**. You do not write instructions that execute step by step; you *declare a circuit* — its terminals, its typed cognitive states, its components, and the connections between them — and the compiler validates that the declaration describes a legal cognitive circuit board (CCB).
 
@@ -27,11 +27,11 @@ Both are CCDL. A `circuit` is the schematic view (what connects to what); a `boa
 
 ---
 
-## C.2 Lexical Elements
+## Lexical Elements
 
 The lexical layer is what the compiler's tokenizer sees before any structure is parsed.
 
-### C.2.1 Identifiers
+### Identifiers
 
 An identifier names a circuit, a node, a component instance, a probe, a via, or a layer.
 
@@ -46,7 +46,7 @@ digit      ::= "0"…"9"
 - Convention: `snake_case` for nodes and instances (`policy_aversion`, `tp_guard`), short prefixes for instance kinds (`c1`, `c2` for CJTs; `r1` for resistors; `d1` for diodes; `tp1` for probes; `v1` for vias). The prefixes are convention, not keywords.
 - Reserved words (§C.2.6) may not be used as identifiers.
 
-### C.2.2 CAS State Literals
+### CAS State Literals
 
 A state literal is a first-class lexical token in CCDL — the "type" carried by a node, a component terminal, a layer entry, or a via endpoint. Its grammar is the canonical CAS state grammar from the style guide and Chapter 2:
 
@@ -71,7 +71,7 @@ Examples, all legal literals: `^8^C_{F2}|A`, `^5^E_{F4}|f`, `^3^P_{F7}|f`, `^9^O
 
 > **Bench Notes — write the literal the compiler can parse.** The Unicode caret-and-superscript forms in this book (`^8^C_{F2}|A`) are the canonical surface syntax. The compiler tokenizes the literal whole; a malformed literal (a `^` with no Noetic digit, a `_{}` with no drive, an unknown register letter) is a lexical error, caught before any structural rule runs. When in doubt, copy a literal that already validates rather than retyping one by hand — the same advice Chapter 4 gives for nodes.
 
-### C.2.3 Numbers
+### Numbers
 
 Numbers appear only inside parameter blocks and component arguments (β, R, C, sat, frequency, ratio, …).
 
@@ -84,7 +84,7 @@ number   ::= [ "-" ] , digit , { digit } , [ "." , digit , { digit } ]
 - No exponent notation. Very small frequencies are written in full (`frequency=0.0000116`), matching the Oscillator example in the style guide.
 - Numbers are dimensionless tuning knobs, not physical units. `R=30` is not 30 ohms; `β=2.4` is not a literal current ratio. The *role* is identical to the electronic quantity; the value lives on the open simplex. (Chapter 4 states this explicitly for `R`.)
 
-### C.2.4 Comments
+### Comments
 
 ```
 comment ::= "//" , { any-char-except-newline }
@@ -94,13 +94,13 @@ comment ::= "//" , { any-char-except-newline }
 - There is no block-comment form.
 - Comments are stripped by the tokenizer and never affect validation. Used throughout the book to annotate nodes and components inline.
 
-### C.2.5 Whitespace and Terminators
+### Whitespace and Terminators
 
 - Whitespace (spaces, tabs, newlines) separates tokens and is otherwise insignificant.
 - Every **statement** inside a block ends with a semicolon `;`.
 - Blocks are delimited by braces `{ … }`.
 
-### C.2.6 Reserved Words
+### Reserved Words
 
 The following are keywords and may not be used as identifiers:
 
@@ -120,7 +120,7 @@ Parameter keys inside parameter blocks (`β`, `sat`, `cutoff`, `region`, `gm`, `
 
 ---
 
-## C.3 The `circuit { … }` Block
+## The `circuit { … }` Block
 
 A circuit is the top-level schematic.
 
@@ -140,9 +140,9 @@ The minimal legal circuit declares at least one input, at least one output, and 
 
 ---
 
-## C.4 Statements: Nodes, CJTs, Feedback, Probes
+## Statements: Nodes, CJTs, Feedback, Probes
 
-### C.4.1 `node` Declaration
+### `node` Declaration
 
 ```
 node_decl ::= "node" , identifier , ":" , state_literal , ";"
@@ -158,7 +158,7 @@ node answer:     ^9^C_{F6}|A;   // the effect: a structured analytical answer
 
 A node is a labeled point in the circuit carrying a specific typed state. Declaring a state once and referring to it by name is how the wiring becomes a fact rather than a coincidence — two components that name the same node are genuinely on the same net. (Chapter 4's Bench Note: name your nodes, don't inline your literals.)
 
-### C.4.2 `cjt` Declaration
+### `cjt` Declaration
 
 The Cognitive Junction Transistor is the book's central component and CCDL's most parameter-rich statement.
 
@@ -191,11 +191,11 @@ let cjt_x = CJT< ^8^C|A | ^5^P|T => ^9^C|A > [β=2.0];
 
 The parameter block `[ … ]` is optional; an omitted block means the CJT's parameters take their defaults (§C.6). The bias terminal, however, is **not** optional — a CJT with no bias is the canonical `E-CJT-001` error.
 
-### C.4.3 `cjt` from a CJT macro — the `CJT< cause | bias => effect >` core
+### `cjt` from a CJT macro — the `CJT< cause | bias => effect >` core
 
 The CJT expression `CJT< cause | bias => effect >` is the irreducible core. Read it left to right: cause, then `|`, then bias, then `=>`, then effect. The two delimiters are load-bearing and not interchangeable: `|` separates cause from bias, `=>` separates bias from effect. Swapping them, or omitting the bias between them, is a parse/structural error.
 
-### C.4.4 `feedback` Declaration
+### `feedback` Declaration
 
 ```
 feedback_decl ::= "feedback" , ref , "->" , ref , [ param_block ] , ";"
@@ -210,7 +210,7 @@ feedback weigh    -> bias_charter    [β=0.2];
 
 Feedback is the deliberate exception to one-way flow. In a CCB it is the slow **O→P** path that lets *outcomes* (not prompts) update the charter — held at low gain so it cannot become a back-door for rewriting principles. A feedback `β` large enough to make the loop blow up is the `E-CJT-005 GainDivergence` rule (§C.9, §C.10).
 
-### C.4.5 `let` Declaration (named component)
+### `let` Declaration (named component)
 
 ```
 let_decl ::= "let" , identifier , "=" , component_expr , [ param_block ] , ";"
@@ -218,7 +218,7 @@ let_decl ::= "let" , identifier , "=" , component_expr , [ param_block ] , ";"
 
 `let` binds a name to a component expression so it can be reused. Most common with CJTs (the style guide's `let cjt_x = CJT< … => … > [β=…];`), but legal for any component. A `let`-bound component is instantiated where its name is referenced.
 
-### C.4.6 `probe` Declaration
+### `probe` Declaration
 
 ```
 probe_decl ::= "probe" , identifier , ":" , ref , ";"
@@ -235,7 +235,7 @@ The bench rule (Chapter 17, Step 8): **probe every stage whose failure would be 
 
 ---
 
-## C.5 Component Declarations
+## Component Declarations
 
 Components other than the CJT are declared either inline (`<kind> <id>: <Type>< … >;`) or via `let`. Each component carries a typed state (or a domain pair) and its own parameters. The forms below match the style-guide cheat-sheet exactly.
 
@@ -244,7 +244,7 @@ component_decl ::= comp_kind , identifier , ":" , component_expr , ";"
 component_expr ::= type_name , "<" , arg_list , ">" , [ param_block ]
 ```
 
-### C.5.1 Passive Components
+### Passive Components
 
 | Form | Meaning | Key args |
 |---|---|---|
@@ -260,7 +260,7 @@ Inductor< ^7^O_{F6}|E, L=50 >
 
 The passive's state literal is its net: a `Resistor` typed to the same node as a CJT's cause is *in series* with that cause. A resistor typed to a different state is on a different rail and has no effect on the CJT (the "series mismatch" failure in Chapter 4).
 
-### C.5.2 One-Way and Threshold Components
+### One-Way and Threshold Components
 
 | Form | Meaning | Key args |
 |---|---|---|
@@ -280,7 +280,7 @@ Fuse< ^8^O_{F5}|E, threshold=0.9, action=permanent_block >
 
 `Fuse.action` takes a symbolic value, the canonical one being `permanent_block` (an irreversible trip, as on the style-guide Agency rail).
 
-### C.5.3 Active and Composite Components
+### Active and Composite Components
 
 | Form | Meaning |
 |---|---|
@@ -296,7 +296,7 @@ Regulator< target_state=^0^E_{F3}|f, tolerance=0.1 >
 
 `Phi< s₁, s₂, s₃, … >` is the sequence constructor — an ordered list of states the oscillator cycles through. (Same `Phi<…>` form as the style guide's sequence operator.)
 
-### C.5.4 Logic Gates
+### Logic Gates
 
 ```
 gate ::= ( "AND" | "OR" | "NOT" | "NAND" | "NOR" | "XOR" ) , "<" , arg_list , ">"
@@ -310,7 +310,7 @@ NOT< ^3^P|f >
 XOR< ^8^C|A, ^9^C|A >
 ```
 
-### C.5.5 Multiplexers
+### Multiplexers
 
 | Form | Meaning |
 |---|---|
@@ -326,7 +326,7 @@ DEMUX< input=^9^C|A, outputs=[^9^E|f, ^9^O|E], select=Drive::active >
 
 ---
 
-## C.6 CJT Parameter Block Grammar
+## CJT Parameter Block Grammar
 
 The parameter block is the bracketed, comma-separated list of `key=value` pairs after a CJT (and, in reduced form, after `feedback` and some components).
 
@@ -369,7 +369,7 @@ A reduced parameter block (`[β=…]` only) is the common case in worked builds;
 
 ---
 
-## C.7 The Multilayer `board { … }` Form
+## The Multilayer `board { … }` Form
 
 The `board` form is the *layout* view: the same circuit organized onto Domain layers and connected by vias. It is what Chapter 17, Step 6 calls the layout, and it makes the safety architecture physical.
 
@@ -408,7 +408,7 @@ Rules specific to the `board` form:
 
 ---
 
-## C.8 Operator Discipline Inside Expressions
+## Operator Discipline Inside Expressions
 
 Where a CCDL expression composes multiple states (an OpAmp's two inputs, a recipe, a register-enriched bias), it uses the canonical CAS operators under **v7.7 discipline**. Getting these right is a review gate.
 
@@ -436,33 +436,33 @@ The `+` joins co-present prerequisites; the `→` lands the outcome. This is con
 
 ---
 
-## C.9 Compiler Validation Passes (Design Rules)
+## Compiler Validation Passes (Design Rules)
 
 The compiler is designed to run a sequence of validation passes over the parsed netlist. These are the Design Rule Checks (DRC) of Chapter 17, Step 7. Each pass either passes silently or emits a code from §C.10. The passes, in the order they are designed to run:
 
-### C.9.1 Admissibility Guard
+### Admissibility Guard
 
 Every operator application and every component connection is checked against an admissibility relation: is this (source, target) pair a legal transition for this operator? An inadmissible transition — a CJT whose cause→effect pair is not a legal Noetic transition, a via between incompatible endpoints — is rejected before any numeric check. (This is Correction 1 of the project: `is_admissible(operator, source, target)` guards every application.)
 
-### C.9.2 Bias-Domain Coherence
+### Bias-Domain Coherence
 
 The bias terminal of each CJT is checked against the cause's domain. A bias drawn from a domain incompatible with the cause raises **E-CJT-008** (cross-domain) or **E-CJT-002** (invalid bias domain). The canonical legal pattern is a bias that sits at or above the cause's domain in the `P ≻ C ≻ E ≻ O` order (a Principled charter biasing a Cognitive intake). The canonical illegal pattern is a *lower* domain biasing a *higher* one — an Operational state biasing a Principled guard — which is the prompt-injection signature.
 
-### C.9.3 β Range and Gain Divergence
+### β Range and Gain Divergence
 
 Every `β` (on CJTs, feedback, and vias) is checked: finite, within range, and — critically for any loop — bounded so the feedback path does not amplify without limit. A loop whose round-trip gain ≥ 1 diverges; the compiler raises **E-CJT-005 GainDivergence**. This is why feedback `β` is kept small (`0.2`, `0.3`).
 
-### C.9.4 Cascade Admissibility (and Depth)
+### Cascade Admissibility (and Depth)
 
 A chain of CJTs in series is checked end to end: each stage's effect must be an admissible cause for the next stage. The pass also counts cascade depth; a pipeline with too many CJTs in series — deep enough that the signal degrades through accumulated gain and saturation — raises the **W-CJT-007 CjtCascadeDepth** warning. (A warning, not an error: legal, but check whether you meant to build a pipeline that long.)
 
-### C.9.5 Push-Pull Balance
+### Push-Pull Balance
 
 For complementary / differential structures (an OpAmp, a push-pull pair, involution-paired stages), the compiler checks that the two halves are balanced — that an involution pair is not driven so far apart that the stage tips into breakdown, and that a differential amplifier's two inputs are compatible. This is the structural form of the project-wide constraint that involution pairs cannot diverge by more than the safe margin. An imbalance severe enough to invert a state is a breakdown condition; a `^2`→`^3` flip under overload is the signature.
 
 ---
 
-## C.10 Error-Code Table
+## Error-Code Table
 
 The complete CJT/CCDL error-code list. `E-` codes are **hard errors**: the compiler refuses to validate the circuit. `W-` codes are **warnings**: the circuit is legal, but the compiler is designed to flag it for you to confirm the behavior is intended.
 
@@ -481,7 +481,7 @@ Two of these are the load-bearing safety codes named throughout Part IV: **E-CJT
 
 ---
 
-## C.11 Grammar Sketch (EBNF)
+## Grammar Sketch (EBNF)
 
 A consolidated EBNF for the language. (Lexical rules from §C.2; this is the structural grammar.)
 
@@ -532,7 +532,7 @@ comment        ::= "//" { any-char-except-newline }
 
 ---
 
-## C.12 A Complete Annotated Example
+## A Complete Annotated Example
 
 The following is a complete, legal CCDL circuit — a two-stage safety filter that intakes a prompt, holds a principled guard, and produces a response — annotated so every construct in this appendix appears at least once. It compiles clean under the design rules of §C.9; the comments call out *why* each line is legal.
 

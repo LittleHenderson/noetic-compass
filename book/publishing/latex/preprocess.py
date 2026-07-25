@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+r"""
 Preprocess FULL_MANUSCRIPT_v2.md into a pandoc-friendly markdown file for
 LaTeX conversion.
 
@@ -10,8 +10,18 @@ structural conventions into proper markdown headings pandoc recognizes:
   - ' Chapter N: TITLE'                           -> '# Chapter N: TITLE'
   - ' Appendix X: TITLE' (first one triggers \appendix) -> '# Appendix X: TITLE'
   - ' J.N Title' (Appendix J subsections)         -> '## J.N Title'
-  - Other single-leading-space short lines are left unchanged (bold inline
-    rendering will be handled in LaTeX via paragraph styling if required).
+  - Every OTHER heading-shaped single-leading-space line -> '## Title'.
+    These are the manuscript's section headings (439 of them). Previously they
+    fell through and were typeset as ordinary body text, which left the printed
+    book and the EPUB with no navigation below chapter level.
+
+IMPORTANT: single-leading-space lines inside fenced ``` blocks are CAS-language
+code comments, not headings. They are tracked and left untouched.
+
+Section numbering is suppressed (secnumdepth 0, re-asserted after \mainmatter
+because memoir's \mainmatter resets it). The manuscript supplies its own
+ordinals where it wants them ('1. The Principled Domain', 'J.1 Purpose'), so
+auto-numbering on top would print 'J.1 J.1 Purpose'.
 
 Also:
   - Strips the placeholder '[Front Matter]' and 'Back Matter' top-level
@@ -29,6 +39,30 @@ from pathlib import Path
 SRC = Path(r"C:\Users\wakil\OneDrive\Desktop\tksCAS\book\manuscript\FULL_MANUSCRIPT_v2.md")
 DST = Path(r"C:\Users\wakil\OneDrive\Desktop\tksCAS\book\publishing\latex\manuscript_preprocessed.md")
 
+# Acronyms that str.title() would mangle ("AI SYSTEMS" -> "Ai Systems").
+ACRONYMS = {"AI", "CAS", "RPM", "NCCS", "CO", "LLM", "API", "EPUB", "PDF", "US"}
+
+# Editorial notes that must not reach the printed page.
+EDITORIAL = re.compile(r"^\s*\[(PREFACE SUPPLEMENT|PLACEHOLDER|AUTHOR REVIEW)[^\]]*\]\s*$", re.I)
+HTML_NOTE = re.compile(r"^\s*<!--\s*(AUTHOR REVIEW|TODO|NOTE TO SELF)", re.I)
+
+
+def smart_title(s: str) -> str:
+    """Title-case a shouted heading without destroying acronyms."""
+    return " ".join(
+        w if w.upper() in ACRONYMS else w.title()
+        for w in s.split(" ")
+    )
+
+
+def is_heading(stripped: str) -> bool:
+    """Heading-shaped: short, not a sentence, not a wrapped continuation."""
+    return (
+        0 < len(stripped) <= 85
+        and not stripped.endswith(".")
+        and not stripped[:1].islower()
+    )
+
 
 def main() -> None:
     text = SRC.read_text(encoding="utf-8")
@@ -38,12 +72,47 @@ def main() -> None:
     # Strip [Front Matter] marker and Back Matter marker — handled by LaTeX
     # frontmatter/mainmatter/backmatter directives below.
     appendix_mode = False
+    in_code = False
+    in_html_note = False
+    n_promoted = 0
+    n_dropped = 0
 
     i = 0
     # Collect all structural-marker line numbers for boundary logic
     while i < len(lines):
         line = lines[i]
         stripped = line.rstrip()
+
+        # --- fenced code blocks: pass through verbatim ---------------------
+        if stripped.lstrip().startswith("```"):
+            in_code = not in_code
+            out.append(line)
+            i += 1
+            continue
+        if in_code:
+            out.append(line)
+            i += 1
+            continue
+
+        # --- multi-line HTML editorial notes -------------------------------
+        if in_html_note:
+            if "-->" in stripped:
+                in_html_note = False
+            i += 1
+            n_dropped += 1
+            continue
+        if HTML_NOTE.match(stripped):
+            if "-->" not in stripped:
+                in_html_note = True
+            i += 1
+            n_dropped += 1
+            continue
+
+        # --- bracketed editorial placeholders ------------------------------
+        if EDITORIAL.match(stripped):
+            i += 1
+            n_dropped += 1
+            continue
 
         # Skip '# [Front Matter]' marker entirely
         if stripped == "# [Front Matter]":
@@ -102,12 +171,16 @@ def main() -> None:
         m = re.match(r"^ (PART [IVX]+):\s*(.+)$", line)
         if m:
             part_label = m.group(1).title()  # "Part I"
-            part_title = m.group(2).strip().title()
+            part_title = smart_title(m.group(2).strip())
             out.append("")
             out.append(r"```{=latex}")
             # Start main matter at Part I
             if part_label == "Part I":
                 out.append(r"\mainmatter")
+                # memoir's \mainmatter resets secnumdepth, which would number
+                # sections on top of the manuscript's own ordinals. Re-suppress.
+                out.append(r"\setcounter{secnumdepth}{0}")
+                out.append(r"\setcounter{tocdepth}{0}")
             out.append(fr"\part{{{part_title}}}")
             out.append(r"```")
             out.append("")
@@ -180,11 +253,29 @@ def main() -> None:
             i += 1
             continue
 
+        # --- section headings ----------------------------------------------
+        # Any remaining single-leading-space, heading-shaped line is one of the
+        # manuscript's section headings. Promote it so it typesets as a heading
+        # and appears in PDF bookmarks and EPUB navigation.
+        if (
+            line.startswith(" ")
+            and not line.startswith("  ")
+            and is_heading(stripped.strip())
+        ):
+            out.append("")
+            out.append(f"## {stripped.strip()}")
+            out.append("")
+            n_promoted += 1
+            i += 1
+            continue
+
         out.append(line)
         i += 1
 
     DST.write_text("\n".join(out), encoding="utf-8")
     print(f"Wrote {DST}  ({len(out)} lines)")
+    print(f"  promoted {n_promoted} section heading(s) to '##'")
+    print(f"  dropped  {n_dropped} editorial note line(s)")
 
 
 if __name__ == "__main__":

@@ -4,9 +4,9 @@
 
 ### From First Resistor to Production Safety Board — A Practical Guide to CJTs, CCBs, and Structural Cognition
 
-**Author:** Wakil (Prof. Hermes M. Thoth)
+**Author:** Little Henderson
 
-**Companion volume:** *Programming in CAS: A Practical Guide*
+**Companion volume:** *Programming in CAS: A Practical Guide* (forthcoming)
 
 **Framework:** Cognitive Architecture System (CAS) v7.7
 
@@ -20,7 +20,7 @@
 
 ## Copyright & Status
 
-© 2026 Little Henderson. All rights reserved. Confidential draft.
+© 2026 Little Henderson. All rights reserved.
 
 The Cognitive Architecture System, the Cognitive Junction Transistor (CJT), and the Cognitive Circuit Board
 (CCB) family described in this book are the subject of ongoing intellectual-property protection, including
@@ -72,7 +72,7 @@ ask to see for a medical device.
 
 Welcome to the workbench.
 
-— *Wakil*
+— *Little Henderson*
 *June 2026*
 
 ---

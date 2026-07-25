@@ -8,7 +8,11 @@
 % --- Page geometry: 6x9 trade paperback (KDP-compatible) ---------------
 \setstocksize{9in}{6in}
 \settrimmedsize{9in}{6in}{*}
-\setlrmarginsandblock{0.625in}{0.875in}{*}   % outside, inside (gutter)
+% memoir signature is \setlrmarginsandblock{SPINE}{EDGE}{ratio} — spine FIRST.
+% The arguments were previously reversed, giving the spine 0.625in and the
+% fore-edge 0.875in. KDP requires the larger margin on the SPINE (gutter) to
+% survive perfect binding; at 601–828 pages that minimum is 0.875in.
+\setlrmarginsandblock{0.875in}{0.625in}{*}   % spine (gutter), fore-edge
 \setulmarginsandblock{0.75in}{0.75in}{*}
 \setheaderspaces{*}{*}{0.4}
 \checkandfixthelayout

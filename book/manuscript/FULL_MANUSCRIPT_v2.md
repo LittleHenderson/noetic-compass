@@ -3281,8 +3281,8 @@ let abstraction: state[C] = CO-2^C_{F2};
 let concretization: state[C] = CO-3^C_{F2};
 let integration: state[C] = CO-4^C_{F4};
 
- 3. Binary state operators — composition (, ×) and modular difference (/, ÷)
-let composed: state[C] = abstraction  integration;
+ 3. Binary state operators — composition (*, ×) and modular difference (/, ÷)
+let composed: state[C] = abstraction * integration;
 let difference: state[C] = integration / abstraction;
 
  4. Fractal composition via ∘ operator
@@ -3299,7 +3299,7 @@ let top_op: string = dominant_operator(composed);
 let top_domain: string = dominant_domain(composed);
 let top_state: string = dominant_state(composed);
 
- 8. compose builtin — alternative to  operator
+ 8. compose builtin — alternative to * operator
 let bridged: state[C] = compose(principle, integration);
 
  9. rpm_of builtin — build RPM from state

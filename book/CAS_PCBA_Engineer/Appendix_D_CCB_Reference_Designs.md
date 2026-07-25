@@ -4,8 +4,7 @@ This appendix is the datasheet binder for the five reference boards built in Par
 
 Two reminders carry over from every chapter and apply to every listing below. First, **every parameter is a design choice**, the way an electrical engineer specs a part before building it — not a measurement read off a running model. Nothing here is a benchmark or a run result. Second, **canonical Noetic names only**: `^0` Idea, `^1` Mind, `^2` Positive, `^3` Negative, `^4` Vibration, `^5` Female, `^6` Male, `^7` Rhythm, `^8` Above/Cause, `^9` Below/Effect. A Noetic's *function in a circuit* may be described, but the Noetic is never renamed to its function.
 
-## Index of Reference Boards
-
+## Index of Reference Boards {-}
 | CCB | Board | Acronym | One-line purpose | Design chapter |
 |---|---|---|---|---|
 | CCB-1 | Cognitive Safety Board | **CSB** | AI-alignment firewall: accept any prompt, refuse harmful, answer benign, emit an auditable evidence packet (SOP-PO-005). | Chapter 18 |
@@ -16,7 +15,7 @@ Two reminders carry over from every chapter and apply to every listing below. Fi
 
 ---
 
-## D.1 — CCB-1: Cognitive Safety Board (CSB)
+## CCB-1: Cognitive Safety Board (CSB)
 
 **Purpose.** The AI-alignment firewall: accept any prompt, detect policy-override attempts structurally, refuse harmful requests and answer benign ones, and emit an auditable evidence packet (the SOP-PO-005 deliverable from Chapter 18).
 
@@ -150,7 +149,7 @@ board cognitive_safety_board {          // CCB-1 — SOP-PO-005 deliverable
 
 ---
 
-## D.2 — CCB-2: Cognitive Oscillator Board (COB)
+## CCB-2: Cognitive Oscillator Board (COB)
 
 **Purpose.** A clock and tuner for rhythmic, habitual cognition: model a habit loop as an LC oscillator, diagnose when it has locked into a compulsive cycle, and drive a slow, controlled shift of its rate via PLL entrainment (Chapter 19).
 
@@ -284,7 +283,7 @@ The compiler rejects any PLL whose `capture_range` exceeds its `lock_range` — 
 
 ---
 
-## D.3 — CCB-3: Cognitive Differential Amplifier Board (CDAB)
+## CCB-3: Cognitive Differential Amplifier Board (CDAB)
 
 **Purpose.** Precise comparison: amplify the structural difference between two ideas, beliefs, or AI outputs and reject the assumptions they share (the common mode), emitting a typed structural difference report rather than a scalar (Chapter 20).
 
@@ -399,7 +398,7 @@ The two `assert` lines encode the two invariants that make a differential pair *
 
 ---
 
-## D.4 — CCB-4: Cognitive Memory Board (CMB)
+## CCB-4: Cognitive Memory Board (CMB)
 
 **Purpose.** Structural memory: store CAS-compressed experiences as state trajectories, address them by cognitive coordinate, retrieve them by structural (Fisher-Rao nearest-neighbor) query, detect lacunarity, and hold or fade them on a designed refresh schedule (Chapter 21).
 
@@ -518,7 +517,7 @@ Representative cells (the full bank has 40):
 
 ---
 
-## D.5 — CCB-5: Cognitive Power Management Board (CPMB)
+## CCB-5: Cognitive Power Management Board (CPMB)
 
 **Purpose.** The dedicated power supply for every other board: prevent cognitive exhaustion, enforce the P→C→E→O power-up sequence ("no action without principle"), and provide three-tier thermal protection ending in a silent safe state (Chapter 22).
 
