@@ -51,7 +51,7 @@ But the honest relationship is **overlap plus a different output**, not "a compl
 
 **The single most important open question — the thing I most want pressure-tested:**
 
-The licensed core claim is deliberately narrow: *CAS-shaped structure is linearly readable from model activations and is causally load-bearing, across six model points and three families up to 20B.* What is **not yet established** is whether that structure is **CAS-specific**, or simply a generic semantic partition that any coherent ontology of similar shape would also recover. The first blind matched-taxonomy comparator returned an indeterminate **GREY** (not a pass); a signal-versus-leakage adjudication is still **OPEN**; the strongest readout peaks at an early layer. Until those close, the defensible reading of the headline numbers (e.g., the 95.6% 40-Element readout at 20B) is "the model encodes this distinction more strongly than a bag-of-words baseline" — **not** "CAS-specific cognition."
+The licensed core claim is deliberately narrow: *CAS-shaped structure is linearly readable from model activations at six model points across three families up to 20B. That it is causally load-bearing is established model-specifically only on Pythia-160M (F28) and remains a missed-gate diagnostic at 20B (40-Element); it is `unavailable` on the other four model points.*
 
 So the question CAS Harness ultimately poses to a reviewer is twofold: can model behavior and internal signals be turned into a structured, preservable, comparable review record a human can challenge — and is the CAS structure that record is built on actually privileged, or just one workable relabeling of generic structure?
 

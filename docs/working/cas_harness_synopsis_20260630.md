@@ -21,7 +21,7 @@ CAS Harness is a **white-box, cross-model AI-interpretability and auditing platf
 
 > *"If a random open language model — one that's never heard of CAS — is probed for CAS-shaped structure, will the structure be there? If yes, is CAS describing something universal about how cognitive systems represent meaning, rather than something we invented?"*
 
-The probing chain **closed in May 2026** on three things: the **presence**, the **causal role**, and the **conditionability** of that structure, across six model points. The harder question — *is the structure CAS-specific, or just a generic semantic partition any similarly-shaped ontology would also induce?* — **remains OPEN** (see §7).
+Foundation-28 held-out readout and eta->epsilon likelihood conditioning replicated on six model points across three architecture families on ONE frozen English synthetic fixture. Causal support is model- and tier-specific, NOT six-model. Static weight-geometry evidence exists only for Pythia-2.8B. No 20B axis is closed and no verdict is validated causally across models.
 
 **Two-product strategy.**
 - **CAS-Native** = "our model, transparent by construction" (trains weights on CAS targets from scratch).
@@ -82,7 +82,7 @@ The **CAS-Native agent swarm scaffold** (`cas-native-agent-swarm-scaffold/`) is 
 
 ## 5. What It Has Empirically Validated (the Evidence Ladder)
 
-Validated claim spans **six model points across three architecture families**, with a **20B scale extension closed on two cognitive axes**.
+Foundation-28 held-out readout and eta->epsilon likelihood conditioning replicated on six model points across three architecture families on ONE frozen English synthetic fixture. Causal support is model- and tier-specific, NOT six-model. Static weight-geometry evidence exists only for Pythia-2.8B. No 20B axis is closed and no verdict is validated causally across models.
 
 **5a. Cognitive-structure detection (readout above text baseline):**
 
