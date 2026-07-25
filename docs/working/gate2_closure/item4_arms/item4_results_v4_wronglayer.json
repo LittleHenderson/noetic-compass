@@ -1,0 +1,37 @@
+{
+  "chance": 0.025,
+  "clean_control_items_fixed_anchor_varies": {
+    "0": 0.025,
+    "2": 0.045804,
+    "4": 0.084583,
+    "6": 0.144137,
+    "8": 0.226399,
+    "12": 0.341979
+  },
+  "clean_control_max": 0.341979,
+  "confounded_control_anchors_fixed_item_varies": {
+    "0": 0.025,
+    "2": 0.054807,
+    "4": 0.097723,
+    "6": 0.155744,
+    "8": 0.173229,
+    "12": 0.331577
+  },
+  "design": "TKS-DEFCTX-40E-PRIMARY-v1",
+  "diagonal_both_same_layer": {
+    "0": 0.025,
+    "2": 0.18244,
+    "4": 0.212009,
+    "6": 0.194807,
+    "8": 0.161726,
+    "10": 0.197917,
+    "12": 0.368006
+  },
+  "frozen_layer": 10,
+  "matched_reference": 0.197917,
+  "model": "EleutherAI/pythia-160m",
+  "seeds": 20,
+  "verdict": "FAIL_not_layer_matched",
+  "version": "v4_wrong_layer_control_disambiguated",
+  "why_two_directions": "Varying the ITEM layer conflates mismatch with item quality, because item layers differ enormously on their own (diagonal row shows this). Holding items FIXED and varying the ANCHOR layer isolates mismatch. The clean control is the one that tests the design's commensurability claim."
+}
