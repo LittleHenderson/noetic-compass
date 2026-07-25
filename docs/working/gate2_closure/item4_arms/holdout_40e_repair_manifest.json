@@ -1,0 +1,93 @@
+{
+  "admissible_after_repair": true,
+  "after": {
+    "base_sentence": {
+      "duplication_factor": 2.0,
+      "key": "base_sentence",
+      "row_count": 5920,
+      "shared_between_splits": {
+        "test<->train": 0,
+        "test<->val": 0,
+        "train<->val": 0
+      },
+      "total_leaked_pairs": 0,
+      "unique_values": 2960
+    },
+    "english": {
+      "duplication_factor": 1.0,
+      "key": "english",
+      "row_count": 5920,
+      "shared_between_splits": {
+        "test<->train": 0,
+        "test<->val": 0,
+        "train<->val": 0
+      },
+      "total_leaked_pairs": 0,
+      "unique_values": 5920
+    },
+    "repartition_group": {
+      "duplication_factor": 592.0,
+      "key": "repartition_group",
+      "row_count": 5920,
+      "shared_between_splits": {
+        "test<->train": 0,
+        "test<->val": 0,
+        "train<->val": 0
+      },
+      "total_leaked_pairs": 0,
+      "unique_values": 10
+    }
+  },
+  "before": {
+    "base_sentence": {
+      "duplication_factor": 2.810811,
+      "key": "base_sentence",
+      "row_count": 8320,
+      "shared_between_splits": {
+        "test<->train": 80,
+        "test<->val": 80,
+        "train<->val": 80
+      },
+      "total_leaked_pairs": 240,
+      "unique_values": 2960
+    },
+    "english": {
+      "duplication_factor": 1.405405,
+      "key": "english",
+      "row_count": 8320,
+      "shared_between_splits": {
+        "test<->train": 160,
+        "test<->val": 160,
+        "train<->val": 160
+      },
+      "total_leaked_pairs": 480,
+      "unique_values": 5920
+    }
+  },
+  "build_item": "B1 \u2014 repaired 40-Element holdout bank",
+  "created_at": "2026-07-25T19:43:30.879309+00:00",
+  "dedup_losslessness_check": {
+    "conflict_examples": [],
+    "duplicated_texts": 5920,
+    "lossless": true,
+    "texts_with_conflicting_labels": 0
+  },
+  "grouping_rule": "whole contrast_bundle_id (fallback counterfactual_pair_id, then base_sentence) assigned to one split; no group is ever split",
+  "honesty_note": "This repair can only REDUCE effective sample size (8,320 rows -> 5,920 unique). It makes the test harder and fairer, never easier. The unique-prompt count is the honest denominator and must be the one reported.",
+  "output_path": "docs\\working\\gate2_closure\\item4_arms\\holdout_40e_repaired_v1.jsonl",
+  "output_sha256": "e54e8961b3fd20efdcc8ac626fc93d2441cf27ea60ea5dc275197c978f55588a",
+  "schema_version": "cas_harness_item4_bank_repair_manifest.v1",
+  "seed": 20260725,
+  "source_path": "C:\\Users\\wakil\\AppData\\Local\\Temp\\claude\\C--Users-wakil-OneDrive-Desktop-tksCAS\\8a50c2ca-34b6-43c1-b27e-59828c6ab21c\\scratchpad\\s9.jsonl",
+  "source_sha256": "2f8637eedff0fb4d9e6191bd5c051ddc21cea699e33621896469a2e522306889",
+  "split_counts_after": {
+    "test": 3360,
+    "train": 1600,
+    "val": 960
+  },
+  "split_counts_before": {
+    "test": 4480,
+    "train": 2560,
+    "val": 1280
+  }
+}
