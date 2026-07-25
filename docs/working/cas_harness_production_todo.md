@@ -915,6 +915,70 @@ commits `8a8624d`/`20b3ffb`/`94f3f4e`, bundle + full evidence in
 `project_handoffs/…/GATE2_W0_FAIR_COMPARISON/` and
 `D:\tksCAS-archive\gate2_w0_fair_comparison_attempt1_20260724\`.
 
+**SCOPE CORRECTION — the four W0 attempts were aimed at the WRONG GATE
+(2026-07-24, expert-panel finding, operator-verified).** A 14-agent panel
+re-read the controlling text. Gate 2's actual definition is the gate-table row
+at `:954` — "small-model semantic authority, matched controls, uncertainty,
+claims reconciliation, and withdrawn-`ACCEPT` root cause close" — expanded as
+EIGHT items under "## Gate 2 — Small-model semantic and claims closure" in
+`docs/working/CAS_HARNESS_033_TO_100_COMPLETION_ROADMAP_20260722.md:187-220`.
+The word "injection" appears ZERO times there. Prompt-injection validation is
+**Gate 3** (`:955`, roadmap `:222+`). The one-line definition the session
+worked from ("the scoring actually works on a small model, with fair
+comparisons and honest error bars") was a paraphrase authored during that same
+session, not the gate's text; it silently dropped two of the five named
+requirements and re-bound the rest to a target the gate never named. The four
+honest FAILs therefore cannot move Gate 2 in either direction. Re-scoping is
+NOT a goalpost move — the roadmap text predates the session (2026-07-22).
+
+Three further defects the panel found, each operator-verified by direct
+inspection:
+- **Effective n was 80, not 640.** The bank is 80 unique prompts duplicated 8x
+  with BYTE-IDENTICAL feature rows (`within-group max feature diff 0.0`), and
+  0 of 80 groups carry both labels. Observed bootstrap half-widths (`0.089`-
+  `0.131`) sit on top of the `0.15` bar, so the design had roughly coin-flip
+  power. Four failures at that power are far less informative than published.
+- **`p = 0.0005` was the arithmetic FLOOR** (`1/2001`), identical in all four
+  attempts, not a measured value. It should read `p <= 1/2001 (floor)`.
+- **The claim "surface controls strengthen with embedding width" is WITHDRAWN.**
+  The char-ngram control never touches the model and is exactly `0.600` on all
+  four datasets; only the l0 control varied, non-monotonically (`0.65` ->
+  `0.625` -> `0.6875`).
+Additionally, the bank's label survives a bijective decode the prompt itself
+announces in plaintext ("Encoding: base64. Encoded note: <payload>"), so a
+decode-aware control is admissible and the bank is not a fair test bed. All
+four committed reports also carried a hardcoded `"model": "EleutherAI/pythia-160m"`
+field while scoring 1b/2.8b data.
+
+**Apparatus repaired (2026-07-24).** `research/reconciled/experiment_admissibility.py`
+(11 tests) computes honest effective sample size and refuses inadmissible
+designs; it is now LOAD-BEARING inside `injection_detection_scorer.py`, which
+raises `InadmissibleDatasetError` before fitting any probe. Against the real
+extraction it now reports `INADMISSIBLE_DO_NOT_SCORE: effective_n_supports_margin_gate,
+no_row_duplication / effective_sample_size=80 (row_count=640, duplication_factor=8.0)`.
+A refusal is explicitly NOT a FAIL. Seed-inclusive re-report
+(`attempts_seed_inclusive_rereport.json`, 20 fold seeds) corrects the published
+record: **attempt 2's `+0.0375` margin was a split artifact — its seed-inclusive
+mean is `-0.0094`, with 14 of 20 seeds putting the hidden state at or below a
+bag of raw token embeddings.** Attempt 3 is the only one where no seed goes
+non-positive. All verdicts remain FAIL.
+
+**Gate 2 work now under way on the CORRECT items** (`docs/working/gate2_closure/`,
+commit `f922be92`): item 1 claims matrix, item 2 withdrawn-`ACCEPT` root cause
+(re-review **ACCEPTABLE**, 13/13 citations verified), item 3 registry signature
+readiness, item 8 fixture replay (re-review **ACCEPTABLE**, 17/17 citations
+verified). Items 1 and 3 are in a final targeted pass. Item 3's original
+headline blocker ("no signature mechanism exists") was FALSE and is corrected:
+24 receipt files exist under `docs/working/pcba_authority_receipts_needed_20260617/`
+with a working verifier (`cas-forex/cas_forex/pcba_authority.py`), and **4 of
+them are already signed** (`operator_id codex_gpt5_local_reviewer_20260617`,
+real `receipt_hash` values, `verify()` True 4/4). Item 4 — the gate's ONLY
+experimental item, a six-arm TKS definition A/B — remains blocked behind owner
+approval per roadmap `:198-199`. That A/B is structurally immune to the failure
+that killed the injection attempts: every arm is scored on one identical
+holdout bank, so surface features are byte-identical across arms and no
+surface control can distinguish them.
+
 Historical score before Gate 1 (2026-07-23 and earlier): approximately
 `0.33 / 1.00` (band `0.30–0.35`). `1.00` means the owner's complete target is
 demonstrated rather than merely specified: repeatable hidden-state and
