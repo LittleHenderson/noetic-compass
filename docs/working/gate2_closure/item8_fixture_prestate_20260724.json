@@ -1,0 +1,237 @@
+{
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/OFF_POD_VERIFICATION.json": {
+  "bytes": 5410,
+  "mtime_ns": 1784631900790464400,
+  "sha256": "db115601df8f2984d56f6c9f5cde09f598b77308acd6cf978109583f375c2e9c"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/RESULT_SUMMARY.md": {
+  "bytes": 4444,
+  "mtime_ns": 1784631998970174300,
+  "sha256": "0eed1d9bc572d0b9e79be1c980c0ddad6227f58dd6a8693a1081a26df0e8f90a"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/artifacts/canary-8prompt-2layer/SHA256SUMS": {
+  "bytes": 2788,
+  "mtime_ns": 1784631312414974300,
+  "sha256": "8f785723b2ab8be80f063de45f8c9cf8f88e98888a5236f69766e0da94521f54"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/artifacts/canary-8prompt-2layer/tks_definition_anchor_canary_artifact_manifest.json": {
+  "bytes": 5216,
+  "mtime_ns": 1784631313145987200,
+  "sha256": "a451f25bfa09d360484d349beb6edf66a7ba6440c194a6d7ea72f501f66ccad7"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/artifacts/canary-8prompt-2layer/tks_definition_anchor_canary_receipt.json": {
+  "bytes": 25181,
+  "mtime_ns": 1784631314091271200,
+  "sha256": "392e846e2393f89a84acc049f28c2729da792d31145899f6e18340296e0b7b06"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/artifacts/canary-8prompt-2layer/tks_definition_anchor_canary_vectors.npz": {
+  "bytes": 555869,
+  "mtime_ns": 1784631316015557100,
+  "sha256": "57921a21e59c0c1b380a097da305dee2fe3bd54cea75282e505db6512e461e3b"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/artifacts/full/FULL_BUNDLE_SHA256SUMS": {
+  "bytes": 5563,
+  "mtime_ns": 1784631292451940700,
+  "sha256": "b44e4457de6763bc41a27aa1b746cbaba19a753f788f472b2fe4ef9546624a93"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/artifacts/full/tks_definition_anchor_local_artifact_manifest.json": {
+  "bytes": 1465,
+  "mtime_ns": 1784631293161742900,
+  "sha256": "99b7d3c9e1257d0ee78f948acd92b65b4a9ac6fc1bc2d3bb235428f98b370ed8"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/artifacts/full/tks_definition_anchor_raw_diagnostic_vectors.npz": {
+  "bytes": 109414103,
+  "mtime_ns": 1784631307603999000,
+  "sha256": "454a4f017d56ed393e50d7e88d29486b3379e96ae930a1123698c6275298ead6"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/artifacts/full/tks_definition_anchor_report.json": {
+  "bytes": 255466,
+  "mtime_ns": 1784631295627018300,
+  "sha256": "0440462d278da53b2fc217f252dff0d295c878b356fd53bccb38cc810407cdef"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/artifacts/full/tks_definition_anchor_report.md": {
+  "bytes": 4551,
+  "mtime_ns": 1784631293884449500,
+  "sha256": "c35bf4ccc92ce94d4d5741fe12fe09f97e1db0dfd74479af6521ef29134c20d0"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/frozen_inputs/foundation28_balanced_v0_20260526.json": {
+  "bytes": 236254,
+  "mtime_ns": 1784631381528572200,
+  "sha256": "0868b37a718798cb30a7db8b8a23f5326d4e1ae2b6464842d16218e97ec1751a"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/frozen_inputs/run_tks_definition_anchor_diagnostic.py": {
+  "bytes": 111446,
+  "mtime_ns": 1784631370667622500,
+  "sha256": "5b069f43af2d50cbc9cfd4735f316497b0c8ab26762cc871d18cd38edee761da"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/frozen_inputs/stage7_foundation_rolebound_pilot_20260526.json": {
+  "bytes": 5686423,
+  "mtime_ns": 1784631376643836400,
+  "sha256": "c2fa18078feaad6f4970f31a380b67557f3684bb871f96695dbf00c750516d75"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/frozen_inputs/tks_definition_anchor_diagnostic_arms_20260721.json": {
+  "bytes": 1438,
+  "mtime_ns": 1784631365968273100,
+  "sha256": "5ef95e61b8df526fec1d66d59635f8b2a6d0f298537019463cd4babefa9b0d5b"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/frozen_inputs/tks_definition_anchor_diagnostic_protocol_20260721.json": {
+  "bytes": 10232,
+  "mtime_ns": 1784631361932493200,
+  "sha256": "d0e154c7ac9913425a16de8d9394b391ae0c788c1bfcdd8959e4d2554b10b715"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/logs/pip_install.log": {
+  "bytes": 23346,
+  "mtime_ns": 1784631336160425000,
+  "sha256": "941887bc6926a251580281efcf84f413e13fa3d239af138b0db9d150920d779f"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/logs/pythia_160m_hook_preflight.log": {
+  "bytes": 326,
+  "mtime_ns": 1784631334602536800,
+  "sha256": "1d5d3411891aaeacfde9c3aba6fae7f91a6a4955ce159f13ed35bfa1eacbf873"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/logs/run_verified_canary_attempt1_interrupted_transport.log": {
+  "bytes": 352,
+  "mtime_ns": 1784631333078251600,
+  "sha256": "557f97fab3e5ec6e1ef6a2f9ea3b245aaebc7e9c9c48aa7d55c322a0346a8593"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/logs/run_verified_canary_transcript.log": {
+  "bytes": 2147,
+  "mtime_ns": 1784631332353563900,
+  "sha256": "f83c12075610cafe6e9fa99efdc587137b13402511d1b887a335d9442ffd4dae"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/logs/runpod_preflight_tests.log": {
+  "bytes": 1522,
+  "mtime_ns": 1784631335334527700,
+  "sha256": "0917ede8dc488cbd7ec20e8fdae94225e688461e51c73ae0c48918e0f4b385bb"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/logs/tks_definition_anchor_canary.log": {
+  "bytes": 1262,
+  "mtime_ns": 1784631331632050700,
+  "sha256": "fe3d99edc2eb8d1c1785a1d91a49969f1827ae034d575f725076e23b0666da6c"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/logs/tks_definition_anchor_canary_attempt1_interrupted_transport.log": {
+  "bytes": 247,
+  "mtime_ns": 1784631333883078500,
+  "sha256": "18f037d5db6a11df7174cccd1baac7035b35c7397a1ca38ef9d93e7371a903b8"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/logs/tks_definition_anchor_full.log": {
+  "bytes": 8492,
+  "mtime_ns": 1784631330902109000,
+  "sha256": "3e763ba4f3b59815dc9e270cdec750d8723ceff64ef27a2c6110746233b73614"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/receipts/hf_snapshot_sha256.txt": {
+  "bytes": 1131,
+  "mtime_ns": 1784631322252378500,
+  "sha256": "8a12d0ea9f864c6fe58e716780320626a0d37b2ce454b81d1683279f03667294"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/receipts/nvidia_smi_q.txt": {
+  "bytes": 9799,
+  "mtime_ns": 1784631323912127800,
+  "sha256": "c29fcbc0df4ada0b5173dfc2faa29326c6706338778044d9af2d5d4d86acd955"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/receipts/operational_canary_source_sha256.txt": {
+  "bytes": 392,
+  "mtime_ns": 1784631321532669500,
+  "sha256": "d51af1bb1ee33323d3368b5ac3414524b46481e1213e754de007e7a46cb46fb9"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/receipts/pip_check.txt": {
+  "bytes": 59,
+  "mtime_ns": 1784631325361751800,
+  "sha256": "328ad969c36b4425e91322b83af45b233459b6f0fe35f2d0a0b5c8d15cc72f78"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/receipts/pip_freeze.txt": {
+  "bytes": 3423,
+  "mtime_ns": 1784631324639258100,
+  "sha256": "c960728ca04f6eeca47a280c4dac4b5eb11f0f2ecb8a324472164b3f44df7cc7"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/receipts/pythia_160m_hook_preflight.json": {
+  "bytes": 19987,
+  "mtime_ns": 1784631323059507300,
+  "sha256": "b689da7f7c42c733f0725d445eed758c8b6b06cbc2f1c3a1fd46bccf34dc3b34"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/receipts/source_file_sha256.txt": {
+  "bytes": 1807,
+  "mtime_ns": 1784631326078186200,
+  "sha256": "ffaddae4c4197b68f5e984778c922223c89b22b63660f7e2d07ba4a29fd195fb"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/source/cas-tks-anchor-diagnostic-20260721-da00bd94.zip": {
+  "bytes": 720034,
+  "mtime_ns": 1784631357866113000,
+  "sha256": "caeb3171d8f461e81aeb164888a41a7c33e105d2813a253df25a833cc58a2e20"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/source/operational_canary/build_verified_canary_bundle.py": {
+  "bytes": 13336,
+  "mtime_ns": 1784631350513933400,
+  "sha256": "704a1eb44300582c101e4f90daef5d2debcfbcb2c71c05f9cd00f8029017afb4"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/source/operational_canary/run_tks_definition_anchor_canary.py": {
+  "bytes": 33521,
+  "mtime_ns": 1784631352243423700,
+  "sha256": "4fed8ddbf9aa7cf899a87c3773d232e0c9ef3927ae3f7b953e1e1738e414024a"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/source/operational_canary/run_verified_canary.sh": {
+  "bytes": 1339,
+  "mtime_ns": 1784631349761818700,
+  "sha256": "4b1f3e832154f4e07df90ba473414d91d437b07d0e19ed8992422a8089e0648c"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/source/operational_canary/test_tks_definition_anchor_canary.py": {
+  "bytes": 3923,
+  "mtime_ns": 1784631351246781600,
+  "sha256": "5f226eebe0043966fcd6a2b5867478522cc6e5a949f310761933637978206aaf"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/supporting_local_preflight/cas-pythia-hook-equivalence-local-20260721.json": {
+  "bytes": 19769,
+  "mtime_ns": 1784624728555367100,
+  "sha256": "5ae6ecd801cd61adc252475f676ae02f4e913ac6f68381cc18a38089d746862f"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_11_TECHNICAL_CANARY_PASS_GATE1/STATUS.md": {
+  "bytes": 4296,
+  "mtime_ns": 1784922184304467900,
+  "sha256": "27bdb880813139620502bb1823a2c6b638bc37552b755b957642ff863ba3826b"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_11_TECHNICAL_CANARY_PASS_GATE1/evidence/PRE_REVERIFY.json": {
+  "bytes": 249,
+  "mtime_ns": 1784922145219087100,
+  "sha256": "6bcb691a480c56df92a07da23408835b1a5a0e136b87001255a4600aaf489ad8"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_11_TECHNICAL_CANARY_PASS_GATE1/evidence/jacobian_lens_canary_v1_anchor_receipt.json": {
+  "bytes": 5597,
+  "mtime_ns": 1784922128159306800,
+  "sha256": "2cd54236347a5f1cc6cf06767fc6d81bf9424e921468f560cc6a0b51d0b3867c"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_11_TECHNICAL_CANARY_PASS_GATE1/evidence/jacobian_lens_canary_v1_execution_receipt.json": {
+  "bytes": 174830,
+  "mtime_ns": 1784922117605791200,
+  "sha256": "96c300fe8381c579533b6f06b578d8510d9ad7a6165131a8018895de9b3d3bf6"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_11_TECHNICAL_CANARY_PASS_GATE1/evidence/jacobian_lens_canary_v1_execution_receipt.json.publication.json": {
+  "bytes": 742,
+  "mtime_ns": 1784922121473762100,
+  "sha256": "711d1c5182788cea47e2d2ca0892baf228678e0009c796546e46093e2ede6989"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_11_TECHNICAL_CANARY_PASS_GATE1/evidence/jacobian_lens_canary_v1_post_run_capture.json": {
+  "bytes": 1756,
+  "mtime_ns": 1784922131276473800,
+  "sha256": "1b18716573336dbbd7c218044284a035844650455a214f4cefe8eb689b41024f"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_11_TECHNICAL_CANARY_PASS_GATE1/evidence/jacobian_lens_canary_v1_receiver_receipt.json": {
+  "bytes": 7396,
+  "mtime_ns": 1784922124867176300,
+  "sha256": "8744172d7e7418e5c0d97773c95fa683e0bdf3aa1b379139e222bd1e63f67622"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_11_TECHNICAL_CANARY_PASS_GATE1/evidence/launch_finished.json": {
+  "bytes": 431,
+  "mtime_ns": 1784922138075492300,
+  "sha256": "623bde9f2a4cf5f2d23ed55e618b4439bcd8f7e9acfe38bb2718748f4ad1049f"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_11_TECHNICAL_CANARY_PASS_GATE1/evidence/launch_started.json": {
+  "bytes": 392,
+  "mtime_ns": 1784922134594190200,
+  "sha256": "b5435f09cd56982d2bf7b8c1c39acfc16a8264f1ef7fdf6d2eb7aa2b8eb5248a"
+ },
+ "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_11_TECHNICAL_CANARY_PASS_GATE1/evidence/wrapper.stdout.log": {
+  "bytes": 400,
+  "mtime_ns": 1784922141792745900,
+  "sha256": "bf5a0183c81776493c6f53cbdf29d9e480832b65ddb6cb6fc1ca0cb663c2b962"
+ }
+}

@@ -1,0 +1,36 @@
+{
+  "caveats": [
+    "source claim state (verbatim): claim_status = NOT_LICENSED",
+    "source claim state (verbatim): status = CURRENT_RUNTIME_FILES_MATCH_CAPTURE",
+    "source schema_version: unavailable",
+    "model revision pinned by the shim: 50f5173d932e8e61f858120bcb800b97af589f46",
+    "SHIM CHOICE: the fixture named no model, so model_checkpoint_id was set to EleutherAI/pythia-160m by the shim. This is an editorial act, not a fixture fact.",
+    "source fixture sha256: 6bcb691a480c56df92a07da23408835b1a5a0e136b87001255a4600aaf489ad8",
+    "source fixture path: project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_11_TECHNICAL_CANARY_PASS_GATE1/evidence/PRE_REVERIFY.json",
+    "This trace is a DERIVED VIEW produced by item8_fixture_to_evidence_packet_shim.py. It is not a restatement of the original and it upgrades no claim."
+  ],
+  "claim_levels": [
+    {
+      "level": "source_copy_evidence",
+      "why": "A replayed historical fixture is source-copy evidence: the numbers are real and were measured, but this path re-presents them rather than re-deriving them."
+    }
+  ],
+  "generated_at": "2026-07-25T21:56:26.568409+00:00",
+  "licenses_nothing": "Replaying a fixture through the live path demonstrates the PATH works. It revives no verdict, and any withdrawn claim in the payload stays withdrawn.",
+  "provenance": {
+    "model_checkpoint_id": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "source_fixture": "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_11_TECHNICAL_CANARY_PASS_GATE1/evidence/PRE_REVERIFY.json",
+    "source_fixture_sha256": "6bcb691a480c56df92a07da23408835b1a5a0e136b87001255a4600aaf489ad8",
+    "source_schema_version": null
+  },
+  "replayed_payload": {
+    "bytes_verified": 5089508503,
+    "claim_status": "NOT_LICENSED",
+    "file_records_verified": 17007,
+    "main_sha256": "717d5a15c831b11c5c37733a6b870965b4cdcbb38a2acbee2daec80e0ab51ab7",
+    "provider_authenticated": false,
+    "status": "CURRENT_RUNTIME_FILES_MATCH_CAPTURE"
+  },
+  "schema_version": "evidence_packet_trace.v1"
+}

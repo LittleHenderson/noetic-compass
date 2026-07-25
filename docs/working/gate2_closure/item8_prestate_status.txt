@@ -1,0 +1,605 @@
+ M .claude/settings.local.json
+ M .gitignore
+ M book/superiority_of_tks/build/frontmatter_tks.tex
+ M book/superiority_of_tks/build/repair_manuscript.py
+ M cas-forex/.claude/launch.json
+ M cas-forex/.dockerignore
+ M cas-forex/.env.example
+ M cas-forex/.gitignore
+ M cas-forex/Dockerfile
+ M cas-forex/START_CAS_FOREX.bat
+ M cas-forex/START_CAS_FOREX_LAN.bat
+ M cas-forex/api/data.py
+ M cas-forex/api/route_cache.py
+ M cas-forex/api/routes/account.py
+ M cas-forex/api/routes/agent_decision.py
+ M cas-forex/api/routes/agent_decision_history.py
+ M cas-forex/api/routes/ai_control_authority.py
+ M cas-forex/api/routes/ai_operator.py
+ M cas-forex/api/routes/assistant.py
+ M cas-forex/api/routes/auto_halt.py
+ M cas-forex/api/routes/chart.py
+ M cas-forex/api/routes/dispatch_loop.py
+ M cas-forex/api/routes/live_enable.py
+ M cas-forex/api/routes/live_order_dry_run.py
+ M cas-forex/api/routes/live_pilot.py
+ M cas-forex/api/routes/live_telemetry.py
+ M cas-forex/api/routes/money_movement.py
+ M cas-forex/api/routes/movement.py
+ M cas-forex/api/routes/mt5_live.py
+ M cas-forex/api/routes/notifications.py
+ M cas-forex/api/routes/operator_briefing.py
+ M cas-forex/api/routes/order_dispatch.py
+ M cas-forex/api/routes/owner_auth.py
+ M cas-forex/api/routes/reconciliation.py
+ M cas-forex/api/routes/risk_control.py
+ M cas-forex/api/routes/settings.py
+ M cas-forex/api/routes/strategy_comparison.py
+ M cas-forex/api/routes/waste_loop_control.py
+ M cas-forex/api/routes/webhook_notifications.py
+ M cas-forex/api/server.py
+ M cas-forex/cas_forex/account_reconciliation.py
+ M cas-forex/cas_forex/agent_decision_explainer.py
+ M cas-forex/cas_forex/agent_dispatch.py
+ M cas-forex/cas_forex/agent_information_flow.py
+ M cas-forex/cas_forex/agent_memory.py
+ M cas-forex/cas_forex/agent_message_bus.py
+ M cas-forex/cas_forex/agent_research_queue.py
+ M cas-forex/cas_forex/agent_state.py
+ M cas-forex/cas_forex/agent_workflow.py
+ M cas-forex/cas_forex/ai_control_authority.py
+ M cas-forex/cas_forex/ai_control_surface.py
+ M cas-forex/cas_forex/ai_model.py
+ M cas-forex/cas_forex/ai_operator.py
+ M cas-forex/cas_forex/ai_operator_runner.py
+ M cas-forex/cas_forex/authority_boundary.py
+ M cas-forex/cas_forex/auto_halt.py
+ M cas-forex/cas_forex/broker/mt5_bridge.py
+ M cas-forex/cas_forex/broker_control.py
+ M cas-forex/cas_forex/broker_profiles.py
+ M cas-forex/cas_forex/broker_truth_monitor.py
+ M cas-forex/cas_forex/broker_truth_recovery_packet.py
+ M cas-forex/cas_forex/capital_plan.py
+ M cas-forex/cas_forex/cas_forex_bot.py
+ M cas-forex/cas_forex/compound_add_order_dry_run_review.py
+ M cas-forex/cas_forex/config.py
+ M cas-forex/cas_forex/daily_report_generator.py
+ M cas-forex/cas_forex/directional_intelligence.py
+ M cas-forex/cas_forex/dispatch_loop.py
+ M cas-forex/cas_forex/edge_authorization.py
+ M cas-forex/cas_forex/edge_gate.py
+ M cas-forex/cas_forex/execution_guard.py
+ M cas-forex/cas_forex/hourly_intraday_policy.py
+ M cas-forex/cas_forex/instruments.py
+ M cas-forex/cas_forex/legacy_receipts_archive.py
+ M cas-forex/cas_forex/live_enable_control.py
+ M cas-forex/cas_forex/live_money_progression_packet.py
+ M cas-forex/cas_forex/live_order_dry_run.py
+ M cas-forex/cas_forex/live_order_dry_run_review.py
+ M cas-forex/cas_forex/live_pilot.py
+ M cas-forex/cas_forex/live_readiness.py
+ M cas-forex/cas_forex/live_recovery.py
+ M cas-forex/cas_forex/market_data/connector.py
+ M cas-forex/cas_forex/micro_scalp_policy.py
+ M cas-forex/cas_forex/model_provider.py
+ M cas-forex/cas_forex/money_movement.py
+ M cas-forex/cas_forex/movement_stream.py
+ M cas-forex/cas_forex/mt5_deal_history_ingest.py
+ M cas-forex/cas_forex/mt5_live.py
+ M cas-forex/cas_forex/mt5_market_data_diagnostic.py
+ M cas-forex/cas_forex/mt5_paper_execution_verifier.py
+ M cas-forex/cas_forex/operator_briefing.py
+ M cas-forex/cas_forex/operator_lessons.py
+ M cas-forex/cas_forex/operator_secrets.py
+ M cas-forex/cas_forex/order_attempt_audit.py
+ M cas-forex/cas_forex/order_attempt_recovery_packet.py
+ M cas-forex/cas_forex/order_dispatch.py
+ M cas-forex/cas_forex/owner_auth.py
+ M cas-forex/cas_forex/owner_command_broker.py
+ M cas-forex/cas_forex/owner_control.py
+ M cas-forex/cas_forex/paper_broker_adapter.py
+ M cas-forex/cas_forex/paper_outcome_sim.py
+ M cas-forex/cas_forex/payment_providers.py
+ M cas-forex/cas_forex/payout_recovery.py
+ M cas-forex/cas_forex/pre_execution_risk_gate.py
+ M cas-forex/cas_forex/push_notifications.py
+ M cas-forex/cas_forex/risk_control.py
+ M cas-forex/cas_forex/risk_monitoring.py
+ M cas-forex/cas_forex/runtime_gates.py
+ M cas-forex/cas_forex/schemas/forecast.py
+ M cas-forex/cas_forex/schemas/market.py
+ M cas-forex/cas_forex/schemas/order.py
+ M cas-forex/cas_forex/stack_health_check.py
+ M cas-forex/cas_forex/terminal_history_ingest.py
+ M cas-forex/cas_forex/terminal_position_reconciliation.py
+ M cas-forex/cas_forex/terminal_receipt_recovery_packet.py
+ M cas-forex/cas_forex/terminal_receipt_recovery_sequence.py
+ M cas-forex/cas_forex/trade_management.py
+ M cas-forex/cas_forex/verified_profit_sweep.py
+ M cas-forex/cas_forex/waste_adaptation_plan.py
+ M cas-forex/cas_forex/waste_adaptation_promotion_rule.py
+ M cas-forex/cas_forex/waste_cycle_audit.py
+ M cas-forex/cas_forex/waste_direction_learning_ledger.py
+ M cas-forex/cas_forex/waste_direction_outcome_binding.py
+ M cas-forex/cas_forex/waste_loop.py
+ M cas-forex/cas_forex/waste_market_data.py
+ M cas-forex/cas_forex/waste_pilot_promotion.py
+ M cas-forex/cas_forex/waste_runner.py
+ M cas-forex/cas_forex/webhook_notifications.py
+ M cas-forex/docs/DEPLOY.md
+ M cas-forex/docs/MOBILE_APP.md
+ M cas-forex/requirements.txt
+ M cas-forex/scripts/run_cas_forex_bot.py
+ M cas-forex/scripts/run_notification_dispatcher.py
+ M cas-forex/tests/test_account_reconciliation.py
+ M cas-forex/tests/test_agent_decision_explainer.py
+ M cas-forex/tests/test_agent_decision_history_route.py
+ M cas-forex/tests/test_agent_decision_route.py
+ M cas-forex/tests/test_agent_dispatch.py
+ M cas-forex/tests/test_agent_information_flow.py
+ M cas-forex/tests/test_agent_message_bus.py
+ M cas-forex/tests/test_agent_research_queue.py
+ M cas-forex/tests/test_agent_workflow.py
+ M cas-forex/tests/test_agent_workflow_cycle.py
+ M cas-forex/tests/test_ai_control_authority.py
+ M cas-forex/tests/test_ai_model.py
+ M cas-forex/tests/test_ai_operator.py
+ M cas-forex/tests/test_ai_operator_runner.py
+ M cas-forex/tests/test_authority_boundary.py
+ M cas-forex/tests/test_auto_halt.py
+ M cas-forex/tests/test_auto_halt_route.py
+ M cas-forex/tests/test_broker_control.py
+ M cas-forex/tests/test_broker_modify_position.py
+ M cas-forex/tests/test_broker_reality.py
+ M cas-forex/tests/test_broker_truth_monitor.py
+ M cas-forex/tests/test_broker_truth_recovery_packet.py
+ M cas-forex/tests/test_chart_route.py
+ M cas-forex/tests/test_daily_report_generator.py
+ M cas-forex/tests/test_daily_report_route.py
+ M cas-forex/tests/test_directional_intelligence.py
+ M cas-forex/tests/test_dispatch_loop.py
+ M cas-forex/tests/test_edge_authorization.py
+ M cas-forex/tests/test_edge_gate.py
+ M cas-forex/tests/test_execution_guard.py
+ M cas-forex/tests/test_legacy_receipts_archive.py
+ M cas-forex/tests/test_live_enable_control.py
+ M cas-forex/tests/test_live_order_dry_run.py
+ M cas-forex/tests/test_live_pilot.py
+ M cas-forex/tests/test_live_readiness.py
+ M cas-forex/tests/test_live_recovery.py
+ M cas-forex/tests/test_live_telemetry_api.py
+ M cas-forex/tests/test_market_data.py
+ M cas-forex/tests/test_model_provider.py
+ M cas-forex/tests/test_money_movement.py
+ M cas-forex/tests/test_money_movement_route.py
+ M cas-forex/tests/test_movement_stream.py
+ M cas-forex/tests/test_mt4_control.py
+ M cas-forex/tests/test_mt5_deal_history_ingest.py
+ M cas-forex/tests/test_mt5_live.py
+ M cas-forex/tests/test_notifications_route.py
+ M cas-forex/tests/test_operator_briefing.py
+ M cas-forex/tests/test_operator_briefing_route.py
+ M cas-forex/tests/test_operator_guidance.py
+ M cas-forex/tests/test_operator_lessons.py
+ M cas-forex/tests/test_order_dispatch.py
+ M cas-forex/tests/test_order_dispatch_route.py
+ M cas-forex/tests/test_owner_auth.py
+ M cas-forex/tests/test_owner_command_broker.py
+ M cas-forex/tests/test_owner_control.py
+ M cas-forex/tests/test_paper_outcome_sim.py
+ M cas-forex/tests/test_payment_providers.py
+ M cas-forex/tests/test_pip_math_regressions.py
+ M cas-forex/tests/test_plan_completion.py
+ M cas-forex/tests/test_pre_execution_risk_gate.py
+ M cas-forex/tests/test_push_notifications.py
+ M cas-forex/tests/test_risk_control.py
+ M cas-forex/tests/test_risk_control_route.py
+ M cas-forex/tests/test_risk_monitoring.py
+ M cas-forex/tests/test_risk_monitoring_route.py
+ M cas-forex/tests/test_runtime_gates.py
+ M cas-forex/tests/test_settings_api_surface.py
+ M cas-forex/tests/test_terminal_history_ingest.py
+ M cas-forex/tests/test_terminal_position_reconciliation.py
+ M cas-forex/tests/test_verified_profit_sweep.py
+ M cas-forex/tests/test_waste_adaptation_plan.py
+ M cas-forex/tests/test_waste_adaptation_promotion_rule.py
+ M cas-forex/tests/test_waste_direction_outcome_binding.py
+ M cas-forex/tests/test_waste_learning_outcomes.py
+ M cas-forex/tests/test_waste_loop.py
+ M cas-forex/tests/test_waste_market_data.py
+ M cas-forex/tests/test_waste_runner.py
+ M cas-forex/tests/test_webhook_notifications.py
+ M cas-forex/tests/test_webhook_notifications_route.py
+ M cas-forex/ui/package-lock.json
+ M cas-forex/ui/package.json
+ M cas-forex/ui/src/App.css
+ M cas-forex/ui/src/App.tsx
+ M cas-forex/ui/src/components/AgentDecisionCard.tsx
+ M cas-forex/ui/src/components/AiActivityIndicator.css
+ M cas-forex/ui/src/components/AiActivityIndicator.tsx
+ M cas-forex/ui/src/components/AiActivityInstantBadge.css
+ M cas-forex/ui/src/components/AiActivityInstantBadge.tsx
+ M cas-forex/ui/src/components/CompoundAddReviewPanel.tsx
+ M cas-forex/ui/src/components/DashboardBrokerTruthOpsPanel.tsx
+ M cas-forex/ui/src/components/DashboardEvidencePanels.tsx
+ M cas-forex/ui/src/components/DashboardInstantShell.tsx
+ M cas-forex/ui/src/components/DashboardOperationsWorkbench.tsx
+ M cas-forex/ui/src/components/DashboardSweepOpsPanel.tsx
+ M cas-forex/ui/src/components/DecisionCardPrimitives.css
+ M cas-forex/ui/src/components/DecisionHistoryRow.tsx
+ M cas-forex/ui/src/components/EdgeThresholdControl.tsx
+ M cas-forex/ui/src/components/FloatingAssistant.tsx
+ M cas-forex/ui/src/components/IncentiveLedgerCard.tsx
+ M cas-forex/ui/src/components/LiveOperabilityPanel.tsx
+ M cas-forex/ui/src/components/LiveTelemetryTable.css
+ M cas-forex/ui/src/components/LiveTradesTelemetry.tsx
+ M cas-forex/ui/src/components/ModeBanner.tsx
+ M cas-forex/ui/src/components/NotificationSubscriptionPanel.tsx
+ M cas-forex/ui/src/components/ObjectivePaceCard.tsx
+ M cas-forex/ui/src/components/OperatorBadge.css
+ M cas-forex/ui/src/components/OperatorBadge.tsx
+ M cas-forex/ui/src/components/OperatorBriefingCard.tsx
+ M cas-forex/ui/src/components/OwnerAccessBadge.tsx
+ M cas-forex/ui/src/components/PortfolioRiskCard.tsx
+ M cas-forex/ui/src/components/Shell.tsx
+ M cas-forex/ui/src/components/TradingWindow.tsx
+ M cas-forex/ui/src/components/WebhookSubscriptionPanel.tsx
+ M cas-forex/ui/src/components/useAiStage.ts
+ M cas-forex/ui/src/data/api.ts
+ M cas-forex/ui/src/data/apiCore.ts
+ M cas-forex/ui/src/data/assistantApi.ts
+ M cas-forex/ui/src/data/dashboardApi.ts
+ M cas-forex/ui/src/data/dashboardDeepApi.ts
+ M cas-forex/ui/src/data/dashboardStartupCache.ts
+ M cas-forex/ui/src/data/dashboardStartupCacheWriter.ts
+ M cas-forex/ui/src/data/fixtures.ts
+ M cas-forex/ui/src/data/operatorApi.ts
+ M cas-forex/ui/src/data/operatorBriefingApi.ts
+ M cas-forex/ui/src/data/ownerAuthApi.ts
+ M cas-forex/ui/src/data/ownerCommandApi.ts
+ M cas-forex/ui/src/data/wasteStageProbe.ts
+ M cas-forex/ui/src/index.css
+ M cas-forex/ui/src/pageConfig.ts
+ M cas-forex/ui/src/pages/AdaptivePage.tsx
+ M cas-forex/ui/src/pages/AuditPage.tsx
+ M cas-forex/ui/src/pages/DailyReportPage.css
+ M cas-forex/ui/src/pages/DailyReportPage.tsx
+ M cas-forex/ui/src/pages/DashboardPage.tsx
+ M cas-forex/ui/src/pages/DecisionHistoryPage.tsx
+ M cas-forex/ui/src/pages/HistoryPage.tsx
+ M cas-forex/ui/src/pages/LedgerPage.tsx
+ M cas-forex/ui/src/pages/OptimizerPage.tsx
+ M cas-forex/ui/src/pages/ProofPage.tsx
+ M cas-forex/ui/src/pages/QuickStartPage.css
+ M cas-forex/ui/src/pages/QuickStartPage.tsx
+ M cas-forex/ui/src/pages/SettingsPage.tsx
+ M cas-forex/ui/src/pages/StrategyComparisonPage.tsx
+ M cas-forex/ui/src/pages/TradePage.tsx
+ M cas-forex/ui/src/pages/WindowsPage.css
+ M cas-forex/ui/src/pages/WindowsPage.tsx
+ M cas-forex/ui/src/registerServiceWorker.ts
+ M cas-forex/ui/src/types/evidence.ts
+ M cas-forex/ui/vite.config.ts
+ M noetic-compass-scaffold/noetic-compass/atlas-viewer/package-lock.json
+ M noetic-compass-scaffold/noetic-compass/atlas-viewer/package.json
+?? .claude/launch.json
+?? .claude/settings.json
+?? 0,
+?? "New folder/"
+?? Noetic_Compass_Operations_Manual_v2_CAS_recovered.md
+?? cas-forex/api/routes/ai_hedge_management.py
+?? cas-forex/api/routes/broker_emergency.py
+?? cas-forex/api/routes/external_monitoring.py
+?? cas-forex/api/routes/mobile.py
+?? cas-forex/api/routes/runtime_topology.py
+?? cas-forex/cas_forex/account_chat_truth.py
+?? cas-forex/cas_forex/account_health.py
+?? cas-forex/cas_forex/active_account_truth.py
+?? cas-forex/cas_forex/ai_hedge_management.py
+?? cas-forex/cas_forex/ai_hedge_management_cycle.py
+?? cas-forex/cas_forex/ai_hedge_management_execution.py
+?? cas-forex/cas_forex/ai_hedge_management_runtime.py
+?? cas-forex/cas_forex/ai_hedge_supervision.py
+?? cas-forex/cas_forex/ai_operator_context.py
+?? cas-forex/cas_forex/ai_operator_position_edge.py
+?? cas-forex/cas_forex/ai_operator_scale_in.py
+?? cas-forex/cas_forex/ai_operator_trade_edge.py
+?? cas-forex/cas_forex/android_apk_install.py
+?? cas-forex/cas_forex/autonomous_money_movement.py
+?? cas-forex/cas_forex/bounded_model_call.py
+?? cas-forex/cas_forex/broker_emergency.py
+?? cas-forex/cas_forex/broker_funding_conformance.py
+?? cas-forex/cas_forex/broker_funding_sandbox.py
+?? cas-forex/cas_forex/broker_symbol_diagnostics.py
+?? cas-forex/cas_forex/bypass_launch_gate.py
+?? cas-forex/cas_forex/critical_notifications.py
+?? cas-forex/cas_forex/daily_loss_guard.py
+?? cas-forex/cas_forex/dispatch_loop_supervisor.py
+?? cas-forex/cas_forex/docker_desktop_install.py
+?? cas-forex/cas_forex/economic_calendar_feed.py
+?? cas-forex/cas_forex/emergency_controls.py
+?? cas-forex/cas_forex/entry_capacity_pressure.py
+?? cas-forex/cas_forex/execution_provenance.py
+?? cas-forex/cas_forex/external_monitoring.py
+?? cas-forex/cas_forex/external_monitoring_control.py
+?? cas-forex/cas_forex/jsonl_tail.py
+?? cas-forex/cas_forex/legal_review_control.py
+?? cas-forex/cas_forex/legal_review_readiness.py
+?? cas-forex/cas_forex/live_candle_route_policy.py
+?? cas-forex/cas_forex/managed_secret_store.py
+?? cas-forex/cas_forex/mobile_apk_artifact.py
+?? cas-forex/cas_forex/mobile_apk_proof.py
+?? cas-forex/cas_forex/mobile_final_verification.py
+?? cas-forex/cas_forex/mobile_phone_proof.py
+?? cas-forex/cas_forex/mobile_phone_verifier.py
+?? cas-forex/cas_forex/mobile_proof_session.py
+?? cas-forex/cas_forex/mobile_readiness_latest.py
+?? cas-forex/cas_forex/mobile_release_readiness.py
+?? cas-forex/cas_forex/mobile_stack_runner.py
+?? cas-forex/cas_forex/mobile_verification_plan.py
+?? cas-forex/cas_forex/mobile_web_base.py
+?? cas-forex/cas_forex/money_movement_dispatch.py
+?? cas-forex/cas_forex/mt5_account_growth.py
+?? cas-forex/cas_forex/mt5_account_identity.py
+?? cas-forex/cas_forex/mt5_demo_learning_sync.py
+?? cas-forex/cas_forex/mt5_permissions.py
+?? cas-forex/cas_forex/operational_readiness.py
+?? cas-forex/cas_forex/operator_account_context.py
+?? cas-forex/cas_forex/operator_scale_in_authorization.py
+?? cas-forex/cas_forex/operator_sizing.py
+?? cas-forex/cas_forex/performance_discipline.py
+?? cas-forex/cas_forex/phone_release_bundle.py
+?? cas-forex/cas_forex/phone_verification_session.py
+?? cas-forex/cas_forex/position_protection.py
+?? cas-forex/cas_forex/pre_trade_money.py
+?? cas-forex/cas_forex/professional_claims.py
+?? cas-forex/cas_forex/professional_readiness_matrix.py
+?? cas-forex/cas_forex/public_launch_gate.py
+?? cas-forex/cas_forex/push_delivery_control.py
+?? cas-forex/cas_forex/risen_live_handoff.py
+?? cas-forex/cas_forex/route_permissions.py
+?? cas-forex/cas_forex/runtime_topology.py
+?? cas-forex/cas_forex/secret_envelope.py
+?? cas-forex/cas_forex/security_posture.py
+?? cas-forex/cas_forex/spec_context.py
+?? cas-forex/cas_forex/ui_browser_zoom_smoke.py
+?? cas-forex/cas_forex/ui_layout_contract.py
+?? cas-forex/cas_forex/ui_visual_baseline.py
+?? cas-forex/cas_forex/web_phone_smoke.py
+?? cas-forex/docs/legal/
+?? cas-forex/docs/operations/
+?? cas-forex/docs/working/CAS_FOREX_AUDIT_REDTEAM_FINDINGS_2026-07-04.md
+?? cas-forex/docs/working/cas_forex_autonomous_execution_correction_2026-07-09.yaml
+?? cas-forex/outputs/
+?? cas-forex/runtime_logs/
+?? cas-forex/scripts/build_android_apks.py
+?? cas-forex/scripts/build_web_phone_release_bundle.py
+?? cas-forex/scripts/capture_entry_opportunity_restoration.py
+?? cas-forex/scripts/capture_operator_position_v14_local_runtime_evidence.py
+?? cas-forex/scripts/capture_operator_position_v14_runtime_evidence.py
+?? cas-forex/scripts/capture_operator_scale_in_natural_runtime_evidence.py
+?? cas-forex/scripts/install_android_debug_apk.py
+?? cas-forex/scripts/install_docker_desktop.py
+?? cas-forex/scripts/install_docker_desktop_elevated.ps1
+?? cas-forex/scripts/redteam_active_account_chat_truth.py
+?? cas-forex/scripts/redteam_deepseek_v4_role_routing.py
+?? cas-forex/scripts/redteam_dual_chat_responsiveness.py
+?? cas-forex/scripts/redteam_entry_candidate_actionability.py
+?? cas-forex/scripts/redteam_entry_opportunity_starvation.py
+?? cas-forex/scripts/redteam_gemma4_backup.py
+?? cas-forex/scripts/redteam_operator_capacity_starvation.py
+?? cas-forex/scripts/redteam_operator_learning_and_fresh_close.py
+?? cas-forex/scripts/redteam_operator_outlier_edge_robustness.py
+?? cas-forex/scripts/redteam_operator_regime_attribution.py
+?? cas-forex/scripts/redteam_operator_sizing_compound_slot.py
+?? cas-forex/scripts/refresh_spec_context.py
+?? cas-forex/scripts/run_android_gradle.py
+?? cas-forex/scripts/run_api_server.py
+?? cas-forex/scripts/run_broker_funding_conformance.py
+?? cas-forex/scripts/run_broker_funding_sandbox.py
+?? cas-forex/scripts/run_docker_engine_check.py
+?? cas-forex/scripts/run_mobile_final_verification.py
+?? cas-forex/scripts/run_mobile_proof_session.py
+?? cas-forex/scripts/run_mobile_release_readiness.py
+?? cas-forex/scripts/run_mobile_stack_readiness.py
+?? cas-forex/scripts/run_mobile_verification_plan.py
+?? cas-forex/scripts/run_phone_verification_session.py
+?? cas-forex/scripts/run_risen_live_handoff.py
+?? cas-forex/scripts/run_ui_browser_zoom_smoke.py
+?? cas-forex/scripts/run_ui_layout_contract.py
+?? cas-forex/scripts/run_ui_visual_baseline.py
+?? cas-forex/scripts/run_web_phone_smoke.py
+?? cas-forex/scripts/setup_android_release_signing.py
+?? cas-forex/scripts/watch_mobile_phone_proof.py
+?? cas-forex/tests/test_account_chat_truth.py
+?? cas-forex/tests/test_account_health.py
+?? cas-forex/tests/test_active_account_truth.py
+?? cas-forex/tests/test_ai_hedge_management.py
+?? cas-forex/tests/test_ai_hedge_management_cycle.py
+?? cas-forex/tests/test_ai_hedge_management_execution.py
+?? cas-forex/tests/test_ai_hedge_management_runtime.py
+?? cas-forex/tests/test_ai_hedge_supervision.py
+?? cas-forex/tests/test_ai_operator_chat_diagnostics.py
+?? cas-forex/tests/test_ai_operator_context.py
+?? cas-forex/tests/test_ai_operator_position_edge.py
+?? cas-forex/tests/test_ai_operator_scale_in.py
+?? cas-forex/tests/test_ai_operator_trade_edge.py
+?? cas-forex/tests/test_android_apk_install.py
+?? cas-forex/tests/test_api_data_auto_halt.py
+?? cas-forex/tests/test_api_data_backsolve.py
+?? cas-forex/tests/test_assistant_route.py
+?? cas-forex/tests/test_autonomous_money_movement.py
+?? cas-forex/tests/test_bounded_model_call.py
+?? cas-forex/tests/test_broker_emergency.py
+?? cas-forex/tests/test_broker_funding_sandbox.py
+?? cas-forex/tests/test_broker_symbol_diagnostics.py
+?? cas-forex/tests/test_broker_symbol_normalization.py
+?? cas-forex/tests/test_broker_truth_cross_surface.py
+?? cas-forex/tests/test_bypass_launch_gate.py
+?? cas-forex/tests/test_capture_operator_position_v14_local_runtime_evidence.py
+?? cas-forex/tests/test_capture_operator_position_v14_runtime_evidence.py
+?? cas-forex/tests/test_capture_operator_scale_in_natural_runtime_evidence.py
+?? cas-forex/tests/test_critical_notifications.py
+?? cas-forex/tests/test_daily_loss_guard.py
+?? cas-forex/tests/test_dispatch_loop_route.py
+?? cas-forex/tests/test_docker_desktop_install.py
+?? cas-forex/tests/test_economic_calendar_feed.py
+?? cas-forex/tests/test_emergency_controls.py
+?? cas-forex/tests/test_entry_capacity_pressure.py
+?? cas-forex/tests/test_external_monitoring.py
+?? cas-forex/tests/test_external_monitoring_route.py
+?? cas-forex/tests/test_jsonl_tail.py
+?? cas-forex/tests/test_legal_review_control.py
+?? cas-forex/tests/test_legal_review_readiness.py
+?? cas-forex/tests/test_live_candle_route_policy.py
+?? cas-forex/tests/test_managed_secret_store.py
+?? cas-forex/tests/test_mobile_apk_artifact.py
+?? cas-forex/tests/test_mobile_apk_proof.py
+?? cas-forex/tests/test_mobile_cli_defaults.py
+?? cas-forex/tests/test_mobile_final_verification.py
+?? cas-forex/tests/test_mobile_phone_proof.py
+?? cas-forex/tests/test_mobile_phone_verifier.py
+?? cas-forex/tests/test_mobile_proof_session.py
+?? cas-forex/tests/test_mobile_readiness_latest.py
+?? cas-forex/tests/test_mobile_release_readiness.py
+?? cas-forex/tests/test_mobile_stack_runner.py
+?? cas-forex/tests/test_mobile_verification_plan.py
+?? cas-forex/tests/test_mobile_verification_session_route.py
+?? cas-forex/tests/test_money_movement_dispatch.py
+?? cas-forex/tests/test_movement_source_ui.py
+?? cas-forex/tests/test_mt5_account_growth.py
+?? cas-forex/tests/test_mt5_demo_learning_sync.py
+?? cas-forex/tests/test_mt5_permissions.py
+?? cas-forex/tests/test_operational_readiness.py
+?? cas-forex/tests/test_operator_account_context.py
+?? cas-forex/tests/test_operator_sizing.py
+?? cas-forex/tests/test_performance_discipline.py
+?? cas-forex/tests/test_phone_release_bundle.py
+?? cas-forex/tests/test_phone_verification_session.py
+?? cas-forex/tests/test_position_protection.py
+?? cas-forex/tests/test_pre_trade_money.py
+?? cas-forex/tests/test_professional_claims.py
+?? cas-forex/tests/test_professional_readiness_matrix.py
+?? cas-forex/tests/test_public_launch_gate.py
+?? cas-forex/tests/test_push_delivery_control.py
+?? cas-forex/tests/test_redteam_active_account_chat_truth.py
+?? cas-forex/tests/test_redteam_deepseek_v4_role_routing.py
+?? cas-forex/tests/test_redteam_dual_chat_responsiveness.py
+?? cas-forex/tests/test_redteam_entry_opportunity_starvation.py
+?? cas-forex/tests/test_redteam_gemma4_backup.py
+?? cas-forex/tests/test_redteam_operator_capacity_starvation.py
+?? cas-forex/tests/test_redteam_operator_outlier_edge_robustness.py
+?? cas-forex/tests/test_redteam_operator_regime_attribution.py
+?? cas-forex/tests/test_risen_live_handoff.py
+?? cas-forex/tests/test_route_permissions.py
+?? cas-forex/tests/test_runtime_simulator_position_overlay.py
+?? cas-forex/tests/test_runtime_topology.py
+?? cas-forex/tests/test_security_posture.py
+?? cas-forex/tests/test_spec_context.py
+?? cas-forex/tests/test_spec_sheet_builder_contract.py
+?? cas-forex/tests/test_ui_browser_zoom_smoke.py
+?? cas-forex/tests/test_ui_layout_contract.py
+?? cas-forex/tests/test_ui_visual_baseline.py
+?? cas-forex/tests/test_waste_loop_control_route.py
+?? cas-forex/tests/test_web_phone_smoke.py
+?? cas-forex/tmp/
+?? cas-forex/ui/android/
+?? cas-forex/ui/src/components/AccountHealthPanel.tsx
+?? cas-forex/ui/src/components/CriticalAlertStrip.css
+?? cas-forex/ui/src/components/CriticalAlertStrip.tsx
+?? cas-forex/ui/src/components/DecisionMovementTruth.tsx
+?? cas-forex/ui/src/components/DecisionVersionTrace.tsx
+?? cas-forex/ui/src/components/LiveReadinessSummaryPanel.tsx
+?? cas-forex/ui/src/components/MoneyMovementSetupStatus.tsx
+?? cas-forex/ui/src/components/MovementTruthPanel.tsx
+?? cas-forex/ui/src/components/PsychologyGuardPanel.tsx
+?? cas-forex/ui/src/pages/PrivacyPage.tsx
+?? cas-forex/ui/src/pages/RiskDisclosurePage.css
+?? cas-forex/ui/src/pages/RiskDisclosurePage.tsx
+?? cas-forex/ui/src/pages/TermsPage.tsx
+?? cas-forex/ui/src/pages/TrackerPage.css
+?? cas-forex/ui/src/pages/TrackerPage.tsx
+?? cas-forex/ui/src/util/brokerPortal.ts
+?? cas-forex/ui/src/util/conviction.ts
+?? cas-forex/ui/src/util/movementSource.ts
+?? cas-forex/ui/visual_baselines/
+?? cas.bat
+?? docs/working/CAS_HARNESS_033_TO_100_COMPLETION_ROADMAP_20260722.md
+?? docs/working/CAS_HARNESS_CJT_BIAS_RPM_OHM_EXPERIMENT_CONTRACT_20260721.md
+?? docs/working/CAS_HARNESS_COMBINED_LIVE_MODEL_CANARY_READINESS_20260722.md
+?? docs/working/CAS_HARNESS_CUSTOMER_PRODUCTION_SUCCESSOR_SPEC_20260716.md
+?? docs/working/CAS_HARNESS_JSPACE_OHM_300B_CAPABILITY_ANALYSIS_20260720.md
+?? docs/working/CAS_HARNESS_TKS_UNIVERSALITY_LICENSING_PROGRAM_20260720.md
+?? docs/working/gate2_closure/item8_fixture_prestate_20260724.json
+?? docs/working/gate2_closure/item8_prestate_head.txt
+?? docs/working/gate2_closure/item8_prestate_status.txt
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/00_PROJECT_STATUS/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/01_FROZEN_SOURCE/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/03_RESEARCH_AND_ARCHITECTURE_DOCS/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/04_AMAZON_INTERNAL_DRAFT_DO_NOT_SEND/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/05_RUNPOD_STATE/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/06_REPRODUCTION_GUIDES/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/07_PROTECTED_IMPLEMENTATION_SNAPSHOT_81b5c18b/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/08_JSPACE_CAS_OHM_SHADOW_2026-07-21/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/09_CJT_BIAS_RPM_OHM_SYNTHETIC_MVP_2026-07-21/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/10_COMBINED_LIVE_MODEL_READINESS_AND_STATISTICAL_EVIDENCE_2026-07-22/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/01_FROZEN_INPUTS/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/02_LOCAL_CPU_PILOT/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/03_IMPLEMENTATION_CHECKPOINT/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_01_ANCHORED_VERIFIER_FAILED_WINDOWS_OPENSSL_CONF_NUL/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_02_CROSS_PLATFORM_BYTE_FIX_A8969EB7/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_02_OPERATOR_NOTES.md
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_03_DEPENDENCY_LAYOUT_A8969EB7/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_03_PRE_EXECUTION_SUPERSESSION_RECORD.json
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_03_REMOTE_RECOVERY_A8969EB7/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_04_CORRECTED_BYTECODE_GUARD_BE97BC7F/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_04_IMPLEMENTATION_FREEZE_BE97BC7F/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_04_REMOTE_PREPARATION_BE97BC7F/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_05_IMPLEMENTATION_FREEZE_F72B89CD/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_05_LIVE_CONTINUITY_OBSERVATION_20260723.json
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_05_OPENSSL3_STDIN_REPAIR_PROSPECTIVE_F72B89CD_20260723/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_05_PRE_ANCHOR_DD55BC73/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_05_REMOTE_PRESTAGE_ZP2S9PSCGNCN0B_20260723/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_06_GPU_EXECUTION_FAILED_CLOSED_PHASE_TWO/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_06_IMPLEMENTATION_FREEZE_29551624/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_06_PRE_ANCHOR_F3E3ADAD/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_06_REMOTE_PRESTAGE_ZP2S9PSCGNCN0B_20260723/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_07_GPU_EXECUTION_FAILED_CLOSED_MODEL_LOAD/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_07_IMPLEMENTATION_FREEZE_88B59DE9/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_08_GPU_EXECUTION_FAILED_CLOSED_CANARY_EXECUTION/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/ATTEMPT_09_IMPLEMENTATION_FREEZE_6D676840/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/NONOFFICIAL_CUDA_GUARD_PREFLIGHT_20260722.md
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/NONOFFICIAL_TSA_PREFLIGHT_20260722.md
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/NONOFFICIAL_TWO_PHASE_MODEL_SMOKE_20260722.md
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/TRACKER_RECOVERY_RECORD_20260723.json
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/environment_pre/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/jacobian_lens_canary_v0_canonical.json
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/jacobian_lens_canary_v0_raw.json
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/jacobian_lens_canary_v1_anchor_payload.json
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/jacobian_lens_canary_v1_anchor_request.tsq
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/jacobian_lens_canary_v1_anchor_response.tsr
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/jacobian_lens_canary_v1_anchor_response_headers.txt
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/jacobian_lens_canary_v1_network_guard_plan.json
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/jacobian_lens_canary_v1_network_guard_plan_superseded_a63b6db2.json
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/jacobian_lens_canary_v1_network_guard_plan_superseded_b44f6b91.json
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/jacobian_lens_canary_v1_nonce_record.json
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/jacobian_lens_canary_v1_protocol.json
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/jacobian_lens_canary_v1_provider_controller_capture.json
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/jacobian_lens_canary_v1_receiver_tool_binding.json
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/jacobian_lens_canary_v1_runner_tool_binding.json
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/production_pod_id.txt
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/research_pod_id.txt
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/04_PROTOCOL_AND_ANCHOR/runpod_provider_observation_raw.txt
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/05_ATTEMPT_03_PREPARATION.md
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/05_ATTEMPT_03_PRESTAGE_OPERATOR_RECORD.json
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/START_HERE.md
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/12_CJT_JSPACE_OHM_JOINED_CANARY_V0_PLANNING_2026-07-22/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/99_EXCLUSIONS_AND_SECURITY/
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/COPY_RECEIPT.md
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/MANIFEST.json
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/MANIFEST.sha256
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/SHA256SUMS.txt
+?? project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/START_HERE.md
+?? project_handoffs/README.md
+?? recover_docx_text.py
