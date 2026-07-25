@@ -1,0 +1,1643 @@
+{
+  "schema_version": "gate2_item4_arm_definition_payload.v1",
+  "arm_id": "NON_TKS_SCHWARTZ_X_TINBERGEN_40_V1",
+  "arm_letter": "E",
+  "arm_role": "coherent matched non-TKS ontology (pre-registration section 2.5, build item B2)",
+  "provenance": "ASSISTANT_COMPILED",
+  "authorship": "ASSISTANT_AUTHORED_FROM_EXTERNAL_ONTOLOGIES",
+  "authorship_note": "The two primitive sets (Schwartz's ten basic values; Tinbergen's four questions) are externally authored and published. The 40 cross-product cells and every one of the 40 definition body strings in this file were WRITTEN BY THE ASSISTANT for this experiment and appear in no external source. A win over this arm is a win over assistant-authored text, not over a published owner source, and must be reported as such.",
+  "created_at": "2026-07-25T17:44:42.896554Z",
+  "created_by": "claude-opus-5 subagent, Gate 2 item 4 build list B2",
+  "git_committed": false,
+  "experiment_run": false,
+  "framework": {
+    "name": "Schwartz basic human values x Tinbergen's four questions",
+    "shape": "10 values x 4 levels of explanation = 40 cells",
+    "axis_1": {
+      "name": "Schwartz theory of basic human values",
+      "citation": "Schwartz, S. H. (1992). Universals in the content and structure of values: Theoretical advances and empirical tests in 20 countries. Advances in Experimental Social Psychology, 25, 1-65.",
+      "secondary_citation": "Schwartz, S. H. (2012). An overview of the Schwartz theory of basic values. Online Readings in Psychology and Culture, 2(1).",
+      "primitives_in_order": [
+        "Self-Direction",
+        "Stimulation",
+        "Hedonism",
+        "Achievement",
+        "Power",
+        "Security",
+        "Conformity",
+        "Tradition",
+        "Benevolence",
+        "Universalism"
+      ],
+      "internal_logic": "Ten motivationally distinct value types derived from three universal requirements of human existence (biological needs, coordinated social interaction, group survival and welfare), arranged on a circumplex of compatibilities and conflicts. Cross-culturally replicated in 20+ countries."
+    },
+    "axis_2": {
+      "name": "Tinbergen's four questions (four levels of explanation in ethology)",
+      "citation": "Tinbergen, N. (1963). On aims and methods of ethology. Zeitschrift fur Tierpsychologie, 20(4), 410-433.",
+      "secondary_citation": "Bateson, P., & Laland, K. N. (2013). Tinbergen's four questions: an appreciation and an update. Trends in Ecology & Evolution, 28(12), 712-718.",
+      "primitives_in_order": [
+        "mechanism / proximate causation",
+        "ontogeny / development",
+        "function / survival value",
+        "phylogeny / evolutionary history"
+      ],
+      "internal_logic": "Two orthogonal cuts - proximate vs ultimate, and static vs dynamic - yielding four non-overlapping and jointly exhaustive levels at which any behavioural trait can be explained. A complete account of a trait answers all four."
+    },
+    "why_this_is_a_serious_alternative": "Both axes are independently published, peer-reviewed, cross-culturally or cross-species validated, and internally coherent. Their cross-product is not an ad hoc device: analysing a motivational disposition at Tinbergen's four levels is standard practice in evolutionary and comparative psychology. Each of the 40 cells names a real, answerable research question (e.g. 'what is the ontogeny of conformity?'), which is the coherence property the straw-man gate in pre-registration section 2.5 tests for."
+  },
+  "bijection": {
+    "frozen_before_capture": true,
+    "searched_over": false,
+    "rule": "Schwartz value n -> TKS Noetic index n in the listed order; Tinbergen question j -> TKS World j in the order A, B, C, D. Fixed by pre-registration section 2.5; no alternative bijection was tried, scored, or reported.",
+    "world_to_tinbergen": {
+      "A": "mechanism / proximate causation",
+      "B": "ontogeny / development",
+      "C": "function / survival value",
+      "D": "phylogeny / evolutionary history"
+    },
+    "noetic_index_to_schwartz": {
+      "1": "Self-Direction",
+      "2": "Stimulation",
+      "3": "Hedonism",
+      "4": "Achievement",
+      "5": "Power",
+      "6": "Security",
+      "7": "Conformity",
+      "8": "Tradition",
+      "9": "Benevolence",
+      "10": "Universalism"
+    },
+    "semantic_alignment_disclaimer": "The bijection is POSITIONAL, not semantic. It is not claimed that TKS World A means 'mechanism' or that TKS Noetic 1 means 'Self-Direction'. The bijection exists only so that Arm E occupies the same 40 code slots as the bank's label space; the pre-registration fixes it precisely so that no post-hoc alignment search can be run."
+  },
+  "source_refs": [
+    {
+      "role": "length_and_register_reference (Arm A, canonical arm)",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/docs/working/tks_owner_locked_definitions_20260603.json",
+      "sha256": "d3dac0ef5c94ccd768da0f18987846d8d0c0fa0b366e13dccc49c82252d2fc12",
+      "field_used": "tks_40_elements[*].definition",
+      "note": "used ONLY to derive per-code length and register targets; no Arm A wording was reused"
+    },
+    {
+      "role": "code_spelling_and_gloss_overlap_covariate (holdout bank)",
+      "path": "noetic-compass-scaffold/noetic-compass/research/cas_probe/stage9_elements_pilot_20260517.jsonl",
+      "git_blob_id": "165df0f6ff08c80fe1c42cd4412478527aabc934",
+      "git_branch": "experiment/cas-probe-pythia",
+      "sha256": "2f8637eedff0fb4d9e6191bd5c051ddc21cea699e33621896469a2e522306889",
+      "note": "read to confirm the 40 element_label spellings are exactly A1..D10 and to compute the S13 lexical-overlap covariate. Bank content did not influence any definition wording."
+    },
+    {
+      "role": "controlling_design",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/docs/working/gate2_closure/GATE2_ITEM4_PREREGISTRATION.md",
+      "sha256": "53d79989af678e628dcf51535357a02b1db0487f29fb7b42f7f61164a9b2a930",
+      "note": "sha256 of the pre-registration as read at authoring time"
+    }
+  ],
+  "codes_covered": {
+    "n": 40,
+    "codes": [
+      "A1",
+      "A2",
+      "A3",
+      "A4",
+      "A5",
+      "A6",
+      "A7",
+      "A8",
+      "A9",
+      "A10",
+      "B1",
+      "B2",
+      "B3",
+      "B4",
+      "B5",
+      "B6",
+      "B7",
+      "B8",
+      "B9",
+      "B10",
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C5",
+      "C6",
+      "C7",
+      "C8",
+      "C9",
+      "C10",
+      "D1",
+      "D2",
+      "D3",
+      "D4",
+      "D5",
+      "D6",
+      "D7",
+      "D8",
+      "D9",
+      "D10"
+    ],
+    "matches_bank_label_space_exactly": true
+  },
+  "definitions": {
+    "A1": {
+      "code": "A1",
+      "title": "Mechanistic Self-Direction",
+      "definition": "Mechanistic Self-Direction is the near cause of a free choice, the working parts that let an actor choose, create, and explore at the moment it acts. It covers what the senses take in, the state of the body, the wiring that carries it, and the loops that make going one's own way the option taken rather than falling in with the rest. To ask after mechanism is to ask what goes on inside the actor and just around it right now, never why the trait is there at all. A signal of curiosity, a guess at a reward, a hold placed on a cued response, and the power to keep a goal of one's own against a pull the other way are each answers of this kind, and each can be measured and moved.",
+      "cell": {
+        "tinbergen_question": "mechanism / proximate causation",
+        "tinbergen_index": 1,
+        "schwartz_value": "Self-Direction",
+        "schwartz_index": 1,
+        "schwartz_defining_motivational_goal": "independent thought and action - choosing, creating, exploring"
+      }
+    },
+    "A2": {
+      "code": "A2",
+      "title": "Mechanistic Stimulation",
+      "definition": "Mechanistic Stimulation is the here-and-now apparatus that propels the search for novelty, thrill, and challenge. How high the bar for arousal sits, how sharply a surprise is met, and how fast a repeated event stops being felt are its parts. Together they tell how a nervous system turns the strange into approach.",
+      "cell": {
+        "tinbergen_question": "mechanism / proximate causation",
+        "tinbergen_index": 1,
+        "schwartz_value": "Stimulation",
+        "schwartz_index": 2,
+        "schwartz_defining_motivational_goal": "excitement, novelty, and challenge in life"
+      }
+    },
+    "A3": {
+      "code": "A3",
+      "title": "Mechanistic Hedonism",
+      "definition": "Mechanistic Hedonism is the working apparatus of pleasure and of the senses as it runs in real time. It asks what a receptor takes up. It asks how strong a thing feels. Those answers tell how the pleasure is made, how long it holds, and how fast it fades.",
+      "cell": {
+        "tinbergen_question": "mechanism / proximate causation",
+        "tinbergen_index": 1,
+        "schwartz_value": "Hedonism",
+        "schwartz_index": 3,
+        "schwartz_defining_motivational_goal": "pleasure or sensuous gratification for oneself"
+      }
+    },
+    "A4": {
+      "code": "A4",
+      "title": "Mechanistic Achievement",
+      "definition": "Mechanistic Achievement is the live system that shows skill against a bar. It is made of paced effort, caught slips, taken cues, kept aims, and word on how the try went.",
+      "cell": {
+        "tinbergen_question": "mechanism / proximate causation",
+        "tinbergen_index": 1,
+        "schwartz_value": "Achievement",
+        "schwartz_index": 4,
+        "schwartz_defining_motivational_goal": "personal success through demonstrating competence according to social standards"
+      }
+    },
+    "A5": {
+      "code": "A5",
+      "title": "Mechanistic Power",
+      "definition": "Mechanistic Power is the near apparatus of status seeking and of control over persons and resources, comprising posture, voice, hormonal swing, the attention paid to rank cues, and the reading of who won a contest, all of which tell how dominance and deference are made inside one encounter.",
+      "cell": {
+        "tinbergen_question": "mechanism / proximate causation",
+        "tinbergen_index": 1,
+        "schwartz_value": "Power",
+        "schwartz_index": 5,
+        "schwartz_defining_motivational_goal": "social status and prestige, control or dominance over people and resources"
+      }
+    },
+    "A6": {
+      "code": "A6",
+      "title": "Mechanistic Security",
+      "definition": "Mechanistic Security is the working threat-detection and steadying apparatus of an actor. It is made up of vigilance, startle, defensive reflex, and the appraisal that marks a setting as safe or unsafe and then holds conduct steady until that marking is revised.",
+      "cell": {
+        "tinbergen_question": "mechanism / proximate causation",
+        "tinbergen_index": 1,
+        "schwartz_value": "Security",
+        "schwartz_index": 6,
+        "schwartz_defining_motivational_goal": "safety, harmony, and stability of society, of relationships, and of self"
+      }
+    },
+    "A7": {
+      "code": "A7",
+      "title": "Mechanistic Conformity",
+      "definition": "Mechanistic Conformity is the restraint-apparatus inhibiting an impulse likely to upset onlookers or breach an expectation.",
+      "cell": {
+        "tinbergen_question": "mechanism / proximate causation",
+        "tinbergen_index": 1,
+        "schwartz_value": "Conformity",
+        "schwartz_index": 7,
+        "schwartz_defining_motivational_goal": "restraint of actions, inclinations, and impulses likely to upset or harm others and violate social expectations or norms"
+      }
+    },
+    "A8": {
+      "code": "A8",
+      "title": "Mechanistic Tradition",
+      "definition": "Mechanistic Tradition is the near machinery of custom. It comprises copying and the cues that set off a rite. It takes in as well the stores that hold a handed-down practice and retrieve it on the days a culture marks out for it.",
+      "cell": {
+        "tinbergen_question": "mechanism / proximate causation",
+        "tinbergen_index": 1,
+        "schwartz_value": "Tradition",
+        "schwartz_index": 8,
+        "schwartz_defining_motivational_goal": "respect, commitment, and acceptance of the customs and ideas that one's culture or religion provides"
+      }
+    },
+    "A9": {
+      "code": "A9",
+      "title": "Mechanistic Benevolence",
+      "definition": "Mechanistic Benevolence is the immediate apparatus of care aimed at close associates. It is made up of affiliative signalling, the reading of distress, grooming, and the appraisal that sends help toward a known rather than an unknown recipient.",
+      "cell": {
+        "tinbergen_question": "mechanism / proximate causation",
+        "tinbergen_index": 1,
+        "schwartz_value": "Benevolence",
+        "schwartz_index": 9,
+        "schwartz_defining_motivational_goal": "preserving and enhancing the welfare of those with whom one is in frequent personal contact"
+      }
+    },
+    "A10": {
+      "code": "A10",
+      "title": "Mechanistic Universalism",
+      "definition": "Mechanistic Universalism is the working apparatus of concern reaching past the familiar circle, out to strangers, to other kinds, and to the habitat all of them share. It is made up of taking the view of another, of pushing out the edge of a category on purpose, and of holding a picture of some far-off party who will never be met. Mechanism asks only what makes wide concern run at the moment it runs.",
+      "cell": {
+        "tinbergen_question": "mechanism / proximate causation",
+        "tinbergen_index": 1,
+        "schwartz_value": "Universalism",
+        "schwartz_index": 10,
+        "schwartz_defining_motivational_goal": "understanding, appreciation, tolerance, and protection for the welfare of all people and for nature"
+      }
+    },
+    "B1": {
+      "code": "B1",
+      "title": "Developmental Self-Direction",
+      "definition": "Developmental Self-Direction is the ontogeny of autonomous choosing across a whole lifetime. Undirected infant activity becomes juvenile exploration, and then contested adolescent independence. At last there comes a settled adult capacity to originate a goal unprompted.",
+      "cell": {
+        "tinbergen_question": "ontogeny / development",
+        "tinbergen_index": 2,
+        "schwartz_value": "Self-Direction",
+        "schwartz_index": 1,
+        "schwartz_defining_motivational_goal": "independent thought and action - choosing, creating, exploring"
+      }
+    },
+    "B2": {
+      "code": "B2",
+      "title": "Developmental Stimulation",
+      "definition": "Developmental Stimulation is the ontogeny of novelty seeking, from infant orienting through juvenile play to the calibrated risk taking of maturity.",
+      "cell": {
+        "tinbergen_question": "ontogeny / development",
+        "tinbergen_index": 2,
+        "schwartz_value": "Stimulation",
+        "schwartz_index": 2,
+        "schwartz_defining_motivational_goal": "excitement, novelty, and challenge in life"
+      }
+    },
+    "B3": {
+      "code": "B3",
+      "title": "Developmental Hedonism",
+      "definition": "Developmental Hedonism is the ontogeny of the pleasure repertoire. An early preference for sweetness and warmth becomes the acquired tastes of one whole life.",
+      "cell": {
+        "tinbergen_question": "ontogeny / development",
+        "tinbergen_index": 2,
+        "schwartz_value": "Hedonism",
+        "schwartz_index": 3,
+        "schwartz_defining_motivational_goal": "pleasure or sensuous gratification for oneself"
+      }
+    },
+    "B4": {
+      "code": "B4",
+      "title": "Developmental Achievement",
+      "definition": "Developmental Achievement is the ontogeny of shown skill. First come the mastery tries of a babe in arms. Then comes graded task load in the years of play. At last set bars, rivals, and one's own eye on the self make the grown pattern of striving toward a mark a watcher can score.",
+      "cell": {
+        "tinbergen_question": "ontogeny / development",
+        "tinbergen_index": 2,
+        "schwartz_value": "Achievement",
+        "schwartz_index": 4,
+        "schwartz_defining_motivational_goal": "personal success through demonstrating competence according to social standards"
+      }
+    },
+    "B5": {
+      "code": "B5",
+      "title": "Developmental Power",
+      "definition": "Developmental Power is the ontogeny of rank, precedence, and the juvenile climb toward standing.",
+      "cell": {
+        "tinbergen_question": "ontogeny / development",
+        "tinbergen_index": 2,
+        "schwartz_value": "Power",
+        "schwartz_index": 5,
+        "schwartz_defining_motivational_goal": "social status and prestige, control or dominance over people and resources"
+      }
+    },
+    "B6": {
+      "code": "B6",
+      "title": "Developmental Security",
+      "definition": "Developmental Security is the ontogeny of safety, how early attachment sets a later tolerance for risk.",
+      "cell": {
+        "tinbergen_question": "ontogeny / development",
+        "tinbergen_index": 2,
+        "schwartz_value": "Security",
+        "schwartz_index": 6,
+        "schwartz_defining_motivational_goal": "safety, harmony, and stability of society, of relationships, and of self"
+      }
+    },
+    "B7": {
+      "code": "B7",
+      "title": "Developmental Conformity",
+      "definition": "Developmental Conformity is the ontogeny of restraint, the growth of impulse control and the learning of which expectations a group enforces.",
+      "cell": {
+        "tinbergen_question": "ontogeny / development",
+        "tinbergen_index": 2,
+        "schwartz_value": "Conformity",
+        "schwartz_index": 7,
+        "schwartz_defining_motivational_goal": "restraint of actions, inclinations, and impulses likely to upset or harm others and violate social expectations or norms"
+      }
+    },
+    "B8": {
+      "code": "B8",
+      "title": "Developmental Tradition",
+      "definition": "Developmental Tradition is the ontogeny of inherited custom in one individual, the course of taking up a practice by watching elders and rehearsing it until it is habitual.",
+      "cell": {
+        "tinbergen_question": "ontogeny / development",
+        "tinbergen_index": 2,
+        "schwartz_value": "Tradition",
+        "schwartz_index": 8,
+        "schwartz_defining_motivational_goal": "respect, commitment, and acceptance of the customs and ideas that one's culture or religion provides"
+      }
+    },
+    "B9": {
+      "code": "B9",
+      "title": "Developmental Benevolence",
+      "definition": "Developmental Benevolence is the ontogeny of care. It runs from contagious infant distress through toddler helping to the reasoned loyalty of an adult.",
+      "cell": {
+        "tinbergen_question": "ontogeny / development",
+        "tinbergen_index": 2,
+        "schwartz_value": "Benevolence",
+        "schwartz_index": 9,
+        "schwartz_defining_motivational_goal": "preserving and enhancing the welfare of those with whom one is in frequent personal contact"
+      }
+    },
+    "B10": {
+      "code": "B10",
+      "title": "Developmental Universalism",
+      "definition": "Developmental Universalism is the ontogeny of wide concern. It is the widening of the circle a person will count as owed something, out from kin to group to stranger.",
+      "cell": {
+        "tinbergen_question": "ontogeny / development",
+        "tinbergen_index": 2,
+        "schwartz_value": "Universalism",
+        "schwartz_index": 10,
+        "schwartz_defining_motivational_goal": "understanding, appreciation, tolerance, and protection for the welfare of all people and for nature"
+      }
+    },
+    "C1": {
+      "code": "C1",
+      "title": "Functional Self-Direction",
+      "definition": "Functional Self-Direction is the survival value of independent choosing, the advantage of acting on self-gathered information when copying a neighbour would mislead, delay, or misfire.",
+      "cell": {
+        "tinbergen_question": "function / survival value",
+        "tinbergen_index": 3,
+        "schwartz_value": "Self-Direction",
+        "schwartz_index": 1,
+        "schwartz_defining_motivational_goal": "independent thought and action - choosing, creating, exploring"
+      }
+    },
+    "C2": {
+      "code": "C2",
+      "title": "Functional Stimulation",
+      "definition": "Functional Stimulation is the use of novelty: news, range, luck, reach, spread, and a way out when the old way fails.",
+      "cell": {
+        "tinbergen_question": "function / survival value",
+        "tinbergen_index": 3,
+        "schwartz_value": "Stimulation",
+        "schwartz_index": 2,
+        "schwartz_defining_motivational_goal": "excitement, novelty, and challenge in life"
+      }
+    },
+    "C3": {
+      "code": "C3",
+      "title": "Functional Hedonism",
+      "definition": "Functional Hedonism is the fitness role of pleasure: reinforcement, preference, appetite, consummation, and renewed pursuit.",
+      "cell": {
+        "tinbergen_question": "function / survival value",
+        "tinbergen_index": 3,
+        "schwartz_value": "Hedonism",
+        "schwartz_index": 3,
+        "schwartz_defining_motivational_goal": "pleasure or sensuous gratification for oneself"
+      }
+    },
+    "C4": {
+      "code": "C4",
+      "title": "Functional Achievement",
+      "definition": "Functional Achievement is the use of shown skill. A clear record of it earns mates, tools, aid, rank, trust, and a better share of the work.",
+      "cell": {
+        "tinbergen_question": "function / survival value",
+        "tinbergen_index": 3,
+        "schwartz_value": "Achievement",
+        "schwartz_index": 4,
+        "schwartz_defining_motivational_goal": "personal success through demonstrating competence according to social standards"
+      }
+    },
+    "C5": {
+      "code": "C5",
+      "title": "Functional Power",
+      "definition": "Functional Power is the payoff of rank, the access priority that status confers over contested resources.",
+      "cell": {
+        "tinbergen_question": "function / survival value",
+        "tinbergen_index": 3,
+        "schwartz_value": "Power",
+        "schwartz_index": 5,
+        "schwartz_defining_motivational_goal": "social status and prestige, control or dominance over people and resources"
+      }
+    },
+    "C6": {
+      "code": "C6",
+      "title": "Functional Security",
+      "definition": "Functional Security is caution's survival value, plus stability under threat.",
+      "cell": {
+        "tinbergen_question": "function / survival value",
+        "tinbergen_index": 3,
+        "schwartz_value": "Security",
+        "schwartz_index": 6,
+        "schwartz_defining_motivational_goal": "safety, harmony, and stability of society, of relationships, and of self"
+      }
+    },
+    "C7": {
+      "code": "C7",
+      "title": "Functional Conformity",
+      "definition": "Functional Conformity is the payoff of restraint, the collective cost avoided when a member holds back.",
+      "cell": {
+        "tinbergen_question": "function / survival value",
+        "tinbergen_index": 3,
+        "schwartz_value": "Conformity",
+        "schwartz_index": 7,
+        "schwartz_defining_motivational_goal": "restraint of actions, inclinations, and impulses likely to upset or harm others and violate social expectations or norms"
+      }
+    },
+    "C8": {
+      "code": "C8",
+      "title": "Functional Tradition",
+      "definition": "Functional Tradition is inherited custom's survival value, the advantage of carrying a solution already field-tested by earlier generations instead of re-deriving it from nothing. A practice persisting without ever being understood can still be adaptive, because the population, and not the individual, paid for every error.",
+      "cell": {
+        "tinbergen_question": "function / survival value",
+        "tinbergen_index": 3,
+        "schwartz_value": "Tradition",
+        "schwartz_index": 8,
+        "schwartz_defining_motivational_goal": "respect, commitment, and acceptance of the customs and ideas that one's culture or religion provides"
+      }
+    },
+    "C9": {
+      "code": "C9",
+      "title": "Functional Benevolence",
+      "definition": "Functional Benevolence is the payoff of caring for close associates.",
+      "cell": {
+        "tinbergen_question": "function / survival value",
+        "tinbergen_index": 3,
+        "schwartz_value": "Benevolence",
+        "schwartz_index": 9,
+        "schwartz_defining_motivational_goal": "preserving and enhancing the welfare of those with whom one is in frequent personal contact"
+      }
+    },
+    "C10": {
+      "code": "C10",
+      "title": "Functional Universalism",
+      "definition": "Functional Universalism is the use of care that reaches well past the near circle. It is the gain in keeping a shared home, a far-off ally, an unrelated stranger, and a claimant not yet born in good standing.",
+      "cell": {
+        "tinbergen_question": "function / survival value",
+        "tinbergen_index": 3,
+        "schwartz_value": "Universalism",
+        "schwartz_index": 10,
+        "schwartz_defining_motivational_goal": "understanding, appreciation, tolerance, and protection for the welfare of all people and for nature"
+      }
+    },
+    "D1": {
+      "code": "D1",
+      "title": "Phylogenetic Self-Direction",
+      "definition": "Phylogenetic Self-Direction is the lineage history of autonomous choosing. It is the comparative record of where independent action turns up across related species. It asks how often that was gained or lost, and what it was built upon.",
+      "cell": {
+        "tinbergen_question": "phylogeny / evolutionary history",
+        "tinbergen_index": 4,
+        "schwartz_value": "Self-Direction",
+        "schwartz_index": 1,
+        "schwartz_defining_motivational_goal": "independent thought and action - choosing, creating, exploring"
+      }
+    },
+    "D2": {
+      "code": "D2",
+      "title": "Phylogenetic Stimulation",
+      "definition": "Phylogenetic Stimulation is the lineage history of novelty seeking, traced by comparing how related species explore and by reconstructing their common ancestral form.",
+      "cell": {
+        "tinbergen_question": "phylogeny / evolutionary history",
+        "tinbergen_index": 4,
+        "schwartz_value": "Stimulation",
+        "schwartz_index": 2,
+        "schwartz_defining_motivational_goal": "excitement, novelty, and challenge in life"
+      }
+    },
+    "D3": {
+      "code": "D3",
+      "title": "Phylogenetic Hedonism",
+      "definition": "Phylogenetic Hedonism is the lineage history of pleasure. It is the deep conservation of reward machinery across distant animal groups, and the later divergence of what each separate group finds gratifying.",
+      "cell": {
+        "tinbergen_question": "phylogeny / evolutionary history",
+        "tinbergen_index": 4,
+        "schwartz_value": "Hedonism",
+        "schwartz_index": 3,
+        "schwartz_defining_motivational_goal": "pleasure or sensuous gratification for oneself"
+      }
+    },
+    "D4": {
+      "code": "D4",
+      "title": "Phylogenetic Achievement",
+      "definition": "Phylogenetic Achievement is the lineage past of shown skill, its ties to similar traits in kindred taxa, its rise, and its re-use in later lines.",
+      "cell": {
+        "tinbergen_question": "phylogeny / evolutionary history",
+        "tinbergen_index": 4,
+        "schwartz_value": "Achievement",
+        "schwartz_index": 4,
+        "schwartz_defining_motivational_goal": "personal success through demonstrating competence according to social standards"
+      }
+    },
+    "D5": {
+      "code": "D5",
+      "title": "Phylogenetic Power",
+      "definition": "Phylogenetic Power is the past of rank: pecking orders, precedence, deference, threat, appeasement, and their reach across many clades.",
+      "cell": {
+        "tinbergen_question": "phylogeny / evolutionary history",
+        "tinbergen_index": 4,
+        "schwartz_value": "Power",
+        "schwartz_index": 5,
+        "schwartz_defining_motivational_goal": "social status and prestige, control or dominance over people and resources"
+      }
+    },
+    "D6": {
+      "code": "D6",
+      "title": "Phylogenetic Security",
+      "definition": "Phylogenetic Security is the past of defence: old, deep, kept, shared, and built on by all later lines.",
+      "cell": {
+        "tinbergen_question": "phylogeny / evolutionary history",
+        "tinbergen_index": 4,
+        "schwartz_value": "Security",
+        "schwartz_index": 6,
+        "schwartz_defining_motivational_goal": "safety, harmony, and stability of society, of relationships, and of self"
+      }
+    },
+    "D7": {
+      "code": "D7",
+      "title": "Phylogenetic Conformity",
+      "definition": "Phylogenetic Conformity is restraint's lineage history, the comparative record of impulse-inhibition in taxa that live in groups with enforced, policed expectations.",
+      "cell": {
+        "tinbergen_question": "phylogeny / evolutionary history",
+        "tinbergen_index": 4,
+        "schwartz_value": "Conformity",
+        "schwartz_index": 7,
+        "schwartz_defining_motivational_goal": "restraint of actions, inclinations, and impulses likely to upset or harm others and violate social expectations or norms"
+      }
+    },
+    "D8": {
+      "code": "D8",
+      "title": "Phylogenetic Tradition",
+      "definition": "Phylogenetic Tradition is the past of handed-on custom, the record of which kindred taxa carry local practices, and of how deeply in time that shared capacity can be traced back.",
+      "cell": {
+        "tinbergen_question": "phylogeny / evolutionary history",
+        "tinbergen_index": 4,
+        "schwartz_value": "Tradition",
+        "schwartz_index": 8,
+        "schwartz_defining_motivational_goal": "respect, commitment, and acceptance of the customs and ideas that one's culture or religion provides"
+      }
+    },
+    "D9": {
+      "code": "D9",
+      "title": "Phylogenetic Benevolence",
+      "definition": "Phylogenetic Benevolence is the lineage history of care for associates, the comparative record of helping, grooming, food sharing, and provisioning in related species, and the ancestral form it was built upon.",
+      "cell": {
+        "tinbergen_question": "phylogeny / evolutionary history",
+        "tinbergen_index": 4,
+        "schwartz_value": "Benevolence",
+        "schwartz_index": 9,
+        "schwartz_defining_motivational_goal": "preserving and enhancing the welfare of those with whom one is in frequent personal contact"
+      }
+    },
+    "D10": {
+      "code": "D10",
+      "title": "Phylogenetic Universalism",
+      "definition": "Phylogenetic Universalism is the lineage history of wide concern. It is the rarest of these, and the most recently derived of them.",
+      "cell": {
+        "tinbergen_question": "phylogeny / evolutionary history",
+        "tinbergen_index": 4,
+        "schwartz_value": "Universalism",
+        "schwartz_index": 10,
+        "schwartz_defining_motivational_goal": "understanding, appreciation, tolerance, and protection for the welfare of all people and for nature"
+      }
+    }
+  },
+  "length_stats": {
+    "unit": "characters of the definition body string, as fed to the anchor frames",
+    "reference_arm": "A",
+    "per_code": {
+      "A1": {
+        "arm_e_chars": 680,
+        "arm_a_chars": 686,
+        "delta_chars": -6,
+        "pct_delta_chars": -0.87,
+        "arm_e_proxy_tokens_gpt2": 157,
+        "arm_a_proxy_tokens_gpt2": 146,
+        "delta_proxy_tokens": 11,
+        "pct_delta_proxy_tokens": 7.53,
+        "arm_e_words": 134,
+        "arm_a_words": 127,
+        "delta_words": 7,
+        "pct_delta_words": 5.51,
+        "arm_e_sentences": 4,
+        "arm_a_sentences": 4,
+        "content_word_jaccard_vs_arm_a": 0.0104,
+        "shared_content_words_vs_arm_a": [
+          "cause"
+        ],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.0612
+      },
+      "A2": {
+        "arm_e_chars": 314,
+        "arm_a_chars": 306,
+        "delta_chars": 8,
+        "pct_delta_chars": 2.61,
+        "arm_e_proxy_tokens_gpt2": 67,
+        "arm_a_proxy_tokens_gpt2": 67,
+        "delta_proxy_tokens": 0,
+        "pct_delta_proxy_tokens": 0.0,
+        "arm_e_words": 52,
+        "arm_a_words": 51,
+        "delta_words": 1,
+        "pct_delta_words": 1.96,
+        "arm_e_sentences": 3,
+        "arm_a_sentences": 3,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.1481
+      },
+      "A3": {
+        "arm_e_chars": 255,
+        "arm_a_chars": 259,
+        "delta_chars": -4,
+        "pct_delta_chars": -1.54,
+        "arm_e_proxy_tokens_gpt2": 59,
+        "arm_a_proxy_tokens_gpt2": 56,
+        "delta_proxy_tokens": 3,
+        "pct_delta_proxy_tokens": 5.36,
+        "arm_e_words": 49,
+        "arm_a_words": 46,
+        "delta_words": 3,
+        "pct_delta_words": 6.52,
+        "arm_e_sentences": 4,
+        "arm_a_sentences": 4,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.1154
+      },
+      "A4": {
+        "arm_e_chars": 169,
+        "arm_a_chars": 180,
+        "delta_chars": -11,
+        "pct_delta_chars": -6.11,
+        "arm_e_proxy_tokens_gpt2": 39,
+        "arm_a_proxy_tokens_gpt2": 41,
+        "delta_proxy_tokens": -2,
+        "pct_delta_proxy_tokens": -4.88,
+        "arm_e_words": 31,
+        "arm_a_words": 30,
+        "delta_words": 1,
+        "pct_delta_words": 3.33,
+        "arm_e_sentences": 2,
+        "arm_a_sentences": 2,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.25
+      },
+      "A5": {
+        "arm_e_chars": 291,
+        "arm_a_chars": 286,
+        "delta_chars": 5,
+        "pct_delta_chars": 1.75,
+        "arm_e_proxy_tokens_gpt2": 58,
+        "arm_a_proxy_tokens_gpt2": 62,
+        "delta_proxy_tokens": -4,
+        "pct_delta_proxy_tokens": -6.45,
+        "arm_e_words": 48,
+        "arm_a_words": 49,
+        "delta_words": -1,
+        "pct_delta_words": -2.04,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.0714
+      },
+      "A6": {
+        "arm_e_chars": 262,
+        "arm_a_chars": 278,
+        "delta_chars": -16,
+        "pct_delta_chars": -5.76,
+        "arm_e_proxy_tokens_gpt2": 54,
+        "arm_a_proxy_tokens_gpt2": 58,
+        "delta_proxy_tokens": -4,
+        "pct_delta_proxy_tokens": -6.9,
+        "arm_e_words": 42,
+        "arm_a_words": 44,
+        "delta_words": -2,
+        "pct_delta_words": -4.55,
+        "arm_e_sentences": 2,
+        "arm_a_sentences": 2,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.1154
+      },
+      "A7": {
+        "arm_e_chars": 123,
+        "arm_a_chars": 119,
+        "delta_chars": 4,
+        "pct_delta_chars": 3.36,
+        "arm_e_proxy_tokens_gpt2": 27,
+        "arm_a_proxy_tokens_gpt2": 27,
+        "delta_proxy_tokens": 0,
+        "pct_delta_proxy_tokens": 0.0,
+        "arm_e_words": 16,
+        "arm_a_words": 21,
+        "delta_words": -5,
+        "pct_delta_words": -23.81,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.2143
+      },
+      "A8": {
+        "arm_e_chars": 229,
+        "arm_a_chars": 235,
+        "delta_chars": -6,
+        "pct_delta_chars": -2.55,
+        "arm_e_proxy_tokens_gpt2": 50,
+        "arm_a_proxy_tokens_gpt2": 50,
+        "delta_proxy_tokens": 0,
+        "pct_delta_proxy_tokens": 0.0,
+        "arm_e_words": 43,
+        "arm_a_words": 42,
+        "delta_words": 1,
+        "pct_delta_words": 2.38,
+        "arm_e_sentences": 3,
+        "arm_a_sentences": 3,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.25
+      },
+      "A9": {
+        "arm_e_chars": 244,
+        "arm_a_chars": 242,
+        "delta_chars": 2,
+        "pct_delta_chars": 0.83,
+        "arm_e_proxy_tokens_gpt2": 48,
+        "arm_a_proxy_tokens_gpt2": 49,
+        "delta_proxy_tokens": -1,
+        "pct_delta_proxy_tokens": -2.04,
+        "arm_e_words": 38,
+        "arm_a_words": 40,
+        "delta_words": -2,
+        "pct_delta_words": -5.0,
+        "arm_e_sentences": 2,
+        "arm_a_sentences": 2,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.1111
+      },
+      "A10": {
+        "arm_e_chars": 403,
+        "arm_a_chars": 388,
+        "delta_chars": 15,
+        "pct_delta_chars": 3.87,
+        "arm_e_proxy_tokens_gpt2": 88,
+        "arm_a_proxy_tokens_gpt2": 83,
+        "delta_proxy_tokens": 5,
+        "pct_delta_proxy_tokens": 6.02,
+        "arm_e_words": 74,
+        "arm_a_words": 69,
+        "delta_words": 5,
+        "pct_delta_words": 7.25,
+        "arm_e_sentences": 3,
+        "arm_a_sentences": 3,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.1852
+      },
+      "B1": {
+        "arm_e_chars": 270,
+        "arm_a_chars": 278,
+        "delta_chars": -8,
+        "pct_delta_chars": -2.88,
+        "arm_e_proxy_tokens_gpt2": 50,
+        "arm_a_proxy_tokens_gpt2": 47,
+        "delta_proxy_tokens": 3,
+        "pct_delta_proxy_tokens": 6.38,
+        "arm_e_words": 36,
+        "arm_a_words": 42,
+        "delta_words": -6,
+        "pct_delta_words": -14.29,
+        "arm_e_sentences": 3,
+        "arm_a_sentences": 3,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.1429
+      },
+      "B2": {
+        "arm_e_chars": 148,
+        "arm_a_chars": 143,
+        "delta_chars": 5,
+        "pct_delta_chars": 3.5,
+        "arm_e_proxy_tokens_gpt2": 28,
+        "arm_a_proxy_tokens_gpt2": 29,
+        "delta_proxy_tokens": -1,
+        "pct_delta_proxy_tokens": -3.45,
+        "arm_e_words": 21,
+        "arm_a_words": 19,
+        "delta_words": 2,
+        "pct_delta_words": 10.53,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.1875
+      },
+      "B3": {
+        "arm_e_chars": 158,
+        "arm_a_chars": 167,
+        "delta_chars": -9,
+        "pct_delta_chars": -5.39,
+        "arm_e_proxy_tokens_gpt2": 31,
+        "arm_a_proxy_tokens_gpt2": 33,
+        "delta_proxy_tokens": -2,
+        "pct_delta_proxy_tokens": -6.06,
+        "arm_e_words": 24,
+        "arm_a_words": 23,
+        "delta_words": 1,
+        "pct_delta_words": 4.35,
+        "arm_e_sentences": 2,
+        "arm_a_sentences": 2,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.1765
+      },
+      "B4": {
+        "arm_e_chars": 281,
+        "arm_a_chars": 284,
+        "delta_chars": -3,
+        "pct_delta_chars": -1.06,
+        "arm_e_proxy_tokens_gpt2": 64,
+        "arm_a_proxy_tokens_gpt2": 61,
+        "delta_proxy_tokens": 3,
+        "pct_delta_proxy_tokens": 4.92,
+        "arm_e_words": 53,
+        "arm_a_words": 43,
+        "delta_words": 10,
+        "pct_delta_words": 23.26,
+        "arm_e_sentences": 4,
+        "arm_a_sentences": 4,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.16
+      },
+      "B5": {
+        "arm_e_chars": 96,
+        "arm_a_chars": 101,
+        "delta_chars": -5,
+        "pct_delta_chars": -4.95,
+        "arm_e_proxy_tokens_gpt2": 20,
+        "arm_a_proxy_tokens_gpt2": 20,
+        "delta_proxy_tokens": 0,
+        "pct_delta_proxy_tokens": 0.0,
+        "arm_e_words": 14,
+        "arm_a_words": 13,
+        "delta_words": 1,
+        "pct_delta_words": 7.69,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.2857
+      },
+      "B6": {
+        "arm_e_chars": 103,
+        "arm_a_chars": 100,
+        "delta_chars": 3,
+        "pct_delta_chars": 3.0,
+        "arm_e_proxy_tokens_gpt2": 21,
+        "arm_a_proxy_tokens_gpt2": 22,
+        "delta_proxy_tokens": -1,
+        "pct_delta_proxy_tokens": -4.55,
+        "arm_e_words": 16,
+        "arm_a_words": 15,
+        "delta_words": 1,
+        "pct_delta_words": 6.67,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.1875
+      },
+      "B7": {
+        "arm_e_chars": 141,
+        "arm_a_chars": 134,
+        "delta_chars": 7,
+        "pct_delta_chars": 5.22,
+        "arm_e_proxy_tokens_gpt2": 29,
+        "arm_a_proxy_tokens_gpt2": 28,
+        "delta_proxy_tokens": 1,
+        "pct_delta_proxy_tokens": 3.57,
+        "arm_e_words": 21,
+        "arm_a_words": 22,
+        "delta_words": -1,
+        "pct_delta_words": -4.55,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.3571
+      },
+      "B8": {
+        "arm_e_chars": 172,
+        "arm_a_chars": 177,
+        "delta_chars": -5,
+        "pct_delta_chars": -2.82,
+        "arm_e_proxy_tokens_gpt2": 34,
+        "arm_a_proxy_tokens_gpt2": 37,
+        "delta_proxy_tokens": -3,
+        "pct_delta_proxy_tokens": -8.11,
+        "arm_e_words": 28,
+        "arm_a_words": 25,
+        "delta_words": 3,
+        "pct_delta_words": 12.0,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.3529
+      },
+      "B9": {
+        "arm_e_chars": 151,
+        "arm_a_chars": 142,
+        "delta_chars": 9,
+        "pct_delta_chars": 6.34,
+        "arm_e_proxy_tokens_gpt2": 30,
+        "arm_a_proxy_tokens_gpt2": 28,
+        "delta_proxy_tokens": 2,
+        "pct_delta_proxy_tokens": 7.14,
+        "arm_e_words": 23,
+        "arm_a_words": 22,
+        "delta_words": 1,
+        "pct_delta_words": 4.55,
+        "arm_e_sentences": 2,
+        "arm_a_sentences": 2,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.3636
+      },
+      "B10": {
+        "arm_e_chars": 166,
+        "arm_a_chars": 162,
+        "delta_chars": 4,
+        "pct_delta_chars": 2.47,
+        "arm_e_proxy_tokens_gpt2": 36,
+        "arm_a_proxy_tokens_gpt2": 34,
+        "delta_proxy_tokens": 2,
+        "pct_delta_proxy_tokens": 5.88,
+        "arm_e_words": 29,
+        "arm_a_words": 31,
+        "delta_words": -2,
+        "pct_delta_words": -6.45,
+        "arm_e_sentences": 2,
+        "arm_a_sentences": 2,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.0714
+      },
+      "C1": {
+        "arm_e_chars": 184,
+        "arm_a_chars": 186,
+        "delta_chars": -2,
+        "pct_delta_chars": -1.08,
+        "arm_e_proxy_tokens_gpt2": 37,
+        "arm_a_proxy_tokens_gpt2": 36,
+        "delta_proxy_tokens": 1,
+        "pct_delta_proxy_tokens": 2.78,
+        "arm_e_words": 25,
+        "arm_a_words": 27,
+        "delta_words": -2,
+        "pct_delta_words": -7.41,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.2
+      },
+      "C2": {
+        "arm_e_chars": 117,
+        "arm_a_chars": 120,
+        "delta_chars": -3,
+        "pct_delta_chars": -2.5,
+        "arm_e_proxy_tokens_gpt2": 30,
+        "arm_a_proxy_tokens_gpt2": 29,
+        "delta_proxy_tokens": 1,
+        "pct_delta_proxy_tokens": 3.45,
+        "arm_e_words": 21,
+        "arm_a_words": 15,
+        "delta_words": 6,
+        "pct_delta_words": 40.0,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.2857
+      },
+      "C3": {
+        "arm_e_chars": 124,
+        "arm_a_chars": 121,
+        "delta_chars": 3,
+        "pct_delta_chars": 2.48,
+        "arm_e_proxy_tokens_gpt2": 26,
+        "arm_a_proxy_tokens_gpt2": 26,
+        "delta_proxy_tokens": 0,
+        "pct_delta_proxy_tokens": 0.0,
+        "arm_e_words": 15,
+        "arm_a_words": 15,
+        "delta_words": 0,
+        "pct_delta_words": 0.0,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.5385
+      },
+      "C4": {
+        "arm_e_chars": 140,
+        "arm_a_chars": 150,
+        "delta_chars": -10,
+        "pct_delta_chars": -6.67,
+        "arm_e_proxy_tokens_gpt2": 34,
+        "arm_a_proxy_tokens_gpt2": 37,
+        "delta_proxy_tokens": -3,
+        "pct_delta_proxy_tokens": -8.11,
+        "arm_e_words": 26,
+        "arm_a_words": 26,
+        "delta_words": 0,
+        "pct_delta_words": 0.0,
+        "arm_e_sentences": 2,
+        "arm_a_sentences": 2,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.5
+      },
+      "C5": {
+        "arm_e_chars": 105,
+        "arm_a_chars": 111,
+        "delta_chars": -6,
+        "pct_delta_chars": -5.41,
+        "arm_e_proxy_tokens_gpt2": 20,
+        "arm_a_proxy_tokens_gpt2": 19,
+        "delta_proxy_tokens": 1,
+        "pct_delta_proxy_tokens": 5.26,
+        "arm_e_words": 16,
+        "arm_a_words": 12,
+        "delta_words": 4,
+        "pct_delta_words": 33.33,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.3333
+      },
+      "C6": {
+        "arm_e_chars": 77,
+        "arm_a_chars": 79,
+        "delta_chars": -2,
+        "pct_delta_chars": -2.53,
+        "arm_e_proxy_tokens_gpt2": 14,
+        "arm_a_proxy_tokens_gpt2": 15,
+        "delta_proxy_tokens": -1,
+        "pct_delta_proxy_tokens": -6.67,
+        "arm_e_words": 10,
+        "arm_a_words": 10,
+        "delta_words": 0,
+        "pct_delta_words": 0.0,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.1818
+      },
+      "C7": {
+        "arm_e_chars": 103,
+        "arm_a_chars": 108,
+        "delta_chars": -5,
+        "pct_delta_chars": -4.63,
+        "arm_e_proxy_tokens_gpt2": 21,
+        "arm_a_proxy_tokens_gpt2": 20,
+        "delta_proxy_tokens": 1,
+        "pct_delta_proxy_tokens": 5.0,
+        "arm_e_words": 16,
+        "arm_a_words": 16,
+        "delta_words": 0,
+        "pct_delta_words": 0.0,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.5
+      },
+      "C8": {
+        "arm_e_chars": 324,
+        "arm_a_chars": 321,
+        "delta_chars": 3,
+        "pct_delta_chars": 0.93,
+        "arm_e_proxy_tokens_gpt2": 60,
+        "arm_a_proxy_tokens_gpt2": 63,
+        "delta_proxy_tokens": -3,
+        "pct_delta_proxy_tokens": -4.76,
+        "arm_e_words": 46,
+        "arm_a_words": 53,
+        "delta_words": -7,
+        "pct_delta_words": -13.21,
+        "arm_e_sentences": 2,
+        "arm_a_sentences": 2,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.2083
+      },
+      "C9": {
+        "arm_e_chars": 68,
+        "arm_a_chars": 71,
+        "delta_chars": -3,
+        "pct_delta_chars": -4.23,
+        "arm_e_proxy_tokens_gpt2": 14,
+        "arm_a_proxy_tokens_gpt2": 14,
+        "delta_proxy_tokens": 0,
+        "pct_delta_proxy_tokens": 0.0,
+        "arm_e_words": 10,
+        "arm_a_words": 12,
+        "delta_words": -2,
+        "pct_delta_words": -16.67,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.125
+      },
+      "C10": {
+        "arm_e_chars": 208,
+        "arm_a_chars": 221,
+        "delta_chars": -13,
+        "pct_delta_chars": -5.88,
+        "arm_e_proxy_tokens_gpt2": 47,
+        "arm_a_proxy_tokens_gpt2": 49,
+        "delta_proxy_tokens": -2,
+        "pct_delta_proxy_tokens": -4.08,
+        "arm_e_words": 38,
+        "arm_a_words": 40,
+        "delta_words": -2,
+        "pct_delta_words": -5.0,
+        "arm_e_sentences": 2,
+        "arm_a_sentences": 2,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.2778
+      },
+      "D1": {
+        "arm_e_chars": 235,
+        "arm_a_chars": 235,
+        "delta_chars": 0,
+        "pct_delta_chars": 0.0,
+        "arm_e_proxy_tokens_gpt2": 48,
+        "arm_a_proxy_tokens_gpt2": 45,
+        "delta_proxy_tokens": 3,
+        "pct_delta_proxy_tokens": 6.67,
+        "arm_e_words": 38,
+        "arm_a_words": 34,
+        "delta_words": 4,
+        "pct_delta_words": 11.76,
+        "arm_e_sentences": 3,
+        "arm_a_sentences": 3,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.25
+      },
+      "D2": {
+        "arm_e_chars": 166,
+        "arm_a_chars": 170,
+        "delta_chars": -4,
+        "pct_delta_chars": -2.35,
+        "arm_e_proxy_tokens_gpt2": 30,
+        "arm_a_proxy_tokens_gpt2": 30,
+        "delta_proxy_tokens": 0,
+        "pct_delta_proxy_tokens": 0.0,
+        "arm_e_words": 23,
+        "arm_a_words": 27,
+        "delta_words": -4,
+        "pct_delta_words": -14.81,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.1765
+      },
+      "D3": {
+        "arm_e_chars": 206,
+        "arm_a_chars": 209,
+        "delta_chars": -3,
+        "pct_delta_chars": -1.44,
+        "arm_e_proxy_tokens_gpt2": 40,
+        "arm_a_proxy_tokens_gpt2": 39,
+        "delta_proxy_tokens": 1,
+        "pct_delta_proxy_tokens": 2.56,
+        "arm_e_words": 31,
+        "arm_a_words": 32,
+        "delta_words": -1,
+        "pct_delta_words": -3.12,
+        "arm_e_sentences": 2,
+        "arm_a_sentences": 2,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.2
+      },
+      "D4": {
+        "arm_e_chars": 145,
+        "arm_a_chars": 142,
+        "delta_chars": 3,
+        "pct_delta_chars": 2.11,
+        "arm_e_proxy_tokens_gpt2": 35,
+        "arm_a_proxy_tokens_gpt2": 33,
+        "delta_proxy_tokens": 2,
+        "pct_delta_proxy_tokens": 6.06,
+        "arm_e_words": 25,
+        "arm_a_words": 19,
+        "delta_words": 6,
+        "pct_delta_words": 31.58,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.4615
+      },
+      "D5": {
+        "arm_e_chars": 135,
+        "arm_a_chars": 149,
+        "delta_chars": -14,
+        "pct_delta_chars": -9.4,
+        "arm_e_proxy_tokens_gpt2": 34,
+        "arm_a_proxy_tokens_gpt2": 37,
+        "delta_proxy_tokens": -3,
+        "pct_delta_proxy_tokens": -8.11,
+        "arm_e_words": 19,
+        "arm_a_words": 25,
+        "delta_words": -6,
+        "pct_delta_words": -24.0,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.3333
+      },
+      "D6": {
+        "arm_e_chars": 103,
+        "arm_a_chars": 100,
+        "delta_chars": 3,
+        "pct_delta_chars": 3.0,
+        "arm_e_proxy_tokens_gpt2": 27,
+        "arm_a_proxy_tokens_gpt2": 27,
+        "delta_proxy_tokens": 0,
+        "pct_delta_proxy_tokens": 0.0,
+        "arm_e_words": 18,
+        "arm_a_words": 16,
+        "delta_words": 2,
+        "pct_delta_words": 12.5,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.3333
+      },
+      "D7": {
+        "arm_e_chars": 165,
+        "arm_a_chars": 158,
+        "delta_chars": 7,
+        "pct_delta_chars": 4.43,
+        "arm_e_proxy_tokens_gpt2": 35,
+        "arm_a_proxy_tokens_gpt2": 34,
+        "delta_proxy_tokens": 1,
+        "pct_delta_proxy_tokens": 2.94,
+        "arm_e_words": 21,
+        "arm_a_words": 26,
+        "delta_words": -5,
+        "pct_delta_words": -19.23,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.4118
+      },
+      "D8": {
+        "arm_e_chars": 178,
+        "arm_a_chars": 186,
+        "delta_chars": -8,
+        "pct_delta_chars": -4.3,
+        "arm_e_proxy_tokens_gpt2": 39,
+        "arm_a_proxy_tokens_gpt2": 38,
+        "delta_proxy_tokens": 1,
+        "pct_delta_proxy_tokens": 2.63,
+        "arm_e_words": 30,
+        "arm_a_words": 32,
+        "delta_words": -2,
+        "pct_delta_words": -6.25,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.3
+      },
+      "D9": {
+        "arm_e_chars": 209,
+        "arm_a_chars": 209,
+        "delta_chars": 0,
+        "pct_delta_chars": 0.0,
+        "arm_e_proxy_tokens_gpt2": 43,
+        "arm_a_proxy_tokens_gpt2": 44,
+        "delta_proxy_tokens": -1,
+        "pct_delta_proxy_tokens": -2.27,
+        "arm_e_words": 31,
+        "arm_a_words": 35,
+        "delta_words": -4,
+        "pct_delta_words": -11.43,
+        "arm_e_sentences": 1,
+        "arm_a_sentences": 1,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.25
+      },
+      "D10": {
+        "arm_e_chars": 131,
+        "arm_a_chars": 136,
+        "delta_chars": -5,
+        "pct_delta_chars": -3.68,
+        "arm_e_proxy_tokens_gpt2": 30,
+        "arm_a_proxy_tokens_gpt2": 28,
+        "delta_proxy_tokens": 2,
+        "pct_delta_proxy_tokens": 7.14,
+        "arm_e_words": 22,
+        "arm_a_words": 24,
+        "delta_words": -2,
+        "pct_delta_words": -8.33,
+        "arm_e_sentences": 2,
+        "arm_a_sentences": 2,
+        "content_word_jaccard_vs_arm_a": 0.0,
+        "shared_content_words_vs_arm_a": [],
+        "content_word_jaccard_vs_bank_gloss": 0.0,
+        "shared_content_words_vs_bank_gloss": [],
+        "reference_arm_a_jaccard_vs_bank_gloss": 0.2727
+      }
+    },
+    "arm_e": {
+      "mean_chars": 194.475,
+      "sd_chars": 108.693,
+      "min_chars": 68,
+      "max_chars": 680,
+      "mean_words": 31.825,
+      "mean_proxy_tokens_gpt2": 41.35,
+      "sd_proxy_tokens_gpt2": 24.406,
+      "total_sentences": 70
+    },
+    "arm_a": {
+      "mean_chars": 196.225,
+      "sd_chars": 108.425,
+      "min_chars": 71,
+      "max_chars": 686,
+      "mean_words": 31.75,
+      "mean_proxy_tokens_gpt2": 41.025,
+      "sd_proxy_tokens_gpt2": 22.955,
+      "total_sentences": 70
+    },
+    "delta_vs_arm_a": {
+      "PRIMARY_proxy_token_match_gpt2_bpe": {
+        "mean_abs_pct_delta": 4.193,
+        "max_abs_pct_delta": 8.11,
+        "worst_code": "B8",
+        "n_codes_outside_plus_minus_10_pct": 0,
+        "arm_a_mean_tokens": 41.025,
+        "arm_e_mean_tokens": 41.35
+      },
+      "mean_delta_chars": -1.75,
+      "sd_delta_chars": 6.815,
+      "mean_abs_pct_delta_chars": 3.348,
+      "max_abs_pct_delta_chars": 9.4,
+      "worst_code_chars": "D5",
+      "n_codes_outside_plus_minus_10_pct_chars": 0,
+      "mean_abs_pct_delta_words": 10.383,
+      "max_abs_pct_delta_words": 40.0,
+      "worst_code_words": "C2",
+      "n_codes_outside_plus_minus_10_pct_words": 16,
+      "sentence_count_mismatches": 0
+    },
+    "matching_rule_applied": "per-code subword-token count (GPT-2 BPE proxy) within +/-10% of the index-matched Arm A definition, AND per-code character count within +/-10%, AND exact per-code sentence-count match. All three hold on 40/40 codes.",
+    "proxy_tokenizer": {
+      "id": "gpt2",
+      "why_a_proxy": "The pre-registration matches on tokens under the tokenizer pinned at required_run_bindings[10], which is unavailable_until_capture_host_resolved (build item B8; candidate Qwen/Qwen2.5-1.5B-Instruct, not pinned). GPT-2 BPE is used here as a same-family subword stand-in so the match is measured rather than assumed.",
+      "why_it_mattered": "Character matching alone was NOT sufficient. Arm A's rarer vocabulary fragments into more subwords per character, so a char-matched draft sat 19/40 codes outside +/-10% on tokens. The definitions were re-tuned against the tokenizer until both metrics passed.",
+      "MANDATORY_RECHECK": "Recompute this table under the pinned tokenizer once B8 resolves. If any code then falls outside +/-10% tokens, THIS ARM MUST BE REWRITTEN before capture. Passing under a proxy is not passing."
+    }
+  },
+  "register_stats": {
+    "arm_e": {
+      "total_words": 1290,
+      "total_sentences": 70,
+      "mean_words_per_sentence": 18.429,
+      "type_token_ratio": 0.3876,
+      "first_person_pronoun_rate": 0.0,
+      "flesch_kincaid_grade": 11.465
+    },
+    "arm_a": {
+      "total_words": 1268,
+      "total_sentences": 70,
+      "mean_words_per_sentence": 18.114,
+      "type_token_ratio": 0.3912,
+      "first_person_pronoun_rate": 0.00473,
+      "flesch_kincaid_grade": 11.948
+    },
+    "preregistered_tolerances_section_2_5": {
+      "mean_words_per_sentence": {
+        "tolerance": "+/-15%",
+        "arm_a": 18.114,
+        "arm_e": 18.429,
+        "pct_delta": 1.74,
+        "pass": true
+      },
+      "type_token_ratio": {
+        "tolerance": "+/-0.05",
+        "arm_a": 0.3912,
+        "arm_e": 0.3876,
+        "delta": -0.0036,
+        "pass": true
+      },
+      "first_person_pronoun_rate": {
+        "tolerance": "+/-0.02",
+        "arm_a": 0.00473,
+        "arm_e": 0.0,
+        "delta": -0.00473,
+        "pass": true
+      },
+      "flesch_kincaid_grade": {
+        "tolerance": "+/-1.5",
+        "arm_a": 11.948,
+        "arm_e": 11.465,
+        "delta": -0.483,
+        "pass": true
+      }
+    },
+    "grammatical_style": "Every definition opens with its cell name followed by 'is', matching Arm A's '<Title> is ...' definitional frame, then elaborates in comma-chained declarative prose. Sentence counts match Arm A per code exactly.",
+    "measurement_notes": [
+      "Flesch-Kincaid uses a regex vowel-group syllable heuristic, not a pronunciation dictionary; it is applied identically to both arms so the DELTA is the meaningful quantity, not the level.",
+      "Length matching was optimised against GPT-2 BPE token counts, not against the pinned capture tokenizer, which does not exist yet (B8). See length_stats.proxy_tokenizer."
+    ]
+  },
+  "independence_from_tks": {
+    "method": "content-word Jaccard per code against the index-matched Arm A definition; content words are lowercased alphabetic tokens of length > 3 characters after stopword removal",
+    "vs_arm_a": {
+      "min": 0.0,
+      "mean": 0.00026,
+      "max": 0.0104,
+      "max_code": "A1",
+      "n_codes_with_any_shared_content_word": 1,
+      "all_shared_content_words": [
+        "cause"
+      ]
+    },
+    "vs_bank_glosses_S13_covariate": {
+      "min": 0.0,
+      "mean": 0.0,
+      "max": 0.0,
+      "reference_arm_a_vs_bank_glosses": {
+        "min": 0.0612,
+        "mean": 0.24867,
+        "max": 0.5385
+      },
+      "note": "Arm E sits near zero overlap with the bank glosses by construction while Arm A does not. Pre-registration S13 therefore REQUIRES that any A-over-E margin survive conditioning on per-class overlap at concept level (n = 40). An uncontrolled A > E could be nothing but lexical overlap."
+    },
+    "vocabulary_exclusions_applied": [
+      "no TKS World names (Spiritual, Mental, Emotional, Physical)",
+      "no TKS Noetic names (Mind, Positive, Negative, Vibration, Female, Male, Rhythm, Above, Below, Idea)",
+      "no CAS framework vocabulary (Noetic, Domain, Drive, Register, Element, Foundation, Operator, Inversion)",
+      "no devotional or metaphysical register (soul, God, Divine, spirit, aura, aether, Akashic, esoteric, initiate)"
+    ]
+  },
+  "preregistered_ceiling": {
+    "headline": "ARM E CANNOT WIN BY CONSTRUCTION. Beating it is close to tautological.",
+    "statement": "The holdout bank's LABEL SPACE is the TKS ontology itself: its 40 classes ARE the 40 TKS Elements and its 40 glosses were authored inside this project. Arm E is scored on how well a Schwartz x Tinbergen definition set identifies TKS categories. A TKS-derived arm is therefore advantaged by the construction of the evaluation, independently of any semantic merit. An Arm A win over Arm E (criterion E6) restates the setup; it is not evidence that TKS concepts are more universal, more valid, or better than Schwartz x Tinbergen.",
+    "governing_text": [
+      "Pre-registration section 4.3: 'Arm E cannot win by construction. ... Criterion E6 is therefore declared THE WEAKEST of 8.4's six and is never headlined.'",
+      "Pre-registration section 7, E6: bar >= +0.08 with LCB > 0, 'Declared IN ADVANCE the WEAKEST of the six criteria and never headlined'.",
+      "Pre-registration section 9.3: E6 is absent from the frozen headline contrast list.",
+      "Pre-registration section 12.7: 'No claim that TKS concepts are more universal than other concept sets.'"
+    ],
+    "what_would_actually_be_informative": "Only the reverse. Pre-registration section 10.1 R3: if Arm E MATCHES OR BEATS Arm A on a bank whose labels are the TKS ontology, that is the strongest disconfirmation available in this design, and the canonical-wording claim does not issue.",
+    "authoring_posture": "Given that ceiling, this arm was authored to be as strong as honesty allows rather than as a foil: real published primitive sets, a cross-product that is standard practice in the source literature, per-code length and sentence-count matching to Arm A, four matched register statistics, and near-zero lexical overlap achieved by writing different content rather than by degrading it."
+  },
+  "outstanding_gates": [
+    {
+      "id": "P6 / section 2.5 STRAW-MAN GATE",
+      "status": "unavailable_until_rated",
+      "requirement": "80 definitions (40 Arm A + 40 Arm E) shuffled, rated blind to arm, 1-5, on 'coherent, non-circular definition of a distinct category', by a pre-registered independent rater. Arm E must score >= mean(Arm A) - 0.5.",
+      "note": "NOT RUN. The rater is not pre-registered and is not the author of this file. A failed audit is a DESIGN DEFECT requiring rewrite, and is NEVER reported as an Arm E loss."
+    },
+    {
+      "id": "B8 tokenizer-exact length match",
+      "status": "matched_under_proxy_only",
+      "requirement": "per-code token count within +/-10% of Arm A under the tokenizer pinned at required_run_bindings[10]",
+      "note": "Matched on 40/40 codes under a GPT-2 BPE proxy (max 8.1%). The pinned tokenizer does not exist yet. Recompute under it before capture; rewrite this arm if any code fails."
+    },
+    {
+      "id": "arm manifest sha256 registration",
+      "status": "pending",
+      "requirement": "this file's own sha256 registered per pre-registration bindings 1-4 in the hashed amendment, before the first forward pass"
+    }
+  ],
+  "honest_limitations": [
+    "ASSISTANT_COMPILED. All 40 definition bodies are the assistant's own composition. Only the two primitive NAME sets are external; no external source contains this prose.",
+    "The straw-man / blind-coherence audit (P6) has NOT been run. Until an independent rater scores it, 'coherent' is the author's claim about the author's own text.",
+    "Length matching passes on 40/40 codes for BOTH subword tokens (GPT-2 BPE proxy, max 8.1%) and characters (max 9.4%), but the tokenizer that will actually be used at capture is not pinned (B8), so the token match is a proxy result and must be rechecked. WHITESPACE-WORD counts are deliberately NOT matched and diverge by up to 40% on short codes: Arm A packs rare multi-token words, Arm E packs common single-token words, and matching all three quantities at once is not simultaneously satisfiable. Tokens were prioritised because the residual confound named in pre-registration section 3.2 is the anchor read POSITION, which is a token index.",
+    "Near-zero lexical overlap with Arm A is a design goal for independence, but it is CONFOUNDED with overlap against the bank glosses (S13). Arm A shares vocabulary with the bank; Arm E does not. Any A-over-E margin that does not survive the S13 covariate is lexical overlap, not semantics.",
+    "Per-code register matching forced a real prose cost on a handful of codes. Arm A's C2, D5, D6 and similar entries are terse comma-lists of short words, which are unusually token-dense; matching them drove Arm E's C2, C4, D5, D6 into the same telegraphic list register (e.g. C2 'news, range, luck, reach, spread'). Those cells are the most likely to be marked down by the P6 blind rater. If they are, the correct response is to rewrite them and re-audit, NOT to report an Arm E loss.",
+    "The bijection is positional and arbitrary by design. It carries no claim that any Schwartz value corresponds to any TKS Noetic, or that any Tinbergen question corresponds to any TKS World.",
+    "Register matching removes obvious style confounds at the arm level; it cannot remove domain-block style, which the pre-registration (section 3.3) states survives arm-internal centering.",
+    "Arm E is structurally disadvantaged and the disadvantage is not correctable within this design. It is a fair comparator for the question 'does a coherent 40-category ontology do as well on a TKS-labelled bank', and it is not a fair comparator for 'is TKS a better ontology than Schwartz x Tinbergen'. The second question is not asked and cannot be answered here."
+  ]
+}
