@@ -1,0 +1,105 @@
+{
+  "E13_layer_stability": {
+    "bar": 0.6,
+    "fraction": 0.8571,
+    "layers_holding": 6,
+    "per_layer": {
+      "0": {
+        "A_owner_raw": 0.025,
+        "B_deployed": 0.025,
+        "D_compact_cas": 0.025,
+        "E_non_tks": 0.025,
+        "F_F1_null": 0.025,
+        "contrast_holds": false
+      },
+      "2": {
+        "A_owner_raw": 0.18244,
+        "B_deployed": 0.183036,
+        "D_compact_cas": 0.045402,
+        "E_non_tks": 0.015714,
+        "F_F1_null": 0.019524,
+        "contrast_holds": true
+      },
+      "4": {
+        "A_owner_raw": 0.212009,
+        "B_deployed": 0.207113,
+        "D_compact_cas": 0.043973,
+        "E_non_tks": 0.016414,
+        "F_F1_null": 0.016771,
+        "contrast_holds": true
+      },
+      "6": {
+        "A_owner_raw": 0.194807,
+        "B_deployed": 0.187693,
+        "D_compact_cas": 0.047009,
+        "E_non_tks": 0.016131,
+        "F_F1_null": 0.016027,
+        "contrast_holds": true
+      },
+      "8": {
+        "A_owner_raw": 0.161726,
+        "B_deployed": 0.146562,
+        "D_compact_cas": 0.050208,
+        "E_non_tks": 0.032991,
+        "F_F1_null": 0.01872,
+        "contrast_holds": true
+      },
+      "10": {
+        "A_owner_raw": 0.197917,
+        "B_deployed": 0.204062,
+        "D_compact_cas": 0.039033,
+        "E_non_tks": 0.032515,
+        "F_F1_null": 0.01747,
+        "contrast_holds": true
+      },
+      "12": {
+        "A_owner_raw": 0.368006,
+        "B_deployed": 0.363259,
+        "D_compact_cas": 0.080045,
+        "E_non_tks": 0.027768,
+        "F_F1_null": 0.00933,
+        "contrast_holds": true
+      }
+    },
+    "verdict": "PASS"
+  },
+  "E8_equal_token_budget": {
+    "full_A_minus_D": 0.1597,
+    "per_arm_median_tokens": {
+      "A_owner_raw": 36,
+      "B_deployed": 38,
+      "D_compact_cas": 28,
+      "E_non_tks": 35,
+      "F_F1_null": 36
+    },
+    "same_sign": true,
+    "shortest_budget": 28,
+    "truncated_A_minus_D": 0.129955,
+    "truncated_macro": {
+      "A_owner_raw": 0.164494,
+      "B_deployed": 0.162262,
+      "D_compact_cas": 0.034539,
+      "E_non_tks": 0.037292,
+      "F_F1_null": 0.019881
+    },
+    "verdict": "PASS"
+  },
+  "design": "TKS-DEFCTX-40E-PRIMARY-v1",
+  "frozen_layer": 10,
+  "model": "EleutherAI/pythia-160m",
+  "seeds": 20,
+  "true_wrong_layer_control": {
+    "anchors_at_L": 10,
+    "items_at_other_layers": {
+      "0": 0.025,
+      "2": 0.054807,
+      "4": 0.097723,
+      "6": 0.155744,
+      "8": 0.173229,
+      "12": 0.331577
+    },
+    "matched_reference": 0.197917,
+    "note": "anchors and items read at DIFFERENT layers; the v2 'wrong_layer' number was matched-layer and is superseded"
+  },
+  "version": "v3_remaining_battery"
+}
