@@ -1,0 +1,120 @@
+{
+  "A_minus_D_bootstrap": {
+    "ci_lower": 0.098438,
+    "ci_upper": 0.118466,
+    "mean": 0.108727
+  },
+  "E8_margin": 0.095535,
+  "E8_truncated": {
+    "A_owner_raw": 0.124196,
+    "B_deployed": 0.12506,
+    "D_compact_cas": 0.028661,
+    "E_non_tks": 0.042857,
+    "F_F1_null": 0.014658
+  },
+  "L_anchor": 8,
+  "L_item": 12,
+  "anchor_layer_selection": {
+    "0": 1.0,
+    "4": 1.0248035430908202,
+    "8": 1.0248966693878174,
+    "12": 1.0247042655944825,
+    "16": 1.024318265914917
+  },
+  "arms": {
+    "A_owner_raw": {
+      "mean": 0.147351,
+      "sd": 0.000975
+    },
+    "B_deployed": {
+      "mean": 0.153824,
+      "sd": 0.001076
+    },
+    "D_compact_cas": {
+      "mean": 0.037426,
+      "sd": 0.000554
+    },
+    "E_non_tks": {
+      "mean": 0.040774,
+      "sd": 0.000546
+    },
+    "F_F1_null": {
+      "mean": 0.009732,
+      "sd": 0.000291
+    }
+  },
+  "chance": 0.025,
+  "commensurability_controls": {
+    "C1_scaffold_mismatch": 0.11314,
+    "C2_frame_mismatch": 0.14006,
+    "C3_position_break": 0.13689
+  },
+  "criteria": {
+    "A1_tks_above_others": true,
+    "A2_margin_ge_0.15": false,
+    "A3_ci_lower_ge_0.15": false,
+    "A4_stability_ge_60pct": true,
+    "A5_truncated_margin_ge_0.15": false,
+    "A6_nulls_at_chance": true,
+    "A7_commensurability_controls": false
+  },
+  "design": "TKS-DEFCTX-40E-SPLITLAYER-v2",
+  "item_layer_selection": {
+    "0": 0.025,
+    "4": 0.33035423522555873,
+    "8": 0.4274624048337284,
+    "12": 0.5131990844123198,
+    "16": 0.41419697541021067
+  },
+  "model": "EleutherAI/pythia-1b",
+  "note_A7_bar": 0.073676,
+  "nulls": {
+    "layer0_anchors": 0.025,
+    "random_direction": 0.02567,
+    "shuffled_labels": 0.027381
+  },
+  "seeds": 20,
+  "stability": {
+    "0": {
+      "A_owner_raw": 0.025,
+      "B_deployed": 0.025,
+      "D_compact_cas": 0.025,
+      "E_non_tks": 0.025,
+      "F_F1_null": 0.025,
+      "holds": false
+    },
+    "4": {
+      "A_owner_raw": 0.239747,
+      "B_deployed": 0.224955,
+      "D_compact_cas": 0.038051,
+      "E_non_tks": 0.032872,
+      "F_F1_null": 0.011905,
+      "holds": true
+    },
+    "8": {
+      "A_owner_raw": 0.192708,
+      "B_deployed": 0.198795,
+      "D_compact_cas": 0.031994,
+      "E_non_tks": 0.045312,
+      "F_F1_null": 0.01756,
+      "holds": true
+    },
+    "12": {
+      "A_owner_raw": 0.50619,
+      "B_deployed": 0.505387,
+      "D_compact_cas": 0.076771,
+      "E_non_tks": 0.036369,
+      "F_F1_null": 0.008795,
+      "holds": true
+    },
+    "16": {
+      "A_owner_raw": 0.460104,
+      "B_deployed": 0.459613,
+      "D_compact_cas": 0.081071,
+      "E_non_tks": 0.040982,
+      "F_F1_null": 0.008214,
+      "holds": true
+    }
+  },
+  "verdict": "NOT_LICENSED"
+}
