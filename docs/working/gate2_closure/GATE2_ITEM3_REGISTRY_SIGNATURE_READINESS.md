@@ -1,5 +1,33 @@
 # Gate 2 Item 3 — Semantic Authority Registry: Signature-Readiness Audit
 
+> ## SUPERSEDED BY AN OWNER DECISION — read this first
+>
+> **This audit's verdict was `BLOCKED — do not sign`. The owner reviewed that verdict, together with
+> its open findings, and signed the registry anyway on 2026-07-24.** That is the owner's prerogative
+> and the decision stands. This document is therefore **a record of what was open at the moment of
+> signing — not a live recommendation against signing.**
+>
+> - Audited bytes: registry sha256 `a68d1b43…`, 275 lines, status
+>   `CANDIDATE_RECONCILIATION_MANIFEST_NOT_OWNER_SIGNED`.
+> - Current bytes: registry sha256 `9469a10a…`, 284 lines, status
+>   `OWNER_SIGNED_SEMANTIC_AUTHORITY_REGISTRY`, with a new top-level `owner_approval` object.
+> - Approval receipt: `docs/working/gate2_closure/OWNER_SEMANTIC_AUTHORITY_REGISTRY_SIGNED_20260724.json`
+>   (`receipt_hash d0c582c9…`, `verify()` True). Its `artifact_hashes` entry pins the registry at its
+>   current sha256, and its `open_findings_at_signing` field carries this audit's unresolved items
+>   verbatim so they travel with the approval instead of being buried.
+> - The approval is explicitly scoped: it approves the 20 sources, the 8-tier precedence, the 25
+>   required run bindings, and the 7 future-agent rules. It does **not** resolve the 12 recorded
+>   `known_conflicts`, does **not** approve the Acquisition/algebra profiles (which remain
+>   `unavailable` per roadmap `:202-203`), and licenses **no** empirical claim.
+> - The receipt's `signature_kind` records what it is: an interactive-session owner approval
+>   transcribed by the assistant — **not** a cryptographic or legal signature.
+>
+> **Everything below is preserved unedited and describes the PRE-SIGNATURE bytes.** Statements in §3
+> binding 8, §10 blockers 1 and 5, and the §11 ledger are true of `a68d1b43…` and are now stale
+> against the current file; each is disclosed with its recomputed value in the supersession bullet in
+> the status block. Nothing below was softened after the fact — the audit is left as it was written,
+> which is the point of keeping it.
+
 ## Status block
 
 - **Addresses (does NOT close)**: Gate 2, item 3 of
@@ -24,9 +52,35 @@
 - **What it does NOT close**: item 3's primary clause is *"Obtain owner approval."* No owner approval was
   obtained and this audit recommends against granting it on the current file. Item 3 remains **OPEN**.
 - **Date**: 2026-07-24
-- **Subject artifact**: `docs/working/TKS_CAS_SEMANTIC_SOURCE_REGISTRY_CANDIDATE_20260720.json`
+- **Subject artifact, pinned to the bytes this audit actually read (2026-07-24)**:
+  `docs/working/TKS_CAS_SEMANTIC_SOURCE_REGISTRY_CANDIDATE_20260720.json`
   (sha256 `A68D1B431C98F51DCD61007FBD75595659486B0092292CD92A49392D58AEEF54`, 275 lines, status field
   at `:4` = `CANDIDATE_RECONCILIATION_MANIFEST_NOT_OWNER_SIGNED`)
+- **Supersession note — the subject artifact has since moved. Added 2026-07-25 by an independent
+  re-derivation pass; every number in this bullet was recomputed from the file on disk, not carried over.**
+  The registry at that path was changed and first committed *after* this audit was written, in commit
+  `eaf5801a` *"gate2(item 3): OWNER SIGNED the semantic authority registry — item 4 unblocked"*
+  (Sat Jul 25 09:03:03 2026 -0700) — the same commit that carries this document. Current file:
+  sha256 `9469A10AE330749C61D157518B849A3737B0F5BD268E44C7BD6334625A38C483`, **284 lines**,
+  `status` = `OWNER_SIGNED_SEMANTIC_AUTHORITY_REGISTRY`, plus a new top-level `owner_approval` object at
+  `:275-283` (`approved_on`, `operator_id`, `receipt`, `roadmap_item`, `unblocks`, `signature_kind`,
+  `scope_note`). Four consequences, each re-derived:
+  (i) every finding in §3, §5-§10 and §11 below describes the **pre-signature** bytes and remains true
+  *of those bytes*;
+  (ii) the literal token `unavailable`, counted **0** times in §3 binding 8, §10 blocker 5 and the §11
+  ledger, occurs **1** time in the current file — inside `owner_approval.scope_note` at `:282`; those
+  three statements are stale on that count;
+  (iii) §10 blocker 1's sentence *"The registry itself defines no approval field"* is no longer true of
+  the current file, although the six greps that blocker names (`owner_signature`, `signed_by`, `signed_at`,
+  `signed_registry_sha256`, `approval_scope`, `supersedes`) still each return **0**;
+  (iv) the registry-side receipt pointer requested in the last bullet of §9(a) now exists, at
+  `owner_approval.receipt` (`:278`), pointing to
+  `docs/working/gate2_closure/OWNER_SEMANTIC_AUTHORITY_REGISTRY_SIGNED_20260724.json` — a harness-local
+  receipt (option (ii) of §9(a), not option (i)) whose recorded `artifact_hashes` entry for the registry
+  equals the registry's current sha256 (recomputed 2026-07-25, match).
+  **This audit's `BLOCKED` verdict is not restated, revised, or transferred to the signed file.** It was a
+  verdict on the pinned bytes above. Whether the signed file is sound is a question for a fresh audit,
+  which has not been performed here.
 - **Compute**: none in the ML sense. This is a document-and-hash audit: no model was loaded, no probe was
   trained, no A/B arm was run. Two millisecond-scale Python executions are recorded and labelled where they
   appear — `PcbaAuthorityReceipt.model_validate` on a CAS Harness `feature` value (raised `ValidationError`)
