@@ -7,7 +7,7 @@
 | Gate | Gate 2 — Small-model semantic and claims closure (`0.38 -> 0.46`) |
 | Item assessed | Item 8 — "Replay the strongest saved Pythia/TKS fixtures through the current live Evidence Packet path without overwriting the historical record." (`docs/working/CAS_HARNESS_033_TO_100_COMPLETION_ROADMAP_20260722.md:214-215`) |
 | Item 8 status | **NOT CLOSED — BLOCKED.** See §9. |
-| What this document does close | The fixture census (§1), the code survey of both Evidence Packet paths (§2), the ingest-compatibility finding (§3), the non-destructive replay procedure (§4), the pre-registration of what a replay would and would not establish (§5), and one independently reproduced sha256 (§6.1). It closes **none** of item 8's own text. |
+| What this document does close | The fixture census (§1), the code survey of both Evidence Packet paths (§2), the ingest-compatibility finding (§3), the non-destructive replay procedure (§4), the pre-registration of what a replay would and would not establish (§5), and three independently recomputed sha256 values — two matches and one mismatch (§6.1). It closes **none** of item 8's own text. |
 | Date | 2026-07-24 |
 | Branch assessed | `codex/cascompass-legal-live-source` |
 | Document type | Assessment + procedure. Not a run report. No replay has been executed as of this document. |
@@ -18,8 +18,9 @@
 Every code fact below was read directly at the cited file:line and every artifact field was read from
 the artifact named. Facts about the branch under assessment came from its working tree; the §1.1
 Stage-7 fixtures were read out of git on branch `experiment/cas-probe-pythia` and are labelled as
-such wherever they appear. One hash was independently recomputed on this host (see §6.1) — that single
-result is `real / verified`. No replay run has been performed, so item 8 is `open`. Every candidate
+such wherever they appear. Three sha256 hashes were independently recomputed on this host (see §6.1):
+two `MATCH` their recorded values and one `MISMATCH`es — all three results are `real / verified`, and
+the mismatch is reported as found. No replay run has been performed, so item 8 is `open`. Every candidate
 fixture on this branch is `not-licensed` by its own recorded status; the §1.1 fixtures carry no
 licensing field at all, only a `reserved_interpretation` scope limit — and nothing in this document
 changes either. Two questions are `flagged-for-human-review` (§8.1, §8.2), with a language constraint
@@ -70,15 +71,36 @@ Stage-7 Foundation-28 pair on branch `experiment/cas-probe-pythia` (§1.1). It i
 that clears a surface control *and* carries a matched random-control causal ablation.
 
 Consequence for item 8: a replay run staged only from this branch's working tree replays no strong
-fixture. The Stage-7 pair (§1.1) is the honest answer to "strongest," and it is **not present in this
-branch's working tree** — it must be materialised out of git before it can be replayed at all.
+fixture. The Stage-7 pair (§1.1) is the honest answer to "strongest," and **neither of its two report
+JSONs is present in this branch's working tree** — both must be materialised out of git before they
+can be replayed at all. (Some Stage-7 *raw* material is present on disk; it does not change this,
+because the reports are the replay subjects. See §1.1.)
 
 ### 1.1 The strongest saved Pythia/TKS fixture family — `experiment/cas-probe-pythia`, not this branch
 
-Not in this branch's working tree (`ls noetic-compass-scaffold/noetic-compass/research/cas_probe/` on
-`codex/cascompass-legal-live-source` returns `CAS_HARNESS_SPEC_SHEET_20260517.docx/.md`,
-`__pycache__`, `evidence_packets`, `graphify-out` — none of the Stage-7 files). Read for this document
-via `git show experiment/cas-probe-pythia:<path>` and `git ls-tree -r -l`:
+**The two report JSONs are not in this branch's working tree; some Stage-7 raw material is.** Re-run on
+2026-07-24, `ls noetic-compass-scaffold/noetic-compass/research/cas_probe/` on
+`codex/cascompass-legal-live-source` returns 14 entries:
+`CAS_HARNESS_SPEC_SHEET_20260517.docx`, `CAS_HARNESS_SPEC_SHEET_20260517.md`, `__pycache__`,
+`evidence_packets`, `graphify-out`, `stage12_equations_formulas_pilot_20260517.jsonl`,
+`stage12_equations_formulas_pilot_manifest_20260517.json`, `stage25_sae_feature_pilot_20260521.pt`,
+`stage6_role_bound_full_activations_20260516.npz`,
+**`stage7_foundation_pilot_activations_20260517.npz`**,
+**`stage7_foundation_pilot_smoke_activations_20260517.npz`**,
+**`stage7_foundation_pilot_smoke_activations_manifest_20260517.json`**,
+`stage9_elements_pilot_activations_20260517.npz`, `tests`.
+
+**Correction to an earlier pass of this document, which recorded a four-entry listing and concluded
+"none of the Stage-7 files."** That was wrong in the direction of understating the evidence. Neither
+report JSON is present — that part stands, and it is the part item 8 depends on — but three Stage-7
+files are: two activations `.npz` (both `UNTRACKED+IGNORED`, matched by
+`noetic-compass-scaffold/noetic-compass/.gitignore:26` = `research/**/*.npz`, confirmed by
+`git check-ignore -v`) and the smoke activations manifest, which is **tracked on this branch's HEAD**
+(`git ls-files --error-unmatch` succeeds). Hash consequences are worked through in the third bullet
+below and re-derived in §6.1.
+
+The two report JSONs were read for this document via
+`git show experiment/cas-probe-pythia:<path>`, with blob sizes from `git ls-tree -r -l`:
 
 | Blob | Bytes | Field read | Value (verbatim) |
 | --- | --- | --- | --- |
@@ -121,11 +143,30 @@ What it does **not** change:
   control or solve the black-box problem"* (pilot) and *"a causal intervention on the
   representation/readout, not a causal language-generation test"* (ablation). A shim that drops
   `reserved_interpretation` strips the only scope limit these two artifacts carry.
-* **Its raw NPZ is `unavailable`.** `stage7_foundation_pilot_activations_20260517.npz`
-  (`activations_sha256` = `d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f`) is not
-  in `git ls-tree -r experiment/cas-probe-pythia -- .../research/cas_probe/` and is not in this
-  branch's working tree. So the §6.1-style re-hash demonstration is **not** available for this
-  fixture; only candidate #1 offers it.
+* **Its raw NPZ is on disk but does NOT hash to the recorded value — and a smaller Stage-7 capture
+  does.** This replaces an earlier `unavailable` finding, and it cuts both ways.
+  * `stage7_foundation_pilot_activations_20260517.npz` is **not** tracked on either branch
+    (`git ls-tree -r experiment/cas-probe-pythia -- .../research/cas_probe/` → no match; ignored by
+    `.gitignore:26` here) but a file of that exact name **is present in this working tree** at
+    `317,617,680` bytes. Re-hashed on this host 2026-07-24: computed
+    `f63a66de86366a63ea0fd786ad0dc0bef68d5634be3b5fae525d4fb667f14d53`, against the
+    `activations_sha256` recorded identically in both reports and in
+    `stage7_foundation_pilot_activations_manifest_20260517.json → output_sha256`,
+    `d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f`. **MISMATCH.** The on-disk file
+    is therefore *not* the artifact the pilot and ablation reports were computed on. It is name-equal
+    and content-different. Recorded as found; no attempt is made here to explain it.
+  * `stage7_foundation_pilot_smoke_activations_20260517.npz` is present at `4,073,549` bytes and
+    re-hashes to `04800d4263e16ff1aa25653d58fe8db3531a9035602429ea7e658413320b4913`, **matching**
+    `output_sha256` in its tracked manifest `stage7_foundation_pilot_smoke_activations_manifest_20260517.json`
+    (`n_records` `56`, `device` `cpu`, same `input_sha256` `3e4a1ac…`, same `model_name` /
+    `model_revision`). **MATCH.**
+  * Net effect on item 8: a §6.1-style re-hash demonstration **is** available for the Stage-7 family,
+    but only via the 56-record smoke capture, and it attests the smoke manifest — not the 4,368-record
+    capture the headline `0.7857` was computed from. The full capture's raw evidence is
+    `unavailable` in the sense the exit clause cares about ("independently reproducible raw
+    evidence"): the bytes that produced the result are not recoverable here, and the bytes that are
+    here do not match. Candidate #1 remains the only fixture offering a re-hash of *its own* headline
+    raw artifact (§6.1.a).
 
 ### 1.2 Replay-fitness ranking (this branch's working tree)
 
@@ -308,7 +349,7 @@ transformation?
 | #5 `cas-pythia-hook-equivalence-local-20260721.json` | **No** | M1, M2, M6, M7, M8. Has an `input` key but it is a hook-equivalence input record, not `{text: …}` — see M1 note |
 | #6 `research_shadow_baseline_final.json` | **No** | M1, M2, M3, M6, M7, M8 |
 | #7 `pythia_160m_reference_trace.json` | **No** | M1, M2, M6. Third schema (`atlas_viewer_trace_v1`); not a measured-outcome fixture |
-| §1.1 Stage-7 pilot probe report (`experiment/cas-probe-pythia`) | **No** | M1, M2, M3 (no `provenance` key), M6, M8. Also not in this branch's working tree at all — must be materialised from git before staging. M7 applies in its harshest form: no `licensing_status` / `claim_eligible` / `claim_status` field exists to carry, only `status` and free-text `reserved_interpretation` |
+| §1.1 Stage-7 pilot probe report (`experiment/cas-probe-pythia`) | **No** | M1, M2, M3 (no `provenance` key), M6, M8. The report JSON itself is not in this branch's working tree — must be materialised from git before staging (some Stage-7 raw `.npz` is on disk, but no report is). M7 applies in its harshest form: no `licensing_status` / `claim_eligible` / `claim_status` field exists to carry, only `status` and free-text `reserved_interpretation` |
 | §1.1 Stage-7 layer-6 ablation report (`experiment/cas-probe-pythia`) | **No** | Same as the row above. Its `decision_gates` and `random_complement_controls` blocks have no packet field to land in either |
 
 ### The mismatches, concretely
@@ -365,7 +406,7 @@ Every path inside #1 and #4 is a RunPod path, e.g.
 `"path is outside allowed roots"` (`api/routes/evidence.py:233-234`) or `"file not found locally"`
 (`:236-237`). Consequence: every check row gets `actual: null, match: false`, and `overall` computes to
 `unable_to_verify` (`:819-820`).
-**Recoverable, and this is the item's best available demonstration** — see §6.1.
+**Recoverable, and this is the item's best available demonstration** — see §6.1.a.
 
 **M6 — the fixture's own `schema_version` has nowhere to go.**
 `EvidencePacket.schema_version` is a hard default `"evidence_packet.v1"` (`api/routes/evidence.py:69`)
@@ -398,11 +439,15 @@ them renders a not-licensed shadow diagnostic as an ordinary Evidence Packet. Pr
 is what item 8 has to be designed around.**
 
 **M8 — discovery fails before any of the above matters.**
-No candidate is discoverable today. Verified on disk on this host:
+No candidate is discoverable today. All five locations at `api/routes/evidence.py:257-273` were
+checked on disk on this host on 2026-07-24:
 `dashboard/public/traces/` — does not exist. `cas-native/trace/captures/` — does not exist.
 `<tksCAS>/cas-synthetic/data/traces/` — does not exist. `.tmp/traces/` — exists, contains exactly three
 unrelated UUID-named files: `57476114-79d5-4689-b1f9-65b869e24d99.json`,
 `94b1b116-3a6f-4cd3-8687-222d78e24cda.json`, `b232683e-09a3-4e0a-ba55-a203d0204e17.json`.
+`cas-native/trace/` (the fifth location) — exists, but holds only Python modules and `tests`
+(`__init__.py`, `activations.py`, `attribution.py`, `generation_trace.py`, `live_capture.py`,
+`mechanistic.py`, `network_summary.py`, `__pycache__`, `tests`); no `*.json` at all.
 Neither `project_handoffs/` nor `.claude/worktrees/` nor `D:/tksCAS-archive/` is searched by
 `_candidate_trace_paths`. Additionally, every fixture is named for its content
 (`tks_definition_anchor_report.json`), not for a `trace_id`.
@@ -482,9 +527,13 @@ Required tests (these are the honesty gates, not optional polish):
 4. the emitted `provenance.model_checkpoint_id` is `EleutherAI/pythia-160m` and a dedicated caveat
    carries revision `50f5173d932e8e61f858120bcb800b97af589f46`;
 5. the emitted `schema_version` of the source fixture appears in `caveats`;
-6. if a §1.1 Stage-7 fixture is in scope, the caveats record that it was materialised from branch
-   `experiment/cas-probe-pythia` and is not in this branch's working tree, and that its raw
-   activations NPZ is `unavailable` so no re-hash was performed for it.
+6. if a §1.1 Stage-7 fixture is in scope, the caveats record (a) that the report was materialised from
+   branch `experiment/cas-probe-pythia` and is not in this branch's working tree, and (b) the raw-NPZ
+   hash state verbatim: that the on-disk `stage7_foundation_pilot_activations_20260517.npz` computes
+   `f63a66de…` against a recorded `activations_sha256` of `d2fc03ad…` — a **MISMATCH**, so the headline
+   capture's raw bytes are not reproducible here — while the 56-record smoke capture does match its
+   tracked manifest (`04800d42…`). A shim that re-hashes only the smoke file and reports `all_match`
+   without this caveat would be reporting a match on an artifact that did not produce the result.
 
 ### 4.3 Step 2 — replay in-process, writing nothing at all (preferred)
 
@@ -508,7 +557,7 @@ Replay order — smallest first, so a shim bug is caught cheaply:
 3. `OFF_POD_VERIFICATION.json` (5,410 B) — supplies the exact model/revision row.
 4. `jacobian_lens_canary_v1_receiver_receipt.json` (7,396 B), then the 174,830 B producer receipt.
 5. **Last:** `tks_definition_anchor_report.json` with the NPZ path rewritten, so `POST /verify`
-   performs a genuine sha256 re-hash (§6.1).
+   performs a genuine sha256 re-hash (§6.1.a).
 
 ### 4.4 Step 3 — only if an HTTP/UI demonstration is required
 
@@ -524,7 +573,8 @@ writing there.
   (`api/routes/mode7.py:1439`) could never have produced them. **Disclose this deviation** —
   `SPEC.md:147` documents `trace_id` as UUID4, so a reviewer will find it.
 * HTTP replay needs a JWT Bearer token (`api/middleware/auth.py:33-37`); confirmed by
-  `tests/test_evidence_routes.py:40-46`, which asserts 401 on both endpoints without auth.
+  `tests/test_evidence_routes.py:40-47` (`test_evidence_get_requires_auth` `:40-42`,
+  `test_evidence_verify_requires_auth` `:45-47`), which asserts 401 on both endpoints without auth.
 
 ### 4.5 Step 4 — where output goes
 
@@ -580,6 +630,13 @@ baselines; it would not prove generation control or solve the black-box problem"
 intervention on the representation/readout, not a causal language-generation test."* A replay does not
 re-run the probe, does not re-run the ablation, and does not add a control.
 
+**And it would not establish reproducible raw evidence for Stage-7.** Pre-registered because the
+temptation after a run is to report the one hash that matched: the Stage-7 headline capture's raw NPZ
+on this host **does not** hash to the value the reports record (§1.1, §6.1), so no `POST /verify`
+`all_match` is obtainable for the artifact behind `0.7857`. The only Stage-7 re-hash that returns a
+match is the 56-record smoke capture, which attests its own manifest and nothing about the headline.
+A replay may report that match only alongside the mismatch.
+
 **And would not establish `control_proof: present`.** Not by any route on this branch — see §2.3 and
 §8.1. This is pre-registered here so it cannot be presented as a surprise after a run.
 
@@ -591,7 +648,9 @@ presentable.
 
 ## 6. Verified facts established while writing this document
 
-### 6.1 The one independently reproduced result (`real / verified`)
+### 6.1 The three independently recomputed hashes (`real / verified`) — two match, one does not
+
+#### 6.1.a Candidate #1's raw diagnostic NPZ — `MATCH`
 
 The recovered raw diagnostic NPZ was re-hashed on this host on 2026-07-24:
 
@@ -615,6 +674,50 @@ the reason it must be disclosed as a caveat rather than performed silently.
 The NPZ's recorded shapes are `definition_shape [3, 28, 12, 768]` and `eval_shape [3080, 12, 768]`,
 with `allow_pickle: false` and status
 `LOCAL_DIAGNOSTIC_ARTIFACT_ATOMIC_WRITE_REOPEN_VERIFIED`.
+
+#### 6.1.b Stage-7 smoke activations — `MATCH`
+
+```
+file:     noetic-compass-scaffold/noetic-compass/research/cas_probe/
+          stage7_foundation_pilot_smoke_activations_20260517.npz
+bytes:    4,073,549
+recorded: 04800d4263e16ff1aa25653d58fe8db3531a9035602429ea7e658413320b4913
+           (stage7_foundation_pilot_smoke_activations_manifest_20260517.json -> output_sha256;
+            that manifest is TRACKED on this branch's HEAD)
+computed: 04800d4263e16ff1aa25653d58fe8db3531a9035602429ea7e658413320b4913
+result:   MATCH
+```
+
+Scope of what this attests: the manifest records `n_records` `56`, `device` `cpu`,
+`model_name` `EleutherAI/pythia-160m`, `model_revision` `50f5173d932e8e61f858120bcb800b97af589f46`,
+`input_sha256` `3e4a1aca9f168a190116578b0b4fdb5bab633232ba06902039b233e589121250`. It is a 56-record
+smoke capture. **No result in §1.1 was computed from it.** It is a real re-hashable Stage-7 artifact
+and nothing more.
+
+#### 6.1.c Stage-7 headline activations — `MISMATCH` (reported as found)
+
+```
+file:     noetic-compass-scaffold/noetic-compass/research/cas_probe/
+          stage7_foundation_pilot_activations_20260517.npz
+bytes:    317,617,680
+recorded: d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f
+           (identical in stage7_foundation_pilot_probe_report_20260517.json ->
+            activations_sha256, stage7_foundation_layer6_ablation_report_20260517.json ->
+            activations_sha256, and stage7_foundation_pilot_activations_manifest_20260517.json ->
+            output_sha256, whose n_records is 4368 and device is cuda)
+computed: f63a66de86366a63ea0fd786ad0dc0bef68d5634be3b5fae525d4fb667f14d53
+result:   MISMATCH
+```
+
+This is the file the §1.1 headline (`0.7857`) and the layer-6 ablation were computed from, by name.
+The bytes on this host are not those bytes. The document does not speculate as to why; it records the
+finding, and §5 pre-registers that no Stage-7 `all_match` may be reported on the strength of §6.1.b.
+Both §6.1.b and §6.1.c are `real / verified` results: the search ran and returned an answer.
+
+Correction recorded: an earlier pass of this document stated the Stage-7 NPZ was `unavailable` and that
+"the §6.1-style re-hash demonstration is **not** available for this fixture." Both halves were wrong —
+the files are present, and a re-hash was not merely available but produced a mismatch that materially
+bears on the exit clause's "independently reproducible raw evidence."
 
 ### 6.2 Gaps closed from the gathering pass
 
@@ -641,6 +744,13 @@ with blob sizes taken from `git ls-tree -r -l experiment/cas-probe-pythia`. Full
 §1.1. They are `real` as artifacts and `unavailable` in this branch's working tree — two different
 statuses, both recorded.
 
+A second correction in the same direction was found while re-checking this section: the same earlier
+pass reported the directory listing that produced the "not in the working tree" finding as containing
+four entries. It contains 14, three of them Stage-7 files (§1.1). The reports are still absent — the
+finding survives — but the listing that supported it was incomplete, and re-running it is what
+surfaced the §6.1.c hash mismatch. Recorded because an under-reported search is a defect in the same
+class as an over-claimed result.
+
 ---
 
 ## 7. Recorded gaps and verified absences
@@ -655,8 +765,9 @@ found in the paths searched, where the search itself is the record.
 | `control_proof` in the served path | ripgrep for `control_proof` under `noetic-compass-scaffold/noetic-compass/api/` → 0 hits. It exists only at `live-trace-worker/scripts/merge_stage9_40e_evidence_packet.py:464` and its test | `real` — verified structural absence: Path A cannot emit the field. (The *gate requirement* that something emit `control_proof: present` remains `open`; that is §8.1, a separate status) |
 | A cover-discovery report for Path B's `--cover-report` | `ls noetic-compass-scaffold/noetic-compass/docs/working/ \| grep -iE 'stage9\|40e\|cover'` → 3 planning `.md` files, no JSON; `ls docs/working/ \| grep -iE 'stage9\|40e\|cover'` → 8 files, none a cover-discovery report; `rglob("*cover*")` over `live-trace-worker/`, `noetic-compass-scaffold/noetic-compass/docs/`, `docs/` → source and test modules only (`discover_stage9_40e_neuron_covers.py`, `cover_library.py`, `test_cover_library.py`, `test_stage9_40e_neuron_covers.py`) plus unrelated `*coverage*` docs | `unavailable` on this branch, scoped to those paths. Consequence: Path B emits `control_proof.status = "missing"` (`merge_stage9_40e_evidence_packet.py:355-365`), never `present`, unless such a report is produced first |
 | A Pythia/TKS fixture that could populate the `cover_discovery` tier | Tier name and artifact ids read at `merge_stage9_40e_evidence_packet.py:426-431` (`cover_discovery`, `stage9_40e_cover_discovery_report`); compared against the §1 and §1.1 census | `real` — verified mismatch. No item-8 fixture is a cover-discovery report; the tier is the Stage-9 40E / GPT-NeoX-20B family |
-| Stage-7 Foundation-28 pilot + layer-6 ablation reports | Present on branch `experiment/cas-probe-pythia` (§1.1); absent from this branch's working tree (`ls noetic-compass-scaffold/noetic-compass/research/cas_probe/`) | `real` as artifacts (read via `git show`), `unavailable` in this working tree. **Correction to an earlier pass that treated them as unavailable outright** |
-| Stage-7 raw activations NPZ `stage7_foundation_pilot_activations_20260517.npz` | `git ls-tree -r experiment/cas-probe-pythia -- .../research/cas_probe/` → not tracked; not in this working tree | `unavailable`. Only its `sha256` (`d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f`) is recorded, so no §6.1-style re-hash is possible for this fixture |
+| Stage-7 Foundation-28 pilot + layer-6 ablation reports | Present on branch `experiment/cas-probe-pythia` (§1.1); absent from this branch's working tree — `ls noetic-compass-scaffold/noetic-compass/research/cas_probe/` re-run 2026-07-24 returns 14 entries, none of them a Stage-7 report JSON (full listing at §1.1) | `real` as artifacts (read via `git show`), `unavailable` in this working tree. **Correction to an earlier pass that treated them as unavailable outright.** A second correction: the same earlier pass reported this listing as four entries; it is 14, three of them Stage-7 raw files (§6.3) |
+| Stage-7 raw activations NPZ `stage7_foundation_pilot_activations_20260517.npz` | `git ls-tree -r experiment/cas-probe-pythia -- .../research/cas_probe/` → not tracked on either branch; `git check-ignore -v` → ignored here by `.gitignore:26`. But `ls` of the directory shows a file of that name **present on disk** at `317,617,680` B, and it was re-hashed (§6.1.c) | `real` — verified **hash mismatch**, not `unavailable`. Computed `f63a66de…` vs recorded `d2fc03ad…`. The headline capture's raw bytes are therefore not reproducible on this host, which bears directly on the exit clause's "independently reproducible raw evidence." **Correction to an earlier pass that recorded this row as `unavailable` and concluded no re-hash was possible** |
+| Stage-7 smoke activations NPZ `stage7_foundation_pilot_smoke_activations_20260517.npz` | Same directory `ls`; manifest `stage7_foundation_pilot_smoke_activations_manifest_20260517.json` confirmed TRACKED on this branch's HEAD via `git ls-files --error-unmatch` | `real` — verified **hash match** (`04800d42…`, §6.1.b). Not a gap. Recorded here because it is the only Stage-7 artifact on this branch that re-hashes cleanly, and because it attests a 56-record smoke capture, **not** the 4,368-record capture behind the `0.7857` headline |
 | Path B's default input | `ls noetic-compass-scaffold/noetic-compass/docs/working/gpt_neox_20b_stage9_original_40e_probe_eval_report_20260527.json` → no such file. Same for the default output packet | `unavailable` on `codex/cascompass-legal-live-source`. The script fails closed at `:75`, which is correct behaviour |
 | WORM / customer-API Evidence Packet writer | `docs/working/cas_harness_production_todo.md:17050` describes customer-API and hosted live-worker Evidence Packets carrying `instruction_integrity`, attributed to branch `codex/cas-harness-public-beta-candidate`. ripgrep for `worm\|WORM\|object_lock\|anchor` under `api/` returned only `visual_grounding.py`, `mode7.py`, `notation/inversion.py`, `notation/compiler.py` — no evidence-packet writer | `unavailable` on this branch. **If the roadmap means that path by "the current live Evidence Packet path," this assessment targets the wrong code** — see §8.1 |
 | Saved Pythia run JSONs for Stage 27F/G sparse neuron-cover or Stage 27P eraser steering | `ls docs/working/ \| grep -iE 'stage27\|neuron_cover\|eraser\|sparse_cover\|27f\|27g\|27p'` → 0; `ls docs/working/*.json` → 32 files, none matching; `ls noetic-compass-scaffold/noetic-compass/docs/working/*.json \| grep -iE 'stage9\|40e\|stage27\|cover\|eraser\|pythia\|probe'` → 0 | `unavailable` **in this branch's working tree**, in the searched locations. Not a claim about other branches — the Stage-7 family (§1.1) is a worked example of a saved Pythia fixture that this class of working-tree search does not reach. `git branch --list` shows the repo carries a large branch set; other saved Pythia fixtures may be reachable the same way |
@@ -749,9 +860,14 @@ a proof claim.
 first — a read-only fixture→packet shim — and, before that, an owner decision that is now sharper than
 "which path": whether item 8 is bound by the exit clause's `control_proof: present` at all.**
 
-This verdict is re-derived after correcting the `control_proof` premise and after adding the Stage-7
-fixture family that an earlier pass missed. Neither correction rescues item 8; the second makes the
-engineering finding stronger, not weaker.
+This verdict is re-derived after correcting the `control_proof` premise, after adding the Stage-7
+fixture family that an earlier pass missed, and after correcting two further errors found in this
+revision: the working-tree listing behind the Stage-7 "not present" finding (§1.1, §6.3) and the
+Stage-7 raw-NPZ status, which was recorded as `unavailable` and is in fact a verified hash mismatch
+plus a verified hash match on a smaller capture (§6.1.b, §6.1.c, §7). None of the four corrections
+rescues item 8. The second strengthens the engineering finding; the fourth adds a new obstacle the
+earlier text did not know about, since the strongest fixture family now also has the weakest raw-
+evidence reproducibility.
 
 Plainly:
 
@@ -770,9 +886,12 @@ Plainly:
    `experiment/cas-probe-pythia` — hidden readout `0.7857` vs its own **character-level** surface
    control `0.4966`, McNemar `p = 2.66e-95`, plus 30 matched random-complement controls at one-sided
    `p = 0.0323` against pre-registered `decision_gates`. Item 8 says replay *the strongest* fixtures.
-   Doing that honestly means materialising artifacts out of another branch, and it means the shim must
-   carry `reserved_interpretation` — the only scope limit those two artifacts have — because they
-   carry no `licensing_status` or `claim_eligible` field at all.
+   Doing that honestly means materialising both report JSONs out of another branch, and it means the
+   shim must carry `reserved_interpretation` — the only scope limit those two artifacts have — because
+   they carry no `licensing_status` or `claim_eligible` field at all. It also means carrying §6.1.c:
+   the raw capture behind `0.7857` is on disk under its recorded name but hashes to `f63a66de…`, not
+   the recorded `d2fc03ad…`. The strongest fixture family is the one whose raw evidence is **least**
+   reproducible here, and the shim must say so rather than re-hash the smoke file and report a match.
 4. **The replay itself, once the shim exists, is genuinely non-destructive** and can be executed with
    zero disk writes via the mechanism already proven at
    `tests/test_evidence_routes.py:171-259`. The one write hazard in the whole item is Path B's
@@ -836,7 +955,12 @@ Read via `git show experiment/cas-probe-pythia:<path>`; blob sizes via
 - `noetic-compass-scaffold/noetic-compass/research/cas_probe/stage7_foundation_pilot_manifest_20260517.json` (1,675 B)
 - `noetic-compass-scaffold/noetic-compass/research/cas_probe/stage7_foundation_pilot_validation_20260517.json` (1,195 B)
 - `noetic-compass-scaffold/noetic-compass/research/cas_probe/stage7_foundation_pilot_20260517.jsonl` (9,021,812 B — listed in the tree; contents not read)
-- `noetic-compass-scaffold/noetic-compass/research/cas_probe/stage7_foundation_pilot_activations_20260517.npz` — **not tracked on that branch and not on disk here.** `unavailable`; only its recorded sha256 is known
+- `noetic-compass-scaffold/noetic-compass/research/cas_probe/stage7_foundation_pilot_activations_20260517.npz` — **not tracked on either branch, but present on disk here** (git-ignored via `noetic-compass-scaffold/noetic-compass/.gitignore:26`). Re-hashed on this host: `f63a66de…` vs recorded `d2fc03ad…` — **MISMATCH** (§6.1.c)
+
+**Stage-7 material present in this branch's working tree** (found by re-running the directory listing; see §1.1 and §6.3)
+- `C:/Users/wakil/OneDrive/Desktop/tksCAS/noetic-compass-scaffold/noetic-compass/research/cas_probe/stage7_foundation_pilot_smoke_activations_manifest_20260517.json` (tracked on HEAD; read for §6.1.b)
+- `C:/Users/wakil/OneDrive/Desktop/tksCAS/noetic-compass-scaffold/noetic-compass/research/cas_probe/stage7_foundation_pilot_smoke_activations_20260517.npz` (untracked + git-ignored; re-hashed, **MATCH**, §6.1.b)
+- `C:/Users/wakil/OneDrive/Desktop/tksCAS/noetic-compass-scaffold/noetic-compass/research/cas_probe/stage7_foundation_pilot_activations_20260517.npz` (untracked + git-ignored; re-hashed, **MISMATCH**, §6.1.c)
 
 **Candidate fixtures**
 - `C:/Users/wakil/OneDrive/Desktop/tksCAS/project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/02_RESEARCH_EVIDENCE/full_recovery/artifacts/full/tks_definition_anchor_report.json`

@@ -260,18 +260,20 @@ Claim state: `open`. Recorded as **P0** at `docs/working/cas_harness_production_
 
 ### C.2 RT-02's own statement of what the candidate registry does *not* cover
 
-Quoted from `:110-113`, the candidate registry is "necessary, but incomplete":
+Quoted from `:111-114` (the framing clause "The candidate registry in `846ee041…` is necessary, but incomplete:" is at `:109`; `:110` is blank), the candidate registry is "necessary, but incomplete":
 
 - "normal Evidence Packet reads and new-anchor paths consult it;"
 - "anonymous Evidence Packet shares do not;"
 - "the offline Stage 9/40E report builder does not consult it;"
 - "it is a targeted recall for known fingerprints, not a general semantic re-verification of every legacy `ACCEPT`."
 
+**Correction of record — a second inherited-citation family, same failure mode as C.1.** An earlier revision of this report cited these bullets as `:110-113` and the fourth bullet alone as `:113`. Both were off by one: the bullets are `:111-114` and the "targeted recall" bullet is `:114`. The same off-by-one propagated to Section D row 23, G.3, and the Sources block, and is corrected in all four places in this revision. Three further red-team line numbers were re-derived rather than inherited and corrected here: RT-05's "No affected live share was proven" sentence is `:159` (not `:157`, which is the `evidence_shares.py:379-407` / `evidence_shares.py:221-241` code citation this report reuses); RT-05's **Required fix** is `:161` (not `:159`); RT-06's **Required fix** is `:170` (not `:171`, which is blank). Every red-team citation in this revision was re-read from `C:/Users/wakil/CAS-Harness-Run/noetic-compass-scaffold/noetic-compass/docs/working/CAS_HARNESS_REDTEAM_REAUDIT_20260719.md` by absolute line number. No substantive claim changed; only the line numbers were wrong.
+
 The fourth bullet is the one most easily lost. **The registry contains exactly 2 records.** No artifact was found in this pass establishing that only two legacy `ACCEPT` packets ever existed. The set of withdrawn traces is itself of unproven completeness — see Section G.
 
 ### C.3 RT-05 — HIGH: the candidate fix's own anonymous-share path bypasses it
 
-Finding at `:152-161`. Red-team's own citation: `api/services/evidence_shares.py:379-407` and `api/routes/evidence_shares.py:221-241`.
+Finding at `:152-161`. Red-team's own citation, at `:157`: `api/services/evidence_shares.py:379-407` and `api/routes/evidence_shares.py:221-241`.
 
 **Verified line-exact this pass, in the live clone:**
 
@@ -285,17 +287,17 @@ Additionally verified: at candidate commit `846ee041`, `api/services/evidence_sh
 
 The red-team's plain-English framing (`:155`): "the main records desk stamps a report 'recalled,' but the public photocopy window hands out the unstamped original."
 
-**Two facts recorded explicitly, and not softened in either direction:** no affected live share was proven, and the candidate code is not deployed. RT-05's own conclusion nevertheless stands: "The defect nevertheless means the candidate fix cannot be merged as complete."
+**Two facts recorded explicitly, and not softened in either direction — both verbatim from `:159`:** "No affected live share was proven, and the candidate code is not deployed." RT-05's own conclusion, in the same sentence at `:159`, nevertheless stands: "The defect nevertheless means the candidate fix cannot be merged as complete."
 
-**Required fix, verbatim from `:159`:** "validate the raw stored-byte hash first, then apply the withdrawal projection at share creation and retrieval. Cover withdrawn fingerprints, corrected fingerprints, unknown variants, wrapped packets, and already-created shares."
+**Required fix, verbatim from `:161`:** "validate the raw stored-byte hash first, then apply the withdrawal projection at share creation and retrieval. Cover withdrawn fingerprints, corrected fingerprints, unknown variants, wrapped packets, and already-created shares."
 
 Claim state: `open`. Recorded as **P0** jointly with RT-02 at `docs/working/cas_harness_production_todo.md:2258-2261`.
 
 ### C.4 RT-06 — a live contradiction that will fight the fix
 
-Finding at `:163-171`. `scripts/verify_evidence_anchor_deployed.py:207-226` **still requires an `ACCEPT`**, and `docs/DEPLOYMENT.md` still instructs operators to run it, while the candidate policy forces the same fragment to `FLAG`. Its tests pass "because they preserve the stale expectation."
+Finding at `:163-170` (`:171` is blank). Statement of the contradiction at `:168`: `scripts/verify_evidence_anchor_deployed.py:207-226` **still requires an `ACCEPT`**, and `docs/DEPLOYMENT.md` still instructs operators to run it, while the candidate policy forces the same fragment to `FLAG`. Its tests pass "because they preserve the stale expectation."
 
-Recorded here because it is a direct hazard to landing item 2: **tombstoning without fixing RT-06 will break documented deployment verification — creating pressure to "fix" it by relaxing the tombstone.** Required fix per `:171`: separate "WORM write/readback works" from "the scientific verdict is accepted."
+Recorded here because it is a direct hazard to landing item 2: **tombstoning without fixing RT-06 will break documented deployment verification — creating pressure to "fix" it by relaxing the tombstone.** Required fix per `:170`: separate "WORM write/readback works" from "the scientific verdict is accepted."
 
 ### C.5 The tombstone exists, and is not deployed
 
@@ -392,7 +394,7 @@ One row per packet / read / share / export / anchor path.
 | 20 | `api/routes/evidence.py:1469-1474 @846ee041` — `POST /evidence/{trace_id}/verify` (decorator `:1469`, path literal `"/{trace_id}/verify"` `:1470`, handler `async def verify_evidence_packet` `:1474`) | **NONE** | `unavailable` | `test_verify_endpoint_reports_withdrawn_status_for_withdrawn_trace` — **not named by RT-02**; identified independently as an uncovered packet-bearing read surface. **Citation corrected:** an earlier revision gave `:1458-1463`, which falls inside the `GET /{trace_id}` handler (`:1450-1451 @846ee041`) — i.e. row 1's *already-covered* surface, which would have destroyed this row's entire point. The verify endpoint is a genuinely distinct and genuinely uncovered surface; only the line numbers were wrong. |
 | 21 | `scripts/verify_evidence_anchor_deployed.py:207-226` — deployment verifier | **contradicts** the tombstone (RT-06) | **9 tests exist and encode the stale expectation** — red-team table `:359`: "Deployment-verifier tests \| 9 passed \| Tests encode stale requirement for unverified worker `ACCEPT`" | `test_deployment_verifier_requires_flag_not_accept_for_unverified_fragment` — and the stale assertion must be **removed**, not preserved. This is the one row where existing tests are a liability rather than an absence. |
 | 22 | `api/routes/export.py:24-25 @846ee041` — `GET /assessments/export` | **N/A** | N/A | **None required.** Verified: exports saved *assessments* for an authenticated API key, not Evidence Packets. Recorded so the roadmap's "export" term is answered, not silently dropped. |
-| 23 | General semantic revalidation of every legacy `ACCEPT` packet | **NONE** | `unavailable` | `test_unregistered_legacy_accept_packet_fails_closed_by_default` — a default-deny rule. RT-02 `:113`: the registry is "a targeted recall for known fingerprints, not a general semantic re-verification of every legacy `ACCEPT`." |
+| 23 | General semantic revalidation of every legacy `ACCEPT` packet | **NONE** | `unavailable` | `test_unregistered_legacy_accept_packet_fails_closed_by_default` — a default-deny rule. RT-02 `:114`: the registry is "a targeted recall for known fingerprints, not a general semantic re-verification of every legacy `ACCEPT`." |
 | 24 | Cross-path recall (all surfaces, one trace) | **NONE** | `unavailable` | `test_withdrawn_trace_is_unreachable_as_accept_across_every_surface` — parametrized over read, share, export, offline report, verify, and anchor. Red-team table `:358`: "Each subsystem passes separately; **no cross-path recall test**." |
 
 **Tally, derived by counting the rows rather than estimated.**
@@ -492,7 +494,7 @@ Every entry is `unavailable`, with what was searched. **Nothing below was filled
 
 2. **The command invocation that produced packet revision 3** (`20260528T0455Z`, the one bearing `ACCEPT`) — `unavailable`. The three-revision ordering in A.4 is inferred from retained artifacts and file timestamps, not from a recovered execution log. Searched: the packet directory listing and the cover-report timestamp.
 
-3. **Completeness of the withdrawn set** — `unavailable`. The registry holds exactly 2 records; the adjudication says "**at least** two machine packets and derivative claims were affected." **No artifact was found establishing that only two legacy `ACCEPT` packets ever existed.** RT-02 `:113` states the registry is a targeted recall, not a general revalidation. Any claim of completeness would be fabricated.
+3. **Completeness of the withdrawn set** — `unavailable`. The registry holds exactly 2 records; the adjudication says "**at least** two machine packets and derivative claims were affected." **No artifact was found establishing that only two legacy `ACCEPT` packets ever existed.** RT-02 `:114` states the registry is a targeted recall, not a general revalidation. Any claim of completeness would be fabricated.
 
 4. **Which derivative claims were affected** — `unavailable`. Row 1.2 says "derivative claims were affected" without enumerating them. No enumeration was located in `docs/working/` or `project_handoffs/`.
 
@@ -500,11 +502,13 @@ Every entry is `unavailable`, with what was searched. **Nothing below was filled
 
 6. **Any artifact changing the RT-02 / RT-05 dispositions after 2026-07-20** — `unavailable`; none found. Searched: `grep -rn` over `docs/working/` and `project_handoffs/` for withdraw / WITHDRAWN / ACCEPT / uniqueness / MTC / candidate-only / revival / anonymous-share / bypass / tombstone / packet; `git log --all` in both the tksCAS repo and the noetic-compass clone; `.claude/worktrees/` enumeration. **Both findings remain `open`.**
 
-7. **Whether any live anonymous share of a withdrawn packet was ever created** — `unavailable`. RT-05 `:157` states no affected live share was proven. Determining this requires live object-store inspection, which was not performed and is not authorized by this task.
+7. **Whether any live anonymous share of a withdrawn packet was ever created** — `unavailable`. RT-05 `:159` states no affected live share was proven. Determining this requires live object-store inspection, which was not performed and is not authorized by this task.
 
 8. **`docs/working/pythia160m_gate1/` scope correction** — the directory does **not** exist in the tksCAS repo: `ls` returns "No such file or directory" and `git ls-files | grep -c pythia160m_gate1` returns `0`. It **does** exist at `C:/Users/wakil/CAS-Harness-Run/noetic-compass-scaffold/noetic-compass/docs/working/pythia160m_gate1/`. **Any statement that this directory "does not exist" is true of the tksCAS repo only** and must carry that scope, or it reads as a stronger absence than the evidence supports.
 
 9. **Path-ambiguity hazard** — four trees hold near-identical code: `C:/Users/wakil/OneDrive/Desktop/tksCAS`, `.../.claude/worktrees/integration/…`, `C:/Users/wakil/CAS-Harness-Run/…`, and `D:/tksCAS-archive/`. Path prefixes differ **within a single commit**: at `846ee041` the registry module is scaffold-prefixed (`noetic-compass-scaffold/noetic-compass/api/services/…`) while the adjudication doc is not (`docs/working/CAS_HARNESS_AUDIT_REMEDIATION_20260719.md`). This cost a failed lookup during this pass. Every citation in this report carries its absolute root or its exact in-commit path for that reason.
+
+   **Companion hazard — inherited line numbers.** Distinct from path ambiguity, and the one that actually produced errors in this report: line numbers copied from an upstream document rather than re-derived from the file. Two families were found and corrected — `cas_harness_audit.py:207` inherited from the red-team's `#L207` permalink (C.1), and four red-team line numbers inherited or mis-transcribed across C.2, C.3, C.4, Section D row 23, G.3, G.7 and the Sources block (correction of record in C.2). Section D row 20's `evidence.py` verify-endpoint range was a third, independent transcription error. **Rule adopted for this revision: a line number is quotable only if it was read from the file in this pass.** Every citation surviving into this revision meets that rule.
 
 ---
 
@@ -544,7 +548,7 @@ Every file consulted in producing this report. Absolute roots given; `R1`/`R2`/`
 - `R2/api/services/cas_harness_evidence_withdrawals.py` — **verified absent**
 
 **Red-team re-audit (`R2`)**
-- `R2/docs/working/CAS_HARNESS_REDTEAM_REAUDIT_20260719.md` — `:68`, `:96-116` (RT-02, incl. `:103` the `#L207` permalink whose off-by-2 this revision corrects, `:107` the independent WORM-revival reading, `:110-113` the registry's own coverage limits), `:152-161` (RT-05, incl. `:155`, `:157`, `:159`), `:163-171` (RT-06), `:354-360` (verification table: `:356` 121 passed, `:357` 19 passed, `:358` 18 passed / no cross-path recall, `:359` 9 passed / stale `ACCEPT` expectation)
+- `R2/docs/working/CAS_HARNESS_REDTEAM_REAUDIT_20260719.md` — `:68`, `:96-116` (RT-02, incl. `:103` the `#L207` permalink whose off-by-2 this revision corrects, `:107` the independent WORM-revival reading, `:109` the "necessary, but incomplete" framing clause, `:111-114` the registry's own coverage limits — **corrected this revision from `:110-113`**), `:152-161` (RT-05, incl. `:155` the plain-English framing, `:157` the `evidence_shares` code citation, `:159` "No affected live share was proven … cannot be merged as complete", `:161` the required fix — **`:159`/`:161` corrected this revision from `:157`/`:159`**), `:163-170` (RT-06, incl. `:168` the contradiction and `:170` the required fix — **corrected this revision from `:171`**; `:171` is blank), `:354-360` (verification table: `:356` 121 passed, `:357` 19 passed, `:358` 18 passed / no cross-path recall, `:359` 9 passed / stale `ACCEPT` expectation)
 
 **Candidate remediation commit `846ee041d32944d606d8555cc015f701ec5b94c9` (via `R3`)**
 - `docs/working/CAS_HARNESS_AUDIT_REMEDIATION_20260719.md` — `:25-26` (row 1.2)

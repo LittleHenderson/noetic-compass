@@ -9,26 +9,39 @@
   A124 as separate versions, World-to-CAS-Domain and World-to-CAS-Register as separate mappings, and
   native F28 versus CAS Drive-by-Register. Mark Acquisition and algebra profiles `unavailable` until
   explicitly reconciled."*
+- **Readiness verdict**: **`BLOCKED` — do not sign the current file.** This is the document's only verdict,
+  and it is stated in exactly this form in §1 and in the §10 heading; no other verdict is asserted anywhere
+  here. Two other tokens appear in §10 and are **counterfactual, not findings**:
+  `READY_FOR_SIGNATURE_PENDING_RECEIPT` (what the verdict *would* be if the missing signature representation
+  were the only finding — it is not) and `READY_FOR_SIGNATURE` (what a *re-audit of the revised file* might
+  reach after §9 is applied — this audit does not pre-approve it). `BLOCKED` is a statement about the
+  candidate file as written; §10 records that it was re-derived on the corrected evidence and could have
+  moved, and that blockers 2-6 are what hold it.
 - **What this document does close**: nothing in roadmap item 3. It closes only the *readiness question* —
-  "is the candidate registry safe to sign as written?" — with the answer **no**, plus a named, costed,
-  zero-compute change set (§9) and an exact signature receipt to issue afterwards (§9(a)).
+  "is the candidate registry safe to sign as written?" — with the answer **no**, plus a named, costed
+  change set (§9; (b)-(i) zero-compute, (a) carrying one small code change) and the exact signature receipt
+  to issue afterwards, written against a receipt schema the repository already has (§9(a)).
 - **What it does NOT close**: item 3's primary clause is *"Obtain owner approval."* No owner approval was
   obtained and this audit recommends against granting it on the current file. Item 3 remains **OPEN**.
 - **Date**: 2026-07-24
 - **Subject artifact**: `docs/working/TKS_CAS_SEMANTIC_SOURCE_REGISTRY_CANDIDATE_20260720.json`
   (sha256 `A68D1B431C98F51DCD61007FBD75595659486B0092292CD92A49392D58AEEF54`, 275 lines, status field
   at `:4` = `CANDIDATE_RECONCILIATION_MANIFEST_NOT_OWNER_SIGNED`)
-- **Compute**: none. This is a document-and-hash audit. No model was loaded, no probe was trained,
-  no A/B arm was run.
+- **Compute**: none in the ML sense. This is a document-and-hash audit: no model was loaded, no probe was
+  trained, no A/B arm was run. Two millisecond-scale Python executions are recorded and labelled where they
+  appear — `PcbaAuthorityReceipt.model_validate` on a CAS Harness `feature` value (raised `ValidationError`)
+  and `PcbaAuthorityReceipt.verify` on the four signed receipts (4/4 `True`), both in §9(a).
 
 ### Claim-state line
 
 This document contains **real** results (every hash, count, grep, and line citation below was
 recomputed or re-read by me during this audit), **accepted-as-recorded** items (explicitly labelled,
-two of them), **unavailable** items (four, each with the exact search that failed), and **open**
+three of them), **unavailable** items (four, each with the exact search that failed), and **open**
 items (six of the eight roadmap bindings). Nothing here is **simulated**. Nothing here changes,
 relaxes, or restates the claim status of any existing result. This audit **licenses nothing**; it
-only reports whether a signature would be safe.
+only reports whether a signature would be safe. The §11 ledger is the authoritative count; where an
+earlier draft's claim state was wrong in *either* direction, the correction is recorded inline at the
+point of use rather than silently applied — see §5.1, §6, §9(a), and §10.
 
 ---
 
@@ -41,11 +54,19 @@ Of the eight bindings roadmap item 3 names, **one** is fully satisfied, **one** 
 would mark item 3 satisfied while six of its named bindings stayed unbound.
 
 Separately, the registry itself carries no signature field. This is **not** a missing-mechanism problem.
-A working owner-signature receipt mechanism already exists in this repository and is described in §9(a):
-24 receipt templates under `docs/working/pcba_authority_receipts_needed_20260617/`, a finalizer
-(`cas-forex/scripts/finalize_pcba_authority_receipt.py`) and a verifier
-(`cas-forex/scripts/verify_pcba_semantics_receipt.py`) that hash-binds artifacts and exits nonzero while
-unsigned. It has simply never been pointed at this registry. Cost to fix: one receipt file, no new schema.
+A working owner-signature receipt mechanism already exists in this repository and is specified for reuse
+in §9(a): a 10-field signed-receipt schema (`cas-forex/cas_forex/pcba_authority.py:30-77`,
+`class PcbaAuthorityReceipt`) that refuses `approved: true` without `operator_id` / `signed_reason` /
+`signature` (`:44-53`), hashes itself over every field except `receipt_hash` (`:55-58`), and verifies by
+re-SHA-256-ing every file named in `artifact_refs` against `artifact_hashes` (`:64-77`); 24 receipt files
+on that schema under `docs/working/pcba_authority_receipts_needed_20260617/`, of which **four are already
+signed, finalized, and still verify today** (I ran `verify()` on all four: 4/4 `True`); and a finalizer
+`cas-forex/scripts/finalize_pcba_authority_receipt.py` that computes `receipt_hash` and then refuses to
+write unless `verify()` passes. It has simply never been pointed at this registry. Cost to fix: one
+receipt file, plus one enum member (§9(a) records the exact constraint and its reproduction). No new
+schema. One caution carried forward from §9(a): those four worked examples were signed by an *agent*
+(`operator_id` `codex_gpt5_local_reviewer_20260617`), not by the owner, so they prove the mechanism runs —
+not that it has ever carried owner approval.
 
 The recommendation is **not** "abandon this registry." The registry's byte-level substrate is sound
 and independently verified (Section 2). The recommendation is: apply the change set in Section 9,
@@ -167,9 +188,17 @@ The same `A/B/C/D` letter is used as a Domain *and* mapped to a Register:
 > the 20B fixture actually names — `git show be9b4a31:noetic-compass-scaffold/noetic-compass/research/cas_probe/build_stage9_elements_fixture.py`
 > at `:28` `_DOMAINS = ("A", "B", "C", "D")`, `:29` `_DOMAIN_TO_REGISTER = {"A": "T", "B": "A", "C": "f", "D": "E"}`,
 > `:235` `register = _DOMAIN_TO_REGISTER[domain]`, `:257-260` emitting `element_domain` / `element_register`
-> (all four lines read by me this session). The two copies differ by a one-line offset (`_DATE` is at LSA
-> `:27` and at cas_probe `:28`). Both write `stage9_elements_{mode}_20260517.jsonl` (LSA `:282`), which is a
-> *different artifact* from the 20260527 scenarios export discussed in §5.1.
+> (all four lines read by me this session). The two copies differ by a one-line offset **in the header
+> region only, and the cas_probe copy is the earlier-numbered one**: `_DATE = "20260517"` is at cas_probe
+> `:26` and at LSA `:27`; `_DOMAINS` at cas_probe `:28` and LSA `:29`; `_DOMAIN_TO_REGISTER` at cas_probe
+> `:29` and LSA `:30`. The two files **realign** further down — `register = _DOMAIN_TO_REGISTER[domain]` is at
+> `:235` in *both*, and the output-path block is at `:282-283` in *both*. (Re-run:
+> `git show be9b4a31:noetic-compass-scaffold/noetic-compass/research/cas_probe/build_stage9_elements_fixture.py | grep -n '_DATE\|_DOMAINS\|_DOMAIN_TO_REGISTER'`
+> against `grep -n` on the LSA path; both executed this session, outputs read.) An earlier revision of this
+> paragraph stated the offset as "`_DATE` at LSA `:27` and at cas_probe `:28`", which was wrong on the
+> cas_probe number and inverted the direction; corrected here rather than silently. Both files write
+> `stage9_elements_{mode}_20260517.jsonl` (cas_probe `:282`, LSA `:282`), which is a *different artifact*
+> from the 20260527 scenarios export discussed in §5.1.
 
 **Instance B — `docs/working/mtc_f28_goemotions_20260615/`.**
 `WORLD_TO_REGISTER = {"A": ("T","Transcendent"), "B": ("A","Analytical"), "C": ("f","Affective"), "D": ("E","Embodied")}`
@@ -380,7 +409,11 @@ audit.
 
 ## 9. Defects to fix BEFORE signature
 
-All zero-compute. Ordered by blocking severity.
+Ordered by blocking severity. **(b) through (i) are zero-compute** — they are edits to JSON and Markdown
+with no model, probe, or A/B run. **(a) is zero-compute for the registry but contains one code change**:
+option (i) below adds a single enum member and requires re-running the CAS Forex test suite. That is the
+only item in this change set that touches executable code, and it is called out rather than hidden inside
+a "zero-compute" blanket.
 
 **(a) Issue an owner-signature receipt using the receipt mechanism the repository already has.**
 Do **not** invent a new schema. An earlier draft of this document proposed a fresh ad-hoc `owner_signature`
@@ -390,20 +423,72 @@ object on the theory that no signing mechanism existed. That was false. Correcte
 
 | Component | Location | State I observed |
 |---|---|---|
-| Receipt templates | `docs/working/pcba_authority_receipts_needed_20260617/` | **24 files** (`ls` count), all unsigned |
-| Receipt schema | e.g. `governance_regulatory_proof_claim__legal_review_signed.json` | 11 fields: `evidence_key`, `feature`, `approved`, `operator_id`, `signed_reason`, `signature`, `artifact_refs`, `artifact_hashes`, `created_at`, `receipt_hash` |
-| Unsigned template values | same file, read in full | `approved: false`, `operator_id: ""`, `signed_reason: ""`, `signature: ""`, `artifact_refs: []`, `artifact_hashes: {}`, `receipt_hash: null`, `created_at: "2026-06-17T23:21:31.754478+00:00"` |
-| Finalizer | `cas-forex/scripts/finalize_pcba_authority_receipt.py` | present; per `docs/working/cas_harness_production_todo.md:16590`, computes `receipt_hash` *"only after a reviewer has set `approved=true`, `operator_id`, `signed_reason`, and `signature`"* |
-| Verifier | `cas-forex/scripts/verify_pcba_semantics_receipt.py` | present; per todo `:16590`, verifies *"against artifact SHA-256 hashes"* and *"intentionally exits nonzero on the current unsigned template and records `verified=false`"*; corroborated at todo `:16588` |
+| Receipt files | `docs/working/pcba_authority_receipts_needed_20260617/` | **24 files** (`ls` count), all on one identical 10-key schema. **20 are unsigned templates; 4 are signed and finalized** — see the worked-examples row below. An earlier pass of this audit said "all unsigned"; that undercounted the evidence and is corrected here |
+| **Worked signed examples** (the mechanism has been exercised end to end) | `compiler_enforced_safety_claim__claim_review_signed.json`, `compiler_enforced_safety_claim__red_team_report_pass.json`, `prompt_injection_prevention_claim__hidden_text_control_pass.json`, `prompt_injection_prevention_claim__red_team_prompt_injection_pass.json` | all four carry `approved: true`, non-empty `operator_id` / `signed_reason` / `signature`, populated `artifact_refs` + `artifact_hashes`, and a real `receipt_hash`. I loaded each through `PcbaAuthorityReceipt.model_validate` and called `verify(artifact_root=<repo root>)`: **4 of 4 returned `True`**, and `receipt_hash == compute_hash()` for all 4. So the schema, the self-hash, and the artifact SHA-256 binding are not merely declared — they hold today against files still on disk |
+| Receipt schema | `cas-forex/cas_forex/pcba_authority.py:30-42`, `class PcbaAuthorityReceipt` | **10 fields**, in declaration order: `evidence_key`, `feature`, `approved`, `operator_id`, `signed_reason`, `signature`, `artifact_refs`, `artifact_hashes`, `created_at`, `receipt_hash` |
+| Unsigned template values | `governance_regulatory_proof_claim__legal_review_signed.json`, parsed in full (10 keys) | `approved: false`, `operator_id: ""`, `signed_reason: ""`, `signature: ""`, `artifact_refs: []`, `artifact_hashes: {}`, `receipt_hash: null`, `created_at: "2026-06-17T23:21:31.754478+00:00"` — this is the shape the registry receipt starts from |
+| Approval interlock | `pcba_authority.py:44-53` (`_validate_receipt`) | a receipt with `approved: true` and any of `operator_id` / `signed_reason` / `signature` empty raises at parse time. Fail-closed, in the schema itself, not in a caller |
+| Self-hash | `pcba_authority.py:55-58` (`compute_hash`) | `receipt_hash` = sha256 over the canonical JSON (`sort_keys=True`, `separators=(",",":")`) of every field **except** `receipt_hash` (`model_dump(exclude={"receipt_hash"})`, `:56`). The value is *written* by `finalize()` at `:60-62`, which is a two-line assignment around this same `compute_hash` call — cite `:55-58` for the hash definition, `:60-62` for the write. §1 uses the same `:55-58` span for the same property |
+| Artifact hash-binding | `pcba_authority.py:64-77` (`verify` / `_artifact_hashes_verified`) | `verify()` returns false unless `approved` **and** `receipt_hash` matches recomputation **and** every entry in `artifact_refs` has a hash in `artifact_hashes` that equals the file's current sha256 |
+| Finalizer | `cas-forex/scripts/finalize_pcba_authority_receipt.py` | present, 53 lines, read in full. Generic over `--receipt` / `--out` / `--artifact-root` (default artifact root = repo root, `parents[2]`). Calls `finalize()` then `verify()`, and **raises rather than writing** if verification fails. Matches the todo `:16590` description *"computes `receipt_hash` only after a reviewer has set `approved=true`, `operator_id`, `signed_reason`, and `signature`"* |
+| Verifier | `cas-forex/scripts/verify_pcba_semantics_receipt.py` | present, read in full. **Not a generic verifier** — see the correction below |
 
-Claim state for the mechanism's existence: **real** (files listed and read by me). Claim state for the
-finalizer/verifier *behaviour*: **accepted-as-recorded** — I read the two todo entries that describe them
-and confirmed both script files exist; I did not execute either script this session (this is a
-zero-compute audit).
+**Correction to the gathering pass on the verifier.** `verify_pcba_semantics_receipt.py` loads a receipt
+through the generic `load_authority_receipts(..., artifact_root=...)` path, but everything after that is
+CAS-Forex-specific: it looks up the `production_pcba_component_syntax` check (`:30-35`) and returns exit 0
+only if that PCBA gate is `LICENSED` and `pcba_semantics_review_signed` is present (`:63-66`, `:120`). Run
+against a CAS Harness registry receipt it would exit nonzero *regardless of whether the registry receipt
+itself verified*. The reusable verification primitive is `PcbaAuthorityReceipt.verify(artifact_root=...)`
+(`pcba_authority.py:64`), not this script. The todo `:16590` sentence *"intentionally exits nonzero on the
+current unsigned template"* is accurate for the PCBA receipt it was written for; it does not generalize.
+
+**Blocking constraint on reuse, reproduced this session.** `feature` is not a free string — it is typed
+`PcbaProductionFeature` (`cas-forex/cas_forex/schemas/pcba.py:70-79`), a 9-member enum:
+`production_pcba_component_syntax`, `live_trading_permission_path`, `compiler_enforced_safety_claim`,
+`prompt_injection_prevention_claim`, `governance_regulatory_proof_claim`, `broker_accept_creation`,
+`reference_board_safety_claim`, `memory_board_cognitive_memory_claim`,
+`power_board_burnout_prevention_claim`. None of them is a CAS Harness semantic-authority gate. I ran
+`PcbaAuthorityReceipt.model_validate({... "feature": "tks_cas_semantic_source_registry" ...})` and it
+raised `ValidationError`: *"Input should be 'production_pcba_component_syntax', … or
+'power_board_burnout_prevention_claim' [type=enum, input_value='tks_cas_semantic_source_registry']"*.
+Claim state: **real** (executed, output read). So the receipt file below is issuable in this schema only
+after **one** of:
+
+- **(i) one enum member** — add `TKS_CAS_SEMANTIC_SOURCE_REGISTRY = "tks_cas_semantic_source_registry"`
+  to `PcbaProductionFeature`. Smallest change, but **not free**: the enum keys two module-level dicts,
+  `REQUIRED_EVIDENCE` (`cas-forex/cas_forex/pcba_readiness.py:105`) and `DEFAULT_STATUS` (`:170`), and
+  `build_pcba_licensing_report` indexes both directly (`:239`, `:245`), so a member added without
+  matching dict entries raises `KeyError` on every PCBA report. It must be added with entries that grant
+  the new member no PCBA licensing effect, and the CAS Forex suite must be re-run. This is a
+  **code change, not zero-compute**, and it is the only non-zero-compute item in §9.
+- **(ii) a CAS-Harness-local receipt model** that reuses the same 10 field names and the same three
+  behaviours (approval interlock, self-hash, artifact hash-binding) with `feature` as a free string.
+  Zero-compute for the registry, but it duplicates the 48 lines at `pcba_authority.py:30-77`.
+
+Recommendation: **(i)**, because the point of reuse is the tested hashing/interlock code, and (ii)
+recreates the divergence risk the registry exists to prevent. Either way the *file content* below is
+unchanged.
+
+**Who signed the four worked examples — a caution that belongs in a document about *owner* approval.**
+All four carry `operator_id` `codex_gpt5_local_reviewer_20260617` and a `signature` of the form
+*"codex-gpt5-local-attestation: …"*. Those are **agent self-attestations, not owner signatures.** The
+mechanism therefore has four demonstrations that it *works* and zero demonstrations that it has ever
+carried an owner's approval. Two consequences for §9(a): the registry receipt's `operator_id` and
+`signature` must identify the human owner, and no future reader should point at the existing four and
+infer that agent attestation is an accepted substitute for the signature roadmap item 3 asks for. This
+audit does not treat those four as precedent for owner approval; it treats them only as proof that the
+hashing, interlock, and artifact binding execute correctly. Claim state: **real** (fields read).
+
+Claim state for the mechanism's existence and shape: **real** (files listed, parsed, and read by me;
+enum rejection executed). Claim state for the schema's *runtime behaviour on a signed receipt*: **real**,
+upgraded in this revision — I executed `PcbaAuthorityReceipt.verify(artifact_root=…)` against all four
+signed receipts and observed 4/4 `True` with 4/4 `receipt_hash` recomputation matches. Claim state for the
+two **CLI scripts'** end-to-end behaviour: **accepted-as-recorded** — I read both scripts in full and the
+todo entries at `:16588` and `:16590`, but did not invoke either from the command line this session.
 
 *The exact receipt to issue, once §9(b)-(i) are applied.* Write
 `docs/working/pcba_authority_receipts_needed_20260617/tks_cas_semantic_source_registry__owner_semantic_authority_signed.json`
-in that same 11-field schema, populated as follows:
+in that same 10-field schema, populated as follows:
 
 ```json
 {
@@ -430,15 +515,53 @@ in that same 11-field schema, populated as follows:
 }
 ```
 
-Then run the finalizer to populate `receipt_hash`, and the verifier to confirm the artifact hashes still
-match. Notes that make this concrete rather than aspirational:
+*Field by field, so no design decision is left open.* These are the ten fields of the existing schema, in
+declaration order, with the exact value to write, who must supply it, and what enforces it. Every type,
+default, and enforcement citation below was read from `cas-forex/cas_forex/pcba_authority.py` this session.
+Claim state: **real**.
+
+| # | Field | Type / default (`pcba_authority.py`) | Value to write | Who supplies it | What enforces it |
+|---|---|---|---|---|---|
+| 1 | `evidence_key` | `str`, required, no default (`:33`) | `"owner_semantic_authority_signed"` | this audit proposes it; any stable string is legal | Nothing validates the value. It is the receipt's local name and should match the filename stem before `.json` |
+| 2 | `feature` | `PcbaProductionFeature` enum, required (`:34`) | `"tks_cas_semantic_source_registry"` | fixed by this audit | **Blocked today.** The enum has 9 members (`schemas/pcba.py:70-79`) and none is this one; `model_validate` raises `ValidationError` (executed this session, output quoted above). Requires §9(a)(i) first |
+| 3 | `approved` | `bool`, default `False` (`:35`) | `true` | owner | Setting `true` arms the interlock at `:44-53`. `verify()` returns `False` outright if this is `false` (`:65`) |
+| 4 | `operator_id` | `str`, default `""` (`:36`) | the **human owner's** identifier | owner | Empty with `approved: true` raises *"Approved receipt requires operator_id"* (`:47-48`). Must not be an agent id — the four existing signed receipts carry `codex_gpt5_local_reviewer_20260617` and are **not** precedent for who may sign (see the caution above) |
+| 5 | `signed_reason` | `str`, default `""` (`:37`) | one scope sentence that **enumerates which of roadmap bindings 1-8 this signature covers and which it does not** | owner | Empty raises at `:49-50`. Nothing checks the *content* — this is the single field where a careless value recreates the "item 3 appeared satisfied" hazard named in §8 |
+| 6 | `signature` | `str`, default `""` (`:38`) | owner signature string | owner | Empty raises at `:51-52`. **Stored as an opaque string; nothing in `pcba_authority.py` verifies it cryptographically.** The receipt's integrity guarantee comes from `receipt_hash` + `artifact_hashes`, not from this field |
+| 7 | `artifact_refs` | `list[str]`, default `[]` (`:39`) | the four paths in the block above (owner may add more) | this audit; owner may extend | Repo-relative paths are resolved as `artifact_root / ref`; absolute paths are used as-is (`_resolve_artifact_ref`, `:256-261`). A ref whose file is missing fails `verify()` (`:74-76`) |
+| 8 | `artifact_hashes` | `dict[str, str]`, default `{}` (`:40`) | one sha256 per entry in `artifact_refs`, **recomputed at signing time** | signing-time environment | `verify()` returns `False` if any ref has no entry here (`:70-73`) or if the file's current sha256 differs from the recorded one (`:74-76`). This is the field that binds the signature to a determinate byte sequence |
+| 9 | `created_at` | `str`, default `utc_now().isoformat()` (`:41`) | a UTC ISO-8601 timestamp — or **omit the key entirely** and let pydantic fill it | signing-time environment | Not validated, but it sits inside the hash payload, so it cannot be edited after finalization without invalidating `receipt_hash` |
+| 10 | `receipt_hash` | `Optional[str]`, default `None` (`:42`) | **`null` — do not compute it by hand** | the finalizer, not the owner | `finalize()` sets it to `compute_hash()` (`:60-62` calling `:55-58`). `finalize_receipt` clears it first (`finalize_pcba_authority_receipt.py:16`), recomputes, and **raises rather than writing** if `verify()` then fails (`:18-21`) |
+
+**Do not add fields.** The model is a plain pydantic `BaseModel` with empty `model_config`, so an extra key
+is **silently ignored, not rejected** — I passed one and it was accepted, and `model_dump()` returned
+exactly the ten names above (executed this session). Consequence: any extra key written into the JSON would
+be **dropped** when the finalizer rewrites the file, and would never enter `receipt_hash`. Anything the
+owner needs to say beyond these ten fields belongs in `signed_reason`, or in the registry-side pointer
+described in the last bullet of this subsection.
+
+Then run
+`python cas-forex/scripts/finalize_pcba_authority_receipt.py --receipt <path> --artifact-root <repo root>`
+to populate `receipt_hash`. That single command also *verifies*: `finalize_receipt` calls `verify()` and
+raises rather than writing if any `artifact_refs` hash no longer matches
+(`finalize_pcba_authority_receipt.py:14-24`). `--out` defaults to `None`, which means the receipt is
+rewritten **in place** (`:33`, `:41`); pass `--out <other path>` if an untouched copy of the
+pre-finalization file should be kept. Do **not** reach for
+`verify_pcba_semantics_receipt.py` here — per the correction above, it answers a CAS Forex PCBA question,
+not this one. Notes that make this concrete rather than aspirational:
 
 - The registry hash **must be recomputed at signing time**, not copied from this audit. The current value
   `A68D1B431C98F51DCD61007FBD75595659486B0092292CD92A49392D58AEEF54` is the hash of the *unrevised*
   candidate and will not survive change set 9(b)-(i). Do not carry it forward.
+- Every placeholder above marked `<…>` is a value only the owner or the signing-time environment can
+  supply. I am **not** inventing them: `operator_id`, `signature`, `signed_reason` and `created_at` are the
+  owner's, and the three `<sha256 … at signing time>` values are undefined until the §9(b)-(i) edits land.
+  The one hash written out in full (`5D3E8702…` for the translation key) is a value I computed this
+  session and it is correct as of today; recompute it anyway at signing time.
 - `artifact_hashes` is the field that solves the "signature binds a determinate byte sequence" problem the
   earlier draft tried to solve with a bespoke `signed_registry_sha256`. The existing schema already does
-  this, and the verifier already checks it.
+  this, and `verify()` already checks it — with the useful strictness that a ref present in
+  `artifact_refs` but *absent* from `artifact_hashes` fails closed (`pcba_authority.py:70-73`).
 - `signed_reason` is the field that carries scope. Because six of eight bindings may still be open at
   signing time (§3), `signed_reason` must **enumerate what is and is not covered** in plain words, so no
   future reader can infer coverage the owner did not grant. This is the one field where a careless value
@@ -446,8 +569,8 @@ match. Notes that make this concrete rather than aspirational:
 - **Naming caution.** The `pcba_authority_receipts_needed_20260617/` directory was built for the CAS Forex
   PCBA licensing gates, not for CAS Harness. Reusing the *schema and toolchain* is the point; the receipt
   above is a new file in that directory and must not be read as a PCBA gate. If the owner prefers, the same
-  11-field schema can be written to a CAS-Harness-local path — the finalizer and verifier take a
-  `--receipt` path argument (todo `:16588` shows the invocation form), so directory choice is free.
+  10-field schema can be written to a CAS-Harness-local path — the finalizer takes a `--receipt` path
+  argument and defaults `--artifact-root` to the repo root, so directory choice is free.
 - Also add a pointer **inside the registry** to the receipt path, so a downstream check reading only the
   registry can find its approval record. This is the one small registry-side addition still required; it is
   a path string, not a new schema.
@@ -502,14 +625,41 @@ it from the registry, so the signature's factual basis stays re-checkable after 
 were applied before re-scoring. (i) The former Blocker 1 — *"no signature mechanism exists"* — was **false
 and is withdrawn**; a working, tested, hash-binding, fail-closed receipt mechanism already exists (§9(a)).
 That removes the single most expensive blocker in the original list and downgrades the signature question
-from *design work* to *one file*. (ii) §5.1's World→Domain finding is **new and worse than what the earlier
+from *design work* to *one receipt file plus one enum member* (the enum constraint is the second-pass
+finding recorded below). (ii) §5.1's World→Domain finding is **new and worse than what the earlier
 draft alleged**: an unversioned, unhashed World-to-CAS-Domain mapping is live in all 8,320 label rows behind
 the project's strongest claim.
+
+Four further corrections were made in a second revision pass, all inside §9(a), all found by opening and
+running the receipt code rather than the prose about it. Two cut against the document, two cut in the
+registry's favour:
+
+- *Against.* `verify_pcba_semantics_receipt.py` is **not** a generic verifier and must not be run against
+  this receipt — it answers a CAS Forex PCBA licensing question and would exit nonzero regardless of
+  whether the registry receipt verified. The reusable primitive is `PcbaAuthorityReceipt.verify`.
+- *Against.* The `feature` field is a **closed 9-member enum**, so the receipt is not literally issuable
+  until one member is added. This adds a small, named, non-zero-compute step to the fix. It makes the
+  signature path slightly more expensive than "one file" — still one enum member, not a design exercise.
+- *In favour.* The schema has **10** fields, not the 11 an earlier pass counted. The list of names was
+  right; only the count was wrong.
+- *In favour, and the largest of the four.* An earlier pass called all 24 receipt files "unsigned." **Four
+  are signed and finalized**, and all four still `verify()` clean against files on disk (4/4, executed).
+  The mechanism is not merely present and plausible — it has been exercised end to end and its hash
+  binding holds today. That is a stronger statement than any earlier draft of this document made, and it
+  is recorded here rather than buried because a correction that increases the evidence is as mandatory as
+  one that decreases it. The offsetting caution, also recorded: those four were signed by an agent, not by
+  the owner.
 
 Re-scoring on the corrected evidence: the verdict is **unchanged at `BLOCKED`**, and it never rested on the
 withdrawn blocker. It rests on the binding tally in §3 — the candidate binds 1.5 of the 8 things roadmap
 `:198-203` names. Signing it would record item 3 as satisfied while six bindings stayed unbound. That is
 independently sufficient, and the §5.1 correction reinforces rather than relieves it.
+
+**Stated explicitly, because several of this revision's corrections cut in the registry's favour:** if the only
+finding against this file were the missing signature representation, the honest verdict would now be
+`READY_FOR_SIGNATURE_PENDING_RECEIPT`, not `BLOCKED` — the mechanism exists and the path is short. It is
+blockers 2 through 6, and blocker 3 in particular, that hold the verdict at `BLOCKED`. I record this so
+that a future reader can see the verdict was re-derived and could have moved, not preserved by default.
 
 Blockers, in order, as they now stand:
 
@@ -518,14 +668,23 @@ Blockers, in order, as they now stand:
    approval field: grep for `owner_signature`, `signed_by`, `signed_at`, `signed_registry_sha256`,
    `approval_scope`, `supersedes` in the registry = 0 hits each, and the only signature-adjacent string in
    the file is its own status at `:4`, `CANDIDATE_RECONCILIATION_MANIFEST_NOT_OWNER_SIGNED`. But the
-   repository *does* hold a receipt mechanism: 24 templates under
-   `docs/working/pcba_authority_receipts_needed_20260617/` on the 11-field schema
+   repository *does* hold a receipt mechanism: the 10-field `PcbaAuthorityReceipt` schema
    `{evidence_key, feature, approved, operator_id, signed_reason, signature, artifact_refs, artifact_hashes,
-   created_at, receipt_hash}`, with `cas-forex/scripts/finalize_pcba_authority_receipt.py` and
-   `cas-forex/scripts/verify_pcba_semantics_receipt.py` (todo `:16588`, `:16590`). So approval **does** have
-   a representation a downstream check could read; it has simply never been issued for this artifact.
-   Severity: **low and mechanical** — one receipt file plus a path pointer in the registry.
-   **Fix: 9(a).** Claim state: **real** (mechanism observed), **open** (never applied here).
+   created_at, receipt_hash}` at `cas-forex/cas_forex/pcba_authority.py:30-77`, with an approval interlock,
+   a self-hash, and artifact SHA-256 binding; 24 receipt files on it under
+   `docs/working/pcba_authority_receipts_needed_20260617/`, **four of them signed, finalized, and verifying
+   4/4 when I ran `verify()` this session**; and the finalizer
+   `cas-forex/scripts/finalize_pcba_authority_receipt.py` (todo `:16588`, `:16590`). So approval **does**
+   have a representation a downstream check could read, and that representation demonstrably works; it has
+   simply never been issued for this artifact. (The four worked examples are agent attestations, not owner
+   signatures — §9(a). They are evidence the mechanism runs, not precedent for who may sign.)
+   One real constraint, reproduced this session (§9(a)): the `feature` field is a 9-member
+   `PcbaProductionFeature` enum (`cas-forex/cas_forex/schemas/pcba.py:70-79`), so issuing the receipt needs
+   one enum member added, or a CAS-Harness-local model reusing the same 10 fields. That is the only
+   non-zero-compute item in the §9 change set.
+   Severity: **low and mechanical** — one receipt file, one enum member, and a path pointer in the registry.
+   **Fix: 9(a).** Claim state: **real** (mechanism observed, enum rejection executed), **open** (never
+   applied here).
 2. **`tks_to_cas_crosswalk_sha256` (registry `:245`) is unsatisfiable** — no TKS↔CAS crosswalk artifact
    exists to hash. Signing a manifest that mandates a hash for a nonexistent file either blocks every
    subsequent run or invites a downstream agent to fabricate the field. **Fix: 9(c).** Claim state:
@@ -559,15 +718,25 @@ item. The Gate 2 exit clause stands as written.
 **After the Section 9 change set is applied, the resulting file should be re-audited and would then be a
 reasonable candidate for `READY_FOR_SIGNATURE`.** This audit does not pre-approve that revision.
 
+**Final readiness verdict of this audit, stated once more so it cannot be read off the wrong token:
+`BLOCKED` — do not sign the current file.** That is the same token used in the status block and in §1, and
+it is the only verdict this document asserts. The two other tokens above are counterfactuals, not findings:
+`READY_FOR_SIGNATURE_PENDING_RECEIPT` is what the verdict *would* be if the missing signature representation
+were the only finding (it is not — blockers 2-6 stand), and `READY_FOR_SIGNATURE` is what a *future re-audit
+of a revised file* might reach (that file does not exist yet). Nothing here licenses a signature, and
+roadmap item 3 remains **OPEN** because its primary clause — *"Obtain owner approval"* — is unmet.
+
 ---
 
 ## 11. Claim-state ledger
 
 | Claim state | Items |
 |---|---|
-| **real** (recomputed by me, 2026-07-24) | 20/20 source-hash MATCH; 20-of-40 and 8-of-28 definition-string diffs; `canon_subfoundations_28_defs.json` absent from canon_index 1.2.0; registry sha256 `A68D1B43…`; translation-key sha256 `5D3E8702…`; all grep counts (`unavailable`=0, `world_to_domain`=0, `world_to_register`=0, `owner_signature`=0, four proposed names =0, translation key in registry =0); mod-10 at `operators.rs:100,103`; two distinct 22-Acquisition vocabularies; native codes `A1-D10` / `1a-7d`; normalized `A0-D9`; 8 plan files × 2,800 rows; Stage-9 builder lines `:5,29,30,55,257,259,306,307` |
-| **accepted-as-recorded** (not re-verified by me) | `main_md_not_located` (registry `:222-227`, LICENSING §5.7 at `:282`) — I did not re-search for `main.md`; the 95.625% / macro-F1 95.617% GPT-NeoX-20B row and its `FLAG_FOR_HUMAN_REVIEW` status at LICENSING `:388` |
-| **unavailable** | signature mechanism; TKS↔CAS crosswalk artifact; World-to-Domain mapping object; field-level symbol rows in the registry |
+| **real** — registry and canon facts (recomputed by me, 2026-07-24) | 20/20 source-hash MATCH; 20-of-40 and 8-of-28 definition-string diffs; `canon_subfoundations_28_defs.json` absent from canon_index 1.2.0; registry sha256 `A68D1B43…`; translation-key sha256 `5D3E8702…`; all grep counts (`unavailable`=0, `world_to_domain`=0, `world_to_register`=0, `owner_signature`=0, four proposed names =0, translation key in registry =0); mod-10 at `operators.rs:100,103`; two distinct 22-Acquisition vocabularies; native codes `A1-D10` / `1a-7d`; normalized `A0-D9`; 8 plan files × 2,800 rows |
+| **real** — source-line contents, **attribution stated separately** | The eight lines `:5, 29, 30, 55, 257, 259, 306, 307` of `docs/working/lsa_artifacts_20260530/build_stage9_elements_fixture.v1.py` read exactly as quoted in §5 and §6. *These are lines of the LSA copy.* Whether that copy produced any particular downstream artifact is **not** part of this cell — §5.1 establishes on the fixture's own `source_builder` / `source_commit` fields that it did **not** produce the 20B claim fixture. The line contents and the attribution are deliberately unbundled here; an earlier draft bundled them and that bundling is what carried the §5.1 error |
+| **real** — receipt mechanism (files parsed and code executed by me) | 24 receipt files under `docs/working/pcba_authority_receipts_needed_20260617/`, one identical 10-key schema across all 24, **20 unsigned + 4 signed**; the 4 signed receipts return `verify(artifact_root=<repo root>) == True` and `receipt_hash == compute_hash()`, **4 of 4**, executed this session; their `operator_id` is `codex_gpt5_local_reviewer_20260617` (agent attestation, not owner); `PcbaAuthorityReceipt` at `pcba_authority.py:30-77` with approval interlock, self-hash, and artifact SHA-256 binding; `finalize_pcba_authority_receipt.py` (53 lines) verifies before writing; `verify_pcba_semantics_receipt.py` is PCBA-syntax-specific (`:30-35`, `:63-66`, `:120`); `PcbaProductionFeature` is a closed 9-member enum and rejects `tks_cas_semantic_source_registry` with a pydantic `ValidationError` (executed, output quoted in §9(a)) |
+| **accepted-as-recorded** (not re-verified by me) | `main_md_not_located` (registry `:222-227`, LICENSING §5.7 at `:282`) — I did not re-search for `main.md`; the 95.625% / macro-F1 95.617% GPT-NeoX-20B row and its `FLAG_FOR_HUMAN_REVIEW` status at LICENSING `:388`; the two **CLI scripts'** end-to-end behaviour (todo `:16588`, `:16590`) — I read both in full but invoked neither from the command line. *(The underlying schema's `verify()` behaviour was executed and moved to the `real` row above.)* |
+| **unavailable** | TKS↔CAS crosswalk artifact; World-to-Domain mapping object; field-level symbol rows in the registry; the exporter that emitted `cas_harness_original_stage9_scenarios_export.v1` (§5.1, searches recorded there). **Withdrawn from this row:** "signature mechanism" — a prior draft listed it here and that was false; see the `real` row above |
 | **open** | roadmap bindings 1, 2, 3, 6, 7, 8 |
 | **flagged-for-human-review** | completeness of `tks_28_foundations_translation_key.md`; whether `CAS_FOUNDATIONAL_CLARIFICATIONS.md:346` is the approved World→Register mapping or one hypothesis |
 | **not-licensed** | nothing in this document licenses any claim |
@@ -580,6 +749,16 @@ reasonable candidate for `READY_FOR_SIGNATURE`.** This audit does not pre-approv
   `noetic-compass-scaffold/`, `cas-engine/`, and `.claude/worktrees/` is therefore **incomplete** — I did
   not exhaustively prove absence outside the scanned trees. Six hits found, all `WORLD_TO_REGISTER`, zero
   `WORLD_TO_DOMAIN`.
+- **The signature-mechanism search, disclosed because its earlier version produced a false blocker.** An
+  earlier draft searched `OWNER_SIGNED|owner_signature|owner-signed|owner signature|SIGNED_` over
+  `docs/working/*.md` and `docs/working/*.json` — a **non-recursive** glob, 32 JSON files at that one
+  level — found only the registry's own `:4` status string, and concluded from that absence that no
+  signature mechanism existed anywhere. The scope limit was not disclosed at the time while a lesser one
+  (the `world_to_domain` grep above) was. The recursive form
+  `grep -rlEi "owner_signature|owner-signed|OWNER_SIGNED|signed_reason" docs/working --include=*.json`
+  returns the 24-file `pcba_authority_receipts_needed_20260617/` receipt tree immediately. Rule taken from
+  this: an absence claim must state its search scope in the same sentence that makes the claim, and a
+  non-recursive glob may never support the word "anywhere."
 - I did not re-search for `main.md`; I accepted the registry's recorded finding.
 
 ---
@@ -636,6 +815,15 @@ Every file below was opened or hashed during this audit.
 - `C:/Users/wakil/OneDrive/Desktop/tksCAS/docs/working/mtc_f28_goemotions_20260615/gate2_confirmatory_tks_original_blind.py` (`:32`)
 - `C:/Users/wakil/OneDrive/Desktop/tksCAS/docs/working/mtc_f28_goemotions_20260615/mtc_f28_goemotions_confirmatory_authoring_plan_20260615_tks_original.json` (+ 7 sibling `*authoring_plan*tks_original*.json` files, row-count and schema inspection)
 - `C:/Users/wakil/OneDrive/Desktop/tksCAS/noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs` (`:100`, `:103`)
+
+**Owner-signature receipt mechanism (§9(a))**
+- `C:/Users/wakil/OneDrive/Desktop/tksCAS/docs/working/pcba_authority_receipts_needed_20260617/` (directory listing, 24 files)
+- `C:/Users/wakil/OneDrive/Desktop/tksCAS/docs/working/pcba_authority_receipts_needed_20260617/governance_regulatory_proof_claim__legal_review_signed.json` (parsed; 10 keys, all values read)
+- `C:/Users/wakil/OneDrive/Desktop/tksCAS/cas-forex/cas_forex/pcba_authority.py` (`:30-77` read in full; `PcbaAuthorityReceipt` validated against a CAS Harness `feature` value, `ValidationError` observed)
+- `C:/Users/wakil/OneDrive/Desktop/tksCAS/cas-forex/cas_forex/schemas/pcba.py` (`:70-79`, `PcbaProductionFeature` enum, 9 members)
+- `C:/Users/wakil/OneDrive/Desktop/tksCAS/cas-forex/scripts/finalize_pcba_authority_receipt.py` (read in full, 53 lines; not executed)
+- `C:/Users/wakil/OneDrive/Desktop/tksCAS/cas-forex/scripts/verify_pcba_semantics_receipt.py` (read in full; not executed; found to be PCBA-syntax-specific)
+- `C:/Users/wakil/OneDrive/Desktop/tksCAS/docs/working/cas_harness_production_todo.md` (`:16588`, `:16590` — finalizer/verifier description, accepted-as-recorded)
 
 **Searched and found to contain no Gate-2 item-3 evidence**
 - `docs/working/CAS_HARNESS_JSPACE_OHM_300B_CAPABILITY_ANALYSIS_20260720.md` (`:615` only, unrelated sense of "registry")

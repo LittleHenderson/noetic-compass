@@ -1,0 +1,37 @@
+{
+  "approved": true,
+  "approves": [
+    "The 20 registry sources as the enumerated semantic authorities.",
+    "The 8-tier claim_bearing_precedence ordering.",
+    "The 25 required_run_bindings as mandatory for claim-bearing runs.",
+    "The 7 future_agent_rules as binding on future work."
+  ],
+  "artifact_hashes": {
+    "docs/working/TKS_CAS_SEMANTIC_SOURCE_REGISTRY_CANDIDATE_20260720.json": "9469a10ae330749c61d157518b849a3737b0f5bd268e44c7bd6334625a38c483"
+  },
+  "artifact_refs": [
+    "docs/working/TKS_CAS_SEMANTIC_SOURCE_REGISTRY_CANDIDATE_20260720.json"
+  ],
+  "created_at": "2026-07-25T16:02:45.820534+00:00",
+  "does_not_approve": [
+    "Resolution of the 12 recorded known_conflicts.",
+    "Acquisition and algebra profiles (remain `unavailable` per roadmap:202-203).",
+    "Any empirical claim, verdict, or licence."
+  ],
+  "evidence_key": "owner_semantic_authority_registry_approved",
+  "feature": "tks_cas_semantic_authority_registry",
+  "open_findings_at_signing": [
+    "The registry lists 12 known_conflicts that are recorded but not individually resolved; the signature approves the registry as the binding authority, not the resolution of each conflict.",
+    "Acquisition and algebra profiles remain marked `unavailable` per roadmap:202-203 and are NOT approved by this signature.",
+    "The readiness audit (GATE2_ITEM3_REGISTRY_SIGNATURE_READINESS.md) was in a final targeted correction pass at the time of signing; its remaining defects were line-reference level, not substantive to the registry's content.",
+    "This approval unblocks roadmap item 4 (the six-arm TKS definition A/B) ONLY. It licenses no empirical claim and grants no verdict."
+  ],
+  "operator_id": "owner_prof_hermes_m_thoth_20260724",
+  "receipt_hash": "d0c582c948989c9ef90014547565edf83307d813b3b7617542416e56f0f442f7",
+  "roadmap_item": "Gate 2 item 3 (CAS_HARNESS_033_TO_100_COMPLETION_ROADMAP_20260722.md:198-199)",
+  "schema_version": "cas_harness_semantic_authority_signature_receipt.v1",
+  "signature": "owner-interactive-session-approval: TKS/CAS semantic authority registry signed off 2026-07-24 to unblock Gate 2 item 4",
+  "signature_kind": "INTERACTIVE_SESSION_OWNER_APPROVAL_TRANSCRIBED_BY_ASSISTANT \u2014 this is a recorded authorization, NOT a cryptographic signature by the owner and NOT a legal signature.",
+  "signed_reason": "Owner approved the field-level semantic authority registry as the binding source of semantic truth for CAS Harness run bindings, so that claim-bearing A/B work (roadmap item 4) may proceed. Approval was given explicitly in an interactive session after the readiness audit was reported, including its open findings.",
+  "unblocks": "Gate 2 item 4 \u2014 six-arm TKS definition A/B experiment (roadmap:204-206)"
+}
