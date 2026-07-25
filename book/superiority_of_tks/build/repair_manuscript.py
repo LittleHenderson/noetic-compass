@@ -116,7 +116,7 @@ UNNUMBERED = {
 
 APPENDIX_TITLES = {
     "apxA": "The 40 Elements — Your Periodic Table of Reality",
-    "apxB": "RPM Troubleshooting Guide",
+    "apxB": "Advanced RPM Troubleshooting",
     "apxC": "TKS vs. The World — A Comparative Chart",
     "apxD": "The 22 Acquisitions — Mapping the Flow of Consciousness",
     "apxE": "The 28 Foundations — The Core Drives Across Four Worlds",
@@ -187,7 +187,7 @@ CH_UNNUM = re.compile(r"^#\s*Chapter:\s*(.+)$")
 CH_H1 = re.compile(r"^#\s*Chapter\s+(\d+)\s*[:–—-]\s*(.+)$")
 
 stats = {"stamps": 0, "fences": 0, "pagebreaks": 0, "promoted": 0, "rules": 0,
-         "emoji": 0}
+         "emoji": 0, "titles": 0}
 
 
 def clean_and_promote(lines, allow_headings=True):
@@ -252,7 +252,7 @@ def chapter_block(key, want_part=True, lines_override=None):
             num = RENUMBER.get(num, num)
             if want_part and num in PART_OPENS:
                 out += part_divider(PART_OPENS[num])
-            out += ["", f"# Chapter {num}: {title}", ""]
+            out += ["", clean_title(f"# Chapter {num}: {title}"), ""]
             continue
         m = CH_UNNUM.match(ln)
         if m:
@@ -265,6 +265,57 @@ def chapter_block(key, want_part=True, lines_override=None):
                 continue
         out.append(ln)
     return clean_and_promote(out)
+
+
+# Drafting labels that leaked into chapter titles. These are production
+# markers, not part of the title, and they print in the TOC and in Amazon's
+# "Look Inside". "Deep Dive" is left alone where it is genuinely part of a
+# title (Chapters 15 and 16); only the parenthetical markers go.
+TITLE_CLEANUPS = [
+    (" (EXTREME ULTRA MAX MEGA Deep Dive Expansion - Part 1)", ""),
+    (" (Using the REAL 12 Prerequisites - D/W/P Cycles - EXTREME ULTRA MAX MEGA"
+     " Deep Dive Expansion - Part 3)", " (Using the 12 Prerequisites and D/W/P Cycles)"),
+    (" (Deep Dive Expansion)", ""),
+    (" (Deep Dive)", ""),
+    (" (Re-Expanded Edition)", ""),
+]
+
+
+def clean_title(line):
+    for old, new in TITLE_CLEANUPS:
+        if old in line:
+            line = line.replace(old, new)
+            stats["titles"] += 1
+    return line
+
+
+def fix_appendix_b(lines):
+    """Appendix B lost its heading and starts its item list at 6.
+
+    The first-line diagnostics it refers to ("you've checked the initial
+    diagnostics") are real -- they are Chapter 11's list, which runs 1-6. The
+    appendix was numbered to continue from 5, so its item 6 collides with
+    Chapter 11's item 6. Since the appendix now carries its own heading and
+    stands alone in the back matter, its five items are renumbered 1-5 and the
+    lead-in is pointed explicitly at Chapter 11.
+    """
+    out = []
+    n = 0
+    for ln in lines:
+        m = re.match(r"^(\s*)(\d+)\.(\s+)(\S.*)$", ln)
+        if m and m.group(2) in {"6", "7", "8", "9", "10"}:
+            n += 1
+            out.append(f"{m.group(1)}{n}.{m.group(3)}{m.group(4)}")
+            continue
+        if ln.startswith("Okay, so you've checked the initial diagnostics"):
+            out.append(
+                "You have run the first-line diagnostics in Chapter 11 and you "
+                "are still stuck. Time to dig deeper into the subtler failure "
+                "modes."
+            )
+            continue
+        out.append(ln)
+    return out
 
 
 def unnumbered_chapter(title):
@@ -356,6 +407,8 @@ for i, key in enumerate(APPENDIX_ORDER):
     body = [l for l in body
             if not re.match(r"^\s*#*\s*APPENDIX\s+[A-Z]\s*[:–—-]", l, re.I)
             and not re.match(r"^ Appendix\s+[A-Z]\s*[:–—-]", l)]
+    if key == "apxB":
+        body = fix_appendix_b(body)
     doc += ["", f"# {APPENDIX_TITLES[key]}", ""]
     doc += clean_and_promote(body)
 
@@ -405,6 +458,7 @@ print(f"  drafting stamps cut  : {stats['stamps']}")
 print(f"  fenced blocks kept   : {stats['fences'] // 2}")
 print(f"  page-break comments  : {stats['pagebreaks']}")
 print(f"  decorative emoji cut : {stats['emoji']}")
+print(f"  drafting labels cut  : {stats['titles']}")
 print(f"  '---' rules cut      : {stats['rules']}")
 print(f"  cross-refs corrected : {xref_fixed}/3")
 
