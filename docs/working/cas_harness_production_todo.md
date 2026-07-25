@@ -17998,3 +17998,46 @@ Clean public story to earn:
 - 2026-05-31: recorded Pythia-160M Gate 3 evidence-packet closure, verifier `SUPPRESS` due `output_bridge_gate_failed`, safe-anchor non-WORM status, corrected Pythia identity override, archive path, and updated the immediate next move toward WORM/legal/data-consent/production-route decisions.
 - Initial version: created as the canonical production TODO and agent operating checklist.
 - 2026-07-09 CAS Forex autonomous workflow/evidence wording alignment completed. The mismatch was that several high-visibility workflow artifacts still read like autonomous AI trading was prohibited even though the guarded dispatch stack already supports owner-delegated autonomous execution. Updated `cas_forex/agent_workflow.py`, `cas_forex/agent_state.py`, `cas_forex/agent_information_flow.py`, `cas_forex/agent_message_bus.py`, `cas_forex/agent_memory.py`, `cas_forex/agent_research_queue.py`, and `api/routes/order_dispatch.py` so these surfaces now explicitly say they are not the direct execution surface while pointing to the real autonomous path through `order_dispatch.py`, `execution_guard.py`, broker/provider truth, risk, receipts, and kill switches. `agent_workflow.py` and `agent_state.py` also now publish owner-arming statuses (`OWNER_ARMING_REQUIRED`, `OWNER_AND_PROVIDER_PENDING`) instead of stale `CURRENTLY NOT LICENSED` strings inside their `live_execution_boundary` payloads, with an explicit `autonomous_execution_path`. Regression coverage updated in `tests/test_agent_workflow.py`, `tests/test_agent_information_flow.py`, `tests/test_agent_research_queue.py`, and `tests/test_agent_workflow_cycle.py`. Verification passed: `python -m py_compile cas_forex/agent_workflow.py cas_forex/agent_state.py cas_forex/agent_information_flow.py cas_forex/agent_message_bus.py cas_forex/agent_memory.py cas_forex/agent_research_queue.py api/routes/order_dispatch.py tests/test_agent_workflow.py tests/test_agent_information_flow.py tests/test_agent_research_queue.py tests/test_agent_workflow_cycle.py`; `pytest tests/test_agent_workflow.py -q -k shared_knowledge_pack_and_live_boundary -x`; `pytest tests/test_agent_information_flow.py -q -k preserves_agent_responsibility_boundaries -x`; `pytest tests/test_agent_research_queue.py -q -k builds_tasks_from_memory -x`; `pytest tests/test_agent_workflow_cycle.py -q -k paper_mt4_command_and_state -x`; `pytest tests/test_agent_workflow_cycle.py -q -x` (`5 passed`). Full-file batches for the other three suites exceeded the command timeout in this session, so the changed assertions were verified directly.
+
+GATE 2 SCOPE CORRECTION + ITEM 4 CLOSED (2026-07-25). The four W0 injection
+attempts above answered **Gate 3's** row (`todo:955`), not Gate 2's. Gate 2's
+controlling text (`todo:954`) is "small-model semantic authority, matched
+controls, uncertainty, claims reconciliation, and withdrawn-`ACCEPT` root cause
+close" -- 8 roadmap items whose only experiment (item 4) is a six-arm TKS
+DEFINITION A/B. Work was being done against a self-authored paraphrase; the gate
+TABLE governs, never a summary.
+
+Items closed this day: 2 (withdrawn-`ACCEPT` root cause, `ACCEPTABLE`), 3 (owner
+SIGNED the semantic authority registry -- receipt `d0c582c9…`, `verify()` True),
+5 (experimental subject manifest, 20/20 hashes verified), 7 (full same-budget
+control battery incl. the random/orthogonal/wrong-axis arms that were missing), 8
+(assessed `ACCEPTABLE`, needs a replay shim built). Item 1 is `PARTIAL` -- clause
+3 requires edits to LIVE legal/NDA surfaces, which is an owner publication
+decision; exact file:line list and replacement text are ready. The last three
+archived cells still licensing the withdrawn `ACCEPT` were tombstoned
+(`v1_7:643`, `v1_8:522`, `v1_9:1220`), claim text preserved byte-identical.
+
+ITEM 4 RAN TWICE AND IS PERMANENTLY NOT LICENSED. v1 (`pythia-160m`) failed the
+layer-specificity control: anchors from a deliberately wrong layer beat matched
+anchors (`0.3420` vs `0.1979`). v2 (`pythia-1b`, pre-registered with STRICTER
+bars set exactly where v1 would have failed) failed all three commensurability
+controls -- breaking the scaffold, the frames and the position start each left
+the result nearly intact.
+
+ROOT CAUSE, PROVEN WITH NO MODEL: a bag of words beats the model 3x on the same
+task (`0.4851` vs `0.1474`), and **39 of 40 classes carry a word unique to their
+own definition** -- one giveaway token per class. Arm F settles it: identical
+vocabulary to Arm A with scrambled class assignment scores at chance (`0.0097`).
+The readout measured which distinctive word belongs to which class, nothing else.
+Both evaluation banks (`stage9_elements_pilot`, `stage7_foundation_pilot`) were
+built by this project's own scripts from the same source as the definitions, so
+BOTH carry the contamination and there is no clean fallback.
+
+The definition-anchored prototype family is CLOSED by pre-commitment made before
+the run. The owner's question -- does original TKS wording preserve more semantic
+signal -- remains OPEN AND UNTESTED, not refuted. Instrument three needs either a
+genuinely independent evaluation set or a task that never compares definitions to
+item text; both are real builds and the choice is the owner's. Evidence:
+`docs/working/gate2_closure/`, esp. `LEXICAL_OVERLAP_DIAGNOSIS.md`.
+
+Gate 2 remains OPEN at `0.38`.
