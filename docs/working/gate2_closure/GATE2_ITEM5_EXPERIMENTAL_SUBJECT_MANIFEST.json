@@ -1,0 +1,260 @@
+{
+  "created_at": "2026-07-25T19:55:56.248682+00:00",
+  "crosswalks": {
+    "consequence": "Any experiment needing A1..D10 <-> A0..D9 is blocked at the registry level, not merely inconvenienced: future_agent_rule 2 forbids remapping by position without a TESTED crosswalk. A proposal exists at docs/working/gate2_closure/item4_arms/proposed_tks_cas_crosswalk.json but is UNRATIFIED and its own owner_ratification block is unanswered.",
+    "required_by": "tks_to_cas_crosswalk_sha256",
+    "tks_to_cas_crosswalk": "unavailable \u2014 no crosswalk artifact exists on disk"
+  },
+  "index_systems": {
+    "A0..D9": "normalized canon (elements/subfoundations/index)",
+    "A1..D10": "owner sources (raw + deployed)",
+    "rule": "Never remap by position. future_agent_rule 2, registry known_conflict 1 (P0_SEMANTIC_IDENTITY)."
+  },
+  "integrity_summary": {
+    "drifted": [],
+    "unavailable": [],
+    "verified": 20
+  },
+  "licenses_nothing": "This manifest is bookkeeping. Preserving subjects distinctly prevents a class of silent error; it does not support any empirical claim.",
+  "registry_path": "docs/working/TKS_CAS_SEMANTIC_SOURCE_REGISTRY_CANDIDATE_20260720.json",
+  "registry_sha256": "9469a10ae330749c61d157518b849a3737b0f5bd268e44c7bd6334625a38c483",
+  "registry_status": "OWNER_SIGNED_SEMANTIC_AUTHORITY_REGISTRY",
+  "roadmap_item": "Gate 2 item 5 (CAS_HARNESS_033_TO_100_COMPLETION_ROADMAP_20260722.md:207-208)",
+  "schema_version": "cas_harness_experimental_subject_manifest.v1",
+  "semantic_versions": {
+    "A124": "owner_deployed_40_28_protected \u2014 deployed protected wording",
+    "D3DA": "owner_raw_40_28_workspace \u2014 owner's raw workspace wording",
+    "rule": "These are sha256 PREFIXES of two byte-different payloads, not two names for one thing. Registry controlling_principle 3: byte-different payloads are different semantic versions until a transformation manifest proves otherwise. No such manifest exists on disk, so they must be carried as two subjects everywhere."
+  },
+  "subject_count": 20,
+  "subjects": [
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [],
+      "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\TKS_v7.4_MASTER.tex",
+      "precedence": "Governs broad v7.4 source identity except where an explicit correction overlay narrows or corrects a claim.",
+      "recomputed_sha256": "1cf90d54e89ece6f1e2ea3f163cf4d4999767038a80ac7b23498cb6b29aeba53",
+      "recorded_sha256": "1cf90d54e89ece6f1e2ea3f163cf4d4999767038a80ac7b23498cb6b29aeba53",
+      "role": "Canonical authority and inheritance declaration; ontology inventory and formal-source provenance.",
+      "semantic_version_tag": "1CF9",
+      "subject_id": "tks_v7_4_master_tex"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [],
+      "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\TKS_v7_4_FULL_BEAUTIFUL.txt",
+      "precedence": "Formal context and architecture-independent TKS target-space authority; not by itself an empirical hidden-state map.",
+      "recomputed_sha256": "980aba9f65ed99ac4961a56be1750c7f344f2741fee903349ec7bb201a0f414a",
+      "recorded_sha256": "980aba9f65ed99ac4961a56be1750c7f344f2741fee903349ec7bb201a0f414a",
+      "role": "Integrated corrected-edition extraction containing the six object classes, compiler specification, Noetic Topos material, and corrected open-simplex Noetic Manifold construction.",
+      "semantic_version_tag": "980A",
+      "subject_id": "tks_v7_4_full_beautiful_corrected_text"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [],
+      "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\TKS_FORMAL_MATHEMATICAL_MANUAL_v7.2_COMPLETE.tex",
+      "precedence": "Fallback only when v7.4 and its explicit corrections do not govern the field.",
+      "recomputed_sha256": "5ddbb5e1c46710ee37b4ddbfd0acf14de200a54cfbd98bae8e6bd7e106c8e1a4",
+      "recorded_sha256": "5ddbb5e1c46710ee37b4ddbfd0acf14de200a54cfbd98bae8e6bd7e106c8e1a4",
+      "role": "Inherited historical formal manual.",
+      "semantic_version_tag": "5DDB",
+      "subject_id": "tks_v7_2_formal_manual"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [],
+      "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\tootra_math_handbook (1).md",
+      "precedence": "Field authority for the ten Noetic meanings, as locked by CAS Foundational Clarifications.",
+      "recomputed_sha256": "18144e4ab9d6a9e8aa25908ecf1f880cf0b26fc21f85422ef178ad9cd64be227",
+      "recorded_sha256": "18144e4ab9d6a9e8aa25908ecf1f880cf0b26fc21f85422ef178ad9cd64be227",
+      "role": "Primary exact wording for the ten Noetic meanings incorporated into CAS.",
+      "semantic_version_tag": "1814",
+      "subject_id": "tootra_math_handbook_noetics"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [],
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\docs\\CAS_FOUNDATIONAL_CLARIFICATIONS.md",
+      "precedence": "Operational CAS authority for Noetic names and definitions; derivative summaries that conflict with it are non-conformant.",
+      "recomputed_sha256": "cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880",
+      "recorded_sha256": "cda85c03273c47f7df9ac53258920b95ba7b3b2007b0e760856a67497f661880",
+      "role": "Repository-normative incorporation of the ten Noetic definitions and CAS operational extensions.",
+      "semantic_version_tag": "CDA8",
+      "subject_id": "cas_foundational_clarifications"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [
+        "owner_deployed_40_28_protected \u2014 byte-different payload; a DIFFERENT semantic version (registry controlling_principle 3), not a reformatting of the same one"
+      ],
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\docs\\working\\tks_owner_locked_definitions_20260603.json",
+      "precedence": "Candidate raw semantic authority for the next original-TKS probe arm. Must not be called byte-identical to the deployed payload.",
+      "recomputed_sha256": "d3dac0ef5c94ccd768da0f18987846d8d0c0fa0b366e13dccc49c82252d2fc12",
+      "recorded_sha256": "d3dac0ef5c94ccd768da0f18987846d8d0c0fa0b366e13dccc49c82252d2fc12",
+      "role": "Workspace owner-provided 40 Element and 28 Foundation prose; 40 and 28 records.",
+      "semantic_version_tag": "D3DA",
+      "subject_id": "owner_raw_40_28_workspace"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [
+        "owner_raw_40_28_workspace \u2014 see above; the A-vs-B comparison is between two versions, and no post-hoc 'it is just normalization' claim may be made without an owner-adjudicated transformation diff (registry known_conflict 2), which does not exist"
+      ],
+      "path": "C:\\Users\\wakil\\CAS-Harness-Run\\noetic-compass-scaffold\\noetic-compass\\api\\resources\\tks_owner_locked_definitions_20260603.json",
+      "precedence": "Current deployed operational version only. It is a distinct semantic version from D3DAC0EF and requires an explicit normalization/adjudication record.",
+      "recomputed_sha256": "a124302ed93c7b8571b24a5cdf14433adf904eb94fd65895c6fd25fae58e28a0",
+      "recorded_sha256": "a124302ed93c7b8571b24a5cdf14433adf904eb94fd65895c6fd25fae58e28a0",
+      "role": "Protected deployment definition payload and current definition-lock subject; 40 and 28 records plus metadata.",
+      "semantic_version_tag": "A124",
+      "subject_id": "owner_deployed_40_28_protected"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [],
+      "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\canon\\normalized\\canon_index.json",
+      "precedence": "Convenience serialization only where it agrees with field authority; unresolved conflicts must not be silently normalized.",
+      "recomputed_sha256": "828fa6bb41d2864642a9408c05748a67127e77457c5ea69e5ed229880758c4ad",
+      "recorded_sha256": "828fa6bb41d2864642a9408c05748a67127e77457c5ea69e5ed229880758c4ad",
+      "role": "Machine-readable normalized-canon manifest version 1.2.0.",
+      "semantic_version_tag": "828F",
+      "subject_id": "normalized_canon_index"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [
+        "owner_raw_40_28_workspace \u2014 the normalized canon is on the A0..D9 index while the owner sources are on A1..D10; future_agent_rule 2 FORBIDS remapping by position without a tested crosswalk"
+      ],
+      "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\canon\\normalized\\canon_elements_40.json",
+      "precedence": "Derived representation requiring an explicit A1-D10 crosswalk before use with original-TKS artifacts.",
+      "recomputed_sha256": "f56eabed920236c36dd7f1c2b1334de822be770bfd4df1c72331673644eb4177",
+      "recorded_sha256": "f56eabed920236c36dd7f1c2b1334de822be770bfd4df1c72331673644eb4177",
+      "role": "Zero-based A0-D9 normalized 40 Element serialization.",
+      "semantic_version_tag": "F56E",
+      "subject_id": "normalized_elements_40"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [
+        "the 28 CAS Drive-by-Register entries \u2014 native F28 and CAS Drive-by-Register are separate subjects per the roadmap item 3 binding list"
+      ],
+      "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\canon\\normalized\\canon_subfoundations_28_defs.json",
+      "precedence": "Experimental semantic source that must be explicitly added to an owner-approved manifest; it is absent from canon_index.json.",
+      "recomputed_sha256": "5507bf6f85f63dc62847ea5f9018b6ad4471ca8acfe851a0f50d2b4ebbf6c88d",
+      "recorded_sha256": "5507bf6f85f63dc62847ea5f9018b6ad4471ca8acfe851a0f50d2b4ebbf6c88d",
+      "role": "Rich machine-readable 28 Sub-Foundation definitions used in the original-TKS de-leak fixture lineage.",
+      "semantic_version_tag": "5507",
+      "subject_id": "normalized_subfoundations_28_defs"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [],
+      "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\canon\\normalized\\canon_acquisitions_22.json",
+      "precedence": "Unresolved against the v7.4 A0 plus Dm/Wm/Pm construction; do not use as an interchangeable representation without a crosswalk.",
+      "recomputed_sha256": "f38adedf5978c6accee49fe30de244fec27e61dca069951783ed810c29c9fa00",
+      "recorded_sha256": "f38adedf5978c6accee49fe30de244fec27e61dca069951783ed810c29c9fa00",
+      "role": "Named 22-acquisition serialization.",
+      "semantic_version_tag": "F38A",
+      "subject_id": "normalized_acquisitions_22"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [],
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\peer_review\\journal_submission\\main.tex",
+      "precedence": "Formal claim-status authority for the journal construction; definitions and theorems remain conditional on stated axioms.",
+      "recomputed_sha256": "cee0a4ab335ddaa2bdd4a56030e5b2a7fa0fa350054b1e57278aec0ae554b0a6",
+      "recorded_sha256": "cee0a4ab335ddaa2bdd4a56030e5b2a7fa0fa350054b1e57278aec0ae554b0a6",
+      "role": "Conservative axiomatic Noetic Topos construction and explicit empirical boundary.",
+      "semantic_version_tag": "CEE0",
+      "subject_id": "noetic_topos_conservative_paper"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [],
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\noetic-compass-scaffold\\noetic-compass\\dashboard\\public\\noetic-topos.md",
+      "precedence": "Secondary product narrative; empirical statements require independent model evidence and may not override the conservative paper's claim boundary.",
+      "recomputed_sha256": "c44f46688b246c42164d3183dea7e7915f3dc030692b164dd09ed8b31a5dc55d",
+      "recorded_sha256": "c44f46688b246c42164d3183dea7e7915f3dc030692b164dd09ed8b31a5dc55d",
+      "role": "Product-facing Noetic Topos chapter with broader operational and detection framing.",
+      "semantic_version_tag": "C44F",
+      "subject_id": "noetic_topos_dashboard_markdown"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [],
+      "path": "C:\\Users\\wakil\\Downloads\\main.pdf",
+      "precedence": "Rendered derivative for review and citation; the hash proves byte identity, not empirical validation.",
+      "recomputed_sha256": "35772dba830f0c5abd63b8316a2750497224731b5cbadf94ba9f59072c178448",
+      "recorded_sha256": "35772dba830f0c5abd63b8316a2750497224731b5cbadf94ba9f59072c178448",
+      "role": "Compiled Noetic Topos PDF; byte-identical copies also exist at Downloads\\noetic-topos.pdf and dashboard\\public\\noetic-topos.pdf.",
+      "semantic_version_tag": "3577",
+      "subject_id": "noetic_topos_compiled_pdf_triplet"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [],
+      "path": "C:\\Users\\wakil\\Downloads\\TKS_v7_4_Review_and_Corrections.pdf",
+      "precedence": "Explicit correction/status overlay outranks broad claims that all earlier theorems remain unchanged.",
+      "recomputed_sha256": "1a010c38da8a141ab557b5f99ad75a2a660619f95e31c4b74feff68e137e587b",
+      "recorded_sha256": "1a010c38da8a141ab557b5f99ad75a2a660619f95e31c4b74feff68e137e587b",
+      "role": "Post-v7.4 formal review identifying conditional and incomplete proof obligations.",
+      "semantic_version_tag": "1A01",
+      "subject_id": "tks_v7_4_review_and_corrections"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [],
+      "path": "C:\\Users\\wakil\\Downloads\\TKS_v7_4_REFEREE_DEFENSIBLE.pdf",
+      "precedence": "Formal editorial overlay, not external peer-review acceptance or proof-assistant verification.",
+      "recomputed_sha256": "e060d44b4c0ea5082391340c1701eee2a4e0284d31d36410db8be138a8505765",
+      "recorded_sha256": "e060d44b4c0ea5082391340c1701eee2a4e0284d31d36410db8be138a8505765",
+      "role": "Referee-defensible editorial formulation and axiom/proof checklist.",
+      "semantic_version_tag": "E060",
+      "subject_id": "tks_v7_4_referee_defensible"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [],
+      "path": "C:\\Users\\wakil\\Downloads\\TKS_v7_4_CORRECTED_CHAPTERS.pdf",
+      "precedence": "Field-specific correction where applicable.",
+      "recomputed_sha256": "105acf6a848296842f0b213e09432f3ae5ede9425089e83c992bc61665a5442c",
+      "recorded_sha256": "105acf6a848296842f0b213e09432f3ae5ede9425089e83c992bc61665a5442c",
+      "role": "Narrow corrected-chapter overlay.",
+      "semantic_version_tag": "105A",
+      "subject_id": "tks_v7_4_corrected_chapters"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [],
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\noetic-compass-scaffold\\noetic-compass\\api\\notation\\compiler.py",
+      "precedence": "Operational implementation, not semantic authority where it conflicts with locked definitions.",
+      "recomputed_sha256": "8169188ad73df8fc3ca709731b3fb4ea07b2513d38d69cf66d22d64cfe88ff4c",
+      "recorded_sha256": "8169188ad73df8fc3ca709731b3fb4ea07b2513d38d69cf66d22d64cfe88ff4c",
+      "role": "Executable CAS notation compiler/interpreter implementation.",
+      "semantic_version_tag": "8169",
+      "subject_id": "active_python_notation_compiler"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [],
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\generator\\v74_baseline.py",
+      "precedence": "Fixture-generation implementation. Generated rows are evidence inputs, never semantic authority.",
+      "recomputed_sha256": "d7dbc96985ceafa1d64efcf22bfd04d66f83230365a6ea74a88a07ea4759a060",
+      "recorded_sha256": "d7dbc96985ceafa1d64efcf22bfd04d66f83230365a6ea74a88a07ea4759a060",
+      "role": "Executable deterministic CAS synthetic-data generator baseline.",
+      "semantic_version_tag": "D7DB",
+      "subject_id": "cas_sdg_v74_baseline"
+    },
+    {
+      "integrity": "verified_matches_signed_hash",
+      "must_not_conflate_with": [],
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\book\\programming_in_cas\\Programming_in_CAS_v0_4_MECH_AUDIT.md",
+      "precedence": "Secondary source only; canonical Noetic conflicts and implementation claims must be reconciled against normative sources and code.",
+      "recomputed_sha256": "7fa9acb30d5e4f7a5baad0cd6d83917b411bb46f49e217755dbdf4818515f01a",
+      "recorded_sha256": "7fa9acb30d5e4f7a5baad0cd6d83917b411bb46f49e217755dbdf4818515f01a",
+      "role": "Pedagogical and architecture text containing implemented, future, and speculative material.",
+      "semantic_version_tag": "7FA9",
+      "subject_id": "programming_in_cas_v0_4_mechanical_audit"
+    }
+  ]
+}
