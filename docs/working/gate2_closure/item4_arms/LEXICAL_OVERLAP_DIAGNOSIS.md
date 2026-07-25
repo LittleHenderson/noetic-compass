@@ -53,3 +53,45 @@ for the same reason: they were solvable by vocabulary.
 ## Status
 
 `NOT LICENSED / FAMILY CLOSED / QUESTION STILL OPEN`
+
+---
+
+## Addendum — the exact leak, quantified
+
+**39 of 40 classes have bank items containing a word that appears in that class's definition and in
+no other class's definition.** A unique giveaway token per class. The task is solvable by spotting one
+distinctive word; no semantics required.
+
+Vocabulary overlap with the bank (328 content words):
+
+| Arm | Arm vocab | Shared with bank | % of arm in bank |
+|---|---:|---:|---:|
+| A owner raw | 464 | 170 | 36.6% |
+| B deployed | 462 | 171 | 37.0% |
+| D compact CAS | 62 | 11 | 17.7% |
+| E non-TKS | 468 | 55 | 11.8% |
+| F null (permutation of A) | 464 | 170 | **36.6%** |
+
+**Arm F is the control that proves it.** F1 is a *permutation* of Arm A's definitions — byte-identical
+vocabulary, same 36.6% overlap with the bank — but the class assignment is scrambled. It scores
+`0.0097`, at chance, against A's `0.1474`. Same words, wrong assignment, no signal.
+
+So what the readout measures is precisely **which distinctive word belongs to which class**, and
+nothing else. Arms A and B win because their definitions were written by the people who later wrote
+the bank's glosses; D and E lose because they use different words. Arm F loses despite identical
+vocabulary because the word→class mapping is broken.
+
+## The hard constraint this imposes
+
+**This bank cannot test the owner's question, by any instrument.** As long as the evaluation items and
+the definitions under test share authorship, a per-class giveaway token exists and any definition-to-item
+comparison will find it before it finds semantics.
+
+Instrument three therefore requires **either**:
+- an evaluation bank whose glosses were authored independently of every arm (no shared vocabulary
+  lineage), **or**
+- a task where the definition is never compared to the item text at all — e.g. definitions used only
+  to shape a representation that is then tested on labels the vocabulary cannot reach.
+
+Choosing between those is a design decision that belongs to the owner, not the assistant. Both are
+substantial builds. Neither is attempted here.
