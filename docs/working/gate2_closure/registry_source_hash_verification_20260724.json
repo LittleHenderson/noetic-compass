@@ -1,0 +1,266 @@
+{
+  "schema_version": "gate2_item3_registry_readiness_verification.v1",
+  "generated_utc": "2026-07-25T01:33:36.117397+00:00",
+  "claim_state": "real",
+  "purpose": "Independent recomputation of every byte-binding asserted by the CANDIDATE semantic source registry, plus recomputation of the D3DA-vs-A124 definition-string difference counts the registry asserts. Evidence only. This artifact is NOT an owner signature and does NOT change registry status.",
+  "subject_registry": {
+    "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS\\docs/working/TKS_CAS_SEMANTIC_SOURCE_REGISTRY_CANDIDATE_20260720.json",
+    "recomputed_sha256": "A68D1B431C98F51DCD61007FBD75595659486B0092292CD92A49392D58AEEF54",
+    "status_field": "CANDIDATE_RECONCILIATION_MANIFEST_NOT_OWNER_SIGNED",
+    "schema_version": "tks_cas_semantic_source_registry_candidate.v1",
+    "n_sources": 20,
+    "n_known_conflicts": 12,
+    "n_required_run_bindings": 25
+  },
+  "source_hash_verification": {
+    "n_sources": 20,
+    "n_exists": 20,
+    "n_match": 20,
+    "n_mismatch": 0,
+    "rows": [
+      {
+        "id": "tks_v7_4_master_tex",
+        "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\TKS_v7.4_MASTER.tex",
+        "exists": true,
+        "registry_sha256": "1CF90D54E89ECE6F1E2EA3F163CF4D4999767038A80AC7B23498CB6B29AEBA53",
+        "recomputed_sha256": "1CF90D54E89ECE6F1E2EA3F163CF4D4999767038A80AC7B23498CB6B29AEBA53",
+        "match": true
+      },
+      {
+        "id": "tks_v7_4_full_beautiful_corrected_text",
+        "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\TKS_v7_4_FULL_BEAUTIFUL.txt",
+        "exists": true,
+        "registry_sha256": "980ABA9F65ED99AC4961A56BE1750C7F344F2741FEE903349EC7BB201A0F414A",
+        "recomputed_sha256": "980ABA9F65ED99AC4961A56BE1750C7F344F2741FEE903349EC7BB201A0F414A",
+        "match": true
+      },
+      {
+        "id": "tks_v7_2_formal_manual",
+        "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\TKS_FORMAL_MATHEMATICAL_MANUAL_v7.2_COMPLETE.tex",
+        "exists": true,
+        "registry_sha256": "5DDBB5E1C46710EE37B4DDBFD0ACF14DE200A54CFBD98BAE8E6BD7E106C8E1A4",
+        "recomputed_sha256": "5DDBB5E1C46710EE37B4DDBFD0ACF14DE200A54CFBD98BAE8E6BD7E106C8E1A4",
+        "match": true
+      },
+      {
+        "id": "tootra_math_handbook_noetics",
+        "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\tootra_math_handbook (1).md",
+        "exists": true,
+        "registry_sha256": "18144E4AB9D6A9E8AA25908ECF1F880CF0B26FC21F85422EF178AD9CD64BE227",
+        "recomputed_sha256": "18144E4AB9D6A9E8AA25908ECF1F880CF0B26FC21F85422EF178AD9CD64BE227",
+        "match": true
+      },
+      {
+        "id": "cas_foundational_clarifications",
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\docs\\CAS_FOUNDATIONAL_CLARIFICATIONS.md",
+        "exists": true,
+        "registry_sha256": "CDA85C03273C47F7DF9AC53258920B95BA7B3B2007B0E760856A67497F661880",
+        "recomputed_sha256": "CDA85C03273C47F7DF9AC53258920B95BA7B3B2007B0E760856A67497F661880",
+        "match": true
+      },
+      {
+        "id": "owner_raw_40_28_workspace",
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\docs\\working\\tks_owner_locked_definitions_20260603.json",
+        "exists": true,
+        "registry_sha256": "D3DAC0EF5C94CCD768DA0F18987846D8D0C0FA0B366E13DCCC49C82252D2FC12",
+        "recomputed_sha256": "D3DAC0EF5C94CCD768DA0F18987846D8D0C0FA0B366E13DCCC49C82252D2FC12",
+        "match": true
+      },
+      {
+        "id": "owner_deployed_40_28_protected",
+        "path": "C:\\Users\\wakil\\CAS-Harness-Run\\noetic-compass-scaffold\\noetic-compass\\api\\resources\\tks_owner_locked_definitions_20260603.json",
+        "exists": true,
+        "registry_sha256": "A124302ED93C7B8571B24A5CDF14433ADF904EB94FD65895C6FD25FAE58E28A0",
+        "recomputed_sha256": "A124302ED93C7B8571B24A5CDF14433ADF904EB94FD65895C6FD25FAE58E28A0",
+        "match": true
+      },
+      {
+        "id": "normalized_canon_index",
+        "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\canon\\normalized\\canon_index.json",
+        "exists": true,
+        "registry_sha256": "828FA6BB41D2864642A9408C05748A67127E77457C5EA69E5ED229880758C4AD",
+        "recomputed_sha256": "828FA6BB41D2864642A9408C05748A67127E77457C5EA69E5ED229880758C4AD",
+        "match": true
+      },
+      {
+        "id": "normalized_elements_40",
+        "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\canon\\normalized\\canon_elements_40.json",
+        "exists": true,
+        "registry_sha256": "F56EABED920236C36DD7F1C2B1334DE822BE770BFD4DF1C72331673644EB4177",
+        "recomputed_sha256": "F56EABED920236C36DD7F1C2B1334DE822BE770BFD4DF1C72331673644EB4177",
+        "match": true
+      },
+      {
+        "id": "normalized_subfoundations_28_defs",
+        "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\canon\\normalized\\canon_subfoundations_28_defs.json",
+        "exists": true,
+        "registry_sha256": "5507BF6F85F63DC62847EA5F9018B6AD4471CA8ACFE851A0F50D2B4EBBF6C88D",
+        "recomputed_sha256": "5507BF6F85F63DC62847EA5F9018B6AD4471CA8ACFE851A0F50D2B4EBBF6C88D",
+        "match": true
+      },
+      {
+        "id": "normalized_acquisitions_22",
+        "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\canon\\normalized\\canon_acquisitions_22.json",
+        "exists": true,
+        "registry_sha256": "F38ADEDF5978C6ACCEE49FE30DE244FEC27E61DCA069951783ED810C29C9FA00",
+        "recomputed_sha256": "F38ADEDF5978C6ACCEE49FE30DE244FEC27E61DCA069951783ED810C29C9FA00",
+        "match": true
+      },
+      {
+        "id": "noetic_topos_conservative_paper",
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\peer_review\\journal_submission\\main.tex",
+        "exists": true,
+        "registry_sha256": "CEE0A4AB335DDAA2BDD4A56030E5B2A7FA0FA350054B1E57278AEC0AE554B0A6",
+        "recomputed_sha256": "CEE0A4AB335DDAA2BDD4A56030E5B2A7FA0FA350054B1E57278AEC0AE554B0A6",
+        "match": true
+      },
+      {
+        "id": "noetic_topos_dashboard_markdown",
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\noetic-compass-scaffold\\noetic-compass\\dashboard\\public\\noetic-topos.md",
+        "exists": true,
+        "registry_sha256": "C44F46688B246C42164D3183DEA7E7915F3DC030692B164DD09ED8B31A5DC55D",
+        "recomputed_sha256": "C44F46688B246C42164D3183DEA7E7915F3DC030692B164DD09ED8B31A5DC55D",
+        "match": true
+      },
+      {
+        "id": "noetic_topos_compiled_pdf_triplet",
+        "path": "C:\\Users\\wakil\\Downloads\\main.pdf",
+        "exists": true,
+        "registry_sha256": "35772DBA830F0C5ABD63B8316A2750497224731B5CBADF94BA9F59072C178448",
+        "recomputed_sha256": "35772DBA830F0C5ABD63B8316A2750497224731B5CBADF94BA9F59072C178448",
+        "match": true
+      },
+      {
+        "id": "tks_v7_4_review_and_corrections",
+        "path": "C:\\Users\\wakil\\Downloads\\TKS_v7_4_Review_and_Corrections.pdf",
+        "exists": true,
+        "registry_sha256": "1A010C38DA8A141AB557B5F99AD75A2A660619F95E31C4B74FEFF68E137E587B",
+        "recomputed_sha256": "1A010C38DA8A141AB557B5F99AD75A2A660619F95E31C4B74FEFF68E137E587B",
+        "match": true
+      },
+      {
+        "id": "tks_v7_4_referee_defensible",
+        "path": "C:\\Users\\wakil\\Downloads\\TKS_v7_4_REFEREE_DEFENSIBLE.pdf",
+        "exists": true,
+        "registry_sha256": "E060D44B4C0EA5082391340C1701EEE2A4E0284D31D36410DB8BE138A8505765",
+        "recomputed_sha256": "E060D44B4C0EA5082391340C1701EEE2A4E0284D31D36410DB8BE138A8505765",
+        "match": true
+      },
+      {
+        "id": "tks_v7_4_corrected_chapters",
+        "path": "C:\\Users\\wakil\\Downloads\\TKS_v7_4_CORRECTED_CHAPTERS.pdf",
+        "exists": true,
+        "registry_sha256": "105ACF6A848296842F0B213E09432F3AE5EDE9425089E83C992BC61665A5442C",
+        "recomputed_sha256": "105ACF6A848296842F0B213E09432F3AE5EDE9425089E83C992BC61665A5442C",
+        "match": true
+      },
+      {
+        "id": "active_python_notation_compiler",
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\noetic-compass-scaffold\\noetic-compass\\api\\notation\\compiler.py",
+        "exists": true,
+        "registry_sha256": "8169188AD73DF8FC3CA709731B3FB4EA07B2513D38D69CF66D22D64CFE88FF4C",
+        "recomputed_sha256": "8169188AD73DF8FC3CA709731B3FB4EA07B2513D38D69CF66D22D64CFE88FF4C",
+        "match": true
+      },
+      {
+        "id": "cas_sdg_v74_baseline",
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\generator\\v74_baseline.py",
+        "exists": true,
+        "registry_sha256": "D7DBC96985CEAFA1D64EFCF22BFD04D66F83230365A6EA74A88A07EA4759A060",
+        "recomputed_sha256": "D7DBC96985CEAFA1D64EFCF22BFD04D66F83230365A6EA74A88A07EA4759A060",
+        "match": true
+      },
+      {
+        "id": "programming_in_cas_v0_4_mechanical_audit",
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\book\\programming_in_cas\\Programming_in_CAS_v0_4_MECH_AUDIT.md",
+        "exists": true,
+        "registry_sha256": "7FA9ACB30D5E4F7A5BAAD0CD6D83917B411BB46F49E217755DBDF4818515F01A",
+        "recomputed_sha256": "7FA9ACB30D5E4F7A5BAAD0CD6D83917B411BB46F49E217755DBDF4818515F01A",
+        "match": true
+      }
+    ]
+  },
+  "d3da_vs_a124_recomputation": {
+    "registry_assertion_quoted": "The payloads share the same 40 and 28 codes, but 20 of 40 Element definition strings and 8 of 28 Foundation strings differ. Some differences are substantive.",
+    "registry_assertion_source": "TKS_CAS_SEMANTIC_SOURCE_REGISTRY_CANDIDATE_20260720.json:165 (known_conflicts[owner_payload_D3DA_vs_deployed_A124].finding)",
+    "recomputed": {
+      "tks_40_elements": {
+        "codes_identical": true,
+        "n_records": 40,
+        "n_definition_string_differences": 20,
+        "differing_codes": [
+          "A1",
+          "A10",
+          "A2",
+          "A3",
+          "A5",
+          "A6",
+          "A9",
+          "B1",
+          "B10",
+          "B2",
+          "B3",
+          "B4",
+          "B9",
+          "C2",
+          "C4",
+          "D1",
+          "D2",
+          "D3",
+          "D5",
+          "D6"
+        ],
+        "n_title_differences": 0,
+        "native_symbol_sample": [
+          "A1",
+          "A10",
+          "A2",
+          "A3",
+          "A4",
+          "A5"
+        ]
+      },
+      "tks_28_foundations": {
+        "codes_identical": true,
+        "n_records": 28,
+        "n_definition_string_differences": 8,
+        "differing_codes": [
+          "1c",
+          "2d",
+          "3b",
+          "5a",
+          "5b",
+          "5c",
+          "6b",
+          "7b"
+        ],
+        "n_title_differences": 0,
+        "native_symbol_sample": [
+          "1a",
+          "1b",
+          "1c",
+          "1d",
+          "2a",
+          "2b"
+        ]
+      }
+    },
+    "assertion_reproduced": true
+  },
+  "canon_index_membership_check": {
+    "registry_assertion_quoted": "canon_subfoundations_28_defs.json was used by original-TKS fixture work but is not listed or hashed by canon_index.json.",
+    "canon_index_version": "1.2.0",
+    "canon_index_files": [
+      "canon_elements_40.json",
+      "canon_foundations_7.json",
+      "canon_noetics_10.json",
+      "canon_lexicon.json",
+      "canon_acquisitions_22.json",
+      "canon_subfoundations_28.json",
+      "canon_worlds_4.json"
+    ],
+    "canon_subfoundations_28_defs_listed": false,
+    "assertion_reproduced": true
+  },
+  "reproduce_command": "python docs/working/gate2_closure/verify_registry_bindings.py  (or re-run the inline recomputation recorded in this file)"
+}

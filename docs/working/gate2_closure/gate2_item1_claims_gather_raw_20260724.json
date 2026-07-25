@@ -1,0 +1,257 @@
+{
+  "schema_version": "cas_harness.gate2_item1_claims_gather.v1",
+  "gather_date": "2026-07-24",
+  "purpose": "Raw material for Gate 2 item 1 (model x revision x evidence-tier claims matrix). GATHER ONLY. No claim is licensed, withdrawn, or rewritten by this file.",
+  "scope_note": "Gate 2 item 1 is roadmap docs/working/CAS_HARNESS_033_TO_100_COMPLETION_ROADMAP_20260722.md:189-191. The four 2026-07-24 prompt-injection experiments are Gate 3 scope (roadmap:255) and are recorded here ONLY for a model-provenance defect, never as Gate 2 evidence.",
+  "repo_state_at_gather": {
+    "cwd": "C:/Users/wakil/OneDrive/Desktop/tksCAS",
+    "HEAD": "d2a4cdf4966c0528f31d3ed47b922a5546188f22",
+    "branch": "codex/cascompass-legal-live-source"
+  },
+
+  "finding_A_branch_split": {
+    "title": "Claim documents and raw evidence live on DISJOINT branches",
+    "state": "real",
+    "evidence": [
+      "git rev-parse HEAD:docs/legal_drafts_20260607/CAS_HARNESS_SPEC_SHEET_current.md = 417d2058f97fbb9e5afebda4ea1a3ae6b4e54c52 (pre-remediation blob)",
+      "git rev-parse d6069513:docs/legal_drafts_20260607/CAS_HARNESS_SPEC_SHEET_current.md = 6d355f6ee055fe25296b99d6a8f643849848db2e (remediated blob)",
+      "git branch -a --contains d6069513a64e44702a0daa7bbb482406731c6ebe -> only codex/claims-remediation-20260719",
+      "git ls-tree -r --name-only master -- noetic-compass-scaffold/noetic-compass/docs/working/ -> 129 files incl. all GPT-NeoX-20B 40E raw JSON",
+      "git ls-tree -r --name-only HEAD -- noetic-compass-scaffold/noetic-compass/docs/working/ -> 43 files, ZERO GPT-NeoX-20B artifacts",
+      "git ls-tree -r --name-only master | grep SPEC_SHEET -> no matches"
+    ],
+    "consequence": "On the branch that carries the claim-bearing spec sheets, none of the 20B/40E raw artifacts are reachable; on the branch that carries the raw artifacts, none of the spec sheets are reachable. No single checkout can currently reproduce a claim row end to end."
+  },
+
+  "finding_B_stage_reports_unmerged": {
+    "title": "Per-model Stage 14/15/16 raw reports are reachable ONLY from an unmerged experiment branch",
+    "state": "real",
+    "evidence": [
+      "git merge-base --is-ancestor bf645c86 HEAD -> NOT ancestor",
+      "git merge-base --is-ancestor bf645c86 master -> NOT ancestor",
+      "git branch -a --contains bf645c86 -> codex/atlas-merge-634b797, experiment/cas-probe-pythia, remotes/origin/experiment/cas-probe-pythia",
+      "git ls-files noetic-compass-scaffold/noetic-compass/research/cas_probe/ -> 5 files at HEAD",
+      "on-disk noetic-compass-scaffold/noetic-compass/research/cas_probe/evidence_packets/ -> empty, untracked, not gitignored",
+      "on-disk noetic-compass-scaffold/noetic-compass/reports/ -> empty, untracked, not gitignored"
+    ]
+  },
+
+  "finding_C_revision_availability": {
+    "title": "Exact model revisions exist for 5 of 6 model points; GPT-NeoX-20B revision is literally null",
+    "state": "real",
+    "revisions_present": {
+      "EleutherAI/pythia-160m": {
+        "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+        "sources": [
+          "noetic-compass-scaffold/noetic-compass/research/cas_probe/stage7_foundation_pilot_smoke_activations_manifest_20260517.json:39 (ON DISK at HEAD, sha256 ae364271bd08245d016566ca9a3f72f5b628f19de50ea1b33573aadeb652878f)",
+          "experiment/cas-probe-pythia:.../stage7_foundation_pilot_activations_manifest_20260517.json (full run, n_records 4368, device cuda)",
+          "experiment/cas-probe-pythia:.../stage9_elements_pilot_activations_manifest_20260517.json (40E, n_records 8320)",
+          "experiment/cas-probe-pythia:.../pythia_probe_activations_v2_manifest_20260516.json (typed v2 probe, n_records 551, labels_sha256 1970c1ab3ee0d46fdd247da705ba038278ec86e51659f10c6b42d31a879e998c)"
+        ]
+      },
+      "EleutherAI/pythia-1b": {
+        "model_revision": "f73d7dcc545c8bd326d8559c8ef84ffe92fea6b2",
+        "sources": ["experiment/cas-probe-pythia:.../stage8_pythia1b_activations_manifest_20260517.json:39"]
+      },
+      "EleutherAI/pythia-2.8b": {
+        "model_revision": "2a259cdd96a4beb1cdf467512e3904197345f6a9",
+        "sources": [
+          "experiment/cas-probe-pythia:.../stage14_pythia28b_activations_manifest_20260518.json:39",
+          "experiment/cas-probe-pythia:.../stage14_weight_geometry_alignment_20260519.json (model.model_revision)"
+        ]
+      },
+      "allenai/OLMo-1B-hf": {
+        "model_revision": "aee7752d9c08ee4775e9b0091426d8410e8f6a89",
+        "sources": ["experiment/cas-probe-pythia:.../stage15_olmo1b_activations_manifest_20260519.json:39"]
+      },
+      "Qwen/Qwen2.5-1.5B": {
+        "model_revision": "8faed761d45a263340a0528343f099c05c9a4323",
+        "sources": ["experiment/cas-probe-pythia:.../stage16_qwen15b_activations_manifest_20260519.json:39"]
+      },
+      "Qwen/Qwen2.5-1.5B-Instruct": {
+        "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+        "sources": ["docs/working/typed_probe_gate_runlog.md:25"],
+        "note": "DISTINCT model AND revision from Qwen/Qwen2.5-1.5B. Blanket 'Qwen' in six-model wording is ambiguous between these two."
+      }
+    },
+    "revision_unavailable": {
+      "EleutherAI/gpt-neox-20b": {
+        "model_revision": "null (literal)",
+        "source": "master:noetic-compass-scaffold/noetic-compass/docs/working/gpt_neox_20b_stage9_original_40e_capture_metadata_20260527.json -> \"model_revision\": None",
+        "corroboration": "project_handoffs/.../CAS_HARNESS_AMAZON_CLAIM_EVIDENCE_MANIFEST_20260721.json:304,323 -> \"model_revision\": null for research.gpt20_f28_packet and research.gpt20_40e_readout_bridge",
+        "consequence": "No 20B row in a model-by-REVISION matrix can be filled from raw evidence. Mark `unavailable`."
+      }
+    },
+    "manifest_self_report": "CAS_HARNESS_AMAZON_CLAIM_EVIDENCE_MANIFEST_20260721.json claim research.cross_model_f28_readout_and_bridge carries the field \"exact_revisions_available\": false."
+  },
+
+  "finding_D_verified_raw_numbers": {
+    "title": "F28 held-out readout numbers reproduce EXACTLY from raw layer-scan reports",
+    "state": "real",
+    "denominator_all_rows": {"n_train": 1344, "n_val": 672, "n_test": 2352, "n_classes": 28, "readout": "focus_token", "selection_rule": "highest validation 28-way Foundation accuracy; ties within 0.001 broken by lowest val lacunarity", "fixture_input_sha256": "3e4a1aca9f168a190116578b0b4fdb5bab633232ba06902039b233e589121250"},
+    "rows": [
+      {"model": "EleutherAI/pythia-1b", "selected_layer_position": 8, "selected_test_accuracy": 0.8239795918367347, "correct_over_n": "1938/2352", "matrix_row_said": "about 1,938/2,352 = 82.398%", "match": "EXACT; the word 'about' in the matrix is unnecessary", "best_layer_by_test_acc": {"layer": 13, "acc": 0.89328231292517}, "val_accuracy_at_selected": 1.0, "source": "experiment/cas-probe-pythia:.../STAGE8_PYTHIA1B_PROBE_REPORT_20260517.json"},
+      {"model": "EleutherAI/pythia-2.8b", "selected_layer_position": 14, "selected_test_accuracy": 0.858843537414966, "correct_over_n": "2020/2352", "matrix_row_said": "2,020/2,352 = 85.884%", "match": "EXACT", "best_layer_by_test_acc": {"layer": 13, "acc": 0.8809523809523809}, "val_accuracy_at_selected": 1.0, "source": "experiment/cas-probe-pythia:.../STAGE14_PYTHIA28B_PROBE_REPORT_20260518.json"},
+      {"model": "allenai/OLMo-1B-hf", "selected_layer_position": 16, "selected_test_accuracy": 0.9060374149659864, "correct_over_n": "2131/2352", "matrix_row_said": "2,131/2,352 = 90.604%", "match": "EXACT", "best_layer_by_test_acc": {"layer": 16, "acc": 0.9060374149659864}, "val_accuracy_at_selected": 0.9910714285714286, "source": "experiment/cas-probe-pythia:.../STAGE15_OLMO1B_PROBE_REPORT_20260519.json"},
+      {"model": "Qwen/Qwen2.5-1.5B", "selected_layer_position": 11, "selected_test_accuracy": 0.8201530612244898, "correct_over_n": "1929/2352", "matrix_row_said": "1,929/2,352 = 82.015%", "match": "EXACT", "best_layer_by_test_acc": {"layer": 28, "acc": 0.9124149659863946}, "val_accuracy_at_selected": 0.9985119047619048, "source": "experiment/cas-probe-pythia:.../STAGE16_QWEN15B_PROBE_REPORT_20260519.json"}
+    ],
+    "honesty_observation": "For Pythia-1B, Pythia-2.8B and Qwen2.5-1.5B the SELECTED layer's test accuracy is LOWER than the best layer's test accuracy. Layer selection was done on validation, not test. This is a point in the record's favour and should be stated on each row.",
+    "degenerate_selection_warning": "Pythia-1B and Pythia-2.8B report val accuracy = 1.0 at the selected layer, so layer choice was decided by the lacunarity tie-break, not by validation accuracy. Record as a selection-uncertainty note; the matrix's Wilson intervals do not cover it."
+  },
+
+  "finding_E_20b_raw_verified": {
+    "title": "GPT-NeoX-20B 40E numbers reproduce exactly; the causal gate is a documented NEAR-MISS",
+    "state": "real",
+    "source": "master:noetic-compass-scaffold/noetic-compass/docs/working/gpt_neox_20b_stage9_original_40e_subspace_ablation_report_20260528T0155Z.json and ..._probe_eval_report_20260527.json",
+    "primary_result": {"layer": 2, "original_accuracy": 0.95625, "ablated_accuracy": 0.6689732142857143, "true_disruption": 0.2872767857142857, "random_same_rank_mean_disruption": 0.0006808035714286175, "random_same_rank_max_disruption": 0.002678571428571419, "chance_baseline_accuracy": 0.025, "packet_decision": "not_applicable_ablation_diagnostic_only"},
+    "snr_check": "0.2872767857142857 / 0.002678571428571419 = 107.25 -> the widely quoted '107x signal-to-noise' is computed against the random MAX, not the random mean (mean ratio = 421.9). The number is backed; the divisor should be named on the row.",
+    "readout_controls": {"n_train": 3840, "n_test": 4480, "seed": 2026, "split": "fixed split by metadata.split; test_split=test", "train_test_group_overlap_count": 0, "confirmed_text_baseline_CountVectorizer_1_2gram": 0.4924107142857143, "text_hash_baseline_HashingVectorizer_1_2gram": 0.5, "majority_class": 0.025, "shuffled_label_hidden_max": 0.033035714285714286, "shuffled_trials": 20},
+    "control_gap": "NO character-level n-gram surface control exists for the 20B 40E readout row. Both text controls are WORD 1-2 gram. Under the project's standing char-level-surface-control rule, the 20B 'hidden beats surface' row must be marked control_proof: partial / char_ngram_control: unavailable."
+  },
+
+  "finding_F_weight_geometry_multiplicity": {
+    "title": "The Pythia-2.8B 2.83x static-weight-geometry row reports the best of three checks",
+    "state": "real",
+    "source": "experiment/cas-probe-pythia:noetic-compass-scaffold/noetic-compass/research/cas_probe/stage14_weight_geometry_alignment_20260519.json",
+    "three_checks": {
+      "output_logit_lens_energy_fraction": {"actual_over_random_mean": 2.830531385486643, "empirical_p_random_ge_actual": 0.009900990099009901, "n_random": 100},
+      "output_weight_energy_fraction": {"actual_over_random_mean": 1.0621312951730846, "empirical_p_random_ge_actual": 0.009900990099009901},
+      "input_weight_energy_fraction": {"actual_over_random_mean": 1.0033496167943243, "empirical_p_random_ge_actual": 0.3465346534653465}
+    },
+    "artifact_own_words": "\"At least one weight-geometry check is above random same-rank controls. This supports a bounded alignment-inspection claim, not generation control.\"",
+    "consequence": "The claim-matrix row 'PASS reported: 2.83 times random; p=.0099' discloses neither the two weaker checks nor the 3-way multiplicity. The row needs a multiplicity policy field."
+  },
+
+  "finding_G_provenance_defect_gate3_scope": {
+    "title": "Two 2026-07-24 evidence reports assert a FALSE model",
+    "state": "real",
+    "gate_scope": "GATE 3 (prompt-injection, roadmap:255). Recorded here as a model-claim provenance defect only. Carries NO Gate 2 credit.",
+    "evidence": [
+      "project_handoffs/.../GATE2_W0_FAIR_COMPARISON/evidence/injection_detection_w0_report_pythia1b_attempt3_meanpool.json -> \"model\": \"EleutherAI/pythia-160m\"",
+      "project_handoffs/.../GATE2_W0_FAIR_COMPARISON/evidence/injection_detection_w0_report_pythia28b_attempt4_meanpool.json -> \"model\": \"EleutherAI/pythia-160m\"",
+      "project_handoffs/.../GATE2_W0_FAIR_COMPARISON/evidence/injection_detection_attempts_registry.json -> attempt 3 model \"EleutherAI/pythia-1b\", attempt 4 model pythia-2.8b (registry is correct)"
+    ],
+    "also": "None of the four reports carries a model_revision field at all.",
+    "already_flagged_by": "project_handoffs/.../GATE2_W0_FAIR_COMPARISON/expert_panel/panel_structured_findings.json:34 (PROVENANCE FIX bullet)"
+  },
+
+  "blanket_six_model_inventory": {
+    "note": "Every occurrence on a live, unbannered, claim-bearing surface in the current working tree. Historical/superseded copies under project_handoffs/ and the v1.6-v2.0 marketing sheets are listed separately as archived.",
+    "live_unbannered": [
+      {"file": "docs/legal_drafts_20260607/CAS_HARNESS_SPEC_SHEET_current.md", "line": 28, "quote": "The validated cross-architecture and cross-scale claim (three independent model families across six model points, with a 20B scale extension closed on two cognitive axes)", "prohibited_by": "CAS_HARNESS_CLAIM_EVIDENCE_MATRIX_20260719.md claim-governance rule: '\"The 20B chain closes on two axes\" is prohibited.'"},
+      {"file": "docs/legal_drafts_20260607/CAS_HARNESS_SPEC_SHEET_current.md", "line": 67, "quote_fragment": "across six model points and three architecture families ... The 20B chain closes on two cognitive axes.", "prohibited_by": "same rule"},
+      {"file": "docs/legal_drafts_20260607/CAS_HARNESS_SPEC_SHEET_current.md", "line": 83, "quote_fragment": "The probing chain closed in May 2026 on the presence, causal role, and conditionability of the structure across six model points", "prohibited_by": "'\"Presence, causal role, and conditionability across six models\" is prohibited.'"},
+      {"file": "docs/legal_drafts_20260607/CAS_HARNESS_SPEC_SHEET_current.md", "line": 522, "quote_fragment": "six models in three architecture families on two cognitive axes at 20B ... every verdict is a typed classification read from hidden states and validated causally", "prohibited_by": "'\"Every verdict is validated causally\" is prohibited.'"},
+      {"file": "docs/working/cas_harness_executive_summary_20260630.md", "line": 12, "quote": "**What is proven (LICENSED).** Across **six open-weight model points in three architecture families** (Pythia/GPT-NeoX 160M->20B, OLMo-1B, Qwen2.5-1.5B):", "defect": "Header scopes the following bullets to six model points AND labels them LICENSED."},
+      {"file": "docs/working/cas_harness_executive_summary_20260630.md", "line": 14, "quote": "- **Causal role** - ablating the structure collapses readout (107x signal-to-noise at 20B); head-level + **sparse MLP-neuron-cover (112/112, p < 10^-33)** with necessity *and* sufficiency.", "defect": "STRONGEST OVERSTATEMENT FOUND. (a) presented as LICENSED under a six-model header; (b) omits that the 20B preregistered causal gate was MISSED (raw artifact packet_decision 'not_applicable_ablation_diagnostic_only', Amazon manifest preregistered_gate_result 'OPEN_NEAR_MISS'); (c) the 112/112 result is Pythia-160M ONLY (28 classes x 4 conditions), per docs/working/cas_harness_original_closure_methodology_20260526.md:192-203 and docs/working/paper_b_causal_localization_draft_outline_20260523.md:52."},
+      {"file": "docs/working/cas_harness_executive_summary_20260630.md", "line": 17, "quote": "- Validated **up to 20B parameters on two cognitive axes** under two named methodologies", "prohibited_by": "'\"The 20B chain closes on two axes\" is prohibited.'"},
+      {"file": "docs/working/cas_harness_synopsis_20260630.md", "line": 24, "quote": "The probing chain **closed in May 2026** on three things: the **presence**, the **causal role**, and the **conditionability** of that structure, across six model points.", "prohibited_by": "'\"Presence, causal role, and conditionability across six models\" is prohibited.'"},
+      {"file": "docs/working/cas_harness_synopsis_20260630.md", "line": 85, "quote": "Validated claim spans **six model points across three architecture families**, with a **20B scale extension closed on two cognitive axes**.", "prohibited_by": "'\"The 20B chain closes on two axes\" is prohibited.'"},
+      {"file": "docs/working/cas_harness_amazon_review_brief_20260615.md", "line": 54, "quote_fragment": "CAS-shaped structure is linearly readable from model activations and is causally load-bearing, across six model points and three families up to 20B.", "prohibited_by": "'\"causally validated across six models\"' is on the Appendix-B prohibited-shorthand list in the 2026-07-21 Amazon spec."},
+      {"file": "noetic-compass-scaffold/noetic-compass/docs/marketing/CAS_HARNESS_SPEC_SHEET_v2_1_INVESTOR_EXTERNAL_NDA_20260604.md", "line": 146, "quote_fragment": "across six model points and three architecture families ... The 20B chain closes on two cognitive axes.", "banner_state": "NO withdrawal banner in the working tree. The banner exists only in unmerged commit d6069513."},
+      {"file": "noetic-compass-scaffold/noetic-compass/docs/marketing/CAS_HARNESS_SPEC_SHEET_v2_1_INVESTOR_EXTERNAL_NDA_20260604.md", "line": 158, "quote_fragment": "The probing chain closed in May 2026 across six model points, two cognitive axes at 20B", "banner_state": "same"},
+      {"file": "noetic-compass-scaffold/noetic-compass/research/cas_probe/CAS_HARNESS_SPEC_SHEET_20260517.md", "line": 521, "quote": "**What is proved today?** Six closed evidence tiers on two open models (Pythia-160M and Pythia-1B)", "note": "This 'six' is TIERS, not models - do not confuse it with the six-model claim. Only FIVE tiers are then enumerated in the same sentence. Document has NO superseded banner in the working tree; the banner exists only in unmerged commit d6069513."},
+      {"file": "docs/legal_drafts_20260607/CAS_provenance_preprint_updated.md", "line": 19, "quote_fragment": "Across five model points spanning three independent architecture families (EleutherAI Pythia/GPT-NeoX at four scales, AI2 OLMo, Alibaba Qwen)", "defect": "Says FIVE model points while enumerating SIX (160M, 1B, 2.8B, 20B, OLMo, Qwen). Same inconsistency at line 97."}
+    ],
+    "archived_or_banner_bearing": [
+      "noetic-compass-scaffold/noetic-compass/docs/marketing/CAS_HARNESS_SPEC_SHEET_v2_0_INVESTOR_EXTERNAL_NDA_20260604.md:1 - carries 'SUPERSEDED 2026-06-04 by v2.1' banner (lines 147, 159 carry six-model text)",
+      "noetic-compass-scaffold/noetic-compass/docs/marketing/CAS_HARNESS_SPEC_SHEET_v1_9_INVESTOR_EXTERNAL_NDA_20260530.md:89,1158,1288",
+      "noetic-compass-scaffold/noetic-compass/docs/marketing/CAS_HARNESS_SPEC_SHEET_v1_8_INVESTOR_EXTERNAL_NDA_20260528.md:54,104,467,549",
+      "noetic-compass-scaffold/noetic-compass/docs/marketing/CAS_HARNESS_SPEC_SHEET_v1_7_INVESTOR_EXTERNAL_NDA_20260528.md:52,152,574,576,667",
+      "noetic-compass-scaffold/noetic-compass/docs/marketing/CAS_HARNESS_SPEC_SHEET_v1_6_INVESTOR_EXTERNAL_NDA_20260527.md:31,308,440,442,492,494,588",
+      "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/03_RESEARCH_AND_ARCHITECTURE_DOCS/HISTORICAL_CLAIM_AND_AUDIT_CONTEXT/CAS_HARNESS_SPEC_SHEET_current.md:28,67,83 (handoff copy, same unbannered text)",
+      "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/03_RESEARCH_AND_ARCHITECTURE_DOCS/HISTORICAL_CLAIM_AND_AUDIT_CONTEXT/cas_harness_synopsis_20260630.md:24,85",
+      "docs/working/cas_harness_matched_taxonomy_evidence_packet_spec_20260530.md:362 - PROHIBITION, not a claim: '\"CAS is validated across model families\" unless the six-model replication has passed.'",
+      "docs/working/cas_harness_matched_taxonomy_control_prereg_20260530.md:51 - planning reference to a 'six-model sweep', not a claim"
+    ]
+  },
+
+  "correctly_bounded_prior_work": {
+    "CAS_HARNESS_CLAIM_EVIDENCE_MATRIX_20260719.md": {
+      "location": "EXISTS ONLY in unmerged commit d6069513a64e44702a0daa7bbb482406731c6ebe on branch codex/claims-remediation-20260719, path docs/legal_drafts_20260607/CAS_HARNESS_CLAIM_EVIDENCE_MATRIX_20260719.md",
+      "on_disk": false,
+      "columns": ["Model", "F28 held-out readout", "F28 causal", "F28 likelihood bridge", "40E evidence", "Static-weight geometry"],
+      "missing_column_for_gate2": "model REVISION - the roadmap item requires model x revision x tier; this matrix has no revision column.",
+      "unavailable_cells_recorded": "F28 causal: 'Not located' for Pythia-1B, Pythia-2.8B, OLMo-1B, Qwen2.5-1.5B. 40E: 'Not located' for Pythia-1B, Pythia-2.8B, OLMo-1B, Qwen2.5-1.5B. Static-weight geometry: 'Not located' for all except Pythia-2.8B.",
+      "prohibited_phrase_list": [
+        "'two independent evidence tiers across six models' (v2.1 / consolidated draft)",
+        "'Presence, causal role, and conditionability across six models'",
+        "'Not lab-specific, not corpus-specific, not language-specific'",
+        "'The 20B chain closes on two axes'",
+        "'Every verdict is validated causally'"
+      ],
+      "self_declared_limit": "'This matrix is a claim-control document, not an independent replication. Raw artifacts, frozen dataset/split, model revisions, seeds, checksums, and packet IDs must be published or escrowed before an external reviewer can reproduce each row.'"
+    },
+    "CAS_HARNESS_TKS_UNIVERSALITY_LICENSING_PROGRAM_20260720.md": {
+      "location": "docs/working/CAS_HARNESS_TKS_UNIVERSALITY_LICENSING_PROGRAM_20260720.md:382-393",
+      "value": "A SECOND, independently-built evidence-tier table with a surface-control column. Adds four model points the 2026-07-19 matrix omits.",
+      "extra_rows": [
+        "Pythia-2.8B layer 24 F28-vs-GoEmotions pilot: F28 49.857%, +13.857pp; preregistered +20pp recoverability floor MISSED -> BLOCKED_CAS_NOT_RECOVERABLE",
+        "Qwen2.5-1.5B-Instruct layer 14 typed readout: 91.566% vs strongest TF-IDF 86.747%, +4.819pp -> typed coverage PASS only",
+        "Qwen-1.5B layer 18 prompt-injection W0 re-audit: hidden BA 89.6875% vs later char n-gram 92.5-93.1% -> initial PASS WITHDRAWN, OPEN / NOT LICENSED",
+        "Pythia-160M historical 40E readout 89.8% vs about 50.1% surface"
+      ],
+      "self_declared_gap": "'There is not yet a same-model, same-neutral-evaluation, same-split, same-hook, same-seed GPU ablation where only original-TKS versus short-CAS definitions changes.'"
+    },
+    "CAS_HARNESS_AMAZON_CLAIM_EVIDENCE_MANIFEST_20260721.json": {
+      "location": "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/04_AMAZON_INTERNAL_DRAFT_DO_NOT_SEND/CAS_HARNESS_AMAZON_CLAIM_EVIDENCE_MANIFEST_20260721.json",
+      "status": "DISTRIBUTION_PAUSED_INTERNAL_REVIEW_DRAFT, distribution_allowed false, external_approval OPEN",
+      "value": "14 claim rows with an evidence_class vocabulary (DEMONSTRATED_RESEARCH_RESULT / DIAGNOSTIC_OR_APPARATUS_EVIDENCE / ENGINEERING_OBJECTIVE) and 15 hashed evidence artifacts. Closest existing thing to the required tier column.",
+      "artifact_availability_recheck_20260724": {
+        "absent_from_current_working_tree": [
+          "noetic-compass-scaffold/noetic-compass/docs/working/S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.json",
+          "noetic-compass-scaffold/noetic-compass/docs/working/gpt_neox_20b_stage9_original_40e_probe_eval_report_20260527.json",
+          "noetic-compass-scaffold/noetic-compass/docs/working/gpt_neox_20b_stage9_original_40e_subspace_ablation_report_20260528T0155Z.json",
+          "noetic-compass-scaffold/noetic-compass/docs/working/gpt_neox_20b_stage9_original_40e_eta_epsilon_bridge_per2_20260528T0455Z.json",
+          "noetic-compass-scaffold/noetic-compass/docs/working/gpt_neox_20b_stage9_original_40e_evidence_packet_20260528T0455Z.json",
+          "noetic-compass-scaffold/noetic-compass/docs/working/gpt_neox_20b_stage9_original_40e_verifier_report_20260528T0455Z.json",
+          "noetic-compass-scaffold/noetic-compass/docs/working/pythia160m_gate1/pythia160m_stage9_40e_evidence_packet.json",
+          "noetic-compass-scaffold/noetic-compass/docs/working/pythia160m_gate1/pythia160m_stage9_40e_verifier_report.json"
+        ],
+        "all_present_on_branch_master": true,
+        "correction_available": "The manifest lists pythia160_f28_activation_manifest and pythia160_f28_activation_npz as availability_in_protected_tree 'unavailable'. Both ARE present in the current working tree with EXACTLY matching SHA-256: ae364271bd08245d016566ca9a3f72f5b628f19de50ea1b33573aadeb652878f and 04800d4263e16ff1aa25653d58fe8db3531a9035602429ea7e658413320b4913."
+      }
+    },
+    "master_public_evidence_manifest": {
+      "location": "master:noetic-compass-scaffold/noetic-compass/research/cas_probe/cas_harness_public_evidence_manifest.json",
+      "value": "5 UI-visible claim rows with hashed artifact paths; self-declares 'no local evidence packet trace ID or p-value was found for those OLMo/Qwen rows' and n_sample_size null on the readout row.",
+      "not_on_HEAD": true
+    }
+  },
+
+  "prior_partial_work_at_todo_2333": {
+    "exact_lines": "docs/working/cas_harness_production_todo.md:2331-2345",
+    "what_it_established": [
+      "2331-2332: May/June historical sheets carry superseded/withdrawn banners; v2.1 and the consolidated current sheet are no longer claim authority.",
+      "2333-2335: 'A six-model-by-tier matrix names exact denominators, descriptive Wilson intervals, available bridge dispersion, missing causal/40E/weight tiers, and the single-fixed-split/no-cross-seed boundary.'",
+      "2336-2339: corrected current PDF says distribution paused, no standing ACCEPT, cross-model evidence depth unequal, 300B NOT LICENSED, worker honesty not independently verified, Governance/31 not customer-production-grade.",
+      "2340-2345: 19-page corrected specification sha256 956328f4addaeaeeb6b9ea2ae83dc9180b7e1f3f8f0dd5a8a4d5f3d7e664fa9f; 3-page matrix sha256 163eae696e24f26264b8d8187185da1f7ad5e4577de4a87f364be9b7ae567524."
+    ],
+    "what_it_did_NOT_establish": [
+      "No model REVISION dimension at all.",
+      "The two claimed PDF SHA-256 values appear ONLY in prose in cas_harness_production_todo.md:2343,2345 and in three project_handoffs snapshots of the same file. No PDF on disk or in any branch was located to verify either hash.",
+      "Its own preamble (todo:2358-2367) states the remediation commits are 'not merged, pushed, deployed', which is still true as of this gather."
+    ]
+  },
+
+  "verified_named_commits": {
+    "d6069513a64e44702a0daa7bbb482406731c6ebe": "docs: reconcile CAS Harness claims and evidence (2026-07-19). 14 files. Only on codex/claims-remediation-20260719.",
+    "f1fa2dae50e063c9376813d17f9f98514af2f69c": "cas-probe: record Stage 14 Pythia 2.8B scale result (2026-05-19). Only on experiment/cas-probe-pythia.",
+    "bf645c860a4dd91b415b4f2ef04898603aea88cc": "cas-probe: record blindspot geometry and OLMo results (2026-05-19). Only on experiment/cas-probe-pythia.",
+    "74d6f88439cca6aa6b5853d421b05b56bfff7967": "cas-probe: record Stage 16 Qwen replication (2026-05-19). Only on experiment/cas-probe-pythia.",
+    "3e72d739e1a23a878d529a42823e97767dd35b8e": "feat(cas-harness): generate Stage 9 40E verifier report (2026-05-28). The commit that carried the later-withdrawn ACCEPT.",
+    "337d0c29b0822228dbfbb35dfc9873ca69453f1d": "fix(evidence): anchor Pythia-160M Stage 9 packet honestly as FLAG, not ACCEPT (2026-06-03). Root-cause producer fix.",
+    "24e15a9b5f7c4632246dd14d9cf261d0c32bc5d7": "fix(evidence): require uniqueness proof for Stage 9 accept (2026-06-03)."
+  },
+
+  "gaps_unavailable": [
+    "GPT-NeoX-20B model revision: unavailable (literal null in the only capture metadata).",
+    "Pythia-160M / Pythia-1B / Pythia-2.8B / OLMo / Qwen F28 CAUSAL tier: unavailable per the 2026-07-19 matrix ('Not located'); no raw artifact located in this gather either, except Pythia-160M whose F28 causal PASS is cited from CAS_HARNESS_SPEC_SHEET_20260517.md prose (78.57% to 3.57%, empirical p=.0323) with no raw JSON located.",
+    "40E tier for Pythia-1B, Pythia-2.8B, OLMo, Qwen: unavailable.",
+    "Static-weight geometry tier for all model points except Pythia-2.8B: unavailable.",
+    "Character-level n-gram surface control for the 20B 40E readout: unavailable (word 1-2 gram only).",
+    "Cross-seed variation for every F28 row: unavailable (single fixed split; 20B seed pinned at 2026).",
+    "The two corrected-PDF SHA-256 values at todo:2343,2345: no matching file located on disk or in any branch.",
+    "Independent object-store / escrow mirror for the 2026-07-21 definition-anchor bundle: OPEN per the Amazon manifest's own missing_or_external_artifacts entry."
+  ]
+}

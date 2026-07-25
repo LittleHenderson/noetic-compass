@@ -1,0 +1,234 @@
+{
+  "schema_version": "gate2_item2_withdrawn_accept_evidence_index.v1",
+  "generated_on": "2026-07-24",
+  "purpose": "Raw-material index for Gate 2 item 2 (withdrawn-ACCEPT root-cause report). Gathering artifact only. No claim is advanced or licensed by this file.",
+  "controlling_text": {
+    "gate_2_score_row": {
+      "path": "docs/working/cas_harness_production_todo.md",
+      "line": 954,
+      "quote": "| 2 | small-model semantic authority, matched controls, uncertainty, claims reconciliation, and withdrawn-`ACCEPT` root cause close | `0.46` |"
+    },
+    "roadmap_item_2": {
+      "path": "docs/working/CAS_HARNESS_033_TO_100_COMPLETION_ROADMAP_20260722.md",
+      "lines": "192-197"
+    },
+    "roadmap_exit_clause": {
+      "path": "docs/working/CAS_HARNESS_033_TO_100_COMPLETION_ROADMAP_20260722.md",
+      "lines": "217-220"
+    }
+  },
+  "do_not_conflate": {
+    "different_record": {
+      "title": "Hidden/Encoded Prompt-Injection W0 — License Withdrawn",
+      "path": ".claude/worktrees/integration/noetic-compass-scaffold/noetic-compass/docs/working/hidden_prompt_injection_w0_license_withdrawn_20260618.md",
+      "date": "2026-06-18",
+      "subject": "internal_w0_prompt_injection_detection license, Qwen2.5-1.5B layer 18",
+      "note": "This is a SEPARATE withdrawal from the Stage 9 40E Evidence Packet ACCEPT withdrawal. Different subject, different date, different mechanism (char n-gram surface control 0.925 beat hidden 0.897). Must never be merged into the Gate 2 item 2 record."
+    },
+    "out_of_scope_this_session": {
+      "note": "The four 2026-07-24 prompt-injection experiments target Gate 3 item 8, not Gate 2. They carry no Gate 2 credit and are not cited as Gate 2 evidence.",
+      "panel_citation": "project_handoffs/CAS_HARNESS_RESEARCH_HANDOFF_2026-07-21/11_JACOBIAN_LIVE_MODEL_CANARY_V1_2026-07-22/GATE2_W0_FAIR_COMPARISON/expert_panel/PANEL_FINAL_REPORT.md"
+    }
+  },
+  "defect_class_A_original_verdict_logic_and_missing_uniqueness_gate": {
+    "summary": "Two Stage 9 40E Evidence Packets were emitted with verdict ACCEPT because the packet merger stamped a candidate-only neuron-cover discovery as a `verified` control_proof chip on nothing but a class-count test, and because no matched-taxonomy/uniqueness gate existed in the verifier report builder or packet merger.",
+    "producer_defect": {
+      "file": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/merge_stage9_40e_evidence_packet.py",
+      "function": "_control_chip_status",
+      "pre_fix_line": "~646",
+      "pre_fix_logic": "if isinstance(class_count, int) and class_count >= 40: return \"verified\"",
+      "cover_report_status_that_was_accepted": "candidate_cover_discovery_completed",
+      "proof": "git diff 337d0c29b0822228dbfbb35dfc9873ca69453f1d^ 337d0c29b0822228dbfbb35dfc9873ca69453f1d -- live-trace-worker/scripts/merge_stage9_40e_evidence_packet.py"
+    },
+    "missing_uniqueness_gate": {
+      "file": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/build_stage9_40e_verifier_report.py",
+      "added_by_commit": "24e15a9b5f7c4632246dd14d9cf261d0c32bc5d7",
+      "added_symbols": ["PASSING_UNIQUENESS_STATUSES", "FAILING_UNIQUENESS_STATUSES", "_uniqueness_gate"],
+      "absent_before": true
+    },
+    "affected_packets": [
+      {
+        "trace_id": "stage9-40e-original-baseline-readout-20260527",
+        "model": "EleutherAI/gpt-neox-20b",
+        "packet_path": "docs/working/gpt_neox_20b_stage9_original_40e_evidence_packet_20260528T0455Z.json",
+        "verdict_field": "ACCEPT",
+        "verdict_line_in_file": 508,
+        "sha256_verified_on_disk": "2b402931b35f7527d0baf76467a9812d7c8d9da232688c2a106238b5b5c7cf6d",
+        "verifier_report_sha256_verified_on_disk": "79d140f0d5028578d8c776eb6069cbad53a4733e0553004aa9ecb8366374a5f0",
+        "on_disk_location_verified": "C:/Users/wakil/CAS-Harness-Run/noetic-compass-scaffold/noetic-compass/docs/working/",
+        "claim_state": "withdrawn"
+      },
+      {
+        "trace_id": "pythia-160m-stage9-40e-readout-20260531",
+        "model": "EleutherAI/pythia-160m",
+        "packet_path": "docs/working/pythia160m_gate1/pythia160m_stage9_40e_evidence_packet.json",
+        "pre_fix_git_revision": "18dc6236a193e43097129819f688269c0c25a0be",
+        "pre_fix_verdict_field": "ACCEPT",
+        "pre_fix_verdict_line": 499,
+        "pre_fix_sha256_independently_recomputed": "0af6964f9446e61376530ff9f3d305540f6eaed709e29fbfa2d02cf37e706f4e",
+        "corrected_on_disk_verdict": "FLAG_FOR_HUMAN_REVIEW",
+        "corrected_on_disk_sha256": "64a9de4d56ce0bee14ca8108cf97b92df23ad11ca4d4784ac0cbaf4ad0788c87",
+        "claim_state": "withdrawn"
+      }
+    ],
+    "correcting_commits": [
+      {"sha": "337d0c29b0822228dbfbb35dfc9873ca69453f1d", "date": "2026-06-03", "subject": "fix(evidence): anchor Pythia-160M Stage 9 packet honestly as FLAG, not ACCEPT"},
+      {"sha": "24e15a9b5f7c4632246dd14d9cf261d0c32bc5d7", "date": "2026-06-03", "subject": "fix(evidence): require uniqueness proof for Stage 9 accept"}
+    ],
+    "contributing_factors_verbatim_from_registry": [
+      "candidate-only control_proof was stamped verified",
+      "the 20B 40E causal result missed its pre-registered absolute gate but the verifier used a different signal-to-noise guard",
+      "the decision was not bound to an immutable policy/preregistration hash",
+      "the same trace id was retained when the packet was regenerated with the corrected FLAG_FOR_HUMAN_REVIEW disposition",
+      "a previously stored anchor can contain the superseded ACCEPT bytes"
+    ]
+  },
+  "defect_class_B_evidence_that_required_withdrawal": {
+    "withdrawn_on": "2026-06-03",
+    "items": [
+      {
+        "id": "B1",
+        "what": "control_proof was candidate cover discovery only; matched-ablation validation had not been run",
+        "source": "commit 337d0c2 message: \"control_proof is candidate cover discovery only (matched-ablation not run), so it is recorded-but-not-verified\"",
+        "claim_state": "real"
+      },
+      {
+        "id": "B2",
+        "what": "GPT-NeoX-20B Condition-3 blind matched-taxonomy comparator returned GREY, not PASS: CAS accuracy 0.5347222222222222 vs NC40 control accuracy 1.0; observed margin -46.52777777777778pp against a pre-registered required +5pp",
+        "citation": "docs/working/cas_harness_production_todo.md:17907",
+        "archive": "D:/tksCAS-archive/condition3_mtc_comparator_20260603/",
+        "claim_state": "real"
+      },
+      {
+        "id": "B3",
+        "what": "Archived earlier Condition-3 MTC (GPT-NeoX-20B) failed CAS comparative specificity: cas_element hidden acc about 6.53% while matched controls were about 84.72%",
+        "citation": "docs/working/cas_harness_production_todo.md:17469",
+        "archive": "D:/tksCAS-archive/condition3_mtc_capture_20260531/",
+        "claim_state": "real"
+      },
+      {
+        "id": "B4",
+        "what": "The 20B 40E causal ablation narrowly MISSED its pre-registered gate (>=30 pp drop / <=65% floor) by 1.27-1.90 pp; 95.625% -> 66.897% = 28.73 pp. Documented as a near-miss, not a pass. The pre-fix verifier had used a different signal-to-noise guard.",
+        "citation": "docs/working/cas_harness_synopsis_20260630.md:101",
+        "claim_state": "real"
+      },
+      {
+        "id": "B5",
+        "what": "Pythia-160M activation-level matched ablation completed 2026-06-03 (label-specific cover drop 0.054762 vs wrong-cover 0.003572, random-control max 0.005953; union cover drop 0.108334 vs union random max 0.0) and was explicitly recorded as NOT sufficient to make the packet ACCEPT; uniqueness/MTC remains open.",
+        "citation": "docs/working/cas_harness_production_todo.md:17898",
+        "claim_state": "real"
+      }
+    ],
+    "resulting_effective_verdict": "FLAG_FOR_HUMAN_REVIEW",
+    "corroborating_summaries": [
+      {"path": "docs/working/cas_harness_synopsis_20260630.md", "line": 137},
+      {"path": "docs/working/cas_harness_executive_summary_20260630.md", "line": 20},
+      {"path": "docs/working/cas_harness_production_todo.md", "line": 17412},
+      {"path": "docs/working/cas_harness_production_todo.md", "line": 17413},
+      {"path": "docs/working/cas_harness_production_todo.md", "line": 17896}
+    ]
+  },
+  "defect_class_C_later_revival_and_anonymous_share_bypass": {
+    "discovery_date": "2026-07-19 PDT / 2026-07-20 UTC",
+    "discovery_artifact": "C:/Users/wakil/CAS-Harness-Run/noetic-compass-scaffold/noetic-compass/docs/working/CAS_HARNESS_REDTEAM_REAUDIT_20260719.md",
+    "C1_deployed_revival": {
+      "finding_id": "RT-02",
+      "finding_lines": "96-116",
+      "severity_as_recorded": "CRITICAL",
+      "dashboard_row_line": 68,
+      "statement": "Protected/live master can still revive a withdrawn GPT-NeoX ACCEPT after valid WORM anchoring, because deployed master has no withdrawal registry.",
+      "verified_live_code": [
+        {"file": "api/routes/cas_harness_audit.py", "line": 207, "content": "REFERENCE_TARGET_EVIDENCE_PACKET_TRACE_ID = \"stage9-40e-original-baseline-readout-20260527\""},
+        {"file": "api/routes/evidence.py", "line": 508, "content": "_STAGE9_40E_ORIGINAL_TRACE_ID = \"stage9-40e-original-baseline-readout-20260527\""},
+        {"file": "api/routes/evidence.py", "lines": "509-511", "content": "_STAGE9_40E_ORIGINAL_PACKET_FILENAME = \"gpt_neox_20b_stage9_original_40e_evidence_packet_20260528T0455Z.json\""},
+        {"file": "api/routes/evidence.py", "lines": "624-641", "content": "public_stage9_40e_packet_payload_for_trace + _stage9_40e_packet_is_worm_retained: the ACCEPT is downgraded ONLY while WORM proof is missing"}
+      ],
+      "verified_absence": "api/services/cas_harness_evidence_withdrawals.py is absent from protected master 81b5c18bd83e1f01ccd398dcad3865a674335b7f (git ls-tree returned empty) and from the live working clone.",
+      "deployed_identity": {
+        "commit": "81b5c18bd83e1f01ccd398dcad3865a674335b7f",
+        "render_service": "srv-d9bijbjtqb8s73cn4n20",
+        "render_deploy": "dep-d9cei8d8nd3s738mism0",
+        "binding_observed_at": "2026-07-20T05:23:07Z",
+        "citation": "docs/working/cas_harness_production_todo.md:2251-2256"
+      },
+      "claim_state": "open"
+    },
+    "C2_anonymous_share_bypass": {
+      "finding_id": "RT-05",
+      "finding_lines": "152-161",
+      "severity_as_recorded": "HIGH",
+      "statement": "In the candidate branch, the anonymous share fetch loads and hash-checks the raw object-store packet, then returns it unchanged, so the public share window serves a packet the main read path stamps as withdrawn.",
+      "verified_code_candidate_846ee041": [
+        {"file": "api/services/evidence_shares.py", "line": 342, "symbol": "fetch_shared_packet"},
+        {"file": "api/services/evidence_shares.py", "lines": "379-381", "symbol": "repository.load_packet_with_content_sha256"},
+        {"file": "api/services/evidence_shares.py", "line": 407, "content": "return packet  (no withdrawal projection applied)"},
+        {"file": "api/services/evidence_shares.py", "lines": "128-163", "symbol": "create_share (also applies no withdrawal projection)"},
+        {"file": "api/routes/evidence_shares.py", "lines": "206-241", "symbol": "GET /shared/{share_id} -> fetch_shared_evidence_packet returns JSONResponse(content=packet)"}
+      ],
+      "same_lines_present_on_live_master": true,
+      "no_live_affected_share_proven": true,
+      "required_fix_verbatim": "validate the raw stored-byte hash first, then apply the withdrawal projection at share creation and retrieval. Cover withdrawn fingerprints, corrected fingerprints, unknown variants, wrapped packets, and already-created shares.",
+      "claim_state": "open"
+    },
+    "C3_other_uncovered_paths_named_by_RT_02": [
+      "anonymous Evidence Packet shares do not consult the registry",
+      "the offline Stage 9/40E report builder does not consult the registry",
+      "it is a targeted recall for known fingerprints, not a general semantic re-verification of every legacy ACCEPT"
+    ],
+    "adjudication_record": {
+      "path_in_commit": "docs/working/CAS_HARNESS_AUDIT_REMEDIATION_20260719.md (exists ONLY inside commit 846ee041; not on tksCAS master, not in the live working clone)",
+      "row_1_2_verbatim": "1.2 withdrawn ACCEPT | CONFIRMED historical verifier defect plus live artifact risk | CRITICAL | Candidate control discovery was misclassified as validated proof. At least two machine packets and derivative claims were affected. Correcting commits `337d0c2` and `24e15a9b` exist. A machine-readable withdrawal tombstone is required so the historical GPT-NeoX packet can never be re-anchored or displayed as ACCEPT. No standing ACCEPT exists."
+    }
+  },
+  "tombstone_paths_and_test_coverage": {
+    "registry_module": {
+      "file": "api/services/cas_harness_evidence_withdrawals.py",
+      "exists_only_in_commit": "846ee041d32944d606d8555cc015f701ec5b94c9",
+      "branch": "codex/audit-remediation-20260719",
+      "on_github": false,
+      "on_protected_master": false,
+      "sidecar_json": "docs/working/evidence_packet_withdrawals_20260719.json (same commit)",
+      "schema_version": "cas_harness_evidence_packet_withdrawal_registry.v1",
+      "records": 2
+    },
+    "covered": [
+      {"path": "api/routes/evidence.py", "lines": "643-648", "surface": "public packet read (GET /evidence/{trace_id})", "test": "tests/test_evidence_routes.py::test_evidence_get_stage9_20b_packet_public_read_enforces_withdrawal, ::test_evidence_get_withdrawn_packet_stays_flag_with_existing_anchor_receipt", "status": "regression test exists (unmerged candidate only)"},
+      {"path": "api/routes/evidence.py", "line": 1563, "surface": "new anchor write (POST /evidence/{trace_id}/anchor) -> HTTP 409 packet_withdrawn", "test": "tests/test_evidence_routes.py::test_evidence_anchor_allows_corrected_flag_packet_and_rejects_withdrawn_accept", "status": "regression test exists (unmerged candidate only)"},
+      {"path": "api/services/cas_harness_static_evidence_anchor.py", "line": 79, "surface": "static anchor store write", "test": "tests/test_cas_harness_static_evidence_anchor.py::test_withdrawn_accept_variant_is_refused_before_any_store_write", "status": "regression test exists (unmerged candidate only)"},
+      {"path": "api/services/cas_harness_verdict_runner.py", "line": 81, "surface": "final verdict runner", "test": "tests/test_cas_harness_verdict_runner.py::test_withdrawn_trace_cannot_be_reactivated_by_accept_and_worm_proof", "status": "regression test exists (unmerged candidate only)"},
+      {"path": "api/services/cas_harness_verifier_decision_adapter.py", "line": 105, "surface": "packet -> verifier decision adaptation", "test": "tests/test_cas_harness_verifier_decision_adapter.py::test_withdrawn_historical_stage9_accept_is_forced_to_human_review, ::test_superseded_pythia_accept_trace_is_forced_to_human_review, ::test_candidate_only_stage9_control_cannot_accept_under_a_new_trace", "status": "regression test exists (unmerged candidate only)"},
+      {"path": "api/routes/cas_harness_audit.py", "lines": "2995,2999,3001", "surface": "audit-session packet payload / run route", "test": "tests/test_cas_harness_audit.py::test_reference_target_uses_corrected_withdrawn_trace_and_stays_review_only, ::test_reference_target_trace_from_public_alpha_console_stays_review_only, ::test_run_route_enforces_withdrawal_for_bundled_stage9_40e_accept, ::test_run_route_never_reactivates_withdrawn_gpt_accept_when_worm_anchored, ::test_run_route_never_reactivates_superseded_pythia_accept_from_anchor", "status": "regression test exists (unmerged candidate only)"},
+      {"path": "scripts/anchor_stage9_40e_packet.py", "line": 111, "surface": "CLI anchor", "test": "tests/test_anchor_stage9_40e_packet.py::test_cli_refuses_bundled_withdrawn_accept_before_anchor, ::test_cli_refuses_superseded_pythia_accept_variant_before_anchor", "status": "regression test exists (unmerged candidate only)"},
+      {"path": "atlas-viewer/src/components/audit/AuditVerdictExplainer.tsx", "surface": "UI verdict explainer", "test": "atlas-viewer/src/components/audit/AuditVerdictExplainer.test.tsx it('explains a withdrawn ACCEPT as fail-closed even when historical proof was present')", "status": "regression test exists (unmerged candidate only)"},
+      {"path": "atlas-viewer/src/pages/AuditConsolePage.tsx", "surface": "UI audit console default target", "test": "atlas-viewer/src/pages/AuditConsolePage.test.tsx it('loads the corrected Stage 9 Pythia packet and explains the withdrawal')", "status": "regression test exists (unmerged candidate only)"},
+      {"path": "api/services/cas_harness_evidence_withdrawals.py", "surface": "registry itself + forensic-byte integrity", "test": "tests/test_cas_harness_evidence_withdrawals.py (6 tests incl. test_historical_accept_artifacts_remain_byte_identical_for_forensics, test_machine_readable_sidecar_matches_runtime_registry, test_anchor_wrapper_cannot_escape_trace_scoped_withdrawal, test_unknown_or_accept_variant_of_pythia_trace_fails_closed)", "status": "regression test exists (unmerged candidate only)"}
+    ],
+    "not_covered": [
+      {"path": "api/services/evidence_shares.py", "lines": "128-163 (create_share), 342-407 (fetch_shared_packet)", "surface": "anonymous Evidence Packet share creation and retrieval", "test": "NONE", "evidence": "CAS_HARNESS_REDTEAM_REAUDIT_20260719.md:152-161 and :356 (\"Does not cover anonymous-share withdrawal bypass\")"},
+      {"path": "api/routes/evidence_shares.py", "lines": "114-119 (create), 151-155 (metadata), 178-182 (revoke), 206-241 (anonymous fetch)", "surface": "share HTTP surface", "test": "NONE"},
+      {"path": "live-trace-worker/scripts/build_stage9_40e_verifier_report.py", "surface": "offline Stage 9/40E verifier report builder", "test": "NONE for withdrawal; 846ee041 only added read-only forensic-output protection (PROTECTED_FORENSIC_OUTPUTS) and changed DEFAULT_PACKET; it does not import the withdrawals module", "evidence": "CAS_HARNESS_REDTEAM_REAUDIT_20260719.md:112 and git grep at 846ee041"},
+      {"path": "live-trace-worker/scripts/merge_stage9_40e_evidence_packet.py", "surface": "Stage 9 40E packet merger", "test": "NONE for withdrawal (it carries the 337d0c2 producer fix and the 24e15a9b uniqueness gate, but does not consult the withdrawal registry)"},
+      {"path": "api/services/cas_harness_merged_evidence_packets.py", "surface": "fleet merged-packet writer", "test": "NONE for withdrawal"},
+      {"path": "api/services/cas_harness_evidence_anchor.py", "surface": "second anchor service", "test": "NONE for withdrawal (does not import the withdrawals module at 846ee041)"},
+      {"path": "api/services/cas_harness_evidence_object_store.py", "surface": "object-store packet load/store", "test": "NONE for withdrawal"},
+      {"path": "api/routes/evidence.py", "lines": "1458-1463", "surface": "POST /evidence/{trace_id}/verify", "test": "NONE for withdrawal (verify path was not given a withdrawal projection at 846ee041)"},
+      {"path": "scripts/verify_evidence_anchor_deployed.py", "lines": "207-226", "surface": "deployment verifier still requires ACCEPT", "test": "tests pass only because they preserve the stale expectation", "evidence": "CAS_HARNESS_REDTEAM_REAUDIT_20260719.md:163-171 (RT-06)"},
+      {"path": "api/routes/export.py", "lines": "24-25", "surface": "GET /assessments/export", "test": "N/A", "note": "Inspected: exports assessments, NOT Evidence Packets. No tombstone required. Recorded so the enumeration is complete."},
+      {"path": "general semantic revalidation of every legacy ACCEPT packet", "surface": "default-deny rule", "test": "NONE", "evidence": "CAS_HARNESS_REDTEAM_REAUDIT_20260719.md:113 — the registry is \"a targeted recall for known fingerprints, not a general semantic re-verification of every legacy ACCEPT\""}
+    ]
+  },
+  "test_run_evidence_as_recorded_not_reproduced_here": {
+    "citation": "docs/working/cas_harness_production_todo.md:2348-2352",
+    "api_service_suite": "2,857 passed, 11 skipped, 3 expected failures, 0 failed",
+    "offline_probe_worker_tree": "240 passed",
+    "withdrawal_verdict_audit_console_tests": "30 passed",
+    "redteam_note": "CAS_HARNESS_REDTEAM_REAUDIT_20260719.md:356-358 — 121 passed withdrawal/planner/feasibility/distributed-audit/dependency-readiness; 19 passed account/anonymous-scope; 18 passed share+withdrawal; 'Each subsystem passes separately; no cross-path recall test'",
+    "claim_state": "accepted (recorded in project record; NOT re-executed during this gathering pass)"
+  },
+  "gaps": [
+    "docs/working/pythia160m_gate1/ does NOT exist in the tksCAS repo (ls and git ls-files both empty). It DOES exist in C:/Users/wakil/CAS-Harness-Run/noetic-compass-scaffold/noetic-compass/docs/working/pythia160m_gate1/. The expert panel's adversarial note that the directory 'does not exist on disk or in git ls-files' is true of the tksCAS repo only.",
+    "The withdrawal registry, its sidecar JSON, its tests, and CAS_HARNESS_AUDIT_REMEDIATION_20260719.md are reachable ONLY as git objects inside commit 846ee041 in the noetic-compass object store (readable from .claude/worktrees/integration). They are not checked out anywhere, are not on protected master, and per docs/working/cas_harness_production_todo.md:2254-2256 GitHub has neither the commit, the branch, nor a PR.",
+    "No live/deployed re-verification of the tombstone state was performed during this gathering pass. The most recent recorded provider binding is 2026-07-20T05:23:07Z.",
+    "No artifact was found that changes the RT-02 / RT-05 dispositions after 2026-07-20. Searched: docs/working/, project_handoffs/, .claude/worktrees/, git log --all in both clones."
+  ]
+}
