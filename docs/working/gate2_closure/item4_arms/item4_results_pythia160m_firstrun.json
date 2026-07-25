@@ -1,0 +1,52 @@
+{
+  "arms": {
+    "A_owner_raw": {
+      "chance": 0.025,
+      "macro_accuracy": 0.180952,
+      "n_classes": 40,
+      "n_eval": 3360
+    },
+    "B_deployed": {
+      "chance": 0.025,
+      "macro_accuracy": 0.181548,
+      "n_classes": 40,
+      "n_eval": 3360
+    },
+    "D_compact_cas": {
+      "chance": 0.025,
+      "macro_accuracy": 0.045833,
+      "n_classes": 40,
+      "n_eval": 3360
+    },
+    "E_non_tks": {
+      "chance": 0.025,
+      "macro_accuracy": 0.015476,
+      "n_classes": 40,
+      "n_eval": 3360
+    },
+    "F_F1_null": {
+      "chance": 0.025,
+      "macro_accuracy": 0.019345,
+      "n_classes": 40,
+      "n_eval": 3360
+    }
+  },
+  "bank_rows": 5920,
+  "calibration_n": 960,
+  "design": "TKS-DEFCTX-40E-PRIMARY-v1",
+  "eval_n": 3360,
+  "fitted_parameters_in_readout": 0,
+  "frozen_layer": 2,
+  "layer_selection_calib_macro_acc": {
+    "0": 0.025,
+    "2": 1.0,
+    "4": 1.0,
+    "6": 1.0,
+    "8": 1.0,
+    "10": 1.0,
+    "12": 1.0
+  },
+  "layer_selection_rule": "arm-free multinomial probe on calibration ITEM states; no definition text seen",
+  "model": "EleutherAI/pythia-160m",
+  "probe_method": "definition_anchored_prototype_readout_v1"
+}

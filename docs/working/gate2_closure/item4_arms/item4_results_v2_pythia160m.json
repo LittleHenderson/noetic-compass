@@ -1,0 +1,72 @@
+{
+  "A_minus_D_group_bootstrap": {
+    "ci_lower_2p5": 0.142182,
+    "ci_upper_97p5": 0.175852,
+    "margin_mean": 0.159693,
+    "rounds": 2000
+  },
+  "arms": {
+    "A_owner_raw": {
+      "macro_max": 0.199702,
+      "macro_mean": 0.197917,
+      "macro_min": 0.196429,
+      "macro_sd": 0.001022,
+      "seeds": 20
+    },
+    "B_deployed": {
+      "macro_max": 0.20506,
+      "macro_mean": 0.204062,
+      "macro_min": 0.202381,
+      "macro_sd": 0.000821,
+      "seeds": 20
+    },
+    "D_compact_cas": {
+      "macro_max": 0.040179,
+      "macro_mean": 0.039033,
+      "macro_min": 0.038095,
+      "macro_sd": 0.000557,
+      "seeds": 20
+    },
+    "E_non_tks": {
+      "macro_max": 0.033929,
+      "macro_mean": 0.032515,
+      "macro_min": 0.031548,
+      "macro_sd": 0.000537,
+      "seeds": 20
+    },
+    "F_F1_null": {
+      "macro_max": 0.018452,
+      "macro_mean": 0.01747,
+      "macro_min": 0.015774,
+      "macro_sd": 0.000749,
+      "seeds": 20
+    }
+  },
+  "chance": 0.025,
+  "controls": {
+    "layer0_anchors": 0.025,
+    "random_direction_anchors": 0.02631,
+    "shuffled_labels": 0.023214,
+    "wrong_layer_anchors": 0.18244
+  },
+  "design": "TKS-DEFCTX-40E-PRIMARY-v1",
+  "eval_n": 3360,
+  "fitted_parameters_in_readout": 0,
+  "frozen_layer": 10,
+  "layer_selection_heldout": {
+    "0": 0.025,
+    "2": 0.3172501273236567,
+    "4": 0.3323121139481434,
+    "6": 0.38047020585623526,
+    "8": 0.41902450898774435,
+    "10": 0.46215228399051933,
+    "12": 0.405387555663291
+  },
+  "layer_selection_rule": "arm-free multinomial logistic probe, FIT and SCORED on DISJOINT halves of calibration",
+  "model": "EleutherAI/pythia-160m",
+  "seeds": 20,
+  "tied_layers": [
+    10
+  ],
+  "version": "v2_layer_selection_fixed"
+}
