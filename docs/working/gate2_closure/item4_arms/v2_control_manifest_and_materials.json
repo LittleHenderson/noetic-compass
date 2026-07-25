@@ -1,0 +1,87 @@
+{
+  "schema_version": "cas_harness_item4_v2_control_manifest.v1",
+  "design": "TKS-DEFCTX-40E-SPLITLAYER-v2",
+  "build_items_closed": ["B7 order-aware encoder pinned", "C1-C3 commensurability materials authored", "v2 model pinned"],
+  "created_at": "2026-07-25",
+  "frozen_before_capture": true,
+
+  "order_aware_encoder": {
+    "status": "PINNED",
+    "why_mandatory": "The pre-registration froze this finding: on these banks a bag-of-n-grams tops out near 0.50 because of ORDER-INSENSITIVITY, not because the task is surface-hard. An order-aware model that can bind a marker to a span may exceed it. Beating tf-idf alone would repeat the withdrawn W0 claim in mirror image - winning against a control structurally incapable of competing.",
+    "model_id": "sentence-transformers/all-MiniLM-L6-v2",
+    "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "weights_sha256": "53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db",
+    "config_sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41",
+    "local_path": "/workspace/cas-hf-cache/models--sentence-transformers--all-MiniLM-L6-v2/snapshots/1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "pooling_mode_selection": "chosen ONCE on seed-0 calibration by the same arm-free criterion used for the hidden arms, then frozen. Budget symmetry: this control gets the same NUMBER of free choices as the hypothesis, so neither gets a larger search.",
+    "acceptance_role": "A8 - the TKS arms must BEAT this control. If it wins, the definition claim fails, and that is the control doing its job.",
+    "not_a_production_dependency": "Used only as a control the hypothesis must beat. That makes the test strictly harder; it is the opposite of leaning on a foreign model."
+  },
+
+  "C1_scaffold_mismatch": {
+    "purpose": "Tests whether the SHARED TRAILING SCAFFOLD is what makes anchors and items comparable. If accuracy survives a mismatched scaffold, v2's corrected commensurability claim is refuted in turn.",
+    "anchor_scaffold": "That role describes:",
+    "item_scaffold": "This sentence concerns:",
+    "expected": "near chance",
+    "fail_condition": "score >= 0.5 x matched"
+  },
+
+  "C2_frame_mismatch": {
+    "purpose": "Tests whether the SHARED FRAME SET is load-bearing. Anchors use the four frozen frames; items use four held-out frames never used for any anchor.",
+    "anchor_frames": [
+      "Definition: {body}\nThat role describes:",
+      "The following describes one role.\n{body}\nThat role describes:",
+      "Consider this description.\n{body}\nThat role describes:",
+      "Description: {body}\nThat role describes:"
+    ],
+    "heldout_item_frames": [
+      "Text: {body}\nThat role describes:",
+      "Read the passage below.\n{body}\nThat role describes:",
+      "Passage: {body}\nThat role describes:",
+      "Here is a statement.\n{body}\nThat role describes:"
+    ],
+    "held_out_frames_carry_no_ontology_vocabulary": true,
+    "expected": "near chance",
+    "fail_condition": "score >= 0.5 x matched"
+  },
+
+  "C3_position_break": {
+    "purpose": "Tests whether CONTENT BEGINNING AT POSITION 0 is load-bearing. Anchors start at position 0; item content is preceded by a neutral filler so it does not.",
+    "filler_text": "The following material has been provided for review by the assessment team and should be considered in full before any determination is made regarding its content or classification under the applicable scheme.",
+    "filler_target_tokens": 40,
+    "filler_carries_no_ontology_vocabulary": true,
+    "expected": "near chance",
+    "fail_condition": "score >= 0.5 x matched"
+  },
+
+  "precommitted_consequence": {
+    "rule": "If ANY of C1, C2, C3 scores >= 0.5 x matched, the corrected commensurability claim is ALSO false, v2 is reported NOT LICENSED, and the definition-anchored prototype family is CLOSED. There is no v3.",
+    "why_this_is_binding": "The injection family was closed after four disclosed attempts under exactly this discipline. Repeating variants until one passes is the failure mode these pre-commitments exist to prevent."
+  },
+
+  "v2_model": {
+    "status": "PINNED",
+    "model_id": "EleutherAI/pythia-1b",
+    "revision": "f73d7dcc545c8bd326d8559c8ef84ffe92fea6b2",
+    "local_path": "/workspace/cas-hf-cache/models--EleutherAI--pythia-1b/snapshots/f73d7dcc545c8bd326d8559c8ef84ffe92fea6b2",
+    "layer_grid": [0, 4, 8, 12, 16],
+    "why_not_160m": "pythia-160m is RETIRED from this design permanently. v2 was authored with full knowledge of v1's numbers on that model, so v2 cannot be confirmatory there. Accepted in advance: if the effect is a 160m artifact, v2 fails, and that is the test working.",
+    "why_1b_and_not_2.8b": "1b was already used in the Gate-3-scope injection work, but never with this instrument, this bank, or this task; and its layer count gives a 5-point grid at the same 4-block spacing as v1's. 2.8b remains available if 1b proves underpowered, but switching AFTER seeing 1b's result would be model-shopping and is forbidden."
+  },
+
+  "carried_forward_unchanged_from_v1": [
+    "code and title discarded from every anchor",
+    "arm-internal class centering; label-free calibration centering",
+    "argmax over cosine, ZERO fitted parameters",
+    "repaired admissible bank (5,920 unique, duplication 1.0, zero split leakage)",
+    "20 seeds; group bootstrap; null battery (layer-0, random-direction, shuffled-label)",
+    "contaminated fixture (816/816 rows embedding Arm B's definition) remains excluded"
+  ],
+
+  "still_outstanding": {
+    "B5_arm_D_crosswalk_ratification": "OWNER - Arm D only. Arms A, B, E, F need no crosswalk (their codes are literally A1..D10, matching the bank's element_label).",
+    "B9_28_foundation_axis": "OWNER - confirm dropping as claim-bearing; Arm D covers 0/28."
+  },
+
+  "licenses_nothing": "This manifest freezes controls and materials. It produces no result and supports no claim. Gate 2 remains OPEN at 0.38."
+}
