@@ -519,7 +519,7 @@ Eight discipline principles:
 | "Runtime-safe accept/suppress decisions without gold labels at inference" | LICENSED |
 | "Head-level + sparse MLP-neuron-cover causal localization with necessity AND sufficiency" | LICENSED |
 | "Drive-local eraser-channel steering, cross-scale within Pythia + cross-architecture on Qwen" | LICENSED |
-| "First ACCEPT verdict in project record on Stage 9 40E validation packet" | LICENSED with explicit scope |
+| "First ACCEPT verdict in project record on Stage 9 40E validation packet" | **TOMBSTONED — NOT LICENSED, WITHDRAWN in v2.0** (pre-fix overclaim; candidate-only `control_proof` before commit `337d0c2`; honest WORM-retained verdict is `FLAG_FOR_HUMAN_REVIEW`; no ACCEPT stands). Claim text retained unaltered for the historical record; the licence it asserted is void. |
 | "Per-customer production ACCEPT verdicts" | NOT LICENSED (validation-packet scope only) |
 | "Frontier-scale (>20B) validation" | NOT LICENSED |
 | "Single-neuron monosemantic localization" | NOT LICENSED |

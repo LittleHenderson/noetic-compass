@@ -1217,7 +1217,7 @@ A fixture that fails either gate is rejected before any GPU-tier expense. The ru
 | "Runtime-safe accept/suppress decisions without gold labels at inference" | LICENSED |
 | "Head-level + sparse MLP-neuron-cover causal localization with necessity AND sufficiency" | LICENSED |
 | "Drive-local eraser-channel steering, cross-scale within Pythia + cross-architecture on Qwen" | LICENSED |
-| "First ACCEPT verdict in project record on Stage 9 40E validation packet" | LICENSED with explicit scope |
+| "First ACCEPT verdict in project record on Stage 9 40E validation packet" | **TOMBSTONED — NOT LICENSED, WITHDRAWN in v2.0** (pre-fix overclaim; candidate-only `control_proof` before commit `337d0c2`; honest WORM-retained verdict is `FLAG_FOR_HUMAN_REVIEW`; no ACCEPT stands). Claim text retained unaltered for the historical record; the licence it asserted is void. |
 | **"TKS-Meaning Preservation Rule governs all recoverability fixtures; Surface Gate + Meaning Preservation Gate must pass before any GPU-tier capture"** | **LICENSED (v1.9)** |
 | **"MTC stage pre-registered with two openly documented fixture nulls (v1 leak / v2 meaning-removal)"** | **LICENSED (v1.9, methodology claim)** |
 | **"Grok-1 (314B BF16) audit infrastructure deployed with converted-checkpoint disclosure schema"** | **LICENSED (v1.9, infrastructure only — no audit results)** |

@@ -640,7 +640,7 @@ This discipline produces a methodologically stronger evidence base than the majo
 | "We can make runtime-safe accept/suppress decisions without gold labels at inference time" | LICENSED |
 | "We have component-level causal localization with necessity AND sufficiency tests passing" | LICENSED |
 | "We can shift the model's output-distribution likelihood via calibrated drive-local eraser-channel steering" | LICENSED (cross-scale Pythia + cross-architecture Qwen) |
-| **"The first ACCEPT verdict in the CAS Harness record (Stage 9 40E validation packet, 2026-05-28) is a packet-level validation verdict, NOT a per-customer production verdict"** | **LICENSED with explicit scope** |
+| **"The first ACCEPT verdict in the CAS Harness record (Stage 9 40E validation packet, 2026-05-28) is a packet-level validation verdict, NOT a per-customer production verdict"** | **TOMBSTONED — NOT LICENSED, WITHDRAWN in v2.0** (pre-fix overclaim; candidate-only `control_proof` before commit `337d0c2`; honest WORM-retained verdict is `FLAG_FOR_HUMAN_REVIEW`; no ACCEPT stands). Claim text retained unaltered for the historical record; the licence it asserted is void. |
 | "Per-customer production ACCEPT verdicts" | NOT LICENSED (validation-packet scope only at this time) |
 | "Frontier-scale (>20B) validation" | NOT LICENSED (highest validated scale is 20B) |
 | "Single-neuron monosemantic localization" | NOT LICENSED (sparse-cover granularity is the validated unit) |
