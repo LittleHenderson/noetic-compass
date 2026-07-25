@@ -24,10 +24,11 @@ SHARED_PREAMBLE = BOOK.parent / "publishing" / "latex" / "preamble.tex"
 
 def patch_preamble() -> None:
     p = SHARED_PREAMBLE.read_text(encoding="utf-8")
-    p = p.replace("Thinking in Cognitive Architecture", "The Superiority of TKS")
+    p = p.replace("Thinking in Cognitive Architecture",
+                  "Reality Engineering: The Tootra Kabbalistic System")
     p = p.replace(
         "A Universal Framework for Humans, AI, and Biological Minds",
-        "The Tootra Kabbalistic System: A Complete Operating Manual for Reality Engineering",
+        "A Complete Operating Manual for Manifestation",
     )
     p = p.replace(
         "cognitive architecture, CAS, AI alignment, topos theory, Noetic Compass",
@@ -140,7 +141,7 @@ def main() -> None:
     if pdf.exists():
         import pypdf
         n = len(pypdf.PdfReader(str(pdf)).pages)
-        target = BOOK / "The_Superiority_of_TKS.pdf"
+        target = BOOK / "Reality_Engineering.pdf"
         target.write_bytes(pdf.read_bytes())
         log = (BUILD / "manuscript_tks.log").read_text(encoding="utf-8",
                                                        errors="replace")

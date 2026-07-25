@@ -51,10 +51,10 @@ BOOKS = [
     },
     {
         "key": "tks",
-        "title": "The Superiority of TKS",
-        "subtitle": "The Tootra Kabbalistic System: A Complete Operating Manual for Reality Engineering",
+        "title": "Reality Engineering: The Tootra Kabbalistic System",
+        "subtitle": "A Complete Operating Manual for Manifestation — Diagnose Why It Fails, Then Make It Work",
         "src": [ROOT / "superiority_of_tks" / "MANUSCRIPT.md"],
-        "out": ROOT / "superiority_of_tks" / "The_Superiority_of_TKS.epub",
+        "out": ROOT / "superiority_of_tks" / "Reality_Engineering.epub",
         "subject": "Body, Mind & Spirit / Magick Studies",
     },
 ]

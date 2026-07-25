@@ -129,14 +129,14 @@ The framework anchor and the commercially larger title. Publish second.
 
 ---
 
-## 3. The Superiority of TKS ⚠️
+## 3. Reality Engineering
 
-Two decisions must be made before this one is listed. Both are commercial, not
-editorial — the book is finished either way.
+Files: `superiority_of_tks/Reality_Engineering.pdf` and `.epub`
 
 | Field | Value |
 |---|---|
-| ⚠️ **Title** | See "Decision A" below |
+| **Title** | Reality Engineering: The Tootra Kabbalistic System |
+| **Subtitle** | A Complete Operating Manual for Manifestation — Diagnose Why It Fails, Then Make It Work |
 | **Author** | Little Henderson |
 | **Pages** | 817 (6×9, B&W, white) |
 | **Est. printing cost** | $0.85 + (817 × $0.012) = **$10.65** |
@@ -144,40 +144,21 @@ editorial — the book is finished either way.
 | **Recommended list** | **$29.99** paperback · **$9.99** Kindle |
 | **Est. royalty** | **$7.34**/copy paperback; **$6.99**/copy Kindle |
 
-### ⚠️ Decision A — the title
+**Two decisions were taken and are now built into the files:**
 
-As titled, the book leads with an acronym nobody searches for. "TKS" has no
-search volume; "Superiority of" occupies the most valuable real estate on the
-page and tells a browsing buyer nothing.
+*Title.* The book was retitled from *The Superiority of TKS*. As it stood it
+led with an acronym that has no search volume, and "Superiority of" occupied
+the most valuable field on the page while telling a browsing buyer nothing. The
+new title puts **Reality**, **Kabbalistic**, and **Manifestation** into indexed
+fields, keeps TKS and Tootra as the brand, and moves the superiority claim to
+the first line of the description — where it sells rather than hides.
 
-- **Keep it:** *The Superiority of TKS* — brand-first, commercially invisible.
-- **Recommended:** **Reality Engineering: The Tootra Kabbalistic System**, with
-  subtitle *A Complete Operating Manual for Manifestation — Diagnose Why It
-  Fails, Then Make It Work*. This puts "Reality," "Kabbalistic," and
-  "Manifestation" into indexed fields, keeps TKS and Tootra as the brand you
-  are building, and moves the superiority claim to the first line of the
-  description, where it sells instead of hides.
-
-### ⚠️ Decision B — profanity in six chapter titles
-
-The prose contains 85 instances; six chapter titles and nine section headings
-carry them. **KDP permits this** — profanity is not a content violation and no
-adult flag follows from language alone. The cost is elsewhere:
-
-1. **Amazon Advertising rejects Sponsored Products for books whose content
-   includes profanity.** That is the single most effective discovery channel
-   for a self-published title, and you lose it.
-2. The profane titles sit in the TOC, which is the first thing "Look Inside"
-   shows a browsing buyer.
-3. Amazon's description-field policy prohibits profanity regardless.
-
-- **Recommended:** keep every instance in the prose — it is the book's voice
-  and it is defended explicitly in the Preface's note on tone — and soften only
-  the six chapter titles. E.g. Ch 6 → "The 40 Elements: Reality Decoded"; Ch 9
-  → "Why TKS Outclasses Every Other Esoteric System"; Ch 12 → "The Future is
-  Tootra: AI, Neurofeedback, and Total Domination". Voice preserved, TOC clean,
-  ads viable.
-- **Or:** keep everything and forgo paid ads.
+*Profanity.* 12 headings carried it; all 12 are softened. The 55 instances in
+the prose are untouched — it is the book's voice and the Preface defends it
+explicitly. This was a distribution decision, not an editorial one: **Amazon
+Advertising rejects Sponsored Products for books whose content includes
+profanity**, and headings are what appear in the TOC, in "Look Inside", and in
+the Kindle sample. The voice survives where it matters; ads stay available.
 
 **Keywords:**
 

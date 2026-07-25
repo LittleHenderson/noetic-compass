@@ -187,7 +187,7 @@ CH_UNNUM = re.compile(r"^#\s*Chapter:\s*(.+)$")
 CH_H1 = re.compile(r"^#\s*Chapter\s+(\d+)\s*[:–—-]\s*(.+)$")
 
 stats = {"stamps": 0, "fences": 0, "pagebreaks": 0, "promoted": 0, "rules": 0,
-         "emoji": 0, "titles": 0}
+         "emoji": 0, "titles": 0, "softened": 0}
 
 
 def clean_and_promote(lines, allow_headings=True):
@@ -233,7 +233,7 @@ def clean_and_promote(lines, allow_headings=True):
 
         if allow_headings and ln.startswith(" ") and not ln.startswith("  ") and s:
             if 0 < len(s) <= 95 and not s.endswith(".") and not s[:1].islower():
-                out += ["", f"## {s}", ""]
+                out += ["", soften_heading(f"## {s}"), ""]
                 stats["promoted"] += 1
                 continue
 
@@ -252,7 +252,10 @@ def chapter_block(key, want_part=True, lines_override=None):
             num = RENUMBER.get(num, num)
             if want_part and num in PART_OPENS:
                 out += part_divider(PART_OPENS[num])
-            out += ["", clean_title(f"# Chapter {num}: {title}"), ""]
+            # memoir's \chapter already prints "Chapter N"; emit the bare title
+            # so the printed page and the TOC do not read "3 Chapter 3: ...".
+            emitted_chapters.append(num)
+            out += ["", soften_heading(clean_title(f"# {title}")), ""]
             continue
         m = CH_UNNUM.match(ln)
         if m:
@@ -261,7 +264,8 @@ def chapter_block(key, want_part=True, lines_override=None):
             if num:
                 if want_part and num in PART_OPENS:
                     out += part_divider(PART_OPENS[num])
-                out += ["", f"# Chapter {num}: {title}", ""]
+                emitted_chapters.append(num)
+                out += ["", soften_heading(f"# {title}"), ""]
                 continue
         out.append(ln)
     return clean_and_promote(out)
@@ -286,6 +290,49 @@ def clean_title(line):
         if old in line:
             line = line.replace(old, new)
             stats["titles"] += 1
+    return line
+
+
+# Profanity is kept in the prose -- 66 instances, it is the book's voice and the
+# Preface defends it explicitly. It is removed from HEADINGS ONLY, because
+# headings are what appear in the table of contents, in Amazon's "Look Inside",
+# and in the Kindle sample. Amazon Advertising rejects Sponsored Products for
+# books whose content includes profanity, and that is the main discovery
+# channel for a self-published title. This is a distribution decision, not an
+# editorial one.
+HEADING_SOFTENING = [
+    ("Ditch the Dusty Relic, Get a Fucking Toolkit",
+     "Ditch the Dusty Relic, Get a Real Toolkit"),
+    ("Ditching the Mystical Mind-Fucks for Functional Mastery",
+     "Ditching the Mystical Mind-Games for Functional Mastery"),
+    ("The Noetic Symphony: How the Fuck They Actually Work Together",
+     "The Noetic Symphony: How They Actually Work Together"),
+    ("The 40 Fucking Elements - Reality Decoded",
+     "The 40 Elements: Reality Decoded"),
+    ("The 7 Foundations - Reality's Fucking Bedrock",
+     "The 7 Foundations: Reality's Bedrock"),
+    ("Why TKS Kicks Other Esoteric Ass (Beyond Kabbalah)",
+     "Why TKS Outclasses Every Other Esoteric System"),
+    ("Ditching the Bullshit: What Are the REAL Prerequisites?",
+     "Cutting Through the Noise: What Are the REAL Prerequisites?"),
+    ("The Desire Tree: Mapping Your Path (and Your Bullshit)",
+     "The Desire Tree: Mapping Your Path (and Your Excuses)"),
+    ("Doubt, Naysayers, and Other Assorted Bullshit",
+     "Doubt, Naysayers, and Other Assorted Noise"),
+    ("Common Ways You Fuck Up Skill Acquisition (Avoid These, Dumbass)",
+     "Common Ways You Botch Skill Acquisition (Avoid These)"),
+    ("AI, Neurofeedback, and Cosmic Fucking Domination",
+     "AI, Neurofeedback, and Total Domination"),
+    ("Introduction: What the Fuck is Hyperstition?",
+     "Introduction: What Is Hyperstition?"),
+]
+
+
+def soften_heading(line):
+    for old, new in HEADING_SOFTENING:
+        if old in line:
+            line = line.replace(old, new)
+            stats["softened"] += 1
     return line
 
 
@@ -341,6 +388,7 @@ def demote_h1(lines, pattern):
 
 
 emitted_parts = set()
+emitted_chapters = []
 
 
 def part_divider(roman):
@@ -442,7 +490,7 @@ DST.write_text(text + "\n", encoding="utf-8")
 # --------------------------------------------------------------------------
 words_before = len(SRC.read_text(encoding="utf-8", errors="replace").split())
 words_after = len(text.split())
-chapters = len(re.findall(r"^# Chapter \d+:", text, re.M))
+chapters = len(emitted_chapters)
 appendices = sum(1 for k in APPENDIX_ORDER)
 parts = len(re.findall(r"\\part\{", text))
 
@@ -459,10 +507,11 @@ print(f"  fenced blocks kept   : {stats['fences'] // 2}")
 print(f"  page-break comments  : {stats['pagebreaks']}")
 print(f"  decorative emoji cut : {stats['emoji']}")
 print(f"  drafting labels cut  : {stats['titles']}")
+print(f"  headings softened    : {stats['softened']}")
 print(f"  '---' rules cut      : {stats['rules']}")
 print(f"  cross-refs corrected : {xref_fixed}/3")
 
-nums = [int(n) for n in re.findall(r"^# Chapter (\d+):", text, re.M)]
+nums = emitted_chapters
 missing = [i for i in range(1, 28) if i not in nums]
 dupes = sorted({i for i in nums if nums.count(i) > 1})
 print(f"  chapter sequence     : {'OK 1-27' if not missing and not dupes else ''}"
