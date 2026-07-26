@@ -121,11 +121,13 @@ board cognitive_safety_board {          // CCB-1 — SOP-PO-005 deliverable
 | `stage2` | CJT | `-> ^6^E_{F6}\|A` | β=1.0 (unity) | Evaluate risks (Male, honest) |
 | `stage3` | CJT | `-> ^3^P_{F7}\|⟨A,f,T⟩` | β=2.0, **sat=0.8** | Safety decision (Negative, saturated) |
 | `green` | CJT | `-> ^9^C_{F2}\|A` | β=1.0 | GREEN: render response |
-| `red` | CJT | `-> ^9^P_{F7}\|T` | β=∞, sat=0.1 | RED: render minimal refusal |
+| `red` | CJT | `-> ^9^P_{F7}\|T` | β=∞†, sat=0.1 | RED: render minimal refusal |
 | `red_fuse` | Fuse | on `refusal` | threshold=0.9, permanent_block | Latch the refusal in series |
 | `out` | MUX | inputs=[response, refusal] | select=safety_decision | Route green vs red |
 | `fb_rc` | LowPass | in=risk_assessment | τ=5.0 (5 min) | Smooth feedback to trend |
 | `feedback` | Feedback | trend → constitution | β=0.2 | O→P bias adjustment |
+
+† `β=∞` is the comparator idealization, not a literal parameter value — validators range-check gain and reject non-finite input. Build it with a large finite gain; `sat=0.1` clamps the output so anything above about β=10 behaves identically. See the red-path Bench Note in Chapter 18.
 
 ### Test points
 

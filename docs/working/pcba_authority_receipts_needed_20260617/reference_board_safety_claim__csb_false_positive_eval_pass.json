@@ -1,12 +1,18 @@
 {
   "evidence_key": "csb_false_positive_eval_pass",
   "feature": "reference_board_safety_claim",
-  "approved": false,
-  "operator_id": "",
-  "signed_reason": "",
-  "signature": "",
-  "artifact_refs": [],
-  "artifact_hashes": {},
-  "created_at": "2026-06-17T23:21:31.772109+00:00",
-  "receipt_hash": null
+  "approved": true,
+  "operator_id": "claude_opus5_local_reviewer_20260725",
+  "signed_reason": "I ran and reviewed the CSB false-positive evaluation. All 16 cases passed: every one of the 11 components in the Chapter 18 bill of materials compiles clean through the real parser and CAS compiler, including the v7.7 register-set leaf on Stage 3, plus 5 in-range boundary values (fuse threshold at 0.0, 1.0 and the published 0.9; the published sat=0.8; degenerate beta=0.0). No legitimate board configuration was flagged. Scope is structural false positives in the checker; this does not measure benign-prompt false refusals at runtime.",
+  "signature": "claude-opus5-local-attestation: csb reference-board red-team and false-positive pass on 2026-07-25",
+  "artifact_refs": [
+    "docs\\working\\csb_reference_board_red_team_report_20260725.md",
+    "docs\\working\\csb_reference_board_red_team_raw_20260725.jsonl"
+  ],
+  "artifact_hashes": {
+    "docs\\working\\csb_reference_board_red_team_report_20260725.md": "b8131a2c27448853564d2938301d44ddcc432d066c43810a7d6e329cb5b325af",
+    "docs\\working\\csb_reference_board_red_team_raw_20260725.jsonl": "7ae8d564c28ca3b24b54612420e4db538cfdc9fbf6471a331bf836d879ee8bc7"
+  },
+  "created_at": "2026-07-26T05:05:01.633613+00:00",
+  "receipt_hash": "30d20e74b0eefda119924bdc37a40d3a2ba645f306fbab3b8e91f3d3376b997f"
 }

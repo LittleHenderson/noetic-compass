@@ -8063,16 +8063,16 @@ The grammar composes, so larger expressions are built from the primitive rules.
 
 The ten Noetics (CO-0 through CO-9) are the cognitive operators of the Cognitive Architecture System. The names and definitions below are verbatim canonical. They are not subject to paraphrasing, softening, modernization, or alternative naming. Any prior draft of this book, and any other artifact in the broader CAS corpus, that used different names or descriptions for the same indices is non-conformant and has been reconciled to match.
 
-- **^0 (CO-0): Idea** — All things in and outside the Mind. Self-dual. Monoid identity.
-- **^1 (CO-1): Mind** — Various degrees of awareness that processes, stores, outputs, and intakes Ideas. Self-dual.
-- **^2 (CO-2): Positive** — An Idea the Mind has an affinity for and is attracted toward. Involution of ^3 (Negative).
-- **^3 (CO-3): Negative** — An Idea the Mind is adverse to and repelled by. Involution of ^2 (Positive).
-- **^4 (CO-4): Vibration** — The degree to which an Idea resonates with the Mind, its impression. Self-dual.
-- **^5 (CO-5): Female** — A Mind impregnated with an Idea, the Ideas a Mind is composed of. Involution of ^6 (Male).
-- **^6 (CO-6): Male** — An Idea impregnated with another Idea, the Ideas an Idea is composed of. Involution of ^5 (Female).
-- **^7 (CO-7): Rhythm** — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it. Self-dual.
-- **^8 (CO-8): Above/Cause** — An Idea that triggers a different Idea than itself to come to Mind. Involution of ^9 (Below/Effect).
-- **^9 (CO-9): Below/Effect** — The Idea brought to Mind by an Above/Cause trigger. Involution of ^8 (Above/Cause).
+- **`^0` (CO-0): Idea** — All things in and outside the Mind. Self-dual. Monoid identity.
+- **`^1` (CO-1): Mind** — Various degrees of awareness that processes, stores, outputs, and intakes Ideas. Self-dual.
+- **`^2` (CO-2): Positive** — An Idea the Mind has an affinity for and is attracted toward. Involution of ^3 (Negative).
+- **`^3` (CO-3): Negative** — An Idea the Mind is adverse to and repelled by. Involution of ^2 (Positive).
+- **`^4` (CO-4): Vibration** — The degree to which an Idea resonates with the Mind, its impression. Self-dual.
+- **`^5` (CO-5): Female** — A Mind impregnated with an Idea, the Ideas a Mind is composed of. Involution of ^6 (Male).
+- **`^6` (CO-6): Male** — An Idea impregnated with another Idea, the Ideas an Idea is composed of. Involution of ^5 (Female).
+- **`^7` (CO-7): Rhythm** — The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it. Self-dual.
+- **`^8` (CO-8): Above/Cause** — An Idea that triggers a different Idea than itself to come to Mind. Involution of ^9 (Below/Effect).
+- **`^9` (CO-9): Below/Effect** — The Idea brought to Mind by an Above/Cause trigger. Involution of ^8 (Above/Cause).
 
 The three involution pairs are `^2 ↔ ^3` (Positive / Negative), `^5 ↔ ^6` (Female / Male), and `^8 ↔ ^9` (Above/Cause / Below/Effect). The four self-dual Noetics are `^0` (Idea), `^1` (Mind), `^4` (Vibration), and `^7` (Rhythm).
 

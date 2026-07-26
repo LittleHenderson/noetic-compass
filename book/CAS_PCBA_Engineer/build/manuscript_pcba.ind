@@ -77,8 +77,8 @@
   \item Deployment ladder, \hyperpage{684}
   \item Dial, \hyperpage{33, 34}, \hyperpage{36}, \hyperpage{66}, 
 		\hyperpage{68, 69}
-  \item Differential Pair, \hyperpage{327}
-  \item Differential pair, \hyperpage{342}, \hyperpage{683}
+  \item Differential Pair, \hyperpage{328}
+  \item Differential pair, \hyperpage{343}, \hyperpage{683}
   \item Diode, \hyperpage{7}, \hyperpage{120}, \hyperpage{132, 133}
   \item Domain Descent, \hyperpage{18}, \hyperpage{25}, \hyperpage{27}, 
 		\hyperpage{120, 121}, \hyperpage{131}
@@ -105,7 +105,7 @@
 		\hyperpage{258, 259}
   \item four operating regions, \hyperpage{135}
   \item Fuse, \hyperpage{112}, \hyperpage{116}, \hyperpage{173, 174}, 
-		\hyperpage{332}, \hyperpage{338, 339}
+		\hyperpage{333}, \hyperpage{338}
 
   \indexspace
 
@@ -144,7 +144,7 @@
   \item Operators, \hyperpage{687}
   \item Oscillator, \hyperpage{108}, \hyperpage{156}, \hyperpage{161}, 
 		\hyperpage{169}, \hyperpage{173, 174}
-  \item Output MUX, \hyperpage{342}
+  \item Output MUX, \hyperpage{343}
 
   \indexspace
 
@@ -179,7 +179,7 @@
 
   \item Saturation, \hyperpage{31}, \hyperpage{35}, \hyperpage{41}, 
 		\hyperpage{57}, \hyperpage{139}, \hyperpage{141}, 
-		\hyperpage{334}
+		\hyperpage{335}
   \item Schmitt Trigger, \hyperpage{173--175}
   \item Schmitt trigger, \hyperpage{156}, \hyperpage{163}, 
 		\hyperpage{166, 167}, \hyperpage{172}, 
@@ -193,8 +193,8 @@
   \indexspace
 
   \item Test point, \hyperpage{689}, \hyperpage{691}
-  \item Test points, \hyperpage{314}, \hyperpage{317}, \hyperpage{339}, 
-		\hyperpage{343}
+  \item Test points, \hyperpage{314}, \hyperpage{317}, \hyperpage{340}, 
+		\hyperpage{344}
   \item Thermal runaway, \hyperpage{41, 42}, \hyperpage{149}, 
 		\hyperpage{151}
   \item Transcendent, \hyperpage{19}, \hyperpage{43}, \hyperpage{128}, 

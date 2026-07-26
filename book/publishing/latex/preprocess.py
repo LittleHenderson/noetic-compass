@@ -312,11 +312,29 @@ def main() -> None:
         out.append(line)
         i += 1
 
-    DST.write_text("\n".join(out), encoding="utf-8")
+    body = "\n".join(out)
+
+    # --- bold bare carets -------------------------------------------------
+    # `**^0 (CO-0): Idea**` renders the caret via \^{} — a *combining*
+    # circumflex, which Palatino Linotype Bold does not carry (Regular does).
+    # Result is a silently dropped glyph in the Noetic definitions list.
+    # Everywhere else the book sets notation in mono, which has the glyph, so
+    # match that convention here: `**`^0` (CO-0): Idea**`.
+    body, n_carets = re.subn(
+        r"\*\*\^(\d)( \(CO-\d\):)", r"**`^\1`\2", body
+    )
+    if n_carets == 0:
+        raise SystemExit(
+            "preprocess: bold-caret pattern '**^N (CO-N):' no longer matches — "
+            "the Noetic definitions list changed shape; re-check before building"
+        )
+
+    DST.write_text(body, encoding="utf-8")
     print(f"Wrote {DST}  ({len(out)} lines)")
     print(f"  promoted {n_promoted} section heading(s) to '##'")
     print(f"  dropped  {n_dropped} editorial note line(s)")
     print(f"  inserted {n_figures} figure(s)")
+    print(f"  fixed    {n_carets} bold bare caret(s)")
     if FIG_BY_ANCHOR:
         raise SystemExit(
             "preprocess: FAILED - these figure anchors no longer match the "
