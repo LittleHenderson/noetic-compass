@@ -58,9 +58,98 @@ from figures import FIGURES  # noqa: E402
 FIG_BY_ANCHOR = {a: (b, l, c) for a, b, l, c in FIGURES}
 
 
+# --------------------------------------------------------------------------
+# Content corrections applied to the source lines before anything else.
+#
+# SOURCE_ORIGINAL.md is vendored untouched with a recorded sha256, so every
+# correction lives here where it is reviewable, rather than being edited into
+# the original. These are the passages a pre-publication sweep identified as
+# carrying real reader risk -- care avoidance, uncredited third-party work,
+# quoted lyrics, and assertions about a named living person.
+# --------------------------------------------------------------------------
+CONTENT_FIXES = [
+    # The single most dangerous sentence in the three books: it anticipates a
+    # reader substituting this practice for medical treatment and then
+    # disclaims responsibility for the outcome.
+    ("If you use TKS instead of medical treatment and get worse, that's on you. "
+     "If you use TKS to supplement medical treatment and get better faster, "
+     "that's the intended use.",
+     "Do not use TKS instead of medical treatment. It is not a treatment and it "
+     "does not replace one. Used alongside proper care, as a way of noticing "
+     "your own patterns and staying engaged with your own recovery, it is doing "
+     "the job it is meant to do. If you are unwell, see a clinician; nothing in "
+     "this book changes that."),
+
+    # Recasts a clinical finding as spiritual attainment, two lines after
+    # conceding that practitioners "break down completely".
+    ("Without proper grounding, advanced practitioners develop what psychiatrists "
+     "would diagnose as dissociative disorders—but what's actually consciousness "
+     "existing simultaneously across multiple probability streams.",
+     "Without proper grounding, advanced practitioners can develop symptoms a "
+     "psychiatrist would recognise as dissociative. Take that seriously and get "
+     "assessed. Whatever else it may be, it is also exactly what it looks like, "
+     "and it is the point at which the practice needs to stop rather than "
+     "deepen."),
+
+    ("After 30 days, patterns emerge. After 90 days, you know your condition "
+     "better than most doctors.",
+     "After 30 days, patterns emerge. After 90 days, you will know your own "
+     "day-to-day patterns in a detail no appointment can capture — which is "
+     "information to bring your doctor, not to replace them."),
+
+    # Cialdini's six principles are reproduced by his own names as a
+    # TKS-native taxonomy. The book credits CCRU and Overton correctly, which
+    # makes this the one uncredited case.
+    (" The Authority Pattern",
+     " *The six patterns that follow were first catalogued by Robert Cialdini "
+     "in* Influence: The Psychology of Persuasion *(1984). They are not "
+     "original to TKS; what follows is a TKS analysis of why they work.*\n\n"
+     " The Authority Pattern"),
+
+    # Song lyrics are the one category publishers pursue regardless of length,
+    # and neither quotation is load-bearing -- both are tags on a name.
+    ('- Nas ("I know I can be what I wanna be")', "- Nas"),
+    ('- Big Daddy Kane ("I\'m giving lessons")', "- Big Daddy Kane"),
+
+    # Asserts a living public figure's religious formation over his own stated
+    # awareness.
+    ("When Jay-Z talks about \"understanding,\" he's speaking Supreme "
+     "Mathematics whether he's conscious of it or not.",
+     "When a rapper uses \"understanding\" as a term of art, the vocabulary "
+     "itself comes from Supreme Mathematics, whatever any individual artist "
+     "takes it to mean."),
+
+    # Author's build-machine paths, printed to readers.
+    ("(I will now proceed to rewrite the remaining case studies, the "
+     "troubleshooting section, and the exercises in "
+     "`/home/ubuntu/expanded_chapter_8_take_7.md` following this canonical "
+     "structure. This will take considerable time.)", ""),
+    ("(Note: The following elaborations are drawn from "
+     "`/home/ubuntu/upload/pasted_content_2.txt`.)", ""),
+]
+
+
+def apply_content_fixes(lines):
+    text = "\n".join(lines)
+    n = 0
+    for old, new in CONTENT_FIXES:
+        if old in text:
+            text = text.replace(old, new)
+            n += 1
+    stats_pending.append(n)
+    return text.split("\n")
+
+
+stats_pending = []
+
 def seg(a, b):
     """1-based inclusive line range from the original source."""
     return RAW[a - 1:b]
+
+
+_orig_len = len(RAW)
+RAW = apply_content_fixes(RAW)
+assert len(RAW) >= _orig_len - 2, "content fixes changed the line count too much"
 
 
 # --------------------------------------------------------------------------
@@ -205,7 +294,14 @@ the system functions when you apply it.
 Test it. That is the only biography that counts.
 """
 
-STAMP = re.compile(r"^\(.*\bComplete\b.*\)\s*$")
+STAMP = re.compile(
+    r"^\(.*\bComplete\b.*\)\s*$"
+    r"|^\(?(Approx\.?|Approximately)\s+[\d,]+\s+words?\b.*$"
+    r"|^.*\bNeed to expand\b.*$"
+    r"|^.*\bnow ~?[\d,]+\s+words\b.*$"
+    r"|^\(I will now proceed\b.*$"
+    r"|^\(.*\b(Approx\.?|Approximately)\s+[\d,]+\s+words?\b.*\)\s*$",
+    re.I)
 PAGEBREAK = re.compile(r"<!--\s*PAGE BREAK\s*-->", re.I)
 
 # Emoji were used as decorative markers in section headings ("Foundation 1:
@@ -554,6 +650,7 @@ print(f"  fenced blocks kept   : {stats['fences'] // 2}")
 print(f"  page-break comments  : {stats['pagebreaks']}")
 print(f"  decorative emoji cut : {stats['emoji']}")
 print(f"  drafting labels cut  : {stats['titles']}")
+print(f"  content fixes applied: {stats_pending[0] if stats_pending else 0}/9")
 print(f"  headings softened    : {stats['softened']}")
 print(f"  figures inserted     : {stats['figures']}")
 print(f"  '---' rules cut      : {stats['rules']}")
