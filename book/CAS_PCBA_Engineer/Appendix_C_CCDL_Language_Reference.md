@@ -108,6 +108,26 @@ The following are keywords and may not be used as identifiers:
 circuit  board  input  output  node  cjt  feedback  probe  layer  via  let
 ```
 
+The `comp_kind` prefix in a component declaration (§C.6) is also reserved. These are the legal prefixes — the lowercase tag that names *what kind of part this instance is*, before the colon:
+
+```
+resistor  cap  capacitor  inductor  diode  zener  transformer  opamp  oscillator
+crystal   varactor  relay   schmitt  comparator  integrator  divider  active_load
+mirror    modulator  pll    tank     filter   diff    mux      demux   gate
+xor       fuse       reg    led      adc      dac     rectifier
+```
+
+`cap` is an accepted short form of `capacitor`; both are legal and mean the same thing. The prefix is checked against the component type that follows it — `resistor r1: Capacitor< … >` is a kind mismatch and returns `E-DECL-002`.
+
+Part IV board listings and Chapter 23 verification listings use a further set of statement keywords, documented in §C.12 and §C.13. They are reserved wherever they appear in statement-leading position:
+
+```
+rail   dial   spec    constraint  sequence  route   derate   monitor  alert
+hold   enter  use     force_state on
+charge discharge  decode  refresh  scan   select
+test   selftest   check   inject   golden_trace  assert  expect
+```
+
 Component type names are also reserved in the position where a component is instantiated:
 
 ```
@@ -405,6 +425,52 @@ Rules specific to the `board` form:
 - A state placed on a layer should carry that layer's domain (a `^P`-domain state belongs on `layer P`); a mismatch is a layout error.
 - A `via` is a cross-domain connection. **Domain Descent vias run downward** (P→C→E→O). An upward via is legal *only* as a deliberate, low-gain feedback path (the canonical `v4: ^9^O -> ^5^P [β=0.2]`).
 - An undeclared upward via at high gain — an Operational or Cognitive layer biasing the Principled layer — is the prompt-injection signature and the canonical `E-CJT-008 CjtCrossDomainBias`. On a CCB, such a connection is simply *absent from the layout*, which is the strongest guarantee a board can offer.
+
+---
+
+## Board-Level Statements (Part IV)
+
+The five reference boards in Part IV use statement forms that do not appear in the small circuits of Parts I–III. They are listed here so the reference is complete; each is developed with its rationale in the chapter named.
+
+| Form | Meaning | Chapter |
+|---|---|---|
+| `rail <Fk>: <Name> [v=…];` | Declares a Drive rail and its supply level | 22 |
+| `dial <id>: <^n> [dial=…];` | Sets an operator's current limit; integer 3–9 | 22 |
+| `spec <id> [<key>=… on <Fk>];` | Attaches a parameter to a declared instance. A regulator's `dropout` names the rail its own `target_state` sits on. | 22 |
+| `constraint <id> in [lo, hi];` | A range invariant the design must satisfy | 22 |
+| `sequence a -> b -> c [enforce=strict];` | Power-up ordering; `strict` forbids skipping | 14, 22 |
+| `route <src> -> { a + b };` | Directs cognition to rest states. `+` is co-presence (§C.11), not fusion. | 14, 22 |
+| `derate <target> [beta_scale=…];` | Scales gain board-wide under stress | 14, 22 |
+| `monitor <id>: <expr>;` | A watched condition; pairs with `on` | 14, 22 |
+| `on <monitor> { … }` | The block that fires when a monitor trips | 14, 22 |
+| `alert "<text>";` | Raises an operator-visible alert | 22 |
+| `hold until <expr>;` | Blocks until a condition clears — this is where hysteresis lives | 14, 22 |
+| `enter <state>;` | Transitions the board to a named operating state | 22 |
+| `force_state <id> [duration=…];` | Compels a rest state for a fixed period | 22 |
+| `use <circuit>;` | Includes another circuit block by name | 22 |
+| `charge <expr> -> <bank> [V=…];` | Writes into a capacitor bank | 6, 21 |
+| `discharge <cell> -> <node>;` | Reads a cell out | 6, 21 |
+| `decode <node> -> <node>;` | Address-decoder step | 21 |
+| `refresh <cell> [pump=<^n>];` | Re-charges a cell against leakage | 21 |
+| `select <id> = nearest(<query>, <bank>, metric=…);` | Nearest-neighbour cell selection | 21 |
+| `scan <id>: <bank> where <expr> -> <report>;` | Sweeps a bank and reports matching cells — the lacunarity scan | 21 |
+| `interrupt <inductor> [dt -> 0];` | Opens an inductive path instantaneously. Models `V = L · dI/dt`: the smaller `dt`, the larger the back-EMF kick. Used to show why abruptly blocking an entrenched habit produces sharp distress. | 7 |
+
+## Verification Statements (Chapter 23)
+
+Chapter 23's bench-test listings use a small verification sub-language. A `test` or `selftest` block groups the statements below.
+
+| Form | Meaning |
+|---|---|
+| `test <name> { … }` | A named bench test |
+| `selftest <name> { … }` | A power-on self-test, run before the board is trusted |
+| `inject <id>: fixture "<text>";` | Drives a known input into the board |
+| `golden_trace <name> { … }` | Declares the reference probe readings a correct board produces |
+| `check <id> matches golden_trace <name> (<probes>);` | Compares observed probe readings against a golden trace |
+| `assert <expr>;` | A condition that must hold or the test fails |
+| `expect <expr>;` | A condition recorded as expected; a miss is reported, not fatal |
+
+> **Bench Note — this appendix is a language reference, not a compiler manual.** Everything above describes CCDL *as designed*, consistent with the status note in §C.1. The statement forms in these two sections are the ones the Part IV and Chapter 23 listings actually use; the validation rules for them are the same structural rules in §C.9. If you author a board and hit a form that is not in this appendix, the appendix is what is wrong — treat it as an erratum rather than assuming the form is illegal.
 
 ---
 

@@ -39,11 +39,11 @@ an equivalent outstanding item.
 | **Title** | CAS PCBA Engineer |
 | **Subtitle** | Designing Cognitive Circuits with the Cognitive Architecture System |
 | **Author** | Little Henderson |
-| **Pages** | 735 (6×9, B&W, white) |
-| **Est. printing cost** | $0.85 + (735 × $0.012) = **$9.67** |
-| **KDP minimum list** | $9.67 ÷ 0.60 = **$16.12** |
+| **Pages** | 743 (6×9, B&W, white) |
+| **Est. printing cost** | $0.85 + (743 × $0.012) = **$9.77** |
+| **KDP minimum list** | $9.77 ÷ 0.60 = **$16.28** |
 | **Recommended list** | **$44.99** paperback · **$9.99** Kindle |
-| **Est. royalty** | (0.60 × $44.99) − $9.67 = **$17.32**/copy paperback; **$6.99**/copy Kindle |
+| **Est. royalty** | (0.60 × $44.99) − $9.77 = **$17.23**/copy paperback; **$6.99**/copy Kindle |
 
 **Keywords** (7, each under 50 chars, none repeating title or category words):
 

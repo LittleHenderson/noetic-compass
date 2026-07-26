@@ -76,12 +76,14 @@ circuit power_sequencer {
 
     sequence p_rail -> c_rail -> e_rail -> o_rail [enforce=strict];
 
-    // O is held in reset until P is within tolerance of its setpoint.
-    gate o_enable: o_rail requires (p_rail within 0.1);
+    // O is held in reset until every higher domain is within tolerance.
+    gate o_enable: o_rail requires (p_rail within 0.10)
+                              and (c_rail within 0.15)
+                              and (e_rail within 0.20);
 }
 ```
 
-Read the `gate` line as the cognitive equivalent of holding a chip in reset: the Operational rail is not allowed to source any action until the Principled rail has powered up and settled within 0.1 of its target state. A circuit that fails to enforce this sequence — that lets O fire before P is stable — has an **inversion**: specifically a Domain precedence violation, the W-axis inversion from the seven-axis scan you'll meet later in the book. The sequencer is what prevents it at startup.
+Read the `gate` line as the cognitive equivalent of holding a chip in reset: the Operational rail is not allowed to source any action until **every** higher domain has powered up and settled within tolerance. All three conditions, not just the first — a gate that checks P alone would happily release O while Cognitive and Evaluative were still down, which is the same failure in a politer costume. Note also that each `within` is that domain's own tolerance, tightest at P and loosest at E; the standard is stricter the higher you go. A circuit that fails to enforce this sequence — that lets O fire before P, C and E are stable — has an **inversion**: specifically a Domain precedence violation, the W-axis inversion from the seven-axis scan you'll meet later in the book. The sequencer is what prevents it at startup, and Chapter 22 builds the full four-rail version on the CPMB.
 
 > **Bench Note — sequencing is not the same as Domain Descent, though they share the order.** Domain Descent (Chapter 2) describes the *causal flow during normal operation*: a principle causes reasoning, which causes a judgment, which causes an action. Power sequencing describes the *startup order*: which rail is allowed to come alive first. They run in the same direction (P→C→E→O) and for the same reason (higher domains govern lower ones), but one is about causation in steady state and the other is about safe initialization. A board can have correct Domain Descent in operation and still be dangerous if it skips the sequencer and lets O come up cold.
 
@@ -127,7 +129,7 @@ circuit brownout_detector {
 
 Notice the two thresholds — trip at 0.35, release at 0.45. That gap is **hysteresis**, and it's standard brownout-detector practice: if the trip and release points were identical, a rail hovering right at the edge would chatter on and off rapidly. The cognitive analog is a circuit that flickers between exhausted and recovered every cycle, which is its own failure. The gap forces the rail to genuinely recover before normal operation resumes.
 
-> **Bench Note — normalized rail here, +12V on the CPMB.** This chapter models the F3 Vitality rail on a normalized 0–1 scale for clarity (trip 0.35, release 0.45). When you build the actual board in Chapter 22, the CPMB expresses that same rail on its **+12V** supply — brownout trip at **2.5V**, release at **3.5V**. It is the identical hysteresis logic; the numbers differ only because the scales do. Think of the 0–1 values here as the fraction of full rail, and the volts in Chapter 22 as the same fraction on the production supply.
+> **Bench Note — normalized rail here, +12 V on the CPMB.** This chapter models the F3 Vitality rail on a normalized 0–1 scale for clarity (trip 0.35, release 0.45). When you build the actual board in Chapter 22, the CPMB expresses that same rail on its **+12 V** supply. The conversion is plain multiplication, and it is worth doing once by hand so the two chapters visibly agree: trip `0.35 × 12 V = 4.2 V`, release `0.45 × 12 V = 5.4 V`, hysteresis gap `0.10 × 12 V = 1.2 V`. Those are exactly the numbers Chapter 22 publishes. It is the identical logic on both sides; only the scale changes. If you ever find a volt figure in Chapter 22 that does not equal its normalized value here times 12, one of the two is wrong — that is a real consistency check, not a formality.
 
 ## Thermal Management: When a Drive Runs Too Hot
 

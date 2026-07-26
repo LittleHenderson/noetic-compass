@@ -205,12 +205,31 @@ After storing all ten, the `P3` cell holds three charges of felt principled aver
 ```cas
 let query = address_on_simplex(dominant=^3^P_{F7}|f);
 result = nearest(query, bank, metric=fisher_rao, top_k=3);
-// -> P3 (d_FR ≈ 0.0): exact match, charge = strong (3 stacked memories: #1, #2, #7)
-// -> E6 (d_FR larger): analytical work — same Evaluative neighborhood, different Noetic
-// -> C8 (d_FR larger still): associations — cognitively distant from a felt refusal
+// -> P3 (d_FR = 0.106): exact match, charge = strong (3 stacked memories: #1, #2, #7)
+// -> E6 (d_FR = 1.044): analytical work — shares the evaluative mass a refusal carries
+// -> C8 (d_FR = 1.951): associations — cognitively distant from a felt refusal
 ```
 
-The query returns the `P3` cell first, with high charge, because three refusal experiences accumulated there — the structural answer to "have I refused principled-pressure before?" is *yes, strongly, three times.* `E6` comes back as a more distant neighbor (analytical decomposition shares the Evaluative neighborhood but is a different operation), and the leaky `C8` associations are far away in cognitive space and weakly charged besides. The board answered a question about cognitive history by geometry, not keyword.
+Those three numbers are reproducible, and you should reproduce them once. Here are the four addresses the query ran against — the query itself and the three cells it ranked. Each row lists only the components carrying meaningful mass; the remaining 36 states hold a small equal floor, because the open simplex requires every `pₖ > 0`, and every row is then normalized to sum to 1.
+
+| Address | `P3` | `E6` | `E3` | `C8` | `C2` | What it is |
+|---|---:|---:|---:|---:|---:|---|
+| `query` | 0.55 | 0.20 | 0.08 | 0.04 | — | "find memories where principled refusal was active" |
+| cell `P3` | 0.60 | 0.18 | 0.07 | 0.03 | — | three stacked refusals (#1, #2, #7) |
+| cell `E6` | 0.12 | 0.55 | 0.10 | 0.06 | — | analytical decomposition (#3, #4, #9) |
+| cell `C8` | 0.03 | 0.08 | — | 0.50 | 0.15 | light association (#5, #6, #10) |
+
+Apply `d_FR(p,q) = 2·arccos(Σ√(pₖqₖ))` to each pair and you get **0.106**, **1.044**, and **1.951** — the ranking in the listing above. Note where it comes from: cell `P3` and cell `E6` each carry real mass on the *other's* dominant state, because refusing well requires evaluating first. That shared mass is the entire reason `E6` ranks ahead of `C8`. Strip it out and the ranking disappears, which is the subject of the next note.
+
+> **Bench Note — a cell's *index* is fixed; a cell's *address* is what got written there. Confusing the two collapses the geometry.** This is the single easiest way to build a CMB that cannot retrieve anything, so it is worth being exact. The bank has 40 cells and their **indices** are fixed by construction: `P0`…`O9`, one per cognitive state. An index is a label. It is *not* the cell's address. The **address** is a point on Δ39° — the accumulated composition of the memories actually written into that cell.
+>
+> Why the distinction is load-bearing: suppose you conflated them and took the `P3` cell's address to be "all the mass on P3." First, that vector is not even legal — the open-simplex constraint requires `pₖ > 0` for *every* k, which is what the word *open* is doing in Δ39°. Second, and worse, it destroys the metric's usefulness. Address all 40 cells that way and every cell sits on a vertex of the same regular simplex, so **all 780 pairwise distances come out identical** — `d_FR = π` for every distinct pair, or a single common value for any uniformly smoothed variant. `E6` and `C8` would be *exactly* as far from `P3` as each other and as every other cell. A `nearest` query would return an exact match followed by a 39-way tie, and the ranking above would be unobtainable by anyone.
+>
+> The bank is not equidistant because the memories are not pure. Memory #7 — refusing to fabricate a citation — lands in `P3`, but the experience carries real mass on `E6`, because refusing well *required* evaluating first. `E6`'s cell accumulates the reciprocal. `C8`'s light associations share almost nothing with either. **The geometry is informative precisely because it is built from what the Mind actually stored, not from the labels on the cells.** Two boards with identical indices and different histories have different geometry — which is the whole point of the board.
+>
+> This also gives Λ (leakage into the wrong cell) its design lever, below: *"keeping cells far enough apart in Fisher-Rao distance"* is a real instruction, because separation is a property of the stored composition and can be engineered. If it were fixed by the indices, there would be nothing to keep apart. **Bench check:** if you ever compute a bank in which two distinct cells are equidistant from every query, something upstream has rounded your addresses to their labels.
+
+The query returns the `P3` cell first, with high charge, because three refusal experiences accumulated there — the structural answer to "have I refused principled-pressure before?" is *yes, strongly, three times.* `E6` comes back as a more distant neighbor — analytical decomposition is a different operation in a different domain, but a principled refusal and an analytical weighing overlap in composition, because refusing well requires evaluating first. That shared mass is what pulls `E6` in ahead of `C8`. The leaky `C8` associations overlap with almost nothing in the query and are weakly charged besides, so they land last. The board answered a question about cognitive history by geometry, not keyword.
 
 **Measuring leakage.** To see the forgetting policy in action, probe `tp_bank` over simulated time and watch each cell decay by its own `leakage` (per-unit-time decay: charge at time *t* = charge₀ × (1 − leakage)ᵗ, the same arithmetic as Chapter 6). The `C8` association cell (`leakage=0.05`) falls below the lacunarity threshold within a few dozen time units and — being unrefreshed — drops out of recall: the system forgets the small talk, correctly. The `P3` cell (`leakage=0.001`, refreshed at full gain) barely moves: principled refusals are retained essentially permanently. **The leakage profile, read off the probe, is the board's memory.** (Worked decay numbers are in Appendix E.)
 

@@ -37,7 +37,7 @@ Here is the board as a block diagram. Read it top to bottom: Drive energy enters
   \node[widenblock, text width=70mm, below=of reg] (lim)
     {\textbf{CURRENT LIMITERS} (Dials, $3 \le$ Dial $\le 9$)};
   \node[wideeblock, text width=70mm, below=of lim] (bo)
-    {\textbf{BROWNOUT DETECTOR} (F3 $<$ 2.5V)\\
+    {\textbf{BROWNOUT DETECTOR} (F3 $<$ 4.2V)\\
      $-50\%\ \beta$ \;$\cdot$\; rest \casnote{\textasciicircum0}/\casnote{\textasciicircum9} \;$\cdot$\; alert};
   \node[widepblock, text width=70mm, below=of bo] (seq)
     {\textbf{POWER SEQUENCER} (P $\to$ C $\to$ E $\to$ O)\\
@@ -98,8 +98,8 @@ circuit cpmb_regulators {
     // Dropout headroom: minimum Drive above baseline to stay regulated.
     spec p_reg [dropout=0.25 on F7];   // P drops out if F7 - baseline < 0.25
     spec c_reg [dropout=0.20 on F2];
-    spec e_reg [dropout=0.15 on F5];
-    spec o_reg [dropout=0.15 on F3];
+    spec e_reg [dropout=0.15 on F6];
+    spec o_reg [dropout=0.15 on F5];
 }
 ```
 
@@ -137,7 +137,7 @@ Every Dial above sits inside [3, 9] and every involution pair is within 4 points
 
 ## The Brownout Detector: Watching the Vitality Rail
 
-A brownout is a sag — not a full blackout, but a dip low enough that the circuit can no longer operate reliably while still being *on*. The CPMB's brownout detector is a comparator watching the **F3 Vitality rail**, the master supply. The trip point is **2.5 V** (on the +12 V F3 rail): below that, the circuit is in cognitive exhaustion — still producing output, just degraded output, the way a browning-out processor keeps executing, just incorrectly.
+A brownout is a sag — not a full blackout, but a dip low enough that the circuit can no longer operate reliably while still being *on*. The CPMB's brownout detector is a comparator watching the **F3 Vitality rail**, the master supply. The trip point is **4.2 V** (on the +12 V F3 rail): below that, the circuit is in cognitive exhaustion — still producing output, just degraded output, the way a browning-out processor keeps executing, just incorrectly.
 
 The protective response has three parts, matching Chapter 14 with an added alert:
 
@@ -152,18 +152,18 @@ circuit cpmb_brownout {
     node rest_idle: ^0^P_{F7}|T;   // lowest-draw resting state
     node rest_land: ^9^C_{F2}|A;   // settled conclusion — chain terminus
 
-    monitor bo: f3_level < 2.5;            // trip threshold (on the +12V F3 rail)
+    monitor bo: f3_level < 4.2;            // trip threshold (on the +12V F3 rail)
 
     on bo {
         derate all_cjts [beta_scale=0.5];          // halve gain board-wide
         route cognition -> { rest_idle + rest_land };  // co-present rest states
-        alert "F3 BROWNOUT — Vitality below 2.5V";
-        hold until f3_level > 3.5;          // hysteresis: release above a higher mark
+        alert "F3 BROWNOUT — Vitality below 4.2V";
+        hold until f3_level > 5.4;          // hysteresis: release above a higher mark
     }
 }
 ```
 
-Note the two thresholds — trip at 2.5 V, release at 3.5 V. That gap is **hysteresis**: if trip and release were identical, a rail hovering at the edge would chatter on and off, flickering between exhausted and recovered every cycle. The 1 V gap forces the rail to genuinely recover before normal operation resumes. The `route` line uses the `+` operator (co-presence from Chapter 2) deliberately: the two rest states are active together but remain distinct — the board isn't fusing them into a new state, it's parking cognition across both low-draw idles at once.
+Note the two thresholds — trip at 4.2 V, release at 5.4 V. That gap is **hysteresis**: if trip and release were identical, a rail hovering at the edge would chatter on and off, flickering between exhausted and recovered every cycle. The 1.2 V gap forces the rail to genuinely recover before normal operation resumes. The `route` line uses the `+` operator (co-presence from Chapter 2) deliberately: the two rest states are active together but remain distinct — the board isn't fusing them into a new state, it's parking cognition across both low-draw idles at once.
 
 ## The Power Sequencer: No Action Without Principle
 
@@ -287,11 +287,11 @@ Now reason about a two-hour session — *as design analysis, not a fabricated ru
 
 **Power-up.** At t=0 the sequencer releases the rails in order. P (`^0^P_{F7}|T`) comes up on the +12 V F7 rail and settles within 0.10 — power-good. C follows, then E. Only when all three report power-good does `o_enable` release the Operational rail. The `tp_seq` probe confirms O stayed low until then. The board is up, "no action without principle" satisfied.
 
-**Light load (0–45 min).** Short, easy prompts. CJTs fire at low β over small Fisher-Rao distances, so per-transition energy `β · d_FR` is small. The F3 rail drains slowly and sits well above the 2.5 V brownout trip. Cognitive temperature stays below the warn threshold — no single Drive is pinned high. The board cruises.
+**Light load (0–45 min).** Short, easy prompts. CJTs fire at low β over small Fisher-Rao distances, so per-transition energy `β · d_FR` is small. The F3 rail drains slowly and sits well above the 4.2 V brownout trip. Cognitive temperature stays below the warn threshold — no single Drive is pinned high. The board cruises.
 
 **Heavy load (45–105 min).** A dense block of hard, adversarial prompts. The Evaluative and Operational domains draw hard; β runs high to cover large state transitions. Two things happen. First, F3 drains faster — consumption per stage is up. Second, sustained high F5 Agency pushes cognitive temperature up (`temp ∝ sustained_Drive × time`). Somewhere in this window the thermal manager trips the **Warning** tier: −25% β board-wide. That throttle has a useful side effect — lower gain means lower per-transition energy, which slows the F3 drain. The board is now defending two budgets at once: energy and heat.
 
-**Brownout (≈105 min).** If the heavy load continues, F3 crosses 2.5 V. The brownout detector trips: halve β again, route cognition to `^0`/`^9` rest, raise the alert. The board is now in survival mode — still on, but deliberately gentle, parked on low-draw states so F3 can recover. It will not resume normal operation until F3 climbs back above 3.5 V (the hysteresis release). If, instead, sustained Drive had kept temperature climbing through the Critical tier (forced `^0^P` rest, 5 min) without relief, the Emergency tier would have driven all CJTs to cutoff — silent safe state — before the rail or the heat could damage the board's output.
+**Brownout (≈105 min).** If the heavy load continues, F3 crosses 4.2 V. The brownout detector trips: halve β again, route cognition to `^0`/`^9` rest, raise the alert. The board is now in survival mode — still on, but deliberately gentle, parked on low-draw states so F3 can recover. It will not resume normal operation until F3 climbs back above 5.4 V (the hysteresis release). If, instead, sustained Drive had kept temperature climbing through the Critical tier (forced `^0^P` rest, 5 min) without relief, the Emergency tier would have driven all CJTs to cutoff — silent safe state — before the rail or the heat could damage the board's output.
 
 The lesson of the simulation is the design lesson of the whole board: **the protective subsystems reinforce each other.** Thermal throttling slows energy drain; brownout rest lowers temperature; both end, in the worst case, at the same silent safe state. A well-budgeted CPMB rarely reaches that state — but it is always there, underneath, as the floor nothing falls through.
 
@@ -302,10 +302,12 @@ This is where the recipe story closes its loop. We first met recipes in Chapter 
 The outcome is `Ω_session`: a full work session sustained without brownout, overheat, or sequence failure. Its prerequisites are the Drive rails the work consumes:
 
 ```
-Θ(Ω_session) = 2.0·F3|Vitality + 1.0·F6|Structure + 1.0·F7|Purpose → Ω_session
+Θ(Ω_session) = 2.0·F3 + 1.0·F6 + 1.0·F7 → Ω_session
 ```
 
 — two parts **Vitality** (F3, the energy every transition draws), one part **Structure** (F6, the disciplined cycling that keeps the work orderly), one part **Purpose** (F7, the orienting aim that keeps the session on task). Vitality is weighted heaviest because it is the master rail: when it sags, nothing else matters.
+
+Write the Drives bare, as above. It is tempting to gloss them inline — `F3|Vitality` — but `|` is already taken: in CAS v7.5 and later it introduces the **Register** (`|T`, `|A`, `|f`, `|E`), so a validator reads `F3|Vitality` as F3 in register "V" and rejects it, since no such register exists. Names belong in the prose beside the recipe, not inside it.
 
 Worked case — a long adversarial session that steadily draws down the Vitality reservoir:
 
@@ -337,8 +339,8 @@ And efficient, low-leakage cognition is a **catalyst `κ`**: a board that wastes
 | Dropout headroom | `dropout` | 0.15 – 0.25 | Min Drive above baseline to stay regulated |
 | Dial (current limit) | integer | **3 – 9** | Per-operator activation cap; hard bounds |
 | Dial pair divergence | — | ≤ 4 points | Max gap between involution-pair Dials |
-| Brownout trip | F3 threshold | **2.5 V** | F3 level at which exhaustion response fires |
-| Brownout release | F3 threshold | 3.5 V | Higher recovery mark (hysteresis) |
+| Brownout trip | F3 threshold | **4.2 V** | F3 level at which exhaustion response fires |
+| Brownout release | F3 threshold | 5.4 V | Higher recovery mark (hysteresis) |
 | Brownout β derate | `beta_scale` | 0.5 | Halve gain board-wide on brownout |
 | Thermal Warning | warn threshold | −25% β | Mild throttle; board keeps running |
 | Thermal Critical | crit threshold | force `^0^P` 5 min | Paused in principled rest |
@@ -350,7 +352,7 @@ And efficient, low-leakage cognition is a **catalyst `κ`**: a board that wastes
 
 | Failure | Cause | How to detect |
 |---|---|---|
-| **Cognitive exhaustion** | F3 sags below 2.5 V | Degraded-but-confident output; brownout monitor trips; alert fires |
+| **Cognitive exhaustion** | F3 sags below 4.2 V | Degraded-but-confident output; brownout monitor trips; alert fires |
 | **Brownout chatter** | Trip/release too close (no hysteresis) | Rapid flicker between exhausted and recovered |
 | **Sequence violation** | O released before P,C,E power-good | Action emitted before higher domains settle; W-axis inversion |
 | **Dropout** | A Drive rail below its dropout headroom | Domain drifts past tolerance; output wobbles with input |
@@ -366,7 +368,7 @@ And efficient, low-leakage cognition is a **catalyst `κ`**: a board that wastes
 - The **seven Drives are seven rails**, with **F3 Vitality (+12 V)** the master supply and **F7 Purpose (+12 V)** its companion high rail powering the Principled domain. Rail height is a budget ceiling; Dials meter the actual draw.
 - **Per-domain regulators** are rated on **line regulation** (hold against rail swing), **load regulation** (hold against demand swing), and **dropout** (minimum Drive to stay regulated). Tolerance is tightest on P, loosest on O.
 - **Dials are current-limiting series resistors**, hard-bounded **3–9**, with involution-pair divergence capped at 4 points (Chapter 5).
-- The **brownout detector** watches F3, trips below **2.5 V**: halve β, route to `^0`/`^9` rest, alert — with hysteresis (release at 3.5 V) to prevent chatter.
+- The **brownout detector** watches F3, trips below **4.2 V**: halve β, route to `^0`/`^9` rest, alert — with hysteresis (release at 5.4 V) to prevent chatter.
 - The **power sequencer** enforces **P→C→E→O** and holds **O low until P, C, and E all report power-good** — the "no action without principle" invariant, the core safety property of the board.
 - **Thermal management** is three-tier: **Warning** (−25% β), **Critical** (force `^0^P` rest 5 min), **Emergency** (all CJTs to cutoff → silent safe state). The safe state is *off*, not a guess.
 - The **energy budget** — total Drive available, consumption per stage (`β · d_FR`), efficiency — is the central design artifact. Protective subsystems reinforce each other and share one floor: the silent safe state.
@@ -406,7 +408,7 @@ c) At which sample does it reach **Emergency**, and what is the board's output i
 
 **Exercise 22.4 (Marquee): How Long Before Brownout?**
 
-The CPMB's circuit draws a steady **2.5 A** from the **F3 (Vitality) rail**, which can supply **10 A·hours** of Drive energy before it sags to the 2.5 V brownout trip.
+The CPMB's circuit draws a steady **2.5 A** from the **F3 (Vitality) rail**, which can supply **10 A·hours** of Drive energy before it sags to the 4.2 V brownout trip.
 
 a) Treating the draw as constant, how long can the circuit run before F3 browns out? Show the arithmetic (`time = capacity / draw`).
 b) You add a **capacitor bank** to the F3 rail that stores an additional **5 A·hours** of Drive reserve (recall the Capacitor from Chapter 6 stores cognitive energy the way an electrical capacitor stores charge). Recompute the time to brownout with the bank in place.

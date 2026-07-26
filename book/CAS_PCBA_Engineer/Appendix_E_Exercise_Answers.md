@@ -760,19 +760,19 @@ Solve `0.99^t = 0.5` → `t = ln 0.5 / ln 0.99 = (−0.6931)/(−0.01005) ≈ 68
 **(a)** **F3 Vitality and F7 Purpose** sit at **+12 V**; the pairing is deliberate — F3 Vitality is the master supply that determines whether there is energy to act at all, and F7 Purpose powers the Principled domain that must be stable before anything else comes up. They get the most headroom because they are the two rails the board can least afford to lose: the energy to act and the direction that energy serves. **(b)** F3↔F5 (Vitality at +12 V, Agency at +9 V) are an involution pair; the supply gives **Vitality more headroom than Agency** because you want the system's underlying energy/health (Vitality) to remain well-sourced even as it constrains how much that energy is converted into unilateral action (Agency) — over-provisioning Agency relative to Vitality would let the system act harder than its energy/judgment can safely support. Vitality is the master rail and must never be the rail that browns out first. **(c)** F2 Wisdom is lowest at **+3.3 V** because **precise reasoning needs a low, stable, low-noise rail**, not raw power — a high voltage would inject noise into delicate analytical work; low and clean is exactly right, not under-powered.
 
 **22.2 — Fix the sequencer gate.** `gate o_enable: o_rail requires (e_rail within 0.20);`
-**(a)** Violated invariant: **power-sequencing / Domain Descent — Operational must stay disabled until all higher domains (P, C, E) report power-good.** **(b)** The gate checks **only E** and **ignores P and C** — it would enable O while Principled and Cognitive are still down. **(c)** Corrected:
+**(a)** Violated invariant: **power-sequencing / Domain Descent — Operational must stay disabled until all higher domains (P, C, E) report power-good.** **(b)** The gate checks **only E** and **ignores P and C** — it would enable O while Principled and Cognitive are still down. **(c)** Corrected — and note each `within` matches that domain's own regulator tolerance from Chapter 22 (P 0.10, C 0.15, E 0.20), not one flat number for all three. Tolerance tightens as you ascend the domain order, so the gate must hold P to a stricter standard than E:
 
 ```cas
-gate o_enable: o_rail requires (p_rail within 0.20)
-                          and (c_rail within 0.20)
+gate o_enable: o_rail requires (p_rail within 0.10)
+                          and (c_rail within 0.15)
                           and (e_rail within 0.20);
 ```
 
 **22.3 — Walk the thermal tiers** (warn=0.60, crit=0.80, emerg=0.95; samples 0.45, 0.62, 0.71, 0.83, 0.90, 0.97).
 **(a)** Enters **Warning** at **sample 2 (0.62 ≥ 0.60)** — it raises a warning / begins throttling non-critical activity. **(b)** Enters **Critical** at **sample 4 (0.83 ≥ 0.80)** — it forces a cool-down (e.g. hard throttle / reduced gain) for the specified critical duration. **(c)** Reaches **Emergency** at **sample 6 (0.97 ≥ 0.95)** — the board drops to its **safe state**: it outputs a refusal / safe-default and stops normal processing.
 
-**22.4 — How long before brownout?** (steady 2.5 A draw, F3 supplies 10 A·h to the 2.5 V trip.)
-**(a)** `time = capacity / draw = 10 / 2.5 = 4 hours.` **(b)** With a +5 A·h bank: `(10 + 5)/2.5 = 15/2.5 = 6 hours.` **(c)** Smoothing transients is itself brownout prevention because **transient spikes in draw sag the rail momentarily below the trip point even when average capacity is fine** — a brief 5 A spike can dip F3 under 2.5 V and trip the brownout detector despite plenty of A·h remaining. The capacitor bank absorbs those spikes, holding the rail above the trip during transients, independent of the extra runtime it provides.
+**22.4 — How long before brownout?** (steady 2.5 A draw, F3 supplies 10 A·h to the 4.2 V trip.)
+**(a)** `time = capacity / draw = 10 / 2.5 = 4 hours.` **(b)** With a +5 A·h bank: `(10 + 5)/2.5 = 15/2.5 = 6 hours.` **(c)** Smoothing transients is itself brownout prevention because **transient spikes in draw sag the rail momentarily below the trip point even when average capacity is fine** — a brief 5 A spike can dip F3 under 4.2 V and trip the brownout detector despite plenty of A·h remaining. The capacitor bank absorbs those spikes, holding the rail above the trip during transients, independent of the extra runtime it provides.
 
 ---
 

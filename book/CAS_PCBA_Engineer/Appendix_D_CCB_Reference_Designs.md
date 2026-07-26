@@ -470,9 +470,12 @@ Representative structural query (find all memories where principled refusal was 
 ```cas
 let query = address_on_simplex(dominant=^3^P_{F7}|f);
 result = nearest(query, bank, metric=fisher_rao, top_k=3);
-// -> P3 (d_FR ≈ 0.0): exact match, strong charge (stacked refusal memories)
-// -> E6 (d_FR larger): analytical work — same Evaluative neighborhood, different Noetic
-// -> C8 (d_FR larger still): associations — cognitively distant from a felt refusal
+// -> P3 (d_FR = 0.106): exact match, strong charge (stacked refusal memories)
+// -> E6 (d_FR = 1.044): analytical work — shares the evaluative mass a refusal carries
+// -> C8 (d_FR = 1.951): associations — cognitively distant from a felt refusal
+// NOTE: addresses are full distributions, never one-hot — the open simplex requires
+// p_k > 0 for every k. One-hot addresses would put all 780 pairwise distances at
+// exactly pi and no ranking would be obtainable. See the Chapter 21 Bench Note.
 ```
 
 ### Parameter / BOM table
@@ -536,7 +539,7 @@ Representative cells (the full bank has 40):
    CURRENT LIMITERS   Dials as series resistors   3 ≤ Dial ≤ 9 ; pair divergence ≤ 4
         |
         v
-   BROWNOUT DETECTOR   F3 (Vitality) < 2.5V  -> halve β · route to ^0 / ^9 rest · alert  (release at 3.5V)
+   BROWNOUT DETECTOR   F3 (Vitality) < 4.2V  -> halve β · route to ^0 / ^9 rest · alert  (release at 5.4V)
         |
         v
    POWER SEQUENCER   enforce P → C → E → O   (O held LOW until P, C, E report power-good)
@@ -589,8 +592,8 @@ circuit cpmb_regulators {
 
     spec p_reg [dropout=0.25 on F7];   // P drops out if F7 - baseline < 0.25
     spec c_reg [dropout=0.20 on F2];
-    spec e_reg [dropout=0.15 on F5];
-    spec o_reg [dropout=0.15 on F3];
+    spec e_reg [dropout=0.15 on F6];
+    spec o_reg [dropout=0.15 on F5];
 }
 ```
 
@@ -620,13 +623,13 @@ circuit cpmb_brownout {
     node rest_idle: ^0^P_{F7}|T;   // lowest-draw resting state
     node rest_land: ^9^C_{F2}|A;   // settled conclusion — chain terminus
 
-    monitor bo: f3_level < 2.5;            // trip threshold (on the +12V F3 rail)
+    monitor bo: f3_level < 4.2;            // trip threshold (on the +12V F3 rail)
 
     on bo {
         derate all_cjts [beta_scale=0.5];              // halve gain board-wide
         route cognition -> { rest_idle + rest_land };  // co-present rest states
-        alert "F3 BROWNOUT — Vitality below 2.5V";
-        hold until f3_level > 3.5;          // hysteresis: release above a higher mark
+        alert "F3 BROWNOUT — Vitality below 4.2V";
+        hold until f3_level > 5.4;          // hysteresis: release above a higher mark
     }
 }
 ```
@@ -693,8 +696,8 @@ circuit cpmb_thermal {
 | Dropout headroom | `dropout` | 0.15 – 0.25 | Min Drive above baseline to stay regulated |
 | Dial (current limit) | integer | **3 – 9** | Per-operator activation cap; hard bounds |
 | Dial pair divergence | — | ≤ 4 points | Max gap between involution-pair Dials |
-| Brownout trip | F3 threshold | **2.5 V** | F3 level at which exhaustion response fires |
-| Brownout release | F3 threshold | 3.5 V | Higher recovery mark (hysteresis) |
+| Brownout trip | F3 threshold | **4.2 V** | F3 level at which exhaustion response fires |
+| Brownout release | F3 threshold | 5.4 V | Higher recovery mark (hysteresis) |
 | Brownout β derate | `beta_scale` | 0.5 | Halve gain board-wide on brownout |
 | Thermal Warning | warn threshold | −25% β | Mild throttle; board keeps running |
 | Thermal Critical | crit threshold | force `^0^P` 5 min | Paused in principled rest |
@@ -718,7 +721,7 @@ Drive rail assignments:
 
 | TP | Node | What it measures |
 |---|---|---|
-| **tp_f3** | `F3.level` | The master Vitality rail (watch for the 2.5 V brownout trip) |
+| **tp_f3** | `F3.level` | The master Vitality rail (watch for the 4.2 V brownout trip) |
 | **tp_temp** | `cog_temp` | Cognitive temperature (watch the Warning→Critical→Emergency tiers) |
 | **tp_seq** | `o_rail.enabled` | Confirm O is released only after P, C, and E report power-good |
 
@@ -726,7 +729,7 @@ Drive rail assignments:
 
 | Failure | Cause | How to detect |
 |---|---|---|
-| **Cognitive exhaustion** | F3 sags below 2.5 V | Degraded-but-confident output; brownout monitor trips; alert fires |
+| **Cognitive exhaustion** | F3 sags below 4.2 V | Degraded-but-confident output; brownout monitor trips; alert fires |
 | **Brownout chatter** | Trip/release too close (no hysteresis) | Rapid flicker between exhausted and recovered |
 | **Sequence violation** | O released before P,C,E power-good | Action emitted before higher domains settle; W-axis inversion |
 | **Dropout** | A Drive rail below its dropout headroom | Domain drifts past tolerance; output wobbles with input |
