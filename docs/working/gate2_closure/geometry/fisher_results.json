@@ -1,0 +1,23 @@
+{
+  "criteria": {
+    "F1_TKS_beats_own_shuffled_by_0.10": false,
+    "F2_reversal_TKS_better_than_compact": false,
+    "F3_permutation_p_below_0.01": false,
+    "F4_lexical_gradient_opposite": true,
+    "F5_no_saturation": false
+  },
+  "design": "FISHER-RAO-SIMPLEX-v1",
+  "geodesic": {
+    "TKS": 0.008323,
+    "compact": 0.003179,
+    "shuffled_TKS": 0.017114
+  },
+  "layer": 12,
+  "lexical_gradient": -2.1516,
+  "model": "EleutherAI/pythia-1b",
+  "permutation_p": 1.0,
+  "prereg_commit": "7e806675",
+  "tks_vs_compact": -0.005144,
+  "tks_vs_shuffled": 0.008791,
+  "verdict": "VOID_SATURATED"
+}
