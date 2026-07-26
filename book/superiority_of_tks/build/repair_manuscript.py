@@ -180,6 +180,52 @@ CONTENT_FIXES = [
     ("reprogram the Noetic 5 (Female) structure (see Chapter 8 advanced troubleshooting",
      "reprogram the Noetic 5 (Female) structure (see Chapter 6 advanced troubleshooting"),
 
+    # Two incompatible sets of confirmation-wave windows for the same three
+    # named waves. The chapter that develops them uses 0-3 / 3-24 / 24-72
+    # hours, and the Confirmation Tracking Log worksheet in the appendix agrees.
+    # The Emergency block was the outlier, and a reader working from it would
+    # wait 24 hours before expecting a first-wave signal the rest of the book
+    # says arrives within three.
+    ("- First (0-24 hrs): Internal shift, strange calm\n"
+     "- Second (24-72 hrs): Unusual offers, forgotten debts, opportunities appear\n"
+     "- Third (72 hrs+): Money manifests through unexpected channels",
+     "- First (0-3 hrs): Internal shift, strange calm\n"
+     "- Second (3-24 hrs): Unusual offers, forgotten debts, opportunities appear\n"
+     "- Third (24-72 hrs): Money manifests through unexpected channels"),
+
+    # The Emergency Money protocol published its 7-operator inverted. The
+    # chapter that defines the operation writes `(D10^2 x A4^4) x 7` and then
+    # expands it term by term -- "Physical manifestation attracted x Spiritual
+    # vibration intensity x Rhythm completion cycle" -- so the 7 is the third
+    # multiplicand. The two protocol blocks divided by it instead.
+    ("EQUATION := (D10 × A4^) ÷ 7 = $5,000",
+     "EQUATION := (D10 × A4^) × 7 = $5,000"),
+    ("EQUATION := (D10 × A4^) ÷ 7 = $[Amount]",
+     "EQUATION := (D10 × A4^) × 7 = $[Amount]"),
+
+    # A drafting stamp that names the author's internal working files.
+    ("(Further elaboration on the D/W/P structure of these paths and their "
+     "specific roles in supporting the 7 Foundations across the 4 Worlds will "
+     "follow, integrating information from `pasted_content.txt` and "
+     "`pasted_content_2.txt`.)", ""),
+
+    # Unit error at the load-bearing step of the 10,000-hour derivation. The
+    # next line reads "52.5 days x 24 hours = 1,260 hours", so the quantity
+    # being divided is hours, not days -- and 1,260 days / 24 is not 52.5 days
+    # of anything.
+    ("1,260 days ÷ 24 hours = 52.5 days of continuous consciousness",
+     "1,260 hours ÷ 24 = 52.5 days of continuous consciousness"),
+
+    # The mirror table pairs 1<->8, 2<->7, 3<->6, 4<->5 -- every pair summing to
+    # 9. That covers eight of the ten Noetics. Nine (Below/Effect) and ten
+    # (Idea) have no partner under this reflection, and the operational rule as
+    # written sends a reader to "0.Y" or "-1.Y" for them.
+    ("**Operational Rule**: When stuck on X.Y, try working with its mirror (9-X).Y or X.(9-Y)",
+     "**Operational Rule**: When stuck on X.Y, try working with its mirror "
+     "(9-X).Y or X.(9-Y) — valid where the index is 1 through 8, since each "
+     "mirror pair above sums to 9. Below/Effect (9) and Idea (10) are unpaired "
+     "under this reflection and have no mirror to move to; work them directly."),
+
     # Song lyrics are the one category publishers pursue regardless of length,
     # and neither quotation is load-bearing -- both are tags on a name.
     ('- Nas ("I know I can be what I wanna be")', "- Nas"),
