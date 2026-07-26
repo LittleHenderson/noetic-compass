@@ -1,0 +1,52 @@
+{
+  "authoring": {
+    "chunks_total": 56,
+    "input_tokens_est": 224348,
+    "interleave_head": [
+      "A:F1A",
+      "D:F1A",
+      "A:F1E",
+      "D:F1E",
+      "A:F1T",
+      "D:F1T"
+    ],
+    "output_tokens_est": 77280,
+    "requests_planned": 112
+  },
+  "blind_pool_planned_rows": 560,
+  "cost": {
+    "authoring": {
+      "input_tokens_est_with_retries": 336522,
+      "model": "models/gemini-2.5-flash-lite",
+      "output_tokens_est_with_retries": 115920,
+      "requests_planned": 112,
+      "usd_est": 0.08
+    },
+    "cost_cap_usd": 25.0,
+    "judging": {
+      "calls_per_pass": 56,
+      "input_tokens_est": 589008,
+      "model": "models/gemini-2.5-flash",
+      "note": "symmetric judge cross (K_A + K_D) roughly doubles judging cost vs a single pass",
+      "output_tokens_est": 45360,
+      "passes": 2,
+      "prompt_tokens_per_call_by_pass": {
+        "K_A": 3387,
+        "K_D": 3625
+      },
+      "requests_planned": 112,
+      "usd_est": 0.2901
+    },
+    "optional_pro_adjudication_usd_est": 1.1899,
+    "total_usd_est_june_models": 0.3701,
+    "under_cap": true,
+    "worst_case_all_fallback_model_usd_est": 3.7864
+  },
+  "dry_run": true,
+  "no_api_calls_made": true,
+  "template_identity_guard": {
+    "cover_controls_and_emotions_identical_across_arms": true,
+    "n_byte_equal": 56,
+    "n_paired_prompts_compared": 56
+  }
+}

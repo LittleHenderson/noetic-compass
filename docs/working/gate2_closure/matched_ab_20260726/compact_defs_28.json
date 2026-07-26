@@ -1,0 +1,311 @@
+{
+  "schema_version": "gate2_closure_matched_ab_compact_defs.v1",
+  "date": "20260726",
+  "purpose": "Arm D (compact/shorthand) definition text for the matched A/B blind-recovery test. These 28 shorthand summaries are the compact arm's definitions, extracted VERBATIM from the quarantined June lineage.",
+  "source_file": "docs/working/_quarantine/mtc_f28_goemotions_wrong_short_defs_20260616/build_confirmatory_authoring_plan.py",
+  "source_symbols": "DRIVES (lines 26-34) and REGISTERS (lines 36-41); per-foundation compact_meaning composed exactly as authoring_instructions() line 182 composed it: 'CAS meaning: drive = {drive_definition}; register = {register_definition}.'",
+  "composition_note": "The quarantined plan stored 7 drive + 4 register shorthand strings and crossed them into 28 per-foundation shorthands at authoring time. Each of the 28 entries below carries the verbatim drive_definition and register_definition strings plus the composed compact_meaning.",
+  "judge_variant_warning": "The quarantined blind judge (gate2_confirmatory_gemini_blind.py DRIVE_DEFS/REGISTER_DEFS, lines 28-43) used SLIGHTLY DIFFERENT shorthand wording for Wisdom, Vitality, Connection, Agency, Structure, Purpose, Affective, Embodied than the authoring plan. Recorded under judge_shorthand_variants. The matched A/B judge must NOT use these: per R2 the frozen judge uses the original TKS 28 definitions for both arms; compact text enters ONLY Arm D authoring.",
+  "original_tks_source": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\canon\\normalized\\canon_subfoundations_28_defs.json",
+  "original_tks_sha256": "5507bf6f85f63dc62847ea5f9018b6ad4471ca8acfe851a0f50d2b4ebbf6c88d",
+  "n_entries": 28,
+  "entries": [
+    {
+      "foundation": "F1T",
+      "drive_code": "F1",
+      "drive": "Unity",
+      "register_code": "T",
+      "register": "Transcendent",
+      "drive_definition": "integrating separate parts into one coherent whole",
+      "register_definition": "ideal, meaning-centered, value-level, or purpose-level",
+      "compact_meaning": "drive = integrating separate parts into one coherent whole; register = ideal, meaning-centered, value-level, or purpose-level"
+    },
+    {
+      "foundation": "F1A",
+      "drive_code": "F1",
+      "drive": "Unity",
+      "register_code": "A",
+      "register": "Analytical",
+      "drive_definition": "integrating separate parts into one coherent whole",
+      "register_definition": "logical, abstract, explanatory, comparative, or rule-based",
+      "compact_meaning": "drive = integrating separate parts into one coherent whole; register = logical, abstract, explanatory, comparative, or rule-based"
+    },
+    {
+      "foundation": "F1f",
+      "drive_code": "F1",
+      "drive": "Unity",
+      "register_code": "f",
+      "register": "Affective",
+      "drive_definition": "integrating separate parts into one coherent whole",
+      "register_definition": "felt, relational, mood-toned, empathic, or emotionally registered",
+      "compact_meaning": "drive = integrating separate parts into one coherent whole; register = felt, relational, mood-toned, empathic, or emotionally registered"
+    },
+    {
+      "foundation": "F1E",
+      "drive_code": "F1",
+      "drive": "Unity",
+      "register_code": "E",
+      "register": "Embodied",
+      "drive_definition": "integrating separate parts into one coherent whole",
+      "register_definition": "physical, tactile, spatial, procedural, bodily, or material",
+      "compact_meaning": "drive = integrating separate parts into one coherent whole; register = physical, tactile, spatial, procedural, bodily, or material"
+    },
+    {
+      "foundation": "F2T",
+      "drive_code": "F2",
+      "drive": "Wisdom",
+      "register_code": "T",
+      "register": "Transcendent",
+      "drive_definition": "discerning what fits, what matters, and what should guide action",
+      "register_definition": "ideal, meaning-centered, value-level, or purpose-level",
+      "compact_meaning": "drive = discerning what fits, what matters, and what should guide action; register = ideal, meaning-centered, value-level, or purpose-level"
+    },
+    {
+      "foundation": "F2A",
+      "drive_code": "F2",
+      "drive": "Wisdom",
+      "register_code": "A",
+      "register": "Analytical",
+      "drive_definition": "discerning what fits, what matters, and what should guide action",
+      "register_definition": "logical, abstract, explanatory, comparative, or rule-based",
+      "compact_meaning": "drive = discerning what fits, what matters, and what should guide action; register = logical, abstract, explanatory, comparative, or rule-based"
+    },
+    {
+      "foundation": "F2f",
+      "drive_code": "F2",
+      "drive": "Wisdom",
+      "register_code": "f",
+      "register": "Affective",
+      "drive_definition": "discerning what fits, what matters, and what should guide action",
+      "register_definition": "felt, relational, mood-toned, empathic, or emotionally registered",
+      "compact_meaning": "drive = discerning what fits, what matters, and what should guide action; register = felt, relational, mood-toned, empathic, or emotionally registered"
+    },
+    {
+      "foundation": "F2E",
+      "drive_code": "F2",
+      "drive": "Wisdom",
+      "register_code": "E",
+      "register": "Embodied",
+      "drive_definition": "discerning what fits, what matters, and what should guide action",
+      "register_definition": "physical, tactile, spatial, procedural, bodily, or material",
+      "compact_meaning": "drive = discerning what fits, what matters, and what should guide action; register = physical, tactile, spatial, procedural, bodily, or material"
+    },
+    {
+      "foundation": "F3T",
+      "drive_code": "F3",
+      "drive": "Vitality",
+      "register_code": "T",
+      "register": "Transcendent",
+      "drive_definition": "maintaining energy, liveliness, repair, and continuing motion",
+      "register_definition": "ideal, meaning-centered, value-level, or purpose-level",
+      "compact_meaning": "drive = maintaining energy, liveliness, repair, and continuing motion; register = ideal, meaning-centered, value-level, or purpose-level"
+    },
+    {
+      "foundation": "F3A",
+      "drive_code": "F3",
+      "drive": "Vitality",
+      "register_code": "A",
+      "register": "Analytical",
+      "drive_definition": "maintaining energy, liveliness, repair, and continuing motion",
+      "register_definition": "logical, abstract, explanatory, comparative, or rule-based",
+      "compact_meaning": "drive = maintaining energy, liveliness, repair, and continuing motion; register = logical, abstract, explanatory, comparative, or rule-based"
+    },
+    {
+      "foundation": "F3f",
+      "drive_code": "F3",
+      "drive": "Vitality",
+      "register_code": "f",
+      "register": "Affective",
+      "drive_definition": "maintaining energy, liveliness, repair, and continuing motion",
+      "register_definition": "felt, relational, mood-toned, empathic, or emotionally registered",
+      "compact_meaning": "drive = maintaining energy, liveliness, repair, and continuing motion; register = felt, relational, mood-toned, empathic, or emotionally registered"
+    },
+    {
+      "foundation": "F3E",
+      "drive_code": "F3",
+      "drive": "Vitality",
+      "register_code": "E",
+      "register": "Embodied",
+      "drive_definition": "maintaining energy, liveliness, repair, and continuing motion",
+      "register_definition": "physical, tactile, spatial, procedural, bodily, or material",
+      "compact_meaning": "drive = maintaining energy, liveliness, repair, and continuing motion; register = physical, tactile, spatial, procedural, bodily, or material"
+    },
+    {
+      "foundation": "F4T",
+      "drive_code": "F4",
+      "drive": "Connection",
+      "register_code": "T",
+      "register": "Transcendent",
+      "drive_definition": "forming, preserving, or repairing bonds between people or parts",
+      "register_definition": "ideal, meaning-centered, value-level, or purpose-level",
+      "compact_meaning": "drive = forming, preserving, or repairing bonds between people or parts; register = ideal, meaning-centered, value-level, or purpose-level"
+    },
+    {
+      "foundation": "F4A",
+      "drive_code": "F4",
+      "drive": "Connection",
+      "register_code": "A",
+      "register": "Analytical",
+      "drive_definition": "forming, preserving, or repairing bonds between people or parts",
+      "register_definition": "logical, abstract, explanatory, comparative, or rule-based",
+      "compact_meaning": "drive = forming, preserving, or repairing bonds between people or parts; register = logical, abstract, explanatory, comparative, or rule-based"
+    },
+    {
+      "foundation": "F4f",
+      "drive_code": "F4",
+      "drive": "Connection",
+      "register_code": "f",
+      "register": "Affective",
+      "drive_definition": "forming, preserving, or repairing bonds between people or parts",
+      "register_definition": "felt, relational, mood-toned, empathic, or emotionally registered",
+      "compact_meaning": "drive = forming, preserving, or repairing bonds between people or parts; register = felt, relational, mood-toned, empathic, or emotionally registered"
+    },
+    {
+      "foundation": "F4E",
+      "drive_code": "F4",
+      "drive": "Connection",
+      "register_code": "E",
+      "register": "Embodied",
+      "drive_definition": "forming, preserving, or repairing bonds between people or parts",
+      "register_definition": "physical, tactile, spatial, procedural, bodily, or material",
+      "compact_meaning": "drive = forming, preserving, or repairing bonds between people or parts; register = physical, tactile, spatial, procedural, bodily, or material"
+    },
+    {
+      "foundation": "F5T",
+      "drive_code": "F5",
+      "drive": "Agency",
+      "register_code": "T",
+      "register": "Transcendent",
+      "drive_definition": "choosing, initiating, directing, or taking ownership of action",
+      "register_definition": "ideal, meaning-centered, value-level, or purpose-level",
+      "compact_meaning": "drive = choosing, initiating, directing, or taking ownership of action; register = ideal, meaning-centered, value-level, or purpose-level"
+    },
+    {
+      "foundation": "F5A",
+      "drive_code": "F5",
+      "drive": "Agency",
+      "register_code": "A",
+      "register": "Analytical",
+      "drive_definition": "choosing, initiating, directing, or taking ownership of action",
+      "register_definition": "logical, abstract, explanatory, comparative, or rule-based",
+      "compact_meaning": "drive = choosing, initiating, directing, or taking ownership of action; register = logical, abstract, explanatory, comparative, or rule-based"
+    },
+    {
+      "foundation": "F5f",
+      "drive_code": "F5",
+      "drive": "Agency",
+      "register_code": "f",
+      "register": "Affective",
+      "drive_definition": "choosing, initiating, directing, or taking ownership of action",
+      "register_definition": "felt, relational, mood-toned, empathic, or emotionally registered",
+      "compact_meaning": "drive = choosing, initiating, directing, or taking ownership of action; register = felt, relational, mood-toned, empathic, or emotionally registered"
+    },
+    {
+      "foundation": "F5E",
+      "drive_code": "F5",
+      "drive": "Agency",
+      "register_code": "E",
+      "register": "Embodied",
+      "drive_definition": "choosing, initiating, directing, or taking ownership of action",
+      "register_definition": "physical, tactile, spatial, procedural, bodily, or material",
+      "compact_meaning": "drive = choosing, initiating, directing, or taking ownership of action; register = physical, tactile, spatial, procedural, bodily, or material"
+    },
+    {
+      "foundation": "F6T",
+      "drive_code": "F6",
+      "drive": "Structure",
+      "register_code": "T",
+      "register": "Transcendent",
+      "drive_definition": "ordering, constraining, arranging, or stabilizing a system",
+      "register_definition": "ideal, meaning-centered, value-level, or purpose-level",
+      "compact_meaning": "drive = ordering, constraining, arranging, or stabilizing a system; register = ideal, meaning-centered, value-level, or purpose-level"
+    },
+    {
+      "foundation": "F6A",
+      "drive_code": "F6",
+      "drive": "Structure",
+      "register_code": "A",
+      "register": "Analytical",
+      "drive_definition": "ordering, constraining, arranging, or stabilizing a system",
+      "register_definition": "logical, abstract, explanatory, comparative, or rule-based",
+      "compact_meaning": "drive = ordering, constraining, arranging, or stabilizing a system; register = logical, abstract, explanatory, comparative, or rule-based"
+    },
+    {
+      "foundation": "F6f",
+      "drive_code": "F6",
+      "drive": "Structure",
+      "register_code": "f",
+      "register": "Affective",
+      "drive_definition": "ordering, constraining, arranging, or stabilizing a system",
+      "register_definition": "felt, relational, mood-toned, empathic, or emotionally registered",
+      "compact_meaning": "drive = ordering, constraining, arranging, or stabilizing a system; register = felt, relational, mood-toned, empathic, or emotionally registered"
+    },
+    {
+      "foundation": "F6E",
+      "drive_code": "F6",
+      "drive": "Structure",
+      "register_code": "E",
+      "register": "Embodied",
+      "drive_definition": "ordering, constraining, arranging, or stabilizing a system",
+      "register_definition": "physical, tactile, spatial, procedural, bodily, or material",
+      "compact_meaning": "drive = ordering, constraining, arranging, or stabilizing a system; register = physical, tactile, spatial, procedural, bodily, or material"
+    },
+    {
+      "foundation": "F7T",
+      "drive_code": "F7",
+      "drive": "Purpose",
+      "register_code": "T",
+      "register": "Transcendent",
+      "drive_definition": "orienting action toward an aim, meaning, duty, or end",
+      "register_definition": "ideal, meaning-centered, value-level, or purpose-level",
+      "compact_meaning": "drive = orienting action toward an aim, meaning, duty, or end; register = ideal, meaning-centered, value-level, or purpose-level"
+    },
+    {
+      "foundation": "F7A",
+      "drive_code": "F7",
+      "drive": "Purpose",
+      "register_code": "A",
+      "register": "Analytical",
+      "drive_definition": "orienting action toward an aim, meaning, duty, or end",
+      "register_definition": "logical, abstract, explanatory, comparative, or rule-based",
+      "compact_meaning": "drive = orienting action toward an aim, meaning, duty, or end; register = logical, abstract, explanatory, comparative, or rule-based"
+    },
+    {
+      "foundation": "F7f",
+      "drive_code": "F7",
+      "drive": "Purpose",
+      "register_code": "f",
+      "register": "Affective",
+      "drive_definition": "orienting action toward an aim, meaning, duty, or end",
+      "register_definition": "felt, relational, mood-toned, empathic, or emotionally registered",
+      "compact_meaning": "drive = orienting action toward an aim, meaning, duty, or end; register = felt, relational, mood-toned, empathic, or emotionally registered"
+    },
+    {
+      "foundation": "F7E",
+      "drive_code": "F7",
+      "drive": "Purpose",
+      "register_code": "E",
+      "register": "Embodied",
+      "drive_definition": "orienting action toward an aim, meaning, duty, or end",
+      "register_definition": "physical, tactile, spatial, procedural, bodily, or material",
+      "compact_meaning": "drive = orienting action toward an aim, meaning, duty, or end; register = physical, tactile, spatial, procedural, bodily, or material"
+    }
+  ],
+  "judge_shorthand_variants": {
+    "drive_defs": {
+      "Unity": "integrating separate parts into one coherent whole",
+      "Wisdom": "weighing evidence, context, and consequences with discernment",
+      "Vitality": "maintaining life, energy, resilience, or active functioning",
+      "Connection": "forming, repairing, or sustaining a relationship or shared bond",
+      "Agency": "making a choice, taking initiative, or directing action",
+      "Structure": "ordering roles, rules, boundaries, procedures, or stable arrangements",
+      "Purpose": "orienting action toward an aim, mission, value, or future direction"
+    },
+    "register_defs": {
+      "Transcendent": "ideal, meaning-centered, value-level, or purpose-level",
+      "Analytical": "logical, abstract, explanatory, comparative, or rule-based",
+      "Affective": "emotionally toned, relationally felt, or interpersonal",
+      "Embodied": "physical, sensory, practical, material, or action-based"
+    }
+  }
+}

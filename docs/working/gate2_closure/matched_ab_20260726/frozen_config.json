@@ -1,0 +1,130 @@
+{
+  "adjudication_model": "models/gemini-2.5-pro",
+  "adversarial_review_fixes_20260726": [
+    "H1: per-arm surface baseline = max(word TF-IDF, char 3-5-gram), both 5-fold CV random_state=0, identical config across arms",
+    "Two-tier frozen criteria: PRIMARY M>=0.10 & p<0.01 & bootstrap 95% CI excludes 0; SECONDARY 0<M<0.10 with same p+CI licenses only 'directionally supported below the pre-registered strong margin'",
+    "H2: symmetric judge cross \u2014 passes K_A (TKS choice key) and K_D (compact choice key) over the same shuffled pool; per-arm recovery = mean over passes; June anchoring sentence removed (runtime-verified)",
+    "A1: arm D banned terms derived with the same call signature as arm A: source_terms_to_avoid(meaning, name)",
+    "A2: TKS-text intersection with HARD_SOURCE_FORBIDDEN pre-registered as inherent-to-manipulation disclosure (pressure direction AGAINST arm A)",
+    "A3: template-identity guard is a real per-chunk byte-compare of paired prompts after stripping exactly the two injection segments; driver hard-fails on any diff",
+    "Framing corrected: 'original TKS foundation wording vs generic drive+register shorthand composition', NOT 'original vs shortened' (compact 125-150 chars vs TKS 98-152)"
+  ],
+  "alpha_one_sided": 0.01,
+  "arms": [
+    "A",
+    "D"
+  ],
+  "author_batch_size": 5,
+  "author_generation_config": {
+    "max_output_tokens": 8192,
+    "response_mime_type": "application/json",
+    "temperature": 0.95,
+    "top_p": 0.95
+  },
+  "author_model": "models/gemini-2.5-flash-lite",
+  "banned_term_symmetry": "Arm D source_banned_terms are derived with the SAME call signature as Arm A: source_terms_to_avoid(meaning, name) \u2014 compact_meaning + its shorthand label name, mirroring June's source_terms_to_avoid(original_tks_meaning, legacy_tks_name) for arm A.",
+  "base_seed": 20260726,
+  "bootstrap_ci_level": 0.95,
+  "bootstrap_iterations": 10000,
+  "criteria": {
+    "margin_definition": "M = (recovery_A - surface_A) - (recovery_D - surface_D); recovery = mean over judge passes K_A,K_D",
+    "primary": {
+      "alpha_one_sided": 0.01,
+      "bootstrap": {
+        "ci_level": 0.95,
+        "iterations": 10000
+      },
+      "licenses": "the strong claim (verdict PASS_TKS_SUPERIORITY_LICENSED)",
+      "margin_floor": 0.1,
+      "rule": "M >= +0.10 AND one-sided paired sign-flip permutation p < 0.01 on paired per-row correctness (10,000 label-preserving permutations) AND bootstrap 95% CI of M excludes 0"
+    },
+    "sanity": "with n=280/arm the SE of the paired accuracy difference is ~0.042, so the +0.10 primary floor is ~2.4 SE",
+    "secondary": {
+      "licenses": "ONLY the wording: 'directionally supported below the pre-registered strong margin'",
+      "rule": "0 < M < 0.10 AND permutation p < 0.01 AND bootstrap 95% CI of M excludes 0"
+    }
+  },
+  "date": "20260726",
+  "fallback_model": "models/gemini-3.1-pro-preview",
+  "framing": "The manipulation is 'original TKS foundation wording vs generic drive+register shorthand composition' \u2014 NOT 'original vs shortened'. Measured definition lengths: compact 125-150 chars vs TKS 98-152 chars; the compact arm is NOT shorter.",
+  "gate1_threshold": 0.6,
+  "goemotion_floor_policy": "descriptive_only: the June goemotion>=max(surface,0.50) floor is reported per arm but is NOT part of the primary endpoint (frozen choice (a); the winning June delink recipe scored goemotion 0.0786).",
+  "guards": {
+    "max_invalid_pred_rate": 0.05,
+    "max_single_foundation_pred_share": 0.3,
+    "min_scored_rows_per_arm": 280,
+    "saturation_ceiling": 0.95
+  },
+  "inherent_asymmetry_disclosure": "ASYMMETRY 2 (inherent to the manipulation, pre-registered): the original TKS definition text intersects the June validator's HARD_SOURCE_FORBIDDEN mystical vocabulary (13 terms measured, e.g. divine/sacred/soul), so Arm A authoring faces extra regeneration constraints Arm D never does. The direction of this pressure is AGAINST arm A (harder authoring), so it cannot manufacture an A win.",
+  "judge_batch_size": 10,
+  "judge_cross": {
+    "passes": {
+      "K_A": "choice key = original TKS 28 subfoundation meanings (sha-pinned canon file)",
+      "K_D": "choice key = compact drive+register shorthand compositions (compact_defs_28.json)"
+    },
+    "per_arm_recovery": "MEAN over the two passes",
+    "pool": "both passes score the SAME shuffled 560-row blind pool with the same opaque ids",
+    "prompt_neutralizations": [
+      "remove the line 'Use the original TKS meanings below, not shorthand drive/register summaries.' (must occur exactly once)",
+      "replace the header 'Foundation options from original TKS definitions:' with 'Foundation options:' (must occur exactly once)",
+      "rename the JSON field 'original_tks_meaning' to 'meaning' (must occur exactly 28 times)"
+    ],
+    "rationale": "June's judge used the original TKS meanings as the choice set for BOTH arms and told the judge to prefer them, anchoring toward arm A. The full cross (each arm's definition style serves as the choice key in one pass, averaged) removes choice-set anchoring symmetrically."
+  },
+  "judge_generation_config": {
+    "max_output_tokens": 4096,
+    "response_mime_type": "application/json",
+    "temperature": 0.0
+  },
+  "judge_model": "models/gemini-2.5-flash",
+  "known_june_flaws_fixed": [
+    "June blind row ids encoded the answer (e.g. 'F1A_000'); this run uses opaque ids row_NNNN",
+    "June arms were authored on different days; this run interleaves chunks A,D,A,D in one session",
+    "June headline numbers came from different judges (flash vs pro); this run freezes one judge model for both arms",
+    "June authoring had no reproducible seeds; this run derives the in-prompt variety seed deterministically",
+    "June's judge anchored on the TKS choice set for both arms; this run crosses the choice key symmetrically"
+  ],
+  "n_per_foundation": 10,
+  "permutation_iterations": 10000,
+  "primary_margin_floor": 0.1,
+  "retries": 3,
+  "retry_sleep_s": 2.0,
+  "rows_per_chunk": 10,
+  "schema_version": "gate2_closure_matched_ab.v2",
+  "surface_control": {
+    "char_vectorizer": {
+      "analyzer": "char",
+      "max_features": 20000,
+      "min_df": 2,
+      "ngram_range": [
+        3,
+        5
+      ],
+      "sublinear_tf": true
+    },
+    "classifier": "LogisticRegression(max_iter=2000, class_weight='balanced')",
+    "cv": {
+      "n_splits": 5,
+      "random_state": 0,
+      "shuffle": true
+    },
+    "cv_seed_sensitivity_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "note": "Both baselines 5-fold stratified CV with the SAME fixed random_state, identical config across arms. The word config is June-exact (verified against the imported June cv_accuracy at random_state=0). The char control is the project's standing mandatory char-level surface control. The 5-seed CV sensitivity report is descriptive only.",
+    "rule": "surface_X = max(word_tfidf_answer_stripped, char_3to5_gram_answer_stripped) per arm, per label task",
+    "word_vectorizer": {
+      "max_features": 20000,
+      "min_df": 2,
+      "ngram_range": [
+        1,
+        2
+      ],
+      "sublinear_tf": true
+    }
+  }
+}
