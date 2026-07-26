@@ -1,0 +1,103 @@
+{
+  "beats_shuffled_count": 4,
+  "criteria": {
+    "S1_usable_range_at_least_3": true,
+    "S2_reversal_robust_2of3": false,
+    "S3_beats_shuffled_2of3": true,
+    "S4_permutation_p_below_0.01": false,
+    "S5_lexical_gradient_opposite": true
+  },
+  "design": "FISHER-RAO-TEMPERATURE-SWEEP-v1",
+  "grid": [
+    0.005,
+    0.01,
+    0.02,
+    0.05,
+    0.1,
+    0.2,
+    0.5,
+    1.0
+  ],
+  "layer": 12,
+  "lexical_gradient": -2.1516,
+  "model": "EleutherAI/pythia-1b",
+  "permutation_p": 1.0,
+  "prereg_commit": "616a9dfd",
+  "reversal_count": 0,
+  "sweep": [
+    {
+      "T": 0.005,
+      "TKS": 2.968016,
+      "beats_shuffled": true,
+      "compact": 1.527024,
+      "reversal": false,
+      "shuffled": 3.059656,
+      "usable": true
+    },
+    {
+      "T": 0.01,
+      "TKS": 2.046199,
+      "beats_shuffled": true,
+      "compact": 0.618339,
+      "reversal": false,
+      "shuffled": 2.451643,
+      "usable": true
+    },
+    {
+      "T": 0.02,
+      "TKS": 0.804532,
+      "beats_shuffled": true,
+      "compact": 0.228044,
+      "reversal": false,
+      "shuffled": 1.171546,
+      "usable": true
+    },
+    {
+      "T": 0.05,
+      "TKS": 0.217775,
+      "beats_shuffled": true,
+      "compact": 0.071719,
+      "reversal": false,
+      "shuffled": 0.388856,
+      "usable": true
+    },
+    {
+      "T": 0.1,
+      "TKS": 0.094293,
+      "beats_shuffled": true,
+      "compact": 0.033437,
+      "reversal": false,
+      "shuffled": 0.181621,
+      "usable": false
+    },
+    {
+      "T": 0.2,
+      "TKS": 0.043953,
+      "beats_shuffled": true,
+      "compact": 0.01622,
+      "reversal": false,
+      "shuffled": 0.087827,
+      "usable": false
+    },
+    {
+      "T": 0.5,
+      "TKS": 0.016877,
+      "beats_shuffled": true,
+      "compact": 0.006387,
+      "reversal": false,
+      "shuffled": 0.034447,
+      "usable": false
+    },
+    {
+      "T": 1.0,
+      "TKS": 0.008321,
+      "beats_shuffled": true,
+      "compact": 0.003157,
+      "reversal": false,
+      "shuffled": 0.017108,
+      "usable": false
+    }
+  ],
+  "usable_count": 4,
+  "verdict": "NOT_LICENSED"
+}
