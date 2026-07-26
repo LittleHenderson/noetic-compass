@@ -90,9 +90,19 @@
   at (\SPINEMID, \WRAPH-0.95) {%
   \displayfont\bfseries\fontsize{\SPINESIZE}{\SPINESIZE}\selectfont \SPINETITLE
 };
+% With rotate=-90 and anchor=east the text ENDS at the anchor and runs upward,
+% so these two y values are the FEET of each line. They must clear each other's
+% length or the author name and the imprint collide.
 \node[rotate=-90, anchor=east, text=paper]
-  at (\SPINEMID, 0.95) {%
+  at (\SPINEMID, 2.05) {%
   \displayfont\fontsize{11}{11}\selectfont \AUTHOR
+};
+
+% Imprint at the foot of the spine. Standard shelf convention, and the thing
+% that makes three separate titles read as one press.
+\node[rotate=-90, anchor=east, text=paper, opacity=0.82]
+  at (\SPINEMID, 0.55) {%
+  \displayfont\fontsize{7.5}{8}\selectfont NOETIC COMPASS PRESS
 };
 
 % ============================ BACK ===================================

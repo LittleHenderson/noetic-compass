@@ -85,7 +85,7 @@ MARK_TKS = r"""\begin{tikzpicture}[x=1.45mm,y=1.45mm]
 BOOKS = [
     {
         "slug": "cas_pcba_engineer",
-        "pages": 720,
+        "pages": 722,
         "title_lines": r"CAS\\PCBA\\Engineer",
         "spine_title": "CAS PCBA Engineer",
         "subtitle": "Designing Cognitive Circuits with the "

@@ -8783,7 +8783,17 @@ The category stubs below are scaffolding for any additional bibliography entries
 
 ## About the Author
 
-[ABOUT THE AUTHOR — to be provided by author]
+**Little Henderson** is the creator of the Cognitive Architecture System, filed as USPTO Provisional Application #64/037,173, and the developer of Noetic Compass — a cross-model AI interpretability suite comprising an audit harness in Python, an inspectable-by-design model architecture, and a deployed assessment platform that evaluates any model, including closed-API models.
+
+His research runs live probe experiments across open-weight architectures — Pythia 160M through 2.8B, OLMo-1B, Qwen2.5-1.5B, and GPT-NeoX-20B — using hidden-state extraction, linear probe training, layer sweeps, and ablation-based causal validation.
+
+One result shaped this book more than any other, and it was a negative one. He designed the Matched-Taxonomy Control as the falsification gate that had to be passed before any CAS-specific claim could stand. Then he ran it, obtained a negative result, and published the falsification openly rather than reporting only the favorable finding. That is the reason this book states what the framework has *not* yet earned as plainly as what it has — and why the passages marked as unverified are marked, rather than quietly rounded up.
+
+By day he inspects flight-grade satellite assemblies at Amazon Leo, formerly Project Kuiper, to IPC Class 3 acceptability under AS9100. That is where the framework comes from: define the acceptance criteria first, instrument the system, isolate the defect, and document the finding honestly. The same discipline on both sides of the bench.
+
+He is completing a B.S. in Computer Science with an artificial intelligence emphasis.
+
+`noeticcompass.com` · `github.com/LittleHenderson`
 
 ---
 

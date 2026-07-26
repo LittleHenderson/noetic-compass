@@ -168,6 +168,37 @@ self-directed work. Decisions about your health, finances, relationships, and
 safety remain yours, and are properly made with qualified professionals.*
 """
 
+# The source page read only "The author prefers to remain behind the work...
+# Test it. That's the only biography that matters." That stance is kept as the
+# closing line -- but the book now carries a byline, and a reader who has spent
+# 800 pages with a system is owed some account of where it came from. In this
+# category the author's lineage and years of practice are a primary reason
+# people buy at all.
+ABOUT_AUTHOR = """**Little Henderson** is the author of *Majik and the True Kabbalah, the Book
+of Tootra* — the work from which this system descends.
+
+The Tootra Kabbalistic System was not assembled out of reading. It was worked,
+tested, and revised against results over years of practice, and the parts that
+did not survive contact with outcomes were cut. What is left is what functioned.
+
+The same framework was later rebuilt in secular engineering terms as the
+Cognitive Architecture System and filed as USPTO Provisional Application
+#64/037,173. In that form it underpins Noetic Compass, an AI interpretability
+suite that applies the ten Noetics to machine cognition and audits language
+models for the same structural failures this book teaches you to find in
+yourself.
+
+By day the author inspects flight-grade satellite hardware to aerospace Class 3
+acceptance criteria — a discipline built on naming a defect precisely instead of
+gesturing at it, and on refusing to pass an unresolved failure downstream. That
+is the same demand this book makes of you.
+
+None of which should matter more than it deserves to. What matters is whether
+the system functions when you apply it.
+
+Test it. That is the only biography that counts.
+"""
+
 STAMP = re.compile(r"^\(.*\bComplete\b.*\)\s*$")
 PAGEBREAK = re.compile(r"<!--\s*PAGE BREAK\s*-->", re.I)
 
@@ -463,7 +494,7 @@ for i, key in enumerate(APPENDIX_ORDER):
 doc += unnumbered_chapter("Index")
 doc += clean_and_promote(seg(*R["index"])[1:])
 doc += unnumbered_chapter("About the Author")
-doc += clean_and_promote(seg(*R["about"])[1:])
+doc += ["", ABOUT_AUTHOR, ""]
 
 # --------------------------------------------------------------------------
 # Cross-reference corrections (pre-insertion numbering survived in 3 places)

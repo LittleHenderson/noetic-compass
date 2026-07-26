@@ -123,6 +123,18 @@ def build_main_body() -> None:
         txt = (BOOK / fname).read_text(encoding="utf-8")
         out.append(strip_h1_prefix(txt, "appendix").strip())
         out.append("\n")
+    # Back matter: an unnumbered chapter, so it does not take an appendix letter.
+    author = BOOK / "About_the_Author.md"
+    if author.exists():
+        body = author.read_text(encoding="utf-8")
+        body = re.sub(r"^#\s+About the Author\s*$", "", body, count=1, flags=re.M)
+        out.append(raw_latex(
+            "\\backmatter\n"
+            "\\chapter*{About the Author}\n"
+            "\\addcontentsline{toc}{chapter}{About the Author}\n"
+            "\\markboth{ABOUT THE AUTHOR}{ABOUT THE AUTHOR}"))
+        out.append(body.strip())
+        out.append("\n")
     (BUILD / "main_body.md").write_text("\n\n".join(out) + "\n", encoding="utf-8")
 
 

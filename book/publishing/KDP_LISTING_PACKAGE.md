@@ -27,11 +27,11 @@ reproducible.
 | **Title** | CAS PCBA Engineer |
 | **Subtitle** | Designing Cognitive Circuits with the Cognitive Architecture System |
 | **Author** | Little Henderson |
-| **Pages** | 720 (6×9, B&W, white) |
-| **Est. printing cost** | $0.85 + (720 × $0.012) = **$9.49** |
-| **KDP minimum list** | $9.49 ÷ 0.60 = **$15.82** |
+| **Pages** | 722 (6×9, B&W, white) |
+| **Est. printing cost** | $0.85 + (722 × $0.012) = **$9.51** |
+| **KDP minimum list** | $9.51 ÷ 0.60 = **$15.85** |
 | **Recommended list** | **$44.99** paperback · **$9.99** Kindle |
-| **Est. royalty** | (0.60 × $44.99) − $9.49 = **$17.50**/copy paperback; **$6.99**/copy Kindle |
+| **Est. royalty** | (0.60 × $44.99) − $9.51 = **$17.48**/copy paperback; **$6.99**/copy Kindle |
 
 **Keywords** (7, each under 50 chars, none repeating title or category words):
 
@@ -207,8 +207,9 @@ the Kindle sample. The voice survives where it matters; ads stay available.
 | Item | Status | Note |
 |---|---|---|
 | **ISBNs** | You are buying a Bowker block of 10 | One per format per title. Start now — it has lead time. |
-| **Covers** | **None exist for any title.** | Blocking. KDP will not accept a title without one. Budget $200–500 each; for a $44.99 technical reference that is the right call. |
+| **Covers** | **Done.** `book/covers/` — full wraps + Kindle fronts | Regenerate with `build_covers.py` whenever a page count changes; the spine width depends on it. |
 | **Indexes** | None of the three has a real one | TKS's lists topics with no page numbers. A professional indexer runs $3–5/page. |
+| **About the Author** | **Done** — all three | Written from the author's professional record. |
 | **Figures (TiCA)** | Zero across 786 pages | Chapter 19 describes five dashboard visualizations in prose. The most-cited weakness a reviewer will find. |
 | **EPUB** | Not yet built | Buildable from the same sources. |
 
@@ -220,7 +221,7 @@ the arithmetic below, but for briefing a designer:
 
 | Book | Pages | Approx. spine (pages × 0.002252") |
 |---|---|---|
-| CAS PCBA Engineer | 720 | 1.62" |
+| CAS PCBA Engineer | 722 | 1.63" |
 | Thinking in Cognitive Architecture | 786 | 1.77" |
 | The Superiority of TKS | 817 | 1.84" |
 
