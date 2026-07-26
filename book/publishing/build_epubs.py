@@ -155,11 +155,33 @@ DISCLAIMER = {
 }
 
 
+# The print builds set these in LaTeX front matter (frontmatter.tex), which the
+# EPUB path never sees. Without them the Kindle editions -- the ones most
+# readers actually buy -- shipped with no dedication at all, and TiCA lost its
+# acknowledgment of the Five Percenters, which is not a page to quietly drop.
+DEDICATION = {
+    "tica": "Dedicated to all builders.",
+}
+ACKNOWLEDGMENTS = {
+    "tica": "I give thanks to Hip Hop and the Five Percenters (Nation of Gods "
+            "and Earths) who, as a young man growing up in the inner city, "
+            "taught me the importance of Supreme Mathematics — numbers and "
+            "their symbolic representation.",
+}
+
+
 def front_matter(book):
-    return ("\n\n# Copyright\n\n"
-            + COMMON_RIGHTS.strip()
-            + "\n\nISBN: [pending publisher assignment]\n\n"
-            + DISCLAIMER[book["key"]] + "\n\n")
+    out = ("\n\n# Copyright\n\n"
+           + COMMON_RIGHTS.strip()
+           + "\n\nISBN: [pending publisher assignment]\n\n"
+           + DISCLAIMER[book["key"]] + "\n\n")
+    ded = DEDICATION.get(book["key"])
+    if ded:
+        out += f"\n\n# Dedication\n\n*{ded}*\n\n"
+    ack = ACKNOWLEDGMENTS.get(book["key"])
+    if ack:
+        out += f"\n\n# Acknowledgments\n\n{ack}\n\n"
+    return out
 
 
 def build(book):
@@ -204,9 +226,11 @@ def build(book):
         print(f"  FAIL {book['title']}\n{r.stderr[-1500:]}")
         return None
 
-    fixed = fix_pipes(book["out"])
+    fixed, stripped = fix_pipes(book["out"])
     if fixed:
         print(f"  ..  unescaped {fixed} register pipe(s)")
+    if stripped:
+        print(f"  ..  stripped {stripped} drafting comment(s)")
     return inspect(book)
 
 
@@ -226,6 +250,7 @@ def fix_pipes(epub):
 
     tmp = Path(tempfile.mkdtemp()) / "fixed.epub"
     n = 0
+    comments_stripped = [0]
     with zipfile.ZipFile(epub) as src, \
             zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as dst:
         for item in src.infolist():
@@ -233,11 +258,19 @@ def fix_pipes(epub):
             if item.filename.endswith((".xhtml", ".html")):
                 text = data.decode("utf-8", "replace")
                 n += text.count("\\|")
-                data = text.replace("\\|", "|").encode("utf-8")
+                text = text.replace("\\|", "|")
+                # Strip HTML comments. The manuscript carries drafting notes as
+                # <!-- ... -->, and pandoc passes them straight through, so they
+                # shipped inside the distributed EPUB: invisible while reading,
+                # plainly visible to anyone who opens the container. One read
+                # "DRAFT supplemental - user to revise voice and specifics."
+                text, c = re.subn(r"<!--.*?-->", "", text, flags=re.S)
+                comments_stripped[0] += c
+                data = text.encode("utf-8")
             # mimetype must stay first and stored, which infolist order preserves
             dst.writestr(item, data)
     shutil.move(str(tmp), str(epub))
-    return n
+    return n, comments_stripped[0]
 
 
 def inspect(book):
