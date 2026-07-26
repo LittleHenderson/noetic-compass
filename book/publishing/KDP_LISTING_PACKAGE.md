@@ -27,12 +27,14 @@ estimates.
 Authored after the April 2026 canon reconciliation, so it carries no naming
 drift, and its build is byte-reproducible.
 
-**One open item unique to this title:** fifteen authority receipts backing
-claims in Chapters 18, 21, 22 and 26 are unsigned (`docs/working/
-pcba_authority_receipts_needed_20260617/`). The regulatory language in Chapter
-26 has been reframed so the book no longer asserts more than they support, but
-signing or formally discharging them is an author decision. No other title has
-an equivalent outstanding item.
+**One open item unique to this title:** the authority receipts backing claims
+in Chapters 18, 21, 22 and 26 now stand at 13 signed of 19
+(`docs/working/pcba_authority_receipts_needed_20260617/`). Six remain open on
+purpose — one asserts a retention property that measurably does not hold, and
+five require a review by a specific competence (legal, regulatory mapping,
+customer disclosure, privacy, human factors). **The book cites none of them**,
+and Chapter 26 has been reframed so the text never asserts more than they
+support. This does not gate publication.
 
 | Field | Value |
 |---|---|
@@ -221,9 +223,13 @@ being less finished than another.
 
 | | Pages | Figures | Index | Overfull boxes | Missing glyphs |
 |---|---|---|---|---|---|
-| CAS PCBA Engineer | 735 | 18 | 95 entries | 0 | 0 |
-| Thinking in Cognitive Architecture | 796 | 8 | 91 entries | 0 | 10 (substituted, verified) |
-| Reality Engineering | 811 | 7 | 113 entries | 0 | 0 |
+| CAS PCBA Engineer | 743 | 18 | 95 entries | 0 | 0 |
+| Thinking in Cognitive Architecture | 798 | 8 | 91 entries | 0 | 0 |
+| Reality Engineering | 801 | 7 | 116 entries | 0 | 0 |
+
+All three now pass `check_invariants.py` (32/32) — a regression guard whose
+every check corresponds to a defect that was actually found and fixed in these
+manuscripts.
 
 What actually separates them is risk and market, not completeness.
 
