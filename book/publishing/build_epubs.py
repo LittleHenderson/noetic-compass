@@ -64,6 +64,16 @@ BOOKS = [
 # blocks carry real headings we must keep, so convert those to markdown first.
 RAW_CHAPTER = re.compile(
     r"```\{=latex\}\s*\\chapter\*\{(?P<t>[^}]*)\}.*?```", re.S)
+
+# Figures are embedded as raw LaTeX for the print build. Pandoc's EPUB writer
+# drops raw LaTeX, so they must be swapped for the PNGs rendered by
+# latex/render_figures.py -- otherwise the ebook ships with no figures, which
+# for this book in particular would be an unfortunate joke.
+RAW_FIGURE = re.compile(
+    r"```\{=latex\}\s*\\begin\{figure\}.*?"
+    r"\\caption\{(?P<cap>.*?)\}\\label\{fig:(?P<lab>[^}]+)\}.*?"
+    r"\\end\{figure\}\s*```", re.S)
+
 RAW_OTHER = re.compile(r"```\{=latex\}.*?```", re.S)
 
 # Custom math macros. These are defined in the print preamble, which the EPUB
@@ -87,10 +97,21 @@ def expand_macros(text):
     return text
 
 
+def _figure_to_image(m):
+    cap = re.sub(r"\s+", " ", m.group("cap")).strip()
+    cap = cap.replace("---", "\u2014").replace("\\%", "%")
+    cap = re.sub(r"\\texttt\{([^}]*)\}", r"`\1`", cap)
+    cap = cap.replace("\\^{}", "^")
+    return f"\n\n![{cap}](figures/fig-{m.group('lab')}.png)\n\n"
+
+
 def prepare(paths):
     text = "\n\n".join(p.read_text(encoding="utf-8", errors="replace")
                        for p in paths if p.exists())
     text = RAW_CHAPTER.sub(lambda m: f"\n\n# {m.group('t')}\n\n", text)
+    text, n_fig = RAW_FIGURE.subn(_figure_to_image, text)
+    if n_fig:
+        print(f"  ..  embedded {n_fig} figure(s)")
     text = RAW_OTHER.sub("", text)
     text = expand_macros(text)
     return text
@@ -123,7 +144,10 @@ def build(book):
            "-t", "epub3", "--mathml",
            "--toc", "--toc-depth=2",
            "--epub-chapter-level=1",
-           "--syntax-highlighting=none"]
+           "--syntax-highlighting=none",
+           # figures live under latex/figures; pandoc must be able to find and
+           # embed them into the container
+           "--resource-path", str(ROOT / "publishing" / "latex")]
     if CSS.exists():
         cmd += ["--css", str(CSS)]
 

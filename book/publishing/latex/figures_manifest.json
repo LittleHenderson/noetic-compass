@@ -1,0 +1,34 @@
+{
+  "noetics": {
+    "file": "figures/fig-noetics.png",
+    "caption": "The ten Noetics. Three involution pairs, each Noetic facing its opposite, and four self-duals that invert to themselves."
+  },
+  "domains": {
+    "file": "figures/fig-domains.png",
+    "caption": "Domain Descent. Causation flows downward through the precedence order; experience returns as signal along the feedback path."
+  },
+  "drives": {
+    "file": "figures/fig-drives.png",
+    "caption": "The seven Core Drives in inversion pairs, with F4 Connection self-dual at the centre."
+  },
+  "rpm": {
+    "file": "figures/fig-rpm.png",
+    "caption": "The Recursive Prerequisite Model. Desire, then Wisdom, then Power --- each stage gated by the one before it."
+  },
+  "inversion": {
+    "file": "figures/fig-inversion.png",
+    "caption": "The seven Inversion Axes. Compound inversion is not a seventh kind but the simultaneous firing of several."
+  },
+  "states": {
+    "file": "figures/fig-states.png",
+    "caption": "The forty Cognitive States: ten Noetics by four Processing Domains."
+  },
+  "heatmap": {
+    "file": "figures/fig-heatmap.png",
+    "caption": "A 40-State Heatmap. Activation is a distribution across the matrix, not a single occupied cell."
+  },
+  "dials": {
+    "file": "figures/fig-dials.png",
+    "caption": "The admissible dial region for an involution pair. Settings outside the band are rejected at configuration time."
+  }
+}

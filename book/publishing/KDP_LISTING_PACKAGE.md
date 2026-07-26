@@ -83,11 +83,11 @@ The framework anchor and the commercially larger title. Publish second.
 | **Title** | Thinking in Cognitive Architecture |
 | **Subtitle** | A Universal Framework for Humans, AI, and Biological Minds |
 | **Author** | Little Henderson |
-| **Pages** | 786 (6×9, B&W, white) |
-| **Est. printing cost** | $0.85 + (786 × $0.012) = **$10.28** |
-| **KDP minimum list** | **$17.13** |
+| **Pages** | 790 (6×9, B&W, white) |
+| **Est. printing cost** | $0.85 + (790 × $0.012) = **$10.33** |
+| **KDP minimum list** | **$17.22** |
 | **Recommended list** | **$39.99** paperback · **$9.99** Kindle |
-| **Est. royalty** | **$13.71**/copy paperback; **$6.99**/copy Kindle |
+| **Est. royalty** | **$13.66**/copy paperback; **$6.99**/copy Kindle |
 | ⚠️ **Hardcover** | **Not available.** KDP's hardcover ceiling is ~550 pages. |
 
 **Keywords:**
@@ -210,7 +210,7 @@ the Kindle sample. The voice survives where it matters; ads stay available.
 | **Covers** | **Done.** `book/covers/` — full wraps + Kindle fronts | Regenerate with `build_covers.py` whenever a page count changes; the spine width depends on it. |
 | **Indexes** | None of the three has a real one | TKS's lists topics with no page numbers. A professional indexer runs $3–5/page. |
 | **About the Author** | **Done** — all three | Written from the author's professional record. |
-| **Figures (TiCA)** | Zero across 786 pages | Chapter 19 describes five dashboard visualizations in prose. The most-cited weakness a reviewer will find. |
+| **Figures (TiCA)** | **Done** — 8 structural diagrams + list of figures | In print as live TikZ, in the EPUB as embedded 300 DPI PNGs with alt text. |
 | **EPUB** | Not yet built | Buildable from the same sources. |
 
 ### Cover specifications
@@ -222,7 +222,7 @@ the arithmetic below, but for briefing a designer:
 | Book | Pages | Approx. spine (pages × 0.002252") |
 |---|---|---|
 | CAS PCBA Engineer | 722 | 1.63" |
-| Thinking in Cognitive Architecture | 786 | 1.77" |
+| Thinking in Cognitive Architecture | 790 | 1.78" |
 | The Superiority of TKS | 817 | 1.84" |
 
 - **Print:** full-wrap PDF, back + spine + front, 300 DPI, 0.125" bleed.

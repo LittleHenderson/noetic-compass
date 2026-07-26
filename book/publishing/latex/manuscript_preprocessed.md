@@ -679,6 +679,39 @@ Balance in CAS means sequential fluidity, not simultaneous moderation. A master 
 A Mind that is truly "moderate" on all Noetics simultaneously is not balanced. It is asleep.
 
 
+```{=latex}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+  % Involution pairs placed FACING each other, which is the structural claim.
+  % A ring layout would put them side by side and say nothing.
+  \foreach \i/\sym/\name in {0/2/Positive, 1/5/Female, 2/8/{Above/Cause}} {
+    \node[casnode, minimum width=30mm, font=\scriptsize]
+      (L\i) at (0, -\i*11mm) {\texttt{\^{}\sym} \; \name};
+  }
+  \foreach \i/\sym/\name in {0/3/Negative, 1/6/Male, 2/9/{Below/Effect}} {
+    \node[casnode, minimum width=30mm, font=\scriptsize]
+      (R\i) at (56mm, -\i*11mm) {\texttt{\^{}\sym} \; \name};
+  }
+  \foreach \i in {0,1,2} { \draw[casinvol] (L\i) -- (R\i); }
+
+  \node[caslabel, font=\tiny] at (28mm, 7mm) {three involution pairs};
+
+  % the four self-duals
+  \foreach \i/\sym/\name in {0/0/Idea, 1/1/Mind, 2/4/Vibration, 3/7/Rhythm} {
+    \node[casnode, minimum width=24mm, font=\scriptsize]
+      (S\i) at (\i*30mm - 17mm, -40mm) {\texttt{\^{}\sym} \; \name};
+    \draw[casinvol] (S\i.south) ++(-4mm,-1mm)
+      arc (200:-20:4mm and 2.6mm);
+  }
+  \node[caslabel, font=\tiny, align=center] at (28mm, -50mm)
+    {four self-duals --- each its own inverse};
+\end{tikzpicture}
+\caption{The ten Noetics. Three involution pairs, each Noetic facing its opposite, and four self-duals that invert to themselves.}\label{fig:noetics}
+\end{figure}
+```
+
+
 ## The Geometry of Thought
 
 
@@ -902,6 +935,34 @@ To make the domains concrete, let us observe four real professionals, each trapp
 Each of these professionals is highly competent in their primary domain. None of them is fully functional, because none of them can execute a complete Domain Descent.
 
 
+```{=latex}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=7mm]
+  \node[casdomain] (P) {P \; Principled};
+  \node[casdomain, below=of P] (C) {C \; Cognitive};
+  \node[casdomain, below=of C] (E) {E \; Evaluative};
+  \node[casdomain, below=of E] (O) {O \; Operational};
+  \draw[casflow] (P) -- (C);
+  \draw[casflow] (C) -- (E);
+  \draw[casflow] (E) -- (O);
+  \node[caslabel, right=2mm of P] {commitments, values, hard boundaries};
+  \node[caslabel, right=2mm of C] {reasoning, analysis, representation};
+  \node[caslabel, right=2mm of E] {judgment, weighing, assessment};
+  \node[caslabel, right=2mm of O] {action, output, execution};
+  % feedback path
+  \draw[casfeedback] (O.west) -- ++(-9mm,0) |- (P.west);
+  \node[caslabel, rotate=90, anchor=south] at ($(O.west)+(-11mm,19mm)$)
+    {feedback};
+  \node[caslabel, anchor=north west] at ($(O.south west)+(0,-4mm)$)
+    {Descent is causal precedence: $P \succ C \succ E \succ O$.
+     The return path carries signal, not authority.};
+\end{tikzpicture}
+\caption{Domain Descent. Causation flows downward through the precedence order; experience returns as signal along the feedback path.}\label{fig:domains}
+\end{figure}
+```
+
+
 ## The Descent: How Ideas Become Reality (P → C → E → O)
 
 
@@ -1027,6 +1088,28 @@ In the Cognitive Architecture System (CAS), we do not use a pyramid. We use an e
 We identify seven fundamental forces that pull on every mind. These are the Seven Core Drives, labeled F1 through F7. They are the "Fuel" for the cognitive machine. Every single action you take—and every token an AI generates—is powered by one or more of these drives. They do not operate in a strict hierarchy; they operate in dynamic tension with one another.
 
 If you understand the seven drives, you can understand why people (and AI) do what they do, even when their behavior seems entirely irrational to an outside observer.
+
+
+```{=latex}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+  % Six drives in inversion pairs, F4 self-dual at the centre.
+  \foreach \i/\lab/\nm in {0/F1/Unity, 1/F2/Wisdom, 2/F3/Vitality} {
+    \node[casnode, minimum width=26mm] (L\i) at (0, -\i*11mm) {\lab \; \nm};
+  }
+  \foreach \i/\lab/\nm in {0/F7/Purpose, 1/F6/Structure, 2/F5/Agency} {
+    \node[casnode, minimum width=26mm] (R\i) at (58mm, -\i*11mm) {\lab \; \nm};
+  }
+  \foreach \i in {0,1,2} { \draw[casinvol] (L\i) -- (R\i); }
+  \node[casnode, minimum width=26mm] (F4) at (29mm, -36mm) {F4 \; Connection};
+  \node[draw=casmuted, circle, inner sep=1.1mm, line width=0.4pt] at (F4) {};
+  \node[caslabel, anchor=north] at (29mm, -44mm)
+    {F4 is self-dual: it has no opposing drive.};
+\end{tikzpicture}
+\caption{The seven Core Drives in inversion pairs, with F4 Connection self-dual at the centre.}\label{fig:drives}
+\end{figure}
+```
 
 
 ## The Spectrum of Drives (F1 to F7)
@@ -1271,6 +1354,30 @@ The Wright brothers succeeded, and Langley failed, because of a fundamental law 
 Action does not happen simply because we "want" it to, or because we have the raw energy to execute. Action requires a sequence of enabling conditions. You cannot effectively execute a plan you do not understand, and you will not learn to understand a plan you do not desire to execute. 
 
 In the Cognitive Architecture System (CAS), this sequence is called the Prerequisite Chain. It is the structural spine of the CAS framework, and it dictates that all lasting achievement must flow strictly through three distinct phases: Desire → Wisdom → Power (D/W/P).
+
+
+```{=latex}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=6mm]
+  \node[casnode] (A0) {A0\\[-2pt]{\tiny Pure Desire}};
+  \node[casnode, right=of A0] (D) {$D_n$\\[-2pt]{\tiny Desire}};
+  \node[casnode, right=of D] (W) {$W_n$\\[-2pt]{\tiny Wisdom}};
+  \node[casnode, right=of W] (P) {$P_n$\\[-2pt]{\tiny Power}};
+  \node[casnode, right=of P] (O) {Outcome};
+  \draw[casflow] (A0) -- (D);
+  \draw[casflow] (D) -- (W);
+  \draw[casflow] (W) -- (P);
+  \draw[casflow] (P) -- (O);
+  \node[caslabel, anchor=north, text width=88mm, align=center]
+    at ($(W.south)+(0,-7mm)$)
+    {Satisfaction runs one way. Reaching a later stage does not re-derive or
+     un-satisfy an earlier one --- the chain is a section-retraction, not an
+     adjunction. A gap at any stage blocks everything downstream of it.};
+\end{tikzpicture}
+\caption{The Recursive Prerequisite Model. Desire, then Wisdom, then Power --- each stage gated by the one before it.}\label{fig:rpm}
+\end{figure}
+```
 
 
 ## The Universal Sequence: D/W/P
@@ -1535,6 +1642,34 @@ Instead, the son withdraws entirely, builds a wall of resentment, and stops spea
 Let's look at the cognitive architecture. The father's original drive was Connection (`F4`). But in his frantic attempt to operationalize it, he flipped his cognitive gear. He inverted his drive for Connection into a drive for pure Agency and Control (`F5`). He replaced `^5` Female (a Mind impregnated with his son's actual state — receptive to who the son is) with `^6` Male (the Idea "my son's problem" decomposed into sub-Ideas to be tested and corrected: study hours, grades, video-game time). He used the tools of compositional critique to try to achieve the goal of receptive connection.
 
 The result was the exact opposite of his intention. But if you ask the father, he will say, "I'm just doing this because I love him." He cannot see the inversion. He is trapped in a Stealth Flip.
+
+
+```{=latex}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+  \def\R{24mm}
+  \node[casnode, font=\scriptsize] (c) at (0,0) {Inversion};
+  \foreach \i/\ax/\desc in {
+    0/N/{operator},
+    1/W/{domain},
+    2/F/{drive},
+    3/E/{entropy},
+    4/S/{sub-drive},
+    5/A/{pathway},
+    6/P/{compound}} {
+    \pgfmathsetmacro\ang{90 - \i*(360/7)}
+    \node[casnode, font=\scriptsize, minimum width=15mm]
+      (a\i) at (\ang:\R) {\textbf{\ax}\\[-2pt]{\tiny\desc}};
+    \draw[casflow, draw=casmuted] (c) -- (a\i);
+  }
+  \node[caslabel, align=center] at (0,-34mm)
+    {\textbf{P} is the seventh axis but not a seventh mechanism ---
+     it is two or more of the other six firing together.};
+\end{tikzpicture}
+\caption{The seven Inversion Axes. Compound inversion is not a seventh kind but the simultaneous firing of several.}\label{fig:inversion}
+\end{figure}
+```
 
 
 ## The Seven Axes of Inversion
@@ -2756,6 +2891,31 @@ Just like the periodic table, the 40-State Matrix turns psychology from a descri
 But the analogy goes deeper than structure — it extends to prediction. Just as Mendeleev predicted that an element with specific properties must exist in a blank cell of his table, the 40-State Matrix predicts that certain cognitive states must exist even if we have not yet observed them clearly. For instance, the state `^4^P` (Principled Vibration — competing ethical Ideas resonating with the Mind at the principled level without one drowning the others out) is rarely achieved by either humans or AI. Most people are either ethical pluralists (holding multiple contradictory values with no coherent resonance) or ethical absolutists (one Idea resonating so loudly that the others are silenced). The 40-State Matrix predicts that a third cognitive state should exist — one in which the resonances of competing ethical Ideas are held in balanced, live impression on the Mind. This state is rare, but it is not impossible. The matrix tells us exactly where to look for it.
 
 
+```{=latex}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=8.6mm, y=7.2mm]
+  \foreach \c/\sym in {0/0,1/1,2/2,3/3,4/4,5/5,6/6,7/7,8/8,9/9} {
+    \node[caslabel, font=\tiny] at (\c+0.5, 0.62) {\texttt{\^{}\sym}};
+  }
+  \foreach \r/\d in {0/P, 1/C, 2/E, 3/O} {
+    \node[caslabel, font=\tiny\bfseries] at (-0.45, -\r-0.5) {\d};
+    \foreach \c in {0,...,9} {
+      \draw[draw=casmuted, line width=0.35pt, fill=caswash]
+        (\c, -\r) rectangle (\c+1, -\r-1);
+      \node[font=\tiny, text=casink] at (\c+0.5, -\r-0.5) {\d\c};
+    }
+  }
+  \node[caslabel, anchor=north, text width=80mm, align=center]
+    at (5, -4.55)
+    {Ten Noetics across, four Domains down. The same Noetic behaves
+     differently in each Domain --- position, not label, carries the meaning.};
+\end{tikzpicture}
+\caption{The forty Cognitive States: ten Noetics by four Processing Domains.}\label{fig:states}
+\end{figure}
+```
+
+
 ## Navigating the Matrix: The Rows and Columns
 
 
@@ -2975,6 +3135,39 @@ Note that the resultant domain is always the minimum (lowest in the P≻C≻E≻
 5.  The Relentless Executor: `^7^O` (Operational Rhythm) × `^3^O` (Operational Negative) = `^0^O` (Operational Idea). Rhythmic repetition of a physical Idea combined with repulsion from any deviation resolves into total operational absorption — the Idea itself at the operational level, content without margin.
 
 In practical terms, if you are trying to improve your own thinking or evaluate an AI system, a useful diagnostic is to pick a Noetic and try to run it cleanly through all four domains in sequence. The places where the descent stalls tell you where the system is weakest.
+
+
+```{=latex}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=8.6mm, y=7.2mm]
+  \foreach \c/\sym in {0/0,1/1,2/2,3/3,4/4,5/5,6/6,7/7,8/8,9/9} {
+    \node[caslabel, font=\tiny] at (\c+0.5, 0.62) {\texttt{\^{}\sym}};
+  }
+  \foreach \r/\d in {0/P, 1/C, 2/E, 3/O} {
+    \node[caslabel, font=\tiny\bfseries] at (-0.45, -\r-0.5) {\d};
+    \foreach \c in {0,...,9} {
+      \draw[draw=casmuted, line width=0.35pt, fill=caswash]
+        (\c, -\r) rectangle (\c+1, -\r-1);
+    }
+  }
+  % the worked example: 60% ^3^C, 30% ^1^C, 10% ^0^P
+  \fill[casaccent, opacity=0.85] (3,-1) rectangle (4,-2);
+  \node[font=\tiny, text=white] at (3.5,-1.5) {60};
+  \fill[casaccent, opacity=0.45] (1,-1) rectangle (2,-2);
+  \node[font=\tiny, text=casink] at (1.5,-1.5) {30};
+  \fill[casaccent, opacity=0.18] (0,0) rectangle (1,-1);
+  \node[font=\tiny, text=casink] at (0.5,-0.5) {10};
+  \node[caslabel, anchor=north, text width=82mm, align=center]
+    at (5, -4.55)
+    {A mind is never wholly in one state. This reading is
+     60\% \texttt{\^{}3\^{}C}, 30\% \texttt{\^{}1\^{}C}, 10\%
+     \texttt{\^{}0\^{}P} --- cognitive aversion dominant, awareness
+     secondary, a trace of principled Idea.};
+\end{tikzpicture}
+\caption{A 40-State Heatmap. Activation is a distribution across the matrix, not a single occupied cell.}\label{fig:heatmap}
+\end{figure}
+```
 
 
 ## The 40-State Heatmap
@@ -5574,6 +5767,39 @@ The Dial System is not just a collection of independent sliders; it is a dynamic
    Division (÷) and Causal Precision: High settings on `^6` Male (CO-6) and `^8` Above/Cause (CO-8) increase the system's Causal Precision (÷). The AI becomes more efficient at revealing the ratios and dependencies between its own logical states — decomposition surfaces the sub-Ideas and associative triggering surfaces the adjacent Ideas — which is critical for self-debugging and high-resolution audit trails.
    Fractal Depth (∘) and Recursion: The `^7` Rhythm dial (CO-7) acts as the "gain" for the fractal composition operator (∘). A high CO-7 dial allows the AI to maintain complex, nested sequences over a greater number of tokens — entrained cadence extends the reach of composition. However, without a corresponding high `^6` Male dial (CO-6) to provide Dual Cancellation, high `^7` Rhythm will entrain an Amplifying Fractal (hallucination).
    Syntactic Co-presence (+): Low-intensity settings across the board (all dials set to 3-4) favor Syntactic Addition. The AI will co-process multiple states but lacks the algebraic intensity to fuse them into a new identity. This is ideal for "neutral observer" profiles.
+
+
+```{=latex}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=7.4mm, y=6.2mm]
+  % Legal band for an involution pair: |a - b| <= 4, each in [3,9].
+  \foreach \v in {3,4,5,6,7,8,9} {
+    \node[caslabel, font=\tiny] at (\v-2, 0.55) {\v};
+    \node[caslabel, font=\tiny] at (-0.55, -\v+2) {\v};
+  }
+  \foreach \a in {3,...,9} {
+    \foreach \b in {3,...,9} {
+      \pgfmathtruncatemacro\diff{abs(\a-\b)}
+      \ifnum\diff>4
+        \fill[casmuted, opacity=0.18] (\a-2.5, -\b+2.5) rectangle (\a-1.5, -\b+1.5);
+      \else
+        \fill[casaccent, opacity=0.30] (\a-2.5, -\b+2.5) rectangle (\a-1.5, -\b+1.5);
+      \fi
+      \draw[draw=casmuted, line width=0.3pt]
+        (\a-2.5, -\b+2.5) rectangle (\a-1.5, -\b+1.5);
+    }
+  }
+  \node[caslabel, font=\tiny, rotate=90] at (-1.6, -2.5) {dial \texttt{\^{}3}};
+  \node[caslabel, font=\tiny] at (2.5, 1.5) {dial \texttt{\^{}2}};
+  \node[caslabel, anchor=north, text width=76mm, align=center]
+    at (2.5, -6.2)
+    {Shaded: admissible. Grey: rejected with HTTP 422. Both dials must sit in
+     $[3,9]$ and may not diverge by more than four points.};
+\end{tikzpicture}
+\caption{The admissible dial region for an involution pair. Settings outside the band are rejected at configuration time.}\label{fig:dials}
+\end{figure}
+```
 
 
 ## Why Involution Pairs Can't Diverge Beyond 4 Points

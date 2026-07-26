@@ -39,6 +39,13 @@ from pathlib import Path
 SRC = Path(r"C:\Users\wakil\OneDrive\Desktop\tksCAS\book\manuscript\FULL_MANUSCRIPT_v2.md")
 DST = Path(r"C:\Users\wakil\OneDrive\Desktop\tksCAS\book\publishing\latex\manuscript_preprocessed.md")
 
+sys.path.insert(0, str(Path(__file__).parent))
+from figures import FIGURES  # noqa: E402
+
+# anchor text -> (tikz body, label, caption). Figures are emitted immediately
+# before their anchor heading.
+FIG_BY_ANCHOR = {a: (b, lbl, cap) for a, b, lbl, cap in FIGURES}
+
 # Acronyms that str.title() would mangle ("AI SYSTEMS" -> "Ai Systems").
 ACRONYMS = {"AI", "CAS", "RPM", "NCCS", "CO", "LLM", "API", "EPUB", "PDF", "US"}
 
@@ -76,6 +83,7 @@ def main() -> None:
     in_html_note = False
     n_promoted = 0
     n_dropped = 0
+    n_figures = 0
 
     i = 0
     # Collect all structural-marker line numbers for boundary logic
@@ -253,6 +261,21 @@ def main() -> None:
             i += 1
             continue
 
+        # --- figures ---------------------------------------------------------
+        # Emitted before the heading they illustrate.
+        if stripped.rstrip() in FIG_BY_ANCHOR:
+            body, label, caption = FIG_BY_ANCHOR.pop(stripped.rstrip())
+            out.append("")
+            out.append(r"```{=latex}")
+            out.append(r"\begin{figure}[htbp]")
+            out.append(r"\centering")
+            out.append(body.strip())
+            out.append(rf"\caption{{{caption}}}\label{{fig:{label}}}")
+            out.append(r"\end{figure}")
+            out.append(r"```")
+            out.append("")
+            n_figures += 1
+
         # --- section headings ----------------------------------------------
         # Any remaining single-leading-space, heading-shaped line is one of the
         # manuscript's section headings. Promote it so it typesets as a heading
@@ -276,6 +299,11 @@ def main() -> None:
     print(f"Wrote {DST}  ({len(out)} lines)")
     print(f"  promoted {n_promoted} section heading(s) to '##'")
     print(f"  dropped  {n_dropped} editorial note line(s)")
+    print(f"  inserted {n_figures} figure(s)")
+    if FIG_BY_ANCHOR:
+        raise SystemExit(
+            "preprocess: FAILED - these figure anchors no longer match the "
+            "manuscript: " + "; ".join(repr(a) for a in FIG_BY_ANCHOR))
 
 
 if __name__ == "__main__":
