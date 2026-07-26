@@ -80,7 +80,7 @@
 \contentsline {section}{Try This: Chapter 5 Exercises}{99}{section*.78}%
 \contentsline {section}{Looking Ahead}{101}{section*.79}%
 \contentsline {chapter}{\chapternumberline {6}Inversions --- The Hidden Reversals}{103}{chapter.6}%
-\contentsline {section}{The Anatomy of a Stealth Flip}{104}{section*.80}%
+\contentsline {section}{The Anatomy of a Stealth Inversion}{104}{section*.80}%
 \contentsline {section}{The Seven Axes of Inversion}{106}{section*.81}%
 \contentsline {section}{Recursive Inversions: When Resolution Fails}{108}{section*.82}%
 \contentsline {section}{Weaponizing the Exposure Loop: \texttt {\^{}1}/\texttt {\^{}4}/\texttt {\^{}7}}{109}{section*.83}%
