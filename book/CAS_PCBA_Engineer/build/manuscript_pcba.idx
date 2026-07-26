@@ -286,34 +286,34 @@
 \indexentry{Brownout|hyperpage}{237}
 \indexentry{Regulator|hyperpage}{238}
 \indexentry{Fisher-Rao distance|hyperpage}{239}
+\indexentry{CPMB|hyperpage}{241}
 \indexentry{CPMB|hyperpage}{245}
 \indexentry{CPMB|hyperpage}{245}
 \indexentry{CPMB|hyperpage}{246}
 \indexentry{Cutoff|hyperpage}{246}
 \indexentry{Fisher-Rao distance|hyperpage}{247}
-\indexentry{CPMB|hyperpage}{247}
-\indexentry{Lacunarity|hyperpage}{250}
+\indexentry{CPMB|hyperpage}{248}
+\indexentry{Lacunarity|hyperpage}{251}
 \indexentry{Recipe|hyperpage}{253}
 \indexentry{Recipe|hyperpage}{253}
-\indexentry{Regulator|hyperpage}{253}
+\indexentry{Regulator|hyperpage}{254}
 \indexentry{Regulator|hyperpage}{254}
 \indexentry{Sequence|hyperpage}{254}
 \indexentry{Brownout|hyperpage}{254}
 \indexentry{Brownout|hyperpage}{254}
 \indexentry{Brownout|hyperpage}{254}
-\indexentry{CPMB|hyperpage}{254}
+\indexentry{CPMB|hyperpage}{255}
 \indexentry{Sequence|hyperpage}{255}
 \indexentry{Compiler|hyperpage}{255}
-\indexentry{Brownout|hyperpage}{255}
-\indexentry{Power sequencing|hyperpage}{256}
 \indexentry{Brownout|hyperpage}{256}
-\indexentry{CPMB|hyperpage}{256}
+\indexentry{Power sequencing|hyperpage}{256}
+\indexentry{Brownout|hyperpage}{257}
 \indexentry{Brownout Detector|hyperpage}{258}
-\indexentry{Power Dissipation|hyperpage}{258}
-\indexentry{Fisher-Rao distance|hyperpage}{258}
-\indexentry{Recipe|hyperpage}{259}
 \indexentry{Power Dissipation|hyperpage}{259}
 \indexentry{Fisher-Rao distance|hyperpage}{259}
+\indexentry{Recipe|hyperpage}{259}
+\indexentry{Power Dissipation|hyperpage}{259}
+\indexentry{Fisher-Rao distance|hyperpage}{260}
 \indexentry{Embodied|hyperpage}{263}
 \indexentry{Embodied|hyperpage}{263}
 \indexentry{Transcendent|hyperpage}{264}
@@ -357,99 +357,99 @@
 \indexentry{Current mirror|hyperpage}{385}
 \indexentry{10 Noetics|hyperpage}{393}
 \indexentry{4 Domains|hyperpage}{393}
-\indexentry{Lacunarity|hyperpage}{405}
-\indexentry{Lacunarity|hyperpage}{405}
-\indexentry{4 Domains|hyperpage}{407}
 \indexentry{Lacunarity|hyperpage}{408}
-\indexentry{Lacunarity|hyperpage}{410}
-\indexentry{10 Noetics|hyperpage}{410}
+\indexentry{Lacunarity|hyperpage}{408}
+\indexentry{4 Domains|hyperpage}{410}
 \indexentry{Lacunarity|hyperpage}{411}
-\indexentry{Brownout|hyperpage}{429}
-\indexentry{Brownout|hyperpage}{432}
-\indexentry{Sequence|hyperpage}{433}
-\indexentry{Walk-Down|hyperpage}{473}
-\indexentry{Evidence Packet|hyperpage}{482}
-\indexentry{Evidence Packet|hyperpage}{484}
-\indexentry{Evidence Packet|hyperpage}{489}
-\indexentry{Circuit Registry|hyperpage}{489}
-\indexentry{Evidence Packet|hyperpage}{492}
+\indexentry{Lacunarity|hyperpage}{413}
+\indexentry{10 Noetics|hyperpage}{413}
+\indexentry{Lacunarity|hyperpage}{414}
+\indexentry{Brownout|hyperpage}{433}
+\indexentry{Brownout|hyperpage}{436}
+\indexentry{Sequence|hyperpage}{437}
+\indexentry{Walk-Down|hyperpage}{477}
+\indexentry{Evidence Packet|hyperpage}{486}
+\indexentry{Evidence Packet|hyperpage}{488}
+\indexentry{Evidence Packet|hyperpage}{493}
 \indexentry{Circuit Registry|hyperpage}{493}
-\indexentry{Bill of Materials|hyperpage}{501}
-\indexentry{NCCS|hyperpage}{502}
-\indexentry{NCCS|hyperpage}{502}
-\indexentry{NCCS|hyperpage}{503}
-\indexentry{Power sequencing|hyperpage}{503}
-\indexentry{NCCS|hyperpage}{504}
-\indexentry{NCCS|hyperpage}{505}
-\indexentry{ISO/IEC 42001|hyperpage}{507}
-\indexentry{ISO/IEC 42001|hyperpage}{509}
-\indexentry{NCCS|hyperpage}{513}
-\indexentry{10 Noetics|hyperpage}{519}
-\indexentry{4 Domains|hyperpage}{521}
-\indexentry{7 Drives|hyperpage}{521}
-\indexentry{Self-dual|hyperpage}{522}
-\indexentry{4 Registers|hyperpage}{522}
-\indexentry{Transcendent|hyperpage}{522}
-\indexentry{Compiler|hyperpage}{522}
-\indexentry{Recipe|hyperpage}{523}
-\indexentry{Sequence|hyperpage}{523}
-\indexentry{Transformer|hyperpage}{525}
-\indexentry{Transformer|hyperpage}{525}
+\indexentry{Evidence Packet|hyperpage}{496}
+\indexentry{Circuit Registry|hyperpage}{497}
+\indexentry{Bill of Materials|hyperpage}{505}
+\indexentry{NCCS|hyperpage}{506}
+\indexentry{NCCS|hyperpage}{506}
+\indexentry{NCCS|hyperpage}{507}
+\indexentry{Power sequencing|hyperpage}{507}
+\indexentry{NCCS|hyperpage}{508}
+\indexentry{NCCS|hyperpage}{509}
+\indexentry{ISO/IEC 42001|hyperpage}{511}
+\indexentry{ISO/IEC 42001|hyperpage}{513}
+\indexentry{NCCS|hyperpage}{517}
+\indexentry{10 Noetics|hyperpage}{523}
+\indexentry{4 Domains|hyperpage}{525}
+\indexentry{7 Drives|hyperpage}{525}
+\indexentry{Self-dual|hyperpage}{526}
+\indexentry{4 Registers|hyperpage}{526}
+\indexentry{Transcendent|hyperpage}{526}
 \indexentry{Compiler|hyperpage}{526}
+\indexentry{Recipe|hyperpage}{527}
+\indexentry{Sequence|hyperpage}{527}
+\indexentry{Transformer|hyperpage}{529}
+\indexentry{Transformer|hyperpage}{529}
 \indexentry{Compiler|hyperpage}{530}
-\indexentry{Transcendent|hyperpage}{556}
-\indexentry{Recipe|hyperpage}{570}
-\indexentry{Duty cycle|hyperpage}{591}
-\indexentry{Current mirror|hyperpage}{596}
-\indexentry{4 Domains|hyperpage}{600}
-\indexentry{Lacunarity|hyperpage}{601}
-\indexentry{Sequence|hyperpage}{610}
-\indexentry{Transcendent|hyperpage}{615}
-\indexentry{Op-amp|hyperpage}{629}
-\indexentry{Compiler|hyperpage}{631}
-\indexentry{Nyquist criterion|hyperpage}{637}
-\indexentry{Block diagram|hyperpage}{642}
-\indexentry{Recipe|hyperpage}{653}
-\indexentry{Active region|hyperpage}{679}
-\indexentry{Bode plot|hyperpage}{680}
-\indexentry{Self-dual|hyperpage}{680}
-\indexentry{Certification tier|hyperpage}{681}
-\indexentry{NCCS|hyperpage}{681}
-\indexentry{NCCS|hyperpage}{681}
-\indexentry{Characteristic curve|hyperpage}{681}
-\indexentry{Cluster|hyperpage}{682}
-\indexentry{Current mirror|hyperpage}{683}
-\indexentry{Darlington pair|hyperpage}{683}
-\indexentry{Differential pair|hyperpage}{683}
-\indexentry{Deployment ladder|hyperpage}{684}
-\indexentry{Evidence packet|hyperpage}{684}
-\indexentry{Filter|hyperpage}{685}
-\indexentry{Input resistance|hyperpage}{686}
-\indexentry{Involution pair|hyperpage}{686}
-\indexentry{Lacunarity|hyperpage}{686}
-\indexentry{Load line|hyperpage}{686}
-\indexentry{NCCS|hyperpage}{686}
-\indexentry{NCCS|hyperpage}{686}
-\indexentry{Notch filter|hyperpage}{687}
-\indexentry{Filter|hyperpage}{687}
-\indexentry{Nyquist criterion|hyperpage}{687}
-\indexentry{Op-amp|hyperpage}{687}
-\indexentry{Open simplex Δ39°|hyperpage}{687}
-\indexentry{Operating point|hyperpage}{687}
-\indexentry{Operators|hyperpage}{687}
-\indexentry{Phase margin / gain margin|hyperpage}{688}
+\indexentry{Compiler|hyperpage}{534}
+\indexentry{Transcendent|hyperpage}{560}
+\indexentry{Recipe|hyperpage}{577}
+\indexentry{Duty cycle|hyperpage}{599}
+\indexentry{Current mirror|hyperpage}{604}
+\indexentry{4 Domains|hyperpage}{609}
+\indexentry{Lacunarity|hyperpage}{609}
+\indexentry{Sequence|hyperpage}{619}
+\indexentry{Transcendent|hyperpage}{623}
+\indexentry{Op-amp|hyperpage}{637}
+\indexentry{Compiler|hyperpage}{639}
+\indexentry{Nyquist criterion|hyperpage}{645}
+\indexentry{Block diagram|hyperpage}{650}
+\indexentry{Recipe|hyperpage}{661}
+\indexentry{Active region|hyperpage}{687}
 \indexentry{Bode plot|hyperpage}{688}
-\indexentry{Sequence|hyperpage}{688}
-\indexentry{Power sequencing|hyperpage}{688}
-\indexentry{Test point|hyperpage}{689}
-\indexentry{Q factor|hyperpage}{689}
-\indexentry{Recipe|hyperpage}{689}
-\indexentry{Self-dual|hyperpage}{690}
-\indexentry{Sequence|hyperpage}{691}
-\indexentry{State literal|hyperpage}{691}
-\indexentry{Test point|hyperpage}{691}
-\indexentry{Transconductance|hyperpage}{691}
-\indexentry{10 Noetics|hyperpage}{696}
-\indexentry{Recipe|hyperpage}{696}
-\indexentry{Noetic Topos paper|hyperpage}{701}
-\indexentry{AI Misalignment Incidents Database|hyperpage}{701}
+\indexentry{Self-dual|hyperpage}{688}
+\indexentry{Certification tier|hyperpage}{689}
+\indexentry{NCCS|hyperpage}{689}
+\indexentry{NCCS|hyperpage}{689}
+\indexentry{Characteristic curve|hyperpage}{689}
+\indexentry{Cluster|hyperpage}{690}
+\indexentry{Current mirror|hyperpage}{691}
+\indexentry{Darlington pair|hyperpage}{691}
+\indexentry{Differential pair|hyperpage}{691}
+\indexentry{Deployment ladder|hyperpage}{692}
+\indexentry{Evidence packet|hyperpage}{692}
+\indexentry{Filter|hyperpage}{693}
+\indexentry{Input resistance|hyperpage}{694}
+\indexentry{Involution pair|hyperpage}{694}
+\indexentry{Lacunarity|hyperpage}{694}
+\indexentry{Load line|hyperpage}{694}
+\indexentry{NCCS|hyperpage}{694}
+\indexentry{NCCS|hyperpage}{694}
+\indexentry{Notch filter|hyperpage}{695}
+\indexentry{Filter|hyperpage}{695}
+\indexentry{Nyquist criterion|hyperpage}{695}
+\indexentry{Op-amp|hyperpage}{695}
+\indexentry{Open simplex Δ39°|hyperpage}{695}
+\indexentry{Operating point|hyperpage}{695}
+\indexentry{Operators|hyperpage}{695}
+\indexentry{Phase margin / gain margin|hyperpage}{696}
+\indexentry{Bode plot|hyperpage}{696}
+\indexentry{Sequence|hyperpage}{696}
+\indexentry{Power sequencing|hyperpage}{696}
+\indexentry{Test point|hyperpage}{697}
+\indexentry{Q factor|hyperpage}{697}
+\indexentry{Recipe|hyperpage}{697}
+\indexentry{Self-dual|hyperpage}{698}
+\indexentry{Sequence|hyperpage}{699}
+\indexentry{State literal|hyperpage}{699}
+\indexentry{Test point|hyperpage}{699}
+\indexentry{Transconductance|hyperpage}{699}
+\indexentry{10 Noetics|hyperpage}{704}
+\indexentry{Recipe|hyperpage}{704}
+\indexentry{Noetic Topos paper|hyperpage}{709}
+\indexentry{AI Misalignment Incidents Database|hyperpage}{709}

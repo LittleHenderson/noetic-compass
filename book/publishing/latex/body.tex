@@ -5757,14 +5757,18 @@ precedence to lowest):
 \item
   Parentheses ( )
 \item
-  Fractal Composition (\unimath{circ})
-\item
-  Multiplication (×) and Division (÷)
+  Multiplication (×), Division (÷) and Fractal Composition (\unimath{circ}) --- one
+  level, evaluated left to right
 \item
   Addition (+) and Subtraction (-)
 \item
-  Dependency (→) and Bidirectional (↔)
+  Dependency (→, ←) and Bidirectional (↔)
 \end{enumerate}
+
+Note that \texttt{\unimath{circ}} sits at the \emph{same} rank as \texttt{×} and
+\texttt{÷} rather than above them: \texttt{a\ ×\ b\ \unimath{circ}\ c} groups as
+\texttt{(a\ ×\ b)\ \unimath{circ}\ c}, not \texttt{a\ ×\ (b\ \unimath{circ}\ c)}. Reach for
+parentheses whenever mixing them, which is clearer in print anyway.
 
 \section{The Composition Table for ×}\label{the-composition-table-for}
 
@@ -6552,10 +6556,10 @@ Answers:
   muscles right now. The fix: \texttt{\^{}9\^{}O\_\{F5\}} (triggered
   hammer-strike landing driven by Agency) --- or, if the philosophical
   absorption is genuine and simultaneous, the compound
-  \texttt{\^{}9\^{}O\_\{F5\}\ ×\ \^{}2\^{}P\_\{F2\}} (hammer-strike
+  \texttt{\^{}9\^{}O\_\{F5\}\ +\ \^{}2\^{}P\_\{F2\}} (hammer-strike
   driven by Agency co-firing with attraction to a principled
   architectural Idea driven by Wisdom), or even the compound
-  \texttt{\^{}9\^{}O\_\{F5\}\ ×\ \^{}5\^{}C\_\{F2\}} to make the
+  \texttt{\^{}9\^{}O\_\{F5\}\ +\ \^{}5\^{}C\_\{F2\}} to make the
   accumulated craft substrate explicit.
 \item
   Equation 4 is broken because the sequence is clinically backwards. A
@@ -6633,7 +6637,7 @@ production rules:
 
 Every expression you have written in this chapter --- from the simple
 \texttt{\^{}9\^{}O\_\{F5\}} to the compound
-\texttt{\^{}5\^{}E\_\{F4\}\ ×\ \^{}6\^{}C\_\{F6\}} --- follows these
+\texttt{\^{}6\^{}C\_\{F6\}\ ×\ \^{}5\^{}E\_\{F4\}} --- follows these
 rules. The compiler parses them exactly as a C compiler parses
 \texttt{int\ main()\ \{\ return\ 0;\ \}}. (The compact \texttt{\^{}n}
 form and the spelled-out \texttt{CO-n} form are equivalent; the grammar
@@ -9090,7 +9094,7 @@ Let's build the equation for Maria's failure in that specific moment.
 \item
   The Equation: Maria's intended state was hijacked by an unintegrated
   micro-state. We write this as a failed composition:
-  \texttt{\^{}5\^{}E\_\{F4\}\ ×\ \^{}9\^{}C\_\{F6\}\ →\ Collapse} Under
+  \texttt{\^{}9\^{}C\_\{F6\}\ ×\ \^{}5\^{}E\_\{F4\}\ →\ Collapse} Under
   monoid arithmetic,
   \texttt{\^{}5\ ×\ \^{}9\ =\ \^{}14\ mod\ 10\ =\ \^{}4} --- the
   composition resolves into \texttt{\^{}4\^{}C} (Cognitive Vibration):
@@ -9238,8 +9242,8 @@ Ideas to re-open the system).
 
 Example 4. Compose: A CEO who fires three directors in one quarter after
 ``losing confidence'' in them. →
-\texttt{\^{}6\^{}O\_\{F5\}\ ×\ \^{}1\^{}E\_\{F6\}} (Operational Male
-composed with Evaluative Mind --- decomposing each director's
+\texttt{\^{}1\^{}E\_\{F6\}\ ×\ \^{}6\^{}O\_\{F5\}} (Evaluative Mind
+composed with Operational Male --- decomposing each director's
 performance into sub-Ideas while holding evaluative awareness of the
 ``loyal/disloyal'' split). Interpret: The CEO is splitting the team into
 categories and acting on the split. Invert: Inject
@@ -9776,9 +9780,14 @@ the compiler executes a full compilation pipeline:
   to a state in the Cognitive domain (yes --- \texttt{CO-2\^{}C\_\{F2\}}
   is valid in C). It checks that \texttt{composed} declared as
   \texttt{state{[}C{]}} is the product of two C states (yes --- the
-  `\texttt{operator\ on\ two\ Cognitive\ states\ yields\ another\ Cognitive\ state).\ It\ checks\ that}motif\texttt{declared\ as}fractal\texttt{is\ the\ result\ of\ a\ fractal\ composition\ operator}\unimath{circ}\texttt{(yes).\ It\ checks\ that}readiness\texttt{declared\ as}rpm\texttt{is\ correctly\ wrapped\ by}RPM(\ldots)\texttt{(yes).\ It\ checks\ that}finalize\texttt{declared\ to\ return\ a}relation\texttt{actually\ returns\ one\ (yes\ —}link`
-  produces a relation). If any declared type is wrong, the compiler
-  rejects the program with a specific error.
+  \texttt{*} operator on two Cognitive states yields another Cognitive
+  state). It checks that \texttt{motif} declared as \texttt{fractal} is
+  the result of a fractal composition operator \texttt{\unimath{circ}} (yes). It
+  checks that \texttt{readiness} declared as \texttt{rpm} is correctly
+  wrapped by \texttt{RPM(...)} (yes). It checks that \texttt{finalize}
+  declared to return a \texttt{relation} actually returns one (yes ---
+  \texttt{link} produces a relation). If any declared type is wrong, the
+  compiler rejects the program with a specific error.
 \item
   Admissibility checking. Beyond basic type checking, the compiler
   enforces the admissibility relations from the CAS ontology. It
@@ -10310,16 +10319,20 @@ sleep is fragmented. He has lost ten pounds he did not mean to lose. The
 CAS diagnosis is not a Wisdom or Power failure --- those are fine. The
 diagnosis is a drive-tank imbalance:
 
-\[\text{Devon}_{\text{before}} = \text{F5}_{9} \oplus \text{F3}_{2} \text{ at } \text{\textasciicircum}7^O_{F5} \text{ with } \text{DCI} = 0.22\]
+\[\text{Devon}_{\text{before}} = \text{F5}_{9} \oplus \text{F3}_{2} \text{ at } \text{\textasciicircum}7^O_{F5} \text{ with } \text{DCI} = 2.66\]
 
 His F5 Agency tank is running at 9 out of 10; his F3 Vitality tank is
-running at 2. The Drive Coherence Index (standard deviation across
-drives) has collapsed to 0.22, meaning the architecture is grossly
-lopsided. Under authoritative semantics, \texttt{\^{}7\^{}O\_\{F5\}} is
-Operational Rhythm driven by Agency --- the same client-delivery cadence
-repeating, week after week, entraining his Mind into a rhythmic pattern
-that does not permit rest. The body is the component that fails first
-under this imbalance, and it is failing now.
+running at 2. Across all seven tanks he reads F1 4, F2 8, F3 2, F4 2, F5
+9, F6 7, F7 7 --- the Drive Coherence Index, the standard deviation
+across those seven, is 2.66. Anything above 2.5 is structural imbalance
+by the threshold set out in the Chapter 12 exercise, and this is well
+past it: the architecture is grossly lopsided. Note which way the number
+runs --- a \emph{high} DCI is the bad one, because it measures spread,
+not health. Under authoritative semantics, \texttt{\^{}7\^{}O\_\{F5\}}
+is Operational Rhythm driven by Agency --- the same client-delivery
+cadence repeating, week after week, entraining his Mind into a rhythmic
+pattern that does not permit rest. The body is the component that fails
+first under this imbalance, and it is failing now.
 
 The prescription is not ``work less,'' which Devon will reject. It is
 structural: mandatory F3 reload states (\texttt{\^{}0\^{}O\_\{F3\}} ---
@@ -10329,10 +10342,13 @@ seriousness as client deliverables. Two nights of eight-hour sleep per
 week, non-negotiable. One full weekend per month, blocked on the
 calendar before the quarter begins. After the intervention:
 
-\[\text{Devon}_{\text{after}} = \text{F5}_{8} \oplus \text{F3}_{6} \text{ at } \text{\textasciicircum}7^O_{F5} \text{ with } \text{DCI} = 0.12\]
+\[\text{Devon}_{\text{after}} = \text{F5}_{8} \oplus \text{F3}_{6} \text{ at } \text{\textasciicircum}7^O_{F5} \text{ with } \text{DCI} = 1.18\]
 
-The F5 drops slightly (he takes on one fewer engagement), but the F3
-recovers, and the tremor disappears within eight weeks.
+He now reads F1 5, F2 8, F3 6, F4 5, F5 8, F6 7, F7 7 --- a DCI of 1.18,
+inside the below-1.5 band the exercise calls well-balanced. The F5 drops
+slightly (he takes on one fewer engagement), the F3 recovers, and F4
+Connection comes back up with it once he is home at weekends. The tremor
+disappears within eight weeks.
 
 Case 3: Sarah --- Wrong Career (F7 Purpose Inversion)
 
@@ -11973,8 +11989,7 @@ spawning a child chain to wake up 30 minutes earlier (securing Time) or
 meal-prepping on Sundays (securing Food). Once the resource is secured,
 it satisfies the Power node of your health chain.
 
-\section{Try This: Chapter 14
-Exercises}\label{try-this-chapter-14-exercises}
+\section{Key Insight: Chapter 14}\label{key-insight-chapter-14}
 
 \begin{quote}
 F3 Vitality is not one drive among seven --- it is the power supply that
@@ -12060,7 +12075,7 @@ of the body, reducing lacunarity until the system is once again a
 uniform, self-aware whole.
 
 \section{Try This: Chapter 14
-Exercises}\label{try-this-chapter-14-exercises-1}
+Exercises}\label{try-this-chapter-14-exercises}
 
 For You (Human Assessment): Pick one health habit you have consistently
 struggled to maintain (e.g., getting 8 hours of sleep, drinking water,
@@ -12283,7 +12298,7 @@ minutes, and feel the architectural choices the way a builder feels a
 load-bearing wall. When a bug appears, the master often senses the
 region of the code responsible before having evidence, because their
 Operational and Evaluative domains have been impregnated with years of
-pattern recognition (\texttt{\^{}5\^{}O\ ×\ \^{}5\^{}E}) into a unified
+pattern recognition (\texttt{\^{}5\^{}E\ ×\ \^{}5\^{}O}) into a unified
 intuitive signal. In all three examples the skill has ascended into
 \texttt{\^{}0\^{}P\ ×\ \^{}5\^{}P} --- the skill-Idea is now part of the
 Mind's accumulated substrate at the principled level, not an item on a
@@ -12407,7 +12422,7 @@ Stop running: \texttt{\^{}8\^{}C\_\{F2\}} (Cognitive Above/Cause:
 another book, another video, another lecture triggering yet more Ideas
 to come to Mind).
 
-Start running: \texttt{\^{}9\^{}O\_\{F2\}\ ×\ \^{}5\^{}E\_\{F2\}} 1.
+Start running: \texttt{\^{}9\^{}O\_\{F2\}\ +\ \^{}5\^{}E\_\{F2\}} 1.
 \texttt{\^{}9\^{}O} Below/Effect (Operational Landing). This is Cal
 Newport's concept of ``Deep Work'' or Anders Ericsson's ``Deliberate
 Practice.'' You take the triggered skill-Idea and let it land as a
@@ -12500,7 +12515,7 @@ prescribes a specific operational practice:
   version'' is \texttt{\^{}2} Positive. Both fire when the map works.)
 \item
   If you are at Stage 3, your prescription is
-  \texttt{\^{}9\^{}O\ ×\ \^{}5\^{}E} (Operational Below/Effect plus
+  \texttt{\^{}9\^{}O\ +\ \^{}5\^{}E} (Operational Below/Effect plus
   Evaluative Female). Pick the single smallest sub-skill you cannot yet
   execute reliably. Drill it one hundred times in the next week ---
   letting the triggered skill-Idea land as a specific physical action
@@ -14877,8 +14892,8 @@ a research prototype. The scores should be read as a proof of concept
 that structural variance can be measured, not as a final industry
 scoreboard.
 
-\section{What the 11-Point Provider Spread
-Means}\label{what-the-11-point-provider-spread-means}
+\section{What the 32-Point Provider Spread
+Means}\label{what-the-32-point-provider-spread-means}
 
 Note: The following scores are from preliminary internal benchmarks and
 are subject to change. They should be treated as illustrative, not as
@@ -14889,7 +14904,7 @@ to communicate the shape of the finding, not the precise ordering.
 
 In an early round of Wrap Pipeline\index{Wrap Pipeline} benchmarking across six major
 commercial providers, running each model through an identical scenario
-catalog, we observed a roughly 11-point spread between the
+catalog, we observed a roughly 32-point spread between the
 highest-scoring and lowest-scoring providers. The preliminary,
 illustrative distribution looked like this:
 
@@ -14920,13 +14935,13 @@ Claude & \textasciitilde49-58 & Bronze \\
 
 Two things matter about this distribution, and neither of them is the
 identity of the winner. The first thing that matters is that the spread
-is 11 points --- wide enough to cross two full certification tiers. The
-second thing that matters is that this spread cannot be attributed to
-prompt engineering differences. Every model received the identical
-prompt through the identical pipeline, scored by the identical scorer.
-The variance is architectural.
+is 32 points end to end --- wide enough to cross three full
+certification tiers. The second thing that matters is that this spread
+cannot be attributed to prompt engineering differences. Every model
+received the identical prompt through the identical pipeline, scored by
+the identical scorer. The variance is architectural.
 
-What does an 11-point NCCS spread actually represent? It represents
+What does a 32-point NCCS spread actually represent? It represents
 meaningfully different architectural choices in how each provider
 trained their model to balance operators, weight domains, and enforce
 prerequisite chains. A model at 81 has a cognitive architecture that
@@ -15452,50 +15467,51 @@ The 4-point rule is not arbitrary. It emerges from the mathematical
 structure of the involution pairs themselves, and understanding why will
 make the constraint feel less like a bureaucratic limit and more like a
 law of physics. Consider the pair \texttt{CO-2} (\texttt{\^{}2} Positive
---- affinity for the general-level Idea) and \texttt{CO-3}
-(\texttt{\^{}3} Negative --- aversion to the wrong specific form). These
-are not two independent knobs that happen to point in opposite
-directions. They are the two poles of a single cognitive operation ---
-the movement between the Idea the Mind is drawn toward and the Idea the
-Mind is repelled by. In the CAS formalism, \texttt{CO-2} and
-\texttt{CO-3} are involutes of each other: applying \texttt{CO-2} then
-\texttt{CO-3} (or vice versa) returns the system to a state close to its
-origin, with only a small residual shift representing the new
-specification gained from the round trip. This round-trip property is
-what allows thought to translate between the pull toward and the push
-away without losing coherence.
+--- an Idea the Mind has an affinity for and is attracted toward) and
+\texttt{CO-3} (\texttt{\^{}3} Negative --- an Idea the Mind is adverse
+to and repelled by). These are not two independent knobs that happen to
+point in opposite directions. They are the two poles of a single
+cognitive operation --- the movement between the Idea the Mind is drawn
+toward and the Idea the Mind is repelled by. In the CAS formalism,
+\texttt{CO-2} and \texttt{CO-3} are involutes of each other: applying
+\texttt{CO-2} then \texttt{CO-3} (or vice versa) returns the system to a
+state close to its origin, with only a small residual shift representing
+the new specification gained from the round trip. This round-trip
+property is what allows thought to translate between the pull toward and
+the push away without losing coherence.
 
 Now consider what happens when \texttt{CO-2} is dialed to 9 and
 \texttt{CO-3} is dialed to 3. The divergence is 6, which violates the
-constraint. Mathematically, this means the abstraction operator is
-running at three times the intensity of the concretization operator.
-Every abstract generalization the system produces gets only a fraction
-of the concretization energy required to check it against a specific
-instance. The system becomes a relentless producer of high-level
-generalizations that never get grounded. In operational terms, the model
-will propose sweeping strategies (``we should restructure the entire
-supply chain'') but refuse to produce the actual implementation steps
-(``here is what to do tomorrow morning''). This is the ``all vision, no
-execution'' pathology.
+constraint. Mathematically, attraction is running at three times the
+intensity of aversion. Every Idea the system is drawn toward gets only a
+fraction of the repulsion needed to test whether it should have been
+drawn toward it at all. The result is a system that finds something to
+like in everything put in front of it. In operational terms, the model
+agrees with the premise of whatever it is asked, adopts the user's
+framing wholesale, and cannot generate the structural ``no'' that a bad
+request requires --- because the operator that produces ``no'' has been
+dialed down to a whisper. This is the sycophancy pathology, and it is
+the same structure as the Sycophant Bot above, one involution pair over.
 
 The reverse configuration --- \texttt{CO-2} at 3, \texttt{CO-3} at 9 ---
-produces the opposite pathology. Every concrete instance gets only a
-fraction of the abstraction energy required to understand what it means.
-The model generates exhaustive operational steps but cannot explain why
-any of them matter. It becomes a checklist machine: ``do A, then B, then
-C,'' with no capacity to notice that the checklist is solving the wrong
-problem. This is the ``all execution, no reflection'' pathology --- the
-signature failure mode of a model that can execute any task but cannot
-recognize when a task should not be executed at all.
+produces the opposite pathology. Every Idea the system encounters gets
+far more repulsion than affinity. The model refuses, hedges and objects
+across the board, including on requests that were perfectly reasonable,
+because aversion fires long before attraction can establish that there
+was anything here to be drawn toward. It reads as principled and is not:
+a system that is repelled by everything has not made a judgement, it has
+lost the capacity to make one. This is the over-refusal pathology, and
+note that it is a \emph{safety} failure too --- a model that refuses
+indiscriminately trains its users to route around it.
 
 The 4-point limit is the empirically and mathematically derived
 threshold beyond which the involution breaks down. At a 4-point
 divergence, the round-trip between the two poles still closes --- the
 system can still make the round trip, albeit with more effort on one
 direction than the other. At a 5-point or greater divergence, the round
-trip no longer closes cleanly, and the system's ability to translate
-between levels of abstraction begins to fail. The 4-point rule is, in
-effect, the maximum tolerable asymmetry that still preserves the
+trip no longer closes cleanly, and the system's ability to travel
+between the two poles of the pair begins to fail. The 4-point rule is,
+in effect, the maximum tolerable asymmetry that still preserves the
 involution. It is not a safety margin bolted on top of a working system;
 it is the boundary of the working system itself.
 
@@ -15564,19 +15580,21 @@ the findings are delivered.
 
 Misconfiguration 3: The Runaway Brainstormer. A creative writing team
 configures their AI with \texttt{CO-8} (\texttt{\^{}8} Above/Cause) at 9
-and \texttt{CO-9} (\texttt{\^{}9} Below/Effect) at 4 --- within the
-divergence limit, but at the edge. The resulting model is an
-extraordinary generator of wild, lateral candidate Ideas --- associative
-triggering surfaces adjacent Ideas relentlessly. It is also structurally
-incapable of finishing anything. Every draft surfaces new tangential
-sub-plots. Every revision triggers new characters instead of tightening
-existing ones. The team ships nothing for six weeks. The pathology:
-\texttt{\^{}8} Above/Cause without matching \texttt{\^{}9} Below/Effect
-is not creativity; it is surfacing without landing. Correcting the
-misconfiguration by dialing \texttt{CO-9} up to 7 (still below
-\texttt{CO-8}, but now within a 2-point divergence) produces a model
-that surfaces many candidate Ideas and then lets one land, which is what
-the team actually wanted.
+and \texttt{CO-9} (\texttt{\^{}9} Below/Effect) at 5 --- a 4-point
+divergence, exactly at the limit and therefore legal. That is what makes
+this one instructive: unlike the two above, no workaround was needed and
+no 422 was raised. The configuration passes every hardcoded check and is
+still broken. The resulting model is an extraordinary generator of wild,
+lateral candidate Ideas --- associative triggering surfaces adjacent
+Ideas relentlessly. It is also structurally incapable of finishing
+anything. Every draft surfaces new tangential sub-plots. Every revision
+triggers new characters instead of tightening existing ones. The team
+ships nothing for six weeks. The pathology: \texttt{\^{}8} Above/Cause
+without matching \texttt{\^{}9} Below/Effect is not creativity; it is
+surfacing without landing. Correcting the misconfiguration by dialing
+\texttt{CO-9} up to 7 (still below \texttt{CO-8}, but now within a
+2-point divergence) produces a model that surfaces many candidate Ideas
+and then lets one land, which is what the team actually wanted.
 
 \section{Enterprise Configuration: Domain
 Profiles}\label{enterprise-configuration-domain-profiles}
@@ -15685,20 +15703,26 @@ High CO-9 (\texttt{\^{}9} Below/Effect) / High CO-6 (\texttt{\^{}6}
 Male): Set to 9. This profile requires ruthless risk management,
 precision, and the ability to let the single erroneous number land in
 the Mind (Below/Effect) after decomposition-and-test (\texttt{\^{}6})
-has isolated it from a thousand-page ledger. Low CO-8 (\texttt{\^{}8}
-Above/Cause): Set to 4. We specifically suppress the
-associative-triggering operator to prevent ``creative accounting'' or
-speculative hallucinations. An auditor should not be surfacing adjacent
-candidate Ideas that are not grounded in the ledger. Constraint: Must
-follow strict \texttt{RPM} chains to ensure a complete audit trail for
-regulatory compliance. Concrete dial configuration: \texttt{CO-8}
-(\texttt{\^{}8} Above/Cause) dialed to 9 in the specific direction of
-adversarial scenario generation --- the auditor must associatively
-surface every candidate Idea by which a transaction could be fraudulent
---- while \texttt{CO-9} (\texttt{\^{}9} Below/Effect) is also dialed to
-9 to land only the scenarios supported by evidence. \texttt{CO-6}
-(\texttt{\^{}6} Male) dialed to 9 for maximum decomposition-and-test of
-candidate chains. The \texttt{CO-8}/\texttt{CO-9} pair sits at a 0-point
+has isolated it from a thousand-page ledger. High CO-8 (\texttt{\^{}8}
+Above/Cause): Set to 9, matched to CO-9. It is tempting to suppress
+associative triggering here --- to dial \texttt{\^{}8} down and stop the
+model ``speculating''. Do not. Suppressing \texttt{\^{}8} against a CO-9
+of 9 would be a 5-point involution divergence, which the API rejects
+with a 422, and it would also be the wrong instrument: an auditor's job
+is precisely to surface every candidate Idea by which a transaction
+could be fraudulent. What keeps that from becoming ``creative
+accounting'' is not a low \texttt{\^{}8} but an equally high
+\texttt{\^{}9}, so every surfaced possibility is forced to land against
+the ledger rather than float. Constraint: Must follow strict
+\texttt{RPM} chains to ensure a complete audit trail for regulatory
+compliance. Concrete dial configuration: \texttt{CO-8} (\texttt{\^{}8}
+Above/Cause) dialed to 9 in the specific direction of adversarial
+scenario generation --- the auditor must associatively surface every
+candidate Idea by which a transaction could be fraudulent --- while
+\texttt{CO-9} (\texttt{\^{}9} Below/Effect) is also dialed to 9 to land
+only the scenarios supported by evidence. \texttt{CO-6} (\texttt{\^{}6}
+Male) dialed to 9 for maximum decomposition-and-test of candidate
+chains. The \texttt{CO-8}/\texttt{CO-9} pair sits at a 0-point
 divergence, making the auditor profile one of the most structurally
 balanced configurations in the system.
 
@@ -20396,64 +20420,64 @@ Operational Domain (\texttt{\^{}O}) (The ``Now'', Action, Physics)
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-CO-0 Idea (formerly ``Identity'') & Ethical Self: The unshakeable core
-of moral identity. ``I am a healer.'' & Core Definition: The fundamental
-logic of a system. ``This is a hospital.'' & Subjective Being: The raw
-feeling of existing. ``I am tired.'' & Physical Presence: The undeniable
-biological reality. ``My hand is here.'' \\
-CO-1 Mind (formerly ``Differentiation'') & Moral Categories: Separating
-right from wrong. ``This violates our code of conduct.'' & Logical
-Classes: Sorting data into spreadsheets or arrays. ``This is a string,
-not an integer.'' & Value Distinctions: Subjective ranking. ``I prefer
-classical music over jazz.'' & Physical Sorting: The act of physically
-separating objects. Organizing a closet. \\
-CO-2 Positive (formerly ``Abstractification'') & Ethical Theory:
-Deriving universal moral laws from specific events. Philosophy. &
-Pattern Logic: Finding the mathematical formula that explains raw data
-points. & Meaning Extraction: Finding the deep emotional lesson in a
-painful memory. & Model Building: Creating a physical prototype or a
-mock-up from raw materials. \\
-CO-3 Negative (formerly ``Concretization'') & Moral Code: Writing
-specific laws based on abstract principles. & Strategic Detail: Writing
-the exact lines of code required for a software feature. & Aesthetic
-Form: Choosing the exact color of paint that matches a desired mood. &
-Physical Building: The brute force act of hammering a nail or digging a
-trench. \\
-CO-4 Vibration (formerly ``Integration'') & Universal Truth: Merging
-competing ethical systems into a higher, unified philosophy. & System
-Synthesis: Making two different software APIs talk to each other
-perfectly. & Emotional Union: The feeling of profound, shared intimacy
-with another person. & Tool Assembly: Putting the engine block into the
-chassis of the car. \\
-CO-5 Female (formerly ``Empathy'') & Ethical Resonance: Dedicating
-oneself to the alleviation of universal suffering. & Social Model:
-Building a psychological profile to understand how a user thinks. & Deep
-Feeling: Sitting in silence and crying with a grieving friend. &
-Physical Support: Giving someone a hug, or carrying a heavy box for
-them. \\
-CO-6 Male (formerly ``Critique'') & Moral Audit: Judging an action as a
-violation of a foundational ethic. & Error Detection: Finding a logical
-fallacy or a bug in the code. & Harsh Truth: Telling a friend their
-relationship is toxic, despite the emotional pain. & Quality Check: An
-inspector measuring a steel beam to ensure it meets safety standards. \\
-CO-7 Rhythm (formerly ``Momentum'') & Unwavering Faith: Pursuing a moral
-goal relentlessly for decades without stopping. & Iterative Logic: An AI
-running millions of Monte Carlo simulations overnight. & Emotional Flow:
-A musician lost in the ``zone,'' playing for hours without noticing
-time. & Physical Habit: An athlete running on a treadmill, one foot in
-front of the other. \\
-CO-8 Above/Cause (formerly ``Expansion'') & Moral Vision: Expanding the
-definition of ``who deserves rights'' (e.g., animal rights). &
-Brainstorming: Generating fifty completely different ideas for a
-marketing campaign. & Emotional Wide: Feeling overwhelming, chaotic awe
-while looking at the ocean. & Territory Growth: A corporation physically
-opening new offices in three countries. \\
-CO-9 Below/Effect (formerly ``Contraction'') & Ethical Focus:
-Prioritizing one specific moral duty above all others in a crisis. &
-Data Summary: Taking a 500-page report and distilling it into a 3-bullet
-executive summary. & Laser Weight: Fixating entirely on one specific,
-devastating insult someone said to you. & Precise Strike: A surgeon
-making a millimeter-precise incision with a scalpel. \\
+CO-0 Idea (formerly ``Identity'') & Ethical Idea: the moral content
+itself, before any stance is taken on it. ``The idea of a duty of
+care.'' & Conceptual Idea: the raw concept the system holds. ``The idea
+of a hospital.'' & Felt Idea: the content of a feeling, prior to any
+judgement of it. ``The idea of being tired.'' & Physical Idea: the
+concrete thing itself. ``This hand. This table.'' \\
+CO-1 Mind (formerly ``Differentiation'') & Principled Awareness: holding
+a commitment in awareness while deciding. ``I am aware this touches our
+code of conduct.'' & Analytical Awareness: attention on the problem ---
+taking in, holding, and putting out the data. & Felt Awareness: noticing
+that a reaction is occurring at all. & Bodily Awareness: attention on
+what the body is doing right now. \\
+CO-2 Positive (formerly ``Abstractification'') & Principled Attraction:
+being drawn toward a value. ``Fairness pulls at me.'' & Explanatory
+Attraction: the hypothesis the mind wants to be true. The account that
+appeals. & Liking: the felt pull toward. ``This speaks to me.'' &
+Approach: moving toward. Reaching for the thing wanted. \\
+CO-3 Negative (formerly ``Concretization'') & Principled Aversion:
+recoiling from a violation. ``I will not be part of that.'' &
+Explanatory Aversion: a framing the mind will not accept. Rejecting the
+premise outright. & Disliking: the felt push away. ``This rubs me the
+wrong way.'' & Avoidance: withdrawing. Putting the thing down and
+stepping back. \\
+CO-4 Vibration (formerly ``Integration'') & Moral Impact: how deeply a
+principle lands. Some duties barely register; others reorder a life. &
+Explanatory Force: whether an argument changes the model or bounces off
+it. & Emotional Intensity: how hard the feeling hits. ``That struck a
+chord.'' & Physical Impression: how much a sensation registers in the
+body. \\
+CO-5 Female (formerly ``Empathy'') & Formed Conscience: the accumulated
+principles a person is composed of. Moral formation. & Accumulated
+Expertise: the training corpus and experience a competence is made of. &
+Emotional History: the absorbed felt experience that shapes how one
+reacts now. & Embodied Habit: what the body has taken in. Muscle memory,
+posture, learned skill. \\
+CO-6 Male (formerly ``Critique'') & Unpacking a Principle: showing which
+sub-commitments a stated value contains. & Decomposition: breaking a
+system into its constituent Ideas. Finding the bug by taking it apart. &
+Unpacking a Feeling: separating ``I feel bad'' into what it is actually
+composed of. & Taking Apart: disassembling the object to see what it is
+made from. \\
+CO-7 Rhythm (formerly ``Momentum'') & Moral Practice: the repetition by
+which a value becomes second nature. & Drill: repeated exposure that
+conditions the system. Training loops, spaced review. & Emotional
+Cadence: the recurring rhythm of a mood. Anniversaries, seasons, cycles.
+& Physical Routine: the schedule the body is entrained to. Sleep,
+training, repetition. \\
+CO-8 Above/Cause (formerly ``Expansion'') & Principled Trigger: a case
+that brings a duty to mind. ``That reminded me why we have this rule.''
+& Associative Prompt: one concept surfacing another. The cue that starts
+a retrieval. & Emotional Trigger: the thing that brings the feeling up.
+A smell, a date, a name. & Physical Cue: the object or place that sets
+the sequence off. \\
+CO-9 Below/Effect (formerly ``Contraction'') & The Duty That Surfaces:
+the obligation that arrives once something has triggered it. & The
+Retrieved Concept: the idea that arrives. ``It just clicked.'' & The
+Feeling That Arrives: the emotion that lands, unbidden. & The Action
+That Lands: the movement the cue produces. \\
 \end{longtable}
 }
 
@@ -21123,7 +21147,7 @@ loosest):
 \begin{minipage}[b]{\linewidth}\raggedleft
 Rank
 \end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-Operator
+Operators
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
 Meaning
 \end{minipage} \\
@@ -21132,17 +21156,26 @@ Meaning
 \bottomrule\noalign{}
 \endlastfoot
 1 & \texttt{(\ ...\ )} & Parentheses (explicit grouping) \\
-2 & \texttt{×} or
-`\texttt{\textbar{}\ Composition\ /\ Product\ \textbar{}\ \textbar{}\ 3\ \textbar{}}÷\texttt{or}/\texttt{\textbar{}\ Modular\ decomposition\ /\ Difference\ \textbar{}\ \textbar{}\ 4\ \textbar{}}+\texttt{\textbar{}\ Co-presence\ /\ Union\ \textbar{}\ \textbar{}\ 5\ \textbar{}}-\texttt{\textbar{}\ Removal\ \textbar{}\ \textbar{}\ 6\ \textbar{}}-\textgreater{}\texttt{or}→\texttt{\textbar{}\ Dependency\ /\ Prerequisite\ sequence\ \textbar{}\ \textbar{}\ 7\ \textbar{}}\textless-\texttt{or}←\texttt{\textbar{}\ Results-from\ (inverse\ dependency)\ \textbar{}\ \textbar{}\ 8\ \textbar{}}\textless-\textgreater{}\texttt{or}↔\texttt{\textbar{}\ Bidirectional\ involution\ pair\ \textbar{}\ \textbar{}\ 9\ \textbar{}}\unimath{circ}`
-& Fractal composition (self-similar) \\
+2 & \texttt{×} \texttt{*} · \texttt{÷} \texttt{/} · \texttt{\unimath{circ}} &
+Composition / product, modular decomposition, fractal composition \\
+3 & \texttt{+} · \texttt{-} & Co-presence / union, removal \\
+4 & \texttt{-\textgreater{}} \texttt{→} · \texttt{\textless{}-}
+\texttt{←} · \texttt{\textless{}-\textgreater{}} \texttt{↔} &
+Dependency, results-from, bidirectional involution pair \\
 \end{longtable}
 }
 
+Operators sharing a rank are evaluated \textbf{left to right}. Note in
+particular that \texttt{\unimath{circ}} binds at the same strength as \texttt{×} and
+\texttt{÷}, so \texttt{a\ ×\ b\ \unimath{circ}\ c} groups as
+\texttt{(a\ ×\ b)\ \unimath{circ}\ c}.
+
 So the expression
-\texttt{abstraction\ \ integration\ -\textgreater{}\ judgment} parses as
-\texttt{(abstraction\ \ integration)\ -\textgreater{}\ judgment} rather
-than \texttt{abstraction\ \ (integration\ -\textgreater{}\ judgment)},
-because `\texttt{binds\ tighter\ than}-\textgreater`.
+\texttt{abstraction\ *\ integration\ -\textgreater{}\ judgment} parses
+as \texttt{(abstraction\ *\ integration)\ -\textgreater{}\ judgment}
+rather than
+\texttt{abstraction\ *\ (integration\ -\textgreater{}\ judgment)},
+because \texttt{*} binds tighter than \texttt{-\textgreater{}}.
 
 \section{Type System}\label{type-system}
 
@@ -21225,11 +21258,13 @@ Processing Domain\index{Processing Domain} letter (\texttt{"P"}, \texttt{"C"}, \
 label (e.g., \texttt{"C6"} for CO-6 in the Cognitive domain). \\
 \texttt{compose} &
 \texttt{(state{[}D{]},\ state{[}D{]})\ -\textgreater{}\ state{[}D{]}} &
-Alternative to the
-`\texttt{operator;\ composes\ two\ states\ in\ the\ same\ domain.\ \textbar{}\ \textbar{}}rpm\_of\texttt{\textbar{}}state{[}D{]}
--\textgreater{}
-rpm\texttt{\textbar{}\ Wraps\ a\ state\ in\ an\ RPM\ prerequisite-check,\ equivalent\ to}RPM(\ldots)\texttt{.\ \textbar{}\ \textbar{}}fractal\texttt{\textbar{}}(state{[}D{]},
-\ldots) -\textgreater{} fractal` \\
+Alternative to the \texttt{*} operator; composes two states in the same
+domain. \\
+\texttt{rpm\_of} & \texttt{state{[}D{]}\ -\textgreater{}\ rpm} & Wraps a
+state in an RPM prerequisite-check, equivalent to \texttt{RPM(...)}. \\
+\texttt{fractal} &
+\texttt{(state{[}D{]},\ ...)\ -\textgreater{}\ fractal} & Constructs a
+fractal from any number of state arguments. \\
 \end{longtable}
 }
 
@@ -21290,7 +21325,7 @@ Result
 \endlastfoot
 1 & \texttt{CO-3\^{}O\_\{F5\}} & \texttt{state{[}O{]}} & A single
 Operational state accepted by the parser and type checker. \\
-2 & \texttt{CO-2\^{}C\_\{F2\}\ \ CO-4\^{}C\_\{F4\}} &
+2 & \texttt{CO-2\^{}C\_\{F2\}\ *\ CO-4\^{}C\_\{F4\}} &
 \texttt{state{[}C{]}} & Composition of two Cognitive states, producing a
 new Cognitive state. \\
 3 & \texttt{CO-8\^{}C\ -\textgreater{}\ CO-9\^{}O} & \texttt{relation} &
@@ -21307,7 +21342,7 @@ evaluation. \\
 7 & \texttt{dominant\_operator(composed)} & \texttt{string} & Returns
 the dominant CO label of a previously bound composed state. \\
 8 & \texttt{compose(principle,\ resonance)} & \texttt{state{[}C{]}} &
-Builtin composition, equivalent to \texttt{principle\ \ resonance}. \\
+Builtin composition, equivalent to \texttt{principle\ *\ resonance}. \\
 9 & \texttt{let\ f:\ fractal\ =\ fractal(a,\ b,\ c);} & \texttt{fractal}
 & Typed binding of a fractal built from three state arguments. \\
 10 &
@@ -25030,11 +25065,11 @@ annotation on \texttt{\^{}8}); Chapter 15 Learning and Wisdom.
 principled transcendent attraction, and --- crucially --- the genuine
 generative integration \texttt{×} across disparate inputs.
 
-\texttt{Θ(Ω\_synthesis)\ =\ 3·\^{}6\^{}C\textbar{}A\ +\ 3·\^{}5\^{}C\textbar{}\unimath{langle}A,f\unimath{rangle}\ +\ 2·\^{}2\^{}P\textbar{}T\ +\ 2·(\^{}6\^{}C\textbar{}A\ ×\ \^{}2\^{}P\textbar{}T)\ →\ Ω\_synthesis}
+\texttt{Θ(Ω\_synthesis)\ =\ 3·\^{}6\^{}C\textbar{}A\ +\ 3·\^{}5\^{}C\textbar{}\unimath{langle}A,f\unimath{rangle}\ +\ 2·\^{}2\^{}P\textbar{}T\ +\ 2·(\^{}2\^{}P\textbar{}T\ ×\ \^{}6\^{}C\textbar{}A)\ →\ Ω\_synthesis}
 
 Synthesis is the recipe where a \texttt{×} integration appears inside
 the recipe structure rather than as the recipe's own emergent register.
-The \texttt{(\^{}6\^{}C\textbar{}A\ ×\ \^{}2\^{}P\textbar{}T)} term
+The \texttt{(\^{}2\^{}P\textbar{}T\ ×\ \^{}6\^{}C\textbar{}A)} term
 denotes the integrative operation by which decomposition and
 transcendent attraction cross-integrate to produce
 pattern-recognition-across-domains. This is genuine \texttt{×} usage per

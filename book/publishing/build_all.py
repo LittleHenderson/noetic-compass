@@ -29,11 +29,23 @@ PANDOC = ["-t", "latex", "--top-level-division=chapter",
           "-f", "markdown-superscript-subscript", "--syntax-highlighting=none"]
 
 
-def run(cmd, cwd, quiet=True):
+def run(cmd, cwd, quiet=True, must_succeed=False):
     r = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True,
                        encoding="utf-8", errors="replace")
     if r.returncode != 0 and not quiet:
         print(r.stdout[-1500:])
+    if r.returncode != 0 and must_succeed:
+        # An assemble or postprocess step that dies leaves the PREVIOUS
+        # intermediate on disk, and every later stage happily consumes it. The
+        # build then reports a page count and a clean glyph check for a book
+        # that does not contain the edits just made. This has happened; do not
+        # let it happen quietly.
+        raise SystemExit(
+            f"build_all: {' '.join(str(c) for c in cmd)} exited "
+            f"{r.returncode} — refusing to build from a stale intermediate.\n"
+            f"--- stdout ---\n{r.stdout[-2000:]}\n"
+            f"--- stderr ---\n{r.stderr[-2000:]}"
+        )
     return r
 
 
@@ -78,19 +90,20 @@ def build(key):
     print(f"=== {key} ===")
 
     for cmd in cfg["assemble"]:
-        run(cmd, d, quiet=False)
+        run(cmd, d, quiet=False, must_succeed=True)
     # tks patches its own preamble inside build_book.py; run it for the styles
     if key == "tks":
         run([sys.executable, "-c",
-             "import build_book; build_book.patch_preamble()"], d)
+             "import build_book; build_book.patch_preamble()"], d,
+            must_succeed=True)
 
     for src, dst in cfg["pandoc"]:
-        run(["pandoc", src, "-o", dst] + PANDOC, d, quiet=False)
+        run(["pandoc", src, "-o", dst] + PANDOC, d, quiet=False, must_succeed=True)
     for cmd in cfg["post"]:
-        run(cmd, d)
+        run(cmd, d, must_succeed=True)
 
     # index marks -- must be after pandoc, before the first xelatex
-    run([sys.executable, str(HERE / "build_indexes.py")], HERE)
+    run([sys.executable, str(HERE / "build_indexes.py")], HERE, must_succeed=True)
 
     tex = [cfg["master"]]
     out = ["-output-directory=" + cfg["outdir"]] if cfg["outdir"] else []

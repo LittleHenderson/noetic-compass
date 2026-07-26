@@ -320,6 +320,29 @@ def main() -> None:
     # Result is a silently dropped glyph in the Noetic definitions list.
     # Everywhere else the book sets notation in mono, which has the glyph, so
     # match that convention here: `**`^0` (CO-0): Idea**`.
+    # --- empty inline code spans ------------------------------------------
+    # The product operator was once stripped from six code spans, leaving
+    # `` in print: two state literals separated by a space and no operator,
+    # in a table whose next column asserted a result. Nothing downstream
+    # noticed. Fail the build instead.
+    # Split on backticks and inspect the SPAN CONTENTS (the odd-indexed
+    # segments). Searching for "` `" instead would fire on every pair of
+    # adjacent spans -- `CO-6` `^6` -- which is legal and common here.
+    empty = []
+    for ln in body.splitlines():
+        if ln.lstrip().startswith("```"):
+            continue
+        parts = ln.split("`")
+        if len(parts) % 2 == 0:        # unbalanced; not our business
+            continue
+        if any(seg.strip() == "" for seg in parts[1::2]):
+            empty.append(ln)
+    if empty:
+        raise SystemExit(
+            "preprocess: %d empty inline code span(s) — an operator glyph has "
+            "been stripped. First: %s" % (len(empty), empty[0].strip()[:110])
+        )
+
     body, n_carets = re.subn(
         r"\*\*\^(\d)( \(CO-\d\):)", r"**`^\1`\2", body
     )

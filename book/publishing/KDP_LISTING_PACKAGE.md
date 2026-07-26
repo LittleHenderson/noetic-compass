@@ -95,11 +95,11 @@ The framework anchor and the commercially larger title.
 | **Title** | Thinking in Cognitive Architecture |
 | **Subtitle** | A Universal Framework for Humans, AI, and Biological Minds |
 | **Author** | Little Henderson |
-| **Pages** | 796 (6×9, B&W, white) |
-| **Est. printing cost** | $0.85 + (796 × $0.012) = **$10.40** |
-| **KDP minimum list** | $10.40 ÷ 0.60 = **$17.34** |
+| **Pages** | 798 (6×9, B&W, white) |
+| **Est. printing cost** | $0.85 + (798 × $0.012) = **$10.43** |
+| **KDP minimum list** | $10.43 ÷ 0.60 = **$17.38** |
 | **Recommended list** | **$39.99** paperback · **$9.99** Kindle |
-| **Est. royalty** | (0.60 × $39.99) − $10.40 = **$13.59**/copy paperback; **$6.99**/copy Kindle |
+| **Est. royalty** | (0.60 × $39.99) − $10.43 = **$13.57**/copy paperback; **$6.99**/copy Kindle |
 | ⚠️ **Hardcover** | **Not available.** KDP's hardcover ceiling is ~550 pages. |
 
 **Keywords:**

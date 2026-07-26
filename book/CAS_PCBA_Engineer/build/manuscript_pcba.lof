@@ -34,15 +34,12 @@
 \addvspace {10pt}
 \contentsline {figure}{\numberline {21.1}{\ignorespaces Cognitive Memory Board write and read paths, from encoder through address decoder to recalled output.}}{395}{figure.21.1}%
 \addvspace {10pt}
-\contentsline {figure}{\numberline {22.1}{\ignorespaces Cognitive Power Management Board reference topology. Drive energy is regulated, limited, sequenced, and thermally managed per domain.}}{416}{figure.22.1}%
+\contentsline {figure}{\numberline {22.1}{\ignorespaces Cognitive Power Management Board reference topology. Drive energy is regulated, limited, sequenced, and thermally managed per domain.}}{420}{figure.22.1}%
 \addvspace {10pt}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {24.1}{\ignorespaces The walk-down. Probe the test points in order and stop at the first reading that departs from specification --- that stage is the fault.}}{462}{figure.24.1}%
+\contentsline {figure}{\numberline {24.1}{\ignorespaces The walk-down. Probe the test points in order and stop at the first reading that departs from specification --- that stage is the fault.}}{466}{figure.24.1}%
 \addvspace {10pt}
-\contentsline {figure}{\numberline {25.1}{\ignorespaces The deployment ladder: five stages from simulation to full enforcement, each granting the board more authority.}}{479}{figure.25.1}%
-\addvspace {10pt}
-\addvspace {10pt}
-\addvspace {10pt}
+\contentsline {figure}{\numberline {25.1}{\ignorespaces The deployment ladder: five stages from simulation to full enforcement, each granting the board more authority.}}{483}{figure.25.1}%
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
@@ -50,4 +47,7 @@
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {I.1}{\ignorespaces The three CAS-Ohm modes. One equation, three uses, selected by which term you do not already know.}}{705}{figure.I.1}%
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\contentsline {figure}{\numberline {I.1}{\ignorespaces The three CAS-Ohm modes. One equation, three uses, selected by which term you do not already know.}}{713}{figure.I.1}%
