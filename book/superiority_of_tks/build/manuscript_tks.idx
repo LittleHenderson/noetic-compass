@@ -10,7 +10,8 @@
 \indexentry{4 Worlds|hyperpage}{2}
 \indexentry{10 Noetics|hyperpage}{2}
 \indexentry{40 Elements|hyperpage}{2}
-\indexentry{7 Foundations|hyperpage}{2}
+\indexentry{28 Foundations|hyperpage}{2}
+\indexentry{Prerequisite|hyperpage}{2}
 \indexentry{Prerequisite|hyperpage}{3}
 \indexentry{Face Cards|hyperpage}{3}
 \indexentry{ACBE|hyperpage}{3}
@@ -87,7 +88,6 @@
 \indexentry{Wisdom Cycle|hyperpage}{28}
 \indexentry{Power Cycle|hyperpage}{28}
 \indexentry{Resources|hyperpage}{28}
-\indexentry{Prerequisite|hyperpage}{28}
 \indexentry{Prerequisite|hyperpage}{28}
 \indexentry{10 Noetics|hyperpage}{29}
 \indexentry{4 Worlds|hyperpage}{29}
@@ -249,6 +249,7 @@
 \indexentry{7 Foundations|hyperpage}{252}
 \indexentry{28 Foundations|hyperpage}{253}
 \indexentry{7 Foundations|hyperpage}{253}
+\indexentry{7 Foundations|hyperpage}{253}
 \indexentry{28 Foundations|hyperpage}{253}
 \indexentry{28 Foundations|hyperpage}{253}
 \indexentry{Number|hyperpage}{253}
@@ -260,7 +261,6 @@
 \indexentry{Integration|hyperpage}{273}
 \indexentry{Integration|hyperpage}{274}
 \indexentry{Integration|hyperpage}{274}
-\indexentry{28 Foundations|hyperpage}{275}
 \indexentry{28 Foundations|hyperpage}{275}
 \indexentry{Resources|hyperpage}{279}
 \indexentry{Integration|hyperpage}{279}
@@ -410,133 +410,118 @@
 \indexentry{Confirmation|hyperpage}{442}
 \indexentry{Confirmation|hyperpage}{452}
 \indexentry{TKS Analysis|hyperpage}{452}
-\indexentry{Notation Format|hyperpage}{453}
-\indexentry{Notation Format|hyperpage}{454}
-\indexentry{Notation Format|hyperpage}{454}
-\indexentry{Synthesis|hyperpage}{459}
-\indexentry{Number|hyperpage}{460}
-\indexentry{Number|hyperpage}{461}
-\indexentry{ACBE|hyperpage}{491}
-\indexentry{ACBE|hyperpage}{491}
-\indexentry{ACBE|hyperpage}{492}
-\indexentry{ACBE|hyperpage}{492}
-\indexentry{What's Actually Happening|hyperpage}{492}
-\indexentry{What's Actually Happening|hyperpage}{494}
-\indexentry{MVR Protocol|hyperpage}{494}
-\indexentry{FM Protocol|hyperpage}{494}
-\indexentry{ACBE|hyperpage}{495}
-\indexentry{What's Actually Happening|hyperpage}{495}
-\indexentry{What's Actually Happening|hyperpage}{496}
-\indexentry{What's Actually Happening|hyperpage}{497}
-\indexentry{What's Actually Happening|hyperpage}{497}
-\indexentry{What's Actually Happening|hyperpage}{498}
-\indexentry{What's Actually Happening|hyperpage}{499}
-\indexentry{Days 8-14|hyperpage}{500}
-\indexentry{Days 15-21|hyperpage}{500}
-\indexentry{Desire Cycle|hyperpage}{512}
-\indexentry{Wisdom Cycle|hyperpage}{512}
-\indexentry{Power Cycle|hyperpage}{512}
-\indexentry{King of Clubs|hyperpage}{525}
-\indexentry{King of Spades|hyperpage}{526}
-\indexentry{King of Diamonds|hyperpage}{528}
-\indexentry{Queen of Diamonds|hyperpage}{529}
-\indexentry{Queen of Hearts|hyperpage}{531}
-\indexentry{Queen of Spades|hyperpage}{532}
-\indexentry{Jack of Diamonds|hyperpage}{534}
-\indexentry{Jack of Hearts|hyperpage}{536}
-\indexentry{Dark Night Protocol|hyperpage}{542}
-\indexentry{Confirmation|hyperpage}{548}
-\indexentry{Confirmation|hyperpage}{549}
-\indexentry{First Wave|hyperpage}{550}
-\indexentry{Gnosis|hyperpage}{550}
-\indexentry{Second Wave|hyperpage}{550}
-\indexentry{Third Wave|hyperpage}{551}
-\indexentry{Planetary Hours|hyperpage}{552}
-\indexentry{Resistance Factor|hyperpage}{554}
-\indexentry{Resistance Factor|hyperpage}{555}
-\indexentry{Resistance Factor|hyperpage}{555}
-\indexentry{Resistance Factor|hyperpage}{555}
-\indexentry{Resistance Factor|hyperpage}{555}
-\indexentry{Why This Matters|hyperpage}{569}
-\indexentry{FM Protocol|hyperpage}{577}
-\indexentry{Living Masters|hyperpage}{577}
-\indexentry{Hierarchy|hyperpage}{577}
-\indexentry{FM Protocol|hyperpage}{578}
-\indexentry{Written Doctrine|hyperpage}{578}
-\indexentry{Foundation 6|hyperpage}{585}
-\indexentry{Beast|hyperpage}{590}
-\indexentry{Case Study|hyperpage}{591}
-\indexentry{Beast|hyperpage}{593}
-\indexentry{Beast|hyperpage}{596}
-\indexentry{Beast|hyperpage}{603}
-\indexentry{Foundation 4|hyperpage}{608}
-\indexentry{Equation Type 1|hyperpage}{622}
-\indexentry{Equation Type 2|hyperpage}{622}
-\indexentry{Equation Type 2|hyperpage}{624}
-\indexentry{Beast|hyperpage}{625}
-\indexentry{Foundation 3|hyperpage}{628}
-\indexentry{Beast|hyperpage}{644}
-\indexentry{Foundation 6|hyperpage}{665}
-\indexentry{Foundation 2|hyperpage}{666}
-\indexentry{Equation Type 1|hyperpage}{677}
-\indexentry{Equation Type 3|hyperpage}{678}
-\indexentry{Control 1|hyperpage}{686}
-\indexentry{Control 2|hyperpage}{686}
-\indexentry{Control 3|hyperpage}{686}
-\indexentry{Doctrine|hyperpage}{686}
+\indexentry{Notation Format|hyperpage}{455}
+\indexentry{Notation Format|hyperpage}{456}
+\indexentry{Notation Format|hyperpage}{456}
+\indexentry{Synthesis|hyperpage}{461}
+\indexentry{Number|hyperpage}{462}
+\indexentry{Number|hyperpage}{463}
+\indexentry{ACBE|hyperpage}{493}
+\indexentry{King of Clubs|hyperpage}{517}
+\indexentry{King of Spades|hyperpage}{518}
+\indexentry{King of Diamonds|hyperpage}{520}
+\indexentry{Queen of Diamonds|hyperpage}{521}
+\indexentry{Queen of Hearts|hyperpage}{523}
+\indexentry{Queen of Spades|hyperpage}{524}
+\indexentry{Jack of Diamonds|hyperpage}{526}
+\indexentry{Jack of Hearts|hyperpage}{528}
+\indexentry{Dark Night Protocol|hyperpage}{534}
+\indexentry{Confirmation|hyperpage}{540}
+\indexentry{Confirmation|hyperpage}{541}
+\indexentry{First Wave|hyperpage}{542}
+\indexentry{Gnosis|hyperpage}{542}
+\indexentry{Second Wave|hyperpage}{542}
+\indexentry{Third Wave|hyperpage}{543}
+\indexentry{Planetary Hours|hyperpage}{544}
+\indexentry{Resistance Factor|hyperpage}{546}
+\indexentry{Resistance Factor|hyperpage}{547}
+\indexentry{Resistance Factor|hyperpage}{547}
+\indexentry{Resistance Factor|hyperpage}{547}
+\indexentry{Resistance Factor|hyperpage}{547}
+\indexentry{ACBE|hyperpage}{553}
+\indexentry{Why This Matters|hyperpage}{561}
+\indexentry{ACBE|hyperpage}{562}
+\indexentry{ACBE|hyperpage}{562}
+\indexentry{ACBE|hyperpage}{563}
+\indexentry{FM Protocol|hyperpage}{569}
+\indexentry{Living Masters|hyperpage}{569}
+\indexentry{Hierarchy|hyperpage}{569}
+\indexentry{FM Protocol|hyperpage}{570}
+\indexentry{Written Doctrine|hyperpage}{570}
+\indexentry{Foundation 6|hyperpage}{581}
+\indexentry{Beast|hyperpage}{586}
+\indexentry{Case Study|hyperpage}{587}
+\indexentry{Beast|hyperpage}{589}
+\indexentry{Beast|hyperpage}{592}
+\indexentry{Beast|hyperpage}{599}
+\indexentry{Foundation 4|hyperpage}{604}
+\indexentry{Equation Type 1|hyperpage}{618}
+\indexentry{Equation Type 2|hyperpage}{618}
+\indexentry{Equation Type 2|hyperpage}{620}
+\indexentry{Beast|hyperpage}{621}
+\indexentry{Foundation 3|hyperpage}{624}
+\indexentry{Beast|hyperpage}{640}
+\indexentry{Foundation 6|hyperpage}{661}
+\indexentry{Foundation 2|hyperpage}{662}
+\indexentry{Equation Type 1|hyperpage}{673}
+\indexentry{Equation Type 3|hyperpage}{674}
+\indexentry{Control 1|hyperpage}{684}
+\indexentry{Control 2|hyperpage}{684}
+\indexentry{Control 3|hyperpage}{684}
+\indexentry{Doctrine|hyperpage}{684}
+\indexentry{Hierarchy|hyperpage}{684}
+\indexentry{Hierarchy|hyperpage}{684}
+\indexentry{Doctrine|hyperpage}{684}
+\indexentry{Doctrine|hyperpage}{684}
+\indexentry{Doctrine|hyperpage}{684}
+\indexentry{Doctrine|hyperpage}{684}
+\indexentry{Doctrine|hyperpage}{685}
+\indexentry{Emotional Charging|hyperpage}{685}
+\indexentry{Emotional Charging|hyperpage}{685}
+\indexentry{Doctrine|hyperpage}{685}
 \indexentry{Hierarchy|hyperpage}{686}
 \indexentry{Hierarchy|hyperpage}{686}
-\indexentry{Doctrine|hyperpage}{686}
-\indexentry{Doctrine|hyperpage}{686}
-\indexentry{Doctrine|hyperpage}{686}
-\indexentry{Doctrine|hyperpage}{686}
-\indexentry{Doctrine|hyperpage}{687}
-\indexentry{Emotional Charging|hyperpage}{687}
-\indexentry{Emotional Charging|hyperpage}{687}
-\indexentry{Doctrine|hyperpage}{687}
-\indexentry{Hierarchy|hyperpage}{688}
-\indexentry{Hierarchy|hyperpage}{688}
-\indexentry{Hierarchy|hyperpage}{688}
-\indexentry{Hierarchy|hyperpage}{689}
-\indexentry{Price of Transformation|hyperpage}{697}
-\indexentry{Hermit's Path|hyperpage}{701}
-\indexentry{Synthesis|hyperpage}{704}
+\indexentry{Hierarchy|hyperpage}{686}
+\indexentry{Hierarchy|hyperpage}{687}
+\indexentry{Price of Transformation|hyperpage}{695}
+\indexentry{Hermit's Path|hyperpage}{699}
+\indexentry{Synthesis|hyperpage}{702}
+\indexentry{Gnosis|hyperpage}{719}
 \indexentry{Gnosis|hyperpage}{721}
-\indexentry{Gnosis|hyperpage}{723}
-\indexentry{Desire Tree|hyperpage}{731}
-\indexentry{Power Cycle|hyperpage}{733}
-\indexentry{Power Cycle|hyperpage}{733}
-\indexentry{Wisdom Cycle|hyperpage}{736}
-\indexentry{Wisdom Cycle|hyperpage}{739}
-\indexentry{Power Cycle|hyperpage}{739}
-\indexentry{Eastern Philosophies vs.~TKS|hyperpage}{739}
-\indexentry{Power Cycle|hyperpage}{740}
-\indexentry{Western Magic/Occultism vs.~TKS|hyperpage}{740}
-\indexentry{Wisdom Cycle|hyperpage}{741}
-\indexentry{Psychology/Cognitive Science vs.~TKS|hyperpage}{742}
-\indexentry{Tree of Life|hyperpage}{745}
-\indexentry{Foundation 1|hyperpage}{745}
-\indexentry{Foundation 1|hyperpage}{749}
-\indexentry{Foundation 2|hyperpage}{750}
-\indexentry{Foundation 3|hyperpage}{750}
-\indexentry{Foundation 4|hyperpage}{750}
-\indexentry{Foundation 6|hyperpage}{751}
-\indexentry{Foundation 7|hyperpage}{751}
-\indexentry{World Router|hyperpage}{759}
-\indexentry{Feedback Loop|hyperpage}{760}
-\indexentry{Quick Reference|hyperpage}{769}
-\indexentry{King of Clubs|hyperpage}{773}
-\indexentry{King of Spades|hyperpage}{773}
-\indexentry{King of Diamonds|hyperpage}{773}
-\indexentry{Queen of Diamonds|hyperpage}{773}
-\indexentry{Queen of Spades|hyperpage}{773}
-\indexentry{Jack of Hearts|hyperpage}{773}
-\indexentry{Mark|hyperpage}{781}
-\indexentry{Number|hyperpage}{781}
-\indexentry{FM Protocol|hyperpage}{781}
-\indexentry{Gnosis|hyperpage}{782}
+\indexentry{Desire Tree|hyperpage}{729}
+\indexentry{Power Cycle|hyperpage}{731}
+\indexentry{Power Cycle|hyperpage}{731}
+\indexentry{Wisdom Cycle|hyperpage}{735}
+\indexentry{Wisdom Cycle|hyperpage}{737}
+\indexentry{Power Cycle|hyperpage}{737}
+\indexentry{Eastern Philosophies vs.~TKS|hyperpage}{737}
+\indexentry{Power Cycle|hyperpage}{738}
+\indexentry{Western Magic/Occultism vs.~TKS|hyperpage}{739}
+\indexentry{Wisdom Cycle|hyperpage}{740}
+\indexentry{Psychology/Cognitive Science vs.~TKS|hyperpage}{740}
+\indexentry{Tree of Life|hyperpage}{743}
+\indexentry{Foundation 1|hyperpage}{744}
+\indexentry{Foundation 1|hyperpage}{748}
+\indexentry{Foundation 2|hyperpage}{748}
+\indexentry{Foundation 3|hyperpage}{748}
+\indexentry{Foundation 4|hyperpage}{748}
+\indexentry{Foundation 6|hyperpage}{749}
+\indexentry{Foundation 7|hyperpage}{749}
+\indexentry{World Router|hyperpage}{758}
+\indexentry{Feedback Loop|hyperpage}{758}
+\indexentry{Quick Reference|hyperpage}{771}
+\indexentry{King of Clubs|hyperpage}{775}
+\indexentry{King of Spades|hyperpage}{775}
+\indexentry{King of Diamonds|hyperpage}{775}
+\indexentry{Queen of Diamonds|hyperpage}{775}
+\indexentry{Queen of Spades|hyperpage}{775}
+\indexentry{Jack of Hearts|hyperpage}{775}
 \indexentry{Mark|hyperpage}{782}
-\indexentry{MVR Protocol|hyperpage}{782}
 \indexentry{Number|hyperpage}{782}
+\indexentry{FM Protocol|hyperpage}{782}
+\indexentry{Gnosis|hyperpage}{782}
+\indexentry{Mark|hyperpage}{783}
+\indexentry{MVR Protocol|hyperpage}{783}
+\indexentry{Number|hyperpage}{783}
 \indexentry{TOOTRA|hyperpage}{783}
-\indexentry{TOOTRA|hyperpage}{783}
+\indexentry{TOOTRA|hyperpage}{785}

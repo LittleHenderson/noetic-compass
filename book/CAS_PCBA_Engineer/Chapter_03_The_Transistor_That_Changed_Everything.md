@@ -61,7 +61,7 @@ In CAS, a cognitive transition has three terminals that map one-to-one onto the 
 - **Base → Bias (B).** The control terminal. In a transistor, the base current sets the gain. In a mind, the bias is the **accumulated substrate** against which the cause is processed — and that substrate is canonically **`^5` Female**: the Ideas a Mind is composed of, the sum of accumulated experience. For an AI system, the `^5` substrate is the training data and fine-tuning corpus. In our circuits, this terminal also carries the engineering controls layered on top of that substrate: the constitution, the **Dial** settings, the Drive configuration. The bias is *who is doing the processing.* Change the bias and the same cause produces a different effect — exactly as moving the valve handle changes the flow for the same incoming pressure.
 - **Emitter → Effect (E).** The Idea produced. The output signal. Canonically an **`^9` Below/Effect** state: the Idea brought to Mind by the Above/Cause trigger. `^9` is the landing — the thought that comes out the other side.
 
-This is the table from the Style Guide, and it is worth tattooing somewhere visible:
+This is the table reproduced on the quick-reference card in Appendix A, and it is worth tattooing somewhere visible:
 
 | Terminal | Transistor part | CAS analog |
 |---|---|---|

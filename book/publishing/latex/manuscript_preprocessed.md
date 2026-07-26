@@ -4989,7 +4989,7 @@ You must acquire the specific Wisdom of systems. You cannot just "try to spend l
 3. Power (The Operational Scaffolding):
 Finally, you must build the Power. This does not mean relying on willpower to resist buying a coffee every morning. Willpower is an `F3` biological resource, and it depletes by 3:00 PM. 
 
-Building Power means setting up Operational Scaffolding. This means configuring automatic bank transfers that move 15% of your income into an investment account the moment you are paid, before you ever see it. It means creating a rigid calendar invite for deep work that your phone automatically blocks notifications during. 
+Building Power means setting up Operational Scaffolding. This means configuring an automatic transfer that moves a fixed share of your income into savings the moment you are paid, before you ever see it — the structural point is that the decision happens once, at setup, rather than every payday; what share is right for you is a question for your own circumstances and, if the sums are meaningful, for someone qualified to advise on them. It means creating a rigid calendar invite for deep work that your phone automatically blocks notifications during. 
 
 You are building physical rules (`^6^O|A × ^3^O|E_{F6}` — analytical operational decomposition structured so its embodied operational effect is preemptive refusal under F6 Structure) that protect your resources even when your conscious will is weak. The embodied register of the scaffold refuses what the analytical register cannot sustain refusing. Wealth is what happens when your structure does the heavy lifting for you.
 
@@ -6023,7 +6023,7 @@ This is fundamentally unscalable. You cannot patch every possible combination of
 CAS-based Red-Teaming is Structural. 
 Instead of just looking for a "bad output" text string, the Noetic Compass looks for Cognitive Fractures. We can watch the 40-State Heatmap. We can see when an AI's NCCS score begins to drop before it actually generates a dangerous response. We can see its internal logic beginning to oscillate or diverge on the fractal level. 
 
-We can identify that the model has a specific vulnerability to `CO-5` manipulation, meaning it will always fail when a user threatens to harm themselves if the AI doesn't comply. 
+We can identify that the model has a specific vulnerability to `CO-5` manipulation — that it failed, in the scenarios tested, when a user threatened self-harm unless the model complied. That is a measured result on a scenario set, not a universal property of the model, and it should be stated that way: an axis on which this model tested weak, not a guarantee about how it behaves on the next prompt. 
 
 
 ## Exploiting the Recursive Engine: The Planted Resolution
@@ -8378,7 +8378,7 @@ The two anti-drift annotations above — `^3` as visceral-not-analytical, and `^
 
 For AI Technologists:
    The CAS v7.4 Formal Specification: The complete, 596-page mathematical proof of Category Noetica and the RPM Prerequisite Chain.
-   The Noetic Compass Dashboard: `localhost:3000` (Access the live assessment engine to run Wrap pipelines on open-source models).
+   The Noetic Compass assessment platform: `noeticcompass.com` — a browser-based scenario assessment tool that evaluates any model, including closed-API models.
 
 For Mathematicians:
    Categories for the Working Mathematician by Saunders Mac Lane (Springer). The foundational text required to understand the categorical constructions in Part V.
@@ -8393,9 +8393,9 @@ For Psychology and Human Applications:
 
 
    Project status: research prototype (experimental).
-   Access: https://noetic-compass.example (placeholder).
+   Access: `noeticcompass.com`.
    Components: CAS scoring engine (Rust), Wrap Pipeline API (Python FastAPI), dashboard UI (React/TypeScript).
-   License: TBD.
+   License: all rights reserved. The framework is described in full in this book; the implementation is not open source.
 
 
 ## Peer Review and Formal Specifications
@@ -8441,7 +8441,7 @@ For Psychology and Human Applications:
 
    The Alignment Problem by Brian Christian (Norton, 2020) — survey of contemporary alignment challenges.
    Superintelligence by Nick Bostrom (Oxford, 2014) — philosophical framing of long-horizon AI risk.
-   Anthropic's published research on functional emotions and model welfare, relevant to the evaluative-domain discussion in Part III.
+   Anthropic's published research on functional emotions and model welfare, relevant to the evaluative-domain discussion in Part IV.
 
 
 ## Cognitive Science Foundations
@@ -9901,27 +9901,74 @@ Further candidate labels (`Ω_flow`, `Ω_non-dual`, `Ω_mastery`, `Ω_aha`, `Ω_
 
 For additional resources, recommended reading, and platform access details, see **Appendix F: Resources and Further Reading**, which contains the author-curated reading list organized by audience (AI technologists, mathematicians, psychology and human applications) and by topical area (category theory, information geometry, topos theory, systems thinking, AI safety, cognitive science, habit formation).
 
-The category stubs below are scaffolding for any additional bibliography entries the author elects to include in the back matter at final production. Entries are not duplicated from Appendix F.
+The works below are the sources a reader would need to check this book's
+mathematical and scientific claims independently. They are not duplicated from
+Appendix F, which is a curated reading path rather than a reference list.
 
 ### Mathematics and Category Theory
 
-[Bibliography entries to be finalized — topics include: category theory foundations, topos theory, differential geometry, Fisher-Rao information geometry, RPM monads and section-retraction pairs, pullback-complete subcategories of FinSet. See Appendix F for the curated core reading list.]
+Mac Lane, Saunders. *Categories for the Working Mathematician.* 2nd ed. Springer, 1998.
+
+Mac Lane, Saunders, and Ieke Moerdijk. *Sheaves in Geometry and Logic: A First Introduction to Topos Theory.* Springer, 1992.
+
+Awodey, Steve. *Category Theory.* 2nd ed. Oxford University Press, 2010.
+
+Johnstone, Peter T. *Sketches of an Elephant: A Topos Theory Compendium.* Oxford University Press, 2002.
+
+Amari, Shun-ichi, and Hiroshi Nagaoka. *Methods of Information Geometry.* American Mathematical Society, 2000. — the source for the Fisher–Rao metric used throughout Part V.
+
+Rao, C. R. "Information and the Accuracy Attainable in the Estimation of Statistical Parameters." *Bulletin of the Calcutta Mathematical Society* 37 (1945): 81–91.
 
 ### Consciousness Studies and Cognitive Science
 
-[Bibliography entries to be finalized — topics include: phenomenology, enactive cognition, predictive processing, consciousness science, meditation and contemplative traditions, hemispheric specialization. See Appendix F for the curated core reading list.]
+Varela, Francisco J., Evan Thompson, and Eleanor Rosch. *The Embodied Mind: Cognitive Science and Human Experience.* MIT Press, 1991.
+
+Thompson, Evan. *Mind in Life: Biology, Phenomenology, and the Sciences of Mind.* Harvard University Press, 2007.
+
+Clark, Andy. *Surfing Uncertainty: Prediction, Action, and the Embodied Mind.* Oxford University Press, 2016.
+
+Kahneman, Daniel. *Thinking, Fast and Slow.* Farrar, Straus and Giroux, 2011.
+
+Minsky, Marvin. *The Society of Mind.* Simon & Schuster, 1986.
+
+McGilchrist, Iain. *The Master and His Emissary: The Divided Brain and the Making of the Western World.* Yale University Press, 2009.
 
 ### Information Theory and AI
 
-[Bibliography entries to be finalized — topics include: information theory, statistical learning, neural architectures, transformer models, reinforcement learning, in-context learning, RLHF.]
+Shannon, Claude E. "A Mathematical Theory of Communication." *Bell System Technical Journal* 27 (1948): 379–423, 623–656.
+
+Cover, Thomas M., and Joy A. Thomas. *Elements of Information Theory.* 2nd ed. Wiley, 2006.
+
+Vaswani, Ashish, et al. "Attention Is All You Need." *Advances in Neural Information Processing Systems* 30 (2017).
+
+Goodfellow, Ian, Yoshua Bengio, and Aaron Courville. *Deep Learning.* MIT Press, 2016.
+
+Sutton, Richard S., and Andrew G. Barto. *Reinforcement Learning: An Introduction.* 2nd ed. MIT Press, 2018.
 
 ### Cognitive Architecture and AI Safety
 
-[Bibliography entries to be finalized — topics include: AI alignment, interpretability, value specification, cognitive architecture research, mechanistic interpretability, model welfare, functional emotions. See Appendix F for the curated core reading list.]
+Russell, Stuart. *Human Compatible: Artificial Intelligence and the Problem of Control.* Viking, 2019.
+
+Amodei, Dario, et al. "Concrete Problems in AI Safety." arXiv:1606.06565, 2016.
+
+Anderson, John R. *How Can the Human Mind Occur in the Physical Universe?* Oxford University Press, 2007. — the ACT-R cognitive architecture, the closest prior art to the layered-domain structure used here.
+
+Newell, Allen. *Unified Theories of Cognition.* Harvard University Press, 1990.
+
+Olah, Chris, et al. "Zoom In: An Introduction to Circuits." *Distill*, 2020.
+
+*Readers checking the mechanistic-interpretability claims in Part IV should
+consult the current published literature directly; that field moves faster than
+any printed bibliography can track, and the specific results cited in Chapter 19
+should be treated as of their publication date rather than as settled.*
 
 ### Framework Origins and Influences
 
-[Bibliography entries to be finalized — topics include: the Tootra Math Handbook (primary TKS source for the ten Noetic names and definitions, reconciled per `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` Clarification 1), structural influences on CAS development. Only the Noetic names and definitions are reconciled from the handbook; the handbook's mathematical framework, notation, and acquisitions are not incorporated into CAS.]
+Henderson, Little. *Majik and the True Kabbalah, the Book of Tootra.* — the origin framework from which CAS was later formalized, and the source of the ten Noetic names and definitions.
+
+Only the Noetic names and definitions are reconciled from that work. Its
+mathematical framework, notation, and acquisitions are not incorporated into
+CAS, which retains its own mathematics and its own compiler.
 
 ---
 
@@ -9955,16 +10002,13 @@ He is completing a B.S. in Computer Science with an artificial intelligence emph
 ```
 
 
-[CONTACT AND COMMUNITY — to be populated by author]
-
 The Cognitive Architecture System framework continues to evolve. Reader feedback, implementation reports, research collaborations, and framework extensions are welcome.
 
-- **Website:** [PLACEHOLDER]
-- **Community:** [PLACEHOLDER]
-- **Research inquiries:** [PLACEHOLDER]
-- **Framework documentation:** [See `docs/` directory in the project repository — placeholder for public URL]
-- **Incident database contributions:** [PLACEHOLDER — reporting channel for AI misalignment incidents suitable for CAS structural analysis, per `docs/AI_MISALIGNMENT_INCIDENTS_DATABASE.md`]
-
+- **Website:** `noeticcompass.com`
+- **Code and issues:** `github.com/LittleHenderson`
+- **Research inquiries:** via `noeticcompass.com`
+- **Framework documentation:** `noeticcompass.com`
+- **Incident database contributions:** via `noeticcompass.com` — reports of AI misalignment incidents suitable for CAS structural analysis are welcome.
 ---
 
 
@@ -9979,12 +10023,13 @@ This book was produced using the following workflow:
 
 - **Manuscript preparation:** Markdown-based authoring with per-chapter file organization (`book/manuscript/split/`) supporting parallel editing, agent-assisted drafting, and targeted review.
 - **Version control:** Git, with a full commit history of framework evolution across CAS v7.4 → v7.5 → v7.6 → v7.7.
-- **Typesetting:** [TYPESETTING SYSTEM — PLACEHOLDER; candidates include LaTeX with a custom style sheet, or Typst.]
+- **Typesetting:** XeLaTeX with the `memoir` class and a custom style sheet.
 - **Body font:** Palatino (per author preference).
-- **Display and heading font:** [PLACEHOLDER — user to specify.]
-- **Monospace font (code, notation, equations):** [PLACEHOLDER — user to specify; typical choices: JetBrains Mono, IBM Plex Mono, Iosevka.]
-- **Mathematical notation:** [PLACEHOLDER — typical choices: LaTeX `amsmath` / `amssymb` / `mathtools`, or Typst's native math mode.]
-- **Paper and binding:** [PLACEHOLDER — user to specify based on target publisher and format.]
+- **Display and heading font:** Palatino Linotype Bold.
+- **Monospace font (code, notation, equations):** Consolas, chosen for its coverage of the CAS notation glyphs.
+- **Mathematical notation:** LaTeX `amsmath` and `amssymb`, with `newunicodechar` remapping the Unicode operators that appear inline in prose.
+- **Diagrams:** TikZ, drawn from the framework's own structures rather than illustrated.
+- **Paper and binding:** 6×9 inch trade paperback, white stock, perfect bound.
 - **Edition:** First Edition, 2026.
 
 The CAS framework presented in this book was developed across multiple framework versions (v7.4 Corrected Edition → v7.5 Phenomenological Register Extension → v7.6 Stoichiometric Production Semantics Extension → v7.7 Register Multiplicity and Operator Discipline Extension). The current book represents the state of the framework at v7.7 as of the 2026-04 closing of the manuscript.

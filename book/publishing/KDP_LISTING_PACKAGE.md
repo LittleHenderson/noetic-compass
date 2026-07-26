@@ -27,8 +27,8 @@ reproducible.
 | **Title** | CAS PCBA Engineer |
 | **Subtitle** | Designing Cognitive Circuits with the Cognitive Architecture System |
 | **Author** | Little Henderson |
-| **Pages** | 730 (6×9, B&W, white) |
-| **Est. printing cost** | $0.85 + (730 × $0.012) = **$9.61** |
+| **Pages** | 735 (6×9, B&W, white) |
+| **Est. printing cost** | $0.85 + (735 × $0.012) = **$9.67** |
 | **KDP minimum list** | $9.61 ÷ 0.60 = **$16.02** |
 | **Recommended list** | **$44.99** paperback · **$9.99** Kindle |
 | **Est. royalty** | (0.60 × $44.99) − $9.61 = **$17.38**/copy paperback; **$6.99**/copy Kindle |
@@ -83,8 +83,8 @@ The framework anchor and the commercially larger title. Publish second.
 | **Title** | Thinking in Cognitive Architecture |
 | **Subtitle** | A Universal Framework for Humans, AI, and Biological Minds |
 | **Author** | Little Henderson |
-| **Pages** | 790 (6×9, B&W, white) |
-| **Est. printing cost** | $0.85 + (790 × $0.012) = **$10.33** |
+| **Pages** | 796 (6×9, B&W, white) |
+| **Est. printing cost** | $0.85 + (796 × $0.012) = **$10.40** |
 | **KDP minimum list** | **$17.22** |
 | **Recommended list** | **$39.99** paperback · **$9.99** Kindle |
 | **Est. royalty** | **$13.66**/copy paperback; **$6.99**/copy Kindle |
@@ -138,8 +138,8 @@ Files: `superiority_of_tks/Reality_Engineering.pdf` and `.epub`
 | **Title** | Reality Engineering: The Tootra Kabbalistic System |
 | **Subtitle** | A Complete Operating Manual for Manifestation — Diagnose Why It Fails, Then Make It Work |
 | **Author** | Little Henderson |
-| **Pages** | 817 (6×9, B&W, white) |
-| **Est. printing cost** | $0.85 + (817 × $0.012) = **$10.65** |
+| **Pages** | 811 (6×9, B&W, white) |
+| **Est. printing cost** | $0.85 + (811 × $0.012) = **$10.58** |
 | **KDP minimum list** | **$17.75** |
 | **Recommended list** | **$29.99** paperback · **$9.99** Kindle |
 | **Est. royalty** | **$7.34**/copy paperback; **$6.99**/copy Kindle |
@@ -208,7 +208,7 @@ the Kindle sample. The voice survives where it matters; ads stay available.
 |---|---|---|
 | **ISBNs** | You are buying a Bowker block of 10 | One per format per title. Start now — it has lead time. |
 | **Covers** | **Done.** `book/covers/` — full wraps + Kindle fronts | Regenerate with `build_covers.py` whenever a page count changes; the spine width depends on it. |
-| **Indexes** | None of the three has a real one | TKS's lists topics with no page numbers. A professional indexer runs $3–5/page. |
+| **Indexes** | **Done — all three.** 95 / 91 / 113 entries | Built from each book's own glossary, page-accurate. Modest but real; a professional indexer would produce 3–5× more. |
 | **About the Author** | **Done** — all three | Written from the author's professional record. |
 | **Figures** | **Done — all three.** PCBA 18, TiCA 8, Reality Engineering 7 | Live TikZ in print; 300 DPI PNGs with alt text in every EPUB. Each book has a List of Figures. |
 | **EPUB** | Not yet built | Buildable from the same sources. |
@@ -221,9 +221,9 @@ the arithmetic below, but for briefing a designer:
 
 | Book | Pages | Approx. spine (pages × 0.002252") |
 |---|---|---|
-| CAS PCBA Engineer | 730 | 1.64" |
-| Thinking in Cognitive Architecture | 790 | 1.78" |
-| The Superiority of TKS | 817 | 1.84" |
+| CAS PCBA Engineer | 735 | 1.66" |
+| Thinking in Cognitive Architecture | 796 | 1.79" |
+| Reality Engineering | 811 | 1.83" |
 
 - **Print:** full-wrap PDF, back + spine + front, 300 DPI, 0.125" bleed.
 - **Kindle:** front only, 2560 × 1600 px, JPEG or TIFF.

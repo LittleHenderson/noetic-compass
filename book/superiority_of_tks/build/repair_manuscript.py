@@ -119,6 +119,42 @@ CONTENT_FIXES = [
      "itself comes from Supreme Mathematics, whatever any individual artist "
      "takes it to mean."),
 
+    # The reading map in "How to Use This Book" gave chapter ranges matching no
+    # version of the book, and omitted Part IV entirely -- nine chapters. It is
+    # the first thing a reader uses, so it misrouted them for 800 pages. This
+    # predates the repair; the ranges below are the delivered ones.
+    ("**PART I-III: THE FOUNDATIONS (Chapters 1-23)**\n"
+     "- Chapters 1-2: Clear out your old bullshit. Understand why traditional systems fail functionally.\n"
+     "- Chapters 3-6: Learn the TKS framework – the 4 Worlds, 10 Noetics, 40 Elements, 7 Foundations. This is the operating system.\n"
+     "- Chapters 7-8: See why TKS outperforms other systems and learn the RPM methodology – your diagnostic and operational tool.\n"
+     "- Chapters 9-23: Apply the system to real manifestation and glimpse where this is all heading.",
+     "**PARTS I-III: THE FOUNDATIONS (Chapters 1-13)**\n"
+     "- Chapters 1-2: Clear out the old assumptions. Understand why traditional systems fail functionally.\n"
+     "- Chapters 3-8: Learn the framework – the 4 Worlds, the 10 Noetics, the 40 Elements, the 7 and 28 Foundations. This is the operating system.\n"
+     "- Chapters 9-10: See why TKS outperforms other systems, and learn the Recursive Prerequisite Model – your diagnostic and operational tool.\n"
+     "- Chapters 11-13: Apply it to manifestation, and glimpse where this is all heading.\n"
+     "\n"
+     "**PART IV: ADVANCED APPLICATIONS (Chapters 14-22)**\n"
+     "- Hyperstition, the Overton Window, social engineering, the mathematical formalism, expression scenarios, the NJT, the operations workbook, mastery stages, and the validation framework.\n"
+     "\n"
+     "**PARTS V-VII: THE PRACTICAL SYSTEM (Chapters 23-27 and the Workshops)**\n"
+     "- Chapters 23-25: prerequisite life cycles, timing windows, and the protocols decoded.\n"
+     "- The five Workshops: money, love, health, protection, career.\n"
+     "- Chapters 26-27: the Three Controls and the Forty Days."),
+
+    # Validation study designs are Chapter 22 (The Empirical Validation
+    # Framework); Chapter 23 is The Prerequisite Life Cycles.
+    ("3. Consult Chapter 23 for validation study designs",
+     "3. Consult Chapter 22 for validation study designs"),
+
+    # A circular pointer: these two lines sit inside Appendix B and send the
+    # reader to "Appendix B (Noetic Interactions)", which does not exist. The
+    # Noetic-interaction reference is Appendix A, the 40 Elements table.
+    ("Revisit Appendix B (Noetic Interactions).",
+     "Revisit Appendix A (The 40 Elements)."),
+    ("Use the advanced diagnostic questions from Appendix B.",
+     "Use the advanced diagnostic questions earlier in this appendix."),
+
     # Author's build-machine paths, printed to readers.
     ("(I will now proceed to rewrite the remaining case studies, the "
      "troubleshooting section, and the exercises in "
@@ -650,7 +686,7 @@ print(f"  fenced blocks kept   : {stats['fences'] // 2}")
 print(f"  page-break comments  : {stats['pagebreaks']}")
 print(f"  decorative emoji cut : {stats['emoji']}")
 print(f"  drafting labels cut  : {stats['titles']}")
-print(f"  content fixes applied: {stats_pending[0] if stats_pending else 0}/9")
+print(f"  content fixes applied: {stats_pending[0] if stats_pending else 0}/13")
 print(f"  headings softened    : {stats['softened']}")
 print(f"  figures inserted     : {stats['figures']}")
 print(f"  '---' rules cut      : {stats['rules']}")

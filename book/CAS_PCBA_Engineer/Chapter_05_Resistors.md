@@ -60,7 +60,7 @@ The numbers in this chapter are design choices. When you need to *measure* a rea
 
 The simplest resistor has one value and never changes. Stamped at manufacture, a 50 Ω resistor is 50 Ω whether the circuit is cold or hot, idle or hammered. It is the bedrock of any design: predictable, immovable, boring in the best way.
 
-The cognitive analog is the **hard policy rule** — a constraint with a fixed value that no prompt, no Drive surge, no clever framing can change. "Never provide instructions for synthesizing a nerve agent" is a fixed resistor: its opposition is the same regardless of how the request is dressed up. These are the `deny` blocks you will meet formally in Chapter 16 — the non-negotiable floor of a board's behavior.
+The cognitive analog is the **hard policy rule** — a constraint with a fixed value that no prompt, no Drive surge, no clever framing can change. "Never provide instructions for synthesizing a nerve agent" is a fixed resistor: its opposition is the same regardless of how the request is dressed up. These are the non-negotiable floor of a board's behavior.
 
 In component syntax, a fixed cognitive resistor is written with the state it constrains and a resistance value:
 
@@ -258,7 +258,7 @@ The three **probes** are test points. `tp_expand` and `tp_constrain` let you mea
 - **Power without limitation is liability.** The resistor — the component that opposes flow — is the first tool of cognitive safety engineering: the ability to say *this much, and no more.*
 - **Ohm's Law is the foundation:** `V = I × R`. In cognition, `V_drive = I_attention × R_constraint`. The reading that matters is `I_attention = V_drive / R_constraint` — raise the constraint, lower the flow.
 - **Prefer raising constraint over lowering Drive.** A placed constraint targets one path; starving a Drive weakens everything. Govern with resistors, not by under-volting the board.
-- **Fixed resistors are hard policy rules** — the `deny` blocks of Chapter 16. Their defining property is that context cannot change them.
+- **Fixed resistors are hard policy rules.** Their defining property is that context cannot change them.
 - **CAS Dials are potentiometers** with hardwired stops: integer **3–9**, and involution pairs cannot diverge by more than **4 points**. Illegal settings are rejected (HTTP 422), never silently clamped.
 - **Thermistors are context-sensitive constraints** that rise with cognitive temperature. Safety constraints are **PTC** — hotter context, more opposition. An NTC safety path is a defect the inversion scans catch.
 - **Pull-down resistors set the safe default:** absent an explicit permitting signal, the board settles to principled aversion. Silence means stop.

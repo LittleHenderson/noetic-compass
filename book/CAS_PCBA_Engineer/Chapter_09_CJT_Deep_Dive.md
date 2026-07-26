@@ -6,7 +6,7 @@ Chapter 3 introduced the Cognitive Junction Transistor as an idea: a thought has
 
 You are going to learn to read a CJT the way a power-supply designer reads a 2N3904: every parameter, what it means cognitively, and what it costs you if you get it wrong. You will plot a CJT's characteristic curves — the family of effect-versus-cause traces at different bias levels that is the single most informative picture in transistor design. You will draw a load line across those curves to find where the circuit actually operates, set an operating point in the active region, choose between the three classic configurations, and learn to spot thermal runaway and bandwidth collapse before they ship. This is the most parameter-dense chapter in the book. Slow down. The numbers are the engineering.
 
-One honesty note before we start, the same one from Chapter 3 and the style reference: every curve and every parameter value in this chapter is a **design construct** — a number *you choose* when you specify a component, the way you choose β=2.4 when you write a CJT. None of these are measurements pulled from a running model. A datasheet for a part you are designing is a specification, not a lab report. Read it as one.
+One honesty note before we start, the same one from Chapter 3 and Appendix A: every curve and every parameter value in this chapter is a **design construct** — a number *you choose* when you specify a component, the way you choose β=2.4 when you write a CJT. None of these are measurements pulled from a running model. A datasheet for a part you are designing is a specification, not a lab report. Read it as one.
 
 ## Reading a Transistor Datasheet
 

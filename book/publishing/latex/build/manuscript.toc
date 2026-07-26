@@ -246,7 +246,7 @@
 \contentsline {section}{Building Wealth as a Complete RPM Chain}{347}{section*.231}%
 \contentsline {section}{Lacunarity in Real Life: Structural Scaffolding}{349}{section*.232}%
 \contentsline {section}{Financial Lacunarity: The Dark Assets}{349}{section*.233}%
-\contentsline {section}{Recursive Resolution: Building Wealth through Causal Search}{349}{section*.234}%
+\contentsline {section}{Recursive Resolution: Building Wealth through Causal Search}{350}{section*.234}%
 \contentsline {section}{The Barbershop Resolution (Power Blocked)}{350}{section*.235}%
 \contentsline {section}{Structural Deadlock in Wealth}{351}{section*.236}%
 \contentsline {section}{Key Insight: Chapter 16}{351}{section*.237}%
@@ -506,10 +506,11 @@
 \contentsline {chapter}{Index}{749}{chapter*.470}%
 \contentsline {chapter}{Bibliography and Further Reading}{753}{chapter*.472}%
 \contentsline {subsection}{Mathematics and Category Theory}{753}{section*.473}%
-\contentsline {subsection}{Consciousness Studies and Cognitive Science}{753}{section*.474}%
+\contentsline {subsection}{Consciousness Studies and Cognitive Science}{754}{section*.474}%
 \contentsline {subsection}{Information Theory and AI}{754}{section*.475}%
 \contentsline {subsection}{Cognitive Architecture and AI Safety}{754}{section*.476}%
-\contentsline {subsection}{Framework Origins and Influences}{754}{section*.477}%
-\contentsline {chapter}{About the Author}{755}{chapter*.479}%
-\contentsline {chapter}{Contact and Community}{757}{chapter*.481}%
-\contentsline {chapter}{Colophon}{759}{chapter*.483}%
+\contentsline {subsection}{Framework Origins and Influences}{755}{section*.477}%
+\contentsline {chapter}{About the Author}{757}{chapter*.479}%
+\contentsline {chapter}{Contact and Community}{759}{chapter*.481}%
+\contentsline {section}{\textbf {Incident database contributions:} via \texttt {noeticcompass.com} --- reports of AI misalignment incidents suitable for CAS structural analysis are welcome.}{759}{section*.482}%
+\contentsline {chapter}{Colophon}{761}{chapter*.484}%

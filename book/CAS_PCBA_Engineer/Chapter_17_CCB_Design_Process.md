@@ -62,7 +62,7 @@ Choosing components is choosing *parameters*, and parameters are design decision
 
 ## Step 4 — Schematic Capture in CCDL
 
-The schematic is the formal, complete description of the circuit: every component, every connection, every parameter, written so unambiguously that the next step (simulation) and the step after (the rule checker) can read it without guessing. In electronics this is a schematic diagram; in our discipline it is **CCDL — the Cognitive Circuit Description Language** — the schematic-as-text format from Chapter 2 and the style guide.
+The schematic is the formal, complete description of the circuit: every component, every connection, every parameter, written so unambiguously that the next step (simulation) and the step after (the rule checker) can read it without guessing. In electronics this is a schematic diagram; in our discipline it is **CCDL — the Cognitive Circuit Description Language** — the schematic-as-text format from Chapter 2 and Appendix A.
 
 Here is the Policy Check stage of our thread, captured in CCDL:
 

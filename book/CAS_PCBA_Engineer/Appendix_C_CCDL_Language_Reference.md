@@ -48,7 +48,7 @@ digit      ::= "0"…"9"
 
 ### CAS State Literals
 
-A state literal is a first-class lexical token in CCDL — the "type" carried by a node, a component terminal, a layer entry, or a via endpoint. Its grammar is the canonical CAS state grammar from the style guide and Chapter 2:
+A state literal is a first-class lexical token in CCDL — the "type" carried by a node, a component terminal, a layer entry, or a via endpoint. Its grammar is the canonical CAS state grammar from Appendix A and Chapter 2:
 
 ```
 state_literal ::= noetic , [ domain ] , [ "_{" , drive , "}" ] , [ register ]
@@ -81,7 +81,7 @@ number   ::= [ "-" ] , digit , { digit } , [ "." , digit , { digit } ]
 ```
 
 - Decimal. A leading sign is permitted but rarely meaningful (most parameters are non-negative; see the ranges in §C.6 and §C.5).
-- No exponent notation. Very small frequencies are written in full (`frequency=0.0000116`), matching the Oscillator example in the style guide.
+- No exponent notation. Very small frequencies are written in full (`frequency=0.0000116`), matching the Oscillator example in Appendix A.
 - Numbers are dimensionless tuning knobs, not physical units. `R=30` is not 30 ohms; `β=2.4` is not a literal current ratio. The *role* is identical to the electronic quantity; the value lives on the open simplex. (Chapter 4 states this explicitly for `R`.)
 
 ### Comments
@@ -216,7 +216,7 @@ Feedback is the deliberate exception to one-way flow. In a CCB it is the slow **
 let_decl ::= "let" , identifier , "=" , component_expr , [ param_block ] , ";"
 ```
 
-`let` binds a name to a component expression so it can be reused. Most common with CJTs (the style guide's `let cjt_x = CJT< … => … > [β=…];`), but legal for any component. A `let`-bound component is instantiated where its name is referenced.
+`let` binds a name to a component expression so it can be reused. Most common with CJTs (Appendix C's `let cjt_x = CJT< … => … > [β=…];`), but legal for any component. A `let`-bound component is instantiated where its name is referenced.
 
 ### `probe` Declaration
 
@@ -294,7 +294,7 @@ Oscillator< Phi< ^8^C|A, ^3^O|E, ^9^E|f, ^0^P|T >, frequency=0.0000116 >
 Regulator< target_state=^0^E_{F3}|f, tolerance=0.1 >
 ```
 
-`Phi< s₁, s₂, s₃, … >` is the sequence constructor — an ordered list of states the oscillator cycles through. (Same `Phi<…>` form as the style guide's sequence operator.)
+`Phi< s₁, s₂, s₃, … >` is the sequence constructor — an ordered list of states the oscillator cycles through. (Same `Phi<…>` form as Appendix C's sequence operator.)
 
 ### Logic Gates
 

@@ -32,7 +32,7 @@ Now the mapping. In CAS, the Noetic that stores energy in a repeated pattern is 
 
 This is the structural reason habits are hard to break, stated precisely: **a habit is a high-inductance `^7` Rhythm state.** It carries stored energy proportional to how many times and how regularly the pattern has fired. A behavior practiced twice has near-zero inductance and is trivial to drop. A behavior practiced daily for a decade is a massive coil, and `V = L × dI/dt` tells you that any attempt to change it quickly will generate a proportionally massive opposing pressure. The man with the cigarette isn't weak. He's working against a twenty-year inductor.
 
-We write the cognitive inductor exactly as the style guide specifies:
+We write the cognitive inductor exactly as Appendix A specifies:
 
 ```cas
 Inductor< ^7^O_{F6}|E, L=50 >

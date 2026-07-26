@@ -274,7 +274,7 @@ cjt c1: CJT< prompt   | bias_a => understand > [β=2.0, region=active];
 cjt c2: CJT< understand | bias_b => evaluate   > [β=1.0, region=active];
 ```
 
-a) Name the component that belongs between `c1` and `c2`, and write the one CCDL line that inserts it (use the `Capacitor< … >` form from §5 of the style guide).
+a) Name the component that belongs between `c1` and `c2`, and write the one CCDL line that inserts it (use the `Capacitor< … >` form from Appendix C).
 b) In one sentence, explain what it passes and what it blocks.
 c) Would a *bypass* capacitor solve this same problem? Explain why or why not.
 

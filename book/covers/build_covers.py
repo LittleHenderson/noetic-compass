@@ -112,7 +112,7 @@ are taught from first principles, exactly where you need them.""",
     },
     {
         "slug": "thinking_in_cognitive_architecture",
-        "pages": 794,
+        "pages": 796,
         "title_lines": r"Thinking in\\Cognitive\\Architecture",
         "spine_title": "Thinking in Cognitive Architecture",
         "subtitle": "A Universal Framework for Humans, AI, "
