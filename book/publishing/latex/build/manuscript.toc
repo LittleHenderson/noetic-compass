@@ -123,18 +123,18 @@
 \contentsline {section}{The Composition Table for ×}{152}{section*.117}%
 \contentsline {section}{The Constraint Rules}{153}{section*.118}%
 \contentsline {section}{The CAS Compiler: Proving the Syntax}{153}{section*.119}%
-\contentsline {section}{Discovered, Not Designed: The Dual-Layer Finding}{153}{section*.120}%
+\contentsline {section}{Discovered, Not Designed: The Dual-Layer Finding}{154}{section*.120}%
 \contentsline {section}{Worked Example: The AI Hallucination}{154}{section*.121}%
 \contentsline {section}{Ten More Worked Constructions}{155}{section*.122}%
 \contentsline {section}{Common Mistakes and How to Fix Them}{162}{section*.123}%
-\contentsline {section}{Register-Enriched Constructions --- Three Additional Worked Examples}{164}{section*.124}%
+\contentsline {section}{Register-Enriched Constructions --- Three Additional Worked Examples}{165}{section*.124}%
 \contentsline {section}{Debug This Equation}{168}{section*.125}%
 \contentsline {section}{CAS as a Formal Language}{170}{section*.126}%
 \contentsline {section}{The 28 Standard Templates}{173}{section*.127}%
-\contentsline {section}{Operator Discipline: When +, ×, and \textbar \ensuremath {\langle }\ldots \ensuremath {\rangle } Apply}{173}{section*.128}%
-\contentsline {section}{Key Insight: Chapter 8}{182}{section*.129}%
+\contentsline {section}{Operator Discipline: When +, ×, and \textbar \ensuremath {\langle }\ldots \ensuremath {\rangle } Apply}{174}{section*.128}%
+\contentsline {section}{Key Insight: Chapter 8}{183}{section*.129}%
 \contentsline {section}{Try This: Chapter 8 Exercises}{183}{section*.130}%
-\contentsline {section}{Looking Ahead}{184}{section*.131}%
+\contentsline {section}{Looking Ahead}{185}{section*.131}%
 \contentsline {chapter}{\chapternumberline {9}The 40 Cognitive States}{187}{chapter.9}%
 \contentsline {section}{Navigating the Matrix: The Rows and Columns}{189}{section*.132}%
 \contentsline {section}{Column 6: The State of Male (\texttt {\^{}6})}{189}{section*.133}%

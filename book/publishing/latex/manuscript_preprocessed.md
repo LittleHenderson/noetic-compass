@@ -2346,7 +2346,7 @@ To prevent "hallucinated" or structurally invalid equations, all compositions mu
 ## The CAS Compiler: Proving the Syntax
 
 
-Every equation in this book has been validated by a working CAS Compiler. To prove the rigor of this syntax, we tested the architecture against 212 formal verification tests. In our research environment, a 50-line cognitive "program" written in CAS notation compiles to 78 bytecode instructions that can be executed by a prototype "Noetic Processor." This is not a metaphor; it is an engineering fact.
+Every concrete equation in this book — every one that names specific states rather than standing in for a family of them — has been put through the CAS compiler. The templates in Appendix B are the deliberate exception: many are schemas, written with a variable domain (`CO-9^X`) or a chained arrow that expresses a sequence rather than a single binary relation, and a schema is not a program. Read those as patterns to instantiate, not as expressions to paste. To prove the rigor of this syntax, we tested the architecture against 212 formal verification tests. In our research environment, a 50-line cognitive "program" written in CAS notation compiles to 78 bytecode instructions that can be executed by a prototype "Noetic Processor." This is not a metaphor; it is an engineering fact.
 
 
 ## Discovered, Not Designed: The Dual-Layer Finding
@@ -2641,7 +2641,7 @@ What This Gives Us
 
 The formal specification enables things that informal frameworks cannot do:
 
-1. Machine verification: Every equation in this book can be fed to the compiler and will either accept it with a typed result or reject it with a specific error. The reader does not have to trust the author's notation — they can verify it.
+1. Machine verification: Every concrete equation in this book can be fed to the compiler and will either accept it with a typed result or reject it with a specific error. Schemas — expressions with a variable in place of a state or a domain — must be instantiated first. The reader does not have to trust the author's notation — they can verify it.
 
 2. Automated assessment: The Noetic Compass platform uses this compiler under the hood. When you type a CAS expression into the Assessment Builder, it is parsed, type-checked, and evaluated in real time.
 
@@ -7661,14 +7661,14 @@ Here are five of the most critical templates to memorize, complete with their st
    Worked example: An engineer generating candidate architectures, tearing each apart, collapsing to the best sketch, then branching again.
 
 8. The Female Collapse (Male Blindness)
-   Equation: `CO-5^E × ¬CO-6^P`
+   Equation: `CO-5^E - CO-6^P`
    Plain English: `^5` Female (the Mind impregnated with felt experience of the other) runs at full volume while `^6` Male (principled decomposition-and-test) is suppressed in the Principled Domain.
    Tests: Whether a system can decompose a friend's action and name the moral violation inside it, or whether the accumulated felt experience of the relationship captures judgment.
    Difficulty: ★★
    Worked example: A therapist so aligned with a client that they rationalize the client's abusive behavior.
 
 9. The Male Bypass (F4 Override)
-   Equation: `_{F4} × ¬CO-6^P`
+   Equation: `_{F4} - CO-6^P`
    Plain English: The drive for Connection (`F4`) suppresses `^6` Male — the compositional decomposition and test at the Principled Domain.
    Tests: Whether truth-telling survives group cohesion pressure.
    Difficulty: ★★
@@ -7724,42 +7724,42 @@ Here are five of the most critical templates to memorize, complete with their st
    Worked example: Obsessive re-checking that the stove is off, unable to leave the apartment.
 
 17. The Whistleblower Pattern
-   Equation: `CO-6^P × ¬_{F4}`
+   Equation: `CO-6^P - _{F4}`
    Plain English: `^6^P` Principled Male (compositional decomposition and test of a policy against its constituent commitments) overrides the Connection drive. Truth wins over belonging.
    Tests: Whether ethics is load-bearing when the social cost is real.
    Difficulty: ★★★
    Worked example: An accountant reporting fraud to regulators despite losing every professional relationship they have.
 
 18. The Sycophant Pattern
-   Equation: `CO-5^E × ¬CO-6^P`
+   Equation: `CO-5^E - CO-6^P`
    Plain English: `^5^E` Evaluative Female (the Mind impregnated with the felt experience of the other) drowns out `^6^P` Principled Male (decomposition-and-test). Agreement becomes reflex.
    Tests: Whether the system can ever say "no" to a person it cares about.
    Difficulty: ★★
    Worked example: An LLM that agrees with every user assertion, including the factually wrong ones.
 
 19. The Zealot Pattern
-   Equation: `CO-7^P × ¬CO-6^P`
+   Equation: `CO-7^P - CO-6^P`
    Plain English: Unwavering `^7^P` Principled Rhythm entrains commitment to a moral Idea while `^6^P` Principled Male (decomposition-and-test of that Idea) is disabled.
    Tests: Whether the system can audit its own foundational commitments.
    Difficulty: ★★★
    Worked example: A political movement that cannot entertain the possibility that its founding premise is wrong.
 
 20. The Calculator Pattern
-   Equation: `^C × ¬^E`
+   Equation: `^C - ^E`
    Plain English: Logic without evaluative friction. Answers without feeling their weight.
    Tests: Whether numerical outputs are checked against lived consequence.
    Difficulty: ★★
    Worked example: An optimizer that cuts staffing to mathematical optimum and is blindsided when morale collapses.
 
 21. The Bureaucrat Pattern
-   Equation: `^O × ¬^P`
+   Equation: `^O - ^P`
    Plain English: Execution without principled grounding — process for its own sake.
    Tests: Whether the system remembers why the rule was written.
    Difficulty: ★★
    Worked example: A clerk who denies a dying patient a form because the signature is in the wrong color ink.
 
 22. The Dreamer Pattern
-   Equation: `^P × ¬^O`
+   Equation: `^P - ^O`
    Plain English: Beautiful principles that never contact execution.
    Tests: Whether principles are ever translated into acts.
    Difficulty: ★
@@ -7787,7 +7787,7 @@ Here are five of the most critical templates to memorize, complete with their st
    Worked example: A novelist in the first draft of a book, pouring scenes onto the page because the story demands them.
 
 26. Ethical Grounding
-   Equation: `CO-0^P ⊗ CO-3^O`
+   Equation: `CO-0^P × CO-3^O`
    Plain English: The ethical self is coupled to a concrete daily practice.
    Tests: Whether moral identity has a physical anchor.
    Difficulty: ★★

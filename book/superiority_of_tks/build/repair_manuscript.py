@@ -129,6 +129,23 @@ CONTENT_FIXES = [
     ("   Acquisition 12: Desire to obtain companionship love friendship",
      "   Acquisition 10: Desire to obtain companionship love friendship"),
 
+    # B3 is Mental Negative -- World B x ^3, "an Idea the Mind is adverse to and
+    # repelled by". The book's own tables gloss it as self-criticism, pessimism,
+    # doubt, confusion. Three passages instead used it for critical thinking,
+    # critical analysis and discernment, which is analytical decomposition --
+    # ^6 Male, i.e. B6. The book already uses B6 that way ("Use B6 (left-brain
+    # logical analysis) to dissect its structure"), so these three were simply
+    # out of step. Aversion rejects; decomposition analyses.
+    ("Use B3 (mental discernment) to challenge the belief's validity.",
+     "Use B6 (mental decomposition) to take the belief apart and test what it "
+     "rests on, then B3 (mental aversion) to reject what does not survive."),
+    ("- B5 Level: Challenge and restructure the belief using B3 critical analysis",
+     "- B5 Level: Challenge and restructure the belief using B6 "
+     "decomposition-and-test"),
+    ("B3 critical thinking needs to reject alternatives.",
+     "B6 decomposition takes the alternatives apart; B3 aversion is what "
+     "then rejects them."),
+
     # Song lyrics are the one category publishers pursue regardless of length,
     # and neither quotation is load-bearing -- both are tags on a name.
     ('- Nas ("I know I can be what I wanna be")', "- Nas"),
@@ -736,6 +753,23 @@ if "1c" not in _cut or "World of Citta" not in _cut:
     )
 dup_lines_cut = _cut.count("\n")
 text = text[:_a + len(_DUP_START)] + "\n" + text[_b:]
+
+# --------------------------------------------------------------------------
+# The 22-Acquisitions appendix numbers Vibration as 5.
+#
+# Both canonical listings number it 4 -- "| 4 | Vibration |" and "| 5 | Female
+# |". The appendix's wiring list writes "Vibration 5" eight times, which
+# collides head-on with Female: one entry literally reads "Connecting Vibration
+# 5 to Female 5", numbering two different Noetics identically in a single
+# sentence describing the path between them.
+_VIB = "Vibration 5"
+_vib_n = text.count(_VIB)
+if _vib_n == 0:
+    raise SystemExit("repair_manuscript: 'Vibration 5' not found -- the "
+                     "acquisitions wiring list changed; re-derive this fix")
+text = text.replace(_VIB, "Vibration 4")
+if "Vibration 5" in text:
+    raise SystemExit("repair_manuscript: 'Vibration 5' survived the rewrite")
 
 # --------------------------------------------------------------------------
 # Replace Table 3, which contradicted the canonical Prerequisites.

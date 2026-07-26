@@ -5800,12 +5800,18 @@ coexistence rather than fusion.
 \section{The CAS Compiler: Proving the
 Syntax}\label{the-cas-compiler-proving-the-syntax}
 
-Every equation in this book has been validated by a working CAS
-Compiler. To prove the rigor of this syntax, we tested the architecture
-against 212 formal verification tests. In our research environment, a
-50-line cognitive ``program'' written in CAS notation compiles to 78
-bytecode instructions that can be executed by a prototype ``Noetic
-Processor.'' This is not a metaphor; it is an engineering fact.
+Every concrete equation in this book --- every one that names specific
+states rather than standing in for a family of them --- has been put
+through the CAS compiler. The templates in Appendix B are the deliberate
+exception: many are schemas, written with a variable domain
+(\texttt{CO-9\^{}X}) or a chained arrow that expresses a sequence rather
+than a single binary relation, and a schema is not a program. Read those
+as patterns to instantiate, not as expressions to paste. To prove the
+rigor of this syntax, we tested the architecture against 212 formal
+verification tests. In our research environment, a 50-line cognitive
+``program'' written in CAS notation compiles to 78 bytecode instructions
+that can be executed by a prototype ``Noetic Processor.'' This is not a
+metaphor; it is an engineering fact.
 
 \section{Discovered, Not Designed: The Dual-Layer
 Finding}\label{discovered-not-designed-the-dual-layer-finding}
@@ -6666,10 +6672,12 @@ do:
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  Machine verification: Every equation in this book can be fed to the
-  compiler and will either accept it with a typed result or reject it
-  with a specific error. The reader does not have to trust the author's
-  notation --- they can verify it.
+  Machine verification: Every concrete equation in this book can be fed
+  to the compiler and will either accept it with a typed result or
+  reject it with a specific error. Schemas --- expressions with a
+  variable in place of a state or a domain --- must be instantiated
+  first. The reader does not have to trust the author's notation ---
+  they can verify it.
 \item
   Automated assessment: The Noetic Compass platform uses this compiler
   under the hood. When you type a CAS expression into the Assessment
@@ -20784,7 +20792,7 @@ their structural equations.
   apart, collapsing to the best sketch, then branching again.
 \item
   The Female Collapse (Male Blindness) Equation:
-  \texttt{CO-5\^{}E\ ×\ ¬CO-6\^{}P} Plain English: \texttt{\^{}5} Female
+  \texttt{CO-5\^{}E\ -\ CO-6\^{}P} Plain English: \texttt{\^{}5} Female
   (the Mind impregnated with felt experience of the other) runs at full
   volume while \texttt{\^{}6} Male (principled decomposition-and-test)
   is suppressed in the Principled Domain. Tests: Whether a system can
@@ -20794,7 +20802,7 @@ their structural equations.
   client that they rationalize the client's abusive behavior.
 \item
   The Male Bypass (F4 Override) Equation:
-  \texttt{\_\{F4\}\ ×\ ¬CO-6\^{}P} Plain English: The drive for
+  \texttt{\_\{F4\}\ -\ CO-6\^{}P} Plain English: The drive for
   Connection (\texttt{F4}) suppresses \texttt{\^{}6} Male --- the
   compositional decomposition and test at the Principled Domain. Tests:
   Whether truth-telling survives group cohesion pressure. Difficulty: ★★
@@ -20859,7 +20867,7 @@ their structural equations.
   Difficulty: ★★ Worked example: Obsessive re-checking that the stove is
   off, unable to leave the apartment.
 \item
-  The Whistleblower Pattern Equation: \texttt{CO-6\^{}P\ ×\ ¬\_\{F4\}}
+  The Whistleblower Pattern Equation: \texttt{CO-6\^{}P\ -\ \_\{F4\}}
   Plain English: \texttt{\^{}6\^{}P} Principled Male (compositional
   decomposition and test of a policy against its constituent
   commitments) overrides the Connection drive. Truth wins over
@@ -20868,16 +20876,15 @@ their structural equations.
   to regulators despite losing every professional relationship they
   have.
 \item
-  The Sycophant Pattern Equation: \texttt{CO-5\^{}E\ ×\ ¬CO-6\^{}P}
-  Plain English: \texttt{\^{}5\^{}E} Evaluative Female (the Mind
-  impregnated with the felt experience of the other) drowns out
-  \texttt{\^{}6\^{}P} Principled Male (decomposition-and-test).
-  Agreement becomes reflex. Tests: Whether the system can ever say
-  ``no'' to a person it cares about. Difficulty: ★★ Worked example: An
-  LLM that agrees with every user assertion, including the factually
-  wrong ones.
+  The Sycophant Pattern Equation: \texttt{CO-5\^{}E\ -\ CO-6\^{}P} Plain
+  English: \texttt{\^{}5\^{}E} Evaluative Female (the Mind impregnated
+  with the felt experience of the other) drowns out \texttt{\^{}6\^{}P}
+  Principled Male (decomposition-and-test). Agreement becomes reflex.
+  Tests: Whether the system can ever say ``no'' to a person it cares
+  about. Difficulty: ★★ Worked example: An LLM that agrees with every
+  user assertion, including the factually wrong ones.
 \item
-  The Zealot Pattern Equation: \texttt{CO-7\^{}P\ ×\ ¬CO-6\^{}P} Plain
+  The Zealot Pattern Equation: \texttt{CO-7\^{}P\ -\ CO-6\^{}P} Plain
   English: Unwavering \texttt{\^{}7\^{}P} Principled Rhythm entrains
   commitment to a moral Idea while \texttt{\^{}6\^{}P} Principled Male
   (decomposition-and-test of that Idea) is disabled. Tests: Whether the
@@ -20885,20 +20892,20 @@ their structural equations.
   Worked example: A political movement that cannot entertain the
   possibility that its founding premise is wrong.
 \item
-  The Calculator Pattern Equation: \texttt{\^{}C\ ×\ ¬\^{}E} Plain
+  The Calculator Pattern Equation: \texttt{\^{}C\ -\ \^{}E} Plain
   English: Logic without evaluative friction. Answers without feeling
   their weight. Tests: Whether numerical outputs are checked against
   lived consequence. Difficulty: ★★ Worked example: An optimizer that
   cuts staffing to mathematical optimum and is blindsided when morale
   collapses.
 \item
-  The Bureaucrat Pattern Equation: \texttt{\^{}O\ ×\ ¬\^{}P} Plain
+  The Bureaucrat Pattern Equation: \texttt{\^{}O\ -\ \^{}P} Plain
   English: Execution without principled grounding --- process for its
   own sake. Tests: Whether the system remembers why the rule was
   written. Difficulty: ★★ Worked example: A clerk who denies a dying
   patient a form because the signature is in the wrong color ink.
 \item
-  The Dreamer Pattern Equation: \texttt{\^{}P\ ×\ ¬\^{}O} Plain English:
+  The Dreamer Pattern Equation: \texttt{\^{}P\ -\ \^{}O} Plain English:
   Beautiful principles that never contact execution. Tests: Whether
   principles are ever translated into acts. Difficulty: ★ Worked
   example: A manifesto-writing activist who never files a single
@@ -20927,7 +20934,7 @@ their structural equations.
   Difficulty: ★★ Worked example: A novelist in the first draft of a
   book, pouring scenes onto the page because the story demands them.
 \item
-  Ethical Grounding Equation: \texttt{CO-0\^{}P\ ⊗\ CO-3\^{}O} Plain
+  Ethical Grounding Equation: \texttt{CO-0\^{}P\ ×\ CO-3\^{}O} Plain
   English: The ethical self is coupled to a concrete daily practice.
   Tests: Whether moral identity has a physical anchor. Difficulty: ★★
   Worked example: A monk whose axiom ``do no harm'' is re-instantiated
