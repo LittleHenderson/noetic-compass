@@ -30,7 +30,7 @@ With that, a filter's job becomes sharp. A filter is a component that **passes s
 
 ## The Low-Pass Filter: Keep the Slow, Drop the Fast
 
-The simplest filter in electronics is a resistor and a capacitor in series — an **RC filter**. You met both components earlier in the book: a **resistor** limits flow (Chapter 6), and a **capacitor** stores charge and resists sudden voltage changes (Chapter 7). Wire them right and you get a **low-pass filter**: it passes low frequencies and blocks high ones.
+The simplest filter in electronics is a resistor and a capacitor in series — an **RC filter**. You met both components earlier in the book: a **resistor** limits flow (Chapter 5), and a **capacitor** stores charge and resists sudden voltage changes (Chapter 7). Wire them right and you get a **low-pass filter**: it passes low frequencies and blocks high ones.
 
 The mechanism is intuitive. The capacitor takes time to charge. Slow signals give it time to follow along, so they pass through. Fast signals change faster than the capacitor can keep up, so they get smoothed away — averaged out into the steady baseline. The dividing line between "passes" and "blocked" is set by a single number, the **time constant** `τ` (tau), where `τ = R × C`. Signals slower than `τ` pass; signals faster than `τ` are attenuated. A long `τ` is a sluggish filter that only lets the very slowest changes through; a short `τ` is a quick filter that passes more.
 
@@ -169,7 +169,7 @@ The four filter shapes, laid over a single cognitive-frequency axis, make the di
 
 Everything so far has been **passive** — built only from resistors, capacitors, and inductors, with no power source of its own. Passive filters are cheap and reliable, but they have two limits: their cutoffs are gentle (frequencies near the edge are only partly attenuated, fading out gradually rather than dropping off a cliff), and their parameters are fixed once you pick the components.
 
-An **active filter** adds an **op-amp** — the operational amplifier you built in Chapter 10, the high-gain difference-amplifier whose behavior is set by feedback. Adding an op-amp buys you two things. First, **sharper cutoffs:** the feedback can be arranged to make the transition from "pass" to "block" much steeper, so the band edges become crisp instead of blurry. Second, **adjustable parameters:** because the op-amp's behavior is governed by its feedback network, you can change center frequency, bandwidth, or gain by adjusting the feedback rather than re-soldering components — which means a filter that *retunes itself* as conditions change.
+An **active filter** adds an **op-amp** — the operational amplifier you built in Chapter 11, the high-gain difference-amplifier whose behavior is set by feedback. Adding an op-amp buys you two things. First, **sharper cutoffs:** the feedback can be arranged to make the transition from "pass" to "block" much steeper, so the band edges become crisp instead of blurry. Second, **adjustable parameters:** because the op-amp's behavior is governed by its feedback network, you can change center frequency, bandwidth, or gain by adjusting the feedback rather than re-soldering components — which means a filter that *retunes itself* as conditions change.
 
 That second property is what makes the adaptive notch from the last Bench Note possible. An active notch can track a compulsion whose frequency drifts, continuously re-centering on the loop's current rate. In CAS terms, the op-amp's feedback path lets the filter's center frequency become a *controlled* parameter — wired, in a full system, to a measurement of where the compulsive rhythm currently sits.
 
@@ -190,7 +190,7 @@ The non-inverting input takes the rhythm signal; the feedback to the inverting i
 One more parameter governs every filter: its **order**, which is just the count of energy-storing components (capacitors and inductors) in it. Order controls *steepness* — how abruptly the filter transitions from passing to blocking at its edge.
 
 - A **first-order** filter is the plain RC pair you've been building: one capacitor, a gentle slope. Simple, stable, but leaky at the edges — frequencies just past the cutoff aren't fully blocked.
-- A **second-order** filter adds an **inductor** to make an **RLC** circuit (resistor, inductor, capacitor). You met the inductor in Chapter 8: it resists *changes* in flow, the way a capacitor resists changes in level. With both storage elements, a second-order filter has a steeper cutoff and can be tuned to **resonate** sharply at one frequency — which is exactly what a sharp band-pass or notch needs.
+- A **second-order** filter adds an **inductor** to make an **RLC** circuit (resistor, inductor, capacitor). You met the inductor in Chapter 7: it resists *changes* in flow, the way a capacitor resists changes in level. With both storage elements, a second-order filter has a steeper cutoff and can be tuned to **resonate** sharply at one frequency — which is exactly what a sharp band-pass or notch needs.
 - A **higher-order** filter is built by **cascading** — chaining several stages in series. Each stage adds steepness. A fourth-order filter is two second-order stages back to back; its edges are nearly vertical. The cost is complexity and, in active designs, more op-amps.
 
 | Order | Components | Edge steepness | Cognitive use |
@@ -216,7 +216,7 @@ This is the diagnostic that precedes filter design, and it closes the loop with 
 - A **high-pass filter** passes rapid changes and blocks the DC baseline — a change detector for surprise, alarm, and **prompt injection**, foreshadowing the CSB's input-stage protection.
 - A **band-pass filter** (high-pass + low-pass in series) passes one frequency band — used to isolate a specific habit frequency by its rate.
 - A **notch (band-stop) filter** blocks one narrow band and passes the rest — used to suppress a compulsive cycle at its resonant frequency without disturbing other cognition.
-- **Active filters** add an op-amp (Chapter 10) for **sharper cutoffs** and **adjustable parameters** — enabling an adaptive notch that tracks a drifting compulsion.
+- **Active filters** add an op-amp (Chapter 11) for **sharper cutoffs** and **adjustable parameters** — enabling an adaptive notch that tracks a drifting compulsion.
 - **Filter order** sets steepness: **1st-order** RC (gentle), **2nd-order** RLC (steep, resonant — the inductor models habit inertia), **higher-order** by cascading.
 - The **cognitive spectrum analyzer** shows which frequencies dominate a circuit — read the spectrum first, then choose your filters. All τ and frequency values are **design choices you compute**, not measured model results.
 
@@ -254,4 +254,4 @@ b) Sketch the filter in CCDL: a high-pass stage and a low-pass stage in series, 
 c) **Which components set the center frequency `f₀`?** Identify them by name and explain, in one or two sentences, how `f₀` relates to the time constants of the two stages.
 d) For comparison, if you wanted to *suppress* this same daily loop instead of isolating it, which single filter type from this chapter would you reach for, and at what frequency would you tune it?
 
-(Answers in Appendix E. For the component primitives used here, see the cheat-sheet in Chapter 2 and the resistor/capacitor/inductor chapters, Chapters 6–8.)
+(Answers in Appendix E. For the component primitives used here, see the cheat-sheet in Chapter 2 and the resistor/capacitor/inductor chapters, Chapters 5–7.)

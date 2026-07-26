@@ -58,7 +58,7 @@ Negative feedback supplies the pruning. We sample the output of an evaluation st
 
 Flip the sign. Sample the output, *don't* invert it, feed it back to *add* to the input. Now `β` is effectively negative in our equation and the denominator `1 + Aβ` *shrinks*. As loop gain `Aβ` approaches `−1`, the denominator approaches zero and the closed-loop gain approaches *infinity*. The system amplifies its own output without limit. A vanishing input — even thermal noise — gets fed back, amplified, fed back again, amplified again. The output runs away to a rail and slams there (latch-up), or, if there's a phase delay in the loop, swings back and forth forever (**oscillation**).
 
-Positive feedback isn't always a fault — controlled, it's how you build oscillators (Chapter 11), memory latches, and clean digital thresholds. But uncontrolled, it's the runaway. And it is exactly the shape of a cognitive failure we must be able to recognize and damp.
+Positive feedback isn't always a fault — controlled, it's how you build oscillators (Chapter 13), memory latches, and clean digital thresholds. But uncontrolled, it's the runaway. And it is exactly the shape of a cognitive failure we must be able to recognize and damp.
 
 ### The cognitive anxiety loop
 

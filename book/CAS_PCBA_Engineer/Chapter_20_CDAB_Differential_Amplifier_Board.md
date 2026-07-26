@@ -320,4 +320,4 @@ b) Give the two most likely physical (well, *structural*) causes on the board, a
 
 c) Explain why the current mirror is worth inspecting here even though the symptom looks like a simple matching problem.
 
-(Answers in Appendix E. The full reference-board context — how the CDAB sits alongside the CSB, COB, CMB, and CPMB — is laid out in the Part IV introduction; the differential amplifier this board is built from is **Chapter 11: Amplifiers**.)
+(Answers in Appendix E. The full reference-board context — how the CDAB sits alongside the CSB, COB, CMB, and CPMB — is laid out in Appendix D, Standard CCB Reference Designs; the differential amplifier this board is built from is **Chapter 11: Amplifiers**.)

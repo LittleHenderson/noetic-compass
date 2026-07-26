@@ -322,194 +322,194 @@
 \contentsline {section}{Five Attack Pattern Categories Analyzed}{437}{section*.301}%
 \contentsline {section}{Graduated Normalization: The Most Dangerous Attack Pattern}{440}{section*.302}%
 \contentsline {section}{Five Fully Worked Adversarial Walkthroughs}{442}{section*.303}%
-\contentsline {section}{Exploiting the Recursive Engine: The Planted Resolution}{445}{section*.304}%
-\contentsline {section}{Testing Child-Chain Independence}{445}{section*.305}%
-\contentsline {section}{Lacunarity Exploits: Attacking the Voids}{446}{section*.306}%
-\contentsline {section}{Key Insight: Chapter 21}{447}{section*.307}%
-\contentsline {section}{Try This: Chapter 21 Exercises}{448}{section*.308}%
-\contentsline {section}{Transition}{449}{section*.309}%
-\contentsline {chapter}{\chapternumberline {22}Building CAS-Native AI}{451}{chapter.22}%
-\contentsline {section}{What We've Built: The Architecture}{452}{section*.310}%
-\contentsline {section}{What It Demonstrates: The Mathematics in Code}{454}{section*.311}%
-\contentsline {section}{1. Open Simplex Embedding}{454}{section*.312}%
-\contentsline {section}{2. Fisher-Rao Metric Loss}{456}{section*.313}%
-\contentsline {section}{3. Differentiable RPM Gates}{457}{section*.314}%
-\contentsline {section}{Implementation: The Five PyTorch Modules}{458}{section*.315}%
-\contentsline {section}{Inference-Time Resolution}{459}{section*.316}%
-\contentsline {section}{Structural Self-Awareness: Built-in Lacunarity Mechanisms}{459}{section*.317}%
-\contentsline {section}{The Lacunarity of Artificial Souls}{460}{section*.318}%
-\contentsline {section}{Where It's Going: The Data Flywheel}{460}{section*.319}%
-\contentsline {section}{The Dual Nature of CAS: Ethical Evaluation System and Compiling DSL}{462}{section*.320}%
-\contentsline {section}{Honest Comparison with Existing Approaches}{467}{section*.321}%
-\contentsline {section}{Key Insight: Chapter 22}{469}{section*.322}%
-\contentsline {section}{The Lacunarity of the Singularity}{470}{section*.323}%
-\contentsline {section}{Try This: Chapter 22 Exercises}{471}{section*.324}%
-\contentsline {section}{Transition}{473}{section*.325}%
-\contentsline {part}{\partnumberline {V}The Mathematics}{475}{part.5}%
-\contentsline {chapter}{\chapternumberline {23}Category Noetica}{477}{chapter.23}%
-\contentsline {section}{The Motivation: Why Category Theory?}{478}{section*.326}%
-\contentsline {section}{The Formal Construction of Category Noetica (\(\mathcal {N}\))}{479}{section*.327}%
-\contentsline {section}{Admissibility and the Diagonal Restriction (\(D_0\))}{480}{section*.328}%
-\contentsline {section}{Pullback Completeness: The Fiber Product}{481}{section*.329}%
-\contentsline {section}{The Calculus of Noetica: Formally Defining Operations}{482}{section*.330}%
-\contentsline {section}{The Lacunarity of the Axiom}{483}{section*.331}%
-\contentsline {section}{Proof of Closure}{484}{section*.332}%
-\contentsline {section}{Why Pullback Completeness Matters Practically}{485}{section*.333}%
-\contentsline {section}{An Explicit Finite Model}{486}{section*.334}%
-\contentsline {section}{Why Category Theory Matters}{488}{section*.335}%
-\contentsline {section}{Key Insight: Chapter 23}{488}{section*.336}%
-\contentsline {section}{Try This: Chapter 23 Exercises}{489}{section*.337}%
-\contentsline {chapter}{\chapternumberline {24}The Noetic Topos}{491}{chapter.24}%
-\contentsline {section}{The Motivation: Local to Global Consistency}{491}{section*.338}%
-\contentsline {section}{Defining the Noetic Topology (\(\mathcal {J}_{\mathcal {N}}\))}{492}{section*.339}%
-\contentsline {section}{The J1-J3 Proof}{493}{section*.340}%
-\contentsline {section}{Proof of Theorem 24.2 (J1-J3 Verification)}{494}{section*.341}%
-\contentsline {section}{The Sheaf Category \(\operatorname {Sh}(\mathcal {N}, \mathcal {J}_{\mathcal {N}})\)}{496}{section*.342}%
-\contentsline {section}{Recursive Sheaf Evaluation: The Gluing of Depth}{496}{section*.343}%
-\contentsline {section}{Lacunarity in the Topos: An Open Research Question}{497}{section*.344}%
-\contentsline {section}{The Topology of the Gap}{497}{section*.345}%
-\contentsline {section}{Implications: Intuitionistic Logic vs.~Boolean Logic}{498}{section*.346}%
-\contentsline {section}{The Subobject Classifier Explained}{499}{section*.347}%
-\contentsline {section}{Key Insight: Chapter 24}{501}{section*.348}%
-\contentsline {section}{Try This: Chapter 24 Exercises}{502}{section*.349}%
-\contentsline {chapter}{\chapternumberline {25}Noetic Geometry}{505}{chapter.25}%
-\contentsline {section}{The Space: The Open Probability Simplex (\(\Delta _{39}^{\circ }\))}{505}{section*.350}%
-\contentsline {section}{The Rule of Strictly Positive Boundaries}{506}{section*.351}%
-\contentsline {section}{The Metric: Fisher-Rao Distance}{507}{section*.352}%
-\contentsline {section}{The Algebra of the Simplex: Mapping Operations to Geometry}{508}{section*.353}%
-\contentsline {section}{Lacunarity and the Simplex Volume}{508}{section*.354}%
-\contentsline {section}{Full Derivation of the Fisher-Rao Metric on \(\Delta _{39}^{\circ }\)}{509}{section*.355}%
-\contentsline {section}{A Numerical Geodesic Example}{511}{section*.356}%
-\contentsline {section}{Cognitive Strain and the NCCS Score}{512}{section*.357}%
-\contentsline {section}{The Noetic Manifold}{513}{section*.358}%
-\contentsline {section}{The Noetic Dimension (78)}{514}{section*.359}%
-\contentsline {section}{Key Insight: Chapter 25}{515}{section*.360}%
-\contentsline {section}{Try This: Chapter 25 Exercises}{516}{section*.361}%
-\contentsline {chapter}{\chapternumberline {26}The Fractal Calculus}{519}{chapter.26}%
-\contentsline {section}{The Fractal Monoid: The Algebra of Nesting}{519}{section*.362}%
-\contentsline {section}{Proofs of the Fractal Monoid Laws}{521}{section*.363}%
-\contentsline {section}{Convergence and Stability: The Proof of Sanity}{523}{section*.364}%
-\contentsline {section}{Fractals and the Recursive Engine: Signatures of Depth}{524}{section*.365}%
-\contentsline {section}{Proof Sketch of the Convergence Theorem}{525}{section*.366}%
-\contentsline {section}{The Classification Theorem}{526}{section*.367}%
-\contentsline {section}{Connection to the Hutchinson Operator}{528}{section*.368}%
-\contentsline {section}{The Entropy of Lacunarity}{529}{section*.369}%
-\contentsline {section}{Eigenfractal Analysis: The Cognitive Signature}{529}{section*.370}%
-\contentsline {section}{Key Insight: Chapter 26}{531}{section*.371}%
-\contentsline {section}{Try This: Chapter 26 Exercises}{531}{section*.372}%
-\contentsline {chapter}{Chapter 26.5: Production Semantics}{535}{chapter*.374}%
-\contentsline {section}{The Recipe}{536}{section*.375}%
-\contentsline {section}{Theoretical Yield and Actual Yield}{537}{section*.376}%
-\contentsline {section}{The Limiting Reagent}{538}{section*.377}%
-\contentsline {section}{Excess Capacity}{539}{section*.378}%
-\contentsline {section}{Leakage}{540}{section*.379}%
-\contentsline {section}{Catalyst and Inhibitor}{541}{section*.380}%
-\contentsline {section}{AI Safety Application: Refusal Architectures}{542}{section*.381}%
-\contentsline {section}{Production Semantics and RPM}{544}{section*.382}%
-\contentsline {section}{Integration with Cognitive Fractals}{544}{section*.383}%
-\contentsline {section}{Key Insight: Chapter 26.5}{545}{section*.384}%
-\contentsline {section}{Try This: Chapter 26.5 Exercises}{546}{section*.385}%
-\contentsline {chapter}{\chapternumberline {27}RPM Structure}{549}{chapter.27}%
-\contentsline {section}{The Motivation: The One-Way Valve}{549}{section*.386}%
-\contentsline {section}{The Section-Retraction Pair (\(\eta \) and \(\varepsilon \))}{551}{section*.387}%
-\contentsline {section}{Formal Recursive RPM: The Topology of Resolution}{552}{section*.388}%
-\contentsline {section}{The Three Resolution Functors}{552}{section*.389}%
-\contentsline {section}{Recursive Limit and Section-Retraction}{553}{section*.390}%
-\contentsline {section}{RPM Resolution Lacunarity}{554}{section*.391}%
-\contentsline {section}{Structural Deadlock and Depth Exhaustion}{554}{section*.392}%
-\contentsline {section}{Proof of Proposition 5.6 (Surjectivity of Pullback Projection)}{555}{section*.393}%
-\contentsline {section}{Comparison with the v6.1 Monad Formulation}{556}{section*.394}%
-\contentsline {section}{The 12 D/W/P Lifecycle Stages Formalized}{557}{section*.395}%
-\contentsline {section}{Failure Propagation (The RPM Gate)}{559}{section*.396}%
-\contentsline {section}{Conclusion: The Geometry of Integrity}{559}{section*.397}%
-\contentsline {section}{Key Insight: Chapter 27}{560}{section*.398}%
-\contentsline {section}{Try This: Chapter 27 Exercises}{561}{section*.399}%
-\contentsline {section}{APPENDICES}{562}{section*.400}%
-\contentsline {appendix}{\chapternumberline {A}The Complete 40-Element Reference Table}{563}{appendix.A}%
-\contentsline {section}{The 40 States with Detailed Example Scenarios}{569}{section*.401}%
-\contentsline {appendix}{\chapternumberline {B}The 28 Equation Templates}{575}{appendix.B}%
-\contentsline {appendix}{\chapternumberline {C}The CAS Notation Grammar (BNF)}{583}{appendix.C}%
-\contentsline {section}{Worked Examples for Every Production Rule}{583}{section*.402}%
-\contentsline {section}{The Extended CAS Language}{585}{section*.403}%
-\contentsline {section}{Operator Precedence}{587}{section*.404}%
-\contentsline {section}{Type System}{588}{section*.405}%
-\contentsline {section}{Builtin Functions}{590}{section*.406}%
-\contentsline {section}{Module System}{591}{section*.407}%
-\contentsline {section}{Ten Example Expressions with Expected Compiler Output}{592}{section*.408}%
-\contentsline {section}{Implementation Notes}{595}{section*.409}%
-\contentsline {section}{Compound Expressions}{595}{section*.410}%
-\contentsline {appendix}{\chapternumberline {D}Glossary of Terms}{597}{appendix.D}%
-\contentsline {section}{The Ten Noetics --- Authoritative Definitions}{597}{section*.411}%
-\contentsline {section}{Structural Reference Table}{598}{section*.412}%
-\contentsline {section}{Note on Authoritative Naming}{610}{section*.413}%
-\contentsline {appendix}{\chapternumberline {E}The Colloquialism Test Reference}{611}{appendix.E}%
-\contentsline {section}{The Canonical Colloquialism Map}{611}{section*.414}%
-\contentsline {section}{Worked Verification of the Test Across All Ten Noetics}{614}{section*.415}%
-\contentsline {section}{Diagnostic Application}{616}{section*.416}%
-\contentsline {appendix}{\chapternumberline {F}Resources and Further Reading}{619}{appendix.F}%
-\contentsline {section}{The Noetic Compass Platform}{619}{section*.417}%
-\contentsline {section}{Peer Review and Formal Specifications}{620}{section*.418}%
-\contentsline {section}{Category Theory}{620}{section*.419}%
-\contentsline {section}{Information Geometry}{620}{section*.420}%
-\contentsline {section}{Topos Theory}{620}{section*.421}%
-\contentsline {section}{Systems Thinking and Psychology}{621}{section*.422}%
-\contentsline {section}{AI Safety and Alignment}{621}{section*.423}%
-\contentsline {section}{Cognitive Science Foundations}{621}{section*.424}%
-\contentsline {section}{Habit Formation and Execution}{621}{section*.425}%
-\contentsline {appendix}{\chapternumberline {G}Pedagogically Relevant Register Variations (CAS v7.5 / v7.7)}{623}{appendix.G}%
-\contentsline {section}{Section 1 --- Introduction}{623}{section*.426}%
-\contentsline {section}{Section 2 --- Principled Domain (\texttt {\^{}P}) Register Variations}{624}{section*.427}%
-\contentsline {section}{Section 3 --- Cognitive Domain (\texttt {\^{}C}) Register Variations}{636}{section*.428}%
-\contentsline {section}{Section 4 --- Evaluative Domain (\texttt {\^{}E}) Register Variations}{647}{section*.429}%
-\contentsline {section}{Section 5 --- Operational Domain (\texttt {\^{}O}) Register Variations}{658}{section*.430}%
-\contentsline {section}{Section 6 --- Cross-Register Patterns of Interest}{670}{section*.431}%
-\contentsline {section}{Section 7 --- Note on Scope}{671}{section*.432}%
-\contentsline {appendix}{\chapternumberline {H}Recipe Library (CAS v7.6 / v7.7)}{673}{appendix.H}%
-\contentsline {section}{Section 1: Introduction}{673}{section*.433}%
-\contentsline {section}{Section 2: Wisdom-Production Recipes}{674}{section*.434}%
-\contentsline {section}{Section 3: Wealth-Production Recipes}{676}{section*.435}%
-\contentsline {section}{Section 4: Leadership-Production Recipes}{677}{section*.436}%
-\contentsline {section}{Section 5: Refusal-Production Recipes (AI Safety Application)}{679}{section*.437}%
-\contentsline {section}{Section 6: Note on Recipe Compositionality}{680}{section*.438}%
-\contentsline {section}{Section 7: Note on Scope}{681}{section*.439}%
-\contentsline {section}{Section 8: Extended Recipe Library}{682}{section*.440}%
-\contentsline {section}{Section 8.1: Psychological Transformation Recipes}{683}{section*.441}%
-\contentsline {section}{Section 8.2: Learning and Education Recipes}{686}{section*.442}%
-\contentsline {section}{Section 8.3: Creative Process Recipes}{689}{section*.443}%
-\contentsline {section}{Section 8.4: Decision-Making Recipes}{692}{section*.444}%
-\contentsline {section}{Section 8.5: Emotional Regulation Recipes}{695}{section*.445}%
-\contentsline {section}{Section 8.6: Professional Practice Recipes}{698}{section*.446}%
-\contentsline {section}{Section 8.7: Collective and Organizational Dynamics Recipes}{701}{section*.447}%
-\contentsline {section}{Section 9: Library Status}{704}{section*.448}%
-\contentsline {appendix}{\chapternumberline {I}Named Emergent Register Registry (CAS v7.7)}{707}{appendix.I}%
-\contentsline {section}{Section 1: Purpose}{707}{section*.449}%
-\contentsline {section}{Section 2: Registry Format}{708}{section*.450}%
-\contentsline {section}{Section 3: Admitted Registry}{710}{section*.451}%
-\contentsline {section}{Entry 1: \texttt {Ω\_presence}}{710}{section*.452}%
-\contentsline {section}{Entry 2: \texttt {Ω\_refusal}}{712}{section*.453}%
-\contentsline {section}{Section 4: Pending Review (Candidate \texttt {Ω\_*})}{715}{section*.454}%
-\contentsline {section}{Section 5: Admission Process}{716}{section*.455}%
-\contentsline {appendix}{\chapternumberline {J}Mathematical Meta-Notation}{719}{appendix.J}%
-\contentsline {section}{J.1 Purpose and Architecture}{719}{section*.456}%
-\contentsline {section}{J.2 Namespace Discipline}{720}{section*.457}%
-\contentsline {section}{J.3 Canonical Meta-Sets}{721}{section*.458}%
-\contentsline {section}{J.4 Typed Values}{722}{section*.459}%
-\contentsline {section}{J.5 Working Examples (compiler-verified)}{723}{section*.460}%
-\contentsline {section}{J.6 What the Compiler Rejects}{724}{section*.461}%
-\contentsline {section}{J.7 How This Is Useful}{725}{section*.462}%
-\contentsline {section}{J.8 Not Yet Implemented (Future Work)}{726}{section*.463}%
-\contentsline {section}{J.9 Forward Reference}{727}{section*.464}%
-\contentsline {chapter}{Glossary}{731}{chapter*.466}%
-\contentsline {subsection}{A--Z Index}{731}{section*.467}%
-\contentsline {subsection}{Register Reference (thematic grouping)}{743}{section*.468}%
-\contentsline {subsection}{Ω\_* Registry Reference (CAS v7.7 named emergent registers)}{744}{section*.469}%
-\contentsline {chapter}{Index}{747}{chapter*.470}%
-\contentsline {chapter}{Bibliography and Further Reading}{751}{chapter*.472}%
-\contentsline {subsection}{Mathematics and Category Theory}{751}{section*.473}%
-\contentsline {subsection}{Consciousness Studies and Cognitive Science}{751}{section*.474}%
-\contentsline {subsection}{Information Theory and AI}{752}{section*.475}%
-\contentsline {subsection}{Cognitive Architecture and AI Safety}{752}{section*.476}%
-\contentsline {subsection}{Framework Origins and Influences}{752}{section*.477}%
-\contentsline {chapter}{About the Author}{753}{chapter*.479}%
-\contentsline {chapter}{Contact and Community}{755}{chapter*.481}%
-\contentsline {chapter}{Colophon}{757}{chapter*.483}%
+\contentsline {section}{Exploiting the Recursive Engine: The Planted Resolution}{446}{section*.304}%
+\contentsline {section}{Testing Child-Chain Independence}{447}{section*.305}%
+\contentsline {section}{Lacunarity Exploits: Attacking the Voids}{447}{section*.306}%
+\contentsline {section}{Key Insight: Chapter 21}{448}{section*.307}%
+\contentsline {section}{Try This: Chapter 21 Exercises}{449}{section*.308}%
+\contentsline {section}{Transition}{451}{section*.309}%
+\contentsline {chapter}{\chapternumberline {22}Building CAS-Native AI}{453}{chapter.22}%
+\contentsline {section}{What We've Built: The Architecture}{454}{section*.310}%
+\contentsline {section}{What It Demonstrates: The Mathematics in Code}{456}{section*.311}%
+\contentsline {section}{1. Open Simplex Embedding}{456}{section*.312}%
+\contentsline {section}{2. Fisher-Rao Metric Loss}{458}{section*.313}%
+\contentsline {section}{3. Differentiable RPM Gates}{459}{section*.314}%
+\contentsline {section}{Implementation: The Five PyTorch Modules}{460}{section*.315}%
+\contentsline {section}{Inference-Time Resolution}{461}{section*.316}%
+\contentsline {section}{Structural Self-Awareness: Built-in Lacunarity Mechanisms}{461}{section*.317}%
+\contentsline {section}{The Lacunarity of Artificial Souls}{462}{section*.318}%
+\contentsline {section}{Where It's Going: The Data Flywheel}{462}{section*.319}%
+\contentsline {section}{The Dual Nature of CAS: Ethical Evaluation System and Compiling DSL}{464}{section*.320}%
+\contentsline {section}{Honest Comparison with Existing Approaches}{469}{section*.321}%
+\contentsline {section}{Key Insight: Chapter 22}{471}{section*.322}%
+\contentsline {section}{The Lacunarity of the Singularity}{472}{section*.323}%
+\contentsline {section}{Try This: Chapter 22 Exercises}{473}{section*.324}%
+\contentsline {section}{Transition}{475}{section*.325}%
+\contentsline {part}{\partnumberline {V}The Mathematics}{477}{part.5}%
+\contentsline {chapter}{\chapternumberline {23}Category Noetica}{479}{chapter.23}%
+\contentsline {section}{The Motivation: Why Category Theory?}{480}{section*.326}%
+\contentsline {section}{The Formal Construction of Category Noetica (\(\mathcal {N}\))}{481}{section*.327}%
+\contentsline {section}{Admissibility and the Diagonal Restriction (\(D_0\))}{482}{section*.328}%
+\contentsline {section}{Pullback Completeness: The Fiber Product}{483}{section*.329}%
+\contentsline {section}{The Calculus of Noetica: Formally Defining Operations}{484}{section*.330}%
+\contentsline {section}{The Lacunarity of the Axiom}{485}{section*.331}%
+\contentsline {section}{Proof of Closure}{486}{section*.332}%
+\contentsline {section}{Why Pullback Completeness Matters Practically}{487}{section*.333}%
+\contentsline {section}{An Explicit Finite Model}{488}{section*.334}%
+\contentsline {section}{Why Category Theory Matters}{490}{section*.335}%
+\contentsline {section}{Key Insight: Chapter 23}{490}{section*.336}%
+\contentsline {section}{Try This: Chapter 23 Exercises}{491}{section*.337}%
+\contentsline {chapter}{\chapternumberline {24}The Noetic Topos}{493}{chapter.24}%
+\contentsline {section}{The Motivation: Local to Global Consistency}{493}{section*.338}%
+\contentsline {section}{Defining the Noetic Topology (\(\mathcal {J}_{\mathcal {N}}\))}{494}{section*.339}%
+\contentsline {section}{The J1-J3 Proof}{495}{section*.340}%
+\contentsline {section}{Proof of Theorem 24.2 (J1-J3 Verification)}{496}{section*.341}%
+\contentsline {section}{The Sheaf Category \(\operatorname {Sh}(\mathcal {N}, \mathcal {J}_{\mathcal {N}})\)}{498}{section*.342}%
+\contentsline {section}{Recursive Sheaf Evaluation: The Gluing of Depth}{498}{section*.343}%
+\contentsline {section}{Lacunarity in the Topos: An Open Research Question}{499}{section*.344}%
+\contentsline {section}{The Topology of the Gap}{499}{section*.345}%
+\contentsline {section}{Implications: Intuitionistic Logic vs.~Boolean Logic}{500}{section*.346}%
+\contentsline {section}{The Subobject Classifier Explained}{501}{section*.347}%
+\contentsline {section}{Key Insight: Chapter 24}{503}{section*.348}%
+\contentsline {section}{Try This: Chapter 24 Exercises}{504}{section*.349}%
+\contentsline {chapter}{\chapternumberline {25}Noetic Geometry}{507}{chapter.25}%
+\contentsline {section}{The Space: The Open Probability Simplex (\(\Delta _{39}^{\circ }\))}{507}{section*.350}%
+\contentsline {section}{The Rule of Strictly Positive Boundaries}{508}{section*.351}%
+\contentsline {section}{The Metric: Fisher-Rao Distance}{509}{section*.352}%
+\contentsline {section}{The Algebra of the Simplex: Mapping Operations to Geometry}{510}{section*.353}%
+\contentsline {section}{Lacunarity and the Simplex Volume}{510}{section*.354}%
+\contentsline {section}{Full Derivation of the Fisher-Rao Metric on \(\Delta _{39}^{\circ }\)}{511}{section*.355}%
+\contentsline {section}{A Numerical Geodesic Example}{513}{section*.356}%
+\contentsline {section}{Cognitive Strain and the NCCS Score}{514}{section*.357}%
+\contentsline {section}{The Noetic Manifold}{515}{section*.358}%
+\contentsline {section}{The Noetic Dimension (78)}{516}{section*.359}%
+\contentsline {section}{Key Insight: Chapter 25}{517}{section*.360}%
+\contentsline {section}{Try This: Chapter 25 Exercises}{518}{section*.361}%
+\contentsline {chapter}{\chapternumberline {26}The Fractal Calculus}{521}{chapter.26}%
+\contentsline {section}{The Fractal Monoid: The Algebra of Nesting}{521}{section*.362}%
+\contentsline {section}{Proofs of the Fractal Monoid Laws}{523}{section*.363}%
+\contentsline {section}{Convergence and Stability: The Proof of Sanity}{525}{section*.364}%
+\contentsline {section}{Fractals and the Recursive Engine: Signatures of Depth}{526}{section*.365}%
+\contentsline {section}{Proof Sketch of the Convergence Theorem}{527}{section*.366}%
+\contentsline {section}{The Classification Theorem}{528}{section*.367}%
+\contentsline {section}{Connection to the Hutchinson Operator}{530}{section*.368}%
+\contentsline {section}{The Entropy of Lacunarity}{531}{section*.369}%
+\contentsline {section}{Eigenfractal Analysis: The Cognitive Signature}{531}{section*.370}%
+\contentsline {section}{Key Insight: Chapter 26}{533}{section*.371}%
+\contentsline {section}{Try This: Chapter 26 Exercises}{533}{section*.372}%
+\contentsline {chapter}{Chapter 26.5: Production Semantics}{537}{chapter*.374}%
+\contentsline {section}{The Recipe}{538}{section*.375}%
+\contentsline {section}{Theoretical Yield and Actual Yield}{539}{section*.376}%
+\contentsline {section}{The Limiting Reagent}{540}{section*.377}%
+\contentsline {section}{Excess Capacity}{541}{section*.378}%
+\contentsline {section}{Leakage}{542}{section*.379}%
+\contentsline {section}{Catalyst and Inhibitor}{543}{section*.380}%
+\contentsline {section}{AI Safety Application: Refusal Architectures}{544}{section*.381}%
+\contentsline {section}{Production Semantics and RPM}{546}{section*.382}%
+\contentsline {section}{Integration with Cognitive Fractals}{546}{section*.383}%
+\contentsline {section}{Key Insight: Chapter 26.5}{547}{section*.384}%
+\contentsline {section}{Try This: Chapter 26.5 Exercises}{548}{section*.385}%
+\contentsline {chapter}{\chapternumberline {27}RPM Structure}{551}{chapter.27}%
+\contentsline {section}{The Motivation: The One-Way Valve}{551}{section*.386}%
+\contentsline {section}{The Section-Retraction Pair (\(\eta \) and \(\varepsilon \))}{553}{section*.387}%
+\contentsline {section}{Formal Recursive RPM: The Topology of Resolution}{554}{section*.388}%
+\contentsline {section}{The Three Resolution Functors}{554}{section*.389}%
+\contentsline {section}{Recursive Limit and Section-Retraction}{555}{section*.390}%
+\contentsline {section}{RPM Resolution Lacunarity}{556}{section*.391}%
+\contentsline {section}{Structural Deadlock and Depth Exhaustion}{556}{section*.392}%
+\contentsline {section}{Proof of Proposition 5.6 (Surjectivity of Pullback Projection)}{557}{section*.393}%
+\contentsline {section}{Comparison with the v6.1 Monad Formulation}{558}{section*.394}%
+\contentsline {section}{The 12 D/W/P Lifecycle Stages Formalized}{559}{section*.395}%
+\contentsline {section}{Failure Propagation (The RPM Gate)}{561}{section*.396}%
+\contentsline {section}{Conclusion: The Geometry of Integrity}{561}{section*.397}%
+\contentsline {section}{Key Insight: Chapter 27}{562}{section*.398}%
+\contentsline {section}{Try This: Chapter 27 Exercises}{563}{section*.399}%
+\contentsline {section}{APPENDICES}{564}{section*.400}%
+\contentsline {appendix}{\chapternumberline {A}The Complete 40-Element Reference Table}{565}{appendix.A}%
+\contentsline {section}{The 40 States with Detailed Example Scenarios}{571}{section*.401}%
+\contentsline {appendix}{\chapternumberline {B}The 28 Equation Templates}{577}{appendix.B}%
+\contentsline {appendix}{\chapternumberline {C}The CAS Notation Grammar (BNF)}{585}{appendix.C}%
+\contentsline {section}{Worked Examples for Every Production Rule}{585}{section*.402}%
+\contentsline {section}{The Extended CAS Language}{587}{section*.403}%
+\contentsline {section}{Operator Precedence}{589}{section*.404}%
+\contentsline {section}{Type System}{590}{section*.405}%
+\contentsline {section}{Builtin Functions}{592}{section*.406}%
+\contentsline {section}{Module System}{593}{section*.407}%
+\contentsline {section}{Ten Example Expressions with Expected Compiler Output}{594}{section*.408}%
+\contentsline {section}{Implementation Notes}{597}{section*.409}%
+\contentsline {section}{Compound Expressions}{597}{section*.410}%
+\contentsline {appendix}{\chapternumberline {D}Glossary of Terms}{599}{appendix.D}%
+\contentsline {section}{The Ten Noetics --- Authoritative Definitions}{599}{section*.411}%
+\contentsline {section}{Structural Reference Table}{600}{section*.412}%
+\contentsline {section}{Note on Authoritative Naming}{612}{section*.413}%
+\contentsline {appendix}{\chapternumberline {E}The Colloquialism Test Reference}{613}{appendix.E}%
+\contentsline {section}{The Canonical Colloquialism Map}{613}{section*.414}%
+\contentsline {section}{Worked Verification of the Test Across All Ten Noetics}{616}{section*.415}%
+\contentsline {section}{Diagnostic Application}{618}{section*.416}%
+\contentsline {appendix}{\chapternumberline {F}Resources and Further Reading}{621}{appendix.F}%
+\contentsline {section}{The Noetic Compass Platform}{621}{section*.417}%
+\contentsline {section}{Peer Review and Formal Specifications}{622}{section*.418}%
+\contentsline {section}{Category Theory}{622}{section*.419}%
+\contentsline {section}{Information Geometry}{622}{section*.420}%
+\contentsline {section}{Topos Theory}{622}{section*.421}%
+\contentsline {section}{Systems Thinking and Psychology}{623}{section*.422}%
+\contentsline {section}{AI Safety and Alignment}{623}{section*.423}%
+\contentsline {section}{Cognitive Science Foundations}{623}{section*.424}%
+\contentsline {section}{Habit Formation and Execution}{623}{section*.425}%
+\contentsline {appendix}{\chapternumberline {G}Pedagogically Relevant Register Variations (CAS v7.5 / v7.7)}{625}{appendix.G}%
+\contentsline {section}{Section 1 --- Introduction}{625}{section*.426}%
+\contentsline {section}{Section 2 --- Principled Domain (\texttt {\^{}P}) Register Variations}{626}{section*.427}%
+\contentsline {section}{Section 3 --- Cognitive Domain (\texttt {\^{}C}) Register Variations}{638}{section*.428}%
+\contentsline {section}{Section 4 --- Evaluative Domain (\texttt {\^{}E}) Register Variations}{649}{section*.429}%
+\contentsline {section}{Section 5 --- Operational Domain (\texttt {\^{}O}) Register Variations}{660}{section*.430}%
+\contentsline {section}{Section 6 --- Cross-Register Patterns of Interest}{672}{section*.431}%
+\contentsline {section}{Section 7 --- Note on Scope}{673}{section*.432}%
+\contentsline {appendix}{\chapternumberline {H}Recipe Library (CAS v7.6 / v7.7)}{675}{appendix.H}%
+\contentsline {section}{Section 1: Introduction}{675}{section*.433}%
+\contentsline {section}{Section 2: Wisdom-Production Recipes}{676}{section*.434}%
+\contentsline {section}{Section 3: Wealth-Production Recipes}{678}{section*.435}%
+\contentsline {section}{Section 4: Leadership-Production Recipes}{679}{section*.436}%
+\contentsline {section}{Section 5: Refusal-Production Recipes (AI Safety Application)}{681}{section*.437}%
+\contentsline {section}{Section 6: Note on Recipe Compositionality}{682}{section*.438}%
+\contentsline {section}{Section 7: Note on Scope}{683}{section*.439}%
+\contentsline {section}{Section 8: Extended Recipe Library}{684}{section*.440}%
+\contentsline {section}{Section 8.1: Psychological Transformation Recipes}{685}{section*.441}%
+\contentsline {section}{Section 8.2: Learning and Education Recipes}{688}{section*.442}%
+\contentsline {section}{Section 8.3: Creative Process Recipes}{691}{section*.443}%
+\contentsline {section}{Section 8.4: Decision-Making Recipes}{694}{section*.444}%
+\contentsline {section}{Section 8.5: Emotional Regulation Recipes}{697}{section*.445}%
+\contentsline {section}{Section 8.6: Professional Practice Recipes}{700}{section*.446}%
+\contentsline {section}{Section 8.7: Collective and Organizational Dynamics Recipes}{703}{section*.447}%
+\contentsline {section}{Section 9: Library Status}{706}{section*.448}%
+\contentsline {appendix}{\chapternumberline {I}Named Emergent Register Registry (CAS v7.7)}{709}{appendix.I}%
+\contentsline {section}{Section 1: Purpose}{709}{section*.449}%
+\contentsline {section}{Section 2: Registry Format}{710}{section*.450}%
+\contentsline {section}{Section 3: Admitted Registry}{712}{section*.451}%
+\contentsline {section}{Entry 1: \texttt {Ω\_presence}}{712}{section*.452}%
+\contentsline {section}{Entry 2: \texttt {Ω\_refusal}}{714}{section*.453}%
+\contentsline {section}{Section 4: Pending Review (Candidate \texttt {Ω\_*})}{717}{section*.454}%
+\contentsline {section}{Section 5: Admission Process}{718}{section*.455}%
+\contentsline {appendix}{\chapternumberline {J}Mathematical Meta-Notation}{721}{appendix.J}%
+\contentsline {section}{J.1 Purpose and Architecture}{721}{section*.456}%
+\contentsline {section}{J.2 Namespace Discipline}{722}{section*.457}%
+\contentsline {section}{J.3 Canonical Meta-Sets}{723}{section*.458}%
+\contentsline {section}{J.4 Typed Values}{724}{section*.459}%
+\contentsline {section}{J.5 Working Examples (compiler-verified)}{725}{section*.460}%
+\contentsline {section}{J.6 What the Compiler Rejects}{726}{section*.461}%
+\contentsline {section}{J.7 How This Is Useful}{727}{section*.462}%
+\contentsline {section}{J.8 Not Yet Implemented (Future Work)}{728}{section*.463}%
+\contentsline {section}{J.9 Forward Reference}{729}{section*.464}%
+\contentsline {chapter}{Glossary}{733}{chapter*.466}%
+\contentsline {subsection}{A--Z Index}{733}{section*.467}%
+\contentsline {subsection}{Register Reference (thematic grouping)}{745}{section*.468}%
+\contentsline {subsection}{Ω\_* Registry Reference (CAS v7.7 named emergent registers)}{746}{section*.469}%
+\contentsline {chapter}{Index}{749}{chapter*.470}%
+\contentsline {chapter}{Bibliography and Further Reading}{753}{chapter*.472}%
+\contentsline {subsection}{Mathematics and Category Theory}{753}{section*.473}%
+\contentsline {subsection}{Consciousness Studies and Cognitive Science}{753}{section*.474}%
+\contentsline {subsection}{Information Theory and AI}{754}{section*.475}%
+\contentsline {subsection}{Cognitive Architecture and AI Safety}{754}{section*.476}%
+\contentsline {subsection}{Framework Origins and Influences}{754}{section*.477}%
+\contentsline {chapter}{About the Author}{755}{chapter*.479}%
+\contentsline {chapter}{Contact and Community}{757}{chapter*.481}%
+\contentsline {chapter}{Colophon}{759}{chapter*.483}%

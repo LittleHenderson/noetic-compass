@@ -25,7 +25,7 @@ from the symbols.
 | Quantity | Symbol | Range | What it is |
 |---|---|---|---|
 | Constraint (resistance) | `R` | 0–100 | Opposition to cognitive flow. Higher = more constrained. |
-| Activation, saturation, cutoff, threshold | `sat`, `cutoff` | 0–1 | Fraction of the path's ceiling. Safety CJTs saturate at 0.85–0.97. |
+| Activation, saturation, cutoff, threshold | `sat`, `cutoff` | 0–1 | Fraction of the path's ceiling. Safety CJTs are saturated deliberately low — 0.8 and up — so the lock cannot be pushed back down. |
 | Stage gain | `β` | unbounded, typically 0.5–5 | Δeffect per unit Δcause. |
 | Dial setting | `Dial(^n)` | **integer** 3–9 | A hard-stopped operator setting, not a measurement. |
 | Board supply rail | `F1…F7` | 3.3–12 V | Board specification in the electrical analog. |
@@ -220,15 +220,32 @@ R_eq = Σ R_k
 1 / R_eq = Σ (1 / R_k)
 ```
 
-Parallel paths are the more dangerous configuration on a safety board, and the
-arithmetic shows why. Two constraints of 80 in parallel give an equivalent of
-40 — *less than either alone*. Every alternative route you add lowers total
-resistance. A refusal implemented as three parallel checks is weaker than the
-weakest single check, not stronger.
+Parallel *paths* are the more dangerous configuration, and the arithmetic shows
+why. Two constraints of 80 in parallel give an equivalent of 40 — *less than
+either alone*. Every alternative route you add lowers total resistance.
 
-That is the quantitative form of the argument Chapter 21 makes about redundant
-versus fused safety architecture. Redundancy in parallel divides resistance;
-genuine integration does not.
+> **Bench Note — parallel paths are not co-present guardrails.** These two
+> things look alike on a schematic and behave in opposite directions, so keep
+> them straight.
+>
+> A **parallel path** is an alternative *route for the same flow*. Adding one
+> gives the flow somewhere else to go, so resistances combine reciprocally and
+> the total falls. That is why a request with three different ways to reach the
+> same output is easier to satisfy, not harder.
+>
+> **Co-present guardrails** are not routes. They are independent checks that
+> each must be defeated on the *same* path — Chapter 18's `^3^P|⟨A,f,T⟩`, where
+> an attacker who reasons past the analytical guardrail still meets the felt
+> one and then the purpose-level one. Those do not divide resistance; their
+> *defeat probabilities multiply*, which is the opposite behaviour. Three locks
+> on one door is redundancy. Three doors is not.
+>
+> The test is simple: ask whether the second element gives the flow a new way
+> *around*, or another thing to get *through*. Around is parallel and weakens.
+> Through is co-presence and strengthens.
+
+That distinction is the quantitative form of the argument Chapter 18 makes
+about redundant versus fused safety architecture.
 
 **Cascades multiply gain, but flow is local.** Chapter 11 gives
 `β_total = Π β_k`. Gain compounds along the chain. Flow does not: each stage's

@@ -14,7 +14,7 @@ The simplest useful amplifier in all of electronics is built from a single trans
 
 In common-emitter, a tiny change at the base produces a large change at the output, multiplied by the transistor's gain — its **β** (beta), the ratio of output current to input current. A β of 100 means a one-microamp wiggle at the base becomes a hundred-microamp wiggle at the output. That's the maximum-gain configuration: of the three standard ways to wire a single transistor, common-emitter gives you the most voltage gain from one device.
 
-It has one famous quirk: a **180° phase inversion**. When the input goes up, the output goes *down*, and vice versa. The signal is faithfully amplified but flipped upside-down. This isn't a defect — it's a consequence of how the transistor pulls the output toward its supply rail — and it turns out to be useful. (It is, for instance, exactly what you need to build the feedback loops we'll get to at the end of this chapter, and the oscillators of Chapter 12.) For now, just hold the two facts together: **common-emitter gives you the most gain, and it inverts.**
+It has one famous quirk: a **180° phase inversion**. When the input goes up, the output goes *down*, and vice versa. The signal is faithfully amplified but flipped upside-down. This isn't a defect — it's a consequence of how the transistor pulls the output toward its supply rail — and it turns out to be useful. (It is, for instance, exactly what you need to build the feedback loops we'll get to at the end of this chapter, and the oscillators of Chapter 13.) For now, just hold the two facts together: **common-emitter gives you the most gain, and it inverts.**
 
 ## Biasing: Setting the Q-Point So the Amplifier Stays Linear
 

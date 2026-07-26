@@ -85,7 +85,7 @@ MARK_TKS = r"""\begin{tikzpicture}[x=1.45mm,y=1.45mm]
 BOOKS = [
     {
         "slug": "cas_pcba_engineer",
-        "pages": 733,
+        "pages": 735,
         "title_lines": r"CAS\\PCBA\\Engineer",
         "spine_title": "CAS PCBA Engineer",
         "subtitle": "Designing Cognitive Circuits with the "
@@ -112,7 +112,7 @@ are taught from first principles, exactly where you need them.""",
     },
     {
         "slug": "thinking_in_cognitive_architecture",
-        "pages": 792,
+        "pages": 794,
         "title_lines": r"Thinking in\\Cognitive\\Architecture",
         "spine_title": "Thinking in Cognitive Architecture",
         "subtitle": "A Universal Framework for Humans, AI, "

@@ -195,7 +195,7 @@ A **sequence** — written with `Phi` — is an ordered list of states traversed
 Phi< ^8^C|A, ^3^O|E, ^9^E|f, ^0^P|T >
 ```
 
-Read: the cognition moved through these four states, in this order. Sequences are how we describe oscillators and habit loops in Chapter 11 — a cycle that repeats is just a `Phi` sequence that returns to its start.
+Read: the cognition moved through these four states, in this order. Sequences are how we describe oscillators and habit loops in Chapter 13 — a cycle that repeats is just a `Phi` sequence that returns to its start.
 
 ## Clusters, Bindings, and the Compiler
 

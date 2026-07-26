@@ -120,6 +120,48 @@ def prepare(paths):
     return text
 
 
+COMMON_RIGHTS = """
+Copyright © 2026 Little Henderson. All rights reserved.
+
+No part of this publication may be reproduced, distributed, or transmitted in
+any form or by any means, including photocopying, recording, or other
+electronic or mechanical methods, without the prior written permission of the
+author, except in the case of brief quotations embodied in critical reviews and
+certain other noncommercial uses permitted by copyright law.
+
+First Edition, 2026. Published by Noetic Compass Press.
+"""
+
+# The print editions carry their disclaimers in LaTeX front matter, which the
+# EPUB path never sees. Without this block the Kindle editions -- the ones most
+# readers actually buy -- shipped with a rights line and nothing else.
+DISCLAIMER = {
+    "pcba": "*Nothing in this book is a safety certification, a guarantee of "
+            "model behavior, or legal or medical advice. A Cognitive Circuit "
+            "Board is an engineering artifact: it does what its schematic, "
+            "parameters, and test report say it does — no more, and no less.*",
+    "tica": "*Nothing in this book is a diagnosis, a treatment, a safety "
+            "certification, a guarantee of model behavior, or legal, medical, "
+            "financial, or psychological advice. The frameworks described here "
+            "are analytical tools. Decisions about your health, relationships, "
+            "finances, or the deployment of an AI system remain yours, and are "
+            "properly made with qualified professionals.*",
+    "tks": "*This book describes a system of practice. It is not medical, "
+           "psychological, financial, or legal advice, and it is not a "
+           "substitute for professional care. The operations described here "
+           "are offered as a framework for reflection and self-directed work. "
+           "Decisions about your health, finances, relationships, and safety "
+           "remain yours, and are properly made with qualified professionals.*",
+}
+
+
+def front_matter(book):
+    return ("\n\n# Copyright\n\n"
+            + COMMON_RIGHTS.strip()
+            + "\n\nISBN: [pending publisher assignment]\n\n"
+            + DISCLAIMER[book["key"]] + "\n\n")
+
+
 def build(book):
     missing = [p for p in book["src"] if not p.exists()]
     if missing:
@@ -140,7 +182,7 @@ def build(book):
         f"subject: \"{book['subject']}\"\n"
         "---\n\n"
     )
-    tmp.write_text(meta + body, encoding="utf-8")
+    tmp.write_text(meta + front_matter(book) + body, encoding="utf-8")
 
     cmd = ["pandoc", str(tmp), "-o", str(book["out"]),
            "-f", "markdown-superscript-subscript",
