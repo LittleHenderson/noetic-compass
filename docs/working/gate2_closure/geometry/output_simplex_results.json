@@ -1,0 +1,23 @@
+{
+  "criteria": {
+    "O1_reversal_TKS_better_than_compact": false,
+    "O2_beats_own_shuffled_control": true,
+    "O3_permutation_p_below_0.01": false,
+    "O4_no_saturation": true,
+    "O5_lexical_gradient_opposite": true
+  },
+  "design": "OUTPUT-DISTRIBUTION-SIMPLEX-v1",
+  "geodesic": {
+    "TKS": 0.475994,
+    "compact": 0.150255,
+    "shuffled_TKS": 0.699542
+  },
+  "lexical_gradient": -2.1516,
+  "model": "EleutherAI/pythia-1b",
+  "note": "output distribution, NOT a Jacobian -- declared deviation",
+  "permutation_p": 1.0,
+  "prereg_commit": "224645b0",
+  "tks_vs_compact": -0.32574,
+  "tks_vs_shuffled": 0.223548,
+  "verdict": "NOT_LICENSED"
+}
