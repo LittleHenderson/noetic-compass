@@ -63,7 +63,8 @@ Each individual curve has the same shape, and the shape has four named parts:
 Here is the family — four bias levels, the construct asked for in this chapter's marquee exercise. Bias rises from the bottom curve to the top.
 
 ```{=latex}
-\begin{center}
+\begin{figure}[htbp]
+\centering
 \begin{tikzpicture}
 \begin{axis}[casaxis, width=8.8cm, height=6.0cm,
     xlabel={cause activation}, ylabel={effect activation},
@@ -99,7 +100,8 @@ Here is the family — four bias levels, the construct asked for in this chapter
     (axis cs:0.62,0.98) -- (axis cs:0.645,0.83);
 \end{axis}
 \end{tikzpicture}
-\end{center}
+\caption{CJT characteristic curves at four bias levels. Each curve plots effect against cause, crossing cutoff, active, and saturation.}\label{fig:cjt-curves}
+\end{figure}
 ```
 
 Read it the way an engineer reads it. The **bias=0.2** curve barely lifts off the axis and saturates early and low — a near-cutoff device, low gain, an early knee, a low ceiling. The **bias=0.8** curve rises steeply (high β), holds its linear active region far across the cause axis, and saturates high (sat≈0.95) with a visible early-effect upslope past the knee. The higher the bias, the steeper the active slope, the later and higher the knee, the more the strong-output feedback shows. That single picture contains the whole datasheet: gain (slope), cutoff (where the curve leaves the axis), saturation (the knee height), and the runaway seed (the post-knee upslope).

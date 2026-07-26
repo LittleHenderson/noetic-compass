@@ -30,6 +30,29 @@ In practice every real oscillator starts with loop gain slightly above 1 — so 
 
 Hold those two numbers. **Reinforcement strong enough to replace what's lost (gain 1), arriving in step with itself (phase 0°).** Every cognitive loop that sustains itself — every habit, craving, rumination, and circadian cycle — obeys the same two conditions. That is not a metaphor. It is the same topology in a different substrate.
 
+```{=latex}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=1mm, y=1mm, font=\sffamily\footnotesize]
+  \node[rounded corners=1pt, minimum width=24mm, minimum height=10mm,
+        fill=casPfill, draw=casPedge, line width=0.6pt] (a) at (0,0)
+        {\texttt{\^{}8} Above/Cause};
+  \node[rounded corners=1pt, minimum width=24mm, minimum height=10mm,
+        fill=casOfill, draw=casOedge, line width=0.6pt] (b) at (46,0)
+        {\texttt{\^{}9} Below/Effect};
+  \draw[-{Latex[length=1.8mm]}, casNedge, line width=0.6pt]
+    (a) to[bend left=32] node[midway, above, font=\scriptsize] {triggers} (b);
+  \draw[-{Latex[length=1.8mm]}, casNedge, line width=0.6pt]
+    (b) to[bend left=32] node[midway, below, font=\scriptsize] {becomes cause} (a);
+  \node[anchor=north, text width=76mm, align=center, text=casNedge,
+        font=\scriptsize] at (23,-16)
+    {A Phi loop. The effect of one cycle is the cause of the next; the period
+     is set by how long the return takes.};
+\end{tikzpicture}
+\caption{The Phi loop. Above/Cause triggers Below/Effect, which becomes the next cause --- the structure behind every cognitive rhythm.}\label{fig:phi-loop}
+\end{figure}
+```
+
 ## The CAS Mapping: A Cognitive Oscillator
 
 A cognitive oscillator is a sequence of cognitive states wired so that the last state triggers the first — a `Phi` sequence that closes into a loop. From Chapter 2: a **`Phi< … >` sequence** is an ordered list of states traversed in time, the cognitive equivalent of a waveform. When that waveform's end feeds its beginning, it repeats. That repeating `Phi` sequence *is* the oscillation.

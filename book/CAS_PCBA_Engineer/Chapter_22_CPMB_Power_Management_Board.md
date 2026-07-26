@@ -25,7 +25,8 @@ Three requirements, three subsystems. The rest of the chapter builds each one an
 Here is the board as a block diagram. Read it top to bottom: Drive energy enters at the rails, is regulated per domain, current-limited by Dials, watched by the brownout detector, ordered by the sequencer, and protected by the thermal manager.
 
 ```{=latex}
-\begin{center}
+\begin{figure}[htbp]
+\centering
 \begin{tikzpicture}[node distance=3.5mm and 0mm]
   \node[widenblock, text width=70mm] (rails)
     {\textbf{DRIVE RAILS} \;(F1--F7)\\
@@ -50,7 +51,8 @@ Here is the board as a block diagram. Read it top to bottom: Drive energy enters
   \draw[flow] (bo) -- (seq);
   \draw[flow] (seq) -- (therm);
 \end{tikzpicture}
-\end{center}
+\caption{Cognitive Power Management Board reference topology. Drive energy is regulated, limited, sequenced, and thermally managed per domain.}\label{fig:cpmb-topology}
+\end{figure}
 ```
 
 Everything below builds these blocks in CCDL and explains the engineering choices behind each one.

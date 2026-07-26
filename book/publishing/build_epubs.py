@@ -39,6 +39,7 @@ BOOKS = [
         "src": [ROOT / "CAS_PCBA_Engineer" / "build" / "front_prose.md",
                 ROOT / "CAS_PCBA_Engineer" / "build" / "main_body.md"],
         "out": ROOT / "CAS_PCBA_Engineer" / "CAS_PCBA_Engineer.epub",
+        "resource": ROOT / "CAS_PCBA_Engineer",
         "subject": "Computers / Artificial Intelligence",
     },
     {
@@ -47,6 +48,7 @@ BOOKS = [
         "subtitle": "A Universal Framework for Humans, AI, and Biological Minds",
         "src": [ROOT / "publishing" / "latex" / "manuscript_preprocessed.md"],
         "out": ROOT / "publishing" / "Thinking_in_Cognitive_Architecture.epub",
+        "resource": ROOT / "publishing" / "latex",
         "subject": "Computers / Artificial Intelligence",
     },
     {
@@ -55,6 +57,7 @@ BOOKS = [
         "subtitle": "A Complete Operating Manual for Manifestation — Diagnose Why It Fails, Then Make It Work",
         "src": [ROOT / "superiority_of_tks" / "MANUSCRIPT.md"],
         "out": ROOT / "superiority_of_tks" / "Reality_Engineering.epub",
+        "resource": ROOT / "superiority_of_tks",
         "subject": "Body, Mind & Spirit / Magick Studies",
     },
 ]
@@ -147,7 +150,8 @@ def build(book):
            "--syntax-highlighting=none",
            # figures live under latex/figures; pandoc must be able to find and
            # embed them into the container
-           "--resource-path", str(ROOT / "publishing" / "latex")]
+           # each book keeps its figures beside its own sources
+           "--resource-path", str(book["resource"])]
     if CSS.exists():
         cmd += ["--css", str(CSS)]
 

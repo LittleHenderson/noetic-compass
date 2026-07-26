@@ -39,7 +39,8 @@ What Chapter 6 built as an isolated array, this chapter wraps in the four circui
 An experience arrives as raw input — usually English, sometimes another system's output, sometimes a sensor stream. It cannot be stored as text; it must be turned into structure first. The **write path** has two stages:
 
 ```{=latex}
-\begin{center}
+\begin{figure}[htbp]
+\centering
 \begin{tikzpicture}[node distance=4mm and 0mm]
   \node[casterm] (exp) {experience (English)};
   \node[widenblock, below=of exp] (enc)
@@ -59,7 +60,8 @@ An experience arrives as raw input — usually English, sometimes another system
   \draw[flow] (decode) -- (read);
   \draw[flow] (read) -- (out);
 \end{tikzpicture}
-\end{center}
+\caption{Cognitive Memory Board write and read paths, from encoder through address decoder to recalled output.}\label{fig:cmb-paths}
+\end{figure}
 ```
 
 The **encoder** is the same English-to-CAS front door we have relied on throughout the book: it reads the raw experience and emits the CAS state trajectory that describes it — which Noetics fired, in which domains, driven by what, in which registers. (This is exactly the analysis the Wrap pipeline's Input Analyzer performs; the CMB reuses it as its write head.) The encoder's output is not one state but typically a short *trajectory* — a `Phi< … >` sequence of the states the experience moved through.

@@ -51,6 +51,12 @@ DST = BOOK / "MANUSCRIPT.md"
 
 RAW = SRC.read_text(encoding="utf-8", errors="replace").splitlines()
 
+sys.path.insert(0, str(Path(__file__).parent))
+from figures import FIGURES  # noqa: E402
+
+# heading text -> (tikz, label, caption); emitted just before that heading
+FIG_BY_ANCHOR = {a: (b, l, c) for a, b, l, c in FIGURES}
+
 
 def seg(a, b):
     """1-based inclusive line range from the original source."""
@@ -218,7 +224,7 @@ CH_UNNUM = re.compile(r"^#\s*Chapter:\s*(.+)$")
 CH_H1 = re.compile(r"^#\s*Chapter\s+(\d+)\s*[:–—-]\s*(.+)$")
 
 stats = {"stamps": 0, "fences": 0, "pagebreaks": 0, "promoted": 0, "rules": 0,
-         "emoji": 0, "titles": 0, "softened": 0}
+         "emoji": 0, "titles": 0, "softened": 0, "figures": 0}
 
 
 def clean_and_promote(lines, allow_headings=True):
@@ -264,7 +270,15 @@ def clean_and_promote(lines, allow_headings=True):
 
         if allow_headings and ln.startswith(" ") and not ln.startswith("  ") and s:
             if 0 < len(s) <= 95 and not s.endswith(".") and not s[:1].islower():
-                out += ["", soften_heading(f"## {s}"), ""]
+                head = soften_heading(f"## {s}")
+                if head in FIG_BY_ANCHOR:
+                    body, label, cap = FIG_BY_ANCHOR.pop(head)
+                    out += ["", "```{=latex}", "\\begin{figure}[htbp]",
+                            "\\centering", body.strip(),
+                            f"\\caption{{{cap}}}\\label{{fig:{label}}}",
+                            "\\end{figure}", "```", ""]
+                    stats["figures"] += 1
+                out += ["", head, ""]
                 stats["promoted"] += 1
                 continue
 
@@ -539,6 +553,7 @@ print(f"  page-break comments  : {stats['pagebreaks']}")
 print(f"  decorative emoji cut : {stats['emoji']}")
 print(f"  drafting labels cut  : {stats['titles']}")
 print(f"  headings softened    : {stats['softened']}")
+print(f"  figures inserted     : {stats['figures']}")
 print(f"  '---' rules cut      : {stats['rules']}")
 print(f"  cross-refs corrected : {xref_fixed}/3")
 

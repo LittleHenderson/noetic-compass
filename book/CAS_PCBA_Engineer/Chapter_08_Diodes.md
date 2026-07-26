@@ -22,6 +22,38 @@ Inside, a diode is a **PN junction**: a sliver of semiconductor that has been do
 
 So a diode is three behaviors in one part: conduct forward (above Vf), block reverse, and demand a minimum push to open at all. Hold those three — **forward conducts, reverse blocks, Vf is the entry price** — because each maps cleanly onto something cognition needs.
 
+```{=latex}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=1mm, y=1mm, font=\sffamily\footnotesize,
+                    dnode/.style={rounded corners=1pt, minimum width=20mm,
+                                  minimum height=8mm, draw, line width=0.6pt}]
+  \node[dnode, fill=casPfill, draw=casPedge] (P) at (0,0)  {\textbf{P}};
+  \node[dnode, fill=casCfill, draw=casCedge] (C) at (0,-14){\textbf{C}};
+  \node[dnode, fill=casEfill, draw=casEedge] (E) at (0,-28){\textbf{E}};
+  \node[dnode, fill=casOfill, draw=casOedge] (O) at (0,-42){\textbf{O}};
+  % forward-biased diodes between domains
+  \foreach \a/\b in {P/C, C/E, E/O} {
+    \draw[-{Latex[length=1.8mm]}, casNedge, line width=0.6pt] (\a) -- (\b);
+    \begin{scope}[shift={($(\a)!0.5!(\b)$)}]
+      \draw[casNedge, line width=0.6pt] (-2.4,1.4) -- (2.4,1.4) -- (0,-1.4) -- cycle;
+      \draw[casNedge, line width=0.6pt] (-2.4,-1.4) -- (2.4,-1.4);
+    \end{scope}
+  }
+  \node[anchor=west, align=left, text=casNedge] at (14,-21)
+    {forward bias:\\ conducts};
+  % blocked reverse path
+  \draw[casRed, line width=0.6pt, dash pattern=on 1.4pt off 1.4pt]
+    (-13,-42) -- (-13,0);
+  \draw[casRed, line width=0.7pt] (-15.6,-2.6) -- (-10.4,-7.8);
+  \draw[casRed, line width=0.7pt] (-15.6,-7.8) -- (-10.4,-2.6);
+  \node[anchor=east, align=right, text=casRed] at (-17,-21)
+    {reverse bias:\\ blocked};
+\end{tikzpicture}
+\caption{Domain Descent as a diode chain. Forward bias conducts down the precedence order; the reverse path is blocked.}\label{fig:descent-diodes}
+\end{figure}
+```
+
 ## The PN Junction in Cognition: Domain Descent as Forward Bias
 
 Recall the four Processing Domains from Chapter 2 and their strict precedence:

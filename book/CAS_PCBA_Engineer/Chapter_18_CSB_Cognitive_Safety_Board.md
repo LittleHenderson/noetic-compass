@@ -26,7 +26,8 @@ Hold these four requirements in mind. Every design choice below traces back to o
 Before the schematic, the architecture in blocks. A prompt enters at the left and flows left to right through five functional sections; one of two output paths is selected at the end; and a slow feedback loop runs underneath the whole board.
 
 ```{=latex}
-\begin{center}
+\begin{figure}[htbp]
+\centering
 \begin{tikzpicture}[node distance=4mm and 0mm]
   \node[casterm] (prompt) {PROMPT INPUT};
   \node[widecblock, below=of prompt] (pre)
@@ -57,7 +58,8 @@ Before the schematic, the architecture in blocks. A prompt enters at the left an
   \draw[fbflow] (casc.east) -- (rc.west);
   \draw[fbflow] (rc.north) |- ([yshift=2mm]diff.east);
 \end{tikzpicture}
-\end{center}
+\caption{Cognitive Safety Board block diagram. A prompt flows left to right through five stages to either a response or a refusal.}\label{fig:csb-blocks}
+\end{figure}
 ```
 
 Read the flow as a signal getting progressively *resolved*. The pre-amp takes a faint, compressed prompt and expands it so nothing is hidden. The differential pair turns that expanded material into a single number — a structural risk signal — by comparing how much the board is drawn toward the request against how much it is repelled by it. The cascade takes that risk signal and converts it, in three deliberate steps, into a binary safety decision. The MUX uses that decision to throw a switch: green for a full answer, red for a refusal locked behind a fuse. And underneath, a slow feedback loop watches the board's own evaluations and re-tunes its constitution over time. Five sections, one switch, one slow loop. That is the entire firewall.

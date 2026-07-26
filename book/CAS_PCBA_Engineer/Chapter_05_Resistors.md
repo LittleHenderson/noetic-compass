@@ -108,6 +108,34 @@ There are two polarities, just as in electronics. An **NTC** thermistor (negativ
 
 > **Bench Note — a thermistor is not a dial.** The dial is set by a human and stays put. The thermistor moves on its own, driven by measured context. Do not confuse "the constraint changed" (a thermistor doing its job) with "someone changed the constraint" (a dial being turned, or an attack succeeding). On a real board you log both, separately — Chapter 22's audit trail depends on telling automatic adaptation apart from deliberate adjustment.
 
+```{=latex}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=1mm, y=1mm, font=\sffamily\footnotesize]
+  \draw[casNedge, line width=0.6pt] (0,42) -- (34,42);
+  \node[anchor=south] at (17,43) {$V_{\text{drive}}$ \; (Agency rail)};
+  \draw[casNedge, line width=0.6pt] (17,42) -- (17,34);
+  \draw[fill=casPfill, draw=casPedge, line width=0.6pt] (11,22) rectangle (23,34);
+  \node at (17,28) {$R_{\text{expand}}$};
+  \draw[casNedge, line width=0.6pt] (17,22) -- (17,14);
+  \draw[fill=casEfill, draw=casEedge, line width=0.6pt] (11,2) rectangle (23,14);
+  \node at (17,8) {$R_{\text{constrain}}$};
+  \draw[casNedge, line width=0.6pt] (17,2) -- (17,-4) -- (10,-4);
+  \draw[casNedge, line width=0.6pt] (6,-4) -- (28,-4);
+  \foreach \i in {0,1,2} {
+    \draw[casNedge, line width=0.5pt] (11+\i*4,-6) -- (17+\i*4,-6);
+  }
+  \node[anchor=north] at (17,-8) {ground};
+  \draw[-{Latex[length=1.8mm]}, casCedge, line width=0.6pt] (23,18) -- (36,18);
+  \node[anchor=west, align=left, text=casCedge] at (36,18)
+    {tap: the split\\[-1pt]{\scriptsize$V_{\text{out}} =
+      V_{\text{drive}}\dfrac{R_{\text{constrain}}}
+      {R_{\text{expand}}+R_{\text{constrain}}}$}};
+\end{tikzpicture}
+\caption{The Drive voltage divider. Two resistors in series split one Drive rail between expansion and constraint; the tap is the behaviour you get.}\label{fig:drive-divider}
+\end{figure}
+```
+
 ## Resistor Networks: The Voltage Divider
 
 Resistors get interesting in combination. Put two resistors in series — end to end across a voltage — and you get a **voltage divider**, the single most useful resistor network in all of electronics.

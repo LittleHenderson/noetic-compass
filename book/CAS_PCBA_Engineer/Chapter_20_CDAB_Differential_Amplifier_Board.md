@@ -31,7 +31,8 @@ The heart of the circuit is a structure called the **differential pair** (or "lo
 We built the CJT — the **Cognitive Junction Transistor** — back in Chapter 4: a three-terminal cognitive amplifier where a small signal at the bias terminal controls a large cause→effect transition, with gain β. A differential pair is simply *two CJTs, matched, sharing one bias substrate*. Call them the **left CJT** (`CJT_L`) carrying the first idea and the **right CJT** (`CJT_R`) carrying the second:
 
 ```{=latex}
-\begin{center}
+\begin{figure}[htbp]
+\centering
 \begin{tikzpicture}[node distance=6mm and 8mm]
   \node[casterm] (a) {INPUT A};
   \node[casterm, right=18mm of a] (b) {INPUT B};
@@ -51,7 +52,8 @@ We built the CJT — the **Cognitive Junction Transistor** — back in Chapter 4
   \draw[flow] (mirror) -- (load);
   \draw[flow] (load) -- (out);
 \end{tikzpicture}
-\end{center}
+\caption{The differential pair. Two matched CJTs share one bias, with a current mirror as active load.}\label{fig:diff-pair}
+\end{figure}
 ```
 
 The two ideas enter as separate causes. Each CJT amplifies its own idea into its own effect. And critically, both rest on the **same shared bias** — here `^5^E_{F4}|f`, an accumulated-experience substrate in the Evaluative domain, drawn toward Connection, held affectively. That shared bias is the cognitive analog of the shared resting current in the silicon pair, and it is doing the most important job on the board. It is the *common frame of evaluation* both ideas are judged against. Because both CJTs are biased identically, any feature the two ideas *share* moves both effects the same way — and, in the next stage, cancels. Only a feature that distinguishes the two ideas moves the two effects *differently*, and that difference survives.

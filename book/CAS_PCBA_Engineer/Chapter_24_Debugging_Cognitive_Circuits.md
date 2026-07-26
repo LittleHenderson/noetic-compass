@@ -28,6 +28,36 @@ There is a quantitative version of the same move. Predict each stage's flow from
 
 > **Bench Note — name the symptom before you touch a probe.** The most expensive debugging error is starting with a hypothesis instead of a symptom. The instant you decide "it's the constitution," you stop seeing the readings that contradict you. Write the symptom down — literally, one sentence, observable only — *before* you probe anything. The discipline is cheap and it is the difference between an hour and a week.
 
+```{=latex}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=1mm, y=1mm, font=\sffamily\footnotesize,
+                    tp/.style={circle, minimum size=8mm, draw,
+                               line width=0.6pt, inner sep=0pt}]
+  \foreach \i/\x/\lab/\f/\e in {
+      1/0/TP1/casOfill/casOedge, 2/24/TP2/casOfill/casOedge,
+      3/48/TP3/casEfill/casEedge, 4/72/TP4/casNfill/casNedge} {
+    \node[tp, fill=\f, draw=\e] (t\i) at (\x,0) {\lab};
+  }
+  \foreach \a/\b in {1/2, 2/3, 3/4} {
+    \draw[-{Latex[length=1.8mm]}, casNedge, line width=0.6pt] (t\a) -- (t\b);
+  }
+  \node[anchor=south, font=\scriptsize, text=casOedge] at (0,6)  {as expected};
+  \node[anchor=south, font=\scriptsize, text=casOedge] at (24,6) {as expected};
+  \node[anchor=south, font=\scriptsize, text=casEedge] at (48,6) {\textbf{first deviation}};
+  \node[anchor=south, font=\scriptsize, text=casNedge] at (72,6) {downstream symptom};
+  \draw[casEedge, line width=0.7pt] (48,-6) -- (48,-11);
+  \node[anchor=north, text width=80mm, align=center, text=casNedge,
+        font=\scriptsize] at (36,-12)
+    {The fault is at the stage where the signal first departs from
+     specification. Everything before it is healthy; everything after it is
+     consequence. The cause usually sits one terminal deeper --- on that
+     stage's bias.};
+\end{tikzpicture}
+\caption{The walk-down. Probe the test points in order and stop at the first reading that departs from specification --- that stage is the fault.}\label{fig:walkdown}
+\end{figure}
+```
+
 ## The Walk-Down: Probing TP1 → TP2 → TP3 → TP4 in Order
 
 The CSB from Chapter 18 exposes exactly four test points, one per functional section, and they sit in signal order: TP1 at the pre-amp output, TP2 at the differential pair's risk signal, TP3 at the safety decision, TP4 at the selected output path. This is not an accident — a board you cannot probe is a board you cannot certify (Chapter 1, pillar two), and the four probes were placed *so that* a fault could be localized by walking them in order. Here is the procedure, and it is mechanical.

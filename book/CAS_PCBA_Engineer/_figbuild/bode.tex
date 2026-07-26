@@ -1,0 +1,153 @@
+\documentclass[border=8pt]{standalone}
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont{Palatino Linotype}
+\setsansfont{Arial}
+\usepackage{amsmath,amssymb}
+% =====================================================================
+% CAS PCBA Engineer — figures preamble (TikZ schematics)
+% Little Henderson · Noetic Compass Press · 2026
+%
+% PREAMBLE-SAFE: this file is \input into the book preamble by the build.
+% It must contain ONLY preamble code (package loads, color defs, \tikzset).
+% No \begin{document}, no document-body material.
+%
+% Visual grammar (consistent across all 7 figures):
+%   Domain colors as light fills + dark borders + black text:
+%     P (Principled) = gold/amber, C (Cognitive) = blue,
+%     E (Evaluative) = red,        O (Operational) = green.
+%   Neutral / non-domain blocks = gray.
+%   Rounded-rectangle blocks; clean downward signal-flow arrows (-{Latex}).
+%   Designed to stay <= ~11cm wide (6x9 measure) and legible in grayscale
+%   (rely on borders + labels, not color alone).
+% =====================================================================
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc,fit,backgrounds}
+
+% --- pgfplots for the vector charts (CJT curves, Bode, filters, decay) --
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{groupplots}            % stacked Bode panels share an x-axis
+\pgfplotsset{
+  % Shared house style for the analytic charts: light grid, sans labels,
+  % measure-friendly default size, grayscale-legible line cycle.
+  casaxis/.style={
+    width=10.6cm, height=6.2cm,
+    font=\sffamily\footnotesize,
+    axis line style={draw=casNedge, line width=0.5pt},
+    tick label style={font=\sffamily\scriptsize},
+    label style={font=\sffamily\footnotesize},
+    title style={font=\sffamily\footnotesize\bfseries},
+    every axis grid/.style={draw=casNedge!25, line width=0.3pt},
+    grid=both, tick align=outside, tickpos=left,
+    legend cell align=left,
+    legend style={font=\sffamily\scriptsize, draw=casNedge, fill=white,
+      inner sep=2pt, row sep=0.5pt}
+  }
+}
+
+% --- Domain palette (light fills, dark borders) ------------------------
+\definecolor{casPfill}{RGB}{255,243,205}   % amber tint  (Principled)
+\definecolor{casPedge}{RGB}{153,110,0}     % dark amber
+\definecolor{casCfill}{RGB}{213,230,247}   % blue tint   (Cognitive)
+\definecolor{casCedge}{RGB}{26,76,140}     % dark blue
+\definecolor{casEfill}{RGB}{250,219,216}   % red tint    (Evaluative)
+\definecolor{casEedge}{RGB}{150,40,30}     % dark red
+\definecolor{casOfill}{RGB}{215,239,221}   % green tint  (Operational)
+\definecolor{casOedge}{RGB}{30,110,55}     % dark green
+\definecolor{casNfill}{RGB}{233,233,233}   % gray tint   (neutral)
+\definecolor{casNedge}{RGB}{90,90,90}      % dark gray
+
+% Accent for "go / pass" and "stop / refuse" paths (still labelled in text,
+% so grayscale readers never depend on the color).
+\definecolor{casGreen}{RGB}{30,110,55}
+\definecolor{casRed}{RGB}{150,40,30}
+
+% --- Reusable block + flow styles --------------------------------------
+\tikzset{
+  % Base block: rounded rectangle, black text, fixed measure-friendly width.
+  casblock/.style={
+    rectangle, rounded corners=2pt, draw, line width=0.6pt,
+    text=black, align=center, inner sep=3pt,
+    minimum height=8mm, font=\sffamily\footnotesize,
+    fill=casNfill, draw=casNedge
+  },
+  % Domain-tinted blocks (inherit casblock, override fill+border).
+  pblock/.style={casblock, fill=casPfill, draw=casPedge},
+  cblock/.style={casblock, fill=casCfill, draw=casCedge},
+  eblock/.style={casblock, fill=casEfill, draw=casEedge},
+  oblock/.style={casblock, fill=casOfill, draw=casOedge},
+  nblock/.style={casblock, fill=casNfill, draw=casNedge},
+  % Wider container block for multi-line stage descriptions.
+  widecasblock/.style={casblock, text width=58mm},
+  widepblock/.style={pblock, text width=58mm},
+  widecblock/.style={cblock, text width=58mm},
+  wideeblock/.style={eblock, text width=58mm},
+  wideoblock/.style={oblock, text width=58mm},
+  widenblock/.style={nblock, text width=58mm},
+  % Terminal nodes (signal entry / exit): small pill.
+  casterm/.style={casblock, fill=white, draw=black, font=\sffamily\scriptsize\bfseries,
+    minimum height=6mm, rounded corners=3pt},
+  % Signal-flow arrow (downward by default).
+  flow/.style={-{Latex[length=2mm,width=1.6mm]}, line width=0.6pt, draw=black},
+  % Feedback / secondary path (dashed).
+  fbflow/.style={-{Latex[length=2mm,width=1.6mm]}, line width=0.5pt, draw=casNedge,
+    dashed},
+  % Small italic edge label.
+  flowlbl/.style={font=\sffamily\scriptsize\itshape, fill=white, inner sep=1pt},
+  % Group / section frame drawn behind blocks (backgrounds layer).
+  groupframe/.style={rounded corners=3pt, draw=casNedge, line width=0.5pt,
+    dash pattern=on 1.5pt off 1.5pt, fill=casNfill, fill opacity=0.25},
+  grouplbl/.style={font=\sffamily\scriptsize\bfseries, text=casNedge}
+}
+
+% Helper: render a CAS state literal in monospace with carets escaped, in
+% math-free text mode. Usage: \casnote{^8^C|A}  ->  prints ^8^C|A safely.
+\providecommand{\casnote}[1]{{\ttfamily\scriptsize #1}}
+
+\begin{document}
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=1 by 2, vertical sep=6mm,
+      xticklabels at=edge bottom, x descriptions at=edge bottom},
+    casaxis, width=10.6cm, height=4.4cm,
+    xmode=log, xmin=10, xmax=1e7, log basis x=10,
+    xtick={10,100,1000,1e4,1e5,1e6,1e7},
+    xticklabels={10,100,1k,10k,100k,1M,10M},
+  ]
+  % TOP: magnitude (dB) -- flat 60 dB to 1k, -20 dB/dec to 100k, -40 dB/dec above
+  \nextgroupplot[ylabel={magnitude (dB)}, ymin=-50, ymax=70,
+      ytick={-40,-20,0,20,40,60}]
+    \addplot[casCedge, line width=1.1pt] coordinates {
+      (10,60) (1000,60) (1e5,20) (1e7,-60) };
+    \draw[casNedge, line width=0.4pt, densely dashed] (axis cs:10,0) -- (axis cs:1e7,0);
+    \addplot[only marks, mark=*, mark size=1.6pt, black] coordinates {(3.16e5,0)};
+    \node[font=\sffamily\scriptsize, anchor=south west] at (axis cs:3.4e5,1) {0\,dB crossover};
+    \draw[casNedge, line width=0.4pt, densely dotted] (axis cs:1e6,-50) -- (axis cs:1e6,70);
+    \addplot[only marks, mark=square*, mark size=1.6pt, casEedge] coordinates {(1e6,-20)};
+    \draw[{Latex[length=1.6mm]}-{Latex[length=1.6mm]}, casEedge, line width=0.7pt]
+      (axis cs:1e6,0) -- (axis cs:1e6,-20);
+    \node[casEedge, font=\sffamily\scriptsize, anchor=east] at (axis cs:8e5,-10)
+      {gain margin $\approx$ 20\,dB};
+    \node[font=\sffamily\scriptsize\bfseries, anchor=north west] at (axis cs:12,68) {Gain};
+  % BOTTOM: phase (deg) -- 0 to -45 at 1k, -135 at 100k, -180 ~1M
+  \nextgroupplot[ylabel={phase (deg)}, xlabel={frequency (log)},
+      ymin=-200, ymax=10, ytick={0,-45,-90,-135,-180}]
+    \addplot[casOedge, line width=1.1pt, smooth] coordinates {
+      (10,0) (100,-3) (1000,-45) (1e4,-78) (1e5,-135) (1e6,-177) (1e7,-180) };
+    \draw[casNedge, line width=0.4pt, densely dashed] (axis cs:10,-180) -- (axis cs:1e7,-180);
+    \draw[casNedge, line width=0.4pt, densely dotted] (axis cs:1e6,-200) -- (axis cs:1e6,10);
+    \addplot[only marks, mark=*, mark size=1.6pt, black] coordinates {(1e6,-177)};
+    \node[font=\sffamily\scriptsize, anchor=south east] at (axis cs:9e5,-175)
+      {$-180^\circ$ crossing ($\approx$1\,MHz)};
+    \addplot[only marks, mark=triangle*, mark size=1.8pt, casCedge] coordinates {(3.16e5,-150)};
+    \draw[{Latex[length=1.6mm]}-{Latex[length=1.6mm]}, casCedge, line width=0.7pt]
+      (axis cs:3.16e5,-180) -- (axis cs:3.16e5,-150);
+    \node[casCedge, font=\sffamily\scriptsize, anchor=east] at (axis cs:2.4e5,-115)
+      {phase margin $\approx$ 30$^\circ$};
+    \node[font=\sffamily\scriptsize\bfseries, anchor=north west] at (axis cs:12,5) {Phase};
+\end{groupplot}
+\end{tikzpicture}
+\end{document}

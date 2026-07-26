@@ -60,6 +60,32 @@ catch it. Convert: `R_component = 10 × R_normalized`.
 
 ---
 
+```{=latex}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=1mm, y=1mm, font=\sffamily\footnotesize]
+  \draw[casNedge, line width=0.7pt] (0,0) -- (44,0) -- (22,26) -- cycle;
+  \draw[casNedge, line width=0.5pt] (11,13) -- (33,13);
+  \node at (22,19) {$V$};
+  \node at (13,6)  {$I$};
+  \node at (31,6)  {$R$};
+  \foreach \x/\y/\t/\f in {
+      70/22/{\textbf{Measure}\\$I = V / R$}/casCfill,
+      70/11/{\textbf{Design}\\$V = I \times R$}/casPfill,
+      70/0/{\textbf{Diagnose}\\$R = V / I$}/casEfill} {
+    \node[anchor=west, rounded corners=1pt, minimum width=34mm,
+          minimum height=9mm, fill=\f, draw=casNedge, line width=0.5pt,
+          align=center, font=\scriptsize] at (\x,\y) {\t};
+  }
+  \node[anchor=north, text width=88mm, align=center, text=casNedge,
+        font=\scriptsize] at (44,-7)
+    {Cover the term you do not know; the remaining two show how to combine
+     them. Which mode you are in depends entirely on which term is unknown.};
+\end{tikzpicture}
+\caption{The three CAS-Ohm modes. One equation, three uses, selected by which term you do not already know.}\label{fig:ohm-modes}
+\end{figure}
+```
+
 ## The three modes
 
 CAS-Ohm has one equation and three uses. Which one you are doing depends

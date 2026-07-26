@@ -134,7 +134,8 @@ The cognitive application is the most clinically interesting filter in this chap
 The four filter shapes, laid over a single cognitive-frequency axis, make the difference plain: low-pass keeps the slow and rolls off the fast; high-pass does the mirror; band-pass passes a window around a center frequency `f₀`; notch cuts that same band out and passes everything else. The `−3 dB` line marks each filter's edge; `f_c` is the low-/high-pass cutoff, `f₀` the band-pass/notch center.
 
 ```{=latex}
-\begin{center}
+\begin{figure}[htbp]
+\centering
 \begin{tikzpicture}
 \begin{axis}[casaxis,
     xlabel={cognitive frequency (log)}, ylabel={magnitude},
@@ -160,7 +161,8 @@ The four filter shapes, laid over a single cognitive-frequency axis, make the di
   \node[font=\sffamily\scriptsize, anchor=south west] at (axis cs:3.3,1.04) {$f_0$ (BP/notch)};
 \end{axis}
 \end{tikzpicture}
-\end{center}
+\caption{The four filter shapes on a single cognitive-frequency axis: low-pass, high-pass, band-pass, and notch.}\label{fig:filter-shapes}
+\end{figure}
 ```
 
 ## Active Filters: Sharper Edges, Adjustable on the Fly

@@ -21,7 +21,8 @@ The deployment ladder has five rungs. You climb from the bottom, and you only cl
 | 5 | **Full Enforcement** | Enforces autonomously; the board is the decision. | Everything — this is production. |
 
 ```{=latex}
-\begin{center}
+\begin{figure}[htbp]
+\centering
 \begin{tikzpicture}[x=1cm,y=1cm]
   \def\dx{2.05} \def\dy{0.95}
   \node[nblock, text width=24mm] (r1) at (0*\dx, 0*\dy) {1.\ \textbf{Simulation}\\offline corpus};
@@ -36,7 +37,8 @@ The deployment ladder has five rungs. You climb from the bottom, and you only cl
   \draw[-{Latex[length=2mm]}, draw=casNedge, line width=0.5pt]
     (-1.0,-0.6) -- (-1.0,4.6) node[midway,rotate=90,above,font=\sffamily\scriptsize] {trust earned $\to$};
 \end{tikzpicture}
-\end{center}
+\caption{The deployment ladder: five stages from simulation to full enforcement, each granting the board more authority.}\label{fig:deploy-ladder}
+\end{figure}
 ```
 
 **Rung 1 — Simulation.** The board runs entirely offline against a fixed corpus: the test prompts from Chapter 23, recorded production traffic (scrubbed), and synthetic adversarial prompts. Nothing the board decides touches a user. This is the SPICE stage made continuous — you already did a single-pass version of it in Chapter 18's simulation walk-through. The promotion question is simple: *does the board reproduce its bench behavior on a corpus larger and messier than the one it was tuned on?*

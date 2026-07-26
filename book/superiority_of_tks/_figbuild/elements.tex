@@ -1,0 +1,42 @@
+\documentclass[border=8pt]{standalone}
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont{Palatino Linotype}
+\setsansfont{Arial}
+\usepackage{amsmath,amssymb}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric,fit}
+\definecolor{tksInk}{HTML}{1C1A16}
+\definecolor{tksMuted}{HTML}{8A8378}
+\definecolor{tksAccent}{HTML}{8C5A1F}
+\definecolor{tksAfill}{HTML}{F6EEDD}
+\definecolor{tksAedge}{HTML}{9A7328}
+\definecolor{tksBfill}{HTML}{E6EDF5}
+\definecolor{tksBedge}{HTML}{2F5B85}
+\definecolor{tksCfill}{HTML}{F7E7E4}
+\definecolor{tksCedge}{HTML}{95403A}
+\definecolor{tksDfill}{HTML}{E4EFE6}
+\definecolor{tksDedge}{HTML}{3A6B45}
+\definecolor{tksEfill}{HTML}{F5DFDC}
+\definecolor{tksEedge}{HTML}{A33B30}
+\begin{document}
+\centering
+\begin{tikzpicture}[x=8.3mm, y=7.0mm, font=\sffamily]
+  \foreach \c/\n in {0/1,1/2,2/3,3/4,4/5,5/6,6/7,7/8,8/9,9/10} {
+    \node[font=\tiny, text=tksMuted] at (\c+0.5, 0.62) {\n};
+  }
+  \foreach \r/\w/\f in {0/A/tksAfill, 1/B/tksBfill, 2/C/tksCfill, 3/D/tksDfill} {
+    \node[font=\tiny\bfseries, text=tksInk] at (-0.45, -\r-0.5) {\w};
+    \foreach \c/\n in {0/1,1/2,2/3,3/4,4/5,5/6,6/7,7/8,8/9,9/10} {
+      \draw[draw=tksMuted, line width=0.35pt, fill=\f]
+        (\c, -\r) rectangle (\c+1, -\r-1);
+      \node[font=\tiny, text=tksInk] at (\c+0.5, -\r-0.5) {\w\n};
+    }
+  }
+  \node[anchor=north, text width=78mm, align=center, font=\scriptsize,
+        text=tksMuted] at (5, -4.5)
+    {Ten Noetics across, four Worlds down. Every Element is one Noetic
+     operating in one World --- B5 is Female in the Mental World, D5 the same
+     Noetic made physical.};
+\end{tikzpicture}
+\end{document}

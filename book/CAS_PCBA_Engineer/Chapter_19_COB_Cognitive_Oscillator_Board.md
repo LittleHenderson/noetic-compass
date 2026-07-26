@@ -31,7 +31,8 @@ The habit's natural frequency is `f0 = 1/(2π√(LC))`, and its Q is the *sharpn
 The COB is a four-stage signal chain. The block diagram below is the topology you will build to; read it top to bottom as the path a rhythmic cognition takes from internal clock to observable behavior.
 
 ```{=latex}
-\begin{center}
+\begin{figure}[htbp]
+\centering
 \begin{tikzpicture}[node distance=4mm and 0mm]
   \node[wideoblock, text width=66mm] (clock)
     {\textbf{CLOCK} \casnote{\textasciicircum7\textasciicircum O|E} --- Rhythm master oscillator\\
@@ -54,7 +55,8 @@ The COB is a four-stage signal chain. The block diagram below is the topology yo
   \draw[flow] (pll) -- (duty);
   \draw[flow] (duty) -- (out);
 \end{tikzpicture}
-\end{center}
+\caption{Cognitive Oscillator Board signal chain: clock, LC tank, phase-locked loop, and duty-cycle modulator.}\label{fig:cob-chain}
+\end{figure}
 ```
 
 ### Stage 1 — The master clock (`^7^O|E`)

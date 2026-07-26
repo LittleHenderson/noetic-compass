@@ -83,7 +83,8 @@ Leakage is **forgetting.** Not deliberate recall, not overwriting — just the s
 The forgetting curve makes the design choice vivid. Both curves below follow the chapter's per-unit-time decay `charge(t) = (1 − leakage)^t`, charged to full at `t = 0`. A **deep, near-permanent** memory (`leakage = 0.001` — a core commitment) barely fades across a week; a **shallow, leaky** memory (`leakage = 0.05` — a stray association) is half-gone in about thirteen hours and effectively empty in three days. Same equation, two leakage values, two completely different fates — which is exactly why you size leakage to the durability you intend.
 
 ```{=latex}
-\begin{center}
+\begin{figure}[htbp]
+\centering
 \begin{tikzpicture}
 \begin{axis}[casaxis,
     xlabel={time (hours)}, ylabel={stored charge (fraction of initial)},
@@ -105,7 +106,8 @@ The forgetting curve makes the design choice vivid. Both curves below follow the
     {half-life $\approx$ 13.5\,h (leaky)};
 \end{axis}
 \end{tikzpicture}
-\end{center}
+\caption{Leakage curves for the same stored experience at two decay rates --- the design choice between a memory that holds and one that fades.}\label{fig:leakage}
+\end{figure}
 ```
 
 ## The Capacitor Bank: A 40-Cell Memory Array

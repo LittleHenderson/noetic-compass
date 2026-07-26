@@ -95,7 +95,8 @@ Here is why it matters from first principles. Negative feedback works by *opposi
 A single corner (one pole — the frequency where a stage's gain starts falling) contributes a gain slope of −20 dB per decade and asymptotically −90° of phase. *One* corner can never reach −180°, so a single-pole amplifier is unconditionally stable — it cannot oscillate, no matter how much feedback you apply. The trouble starts with *two* corners. Two poles can stack to −180°, and now stability is a real question. A two-stage amplifier — like the two-stage CJT amplifier in this chapter's marquee exercise — has at least two poles, and is exactly where Bode analysis earns its keep.
 
 ```{=latex}
-\begin{center}
+\begin{figure}[htbp]
+\centering
 \begin{tikzpicture}
 \begin{groupplot}[
     group style={group size=1 by 2, vertical sep=6mm,
@@ -138,7 +139,8 @@ A single corner (one pole — the frequency where a stage's gain starts falling)
     \node[font=\sffamily\scriptsize\bfseries, anchor=north west] at (axis cs:12,5) {Phase};
 \end{groupplot}
 \end{tikzpicture}
-\end{center}
+\caption{Bode plot of gain and phase against frequency. Each pole contributes a further $-20$\,dB per decade and $-90^\circ$ of phase.}\label{fig:bode}
+\end{figure}
 ```
 
 Lay the two graphs over each other and the stability question becomes geometric: at the frequency where the gain curve crosses 0 dB (gain = 1), *how far is the phase from −180°?* And at the frequency where the phase hits −180°, *how far is the gain below 0 dB?* Those two distances have names.

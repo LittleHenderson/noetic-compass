@@ -98,6 +98,25 @@ def patch_preamble() -> None:
         "\\AtBeginEnvironment{longtable}{\\footnotesize}\n"
         "\\AtBeginEnvironment{tabular}{\\small}\n"
     )
+
+    # --- figure styles (used by the seven TikZ diagrams) ---------
+    p += (
+        "\n\\usepackage{tikz}\n"
+        "\\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric,fit}\n"
+        "\\definecolor{tksInk}{HTML}{1C1A16}\n"
+        "\\definecolor{tksMuted}{HTML}{8A8378}\n"
+        "\\definecolor{tksAccent}{HTML}{8C5A1F}\n"
+        "\\definecolor{tksAfill}{HTML}{F6EEDD}\n"
+        "\\definecolor{tksAedge}{HTML}{9A7328}\n"
+        "\\definecolor{tksBfill}{HTML}{E6EDF5}\n"
+        "\\definecolor{tksBedge}{HTML}{2F5B85}\n"
+        "\\definecolor{tksCfill}{HTML}{F7E7E4}\n"
+        "\\definecolor{tksCedge}{HTML}{95403A}\n"
+        "\\definecolor{tksDfill}{HTML}{E4EFE6}\n"
+        "\\definecolor{tksDedge}{HTML}{3A6B45}\n"
+        "\\definecolor{tksEfill}{HTML}{F5DFDC}\n"
+        "\\definecolor{tksEedge}{HTML}{A33B30}\n"
+    )
     (BUILD / "preamble_tks.tex").write_text(p, encoding="utf-8")
     print("patched preamble -> preamble_tks.tex")
 

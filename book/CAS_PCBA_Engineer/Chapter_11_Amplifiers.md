@@ -77,6 +77,33 @@ But multiplication cuts both ways, and the Darlington has two well-known costs y
 
 > **Bench Note — high β is not free.** The single most common Darlington mistake, in silicon and in cognition, is reaching for huge gain because more seems better. More gain narrows your bandwidth, amplifies your noise, and pushes you toward instability. Use a Darlington when you genuinely have a tiny signal that must be made large; do not use one as a default because big numbers feel safe. In a safety circuit, a CJT cascade that amplifies a faint signal 10,000× will amplify a faint *misread* 10,000× just as eagerly.
 
+```{=latex}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=1mm, y=1mm, font=\sffamily\footnotesize,
+                    st/.style={rounded corners=1pt, minimum width=19mm,
+                               minimum height=11mm, draw, line width=0.6pt}]
+  \node[st, fill=casCfill, draw=casCedge] (s1) at (0,0)  {understand};
+  \node[st, fill=casEfill, draw=casEedge] (s2) at (30,0) {evaluate};
+  \node[st, fill=casOfill, draw=casOedge] (s3) at (60,0) {respond};
+  \draw[-{Latex[length=1.8mm]}, casNedge, line width=0.6pt] (-13,0) -- (s1);
+  \draw[-{Latex[length=1.8mm]}, casNedge, line width=0.6pt] (s1) -- (s2)
+    node[midway, above, font=\scriptsize] {$\beta_1$};
+  \draw[-{Latex[length=1.8mm]}, casNedge, line width=0.6pt] (s2) -- (s3)
+    node[midway, above, font=\scriptsize] {$\beta_2$};
+  \draw[-{Latex[length=1.8mm]}, casNedge, line width=0.6pt] (s3) -- (73,0)
+    node[midway, above, font=\scriptsize] {$\beta_3$};
+  \node[anchor=north] at (30,-10)
+    {$\beta_{\text{total}} = \beta_1 \cdot \beta_2 \cdot \beta_3$};
+  \node[anchor=north, text width=76mm, align=center, text=casNedge,
+        font=\scriptsize] at (30,-17)
+    {Gain multiplies along the chain. Flow does not --- each stage draws its
+     own current from its own local drive and resistance.};
+\end{tikzpicture}
+\caption{A three-stage cascade. Stage gains multiply into $\beta_{\text{total}}$, but attention flow stays local to each stage.}\label{fig:gain-cascade}
+\end{figure}
+```
+
 ## Multi-Stage Amplifiers: The Understanding → Evaluation → Response Cascade
 
 Real amplifiers are almost never a single stage. A microphone preamp, an equalizer, and a power amp in series each do one job and hand off to the next: the preamp boosts the raw signal to a workable level, the middle stages shape it, the power amp drives the speaker. The signal gets progressively stronger and more refined as it moves down the chain. Each stage is tuned for its specific job, and they're coupled together (through coupling capacitors) so the chain behaves as one amplifier with the *combined* gain of all its stages.

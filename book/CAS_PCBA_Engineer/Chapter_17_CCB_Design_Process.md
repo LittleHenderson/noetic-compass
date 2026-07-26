@@ -114,7 +114,8 @@ A schematic says *what connects to what.* A **layout** says *where everything ph
 A CCB is multilayer too, and its layers are the four **Domains**. Each Domain is a layer of the board; signals within a Domain route on that layer; and a **via** is a cross-domain connection — a signal passing from one Domain layer to another, exactly the Domain Descent (and feedback) paths from Chapter 2. The picture below shows the idea: four stacked Domain planes in descent order (P on top, then C, E, O), each holding a few representative states, with vias as the vertical connectors between planes. Three vias run *downward* with Domain Descent (`v1: ^2^P→^2^C`, `v2: ^6^C→^6^E`, `v3: ^4^E→^3^O`); the lone upward via `v4: ^9^O→^0^P` is the feedback path, drawn distinct because it runs against descent.
 
 ```{=latex}
-\begin{center}
+\begin{figure}[htbp]
+\centering
 \begin{tikzpicture}[x=1cm,y=1cm,
     statechip/.style={rectangle, rounded corners=2pt, draw, line width=0.5pt,
       fill=white, inner sep=2pt, font=\ttfamily\scriptsize, minimum height=5mm}]
@@ -155,7 +156,8 @@ A CCB is multilayer too, and its layers are the four **Domains**. Each Domain is
     (O9.east) -- ++(3.0,0) |- (P0.east)
     node[pos=0.28, right=1pt, font=\sffamily\scriptsize\bfseries, text=casRed] {v4 (feedback)};
 \end{tikzpicture}
-\end{center}
+\caption{The four Processing Domains as board layers. Signals route within a layer; a cross-domain transition is a via.}\label{fig:domain-layers}
+\end{figure}
 ```
 
 Here is our thread expressed as a layered layout in CCDL:

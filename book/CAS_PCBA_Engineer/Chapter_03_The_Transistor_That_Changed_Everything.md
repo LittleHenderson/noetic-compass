@@ -71,7 +71,8 @@ This is the table from the Style Guide, and it is worth tattooing somewhere visi
 | **β — Gain** | Ic / Ib | how strongly the bias amplifies the cause → effect transition |
 
 ```{=latex}
-\begin{center}
+\begin{figure}[htbp]
+\centering
 \begin{tikzpicture}[node distance=0pt]
   \node[nblock, minimum width=20mm, minimum height=20mm,
         font=\sffamily\small\bfseries] (cjt) at (0,0) {CJT};
@@ -86,7 +87,8 @@ This is the table from the Style Guide, and it is worth tattooing somewhere visi
   \draw[flow] (cjt.south) -- (effect.north);
   \node[flowlbl, anchor=west] at (cjt.east) {gain $\beta$ \;($C\!\to\!E$)};
 \end{tikzpicture}
-\end{center}
+\caption{The Cognitive Junction Transistor. Cause enters at the collector, bias controls the junction, and effect leaves at the emitter.}\label{fig:cjt-terminals}
+\end{figure}
 ```
 
 ### The four regions, in a mind

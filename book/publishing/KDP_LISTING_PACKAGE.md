@@ -27,11 +27,11 @@ reproducible.
 | **Title** | CAS PCBA Engineer |
 | **Subtitle** | Designing Cognitive Circuits with the Cognitive Architecture System |
 | **Author** | Little Henderson |
-| **Pages** | 722 (6×9, B&W, white) |
-| **Est. printing cost** | $0.85 + (722 × $0.012) = **$9.51** |
-| **KDP minimum list** | $9.51 ÷ 0.60 = **$15.85** |
+| **Pages** | 730 (6×9, B&W, white) |
+| **Est. printing cost** | $0.85 + (730 × $0.012) = **$9.61** |
+| **KDP minimum list** | $9.61 ÷ 0.60 = **$16.02** |
 | **Recommended list** | **$44.99** paperback · **$9.99** Kindle |
-| **Est. royalty** | (0.60 × $44.99) − $9.51 = **$17.48**/copy paperback; **$6.99**/copy Kindle |
+| **Est. royalty** | (0.60 × $44.99) − $9.61 = **$17.38**/copy paperback; **$6.99**/copy Kindle |
 
 **Keywords** (7, each under 50 chars, none repeating title or category words):
 
@@ -210,7 +210,7 @@ the Kindle sample. The voice survives where it matters; ads stay available.
 | **Covers** | **Done.** `book/covers/` — full wraps + Kindle fronts | Regenerate with `build_covers.py` whenever a page count changes; the spine width depends on it. |
 | **Indexes** | None of the three has a real one | TKS's lists topics with no page numbers. A professional indexer runs $3–5/page. |
 | **About the Author** | **Done** — all three | Written from the author's professional record. |
-| **Figures (TiCA)** | **Done** — 8 structural diagrams + list of figures | In print as live TikZ, in the EPUB as embedded 300 DPI PNGs with alt text. |
+| **Figures** | **Done — all three.** PCBA 18, TiCA 8, Reality Engineering 7 | Live TikZ in print; 300 DPI PNGs with alt text in every EPUB. Each book has a List of Figures. |
 | **EPUB** | Not yet built | Buildable from the same sources. |
 
 ### Cover specifications
@@ -221,7 +221,7 @@ the arithmetic below, but for briefing a designer:
 
 | Book | Pages | Approx. spine (pages × 0.002252") |
 |---|---|---|
-| CAS PCBA Engineer | 722 | 1.63" |
+| CAS PCBA Engineer | 730 | 1.64" |
 | Thinking in Cognitive Architecture | 790 | 1.78" |
 | The Superiority of TKS | 817 | 1.84" |
 
