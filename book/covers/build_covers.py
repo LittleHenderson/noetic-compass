@@ -85,7 +85,7 @@ MARK_TKS = r"""\begin{tikzpicture}[x=1.45mm,y=1.45mm]
 BOOKS = [
     {
         "slug": "cas_pcba_engineer",
-        "pages": 730,
+        "pages": 733,
         "title_lines": r"CAS\\PCBA\\Engineer",
         "spine_title": "CAS PCBA Engineer",
         "subtitle": "Designing Cognitive Circuits with the "
@@ -112,7 +112,7 @@ are taught from first principles, exactly where you need them.""",
     },
     {
         "slug": "thinking_in_cognitive_architecture",
-        "pages": 790,
+        "pages": 792,
         "title_lines": r"Thinking in\\Cognitive\\Architecture",
         "spine_title": "Thinking in Cognitive Architecture",
         "subtitle": "A Universal Framework for Humans, AI, "
@@ -143,7 +143,7 @@ nothing.""",
     },
     {
         "slug": "reality_engineering",
-        "pages": 817,
+        "pages": 813,
         "title_lines": r"Reality\\Engineering",
         "spine_title": "Reality Engineering",
         "subtitle": "The Tootra Kabbalistic System --- A Complete Operating "

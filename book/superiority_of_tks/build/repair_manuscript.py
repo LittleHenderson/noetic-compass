@@ -505,8 +505,10 @@ for i, key in enumerate(APPENDIX_ORDER):
     doc += ["", f"# {APPENDIX_TITLES[key]}", ""]
     doc += clean_and_promote(body)
 
-doc += unnumbered_chapter("Index")
-doc += clean_and_promote(seg(*R["index"])[1:])
+# The source Index lists topics with no page numbers, which is unusable
+# in an 800-page manual. Replaced with a real index built from the
+# \index marks that publishing/build_indexes.py inserts into body.tex.
+doc += ["", "```{=latex}", "\printindex", "```", ""]
 doc += unnumbered_chapter("About the Author")
 doc += ["", ABOUT_AUTHOR, ""]
 

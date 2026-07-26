@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (MiKTeX 24.1) (preloaded format=xelatex 2026.4.9)  25 JUL 2026 17:51
+This is XeTeX, Version 3.141592653-2.6-0.999995 (MiKTeX 24.1) (preloaded format=xelatex 2026.4.9)  25 JUL 2026 18:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -629,6 +629,12 @@ LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 dechar.sty
 Package: newunicodechar 2018/04/08 v1.2 Defining Unicode characters
 )
+\manuscript@idxfile=\write4
+\openout4 = `manuscript.idx'.
+
+
+Writing index file manuscript.idx 
+
 (C:\Users\wakil\AppData\Local\Programs\MiKTeX\tex/latex/microtype\microtype.sty
 Package: microtype 2026/03/01 v3.2d Micro-typographical refinements (RS)
 \MT@toks=\toks30
@@ -728,7 +734,7 @@ libraryfiltered.code.tex
 \pgf@yc=\dimen265
 \pgf@xd=\dimen266
 \pgf@yd=\dimen267
-\w@pgf@writea=\write4
+\w@pgf@writea=\write5
 \r@pgf@reada=\read3
 \c@pgf@counta=\count337
 \c@pgf@countb=\count338
@@ -1279,10 +1285,10 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 Package: memhfixc 2025/09/16 v1.24 hyperref package fixes for memoir class
 \c@memhycontfloat=\count393
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 257.
-Package hyperref Info: Option `bookmarksnumbered' set `true' on input line 257.
+Package hyperref Info: Option `colorlinks' set `true' on input line 263.
+Package hyperref Info: Option `bookmarksnumbered' set `true' on input line 263.
 
-Package hyperref Info: Option `bookmarksopen' set `true' on input line 257.
+Package hyperref Info: Option `bookmarksopen' set `true' on input line 263.
 
 (C:\Users\wakil\AppData\Local\Programs\MiKTeX\tex/latex/tools\calc.sty
 Package: calc 2023/07/08 v4.3 Infix arithmetic (KKT,FJ)
@@ -1340,7 +1346,7 @@ Package: fancyvrb 2025/07/28 4.6 verbatim text (tvz,hv)
 \FV@TabBox=\box95
 \c@FancyVerbLine=\count406
 \FV@StepNumber=\count407
-\FV@OutFile=\write5
+\FV@OutFile=\write6
 )
 (C:\Users\wakil\AppData\Local\Programs\MiKTeX\tex/latex/framed\framed.sty
 Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
@@ -2239,8 +2245,8 @@ Package hyperref Info: Link coloring ON on input line 16.
 out)
 (C:\Users\wakil\OneDrive\Desktop\tksCAS\book\publishing\latex\build\manuscript.
 out)
-\@outlinefile=\write6
-\openout6 = `manuscript.out'.
+\@outlinefile=\write7
+\openout7 = `manuscript.out'.
 
  (frontmatter.tex
 
@@ -3538,8 +3544,8 @@ that a human user prefers
 [14]
 Overfull \hbox (3.91539pt too wide) in paragraph at lines 700--707
 []\TU/PalatinoLinotype(0)/m/n/10.95 The AI operated entirely in the Cognitive D
-omain (\TU/Consolas(0)/m/n/10.95 ^C\TU/PalatinoLinotype(0)/m/n/10.95 ): it retr
-ieved
+omain[] (\TU/Consolas(0)/m/n/10.95 ^C\TU/PalatinoLinotype(0)/m/n/10.95 ): it re
+trieved
  []
 
 
@@ -3569,7 +3575,7 @@ onality test with fancier
 [19] [20]
 Overfull \hbox (8.46858pt too wide) in paragraph at lines 940--947
 \TU/PalatinoLinotype(0)/m/n/10.95 duce the fourth coordinate — the Phenomenolog
-ical Register — which
+ical Register[] — which
  []
 
 
@@ -3578,19 +3584,13 @@ Overfull \hbox (0.53789pt too wide) in paragraph at lines 940--947
 olas(0)/m/n/10.95 |T\TU/PalatinoLinotype(0)/m/n/10.95 , \TU/Consolas(0)/m/n/10.
 95 |A\TU/PalatinoLinotype(0)/m/n/10.95 , \TU/Consolas(0)/m/n/10.95 |f\TU/Palati
 noLinotype(0)/m/n/10.95 , \TU/Consolas(0)/m/n/10.95 |E\TU/PalatinoLinotype(0)/m
-/n/10.95 ) in which any Noetic
+/n/10.95 ) in which any Noetic[]
  []
 
 [21] [22] [23]
 Overfull \hbox (1.40248pt too wide) in paragraph at lines 1061--1069
 []\TU/PalatinoLinotype(0)/m/n/10.95 Expected Outcome: Most current-generation A
 I systems will pro-
- []
-
-
-Overfull \hbox (14.78647pt too wide) in paragraph at lines 1061--1069
-\TU/PalatinoLinotype(0)/m/n/10.95 vide a response that is heavily weighted towa
-rd the Cognitive Domain—
  []
 
 [24] [25] [26
@@ -3822,15 +3822,15 @@ t
 Chapter 3.
 [53] [54] [55] [56]
 Overfull \hbox (1.11696pt too wide) in paragraph at lines 2216--2222
-[]\TU/PalatinoLinotype(0)/m/n/10.95 The Cognitive Domain is the realm of facts,
- logic, data, categories,
+[]\TU/PalatinoLinotype(0)/m/n/10.95 The Cognitive Domain[] is the realm of fact
+s, logic, data, categories,
  []
 
 [57] [58]
 Overfull \hbox (1.01051pt too wide) in paragraph at lines 2324--2346
 []\TU/PalatinoLinotype(0)/m/n/10.95 Register Variation in \TU/Consolas(0)/m/n/1
-0.95 ^O\TU/PalatinoLinotype(0)/m/n/10.95 . The Operational Domain most often fi
-res
+0.95 ^O\TU/PalatinoLinotype(0)/m/n/10.95 . The Operational Domain[] most often 
+fires
  []
 
 [59]
@@ -4151,9 +4151,9 @@ n operational afterthought—
  []
 
 [96]
-Overfull \hbox (1.13187pt too wide) in paragraph at lines 3779--3796
-\TU/PalatinoLinotype(0)/m/n/10.95 v7.5). Each of the three prerequisite stages 
-— Desire, Wisdom, Power
+Overfull \hbox (1.13185pt too wide) in paragraph at lines 3779--3796
+\TU/PalatinoLinotype(0)/m/n/10.95 v7.5[]). Each of the three prerequisite stage
+s — Desire, Wisdom, Power
  []
 
 [97]
@@ -4767,10 +4767,10 @@ ndation that distinguishes
 
 [173]
 Overfull \hbox (2.78136pt too wide) in paragraph at lines 6732--6736
-[]\TU/PalatinoLinotype(0)/m/n/10.95 Before v7.7, a writer might reach for \TU/C
-onsolas(0)/m/n/10.95 ^3^P|A $\OMS/cmsy/m/n/10.95 ^^B$ \TU/Consolas(0)/m/n/10.95
- ^3^P|f $\OMS/cmsy/m/n/10.95 ^^B$ \TU/Consolas(0)/m/n/10.95 ^3^P|T\TU/PalatinoL
-inotype(0)/m/n/10.95 .
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Before v7.7[], a writer might reach for \TU
+/Consolas(0)/m/n/10.95 ^3^P|A $\OMS/cmsy/m/n/10.95 ^^B$ \TU/Consolas(0)/m/n/10.
+95 ^3^P|f $\OMS/cmsy/m/n/10.95 ^^B$ \TU/Consolas(0)/m/n/10.95 ^3^P|T\TU/Palatin
+oLinotype(0)/m/n/10.95 .
  []
 
 
@@ -5009,7 +5009,7 @@ Overfull \hbox (2.61572pt too wide) in paragraph at lines 7424--7427
 [192]
 Overfull \hbox (7.05263pt too wide) in paragraph at lines 7428--7450
 []\TU/Consolas(0)/m/n/10.95 |T \TU/PalatinoLinotype(0)/m/n/10.95 — Transcendent
- Register. High-abstraction, purpose-orienting,
+ Register[]. High-abstraction, purpose-orienting,
  []
 
 
@@ -5044,8 +5044,8 @@ cedural plan — the project
 
 [196]
 Overfull \hbox (88.66258pt too wide) in paragraph at lines 7619--7634
-\TU/PalatinoLinotype(0)/m/n/10.95 the Colloquialism Test (see Chapter 2 and \TU
-/Consolas(0)/m/n/10.95 docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md
+\TU/PalatinoLinotype(0)/m/n/10.95 the Colloquialism Test[] (see Chapter 2 and \
+TU/Consolas(0)/m/n/10.95 docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md
  []
 
 
@@ -5275,8 +5275,8 @@ onsolas(0)/m/n/10.95 ^8 $\OMS/cmsy/m/n/10.95 $$ \TU/Consolas(0)/m/n/10.95 ^9\TU
 
 
 Overfull \hbox (13.60782pt too wide) in paragraph at lines 8782--8792
-[]\TU/PalatinoLinotype(0)/m/n/10.95 Why This Matters: The Cognitive Fractal Ana
-lysis is not a metaphor.
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Why This Matters: The Cognitive Fractal[] A
+nalysis is not a metaphor.
  []
 
 
@@ -5398,8 +5398,8 @@ ional
 
 [244]
 Overfull \hbox (1.43648pt too wide) in paragraph at lines 9352--9367
-[]\TU/PalatinoLinotype(0)/m/n/10.95 Recipe 2: The Martyr’s Antidote The Problem
-: Trapped in \TU/Consolas(0)/m/n/10.95 ^5^E|f
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Recipe[] 2: The Martyr’s Antidote The Probl
+em[]: Trapped in \TU/Consolas(0)/m/n/10.95 ^5^E|f
  []
 
 [245]
@@ -5647,8 +5647,8 @@ te, Martyr’s
 
 [257]
 Overfull \hbox (3.1644pt too wide) in paragraph at lines 9868--9879
-[]\TU/PalatinoLinotype(0)/m/n/10.95 Diagnose the Problem: Write the CAS equatio
-n for your “stuck”
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Diagnose the Problem[]: Write the CAS equat
+ion for your “stuck”
  []
 
 
@@ -5823,8 +5823,8 @@ Overfull \hbox (47.14655pt too wide) detected at line 10795
 
 [286]
 Overfull \hbox (7.147pt too wide) in paragraph at lines 10852--10857
-\TU/PalatinoLinotype(0)/m/n/10.95 chor.” While the other drives exist in opposi
-tional pairs (Unity vs. Pur-
+\TU/PalatinoLinotype(0)/m/n/10.95 chor[].” While the other drives exist in oppo
+sitional pairs (Unity vs. Pur-
  []
 
 [287]
@@ -6298,8 +6298,8 @@ rsion Scanner” present
 
 [355]
 Overfull \hbox (3.73946pt too wide) in paragraph at lines 13271--13274
-\TU/PalatinoLinotype(0)/m/n/10.95 hort Cloud. We plot the cognitive “home state
-s” and dominant drives
+\TU/PalatinoLinotype(0)/m/n/10.95 hort Cloud[]. We plot the cognitive “home sta
+tes” and dominant drives
  []
 
 [356]
@@ -6323,9 +6323,9 @@ Overfull \hbox (15.59271pt too wide) in paragraph at lines 13332--13342
  []
 
 [358]
-Overfull \hbox (1.02603pt too wide) in paragraph at lines 13375--13379
+Overfull \hbox (1.02605pt too wide) in paragraph at lines 13375--13379
 \TU/PalatinoLinotype(0)/m/n/10.95 CAS uses for this is the Bhattacharyya Distan
-ce, borrowed from prob-
+ce[], borrowed from prob-
  []
 
 [359] [360] [361] [362]
@@ -6688,7 +6688,7 @@ t volatility and a highly
 [397]
 Overfull \hbox (20.20772pt too wide) in paragraph at lines 14600--14603
 \TU/PalatinoLinotype(0)/m/n/10.95 through a rigorous, mathematical, 8-stage aud
-it called the Wrap Pipeline. 
+it called the Wrap Pipeline[]. 
  []
 
 
@@ -6730,8 +6730,8 @@ layer for patient-
 
 [400]
 Overfull \hbox (15.02185pt too wide) in paragraph at lines 14711--14739
-\TU/PalatinoLinotype(0)/m/n/10.95 Under CAS v7.5, the Wrap Pipeline optionally 
-specifies the Phenomeno-
+\TU/PalatinoLinotype(0)/m/n/10.95 Under CAS v7.5, the Wrap Pipeline[] optionall
+y specifies the Phenomeno-
  []
 
 
@@ -6779,8 +6779,8 @@ Overfull \hbox (13.01213pt too wide) in paragraph at lines 15076--15080
 
 [410]
 Overfull \hbox (8.33182pt too wide) in paragraph at lines 15113--15118
-[]\TU/PalatinoLinotype(0)/m/n/10.95 The Lacunarity Report reveals that System A
- is suitable for general-
+[]\TU/PalatinoLinotype(0)/m/n/10.95 The Lacunarity Report[] reveals that System
+ A is suitable for general-
  []
 
 
@@ -6797,8 +6797,8 @@ parameter LLM, the Noetic
 
 [411]
 Overfull \hbox (4.18852pt too wide) in paragraph at lines 15174--15198
-\TU/PalatinoLinotype(0)/m/n/10.95 spectrum of Noetics. The 40-State Heatmap rev
-eals which
+\TU/PalatinoLinotype(0)/m/n/10.95 spectrum of Noetics. The 40-State Heatmap[] r
+eveals which
  []
 
 
@@ -7284,9 +7284,9 @@ list of psychological metaphors.
  []
 
 
-Overfull \hbox (2.67154pt too wide) in paragraph at lines 17683--17686
+Overfull \hbox (2.67155pt too wide) in paragraph at lines 17683--17686
 \TU/PalatinoLinotype(0)/m/n/10.95 unified understanding of reality. We will con
-struct The Noetic Topos. 
+struct The Noetic Topos[]. 
  []
 
 
@@ -7317,8 +7317,8 @@ jects defined, mor-
 Chapter 24.
 
 Overfull \hbox (13.10986pt too wide) in paragraph at lines 17787--17789
-[]\TU/PalatinoLinotype(0)/m/n/10.95 If Category Theory provides the “bookkeepin
-g” of cognition, Topos
+[]\TU/PalatinoLinotype(0)/m/n/10.95 If Category Theory[] provides the “bookkeep
+ing” of cognition, Topos
  []
 
 [491
@@ -7494,10 +7494,10 @@ U/Consolas(0)/m/n/10.95 |A \TU/PalatinoLinotype(0)/m/n/10.95 even under stress,
 
 ]
 Overfull \hbox (13.35463pt too wide) in paragraph at lines 18752--18763
-\TU/PalatinoLinotype(0)/m/n/10.95 tive Operators. The Fractal Monoid is the mat
-hematical triple $\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 M; \OMS/cmsy/m/n/10.9
-5 ^^N\OML/cmm/m/it/10.95 ; []\OT1/cmr/m/n/10.95 )$\TU/PalatinoLinotype(0)/m/n/1
-0.95 ,
+\TU/PalatinoLinotype(0)/m/n/10.95 tive Operators. The Fractal Monoid[] is the m
+athematical triple $\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 M; \OMS/cmsy/m/n/10
+.95 ^^N\OML/cmm/m/it/10.95 ; []\OT1/cmr/m/n/10.95 )$\TU/PalatinoLinotype(0)/m/n
+/10.95 ,
  []
 
 [520] [521]
@@ -8215,14 +8215,14 @@ Overfull \hbox (6.14392pt too wide) in paragraph at lines 21499--21501
 
 [602]
 Overfull \hbox (10.34909pt too wide) in paragraph at lines 21516--21519
-[]\TU/PalatinoLinotype(0)/m/n/10.95 Core Drive. One of the seven motivational f
-oundations (F1 through
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Core Drive[]. One of the seven motivational
+ foundations (F1 through
  []
 
 
-Overfull \hbox (10.14287pt too wide) in paragraph at lines 21520--21534
+Overfull \hbox (10.14285pt too wide) in paragraph at lines 21520--21534
 \TU/PalatinoLinotype(0)/m/n/10.95 tion, specified in Clarification 10 (CAS v7.7
-), in which multiple register-
+[]), in which multiple register-
  []
 
 [603]
@@ -8239,10 +8239,10 @@ m, base LLM call, Noetic
  []
 
 
-Overfull \hbox (6.68571pt too wide) in paragraph at lines 21652--21655
-[]\TU/PalatinoLinotype(0)/m/n/10.95 Noetic Manifold. The open probability simpl
-ex $\OT1/cmr/m/n/10.95 ^^A$\TU/Consolas(0)/m/n/10.95 _{39}° \TU/PalatinoLinotyp
-e(0)/m/n/10.95 on which
+Overfull \hbox (6.68573pt too wide) in paragraph at lines 21652--21655
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Noetic Manifold[]. The open probability sim
+plex $\OT1/cmr/m/n/10.95 ^^A$\TU/Consolas(0)/m/n/10.95 _{39}° \TU/PalatinoLinot
+ype(0)/m/n/10.95 on which
  []
 
 [606]
@@ -8343,8 +8343,8 @@ tal). Access: https://noetic-
 
 [619]
 Overfull \hbox (25.47845pt too wide) in paragraph at lines 22112--22117
-\TU/PalatinoLinotype(0)/m/n/10.95 Information Geometry and Its Applications by 
-Shun-ichi Amari (Springer,
+\TU/PalatinoLinotype(0)/m/n/10.95 Information Geometry[] and Its Applications b
+y Shun-ichi Amari (Springer,
  []
 
 [620]
@@ -10594,8 +10594,8 @@ of two different cognitive states,
 
 [734] [735]
 Overfull \hbox (8.82823pt too wide) in paragraph at lines 26714--26723
-[]\TU/PalatinoLinotype(0)/b/n/10.95 Involution / Involution Pair \TU/PalatinoLi
-notype(0)/m/n/10.95 — Two Cognitive Operators or Drives
+[]\TU/PalatinoLinotype(0)/b/n/10.95 Involution / Involution Pair[] \TU/Palatino
+Linotype(0)/m/n/10.95 — Two Cognitive Operators or Drives
  []
 
 
@@ -10640,8 +10640,8 @@ Overfull \hbox (9.64217pt too wide) in paragraph at lines 26891--26897
 
 [740]
 Overfull \hbox (3.13472pt too wide) in paragraph at lines 26921--26925
-[]\TU/PalatinoLinotype(0)/b/n/10.95 Stealth Inversion \TU/PalatinoLinotype(0)/m
-/n/10.95 — An inversion pattern that presents as healthy
+[]\TU/PalatinoLinotype(0)/b/n/10.95 Stealth Inversion[] \TU/PalatinoLinotype(0)
+/m/n/10.95 — An inversion pattern that presents as healthy
  []
 
 
@@ -10671,8 +10671,8 @@ rives remain unchanged.
 
 Overfull \hbox (17.04564pt too wide) in paragraph at lines 27015--27022
 []\TU/Consolas(0)/b/n/10.95 |T \TU/PalatinoLinotype(0)/b/n/10.95 Transcendent R
-egister \TU/PalatinoLinotype(0)/m/n/10.95 — High-abstraction, purpose-orienting
-,
+egister[] \TU/PalatinoLinotype(0)/m/n/10.95 — High-abstraction, purpose-orienti
+ng,
  []
 
 [743]
@@ -10731,121 +10731,330 @@ mr/m/n/10.95
 $\TU/Consolas(0)/m/n/10.95 _synthesis\TU/PalatinoLinotype(0)/m/n/10.95 ,
  []
 
-[745] [746
 
-] [747] [748
+(C:\Users\wakil\OneDrive\Desktop\tksCAS\book\publishing\latex\build\manuscript.
+ind [745] [746
 
 ]
-Overfull \hbox (0.65704pt too wide) in paragraph at lines 27118--27124
+Overfull \hbox (6.25548pt too wide) in paragraph at lines 5--6
+[]\TU/PalatinoLinotype(0)/m/n/10.95 30 Resilience Scenarios, [][]432[][], [][]4
+47[][] 
+ []
+
+
+Overfull \hbox (8.90997pt too wide) in paragraph at lines 6--9
+[]\TU/PalatinoLinotype(0)/m/n/10.95 40 Cognitive States, [][]xiii[][], [][]115[
+][], [][]123[][],
+ []
+
+
+Overfull \hbox (5.03719pt too wide) in paragraph at lines 9--11
+[]\TU/PalatinoLinotype(0)/m/n/10.95 40-State Heatmap, [][]214[][], [][]407[][],
+ [][]408[][],
+ []
+
+
+Overfull \hbox (2.19736pt too wide) in paragraph at lines 13--14
+[]\TU/PalatinoLinotype(0)/m/n/10.95 8 Resource Categories, [][]351[][], [][]352
+[][] 
+ []
+
+
+Overfull \hbox (9.54637pt too wide) in paragraph at lines 18--19
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Admissibility / Admissibility Re-
+ []
+
+
+Overfull \hbox (10.81763pt too wide) in paragraph at lines 21--23
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Analytical Register, [][]193[][], [][]602[]
+[], [][]732[][],
+ []
+
+
+Overfull \hbox (11.57364pt too wide) in paragraph at lines 28--30
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Bhattacharyya Distance, [][]359[][], [][]60
+2[][],
+ []
+
+
+Overfull \hbox (2.08047pt too wide) in paragraph at lines 37--40
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Cognitive Fractal, [][]219[][], [][]220[][]
+, [][]228[][],
+ []
+
+
+Overfull \hbox (0.10217pt too wide) in paragraph at lines 44--47
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Colloquialism Test, [][]xvii[][], [][]45[][
+], [][]46[][],
+ []
+
+
+Overfull \hbox (3.17726pt too wide) in paragraph at lines 47--49
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Convergence, [][]178[][], [][]234[][], [][]
+523[][], [][]524[][] 
+ []
+
+
+Overfull \hbox (6.11722pt too wide) in paragraph at lines 63--65
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Dual Cancellation, [][]229[][], [][]233[][]
+, [][]234[][],
+ []
+
+
+Overfull \hbox (11.5227pt too wide) in paragraph at lines 70--72
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Embodied Register, [][]193[][], [][]604[][]
+, [][]735[][],
+ []
+
+[747
+
+]
+Overfull \hbox (5.52373pt too wide) in paragraph at lines 80--82
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Fisher-Rao Metric, [][]456[][], [][]507[][]
+, [][]509[][],
+ []
+
+
+Overfull \hbox (2.7705pt too wide) in paragraph at lines 91--93
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Graduated Normalization, [][]438[][],
+ []
+
+
+Overfull \hbox (4.76122pt too wide) in paragraph at lines 97--98
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Hidden Inversion Injection, [][]414[][] 
+ []
+
+
+Overfull \hbox (7.27492pt too wide) in paragraph at lines 101--103
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Information Geometry, [][]505[][], [][]507[
+][],
+ []
+
+
+Overfull \hbox (1.18547pt too wide) in paragraph at lines 103--105
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Inversion, [][]83[][], [][]102[][], [][]104
+[][], [][]106[][], [][]107[][] 
+ []
+
+
+Overfull \hbox (6.65575pt too wide) in paragraph at lines 106--107
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Involution / Involution Pair, [][]736[][] 
+ []
+
+
+Overfull \hbox (0.97758pt too wide) in paragraph at lines 114--115
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Lacunarity of the Machine, [][]392[][] 
+ []
+
+
+Overfull \hbox (6.72955pt too wide) in paragraph at lines 115--116
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Lacunarity Report, [][]410[][]–[][]412[][],
+ [][]427[][] 
+ []
+
+
+Overfull \hbox (2.81012pt too wide) in paragraph at lines 127--130
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Noetic Compass, [][]xii[][], [][]xvi[][], [
+][]18[][], [][]37[][],
+ []
+
+
+Overfull \hbox (3.30203pt too wide) in paragraph at lines 132--135
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Noetic Topos, [][]xvi[][], [][]473[][], [][
+]488[][], [][]490[][],
+ []
+
+
+Overfull \hbox (2.21968pt too wide) in paragraph at lines 138--141
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Operational Domain, [][]18[][], [][]54[][],
+ [][]59[][],
+ []
+
+
+Overfull \hbox (7.57713pt too wide) in paragraph at lines 144--147
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Phenomenological Register, [][]xiii[][],
+ []
+
+
+Overfull \hbox (2.21889pt too wide) in paragraph at lines 144--147
+[][]\TU/PalatinoLinotype(0)/m/n/10.95 18[][], [][]21[][], [][]46[][], [][]114[]
+[], [][]123[][], [][]124[][],
+ []
+
+
+Overfull \hbox (9.6114pt too wide) in paragraph at lines 163--164
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Recursive Resolution, [][]71[][]–[][]73[][]
+, [][]600[][] 
+ []
+
+
+Overfull \hbox (10.1979pt too wide) in paragraph at lines 168--169
+[]\TU/PalatinoLinotype(0)/m/n/10.95 RPM Resolution Lacunarity, [][]113[][],
+ []
+
+[748]
+Overfull \hbox (3.72145pt too wide) in paragraph at lines 177--178
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Seven-Drive Career Diagnostic,
+ []
+
+
+Overfull \hbox (0.68498pt too wide) in paragraph at lines 181--183
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Stealth Inversion, [][]290[][], [][]292[][]
+, [][]298[][],
+ []
+
+
+Overfull \hbox (13.0119pt too wide) in paragraph at lines 183--184
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Substrate Independence, [][]609[][], [][]74
+1[][] 
+ []
+
+
+Overfull \hbox (5.69504pt too wide) in paragraph at lines 189--192
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Transcendent Register, [][]193[][], [][]604
+[][],
+ []
+
+
+Overfull \hbox (2.64471pt too wide) in paragraph at lines 200--203
+[]\TU/PalatinoLinotype(0)/m/n/10.95 v7.5, [][]xiii[][], [][]xvii[][], [][]18[][
+], [][]46[][], [][]58[][], [][]97[][], [][]114[][],
+ []
+
+
+Overfull \hbox (3.37471pt too wide) in paragraph at lines 203--206
+[]\TU/PalatinoLinotype(0)/m/n/10.95 v7.6, [][]xiii[][], [][]xvii[][], [][]673[]
+[], [][]681[][], [][]720[][], [][]739[][],
+ []
+
+
+Overfull \hbox (3.37471pt too wide) in paragraph at lines 206--208
+[]\TU/PalatinoLinotype(0)/m/n/10.95 v7.7, [][]xiii[][], [][]xvii[][], [][]142[]
+[], [][]173[][], [][]174[][], [][]603[][],
+ []
+
+
+Overfull \hbox (7.87665pt too wide) in paragraph at lines 213--216
+[]\TU/PalatinoLinotype(0)/m/n/10.95 Wrap Pipeline, [][]xvi[][], [][]112[][], []
+[]384[][], [][]389[][],
+ []
+
+[749
+
+]) [750
+
+
+]
+Overfull \hbox (0.65704pt too wide) in paragraph at lines 27106--27112
 \TU/PalatinoLinotype(0)/m/n/10.95 cess details, see \TU/PalatinoLinotype(0)/b/n
 /10.95 Appendix F: Resources and Further Reading\TU/PalatinoLinotype(0)/m/n/10.
 95 , which
  []
 
 
-Overfull \hbox (0.97176pt too wide) in paragraph at lines 27118--27124
+Overfull \hbox (0.97176pt too wide) in paragraph at lines 27106--27112
 \TU/PalatinoLinotype(0)/m/n/10.95 technologists, mathematicians, psychology and
  human applications)
  []
 
 
-Overfull \hbox (22.15147pt too wide) in paragraph at lines 27132--27137
+Overfull \hbox (22.15147pt too wide) in paragraph at lines 27120--27125
 \TU/PalatinoLinotype(0)/m/n/10.95 formation geometry, RPM monads and section-re
 traction pairs, pullback-
  []
 
 
-Overfull \hbox (3.03168pt too wide) in paragraph at lines 27141--27145
+Overfull \hbox (3.03168pt too wide) in paragraph at lines 27129--27133
 \TU/PalatinoLinotype(0)/m/n/10.95 ogy, enactive cognition, predictive processin
 g, consciousness science,
  []
 
 
-Overfull \hbox (1.39021pt too wide) in paragraph at lines 27141--27145
+Overfull \hbox (1.39021pt too wide) in paragraph at lines 27129--27133
 \TU/PalatinoLinotype(0)/m/n/10.95 meditation and contemplative traditions, hemi
 spheric specialization.
  []
 
-[749]
-Overfull \hbox (3.63214pt too wide) in paragraph at lines 27155--27159
+[751]
+Overfull \hbox (3.63214pt too wide) in paragraph at lines 27143--27147
 \TU/PalatinoLinotype(0)/m/n/10.95 mechanistic interpretability, model welfare, 
 functional emotions. See
  []
 
 
-Overfull \hbox (17.20993pt too wide) in paragraph at lines 27163--27171
+Overfull \hbox (17.20993pt too wide) in paragraph at lines 27151--27159
 \TU/PalatinoLinotype(0)/m/n/10.95 definitions, reconciled per \TU/Consolas(0)/m
 /n/10.95 docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md
  []
 
-[750]
-Overfull \hbox (12.87833pt too wide) in paragraph at lines 27199--27204
+[752]
+Overfull \hbox (12.87833pt too wide) in paragraph at lines 27187--27192
 \TU/PalatinoLinotype(0)/m/n/10.95 Leo, formerly Project Kuiper, to IPC Class 3 
 acceptability under AS9100.
  []
 
-[751
+[753
 
-] [752]
-Overfull \hbox (9.06845pt too wide) in paragraph at lines 27218--27221
+] [754]
+Overfull \hbox (9.06845pt too wide) in paragraph at lines 27206--27209
 []\TU/PalatinoLinotype(0)/m/n/10.95 The Cognitive Architecture System framework
  continues to evolve.
  []
 
 
-Overfull \hbox (1.43698pt too wide) in paragraph at lines 27231--27234
+Overfull \hbox (1.43698pt too wide) in paragraph at lines 27219--27222
 []\TU/PalatinoLinotype(0)/b/n/10.95 Framework documentation: \TU/PalatinoLinoty
 pe(0)/m/n/10.95 [See \TU/Consolas(0)/m/n/10.95 docs/ \TU/PalatinoLinotype(0)/m/
 n/10.95 directory in the project
  []
 
 
-Overfull \hbox (49.4262pt too wide) in paragraph at lines 27234--27238
+Overfull \hbox (49.4262pt too wide) in paragraph at lines 27222--27226
 \TU/PalatinoLinotype(0)/m/n/10.95 structural analysis, per \TU/Consolas(0)/m/n/
 10.95 docs/AI_MISALIGNMENT_INCIDENTS_DATABASE.md\TU/PalatinoLinotype(0)/m/n/10.
 95 ] 
  []
 
-[753
+[755
 
-] [754
+] [756
 
 ]
-Overfull \hbox (6.15005pt too wide) in paragraph at lines 27251--27256
+Overfull \hbox (6.15005pt too wide) in paragraph at lines 27239--27244
 []\TU/PalatinoLinotype(0)/b/n/10.95 Manuscript preparation: \TU/PalatinoLinotyp
 e(0)/m/n/10.95 Markdown-based authoring with per-
  []
 
 
-Overfull \hbox (7.75024pt too wide) in paragraph at lines 27267--27271
+Overfull \hbox (7.75024pt too wide) in paragraph at lines 27255--27259
 []\TU/PalatinoLinotype(0)/b/n/10.95 Monospace font (code, notation, equations):
  \TU/PalatinoLinotype(0)/m/n/10.95 [PLACEHOLDER
  []
 
 
-Overfull \hbox (1.74834pt too wide) in paragraph at lines 27281--27287
+Overfull \hbox (1.74834pt too wide) in paragraph at lines 27269--27275
 []\TU/PalatinoLinotype(0)/m/n/10.95 The CAS framework presented in this book wa
 s developed across
  []
 
 
-Overfull \hbox (2.09795pt too wide) in paragraph at lines 27281--27287
+Overfull \hbox (2.09795pt too wide) in paragraph at lines 27269--27275
 \TU/PalatinoLinotype(0)/m/n/10.95 cipline Extension). The current book represen
 ts the state of the frame-
  []
 
-[755]
-Overfull \hbox (12.17413pt too wide) in paragraph at lines 27288--27294
+[757]
+Overfull \hbox (12.17413pt too wide) in paragraph at lines 27276--27282
 []\TU/PalatinoLinotype(0)/m/n/10.95 Manuscript sources, framework implementatio
 n code (CAS-Native
  []
 
-) [756]
-\tf@toc=\write7
-\openout7 = `manuscript.toc'.
+) [758]
+\tf@toc=\write8
+\openout8 = `manuscript.toc'.
 
-\tf@lof=\write8
-\openout8 = `manuscript.lof'.
+\tf@lof=\write9
+\openout9 = `manuscript.lof'.
 
 
 (C:\Users\wakil\OneDrive\Desktop\tksCAS\book\publishing\latex\build\manuscript.
@@ -10855,16 +11064,16 @@ LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2020/03/25>
  ***********
 Package rerunfilecheck Info: File `manuscript.out' has not changed.
-(rerunfilecheck)             Checksum: 2513498F93B98335CAE433105F078AD2;9691.
+(rerunfilecheck)             Checksum: 7D0B94989CE19759EF06107C7540ED3E;9691.
  ) 
 Here is how much of TeX's memory you used:
- 37797 strings out of 409617
- 794707 string characters out of 5774014
+ 37809 strings out of 409617
+ 794991 string characters out of 5774014
  1954191 words of memory out of 5000000
- 59314 multiletter control sequences out of 15000+600000
+ 59322 multiletter control sequences out of 15000+600000
  568378 words of font info for 139 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  106i,12n,110p,1009b,855s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on C:\Users\wakil\OneDrive\Desktop\tksCAS\book\publishing\latex\
-build\manuscript.pdf (790 pages).
+build\manuscript.pdf (792 pages).

@@ -503,13 +503,13 @@
 \contentsline {subsection}{A--Z Index}{731}{section*.467}%
 \contentsline {subsection}{Register Reference (thematic grouping)}{743}{section*.468}%
 \contentsline {subsection}{Ω\_* Registry Reference (CAS v7.7 named emergent registers)}{744}{section*.469}%
-\contentsline {chapter}{Index}{747}{chapter*.471}%
-\contentsline {chapter}{Bibliography and Further Reading}{749}{chapter*.473}%
-\contentsline {subsection}{Mathematics and Category Theory}{749}{section*.474}%
-\contentsline {subsection}{Consciousness Studies and Cognitive Science}{749}{section*.475}%
-\contentsline {subsection}{Information Theory and AI}{750}{section*.476}%
-\contentsline {subsection}{Cognitive Architecture and AI Safety}{750}{section*.477}%
-\contentsline {subsection}{Framework Origins and Influences}{750}{section*.478}%
-\contentsline {chapter}{About the Author}{751}{chapter*.480}%
-\contentsline {chapter}{Contact and Community}{753}{chapter*.482}%
-\contentsline {chapter}{Colophon}{755}{chapter*.484}%
+\contentsline {chapter}{Index}{747}{chapter*.470}%
+\contentsline {chapter}{Bibliography and Further Reading}{751}{chapter*.472}%
+\contentsline {subsection}{Mathematics and Category Theory}{751}{section*.473}%
+\contentsline {subsection}{Consciousness Studies and Cognitive Science}{751}{section*.474}%
+\contentsline {subsection}{Information Theory and AI}{752}{section*.475}%
+\contentsline {subsection}{Cognitive Architecture and AI Safety}{752}{section*.476}%
+\contentsline {subsection}{Framework Origins and Influences}{752}{section*.477}%
+\contentsline {chapter}{About the Author}{753}{chapter*.479}%
+\contentsline {chapter}{Contact and Community}{755}{chapter*.481}%
+\contentsline {chapter}{Colophon}{757}{chapter*.483}%

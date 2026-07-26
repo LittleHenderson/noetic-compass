@@ -135,6 +135,10 @@ def build_main_body() -> None:
             "\\markboth{ABOUT THE AUTHOR}{ABOUT THE AUTHOR}"))
         out.append(body.strip())
         out.append("\n")
+    # Index, built from the \index marks publishing/build_indexes.py inserts
+    # into body.tex after pandoc.
+    out.append(raw_latex("\\printindex"))
+    out.append("\n")
     (BUILD / "main_body.md").write_text("\n\n".join(out) + "\n", encoding="utf-8")
 
 

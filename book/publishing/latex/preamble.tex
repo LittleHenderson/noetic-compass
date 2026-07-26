@@ -148,6 +148,12 @@
 % U+2218 (∘) inside Verbatim/texttt blocks.
 \newcommand{\unimath}[1]{\ensuremath{\csname #1\endcsname}}
 
+% --- Index --------------------------------------------------------------
+% memoir supplies \makeindex / \printindex. Marks are inserted into body.tex
+% by publishing/build_indexes.py after pandoc; the .idx is compiled by
+% makeindex between the two xelatex passes.
+\makeindex
+
 % --- Microtypography ---------------------------------------------------
 \usepackage{microtype}
 \clubpenalty=10000

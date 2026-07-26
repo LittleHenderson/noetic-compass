@@ -247,9 +247,26 @@ def main() -> None:
 
         # Back-matter subsections like '## Glossary', '## Bibliography' — keep
         # as unnumbered chapter
+        # The manuscript's "Index" section is a note explaining how an index
+        # would be produced, not an index. Replace it with the real one, built
+        # from the \index marks that build_indexes.py inserts into body.tex.
+        if stripped == "## Index":
+            out.append("")
+            out.append(r"```{=latex}")
+            out.append(r"\printindex")
+            out.append(r"```")
+            out.append("")
+            i += 1
+            while i < len(lines):
+                nxt = lines[i].rstrip()
+                if nxt.startswith("## ") or nxt == "# Back Matter":
+                    break
+                i += 1
+            continue
+
         if stripped in ("## Glossary", "## Bibliography and Further Reading",
                         "## About the Author", "## Contact and Community",
-                        "## Colophon", "## Index"):
+                        "## Colophon"):
             title = stripped[3:]
             out.append("")
             out.append(r"```{=latex}")

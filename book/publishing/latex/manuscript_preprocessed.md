@@ -9884,15 +9884,8 @@ Further candidate labels (`Ω_flow`, `Ω_non-dual`, `Ω_mastery`, `Ω_aha`, `Ω_
 
 
 ```{=latex}
-\chapter*{Index}
-\addcontentsline{toc}{chapter}{Index}
-\markboth{INDEX}{INDEX}
+\printindex
 ```
-
-
-[INDEX — to be generated from the final manuscript via an indexing tool during production. Entries should cover topics, named persons, concepts, figures, equations, and cross-references across the 27 chapters and six appendices. Recommended tooling: LaTeX `imakeidx` (or equivalent) for the target typesetting system; alternatively, Typst's built-in index support if the book is typeset in Typst. Placeholder page ranges to be replaced with final pagination.]
-
----
 
 
 ```{=latex}
