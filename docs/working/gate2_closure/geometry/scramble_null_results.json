@@ -1,0 +1,37 @@
+{
+  "criteria_primary": {
+    "E1_below_2.5pct_null": true,
+    "E2_sanity_ci_excludes_0": true,
+    "E3_margin_beyond_lexical_0.10": true,
+    "E4_no_saturation": true
+  },
+  "criteria_secondary": {
+    "W1_ordinal_rho_and_p": false
+  },
+  "design": "SCRAMBLE-NULL-COMPLETION-v1",
+  "model": "EleutherAI/pythia-1b",
+  "prereg_commit": "3385aa63",
+  "primary": {
+    "E2_bootstrap_ci": [
+      0.208537,
+      0.255985
+    ],
+    "E3_margin_minus_lexical": 0.183721,
+    "compact_exact_p": 0.004975,
+    "compact_rel_E5": 0.667694,
+    "d_tks": 0.475994,
+    "exact_p": 0.004975,
+    "lexical_rel_char": 0.113847,
+    "lexical_rel_word": 0.144205,
+    "null_2p5": 0.677864,
+    "null_mean": 0.708248,
+    "rel_margin": 0.327927
+  },
+  "secondary_womfr": {
+    "compact_rho_excluded_W3": 0.117271,
+    "perm_p": 0.089291,
+    "tks_mean_rho": 0.191336
+  },
+  "seeds": "1..200 (20260725 retired)",
+  "verdict": "PRIMARY_LICENSED | SECONDARY_NOT_LICENSED"
+}
