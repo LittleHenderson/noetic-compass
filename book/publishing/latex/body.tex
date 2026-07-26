@@ -6636,7 +6636,8 @@ production rules:
 \begin{Verbatim}[commandchars=\\\{\}]
 <cognitive_state> ::= "CO-" <digit> "^" <domain> "_{" <drive> "}"
 <domain>          ::= "P" | "C" | "E" | "O"
-<drive>           ::= "F" <digit>
+<drive>           ::= "F" <drive_index>
+<drive_index>     ::= "1" | "2" | "3" | "4" | "5" | "6" | "7"
 <digit>           ::= "0" | "1" | ... | "9"
 <expression>      ::= <cognitive_state>
                     | <expression> <operator> <expression>
@@ -20987,7 +20988,8 @@ Compass engine to parse string equations into executable tensors.
 <state>        ::= <operator> <domain> "_" <drive> | <operator> <domain>
 <operator>     ::= "CO-" <digit>
 <domain>       ::= "^P" | "^C" | "^E" | "^O"
-<drive>        ::= "{F" <digit> "}"
+<drive>        ::= "{F" <drive_index> "}"
+<drive_index>  ::= "1" | "2" | "3" | "4" | "5" | "6" | "7"
 <digit>        ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 \end{Verbatim}
 
@@ -21140,7 +21142,7 @@ Noetic Compass compiler-interpreter. The extended productions follow.
 <drive_ref>        ::= "F" <drive_digit> ;
 \end{Verbatim}
 
-This grammar reflects what the compiler in
+This grammar is written to match what the compiler in
 \texttt{noetic-compass/cas-engine/crates/casc-syntax/src/lib.rs} (Rust)
 and \texttt{noetic-compass/api/notation/compiler.py} (Python) actually
 accepts, including the typed set-theory meta-logic productions

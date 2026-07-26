@@ -2618,7 +2618,8 @@ The CAS notation follows a Backus-Naur Form (BNF) grammar, the same standard use
 ```bnf
 <cognitive_state> ::= "CO-" <digit> "^" <domain> "_{" <drive> "}"
 <domain>          ::= "P" | "C" | "E" | "O"
-<drive>           ::= "F" <digit>
+<drive>           ::= "F" <drive_index>
+<drive_index>     ::= "1" | "2" | "3" | "4" | "5" | "6" | "7"
 <digit>           ::= "0" | "1" | ... | "9"
 <expression>      ::= <cognitive_state>
                     | <expression> <operator> <expression>
@@ -7821,7 +7822,8 @@ For developers building parsers for the Cognitive Architecture System, here is t
 <state>        ::= <operator> <domain> "_" <drive> | <operator> <domain>
 <operator>     ::= "CO-" <digit>
 <domain>       ::= "^P" | "^C" | "^E" | "^O"
-<drive>        ::= "{F" <digit> "}"
+<drive>        ::= "{F" <drive_index> "}"
+<drive_index>  ::= "1" | "2" | "3" | "4" | "5" | "6" | "7"
 <digit>        ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 ```
 
@@ -7928,7 +7930,7 @@ The grammar above describes CAS notation as it appears inline in prose. The full
 <drive_ref>        ::= "F" <drive_digit> ;
 ```
 
-This grammar reflects what the compiler in `noetic-compass/cas-engine/crates/casc-syntax/src/lib.rs` (Rust) and `noetic-compass/api/notation/compiler.py` (Python) actually accepts, including the typed set-theory meta-logic productions (`∈ ∉ ⊂ ⊆ ⊃ ⊇`, cardinality `|X|`, `∅`, canonical meta-sets, and the `meta_set` / `meta_symbol` / `meta_assertion` type names). Appendix J documents the meta-logic layer in detail.
+This grammar is written to match what the compiler in `noetic-compass/cas-engine/crates/casc-syntax/src/lib.rs` (Rust) and `noetic-compass/api/notation/compiler.py` (Python) actually accepts, including the typed set-theory meta-logic productions (`∈ ∉ ⊂ ⊆ ⊃ ⊇`, cardinality `|X|`, `∅`, canonical meta-sets, and the `meta_set` / `meta_symbol` / `meta_assertion` type names). Appendix J documents the meta-logic layer in detail.
 
 
 ## Operator Precedence
