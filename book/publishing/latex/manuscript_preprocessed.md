@@ -195,7 +195,7 @@ All of these interventions have value. But after six months of weekly sessions, 
 
 The reason is structural, and no current psychological framework can articulate it precisely. Tom's problem is not his childhood, his reward system, or his self-talk. Tom's problem is that his motivational architecture has a broken link in its prerequisite chain. He possesses a powerful drive for Wisdom (`F2`)—he genuinely loves his research topic. He possesses a powerful drive for Purpose (`F7`)—he wants to contribute to his field. But he has never developed the intermediate structural capacity for Agency (`F5`)—the concrete, operational ability to sit down, open the document, and produce output under uncomfortable conditions. His desire and his wisdom are fully developed, but the mechanical linkage to execution is missing. No amount of reframing his thoughts will build that linkage. He needs an architectural intervention, not a narrative one.
 
-In the notation we will learn in Part II of this book, Tom's state would be written as: `CO-2^C_{F2} → [BROKEN] → CO-3^O_{F5}`. His cognitive abstractification is disconnected from his operational concretization. The arrow between them—the prerequisite chain—is where the failure lives.
+In the notation we will learn in Part II of this book, Tom's state would be written as: `CO-2^C_{F2} → [BROKEN] → CO-3^O_{F5}`. Read it left to right: at the Cognitive level he is drawn toward the work — `^2` Positive, an Idea he has an affinity for, fuelled by `F2` Wisdom, which is exactly the love of the topic he reports. At the Operational level he is repelled by it — `^3` Negative, an Idea he is adverse to, at the point where it would become physical action. The attraction and the aversion are both real and they sit at different levels of the architecture. The arrow between them — the prerequisite chain — is where the failure lives, and that is why working on either end alone has done nothing for six months.
 
 This example is not unusual. It is the norm. Billions of people around the world are sitting in therapy, reading self-help books, or simply suffering in silence, while the actual structural cause of their frustration goes undiagnosed—not because their therapists are incompetent, but because the diagnostic tools do not yet exist.
 
@@ -3694,7 +3694,7 @@ export fn link(source: state[C], target: state[E]): relation
 export fn chain(a: state[C], b: state[C]): fractal = a ∘ b;
 ```
 
-This twelve-line file declares two typed state bindings (a Cognitive Positive state fueled by Wisdom, and an Evaluative Female state fueled by Connection) and two typed functions (one that builds a dependency relation from a Cognitive state to an Evaluative state, and one that composes two Cognitive states into a fractal). The `export` keywords make these symbols visible to other modules. (Note: the programmer-facing variable names — `principle`, `judgment`, `abstraction`, `concretization`, `integration` — are legacy labels kept for code continuity; the Noetics they bind are named authoritatively in the surrounding prose.)
+This twelve-line file declares two typed state bindings (a Cognitive Positive state fueled by Wisdom, and an Evaluative Female state fueled by Connection) and two typed functions (one that builds a dependency relation from a Cognitive state to an Evaluative state, and one that composes two Cognitive states into a fractal). The `export` keywords make these symbols visible to other modules. (The programmer-facing variable names — `principle`, `judgment`, `attraction`, `aversion`, `integration` — are chosen to match the Noetics they bind. Two of them used to read `abstraction` and `concretization`, which quietly taught the superseded Scheme-A labels for `^2` and `^3` through the identifiers themselves.)
 
 The Application Program (`CAS_FULL_DEMO_APP.cas`):
 
@@ -3706,16 +3706,16 @@ The Application Program (`CAS_FULL_DEMO_APP.cas`):
 use "CAS_FULL_DEMO_LIB.cas";
 
  2. Typed let bindings with explicit state notation
-let abstraction: state[C] = CO-2^C_{F2};
-let concretization: state[C] = CO-3^C_{F2};
+let attraction: state[C] = CO-2^C_{F2};
+let aversion: state[C] = CO-3^C_{F2};
 let integration: state[C] = CO-4^C_{F4};
 
  3. Binary state operators — composition (*, ×) and modular difference (/, ÷)
-let composed: state[C] = abstraction * integration;
-let difference: state[C] = integration / abstraction;
+let composed: state[C] = attraction * integration;
+let difference: state[C] = integration / attraction;
 
  4. Fractal composition via ∘ operator
-let motif: fractal = abstraction ∘ concretization ∘ integration;
+let motif: fractal = attraction ∘ aversion ∘ integration;
 
  5. Phi literal — direct fractal sequence notation
 let phi_seq: fractal = Phi<2:4:6:8>;
@@ -3735,7 +3735,7 @@ let bridged: state[C] = compose(principle, integration);
 let principle_rpm: rpm = rpm_of(principle);
 
  10. fractal builtin — construct fractal from multiple states
-let woven: fractal = fractal(abstraction, integration, concretization);
+let woven: fractal = fractal(attraction, integration, aversion);
 
  11. Typed function with parameters and declared return
 fn finalize(seed: state[C], outcome: state[E]): relation
@@ -3764,7 +3764,7 @@ When this program is fed to the Noetic Compass CAS compiler (invoked with `pytho
 
 3. Module resolution. The `use "CAS_FULL_DEMO_LIB.cas"` statement triggers a recursive compilation of the library module. Only symbols marked with `export` are visible to the importing program. In this case, the library exports `principle`, `judgment`, `link`, and `chain` — and these are the only symbols the app can reference. Anything non-exported is invisible, just like private fields in a class.
 
-4. Type checking. Every binding's declared type is verified against the inferred type of its right-hand side. The compiler checks that `abstraction` declared as `state[C]` actually binds to a state in the Cognitive domain (yes — `CO-2^C_{F2}` is valid in C). It checks that `composed` declared as `state[C]` is the product of two C states (yes — the `*` operator on two Cognitive states yields another Cognitive state). It checks that `motif` declared as `fractal` is the result of a fractal composition operator `∘` (yes). It checks that `readiness` declared as `rpm` is correctly wrapped by `RPM(...)` (yes). It checks that `finalize` declared to return a `relation` actually returns one (yes — `link` produces a relation). If any declared type is wrong, the compiler rejects the program with a specific error.
+4. Type checking. Every binding's declared type is verified against the inferred type of its right-hand side. The compiler checks that `attraction` declared as `state[C]` actually binds to a state in the Cognitive domain (yes — `CO-2^C_{F2}` is valid in C). It checks that `composed` declared as `state[C]` is the product of two C states (yes — the `*` operator on two Cognitive states yields another Cognitive state). It checks that `motif` declared as `fractal` is the result of a fractal composition operator `∘` (yes). It checks that `readiness` declared as `rpm` is correctly wrapped by `RPM(...)` (yes). It checks that `finalize` declared to return a `relation` actually returns one (yes — `link` produces a relation). If any declared type is wrong, the compiler rejects the program with a specific error.
 
 5. Admissibility checking. Beyond basic type checking, the compiler enforces the admissibility relations from the CAS ontology. It confirms that each Noetic is permitted in the domain it is being applied in, and that sequential transitions respect the domain descent ordering P ≻ C ≻ E ≻ O. A program that tries to put `^5` (Female) in the Principled domain without justification, or sequence an Evaluative state before a Cognitive one, will be flagged.
 
@@ -5518,7 +5518,7 @@ To make each stage concrete, we will use a running example throughout this secti
 2.  RPM Gate (Prerequisite Check): It checks if the prompt respects the Prerequisite Chain (Desire → Wisdom → Power). For example, is the user demanding that the AI execute a high-risk Action (Power) without providing the necessary context or logic (Wisdom)?
     Ventilator example: The RPM Gate confirms the prompt provides Desire (the hospital director needs an allocation rule), partial Wisdom (the clinical context is stated, but the ethical framework is not), and is requesting Power (an executable rule). Because the Wisdom layer is incomplete, the Gate flags the prompt as requiring the model to supply its own ethical scaffolding before producing the Power output. A compliant model will internally generate the missing Wisdom before emitting a rule.
 3.  Dial Adjustment: The system sets the target "Cognitive Profile" for the specific assessment. (We will explore the Dial System deeply in Chapter 20).
-    Ventilator example: For a medical triage prompt, the Dial system loads the Healthcare profile: `CO-6` (`^6` Male) at 9, `CO-5` (`^5` Female) at 6, `CO-3` (`^3` Negative) at 8, `CO-2` (`^2` Positive) at 7. This configuration forces the model to balance decomposition-and-test of the symptom set with a Mind that carries the patient's accumulated state, and to produce a specific-form rule (aversion to the wrong allocation) grounded in the general-level principled affinity (`^2`).
+    Ventilator example: For a medical triage prompt, the Dial system loads the Healthcare profile: `CO-6` (`^6` Male) at 8, `CO-5` (`^5` Female) at 6, `CO-3` (`^3` Negative) at 8, `CO-2` (`^2` Positive) at 7. This configuration forces the model to balance decomposition-and-test of the symptom set with a Mind that carries the patient's accumulated state, and to produce a specific-form rule (aversion to the wrong allocation) grounded in the general-level principled affinity (`^2`).
 4.  Base LLM Call: The target AI model (e.g., GPT-4, Claude, or a custom open-source model) receives the prompt and generates its raw response.
     Ventilator example: The target model returns a multi-paragraph response proposing a triage rule based on expected clinical benefit, with a brief acknowledgment of the ethical weight of the decision. The raw response is handed unchanged to the next stage.
 5.  Noetic Scoring (Real LLM Intelligence): This is the core of the engine. A secondary, highly calibrated AI-powered "Scorer" evaluates the response against all 10 Noetics. It does not just assign a number; it provides specific, cited text evidence for why the response demonstrated `CO-6` (`^6` Male) or failed to demonstrate `CO-5` (`^5` Female).
@@ -7624,7 +7624,7 @@ CO-9 — Below/Effect (The Sniper)
 
 The CAS framework recognizes 28 fundamental cognitive sequences (often referred to as templates or "design patterns"). They represent the most common human behaviors and the standard AI reasoning paths evaluated by the Noetic Compass. 
 
-Here are five of the most critical templates to memorize, complete with their structural equations.
+Here are the twenty-eight templates, complete with their structural equations. If you memorise only a handful, make them the first five — they are the ones that recur most often in practice.
 
 1. The Domain Descent (The Architecture of Execution)
    Equation: `^P → ^C → ^E → ^O`
@@ -7948,7 +7948,7 @@ When multiple operators appear in a single expression, the parser applies preced
 
 Operators sharing a rank are evaluated **left to right**. Note in particular that `∘` binds at the same strength as `×` and `÷`, so `a × b ∘ c` groups as `(a × b) ∘ c`.
 
-So the expression `abstraction * integration -> judgment` parses as `(abstraction * integration) -> judgment` rather than `abstraction * (integration -> judgment)`, because `*` binds tighter than `->`.
+So the expression `attraction * integration -> judgment` parses as `(attraction * integration) -> judgment` rather than `attraction * (integration -> judgment)`, because `*` binds tighter than `->`.
 
 
 ## Type System
@@ -8043,7 +8043,7 @@ A draft specification for a standalone Rust compiler ecosystem (`tksc`, `tkscore
 
 The grammar composes, so larger expressions are built from the primitive rules.
 
-   Compound transition into a fractal: `(CO-2^C → CO-3^O) ∘ CO-0^P`. Plain English: "At every scale, the transition from cognitive abstraction to operational concretization is grounded in a stable principled identity." A disciplined craftsperson whose every act is traceable to a core ethic.
+   Compound transition into a fractal: `(CO-2^C → CO-3^O) ∘ CO-0^P`. Plain English: "At every scale, the transition from cognitive attraction to operational aversion is grounded in a stable principled identity." A disciplined craftsperson whose every act is traceable to a core ethic.
    RPM wrapping: `RPM(CO-6^O_{F5})`. Plain English: "`^6^O` Operational Male — the physical decomposition-and-test of a work against its parts — driven by Agency, wrapped by the Routine/Prerequisite/Module structure." The Male decomposition cannot execute unless its Desire and Wisdom prerequisites are already satisfied — the section-retraction guarantees the gate is one-directional.
    Involution pair: `CO-8^C ↔ CO-9^O`. Plain English: "`^8^C` Cognitive Above/Cause and `^9^O` Operational Below/Effect stand in involutional tension." Associative surfacing of candidate Ideas while executing the one precise landed Idea — a healthy pair when balanced, a pathology when either side collapses.
    Dual cancellation as a law: `(CO-8 ∘ CO-9) ↔ CO-0`. Plain English: "`^8` Above/Cause composed with its involutional opposite `^9` Below/Effect returns to `^0` Idea." The antidote equation.
@@ -9385,7 +9385,7 @@ Cross-reference: Chapter 17 Leadership and Groups; Chapter 12 Career and Purpose
 ## Section 9: Library Status
 
 
-The extended library contains 35 recipes across 10 thematic domains: Wisdom (5), Wealth (4), Leadership (5), AI Refusal (2 Θ-form recipes — Architectures A and B — plus the static-specification architecture C treated in prose rather than recipe form, and a compositional-note section), Psychological Transformation (3), Learning and Education (3), Creative Process (3), Decision-Making (3), Emotional Regulation (3), Professional Practice (3), and Collective/Organizational Dynamics (3) — totaling 14 recipes in Sections 2-5 and 21 recipes in Sections 8.1-8.7. Coefficients across the library remain illustrative rather than empirically calibrated; domain-specific calibration and empirical yield measurement are the standing research obligation flagged in Section 7 above. Recipes that reference `Ω_*` emergent registers cross-reference Appendix I where registry entries exist; candidate `Ω_*` labels introduced informally within recipe leakage terms (e.g., `Ω_rumination`, `Ω_churn`, `Ω_plateau`) are pedagogical and not registry-admitted.
+The extended library contains 43 recipes. Sections 2–5 develop 22 of them; Sections 8.1–8.7 add a further 21, grouped by thematic domain — Wisdom, Wealth, Leadership, AI Refusal, Psychological Transformation, Learning and Education, Creative Process, Decision-Making, Emotional Regulation, Professional Practice, and Collective/Organizational Dynamics. The AI Refusal group carries two Θ-form recipes (Architectures A and B); architecture C is a static specification and is treated in prose rather than recipe form. Coefficients across the library remain illustrative rather than empirically calibrated; domain-specific calibration and empirical yield measurement are the standing research obligation flagged in Section 7 above. Recipes that reference `Ω_*` emergent registers cross-reference Appendix I where registry entries exist; candidate `Ω_*` labels introduced informally within recipe leakage terms (e.g., `Ω_rumination`, `Ω_churn`, `Ω_plateau`) are pedagogical and not registry-admitted.
 
 <!-- BOOK-3 closure: 35 total recipes across 10 thematic domains (original 14 + 21 new across 7 applied domains). -->
 
@@ -9718,7 +9718,7 @@ This glossary orients the reader to CAS vocabulary as it appears across the manu
 
 **Cognitive State** — One of the 40 cells produced by the cross-product of the 10 Cognitive Operators and the 4 Processing Domains (e.g., `^3^P` — principled aversion). The canonical unit of CAS analysis at the state-space level. See Chapter 9; Appendix A.
 
-**Cohort Cloud** — The statistical distribution of CAS scores across a reference population, used to normalize an individual system's scores. See Chapter 16; Appendix D.
+**Cohort Cloud** — The statistical distribution of CAS scores across a reference population, used to normalize an individual system's scores. See Chapter 17; Appendix D.
 
 **Colloquialism Test** — A diagnostic principle for verifying Noetic classifications: match the most natural native-speaker colloquialism for a phenomenon to the folk-form cluster attached to each Noetic. A clean match supports the classification; no match signals drift; multiple matches suggest a compound expression. See Chapter 2 for introduction; Appendix E for full worked verification across all ten Noetics.
 
@@ -9736,7 +9736,7 @@ This glossary orients the reader to CAS vocabulary as it appears across the manu
 
 **Domain Descent** — The canonical healthy sequence `^P → ^C → ^E → ^O`: a principled axiom flows into a cognitive plan, which acquires evaluative weight, which manifests as an operational act. See Chapter 3; Chapter 8; Appendix B (Template 1); Appendix D.
 
-**Dual Cancellation** — The mathematical principle by which composing a Cognitive Operator with its involution pair returns the system to identity: `(^n ∘ ^{n'}) ↔ ^0` for each pair. See Chapter 6; Appendix B (Template 5); Appendix D.
+**Dual Cancellation** — The mathematical principle by which composing a Cognitive Operator with its involution pair returns the system to identity: `(^n ∘ ^{n'}) ↔ ^0` for each pair. See Chapter 10; Appendix B (Template 5); Appendix D.
 
 **Efficiency** (`η`, Production Semantics) — The ratio of Actual Yield to Theoretical Yield, `η = Y_A / Y_T`, in `[0, 1]`. Measures how well a Mind converts its available prerequisites into the intended outcome. Catalysts raise `η`; inhibitors lower it. See Chapter 26.5; Appendix H.
 

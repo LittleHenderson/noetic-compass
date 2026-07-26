@@ -431,10 +431,16 @@ one.
 
 In the notation we will learn in Part II of this book, Tom's state would
 be written as:
-\texttt{CO-2\^{}C\_\{F2\}\ →\ {[}BROKEN{]}\ →\ CO-3\^{}O\_\{F5\}}. His
-cognitive abstractification is disconnected from his operational
-concretization. The arrow between them---the prerequisite chain---is
-where the failure lives.
+\texttt{CO-2\^{}C\_\{F2\}\ →\ {[}BROKEN{]}\ →\ CO-3\^{}O\_\{F5\}}. Read
+it left to right: at the Cognitive level he is drawn toward the work ---
+\texttt{\^{}2} Positive, an Idea he has an affinity for, fuelled by
+\texttt{F2} Wisdom, which is exactly the love of the topic he reports.
+At the Operational level he is repelled by it --- \texttt{\^{}3}
+Negative, an Idea he is adverse to, at the point where it would become
+physical action. The attraction and the aversion are both real and they
+sit at different levels of the architecture. The arrow between them ---
+the prerequisite chain --- is where the failure lives, and that is why
+working on either end alone has done nothing for six months.
 
 This example is not unusual. It is the norm. Billions of people around
 the world are sitting in therapy, reading self-help books, or simply
@@ -9682,11 +9688,13 @@ Positive state fueled by Wisdom, and an Evaluative Female state fueled
 by Connection) and two typed functions (one that builds a dependency
 relation from a Cognitive state to an Evaluative state, and one that
 composes two Cognitive states into a fractal). The \texttt{export}
-keywords make these symbols visible to other modules. (Note: the
+keywords make these symbols visible to other modules. (The
 programmer-facing variable names --- \texttt{principle},
-\texttt{judgment}, \texttt{abstraction}, \texttt{concretization},
-\texttt{integration} --- are legacy labels kept for code continuity; the
-Noetics they bind are named authoritatively in the surrounding prose.)
+\texttt{judgment}, \texttt{attraction}, \texttt{aversion},
+\texttt{integration} --- are chosen to match the Noetics they bind. Two
+of them used to read \texttt{abstraction} and \texttt{concretization},
+which quietly taught the superseded Scheme-A labels for \texttt{\^{}2}
+and \texttt{\^{}3} through the identifiers themselves.)
 
 The Application Program (\texttt{CAS\_FULL\_DEMO\_APP.cas}):
 
@@ -9698,16 +9706,16 @@ The Application Program (\texttt{CAS\_FULL\_DEMO\_APP.cas}):
 use "CAS_FULL_DEMO_LIB.cas";
 
  2. Typed let bindings with explicit state notation
-let abstraction: state[C] = CO-2^C_{F2};
-let concretization: state[C] = CO-3^C_{F2};
+let attraction: state[C] = CO-2^C_{F2};
+let aversion: state[C] = CO-3^C_{F2};
 let integration: state[C] = CO-4^C_{F4};
 
  3. Binary state operators — composition (*, ×) and modular difference (/, ÷)
-let composed: state[C] = abstraction * integration;
-let difference: state[C] = integration / abstraction;
+let composed: state[C] = attraction * integration;
+let difference: state[C] = integration / attraction;
 
  4. Fractal composition via \unimath{circ} operator
-let motif: fractal = abstraction \unimath{circ} concretization \unimath{circ} integration;
+let motif: fractal = attraction \unimath{circ} aversion \unimath{circ} integration;
 
  5. Phi literal — direct fractal sequence notation
 let phi_seq: fractal = Phi<2:4:6:8>;
@@ -9727,7 +9735,7 @@ let bridged: state[C] = compose(principle, integration);
 let principle_rpm: rpm = rpm_of(principle);
 
  10. fractal builtin — construct fractal from multiple states
-let woven: fractal = fractal(abstraction, integration, concretization);
+let woven: fractal = fractal(attraction, integration, aversion);
 
  11. Typed function with parameters and declared return
 fn finalize(seed: state[C], outcome: state[E]): relation
@@ -9784,7 +9792,7 @@ the compiler executes a full compilation pipeline:
 \item
   Type checking. Every binding's declared type is verified against the
   inferred type of its right-hand side. The compiler checks that
-  \texttt{abstraction} declared as \texttt{state{[}C{]}} actually binds
+  \texttt{attraction} declared as \texttt{state{[}C{]}} actually binds
   to a state in the Cognitive domain (yes --- \texttt{CO-2\^{}C\_\{F2\}}
   is valid in C). It checks that \texttt{composed} declared as
   \texttt{state{[}C{]}} is the product of two C states (yes --- the
@@ -14668,7 +14676,7 @@ every stage of the pipeline.
   the specific assessment. (We will explore the Dial System\index{Dial System} deeply in
   Chapter 20). Ventilator example: For a medical triage prompt, the Dial
   system loads the Healthcare profile: \texttt{CO-6} (\texttt{\^{}6}
-  Male) at 9, \texttt{CO-5} (\texttt{\^{}5} Female) at 6, \texttt{CO-3}
+  Male) at 8, \texttt{CO-5} (\texttt{\^{}5} Female) at 6, \texttt{CO-3}
   (\texttt{\^{}3} Negative) at 8, \texttt{CO-2} (\texttt{\^{}2}
   Positive) at 7. This configuration forces the model to balance
   decomposition-and-test of the symptom set with a Mind that carries the
@@ -20720,8 +20728,9 @@ referred to as templates or ``design patterns''). They represent the
 most common human behaviors and the standard AI reasoning paths
 evaluated by the Noetic Compass.
 
-Here are five of the most critical templates to memorize, complete with
-their structural equations.
+Here are the twenty-eight templates, complete with their structural
+equations. If you memorise only a handful, make them the first five ---
+they are the ones that recur most often in practice.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -21178,10 +21187,9 @@ particular that \texttt{\unimath{circ}} binds at the same strength as \texttt{×
 \texttt{(a\ ×\ b)\ \unimath{circ}\ c}.
 
 So the expression
-\texttt{abstraction\ *\ integration\ -\textgreater{}\ judgment} parses
-as \texttt{(abstraction\ *\ integration)\ -\textgreater{}\ judgment}
-rather than
-\texttt{abstraction\ *\ (integration\ -\textgreater{}\ judgment)},
+\texttt{attraction\ *\ integration\ -\textgreater{}\ judgment} parses as
+\texttt{(attraction\ *\ integration)\ -\textgreater{}\ judgment} rather
+than \texttt{attraction\ *\ (integration\ -\textgreater{}\ judgment)},
 because \texttt{*} binds tighter than \texttt{-\textgreater{}}.
 
 \section{Type System}\label{type-system}
@@ -21395,21 +21403,21 @@ rules.
 
 Compound transition into a fractal:
 \texttt{(CO-2\^{}C\ →\ CO-3\^{}O)\ \unimath{circ}\ CO-0\^{}P}. Plain English: ``At
-every scale, the transition from cognitive abstraction to operational
-concretization is grounded in a stable principled identity.'' A
-disciplined craftsperson whose every act is traceable to a core ethic.
-RPM wrapping: \texttt{RPM(CO-6\^{}O\_\{F5\})}. Plain English:
-``\texttt{\^{}6\^{}O} Operational Male --- the physical
-decomposition-and-test of a work against its parts --- driven by Agency,
-wrapped by the Routine/Prerequisite/Module structure.'' The Male
-decomposition cannot execute unless its Desire and Wisdom prerequisites
-are already satisfied --- the section-retraction guarantees the gate is
-one-directional. Involution pair: \texttt{CO-8\^{}C\ ↔\ CO-9\^{}O}.
-Plain English: ``\texttt{\^{}8\^{}C} Cognitive Above/Cause and
-\texttt{\^{}9\^{}O} Operational Below/Effect stand in involutional
-tension.'' Associative surfacing of candidate Ideas while executing the
-one precise landed Idea --- a healthy pair when balanced, a pathology
-when either side collapses. Dual cancellation as a law:
+every scale, the transition from cognitive attraction to operational
+aversion is grounded in a stable principled identity.'' A disciplined
+craftsperson whose every act is traceable to a core ethic. RPM wrapping:
+\texttt{RPM(CO-6\^{}O\_\{F5\})}. Plain English: ``\texttt{\^{}6\^{}O}
+Operational Male --- the physical decomposition-and-test of a work
+against its parts --- driven by Agency, wrapped by the
+Routine/Prerequisite/Module structure.'' The Male decomposition cannot
+execute unless its Desire and Wisdom prerequisites are already satisfied
+--- the section-retraction guarantees the gate is one-directional.
+Involution pair: \texttt{CO-8\^{}C\ ↔\ CO-9\^{}O}. Plain English:
+``\texttt{\^{}8\^{}C} Cognitive Above/Cause and \texttt{\^{}9\^{}O}
+Operational Below/Effect stand in involutional tension.'' Associative
+surfacing of candidate Ideas while executing the one precise landed Idea
+--- a healthy pair when balanced, a pathology when either side
+collapses. Dual cancellation as a law:
 \texttt{(CO-8\ \unimath{circ}\ CO-9)\ ↔\ CO-0}. Plain English: ``\texttt{\^{}8}
 Above/Cause composed with its involutional opposite \texttt{\^{}9}
 Below/Effect returns to \texttt{\^{}0} Idea.'' The antidote equation.
@@ -25727,22 +25735,22 @@ Purpose; Chapter 16 Wealth and Structure.
 
 \section{Section 9: Library Status}\label{section-9-library-status}
 
-The extended library contains 35 recipes across 10 thematic domains:
-Wisdom (5), Wealth (4), Leadership (5), AI Refusal (2 Θ-form recipes ---
-Architectures A and B --- plus the static-specification architecture C
-treated in prose rather than recipe form, and a compositional-note
-section), Psychological Transformation (3), Learning and Education (3),
-Creative Process (3), Decision-Making (3), Emotional Regulation (3),
-Professional Practice (3), and Collective/Organizational Dynamics (3)
---- totaling 14 recipes in Sections 2-5 and 21 recipes in Sections
-8.1-8.7. Coefficients across the library remain illustrative rather than
-empirically calibrated; domain-specific calibration and empirical yield
-measurement are the standing research obligation flagged in Section 7
-above. Recipes that reference \texttt{Ω\_*} emergent registers
-cross-reference Appendix I where registry entries exist; candidate
-\texttt{Ω\_*} labels introduced informally within recipe leakage terms
-(e.g., \texttt{Ω\_rumination}, \texttt{Ω\_churn}, \texttt{Ω\_plateau})
-are pedagogical and not registry-admitted.
+The extended library contains 43 recipes. Sections 2--5 develop 22 of
+them; Sections 8.1--8.7 add a further 21, grouped by thematic domain ---
+Wisdom, Wealth, Leadership, AI Refusal, Psychological Transformation,
+Learning and Education, Creative Process, Decision-Making, Emotional
+Regulation, Professional Practice, and Collective/Organizational
+Dynamics. The AI Refusal group carries two Θ-form recipes (Architectures
+A and B); architecture C is a static specification and is treated in
+prose rather than recipe form. Coefficients across the library remain
+illustrative rather than empirically calibrated; domain-specific
+calibration and empirical yield measurement are the standing research
+obligation flagged in Section 7 above. Recipes that reference
+\texttt{Ω\_*} emergent registers cross-reference Appendix I where
+registry entries exist; candidate \texttt{Ω\_*} labels introduced
+informally within recipe leakage terms (e.g., \texttt{Ω\_rumination},
+\texttt{Ω\_churn}, \texttt{Ω\_plateau}) are pedagogical and not
+registry-admitted.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -26696,7 +26704,7 @@ of CAS analysis at the state-space level. See Chapter 9; Appendix A.
 
 \textbf{Cohort Cloud\index{Cohort Cloud}} --- The statistical distribution of CAS scores
 across a reference population, used to normalize an individual system's
-scores. See Chapter 16; Appendix D.
+scores. See Chapter 17; Appendix D.
 
 \textbf{Colloquialism Test} --- A diagnostic principle for verifying
 Noetic classifications: match the most natural native-speaker
@@ -26745,7 +26753,7 @@ as an operational act. See Chapter 3; Chapter 8; Appendix B (Template
 composing a Cognitive Operator with its involution pair returns the
 system to identity:
 \texttt{(\^{}n\ \unimath{circ}\ \^{}\{n\textquotesingle{}\})\ ↔\ \^{}0} for each
-pair. See Chapter 6; Appendix B (Template 5); Appendix D.
+pair. See Chapter 10; Appendix B (Template 5); Appendix D.
 
 \textbf{Efficiency} (\texttt{η}, Production Semantics) --- The ratio of
 Actual Yield to Theoretical Yield, \texttt{η\ =\ Y\_A\ /\ Y\_T}, in
