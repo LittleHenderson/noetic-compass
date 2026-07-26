@@ -18,9 +18,21 @@ estimates.
 
 ## 1. CAS PCBA Engineer
 
-**Publish this one first.** It is the closest to done, it was authored after
-the April 2026 canon reconciliation so it has no drift to fix, and its build is
-reproducible.
+> **Note on ordering.** An earlier draft of this document called this book "the
+> closest to done" and told you to publish it first. That was true when it was
+> written and is no longer true — all three titles have since been brought to
+> the same production standard. See "Publication order" at the end of this
+> document for the current recommendation, which is different.
+
+Authored after the April 2026 canon reconciliation, so it carries no naming
+drift, and its build is byte-reproducible.
+
+**One open item unique to this title:** fifteen authority receipts backing
+claims in Chapters 18, 21, 22 and 26 are unsigned (`docs/working/
+pcba_authority_receipts_needed_20260617/`). The regulatory language in Chapter
+26 has been reframed so the book no longer asserts more than they support, but
+signing or formally discharging them is an author decision. No other title has
+an equivalent outstanding item.
 
 | Field | Value |
 |---|---|
@@ -76,7 +88,7 @@ reproducible.
 
 ## 2. Thinking in Cognitive Architecture
 
-The framework anchor and the commercially larger title. Publish second.
+The framework anchor and the commercially larger title.
 
 | Field | Value |
 |---|---|
@@ -201,6 +213,44 @@ the Kindle sample. The voice survives where it matters; ads stay available.
 > This is an operating manual. Stop describing reality. Start engineering it.
 
 ---
+
+## Publication order
+
+All three are at the same production standard. Nothing below is about one book
+being less finished than another.
+
+| | Pages | Figures | Index | Overfull boxes | Missing glyphs |
+|---|---|---|---|---|---|
+| CAS PCBA Engineer | 735 | 18 | 95 entries | 0 | 0 |
+| Thinking in Cognitive Architecture | 796 | 8 | 91 entries | 0 | 10 (substituted, verified) |
+| Reality Engineering | 811 | 7 | 113 entries | 0 | 0 |
+
+What actually separates them is risk and market, not completeness.
+
+**1st — Thinking in Cognitive Architecture.** The framework anchor, the largest
+addressable market of the three, and now the cleanest risk profile: no unsigned
+receipts, no regulatory-conformity language, no content-policy history once the
+attack prompts were rewritten. Publishing the specialist handbook before the
+framework it specialises in was always commercially odd; this ordering fixes
+that.
+
+**2nd — CAS PCBA Engineer.** Technically the most polished book of the three
+and the one with the strongest author-credibility story, since the author
+inspects flight-grade satellite hardware to Class 3 for a living. Held to
+second only because fifteen authority receipts behind Chapters 18, 21, 22 and 26
+are unsigned, and Chapter 26 discusses regulatory frameworks. Neither blocks
+upload; both are worth settling deliberately rather than by default.
+
+**3rd — Reality Engineering.** Not last for quality — its index is the largest
+of the three and it builds clean. Last because it was the most heavily
+transformed (three draft layers reordered, chapters renumbered, twelve
+appendices relabelled), so it carries the most residual uncertainty simply by
+having changed the most; and because it sells into a different market from the
+other two, where the profanity-in-headings decision and category placement
+deserve their own attention rather than being carried along by a series launch.
+
+**If you would rather just start:** any of the three can go up today. The order
+above optimises for a coherent series launch, not for readiness.
 
 ## Shared: what still has to be bought or built
 
