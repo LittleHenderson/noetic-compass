@@ -106,6 +106,16 @@ CONTENT_FIXES = [
      "original to TKS; what follows is a TKS analysis of why they work.*\n\n"
      " The Authority Pattern"),
 
+    # The appendix titled "The 22 Acquisitions" published only 21 distinct
+    # numbers: 10 was absent and its entry was printed as a second 12, so 12
+    # appeared twice with contradictory roles ("Power to obtain..." and "Desire
+    # to obtain..."). The appendix's own rule -- Foundation k uses 3k-2 Desire,
+    # 3k-1 Wisdom, 3k Power -- settles it, and 21 of the 22 entries obey it:
+    # Foundation 4 is {10 Desire, 11 Wisdom, 12 Power}. 11 Wisdom and 12 Power
+    # are both already correct and present, so the duplicate is 10 Desire.
+    ("   Acquisition 12: Desire to obtain companionship love friendship",
+     "   Acquisition 10: Desire to obtain companionship love friendship"),
+
     # Song lyrics are the one category publishers pursue regardless of length,
     # and neither quotation is load-bearing -- both are tags on a name.
     ('- Nas ("I know I can be what I wanna be")', "- Nas"),
@@ -183,9 +193,25 @@ def seg(a, b):
     return RAW[a - 1:b]
 
 
+# CONTENT_FIXES are deliberately NOT applied here.
+#
+# They used to be, and it silently corrupted the book. Two of the thirteen
+# fixes inject lines (+2 near source line 495, +8 near 11659, net +10). Every
+# index in the R region map below is written in ORIGINAL-source numbering, so
+# once RAW had grown, 31 of the 39 regions were sliced 2 or 10 lines early:
+# each one inherited the tail of the region before it and lost its own tail.
+# That is what put three chapters inside verbatim blocks, left the Glossary
+# with no heading, and severed the "Warning Signs to Stop" safety list from its
+# emergency-grounding protocol.
+#
+# The old guard was `assert len(RAW) >= _orig_len - 2`, which is one-sided: it
+# caught shrinkage and let a +10 growth through without a word.
+#
+# Fixed by applying them at the end, to the assembled text, exactly as the XREF
+# fixes already do. RAW now keeps original numbering, so the region map is
+# valid by construction.
 _orig_len = len(RAW)
-RAW = apply_content_fixes(RAW)
-assert len(RAW) >= _orig_len - 2, "content fixes changed the line count too much"
+assert len(RAW) == _orig_len, "RAW must not be mutated before the region map is applied"
 
 
 # --------------------------------------------------------------------------
@@ -659,6 +685,36 @@ for old, new in XREF:
     if old in text:
         text = text.replace(old, new)
         xref_fixed += 1
+
+# Content fixes run HERE, on the assembled text, not on RAW. See the note at the
+# region map for why. Fail loudly on any that no longer match: a silently
+# skipped fix means profanity, a drafting stamp or a care-avoidance passage
+# ships in the printed book.
+# Check the END STATE, not whether each fix fired. A fix whose `old` text was
+# already removed by an earlier cleanup pass is a no-op, which is fine; a fix
+# whose `old` text is still present afterwards is a real failure.
+# Verify by the RESULT, not by whether the fix fired. Two shapes exist here:
+# replacements (new does not contain old) and insertions (new contains old, e.g.
+# prepending an attribution before a heading). Checking `old not in text`
+# afterwards is wrong for the second shape, and checking that every fix fired is
+# wrong for the first, because an earlier cleanup pass may already have removed
+# the target. `new in text` is the property that holds for both.
+content_fixed = 0
+for old, new in CONTENT_FIXES:
+    if new and new in text:
+        continue                      # already applied; do not double-insert
+    if old in text:
+        text = text.replace(old, new)
+        content_fixed += 1
+_bad = [(old, new) for old, new in CONTENT_FIXES
+        if ((new not in text) if new else (old in text))]
+if _bad:
+    raise SystemExit(
+        "repair_manuscript: %d content fix(es) did not land. A skipped fix "
+        "ships profanity, a drafting stamp, or a care-avoidance passage into "
+        "the printed book. First: %r" % (len(_bad), _bad[0][0][:90])
+    )
+stats_pending.append(content_fixed)
 
 # collapse runs of blank lines
 text = re.sub(r"\n{4,}", "\n\n\n", text)
