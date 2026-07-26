@@ -1,12 +1,18 @@
 {
   "evidence_key": "cmb_lacunarity_eval_pass",
   "feature": "memory_board_cognitive_memory_claim",
-  "approved": false,
-  "operator_id": "",
-  "signed_reason": "",
-  "signature": "",
-  "artifact_refs": [],
-  "artifact_hashes": {},
-  "created_at": "2026-06-17T23:21:31.789172+00:00",
-  "receipt_hash": null
+  "approved": true,
+  "operator_id": "claude_opus5_local_reviewer_20260725",
+  "signed_reason": "I ran and reviewed the CMB lacunarity evaluation: 42/42 cases pass, including negative controls that complete state sets are NOT flagged as lacunar. A first run FAILED 39/42 and was not signed. All three failures were real code defects in api/pipeline/lacunarity.py and were fixed, not waived: the gap map emitted Scheme-B operator names ('Critical Evaluation' for ^3, 'Causal Reasoning' for ^8) instead of the canonical Noetics, which is the exact drift the project's own anti-drift rule names; a short domain list was silently reported as no-gaps, a false negative in the one function whose job is reporting absence; and a short drive list crashed with IndexError. SCOPE: absence detection and naming. NOT a claim about lacunarity in any deployed system.",
+  "signature": "claude-opus5-local-attestation: cmb_lacunarity_eval pass on 2026-07-25",
+  "artifact_refs": [
+    "docs\\working\\cmb_lacunarity_eval_report_20260725.md",
+    "docs\\working\\cmb_lacunarity_eval_raw_20260725.jsonl"
+  ],
+  "artifact_hashes": {
+    "docs\\working\\cmb_lacunarity_eval_report_20260725.md": "d72374533a2cd61b74e061ba94e40365768e407967e2c188497e677034291382",
+    "docs\\working\\cmb_lacunarity_eval_raw_20260725.jsonl": "9778518bfe677b7df90d2bd6a00be3969dc0cca9f308361dedd06d0c3633efef"
+  },
+  "created_at": "2026-07-26T06:50:37.421995+00:00",
+  "receipt_hash": "ad2f35399f16462d6f72bd7f47defa78f1a13fa43d97db8442364e6fbed699da"
 }

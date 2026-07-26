@@ -92,10 +92,14 @@ def build_cpmb() -> CrcCircuit:
     return _circuit(
         "CPMB",
         [
-            "CJT< drive_energy | ^5^P_{F3}|T => ^0^P_{F3}|T > [beta=1]",
-            "CJT< ^0^P_{F3}|T | ^5^P_{F6}|T => ^1^C_{F6}|A > [beta=1]",
-            "CJT< ^1^C_{F6}|A | ^5^P_{F6}|T => ^0^E_{F3}|T > [beta=1]",
-            "CJT< ^0^E_{F3}|T | ^5^P_{F6}|T => ^0^O_{F3}|T > [beta=1]",
+            # The four rails as published at Chapter_22:179-182: p_rail
+            # ^0^P_{F7}|T, c_rail ^1^C_{F2}|A, e_rail ^6^E_{F6}|A, o_rail
+            # ^9^O_{F5}|E, powering up in that order. Each rail's Drive is the
+            # one its regulator targets, so the dropout spec and the rail agree.
+            "CJT< drive_energy | ^5^P_{F7}|T => ^0^P_{F7}|T > [beta=1]",
+            "CJT< ^0^P_{F7}|T | ^5^P_{F7}|T => ^1^C_{F2}|A > [beta=1]",
+            "CJT< ^1^C_{F2}|A | ^5^P_{F7}|T => ^6^E_{F6}|A > [beta=1]",
+            "CJT< ^6^E_{F6}|A | ^5^P_{F7}|T => ^9^O_{F5}|E > [beta=1]",
         ],
         fuses=[CrcFuse(name="overload_fuse", protects="O_rail", installed_at="C_rail")],
         sequence=["P_rail", "C_rail", "E_rail", "O_rail"],

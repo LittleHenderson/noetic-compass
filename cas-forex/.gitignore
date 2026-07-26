@@ -29,9 +29,13 @@ ui/%SystemDrive%/
 **/%SystemDrive%/
 **/ProgramData/Microsoft/Windows/Caches/
 
-# Capacitor-generated native projects (regenerate with `npx cap add android`)
-ui/android/
+# Capacitor native projects. Keep Android trackable so the APK wrapper is a
+# real project artifact; ui/android/.gitignore excludes build outputs, copied
+# web assets, local SDK paths, and signing secrets.
 ui/ios/
 
 # Local Claude Code permission state (machine-specific)
 .claude/settings.local.json
+
+# Spec-sheet builder scratch output (15k+ files, regenerated on demand)
+tmp/

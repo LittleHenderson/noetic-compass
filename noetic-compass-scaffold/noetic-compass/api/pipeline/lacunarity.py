@@ -67,19 +67,33 @@ def generate_gap_map(
     dom_threshold: float = 0.2,
     drv_threshold: float = 0.2,
 ) -> dict:
+    # Canonical Noetic names. These are authoritative and verbatim; see
+    # docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md Clarification 1. Do not substitute
+    # functional descriptions. The names this list previously carried
+    # ("Critical Evaluation" for ^3, "Causal Reasoning" for ^8, and the rest)
+    # were Scheme-B drift -- exactly the two the anti-drift rule calls out: ^3
+    # Negative is visceral aversion, not analytical critique, and ^8
+    # Above/Cause is associative triggering, not deductive reasoning.
     op_names = [
-        "Generative Potential", "Directed Attention", "Attraction",
-        "Critical Evaluation", "Encoding Intensity", "Receptive Integration",
-        "Projective Assertion", "Pattern Entrainment", "Causal Reasoning",
-        "Consequential Grounding",
+        "Idea", "Mind", "Positive", "Negative", "Vibration",
+        "Female", "Male", "Rhythm", "Above/Cause", "Below/Effect",
     ]
     drive_names = ["Unity", "Wisdom", "Vitality", "Connection", "Agency", "Structure", "Purpose"]
     domain_names = ["P", "C", "E", "O"]
 
-    absent_ops = [i for i, s in enumerate(operator_scores) if s < op_threshold]
-    absent_doms = [domain_names[i] for i, s in enumerate(domain_scores) if s < dom_threshold]
-    absent_drvs = [i + 1 for i, s in enumerate(drive_scores) if s < drv_threshold]
-    strongest = [i for i, s in enumerate(operator_scores) if s >= op_threshold * 1.5]
+    # Pad to full width before scanning. A short list means the caller supplied
+    # no evidence for the trailing entries, and absent evidence is exactly what
+    # a lacunarity scan exists to report -- treating it as "nothing to see"
+    # would make the short-list case a silent false negative. Truncating on the
+    # long side keeps the name lookups below in range.
+    ops = (list(operator_scores) + [0.0] * len(op_names))[:len(op_names)]
+    doms = (list(domain_scores) + [0.0] * len(domain_names))[:len(domain_names)]
+    drvs = (list(drive_scores) + [0.0] * len(drive_names))[:len(drive_names)]
+
+    absent_ops = [i for i, s in enumerate(ops) if s < op_threshold]
+    absent_doms = [domain_names[i] for i, s in enumerate(doms) if s < dom_threshold]
+    absent_drvs = [i + 1 for i, s in enumerate(drvs) if s < drv_threshold]
+    strongest = [i for i, s in enumerate(ops) if s >= op_threshold * 1.5]
 
     if len(absent_ops) >= 5:
         names = [op_names[i] for i in absent_ops]
@@ -115,14 +129,18 @@ def compute_lacunarity_profile(
 
     state = compute_state_lacunarity(raw_10)
     fractal = compute_fractal_lacunarity(fractal_sequence or [])
-    domain = compute_domain_lacunarity(domain_scores[:4] if len(domain_scores) >= 4 else domain_scores + [0.0] * 4)
-    drive_flat = drive_scores[:7] if len(drive_scores) >= 7 else drive_scores + [0.0] * 7
+    # Pad-then-truncate in one step. The previous form padded without
+    # truncating on the short branch, so a 2-element domain list became a
+    # 6-element one and a short drive list produced out-of-range drive indices.
+    domain_flat = (list(domain_scores) + [0.0] * 4)[:4]
+    drive_flat = (list(drive_scores) + [0.0] * 7)[:7]
+    domain = compute_domain_lacunarity(domain_flat)
     drv = compute_drive_lacunarity(drive_flat)
     rpm = compute_rpm_resolution_lacunarity(resolution_details or [])
 
     composite = round(0.30 * state + 0.20 * fractal + 0.20 * domain + 0.15 * drv + 0.15 * rpm, 4)
     classification = classify_lacunarity(composite)
-    gap_map = generate_gap_map(raw_10, domain_scores[:4], drive_flat)
+    gap_map = generate_gap_map(raw_10, domain_flat, drive_flat)
 
     return {
         "state": state,

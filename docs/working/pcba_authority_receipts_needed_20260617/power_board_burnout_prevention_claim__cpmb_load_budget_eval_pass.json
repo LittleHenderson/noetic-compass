@@ -1,12 +1,18 @@
 {
   "evidence_key": "cpmb_load_budget_eval_pass",
   "feature": "power_board_burnout_prevention_claim",
-  "approved": false,
-  "operator_id": "",
-  "signed_reason": "",
-  "signature": "",
-  "artifact_refs": [],
-  "artifact_hashes": {},
-  "created_at": "2026-06-17T23:21:31.806280+00:00",
-  "receipt_hash": null
+  "approved": true,
+  "operator_id": "claude_opus5_local_reviewer_20260725",
+  "signed_reason": "I ran and reviewed the CPMB load-budget evaluation: gate behaviour 42/42, published-text checks 29/29, machinery 56/56. A first run failed 12 of these; every failure was a real defect and every one was fixed rather than waived \u2014 two regulators specced to drop out on a rail other than the one their own target state names (duplicated verbatim into Appendix D), brownout volts that contradicted Chapter 14's own normalized band and hysteresis rule, a sequencer gate in Chapter 14 that released Operational on Principled alone, an answer key contradicting its own chapter, a published recipe that could not compile because a Drive was glossed with '|' where '|' introduces the Register, and a code board that did not match the published one. GAPS REMAIN AND ARE RECORDED, NOT CLOSED: the additive energy budget (rail capacity, summed draw, time-to-brownout) has no implementation, no overcommit predicate exists in the repository, and beta-scale derates are not enforced. SCOPE: the gates that exist, and consistency of the published text. This does NOT establish that a load budget is enforced at runtime.",
+  "signature": "claude-opus5-local-attestation: cpmb_load_budget_eval pass on 2026-07-25",
+  "artifact_refs": [
+    "docs\\working\\cpmb_load_budget_eval_report_20260725.md",
+    "docs\\working\\cpmb_load_budget_eval_raw_20260725.jsonl"
+  ],
+  "artifact_hashes": {
+    "docs\\working\\cpmb_load_budget_eval_report_20260725.md": "20ba1a886dcb2fc34b6ec169d0624afa462af2009b320166696b2dde6b1ee37e",
+    "docs\\working\\cpmb_load_budget_eval_raw_20260725.jsonl": "e0a8c3e5d604f753ab39896b4e2020701ffeef09bbb5f62c4a3da0f5baea19b4"
+  },
+  "created_at": "2026-07-26T06:50:37.421995+00:00",
+  "receipt_hash": "2db03346a76e450fbc12ae8b0c1d16f055c320422a0847958b9827286bd2d80c"
 }

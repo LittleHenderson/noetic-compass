@@ -1,12 +1,18 @@
 {
   "evidence_key": "cmb_memory_retrieval_eval_pass",
   "feature": "memory_board_cognitive_memory_claim",
-  "approved": false,
-  "operator_id": "",
-  "signed_reason": "",
-  "signature": "",
-  "artifact_refs": [],
-  "artifact_hashes": {},
-  "created_at": "2026-06-17T23:21:31.785434+00:00",
-  "receipt_hash": null
+  "approved": true,
+  "operator_id": "claude_opus5_local_reviewer_20260725",
+  "signed_reason": "I ran and reviewed the CMB memory-retrieval evaluation: 44/44 cases pass. Behavioural retrieval was measured against a real Fisher-Rao implementation (top-1 = 1.000 at bank sizes 10/20/40 against chance 0.100/0.050/0.025) with a separation sweep showing graceful degradation to 0.235 at sep=0.02, so the metric is doing work rather than the test being easy. The published Chapter 21 worked example now reproduces from the address table printed beside it to within 0.0004. A first run FAILED this receipt and was not signed: it proved the published ranking was underivable, because a label-addressed bank puts all 780 pairwise distances at one value. That was a real book defect; the book was corrected and the degenerate reading is retained as a passing control so the collapse cannot silently return. SCOPE: retrieval geometry and open-simplex enforcement. NOT a claim about any deployed memory system.",
+  "signature": "claude-opus5-local-attestation: cmb_memory_retrieval_eval pass on 2026-07-25",
+  "artifact_refs": [
+    "docs\\working\\cmb_memory_retrieval_eval_report_20260725.md",
+    "docs\\working\\cmb_memory_retrieval_eval_raw_20260725.jsonl"
+  ],
+  "artifact_hashes": {
+    "docs\\working\\cmb_memory_retrieval_eval_report_20260725.md": "75382db3571b87eb654a0a14b48f54b910a72b70dadd4edff7a18e08d60000de",
+    "docs\\working\\cmb_memory_retrieval_eval_raw_20260725.jsonl": "1a958c4db5024aec8990ebb386dbebbbe525d7231d481868eacae7417d68b0f3"
+  },
+  "created_at": "2026-07-26T06:50:37.421995+00:00",
+  "receipt_hash": "55f73a6c8dd19cc148b6f002f10167b21b5b367bf64c5dc57e0d4c1f748a11c5"
 }
