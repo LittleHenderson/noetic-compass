@@ -1,0 +1,22 @@
+{
+  "criteria": {
+    "R1_reversal_TKS_above_compact": false,
+    "R2_margin_at_least_0.05": false,
+    "R3_permutation_p_below_0.01": false,
+    "R4_lexical_orders_opposite": true,
+    "R5_metric_content_dependent": true
+  },
+  "design": "GRID-LEXICAL-REVERSAL-v1",
+  "layer": 12,
+  "lexical_compact": 0.98495,
+  "lexical_margin": -0.633876,
+  "lexical_tks": 0.351074,
+  "model": "EleutherAI/pythia-1b",
+  "model_compact_reconstruction": 0.997738,
+  "model_margin": -0.018626,
+  "model_tks_reconstruction": 0.979112,
+  "permutation_floor": 0.001996,
+  "permutation_p": 0.91018,
+  "prereg_commit": "8e498389",
+  "verdict": "NOT_LICENSED"
+}
