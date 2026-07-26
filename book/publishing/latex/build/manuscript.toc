@@ -292,11 +292,11 @@
 \contentsline {section}{How to Read Each Visualization}{407}{section*.273}%
 \contentsline {section}{The Four Tiers of Cognitive Depth}{409}{section*.274}%
 \contentsline {section}{Visualizing the Recursive RPM Graph}{410}{section*.275}%
-\contentsline {section}{The Lacunarity Report: Beyond the Composite Score}{410}{section*.276}%
+\contentsline {section}{The Lacunarity Report: Beyond the Composite Score}{411}{section*.276}%
 \contentsline {section}{Case Study: The Lacunarity of Large Language Models}{411}{section*.277}%
 \contentsline {section}{Benchmark Results: The State of the Industry}{412}{section*.278}%
-\contentsline {section}{Key Insight: Chapter 19}{412}{section*.279}%
-\contentsline {section}{Try This: Chapter 19 Exercises}{413}{section*.280}%
+\contentsline {section}{Key Insight: Chapter 19}{413}{section*.279}%
+\contentsline {section}{Try This: Chapter 19 Exercises}{414}{section*.280}%
 \contentsline {section}{Transition}{415}{section*.281}%
 \contentsline {chapter}{\chapternumberline {20}The Dial System}{417}{chapter.20}%
 \contentsline {section}{Tuning the Architecture: The 10 Dials}{418}{section*.282}%
@@ -424,93 +424,92 @@
 \contentsline {section}{Conclusion: The Geometry of Integrity}{563}{section*.397}%
 \contentsline {section}{Key Insight: Chapter 27}{564}{section*.398}%
 \contentsline {section}{Try This: Chapter 27 Exercises}{565}{section*.399}%
-\contentsline {section}{APPENDICES}{566}{section*.400}%
 \contentsline {appendix}{\chapternumberline {A}The Complete 40-Element Reference Table}{567}{appendix.A}%
-\contentsline {section}{The 40 States with Detailed Example Scenarios}{573}{section*.401}%
+\contentsline {section}{The 40 States with Detailed Example Scenarios}{573}{section*.400}%
 \contentsline {appendix}{\chapternumberline {B}The 28 Equation Templates}{579}{appendix.B}%
 \contentsline {appendix}{\chapternumberline {C}The CAS Notation Grammar (BNF)}{587}{appendix.C}%
-\contentsline {section}{Worked Examples for Every Production Rule}{587}{section*.402}%
-\contentsline {section}{The Extended CAS Language}{589}{section*.403}%
-\contentsline {section}{Operator Precedence}{591}{section*.404}%
-\contentsline {section}{Type System}{592}{section*.405}%
-\contentsline {section}{Builtin Functions}{593}{section*.406}%
-\contentsline {section}{Module System}{594}{section*.407}%
-\contentsline {section}{Ten Example Expressions with Expected Compiler Output}{595}{section*.408}%
-\contentsline {section}{Implementation Notes}{598}{section*.409}%
-\contentsline {section}{Compound Expressions}{599}{section*.410}%
+\contentsline {section}{Worked Examples for Every Production Rule}{587}{section*.401}%
+\contentsline {section}{The Extended CAS Language}{589}{section*.402}%
+\contentsline {section}{Operator Precedence}{591}{section*.403}%
+\contentsline {section}{Type System}{592}{section*.404}%
+\contentsline {section}{Builtin Functions}{593}{section*.405}%
+\contentsline {section}{Module System}{594}{section*.406}%
+\contentsline {section}{Ten Example Expressions with Expected Compiler Output}{595}{section*.407}%
+\contentsline {section}{Implementation Notes}{598}{section*.408}%
+\contentsline {section}{Compound Expressions}{599}{section*.409}%
 \contentsline {appendix}{\chapternumberline {D}Glossary of Terms}{601}{appendix.D}%
-\contentsline {section}{The Ten Noetics --- Authoritative Definitions}{601}{section*.411}%
-\contentsline {section}{Structural Reference Table}{602}{section*.412}%
-\contentsline {section}{Note on Authoritative Naming}{614}{section*.413}%
+\contentsline {section}{The Ten Noetics --- Authoritative Definitions}{601}{section*.410}%
+\contentsline {section}{Structural Reference Table}{602}{section*.411}%
+\contentsline {section}{Note on Authoritative Naming}{614}{section*.412}%
 \contentsline {appendix}{\chapternumberline {E}The Colloquialism Test Reference}{615}{appendix.E}%
-\contentsline {section}{The Canonical Colloquialism Map}{615}{section*.414}%
-\contentsline {section}{Worked Verification of the Test Across All Ten Noetics}{618}{section*.415}%
-\contentsline {section}{Diagnostic Application}{620}{section*.416}%
+\contentsline {section}{The Canonical Colloquialism Map}{615}{section*.413}%
+\contentsline {section}{Worked Verification of the Test Across All Ten Noetics}{618}{section*.414}%
+\contentsline {section}{Diagnostic Application}{620}{section*.415}%
 \contentsline {appendix}{\chapternumberline {F}Resources and Further Reading}{623}{appendix.F}%
-\contentsline {section}{The Noetic Compass Platform}{623}{section*.417}%
-\contentsline {section}{Peer Review and Formal Specifications}{624}{section*.418}%
-\contentsline {section}{Category Theory}{624}{section*.419}%
-\contentsline {section}{Information Geometry}{624}{section*.420}%
-\contentsline {section}{Topos Theory}{624}{section*.421}%
-\contentsline {section}{Systems Thinking and Psychology}{625}{section*.422}%
-\contentsline {section}{AI Safety and Alignment}{625}{section*.423}%
-\contentsline {section}{Cognitive Science Foundations}{625}{section*.424}%
-\contentsline {section}{Habit Formation and Execution}{625}{section*.425}%
+\contentsline {section}{The Noetic Compass Platform}{623}{section*.416}%
+\contentsline {section}{Peer Review and Formal Specifications}{624}{section*.417}%
+\contentsline {section}{Category Theory}{624}{section*.418}%
+\contentsline {section}{Information Geometry}{624}{section*.419}%
+\contentsline {section}{Topos Theory}{624}{section*.420}%
+\contentsline {section}{Systems Thinking and Psychology}{625}{section*.421}%
+\contentsline {section}{AI Safety and Alignment}{625}{section*.422}%
+\contentsline {section}{Cognitive Science Foundations}{625}{section*.423}%
+\contentsline {section}{Habit Formation and Execution}{625}{section*.424}%
 \contentsline {appendix}{\chapternumberline {G}Pedagogically Relevant Register Variations (CAS v7.5 / v7.7)}{627}{appendix.G}%
-\contentsline {section}{Section 1 --- Introduction}{627}{section*.426}%
-\contentsline {section}{Section 2 --- Principled Domain (\texttt {\^{}P}) Register Variations}{628}{section*.427}%
-\contentsline {section}{Section 3 --- Cognitive Domain (\texttt {\^{}C}) Register Variations}{640}{section*.428}%
-\contentsline {section}{Section 4 --- Evaluative Domain (\texttt {\^{}E}) Register Variations}{651}{section*.429}%
-\contentsline {section}{Section 5 --- Operational Domain (\texttt {\^{}O}) Register Variations}{662}{section*.430}%
-\contentsline {section}{Section 6 --- Cross-Register Patterns of Interest}{674}{section*.431}%
-\contentsline {section}{Section 7 --- Note on Scope}{675}{section*.432}%
+\contentsline {section}{Section 1 --- Introduction}{627}{section*.425}%
+\contentsline {section}{Section 2 --- Principled Domain (\texttt {\^{}P}) Register Variations}{628}{section*.426}%
+\contentsline {section}{Section 3 --- Cognitive Domain (\texttt {\^{}C}) Register Variations}{640}{section*.427}%
+\contentsline {section}{Section 4 --- Evaluative Domain (\texttt {\^{}E}) Register Variations}{651}{section*.428}%
+\contentsline {section}{Section 5 --- Operational Domain (\texttt {\^{}O}) Register Variations}{662}{section*.429}%
+\contentsline {section}{Section 6 --- Cross-Register Patterns of Interest}{674}{section*.430}%
+\contentsline {section}{Section 7 --- Note on Scope}{675}{section*.431}%
 \contentsline {appendix}{\chapternumberline {H}Recipe Library (CAS v7.6 / v7.7)}{677}{appendix.H}%
-\contentsline {section}{Section 1: Introduction}{677}{section*.433}%
-\contentsline {section}{Section 2: Wisdom-Production Recipes}{678}{section*.434}%
-\contentsline {section}{Section 3: Wealth-Production Recipes}{680}{section*.435}%
-\contentsline {section}{Section 4: Leadership-Production Recipes}{681}{section*.436}%
-\contentsline {section}{Section 5: Refusal-Production Recipes (AI Safety Application)}{683}{section*.437}%
-\contentsline {section}{Section 6: Note on Recipe Compositionality}{684}{section*.438}%
-\contentsline {section}{Section 7: Note on Scope}{685}{section*.439}%
-\contentsline {section}{Section 8: Extended Recipe Library}{686}{section*.440}%
-\contentsline {section}{Section 8.1: Psychological Transformation Recipes}{687}{section*.441}%
-\contentsline {section}{Section 8.2: Learning and Education Recipes}{690}{section*.442}%
-\contentsline {section}{Section 8.3: Creative Process Recipes}{693}{section*.443}%
-\contentsline {section}{Section 8.4: Decision-Making Recipes}{696}{section*.444}%
-\contentsline {section}{Section 8.5: Emotional Regulation Recipes}{699}{section*.445}%
-\contentsline {section}{Section 8.6: Professional Practice Recipes}{702}{section*.446}%
-\contentsline {section}{Section 8.7: Collective and Organizational Dynamics Recipes}{705}{section*.447}%
-\contentsline {section}{Section 9: Library Status}{708}{section*.448}%
+\contentsline {section}{Section 1: Introduction}{677}{section*.432}%
+\contentsline {section}{Section 2: Wisdom-Production Recipes}{678}{section*.433}%
+\contentsline {section}{Section 3: Wealth-Production Recipes}{680}{section*.434}%
+\contentsline {section}{Section 4: Leadership-Production Recipes}{681}{section*.435}%
+\contentsline {section}{Section 5: Refusal-Production Recipes (AI Safety Application)}{683}{section*.436}%
+\contentsline {section}{Section 6: Note on Recipe Compositionality}{684}{section*.437}%
+\contentsline {section}{Section 7: Note on Scope}{685}{section*.438}%
+\contentsline {section}{Section 8: Extended Recipe Library}{686}{section*.439}%
+\contentsline {section}{Section 8.1: Psychological Transformation Recipes}{687}{section*.440}%
+\contentsline {section}{Section 8.2: Learning and Education Recipes}{690}{section*.441}%
+\contentsline {section}{Section 8.3: Creative Process Recipes}{693}{section*.442}%
+\contentsline {section}{Section 8.4: Decision-Making Recipes}{696}{section*.443}%
+\contentsline {section}{Section 8.5: Emotional Regulation Recipes}{699}{section*.444}%
+\contentsline {section}{Section 8.6: Professional Practice Recipes}{702}{section*.445}%
+\contentsline {section}{Section 8.7: Collective and Organizational Dynamics Recipes}{705}{section*.446}%
+\contentsline {section}{Section 9: Library Status}{708}{section*.447}%
 \contentsline {appendix}{\chapternumberline {I}Named Emergent Register Registry (CAS v7.7)}{711}{appendix.I}%
-\contentsline {section}{Section 1: Purpose}{711}{section*.449}%
-\contentsline {section}{Section 2: Registry Format}{712}{section*.450}%
-\contentsline {section}{Section 3: Admitted Registry}{714}{section*.451}%
-\contentsline {section}{Entry 1: \texttt {Ω\_presence}}{714}{section*.452}%
-\contentsline {section}{Entry 2: \texttt {Ω\_refusal}}{716}{section*.453}%
-\contentsline {section}{Section 4: Pending Review (Candidate \texttt {Ω\_*})}{719}{section*.454}%
-\contentsline {section}{Section 5: Admission Process}{720}{section*.455}%
+\contentsline {section}{Section 1: Purpose}{711}{section*.448}%
+\contentsline {section}{Section 2: Registry Format}{712}{section*.449}%
+\contentsline {section}{Section 3: Admitted Registry}{714}{section*.450}%
+\contentsline {section}{Entry 1: \texttt {Ω\_presence}}{714}{section*.451}%
+\contentsline {section}{Entry 2: \texttt {Ω\_refusal}}{716}{section*.452}%
+\contentsline {section}{Section 4: Pending Review (Candidate \texttt {Ω\_*})}{719}{section*.453}%
+\contentsline {section}{Section 5: Admission Process}{720}{section*.454}%
 \contentsline {appendix}{\chapternumberline {J}Mathematical Meta-Notation}{723}{appendix.J}%
-\contentsline {section}{J.1 Purpose and Architecture}{723}{section*.456}%
-\contentsline {section}{J.2 Namespace Discipline}{724}{section*.457}%
-\contentsline {section}{J.3 Canonical Meta-Sets}{725}{section*.458}%
-\contentsline {section}{J.4 Typed Values}{726}{section*.459}%
-\contentsline {section}{J.5 Working Examples (compiler-verified)}{727}{section*.460}%
-\contentsline {section}{J.6 What the Compiler Rejects}{728}{section*.461}%
-\contentsline {section}{J.7 How This Is Useful}{729}{section*.462}%
-\contentsline {section}{J.8 Not Yet Implemented (Future Work)}{730}{section*.463}%
-\contentsline {section}{J.9 Forward Reference}{731}{section*.464}%
-\contentsline {chapter}{Glossary}{735}{chapter*.466}%
-\contentsline {subsection}{A--Z Index}{735}{section*.467}%
-\contentsline {subsection}{Register Reference (thematic grouping)}{747}{section*.468}%
-\contentsline {subsection}{Ω\_* Registry Reference (CAS v7.7 named emergent registers)}{748}{section*.469}%
-\contentsline {chapter}{Index}{751}{chapter*.470}%
-\contentsline {chapter}{Bibliography and Further Reading}{755}{chapter*.472}%
-\contentsline {subsection}{Mathematics and Category Theory}{755}{section*.473}%
-\contentsline {subsection}{Consciousness Studies and Cognitive Science}{756}{section*.474}%
-\contentsline {subsection}{Information Theory and AI}{756}{section*.475}%
-\contentsline {subsection}{Cognitive Architecture and AI Safety}{756}{section*.476}%
-\contentsline {subsection}{Framework Origins and Influences}{757}{section*.477}%
-\contentsline {chapter}{About the Author}{759}{chapter*.479}%
-\contentsline {chapter}{Contact and Community}{761}{chapter*.481}%
-\contentsline {section}{\textbf {Incident database contributions:} via \texttt {noeticcompass.com} --- reports of AI misalignment incidents suitable for CAS structural analysis are welcome.}{761}{section*.482}%
-\contentsline {chapter}{Colophon}{763}{chapter*.484}%
+\contentsline {section}{J.1 Purpose and Architecture}{723}{section*.455}%
+\contentsline {section}{J.2 Namespace Discipline}{724}{section*.456}%
+\contentsline {section}{J.3 Canonical Meta-Sets}{725}{section*.457}%
+\contentsline {section}{J.4 Typed Values}{726}{section*.458}%
+\contentsline {section}{J.5 Working Examples (compiler-verified)}{727}{section*.459}%
+\contentsline {section}{J.6 What the Compiler Rejects}{728}{section*.460}%
+\contentsline {section}{J.7 How This Is Useful}{729}{section*.461}%
+\contentsline {section}{J.8 Not Yet Implemented (Future Work)}{730}{section*.462}%
+\contentsline {section}{J.9 Forward Reference}{731}{section*.463}%
+\contentsline {chapter}{Glossary}{735}{chapter*.465}%
+\contentsline {subsection}{A--Z Index}{735}{section*.466}%
+\contentsline {subsection}{Register Reference (thematic grouping)}{747}{section*.467}%
+\contentsline {subsection}{Ω\_* Registry Reference (CAS v7.7 named emergent registers)}{748}{section*.468}%
+\contentsline {chapter}{Index}{751}{chapter*.469}%
+\contentsline {chapter}{Bibliography and Further Reading}{755}{chapter*.471}%
+\contentsline {subsection}{Mathematics and Category Theory}{755}{section*.472}%
+\contentsline {subsection}{Consciousness Studies and Cognitive Science}{756}{section*.473}%
+\contentsline {subsection}{Information Theory and AI}{756}{section*.474}%
+\contentsline {subsection}{Cognitive Architecture and AI Safety}{756}{section*.475}%
+\contentsline {subsection}{Framework Origins and Influences}{757}{section*.476}%
+\contentsline {chapter}{About the Author}{759}{chapter*.478}%
+\contentsline {chapter}{Contact and Community}{761}{chapter*.480}%
+\contentsline {section}{\textbf {Incident database contributions:} via \texttt {noeticcompass.com} --- reports of AI misalignment incidents suitable for CAS structural analysis are welcome.}{761}{section*.481}%
+\contentsline {chapter}{Colophon}{763}{chapter*.483}%

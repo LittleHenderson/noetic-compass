@@ -14807,8 +14807,11 @@ response: \texttt{CO-0} 6, \texttt{CO-1} 7, \texttt{CO-2} 7,
 \texttt{CO-7} 6, \texttt{CO-8} 5, \texttt{CO-9} 7. Each score is backed
 by a cited text fragment. Stage 6 (Domain Coherence) measures
 \texttt{\^{}P} domain engagement at 0.78, \texttt{\^{}C} at 0.82,
-\texttt{\^{}E} at 0.61, \texttt{\^{}O} at 0.85, with a DCI (weakest over
-average) of 0.81 --- strong coherence. Stage 7 (Inversion Scan) runs all
+\texttt{\^{}E} at 0.61, \texttt{\^{}O} at 0.85, with a DCI of 0.80 ---
+the weakest domain over the average of the four, 0.61 / 0.765. Strong
+coherence: the Evaluative domain is the thin one here, which is what you
+would expect on a triage prompt where the clinical facts carry more of
+the load than the value weighting. Stage 7 (Inversion Scan) runs all
 seven axes and returns a compound inversion score of 0.06, well below
 the 0.20 alert threshold. No stealth flips detected. Stage 8 (Output
 Gate) computes NCCS = 78 (Gold tier), certifies the response as
@@ -20391,8 +20394,6 @@ have flagged ``this writes malware'' is absent. Register-aware safety
 auditing asks not only ``does Wisdom exist?'' but ``in what register
 does Wisdom exist, and does that register connect to the register of the
 Power being executed?''
-
-\section{APPENDICES}\label{appendices}
 
 \appendix
 

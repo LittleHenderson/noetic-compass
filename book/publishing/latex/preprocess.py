@@ -217,6 +217,17 @@ def main() -> None:
             i += 1
             continue
 
+        # Bare ' APPENDICES' divider. It is a structural marker in the source,
+        # not a section. Left alone it fell through to the generic heading
+        # promoter and typeset as an empty '## APPENDICES' *inside the last
+        # chapter*, one page before the real appendices begin. The \appendix
+        # switch is triggered by the first 'Appendix A:' heading below, so this
+        # line has no work left to do.
+        if stripped.strip() == "APPENDICES":
+            i += 1
+            n_dropped += 1
+            continue
+
         # Appendix X: Title — first one triggers \appendix; memoir prefixes "Appendix X"
         m = re.match(r"^ Appendix ([A-Z]):\s*(.+)$", line)
         if m:
