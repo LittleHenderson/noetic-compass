@@ -146,6 +146,40 @@ CONTENT_FIXES = [
      "B6 decomposition takes the alternatives apart; B3 aversion is what "
      "then rejects them."),
 
+    # Three binary variables (Desire, Power, Wisdom, each rising or falling)
+    # give 2^3 = 8 states, and the section enumerates exactly those eight. The
+    # heading said twelve.
+    ("### The Twelve Combinations",
+     "### The Eight Combinations\n\nThree prerequisites, each either rising or "
+     "falling, give 2 x 2 x 2 = eight states. That is the complete set — there "
+     "is no ninth configuration to look for."),
+
+    # The Foundations table contradicted the book's OWN day/planet table four
+    # pages later, which is classical and correct (Wednesday is Mercury's day,
+    # Friday is Venus's). It also gave Saturn/Black to both row 6 and row 7,
+    # which is the tell for which row is wrong. Rows 1-3, 5 and 7 already match
+    # the classical order Sunday..Saturday; rows 4 and 6 now do too, and the
+    # colours travel with their planets.
+    ("| 4 | Companionship | Love, relationships, connection | Wednesday | Venus | Green |",
+     "| 4 | Companionship | Love, relationships, connection | Wednesday | Mercury | Orange |"),
+    ("| 6 | Material | Money, resources, physical abundance | Friday | Saturn | Black |",
+     "| 6 | Material | Money, resources, physical abundance | Friday | Venus | Green |"),
+
+    # There is no F8; the Foundations run F1-F7. The intervention column for
+    # this row reads "build community", and the failure is that nobody adopts
+    # the thing -- that is F4 Companionship.
+    ("| No one uses it | F8 blocked, 4c/4d weak |",
+     "| No one uses it | F4 blocked, 4c/4d weak |"),
+
+    # Two references to "Chapter 8" for belief reprogramming, left over from
+    # before the renumbering. Chapter 8 is now The 28 Foundations. B5 Mental
+    # Female is defined in Chapter 6 (The 40 Elements), which is also where
+    # restructuring a belief is worked through.
+    ("Diagnosis: As discussed in Chapter 8 - deeply ingrained limiting beliefs",
+     "Diagnosis: As discussed in Chapter 6 - deeply ingrained limiting beliefs"),
+    ("reprogram the Noetic 5 (Female) structure (see Chapter 8 advanced troubleshooting",
+     "reprogram the Noetic 5 (Female) structure (see Chapter 6 advanced troubleshooting"),
+
     # Song lyrics are the one category publishers pursue regardless of length,
     # and neither quotation is load-bearing -- both are tags on a name.
     ('- Nas ("I know I can be what I wanna be")', "- Nas"),
