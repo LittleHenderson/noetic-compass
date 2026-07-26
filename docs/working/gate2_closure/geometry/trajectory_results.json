@@ -1,0 +1,83 @@
+{
+  "criteria": {
+    "T1_TKS_climbs": false,
+    "T2_TKS_slope_exceeds_compact_by_0.02": false,
+    "T3_shuffled_does_NOT_climb": true,
+    "T4_lexical_flat_favours_compact": true,
+    "T5_metric_content_dependent": true
+  },
+  "curves": {
+    "TKS": [
+      0.995398,
+      0.995221,
+      0.994461,
+      0.993314,
+      0.991759,
+      0.988457,
+      0.987625,
+      0.986357,
+      0.984884,
+      0.983964,
+      0.9841,
+      0.979112,
+      0.981217,
+      0.978442,
+      0.972088,
+      0.956133
+    ],
+    "compact": [
+      0.999777,
+      0.999632,
+      0.999529,
+      0.999371,
+      0.999173,
+      0.998829,
+      0.998668,
+      0.998529,
+      0.998353,
+      0.998156,
+      0.998113,
+      0.997738,
+      0.997831,
+      0.99754,
+      0.997077,
+      0.995389
+    ],
+    "shuffled_TKS": [
+      0.993086,
+      0.99311,
+      0.992047,
+      0.99045,
+      0.987776,
+      0.983211,
+      0.981315,
+      0.979381,
+      0.977005,
+      0.975073,
+      0.97478,
+      0.958849,
+      0.960663,
+      0.954705,
+      0.940069,
+      0.902161
+    ]
+  },
+  "design": "LAYER-TRAJECTORY-v1",
+  "lexical_compact": 0.98495,
+  "lexical_tks": 0.351074,
+  "model": "EleutherAI/pythia-1b",
+  "num_layers": 16,
+  "prereg_commit": "78f40b68",
+  "slopes": {
+    "TKS": -0.001908,
+    "compact": -0.000221,
+    "shuffled_TKS": -0.004409
+  },
+  "spearman": {
+    "TKS": -0.994118,
+    "compact": -0.997059,
+    "shuffled_TKS": -0.994118
+  },
+  "tks_climb_permutation_p": 1.0,
+  "verdict": "NOT_LICENSED"
+}
