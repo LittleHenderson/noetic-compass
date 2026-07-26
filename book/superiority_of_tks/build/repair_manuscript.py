@@ -106,6 +106,19 @@ CONTENT_FIXES = [
      "original to TKS; what follows is a TKS analysis of why they work.*\n\n"
      " The Authority Pattern"),
 
+    # Table 8 named four of the seven Foundations differently from the rest of
+    # the book. Three of the four substitutes -- Opposition, Beauty, Victory --
+    # are traditional Sefirot vocabulary that leaked in from another system.
+    # The canonical names are fixed by fourteen chapter headings (Foundation N:
+    # ... and Foundation N: ... Across the 4 Worlds), which agree with each
+    # other and with the second appendix listing. Table 8 is the appendix the
+    # Usage Guide sends readers to for diagnosis, so it is the worst place in
+    # the book to carry a private naming scheme.
+    ("**F2 Opposition**", "**F2 Wisdom / Knowledge**"),
+    ("**F3 Beauty**", "**F3 Health / Life**"),
+    ("**F6 Victory**", "**F6 Wealth / Structure**"),
+    ("**F7 Abundance**", "**F7 Purpose / Rhythm**"),
+
     # The appendix titled "The 22 Acquisitions" published only 21 distinct
     # numbers: 10 was absent and its entry was printed as a second 12, so 12
     # appeared twice with contradictory roles ("Power to obtain..." and "Desire
@@ -693,6 +706,147 @@ for old, new in XREF:
 # Check the END STATE, not whether each fix fired. A fix whose `old` text was
 # already removed by an earlier cleanup pass is a no-op, which is fine; a fix
 # whose `old` text is still present afterwards is a real failure.
+# --------------------------------------------------------------------------
+# Excise the duplicated Worlds C/D draft layer.
+#
+# Chapter 5's 40-Elements expansion was published twice. The first copy runs to
+# "(End of Chapter 5 Expansion)"; a second, older copy of the same 20 elements
+# (C1-C10, D1-D10) plus its own Cross-World Interactions section follows
+# immediately AFTER that closing stamp, carrying 20 different `Definition:`
+# strings for the same cells -- both quoted as verbatim source text.
+#
+# The second copy is the superseded layer: it uses the old number-first notation
+# (1b, 3c, 1d) throughout -- 132 such tokens against 1 in the retained copy --
+# and it introduces no element the first copy does not already define. Cut it.
+_DUP_START = "(End of Chapter 5 Expansion)"
+_DUP_END = ("Intervention often requires addressing blocks across multiple "
+            "levels, not just the physical.")
+_a, _b = text.find(_DUP_START), text.find(_DUP_END)
+if _a == -1 or _b == -1 or _b <= _a:
+    raise SystemExit(
+        "repair_manuscript: duplicate Worlds C/D block not locatable "
+        f"(start={_a}, end={_b}); anchors moved -- re-derive before building"
+    )
+_b += len(_DUP_END)
+_cut = text[_a + len(_DUP_START):_b]
+if "1c" not in _cut or "World of Citta" not in _cut:
+    raise SystemExit(
+        "repair_manuscript: the span between the duplicate anchors does not "
+        "look like the old-notation Worlds C/D copy; refusing to cut it"
+    )
+dup_lines_cut = _cut.count("\n")
+text = text[:_a + len(_DUP_START)] + "\n" + text[_b:]
+
+# --------------------------------------------------------------------------
+# Replace Table 3, which contradicted the canonical Prerequisites.
+#
+# The chapter "The Canonical Prerequisites & The Recursive Prerequisite Model"
+# defines the 12 as three cycles of four, keyed to the face cards:
+# P1-P4 Desire (Kings), P5-P8 Power (Queens), P9-P12 Wisdom (Jacks).
+#
+# Table 3 published a different naming scheme entirely (Desire / Intent /
+# Resource / Plan / Knowledge / ...) AND inverted two of the three cycles,
+# assigning P5-P8 to Wisdom and P9-P12 to Power. Since the Usage Guide directly
+# tells the reader to "Check Table 3 for Prerequisite deficiencies", the
+# appendix a reader is sent to disagreed with the chapter that defines the term.
+#
+# The Element and Fractal columns are dropped rather than relabelled. They were
+# chosen to match the superseded concepts -- "Resource", "Plan", "Feedback" --
+# so carrying them over onto the canonical names would silently assert
+# correspondences nobody established. Losing a column beats fabricating one.
+_T3_START = "## Table 3: 12 Prerequisites to Element/Fractal Mapping"
+_T3_END = "## Table 4"
+_t3a, _t3b = text.find(_T3_START), text.find(_T3_END)
+if _t3a == -1 or _t3b == -1 or _t3b <= _t3a:
+    raise SystemExit("repair_manuscript: Table 3 block not locatable for replacement")
+_T3_NEW = """## Table 3: The 12 Prerequisites
+
+Three cycles of four. Kings carry Desire, Queens carry Power, Jacks carry
+Wisdom — the structure developed in *The Canonical Prerequisites & The
+Recursive Prerequisite Model*, which is where the full treatment of each stage
+lives. Use this table to name which stage is deficient; go to that chapter for
+what to do about it.
+
+| Prerequisite | Cycle | Card | Stage |
+|--------------|-------|------|-------|
+| **P1** | Desire | King of Clubs | Beginning Desire — the want is just dawning |
+| **P2** | Desire | King of Hearts | Strong Desire — the will is fully engaged |
+| **P3** | Desire | King of Spades | Weakening Desire — motivation is fading |
+| **P4** | Desire | King of Diamonds | Absent Desire — the will is gone |
+| **P5** | Power | Queen of Diamonds | Birth of Power — ability just emerging |
+| **P6** | Power | Queen of Clubs | Adolescent Power — progressing, not yet effective |
+| **P7** | Power | Queen of Hearts | Mature Power — fully effective for the task |
+| **P8** | Power | Queen of Spades | Waning Power — capability diminishing |
+| **P9** | Wisdom | Jack of Clubs | Learning Wisdom — knowledge being acquired |
+| **P10** | Wisdom | Jack of Diamonds | Knowing Wisdom — present, application may lag |
+| **P11** | Wisdom | Jack of Spades | Understanding Wisdom — a working grasp |
+| **P12** | Wisdom | Jack of Hearts | Mastering Wisdom — full comprehension |
+
+"""
+text = text[:_t3a] + _T3_NEW + text[_t3b:]
+
+# --------------------------------------------------------------------------
+# Normalise the Noetic index base in the Cross-Reference Tables.
+#
+# The book publishes ONE canonical listing of the ten Noetics -- "The Canonical
+# Noetic Definitions" -- and it runs 1 Mind ... 9 Below/Effect, 10 Idea. Idea is
+# Noetic 10; there is no Noetic 0. The rest of the book agrees overwhelmingly:
+# the Idea row of the element grid is written X10 roughly 485 times against 8
+# stray X0.
+#
+# Those 8 strays all sit in the Cross-Reference Tables appendix, and they take
+# two forms: element labels (D0 for D10) and fractal cells with a zero
+# component (5.0 for 5.10, 0.1 for 10.1). None of the zero-component cells
+# exist in the book's own 100-cell table, so a reader following Table 3 or
+# Table 8 is sent to a cell that is not there.
+#
+# Normalising can collide -- P1 lists both "2.0" and "2.10", which are the same
+# cell written two ways. Where that happens the duplicate is dropped rather than
+# invented over: two correct cells beat three with one fabricated.
+def _normalise_noetic_base(block: str) -> tuple[str, int]:
+    n = 0
+
+    def elem(m):
+        nonlocal n
+        n += 1
+        return m.group(1) + "10"
+
+    block = re.sub(r"\b([A-D])0\b", elem, block)
+
+    def cell(m):
+        nonlocal n
+        a, b = m.group(1), m.group(2)
+        if a != "0" and b != "0":
+            return m.group(0)
+        n += 1
+        return f"{'10' if a == '0' else a}.{'10' if b == '0' else b}"
+
+    block = re.sub(r"(?<![\d.])(10|[0-9])\.(10|[0-9])(?![\d])", cell, block)
+
+    # drop cells that normalisation turned into duplicates inside one table cell
+    def dedupe(m):
+        seen, out = set(), []
+        for part in [p.strip() for p in m.group(1).split(",")]:
+            if part and part not in seen:
+                seen.add(part)
+                out.append(part)
+        return "| " + ", ".join(out) + " |"
+
+    block = re.sub(r"\|\s*((?:(?:10|[1-9])\.(?:10|[0-9])\s*,\s*)+(?:10|[1-9])\.(?:10|[0-9]))\s*\|",
+                   dedupe, block)
+    return block, n
+
+_xr = text.find(_T3_START.replace("12 Prerequisites to Element/Fractal Mapping",
+                                  "The 12 Prerequisites"))
+_xrend = text.find("## Usage Guide", _xr) if _xr != -1 else -1
+if _xr == -1 or _xrend == -1:
+    raise SystemExit("repair_manuscript: Cross-Reference Tables region not found "
+                     "for Noetic-base normalisation")
+_head, _mid, _tail = text[:_xr], text[_xr:_xrend], text[_xrend:]
+_mid, noetic_base_fixed = _normalise_noetic_base(_mid)
+text = _head + _mid + _tail
+text = text.replace("(A1-D0 Elements", "(A1-D10 Elements")
+
 # Verify by the RESULT, not by whether the fix fired. Two shapes exist here:
 # replacements (new does not contain old) and insertions (new contains old, e.g.
 # prepending an attribution before a heading). Checking `old not in text`
@@ -742,7 +896,11 @@ print(f"  fenced blocks kept   : {stats['fences'] // 2}")
 print(f"  page-break comments  : {stats['pagebreaks']}")
 print(f"  decorative emoji cut : {stats['emoji']}")
 print(f"  drafting labels cut  : {stats['titles']}")
-print(f"  content fixes applied: {stats_pending[0] if stats_pending else 0}/13")
+print(f"  content fixes applied: "
+      f"{stats_pending[0] if stats_pending else 0}/{len(CONTENT_FIXES)}"
+      f"  (the rest were already handled upstream)")
+print(f"  duplicate C/D lines cut: {dup_lines_cut}")
+print(f"  Noetic base normalised: {noetic_base_fixed} label(s)")
 print(f"  headings softened    : {stats['softened']}")
 print(f"  figures inserted     : {stats['figures']}")
 print(f"  '---' rules cut      : {stats['rules']}")

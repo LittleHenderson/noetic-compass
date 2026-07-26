@@ -143,7 +143,7 @@ nothing.""",
     },
     {
         "slug": "reality_engineering",
-        "pages": 811,
+        "pages": 801,
         "title_lines": r"Reality\\Engineering",
         "spine_title": "Reality Engineering",
         "subtitle": "The Tootra Kabbalistic System --- A Complete Operating "

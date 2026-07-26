@@ -150,11 +150,11 @@ Files: `superiority_of_tks/Reality_Engineering.pdf` and `.epub`
 | **Title** | Reality Engineering: The Tootra Kabbalistic System |
 | **Subtitle** | A Complete Operating Manual for Manifestation — Diagnose Why It Fails, Then Make It Work |
 | **Author** | Little Henderson |
-| **Pages** | 811 (6×9, B&W, white) |
-| **Est. printing cost** | $0.85 + (811 × $0.012) = **$10.58** |
-| **KDP minimum list** | $10.58 ÷ 0.60 = **$17.64** |
+| **Pages** | 801 (6×9, B&W, white) |
+| **Est. printing cost** | $0.85 + (801 × $0.012) = **$10.46** |
+| **KDP minimum list** | $10.46 ÷ 0.60 = **$17.44** |
 | **Recommended list** | **$29.99** paperback · **$9.99** Kindle |
-| **Est. royalty** | (0.60 × $29.99) − $10.58 = **$7.41**/copy paperback; **$6.99**/copy Kindle |
+| **Est. royalty** | (0.60 × $29.99) − $10.46 = **$7.53**/copy paperback; **$6.99**/copy Kindle |
 
 **Two decisions were taken and are now built into the files:**
 
