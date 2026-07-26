@@ -406,7 +406,7 @@
 \contentsline {section}{Catalyst and Inhibitor}{545}{section*.380}%
 \contentsline {section}{AI Safety Application: Refusal Architectures}{546}{section*.381}%
 \contentsline {section}{Production Semantics and RPM}{548}{section*.382}%
-\contentsline {section}{Integration with Cognitive Fractals}{548}{section*.383}%
+\contentsline {section}{Integration with Cognitive Fractals}{549}{section*.383}%
 \contentsline {section}{Key Insight: Chapter 26.5}{549}{section*.384}%
 \contentsline {section}{Try This: Chapter 26.5 Exercises}{550}{section*.385}%
 \contentsline {chapter}{\chapternumberline {27}RPM Structure}{553}{chapter.27}%
@@ -469,8 +469,8 @@
 \contentsline {section}{Section 3: Wealth-Production Recipes}{680}{section*.434}%
 \contentsline {section}{Section 4: Leadership-Production Recipes}{681}{section*.435}%
 \contentsline {section}{Section 5: Refusal-Production Recipes (AI Safety Application)}{683}{section*.436}%
-\contentsline {section}{Section 6: Note on Recipe Compositionality}{684}{section*.437}%
-\contentsline {section}{Section 7: Note on Scope}{685}{section*.438}%
+\contentsline {section}{Section 6: Note on Recipe Compositionality}{685}{section*.437}%
+\contentsline {section}{Section 7: Note on Scope}{686}{section*.438}%
 \contentsline {section}{Section 8: Extended Recipe Library}{686}{section*.439}%
 \contentsline {section}{Section 8.1: Psychological Transformation Recipes}{687}{section*.440}%
 \contentsline {section}{Section 8.2: Learning and Education Recipes}{690}{section*.441}%

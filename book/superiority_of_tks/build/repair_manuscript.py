@@ -180,6 +180,19 @@ CONTENT_FIXES = [
     ("reprogram the Noetic 5 (Female) structure (see Chapter 8 advanced troubleshooting",
      "reprogram the Noetic 5 (Female) structure (see Chapter 6 advanced troubleshooting"),
 
+    # D12 is not an element -- each World carries ten, X1 through X10. The same
+    # parenthesis gives the old-notation form "3d", which is D3, so the modern
+    # half of the pair should have read D3 all along.
+    ("What triggered it (3d/D12 - setback, fatigue, comparison)?",
+     "What triggered it (3d/D3 - setback, fatigue, comparison)?"),
+
+    # Table 5's second column is typed for fractals (X.Y and X.Y.Z); every other
+    # row carries only those. This row led with an element code. Moved to the
+    # Elements column, which is where element codes belong and where D10 and D5
+    # already sit -- rather than inventing a fractal nobody derived.
+    ("| **Financial stuckness** | D3, 5.1.3, 3.5 | D10, D5 | P3, P9 |",
+     "| **Financial stuckness** | 5.1.3, 3.5 | D3, D10, D5 | P3, P9 |"),
+
     # Two incompatible sets of confirmation-wave windows for the same three
     # named waves. The chapter that develops them uses 0-3 / 3-24 / 24-72
     # hours, and the Confirmation Tracking Log worksheet in the appendix agrees.
