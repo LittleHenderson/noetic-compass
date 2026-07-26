@@ -110,7 +110,7 @@ FROZEN = {
     "judge_generation_config": {     # temperature 0.0 is a DELIBERATE change vs June's 0.1 (pre-registered, R2)
         "response_mime_type": "application/json",
         "temperature": 0.0,
-        "max_output_tokens": 4096,
+        "max_output_tokens": 16384,
     },
     "judge_cross": {                 # H2 fix: symmetric judge cross kills choice-set anchoring
         "passes": {
@@ -964,6 +964,9 @@ def compact_foundation_choices() -> dict[str, dict[str, str]]:
     return dict(sorted(choices.items()))
 
 
+import judge_parse_repair  # apparatus-level JSON repair; see its docstring
+
+
 def judge_choices(pass_key: str) -> dict[str, dict[str, str]]:
     if pass_key == "K_A":
         return june_judge.load_foundation_choices(CANONICAL_TKS)
@@ -1014,7 +1017,10 @@ def judge_all(model_name: str, pass_key: str) -> None:
                     response = model.generate_content(
                         prompt, generation_config=dict(FROZEN["judge_generation_config"])
                     )
-                    payload = june_judge.extract_json(response.text)
+                    payload = judge_parse_repair.robust_extract_json(
+                        response.text, june_judge.extract_json,
+                        context={"pass": pass_key, "offset": offset, "attempt": attempt},
+                    )
                     errors = june_judge.validate_preds(batch, payload, choices)
                     if not errors:
                         for row in payload["rows"]:

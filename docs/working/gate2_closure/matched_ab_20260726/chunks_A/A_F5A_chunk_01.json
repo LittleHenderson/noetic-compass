@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F5A_chunk_01",
+  "generated_at_epoch": 1785076428,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F5A_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. The bins overflow with items needing proper placement, and the backlog continues to grow. As they pick up a specific, sought-after item, their eyes light up, and they quickly place it in the correct bin, humming softly. Now, they must decide whether to tackle the most complex remaining item or complete a few simple ones first to clear space."
+    },
+    {
+      "id": "F5A_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. The scanner beeps incessantly, each undelivered package a small failure. They find a large envelope addressed to a known resident, and their shoulders relax slightly, a faint smile touching their lips as they place it carefully into the designated tray. The next step is to decide whether to reroute a misaddressed parcel or document its current location."
+    },
+    {
+      "id": "F5A_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. Tools lie scattered, and the timer on the whiteboard ticks down ominously. A critical component for a student project is discovered hidden under some debris, and their breath hitches, eyes widening as they grasp it. They must now choose between dedicating time to finding its original owner or continuing with the general sorting to meet the deadline."
+    },
+    {
+      "id": "F5A_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. The headset crackles with indecipherable calls, and a thick binder of pending applications sits untouched. A crucial document for a new small business owner is located, and a hopeful nod escapes them as they set it aside, their posture straightening. They face a choice: expedite this specific permit or process the stack of routine requests before it."
+    },
+    {
+      "id": "F5A_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The wall calendar displays a past deadline, and scattered forms represent unfinished work. Finding the signed approval form for a major update, their jaw tightens with satisfaction, and they carefully add it to the completed pile, a subtle lift in their chin. The immediate decision is whether to finalize this release or address a new urgent bug report."
+    },
+    {
+      "id": "F5A_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They pull a new request and examine the map, considering the tangled lines and missing connections. A quiet realization flickers across their face as they grasp a subtle flaw in their own initial approach. They then select a specific document, placing it in a discard pile, accepting the need to re-evaluate the entire order."
+    },
+    {
+      "id": "F5A_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. Holding a toolbox, they find an unexpected missing part for a vital appliance, a crucial oversight. A slow exhale escapes them as the pressure lifts, recognizing the immediate danger has passed. They set the toolbox down with a soft click and begin organizing the packing slips."
+    },
+    {
+      "id": "F5A_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. While reviewing a laptop screen and tapping a badge, they notice a critical error in a recently completed shipment log. A pained expression crosses their features, their jaw tightening slightly. They then pick up a stack of sticky notes, their hand trembling as they start to draft a corrective message."
+    },
+    {
+      "id": "F5A_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. They pour water from a thermos, their movements slow. A notification on a phone screen displays an update about a project they had a significant hand in, showing its complete failure. Their shoulders slump, and they stare blankly at the table. They then push the phone away, the device sliding across the surface."
+    },
+    {
+      "id": "F5A_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. They push a cart laden with envelopes, about to file a routine document. Suddenly, an unexpected alert flashes on a nearby monitor, detailing an imminent external threat far worse than anticipated. Their eyes widen, and their breath catches. They halt the cart mid-motion, their hand hovering over an envelope."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

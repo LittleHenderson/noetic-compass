@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F5A_chunk_01",
+  "generated_at_epoch": 1785076433,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F5A_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. A delivery arrives with several urgent items, each requiring immediate attention and careful placement. The person pauses, looking from the new arrivals to the overflowing bins of older requests, then deliberately selects one of the new items to process first. A quick smile flashes across their face as they place it neatly into its designated spot."
+    },
+    {
+      "id": "F5A_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. The final package in the stack is for a familiar resident who has moved out weeks ago, and the sender's return address is smudged. The person considers their options: leave it to be returned, or try to decipher the sender's details to contact them. They carefully set it aside, making a note to look up the sender's information later, a soft expression settling on their features."
+    },
+    {
+      "id": "F5A_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The timer on the whiteboard shows only minutes remaining, and a crucial bin is still nearly empty, while another is overflowing with less critical items. The person's breath hitches as they glance at the timer, then quickly begins shuffling items from the full bin to a spare chair, their movements a little jerky."
+    },
+    {
+      "id": "F5A_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A stack of complicated forms arrives, each needing a specific, hard-to-find authorization code. The person scans the binder for the codes, then consults the sign-in sheet for applicant contact information, feeling a sense of anticipation. They pick up the first form, a determined set to their jaw as they prepare to begin the verification process."
+    },
+    {
+      "id": "F5A_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The last remaining form on the desk is for a project that faced significant technical hurdles but is now officially completed. The person picks up the form, their posture straightening as they review the final sign-off. They then carefully file it, a slight upward tilt of their chin as they survey the now-clear desk."
+    },
+    {
+      "id": "F5A_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They pick up a crumpled map, considering its condition. Suddenly, they notice a recurring pattern in the request codes, a detail that reorients their entire understanding of the queue's purpose. They set the map down, then begin re-categorizing items with a focused intensity, their brow furrowed in thought."
+    },
+    {
+      "id": "F5A_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. Among the items, they find a misplaced toolbox, identical to one they recently lost. A slow exhale escapes their lips as they lift it, checking the contents against the manifest. The pressure lifts from their shoulders as they place the correctly accounted item onto the sorted pile."
+    },
+    {
+      "id": "F5A_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. They handle a laptop, reviewing its associated paperwork. A forgotten detail on a sticky note catches their eye, revealing a critical oversight they made earlier. Their shoulders slump slightly, and they slowly push the stack of mislabeled items away, a quiet sigh escaping them."
+    },
+    {
+      "id": "F5A_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. They examine a thermos, noting its worn exterior. A call comes through on their phone, and after listening, their posture deflates, the corners of their mouth turning downward. They place the phone back on the table and stare blankly at the sorting pile, a heavy stillness settling over them."
+    },
+    {
+      "id": "F5A_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. While organizing envelopes, they discover a familiar return address on an unexpected item. Their eyes widen, and their breath catches. They halt their sorting mid-motion, reaching out to gently touch the envelope again, a look of utter disbelief fixed on their face."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

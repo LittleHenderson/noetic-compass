@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F2T_chunk_01",
+  "generated_at_epoch": 1785076323,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F2T_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They pick up a bin, then pause, a slight upward curve forming at the corners of their mouth as they examine a specific label on the bin, a quiet hum starting in their throat. Finally, they place the bin firmly into the designated section, their posture straightening slightly."
+    },
+    {
+      "id": "F2T_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. After scanning a package, their shoulders sag a fraction, and they gently place the next item down, their brow furrowing slightly as they look towards a stack of unanswered messages. They then pick up a piece of tape, their movements slow and deliberate."
+    },
+    {
+      "id": "F2T_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The timer on the wall shows less than a minute remaining. They pick up a spare chair, their gaze unfocused as they briefly touch a smudge on the whiteboard. They then set the chair down abruptly near the door and check the timer again."
+    },
+    {
+      "id": "F2T_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. While holding a binder, their eyes dart to a small, unfiled document peeking out from under a pile on the desk, and they lean forward slightly, a quick intake of breath audible. They then place the binder down and reach for the headset."
+    },
+    {
+      "id": "F2T_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. They hold a set of forms, but their focus shifts to the wall calendar, specifically a circled date. Their jaw tightens momentarily, and they grip the forms a bit harder before setting them down and picking up the keys from the desk."
+    },
+    {
+      "id": "F2T_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. The terminal screen shows a list of urgent bookings that have been misrouted, each requiring an immediate redirect to a different platform. One particular ticket stands out, marked with a crucial detail that seems to contradict the system's current classification. After a brief scan of the map, the person sets the offending ticket aside, their jaw tightens, and they proceed with the standard sorting protocol without further investigation, leaving the problematic request unresolved for now."
+    },
+    {
+      "id": "F2T_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. Several boxes of donated supplies need to be categorized before the evening meal service. A set of used gloves are found mixed with the fresh items, clearly a breach of hygiene standards. The person picks up the used gloves with a stiff finger, then drops them into the bin with a sharp flick of the wrist, before returning to organizing the undamaged food packages with a set expression."
+    },
+    {
+      "id": "F2T_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. Inventory lists are piling up, detailing incoming shipments that need immediate allocation. A particular manifest is written in a barely legible hand, and the ink has smudged badly across critical numbers, making its contents ambiguous. The person holds the sticky notes at arm's length, a wrinkle appearing between their brows, before setting it aside without attempting to decipher it and moves on to the next clearly marked document."
+    },
+    {
+      "id": "F2T_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A stack of outdated periodicals requires cataloging and shelving. While sorting, a stray, brightly colored flyer falls from one of the magazines, advertising a local event with extremely loud fonts. The person's cheeks flush slightly as they quickly stuff the flyer into their pocket, adjusting their posture to appear more composed before resuming the task of organizing the journals by publication date."
+    },
+    {
+      "id": "F2T_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. A pile of forms from the last supply drop needs processing to determine resource allocation. Among the standard documents, one envelope is addressed in an ornate, looping script and sealed with wax, vastly different from the usual plain mail. The person's eyes widen, and a broad smile stretches their face as they carefully pick up the unusual envelope, setting the other forms aside to examine it immediately."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

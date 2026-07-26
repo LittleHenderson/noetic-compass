@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F2E_chunk_01",
+  "generated_at_epoch": 1785076306,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F2E_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. A bin of urgent items needs immediate attention, but the system is offline. The person glances at the clock, then back at the overflowing bin, a small frown appearing as they tap a pen against their chin, considering if they should proceed without proper records. They pick up a label, hesitating before placing it."
+    },
+    {
+      "id": "F2E_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. A large, unmarked package sits apart from the others, drawing their gaze. They approach it, tracing the shape of the box with a finger before pulling back sharply. The person then leans in again, a subtle widening of the eyes as they examine a faint smudge near the return address, before reaching for the tape dispenser."
+    },
+    {
+      "id": "F2E_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. They encounter a project component that clearly doesn't match the schematics on the whiteboard. The person holds the piece up, turning it slowly, their brow furrowed. A sigh escapes them as they then set it down on a spare chair, deliberately pushing it to the edge as if to put it out of mind, before turning back to the timer."
+    },
+    {
+      "id": "F2E_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A submitted application is missing a crucial signature, evident on the binder. The person stares at the blank space on the form, their lips thinning. They then abruptly push the binder away, the movement a little too forceful, and pick up the headset, their jaw tight."
+    },
+    {
+      "id": "F2E_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. A report contains a critical error, revealed by a quick scan of the forms. The person recoils slightly, eyes narrowing at the screen. They pinch the bridge of their nose for a moment, a visible shudder running through their shoulders, before reaching for the wall calendar with a decisive, almost aggressive, movement."
+    },
+    {
+      "id": "F2E_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. The individual fumbles with a charging cord, dropping it repeatedly. A slight flush creeps up their neck as a colleague observes the struggle to connect it. They finally snag the cord, their knuckles white, and hastily jam it into the charging port, trying to appear unbothered by the awkward moment."
+    },
+    {
+      "id": "F2E_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. Handling a chipped toolbox, the individual hums a quick, upbeat tune. Their eyes dart between the packing slips and the contents within the toolbox, a wide smile stretching their lips as they find a perfectly matched, needed item. They hold it up for a brief moment before placing it in the outgoing pile, practically bouncing on the balls of their feet."
+    },
+    {
+      "id": "F2E_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. Clutching a company laptop, the individual freezes as a loud clatter echoes from the far end of the bay. Their gaze snaps towards the sound, pupils dilating. They then quickly pull the laptop closer, hunching their shoulders and lowering their head as they try to make sense of the noise and assess potential danger."
+    },
+    {
+      "id": "F2E_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A warm thermos sits nearby as the individual reviews a stack of documents. A faint smile plays on their lips as they read a particular item, their shoulders relaxing. They then carefully place the document aside and nod slowly, their eyes crinkling at the corners before turning to the next request with renewed ease."
+    },
+    {
+      "id": "F2E_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. Surrounded by a cart full of envelopes and marker pens, the individual stares at a particular request. Their hand trembles slightly as they reach for it, their lower lip quivering. They then pull the request towards them with a visible effort, their gaze fixed on it with a profound stillness that seems to absorb all sound."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

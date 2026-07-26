@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F3T_chunk_01",
+  "generated_at_epoch": 1785076362,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F3T_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They examine a bin labeled 'Urgent,' filled with supplies that haven't been used for months, contrary to the current need for a different item. A quiet sigh escapes them, and their shoulders slump slightly as they push the bin aside, selecting a different one to process first. The clipboard awaits their next move."
+    },
+    {
+      "id": "F3T_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. The scanner beeps, signaling an incoming package that matches an old, cleared order, not the one currently on the screen. Their brow furrows as they glance at the tape dispenser, then back at the incorrect label. They reroute the package to the holding area with a sharp tap of their finger on the counter."
+    },
+    {
+      "id": "F3T_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The timer ticks down on a project that requires precise measurements, but the bin of materials they picked from the queue is incomplete, missing a crucial component. They stare at the whiteboard listing the project steps, then at the spare chairs, their jaw tightening. They pick up a piece of scrap wood, turning it over and over in their hands."
+    },
+    {
+      "id": "F3T_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. The headset crackles with a caller's urgent inquiry about a permit that was denied yesterday, yet the current request is for an outdated form. They hold the binder with slightly trembling hands, their gaze fixed on the sign-in sheet. They then deliberately place the outdated form into the rejected pile with a decisive motion."
+    },
+    {
+      "id": "F3T_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. A critical system update is due, but the forms they're processing are for a deprecated feature, and the wall calendar shows the release date is imminent. Their breath hitches, and they look away from the forms, their cheeks flushing. They slide the incorrect forms into a separate, smaller tray with unnecessary force."
+    },
+    {
+      "id": "F3T_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. A passenger hands them a crumpled map, gesturing wildly about a missed connection. The person considers trying to re-route the passenger or simply marking the request as unresolvable. They take a shallow breath, then point to a different section of the large station map, their shoulders straightening slightly."
+    },
+    {
+      "id": "F3T_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. The next item is a bulk order of damaged food packaging, marked with a suspicious stain. The person shifts their weight, their jaw tightening almost imperceptibly as they consider whether to flag it for inspection or dispose of it immediately. They push the stained item to a separate pile with a quick, decisive movement of their hand."
+    },
+    {
+      "id": "F3T_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. A notification flashes on their laptop about an urgent shipment that was diverted due to a system error. The person reviews the details, then looks at the overflowing inbox of routine requests, a small smile beginning to form at their lips as they begin reallocating resources. They rapidly type a new priority code into the system."
+    },
+    {
+      "id": "F3T_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A printed flyer for a local event arrives, attached to which is a small, dried flower. The person picks up the flyer, their gaze softening as they trace the delicate petals. They carefully place the flyer and flower aside, not in the sorted pile, before returning to the remaining tasks with a heavy exhale."
+    },
+    {
+      "id": "F3T_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. A child's drawing, depicting a sun and stick figures holding hands, is tucked into the latest request form. The person pauses, their eyes widening as they look at the cheerful depiction. They then retrieve a bright red marker pen from the desk and draw a small, smiling sun next to the existing one on the drawing before filing it."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

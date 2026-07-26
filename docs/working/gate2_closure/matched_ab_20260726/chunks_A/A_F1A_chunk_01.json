@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F1A_chunk_01",
+  "generated_at_epoch": 1785076241,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F1A_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They pick up a bin of expired bandages, an item that was requested by a patient who has since been discharged. A small, dry chuckle escapes as they place it aside. They then examine a clipboard of pending orders, deciding whether to fulfill an unusual request for a pediatric nebulizer attachment that is no longer manufactured."
+    },
+    {
+      "id": "F1A_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. A stack of misdelivered parcels sits precariously, threatening to spill onto the floor. The person tapes one box shut with excessive force, the ripping sound sharp. Next, they eye a large, unmarked envelope, debating if it should be returned to sender or held for further inspection, knowing the consequences of either choice."
+    },
+    {
+      "id": "F1A_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. A student\u2019s half-finished project, a wooden birdhouse, is on the workbench, waiting for a specific type of screw that is part of this queue. The person gestures dismissively towards the timer on the whiteboard, then pushes a bin of fasteners closer, making a sharp, decisive movement with their hand as they choose a replacement screw that will fit but not perfectly."
+    },
+    {
+      "id": "F1A_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A binder full of overdue applications needs processing. The person carefully flips through the pages, a slight nod as they find a completed form. They then consider an application for a street vendor license, noting the applicant\u2019s name on the sign-in sheet. A brief pause, then they stamp the binder with an affirmative mark, a subtle easing of their shoulders."
+    },
+    {
+      "id": "F1A_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The wall calendar shows a critical release date looming. The person gently places a set of system keys into a labeled bin, their movements precise and deliberate. They then pick up a form requesting emergency patches, tracing the urgency with a fingertip before setting it atop the forms already in the 'expedite' pile, their breath catching slightly."
+    },
+    {
+      "id": "F1A_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They pick up a crumpled map, hesitating to unfold it as the sheer volume of pending tasks seems to overwhelm their capacity for clear thought. The kiosk\u2019s dim light casts long shadows as they finally smooth the map, their brow furrowing deeper with each line they trace, a silent question hanging in the air about how to proceed."
+    },
+    {
+      "id": "F1A_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. They pause, holding a small, tarnished toolbox, tilting their head to examine the unfamiliar latch. A flicker of interest crosses their face as they consider the possibility of what might lie within, then set it aside to continue with the receipts, a subtle upward curve to their lips."
+    },
+    {
+      "id": "F1A_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. Their gaze drifts from the pile of sticky notes towards the exit, a deep yearning settling in their chest as they consider leaving the task unfinished. They grip the edge of the laptop, knuckles whitening, before slowly releasing it and turning back to the queue, a soft exhale escaping them."
+    },
+    {
+      "id": "F1A_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. They pick up a discarded phone, then set it down abruptly, a slump entering their shoulders as they realize a crucial document is missing. The corners of their mouth turn down as they stare at the empty space on the table, a heavy sigh escaping their lips."
+    },
+    {
+      "id": "F1A_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. They examine a stack of envelopes, a slight frown forming as they notice a series of irregular markings on one. Their lips thin as they set the envelope aside with a sharp tap, a quiet disapproval evident in the rigid set of their jaw."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

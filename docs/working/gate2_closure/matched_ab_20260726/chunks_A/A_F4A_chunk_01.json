@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F4A_chunk_01",
+  "generated_at_epoch": 1785076380,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F4A_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. A colleague arrives, asking for help with a critical task elsewhere, implying they need to drop their current work. The person pauses, looking from the growing stack of bins to the colleague, then slowly places a label back onto the dispenser, their brow furrowed slightly. They then gesture towards an empty bin for the colleague to use, deciding to delegate their own task."
+    },
+    {
+      "id": "F4A_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. A scanner malfunction renders several trays unusable, threatening to halt the entire process. The person freezes, eyes wide, as the machine emits a sharp, broken tone. They quickly grab a roll of tape, securing the faulty scanner and forcing a reshuffling of the trays, choosing a less efficient manual workaround."
+    },
+    {
+      "id": "F4A_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. A student, struggling with a complex concept, seeks guidance. The person glances at the timer, then at the student's earnest expression, and sets the timer aside. They pick up a spare chair, pulling it closer to the student and begin explaining the concept, prioritizing teaching over sorting."
+    },
+    {
+      "id": "F4A_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. An applicant, visibly distressed, explains a bureaucratic error that has caused significant personal hardship. The person listens, their usual brisk sorting pace slowing to a near halt as their gaze drops to the binder. They then begin carefully re-reading the application, their shoulders slumping slightly as they consider the implications."
+    },
+    {
+      "id": "F4A_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. A successful deployment notification flashes on the screen, accompanied by congratulations from a remote team. The person lets out a small, sharp exhale, a broad smile crinkling the corners of their eyes as they look at the wall calendar. They then lean back, closing their eyes for a brief moment, a sense of accomplishment washing over them."
+    },
+    {
+      "id": "F4A_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They reviewed a customer's crumpled receipt roll, recognizing the pattern of their frequent, complex orders. Instead of just filing it, they pulled out a station map to highlight a nearby, less crowded shop that offered the same items, a small adjustment to the standard procedure. Their shoulders relaxed as they offered the map, a hint of a smile playing on their lips as the customer's face lit up."
+    },
+    {
+      "id": "F4A_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. They picked up a worn toolbox, its contents shifting precariously. As they tried to organize the packing slips for misplaced items, their breath hitched, and their jaw tightened. They fumbled a pair of gloves, dropping them onto the floor before slowly bending to pick them up, their movements a little stiff."
+    },
+    {
+      "id": "F4A_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. They reviewed the laptop screen displaying overdue shipments, then picked up a sticky note. A quick glance at the bright yellow note, and a determined set of their jaw appeared as they tapped it firmly onto the monitor. They then efficiently began re-routing the upcoming deliveries, a clear plan forming in their actions."
+    },
+    {
+      "id": "F4A_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. Holding a polished thermos, they examined a stack of documents. They paused, a slight flush rising on their cheeks, then carefully arranged the papers into a neat pile, adding a small, precisely folded note on top. They looked at the finished work, puffing their chest out slightly before gathering their items."
+    },
+    {
+      "id": "F4A_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. They were handling a cart filled with envelopes when a particular shipping label caught their eye. Their eyes widened, and their lips parted slightly as they set the cart down abruptly. They then reached for a marker pen, making a bold, decisive stroke across the label before shoving the entire batch into a different pile."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F5T_chunk_01",
+  "generated_at_epoch": 1785076455,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F5T_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They review a bin overflowing with supplies and labels, a task that usually feels routine. Today, however, a particular item triggers a deep, quiet ache, and their hand stills, hovering over a label. They then slowly place it on the wrong bin, eyes fixed on the wall."
+    },
+    {
+      "id": "F5T_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. As they scan a package, the recipient's name leaps out. A wide smile breaks across their face, crinkling their eyes. They quickly place the package in its tray, then pick up another, humming a cheerful tune as they work through the rest."
+    },
+    {
+      "id": "F5T_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The timer on the whiteboard ticks down, and they have several tasks left. A student\u2019s poorly executed project sits before them, and a warmth spreads through their chest. They gently adjust the student's materials, then turn to the next item with a soft gaze."
+    },
+    {
+      "id": "F5T_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. The line stretches long, and the headset crackles with inquiries. Their hand trembles slightly as they pick up the next file from the stack. They clear their throat, their voice strained as they call out the next number, their gaze darting to the growing queue."
+    },
+    {
+      "id": "F5T_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The forms are piled high, and the wall calendar shows a critical deadline approaching. As they finalize the last form, a sense of possibility fills them, their shoulders straightening. They jot a confident note on the completed sheet and grab the keys, a determined set to their jaw."
+    },
+    {
+      "id": "F5T_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. A stack of overdue forms is on the counter, and the person needs to decide which to process first from the pile of receipts. The person notices a small, forgotten token tucked into one of the envelopes, a memento from a previous trip, and their posture straightens slightly as they pick it up."
+    },
+    {
+      "id": "F5T_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. Among the packing slips and spare gloves, they're meant to organize a backlog of ingredient requests. While reviewing a crumpled note, they find a recipe card detailing a dish from their childhood, and their hands pause over the forms."
+    },
+    {
+      "id": "F5T_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. Laptops and badges are scattered on a makeshift table as they tackle a backlog of shipment manifests. After reviewing a particularly complex manifest, they lean back, letting out a slow exhale as they tap the completed report."
+    },
+    {
+      "id": "F5T_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A thermos and a phone sit nearby while they sift through a pile of overdue notices. The person stops, eyes fixed on a particular name on a returned book slip, and their shoulders slump forward."
+    },
+    {
+      "id": "F5T_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. They are reviewing a stack of envelopes and marker pens, trying to prioritize incoming messages. A notification flashes on the screen, and the person\u2019s gaze drops to the cart, a slight tremor passing through their hand as they set down the pen."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

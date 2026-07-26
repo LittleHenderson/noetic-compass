@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F7f_chunk_01",
+  "generated_at_epoch": 1785076552,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F7f_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. The stack of forms on the clipboard has been growing all morning, each one a small imperative that feels like a weight. Finding the correct bin for the next label requires a decision: address the urgent item that will cause problems if missed, or clear the simple ones to regain a sense of progress. They pick up the most recent form and their brow furrows slightly before they walk towards the bins."
+    },
+    {
+      "id": "F7f_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. Letters and packages are piled next to the numbered trays, each needing to be scanned and placed. A critical delivery, clearly marked as urgent, sits beneath a stack of junk mail. Should they move the pile to get to the important one, risking misplacing the others, or leave it for now and deal with the routine items? They reach for the scanner, but pause, eyes flicking to the urgent package."
+    },
+    {
+      "id": "F7f_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The whiteboard lists tasks, and a timer shows how little time is left. Among the scattered spare chairs are several piles of materials, each needing to be categorized for an upcoming project. One pile contains fragile components that require careful handling and specific placement, while another is standard stock that can be quickly processed. They pick up a handful of the standard stock, but their gaze lingers on the delicate items."
+    },
+    {
+      "id": "F7f_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. The headset crackles with incoming calls, while the binder of completed forms lies open. A new application has arrived, marked for immediate attention due to a time-sensitive event, but it\u2019s buried under a thick stack of routine paperwork. The counter is busy, and the person\u2019s hand hovers between the binder and the new application. They decide to process one routine form, their lips pursing slightly as they do."
+    },
+    {
+      "id": "F7f_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The wall calendar shows deadlines looming, and a pile of forms needs filing. A critical patch report is mixed in with standard progress updates, and it\u2019s at the bottom of a hefty stack. The person considers pulling the entire stack, risking disarray, or methodically working through the mundane reports first to reach the vital one. They take a deep breath, eyes narrowed, and grab the top few forms, but their jaw tightens."
+    },
+    {
+      "id": "F7f_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They review a crumpled receipt roll for a fare adjustment, but the system indicates it's already been processed. Their jaw tightens slightly as they consider refiling the issue, knowing it will only add to the backlog and require further explanation. Instead, they set the receipt aside and move to the next ticket, a barely perceptible clenching of their fist at their side."
+    },
+    {
+      "id": "F7f_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. They pick up a worn toolbox, checking its contents against a packing slip. A mismatched set of wrenches causes them to pause, their brow lifting almost imperceptibly as they note the discrepancy. They then place the correct tools in the designated bin, making a mental note to flag the inventory error later."
+    },
+    {
+      "id": "F7f_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. They examine a laptop screen displaying a shipment manifest, then consult a stack of sticky notes. A note with a partially erased address makes them tilt their head, their eyes narrowing slightly as they try to decipher the smudge. They carefully place the sticky note onto the correct manifest line, their lips pressing together briefly."
+    },
+    {
+      "id": "F7f_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. They are trying to organize a pile of documents, but a thermos lid is stuck fast. A slight frown creases their forehead as they apply more pressure, their knuckles whitening on the thermos's metal. They finally twist it open with a sharp pop, then look back at the papers with a hesitant exhale."
+    },
+    {
+      "id": "F7f_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. They are filing out envelopes, but a marker pen runs dry mid-address. They try shaking it, their eyebrows raising in a silent question to the inkless felt tip. After a moment, they set the pen down and reach for another from a nearby cart, their attention already shifting to the next recipient."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

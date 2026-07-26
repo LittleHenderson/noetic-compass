@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F3A_chunk_01",
+  "generated_at_epoch": 1785076338,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F3A_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. The request list is longer than expected, and a crucial item for a specialist is missing. The person checks the bins again, their shoulders slumping slightly before they select a less ideal substitute and add a note to the clipboard, their jaw tightening."
+    },
+    {
+      "id": "F3A_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. A neighbor has repeatedly mislabeled their packages, causing delays. The person scans another incorrectly addressed envelope, their lips thinning into a tight line as they decisively place it in the overflow tray, making a mental note to address the issue later."
+    },
+    {
+      "id": "F3A_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The project deadline is approaching, and several student requests are out of order. The person glances at the timer, then picks up a stray component. They hold it for a moment, a flicker of distaste crossing their face, before dropping it into the disposal bin and continuing the sort with a visible grimace."
+    },
+    {
+      "id": "F3A_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A familiar but troublesome applicant has submitted incomplete paperwork, and the person recognizes the name immediately. They pick up the binder, their gaze dropping to the floor for a brief second as their cheeks flush. They then place the file in the secondary pile, avoiding eye contact with the waiting line."
+    },
+    {
+      "id": "F3A_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. A critical bug fix has just been approved for early deployment. The person scans the final form, their eyes widening slightly and a quick smile touching their lips. They grab a set of keys from the desk, their movements becoming noticeably quicker as they stride towards the release server, a palpable eagerness in their posture."
+    },
+    {
+      "id": "F3A_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They stare at a stack of crumpled receipts, the delay notice a knot in their stomach. A frantic traveler rushes past, glancing at the closed counter. The person grips a receipt roll tighter, their knuckles whitening, and then slowly pushes the entire stack aside, letting the next person in the queue step forward."
+    },
+    {
+      "id": "F3A_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. A volunteer offers a warm meal, a gesture of unexpected aid that stops the person mid-sort. They pause, a slight smile touching their lips as they look at the food, then nod gratefully and accept the plate, their shoulders relaxing."
+    },
+    {
+      "id": "F3A_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. An empty inbox screen flickers on the laptop, mirroring the void left by a canceled shipment. The person stares blankly at a sticky note, their breath catching. They then pick up the note, crumple it slowly, and drop it into the bin, letting out a quiet exhale."
+    },
+    {
+      "id": "F3A_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. The last returned book falls perfectly into place, completing a surprisingly neat pile. A soft hum escapes their lips as they survey the organized stack. They then gather the sorted requests with a flourish, a broad smile spreading across their face as they hand them to the librarian."
+    },
+    {
+      "id": "F3A_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. A child's drawing, slipped into a request envelope, depicts a bright sun. The person's gaze softens as they carefully pull out the paper, tracing the crayon lines. They then gently place the drawing on top of the sorted stack, smoothing it flat with a tender touch."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F7T_chunk_01",
+  "generated_at_epoch": 1785076537,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F7T_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They pick up a bin of expired bandages, a prickle of regret surfacing as they recall not ordering them sooner. A crumpled label sits in their hand, the choice now between re-ordering at a higher price or filing the request as unfulfilled."
+    },
+    {
+      "id": "F7T_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. They pick up a package clearly addressed to a former resident, a familiar ache settling in their chest with the thought of what was lost. The scanner displays the old address, and they must choose to either forward it or discard it according to protocol."
+    },
+    {
+      "id": "F7T_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. They find a set of custom-made tools not listed on any manifest, a quick intake of breath escaping them as they consider the implications. Holding a polished, uniquely shaped tool, they must decide whether to log it as an unauthorized addition or integrate it discreetly into inventory."
+    },
+    {
+      "id": "F7T_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. They process a backlog of applications, their expression unreadable as they review a set of unusual blueprints. A binder filled with outdated zoning laws lies open, and they must choose whether to approve the plans based on current standards or flag them for a review committee."
+    },
+    {
+      "id": "F7T_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. They encounter a meticulously organized set of project files, a slight widening of their eyes at the efficient system. A completed forms packet is in their hand, and they must decide whether to implement this new methodology immediately or stick to the established, albeit slower, procedure."
+    },
+    {
+      "id": "F7T_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. The stack of requests grew, each one a tangled problem demanding attention. They paused, then picked up a crumpled map, a faint smile playing on their lips as they imagined a better path, before setting it aside to tackle the most urgent file. The tension in their shoulders eased slightly with this decision."
+    },
+    {
+      "id": "F7T_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. A recent batch of urgent orders sat in a heap, each needing immediate processing. Grasping a worn toolbox, their jaw tightened, then they abruptly slammed it down, choosing instead to focus on the packing slips. Their breathing became shallow and rapid."
+    },
+    {
+      "id": "F7T_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. The backlog of paperwork was overwhelming, blocking the path to the next shipment. They picked up a sticky note, a flicker of a smirk crossing their face, before tossing it back onto the pile and turning to the laptop. Their movements became jerky."
+    },
+    {
+      "id": "F7T_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. Several urgent notifications had arrived, disrupting the usual calm. They reached for a thermos, a brief nod of acknowledgment passing their lips as they considered a different approach, then picked up the phone to address the most critical item. Their posture straightened noticeably."
+    },
+    {
+      "id": "F7T_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. The list of incoming needs was extensive, with limited resources available. They ran a hand over a stack of envelopes, their brow furrowing slightly, before carefully placing them into a cart and selecting one to process. Their gaze softened as they handled the item."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

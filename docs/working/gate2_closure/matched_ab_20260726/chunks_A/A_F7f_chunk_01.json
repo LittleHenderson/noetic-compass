@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F7f_chunk_01",
+  "generated_at_epoch": 1785076547,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F7f_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. A critical item from a child's treatment is missing, and the system shows no record of its processing. They find the item tucked away in an incorrect bin. As they retrieve it, their breath catches, and their eyes widen momentarily before they quickly secure the item. Now, they must decide whether to flag the oversight or simply correct it and move on."
+    },
+    {
+      "id": "F7f_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. They are processing a large stack of parcels when a small, hand-addressed package with familiar handwriting appears. It's addressed to a former roommate who moved out months ago. A subtle tightening around their jaw occurs as they recognize the sender, and they pause, holding the package slightly tighter. They must then choose whether to return it to sender or put it aside as undeliverable."
+    },
+    {
+      "id": "F7f_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. They are reviewing requests for custom projects when an entry for a student known for exceptional craftsmanship appears. The request is for a deceptively simple item, but the student\u2019s past work hints at a deeper, intricate design. The person\u2019s eyebrows lift slightly, and a faint smile touches their lips as they reread the student's specifications. They must decide if this simple request hides a complex, innovative piece and how much time to allocate to it."
+    },
+    {
+      "id": "F7f_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A backlog of applications sits before them, each requiring careful review. One form, however, stands out\u2014it details an unusual community garden proposal with a quirky, inventive approach to urban farming. The person lets out a short, quiet chuckle, shaking their head slightly as they examine the blueprint. They must now decide whether to approve the unconventional plan or request modifications based on standard procedure."
+    },
+    {
+      "id": "F7f_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The final build is pending, but several urgent bug reports are mixed with routine updates. One report details a critical flaw that was supposedly fixed weeks ago, but the system shows the fix was never deployed. Their jaw clenches, and they grip the edge of the desk for a brief moment. They must decide whether to halt the release to investigate or push it forward and address the report later."
+    },
+    {
+      "id": "F7f_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. A large pile of requests is spreading across the counter, disrupting the usual order. The person picks up a crumpled map, their jaw tightening slightly as they realize a crucial detail has been missed by everyone else. They then have to decide whether to re-route the next available train or send everyone back to the end of the line, knowing it will cause further disruption."
+    },
+    {
+      "id": "F7f_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. Amidst the general preparation, a stack of volunteer sign-up sheets has become jumbled. The person smooths out a packing slip with careful fingers, a gentle nod of understanding passing over their lips as they recognize a pattern of overlooked support. They then choose between assigning the remaining tasks to the most experienced volunteers or attempting to distribute them evenly, hoping to foster a more collaborative atmosphere."
+    },
+    {
+      "id": "F7f_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. A chaotic inbox of delivery manifests needs organizing before the next shipment arrives. The person holds a sticky note, their eyes softening as they recall a previous interaction with a new team member who struggled with the process. They decide whether to assign the complex sorting job to this individual for a learning opportunity or to handle it themselves to guarantee speed and accuracy."
+    },
+    {
+      "id": "F7f_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. The materials for a community event are mixed up, delaying preparations. The person looks at a disorganized stack of brochures, a slight furrow forming between their brows as they try to piece together the correct sequence. They must now choose between proceeding with the current, potentially incorrect, arrangement or halting everything to consult a barely legible master plan, risking further delays."
+    },
+    {
+      "id": "F7f_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. Emergency supply requests are piling up, each one slightly different. The person examines a set of envelopes, tilting their head as they notice an unusual discrepancy in the recipient addresses. They have to decide whether to flag this anomaly for immediate investigation, potentially delaying aid, or to proceed with the distribution based on the available information, hoping it resolves without issue."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F7T_chunk_01",
+  "generated_at_epoch": 1785076541,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F7T_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They pick up a bin of labeled medications, noticing one item is misplaced. A flicker of regret crosses their face before they carefully re-slot the item, then proceed to the next bin."
+    },
+    {
+      "id": "F7T_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. They are scanning incoming packages when they see a small, brightly colored envelope addressed to themselves. Their shoulders slump slightly, and they set it aside unopened as they continue with the stack."
+    },
+    {
+      "id": "F7T_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. While organizing tools on the whiteboard, they find a complex diagram sketched in chalk, far superior to anything they could create. Their eyes widen for a second, and they lean closer to study the lines before returning to the task with a slight frown."
+    },
+    {
+      "id": "F7T_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. They pick up a binder and flip through the pages, checking off completed forms. They then move to the next section of the binder, scanning the sign-in sheet with focused attention."
+    },
+    {
+      "id": "F7T_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. They are reviewing a list of completed tasks on a wall calendar when they notice the meticulous detail in the team's progress notes. A slow smile spreads across their face, and they trace a particularly well-documented entry with a fingertip before resuming their own sorting."
+    },
+    {
+      "id": "F7T_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. The ticket machine hums, and a pile of faded receipts sits on the counter. The person picks up a tattered map, then pauses, their lips twitching upwards into a fleeting grin before they sigh and push it onto the 'to-process' stack, a quiet chuckle escaping their lips."
+    },
+    {
+      "id": "F7T_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. Amidst the clatter of dishes, a stack of packing slips threatens to topple. The person grabs a worn toolbox, then slams it down, their jaw tightening and a low growl rumbling in their chest as they shove the slips into a disorganized pile."
+    },
+    {
+      "id": "F7T_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. The glow of a laptop screen illuminates the grime. The person holds a shiny badge, then abruptly drops it onto the desk, a sharp exhale whistling through their teeth as they flick a cluster of sticky notes into the trash."
+    },
+    {
+      "id": "F7T_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A half-finished thermos of coffee steams nearby. The person examines a crumpled phone message, then nods, a distinct widening of their eyes and a slight, upward curve of their mouth as they carefully place it in the 'urgent' section."
+    },
+    {
+      "id": "F7T_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. A dented cart stands ready for supplies. The person picks up a thick stack of envelopes, then softly places them back down, their shoulders slumping slightly and their brow furrowing with gentle concern as they arrange them neatly, one by one."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F3f_chunk_01",
+  "generated_at_epoch": 1785076366,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F3f_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They pick up a bin of outdated bandages, noting the expiration date is today. A small frown creases their brow as they consider the waste. They then grab a fresh label and begin re-tagging the bin for immediate disposal."
+    },
+    {
+      "id": "F3f_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. A package with a return address from a known scammer arrives. The person pauses, a slight curl of the lip appearing. They then place the item directly into a separate, marked 'return to sender' tray without scanning."
+    },
+    {
+      "id": "F3f_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. A misplaced, very expensive tool kit appears on the list for a beginner's project. The person's cheeks flush as they realize it's been accidentally assigned. They quickly look around before placing the kit aside, out of sight."
+    },
+    {
+      "id": "F3f_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A rush application for a community garden expansion comes through. The person's eyes light up as they read the details about the new green space. They expedite the paperwork, their fingers flying across the keyboard."
+    },
+    {
+      "id": "F3f_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The final build for a critical system update is flagged as 'pending review' due to a minor, yet persistent bug. A tremor runs through the person's hands as they read the warning. They immediately lock down the system, preventing further access."
+    },
+    {
+      "id": "F3f_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue.  The kiosk is packed with urgent travel forms and a faulty receipt printer whirs incessantly.  The person reviews a crumpled map, then sees a notification that their own train is also delayed.  They hesitate, then push the stack of forms aside and quickly check the departure board. "
+    },
+    {
+      "id": "F3f_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue.  Boxes of donated goods litter the floor, and the air is thick with the smell of old coffee. The person picks up a worn toolbox, then a pair of grimy gloves, but their hand stills over a packet of old packing slips.  Their shoulders slump, and they slowly let the slips fall back into the box."
+    },
+    {
+      "id": "F3f_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. Pallets of incoming shipments tower overhead, and the scanner gun beeps erratically. The person places a sticky note on a laptop, then adjusts their badge.  Suddenly, they spot a familiar face across the bay and a wide grin spreads across their cheeks, their focus shifting entirely from the queue."
+    },
+    {
+      "id": "F3f_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. The quiet room is filled with the scent of old paper and lemon polish. The person pours a drink from a thermos, then nudges a folding table.  When they pick up a ringing phone, their voice softens considerably, speaking in hushed, warm tones about a shared memory."
+    },
+    {
+      "id": "F3f_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. The confined space hums with emergency generators, and the air is stale and close. The person unwraps a fresh marker pen, then arranges a stack of envelopes.  A sudden tremor rattles the room, causing their hand to jerk, scattering the envelopes as they instinctively flinch back."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

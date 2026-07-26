@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F3E_chunk_01",
+  "generated_at_epoch": 1785076352,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F3E_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They pick up a bin of expired items, a faint sour scent wafting from it. A bead of sweat traces a path down their temple as they consider what to do with the spoiled contents. Do they dispose of them immediately or try to salvage any usable components before the waste pickup arrives?"
+    },
+    {
+      "id": "F3E_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. They pick up a misaddressed package that clearly belongs to a neighbor. Their cheeks flush as they realize they almost tossed it into the wrong bin earlier. They now have to retrieve it and place it in the correct tray, hoping the recipient doesn't notice the near-mistake."
+    },
+    {
+      "id": "F3E_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. They receive an alert about a sudden influx of urgent orders, each requiring immediate attention. Their pulse quickens as they scan the whiteboard, noting the tight deadline. They rapidly reshuffle the tasks, deciding whether to tackle the most complex order first or start with the simplest to build momentum."
+    },
+    {
+      "id": "F3E_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. The queue system suddenly glitches, displaying a long list of what seem to be incomplete applications. Their breath hitches as they look at the growing stack of unresolved cases. They must choose between manually re-entering each one or waiting for IT to fix the system, risking further delays."
+    },
+    {
+      "id": "F3E_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. A colleague approaches, holding a small, beautifully wrapped gift. The person recognizes the wrapping from a shared inside joke about a past project's success. They accept the offering, a warm feeling spreading through their chest, and decide whether to open it now or save it for later."
+    },
+    {
+      "id": "F3E_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They examine a crumpled map, trying to make sense of a complex route. A recent communication indicates a significant personal setback, but they must still process these tickets. After reviewing a document, they let out a soft exhale, their shoulders slumping slightly before they pick up the next receipt roll."
+    },
+    {
+      "id": "F3E_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. They are organizing various tools and packing slips. A recent success at a local competition has buoyed their spirits, and they are eager to share the good news. Picking up a box of gloves, they hum a little tune and tap their foot rhythmically as they proceed to the next task."
+    },
+    {
+      "id": "F3E_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. A laptop is open, displaying a list of items. Their thoughts are on a deeply valued relationship, and the warmth it brings. As they place a sticky note on a package, their gaze softens, and a faint smile touches their lips before they turn back to the screen."
+    },
+    {
+      "id": "F3E_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. They are arranging a thermos and some papers. A looming presentation has them on edge, and the weight of expectation is palpable. They pick up a ringing phone, their hand trembling slightly as they answer, and their voice is a bit too high-pitched."
+    },
+    {
+      "id": "F3E_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. They are working with a cart full of envelopes and marker pens. A recent forecast suggests a turn for the better, and they feel a sense of relief and anticipation. Grabbing a marker, they draw a small, upward-curving line on an envelope and then select the next one with a swift motion."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

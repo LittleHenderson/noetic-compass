@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F3A_chunk_01",
+  "generated_at_epoch": 1785076343,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F3A_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They pick up a bin of expired bandages, the request form indicating they were meant for a patient's follow-up care. A small sigh escapes their lips as they place the bin aside. The next bin contains urgently needed sterile swabs, but the patient's name on the request doesn't match the label on the bin, forcing a choice between delaying the patient or risking an error."
+    },
+    {
+      "id": "F3A_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. A package is scanned, revealing it's addressed to an apartment with a notorious history of missed payments. The person pauses, their fingers hovering over the numbered trays. They then deliberately place the package in a separate, unmarked pile, their jaw tightening slightly. The next package in the stack is also flagged, presenting the same difficult decision."
+    },
+    {
+      "id": "F3A_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. They examine a complex diagram on the whiteboard, meant to guide the assembly of a project. The timer on the wall shows little time remaining. Their brow furrows, and they quickly grab a spare chair, positioning it to block an access point on the diagram, a grim set to their mouth. A student approaches, asking for clarification on that very section."
+    },
+    {
+      "id": "F3A_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A headset crackles with an inquiry about a permit that was already issued and paid for. The person checks the binder, their face flushing slightly as they confirm the error is theirs. They mute the headset, take a deep breath, and then unmute, preparing to explain the mistake to the waiting applicant. The next call rings in, demanding immediate attention."
+    },
+    {
+      "id": "F3A_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The wall calendar shows the final release date approaching rapidly. A set of keys is held up, marked for immediate deployment to a critical system update. A wide grin stretches across their face as they hold the keys aloft. The next set of forms on the desk represents a routine update, but it also requires deployment to the same system."
+    },
+    {
+      "id": "F3A_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. A stack of tickets for a cancelled trip sits atop the pile, and the kiosk's digital display flashes an urgent notification about further disruptions. The person's hand stills over a form, fingers splaying outward, as a faint tremor runs through their shoulders. They take a slow, shallow breath, eyes fixed on the flashing screen, then finally pick up the next ticket."
+    },
+    {
+      "id": "F3A_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. A missing part for a vital appliance is noted on a slip, and the entire next batch of meals depends on its quick retrieval from the toolbox. The person's eyebrows lift slightly as they find the correct component, a faint, soft sound escaping their lips. They then carefully place the part into a new envelope, sealing it with a practiced motion."
+    },
+    {
+      "id": "F3A_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. A critical delivery has been misrouted, and a single sticky note reveals the error, its faded ink a stark reminder of lost time. The person\u2019s gaze drops to the floor, their jaw tightening, and their shoulders slump almost imperceptibly. After a long pause, they pull the note from the pile and begin to draft a new itinerary."
+    },
+    {
+      "id": "F3A_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A rare book has finally been located and is now confirmed for pick-up, its confirmation slip peeking from the stack. The person\u2019s lips curve upward, and a quiet, pleased hum fills the air as they carefully slide the slip from the top. They then place the confirmed request aside, making a distinct checkmark on a nearby notepad."
+    },
+    {
+      "id": "F3A_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. The last available cot is marked on a form, and the shelter's capacity limit has been reached, leaving a child without a place. The person's eyes dart between the form and the door, their breath catching audibly. They finally set the form down, their movements becoming deliberately slower, and reach for the marker pens to add a note to the manifest."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

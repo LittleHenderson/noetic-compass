@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F3T_chunk_01",
+  "generated_at_epoch": 1785076357,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F3T_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. The task requires meticulously organizing numerous medical supply orders into labeled bins before the end of the shift. A particular set of items, however, feels like a vital personal need, a deep impulse to obtain them and make them part of their own resource pool, beyond the official count. They look at the limited stock, then at their own work log, and finally choose to subtly divert a small, necessary bundle, tucking it away quickly."
+    },
+    {
+      "id": "F3T_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. Boxes and envelopes are piled high, waiting to be assigned to numbered trays. The deadline is looming, and the pressure mounts with each passing minute. The individual notices a package addressed to a former resident, one they recognize. A profound sense of letdown washes over them, realizing they cannot fulfill a silent, personal hope that this might finally be the item they anticipated. They then place the package with the other undeliverables, their shoulders slumping slightly."
+    },
+    {
+      "id": "F3T_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The task involves organizing student project materials, ensuring everything is accounted for and returned to its proper place. While tidying, they find a unique, custom-made tool that clearly doesn't belong to any current student. This item, however, seems perfectly suited to a long-cherished personal project, a tool they've only imagined. They pick it up, inspect it with a frown, and then deliberately place it aside, separate from the other sorted items, their jaw tightening."
+    },
+    {
+      "id": "F3T_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. The work involves processing a backlog of applications, each requiring careful review and stamping. A specific application stands out, not for its content, but for its unusual, slightly soiled appearance. A deep revulsion rises in the person, a visceral reaction to its perceived impurity, which clashes with their own meticulous standards. They push the document away with the edge of their hand, then resolutely move to the next one, their nostrils flaring briefly."
+    },
+    {
+      "id": "F3T_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The task is to organize a pile of forms and access keys, ensuring each item is correctly assigned before the next release cycle. They discover a specific set of keys that look remarkably similar to ones they misplaced recently, possibly leading to a personal complication. A flush creeps up their neck, a wave of mortification at the potential overlap and the trouble it might cause. They quickly place the keys back into the general pile, not marking them as separate, their gaze fixed on the wall calendar."
+    },
+    {
+      "id": "F3T_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They pick up a crumpled map, the last item on the pile, noticing it\u2019s for a route that was recently rerouted. A slight smile plays on their lips as they re-route the request mentally, feeling a surge of clarity about the day\u2019s unfolding tasks. They tap the map briskly and place it on the completed pile."
+    },
+    {
+      "id": "F3T_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. They are handling a box of expired food donations when a customer unexpectedly appears at the door, unannounced. Their shoulders tense, and their breath catches as they quickly push the box behind the counter. They then step forward, forcing a neutral expression."
+    },
+    {
+      "id": "F3T_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. While reviewing a batch of packing slips, they find a note from a former colleague expressing thanks for past help. Their eyes soften, and a warm feeling spreads through their chest. They carefully tuck the note into their pocket before resuming work on the slips."
+    },
+    {
+      "id": "F3T_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. Sorting through old meeting minutes, they come across a reference to a project that was abruptly cancelled, a project they had poured significant effort into. A visible wave of sadness washes over their face, and their hands tremble slightly as they set the papers aside. They stare blankly at the thermos for a moment."
+    },
+    {
+      "id": "F3T_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. As they organize a stack of envelopes, they discover a small, hand-drawn picture slipped inside one. It depicts a vibrant sun with a cheerful message, a remnant from a child they\u2019d helped earlier. Their eyes widen, and a broad grin spreads across their face. They hold the drawing up for a moment before carefully placing it on top of the sorted envelopes."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

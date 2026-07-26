@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F4f_chunk_01",
+  "generated_at_epoch": 1785076419,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F4f_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. The person needs to retrieve specific medical supplies for a patient's treatment plan, but the request is for a drug that is out of stock and has a long lead time. The person looks at the empty shelf where the item should be, then slowly shakes their head, their jaw tightening slightly. They must decide whether to inform the attending physician immediately, risking a delay in care, or try to find a substitute that might not be as effective."
+    },
+    {
+      "id": "F4f_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. A package arrives that is addressed to a former resident who recently passed away. The person hesitates, holding the package, their brow furrowing as they recall conversations with the deceased about their family. They then carefully set the package aside, separate from the others, and make a mental note to contact the building manager about forwarding it to the next of kin. They begin scanning the next item with a more deliberate pace."
+    },
+    {
+      "id": "F4f_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. A student's project submission is found in the queue, but it's damaged beyond repair, looking like it fell from a height. The person examines the broken pieces, their shoulders slumping and their gaze distant. They must choose how to approach the student: deliver the bad news directly, or attempt to salvage what's left and help them rebuild, knowing it might be too late to meet the deadline."
+    },
+    {
+      "id": "F4f_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. An application is processed that, upon review, is missing a critical signature required for approval. The person finds the relevant section on the binder's pages, a small, involuntary smile touching their lips as they recognize the applicant's name from a previous positive interaction. They place the binder on a separate pile for follow-up, a light, almost buoyant feeling accompanying their next action. They then pick up the headset to assist the next person."
+    },
+    {
+      "id": "F4f_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. A critical bug report is discovered within the backlog of low-priority items. The person reviews the report, their eyes widening slightly and their breath catching for a moment. They then quickly grab a spare form, their fingers tapping a light rhythm on its surface. They must decide whether to escalate the issue immediately, potentially disrupting the current release schedule, or wait for the scheduled review, risking unforeseen consequences."
+    },
+    {
+      "id": "F4f_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. The system is unexpectedly slow, and a crucial document is missing from the current stack. The person leans forward, hands hovering over the receipt roll, a faint tremor in their fingers as they scan the piles again, then suddenly jerks back slightly. They then turn to the digital display, re-entering the request details with a quick, sharp tap of their finger."
+    },
+    {
+      "id": "F4f_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. Their task is to organize meal tickets for the evening. They notice a ticket for a large family that was almost overlooked, tucked beneath a stack of packing slips. A broad smile stretches across their face, and they hum softly as they place the ticket prominently on top. They then efficiently gather the remaining tickets, placing them in the toolbox for safekeeping."
+    },
+    {
+      "id": "F4f_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. They are reviewing inventory discrepancies on a laptop. A specific item, marked as low stock, is suddenly located by a colleague. The person\u2019s posture straightens, their shoulders lifting as they look up from the screen, a faint flush rising on their cheeks. They then calmly update the laptop with the new information and close the file."
+    },
+    {
+      "id": "F4f_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. They are organizing pamphlets for an upcoming event. While reviewing the content of one, their eyes widen, and their breath catches. The person stops typing on their phone, their mouth falling slightly open as they stare at the paper. They slowly lower the pamphlet, their gaze fixed on the thermos beside them, before carefully placing the document aside."
+    },
+    {
+      "id": "F4f_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. They are managing incoming supply manifests. A critical delivery, long overdue and presumed lost, is confirmed as arrived. The person exhales a long, slow breath, their shoulders visibly relaxing, and a slight smile touches their lips as they look down at the marker pens. They then grab a fresh envelope and swiftly begin marking it with a new destination."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

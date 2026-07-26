@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F5f_chunk_01",
+  "generated_at_epoch": 1785076465,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F5f_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. The stack of pending orders is higher than yesterday, and each label on the clipboard is smudged. As they pick up a bin, their lips press together, and they then carefully select the next item, aligning it perfectly before placing it down. The task requires careful attention to detail, but a different, deeper fulfillment is sought in the act of bringing order to the chaos for those who rely on these supplies."
+    },
+    {
+      "id": "F5f_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. A pile of unaddressed packages teeters precariously on the scanner. Taking a deep, quiet breath, they then grip the scanner with a white-knuckled hold, their brow furrowed as they consider each package. The job is simple, but a growing unease about missing a critical delivery creates a knot in their stomach."
+    },
+    {
+      "id": "F5f_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The timer on the whiteboard shows they are behind schedule for material allocation. With a slight upward tilt of their chin, they then grab a stack of materials, quickly checking each one before placing it on the designated spare chair. A sense of bright expectation fills them as they anticipate the positive outcomes of their efficient work."
+    },
+    {
+      "id": "F5f_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. The binder is nearly full, and a long line has formed. Their chest expands slightly, and they then reach for the headset, adjusting it with a steady hand before speaking to the next applicant. Bringing order to these procedures brings a deep sense of personal accomplishment and a feeling of being highly capable."
+    },
+    {
+      "id": "F5f_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The wall calendar shows a deadline that has already passed for several items. Their eyes widen almost imperceptibly, and they then pick up a form, their hand pausing for a moment before they carefully begin to fill it out. A new understanding about a critical path forward in the project suddenly becomes clear."
+    },
+    {
+      "id": "F5f_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. While reviewing the backlog of passenger inquiries, they notice a pattern of repeated issues. The system is fundamentally flawed, making their efforts futile. They finally find a workaround that bypasses the main error, letting the queue clear. Their shoulders visibly relax as they lean back, the tension draining from their jaw."
+    },
+    {
+      "id": "F5f_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. They are organizing notes about an upcoming event, but realize a critical detail was missed on the original plan, causing potential issues for volunteers. They quickly draft a revised instruction sheet, addressing the oversight. Their gaze drops to the floor for a moment, and they rub their temples before continuing with their task."
+    },
+    {
+      "id": "F5f_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. The task involves processing old inventory data, and they uncover a record of a significant error they made months ago, which was never corrected. They stare at the screen, hands still. The weight of the past mistake settles in, visible in the slight slump of their posture as they slowly close the file."
+    },
+    {
+      "id": "F5f_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. While organizing a stack of research papers, they come across an unexpected and highly relevant piece of information that changes their entire perspective. Their eyes widen slightly, and they quickly pick up their phone, fingers hovering over the screen, before a small smile touches their lips. They decide to immediately follow up on this new lead."
+    },
+    {
+      "id": "F5f_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. The task involves categorizing emergency supply manifests, a routine procedure. They methodically go through each item, ensuring it's correctly logged. A faint, almost imperceptible nod accompanies the completion of the final entry. They then set the completed list aside, ready for the next task with steady hands and an even tone."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

@@ -1,0 +1,57 @@
+{
+  "arm": "D",
+  "char_results": {
+    "foundation_answer_stripped": 0.010714285714285714,
+    "goemotion_answer_stripped": 0.13214285714285715
+  },
+  "cv_seed_sensitivity": {
+    "foundation_answer_stripped": {
+      "char": [
+        0.010714285714285714,
+        0.0035714285714285713,
+        0.0035714285714285713,
+        0.0035714285714285713,
+        0.007142857142857143
+      ],
+      "word": [
+        0.007142857142857143,
+        0.0035714285714285713,
+        0.007142857142857143,
+        0.0035714285714285713,
+        0.0035714285714285713
+      ]
+    },
+    "note": "descriptive only (pre-registered): the primary surface numbers use random_state=0; this report shows CV-seed spread for the two surface numbers entering surface_X",
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "fixture": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\docs\\working\\gate2_closure\\matched_ab_20260726\\fixture_arm_D.json",
+  "fixture_sha256": "f5b604ca1be693713c883b2984b42d9825e4fb26e11371876a6cacc5293ffd5b",
+  "schema_version": "gate2_closure_matched_ab_surface_gate.v2",
+  "surface": {
+    "components": {
+      "char_foundation": 0.010714285714285714,
+      "char_goemotion": 0.13214285714285715,
+      "word_foundation": 0.007142857142857143,
+      "word_goemotion": 0.11428571428571428
+    },
+    "foundation_answer_stripped": 0.010714285714285714,
+    "goemotion_answer_stripped": 0.13214285714285715,
+    "rule": "surface_X = max(word_tfidf_answer_stripped, char_3to5_gram_answer_stripped) per arm, per label task"
+  },
+  "threshold": 0.6,
+  "verdict": "PASS",
+  "word_results": {
+    "drive_answer_stripped": 0.11785714285714285,
+    "foundation_answer_stripped": 0.007142857142857143,
+    "foundation_raw": 0.007142857142857143,
+    "goemotion_answer_stripped": 0.11428571428571428,
+    "goemotion_raw": 0.11785714285714285,
+    "register_answer_stripped": 0.16785714285714287
+  }
+}

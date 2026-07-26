@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F6E_chunk_01",
+  "generated_at_epoch": 1785076490,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F6E_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They check a bin of gauze that is far too large for the unit's usual needs, then pause, a slight exhale escaping their lips as they realize they can set aside the excess for a future, different need. The choice is to immediately process all items or to flag the surplus for later. They decide to flag the surplus, a small gesture of contentment passing over their features."
+    },
+    {
+      "id": "F6E_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. They scan a package addressed to a former resident and hesitate, a frown creasing their brow. The internal conflict is whether to attempt to re-route it or simply set it aside with the other misaddressed items. They place the package in the re-routing bin, their shoulders slumping slightly as they continue the task, a faint flush rising on their cheeks."
+    },
+    {
+      "id": "F6E_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The timer on the whiteboard shows they are running far behind. They pick up a box of fasteners, noting its considerable weight and volume, more than enough for the current project. A wave of despondency washes over them as they consider the implications for future projects, seeing the sheer amount of material. They decide to set the entire box aside for a separate inventory later, their lower lip trembling almost imperceptibly."
+    },
+    {
+      "id": "F6E_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. They pick up a stack of forms related to a large-scale development project, far exceeding the typical scope. A look of disbelief spreads across their face as they realize the implications of the sheer volume. Their hand trembles slightly as they place the stack on the desk, then they turn to the next item, their eyes wide for a moment before resuming the work."
+    },
+    {
+      "id": "F6E_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. They examine a large crate of outdated hardware components scheduled for disposal. The sheer quantity feels overwhelming. They push the crate aside to deal with it later, then turn back to the stack of routine forms on their desk, their expression impassive as they continue the sorting process."
+    },
+    {
+      "id": "F6E_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. A new shipment of essential supplies has arrived, but the person is holding onto a disproportionate amount for personal use, blocking others from accessing them. They justify this by claiming they need to safeguard them. As the queue grows longer, a colleague points out the dwindling communal stores. The person slowly places a few items from their personal stash onto the communal pile, their jaw tight."
+    },
+    {
+      "id": "F6E_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. A delivery of specialty ingredients has arrived, and the person is carefully sifting through them, setting aside a significant portion of the rarer items for their own project, claiming it\u2019s for a \u2018special recipe\u2019. They arrange these items in a private bin, carefully arranging them. When asked to share, the person makes a joking remark, then gestures vaguely at the communal pots, their eyes twinkling."
+    },
+    {
+      "id": "F6E_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. A large order of valuable tools has been processed, but the person is seen organizing a substantial portion into a personal locker, citing a need for 'specialized maintenance' before they can be issued. They methodically secure the locker. As a critical deadline approaches and tools are needed, the person slams a fist against the locker, then grudgingly unlocks it and hands over only a few items."
+    },
+    {
+      "id": "F6E_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. While reviewing forms, the person keeps adding extra paper supplies to their personal desk, justifying it as 'preparation for unexpected needs'. They meticulously arrange the extra stacks. When the supply closet runs out and a supervisor asks why, the person starts stacking the extra paper into a precarious tower, their lips pursed tightly."
+    },
+    {
+      "id": "F6E_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. A box of emergency blankets has been opened, and the person is carefully folding and setting aside several of them, remarking on their superior quality and personal comfort needs. They place these aside neatly. When a new arrival shivers, the person hands over one of the reserved blankets with a tight smile, their gaze briefly flicking to the remaining pile."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

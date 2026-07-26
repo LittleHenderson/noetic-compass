@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F6f_chunk_01",
+  "generated_at_epoch": 1785076512,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F6f_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They begin by organizing a stack of patient forms on a clipboard. A sudden, sharp intake of breath escapes them as they notice a critical error overlooked on a previous entry. Their shoulders stiffen for a moment, then they slowly pick up a red pen to correct the mistake before placing it in a labeled bin."
+    },
+    {
+      "id": "F6f_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. They scan a package, then pause, a slow exhale escaping their lips. Checking the address again, they confirm the recipient is no longer a resident. A small, almost imperceptible smile touches their lips as they move the package to the outgoing tray marked 'Return to Sender' with a piece of tape."
+    },
+    {
+      "id": "F6f_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. They are reviewing a project plan on the whiteboard, tapping a marker against their palm. They stop, their eyes widening slightly as they recall a crucial step omitted from the initial design. Their jaw clenches, and they immediately grab a different colored marker to add the missing detail, their movements becoming more deliberate."
+    },
+    {
+      "id": "F6f_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. They are reviewing a binder of applications, their brow furrowed. A low sigh escapes them as they find a document that indicates a significant delay in a critical approval. Their shoulders slump almost imperceptibly, and they carefully place the binder aside, picking up a new application from the stack to continue."
+    },
+    {
+      "id": "F6f_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. They are checking a wall calendar for a specific date, then freeze, their eyes fixed on the page. A sudden, sharp widening of their eyes occurs as they notice the current date is already past the scheduled release. They drop the marker they were holding, their mouth falling open slightly as they stare at the calendar."
+    },
+    {
+      "id": "F6f_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. The terminal flickers, showing a jumbled list of urgent travel needs. The person hesitates, then decisively picks up a crumpled map, pushing it to the side of the pile, choosing to address the simpler tasks first before tackling the complex ones."
+    },
+    {
+      "id": "F6f_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. Among the paperwork are notes about a special community meal. The person pauses, a slight upward turn at the corners of their mouth as they notice a detailed recipe card, before setting it aside carefully, signaling intent to prepare it with care."
+    },
+    {
+      "id": "F6f_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. The screen shows a mix of inventory logs and shipping manifests. The person picks up a sticky note with a doodle on it, tilting their head with a subtle grin, then places it atop a stack of routine paperwork, indicating a lighthearted approach to the work."
+    },
+    {
+      "id": "F6f_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A stack of overdue notices sits prominently. The person slams a fist lightly on the table, then forcefully shoves the entire pile of notices into a single folder, their jaw tight, showing a clear preference for dealing with accumulated issues quickly."
+    },
+    {
+      "id": "F6f_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. Unopened mail is mixed with urgent advisories. The person sighs, their shoulders slumping slightly as they pick up an envelope addressed with a barely legible scrawl, then quickly tosses it onto a separate, smaller pile, prioritizing clarity over completeness."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

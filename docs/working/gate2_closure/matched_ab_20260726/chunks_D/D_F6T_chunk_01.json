@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F6T_chunk_01",
+  "generated_at_epoch": 1785076504,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F6T_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. The individual reviews a long list of patient needs, each item marked urgent, and sees a pattern where certain types of requests are consistently overlooked. A small smile touches their lips as they devise a new sequential handling process, a flicker of anticipation in their gaze as they imagine the improved patient care flow. They confidently grab a fresh set of labels, ready to implement the adjustment."
+    },
+    {
+      "id": "F6T_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. Packages are piling up, and a specific building wing\u2019s mail has been sitting for days. As they scan a misdelivered parcel, the recipient\u2019s name from that wing triggers a memory of a prior oversight. Their shoulders straighten, and they grip the scanner a bit tighter, before carefully placing the package onto the correct numbered tray and focusing with renewed intensity."
+    },
+    {
+      "id": "F6T_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. A complex project has stalled, with student requests for specific tools scattered and unfulfilled. Looking at the whiteboard filled with unfinished tasks, they suddenly grasp how a simple change in the tool checkout system could resolve the bottlenecks. A sharp intake of breath is followed by them swiftly wiping a section of the whiteboard clean, preparing to sketch out the new arrangement."
+    },
+    {
+      "id": "F6T_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A queue of frustrated residents waits, each with a different permit application that has been sitting for weeks. They pick up the headset to clarify a building code detail on a particularly complex application and realize the entire department\u2019s workflow is creating these backlogs. Their shoulders sag momentarily, then they take a deep breath and turn to the binder, reordering the pending forms with deliberate calm."
+    },
+    {
+      "id": "F6T_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. A crucial software update is behind schedule, with bug reports and feature requests languishing unaddressed. Glancing at the wall calendar, they connect the overdue tasks to a recent, poorly communicated change in the development team\u2019s process. Their jaw tightens, and they slowly trace a finger over the current date on the calendar before picking up a stack of forms, their movements precise and deliberate."
+    },
+    {
+      "id": "F6T_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They were supposed to group customer inquiries by destination, but a critical piece of the sorting logic is missing, leaving the entire process stalled. The person stares at a crumpled map, shoulders slumping as they review the remaining documents, the weight of the backlog pressing down. They finally push the entire stack aside, deciding to start over from scratch later."
+    },
+    {
+      "id": "F6T_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. A complex inventory of donated goods needs to be cataloged, but a crucial label is illegible, making a whole bin unidentifiable. They hold up a dusty toolbox, frowning as the packing slips flutter in a sudden draft. With a sharp inhale, they slam the toolbox down and vigorously scrub at the offending label with a rag."
+    },
+    {
+      "id": "F6T_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. The task involves categorizing incoming shipments using a laptop, but the system is exceptionally slow, causing items to pile up. The person taps a sticky note, their gaze fixed on the blank screen. They reboot the laptop, then turn their attention to meticulously organizing the physical items instead."
+    },
+    {
+      "id": "F6T_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. They were supposed to compile research materials, but a particularly insightful passage in a document catches their eye, diverting their focus. They hold a steaming thermos, eyes widening as they reread the highlighted text. A slow smile spreads across their face as they reach for their phone to record a note."
+    },
+    {
+      "id": "F6T_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. The job is to organize emergency supplies, but a mislabeled box contains something entirely unexpected and incongruous. They pick up a cart full of envelopes, a flicker of disbelief crossing their features. A sudden snort escapes them, and they shake their head, a grin playing on their lips as they begin repackaging the contents."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

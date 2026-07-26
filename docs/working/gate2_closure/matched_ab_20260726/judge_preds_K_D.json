@@ -1,0 +1,2802 @@
+[
+  {
+    "foundation": "F5E",
+    "goemotion": "desire",
+    "id": "row_0000"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "anger",
+    "id": "row_0001"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "desire",
+    "id": "row_0002"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "confusion",
+    "id": "row_0003"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "disapproval",
+    "id": "row_0004"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "relief",
+    "id": "row_0005"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "annoyance",
+    "id": "row_0006"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "anger",
+    "id": "row_0007"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "remorse",
+    "id": "row_0008"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "amusement",
+    "id": "row_0009"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "caring",
+    "id": "row_0010"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "annoyance",
+    "id": "row_0011"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "nervousness",
+    "id": "row_0012"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "disappointment",
+    "id": "row_0013"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "surprise",
+    "id": "row_0014"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "disappointment",
+    "id": "row_0015"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "curiosity",
+    "id": "row_0016"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "amusement",
+    "id": "row_0017"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "realization",
+    "id": "row_0018"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "relief",
+    "id": "row_0019"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "sadness",
+    "id": "row_0020"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "annoyance",
+    "id": "row_0021"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "desire",
+    "id": "row_0022"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "row_0023"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "disgust",
+    "id": "row_0024"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "disappointment",
+    "id": "row_0025"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "sadness",
+    "id": "row_0026"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "confusion",
+    "id": "row_0027"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "relief",
+    "id": "row_0028"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "caring",
+    "id": "row_0029"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "annoyance",
+    "id": "row_0030"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "curiosity",
+    "id": "row_0031"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0032"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "embarrassment",
+    "id": "row_0033"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "optimism",
+    "id": "row_0034"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "sadness",
+    "id": "row_0035"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "caring",
+    "id": "row_0036"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "annoyance",
+    "id": "row_0037"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "amusement",
+    "id": "row_0038"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "nervousness",
+    "id": "row_0039"
+  },
+  {
+    "foundation": "F1f",
+    "goemotion": "disappointment",
+    "id": "row_0040"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "joy",
+    "id": "row_0041"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "realization",
+    "id": "row_0042"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "amusement",
+    "id": "row_0043"
+  },
+  {
+    "foundation": "F6f",
+    "goemotion": "annoyance",
+    "id": "row_0044"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "curiosity",
+    "id": "row_0045"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "admiration",
+    "id": "row_0046"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "embarrassment",
+    "id": "row_0047"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "sadness",
+    "id": "row_0048"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "nervousness",
+    "id": "row_0049"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "annoyance",
+    "id": "row_0050"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "nervousness",
+    "id": "row_0051"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "neutral",
+    "id": "row_0052"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "confusion",
+    "id": "row_0053"
+  },
+  {
+    "foundation": "F2T",
+    "goemotion": "nervousness",
+    "id": "row_0054"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "curiosity",
+    "id": "row_0055"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "confusion",
+    "id": "row_0056"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "realization",
+    "id": "row_0057"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "annoyance",
+    "id": "row_0058"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "relief",
+    "id": "row_0059"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "joy",
+    "id": "row_0060"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "gratitude",
+    "id": "row_0061"
+  },
+  {
+    "foundation": "F5f",
+    "goemotion": "optimism",
+    "id": "row_0062"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "disapproval",
+    "id": "row_0063"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "amusement",
+    "id": "row_0064"
+  },
+  {
+    "foundation": "F2T",
+    "goemotion": "caring",
+    "id": "row_0065"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "remorse",
+    "id": "row_0066"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "joy",
+    "id": "row_0067"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "desire",
+    "id": "row_0068"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "relief",
+    "id": "row_0069"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "amusement",
+    "id": "row_0070"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "curiosity",
+    "id": "row_0071"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "gratitude",
+    "id": "row_0072"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "anger",
+    "id": "row_0073"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "fear",
+    "id": "row_0074"
+  },
+  {
+    "foundation": "F6f",
+    "goemotion": "nervousness",
+    "id": "row_0075"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "curiosity",
+    "id": "row_0076"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "disappointment",
+    "id": "row_0077"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "caring",
+    "id": "row_0078"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "relief",
+    "id": "row_0079"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "annoyance",
+    "id": "row_0080"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "anger",
+    "id": "row_0081"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "disappointment",
+    "id": "row_0082"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "curiosity",
+    "id": "row_0083"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "annoyance",
+    "id": "row_0084"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "surprise",
+    "id": "row_0085"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "sadness",
+    "id": "row_0086"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "nervousness",
+    "id": "row_0087"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "sadness",
+    "id": "row_0088"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "sadness",
+    "id": "row_0089"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "annoyance",
+    "id": "row_0090"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "annoyance",
+    "id": "row_0091"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "disappointment",
+    "id": "row_0092"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "gratitude",
+    "id": "row_0093"
+  },
+  {
+    "foundation": "F5f",
+    "goemotion": "pride",
+    "id": "row_0094"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "annoyance",
+    "id": "row_0095"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "caring",
+    "id": "row_0096"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "gratitude",
+    "id": "row_0097"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "realization",
+    "id": "row_0098"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "curiosity",
+    "id": "row_0099"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "caring",
+    "id": "row_0100"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "disgust",
+    "id": "row_0101"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "realization",
+    "id": "row_0102"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "nervousness",
+    "id": "row_0103"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "disappointment",
+    "id": "row_0104"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "optimism",
+    "id": "row_0105"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "anger",
+    "id": "row_0106"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "caring",
+    "id": "row_0107"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "pride",
+    "id": "row_0108"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "disappointment",
+    "id": "row_0109"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "realization",
+    "id": "row_0110"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "nervousness",
+    "id": "row_0111"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "relief",
+    "id": "row_0112"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "pride",
+    "id": "row_0113"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "realization",
+    "id": "row_0114"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "confusion",
+    "id": "row_0115"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "disappointment",
+    "id": "row_0116"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "amusement",
+    "id": "row_0117"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "annoyance",
+    "id": "row_0118"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "annoyance",
+    "id": "row_0119"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "relief",
+    "id": "row_0120"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "caring",
+    "id": "row_0121"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "nervousness",
+    "id": "row_0122"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "remorse",
+    "id": "row_0123"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "desire",
+    "id": "row_0124"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "caring",
+    "id": "row_0125"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "disappointment",
+    "id": "row_0126"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "joy",
+    "id": "row_0127"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "joy",
+    "id": "row_0128"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "amusement",
+    "id": "row_0129"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "remorse",
+    "id": "row_0130"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "embarrassment",
+    "id": "row_0131"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0132"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "relief",
+    "id": "row_0133"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "approval",
+    "id": "row_0134"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "sadness",
+    "id": "row_0135"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "caring",
+    "id": "row_0136"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "realization",
+    "id": "row_0137"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "joy",
+    "id": "row_0138"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "sadness",
+    "id": "row_0139"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "neutral",
+    "id": "row_0140"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "curiosity",
+    "id": "row_0141"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "fear",
+    "id": "row_0142"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "row_0143"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "annoyance",
+    "id": "row_0144"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "realization",
+    "id": "row_0145"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "disappointment",
+    "id": "row_0146"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "approval",
+    "id": "row_0147"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "excitement",
+    "id": "row_0148"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "relief",
+    "id": "row_0149"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "annoyance",
+    "id": "row_0150"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "embarrassment",
+    "id": "row_0151"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "remorse",
+    "id": "row_0152"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "joy",
+    "id": "row_0153"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "gratitude",
+    "id": "row_0154"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "relief",
+    "id": "row_0155"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "nervousness",
+    "id": "row_0156"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "relief",
+    "id": "row_0157"
+  },
+  {
+    "foundation": "F1T",
+    "goemotion": "joy",
+    "id": "row_0158"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "amusement",
+    "id": "row_0159"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "realization",
+    "id": "row_0160"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "sadness",
+    "id": "row_0161"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "caring",
+    "id": "row_0162"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "annoyance",
+    "id": "row_0163"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "neutral",
+    "id": "row_0164"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "approval",
+    "id": "row_0165"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "disappointment",
+    "id": "row_0166"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "joy",
+    "id": "row_0167"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "surprise",
+    "id": "row_0168"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "caring",
+    "id": "row_0169"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "disappointment",
+    "id": "row_0170"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "relief",
+    "id": "row_0171"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "annoyance",
+    "id": "row_0172"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "annoyance",
+    "id": "row_0173"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "curiosity",
+    "id": "row_0174"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "surprise",
+    "id": "row_0175"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "optimism",
+    "id": "row_0176"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "joy",
+    "id": "row_0177"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "confusion",
+    "id": "row_0178"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "disappointment",
+    "id": "row_0179"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "approval",
+    "id": "row_0180"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0181"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "pride",
+    "id": "row_0182"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "confusion",
+    "id": "row_0183"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "excitement",
+    "id": "row_0184"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "optimism",
+    "id": "row_0185"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "approval",
+    "id": "row_0186"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "annoyance",
+    "id": "row_0187"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "disappointment",
+    "id": "row_0188"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "remorse",
+    "id": "row_0189"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "caring",
+    "id": "row_0190"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "nervousness",
+    "id": "row_0191"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "annoyance",
+    "id": "row_0192"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "excitement",
+    "id": "row_0193"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "embarrassment",
+    "id": "row_0194"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "amusement",
+    "id": "row_0195"
+  },
+  {
+    "foundation": "F1f",
+    "goemotion": "surprise",
+    "id": "row_0196"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "disapproval",
+    "id": "row_0197"
+  },
+  {
+    "foundation": "F2T",
+    "goemotion": "caring",
+    "id": "row_0198"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "annoyance",
+    "id": "row_0199"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0200"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "surprise",
+    "id": "row_0201"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "curiosity",
+    "id": "row_0202"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "curiosity",
+    "id": "row_0203"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "disapproval",
+    "id": "row_0204"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "relief",
+    "id": "row_0205"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0206"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "confusion",
+    "id": "row_0207"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "joy",
+    "id": "row_0208"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "remorse",
+    "id": "row_0209"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "surprise",
+    "id": "row_0210"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "disappointment",
+    "id": "row_0211"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "sadness",
+    "id": "row_0212"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "amusement",
+    "id": "row_0213"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "realization",
+    "id": "row_0214"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "nervousness",
+    "id": "row_0215"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "amusement",
+    "id": "row_0216"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "annoyance",
+    "id": "row_0217"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "pride",
+    "id": "row_0218"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "fear",
+    "id": "row_0219"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "excitement",
+    "id": "row_0220"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "annoyance",
+    "id": "row_0221"
+  },
+  {
+    "foundation": "F6f",
+    "goemotion": "approval",
+    "id": "row_0222"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "nervousness",
+    "id": "row_0223"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "amusement",
+    "id": "row_0224"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "surprise",
+    "id": "row_0225"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "annoyance",
+    "id": "row_0226"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "row_0227"
+  },
+  {
+    "foundation": "F5f",
+    "goemotion": "embarrassment",
+    "id": "row_0228"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "remorse",
+    "id": "row_0229"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "row_0230"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "optimism",
+    "id": "row_0231"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "surprise",
+    "id": "row_0232"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "disapproval",
+    "id": "row_0233"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "surprise",
+    "id": "row_0234"
+  },
+  {
+    "foundation": "F1f",
+    "goemotion": "annoyance",
+    "id": "row_0235"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "caring",
+    "id": "row_0236"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "annoyance",
+    "id": "row_0237"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "anger",
+    "id": "row_0238"
+  },
+  {
+    "foundation": "F1f",
+    "goemotion": "disappointment",
+    "id": "row_0239"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "realization",
+    "id": "row_0240"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "disappointment",
+    "id": "row_0241"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "caring",
+    "id": "row_0242"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "disappointment",
+    "id": "row_0243"
+  },
+  {
+    "foundation": "F5A",
+    "goemotion": "confusion",
+    "id": "row_0244"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "confusion",
+    "id": "row_0245"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "anger",
+    "id": "row_0246"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "annoyance",
+    "id": "row_0247"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "excitement",
+    "id": "row_0248"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "curiosity",
+    "id": "row_0249"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "embarrassment",
+    "id": "row_0250"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "amusement",
+    "id": "row_0251"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "fear",
+    "id": "row_0252"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0253"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "disappointment",
+    "id": "row_0254"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "row_0255"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "sadness",
+    "id": "row_0256"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "disappointment",
+    "id": "row_0257"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "annoyance",
+    "id": "row_0258"
+  },
+  {
+    "foundation": "F6f",
+    "goemotion": "disapproval",
+    "id": "row_0259"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "sadness",
+    "id": "row_0260"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "annoyance",
+    "id": "row_0261"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "joy",
+    "id": "row_0262"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "realization",
+    "id": "row_0263"
+  },
+  {
+    "foundation": "F5f",
+    "goemotion": "optimism",
+    "id": "row_0264"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "fear",
+    "id": "row_0265"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "caring",
+    "id": "row_0266"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "disapproval",
+    "id": "row_0267"
+  },
+  {
+    "foundation": "F5A",
+    "goemotion": "neutral",
+    "id": "row_0268"
+  },
+  {
+    "foundation": "F7A",
+    "goemotion": "surprise",
+    "id": "row_0269"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "fear",
+    "id": "row_0270"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "optimism",
+    "id": "row_0271"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "sadness",
+    "id": "row_0272"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "curiosity",
+    "id": "row_0273"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "nervousness",
+    "id": "row_0274"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "annoyance",
+    "id": "row_0275"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "joy",
+    "id": "row_0276"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "amusement",
+    "id": "row_0277"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "approval",
+    "id": "row_0278"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "nervousness",
+    "id": "row_0279"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "nervousness",
+    "id": "row_0280"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "approval",
+    "id": "row_0281"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "optimism",
+    "id": "row_0282"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "nervousness",
+    "id": "row_0283"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "disappointment",
+    "id": "row_0284"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "annoyance",
+    "id": "row_0285"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "anger",
+    "id": "row_0286"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "approval",
+    "id": "row_0287"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "love",
+    "id": "row_0288"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "sadness",
+    "id": "row_0289"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "fear",
+    "id": "row_0290"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "fear",
+    "id": "row_0291"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "surprise",
+    "id": "row_0292"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "annoyance",
+    "id": "row_0293"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "joy",
+    "id": "row_0294"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "excitement",
+    "id": "row_0295"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "confusion",
+    "id": "row_0296"
+  },
+  {
+    "foundation": "F5A",
+    "goemotion": "admiration",
+    "id": "row_0297"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "realization",
+    "id": "row_0298"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "sadness",
+    "id": "row_0299"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "fear",
+    "id": "row_0300"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "disappointment",
+    "id": "row_0301"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "relief",
+    "id": "row_0302"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "nervousness",
+    "id": "row_0303"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0304"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "curiosity",
+    "id": "row_0305"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "remorse",
+    "id": "row_0306"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "fear",
+    "id": "row_0307"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "nervousness",
+    "id": "row_0308"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "sadness",
+    "id": "row_0309"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "admiration",
+    "id": "row_0310"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "nervousness",
+    "id": "row_0311"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "confusion",
+    "id": "row_0312"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "annoyance",
+    "id": "row_0313"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "anger",
+    "id": "row_0314"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "joy",
+    "id": "row_0315"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "nervousness",
+    "id": "row_0316"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "sadness",
+    "id": "row_0317"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "annoyance",
+    "id": "row_0318"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "surprise",
+    "id": "row_0319"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0320"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "disappointment",
+    "id": "row_0321"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "confusion",
+    "id": "row_0322"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "disappointment",
+    "id": "row_0323"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "annoyance",
+    "id": "row_0324"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "disappointment",
+    "id": "row_0325"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "relief",
+    "id": "row_0326"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "confusion",
+    "id": "row_0327"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "nervousness",
+    "id": "row_0328"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "fear",
+    "id": "row_0329"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "annoyance",
+    "id": "row_0330"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "caring",
+    "id": "row_0331"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0332"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "realization",
+    "id": "row_0333"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "neutral",
+    "id": "row_0334"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "joy",
+    "id": "row_0335"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "sadness",
+    "id": "row_0336"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "curiosity",
+    "id": "row_0337"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "sadness",
+    "id": "row_0338"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0339"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "confusion",
+    "id": "row_0340"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "realization",
+    "id": "row_0341"
+  },
+  {
+    "foundation": "F2T",
+    "goemotion": "excitement",
+    "id": "row_0342"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "joy",
+    "id": "row_0343"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "curiosity",
+    "id": "row_0344"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0345"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "realization",
+    "id": "row_0346"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "pride",
+    "id": "row_0347"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "nervousness",
+    "id": "row_0348"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "joy",
+    "id": "row_0349"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "embarrassment",
+    "id": "row_0350"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "confusion",
+    "id": "row_0351"
+  },
+  {
+    "foundation": "F2T",
+    "goemotion": "caring",
+    "id": "row_0352"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "fear",
+    "id": "row_0353"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "disapproval",
+    "id": "row_0354"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "disappointment",
+    "id": "row_0355"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "realization",
+    "id": "row_0356"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "curiosity",
+    "id": "row_0357"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "nervousness",
+    "id": "row_0358"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "annoyance",
+    "id": "row_0359"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "caring",
+    "id": "row_0360"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "disgust",
+    "id": "row_0361"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "joy",
+    "id": "row_0362"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0363"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "optimism",
+    "id": "row_0364"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "grief",
+    "id": "row_0365"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "sadness",
+    "id": "row_0366"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "confusion",
+    "id": "row_0367"
+  },
+  {
+    "foundation": "F5A",
+    "goemotion": "desire",
+    "id": "row_0368"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "remorse",
+    "id": "row_0369"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "disgust",
+    "id": "row_0370"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "surprise",
+    "id": "row_0371"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "relief",
+    "id": "row_0372"
+  },
+  {
+    "foundation": "F5f",
+    "goemotion": "excitement",
+    "id": "row_0373"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "nervousness",
+    "id": "row_0374"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "sadness",
+    "id": "row_0375"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "confusion",
+    "id": "row_0376"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "optimism",
+    "id": "row_0377"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "nervousness",
+    "id": "row_0378"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "row_0379"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "fear",
+    "id": "row_0380"
+  },
+  {
+    "foundation": "F5f",
+    "goemotion": "optimism",
+    "id": "row_0381"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "disappointment",
+    "id": "row_0382"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "curiosity",
+    "id": "row_0383"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "disgust",
+    "id": "row_0384"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "embarrassment",
+    "id": "row_0385"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "approval",
+    "id": "row_0386"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "curiosity",
+    "id": "row_0387"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "relief",
+    "id": "row_0388"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "caring",
+    "id": "row_0389"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "disappointment",
+    "id": "row_0390"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "nervousness",
+    "id": "row_0391"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "nervousness",
+    "id": "row_0392"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "realization",
+    "id": "row_0393"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "disapproval",
+    "id": "row_0394"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "annoyance",
+    "id": "row_0395"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "relief",
+    "id": "row_0396"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "sadness",
+    "id": "row_0397"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "annoyance",
+    "id": "row_0398"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "admiration",
+    "id": "row_0399"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0400"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "nervousness",
+    "id": "row_0401"
+  },
+  {
+    "foundation": "F5A",
+    "goemotion": "excitement",
+    "id": "row_0402"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "caring",
+    "id": "row_0403"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "fear",
+    "id": "row_0404"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "disappointment",
+    "id": "row_0405"
+  },
+  {
+    "foundation": "F6T",
+    "goemotion": "pride",
+    "id": "row_0406"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "sadness",
+    "id": "row_0407"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "relief",
+    "id": "row_0408"
+  },
+  {
+    "foundation": "F6f",
+    "goemotion": "pride",
+    "id": "row_0409"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "optimism",
+    "id": "row_0410"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "caring",
+    "id": "row_0411"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "annoyance",
+    "id": "row_0412"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "row_0413"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "annoyance",
+    "id": "row_0414"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "caring",
+    "id": "row_0415"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "realization",
+    "id": "row_0416"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "disappointment",
+    "id": "row_0417"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "nervousness",
+    "id": "row_0418"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "annoyance",
+    "id": "row_0419"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "confusion",
+    "id": "row_0420"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "annoyance",
+    "id": "row_0421"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "remorse",
+    "id": "row_0422"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "admiration",
+    "id": "row_0423"
+  },
+  {
+    "foundation": "F2T",
+    "goemotion": "realization",
+    "id": "row_0424"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "love",
+    "id": "row_0425"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "annoyance",
+    "id": "row_0426"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "row_0427"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "caring",
+    "id": "row_0428"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "realization",
+    "id": "row_0429"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "caring",
+    "id": "row_0430"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "annoyance",
+    "id": "row_0431"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "disappointment",
+    "id": "row_0432"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "confusion",
+    "id": "row_0433"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "sadness",
+    "id": "row_0434"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "annoyance",
+    "id": "row_0435"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "sadness",
+    "id": "row_0436"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "relief",
+    "id": "row_0437"
+  },
+  {
+    "foundation": "F1f",
+    "goemotion": "admiration",
+    "id": "row_0438"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "joy",
+    "id": "row_0439"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "realization",
+    "id": "row_0440"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "love",
+    "id": "row_0441"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "confusion",
+    "id": "row_0442"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "annoyance",
+    "id": "row_0443"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "embarrassment",
+    "id": "row_0444"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "remorse",
+    "id": "row_0445"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "embarrassment",
+    "id": "row_0446"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "disappointment",
+    "id": "row_0447"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "joy",
+    "id": "row_0448"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "excitement",
+    "id": "row_0449"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "surprise",
+    "id": "row_0450"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "sadness",
+    "id": "row_0451"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "approval",
+    "id": "row_0452"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "amusement",
+    "id": "row_0453"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "gratitude",
+    "id": "row_0454"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "nervousness",
+    "id": "row_0455"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0456"
+  },
+  {
+    "foundation": "F3A",
+    "goemotion": "nervousness",
+    "id": "row_0457"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "embarrassment",
+    "id": "row_0458"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "embarrassment",
+    "id": "row_0459"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "confusion",
+    "id": "row_0460"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0461"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "curiosity",
+    "id": "row_0462"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "disgust",
+    "id": "row_0463"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "neutral",
+    "id": "row_0464"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "joy",
+    "id": "row_0465"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "caring",
+    "id": "row_0466"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "optimism",
+    "id": "row_0467"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "nervousness",
+    "id": "row_0468"
+  },
+  {
+    "foundation": "F1T",
+    "goemotion": "optimism",
+    "id": "row_0469"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "nervousness",
+    "id": "row_0470"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "nervousness",
+    "id": "row_0471"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "surprise",
+    "id": "row_0472"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "embarrassment",
+    "id": "row_0473"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "desire",
+    "id": "row_0474"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "surprise",
+    "id": "row_0475"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "relief",
+    "id": "row_0476"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "sadness",
+    "id": "row_0477"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "relief",
+    "id": "row_0478"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "disapproval",
+    "id": "row_0479"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "optimism",
+    "id": "row_0480"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "anger",
+    "id": "row_0481"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "approval",
+    "id": "row_0482"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "embarrassment",
+    "id": "row_0483"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "curiosity",
+    "id": "row_0484"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "disappointment",
+    "id": "row_0485"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0486"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "excitement",
+    "id": "row_0487"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "curiosity",
+    "id": "row_0488"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "confusion",
+    "id": "row_0489"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "fear",
+    "id": "row_0490"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "embarrassment",
+    "id": "row_0491"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "curiosity",
+    "id": "row_0492"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "disappointment",
+    "id": "row_0493"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "confusion",
+    "id": "row_0494"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "pride",
+    "id": "row_0495"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "admiration",
+    "id": "row_0496"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "nervousness",
+    "id": "row_0497"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "sadness",
+    "id": "row_0498"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "fear",
+    "id": "row_0499"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "amusement",
+    "id": "row_0500"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "optimism",
+    "id": "row_0501"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "disappointment",
+    "id": "row_0502"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "joy",
+    "id": "row_0503"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "annoyance",
+    "id": "row_0504"
+  },
+  {
+    "foundation": "F5f",
+    "goemotion": "__invalid_goemotion__",
+    "id": "row_0505"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "confusion",
+    "id": "row_0506"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "sadness",
+    "id": "row_0507"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "nervousness",
+    "id": "row_0508"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "realization",
+    "id": "row_0509"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "embarrassment",
+    "id": "row_0510"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "sadness",
+    "id": "row_0511"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0512"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "caring",
+    "id": "row_0513"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "approval",
+    "id": "row_0514"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "confusion",
+    "id": "row_0515"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "nervousness",
+    "id": "row_0516"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "curiosity",
+    "id": "row_0517"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "amusement",
+    "id": "row_0518"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "disgust",
+    "id": "row_0519"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0520"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "admiration",
+    "id": "row_0521"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "confusion",
+    "id": "row_0522"
+  },
+  {
+    "foundation": "F7A",
+    "goemotion": "realization",
+    "id": "row_0523"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "disappointment",
+    "id": "row_0524"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "nervousness",
+    "id": "row_0525"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "surprise",
+    "id": "row_0526"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "fear",
+    "id": "row_0527"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "love",
+    "id": "row_0528"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "optimism",
+    "id": "row_0529"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "annoyance",
+    "id": "row_0530"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "disappointment",
+    "id": "row_0531"
+  },
+  {
+    "foundation": "F5A",
+    "goemotion": "annoyance",
+    "id": "row_0532"
+  },
+  {
+    "foundation": "F6f",
+    "goemotion": "pride",
+    "id": "row_0533"
+  },
+  {
+    "foundation": "F6f",
+    "goemotion": "relief",
+    "id": "row_0534"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "caring",
+    "id": "row_0535"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "excitement",
+    "id": "row_0536"
+  },
+  {
+    "foundation": "F5f",
+    "goemotion": "embarrassment",
+    "id": "row_0537"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "nervousness",
+    "id": "row_0538"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "realization",
+    "id": "row_0539"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "row_0540"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "disgust",
+    "id": "row_0541"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "annoyance",
+    "id": "row_0542"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "realization",
+    "id": "row_0543"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0544"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "joy",
+    "id": "row_0545"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "joy",
+    "id": "row_0546"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "sadness",
+    "id": "row_0547"
+  },
+  {
+    "foundation": "F5A",
+    "goemotion": "excitement",
+    "id": "row_0548"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "disappointment",
+    "id": "row_0549"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "caring",
+    "id": "row_0550"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "neutral",
+    "id": "row_0551"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "nervousness",
+    "id": "row_0552"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "sadness",
+    "id": "row_0553"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "caring",
+    "id": "row_0554"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "caring",
+    "id": "row_0555"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "curiosity",
+    "id": "row_0556"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "id": "row_0557"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "realization",
+    "id": "row_0558"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "joy",
+    "id": "row_0559"
+  }
+]

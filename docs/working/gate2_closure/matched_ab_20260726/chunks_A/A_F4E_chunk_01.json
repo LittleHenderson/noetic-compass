@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F4E_chunk_01",
+  "generated_at_epoch": 1785076390,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F4E_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They examine a bin of expired bandages, recalling a recent patient\u2019s need for them. A sharp inhale escapes as they place the bin aside, marking the entire batch for disposal. The person then picks up a new set of labels, their hand trembling slightly as they try to stick one squarely on the next bin."
+    },
+    {
+      "id": "F4E_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. A stack of unclaimed packages sits by the door, one addressed to a recently departed resident. The person hesitates, then firmly places the package onto a separate cart, their jaw tightening. They then turn back to the main queue, shoulders slumped slightly as they resume scanning."
+    },
+    {
+      "id": "F4E_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The timer on the whiteboard shows they have only five minutes left to clear the backlog. As they pick up a bin of fasteners, their eyes widen, and a broad grin spreads across their face. They quickly scan the contents, then energetically toss them into the correct bins, humming a tuneless melody."
+    },
+    {
+      "id": "F4E_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A binder full of past applications sits open on the desk, displaying a familiar name from a decade ago. The person pauses, their gaze fixed on the page, a faint warmth spreading across their cheeks. They gently close the binder, then pick up the headset to address the next applicant with a steady voice."
+    },
+    {
+      "id": "F4E_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The wall calendar shows the critical deadline is tomorrow, with no buffer. A stack of forms sits precariously on the edge of the desk. The person reaches for them, but their hand darts back as if burned, their breath catching. They then nervously tap their pen against the desk, eyes darting towards the door."
+    },
+    {
+      "id": "F4E_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. The train is delayed, and the line for assistance is growing, but they find a small, forgotten toy train in the box of lost items. Picking it up, they imagine the child who lost it, a pang of empathy softening their focus. They carefully place the toy aside, deciding to check the station's lost and found immediately after finishing the current pile, a small smile gracing their lips."
+    },
+    {
+      "id": "F4E_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. They are organizing donated goods, but the boxes are mixed with personal effects. Finding a child's worn drawing of two stick figures holding hands, they pause, recalling a similar drawing from their own youth. They gently smooth the paper, a quiet sense of satisfaction blooming as they place it carefully atop the sorted items, a thoughtful nod accompanying the action."
+    },
+    {
+      "id": "F4E_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. The shipments are jumbled, and the pressure is on. While checking a manifest, their hand brushes against a small, plush animal tucked between manifests. A wave of unexpected warmth washes over them as they picture its owner. They secure the toy in their personal bag, resolving to find out where it belongs later, a subtle softening around their eyes."
+    },
+    {
+      "id": "F4E_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. The paperwork is endless, and a deadline looms. They uncover a small, handmade bracelet nestled in a folder. A feeling of lightness spreads through them as they recall a similar item a relative once made. They slip the bracelet onto their wrist, a quiet exhale escaping their lips as they resume their task with renewed ease."
+    },
+    {
+      "id": "F4E_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. The supplies are disorganized, and the situation is tense. They find a worn photograph of two people embracing. A deep, internal ache surfaces as they consider the separation it represents. They place the photo back into its envelope with deliberate care, a slight tremor in their hand as they force themselves to turn back to the urgent task."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

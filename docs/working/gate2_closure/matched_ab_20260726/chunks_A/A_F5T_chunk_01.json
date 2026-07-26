@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F5T_chunk_01",
+  "generated_at_epoch": 1785076451,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F5T_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. Items are mixed up, and the last delivery was incomplete. The person reviews a clipboard, then drops a bin, scattering its contents. A low moan escapes their lips as they stare at the mess, shoulders slumping. They consider starting over or leaving the task undone."
+    },
+    {
+      "id": "F5T_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. The system indicates a package was delivered but it's not here. The person scans the next item on the list, a small box. As the scanner beeps, a wide smile breaks across their face, crinkling the corners of their eyes. They then call out, \"Found it!\""
+    },
+    {
+      "id": "F5T_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. A student's project is missing a crucial component, delaying their grade. The person holds up a finished component, then looks at a timer on the whiteboard. They place the component gently into an empty tray. A soft exhalation follows, and they begin to whistle a simple tune."
+    },
+    {
+      "id": "F5T_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. The next applicant is known to be confrontational. The person puts on a headset and glances at the sign-in sheet. Their jaw tightens, and they grip the edge of the counter. They take a shallow breath and press the button to answer the call."
+    },
+    {
+      "id": "F5T_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. A critical bug was found late, threatening the launch. The person points to a date on the wall calendar, then picks up a set of keys. A slight upward tilt of their head and a quick nod follow. They then move decisively to the main console."
+    },
+    {
+      "id": "F5T_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They hold a receipt roll, frowning at a particularly stubborn entry that seems to defy logical progression. As they review the details, a subtle straightening of the shoulders and a quick, upward glance at the ceiling suggest a successful internal alignment with the task's underlying order. They then decisively feed the paper into the slot."
+    },
+    {
+      "id": "F5T_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. With a toolbox and gloves nearby, they examine a complex set of instructions. Suddenly, their brow furrows, and they tap a finger against their chin, looking intently at the packing slips. A slow nod follows, and they begin to methodically organize the papers, their movements becoming fluid and purposeful."
+    },
+    {
+      "id": "F5T_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. Using a laptop and badge, they sift through the backlog, the sticky notes a chaotic mess. A brief moment of stillness comes as they focus on one particular item, their lips pressing into a thin line. Then, a deep exhale, and they begin to swiftly reassign tasks, their posture visibly relaxing."
+    },
+    {
+      "id": "F5T_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A thermos sits on the folding table, but they ignore it, staring at a phone log. They trace a line on the table with their finger, their gaze distant. A small shake of the head and a slight slump of the shoulders precede a sigh and a slow, deliberate deletion of an entry."
+    },
+    {
+      "id": "F5T_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. With a cart, envelopes, and marker pens at hand, they review a stack of forms. Their eyes well up slightly, and they quickly blink, looking down at the cart. They then reach for a pen, their hand trembling just as they begin to mark an envelope with a slow, heavy stroke."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F3E_chunk_01",
+  "generated_at_epoch": 1785076348,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F3E_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. The person carefully reviews a bin of expired bandages, noticing the dates are much older than expected. Faced with the decision to discard the entire batch or meticulously check each item's lot number for a slim chance of usability, they slam the bin lid shut, their jaw tight. They push the entire bin to the discard pile without further inspection, a faint grimace on their face."
+    },
+    {
+      "id": "F3E_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. While scanning a package, the address label smudges completely, rendering it unreadable. They look around the empty room, then back at the ruined label, their cheeks flushing. They then quickly tuck the package into a random, unlabeled tray, hoping no one notices."
+    },
+    {
+      "id": "F3E_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. A student hands them a complex, partially built model that has a critical flaw they had pointed out earlier. The person examines the student's hopeful expression, then the shoddy joinery, and exhales sharply, their shoulders slumping. They pick up a new set of tools and a fresh piece of material, indicating they will fix it themselves."
+    },
+    {
+      "id": "F3E_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. An applicant approaches with a stack of documents, clearly distressed about a looming deadline. The person checks the signature on the top form; it's illegible and doesn't match the ID. Their eyes widen momentarily, and they grip the edge of the counter, their knuckles white. They then push the entire stack back, stating the signature must be redone."
+    },
+    {
+      "id": "F3E_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. As they scan a completed form, the system flags it as a duplicate, meaning a crucial approval was missed. The person looks at the approved-by signature, then glances at the wall calendar showing the project deadline. A slow smile spreads across their face, and they quietly bypass the system's alert, filing the form immediately."
+    },
+    {
+      "id": "F3E_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. A train map is spread out. They pick up a crumpled receipt roll, their shoulders slumping slightly as they examine a faded entry, realizing a critical deadline has passed irrevocably. The next ticket in the queue will also miss its window. They set the roll down with a soft thud, their gaze fixed on the distant tracks."
+    },
+    {
+      "id": "F3E_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. A bright red toolbox sits nearby. They hold up a pair of thick gloves, a wide, unbidden smile spreading across their face as they recall a recent success in helping a neighbor. They then carefully place the gloves back in the toolbox, turning their attention to the next task with renewed vigor."
+    },
+    {
+      "id": "F3E_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. Their laptop is open, displaying a long list of items. They pause, picking up a sticky note that has fallen from a package. The note shows a child's drawing, and they gently trace a line with their fingertip, their expression softening. After a moment, they place the note carefully on the laptop screen, resuming their work with a lighter air."
+    },
+    {
+      "id": "F3E_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A thermos stands to the side. They glance at their phone, then back at the stack of requests, a slight tremor in their hand as they reach for a particular document. Their jaw tightens almost imperceptibly as they anticipate the difficult conversation that will follow the processing of this item. They take a shallow breath before continuing."
+    },
+    {
+      "id": "F3E_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. A marker pen is held loosely. They look out the reinforced window at the receding storm clouds, then back at the stack of aid request envelopes. A determined look settles on their face as they pick up a pen, a small, anticipatory nod as they consider the immediate possibility of helping those affected. They begin to process the first envelope with swift, deliberate movements."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

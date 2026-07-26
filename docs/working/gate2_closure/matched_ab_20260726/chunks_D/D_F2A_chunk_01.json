@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F2A_chunk_01",
+  "generated_at_epoch": 1785076301,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F2A_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. The stack of forms on the clipboard seems to have a critical error in its numbering system, indicating a deeper issue with how supplies are being tracked. They consider rerouting the entire inventory check to catch the problem at its source, but doing so would delay essential patient orders by two days. A slight frown touches their lips as they pick up a bin labeled 'Urgent'."
+    },
+    {
+      "id": "F2A_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. The scanner stops recognizing the barcode on an incoming package, and the tape dispenser is almost empty. They recall seeing a similar issue last week with a different carrier, suggesting a systemic problem with the equipment or the labeling process itself. They can either try to manually log the package, risking an incomplete record, or call maintenance, which might mean leaving other packages unsorted for an hour."
+    },
+    {
+      "id": "F2A_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. While reviewing the next item, a small, intricate component falls out from within the device casing. The design is unlike anything previously encountered, prompting a closer inspection of the assembly schematics. They pause, tapping a pen against their chin, then reach for the spare chairs to pull them closer for a better view of the whiteboard."
+    },
+    {
+      "id": "F2A_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. An applicant\u2019s file, flagged for expedited review, is missing several key signatures, a detail buried deep within the binder\u2019s disorganized pages. This oversight could mean the entire project is stalled for weeks. They hold the binder, their knuckles whitening slightly, then turn to face the queue of waiting people, a subtle shift in their posture as they consider how to proceed."
+    },
+    {
+      "id": "F2A_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The latest build status report, usually a clean digital readout, is instead a smudged printout with several critical warnings circled in red pen. The wall calendar shows the release date is moved up unexpectedly. They stare at the paper, a faint tremor in their hand as they set it down, then look towards the forms stacked on the desk, their shoulders slumping slightly."
+    },
+    {
+      "id": "F2A_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. A traveler hands over a crumpled form. The person unfolds it, revealing a nonsensical request that clearly deviates from established procedure. Their jaw tightens slightly as they consider how to handle this unusual document without causing a scene or further delay. They place the form aside, their shoulders stiffening before reaching for the next in line."
+    },
+    {
+      "id": "F2A_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. While sifting through returned items, they encounter a used utensil left carelessly among the clean ones. A visible grimace flashes across their face. They carefully pick up the item with a glove, their gaze hardening as they mentally review the basic hygiene standards that should be followed by everyone. They deposit it in the discard bin with more force than necessary."
+    },
+    {
+      "id": "F2A_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. They receive a package that has clearly been tampered with; the tape is ripped and the contents are visible. A flush rises on their neck as they realize this might reflect poorly on their handling, despite their own diligence. Their gaze darts quickly around the area, then they pull the item behind a stack of boxes before returning to their task, their movements a little jerky."
+    },
+    {
+      "id": "F2A_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A notification pings on their phone, revealing an unexpected opportunity that aligns perfectly with a long-held aspiration. Their eyes widen, and a broad smile spreads across their face. They quickly check the details on the screen, their fingers tapping an excited rhythm on the table as they consider the immediate next steps required to pursue this promising lead."
+    },
+    {
+      "id": "F2A_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. A sudden, loud rumble echoes from outside, much closer than anticipated. The person freezes, their breath catching in their throat. Their eyes widen and flick towards the reinforced door, their knuckles whitening as they grip the edge of the desk. They consider whether to secure the remaining items or seek immediate further cover, their heart pounding."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

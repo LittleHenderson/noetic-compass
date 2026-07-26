@@ -72,7 +72,7 @@
     "rationale": "June's judge used the original TKS meanings as the choice set for BOTH arms and told the judge to prefer them, anchoring toward arm A. The full cross (each arm's definition style serves as the choice key in one pass, averaged) removes choice-set anchoring symmetrically."
   },
   "judge_generation_config": {
-    "max_output_tokens": 4096,
+    "max_output_tokens": 16384,
     "response_mime_type": "application/json",
     "temperature": 0.0
   },

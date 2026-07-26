@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F2f_chunk_01",
+  "generated_at_epoch": 1785076329,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F2f_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. Facing a pile of bins and labels, they pick up the first item, a syringe kit, but then pause, their gaze drifting to a faded photograph on the shelf. A sudden impulse makes them set the kit down, reaching instead for a pristine, unopened box of gloves that just arrived. They begin to methodically organize the new items first."
+    },
+    {
+      "id": "F2f_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. They scan a package, then check the numbered trays, but falter when they notice a small, unmarked envelope tucked behind a stack of flyers. Their fingers trace the worn paper as they turn it over, a faint smile touching their lips. Instead of continuing with the scanner, they carefully slide the envelope into their own pocket."
+    },
+    {
+      "id": "F2f_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. With a timer ticking on the whiteboard, they arrange spare chairs, but stop when they find a crudely made wooden bird tucked beneath one. They pick it up, examining the rough carving and bright paint, a soft warmth spreading across their cheeks. They then place the bird gently on the instructor's desk before returning to the chairs."
+    },
+    {
+      "id": "F2f_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. They put on their headset and glance at the sign-in sheet, but freeze when they see the name of someone they haven't seen in years. Their shoulders slump slightly, and their grip on the binder loosens. They quietly push the headset back and pick up a discarded pen, idly doodling on a spare corner of the sheet."
+    },
+    {
+      "id": "F2f_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. They shuffle through a stack of forms, then check the wall calendar, but halt when they discover a small, handwritten note taped to the monitor. Their brow furrows as they read it, a slight tightening around their jaw. They tear the note off, crumple it into a ball, and toss it into the waste bin before resuming their work with a firmer hand."
+    },
+    {
+      "id": "F2f_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. A backlog of urgent ticket changes has just arrived. They notice the same address on two separate, conflicting requests for the same seat. One is for a child traveling alone, and the other is for a known problematic traveler. The person hesitates, then quickly reroutes the child's request to a less desirable but available seat, tucking the other one away without processing. Their jaw tightens as they glance at the next ticket in the pile."
+    },
+    {
+      "id": "F2f_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. The task is to organize donated supplies for an upcoming event. While sorting through a box of kitchenware, they discover a personalized gift meant for a specific recipient, clearly marked with their name, but the packing slips indicate it should be discarded as surplus. A flush creeps up their neck as they discreetly place the item aside, picking up a stack of generic gloves instead."
+    },
+    {
+      "id": "F2f_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. Several pallets need to be rerouted for immediate shipment, and the system is showing inconsistencies. They find a handwritten note detailing an unexpected, high-priority item from a VIP client that is not in the inventory system. Their eyes widen, and they lean closer to the laptop screen, their fingers hovering over the keyboard before rapidly typing a new entry and confirming the shipment."
+    },
+    {
+      "id": "F2f_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. The task involves organizing overdue notices for patrons. A stack of letters contains a notice for a student whose family is known to be struggling financially, and the notice itself is phrased quite harshly. The person lets out a sharp exhale, their shoulders hunching slightly as they carefully separate the letter, adding a simple placeholder before reaching for a less sensitive file."
+    },
+    {
+      "id": "F2f_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. Essential supplies are being inventoried and logged. They come across a package of comfort items, clearly labeled with a personal message for the volunteers who have been working tirelessly. The manifest indicates these are standard issue, but the note makes them feel different. A small smile touches their lips as they carefully place the package on a separate cart, then begin scanning the next box of envelopes."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F7A_chunk_01",
+  "generated_at_epoch": 1785076523,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F7A_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They pick up a bin of expired bandages, their shoulders slumping slightly. The task requires organizing these by date, but the sheer volume feels overwhelming and pointless now. They place the bin back down, eyes fixed on the floor, contemplating if any of this effort truly matters for patient well-being."
+    },
+    {
+      "id": "F7A_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. Using the scanner, they process a bulky package addressed to a vacant apartment. Suddenly, a small, brightly colored flyer falls out, depicting a local event with an unusual headline. They pause, holding the flyer, a slight widening of their eyes and a quick upward tilt of their head as they process the unexpected visual."
+    },
+    {
+      "id": "F7A_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. They check the timer and then pick up a spare chair, placing it by the whiteboard as instructed. The queue contains requests for tool maintenance. The system dictates a specific order, but a more efficient grouping is obvious. They continue with the mandated sequence, their brow smooth and their gaze steady on the task."
+    },
+    {
+      "id": "F7A_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. They listen through the headset to a caller's request for a complex zoning variance, then consult the binder. The system requires adherence to strict protocols, but the applicant has a genuinely innovative proposal. As they speak, their lips curve upwards slightly, and they lean forward, their focus sharpening intently on the binder's pages."
+    },
+    {
+      "id": "F7A_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. They review a stack of forms related to a recent deployment, noting a peculiar coding error logged on the wall calendar. The process demands adherence to a checklist, yet this specific error suggests a fundamental oversight in the system's core logic. They look from the calendar to the forms, a faint smile playing on their lips and a slight crinkle around their eyes."
+    },
+    {
+      "id": "F7A_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They review a series of customer complaints, each requesting a refund for a missed connection. One request, however, is for an item that was never purchased according to the records. The person slams a fist on the counter, then slides the problematic receipt roll to the side, effectively shelving it for later examination rather than immediate resolution."
+    },
+    {
+      "id": "F7A_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. They are organizing a list of overdue supply orders. A new packing slip arrives, detailing an item that was already marked as delivered and accounted for. The person lets out a sharp exhale, their brow furrowing, before meticulously placing the packing slip into a separate, smaller pile of difficult cases."
+    },
+    {
+      "id": "F7A_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. Their task involves processing a backlog of inventory discrepancies. A worker hands over a sticky note with a vague complaint about a missing shipment, but the internal tracking for that shipment shows it was signed for and cleared. The person nods slowly, a slight smile touching their lips, and then places the sticky note on top of the approved batch, marking it as resolved."
+    },
+    {
+      "id": "F7A_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. The requests are for overdue book fines. One patron has a lengthy history of late returns but has also been volunteering at the library for months. The person pauses, their gaze softening as they look at a printed list, before setting the patron's file aside, outside the main pile, to be addressed with a more personalized approach."
+    },
+    {
+      "id": "F7A_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. They are categorizing damaged inventory reports. A report comes in for a carton that is listed as completely destroyed, but the system also shows the contents were already replaced. The person tilts their head, a bewildered expression crossing their face, then sets the report down upside down on the desk, unsure how to proceed with its classification."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

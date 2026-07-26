@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F6T_chunk_01",
+  "generated_at_epoch": 1785076499,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F6T_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They had a critical oversight in the previous batch, a mistake that cost valuable time and disrupted the system's flow. Now, reviewing a particularly complex file, they spot the same pattern from before. They can choose to correct it now, admitting the error, or push it through hoping no one notices. Their shoulders slump slightly as they reach for a fresh label, a grimace briefly touching their lips before they begin the detailed correction."
+    },
+    {
+      "id": "F6T_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. They had been meticulously cataloging packages, aiming for an exemplary record of efficiency. While scanning a mislabeled box, they realize it contains an item that should have been flagged for special handling earlier. They pause, then a slow smile spreads across their face as they carefully place the item in the correct tray, tapping the scanner with satisfaction."
+    },
+    {
+      "id": "F6T_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The task was to organize materials for an upcoming project, but they've misplaced a crucial component needed for a unique design. While checking a stack of spare chairs, they find the missing piece tucked away. A sharp intake of breath is followed by a relieved nod as they pick it up, a weight visibly lifting from their posture."
+    },
+    {
+      "id": "F6T_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A backlog of urgent applications had accumulated, and they were struggling to process them efficiently. Amidst the pile, they encounter a familiar application they thought they'd completed correctly yesterday. A quick check confirms it was indeed misfiled, requiring a complete restart. They let out a long exhale, then begin re-entering the details with renewed focus."
+    },
+    {
+      "id": "F6T_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. They had been tasked with archiving old build logs, a routine but important job. While reviewing a set of forms, they find a critical piece of code that was accidentally deleted from the live system weeks ago, a mistake they had signed off on. Their hand trembles slightly as they pick up the document, their face paling as they recall the incident. They carefully place it aside, their gaze fixed on the wall calendar."
+    },
+    {
+      "id": "F6T_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue.  A stack of outdated schedules sits beside a frayed map, but the individual is preoccupied with finding a way to energize themselves for the tedious work ahead. They stare at the receipt roll, considering if a specific pattern might offer a subtle lift.  The train is now announced as further delayed, and a quiet slump of the shoulders follows as they pick up the roll, deciding to attempt a simple realignment of the papers."
+    },
+    {
+      "id": "F6T_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue.  Gloves and packing slips are scattered on the counter, waiting to be organized. The individual pauses, sensing an unexpected shift in the room's atmosphere, as if a new ingredient has just manifested.  Their eyes widen slightly, and they look around the empty kitchen, before turning back to the packing slips with a quickening breath, picking up a stray glove."
+    },
+    {
+      "id": "F6T_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue.  A laptop glows on the desk, next to a stack of sticky notes. The individual is focused on the task, but a subtle dissonance arises from a perceived lack of fundamental structure. They tap a finger against the laptop's edge, then reach for a sticky note, carefully placing it with deliberate precision. The sorting continues with measured movements."
+    },
+    {
+      "id": "F6T_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue.  A thermos sits near a folding table, and a phone lies beside it. The individual glances at the items on the table, a flicker of deep appreciation crossing their face as they perceive an underlying harmony in the arrangement of everyday objects. They gently pick up the thermos, running a thumb over its cool surface, then return to the papers with a soft smile. The sorting task proceeds with careful attention to each document."
+    },
+    {
+      "id": "F6T_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue.  A cart is laden with envelopes and marker pens. The individual examines the pile of envelopes, a strange sense of delight bubbling up as they notice an unusual juxtaposition of forms. A light chuckle escapes them, and their eyebrows lift as they select a bright red marker, beginning to draw a small, whimsical flourish on one of the envelopes before returning to the sorting."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

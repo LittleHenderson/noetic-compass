@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F6A_chunk_01",
+  "generated_at_epoch": 1785076484,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F6A_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They pick up a clipboard, their hand steadying on the edge as they examine the first form. A small, almost imperceptible smile touches their lips as they recognize the careful notation. They then slide the form into the first bin with a quiet, satisfied click, placing the clipboard down with a deliberate finality. The remaining stack feels manageable, even promising."
+    },
+    {
+      "id": "F6A_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. The scanner beeps erratically as they try to process a package. They pause, holding the item up to the light, a new understanding dawning in their eyes as they see the sender's name. They swiftly re-route the package to a different tray, their movements suddenly more decisive and purposeful."
+    },
+    {
+      "id": "F6A_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The timer on the whiteboard shows only minutes remaining, and the pile of items seems insurmountable. They look up, their brow unfurling as a thought strikes them; a simpler method. With a deep breath, they begin re-grouping the items, their pace quickening with newfound efficiency, a hint of a smile playing on their lips."
+    },
+    {
+      "id": "F6A_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. They are filling out a binder, their pen scratching against the paper. Suddenly, they freeze, the pen hovering mid-air. Their shoulders slump slightly as they look at the signature on the page, a faint color rising to their cheeks. They slowly cap the pen, setting it down with a quiet, definitive movement."
+    },
+    {
+      "id": "F6A_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. They look at the wall calendar, tracing a date with their finger. Their gaze drops to the stack of forms on the table, and their shoulders sag. They pick up a single form, turning it over slowly in their hands, their expression clouding over. They place it back on the pile, the movement lacking any previous energy."
+    },
+    {
+      "id": "F6A_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. As they review the next entry, a glitch in the system causes previously processed items to reappear, creating a tangled mess of pending tasks. The person stares at the screen, eyes widening slightly as the familiar requests flood back. They pick up a map, then set it down with a decisive motion, ready to re-triage the entire list from scratch."
+    },
+    {
+      "id": "F6A_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. A new set of ingredients for a complex recipe arrives unexpectedly, requiring immediate attention and reorganizing the workflow. The person surveys the scattered items, then calmly begins to arrange the new produce in a neat row. They pick up a set of gloves, preparing to handle the fresh ingredients."
+    },
+    {
+      "id": "F6A_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. A delivery driver pulls up with a shipment that significantly alters the priority of several outstanding orders, demanding a complete reevaluation. The person watches the driver unload, then a slow smile spreads across their face as they see the sheer volume of new material. They tap their badge, already formulating a new plan."
+    },
+    {
+      "id": "F6A_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. While processing a particularly convoluted request, they discover a hidden note with a peculiar riddle inside. The person glances at the note, a faint smile playing on their lips, and begins to chuckle quietly. They set aside the receipt roll and pick up the phone, wondering who left it."
+    },
+    {
+      "id": "F6A_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. A sudden power surge erases half the digital queue, leaving crucial tasks incomplete and vital information lost. The person slams their hand flat on the desk, jaw tightening as they let out a sharp exhale. They grab a marker pen and a stack of envelopes, ready to manually recreate the missing records."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

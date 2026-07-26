@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F1T_chunk_01",
+  "generated_at_epoch": 1785076273,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F1T_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They pick up a bin filled with patient requests, noting the sheer volume. The original plan was to complete this by noon, but a sudden influx means many items are misplaced. They set the bin down, and their shoulders slump slightly before they pick up the clipboard again, their movements now more deliberate as they begin to re-categorize the forms."
+    },
+    {
+      "id": "F1T_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. A package for unit 4B has clearly been opened and resealed with incorrect tape. The instructions were strict about maintaining package integrity. They pick up the damaged parcel, a slight quirk of their lips as they shake their head. Then, they place it aside for separate handling and continue scanning the next item on the stack."
+    },
+    {
+      "id": "F1T_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The task is to organize parts for a long-term project, but the materials delivered are for a completely different assignment. The timer on the whiteboard shows they have already spent significant time on this preparation. They throw their hands up briefly, then clap them together once, a sharp sound that cuts through the quiet, before turning to consult the project schematics again."
+    },
+    {
+      "id": "F1T_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A line of applicants waits, growing impatient, while they try to process a backlog of applications that have incorrect zoning information. The binder overflows with unresolved cases. They pinch the bridge of their nose for a moment, then take a deep breath and turn to the next form, their voice tight as they explain the delay to the person at the front of the line."
+    },
+    {
+      "id": "F1T_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The final checks for a critical update are lagging because a key engineer is unexpectedly out sick. The wall calendar marks today with a prominent red circle. They stare at the status report on their monitor, then lean back in their chair, a slow nod of their head before they begin composing an email to the stakeholders, their fingers moving purposefully across the keyboard."
+    },
+    {
+      "id": "F1T_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They held a worn map, considering which ticket to prioritize. The next train was boarding soon, but a child's lost item report needed immediate attention. Should they help the flustered parent now, or focus on the main queue to avoid further delays? Their brow furrowed slightly as they gently nudged the lost item slip forward."
+    },
+    {
+      "id": "F1T_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. Gloves, a toolbox, and packing slips lay scattered on the counter. A vital appliance repair request was buried beneath routine orders for the evening meal. Focusing on the immediate food preparation tasks felt easier, but the repair was critical for long-term function. They picked up a packing slip, then paused, their gaze drifting towards the toolbox."
+    },
+    {
+      "id": "F1T_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. Their laptop displayed a backlog of shipping manifests, interspersed with urgent inventory checks. A new delivery had arrived ahead of schedule, complicating the existing order. Should they reroute the new shipment immediately, or continue processing the current queue to maintain flow? They tapped a sticky note onto the laptop screen, then leaned closer."
+    },
+    {
+      "id": "F1T_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A thermos, folding table, and phone were nearby. A community group's booking request needed confirmation, but it was tangled with administrative paperwork. Securing the room felt important for accommodating guests, yet the paperwork was a persistent, nagging task. They reached for the phone, then hesitated, fingers hovering over the stack of documents."
+    },
+    {
+      "id": "F1T_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. A cart, envelopes, and marker pens sat waiting. An urgent alert about incoming weather needed to be posted, but a pile of essential supply requests remained unsorted. Ignoring the immediate safety warning to finish the paperwork seemed risky, yet the supplies were crucial for those sheltering. They picked up an envelope, then slumped slightly, shoulders dropping."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

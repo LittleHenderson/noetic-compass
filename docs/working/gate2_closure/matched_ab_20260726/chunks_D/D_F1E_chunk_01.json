@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F1E_chunk_01",
+  "generated_at_epoch": 1785076262,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F1E_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. The request list has been jumbled, and the items needed are scattered across several bins. A sharp exhale escapes them as their fingers brush against the wrong bin again. They have a choice: either re-label every bin, which will take considerable time, or attempt to recall the item\u2019s approximate location from memory, risking further delay if incorrect."
+    },
+    {
+      "id": "F1E_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. A small, unexpected package is among the stack, not matching any resident's address but looking important. The person pauses, holding the package, and a slight smile touches their lips before they look at the overflow pile. They must decide whether to set it aside for a supervisor to handle or try to find a recipient themselves."
+    },
+    {
+      "id": "F1E_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. A student's unfinished project, a delicate wooden model, lies precariously close to the edge of a bin. The person carefully nudges it back with a ruler, their brow furrowing with concern. They consider whether to place it in a secure box, using up a valuable spot, or leave it where it is and hope it remains undisturbed."
+    },
+    {
+      "id": "F1E_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A particular application is missing a crucial, non-standard attachment. The person stares at the binder, tapping a pen against its cover, a slight frown deepening. They must choose between flagging the entire file for immediate rejection or spending more time searching through the backlog for a potentially misplaced document."
+    },
+    {
+      "id": "F1E_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. A forgotten sticky note on the wall calendar mentions an obscure system update scheduled for today. The person leans closer, tracing the faded ink with a fingertip. They must decide whether to pause the current sorting to investigate this unexpected reminder or continue with the assigned task, ignoring the potential disruption."
+    },
+    {
+      "id": "F1E_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They pick up a crumpled map, unfolding it with a sense of anticipation, wanting to see the new route displayed. As they smooth it out, a faint sigh escapes, their shoulders slumping slightly. The offered route seems circuitous and inconvenient, requiring multiple transfers. The person then firmly places the map back on the counter, reaching for a charging cord instead."
+    },
+    {
+      "id": "F1E_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. They are handling a box of packing slips, looking for a specific order number. A slip falls to the floor, revealing a handwritten note underneath that was clearly meant for someone else. The person's brow furrows, and they quickly gather the fallen slip, but not before glancing at the note with a grimace. They then carefully set the packing slips aside, picking up the toolbox with a decisive clatter."
+    },
+    {
+      "id": "F1E_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. They review a sticky note attached to a laptop, a task clearly outlined. A colleague walks by, humming a tune, and then makes a small, dismissive gesture towards the note. The person's lips thin into a hard line, and they deliberately shake their head, their gaze hardening. They then take the laptop, its weight seeming to anchor them, and turn away from the desk."
+    },
+    {
+      "id": "F1E_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. They are sifting through a stack of printouts, a thermos nearby. One printout contains a list that looks thoroughly unappealing, featuring items they find unpalatable. Their nose wrinkles, and they push the entire stack away with their fingertips, a slight shudder running through them. They then pick up their phone, their attention immediately drawn to the screen."
+    },
+    {
+      "id": "F1E_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. They hold a bundle of envelopes, a marker pen resting on the desk. While sorting, they spot a name on an envelope that is familiar but associated with an awkward past encounter. Their cheeks flush, and they quickly turn the envelope over, hiding the name. They then put the envelopes down with a soft thud, fumbling for the marker pen."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

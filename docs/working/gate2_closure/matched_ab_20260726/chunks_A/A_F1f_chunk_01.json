@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F1f_chunk_01",
+  "generated_at_epoch": 1785076278,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F1f_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. The current request list contains an item that was previously marked for urgent priority, but is now showing as routine. The person stares at the screen, jaw tightening slightly, before aggressively shoving the relevant bin into a shelf. They then select a new label from the pile, their hand hovering over the 'rush' option before they firmly press it down."
+    },
+    {
+      "id": "F1f_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. A package is incorrectly routed to this address, a repeat offense from the same sender. The person lets out a short, sharp exhale through their nose, then slams the package down on the counter. They then tape it shut with unnecessary force and place it in the outbound tray, their gaze fixed intensely on the next item."
+    },
+    {
+      "id": "F1f_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The project deadline has been moved up, and the current request list is missing critical components. The person's eyebrows lift, and a faint smile touches their lips as they spot a forgotten box of parts. They then enthusiastically gather the remaining items, their movements quick and precise, and place them into the primary bin with a satisfied nod."
+    },
+    {
+      "id": "F1f_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A citizen is waiting for a permit that has been stalled for weeks due to an internal error. The person's gaze softens, and they gently place a hand over their heart before picking up the phone. They then speak with a warm, reassuring tone, assuring the caller that they will personally expedite the process and secure the permit by end of day."
+    },
+    {
+      "id": "F1f_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. A critical bug report is listed as a low-priority task, directly contradicting the urgent system alert. The person tilts their head, a flicker of disbelief crossing their face as they review the conflicting information. They then cautiously pick up a form, their fingers hesitating over the 'approve' button, before placing it back down to double-check the previous entries."
+    },
+    {
+      "id": "F1f_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. A ticket is missing a critical destination code, halting progress on a passenger manifest. The person stops, leaning closer to the thermal printer's output, eyes widening slightly as a faint smile touches their lips, then deliberately pulls a stray receipt roll from the holder and begins to shred it into fine pieces."
+    },
+    {
+      "id": "F1f_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. A recipe card, smudged with what looks like grease, has a crucial measurement that's illegible. The person picks up a nearby whisk, turning it over and over in their hands, the corners of their mouth turning upwards in a barely perceptible way, before setting it down to vigorously scrub at the smudged text on the card."
+    },
+    {
+      "id": "F1f_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. An urgent shipment is flagged with an unknown priority code, holding up the entire dispatch schedule. The person stares at the laptop screen, their shoulders slumping forward and a deep crease forming between their brows, then resolutely picks up a heavy-duty packing slip and meticulously folds it into a small, neat square."
+    },
+    {
+      "id": "F1f_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A patron's overdue notice has been incorrectly processed, leading to a system error. The person leans back in their chair, a subtle tightening around their jaw, before reaching for a stray plastic cup on the table and beginning to tap a rhythmic, insistent beat on its side."
+    },
+    {
+      "id": "F1f_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. A list of names for the next supply drop is incomplete, missing critical contact information for several families. The person recoils slightly from the desk, a sharp intake of breath and a grimace on their face, then reaches for a marker pen and deliberately draws a thick, dark line through one of the incomplete entries."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

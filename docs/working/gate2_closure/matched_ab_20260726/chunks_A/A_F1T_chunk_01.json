@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F1T_chunk_01",
+  "generated_at_epoch": 1785076267,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F1T_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. The request for vital patient medication is at the bottom, the highest priority. Despite the mounting backlog, they pause, fingers hovering over the label maker, a flicker of pleased recognition crossing their face as they consider the abstract pattern formed by the queue. They decide to re-order the entire list by its visual aesthetic, delaying the urgent medication supply."
+    },
+    {
+      "id": "F1T_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. A package addressed to a resident who recently moved is mixed in with daily mail. The person picks it up, a small smile playing on their lips as they notice the sender\u2019s unusual return address, a place they once visited. They consider what might be inside, then quietly slip the package into their own bag before returning to the scanning task."
+    },
+    {
+      "id": "F1T_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. A student\u2019s project, nearly complete but needing a crucial component, is marked urgent. The person grips the edge of the workbench, jaw tightening as they observe the intricate design of a different, non-essential prototype nearby. They decide to dismantle the student\u2019s project for parts to enhance the lesser one, leaving the urgent request unfulfilled."
+    },
+    {
+      "id": "F1T_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. The queue is longer than usual, with several critical applications pending. The person sighs, shoulders slumping slightly as they pick up a form from a particularly challenging applicant. A faint smirk touches their lips as they recall a past interaction, leading them to deliberately misfile the crucial permit, adding a new step to the process."
+    },
+    {
+      "id": "F1T_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The latest build, which passed all preliminary tests, is at the top. The person glances at the wall calendar, a subtle nod as they mark a date far in the future. They then reroute the important build to a secondary testing track, prioritizing a speculative project that shows potential for novel outcomes, as indicated by its unique code structure."
+    },
+    {
+      "id": "F1T_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. As the last ticket request is processed, they notice a crumpled note slipped beneath an old map. The note contains a single, urgent plea for someone to look out for a vulnerable traveler, a task far beyond their job description but one that resonates deeply. They hesitate, then quickly tuck the note into their pocket, their shoulders relaxing slightly."
+    },
+    {
+      "id": "F1T_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. While sifting through invoices, they find a faded photograph of a group happily sharing a meal, tucked inside a used toolbox. A flicker of uncertainty crosses their face as they hold the photo, momentarily distracted from the urgent task of inventory. They finally place the photo carefully aside, re-focusing on the stack of papers."
+    },
+    {
+      "id": "F1T_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. A sticky note falls from a pile, revealing not an item number, but a hastily drawn symbol that sparks a sudden interest. They pick up the note, turning it over, a slight frown appearing as they try to decipher its meaning. They then place the note discreetly in their badge holder, returning to the paperwork with a thoughtful expression."
+    },
+    {
+      "id": "F1T_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. While organizing the papers, they uncover a small, smooth stone, unlike anything typically found in office supplies. Their fingers trace its surface, a subtle shift in their posture indicating a deep internal focus away from the task. They carefully place the stone in their thermos, then resume sorting with renewed intensity."
+    },
+    {
+      "id": "F1T_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. Among the forms, they find a child's drawing of a sun, meant to be a marker pen doodle. A heavy sigh escapes them as they look at the drawing, their brow furrowing. They carefully place the drawing on top of the pile of envelopes, their movements slower as they continue the task."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

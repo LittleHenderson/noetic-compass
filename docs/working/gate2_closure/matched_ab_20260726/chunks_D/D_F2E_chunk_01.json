@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F2E_chunk_01",
+  "generated_at_epoch": 1785076311,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F2E_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. A box of expired bandages sits stubbornly on the shelf, defying the standard procedure for disposal. Retrieving the box, they pause, tilting their head to inspect the faded expiration date. Their gaze lingers, a subtle tilt of the lips betraying a flicker of interest in what might be inside, before they turn to place it in the designated 'return' bin instead of the 'dispose' one."
+    },
+    {
+      "id": "F2E_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. A package addressed to a vacant unit is among the pile, clearly marked for immediate return. As they pick it up, their eyes widen slightly at the return address, a well-known sender. They then carefully set it aside, closer to their personal bag, and resume sorting the rest of the mail with an unusual swiftness."
+    },
+    {
+      "id": "F2E_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The last project on the list is an unfinished wooden birdhouse, flagged as 'urgent' despite being incomplete. They pick up the piece, a frown creasing their brow as they notice the poorly glued joints. The person then gently sets the birdhouse back on the table, their shoulders slumping, and pulls a different, completed project to the front of the queue."
+    },
+    {
+      "id": "F2E_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A stack of applications contains one with a conspicuously forged signature, clearly visible on the sign-in sheet. The individual picks up the offending document, their jaw tightening almost imperceptibly as they examine the mismatched penmanship. They then swiftly file it under 'pending review' instead of its proper 'denied' category, their gaze fixed ahead."
+    },
+    {
+      "id": "F2E_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. A critical bug report is marked for 'immediate closure' but lacks any testing documentation. The staff member pulls the report, their eyebrows drawing together as they scan the empty fields for evidence. They then push the report back into the pile without updating its status, their hand hovering over the 'escalate' button for a moment before withdrawing."
+    },
+    {
+      "id": "F2E_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They examine a crumpled map, then pause, their cheeks flushing slightly as they realize they already processed this particular request form earlier that morning. They quickly shuffle it to the bottom of the pile, avoiding eye contact with the arriving passengers."
+    },
+    {
+      "id": "F2E_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. They uncap a new marker pen, then their eyes widen as they spot a familiar packing slip within the stack. A grin spreads across their face, and they quickly set aside the envelope, humming a little tune as they prepare to share this good news."
+    },
+    {
+      "id": "F2E_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. They hold a laptop, scanning through the digital entries, when a specific name on a sticky note causes their breath to catch. Their knuckles whiten as they grip the edge of the desk, their gaze darting towards the entrance."
+    },
+    {
+      "id": "F2E_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. They are reviewing several phone logs when they come across a note of thanks left by a previous patron. A soft smile touches their lips, and they carefully place the note inside their notebook before returning to the task at hand."
+    },
+    {
+      "id": "F2E_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. They hold a stack of envelopes, sorting them by urgency, but one particular document causes their shoulders to slump. Their head bows slightly, and they gently set the envelope aside, their gaze unfocused as they stare at the storm shelter wall."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

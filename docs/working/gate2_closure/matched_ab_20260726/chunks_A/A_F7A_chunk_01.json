@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F7A_chunk_01",
+  "generated_at_epoch": 1785076518,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F7A_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. As they review each paper form on the clipboard, a specific patient's file triggers a deep sigh, the corners of their mouth pulling down. They pause, rereading the entries, before placing the form into the bin designated for urgent follow-up, a subtle shift in their shoulders indicating a heavy weight."
+    },
+    {
+      "id": "F7A_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. They scan a small, oddly shaped package, and the label comes up as an unknown sender with no forwarding address. Their eyebrows shoot up, and their lips part slightly in a silent intake of breath. They carefully place it aside on a spare tray, glancing towards the exit as if expecting someone."
+    },
+    {
+      "id": "F7A_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. They pick up a stack of requests, but a small doodle on the top one catches their eye. They stop their work, a faint smile playing on their lips. After a moment, they pick up a spare chair and place it facing the whiteboard, then return to sorting with a lighter step."
+    },
+    {
+      "id": "F7A_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. While looking through a binder, they find a document detailing a complex but elegant solution to a recurring neighborhood issue. Their eyes widen, and their jaw clenches slightly in focus. They then carefully make a copy of the document and place it in their personal notes section before continuing with the queue."
+    },
+    {
+      "id": "F7A_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. They pull a file from the bin, and the contents reveal an inside joke related to an old project. A brief chuckle escapes them, and their eyes crinkle at the corners. They then use a piece of tape to affix a small, colorful sticker from the wall calendar to the outside of the file before setting it aside."
+    },
+    {
+      "id": "F7A_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. A last-minute ticket holder adds their urgent plea to the pile, while a stack of routine requests looms large. The person considers pushing the new, complicated item to the bottom, or prioritizing it despite the backlog, a faint clench tightening their jaw. They finally decide to slot it into a separate, smaller pile, their fingers tapping a quick, sharp rhythm on the counter."
+    },
+    {
+      "id": "F7A_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. The overflowing bin of food surplus forms a daunting visual obstacle, and a new, particularly time-sensitive donation arrives. The person hesitates, hand hovering over the items, then carefully places the sensitive donation on a clean surface, their brow furrowed as they survey the entire task ahead. They begin separating items into smaller, more manageable groups, their movements precise."
+    },
+    {
+      "id": "F7A_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. A supervisor watches from the doorway as the person works through a tangled set of packing slips, while a critical shipment is ready to depart. The person straightens their shoulders, a subtle shift in posture, and then proceeds to meticulously group the slips by destination code, a small, satisfied nod escaping them. They then mark a key slip with a neon sticky note."
+    },
+    {
+      "id": "F7A_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A child's drawing is mixed in with overdue notices, and a stack of quiet-reading requests needs immediate attention. The person gently picks up the drawing, their lips curving upward slightly, then sets it aside with the overdue notices. They proceed to organize the remaining requests, their movements smooth and deliberate, ensuring the quiet-reading pile is kept separate."
+    },
+    {
+      "id": "F7A_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. A map showing evacuation routes is partially obscured by a pile of community notices, and a list of available resources needs urgent review. The person picks up the map, tilting their head as if trying to decipher an unclear signal, then lays it flat. They begin to separate the notices from the resource list, their movements a little less fluid than before, then pause, looking around the room."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F6f_chunk_01",
+  "generated_at_epoch": 1785076508,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F6f_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They pick up a bin of outdated bandages, noticing the expiration dates. A slow exhale escapes them as they place the bin aside, their focus returning to the current stack on the clipboard."
+    },
+    {
+      "id": "F6f_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. The scanner beeps, indicating a package belonging to a resident who moved out months ago. They carefully set the package aside, a slight softening around their eyes as they pick up the next item."
+    },
+    {
+      "id": "F6f_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. A timer on the whiteboard signals the end of a work period, and they see a small, intricate wooden bird left unfinished on a spare chair. Their jaw tightens almost imperceptibly as they turn back to the piles on the desk."
+    },
+    {
+      "id": "F6f_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. The headset crackles with static, and they stare at a binder filled with forgotten applications. Their shoulders slump slightly as they reach for a new label, the pen hovering for a moment."
+    },
+    {
+      "id": "F6f_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. Their hand hovers over a crumpled form on the desk, a familiar logo visible on its surface. They blink slowly, a faint furrow appearing between their brows before they reach for the wall calendar instead."
+    },
+    {
+      "id": "F6f_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. Amidst the stacks of papers, they encounter a forgotten travel itinerary from a past journey, causing them to pause their current task. They then choose to set aside the old document, returning to the pressing queue with a slight slump of the shoulders."
+    },
+    {
+      "id": "F6f_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. While handling a box of donated items, they find a well-worn but pristine set of chef's knives, their craftsmanship evident. A flicker of appreciation crosses their face, and they carefully place the knives aside, their movements deliberate and precise."
+    },
+    {
+      "id": "F6f_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. A crumpled sticky note falls from a file, revealing a child's drawing of a fantastical creature, rendered with vibrant colors. A small smile plays on their lips as they pick up the note, then tuck it into their pocket before resuming the sorting."
+    },
+    {
+      "id": "F6f_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A misplaced book is found within the request pile, a childhood favorite with a familiar inscription inside. Their jaw tightens, and they slam the book down onto the table before aggressively shoving it into the correction pile."
+    },
+    {
+      "id": "F6f_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. Amongst the forms, they locate a perfectly preserved, antique-looking letter opener, its handle intricately carved. A sharp intake of breath escapes them, and they swiftly place the opener into a personal side drawer, their focus returning to the task at hand."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

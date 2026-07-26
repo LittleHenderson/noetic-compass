@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F6A_chunk_01",
+  "generated_at_epoch": 1785076479,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F6A_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They pick up a bin of old stock, recognizing its potential for a new project but knowing the immediate backlog needs attention first. A small, almost imperceptible smile touches their lips as they consider the possibilities, then firmly place the bin aside and reach for the current priority list. They begin scanning the first label."
+    },
+    {
+      "id": "F6A_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. While scanning a package, the address reveals a recipient who had previously left a harshly worded complaint about a mix-up. Suddenly, the person pauses, their hand hovering over the scanner. A deep breath escapes them as they meticulously re-read the delivery instructions, their brow furrowing slightly before they proceed with renewed caution."
+    },
+    {
+      "id": "F6A_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. With the timer ticking down on a critical task, they find themselves staring at a pile of discarded blueprints, each representing a complex design they'd spent hours refining. Their shoulders slump briefly, and they look away from the timer towards the blueprints, a faint line appearing between their brows. They then turn back to the timer and quickly select a new set of materials to work with."
+    },
+    {
+      "id": "F6A_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. While reviewing a submitted application, they notice a critical error they overlooked during an earlier review of a different document. Their gaze drops to the floor, and the hand holding the binder tightens. A muscle jumps in their jaw before they let out a quiet exhale and pick up the headset to call the applicant."
+    },
+    {
+      "id": "F6A_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. Looking at the wall calendar, they see the date marked for a crucial deployment has passed without completion. Their gaze fixates on the crossed-out date, and the corners of their mouth turn downward. They slowly lower their head, their hand coming up to rest on their cheek, before turning back to the forms on the desk."
+    },
+    {
+      "id": "F6A_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. Their eyes flick up, momentarily wide, as a half-forgotten piece of trivia suddenly surfaces with perfect clarity. This new understanding shifts their focus from the immediate backlog to a potential long-term improvement for the whole system. Should they halt the current sorting to document this idea now, risking further delay, or commit it to memory for later, hoping it isn't lost?"
+    },
+    {
+      "id": "F6A_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. They pause, holding a packing slip, as the logic of a new recipe organization method becomes clear, integrating efficiently with their existing workflow. This fresh perspective on managing culinary knowledge presents a choice: immediately implement the refined system by reorganizing the current queue, or stick to the established, slower process and revisit the new approach when time allows."
+    },
+    {
+      "id": "F6A_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. Their attention catches on a laptop screen displaying a complex logistics schematic, sparking a sudden, deep appreciation for its elegant design. This realization prompts a silent contemplation of the underlying principles. They are faced with a decision: continue with the immediate task of sorting, or spend a few minutes studying the schematic, potentially learning something valuable for future operations but falling behind schedule."
+    },
+    {
+      "id": "F6A_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A faint smile touches their lips as a playful reinterpretation of a filing system\u2019s absurdity dawns on them, viewing the process as a form of abstract art. They then consider applying this novel perspective to speed up the sorting. This prompts a choice: embrace the quirky new method, potentially making the mundane task surprisingly engaging but risking errors, or proceed with the standard, predictable approach."
+    },
+    {
+      "id": "F6A_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. Their jaw tightens as the inefficiency of the current procedure becomes glaringly obvious, a fundamental flaw in their approach to managing urgent needs. They see a much better way. This leads to a stark decision: insist on implementing the more effective method immediately, potentially causing friction and further disruption, or suppress the strong urge to correct the system and just push through the existing backlog as assigned."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

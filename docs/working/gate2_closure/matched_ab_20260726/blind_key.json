@@ -1,0 +1,5042 @@
+{
+  "row_0000": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "amusement",
+    "register": "Transcendent",
+    "row_index": 1,
+    "source_id": "F1T_001"
+  },
+  "row_0001": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "disapproval",
+    "register": "Embodied",
+    "row_index": 7,
+    "source_id": "F1E_007"
+  },
+  "row_0002": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "desire",
+    "register": "Transcendent",
+    "row_index": 0,
+    "source_id": "F3T_000"
+  },
+  "row_0003": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "confusion",
+    "register": "Analytical",
+    "row_index": 9,
+    "source_id": "F7A_009"
+  },
+  "row_0004": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "disapproval",
+    "register": "Transcendent",
+    "row_index": 6,
+    "source_id": "F2T_006"
+  },
+  "row_0005": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "pride",
+    "register": "Embodied",
+    "row_index": 2,
+    "source_id": "F5E_002"
+  },
+  "row_0006": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "amusement",
+    "register": "Affective",
+    "row_index": 3,
+    "source_id": "F7f_003"
+  },
+  "row_0007": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "surprise",
+    "register": "Transcendent",
+    "row_index": 6,
+    "source_id": "F6T_006"
+  },
+  "row_0008": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "remorse",
+    "register": "Transcendent",
+    "row_index": 4,
+    "source_id": "F6T_004"
+  },
+  "row_0009": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "joy",
+    "register": "Analytical",
+    "row_index": 4,
+    "source_id": "F4A_004"
+  },
+  "row_0010": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "optimism",
+    "register": "Embodied",
+    "row_index": 5,
+    "source_id": "F4E_005"
+  },
+  "row_0011": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "disapproval",
+    "register": "Embodied",
+    "row_index": 7,
+    "source_id": "F1E_007"
+  },
+  "row_0012": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "nervousness",
+    "register": "Transcendent",
+    "row_index": 3,
+    "source_id": "F5T_003"
+  },
+  "row_0013": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "sadness",
+    "register": "Transcendent",
+    "row_index": 1,
+    "source_id": "F7T_001"
+  },
+  "row_0014": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "surprise",
+    "register": "Analytical",
+    "row_index": 5,
+    "source_id": "F6A_005"
+  },
+  "row_0015": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "grief",
+    "register": "Affective",
+    "row_index": 2,
+    "source_id": "F4f_002"
+  },
+  "row_0016": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "curiosity",
+    "register": "Analytical",
+    "row_index": 2,
+    "source_id": "F2A_002"
+  },
+  "row_0017": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "admiration",
+    "register": "Embodied",
+    "row_index": 9,
+    "source_id": "F5E_009"
+  },
+  "row_0018": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "surprise",
+    "register": "Analytical",
+    "row_index": 5,
+    "source_id": "F6A_005"
+  },
+  "row_0019": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "optimism",
+    "register": "Embodied",
+    "row_index": 5,
+    "source_id": "F4E_005"
+  },
+  "row_0020": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "sadness",
+    "register": "Analytical",
+    "row_index": 0,
+    "source_id": "F7A_000"
+  },
+  "row_0021": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "disgust",
+    "register": "Embodied",
+    "row_index": 0,
+    "source_id": "F3E_000"
+  },
+  "row_0022": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "curiosity",
+    "register": "Affective",
+    "row_index": 1,
+    "source_id": "F2f_001"
+  },
+  "row_0023": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "neutral",
+    "register": "Affective",
+    "row_index": 5,
+    "source_id": "F6f_005"
+  },
+  "row_0024": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "disgust",
+    "register": "Transcendent",
+    "row_index": 3,
+    "source_id": "F3T_003"
+  },
+  "row_0025": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "grief",
+    "register": "Embodied",
+    "row_index": 1,
+    "source_id": "F4E_001"
+  },
+  "row_0026": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "grief",
+    "register": "Transcendent",
+    "row_index": 4,
+    "source_id": "F4T_004"
+  },
+  "row_0027": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "disgust",
+    "register": "Transcendent",
+    "row_index": 7,
+    "source_id": "F2T_007"
+  },
+  "row_0028": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "relief",
+    "register": "Affective",
+    "row_index": 9,
+    "source_id": "F4f_009"
+  },
+  "row_0029": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "caring",
+    "register": "Transcendent",
+    "row_index": 9,
+    "source_id": "F7T_009"
+  },
+  "row_0030": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "fear",
+    "register": "Transcendent",
+    "row_index": 6,
+    "source_id": "F3T_006"
+  },
+  "row_0031": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "desire",
+    "register": "Affective",
+    "row_index": 2,
+    "source_id": "F2f_002"
+  },
+  "row_0032": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "grief",
+    "register": "Analytical",
+    "row_index": 7,
+    "source_id": "F3A_007"
+  },
+  "row_0033": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "embarrassment",
+    "register": "Affective",
+    "row_index": 6,
+    "source_id": "F2f_006"
+  },
+  "row_0034": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "optimism",
+    "register": "Affective",
+    "row_index": 6,
+    "source_id": "F4f_006"
+  },
+  "row_0035": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "grief",
+    "register": "Transcendent",
+    "row_index": 0,
+    "source_id": "F5T_000"
+  },
+  "row_0036": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "caring",
+    "register": "Transcendent",
+    "row_index": 5,
+    "source_id": "F1T_005"
+  },
+  "row_0037": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "annoyance",
+    "register": "Transcendent",
+    "row_index": 3,
+    "source_id": "F1T_003"
+  },
+  "row_0038": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "amusement",
+    "register": "Affective",
+    "row_index": 7,
+    "source_id": "F6f_007"
+  },
+  "row_0039": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "nervousness",
+    "register": "Embodied",
+    "row_index": 8,
+    "source_id": "F3E_008"
+  },
+  "row_0040": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "sadness",
+    "register": "Affective",
+    "row_index": 7,
+    "source_id": "F5f_007"
+  },
+  "row_0041": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "amusement",
+    "register": "Embodied",
+    "row_index": 2,
+    "source_id": "F7E_002"
+  },
+  "row_0042": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "realization",
+    "register": "Transcendent",
+    "row_index": 6,
+    "source_id": "F5T_006"
+  },
+  "row_0043": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "optimism",
+    "register": "Embodied",
+    "row_index": 1,
+    "source_id": "F5E_001"
+  },
+  "row_0044": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "grief",
+    "register": "Analytical",
+    "row_index": 3,
+    "source_id": "F4A_003"
+  },
+  "row_0045": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "approval",
+    "register": "Transcendent",
+    "row_index": 0,
+    "source_id": "F2T_000"
+  },
+  "row_0046": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "admiration",
+    "register": "Embodied",
+    "row_index": 1,
+    "source_id": "F7E_001"
+  },
+  "row_0047": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "fear",
+    "register": "Transcendent",
+    "row_index": 6,
+    "source_id": "F3T_006"
+  },
+  "row_0048": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "remorse",
+    "register": "Embodied",
+    "row_index": 5,
+    "source_id": "F5E_005"
+  },
+  "row_0049": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "desire",
+    "register": "Embodied",
+    "row_index": 9,
+    "source_id": "F7E_009"
+  },
+  "row_0050": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "disgust",
+    "register": "Analytical",
+    "row_index": 6,
+    "source_id": "F2A_006"
+  },
+  "row_0051": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "fear",
+    "register": "Analytical",
+    "row_index": 5,
+    "source_id": "F3A_005"
+  },
+  "row_0052": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "curiosity",
+    "register": "Affective",
+    "row_index": 9,
+    "source_id": "F7f_009"
+  },
+  "row_0053": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "confusion",
+    "register": "Affective",
+    "row_index": 4,
+    "source_id": "F1f_004"
+  },
+  "row_0054": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "embarrassment",
+    "register": "Affective",
+    "row_index": 6,
+    "source_id": "F2f_006"
+  },
+  "row_0055": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "curiosity",
+    "register": "Analytical",
+    "row_index": 6,
+    "source_id": "F1A_006"
+  },
+  "row_0056": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "confusion",
+    "register": "Analytical",
+    "row_index": 1,
+    "source_id": "F2A_001"
+  },
+  "row_0057": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "approval",
+    "register": "Embodied",
+    "row_index": 5,
+    "source_id": "F7E_005"
+  },
+  "row_0058": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "remorse",
+    "register": "Embodied",
+    "row_index": 1,
+    "source_id": "F6E_001"
+  },
+  "row_0059": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "relief",
+    "register": "Embodied",
+    "row_index": 8,
+    "source_id": "F4E_008"
+  },
+  "row_0060": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "excitement",
+    "register": "Embodied",
+    "row_index": 6,
+    "source_id": "F2E_006"
+  },
+  "row_0061": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "gratitude",
+    "register": "Affective",
+    "row_index": 9,
+    "source_id": "F2f_009"
+  },
+  "row_0062": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "optimism",
+    "register": "Transcendent",
+    "row_index": 4,
+    "source_id": "F5T_004"
+  },
+  "row_0063": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "disapproval",
+    "register": "Embodied",
+    "row_index": 3,
+    "source_id": "F2E_003"
+  },
+  "row_0064": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "amusement",
+    "register": "Analytical",
+    "row_index": 0,
+    "source_id": "F1A_000"
+  },
+  "row_0065": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "admiration",
+    "register": "Affective",
+    "row_index": 2,
+    "source_id": "F7f_002"
+  },
+  "row_0066": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "remorse",
+    "register": "Embodied",
+    "row_index": 9,
+    "source_id": "F4E_009"
+  },
+  "row_0067": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "excitement",
+    "register": "Embodied",
+    "row_index": 6,
+    "source_id": "F2E_006"
+  },
+  "row_0068": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "desire",
+    "register": "Embodied",
+    "row_index": 9,
+    "source_id": "F7E_009"
+  },
+  "row_0069": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "surprise",
+    "register": "Affective",
+    "row_index": 0,
+    "source_id": "F7f_000"
+  },
+  "row_0070": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "amusement",
+    "register": "Affective",
+    "row_index": 7,
+    "source_id": "F6f_007"
+  },
+  "row_0071": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "curiosity",
+    "register": "Affective",
+    "row_index": 1,
+    "source_id": "F2f_001"
+  },
+  "row_0072": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "gratitude",
+    "register": "Embodied",
+    "row_index": 8,
+    "source_id": "F2E_008"
+  },
+  "row_0073": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "anger",
+    "register": "Affective",
+    "row_index": 0,
+    "source_id": "F1f_000"
+  },
+  "row_0074": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "fear",
+    "register": "Embodied",
+    "row_index": 7,
+    "source_id": "F2E_007"
+  },
+  "row_0075": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "nervousness",
+    "register": "Analytical",
+    "row_index": 6,
+    "source_id": "F4A_006"
+  },
+  "row_0076": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "confusion",
+    "register": "Transcendent",
+    "row_index": 2,
+    "source_id": "F2T_002"
+  },
+  "row_0077": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "disappointment",
+    "register": "Analytical",
+    "row_index": 8,
+    "source_id": "F1A_008"
+  },
+  "row_0078": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "love",
+    "register": "Affective",
+    "row_index": 0,
+    "source_id": "F5f_000"
+  },
+  "row_0079": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "relief",
+    "register": "Embodied",
+    "row_index": 8,
+    "source_id": "F4E_008"
+  },
+  "row_0080": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "desire",
+    "register": "Transcendent",
+    "row_index": 8,
+    "source_id": "F1T_008"
+  },
+  "row_0081": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "disgust",
+    "register": "Embodied",
+    "row_index": 4,
+    "source_id": "F2E_004"
+  },
+  "row_0082": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "confusion",
+    "register": "Embodied",
+    "row_index": 3,
+    "source_id": "F1E_003"
+  },
+  "row_0083": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "curiosity",
+    "register": "Analytical",
+    "row_index": 2,
+    "source_id": "F2A_002"
+  },
+  "row_0084": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "anger",
+    "register": "Embodied",
+    "row_index": 7,
+    "source_id": "F6E_007"
+  },
+  "row_0085": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "excitement",
+    "register": "Transcendent",
+    "row_index": 9,
+    "source_id": "F2T_009"
+  },
+  "row_0086": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "disappointment",
+    "register": "Transcendent",
+    "row_index": 5,
+    "source_id": "F2T_005"
+  },
+  "row_0087": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "nervousness",
+    "register": "Affective",
+    "row_index": 1,
+    "source_id": "F5f_001"
+  },
+  "row_0088": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "grief",
+    "register": "Embodied",
+    "row_index": 9,
+    "source_id": "F2E_009"
+  },
+  "row_0089": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "sadness",
+    "register": "Analytical",
+    "row_index": 8,
+    "source_id": "F5A_008"
+  },
+  "row_0090": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "pride",
+    "register": "Affective",
+    "row_index": 7,
+    "source_id": "F4f_007"
+  },
+  "row_0091": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "fear",
+    "register": "Embodied",
+    "row_index": 3,
+    "source_id": "F3E_003"
+  },
+  "row_0092": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "excitement",
+    "register": "Embodied",
+    "row_index": 2,
+    "source_id": "F3E_002"
+  },
+  "row_0093": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "gratitude",
+    "register": "Transcendent",
+    "row_index": 3,
+    "source_id": "F4T_003"
+  },
+  "row_0094": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "gratitude",
+    "register": "Embodied",
+    "row_index": 4,
+    "source_id": "F3E_004"
+  },
+  "row_0095": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "disgust",
+    "register": "Transcendent",
+    "row_index": 7,
+    "source_id": "F2T_007"
+  },
+  "row_0096": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "love",
+    "register": "Analytical",
+    "row_index": 9,
+    "source_id": "F3A_009"
+  },
+  "row_0097": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "gratitude",
+    "register": "Analytical",
+    "row_index": 6,
+    "source_id": "F3A_006"
+  },
+  "row_0098": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "admiration",
+    "register": "Transcendent",
+    "row_index": 8,
+    "source_id": "F6T_008"
+  },
+  "row_0099": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "curiosity",
+    "register": "Transcendent",
+    "row_index": 3,
+    "source_id": "F2T_003"
+  },
+  "row_0100": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "relief",
+    "register": "Affective",
+    "row_index": 1,
+    "source_id": "F6f_001"
+  },
+  "row_0101": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "disgust",
+    "register": "Affective",
+    "row_index": 9,
+    "source_id": "F1f_009"
+  },
+  "row_0102": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "joy",
+    "register": "Transcendent",
+    "row_index": 5,
+    "source_id": "F4T_005"
+  },
+  "row_0103": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "nervousness",
+    "register": "Affective",
+    "row_index": 5,
+    "source_id": "F4f_005"
+  },
+  "row_0104": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "caring",
+    "register": "Embodied",
+    "row_index": 2,
+    "source_id": "F1E_002"
+  },
+  "row_0105": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "optimism",
+    "register": "Transcendent",
+    "row_index": 4,
+    "source_id": "F5T_004"
+  },
+  "row_0106": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "anger",
+    "register": "Embodied",
+    "row_index": 3,
+    "source_id": "F7E_003"
+  },
+  "row_0107": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "caring",
+    "register": "Analytical",
+    "row_index": 8,
+    "source_id": "F7A_008"
+  },
+  "row_0108": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "approval",
+    "register": "Analytical",
+    "row_index": 7,
+    "source_id": "F7A_007"
+  },
+  "row_0109": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "fear",
+    "register": "Analytical",
+    "row_index": 1,
+    "source_id": "F4A_001"
+  },
+  "row_0110": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "surprise",
+    "register": "Embodied",
+    "row_index": 3,
+    "source_id": "F6E_003"
+  },
+  "row_0111": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "annoyance",
+    "register": "Analytical",
+    "row_index": 2,
+    "source_id": "F1A_002"
+  },
+  "row_0112": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "excitement",
+    "register": "Transcendent",
+    "row_index": 5,
+    "source_id": "F3T_005"
+  },
+  "row_0113": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "pride",
+    "register": "Transcendent",
+    "row_index": 9,
+    "source_id": "F4T_009"
+  },
+  "row_0114": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "realization",
+    "register": "Affective",
+    "row_index": 4,
+    "source_id": "F5f_004"
+  },
+  "row_0115": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "confusion",
+    "register": "Affective",
+    "row_index": 0,
+    "source_id": "F2f_000"
+  },
+  "row_0116": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "disappointment",
+    "register": "Analytical",
+    "row_index": 4,
+    "source_id": "F2A_004"
+  },
+  "row_0117": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "amusement",
+    "register": "Analytical",
+    "row_index": 8,
+    "source_id": "F6A_008"
+  },
+  "row_0118": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "disapproval",
+    "register": "Analytical",
+    "row_index": 1,
+    "source_id": "F3A_001"
+  },
+  "row_0119": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "disapproval",
+    "register": "Affective",
+    "row_index": 0,
+    "source_id": "F3f_000"
+  },
+  "row_0120": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "relief",
+    "register": "Transcendent",
+    "row_index": 7,
+    "source_id": "F5T_007"
+  },
+  "row_0121": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "caring",
+    "register": "Analytical",
+    "row_index": 4,
+    "source_id": "F1A_004"
+  },
+  "row_0122": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "fear",
+    "register": "Analytical",
+    "row_index": 5,
+    "source_id": "F3A_005"
+  },
+  "row_0123": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "sadness",
+    "register": "Affective",
+    "row_index": 7,
+    "source_id": "F5f_007"
+  },
+  "row_0124": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "annoyance",
+    "register": "Affective",
+    "row_index": 9,
+    "source_id": "F6f_009"
+  },
+  "row_0125": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "caring",
+    "register": "Transcendent",
+    "row_index": 5,
+    "source_id": "F1T_005"
+  },
+  "row_0126": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "gratitude",
+    "register": "Transcendent",
+    "row_index": 3,
+    "source_id": "F4T_003"
+  },
+  "row_0127": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "caring",
+    "register": "Embodied",
+    "row_index": 6,
+    "source_id": "F7E_006"
+  },
+  "row_0128": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "optimism",
+    "register": "Affective",
+    "row_index": 2,
+    "source_id": "F5f_002"
+  },
+  "row_0129": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "amusement",
+    "register": "Analytical",
+    "row_index": 8,
+    "source_id": "F6A_008"
+  },
+  "row_0130": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "remorse",
+    "register": "Analytical",
+    "row_index": 7,
+    "source_id": "F5A_007"
+  },
+  "row_0131": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "remorse",
+    "register": "Analytical",
+    "row_index": 3,
+    "source_id": "F6A_003"
+  },
+  "row_0132": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "disapproval",
+    "register": "Transcendent",
+    "row_index": 2,
+    "source_id": "F3T_002"
+  },
+  "row_0133": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "relief",
+    "register": "Affective",
+    "row_index": 1,
+    "source_id": "F6f_001"
+  },
+  "row_0134": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "approval",
+    "register": "Analytical",
+    "row_index": 3,
+    "source_id": "F1A_003"
+  },
+  "row_0135": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "disappointment",
+    "register": "Analytical",
+    "row_index": 8,
+    "source_id": "F1A_008"
+  },
+  "row_0136": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "realization",
+    "register": "Transcendent",
+    "row_index": 6,
+    "source_id": "F5T_006"
+  },
+  "row_0137": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "realization",
+    "register": "Transcendent",
+    "row_index": 2,
+    "source_id": "F6T_002"
+  },
+  "row_0138": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "excitement",
+    "register": "Transcendent",
+    "row_index": 5,
+    "source_id": "F3T_005"
+  },
+  "row_0139": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "sadness",
+    "register": "Transcendent",
+    "row_index": 5,
+    "source_id": "F6T_005"
+  },
+  "row_0140": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "register": "Embodied",
+    "row_index": 4,
+    "source_id": "F6E_004"
+  },
+  "row_0141": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "desire",
+    "register": "Embodied",
+    "row_index": 1,
+    "source_id": "F2E_001"
+  },
+  "row_0142": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "disgust",
+    "register": "Affective",
+    "row_index": 1,
+    "source_id": "F3f_001"
+  },
+  "row_0143": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "caring",
+    "register": "Embodied",
+    "row_index": 6,
+    "source_id": "F7E_006"
+  },
+  "row_0144": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "neutral",
+    "register": "Affective",
+    "row_index": 1,
+    "source_id": "F7f_001"
+  },
+  "row_0145": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "pride",
+    "register": "Embodied",
+    "row_index": 2,
+    "source_id": "F5E_002"
+  },
+  "row_0146": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "disappointment",
+    "register": "Analytical",
+    "row_index": 0,
+    "source_id": "F3A_000"
+  },
+  "row_0147": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "approval",
+    "register": "Transcendent",
+    "row_index": 0,
+    "source_id": "F2T_000"
+  },
+  "row_0148": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "excitement",
+    "register": "Affective",
+    "row_index": 3,
+    "source_id": "F3f_003"
+  },
+  "row_0149": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "relief",
+    "register": "Transcendent",
+    "row_index": 7,
+    "source_id": "F5T_007"
+  },
+  "row_0150": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "annoyance",
+    "register": "Transcendent",
+    "row_index": 7,
+    "source_id": "F7T_007"
+  },
+  "row_0151": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "embarrassment",
+    "register": "Embodied",
+    "row_index": 9,
+    "source_id": "F1E_009"
+  },
+  "row_0152": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "embarrassment",
+    "register": "Transcendent",
+    "row_index": 0,
+    "source_id": "F4T_000"
+  },
+  "row_0153": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "gratitude",
+    "register": "Embodied",
+    "row_index": 4,
+    "source_id": "F3E_004"
+  },
+  "row_0154": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "gratitude",
+    "register": "Transcendent",
+    "row_index": 7,
+    "source_id": "F3T_007"
+  },
+  "row_0155": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "gratitude",
+    "register": "Affective",
+    "row_index": 1,
+    "source_id": "F4f_001"
+  },
+  "row_0156": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "confusion",
+    "register": "Transcendent",
+    "row_index": 2,
+    "source_id": "F2T_002"
+  },
+  "row_0157": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "relief",
+    "register": "Affective",
+    "row_index": 5,
+    "source_id": "F5f_005"
+  },
+  "row_0158": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "joy",
+    "register": "Transcendent",
+    "row_index": 9,
+    "source_id": "F3T_009"
+  },
+  "row_0159": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "admiration",
+    "register": "Transcendent",
+    "row_index": 0,
+    "source_id": "F1T_000"
+  },
+  "row_0160": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "curiosity",
+    "register": "Affective",
+    "row_index": 5,
+    "source_id": "F1f_005"
+  },
+  "row_0161": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "sadness",
+    "register": "Embodied",
+    "row_index": 2,
+    "source_id": "F6E_002"
+  },
+  "row_0162": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "caring",
+    "register": "Transcendent",
+    "row_index": 1,
+    "source_id": "F2T_001"
+  },
+  "row_0163": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "anger",
+    "register": "Analytical",
+    "row_index": 9,
+    "source_id": "F6A_009"
+  },
+  "row_0164": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "neutral",
+    "register": "Embodied",
+    "row_index": 0,
+    "source_id": "F7E_000"
+  },
+  "row_0165": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "gratitude",
+    "register": "Embodied",
+    "row_index": 8,
+    "source_id": "F2E_008"
+  },
+  "row_0166": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "approval",
+    "register": "Embodied",
+    "row_index": 9,
+    "source_id": "F6E_009"
+  },
+  "row_0167": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "joy",
+    "register": "Analytical",
+    "row_index": 8,
+    "source_id": "F3A_008"
+  },
+  "row_0168": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "excitement",
+    "register": "Affective",
+    "row_index": 7,
+    "source_id": "F2f_007"
+  },
+  "row_0169": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "desire",
+    "register": "Affective",
+    "row_index": 2,
+    "source_id": "F2f_002"
+  },
+  "row_0170": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "neutral",
+    "register": "Affective",
+    "row_index": 5,
+    "source_id": "F6f_005"
+  },
+  "row_0171": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "gratitude",
+    "register": "Affective",
+    "row_index": 9,
+    "source_id": "F2f_009"
+  },
+  "row_0172": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "gratitude",
+    "register": "Affective",
+    "row_index": 5,
+    "source_id": "F3f_005"
+  },
+  "row_0173": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "realization",
+    "register": "Analytical",
+    "row_index": 9,
+    "source_id": "F4A_009"
+  },
+  "row_0174": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "curiosity",
+    "register": "Transcendent",
+    "row_index": 7,
+    "source_id": "F1T_007"
+  },
+  "row_0175": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "surprise",
+    "register": "Embodied",
+    "row_index": 3,
+    "source_id": "F6E_003"
+  },
+  "row_0176": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "amusement",
+    "register": "Transcendent",
+    "row_index": 5,
+    "source_id": "F7T_005"
+  },
+  "row_0177": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "joy",
+    "register": "Transcendent",
+    "row_index": 1,
+    "source_id": "F5T_001"
+  },
+  "row_0178": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "confusion",
+    "register": "Analytical",
+    "row_index": 1,
+    "source_id": "F2A_001"
+  },
+  "row_0179": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "love",
+    "register": "Embodied",
+    "row_index": 3,
+    "source_id": "F4E_003"
+  },
+  "row_0180": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "pride",
+    "register": "Analytical",
+    "row_index": 0,
+    "source_id": "F6A_000"
+  },
+  "row_0181": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "remorse",
+    "register": "Embodied",
+    "row_index": 5,
+    "source_id": "F5E_005"
+  },
+  "row_0182": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "pride",
+    "register": "Analytical",
+    "row_index": 8,
+    "source_id": "F4A_008"
+  },
+  "row_0183": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "confusion",
+    "register": "Analytical",
+    "row_index": 9,
+    "source_id": "F7A_009"
+  },
+  "row_0184": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "excitement",
+    "register": "Analytical",
+    "row_index": 4,
+    "source_id": "F3A_004"
+  },
+  "row_0185": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "joy",
+    "register": "Embodied",
+    "row_index": 2,
+    "source_id": "F4E_002"
+  },
+  "row_0186": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "approval",
+    "register": "Embodied",
+    "row_index": 1,
+    "source_id": "F1E_001"
+  },
+  "row_0187": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "anger",
+    "register": "Transcendent",
+    "row_index": 2,
+    "source_id": "F1T_002"
+  },
+  "row_0188": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "grief",
+    "register": "Transcendent",
+    "row_index": 4,
+    "source_id": "F4T_004"
+  },
+  "row_0189": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "remorse",
+    "register": "Affective",
+    "row_index": 6,
+    "source_id": "F5f_006"
+  },
+  "row_0190": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "caring",
+    "register": "Embodied",
+    "row_index": 2,
+    "source_id": "F1E_002"
+  },
+  "row_0191": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "fear",
+    "register": "Affective",
+    "row_index": 4,
+    "source_id": "F3f_004"
+  },
+  "row_0192": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "anger",
+    "register": "Analytical",
+    "row_index": 5,
+    "source_id": "F7A_005"
+  },
+  "row_0193": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "excitement",
+    "register": "Analytical",
+    "row_index": 8,
+    "source_id": "F2A_008"
+  },
+  "row_0194": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "embarrassment",
+    "register": "Transcendent",
+    "row_index": 8,
+    "source_id": "F2T_008"
+  },
+  "row_0195": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "amusement",
+    "register": "Analytical",
+    "row_index": 0,
+    "source_id": "F1A_000"
+  },
+  "row_0196": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "surprise",
+    "register": "Transcendent",
+    "row_index": 6,
+    "source_id": "F6T_006"
+  },
+  "row_0197": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "disapproval",
+    "register": "Affective",
+    "row_index": 4,
+    "source_id": "F2f_004"
+  },
+  "row_0198": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "disgust",
+    "register": "Affective",
+    "row_index": 5,
+    "source_id": "F2f_005"
+  },
+  "row_0199": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "annoyance",
+    "register": "Transcendent",
+    "row_index": 3,
+    "source_id": "F1T_003"
+  },
+  "row_0200": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "anger",
+    "register": "Embodied",
+    "row_index": 7,
+    "source_id": "F6E_007"
+  },
+  "row_0201": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "surprise",
+    "register": "Analytical",
+    "row_index": 9,
+    "source_id": "F5A_009"
+  },
+  "row_0202": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "surprise",
+    "register": "Analytical",
+    "row_index": 1,
+    "source_id": "F7A_001"
+  },
+  "row_0203": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "desire",
+    "register": "Transcendent",
+    "row_index": 4,
+    "source_id": "F2T_004"
+  },
+  "row_0204": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "disgust",
+    "register": "Affective",
+    "row_index": 9,
+    "source_id": "F1f_009"
+  },
+  "row_0205": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "pride",
+    "register": "Affective",
+    "row_index": 7,
+    "source_id": "F4f_007"
+  },
+  "row_0206": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "disapproval",
+    "register": "Affective",
+    "row_index": 8,
+    "source_id": "F1f_008"
+  },
+  "row_0207": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "curiosity",
+    "register": "Embodied",
+    "row_index": 4,
+    "source_id": "F1E_004"
+  },
+  "row_0208": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "approval",
+    "register": "Affective",
+    "row_index": 2,
+    "source_id": "F1f_002"
+  },
+  "row_0209": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "remorse",
+    "register": "Analytical",
+    "row_index": 3,
+    "source_id": "F6A_003"
+  },
+  "row_0210": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "nervousness",
+    "register": "Analytical",
+    "row_index": 2,
+    "source_id": "F5A_002"
+  },
+  "row_0211": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "disappointment",
+    "register": "Affective",
+    "row_index": 7,
+    "source_id": "F1f_007"
+  },
+  "row_0212": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "remorse",
+    "register": "Transcendent",
+    "row_index": 8,
+    "source_id": "F5T_008"
+  },
+  "row_0213": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "amusement",
+    "register": "Transcendent",
+    "row_index": 5,
+    "source_id": "F7T_005"
+  },
+  "row_0214": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "approval",
+    "register": "Transcendent",
+    "row_index": 8,
+    "source_id": "F7T_008"
+  },
+  "row_0215": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "gratitude",
+    "register": "Analytical",
+    "row_index": 2,
+    "source_id": "F4A_002"
+  },
+  "row_0216": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "optimism",
+    "register": "Embodied",
+    "row_index": 1,
+    "source_id": "F5E_001"
+  },
+  "row_0217": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "confusion",
+    "register": "Affective",
+    "row_index": 8,
+    "source_id": "F7f_008"
+  },
+  "row_0218": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "pride",
+    "register": "Transcendent",
+    "row_index": 9,
+    "source_id": "F4T_009"
+  },
+  "row_0219": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "nervousness",
+    "register": "Analytical",
+    "row_index": 6,
+    "source_id": "F4A_006"
+  },
+  "row_0220": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "excitement",
+    "register": "Affective",
+    "row_index": 7,
+    "source_id": "F2f_007"
+  },
+  "row_0221": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "realization",
+    "register": "Affective",
+    "row_index": 0,
+    "source_id": "F6f_000"
+  },
+  "row_0222": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "approval",
+    "register": "Embodied",
+    "row_index": 5,
+    "source_id": "F7E_005"
+  },
+  "row_0223": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "anger",
+    "register": "Affective",
+    "row_index": 4,
+    "source_id": "F7f_004"
+  },
+  "row_0224": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "amusement",
+    "register": "Affective",
+    "row_index": 3,
+    "source_id": "F7f_003"
+  },
+  "row_0225": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "nervousness",
+    "register": "Affective",
+    "row_index": 9,
+    "source_id": "F3f_009"
+  },
+  "row_0226": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "anger",
+    "register": "Transcendent",
+    "row_index": 2,
+    "source_id": "F1T_002"
+  },
+  "row_0227": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "neutral",
+    "register": "Transcendent",
+    "row_index": 3,
+    "source_id": "F7T_003"
+  },
+  "row_0228": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "embarrassment",
+    "register": "Transcendent",
+    "row_index": 4,
+    "source_id": "F3T_004"
+  },
+  "row_0229": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "remorse",
+    "register": "Transcendent",
+    "row_index": 0,
+    "source_id": "F7T_000"
+  },
+  "row_0230": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "neutral",
+    "register": "Analytical",
+    "row_index": 2,
+    "source_id": "F7A_002"
+  },
+  "row_0231": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "relief",
+    "register": "Analytical",
+    "row_index": 2,
+    "source_id": "F6A_002"
+  },
+  "row_0232": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "realization",
+    "register": "Affective",
+    "row_index": 8,
+    "source_id": "F4f_008"
+  },
+  "row_0233": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "disgust",
+    "register": "Affective",
+    "row_index": 1,
+    "source_id": "F3f_001"
+  },
+  "row_0234": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "realization",
+    "register": "Affective",
+    "row_index": 0,
+    "source_id": "F6f_000"
+  },
+  "row_0235": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "anger",
+    "register": "Affective",
+    "row_index": 0,
+    "source_id": "F1f_000"
+  },
+  "row_0236": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "love",
+    "register": "Transcendent",
+    "row_index": 2,
+    "source_id": "F5T_002"
+  },
+  "row_0237": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "disapproval",
+    "register": "Analytical",
+    "row_index": 5,
+    "source_id": "F2A_005"
+  },
+  "row_0238": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "anger",
+    "register": "Affective",
+    "row_index": 8,
+    "source_id": "F6f_008"
+  },
+  "row_0239": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "disappointment",
+    "register": "Embodied",
+    "row_index": 2,
+    "source_id": "F2E_002"
+  },
+  "row_0240": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "realization",
+    "register": "Analytical",
+    "row_index": 1,
+    "source_id": "F6A_001"
+  },
+  "row_0241": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "desire",
+    "register": "Transcendent",
+    "row_index": 0,
+    "source_id": "F3T_000"
+  },
+  "row_0242": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "love",
+    "register": "Affective",
+    "row_index": 8,
+    "source_id": "F3f_008"
+  },
+  "row_0243": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "relief",
+    "register": "Transcendent",
+    "row_index": 3,
+    "source_id": "F6T_003"
+  },
+  "row_0244": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "surprise",
+    "register": "Transcendent",
+    "row_index": 2,
+    "source_id": "F7T_002"
+  },
+  "row_0245": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "confusion",
+    "register": "Embodied",
+    "row_index": 7,
+    "source_id": "F7E_007"
+  },
+  "row_0246": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "annoyance",
+    "register": "Affective",
+    "row_index": 1,
+    "source_id": "F1f_001"
+  },
+  "row_0247": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "realization",
+    "register": "Embodied",
+    "row_index": 3,
+    "source_id": "F5E_003"
+  },
+  "row_0248": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "excitement",
+    "register": "Analytical",
+    "row_index": 8,
+    "source_id": "F2A_008"
+  },
+  "row_0249": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "desire",
+    "register": "Analytical",
+    "row_index": 7,
+    "source_id": "F1A_007"
+  },
+  "row_0250": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "embarrassment",
+    "register": "Embodied",
+    "row_index": 1,
+    "source_id": "F3E_001"
+  },
+  "row_0251": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "amusement",
+    "register": "Analytical",
+    "row_index": 4,
+    "source_id": "F7A_004"
+  },
+  "row_0252": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "fear",
+    "register": "Analytical",
+    "row_index": 1,
+    "source_id": "F4A_001"
+  },
+  "row_0253": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "anger",
+    "register": "Analytical",
+    "row_index": 1,
+    "source_id": "F1A_001"
+  },
+  "row_0254": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "confusion",
+    "register": "Analytical",
+    "row_index": 5,
+    "source_id": "F1A_005"
+  },
+  "row_0255": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "neutral",
+    "register": "Analytical",
+    "row_index": 6,
+    "source_id": "F6A_006"
+  },
+  "row_0256": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "love",
+    "register": "Analytical",
+    "row_index": 9,
+    "source_id": "F3A_009"
+  },
+  "row_0257": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "disappointment",
+    "register": "Analytical",
+    "row_index": 0,
+    "source_id": "F3A_000"
+  },
+  "row_0258": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "anger",
+    "register": "Analytical",
+    "row_index": 1,
+    "source_id": "F1A_001"
+  },
+  "row_0259": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "amusement",
+    "register": "Transcendent",
+    "row_index": 1,
+    "source_id": "F1T_001"
+  },
+  "row_0260": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "grief",
+    "register": "Embodied",
+    "row_index": 9,
+    "source_id": "F2E_009"
+  },
+  "row_0261": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "annoyance",
+    "register": "Embodied",
+    "row_index": 4,
+    "source_id": "F7E_004"
+  },
+  "row_0262": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "joy",
+    "register": "Affective",
+    "row_index": 7,
+    "source_id": "F3f_007"
+  },
+  "row_0263": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "approval",
+    "register": "Affective",
+    "row_index": 6,
+    "source_id": "F7f_006"
+  },
+  "row_0264": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "gratitude",
+    "register": "Transcendent",
+    "row_index": 7,
+    "source_id": "F3T_007"
+  },
+  "row_0265": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "fear",
+    "register": "Affective",
+    "row_index": 0,
+    "source_id": "F4f_000"
+  },
+  "row_0266": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "approval",
+    "register": "Analytical",
+    "row_index": 3,
+    "source_id": "F1A_003"
+  },
+  "row_0267": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "disappointment",
+    "register": "Embodied",
+    "row_index": 6,
+    "source_id": "F1E_006"
+  },
+  "row_0268": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "neutral",
+    "register": "Transcendent",
+    "row_index": 3,
+    "source_id": "F7T_003"
+  },
+  "row_0269": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "love",
+    "register": "Affective",
+    "row_index": 4,
+    "source_id": "F4f_004"
+  },
+  "row_0270": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "nervousness",
+    "register": "Affective",
+    "row_index": 1,
+    "source_id": "F5f_001"
+  },
+  "row_0271": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "optimism",
+    "register": "Analytical",
+    "row_index": 7,
+    "source_id": "F4A_007"
+  },
+  "row_0272": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "grief",
+    "register": "Affective",
+    "row_index": 2,
+    "source_id": "F4f_002"
+  },
+  "row_0273": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "admiration",
+    "register": "Affective",
+    "row_index": 2,
+    "source_id": "F7f_002"
+  },
+  "row_0274": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "love",
+    "register": "Affective",
+    "row_index": 4,
+    "source_id": "F4f_004"
+  },
+  "row_0275": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "annoyance",
+    "register": "Analytical",
+    "row_index": 6,
+    "source_id": "F7A_006"
+  },
+  "row_0276": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "joy",
+    "register": "Analytical",
+    "row_index": 0,
+    "source_id": "F5A_000"
+  },
+  "row_0277": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "amusement",
+    "register": "Transcendent",
+    "row_index": 9,
+    "source_id": "F6T_009"
+  },
+  "row_0278": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "joy",
+    "register": "Analytical",
+    "row_index": 0,
+    "source_id": "F5A_000"
+  },
+  "row_0279": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "fear",
+    "register": "Affective",
+    "row_index": 0,
+    "source_id": "F4f_000"
+  },
+  "row_0280": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "gratitude",
+    "register": "Embodied",
+    "row_index": 0,
+    "source_id": "F4E_000"
+  },
+  "row_0281": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "pride",
+    "register": "Embodied",
+    "row_index": 6,
+    "source_id": "F4E_006"
+  },
+  "row_0282": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "optimism",
+    "register": "Analytical",
+    "row_index": 7,
+    "source_id": "F4A_007"
+  },
+  "row_0283": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "nervousness",
+    "register": "Transcendent",
+    "row_index": 3,
+    "source_id": "F5T_003"
+  },
+  "row_0284": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "disappointment",
+    "register": "Transcendent",
+    "row_index": 1,
+    "source_id": "F3T_001"
+  },
+  "row_0285": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "remorse",
+    "register": "Affective",
+    "row_index": 2,
+    "source_id": "F6f_002"
+  },
+  "row_0286": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "anger",
+    "register": "Affective",
+    "row_index": 4,
+    "source_id": "F7f_004"
+  },
+  "row_0287": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "pride",
+    "register": "Transcendent",
+    "row_index": 1,
+    "source_id": "F6T_001"
+  },
+  "row_0288": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "admiration",
+    "register": "Embodied",
+    "row_index": 1,
+    "source_id": "F7E_001"
+  },
+  "row_0289": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "sadness",
+    "register": "Transcendent",
+    "row_index": 1,
+    "source_id": "F7T_001"
+  },
+  "row_0290": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "nervousness",
+    "register": "Affective",
+    "row_index": 9,
+    "source_id": "F3f_009"
+  },
+  "row_0291": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "fear",
+    "register": "Analytical",
+    "row_index": 9,
+    "source_id": "F2A_009"
+  },
+  "row_0292": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "surprise",
+    "register": "Embodied",
+    "row_index": 7,
+    "source_id": "F5E_007"
+  },
+  "row_0293": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "annoyance",
+    "register": "Embodied",
+    "row_index": 4,
+    "source_id": "F7E_004"
+  },
+  "row_0294": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "joy",
+    "register": "Affective",
+    "row_index": 3,
+    "source_id": "F4f_003"
+  },
+  "row_0295": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "excitement",
+    "register": "Analytical",
+    "row_index": 4,
+    "source_id": "F3A_004"
+  },
+  "row_0296": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "caring",
+    "register": "Affective",
+    "row_index": 7,
+    "source_id": "F7f_007"
+  },
+  "row_0297": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "admiration",
+    "register": "Transcendent",
+    "row_index": 4,
+    "source_id": "F7T_004"
+  },
+  "row_0298": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "realization",
+    "register": "Analytical",
+    "row_index": 5,
+    "source_id": "F5A_005"
+  },
+  "row_0299": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "grief",
+    "register": "Embodied",
+    "row_index": 5,
+    "source_id": "F3E_005"
+  },
+  "row_0300": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "fear",
+    "register": "Analytical",
+    "row_index": 9,
+    "source_id": "F2A_009"
+  },
+  "row_0301": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "grief",
+    "register": "Affective",
+    "row_index": 6,
+    "source_id": "F3f_006"
+  },
+  "row_0302": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "relief",
+    "register": "Affective",
+    "row_index": 9,
+    "source_id": "F4f_009"
+  },
+  "row_0303": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "nervousness",
+    "register": "Embodied",
+    "row_index": 8,
+    "source_id": "F3E_008"
+  },
+  "row_0304": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "admiration",
+    "register": "Transcendent",
+    "row_index": 0,
+    "source_id": "F1T_000"
+  },
+  "row_0305": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "neutral",
+    "register": "Embodied",
+    "row_index": 8,
+    "source_id": "F5E_008"
+  },
+  "row_0306": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "optimism",
+    "register": "Transcendent",
+    "row_index": 0,
+    "source_id": "F6T_000"
+  },
+  "row_0307": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "surprise",
+    "register": "Embodied",
+    "row_index": 7,
+    "source_id": "F5E_007"
+  },
+  "row_0308": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "sadness",
+    "register": "Embodied",
+    "row_index": 2,
+    "source_id": "F6E_002"
+  },
+  "row_0309": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "remorse",
+    "register": "Embodied",
+    "row_index": 9,
+    "source_id": "F4E_009"
+  },
+  "row_0310": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "surprise",
+    "register": "Transcendent",
+    "row_index": 2,
+    "source_id": "F7T_002"
+  },
+  "row_0311": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "nervousness",
+    "register": "Embodied",
+    "row_index": 4,
+    "source_id": "F4E_004"
+  },
+  "row_0312": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "confusion",
+    "register": "Analytical",
+    "row_index": 5,
+    "source_id": "F1A_005"
+  },
+  "row_0313": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "disgust",
+    "register": "Transcendent",
+    "row_index": 3,
+    "source_id": "F3T_003"
+  },
+  "row_0314": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "disapproval",
+    "register": "Affective",
+    "row_index": 4,
+    "source_id": "F2f_004"
+  },
+  "row_0315": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "joy",
+    "register": "Analytical",
+    "row_index": 4,
+    "source_id": "F4A_004"
+  },
+  "row_0316": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "nervousness",
+    "register": "Analytical",
+    "row_index": 2,
+    "source_id": "F5A_002"
+  },
+  "row_0317": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "sadness",
+    "register": "Embodied",
+    "row_index": 6,
+    "source_id": "F5E_006"
+  },
+  "row_0318": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "annoyance",
+    "register": "Affective",
+    "row_index": 9,
+    "source_id": "F6f_009"
+  },
+  "row_0319": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "nervousness",
+    "register": "Affective",
+    "row_index": 5,
+    "source_id": "F4f_005"
+  },
+  "row_0320": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "neutral",
+    "register": "Transcendent",
+    "row_index": 7,
+    "source_id": "F6T_007"
+  },
+  "row_0321": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "disapproval",
+    "register": "Affective",
+    "row_index": 0,
+    "source_id": "F3f_000"
+  },
+  "row_0322": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "confusion",
+    "register": "Transcendent",
+    "row_index": 6,
+    "source_id": "F1T_006"
+  },
+  "row_0323": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "desire",
+    "register": "Embodied",
+    "row_index": 5,
+    "source_id": "F1E_005"
+  },
+  "row_0324": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "gratitude",
+    "register": "Affective",
+    "row_index": 5,
+    "source_id": "F3f_005"
+  },
+  "row_0325": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "disappointment",
+    "register": "Embodied",
+    "row_index": 6,
+    "source_id": "F1E_006"
+  },
+  "row_0326": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "love",
+    "register": "Analytical",
+    "row_index": 1,
+    "source_id": "F5A_001"
+  },
+  "row_0327": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "realization",
+    "register": "Embodied",
+    "row_index": 7,
+    "source_id": "F4E_007"
+  },
+  "row_0328": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "nervousness",
+    "register": "Transcendent",
+    "row_index": 7,
+    "source_id": "F4T_007"
+  },
+  "row_0329": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "fear",
+    "register": "Transcendent",
+    "row_index": 2,
+    "source_id": "F4T_002"
+  },
+  "row_0330": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "disapproval",
+    "register": "Transcendent",
+    "row_index": 2,
+    "source_id": "F3T_002"
+  },
+  "row_0331": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "love",
+    "register": "Analytical",
+    "row_index": 5,
+    "source_id": "F4A_005"
+  },
+  "row_0332": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "disapproval",
+    "register": "Analytical",
+    "row_index": 9,
+    "source_id": "F1A_009"
+  },
+  "row_0333": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "excitement",
+    "register": "Analytical",
+    "row_index": 0,
+    "source_id": "F4A_000"
+  },
+  "row_0334": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "pride",
+    "register": "Affective",
+    "row_index": 3,
+    "source_id": "F5f_003"
+  },
+  "row_0335": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "excitement",
+    "register": "Transcendent",
+    "row_index": 1,
+    "source_id": "F4T_001"
+  },
+  "row_0336": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "fear",
+    "register": "Affective",
+    "row_index": 8,
+    "source_id": "F2f_008"
+  },
+  "row_0337": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "curiosity",
+    "register": "Analytical",
+    "row_index": 6,
+    "source_id": "F1A_006"
+  },
+  "row_0338": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "sadness",
+    "register": "Analytical",
+    "row_index": 0,
+    "source_id": "F7A_000"
+  },
+  "row_0339": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "disapproval",
+    "register": "Embodied",
+    "row_index": 3,
+    "source_id": "F2E_003"
+  },
+  "row_0340": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "curiosity",
+    "register": "Embodied",
+    "row_index": 4,
+    "source_id": "F1E_004"
+  },
+  "row_0341": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "remorse",
+    "register": "Affective",
+    "row_index": 2,
+    "source_id": "F6f_002"
+  },
+  "row_0342": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "surprise",
+    "register": "Affective",
+    "row_index": 8,
+    "source_id": "F5f_008"
+  },
+  "row_0343": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "excitement",
+    "register": "Transcendent",
+    "row_index": 1,
+    "source_id": "F4T_001"
+  },
+  "row_0344": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "desire",
+    "register": "Transcendent",
+    "row_index": 8,
+    "source_id": "F1T_008"
+  },
+  "row_0345": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "annoyance",
+    "register": "Affective",
+    "row_index": 1,
+    "source_id": "F1f_001"
+  },
+  "row_0346": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "pride",
+    "register": "Transcendent",
+    "row_index": 5,
+    "source_id": "F5T_005"
+  },
+  "row_0347": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "pride",
+    "register": "Analytical",
+    "row_index": 4,
+    "source_id": "F5A_004"
+  },
+  "row_0348": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "caring",
+    "register": "Analytical",
+    "row_index": 4,
+    "source_id": "F1A_004"
+  },
+  "row_0349": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "joy",
+    "register": "Analytical",
+    "row_index": 8,
+    "source_id": "F3A_008"
+  },
+  "row_0350": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "embarrassment",
+    "register": "Analytical",
+    "row_index": 3,
+    "source_id": "F3A_003"
+  },
+  "row_0351": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "confusion",
+    "register": "Affective",
+    "row_index": 8,
+    "source_id": "F7f_008"
+  },
+  "row_0352": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "pride",
+    "register": "Embodied",
+    "row_index": 6,
+    "source_id": "F4E_006"
+  },
+  "row_0353": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "fear",
+    "register": "Transcendent",
+    "row_index": 2,
+    "source_id": "F4T_002"
+  },
+  "row_0354": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "disgust",
+    "register": "Embodied",
+    "row_index": 4,
+    "source_id": "F2E_004"
+  },
+  "row_0355": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "grief",
+    "register": "Embodied",
+    "row_index": 5,
+    "source_id": "F3E_005"
+  },
+  "row_0356": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "realization",
+    "register": "Analytical",
+    "row_index": 9,
+    "source_id": "F4A_009"
+  },
+  "row_0357": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "curiosity",
+    "register": "Embodied",
+    "row_index": 8,
+    "source_id": "F7E_008"
+  },
+  "row_0358": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "disapproval",
+    "register": "Affective",
+    "row_index": 8,
+    "source_id": "F1f_008"
+  },
+  "row_0359": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "disapproval",
+    "register": "Analytical",
+    "row_index": 1,
+    "source_id": "F3A_001"
+  },
+  "row_0360": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "caring",
+    "register": "Affective",
+    "row_index": 7,
+    "source_id": "F7f_007"
+  },
+  "row_0361": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "disgust",
+    "register": "Affective",
+    "row_index": 5,
+    "source_id": "F2f_005"
+  },
+  "row_0362": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "joy",
+    "register": "Transcendent",
+    "row_index": 1,
+    "source_id": "F5T_001"
+  },
+  "row_0363": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "anger",
+    "register": "Embodied",
+    "row_index": 3,
+    "source_id": "F7E_003"
+  },
+  "row_0364": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "admiration",
+    "register": "Affective",
+    "row_index": 6,
+    "source_id": "F6f_006"
+  },
+  "row_0365": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "grief",
+    "register": "Transcendent",
+    "row_index": 0,
+    "source_id": "F5T_000"
+  },
+  "row_0366": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "sadness",
+    "register": "Transcendent",
+    "row_index": 9,
+    "source_id": "F5T_009"
+  },
+  "row_0367": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "curiosity",
+    "register": "Affective",
+    "row_index": 9,
+    "source_id": "F7f_009"
+  },
+  "row_0368": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "pride",
+    "register": "Analytical",
+    "row_index": 0,
+    "source_id": "F6A_000"
+  },
+  "row_0369": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "pride",
+    "register": "Transcendent",
+    "row_index": 1,
+    "source_id": "F6T_001"
+  },
+  "row_0370": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "disapproval",
+    "register": "Transcendent",
+    "row_index": 6,
+    "source_id": "F2T_006"
+  },
+  "row_0371": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "surprise",
+    "register": "Analytical",
+    "row_index": 1,
+    "source_id": "F7A_001"
+  },
+  "row_0372": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "optimism",
+    "register": "Embodied",
+    "row_index": 9,
+    "source_id": "F3E_009"
+  },
+  "row_0373": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "admiration",
+    "register": "Analytical",
+    "row_index": 7,
+    "source_id": "F6A_007"
+  },
+  "row_0374": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "disappointment",
+    "register": "Transcendent",
+    "row_index": 9,
+    "source_id": "F1T_009"
+  },
+  "row_0375": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "disappointment",
+    "register": "Transcendent",
+    "row_index": 9,
+    "source_id": "F1T_009"
+  },
+  "row_0376": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "annoyance",
+    "register": "Embodied",
+    "row_index": 0,
+    "source_id": "F1E_000"
+  },
+  "row_0377": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "optimism",
+    "register": "Analytical",
+    "row_index": 3,
+    "source_id": "F5A_003"
+  },
+  "row_0378": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "disappointment",
+    "register": "Analytical",
+    "row_index": 4,
+    "source_id": "F2A_004"
+  },
+  "row_0379": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "neutral",
+    "register": "Affective",
+    "row_index": 9,
+    "source_id": "F5f_009"
+  },
+  "row_0380": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "fear",
+    "register": "Affective",
+    "row_index": 4,
+    "source_id": "F3f_004"
+  },
+  "row_0381": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "optimism",
+    "register": "Transcendent",
+    "row_index": 8,
+    "source_id": "F4T_008"
+  },
+  "row_0382": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "caring",
+    "register": "Analytical",
+    "row_index": 0,
+    "source_id": "F2A_000"
+  },
+  "row_0383": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "admiration",
+    "register": "Embodied",
+    "row_index": 5,
+    "source_id": "F6E_005"
+  },
+  "row_0384": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "disgust",
+    "register": "Embodied",
+    "row_index": 0,
+    "source_id": "F3E_000"
+  },
+  "row_0385": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "embarrassment",
+    "register": "Analytical",
+    "row_index": 3,
+    "source_id": "F3A_003"
+  },
+  "row_0386": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "amusement",
+    "register": "Embodied",
+    "row_index": 2,
+    "source_id": "F7E_002"
+  },
+  "row_0387": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "curiosity",
+    "register": "Embodied",
+    "row_index": 0,
+    "source_id": "F2E_000"
+  },
+  "row_0388": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "relief",
+    "register": "Analytical",
+    "row_index": 6,
+    "source_id": "F5A_006"
+  },
+  "row_0389": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "love",
+    "register": "Analytical",
+    "row_index": 1,
+    "source_id": "F5A_001"
+  },
+  "row_0390": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "sadness",
+    "register": "Transcendent",
+    "row_index": 5,
+    "source_id": "F6T_005"
+  },
+  "row_0391": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "fear",
+    "register": "Embodied",
+    "row_index": 3,
+    "source_id": "F3E_003"
+  },
+  "row_0392": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "embarrassment",
+    "register": "Transcendent",
+    "row_index": 0,
+    "source_id": "F4T_000"
+  },
+  "row_0393": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "realization",
+    "register": "Embodied",
+    "row_index": 3,
+    "source_id": "F5E_003"
+  },
+  "row_0394": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "disappointment",
+    "register": "Embodied",
+    "row_index": 2,
+    "source_id": "F2E_002"
+  },
+  "row_0395": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "remorse",
+    "register": "Affective",
+    "row_index": 6,
+    "source_id": "F5f_006"
+  },
+  "row_0396": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "realization",
+    "register": "Transcendent",
+    "row_index": 2,
+    "source_id": "F6T_002"
+  },
+  "row_0397": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "grief",
+    "register": "Affective",
+    "row_index": 6,
+    "source_id": "F3f_006"
+  },
+  "row_0398": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "desire",
+    "register": "Affective",
+    "row_index": 6,
+    "source_id": "F1f_006"
+  },
+  "row_0399": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "admiration",
+    "register": "Transcendent",
+    "row_index": 4,
+    "source_id": "F7T_004"
+  },
+  "row_0400": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "disapproval",
+    "register": "Analytical",
+    "row_index": 5,
+    "source_id": "F2A_005"
+  },
+  "row_0401": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "nervousness",
+    "register": "Embodied",
+    "row_index": 0,
+    "source_id": "F5E_000"
+  },
+  "row_0402": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "excitement",
+    "register": "Embodied",
+    "row_index": 2,
+    "source_id": "F3E_002"
+  },
+  "row_0403": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "love",
+    "register": "Embodied",
+    "row_index": 3,
+    "source_id": "F4E_003"
+  },
+  "row_0404": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "fear",
+    "register": "Affective",
+    "row_index": 8,
+    "source_id": "F2f_008"
+  },
+  "row_0405": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "relief",
+    "register": "Analytical",
+    "row_index": 2,
+    "source_id": "F6A_002"
+  },
+  "row_0406": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "love",
+    "register": "Affective",
+    "row_index": 0,
+    "source_id": "F5f_000"
+  },
+  "row_0407": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "gratitude",
+    "register": "Affective",
+    "row_index": 1,
+    "source_id": "F4f_001"
+  },
+  "row_0408": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "love",
+    "register": "Transcendent",
+    "row_index": 2,
+    "source_id": "F5T_002"
+  },
+  "row_0409": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "pride",
+    "register": "Affective",
+    "row_index": 3,
+    "source_id": "F5f_003"
+  },
+  "row_0410": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "optimism",
+    "register": "Transcendent",
+    "row_index": 8,
+    "source_id": "F4T_008"
+  },
+  "row_0411": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "love",
+    "register": "Transcendent",
+    "row_index": 6,
+    "source_id": "F4T_006"
+  },
+  "row_0412": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "relief",
+    "register": "Transcendent",
+    "row_index": 3,
+    "source_id": "F6T_003"
+  },
+  "row_0413": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "neutral",
+    "register": "Affective",
+    "row_index": 9,
+    "source_id": "F5f_009"
+  },
+  "row_0414": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "surprise",
+    "register": "Affective",
+    "row_index": 4,
+    "source_id": "F6f_004"
+  },
+  "row_0415": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "gratitude",
+    "register": "Analytical",
+    "row_index": 2,
+    "source_id": "F4A_002"
+  },
+  "row_0416": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "amusement",
+    "register": "Analytical",
+    "row_index": 4,
+    "source_id": "F7A_004"
+  },
+  "row_0417": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "relief",
+    "register": "Embodied",
+    "row_index": 4,
+    "source_id": "F5E_004"
+  },
+  "row_0418": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "nervousness",
+    "register": "Transcendent",
+    "row_index": 7,
+    "source_id": "F4T_007"
+  },
+  "row_0419": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "annoyance",
+    "register": "Affective",
+    "row_index": 5,
+    "source_id": "F7f_005"
+  },
+  "row_0420": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "confusion",
+    "register": "Affective",
+    "row_index": 4,
+    "source_id": "F1f_004"
+  },
+  "row_0421": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "disappointment",
+    "register": "Transcendent",
+    "row_index": 5,
+    "source_id": "F2T_005"
+  },
+  "row_0422": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "remorse",
+    "register": "Transcendent",
+    "row_index": 0,
+    "source_id": "F7T_000"
+  },
+  "row_0423": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "admiration",
+    "register": "Analytical",
+    "row_index": 7,
+    "source_id": "F6A_007"
+  },
+  "row_0424": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "approval",
+    "register": "Transcendent",
+    "row_index": 8,
+    "source_id": "F7T_008"
+  },
+  "row_0425": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "love",
+    "register": "Embodied",
+    "row_index": 7,
+    "source_id": "F3E_007"
+  },
+  "row_0426": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "annoyance",
+    "register": "Transcendent",
+    "row_index": 7,
+    "source_id": "F7T_007"
+  },
+  "row_0427": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "register": "Embodied",
+    "row_index": 4,
+    "source_id": "F6E_004"
+  },
+  "row_0428": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "realization",
+    "register": "Embodied",
+    "row_index": 7,
+    "source_id": "F4E_007"
+  },
+  "row_0429": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "realization",
+    "register": "Analytical",
+    "row_index": 5,
+    "source_id": "F5A_005"
+  },
+  "row_0430": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "grief",
+    "register": "Transcendent",
+    "row_index": 8,
+    "source_id": "F3T_008"
+  },
+  "row_0431": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "annoyance",
+    "register": "Affective",
+    "row_index": 5,
+    "source_id": "F7f_005"
+  },
+  "row_0432": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "sadness",
+    "register": "Embodied",
+    "row_index": 6,
+    "source_id": "F5E_006"
+  },
+  "row_0433": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "confusion",
+    "register": "Embodied",
+    "row_index": 7,
+    "source_id": "F7E_007"
+  },
+  "row_0434": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "sadness",
+    "register": "Analytical",
+    "row_index": 4,
+    "source_id": "F6A_004"
+  },
+  "row_0435": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "annoyance",
+    "register": "Analytical",
+    "row_index": 2,
+    "source_id": "F1A_002"
+  },
+  "row_0436": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "grief",
+    "register": "Analytical",
+    "row_index": 7,
+    "source_id": "F3A_007"
+  },
+  "row_0437": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "relief",
+    "register": "Analytical",
+    "row_index": 6,
+    "source_id": "F5A_006"
+  },
+  "row_0438": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "admiration",
+    "register": "Transcendent",
+    "row_index": 8,
+    "source_id": "F6T_008"
+  },
+  "row_0439": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "joy",
+    "register": "Embodied",
+    "row_index": 6,
+    "source_id": "F3E_006"
+  },
+  "row_0440": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "curiosity",
+    "register": "Transcendent",
+    "row_index": 3,
+    "source_id": "F2T_003"
+  },
+  "row_0441": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "love",
+    "register": "Affective",
+    "row_index": 8,
+    "source_id": "F3f_008"
+  },
+  "row_0442": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "neutral",
+    "register": "Affective",
+    "row_index": 1,
+    "source_id": "F7f_001"
+  },
+  "row_0443": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "admiration",
+    "register": "Embodied",
+    "row_index": 5,
+    "source_id": "F6E_005"
+  },
+  "row_0444": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "embarrassment",
+    "register": "Analytical",
+    "row_index": 7,
+    "source_id": "F2A_007"
+  },
+  "row_0445": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "remorse",
+    "register": "Analytical",
+    "row_index": 7,
+    "source_id": "F5A_007"
+  },
+  "row_0446": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "embarrassment",
+    "register": "Embodied",
+    "row_index": 5,
+    "source_id": "F2E_005"
+  },
+  "row_0447": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "sadness",
+    "register": "Affective",
+    "row_index": 3,
+    "source_id": "F6f_003"
+  },
+  "row_0448": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "pride",
+    "register": "Transcendent",
+    "row_index": 5,
+    "source_id": "F5T_005"
+  },
+  "row_0449": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "joy",
+    "register": "Embodied",
+    "row_index": 2,
+    "source_id": "F4E_002"
+  },
+  "row_0450": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "surprise",
+    "register": "Affective",
+    "row_index": 4,
+    "source_id": "F6f_004"
+  },
+  "row_0451": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "disappointment",
+    "register": "Affective",
+    "row_index": 3,
+    "source_id": "F2f_003"
+  },
+  "row_0452": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "relief",
+    "register": "Embodied",
+    "row_index": 0,
+    "source_id": "F6E_000"
+  },
+  "row_0453": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "amusement",
+    "register": "Embodied",
+    "row_index": 6,
+    "source_id": "F6E_006"
+  },
+  "row_0454": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "joy",
+    "register": "Transcendent",
+    "row_index": 9,
+    "source_id": "F3T_009"
+  },
+  "row_0455": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "disgust",
+    "register": "Embodied",
+    "row_index": 8,
+    "source_id": "F1E_008"
+  },
+  "row_0456": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "anger",
+    "register": "Affective",
+    "row_index": 8,
+    "source_id": "F6f_008"
+  },
+  "row_0457": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "curiosity",
+    "register": "Affective",
+    "row_index": 5,
+    "source_id": "F1f_005"
+  },
+  "row_0458": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "embarrassment",
+    "register": "Affective",
+    "row_index": 2,
+    "source_id": "F3f_002"
+  },
+  "row_0459": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "embarrassment",
+    "register": "Embodied",
+    "row_index": 5,
+    "source_id": "F2E_005"
+  },
+  "row_0460": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "curiosity",
+    "register": "Embodied",
+    "row_index": 0,
+    "source_id": "F2E_000"
+  },
+  "row_0461": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "neutral",
+    "register": "Transcendent",
+    "row_index": 7,
+    "source_id": "F6T_007"
+  },
+  "row_0462": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "curiosity",
+    "register": "Embodied",
+    "row_index": 8,
+    "source_id": "F7E_008"
+  },
+  "row_0463": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "disgust",
+    "register": "Analytical",
+    "row_index": 2,
+    "source_id": "F3A_002"
+  },
+  "row_0464": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "confusion",
+    "register": "Affective",
+    "row_index": 0,
+    "source_id": "F2f_000"
+  },
+  "row_0465": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "joy",
+    "register": "Affective",
+    "row_index": 7,
+    "source_id": "F3f_007"
+  },
+  "row_0466": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "grief",
+    "register": "Analytical",
+    "row_index": 3,
+    "source_id": "F4A_003"
+  },
+  "row_0467": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "optimism",
+    "register": "Transcendent",
+    "row_index": 0,
+    "source_id": "F6T_000"
+  },
+  "row_0468": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "realization",
+    "register": "Analytical",
+    "row_index": 1,
+    "source_id": "F6A_001"
+  },
+  "row_0469": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "gratitude",
+    "register": "Embodied",
+    "row_index": 0,
+    "source_id": "F4E_000"
+  },
+  "row_0470": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "desire",
+    "register": "Analytical",
+    "row_index": 3,
+    "source_id": "F2A_003"
+  },
+  "row_0471": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "amusement",
+    "register": "Embodied",
+    "row_index": 6,
+    "source_id": "F6E_006"
+  },
+  "row_0472": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "realization",
+    "register": "Affective",
+    "row_index": 8,
+    "source_id": "F4f_008"
+  },
+  "row_0473": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "embarrassment",
+    "register": "Embodied",
+    "row_index": 1,
+    "source_id": "F3E_001"
+  },
+  "row_0474": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "desire",
+    "register": "Embodied",
+    "row_index": 1,
+    "source_id": "F2E_001"
+  },
+  "row_0475": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "surprise",
+    "register": "Affective",
+    "row_index": 8,
+    "source_id": "F5f_008"
+  },
+  "row_0476": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "relief",
+    "register": "Embodied",
+    "row_index": 4,
+    "source_id": "F5E_004"
+  },
+  "row_0477": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "grief",
+    "register": "Transcendent",
+    "row_index": 8,
+    "source_id": "F3T_008"
+  },
+  "row_0478": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "gratitude",
+    "register": "Analytical",
+    "row_index": 6,
+    "source_id": "F3A_006"
+  },
+  "row_0479": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "disapproval",
+    "register": "Analytical",
+    "row_index": 9,
+    "source_id": "F1A_009"
+  },
+  "row_0480": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "love",
+    "register": "Transcendent",
+    "row_index": 6,
+    "source_id": "F4T_006"
+  },
+  "row_0481": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "anger",
+    "register": "Transcendent",
+    "row_index": 6,
+    "source_id": "F7T_006"
+  },
+  "row_0482": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "approval",
+    "register": "Analytical",
+    "row_index": 7,
+    "source_id": "F7A_007"
+  },
+  "row_0483": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "embarrassment",
+    "register": "Analytical",
+    "row_index": 7,
+    "source_id": "F2A_007"
+  },
+  "row_0484": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "approval",
+    "register": "Embodied",
+    "row_index": 9,
+    "source_id": "F6E_009"
+  },
+  "row_0485": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "remorse",
+    "register": "Embodied",
+    "row_index": 1,
+    "source_id": "F6E_001"
+  },
+  "row_0486": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "disappointment",
+    "register": "Transcendent",
+    "row_index": 1,
+    "source_id": "F3T_001"
+  },
+  "row_0487": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "joy",
+    "register": "Affective",
+    "row_index": 3,
+    "source_id": "F4f_003"
+  },
+  "row_0488": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "approval",
+    "register": "Embodied",
+    "row_index": 1,
+    "source_id": "F1E_001"
+  },
+  "row_0489": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "confusion",
+    "register": "Transcendent",
+    "row_index": 6,
+    "source_id": "F1T_006"
+  },
+  "row_0490": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "surprise",
+    "register": "Analytical",
+    "row_index": 9,
+    "source_id": "F5A_009"
+  },
+  "row_0491": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "embarrassment",
+    "register": "Embodied",
+    "row_index": 9,
+    "source_id": "F1E_009"
+  },
+  "row_0492": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "desire",
+    "register": "Affective",
+    "row_index": 6,
+    "source_id": "F1f_006"
+  },
+  "row_0493": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "disappointment",
+    "register": "Affective",
+    "row_index": 7,
+    "source_id": "F1f_007"
+  },
+  "row_0494": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "caring",
+    "register": "Affective",
+    "row_index": 3,
+    "source_id": "F1f_003"
+  },
+  "row_0495": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "pride",
+    "register": "Analytical",
+    "row_index": 4,
+    "source_id": "F5A_004"
+  },
+  "row_0496": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "admiration",
+    "register": "Affective",
+    "row_index": 6,
+    "source_id": "F6f_006"
+  },
+  "row_0497": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "desire",
+    "register": "Transcendent",
+    "row_index": 4,
+    "source_id": "F2T_004"
+  },
+  "row_0498": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "grief",
+    "register": "Embodied",
+    "row_index": 1,
+    "source_id": "F4E_001"
+  },
+  "row_0499": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2E",
+    "goemotion": "fear",
+    "register": "Embodied",
+    "row_index": 7,
+    "source_id": "F2E_007"
+  },
+  "row_0500": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "neutral",
+    "register": "Analytical",
+    "row_index": 2,
+    "source_id": "F7A_002"
+  },
+  "row_0501": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "optimism",
+    "register": "Embodied",
+    "row_index": 9,
+    "source_id": "F3E_009"
+  },
+  "row_0502": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2f",
+    "goemotion": "disappointment",
+    "register": "Affective",
+    "row_index": 3,
+    "source_id": "F2f_003"
+  },
+  "row_0503": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "love",
+    "register": "Embodied",
+    "row_index": 7,
+    "source_id": "F3E_007"
+  },
+  "row_0504": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "anger",
+    "register": "Analytical",
+    "row_index": 9,
+    "source_id": "F6A_009"
+  },
+  "row_0505": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "optimism",
+    "register": "Analytical",
+    "row_index": 3,
+    "source_id": "F5A_003"
+  },
+  "row_0506": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "annoyance",
+    "register": "Analytical",
+    "row_index": 6,
+    "source_id": "F7A_006"
+  },
+  "row_0507": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5A",
+    "goemotion": "sadness",
+    "register": "Analytical",
+    "row_index": 8,
+    "source_id": "F5A_008"
+  },
+  "row_0508": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "caring",
+    "register": "Transcendent",
+    "row_index": 1,
+    "source_id": "F2T_001"
+  },
+  "row_0509": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "remorse",
+    "register": "Transcendent",
+    "row_index": 4,
+    "source_id": "F6T_004"
+  },
+  "row_0510": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "embarrassment",
+    "register": "Transcendent",
+    "row_index": 8,
+    "source_id": "F2T_008"
+  },
+  "row_0511": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6f",
+    "goemotion": "sadness",
+    "register": "Affective",
+    "row_index": 3,
+    "source_id": "F6f_003"
+  },
+  "row_0512": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "desire",
+    "register": "Analytical",
+    "row_index": 3,
+    "source_id": "F2A_003"
+  },
+  "row_0513": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "caring",
+    "register": "Analytical",
+    "row_index": 8,
+    "source_id": "F7A_008"
+  },
+  "row_0514": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "admiration",
+    "register": "Embodied",
+    "row_index": 9,
+    "source_id": "F5E_009"
+  },
+  "row_0515": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "curiosity",
+    "register": "Transcendent",
+    "row_index": 7,
+    "source_id": "F1T_007"
+  },
+  "row_0516": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "surprise",
+    "register": "Affective",
+    "row_index": 0,
+    "source_id": "F7f_000"
+  },
+  "row_0517": {
+    "arm": "D",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "admiration",
+    "register": "Analytical",
+    "row_index": 3,
+    "source_id": "F7A_003"
+  },
+  "row_0518": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6T",
+    "goemotion": "amusement",
+    "register": "Transcendent",
+    "row_index": 9,
+    "source_id": "F6T_009"
+  },
+  "row_0519": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "disgust",
+    "register": "Analytical",
+    "row_index": 6,
+    "source_id": "F2A_006"
+  },
+  "row_0520": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "register": "Embodied",
+    "row_index": 8,
+    "source_id": "F6E_008"
+  },
+  "row_0521": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "admiration",
+    "register": "Analytical",
+    "row_index": 3,
+    "source_id": "F7A_003"
+  },
+  "row_0522": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7A",
+    "goemotion": "anger",
+    "register": "Analytical",
+    "row_index": 5,
+    "source_id": "F7A_005"
+  },
+  "row_0523": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "approval",
+    "register": "Transcendent",
+    "row_index": 4,
+    "source_id": "F1T_004"
+  },
+  "row_0524": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "desire",
+    "register": "Embodied",
+    "row_index": 5,
+    "source_id": "F1E_005"
+  },
+  "row_0525": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "anger",
+    "register": "Transcendent",
+    "row_index": 6,
+    "source_id": "F7T_006"
+  },
+  "row_0526": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4T",
+    "goemotion": "joy",
+    "register": "Transcendent",
+    "row_index": 5,
+    "source_id": "F4T_005"
+  },
+  "row_0527": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4E",
+    "goemotion": "nervousness",
+    "register": "Embodied",
+    "row_index": 4,
+    "source_id": "F4E_004"
+  },
+  "row_0528": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "love",
+    "register": "Analytical",
+    "row_index": 5,
+    "source_id": "F4A_005"
+  },
+  "row_0529": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "optimism",
+    "register": "Affective",
+    "row_index": 2,
+    "source_id": "F5f_002"
+  },
+  "row_0530": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "annoyance",
+    "register": "Embodied",
+    "row_index": 8,
+    "source_id": "F6E_008"
+  },
+  "row_0531": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "sadness",
+    "register": "Analytical",
+    "row_index": 4,
+    "source_id": "F6A_004"
+  },
+  "row_0532": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "confusion",
+    "register": "Embodied",
+    "row_index": 3,
+    "source_id": "F1E_003"
+  },
+  "row_0533": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "pride",
+    "register": "Analytical",
+    "row_index": 8,
+    "source_id": "F4A_008"
+  },
+  "row_0534": {
+    "arm": "D",
+    "drive": "Structure",
+    "foundation": "F6E",
+    "goemotion": "relief",
+    "register": "Embodied",
+    "row_index": 0,
+    "source_id": "F6E_000"
+  },
+  "row_0535": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7f",
+    "goemotion": "approval",
+    "register": "Affective",
+    "row_index": 6,
+    "source_id": "F7f_006"
+  },
+  "row_0536": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "approval",
+    "register": "Affective",
+    "row_index": 2,
+    "source_id": "F1f_002"
+  },
+  "row_0537": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "embarrassment",
+    "register": "Affective",
+    "row_index": 2,
+    "source_id": "F3f_002"
+  },
+  "row_0538": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "nervousness",
+    "register": "Embodied",
+    "row_index": 0,
+    "source_id": "F5E_000"
+  },
+  "row_0539": {
+    "arm": "A",
+    "drive": "Structure",
+    "foundation": "F6A",
+    "goemotion": "neutral",
+    "register": "Analytical",
+    "row_index": 6,
+    "source_id": "F6A_006"
+  },
+  "row_0540": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5E",
+    "goemotion": "neutral",
+    "register": "Embodied",
+    "row_index": 8,
+    "source_id": "F5E_008"
+  },
+  "row_0541": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "disgust",
+    "register": "Embodied",
+    "row_index": 8,
+    "source_id": "F1E_008"
+  },
+  "row_0542": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3T",
+    "goemotion": "embarrassment",
+    "register": "Transcendent",
+    "row_index": 4,
+    "source_id": "F3T_004"
+  },
+  "row_0543": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "realization",
+    "register": "Affective",
+    "row_index": 4,
+    "source_id": "F5f_004"
+  },
+  "row_0544": {
+    "arm": "D",
+    "drive": "Unity",
+    "foundation": "F1E",
+    "goemotion": "annoyance",
+    "register": "Embodied",
+    "row_index": 0,
+    "source_id": "F1E_000"
+  },
+  "row_0545": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7E",
+    "goemotion": "neutral",
+    "register": "Embodied",
+    "row_index": 0,
+    "source_id": "F7E_000"
+  },
+  "row_0546": {
+    "arm": "A",
+    "drive": "Vitality",
+    "foundation": "F3E",
+    "goemotion": "joy",
+    "register": "Embodied",
+    "row_index": 6,
+    "source_id": "F3E_006"
+  },
+  "row_0547": {
+    "arm": "A",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "remorse",
+    "register": "Transcendent",
+    "row_index": 8,
+    "source_id": "F5T_008"
+  },
+  "row_0548": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3f",
+    "goemotion": "excitement",
+    "register": "Affective",
+    "row_index": 3,
+    "source_id": "F3f_003"
+  },
+  "row_0549": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5f",
+    "goemotion": "relief",
+    "register": "Affective",
+    "row_index": 5,
+    "source_id": "F5f_005"
+  },
+  "row_0550": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1f",
+    "goemotion": "caring",
+    "register": "Affective",
+    "row_index": 3,
+    "source_id": "F1f_003"
+  },
+  "row_0551": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1T",
+    "goemotion": "approval",
+    "register": "Transcendent",
+    "row_index": 4,
+    "source_id": "F1T_004"
+  },
+  "row_0552": {
+    "arm": "D",
+    "drive": "Agency",
+    "foundation": "F5T",
+    "goemotion": "sadness",
+    "register": "Transcendent",
+    "row_index": 9,
+    "source_id": "F5T_009"
+  },
+  "row_0553": {
+    "arm": "A",
+    "drive": "Unity",
+    "foundation": "F1A",
+    "goemotion": "desire",
+    "register": "Analytical",
+    "row_index": 7,
+    "source_id": "F1A_007"
+  },
+  "row_0554": {
+    "arm": "A",
+    "drive": "Wisdom",
+    "foundation": "F2A",
+    "goemotion": "caring",
+    "register": "Analytical",
+    "row_index": 0,
+    "source_id": "F2A_000"
+  },
+  "row_0555": {
+    "arm": "A",
+    "drive": "Purpose",
+    "foundation": "F7T",
+    "goemotion": "caring",
+    "register": "Transcendent",
+    "row_index": 9,
+    "source_id": "F7T_009"
+  },
+  "row_0556": {
+    "arm": "D",
+    "drive": "Wisdom",
+    "foundation": "F2T",
+    "goemotion": "excitement",
+    "register": "Transcendent",
+    "row_index": 9,
+    "source_id": "F2T_009"
+  },
+  "row_0557": {
+    "arm": "D",
+    "drive": "Vitality",
+    "foundation": "F3A",
+    "goemotion": "disgust",
+    "register": "Analytical",
+    "row_index": 2,
+    "source_id": "F3A_002"
+  },
+  "row_0558": {
+    "arm": "D",
+    "drive": "Connection",
+    "foundation": "F4A",
+    "goemotion": "excitement",
+    "register": "Analytical",
+    "row_index": 0,
+    "source_id": "F4A_000"
+  },
+  "row_0559": {
+    "arm": "A",
+    "drive": "Connection",
+    "foundation": "F4f",
+    "goemotion": "optimism",
+    "register": "Affective",
+    "row_index": 6,
+    "source_id": "F4f_006"
+  }
+}

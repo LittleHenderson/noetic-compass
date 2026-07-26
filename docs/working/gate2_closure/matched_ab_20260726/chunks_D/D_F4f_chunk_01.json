@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F4f_chunk_01",
+  "generated_at_epoch": 1785076423,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F4f_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. The bins are overflowing with items that need immediate attention, yet a crucial label is missing for a critical medication. A sharp inhale escapes them as their jaw tightens, and they quickly scan the surrounding shelves again, fingers tracing the edge of a bin rather than picking up an item."
+    },
+    {
+      "id": "F4f_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. A package addressed to a recently moved-out resident appears, identical to one that caused trouble last week. They pause, their shoulders relaxing slightly as they carefully set the package aside, then make a note on the tape to cross-reference it with the move-out log."
+    },
+    {
+      "id": "F4f_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The timer on the whiteboard is about to expire, and a vital component for a student project is nowhere to be found among the scattered spare chairs and materials. Their lower lip trembles imperceptibly as they lower their head, letting out a slow exhale before turning to ask a nearby colleague for assistance."
+    },
+    {
+      "id": "F4f_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A complex application, requiring a signature from a notoriously difficult official, lands at the top of the pile. Their eyes widen, and a quick smile flashes across their face as they pick up the binder, then confidently tap the desk to signal the next applicant."
+    },
+    {
+      "id": "F4f_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The final sign-off form for a critical update is missing, and the wall calendar shows the deployment deadline is hours away. They press their lips together, a faint warmth spreading across their cheeks as they place a hand on the desk and turn to re-check the completed forms one last time."
+    },
+    {
+      "id": "F4f_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. The screen shows a notification about a sudden route change, impacting several bookings. They grip the charging cord tighter, then visibly swallow before selecting the next urgent item. Their breath hitches as they consider the cascading cancellations this will likely cause."
+    },
+    {
+      "id": "F4f_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. A volunteer confirms a large food delivery is en route, potentially enough for the entire week's meals. They tap the toolbox with a gloved hand, a slight lift at the corners of their mouth, and then efficiently assign the next task."
+    },
+    {
+      "id": "F4f_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. The latest inventory report appears on the laptop, showing a significant discrepancy in a recent shipment. They lean back, puffing their cheeks out slightly, then carefully pick up a sticky note to jot down an audit point."
+    },
+    {
+      "id": "F4f_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. While reviewing a stack of overdue notices, their eyes widen as they recognize a name from years ago. They stop scrolling, fingers hovering over the next entry, a sudden stillness settling over them."
+    },
+    {
+      "id": "F4f_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. The external weather alert system suddenly goes silent, indicating the immediate danger has passed. They let out a slow exhale, shoulders dropping, and then begin processing the remaining forms with renewed vigor, a faint smile gracing their lips."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

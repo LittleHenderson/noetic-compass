@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F4E_chunk_01",
+  "generated_at_epoch": 1785076399,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F4E_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. The clipboard lists items for urgent patient care, but the bin is nearly empty, indicating supplies for earlier requests were never picked up. A deep breath is drawn before carefully placing a label on an empty bin, a slight smile touching their lips as they consider the efficiency gained in the long run."
+    },
+    {
+      "id": "F4E_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. The scanner is not picking up the usual daily volume of packages, and a stack of mail sits untouched, marked with unfamiliar sender addresses. The person stares at the tray of unopened letters, their shoulders slumping, and slowly turns away without placing any of the new mail."
+    },
+    {
+      "id": "F4E_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The timer on the whiteboard shows the allotted time for this task has long passed, and a pile of sorted projects sits incomplete. After a moment, the person claps their hands together once, a bright expression forming as they resume sorting with renewed vigor, arranging the finished items neatly."
+    },
+    {
+      "id": "F4E_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. The headset crackles with static, and the binder is missing critical approval pages, preventing the processing of the current application. The person gently closes the binder, a soft, lingering look sent towards the absent pages before they pick up the next file with focused attention."
+    },
+    {
+      "id": "F4E_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The wall calendar has several dates circled in red, and the forms require immediate sign-off but lack necessary verification stamps. The person's hand trembles slightly as they reach for a form, their gaze darting towards the door, then back to the incomplete paperwork."
+    },
+    {
+      "id": "F4E_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. The next train is critically late, affecting many passengers. They examine a passenger's urgent request, which asks to reroute their travel plans to secure a specific arrival time. A new itinerary appears on the screen, showing a feasible but less direct path. The person's hands hover over the confirmation button, then quickly press it, a slight upward turn at the corner of their mouth as they look up."
+    },
+    {
+      "id": "F4E_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. A large event is scheduled for later today, and all volunteers are counting on the timely preparation of supplies. They pick up a sealed box of items, marked with a precise inventory list. Unpacking it, they find everything is perfectly organized and accounted for, exceeding the listed contents. Their shoulders relax, and they tap the packing slips with satisfaction before setting the box aside."
+    },
+    {
+      "id": "F4E_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. The incoming shipment\u2019s deadline is approaching, and missing items will cause significant disruption. They review a digital manifest on their laptop, cross-referencing it with a crumpled sticky note from the previous shift. A discrepancy becomes apparent: a key component is marked as present but isn't physically visible. Their brow furrows, and they lean closer to the screen, a slow shake of the head betraying their dawning understanding."
+    },
+    {
+      "id": "F4E_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A critical project submission is due in minutes, and a vital document is missing from the required packet. They search frantically through loose papers and their phone, the thermos of water untouched beside them. Just as they begin to organize their next steps, they spot the correct document tucked beneath a folding table leg. A deep exhale escapes them, and their posture visibly softens as they retrieve it."
+    },
+    {
+      "id": "F4E_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. The community is anxious about dwindling supplies, and their own inventory system seems to have failed. They hold a marker pen, about to cross an item off a list, but pause, their gaze fixed on the cart of supplies. They realize they mistakenly allocated a crucial item yesterday, leaving less than intended. The pen remains still, and their jaw tightens as they slowly lower their hand, a shadow crossing their face."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

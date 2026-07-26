@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F4T_chunk_01",
+  "generated_at_epoch": 1785076404,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F4T_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They check a clipboard, realizing they missed a critical item for a patient, making the entire bin unusable. A flush creeps up their neck as they consider how to explain this to their supervisor, then resolutely grab a new bin and start over, their jaw tight."
+    },
+    {
+      "id": "F4T_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. While scanning a package, they notice a forgotten item that reveals an unexpected, significant delivery meant for them alone. A broad smile stretches their face as they carefully set the package aside, eyes sparkling at the prospect of opening it later."
+    },
+    {
+      "id": "F4T_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The timer on the whiteboard shows they've run out of time to complete the task, and a crucial piece of equipment is now locked away. A sharp intake of breath escapes them as they grip the edge of a spare chair, their gaze darting towards the locked cabinet."
+    },
+    {
+      "id": "F4T_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A customer, upon receiving their approved permit, offers a heartfelt thanks and a small, unexpected gift, a token of their deep appreciation for the extra effort. The person's shoulders relax visibly, and a genuine warmth spreads across their face as they carefully place the gift on the counter."
+    },
+    {
+      "id": "F4T_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. They come across a form for a project that was just unexpectedly cancelled, rendering weeks of their work obsolete. Their shoulders slump as they stare at the wall calendar, a heavy stillness settling over them as they slowly set the form aside."
+    },
+    {
+      "id": "F4T_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. A new urgent request arrives, promising a direct route if handled quickly, but it means rerouting others who have also waited. The person\u2019s hands briefly fly to their chest, breath catching, before they decisively mark the new item for immediate processing, leaving the others untouched for now."
+    },
+    {
+      "id": "F4T_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. They find a note from a regular volunteer, detailing a shortcut to a more efficient system that would greatly help everyone's workflow. This method, however, requires deviating from the standard procedure and might be seen as bypassing established rules. They pick up the toolbox, then pause, a slow smile spreading across their face as they tuck the note into their apron pocket."
+    },
+    {
+      "id": "F4T_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. An alert flashes indicating a critical system update is ready, but installing it now risks disrupting the current queue processing and potentially corrupting the data. They have the laptop open and a sticky note with the update code nearby. Their jaw tightens, and they lean back, eyes darting between the alert and the queue, then slowly close the alert window."
+    },
+    {
+      "id": "F4T_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A colleague suggests a bold, unconventional approach to clearing the backlog that, if successful, would dramatically improve their efficiency, but it carries a significant risk of complete failure. They are holding a thermos, considering the proposal. A hopeful grin touches their lips, and they nod, reaching for the phone to gather resources for the new plan."
+    },
+    {
+      "id": "F4T_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. They discover a forgotten, highly complex problem within the queue that, if solved, would demonstrate exceptional skill and benefit the entire community housed here. However, tackling it means delaying the processing of simpler, immediate needs. With a marker pen hovering over an envelope, their shoulders straighten, a determined glint in their eye as they push aside the simpler tasks."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

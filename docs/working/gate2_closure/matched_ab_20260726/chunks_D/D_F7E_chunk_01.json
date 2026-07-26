@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F7E_chunk_01",
+  "generated_at_epoch": 1785076533,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F7E_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They pick up a bin of outdated bandages, their focus narrowing as they recall the proper disposal procedure for biohazards. A moment later, they place the bin into a designated reclamation chute."
+    },
+    {
+      "id": "F7E_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. As they scan the next package, a small, intricate design on its surface catches their eye, prompting a brief, soft smile. They then resume scanning, placing the package onto the correct numbered tray."
+    },
+    {
+      "id": "F7E_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. A misplaced tool on the workbench causes them to pause, a slight upturn at the corners of their mouth. After nudging the tool back into its proper holder with a finger, they return to the queue."
+    },
+    {
+      "id": "F7E_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. The binder's pages are out of order, and their jaw tightens almost imperceptibly as they notice a critical document is missing. With a controlled exhalation, they begin reordering the remaining pages, setting the binder aside for now."
+    },
+    {
+      "id": "F7E_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The wall calendar shows a missed deadline, and their brow furrows slightly as they glance at it. They then retrieve a form from the pile, noting the submission date before placing it in the 'processed' bin."
+    },
+    {
+      "id": "F7E_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. A stack of unfamiliar customer forms appeared, each requiring a specific regional map to process. The person hesitated, then carefully picked up one map, tracing a route on it with a fingertip before setting it aside with a slight nod."
+    },
+    {
+      "id": "F7E_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. A tray of identical meals sat waiting for distribution, but one container seemed slightly askew. The person gently adjusted the lid, then began plating the meals with deliberate, unhurried movements."
+    },
+    {
+      "id": "F7E_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. Two different inventory lists were presented simultaneously, and neither matched the current stock. The person stared at the laptop screen, then at the shelves, a furrow appearing between their brows as they tapped a finger against their chin."
+    },
+    {
+      "id": "F7E_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A small, unmarked envelope was mixed into the pile of returned books. The person paused their sorting, their gaze fixed on the envelope, before picking it up and turning it over in their hands, a faint smile touching their lips."
+    },
+    {
+      "id": "F7E_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. The last remaining radio battery was almost depleted, but another person nearby clearly needed it for a critical check-in. The person\u2019s hand hovered over the battery, their jaw tightening as they glanced towards the other individual before decisively placing it in their own device."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

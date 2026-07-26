@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F5E_chunk_01",
+  "generated_at_epoch": 1785076437,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F5E_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They pick up a clipboard, noting the stack of urgent items. A sudden tremor in their hand causes a bin to clatter. They pause, a quick, shallow breath escaping before resuming the task, their movements a fraction more jerky."
+    },
+    {
+      "id": "F5E_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. With a scanner and numbered trays, they begin processing a pile of envelopes. As they scan a package, a faint smile touches their lips, and their pace quickens, efficiently routing each item."
+    },
+    {
+      "id": "F5E_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. Using a timer and spare chairs, they examine a complex schematic. A slow nod of understanding spreads across their face, and they meticulously adjust a connection on a small device, their posture becoming more upright."
+    },
+    {
+      "id": "F5E_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. Wearing a headset and with a binder open, they review a stacked pile of applications. Their eyes widen slightly as they notice a discrepancy on a form, and they lean forward, tapping a pen against the desk as if recalibrating their approach."
+    },
+    {
+      "id": "F5E_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. They are handling forms and checking a wall calendar. After a long moment of scanning a critical document, their shoulders slump slightly, and a quiet exhale escapes them as they place the completed form aside with lighter hands."
+    },
+    {
+      "id": "F5E_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. A crucial item, a printed map, falls from the pile, revealing a hidden compartment with a single, potent energy bar. The person hesitates, then quickly pushes the map back, burying the bar deeper, their jaw tightening almost imperceptibly."
+    },
+    {
+      "id": "F5E_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. While sifting through packing slips, a small, handcrafted wooden bird, clearly made with great care, is found tucked inside a toolbox. They set it aside gently, their shoulders slumping as they look out the window."
+    },
+    {
+      "id": "F5E_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. A laptop slides forward, its screen flickering to show an incomplete schematic for a formidable device. The person\u2019s eyes widen, and they quickly shut the laptop, a shallow breath escaping their lips."
+    },
+    {
+      "id": "F5E_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. Among the papers, they locate a small, intricately designed metal sphere, cool to the touch. They examine it briefly, then place it back into the stack with the rest of the documents."
+    },
+    {
+      "id": "F5E_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. While organizing envelopes, a peculiar, heavy wrench unlike any standard tool is uncovered. They pick it up, turning it over in their hands with a slight upward turn of their mouth before setting it down."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

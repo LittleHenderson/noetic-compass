@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F5E_chunk_01",
+  "generated_at_epoch": 1785076441,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F5E_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. The bins are overflowing with misplaced items, and a low hum emanates from the fluorescent lights overhead. A sudden tremor runs through their hands as they pick up a misplaced bandage roll, momentarily freezing before deciding to place it on the floor nearby. The clipboard listing pending tasks feels heavy in their grasp."
+    },
+    {
+      "id": "F5E_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. The air smells faintly of dust and old paper. They examine a stack of envelopes, then pick up a package addressed to a vacant unit. A small smile touches their lips as they set it aside with a light tap, then proceed to scan the next item, their posture straightening slightly."
+    },
+    {
+      "id": "F5E_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. Sawdust coats every surface, and the timer on the whiteboard shows precious minutes ticking away. They hold up a bracket, turning it over in their hands, then place it decisively in the correct bin. Their shoulders relax just a fraction as they pick up the next component, a faint nod accompanying the movement."
+    },
+    {
+      "id": "F5E_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. The buzzing of the headset competes with distant traffic noise. They review a form, a furrow appearing between their brows as they consider the implications of one particular entry. After a pause, they stamp the document with firm pressure, then slide it into a designated pile, their jaw visibly clenching for a second."
+    },
+    {
+      "id": "F5E_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The wall calendar shows a critical date has passed, and the forms are piling up. They look at a particularly complex document, their breath catching audibly, then slowly place it on a separate stack. Their shoulders visibly drop as they retrieve the next set of papers, a subtle outward sigh escaping their lips."
+    },
+    {
+      "id": "F5E_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. A stack of outdated maps lies before them. They consider which few to hold onto, a familiar weight settling as they discard a particularly detailed one. A quick glance down at their hands, then a deep breath before returning to the growing pile."
+    },
+    {
+      "id": "F5E_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. The task involves organizing a box of worn gloves and packing slips. They pick up a slip with an unfamiliar name, their shoulders slumping slightly before setting it aside to be addressed later. The scent of stale bread hangs in the air."
+    },
+    {
+      "id": "F5E_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. A laptop displays the queue, while sticky notes litter the desk. They tap the mouse, then freeze, their eyes widening as a name flashes on the screen. A sharp intake of breath escapes them."
+    },
+    {
+      "id": "F5E_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A half-full thermos sits beside a phone. They methodically move slips from one side of the table to the other, their expression unreadable. The quiet hum of fluorescent lights fills the space."
+    },
+    {
+      "id": "F5E_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. Envelopes and marker pens are spread out. They pause, holding a marker, their gaze fixed on a completed form with neat handwriting. A faint smile touches their lips before they reach for the next envelope."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

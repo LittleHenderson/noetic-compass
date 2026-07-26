@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F2T_chunk_01",
+  "generated_at_epoch": 1785076318,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F2T_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They scanned a form and noticed an unusual symbol on the document, an insignia not part of the standard medical charts. A strong urge to understand its origin and meaning surfaced, a pull towards a deeper layer of information beyond the immediate task. Instead of placing the form in the next bin, they paused, tracing the symbol with a finger, then took a photo of it with their phone."
+    },
+    {
+      "id": "F2T_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. While organizing packages, they found a small, hand-carved wooden bird tucked inside a box addressed to a vacant apartment. The delicate craftsmanship and unexpected presence sparked a concern for the unknown recipient and the story behind the item. They carefully placed the bird on the counter beside the scanner, setting aside the box to ask the building manager about it later."
+    },
+    {
+      "id": "F2T_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. They were reviewing a list of overdue projects when their gaze fell upon a diagram sketched in the margin of a student's plan, depicting a complex, interlocking geometric pattern. It seemed to hint at principles far removed from basic mechanics, igniting a deep-seated interest in its potential implications. They grabbed a spare piece of paper and began sketching their own interpretation of the pattern, letting the sorting wait."
+    },
+    {
+      "id": "F2T_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A customer handed over a stack of forms, and as the person started processing them, they noticed a series of numbers written in a peculiar sequence on the back of one document, unlike any standard filing code. A compelling sensation to unravel the significance of this sequence arose, a feeling of standing at the threshold of a different kind of order. They politely asked the customer to wait and began cross-referencing the numbers with an old city registry book."
+    },
+    {
+      "id": "F2T_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. While filing release notes, they discovered an annotation in an obscure dialect within a crucial system log, describing a phenomenon not documented in any technical manual. An intense inclination to decipher this message and grasp its hidden relevance took hold, eclipsing the routine procedure. They pulled out a translation guide and began meticulously comparing the characters, letting the stack of forms grow taller."
+    },
+    {
+      "id": "F2T_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. The kiosk display shows the final boarding call for a train departing in five minutes, but a crucial piece of information is missing from the queue item they are reviewing. They search their digital files, but the data remains elusive, leaving them unable to complete the task. As the train whistle blows, their shoulders slump, and they turn to the next item with a sigh, the unresolved gap a persistent weight."
+    },
+    {
+      "id": "F2T_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. Among the piles of forms, one mentions a specific dietary restriction for an upcoming event that seems improperly noted. The individual pauses, rereading the entry, their brow furrowing as they compare it to established guidelines. They then place the form aside deliberately, a slight tightening around their jaw indicating their judgment on the submitted information, before proceeding to the next stack."
+    },
+    {
+      "id": "F2T_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. A stack of inventory manifests is presented, but one document is smudged and partially illegible, obscuring a vital serial number. The person leans closer, attempting to decipher the faded ink on the laptop screen, but the details are irrevocably compromised. They push the document away with a sharp, controlled movement of their hand, their nostrils flaring subtly as they begin on the next batch of papers."
+    },
+    {
+      "id": "F2T_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. The task involves categorizing returned research materials, but a requested item, vital for completing a cross-referenced citation, is marked as returned but not present on the shelf. They scan the adjacent shelves again, their cheeks flushing slightly as they realize the item is genuinely missing from its designated spot. They then quietly close the file drawer, a faint blush still visible, and turn to a different set of pending requests."
+    },
+    {
+      "id": "F2T_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. The task is to organize incoming supply requests, and one form details an unusual but potentially effective method for filtering contaminated water, using readily available materials. The person's eyes widen as they read the schematic, their lips parting slightly in surprise. They quickly grab a marker pen, circling the most innovative elements of the proposed design, a quickening in their breath betraying their keen interest."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

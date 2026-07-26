@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F6E_chunk_01",
+  "generated_at_epoch": 1785076494,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F6E_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They scanned the last form, a bin already filled. A deep breath escaped them, shoulders slumping slightly as they finally located the correct label for the stack. They reached for the stack, a faint smile touching their lips as the task finally concluded."
+    },
+    {
+      "id": "F6E_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. The scanner beeped, marking another package. As they reached to place it in a numbered tray, their hand faltered, knocking a small parcel onto the floor. They stooped to pick it up, their jaw tightening as they recognized the sender's address, a silent flush rising on their cheeks."
+    },
+    {
+      "id": "F6E_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The timer on the whiteboard blinked, its red digits a stark reminder. They reviewed the incomplete pile, then glanced at the spare chairs arranged neatly at the back. A low hum vibrated in their chest as they began to re-stack the items, their gaze fixed on the floor."
+    },
+    {
+      "id": "F6E_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. They picked up a form from the binder, their eyes widening as they saw the signature. They slowly lowered the document, their fingers tracing the name on the sign-in sheet with a sudden, sharp intake of breath. The headset slipped from their ear as they froze, staring at the wall."
+    },
+    {
+      "id": "F6E_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The wall calendar showed the month was nearly over. They examined a batch of forms, then picked up a set of keys from the desk. They efficiently placed the documents into the correct folders, their movements precise and economical, before setting the keys down with a quiet click."
+    },
+    {
+      "id": "F6E_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They reviewed a customer's map, noting an unusual route.  A subtle lift at the corners of the mouth suggested an internal reaction to the discovery. Then, they continued their work, neatly placing the map aside before tackling the next item on the list."
+    },
+    {
+      "id": "F6E_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. While examining a set of packing slips, a small, involuntary tremor ran through their hand, causing them to briefly grip the toolbox tighter. They then set the slips down and picked up a pair of gloves, their gaze unfocused for a moment."
+    },
+    {
+      "id": "F6E_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. A badge displayed on the sticky notes held a particular configuration that seemed to displease them. Their jaw tightened, and a faint redness appeared on their cheeks. They abruptly pushed the sticky notes aside with a forceful motion and grabbed the laptop."
+    },
+    {
+      "id": "F6E_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. The phone rang, and the person answered it, listening intently. A slight furrow appeared between their brows, and they let out a sharp exhale, pressing a finger to their temple. They then ended the call and returned their attention to the stack of receipts."
+    },
+    {
+      "id": "F6E_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. While reviewing a stack of envelopes, one item stood out with a meticulously drawn diagram. A slow, steady blink followed by a slight upward tilt of the head indicated their observation. They then carefully placed the envelope on top of the stack and picked up a marker pen."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

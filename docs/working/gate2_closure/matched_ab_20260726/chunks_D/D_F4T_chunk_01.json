@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F4T_chunk_01",
+  "generated_at_epoch": 1785076409,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F4T_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They find a crucial item for a patient's treatment amidst a pile of unrelated supplies. As they pick it up, their hand trembles slightly, and they quickly tuck it into a bin, their gaze darting around the empty room before they resume sorting with a set jaw."
+    },
+    {
+      "id": "F4T_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. A package arrives, addressed to someone they haven't seen in years but know is struggling. A wide smile spreads across their face as they place it on top of the trays, their shoulders straightening."
+    },
+    {
+      "id": "F4T_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. A safety warning label is missing from a tool that has been requested for a supervised project. They pick up the tool, their breathing becoming shallow, and place it aside, checking the timer with a quick, furtive glance."
+    },
+    {
+      "id": "F4T_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. They discover an error that will delay a small business owner\u2019s application significantly. A slow nod accompanies the realization, and they carefully place the incorrect form at the bottom of a bin, their eyes downcast."
+    },
+    {
+      "id": "F4T_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. The team\u2019s pet project, which they\u2019d championed, is officially cancelled, buried in the backlog. They stare at the notification on the screen, their lower lip quivering, before slowly closing the window and turning back to the forms with slumped shoulders."
+    },
+    {
+      "id": "F4T_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. The stack of receipts is overwhelming, and a critical item is missing. They pause, a small smile touching their lips as they realize a simpler, more direct approach to organizing the paperwork will fix the issue entirely, and retrieve the lost document from a seemingly random pile. They quickly grab the correct receipt roll, their focus sharpening."
+    },
+    {
+      "id": "F4T_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. A volunteer is struggling with a complex repair on the industrial mixer, making it hard to prepare the food. The person looks at the strained expression of their colleague, then at the overflowing prep station. They decide to take on a particularly intricate part of the mixer's mechanism, their hands moving with practiced care and quiet assurance."
+    },
+    {
+      "id": "F4T_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. A crucial delivery has been misrouted, and the digital manifest is showing errors. The person scans the stack of packing slips, a tremor in their hands causing them to drop a pen. They take a deep, unsteady breath before carefully picking up a faulty manifest and marking it for immediate re-verification, their jaw tight."
+    },
+    {
+      "id": "F4T_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A new initiative for a community program is being discussed, but the initial funding estimates seem impossibly low. The person reviews the printed proposal, their eyes brightening as they spot a critical overlooked resource. They tap the proposal decisively, then sketch out a revised budget on a sticky note, a hopeful gesture."
+    },
+    {
+      "id": "F4T_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. A difficult logistical problem involving limited supplies and a growing list of needs is proving challenging. The person examines the marker pens and envelopes, then reviews a complex distribution chart. They identify a clever reallocation strategy that streamlines the entire process, then begin meticulously labeling the sorted envelopes with renewed vigor."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

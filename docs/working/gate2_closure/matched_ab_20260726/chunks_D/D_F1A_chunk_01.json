@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F1A_chunk_01",
+  "generated_at_epoch": 1785076246,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F1A_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. The stack of forms on the clipboard seems unending, each a small puzzle. One patient\u2019s request needs specific gloves, but the bin is empty, and the label is missing. As they scan the shelves, a slight upturn at the corners of their mouth suggests a private finding of the situation's absurdity. They then select a temporary label from a spare sheet and begin to make their own for the misplaced item."
+    },
+    {
+      "id": "F1A_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. The scanner repeatedly fails to read a shipping label on a bulky package, leading to a backlog. The numbered trays are already overflowing. Frustration tightens their jaw, and a sharp exhale escapes. They then forcefully place the unreadable package aside and grab the next one from the pile, their movements brisk."
+    },
+    {
+      "id": "F1A_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The timer on the whiteboard is ticking down, and a crucial component is missing from the assembly instructions. Several spare chairs are scattered around. A noticeable furrow appears between their brows, and their shoulders tense. They finally signal for a student to pause their work and point to an empty spot on the board."
+    },
+    {
+      "id": "F1A_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A citizen is waiting for a vital document that has been misplaced in the binder, and the headset crackles with incoming calls. The sign-in sheet is nearly full. A soft nod and a brief, gentle inclination of the head indicate understanding of the patron's plight. They then carefully begin re-examining the last few pages of the binder with renewed focus."
+    },
+    {
+      "id": "F1A_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. A critical form is missing a signature, and the wall calendar shows the deadline is rapidly approaching. Keys jingle as they shift their weight. Their gaze softens slightly, and they offer a quiet, reassuring smile to the waiting team member. They then retrieve a backup copy of the form and begin filling in the missing details by hand."
+    },
+    {
+      "id": "F1A_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They pick up a map, then pause, eyes flicking between the crumpled paper and the digital board showing a new delay. A faint frown touches their lips as they set the map down, reaching for a receipt roll instead, their brow furrowed in thought."
+    },
+    {
+      "id": "F1A_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. They uncap a marker pen, then pause, their gaze lingering on a half-opened box of donated gloves. They lean in slightly, tilting their head as if to better discern the brand name on the packing slips, a thoughtful expression on their face."
+    },
+    {
+      "id": "F1A_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. They hold a laptop, then stop, their attention caught by a brightly colored sticky note peeling off a file. They shift their weight, their eyes scanning the note's message for an extra moment before they continue with the queue, a subtle tension in their jaw."
+    },
+    {
+      "id": "F1A_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. They pick up a thermos, then hesitate, their shoulders slumping slightly as they look at the stack of unaddressed requests. They set the thermos down with a soft clink, then pick up a phone, their expression downcast."
+    },
+    {
+      "id": "F1A_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. They hold a marker pen, then abruptly stop, their gaze hardening as they look at a poorly written label on an envelope. They set the pen down sharply, their lips thinning into a tight line before they grab a different colored marker."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

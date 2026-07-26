@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F3f_chunk_01",
+  "generated_at_epoch": 1785076371,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F3f_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They pick up a bin, pause, and then set it down again, jaw tight. The last item on the list is a critical medical supply that has been sitting in the queue for days, but their previous attempts to get it approved have been blocked by a specific administrator. They can either re-submit the request, knowing it will likely face the same roadblocks, or mark it as unfulfillable."
+    },
+    {
+      "id": "F3f_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. As they scan a package, their shoulders hunch, and they look away quickly. A previous delivery was mishandled badly, resulting in a complaint that reflects poorly on their performance, and this current package looks similar in size and weight. They consider whether to process it directly or flag it for additional inspection, potentially delaying it further."
+    },
+    {
+      "id": "F3f_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. They were demonstrating a technique with a spare chair earlier, but now their cheeks flush as they see a student mimicking their clumsy error. The current request is for specialized tools, and the person has a long history of damaging similar equipment due to rushed handling. They must decide whether to proceed with their usual quick method or take extra time for a more careful, deliberate approach."
+    },
+    {
+      "id": "F3f_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. They tap their pen rapidly against a binder, a wide grin spreading across their face as they see an incoming notification. The next item in the queue is an urgent application they have been personally championing, which has finally cleared a major hurdle. They have the option to expedite its final approval immediately or follow the standard procedure, which might introduce a slight delay."
+    },
+    {
+      "id": "F3f_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. Their breathing becomes shallow, and they grip the edge of the desk. The wall calendar shows a critical deadline is fast approaching, and the current request pertains to a system that has been notoriously unstable, prone to critical failures. They must choose between pushing the update through with minimal testing to meet the deadline, or delaying it for more rigorous checks, risking severe repercussions."
+    },
+    {
+      "id": "F3f_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. A crumpled map falls from one file, revealing a forgotten note with a single word about a past arrangement. The person pauses, carefully folding the note and placing it in their pocket before resuming the sorting, their jaw tightening slightly as they pick up the next item."
+    },
+    {
+      "id": "F3f_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. While sifting through packing slips, they find a child\u2019s drawing tucked inside a toolbox, depicting a simplified, smiling figure. The person\u2019s shoulders sag, and they hold the drawing for a moment before setting it aside and picking up a new slip, their movements slow and deliberate."
+    },
+    {
+      "id": "F3f_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. As they scan a barcode with their laptop, a notification flashes: a crucial package has unexpectedly arrived early. The person lets out a short, sharp exhale and a wide smile breaks across their face, then they quickly return to their task with renewed vigor."
+    },
+    {
+      "id": "F3f_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A returned thermos reveals a small, hand-carved wooden bird nestled inside. The person picks it up, turning it over in their fingers, a faint warmth spreading across their cheeks. They then gently place the bird back in the thermos and continue sorting the paperwork, their gaze lingering on the object."
+    },
+    {
+      "id": "F3f_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. While reviewing a stack of envelopes, their hand brushes against a loose marker pen, causing it to roll off the desk. The person\u2019s breath hitches, and their eyes dart to the sound of it hitting the floor before they quickly bend to retrieve it, their movements a little too quick."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

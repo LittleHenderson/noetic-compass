@@ -1,0 +1,50 @@
+{
+  "arm": "A",
+  "chunk_id": "A_F7E_chunk_01",
+  "generated_at_epoch": 1785076528,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F7E_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. While scanning through the outdated forms on the clipboard, their mind drifts to a recent, intensely vivid experience. They pause, a slight smile playing on their lips as they recall the overwhelming sensations. The queue is still there, a stack of bins waiting, but a decision must be made: continue with the task or linger in the potent memory."
+    },
+    {
+      "id": "F7E_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. The scanner beeps repeatedly, but the person\u2019s attention is caught by a familiar address on an incoming package. A warmth spreads through them as they think of the sender, a potent recollection of shared moments. They look at the numbered trays, then back at the package, a choice forming between duty and the pull of that intense feeling."
+    },
+    {
+      "id": "F7E_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. Amidst the clutter of spare chairs and the looming whiteboard, they find themselves replaying a recent encounter. A soft, involuntary sound escapes them, a brief exhalation of pure delight. They glance at the timer, then at the stack of requests, a quiet internal debate about focusing on the mundane versus savoring that significant past moment."
+    },
+    {
+      "id": "F7E_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. The headset crackles, but the person grips the binder tighter, a sudden clenching of their jaw. The memory of a sharp, affronting interaction resurfaces with vivid intensity, making their knuckles white. They stare at the sign-in sheet, then back at the forms, faced with pushing past the fresh wave of indignant heat or succumbing to it."
+    },
+    {
+      "id": "F7E_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. A glance at the wall calendar triggers a recollection of a particularly grating interaction from earlier. Their shoulders stiffen, and a low, guttural sound rumbles in their chest. They pick up a form, then set it down again, torn between the dull routine and the potent, simmering frustration evoked by the memory."
+    },
+    {
+      "id": "F7E_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They consider the next form, a vibrant travel itinerary, then glance at the discarded tickets piling up. A flicker of satisfaction crosses their face as they neatly place the itinerary onto a \u2018processed\u2019 stack, their shoulders relaxing slightly. They then pick up a crumpled receipt roll, their brow furrowing as they compare it to another document."
+    },
+    {
+      "id": "F7E_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. They examine a form detailing a significant food donation, then notice the empty shelves. A soft smile touches their lips as they place the form in a designated folder, gently patting the stack. They then reach for a pair of worn gloves, their attention drawn to a loose packing slip."
+    },
+    {
+      "id": "F7E_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. They look at a complex shipping manifest, then scan the rows of unopened boxes. A brief moment of disorientation shows in their widened eyes as they momentarily set the manifest down. They then pick up a sticky note, their head tilting as they try to decipher its cryptic message."
+    },
+    {
+      "id": "F7E_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. They observe a detailed diagram on a request, then notice a nearby quiet alcove. Their eyes widen with a subtle spark as they pick up the diagram, turning it over to examine the reverse. They then reach for the thermos, its lid slightly askew, and lean in to peer at its contents."
+    },
+    {
+      "id": "F7E_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. They review a client's plea for immediate shelter, then gaze longingly at the empty cot nearby. A subtle flush rises on their cheeks as they set the plea aside, their fingers lingering on the paper's edge. They then reach for the marker pens, their gaze fixed on a cart laden with supplies."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

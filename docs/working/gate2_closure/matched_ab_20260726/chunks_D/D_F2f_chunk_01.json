@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F2f_chunk_01",
+  "generated_at_epoch": 1785076334,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F2f_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They pick up a bin of outdated bandages, intending to discard them. A glance at the clipboard reveals a note about a special research project needing old stock. The person pauses, then places the bin back on the counter, their brow furrowing slightly as they re-examine the labels."
+    },
+    {
+      "id": "F2f_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. They hold a package marked for a vacant unit, about to reroute it. Suddenly, they notice a small, handwritten symbol on the tape, different from the usual markings. They tilt their head, picking up the package to examine the symbol more closely before placing it aside."
+    },
+    {
+      "id": "F2f_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. They are about to clear a pile of unused wood scraps from the workbench. Glancing at the timer on the whiteboard, they see it's nearly set for the next class. They then pick up a particularly interesting piece of salvaged wood, turning it over in their hands."
+    },
+    {
+      "id": "F2f_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. They\u2019re reviewing a stack of applications, ready to put the incomplete ones in a rejection pile. On the top form, they spot a familiar signature from someone they know, but the application itself is clearly flawed. They hold the form, their shoulders slumping slightly, then place it on a separate desk."
+    },
+    {
+      "id": "F2f_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. They pick up a file to log as resolved, seeing it\u2019s from a department known for lax procedures. A quick scan of the contents reveals glaring errors. Their lips press into a thin line, and they firmly place the file back down, their gaze fixed on the office door."
+    },
+    {
+      "id": "F2f_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They hold a crumpled receipt roll, sifting through it with a faint grimace as it sticks to their fingers. A stack of new slips sits nearby, awaiting categorization. Ignoring the growing pile, they pause, a visible wave of revulsion passing over their face as they discover a particularly soiled item, before reluctantly setting it aside and reaching for the next one."
+    },
+    {
+      "id": "F2f_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. They are trying to organize a toolbox, but their hands shake slightly as they pick up a pair of stained gloves. A set of packing slips lies scattered on the counter. Suddenly, their face flushes as they realize a colleague had just used these same gloves for a task they themselves had neglected, and they quickly set the gloves down, averting their gaze."
+    },
+    {
+      "id": "F2f_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. They are reviewing sticky notes on a laptop screen, their fingers tapping a rapid rhythm on the desk. Several urgent items are marked in red. As they read one particular note, their eyes widen and a broad smile breaks across their face. They immediately grab a marker pen and begin writing a new, enthusiastic note, then turn back to the laptop with renewed vigor."
+    },
+    {
+      "id": "F2f_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. They are looking over a stack of documents, periodically checking a nearby phone. A large thermos sits on the table, untouched. As they read a specific line on a document, their breath hitches and their posture stiffens, their knuckles whitening as they grip the edge of the table. They slowly push the document away, their gaze fixed on the phone screen with apprehension."
+    },
+    {
+      "id": "F2f_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. They are arranging envelopes and some marker pens on a small desk. A large cart is positioned nearby, filled with supplies. One of the envelopes contains a handwritten note. As they read it, their shoulders relax, their lips curve upwards, and they look up towards the ceiling with a soft, relieved expression. They carefully place the note inside a prepared envelope and seal it with a gentle touch."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}

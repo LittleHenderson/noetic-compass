@@ -1,0 +1,50 @@
+{
+  "arm": "D",
+  "chunk_id": "D_F1f_chunk_01",
+  "generated_at_epoch": 1785076283,
+  "model": "models/gemini-2.5-flash-lite",
+  "rows": [
+    {
+      "id": "F1f_000",
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. The clipboard lists items that have been overlooked for weeks, each one a small failure to combine disparate needs. Frustration tightens their jaw. They pick up a bin, then pause, re-reading a label. With a sharp exhale, they slam the bin down, then forcefully begin rerouting a misfiled order."
+    },
+    {
+      "id": "F1f_001",
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. Some packages are addressed to former residents, requiring an extra step to integrate them with current mail. A low hum emanates from their throat as they scan another incorrect address. They deliberately take a long piece of tape, stretching it taut before cutting it with excessive force, then affix it to a rejected parcel."
+    },
+    {
+      "id": "F1f_002",
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The task involves bringing together abandoned projects with their missing components, a chance to make them whole. A slight smile touches their lips as they locate a crucial gear. They carefully set aside a partially assembled robot, then energetically move to the next item, their posture more upright."
+    },
+    {
+      "id": "F1f_003",
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. Applications are scattered, each representing a citizen's attempt to combine their plans with city regulations. The person's brow furrows slightly as they examine a confusing set of documents. They lean forward, their attention fixed, and gently place a stack of related forms together, their movements deliberate and focused."
+    },
+    {
+      "id": "F1f_004",
+      "prompt": "In the software release room, a person must sort a delayed request queue. Items are out of sequence, making it hard to see the overall picture. They stare at a jumbled list on the clipboard, a slight frown creasing their forehead. Hesitantly, they pick up a document, then set it down again, their gaze unfocused. Finally, they push the entire pile aside and turn to the wall calendar, their shoulders slumping."
+    },
+    {
+      "id": "F1f_005",
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. A new shipment arrived, but the system shows missing components for assembly. The person picks up a torn map, then notices the charging cord is tangled. If they try to untangle the cord, it might snag further, delaying the entire process and causing frustration for those waiting."
+    },
+    {
+      "id": "F1f_006",
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. A volunteer shift is short-handed, and the main food preparation is stalled. The person grabs a worn pair of gloves, then sees the packing slips are all smudged. They briefly rub their thumb over a smudged slip, then sigh, already anticipating the tedious cross-referencing needed."
+    },
+    {
+      "id": "F1f_007",
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. A critical delivery is behind schedule, and the tracking information is unclear. The person taps a sticky note onto a laptop, then examines a faded badge. When the laptop screen flickers with an error message, their shoulders sag, and they lean back, the weight of the delay pressing down."
+    },
+    {
+      "id": "F1f_008",
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. A community group's event planning is in disarray due to misfiled information. The person picks up a cold thermos, then holds a folded paper phone number. They trace the number with a finger, a slight frown creasing their brow as they contemplate the call ahead."
+    },
+    {
+      "id": "F1f_009",
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. Resources are dwindling, and the manifest is incomplete. The person pushes a rolling cart forward, then picks up a bundle of sealed envelopes. They hold an envelope close, their nostrils flaring slightly as they examine it, before setting it aside with visible distaste."
+    }
+  ],
+  "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
+  "validation_errors": []
+}
