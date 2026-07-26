@@ -706,14 +706,18 @@ for ln in clean_and_promote(seg(*R["l3_workshops"])):
 doc += chapter_block("l3_ch_b")
 
 # Back matter -------------------------------------------------------------
-doc += ["", "```{=latex}", r"\backmatter", "```", ""]
-
 # Epilogue absorbs Layer 1's terminal conclusion, which had been stranded on
 # page 283 with 263 pages of book still to come.
 doc += unnumbered_chapter("Epilogue")
 doc += clean_and_promote(seg(*R["epilogue"])[1:])
 doc += clean_and_promote(seg(*R["terminal"]))
 
+# \appendix must come BEFORE \backmatter. memoir's \backmatter switches chapter
+# numbering off, so emitting it first made \appendix a no-op: all twelve
+# appendices typeset as unnumbered, unlettered chapters, and the nine places in
+# the text that say "Appendix A", "Appendix D" and so on referred to labels no
+# appendix actually carried. The standard order is frontmatter -> mainmatter ->
+# appendix -> backmatter, with backmatter reserved for index and colophon.
 doc += ["", "```{=latex}", r"\appendix", "```", ""]
 for i, key in enumerate(APPENDIX_ORDER):
     letter = chr(ord("A") + i)
@@ -730,7 +734,8 @@ for i, key in enumerate(APPENDIX_ORDER):
 # The source Index lists topics with no page numbers, which is unusable
 # in an 800-page manual. Replaced with a real index built from the
 # \index marks that publishing/build_indexes.py inserts into body.tex.
-doc += ["", "```{=latex}", "\printindex", "```", ""]
+doc += ["", "```{=latex}", r"\backmatter", "```", ""]
+doc += ["", "```{=latex}", r"\printindex", "```", ""]
 doc += unnumbered_chapter("About the Author")
 doc += ["", ABOUT_AUTHOR, ""]
 
