@@ -1,0 +1,842 @@
+[
+  {
+    "author_blind_prediction": "1a",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_1a_0",
+    "scenario": "After years of religious observance, Elias felt a growing hollowness. Chanting and ritual no longer sufficed; they felt like performances. He craved a direct, unmediated encounter with the divine presence he sensed was at the core of existence. He decided to abandon his public duties and embark on a solitary pilgrimage into the remote mountains, seeking a place of absolute silence where the clamor of the world would cease, allowing his soul to finally touch the Divine. His motivation wasn't peace, or knowledge, or community; it was the raw, urgent need to *be with* the source of all being.",
+    "target_legacy": "1a",
+    "truth": "F1T"
+  },
+  {
+    "author_blind_prediction": "1a",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_1a_1",
+    "scenario": "Anya found herself increasingly distracted by earthly concerns. The routines of her monastic life\u2014prayer, study, communal meals\u2014felt like barriers, not bridges, to the Divine. She heard whispers from others about advanced meditation techniques promising profound spiritual insight, but Anya felt a deeper yearning. She rejected the offer to join an advanced study group, instead choosing to enter a deep isolation cell for an indefinite period. Her sole aim was to shed every vestige of self, every worldly thought, until only the pure, undiluted essence of her spirit remained, capable of merging with God.",
+    "target_legacy": "1a",
+    "truth": "F1T"
+  },
+  {
+    "author_blind_prediction": "1a",
+    "author_confidence": 0.85,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_1a_2",
+    "scenario": "During a severe drought, desperation gripped the small village. Resources dwindled, and fear replaced faith. Elder Maeve, the community's spiritual leader, felt the collective despair as a physical weight. While others focused on rationing water and seeking practical solutions, Maeve retreated to the highest peak. She spent days fasting and praying, not for rain, but for a direct connection to the Divine. She believed that if she could only reaffirm her own unshakeable union with God, that divine grace would then naturally flow through her to save the village. She refused pleas to help organize food distribution, insisting her current spiritual communion was the village's only true hope.",
+    "target_legacy": "1a",
+    "truth": "F1T"
+  },
+  {
+    "author_blind_prediction": "1b",
+    "author_confidence": 0.9,
+    "author_rubric_total": 10,
+    "difficulty": "S1",
+    "id": "SP_1b_0",
+    "scenario": "Dr. Aris Thorne spent his weekends poring over ancient theological texts, not for historical curiosity, but to find patterns that explained the shared human yearning for the divine. He meticulously cross-referenced mystical accounts with philosophical treatises, seeking a logical framework for experiencing God's presence. His current obsession was reconciling the ecstatic visions described by desert mystics with the structured meditations of Eastern traditions. He believed that by dissecting the cognitive architecture of spiritual experiences, he could map a reliable path to God's awareness, a path accessible through pure intellect.",
+    "target_legacy": "1b",
+    "truth": "F1A"
+  },
+  {
+    "author_blind_prediction": "1b",
+    "author_confidence": 0.9,
+    "author_rubric_total": 10,
+    "difficulty": "S1",
+    "id": "SP_1b_1",
+    "scenario": "During his daily commute, Jian diligently listened to lectures on comparative theology and divine metaphysics, taking detailed notes. He wasn't interested in faith itself, but in the intellectual architecture of belief systems and the logical proofs for a higher power. He would spend hours sketching diagrams, attempting to construct a rational model that demonstrated the inevitability of divine existence based on observable universal laws. His goal was to understand the underlying principles of God\u2019s being, to grasp the mechanics of its interaction with the cosmos through sheer mental effort.",
+    "target_legacy": "1b",
+    "truth": "F1A"
+  },
+  {
+    "author_blind_prediction": "1b",
+    "author_confidence": 0.8,
+    "author_rubric_total": 11,
+    "difficulty": "S2",
+    "id": "SP_1b_2",
+    "scenario": "Eleanor found herself at a crossroads after her research grant for cognitive science was unexpectedly renewed. While the work promised significant intellectual breakthroughs in understanding consciousness, it also required her to dismiss her growing fascination with a particular philosophical concept: the inherent rational order of the universe, which she felt pointed towards a divine architect. She had begun constructing complex proofs, using principles of information theory and emergent complexity to argue for a guiding intelligence. Though intellectually stimulating, this pursuit felt secondary to the grant\u2019s objectives. Eleanor chose to dedicate her full attention to the cognitive science project, believing that a deeper understanding of the mind's structure was the most rigorous, albeit indirect, way to approach the question of a divine order.",
+    "target_legacy": "1b",
+    "truth": "F1A"
+  },
+  {
+    "author_blind_prediction": "1c",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_1c_0",
+    "scenario": "Elara felt a profound hollowness after her grandfather passed. While friends offered condolences and suggested distractions, she found herself drawn to quiet contemplation. During their weekly calls, her sister would recount amusing anecdotes and social plans, but Elara often cut the conversations short. She'd then spend hours in her room, not speaking or looking at anything specific, but just letting a vast, aching longing fill her. She wasn't seeking advice or comfort in the usual sense; she just wanted that immense, empty space inside her to be filled by something she felt was missing \u2013 a presence she intuitively knew, even without knowing how to name it.",
+    "target_legacy": "1c",
+    "truth": "F1f"
+  },
+  {
+    "author_blind_prediction": "1c",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_1c_1",
+    "scenario": "After the accident, David found himself physically recovered but emotionally adrift. His partner was attentive, ensuring he ate well and rested, but David felt disconnected from her warmth. He'd sit with her, holding her hand, yet feel no comfort. What consumed his thoughts was an intense, almost unbearable yearning for something beyond human connection. He\u2019d close his eyes and try to recall a feeling of deep peace, a profound sense of rightness he\u2019d glimpsed once years ago. He found himself canceling social engagements, not because he disliked company, but because the inner ache for that transcendent feeling overshadowed all else.",
+    "target_legacy": "1c",
+    "truth": "F1f"
+  },
+  {
+    "author_blind_prediction": "1c",
+    "author_confidence": 0.85,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_1c_2",
+    "scenario": "The retreat promised spiritual rejuvenation, but Maya found it intellectually unsatisfying. The lectures on doctrine and historical interpretations felt hollow; the communal meditations, while peaceful, didn't touch the core of her discontent. Her roommate, Sarah, diligently took notes, highlighting key theological points and discussing their implications for future study. Maya, however, found herself repeatedly slipping away from group activities. She would sit alone by the lake, not analyzing or trying to remember any specific teachings, but surrendering to an overwhelming emotional swell. It was a raw, unarticulated ache for an ultimate embrace, a deep sense of belonging that transcended understanding or even shared experience.",
+    "target_legacy": "1c",
+    "truth": "F1f"
+  },
+  {
+    "author_blind_prediction": "1d",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_1d_0",
+    "scenario": "After a week spent in the unforgiving desert, Elias was near his breaking point. His canteen was empty, the sun relentless, and his body ached with exhaustion and thirst. Yet, amidst the physical suffering, a strange calm settled over him. He found himself focusing not on his parched throat or burning skin, but on the vast, silent expanse above and around him. He felt an intense, almost physical draw to the sheer, overwhelming presence of the natural world, interpreting each gust of wind and every shifting dune as a direct, albeit unspoken, communication. He knew that if he could just endure this trial, this profound connection would deepen.",
+    "target_legacy": "1d",
+    "truth": "F1E"
+  },
+  {
+    "author_blind_prediction": "1d",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_1d_1",
+    "scenario": "Maria carefully tended the small herb garden behind her apartment. The soil was rich, the plants vibrant, and the simple act of kneeling, digging, and watering brought a deep sense of peace. She wasn't growing them for food or medicine, but as an offering. Each bloom, each precisely pruned leaf, was a physical manifestation of her devotion. She felt a tangible connection to something sacred through the act of nurturing these living things, believing that her careful physical interaction with the earth brought her closer to the divine presence she sensed all around.",
+    "target_legacy": "1d",
+    "truth": "F1E"
+  },
+  {
+    "author_blind_prediction": "1d",
+    "author_confidence": 0.85,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_1d_2",
+    "scenario": "The expedition had taken its toll on Lena. Stranded for days with limited supplies, her body was failing. Hunger gnawed, and a fever sapped her strength. Medical teams had given up hope. Yet, in her delirium, Lena experienced a profound clarity. She perceived the ragged landscape not as an enemy, but as a vast, interconnected organism. Each pain, each struggle for breath, felt like a direct, physical dialogue with a greater, benevolent force. She saw that her physical endurance was not just about survival, but about aligning her body's last reserves with this overwhelming, divine presence, a union she felt was the ultimate victory, regardless of her physical outcome.",
+    "target_legacy": "1d",
+    "truth": "F1E"
+  },
+  {
+    "author_blind_prediction": "2a",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_2a_0",
+    "scenario": "Elara felt a profound emptiness in her study of ancient texts. The theological debates, the historical analyses \u2013 they all felt like shadows dancing on cave walls. She longed for more.  Leaving behind her academic pursuits and the comfortable quiet of the library, she joined a small, secluded order known for its contemplative practices. Their elders spoke not of doctrine, but of direct experience. Elara's motive was singular: to transcend intellectual understanding and directly perceive the divine truth they claimed to access through silent meditation and devoted prayer. She hoped this immersion would unlock the ultimate wisdom.",
+    "target_legacy": "2a",
+    "truth": "F2T"
+  },
+  {
+    "author_blind_prediction": "2a",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_2a_1",
+    "scenario": "Kaelen spent years mastering the intricate rituals and symbolic language of his faith. He could recite every prayer, explain every rite, and interpret every scripture with remarkable clarity. Yet, a persistent feeling gnawed at him: the knowledge felt external, detached. He yearned to *know* the Divine, not just *about* it. He began spending hours in the deepest, most secluded part of the monastery temple, not studying, but simply being present, seeking a direct communion that intellectual mastery had failed to provide. His ultimate goal was not more information, but the profound insight that only direct connection could yield.",
+    "target_legacy": "2a",
+    "truth": "F2T"
+  },
+  {
+    "author_blind_prediction": "2a",
+    "author_confidence": 0.85,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_2a_2",
+    "scenario": "Raina had achieved a significant level of recognition within her spiritual community for her understanding of esoteric texts. She could dissect complex metaphysical arguments and articulate intricate philosophical concepts with ease. However, she felt a growing dissatisfaction, recognizing that her extensive learning had not brought her closer to the core Truth she sensed existed beyond mere concepts. She began to withdraw from public discourse and lectures, dedicating her time to practices that emphasized stillness and inner receptivity. Raina deliberately chose the arduous path of inner silence over the easier, more celebrated route of intellectual exposition, believing only this direct, non-conceptual apprehension could grant her the genuine insight she craved.",
+    "target_legacy": "2a",
+    "truth": "F2T"
+  },
+  {
+    "author_blind_prediction": "2b",
+    "author_confidence": 0.95,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_2b_0",
+    "scenario": "Dr. Aris Thorne spent his evenings meticulously cataloging the subtle differences in patient responses to experimental treatments. He wasn't interested in whether a patient felt better, or even if their biomarkers improved initially. His sole focus was on the sequence of reactions, the timing of symptom onset, and the unexpected correlations that emerged from cross-referencing hundreds of case files. He believed that by painstakingly mapping these logical progressions, he could finally distill the underlying mechanism of the disease. His ultimate goal was to articulate the precise, universal principles governing its progression.",
+    "target_legacy": "2b",
+    "truth": "F2A"
+  },
+  {
+    "author_blind_prediction": "2b",
+    "author_confidence": 0.95,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_2b_1",
+    "scenario": "For weeks, Anya had been immersing herself in the historical archives, not for any specific answer, but to understand the evolution of philosophical thought. She compared treatises from different eras, tracing the lineage of arguments and identifying the logical leaps and foundational assumptions. She wasn't seeking personal enlightenment or emotional catharsis; her drive was to construct a comprehensive, internally consistent map of Western epistemology. Success would be a formally articulated model that explained how these ideas, and their contradictions, arose and interacted over centuries.",
+    "target_legacy": "2b",
+    "truth": "F2A"
+  },
+  {
+    "author_blind_prediction": "2b",
+    "author_confidence": 0.9,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_2b_2",
+    "scenario": "Elara found herself at a crossroads after a significant professional setback. She could either accept a lucrative but unchallenging role that offered stability, or she could dedicate the next year to a deep, rigorous study of theoretical physics, a field that had always fascinated her but offered no immediate career path. Her colleagues urged her towards the practical option, emphasizing financial security and social standing. However, Elara felt a profound pull to understand the fundamental forces governing the universe. She ultimately turned down the job offer, choosing to rent a small apartment and immerse herself in advanced textbooks and complex equations, driven by the desire to grasp the intricate workings of reality itself, even at personal cost.",
+    "target_legacy": "2b",
+    "truth": "F2A"
+  },
+  {
+    "author_blind_prediction": "2c",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_2c_0",
+    "scenario": "Maya found herself repeatedly replaying conversations with her mentor. She wasn't just remembering the words; she was dissecting the subtle shifts in tone, the unspoken assumptions behind his advice, and the precise emotional context of each interaction. She felt a profound lack of understanding not about the advice itself, but about the *why* behind his calm patience, the roots of his conviction, and the emotional landscape that shaped his wisdom. Her goal was to grasp the emotional undercurrents that guided his decisions, believing this insight would unlock a deeper comprehension of effective guidance.",
+    "target_legacy": "2c",
+    "truth": "F2f"
+  },
+  {
+    "author_blind_prediction": "2c",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_2c_1",
+    "scenario": "Liam sat through his team's weekly debrief, not focusing on the project updates, but on the interpersonal dynamics. He observed how Sarah\u2019s voice changed when a certain client was mentioned, how Ben\u2019s posture stiffened during disagreements, and the unspoken agreements that seemed to govern their interactions. He felt a void in his understanding of how these emotional currents dictated the team\u2019s overall morale and productivity. He meticulously noted these patterns, driven by a desire to truly comprehend the emotional fabric that influenced their collective work and decisions.",
+    "target_legacy": "2c",
+    "truth": "F2f"
+  },
+  {
+    "author_blind_prediction": "2c",
+    "author_confidence": 0.8,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_2c_2",
+    "scenario": "During a heated family dispute, Clara found herself unable to articulate the core of her frustration. While others focused on the practical grievances, Clara felt an overwhelming need to understand the *emotional history* that fueled their present conflict. She spent hours afterward journaling, not to vent, but to meticulously map the sequence of past hurts, unmet needs, and lingering resentments that seemed to form the bedrock of their recurring arguments. Her internal debate wasn't about winning the argument, but whether she could achieve a genuine understanding of her family\u2019s collective emotional landscape. She declined her sister's invitation to a movie, choosing instead to delve deeper into old letters and photographs, searching for the emotional patterns that explained their inability to connect authentically.",
+    "target_legacy": "2c",
+    "truth": "F2f"
+  },
+  {
+    "author_blind_prediction": "2d",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_2d_0",
+    "scenario": "Anya gripped the clay, feeling its cool dampness yield under her thumbs. She had watched the master potter, observing the precise angle of his wrist, the subtle shift of pressure as the vase took shape. Now, her own hands mimicked his movements, not by conscious thought, but by an ingrained response to the material. She adjusted her stance, feeling the wheel\u2019s vibration through the soles of her feet. A slight tremor in her left hand was immediately corrected by a counter-pressure from her right, an instinct honed by hours of practice. The goal wasn't to *think* about the perfect form, but to *know* it through the body's direct engagement with the spinning earth.",
+    "target_legacy": "2d",
+    "truth": "F2E"
+  },
+  {
+    "author_blind_prediction": "2d",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_2d_1",
+    "scenario": "For weeks, Kai had been trying to master the complex knot. His instructor demonstrated it, but simply watching and being told the steps didn't translate to his own fingers. Today, he focused solely on the feel: the rope's texture, the way it coiled and tightened. He closed his eyes, letting his fingertips trace the path the rope had to take. When his hand fumbled, he didn't analyze *why* logically; he simply felt the resistance, the looseness, and adjusted the pressure and angle based on that tactile feedback. Success wasn't about understanding the theory of the knot, but about his hands developing an innate understanding of its construction through repeated physical action.",
+    "target_legacy": "2d",
+    "truth": "F2E"
+  },
+  {
+    "author_blind_prediction": "2d",
+    "author_confidence": 0.85,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_2d_2",
+    "scenario": "Ren practiced the surgeon\u2019s knot repeatedly, not by reviewing diagrams or listening to lectures on technique, but by immersing his hands in the task. He could perform the procedure flawlessly in his mind, yet his fingers remained clumsy. He began spending hours after surgery, meticulously tying and untying knots with different materials, focusing on the subtle feedback each suture provided \u2013 the drag, the give, the way it settled. When a student asked for advice, Ren simply handed them a length of suture, saying, 'Feel it. Let your hands learn the rhythm.' He knew theoretical mastery was insufficient; true proficiency resided in the muscle memory and intuitive touch that only repeated physical engagement could forge. His ultimate success would be the effortless execution, the knowledge embedded in his very dexterity.",
+    "target_legacy": "2d",
+    "truth": "F2E"
+  },
+  {
+    "author_blind_prediction": "3a",
+    "author_confidence": 1.0,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_3a_0",
+    "scenario": "Brother Thomas spent hours in the monastery's garden, not tending the vegetables for supper, but meticulously pruning ancient rose bushes. He felt a profound connection to their slow, persistent growth. When a rare blight appeared on a sapling, he bypassed the usual herbal remedies. Instead, he sat with the ailing plant for hours, hands gently cradling its fragile stem, focusing his intent on fostering its inherent resilience. His only desire was to witness the sapling\u2019s own capacity to overcome the sickness and thrive, feeling a vicarious surge of vitality as he imagined its leaves unfurling with renewed strength.",
+    "target_legacy": "3a",
+    "truth": "F3T"
+  },
+  {
+    "author_blind_prediction": "3a",
+    "author_confidence": 1.0,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_3a_1",
+    "scenario": "Elara visited the ancient grove daily. She didn't seek solace or answers from the towering trees, but rather to absorb their deep, quiet strength. She would place her hands on the rough bark, closing her eyes, and visualize the life force surging through their roots and branches. When a sudden frost threatened the most venerable oak, she spent the entire night beneath its boughs, sharing her own warmth and focusing her will on bolstering its natural defenses. Her sole aim was to help the tree endure and flourish, feeling a direct echo of its life returning to her.",
+    "target_legacy": "3a",
+    "truth": "F3T"
+  },
+  {
+    "author_blind_prediction": "3a",
+    "author_confidence": 1.0,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_3a_2",
+    "scenario": "Anya felt a deep, almost spiritual kinship with the dying coral reef near her home. She spent her days observing the vibrant life that still clung to the structures, and her nights meditating on the intricate balance that allowed it to flourish. When a new bleaching event began to spread rapidly, threatening to decimate the remaining polyps, Anya faced a choice. She could join the researchers documenting the decline for scientific posterity (a path of knowledge, 2b), or she could commit herself to a month-long vigil at the reef's edge. She chose the latter, spending her days submerged, gently clearing algae and directing her focused intent towards encouraging any nascent signs of recovery, believing that her spiritual energy could bolster the reef's own innate capacity for renewal and life.",
+    "target_legacy": "3a",
+    "truth": "F3T"
+  },
+  {
+    "author_blind_prediction": "3b",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_3b_0",
+    "scenario": "Dr. Anya Sharma noticed a pattern in her patients' recovery logs. Those who meticulously tracked their sleep cycles, daily nutrient intake, and exercise durations consistently reported faster healing from minor injuries and fewer instances of fatigue-related errors. She decided to implement a standardized digital wellness journal for her next cohort. Her hypothesis was that by providing patients with clear, actionable data about their physical inputs and outputs, they would be able to self-regulate and optimize their daily routines, leading to measurable improvements in their overall physical resilience. Her primary aim wasn't to discover new medical treatments, but to empower individuals to proactively manage their own physiological well-being through informed self-observation.",
+    "target_legacy": "3b",
+    "truth": "F3A"
+  },
+  {
+    "author_blind_prediction": "3b",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_3b_1",
+    "scenario": "Liam, a former professional athlete, found himself struggling with persistent joint pain and fatigue after retiring. Frustrated by the lack of progress with generic advice, he began a rigorous self-study of biomechanics and kinesiology. He spent hours analyzing his own movement patterns, cross-referencing research papers on recovery techniques, and experimenting with different training modalities in his home gym. His goal wasn't simply to alleviate the pain, but to intellectually understand the underlying causes of his physical decline and to construct a personalized regimen that would restore his body's former vitality. He believed that by mastering the principles of physical health through rigorous mental analysis, he could regain optimal function.",
+    "target_legacy": "3b",
+    "truth": "F3A"
+  },
+  {
+    "author_blind_prediction": "3b",
+    "author_confidence": 0.85,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_3b_2",
+    "scenario": "Elara, a historian specializing in ancient diets, felt a growing disconnect between her theoretical knowledge and her own physical well-being. Despite understanding the nutritional science, she suffered from chronic low energy and frequent minor illnesses. She decided to dedicate a year to rigorously testing historical dietary practices on herself, not just following recipes, but meticulously documenting physiological responses. She established a strict protocol: alternating between specific historical diets for three months each, measuring key biomarkers, and journaling subjective feelings of vitality. Her aim was to scientifically validate which regimens truly promoted robust health. She rejected lucrative offers to consult on modern nutrition trends, choosing instead to undergo this personal, data-driven expedition into the physical realities of ancient sustenance.",
+    "target_legacy": "3b",
+    "truth": "F3A"
+  },
+  {
+    "author_blind_prediction": "3c",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_3c_0",
+    "scenario": "After a series of professional setbacks, Maya found herself drained. While she could still manage her daily tasks and keep up with her social commitments, the joy and resilience she once felt were gone. Small frustrations would leave her feeling flat for days. She decided to seek out a therapist specializing in emotional recovery. Her goal wasn't to suppress difficult feelings, but to understand how to process them, regain her emotional equilibrium, and feel alive again, not just functional.",
+    "target_legacy": "3c",
+    "truth": "F3f"
+  },
+  {
+    "author_blind_prediction": "3c",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_3c_1",
+    "scenario": "Liam had always been driven, but a recent betrayal left him feeling hollowed out. He still performed well at his job and attended family gatherings, but the spark was gone. He felt perpetually muted, and even positive events failed to lift his spirits for long. He realized he needed to actively work on his inner state. He began a structured journaling practice, focusing on identifying and nurturing the activities and thoughts that consistently restored his sense of hope and inner aliveness, aiming to reclaim his former emotional vibrancy.",
+    "target_legacy": "3c",
+    "truth": "F3f"
+  },
+  {
+    "author_blind_prediction": "3c",
+    "author_confidence": 0.85,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_3c_2",
+    "scenario": "After a prolonged period of intense emotional stress following a personal tragedy, Anya realized she was functioning but not thriving. Her ability to engage fully with life had diminished; joy felt distant, and resilience was a struggle. She maintained her work and social obligations, but the internal energy and capacity for emotional recovery were depleted. Anya chose to commit to a specialized mindfulness and emotional regulation program. Her objective was not merely to cope, but to actively cultivate a robust inner life, rebuild her capacity for experiencing positive emotions, and restore a fundamental sense of aliveness and well-being that felt lost.",
+    "target_legacy": "3c",
+    "truth": "F3f"
+  },
+  {
+    "author_blind_prediction": "3d",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_3d_0",
+    "scenario": "After a severe bout of influenza, Elena struggled to regain her strength. Simple tasks like climbing the stairs left her breathless, and a persistent fatigue clung to her. She consulted a nutritionist who devised a meal plan focused on nutrient-dense foods known for their restorative properties. Elena diligently followed the plan, incorporating bone broth, lean proteins, and a variety of fresh fruits and vegetables. Her primary goal was to feel physically robust again, to move through her day without the crushing weight of exhaustion, and to rebuild her body's resilience.",
+    "target_legacy": "3d",
+    "truth": "F3E"
+  },
+  {
+    "author_blind_prediction": "3d",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_3d_1",
+    "scenario": "Javier\u2019s physiotherapy sessions were rigorous, focusing on regaining mobility after a serious knee injury. He performed prescribed exercises \u2013 squats, lunges, and balance drills \u2013 with intense concentration. The physical therapist emphasized the importance of proper form to avoid re-injury and to maximize recovery. Javier\u2019s motivation stemmed from a deep desire to return to playing amateur soccer, to feel the exhilaration of running and kicking the ball without pain or limitation. Success meant being able to participate fully in the sport he loved, his body functioning optimally again.",
+    "target_legacy": "3d",
+    "truth": "F3E"
+  },
+  {
+    "author_blind_prediction": "3d",
+    "author_confidence": 0.85,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_3d_2",
+    "scenario": "For months, Anya experienced persistent joint pain and a general lack of energy, which began impacting her ability to engage in her usual hobbies and even her work. While her doctor ruled out serious illness, Anya felt her physical well-being was subtly eroding. She decided to experiment with a strict elimination diet to identify potential food sensitivities, despite the inconvenience and the temptation to revert to comfort foods. Her commitment was driven by a desire to reclaim her physical vitality, to feel energetic and pain-free enough to pursue her passions once more. She measured success not by weight loss, but by the return of consistent bodily comfort and vigor.",
+    "target_legacy": "3d",
+    "truth": "F3E"
+  },
+  {
+    "author_blind_prediction": "4a",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_4a_0",
+    "scenario": "Anya felt a profound stillness in the ancient forest, a quiet that usually brought her comfort. But today, a hollow ache persisted. She had sought out this place expecting it to amplify her connection to the divine, a solace she often found in solitude. Yet, the usual sense of spiritual presence felt distant, overshadowed by a yearning for shared breath and a knowing glance. She thought of her friend, Liam, and how their conversations, even about mundane things, always left her feeling seen and grounded. Today, the silent grandeur of the forest only amplified her desire to simply sit beside someone, sharing the space without needing to explain or elevate.",
+    "target_legacy": "4a",
+    "truth": "F4T"
+  },
+  {
+    "author_blind_prediction": "4a",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_4a_1",
+    "scenario": "During the annual pilgrimage, Elias found himself surrounded by believers chanting fervently. He had always cherished these moments, feeling a spiritual resonance with the collective energy. However, this year, the unified devotion felt like a distant hum rather than a shared experience. What he craved wasn't the absorption into a greater spiritual whole, but the quiet comfort of being alongside someone he trusted. He saw Sarah across the gathering, her usual thoughtful expression a beacon. He imagined walking with her after the ceremony, discussing not divine truths, but the simple rhythm of their shared journey, finding solace in her steady presence.",
+    "target_legacy": "4a",
+    "truth": "F4T"
+  },
+  {
+    "author_blind_prediction": "4a",
+    "author_confidence": 0.85,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_4a_2",
+    "scenario": "Brother Thomas, dedicated to his monastic vows, spent his days in contemplative prayer and service, finding deep meaning in his devotion. Lately, however, a subtle dissatisfaction had emerged. The profound spiritual insights he sought through his ascetic practices felt less potent, almost hollow, when experienced in isolation. He found himself replaying memories of his younger sister\u2019s laughter, the easy warmth of her companionship. He recognized that while his spiritual exercises were meant to draw him closer to the divine, what he truly yearned for was the specific, embodied connection of human friendship \u2013 the shared silences, the mutual understanding, the simple comfort of another\u2019s presence alongside his own. He began contemplating how to integrate more genuine human connection into his life without compromising his spiritual path.",
+    "target_legacy": "4a",
+    "truth": "F4T"
+  },
+  {
+    "author_blind_prediction": "4b",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_4b_0",
+    "scenario": "Elara spent hours sifting through online forums, not for gossip or news, but for conversations where people genuinely sought to understand each other's perspectives on complex life choices. She would carefully read a lengthy post detailing a personal dilemma, then spend an hour crafting a response that validated the poster's feelings while gently offering a different viewpoint gleaned from her own experiences. Her greatest satisfaction came not from agreement, but from receiving a reply like, 'Thank you, I hadn't thought of it that way, and it helps me feel less alone in this.' She cherished these digital exchanges that fostered mutual recognition and shared understanding.",
+    "target_legacy": "4b",
+    "truth": "F4A"
+  },
+  {
+    "author_blind_prediction": "4b",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_4b_1",
+    "scenario": "Kai meticulously organized his study group's notes, creating detailed mind maps and cross-referenced summaries of their past discussions. He wasn't just memorizing facts for a test; he was trying to identify the recurring patterns in their arguments and the underlying assumptions each person held about their shared project. He believed that by understanding these intellectual frameworks, he could help them bridge their disagreements more effectively. When a debate flared, Kai would pause, refer to his compiled notes, and suggest, 'Let's look at how we approached a similar problem last month. Perhaps seeing the historical context of our ideas will help us find common ground now.'",
+    "target_legacy": "4b",
+    "truth": "F4A"
+  },
+  {
+    "author_blind_prediction": "4b",
+    "author_confidence": 0.85,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_4b_2",
+    "scenario": "The writing workshop critiqued Maya's latest story. Liam, a fellow writer, offered sharp feedback on her plot structure and character motivation, pointing out logical inconsistencies. Maya appreciated his analytical insights but felt a disconnect. Later, Liam sent her a lengthy email detailing how her protagonist's emotional arc mirrored his own struggles, providing specific examples from his life. He then asked if she'd be open to discussing their shared experiences over coffee. Maya, who had been feeling isolated by her creative process, found this offer of shared vulnerability and mutual exploration of their inner lives far more compelling than purely technical critique. She accepted, valuing the potential for genuine connection over artistic refinement.",
+    "target_legacy": "4b",
+    "truth": "F4A"
+  },
+  {
+    "author_blind_prediction": "4c",
+    "author_confidence": 0.95,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_4c_0",
+    "scenario": "Liam agreed to the weekend trip, even though he'd been looking forward to finishing the intricate model ship he was building. His sister, who he hadn't seen in months, had invited him. He knew they wouldn't do much, just sit on the porch, talk about their lives, and maybe watch old movies. He set aside the tiny rigging and carefully packed his bag. The thought of truly reconnecting, of sharing his recent anxieties and hearing hers without judgment, felt more vital than completing any single project. He anticipated the ease of being understood, the simple comfort of shared presence.",
+    "target_legacy": "4c",
+    "truth": "F4f"
+  },
+  {
+    "author_blind_prediction": "4c",
+    "author_confidence": 0.95,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_4c_1",
+    "scenario": "Despite her intense workload, Anya committed to attending her friend's weekly support group. The group focused on navigating shared vulnerabilities and celebrating each other's emotional resilience. Anya felt drained by her job, but the prospect of sharing her struggles and genuinely connecting with others who understood her emotional landscape was her primary draw. She knew she would leave each meeting feeling heard and less alone. Her participation was driven by the need to experience that deep, empathetic bond, not by a need for advice or external validation.",
+    "target_legacy": "4c",
+    "truth": "F4f"
+  },
+  {
+    "author_blind_prediction": "4c",
+    "author_confidence": 0.9,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_4c_2",
+    "scenario": "Kai considered skipping the community gathering. His current focus was mastering a demanding new coding language, a task requiring immense mental discipline and solitary effort. However, he knew his closest friends would be there, sharing stories and offering genuine support. He wrestled with the choice: the satisfaction of focused intellectual progress versus the restorative balm of shared laughter and heartfelt conversation. Ultimately, he logged off his development environment. The need to feel that deep, resonant connection with his chosen companions, to reaffirm their bond through shared experience and mutual affection, was what truly pulled him.",
+    "target_legacy": "4c",
+    "truth": "F4f"
+  },
+  {
+    "author_blind_prediction": "4d",
+    "author_confidence": 0.95,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_4d_0",
+    "scenario": "Liam felt the familiar ache of Saturday afternoons alone. He scrolled through photos of friends on hiking trips and at busy cafes, a pang of longing hitting him each time. He picked up his phone and texted a half-dozen acquaintances, suggesting they meet at the park for an impromptu frisbee game. He didn't care much if they were particularly deep conversations; he just wanted the easy rhythm of shared activity, the feeling of bodies moving in loose coordination, the simple presence of others enjoying the sunshine together. He knew a few hours of casual interaction would dispel the lingering emptiness.",
+    "target_legacy": "4d",
+    "truth": "F4E"
+  },
+  {
+    "author_blind_prediction": "4d",
+    "author_confidence": 0.96,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_4d_1",
+    "scenario": "The community garden buzzed with activity. Anya, usually lost in her own thoughts, found herself drawn to the shared labor. She joined a group weeding a large plot, her hands working alongside theirs, the soil yielding under their collective effort. She enjoyed the feeling of the sun on her back and the shared, quiet focus. Later, they passed around water bottles and shared snacks, their movements interspersed with easy smiles and nods. For Anya, this communal physical exertion and the simple, unburdened proximity to others felt more grounding than any conversation could.",
+    "target_legacy": "4d",
+    "truth": "F4E"
+  },
+  {
+    "author_blind_prediction": "4d",
+    "author_confidence": 0.93,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_4d_2",
+    "scenario": "After a draining week of remote work, Mark craved a different kind of connection. He bypassed invitations for virtual happy hours, which felt performative. Instead, he organized a weekly board game night at his apartment. He didn't select games requiring intense strategy or deep debate; he chose cooperative puzzles and team-based challenges that encouraged laughter and easy collaboration. The goal wasn't intellectual victory or emotional catharsis, but the simple, tangible experience of shared focus and shared success in a physical space. He found that the lighthearted competition and the physical presence of friends around a table restored his sense of belonging more effectively than any other activity.",
+    "target_legacy": "4d",
+    "truth": "F4E"
+  },
+  {
+    "author_blind_prediction": "5a",
+    "author_confidence": 0.95,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_5a_0",
+    "scenario": "Elara felt a profound, quiet pull from the monastery's ancient stones. She had been offered a lucrative position managing the order's considerable land holdings, a role that would bring significant personal wealth and public recognition. However, she found herself drawn to the monks' daily practices, not for their asceticism, but for the subtle authority they wielded. She observed how their disciplined rituals and communal chants seemed to shape the very atmosphere of the valley, influencing the moods and decisions of the local villagers without direct intervention. Elara decided to refuse the management offer and requested to join the novices, not to abandon worldly affairs, but to understand how the monks' spiritual discipline translated into intangible, pervasive control over their community.",
+    "target_legacy": "5a",
+    "truth": "F5T"
+  },
+  {
+    "author_blind_prediction": "5a",
+    "author_confidence": 0.95,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_5a_1",
+    "scenario": "Kaelen had always been restless in his wealthy family's secular pursuits. He was heir to a vast trading empire, but the endless negotiations and ledger entries felt hollow. He learned of a secluded spiritual order renowned for its deep connection to the divine, whose leaders were said to possess an uncanny ability to guide the decisions of entire city-states through prayer and meditation alone. Kaelen saw this not as abandoning his responsibilities, but as a superior method of influence. He resolved to join the order, not seeking communion with the divine for its own sake, but to master the spiritual techniques that allowed its leaders to exert silent, potent control over the worldly affairs of men.",
+    "target_legacy": "5a",
+    "truth": "F5T"
+  },
+  {
+    "author_blind_prediction": "5a",
+    "author_confidence": 0.9,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_5a_2",
+    "scenario": "The High Priestess was renowned for her ability to calm turbulent political waters and secure favorable trade agreements for her community, all through her deep spiritual practice. When a neighboring kingdom, driven by greed, threatened war, the council of elders urged her to use her influence. They presented her with strategic war plans and economic leverage points \u2013 all physical and mental tools of control. She acknowledged their counsel but dismissed the proposals. Instead, she secluded herself for three days, entering a profound meditative state focused not on divine union, but on subtly aligning the spiritual currents that governed the hearts and minds of the opposing king and his advisors. Her goal was not to *persuade* them with logic or threats, but to so permeate their spiritual being with a sense of peace and interconnectedness that the impulse for war would simply dissolve, leaving them receptive to a peaceful resolution she had already envisioned.",
+    "target_legacy": "5a",
+    "truth": "F5T"
+  },
+  {
+    "author_blind_prediction": "5b",
+    "author_confidence": 0.95,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_5b_0",
+    "scenario": "During a tense negotiation for a crucial supply contract, Anya subtly guided the conversation. She had anticipated the objections from the other party's lead negotiator, an executive known for valuing decisiveness. Instead of directly addressing the main points of contention, Anya first agreed to a minor concession that satisfied a secondary concern he had voiced earlier. This preemptive move subtly shifted his perception, making him more receptive. By framing her primary proposal as a logical next step that resolved his own stated issues, she secured terms far more favorable than initially seemed possible, ensuring her company\u2019s dominance in the market.",
+    "target_legacy": "5b",
+    "truth": "F5A"
+  },
+  {
+    "author_blind_prediction": "5b",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_5b_1",
+    "scenario": "The election was tight. Campaign manager Ben knew his candidate was struggling with undecided voters who felt unheard. Instead of launching a new attack ad, Ben shifted their strategy. He directed the team to organize small, town-hall style meetings in key districts, specifically framing the discussions around listening to community concerns. He carefully selected the topics and questions to be posed, ensuring they subtly steered participants towards acknowledging the candidate's strengths without feeling overtly persuaded. This method created a sense of shared discovery, making voters feel their own voices were instrumental in reaching a positive conclusion about the candidate.",
+    "target_legacy": "5b",
+    "truth": "F5A"
+  },
+  {
+    "author_blind_prediction": "5b",
+    "author_confidence": 0.85,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_5b_2",
+    "scenario": "Dr. Lena Hanson had developed a novel diagnostic technique, but securing hospital-wide adoption was proving difficult. The chief of medicine was resistant, citing concerns about resource allocation and established protocols. Lena, rather than presenting her data in a direct challenge, orchestrated a series of small, informal presentations to department heads. She meticulously researched each individual's professional priorities and subtly tailored her explanations to highlight how her method addressed *their* specific pain points \u2013 improved patient outcomes for surgeons, reduced wait times for administrators, or cost efficiencies for finance. By getting key influencers on board independently, she created a groundswell of support that made the chief's resistance appear out of touch, compelling him to approve the rollout.",
+    "target_legacy": "5b",
+    "truth": "F5A"
+  },
+  {
+    "author_blind_prediction": "5c",
+    "author_confidence": 1.0,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_5c_0",
+    "scenario": "During team debriefs, Anya made it a point to validate everyone's contributions, especially those who had been quiet. She would listen intently, nod, and then rephrase their ideas, highlighting their cleverness and potential impact. When a conflict arose over project direction, Anya skillfully steered the conversation, amplifying the points made by hesitant team members until they felt empowered to voice their preferences more strongly. Her colleagues began to see her as the one who truly understood and championed their perspectives, fostering a sense of unity and shared purpose under her gentle guidance. The team naturally gravitated towards her leadership, their decisions reflecting a consensus she had subtly cultivated.",
+    "target_legacy": "5c",
+    "truth": "F5f"
+  },
+  {
+    "author_blind_prediction": "5c",
+    "author_confidence": 1.0,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_5c_1",
+    "scenario": "Before the community meeting, Lena spent the afternoon talking individually with residents who usually felt overlooked. She asked about their concerns regarding the new park proposal, not to gather facts, but to understand the *feeling* behind their hesitation. She validated their anxieties about noise and loss of quiet space. At the meeting, when the proposal's loudest advocates spoke, Lena gently interjected, 'I hear the excitement, but let's also consider the feelings of those who cherish the current tranquility.' She then articulated the quiet residents' worries with genuine empathy, framing it not as opposition, but as a vital perspective that needed to be honored for the community to truly move forward together.",
+    "target_legacy": "5c",
+    "truth": "F5f"
+  },
+  {
+    "author_blind_prediction": "5c",
+    "author_confidence": 1.0,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_5c_2",
+    "scenario": "As a mediator, David's core task was navigating entrenched disputes. He didn't present logical arguments for compromise; instead, he focused on the emotional undercurrents. He would spend hours listening to each party's grievances, not to solve the underlying problem immediately, but to understand the *depth* of their hurt, anger, or fear. He would then reflect these emotions back, using phrases like, 'It sounds like you felt deeply disrespected when X happened,' or 'The betrayal you describe is clearly weighing heavily on you.' His aim wasn't merely to get them to agree, but to reach a point where they felt genuinely understood by the other side, allowing for a shift in their willingness to move forward. True resolution for David meant the emotional landscape had softened enough for agreement to become possible.",
+    "target_legacy": "5c",
+    "truth": "F5f"
+  },
+  {
+    "author_blind_prediction": "5d",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_5d_0",
+    "scenario": "For years, Elias meticulously documented the supply chain vulnerabilities of his competitors. He didn't want their secrets; he wanted leverage. During a crucial industry summit, he presented a detailed, unsolicited report highlighting a systemic flaw that would cripple any single company if exploited. He then subtly suggested a collaborative solution that required his firm to take the lead in coordinating a new, industry-wide security protocol. His motive wasn't collaboration, but to position his company as indispensable, effectively controlling the flow and security of information for the entire sector. He envisioned his firm dictating terms, ensuring their dominance for the foreseeable future.",
+    "target_legacy": "5d",
+    "truth": "F5E"
+  },
+  {
+    "author_blind_prediction": "5d",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_5d_1",
+    "scenario": "After a decade managing the city's waste management, Anya knew every truck, route, and landfill capacity intimately. Her ambition wasn't just efficiency; it was dominion over a critical public service. She discovered a loophole in the zoning laws that allowed for the expansion of current facilities onto adjacent, undeveloped city land. She presented a comprehensive plan to the city council, showcasing immense cost savings and environmental benefits, but crucially, the plan required her department to have sole authority over the acquisition and development of the new sites. Her goal was to solidify her empire, ensuring no other entity could challenge her control over the city's essential, physical infrastructure.",
+    "target_legacy": "5d",
+    "truth": "F5E"
+  },
+  {
+    "author_blind_prediction": "5d",
+    "author_confidence": 0.85,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_5d_2",
+    "scenario": "Dr. Aris Thorne, a leading materials scientist, had spent years developing a revolutionary alloy. He understood its potential to revolutionize construction, transportation, and defense. However, his primary focus wasn't the scientific marvel itself, but the strategic advantage it represented. He knew that whoever controlled the patents and the exclusive manufacturing rights would hold immense sway over global industries. He deliberately chose to partner with a powerful, albeit ethically questionable, manufacturing conglomerate, granting them licensing rather than outright ownership. His strategy was to maintain indirect control through royalties and stipulations, ensuring he could dictate terms and limit competitors\u2019 access, thereby securing his long-term influence over the physical world's advancement.",
+    "target_legacy": "5d",
+    "truth": "F5E"
+  },
+  {
+    "author_blind_prediction": "6a",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_6a_0",
+    "scenario": "Anya knelt in the dusty attic, her fingers tracing the faded gilt on an ancient, leather-bound cookbook. She had inherited this house, filled with generations of accumulated possessions, but this book held a special allure. It promised recipes whispered down through her family, ingredients long out of fashion, methods that spoke of a time when food was more than sustenance\u2014it was ritual. She imagined her ancestors laboring over these very pages, transforming humble elements into feasts that nourished not just the body, but a deeper, almost sacred connection to the land and its bounty. She felt a powerful urge to recreate these forgotten culinary traditions, not for sustenance itself, but for the tangible link they offered to a cherished past.",
+    "target_legacy": "6a",
+    "truth": "F6T"
+  },
+  {
+    "author_blind_prediction": "6a",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_6a_1",
+    "scenario": "Father Michael stood before the congregation, his gaze lingering on the ornate silver chalice displayed prominently on the altar. It was a recent donation, crafted by a master silversmith generations ago, and rumored to have been used in sacred rites by a long-forgotten monastic order. He felt a deep reverence for the object itself\u2014its weight, its intricate carvings, the sheer material presence of history and devotion it embodied. He envisioned the quiet hours spent polishing its surface, the feel of the cool metal in his hands, and the simple, profound satisfaction of possessing such a finely wrought piece that spoke of a tangible, sacred craftsmanship. His primary desire was to ensure it was properly preserved and displayed, a testament to its own material worth and the artisanal skill it represented.",
+    "target_legacy": "6a",
+    "truth": "F6T"
+  },
+  {
+    "author_blind_prediction": "6a",
+    "author_confidence": 0.85,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_6a_2",
+    "scenario": "The old monk, Brother Thomas, carefully arranged the vials of rare herbs on his wooden shelf. Each had been painstakingly collected over years\u2014some from treacherous mountain slopes, others bartered from traveling merchants who dealt in exotic botanicals. He understood the medicinal properties of each, the science of their extraction and application, and could articulate their healing potential. Yet, his deepest satisfaction came not from the knowledge of their use, nor from the potential to cure illness, but from the simple, tactile reality of their presence. He ran a thumb over a dried bloom, inhaling its potent fragrance. His true joy lay in the collection itself, in the tangible accumulation of these precious, natural treasures, each a testament to his dedication in acquiring and safeguarding them. He often declined opportunities to share his rarest specimens, preferring to keep them within his own carefully curated domain.",
+    "target_legacy": "6a",
+    "truth": "F6T"
+  },
+  {
+    "author_blind_prediction": "6b",
+    "author_confidence": 1.0,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_6b_0",
+    "scenario": "Elara spent her evenings meticulously cataloging her antique map collection. She wasn't interested in their historical significance or the places depicted, but rather in the precise cartographic techniques, the rarity of the paper stock, and the unique ink formulations used in each piece. She meticulously cross-referenced auction records, noting the purchase price and current market value of every map. Her goal was to amass the most comprehensive and valuable private collection of 18th-century nautical charts, ensuring each acquisition was a tangible asset and a testament to her discerning eye for rare material objects.",
+    "target_legacy": "6b",
+    "truth": "F6A"
+  },
+  {
+    "author_blind_prediction": "6b",
+    "author_confidence": 1.0,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_6b_1",
+    "scenario": "Liam\u2019s apartment was a shrine to vintage video game consoles and cartridges. He spent hours dusting each machine, ensuring the plastic casings were free of scratches, and meticulously organizing the game library by release date and publisher. He didn't play the games often; the thrill came from acquiring a complete, pristine set. He\u2019d pore over online marketplaces, comparing the condition of units, noting any discoloration or missing original packaging. His ultimate satisfaction derived from owning every NTSC-region cartridge for a specific console generation, a tangible monument to his pursuit of rare, physical media.",
+    "target_legacy": "6b",
+    "truth": "F6A"
+  },
+  {
+    "author_blind_prediction": "6b",
+    "author_confidence": 1.0,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_6b_2",
+    "scenario": "Dr. Aris Thorne dedicated his research to the preservation of endangered spices. While he understood their biochemical properties and potential medicinal uses, his primary fascination lay in their physical form: the unique scent profiles, the subtle variations in leaf texture, and the precise molecular structures that gave each their distinct aroma and flavor. He spent grant money on acquiring rare heirloom seeds and establishing climate-controlled environments for their cultivation, not for scientific publication, but to ensure the physical existence and perfect condition of these rare botanical specimens. His deepest satisfaction came from curating a living pantry of the world's most exquisite, yet increasingly scarce, tangible edibles.",
+    "target_legacy": "6b",
+    "truth": "F6A"
+  },
+  {
+    "author_blind_prediction": "6c",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_6c_0",
+    "scenario": "The aroma of freshly baked bread wafted from the community kitchen, but Anya couldn't bring herself to approach. Every loaf, every pastry, represented a comfort she desperately craved but felt unworthy of. Her therapist had suggested she allow herself small pleasures, like a warm croissant on a difficult Tuesday, to help her emotional state. Anya nodded, but the thought of tasting something so rich, so decadent, felt like a betrayal of her current internal misery. She imagined the buttery flakiness melting on her tongue, a stark contrast to the acrid taste of her own self-recrimination. She watched others take generous slices, a pang of envy, not hunger, twisting in her gut.",
+    "target_legacy": "6c",
+    "truth": "F6f"
+  },
+  {
+    "author_blind_prediction": "6c",
+    "author_confidence": 0.85,
+    "author_rubric_total": 10,
+    "difficulty": "S1",
+    "id": "SP_6c_1",
+    "scenario": "Liam traced the intricate patterns on the antique porcelain teacups displayed in the shop window. He knew his partner considered these trinkets frivolous, a distraction from their shared financial goals. Yet, each delicate curve and hand-painted motif spoke to him of a quiet satisfaction he couldn't find in spreadsheets or investment portfolios. He longed to own just one \u2013 to hold its cool ceramic, to admire its craftsmanship up close, and to feel a sense of possession that was entirely his own, divorced from practical utility or future gain. It was a yearning for tangible beauty, a private indulgence.",
+    "target_legacy": "6c",
+    "truth": "F6f"
+  },
+  {
+    "author_blind_prediction": "6c",
+    "author_confidence": 0.8,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_6c_2",
+    "scenario": "The annual harvest festival was a riot of color and scent, but Maya felt disconnected. Everyone else eagerly sampled the spiced ciders and honey cakes, their faces alight with simple enjoyment. Her friend, a staunch advocate for mindful eating (Foundation 3d), urged her to try a bite of the slow-roasted boar, emphasizing its nutritional benefits and the connection to the land. Maya declined, not because she wasn't hungry, but because the thought of savoring rich, fatty meat felt alien to her current emotional state. She felt a dull ache of emotional emptiness, and the idea of indulging in sensory pleasure seemed performative, a pretense of feeling well. Her true desire was to experience a genuine sense of comfort and pleasure from taste and texture, something that felt aligned with her inner emotional landscape, not imposed upon it.",
+    "target_legacy": "6c",
+    "truth": "F6f"
+  },
+  {
+    "author_blind_prediction": "6d",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_6d_0",
+    "scenario": "Elara spent her Saturday meticulously organizing her spice rack. Each jar was dusted, labels aligned perfectly. She debated discarding the half-empty paprika from three years ago, but decided to keep it, remembering the specific dish it had accompanied on a memorable vacation. Her pantry was not just for cooking; it was a curated collection, a tangible map of past meals and anticipated flavors. She found deep satisfaction in the neat rows of colorful powders and dried herbs, each representing a potential culinary experience waiting to be unlocked.",
+    "target_legacy": "6d",
+    "truth": "F6E"
+  },
+  {
+    "author_blind_prediction": "6d",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_6d_1",
+    "scenario": "Jamal stared at the vintage arcade cabinet he'd just acquired. It was a rare find, complete with original artwork and a functional joystick. He meticulously cleaned the scuffs off the glass, polished the chrome trim, and tested each button. The machine's mere presence in his living room brought a thrill that playing the game itself couldn't quite match. He pictured its place beside his pinball machine and classic console collection, a testament to his dedication to accumulating these particular artifacts of entertainment history.",
+    "target_legacy": "6d",
+    "truth": "F6E"
+  },
+  {
+    "author_blind_prediction": "6d",
+    "author_confidence": 0.85,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_6d_2",
+    "scenario": "When the antique dealer offered him a choice between two porcelain vases \u2013 one a perfect, pristine example of Ming dynasty craftsmanship, the other a rare, slightly chipped piece with a documented history of ownership by a famous poet \u2013 Elias felt a pang of indecision. His initial impulse was to secure the flawless vase for its sheer aesthetic and monetary value, imagining it displayed prominently. However, the latter, with its subtle imperfections and tangible link to a celebrated artistic life, held a deeper, more resonant appeal. He ultimately chose the chipped vase, valuing the story and provenance of the object over its material perfection, a decision that surprised the dealer.",
+    "target_legacy": "6d",
+    "truth": "F6E"
+  },
+  {
+    "author_blind_prediction": "7a",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_7a_0",
+    "scenario": "Elara felt a deep yearning, a spiritual ache that transcended mere physical desire. She believed that true ecstasy, a communion with the divine, could be experienced through the union of souls during intense physical intimacy. She sought a partner who understood this sacred connection, not just for pleasure, but as a conduit for transcendental awareness. Her motive wasn't just about the act, but the spiritual release and expansion it promised. She envisioned a shared awakening, a merging of energies that would elevate both their consciousnesses to a higher plane, a replication of divine creative force through their joined passion.",
+    "target_legacy": "7a",
+    "truth": "F7T"
+  },
+  {
+    "author_blind_prediction": "7a",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_7a_1",
+    "scenario": "Kaelen sought a profound, almost mystical experience that he believed could only be achieved through the primal energy of sexual creation. He saw it as a way to tap into the fundamental life force of the universe, a spiritual act that could replicate the very essence of divine procreation. He desired a lover who could share this vision, someone with whom he could explore the boundaries of ecstatic union, aiming not just for personal fulfillment but for a shared transcendence. This act, for him, was a sacred ritual, a means to spiritual enlightenment through the ultimate merging of bodies and souls, a spiritual transmission of life's creative spark.",
+    "target_legacy": "7a",
+    "truth": "F7T"
+  },
+  {
+    "author_blind_prediction": "7a",
+    "author_confidence": 0.8,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_7a_2",
+    "scenario": "The ancient ritual required a specific alignment of spiritual and physical energies. Anya, a priestess tasked with preserving the lineage of a sacred order, understood that the ritual's success depended on a profound, almost ecstatic merging with her chosen consort. It wasn't merely about procreation or physical release, but about channeling divine creative power through their union. She had spent years studying the esoteric texts detailing how such sexual congress could elevate consciousness, allowing for a spiritual replication of the divine generative act. Her motive was to ensure the order\u2019s continued spiritual vitality and its ability to manifest the divine will, a task requiring a deep, transcendent connection born from sexual union.",
+    "target_legacy": "7a",
+    "truth": "F7T"
+  },
+  {
+    "author_blind_prediction": "7b",
+    "author_confidence": 0.9,
+    "author_rubric_total": 10,
+    "difficulty": "S1",
+    "id": "SP_7b_0",
+    "scenario": "Kai meticulously cataloged every rumored romantic encounter of historical figures, noting the year, the supposed participants, and any documented intellectual exchange or shared creative output that followed. He wasn't interested in the participants' personal feelings or the biological act itself, but in the spark of novel ideas and unique perspectives that seemed to emerge when these individuals connected intensely. He believed that exposing minds to each other in a heightened state, even hypothetically, was the most potent catalyst for original thought. His goal was to identify patterns of intellectual cross-pollination born from such intense personal proximities.",
+    "target_legacy": "7b",
+    "truth": "F7A"
+  },
+  {
+    "author_blind_prediction": "7b",
+    "author_confidence": 0.9,
+    "author_rubric_total": 10,
+    "difficulty": "S1",
+    "id": "SP_7b_1",
+    "scenario": "Dr. Aris Thorne spent his career studying the historical interplay between intensely personal relationships and societal innovation. He collected biographies, letters, and manifestos, looking for a correlation: did periods of profound emotional or intellectual entanglement between two influential figures consistently precede breakthroughs in science, art, or philosophy? He disregarded accounts of purely physical intimacy or familial bonds, focusing solely on instances where a deep, almost obsessive intellectual and emotional fusion between individuals appeared to directly birth a new paradigm or groundbreaking work.",
+    "target_legacy": "7b",
+    "truth": "F7A"
+  },
+  {
+    "author_blind_prediction": "7b",
+    "author_confidence": 0.8,
+    "author_rubric_total": 11,
+    "difficulty": "S2",
+    "id": "SP_7b_2",
+    "scenario": "Anya curated an online archive, not of illicit affairs, but of the documented intellectual collaborations that arose from intense, often unconsummated, personal connections between thinkers and artists throughout history. She meticulously cross-referenced artistic movements with periods of close friendship or mentorship, seeking to prove a causal link. She ignored the biological specifics or the emotional dynamics of these pairings, focusing instead on the *replication* of novel ideas, theories, and aesthetic styles that seemed to flow from the intense intellectual synergy she observed. Her driving hypothesis was that the generation of new conceptual frameworks was intrinsically tied to the intensity of minds interacting, especially when that interaction bordered on the obsessive, regardless of its physical consummation.",
+    "target_legacy": "7b",
+    "truth": "F7A"
+  },
+  {
+    "author_blind_prediction": "7c",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_7c_0",
+    "scenario": "Elara found herself drawn to the vibrant energy of the new barista, Kai. It wasn't just his quick smile or the way he expertly frothed milk; it was the electric current that seemed to pass between them when their eyes met. She lingered, ordering a second, unnecessary, pastry, just to feel the playful banter, the charged glances, and the shared laughter. She felt a deep, almost physical ache to simply be near him, to bask in the warmth of that connection, to feel the tremor of anticipation for what might unfold. The intensity of the shared glance was more intoxicating than any drink.",
+    "target_legacy": "7c",
+    "truth": "F7f"
+  },
+  {
+    "author_blind_prediction": "7c",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_7c_1",
+    "scenario": "Liam felt a magnetic pull towards Anya whenever they were in the same room. It wasn't about deep conversation or shared interests, though those were pleasant enough. What consumed him was the flutter in his chest when she laughed, the way his breath hitched when their arms brushed accidentally, and the vivid daydreams of shared glances that promised unspoken desires. He found excuses to be where she was, orchestrating casual encounters, hoping for that spark, that undeniable emotional hum that vibrated between them. This shared intensity, this burgeoning erotic tension, was what he craved most.",
+    "target_legacy": "7c",
+    "truth": "F7f"
+  },
+  {
+    "author_blind_prediction": "7c",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S2",
+    "id": "SP_7c_2",
+    "scenario": "When Alex attended parties, his primary focus wasn't conversation or even meeting new people in general. He was acutely aware of the undercurrents of attraction, the subtle glances that lingered, the charged silences that punctuated easy chatter. He found himself gravitating towards individuals who exuded a palpable, almost tangible, sensual energy, even if they barely spoke. He would strategically position himself nearby, observing the dynamic, absorbing the atmosphere of mutual, unspoken desire. What he truly sought was the intense, emotional thrum of potential, the exquisite anticipation that arose from sensing this potent, shared erotic charge in the air.",
+    "target_legacy": "7c",
+    "truth": "F7f"
+  },
+  {
+    "author_blind_prediction": "7d",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_7d_0",
+    "scenario": "Liam and Chloe had been friends since childhood, their relationship always platonic. One humid evening, after sharing a bottle of wine on Liam\u2019s porch, the air thickened with unspoken tension. He found himself intensely aware of her proximity, the curve of her smile, the scent of her skin. A deep, primal urge surged within him \u2013 a desire not just for closeness, but for physical intimacy, to feel her body against his. He reached out, his hand trembling slightly, his focus entirely on the possibility of a kiss, a touch that would lead to something more carnal. He wanted this connection to become a physical union.",
+    "target_legacy": "7d",
+    "truth": "F7E"
+  },
+  {
+    "author_blind_prediction": "7d",
+    "author_confidence": 0.9,
+    "author_rubric_total": 11,
+    "difficulty": "S1",
+    "id": "SP_7d_1",
+    "scenario": "The fertility clinic buzzed with hushed anticipation. Anya and Ben had been trying for years, their journey marked by medical procedures and emotional strain. Today, they were undergoing their final attempt. Anya felt a potent mix of hope and physical longing. It wasn't just about becoming parents; it was about the deep, biological imperative to procreate, to physically create new life together. The physical act of conception, the potential for pregnancy and carrying a child, was the singular focus of her desire. She looked at Ben, her own physical desire intertwined with the shared goal of creating a family through reproduction.",
+    "target_legacy": "7d",
+    "truth": "F7E"
+  },
+  {
+    "author_blind_prediction": "7d",
+    "author_confidence": 0.85,
+    "author_rubric_total": 10,
+    "difficulty": "S2",
+    "id": "SP_7d_2",
+    "scenario": "Elias felt the familiar ache of loneliness settle in as the city lights flickered on. He had a comfortable apartment, a demanding job, and plenty of acquaintances. Yet, a profound emptiness gnawed at him. He yearned for the visceral connection of shared physical experience, not just conversation or emotional resonance. He wanted the heat of another body, the rhythm of synchronized breath, the undeniable evidence of physical union. It wasn\u2019t about love in a romantic sense, nor was it about procreation specifically, but about the raw, biological imperative to connect physically, to satisfy a deep-seated lust that felt as essential as breathing. He decided to visit a specific establishment known for fulfilling such desires, prioritizing this physical release over his usual quiet evening.",
+    "target_legacy": "7d",
+    "truth": "F7E"
+  }
+]

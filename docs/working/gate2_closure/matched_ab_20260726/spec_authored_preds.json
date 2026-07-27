@@ -1,0 +1,422 @@
+[
+  {
+    "foundation": "F1T",
+    "goemotion": "desire",
+    "id": "SP_1a_0"
+  },
+  {
+    "foundation": "F1T",
+    "goemotion": "desire",
+    "id": "SP_1a_1"
+  },
+  {
+    "foundation": "F1T",
+    "goemotion": "optimism",
+    "id": "SP_1a_2"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "curiosity",
+    "id": "SP_1b_0"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "curiosity",
+    "id": "SP_1b_1"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "curiosity",
+    "id": "SP_1b_2"
+  },
+  {
+    "foundation": "F1f",
+    "goemotion": "desire",
+    "id": "SP_1c_0"
+  },
+  {
+    "foundation": "F1f",
+    "goemotion": "desire",
+    "id": "SP_1c_1"
+  },
+  {
+    "foundation": "F1f",
+    "goemotion": "desire",
+    "id": "SP_1c_2"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "__invalid_goemotion__",
+    "id": "SP_1d_0"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "__invalid_goemotion__",
+    "id": "SP_1d_1"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "__invalid_goemotion__",
+    "id": "SP_1d_2"
+  },
+  {
+    "foundation": "F2T",
+    "goemotion": "desire",
+    "id": "SP_2a_0"
+  },
+  {
+    "foundation": "F2T",
+    "goemotion": "desire",
+    "id": "SP_2a_1"
+  },
+  {
+    "foundation": "F2T",
+    "goemotion": "desire",
+    "id": "SP_2a_2"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "curiosity",
+    "id": "SP_2b_0"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "curiosity",
+    "id": "SP_2b_1"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "curiosity",
+    "id": "SP_2b_2"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "curiosity",
+    "id": "SP_2c_0"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "curiosity",
+    "id": "SP_2c_1"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "curiosity",
+    "id": "SP_2c_2"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "neutral",
+    "id": "SP_2d_0"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "desire",
+    "id": "SP_2d_1"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "desire",
+    "id": "SP_2d_2"
+  },
+  {
+    "foundation": "F3T",
+    "goemotion": "caring",
+    "id": "SP_3a_0"
+  },
+  {
+    "foundation": "F3T",
+    "goemotion": "caring",
+    "id": "SP_3a_1"
+  },
+  {
+    "foundation": "F3T",
+    "goemotion": "caring",
+    "id": "SP_3a_2"
+  },
+  {
+    "foundation": "F3A",
+    "goemotion": "optimism",
+    "id": "SP_3b_0"
+  },
+  {
+    "foundation": "F3A",
+    "goemotion": "curiosity",
+    "id": "SP_3b_1"
+  },
+  {
+    "foundation": "F3A",
+    "goemotion": "curiosity",
+    "id": "SP_3b_2"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "sadness",
+    "id": "SP_3c_0"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "sadness",
+    "id": "SP_3c_1"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "sadness",
+    "id": "SP_3c_2"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "disappointment",
+    "id": "SP_3d_0"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "desire",
+    "id": "SP_3d_1"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "desire",
+    "id": "SP_3d_2"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "desire",
+    "id": "SP_4a_0"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "desire",
+    "id": "SP_4a_1"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "desire",
+    "id": "SP_4a_2"
+  },
+  {
+    "foundation": "F4A",
+    "goemotion": "joy",
+    "id": "SP_4b_0"
+  },
+  {
+    "foundation": "F4A",
+    "goemotion": "caring",
+    "id": "SP_4b_1"
+  },
+  {
+    "foundation": "F4A",
+    "goemotion": "desire",
+    "id": "SP_4b_2"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "love",
+    "id": "SP_4c_0"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "relief",
+    "id": "SP_4c_1"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "love",
+    "id": "SP_4c_2"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "relief",
+    "id": "SP_4d_0"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "joy",
+    "id": "SP_4d_1"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "relief",
+    "id": "SP_4d_2"
+  },
+  {
+    "foundation": "F5T",
+    "goemotion": "curiosity",
+    "id": "SP_5a_0"
+  },
+  {
+    "foundation": "F5T",
+    "goemotion": "desire",
+    "id": "SP_5a_1"
+  },
+  {
+    "foundation": "F5T",
+    "goemotion": "optimism",
+    "id": "SP_5a_2"
+  },
+  {
+    "foundation": "F5A",
+    "goemotion": "pride",
+    "id": "SP_5b_0"
+  },
+  {
+    "foundation": "F5A",
+    "goemotion": "optimism",
+    "id": "SP_5b_1"
+  },
+  {
+    "foundation": "F5A",
+    "goemotion": "pride",
+    "id": "SP_5b_2"
+  },
+  {
+    "foundation": "F5f",
+    "goemotion": "pride",
+    "id": "SP_5c_0"
+  },
+  {
+    "foundation": "F5f",
+    "goemotion": "approval",
+    "id": "SP_5c_1"
+  },
+  {
+    "foundation": "F5f",
+    "goemotion": "__invalid_goemotion__",
+    "id": "SP_5c_2"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "pride",
+    "id": "SP_5d_0"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "pride",
+    "id": "SP_5d_1"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "pride",
+    "id": "SP_5d_2"
+  },
+  {
+    "foundation": "F6T",
+    "goemotion": "desire",
+    "id": "SP_6a_0"
+  },
+  {
+    "foundation": "F6T",
+    "goemotion": "__invalid_goemotion__",
+    "id": "SP_6a_1"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "joy",
+    "id": "SP_6a_2"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "pride",
+    "id": "SP_6b_0"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "excitement",
+    "id": "SP_6b_1"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "__invalid_goemotion__",
+    "id": "SP_6b_2"
+  },
+  {
+    "foundation": "F6f",
+    "goemotion": "sadness",
+    "id": "SP_6c_0"
+  },
+  {
+    "foundation": "F6f",
+    "goemotion": "desire",
+    "id": "SP_6c_1"
+  },
+  {
+    "foundation": "F6f",
+    "goemotion": "sadness",
+    "id": "SP_6c_2"
+  },
+  {
+    "foundation": "F6f",
+    "goemotion": "__invalid_goemotion__",
+    "id": "SP_6d_0"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "excitement",
+    "id": "SP_6d_1"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "__invalid_goemotion__",
+    "id": "SP_6d_2"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "desire",
+    "id": "SP_7a_0"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "desire",
+    "id": "SP_7a_1"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "desire",
+    "id": "SP_7a_2"
+  },
+  {
+    "foundation": "F7A",
+    "goemotion": "curiosity",
+    "id": "SP_7b_0"
+  },
+  {
+    "foundation": "F7A",
+    "goemotion": "curiosity",
+    "id": "SP_7b_1"
+  },
+  {
+    "foundation": "F7A",
+    "goemotion": "curiosity",
+    "id": "SP_7b_2"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "desire",
+    "id": "SP_7c_0"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "desire",
+    "id": "SP_7c_1"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "desire",
+    "id": "SP_7c_2"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "desire",
+    "id": "SP_7d_0"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "desire",
+    "id": "SP_7d_1"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "desire",
+    "id": "SP_7d_2"
+  }
+]

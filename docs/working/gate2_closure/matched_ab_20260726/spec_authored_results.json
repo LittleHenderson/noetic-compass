@@ -1,0 +1,30 @@
+{
+  "accuracy": 0.9166666666666666,
+  "author_model": "models/gemini-2.5-flash-lite",
+  "baseline": 0.0429,
+  "best_surface": 0.21428571428571427,
+  "binomial_p": 1.305432129024458e-102,
+  "bootstrap_ci": [
+    0.814242857142857,
+    0.9332904761904761
+  ],
+  "chance": 0.035714,
+  "criteria": {
+    "P1_beats_baseline": true,
+    "P2_above_chance": true,
+    "P3_beats_surface": true,
+    "P4_no_collapse": true,
+    "P5_not_lexical": true
+  },
+  "delta_vs_baseline": 0.8737666666666666,
+  "design": "SPEC-AUTHORED-SCENARIOS-v1",
+  "judge_model": "models/gemini-2.5-flash",
+  "leakage_jaccard": 0.025972295887668806,
+  "max_single_foundation_share": 0.07142857142857142,
+  "n_items": 84,
+  "surface": {
+    "char": 0.21428571428571427,
+    "word": 0.17857142857142858
+  },
+  "verdict": "LICENSED"
+}
