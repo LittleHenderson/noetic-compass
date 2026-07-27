@@ -1,0 +1,242 @@
+# CAS Harness — Engineering Handoff Package
+
+**Status:** Gate 2 OPEN at `0.38`. Nothing in this document licenses a product claim.
+**Written:** 2026-07-27
+**Audience:** an incoming engineering team with no prior context on this campaign.
+
+---
+
+## 1. How to read this document
+
+This is an honest inventory, not a pitch. It separates four things that are easy to blur:
+
+| Bucket | Meaning |
+|---|---|
+| **Licensed** | Passed a pre-registered gate. Claimable, within its stated ceiling. |
+| **Not licensed** | Ran correctly, did not clear its bar. The apparatus worked; the result was null. |
+| **Void** | The measurement was degenerate or the construction was broken. Not a null result — no result. |
+| **Open** | Not yet run, or blocked. |
+
+A null result from a correct instrument is **normal and valuable**. A working scale that reads
+zero is still a working scale. Most of this campaign is null, and that is reported plainly.
+
+---
+
+## 2. The one licensed result
+
+**`SCRAMBLE-NULL-COMPLETION-v1`** — pre-registration commit `3385aa63`, model
+`EleutherAI/pythia-1b`, seeds `1..200`.
+
+| Criterion | Bar | Observed | Result |
+|---|---|---|---|
+| `E1` below 2.5% of null | — | `0/200` fresh scrambles beat it | **PASS** |
+| `E2` bootstrap CI excludes 0 | — | `[0.208537, 0.255985]` | **PASS** |
+| `E3` margin beyond lexical | `>= 0.10` | `0.183721` | **PASS** |
+| `E4` no saturation | — | clear | **PASS** |
+| `W1` ordinal correlation (secondary) | `p < 0.05` | `perm_p = 0.089291` | **FAIL** |
+
+Exact permutation `p = 0.004975`.
+
+**What this licenses, exactly:** the TKS grid's assignment of meanings to cells is
+non-arbitrary beyond what vocabulary overlap alone explains, on `pythia-1b`.
+
+**What it does NOT license:** that the grid is *derived*, that TKS beats any alternative
+scheme, or anything about other models. The secondary ordinal test (`W1`) failed, so the
+"structure is ordered along a gradient" reading is **not** supported.
+
+---
+
+## 3. Infrastructure that works and is reusable
+
+This is the real asset. Every item below is built, tested, and independent of whether any
+particular hypothesis held.
+
+| Component | Path | What it does |
+|---|---|---|
+| **Admissibility guard** | `research/reconciled/experiment_admissibility.py` | 11 tests. Computes *honest* effective sample size and refuses inadmissible designs. Load-bearing inside `injection_detection_scorer.py` — raises `InadmissibleDatasetError` before any probe is fit. |
+| **Matched A/B driver** | `docs/working/gate2_closure/matched_ab_20260726/run_matched_ab.py` | Full two-arm pipeline: authoring, blinding, cross-judging, surface controls, bootstrap, permutation. Ran `2,780` pairs cleanly. |
+| **Judge parse repair** | `.../judge_parse_repair.py` | Repairs malformed LLM JSON (fences, prose, trailing commas, truncation) without altering content. |
+| **Surface precheck** | `docs/working/cjt_breakdown/surface_precheck.py` | VADER-based check that prompt text does not itself contain the effect being measured. Catches construction defects before GPU spend. |
+| **Regression guard** | `check_invariants.py` (commit `0923146b`) | One check per defect found during this campaign. |
+| **Signature/receipt chain** | `cas-forex/cas_forex/pcba_authority.py` | 24 receipts, 4 signed, `verify()` True 4/4. |
+
+**The apparatus is sound.** The `2,780`-pair run had correct blinding, symmetric authoring
+constraints, a full judge cross to remove choice-set anchoring, char-3-5-gram *and* word
+TF-IDF surface controls, `10,000`-iteration bootstrap, and label-preserving permutation.
+That is a properly built experiment. It returned null.
+
+---
+
+## 4. Complete verdict ledger
+
+Every instrument run in this campaign. No omissions.
+
+### Geometry track (`docs/working/gate2_closure/geometry/`)
+
+| Instrument | Verdict |
+|---|---|
+| `scramble_null` | **PRIMARY_LICENSED** \| SECONDARY_NOT_LICENSED |
+| `fisher` | VOID_SATURATED |
+| `fisher_sweep` | NOT_LICENSED |
+| `output_simplex` | NOT_LICENSED |
+| `reversal` | NOT_LICENSED |
+| `trajectory` | NOT_LICENSED |
+
+### Definition A/B track (`docs/working/gate2_closure/item4_arms/`)
+
+| Instrument | Verdict |
+|---|---|
+| `v2_pythia1b` | NOT_LICENSED |
+| `v3_composition` | VOID_SAME_DISEASE |
+| `v4_masked` | NOT_LICENSED |
+| `v4_wronglayer` | FAIL_not_layer_matched |
+| `v5_multiplicative` | NOT_LICENSED |
+| `v5b_simspace` | VOID_DEGENERATE_METRIC |
+| `matched_ab_20260726` (scaled) | **NOT_LICENSED_DEGENERATE** |
+
+### Book-prediction track (`docs/working/cjt_breakdown/`)
+
+| Instrument | Verdict |
+|---|---|
+| Vocabulary escalation ladder | Abandoned — `B4` surface gate failed 3× with contamination *increasing* each revision |
+| Repetition-pressure inversion | VOID on `B4` construction guard; **open decision** (see §7) |
+| β (CJT gain) measurement | Computable; hypothesis unsupported — injection `0.452` vs benign `0.427`, separation `+0.025` |
+
+**Tally: 1 licensed, 8 not licensed, 4 void, 2 abandoned/open.**
+
+---
+
+## 5. The headline failure, and why it is not what it looks like
+
+The scaled matched A/B is the campaign's most careful experiment. Its result:
+
+```
+arm A (original TKS wording)          accuracy 0.0636
+arm D (generic shorthand composition) accuracy 0.0423
+chance                                         0.0357
+margin M = -0.010763
+bootstrap 95% CI  [-0.019013, -0.001927]   (entirely below zero)
+paired permutation, n = 2780 pairs
+safety-block accounting: A=7, D=13, total 20 rows — SYMMETRIC
+```
+
+**Read it carefully.** Both arms sit near the floor. The judge (`gemini-2.5-flash`) was asked
+to match a definition to one of 28 foundations and got roughly `1 in 16` right where blind
+guessing gets `1 in 28`. The confidence interval sits entirely below zero, so if anything the
+generic arm did *better* — but from a baseline so close to chance that the comparison carries
+almost no information either way.
+
+**This is a power failure, not a verdict on TKS.** A referee who can barely tell anything apart
+cannot declare a winner. The result replicated at two scales (small run and `10×`), so it is
+stable — scaling fixed the statistics, not the task.
+
+**Disclosed guard shortfall:** two passes scored `2793` and `2787` rows against a pre-registered
+floor of `2800`, because the judge API refused 20 rows. Recorded rather than silently rounded.
+
+---
+
+## 6. Root cause — read this before designing anything new
+
+Sixteen instruments failed for one recurring reason: **the confound arrives before the
+phenomenon.**
+
+The book's author also wrote the definitions, the test items, and the scoring rubric. So any
+signal an instrument detects has at least two explanations:
+
+1. The definitions genuinely share deep structure. *(the hypothesis)*
+2. The definitions share an author, a vocabulary, and a set of habits. *(the confound)*
+
+Every instrument that found signal was traceable to (2) once controls were added. Adding
+controls is what produced the null results — the controls are correct, and they are what makes
+this ledger trustworthy.
+
+**Known specific traps, each discovered the hard way:**
+
+- **Row duplication inflates `n`.** One dataset reported `640` rows; effective `n` was `80`
+  (8 byte-identical copies each). Always compute effective sample size, never trust row count.
+- **Char n-gram controls are mandatory.** A detector was withdrawn after a char-3-5-gram
+  baseline (`0.925`) beat the hidden-state probe. This control never touches the model, so its
+  score is constant across model sizes — if it moves, something is wrong with your harness.
+- **Split artifacts masquerade as margins.** A `+0.0375` margin had a seed-inclusive mean of
+  `-0.0094`, with 14 of 20 fold seeds putting the hidden state at or below raw token embeddings.
+  Always report across seeds.
+- **Natural-language escalation ladders cannot have flat surface sentiment.** Linguistic
+  intensity *is* word choice. Three ladder rewrites made contamination worse, not better.
+- **Sentiment lexicons you build yourself will be broken.** A hand-built one scored
+  *"I am hopeless as a writer"* as **positive**. Use a published lexicon (VADER).
+- **LLM API calls need explicit timeouts.** One hung connection blocked a run for 148 minutes.
+- **Buffered logging hides progress.** Use `python -u`.
+
+---
+
+## 7. The one experiment that needs people
+
+This is the single highest-value thing a resourced team can do that could not be done here.
+
+**The problem it solves:** independence. Not power — see the caveat below.
+
+### Protocol sketch
+
+1. **Recruit** `n >= 200` participants with no exposure to the book or framework
+   (Prolific/MTurk screening question, plus an attention check).
+2. **Split into two arms.** Arm A sees the original TKS foundation wording; arm D sees generic
+   drive+register shorthand. Neither arm is told which is which, or that a comparison exists.
+3. **Task:** each participant reads a definition and selects the matching foundation from the
+   28-cell grid. Same task the LLM judge performed.
+4. **Pre-register before collection:** margin floor, alpha, CI method, exclusion rules. Do not
+   move them afterward. The pre-registrations in this repo are usable templates.
+5. **Surface controls unchanged** — word TF-IDF and char 3-5-gram baselines computed on the
+   same items, subtracted per arm.
+
+### The honest caveat
+
+A human panel fixes **independence** (clean data, no shared authorship). It does **not
+automatically fix power**. The matched A/B failed because the *judge* was near chance. Humans
+would very likely do better than `gemini-2.5-flash` at 28-way matching — but that is an
+assumption, and it should be measured with a small pilot (`n ~ 30`) before funding a full panel.
+
+**Pilot gate:** if human accuracy on arm-A items is below `~0.25`, the task itself is too hard
+and needs redesign (fewer choices, or a graded-similarity response) before scaling.
+
+---
+
+## 8. What is not in scope of the existing patent
+
+USPTO provisional **`64/037,173`**, filed **`04/13/2026`**. Conversion deadline
+**`2027-04-13`** — a utility or PCT filing claiming priority must land by then.
+
+**Not covered by that provisional** (added afterward, needs its own filing or inclusion in the
+utility application):
+
+- CAS v7.5 (Phenomenological Register), v7.6 (Production Semantics), v7.7 (Register Multiplicity)
+- The Fleet / 300B sharded-audit architecture
+
+The utility filing should **not** wait on the human-panel outcome.
+
+---
+
+## 9. Recommended sequence for the receiving team
+
+1. **Run `check_invariants.py`** and the admissibility guard against your own environment first.
+   If those don't pass, nothing downstream is trustworthy.
+2. **Pilot the human task** (`n ~ 30`) to measure whether the 28-way matching task is tractable
+   for people at all. Cheap, and it gates everything else.
+3. **If the pilot clears**, run the full panel against the existing pre-registration templates.
+4. **Independently of the panel**, the book-prediction track (§4, third table) is testable
+   without human subjects and remains open.
+
+---
+
+## 10. Status line
+
+```
+Gate 1   EARNED  (0.38)
+Gate 2   OPEN    (0.46) — "the scoring actually works on a small model,
+                          with fair comparisons and honest error bars"
+```
+
+Gate 2 is open because no instrument yet demonstrates usable discrimination. The methodology
+requirement — fair comparisons, honest error bars — is **met**. The functional requirement —
+the scoring actually discriminates — is **not**.
+
+That distinction is the most important sentence in this document.
