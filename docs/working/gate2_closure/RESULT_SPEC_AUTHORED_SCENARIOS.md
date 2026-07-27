@@ -25,8 +25,26 @@ judge `models/gemini-2.5-flash`.
 | `P4` no collapse | `<= 0.30` | `0.0714` | **PASS** |
 | `P5` not lexical | Jaccard `<= 0.15` | `0.0260` | **PASS** |
 
-**The author model was held fixed.** Only the protocol changed. A `21×` improvement is
-attributable to the authoring specification, not to a better writer.
+**The author model was held fixed.** Only the protocol changed.
+
+### Claim scope — narrowed 2026-07-27 at owner instruction
+
+Two earlier phrasings were too broad and are corrected here. The corrections are recorded rather
+than silently edited.
+
+**Was:** *"a 21× improvement attributable to the instructions alone."*
+**Now:** the `21×` figure is supportable **for this controlled authoring comparison**, and only
+because the following were unchanged between arms — verified: author model
+(`gemini-2.5-flash-lite`), decoding parameters (`temperature 0.95`, `top_p 0.95`), label
+inventory (the same 28 TKS definitions), and judge procedure (`gemini-2.5-flash`, same prompt
+builder, same parse path). It is **not** a claim that instructions alone explain every historical
+failure. Item populations still differ between arms, as the pre-registration already flagged.
+
+**Was:** *"the cause was the prompt."*
+**Now:** **the original authoring prompt was a *sufficient* cause of the scenario-signal failure,
+and appears to explain a major portion of the downstream nulls.** The intervention establishes
+that changing the prompt repairs recoverability. It does **not** establish that each of the
+sixteen instruments was otherwise flawless or affected only by this defect.
 
 ---
 
@@ -122,11 +140,34 @@ from indistinguishable-from-chance to `0.9167`.
 with these same baselines, through a **small model**. The premise is clean — an independent judge
 confirms the signal is present in the items, which was never true of any earlier dataset.
 
-## Required fix for the successor
+## Dataset versioning — both versions preserved, neither overwritten
 
-1. **Strip the World name** from author prompts and post-filter any scenario containing it.
+Per owner instruction, the contaminated dataset is **not** repaired in place:
+
+| Version | Contents | What it measures |
+|---|---|---|
+| **`V1_RAW`** | the original 84 scenarios, World-name leakage intact | the protocol **as implemented** |
+| **`V1_DELEAKED`** | deterministic removal of prohibited descriptors | the stronger **semantic** claim |
+
+`V1_RAW` is what is committed here (`spec_authored_items.json`, item-set sha256
+`c2ad86df5bac9792dd02685925f9750f`). Both are reported side by side in any successor.
+
+**Caveat on deterministic stripping, recorded before it is applied:** removing `spirit/spiritual`,
+`mind/mental`, `emotion/emotional`, `physical` also removes ordinary semantic content — especially
+*mind* and *feeling* — and will damage some classes more than others. Deterministic stripping is
+therefore a **sensitivity analysis**, not the primary de-leak. The primary de-leak is
+**regeneration under a prohibited-token list**, and because that decision follows sight of the
+`V1_RAW` result it must be filed as a **new pre-registered dataset, not a correction to this one**.
+
+## Required for the successor
+
+1. **Regenerate** under a prohibited-token list (new pre-registration, new dataset name).
 2. **Extend `P5` to cover every string the author prompt contains**, not just the definition text.
-3. Re-run and report whether the World axis survives.
+3. Report `V1_RAW` and `V1_DELEAKED` together; the delta quantifies the leak's contribution.
+4. **Preserve the seven errors** as a targeted diagnostic set — do **not** repair them before the
+   small-model run. They are informative boundary cases (`4a` vs `4c`; `6a`/`6b`/`6c`/`6d`), and
+   the pattern suggests the drive is recoverable while **ontological location** is not always
+   behaviorally anchored. A separate adversarial set for Foundations `4` and `6` comes after.
 
 Artifacts: `spec_authored_results.json`, `spec_authored_items.json`, `spec_authored_preds.json`.
 Gate 2 remains **OPEN at `0.38`**.
