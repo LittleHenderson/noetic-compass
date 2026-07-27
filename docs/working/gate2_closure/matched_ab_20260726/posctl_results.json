@@ -1,0 +1,43 @@
+{
+  "amendment": "AMENDMENT 1 (T0 n=28, T1 deduplicated)",
+  "chance": 0.035714,
+  "criteria": {
+    "C1_harness_integrity": true,
+    "C2_instrument_sensitivity": true,
+    "C3_difficulty_localized": true,
+    "C4_no_degenerate_collapse": true
+  },
+  "design": "JUDGE-POSITIVE-CONTROL-v1",
+  "judge_model": "models/gemini-2.5-flash",
+  "prereg_commit": "8ab16b2d",
+  "tiers": {
+    "T0": {
+      "accuracy": 1.0,
+      "chance": 0.035714,
+      "effective_n_equals_rows": true,
+      "max_single_foundation_share": 0.0357,
+      "n_correct": 28,
+      "n_rows": 28,
+      "n_scored": 28
+    },
+    "T1": {
+      "accuracy": 1.0,
+      "chance": 0.035714,
+      "effective_n_equals_rows": true,
+      "max_single_foundation_share": 0.0625,
+      "n_correct": 160,
+      "n_rows": 160,
+      "n_scored": 160
+    },
+    "T2": {
+      "accuracy": 0.042857,
+      "chance": 0.035714,
+      "effective_n_equals_rows": true,
+      "max_single_foundation_share": 0.2857,
+      "n_correct": 12,
+      "n_rows": 280,
+      "n_scored": 280
+    }
+  },
+  "verdict": "JUDGE_FUNCTIONAL"
+}

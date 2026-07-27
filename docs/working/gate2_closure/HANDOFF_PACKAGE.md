@@ -46,6 +46,34 @@ scheme, or anything about other models. The secondary ordinal test (`W1`) failed
 
 ---
 
+## 2b. The diagnostic that reframes the ledger
+
+**`JUDGE-POSITIVE-CONTROL-v1`** — pre-registration `8ab16b2d` + Amendment 1 (`35c9f62a`),
+verdict `JUDGE_FUNCTIONAL`. Full write-up: `RESULT_JUDGE_POSITIVE_CONTROL.md`.
+
+Sixteen instruments ran without ever asking whether the apparatus can detect a signal that is
+certainly present. When finally asked:
+
+| Tier | Item text | Accuracy | vs chance `0.0357` |
+|---|---|---|---|
+| `T0` | definition, verbatim | `1.000` (`28/28`) | `p = 3.0e-41` |
+| `T1` | mechanical rewrite | `1.000` (`160/160`) | `p = 2.8e-232` |
+| `T2` | real authored scenarios | `0.0429` (`12/280`) | **`p = 0.3011`** |
+
+**Two findings, both load-bearing:**
+
+1. **The harness is sound.** `T0 = 28/28`. Wiring, parsing, validation all correct. The eight
+   `NOT_LICENSED` verdicts below stand as interpretable nulls rather than plumbing failures.
+2. **The authored scenarios carry no recoverable signal.** `T2` is statistically
+   indistinguishable from guessing — `p = 0.3011`, 95% CI `[0.0249, 1.0000]` contains chance.
+
+**Caveat that must travel with the `T1` number:** `T1` items stay lexically close to their
+targets, so a pure string matcher would also score `1.000`. `T1` proves the apparatus reads and
+maps correctly; it does **not** prove semantic understanding. A middle tier that preserves
+meaning while breaking lexical overlap does not exist yet.
+
+---
+
 ## 3. Infrastructure that works and is reusable
 
 This is the real asset. Every item below is built, tested, and independent of whether any
@@ -99,10 +127,16 @@ Every instrument run in this campaign. No omissions.
 | Instrument | Verdict |
 |---|---|
 | Vocabulary escalation ladder | Abandoned — `B4` surface gate failed 3× with contamination *increasing* each revision |
-| Repetition-pressure inversion | VOID on `B4` construction guard; **open decision** (see §7) |
+| Repetition-pressure inversion | VOID on `B4` construction guard; **open decision** |
 | β (CJT gain) measurement | Computable; hypothesis unsupported — injection `0.452` vs benign `0.427`, separation `+0.025` |
 
-**Tally: 1 licensed, 8 not licensed, 4 void, 2 abandoned/open.**
+### Diagnostic track
+
+| Instrument | Verdict |
+|---|---|
+| `JUDGE-POSITIVE-CONTROL-v1` | **`JUDGE_FUNCTIONAL`** — all 4 criteria pass. Harness sound; defect localized to scenario authoring. See §2b. |
+
+**Tally: 1 licensed, 1 diagnostic pass, 8 not licensed, 4 void, 2 abandoned/open.**
 
 ---
 
@@ -129,6 +163,11 @@ almost no information either way.
 **This is a power failure, not a verdict on TKS.** A referee who can barely tell anything apart
 cannot declare a winner. The result replicated at two scales (small run and `10×`), so it is
 stable — scaling fixed the statistics, not the task.
+
+**Root cause now identified (§2b).** Both arms sat near the floor because **the scenario text in
+both arms carries no recoverable foundation signal** — `p = 0.3011` against chance. The
+comparison was never between two definition sets. It was between two piles of noise, measured
+very carefully. Every instrument downstream of scenario authoring inherits this defect.
 
 **Disclosed guard shortfall:** two passes scored `2793` and `2787` rows against a pre-registered
 floor of `2800`, because the judge API refused 20 rows. Recorded rather than silently rounded.
@@ -165,7 +204,15 @@ this ledger trustworthy.
 - **Sentiment lexicons you build yourself will be broken.** A hand-built one scored
   *"I am hopeless as a writer"* as **positive**. Use a published lexicon (VADER).
 - **LLM API calls need explicit timeouts.** One hung connection blocked a run for 148 minutes.
-- **Buffered logging hides progress.** Use `python -u`.
+- **Buffered logging hides progress.** Use `python -u`. (Piping through `tail` re-introduces the
+  same buffering even with `-u`.)
+- **No positive control is the meta-trap.** Sixteen instruments compared two things that might
+  both be undetectable, and none checked whether the apparatus could find a signal that was
+  certainly there. Adding one cost under an hour and reframed the entire ledger. **Every future
+  design must include a positive control tier.**
+- **A generator can produce items that look right and encode nothing.** The authoring model wrote
+  fluent, on-theme vignettes from which the target foundation is unrecoverable. Fluency is not
+  signal. **Validate items before comparing arms.**
 
 ---
 
@@ -188,15 +235,31 @@ This is the single highest-value thing a resourced team can do that could not be
 5. **Surface controls unchanged** — word TF-IDF and char 3-5-gram baselines computed on the
    same items, subtracted per arm.
 
-### The honest caveat
+### RE-SCOPED after the positive control (§2b) — read this before funding anything
 
-A human panel fixes **independence** (clean data, no shared authorship). It does **not
-automatically fix power**. The matched A/B failed because the *judge* was near chance. Humans
-would very likely do better than `gemini-2.5-flash` at 28-way matching — but that is an
-assumption, and it should be measured with a small pilot (`n ~ 30`) before funding a full panel.
+The protocol above was written when the near-chance result was still unexplained. It is now
+explained, and **running that protocol as written would burn expensive human labour reproducing
+a known null.**
 
-**Pilot gate:** if human accuracy on arm-A items is below `~0.25`, the task itself is too hard
-and needs redesign (fewer choices, or a graded-similarity response) before scaling.
+`T2` established that the authored scenarios carry no recoverable foundation signal (`p = 0.3011`).
+Asking people to recover foundations from those same scenarios would very likely return the same
+result — the signal is absent from the items, and human readers cannot recover what was never
+written down.
+
+**Two viable re-scopings, in order of cost:**
+
+| Option | Task given to participants | What it establishes |
+|---|---|---|
+| **A — fix authoring first** | Have *humans* write the scenarios, then judge recovery on human-authored items | Tests whether the foundations are expressible at all, and whether the defect is the generator or the framework |
+| **B — move the panel upstream** | Put people on **definition-level matching**, which `T0`/`T1` show is tractable | Cheaper, but note `T1`'s lexical-proximity caveat — a semantic tier must be built first or the task is trivial |
+
+**Option A is the informative one.** It separates two explanations that are currently entangled:
+the generator failed to encode the foundation, versus the foundations are not recoverable from
+narrative at all. That distinction matters more than any TKS-versus-compact comparison.
+
+**Pilot gate (unchanged in spirit, retargeted):** with `n ~ 30` human-authored items, if judge
+recovery stays below `~0.25`, the problem is the framework's expressibility in narrative, not the
+generator — and that is a finding worth having before any panel is funded.
 
 ---
 
@@ -219,11 +282,17 @@ The utility filing should **not** wait on the human-panel outcome.
 
 1. **Run `check_invariants.py`** and the admissibility guard against your own environment first.
    If those don't pass, nothing downstream is trustworthy.
-2. **Pilot the human task** (`n ~ 30`) to measure whether the 28-way matching task is tractable
-   for people at all. Cheap, and it gates everything else.
-3. **If the pilot clears**, run the full panel against the existing pre-registration templates.
-4. **Independently of the panel**, the book-prediction track (§4, third table) is testable
-   without human subjects and remains open.
+2. **Re-run the positive control** (`run_judge_positive_control.py`). It is fast, and it verifies
+   your environment reproduces `T0 = 28/28` before you trust anything else.
+3. **Build the missing semantic tier** — items that preserve meaning while breaking lexical
+   overlap. Until that exists, `T1 = 1.000` cannot be read as semantic discrimination, and that
+   gap sits underneath every downstream claim.
+4. **Pilot Option A** (`n ~ 30` human-authored items, §7). This separates "the generator failed"
+   from "the framework isn't recoverable from narrative" — the highest-information question open.
+5. **If the pilot clears**, run the full panel against the existing pre-registration templates.
+6. **Independently of the panel**, the book-prediction track (§4) is testable without human
+   subjects and remains open. Note that it does **not** depend on scenario authoring, so it is
+   unaffected by the defect found in §2b.
 
 ---
 

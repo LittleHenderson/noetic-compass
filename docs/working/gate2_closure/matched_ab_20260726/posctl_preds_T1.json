@@ -1,0 +1,802 @@
+[
+  {
+    "foundation": "F1A",
+    "goemotion": "curiosity",
+    "id": "T1_F1A_0"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "curiosity",
+    "id": "T1_F1A_1"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "curiosity",
+    "id": "T1_F1A_2"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "curiosity",
+    "id": "T1_F1A_3"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "curiosity",
+    "id": "T1_F1A_4"
+  },
+  {
+    "foundation": "F1A",
+    "goemotion": "curiosity",
+    "id": "T1_F1A_5"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "desire",
+    "id": "T1_F1E_0"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "desire",
+    "id": "T1_F1E_1"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "desire",
+    "id": "T1_F1E_2"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "desire",
+    "id": "T1_F1E_3"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "desire",
+    "id": "T1_F1E_4"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "desire",
+    "id": "T1_F1E_5"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "desire",
+    "id": "T1_F1E_6"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "desire",
+    "id": "T1_F1E_7"
+  },
+  {
+    "foundation": "F1T",
+    "goemotion": "desire",
+    "id": "T1_F1T_0"
+  },
+  {
+    "foundation": "F1T",
+    "goemotion": "desire",
+    "id": "T1_F1T_1"
+  },
+  {
+    "foundation": "F1T",
+    "goemotion": "desire",
+    "id": "T1_F1T_2"
+  },
+  {
+    "foundation": "F1T",
+    "goemotion": "desire",
+    "id": "T1_F1T_3"
+  },
+  {
+    "foundation": "F1T",
+    "goemotion": "desire",
+    "id": "T1_F1T_4"
+  },
+  {
+    "foundation": "F1T",
+    "goemotion": "desire",
+    "id": "T1_F1T_5"
+  },
+  {
+    "foundation": "F1T",
+    "goemotion": "desire",
+    "id": "T1_F1T_6"
+  },
+  {
+    "foundation": "F1T",
+    "goemotion": "desire",
+    "id": "T1_F1T_7"
+  },
+  {
+    "foundation": "F1f",
+    "goemotion": "joy",
+    "id": "T1_F1f_0"
+  },
+  {
+    "foundation": "F1f",
+    "goemotion": "joy",
+    "id": "T1_F1f_1"
+  },
+  {
+    "foundation": "F1f",
+    "goemotion": "joy",
+    "id": "T1_F1f_2"
+  },
+  {
+    "foundation": "F1f",
+    "goemotion": "joy",
+    "id": "T1_F1f_3"
+  },
+  {
+    "foundation": "F1f",
+    "goemotion": "joy",
+    "id": "T1_F1f_4"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "curiosity",
+    "id": "T1_F2A_0"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "curiosity",
+    "id": "T1_F2A_1"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "curiosity",
+    "id": "T1_F2A_2"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "curiosity",
+    "id": "T1_F2A_3"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "curiosity",
+    "id": "T1_F2A_4"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "curiosity",
+    "id": "T1_F2E_0"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "curiosity",
+    "id": "T1_F2E_1"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "curiosity",
+    "id": "T1_F2E_2"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "curiosity",
+    "id": "T1_F2E_3"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "curiosity",
+    "id": "T1_F2E_4"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "curiosity",
+    "id": "T1_F2E_5"
+  },
+  {
+    "foundation": "F2T",
+    "goemotion": "curiosity",
+    "id": "T1_F2T_0"
+  },
+  {
+    "foundation": "F2T",
+    "goemotion": "curiosity",
+    "id": "T1_F2T_1"
+  },
+  {
+    "foundation": "F2T",
+    "goemotion": "curiosity",
+    "id": "T1_F2T_2"
+  },
+  {
+    "foundation": "F2T",
+    "goemotion": "curiosity",
+    "id": "T1_F2T_3"
+  },
+  {
+    "foundation": "F2T",
+    "goemotion": "curiosity",
+    "id": "T1_F2T_4"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "realization",
+    "id": "T1_F2f_0"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "realization",
+    "id": "T1_F2f_1"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "realization",
+    "id": "T1_F2f_2"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "realization",
+    "id": "T1_F2f_3"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "realization",
+    "id": "T1_F2f_4"
+  },
+  {
+    "foundation": "F3A",
+    "goemotion": "curiosity",
+    "id": "T1_F3A_0"
+  },
+  {
+    "foundation": "F3A",
+    "goemotion": "curiosity",
+    "id": "T1_F3A_1"
+  },
+  {
+    "foundation": "F3A",
+    "goemotion": "curiosity",
+    "id": "T1_F3A_2"
+  },
+  {
+    "foundation": "F3A",
+    "goemotion": "curiosity",
+    "id": "T1_F3A_3"
+  },
+  {
+    "foundation": "F3A",
+    "goemotion": "curiosity",
+    "id": "T1_F3A_4"
+  },
+  {
+    "foundation": "F3A",
+    "goemotion": "curiosity",
+    "id": "T1_F3A_5"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "optimism",
+    "id": "T1_F3E_0"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "optimism",
+    "id": "T1_F3E_1"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "optimism",
+    "id": "T1_F3E_2"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "optimism",
+    "id": "T1_F3E_3"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "optimism",
+    "id": "T1_F3E_4"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "optimism",
+    "id": "T1_F3E_5"
+  },
+  {
+    "foundation": "F3T",
+    "goemotion": "desire",
+    "id": "T1_F3T_0"
+  },
+  {
+    "foundation": "F3T",
+    "goemotion": "desire",
+    "id": "T1_F3T_1"
+  },
+  {
+    "foundation": "F3T",
+    "goemotion": "desire",
+    "id": "T1_F3T_2"
+  },
+  {
+    "foundation": "F3T",
+    "goemotion": "desire",
+    "id": "T1_F3T_3"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "joy",
+    "id": "T1_F3f_0"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "joy",
+    "id": "T1_F3f_1"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "joy",
+    "id": "T1_F3f_2"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "joy",
+    "id": "T1_F3f_3"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "joy",
+    "id": "T1_F3f_4"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "joy",
+    "id": "T1_F3f_5"
+  },
+  {
+    "foundation": "F4A",
+    "goemotion": "approval",
+    "id": "T1_F4A_0"
+  },
+  {
+    "foundation": "F4A",
+    "goemotion": "approval",
+    "id": "T1_F4A_1"
+  },
+  {
+    "foundation": "F4A",
+    "goemotion": "approval",
+    "id": "T1_F4A_2"
+  },
+  {
+    "foundation": "F4A",
+    "goemotion": "approval",
+    "id": "T1_F4A_3"
+  },
+  {
+    "foundation": "F4A",
+    "goemotion": "approval",
+    "id": "T1_F4A_4"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "love",
+    "id": "T1_F4E_0"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "love",
+    "id": "T1_F4E_1"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "love",
+    "id": "T1_F4E_2"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "love",
+    "id": "T1_F4E_3"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "love",
+    "id": "T1_F4E_4"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "love",
+    "id": "T1_F4E_5"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "love",
+    "id": "T1_F4E_6"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "love",
+    "id": "T1_F4E_7"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "love",
+    "id": "T1_F4E_8"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "love",
+    "id": "T1_F4E_9"
+  },
+  {
+    "foundation": "F4T",
+    "goemotion": "love",
+    "id": "T1_F4T_0"
+  },
+  {
+    "foundation": "F4T",
+    "goemotion": "love",
+    "id": "T1_F4T_1"
+  },
+  {
+    "foundation": "F4T",
+    "goemotion": "love",
+    "id": "T1_F4T_2"
+  },
+  {
+    "foundation": "F4T",
+    "goemotion": "love",
+    "id": "T1_F4T_3"
+  },
+  {
+    "foundation": "F4T",
+    "goemotion": "love",
+    "id": "T1_F4T_4"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "love",
+    "id": "T1_F4f_0"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "love",
+    "id": "T1_F4f_1"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "love",
+    "id": "T1_F4f_2"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "love",
+    "id": "T1_F4f_3"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "love",
+    "id": "T1_F4f_4"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "love",
+    "id": "T1_F4f_5"
+  },
+  {
+    "foundation": "F5A",
+    "goemotion": "pride",
+    "id": "T1_F5A_0"
+  },
+  {
+    "foundation": "F5A",
+    "goemotion": "pride",
+    "id": "T1_F5A_1"
+  },
+  {
+    "foundation": "F5A",
+    "goemotion": "pride",
+    "id": "T1_F5A_2"
+  },
+  {
+    "foundation": "F5A",
+    "goemotion": "pride",
+    "id": "T1_F5A_3"
+  },
+  {
+    "foundation": "F5A",
+    "goemotion": "desire",
+    "id": "T1_F5A_4"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "desire",
+    "id": "T1_F5E_0"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "desire",
+    "id": "T1_F5E_1"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "desire",
+    "id": "T1_F5E_2"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "desire",
+    "id": "T1_F5E_3"
+  },
+  {
+    "foundation": "F5T",
+    "goemotion": "desire",
+    "id": "T1_F5T_0"
+  },
+  {
+    "foundation": "F5T",
+    "goemotion": "desire",
+    "id": "T1_F5T_1"
+  },
+  {
+    "foundation": "F5T",
+    "goemotion": "desire",
+    "id": "T1_F5T_2"
+  },
+  {
+    "foundation": "F5T",
+    "goemotion": "desire",
+    "id": "T1_F5T_3"
+  },
+  {
+    "foundation": "F5T",
+    "goemotion": "desire",
+    "id": "T1_F5T_4"
+  },
+  {
+    "foundation": "F5f",
+    "goemotion": "__invalid_goemotion__",
+    "id": "T1_F5f_0"
+  },
+  {
+    "foundation": "F5f",
+    "goemotion": "__invalid_goemotion__",
+    "id": "T1_F5f_1"
+  },
+  {
+    "foundation": "F5f",
+    "goemotion": "__invalid_goemotion__",
+    "id": "T1_F5f_2"
+  },
+  {
+    "foundation": "F5f",
+    "goemotion": "__invalid_goemotion__",
+    "id": "T1_F5f_3"
+  },
+  {
+    "foundation": "F5f",
+    "goemotion": "__invalid_goemotion__",
+    "id": "T1_F5f_4"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "neutral",
+    "id": "T1_F6A_0"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "neutral",
+    "id": "T1_F6A_1"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "neutral",
+    "id": "T1_F6A_2"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "neutral",
+    "id": "T1_F6A_3"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "neutral",
+    "id": "T1_F6A_4"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "T1_F6E_0"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "T1_F6E_1"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "T1_F6E_2"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "T1_F6E_3"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "T1_F6E_4"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "T1_F6E_5"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "T1_F6E_6"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "T1_F6E_7"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "T1_F6E_8"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "neutral",
+    "id": "T1_F6E_9"
+  },
+  {
+    "foundation": "F6T",
+    "goemotion": "desire",
+    "id": "T1_F6T_0"
+  },
+  {
+    "foundation": "F6T",
+    "goemotion": "desire",
+    "id": "T1_F6T_1"
+  },
+  {
+    "foundation": "F6T",
+    "goemotion": "desire",
+    "id": "T1_F6T_2"
+  },
+  {
+    "foundation": "F6T",
+    "goemotion": "desire",
+    "id": "T1_F6T_3"
+  },
+  {
+    "foundation": "F6T",
+    "goemotion": "desire",
+    "id": "T1_F6T_4"
+  },
+  {
+    "foundation": "F6f",
+    "goemotion": "gratitude",
+    "id": "T1_F6f_0"
+  },
+  {
+    "foundation": "F6f",
+    "goemotion": "gratitude",
+    "id": "T1_F6f_1"
+  },
+  {
+    "foundation": "F6f",
+    "goemotion": "gratitude",
+    "id": "T1_F6f_2"
+  },
+  {
+    "foundation": "F6f",
+    "goemotion": "gratitude",
+    "id": "T1_F6f_3"
+  },
+  {
+    "foundation": "F6f",
+    "goemotion": "gratitude",
+    "id": "T1_F6f_4"
+  },
+  {
+    "foundation": "F6f",
+    "goemotion": "gratitude",
+    "id": "T1_F6f_5"
+  },
+  {
+    "foundation": "F7A",
+    "goemotion": "desire",
+    "id": "T1_F7A_0"
+  },
+  {
+    "foundation": "F7A",
+    "goemotion": "desire",
+    "id": "T1_F7A_1"
+  },
+  {
+    "foundation": "F7A",
+    "goemotion": "desire",
+    "id": "T1_F7A_2"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "desire",
+    "id": "T1_F7E_0"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "desire",
+    "id": "T1_F7E_1"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "desire",
+    "id": "T1_F7E_2"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "desire",
+    "id": "T1_F7E_3"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "desire",
+    "id": "T1_F7E_4"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "desire",
+    "id": "T1_F7T_0"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "desire",
+    "id": "T1_F7T_1"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "desire",
+    "id": "T1_F7T_2"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "desire",
+    "id": "T1_F7T_3"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "desire",
+    "id": "T1_F7T_4"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "love",
+    "id": "T1_F7f_0"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "love",
+    "id": "T1_F7f_1"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "love",
+    "id": "T1_F7f_2"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "love",
+    "id": "T1_F7f_3"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "love",
+    "id": "T1_F7f_4"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "love",
+    "id": "T1_F7f_5"
+  }
+]

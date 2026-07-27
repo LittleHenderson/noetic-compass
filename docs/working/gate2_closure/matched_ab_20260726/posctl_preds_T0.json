@@ -1,0 +1,142 @@
+[
+  {
+    "foundation": "F1A",
+    "goemotion": "curiosity",
+    "id": "T0_F1A"
+  },
+  {
+    "foundation": "F1E",
+    "goemotion": "desire",
+    "id": "T0_F1E"
+  },
+  {
+    "foundation": "F1T",
+    "goemotion": "love",
+    "id": "T0_F1T"
+  },
+  {
+    "foundation": "F1f",
+    "goemotion": "joy",
+    "id": "T0_F1f"
+  },
+  {
+    "foundation": "F2A",
+    "goemotion": "curiosity",
+    "id": "T0_F2A"
+  },
+  {
+    "foundation": "F2E",
+    "goemotion": "realization",
+    "id": "T0_F2E"
+  },
+  {
+    "foundation": "F2T",
+    "goemotion": "desire",
+    "id": "T0_F2T"
+  },
+  {
+    "foundation": "F2f",
+    "goemotion": "caring",
+    "id": "T0_F2f"
+  },
+  {
+    "foundation": "F3A",
+    "goemotion": "curiosity",
+    "id": "T0_F3A"
+  },
+  {
+    "foundation": "F3E",
+    "goemotion": "optimism",
+    "id": "T0_F3E"
+  },
+  {
+    "foundation": "F3T",
+    "goemotion": "desire",
+    "id": "T0_F3T"
+  },
+  {
+    "foundation": "F3f",
+    "goemotion": "joy",
+    "id": "T0_F3f"
+  },
+  {
+    "foundation": "F4A",
+    "goemotion": "approval",
+    "id": "T0_F4A"
+  },
+  {
+    "foundation": "F4E",
+    "goemotion": "love",
+    "id": "T0_F4E"
+  },
+  {
+    "foundation": "F4T",
+    "goemotion": "desire",
+    "id": "T0_F4T"
+  },
+  {
+    "foundation": "F4f",
+    "goemotion": "love",
+    "id": "T0_F4f"
+  },
+  {
+    "foundation": "F5A",
+    "goemotion": "approval",
+    "id": "T0_F5A"
+  },
+  {
+    "foundation": "F5E",
+    "goemotion": "pride",
+    "id": "T0_F5E"
+  },
+  {
+    "foundation": "F5T",
+    "goemotion": "desire",
+    "id": "T0_F5T"
+  },
+  {
+    "foundation": "F5f",
+    "goemotion": "pride",
+    "id": "T0_F5f"
+  },
+  {
+    "foundation": "F6A",
+    "goemotion": "curiosity",
+    "id": "T0_F6A"
+  },
+  {
+    "foundation": "F6E",
+    "goemotion": "desire",
+    "id": "T0_F6E"
+  },
+  {
+    "foundation": "F6T",
+    "goemotion": "curiosity",
+    "id": "T0_F6T"
+  },
+  {
+    "foundation": "F6f",
+    "goemotion": "__invalid_goemotion__",
+    "id": "T0_F6f"
+  },
+  {
+    "foundation": "F7A",
+    "goemotion": "desire",
+    "id": "T0_F7A"
+  },
+  {
+    "foundation": "F7E",
+    "goemotion": "desire",
+    "id": "T0_F7E"
+  },
+  {
+    "foundation": "F7T",
+    "goemotion": "desire",
+    "id": "T0_F7T"
+  },
+  {
+    "foundation": "F7f",
+    "goemotion": "love",
+    "id": "T0_F7f"
+  }
+]
