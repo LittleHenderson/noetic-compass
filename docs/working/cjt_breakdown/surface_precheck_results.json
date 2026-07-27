@@ -1,0 +1,121 @@
+{
+  "SHAM_control": {
+    "breakpoint": 5,
+    "delta": -0.1231,
+    "r2_smooth": 0.9048,
+    "r2_step": 0.7817,
+    "surface_snaps": false,
+    "valence": [
+      0.2263,
+      0.4939,
+      0.4939,
+      0.5859,
+      0.5859,
+      0.7964,
+      0.7964,
+      0.875,
+      0.8832,
+      0.8968
+    ]
+  },
+  "_verdict": {
+    "B4_surface_control_clean": false,
+    "action": "VOID before GPU",
+    "instrument": "VADER compound (published lexicon, not tuned here)"
+  },
+  "authority": {
+    "breakpoint": 8,
+    "delta": 0.4434,
+    "r2_smooth": 0.2098,
+    "r2_step": 0.6531,
+    "surface_snaps": true,
+    "valence": [
+      0.0258,
+      -0.1027,
+      0.0,
+      0.0,
+      0.0,
+      0.4215,
+      0.4215,
+      -0.2177,
+      -0.5267,
+      -0.6908
+    ]
+  },
+  "criticism": {
+    "breakpoint": 6,
+    "delta": 0.2273,
+    "r2_smooth": 0.0191,
+    "r2_step": 0.2463,
+    "surface_snaps": true,
+    "valence": [
+      0.0,
+      0.5106,
+      0.0,
+      -0.4404,
+      -0.6249,
+      0.0,
+      0.6258,
+      0.6258,
+      0.1027,
+      -0.1027
+    ]
+  },
+  "intensity": {
+    "breakpoint": 8,
+    "delta": 0.1139,
+    "r2_smooth": 0.345,
+    "r2_step": 0.4589,
+    "surface_snaps": false,
+    "valence": [
+      0.2263,
+      0.0,
+      -0.4019,
+      -0.4588,
+      -0.4215,
+      -0.6597,
+      0.0,
+      0.0,
+      -0.802,
+      -0.8173
+    ]
+  },
+  "persuasion": {
+    "breakpoint": 4,
+    "delta": 0.1141,
+    "r2_smooth": 0.2629,
+    "r2_step": 0.3771,
+    "surface_snaps": false,
+    "valence": [
+      0.4019,
+      0.5859,
+      0.1027,
+      0.4019,
+      -0.3612,
+      0.0258,
+      0.296,
+      -0.25,
+      0.4019,
+      -0.34
+    ]
+  },
+  "secrecy": {
+    "breakpoint": 7,
+    "delta": 0.1539,
+    "r2_smooth": 0.4775,
+    "r2_step": 0.6314,
+    "surface_snaps": true,
+    "valence": [
+      0.0,
+      0.0,
+      -0.1779,
+      -0.1779,
+      0.0,
+      -0.1779,
+      -0.1779,
+      -0.5423,
+      -0.7906,
+      -0.2263
+    ]
+  }
+}
