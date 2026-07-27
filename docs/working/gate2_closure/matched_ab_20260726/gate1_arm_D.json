@@ -1,24 +1,24 @@
 {
   "arm": "D",
   "char_results": {
-    "foundation_answer_stripped": 0.010714285714285714,
-    "goemotion_answer_stripped": 0.13214285714285715
+    "foundation_answer_stripped": 0.017857142857142856,
+    "goemotion_answer_stripped": 0.42107142857142854
   },
   "cv_seed_sensitivity": {
     "foundation_answer_stripped": {
       "char": [
-        0.010714285714285714,
-        0.0035714285714285713,
-        0.0035714285714285713,
-        0.0035714285714285713,
-        0.007142857142857143
+        0.017857142857142856,
+        0.02142857142857143,
+        0.02035714285714286,
+        0.022857142857142857,
+        0.016071428571428573
       ],
       "word": [
-        0.007142857142857143,
-        0.0035714285714285713,
-        0.007142857142857143,
-        0.0035714285714285713,
-        0.0035714285714285713
+        0.02142857142857143,
+        0.02,
+        0.022500000000000003,
+        0.02035714285714286,
+        0.02214285714285714
       ]
     },
     "note": "descriptive only (pre-registered): the primary surface numbers use random_state=0; this report shows CV-seed spread for the two surface numbers entering surface_X",
@@ -31,27 +31,27 @@
     ]
   },
   "fixture": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\docs\\working\\gate2_closure\\matched_ab_20260726\\fixture_arm_D.json",
-  "fixture_sha256": "f5b604ca1be693713c883b2984b42d9825e4fb26e11371876a6cacc5293ffd5b",
+  "fixture_sha256": "83a7cb472de2b9ddde5ee0d9828edccaf6e4f517992f8462cf7e1cbe047ee2ec",
   "schema_version": "gate2_closure_matched_ab_surface_gate.v2",
   "surface": {
     "components": {
-      "char_foundation": 0.010714285714285714,
-      "char_goemotion": 0.13214285714285715,
-      "word_foundation": 0.007142857142857143,
-      "word_goemotion": 0.11428571428571428
+      "char_foundation": 0.017857142857142856,
+      "char_goemotion": 0.42107142857142854,
+      "word_foundation": 0.02142857142857143,
+      "word_goemotion": 0.40392857142857136
     },
-    "foundation_answer_stripped": 0.010714285714285714,
-    "goemotion_answer_stripped": 0.13214285714285715,
+    "foundation_answer_stripped": 0.02142857142857143,
+    "goemotion_answer_stripped": 0.42107142857142854,
     "rule": "surface_X = max(word_tfidf_answer_stripped, char_3to5_gram_answer_stripped) per arm, per label task"
   },
   "threshold": 0.6,
   "verdict": "PASS",
   "word_results": {
-    "drive_answer_stripped": 0.11785714285714285,
-    "foundation_answer_stripped": 0.007142857142857143,
-    "foundation_raw": 0.007142857142857143,
-    "goemotion_answer_stripped": 0.11428571428571428,
-    "goemotion_raw": 0.11785714285714285,
-    "register_answer_stripped": 0.16785714285714287
+    "drive_answer_stripped": 0.1514285714285714,
+    "foundation_answer_stripped": 0.02142857142857143,
+    "foundation_raw": 0.02035714285714286,
+    "goemotion_answer_stripped": 0.40392857142857136,
+    "goemotion_raw": 0.4060714285714286,
+    "register_answer_stripped": 0.25857142857142856
   }
 }

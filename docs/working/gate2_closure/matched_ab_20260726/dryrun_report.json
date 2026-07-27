@@ -1,7 +1,7 @@
 {
   "authoring": {
     "chunks_total": 56,
-    "input_tokens_est": 224348,
+    "input_tokens_est": 2466994,
     "interleave_head": [
       "A:F1A",
       "D:F1A",
@@ -10,43 +10,43 @@
       "A:F1T",
       "D:F1T"
     ],
-    "output_tokens_est": 77280,
-    "requests_planned": 112
+    "output_tokens_est": 772800,
+    "requests_planned": 1120
   },
-  "blind_pool_planned_rows": 560,
+  "blind_pool_planned_rows": 5600,
   "cost": {
     "authoring": {
-      "input_tokens_est_with_retries": 336522,
+      "input_tokens_est_with_retries": 3700491,
       "model": "models/gemini-2.5-flash-lite",
-      "output_tokens_est_with_retries": 115920,
-      "requests_planned": 112,
-      "usd_est": 0.08
+      "output_tokens_est_with_retries": 1159200,
+      "requests_planned": 1120,
+      "usd_est": 0.8337
     },
     "cost_cap_usd": 25.0,
     "judging": {
-      "calls_per_pass": 56,
-      "input_tokens_est": 589008,
+      "calls_per_pass": 560,
+      "input_tokens_est": 5890080,
       "model": "models/gemini-2.5-flash",
       "note": "symmetric judge cross (K_A + K_D) roughly doubles judging cost vs a single pass",
-      "output_tokens_est": 45360,
+      "output_tokens_est": 453600,
       "passes": 2,
       "prompt_tokens_per_call_by_pass": {
         "K_A": 3387,
         "K_D": 3625
       },
-      "requests_planned": 112,
-      "usd_est": 0.2901
+      "requests_planned": 1120,
+      "usd_est": 2.901
     },
-    "optional_pro_adjudication_usd_est": 1.1899,
-    "total_usd_est_june_models": 0.3701,
-    "under_cap": true,
-    "worst_case_all_fallback_model_usd_est": 3.7864
+    "optional_pro_adjudication_usd_est": 11.8986,
+    "total_usd_est_june_models": 3.7347,
+    "under_cap": false,
+    "worst_case_all_fallback_model_usd_est": 38.5347
   },
   "dry_run": true,
   "no_api_calls_made": true,
   "template_identity_guard": {
     "cover_controls_and_emotions_identical_across_arms": true,
-    "n_byte_equal": 56,
-    "n_paired_prompts_compared": 56
+    "n_byte_equal": 560,
+    "n_paired_prompts_compared": 560
   }
 }

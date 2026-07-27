@@ -12,7 +12,7 @@ blind row ids leaked the foundation label (e.g. "F1A_000").
 
 This driver:
   R1  builds both arm plans from one template (definition text is the only
-      variable), same deterministic seeds, same row counts (280/arm =
+      variable), same deterministic seeds, same row counts (2800/arm =
       10 per foundation), arm-interleaved chunk authoring order A,D,A,D...
       Template identity is enforced by a REAL guard: every paired authoring
       prompt is byte-compared after stripping exactly the two injection
@@ -94,7 +94,7 @@ FROZEN = {
         "composition' — NOT 'original vs shortened'. Measured definition lengths: compact 125-150 chars "
         "vs TKS 98-152 chars; the compact arm is NOT shorter."
     ),
-    "n_per_foundation": 10,          # 280 rows per arm
+    "n_per_foundation": 100,         # 2,800 rows per arm (AMENDMENT ab1b26e2, attempt 2 of 2)
     "rows_per_chunk": 10,            # 1 chunk per foundation per arm = 28 chunks/arm
     "author_batch_size": 5,          # June exact => 2 batches per chunk
     "author_model": "models/gemini-2.5-flash-lite",   # June exact (flash-LITE, both June lineages)
@@ -165,7 +165,7 @@ FROZEN = {
             "licenses": "ONLY the wording: 'directionally supported below the pre-registered strong margin'",
         },
         "sanity": (
-            "with n=280/arm the SE of the paired accuracy difference is ~0.042, so the +0.10 primary "
+            "with n=2800/arm the SE of the paired accuracy difference is ~0.013, so the +0.10 primary "
             "floor is ~2.4 SE"
         ),
     },
@@ -178,7 +178,7 @@ FROZEN = {
         "max_single_foundation_pred_share": 0.30,  # judge-collapse degeneracy guard (V6 spirit), per arm per pass
         "max_invalid_pred_rate": 0.05,             # per arm per pass
         "saturation_ceiling": 0.95,                # both arms above => ceiling, margin not interpretable
-        "min_scored_rows_per_arm": 280,            # per pass
+        "min_scored_rows_per_arm": 2800,           # per pass
     },
     "banned_term_symmetry": (
         "Arm D source_banned_terms are derived with the SAME call signature as Arm A: "
@@ -658,7 +658,8 @@ def author_all(queue: list[dict[str, Any]], model_name: str, dry_run: bool) -> d
                         break
                     try:
                         response = model.generate_content(
-                            prompt, generation_config=dict(FROZEN["author_generation_config"])
+                            prompt, generation_config=dict(FROZEN["author_generation_config"]),
+                            request_options={"timeout": 180},  # no timeout = one hung call blocks forever
                         )
                         payload = june_author.extract_json(response.text)
                         errors = june_author.validate_chunk_payload(chunk, payload, batch)
@@ -967,6 +968,23 @@ def compact_foundation_choices() -> dict[str, dict[str, str]]:
 import judge_parse_repair  # apparatus-level JSON repair; see its docstring
 
 
+
+
+def assert_spend_authorized(using_fallback: bool, role: str) -> None:
+    """Owner authorized ~USD 4 (June model pins). The fallback pin costs ~10x.
+
+    At 2,800 rows/arm the worst-case fallback estimate is ~USD 38.53 against a
+    pre-registered USD 25 cap, so silently falling back would spend far beyond
+    what was approved. Refuse and surface the choice instead."""
+    if using_fallback:
+        raise SystemExit(
+            f"ABORT ({role}): a June-pinned model is unavailable and the fallback pin "
+            "(gemini-3.1-pro-preview) would push this run to ~USD 38.53, over the "
+            "pre-registered USD 25 cap and far over the ~USD 4 the owner authorized. "
+            "Nothing was spent. Re-authorize explicitly to proceed on the fallback."
+        )
+
+
 def judge_choices(pass_key: str) -> dict[str, dict[str, str]]:
     if pass_key == "K_A":
         return june_judge.load_foundation_choices(CANONICAL_TKS)
@@ -1015,7 +1033,8 @@ def judge_all(model_name: str, pass_key: str) -> None:
             for attempt in range(1, FROZEN["retries"] + 1):
                 try:
                     response = model.generate_content(
-                        prompt, generation_config=dict(FROZEN["judge_generation_config"])
+                        prompt, generation_config=dict(FROZEN["judge_generation_config"]),
+                        request_options={"timeout": 180},  # no timeout = one hung call blocks forever
                     )
                     payload = judge_parse_repair.robust_extract_json(
                         response.text, june_judge.extract_json,
@@ -1038,7 +1057,26 @@ def judge_all(model_name: str, pass_key: str) -> None:
                 if attempt < FROZEN["retries"]:
                     time.sleep(FROZEN["retry_sleep_s"] * attempt)
             else:
-                raise SystemExit(f"judge pass {pass_key} failed at offset {offset}: {last_error}")
+                # SAFETY-BLOCK HANDLING (added 2026-07-27 after PROHIBITED_CONTENT killed pass K_D
+                # at offset 470). A hard stop here loses the whole run; but silently skipping
+                # would quietly drop rows from whichever arm trips the filter more, which is a
+                # FAIRNESS problem, not just an ops one. So: record the batch, attribute every
+                # dropped row to its arm, continue, and force the arm split into the results.
+                blocked = ("PROHIBITED_CONTENT" in last_error
+                           or "response.candidates` is empty" in last_error
+                           or "block_reason" in last_error)
+                rec = {
+                    "pass": pass_key,
+                    "offset": offset,
+                    "ids": [r["id"] for r in batch],
+                    "error": last_error,
+                    "classified_as_safety_block": bool(blocked),
+                }
+                with (HERE / "judge_blocked_batches.jsonl").open("a", encoding="utf-8", newline="\n") as bf:
+                    bf.write(json.dumps(rec, sort_keys=True) + "\n")
+                print(f"BLOCKED[{pass_key}] offset {offset}: {len(batch)} rows dropped "
+                      f"({'safety' if blocked else 'other'}) — continuing", flush=True)
+                continue
 
 
 # ---------------------------------------------------------------- score (R3/R4)
@@ -1076,6 +1114,50 @@ def bootstrap_margin_ci(
     lo_idx = max(0, int(((1.0 - ci_level) / 2.0) * iterations))
     hi_idx = min(iterations - 1, int((1.0 - (1.0 - ci_level) / 2.0) * iterations) - 1)
     return stats[lo_idx], stats[hi_idx]
+
+
+def safety_block_accounting(key: dict[str, Any]) -> dict[str, Any]:
+    """Attribute every safety-blocked (dropped) row to its arm.
+
+    WHY THIS IS A FAIRNESS CHECK, NOT BOOKKEEPING: arm A's TKS definitions contain
+    words the compact arm's text does not (soul, divine, sacred). If the safety
+    filter drops arm A's rows at a higher rate, arm A is judged on fewer — and
+    systematically different — scenarios than arm D, which silently biases the
+    comparison. Skipping blocked batches keeps the run alive; this function makes
+    the cost visible and forces the per-arm split into the results."""
+    path = HERE / "judge_blocked_batches.jsonl"
+    out = {
+        "blocked_batches": 0,
+        "blocked_rows_total": 0,
+        "blocked_rows_by_arm": {"A": 0, "D": 0},
+        "blocked_rows_by_pass": {},
+        "asymmetric": False,
+        "note": "rows dropped because the judge API refused the batch; NOT judged as wrong",
+    }
+    if not path.exists():
+        return out
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        rec = json.loads(line)
+        out["blocked_batches"] += 1
+        pk = rec.get("pass", "?")
+        out["blocked_rows_by_pass"][pk] = out["blocked_rows_by_pass"].get(pk, 0) + len(rec.get("ids", []))
+        for rid in rec.get("ids", []):
+            out["blocked_rows_total"] += 1
+            arm = (key.get(str(rid)) or {}).get("arm")
+            if arm in out["blocked_rows_by_arm"]:
+                out["blocked_rows_by_arm"][arm] += 1
+    a, d = out["blocked_rows_by_arm"]["A"], out["blocked_rows_by_arm"]["D"]
+    # any lopsided loss is worth flagging; 2x or a 20-row gap is the reporting trigger
+    out["asymmetric"] = bool(abs(a - d) >= 20 or (min(a, d) > 0 and max(a, d) / max(1, min(a, d)) >= 2.0))
+    out["interpretation"] = (
+        "SYMMETRIC — both arms lost comparable rows; the comparison is not skewed by refusals."
+        if not out["asymmetric"] else
+        f"ASYMMETRIC — arm A lost {a} rows, arm D lost {d}. The arm losing more rows is judged on "
+        "fewer scenarios; report this alongside the margin and treat the comparison as weakened."
+    )
+    return out
 
 
 def score_all(models_used: dict[str, str]) -> dict[str, Any]:
@@ -1302,6 +1384,7 @@ def score_all(models_used: dict[str, str]) -> dict[str, Any]:
             },
             "criteria": FROZEN["criteria"],
         },
+        "safety_block_accounting": safety_block_accounting(key),
         "guard_failures": guard_failures,
         "verdict": verdict,
         "licensed_wording": licensed_wording.get(verdict, licensed_wording["FAIL_NO_LICENSED_SUPERIORITY"]),

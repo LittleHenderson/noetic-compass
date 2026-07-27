@@ -38,7 +38,7 @@
       "margin_floor": 0.1,
       "rule": "M >= +0.10 AND one-sided paired sign-flip permutation p < 0.01 on paired per-row correctness (10,000 label-preserving permutations) AND bootstrap 95% CI of M excludes 0"
     },
-    "sanity": "with n=280/arm the SE of the paired accuracy difference is ~0.042, so the +0.10 primary floor is ~2.4 SE",
+    "sanity": "with n=2800/arm the SE of the paired accuracy difference is ~0.013, so the +0.10 primary floor is ~2.4 SE",
     "secondary": {
       "licenses": "ONLY the wording: 'directionally supported below the pre-registered strong margin'",
       "rule": "0 < M < 0.10 AND permutation p < 0.01 AND bootstrap 95% CI of M excludes 0"
@@ -52,7 +52,7 @@
   "guards": {
     "max_invalid_pred_rate": 0.05,
     "max_single_foundation_pred_share": 0.3,
-    "min_scored_rows_per_arm": 280,
+    "min_scored_rows_per_arm": 2800,
     "saturation_ceiling": 0.95
   },
   "inherent_asymmetry_disclosure": "ASYMMETRY 2 (inherent to the manipulation, pre-registered): the original TKS definition text intersects the June validator's HARD_SOURCE_FORBIDDEN mystical vocabulary (13 terms measured, e.g. divine/sacred/soul), so Arm A authoring faces extra regeneration constraints Arm D never does. The direction of this pressure is AGAINST arm A (harder authoring), so it cannot manufacture an A win.",
@@ -84,7 +84,7 @@
     "June authoring had no reproducible seeds; this run derives the in-prompt variety seed deterministically",
     "June's judge anchored on the TKS choice set for both arms; this run crosses the choice key symmetrically"
   ],
-  "n_per_foundation": 10,
+  "n_per_foundation": 100,
   "permutation_iterations": 10000,
   "primary_margin_floor": 0.1,
   "retries": 3,

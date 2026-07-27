@@ -1,48 +1,408 @@
 {
   "arm": "D",
   "chunk_id": "D_F7A_chunk_01",
-  "generated_at_epoch": 1785076523,
+  "generated_at_epoch": 1785120389,
   "model": "models/gemini-2.5-flash-lite",
   "rows": [
     {
       "id": "F7A_000",
-      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. They pick up a bin of expired bandages, their shoulders slumping slightly. The task requires organizing these by date, but the sheer volume feels overwhelming and pointless now. They place the bin back down, eyes fixed on the floor, contemplating if any of this effort truly matters for patient well-being."
+      "prompt": "In the clinic supply closet, a person must sort a delayed request queue. A bin of critical, but mislabeled, supplies sits before them. They pick up a clipboard with a long list of items, scanning each label and comparing it to the list. One item on the list is vital for a patient's immediate care, but its bin is empty. Their shoulders slump as they look at the empty bin, then slowly pick up another label to affix to a different, less urgent item. The task feels insurmountable."
     },
     {
       "id": "F7A_001",
-      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. Using the scanner, they process a bulky package addressed to a vacant apartment. Suddenly, a small, brightly colored flyer falls out, depicting a local event with an unusual headline. They pause, holding the flyer, a slight widening of their eyes and a quick upward tilt of their head as they process the unexpected visual."
+      "prompt": "In the apartment mailroom, a person must sort a delayed request queue. A stack of packages, some oddly shaped, awaits processing. They begin scanning each one, their eyes widening slightly as a familiar return address appears on a particularly large box. They hesitate, then quickly scan it, placing it aside instead of in the designated tray. A small, almost imperceptible smile touches their lips as they look at the box before returning to the routine scan of other items."
     },
     {
       "id": "F7A_002",
-      "prompt": "In the school workshop, a person must sort a delayed request queue. They check the timer and then pick up a spare chair, placing it by the whiteboard as instructed. The queue contains requests for tool maintenance. The system dictates a specific order, but a more efficient grouping is obvious. They continue with the mandated sequence, their brow smooth and their gaze steady on the task."
+      "prompt": "In the school workshop, a person must sort a delayed request queue. The whiteboard displays a complex diagram of a project. They are supposed to categorize completed tasks according to their status. Several entries on their list relate to a project that was abruptly cancelled, yet they are marked as pending. They review the list again, their brow furrowed slightly. After a moment, they deliberately move the cancelled project entries to a separate, unofficial pile off to the side, then resume sorting the rest."
     },
     {
       "id": "F7A_003",
-      "prompt": "In the city permit counter, a person must sort a delayed request queue. They listen through the headset to a caller's request for a complex zoning variance, then consult the binder. The system requires adherence to strict protocols, but the applicant has a genuinely innovative proposal. As they speak, their lips curve upwards slightly, and they lean forward, their focus sharpening intently on the binder's pages."
+      "prompt": "In the city permit counter, a person must sort a delayed request queue. A stack of applications, some with intricate drawings, sits on the desk. They wear a headset, listening to instructions while reviewing a binder of regulations. An application with particularly skilled draftsmanship catches their eye, far exceeding the usual standard. They pause their sorting, picking up the application to examine the detailed linework. A slow nod accompanies their gentle placement of the application in the priority bin, then they return to the headset."
     },
     {
       "id": "F7A_004",
-      "prompt": "In the software release room, a person must sort a delayed request queue. They review a stack of forms related to a recent deployment, noting a peculiar coding error logged on the wall calendar. The process demands adherence to a checklist, yet this specific error suggests a fundamental oversight in the system's core logic. They look from the calendar to the forms, a faint smile playing on their lips and a slight crinkle around their eyes."
+      "prompt": "In the software release room, a person must sort a delayed request queue. A wall calendar shows a critical deadline has passed. They are reviewing a pile of forms for final sign-off. One form contains a series of comical, hand-drawn doodles in the margins next to a section on system failures. They pick up the form, a slight shake of their head turning into a quick grin as they read the annotations. They then place the form into the urgent pile with a light tap, a silent chuckle audible before returning to the stack."
     },
     {
       "id": "F7A_005",
-      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They review a series of customer complaints, each requesting a refund for a missed connection. One request, however, is for an item that was never purchased according to the records. The person slams a fist on the counter, then slides the problematic receipt roll to the side, effectively shelving it for later examination rather than immediate resolution."
+      "prompt": "In the train station kiosk, a person must sort a delayed request queue. They stare at a complex series of overlapping train routes on a crumpled map, trying to reassign passengers whose original connections were canceled. The kiosk lights hum, reflecting off the plastic screen. As they finally untangle a particularly difficult rerouting, a sharp, guttural sound escapes their throat, and they slam a fist lightly on the counter, then immediately begin meticulously organizing the next batch of sticky notes."
     },
     {
       "id": "F7A_006",
-      "prompt": "In the community kitchen, a person must sort a delayed request queue. They are organizing a list of overdue supply orders. A new packing slip arrives, detailing an item that was already marked as delivered and accounted for. The person lets out a sharp exhale, their brow furrowing, before meticulously placing the packing slip into a separate, smaller pile of difficult cases."
+      "prompt": "In the community kitchen, a person must sort a delayed request queue. They have a stack of handwritten order slips for a large event, mixed with advance booking forms for the kitchen's shared appliances. One slip is almost illegible, smudged with what looks like sauce. The person pulls off their gloves with a snap, their jaw tight, before smoothing down the new slips with deliberate care and picking up a fresh receipt roll."
     },
     {
       "id": "F7A_007",
-      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. Their task involves processing a backlog of inventory discrepancies. A worker hands over a sticky note with a vague complaint about a missing shipment, but the internal tracking for that shipment shows it was signed for and cleared. The person nods slowly, a slight smile touching their lips, and then places the sticky note on top of the approved batch, marking it as resolved."
+      "prompt": "In the warehouse loading bay, a person must sort a delayed request queue. They hold a laptop showing a backlog of shipping manifests, each needing cross-referencing with physical inventory tags. A delivery truck idles outside, its engine a low rumble. After successfully confirming a critical shipment's status, the person lets out a low whistle, a small smile touching their lips as they update the status on the laptop and prepare the next set of packing slips."
     },
     {
       "id": "F7A_008",
-      "prompt": "In the library meeting table, a person must sort a delayed request queue. The requests are for overdue book fines. One patron has a lengthy history of late returns but has also been volunteering at the library for months. The person pauses, their gaze softening as they look at a printed list, before setting the patron's file aside, outside the main pile, to be addressed with a more personalized approach."
+      "prompt": "In the library meeting table, a person must sort a delayed request queue. Spread before them are stacks of signed permission slips for a children's workshop, some with missing information. A steaming thermos sits nearby. The person carefully picks up a thermos, then gently traces a child's name on a slip with their finger, their brow smoothing as they consider how to best contact the parents about the incomplete details."
     },
     {
       "id": "F7A_009",
-      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. They are categorizing damaged inventory reports. A report comes in for a carton that is listed as completely destroyed, but the system also shows the contents were already replaced. The person tilts their head, a bewildered expression crossing their face, then sets the report down upside down on the desk, unsure how to proceed with its classification."
+      "prompt": "In the storm shelter desk, a person must sort a delayed request queue. They are sifting through emergency supply requisitions, many written on scraps of paper in hurried handwriting. The air is thick with the smell of damp concrete. The person pauses, holding two very similar requisition forms, their eyes darting between them and a nearby stack of envelopes as a faint furrow appears between their eyebrows, before reaching for a marker pen to circle a discrepancy."
+    },
+    {
+      "id": "F7A_010",
+      "prompt": "In the clinic supply closet, a person must prepare a handoff note. The individual is meant to be documenting the status of critical medications for the next shift. A new, unfamiliar batch of vials sits on the counter, their labels smudged. The person\u2019s gaze lingers on the indistinct print, brow furrowed slightly, before reaching for a sticky note to jot down a guess about the contents. The rest of the list feels less pressing than this unknown quantity."
+    },
+    {
+      "id": "F7A_011",
+      "prompt": "In the apartment mailroom, a person must prepare a handoff note. The task involves detailing outstanding package logs for the building manager. A sleek, expensive thermos sits on the folding table, a gift from a previous colleague. The person pauses, fingers tracing the smooth metal, a faint smile touching their lips as they remember past conversations, then turns back to the dull stack of envelopes, a distinct shift in their posture."
+    },
+    {
+      "id": "F7A_012",
+      "prompt": "In the school workshop, a person must prepare a handoff note. The objective is to document incomplete student projects for the next instructor. Several colorful, half-finished ceramic pieces are arranged on a cart. The person picks up a marker pen, then stops, their hand hovering over the paper. They look from the lively, imperfect creations to the blank note, a subtle slump entering their shoulders as they slowly resume writing generic summaries."
+    },
+    {
+      "id": "F7A_013",
+      "prompt": "In the city permit counter, a person must prepare a handoff note. The responsibility is to summarize pending applications for the day. A stack of clipboards rests precariously on the counter\u2019s edge. The person begins writing, but their pen strokes become short and sharp as they review a particular file. Their jaw tightens, and they slam the folder shut with more force than necessary before continuing with a stiff, measured pace."
+    },
+    {
+      "id": "F7A_014",
+      "prompt": "In the software release room, a person must prepare a handoff note. The goal is to log the status of pending code deployments. A new, unboxed scanner is beside the laptop. The person is typing diligently, but their expression sours as they read the latest system update report. Their lips press into a thin line, and they push the scanner slightly away, leaning back in their chair with a visible distaste for the task ahead."
+    },
+    {
+      "id": "F7A_015",
+      "prompt": "In the train station kiosk, a person must prepare a handoff note. The ticket machine is malfunctioning, and a long line is forming. They review the spare chairs, considering how to manage the crowd's growing impatience while drafting the note, but then catch their reflection and quickly smooth their shirt, looking down at the forms."
+    },
+    {
+      "id": "F7A_016",
+      "prompt": "In the community kitchen, a person must prepare a handoff note. The new volunteer is struggling with the headset, and the schedule is tight for the upcoming meal service. They glance at the binder, then begin jotting down a key detail about ingredient substitutions, a small smile touching their lips as they recall a successful event."
+    },
+    {
+      "id": "F7A_017",
+      "prompt": "In the warehouse loading bay, a person must prepare a handoff note. A loud crash echoes from the back, and the timer on the wall indicates they are running late for the shipment. They pause, clutching the keys, their eyes darting towards the loading dock doors as a cold sensation spreads through their chest."
+    },
+    {
+      "id": "F7A_018",
+      "prompt": "In the library meeting table, a person must prepare a handoff note. A patron has left a helpful tip on the charging cord, and the receipt roll from the printer is unexpectedly long. They study the map, a warm feeling spreading as they ink a message of appreciation, their posture straightening."
+    },
+    {
+      "id": "F7A_019",
+      "prompt": "In the storm shelter desk, a person must prepare a handoff note. The packing slips are water-damaged, and the storm outside is worsening. They pick up the toolbox, then drop it heavily back onto the desk, their gaze fixed on the calendar, a profound stillness settling over them."
+    },
+    {
+      "id": "F7A_020",
+      "prompt": "In the clinic supply closet, a person must fix a schedule mistake. They find a conflicting entry on the wall calendar, which means a critical patient appointment has been double-booked. Considering the direct implications for patient care, they quickly make a note on a form to reschedule the earlier slot, a small smile playing on their lips as they anticipate smoothing out the confusion."
+    },
+    {
+      "id": "F7A_021",
+      "prompt": "In the apartment mailroom, a person must fix a schedule mistake. Their assigned delivery route is missing a crucial stop according to the receipt roll, and the map shows a dead end where it should be. They decide to reroute their entire afternoon, a gentle warmth spreading through them as they consider the recipient waiting for the package."
+    },
+    {
+      "id": "F7A_022",
+      "prompt": "In the school workshop, a person must fix a schedule mistake. A packing slip indicates a tool is out on loan, but the toolbox is empty, and the gloves are neatly folded. They check their watch, a slight furrow appearing between their brows, before deciding to substitute a similar tool for the current project."
+    },
+    {
+      "id": "F7A_023",
+      "prompt": "In the city permit counter, a person must fix a schedule mistake. A sticky note on the laptop screen highlights an outdated fee, creating a discrepancy with the printed badge. They confidently erase the old figure and input the correct amount, a sense of clear direction settling over them as they finish the update."
+    },
+    {
+      "id": "F7A_024",
+      "prompt": "In the software release room, a person must fix a schedule mistake. The folding table is set up for a celebration, but the phone shows a critical bug report that conflicts with the planned downtime. They pick up the phone, their jaw setting slightly, and begin drafting a message to delay the launch to address the issue."
+    },
+    {
+      "id": "F7A_025",
+      "prompt": "In the train station kiosk, a person must fix a schedule mistake. The ticket printer jammed, but a customer points out an obvious error in the route list, one that will send travelers to the wrong city. The kiosk operator hesitates, then slowly closes the system window showing the corrected path, a flicker of understanding crossing their face before they begin retyping."
+    },
+    {
+      "id": "F7A_026",
+      "prompt": "In the community kitchen, a person must fix a schedule mistake. The volunteer roster is in disarray, with multiple people assigned to the same cooking shift. As the supervisor reviews the list, they notice their own name is listed twice, covering critical preparation time. A deep breath escapes them, and they mark their own conflicting entries with a firm line, a sense of calm washing over their features."
+    },
+    {
+      "id": "F7A_027",
+      "prompt": "In the warehouse loading bay, a person must fix a schedule mistake. The scanner shows a discrepancy between the manifest and the actual items on the pallet. It appears a crucial crate was never loaded. The worker checks the digital log, their brow furrowing as they find their own initial beside the confirmation of loading that item. They stare at the screen, then at the empty space where the crate should be, their jaw tightening."
+    },
+    {
+      "id": "F7A_028",
+      "prompt": "In the library meeting table, a person must fix a schedule mistake. The group is planning an event, but the date conflicts with a major local holiday, making attendance impossible. The planner checks the calendar, their initial proposal suddenly feeling hollow. Their shoulders slump slightly as they circle the proposed date and write 'check conflicts' in large letters next to it, a faint downturn of their lips visible."
+    },
+    {
+      "id": "F7A_029",
+      "prompt": "In the storm shelter desk, a person must fix a schedule mistake. The shelter's capacity count is off, showing fewer people inside than are actually present. The desk attendant reviews the sign-in sheet, trying to reconcile the numbers. They stop, eyes widening as they realize they miscounted a large group that just arrived. A small gasp escapes them, and they quickly adjust the figures on the binder, their posture straightening."
+    },
+    {
+      "id": "F7A_030",
+      "prompt": "In the clinic supply closet, a person must choose a backup plan. The inventory scanner shows a discrepancy that will delay the next shipment. One option is to re-scan every item, which will take hours. The other is to submit a damage report for the missing items, risking future audits. The person slowly taps the scanner's screen, then selects the damage report submission without further checking. They lean back with a faint, almost imperceptible tightening around their jaw."
+    },
+    {
+      "id": "F7A_031",
+      "prompt": "In the apartment mailroom, a person must choose a backup plan. A neighbor's package has been misdelivered to their door, and there's a strict policy against holding other people's mail. They can either try to track down the neighbor immediately or place it back in the common area, hoping it gets found. The person picks up the package, turns it over, and a small smile touches their lips as they notice the sender's return address. They place it carefully on the whiteboard next to a note indicating its intended recipient."
+    },
+    {
+      "id": "F7A_032",
+      "prompt": "In the school workshop, a person must choose a backup plan. The project deadline is looming, and a critical component has broken. They can either attempt a risky, quick repair that might fail, or request a replacement part, which will certainly cause them to miss the deadline. The person examines the broken piece, then lets out a soft, breathy sound, their shoulders slumping slightly. They pick up a different tool, and begin disassembling the broken part for a makeshift fix."
+    },
+    {
+      "id": "F7A_033",
+      "prompt": "In the city permit counter, a person must choose a backup plan. The required form is missing a crucial signature, and the official is unyielding about the rules. The choice is to wait indefinitely for the signatory or to try and forge the signature to proceed. The person grips the edge of the counter, their knuckles whitening. They then abruptly push the forms back, their gaze hardening as they turn to leave the counter."
+    },
+    {
+      "id": "F7A_034",
+      "prompt": "In the software release room, a person must choose a backup plan. The final code is ready, but a minor, cosmetic bug has surfaced. Fixing it will require delaying the release by a day, potentially upsetting stakeholders. Ignoring it means releasing with the flaw, which could be perceived as unprofessional. The person stares at the screen, their brow furrowing, and then lets out a short, sharp exhale. They pick up the receipt roll and begin to carefully document the bug's details, preparing for an immediate follow-up patch."
+    },
+    {
+      "id": "F7A_035",
+      "prompt": "In the train station kiosk, a person must choose a backup plan. The ticket scanner failed again, and a long line is forming. They had a clear itinerary, but now need a different route. The person reviews a printed packing slip, then their shoulders relax slightly as they point to a different departure board. \"This one,\" they state, their voice steady."
+    },
+    {
+      "id": "F7A_036",
+      "prompt": "In the community kitchen, a person must choose a backup plan. The community meal sign-up sheet is full, but an unexpected group of visitors arrived. The person looks at the laptop\u2019s screen displaying the inventory, then briefly touches their badge, a slight frown appearing. They carefully slide a fresh sheet of sticky notes toward the assistant. \"Let's get these newcomers sorted,\" they say, their tone gentle."
+    },
+    {
+      "id": "F7A_037",
+      "prompt": "In the warehouse loading bay, a person must choose a backup plan. The shipment is marked urgent, but the designated truck is out of service. They are holding a cold thermos, their eyes scanning the folding table. After a moment of stillness, they pick up their phone, then tap a few numbers, their brow furrowed. \"Yes, can we reroute number seven?\" they ask, their voice strained."
+    },
+    {
+      "id": "F7A_038",
+      "prompt": "In the library meeting table, a person must choose a backup plan. The planned speaker cancelled last minute for the event. The person pushes a cart loaded with envelopes, then picks up a marker pen, examining it. Their head tilts slightly, and they begin writing rapidly on a fresh envelope, a small smile playing on their lips. \"I have an idea,\" they murmur."
+    },
+    {
+      "id": "F7A_039",
+      "prompt": "In the storm shelter desk, a person must choose a backup plan. The available supplies are running low, and the storm shows no sign of stopping. The person holds a clipboard, their gaze fixed on the bins of items. They slowly set the clipboard down, their fingers tracing the edge of a label. A deep breath escapes them as they reach for a particular bin. \"This is the priority,\" they announce, their voice firm."
+    },
+    {
+      "id": "F7A_040",
+      "prompt": "In the clinic supply closet, a person must update a shared checklist. They find the required thermos is missing from its usual spot. This means a crucial item for patient comfort cannot be deployed as intended. They briefly set down their marker, then pick up the phone to track down the missing thermos, their shoulders slumping slightly."
+    },
+    {
+      "id": "F7A_041",
+      "prompt": "In the apartment mailroom, a person must update a shared checklist. Another resident has clearly used the marker pens to deface several envelopes before returning them to the cart. This disregard for shared resources obstructs the day's work. The person slowly shakes their head, a tight line forming around their mouth, before carefully placing the defaced envelopes aside and beginning with a fresh stack."
+    },
+    {
+      "id": "F7A_042",
+      "prompt": "In the school workshop, a person must update a shared checklist. A new set of bins for project materials has arrived, but the labels are completely illegible, smudged with what looks like oil. This prevents efficient organization and distribution of supplies. The person winces, pressing a hand to their forehead for a moment before picking up a fresh label and a cleaning cloth to attempt to salvage the situation."
+    },
+    {
+      "id": "F7A_043",
+      "prompt": "In the city permit counter, a person must update a shared checklist. After scanning the applicant's documents, the system flags an error that cannot be resolved by the standard procedures, indicating a potential misfiling. This delays the entire process for the person waiting. The clerk\u2019s face flushes as they look up, a soft exhale escaping their lips, then they signal for a supervisor to assist."
+    },
+    {
+      "id": "F7A_044",
+      "prompt": "In the software release room, a person must update a shared checklist. The final test results are in, and they indicate a critical bug has been resolved ahead of schedule, allowing for an earlier launch. This is a significant breakthrough for the team's efforts. The person lets out a sharp, delighted exclamation, their eyes widening as they quickly jot down the positive update on the whiteboard, a broad grin spreading across their face."
+    },
+    {
+      "id": "F7A_045",
+      "prompt": "In the train station kiosk, a person must update a shared checklist. They review the binder, noting a discrepancy that suggests a missed deadline. A coworker approaches, expecting the task to be complete. The person hesitates, then quickly marks the item as done, avoiding their coworker's gaze."
+    },
+    {
+      "id": "F7A_046",
+      "prompt": "In the community kitchen, a person must update a shared checklist. They locate a forgotten donation receipt and enter it onto the form, then find an extra entry for a completed task. A quiet smile touches their lips as they record the correction, straightening the wall calendar."
+    },
+    {
+      "id": "F7A_047",
+      "prompt": "In the warehouse loading bay, a person must update a shared checklist. While checking the receipt roll, they discover a record of an item that was supposed to be delivered weeks ago but never arrived. Their shoulders slump slightly, and they slowly lower the receipt roll to the ground, the map falling open."
+    },
+    {
+      "id": "F7A_048",
+      "prompt": "In the library meeting table, a person must update a shared checklist. They review the packing slips, noticing that all items for the upcoming event have been accounted for. A broad grin spreads across their face as they check off the final entry, a slight bounce in their step as they gather the toolbox."
+    },
+    {
+      "id": "F7A_049",
+      "prompt": "In the storm shelter desk, a person must update a shared checklist. They input the latest status report from the laptop, seeing that the local conditions are improving. A wave of calm washes over them as they tick the 'all clear' box, carefully placing a sticky note on the binder."
+    },
+    {
+      "id": "F7A_050",
+      "prompt": "In the clinic supply closet, a person must coordinate a pickup. They review a crumpled map, their hand trembling slightly as they trace a route. Another individual waits impatiently by the door, tapping their foot. The person hesitates, then points a wavering finger at a section of the map, offering it to the waiting individual."
+    },
+    {
+      "id": "F7A_051",
+      "prompt": "In the apartment mailroom, a person must coordinate a pickup. They\u2019ve gathered the packing slips and a worn toolbox, preparing to leave. A neighbor stops to chat, asking about the project. The person beams, recounting the successful plan and holding up the toolbox with a flourish, eager to begin."
+    },
+    {
+      "id": "F7A_052",
+      "prompt": "In the school workshop, a person must coordinate a pickup. They\u2019ve arranged the laptop and a stack of sticky notes on the workbench. A supervisor approaches, inquiring about the progress. The person stands a little straighter, gesturing towards the organized materials with a confident sweep of their arm, detailing their meticulous preparation."
+    },
+    {
+      "id": "F7A_053",
+      "prompt": "In the city permit counter, a person must coordinate a pickup. They look at a complex form, then at the thermos of coffee on the counter, and finally at the ticking clock. The clerk calls out a name that is not theirs. The person\u2019s shoulders slump, and they quietly begin to repack their belongings, their earlier focus dissolving."
+    },
+    {
+      "id": "F7A_054",
+      "prompt": "In the software release room, a person must coordinate a pickup. They\u2019ve gathered the envelopes and marker pens, ready to seal them. A colleague rushes in, asking if the final verification has been completed. The person lets out a slow exhale, a slight smile touching their lips, and nods affirmatively, indicating the sealed envelopes as proof of completion."
+    },
+    {
+      "id": "F7A_055",
+      "prompt": "In the train station kiosk, a person must coordinate a pickup. A group is waiting for a shared item, but the identifier on the clipboard has been smudged. The person hesitates, glancing at the waiting faces, then presses on a loose label, smearing the ink further. They decide to hand over a generic bin instead of waiting for clarification."
+    },
+    {
+      "id": "F7A_056",
+      "prompt": "In the community kitchen, a person must coordinate a pickup. The scanner is malfunctioning, preventing them from verifying the numbered trays assigned to each volunteer. They watch the food preparation stalls, their shoulders slumping slightly, and then proceed to manually distribute the trays based on a hurried guess, hoping it's correct."
+    },
+    {
+      "id": "F7A_057",
+      "prompt": "In the warehouse loading bay, a person must coordinate a pickup. The whiteboard, meant to show the schedule, is blank due to a technical glitch. As the timer on the wall ticks down, they look towards the loading dock, then make a quick, decisive gesture to direct the next truck forward without confirmation."
+    },
+    {
+      "id": "F7A_058",
+      "prompt": "In the library meeting table, a person must coordinate a pickup. The sign-in sheet is missing, and the headset they need to communicate with the group isn't working. They adjust the binder in front of them, their jaw set, and then announce the next arrival time loudly without any verification."
+    },
+    {
+      "id": "F7A_059",
+      "prompt": "In the storm shelter desk, a person must coordinate a pickup. The wall calendar shows conflicting dates for the supply delivery, and the forms for tracking items are incomplete. They look at the keys on the desk, a slow smile spreading across their face, then confidently sign off on the delivery as if it were perfectly organized."
+    },
+    {
+      "id": "F7A_060",
+      "prompt": "In the clinic supply closet, a person must repair a small process break. The malfunctioning diagnostic tool needs a specific adapter, not in the usual bin. They find one that looks nearly right, but the label is smudged. A quick test on the whiteboard reveals it\u2019s incompatible. They then spot the correct adapter tucked behind a shelf, realizing they were focused on the wrong area. A chuckle escapes their lips as they slot the correct part into the tool, the timer on the wall now showing significant time elapsed, and the process unit hums back to life."
+    },
+    {
+      "id": "F7A_061",
+      "prompt": "In the apartment mailroom, a person must repair a small process break. A stack of misdirected parcels blocks access to the sorting console. While trying to shift the heavy boxes, they notice a binder nearby containing the mail routes. Consulting it, they see a note about temporary rerouting due to construction. Their jaw tightens, and they slam the binder shut, a sharp exhale escaping. They then push the parcels aside with renewed force, revealing the console and rerouting the remaining items."
+    },
+    {
+      "id": "F7A_062",
+      "prompt": "In the school workshop, a person must repair a small process break. The 3D printer jams, halting a student project. They check the spool of filament and the forms detailing the print settings. A quick review of the wall calendar shows a recent system update that altered calibration. A huff of impatience escapes them as they pull up the printer's diagnostic log. They then adjust the feed tension manually, and the printer whirs back to life, the student\u2019s project resuming."
+    },
+    {
+      "id": "F7A_063",
+      "prompt": "In the city permit counter, a person must repair a small process break. A citizen needs a permit revised, but the digital system is offline. The attendant pulls out a large map to cross-reference the application details manually. They notice a handwritten annotation on the map highlighting a zoning change not yet reflected in the system. A small, pleased smile touches their lips. They then explain the situation to the citizen and begin filling out the revised permit by hand, using the map's markings."
+    },
+    {
+      "id": "F7A_064",
+      "prompt": "In the software release room, a person must repair a small process break. A critical server fails, jeopardizing a client deadline. The technician dons gloves and opens a toolbox, scanning the packing slips for server hardware components. They realize the faulty part isn't immediately obvious from the logs. A soft sigh escapes them as they gently place the toolbox down. They then initiate a remote diagnostic sequence, their gaze fixed on the monitor, waiting for the system to report the exact issue."
+    },
+    {
+      "id": "F7A_065",
+      "prompt": "In the train station kiosk, a person must repair a small process break. A sudden system alert on the laptop flashes an unexpected error code, halting the expected workflow. The person stares at the screen, then slowly shakes their head, brow furrowed, before reaching for a cluster of sticky notes to document the new, unpredicted issue and formulate a potential workaround."
+    },
+    {
+      "id": "F7A_066",
+      "prompt": "In the community kitchen, a person must repair a small process break. While prepping ingredients, they notice an unusual ingredient label on a thermos, different from the usual supplier's mark. A slight tilt of the head and a narrowing of the eyes precede them picking up their phone to discreetly research the unfamiliar branding and its implications for the recipe."
+    },
+    {
+      "id": "F7A_067",
+      "prompt": "In the warehouse loading bay, a person must repair a small process break. They are tasked with moving inventory using a cart. As they reach for a stack of envelopes, a glint of an unusual, expensive-looking object tucked within catches their eye. A quick, furtive glance around the empty bay precedes them pocketing the item, their pace quickening as they push the cart forward."
+    },
+    {
+      "id": "F7A_068",
+      "prompt": "In the library meeting table, a person must repair a small process break. While organizing labels for a project on the clipboard, they discover the budget allocation has been drastically reduced, rendering the current plan unfeasible. Shoulders slump slightly, and a deep breath is released through pursed lips as they consider crossing out the entire proposal and starting over with far fewer resources."
+    },
+    {
+      "id": "F7A_069",
+      "prompt": "In the storm shelter desk, a person must repair a small process break. They are reviewing a manifest scanned into the system. One entry for incoming supplies shows a discrepancy in quantity compared to the accompanying physical tape-sealed boxes. A sharp intake of breath and a tightening of the jaw occur as they signal for a supervisor, pointing firmly at the conflicting records."
+    },
+    {
+      "id": "F7A_070",
+      "prompt": "In the clinic supply closet, a person must review a confusing record. The label on the medical chart does not match the patient's name on the envelope. As they reread the dense text, their stomach tightens. They push the envelope aside, their mouth set in a hard line, and reach for a marker pen to cross out the mismatched entry."
+    },
+    {
+      "id": "F7A_071",
+      "prompt": "In the apartment mailroom, a person must review a confusing record. The incoming mail bins are clearly mislabeled, with some mail mixed across several. They scan the clipboard for guidance, but the system is incomplete. A flush creeps up their neck as they realize they will have to sort it all manually, their shoulders slumping."
+    },
+    {
+      "id": "F7A_072",
+      "prompt": "In the school workshop, a person must review a confusing record. The project instructions are a jumble of steps, contradicting each other. As they finally piece together a coherent sequence, their eyes widen and a broad smile spreads across their face. They quickly grab the tape and start securing the numbered trays for the next phase."
+    },
+    {
+      "id": "F7A_073",
+      "prompt": "In the city permit counter, a person must review a confusing record. The zoning map is obscured by smudges, making it impossible to verify the property lines. A sharp intake of breath precedes them leaning back, their gaze darting towards the exit. They then firmly place the map down and tap the timer, resigned to waiting."
+    },
+    {
+      "id": "F7A_074",
+      "prompt": "In the software release room, a person must review a confusing record. The previous team left incomplete notes in the binder, and the new system seems to have a critical error. A soft exhale escapes them as they notice a small, overlooked comment in the margin that clarifies the issue. Their expression softens, and they jot down a quick confirmation on the sign-in sheet."
+    },
+    {
+      "id": "F7A_075",
+      "prompt": "In the train station kiosk, a person must review a confusing record. The stack of forms appears disorganized, and a key detail seems misplaced. They pause, fingers tracing a faded entry on the wall calendar, and let out a soft, drawn-out exhale. The ticket window closes for the night. Do they try to retrace the steps for the record, or leave it for the morning? "
+    },
+    {
+      "id": "F7A_076",
+      "prompt": "In the community kitchen, a person must review a confusing record. The ingredients list on the receipt roll seems to contradict the recipe book. A warm smile spreads across their face as they notice a small typo. They then glance at the communal table, a shared map laid out, and decide to add a note for the next volunteer. Should they proceed with their original plan or adjust based on the find?"
+    },
+    {
+      "id": "F7A_077",
+      "prompt": "In the warehouse loading bay, a person must review a confusing record. The packing slips show a discrepancy with the inventory in the toolbox. They look at the worn gloves on the shelf, their brow furrowed. Then, a flicker of understanding crosses their features as they spot an error on a slip. Do they flag the issue for immediate correction or document it for later? "
+    },
+    {
+      "id": "F7A_078",
+      "prompt": "In the library meeting table, a person must review a confusing record. The laptop screen displays conflicting data, and the sticky notes are out of order. Their knuckles whiten as they grip the edge of the table, eyes darting towards the exit. A badge on their shirt seems to weigh them down. Do they ask for clarification from the supervisor or attempt to resolve it alone?"
+    },
+    {
+      "id": "F7A_079",
+      "prompt": "In the storm shelter desk, a person must review a confusing record. The phone\u2019s message log is unclear, and the folding table is unstable. They glance at the thermos, a slight nod of their head indicating comprehension. A determined glint appears in their eye as they begin jotting down a new set of instructions on a spare piece of paper. Should they trust their interpretation or wait for further communication?"
+    },
+    {
+      "id": "F7A_080",
+      "prompt": "In the clinic supply closet, a person must set up a temporary station. They unpack a toolbox, carefully arranging its contents on the folding table. Having completed the task with exceptional neatness, their shoulders relax, and a small smile touches their lips as they survey the organized space. They gather the packing slips, ready for the next step."
+    },
+    {
+      "id": "F7A_081",
+      "prompt": "In the apartment mailroom, a person must set up a temporary station. While connecting a laptop to the network, they suddenly stop, eyes widening slightly as a notification appears. The initial urgency to finish fades as they stare at the screen, a subtle shift in their posture indicating a significant internal adjustment. They then slowly reach for a sticky note."
+    },
+    {
+      "id": "F7A_082",
+      "prompt": "In the school workshop, a person must set up a temporary station. The final box is unpacked, and the folding table is clear. A deep exhale escapes them as they step back, hands on their hips, the tension visibly draining from their frame. They pick up their thermos, the simple completion of the task bringing a noticeable lightness to their movements. They then check their phone."
+    },
+    {
+      "id": "F7A_083",
+      "prompt": "In the city permit counter, a person must set up a temporary station. After distributing the envelopes, they notice a misplaced document from a previous interaction. Their gaze fixes on it, and their brow furrows as they recall the oversight. They slowly put down the marker pens and pick up the stray envelope, a heavy stillness about them."
+    },
+    {
+      "id": "F7A_084",
+      "prompt": "In the software release room, a person must set up a temporary station. The bins are labeled and organized, but the task feels hollow. As they place the last label on a bin, their movements become slower, heavier. They gaze at the clipboard with a downcast expression, a quiet slump entering their shoulders. They then push the bins aside slightly."
+    },
+    {
+      "id": "F7A_085",
+      "prompt": "In the train station kiosk, a person must set up a temporary station. They unroll the tape to secure the numbered trays, but the scanner immediately slides off the slick surface. A quick adjustment of the tape seems to fix it, but then a sudden loud announcement overhead causes the person to jump, dropping the scanner and tape on the floor. The person stares at the scattered items, a flicker of wide-eyed shock crossing their face before they stoop to retrieve the fallen supplies."
+    },
+    {
+      "id": "F7A_086",
+      "prompt": "In the community kitchen, a person must set up a temporary station. The timer is placed on the spare chairs and the whiteboard is positioned, but there's no obvious place to write. The person considers the available space, then places the timer on a counter instead of the chairs. They retrieve a marker and begin to list tasks on the whiteboard, maintaining a steady, unexpressive posture."
+    },
+    {
+      "id": "F7A_087",
+      "prompt": "In the warehouse loading bay, a person must set up a temporary station. While clipping the headset on, they notice the sign-in sheet is already filled out with a surprisingly organized and detailed list of names and arrival times. A slow smile spreads across the person's face as they examine the neat handwriting and efficient layout of the sheet. They carefully place the headset down to handle the binder, appreciating the thoroughness of the prior work."
+    },
+    {
+      "id": "F7A_088",
+      "prompt": "In the library meeting table, a person must set up a temporary station. They lay out the forms and keys, then check the wall calendar. Noticing it's flipped to the correct month but the wrong week, they let out a soft, breathy chuckle. A smirk plays on their lips as they reach for the keys, their shoulders shaking slightly with silent mirth. They then pivot to correct the calendar display."
+    },
+    {
+      "id": "F7A_089",
+      "prompt": "In the storm shelter desk, a person must set up a temporary station. They attempt to plug in the charging cord for a device, but the outlet sparks ominously. A sharp intake of breath is followed by a tightening of the jaw. With a frustrated huff, the person yanks the cord from the faulty outlet, their knuckles turning white as they grip the plug. They scan the desk for another power source, a vein pulsing in their temple."
+    },
+    {
+      "id": "F7A_090",
+      "prompt": "In the clinic supply closet, a person must close an unfinished shift. The last patient's chart is missing, and the binder feels unusually light. A faint, high-pitched whine emanates from the ventilation system, growing steadily louder as the shift clock ticks down. The person hesitates, then picks up the headset, their jaw tightens, and they begin a slow, deliberate sweep of the shelves again."
+    },
+    {
+      "id": "F7A_091",
+      "prompt": "In the apartment mailroom, a person must close an unfinished shift. A neighbor's package, clearly marked with a name that isn't theirs, sits open on the counter, a small, intricate metal puzzle spilling out. The wall calendar shows the deadline for end-of-day tasks is minutes away. The person looks from the calendar to the open box, then sets down their pen and carefully reaches for the puzzle."
+    },
+    {
+      "id": "F7A_092",
+      "prompt": "In the school workshop, a person must close an unfinished shift. A younger student left behind a half-finished birdhouse, the intricate wiring for a small solar panel dangling precariously. The receipt roll runs out just as they begin to log the last item. The person picks up a small piece of sandpaper, then gently tucks a loose wire back into the birdhouse structure before wiping their hands."
+    },
+    {
+      "id": "F7A_093",
+      "prompt": "In the city permit counter, a person must close an unfinished shift. The stack of packing slips for the day\u2019s deliveries is incomplete, with one crucial form missing its corresponding entry. A toolbox sits open, revealing a collection of specialized wrenches that seem out of place. The person scans the counter, then looks back at the incomplete stack, a frown deepening on their brow as they pick up the last packing slip and turn it over."
+    },
+    {
+      "id": "F7A_094",
+      "prompt": "In the software release room, a person must close an unfinished shift. A sticky note with a cryptic sequence of numbers is stuck to the laptop screen, different from the usual release codes. The badge reader malfunctions as they attempt to clock out, requiring manual entry. The person stares at the numbers on the note, then slowly taps the malfunctioning badge reader with their fingertip, their head tilted slightly."
+    },
+    {
+      "id": "F7A_095",
+      "prompt": "In the train station kiosk, a person must close an unfinished shift. They start to pack up their thermos and phone, but notice a specific item, a small, handcrafted bird, left behind on the folding table. A flicker of a smile touches their lips as they carefully pick it up, their gaze lingering on it for a moment before they place it gently into their bag. They then proceed to finish their closing tasks, a subtle warmth emanating from their posture."
+    },
+    {
+      "id": "F7A_096",
+      "prompt": "In the community kitchen, a person must close an unfinished shift. After tidying the cart and ensuring all marker pens are capped, they discover a stack of unaddressed envelopes tucked away. A heavy sigh escapes them, their shoulders slumping as they stare at the pile. They stoop to pick up a single envelope, running a thumb over its blank surface before dropping it back onto the cart with a thud, then continue their work with a visible reluctance."
+    },
+    {
+      "id": "F7A_097",
+      "prompt": "In the warehouse loading bay, a person must close an unfinished shift. They have just finished scanning the last of the bins and applying labels. However, a large, obviously damaged bin sits apart from the rest, clearly not processed. The person\u2019s eyebrows knit together, and they push their clipboard away with a sharp movement. They pick up a label, then toss it onto the floor near the damaged bin before turning back to their equipment."
+    },
+    {
+      "id": "F7A_098",
+      "prompt": "In the library meeting table, a person must close an unfinished shift. The scanner is put away, and the tape is coiled. Yet, a collection of numbered trays, each with a peculiar, faint odor, remains on the table. The person recoils slightly, their nose wrinkling, and they quickly wave a hand in front of their face. They push the trays further away, their gaze fixed on them with aversion, before gathering their belongings."
+    },
+    {
+      "id": "F7A_099",
+      "prompt": "In the storm shelter desk, a person must close an unfinished shift. The timer is set to zero, and the spare chairs are stacked. However, a brightly colored, child-like drawing is taped crookedly to the whiteboard, depicting a messy sun. The person blinks rapidly, their cheeks flushing as they look at it. They quickly turn their back to the whiteboard, their posture stiffening, and begin to pack their bag with hurried, awkward movements."
     }
   ],
   "schema_version": "gate2_closure_matched_ab_chunk_result.v2",
