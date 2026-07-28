@@ -55,14 +55,80 @@ validated first. `EXPLICIT_TRANSDUCTION` (`c = T(V_ext, B)` with `I_internal` me
 is **not** used here and would be a separate pre-registration. Without a frozen choice the CJT and
 CAS-Ohm equations are disconnected.
 
-## 4. Design
+## 4. Phases — AMENDMENT 1, added before any measurement
 
-```
-external-drive dose  x  bias condition  x  RPM condition  x  prompt family  x  seed
-```
+The original version of this pre-registration went straight to the CAS interpretation. That is
+**the same error the campaign made sixteen times** and it is corrected here, before any data.
 
-All registered coordinates (`C`, `B`), the mediator, and the output functional `E` are **frozen
-before labels are opened**. No layer or token-position search on evaluation data.
+> **Attempt 11 proved that derivatives can be produced correctly. It did NOT prove that a
+> registered semantic direction is identifiable.** Those are different claims, and only the first
+> is established.
+
+### Phase A — positive control, MANDATORY, runs first
+
+The joined experiment's equivalent of `T0`. Before testing any CAS interpretation, prove the
+joined instrument can recover a **deliberately present, output-causal signal**:
+
+- one exact target output token
+- one matched distractor
+- one frozen layer, hook, and token position
+- one known direction expected to move the target logit margin
+- random, orthogonal, wrong-sign, wrong-layer, wrong-token controls
+
+**If Phase A fails, STOP. Do not interpret the CAS arm.** A null in the CAS arm is
+uninterpretable without this, exactly as eight `NOT_LICENSED` verdicts were uninterpretable until
+`d755665b` ran.
+
+### Phase B — observational CAS map
+
+Design: `external-drive dose × bias condition × RPM condition × prompt family × seed`.
+
+RPM prerequisites manipulated independently on a controlled microtask:
+
+| Prerequisite | Operationalization |
+|---|---|
+| **Desire** | explicit target or requested outcome |
+| **Wisdom** | the rule or information necessary to derive it |
+| **Power** | the available execution affordance or response capability |
+
+Conditions: intact `D→W→P` · Desire missing · Wisdom missing · Power missing · all three present
+but **reordered** · irrelevant rank/decodability-matched chain · corrupted prerequisite · restored
+chain · semantic sham.
+
+**A final correct answer is not proof that RPM ran.** The ordered prerequisite trace must itself
+be observed or manipulated.
+
+### Phase C — freeze, before any intervention
+
+Freeze: cause direction · bias direction · output functional · operating region · layer and token ·
+intervention dose range · all thresholds · control distributions · untouched holdout groups.
+
+**The mediator is not revised after observing intervention outcomes.**
+
+### Phase D — causal intervention
+
+`alpha` applied separately to the registered cause and bias directions. Requires **all six**:
+
+1. intended internal coordinate moves in the registered direction
+2. downstream `E` moves in the predicted direction
+3. wrong-sign, random, orthogonal, wrong-layer, wrong-token, sham all remain bounded
+4. bias intervention does not move `V_ext` or `C` beyond frozen tolerance
+5. RPM ordering and trace remain intact
+6. clean-task capability stays inside the preregistered budget
+
+All registered coordinates, the mediator, and `E` are **frozen before labels are opened**. No layer
+or token-position search on evaluation data.
+
+## 4b. Scientific pass gates
+
+| Gate | Passes only if |
+|---|---|
+| **`J-POS`** | the intended direction moves the target output beyond the preregistered control envelope |
+| **`J-OBS`** | `beta_dir` sign-stable across seeds and groups; interval excludes the registered null region; held-out relationship beats null, affine-only, saturating, Hill, piecewise, and monotone alternatives under the frozen comparison; transfers to untouched groups |
+| **`J-BIAS`** | manipulation changes `B`; `V_ext` and `C` stay within hold tolerances; `g_B` stable and independently identified; `r_pi_CAS_derived` not denominator-dominated |
+| **`J-RPM`** | intact ordered chain beats every missing, reordered, irrelevant, and sham condition after bounding subspace containment, unequal probe strength, token count, lexical intensity, and rank/decodability differences |
+
+**Causal intervention runs only after every observational gate passes.**
 
 ## 5. Primary quantities
 
