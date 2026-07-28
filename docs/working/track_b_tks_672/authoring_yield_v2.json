@@ -1,0 +1,28 @@
+{
+  "budget_overrun_policy": "if any Foundation ends below 8 complete families, v2 FAILS authoring yield; extending requires a NEW successor lock",
+  "budget_verdict": "FAIL_AUTHORING_YIELD",
+  "candidate_dispositions": {
+    "direct_world_label": 159,
+    "pass": 961
+  },
+  "candidates_generated": 1120,
+  "cohort": "v2",
+  "complete_families": 211,
+  "complete_families_per_foundation": {
+    "max": 8,
+    "min": 5
+  },
+  "complete_families_target": 224,
+  "selected": 653,
+  "starved_foundations_below_8": {
+    "1d": 7,
+    "2a": 6,
+    "5d": 5,
+    "6a": 7,
+    "6b": 7,
+    "7a": 6,
+    "7c": 6,
+    "7d": 7
+  },
+  "world_leak_candidate_rate": 0.142
+}

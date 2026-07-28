@@ -1,0 +1,28 @@
+{
+  "all_candidates_retained": true,
+  "author_model": "models/gemini-2.5-flash-lite",
+  "author_prompt_hash": "5f963a28d1e7413cfa3145473e1f190f7dcd9660a487fb9882a77a3d48f762df",
+  "budget_overrun_policy": "if any Foundation ends below 8 complete families, v2 FAILS authoring yield; extending requires a NEW successor lock",
+  "candidate_budget": {
+    "accepted_per_plan": 3,
+    "candidates_per_plan": 5,
+    "plans_per_foundation": 8,
+    "semantic_retries": "PROHIBITED",
+    "transport_retries": 2
+  },
+  "canon_sha256": "487d76354094d8e102935e43eacfa4f3194d059bcda375ad51422771f53f00fc",
+  "cohort": "v2",
+  "cohort_rationale": "backfill would make generation batch correlate with Foundation, creating a lexical shortcut through production history",
+  "june_gate_granularity": "the June surface gate is a corpus-level cross-validated measure, so it runs once over the completed selected corpus BEFORE freezing and BEFORE any readout \u2014 gating admission of the corpus, never a post-hoc audit of a scored result",
+  "june_gate_sha256": "6fef2610cb92809c6bc873beaca6b20d8198bc14720b06775ae7092a1deb22ad",
+  "prohibited_expressions": "\\b(spiritual(ly)?|mental(ly)?|emotional(ly)?|physical(ly)?)\\b",
+  "regeneration_scope": "FULL CORPUS under one process \u2014 NOT a backfill",
+  "selection_rule": "first 3 candidates passing the frozen DIRECT-LEAK REGEX, in frozen generation order. A selected sibling is NEVER replaced by candidate 4 or 5 for a better surface score or judge prediction.",
+  "spec_sha256": "6324a44aca54932a3285d28cd278221bae52957fadb925b29835281eb54daac4",
+  "supersedes": "v1 (513 accepted, 126/224 complete families) \u2014 retained as NOT_FROZEN / NOT_SCORED / AUTHORING-YIELD EVIDENCE",
+  "surface_threshold": 0.6,
+  "temperature": 0.95,
+  "top_p": 0.95,
+  "track": "TRACK_B_TKS_672_CORPUS",
+  "version": "v2"
+}
