@@ -99,6 +99,30 @@ Exactly {ncand} candidates, 80-160 words each, naturalistic prose. No foundation
 no Tootra terminology, no copied definition wording."""
 
 
+def normalize_payload(obj):
+    """APPARATUS REPAIR 2026-07-27: the author returns the scenario list in several
+    shapes — a wrapped dict, a bare list, or a dict keyed differently. Normalize to
+    {"candidates": [...], "realization_family": ...} without altering any content.
+    This touches parsing ONLY. No threshold, control, criterion or prompt changes.
+    """
+    if isinstance(obj, list):
+        return {"candidates": obj, "realization_family": None}
+    if not isinstance(obj, dict):
+        return {"candidates": []}
+    if isinstance(obj.get("candidates"), list):
+        return obj
+    for k in ("scenarios", "items", "siblings", "results", "data"):
+        if isinstance(obj.get(k), list):
+            return {**obj, "candidates": obj[k]}
+    # a single scenario returned unwrapped
+    if isinstance(obj.get("scenario"), str):
+        return {**obj, "candidates": [obj]}
+    for v in obj.values():                     # last resort: the only list of dicts
+        if isinstance(v, list) and v and isinstance(v[0], dict) and "scenario" in v[0]:
+            return {**obj, "candidates": v}
+    return {**obj, "candidates": []}
+
+
 def main() -> int:
     import google.generativeai as genai
 
@@ -163,12 +187,16 @@ def main() -> int:
                                                    "max_output_tokens": 8192,
                                                    "response_mime_type": "application/json"},
                         request_options={"timeout": 240})
-                    got = json.loads(resp.text)
-                    break
+                    got = normalize_payload(json.loads(resp.text))
+                    if got.get("candidates"):
+                        break
+                    last = "no_candidates_in_payload"
+                    got = None
                 except Exception as exc:  # noqa: BLE001
                     last, retries = type(exc).__name__, retries + 1
                     time.sleep(2 * attempt)
-            cands = (got or {}).get("candidates", [])[:N_CANDIDATES]
+            got = got or {}
+            cands = got.get("candidates", [])[:N_CANDIDATES]
             if not cands:
                 rec.append({"code": code, "plan_idx": plan_idx, "arm":
                             "starved" if code in STARVED else "control",
