@@ -1,0 +1,74 @@
+{
+  "comparators": {
+    "s2_silent": 0.1969,
+    "v1_label": 0.4058,
+    "v2_16cell": 0.1625
+  },
+  "overall_leak": 0.009375,
+  "per_cell": {
+    "1b": {
+      "leaked": 0,
+      "total": 20
+    },
+    "1d": {
+      "leaked": 0,
+      "total": 20
+    },
+    "2a": {
+      "leaked": 0,
+      "total": 20
+    },
+    "2b": {
+      "leaked": 2,
+      "total": 20
+    },
+    "2c": {
+      "leaked": 0,
+      "total": 20
+    },
+    "3d": {
+      "leaked": 0,
+      "total": 20
+    },
+    "5b": {
+      "leaked": 0,
+      "total": 20
+    },
+    "5d": {
+      "leaked": 0,
+      "total": 20
+    },
+    "6a": {
+      "leaked": 0,
+      "total": 20
+    },
+    "6b": {
+      "leaked": 0,
+      "total": 20
+    },
+    "6c": {
+      "leaked": 0,
+      "total": 20
+    },
+    "6d": {
+      "leaked": 0,
+      "total": 20
+    },
+    "7a": {
+      "leaked": 0,
+      "total": 20
+    },
+    "7b": {
+      "leaked": 0,
+      "total": 20
+    },
+    "7c": {
+      "leaked": 0,
+      "total": 20
+    },
+    "7d": {
+      "leaked": 1,
+      "total": 20
+    }
+  }
+}

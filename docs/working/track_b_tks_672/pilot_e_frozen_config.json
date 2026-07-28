@@ -1,0 +1,15 @@
+{
+  "arm": "EXPLICIT_AVOIDANCE_INSTRUCTION",
+  "audit_exemption": "the prohibition paragraph is exempt from the prompt audit BY DESIGN \u2014 that exemption IS the experiment",
+  "delta_vs_s2": "ONE frozen prohibition paragraph appended after the audited body; no label printed anywhere",
+  "design": "WORLD_REALIZATION_GRAMMAR_V1_PILOT_E",
+  "question": "does stating the prohibition suppress the topic-vocabulary channel (drive-1 'spiritual', 1b 0.700 under silence) without recreating priming?",
+  "role": "SECONDARY DIAGNOSTIC \u2014 quarantined, non-claim-bearing, never mixed with S2",
+  "s2_baseline": {
+    "1b": 0.7,
+    "1d": 0.5,
+    "6a": 0.05,
+    "7c": 0.0,
+    "overall": 0.1969
+  }
+}

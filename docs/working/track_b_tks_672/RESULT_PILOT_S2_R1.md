@@ -13,13 +13,14 @@
 | v2 generator | label in header + full definitions + **explicit prohibition** + self-check | `0.1625` *(restricted to these 16 cells; overall was `0.142`)* |
 | **S2** | **silent** — criterion only, no label, no prohibition | `0.1969` |
 
-Two conclusions, both earned:
+Two readings — **with owner-corrected evidential weight**:
 
-1. **Printing the target label is the catastrophic channel.** v1's `0.4058` collapses to
-   `≈0.16–0.20` the moment the label leaves the prompt, under *either* enforcement style.
-2. **The explicit instruction, by itself, is not harmful — it is mildly helpful overall**
-   (`0.1625` vs `0.1969`). v1's disaster was the label, not the prohibition. My earlier framing
-   ("prohibition priming") conflated the two; the data now separates them.
+1. **Suggestive, not causal:** v1's `0.4058` falling to `≈0.16–0.20` when the label leaves the
+   prompt is a *demonstration that the contaminated prompt produced heavy leakage* — v1 differed
+   in multiple ways and had an apparatus defect, so it is not a clean estimate of label priming.
+2. **The clean causal test of the instruction is S2 vs E only.** v2 is informative but
+   uncontrolled (it also carried definitions and other context S2 lacked). See
+   `RESULT_PILOT_E_VS_S2.md` for the controlled comparison.
 
 ## 2. But the aggregate hides the real structure — the variance moved
 
@@ -62,8 +63,11 @@ The frozen `R1` reads *"starved-cell leakage reduced materially from v2"* withou
 a defect in my pre-registration, disclosed. On the starved cells: mean delta **`-0.130`**,
 `4/5` baselined cells improved, `7c` to zero; exception `1d +0.225` (drive-1 topic channel).
 
-**Recorded as `R1_STARVED_IMPROVED_WITH_DISCLOSED_EXCEPTION` — not a clean PASS**, and the
-overall-16-cell figure (`+0.034` vs v2's explicit arm) is stated beside it.
+**Formal status, per owner correction: `R1_PRIMARY_UNSCORABLE_THRESHOLD_UNDEFINED`** — the
+pre-registered bar had no number, so no pass/fail is scorable against it, and a custom
+post-result category must not be mistaken for a preregistered pass. Descriptive findings:
+`4/5` baselined starved cells improved; `1d` worsened; starved-cell mean decreased `0.130`;
+overall leakage `0.1969` (v2 on the same cells: `0.1625`).
 
 `R1B` criterion-copy: mean recall **`0.039`** — the authors are *not* copying the grammar text.
 Held-out transfer (`R4`/`R5`) remains the decisive test, but the copying channel looks quiet.
