@@ -1,0 +1,65 @@
+{
+  "arms": {
+    "char_3_5gram": {
+      "drive": 0.6071428571428571,
+      "max_share": 0.19047619047619047,
+      "world": 0.0
+    },
+    "gpt2_L0": {
+      "drive": 0.3333333333333333,
+      "max_share": 0.2857142857142857,
+      "world": 0.0
+    },
+    "gpt2_L6": {
+      "drive": 0.47619047619047616,
+      "max_share": 0.2261904761904762,
+      "world": 0.0
+    },
+    "pythia-160m_L0": {
+      "drive": 0.5476190476190477,
+      "max_share": 0.2261904761904762,
+      "world": 0.0
+    },
+    "pythia-160m_L6": {
+      "drive": 0.5595238095238095,
+      "max_share": 0.20238095238095238,
+      "world": 0.0
+    },
+    "word_tfidf": {
+      "drive": 0.5238095238095238,
+      "max_share": 0.20238095238095238,
+      "world": 0.0
+    }
+  },
+  "criteria": {
+    "G1_drive_above_chance": true,
+    "G2_drive_beats_lexical": false,
+    "G3_no_collapse": true,
+    "G4_honest_error_bars": true,
+    "G5_world_secondary_flagged": false
+  },
+  "design": "SMALL-MODEL-RECOVERY-v1",
+  "drive_chance": 0.14285714285714285,
+  "effective_n": 28,
+  "effective_n_note": "groups (foundations), NOT rows",
+  "folds": 4,
+  "n_groups": 28,
+  "n_items": 84,
+  "prereg": "PREREG_SMALL_MODEL_RECOVERY.md",
+  "primary": {
+    "best_lexical": 0.6071428571428571,
+    "best_lexical_source": "char_3_5gram",
+    "drive": 0.5595238095238095,
+    "group_bootstrap_ci": [
+      -0.15476190476190477,
+      0.059523809523809534
+    ],
+    "layer": 6,
+    "margin": -0.04761904761904756,
+    "model": "EleutherAI/pythia-160m",
+    "permutation_p": 9.999000099990002e-05
+  },
+  "verdict": "NOT_LICENSED_LEXICAL",
+  "world_caveat": "World axis carries a disclosed leak: 47/84 (56%) of scenarios contain the literal World name. Never report the world number alone.",
+  "world_chance": 0.25
+}
