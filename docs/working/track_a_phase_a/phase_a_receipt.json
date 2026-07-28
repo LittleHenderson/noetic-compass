@@ -1,0 +1,111 @@
+{
+  "calibration_effect_diagnostic_only": 0.8333333333333334,
+  "calibration_groups": [
+    "The capital of France is",
+    "France's capital city is",
+    "If you visit France, the capital you land in is",
+    "Q: What is the capital of France? A:",
+    "The French government sits in the capital,",
+    "Everyone knows the capital of France is"
+  ],
+  "code_commit": "ee5dcefdb646876cecf89a763e875661b9cd12ab",
+  "control_envelope": 0.4166666666666667,
+  "direction_construction": "mean(calibration hidden) - mean(frame-matched contrast), L2-normalised",
+  "distractor_token_id": 4693,
+  "firewall": "no TKS corpus text, labels or partitions were read by this track",
+  "generalizes_to_untouched": true,
+  "hook": "gpt_neox.layers[LAYER-1] forward_hook",
+  "layer": 6,
+  "model": "EleutherAI/pythia-160m",
+  "pass_threshold": 0.5,
+  "position": -1,
+  "prereg": "PREREG_CJT_JSPACE_JOINED_NARROW_v1.md amendment 1 (17159fce)",
+  "protocol_hash": "66ff171316f632c5c71e3d49ba5985398360af9e34af329f8303d8cc98ece726",
+  "python": "3.14.0",
+  "seed_list": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "target_logit_margin_effects": {
+    "orthogonal": {
+      "ci95": [
+        -1.1375,
+        1.0
+      ],
+      "mean": 0.03333333333333333,
+      "n": 30,
+      "sd": 0.5312459150169743
+    },
+    "random": {
+      "ci95": [
+        -1.1375,
+        1.1374999999999993
+      ],
+      "mean": 0.0,
+      "n": 30,
+      "sd": 0.5773502691896257
+    },
+    "registered": {
+      "ci95": [
+        1.0,
+        1.5
+      ],
+      "mean": 1.25,
+      "n": 30,
+      "sd": 0.25
+    },
+    "sham": {
+      "ci95": [
+        0.0,
+        0.5
+      ],
+      "mean": 0.4166666666666667,
+      "n": 30,
+      "sd": 0.18633899812498245
+    },
+    "wrong_layer": {
+      "ci95": [
+        0.0,
+        0.5
+      ],
+      "mean": 0.4166666666666667,
+      "n": 30,
+      "sd": 0.18633899812498245
+    },
+    "wrong_sign": {
+      "ci95": [
+        -3.5,
+        0.0
+      ],
+      "mean": -1.6666666666666667,
+      "n": 30,
+      "sd": 1.0671873729054748
+    },
+    "wrong_token": {
+      "ci95": [
+        0.0,
+        0.5
+      ],
+      "mean": 0.16666666666666666,
+      "n": 30,
+      "sd": 0.23570226039551584
+    }
+  },
+  "target_token_id": 7785,
+  "tokenizer_identity": "GPTNeoXTokenizer",
+  "torch": "2.11.0+cpu",
+  "track": "TRACK_A_PHASE_A_IDENTIFIABILITY",
+  "transformers": "5.8.1",
+  "untouched_groups": [
+    "The seat of French national government is located in",
+    "When travelling to France, tourists first reach the capital,",
+    "Among European capitals, the French one is",
+    "The Eiffel Tower stands in the French capital of",
+    "Napoleon ruled France from its capital,",
+    "The French capital, home to the Louvre, is"
+  ],
+  "verdict": "PHASE_A_IDENTIFIABILITY_PASS"
+}
