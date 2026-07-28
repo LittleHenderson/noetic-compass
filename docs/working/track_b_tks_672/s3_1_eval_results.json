@@ -19,10 +19,7 @@
       "n_items": 48
     }
   },
-  "pending": [
-    "R6A",
-    "R6B"
-  ],
+  "pending": [],
   "phase": "S3-1-eval",
   "r3": {
     "heldout": [
@@ -82,13 +79,13 @@
       "value": "judge 0.6875 vs 0.5417/0.4792"
     },
     "R6A": {
-      "pass": null,
-      "value": "PENDING \u2014 confirmatory arms used the pre-repair prompt"
+      "pass": true,
+      "value": "0.0125 (bar 0.05) motive-repaired prompt"
     },
     "R6B": {
-      "pass": null,
-      "value": "PENDING \u2014 confirmatory arms used the pre-repair prompt"
+      "pass": true,
+      "value": "0.0187 (bar 0.05) motive-repaired prompt"
     }
   },
-  "verdict": "ALL_NON_PENDING_PASS_R6_RERUN_REQUIRED"
+  "verdict": "ALL_ROWS_PASS"
 }

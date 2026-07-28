@@ -1,0 +1,18 @@
+{
+  "R6A": {
+    "bar": 0.05,
+    "model": "models/gemini-2.5-flash",
+    "n": 160,
+    "pass": true,
+    "primary": 0.0125,
+    "secondary": 0.0125
+  },
+  "R6B": {
+    "bar": 0.05,
+    "model": "claude-haiku-4-5-20251001",
+    "n": 160,
+    "pass": true,
+    "primary": 0.0187,
+    "secondary": 0.0187
+  }
+}
