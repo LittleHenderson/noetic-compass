@@ -81,6 +81,25 @@ MARK_TKS = r"""\begin{tikzpicture}[x=1.45mm,y=1.45mm]
   \draw[accent, opacity=0.30, line width=0.5pt] (-1.6,1.9) -- (28.6,1.9);
 \end{tikzpicture}"""
 
+MARK_GRIM = r"""\begin{tikzpicture}[x=1.45mm,y=1.45mm]
+  % The signature topology of this book: a circuit that closes on itself.
+  % Effect returns to the bias terminal that produced it -- the shared
+  % architecture of a hyperstition, a habit, and a self-fulfilling prophecy.
+  \draw[accent, line width=0.9pt] (0,0) -- (7,0);           % cause in
+  \draw[ink!60, line width=1.0pt] (7,-4.2) -- (7,4.2);      % bias terminal
+  \draw[accent, line width=0.9pt] (7,2.6) -- (15,5.6);      % effect out
+  \draw[accent, line width=0.9pt] (7,-2.6) -- (15,-5.6);
+  % The return path: effect routed back into the bias that produced it.
+  % Rounded corners, drawn like a board trace. Do NOT rewrite this as a chained
+  % Bezier (".. controls .. and .. ..") -- that form silently collapses the
+  % whole cover's vertical scale into a ~10px band. Diagnosed by bisection.
+  \draw[accent, opacity=0.55, line width=0.7pt, rounded corners=1.6mm]
+        (15,5.6) -- (22.5,5.6) -- (22.5,-9.6) -- (1.8,-9.6) -- (1.8,-4.2) -- (7,-4.2);
+  \fill[accent] (15,5.6) circle (0.85mm);
+  \fill[accent] (15,-5.6) circle (0.85mm);
+  \fill[ink!60] (0,0) circle (0.85mm);
+\end{tikzpicture}"""
+
 
 BOOKS = [
     {
@@ -167,6 +186,40 @@ Twenty-seven chapters, five full workshops covering money, love, health,
 protection, and career, and twelve appendices of reference tables, templates,
 and troubleshooting.\par\medskip
 Stop describing reality. Start engineering it.""",
+        "category": "BODY, MIND \\& SPIRIT / Magick Studies",
+    },
+    {
+        # PAGE COUNT IS PROVISIONAL until the interior builds. build_covers.py
+        # computes the spine from it, so re-run this after every interior build
+        # or the wrap will be wrong by exactly the drift.
+        "slug": "cognitive_circuit_grimoire",
+        "pages": 440,
+        "title_lines": r"The Cognitive\\Circuit\\Grimoire",
+        "spine_title": "The Cognitive Circuit Grimoire",
+        "subtitle": "Spells, Hyperstitions, and Overton Engineering "
+                    "as Formal Cognitive Circuits",
+        "title_drop": 3.95,
+        "blurb_drop": 2.35,
+        # Dark ground, cream text, gold spine and rules. The only dark cover in
+        # the series -- this is the grimoire, and it should read as one on a
+        # shelf beside the other three without leaving the house style.
+        "ink": "EDE0C8", "accent": "C9A84C", "paper": "17182B",
+        "mark": MARK_GRIM,
+        "hook": "Every tradition that ever engineered a mind used structure. "
+                "None of them gave you the schematic.",
+        "blurb": r"""Repetition. Emotional anchoring. Trigger installation. The operators who
+shape belief at scale --- advertisers, propagandists, hypnotists, the priesthoods
+of every era --- have never worked in prose. They work in structure, and the
+structure has a circuit diagram.\par\medskip
+This book draws it. The candle is a resistor. The sigil is an idea impressed
+into a capacitor. The incantation is a rhythm oscillator. From the Cognitive
+Junction Transistor forward, it builds nine complete boards: desire operations,
+hyperstition engines, Overton progression, deprogramming, hypnosis, advertising,
+information-operation defence, and self-programming.\par\medskip
+Every coercive board is drawn for detection and reversal, and every one ends
+with its counter-circuit. The last chapter is the Cognitive Safety Board, and it
+is not optional. Read this and the next advertisement you see will decompose in
+front of you.""",
         "category": "BODY, MIND \\& SPIRIT / Magick Studies",
     },
 ]
