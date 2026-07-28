@@ -1,0 +1,313 @@
+% =====================================================================
+% The Cognitive Circuit Grimoire — LaTeX preamble
+% Little Henderson · Noetic Compass Press · 2026
+% =====================================================================
+%
+% Typeset with XeLaTeX. Unicode math (Appendix J) renders via unicode-math.
+
+% --- Page geometry: 6x9 trade paperback (KDP-compatible) ---------------
+\setstocksize{9in}{6in}
+\settrimmedsize{9in}{6in}{*}
+% memoir signature is \setlrmarginsandblock{SPINE}{EDGE}{ratio} — spine FIRST.
+% The arguments were previously reversed, giving the spine 0.625in and the
+% fore-edge 0.875in. KDP requires the larger margin on the SPINE (gutter) to
+% survive perfect binding; at 601–828 pages that minimum is 0.875in.
+\setlrmarginsandblock{0.875in}{0.625in}{*}   % spine (gutter), fore-edge
+\setulmarginsandblock{0.75in}{0.75in}{*}
+\setheaderspaces{*}{*}{0.4}
+\checkandfixthelayout
+
+% --- Fonts (XeLaTeX) ---------------------------------------------------
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont{Palatino Linotype}[
+    Ligatures=TeX,
+    Numbers=OldStyle
+]
+\setsansfont{Arial}[Ligatures=TeX]
+\setmonofont{DejaVu Sans Mono}[Scale=0.82]
+
+% --- Math (Unicode) ----------------------------------------------------
+\usepackage{amsmath,amssymb}
+% unicode-math disabled — interaction with this manuscript triggers an
+% extreme processing slowdown / stall around chapter 17 (line 4986 area).
+% AMS math + amssymb cover all math symbols actually used in the manuscript;
+% Unicode math symbols in prose are remapped to math mode via \newunicodechar
+% below.
+%\usepackage{unicode-math}
+%\setmathfont{Latin Modern Math}
+
+% --- Unicode symbol fallback for text-mode math operators --------------
+% Palatino Linotype lacks glyphs for ∈, ∉, ⊂, ⊆, ⊃, ⊇, ∅, →, ∘, ↔, etc.,
+% which appear as inline prose-style symbols in the manuscript (particularly
+% Appendix J meta-logic). When these appear in text mode, remap them to
+% math mode so the unicode-math font provides the glyph.
+\usepackage{newunicodechar}
+\newunicodechar{∈}{\ensuremath{\in}}
+\newunicodechar{∉}{\ensuremath{\notin}}
+\newunicodechar{⊂}{\ensuremath{\subset}}
+\newunicodechar{⊆}{\ensuremath{\subseteq}}
+\newunicodechar{⊃}{\ensuremath{\supset}}
+\newunicodechar{⊇}{\ensuremath{\supseteq}}
+\newunicodechar{∅}{\ensuremath{\varnothing}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{←}{\ensuremath{\leftarrow}}
+\newunicodechar{↔}{\ensuremath{\leftrightarrow}}
+\newunicodechar{⇒}{\ensuremath{\Rightarrow}}
+\newunicodechar{⇔}{\ensuremath{\Leftrightarrow}}
+\newunicodechar{∘}{\ensuremath{\circ}}
+\newunicodechar{≈}{\ensuremath{\approx}}
+\newunicodechar{≠}{\ensuremath{\neq}}
+\newunicodechar{≤}{\ensuremath{\leq}}
+\newunicodechar{≥}{\ensuremath{\geq}}
+\newunicodechar{≡}{\ensuremath{\equiv}}
+\newunicodechar{≻}{\ensuremath{\succ}}
+\newunicodechar{≺}{\ensuremath{\prec}}
+\newunicodechar{√}{\ensuremath{\surd}}
+\newunicodechar{∑}{\ensuremath{\sum}}
+\newunicodechar{∏}{\ensuremath{\prod}}
+\newunicodechar{∫}{\ensuremath{\int}}
+\newunicodechar{∂}{\ensuremath{\partial}}
+\newunicodechar{∇}{\ensuremath{\nabla}}
+\newunicodechar{∞}{\ensuremath{\infty}}
+\newunicodechar{⟨}{\ensuremath{\langle}}
+\newunicodechar{⟩}{\ensuremath{\rangle}}
+\newunicodechar{Δ}{\ensuremath{\Delta}}
+\newunicodechar{∪}{\ensuremath{\cup}}
+\newunicodechar{∩}{\ensuremath{\cap}}
+\newunicodechar{∧}{\ensuremath{\wedge}}
+\newunicodechar{∨}{\ensuremath{\vee}}
+\newunicodechar{¬}{\ensuremath{\neg}}
+\newunicodechar{⊢}{\ensuremath{\vdash}}
+\newunicodechar{⊨}{\ensuremath{\models}}
+% Register these for robustness even when already covered
+\newunicodechar{×}{\ensuremath{\times}}
+\newunicodechar{·}{\ensuremath{\cdot}}
+\newunicodechar{±}{\ensuremath{\pm}}
+\newunicodechar{∓}{\ensuremath{\mp}}
+\newunicodechar{⋅}{\ensuremath{\cdot}}
+% Greek letters commonly appearing in prose (ensure math-mode rendering)
+\newunicodechar{α}{\ensuremath{\alpha}}
+\newunicodechar{β}{\ensuremath{\beta}}
+\newunicodechar{γ}{\ensuremath{\gamma}}
+\newunicodechar{δ}{\ensuremath{\delta}}
+\newunicodechar{ε}{\ensuremath{\varepsilon}}
+\newunicodechar{ζ}{\ensuremath{\zeta}}
+\newunicodechar{η}{\ensuremath{\eta}}
+\newunicodechar{θ}{\ensuremath{\theta}}
+\newunicodechar{ι}{\ensuremath{\iota}}
+\newunicodechar{κ}{\ensuremath{\kappa}}
+\newunicodechar{λ}{\ensuremath{\lambda}}
+\newunicodechar{μ}{\ensuremath{\mu}}
+\newunicodechar{ν}{\ensuremath{\nu}}
+\newunicodechar{ξ}{\ensuremath{\xi}}
+\newunicodechar{π}{\ensuremath{\pi}}
+\newunicodechar{ρ}{\ensuremath{\rho}}
+\newunicodechar{σ}{\ensuremath{\sigma}}
+\newunicodechar{τ}{\ensuremath{\tau}}
+\newunicodechar{υ}{\ensuremath{\upsilon}}
+\newunicodechar{φ}{\ensuremath{\varphi}}
+\newunicodechar{χ}{\ensuremath{\chi}}
+\newunicodechar{ψ}{\ensuremath{\psi}}
+\newunicodechar{ω}{\ensuremath{\omega}}
+\newunicodechar{Γ}{\ensuremath{\Gamma}}
+\newunicodechar{Λ}{\ensuremath{\Lambda}}
+\newunicodechar{Ξ}{\ensuremath{\Xi}}
+\newunicodechar{Π}{\ensuremath{\Pi}}
+\newunicodechar{Σ}{\ensuremath{\Sigma}}
+\newunicodechar{Φ}{\ensuremath{\Phi}}
+\newunicodechar{Ψ}{\ensuremath{\Psi}}
+\newunicodechar{Ω}{\ensuremath{\Omega}}
+\newunicodechar{Θ}{\ensuremath{\Theta}}
+% Glyphs absent from Palatino Linotype and Consolas that were silently printing
+% as nothing. The star is load-bearing: it is the exercise difficulty rating
+% ("Difficulty: ★★"), so 51 ratings were rendering blank.
+\newunicodechar{★}{\ensuremath{\bigstar}}
+\newunicodechar{☆}{\ensuremath{\star}}
+\newunicodechar{✓}{\ensuremath{\checkmark}}
+\newunicodechar{⊥}{\ensuremath{\perp}}
+\newunicodechar{⊤}{\ensuremath{\top}}
+\newunicodechar{⊗}{\ensuremath{\otimes}}
+\newunicodechar{⊕}{\ensuremath{\oplus}}
+\newunicodechar{∃}{\ensuremath{\exists}}
+\newunicodechar{∀}{\ensuremath{\forall}}
+
+\newunicodechar{∝}{\ensuremath{\propto}}
+\newunicodechar{≫}{\ensuremath{\gg}}
+\newunicodechar{≪}{\ensuremath{\ll}}
+\newunicodechar{⇄}{\ensuremath{\rightleftarrows}}
+\newunicodechar{ₙ}{\textsubscript{n}}
+\newunicodechar{ₖ}{\textsubscript{k}}
+\newunicodechar{ᵢ}{\textsubscript{i}}
+\newunicodechar{ⱼ}{\textsubscript{j}}
+\newunicodechar{ₘ}{\textsubscript{m}}
+% --- Custom math commands used by the manuscript -----------------------
+\newcommand{\Noetica}{\mathcal{N}}
+\newcommand{\Obj}{\operatorname{Obj}}
+\newcommand{\id}{\mathrm{id}}
+\newcommand{\Sh}{\operatorname{Sh}}
+\newcommand{\Jnoe}{\mathcal{J}_{\mathcal{N}}}
+
+% --- Unicode glyph fallback for verbatim/texttt contexts ---------------
+% \unimath{name} produces \ensuremath{\name} — a single math glyph using the
+% math font (Latin Modern Math), which has full coverage of math-symbol
+% codepoints that the system mono fonts (Consolas) lack. Used by
+% postprocess.py to substitute U+2208 (∈), U+2209 (∉), U+2282 (⊂),
+% U+2286 (⊆), U+2283 (⊃), U+2287 (⊇), U+2205 (∅), U+27E8 (⟨), U+27E9 (⟩),
+% U+2218 (∘) inside Verbatim/texttt blocks.
+\newcommand{\unimath}[1]{\ensuremath{\csname #1\endcsname}}
+
+% --- Index --------------------------------------------------------------
+% memoir supplies \makeindex / \printindex. Marks are inserted into body.tex
+% by publishing/build_indexes.py after pandoc; the .idx is compiled by
+% makeindex between the two xelatex passes.
+\makeindex
+
+% --- Microtypography ---------------------------------------------------
+\usepackage{microtype}
+\clubpenalty=10000
+\widowpenalty=10000
+\raggedbottom
+
+% --- Line spacing: 1.35x leading for 11pt body (approx. 14.85pt) ------
+\setSingleSpace{1.20}
+\SingleSpacing
+
+% --- Colored theorem environments via tcolorbox ------------------------
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{theorems,breakable}
+
+\newtcbtheorem[number within=chapter]{thmbox}{Theorem}{%
+    enhanced,breakable,colback=blue!5,colframe=blue!55!black,
+    fonttitle=\bfseries,coltitle=white,
+    boxrule=0.4pt,arc=1pt,left=6pt,right=6pt,top=4pt,bottom=4pt,
+    before skip=8pt,after skip=8pt
+}{thm}
+
+\newtcbtheorem[number within=chapter]{defbox}{Definition}{%
+    enhanced,breakable,colback=green!5,colframe=green!45!black,
+    fonttitle=\bfseries,coltitle=white,
+    boxrule=0.4pt,arc=1pt,left=6pt,right=6pt,top=4pt,bottom=4pt,
+    before skip=8pt,after skip=8pt
+}{def}
+
+\newtcbtheorem[number within=chapter]{exbox}{Example}{%
+    enhanced,breakable,colback=orange!5,colframe=orange!60!black,
+    fonttitle=\bfseries,coltitle=white,
+    boxrule=0.4pt,arc=1pt,left=6pt,right=6pt,top=4pt,bottom=4pt,
+    before skip=8pt,after skip=8pt
+}{ex}
+
+\newtcbtheorem[number within=chapter]{propbox}{Proposition}{%
+    enhanced,breakable,colback=cyan!5,colframe=cyan!55!black,
+    fonttitle=\bfseries,coltitle=white,
+    boxrule=0.4pt,arc=1pt
+}{prop}
+
+\newtcbtheorem[number within=chapter]{lembox}{Lemma}{%
+    enhanced,breakable,colback=violet!5,colframe=violet!50!black,
+    fonttitle=\bfseries,coltitle=white,
+    boxrule=0.4pt,arc=1pt
+}{lem}
+
+\newtcbtheorem[number within=chapter]{corbox}{Corollary}{%
+    enhanced,breakable,colback=teal!5,colframe=teal!50!black,
+    fonttitle=\bfseries,coltitle=white,
+    boxrule=0.4pt,arc=1pt
+}{cor}
+
+\newtcolorbox{remarkbox}{%
+    enhanced,breakable,colback=gray!5,colframe=gray!50,
+    fonttitle=\bfseries,coltitle=white,
+    boxrule=0.4pt,arc=1pt,left=6pt,right=6pt,top=4pt,bottom=4pt,
+    title=Remark,before skip=8pt,after skip=8pt
+}
+
+% --- Running headers / page style --------------------------------------
+\makepagestyle{book}
+\makeevenhead{book}{\small\itshape The Cognitive Circuit Grimoire}{}{}
+\makeoddhead{book}{}{}{\small\itshape\rightmark}
+\makeevenfoot{book}{}{\thepage}{}
+\makeoddfoot{book}{}{\thepage}{}
+\makeheadrule{book}{\textwidth}{0.2pt}
+
+\makepagestyle{plainbook}
+\makeevenhead{plainbook}{}{}{}
+\makeoddhead{plainbook}{}{}{}
+\makeevenfoot{plainbook}{}{\thepage}{}
+\makeoddfoot{plainbook}{}{\thepage}{}
+
+\aliaspagestyle{chapter}{plainbook}
+\pagestyle{book}
+
+% Mark chapter names for running headers
+\renewcommand{\chaptermark}[1]{\markright{#1}}
+
+% --- Chapter / part title styling --------------------------------------
+\chapterstyle{hangnum}
+\renewcommand{\chapnumfont}{\normalfont\huge\bfseries}
+\renewcommand{\chaptitlefont}{\normalfont\LARGE\bfseries}
+\renewcommand{\partnamefont}{\normalfont\Huge\bfseries}
+\renewcommand{\parttitlefont}{\normalfont\Huge\bfseries\itshape}
+
+% --- Section numbering depth ------------------------------------------
+\setcounter{secnumdepth}{0}
+\setcounter{tocdepth}{0}
+
+% --- Hyperref (loaded last) --------------------------------------------
+\usepackage[hyperfootnotes=false]{hyperref}
+\hypersetup{
+    pdftitle={The Cognitive Circuit Grimoire},
+    pdfauthor={Little Henderson},
+    pdfsubject={Designing Cognitive Circuits with the Cognitive Architecture System},
+    pdfkeywords={CAS, CJT, cognitive circuit board, CCDL, TKS, hyperstition, Overton},
+    pdfcreator={Noetic Compass Press},
+    pdfproducer={XeLaTeX (memoir, Palatino Linotype)},
+    colorlinks=true,
+    linkcolor=blue!45!black,
+    urlcolor=blue!55!black,
+    citecolor=green!45!black,
+    bookmarksnumbered=true,
+    bookmarksopen=true
+}
+
+% --- Misc --------------------------------------------------------------
+\usepackage{calc}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+
+% Pandoc >= 2.17 uses a \real{...} helper in longtable column widths. Define
+% it as a pass-through scaling factor so \p{(\linewidth - N\tabcolsep) * \real{0.333}}
+% expressions compile under calc package arithmetic.
+\providecommand{\real}[1]{#1}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{enumitem}
+
+% Keep pandoc happy: it emits \tightlist, \passthrough, etc.
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\passthrough}[1]{#1}
+
+% Pandoc fancyvrb/Shaded setup for code blocks
+\usepackage{fancyvrb}
+\usepackage{fvextra}
+\fvset{breaklines=true,breakanywhere=true,fontsize=\footnotesize}
+\usepackage{framed}
+\definecolor{shadecolor}{gray}{0.95}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\VerbatimHighlightingCommand}[2]{#2}
+
+% --- Table of Contents formatting (memoir) -----------------------------
+\setlength{\cftbeforechapterskip}{4pt plus 2pt minus 1pt}
+
+% --- Grimoire build: overfull-box mitigation ---
+\usepackage{etoolbox}
+\setlength{\emergencystretch}{3em}
+\AtBeginEnvironment{longtable}{\footnotesize}
+\AtBeginEnvironment{tabular}{\small}
+\appto\UrlBreaks{\do\^\do\|\do\<\do\>\do\_}
+
+% --- Grimoire build: TikZ figure styles ---
+\input{figures_preamble.tex}
