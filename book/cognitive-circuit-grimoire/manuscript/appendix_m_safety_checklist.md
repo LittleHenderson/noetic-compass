@@ -11,7 +11,7 @@ later one. If the gate is shut, nothing downstream matters.
 
 ---
 
-## K.1 The Prerequisite Gate
+## M.1 The Prerequisite Gate
 
 From Chapter 21. Four gates, sequential, each answered in writing before the
 next is opened. An unwritten answer is not an answer.
@@ -29,7 +29,7 @@ a fired operation. The gate is the only place refusal is cheap.
 
 ---
 
-## K.2 The Invariant Check
+## M.2 The Invariant Check
 
 Structural. Does the board in front of you actually contain the parts that make
 it safe, or does it contain them on the page you drew last month? Verify against
@@ -37,19 +37,19 @@ the listing you are about to run, not against memory.
 
 | # | Invariant | How to verify | If absent |
 |---|---|---|---|
-| K2-1 | **The CSB stage is present and populated.** | A saturating refusal CJT biased `^3^P_{F7}|⟨A,f,T⟩` sits ahead of every amplification stage, in the Principled domain, with no bypass path around it (Chapter 24.2) | Abort. A board without its safety stage is not a de-rated board, it is a different board |
-| K2-2 | **The fuse is specified, not implied.** | An explicit `Fuse<>` on the refusal path with both `threshold` and `action` written out; `action=permanent_block` (Chapters 11.1, 24.3) | Abort. A refusal that can be retried into acceptance is not a refusal |
-| K2-3 | **The domain diodes are present, all three.** | `^P -> ^C`, `^C -> ^E`, `^E -> ^O` each instantiated with its own `Vf` (Chapter 8.1). Standard values 0.7 / 1.2 / 2.0 | Abort. A missing junction merges two domains; a zero-drop junction deletes the boundary rather than optimising it |
-| K2-4 | **No ascent.** | Every `×` in the listing has its result at or below the domain of its inputs. `P ≻ C ≻ E ≻ O`. An `^O × ^P` term is invalid and a validator rejects it | Rewrite. The one lawful upward path is the filtered `O→P` feedback of Chapter 8.4 |
-| K2-5 | **The `O→P` return is filtered and low-gain.** | Lowpass with a stated `τ` and a feedback gain around `β=0.05`, terminating at a *bias* terminal (Chapter 24.5) | Fix before running. An unfiltered return lets one result rewrite your principles |
-| K2-6 | **Operator discipline holds.** | Every `×` names its emergent result. Same-Noetic multi-register terms use `+` or `|⟨…⟩`, never bare `×`. `|` introduces a Register (T/A/f/E) and nothing else | Rewrite. `F3|Vitality` is a syntax error, not an annotation |
-| K2-7 | **Test points are exposed.** | TP1–TP4 present and readable during the run, not reconstructed after (Chapter 12.3) | Add them. An operation you cannot measure is an anecdote |
-| K2-8 | **Consent is architectural, not assumed.** | The target is yourself, or a consenting party under Chapter 26.2. If the board acts on a non-consenting person, it carries the detection-only banner and is not built | Abort. This one has no adjustment path |
-| K2-9 | **Coercive analysis has its counter-circuit.** | Any board derived from Chapters 15–19 is paired with its counter (16.6, 19.6, 18's consumer-side detection) | Abort until paired |
+| M2-1 | **The CSB stage is present and populated.** | A saturating refusal CJT biased `^3^P_{F7}|⟨A,f,T⟩` sits ahead of every amplification stage, in the Principled domain, with no bypass path around it (Chapter 24.2) | Abort. A board without its safety stage is not a de-rated board, it is a different board |
+| M2-2 | **The fuse is specified, not implied.** | An explicit `Fuse<>` on the refusal path with both `threshold` and `action` written out; `action=permanent_block` (Chapters 11.1, 24.3) | Abort. A refusal that can be retried into acceptance is not a refusal |
+| M2-3 | **The domain diodes are present, all three.** | `^P -> ^C`, `^C -> ^E`, `^E -> ^O` each instantiated with its own `Vf` (Chapter 8.1). Standard values 0.7 / 1.2 / 2.0 | Abort. A missing junction merges two domains; a zero-drop junction deletes the boundary rather than optimising it |
+| M2-4 | **No ascent.** | Every `×` in the listing has its result at or below the domain of its inputs. `P ≻ C ≻ E ≻ O`. An `^O × ^P` term is invalid and a validator rejects it | Rewrite. The one lawful upward path is the filtered `O→P` feedback of Chapter 8.4 |
+| M2-5 | **The `O→P` return is filtered and low-gain.** | Lowpass with a stated `τ` and a feedback gain around `β=0.05`, terminating at a *bias* terminal (Chapter 24.5) | Fix before running. An unfiltered return lets one result rewrite your principles |
+| M2-6 | **Operator discipline holds.** | Every `×` names its emergent result. Same-Noetic multi-register terms use `+` or `|⟨…⟩`, never bare `×`. `|` introduces a Register (T/A/f/E) and nothing else | Rewrite. `F3|Vitality` is a syntax error, not an annotation |
+| M2-7 | **Test points are exposed.** | TP1–TP4 present and readable during the run, not reconstructed after (Chapter 12.3) | Add them. An operation you cannot measure is an anecdote |
+| M2-8 | **Consent is architectural, not assumed.** | The target is yourself, or a consenting party under Appendix M §M.2. If the board acts on a non-consenting person, it carries the detection-only banner and is not built | Abort. This one has no adjustment path |
+| M2-9 | **Coercive analysis has its counter-circuit.** | Any board derived from Chapters 15–19 is paired with its counter (16.6, 19.6, 18's consumer-side detection) | Abort until paired |
 
 ---
 
-## K.3 The Parameter Sanity Check
+## M.3 The Parameter Sanity Check
 
 Numeric. Every value below is a design choice you must be able to defend out
 loud in one sentence (Chapter 12.1). "It was in the example" is not a defence.
@@ -57,7 +57,7 @@ loud in one sentence (Chapter 12.1). "It was in the example" is not a defence.
 | Parameter | Admissible | The check | What a bad value does |
 |---|---|---|---|
 | **Dial** (any operator) | integer **3–9** | Every dial in range. No exceptions, no temporary overrides | Below 3 the operator is dark on that Noetic; above 9 it dominates every path and the board has one behaviour regardless of input |
-| **Involution divergence** | **≤ 4 points** | `\|Dial(^2) − Dial(^3)\| ≤ 4`, `\|Dial(^5) − Dial(^6)\| ≤ 4`, `\|Dial(^8) − Dial(^9)\| ≤ 4` (Chapter 25.2) | Divergence past 4 is the fracture condition. `^2/^3` apart is obsession or blanket aversion; `^5/^6` apart is a formation that cannot be examined or an analysis with nothing under it |
+| **Involution divergence** | **≤ 4 points** | `\|Dial(^2) − Dial(^3)\| ≤ 4`, `\|Dial(^5) − Dial(^6)\| ≤ 4`, `\|Dial(^8) − Dial(^9)\| ≤ 4` (Chapter 6.2) | Divergence past 4 is the fracture condition. `^2/^3` apart is obsession or blanket aversion; `^5/^6` apart is a formation that cannot be examined or an analysis with nothing under it |
 | **Self-duals** | `^0`, `^1`, `^4`, `^7` | No pair constraint — but check that a high `^7` is deliberate | `^7` at 9 with no gate is the habit oscillator running free |
 | **Drive inversions** | F1↔F7, F2↔F6, F3↔F5; F4 self-dual | Same 4-point rule across each pair | An F5/F3 split is agency without vitality to spend, which reads as burnout and gets misdiagnosed as low drive |
 | **`sat`** | set **deliberately and low** | Refusal stages: `0.85`. Working amplifiers: `0.60`–`0.80`. Anything at `1.0` needs a written reason | `sat=1.0` removes the headroom that makes calibration possible. `sat>0.97` on a refusal never latches. Saturation is the ceiling you cannot push past, and it only protects you if you set it before you want it moved |
@@ -70,7 +70,7 @@ loud in one sentence (Chapter 12.1). "It was in the example" is not a defence.
 
 ---
 
-## K.4 Stop Conditions — Abort, Do Not Adjust
+## M.4 Stop Conditions — Abort, Do Not Adjust
 
 The distinction that matters most in this appendix. Most bad readings are
 adjustments: lower β, lengthen τ, re-run. The following are not. Each means the
@@ -82,8 +82,8 @@ knob inside that regime produces a board that looks corrected and is not.
 | The refusal fuse has blown (`threshold=0.90` crossed) | **Stop permanently on that path.** The morphism is removed. No appeal, no re-argument, no rewording of the desire to route around it (Chapter 24.3) |
 | You find yourself re-arguing with your own refusal | **Stop the session.** This is the failure the saturated CJT exists to catch, and noticing it means the ceiling is doing its job |
 | A dial pair has diverged past 4 and you are looking for a reason it is fine | **Stop.** Reset both dials to their last defensible values and run the Chapter 24.6 self-audit before anything else |
-| The target has withdrawn consent, or you realise consent was never obtained | **Stop immediately and un-board** (Chapter 26.3). Nothing else on this list overrides this line |
-| `^5` capacitor leakage: sustained exhaustion, derealisation, dissociation, sleep loss traceable to the work | **Stop the operation entirely.** This is not a τ problem. See Chapters 7.3 and 7.4, then K.5 below |
+| The target has withdrawn consent, or you realise consent was never obtained | **Stop immediately and un-board** (Appendix M §M.4). Nothing else on this list overrides this line |
+| `^5` capacitor leakage: sustained exhaustion, derealisation, dissociation, sleep loss traceable to the work | **Stop the operation entirely.** This is not a τ problem. See Chapters 7.3 and 7.4, then M.5 below |
 | The operation now requires deceiving someone to continue | **Stop.** The requirement is the diagnosis |
 | Confirmations arriving with no corresponding operational current at TP4 | **Stop and re-gate.** You are measuring feeling, not flow (Chapter 22.5) |
 | CSB refusals rising operation over operation | **Stop the sequence, not the individual run.** Rising refusals are the ethical-drift signal (Chapter 22.5) |
@@ -91,24 +91,24 @@ knob inside that regime produces a board that looks corrected and is not.
 
 ---
 
-## K.5 Warning Signs, and What to Do
-
-[[COMPOSITOR: set this section as a single unbroken block. It must not break across a page, and no heading may be inserted inside it. In the companion volume a page break severed this material and the final rows came to sit under the wrong heading.]]
+## M.5 Warning Signs, and What to Do
 
 | Warning sign | What it indicates | What to do when you see it |
 |---|---|---|
 | The operation is the first thing you think about on waking and the last before sleep | Loop gain has gone above unity; the oscillator is self-sustaining | Cut the duty cycle to zero for a full cycle length. Do not "taper." Re-enter only after a clean self-audit |
 | You have stopped filling in the tracking sheet | Measurement has been abandoned, which always precedes drift rather than following it | Stop operating. Resume only with the sheet in front of you (Appendix G) |
-| The prime desire has quietly changed and you did not re-gate | A sub-desire has substituted itself for the prime | Return to A0. Re-run the whole checklist from K.1 |
+| The prime desire has quietly changed and you did not re-gate | A sub-desire has substituted itself for the prime | Return to A0. Re-run the whole checklist from M.1 |
 | You have raised β twice in a row without raising anything else | Compensating for an unmeasured constraint by shouting louder | Measure `R_constraint` and `ΣVf` before touching gain again |
-| Other people's concern about you has become evidence that they are obstacles | Inversion on the `^2`/`^3` axis, projected outward (Chapter 25.3) | Stop. Talk to one of those people. Run the shadow-integration circuit (Chapter 25.4), not another operation |
-| You are running the board on someone who has not been told it exists | Consent violation, regardless of intent or expected benefit | Stop and un-board (Chapter 26.3). There is no adjusted version of this |
+| Other people's concern about you has become evidence that they are obstacles | Possible inversion on the `^2`/`^3` axis, projected outward (Chapter 3.4) | Stop. Talk to one of those people. Do not run another operation. If the pattern persists or causes distress, seek qualified help; this manual does not supply a shadow-work treatment |
+| You are running the board on someone who has not been told it exists | Consent violation, regardless of intent or expected benefit | Stop and un-board (Appendix M §M.4). There is no adjusted version of this |
 | Sleep, appetite, or grip on what is real has changed since the sequence began | `^5` dielectric stress. The substrate, not the circuit | Stop all operations. Rest, eat, get outdoors, talk to someone who knows you. If it does not resolve, see a clinician — this book has nothing to offer here and does not pretend to |
 | You are reading this list looking for the row that lets you continue | The most reliable warning sign in the appendix | Stop for the day. Nothing on a board decays in twenty-four hours; the only thing that does is the impulse |
 
 ---
 
-## K.6 The Plain Statement
+\clearpage
+
+## M.6 The Plain Statement
 
 This book is not medical advice and it is not psychiatric advice. It does not
 diagnose anything, it does not treat anything, and nothing in it — no board, no

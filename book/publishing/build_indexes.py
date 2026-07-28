@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 r"""
-Build real, page-accurate indexes for all three books.
+Build real, page-accurate indexes for all four books.
 
 None of the three had one. Reality Engineering shipped an "Index" that listed
 topics with no page numbers at all -- for an 800-page operating manual, that is
@@ -24,8 +24,9 @@ Two things stop this producing a useless index:
    skipped entirely. Indexing a keyword because it appeared in a code sample
    sends the reader to a listing, not an explanation.
 
-Run:  python build_indexes.py            (marks every book's body.tex)
-      python build_indexes.py --terms    (just print the extracted terms)
+Run:  python build_indexes.py                 (marks every book's body.tex)
+      python build_indexes.py grimoire        (marks one book's body.tex)
+      python build_indexes.py --terms         (just print extracted terms)
 """
 import io
 import re
@@ -77,11 +78,46 @@ def escape_index(term):
 
 def clean_term(raw):
     t = raw.strip()
-    t = re.sub(r"`[^`]*`", "", t)                 # drop inline notation
+    t = t.replace("`", "")                         # keep inline notation text
     t = re.sub(r"\([^)]*\)", "", t)               # drop parentheticals
     t = re.sub(r"\*+", "", t)                     # drop markdown emphasis
     t = re.sub(r"\s+", " ", t).strip(" —-–:,.")
     return t
+
+
+# Symbolic glossary entries need two things the ordinary term path cannot give
+# them: a TeX-safe printed form and a search needle matching pandoc's output.
+# Their ASCII sort keys keep makeindex deterministic and place them where a
+# reader will look rather than in an arbitrary Unicode-symbol bucket.
+SPECIAL_INDEX = {
+    "β": ("beta", r"$\beta$", "β"),
+    "β=∞": ("beta infinite", r"$\beta=\infty$", "β=∞"),
+    "g_m": ("gm", r"$g_m$", r"g\_m"),
+    "rπ": ("r pi", r"$r\pi$", "rπ"),
+    "τ": ("tau", r"$\tau$", "τ"),
+    "η": ("eta", r"$\eta$", "η"),
+    "Ω_c, V_c, A_c, F_c, h·Ω_c": (
+        "cognitive units",
+        r"Cognitive units ($\Omega_c$, $V_c$, $A_c$, $F_c$, $h\cdot\Omega_c$)",
+        "Cognitive ohms",
+    ),
+    "^n^D_{Fk}|R": ("state literal", "State literal", "state literal"),
+    "|": ("register pipe", r"Register pipe (\texttt{|})", "Introduces the Register"),
+    "+ / × / |⟨…⟩": (
+        "operators cas",
+        "Operators (+, ×, register set)",
+        "Co-presence",
+    ),
+    "A0": ("A0", "A0 (Pure Desire)", "A0"),
+}
+
+
+def index_payload(term):
+    """Return a makeindex payload, including sort/display forms when needed."""
+    if term not in SPECIAL_INDEX:
+        return escape_index(term)
+    sort_key, display, _ = SPECIAL_INDEX[term]
+    return escape_index(sort_key) + "@" + escape_index(display)
 
 
 # --- per-book glossary parsers -------------------------------------------
@@ -119,7 +155,19 @@ def terms_tks():
     return out
 
 
+def terms_grimoire():
+    f = ROOT / 'cognitive-circuit-grimoire' / 'manuscript' / 'appendix_i_glossary.md'
+    out = []
+    for m in re.finditer(r'^\*\*(.+?)\*\*\s+', f.read_text(encoding='utf-8'), re.M):
+        out.append(clean_term(m.group(1)))
+    return out
+
+
 BOOKS = {
+    'grimoire': {
+        'terms': terms_grimoire,
+        'body': ROOT / 'cognitive-circuit-grimoire' / 'build' / 'body.tex',
+    },
     "pcba": {
         "terms": terms_pcba,
         "body": ROOT / "CAS_PCBA_Engineer" / "build" / "body.tex",
@@ -177,17 +225,20 @@ def mark(body_path, terms):
     # "Transistor" can swallow the same span
     usable = sorted(
         {normalise(t) for t in terms
-         if len(t) >= MIN_LEN
-         and t.lower() not in STOP_TERMS
-         and not TERM_REJECT.search(t)
-         and normalise(t).lower() not in STOP_TERMS},
+         if (t in SPECIAL_INDEX or (
+             len(t) >= MIN_LEN
+             and t.lower() not in STOP_TERMS
+             and not TERM_REJECT.search(t)
+             and normalise(t).lower() not in STOP_TERMS
+         ))},
         key=len, reverse=True)
 
     inserts = []          # (position, text)
     claimed = []          # spans already indexed, to avoid nesting
     marked = 0
     for term in usable:
-        pat = re.compile(r"(?<![\w\\])" + re.escape(term) + r"(?![\w])")
+        needle = SPECIAL_INDEX.get(term, (None, None, term))[2]
+        pat = re.compile(r"(?<![\w\\])" + re.escape(needle) + r"(?![\w])")
         hits = 0
         for m in pat.finditer(text):
             if hits >= MAX_HITS:
@@ -196,7 +247,7 @@ def mark(body_path, terms):
                 continue
             if any(a <= m.start() < b for a, b in claimed):
                 continue
-            inserts.append((m.end(), "\\index{" + escape_index(term) + "}"))
+            inserts.append((m.end(), "\\index{" + index_payload(term) + "}"))
             claimed.append((m.start(), m.end()))
             hits += 1
         marked += hits
@@ -210,7 +261,14 @@ def mark(body_path, terms):
 
 def main():
     only_terms = "--terms" in sys.argv
-    for key, cfg in BOOKS.items():
+    requested = [arg for arg in sys.argv[1:] if not arg.startswith("-")]
+    unknown = sorted(set(requested) - set(BOOKS))
+    if unknown:
+        raise SystemExit(f"unknown book key(s): {', '.join(unknown)}")
+
+    selected = requested or list(BOOKS)
+    for key in selected:
+        cfg = BOOKS[key]
         terms = [t for t in cfg["terms"]() if t]
         terms = list(dict.fromkeys(terms))
         print(f"=== {key} ===")

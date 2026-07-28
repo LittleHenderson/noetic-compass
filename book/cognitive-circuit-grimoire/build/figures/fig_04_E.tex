@@ -1,0 +1,45 @@
+% Figure 4-E -- three series constraints versus three parallel routes.
+\begin{tikzpicture}[x=1cm,y=1cm,font=\sffamily\scriptsize,
+  panel/.style={rounded corners=3pt,draw=casNedge,line width=.6pt,fill=casNfill!30},
+  wire/.style={draw=black,line width=.65pt},
+  res/.pic={\draw[wire] (-.65,0)--(-.48,0)--(-.36,.18)--(-.12,-.18)--(.12,.18)
+    --(.36,-.18)--(.48,0)--(.65,0);},
+  rlab/.style={font=\sffamily\tiny\bfseries,fill=white,inner sep=.5pt}]
+\path[panel] (0,0) rectangle (5.10,4.35);
+\path[panel] (5.35,0) rectangle (10.60,4.35);
+\node[font=\sffamily\footnotesize\bfseries] at (2.55,3.98)
+  {THREE LOCKS, ONE DOOR};
+\node[font=\sffamily\footnotesize\bfseries] at (7.98,3.98) {THREE DOORS};
+
+% Series: one path through all three parts.
+\draw[flow] (.35,2.35)--(.72,2.35);
+\foreach \x in {1.35,2.55,3.75}{\pic at (\x,2.35) {res};
+  \node[rlab,anchor=south] at (\x,2.65) {60 $\Omega_c$};}
+\draw[wire] (2.00,2.35)--(1.90,2.35);
+\draw[wire] (3.20,2.35)--(3.10,2.35);
+\draw[flow] (4.40,2.35)--(4.78,2.35);
+\node[nblock,minimum width=28mm,minimum height=7mm,fill=white] at (2.55,1.25)
+  {$R_{total}=180\,\Omega_c$};
+\node[font=\sffamily\scriptsize\bfseries] at (2.55,.62)
+  {$I=0.099$ A$_c$};
+
+% Parallel: three one-resistor routes between common buses.
+\draw[wire] (5.88,1.35)--(5.88,3.30);
+\draw[wire] (9.90,1.35)--(9.90,3.30);
+\foreach \y in {1.55,2.32,3.09}{
+  \draw[wire] (5.88,\y)--(7.28,\y);
+  \pic at (7.93,\y) {res};
+  \draw[wire] (8.58,\y)--(9.90,\y);
+  \node[rlab,anchor=south] at (7.93,{\y+.22}) {60 $\Omega_c$};
+}
+\draw[flow,line width=1.6pt] (5.48,2.32)--(5.88,2.32);
+\draw[flow,line width=1.6pt] (9.90,2.32)--(10.34,2.32);
+\node[nblock,minimum width=26mm,minimum height=7mm,fill=white] at (7.93,.78)
+  {$R_{eq}=20\,\Omega_c$};
+\node[font=\sffamily\scriptsize\bfseries] at (7.93,.25)
+  {$I=0.890$ A$_c$};
+
+\node[pblock,text width=88mm,minimum height=8mm,
+  font=\sffamily\footnotesize\bfseries] at (5.30,-.62)
+  {same components --- $9\times$ the flow};
+\end{tikzpicture}

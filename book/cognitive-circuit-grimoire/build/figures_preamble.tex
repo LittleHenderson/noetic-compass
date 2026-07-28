@@ -17,6 +17,10 @@
 % =====================================================================
 
 \usepackage{tikz}
+% Assembly-figure BOMs use hyphenating ragged p-columns. Keep these
+% dependencies here so the book and standalone figtest share the same setup.
+\usepackage{array}
+\usepackage{ragged2e}
 \usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc,fit,backgrounds}
 
 % --- pgfplots for the vector charts (CJT curves, Bode, filters, decay) --

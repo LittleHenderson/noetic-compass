@@ -1,0 +1,73 @@
+% Figure 5-E -- filled confirmation ledger with convergence and NO-READ.
+\begin{tikzpicture}[x=1mm,y=1mm,
+  tinytext/.style={font=\fontsize{5.2}{5.8}\selectfont,align=center,inner sep=.3pt},
+  head/.style={font=\fontsize{5.2}{5.8}\selectfont\bfseries,align=center,inner sep=.3pt},
+  call/.style={font=\sffamily\scriptsize,fill=white,inner sep=1pt}]
+% Column rules: Op, Date, Desire, t_op, t_conf, ^1, ^4, eta, result, (a,b), A, Band.
+\foreach \x in {0,4,14,36,42,49,53,57,63,70,77,82,91}{
+  \draw[casNedge,line width=.35pt] (\x,8)--(\x,54);
+}
+\foreach \y in {8,16,24,32,40,47,54}{
+  \draw[casNedge,line width=.35pt] (0,\y)--(91,\y);
+}
+\path[fill=casNfill] (0,47) rectangle (91,54);
+\node[head] at (2,50.5) {Op};
+\node[head] at (9,50.5) {Date};
+\node[head] at (25,50.5) {Desire};
+\node[head] at (39,50.5) {$t_{op}$};
+\node[head] at (45.5,50.5) {$t_{conf}$};
+\node[head] at (51,50.5) {$\hat{1}^{\circ}$};
+\node[head] at (55,50.5) {$\hat{4}^{\circ}$};
+\node[head] at (60,50.5) {$\eta$};
+\node[head] at (66.5,50.5) {result};
+\node[head] at (73.5,50.5) {$(a,b)$};
+\node[head] at (79.5,50.5) {$A$};
+\node[head] at (86.5,50.5) {Band};
+
+% Five filled rows (row centres descend).
+\node[tinytext] at (2,43.5){1}; \node[tinytext] at (9,43.5){03/14/26};
+\node[tinytext,text width=20mm] at (25,43.5){red Corvette};
+\node[tinytext] at (39,43.5){20}; \node[tinytext] at (45.5,43.5){60};
+\node[tinytext] at (51,43.5){2$^\circ$}; \node[tinytext] at (55,43.5){2$^\circ$};
+\node[tinytext] at (60,43.5){.333}; \node[tinytext] at (66.5,43.5){1/9};
+\node[tinytext] at (73.5,43.5){(1,9)}; \node[tinytext] at (79.5,43.5){9.0};
+\path[fill=casEfill] (82,40) rectangle (91,47); \node[head] at (86.5,43.5){RE-SPEC};
+
+\node[tinytext] at (2,36){2}; \node[tinytext] at (9,36){03/17/26};
+\node[tinytext,text width=20mm] at (25,36){red Corvette};
+\node[tinytext] at (39,36){20}; \node[tinytext] at (45.5,36){20};
+\node[tinytext] at (51,36){1$^\circ$}; \node[tinytext] at (55,36){1$^\circ$};
+\node[tinytext] at (60,36){1.000}; \node[tinytext] at (66.5,36){1/3};
+\node[tinytext] at (73.5,36){(1,3)}; \node[tinytext] at (79.5,36){3.0};
+\path[fill=casCfill] (82,32) rectangle (91,40); \node[head] at (86.5,36){DRIVE};
+
+\node[tinytext] at (2,28){3}; \node[tinytext] at (9,28){03/21/26};
+\node[tinytext,text width=20mm] at (25,28){red Corvette};
+\node[tinytext] at (39,28){24}; \node[tinytext] at (45.5,28){8};
+\node[tinytext] at (51,28){1$^\circ$}; \node[tinytext] at (55,28){1$^\circ$};
+\node[tinytext] at (60,28){3.000}; \node[tinytext] at (66.5,28){1/1};
+\node[tinytext] at (73.5,28){(1,1)}; \node[tinytext] at (79.5,28){1.0};
+\path[fill=casOfill] (82,24) rectangle (91,32); \node[head] at (86.5,28){ACT};
+
+\node[tinytext] at (2,20){4}; \node[tinytext] at (9,20){03/24/26};
+\node[tinytext,text width=20mm] at (25,20){paid position X};
+\node[tinytext] at (39,20){30}; \node[tinytext] at (45.5,20){45};
+\node[tinytext] at (51,20){2$^\circ$}; \node[tinytext] at (55,20){2$^\circ$};
+\node[tinytext] at (60,20){.667}; \node[tinytext] at (66.5,20){2/9};
+\node[tinytext] at (73.5,20){(2,9)}; \node[tinytext] at (79.5,20){4.5};
+\path[fill=casCfill] (82,16) rectangle (91,24); \node[head] at (86.5,20){DRIVE};
+
+\node[tinytext] at (2,12){5}; \node[tinytext] at (9,12){03/26/26};
+\node[tinytext,text width=20mm] at (25,12){silent cast, same};
+\node[tinytext] at (39,12){25}; \node[tinytext] at (45.5,12){---};
+\node[tinytext] at (51,12){2$^\circ$}; \node[tinytext] at (55,12){---};
+\foreach \x in {60,66.5,73.5,79.5}{\node[tinytext] at (\x,12){---};}
+\path[fill=casNfill] (82,8) rectangle (91,16); \node[head] at (86.5,12){NO-READ};
+
+% Read A downward: first three rows converge; fifth is a positive measurement.
+\draw[-{Latex[length=2mm,width=1.5mm]},line width=1pt,draw=casGreen]
+  (81.2,44)--(81.2,27.5);
+\node[call,rotate=90,text=casGreen] at (78.8,35.5) {converging};
+\draw[fbflow] (86.5,8)--(86.5,4.5)--(62,4.5);
+\node[call,anchor=east] at (61.5,4.5) {not a gap --- a measurement};
+\end{tikzpicture}

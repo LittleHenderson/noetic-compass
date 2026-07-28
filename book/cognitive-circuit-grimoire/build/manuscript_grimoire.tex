@@ -21,6 +21,10 @@
 \input{frontmatter_grimoire.tex}
 
 \mainmatter
+% memoir's \mainmatter reattaches the figure counter to chapters and resets
+% its printed form to chapter.Arabic. Restore the authored Figure 13-C style
+% after that transition, immediately before the generated body begins.
+\renewcommand{\thefigure}{\thechapter-\Alph{figure}}
 \pagestyle{book}
 
 \input{body.tex}

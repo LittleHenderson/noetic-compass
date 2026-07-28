@@ -1,0 +1,74 @@
+% Figure 6-C -- drive divider, lawful dial range, and non-monotone tap fraction.
+\begin{tikzpicture}[
+  scale=0.83,transform shape,
+  x=1cm,y=1cm,font=\sffamily\footnotesize,
+  wire/.style={draw=black,line width=0.7pt},
+  rbody/.style={draw=casNedge,fill=casNfill,line width=0.7pt,
+                minimum width=23mm,minimum height=8mm},
+  tiny/.style={font=\sffamily\scriptsize,align=center}
+]
+
+\node[casterm,text width=23mm] (vin) at (2.1,0)
+  {$V_{\mathrm{drive}}$\\F5 Agency};
+\node[rbody] (rc) at (2.1,-1.55)
+  {$R_{\mathrm{constrain}}$};
+\node[rbody] (re) at (2.1,-3.65)
+  {$R_{\mathrm{expand}}$};
+\draw[flow] (vin.south) -- (rc.north);
+\draw[wire] (rc.south) -- (re.north);
+\draw[wire] (re.south) -- (2.1,-4.75);
+\draw[wire] (1.72,-4.75) -- (2.48,-4.75);
+\draw[wire] (1.83,-4.90) -- (2.37,-4.90);
+\draw[wire] (1.94,-5.05) -- (2.26,-5.05);
+\fill (2.1,-2.60) circle (1.5pt);
+\draw[flow] (2.1,-2.60) -- (4.15,-2.60);
+\node[casterm,text width=23mm] (out) at (5.05,-2.60)
+  {$V_{\mathrm{behavior}}$\\divider tap};
+
+\node[tiny,anchor=west] at (3.45,-1.55)
+  {$\mathrm{Dial}({}^{\wedge}3)$\\series drop};
+\node[tiny,anchor=west] at (3.45,-3.65)
+  {$\mathrm{Dial}({}^{\wedge}2)$\\expand leg};
+
+\draw[draw=casNedge,line width=0.6pt]
+  (0.70,-0.95) -- (0.52,-0.95) -- (0.52,-4.24) -- (0.70,-4.24);
+\node[tiny,rotate=90] at (0.02,-2.60)
+  {involution pair \textasciicircum 2 $\leftrightarrow$ \textasciicircum 3};
+\node[tiny,rotate=90] at (0.92,-2.60) {spread $\le 4$};
+
+\node[nblock,text width=43mm,align=left,font=\sffamily\scriptsize,
+      anchor=north west] at (6.10,0.15) {
+  \textbf{transmission}\\[-1pt]
+  \[
+  k=\frac{R_{\mathrm{expand}}}
+          {R_{\mathrm{expand}}+R_{\mathrm{constrain}}}
+  \]
+  \vspace{-3mm}
+  $V_{\mathrm{behavior}}=kV_{\mathrm{drive}}$};
+
+\begin{scope}[shift={(6.1,-2.45)}]
+  \node[font=\sffamily\scriptsize\bfseries,anchor=west] at (0,0.25)
+    {lawful tap readings};
+  \foreach \yy/\kk/\dials/\note in {
+    0/0.300/{3 / 7}/{low},
+    -0.72/0.500/{3 / 3}/{balanced},
+    -1.44/0.643/{9 / 5}/{attraction at 9 transmits less},
+    -2.16/0.700/{7 / 3}/{lawful maximum}
+  }{
+    \draw[draw=casNedge,line width=0.45pt] (0,\yy) -- (4.0,\yy);
+    \fill[casCedge] ({4.0*\kk},\yy) circle (1.5pt);
+    \node[font=\sffamily\scriptsize,anchor=east] at (-0.05,\yy)
+      {$k=\kk$};
+    \node[font=\sffamily\scriptsize,anchor=west] at (4.12,\yy)
+      {\dials};
+  }
+  \node[font=\sffamily\tiny,anchor=west,text=casNedge]
+    at (4.12,0.30) {$\mathrm{Dial}({}^{\wedge}2)/
+                    \mathrm{Dial}({}^{\wedge}3)$};
+  \node[font=\sffamily\scriptsize\bfseries,anchor=west,text=casCedge]
+    at (0,-3.02) {$0.700$: maximum at $7/3$};
+  \node[font=\sffamily\scriptsize,anchor=west,text=casNedge]
+    at (0,-3.50) {$0.643$: dial 9 is not the maximum};
+\end{scope}
+
+\end{tikzpicture}

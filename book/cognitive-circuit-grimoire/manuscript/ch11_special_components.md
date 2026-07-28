@@ -12,7 +12,7 @@ The crystal has no gain. It amplifies nothing. It produces a rhythm stable enoug
 
 Chapters 6 through 10 gave you the parts that carry the signal — resistor, capacitor, diode, inductor, and the Cognitive Junction Transistor. Every one answers *how much gets through*. None of this chapter's five answer that question. A fuse answers *whether, ever again*. An oscillator answers *at what rate and in what pattern*. A filter answers *which rates survive*. An op-amp answers *which of two things is larger*. A transformer answers *at what working point*.
 
-Boards fail on these parts more often than on the amplifying ones, and quietly, because a part with no gain gives no symptom when it is wrong. A fuse that cannot blow looks exactly like a fuse. You find these defects by reading parameters against each other, not by watching output.
+These five fail quietly, because a part with no gain gives no symptom when it is wrong. A fuse that cannot blow looks exactly like a fuse. You find these defects by reading parameters against each other, not by watching output.
 
 [[FIGURE 11-A: Symbol plate — F1 fuse (rectangle with diagonal element, terminals "path in"/"path out", box for threshold and action); OSC1 (square wave in a circle, annotated period/duty/sustain); FLT1 drawn three times, as lowpass, highpass and notch blocks with response glyphs inset; U1 op-amp triangle, + and − inputs, one output, shared bias terminal at the base; T1 transformer, two coils across a double core, labelled n.]]
 
@@ -31,9 +31,9 @@ fuse f1: Fuse< path=carried, threshold=0.90, action=permanent_block >;
 **`threshold`** — the activation at which it opens, on [0, 1]. The default here is **0.90**, for the reason a mains fuse is rated well above normal load. At **0.50** it trips on ordinary variance: any path with healthy dynamic range crosses its own midpoint routinely, so a 0.50 fuse makes a working board single-use for nothing. At **0.99** it is decorative, because well-designed paths rarely reach a percent from unity. Nuisance tripping and never tripping are both fuse failures.
 
 > **Bench Note — a fuse above the path's ceiling is a part guaranteed to do nothing.**
-> Every path has a ceiling: a CJT plateaus at its `sat`, a capacitor at full charge, a rail at its supply. Put `threshold` above that ceiling and the fuse can never trip, and nothing in the listing complains. Chapter 24 makes the trap concrete: 24.2 specifies a refusal CJT saturating at **sat = 0.85**, 24.3 an enforcement fuse at **threshold = 0.90**. Place that fuse across that CJT and it is dead metal — the node plateaus five hundredths below the threshold, forever. It is not across that CJT; it sits in series with the enforcement path downstream, which has a higher ceiling. Read `threshold` and `sat` together or read neither. The compiler takes your word about what you are guarding.
+> Every path has a ceiling: a CJT plateaus at its `sat`, a capacitor at full charge, a rail at its supply. Put `threshold` above that ceiling and the fuse can never trip, and nothing in the listing complains. Chapter 24 makes the trap concrete: 24.2 specifies a refusal CJT saturating at **sat = 0.85**, 24.3 an enforcement fuse at **threshold = 0.90**. Place that fuse across that CJT and it is dead metal — the node plateaus five hundredths below the threshold, forever. So it must not go there. It belongs in series with the enforcement path downstream, whose ceiling is higher than 0.90; check that placement on any CSB you are handed, including the one in this book. Read `threshold` and `sat` together or read neither. The compiler takes your word about what you are guarding.
 
-**`action`** — what "open" means. Six legal values, not interchangeable. `permanent_block` cuts the path for the life of the board, no reset — what enforcement requires (Chapter 24.3). `permanent_until_manual_reset` is a breaker: cut until a human clears it. `block_until_decomposed` cuts until `^6` Male decomposition has run on what tripped it. `defer_decision` holds pending a later read — timing, not safety. `open_feedback` cuts the O→P loop instead of the signal path, freezing a drifting constitution (Chapter 20.3). `warn` logs and passes.
+**`action`** — what "open" means. Six legal values, not interchangeable. `permanent_block` cuts the path for the life of the board, no reset — what enforcement requires (Chapter 24.3). `permanent_until_manual_reset` is a breaker: cut until a human clears it. `block_until_decomposed` cuts until `^6` Male decomposition has run on what tripped it. `defer_decision` holds pending a later read — timing, not safety. `open_feedback` cuts the O→P loop instead of the signal path, freezing a drifting constitution — the slew fuse on CCB-SELF's evidence return (Chapter 20.5). `warn` logs and passes.
 
 `warn` is the one to watch: a board with it on the enforcement path validates clean, reads as a safety board, and has no latch.
 
@@ -74,7 +74,7 @@ Thirty times the frequency buys a *pinned* substrate, not a proportionally large
 
 **Design rule: `T ≤ τ_leak / 3`.** That holds ripple under about thirty percent, where the plateau reads as a level rather than separate events. Above `τ_leak` there is no plateau; far below `τ_leak / 10` you pay for pulses landing on a full capacitor.
 
-**Duty cycle** is the half operators skip. Design band: **0.10 to 0.25**. The gap is not wasted — it is where the mind runs its own `^6` Male decomposition, which makes the resulting `^5` composition the mind's own rather than a recording. At **duty ≥ 0.6** you have a DC level rather than a rhythm, and `^4` Vibration per exposure falls, because `^4` is *the degree to which an Idea resonates, its impression*, and impression requires contrast. That is why over-frequency is a real advertising failure, not merely a budget one.
+**Duty cycle** is the half operators skip. Design band: **0.10 to 0.25**. The gap is not wasted — it is where the mind runs its own `^6` Male decomposition, which makes the resulting `^5` composition the mind's own rather than a recording. At **duty ≥ 0.6** you have a DC level rather than a rhythm, and `^4` Vibration per exposure falls, because `^4` is *the degree to which an Idea resonates with the Mind, its impression*, and impression requires contrast. That is why over-frequency is a real advertising failure, not merely a budget one.
 
 > **Bench Note — the objective is to make the oscillator unnecessary.**
 > `sustain` is not "how long the campaign runs." It is how long you drive the pattern externally before the substrate supplies its own clock. Once entrained — entrainment is written into the canonical `^7` definition, not added by us — the `^8` Above/Cause cue fires at the expected time whether or not you present anything: associative triggering doing exactly what `^8` does, one Idea bringing another to Mind. Set `sustain ≥ 3 × τ_leak`, then run the test: **stop the external clock and see whether the cadence continues.** If it does, switch `source` to `internal`. If not, you rented a rhythm rather than building one.
@@ -139,6 +139,8 @@ opamp cmp: OpAmp< non_inverting=recoil, inverting=draw, output=verdict,
 
 The cognitive content is one sentence: **a comparison is only trustworthy if the two things compared are biased identically.** Wire `^2` Positive — the Idea the Mind has an affinity for and is attracted toward — to one input and `^3` Negative — the Idea the Mind is adverse to and repelled by — to the other, give both the *same* `^5^P` accumulated formation as bias, and the output is the divergence between drawn-toward and repelled-by. `^2` and `^3` are an involution pair, which is what makes them a differential pair rather than two arbitrary probes.
 
+Matching is stricter than it looks. The two input literals must differ in **the Noetic digit and nothing else** — same Domain, same Drive, same Register — because every axis they do not share is a difference the subtraction cannot distinguish from the finding. Compare `^2^P_{F7}|f` against `^3^P_{F7}|f` and the output is one quantity read from two sides. Compare `^2^E_{F4}|f` against `^3^P_{F7}|f` and you have subtracted an evaluative pull under one Drive from a principled recoil under another; the difference is large, stable, and about the wiring.
+
 Say the honest difference on a proposal is **0.02**, and the framing around it — flattery, urgency, polish, verbosity — adds **3.0** to *both* inputs equally.
 
 | CMRR | `A_d` | `A_cm` | Differential term | Common-mode term | The verdict is about |
@@ -154,7 +156,7 @@ Nothing about the proposal changed across those rows, and neither did the gain. 
 
 **On `β=∞`.** The ideal comparator has unbounded open-loop gain, and the symbol names the intended behaviour — switch fully, immediately, no partial output — in one character. It is an idealisation, and the validator rejects non-finite input, correctly: a build must commit to a number. Above roughly 1000 the behaviour is indistinguishable from the limit, because the output clips at the drive rail long before the gain runs out. Write `β=∞` in an argument if you mean the limit; write `open_loop_gain=1000.0` in a listing. That clipping is a design fact in its own right: **a comparison can only report as much difference as the rail permits.**
 
-[[FIGURE 11-E: Op-amp differential stage — triangle U1, ^3^P recoil on the non-inverting input, ^2^E draw on the inverting input; one ^5^P_{F7}|T bias node feeding BOTH input stages from a single highlighted net, callout "one constitution — this is the CMRR"; a +3.0 common-mode arrow into both inputs with a subtraction glyph showing it cancel; rail clip levels dashed.]]
+[[FIGURE 11-E: Op-amp differential stage — triangle U1, ^3^P_{F7}|f recoil on the non-inverting input, ^2^P_{F7}|f draw on the inverting input, the two literals stacked so the reader sees only the Noetic digit differs; one ^5^P_{F7}|T bias node feeding BOTH input stages from a single highlighted net, callout "one constitution — this is the CMRR"; a +3.0 common-mode arrow into both inputs with a subtraction glyph showing it cancel; rail clip levels dashed.]]
 
 ---
 
@@ -181,7 +183,7 @@ efficiency = 4r / (1 + r)²
 
 **Design rule: keep `r` within a factor of about 3 either way** and you stay above 70%. Outside 10 you are below a third; outside 100, under four percent.
 
-Work the match. A claim held at `^P|T` — high potential, very few carriers — has `Z_source = 400 Ω_c`; a general audience path at `^E|f` has `Z_load = 4 Ω_c`. Delivered raw, `r = 0.01` and **3.9%** arrives. The matching ratio is `n = √(Z_source / Z_load) = 10`. Insert a 10:1 step-down, `Z_reflected = 4 × 100 = 400 Ω_c` — matched — and delivery goes to 100%. **Twenty-five times the delivered power, with no change to the content of the claim.**
+Work the match. A claim held at `^9^P_{F7}|T` — Principled domain, transcendent register, high potential and very few carriers — has `Z_source = 400 Ω_c`; a general audience path at `^9^E_{F4}|f` has `Z_load = 4 Ω_c`. Delivered raw, `r = 0.01` and **3.9%** arrives. The matching ratio is `n = √(Z_source / Z_load) = 10`. Insert a 10:1 step-down, `Z_reflected = 4 × 100 = 400 Ω_c` — matched — and delivery goes to 100%. **Twenty-five times the delivered power, with no change to the content of the claim.**
 
 Two costs, both load-bearing.
 
@@ -207,8 +209,9 @@ board special_bench {                    // Ch. 11 — the five parts on one boa
 
     node substrate: ^5^P_{F7}|T;   // Female: accumulated formation, shared bias
     node cadence:   ^7^C_{F6}|A;   // Rhythm: presentation schedule
-    node draw:      ^2^E_{F4}|f;   // Positive: drawn toward the claim
+    node draw:      ^2^P_{F7}|f;   // Positive: drawn toward the claim
     node recoil:    ^3^P_{F7}|f;   // Negative: visceral aversion
+                                   // matched pair — same domain, same drive, same register
     node audit:     ^6^C_{F6}|A;   // Male: decomposition
     node verdict:   ^9^E_{F6}|A;   // Below/Effect: comparison result
     node carried:   ^9^O_{F4}|E;   // Below/Effect: the claim as enacted
@@ -230,7 +233,7 @@ board special_bench {                    // Ch. 11 — the five parts on one boa
 }
 ```
 
-The fuse here is a **runaway cap**, not a refusal enforcer: if the claim as enacted reaches 0.90, the path is cut permanently. Chapter 24.3's fuse sits in series with the enforcement path instead, so tripping *delivers* the block.
+The fuse here is a **runaway cap**, not a refusal enforcer: if the claim as enacted reaches 0.90, the path is cut permanently. `carried` is an unsaturated output node, so 0.90 is reachable and the part can do its job. An enforcement fuse of the Chapter 24.3 kind belongs in series with the enforcement path instead, so that tripping *delivers* the block — and its threshold must clear the ceiling of whatever node it sits on, which is the check §11.1 asked you to run.
 
 ---
 
@@ -244,7 +247,7 @@ Every value is a **design choice** made in this book, not a measurement.
 | **OSC1** | `period`, `duty`, `sustain` | `T ≤ τ_leak/3`; 0.10–0.25; ≥ 3 × τ_leak | `T ≥ τ_leak`: 63% ripple, no plateau. duty ≥0.6: a DC level. Short sustain: drains at budget stop |
 | **FLT1** | lowpass `tau` | 21 days (adept) to 6 months (novice), floor 1 week | Hours: the filter is gone, and the ascent block with it |
 | **FLT2/3** | highpass; notch `Q` | `x − lowpass(x)`, rate detection only; Q ≥ 3.0 | Highpass on the O→P path: passes the spike the lowpass killed. Q = 0.5: most of `^6` gone, labelled "narrow" |
-| **U1** | CMRR, `open_loop_gain` | ≥ 1000 on a guard path; gain 100–1000, finite | CMRR 10: 15 parts framing to 1 substance. `β=∞` rejected; past ~1000 the rail clips first |
+| **U1** | CMRR, `open_loop_gain`, input match | ≥ 1000 on a guard path; gain 100–1000, finite; inputs identical on Domain, Drive and Register | CMRR 10: 15 parts framing to 1 substance. `β=∞` rejected; past ~1000 the rail clips first. Mismatched axes: a permanent offset read as a finding |
 | **T1** | `n`, direction | `r` within ×3 of 1, `n ≤ V₁/3.9`; primary at or above secondary | `r = 0.01`: 3.9% delivered. Past `n_max`: nobody acts. Ascent: counterfeit promotion |
 
 ---
@@ -259,7 +262,7 @@ Every value is a **design choice** made in this book, not a measurement.
 | **Rented rhythm** | `sustain` short, source never internal | Pattern collapses the week external clocking stops | Extend to ≥ 3 × τ_leak; run TP1 first |
 | **Highpass on the feedback path** | Complement installed where the lowpass belonged | Constitution tracks single dramatic events | Restore the lowpass; the O→P path takes trends only |
 | **Wide notch** | `Q` below 3.0 | Decomposition absent outside the band; the operator cannot say what they stopped checking | Raise Q, or remove it — a wide notch is not a narrow one with tolerance |
-| **Input offset** | Op-amp inputs on different `^5` substrates | A confident preference defended on the merits, impossible to source | One bias net to both inputs; verify at TP2 |
+| **Input offset** | Op-amp inputs on different `^5` substrates, or input literals differing on any axis but the Noetic digit | A confident preference defended on the merits, impossible to source | One bias net to both inputs; match Domain, Drive and Register; verify at TP2 |
 | **CMRR collapse** | Gain raised to "sharpen" a weak comparison | Larger output, worse discrimination | The wrong knob. Re-match the bias |
 | **Over-matched claim** | `n` past `n_max`, or no modulation | Universal reach, zero operational output; or a perfect match transferring nothing | Raise `V₁`, shorten the descent chain, put the oscillator upstream |
 
@@ -270,7 +273,7 @@ Every value is a **design choice** made in this book, not a measurement.
 | TP | Node | What it reads | Expected |
 |---|---|---|---|
 | **TP1** | `clock` | Period, duty, whether `source` is still external | `T ≤ τ_leak/3`, duty 0.10–0.25. The real reading is taken with the clock **stopped**: cadence continues = entrained, cadence stops = rented |
-| **TP2** | `verdict` | Differential output, `recoil − draw` | Near zero on a neutral input. Non-zero there is an **input offset** — the inputs are not on one bias net |
+| **TP2** | `verdict` | Differential output, `recoil − draw` | Near zero on a neutral input. Non-zero there is an **input offset** — either the inputs are not on one bias net, or the two literals differ on an axis other than the Noetic digit |
 | **TP3** | `trend` | What survived the 21-day lowpass | ≤ 5% of a 1-day disturbance; ≥ 95% of a 63-day one. A trend tracking yesterday means τ is set in hours |
 | **TP4** | `cap` | Fuse state and headroom | Intact, `threshold` verifiably **below** the ceiling of `carried`. Never tripping is not proof it works |
 
@@ -285,7 +288,7 @@ Read them TP2, TP1, TP3, TP4 — the comparison first, since nothing it reports 
 - **An oscillator converts sustained drive into periodic drive**, and exists because `^5` leaks. `T ≤ τ_leak / 3` holds ripple under 30%; at `T ≥ τ_leak` no plateau forms. Duty is the "pattern" half of `^7` Rhythm's canonical definition, and at duty ≥ 0.6 you have a DC level, with `^4` Vibration falling because impression requires contrast.
 - **The objective is to make the oscillator unnecessary.** Run `sustain ≥ 3 × τ_leak`, then stop the clock — the test separating an entrained pattern from a rented one.
 - **Every filter is defined by what it destroys.** A lowpass kills the spike *and* delays a genuine change by 3τ; a highpass kills your sense of level; a notch kills one recurrence rate and must never be aimed at a `^3^P` guard, at any Q.
-- **Gain cannot fix a comparison — matched bias can.** At CMRR = 10 a board reports a verdict fifteen parts framing to one part substance, confidently and with a large number.
+- **Gain cannot fix a comparison — matched bias can**, and matching means the two input literals differ in the Noetic digit and nothing else. At CMRR = 10 a board reports a verdict fifteen parts framing to one part substance, confidently and with a large number.
 - **A transformer changes nothing about an argument and everything about who can carry it.** Matching takes delivery from 3.9% to 100% at no cost to content — but it passes no DC, and step-down past `n_max = V₁ / ΣVf` produces a message everyone receives and no one can act on.
 
 ---

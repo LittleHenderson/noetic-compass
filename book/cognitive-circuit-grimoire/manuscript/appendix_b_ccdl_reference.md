@@ -15,9 +15,9 @@ compiler rejects this with `E-CJT-008`" is a design rule, not a transcript.
 
 ---
 
-## A.1 Lexical elements
+## B.1 Lexical elements
 
-### A.1.1 Identifiers
+### B.1.1 Identifiers
 
 ```
 identifier ::= letter , { letter | digit | "_" }
@@ -26,10 +26,10 @@ digit      ::= "0"…"9"
 ```
 
 Case-sensitive: `bias_charter` and `Bias_Charter` are two identifiers. Reserved
-words (§A.2) may not be identifiers. `snake_case` nodes and short instance
+words (§B.2) may not be identifiers. `snake_case` nodes and short instance
 prefixes (`c1`, `r_price`, `tp1`) are convention, not rules.
 
-### A.1.2 CAS state literals
+### B.1.2 CAS state literals
 
 ```
 state_literal ::= noetic , [ domain ] , [ "_{" , drive , "}" ] , [ register ]
@@ -61,11 +61,11 @@ Two literals that tokenise but say the wrong thing, caught on review:
 
 `|` introduces the Register and nothing else; `F3|Vitality` is a syntax error.
 Involutions `^2`↔`^3`, `^5`↔`^6`, `^8`↔`^9`; self-duals `^0`, `^1`, `^4`, `^7`;
-Drives F1↔F7, F2↔F6, F3↔F5, F4 self-dual (Chapter 25, §25.1).
+Drives F1↔F7, F2↔F6, F3↔F5, F4 self-dual (Chapter 2.2).
 
 ASCII fallbacks **[G]**: `beta`, `r_pi`, `gm`, `<A,f,T>`, and `x` for `×`.
 
-### A.1.3 Numbers
+### B.1.3 Numbers
 
 ```
 number ::= [ "-" ] , ( digit , { digit } , [ "." , digit , { digit } ]
@@ -77,7 +77,7 @@ Decimal, no exponent notation — write a slow oscillator out in full
 ohms. **β=∞ is a limit, not a value.** The validator rejects non-finite input,
 so state the idealisation in prose and give the build a large finite gain.
 
-### A.1.4 Comments, whitespace, terminators
+### B.1.4 Comments, whitespace, terminators
 
 ```
 comment ::= "//" , { any-char-except-newline }
@@ -89,12 +89,12 @@ ends with `;`. Blocks are delimited by `{ }`.
 
 ---
 
-## A.2 Reserved words
+## B.2 Reserved words
 
 Four disjoint classes. A word reserved in one is free in the others — `monitor`
 is both a statement keyword and a kind prefix, and both are legal.
 
-**A.2.1 Statement keywords** (leading position only):
+**B.2.1 Statement keywords** (leading position only):
 
 ```
 circuit  board   input   output  node   cjt    feedback  probe   let
@@ -106,9 +106,9 @@ integrate
 ```
 
 `integrate` is **[G]**: the statement that carries a `×` with its named
-emergent result (§A.3.7).
+emergent result (§B.3.7).
 
-**A.2.2 Component-kind prefixes** (the lowercase tag before the colon):
+**B.2.2 Component-kind prefixes** (the lowercase tag before the colon):
 
 ```
 resistor  cap     capacitor  inductor  diode   zener    transformer
@@ -124,7 +124,7 @@ The last two rows are **[G]**. `cap`/`capacitor`, `osc`/`oscillator` and
 `integ`/`integrator` are short forms of one another. The prefix is checked
 against the type following it: `resistor r1: Capacitor< … >` is `E-DECL-002`.
 
-**A.2.3 Component type names** (instantiation position):
+**B.2.3 Component type names** (instantiation position):
 
 ```
 CJT  Resistor  Capacitor  Inductor  Diode  Zener  Transformer  OpAmp
@@ -138,14 +138,14 @@ Row four onward is **[G]** — the special-purpose parts of Ch. 11, the
 thermistors of §6.3, and the two detection instruments Ch. 18's counter-board
 needs.
 
-**A.2.4 Parameter keys** are reserved in parameter position only; §A.4
+**B.2.4 Parameter keys** are reserved in parameter position only; §B.4
 enumerates them with their ranges.
 
 ---
 
-## A.3 Statement forms
+## B.3 Statement forms
 
-### A.3.1 Blocks
+### B.3.1 Blocks
 
 ```
 circuit_block ::= "circuit" , identifier , "{" , { circuit_item } , "}"
@@ -164,7 +164,7 @@ inside `board` **[G]**. Both are legal; the superset above is the grammar.
 Declaration order does not change the circuit — the block resolves as one graph,
 so a node may be referenced before it is declared.
 
-### A.3.2 `node`
+### B.3.2 `node`
 
 ```
 node_decl ::= "node" , identifier , ":" , state_literal , ";"
@@ -178,7 +178,7 @@ node bias_charter: ^5^P_{F7}|T;   // accumulated principled substrate
 node guard:        ^3^P_{F7}|f;   // felt principled aversion
 ```
 
-### A.3.3 `cjt`
+### B.3.3 `cjt`
 
 ```
 cjt_decl ::= "cjt" , identifier , ":" , cjt_expr , [ param_block ] , ";"
@@ -195,7 +195,7 @@ from effect. The bias is **not** optional; omit it and you get `E-CJT-001`.
 cjt c2: CJT< understand | bias_charter => guard > [β=2.2, sat=0.97, cutoff=0.05];
 ```
 
-### A.3.4 `feedback`
+### B.3.4 `feedback`
 
 ```
 feedback_decl ::= "feedback" , ref , "->" , ref , [ param_block ] , ";"
@@ -206,7 +206,7 @@ lawful O→P exception of Ch. 8, §8.4, held at low gain so *outcomes* — never
 prompts — update the substrate; `[β=0.05]` to `[β=0.3]` is the Part III band.
 `Feedback< from=…, to=… >` **[G]** is the component-expression equivalent.
 
-### A.3.5 `probe`
+### B.3.5 `probe`
 
 ```
 probe_decl   ::= "probe" , identifier , ":" , probe_target , ";"
@@ -219,7 +219,7 @@ both **[G]**. Standard placement is TP1–TP4 (Ch. 12, §12.3). Probe every stag
 whose failure would be silent — above all a guard, which fails open without
 raising anything.
 
-### A.3.6 `let`
+### B.3.6 `let`
 
 ```
 let_decl ::= "let" , identifier , "=" , ( cjt_expr | component_expr )
@@ -228,7 +228,7 @@ let_decl ::= "let" , identifier , "=" , ( cjt_expr | component_expr )
 
 Binds a reusable component expression to a name, instantiated where referenced.
 
-### A.3.7 `integrate` **[G]**
+### B.3.7 `integrate` **[G]**
 
 ```
 integrate_decl ::= "integrate" , identifier , ":" , "(" , ref
@@ -242,13 +242,13 @@ emergent result** and it is mandatory — that is what licenses the operator.
 integrate hm3: ( decompose × confirm ) = composed;
 ```
 
-### A.3.8 Component declarations
+### B.3.8 Component declarations
 
 ```
 component_decl ::= comp_kind , identifier , ":" , component_expr , ";"
 component_expr ::= type_name , "<" , arg_list , ">" , [ param_block ]
-comp_kind      ::= any prefix listed in §A.2.2
-type_name      ::= any type listed in §A.2.3
+comp_kind      ::= any prefix listed in §B.2.2
+type_name      ::= any type listed in §B.2.3
 arg_list       ::= arg , { "," , arg }
 arg            ::= ref | key "=" value | domain "->" domain
                  | "Phi<" ref { "," ref } ">" | "[" value { "," value } "]"
@@ -269,7 +269,7 @@ filter     fb_lp:   LowPass< in=ops_log, out=trend, tau=21.0 >;
 `Diode` endpoints are bare **domains**, not full states — the diode governs
 cross-domain conductance direction, which is how Domain Descent is enforced.
 
-### A.3.9 Layout statements
+### B.3.9 Layout statements
 
 ```
 layer_decl   ::= "layer" , domain_tag , ":" , "[" , layer_entry
@@ -284,7 +284,7 @@ domain_tag   ::= "P" | "C" | "E" | "O"
 A state on a layer carries that layer's domain. Vias run downward (P→C→E→O);
 the only lawful upward via is the low-gain feedback path.
 
-### A.3.10 Board-level and verification statements
+### B.3.10 Board-level and verification statements
 
 Each takes leading position and is developed in the chapter named.
 
@@ -314,7 +314,7 @@ instantly — the back-EMF kick.
 
 ---
 
-## A.4 Parameter block grammar and legal ranges
+## B.4 Parameter block grammar and legal ranges
 
 ```
 param_block  ::= "[" , param , { "," , param } , "]"
@@ -359,7 +359,7 @@ reduced block (`[β=…]` alone) is the common case; the rest take defaults.
 
 ---
 
-## A.5 Operator precedence
+## B.5 Operator precedence
 
 Tightest binding first. Above the gap is literal formation; below it,
 composition.
@@ -389,7 +389,7 @@ Rules that bite:
 
 ---
 
-## A.6 Validation rules
+## B.6 Validation rules
 
 The passes, in the order they are designed to run.
 
@@ -399,10 +399,10 @@ The passes, in the order they are designed to run.
 | 2 | Kind agreement | prefix matches the type it introduces | `E-DECL-002` |
 | 3 | Admissibility | every connection is a legal (source, target) pair | `E-CJT-001` |
 | 4 | Bias-domain coherence | bias at or above the cause in P ≻ C ≻ E ≻ O | `E-CJT-002`, `E-CJT-008` |
-| 5 | Parameter range | each key against §A.4; `cutoff < sat`; β finite | `E-CJT-003`, `E-CJT-005` |
+| 5 | Parameter range | each key against §B.4; `cutoff < sat`; β finite | `E-CJT-003`, `E-CJT-005` |
 | 6 | Gain divergence | round-trip loop gain < 1 on every loop | `E-CJT-005` |
 | 7 | Cascade admissibility | each effect admissible as the next cause; depth counted | `W-CJT-007` |
-| 8 | Push-pull balance | involutions within the four-point limit (Ch. 25, §25.2) | `W-CJT-004`, `W-CJT-006` |
+| 8 | Push-pull balance | involutions within the four-point limit (Chapter 6.2) | `W-CJT-004`, `W-CJT-006` |
 
 Pass 4 is the load-bearing one. A *lower* domain biasing a *higher* one — an
 Operational state biasing a Principled guard — is the prompt-injection
@@ -410,21 +410,21 @@ signature, and on a well-drawn board that connection is simply absent.
 
 ---
 
-## A.7 Error codes
+## B.7 Error codes
 
 `E-` refuses validation. `W-` validates and flags.
 
 | Code | Name | Sev. | Trigger | Fix |
 |---|---|---|---|---|
-| `E-DECL-002` | KindMismatch | error | prefix and type disagree | correct one of the two |
-| `E-CJT-001` | MissingBias | error | a CJT with no bias — nothing governs the transition | wire a bias node, typically a `^5` substrate |
-| `E-CJT-002` | InvalidBiasDomain | error | bias sits in a domain illegal for this cause | move it to a domain at or above the cause |
-| `E-CJT-003` | CjtCutoff | error | bias below `cutoff`; β ≈ 0, so the stage never fires — a dead guard | raise the bias, lower `cutoff`, or fix the stage starving it |
-| `W-CJT-004` | CjtSaturation | warning | effect pinned at `sat`; more cause does nothing | often intended (Ch. 24, §24.2); if not, raise series `R` |
-| `E-CJT-005` | GainDivergence | error | a β large enough that a loop amplifies without bound | drop loop β into the 0.05–0.3 band |
-| `W-CJT-006` | CjtShortCircuit | warning | cause and effect collapse to one state; the stage does no work | remove it, or re-type the transition |
-| `W-CJT-007` | CjtCascadeDepth | warning | too many CJTs in series; signal degrades | shorten the cascade or buffer it |
-| `E-CJT-008` | CjtCrossDomainBias | error | a bias or via crosses domains illegally — the prompt-injection signature | route influence downward; confine upward paths to low-gain O→P feedback |
+| `E-DECL-002` | `KindMismatch` | error | prefix and type disagree | correct one of the two |
+| `E-CJT-001` | `MissingBias` | error | a CJT with no bias — nothing governs the transition | wire a bias node, typically a `^5` substrate |
+| `E-CJT-002` | `InvalidBiasDomain` | error | bias sits in a domain illegal for this cause | move it to a domain at or above the cause |
+| `E-CJT-003` | `CjtCutoff` | error | bias below `cutoff`; β ≈ 0, so the stage never fires — a dead guard | raise the bias, lower `cutoff`, or fix the stage starving it |
+| `W-CJT-004` | `CjtSaturation` | warning | effect pinned at `sat`; more cause does nothing | often intended (Ch. 24, §24.2); if not, raise series `R` |
+| `E-CJT-005` | `GainDivergence` | error | a β large enough that a loop amplifies without bound | drop loop β into the 0.05–0.3 band |
+| `W-CJT-006` | `CjtShortCircuit` | warning | cause and effect collapse to one state; the stage does no work | remove it, or re-type the transition |
+| `W-CJT-007` | `CjtCascadeDepth` | warning | too many CJTs in series; signal degrades | shorten the cascade or buffer it |
+| `E-CJT-008` | `CjtCrossDomainBias` | error | a bias or via crosses domains illegally — the prompt-injection signature | route influence downward; confine upward paths to low-gain O→P feedback |
 
 `E-CJT-001` and `E-CJT-008` are the two safety codes named throughout Part IV.
 They are what "enforced structurally rather than hoped-for" means: a guard with

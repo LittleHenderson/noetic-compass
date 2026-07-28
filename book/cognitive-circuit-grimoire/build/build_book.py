@@ -96,7 +96,7 @@ def strip_h1_prefix(text: str, kind: str) -> str:
     lines = text.split("\n")
     out, seen_banner = [], False
     for line in lines:
-        m = re.match(r"^#\s+(CHAPTER|APPENDIX)\s+[0-9A-L]+\s*$", line.strip(), re.I)
+        m = re.match(r"^#\s+(CHAPTER|APPENDIX)\s+[0-9A-M]+\s*$", line.strip(), re.I)
         if m and not seen_banner:
             seen_banner = True
             continue
@@ -112,18 +112,48 @@ def missing(paths: list[Path]) -> list[str]:
     return [p.name for p in paths if not p.exists()]
 
 
+def read_normalized(path: Path, kind: str) -> str:
+    """Read one chapter/appendix and require one printable top-level title."""
+    raw = path.read_text(encoding="utf-8")
+    bannered = bool(re.search(
+        r"(?m)^#\s+(?:CHAPTER|APPENDIX)\s+[0-9A-M]+\s*$",
+        raw,
+        re.I,
+    ))
+    text = strip_h1_prefix(raw, kind).strip()
+    # Ordinary bannered sources use H3 for their n.1/A.1 sections because the
+    # source keeps both a '# CHAPTER n' banner and an H2 title. Once the banner
+    # is removed and the title becomes H1, promote H3+ by one level so pandoc
+    # emits real sections. Appendix H deliberately retains later H2 chapter
+    # groups and H3 answers; the presence of those H2s preserves that hierarchy.
+    if bannered and not re.search(r"(?m)^##\s+\S", text):
+        text = re.sub(
+            r"(?m)^(#{3,})(?=\s)",
+            lambda match: match.group(1)[1:],
+            text,
+        )
+    headings = re.findall(r"(?m)^#\s+\S.*$", text)
+    if len(headings) != 1:
+        raise ValueError(
+            f"{path.name}: expected exactly one normalized H1, found "
+            f"{len(headings)} ({headings})"
+        )
+    return text
+
+
 def build_front_prose() -> None:
     parts = []
     for fname in FRONT_PROSE:
         p = MS / fname
         if not p.exists():
-            print(f"  front matter not yet written, skipping: {fname}")
-            continue
+            raise FileNotFoundError(
+                f"required front-matter source is missing: {p}"
+            )
         parts.append(p.read_text(encoding="utf-8").strip())
     (BUILD / "front_prose.md").write_text("\n\n".join(parts) + "\n", encoding="utf-8")
 
 
-def build_main_body() -> None:
+def build_main_body() -> list[str]:
     out: list[str] = []
     absent: list[str] = []
 
@@ -138,7 +168,7 @@ def build_main_body() -> None:
             if not p.exists():
                 absent.append(fname)
                 continue
-            out.append(strip_h1_prefix(p.read_text(encoding="utf-8"), "chapter").strip())
+            out.append(read_normalized(p, "chapter"))
             out.append("\n")
 
     out.append(raw_latex(
@@ -149,7 +179,7 @@ def build_main_body() -> None:
         if not p.exists():
             absent.append(fname)
             continue
-        out.append(strip_h1_prefix(p.read_text(encoding="utf-8"), "appendix").strip())
+        out.append(read_normalized(p, "appendix"))
         out.append("\n")
 
     author = MS / "about_the_author.md"
@@ -174,14 +204,15 @@ def build_main_body() -> None:
         print(f"  NOT YET WRITTEN ({len(absent)}):")
         for a in absent:
             print(f"     - {a}")
+    return absent
 
 
 def main() -> int:
     build_front_prose()
-    build_main_body()
+    absent = build_main_body()
     body = (BUILD / "main_body.md").read_text(encoding="utf-8")
     print(f"  main_body.md: {len(body.split()):,} words")
-    return 0
+    return 1 if absent else 0
 
 
 if __name__ == "__main__":

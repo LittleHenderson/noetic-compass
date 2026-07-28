@@ -1,0 +1,67 @@
+% Figure 7-A -- cognitive capacitor, leakage path, and polarised variant.
+\begin{tikzpicture}[
+  x=1cm,y=1cm,font=\sffamily\footnotesize,
+  wire/.style={draw=black,line width=0.7pt},
+  plate/.style={draw=casCedge,line width=1.3pt},
+  tiny/.style={font=\sffamily\scriptsize,align=center}
+]
+
+\node[font=\sffamily\footnotesize\bfseries,anchor=west]
+  at (0.15,0.45) {COGNITIVE CAPACITOR C1};
+
+% main capacitor, plates horizontal so their roles read naturally
+\draw[wire] (4.60,0.05) -- (4.60,-0.75);
+\draw[plate] (2.60,-0.75) -- (6.60,-0.75);
+\draw[plate] (2.60,-1.65) -- (6.60,-1.65);
+\draw[wire] (4.60,-1.65) -- (4.60,-2.45);
+\node[casterm,text width=38mm] (feed) at (4.60,0.35)
+  {\textasciicircum 7 Rhythm feed\\charge in};
+\node[casterm,text width=44mm] (drain) at (4.60,-2.75)
+  {\textasciicircum 6 Male decomposition\\discharge path};
+
+% dielectric hatch, drawn explicitly (no pattern library required)
+\foreach \x in {2.85,3.25,...,6.25}{
+  \draw[draw=casNedge!65,line width=0.35pt]
+    (\x,-1.58) -- (\x+0.28,-0.82);
+}
+\node[tiny,fill=white,inner sep=1.5pt] at (4.60,-1.20)
+  {dielectric separation --- $V_{\mathrm{BR}}$};
+\node[font=\sffamily\scriptsize\bfseries] at (1.90,-1.20) {C1};
+
+% leakage resistor in parallel
+\draw[wire,dashed] (6.60,-0.75) -- (7.55,-0.75);
+\node[draw=casNedge,fill=casNfill,dashed,line width=0.65pt,
+      minimum width=11mm,minimum height=6mm] (rl) at (7.55,-1.20)
+  {$R_{\mathrm{leak}}$};
+\draw[wire,dashed] (7.55,-1.50) -- (7.55,-1.65) -- (6.60,-1.65);
+\node[tiny,anchor=west] at (8.25,-1.20)
+  {$\tau_{\mathrm{leak}}=R_{\mathrm{leak}}C$};
+
+% annotations
+\node[nblock,text width=30mm,font=\sffamily\scriptsize,anchor=west]
+  at (0.15,-0.55)
+  {stored composition\\
+   $Q_c=C\,V$\\
+   $C$ in cognitive farads $F_c$};
+
+\draw[draw=casNedge,dash pattern=on 1.5pt off 1.5pt,line width=0.4pt]
+  (0.15,-3.35) -- (10.25,-3.35);
+
+% polarised variant
+\node[font=\sffamily\scriptsize\bfseries,anchor=west]
+  at (0.20,-3.72) {POLARISED VARIANT};
+\draw[wire] (1.60,-4.20) -- (2.55,-4.20);
+\draw[plate] (2.55,-3.78) -- (2.55,-4.62);
+\draw[plate] (3.20,-3.78) -- (3.20,-4.62);
+\draw[wire] (3.20,-4.20) -- (4.15,-4.20);
+\node[font=\sffamily\large\bfseries,text=casEedge] at (2.20,-3.78) {$+$};
+\node[tiny] at (2.88,-5.00) {polarity is part of the specification};
+
+\node[nblock,text width=50mm,align=left,font=\sffamily\scriptsize,
+      anchor=west] at (4.70,-4.30)
+  {\textbf{declared quantities}\\
+   $C$ in $F_c$ \quad $V$ in $V_c$\\
+   $\tau=RC$ in the declared time base\\
+   reverse the plates and the stored relation is not the same board};
+
+\end{tikzpicture}

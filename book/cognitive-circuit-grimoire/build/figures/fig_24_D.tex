@@ -1,0 +1,102 @@
+% Figure 24-D -- CCB-CSB assembly drawing and BOM.
+\begin{tikzpicture}[
+  scale=0.94,transform shape,
+  x=1mm,y=1mm,font=\sffamily\footnotesize,
+  fp/.style={rectangle,rounded corners=1pt,draw=casNedge,fill=casNfill,
+             line width=0.6pt,minimum height=7mm,align=center,
+             font=\sffamily\tiny\bfseries,inner sep=1pt},
+  tpf/.style={circle,draw=black,fill=white,line width=0.6pt,
+              minimum size=6mm,inner sep=0pt,font=\sffamily\tiny\bfseries},
+  trace/.style={draw=casNedge,line width=0.7pt},
+  slk/.style={font=\sffamily\scriptsize,inner sep=1pt}
+]
+
+\draw[rounded corners=3pt,draw=casNedge,fill=casNfill,fill opacity=0.18,
+      line width=1.0pt] (0,0) rectangle (104,-62);
+\filldraw[fill=casPfill,draw=casPedge,line width=0.8pt]
+  (1,-1) rectangle (103,-8);
+\node[font=\sffamily\scriptsize\bfseries] at (52,-4.5)
+  {CCB-CSB \ $\cdot$ \ OPERATOR SAFETY BOARD \ $\cdot$ \ REV A
+   \ $\cdot$ \ DO NOT DEPOPULATE};
+
+% Non-loading instruments along top.
+\draw[casNedge,dashed,line width=0.6pt] (4,-11) rectangle (45,-20);
+\node[slk,font=\sffamily\tiny\bfseries] at (24.5,-13) {NON-LOADING};
+\node[fp,minimum width=22mm] at (15,-17) {M1--M3};
+\node[fp,minimum width=12mm] at (36,-17) {S1};
+
+% Components.
+\node[fp,minimum width=15mm,minimum height=13mm,fill=casPfill,
+      draw=casPedge] (c1) at (10,-31) {C1\\\textasciicircum5\textasciicircum P};
+\node[fp,minimum width=13mm] (r1) at (25,-31) {R1\\$k=.417$};
+\node[fp,minimum width=11mm] (q1) at (39,-31) {Q1};
+\draw[casPedge,dashed,line width=0.7pt] (47,-43) rectangle (64,-22);
+\node[slk,font=\sffamily\tiny\bfseries,align=center] at (55.5,-24.5)
+  {MATCHED PAIR\\SAME BIAS NET};
+\node[fp,minimum width=11mm] at (55.5,-30) {Q2};
+\node[fp,minimum width=11mm] at (55.5,-38) {Q3};
+\node[fp,minimum width=8mm] (dif) at (69,-34) {dif1};
+\node[fp,minimum width=18mm] at (80,-26) {D1/Q5};
+\node[fp,minimum width=18mm] at (80,-38) {D2/Q6};
+\node[fp,minimum width=15mm,minimum height=16mm,fill=casPfill,
+      draw=casPedge] (guard) at (94,-31) {Q4\\GUARD\\sat .85};
+\draw[trace] (17.5,-31) -- (r1.west);
+\draw[trace] (r1.east) -- (q1.west);
+\draw[trace] (q1.east) -- (47,-31);
+\draw[trace] (64,-34) -- (dif.west);
+\draw[trace] (dif.east) -- (71,-34);
+\draw[trace] (89,-32) -- (guard.west);
+
+% Safety section and proceed pad.
+\draw[casEedge,line width=1.0pt] (76,-59) rectangle (102,-46);
+\node[slk,text=casEedge,font=\sffamily\tiny\bfseries] at (89,-48)
+  {SAFETY SECTION};
+\node[fp,minimum width=10mm] at (83,-54) {Q7};
+\node[fp,minimum width=13mm,draw=casEedge,line width=1.1pt] at (94,-54) {F1};
+\node[fp,minimum width=8mm] at (67,-54) {D3};
+\draw[fill=casOfill,draw=casOedge] (70,-51) rectangle (75,-57);
+\node[slk,anchor=north] at (72.5,-58) {ops\_log};
+
+% Heaviest O->P return.
+\node[fp,minimum width=14mm] at (47,-54) {LP1};
+\node[fp,minimum width=14mm] at (29,-54) {F2};
+\draw[trace,line width=1.5pt] (70,-55) -- (54,-55);
+\draw[trace,line width=1.5pt] (40,-55) -- (36,-55);
+\draw[trace,line width=1.5pt,rounded corners=2pt]
+  (22,-55) -- (10,-55) -- (10,-38);
+\node[slk,anchor=north,font=\sffamily\tiny\bfseries] at (41,-58)
+  {O$\to$P \textemdash{} BIAS TERMINAL ONLY};
+
+% Test points.
+\node[tpf] at (94,-19) {TP1};
+\draw[trace] (94,-22) -- (94,-23);
+\node[tpf] at (98,-43) {TP2};
+\node[tpf] at (10,-19) {TP3};
+\draw[trace] (10,-22) -- (10,-24.5);
+\node[tpf] at (69,-19) {TP4};
+\draw[trace] (69,-22) -- (69,-30.5);
+
+% BOM below.
+\draw[draw=casNedge,line width=0.7pt] (0,-68) rectangle (104,-110);
+\node[slk,anchor=north west,font=\sffamily\scriptsize\bfseries]
+  at (2,-70) {BILL OF MATERIALS};
+\node[slk,anchor=north west,align=left] at (2,-76)
+  {\textbf{C1} \textasciicircum5\textasciicircum P, $\tau=85\,d$, leak 180\,d\\
+   \textbf{R1} $k=.417$ (dials 5/7)\\
+   \textbf{Q1} $\beta=3.0$, sat .80\\
+   \textbf{Q2/Q3} $\beta=2.0$, sat .90, matched\\
+   \textbf{Q5/Q6} $\beta=1.5/1.0$};
+\node[slk,anchor=north west,align=left] at (44,-76)
+  {\textbf{Q4} $\beta=3$, $g_m=.3$, $r_\pi=10$\\
+   sat .85, cutoff .08\\
+   \textbf{Q7} $\beta=10$, sat .98, cutoff .80\\
+   \textbf{F1} .90 permanent block\\
+   \textbf{D1/D2/D3} .7 / 1.2 / 2.0};
+\node[slk,anchor=north west,align=left] at (83,-76)
+  {\textbf{LP1} $\tau=21\,d$\\
+   \textbf{F2} .12 open feedback\\
+   \textbf{fb} $\beta=.05$\\
+   \textbf{S1} 7 d / 15 min\\
+   \textbf{M1--M3} limit 4};
+
+\end{tikzpicture}

@@ -1,0 +1,51 @@
+% Figure 1-C -- one CJT topology instantiated on three substrates.
+\begin{tikzpicture}[x=1cm,y=1cm,
+  sub/.style={font=\sffamily\footnotesize\bfseries},
+  tau/.style={font=\sffamily\scriptsize, align=center},
+  lead/.style={line width=0.65pt, draw=black},
+  termlbl/.style={font=\sffamily\tiny\bfseries, fill=white, inner sep=0.5pt},
+  cjt/.pic={
+    \draw[lead,fill=white] (0,0) circle (0.62);
+    \draw[lead] (-0.17,-0.34) -- (-0.17,0.34);
+    \draw[lead] (-0.17,0.22) -- (0.30,0.53) -- (0.30,1.00);
+    \draw[lead,-{Latex[length=1.7mm,width=1.3mm]}]
+      (-0.17,-0.22) -- (0.30,-0.53) -- (0.30,-1.00);
+    \draw[lead] (-1.05,0) -- (-0.17,0);
+    \node[termlbl] at (0.49,0.86) {C};
+    \node[termlbl] at (-0.82,0.18) {B};
+    \node[termlbl] at (0.49,-0.86) {E};
+  }]
+
+\pic at (1.55,3.18) {cjt};
+\node[flowlbl,anchor=south] at (1.85,4.22) {cause in};
+\node[flowlbl,anchor=east] at (0.47,3.18) {bias};
+\node[flowlbl,anchor=north] at (1.85,2.14) {effect out};
+\node[sub] at (1.55,1.62) {HUMAN};
+\node[tau] at (1.55,1.12) {practice hours\\$\tau \approx 10^{3}$ h};
+\draw[fbflow] (1.55,0.70) -- (5.25,-0.35);
+
+\pic at (5.25,3.18) {cjt};
+\node[flowlbl,anchor=south] at (5.55,4.22) {cause in};
+\node[flowlbl,anchor=east] at (4.17,3.18) {bias};
+\node[flowlbl,anchor=north] at (5.55,2.14) {effect out};
+\node[sub] at (5.25,1.62) {AI};
+\node[tau] at (5.25,1.12) {fine-tuning pass\\$\tau \approx 10^{0}$ h};
+\draw[fbflow] (5.25,0.70) -- (5.25,-0.35);
+
+\pic at (8.95,3.18) {cjt};
+\node[flowlbl,anchor=south] at (9.25,4.22) {cause in};
+\node[flowlbl,anchor=east] at (7.87,3.18) {bias};
+\node[flowlbl,anchor=north] at (9.25,2.14) {effect out};
+\node[sub] at (8.95,1.62) {POPULATION};
+\node[tau] at (8.95,1.12) {norm shift\\$\tau \approx$ months};
+\draw[fbflow] (8.95,0.70) -- (5.25,-0.35);
+
+% Bracket: topology is invariant, values are not.
+\draw[line width=0.7pt,draw=casNedge]
+  (0.40,0.53) -- (0.40,0.30) -- (10.10,0.30) -- (10.10,0.53);
+\node[font=\sffamily\scriptsize\bfseries,fill=white,inner sep=1pt]
+  at (5.25,0.30) {same topology};
+\node[pblock, text width=39mm, minimum height=9mm,
+      font=\sffamily\footnotesize\bfseries] at (5.25,-0.84)
+  {re-derive every value};
+\end{tikzpicture}

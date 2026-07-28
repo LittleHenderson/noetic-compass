@@ -1,0 +1,74 @@
+% Figure 7-E -- parallel capacitor bank versus unequal series chain.
+\begin{tikzpicture}[
+  scale=0.79,transform shape,
+  x=1cm,y=1cm,font=\sffamily\footnotesize,
+  wire/.style={draw=black,line width=0.6pt},
+  cplate/.style={draw=casCedge,line width=0.8pt},
+  tiny/.style={font=\sffamily\scriptsize,align=center}
+]
+
+\node[groupframe,minimum width=51mm,minimum height=68mm] at (2.60,-3.05) {};
+\node[groupframe,minimum width=48mm,minimum height=68mm] at (8.10,-3.05) {};
+\node[font=\sffamily\footnotesize\bfseries] at (2.60,0.12)
+  {PARALLEL --- THE BANK};
+\node[font=\sffamily\footnotesize\bfseries] at (8.10,0.12)
+  {SERIES --- THE CHAIN};
+
+% parallel rails
+\draw[wire] (0.42,-0.68) -- (4.78,-0.68);
+\draw[wire] (0.42,-3.38) -- (4.78,-3.38);
+\foreach \i in {0,...,11}{
+  \pgfmathsetmacro{\xx}{0.62+0.36*\i}
+  \draw[wire] (\xx,-0.68) -- (\xx,-1.18);
+  \draw[draw=casNedge,line width=0.45pt,fill=casNfill]
+    (\xx-0.10,-1.18) rectangle (\xx+0.10,-1.58);
+  \draw[wire] (\xx,-1.58) -- (\xx,-2.02);
+  \draw[cplate] (\xx-0.14,-2.02) -- (\xx+0.14,-2.02);
+  \draw[cplate] (\xx-0.14,-2.22) -- (\xx+0.14,-2.22);
+  \draw[wire] (\xx,-2.22) -- (\xx,-3.38);
+}
+\node[tiny,anchor=west] at (0.52,-3.76)
+  {$12$ cells,\ each with a series ballast resistor};
+\node[nblock,text width=41mm,font=\sffamily\scriptsize] at (2.60,-4.55)
+  {$C_{\mathrm{total}}=\sum C=0.60\,F_c$\\
+   $\tau=RC=24$ months\\
+   $3\tau=6$ years};
+\draw[fbflow] (1.02,-5.40) -- (0.98,-2.15);
+\node[tiny,text width=38mm,anchor=north west,align=left]
+  at (0.45,-5.50)
+  {shorted cell drags the rail ---\\isolation is why it does not};
+
+% series chain
+\node[casterm] (rail) at (8.10,-0.62) {$8.0\,V_c$ rail};
+\draw[wire] (rail.south) -- (8.10,-1.08);
+\foreach \yy/\val/\drop/\name in {
+  -1.28/4.0/1.14/C1,
+  -2.52/1.0/4.57/C2,
+  -3.76/2.0/2.29/C3
+}{
+  \draw[cplate] (7.72,\yy) -- (8.48,\yy);
+  \draw[cplate] (7.72,{\yy-0.24}) -- (8.48,{\yy-0.24});
+  \node[tiny,anchor=east] at (7.55,{\yy-0.12})
+    {\name\quad \val\ $F_c$};
+  \node[tiny,anchor=west] at (8.65,{\yy-0.12})
+    {$\drop\,V_c$};
+  \draw[wire] (8.10,{\yy-0.24}) -- (8.10,{\yy-1.00});
+  \draw[draw=casNedge,dashed,line width=0.5pt,rounded corners=1pt]
+    (9.45,{\yy+0.10}) rectangle (9.88,{\yy-0.46});
+  \draw[wire,dashed] (8.48,\yy) -- (9.45,\yy);
+  \draw[wire,dashed] (8.48,{\yy-0.24}) -- (9.45,{\yy-0.24});
+}
+\draw[wire] (8.10,-5.00) -- (8.10,-5.32);
+\draw[wire] (7.75,-5.32) -- (8.45,-5.32);
+\draw[wire] (7.87,-5.45) -- (8.33,-5.45);
+\draw[wire] (7.98,-5.58) -- (8.22,-5.58);
+\draw[draw=casEedge,line width=1.0pt,rounded corners=2pt]
+  (7.32,-2.32) rectangle (10.08,-3.00);
+\node[tiny,text=casEedge,anchor=west] at (6.20,-2.75)
+  {\textbf{smallest cell:}\\57\% of stress};
+\node[tiny,anchor=west] at (8.58,-4.95)
+  {all $V_{\mathrm{BR}}=5.0$};
+\node[tiny,anchor=west,text=casNedge] at (8.55,-5.48)
+  {dashed balancing resistors --- the fix};
+
+\end{tikzpicture}

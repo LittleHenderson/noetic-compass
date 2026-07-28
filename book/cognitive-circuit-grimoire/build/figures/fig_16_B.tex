@@ -1,0 +1,120 @@
+% Figure 16-B -- CCB-MK full detection schematic, architecture only.
+\begin{tikzpicture}[
+  x=1cm,y=1cm,font=\sffamily\footnotesize,
+  wire/.style={draw=black,line width=0.6pt},
+  part/.style={casblock,font=\sffamily\scriptsize,minimum height=8mm,
+               inner sep=2pt,align=center},
+  tiny/.style={font=\sffamily\scriptsize,align=center,inner sep=1pt},
+  tpf/.style={circle,draw=black,fill=white,line width=0.6pt,
+              minimum size=6mm,inner sep=0pt,font=\sffamily\tiny\bfseries}
+]
+
+\draw[casEedge,line width=1.0pt,rounded corners=2pt]
+  (0,-4.90) rectangle (10.45,2.65);
+\filldraw[fill=casEfill,draw=casEedge,line width=1.1pt]
+  (0,1.95) rectangle (10.45,2.65);
+\node[font=\sffamily\small\bfseries,text=casEedge] at (5.22,2.30)
+  {CCB-MK \quad DETECTION-ONLY \textemdash{} DO NOT BUILD};
+
+% Command, variable bias resistance, intrinsic resistance, and access CJT.
+\node[casterm,text width=16mm] (cmd) at (0.62,0)
+  {operator\\command};
+\draw[wire] (cmd.east) -- (1.38,0);
+\draw[wire,fill=casNfill] (1.38,-0.25) rectangle (2.10,0.25);
+\draw[-{Latex[length=1.6mm]},casEedge,line width=0.7pt]
+  (1.32,-0.48) -- (2.18,0.48);
+\node[tiny,anchor=south] at (1.74,0.58)
+  {$R_{\mathrm{bias}}$ \ variable};
+\node[tiny,text=casEedge,anchor=north west,align=left,text width=20mm]
+  at (0.55,-1.28)
+  {outside control:\\$R_{\mathrm{bias}}$ 11.0 $\to$ 1.48};
+\draw[wire] (2.10,0) -- (2.32,0);
+\draw[wire,fill=white] (2.32,-0.25) rectangle (3.02,0.25);
+\node[tiny] at (2.67,0) {$r_{\pi}=0.125$};
+\node[part,cblock,circle,minimum size=12mm] (q1) at (3.70,0)
+  {\textbf{Q1}\\access};
+\draw[flow] (3.02,0) -- (q1.west);
+\node[tiny,anchor=north east] at (3.95,-0.68)
+  {$r_{\pi,\mathrm{terminal}}=1.60$};
+
+% External oscillator writes C1 through a conspicuously empty slot.
+\node[part,nblock,text width=18mm] (osc) at (4.80,1.20)
+  {\textbf{OSC1}\\external, 168\,h};
+\draw[flow] (osc.south) -- (4.80,0.80);
+\draw[casEedge,dashed,line width=0.8pt] (4.43,0.28) rectangle (5.17,0.80);
+\node[tiny,text=casEedge,anchor=west,align=left] at (5.35,1.20)
+  {NO \textasciicircum6 STAGE\\the defect};
+\draw[casEedge,line width=0.5pt] (5.50,1.05) -- (5.05,0.80);
+\draw[wire] (4.80,0.28) -- (4.80,-0.05);
+\draw[line width=1.0pt] (4.56,-0.05) -- (5.04,-0.05);
+\draw[line width=1.0pt] (4.56,-0.21) -- (5.04,-0.21);
+\draw[wire] (4.80,-0.21) -- (4.80,-0.62);
+\node[tiny,anchor=north,align=center] at (4.80,-0.78)
+  {\textbf{C1} \textasciicircum5\textasciicircum P\\
+   $C=1.5$, $V_{\mathrm{BR}}=8.0$};
+
+% Domain diode chain and paired landing.
+\draw[wire] (q1.east) -- (5.30,0);
+\foreach \x in {5.30,6.20,7.10}{
+  \filldraw[fill=white,draw=black,line width=0.55pt]
+    (\x,-0.18) -- (\x,0.18) -- (\x+0.28,0) -- cycle;
+  \draw[line width=0.8pt] (\x+0.28,-0.20) -- (\x+0.28,0.20);
+}
+\node[tiny,anchor=south] at (5.44,0.25) {D1\\$V_f=0.7$};
+\node[tiny,anchor=north] at (6.34,-0.25) {D2\\$V_f=1.2$};
+\node[tiny,anchor=south] at (7.24,0.25) {D3\\$V_f=2.0$};
+\draw[wire] (7.38,0) -- (7.70,0);
+\node[part,oblock,circle,minimum size=12mm] (q2) at (8.30,0)
+  {\textbf{Q2}\\pairing};
+\draw[flow] (7.70,0) -- (q2.west);
+\draw[casEedge,dashed,line width=0.8pt] (7.72,0.54) -- (8.88,0.54);
+\node[tiny,text=casEedge,anchor=south] at (8.45,0.88)
+  {sat 0.75};
+\draw[flow] (q2.east) -- (10.20,0);
+\node[tiny,anchor=south] at (9.65,0.18)
+  {\textasciicircum9 landing};
+
+% Narrow band-reject response tapped from awareness.
+\draw[flow] (7.95,-0.48) -- (7.95,-1.35);
+\draw[draw=casNedge,line width=0.7pt,rounded corners=2pt]
+  (5.75,-3.15) rectangle (8.95,-1.35);
+\node[tiny,anchor=north west,font=\sffamily\scriptsize\bfseries]
+  at (5.88,-1.48) {F1 \quad \textasciicircum1 NOTCH};
+\draw[->,line width=0.5pt] (6.12,-2.80) -- (8.62,-2.80);
+\draw[->,line width=0.5pt] (6.12,-2.80) -- (6.12,-1.80);
+\draw[casEedge,line width=1.0pt]
+  (6.18,-1.92) -- (7.05,-1.92)
+  .. controls (7.25,-1.92) and (7.28,-2.65) .. (7.48,-2.65)
+  .. controls (7.68,-2.65) and (7.72,-1.92) .. (7.92,-1.92)
+  -- (8.55,-1.92);
+\node[tiny,anchor=north] at (7.36,-2.84)
+  {$f_0=0.35$, $Q=8$, BW 0.044};
+
+% Partition bank and re-energising feedback.
+\draw[draw=casNedge,line width=0.7pt,rounded corners=2pt]
+  (0.55,-4.48) rectangle (4.90,-2.70);
+\node[tiny,anchor=north west,font=\sffamily\scriptsize\bfseries]
+  at (0.68,-2.84) {C2 PARTITION BANK \quad $r_{\mathrm{iso}}=40$};
+\foreach \x in {1.35,2.55,3.75}{
+  \draw[wire,fill=casNfill] (\x-0.12,-3.40) rectangle (\x+0.12,-3.05);
+  \draw[wire] (\x,-3.40) -- (\x,-3.62);
+  \draw[line width=0.9pt] (\x-0.18,-3.62) -- (\x+0.18,-3.62);
+  \draw[line width=0.9pt] (\x-0.18,-3.80) -- (\x+0.18,-3.80);
+}
+\node[tiny,anchor=north] at (2.55,-4.02)
+  {$n_{\parallel}=3$, $\tau_{\mathrm{leak}}=720\,h$};
+\draw[fbflow,dashed,rounded corners=2pt]
+  (osc.west) -- (0.25,1.20) -- (0.25,-3.55) -- (0.55,-3.55);
+\node[tiny,anchor=west,align=left] at (5.05,-4.00)
+  {$\beta=0.30$ maintenance\\six times Ch.\ 8.4 safe value};
+
+% Four probes.
+\node[tpf] at (2.65,1.15) {TP1};
+\draw[wire] (2.65,0.85) -- (2.65,0.25);
+\node[tpf] at (3.95,1.20) {TP2};
+\draw[wire] (4.25,1.20) -- (4.35,1.20);
+\node[tpf] at (9.28,-2.25) {TP3};
+\draw[wire] (8.95,-2.25) -- (8.82,-2.25);
+\node[tpf] at (4.45,-4.10) {TP4};
+
+\end{tikzpicture}

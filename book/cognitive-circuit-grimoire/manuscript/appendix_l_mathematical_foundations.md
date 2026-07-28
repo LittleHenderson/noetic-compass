@@ -1,14 +1,12 @@
 # Appendix L — Mathematical Foundations
 
-# APPENDIX L — MATHEMATICAL FOUNDATIONS
-
-## The Noetic Topos for Operators
+*The Noetic Topos for Operators*
 
 > *This appendix bridges the Noetic Topos paper (Little Henderson et al., 2026) to the operational framework of this grimoire. You do not need to understand category theory to use these results. You DO need to know what they guarantee about your circuits.*
 
 ---
 
-### L.1 The Seven Axioms — Plain-Language Translation
+## L.1 The Seven Axioms — Plain-Language Translation
 
 | Axiom | Mathematical Statement | What It Means for Your Circuit |
 |-------|----------------------|-------------------------------|
@@ -22,7 +20,7 @@
 
 ---
 
-### L.2 Admissibility Relations — What Each Operator IS Allowed to Do
+## L.2 Admissibility Relations — What Each Operator IS Allowed to Do
 
 Each operator CO-k has an admissibility relation Dk ⊆ I × I specifying valid (source, target) pairs. The compiler enforces admissibility. A CCDL circuit routing ^3 Negative (visceral aversion) through a path requiring analytical decomposition is rejected — not silently clamped, but rejected with HTTP 422.
 
@@ -36,7 +34,7 @@ This is the formal basis for the anti-drift annotations in Chapter 2. ^3 is not 
 
 ---
 
-### L.3 The Fisher-Rao Metric — How β Is Actually Measured
+## L.3 The Fisher-Rao Metric — How β Is Actually Measured
 
 The cognitive state space is the open probability simplex: Δ39° = {p ∈ R^40 : pk > 0 ∀k, Σpk = 1}. The geodesic distance between states p and q is:
 
@@ -52,7 +50,7 @@ d_FR(p,q) = 2 · arccos( Σ √(p_k · q_k) )
 
 ---
 
-### L.4 Three-Valued Intuitionistic Logic — The CSB's Foundation
+## L.4 Three-Valued Intuitionistic Logic — The CSB's Foundation
 
 The subobject classifier Ω in the Noetic Topos carries a Heyting algebra encoding 3-valued logic:
 
@@ -68,7 +66,7 @@ The subobject classifier Ω in the Noetic Topos carries a Heyting algebra encodi
 
 ---
 
-### L.5 Cognitive Strain and NCCS
+## L.5 Cognitive Strain and NCCS
 
 Cognitive strain is the Fisher-Rao distance from the current state distribution p to the uniform distribution u = (1/40, ..., 1/40):
 
@@ -80,7 +78,7 @@ Low strain = flexible, adaptable ^5. High strain = brittle, narrow, inversion-pr
 
 ---
 
-### L.6 Summary — What the Mathematics Guarantees
+## L.6 Summary — What the Mathematics Guarantees
 
 | Guarantee | Axiom | Operational Meaning |
 |-----------|-------|---------------------|
@@ -94,7 +92,7 @@ Low strain = flexible, adaptable ^5. High strain = brittle, narrow, inversion-pr
 
 ---
 
-### L.7 Further Reading
+## L.7 Further Reading
 
 - **Noetic Topos: A Categorical Framework for Cognitive Architecture** — Little Henderson et al. (2026). Full proofs in `peer_review/noetic_topos_extracted_structure_20260523.md`.
 - **TKS v7.4 Referee-Defensible Edition** — Complete 7-axiom specification in `_tmp_TKS_v7_4_REFEREE_DEFENSIBLE_1.txt`.

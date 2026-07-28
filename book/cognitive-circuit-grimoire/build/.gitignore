@@ -1,6 +1,8 @@
 # LaTeX and figure-test intermediates. Regenerated on every build; the .tex
 # sources in figures/ are the real artifacts and stay tracked.
 figtest/
+body.tex
+front_prose.tex
 *.aux
 *.log
 *.out

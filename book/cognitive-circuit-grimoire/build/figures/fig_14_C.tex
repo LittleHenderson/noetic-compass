@@ -1,0 +1,114 @@
+% Figure 14-C -- CCB-H assembly, loop routing, anchor block, TPs and BOM.
+\begin{tikzpicture}[
+  x=1mm,y=1mm,font=\sffamily\footnotesize,
+  fp/.style={rectangle,rounded corners=1pt,draw=casNedge,fill=casNfill,
+             line width=0.6pt,minimum height=7mm,align=center,
+             font=\sffamily\scriptsize\bfseries,inner sep=1pt},
+  tpf/.style={circle,draw=black,fill=white,line width=0.6pt,
+              minimum size=6mm,inner sep=0pt,font=\sffamily\tiny\bfseries},
+  slk/.style={font=\sffamily\scriptsize,inner sep=1pt},
+  trace/.style={draw=casNedge,line width=0.7pt},
+  rtn/.style={-{Latex[length=1.6mm,width=1.2mm]},draw=casPedge,
+              line width=0.7pt}
+]
+
+\draw[rounded corners=3pt,draw=casNedge,fill=casNfill,fill opacity=0.18,
+      line width=1.0pt] (0,0) rectangle (104,-62);
+\node[anchor=west,font=\sffamily\footnotesize\bfseries] at (3,-3.2)
+  {CCB-H \textemdash{} ASSEMBLY / SIGNAL SIDE};
+\node[anchor=east,font=\sffamily\scriptsize] at (101,-3.2)
+  {two returns; independent anchor};
+
+% Main placement path.
+\node[fp,minimum width=10mm] (r1) at (8,-22) {R1};
+\node[fp,minimum width=8mm] (d1) at (19,-22) {D1};
+\node[fp,minimum width=11mm,fill=casCfill,draw=casCedge] (q1) at (31,-22) {Q1};
+\node[fp,minimum width=10mm] (c1) at (31,-42) {C1};
+\node[fp,minimum width=10mm] (osc) at (42,-22) {OSC1};
+\node[fp,minimum width=12mm] (xf1) at (54,-22) {XF1};
+\node[fp,minimum width=12mm] (c2) at (67,-22) {C2};
+\node[fp,minimum width=8mm] (d2) at (78,-22) {D2};
+\node[fp,minimum width=11mm,fill=casOfill,draw=casOedge] (q2) at (90,-22) {Q2};
+\draw[trace] (r1.east) -- (d1.west);
+\draw[trace] (d1.east) -- (q1.west);
+\draw[trace] (q1.east) -- (osc.west);
+\draw[trace] (osc.east) -- (xf1.west);
+\draw[trace] (xf1.east) -- (c2.west);
+\draw[trace] (c2.east) -- (d2.west);
+\draw[trace] (d2.east) -- (q2.west);
+\draw[trace] (31,-38.5) -- (31,-25.5);
+
+% Short upper loop A.
+\node[fp,minimum width=12mm] (flt1) at (42,-11) {FLT1};
+\node[fp,minimum width=15mm] (fb1) at (24,-11) {FB1\\LOOP A\\$\beta=1.90$};
+\draw[rtn] (48,-11) -- (q1.north |- 48,-11);
+\draw[rtn] (flt1.west) -- (fb1.east);
+\draw[rtn,rounded corners=2pt] (fb1.west) -- (14,-11) -- (14,-42) -- (c1.west);
+
+% Long lower loop B.
+\node[fp,minimum width=12mm] (flt2) at (70,-50) {FLT2};
+\node[fp,minimum width=15mm] (fb2) at (53,-50) {FB2\\LOOP B\\$\beta=0.30$};
+\draw[rtn,rounded corners=2pt] (q2.south) -- (90,-50) -- (flt2.east);
+\draw[rtn] (flt2.west) -- (fb2.east);
+\draw[rtn,rounded corners=2pt] (fb2.west) -- (38,-50) -- (38,-42) -- (c1.east);
+\node[slk,anchor=north] at (72,-54)
+  {fact return};
+
+% Independent anchor block.
+\draw[casPedge,dash pattern=on 2pt off 1.2pt,line width=0.8pt,
+      rounded corners=2pt] (78,-60) rectangle (101,-34);
+\node[slk,text=casPedge,font=\sffamily\tiny\bfseries] at (89.5,-37)
+  {OUTSIDE BOTH LOOPS};
+\node[fp,minimum width=8mm] at (83,-43) {C3};
+\node[fp,minimum width=8mm] at (93,-43) {Q3};
+\node[fp,minimum width=13mm] at (86,-51) {M\_ANCHOR};
+\node[fp,minimum width=8mm] at (96,-51) {Q4};
+\node[fp,minimum width=8mm] at (96,-57) {F1};
+
+% Test points and expected readings.
+\node[tpf] (tp1) at (8,-12) {TP1};
+\draw[trace] (tp1.south) -- (8,-18);
+\node[slk,anchor=south,align=center] at (8,-8)
+  {0.55--0.85};
+\node[tpf] (tp2) at (67,-12) {TP2};
+\draw[trace] (tp2.south) -- (67,-18);
+\node[slk,anchor=south] at (67,-8) {$\ge 0.70$};
+\node[tpf] (tp3) at (58,-36) {TP3};
+\draw[trace] (tp3.north) -- (58,-25.5);
+\node[slk,anchor=west,align=left] at (62,-36)
+  {read only against\\seed removal};
+\node[tpf] (tp4) at (90,-12) {TP4};
+\draw[trace] (tp4.south) -- (90,-18);
+\node[slk,anchor=south] at (90,-8) {0.90--1.50};
+
+% Notes and BOM beneath the board.
+\draw[draw=casNedge,line width=0.7pt] (0,-68) rectangle (32,-103);
+\node[slk,anchor=north west,font=\sffamily\scriptsize\bfseries]
+  at (2,-70) {ASSEMBLY NOTES};
+\node[slk,anchor=north west,align=left,text width=28mm] at (2,-75)
+  {TP3 is meaningful only during the seed-removal test.\\[2pt]
+   C3--Q3--M\_ANCHOR--Q4--F1 has no trace into either return.\\[2pt]
+   LOOP A controls level; LOOP B carries fact and controls growth.};
+
+\draw[draw=casNedge,line width=0.7pt] (36,-68) rectangle (104,-103);
+\node[slk,anchor=north west,font=\sffamily\scriptsize\bfseries]
+  at (38,-70) {BILL OF MATERIALS};
+\node[slk,anchor=north west,align=left] at (38,-75)
+  {\textbf{R1} seed divider\\
+   \textbf{D1} $V_f=1.2$ \quad \textbf{Q1} seed CJT\\
+   \textbf{C1} shared bias\\
+   \textbf{FLT1} $\tau=90\,d$ \quad \textbf{FB1} $\beta=1.90$\\
+   \textbf{OSC1} rehearsal\\
+   \textbf{XF1} transformer \quad \textbf{C2} bank\\
+   \textbf{D2} $V_f=2.0$};
+\node[slk,anchor=north west,align=left] at (78,-75)
+  {\textbf{Q2} manifest CJT\\
+   \textbf{FLT2} $\tau=90\,d$\\
+   \textbf{FB2} $\beta=0.30$\\
+   \textbf{C3} leakage 0\\
+   \textbf{Q3} audit\\
+   \textbf{M\_ANCHOR} monitor\\
+   \textbf{Q4} sat 0.85\\
+   \textbf{F1} guard fuse};
+
+\end{tikzpicture}

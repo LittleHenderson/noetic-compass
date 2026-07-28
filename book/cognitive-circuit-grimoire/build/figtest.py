@@ -32,6 +32,7 @@ WRAP = r"""\documentclass[11pt,border=3pt]{standalone}
 \setsansfont{Arial}
 \input{../figures_preamble.tex}
 \begin{document}
+\centering
 %s
 \end{document}
 """

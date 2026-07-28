@@ -125,6 +125,8 @@
 \newunicodechar{★}{\ensuremath{\bigstar}}
 \newunicodechar{☆}{\ensuremath{\star}}
 \newunicodechar{✓}{\ensuremath{\checkmark}}
+\newunicodechar{☐}{\ensuremath{\square}}
+\newunicodechar{⚠}{\ensuremath{\blacktriangle}}
 \newunicodechar{⊥}{\ensuremath{\perp}}
 \newunicodechar{⊤}{\ensuremath{\top}}
 \newunicodechar{⊗}{\ensuremath{\otimes}}
@@ -162,6 +164,9 @@
 % by publishing/build_indexes.py after pandoc; the .idx is compiled by
 % makeindex between the two xelatex passes.
 \makeindex
+% The 6 x 9 trim needs a compact but still visible break between index letter
+% groups; memoir's 10pt default leaves a single-entry orphan final page.
+\renewcommand{\indexspace}{\par\vskip 6pt plus 3pt minus 2pt\relax}
 
 % --- Microtypography ---------------------------------------------------
 \usepackage{microtype}
@@ -242,6 +247,9 @@
 
 % Mark chapter names for running headers
 \renewcommand{\chaptermark}[1]{\markright{#1}}
+% Keep section marks from replacing the intended chapter running head. Long
+% section titles otherwise wrap to a second baseline and overflow headheight.
+\renewcommand{\sectionmark}[1]{}
 
 % --- Chapter / part title styling --------------------------------------
 \chapterstyle{hangnum}
@@ -250,9 +258,16 @@
 \renewcommand{\partnamefont}{\normalfont\Huge\bfseries}
 \renewcommand{\parttitlefont}{\normalfont\Huge\bfseries\itshape}
 
-% --- Section numbering depth ------------------------------------------
-\setcounter{secnumdepth}{0}
-\setcounter{tocdepth}{0}
+% Section identifiers are authored explicitly in the Markdown (for example,
+% 10.3 and M.5). Number chapters automatically, retain section entries in the
+% contents, and do not prepend a second memoir-generated section number.
+\setsecnumdepth{chapter}
+\settocdepth{section}
+
+% The book specification names figures by chapter and letter (Figure 13-C),
+% not by the memoir default chapter-and-Arabic form (Figure 13.3). The figure
+% counter already resets at every chapter; only its printed representation
+% needs to change. This also keeps List of Figures entries aligned with prose.
 
 % --- Hyperref (loaded last) --------------------------------------------
 \usepackage[hyperfootnotes=false]{hyperref}
@@ -276,6 +291,7 @@
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{ragged2e}
 
 % Pandoc >= 2.17 uses a \real{...} helper in longtable column widths. Define
 % it as a pass-through scaling factor so \p{(\linewidth - N\tabcolsep) * \real{0.333}}
@@ -300,14 +316,25 @@
 \newcommand{\VerbatimHighlightingCommand}[2]{#2}
 
 % --- Table of Contents formatting (memoir) -----------------------------
-\setlength{\cftbeforechapterskip}{4pt plus 2pt minus 1pt}
+% Keep chapter breaks distinct while preventing the final Index entry from
+% being stranded by itself on a separate contents page.
+\setlength{\cftbeforechapterskip}{3.5pt plus 2pt minus 1pt}
+\setpnumwidth{3.5em}
+\setrmarg{4.5em}
 
 % --- Grimoire build: overfull-box mitigation ---
 \usepackage{etoolbox}
 \setlength{\emergencystretch}{3em}
-\AtBeginEnvironment{longtable}{\footnotesize}
+% Normal tables use 9pt. The postprocessor locally overrides this command to
+% 8pt for dense five-or-more-column tables before the environment hook runs.
+\newcommand{\grimoiretablefont}{\footnotesize}
+\AtBeginEnvironment{longtable}{\grimoiretablefont}
 \AtBeginEnvironment{tabular}{\small}
 \appto\UrlBreaks{\do\^\do\|\do\<\do\>\do\_}
 
 % --- Grimoire build: TikZ figure styles ---
 \input{figures_preamble.tex}
+
+% Apply this after every float/TikZ package has loaded. The master document
+% restates it after \mainmatter, which memoir uses to reset the representation.
+\renewcommand{\thefigure}{\thechapter-\Alph{figure}}

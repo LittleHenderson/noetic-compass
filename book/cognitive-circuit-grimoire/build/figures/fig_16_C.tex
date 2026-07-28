@@ -1,0 +1,115 @@
+% Figure 16-C -- CCB-DP counter-circuit, buildable and internally biased.
+\begin{tikzpicture}[
+  scale=0.90,transform shape,
+  x=1cm,y=1cm,font=\sffamily\footnotesize,
+  wire/.style={draw=black,line width=0.6pt},
+  part/.style={casblock,font=\sffamily\scriptsize,minimum height=8mm,
+               inner sep=2pt,align=center},
+  tiny/.style={font=\sffamily\scriptsize,align=center,inner sep=1pt},
+  tpf/.style={circle,draw=black,fill=white,line width=0.6pt,
+              minimum size=6mm,inner sep=0pt,font=\sffamily\tiny\bfseries}
+]
+
+\node[font=\sffamily\footnotesize\bfseries,anchor=west] at (0,2.75)
+  {CCB-DP \textemdash{} COUNTER-CIRCUIT / BUILDABLE};
+
+% Restore resistance, ramp and third-party support boundary.
+\draw[wire] (-0.15,0) -- (0.25,0);
+\draw[wire,fill=casNfill] (0.25,-0.32) rectangle (1.25,0.32);
+\draw[-{Latex[length=1.7mm]},casCedge,line width=0.8pt]
+  (0.18,-0.55) -- (1.32,0.55);
+\node[tiny,anchor=south,font=\sffamily\scriptsize\bfseries]
+  at (0.75,0.66) {R\_RESTORE \textemdash{} FIRST};
+\node[tiny,anchor=north,align=center,text width=22mm] at (0.75,-0.44)
+  {$r_{\pi}$: 1.60 $\to$ 10.80\\55\,h on-path};
+
+% Human icon: support touches only R_bias.
+\draw[line width=0.6pt] (1.80,1.72) circle (0.16);
+\draw[line width=0.6pt] (1.80,1.56) -- (1.80,1.05);
+\draw[line width=0.6pt] (1.50,1.36) -- (2.10,1.36);
+\draw[line width=0.6pt] (1.80,1.05) -- (1.56,0.72);
+\draw[line width=0.6pt] (1.80,1.05) -- (2.04,0.72);
+\node[tiny,anchor=west,align=left] at (2.18,1.36)
+  {third party appears here and nowhere else:\\
+   $R_{\mathrm{bias}}$ support only};
+\draw[fbflow] (1.80,0.72) -- (1.05,0.32);
+
+% Q1 decomposition, D2 raised drop, Q2 confirmation, fusion.
+\draw[wire] (1.25,0) -- (1.70,0);
+\node[part,cblock,circle,minimum size=12mm] (q1) at (2.30,0)
+  {\textbf{Q1}\\DP1\\$\beta=2.0$};
+\draw[flow] (1.70,0) -- (q1.west);
+\node[tiny,anchor=north] at (2.30,-0.78)
+  {\textasciicircum6 decompose};
+
+\draw[wire] (q1.east) -- (3.25,0);
+\filldraw[fill=white,draw=casEedge,line width=0.8pt]
+  (3.25,-0.22) -- (3.25,0.22) -- (3.62,0) -- cycle;
+\draw[casEedge,line width=1.0pt] (3.62,-0.24) -- (3.62,0.24);
+\draw[casEedge,line width=0.8pt] (3.44,0) circle (0.42);
+\node[tiny,text=casEedge,anchor=south] at (3.44,0.52)
+  {D2 \ $V_f=1.6$ \ raised};
+\draw[wire] (3.62,0) -- (4.10,0);
+
+\node[part,pblock,circle,minimum size=12mm] (q2) at (4.70,0)
+  {\textbf{Q2}\\DP2\\$\beta=1.0$};
+\draw[flow] (4.10,0) -- (q2.west);
+\node[tiny,anchor=north] at (4.70,-0.78)
+  {\textasciicircum4 confirm};
+
+\node[pblock,font=\sffamily\scriptsize,align=center,text width=28mm] (fusion)
+  at (6.55,0)
+  {$({\mathrm{decompose}}\times{\mathrm{confirm}})$\\$={\mathrm{composed}}$};
+\draw[flow] (q2.east) -- (fusion.west);
+
+% D3 and the safety section.
+\draw[wire] (fusion.east) -- (7.65,0);
+\filldraw[fill=white,draw=black,line width=0.6pt]
+  (7.65,-0.19) -- (7.65,0.19) -- (7.96,0) -- cycle;
+\draw[line width=0.9pt] (7.96,-0.21) -- (7.96,0.21);
+\node[tiny,anchor=south] at (7.80,0.30) {D3};
+\draw[casPedge,line width=0.9pt,rounded corners=2pt]
+  (8.15,-1.05) rectangle (10.38,1.05);
+\node[tiny,text=casPedge,anchor=north west,font=\sffamily\scriptsize\bfseries]
+  at (8.28,0.92) {SAFETY SECTION};
+\node[part,pblock,circle,minimum size=11mm] (q3) at (8.92,0)
+  {\textbf{Q3}\\CSB};
+\node[nblock,font=\sffamily\scriptsize] (f1) at (9.85,0)
+  {F1};
+\draw[flow] (7.96,0) -- (q3.west);
+\draw[flow] (q3.east) -- (f1.west);
+\node[tiny,anchor=north] at (9.05,-0.62) {sat 0.85};
+
+% Internal oscillator and slow lawful feedback to the capacitor bias.
+\node[part,nblock,text width=24mm] (osc) at (2.05,-3.10)
+  {\textbf{OSC1}\\source=internal};
+\node[part,nblock,text width=26mm] (fb) at (5.25,-3.10)
+  {\textbf{RC FEEDBACK}\\$\tau=504\,h$, $\beta=0.05$};
+\draw[flow] (osc.east) -- (fb.west);
+\draw[fbflow,rounded corners=2pt]
+  (fb.east) -- (7.20,-3.10) -- (7.20,-1.72) -- (6.30,-1.72);
+\draw[line width=1.0pt] (6.06,-1.72) -- (6.54,-1.72);
+\draw[line width=1.0pt] (6.06,-1.88) -- (6.54,-1.88);
+\draw[wire] (6.30,-1.88) -- (6.30,-2.10);
+\node[tiny,anchor=east,align=right] at (5.94,-1.80)
+  {subject's capacitor\\bias pad};
+\node[tiny,text=casPedge,anchor=north] at (5.25,-3.78)
+  {feedback lands on bias terminal, never on the signal path};
+
+% Bias rail is internal and reaches every CJT.
+\draw[line width=1.25pt] (2.30,-2.10) -- (8.92,-2.10);
+\draw[flow] (2.30,-2.10) -- (2.30,-0.60);
+\draw[flow] (4.70,-2.10) -- (4.70,-0.60);
+\draw[flow] (8.92,-2.10) -- (8.92,-1.05);
+
+% Test points.
+\node[tpf] at (1.48,-1.52) {TP1};
+\draw[wire] (1.30,-1.28) -- (1.05,-0.76);
+\node[tpf] at (0.55,-3.10) {TP2};
+\draw[wire] (0.85,-3.10) -- (1.05,-3.10);
+\node[tpf] at (2.95,0.95) {TP3};
+\draw[wire] (2.82,0.68) -- (2.55,0.48);
+\node[tpf] at (10.02,1.62) {TP4};
+\draw[wire] (10.02,1.32) -- (10.02,1.05);
+
+\end{tikzpicture}

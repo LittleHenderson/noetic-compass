@@ -1,0 +1,45 @@
+% Figure 1-D -- standard five-stage signal path and the lawful feedback landing.
+\begin{tikzpicture}[x=1cm,y=1cm,
+  stage/.style={casblock, text width=15mm, minimum height=12mm,
+    font=\sffamily\scriptsize\bfseries, inner sep=2pt},
+  probe/.style={circle, draw=black, fill=white, line width=0.55pt,
+    minimum size=2.2mm, inner sep=0pt},
+  tplbl/.style={font=\sffamily\scriptsize\bfseries},
+  note/.style={font=\sffamily\scriptsize\itshape, align=center, fill=white,
+    inner sep=1.5pt}]
+
+\node[cblock,stage] (in) at (0.90,2.35) {INPUT\\STAGE};
+\node[pblock,stage] (disc) at (3.08,2.35) {DISCRIMI-\\NATION};
+\node[eblock,stage] (commit) at (5.26,2.35) {COMMIT-\\MENT};
+\node[oblock,stage] (select) at (7.44,2.35) {OUTPUT\\SELECT};
+\node[casterm,minimum width=14mm,minimum height=12mm] (out) at (9.62,2.35)
+  {OUT};
+
+\draw[flow] (in) -- (disc);
+\draw[flow] (disc) -- (commit);
+\draw[flow] (commit) -- (select);
+\draw[flow] (select) -- (out);
+
+% Probes fall from the four inter-stage nets.
+\foreach \x/\lab in {1.99/TP1,4.17/TP2,6.35/TP3,8.53/TP4}{
+  \draw[line width=0.55pt] (\x,2.35) -- (\x,1.55);
+  \node[probe] at (\x,1.45) {};
+  \node[tplbl,anchor=north] at (\x,1.28) {\lab};
+}
+
+% Bias landing governs both discriminating and commitment stages.
+\node[pblock, text width=29mm, minimum height=8mm,
+      font=\sffamily\scriptsize\bfseries] (bias) at (4.17,-0.25)
+  {BIAS NODE \quad \casnote{\detokenize{^5^P}}};
+\draw[line width=0.55pt] (3.08,1.75) -- (3.08,0.16);
+\draw[line width=0.55pt] (5.26,1.75) -- (5.26,0.16);
+\draw[line width=0.55pt] (3.08,0.16) -- (bias.north west);
+\draw[line width=0.55pt] (5.26,0.16) -- (bias.north east);
+
+% Output returns only to the bias terminal, never to a signal net.
+\draw[fbflow,rounded corners=3pt]
+  (out.south) -- (9.62,-1.30) -- (4.17,-1.30) -- (bias.south);
+\node[note,text width=68mm] at (7.00,-1.30)
+  {lawful \casnote{\detokenize{^O}}$\to$\casnote{\detokenize{^P}} feedback
+   --- long $\tau$, terminating at the bias, never at the signal path};
+\end{tikzpicture}

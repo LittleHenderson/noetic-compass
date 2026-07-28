@@ -108,7 +108,7 @@ That is the structural account of why abrupt cessation of an entrenched routine 
 
 #### The Flyback Path
 
-CCDL will let you write the abrupt cut. Appendix B §A.3.10 lists exactly one inductive statement, and this is it:
+CCDL will let you write the abrupt cut. Appendix B §B.3.10 lists exactly one inductive statement, and this is it:
 
 ```cas
 interrupt coil [dt -> 0];    // legal, compiles clean, almost never correct
@@ -147,9 +147,9 @@ board habit_transition {
 }
 ```
 
-Two lines do the safety work. `hold until` refuses to open the switch until the substitute carries flow. `constraint taper_rate` is the kick budget from the table above, written where a validator enforces it rather than left in the operator's intentions. The monitor threshold is in volts, not activation, so it sits outside `[0, 1]`; Appendix B §A.4 permits that where the guarded quantity is unnormalised.
+Two lines do the safety work. `hold until` refuses to open the switch until the substitute carries flow. `constraint taper_rate` is the kick budget from the table above, written where a validator enforces it rather than left in the operator's intentions. The monitor threshold is in volts, not activation, so it sits outside `[0, 1]`; Appendix B §B.4 permits that where the guarded quantity is unnormalised.
 
-Note `^9_old` and `^9_new`. Both nodes are the same state — Below/Effect, Operational, F6 Structure, embodied — because that is the honest typing: the substitute is not a nobler act than the one it replaces, only a different landing for the same cue. The `_label` suffix of Appendix B §A.1.2 exists for exactly this case, two instances of one state on one board, and without it the two `node` lines are indistinguishable to a reader and the TP2/TP4 pair below has nothing to name.
+Note `^9_old` and `^9_new`. Both nodes are the same state — Below/Effect, Operational, F6 Structure, embodied — because that is the honest typing: the substitute is not a nobler act than the one it replaces, only a different landing for the same cue. The `_label` suffix of Appendix B §B.1.2 exists for exactly this case, two instances of one state on one board, and without it the two `node` lines are indistinguishable to a reader and the TP2/TP4 pair below has nothing to name.
 
 [[FIGURE 9-D: Flyback schematic. Drive rail into a switch, then L1 (3,200 h·Ω_c) in series with R (40 Ω_c) to ground; a diode across L1 in reverse-blocking orientation, with a curved arrow showing the circulating decay loop when the switch opens; TP1–TP4 as callout flags.]]
 

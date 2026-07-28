@@ -204,10 +204,6 @@
 - 23.4 The Tree of Life Method — Redirecting Through Higher Probability Paths
 - 23.5 Astrological Weighting — Planetary Dials for Timing
 
----
-
-## PART V — SAFETY & GOVERNANCE
-
 ### Chapter 24: The Cognitive Safety Board (CSB) for Operators
 - 24.1 Why Every Operator Needs a CSB
 - 24.2 The Saturated Refusal CJT — ^3^P at sat=0.85
@@ -215,18 +211,6 @@
 - 24.4 The Domain Diode Chain — Preventing Unlawful Domain Ascent
 - 24.5 The O→P Feedback Filter — τ Selection for Ethical Drift Detection
 - 24.6 Full CCDL Schematic of the Operator's CSB
-
-### Chapter 25: Involution Guards and Shadow Work
-- 25.1 The Involution Pairs — ^2↔^3, ^5↔^6, ^8↔^9
-- 25.2 The 4-Point Divergence Limit — Why |Dial(^2) − Dial(^3)| ≤ 4
-- 25.3 Detecting Inversion — When Your Circuit Flips Its Own Polarity
-- 25.4 The Shadow Integration Circuit — Making the Shadow Work FOR You
-
-### Chapter 26: Ethics as Architecture
-- 26.1 The Engineering Ethics of Cognitive Control
-- 26.2 Consent Architectures — The Voluntary Target Circuit
-- 26.3 The "Right to Be Un-Boarded" Invariant
-- 26.4 The Operator's Oath — A CAS-Enforceable Ethical Commitment
 
 ---
 

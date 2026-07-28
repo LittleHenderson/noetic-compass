@@ -9,7 +9,7 @@ an impression is not something you can read three weeks later and disagree with.
 
 ---
 
-### I.1 Which form, when
+### G.1 Which form, when
 
 | Form | Opened | Written in | Answers |
 |---|---|---|---|
@@ -23,7 +23,7 @@ strike it.
 
 ---
 
-### I.2 Page geometry
+### G.2 Page geometry
 
 - 58 monospace columns — about 9 pt in a 6×9 text block. Nothing here is wider,
   so nothing reflows on a photocopier set to 100 percent.
@@ -34,7 +34,7 @@ strike it.
 
 ---
 
-### I.3 Form 1 — Operation Log
+### G.3 Form 1 — Operation Log
 
 ```
 ┌────────────────────────────────────────────────────────┐
@@ -48,7 +48,7 @@ strike it.
 │ ______________________________________________________ │
 │                                                        │
 │ Target:  self ____    consenting other ____            │
-│ (there is no third box; Chapter 26.2)                  │
+│ (there is no third box; Appendix M §M.2)               │
 ├────────────────────────────────────────────────────────┤
 │ PARAMETERS AS SET                                      │
 │ Dial(^2) ____  Dial(^3) ____  divergence ____  (<=4)   │
@@ -90,7 +90,7 @@ strike it.
 |---|---|---|
 | Prime desire | The A0-authenticated desire (Chapter 21.1) | The desire you walked in with, if the audit changed it |
 | Board / rev | The CCDL revision you actually fired | The one you meant to fire |
-| Dials | Both members of every pair, plus the divergence — the limit is 4 points (Chapter 25.2) | One dial with its involution partner left blank |
+| Dials | Both members of every pair, plus the divergence — the limit is 4 points (Chapter 6.2) | One dial with its involution partner left blank |
 | CJT | β, sat, rπ, g_m as set (Chapter 3.3) | β alone. sat is what pins your readings |
 | Gates | Pass or fail per gate **and the number that decided it** (Chapters 21.2–21.4) | A tick |
 | Sessions | Readings taken at TP1–TP4 (Chapter 12.3); `^1` Mind graded 3°/2°/1° (Chapter 5.5) | Readings reconstructed later from the outcome |
@@ -109,7 +109,7 @@ That one character is what makes the next form's entry obvious.
 
 ---
 
-### I.4 Form 2 — Confirmation Log
+### G.4 Form 2 — Confirmation Log
 
 ```
 ┌────────────────────────────────────────────────────────┐
@@ -166,7 +166,7 @@ so the result and its inputs can never be separated later.
 
 ---
 
-### I.5 Form 3 — Parameter-Change Log
+### G.5 Form 3 — Parameter-Change Log
 
 The form that earns its page. An operator who moves two parameters and gets a
 better reading has bought a better reading and learned nothing.
@@ -237,7 +237,7 @@ you a number and no account of where it came from.
 
 ---
 
-### I.6 Filling conventions
+### G.6 Filling conventions
 
 | Mark | Meaning |
 |---|---|
@@ -250,7 +250,7 @@ you a number and no account of where it came from.
 
 ---
 
-### I.7 What the logs feed
+### G.7 What the logs feed
 
 - **Chapter 22.5**, trend reading, needs at least three operations at comparable
   settings before a movement in η means anything. Form 3 is the only record of

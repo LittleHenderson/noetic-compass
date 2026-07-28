@@ -1,0 +1,90 @@
+% Figure 21-D -- CCB-RPM full schematic with reference designators.
+\begin{tikzpicture}[
+  scale=0.77,transform shape,
+  x=1cm,y=1cm,font=\sffamily\scriptsize,
+  part/.style={casblock,font=\sffamily\tiny,minimum height=7mm,
+               inner sep=1.5pt,align=center},
+  wire/.style={draw=black,line width=0.55pt},
+  tpf/.style={circle,draw=black,fill=white,line width=0.6pt,
+              minimum size=6mm,inner sep=0pt,font=\sffamily\tiny\bfseries}
+]
+
+\node[font=\sffamily\footnotesize\bfseries,anchor=west] at (0,3.55)
+  {CCB-RPM \textemdash{} FULL SCHEMATIC};
+
+% Authentication fanout.
+\node[part,cblock,text width=12mm] (q1) at (0.75,1.55) {Q1\\intake};
+\node[part,cblock] (q2) at (2.05,2.40) {Q2};
+\node[part,cblock] (q3) at (2.05,1.55) {Q3};
+\node[part,cblock] (q4) at (2.05,0.70) {Q4};
+\draw[flow] (-0.25,1.55) -- (q1.west);
+\draw[flow] (q1.east) -- (q2.west);
+\draw[flow] (q1.east) -- (q3.west);
+\draw[flow] (q1.east) -- (q4.west);
+\node[part,pblock,text width=13mm] (df1) at (3.45,2.15) {DIFF1\\witness};
+\node[part,pblock,text width=13mm] (df2) at (3.45,0.95) {DIFF2\\premium};
+\draw[flow] (q2.east) -- (df1.west);
+\draw[flow] (q3.east) -- (df1.west);
+\draw[flow] (q3.east) -- (df2.west);
+\draw[flow] (q4.east) -- (df2.west);
+\node[part,nblock] (f1) at (4.70,2.15) {F1};
+\node[part,nblock] (m1) at (4.70,0.95) {M1};
+\draw[flow] (df1.east) -- (f1.west);
+\draw[flow] (df2.east) -- (m1.west);
+\draw[flow] (f1.south) -- (4.70,1.55);
+\node[font=\sffamily\tiny,anchor=east] at (4.15,1.55) {RE-WORD};
+
+% Drive rail and constraint stack.
+\node[part,eblock] (f5) at (0.80,-0.75) {F5=7};
+\node[part,eblock] (f2) at (2.05,-0.75) {F2=6};
+\node[part,nblock] (d23) at (3.35,-0.75) {D2/D3\\1.2/2.0};
+\node[part,nblock,text width=18mm] (rs) at (4.95,-0.75)
+  {R1--R4\\25/0/30/20};
+\node[part,eblock] (amp) at (6.30,-0.75) {$A$\\$I_{\mathrm{attention}}$};
+\node[part,nblock] (m2) at (7.55,-0.75) {M2};
+\draw[flow] (f5.east) -- (f2.west);
+\draw[flow] (f2.east) -- (d23.west);
+\draw[flow] (d23.east) -- (rs.west);
+\draw[flow] (rs.east) -- (amp.west);
+\draw[flow] (amp.east) -- (m2.west);
+\draw[flow] (m2.south) -- (7.55,-1.50);
+\node[font=\sffamily\tiny,anchor=north] at (7.55,-1.55) {HOLD};
+
+% Logic gates and arm/hold mux.
+\node[part,pblock,text width=12mm] (g1) at (6.20,1.90) {G1\\6-AND};
+\node[part,pblock,text width=12mm] (g2) at (7.55,1.90) {G2\\4-AND};
+\node[part,pblock,text width=12mm] (g3) at (8.90,1.90) {G3\\READY};
+\node[part,pblock,text width=12mm] (g4) at (10.25,1.90) {G4\\ARM};
+\node[part,oblock,text width=15mm] (mux) at (11.75,1.15) {MUX1\\ARM/\\HOLD};
+\draw[flow] (m1.east) -- (g1.west);
+\draw[flow] (g1.east) -- (g2.west);
+\draw[flow] (g2.east) -- (g3.west);
+\draw[flow] (g3.east) -- (g4.west);
+\draw[flow] (g4.east) -- (mux.west);
+\draw[flow,rounded corners=2pt] (m2.east) -- (10.90,-0.75) -- (10.90,0.90)
+  -- (mux.west);
+\node[part,nblock] at (6.20,2.80) {M3};
+\node[part,nblock] at (7.55,2.80) {M4/M5};
+\draw[flow] (mux.east) -- (12.80,1.15);
+\node[font=\sffamily\tiny,anchor=south] at (12.45,1.32)
+  {D\_out $\to$ cast};
+
+% Only upward feedback path.
+\node[part,nblock,text width=19mm] (flt) at (8.10,-2.75)
+  {FLT1\\$\tau=21\,d$, $\beta=.15$};
+\draw[fbflow,rounded corners=2pt] (10.25,1.50) -- (10.25,-2.75) -- (flt.east);
+\draw[fbflow,rounded corners=2pt] (flt.west) -- (0.25,-2.75) -- (0.25,-2.15);
+\node[font=\sffamily\tiny,anchor=north] at (4.10,-3.08)
+  {the only upward path \textemdash{} into the practice rail};
+
+% Probes.
+\node[tpf] at (3.45,3.05) {TP1};
+\draw[wire] (3.45,2.75) -- (3.45,2.53);
+\node[tpf] at (6.30,-1.80) {TP2};
+\draw[wire] (6.30,-1.50) -- (6.30,-1.12);
+\node[tpf] at (8.90,3.00) {TP3};
+\draw[wire] (8.90,2.70) -- (8.90,2.30);
+\node[tpf] at (11.75,2.45) {TP4};
+\draw[wire] (11.75,2.15) -- (11.75,1.55);
+
+\end{tikzpicture}

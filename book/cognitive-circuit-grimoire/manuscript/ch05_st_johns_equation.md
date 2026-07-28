@@ -20,16 +20,18 @@ The formula itself is not the hard part. The formula is one multiplication.
 
 The Book of Revelation is read here as a **calibration document** — not prophecy, not allegory, but a text that states one measurement four different ways across eight passages. That is what engineering documents do. A datasheet gives you the same current limit in milliamps, in watts at a stated voltage, and in a derating curve, because different parts of the design need it in different forms.
 
-| Reference | As written | In days | In years |
-|---|---|---|---|
-| Rev 11:2 | forty and two months | 1,260 | 3½ |
-| Rev 11:3 | a thousand two hundred and threescore days | 1,260 | 3½ |
-| Rev 11:9, 11:11 | three days and an half | 1,260 (day-for-year) | 3½ |
-| Rev 12:6 | a thousand two hundred and threescore days | 1,260 | 3½ |
-| Rev 12:14 | a time, and times, and half a time | 1,260 | 3½ |
-| Rev 13:5 | forty and two months | 1,260 | 3½ |
-| Daniel 7:25 | a time and times and the dividing of time | 1,260 | 3½ |
-| Daniel 12:7 | a time, times, and an half | 1,260 | 3½ |
+| Reference | As written |
+|---|---|
+| Rev 11:2 | forty and two months |
+| Rev 11:3 | a thousand two hundred and threescore days |
+| Rev 11:9, 11:11 | three days and an half (day-for-year) |
+| Rev 12:6 | a thousand two hundred and threescore days |
+| Rev 12:14 | a time, and times, and half a time |
+| Rev 13:5 | forty and two months |
+| Daniel 7:25 | a time and times and the dividing of time |
+| Daniel 12:7 | a time, times, and an half |
+
+Under the conventions below, every row normalizes to 1,260 days, or 3½ prophetic years.
 
 Three conversions do the work, and all three are **conventions**, not discoveries. Name them out loud, because an engineer who cannot name their unit conventions cannot check anyone else's arithmetic.
 
@@ -215,7 +217,7 @@ Degrees: `^7` Rhythm **15 min** (2°, barely inside its middle band), `^1` Mind 
 
 `A` is a shortfall in **delivered current**, and current is set by `V_drive / R_constraint` (Chapter 4.2). Decompose the resistance on a cast aimed at another person's decision (Chapter 4.4): `R_cap` and `R_resource` are the operator's and can be worked. `R_context` is partly shared. But the dominant term is another mind's `^5` composition and its own `^2`/`^3` polarity toward the operator — **a resistance the operator cannot measure, cannot decompose, and has no lawful path to modify.** An instrument reading off-scale against an unmeasurable resistance is not a weak instrument. It is a correctly specified one, telling you the target you named is not the target that is blocked.
 
-**This book does not supply a circuit aimed at a non-consenting person's choices.** The analysis above is here so you can recognize the architecture — in this chapter's arithmetic, and in Chapters 16, 18 and 19 where the same shape appears at scale. The operational version is deliberately absent, and consent architectures are the subject of Chapter 26.2. What the instrument *does* license is the self-directed route: run the `^6^C_{F6}|A` decomposition of Chapter 23.3 on your own stated desire, find what the wanting is actually about, and cast on that. Sub-desires sit in the operator's own `^5`, at resistance the operator can genuinely lower, and they routinely read inside the driveable band while the prime target reads past 9.
+**This book does not supply a circuit aimed at a non-consenting person's choices.** The analysis above is here so you can recognize the architecture — in this chapter's arithmetic, and in Chapters 16, 18 and 19 where the same shape appears at scale. The operational version is deliberately absent, and consent architectures are the subject of Appendix M §M.2. What the instrument *does* license is the self-directed route: run the `^6^C_{F6}|A` decomposition of Chapter 23.3 on your own stated desire, find what the wanting is actually about, and cast on that. Sub-desires sit in the operator's own `^5`, at resistance the operator can genuinely lower, and they routinely read inside the driveable band while the prime target reads past 9.
 
 > A plain line, not a hedge. A cast that will not read, run against a wanting that will not let go, is a recognizable and unpleasant place to be. Everything in this chapter is arithmetic on a logbook. None of it is a psychological or medical instrument, and it does not describe, diagnose, or treat distress, compulsion, or attachment of any kind. If the operations have stopped being something you choose, that is a matter for a clinician, and nothing in this book substitutes for that care.
 

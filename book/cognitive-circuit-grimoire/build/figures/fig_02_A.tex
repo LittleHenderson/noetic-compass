@@ -1,0 +1,48 @@
+% Figure 2-A -- exploded anatomy of a complete CAS state literal.
+\begin{tikzpicture}[
+  x=1cm, y=1cm,
+  token/.style={casblock, minimum width=21mm, minimum height=10mm,
+                font=\sffamily\footnotesize\bfseries},
+  question/.style={font=\sffamily\scriptsize\bfseries, text=casNedge},
+  answer/.style={casblock, minimum width=21mm, minimum height=8mm,
+                 font=\sffamily\scriptsize},
+  note/.style={font=\sffamily\scriptsize, align=center}
+]
+
+\node[token, eblock] (n) at (0.9,0)
+  {\casnote{\detokenize{^3}}};
+\node[token, pblock] (d) at (3.45,0)
+  {\casnote{\detokenize{^P}}};
+\node[token, nblock] (f) at (6.00,0)
+  {\casnote{\detokenize{_{F7}}}};
+\node[token, cblock] (r) at (8.55,0)
+  {\casnote{\detokenize{|f}}};
+
+\node[question] (qn) at (0.9,-1.00) {WHAT?};
+\node[question] (qd) at (3.45,-1.00) {WHERE?};
+\node[question] (qf) at (6.00,-1.00) {WHY?};
+\node[question] (qr) at (8.55,-1.00) {HOW?};
+
+\node[answer, eblock] (an) at (0.9,-2.05)
+  {\textbf{Negative}\\aversion};
+\node[answer, pblock] (ad) at (3.45,-2.05)
+  {\textbf{Principled}\\governing level};
+\node[answer, nblock] (af) at (6.00,-2.05)
+  {\textbf{Purpose}\\dominant motive};
+\node[answer, cblock] (ar) at (8.55,-2.05)
+  {\textbf{Affective}\\value-toned mode};
+
+\foreach \a/\b in {n/qn,d/qd,f/qf,r/qr,qn/an,qd/ad,qf/af,qr/ar}
+  \draw[flow] (\a.south) -- (\b.north);
+
+\node[nblock, text width=94mm, minimum height=12mm,
+      font=\sffamily\footnotesize] at (4.73,-3.55)
+  {\textbf{Read aloud:}\quad ``Affective principled aversion, driven by
+   Purpose.''\\[-1pt]
+   {\scriptsize Drive and Register may be omitted only when their
+   uncertainty is deliberate.}};
+
+\node[note, anchor=south] at (4.73,0.73)
+  {\textbf{ONE COORDINATE, FOUR INDEPENDENT DECISIONS}};
+
+\end{tikzpicture}

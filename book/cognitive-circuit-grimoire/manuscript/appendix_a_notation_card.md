@@ -9,7 +9,7 @@ Entries are self-contained. Read one row and stop.
 
 ---
 
-## C.1 How to read a state literal
+## A.1 How to read a state literal
 
 A state has two written forms and they run in opposite order.
 
@@ -36,7 +36,7 @@ forty are the spine. Everything else is specification laid on top.
 
 ---
 
-## C.2 The ten Noetics — canonical definitions
+## A.2 The ten Noetics — canonical definitions
 
 Verbatim. These are not paraphrased anywhere in this book, and if a definition
 you are reading differs from one below, the one below governs.
@@ -62,7 +62,7 @@ deduction is `^6` decomposition landing in `^9`.
 
 ---
 
-## C.3 The four Domains and their precedence
+## A.3 The four Domains and their precedence
 
 **P ≻ C ≻ E ≻ O.** Precedence is a structural ordering, not a value judgment.
 It fixes which direction signal may travel through the `×` operator and through
@@ -83,7 +83,7 @@ them, which is sometimes true and should then be deliberate.
 
 ---
 
-## C.4 Principled domain — P0 through P9
+## A.4 Principled domain — P0 through P9
 
 | Literal | Full form | Reading | Active | Absent |
 |---|---|---|---|---|
@@ -100,7 +100,7 @@ them, which is sometimes true and should then be deliberate.
 
 ---
 
-## C.5 Cognitive domain — C0 through C9
+## A.5 Cognitive domain — C0 through C9
 
 | Literal | Full form | Reading | Active | Absent |
 |---|---|---|---|---|
@@ -117,7 +117,7 @@ them, which is sometimes true and should then be deliberate.
 
 ---
 
-## C.6 Evaluative domain — E0 through E9
+## A.6 Evaluative domain — E0 through E9
 
 | Literal | Full form | Reading | Active | Absent |
 |---|---|---|---|---|
@@ -134,7 +134,7 @@ them, which is sometimes true and should then be deliberate.
 
 ---
 
-## C.7 Operational domain — O0 through O9
+## A.7 Operational domain — O0 through O9
 
 | Literal | Full form | Reading | Active | Absent |
 |---|---|---|---|---|
@@ -151,12 +151,12 @@ them, which is sometimes true and should then be deliberate.
 
 ---
 
-## C.8 Involutions and self-duals
+## A.8 Involutions and self-duals
 
 An involution pair is two Noetics that are structural inverses of each other:
 applying the relation twice returns you to the start. A self-dual is its own
 inverse. This matters at the bench for one reason above all — the dial
-divergence limit. Chapter 25 works the guards.
+divergence limit. Chapter 2.2 defines the pairs; Chapter 6.2 works the guard.
 
 | Noetic | Involution partner |
 |---|---|
@@ -187,7 +187,7 @@ possible recoil, and it will approve things it has no mechanism to refuse.
 
 ---
 
-## C.9 Absence is not one thing
+## A.9 Absence is not one thing
 
 Three different readings look like a low number at a test point, and they call
 for different repairs.
@@ -195,10 +195,10 @@ for different repairs.
 | Reading | Name | What it means | Repair direction |
 |---|---|---|---|
 | State absent | **Lacunarity** | The state is not there at all | Build it — the state has to be constructed before it can be tuned |
-| State present, polarity flipped | **Inversion** | The state runs as its involution partner's shadow | Guard it (Chapter 25) — tuning a flipped state deepens the flip |
+| State present, polarity flipped | **Inversion** | The state runs as its involution partner's shadow | Diagnose at Chapter 3.4; guard it at Chapter 6.2 — tuning a flipped state deepens the flip |
 | State present, output misrouted | **Leakage** | The state fires but produces the wrong product | Re-route — the component is fine, the connection is not |
 
-The "Absent" column in C.4 through C.7 describes lacunarity: the state is
+The "Absent" column in A.4 through A.7 describes lacunarity: the state is
 missing, and nothing downstream can compensate for it. Before you conclude a
 state is absent, check the other two readings. A C6 that reads zero because its
 output is landing in the wrong stage is not a missing analytical faculty, and
@@ -206,7 +206,7 @@ building a second one will not help.
 
 ---
 
-## C.10 Fastest paths back into the book
+## A.10 Fastest paths back into the book
 
 | You want | Go to |
 |---|---|
@@ -217,4 +217,4 @@ building a second one will not help.
 | `^7` as a clock you build | Chapter 11, section 11.2 |
 | Measuring `^1`, `^4`, `^7` in a live operation | Chapter 22 |
 | `^3^P` saturated as a refusal element | Chapter 24, section 24.2 |
-| Involution guards and the divergence limit | Chapter 25 |
+| Involution pairs and the divergence limit | Chapters 2.2 and 6.2 |

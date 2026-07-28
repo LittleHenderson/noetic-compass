@@ -1,0 +1,49 @@
+% Figure 10-C -- low- and high-saturation safety stages at the same beta.
+\begin{tikzpicture}
+\begin{axis}[casaxis,
+  width=10.3cm,height=7.0cm,
+  xmin=0,xmax=0.6,ymin=0,ymax=1.02,
+  xtick={0,0.1,0.2,0.3,0.4,0.5,0.6},
+  ytick={0,0.2,0.4,0.6,0.8,0.97},
+  xlabel={cause current ($A_c$)},
+  ylabel={effect current ($A_c$)},
+  axis on top,legend style={at={(0.03,0.97)},anchor=north west}
+]
+\fill[casNfill] (axis cs:0,0) rectangle (axis cs:0.10,1.02);
+\node[font=\sffamily\scriptsize,rotate=90,text=casNedge]
+  at (axis cs:0.05,0.55) {cutoff $=0.10$};
+
+% available cause-space, drawn behind the curves
+\fill[casCfill,opacity=0.55] (axis cs:0.10,0) rectangle (axis cs:0.30,0.60);
+\fill[casPfill,opacity=0.48] (axis cs:0.30,0) rectangle (axis cs:0.485,0.97);
+
+\addplot[casCedge,line width=1.25pt] coordinates
+  {(0.10,0.20)(0.30,0.60)(0.60,0.60)};
+\addlegendentry{A: $\beta=2.0,\ \mathrm{sat}=0.60$}
+\addplot[casEedge,dashed,line width=1.25pt] coordinates
+  {(0.10,0.20)(0.485,0.97)(0.60,0.97)};
+\addlegendentry{B: $\beta=2.0,\ \mathrm{sat}=0.97$}
+
+\draw[casNedge,dashed,line width=0.7pt]
+  (axis cs:0.30,0) -- (axis cs:0.30,1.02);
+\node[font=\sffamily\scriptsize\bfseries,align=left,anchor=west,
+      fill=white,inner sep=1.5pt] at (axis cs:0.31,0.73)
+  {A latched\\B still moving};
+
+\draw[{Latex[length=1.7mm]}-{Latex[length=1.7mm]},
+      casEedge,line width=0.75pt]
+  (axis cs:0.30,0.12) -- (axis cs:0.485,0.12);
+\node[font=\sffamily\scriptsize\bfseries,anchor=south,align=center,
+      text=casEedge,fill=white,inner sep=1pt]
+  at (axis cs:0.3925,0.135)
+  {+74\% cause-space\\available to an adversary};
+
+\node[font=\sffamily\scriptsize,anchor=north west,align=left]
+  at (axis cs:0.12,0.54)
+  {A steerable\\region};
+\node[font=\sffamily\scriptsize,anchor=north west,align=left]
+  at (axis cs:0.34,0.52)
+  {extra region\\left by B};
+
+\end{axis}
+\end{tikzpicture}

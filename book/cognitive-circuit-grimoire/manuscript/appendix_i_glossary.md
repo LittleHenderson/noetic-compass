@@ -98,7 +98,7 @@ the entries most worth reading before you need them.
 
 **Common-mode rejection** — An op-amp amplifies the *difference* between its two inputs and ideally ignores whatever is common to both. Cognitively: a comparison stage should respond to how two Ideas differ, not to the framing, source, or delivery they share. Poor rejection is why identical proposals get different verdicts depending on who tabled them. *Chapter 11.4; see also g_m, Chapter 10.3.*
 
-**Consent architecture** — A circuit whose target has agreed to it, built so the agreement is structural rather than assumed. *Chapter 26.2.*
+**Consent architecture** — A circuit whose target has agreed to it, built so the agreement is structural rather than assumed. *Appendix M §M.2; Appendix K.*
 
 **Counter-circuit** — The reversal or detection board that every coercive board in this catalogue ends with, at equal or greater depth. *Chapters 16.7, 19.6.*
 
@@ -114,7 +114,7 @@ the entries most worth reading before you need them.
 
 **DETECTION-ONLY SCHEMATIC — DO NOT BUILD** — The banner carried by any circuit whose purpose is to act on a non-consenting person. Drawn so you can recognise one. *Chapter 12.2.*
 
-**Dial** — An operator-set integer from 3 to 9 controlling a dial-adjusted resistor. Involution partners may not diverge by more than 4 points. *Chapters 6.2, 25.2.*
+**Dial** — An operator-set integer from 3 to 9 controlling a dial-adjusted resistor. Involution partners may not diverge by more than 4 points. *Chapter 6.2.*
 
 **Dielectric breakdown** — A capacitor stressed past what its insulation holds. The `^5` analogue of a store that fractures rather than saturates. **No medical or psychiatric claim is made or implied; if this describes you, see a clinician.** *Chapter 7.4.*
 
@@ -182,9 +182,9 @@ the entries most worth reading before you need them.
 
 **Induction coupling** — Belief transferred between minds by proximity and shared cadence rather than by argument. *Chapter 9.3.*
 
-**Inversion** — A structural polarity flip along one of the named axes — a circuit producing the opposite of what it was built for while appearing to run normally. Distinct from failure: an inverted board is working, backwards. *Chapters 19.4, 25.3.*
+**Inversion** — A structural polarity flip along one of the named axes — a circuit producing the opposite of what it was built for while appearing to run normally. Distinct from failure: an inverted board is working, backwards. *Chapters 3.4 and 19.4.*
 
-**Involution pair** — Two Noetics that are one structure seen from two sides: `^2`↔`^3`, `^5`↔`^6`, `^8`↔`^9`. Self-dual: `^0`, `^1`, `^4`, `^7`. **A pair cannot be flipped directly** — reorienting a structure means taking it apart first, which is `^6` Male's job. *Chapters 25.1, 15.1.*
+**Involution pair** — Two Noetics that are one structure seen from two sides: `^2`↔`^3`, `^5`↔`^6`, `^8`↔`^9`. Self-dual: `^0`, `^1`, `^4`, `^7`. **A pair cannot be flipped directly** — reorienting a structure means taking it apart first, which is `^6` Male's job. *Chapters 2.2, 15.1.*
 
 ---
 
@@ -229,7 +229,7 @@ Never renamed to their function. *Chapter 2.2.*
 
 **Op-amp** — Very high differential gain: amplifies the difference between two inputs. The precision comparison part. *Chapter 11.4.*
 
-**Operator's Oath** — A commitment written so that it can be enforced by the circuit rather than remembered by the operator. *Chapter 26.4; text in the T.O.O.T.R.A. Oath appendix.*
+**Operator's Oath** — A commitment written so that it can be enforced by the circuit rather than remembered by the operator. *Text and circuit binding in Appendix K.*
 
 **Oscillator** — Sustained periodic output. The `^7` Rhythm component: what keeps a practice, a campaign, or an egregore fed. *Chapters 11.2, 20.4.*
 
@@ -267,7 +267,7 @@ Never renamed to their function. *Chapter 2.2.*
 
 **Section-retraction** — The formal statement of one-directionality: realization after embedding returns you to the start, but re-embedding after realization does not. Practically — you cannot un-cast. *Chapter 21.5.*
 
-**Shadow integration** — Making an inverted or disowned structure work for the operator rather than against them, by routing it rather than suppressing it. *Chapter 25.4.*
+**Shadow integration** — A consent-bound self-programming use in which an inverted or disowned structure is decomposed and routed rather than suppressed. This is a structural description, not a mental-health treatment. *Chapters 3.4 and 20.1–20.5; Appendix M.*
 
 **Slew** — Rate of change at a node, and the thing a slew fuse limits. A reference that can be moved quickly is not a reference. *Chapter 20.5.*
 
@@ -293,7 +293,7 @@ Never renamed to their function. *Chapter 2.2.*
 
 ## U
 
-**Un-boarded, right to be** — The invariant that a person may have a circuit removed from them, and that no board may be built to defeat that removal. *Chapter 26.3.*
+**Un-boarded, right to be** — The invariant that a person may have a circuit removed from them, and that no board may be built to defeat that removal. *Appendix M §M.4; Appendix K.*
 
 ---
 

@@ -124,7 +124,7 @@ neither should be used on another person.
 |---|---|
 | Anders Ericsson and Robert Pool, *Peak* | The deliberate-practice research behind Section 5.2's ten-thousand-hour constant, with Ericsson's objections to how it is quoted |
 | Charles Duhigg, *The Power of Habit* | Cue, routine, reward — the three-node loop Section 20.4 draws as an oscillator with auto-gating |
-| Leon Festinger, *A Theory of Cognitive Dissonance* | What happens when a `^5` capacitor holds incompatible charge; background for the involution work in Chapter 25 |
+| Leon Festinger, *A Theory of Cognitive Dissonance* | What happens when a `^5` capacitor holds incompatible charge; background for the involution and breakdown work in Chapters 2.2 and 3.4 |
 
 ---
 

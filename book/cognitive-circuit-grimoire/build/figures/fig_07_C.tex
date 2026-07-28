@@ -1,0 +1,65 @@
+% Figure 7-C -- repeated feeding equilibrium and unforced leakage.
+\begin{tikzpicture}
+\begin{groupplot}[
+  casaxis,width=10.3cm,height=4.2cm,
+  group style={group size=1 by 2,vertical sep=9mm,
+               x descriptions at=edge bottom},
+  xmin=0,xmax=90,xtick={0,15,30,45,60,75,90},
+  ytick={0,2,4,6,8},
+  ylabel={$P_{\mathrm{cap}}$},axis on top,
+  legend style={at={(0.98,0.05)},anchor=south east}
+]
+
+\nextgroupplot[ymin=0,ymax=8.2,title={repeated feed against $\tau_{\mathrm{leak}}=30\,d$}]
+\fill[casCfill,opacity=0.55] (axis cs:0,6.75) rectangle (axis cs:90,7.25);
+\node[font=\sffamily\scriptsize\bfseries,anchor=east,fill=white,inner sep=1pt]
+  at (axis cs:88,7.0) {$P_{\mathrm{eq}}=f\tau_{\mathrm{leak}}=7.0$};
+
+\addplot[casCedge,line width=1.0pt] coordinates {
+  (0,0)(7.4,1.45)(7.5,1.80)(14.9,3.00)(15,3.35)
+  (22.4,4.28)(22.5,4.63)(29.9,5.31)(30,5.66)
+  (37.4,6.02)(37.5,6.37)(44.9,6.42)(45,6.77)
+  (52.4,6.55)(52.5,6.90)(59.9,6.62)(60,6.97)
+  (67.4,6.66)(67.5,7.01)(74.9,6.68)(75,7.03)
+  (82.4,6.69)(82.5,7.04)(90,6.70)};
+\addlegendentry{$+0.35$, design cadence}
+
+\addplot[casNedge,dashed,line width=0.9pt] coordinates {
+  (0,0)(14.9,0.95)(15,1.30)(29.9,1.95)(30,2.30)
+  (44.9,2.70)(45,3.05)(59.9,3.05)(60,3.40)
+  (74.9,3.13)(75,3.48)(90,3.17)};
+\addlegendentry{same deposit, half cadence}
+\draw[casNedge,dotted,line width=0.6pt]
+  (axis cs:0,3.5) -- (axis cs:90,3.5);
+\node[font=\sffamily\scriptsize,anchor=north east,fill=white,inner sep=1pt]
+  at (axis cs:88,3.45) {sparser equilibrium $=3.5$};
+
+\nextgroupplot[ymin=0,ymax=7.5,title={feed removed: pure decay},
+               xlabel={days}]
+\addplot[casEedge,line width=1.2pt,domain=0:90,samples=120]
+  {7*exp(-x/30)};
+\draw[casNedge,dotted,line width=0.55pt]
+  (axis cs:30,0) -- (axis cs:30,2.58);
+\addplot[only marks,mark=*,mark size=1.8pt,casEedge]
+  coordinates {(30,2.58)};
+\node[font=\sffamily\scriptsize,anchor=south east,
+      fill=white,inner sep=1pt] at (axis cs:30,2.58) {2.58};
+\draw[casNedge,dotted,line width=0.55pt]
+  (axis cs:60,0) -- (axis cs:60,0.95);
+\addplot[only marks,mark=*,mark size=1.8pt,casEedge]
+  coordinates {(60,0.95)};
+\node[font=\sffamily\scriptsize,anchor=south east,
+      fill=white,inner sep=1pt] at (axis cs:60,0.95) {0.95};
+\draw[casNedge,dotted,line width=0.55pt]
+  (axis cs:90,0) -- (axis cs:90,0.35);
+\addplot[only marks,mark=*,mark size=1.8pt,casEedge]
+  coordinates {(90,0.35)};
+\node[font=\sffamily\scriptsize,anchor=south east,
+      fill=white,inner sep=1pt] at (axis cs:90,0.35) {0.35};
+\draw[casCedge,dashed,line width=0.7pt]
+  (axis cs:20.8,0) -- (axis cs:20.8,3.5);
+\node[font=\sffamily\scriptsize,anchor=south west,fill=white,inner sep=1pt]
+  at (axis cs:21.2,3.5) {half-life $=20.8\,d$};
+
+\end{groupplot}
+\end{tikzpicture}

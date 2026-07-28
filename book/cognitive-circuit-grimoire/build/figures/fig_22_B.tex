@@ -1,0 +1,86 @@
+% Figure 22-B -- CCB-QT full schematic with references.
+\begin{tikzpicture}[
+  scale=0.84,transform shape,
+  x=1cm,y=1cm,font=\sffamily\scriptsize,
+  part/.style={casblock,font=\sffamily\tiny,minimum height=7mm,
+               inner sep=1.5pt,align=center},
+  wire/.style={draw=black,line width=0.55pt},
+  tpf/.style={circle,draw=black,fill=white,line width=0.6pt,
+              minimum size=6mm,inner sep=0pt,font=\sffamily\tiny\bfseries}
+]
+
+\node[font=\sffamily\footnotesize\bfseries,anchor=west] at (0,3.35)
+  {CCB-QT \textemdash{} FULL SCHEMATIC};
+
+% Upper gnosis rail.
+\node[part,pblock] (h1) at (1.20,2.10) {H1\\hold 2.0};
+\node[part,nblock] (m1) at (2.65,2.10) {M1};
+\draw[flow] (-0.20,2.10) -- (h1.west);
+\draw[flow] (h1.east) -- (m1.west);
+\draw[flow] (m1.south) -- (2.65,1.45);
+\node[font=\sffamily\tiny,anchor=north] at (2.65,1.40) {NO\_COMPUTE};
+
+% Clock rail.
+\node[part,eblock] (f1) at (2.10,0.70) {F1\\write once};
+\draw[flow] (-0.20,0.70) -- (f1.west);
+\node[font=\sffamily\tiny,anchor=south] at (0.45,0.82) {clocked\_op};
+
+% Confirmation rail.
+\node[part,cblock] (l1) at (1.00,-0.90) {L1\\max 1.0};
+\node[part,nblock] (f2) at (2.45,-0.90) {F2\\horizon};
+\node[part,cblock] (h2) at (3.90,-0.90) {H2\\hold 30};
+\draw[flow] (-0.20,-0.90) -- (l1.west);
+\draw[flow] (l1.east) -- (f2.west);
+\draw[flow] (f2.east) -- (h2.west);
+\draw[flow] (f2.south) -- (2.45,-1.65);
+\node[font=\sffamily\tiny,anchor=north] at (2.45,-1.70) {NO-READ};
+
+% Three rails converge at row assembler and MUX1.
+\node[part,pblock,text width=20mm] (row) at (5.10,0.70) {ROW\\ASSEMBLER};
+\node[part,pblock,text width=15mm] (mux) at (6.55,0.70) {MUX1};
+\draw[flow,rounded corners=2pt] (m1.east) -- (4.25,2.10) -- (4.25,1.00)
+  -- (row.west);
+\draw[flow] (f1.east) -- (row.west);
+\draw[flow,rounded corners=2pt] (h2.east) -- (4.65,-0.90) -- (4.65,0.40)
+  -- (row.west);
+\draw[flow] (row.east) -- (mux.west);
+\draw[wire,dashed] (f2.north) -- (2.45,0) -- (6.55,0) -- (mux.south);
+\node[font=\sffamily\tiny,anchor=west] at (4.95,-0.08) {select};
+
+% Confound, latches, trend and output descent.
+\node[part,eblock,text width=15mm] (m2) at (8.00,0.70) {M2\\confound};
+\node[part,oblock] (f3) at (9.45,0.70) {F3\\write once};
+\node[part,nblock] (f4) at (9.45,-0.55) {F4\\scope};
+\draw[flow] (mux.east) -- (m2.west);
+\draw[flow] (m2.east) -- (f3.west);
+\draw[flow] (m2.south) -- (8.00,-0.30);
+\node[font=\sffamily\tiny,anchor=north] at (8.00,-0.35) {CONFOUNDED};
+\draw[wire] (f3.south) -- (f4.north);
+\node[font=\sffamily\tiny,anchor=west,align=left] at (9.95,-0.55)
+  {S1 \textemdash{} self-report only};
+
+\node[part,nblock,text width=15mm] (flt) at (7.90,-2.30) {FLT1\\$\tau=3$ ops};
+\node[part,pblock] (m3) at (6.35,-2.30) {M3\\abort};
+\draw[fbflow,rounded corners=2pt]
+  (f3.south) -- (9.45,-2.30) -- (flt.east);
+\draw[flow] (flt.west) -- (m3.east);
+
+\draw[flow] (f3.east) -- (10.45,0.70);
+\filldraw[fill=white,draw=black,line width=0.6pt]
+  (10.45,0.50) -- (10.45,0.90) -- (10.78,0.70) -- cycle;
+\draw[line width=0.9pt] (10.78,0.48) -- (10.78,0.92);
+\draw[flow] (10.78,0.70) -- (11.35,0.70);
+\node[font=\sffamily\tiny,anchor=north,align=center] at (11.05,0.48)
+  {D1 \ \textasciicircum E$\to$\textasciicircum O\\log\_row};
+
+% TPs.
+\node[tpf] at (1.20,2.95) {TP1};
+\draw[wire] (1.20,2.65) -- (1.20,2.45);
+\node[tpf] at (1.15,1.35) {TP2};
+\draw[wire] (1.35,1.12) -- (1.75,0.95);
+\node[tpf] at (1.00,-1.90) {TP3};
+\draw[wire] (1.00,-1.60) -- (1.00,-1.28);
+\node[tpf] at (7.90,-3.15) {TP4};
+\draw[wire] (7.90,-2.85) -- (7.90,-2.68);
+
+\end{tikzpicture}

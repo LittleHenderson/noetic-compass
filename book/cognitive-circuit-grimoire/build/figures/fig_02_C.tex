@@ -1,0 +1,65 @@
+% Figure 2-C -- orthogonality of Domain, Register, and Drive.  The 4x4 field
+% makes level and mode visibly independent; a Drive rail powers one coordinate.
+\begin{tikzpicture}[
+  x=1cm, y=1cm,
+  cell/.style={casblock, minimum width=10mm, minimum height=7.5mm,
+               inner sep=1pt, font=\sffamily\tiny},
+  rowlbl/.style={casblock, minimum width=17mm, minimum height=7.5mm,
+                 inner sep=1pt, font=\sffamily\scriptsize\bfseries},
+  collbl/.style={font=\sffamily\tiny\bfseries, align=center,
+                 text width=12mm},
+  rail/.style={casblock, minimum width=11mm, minimum height=6mm,
+               inner sep=1pt, font=\sffamily\tiny\bfseries},
+  note/.style={font=\sffamily\scriptsize, align=left},
+  hi/.style={casblock, fill=casEfill, draw=casEedge, line width=1.0pt,
+             minimum width=10mm, minimum height=7.5mm, inner sep=1pt,
+             font=\sffamily\tiny\bfseries}
+]
+
+% Register headers
+\node[collbl] at (1.30,0.95) {\texttt{|T}\\Transcen-\\dent};
+\node[collbl] at (2.55,0.95) {\texttt{|A}\\Analy-\\tical};
+\node[collbl] at (3.80,0.95) {\texttt{|f}\\Affec-\\tive};
+\node[collbl] at (5.05,0.95) {\texttt{|E}\\Embod-\\ied};
+\node[font=\sffamily\scriptsize\bfseries, text=casNedge] at (3.18,1.80)
+  {REGISTER CHOOSES THE MODE};
+
+% Domain rows and 4x4 field
+\foreach \y/\dom/\sty/\name in
+  {0/P/pblock/Principled,-1/C/cblock/Cognitive,
+   -2/E/eblock/Evaluative,-3/O/oblock/Operational}{
+  \node[rowlbl,\sty] at (-0.25,\y) {\texttt{\string^\dom}\ \name};
+  \foreach \x in {1.30,2.55,3.80,5.05}
+    \node[cell,\sty] at (\x,\y) {};
+}
+
+% Highlight one independently selected coordinate.
+\node[hi] (target) at (3.80,-2)
+  {\casnote{\detokenize{^3^E}}\\[-1pt]\texttt{|f}};
+\node[note] at (6.15,-1.98)
+  {\textbf{one coordinate}\\
+   Negative $\times$ Evaluative\\
+   $\times$ Affective};
+
+% Domain descent and the separately filtered return.
+\draw[flow] (-1.35,0.20) -- (-1.35,-3.20);
+\node[rotate=90, font=\sffamily\scriptsize\bfseries, fill=white, inner sep=1pt]
+  at (-1.35,-1.50) {LAWFUL DESCENT};
+\draw[fbflow, rounded corners=3pt]
+  (-0.75,-3.42) -- (-1.95,-3.42) -- (-1.95,0.42) -- (-0.75,0.42);
+\node[rotate=90, font=\sffamily\tiny\itshape, fill=white, inner sep=1pt]
+  at (-1.95,-1.50) {filtered O$\to$P return};
+
+% Drive rails
+\node[font=\sffamily\scriptsize\bfseries, text=casNedge]
+  at (2.75,-4.00) {DRIVE SUPPLIES THE MOTIVE};
+\foreach \x/\f/\sty in
+  {-0.20/F1/nblock,0.78/F2/nblock,1.76/F3/nblock,2.74/F4/nblock,
+   3.72/F5/nblock,4.70/F6/nblock,5.68/F7/pblock}
+  \node[rail,\sty] (\f) at (\x,-4.55) {\f};
+\draw[fbflow, draw=casPedge, line width=0.8pt]
+  (F7.north) to[out=95,in=-20] (target.south east);
+\node[font=\sffamily\tiny\itshape, text=casPedge, anchor=west]
+  at (5.92,-3.95) {Purpose powers};
+
+\end{tikzpicture}

@@ -1,0 +1,50 @@
+% Figure 2-D -- the v7.7 operator decision plate.
+\begin{tikzpicture}[
+  x=1cm, y=1cm,
+  choice/.style={casblock, text width=21mm, minimum height=21mm,
+                 inner sep=2pt, font=\sffamily\scriptsize},
+  toplbl/.style={nblock, text width=55mm, minimum height=8mm,
+                 font=\sffamily\footnotesize\bfseries},
+  reject/.style={casblock, fill=casEfill, draw=casEedge,
+                 text width=94mm, minimum height=17mm, align=center,
+                 font=\sffamily\scriptsize},
+  branch/.style={flow, draw=casNedge}
+]
+
+\node[toplbl] (q) at (4.80,0)
+  {WHAT RELATION ARE YOU CLAIMING?};
+
+\node[choice, pblock] (occ) at (0.90,-2.10)
+  {\textbf{OCCUPANCY ONLY}\\[2pt]
+   $|\langle A,f,T\rangle$\\[2pt]
+   {\tiny no dynamics claimed}};
+\node[choice, cblock] (cop) at (3.50,-2.10)
+  {\textbf{DISTINCT\\CO-PRESENCE}\\[2pt]
+   $A + B + C$\\[2pt]
+   {\tiny parts fail separately}};
+\node[choice, eblock] (int) at (6.10,-2.10)
+  {\textbf{EMERGENT\\INTEGRATION}\\[2pt]
+   $(A\times B\times C)=\Omega$\\[2pt]
+   {\tiny result must be named}};
+\node[choice, oblock] (dir) at (8.70,-2.10)
+  {\textbf{DIRECTED FLOW}\\[2pt]
+   $a\to b$\\[2pt]
+   {\tiny or a \texttt{sequence}}};
+
+\coordinate (fork) at (4.80,-0.70);
+\draw[line width=0.6pt, draw=casNedge] (q.south) -- (fork);
+\foreach \n in {occ,cop,int,dir}
+  \draw[branch] (fork) -| (\n.north);
+
+\node[reject] at (4.80,-4.30)
+  {\begin{tabular}{@{}r@{\quad}l@{}}
+   \textcolor{casRed}{\textbf{REJECT}} $A\times B\times C$
+     & no emergent result is named \\[1pt]
+   \textcolor{casRed}{\textbf{REJECT}} $a\to b\to c$
+     & not a binary expression
+   \end{tabular}\\[2pt]
+   {\tiny Repair: use $+$ or $|\langle\ldots\rangle$; name
+   $\Omega$ after $\times$; write two edges or
+   \texttt{sequence a -> b -> c}.}};
+
+\end{tikzpicture}

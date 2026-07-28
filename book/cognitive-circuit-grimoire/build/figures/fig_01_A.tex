@@ -1,0 +1,70 @@
+% Figure 1-A -- prose instruction versus an instrumented CCDL schematic.
+\begin{tikzpicture}[x=1cm,y=1cm,
+  panel/.style={rounded corners=3pt, draw=casNedge, line width=0.6pt,
+    fill=casNfill!45},
+  qnote/.style={font=\sffamily\scriptsize, align=center, fill=white,
+    draw=casNedge, rounded corners=2pt, inner sep=2pt},
+  stage/.style={casblock, text width=10.5mm, minimum height=13mm,
+    font=\sffamily\scriptsize, inner sep=2pt},
+  netlbl/.style={font=\ttfamily\tiny, fill=white, inner sep=0.7pt},
+  tplbl/.style={font=\sffamily\tiny\bfseries, inner sep=1pt}]
+
+% Panel fields.
+\path[panel] (0,0) rectangle (4.95,5.25);
+\path[panel] (5.20,0) rectangle (10.65,5.25);
+\node[font=\sffamily\footnotesize\bfseries] at (2.475,4.94)
+  {PROSE INSTRUCTION};
+\node[font=\sffamily\footnotesize\bfseries] at (7.925,4.94)
+  {TYPED CCDL SCHEMATIC};
+
+% The prose rule.
+\node[nblock, text width=31mm, minimum height=15mm,
+      font=\ttfamily\scriptsize, fill=white] (prompt) at (2.48,2.75)
+  {Be helpful. Be honest.\\Do not produce harmful content.};
+
+% Four questions whose answers are absent from the sentence.
+\node[qnote] (arity) at (1.18,4.18) {how many\\inputs?};
+\node[qnote] (law)   at (3.78,4.18) {composes by\\what law?};
+\node[qnote] (probe) at (1.18,1.24) {probe\\where?};
+\node[qnote] (fail)  at (3.78,1.24) {fails at\\what value?};
+\draw[fbflow] (arity.south east) -- (prompt.north west);
+\draw[fbflow] (law.south west)   -- (prompt.north east);
+\draw[fbflow] (probe.north east) -- (prompt.south west);
+\draw[fbflow] (fail.north west)  -- (prompt.south east);
+\node[font=\sffamily\scriptsize\itshape, text=casNedge] at (2.48,0.48)
+  {no typed answer};
+
+% Four-stage circuit carrying the same safety intent.
+\node[cblock, stage] (q1) at (5.88,2.88)
+  {\textbf{Q1}\\INTAKE\\[-1pt]\casnote{\detokenize{^0^C}}};
+\node[pblock, stage] (q2) at (7.22,2.88)
+  {\textbf{Q2}\\GUARD\\[-1pt]\casnote{\detokenize{^3^P}}};
+\node[eblock, stage] (q3) at (8.56,2.88)
+  {\textbf{Q3}\\JUDGE\\[-1pt]\casnote{\detokenize{^6^E}}};
+\node[oblock, stage] (s1) at (9.90,2.88)
+  {\textbf{S1}\\SELECT\\[-1pt]\casnote{\detokenize{^9^O}}};
+
+\draw[flow] (q1) -- node[netlbl,above] {n\_surfaced} (q2);
+\draw[flow] (q2) -- node[netlbl,above] {n\_guarded}  (q3);
+\draw[flow] (q3) -- node[netlbl,above] {n\_decided}  (s1);
+\draw[flow] (5.27,2.88) -- (q1.west);
+\draw[flow] (s1.east) -- (10.53,2.88);
+\node[netlbl, anchor=south west] at (5.28,3.15) {request};
+\node[netlbl, anchor=south east] at (10.52,3.15) {response};
+
+% Standard contract probes. TP1 is the surfaced input; TP4 is the selector out.
+\foreach \x/\lab in {6.55/TP1,7.89/TP2,9.23/TP3,10.40/TP4}{
+  \draw[line width=0.55pt] (\x,2.88) -- (\x,1.88);
+  \draw[line width=0.55pt, fill=white] (\x,1.78) circle (0.10);
+  \node[tplbl, anchor=north] at (\x,1.63) {\lab};
+}
+\node[nblock, text width=42mm, font=\ttfamily\tiny, align=left,
+      fill=white, minimum height=8mm] at (7.93,0.87)
+  {Q2 [cutoff=.10, sat=.92]\quad net n\_guarded\\
+   every stage typed; every boundary probeable};
+
+% Shared caption.
+\node[nblock, text width=95mm, minimum height=7mm,
+      font=\sffamily\footnotesize\bfseries, fill=white] at (5.33,-0.48)
+  {Same intent. One can be measured.};
+\end{tikzpicture}

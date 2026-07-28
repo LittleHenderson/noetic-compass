@@ -1,0 +1,82 @@
+% Figure 6-A -- resistor symbol plate and the two-leg drive divider.
+\begin{tikzpicture}[
+  scale=0.96,transform shape,
+  x=1cm,y=1cm,font=\sffamily\footnotesize,
+  wire/.style={draw=black,line width=0.65pt},
+  body/.style={draw=casNedge,fill=casNfill,line width=0.7pt,
+               minimum width=13mm,minimum height=6mm},
+  tiny/.style={font=\sffamily\scriptsize,align=center},
+  head/.style={font=\sffamily\scriptsize\bfseries,align=center}
+]
+
+% ---- four symbols ----------------------------------------------------
+\foreach \x/\ref/\kind in {0.9/R1/FIXED,3.45/R2/DIAL,6.00/RT1/PTC,8.55/RT2/NTC}{
+  \draw[wire] (\x-1.05,0) -- (\x-0.65,0);
+  \node[body] (\ref) at (\x,0) {};
+  \draw[wire] (\x+0.65,0) -- (\x+1.05,0);
+  \node[head] at (\x,0.72) {\ref\ \ \kind};
+}
+\node[tiny] at (0.9,0) {$60\,\Omega_c$};
+\node[tiny,text width=22mm] at (0.9,-0.82) {flow-in \hfill flow-out};
+
+\draw[-{Latex[length=1.7mm,width=1.3mm]},draw=casCedge,line width=0.65pt]
+  (2.86,-0.43) -- (4.04,0.43);
+\node[tiny,text width=27mm] at (3.45,-0.92)
+  {$R=10\times\mathrm{Dial}$\\$\mathrm{Dial}\in\{3,\ldots,9\}$};
+
+\draw[draw=casNedge,line width=0.55pt] (5.55,-0.42) -- (6.42,0.42);
+\draw[-{Latex[length=1.5mm,width=1.1mm]},draw=casNedge,line width=0.55pt]
+  (5.72,-0.42) -- (6.50,0.36);
+\node[tiny] at (6.00,0) {$+t^\circ$};
+\node[tiny] at (6.00,-0.82) {resistance rises};
+
+\draw[draw=casNedge,line width=0.55pt] (8.10,-0.42) -- (8.97,0.42);
+\draw[-{Latex[length=1.5mm,width=1.1mm]},draw=casNedge,line width=0.55pt]
+  (8.27,-0.42) -- (9.05,0.36);
+\node[tiny] at (8.55,0) {$-t^\circ$};
+\node[tiny] at (8.55,-0.82) {guard collapses};
+\draw[fill=casEfill,draw=casEedge,line width=0.7pt]
+  (9.52,-0.18) -- (9.83,0.35) -- (10.14,-0.18) -- cycle;
+\node[font=\sffamily\scriptsize\bfseries,text=casEedge] at (9.83,0.01) {!};
+
+% ---- separator -------------------------------------------------------
+\draw[draw=casNedge,dash pattern=on 1.5pt off 1.5pt,line width=0.4pt]
+  (-0.25,-1.55) -- (10.15,-1.55);
+\node[head,anchor=west] at (-0.15,-1.92)
+  {DRIVE VOLTAGE DIVIDER};
+
+% ---- divider ---------------------------------------------------------
+\node[casterm,text width=19mm] (rail) at (1.15,-2.65)
+  {$V_{\mathrm{drive}}$\\F5 Agency};
+\node[body,minimum width=17mm] (rc) at (1.15,-3.85)
+  {$R_{\mathrm{constrain}}$};
+\node[body,minimum width=17mm] (re) at (1.15,-5.28)
+  {$R_{\mathrm{expand}}$};
+\draw[flow] (rail.south) -- (rc.north);
+\draw[wire] (rc.south) -- (re.north);
+\draw[wire] (re.south) -- (1.15,-6.08);
+\draw[wire] (0.82,-6.08) -- (1.48,-6.08);
+\draw[wire] (0.92,-6.20) -- (1.38,-6.20);
+\draw[wire] (1.02,-6.32) -- (1.28,-6.32);
+\fill (1.15,-4.565) circle (1.4pt);
+\draw[flow] (1.15,-4.565) -- (3.20,-4.565);
+\node[casterm,text width=22mm] at (4.05,-4.565)
+  {$V_{\mathrm{behavior}}$\\divider tap};
+
+\node[tiny,anchor=west] at (2.18,-3.85)
+  {$\mathrm{Dial}({}^{\wedge}3)$ --- series drop};
+\node[tiny,anchor=west] at (2.18,-5.28)
+  {$\mathrm{Dial}({}^{\wedge}2)$ --- expand leg};
+
+\node[nblock,text width=40mm,align=left,font=\sffamily\scriptsize,
+      anchor=west] at (5.55,-3.72) {
+  \textbf{tap fraction}\\[1pt]
+  $k=\frac{R_{\mathrm{expand}}}
+  {R_{\mathrm{expand}}+R_{\mathrm{constrain}}}$\\[2pt]
+  output:\ $V_{\mathrm{behavior}}=kV_{\mathrm{drive}}$};
+\node[tiny,text width=43mm,anchor=west,align=left] at (5.55,-5.42)
+  {The two legs are an involution pair:\\
+   \textasciicircum 2 Positive $\leftrightarrow$
+   \textasciicircum 3 Negative.};
+
+\end{tikzpicture}

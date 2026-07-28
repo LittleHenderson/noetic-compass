@@ -1,0 +1,80 @@
+% Figure 14-A -- CCB-H block diagram, two loops, and an independent anchor.
+\begin{tikzpicture}[
+  x=1cm,y=1cm,font=\sffamily\footnotesize,
+  stage/.style={casblock,text width=19mm,minimum height=13mm,
+                font=\sffamily\scriptsize,align=center},
+  loop/.style={nblock,font=\sffamily\scriptsize,minimum height=6mm,
+               inner sep=2pt},
+  tiny/.style={font=\sffamily\scriptsize,align=center,inner sep=1pt}
+]
+
+\node[font=\sffamily\footnotesize\bfseries,anchor=west] at (0,3.05)
+  {CCB-H \textemdash{} TWO LOOPS, ONE INDEPENDENT ANCHOR};
+
+% Main path.
+\node[stage,cblock] (seed) at (1.20,0)
+  {\textbf{SEED}\\R1 $\rightarrow$ D1\\Q1};
+\node[stage,eblock] (rehearse) at (3.75,0)
+  {\textbf{LOOP A}\\rehearsal\\sets level};
+\node[stage,pblock] (prop) at (6.30,0)
+  {\textbf{PROPAGATE}\\XF1 $\rightarrow$ C2\\fusion};
+\node[stage,oblock] (manifest) at (8.85,0)
+  {\textbf{MANIFEST}\\D2 $\rightarrow$ Q2\\conduct};
+\draw[flow] (-0.15,0) -- (seed.west);
+\draw[flow] (seed.east) -- (rehearse.west);
+\draw[flow] (rehearse.east) -- (prop.west);
+\draw[flow] (prop.east) -- (manifest.west);
+\draw[flow] (manifest.east) -- (10.20,0);
+
+\node[tiny,anchor=north] at (1.20,-0.82)
+  {D1 \ \textasciicircum C$\to$\textasciicircum E \quad $V_f=1.2$};
+\node[tiny,anchor=north] at (8.85,-0.82)
+  {D2 \ \textasciicircum E$\to$\textasciicircum O \quad $V_f=2.0$};
+
+% Shared bias node.
+\draw[line width=1.25pt] (0.55,-1.55) -- (4.10,-1.55);
+\draw[flow] (1.20,-1.55) -- (1.20,-0.70);
+\node[pblock,font=\sffamily\scriptsize] at (0.55,-1.55)
+  {C1 bias};
+
+% Fast loop A, above the signal path.
+\draw[fbflow,rounded corners=2pt]
+  (4.55,0.35) -- (4.55,1.82) -- (3.90,1.82);
+\node[loop] (flt1) at (3.35,1.82) {FLT1 \ $\tau=90\,d$};
+\node[loop] (fb1) at (1.35,1.82) {FB1 \ $\beta=1.90$};
+\draw[fbflow,rounded corners=2pt]
+  (2.40,1.82) -- (fb1.east);
+\draw[fbflow,rounded corners=2pt]
+  (fb1.west) -- (0.55,1.82) -- (0.55,-1.50);
+\node[tiny,anchor=south] at (2.65,2.15)
+  {\textbf{LOOP A} \textemdash{} sets level};
+
+% Slow loop B, below the signal path.  It carries realised fact.
+\draw[fbflow,rounded corners=2pt]
+  (9.65,-0.35) -- (9.65,-2.62) -- (8.85,-2.62);
+\node[loop] (flt2) at (7.90,-2.62) {FLT2 \ $\tau=90\,d$};
+\node[loop] (fb2) at (5.85,-2.62) {FB2 \ $\beta=0.30$};
+\draw[fbflow] (6.95,-2.62) -- (fb2.east);
+\draw[fbflow,rounded corners=2pt]
+  (fb2.west) -- (0.22,-2.62) -- (0.22,-1.55) -- (0.50,-1.55);
+\node[tiny,anchor=north] at (7.00,-2.96)
+  {\textbf{LOOP B} \textemdash{} sets growth; return carries fact};
+
+% Independent anchor and guard, explicitly outside both loops.
+\draw[casPedge,dash pattern=on 2pt off 1.3pt,line width=0.8pt,
+      rounded corners=2pt] (2.20,-5.35) rectangle (9.95,-3.62);
+\node[tiny,text=casPedge,anchor=north west,font=\sffamily\scriptsize\bfseries]
+  at (2.34,-3.76) {OUTSIDE BOTH LOOPS};
+\node[pblock,font=\sffamily\scriptsize] (c3) at (3.25,-4.62)
+  {C3\\leakage 0};
+\node[pblock,font=\sffamily\scriptsize] (q3) at (5.05,-4.62)
+  {Q3\\AUDIT};
+\node[pblock,font=\sffamily\scriptsize] (q4) at (7.10,-4.62)
+  {Q4 CSB\\sat 0.85};
+\node[nblock,font=\sffamily\scriptsize] (f1) at (8.95,-4.62)
+  {F1\\fuse};
+\draw[flow] (c3.east) -- (q3.west);
+\draw[flow] (q3.east) -- (q4.west);
+\draw[flow] (q4.east) -- (f1.west);
+
+\end{tikzpicture}

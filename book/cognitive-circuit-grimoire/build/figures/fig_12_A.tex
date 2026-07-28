@@ -1,0 +1,51 @@
+% Figure 12-A -- CCB-0 trainer block diagram with lawful feedback.
+\begin{tikzpicture}[scale=.98,transform shape,x=1cm,y=1cm,font=\sffamily\scriptsize,
+  stage/.style={casblock,text width=17mm,minimum height=13mm,
+    font=\sffamily\scriptsize\bfseries},
+  diode/.pic={\filldraw[fill=white,draw=black,line width=.55pt]
+    (-.17,-.17)--(-.17,.17)--(.11,0)--cycle;\draw[line width=.85pt](.11,-.20)--(.11,.20);},
+  small/.style={font=\sffamily\tiny,align=center,fill=white,inner sep=.7pt}]
+\node[cblock,stage] (audit) at (1.20,2.70) {AUDIT\\Q1};
+\node[pblock,stage] (guard) at (3.55,2.70) {GUARD\\Q2};
+\node[eblock,stage] (amp) at (6.15,2.70) {AMPLIFY\\Q3};
+\node[oblock,stage] (deliver) at (8.55,2.70) {DELIVER\\Q4};
+\draw[flow] (.05,2.70)--(audit.west); \node[small,anchor=south west] at (.10,2.82) {intent};
+\draw[flow] (audit)--(guard);
+\draw[line width=.6pt] (guard.east)--(4.70,2.70); \pic at (4.73,2.70){diode};
+\draw[flow] (4.88,2.70)--(amp.west);
+\node[small,anchor=south] at (4.73,3.08) {D1 ${}^C\!\to{}^E$\\$V_f=1.2$};
+\draw[flow] (amp)--(deliver);
+\draw[line width=.6pt] (deliver.east)--(9.78,2.70); \pic at (9.80,2.70){diode};
+\draw[flow] (9.95,2.70)--(10.55,2.70);
+\node[small,anchor=south] at (9.80,3.08) {D2 ${}^E\!\to{}^O$\\$V_f=2.0$};
+
+% Bias rail from C1 to every CJT bias terminal.
+\draw[line width=1.2pt,draw=casPedge] (.65,.15)--(9.00,.15);
+\node[pblock,text width=18mm,minimum height=8mm,font=\sffamily\scriptsize\bfseries]
+  (c1) at (.75,-.58) {C1\\BIAS RAIL};
+\draw[line width=.7pt,draw=casPedge] (c1.north)--(.75,.15);
+\foreach \x in {1.20,3.55,6.15,8.55}{\draw[line width=.6pt,draw=casPedge](\x,.15)--(\x,2.05);}
+\node[small,anchor=west] at (9.05,.15) {substrate ${}^5{}^P$};
+
+% Permanent refusal branch.
+\draw[flow] (guard.south)--(3.55,1.45);
+\path[draw=black,fill=white] (3.30,1.05) rectangle (3.80,1.45);
+\draw[line width=.7pt] (3.34,1.09)--(3.76,1.41);
+\node[small,anchor=west] at (3.90,1.25) {F1 REFUSE};
+\draw[line width=.6pt] (3.55,1.05)--(3.55,.72);
+\draw[line width=.6pt] (3.30,.72)--(3.80,.72);
+\draw[line width=.6pt] (3.38,.61)--(3.72,.61);
+
+% Output trend returns through FLT1 and FB1 only to C1.
+\draw[fbflow,rounded corners=2pt] (10.45,2.70)--(10.45,-1.55)--(8.00,-1.55);
+\node[nblock,font=\sffamily\scriptsize] (flt) at (7.15,-1.55) {FLT1 $\tau=21$ d};
+\node[nblock,font=\sffamily\scriptsize] (fb) at (4.75,-1.55) {FB1 $\beta=.05$};
+\draw[fbflow] (8.00,-1.55)--(flt.east); \draw[fbflow] (flt.west)--(fb.east);
+\draw[fbflow,rounded corners=2pt] (fb.west)--(.75,-1.55)--(c1.south);
+\node[small,anchor=south] at (4.85,-1.16) {terminates at bias, never signal path};
+
+\foreach \x/\y/\lab in {.75/.15/TP1,3.55/1.65/TP2,6.15/2.70/TP3,10.28/2.70/TP4}{
+  \node[circle,draw=black,fill=white,minimum size=2mm,inner sep=0pt] at (\x,\y) {};
+  \node[small,anchor=south] at (\x,{\y+.14}) {\lab};
+}
+\end{tikzpicture}

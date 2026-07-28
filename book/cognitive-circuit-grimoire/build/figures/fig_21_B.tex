@@ -1,0 +1,47 @@
+% Figure 21-B -- witness-load / object-premium decision map.
+\begin{tikzpicture}
+\begin{axis}[casaxis,
+  width=10.3cm,height=7.3cm,
+  xmin=0,xmax=0.6,ymin=0,ymax=0.6,
+  xtick={0,0.1,0.2,0.3,0.4,0.5,0.6},
+  ytick={0,0.1,0.2,0.3,0.4,0.5,0.6},
+  xlabel={witness load},
+  ylabel={object premium},
+  axis on top
+]
+
+\fill[casNfill] (axis cs:0,0) rectangle (axis cs:0.30,0.20);
+\fill[casCfill] (axis cs:0,0.20) rectangle (axis cs:0.30,0.60);
+\fill[casPfill] (axis cs:0.30,0.20) rectangle (axis cs:0.60,0.60);
+\fill[casEfill] (axis cs:0.30,0) rectangle (axis cs:0.60,0.20);
+\draw[casNedge,dashed,line width=0.8pt]
+  (axis cs:0.30,0) -- (axis cs:0.30,0.60);
+\draw[casNedge,dashed,line width=0.8pt]
+  (axis cs:0,0.20) -- (axis cs:0.60,0.20);
+
+\node[font=\sffamily\scriptsize\bfseries,align=center]
+  at (axis cs:0.18,0.53) {PASS\\object survives};
+\node[font=\sffamily\scriptsize\bfseries,align=center]
+  at (axis cs:0.15,0.10) {PROXY\\TARGET};
+\node[font=\sffamily\scriptsize\bfseries,align=center]
+  at (axis cs:0.45,0.43) {WITNESS-\\CARRIED};
+\node[font=\sffamily\scriptsize\bfseries,align=center,text=casEedge]
+  at (axis cs:0.50,0.16) {BOTH\\RE-WORD};
+
+\addplot[only marks,mark=*,mark size=2.2pt,casEedge]
+  coordinates {(0.38,0.08)};
+\addplot[only marks,mark=*,mark size=2.2pt,casCedge]
+  coordinates {(0.07,0.42)};
+\draw[-{Latex[length=2mm,width=1.4mm]},casNedge,line width=1.0pt]
+  (axis cs:0.38,0.08) .. controls (axis cs:0.32,0.34) ..
+  (axis cs:0.07,0.42);
+\node[font=\sffamily\scriptsize\bfseries,align=center,fill=white,
+      inner sep=1.5pt] at (axis cs:0.26,0.34)
+  {re-specification\\no cast fired};
+\node[font=\sffamily\scriptsize\bfseries,anchor=north east,
+      fill=white,inner sep=1pt] at (axis cs:0.37,0.075) {1};
+\node[font=\sffamily\scriptsize\bfseries,anchor=south west,
+      fill=white,inner sep=1pt] at (axis cs:0.08,0.425) {2};
+
+\end{axis}
+\end{tikzpicture}

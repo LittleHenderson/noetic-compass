@@ -1,0 +1,43 @@
+% Figure 3-A -- CJT component symbol and equivalent three-port block.
+\begin{tikzpicture}[x=1cm,y=1cm,
+  lead/.style={line width=0.75pt,draw=black},
+  call/.style={font=\sffamily\scriptsize,align=center},
+  port/.style={font=\sffamily\scriptsize\bfseries,fill=white,inner sep=1pt}]
+
+\node[font=\sffamily\footnotesize\bfseries] at (2.42,5.10)
+  {CJT SYMBOL};
+\draw[lead,fill=white] (2.42,3.25) circle (0.88);
+% Base bar and NPN junction strokes.
+\draw[lead,line width=1.0pt] (2.15,2.78) -- (2.15,3.72);
+\draw[lead] (2.15,3.55) -- (2.86,4.04) -- (2.86,4.72);
+\draw[lead,-{Latex[length=2.2mm,width=1.7mm]}]
+  (2.15,2.95) -- (2.86,2.46) -- (2.86,1.78);
+\draw[lead] (0.35,3.25) -- (2.15,3.25);
+% Terminal labels, deliberately spelling out both vocabularies.
+\node[call,anchor=south] at (2.86,4.77)
+  {\textbf{C --- Cause}\\(collector)};
+\node[call,anchor=east] at (1.76,3.25)
+  {\textbf{B --- Bias}\\(base)};
+\node[call,anchor=north] at (2.86,1.70)
+  {\textbf{E --- Effect}\\(emitter)};
+\node[font=\sffamily\footnotesize\bfseries,anchor=west] at (3.38,3.80) {Q1};
+
+\node[nblock,text width=42mm,minimum height=9mm,fill=white,
+      font=\ttfamily\scriptsize] at (2.42,0.50)
+  {[\ensuremath{\beta}=2.4, sat=0.78, cutoff=0.10]};
+
+% Equivalent three-port view.
+\node[font=\sffamily\footnotesize\bfseries] at (8.00,5.10)
+  {THREE-PORT VIEW};
+\node[cblock,text width=33mm,minimum height=25mm,
+      font=\sffamily\scriptsize\bfseries] (blk) at (8.00,3.15)
+  {COGNITIVE JUNCTION\\TRANSISTOR\\[2pt]\normalfont\ttfamily Q1};
+\draw[flow] (8.00,4.78) -- (blk.north);
+\node[port,anchor=south] at (8.00,4.82) {C --- CAUSE IN};
+\draw[flow] (5.45,3.15) -- (blk.west);
+\node[port,anchor=south west] at (5.45,3.23) {B --- BIAS};
+\draw[flow] (blk.south) -- (8.00,1.43);
+\node[port,anchor=north] at (8.00,1.38) {E --- EFFECT OUT};
+\node[flowlbl,text width=34mm,align=center] at (8.00,0.50)
+  {same three terminal roles; schematic abstraction only};
+\end{tikzpicture}

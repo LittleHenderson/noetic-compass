@@ -117,7 +117,7 @@ You do not need to understand these yet. Read only the shape of a row: a design 
 | **β** gain | effect movement per unit cause | 0.5 – 4.0 | attenuates a signal it should carry | cascaded gains run away | Ch 3, 10 |
 | **sat** ceiling | plateau past which more cause does nothing | 0.60 – 0.80 working; 0.85 – 0.97 safety | benign input latches a refusal | headroom left to push a locked decision | Ch 3, 24 |
 | **cutoff** | bias floor below which the stage does not fire | 0.05 – 0.20 | noise fires it; the board flags everything | never fires on real input — the silent failure | Ch 3, 24 |
-| **τ** | time to move the substrate; 3τ ≈ 95% | minutes to months | reprogrammable by a burst of crafted input | cannot learn from sustained evidence | Ch 7, 9, 15 |
+| **τ** | time to move the substrate; 3τ ≈ 95% | minutes to months | can be reprogrammed by a burst of crafted input | cannot learn from sustained evidence | Ch 7, 9, 15 |
 | **R_constraint** | opposition to attention flow | 10 – 90 Ω_c | flow floods paths not built for it | the operation stalls at the output | Ch 4, 6 |
 
 One notational trap, early. **β=∞ is a limit, not a value** — the idealisation for a hard comparator. A validator rejects it: parameter fields are range-checked. Write it in discussion if you mean the idealisation; build with a large finite gain and say which.

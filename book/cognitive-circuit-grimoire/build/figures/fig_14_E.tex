@@ -1,0 +1,49 @@
+% Figure 14-E -- seed-removal test at months 4 and 14.
+\begin{tikzpicture}
+\begin{groupplot}[
+  group style={group size=2 by 1,horizontal sep=8mm},
+  casaxis,width=4.55cm,height=6.2cm,
+  xmin=0,xmax=8,xtick={0,2,4,6,8},
+  xlabel={cycle after seed removal},
+  axis on top
+]
+
+\nextgroupplot[
+  ymin=0.030,ymax=0.046,
+  ytick={0.032,0.036,0.040,0.044},
+  ylabel={TP3},
+  title={month 4}
+]
+\fill[casNfill] (axis cs:0,0.0369) rectangle (axis cs:8,0.0451);
+\node[font=\sffamily\scriptsize,anchor=north east,text=casNedge]
+  at (axis cs:7.8,0.0448) {$\pm10\%$ unresolved};
+\addplot[casCedge,line width=1.25pt,mark=*,mark size=1.7pt]
+  coordinates {(0,0.0410)(1,0.0404)(2,0.0397)(3,0.0389)
+               (4,0.0381)(5,0.0372)(6,0.0364)(7,0.0356)(8,0.0350)};
+\node[font=\sffamily\scriptsize\bfseries,anchor=north east,align=right,
+      fill=white,inner sep=1.2pt] at (axis cs:7.8,0.0347)
+  {0.041 $\to$ 0.035\\$-15.4\%$};
+\node[font=\sffamily\scriptsize\bfseries,anchor=south west,align=left]
+  at (axis cs:0.25,0.0310)
+  {sub-critical\\$G=0.415$ \textemdash{} rented};
+
+\nextgroupplot[
+  ymin=0.275,ymax=0.365,
+  ytick={0.28,0.30,0.32,0.34,0.36},
+  title={month 14}
+]
+\fill[casNfill] (axis cs:0,0.279) rectangle (axis cs:8,0.341);
+\node[font=\sffamily\scriptsize,anchor=north east,text=casNedge]
+  at (axis cs:7.8,0.339) {$\pm10\%$ unresolved};
+\addplot[casEedge,line width=1.25pt,mark=*,mark size=1.7pt]
+  coordinates {(0,0.310)(1,0.315)(2,0.320)(3,0.325)
+               (4,0.331)(5,0.337)(6,0.342)(7,0.347)(8,0.352)};
+\node[font=\sffamily\scriptsize\bfseries,anchor=south east,align=right,
+      fill=white,inner sep=1.2pt] at (axis cs:7.8,0.352)
+  {0.310 $\to$ 0.352\\$+13.4\%$};
+\node[font=\sffamily\scriptsize\bfseries,anchor=north west,align=left]
+  at (axis cs:0.25,0.292)
+  {super-critical\\$G=1.449$ \textemdash{} crossover};
+
+\end{groupplot}
+\end{tikzpicture}

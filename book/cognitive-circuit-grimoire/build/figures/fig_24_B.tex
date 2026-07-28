@@ -1,0 +1,61 @@
+% Figure 24-B -- guard transfer characteristic and arming margin.
+\begin{tikzpicture}
+\begin{axis}[casaxis,
+  width=10.3cm,height=7.3cm,
+  xmin=0,xmax=0.8,ymin=0,ymax=1.02,
+  xtick={0,0.08,0.20,0.4,0.8},
+  xticklabels={0,.08,.200,.40,.80},
+  ytick={0,0.2,0.4,0.6,0.8,0.85,0.95,1.0},
+  xlabel={assessed risk},
+  ylabel={refusal activation},
+  axis on top
+]
+
+\fill[casPfill,opacity=0.55]
+  (axis cs:0.283,0) rectangle (axis cs:0.317,1.02);
+\node[font=\sffamily\scriptsize,rotate=90,align=center,text=casPedge]
+  at (axis cs:0.300,0.43)
+  {cause-space handed to the argument\\by raising the ceiling};
+
+% Three ceiling alternatives and their knees.
+\draw[casNedge,dashed,line width=0.7pt]
+  (axis cs:0,0.60) -- (axis cs:0.8,0.60);
+\draw[casPedge,dashed,line width=0.9pt]
+  (axis cs:0,0.85) -- (axis cs:0.8,0.85);
+\draw[casEedge,dashed,line width=0.7pt]
+  (axis cs:0,0.95) -- (axis cs:0.8,0.95);
+\addplot[casCedge,line width=1.25pt] coordinates
+  {(0,0)(0.08,0)(0.283,0.85)(0.8,0.85)};
+\addplot[casNedge,line width=0.8pt] coordinates
+  {(0.08,0)(0.20,0.60)(0.8,0.60)};
+\addplot[casEedge,line width=0.8pt] coordinates
+  {(0.08,0)(0.317,0.95)(0.8,0.95)};
+
+\addplot[only marks,mark=*,mark size=1.8pt,black]
+  coordinates {(0.20,0.60)(0.283,0.85)(0.317,0.95)};
+\node[font=\sffamily\tiny,anchor=south east] at (axis cs:0.20,0.60) {0.200};
+\node[font=\sffamily\tiny,anchor=south east] at (axis cs:0.283,0.85) {0.283};
+\node[font=\sffamily\tiny,anchor=south west] at (axis cs:0.317,0.95) {0.317};
+
+% Enforcement arming line and margin.
+\draw[casNedge,dash pattern=on 2pt off 1pt,line width=0.9pt]
+  (axis cs:0,0.80) -- (axis cs:0.8,0.80);
+\node[font=\sffamily\scriptsize\bfseries,anchor=east,fill=white,inner sep=1pt]
+  at (axis cs:0.78,0.79) {Q7 cutoff \textemdash{} enforcement arms};
+\draw[{Latex[length=1.7mm]}-{Latex[length=1.7mm]},casPedge,line width=0.8pt]
+  (axis cs:0.70,0.80) -- (axis cs:0.70,0.85);
+\node[font=\sffamily\tiny,anchor=east,text=casPedge]
+  at (axis cs:0.68,0.825) {0.05 arming margin};
+
+% Worked example.
+\draw[casEedge,line width=0.9pt]
+  (axis cs:0.60,0) -- (axis cs:0.60,0.85);
+\node[font=\sffamily\scriptsize\bfseries,rotate=90,anchor=south,
+      fill=white,inner sep=1pt,text=casEedge]
+  at (axis cs:0.60,0.28)
+  {worked example \textemdash{} 2.1$\times$ the knee};
+\node[font=\sffamily\tiny,anchor=north west] at (axis cs:0.01,0.02)
+  {cutoff $=0.08$; active slope $\beta=3.0$};
+
+\end{axis}
+\end{tikzpicture}

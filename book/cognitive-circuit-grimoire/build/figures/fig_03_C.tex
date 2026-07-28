@@ -1,0 +1,34 @@
+% Figure 3-C -- legal region transitions and the one-way breakdown state.
+\begin{tikzpicture}[x=1cm,y=1cm,
+  region/.style={nblock,text width=23mm,minimum height=12mm,
+    font=\sffamily\footnotesize\bfseries},
+  edge/.style={<->,>=Latex,line width=0.7pt,draw=black},
+  fail/.style={-{Latex[length=2.4mm,width=1.9mm]},line width=1.35pt,
+    draw=casRed},
+  elbl/.style={font=\sffamily\scriptsize,align=center,fill=white,inner sep=1pt}]
+
+\node[region] (cut) at (1.25,2.70) {CUTOFF};
+\node[region] (act) at (5.25,2.70) {ACTIVE};
+\node[region] (sat) at (9.25,2.70) {SATURATION};
+
+\draw[edge] (cut) -- node[elbl,above] {bias $>$ cutoff}
+  node[elbl,below] {bias $<$ cutoff} (act);
+\draw[edge] (act) -- node[elbl,above] {cause $\geq \mathrm{sat}/\beta$}
+  node[elbl,below] {cause $< \mathrm{sat}/\beta$} (sat);
+
+\node[eblock,text width=27mm,minimum height=14mm,
+      font=\sffamily\footnotesize\bfseries] (break) at (7.35,-0.45)
+  {BREAKDOWN\\[2pt]\normalfont\scriptsize one-way state};
+\draw[fail] (act.south east) -- node[elbl,sloped,above]
+  {runaway loop} (break.north west);
+\draw[fail] (sat.south west) -- node[elbl,sloped,above]
+  {spike $>I_c(\mathrm{max})$} (break.north east);
+
+% No return arrow is intentionally drawn.
+\node[eblock,text width=40mm,minimum height=11mm,
+      font=\sffamily\scriptsize,align=left] (call) at (2.25,-0.45)
+  {\textbf{Emitter Noetic}\\$=$ involution of the\\designed Noetic};
+\draw[draw=casRed,line width=0.8pt] (break.west) -- (call.east);
+\node[font=\sffamily\scriptsize\itshape,text=casEedge,anchor=north]
+  at (7.35,-1.35) {no lawful arrow leaves BREAKDOWN};
+\end{tikzpicture}

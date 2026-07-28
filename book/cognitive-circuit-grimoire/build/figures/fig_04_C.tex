@@ -1,0 +1,36 @@
+% Figure 4-C -- the three algebraic modes of CAS-Ohm.
+\begin{tikzpicture}[x=.97cm,y=1cm,
+  frame/.style={rounded corners=3pt,draw=casNedge,line width=.6pt,fill=casNfill!35},
+  title/.style={font=\sffamily\footnotesize\bfseries},
+  formula/.style={font=\sffamily\scriptsize\bfseries,align=center},
+  known/.style={cblock,minimum width=8mm,minimum height=7mm,font=\sffamily\scriptsize\bfseries},
+  unknown/.style={pblock,minimum width=8mm,minimum height=7mm,font=\sffamily\scriptsize\bfseries},
+  ask/.style={font=\sffamily\scriptsize\itshape,align=center}]
+
+\foreach \x in {0,3.58,7.16}{\path[frame] (\x,0) rectangle ++(3.40,4.70);}
+% Measure.
+\node[title] at (1.70,4.33) {1  MEASURE};
+\node[formula] at (1.70,3.62) {$I=(V-\Sigma V_f)/R$};
+\node[known] at (.73,2.55) {$V$}; \node[known] at (1.70,2.55) {$R$};
+\node[unknown] at (2.67,2.55) {$I$};
+\node[formula] at (1.70,1.72) {known\quad known\quad \textbf{unknown}};
+\node[ask] at (1.70,.72) {what will flow?};
+% Design.
+\node[title] at (5.28,4.33) {2  DESIGN};
+\node[formula] at (5.28,3.62) {$V=I\,R+\Sigma V_f$};
+\node[known] at (4.31,2.55) {$I$}; \node[known] at (5.28,2.55) {$R$};
+\node[unknown] at (6.25,2.55) {$V$};
+\node[formula] at (5.28,1.72) {known\quad known\quad \textbf{unknown}};
+\node[ask] at (5.28,.72) {what rail do I need?};
+% Diagnose.
+\node[title] at (8.86,4.33) {3  DIAGNOSE};
+\node[formula] at (8.86,3.62) {$R=(V-\Sigma V_f)/I$};
+\node[known] at (7.89,2.55) {$V$}; \node[known] at (8.86,2.55) {$I$};
+\node[unknown] at (9.83,2.55) {$R$};
+\node[formula] at (8.86,1.72) {known\quad known\quad \textbf{unknown}};
+\node[ask,text width=27mm] at (8.86,.72) {what is in the path\\that I did not draw?};
+
+\node[nblock,text width=92mm,minimum height=8mm,fill=white,
+  font=\sffamily\scriptsize\bfseries] at (5.28,-.52)
+  {modes 1 and 2 trust the schematic; mode 3 tests it};
+\end{tikzpicture}

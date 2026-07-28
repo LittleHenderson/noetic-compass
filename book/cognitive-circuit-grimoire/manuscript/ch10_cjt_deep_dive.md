@@ -58,7 +58,7 @@ Specify β = 2.7. Then check the ceiling: the stage will run near 0.55, so `sat`
 
 Now the part that makes the rule mean something. To reach the same 0.55 A_c at unity gain you would need `V_drive = (0.55 × 40) + 3.9 = 25.9 V_c` — nearly fourteen more volts of drive than the operator has. **Gain is what you buy when you cannot afford drive.** And it is not a free substitution, because drive and gain do different things to whatever contamination is riding on the cause terminal. More drive raises signal and noise together; the ratio is unchanged. More gain does the same — but gain also multiplies every subsequent stray input by everything downstream of it, which is Section 10.5's whole subject.
 
-> **Bench Note — the ceiling on β is contamination, not power.** Operators treat high β as bold and low β as timid. The real limit is arithmetic. If 5% of what sits on your cause terminal is content you did not intend — a half-formed grievance riding along with the stated desire, a resentment attached to the target — then at β = 1.0 that contamination arrives at 5% of the output magnitude and at β = 3.0 it arrives at 15%. The intended signal grew by the same factor, so the *ratio* held; what changed is that 15% of a large output is a large amount of unintended effect. This is the mechanism behind the inversion failures of Chapter 25.3, and it is why the operation-type table below stops recommending numbers above 4.0 rather than continuing the trend.
+> **Bench Note — the ceiling on β is contamination, not power.** Operators treat high β as bold and low β as timid. The real limit is arithmetic. If 5% of what sits on your cause terminal is content you did not intend — a half-formed grievance riding along with the stated desire, a resentment attached to the target — then at β = 1.0 that contamination arrives at 5% of the output magnitude and at β = 3.0 it arrives at 15%. The intended signal grew by the same factor, so the *ratio* held; what changed is that 15% of a large output is a large amount of unintended effect. This is the mechanism behind the breakdown inversion in Chapter 3.4, and it is why the operation-type table below stops recommending numbers above 4.0 rather than continuing the trend.
 
 | Operation type | Design β | Why this band | What breaks outside it |
 |---|---|---|---|
@@ -68,7 +68,7 @@ Now the part that makes the rule mean something. To reach the same 0.55 A_c at u
 | Self-programming (Ch. 20) | 1.0 – 1.5 | Identity substrate moves slowly; nothing external checks a closed loop | Above 2.0 a self-suggestion amplifies with no external check — see 17.5 |
 | Desire manifestation (Ch. 13) | 1.5 – 3.0 | Sized against real external `R_constraint` | Below 1.5 the rail never clears; above 3.0 contamination dominates |
 | Collective / group operation | 2.0 – 4.0 | Collective bias supplies part of the lift | Above 4.0 the group's own contamination is amplified with the signal |
-| Hostile / adversarial operation | not specified | — | This book does not specify a build. The band is documented in Section 25.3 so an inversion signature can be recognised from outside |
+| Hostile / adversarial operation | not specified | — | This book does not specify a build. The inversion signature is documented in Chapter 19.4 so it can be recognised from outside |
 
 [[FIGURE 10-B: Characteristic curve — CJT transfer characteristic. Horizontal axis cause (A_c) 0 to 0.6; vertical axis effect (A_c) 0 to 1.0. Three straight-line regions drawn for β = 0.3, β = 1.0 and β = 2.7, each rising from a common cutoff knee at cause = 0.05 and each bending flat at its own sat plateau (0.20, 0.55, 0.70 respectively). The cutoff region left of the knee is shaded and labelled "no response"; the plateau regions are shaded and labelled "no response to further cause". The design point (0.2025, 0.55) is marked with crosshairs on the β = 2.7 line.]]
 
@@ -166,7 +166,7 @@ Collective substrates sit lower than individuals because a frame must displace e
 
 Now the arithmetic. A reframe that displaces the bias by 0.50 V_c moves the effect by `g_m × 0.50`:
 
-| `g_m` | Effect shift from a 0.50 V_c reframe | Condition |
+| `g_m` | Effect shift | Condition |
 |---|---|---|
 | 0.25 | 0.125 A_c | institutional stage, Section 15.3's A5 |
 | 0.40 | 0.200 A_c | professional stage, Section 13.3's Q2 |
@@ -291,7 +291,7 @@ n_k = n_{k−1} · β_k + ε · s_k
 Divide the second by the first, and the gains cancel:
 
 ```
-r_k = r_{k−1} + ε          ⟹          r_n = n · ε
+r_k = r_{k−1} + ε          =>          r_n = n · ε
 ```
 
 **The noise-to-signal ratio at the output of a cascade is the stage count times the per-stage contamination, and the gains do not appear.** A gentle chain of ten stages at β = 1.1 each is dirtier than a hard chain of three at β = 3.0, even though the gentle one barely amplifies. Length is the variable. This is a model this book adopts, not a measurement, and it is the model that sizes every cascade in Part III.
@@ -393,7 +393,7 @@ Every value below is a design choice made in this book, not a measurement.
 
 | Parameter | Units | Design range | Failure at other values |
 |---|---|---|---|
-| `β` gain | — (Fisher-Rao ratio) | 0.05 – 4.0 | 0 is cutoff, not attenuation. Above 4.0 contamination scales with the signal and inversion risk climbs (25.3) |
+| `β` gain | — (Fisher-Rao ratio) | 0.05 – 4.0 | 0 is cutoff, not attenuation. Above 4.0 contamination scales with the signal and inversion risk climbs (Chapter 3.4) |
 | `sat` decision stage | — | 0.60 – 0.85 | At the 0.95 default an adversary gets ~70% more steerable cause-space |
 | `sat` production stage | — | ≥ 1.25 × peak effect | At the operating point the stage clips and every reading pins to one number |
 | `cutoff` | — | 0.05 – 0.20, and `cutoff < sat` | Above 0.2 a real cause fails to fire the stage; the grammar rejects `cutoff ≥ sat` |

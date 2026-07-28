@@ -4,6 +4,27 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-07-28 — Cognitive Circuit Grimoire accepted digital master
+
+- Built and accepted the canonical 6 × 9 inch, 908-page
+  `book/cognitive-circuit-grimoire/Cognitive_Circuit_Grimoire.pdf` digital
+  master (2,672,454 bytes; SHA-256
+  `99AC4170929C48F82C3D2FA81AABA3798C181EF32B3CDCC4C5E7E2D7C52F923D`).
+- Completed the split 24-chapter manuscript, 13 appendices, 112 authored
+  figures, and 164 worked exercise answers. Added fail-closed structure,
+  cross-reference, answer, figure-inventory, standalone-figure, longtable,
+  index, glyph, citation, reference, and layout gates to the publishing path.
+- The accepted build reports 0 material layout errors, unresolved references,
+  unresolved citations, missing glyphs, or rerun warnings. All fonts are
+  embedded/subset, and independent text/front-matter inspection found no stale
+  markers or orphaned contents entry.
+- Marked the pre-existing HTML, EPUB, cover HTML, and monolithic manuscript as
+  legacy previews rather than release artifacts.
+- Print-production status remains `OPEN`: 908 pages exceeds KDP's current
+  828-page 6 × 9 black-ink, white-paper paperback maximum. Closure requires a
+  publishing decision between a validated 10-point single-volume reflow and a
+  multi-volume split, followed by cover/spine regeneration.
+
 ## 2026-07-27 — Gate 2 campaign: root cause found, instrument rebuilt, S3-1 ALL_ROWS_PASS
 
 - **Judge positive control** (`d755665b`): sixteen nulls explained — harness sound (`T0 28/28`),

@@ -1,0 +1,70 @@
+% Figure 10-A -- Cognitive Junction Transistor symbol and parameter callouts.
+\begin{tikzpicture}[
+  x=1cm,y=1cm,font=\sffamily\footnotesize,
+  wire/.style={draw=black,line width=0.75pt},
+  call/.style={font=\sffamily\scriptsize,align=left},
+  pbox/.style={draw=casNedge,fill=casNfill,rounded corners=2pt,
+               line width=0.6pt,font=\sffamily\scriptsize,align=left,
+               inner sep=3pt}
+]
+
+\node[font=\sffamily\footnotesize\bfseries,anchor=west]
+  at (0.15,0.60) {COGNITIVE JUNCTION TRANSISTOR};
+
+% terminals
+\node[casterm,text width=27mm] (cause) at (1.55,-0.65)
+  {cause / collector\\\textasciicircum 8 Above/Cause};
+\node[casterm,text width=27mm] (bias) at (1.55,-3.02)
+  {bias / base\\\textasciicircum 5 Female};
+\node[casterm,text width=27mm] (effect) at (8.70,-3.72)
+  {effect / emitter\\\textasciicircum 9 Below/Effect};
+
+% transistor body
+\draw[draw=casCedge,fill=casCfill,line width=0.8pt] (5.28,-2.35) circle (1.22);
+\draw[wire] (4.73,-3.05) -- (4.73,-1.65);          % base bar
+\draw[wire] (4.73,-1.90) -- (5.58,-1.25) -- (5.58,-0.75);
+\draw[wire] (4.73,-2.80) -- (5.58,-3.45) -- (5.58,-3.85);
+\draw[-{Latex[length=1.7mm,width=1.3mm]},wire]
+  (5.20,-3.15) -- (5.53,-3.40);
+\node[font=\sffamily\scriptsize\bfseries] at (5.28,-2.35) {CJT};
+
+% cause and effect leads
+\draw[flow] (cause.east) -- (4.10,-0.65) -- (4.10,-1.10) -- (5.58,-1.10);
+\draw[flow] (5.58,-3.62) -- (7.15,-3.62) -- (effect.west);
+
+% r_pi in the bias lead
+\draw[wire] (bias.east) -- (2.75,-3.02);
+\node[draw=casNedge,fill=casNfill,line width=0.7pt,
+      minimum width=14mm,minimum height=6mm] (rpi) at (3.45,-3.02)
+  {$r_\pi$};
+\draw[flow] (rpi.east) -- (4.73,-3.02);
+
+% saturation ceiling
+\draw[draw=casEedge,dashed,line width=0.8pt]
+  (6.25,-2.88) -- (8.00,-2.88);
+\node[call,text=casEedge,anchor=south] at (7.10,-2.84)
+  {$\mathrm{sat}$ --- effect ceiling};
+
+% parameter callouts
+\node[pbox,text width=31mm,anchor=west] (bcall) at (6.55,-0.72)
+  {$\mathbf{\beta}$ acts on the\\cause-to-effect path};
+\draw[fbflow] (bcall.west) -- (5.48,-1.55);
+
+\node[pbox,text width=32mm,anchor=west] (gmcall) at (6.55,-1.70)
+  {$\mathbf{g_m}$ acts on the\\bias-to-effect path};
+\draw[fbflow] (gmcall.west) -- (5.10,-2.72);
+
+\node[call,text width=31mm,anchor=north] at (3.45,-3.48)
+  {$r_\pi$: series resistance\\seen at the bias lead};
+
+\node[pbox,text width=42mm,anchor=north west] at (0.25,-4.52)
+  {\textbf{hard limits, not design knobs}\\
+   $I_c(\max)$ --- maximum cause current\\
+   cutoff --- cause floor below which the stage is off};
+
+\node[pbox,text width=40mm,anchor=north west] at (5.55,-4.52)
+  {\textbf{two controls, two questions}\\
+   $\beta$: how far does the cause move the effect?\\
+   $g_m$: how far does bias displacement move it?};
+
+\end{tikzpicture}

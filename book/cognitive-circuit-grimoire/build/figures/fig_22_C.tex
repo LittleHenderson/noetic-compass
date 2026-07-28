@@ -1,0 +1,95 @@
+% Figure 22-C -- CCB-QT assembly with degree ladder and BOM.
+\begin{tikzpicture}[
+  scale=0.95,transform shape,
+  x=1mm,y=1mm,font=\sffamily\footnotesize,
+  fp/.style={rectangle,rounded corners=1pt,draw=casNedge,fill=casNfill,
+             line width=0.6pt,minimum height=7mm,align=center,
+             font=\sffamily\tiny\bfseries,inner sep=1pt},
+  tpf/.style={circle,draw=black,fill=white,line width=0.6pt,
+              minimum size=6mm,inner sep=0pt,font=\sffamily\tiny\bfseries},
+  trace/.style={draw=casNedge,line width=0.7pt},
+  slk/.style={font=\sffamily\scriptsize,inner sep=1pt}
+]
+
+\draw[rounded corners=3pt,draw=casNedge,fill=casNfill,fill opacity=0.18,
+      line width=1.0pt] (0,0) rectangle (104,-62);
+\node[anchor=west,font=\sffamily\footnotesize\bfseries] at (3,-5)
+  {CCB-QT \textemdash{} ASSEMBLY};
+\node[anchor=east,font=\sffamily\scriptsize] at (101,-5)
+  {write-once quantitative logger};
+
+% Three intake rails.
+\node[slk,anchor=west] at (1,-17) {gnosis};
+\node[slk,anchor=west] at (1,-29) {clock};
+\node[slk,anchor=west] at (1,-41) {confirm};
+\node[fp,minimum width=12mm] at (18,-17) {H1/M1};
+\node[fp,minimum width=10mm] at (18,-29) {F1};
+\node[fp,minimum width=18mm] at (18,-41) {L1/F2/H2};
+\node[fp,minimum width=15mm] (mux) at (40,-29) {MUX1};
+\draw[trace] (4,-17) -- (12,-17);
+\draw[trace] (4,-29) -- (13,-29);
+\draw[trace] (4,-41) -- (9,-41);
+\draw[trace,rounded corners=2pt] (24,-17) -- (31,-17) -- (31,-27) -- (mux.west);
+\draw[trace] (23,-29) -- (mux.west);
+\draw[trace,rounded corners=2pt] (27,-41) -- (31,-41) -- (31,-31) -- (mux.west);
+
+% Downstream placements.
+\node[fp,minimum width=12mm] (m2) at (56,-29) {M2};
+\node[fp,minimum width=13mm] (f34) at (70,-29) {F3/F4};
+\node[fp,minimum width=14mm] (flt) at (84,-29) {FLT1/M3};
+\node[fp,minimum width=8mm] at (98,-29) {D1};
+\draw[trace] (mux.east) -- (m2.west);
+\draw[trace] (m2.east) -- (f34.west);
+\draw[trace] (f34.east) -- (flt.west);
+\draw[trace] (flt.east) -- (94,-29);
+\draw[fill=casOfill,draw=casOedge] (100,-26) rectangle (104,-32);
+\node[slk,anchor=east] at (102,-22) {log\_row};
+
+% Practice rail.
+\draw[trace,line width=1.3pt] (6,-54) -- (96,-54);
+\node[slk,anchor=north] at (51,-56) {PRACTICE RAIL};
+
+% TPs and expected values.
+\node[tpf] at (18,-10) {TP1};
+\draw[trace] (18,-13) -- (18,-13.5);
+\node[slk,anchor=east] at (14,-10) {1\textdegree/2\textdegree; $<2$ min};
+\node[tpf] at (37,-10) {TP2};
+\node[slk,anchor=west] at (42,-10) {boundary matches page one};
+\node[tpf] at (18,-48) {TP3};
+\node[slk,anchor=west] at (23,-48) {exactly one arrival};
+\node[tpf] at (84,-48) {TP4};
+\node[slk,anchor=west] at (89,-48) {$\rho\le0.6$};
+
+% Degree ladders.
+\draw[draw=casNedge,line width=0.7pt] (0,-68) rectangle (39,-105);
+\node[slk,anchor=north west,font=\sffamily\scriptsize\bfseries]
+  at (2,-70) {THREE DEGREE LADDERS};
+\foreach \x/\lab in {8/gnosis,20/rhythm,32/vibration}{
+  \node[slk,font=\sffamily\tiny\bfseries] at (\x,-77) {\lab};
+  \draw[fill=casNfill,draw=casNedge] (\x-4,-84) rectangle (\x+4,-80);
+  \draw[fill=casCfill,draw=casCedge] (\x-4,-90) rectangle (\x+4,-86);
+  \draw[fill=casPfill,draw=casPedge] (\x-4,-96) rectangle (\x+4,-92);
+  \node[slk] at (\x,-82) {1};
+  \node[slk] at (\x,-88) {2};
+  \node[slk] at (\x,-94) {3};
+}
+
+% BOM.
+\draw[draw=casNedge,line width=0.7pt] (43,-68) rectangle (104,-105);
+\node[slk,anchor=north west,font=\sffamily\scriptsize\bfseries]
+  at (45,-70) {BILL OF MATERIALS};
+\node[slk,anchor=north west,align=left] at (45,-76)
+  {\textbf{H1} hold 2.0\\
+   \textbf{M1} no-compute\\
+   \textbf{F1} boundary/write once\\
+   \textbf{L1} max 1.0 \quad \textbf{F2} horizon\\
+   \textbf{H2} hold 30.0\\
+   \textbf{M2} confound gate};
+\node[slk,anchor=north west,align=left] at (81,-76)
+  {\textbf{F3} write once\\
+   \textbf{F4} self-report scope\\
+   \textbf{FLT1} $\tau=3$ ops\\
+   \textbf{M3} abort monitor\\
+   \textbf{D1} E$\to$O descent};
+
+\end{tikzpicture}

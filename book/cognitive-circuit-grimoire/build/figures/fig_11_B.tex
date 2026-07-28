@@ -1,0 +1,25 @@
+% Figure 11-B -- fuse conductance is a one-way step at threshold.
+\begin{tikzpicture}[scale=.90,transform shape]
+\begin{axis}[casaxis,width=10.6cm,height=6.4cm,
+  xmin=0,xmax=1,ymin=-.08,ymax=1.15,
+  xlabel={path activation},ylabel={conductance},
+  xtick={0,.2,.4,.6,.8,.85,.9,1},ytick={0,1},grid=none,axis on top,clip=false]
+\fill[casCfill] (axis cs:0,0)--(axis cs:0,1.08)--(axis cs:.85,1.08)
+  --(axis cs:.85,0)--cycle;
+\node[font=\sffamily\scriptsize\bfseries,align=center]
+  at (axis cs:.43,.28) {guarded path's\\sat ceiling $=0.85$};
+\addplot[black,line width=1.4pt] coordinates {(0,1)(.9,1)(.9,0)(1,0)};
+\addplot[casRed,line width=1.4pt,-{Latex[length=2mm,width=1.5mm]}]
+  coordinates {(.9,1)(.9,.04)};
+\filldraw[fill=casOfill,draw=casGreen,line width=.8pt] (axis cs:.8,1) circle (2pt);
+\node[font=\sffamily\scriptsize\bfseries,anchor=south east,fill=white,inner sep=1pt]
+  at (axis cs:.8,1.02) {.80 reachable};
+\draw[casNedge,dashed] (axis cs:.85,0)--(axis cs:.85,1.08);
+\filldraw[fill=casEfill,draw=casRed,line width=.8pt] (axis cs:.9,1) circle (2pt);
+\node[font=\sffamily\scriptsize\bfseries,anchor=south west,align=left,
+  text=casEedge,fill=white,inner sep=1pt] at (axis cs:.905,1.02)
+  {.90 threshold\\can never trip here};
+\node[font=\sffamily\scriptsize\itshape,anchor=north east]
+  at (axis cs:.98,-.02) {open forever};
+\end{axis}
+\end{tikzpicture}

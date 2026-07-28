@@ -1,3 +1,10 @@
+> **ARCHIVED, SUPERSEDED DRAFT — DO NOT PUBLISH OR BUILD FROM THIS FILE.**
+> The canonical release sources are the 24 chapter files and Appendices A–M in
+> `manuscript/`, assembled and safety-checked by `build/build_book.py` through
+> `book/publishing/build_all.py grimoire`. This retained monolithic draft
+> predates the current consent, detection-only, counter-circuit, citation, and
+> cross-reference corrections and exists only for historical comparison.
+
 # THE COGNITIVE CIRCUIT GRIMOIRE
 
 ## Complete Manuscript — Full and Publishable Edition

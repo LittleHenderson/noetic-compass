@@ -1,0 +1,56 @@
+% Figure 1-B -- the shared four-way axis at arities ten and seven.
+\begin{tikzpicture}[x=1cm,y=1cm,
+  hdr/.style={font=\sffamily\scriptsize\bfseries, align=center},
+  world/.style={font=\sffamily\tiny, align=center, text=casNedge},
+  row/.style={font=\ttfamily\scriptsize, anchor=east},
+  cell/.style={draw=casNedge, line width=0.35pt},
+  title/.style={font=\sffamily\footnotesize\bfseries},
+  count/.style={font=\sffamily\scriptsize\bfseries, fill=white, inner sep=1pt}]
+
+\def\cw{0.76}
+\def\rh{0.34}
+\def\lx{1.04}
+\def\rx{6.55}
+
+% Left title and two-level column header.
+\node[title] at (2.56,4.64) {NOETICS $\times$ DOMAINS};
+\foreach \i/\d/\w in {0/P/Spiritual,1/C/Mental,2/E/{Emo-\\tional},3/O/Physical}{
+  \node[hdr] at ({\lx+(\i+.5)*\cw},4.23) {\d};
+  \node[world, text width=8.5mm] at ({\lx+(\i+.5)*\cw},3.91) {\w};
+}
+\foreach \rowidx in {0,...,9}{
+  \node[row] at (0.92,{3.55-(\rowidx+.5)*\rh})
+    {\textasciicircum\rowidx};
+  \foreach \c/\fillc in {0/casPfill,1/casCfill,2/casEfill,3/casOfill}{
+    \path[cell,fill=\fillc]
+      ({\lx+\c*\cw},{3.55-(\rowidx+1)*\rh})
+      rectangle ++(\cw,\rh);
+  }
+}
+\node[count] at (2.56,-0.08) {40 Cognitive States};
+
+% Right title and the same two-level column header.
+\node[title] at (8.07,4.64) {DRIVES $\times$ DOMAINS};
+\foreach \i/\d/\w in {0/P/Spiritual,1/C/Mental,2/E/{Emo-\\tional},3/O/Physical}{
+  \node[hdr] at ({\rx+(\i+.5)*\cw},4.23) {\d};
+  \node[world, text width=8.5mm] at ({\rx+(\i+.5)*\cw},3.91) {\w};
+}
+\foreach \rowidx in {0,...,6}{
+  \pgfmathtruncatemacro{\drive}{\rowidx+1}
+  \node[row] at (6.43,{3.55-(\rowidx+.5)*\rh}) {F\drive};
+  \foreach \c/\fillc in {0/casPfill,1/casCfill,2/casEfill,3/casOfill}{
+    \path[cell,fill=\fillc]
+      ({\rx+\c*\cw},{3.55-(\rowidx+1)*\rh})
+      rectangle ++(\cw,\rh);
+  }
+}
+\node[count] at (8.07,1.00) {28 Domain-Specific Drives};
+
+% One explicit bracket spanning both uses of the axis.
+\draw[line width=0.7pt, draw=casNedge]
+  (1.04,-0.58) -- (1.04,-0.82) -- (9.59,-0.82) -- (9.59,-0.58);
+\draw[line width=0.7pt, draw=casNedge] (5.315,-0.82) -- (5.315,-1.04);
+\node[nblock, text width=66mm, minimum height=7mm,
+      font=\sffamily\scriptsize\bfseries, fill=white] at (5.315,-1.40)
+  {the same four-way axis at two arities};
+\end{tikzpicture}

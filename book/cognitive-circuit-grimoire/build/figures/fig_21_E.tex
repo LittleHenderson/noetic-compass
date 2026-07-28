@@ -1,0 +1,93 @@
+% Figure 21-E -- CCB-RPM assembly, zones, probes, thresholds and BOM.
+\begin{tikzpicture}[
+  scale=0.96,transform shape,
+  x=1mm,y=1mm,font=\sffamily\footnotesize,
+  fp/.style={rectangle,rounded corners=1pt,draw=casNedge,fill=casNfill,
+             line width=0.6pt,minimum height=7mm,align=center,
+             font=\sffamily\tiny\bfseries,inner sep=1pt},
+  tpf/.style={circle,draw=black,fill=white,line width=0.6pt,
+              minimum size=6mm,inner sep=0pt,font=\sffamily\tiny\bfseries},
+  trace/.style={draw=casNedge,line width=0.7pt},
+  slk/.style={font=\sffamily\scriptsize,inner sep=1pt}
+]
+
+\draw[rounded corners=3pt,draw=casNedge,fill=casNfill,fill opacity=0.18,
+      line width=1.0pt] (0,0) rectangle (104,-62);
+\node[anchor=west,font=\sffamily\footnotesize\bfseries] at (3,-5)
+  {CCB-RPM \textemdash{} ASSEMBLY};
+\node[anchor=east,font=\sffamily\scriptsize] at (101,-5)
+  {readiness gate / rev A};
+
+% Zone frames.
+\foreach \xa/\xb/\lab in {3/25/A0,25/47/D,47/66/W,66/84/P,84/101/{ARM / HOLD}}{
+  \draw[casNedge,dashed,line width=0.5pt] (\xa,-10) rectangle (\xb,-48);
+  \node[slk,font=\sffamily\tiny\bfseries] at ({(\xa+\xb)/2},-12) {\lab};
+}
+\draw[fill=casNfill,draw=casNedge] (0,-25) rectangle (4,-31);
+\node[slk,anchor=west] at (1,-20) {STATED DESIRE};
+\draw[fill=casOfill,draw=casOedge] (100,-25) rectangle (104,-31);
+\node[slk,anchor=east] at (103,-20) {CAST};
+
+% Placements.
+\node[fp,minimum width=12mm] at (12,-27) {Q1};
+\node[fp,minimum width=16mm] (diff) at (22,-27) {DIFF1/2};
+\node[fp,minimum width=15mm] (amm) at (36,-27) {D2/D3\\R1--R4\\AMM};
+\node[fp,minimum width=13mm] at (56,-27) {G1};
+\node[fp,minimum width=13mm] at (74,-27) {G2/G3/G4};
+\node[fp,minimum width=13mm] (mux) at (91,-27) {MUX1};
+\node[fp,minimum width=9mm] at (99,-38) {D\_out};
+\draw[trace] (4,-28) -- (diff.west);
+\draw[trace] (diff.east) -- (amm.west);
+\draw[trace] (amm.east) -- (49.5,-27);
+\draw[trace] (62.5,-27) -- (67.5,-27);
+\draw[trace] (80.5,-27) -- (mux.west);
+\draw[trace] (mux.east) -- (100,-28);
+
+% Return on lower edge.
+\node[fp,minimum width=18mm] (flt) at (58,-55) {FLT1 $\tau=21\,d$};
+\draw[trace,line width=1.3pt,rounded corners=2pt]
+  (91,-31) -- (91,-55) -- (flt.east);
+\draw[trace,line width=1.3pt,rounded corners=2pt]
+  (flt.west) -- (5,-55) -- (5,-49);
+\node[slk,anchor=north] at (35,-57)
+  {$\beta=.15$ \quad return to practice rail};
+
+% TPs.
+\node[tpf] at (22,-17) {TP1};
+\draw[trace] (22,-20) -- (22,-23);
+\node[tpf] at (36,-17) {TP2};
+\draw[trace] (36,-20) -- (36,-23);
+\node[tpf] at (74,-17) {TP3};
+\draw[trace] (74,-20) -- (74,-23);
+\node[tpf] at (91,-17) {TP4};
+\draw[trace] (91,-20) -- (91,-23);
+
+% Threshold panel and BOM.
+\draw[draw=casNedge,line width=0.7pt] (0,-68) rectangle (35,-104);
+\node[slk,anchor=north west,font=\sffamily\scriptsize\bfseries]
+  at (2,-70) {FOUR THRESHOLDS};
+\node[slk,anchor=north west,align=left] at (2,-76)
+  {witness load \quad 0.30\\
+   object premium \quad 0.20\\
+   $I_{\mathrm{attention}}$/cutoff \quad 2.0\\
+   load ceiling \quad 0.50\\[3pt]
+   TP1 DIFF1 \quad TP2 ammeter\\
+   TP3 G3 \quad TP4 MUX1};
+
+\draw[draw=casNedge,line width=0.7pt] (39,-68) rectangle (104,-104);
+\node[slk,anchor=north west,font=\sffamily\scriptsize\bfseries]
+  at (41,-70) {BILL OF MATERIALS};
+\node[slk,anchor=north west,align=left] at (41,-76)
+  {\textbf{F1} re-word fuse\\
+   \textbf{M1--M5} threshold monitors\\
+   \textbf{Q1--Q8} junctions\\
+   \textbf{D2/D3/D\_out} descent chain\\
+   \textbf{R1--R4} 25 / 0 / 30 / 20};
+\node[slk,anchor=north west,align=left] at (79,-76)
+  {\textbf{G1} 6-input AND\\
+   \textbf{G2} 4-input AND\\
+   \textbf{G3/G4} ready / arm\\
+   \textbf{MUX1} ARM/HOLD\\
+   \textbf{FLT1} $\tau=21\,d$, $\beta=.15$};
+
+\end{tikzpicture}

@@ -1,0 +1,53 @@
+% Figure 6-B -- PTC and NTC resistance versus cognitive temperature.
+\begin{tikzpicture}
+\begin{axis}[casaxis,
+  width=10.6cm,height=6.8cm,
+  xmin=1,xmax=6,ymin=0,ymax=45,
+  xtick={1,2,3,4,5,6},
+  ytick={0,5,10,20,30,40},
+  xlabel={cognitive temperature $\theta$},
+  ylabel={resistance $R$ ($\Omega_c$)},
+  legend style={at={(0.03,0.97)},anchor=north west},
+  axis on top
+]
+
+\addplot[casCedge,line width=1.2pt,domain=1:2,samples=2] {10};
+\addplot[casCedge,line width=1.2pt,domain=2:6,samples=80]
+  {10 + 3*(x-2)^2};
+\addlegendentry{PTC: $R_{\mathrm{base}}+3(\theta-\theta_k)^2$}
+
+\addplot[casEedge,dashed,line width=1.2pt,domain=1:6,samples=100]
+  {10/x};
+\addlegendentry{NTC: $R_{\mathrm{base}}/\theta$}
+
+\draw[casNedge,dashed,line width=0.7pt]
+  (axis cs:2,0) -- (axis cs:2,45);
+\draw[casNedge,dotted,line width=0.7pt]
+  (axis cs:1,10) -- (axis cs:6,10);
+\node[font=\sffamily\scriptsize,anchor=south west,fill=white,inner sep=1pt]
+  at (axis cs:2.04,1.2) {$\theta_k=2.0$};
+\node[font=\sffamily\scriptsize,anchor=south east,fill=white,inner sep=1pt]
+  at (axis cs:5.95,10.3) {$R_{\mathrm{base}}=10$};
+
+\addplot[only marks,mark=*,mark size=2pt,casCedge]
+  coordinates {(5,37)};
+\node[font=\sffamily\scriptsize\bfseries,anchor=south east,
+      text=casCedge,fill=white,inner sep=1.5pt]
+  at (axis cs:4.96,37.3) {$R_{\mathrm{base}}+27$};
+
+\draw[fill=casEfill,draw=casEedge,line width=0.7pt]
+  (axis cs:4.68,2.0) -- (axis cs:4.91,5.2) -- (axis cs:5.14,2.0) -- cycle;
+\node[font=\sffamily\scriptsize\bfseries,text=casEedge]
+  at (axis cs:4.91,3.0) {!};
+\node[font=\sffamily\scriptsize\bfseries,align=right,anchor=south east,
+      text=casEedge,fill=white,inner sep=1.5pt]
+  at (axis cs:5.85,5.7)
+  {guard collapses under heat\\thermal runaway};
+
+\node[font=\sffamily\scriptsize,align=left,anchor=west,
+      fill=white,inner sep=1.5pt]
+  at (axis cs:2.55,22)
+  {PTC knee: added heat\\buys added resistance};
+
+\end{axis}
+\end{tikzpicture}

@@ -1,0 +1,67 @@
+% Figure 4-A -- CAS-Ohm bench rig and four standard test points.
+\begin{tikzpicture}[x=1cm,y=1cm,font=\sffamily\scriptsize,
+  wire/.style={draw=black,line width=0.7pt},
+  tp/.style={circle,draw=black,fill=white,line width=0.6pt,minimum size=2.2mm,inner sep=0pt},
+  src/.style={circle,draw=casCedge,fill=casCfill,line width=0.7pt,minimum size=7mm},
+  rpart/.style={rectangle,draw=casNedge,fill=casNfill,line width=0.6pt,
+    minimum width=18mm,minimum height=7mm,align=center},
+  diode/.pic={\filldraw[fill=white,draw=black,line width=.6pt]
+    (-.18,-.18)--(-.18,.18)--(.12,0)--cycle;
+    \draw[line width=.9pt] (.12,-.21)--(.12,.21);}]
+
+% Three series drive sources on the left rail.
+\draw[wire] (.8,.35)--(.8,.75);
+\foreach \y/\f/\v in {1.15/F4/8,2.15/F7/8,3.15/F6/9}{
+  \node[src] (s\f) at (.8,\y) {$+$};
+  \draw[wire] (.8,{\y-.65})--(.8,{\y-.35});
+  \draw[wire] (.8,{\y+.35})--(.8,{\y+.65});
+  \node[anchor=west] at (1.23,\y) {\textbf{\f}\quad \v\,V$_c$};
+}
+\draw[wire] (.8,3.80)--(.8,4.35)--(2.05,4.35);
+\node[font=\sffamily\footnotesize\bfseries,anchor=south west] at (.15,4.50)
+  {$V_{\mathrm{drive}}=25$ V$_c$};
+\draw[wire] (.42,.35)--(1.18,.35);
+\draw[wire] (.52,.22)--(1.08,.22);
+\draw[wire] (.64,.09)--(.96,.09);
+
+% Three-diode domain descent.
+\foreach \x/\d/\drop in {2.55/D1/0.7,3.65/D2/1.2,4.75/D3/2.0}{
+  \draw[wire] ({\x-.50},4.35)--({\x+.50},4.35);
+  \pic at (\x,4.35) {diode};
+  \node[anchor=south] at (\x,4.62) {\textbf{\d}\quad \drop};
+}
+\node[anchor=north] at (3.65,4.05) {$\Sigma V_f=3.9$ V$_c$};
+
+% Ammeter and top return into the resistance stack.
+\draw[wire] (5.25,4.35)--(6.15,4.35);
+\node[circle,draw=black,fill=white,line width=.75pt,minimum size=9mm] (amp) at (6.60,4.35)
+  {\textbf{A}};
+\node[anchor=north,align=center] at (6.60,3.86) {$I_{\mathrm{attention}}$};
+\draw[wire] (amp.east)--(9.35,4.35)--(9.35,3.90);
+
+% Four distinct series constraints, returning to ground.
+\node[rpart] (rcap) at (9.35,3.52) {$R_{\mathrm{cap}}$};
+\node[rpart] (rpol) at (9.35,2.64) {$R_{\mathrm{policy}}$};
+\node[rpart,fill=casEfill,draw=casEedge] (rctx) at (9.35,1.76) {$R_{\mathrm{context}}$};
+\node[rpart] (rres) at (9.35,.88) {$R_{\mathrm{resource}}$};
+\draw[wire] (rcap.south)--(rpol.north);
+\draw[wire] (rpol.south)--(rctx.north);
+\draw[wire] (rctx.south)--(rres.north);
+\draw[wire] (rres.south)--(9.35,.35);
+\draw[wire] (8.98,.35)--(9.72,.35);
+\draw[wire] (9.08,.22)--(9.62,.22);
+\draw[wire] (9.20,.09)--(9.50,.09);
+
+% Contract probes: TP4 spans R_context alone.
+\foreach \x/\lab in {1.75/TP1,5.55/TP2,7.25/TP3}{
+  \draw[wire] (\x,4.35)--(\x,5.00);
+  \node[tp] at (\x,5.10) {};
+  \node[font=\sffamily\scriptsize\bfseries,anchor=south] at (\x,5.22) {\lab};
+}
+\draw[wire] (8.45,2.12)--(8.45,1.40);
+\draw[wire] (8.45,2.12)--(rctx.north west);
+\draw[wire] (8.45,1.40)--(rctx.south west);
+\node[tp] at (8.45,2.12) {};
+\node[tp] at (8.45,1.40) {};
+\node[font=\sffamily\scriptsize\bfseries,anchor=east] at (8.25,1.76) {TP4};
+\end{tikzpicture}

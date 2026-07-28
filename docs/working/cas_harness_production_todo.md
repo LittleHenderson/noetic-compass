@@ -22,6 +22,43 @@ Plain-English mandate: this file is the project dashboard. Check the dashboard b
 
 ## Current Plain-English State
 
+### Current 2026-07-28 Cognitive Circuit Grimoire digital-master checkpoint
+
+Controlling status:
+
+`GRIMOIRE_DIGITAL_MASTER ACCEPT / PRINT_PRODUCTION OPEN / TAGGED_PDF unavailable`
+
+The canonical 6 × 9 inch digital master is
+`book/cognitive-circuit-grimoire/Cognitive_Circuit_Grimoire.pdf`: 908 pages,
+2,672,454 bytes, SHA-256
+`99AC4170929C48F82C3D2FA81AABA3798C181EF32B3CDCC4C5E7E2D7C52F923D`,
+built 2026-07-28. The canonical split manuscript contains 24 of 24 chapters,
+13 appendices, 112 unique authored figures, and 164 exercises with 164 matched
+worked answers.
+
+The fail-closed build and independent audits report no missing or orphaned
+figures, answer mismatches, cross-reference problems, CJT violations, missing
+glyphs, unresolved references or citations, rerun warnings, oversized floats,
+empty plots, running-header warnings, material overfull boxes, stale markers,
+or orphaned contents entries. All 112 standalone figures and all 249 generated
+longtables passed their dedicated regression suites. The final List of Figures
+exactly matches authored labels and order. Fonts are embedded/subset. The PDF
+is an accepted visual digital master; a tagged accessible release is
+`unavailable`.
+
+The existing HTML, EPUB, cover HTML, and monolithic Markdown files predate the
+accepted build and are excluded as legacy previews.
+
+Print-production status is `OPEN`: at 908 pages, the interior exceeds Amazon
+KDP's current 828-page maximum for a 6 × 9 inch black-ink, white-paper
+paperback. Closure experiment: owner chooses either (a) a 10-point
+single-volume reflow or (b) a multi-volume split, with the split recommended
+for readability; the selected interior then runs the complete build,
+validation, and visual-QA pipeline. Required evidence is a qualifying page
+count, a clean full build, independent PDF audit, and regenerated cover/spine
+dimensions. Compute tier: local CPU/TeX. Owner: Little Henderson. Next
+executable action: record the publishing choice.
+
 ### Current 2026-07-23 prospective Attempt 6 CRLF/bare-CR repair and implementation-freeze checkpoint
 
 Controlling status:

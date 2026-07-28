@@ -1,0 +1,58 @@
+% Figure 6-D -- the same two resistors in series and in parallel.
+\begin{tikzpicture}[
+  x=1cm,y=1cm,font=\sffamily\footnotesize,
+  wire/.style={draw=black,line width=0.7pt},
+  rbody/.style={draw=casNedge,fill=casNfill,line width=0.7pt,
+                minimum width=15mm,minimum height=7mm},
+  tiny/.style={font=\sffamily\scriptsize,align=center}
+]
+
+% panel frames
+\node[groupframe,minimum width=48mm,minimum height=57mm] at (2.4,-2.4) {};
+\node[groupframe,minimum width=48mm,minimum height=57mm] at (7.7,-2.4) {};
+\node[font=\sffamily\footnotesize\bfseries] at (2.4,0.18) {SERIES};
+\node[font=\sffamily\footnotesize\bfseries] at (7.7,0.18) {PARALLEL};
+
+% series
+\node[casterm] (srail) at (2.4,-0.65) {$24\,V_c$ rail};
+\node[rbody] (sr1) at (2.4,-1.72) {R1};
+\node[rbody] (sr2) at (2.4,-3.02) {R2};
+\node[casterm] (sret) at (2.4,-4.12) {return};
+\draw[flow] (srail.south) -- (sr1.north);
+\draw[flow] (sr1.south) -- (sr2.north);
+\draw[flow] (sr2.south) -- (sret.north);
+\node[tiny,anchor=west] at (3.28,-1.72) {$60\,\Omega_c$};
+\node[tiny,anchor=west] at (3.28,-3.02) {$30\,\Omega_c$};
+\node[nblock,text width=35mm,font=\sffamily\scriptsize] at (2.4,-5.05)
+  {$R_{\mathrm{series}}=90\,\Omega_c$\\
+   $I=24/90=0.267\,A_c$};
+\node[tiny,text width=39mm] at (2.4,-6.0)
+  {constraints stack --- flow falls};
+
+% parallel rails and branches
+\node[casterm] (prail) at (7.7,-0.65) {$24\,V_c$ rail};
+\node[casterm] (pret) at (7.7,-4.12) {return};
+\draw[wire] (6.10,-1.25) -- (9.30,-1.25);
+\draw[wire] (6.10,-3.65) -- (9.30,-3.65);
+\draw[flow] (prail.south) -- (7.7,-1.25);
+\draw[flow] (7.7,-3.65) -- (pret.north);
+\node[rbody] (pr1) at (6.60,-2.45) {R1};
+\node[rbody] (pr2) at (8.80,-2.45) {R2};
+\draw[wire] (6.60,-1.25) -- (pr1.north);
+\draw[flow] (pr1.south) -- (6.60,-3.65);
+\draw[wire] (8.80,-1.25) -- (pr2.north);
+\draw[flow] (pr2.south) -- (8.80,-3.65);
+\node[tiny] at (6.60,-1.72) {$60\,\Omega_c$};
+\node[tiny] at (8.80,-1.72) {$30\,\Omega_c$};
+\node[nblock,text width=35mm,font=\sffamily\scriptsize] at (7.7,-5.05)
+  {$R_{\mathrm{parallel}}=20\,\Omega_c$\\
+   $I=24/20=1.2\,A_c$};
+\node[tiny,text width=40mm] at (7.7,-6.0)
+  {route opens --- clipped at $I_{\max}=1.0$};
+
+\node[draw=casCedge,fill=casCfill,rounded corners=2pt,line width=0.7pt,
+      font=\sffamily\scriptsize\bfseries,inner sep=3pt]
+  at (5.05,-6.75)
+  {$R_{\mathrm{parallel}}<\min(R_k)$,\quad always};
+
+\end{tikzpicture}

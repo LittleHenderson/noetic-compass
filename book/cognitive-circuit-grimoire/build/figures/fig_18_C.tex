@@ -18,8 +18,8 @@
 
   % ================= substrate ==========================================
   \draw[rounded corners=5pt, draw=casNedge, line width=1.1pt, fill=white]
-    (-5.05,0.45) rectangle (5.05,-16.10);
-  \foreach \p in {(-4.80,0.18),(4.80,0.18),(-4.80,-15.83),(4.80,-15.83)}
+    (-5.05,0.45) rectangle (5.05,-15.34);
+  \foreach \p in {(-4.80,0.18),(4.80,0.18),(-4.80,-15.07),(4.80,-15.07)}
     \draw[draw=casNedge, line width=0.5pt] \p circle (0.10);
 
   \node[font=\sffamily\scriptsize\bfseries] at (0,0.02)
@@ -112,8 +112,12 @@
   % ================= deck boundary ======================================
   \draw[dash pattern=on 3pt off 2pt, line width=0.7pt, draw=casNedge]
     (-4.90,-8.05) -- (4.90,-8.05);
-  \node[font=\sffamily\tiny\itshape, fill=white, inner sep=1.5pt,
-        text=casNedge] at (0,-8.05) {deck boundary};
+  \node[font=\sffamily\tiny, fill=white, inner sep=1pt, align=center,
+        text=casNedge] at (0,-8.14)
+    {deck boundary \ \textperiodcentered\ \ \textbf{DOMAIN KEY}: P Principled \ \ C Cognitive
+     \ \ E Evaluative\\
+     O Operational \ \ grey component \ \ \textperiodcentered\ \ every value is a design choice,
+     never a measurement};
 
   % ================= DECK 2 =============================================
   \node[font=\sffamily\scriptsize\bfseries, anchor=west, text=casNedge]
@@ -138,7 +142,7 @@
   \node[nblock, fp] (ddesc) at ( 3.70,-11.20) {\textbf{D\_DESC} Diode\\ \caslit{\casU C$\to$\casU E} Vf=1.2};
 
   \node[casterm, text width=28mm, font=\sffamily\tiny, minimum height=5mm]
-        (wout) at (2.95,-12.35)
+        (wout) at (2.95,-12.07)
     {verified want \ \caslit{\casU2\casU E\casS{F4}|$\langle$A,f,T$\rangle$}};
 
   \draw[trace] (win)  -- (det1);
@@ -149,7 +153,7 @@
   \draw[trace] (det5) -- (det6);
   \draw[trace] (det6) -- (judge);
   \draw[trace] (judge) -- (ddesc);
-  \draw[trace] (ddesc.south) -- (3.70,-12.02) -- (2.95,-12.02) -- (wout.north);
+  \draw[trace] (ddesc.south) -- (3.70,-11.74) -- (2.95,-11.74) -- (wout.north);
 
   % ---- DET probes ------------------------------------------------------
   \foreach \n in {det1,det2,det3}
@@ -164,28 +168,26 @@
   \draw[line width=0.4pt] (det5.south west) -- ($(det5.south west)+(0,-0.24)$);
   \node[tpflag, anchor=north west] at ($(det5.south west)+(-0.10,-0.22)$) {tp4};
 
-  % ================= legend =============================================
-  \node[draw=casNedge, line width=0.5pt, rounded corners=2pt, fill=white,
-        inner sep=3pt, align=left, font=\sffamily\tiny,
-        anchor=north west, text width=17mm]
-    at (-4.90,-12.80)
-    {\textbf{DOMAIN KEY}\\[2pt]
-     P \ Principled\\ C \ Cognitive\\ E \ Evaluative\\ O \ Operational\\
-     grey \ component\\[3pt]
-     every value is a\\ design choice,\\ never a\\ measurement};
-
   % ================= BOM ================================================
   \node[draw=casNedge, line width=0.6pt, rounded corners=2pt, fill=white,
-        inner sep=3pt, anchor=north east, font=\sffamily\tiny]
-    at (4.90,-12.80)
-    {\setlength{\tabcolsep}{1.2pt}\renewcommand{\arraystretch}{0.86}%
-     \begin{tabular}{@{}p{12mm}p{7mm}p{14mm}@{\hspace{2.5mm}}p{12.5mm}p{7mm}p{14mm}@{}}
-      \multicolumn{6}{@{}l}{\textbf{BILL OF MATERIALS}}\\[1pt]
+        inner xsep=3pt, inner ysep=0.5pt, anchor=north east,
+        font=\sffamily\tiny]
+    at (4.90,-12.52)
+    {\setlength{\tabcolsep}{1.2pt}\renewcommand{\arraystretch}{0.70}%
+     \begin{tabular}{@{}
+       >{\fontsize{7}{7.6}\selectfont\RaggedRight\arraybackslash\hspace{0pt}}p{14mm}
+       >{\fontsize{7}{7.6}\selectfont\RaggedRight\arraybackslash\hspace{0pt}}p{8mm}
+       >{\fontsize{7}{7.6}\selectfont\RaggedRight\arraybackslash\hspace{0pt}}p{22mm}
+       @{\hspace{2mm}}
+       >{\fontsize{7}{7.6}\selectfont\RaggedRight\arraybackslash\hspace{0pt}}p{14mm}
+       >{\fontsize{7}{7.6}\selectfont\RaggedRight\arraybackslash\hspace{0pt}}p{8mm}
+       >{\fontsize{7}{7.6}\selectfont\RaggedRight\arraybackslash\hspace{0pt}}p{22mm}
+       @{}}
       \textbf{Ref} & \textbf{Type} & \textbf{Value} &
-      \textbf{Ref} & \textbf{Type} & \textbf{Value}\\[1pt]
+      \textbf{Ref} & \textbf{Type} & \textbf{Value}\\
       C\_SEG   & Cap   & 9.50, leak .04   & CLOSE     & CJT   & 1.0, cut .20 \\
       MEDIA    & Osc   & 3/wk, 12 wk      & CSB       & CJT   & 2.0, sat .85 \\
-      ENDORSE  & Xfmr  & n = 0.35         & CSB\_FUSE & Fuse  & 0.90 block \\
+      ENDORSE  & Xfmr  & n = 0.35         & CSB\_\allowbreak FUSE & Fuse  & 0.90 block \\
       ASSOC    & CJT   & 2.0, sat .85     & DET-1     & Integ & window 4 wk \\
       FLIP     & CJT   & 1.2, sat .85     & DET-2     & Probe & polarity \\
       INJECT   & CJT   & 2.5, det.\ only  & DET-3     & LPF   & $\tau$ = 4.0 wk \\
@@ -195,5 +197,7 @@
       D3       & Diode & Vf = 2.0         & JUDGE     & CJT   & 1.0, sat .85 \\
       R\_PRICE & Res   & R = 4.0          & D\_DESC   & Diode & Vf = 1.2 \\
     \end{tabular}};
+  \node[font=\sffamily\tiny\bfseries, fill=white, inner sep=1pt,
+        anchor=south west] at (-4.58,-12.52) {BILL OF MATERIALS};
 
 \end{tikzpicture}

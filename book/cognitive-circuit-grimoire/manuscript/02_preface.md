@@ -62,9 +62,7 @@ The author's position is this: the engineering belongs to everyone. The ethics b
 
 **Part III: The Board Catalog** — Eight complete reference boards. Each chapter follows the same structure: requirements, block diagram, full CCDL schematic, BOM, CJT parameter selection table, St. John's calibration, and a worked example.
 
-**Part IV: Operations** — The RPM prerequisite gate, the Quantitative Table, and advanced St. John's Equation calibration.
-
-**Part V: Safety & Governance** — The CSB, involution guards, shadow integration, and ethics as architecture.
+**Part IV: Operations** — The RPM prerequisite gate, the Quantitative Table, advanced St. John's Equation calibration, and the Cognitive Safety Board's refusal architecture.
 
 **Appendices** — Quick-reference cards, CCDL language reference, datasheets, worksheets, and the complete TKS crosswalk.
 

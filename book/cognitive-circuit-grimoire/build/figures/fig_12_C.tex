@@ -1,0 +1,53 @@
+% Figure 12-C -- CCB-0 plan-view assembly drawing and complete BOM.
+\begin{tikzpicture}[scale=.99,transform shape,x=1cm,y=1cm,font=\sffamily\tiny,
+  zone/.style={draw=casNedge,dashed,rounded corners=2pt,fill=casNfill!18},
+  fp/.style={rectangle,draw=black,fill=white,line width=.45pt,
+    minimum height=5mm,minimum width=8mm,font=\sffamily\tiny\bfseries},
+  pad/.style={circle,draw=casCedge,fill=casCfill,line width=.6pt,
+    minimum size=4mm,inner sep=0pt,font=\sffamily\tiny\bfseries}]
+\path[draw=black,line width=1pt,rounded corners=2pt] (0,0) rectangle (10.65,7.05);
+\path[zone] (.25,3.65) rectangle (3.55,6.72);
+\path[zone] (3.72,3.65) rectangle (6.65,6.72);
+\path[zone] (6.82,3.65) rectangle (10.40,6.72);
+\path[zone,fill=casPfill] (.25,.72) rectangle (6.05,3.45);
+\node[font=\sffamily\scriptsize\bfseries] at (1.90,6.47){AUDIT / GUARD};
+\node[font=\sffamily\scriptsize\bfseries] at (5.18,6.47){AMPLIFY};
+\node[font=\sffamily\scriptsize\bfseries] at (8.60,6.47){DELIVER};
+\node[font=\sffamily\scriptsize\bfseries] at (3.15,3.18){BIAS};
+
+% Footprints grouped by functional zone.
+\node[fp] (q1) at (1.05,5.58){Q1}; \node[fp] (q2) at (2.22,5.58){Q2};
+\node[fp] (f1) at (3.00,4.78){F1}; \node[fp,minimum width=12mm] (mux) at (1.70,4.55){MUX1};
+\node[fp] (d1) at (4.23,5.58){D1}; \node[fp] (q3) at (5.22,5.58){Q3};
+\node[fp,minimum width=12mm] (osc) at (5.18,4.62){OSC1};
+\node[fp] (d2) at (7.38,5.58){D2}; \node[fp] (q4) at (8.40,5.58){Q4};
+\node[fp] (r0) at (.92,2.25){R0}; \node[fp] (c1) at (1.92,2.25){C1};
+\node[fp,minimum width=12mm] (flt) at (3.35,1.52){FLT1};
+\node[fp,minimum width=12mm] (fb) at (4.85,1.52){FB1};
+\draw[line width=1pt,draw=casPedge] (.55,2.75)--(5.70,2.75);
+\foreach \n in {q1,q2,q3,q4}{\draw[draw=casPedge,line width=.5pt] (\n.south)--(\n.south|-0,2.75);}
+
+% Test pads and leaders to the named nets.
+\node[pad] (tp1) at (.65,3.02){1}; \draw (tp1)--(.65,2.75);
+\node[pad] (tp2) at (3.18,4.10){2}; \draw (tp2)--(f1.south);
+\node[pad] (tp3) at (6.22,5.15){3}; \draw (tp3)--(q3.east);
+\node[pad] (tp4) at (9.85,5.58){4}; \draw (tp4)--(q4.east);
+\foreach \n/\lab in {tp1/TP1 substrate,tp2/TP2 refuse,tp3/TP3 driven,tp4/TP4 act}
+  {\node[font=\sffamily\tiny,anchor=north] at (\n.south){\lab};}
+
+% Complete thirteen-line BOM in the lower-right corner.
+\path[draw=black,fill=white,line width=.55pt] (6.15,.72) rectangle (10.40,3.45);
+\node[font=\sffamily\tiny\bfseries] at (8.28,3.28){BOM --- REF / TYPE / KEY PARAMETER};
+\foreach \y/\txt in {3.08/{R0  Resistor  R=40},2.90/{C1  Capacitor  C=83.33},
+  2.72/{Q1  CJT  $\beta=1.0$},2.54/{Q2  CJT  $\beta=2$, sat=.85},
+  2.36/{F1  Fuse  threshold=.90},2.18/{MUX1  MUX  select=refuse},
+  2.00/{D1  Diode  $V_f=1.2$},1.82/{Q3  CJT  $\beta=2.5$, sat=.80},
+  1.64/{OSC1  Osc  1d / .014 / 30d},1.46/{D2  Diode  $V_f=2.0$},
+  1.28/{Q4  CJT  $\beta=1.0$},1.10/{FLT1  LowPass  $\tau=21$d},
+  .92/{FB1  Feedback  $\beta=.05$}}
+  {\node[font=\fontsize{4.7}{5.0}\selectfont,anchor=west] at (6.30,\y){\txt};}
+
+\path[draw=black,fill=casNfill] (.25,.15) rectangle (10.40,.58);
+\node[font=\sffamily\scriptsize\bfseries] at (5.32,.365)
+  {CCB-0 THE TRAINER --- teaching board, self-directed operation only};
+\end{tikzpicture}

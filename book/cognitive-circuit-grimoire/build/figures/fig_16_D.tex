@@ -1,0 +1,116 @@
+% Figure 16-D -- CCB-DP assembly with protected safety section and BOM.
+\begin{tikzpicture}[
+  scale=0.87,transform shape,
+  x=1mm,y=1mm,font=\sffamily\footnotesize,
+  fp/.style={rectangle,rounded corners=1pt,draw=casNedge,fill=casNfill,
+             line width=0.6pt,minimum height=7mm,align=center,
+             font=\sffamily\scriptsize\bfseries,inner sep=1pt},
+  tpf/.style={circle,draw=black,fill=white,line width=0.6pt,
+              minimum size=6mm,inner sep=0pt,font=\sffamily\tiny\bfseries},
+  trace/.style={draw=casNedge,line width=0.7pt},
+  slk/.style={font=\sffamily\scriptsize,inner sep=1pt}
+]
+
+\draw[rounded corners=3pt,draw=casNedge,fill=casNfill,fill opacity=0.18,
+      line width=1.0pt] (0,0) rectangle (104,-62);
+\node[anchor=west,font=\sffamily\footnotesize\bfseries] at (3,-5)
+  {CCB-DP \textemdash{} DEPROGRAMMING COUNTER-CIRCUIT};
+\node[anchor=east,font=\sffamily\scriptsize] at (101,-9)
+  {assembly / top view};
+
+% Restore footprint and ramp silkscreen.
+\node[fp,minimum width=20mm,minimum height=10mm,fill=casCfill,
+      draw=casCedge] (restore) at (13,-20) {R\_RESTORE};
+\draw[casCedge,line width=0.8pt] (4,-32) -- (8,-30) -- (12,-27)
+  -- (16,-23) -- (22,-17);
+\node[slk,anchor=west,font=\sffamily\tiny\bfseries] at (3,-35)
+  {1.60 $\to$ 10.80 / 55 h \quad FIT FIRST};
+
+% Domain diodes down the left, D2 called out.
+\node[fp,minimum width=8mm] at (30,-16) {D1};
+\node[fp,minimum width=8mm,draw=casEedge] at (30,-27) {D2};
+\node[fp,minimum width=8mm] at (30,-38) {D3};
+\node[slk,text=casEedge,anchor=west] at (35,-27) {$V_f=1.6$};
+
+% Active devices and fusion.
+\node[fp,minimum width=13mm,fill=casCfill,draw=casCedge] (dp1) at (48,-18)
+  {DP1\\$\beta=2.0$};
+\node[fp,minimum width=13mm,fill=casPfill,draw=casPedge] (dp2) at (67,-18)
+  {DP2\\$\beta=1.0$};
+\node[fp,minimum width=30mm,fill=casPfill,draw=casPedge] (fusion) at (58,-33)
+  {$(\,{\mathrm{decompose}}\times{\mathrm{confirm}}\,)={\mathrm{composed}}$};
+\draw[trace] (34,-16) -- (dp1.west);
+\draw[trace] (dp1.east) -- (dp2.west);
+\draw[trace] (dp1.south) -- (48,-28) -- (fusion.north west);
+\draw[trace] (dp2.south) -- (67,-28) -- (fusion.north east);
+
+% Internal oscillator and scored-through external pad.
+\node[fp,minimum width=22mm] (osc) at (17,-50)
+  {OSC1\\source=INTERNAL};
+\draw[trace] (2,-50) rectangle (6,-46);
+\draw[casEedge,line width=1.0pt] (1.5,-51) -- (6.5,-45);
+\node[slk,text=casEedge,anchor=south west] at (1,-44)
+  {external input absent};
+
+% Slow feedback goes only to the capacitor bias pad.
+\node[fp,minimum width=21mm] (fb) at (47,-50)
+  {FB\\$\tau=504\,h$, $\beta=0.05$};
+\draw[trace] (osc.east) -- (fb.west);
+\draw[trace,line width=1.2pt,rounded corners=2pt]
+  (fb.east) -- (67,-50) -- (67,-41);
+\draw[trace] (64,-41) rectangle (70,-37);
+\node[slk,anchor=west,align=left] at (71,-39)
+  {capacitor bias pad\\not signal rail};
+
+% Protected safety section.
+\draw[casPedge,line width=1.0pt,rounded corners=2pt]
+  (77,-58) rectangle (101,-11);
+\node[slk,text=casPedge,font=\sffamily\tiny\bfseries,align=center]
+  at (89,-15) {SAFETY SECTION\\DO NOT DEPOPULATE};
+\node[fp,minimum width=12mm,fill=casPfill,draw=casPedge] (csb) at (89,-30)
+  {CSB\\sat .85};
+\node[fp,minimum width=17mm,fill=casPfill,draw=casPedge] (fuse) at (89,-44)
+  {DP\_FUSE};
+\draw[trace] (csb.south) -- (fuse.north);
+
+% Four test points with callouts.
+\node[tpf] at (13,5) {TP1};
+\draw[trace] (13,2) -- (13,-15);
+\node[slk,anchor=south] at (13,9) {$r_{\pi}$ vs baseline};
+\node[tpf] at (17,-59) {TP2};
+\node[slk,anchor=east] at (13,-59) {cadence source};
+\node[tpf] at (48,5) {TP3};
+\draw[trace] (48,2) -- (48,-14.5);
+\node[slk,anchor=south] at (48,9) {gain at stage};
+\node[tpf] at (98,-30) {TP4};
+\draw[trace] (95,-30) -- (95,-30);
+
+% Notes and BOM below the board.
+\draw[draw=casNedge,line width=0.7pt] (0,-68) rectangle (31,-108);
+\node[slk,anchor=north west,font=\sffamily\scriptsize\bfseries]
+  at (2,-70) {ASSEMBLY GUARANTEES};
+\node[slk,anchor=north west,align=left,text width=27mm] at (2,-75)
+  {No external bias terminal exists on this board.\\[3pt]
+   CCB-MK is detection-only and is not laid out.\\[3pt]
+   DP3 is an integration statement, not a fitted part.};
+
+\draw[draw=casNedge,line width=0.7pt] (35,-68) rectangle (104,-108);
+\node[slk,anchor=north west,font=\sffamily\scriptsize\bfseries]
+  at (37,-70) {BILL OF MATERIALS};
+\node[slk,anchor=north west,align=left] at (37,-75)
+  {\textbf{r\_restore} $1.60\to10.80$\\
+   55\,h taper\\
+   \textbf{dp1} \quad CJT, $\beta=2.0$\\
+   \textbf{dp2} \quad CJT, $\beta=1.0$ unity\\
+   \textbf{own} \quad OSC1, source=internal\\
+   \textbf{d\_pc} \quad domain diode\\
+   \textbf{d\_ce} \quad $V_f=1.6$};
+\node[slk,anchor=north west,align=left] at (80,-75)
+  {\textbf{d\_eo} \quad domain diode\\
+   \textbf{fb} \quad $\tau=504\,h$, $\beta=0.05$\\
+   \textbf{csb} \quad sat 0.85\\
+   \textbf{dp\_fuse} \quad permanent fuse\\[2pt]
+   \textit{dp3: integration statement,}\\
+   \textit{not a part}};
+
+\end{tikzpicture}

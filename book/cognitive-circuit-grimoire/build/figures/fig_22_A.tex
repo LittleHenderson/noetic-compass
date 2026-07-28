@@ -1,0 +1,70 @@
+% Figure 22-A -- CCB-QT block diagram.
+\begin{tikzpicture}[
+  scale=0.90,transform shape,
+  x=1cm,y=1cm,font=\sffamily\footnotesize,
+  stage/.style={casblock,text width=20mm,minimum height=12mm,
+                font=\sffamily\scriptsize,align=center},
+  tiny/.style={font=\sffamily\scriptsize,align=center,inner sep=1pt},
+  tpf/.style={circle,draw=black,fill=white,line width=0.6pt,
+              minimum size=6mm,inner sep=0pt,font=\sffamily\tiny\bfseries}
+]
+
+\node[font=\sffamily\footnotesize\bfseries,anchor=west] at (0,3.20)
+  {CCB-QT \textemdash{} QUANTITATIVE TABLE LOGGER};
+
+% Three intake paths.
+\node[stage,pblock] (gn) at (1.15,1.65)
+  {\textbf{GNOSIS}\\2-min hold\\three bins};
+\node[stage,eblock] (clock) at (3.65,1.65)
+  {\textbf{RHYTHM}\\declared boundary\\three bins};
+\node[stage,cblock] (conf) at (1.15,-0.20)
+  {\textbf{CONFIRM}\\\textasciicircum8 arrival $\to$\\
+   \textasciicircum9 recall};
+\node[stage,nblock] (limit) at (3.65,-0.20)
+  {\textbf{FIRST ONLY}\\limiter + horizon\\three vibration bins};
+\node[stage,pblock,text width=21mm] (row) at (5.95,0.75)
+  {\textbf{ROW}\\ASSEMBLER};
+\draw[flow] (gn.east) -- (row.west);
+\draw[flow] (clock.south) -- (3.65,0.75) -- (row.west);
+\draw[flow] (conf.east) -- (limit.west);
+\draw[flow] (limit.east) -- (row.west);
+
+% Horizon's explicit no-read exit.
+\draw[flow] (limit.south) -- (3.65,-1.25);
+\node[nblock,font=\sffamily\scriptsize] at (3.65,-1.55) {NO-READ};
+
+% Confound gate, write-once latch, descent and log.
+\node[stage,eblock,text width=20mm] (cg) at (7.65,0.75)
+  {\textbf{CONFOUND}\\GATE};
+\node[stage,oblock,text width=20mm] (latch) at (9.35,0.75)
+  {\textbf{WRITE-ONCE}\\LATCH};
+\draw[flow] (row.east) -- (cg.west);
+\draw[flow] (cg.east) -- (latch.west);
+\draw[flow] (cg.south) -- (7.65,-0.45);
+\node[nblock,font=\sffamily\scriptsize] at (7.65,-0.75) {CONFOUNDED};
+\draw[flow] (latch.east) -- (10.35,0.75);
+\filldraw[fill=white,draw=black,line width=0.6pt]
+  (10.35,0.55) -- (10.35,0.95) -- (10.68,0.75) -- cycle;
+\draw[line width=0.9pt] (10.68,0.53) -- (10.68,0.97);
+\draw[flow] (10.68,0.75) -- (11.15,0.75);
+\node[tiny,anchor=north] at (10.90,0.52) {LOG ROW};
+
+% Trend filter and abort monitor.
+\node[stage,nblock,text width=21mm] (trend) at (8.70,-2.15)
+  {\textbf{3-ROW TREND}\\lowpass};
+\node[stage,pblock,text width=19mm] (abort) at (6.25,-2.15)
+  {\textbf{ABORT}\\REVIEW};
+\draw[fbflow] (latch.south) -- (9.35,-2.15) -- (trend.east);
+\draw[flow] (trend.west) -- (abort.east);
+
+% Test points.
+\node[tpf] at (1.15,2.65) {TP1};
+\draw[line width=0.5pt] (1.15,2.35) -- (1.15,2.25);
+\node[tpf] at (3.65,2.65) {TP2};
+\draw[line width=0.5pt] (3.65,2.35) -- (3.65,2.25);
+\node[tpf] at (2.70,-0.95) {TP3};
+\draw[line width=0.5pt] (2.95,-0.72) -- (3.15,-0.52);
+\node[tpf] at (10.30,-2.15) {TP4};
+\draw[line width=0.5pt] (10.00,-2.15) -- (9.70,-2.15);
+
+\end{tikzpicture}

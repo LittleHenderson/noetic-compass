@@ -1,0 +1,29 @@
+% Figure 5-A -- the two clock readings from which the calibration follows.
+\begin{tikzpicture}[x=1cm,y=1cm,font=\sffamily\scriptsize,
+  tick/.style={draw=black,line width=.9pt},
+  val/.style={nblock,minimum width=20mm,minimum height=8mm,fill=white,
+    font=\sffamily\footnotesize\bfseries}]
+\draw[flow,line width=1pt] (.45,3.25)--(9.85,3.25);
+\draw[tick] (.55,2.95)--(.55,3.55);
+\draw[tick,line width=1.2pt] (4.35,2.70)--(4.35,3.80);
+\node[font=\sffamily\scriptsize\bfseries,align=center,anchor=south]
+  at (4.35,3.86) {END OF OPERATION\\the $t_{conf}$ clock starts here};
+\node[align=center,text width=34mm] at (2.40,2.70)
+  {$t_{op}$ --- operation\\clocked start to finish};
+\node[align=center,text width=34mm] at (7.10,2.70)
+  {$t_{conf}$ --- to first confirmation};
+\node[star,star points=8,star point ratio=2.2,draw=casPedge,fill=casPfill,
+      minimum size=8mm,line width=.7pt] at (9.50,3.25) {};
+\node[anchor=south,align=center] at (9.50,3.75) {first\\confirmation};
+
+\node[val] (op) at (2.40,1.45) {20 min};
+\node[val] (cf) at (7.10,1.45) {60 min};
+\node[pblock,text width=37mm,minimum height=9mm,
+      font=\sffamily\footnotesize\bfseries] (eta) at (4.75,.25)
+  {$\eta=t_{op}/t_{conf}$};
+\draw[flow] (op.south east)--(eta.north west);
+\draw[flow] (cf.south west)--(eta.north east);
+\node[nblock,text width=80mm,minimum height=7mm,fill=white,
+  font=\sffamily\scriptsize\bfseries] at (4.75,-.70)
+  {everything downstream comes from these two readings};
+\end{tikzpicture}

@@ -1,0 +1,43 @@
+% Figure 4-D -- equal total resistance, radically different repair horizons.
+\begin{tikzpicture}[x=1cm,y=1cm,font=\sffamily\scriptsize,
+  seg/.style={draw=casNedge,line width=.45pt,minimum height=5mm},
+  val/.style={font=\sffamily\tiny\bfseries},
+  tim/.style={font=\sffamily\scriptsize\bfseries,anchor=west}]
+% Shared legend.
+\foreach \x/\fillc/\lab in {0.6/casPfill/$R_{cap}$,2.75/casCfill/$R_{policy}$,
+  5.15/casEfill/$R_{context}$,7.75/casOfill/$R_{resource}$}{
+  \path[seg,fill=\fillc] (\x,4.15) rectangle ++(.38,.26);
+  \node[anchor=west] at (\x+.48,4.28) {\lab};
+}
+% A: 5 / 60 / 3 / 2.
+\node[font=\sffamily\footnotesize\bfseries,anchor=east] at (.42,3.25) {A};
+\path[seg,fill=casPfill] (.60,3.00) rectangle (1.10,3.50);
+\path[seg,fill=casCfill] (1.10,3.00) rectangle (7.10,3.50);
+\path[seg,fill=casEfill] (7.10,3.00) rectangle (7.40,3.50);
+\path[seg,fill=casOfill] (7.40,3.00) rectangle (7.60,3.50);
+\node[val] at (.85,3.25) {5}; \node[val] at (4.10,3.25) {60};
+\node[val] at (7.25,3.25) {3}; \node[val,anchor=west] at (7.42,3.25) {2};
+\node[tim] at (7.90,3.25) {none};
+% B: 60 / 0 / 5 / 5.
+\node[font=\sffamily\footnotesize\bfseries,anchor=east] at (.42,2.25) {B};
+\path[seg,fill=casPfill] (.60,2.00) rectangle (6.60,2.50);
+\draw[casCedge,line width=1.0pt] (6.60,2.00)--(6.60,2.50);
+\path[seg,fill=casEfill] (6.60,2.00) rectangle (7.10,2.50);
+\path[seg,fill=casOfill] (7.10,2.00) rectangle (7.60,2.50);
+\node[val] at (3.60,2.25) {60}; \node[val,anchor=south] at (6.60,2.53) {0};
+\node[val] at (6.85,2.25) {5}; \node[val] at (7.35,2.25) {5};
+\node[tim] at (7.90,2.25) {hundreds of hours};
+% C: 5 / 0 / 45 / 20.
+\node[font=\sffamily\footnotesize\bfseries,anchor=east] at (.42,1.25) {C};
+\path[seg,fill=casPfill] (.60,1.00) rectangle (1.10,1.50);
+\draw[casCedge,line width=1.0pt] (1.10,1.00)--(1.10,1.50);
+\path[seg,fill=casEfill] (1.10,1.00) rectangle (5.60,1.50);
+\path[seg,fill=casOfill] (5.60,1.00) rectangle (7.60,1.50);
+\node[val] at (.85,1.25) {5}; \node[val,anchor=south] at (1.10,1.53) {0};
+\node[val] at (3.35,1.25) {45}; \node[val] at (6.60,1.25) {20};
+\node[tim] at (7.90,1.25) {one afternoon};
+
+\node[nblock,text width=91mm,minimum height=8mm,fill=white,
+  font=\sffamily\footnotesize\bfseries] at (5.15,.10)
+  {identical $I_{attention}=0.254$ A$_c$};
+\end{tikzpicture}

@@ -1,0 +1,71 @@
+% Figure 21-A -- CCB-RPM block diagram.
+\begin{tikzpicture}[
+  scale=0.91,transform shape,
+  x=1cm,y=1cm,font=\sffamily\footnotesize,
+  stage/.style={casblock,text width=19mm,minimum height=14mm,
+                font=\sffamily\scriptsize,align=center},
+  gate/.style={casblock,text width=13mm,minimum height=12mm,
+               font=\sffamily\scriptsize\bfseries,align=center},
+  tiny/.style={font=\sffamily\scriptsize,align=center,inner sep=1pt},
+  tpf/.style={circle,draw=black,fill=white,line width=0.6pt,
+              minimum size=6mm,inner sep=0pt,font=\sffamily\tiny\bfseries}
+]
+
+\node[font=\sffamily\footnotesize\bfseries,anchor=west] at (0,2.85)
+  {CCB-RPM \textemdash{} READINESS / PERMISSION / MANDATE};
+
+\node[stage,cblock] (auth) at (1.55,0)
+  {\textbf{A0 AUTH}\\Q1 $\to$ Q2/Q3/Q4\\
+   DIFF1 witness\\DIFF2 premium};
+\node[stage,eblock] (drive) at (4.10,0)
+  {\textbf{D-GATE}\\F5/F2, D2/D3\\
+   R1--R4\\$I_{\mathrm{attention}}$};
+\node[gate,pblock] (wg) at (6.15,0) {W-GATE\\6-input\\AND};
+\node[gate,pblock] (pg) at (7.75,0) {P-GATE\\4-input\\AND};
+\node[gate,oblock] (mux) at (9.35,0) {ARM/\\HOLD\\MUX};
+
+\draw[flow] (-0.25,0) -- (auth.west);
+\node[tiny,anchor=south] at (0.12,0.18) {stated desire};
+\draw[flow] (auth.east) -- (drive.west);
+\draw[flow] (drive.east) -- (wg.west);
+\draw[flow] (wg.east) -- (pg.west);
+\draw[flow] (pg.east) -- (mux.west);
+
+% Re-word and hold exits.
+\draw[flow,rounded corners=2pt] (auth.south) -- (1.15,-1.32);
+\node[nblock,font=\sffamily\scriptsize] at (1.15,-1.65)
+  {F1 $\to$ RE-WORD};
+\draw[flow,rounded corners=2pt] (drive.south) -- (4.10,-1.00);
+\node[nblock,font=\sffamily\scriptsize] at (4.10,-1.30)
+  {M2 $\to$ HOLD};
+
+% Descent to cast.
+\draw[flow] (mux.east) -- (10.15,0);
+\filldraw[fill=white,draw=black,line width=0.6pt]
+  (10.15,-0.20) -- (10.15,0.20) -- (10.48,0) -- cycle;
+\draw[line width=0.9pt] (10.48,-0.22) -- (10.48,0.22);
+\node[tiny,anchor=south] at (10.31,0.30) {D\_out};
+\draw[flow] (10.48,0) -- (10.82,0);
+\node[tiny,anchor=north] at (10.65,-0.18) {cast};
+
+% Slow lawful return from ARM to practice rail.
+\node[nblock,font=\sffamily\scriptsize] (flt) at (6.20,-2.58)
+  {FLT1 \ $\tau=21\,d$};
+\draw[fbflow,rounded corners=2pt]
+  (9.35,-0.62) -- (9.35,-2.58) -- (flt.east);
+\draw[fbflow,rounded corners=2pt]
+  (flt.west) -- (0.20,-2.58) -- (0.20,-2.15);
+\node[tiny,anchor=north] at (4.15,-2.92)
+  {ARM $\to$ practice rail \quad $\beta=0.15$};
+
+% Test points.
+\node[tpf] at (2.35,1.02) {TP1};
+\draw[line width=0.5pt] (2.18,0.78) -- (1.95,0.58);
+\node[tpf] at (4.90,0.95) {TP2};
+\draw[line width=0.5pt] (4.72,0.70) -- (4.50,0.55);
+\node[tpf] at (6.95,1.08) {TP3};
+\draw[line width=0.5pt] (6.95,0.78) -- (6.95,0.62);
+\node[tpf] at (9.35,1.08) {TP4};
+\draw[line width=0.5pt] (9.35,0.78) -- (9.35,0.62);
+
+\end{tikzpicture}

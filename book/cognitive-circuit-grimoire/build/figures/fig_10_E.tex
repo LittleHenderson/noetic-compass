@@ -1,0 +1,69 @@
+% Figure 10-E -- decomposition of the CJT bias-terminal resistance.
+\begin{tikzpicture}[
+  x=1cm,y=1cm,font=\sffamily\footnotesize,
+  wire/.style={draw=black,line width=0.75pt},
+  rbody/.style={draw=casNedge,fill=casNfill,line width=0.7pt,
+                minimum width=18mm,minimum height=7mm},
+  tiny/.style={font=\sffamily\scriptsize,align=left}
+]
+
+\node[font=\sffamily\footnotesize\bfseries,anchor=west]
+  at (0.15,0.45) {THE BIAS TERMINAL DECOMPOSED};
+
+% substrate capacitor
+\node[pblock,text width=21mm] (sub) at (0.95,-2.05)
+  {\textasciicircum 5 Female\\bias substrate};
+\draw[wire] (2.12,-2.05) -- (2.45,-2.05);
+\draw[draw=casPedge,line width=1.0pt] (2.45,-1.72) -- (2.45,-2.38);
+\draw[draw=casPedge,line width=1.0pt] (2.78,-1.72) -- (2.78,-2.38);
+\draw[wire] (2.78,-2.05) -- (3.15,-2.05);
+
+% R_bias, variable
+\node[rbody] (rb) at (4.05,-2.05) {$R_{\mathrm{bias}}$};
+\draw[wire] (3.15,-2.05) -- (rb.west);
+\draw[-{Latex[length=1.7mm,width=1.3mm]},draw=casEedge,line width=0.7pt]
+  (3.48,-2.55) -- (4.62,-1.55);
+
+% intrinsic resistance
+\node[rbody,minimum width=25mm] (ri) at (6.62,-2.05)
+  {$r_{\pi,\mathrm{intrinsic}}=\beta/g_m$};
+\draw[wire] (rb.east) -- (ri.west);
+
+% CJT
+\draw[wire] (ri.east) -- (8.23,-2.05);
+\draw[draw=casCedge,fill=casCfill,line width=0.8pt] (8.95,-2.05) circle (0.72);
+\draw[wire] (8.23,-2.05) -- (8.58,-2.05);
+\draw[wire] (8.58,-2.50) -- (8.58,-1.60);
+\draw[wire] (8.58,-1.80) -- (9.15,-1.30);
+\draw[wire] (8.58,-2.30) -- (9.15,-2.80);
+\draw[-{Latex[length=1.5mm,width=1.1mm]},wire]
+  (8.88,-2.55) -- (9.12,-2.77);
+\node[font=\sffamily\scriptsize\bfseries] at (9.70,-2.05) {CJT};
+
+\node[tiny,text width=41mm,anchor=north] at (4.05,-2.63)
+  {\textbf{the term an outside party can move}\\
+   fatigue · urgency · isolation · repetition};
+\node[tiny,text width=34mm,anchor=north] at (6.62,-2.63)
+  {\textbf{fixed by the two gains}\\not independently declared};
+
+\draw[draw=casNedge,dash pattern=on 1.5pt off 1.5pt,line width=0.4pt]
+  (0.20,-3.92) -- (10.15,-3.92);
+
+\node[nblock,text width=43mm,align=left,font=\sffamily\scriptsize,
+      anchor=north west] at (0.25,-4.28)
+  {\textbf{15.3 A1}\\
+   $r_{\pi,\mathrm{terminal}}
+     =r_{\pi,\mathrm{intrinsic}}+R_{\mathrm{bias}}$\\
+   $=3.0+5.0=8.0$};
+\node[nblock,text width=43mm,align=left,font=\sffamily\scriptsize,
+      anchor=north west] at (5.45,-4.28)
+  {\textbf{17.1 trance}\\
+   $r_{\pi,\mathrm{terminal}}
+     =r_{\pi,\mathrm{intrinsic}}+R_{\mathrm{bias}}$\\
+   $=0.15+0=0.15$};
+
+\node[font=\sffamily\scriptsize\bfseries,text=casEedge]
+  at (5.10,-6.15)
+  {an outside party can collapse only the outer term};
+
+\end{tikzpicture}

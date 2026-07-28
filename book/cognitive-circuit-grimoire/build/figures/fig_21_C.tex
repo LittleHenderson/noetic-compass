@@ -1,0 +1,41 @@
+% Figure 21-C -- retraction is not an involution after a cast.
+\begin{tikzpicture}[
+  scale=0.90,transform shape,
+  x=1cm,y=1cm,font=\sffamily\footnotesize,
+  obj/.style={casblock,minimum width=18mm,minimum height=10mm,
+              font=\sffamily\scriptsize\bfseries},
+  note/.style={font=\sffamily\scriptsize,align=center}
+]
+
+\node[font=\sffamily\footnotesize\bfseries,anchor=west] at (0,2.85)
+  {SCANNING COMMUTES; CASTING DOES NOT};
+
+% Upper row.
+\node[obj,cblock] (i1) at (1.20,1.10) {object $I$};
+\node[obj,pblock] (ri1) at (5.05,1.10) {$R(I)$};
+\draw[flow] (i1.east) -- node[above,font=\sffamily\scriptsize] {$\eta$} (ri1.west);
+\draw[fbflow] (ri1.west) to[bend left=28]
+  node[below,font=\sffamily\scriptsize] {$\varepsilon$} (i1.east);
+\draw[casCedge,line width=0.9pt,-{Latex[length=1.8mm]}]
+  (1.20,0.35) .. controls (3.05,-0.25) and (4.20,-0.25) .. (5.05,0.35);
+\node[note,anchor=north,text=casCedge] at (3.12,0.15)
+  {$\varepsilon\!\circ\!\eta={\mathrm{id}}_I$\\scanning is free};
+
+% Lower row.
+\node[obj,pblock] (ri2) at (1.20,-2.00) {$R(I)$};
+\node[obj,cblock] (i2) at (5.05,-2.00) {object $I$};
+\node[obj,oblock,fill=casOfill] (rip) at (8.95,-2.00) {$R(I)'$};
+\draw[flow] (ri2.east) -- node[above,font=\sffamily\scriptsize] {$\varepsilon$} (i2.west);
+\draw[flow] (i2.east) -- node[above,font=\sffamily\scriptsize] {$\eta$} (rip.west);
+\node[font=\sffamily\Large,text=casEedge] at (5.10,-3.12) {$\ne$};
+\draw[casEedge,line width=1.0pt] (4.78,-3.42) -- (5.42,-2.82);
+\node[note,text=casEedge,anchor=north] at (5.10,-3.50)
+  {$R(I)\ne R(I)'$};
+\node[note,anchor=north west,align=left,text width=43mm] at (7.05,-2.72)
+  {$+$ the cast happened\\
+   $+$ the operator knows what it felt like\\
+   $+$ the log has a row};
+\node[note,anchor=west,text=casEedge] at (0.15,-3.38)
+  {no arrow $R(I)'\to R(I)$ exists};
+
+\end{tikzpicture}

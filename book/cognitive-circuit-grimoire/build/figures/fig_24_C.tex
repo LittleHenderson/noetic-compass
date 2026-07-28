@@ -1,0 +1,103 @@
+% Figure 24-C -- CCB-CSB full schematic with references and instruments.
+\begin{tikzpicture}[
+  scale=0.67,transform shape,
+  x=1cm,y=1cm,font=\sffamily\scriptsize,
+  part/.style={casblock,font=\sffamily\tiny,minimum height=8mm,
+               inner sep=1.5pt,align=center},
+  wire/.style={draw=black,line width=0.55pt},
+  tpf/.style={circle,draw=black,fill=white,line width=0.6pt,
+              minimum size=6mm,inner sep=0pt,font=\sffamily\tiny\bfseries}
+]
+
+\node[font=\sffamily\footnotesize\bfseries,anchor=west] at (0,3.45)
+  {CCB-CSB \textemdash{} FULL SCHEMATIC};
+
+% Divider and signal path.
+\node[part,cblock,text width=13mm] (r1) at (0.80,0) {R1 divider\\$k=.417$};
+\node[part,pblock] (q1) at (2.20,0) {Q1\\$\beta=3$};
+\draw[flow] (-0.25,0) -- (r1.west);
+\draw[flow] (r1.east) -- (q1.west);
+\node[font=\sffamily\tiny,anchor=south] at (0.02,0.18) {proposal};
+
+% Matched pair split and subtractor.
+\node[part,pblock] (q2) at (3.70,0.70) {Q2 \ \textasciicircum2\textasciicircum P};
+\node[part,pblock] (q3) at (3.70,-0.70) {Q3 \ \textasciicircum3\textasciicircum P};
+\draw[flow] (q1.east) -- (q2.west);
+\draw[flow] (q1.east) -- (q3.west);
+\draw[casPedge,dashed,line width=0.7pt] (3.05,-1.25) rectangle (4.35,1.25);
+\node[font=\sffamily\tiny,anchor=south] at (3.70,1.34)
+  {MATCHED \textemdash{} same $\beta$, sat, bias};
+\node[part,nblock,text width=10mm] (dif) at (5.10,0) {dif1\\$-$};
+\draw[flow] (q2.east) -- (dif.west);
+\draw[flow] (q3.east) -- (dif.west);
+
+% Diodes, linear stages, guard, enforcer, fuse.
+\node[part,nblock] (d1) at (6.20,0) {D1};
+\node[part,eblock] (q5) at (7.30,0) {Q5\\1.5};
+\node[part,nblock] (d2) at (8.40,0) {D2};
+\node[part,eblock] (q6) at (9.50,0) {Q6\\1.0};
+\node[part,pblock,text width=15mm,minimum height=13mm,fill=casPfill] (q4)
+  at (10.95,0) {\textbf{Q4 GUARD}\\$\beta=3$, sat .85\\cut .08};
+\node[part,oblock,text width=13mm] (q7) at (12.45,0)
+  {Q7\\cut .80\\sat .98};
+\node[part,nblock,text width=18mm] (f1) at (13.90,0)
+  {F1\\0.90\\permanent};
+\draw[flow] (dif.east) -- (d1.west);
+\draw[flow] (d1.east) -- (q5.west);
+\draw[flow] (q5.east) -- (d2.west);
+\draw[flow] (d2.east) -- (q6.west);
+\draw[flow] (q6.east) -- (q4.west);
+\draw[flow] (q4.east) -- (q7.west);
+\draw[flow] (q7.east) -- (f1.west);
+\draw[flow] (f1.east) -- (14.75,0);
+\node[font=\sffamily\tiny,anchor=south] at (14.55,0.32) {BLOCKED};
+\draw[casPedge,dashed,line width=0.7pt] (10.30,0.72) -- (11.60,0.72);
+\draw[casNedge,dashed,line width=0.6pt] (10.30,-0.72) -- (11.60,-0.72);
+
+% Proceed branch and ops log.
+\draw[flow] (q4.south) -- (10.95,-1.50);
+\node[part,nblock] (d3) at (10.95,-1.90) {D3};
+\draw[flow] (d3.south) -- (10.95,-2.65);
+\node[part,oblock] (log) at (10.95,-3.05) {ops\_log};
+\node[font=\sffamily\tiny,anchor=west] at (11.55,-1.90)
+  {PROCEED below cutoff};
+
+% Charter bias rail and taps.
+\node[part,pblock,text width=12mm] (c1) at (1.05,-2.70)
+  {C1\\\textasciicircum5\textasciicircum P};
+\draw[line width=1.5pt] (1.70,-2.70) -- (13.10,-2.70);
+\foreach \x in {2.20,3.70,7.30,9.50,10.95,12.45}{
+  \draw[line width=0.7pt] (\x,-2.84) -- (\x,-2.56);
+}
+\draw[flow] (2.20,-2.56) -- (2.20,-0.42);
+\draw[flow] (3.70,-2.56) -- (3.70,-1.10);
+\draw[flow] (7.30,-2.56) -- (7.30,-0.42);
+\draw[flow] (9.50,-2.56) -- (9.50,-0.42);
+\draw[flow] (10.95,-2.56) -- (10.95,-0.68);
+\draw[flow] (12.45,-2.56) -- (12.45,-0.42);
+
+% Heavy lawful return.
+\node[part,nblock,text width=15mm] (lp) at (7.55,-4.45) {LP1\\$\tau=21\,d$};
+\node[part,nblock,text width=17mm] (f2) at (5.45,-4.45)
+  {F2\\0.12 pts/day};
+\draw[fbflow,line width=1.2pt,rounded corners=2pt]
+  (log.south) -- (10.95,-4.45) -- (lp.east);
+\draw[fbflow,line width=1.2pt] (lp.west) -- (f2.east);
+\draw[fbflow,line width=1.2pt,rounded corners=2pt]
+  (f2.west) -- (1.05,-4.45) -- (1.05,-3.12);
+\node[font=\sffamily\tiny,anchor=north] at (6.60,-4.85)
+  {O$\to$P \textemdash{} BIAS TERMINAL ONLY};
+
+% Non-loading instrument block.
+\draw[casNedge,dashed,line width=0.7pt] (12.30,1.55) rectangle (14.80,3.10);
+\node[font=\sffamily\tiny\bfseries] at (13.55,2.82) {NON-LOADING};
+\node[font=\sffamily\tiny] at (13.55,2.32) {M1/M2/M3};
+\node[font=\sffamily\tiny] at (13.55,1.92) {S1 sampler};
+
+% Probes.
+\node[tpf] at (10.95,1.55) {TP1};
+\node[tpf] at (13.00,1.05) {TP2};
+\node[tpf] at (1.05,-3.70) {TP3};
+\node[tpf] at (5.10,1.25) {TP4};
+
+\end{tikzpicture}

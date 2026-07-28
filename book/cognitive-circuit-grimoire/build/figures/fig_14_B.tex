@@ -1,0 +1,124 @@
+% Figure 14-B -- full CCB-H schematic in drawn component symbols.
+\begin{tikzpicture}[
+  scale=0.97,transform shape,
+  x=1cm,y=1cm,font=\sffamily\footnotesize,
+  wire/.style={draw=black,line width=0.6pt},
+  part/.style={casblock,font=\sffamily\scriptsize,minimum width=10mm,
+               minimum height=7mm,inner sep=2pt},
+  loop/.style={nblock,font=\sffamily\scriptsize,minimum height=6mm,
+               inner sep=2pt},
+  tiny/.style={font=\sffamily\scriptsize,align=center,inner sep=1pt}
+]
+
+\node[font=\sffamily\footnotesize\bfseries,anchor=west] at (0,3.22)
+  {CCB-H \textemdash{} FULL SCHEMATIC};
+
+% R1 and D1.
+\draw[wire] (-0.15,0) -- (0.25,0);
+\draw[wire,fill=casNfill] (0.25,-0.22) rectangle (0.85,0.22);
+\node[tiny,anchor=south] at (0.45,0.28) {R1};
+\draw[wire] (0.85,0) -- (1.15,0);
+\filldraw[fill=white,draw=black,line width=0.6pt]
+  (1.15,-0.20) -- (1.15,0.20) -- (1.48,0) -- cycle;
+\draw[line width=0.9pt] (1.48,-0.22) -- (1.48,0.22);
+\draw[wire] (1.48,0) -- (1.82,0);
+\node[tiny,anchor=south] at (1.48,0.30) {D1 \ $V_f=1.2$};
+
+% Q1 and its C1 bias rail.
+\node[part,cblock,circle,minimum size=12mm] (q1) at (2.40,0)
+  {\textbf{Q1}};
+\draw[flow] (1.82,0) -- (q1.west);
+\draw[wire] (2.40,-0.60) -- (2.40,-1.55);
+\draw[line width=1.2pt] (0.35,-1.55) -- (3.00,-1.55);
+\draw[line width=1.0pt] (0.35,-1.35) -- (0.35,-1.75);
+\draw[line width=1.0pt] (0.51,-1.35) -- (0.51,-1.75);
+\node[tiny,anchor=east] at (0.25,-1.55) {C1};
+\node[tiny,anchor=north] at (1.55,-1.67)
+  {shared bias rail};
+
+% Transformer, isolated collective bank, and fusion.
+\draw[wire] (q1.east) -- (3.45,0);
+\draw[wire] (3.50,-0.46) arc (270:90:0.23);
+\draw[wire] (3.50,0) arc (270:90:0.23);
+\draw[wire] (4.15,-0.46) arc (-90:90:0.23);
+\draw[wire] (4.15,0) arc (-90:90:0.23);
+\draw[line width=0.8pt] (3.83,-0.54) -- (3.83,0.54);
+\draw[line width=0.8pt] (3.93,-0.54) -- (3.93,0.54);
+\node[tiny,anchor=south] at (3.88,0.65) {XF1};
+\draw[wire] (4.38,0) -- (4.70,0);
+
+\foreach \x in {4.88,5.30,5.72}{
+  \draw[wire,fill=casNfill] (\x-0.11,0.38) rectangle (\x+0.11,0.64);
+  \draw[wire] (\x,0.38) -- (\x,0.18);
+  \draw[line width=0.9pt] (\x-0.14,0.18) -- (\x+0.14,0.18);
+  \draw[line width=0.9pt] (\x-0.14,0.02) -- (\x+0.14,0.02);
+  \draw[wire] (\x,0.02) -- (\x,-0.36);
+}
+\draw[wire] (4.70,0.64) -- (5.90,0.64);
+\draw[wire] (4.70,-0.36) -- (5.90,-0.36);
+\node[tiny,anchor=north,align=center] at (5.18,-0.48)
+  {C2 bank\\+ isolation};
+
+\draw[wire] (5.90,0) -- (6.30,0);
+\node[circle,draw=casPedge,fill=casPfill,line width=0.7pt,
+      minimum size=7mm,font=\sffamily\scriptsize\bfseries] (eg1) at (6.65,0)
+  {$\Sigma$};
+\node[tiny,anchor=north] at (6.78,-0.44)
+  {eg1 \ fusion};
+
+% D2, Q2 and conduct output.
+\draw[wire] (eg1.east) -- (7.10,0);
+\filldraw[fill=white,draw=black,line width=0.6pt]
+  (7.10,-0.20) -- (7.10,0.20) -- (7.43,0) -- cycle;
+\draw[line width=0.9pt] (7.43,-0.22) -- (7.43,0.22);
+\node[tiny,anchor=south] at (7.27,0.30) {D2 \ $V_f=2.0$};
+\draw[wire] (7.43,0) -- (7.75,0);
+\node[part,oblock,circle,minimum size=12mm] (q2) at (8.35,0)
+  {\textbf{Q2}};
+\draw[flow] (7.75,0) -- (q2.west);
+\draw[flow] (q2.east) -- (10.15,0);
+\node[tiny,anchor=south] at (9.55,0.18) {conduct output};
+
+% LOOP A above, from Q1 effect to C1 bias.
+\draw[fbflow,rounded corners=2pt]
+  (2.95,0.22) -- (2.95,2.12) -- (2.60,2.12);
+\node[loop] (flt1) at (2.25,2.12) {FLT1 \ $\tau=90\,d$};
+\node[loop] (fb1) at (0.50,2.12) {FB1 \ $\beta=1.90$};
+\draw[fbflow] (1.40,2.12) -- (fb1.east);
+\draw[fbflow,rounded corners=2pt]
+  (fb1.west) -- (0.12,2.12) -- (0.12,-1.55) -- (0.30,-1.55);
+\node[tiny,anchor=south] at (1.55,2.44)
+  {LOOP A \textemdash{} sets level};
+
+% LOOP B below, from conduct to the same bias rail.
+\draw[fbflow,rounded corners=2pt]
+  (9.75,-0.20) -- (9.75,-2.86) -- (8.85,-2.86);
+\node[loop] (flt2) at (7.92,-2.86) {FLT2 \ $\tau=90\,d$};
+\node[loop] (fb2) at (5.82,-2.86) {FB2 \ $\beta=0.30$};
+\draw[fbflow] (6.98,-2.86) -- (fb2.east);
+\draw[fbflow,rounded corners=2pt]
+  (fb2.west) -- (0.08,-2.86) -- (0.08,-1.55) -- (0.30,-1.55);
+\node[tiny,anchor=north] at (7.00,-3.20)
+  {LOOP B \textemdash{} carries realised fact};
+
+% Independent anchor/audit/safety chain.
+\draw[casPedge,dash pattern=on 2pt off 1.3pt,line width=0.8pt,
+      rounded corners=2pt] (1.30,-5.82) rectangle (9.75,-4.02);
+\node[tiny,text=casPedge,anchor=north west,font=\sffamily\scriptsize\bfseries]
+  at (1.44,-4.16) {ANCHOR REGION \textemdash{} TOUCHES NEITHER LOOP};
+\node[pblock,font=\sffamily\scriptsize] (c3) at (2.35,-5.05)
+  {C3\\leakage=0};
+\node[pblock,font=\sffamily\scriptsize] (q3) at (4.15,-5.05)
+  {Q3\\audit};
+\node[nblock,font=\sffamily\scriptsize] (mon) at (6.05,-5.05)
+  {M\_ANCHOR};
+\node[pblock,font=\sffamily\scriptsize] (q4) at (7.62,-5.05)
+  {Q4\\sat .85};
+\node[nblock,font=\sffamily\scriptsize] (f1) at (9.00,-5.05)
+  {F1};
+\draw[flow] (c3.east) -- (q3.west);
+\draw[flow] (q3.east) -- (mon.west);
+\draw[flow] (mon.east) -- (q4.west);
+\draw[flow] (q4.east) -- (f1.west);
+
+\end{tikzpicture}

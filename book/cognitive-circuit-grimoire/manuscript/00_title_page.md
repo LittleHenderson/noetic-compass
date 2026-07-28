@@ -37,7 +37,7 @@ ISBN: [pending publisher assignment]
 
 This volume is an operator's manual for cognitive architecture engineering applied to influence, persuasion, manifestation, and mind control. The circuits described herein are REAL — not metaphor, not poetry, not "law of attraction" positive thinking. They are formal schematics with measurable parameters, verifiable test points, and predictable failure modes.
 
-The techniques span the full ethical spectrum from self-development to coercive control. The author provides the engineering; the operator provides the ethics. A circuit that can liberate can also enslave. The Cognitive Safety Board (CSB) in Part V is not optional — it is the minimum viable safety architecture for any operator who wishes to remain human.
+The techniques span the full ethical spectrum from self-development to coercive control. The author provides the engineering; the operator provides the ethics. A circuit that can liberate can also enslave. The Cognitive Safety Board (CSB) in Chapter 24 is not optional — it is the minimum viable safety architecture for any operator who wishes to remain human.
 
 Nothing in this book is legal, medical, or psychological advice.
 

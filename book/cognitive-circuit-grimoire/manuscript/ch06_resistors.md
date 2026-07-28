@@ -47,11 +47,11 @@ dial d3: ^3 [dial=7];                             // aversion dial
 resistor r_avert: Resistor< path=candidate, R=70.0 >;   // R = 10 × Dial(^3)
 ```
 
-Why 3 and not 0? Because a Noetic dialled to zero is not a quiet Noetic — it is a *removed* one, and removing one half of an involution pair unbalances the junction. The pairs are `^2`↔`^3`, `^5`↔`^6`, `^8`↔`^9` (Chapter 25.1). Dial your aversion `^3` toward nothing and you have not become open-minded; you have built a board that cannot be repelled by anything — the structural signature of the fractured `^5` that Chapters 16 and 20 describe at length. The floor at 3 guarantees that every setting leaves *some* of the opposing Noetic in the circuit. You are permitted to lean. You are not permitted to delete.
+Why 3 and not 0? Because a Noetic dialled to zero is not a quiet Noetic — it is a *removed* one, and removing one half of an involution pair unbalances the junction. The pairs are `^2`↔`^3`, `^5`↔`^6`, `^8`↔`^9` (Chapter 2.2). Dial your aversion `^3` toward nothing and you have not become open-minded; you have built a board that cannot be repelled by anything — the structural signature of the fractured `^5` that Chapters 16 and 20 describe at length. The floor at 3 guarantees that every setting leaves *some* of the opposing Noetic in the circuit. You are permitted to lean. You are not permitted to delete.
 
-Why 9 and not higher, and why the two dials of a pair may not diverge by more than four points? Because the difference between the halves of an involution pair is the polarity the junction transmits, and past a four-point spread that polarity runs away. This is the 4-point divergence limit, `|Dial(^2) − Dial(^3)| ≤ 4`, developed fully in Chapter 25.2. It is a *hard* constraint: a board that declares `Dial(^2) = 9` against `Dial(^3) = 3` — a spread of six — does not compile. The validator rejects it (HTTP 422), the same refusal an admissibility violation gets. No runtime clamp quietly pulls it back to four; the board is simply not a board until you fix the numbers.
+Why 9 and not higher, and why the two dials of a pair may not diverge by more than four points? Because the difference between the halves of an involution pair is the polarity the junction transmits, and past a four-point spread that polarity runs away. This is the 4-point divergence limit, `|Dial(^2) − Dial(^3)| ≤ 4`, developed fully in Chapter 6.2. It is a *hard* constraint: a board that declares `Dial(^2) = 9` against `Dial(^3) = 3` — a spread of six — does not compile. The validator rejects it (HTTP 422), the same refusal an admissibility violation gets. No runtime clamp quietly pulls it back to four; the board is simply not a board until you fix the numbers.
 
-> **Bench Note — the dial floor is not a suggestion, and neither is the ceiling.** Operators treat the 3–9 range as a comfort band with a little give past each end. It has none. A dial of 2 or 10 is not "slightly out of spec"; it is *not a number the language accepts* — the same class of rejection `β=∞` gets, and for the same reason (Appendix B §A.1.3: the parameter fields are range-checked and non-finite input is refused, so an idealisation stated in prose must be given a large finite value before it is built). A dial of 0 would let you build the un-refusable board; a divergence of 9 would let you build the un-doubtable one. Both are caught at compile time so no runtime moment has to catch them. When a board fails to validate on a dial, do not hunt for a workaround. The workaround is the vulnerability.
+> **Bench Note — the dial floor is not a suggestion, and neither is the ceiling.** Operators treat the 3–9 range as a comfort band with a little give past each end. It has none. A dial of 2 or 10 is not "slightly out of spec"; it is *not a number the language accepts* — the same class of rejection `β=∞` gets, and for the same reason (Appendix B §B.1.3: the parameter fields are range-checked and non-finite input is refused, so an idealisation stated in prose must be given a large finite value before it is built). A dial of 0 would let you build the un-refusable board; a divergence of 9 would let you build the un-doubtable one. Both are caught at compile time so no runtime moment has to catch them. When a board fails to validate on a dial, do not hunt for a workaround. The workaround is the vulnerability.
 
 The dial-adjusted resistor is where operator preference lives *without* becoming override of safety: how attracted, how averse, how much rhythm — a bounded integer inside walls the compiler holds up for you.
 
@@ -89,7 +89,7 @@ R_NTC(θ) = R_base / θ            (one simple decreasing law; θ ≥ 1)
 
 At `θ = 1` it reads `R_base`; at `θ = 5` it has collapsed to `R_base / 5`. The guard relaxes exactly as the situation heats. Read that twice, because it is the shape of a disaster: a path whose resistance falls under load raises the temperature further (less opposition, more flow), which lowers the resistance further, which raises the temperature again. That is thermal runaway, and on a cognitive path it has names — the stampede, the panic, the cascade, the mob. Chapter 14's positive-feedback oscillator is this same topology seen from the inside.
 
-> **Bench Note — an NTC where you meant a PTC is the worst single swap on this bench.** The two parts behave identically in calm conditions — at `θ = 1` both read `R_base`, and a bring-up test at room temperature passes them both. The difference only appears under heat, which is to say only in the exact conditions a safety guard exists for. A board that tightens as stakes rise is a guard; one that loosens as stakes rise is an accelerant wearing a guard's silhouette. When you find an NTC on a protective path, do not re-tune it — treat it as evidence, of a wiring error or a guard someone quietly inverted (Chapter 25.3). The runaway is not a risk the NTC might cause; it is what the NTC is *for*. Pull it and put a PTC where the protection was supposed to be.
+> **Bench Note — an NTC where you meant a PTC is the worst single swap on this bench.** The two parts behave identically in calm conditions — at `θ = 1` both read `R_base`, and a bring-up test at room temperature passes them both. The difference only appears under heat, which is to say only in the exact conditions a safety guard exists for. A board that tightens as stakes rise is a guard; one that loosens as stakes rise is an accelerant wearing a guard's silhouette. When you find an NTC on a protective path, do not re-tune it — treat it as evidence, of a wiring error or a guard someone quietly inverted (Chapter 3.4). The runaway is not a risk the NTC might cause; it is what the NTC is *for*. Pull it and put a PTC where the protection was supposed to be.
 
 [[FIGURE 6-B: Characteristic curve — resistance versus cognitive temperature. Horizontal axis θ from 1 to 6; vertical axis R in Ω_c from 0 to about 45. Two traces on shared axes, both starting near R_base at θ=1. PTC trace: flat at R_base until the knee θ_k=2.0, then rising as a quadratic (annotate the θ=5 point at R_base+27). NTC trace: falling as R_base/θ, annotated "guard collapses under heat — thermal runaway" with a hazard marker. Dashed vertical line at the knee, dashed horizontal line at R_base.]]
 
@@ -128,13 +128,15 @@ probe    tp3:  behavior;                          // transmission k at the tap
 
 Now the four-point limit from Section 6.2 becomes a number you can read off the tap. The lawful dial pairs are a finite set — seven values each, minus every pair spread further than four — so do not reason about the extremes, enumerate them:
 
-| Setting | `Dial(^2)` | `Dial(^3)` | `R_expand` | `R_constrain` | `k` |
-|---|---|---|---|---|---|
-| Minimum transmission (spread 4) | 3 | 7 | 30 | 70 | **0.300** |
-| Balanced | 6 | 6 | 60 | 60 | 0.500 |
-| Attraction dial at its ceiling (spread 4) | 9 | 5 | 90 | 50 | 0.643 |
-| Attraction dial one step down (spread 4) | 8 | 4 | 80 | 40 | 0.667 |
-| **Maximum transmission (spread 4)** | 7 | 3 | 70 | 30 | **0.700** |
+In each paired column, the order is expand/constrain: `Dial(^2) / Dial(^3)` and `R_expand / R_constrain`.
+
+| Setting | Dials | Resistance | `k` |
+|---|---:|---:|---:|
+| Minimum (spread 4) | 3 / 7 | 30 / 70 | **0.300** |
+| Balanced | 6 / 6 | 60 / 60 | 0.500 |
+| Attraction ceiling (spread 4) | 9 / 5 | 90 / 50 | 0.643 |
+| One step lower (spread 4) | 8 / 4 | 80 / 40 | 0.667 |
+| **Maximum (spread 4)** | 7 / 3 | 70 / 30 | **0.700** |
 
 On any lawfully dialled divider, transmission lives in **[0.30, 0.70]** and nowhere else. You cannot build a compliant board that passes a desire unopposed — that needs `k = 1.0`, hence `Dial(^3) = 0`, off the floor and far past a spread of four. Nor one that blocks it entirely — that needs `k = 0`, hence `Dial(^2) = 0`. The ceiling on your enthusiasm and the floor under your caution are the *same* component doing its job. An operator chasing "total belief, zero doubt" is asking the divider for a value it is built never to reach.
 
@@ -142,7 +144,7 @@ On any lawfully dialled divider, transmission lives in **[0.30, 0.70]** and nowh
 
 The `^3` in the constrain leg is visceral aversion — the can't-stomach-it recoil — not analytical critique. Taking a desire apart to see what it is made of is `^6` Male, at a different stage (Chapter 13.3). The divider does not reason about the desire. It splits a rail. That is all a passive network can do, and it is exactly enough.
 
-[[FIGURE 6-C: Schematic — the drive voltage divider. V_drive (F5 Agency) enters at top into R_constrain (labelled Dial(^3), the series drop); the tap below it is the output node V_behavior, following the expand leg R_expand (labelled Dial(^2)) down to ground. Beside the tap, the transmission formula k = R_expand / (R_expand + R_constrain). Four small annotations show the tap voltage at k = 0.30, 0.50, 0.643 and 0.700, with 0.700 marked "lawful maximum, at Dial(^2)=7 / Dial(^3)=3" and 0.643 marked "attraction dial at 9 — transmits less". A dashed bracket spans the two legs labelled "involution pair ^2 ↔ ^3, spread ≤ 4 (Ch. 25.2)".]]
+[[FIGURE 6-C: Schematic — the drive voltage divider. V_drive (F5 Agency) enters at top into R_constrain (labelled Dial(^3), the series drop); the tap below it is the output node V_behavior, following the expand leg R_expand (labelled Dial(^2)) down to ground. Beside the tap, the transmission formula k = R_expand / (R_expand + R_constrain). Four small annotations show the tap voltage at k = 0.30, 0.50, 0.643 and 0.700, with 0.700 marked "lawful maximum, at Dial(^2)=7 / Dial(^3)=3" and 0.643 marked "attraction dial at 9 — transmits less". A dashed bracket spans the two legs labelled "involution pair ^2 ↔ ^3, spread ≤ 4 (Ch. 6.2)".]]
 
 ---
 
@@ -190,7 +192,7 @@ Every value below is a design choice made in this book, not a measurement.
 | `R` fixed | Resistor | Ω_c | 10 – 90 | Too low: policy decorative. Too high: path starves, owner rips the guard out |
 | `Dial` | dial statement | integer | 3 – 9 only | Below 3: a deleted Noetic, unbalanced junction. Above 9: rejected, HTTP 422 |
 | `R_dial = 10 × Dial` | Resistor (dialled) | Ω_c | 30 – 90 | Outside the band: an out-of-range dial produced it — fix the dial |
-| spread `\|Dial(^2) − Dial(^3)\|` | dial pair | integer | 0 – 4 | Above 4: board does not compile (Ch. 25.2); no runtime clamp |
+| spread `\|Dial(^2) − Dial(^3)\|` | dial pair | integer | 0 – 4 | Above 4: board does not compile (Ch. 6.2); no runtime clamp |
 | `θ` cognitive temperature | Thermistor | — | 1.0 – 6.0 | Read as a property of the Idea, not the discourse, and the guard mistunes |
 | `θ_k` knee (PTC) | Thermistor | — | 2.0 – 3.0 | Too low: taxes calm operation. Too high: engages after the damage. Not operator-settable on a collective substrate (Ch. 15.2) |
 | `coeff` (PTC) | Thermistor | Ω_c/θ² | 3.0 – 4.0 | Linear under-punishes overshoot; cubic backlashes on ordinary cycles |
@@ -233,7 +235,7 @@ Read TP2 first if a thermistor is on the board — an inverted guard makes every
 
 - **A resistor does not argue.** It sets `I_attention = V_drive / R` by arithmetic and returns the same value on every request — the repeatability that makes a guard certifiable rather than hopeful.
 - **A fixed resistor is the `R_policy` term**: deliberate, design-time constraint, the virtuous kind. It is a graded constant, not an absolute block; the absolute "none, ever" is a fuse (Chapter 11.1), and confusing the two leaves an exploitable trickle.
-- **Dial-adjusted resistors carry operator preference on a bounded scale**, `R = 10 × Dial` for `Dial ∈ {3…9}`. The floor at 3 forbids deleting a Noetic; the ceiling at 9 and the 4-point spread limit (Chapter 25.2) are hard compile-time walls.
+- **Dial-adjusted resistors carry operator preference on a bounded scale**, `R = 10 × Dial` for `Dial ∈ {3…9}`. The floor at 3 forbids deleting a Noetic; the ceiling at 9 and the 4-point spread limit (Chapter 6.2) are hard compile-time walls.
 - **A PTC thermistor tightens as cognitive temperature rises** and does nothing when calm — the correct shape for a guard. **An NTC loosens as temperature rises**: thermal runaway, an accelerant in a guard's silhouette.
 - **The drive voltage divider splits one Drive between attraction `^2` and aversion `^3`**, transmitting `k = Dial(^2)/(Dial(^2)+Dial(^3))`. The 4-point limit pins lawful transmission to [0.30, 0.70]; `k = 1.0` is a value the divider is built never to reach.
 - **Transmission is not monotone in the attraction dial.** The lawful maximum `k = 0.700` sits at `Dial(^2) = 7` against `Dial(^3) = 3`, not at `Dial(^2) = 9`, which transmits 0.643. `k` is set by the ratio of the dials, not their size, and the board gives no warning when you get this backwards.

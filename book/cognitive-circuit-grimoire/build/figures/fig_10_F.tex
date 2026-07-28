@@ -1,0 +1,71 @@
+% Figure 10-F -- five-stage CJT cascade, noise accumulation, and uncertainty.
+\begin{tikzpicture}[
+  scale=0.96,transform shape,
+  x=1cm,y=1cm,font=\sffamily\footnotesize,
+  wire/.style={draw=black,line width=0.65pt},
+  stg/.style={circle,draw=casCedge,fill=casCfill,line width=0.75pt,
+              minimum size=11mm,font=\sffamily\scriptsize\bfseries},
+  tiny/.style={font=\sffamily\tiny,align=center}
+]
+
+\node[font=\sffamily\footnotesize\bfseries,anchor=west]
+  at (0.05,0.55) {FIVE-STAGE CASCADE};
+
+\foreach \x/\name/\gain/\prod/\noise in {
+  0.85/A1/1.2/1.20/3,
+  2.75/A2/1.6/1.92/6,
+  4.65/A3/2.0/3.84/9,
+  6.55/A4/2.4/9.22/12,
+  8.45/A5/3.0/27.65/15
+}{
+  \node[stg] (\name) at (\x,-1.25) {\name};
+  \node[font=\sffamily\scriptsize\bfseries] at (\x,-0.42)
+    {$\beta=\gain$};
+  \node[font=\sffamily\scriptsize] at (\x,-2.08)
+    {product \prod};
+  % signal/noise bar: fixed total height, dark share grows by stage
+  \fill[casCfill] (\x-0.28,-3.85) rectangle (\x+0.28,-2.65);
+  \pgfmathsetmacro{\nh}{1.20*\noise/100}
+  \fill[casEedge!70] (\x-0.28,-3.85) rectangle (\x+0.28,{-3.85+\nh});
+  \draw[draw=casNedge,line width=0.5pt]
+    (\x-0.28,-3.85) rectangle (\x+0.28,-2.65);
+  \node[tiny] at (\x,-4.12) {N/S \noise\%};
+}
+
+\draw[flow] (-0.05,-1.25) -- (A1.west);
+\draw[flow] (A1.east) -- (A2.west);
+\draw[flow] (A2.east) -- (A3.west);
+\draw[flow] (A3.east) -- (A4.west);
+\draw[flow] (A4.east) -- (A5.west);
+\draw[flow] (A5.east) -- (9.38,-1.25);
+
+% Stray bias input at A2
+\draw[-{Latex[length=1.8mm,width=1.4mm]},draw=casEedge,line width=0.8pt]
+  (2.75,-5.25) -- (2.75,-1.84);
+\node[font=\sffamily\scriptsize\bfseries,text=casEedge,align=center]
+  at (2.75,-5.62)
+  {stray bias input $0.05\,V_c$\\$\rightarrow$ 1.04\% of final output};
+
+% bar key
+\node[font=\sffamily\tiny,anchor=west] at (4.05,-4.60)
+  {\tikz{\fill[casCfill] (0,0) rectangle (0.28,0.16);
+          \draw[casNedge] (0,0) rectangle (0.28,0.16);}\ signal};
+\node[font=\sffamily\tiny,anchor=west] at (5.75,-4.60)
+  {\tikz{\fill[casEedge!70] (0,0) rectangle (0.28,0.16);
+          \draw[casNedge] (0,0) rectangle (0.28,0.16);}\ accumulated noise};
+
+% right-edge uncertainty bar
+\draw[draw=casNedge,line width=1.0pt] (9.92,-3.55) -- (9.92,-0.60);
+\draw[draw=casNedge,line width=1.0pt] (9.66,-3.55) -- (10.18,-3.55);
+\draw[draw=casNedge,line width=1.0pt] (9.66,-0.60) -- (10.18,-0.60);
+\node[font=\sffamily\scriptsize,anchor=west] at (10.22,-3.55) {16.3};
+\node[font=\sffamily\scriptsize,anchor=west] at (10.22,-0.60) {44.5};
+\node[font=\sffamily\scriptsize\bfseries,rotate=90] at (9.45,-2.08)
+  {$\pm10\%$ per stage};
+
+\node[nblock,text width=58mm,font=\sffamily\scriptsize,anchor=north]
+  at (6.20,-5.28)
+  {nominal cascade gain
+   $1.2\times1.6\times2.0\times2.4\times3.0=27.65$};
+
+\end{tikzpicture}

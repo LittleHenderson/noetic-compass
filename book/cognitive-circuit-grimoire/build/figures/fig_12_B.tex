@@ -1,0 +1,66 @@
+% Figure 12-B -- full drawn CCB-0 trainer schematic.
+\begin{tikzpicture}[x=1cm,y=1cm,font=\sffamily\tiny,
+  wire/.style={draw=black,line width=.6pt},
+  qsym/.pic={\draw[wire,fill=white] (0,0) circle (.28);
+    \draw[wire](-.12,-.16)--(-.12,.16);
+    \draw[wire](-.12,.11)--(.18,.25)--(.18,.48);
+    \draw[wire,-{Latex[length=1.1mm,width=.9mm]}](-.12,-.11)--(.18,-.25)--(.18,-.48);
+    \draw[wire](-.48,0)--(-.12,0);},
+  diode/.pic={\filldraw[fill=white,draw=black,line width=.5pt]
+    (-.14,-.14)--(-.14,.14)--(.09,0)--cycle;\draw[line width=.75pt](.09,-.17)--(.09,.17);},
+  tag/.style={font=\sffamily\tiny\bfseries,fill=white,inner sep=.5pt},
+  tp/.style={circle,draw=black,fill=white,minimum size=2mm,inner sep=0pt}]
+% Horizontal cause/effect path.
+\pic at (.75,2.65){qsym}; \node[tag,anchor=south] at (.75,3.18){Q1};
+\draw[wire] (1.23,2.65)--(2.02,2.65);
+\pic at (2.50,2.65){qsym}; \node[tag,anchor=south] at (2.50,3.18){Q2};
+% MUX1 and guard select.
+\draw[wire] (2.98,2.65)--(3.40,2.65);
+\path[draw=black,fill=white] (3.40,2.25)--(4.15,2.38)--(4.15,2.92)--(3.40,3.05)--cycle;
+\node[tag] at (3.78,2.65){MUX1};
+\draw[wire] (4.15,2.65)--(4.55,2.65); \pic at (4.72,2.65){diode};
+\node[tag,anchor=south] at (4.72,2.92){D1 $V_f1.2$};
+\draw[wire] (4.88,2.65)--(5.32,2.65);
+\pic at (5.80,2.65){qsym}; \node[tag,anchor=south] at (5.80,3.18){Q3};
+% Oscillator square-wave circle.
+\draw[wire] (6.28,2.65)--(6.70,2.65);
+\node[circle,draw=black,fill=white,minimum size=7mm] (osc) at (7.05,2.65) {};
+\draw[line width=.55pt] (6.82,2.55)--(6.92,2.55)--(6.92,2.77)--(7.08,2.77)--(7.08,2.55)--(7.25,2.55);
+\node[tag,anchor=south] at (7.05,3.08){OSC1 duty .014};
+\draw[wire] (7.40,2.65)--(7.80,2.65); \pic at (7.98,2.65){diode};
+\node[tag,anchor=south] at (7.98,2.92){D2 $V_f2.0$};
+\draw[wire] (8.14,2.65)--(8.58,2.65);
+\pic at (9.06,2.65){qsym}; \node[tag,anchor=south] at (9.06,3.18){Q4};
+\draw[flow] (9.54,2.65)--(10.45,2.65);
+
+% Bias rail: R0, C1 and four base stubs.
+\draw[wire] (.18,.30)--(.42,.30); \path[draw=black,fill=casNfill] (.42,.10) rectangle (1.25,.50);
+\node[tag] at (.83,.30){R0 40};
+\draw[wire] (1.25,.30)--(1.55,.30);
+\draw[line width=.8pt] (1.55,.05)--(1.55,.55); \draw[line width=.8pt] (1.74,.05)--(1.74,.55);
+\node[tag,anchor=west] at (1.88,.30){C1 83.33};
+\draw[line width=1.1pt,draw=casPedge] (1.74,.30)--(9.30,.30);
+\node[tag,anchor=south] at (5.35,.38){$^5{}^P$ BIAS RAIL};
+\foreach \x in {.75,2.50,5.80,9.06}{\draw[wire,draw=casPedge](\x,.30)--(\x,2.17);}
+
+% Fuse branch and select line from refuse.
+\draw[wire] (2.98,2.65)--(2.98,1.70);
+\path[draw=black,fill=white] (2.78,1.25) rectangle (3.18,1.70);
+\draw[line width=.6pt] (2.82,1.29)--(3.14,1.66);
+\node[tag,anchor=west] at (3.25,1.47){F1 .90};
+\draw[wire,dashed] (2.98,1.25)--(3.78,1.25)--(3.78,2.25);
+
+% Saturation ceiling above Q3.
+\draw[casRed,dashed] (5.25,3.48)--(6.35,3.48);
+\node[tag,text=casEedge,anchor=west] at (6.38,3.48){sat=.80};
+
+% Return loop at bottom.
+\draw[fbflow,rounded corners=2pt] (10.30,2.65)--(10.30,-.75)--(8.30,-.75);
+\node[nblock,font=\sffamily\tiny] (flt) at (7.55,-.75){FLT1 $\tau=21$d};
+\node[nblock,font=\sffamily\tiny] (fb) at (5.15,-.75){FB1 $\beta=.05$};
+\draw[fbflow] (8.30,-.75)--(flt.east); \draw[fbflow] (flt.west)--(fb.east);
+\draw[fbflow,rounded corners=2pt] (fb.west)--(1.65,-.75)--(1.65,.02);
+
+\foreach \x/\y/\lab in {1.65/.30/TP1,2.98/1.88/TP2,6.28/2.65/TP3,10.08/2.65/TP4}{
+  \node[tp] at (\x,\y){}; \node[tag,anchor=south] at (\x,{\y+.12}){\lab};}
+\end{tikzpicture}

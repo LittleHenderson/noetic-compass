@@ -1,0 +1,61 @@
+% Figure 2-B -- the ten Noetics arranged as three involution pairs and four
+% self-duals.  Names are canonical; the short phrases distinguish the roles.
+\begin{tikzpicture}[
+  x=1cm, y=1cm,
+  pair/.style={casblock, text width=39mm, minimum height=9mm,
+               font=\sffamily\scriptsize},
+  self/.style={casblock, text width=18mm, minimum height=8mm,
+               font=\sffamily\scriptsize},
+  pairarrow/.style={{Latex[length=1.8mm]}-{Latex[length=1.8mm]},
+                    line width=0.7pt, draw=casNedge},
+  lbl/.style={font=\sffamily\scriptsize\bfseries, text=casNedge},
+  warn/.style={casblock, fill=casEfill, draw=casEedge,
+               text width=91mm, minimum height=8mm,
+               font=\sffamily\scriptsize\bfseries}
+]
+
+\node[lbl] at (2.75,0.75) {INVOLUTION PAIRS};
+
+\node[pair, cblock] (p2) at (0,-0.10)
+  {\textbf{\casnote{\detokenize{^2}} Positive}\\
+   affinity for; attracted toward};
+\node[pair, eblock] (p3) at (5.50,-0.10)
+  {\textbf{\casnote{\detokenize{^3}} Negative}\\
+   adverse to; repelled by};
+\draw[pairarrow] (p2.east) -- node[above, font=\sffamily\tiny]
+  {direction of affinity} (p3.west);
+
+\node[pair, pblock] (p5) at (0,-1.45)
+  {\textbf{\casnote{\detokenize{^5}} Female}\\
+   Ideas composing a Mind};
+\node[pair, cblock] (p6) at (5.50,-1.45)
+  {\textbf{\casnote{\detokenize{^6}} Male}\\
+   Ideas composing an Idea};
+\draw[pairarrow] (p5.east) -- node[above, font=\sffamily\tiny]
+  {composition} (p6.west);
+
+\node[pair, nblock] (p8) at (0,-2.80)
+  {\textbf{\casnote{\detokenize{^8}} Above/Cause}\\
+   the Idea that triggers};
+\node[pair, oblock] (p9) at (5.50,-2.80)
+  {\textbf{\casnote{\detokenize{^9}} Below/Effect}\\
+   the Idea brought to Mind};
+\draw[pairarrow] (p8.east) -- node[above, font=\sffamily\tiny]
+  {trigger / arrival} (p9.west);
+
+\node[lbl] at (2.75,-3.75) {SELF-DUALS};
+\node[self, nblock] at (-0.35,-4.55)
+  {\textbf{\casnote{\detokenize{^0}} Idea}\\content};
+\node[self, nblock] at (1.72,-4.55)
+  {\textbf{\casnote{\detokenize{^1}} Mind}\\awareness};
+\node[self, nblock] at (3.78,-4.55)
+  {\textbf{\casnote{\detokenize{^4}} Vibration}\\impression};
+\node[self, nblock] at (5.85,-4.55)
+  {\textbf{\casnote{\detokenize{^7}} Rhythm}\\cadence};
+
+\node[warn] at (2.75,-5.65)
+  {\casnote{\detokenize{^3}} is aversion, not critique
+   \quad$\bullet$\quad
+   \casnote{\detokenize{^8}} is association, not deduction};
+
+\end{tikzpicture}

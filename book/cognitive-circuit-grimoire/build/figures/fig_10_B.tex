@@ -1,0 +1,54 @@
+% Figure 10-B -- CJT cause-to-effect characteristic at three gains.
+\begin{tikzpicture}
+\begin{axis}[casaxis,
+  width=10.3cm,height=7.0cm,
+  xmin=0,xmax=0.6,ymin=0,ymax=1.0,
+  xtick={0,0.05,0.1,0.2,0.3,0.4,0.5,0.6},
+  ytick={0,0.2,0.4,0.55,0.7,0.8,1.0},
+  xlabel={cause current ($A_c$)},
+  ylabel={effect current ($A_c$)},
+  axis on top,legend style={at={(0.98,0.05)},anchor=south east}
+]
+\fill[casNfill] (axis cs:0,0) rectangle (axis cs:0.05,1.0);
+\node[font=\sffamily\scriptsize\bfseries,rotate=90,text=casNedge]
+  at (axis cs:0.025,0.58) {cutoff --- no response};
+\draw[casNedge,dashed,line width=0.7pt]
+  (axis cs:0.05,0) -- (axis cs:0.05,1);
+
+% Exact gain lines after the common cutoff; each is clipped at its declared sat.
+\addplot[casNedge,line width=1.0pt] coordinates
+  {(0.05,0.015)(0.60,0.180)};
+\draw[casNedge,dotted,line width=0.8pt]
+  (axis cs:0.05,0.20) -- (axis cs:0.60,0.20);
+\addlegendentry{$\beta=0.3,\ \mathrm{sat}=0.20$}
+
+\addplot[casCedge,line width=1.15pt] coordinates
+  {(0.05,0.05)(0.55,0.55)(0.60,0.55)};
+\addlegendentry{$\beta=1.0,\ \mathrm{sat}=0.55$}
+
+\addplot[casEedge,line width=1.2pt] coordinates
+  {(0.05,0.135)(0.2025,0.54675)(0.2593,0.70)(0.60,0.70)};
+\addlegendentry{$\beta=2.7,\ \mathrm{sat}=0.70$}
+
+\fill[casCfill,opacity=0.45] (axis cs:0.55,0.55) rectangle (axis cs:0.60,0.70);
+\fill[casEfill,opacity=0.45] (axis cs:0.2593,0.70) rectangle (axis cs:0.60,1.0);
+\node[font=\sffamily\scriptsize,align=left,anchor=west]
+  at (axis cs:0.33,0.82)
+  {plateau: no response\\to further cause};
+
+\draw[casNedge,dashed,line width=0.6pt]
+  (axis cs:0.2025,0) -- (axis cs:0.2025,0.55);
+\draw[casNedge,dashed,line width=0.6pt]
+  (axis cs:0,0.55) -- (axis cs:0.2025,0.55);
+\addplot[only marks,mark=x,mark size=3.4pt,mark options={line width=1.0pt},
+         black] coordinates {(0.2025,0.55)};
+\node[font=\sffamily\scriptsize\bfseries,anchor=south west,
+      fill=white,inner sep=1pt] at (axis cs:0.208,0.565)
+  {design point $(0.2025,0.55)$};
+
+\node[font=\sffamily\tiny,anchor=north west,text=casNedge]
+  at (axis cs:0.34,0.19)
+  {$\beta=0.3$ reaches 0.18 in-frame; the 0.20 ceiling lies just beyond};
+
+\end{axis}
+\end{tikzpicture}

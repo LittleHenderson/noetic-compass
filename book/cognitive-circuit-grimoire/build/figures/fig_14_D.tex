@@ -1,0 +1,63 @@
+% Figure 14-D -- stability trajectories at four round-trip gains.
+\begin{tikzpicture}
+\begin{axis}[casaxis,
+  width=10.3cm,height=7.2cm,
+  xmin=0,xmax=2.5,ymin=0,ymax=1.05,
+  xtick={0,0.5,1.0,1.8,2.0,2.5},
+  xticklabels={0,0.50,1.00,1.80,2.00,2.50},
+  ytick={0,0.2,0.4,0.6,0.8,1.0},
+  xlabel={round-trip gain $G$},
+  ylabel={store charge $s$ after up to 60 cycles},
+  axis on top
+]
+
+% Design bands.
+\fill[casPfill,opacity=0.55] (axis cs:1.80,0) rectangle (axis cs:2.00,1.05);
+\fill[casEfill,opacity=0.55] (axis cs:2.00,0) rectangle (axis cs:2.50,1.05);
+\node[font=\sffamily\scriptsize\bfseries,rotate=90,text=casPedge]
+  at (axis cs:1.90,0.76) {S3 KILL};
+\node[font=\sffamily\scriptsize\bfseries,rotate=90,text=casEedge]
+  at (axis cs:2.25,0.76) {S1 CAP};
+
+\draw[casNedge,dashed,line width=0.8pt]
+  (axis cs:1.0,0) -- (axis cs:1.0,1.05);
+\node[font=\sffamily\scriptsize,align=center,anchor=south,fill=white,
+      inner sep=1pt] at (axis cs:1.0,0.72)
+  {idealisation\\measure-zero\\unbuildable};
+
+% All traces start at s=0.20.  Small horizontal offsets reveal cycle order
+% while keeping each trajectory tied to its declared gain.
+\addplot[casNedge,line width=1.1pt,mark=*,mark size=1.5pt]
+  coordinates {(0.50,0.20)(0.485,0.12)(0.515,0.06)(0.50,0.015)};
+\node[font=\sffamily\scriptsize\bfseries,anchor=east,fill=white,inner sep=1pt]
+  at (axis cs:0.48,0.08) {$G=0.50$};
+
+\addplot[casCedge,line width=1.1pt,mark=*,mark size=1.5pt]
+  coordinates {(0.99,0.20)(0.975,0.17)(1.005,0.14)(0.99,0.11)};
+\node[font=\sffamily\scriptsize\bfseries,anchor=east,fill=white,inner sep=1pt]
+  at (axis cs:0.97,0.25) {$G=0.99$};
+
+\addplot[casPedge,line width=1.2pt,mark=*,mark size=1.5pt]
+  coordinates {(1.15,0.20)(1.135,0.25)(1.165,0.31)(1.15,0.39)};
+\node[font=\sffamily\scriptsize\bfseries,anchor=west,fill=white,inner sep=1pt]
+  at (axis cs:1.18,0.39) {$G=1.15$};
+\draw[{Latex[length=1.5mm]}-{Latex[length=1.5mm]},casPedge,line width=0.7pt]
+  (axis cs:1.24,0.20) -- (axis cs:1.24,0.40);
+\node[font=\sffamily\scriptsize,anchor=west,align=left,
+      fill=white,inner sep=1pt]
+  at (axis cs:1.55,0.50) {62-cycle doubling};
+
+\addplot[casEedge,line width=1.3pt,mark=*,mark size=1.6pt]
+  coordinates {(2.00,0.20)(1.98,0.42)(2.02,0.78)(2.00,1.00)(2.22,1.00)};
+\node[font=\sffamily\scriptsize\bfseries,anchor=south east,align=left,
+      fill=white,inner sep=1.5pt,text=casEedge]
+  at (axis cs:2.43,0.92)
+  {pinned at 1.0\\no longer growing;\\no longer persuadable};
+
+\draw[casNedge,dotted,line width=0.65pt]
+  (axis cs:0,0.20) -- (axis cs:2.50,0.20);
+\node[font=\sffamily\scriptsize,anchor=south,fill=white,inner sep=1pt]
+  at (axis cs:1.25,0.03) {common start; dots show cycle progression};
+
+\end{axis}
+\end{tikzpicture}

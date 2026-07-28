@@ -1,0 +1,65 @@
+% Figure 7-B -- capacitor charging curve, time constants, and a lower rail.
+\begin{tikzpicture}
+\begin{axis}[casaxis,
+  width=10.3cm,height=7.0cm,
+  xmin=0,xmax=5,ymin=0,ymax=10.8,
+  xtick={0,1,2,3,4,5},
+  xticklabels={$0$,$1\tau$,$2\tau$,$3\tau$,$4\tau$,$5\tau$},
+  ytick={0,2,4,6,8,10},
+  xlabel={time in units of $\tau$},
+  ylabel={$P_{\mathrm{cap}}$},
+  axis on top,legend style={at={(0.98,0.10)},anchor=south east}
+]
+\addplot[casCedge,line width=1.25pt,domain=0:5,samples=120]
+  {10*(1-exp(-x))};
+\addlegendentry{rail $=10$}
+\addplot[casNedge,dashed,line width=1.0pt,domain=0:5,samples=120]
+  {6*(1-exp(-x))};
+\addlegendentry{same $\tau$, rail $=6$}
+
+\draw[casNedge,dashed,line width=0.65pt]
+  (axis cs:0,10) -- (axis cs:5,10);
+\node[font=\sffamily\scriptsize,anchor=south east,fill=white,inner sep=1pt]
+  at (axis cs:4.95,10.05) {rail asymptote};
+
+\draw[casNedge,dotted,line width=0.55pt]
+  (axis cs:1,0) -- (axis cs:1,6.32);
+\addplot[only marks,mark=*,mark size=1.9pt,casCedge]
+  coordinates {(1,6.32)};
+\node[font=\sffamily\scriptsize\bfseries,anchor=south east,
+      fill=white,inner sep=1pt] at (axis cs:1,6.32) {6.32};
+\draw[casNedge,dotted,line width=0.55pt]
+  (axis cs:2,0) -- (axis cs:2,8.65);
+\addplot[only marks,mark=*,mark size=1.9pt,casCedge]
+  coordinates {(2,8.65)};
+\node[font=\sffamily\scriptsize\bfseries,anchor=south east,
+      fill=white,inner sep=1pt] at (axis cs:2,8.65) {8.65};
+\draw[casNedge,dotted,line width=0.55pt]
+  (axis cs:3,0) -- (axis cs:3,9.50);
+\addplot[only marks,mark=*,mark size=1.9pt,casCedge]
+  coordinates {(3,9.50)};
+\node[font=\sffamily\scriptsize\bfseries,anchor=south east,
+      fill=white,inner sep=1pt] at (axis cs:3,9.50) {9.50};
+
+\draw[{Latex[length=1.6mm]}-{Latex[length=1.6mm]},casEedge,line width=0.65pt]
+  (axis cs:1.10,6.32) -- (axis cs:1.10,10);
+\node[font=\sffamily\scriptsize,anchor=west,fill=white,inner sep=1pt]
+  at (axis cs:1.13,8.15) {3.68};
+\draw[{Latex[length=1.6mm]}-{Latex[length=1.6mm]},casEedge,line width=0.65pt]
+  (axis cs:2.10,8.65) -- (axis cs:2.10,10);
+\node[font=\sffamily\scriptsize,anchor=west,fill=white,inner sep=1pt]
+  at (axis cs:2.13,9.28) {1.35};
+\draw[{Latex[length=1.6mm]}-{Latex[length=1.6mm]},casEedge,line width=0.65pt]
+  (axis cs:3.10,9.50) -- (axis cs:3.10,10);
+\node[font=\sffamily\scriptsize,anchor=west,fill=white,inner sep=1pt]
+  at (axis cs:3.13,9.70) {0.50};
+
+\node[font=\sffamily\scriptsize\itshape,align=left,anchor=west,
+      fill=white,inner sep=1.5pt] at (axis cs:0.28,4.55)
+  {each $\tau$ closes 63.2\%\\of what is left};
+\node[font=\sffamily\scriptsize,align=left,anchor=west,
+      fill=white,inner sep=1.5pt,text=casNedge] at (axis cs:2.80,5.15)
+  {same $\tau$, rail at 6.0:\\no number of hours reaches 8};
+
+\end{axis}
+\end{tikzpicture}

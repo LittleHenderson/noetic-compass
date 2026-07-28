@@ -56,7 +56,7 @@ The bias is *who is doing the processing.* Change it and the same cause produces
 
 **E — Effect. The emitter. The Idea produced.** Canonically **`^9` Below/Effect** — *the Idea brought to Mind by an Above/Cause trigger.* The landing.
 
-`^8` and `^9` are an involution pair (Chapter 25.1). Cause and effect are duals, and the CJT is the device that maps one onto the other under the governance of a third thing.
+`^8` and `^9` are an involution pair (Chapter 2.2). Cause and effect are duals, and the CJT is the device that maps one onto the other under the governance of a third thing.
 
 | Terminal | Transistor part | What it carries | Canonical Noetic |
 |---|---|---|---|
@@ -182,7 +182,7 @@ A CJT is linear only in one of its four regions. An operator who does not know w
 
 **Saturation.** The output has hit `sat`. More cause changes nothing. Sometimes exactly what you want — a refusal at its ceiling that cannot be argued higher (Chapter 24.2). Sometimes a fault — a mind that has stopped taking evidence because it is already as certain as it can get.
 
-**Breakdown.** Not a boundary of the active region but a different kind of event. The stage stops obeying its own transfer function, `rπ` collapses so the bias governs nothing, and **the emitter reports the involution of the designed Noetic.** `^2` Positive comes out as `^3` Negative — fascination arrives as disgust. `^5` Female inverts to `^6` Male; `^8` Above/Cause inverts to `^9` Below/Effect (Chapter 25.1).
+**Breakdown.** Not a boundary of the active region but a different kind of event. The stage stops obeying its own transfer function, `rπ` collapses so the bias governs nothing, and **the emitter reports the involution of the designed Noetic.** `^2` Positive comes out as `^3` Negative — fascination arrives as disgust. `^5` Female inverts to `^6` Male; `^8` Above/Cause inverts to `^9` Below/Effect (Chapter 2.2).
 
 That distinction is the whole diagnostic. Cutoff and saturation produce **too little or too much of the right thing**. Breakdown produces **the wrong thing**. If the emitter's Noetic is not the one you designed, you are not looking at a tuning problem and no Dial will fix it.
 
@@ -222,17 +222,27 @@ You do not fix runaway by lowering β once it has started. You fix it with negat
 
 ### 3.5 The CJT Datasheet — Full Parameter Table
 
-The whole part on one page. Keep it open while you design.
+The whole part in two linked tables. Keep them open while you design.
 
-| Parameter | Symbol | Electronic meaning | CAS meaning | Legal range | Design default | Fails low | Fails high |
-|---|---|---|---|---|---|---|---|
-| **Cognitive gain** | β | I_c / I_b | `d_FR(ΔE) / d_FR(ΔC)` on Δ39° | finite, ≥ 0 | 2.4 | < 0.5: nothing survives to the next stage | > 4.0: loop instability, `E-CJT-005` |
-| **Transconductance** | g_m | ∂I_c / ∂V_be | ∂effect / ∂bias — framing sensitivity | ≥ 0 | 1.2 | < 0.2: bias decorative, stage unsteerable | > 3.0: output flips on rewording |
-| **Input resistance** | rπ | β / g_m | stubbornness to bias change | ≥ 0 | 2.0 | → 0: substrate writes on contact (gnosis; Ch.16 vulnerability) | → ∞: no operation can calibrate the operator |
-| **Saturation point** | sat | V_ce(sat) | effect plateau; added cause → no Δeffect | (0, 1] | 0.78; safety 0.85 | working stages clip strong causes | safety refusals become negotiable |
-| **Max effect intensity** | I_c(max) | absolute output ceiling | hard top of the plateau; substrate property, **not a param-block key** | [sat, 1], by eye | 0.92 | cascade dropout — next stage never fires | full-scale write into `^5`; Ch.7.4 |
-| **Cutoff** | cutoff | base threshold | bias floor below which β ≈ 0 | [0, 1), `< sat` | 0.10 | stage fires on noise; false refusals | dead guard, `E-CJT-003` — worst fault on any board |
-| **Operating region** | region | — | declared intent | cutoff \| active \| saturation \| breakdown | active | — | contradicting numbers are flagged, not guessed |
+| Parameter | Symbol | Electronic meaning | CAS meaning |
+|---|---|---|---|
+| **Cognitive gain** | β | I_c / I_b | `d_FR(ΔE) / d_FR(ΔC)` on Δ39° |
+| **Trans\allowbreak{}conductance** | g_m | ∂I_c / ∂V_be | ∂effect / ∂bias — framing sensitivity |
+| **Input resistance** | rπ | β / g_m | stubbornness to bias change |
+| **Saturation point** | sat | V_ce(sat) | effect plateau; added cause → no Δeffect |
+| **Max effect intensity** | I_c(max) | absolute output ceiling | hard top of the plateau; substrate property, **not a param-block key** |
+| **Cutoff** | cutoff | base threshold | bias floor below which β ≈ 0 |
+| **Operating region** | region | — | declared intent |
+
+| Parameter | Legal range | Design default | Fails low | Fails high |
+|---|---|---|---|---|
+| **Cognitive gain** | finite, ≥ 0 | 2.4 | < 0.5: nothing survives to the next stage | > 4.0: loop instability, `E-CJT-005` |
+| **Trans\allowbreak{}conductance** | ≥ 0 | 1.2 | < 0.2: bias decorative, stage unsteerable | > 3.0: output flips on rewording |
+| **Input resistance** | ≥ 0 | 2.0 | → 0: substrate writes on contact (gnosis; Ch.16 vulnerability) | → ∞: no operation can calibrate the operator |
+| **Saturation point** | (0, 1] | 0.78; safety 0.85 | working stages clip strong causes | safety refusals become negotiable |
+| **Max effect intensity** | [sat, 1], by eye | 0.92 | cascade dropout — next stage never fires | full-scale write into `^5`; Ch.7.4 |
+| **Cutoff** | [0, 1), `< sat` | 0.10 | stage fires on noise; false refusals | dead guard, `E-CJT-003` — worst fault on any board |
+| **Operating region** | cutoff \| active \| saturation \| breakdown | active | — | contradicting numbers are flagged, not guessed |
 
 Three standard operating points, as a starting library. Each set is a design choice, stated with its reason.
 

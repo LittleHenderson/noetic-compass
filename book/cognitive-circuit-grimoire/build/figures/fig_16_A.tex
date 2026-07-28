@@ -1,0 +1,86 @@
+% Figure 16-A -- CCB-MK detection-only block diagram.
+\begin{tikzpicture}[
+  scale=0.96,transform shape,
+  x=1cm,y=1cm,font=\sffamily\footnotesize,
+  stage/.style={casblock,text width=22mm,minimum height=13mm,
+                font=\sffamily\scriptsize,align=center},
+  small/.style={nblock,font=\sffamily\scriptsize,minimum height=6mm,
+                inner sep=2pt},
+  tiny/.style={font=\sffamily\scriptsize,align=center,inner sep=1pt},
+  tpf/.style={circle,draw=black,fill=white,line width=0.6pt,
+              minimum size=6mm,inner sep=0pt,font=\sffamily\tiny\bfseries}
+]
+
+% Detection-only frame and banner.
+\draw[casEedge,line width=1.1pt,rounded corners=2pt]
+  (0,-3.15) rectangle (10.35,2.70);
+\filldraw[fill=casEfill,draw=casEedge,line width=1.1pt]
+  (0,1.98) rectangle (10.35,2.70);
+\node[font=\sffamily\small\bfseries,text=casEedge] at (5.18,2.34)
+  {DETECTION-ONLY \textemdash{} DO NOT BUILD};
+
+% Main path.
+\node[stage,pblock] (bias) at (1.35,0)
+  {\textbf{BIAS COLLAPSE}\\$R_{\mathrm{bias}}$ driven down\\
+   $r_{\pi}$ 12.0 $\to$ 1.6};
+\node[stage,cblock] (pair) at (5.95,0)
+  {\textbf{TRIGGER PAIRING}\\
+   \textasciicircum8\textasciicircum C $\to$
+   \textasciicircum9\textasciicircum O\\$\beta=1.0$};
+\node[stage,nblock,text width=25mm,font=\sffamily\scriptsize] (part) at (8.95,0)
+  {\textbf{PARTITION}\\MAINTENANCE\\
+   $n_{\parallel}$ cells, $r_{\mathrm{iso}}$\\$\tau_{\mathrm{leak}}=720\,h$};
+\draw[flow] (-0.25,0) -- (bias.west);
+\node[tiny,anchor=south] at (0.10,0.22) {operator\\command};
+\draw[flow] (bias.east) -- (pair.west);
+\draw[flow] (pair.east) -- (part.west);
+
+% Collapsed-bias rail feeds every downstream stage.
+\draw[line width=1.3pt] (1.35,-1.20) -- (9.55,-1.20);
+\draw[flow] (1.35,-1.20) -- (1.35,-0.66);
+\draw[flow] (5.95,-1.20) -- (5.95,-0.66);
+\draw[flow] (8.95,-1.20) -- (8.95,-0.66);
+\node[tiny,anchor=north] at (3.62,-1.32)
+  {collapsed bias terminal shared by every downstream stage};
+
+% Externally sourced oscillator writes the stressed store.
+\node[small] (osc) at (3.60,1.22)
+  {\textbf{\textasciicircum7 OSCILLATOR}\\168\,h \quad source=external};
+\node[pblock,font=\sffamily\scriptsize,align=center] (store) at (3.60,0)
+  {\textbf{\textasciicircum5\textasciicircum P STORE}\\
+   $C=1.5$, $V_{\mathrm{BR}}=8.0$\\rail $6.0\,V_c$};
+\draw[flow] (osc.south) -- (store.north);
+\fill[casPfill,opacity=0.7] (2.45,-0.97) rectangle (4.75,-0.72);
+\node[tiny,text=casPedge] at (3.78,-0.845)
+  {cumulative stress zone};
+
+% Narrow awareness notch.
+\draw[flow] (5.95,-0.66) -- (5.95,-1.83);
+\node[small,text width=28mm,align=center] (notch) at (5.95,-2.25)
+  {\textbf{NOTCH on \textasciicircum1}\\
+   $f_0$ at pairing band, $Q=8$\\narrow-band gap};
+\node[tiny,text=casEedge,anchor=west] at (7.45,-2.25)
+  {the fingerprint};
+
+% Oscillator re-energises the partition.
+\draw[fbflow,dashed,rounded corners=2pt]
+  (osc.east) -- (9.85,1.22) -- (9.85,0.58);
+\node[tiny,anchor=south] at (7.55,1.26)
+  {re-energising cadence};
+
+% Test points.  CSB is physically outside the detection-only frame.
+\node[tpf] at (1.35,-2.25) {TP1};
+\draw[line width=0.5pt] (1.35,-1.95) -- (1.35,-1.20);
+\node[tpf] at (3.60,1.72) {TP2};
+\draw[line width=0.5pt] (3.60,1.42) -- (3.60,1.15);
+\node[tpf] at (4.55,-2.25) {TP3};
+\draw[line width=0.5pt] (4.85,-2.25) -- (5.20,-2.25);
+
+\draw[casPedge,line width=0.8pt,rounded corners=2pt]
+  (7.45,-4.62) rectangle (10.35,-3.55);
+\node[pblock,font=\sffamily\scriptsize] at (8.35,-4.08) {CSB};
+\node[tpf] at (9.65,-4.08) {TP4};
+\node[tiny,text=casPedge,anchor=east] at (10.22,-4.86)
+  {guard remains outside the banner};
+
+\end{tikzpicture}

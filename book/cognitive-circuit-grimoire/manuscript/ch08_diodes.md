@@ -97,7 +97,7 @@ The diagnostic is one question: **what crossed the junction?** If the honest ans
 
 Counterfeit ascent is the payload of Overton progression (Chapter 15). Norm-shifting campaigns cannot push ideas up the domain order any more than you can. They install an operational fact and supply the relabel ready-made, so the target performs the promotion and experiences it as their own conclusion.
 
-An operator whose whole chain has inverted — action setting evaluation setting reasoning setting principle — is running this architecture backwards, and it presents as fluent post-hoc rationalisation at every stage. Chapter 25 covers inversion detection; the diode chain is where you look first.
+An operator whose whole chain has inverted — action setting evaluation setting reasoning setting principle — is running this architecture backwards, and it presents as fluent post-hoc rationalisation at every stage. Chapters 3.4 and 19.4 cover inversion signatures; the diode chain is where you look first.
 
 ---
 

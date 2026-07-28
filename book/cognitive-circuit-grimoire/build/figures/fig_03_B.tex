@@ -1,0 +1,56 @@
+% Figure 3-B -- CJT transfer characteristic and operating regions.
+\begin{tikzpicture}
+\begin{axis}[casaxis,
+  width=10.6cm,height=7.3cm,
+  xmin=0,xmax=1.0,ymin=0,ymax=1.03,
+  xlabel={cause activation},ylabel={effect activation},
+  xtick={0,0.10,0.325,0.5,0.75,0.92,1.0},
+  xticklabels={0,.10,.325,.50,.75,.92,1.0},
+  ytick={0,0.2,0.4,0.6,0.78,0.92,1.0},
+  yticklabels={0,.20,.40,.60,.78,.92,1.0},
+  grid=none,axis on top,clip=false]
+
+% Region fields remain legible in grayscale because every boundary is ruled.
+\fill[casNfill] (axis cs:0,0) rectangle (axis cs:0.10,1.03);
+\fill[casCfill] (axis cs:0.10,0) rectangle (axis cs:0.325,1.03);
+\fill[casOfill] (axis cs:0.325,0) rectangle (axis cs:0.92,1.03);
+\fill[casEfill] (axis cs:0.92,0) rectangle (axis cs:1.0,1.03);
+\draw[casNedge,dashed] (axis cs:0.10,0) -- (axis cs:0.10,1.03);
+\draw[casNedge,dashed] (axis cs:0.325,0) -- (axis cs:0.325,1.03);
+\draw[casRed,line width=1.0pt,dashed] (axis cs:0.92,0) -- (axis cs:0.92,1.03);
+
+\node[font=\sffamily\scriptsize\bfseries,rotate=90]
+  at (axis cs:0.05,0.52) {CUTOFF};
+\node[font=\sffamily\scriptsize\bfseries,rotate=90]
+  at (axis cs:0.205,0.52) {ACTIVE};
+\node[font=\sffamily\scriptsize\bfseries]
+  at (axis cs:0.62,0.18) {SATURATION};
+\node[font=\sffamily\scriptsize\bfseries,rotate=90,text=casEedge]
+  at (axis cs:0.965,0.43) {BREAKDOWN};
+
+% Transfer path: cutoff, active gain, then a gently rising feedback plateau.
+\addplot[black,line width=1.15pt] coordinates {(0,0) (0.10,0)};
+\addplot[black,line width=1.15pt] coordinates
+  {(0.10,0) (0.10,0.24) (0.325,0.78)};
+\addplot[black,line width=1.15pt] coordinates
+  {(0.325,0.78) (0.60,0.805) (0.92,0.84)};
+\addplot[casRed,line width=1.3pt,-{Latex[length=2mm,width=1.5mm]}]
+  coordinates {(0.92,0.84) (0.985,1.00)};
+
+\draw[casNedge,dashed] (axis cs:0,0.92) -- (axis cs:0.92,0.92);
+\node[font=\sffamily\scriptsize,anchor=south east,fill=white,inner sep=1pt]
+  at (axis cs:0.91,0.92) {$I_c(\mathrm{max})=0.92$};
+\filldraw[fill=white,draw=black,line width=0.7pt]
+  (axis cs:0.325,0.78) circle (1.6pt);
+\node[font=\sffamily\scriptsize,anchor=south west,align=left,fill=white,
+      inner sep=1pt] at (axis cs:0.34,0.78)
+  {knee $=\mathrm{sat}/\beta$\\$(0.325,\,0.78)$};
+\node[font=\sffamily\scriptsize,anchor=south east,fill=white,inner sep=1pt]
+  at (axis cs:0.29,0.60) {slope $\beta=2.4$};
+\node[font=\sffamily\scriptsize\itshape,anchor=south,fill=white,inner sep=1pt]
+  at (axis cs:0.66,0.82) {strong outputs feed back};
+\node[font=\sffamily\scriptsize\bfseries,anchor=north east,align=right,
+      text=casEedge,fill=white,inner sep=1pt]
+  at (axis cs:0.99,1.00) {output leaves\\the curve};
+\end{axis}
+\end{tikzpicture}
