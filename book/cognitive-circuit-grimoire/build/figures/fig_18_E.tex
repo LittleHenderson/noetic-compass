@@ -1,0 +1,70 @@
+% Figure 18-E — the two decay constants the counter-circuit separates.
+% Injected ^3 (tau = 2 wk) against identity ^2 (tau = 40 wk); the DET-5 hold
+% at week 2 is the corner that turns the difference into discrimination.
+% Curves labelled directly on the plot: no legend box to sit over the data,
+% and solid / dash-dot carries the distinction in grayscale.
+\begin{tikzpicture}
+\begin{axis}[
+  casaxis,
+  width=10.2cm, height=6.0cm,
+  xmin=0, xmax=8, ymin=0, ymax=1.06,
+  xlabel={weeks of silence after exposure},
+  ylabel={fraction of peak charge},
+  xtick={0,1,2,3,4,5,6,7,8},
+  ytick={0,0.2,0.368,0.6,0.8,0.951},
+  yticklabels={0,0.2,0.368,0.6,0.8,0.951},
+]
+
+  % --- the region between the curves: everything the filter has to work
+  %     with.  Explicit polygon; no chained Beziers anywhere.
+  \addplot[draw=none, fill=casNedge!12, forget plot] coordinates {
+    (0,1.000) (1,0.975) (2,0.951) (3,0.928) (4,0.905) (5,0.882)
+    (6,0.861) (7,0.839) (8,0.819)
+    (8,0.018) (7,0.030) (6,0.050) (5,0.082) (4,0.135) (3,0.223)
+    (2,0.368) (1,0.607) (0,1.000)
+  };
+
+  % --- identity path: slow, survives the hold ---------------------------
+  \addplot[domain=0:8, samples=120, line width=1.0pt, draw=casCedge,
+           dash pattern=on 3.5pt off 2pt on 0.8pt off 2pt] {exp(-x/40)};
+
+  % --- injected path: fast, does not ------------------------------------
+  \addplot[domain=0:8, samples=200, line width=1.0pt, draw=casEedge]
+          {exp(-x/2)};
+
+  % --- direct curve labels ----------------------------------------------
+  \node[font=\sffamily\scriptsize, anchor=west, fill=white, inner sep=1pt]
+        at (axis cs:4.45,0.945)
+        {identity \textasciicircum2, $\tau$ = 40 wk};
+  \node[font=\sffamily\scriptsize, anchor=west, fill=white, inner sep=1pt]
+        at (axis cs:4.45,0.300)
+        {injected \textasciicircum3, $\tau$ = 2 wk};
+  \draw[line width=0.4pt, draw=casEedge] (axis cs:4.40,0.300) -- (axis cs:4.05,0.145);
+
+  % --- the hold ---------------------------------------------------------
+  \draw[dashed, line width=0.6pt, draw=black]
+        (axis cs:2,0) -- (axis cs:2,1.00);
+  \node[font=\sffamily\scriptsize\bfseries, anchor=west, fill=white,
+        inner sep=1pt] at (axis cs:2.12,0.070) {DET-5 hold = 2 wk};
+
+  % --- the vertical gap the hold buys -----------------------------------
+  \fill[casNedge!45] (axis cs:1.90,0.368) rectangle (axis cs:2.10,0.951);
+  \draw[{Latex[length=1.6mm]}-{Latex[length=1.6mm]}, line width=0.6pt]
+        (axis cs:2,0.368) -- (axis cs:2,0.951);
+
+  \fill[black] (axis cs:2,0.951) circle (1.5pt);
+  \fill[black] (axis cs:2,0.368) circle (1.5pt);
+
+  \node[font=\sffamily\scriptsize, anchor=west, fill=white, inner sep=1pt]
+        at (axis cs:2.20,0.905) {0.951 kept};
+  \node[font=\sffamily\scriptsize, anchor=west, fill=white, inner sep=1pt]
+        at (axis cs:2.20,0.412) {0.368 kept};
+
+  \node[font=\sffamily\scriptsize\itshape, anchor=west, align=left,
+        fill=white, inner sep=1.5pt, draw=casNedge, line width=0.4pt,
+        rounded corners=2pt]
+        at (axis cs:2.20,0.640)
+        {discrimination = 0.583\\ what the filter buys you};
+
+\end{axis}
+\end{tikzpicture}

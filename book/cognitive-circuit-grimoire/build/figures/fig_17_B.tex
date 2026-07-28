@@ -1,0 +1,127 @@
+% Figure 17-B — induction as a ramp function.
+% Upper: r_pi descents (linear / exponential / staircase) to the 0.26 floor.
+% Lower: V_kick against ramp time, with the kick budget and the usable window.
+\begin{tikzpicture}
+\begin{groupplot}[
+    casaxis,
+    group style={group size=1 by 2, vertical sep=0.95cm,
+                 x descriptions at=edge bottom},
+    width=10.2cm, height=5.6cm,
+    xmin=0, xmax=20, xtick={0,4,8,12,16,20},
+    xlabel={minutes}]
+
+% ================= upper panel: the bias descent =====================
+\nextgroupplot[
+    ymin=0.10, ymax=1.10, ytick={0.2,0.4,0.6,0.8,1.0},
+    ylabel={$r_\pi$},
+    title={bias collapse: three ramp classes},
+    legend style={at={(0.985,0.965)}, anchor=north east}]
+
+% asymptote
+\addplot[draw=casNedge, dashed, line width=0.6pt, mark=none, forget plot]
+  coordinates {(0,0.26) (20,0.26)};
+\node[font=\sffamily\scriptsize, anchor=south east, inner sep=1.5pt]
+  at (axis cs:19.7,0.265) {$r_{\pi}$ floor $= 0.26$};
+
+% linear ramp
+\addplot[draw=casNedge, line width=0.7pt, mark=none,
+         dash pattern=on 3pt off 2pt]
+  coordinates {(0,1.00) (9,0.26) (20,0.26)};
+\addlegendentry{linear}
+
+% exponential ramp, tau_i = 3 min
+\addplot[draw=casCedge, line width=1.1pt, mark=none, domain=0:20, samples=140]
+  {0.26 + 0.74*exp(-x/3)};
+\addlegendentry{exponential, $\tau_i = 3$ min}
+
+% staircase (fractionation): four partial descents with partial recoveries
+\addplot[draw=casEedge, line width=0.7pt, mark=none,
+         dash pattern=on 1.2pt off 1.4pt]
+  coordinates {(0,1.00) (1.6,0.72) (2.4,0.84) (4.0,0.55) (4.8,0.63)
+               (6.4,0.41) (7.2,0.46) (8.8,0.31) (9.6,0.34) (11.2,0.27)
+               (20,0.27)};
+\addlegendentry{staircase (fractionation)}
+
+% tau markers on the exponential
+\addplot[only marks, mark=*, mark size=1.1pt, draw=casCedge, fill=casCedge,
+         forget plot] coordinates {(3,0.53) (6,0.36) (9,0.30)};
+\node[font=\sffamily\scriptsize, anchor=east, align=left, fill=white,
+      draw=casNedge, line width=0.4pt, inner sep=2.5pt, rounded corners=1pt]
+  at (axis cs:19.6,0.52)
+  {$\tau_i$ marks on the exponential\\[1pt]
+   $1\tau$ 0.53 \quad $2\tau$ 0.36 \quad $3\tau$ 0.30};
+
+% ================= lower panel: the kick budget ======================
+\nextgroupplot[
+    ymode=log, ymin=1.2, ymax=700, ytick={2,5,10,20,50,100,200,500},
+    yticklabels={2,5,10,20,50,100,200,500},
+    ylabel={$V_{\mathrm{kick}}$ (V$_c$)},
+    title={kick budget, $L_s = 120$\,min$\cdot\Omega_c$, $\Delta i = 0.70$},
+    legend style={at={(0.985,0.965)}, anchor=north east}]
+
+% leakage band beyond 15 min
+\fill[casNedge!22] (axis cs:15,1.2) rectangle (axis cs:20,700);
+\node[font=\sffamily\scriptsize, align=center, fill=white, inner sep=1.5pt]
+  at (axis cs:17.4,2.4) {leakage,\\ lost lock};
+
+% usable window, hatched.
+% (literal coordinates: pgfplots replays axis-internal drawings after any
+%  \foreach scope has closed, so loop macros are gone by then)
+\begin{scope}
+\clip (axis cs:3.5,1.2) rectangle (axis cs:15,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:3.50,1.2)--(axis cs:-3.00,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:4.25,1.2)--(axis cs:-2.25,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:5.00,1.2)--(axis cs:-1.50,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:5.75,1.2)--(axis cs:-0.75,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:6.50,1.2)--(axis cs:0.00,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:7.25,1.2)--(axis cs:0.75,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:8.00,1.2)--(axis cs:1.50,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:8.75,1.2)--(axis cs:2.25,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:9.50,1.2)--(axis cs:3.00,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:10.25,1.2)--(axis cs:3.75,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:11.00,1.2)--(axis cs:4.50,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:11.75,1.2)--(axis cs:5.25,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:12.50,1.2)--(axis cs:6.00,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:13.25,1.2)--(axis cs:6.75,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:14.00,1.2)--(axis cs:7.50,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:14.75,1.2)--(axis cs:8.25,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:15.50,1.2)--(axis cs:9.00,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:16.25,1.2)--(axis cs:9.75,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:17.00,1.2)--(axis cs:10.50,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:17.75,1.2)--(axis cs:11.25,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:18.50,1.2)--(axis cs:12.00,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:19.25,1.2)--(axis cs:12.75,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:20.00,1.2)--(axis cs:13.50,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:20.75,1.2)--(axis cs:14.25,700);
+\draw[draw=casNedge!45,line width=0.3pt] (axis cs:21.50,1.2)--(axis cs:15.00,700);
+\end{scope}
+\node[font=\sffamily\scriptsize, fill=white, inner sep=1.5pt]
+  at (axis cs:8.6,2.1) {usable window $\approx$ 4--15 min};
+
+% the kick curve
+\addplot[draw=black, line width=1.1pt, mark=none, domain=0.55:20, samples=200]
+  {84/x};
+\addlegendentry{$V_{\mathrm{kick}} = L_s\,\mathrm{d}i/\mathrm{d}t$}
+
+% budget line and rail reference
+\addplot[draw=casEedge, line width=0.8pt, mark=none,
+         dash pattern=on 3pt off 2pt] coordinates {(0,72) (20,72)};
+\addlegendentry{$3 \times V_{\mathrm{drive}} = 72$ V$_c$}
+\addplot[draw=casNedge, line width=0.6pt, mark=none, dotted]
+  coordinates {(0,24) (20,24)};
+\addlegendentry{$1 \times$ rail $= 24$ V$_c$}
+
+% design point and the over-fast corner
+\addplot[only marks, mark=*, mark size=1.3pt, draw=black, fill=white,
+         forget plot] coordinates {(8,10.5)};
+\node[font=\sffamily\scriptsize, anchor=west, inner sep=2pt, fill=white]
+  at (axis cs:8.5,10.5) {design point 8 min};
+\node[font=\sffamily\scriptsize, anchor=north west, align=left, inner sep=2pt,
+      fill=white] (recoil) at (axis cs:1.5,640)
+  {0.5 min: 168 V$_c$\\
+   recoil at \textasciicircum 3\textasciicircum E\textsubscript{F3}|f};
+\draw[-{Latex[length=1.6mm,width=1.2mm]}, line width=0.4pt]
+  (recoil.south west) -- (axis cs:0.62,175);
+
+\end{groupplot}
+\end{tikzpicture}

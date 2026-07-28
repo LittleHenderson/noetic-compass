@@ -1,0 +1,147 @@
+% Figure 15-C -- the pacing characteristic for stage A2.
+% Upper panel: R_collective against months for five schedules, all starting at
+% 80 and all lowering R_base by the designed 25 points.  The difference between
+% them is entirely schedule: the base term decays with tau = T/3, the substrate's
+% PTC term lags and is quadratic in the overshoot, so the two fast schedules
+% finish ABOVE where they started.
+% Lower panel: the component responsible -- R_PTC against theta, flat to the
+% knee at 3.0 then quadratic, with the five schedules dropped onto it.
+% The cycle list is emptied so every trace carries only the dash pattern set
+% here; the traces must separate in grayscale, not by hue.
+\begin{tikzpicture}[font=\sffamily\scriptsize]
+\begin{groupplot}[
+  casaxis,
+  width=9.5cm,
+  group style={group size=1 by 2, vertical sep=1.30cm},
+  scaled ticks=false,
+  cycle list={{},{},{},{},{}},
+]
+
+% ==================== upper panel: R_collective(t) =====================
+\nextgroupplot[
+  height=6.2cm,
+  xmin=-2, xmax=78, ymin=48, ymax=131,
+  xtick={0,12,24,36,48,60,72},
+  ytick={55,70,80,90,119},
+  xlabel={months into stage A2},
+  ylabel={$R_{\mathrm{collective}}$\ \ ($\Omega_c$)},
+  legend style={at={(0.985,0.98)}, anchor=north east,
+                font=\sffamily\tiny, row sep=0pt},
+]
+
+% --- band boundaries ---------------------------------------------------
+\draw[draw=casNedge, dash pattern=on 1pt off 1.5pt, line width=0.5pt]
+  (axis cs:-2,55) -- (axis cs:78,55);
+\draw[draw=casNedge, dash pattern=on 1pt off 1.5pt, line width=0.5pt]
+  (axis cs:-2,80) -- (axis cs:78,80);
+\draw[draw=casEedge, dash pattern=on 3pt off 2pt, line width=0.8pt]
+  (axis cs:-2,90) -- (axis cs:78,90);
+
+% --- the five schedules -------------------------------------------------
+% R(t) = 55 + 26.31 (e^{-3t/T} - e^{-3})  +  P (t/T)^6
+\addplot[solid, draw=casOedge, line width=1.2pt, domain=0:72, samples=140]
+  {55 + 26.31*(exp(-3*x/72) - 0.049787)};
+\addlegendentry{72 mo (design)}
+
+\addplot[draw=casNedge, line width=0.8pt, dash pattern=on 4pt off 2pt,
+         domain=0:48, samples=120]
+  {55 + 26.31*(exp(-3*x/48) - 0.049787)};
+\addlegendentry{48 mo}
+
+\addplot[draw=casNedge, line width=0.8pt, dash pattern=on 1pt off 1.6pt,
+         domain=0:36, samples=120]
+  {55 + 26.31*(exp(-3*x/36) - 0.049787)};
+\addlegendentry{36 mo}
+
+\addplot[draw=casEedge, line width=0.9pt,
+         dash pattern=on 4pt off 1.6pt on 1pt off 1.6pt,
+         domain=0:24, samples=140]
+  {55 + 26.31*(exp(-3*x/24) - 0.049787) + 4*(x/24)^6};
+\addlegendentry{24 mo}
+
+\addplot[solid, draw=casEedge, line width=1.5pt, domain=0:12, samples=180]
+  {55 + 26.31*(exp(-3*x/12) - 0.049787) + 64*(x/12)^6};
+\addlegendentry{12 mo}
+
+\addplot[only marks, mark=*, mark size=1.3pt, draw=black, fill=black,
+         forget plot] coordinates {(0,80) (12,119) (24,59) (72,55)};
+
+% --- annotation ---------------------------------------------------------
+\node[anchor=west, fill=white, inner sep=1.5pt,
+      font=\sffamily\scriptsize\bfseries] at (axis cs:12.9,120) {119};
+
+\node[anchor=west, fill=white, inner sep=1.5pt, font=\sffamily\tiny]
+  at (axis cs:14,104) {backlash --- past its own start};
+\draw[-{Latex[length=1.5mm,width=1.2mm]}, line width=0.45pt]
+  (axis cs:13.6,104) -- (axis cs:11.7,102);
+
+\node[anchor=west, fill=white, inner sep=1.5pt, font=\sffamily\tiny]
+  at (axis cs:24,92.5) {\textbf{90 --- UNTHINKABLE}};
+\node[anchor=west, fill=white, inner sep=1.5pt, font=\sffamily\tiny]
+  at (axis cs:24,84) {start 80 \ (RADICAL band)};
+\node[anchor=east, fill=white, inner sep=1.5pt, font=\sffamily\tiny]
+  at (axis cs:77,51) {55 = target (ACCEPTABLE)};
+
+\node[anchor=west, fill=white, inner sep=1.5pt, font=\sffamily\tiny]
+  at (axis cs:25.6,64) {59};
+\draw[line width=0.45pt] (axis cs:25.4,63) -- (axis cs:24.4,59.8);
+
+\node[anchor=west, fill=white, inner sep=1.5pt,
+      font=\sffamily\tiny\itshape]
+  at (axis cs:0.5,51) {all five lower $R_{\mathrm{base}}$ by 25};
+
+% ==================== lower panel: R_PTC(theta) ========================
+\nextgroupplot[
+  height=5.4cm,
+  xmin=0, xmax=7.8, ymin=-8, ymax=100,
+  xtick={0,1,2,3,4,5,6,7},
+  ytick={0,4,20,40,64},
+  xlabel={cognitive temperature $\theta$ \ (dimensionless salience)},
+  ylabel={$R_{\mathrm{PTC}}$\ \ ($\Omega_c$)},
+]
+
+\fill[casNfill, opacity=0.65] (axis cs:0,-8) rectangle (axis cs:3,100);
+
+\addplot[solid, draw=black, line width=1.3pt, domain=0:3, samples=2] {0};
+\addplot[solid, draw=black, line width=1.3pt, domain=3:7.4, samples=90]
+  {4*(x-3)^2};
+
+\draw[draw=casNedge, dash pattern=on 3pt off 2pt, line width=0.6pt]
+  (axis cs:3,-8) -- (axis cs:3,100);
+
+% --- the five schedules dropped onto the curve --------------------------
+\draw[draw=casNedge, dotted, line width=0.6pt] (axis cs:4,0) -- (axis cs:4,4);
+\draw[draw=casEedge, dotted, line width=0.7pt] (axis cs:7,0) -- (axis cs:7,64);
+\addplot[only marks, mark=*, mark size=1.3pt, draw=black, fill=black,
+         forget plot]
+  coordinates {(2,0) (2.5,0) (3,0) (4,4) (7,64)};
+
+\node[rotate=90, anchor=west, inner sep=1.5pt, font=\sffamily\tiny]
+  at (axis cs:1.86,3) {72 mo};
+\node[rotate=90, anchor=west, inner sep=1.5pt, font=\sffamily\tiny]
+  at (axis cs:2.36,3) {48 mo};
+\node[rotate=90, anchor=west, inner sep=1.5pt, font=\sffamily\tiny]
+  at (axis cs:2.86,3) {36 mo};
+\node[rotate=90, anchor=west, inner sep=1.5pt, font=\sffamily\tiny]
+  at (axis cs:4.08,7) {24 mo};
+\node[rotate=90, anchor=west, inner sep=1.5pt, font=\sffamily\tiny\bfseries]
+  at (axis cs:7.06,8) {12 mo};
+\node[anchor=west, inner sep=1.5pt, font=\sffamily\tiny\bfseries]
+  at (axis cs:3.10,-5) {knee $\theta_k$ = 3.0};
+
+\node[anchor=west, inner sep=1.5pt, font=\sffamily\tiny]
+  at (axis cs:4.28,2) {$R_{\mathrm{PTC}}$ = 4 \ at $\theta$ = 4.0};
+\node[anchor=east, inner sep=1.5pt, font=\sffamily\tiny\bfseries]
+  at (axis cs:7.70,92) {$R_{\mathrm{PTC}}$ = 64 \ at $\theta$ = 7.0};
+
+\node[anchor=west, inner sep=1.5pt] at (axis cs:0.18,90)
+  {$R_{\mathrm{PTC}} = \alpha(\theta-\theta_k)^2$};
+\node[anchor=west, inner sep=1.5pt, font=\sffamily\tiny\itshape]
+  at (axis cs:0.18,78)
+  {below the knee the substrate adds nothing at all};
+\node[anchor=west, inner sep=1.5pt, font=\sffamily\tiny]
+  at (axis cs:0.18,68)
+  {$\theta_k$ = 3.0 and $\alpha$ = 4.0 belong to the substrate};
+
+\end{groupplot}
+\end{tikzpicture}

@@ -1,0 +1,166 @@
+% Figure 20-D -- the habit oscillator and its hysteretic gate.  Upper: the
+% working composition crossing the 8.0 / 9.0 band.  Lower: the enable line,
+% with hysteresis and without.  Inset: G1 as an op-amp with positive feedback.
+\begin{tikzpicture}[font=\sffamily\scriptsize]
+\begin{groupplot}[
+  casaxis,
+  width=10.2cm, height=4.8cm,
+  group style={group size=1 by 2, vertical sep=1.05cm,
+               x descriptions at=edge bottom},
+  xmin=0, xmax=70,
+  xtick={0,10,20,30,40,50,60,70},
+  scaled ticks=false,
+]
+
+% ---------------- upper panel: the sensed node -----------------------
+\nextgroupplot[
+  ymin=0, ymax=10.9, ytick={0,2,4,6,8,10},
+  ylabel={$P_{\mathrm{work}}$ \ (0--10)},
+  title={the sensed node crosses the band between day 35.4 and day 50.7},
+]
+\fill[casCfill, opacity=0.75] (axis cs:0,8) rectangle (axis cs:70,9);
+\draw[draw=casCedge, line width=0.7pt] (axis cs:0,9) -- (axis cs:70,9);
+\draw[draw=casCedge, line width=0.7pt] (axis cs:0,8) -- (axis cs:70,8);
+
+\addplot[draw=casCedge, line width=1.0pt, mark=none, domain=0:70, samples=160]
+  {10*(1-exp(-x/22))};
+
+\draw[draw=casNedge, dotted, line width=0.6pt]
+  (axis cs:35.4,0) -- (axis cs:35.4,8);
+\draw[draw=casNedge, dotted, line width=0.6pt]
+  (axis cs:50.7,0) -- (axis cs:50.7,9);
+\addplot[only marks, mark=*, mark size=1.4pt, draw=black, fill=black]
+  coordinates {(35.4,8) (50.7,9)};
+
+\draw[{Latex[length=1.6mm]}-{Latex[length=1.6mm]}, line width=0.5pt]
+  (axis cs:35.4,5.4) -- (axis cs:50.7,5.4);
+\node[fill=white, inner sep=1pt, font=\sffamily\scriptsize\itshape]
+  at (axis cs:43,6.15) {16 days inside the band};
+\node[anchor=east, fill=white, inner sep=1pt]
+  at (axis cs:68,3.20) {$P_{\mathrm{work}}=10\,(1-e^{-t/22})$};
+\node[anchor=west, fill=white, inner sep=1pt]
+  at (axis cs:1.5,9.45) {disable above 9.0};
+\node[anchor=west, fill=white, inner sep=1pt]
+  at (axis cs:1.5,7.55) {enable below 8.0};
+
+% ---------------- lower panel: the enable line -----------------------
+\nextgroupplot[
+  ymin=-0.35, ymax=4.35,
+  ytick={0.05,1.05,2.40,3.40}, yticklabels={off,on,off,on},
+  ylabel={gate enable},
+  xlabel={days},
+  title={enable line: hysteresis (upper) against a single threshold (lower)},
+]
+\draw[draw=casNedge, dotted, line width=0.6pt]
+  (axis cs:50.7,2.20) -- (axis cs:50.7,3.70);
+\draw[draw=casNedge, dotted, line width=0.6pt]
+  (axis cs:54.2,2.20) -- (axis cs:54.2,3.70);
+\draw[draw=casNedge, dotted, line width=0.6pt]
+  (axis cs:41.7,-0.20) -- (axis cs:41.7,1.30);
+
+% with hysteresis: one clean transition, then the designed 3.5 d top-up
+\draw[draw=casCedge, line width=1.0pt]
+  (axis cs:0,3.4) -- (axis cs:50.7,3.4) -- (axis cs:50.7,2.4) --
+  (axis cs:54.2,2.4) -- (axis cs:54.2,3.4) -- (axis cs:55.2,3.4) --
+  (axis cs:55.2,2.4) -- (axis cs:58.7,2.4) -- (axis cs:58.7,3.4) --
+  (axis cs:59.7,3.4) -- (axis cs:59.7,2.4) -- (axis cs:63.2,2.4) --
+  (axis cs:63.2,3.4) -- (axis cs:64.2,3.4) -- (axis cs:64.2,2.4) --
+  (axis cs:67.7,2.4) -- (axis cs:67.7,3.4) -- (axis cs:70,3.4);
+
+% no hysteresis: chatter at a one-day period from day 41.7
+\draw[draw=casEedge, line width=0.6pt]
+  (axis cs:0,1.05) -- (axis cs:41.7,1.05) -- (axis cs:41.7,0.05) --
+  (axis cs:42.2,0.05) -- (axis cs:42.2,1.05) -- (axis cs:42.7,1.05) --
+  (axis cs:42.7,0.05) -- (axis cs:43.2,0.05) -- (axis cs:43.2,1.05) --
+  (axis cs:43.7,1.05) -- (axis cs:43.7,0.05) -- (axis cs:44.2,0.05) --
+  (axis cs:44.2,1.05) -- (axis cs:44.7,1.05) -- (axis cs:44.7,0.05) --
+  (axis cs:45.2,0.05) -- (axis cs:45.2,1.05) -- (axis cs:45.7,1.05) --
+  (axis cs:45.7,0.05) -- (axis cs:46.2,0.05) -- (axis cs:46.2,1.05) --
+  (axis cs:46.7,1.05) -- (axis cs:46.7,0.05) -- (axis cs:47.2,0.05) --
+  (axis cs:47.2,1.05) -- (axis cs:47.7,1.05) -- (axis cs:47.7,0.05) --
+  (axis cs:48.2,0.05) -- (axis cs:48.2,1.05) -- (axis cs:48.7,1.05) --
+  (axis cs:48.7,0.05) -- (axis cs:49.2,0.05) -- (axis cs:49.2,1.05) --
+  (axis cs:49.7,1.05) -- (axis cs:49.7,0.05) -- (axis cs:50.2,0.05) --
+  (axis cs:50.2,1.05) -- (axis cs:50.7,1.05) -- (axis cs:50.7,0.05) --
+  (axis cs:51.2,0.05) -- (axis cs:51.2,1.05) -- (axis cs:51.7,1.05) --
+  (axis cs:51.7,0.05) -- (axis cs:52.2,0.05) -- (axis cs:52.2,1.05) --
+  (axis cs:52.7,1.05) -- (axis cs:52.7,0.05) -- (axis cs:53.2,0.05) --
+  (axis cs:53.2,1.05) -- (axis cs:53.7,1.05) -- (axis cs:53.7,0.05) --
+  (axis cs:54.2,0.05) -- (axis cs:54.2,1.05) -- (axis cs:54.7,1.05) --
+  (axis cs:54.7,0.05) -- (axis cs:55.2,0.05) -- (axis cs:55.2,1.05) --
+  (axis cs:55.7,1.05) -- (axis cs:55.7,0.05) -- (axis cs:56.2,0.05) --
+  (axis cs:56.2,1.05) -- (axis cs:56.7,1.05) -- (axis cs:56.7,0.05) --
+  (axis cs:57.2,0.05) -- (axis cs:57.2,1.05) -- (axis cs:57.7,1.05) --
+  (axis cs:57.7,0.05) -- (axis cs:58.2,0.05) -- (axis cs:58.2,1.05) --
+  (axis cs:58.7,1.05) -- (axis cs:58.7,0.05) -- (axis cs:59.2,0.05) --
+  (axis cs:59.2,1.05) -- (axis cs:59.7,1.05) -- (axis cs:59.7,0.05) --
+  (axis cs:60.2,0.05) -- (axis cs:60.2,1.05) -- (axis cs:60.7,1.05) --
+  (axis cs:60.7,0.05) -- (axis cs:61.2,0.05) -- (axis cs:61.2,1.05) --
+  (axis cs:61.7,1.05) -- (axis cs:61.7,0.05) -- (axis cs:62.2,0.05) --
+  (axis cs:62.2,1.05) -- (axis cs:62.7,1.05) -- (axis cs:62.7,0.05) --
+  (axis cs:63.2,0.05) -- (axis cs:63.2,1.05) -- (axis cs:63.7,1.05) --
+  (axis cs:63.7,0.05) -- (axis cs:64.2,0.05) -- (axis cs:64.2,1.05) --
+  (axis cs:64.7,1.05) -- (axis cs:64.7,0.05) -- (axis cs:65.2,0.05) --
+  (axis cs:65.2,1.05) -- (axis cs:65.7,1.05) -- (axis cs:65.7,0.05) --
+  (axis cs:66.2,0.05) -- (axis cs:66.2,1.05) -- (axis cs:66.7,1.05) --
+  (axis cs:66.7,0.05) -- (axis cs:67.2,0.05) -- (axis cs:67.2,1.05) --
+  (axis cs:67.7,1.05) -- (axis cs:67.7,0.05) -- (axis cs:68.2,0.05) --
+  (axis cs:68.2,1.05) -- (axis cs:68.7,1.05) -- (axis cs:68.7,0.05) --
+  (axis cs:70,0.05);
+
+\node[anchor=west, fill=white, inner sep=1pt] at (axis cs:1.5,4.00)
+  {\textbf{with hysteresis}};
+\node[anchor=east, fill=white, inner sep=1pt] at (axis cs:69,4.00)
+  {disable 50.7, re-enable +3.5\,d};
+\node[anchor=west, fill=white, inner sep=1pt] at (axis cs:1.5,1.75)
+  {\textbf{no hysteresis}};
+\node[anchor=east, fill=white, inner sep=1pt] at (axis cs:69,1.75)
+  {single 8.5: chatter, one-day period};
+\end{groupplot}
+
+% ---------------- inset: G1 as an op-amp with positive feedback -------
+\begin{scope}[shift={($(current bounding box.south)+(0,-0.30)$)},
+              line width=0.6pt]
+  \draw[dashed, draw=casNedge, rounded corners=3pt]
+    (-4.75,-2.78) rectangle (4.75,0.12);
+  \node[grouplbl, anchor=north west] at (-4.60,0.00)
+    {G1 \textemdash{} SCHMITT TRIGGER: OP-AMP + POSITIVE FEEDBACK};
+
+  % op-amp triangle
+  \draw[fill=casNfill, draw=casNedge]
+    (-1.30,-0.55) -- (-1.30,-1.95) -- (0.20,-1.25) -- cycle;
+  \node[font=\sffamily\scriptsize] at (-1.08,-0.86) {$-$};
+  \node[font=\sffamily\scriptsize] at (-1.08,-1.64) {$+$};
+  \node[font=\sffamily\scriptsize] at (-0.66,-1.25) {G1};
+
+  % sense input
+  \draw[-{Latex[length=1.8mm,width=1.4mm]}] (-4.20,-0.86) -- (-1.30,-0.86);
+  \node[font=\sffamily\scriptsize, anchor=south west] at (-4.20,-0.80)
+    {\textbf{sense} \ $P_{\mathrm{work}}$ at C2 (TP1)};
+
+  % reference divider into the + input
+  \draw (-4.20,-1.64) -- (-3.50,-1.64);
+  \draw[fill=white, draw=casNedge] (-3.50,-1.78) rectangle (-2.90,-1.50);
+  \node[font=\sffamily\scriptsize, anchor=east] at (-4.30,-1.64) {ref};
+  \node[font=\sffamily\scriptsize] at (-3.20,-2.02) {R1};
+  \draw (-2.90,-1.64) -- (-1.30,-1.64);
+  \fill (-2.30,-1.64) circle (1.1pt);
+
+  % positive feedback path
+  \draw[rounded corners=2pt] (-2.30,-1.64) -- (-2.30,-2.32) -- (-1.00,-2.32);
+  \draw[fill=white, draw=casNedge] (-1.00,-2.46) rectangle (-0.40,-2.18);
+  \node[font=\sffamily\scriptsize] at (-0.70,-2.02) {$R_f$};
+  \draw[rounded corners=2pt] (-0.40,-2.32) -- (0.95,-2.32) -- (0.95,-1.25);
+  \fill (0.95,-1.25) circle (1.1pt);
+
+  % output
+  \draw[-{Latex[length=1.8mm,width=1.4mm]}] (0.20,-1.25) -- (2.55,-1.25);
+  \node[font=\sffamily\scriptsize, anchor=south west] at (1.05,-1.19)
+    {\textbf{enable} $\rightarrow$ OSC1};
+
+  \node[font=\sffamily\scriptsize\itshape, anchor=north east, align=right,
+        text width=29mm] at (4.62,-1.55)
+    {$R_f$ sets the 1.0-point band: on below 8.0, off above 9.0};
+\end{scope}
+
+\end{tikzpicture}

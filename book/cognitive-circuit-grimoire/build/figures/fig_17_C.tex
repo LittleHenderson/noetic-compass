@@ -1,0 +1,183 @@
+% Figure 17-C — CCB-HYP full schematic, operator -> subject.
+% DETECTION-ONLY. Drawn symbols, reference designators, heavy title banner,
+% and the veto rail held off every other net by a wide air gap.
+\begin{tikzpicture}[x=1cm,y=1cm, font=\sffamily\scriptsize,
+  % ---- symbol library -------------------------------------------------
+  cjt/.pic={
+    \draw[line width=0.5pt] (0,0) circle (0.45);
+    \draw[line width=0.5pt] (0,0.45) -- (0,0.17);
+    \draw[line width=0.9pt] (-0.26,0.17) -- (0.26,0.17);
+    \draw[line width=0.5pt] (-0.13,0.17) -- (-0.40,-0.28) -- (-0.70,-0.28);
+    \draw[line width=0.5pt,-{Latex[length=1.3mm,width=1.0mm]}]
+          (0.13,0.17) -- (0.36,-0.21);
+    \draw[line width=0.5pt] (0.13,0.17) -- (0.40,-0.28) -- (0.70,-0.28);},
+  dio/.pic={
+    \draw[line width=0.5pt] (-0.30,0) -- (-0.13,0);
+    \draw[line width=0.5pt] (0.13,0) -- (0.30,0);
+    \filldraw[fill=white,line width=0.5pt]
+      (-0.13,0.17) -- (-0.13,-0.17) -- (0.13,0) -- cycle;
+    \draw[line width=0.9pt] (0.13,0.19) -- (0.13,-0.19);},
+  fuse/.pic={
+    \draw[line width=0.5pt] (-0.55,0) -- (-0.30,0);
+    \draw[line width=0.5pt] (0.30,0) -- (0.55,0);
+    \filldraw[fill=white,line width=0.5pt]
+      (-0.30,-0.14) rectangle (0.30,0.14);
+    \draw[line width=0.5pt] (-0.30,0) -- (0.30,0);},
+  lead/.style={line width=0.5pt, draw=black},
+  jdot/.style={circle, fill=black, inner sep=0pt, minimum size=1.5pt},
+  ldr/.style={dotted, line width=0.4pt, draw=casNedge},
+  tag/.style={casblock, font=\sffamily\tiny, inner sep=2pt,
+              minimum height=0pt, align=center, rounded corners=1.5pt},
+  ptag/.style={tag, fill=casPfill, draw=casPedge},
+  ctag/.style={tag, fill=casCfill, draw=casCedge},
+  etag/.style={tag, fill=casEfill, draw=casEedge},
+  otag/.style={tag, fill=casOfill, draw=casOedge},
+  ntag/.style={tag, fill=casNfill, draw=casNedge},
+  tiny/.style={font=\sffamily\tiny}]
+
+% ===================== drawing frame + banner =========================
+\draw[line width=0.7pt, draw=casNedge] (0,-1.45) rectangle (10.40,7.30);
+\filldraw[line width=1.2pt, fill=casNfill, draw=black]
+  (0.12,6.38) rectangle (10.28,7.18);
+\draw[line width=0.4pt, draw=black] (0.20,6.46) rectangle (10.20,7.10);
+\node[font=\sffamily\footnotesize\bfseries] at (5.20,6.90)
+  {DETECTION-ONLY SCHEMATIC --- DO NOT BUILD};
+\node[tiny] at (5.20,6.61)
+  {CCB-HYP operator $\rightarrow$ subject $\cdot$ recognition reference
+   $\cdot$ no induction script};
+
+% ===================== generator: OSC1, V4, F1 ========================
+% OSC1 -- rhythm oscillator (pulse train)
+\draw[lead] (0.85,4.85) circle (0.30);
+\draw[lead] (0.67,4.77) -- (0.67,4.93) -- (0.79,4.93) -- (0.79,4.77)
+            -- (0.91,4.77) -- (0.91,4.93) -- (1.03,4.93);
+\node[tiny,font=\sffamily\tiny\bfseries] at (0.85,5.42) {OSC1};
+\node[tiny] at (0.85,5.19) {\textasciicircum 7\textasciicircum
+  O\textsubscript{F4}|E};
+\node[tiny] at (0.85,4.36) {0.15\,Hz};
+% V4 -- carrier (sine)
+\draw[lead] (0.85,3.15) circle (0.30);
+\draw[lead] (0.69,3.15) sin (0.77,3.25) cos (0.85,3.15)
+            sin (0.93,3.05) cos (1.01,3.15);
+\node[tiny,font=\sffamily\tiny\bfseries] at (0.85,2.68) {V4};
+\node[tiny] at (0.85,2.45) {\textasciicircum 4\textasciicircum
+  O\textsubscript{F4}|E};
+% wiring into F1
+\draw[lead] (1.15,4.85) -- (1.50,4.85) -- (1.50,4.05) -- (1.85,4.05);
+\draw[lead] (1.15,3.15) -- (1.50,3.15) -- (1.50,4.05);
+\node[jdot] at (1.50,4.05) {};
+\node[ntag,minimum width=17mm,minimum height=8.5mm] (f1) at (2.70,4.05)
+  {\textbf{F1} \ LowPass\\ $\tau_i = 3$ min};
+
+% carrier tap down to the filter CJT and (by net label) to the veto rail
+\node[jdot] at (1.50,3.15) {};
+\draw[lead] (1.50,3.15) -- (1.50,2.05) -- (4.60,2.05) -- (4.60,2.75);
+\node[tiny,fill=white,inner sep=1pt,font=\sffamily\tiny\itshape]
+  at (3.05,2.05) {carrier};
+
+% ===================== O->P lawful ascent + C1 ========================
+\draw[lead] (3.55,4.05) -- (4.05,4.05);
+\draw[-{Latex[length=2mm,width=1.5mm]},line width=0.7pt]
+  (4.05,4.05) -- (4.05,5.55);
+\draw[lead] (4.05,5.55) -- (4.30,5.55);
+% C1 -- the ^5^P substrate capacitor
+\draw[line width=0.9pt] (4.30,5.22) -- (4.30,5.88);
+\draw[line width=0.9pt] (4.54,5.22) -- (4.54,5.88);
+% substrate rail
+\draw[lead] (4.54,5.55) -- (8.75,5.55);
+\node[jdot] at (5.30,5.55) {};
+
+\node[ptag,minimum width=30mm] (c1lbl) at (2.40,6.05)
+  {\textbf{C1} \ \textasciicircum 5\textasciicircum
+   P\textsubscript{F7}|T \ substrate};
+\draw[ldr] (3.92,5.99) -- (4.26,5.80);
+\node[ntag,minimum width=44mm] (fblbl) at (7.60,6.05)
+  {O\,$\rightarrow$\,P lawful ascent, \S8.4\\
+   $\beta_{fb}$ 0.2 $\rightarrow$ 0.9 \ (RC-limited, $\tau_i$)};
+\draw[ldr] (5.86,5.90) -- (4.16,5.60);
+
+% ===================== Q1: the ^6 filter ==============================
+\fill[casCfill] (5.30,3.03) circle (0.45);
+\pic at (5.30,3.03) {cjt};
+\draw[lead] (5.30,3.48) -- (5.30,5.55);
+\draw[-{Latex[length=1.6mm,width=1.2mm]},line width=0.5pt]
+  (4.75,2.55) -- (5.85,3.55);
+\node[ctag,minimum width=30mm] (q1lbl) at (2.60,1.55)
+  {\textbf{Q1} \ \textasciicircum 6\textasciicircum
+   C\textsubscript{F6}|A \ filter\\
+   D-factor: $\beta$ 1.0 $\rightarrow$ 0.5};
+\draw[ldr] (q1lbl.east) -- (5.05,1.55) -- (5.05,2.58);
+
+% ===================== D1--D3 domain descent ==========================
+\draw[lead] (6.00,2.75) -- (8.05,2.75);
+\pic at (6.45,2.75) {dio};
+\pic at (7.05,2.75) {dio};
+\pic at (7.65,2.75) {dio};
+\node[tiny] at (6.45,3.06) {D1};
+\node[tiny] at (7.05,3.06) {D2};
+\node[tiny] at (7.65,3.06) {D3};
+\node[tiny] at (7.05,2.42) {\textasciicircum P $\rightarrow$
+  \textasciicircum C $\rightarrow$ \textasciicircum E $\rightarrow$
+  \textasciicircum O};
+
+% ===================== Q2: delivery ===================================
+\fill[casEfill] (8.75,3.03) circle (0.45);
+\pic at (8.75,3.03) {cjt};
+\draw[lead] (8.75,3.48) -- (8.75,5.55);
+\draw[-{Latex[length=2mm,width=1.5mm]},line width=0.5pt]
+  (9.45,2.75) -- (10.15,2.75);
+\node[tiny,align=center] at (9.86,3.06)
+  {landed\\ \textasciicircum 9\textasciicircum E\textsubscript{F5}|f};
+\node[etag,minimum width=29mm] (q2lbl) at (7.05,4.60)
+  {\textbf{Q2} \ delivery CJT\\
+   $\beta = 3.0$, \ $r_\pi = 0.15$\\ $g_m = 20$};
+\draw[ldr] (8.48,4.28) -- (8.44,3.42);
+
+% ===================== Q3: anchor =====================================
+\fill[casEfill] (8.75,1.35) circle (0.45);
+\pic at (8.75,1.35) {cjt};
+\draw[lead] (8.75,1.80) -- (8.75,1.98);
+\node[ptag,anchor=south] at (8.75,1.99) {\textasciicircum 5\textasciicircum P};
+\node[etag,anchor=east] (trg) at (7.98,1.07)
+  {trigger \ \textasciicircum 8\textasciicircum E\textsubscript{F4}|f};
+\draw[lead] (7.98,1.07) -- (8.05,1.07);
+\draw[-{Latex[length=2mm,width=1.5mm]},line width=0.5pt]
+  (9.45,1.07) -- (10.15,1.07);
+\node[tiny,align=center] at (9.88,1.52)
+  {fires\\ \textasciicircum 9\textasciicircum O\textsubscript{F5}|E};
+\node[ntag,minimum width=25mm] (q3lbl) at (6.30,1.80)
+  {\textbf{Q3} \ anchor CJT, $\beta = 2.0$\\
+   \textasciicircum 8\textasciicircum E|f $\rightarrow$
+   \textasciicircum 9\textasciicircum O|E};
+
+% ===================== air gap ========================================
+\draw[dash pattern=on 1pt off 1.7pt, draw=casNedge, line width=0.5pt]
+  (0.15,0.62) -- (10.25,0.62);
+\node[font=\sffamily\tiny\itshape, fill=white, inner sep=1.5pt]
+  at (3.30,0.62) {air gap --- no shared net with any stage above};
+
+% ===================== veto rail (parallel, in series with nothing) ===
+\node[ptag,minimum width=27mm] (vt) at (2.20,0.29)
+  {veto \ \textasciicircum 3\textasciicircum
+   P\textsubscript{F7}|$\langle$A,f,T$\rangle$};
+\draw[lead] (2.20,0.17) -- (2.20,0.10);
+\fill[casPfill] (2.20,-0.35) circle (0.45);
+\pic at (2.20,-0.35) {cjt};
+\node[ntag,anchor=east] at (1.48,-0.63) {carrier};
+\draw[lead] (1.48,-0.63) -- (1.50,-0.63);
+\draw[lead] (2.90,-0.63) -- (3.35,-0.63);
+\pic at (3.90,-0.63) {fuse};
+\draw[-{Latex[length=2mm,width=1.5mm]},line width=0.5pt]
+  (4.45,-0.63) -- (4.95,-0.63);
+\node[casterm,anchor=west,font=\sffamily\tiny\bfseries,minimum height=4.5mm]
+  at (4.98,-0.63) {REFUSE};
+\node[tiny,align=center] at (2.10,-1.12)
+  {\textbf{Q4} \ CSB\\ $\beta = 2.0$, sat $= 0.85$};
+\node[tiny,align=center] at (4.15,-1.12)
+  {\textbf{F2} \ fuse\\ permanent\_block};
+\node[casblock,fill=white,draw=black,line width=0.8pt,minimum width=32mm,
+      font=\sffamily\tiny,align=center] at (8.55,-0.66)
+  {\textbf{SI-1:} the veto rail is PARALLEL,\\
+   in series with nothing. Trance\\ attenuates |A only.};
+
+\end{tikzpicture}

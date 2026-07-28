@@ -18,7 +18,7 @@ That last sentence is what this chapter is built around. **CCB-D organises effor
 
 ### 13.1 Requirements and Safety Invariants
 
-Requirements before components (Chapter 12.1). Every part on this board exists because one of the lines below demanded it; if you cannot name the requirement a component serves, take the component off.
+Requirements before components (Chapter 12.1). Every part exists because one of the lines below demanded it; if you cannot name the requirement a component serves, take it off.
 
 | # | The board shall | Stage |
 |---|---|---|
@@ -40,7 +40,7 @@ Requirements before components (Chapter 12.1). Every part on this board exists b
 | S5 | Run without bound — the obsession failure | `duty ≤ 0.05`, FLT1 `τ=24 hr` |
 | S6 | Rewrite the operator's principles from a single result | FLT2 `τ=3 weeks`, FB1 `β=0.05`, terminating at the bias |
 
-**Scope limits.** CCB-D acts on the operator's own mind with the operator's own consent, which is why this chapter is written operationally rather than as detection-only analysis (compare Chapters 16 and 19). It does not act on a non-consenting person; 13.4 explains why a row for that is absent and where the mechanism is analysed instead. It does not treat anything — a health desire routes to behavioural resistance terms and nothing else, and a symptom belongs to a qualified clinician, since no schematic here substitutes for care. And it does not move objects. TP4 measures a current, and the current is spent by a person doing things.
+**Scope limits.** CCB-D acts on the operator's own mind with their own consent, which is why this chapter is written operationally rather than as detection-only analysis (compare Chapters 16 and 19). It does not act on a non-consenting person; 13.4 explains why a row for that is absent. It does not treat anything — a health desire routes to behavioural resistance terms and nothing else, and a symptom belongs to a qualified clinician, since no schematic here substitutes for care. And it does not move objects: TP4 measures a current, spent by a person doing things.
 
 ---
 
@@ -58,10 +58,10 @@ Five stages, one signal path, two feedback loops, one branch to ground.
 
 **MANIFEST** descends through the last domain diode and produces the operational current. It is the only stage whose bias is not the operator, but the receptivity of whatever part of the world has to move.
 
-Two domain diodes sit in the signal path: D2 at `^C -> ^E` and D3 at `^E -> ^O`. Their forward drops sum to **1.2 + 2.0 = 3.2** on the drive scale, and that is a hard floor. Below a total drive of 3.2 the board produces no operational output — not a little, none — exactly as Chapter 8.1 sets out. A desire originating at the Principled level enters above D1 too and pays **3.9**. Purpose-level wants cost 0.7 more drive to act on than merely wanted ones: a fact about the chain, not a moral one.
+Two domain diodes sit in the signal path: D2 at `^C -> ^E` and D3 at `^E -> ^O`. Their forward drops sum to **1.2 + 2.0 = 3.2** on the drive scale, a hard floor. Below a total drive of 3.2 the board produces no operational output — not a little, none — exactly as Chapter 8.1 sets out. A desire originating at the Principled level enters above D1 too and pays **3.9**: purpose-level wants cost 0.7 more drive to act on than merely wanted ones, a fact about the chain and not a moral one.
 
 > **Bench Note — the bias terminal caps the domain of the effect.**
-> Q0 in the listing below has a `^C` cause and a `^P` effect. That looks like the domain ascent Chapter 8 spends a section forbidding. It is not. **A CJT's effect may occupy any domain at or below its bias terminal, never one above it.** The desire is not promoted — its literal stays `^0^C` and continues down the chain unchanged; what happens is that a substrate already living at `^P` produces a *new* state at `^P` in response. Nothing crossed a junction upward, so nothing was relabelled. The corollary is the useful part: an operator with no principled formation cannot produce a principled refusal, because there is no bias at that domain to produce it against. The bias terminal is the ceiling on what kind of state your board can emit.
+> Q0 in the listing below has a `^C` cause and a `^P` effect. That looks like the domain ascent Chapter 8 spends a section forbidding. It is not. A CJT is governed by two domain rules, not one, and they point in opposite directions. **The bias must sit at or above the cause** (Chapter 3.2 — a lower-domain bias is `E-CJT-008`, the prompt-injection signature). **The effect may sit at or below the bias, never above it.** Q0 obeys both: cause `^C`, bias `^P`, effect `^P`. The desire is not promoted — its literal stays `^0^C` and continues down the chain unchanged; a substrate already living at `^P` produces a *new* state at `^P` in response. Nothing crossed a junction upward, so nothing was relabelled. The corollary is the useful part: an operator with no principled formation cannot produce a principled refusal, because there is no bias at that domain to produce it against. The bias terminal is both the floor under what your board may read and the ceiling on what it can emit.
 
 ---
 
@@ -70,98 +70,124 @@ Two domain diodes sit in the signal path: D2 at `^C -> ^E` and D3 at `^E -> ^O`.
 Topology inside angle brackets, parameters inside square brackets. Every numeric value is a **design choice**, justified in the walk that follows.
 
 ```cas
-// CCB-D — DESIRE MANIFESTATION BOARD.  Parameters are design choices.
+// CCB-D — DESIRE MANIFESTATION BOARD.  Every value is a design choice.
+// Two time bases, declared per line: the ^5 rail runs in HOURS, everything
+// dynamic in DAYS.  Reference designators (C1, Q0, TP1 …) appear in the prose
+// and the figures; the listing carries the lowercase instance names.
 
-// ---- STAGE 0: BIAS RAIL ----
-C1  Capacitor< ^5_operator^P_{F7}|T >
-    [ C=practice_hours, tau=3333hr, leakage=0.0002/day, V_BR=8.0 ]
-D1  Diode< ^P -> ^C >   [ Vf=0.7, I_R=0.02, V_BR=12.0 ]   // ^P-origin desires only
+board ccb_d {
+    input:  desire;
+    output: manifest;
 
-// ---- STAGE 1: INTAKE ----
-R1  Divider< in=^0_desire^C_{F2}|A, out=^0_gated^C_{F2}|A >
-    [ R_expand=Dial(^2), R_constrain=Dial(^3),
-      k = R_expand / (R_expand + R_constrain),
-      constraint: |Dial(^2) - Dial(^3)| <= 4 ]
+    // ---- typed nodes ----
+    node substrate:   ^5_operator^P_{F7}|T;      // Female: accumulated formation — the bias rail
+    node desire:      ^0_desire^C_{F2}|A;        // Idea: the Prime Desire as formed
+    node attraction:  ^2^C_{F2}|f;               // Positive: the divider's expand leg
+    node aversion:    ^3^C_{F2}|f;               // Negative: the constrain leg — visceral, not analytic
+    node gated:       ^0_gated^C_{F2}|A;         // Idea: what survives INTAKE
+    node audit:       ^6_audit^P_{F7}|A;         // Male: the desire taken apart
+    node refusal:     ^3_refusal^P_{F7}|⟨A,f,T⟩; // Negative: three co-present locks
+    node passed:      ^0_passed^C_{F2}|A;        // Idea: what POLICY releases downstream
+    node amplified:   ^9_amplified^E_{F5}|A;     // Below/Effect: the amplified want
+    node confirm:     ^4_confirm^E_{F2}|f;       // Vibration: the confirmation's impression
+    node cadence:     ^7_cadence^E_{F6}|E;       // Rhythm: the clocked delivery
+    node charge:      ^5_charge^E_{F2}|f;        // Female: what the cadence deposits
+    node receptivity: ^5_collective^E_{F4}|f;    // Female: how disposed the minds that must move already are
+    node manifest:    ^9_manifest^O_{F5}|E;      // Below/Effect: delivered operational current
+    node regate:      ^7_regate^O_{F6}|E;        // Rhythm: the rate limit, inside ^O
+    node trend:       ^9_trend^O_{F5}|E;         // same literal as manifest — a filter changes tau, not type
 
-// ---- STAGE 2: POLICY ----
-Q0  CJT< cause=^0_gated^C_{F2}|A, bias=^5_operator^P_{F7}|T,
-         effect=^6_audit^P_{F7}|A >
-    [ beta=1.0, region=active ]
-Q1  CJT< cause=^6_audit^P_{F7}|A, bias=^5_operator^P_{F7}|T,
-         effect=^3_refusal^P_{F7}|<A,f,T> >
-    [ beta=2.0, sat=0.85, cutoff=0.30 ]            // deliberately saturated
-F1  Fuse< path=^3_refusal^P_{F7}|<A,f,T> >
-    [ threshold=0.90, action=permanent_block ]
-MUX1 MUX< inputs=[ ^0_gated^C_{F2}|A, ^3_refusal^P_{F7}|<A,f,T> ],
-          select=^3_refusal >   [ pass_if: TP2 < 0.30 ]
+    // ---- STAGE 0: BIAS RAIL ----
+    resistor  r0: Resistor< path=substrate, R=40.0 >;               // Ohm_c
+    capacitor c1: Capacitor< node=substrate, C=83.33,               // tau = R x C = 3,333 hr
+                             leakage=0.0002, V_BR=8.0 >;            // leakage per DAY
+    diode     d1: Diode< ^P -> ^C > [Vf=0.7, I_R=0.02, V_BR=12.0];  // ^P-origin desires only
 
-// ---- STAGE 3: AMPLIFY ----
-D2  Diode< ^C -> ^E >   [ Vf=1.2, I_R=0.02, V_BR=10.0 ]
-Q2  CJT< cause=^0_gated^C_{F2}|A, bias=^5_operator^P_{F7}|T,
-         effect=^9_amplified^E_{F5}|A >
-    [ beta=desire_specific, sat=0.80,
-      r_pi=Dial(^5)/Dial(^6), g_m=0.4, region=active ]
+    // ---- STAGE 1: INTAKE ----
+    dial       d_pos: ^2 [dial=6];
+    dial       d_neg: ^3 [dial=4];
+    constraint dial_spread in [0, 4];                     // S4 — |Dial(^2) - Dial(^3)|, Ch 25.2
+    resistor   r1a: Resistor< path=attraction, R=60.0 >;  // 10 x Dial(^2)
+    resistor   r1b: Resistor< path=aversion,   R=40.0 >;  // 10 x Dial(^3)
+    divider    r1:  Divider< source=desire, expand=attraction,
+                             constrain=aversion, tap=gated >;   // k = 6/(6+4) = 0.600
 
-// ---- STAGE 4: RHYTHM ----
-OSC1 Oscillator< signal=^9_amplified^E_{F5}|A, out=^7_cadence^E_{F6}|E >
-    [ period=24hr, duty=t_op/period, duty_max=0.05,
-      sustain=until( grade(^4_confirm)==1 or n_ops_exhausted ) ]
-// charging identity:
-// ( ^4_confirm^E_{F2}|f  x  ^7_cadence^E_{F6}|E )  =  ^5_charge^E_{F2}|f
+    // ---- STAGE 2: POLICY ----
+    cjt  q0:   CJT< gated | substrate => audit >   [beta=1.0, region=active];
+    cjt  q1:   CJT< audit | substrate => refusal > [beta=2.0, sat=0.85, cutoff=0.30];
+    fuse f1:   Fuse< refusal, threshold=0.90, action=permanent_block >;
+    mux  mux1: MUX< inputs=[gated, refusal], select=refusal, outputs=[passed] >;
+                                      // selects refusal once TP2 reaches q1's cutoff
 
-// ---- STAGE 5: MANIFEST ----
-D3  Diode< ^E -> ^O >   [ Vf=2.0, I_R=0.02, V_BR=8.0 ]
-Q3  CJT< cause=^7_cadence^E_{F6}|E, bias=^5_collective^O_{F4}|f,
-         effect=^9_manifest^O_{F5}|E >
-    [ beta=receptivity, sat=1.0 ]
+    // ---- STAGE 3: AMPLIFY ----
+    diode d2: Diode< ^C -> ^E > [Vf=1.2, I_R=0.02, V_BR=10.0];
+    cjt   q2: CJT< passed | substrate => amplified >
+              [beta=2.5, sat=0.80, cutoff=0.05, g_m=0.40, r_pi=1.50, region=active];
+              // beta by desire type (13.4); 2.5 = the wealth row
+              // r_pi = Dial(^5)/Dial(^6) = 6/4
 
-// ---- LOOP A: rate limiter, stays inside ^O ----
-FLT1 Filter< in=^9_manifest^O_{F5}|E, out=^7_regate^O_{F6}|E, type=lowpass >
-    [ tau=24hr ]
+    // ---- STAGE 4: RHYTHM ----
+    osc osc1: Oscillator< signal=amplified, source=cadence,
+                          period=1.0, duty=0.014, sustain=40.0 >;
+              // period in DAYS; duty = 20 min / 1440 min; ceiling 0.05 = 72 min (S5)
+              // sustain in DAYS — the operation window; n_ops from 13.5 sets it
+    monitor m_conf: confirm;                     // ^4 grade, logged per operation (Ch 22)
+    on m_conf { alert "1-degree confirmation — stop operating and act"; }
+    integrate rh1: ( confirm × cadence ) = charge;   // ^4 x ^7 = ^5, named emergent result
 
-// ---- LOOP B: the lawful O -> P path (Chapter 8.4) ----
-FLT2 Filter< in=^9_manifest^O_{F5}|E, out=^9_trend^O_{F5}|E, type=lowpass >
-    [ tau=3weeks ]
-FB1  Feedback< from=^9_trend^O_{F5}|E, to=^5_operator^P_{F7}|T >
-    [ beta=0.05 ]                                  // to the BIAS, never the signal path
+    // ---- STAGE 5: MANIFEST ----
+    diode d3: Diode< ^E -> ^O > [Vf=2.0, I_R=0.02, V_BR=8.0];
+    cjt   q3: CJT< cadence | receptivity => manifest > [beta=1.0, sat=1.0, region=active];
+              // beta = receptivity (13.4); 1.0 = mass-market car
+              // the bias is ^E and never ^O — see the Stage 5 walk
 
-// ---- TEST POINTS ----
-probe TP1: ^0_gated^C_{F2}|A          // clarity leaving INTAKE
-probe TP2: ^3_refusal^P_{F7}|<A,f,T>  // principled aversion
-probe TP3: ^9_amplified^E_{F5}|A      // AMPLIFY output vs sat
-probe TP4: ^9_manifest^O_{F5}|E       // delivered operational current
+    // ---- LOOP A: rate limiter, stays inside ^O ----
+    filter flt1: LowPass< in=manifest, out=regate, tau=1.0 >;   // tau in DAYS
+
+    // ---- LOOP B: the lawful O -> P path (Ch 8.4) ----
+    filter flt2: LowPass< in=manifest, out=trend, tau=21.0 >;   // three weeks, in DAYS
+    feedback trend -> substrate [beta=0.05];   // FB1 — to the BIAS, never the signal path
+
+    // ---- TEST POINTS ----
+    probe tp1: gated;       // clarity leaving INTAKE
+    probe tp2: refusal;     // principled aversion
+    probe tp3: amplified;   // AMPLIFY output vs sat
+    probe tp4: manifest;    // delivered operational current
+}
 ```
 
-[[FIGURE 13-B: Full CCDL schematic of CCB-D in drawn component symbols — C1 as a capacitor feeding the ^5^P bias rail along the bottom; R1 as a two-resistor divider with the tap labelled k; Q0 and Q1 as CJTs with bias terminals tied to the rail; F1 as a fuse on the branch dropping from Q1's effect; MUX1 as a two-input multiplexer; D2 and D3 as diodes in the horizontal path with Vf beside each; Q2 with sat=0.80 as a dashed ceiling line above its effect terminal; OSC1 as a square-wave oscillator; Q3 with its bias from a separate ^5_collective^O symbol rather than the rail; and the two feedback loops as distinct return paths at different heights, time constants labelled.]]
+[[FIGURE 13-B: Full CCDL schematic of CCB-D in drawn component symbols — C1 as a capacitor feeding the ^5^P bias rail along the bottom; R1 as a two-resistor divider with the tap labelled k; Q0 and Q1 as CJTs with bias terminals tied to the rail; F1 as a fuse on the branch dropping from Q1's effect; MUX1 as a two-input multiplexer; D2 and D3 as diodes in the horizontal path with Vf beside each; Q2 with sat=0.80 as a dashed ceiling line above its effect terminal; OSC1 as a square-wave oscillator; Q3 with its bias from a separate ^5_collective^E symbol rather than the rail; and the two feedback loops as distinct return paths at different heights, time constants labelled.]]
 
-**Stage 0 — the bias rail.** `C1` is the operator's `^5` Female: the Ideas the Mind is composed of, held as stored charge (Chapter 7.1), charging on the RC curve of Chapter 7.2, `P_cap(t) = 10 × (1 − e^(−t/τ))`. **τ = 3,333 hr** is chosen so the capacitor reaches 95% charge at 3τ = 10,000 hours, tying the component to the constant derived in Chapter 5.2. At τ = 10,000 hr, ten thousand hours of practice leaves you at 63%, contradicting the constant; at τ = 1,000 hr the rail saturates inside a year, contradicting everything observed about acquiring a craft.
+**Stage 0 — the bias rail.** `C1` is the operator's `^5` Female — a Mind impregnated with an Idea, the Ideas a Mind is composed of — held as stored charge (Chapter 7.1) and charging on the RC curve of Chapter 7.2, `P_cap(t) = 10 × (1 − e^(−t/τ))`. **τ = 3,333 hr** is chosen so the capacitor reaches 95% charge at 3τ = 10,000 hours, tying the component to the constant derived in Chapter 5.2. At τ = 10,000 hr, ten thousand hours of practice leaves you at 63%, contradicting the constant; at τ = 1,000 hr the rail saturates inside a year, contradicting everything observed about acquiring a craft.
 
 **Leakage = 0.0002/day** is the choice operators ignore: an unreinforced `^5` store loses 0.02% of its charge daily, a half-life near 9.5 years. Negligible until you multiply. Practice needed to hold station is `leakage × C` — at 1,850 stored hours, **0.37 hr/day, about 22 minutes**; at 5,000 hours, a full hour. **Maintenance cost scales with the store**, which is why advanced practitioners practise more rather than less: an arithmetic consequence of a leaky capacitor, not a virtue.
 
 **Stage 1 — INTAKE.** `R1` is the drive voltage divider of Chapter 6.4, tapped between `Dial(^2)` attraction in the expand leg and `Dial(^3)` aversion in the constrain leg: `k = Dial(^2) / (Dial(^2) + Dial(^3))`. Dials run 3–9 (Chapter 6.2), and Chapter 25.2 caps their difference at 4.
 
-> **Bench Note — the divergence limit is a transmission cap, and you can compute it.**
-> Work the two extremes the 4-point limit allows. Maximum attraction: `Dial(^2)=9`, `Dial(^3)=5`, `k = 9/14 = 0.643`. Maximum aversion: `Dial(^2)=3`, `Dial(^3)=7`, `k = 3/10 = 0.300`. On any lawfully-dialled D-board, intake transmission lives in **[0.30, 0.64]** and nowhere else. You cannot build a compliant board that passes a desire unopposed, nor one that blocks it entirely. Operators chasing "total belief, zero doubt" are asking for `k = 1.0`, which needs `Dial(^3) = 0` — off the scale, a divergence of 9, and the board that delivers it is the board that fractures `^5`. The ceiling on your enthusiasm is a safety component.
+> **Bench Note — the divergence limit is a transmission cap, and turning attraction up can lower it.**
+> `k` is set by the *ratio* of the dials, not their size, so enumerate the lawful pairs instead of reaching for the biggest number. Crank attraction to the top of the scale: `Dial(^2) = 9` drags `Dial(^3)` to at least 5 to stay inside the limit, and `k = 9/14 = 0.643`. Now back both off. `Dial(^2) = 7`, `Dial(^3) = 3` — divergence still exactly 4, still lawful — and `k = 7/10 = 0.700`. **The lower pair transmits more.** Maximum transmission sits at the *bottom* of the aversion range, not the top of the attraction range, and every step up the `^2` dial from there costs you: 0.700 at (7,3), 0.667 at (8,4), 0.643 at (9,5). The floor is the mirror image, `Dial(^2) = 3` against `Dial(^3) = 7`, `k = 3/10 = 0.300`. On any lawfully-dialled D-board, intake transmission lives in **[0.30, 0.70]** and nowhere else. Operators chasing "total belief, zero doubt" are asking for `k = 1.0`, which needs `Dial(^3) = 0` — off the scale, a divergence of 9, and the board that delivers it is the board that fractures `^5`. The ceiling on your enthusiasm is a safety component, and so is the fact that pushing the attraction dial harder moves transmission the wrong way.
 
-**Stage 2 — POLICY.** Two devices, and the split between them is the notational point of the whole board.
+**Stage 2 — POLICY.** Two devices, in series, on separate Noetics: decomposition at `^6` and recoil at `^3`. Collapse them into one and you have written the drift this book exists to prevent.
 
-`Q0` produces `^6_audit^P_{F7}|A` at **β = 1.0**. `^6` Male — an Idea impregnated with another Idea, the Ideas an Idea is composed of — is the Noetic for taking the desire apart: what is it made of, what does it cost, whose consent does it need. Unity gain, because above 1.0 an audit manufactures objections and below 1.0 it downplays real ones. This is decomposition, and it is emphatically **not** `^3`.
+`Q0` produces `^6_audit^P_{F7}|A` at **β = 1.0**. `^6` Male — an Idea impregnated with another Idea, the Ideas an Idea is composed of — is the Noetic for taking the desire apart: what it is made of, what it costs, whose consent it needs. Unity gain, because above 1.0 an audit manufactures objections and below 1.0 it downplays real ones. This is decomposition, and emphatically **not** `^3`.
 
 `Q1` produces `^3_refusal^P_{F7}|⟨A,f,T⟩` at **β = 2.0, sat = 0.85, cutoff = 0.30**. `^3` Negative is the Idea the Mind is adverse to and repelled by — the visceral will-not, not the analysis, which already happened at Q0. The register-set `|⟨A,f,T⟩` says the aversion is present in three registers without claiming they fuse. Writing `(^3^P|A × ^3^P|f × ^3^P|T)` would be invalid under the v7.7 discipline of Chapter 2.6: same-Noetic multi-register `×` requires a named emergent result, and no fused state is defined for this board. Three co-present locks, each independently defeasible, is the honest claim and the weaker one — say the weaker thing.
 
-`sat = 0.85` sits inside the 0.85–0.97 band Chapter 3.3 specifies for safety CJTs; past the plateau the stage stops responding to its cause, so a desire cannot be argued past a refusal it already triggered. `cutoff = 0.30` is the firing floor, which lets ordinary wants through without a fight. `F1` blows at 0.90 and blocks permanently. Chapter 24 writes the equivalent path with `β=∞`; that is a limit, not a value, and a validator rejects non-finite parameters. This board specifies no infinite gain — build Chapter 24's idealization as `β=10`, indistinguishable once the ceiling clamps the output.
+`sat = 0.85` sits inside the 0.85–0.97 band Chapter 3.3 specifies for safety CJTs; past the plateau the stage stops responding to its cause, so a desire cannot be argued past a refusal it already triggered. `cutoff = 0.30` is the firing floor, which lets ordinary wants through without a fight. `F1` blows at 0.90 and blocks permanently — the same ceiling and the same threshold Chapter 24 specifies for the operator's own safety board.
 
-**Stage 3 — AMPLIFY.** `sat = 0.80` on `Q2` governs the entire worked example: 20% headroom, keeping the stage in the active region where output tracks input. `rπ = Dial(^5)/Dial(^6)` sets stubbornness. `g_m = 0.4` sets framing sensitivity (Chapter 10.3) — low enough that rewording does not swing the output, high enough that a genuinely better formulation registers.
+Note how Chapter 24 writes that refusal: by ceiling and fuse, `sat = 0.85` and `threshold = 0.90`, and never by gain. The infinite-gain form, `β=∞`, is the standard comparator idealization and it is written that way in the companion volume *CAS PCBA Engineer*. It is a limit, not a value, and a validator rejects non-finite parameters outright. Build it as `β=10`. Once `sat` clamps the output the two are indistinguishable, which is the whole point: the ceiling shapes a refusal, the gain only decides how fast it gets there.
+
+**Stage 3 — AMPLIFY.** `sat = 0.80` on `Q2` governs the entire worked example: 20% headroom, keeping the stage in the active region where output tracks input. `cutoff = 0.05` is the floor of the 0.05–0.20 design band of Chapter 3.3, deliberately at the bottom, because this is the stage the RPM D-gate is measured against (13.6) and a high floor would read modest but real drive as no drive at all. At `cutoff = 0.20` the Corvette operator's `I_attention = 0.076` fails the gate on a desire that in fact runs. `rπ = Dial(^5)/Dial(^6)` sets stubbornness. `g_m = 0.4` sets framing sensitivity (Chapter 10.3) — inside the 0.2–3.0 design range of Chapter 3.3, low enough that rewording does not swing the output, high enough that a better formulation registers.
 
 **Stage 4 — RHYTHM.** `OSC1` runs a 24-hour period at duty `t_op / 1440 min`. The **duty ceiling of 0.05** — 72 minutes a day — is invariant S5. Above it you are not running an operation on a schedule but a loop, and the observable is rumination. An operator who cannot get a desire below 72 daily minutes has a `^5` problem the D-board is the wrong instrument for (Chapter 20).
 
-The charging identity in the listing is worth reading slowly:
-
 `( ^4_confirm^E_{F2}|f × ^7_cadence^E_{F6}|E ) = ^5_charge^E_{F2}|f`
 
-A `^4` Vibration — the degree to which an Idea resonates with the Mind, its impression — integrated with a `^7` Rhythm — the rate and pattern the Mind is exposed to an Idea — produces `^5`, composition. This `×` is legitimate: two different Noetics, one domain, no ascent, **named emergent result**. Impression alone fades; cadence alone is empty repetition. Their integration charges the capacitor, which is why RHYTHM is a stage and not a footnote.
+A `^4` Vibration — the degree to which an Idea resonates with the Mind, its impression — integrated with a `^7` Rhythm — the rate and pattern a Mind is exposed to an Idea, entraining it — produces `^5`, composition. This `×` is legitimate: two different Noetics, one domain, no ascent, **named emergent result**. Impression alone fades; cadence alone is empty repetition. Their integration charges the capacitor, which is why RHYTHM is a stage and not a footnote.
 
-**Stage 5 — MANIFEST.** `Q3` is the only stage biased by something other than the operator: `^5_collective^O_{F4}|f`, the receptivity of whatever has to move. `β = receptivity` is therefore not a knob but a property of the world, estimated and then respected. Buying a mass-produced car from people whose job is selling cars is a receptivity near 1.0. Persuading one specific person to love you is not.
+**Stage 5 — MANIFEST.** `Q3` is the only stage biased by something other than the operator: `^5_collective^E_{F4}|f`, the accumulated composition of whatever minds have to move, read at the Evaluative level. `β = receptivity` is therefore not a knob but a property of the world, estimated and then respected. Buying a mass-produced car from people whose job is selling cars is a receptivity near 1.0. Persuading one specific person to love you is not.
+
+Read that bias domain twice, because the obvious choice is wrong and the compiler catches it. Receptivity is about the world, the world is where acts land, so the hand reaches for `^5_collective^O` — and a board with `cause=^7_cadence^E` against `bias=^5_collective^O` is refused: **`E-CJT-008 CjtCrossDomainBias`**, the bias sitting *below* its own cause in P ≻ C ≻ E ≻ O. The rule from Chapter 3.2 is the complement of the one in the Bench Note above: a bias must sit at or above the cause it governs, and an effect at or below the bias that produced it. `Q3` satisfies both at `^E` — cause `^7^E`, bias `^5^E`, effect `^9^O`, with D3 doing the descent. It is also the more accurate literal. An `^O` collective store is a *record of what a population has already done*; what biases this stage is how disposed those minds are before they act, which is an Evaluative composition. The literal that compiles is also the one that is true, which is the ordinary case rather than a happy accident: when a state refuses to wire, the usual reason is that it was describing the wrong thing.
 
 **The two loops.** It is tempting to run one fast feedback path from MANIFEST to the bias rail so the board "learns quickly." Do not — that is the fast `^O` to `^P` ascent Chapter 8.4 exists to prevent, and a 24-hour constant on it removes the diode. Split it. **FLT1** (τ = 24 hr) is a rate limiter staying inside `^O`, stopping the operator re-triggering RHYTHM on yesterday's result. **FLT2 + FB1** (τ = 3 weeks, β = 0.05) is the lawful path up, terminating at C1's bias terminal and never at the signal path — feedback around a gain stage is an oscillator, which Chapter 14 builds deliberately and which here is a defect.
 
@@ -182,15 +208,15 @@ A `^4` Vibration — the degree to which an Idea resonates with the Mind, its im
 
 **Wealth.** Higher gain is affordable because receptivity is high — markets are built to transact and nobody has to be convinced. The binding term is `R_resource`, the one resistance a person can attack directly with ordinary work. Daily cadence, because financial resistance moves in daily increments.
 
-**Love.** The lowest gain band, and the receptivity column is why. Another mind must consent, and a mind that has not consented is a resistance you are structurally forbidden to lower by force — that is the difference between this board and Chapter 19. High `β` against low receptivity gives a saturated stage and an obsessed operator: all the gain into the ceiling, none into the world. Weekly cadence, because daily operation on a person is the duty-cycle failure in its most recognisable form.
+**Love.** The lowest gain band, and the receptivity column is why. Another mind must consent, and a mind that has not consented is a resistance you are structurally forbidden to lower by force — the difference between this board and Chapter 19. High `β` against low receptivity gives a saturated stage and an obsessed operator: all the gain into the ceiling, none into the world. Weekly cadence, because daily operation on a person is the duty-cycle failure in its most recognisable form.
 
-**Health.** Read the governing state carefully: `^2^P|E`, attraction to function in the Embodied register, not `^3` toward a condition. The dominant term is `R_cap` — adherence, the actual behaviours. That is the whole safe scope of this row. The board organises attention onto acts; it does not treat, diagnose, or replace anything, and a symptom belongs to a clinician.
+**Health.** Read the governing state carefully: `^2^P|E`, attraction to function in the Embodied register, not `^3` toward a condition. The dominant term is `R_cap` — adherence, the actual behaviours. That is the whole safe scope of this row: the board organises attention onto acts. It does not treat, diagnose, or replace anything, and a symptom belongs to a clinician.
 
 **Power.** Receptivity is low because many minds are involved and most are not moving. Monthly cadence, because collective resistance has a time constant measured in months (Chapter 15.4). The dominant term is `R_policy` — usually the operator's own, which is the honest finding and often the unwelcome one.
 
-**Knowledge.** Lowest gain, highest receptivity: nothing resists you learning a thing. `R_cap` is all of it, and `R_cap` falls with practice hours — the one row where the D-board and the `^5` capacitor work on the same quantity. Chapter 20 is the better instrument for a long acquisition.
+**Knowledge.** Lowest gain, highest receptivity: nothing resists you learning a thing. `R_cap` is all of it, and it falls with practice hours — the one row where the D-board and the `^5` capacitor work on the same quantity. Chapter 20 is the better instrument for a long acquisition.
 
-**Protection.** The only row governed by `^3` rather than `^2`, correctly: a ward is principled aversion to a class of thing, held across three registers, running continuously rather than in sessions. Gain stays moderate because vigilance at high gain is indistinguishable from anxiety.
+**Protection.** The only row governed by `^3` rather than `^2`, correctly: a ward is principled aversion to a class of thing, held across three registers, running continuously. Gain stays moderate because vigilance at high gain is indistinguishable from anxiety.
 
 **On the row that is not here.** A row for operations aimed at harming a specific person is absent, and not only for taste. It fails three of this board's own invariants: it drives `Dial(^3)` past the S4 limit, it inverts the `^2`↔`^3` involution pair by design (Chapter 25.3), and it acts on a mind that has not consented, outside the scope declared in 13.1. The mechanism is analysed — as mechanism, for recognition and defence — in Chapter 19, which ends in its counter-circuit. Parameters for it appear nowhere in this book.
 
@@ -203,14 +229,13 @@ After every operation, clock two numbers and compute (Chapter 5.3):
 ```
   eta    = t_op / t_conf
   result = eta × 1/3   ->  reduce to a/b
-  a = n_ops     b = beta_required     A = b/a = required amplitude ratio
+  a = n_ops     b = beta_next     A = b/a = required amplitude ratio
 ```
 
-`a` is how many more operations, `b` is the amplitude each must deliver relative to this one. The D-board adds one refinement to Chapter 5's presentation, and it is the difference between a usable instrument and a superstition.
+`a` is how many more operations, `b` is the amplitude each must deliver relative to this one. Chapter 5.3 notes that `beta_next` and `beta_required` name one readout; this book uses `beta_next`, and neither name is a CJT parameter.
 
-> **Bench Note — read b/a, not b. Run the arithmetic yourself.**
-> Take `t_op = 20 min`. At `t_conf = 20`, η = 1, result = 1/3, so a=1, b=3. Now be wrong about the confirmation time by four minutes either way. At `t_conf = 16`: η = 5/4, result = 5/12, **b = 12**. At `t_conf = 24`: η = 5/6, result = 5/18, **b = 18**. A twenty-percent timing error swung `b` from 3 to 18, because `b` is a lowest-terms denominator and those are not continuous in their inputs.
-> Take the ratio instead. `b/a` is 3, then 2.4, then 3.6 — smooth, monotone, exactly `3/η` every time. **A = b/a is the required amplitude ratio, and it is the number to act on.** `b` gives the strength of one operation, `a` gives how many, and their ratio is what must match the CAS-Ohm shortfall. Report both, decide on the ratio.
+> **Bench Note — `A = b/a` is the number, and the reason is arithmetic rather than doctrine.**
+> Chapter 5.3 puts the swing on the bench: hold `t_op = 20 min`, be wrong about the confirmation by four minutes either way, and `b` reads 3, then 12, then 18. Here is *why*, because this board depends on it. `b` is a lowest-terms denominator, and reduction is not continuous in its inputs — 5/12 and 5/18 sit close either side of 1/3, but 12 and 18 sit nowhere near 3. The ratio cancels the reduction back out: `b/a` equals `3/η` identically, so the same three readings give **3.0, 2.4, 3.6** — smooth, monotone, and well-behaved under a timing error. That matters here specifically. **`A` is the only St. John's output dimensionally comparable to a CAS-Ohm current ratio**, which is what makes the independent check in 13.6 possible at all; `b` on its own cannot be checked against anything. Log `a` and `b` because the tradition does. Decide on `A`.
 
 Interpretation bands for the ratio:
 
@@ -221,7 +246,7 @@ Interpretation bands for the ratio:
 | 1 < A < 3 | Close | Finish the resistance work; do not re-tune the amplifier |
 | A ≤ 1 | Sufficient | Stop operating. `n_ops = a` more sessions, then act |
 
-And the correction that matters most: **`β_required` is not the CJT's β.** It multiplies the *delivered current* at TP4, and five things set that current — clarity at TP1, transmission `k`, residual aversion at TP2, the amplifier, and `R_op`. When Chapter 5's Red Corvette reads `b = 9`, it is not asking for `β = 9` on a device whose design range tops out near 4.0 (Chapter 3.3). It is asking for nine times the current at TP4, and the amplifier is the least available of the five ways to get it.
+And the correction that matters most: **`β_next` is not the CJT's β.** It multiplies the *delivered current* at TP4, and five things set that current — clarity at TP1, transmission `k`, residual aversion at TP2, the amplifier, and `R_op`. When Chapter 5's Red Corvette reads `b = 9`, it is not asking for `β = 9` on a device whose design range tops out near 4.0 (Chapter 3.3). It is asking for nine times the current at TP4, and the amplifier is the least available of the five ways to get it.
 
 ---
 
@@ -239,7 +264,7 @@ The rail sits at **4.3** of a possible 10. Break-even maintenance is `0.0002 × 
 
 **The Prime Desire.** *I own a red Chevrolet Corvette.* Present tense, specific make and colour, ownership rather than wanting. The formation matters because TP1 measures it.
 
-**RPM gate (Chapter 21).** *A0.* Strip the object of witnesses: would you still want it if nobody ever saw you in it? Yes — the desire is `^2^E` toward the object, not `^2^O` toward being seen. Had the answer been no, the true Ω is status and this is the wrong board; route to Chapter 23.3.
+**RPM gate (Chapter 21).** *A0.* Strip the object of witnesses: would you still want it if nobody ever saw you in it? Yes — the desire is `^2^E` toward the object, not `^2^O` toward being seen. Had the answer been no, the true Ω is status and this is the wrong board (Chapter 23.3).
 
 *D-gate.* `Dial(F5) = 7`. Intake resistance per Chapter 4.4: `R_cap 10 + R_policy 5 + R_context 15 + R_resource 20 = R_in 50`. The desire originates at `^C`, so it pays D2 and D3 only:
 
@@ -249,7 +274,7 @@ The rail sits at **4.3** of a possible 10. Break-even maintenance is `0.0002 × 
 
 Against Q2's `cutoff = 0.05` that clears by 52%. Gate passes — thinly. Note what the diode correction did: the naive `7/50 = 0.14` overstates the margin by nearly double.
 
-*W-gate.* Schematic in hand. *P-gate.* Twenty minutes daily, private room, materials. Both pass.
+*W-gate.* Schematic in hand. *P-gate.* Twenty minutes daily, private room, materials. Pass.
 
 **Operation 1 — the one that reads as a failure.** `Dial(^2) = 6`, `Dial(^3) = 4` — divergence 2, inside S4, `k = 0.60`. Q2 at `β = 3.0`, mid-band for the wealth row. `t_op = 20 min`, `^1` Mind graded 2° — the sigil went in and out of focus (Chapter 5.5).
 
@@ -267,13 +292,13 @@ Confirmation arrives at 60 minutes — a song on the radio. `^4` Vibration 2°. 
 The naive reading is despair: nine times stronger, impossible. The bench reading is different. **TP3 was pinned.** Q2 spent the operation in saturation with 12.6% of its gain thrown into the ceiling, so its output stopped tracking its input, so the ratio just computed measures the clamp and not the board.
 
 > **Bench Note — a saturated stage cannot be calibrated.**
-> Saturation is a virtue at Q1, where the point is that a refusal stops responding to argument. It is a defect at Q2, where the point is that output tracks cause so St. John's ratio means something. The test is one probe: if TP3 sits exactly at `sat` and does not move when you improve TP1, the stage is clamped and every calibration number downstream is uninterpretable. Fix the operating point *before* you believe a reading. The commonest misdiagnosis in desire work is an operator concluding they need more power from an instrument already at its ceiling.
+> Saturation is a virtue at Q1, where a refusal must stop responding to argument. It is a defect at Q2, where output must track cause for St. John's ratio to mean anything. The test is one probe: if TP3 sits exactly at `sat` and does not move when you improve TP1, the stage is clamped and every calibration number downstream is uninterpretable. Fix the operating point *before* you believe a reading. The commonest misdiagnosis in desire work is an operator concluding they need more power from an instrument already at its ceiling.
 
-**Operation 2 — corrected operating point.** Q2 dropped to `β = 2.5`, the bottom of the wealth band. Nothing else changed.
+**Operation 2 — corrected operating point.** Q2 dropped to `β = 2.5`, the bottom of the wealth band. Nothing else changes.
 
 - Cause unchanged at `c = 0.305`.
 - Q2 output: `2.5 × 0.305 = 0.762`. **TP3 = 0.76**, active, 5% below the ceiling.
-- `t_op = 20`, `t_conf = 20` — a red Corvette in the next lane on the drive home. `^4` Vibration 1°.
+- `t_op = 20`, `t_conf = 20` — a red Corvette in the next lane on the way home. `^4` Vibration 1°.
 
 ```
   eta = 20/20 = 1     result = 1/3     a = 1, b = 3     A = 3.0
@@ -285,16 +310,16 @@ Now the independent check. Receptivity is 1.0 for a mass-market car, so `V_manif
   TP4 = (V_manifest − Vf_D3) / R_op = (7.6 − 2.0) / 67 = 5.6 / 67 = 0.084
 ```
 
-The manifestation threshold on this board is **0.25** — the delivered current below which the operator does not, in practice, make the calls and visit the lots. Deficit: `0.25 / 0.084 = 2.99`.
+The manifestation threshold on this board is **0.25** — the current below which the operator does not, in practice, make the calls and visit the lots. Deficit: `0.25 / 0.084 = 2.99`.
 
 St. John's Equation, from two clock readings, says the amplitude must rise **3.0×**. CAS-Ohm, from seven board parameters sharing no inputs with those readings, says **2.99×**. That is a consistency check between two models on one example — not proof that either is right, and one agreement is not evidence. But a disagreement would have been a reason to stop, and there isn't one.
 
 **Where the 3× can come from.** `TP3 = 0.76` against `sat = 0.80` leaves 5% headroom. Three times 0.76 is 2.28; the ceiling is 0.80. **The amplifier cannot supply the required gain** — not with a better β, not with a cascade, since every cascaded stage clamps at its own ceiling (Chapter 10.5). Four levers remain, three on the resistance side:
 
-1. **TP1** — clarity, 0.62 → 0.85. Statement rewritten, sigil rebuilt, `^1` Mind driven to 1°.
+1. **TP1** — clarity, 0.62 → 0.85. Statement rewritten, sigil rebuilt, `^1` Mind at 1°. The rebuild is also a capability gain, so `R_cap` falls 5 → 4: an operator who can hold the image can also hold a conversation about the car.
 2. **TP2 and the dials** — Q0's audit surfaces the blocking belief, *people like me don't own cars like that*, a `^5` composition item resolved per Chapter 23.3. Aversion 0.18 → 0.08; dials to `Dial(^2) = 7`, `Dial(^3) = 3` — divergence 4, at the S4 limit and not past it. `k = 0.70`.
 3. **R_context** 20 → 2. Two weekends: market prices learned, three dealers identified.
-4. **R_resource** 35 → 9. Current car sold, six months of a savings line, financing pre-approved.
+4. **R_resource** 35 → 9. Car sold, six months of a savings line, financing pre-approved.
 
 `R_policy` stays at 7 — the operator's own rule about what fraction of income a payment may take. Lowering a policy resistance to make a board fire is how a safety invariant becomes a story you tell afterwards.
 
@@ -314,12 +339,12 @@ St. John's Equation, from two clock readings, says the amplitude must rise **3.0
   eta = 24/8 = 3      result = 1/1      a = 1, b = 1      A = 1.0
 ```
 
-Sufficient. One more session of 24 minutes, then stop operating and go do the thing.
+Sufficient. One more 24-minute session, then stop operating and go do the thing.
 
 **Where the gain actually came from.** TP4 went from 0.084 to 0.259, a factor of **3.10**. Decompose it:
 
 ```
-  numerator  5.7 / 5.6 = 1.018      (the amplifier's contribution)
+  numerator  5.7 / 5.6 = 1.018      (the amplifier)
   resistance   67 / 22 = 3.045      (the resistance work)
   1.018 × 3.045 = 3.10                              check
 ```
@@ -328,9 +353,9 @@ On a log scale the resistance term accounts for **98%** of the improvement. The 
 
 That is the finding, and it is not a disappointment. It is what the board is for. CCB-D took an operator pushing harder on a clamped amplifier and pointed their twenty minutes a day at the four numbers that could move. The Corvette did not appear in the driveway. The path to it stopped being obstructed, one resistance term at a time, by the operator.
 
-[[FIGURE 13-C: Assembly drawing of CCB-D — rectangular board outline, five stages left to right as labelled rectangles, designators C1, D1, R1, Q0, Q1, F1, MUX1, D2, Q2, OSC1, D3, Q3, FLT1, FLT2, FB1 at their positions; the ^5^P bias rail as a thick trace along the lower edge with tick marks where Q0/Q1/Q2 tap it; four circled test-point callouts TP1–TP4 on leader lines with expected bands beside each (TP1 0.60–0.90, TP2 <0.30, TP3 0.60–0.78, TP4 ≥0.25); and a boxed BOM at lower right listing every designator with its key parameter.]]
+[[FIGURE 13-C: Assembly drawing of CCB-D — rectangular board outline, five stages left to right as labelled rectangles, designators R0, C1, D1, R1, Q0, Q1, F1, MUX1, D2, Q2, OSC1, D3, Q3, FLT1, FLT2, FB1 at their positions; the ^5^P bias rail as a thick trace along the lower edge with tick marks where Q0/Q1/Q2 tap it; four circled test-point callouts TP1–TP4 on leader lines with expected bands beside each (TP1 0.60–0.90, TP2 <0.30, TP3 0.60–0.78, TP4 ≥0.25); and a boxed BOM at lower right listing every designator with its key parameter.]]
 
-[[FIGURE 13-D: TP4 band chart — one vertical axis from 0 to 0.40 labelled "delivered operational current", split into three shaded bands: below 0.05 "cutoff — board not firing", 0.05–0.25 "confirmation band — signal reaches the Ether, no manifestation", above 0.25 "manifestation threshold"; the three Red Corvette operations plotted at 0.084, 0.084 and 0.259 and numbered; the middle band annotated "this is where operators conclude the board doesn't work".]]
+[[FIGURE 13-D: TP4 band chart — one vertical axis from 0 to 0.40 labelled "delivered operational current", split into three shaded bands: below 0.05 "cutoff — board not firing", 0.05–0.25 "confirmation band — signal reaches the Ether, no manifestation", above 0.25 "manifestation threshold"; Red Corvette operations 2 and 3 plotted and labelled at 0.084 and 0.259; the middle band annotated "this is where operators conclude the board doesn't work".]]
 
 [[FIGURE 13-E: AMPLIFY transfer curve — horizontal axis cause activation c from 0 to 0.8, vertical axis TP3 from 0 to 1.0, horizontal dashed ceiling at sat = 0.80; three lines of slope 3.0, 2.5 and 1.40 rising from the origin and flattening at the ceiling; operating points marked at (0.305, 0.80 clamped), (0.305, 0.76) and (0.547, 0.77); the clamped point circled and annotated "pinned — no calibration reading is valid here".]]
 
@@ -338,21 +363,22 @@ That is the finding, and it is not a disappointment. It is what the board is for
 
 ### Component and Parameter Table
 
-Every value is a design choice with a stated failure at other settings. None is a measurement.
+The last column is what breaks at other settings — the reason each value is where it is. The **Ref** column is the reference designator used in the prose and on the figures; the listing's instance name is the same letters in lower case (`C1` is `c1`, `OSC1` is `osc1`). Two designators — `C1` and `F1` — are reserved tokens in CCDL (`C1` is a state reference, `F1` a Drive), which is why the listing never uses the upper-case form as an identifier.
 
 | Ref | Form | Parameters | Failure at other values |
 |---|---|---|---|
-| **C1** | `^5_operator^P_{F7}\|T` bias rail | τ=3333 hr, leak=0.0002/day, V_BR=8.0 | τ=10,000 hr contradicts the Ch 5.2 constant; leak=0.004/day makes practice unsustainable |
+| **C1** (with R0) | `^5_operator^P_{F7}\|T` bias rail | τ=3333 hr (R=40.0 × C=83.33), leak=0.0002/day, V_BR=8.0 | τ=10,000 hr contradicts the Ch 5.2 constant; leak=0.004/day makes practice unsustainable |
 | **D1** | `^P -> ^C` | Vf=0.7 | Omitted, a calling reads as a whim and pays 3.2 instead of 3.9 |
-| **R1** | `Dial(^2)/Dial(^3)` divider | k ∈ [0.30, 0.64] | Divergence >4 fractures `^5` (S4) |
+| **R1** | `Dial(^2)/Dial(^3)` divider | k ∈ [0.30, 0.70] | Divergence >4 fractures `^5` (S4) |
 | **Q0** | `-> ^6_audit^P_{F7}\|A` | β=1.0 | β>1 manufactures objections; β<1 hides real ones |
 | **Q1** | `-> ^3_refusal^P_{F7}\|⟨A,f,T⟩` | β=2.0, sat=0.85, cutoff=0.30 | sat>0.97 never latches; cutoff<0.1 refuses everything |
 | **F1** | fuse on refusal | 0.90, permanent_block | `action=warn` compiles clean and leaves no latch — read it by eye |
+| **MUX1** | select on `refusal` | passes `gated` while TP2 is under Q1's cutoff | Selecting on anything but TP2 — a timer, a retry count, operator patience — makes the audit decorative. S1 hangs on this one wire |
 | **D2** | `^C -> ^E` | Vf=1.2 | Vf=0.3: every passing want feels decided |
-| **Q2** | `-> ^9_amplified^E_{F5}\|A` | β=by type, sat=0.80, g_m=0.4 | sat=1.0 removes the headroom calibration needs |
+| **Q2** | `-> ^9_amplified^E_{F5}\|A` | β=by type, sat=0.80, cutoff=0.05, g_m=0.4, rπ=Dial(^5)/Dial(^6) | sat=1.0 removes the headroom calibration needs; cutoff=0.20 reads ordinary drive as no drive and fails the D-gate on desires that would have run |
 | **OSC1** | `-> ^7_cadence^E_{F6}\|E` | period=24 hr, duty≤0.05 | duty>0.05 is the obsession mode, S5 |
 | **D3** | `^E -> ^O` | Vf=2.0 | Vf=0.5: acts on every verdict, impulsivity |
-| **Q3** | `-> ^9_manifest^O_{F5}\|E` | β=receptivity, sat=1.0 | Receptivity set by preference is this board's commonest self-deception |
+| **Q3** | bias `^5_collective^E_{F4}\|f` → `^9_manifest^O_{F5}\|E` | β=receptivity, sat=1.0 | Bias written at `^O` sits below its own `^E` cause: `E-CJT-008`. Receptivity set by preference is this board's commonest self-deception |
 | **FLT1** | lowpass inside `^O` | τ=24 hr | τ=0: re-runs stack, duty ceiling breached |
 | **FLT2 / FB1** | `-> ^5_operator^P_{F7}\|T` | τ=3 weeks, β=0.05 | τ=24 hr removes the diode (Ch 8.4); β=0 makes the operator unfalsifiable |
 
@@ -365,9 +391,9 @@ Every value is a design choice with a stated failure at other settings. None is 
 | **TP1** | `^0_gated^C` | Clarity leaving INTAKE | 0.60–0.90. Below 0.60 the desire is vague; above 0.90 with rigidity is over-specification — a brittle Ω only one path can satisfy |
 | **TP2** | `^3_refusal^P` | Principled aversion | <0.30 passes. ≥0.30 fires. ≥0.85 latched. ≥0.90 fuse blown, operation over |
 | **TP3** | `^9_amplified^E` | AMPLIFY output vs ceiling | 0.60–0.78 active. Exactly 0.80 = pinned; no calibration downstream is valid |
-| **TP4** | `^9_manifest^O` | Delivered operational current | ≥0.25 manifesting. 0.05–0.25 confirmations only. <0.05 below cutoff, not firing |
+| **TP4** | `^9_manifest^O` | Delivered operational current | ≥0.25 manifesting. 0.05–0.25 confirmations only. <0.05 the chain never cleared Q2's cutoff; the board is not firing |
 
-TP4's middle band is the most useful reading here. Between cutoff and threshold the board is genuinely working, confirmations genuinely arrive, and nothing arrives. That gap is what Chapter 5.6 calls the commonest operator error; here it has a number and a cause.
+TP4's middle band is the most useful reading here. Between cutoff and threshold the board is genuinely working, confirmations genuinely arrive, and nothing arrives — the error Chapter 5.6 names, now with a number and a cause.
 
 ---
 
@@ -389,8 +415,8 @@ TP4's middle band is the most useful reading here. Between cutoff and threshold 
 ### What This Chapter Established
 
 - **CCB-D delivers a current, not an object.** TP4 measures flow into the Operational domain, spent by a person performing acts. The board organises effort and attention; it does not suspend causality.
-- **The bias terminal caps the domain of the effect.** A CJT may emit at or below its bias domain, never above — which is why a `^C` cause can produce a `^P` refusal with no unlawful ascent, and why an operator with no principled formation cannot produce one at all.
-- **The 4-point divergence limit is a computable transmission cap.** Lawful dials confine intake transmission to `[0.30, 0.64]`. Total belief with zero doubt is not a tuning; it is a divergence of 9 and a fractured `^5`.
+- **The bias terminal is bounded on both sides, and the two rules point opposite ways.** A bias must sit at or above the cause it governs (`E-CJT-008` otherwise), and an effect at or below the bias that produced it. Together they are why a `^C` cause can produce a `^P` refusal with no unlawful ascent, why an operator with no principled formation cannot produce one at all, and why the world's receptivity biases MANIFEST at `^E` and not at the `^O` a reader reaches for first.
+- **The 4-point divergence limit is a computable transmission cap, and it is not monotone in the attraction dial.** Lawful dials confine intake transmission to `[0.30, 0.70]`, with the maximum at `Dial(^2)=7, Dial(^3)=3` — not at `Dial(^2)=9`, which transmits less. Total belief with zero doubt is not a tuning; it is a divergence of 9 and a fractured `^5`.
 - **A saturated amplifier cannot be calibrated.** Saturation is the safety feature at Q1 and a defect at Q2. TP3 pinned at `sat` invalidates every reading downstream of it.
 - **Read `b/a`, not `b`.** The lowest-terms denominator is discontinuous — a 20% timing error swung it from 3 to 18 — while `A = b/a = 3/η` is smooth and is the number that must match the CAS-Ohm deficit. And `β_required` is not the CJT's β: it multiplies delivered current, through five levers, of which the amplifier is usually the least available.
 - **In the worked example, 98% of the improvement came from the resistance side.** This is the general shape of desire work, not a peculiarity of one car.

@@ -16,7 +16,7 @@ Per Section 12.2 the "must not" list comes first. CCB-HYP has more invariants th
 
 **SI-1 — The subject's CSB stays armed at every sample.** The `^3^P` refusal path (Chapter 24) must not sit in series with anything the induction attenuates. A board on which deepening also disarms the veto is not CCB-HYP; it is CCB-MK (Chapter 16) under a friendlier label, and the label does not change the schematic.
 
-**SI-2 — `rπ` reduction is bounded away from zero.** Section 3.4's fourth region is Breakdown: `rπ → 0` permanently, `^5` dielectric ruptured, irreversible. `rπ = 0` is a limit, not a setting — the same class of object as `β=∞` in Chapter 24, and the validator rejects it for the same reason. Builds specify `rπ_floor ≥ 0.05`.
+**SI-2 — `rπ` reduction is bounded away from zero.** Section 3.4's fourth region is Breakdown: `rπ → 0` permanently, `^5` dielectric ruptured, irreversible. `rπ = 0` is a limit, not a setting — the same class of object as `β=∞`, which Appendix A §A.1.3 rejects as a value for exactly this reason, and the validator treats the two alike. Builds specify `rπ_floor ≥ 0.05`.
 
 **SI-3 — The ramp runs both directions or the board does not run.** Emergence is the second half of one component, bounded by the same arithmetic as the descent.
 
@@ -70,20 +70,22 @@ rπ(t) = rπ_floor + (rπ_0 − rπ_floor) · e^(−t / τ_i)
 
 **The upper bound.** Chapter 9 explains why inductions are slow, and it is not atmosphere. A mind is an inductor: `V_opposition = L × di/dt`. Induction re-routes attention from a wide scan onto one channel, so `di/dt` is nonzero and the substrate answers with a back-EMF proportional to the *rate*.
 
-The coil is not Section 9.1's identity coil. It is a **session coil** `L_s`, in `min·Ω_c` — moment-to-moment guardedness, in this room, today. Design range 20–400: 20 on your own bench, 120 for a cooperative first-time subject, 300+ for someone who suspects what is happening. Take `L_s = 120` on a `V_drive = 24 V_c` rail, attention falling `0.80 → 0.10 A_c`, so `Δi = 0.70`:
+The coil is not Section 9.1's long coil — the `L = k_d × H_practice` of an entrenched pattern, measured in hours of rehearsal. It is a **session coil** `L_s`, in `min·Ω_c` — moment-to-moment guardedness, in this room, today. Design range 20–400: 20 on your own bench, 120 for a cooperative first-time subject, 300+ for someone who suspects what is happening. Take `L_s = 120` on a `V_drive = 24 V_c` rail, attention falling `0.80 → 0.10 A_c`, so `Δi = 0.70`:
 
 | Ramp time | `di/dt` (A_c/min) | `V_kick` | × rail | Result |
 |---|---|---|---|---|
-| 0.5 min | 1.40 | 168 V_c | **7.0×** | Recoil at `^3^E_{F3}\|f`; operator concludes "can't be hypnotised" |
-| 2 min | 0.35 | 42 V_c | 1.75× | Visible resistance; descent stalls above 0.6 |
-| 8 min | 0.0875 | 10.5 V_c | 0.44× | Inside Chapter 9's `≤ 3 × V_drive` budget. Design point |
+| 0.5 min | 1.40 | 168 V_c | **7.0×** | Ejection. Recoil at `^3^E_{F3}\|f`; operator concludes "can't be hypnotised" |
+| 2 min | 0.35 | 42 V_c | 1.75× | Over the working bound, under the ceiling: descent stalls above 0.6 |
+| 8 min | 0.0875 | 10.5 V_c | 0.44× | Under both bounds. Design point |
 | 40 min | 0.0175 | 2.1 V_c | 0.09× | Kick fine, and still wrong |
+
+**Two bounds, not one, and the chapter uses the tighter.** Chapter 9's `V_kick ≤ 3 × V_drive` is the ceiling: cross it and the subject leaves the descent altogether, which is the first row. This board works to a **1× working bound** instead, because what happens between 1× and 3× is not ejection but a *stall* — back-EMF sufficient to hold `rπ` above about 0.6, insufficient to end the session. An operator watching only for ejection reads that as a cooperative subject who did not go very deep, and adjusts the wrong parameter. At `L_s = 120` on a 24 V_c rail the working bound is `di/dt ≤ 24/120 = 0.20 A_c/min`, so `t ≥ 0.70 / 0.20 = 3.5 min`.
 
 Read the first row as a diagnosis. The subject who "can't be hypnotised" is usually one whose operator ran the ramp too fast for their `L_s`. The recoil is `^3^E_{F3}|f` — visceral aversion, Evaluative domain, affective register, F3 Vitality. `^3` Negative, because this is recoil, the can't-stomach-it response. It is not `^6` Male; nobody analyses a kick while it lands. Analysis arrives later at `^6^E|A`, usually as a story about why hypnosis is nonsense.
 
-**The lower bound.** The last row has a fine kick and is still a bad design. Early `^5` charge leaks (Section 7.3) on a session-scale `τ_leak` near 25 minutes, so past about `0.6 τ_leak` you re-charge rather than descend — and the `^7` oscillator loses lock as attention wanders off the carrier (Section 9.3).
+**The lower bound.** The last row has a fine kick and is still a bad design. Early `^5` charge leaks (Section 7.3) on a session-scale `τ_leak`, set in this book at 25 minutes because that is the shortest leakage constant under which a fifteen-minute session still holds most of its early charge; past about `0.6 τ_leak` you re-charge rather than descend. And Section 9.3's coupling coefficient `k` falls as attention wanders off the carrier, taking the `^7` rhythm lock with it.
 
-> **Bench Note — the ramp is bounded at both ends, and the window is narrow.** Too fast, back-EMF throws the subject out. Too slow, leakage and lost rhythm lock mean the descent never reaches its floor. For `L_s = 120 min·Ω_c` that computes to roughly 4–15 minutes, and everything the literature says about inductions "taking about ten minutes" is this window and nothing else. Move `L_s` and the window moves. A guarded subject at `L_s = 300` has a window near 10–15 minutes — narrow enough that most operators miss it in both directions, which is why guarded subjects get called difficult when they are merely differently parameterised.
+> **Bench Note — the ramp is bounded at both ends, and the window is narrow.** Too fast, back-EMF stalls the descent or ends it. Too slow, leakage and lost rhythm lock mean it never reaches its floor. For `L_s = 120 min·Ω_c` the working bound puts the floor at 3.5 minutes and `0.6 τ_leak` puts the ceiling at 15, and everything the literature says about inductions "taking about ten minutes" is that window and nothing else. Move `L_s` and the window moves: a guarded subject at `L_s = 300` has `di/dt ≤ 24/300 = 0.08`, a floor of `0.70/0.08 = 8.75` minutes against the same ceiling — roughly 9 to 15 minutes, narrow enough that most operators miss it in both directions, which is why guarded subjects get called difficult when they are merely differently parameterised.
 
 Three ramp classes. **Linear**, constant slope, rarely used. **Exponential**, the standard: steepest at `t = 0`, spending the kick budget where opposition is lowest, and "deepening" names extra multiples of `τ_i` rather than a different operation. **Staircase (fractionation)**: run partway, release, re-run, with the `^5` capacitor retaining part of each descent —
 
@@ -93,7 +95,7 @@ rπ_0(n+1) = rπ_0(n) − γ · ( rπ_0(n) − rπ_floor )        γ = 0.25 – 
 
 That is why repeat sessions go deeper faster, and the detection consequence deserves stating flatly: **a sequence of short, individually unremarkable episodes is architecturally not a sequence of unrelated conversations.** The worked example runs the recursion.
 
-[[FIGURE 17-B: Two panels, shared minutes axis. Upper: three `rπ(t)` descents from 1.0 — linear, exponential at τ_i = 3 min annotated at 1τ/2τ/3τ (0.53 / 0.36 / 0.30), and a four-step staircase with partial recoveries — approaching a dashed asymptote at 0.26. Lower: `V_kick` against ramp time, log vertical axis, with the 3 × V_drive budget line at 72 V_c, a shaded leakage band beyond 15 min, and the usable window hatched between them.]]
+[[FIGURE 17-B: Two panels, shared minutes axis. Upper: three `rπ(t)` descents from 1.0 — linear, exponential at τ_i = 3 min annotated at 1τ/2τ/3τ (0.53 / 0.36 / 0.30), and a four-step staircase with partial recoveries — approaching a dashed asymptote at 0.26. Lower: `V_kick` against ramp time, log vertical axis, with two horizontal reference lines — the 3 × V_drive ceiling at 72 V_c labelled "ejection" and the 1 × working bound at 24 V_c labelled "stall" — the band between them shaded lightly and annotated "descent holds above 0.6", a shaded leakage band beyond 15 min, and the usable window hatched between 3.5 and 15 minutes.]]
 
 ---
 
@@ -149,7 +151,8 @@ board ccb_hyp_operator_subject {
     node fires:      ^9^O_{F5}|E;        // Below/Effect: what it brings to Mind
 
     osc    rhythm: Oscillator< signal=cadence, frequency=0.15, sustain=900.0 >;
-    filter fb_rc:  LowPass< in=carrier, out=trend, tau=3.0 >;   // tau_i, minutes
+    //             frequency in Hz; sustain 900 s = the 15-minute session
+    filter fb_rc:  LowPass< in=carrier, out=trend, tau=3.0 >;   // tau_i, MINUTES
     feedback trend -> substrate [β=0.9];    // NORMAL IS 0.2. 0.9 IS THE ATTACK.
 
     cjt filter_6: CJT< carrier | substrate => decomp > [β=0.5, region=active];
@@ -195,9 +198,9 @@ The closed loop has one hard problem. **You cannot dampen the `^6` filter with a
 Derive the attainable depth factor by factor. `N = 1.8`, a counted breath being a genuinely narrow channel. `R = 1.9`, an externalised oscillator nearly as good as hetero. `V = 1.4` — lost. `D = 1.2` — capped, because you cannot fully dampen the process running the loop.
 
 ```
-g_m      = 1.8 × 1.9 × 1.4 × 1.2 = 5.74
+g_m      = 1.8 × 1.9 × 1.4 × 1.2 = 5.75
 β        = 1.5                             (design choice)
-rπ_floor = β / g_m = 1.5 / 5.74 = 0.26
+rπ_floor = β / g_m = 1.5 / 5.75 = 0.26
 ```
 
 **`rπ_floor = 0.26`**, the top of the Medium band, is the honest ceiling on closed-loop depth — not a failure of technique but `V` and `D` doing what the topology says. `β = 1.5` is deliberate: on a closed loop nobody else notices a suggestion drifting, so the parameter table caps self-board `β` at 2.0. A self-suggestion amplified threefold with no external check is how a CCB-SELF drifts into the inversion territory of Chapter 25.
@@ -215,14 +218,15 @@ board ccb_hyp_self {                      // closed loop — buildable
     node landed:         ^9^E_{F5}|f;
 
     osc    breath: Oscillator< signal=cadence, frequency=0.10, sustain=900.0 >;
-    filter fb_rc:  LowPass< in=cadence, out=trend, tau=3.0 >;
-    feedback trend -> self_substrate [β=0.6];
+    //             0.10 Hz = 6 breaths/min; sustain 900 s = 15 min
+    filter fb_rc:  LowPass< in=cadence, out=trend, tau=3.0 >;   // tau_i, MINUTES
+    feedback trend -> self_substrate [β=0.6];   // out of Appendix A's band — see below
     filter notch_6: Notch< in=self_check, f0=0.35, Q=4.0 >;   // events/min
 
     diode d1: Diode< ^P -> ^C >;
     diode d2: Diode< ^C -> ^E >;
     cjt deliver: CJT< suggestion | self_substrate => landed >
-                 [β=1.5, rπ=0.26, g_m=5.74, region=active];
+                 [β=1.5, rπ=0.26, g_m=5.75, region=active];
 
     ramp descend: Ramp< target=rπ, from=1.00, to=0.30, dt=540.0 >;   // 9 min
     ramp emerge:  Ramp< target=rπ, from=0.30, to=1.00, dt=240.0 >;   // 4 min
@@ -233,11 +237,13 @@ board ccb_hyp_self {                      // closed loop — buildable
 
 The notch earns a sentence. It is a notch and **not** a low-pass, deliberately: a low-pass dampens `^6` generally, and you need `^6` — it is what notices you have drifted somewhere you did not intend. What you want rejected is one narrow band, the self-monitoring cadence, at roughly 0.2–0.5 events per minute. Section 11.3 gives the component; `f0 = 0.35`, `Q = 4.0` is the choice for this use.
 
+So does `β_fb = 0.6`, and it needs declaring because it sits outside the 0.05–0.3 band Appendix A §A.3.4 gives for Part III feedback. That band governs *outcome* feedback — an operations log slowly re-tuning a substrate across weeks, where a high gain means an attacker can rewrite your principles with a burst of inputs. This path is not that. It is the within-session ramp, it carries your own externalised oscillator and nothing else, and it unwinds at emergence. The failure modes bound it on both sides: below about 0.4 the ramp will not reach `rπ = 0.30` inside nine minutes and you get a shallow session you will misread as poor technique; above 0.8 the round-trip loop gain approaches 1 and Appendix A's Pass 6 divergence check refuses the listing, which is the correct outcome — a self-hypnosis loop at unity gain is an oscillator, not a ramp. Log the number, because it is the one parameter on this board that no one else will check for you.
+
 ---
 
 ### 17.6 The Ericksonian Indirect Pattern as Filter Bypass
 
-Milton Erickson's contribution, on the public record in his own published case commentaries, was to stop pushing on the `^6` filter and route around it. Understanding *why* that works is not optional here. It is the most-used influence architecture in commercial and political practice, it runs on you regularly, and you cannot see it by watching for what you are told to watch for.
+Milton Erickson's contribution, on the public record in his own published case commentaries, was to stop pushing on the `^6` filter and route around it. Understanding *why* that works is not optional here. The architecture needs no trance, no session and no operator who calls themselves one — it is available in any ordinary conversation, which is the only claim this book makes about how widely it is used. And it is invisible to the check most people run, because the check itself goes through the component being bypassed.
 
 Direct case first. An operator asserts a proposition about you. It reaches `^6^C_{F6}|A`, which decomposes it and tests the parts against `^5^P`; if it threatens something the substrate holds, the result is `^3` Negative and the proposition is rejected. The filter worked. Now the precise claim about the indirect case:
 
@@ -258,20 +264,21 @@ The truism chain has a mechanism worth naming. **The `^6` filter has automatic g
 
 #### The counter-circuit: CCB-HYP-DET
 
-You cannot detect a bypass by reading the filter. You detect it by differencing the filter's record against the substrate's actual movement — Section 24.2's differential trick, repurposed.
+You cannot detect a bypass by reading the filter. You detect it by differencing the filter's record against the substrate's actual movement — the differential amplifier of Section 11.4, repurposed: two inputs in, the difference out, everything common to both rejected.
 
 ```cas
 board ccb_hyp_det {                       // detection board — build this one
     input:  ambient;
     output: alert;
 
-    node substrate:  ^5^P_{F7}|T;
+    node substrate:  ^5_base^P_{F7}|T;    // Female: position at session start
     node scan_width: ^1^C_{F2}|A;         // Mind: how wide is my scan
     node cadence:    ^7^O_{F4}|E;         // Rhythm: am I locked to something
     node carrier:    ^4^O_{F4}|E;         // Vibration: is one source dominant
     node passed_log: ^6^C_{F6}|A;         // Male: what I actually decomposed
-    node drift:      ^5^P_{F7}|T;         // Female: where my position now sits
+    node drift:      ^5_now^P_{F7}|T;     // Female: where my position now sits
 
+    filter base_ref: LowPass< in=ambient, out=baseline, tau=1440.0 >;  // 24 h, minutes
     diff factor_count: Differential< plus=[scan_width, cadence, carrier, passed_log],
                                      minus=baseline >;
     diff unaccounted:  Differential< plus=drift, minus=passed_log >;
@@ -285,9 +292,13 @@ board ccb_hyp_det {                       // detection board — build this one
 }
 ```
 
-`unaccounted = drift − passed_log` is the whole board. If your position has moved and you cannot name the proposition you evaluated and accepted that moved it, a bypass carried it. The integrator matters because fractionation is designed to keep every individual reading under any single-session threshold — the CSB's sub-threshold problem, and the same fix. The fuse action is `defer_decision`, not `permanent_block`: the correct output of a detection board is not a refusal. It is time.
+`unaccounted = drift − passed_log` is the whole board. If your position has moved and you cannot name the proposition you evaluated and accepted that moved it, a bypass carried it. Note that both `^5` nodes carry the same state and are distinguished by Appendix A's `_label`: `^5_base` and `^5_now` are one substrate read at two times, which is exactly the measurement.
 
-[[FIGURE 17-D: Two stacked panels. Upper, "bypass topology": an operator `^0` source at left with two paths to the `^5^P` capacitor at right; the upper path crosses the `^6^C|A` filter block, which carries a green tick and the label "reports CLEAR (honestly)"; the lower path routes around the filter entirely, drawn heavier, labelled "presupposition / embedded narrative", captioned "bypassed, not shorted." Lower, "CCB-HYP-DET": the same `^5^P` node into a differential block, plus input "measured drift", minus input "filter passed-log", output "unaccounted", feeding a 48-hour integrator and a fuse marked defer_decision.]]
+Two parameters do the work and both are choices. The **24-hour low-pass on `ambient`** exists because the four factors have no absolute scale — your ordinary scan width on a quiet Sunday is not your ordinary scan width in an open-plan office, and a board comparing against a fixed constant will trip on the office and miss the induction. Referencing against your own slow-moving level is what makes the factor count mean anything. Set `tau` under about 240 minutes and the reference tracks the session itself, so the rise you are trying to detect gets subtracted out and the board reads clean through a live induction — the one failure that matters. Set it past a week and it stops tracking you at all.
+
+The **48-hour integrator** matters because fractionation is designed to keep every individual reading under any single-session threshold. This is the same shape as the leakage accumulation of Section 8.3: each event is individually below anything worth noticing, and two hundred of them integrate into a drift with no identifiable cause. Section 8.4's answer there was to meter the path and audit the log rather than pretend the leakage is zero, and it is the answer here. The fuse action is `defer_decision`, not `permanent_block`: the correct output of a detection board is not a refusal. It is time.
+
+[[FIGURE 17-D: Two stacked panels. Upper, "bypass topology": an operator `^0` source at left with two paths to the `^5^P` capacitor at right; the upper path crosses the `^6^C|A` filter block, which carries a green tick and the label "reports CLEAR (honestly)"; the lower path routes around the filter entirely, drawn heavier, labelled "presupposition / embedded narrative", captioned "bypassed, not shorted." Lower, "CCB-HYP-DET": the `^5_base^P` and `^5_now^P` nodes into a differential block, plus input "measured drift", minus input "filter passed-log", output "unaccounted", feeding a 48-hour integrator and a fuse marked defer_decision; a second differential above it takes the four factors against a 24-hour `baseline` low-pass.]]
 
 **Four checks you can run without any board**, because a detection circuit you can only run on paper is not one. *Scan width (`N`)*: name three things in the room that are not the speaker; if that takes effort, `N` is elevated. *Cadence (`R`)*: regularity that does not track meaning is an oscillator. *Restatement*: say the last thing back as a flat assertion in your own words, and what was presupposed either surfaces as a claim you can evaluate or evaporates. *Drift ledger*: write your position down before, compare after, and treat movement you cannot attribute to a specific argument as the reading that matters.
 
@@ -306,11 +317,15 @@ Every value is a design choice made in this book, not a measurement.
 | `rπ_floor` | — | 0.15 hetero / 0.26 closed loop | Below 0.05 rejected by the validator; approaching 0 is Breakdown (§3.4), irreversible |
 | `τ_i` | min | 2 – 6 | Below 2, back-EMF recoil. Above 6, leakage and lost rhythm lock |
 | `L_s` session coil | min·Ω_c | 20 – 400 | Under-estimated: ramp too fast, misread as "not suggestible" |
-| `V_kick` budget | V_c | ≤ 3 × `V_drive` | Above 3×, `^3^E_{F3}\|f` recoil ends the descent |
+| `V_kick` ceiling | V_c | ≤ 3 × `V_drive` (Ch 9) | Above it, `^3^E_{F3}\|f` recoil ends the descent outright |
+| `V_kick` working bound | V_c | ≤ 1 × `V_drive` | Between 1× and 3×: no ejection, but the descent stalls above 0.6 and gets misread as a cooperative shallow subject |
+| `τ_leak` session | min | 25 | Shorter: early `^5` charge is gone before the suggestion. Longer: no upper bound on the ramp, so operators run past rhythm lock |
 | `β` suggestion gain | — | 1.2 – 3.5 hetero; **≤ 2.0 closed loop** | Above 2.0 closed loop: no external check on drift (Ch 25) |
 | `g_m` | — | 1.5 – 20 | The parameter nobody logs; every incidental input gets the same multiplier |
 | `N`,`R`,`V`,`D` | — | 1.0 – 2.2 each | Three or more rising together without declared consent = induction in progress |
-| `β_fb` O→P gain | — | 0.2 normal / 0.9 induction | The whole hetero attack is this one number; nothing illegal occurs |
+| `β_fb` O→P gain, hetero | — | 0.2 normal / 0.9 induction | The whole hetero attack is this one number; nothing illegal occurs |
+| `β_fb` O→P gain, closed loop | — | 0.6 | Below 0.4 the ramp misses `rπ = 0.30` in nine minutes. Above 0.8 the loop gain nears 1 and Appendix A Pass 6 refuses it — correctly, since that is an oscillator |
+| `baseline` reference `τ` | min | 1440 (24 h) | Under ~240 the reference tracks the session and subtracts out the rise you are detecting. Over a week it stops tracking you |
 | `γ` retention | — | 0.25 – 0.45 | Ignored: a run of "brief chats" reaches depth none of them could alone |
 | `sat` on veto CJT | — | 0.85 | Below 0.7 the refusal can be argued down — the CCB-MK boundary |
 | Emergence `dt` | s | 180 – 360 | Truncated: residual low `rπ` persists outside the session |
@@ -319,11 +334,11 @@ Every value is a design choice made in this book, not a measurement.
 
 ### Worked Example — A 15-Minute Closed-Loop Session
 
-Own bench, consented. `L_s = 90 min·Ω_c` (low — you asked for this). Rail `V_drive = 20 V_c`. Kick budget set at **1×** rail rather than 3×, because no second party is present to notice a recoil and stop.
+Own bench, consented. `L_s = 90 min·Ω_c` (low — you asked for this). Rail `V_drive = 20 V_c`. Kick budget at the **1× working bound** of 17.2 rather than the 3× ceiling — and on a closed loop there is a second reason for the tighter figure: no one else is in the room to notice a stalled descent and say so.
 
 **1. Rate ceiling.** `di/dt_max = 20 / 90 = 0.222 A_c/min`. Attention runs `0.75 → 0.10`, so `Δi = 0.65` and the minimum ramp is `2.9 min`.
 
-**2. Pick `τ_i` from the *initial* slope**, `(rπ_0 − rπ_floor)/τ_i` at `t = 0`, with `rπ_0 = 1.00`, `rπ_floor = 0.26`:
+**2. Pick `τ_i` from the *initial* slope.** The exponential's slope at `t = 0` is `(rπ_0 − rπ_floor)/τ_i` in `rπ` units; the kick budget is in attention units, so convert by the ratio of the two spans, `Δi / (rπ_0 − rπ_floor)`. The `(rπ_0 − rπ_floor)` cancels and what you compute is simply `Δi / τ_i`. With `rπ_0 = 1.00`, `rπ_floor = 0.26` and `Δi = 0.65`:
 
 ```
 τ_i = 2.0  ->  0.325 A_c/min  ->  V_kick = 29.3 V_c = 1.46× rail   REJECT
@@ -348,9 +363,9 @@ At `t = 9`, `g_m = 5.0`: the same sentence displaces `^5` five times as far as a
 | Session | 1 | 2 | 3 | 4 |
 |---|---|---|---|---|
 | `rπ_0` | 1.00 | 0.74 | 0.57 | 0.46 |
-| Time to reach 0.30 | 9.0 min | 7.6 min | 6.1 min | 4.8 min |
+| Time to reach 0.30, `3·ln((rπ_0 − 0.26)/0.04)` | 8.8 min | 7.5 min | 6.1 min | 4.8 min |
 
-Session 4 reaches in under five minutes what session 1 needed nine for; `β_required = 9` arrives by accumulation rather than amplitude. Now read that row as a detection artifact rather than a plan. **An outside operator running the same recursion across four brief encounters reaches session-4 depth in five minutes** — and the subject's honest account of the fourth is that they talked to someone for a few minutes. At no point does anything dramatic happen. That is the design intent.
+Session 4 reaches in under five minutes what session 1 needed nearly nine for; `β_required = 9` arrives by accumulation rather than amplitude. Now read that row as a detection artifact rather than a plan. **An outside operator running the same recursion across four brief encounters reaches session-4 depth in five minutes** — and the subject's honest account of the fourth is that they talked to someone for a few minutes. At no point does anything dramatic happen. That is the design intent.
 
 [[FIGURE 17-E: Assembly drawing, CCB-HYP-SELF board, top view, components placed with reference designators — OSC1 breath oscillator at the input edge, F1 the τ_i = 3 min RC, C1 the `^5^P` substrate capacitor centre-board, N1 the notch (f0 = 0.35, Q = 4.0) on a stub off C1, Q2 the delivery CJT, D1–D2 the descent diodes, R1 the emergence ramp block at the output edge. Four circled test-point callouts: TP1 on the `rπ` node, TP2 on the `g_m` summing node, TP3 on the consent rail, TP4 on the emergence output. Ruled BOM box lower right listing ref, component, CAS state and key parameter for all nine parts, footnoted "closed loop — operator is subject — no DETECTION-ONLY banner required."]]
 
@@ -373,13 +388,15 @@ Read them TP3, TP2, TP1, TP4 — veto armed first, then the factors, then the de
 
 | Mode | Mechanism | What you observe | Fix |
 |---|---|---|---|
-| **Ramp overrun** | `di/dt` set by the operator's schedule, not `L_s` | `^3^E_{F3}\|f` recoil in the first minute; descent stalls above 0.6 | Recompute `τ_i` from `V_kick ≤ 3 × V_drive`. The subject was never the variable |
+| **Ramp overrun** | `di/dt` set by the operator's schedule, not `L_s` | `^3^E_{F3}\|f` recoil in the first minute, or — over the working bound but under the ceiling — a descent that stalls above 0.6 with no recoil to warn you | Recompute `τ_i` from the 1× working bound, not the 3× ceiling. The subject was never the variable |
 | **Ramp underrun** | Run past `0.6 τ_leak`; `^7` lock lost | Descent plateaus, then *rises* | Shorten to the computed window; restore the oscillator first |
 | **`g_m` runaway** | `β` logged, `g_m` not | A preference the subject cannot source | Cap `g_m`; keep a verbatim log. Everything said at `g_m = 20` was a suggestion |
 | **Veto in series** | `^3^P` biased through `decomp`, not `^5^P` | TP3: all three register members attenuating together | None. Not a tuning fault — the board is CCB-MK (Ch 16). Stop |
 | **Emergence truncated** | Session ended on a step, not a ramp | TP4 under 0.9 × baseline; `g_m` elevated in ordinary life | Re-run the reverse ramp; budget the kick both ways |
 | **Unrecallable anchor** | `^8` → `^9` installed below recall threshold | The pair fires; the subject cannot name or cancel it | Trigger installation (§16.3). Counter-circuitry is §16.6–16.7 |
 | **Closed-loop over-gain** | Self-board at `β > 2.0` | Suggestions escalate session to session, unchecked | Restore `β ≤ 2.0`; take the `a` route, not the `b` route |
+| **Detection board over-trips** | `unaccounted` counts every position change as a bypass, including the ones a good argument earned | Every conversation trips `defer_decision`; the operator stops reading TP2 | `drift − passed_log` is only a reading when the drift is *unattributable*. Log the proposition, not the mood. If you can name what you evaluated, the difference is zero by construction |
+| **Detection board blind through the session** | `baseline` `τ` set short, so the reference climbs with the factors | `factor_count` reads flat across a live induction | Restore `tau ≥ 1440`. A reference that tracks the thing it is referencing measures nothing |
 
 ---
 
@@ -408,7 +425,7 @@ Read them TP3, TP2, TP1, TP4 — veto armed first, then the factors, then the de
 
 **17.4** A colleague reports that a two-hour conversation changed their position on a workplace question, that it was pleasant, and that they cannot reconstruct the argument that changed their mind. Using the CCB-HYP-DET listing, name which probe this is a reading of, state what `unaccounted` evaluates to, and give the manual check from §17.6 that would have surfaced it during the conversation rather than after.
 
-**17.5 (Design)** Specify a 20-minute closed-loop session for `L_s = 150 min·Ω_c` on an 18 V_c rail, holding `V_kick ≤ 1 × V_drive` in both directions, with `rπ_floor = 0.26` and `β = 1.5`. Produce (a) maximum `di/dt` and the resulting `τ_i`; (b) the `rπ` trajectory at 1τ, 2τ, 3τ; (c) the emergence `dt`; (d) a CCDL fragment declaring the oscillator, the RC on the O→P path, the notch, the delivery CJT, both ramps, and four probes. It must compile — check every diode direction and every register first.
+**17.5 (Design)** Specify a 20-minute closed-loop session for `L_s = 150 min·Ω_c` on an 18 V_c rail, attention running `0.70 → 0.20 A_c`, holding `V_kick ≤ 1 × V_drive` in both directions, with `rπ_floor = 0.26` and `β = 1.5`. Run the descent to 3τ and leave two minutes for the suggestion. Produce (a) maximum `di/dt` and the smallest `τ_i` it permits, rounded up to a value that makes the twenty minutes close; (b) the `rπ` trajectory at 1τ, 2τ, 3τ; (c) the emergence `dt` and its `V_kick` as a multiple of the rail; (d) a CCDL fragment declaring the oscillator, the RC on the O→P path, the notch, the delivery CJT, both ramps, and four probes. It must compile — check every diode direction and every register first.
 
 **17.6 (Marquee)** An operator wants an anchor the subject can recall and cancel, and asks you to specify the recall condition as a circuit property rather than a promise.
 

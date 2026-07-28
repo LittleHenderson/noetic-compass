@@ -1,0 +1,161 @@
+% Figure 18-B — CCB-ADV full schematic with reference designators.
+% Every stage carries its designator, its gain and saturation, and the full
+% CAS literal of the node it produces.  The bias rail runs down the left; the
+% INJECT / RESOLVE branch sits inside a hatched detection-only boundary whose
+% top edge carries the banner.
+\providecommand{\casU}{\textasciicircum}
+\providecommand{\casS}[1]{\_\{#1\}}
+\begin{tikzpicture}[
+  font=\sffamily\scriptsize,
+  spine/.style={text width=45mm, minimum height=7mm, font=\sffamily\scriptsize},
+  lane/.style={text width=29mm, minimum height=11mm, font=\sffamily\scriptsize},
+  side/.style={text width=24mm, minimum height=6mm, font=\sffamily\scriptsize},
+  half/.style={text width=19mm, minimum height=6mm, font=\sffamily\scriptsize}
+]
+
+  % ================= input ==============================================
+  \node[casterm, text width=34mm] (in) at (0,0.35)
+    {creative \ \ (board input)};
+
+  % ================= drive + bias =======================================
+  \node[nblock, spine] (media) at (0,-0.90)
+    {\textbf{MEDIA} \ Oscillator\\
+     f = 3.0/wk \textperiodcentered\ sustain = 12.0 wk};
+
+  \node[pblock, spine] (cseg) at (0,-2.30)
+    {\textbf{C\_SEG} \ Capacitor \ \ \textbf{[TP1]}\\
+     segment \casnote{\casU5\casU P\casS{F4}|f}\\
+     C = 9.50, leak = 0.04/wk};
+
+  \draw[flow] (in)    -- (media);
+  \draw[flow] (media) -- (cseg);
+
+  % ---- bias rail -------------------------------------------------------
+  \draw[line width=1.0pt, draw=casPedge, rounded corners=3pt]
+    (cseg.west) -- (-4.05,-2.30) -- (-4.05,-13.45);
+  \node[font=\sffamily\scriptsize\itshape, rotate=90, anchor=south,
+        text=casPedge] at (-4.18,-8.00) {bias rail \ b = 0.950};
+
+  % ================= endorsement coupling ===============================
+  \node[pblock, side] (endor) at (4.05,-0.90)
+    {\textbf{endorser}\\ \casnote{\casU5\casU P\casS{F7}|T}};
+  \node[nblock, side] (endorse) at (4.05,-2.30)
+    {\textbf{ENDORSE}\\ Transformer\\ n = 0.35};
+  \node[cblock, side] (prod) at (4.05,-3.85)
+    {\textbf{product}\\ \casnote{\casU0\casU C\casS{F2}|A}};
+
+  \draw[flow] (endor)   -- (endorse);
+  \draw[flow] (endorse) -- (prod);
+
+  % ================= association bank ===================================
+  \node[cblock, spine] (assoc) at (0,-3.85)
+    {\textbf{ASSOC} \ CJT \ \ \textbf{[TP2]}\\
+     $\beta$ = 2.0, sat = 0.85\\
+     cue \casnote{\casU8\casU C\casS{F4}|A}};
+
+  \node[cblock, spine] (flip) at (0,-5.25)
+    {\textbf{FLIP} \ CJT \ $\beta$ = 1.2, sat = 0.85\\
+     surfaced \casnote{\casU9\casU C\casS{F4}|f}};
+
+  \draw[flow] (cseg)  -- (assoc);
+  \draw[flow] (prod)  -- (assoc);
+  \draw[flow] (assoc) -- (flip);
+
+  % ================= two branches =======================================
+  \node[casterm, text width=26mm, font=\sffamily\scriptsize]
+        (ideal) at (-1.91,-6.80)
+    {ideal \casnote{\casU0\casU C\casS{F2}|A}};
+
+  \node[eblock, lane] (inject) at (-1.91,-7.92)
+    {\textbf{INJECT} \ CJT\\ $\beta$ = 2.5, sat = 0.85\\
+     gap \casnote{\casU3\casU E\casS{F3}|f}};
+
+  \node[eblock, lane] (resolve) at (-1.91,-9.42)
+    {\textbf{RESOLVE} \ CJT\\ $\beta$ = 2.0, sat = 0.85};
+
+  \node[eblock, lane] (affirm) at (1.91,-7.92)
+    {\textbf{AFFIRM} \ CJT\\ $\beta$ = 2.0, sat = 0.85\\
+     pull \casnote{\casU2\casU E\casS{F4}|f}};
+
+  \node[eblock, lane] (want) at (1.91,-9.42)
+    {\textbf{WANT} \ CJT\\ $\beta$ = 1.2, sat = 0.85};
+
+  \draw[flow] (ideal)  -- (inject);
+  \draw[flow] (inject) -- (resolve);
+  \draw[flow] (affirm) -- (want);
+  \draw[flow, rounded corners=3pt]
+    (flip.south) -- (0,-5.92) -- (1.91,-5.92) -- (affirm.north);
+
+  % ================= conversion chain ===================================
+  \node[eblock, spine] (intent) at (0,-10.92)
+    {\textbf{intent} \ \casnote{\casU9\casU E\casS{F5}|f} \ \ \textbf{[TP3]}\\
+     both branches land on the same node};
+
+  \draw[line width=0.6pt, rounded corners=3pt]
+    (resolve.south) -- (-1.91,-10.38) -- (0,-10.38);
+  \draw[line width=0.6pt, rounded corners=3pt]
+    (want.south) -- (1.91,-10.38) -- (0,-10.38);
+  \fill[black] (0,-10.38) circle (1.2pt);
+  \draw[flow] (0,-10.38) -- (intent.north);
+
+  \node[nblock, half] (rprice) at (-1.25,-12.20)
+    {\textbf{R\_PRICE}\\ Resistor R = 4.0};
+  \node[nblock, half] (d3) at (1.25,-12.20)
+    {\textbf{D3} \ Diode\\ \casnote{\casU E$\to$\casU O} \ Vf = 2.0};
+
+  \draw[flow, rounded corners=3pt]
+    (intent.south) -- (0,-11.70) -- (-1.25,-11.70) -- (rprice.north);
+  \draw[flow] (rprice) -- (d3);
+
+  \node[oblock, spine] (close) at (0,-13.65)
+    {\textbf{CLOSE} \ CJT \ \ \textbf{[TP4]}\\
+     $\beta$ = 1.0, cutoff = 0.20\\
+     sale \casnote{\casU9\casU O\casS{F5}|E}};
+
+  \draw[flow, rounded corners=3pt]
+    (d3.south) -- (1.25,-12.95) -- (0,-12.95) -- (close.north);
+
+  \node[casterm, text width=34mm] (out) at (0,-15.05)
+    {transaction \ \ (board output)};
+  \draw[flow] (close) -- (out);
+
+  % ---- bias taps: horizontal stubs off the rail ------------------------
+  \foreach \n in {assoc,flip,inject,resolve,intent,close}
+    \draw[fbflow, draw=casPedge] (-4.05,0 |- \n.west) -- (\n.west);
+
+  % ================= consumer safety branch =============================
+  \node[pblock, side] (csb) at (4.05,-10.92)
+    {\textbf{CSB} \ CJT\\ $\beta$ = 2.0, sat = 0.85\\
+     refusal \casnote{\casU3\casU P\casS{F7}|T}};
+  \node[nblock, side] (fuse) at (4.05,-12.60)
+    {\textbf{CSB\_FUSE} \ Fuse\\ 0.90,\\ permanent\_block};
+
+  \draw[flow] (csb) -- (fuse);
+  \draw[fbflow, rounded corners=3pt, draw=black]
+    (in.east) -- (5.48,0.35) -- (5.48,-10.92) -- (csb.east);
+
+  \draw[rounded corners=3pt, line width=0.7pt, draw=black]
+    (fuse.south) -- (4.05,-13.65) -- (2.66,-13.65);
+  \draw[line width=1.2pt, draw=black] (2.62,-13.95) -- (2.62,-13.35);
+  \node[flowlbl, anchor=north west, align=left, text width=24mm]
+    at (2.72,-13.92)
+    {latches a permanent block --- absent by default on real boards};
+
+  % ================= detection-only hatched boundary ====================
+  \node[font=\sffamily\tiny\bfseries, fill=white, draw=casEedge,
+        line width=0.5pt, inner sep=1.5pt, rounded corners=1pt,
+        text width=34mm, align=center] (stamp) at (-1.91,-6.18)
+    {DETECTION-ONLY SCHEMATIC\\ DO NOT BUILD};
+
+  \begin{scope}[on background layer]
+    \fill[white] (-3.74,-10.18) rectangle (-0.08,-6.18);
+    \begin{scope}
+      \clip (-3.74,-10.18) rectangle (-0.08,-6.18);
+      \foreach \i in {-8.2,-7.9,...,0.6}
+        \draw[draw=casEedge!65, line width=0.45pt] (\i,-10.7) -- (\i+4.1,-5.6);
+    \end{scope}
+    \draw[draw=casEedge, line width=0.7pt]
+      (-3.74,-10.18) rectangle (-0.08,-6.18);
+  \end{scope}
+
+\end{tikzpicture}

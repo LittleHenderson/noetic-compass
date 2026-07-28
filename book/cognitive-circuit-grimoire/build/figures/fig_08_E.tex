@@ -1,0 +1,63 @@
+% Figure 8-E -- Design map for the O->P feedback path.
+% Horizontal: filter time constant tau (log, hours to years).
+% Vertical:   feedback gain beta (0 to 0.5).
+% Three hazard regions (tinted, dashed borders) and one design target
+% (heavier solid border) at tau >= 3 weeks, beta <= 0.05.
+\begin{tikzpicture}
+\begin{axis}[
+  casaxis,
+  width=10.4cm, height=7.4cm,
+  xmode=log, xmin=0.035, xmax=760,
+  xtick={0.0417,0.25,1,7,21,91,365},
+  xticklabels={1\,h,6\,h,1\,d,1\,wk,3\,wk,3\,mo,1\,yr},
+  minor xtick={},
+  ymin=0, ymax=0.5, ytick={0,0.05,0.1,0.2,0.3,0.4,0.5},
+  yticklabel style={/pgf/number format/fixed,
+                    /pgf/number format/precision=2},
+  xlabel={filter time constant $\tau$ \ (log scale)},
+  ylabel={feedback gain $\beta$},
+]
+
+% ---- hazard: short tau -- the diode is removed ------------------------
+\path[fill=casEfill, fill opacity=0.55, draw=casEedge, line width=0.6pt,
+      dash pattern=on 2.5pt off 1.5pt]
+  (axis cs:0.035,0) rectangle (axis cs:7,0.5);
+
+% ---- hazard: high gain with a long tau -- the patient adversary -------
+\path[fill=casEfill, fill opacity=0.55, draw=casEedge, line width=0.6pt,
+      dash pattern=on 2.5pt off 1.5pt]
+  (axis cs:7,0.15) rectangle (axis cs:760,0.5);
+
+% ---- hazard: beta -> 0 -- dogma ---------------------------------------
+\path[fill=casEfill, fill opacity=0.55, draw=casEedge, line width=0.6pt,
+      dash pattern=on 2.5pt off 1.5pt]
+  (axis cs:0.035,0) rectangle (axis cs:760,0.02);
+
+% ---- the design target ------------------------------------------------
+\path[fill=casOfill, fill opacity=0.95, draw=casOedge, line width=1.3pt]
+  (axis cs:21,0.02) rectangle (axis cs:760,0.05);
+
+% ---- region labels ----------------------------------------------------
+\node[font=\sffamily\footnotesize\bfseries]
+  at (axis cs:0.5,0.40) {reprogrammable};
+\node[font=\sffamily\scriptsize, align=center, anchor=north]
+  at (axis cs:0.5,0.375) {short $\tau$:\\the diode is removed};
+
+\node[font=\sffamily\footnotesize\bfseries, text width=36mm, align=center]
+  at (axis cs:60,0.405) {capturable by a patient adversary};
+\node[font=\sffamily\scriptsize, text width=36mm, align=center, anchor=north]
+  at (axis cs:60,0.355) {patience defeats a $\tau$-only defence};
+
+\node[font=\sffamily\footnotesize\bfseries] (dg) at (axis cs:0.45,0.160) {dogma};
+\node[font=\sffamily\scriptsize, align=center, anchor=north]
+  at (axis cs:0.45,0.145) {$\beta \to 0$ at any $\tau$: no\\outcome corrects a principle};
+\draw[fbflow] (axis cs:0.45,0.092) -- (axis cs:0.45,0.024);
+
+\node[font=\sffamily\footnotesize\bfseries] (tg) at (axis cs:60,0.128)
+  {design target};
+\node[font=\sffamily\scriptsize, align=center, anchor=north]
+  at (axis cs:60,0.113) {$\tau \geq 3$ weeks, \ $\beta \leq 0.05$};
+\draw[fbflow] (axis cs:60,0.085) -- (axis cs:60,0.053);
+
+\end{axis}
+\end{tikzpicture}

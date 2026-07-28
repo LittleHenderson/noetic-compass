@@ -1,0 +1,113 @@
+% Figure 23-D -- CCB-CAL full schematic with reference designators.
+% Intake at the left, readout wrapped onto the second band, ledger on the third,
+% OSC1 along the bottom gated from M1 and wired back to the intake.
+\begin{tikzpicture}[
+  x=1mm, y=1mm, font=\sffamily\footnotesize,
+  sblk/.style={rectangle, rounded corners=2pt, draw, line width=0.6pt,
+    align=center, text=black, inner sep=2pt, font=\sffamily\scriptsize},
+  sC/.style={sblk, fill=casCfill, draw=casCedge},
+  sE/.style={sblk, fill=casEfill, draw=casEedge},
+  term/.style={rectangle, rounded corners=3pt, draw=black, fill=white,
+    line width=0.6pt, inner sep=2.5pt, align=center,
+    font=\sffamily\scriptsize\bfseries},
+  tpf/.style={rectangle, rounded corners=1pt, draw=black, fill=white,
+    line width=0.4pt, inner sep=1.5pt, font=\sffamily\scriptsize\bfseries},
+  ref/.style={font=\sffamily\scriptsize, inner sep=1pt},
+  wire/.style={line width=0.6pt, draw=black},
+  xlbl/.style={anchor=west, font=\sffamily\scriptsize, inner sep=1pt}]
+
+% ===================== BAND 1 : intake, quantizers, horizon fuse ==========
+\node[term] (in) at (7,0) {op\_log};
+\draw[wire] (15,0) -- (18,0);
+\fill (18,0) circle (0.7mm);
+\draw[flow] (18,0) -- (18,10) -- (20,10);
+\draw[flow] (18,0) -- (18,-10) -- (20,-10);
+
+\node[sC, text width=22mm, minimum height=10mm] (flt1) at (32,10)
+  {\textbf{FLT1}\\quantize 5.0};
+\node[sC, text width=22mm, minimum height=10mm] (flt2) at (32,-10)
+  {\textbf{FLT2}\\quantize 5.0};
+
+% F1 horizon fuse, drawn as a fuse body on the t_conf lead
+\draw[wire] (44,-10) -- (56,-10);
+\draw[fill=casNfill, draw=casNedge, line width=0.6pt] (56,-13) rectangle (68,-7);
+\draw[wire] (56,-10) -- (68,-10);
+\draw[wire] (68,-10) -- (76,-10) -- (76,-4);
+\draw[flow] (76,-4) -- (80,-4);
+\node[ref] at (64,-1) {\textbf{F1}\quad $t_H = 1440$ min};
+\node[tpf] at (50,-6) {TP1};
+
+% blown path
+\draw[flow] (62,-13) -- (62,-19.5);
+\node[term] (nr) at (62,-23) {NO-READ};
+\node[xlbl] at (64,-16) {no\_read};
+
+\draw[wire] (44,10) -- (76,10) -- (76,4);
+\draw[flow] (76,4) -- (80,4);
+
+\node[sE, text width=15mm, minimum width=16mm, minimum height=13mm] (eta) at (88,0)
+  {\textbf{$\eta$}\\$t_\mathrm{op}/t_\mathrm{conf}$};
+\node[tpf, anchor=south] at (88,10.5) {TP2};
+
+% wrap down to band 2
+\draw[flow, rounded corners=2pt] (88,-6.5) -- (88,-30) -- (6,-30) -- (6,-48);
+
+% ===================== BAND 2 : tau divider and band guard ===============
+% R1 -- fixed resistor realising tau = 1/3
+\draw[wire] (6,-48) -- (12,-48) -- (14,-45) -- (18,-51) -- (22,-45)
+                  -- (26,-51) -- (28,-48) -- (34,-48);
+\draw[flow] (34,-48) -- (40,-48);
+\node[ref] at (20,-42) {\textbf{R1}\quad $3.0\,\Omega_c$};
+\node[ref] at (20,-54) {$\tau = 1/3$};
+\node[tpf] at (35,-42) {TP3};
+
+\node[sE, text width=21mm, minimum width=24mm, minimum height=28mm] (m1) at (52,-48)
+  {\textbf{M1}\\BAND GUARD\\two-threshold\\comparator\\$\eta \in$\\{}[0.333,\;3.000]};
+
+\draw[flow] (64,-38) -- (69,-38);
+\node[xlbl] at (70,-38) {ACT \quad $A \le 1$};
+\draw[flow] (64,-44) -- (69,-44);
+\node[xlbl] at (70,-44) {CLOSE \quad $1 < A < 3$};
+\draw[flow] (64,-50) -- (69,-50);
+\node[xlbl] at (70,-50) {DRIVE \quad $3 \le A < 9$};
+
+% RE-SPEC exit, F2 in series
+\draw[wire] (64,-56) -- (69,-56);
+\draw[fill=casNfill, draw=casNedge, line width=0.6pt] (69,-58.5) rectangle (79,-53.5);
+\draw[wire] (69,-56) -- (79,-56);
+\draw[flow] (79,-56) -- (84,-56);
+\node[xlbl] at (85,-56) {RE-SPEC};
+\node[anchor=north, align=center, font=\sffamily\scriptsize, inner sep=1pt]
+  at (74,-60) {\textbf{F2}\quad $A = 9$\\block until\\decomposed};
+
+% ===================== BAND 3 : ledger, diode, output ====================
+\fill (34,-48) circle (0.7mm);
+\draw[flow] (34,-48) -- (34,-75);
+\node[sE, text width=22mm, minimum height=10mm] (flt3) at (30,-80)
+  {\textbf{FLT3}\\lowpass $\tau = 3$ ops};
+\draw[wire] (41,-80) -- (56,-80);
+\node[tpf] at (52,-86) {TP4};
+
+% D1 domain diode E -> O
+\draw[wire] (56,-80) -- (59,-80);
+\draw[fill=casOfill, draw=casOedge, line width=0.6pt]
+  (59,-83) -- (59,-77) -- (64,-80) -- cycle;
+\draw[line width=0.9pt, draw=casOedge] (64,-83) -- (64,-77);
+\draw[flow] (64,-80) -- (73,-80);
+\node[ref] at (62,-73) {\textbf{D1}\quad ${}^{\mathrm{E}} \to {}^{\mathrm{O}}$};
+\node[term] (out) at (86,-80) {next\_op\_spec};
+
+% ===================== BAND 4 : schedule oscillator ======================
+\draw[rounded corners=2pt, fill=casOfill, draw=casOedge, line width=0.6pt]
+  (13,-102) rectangle (56,-90);
+\draw[line width=0.7pt] (15,-96) -- (15.83,-95) -- (16.67,-94.27)
+  -- (17.5,-94) -- (18.33,-94.27) -- (19.17,-95) -- (20,-96)
+  -- (20.83,-97) -- (21.67,-97.73) -- (22.5,-98) -- (23.33,-97.73)
+  -- (24.17,-97) -- (25,-96);
+\node[anchor=west, align=left, font=\sffamily\scriptsize] at (28,-96)
+  {\textbf{OSC1}\\period 72\,h};
+
+\draw[fbflow, rounded corners=2pt] (45,-62) -- (45,-90);
+\node[xlbl, font=\sffamily\scriptsize\itshape] at (46,-68) {gate};
+\draw[flow, rounded corners=2pt] (13,-96) -- (-4,-96) -- (-4,0) -- (-1,0);
+\end{tikzpicture}

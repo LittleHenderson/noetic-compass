@@ -1,0 +1,82 @@
+% Figure 15-A -- CCB-O signal path, block diagram (left to right).
+\begin{tikzpicture}[x=1cm,y=1cm,font=\sffamily]
+\def\cs#1{{\ttfamily\scriptsize\detokenize{#1}}}
+\def\cst#1{{\ttfamily\tiny\detokenize{#1}}}
+\tikzset{
+  amp/.style={casblock, minimum width=12mm, minimum height=17mm,
+              font=\sffamily\scriptsize, inner sep=1.5pt},
+  tp/.style={circle, draw=black, fill=white, line width=0.5pt,
+             inner sep=0.3pt, minimum size=5mm, font=\sffamily\tiny\bfseries},
+  lead/.style={line width=0.5pt, draw=casNedge},
+}
+
+% ---------- substrate band (not operator-owned) ----------
+\path[groupframe] (0,1.60) rectangle (10.30,3.00);
+\node[grouplbl, anchor=west] at (0.15,2.80)
+  {SUBSTRATE --- NOT OPERATOR-OWNED};
+
+% PTC thermistor RT1
+\draw[lead] (0.45,2.10) -- (0.72,2.10);
+\draw[lead] (1.48,2.10) -- (1.75,2.10);
+\draw[line width=0.6pt, draw=casNedge, fill=white] (0.72,1.94) rectangle (1.48,2.26);
+\draw[-{Latex[length=1.6mm,width=1.2mm]}, line width=0.5pt]
+      (0.62,1.86) -- (1.58,2.36);
+\node[font=\sffamily\tiny, anchor=west] at (1.50,2.44) {$+t$};
+\node[font=\sffamily\tiny] at (1.10,1.76) {RT1 \ PTC};
+\draw[lead] (1.75,2.10) -- (2.05,2.10);
+\node[tp] at (2.30,2.10) {TP2};
+
+\node[font=\sffamily\footnotesize] at (6.30,2.20)
+  {$R_{\mathrm{collective}} = R_{\mathrm{base}} + R_{\mathrm{PTC}}(\theta)$};
+\node[font=\sffamily\tiny] at (6.30,1.82)
+  {knee $\theta_k=3.0$ \quad $\alpha=4.0$ \quad sums into every stage output};
+
+% ---------- main chain ----------
+\node[casterm, minimum width=15.5mm, align=center] (seed) at (0.775,0)
+  {\textbf{SEED IDEA}\\\cst{^0^C_{F2}|A}};
+\node[circle, draw=black, fill=white, line width=0.6pt, inner sep=0pt,
+      minimum size=5mm, font=\sffamily\scriptsize] (sum) at (2.05,0) {$\Sigma$};
+
+\node[amp, fill=casPfill, draw=casPedge] (a1) at (3.10,0)
+  {\textbf{A1}\\$\beta$=1.2\\95$\,\to\,$80\\\cst{^5^P}};
+\node[amp, fill=casCfill, draw=casCedge] (a2) at (4.40,0)
+  {\textbf{A2}\\$\beta$=1.6\\80$\,\to\,$55\\\cst{^5^C}};
+\node[amp, fill=casCfill, draw=casCedge, line width=1.2pt] (a3) at (5.70,0)
+  {\textbf{A3}\\$\beta$=2.0\\55$\,\to\,$30\\{\tiny\bfseries HINGE \cst{^6}}};
+\node[amp, fill=casEfill, draw=casEedge] (a4) at (7.00,0)
+  {\textbf{A4}\\$\beta$=2.4\\30$\,\to\,$12\\\cst{^5^E}};
+\node[amp, fill=casOfill, draw=casOedge] (a5) at (8.30,0)
+  {\textbf{A5}\\$\beta$=3.0\\12$\,\to\,$2\\\cst{^5^O}};
+\node[amp, minimum width=13mm] (f1) at (9.60,0)
+  {\textbf{F1}\\CONSOL.\\{\tiny fuse ---}\\{\tiny not an amp}};
+
+\draw[flow] (seed) -- (sum);
+\draw[flow] (sum) -- (a1);
+\foreach \s/\t in {a1/a2,a2/a3,a3/a4,a4/a5,a5/f1} \draw[flow] (\s) -- (\t);
+
+\node[casterm, fill=casOfill, draw=casOedge, minimum width=15.5mm,
+      align=center] (pol) at (9.60,-1.55)
+  {\textbf{POLICY}\\\cst{^9^O_{F6}|E}};
+\draw[flow] (f1) -- (pol);
+
+% ---------- substrate feeds every stage ----------
+\draw[fbflow] (2.05,1.60) -- (2.05,0.28);
+\foreach \x in {3.10,4.40,5.70,7.00,8.30} \draw[fbflow] (\x,1.60) -- (\x,0.90);
+
+% ---------- rhythm oscillator rail ----------
+\node[nblock, minimum width=62.5mm, minimum height=8.5mm, align=center,
+      font=\sffamily\scriptsize] (osc) at (5.625,-2.00)
+  {\cs{^7} \textbf{RHYTHM OSCILLATOR} (OSC1)\\
+   {\tiny sustained across all stages $\cdot$ period 21 d, duty 0.15}};
+\foreach \x in {3.10,4.40,5.70,7.00,8.30}
+  \draw[flow] (\x,-1.575) -- (\x,-0.88);
+\node[font=\sffamily\tiny\itshape, anchor=east] at (2.42,-1.20) {bias terminals};
+
+% ---------- test points ----------
+\draw[lead] (2.05,-0.16) -- (2.05,-0.56);
+\node[tp] at (2.05,-0.81) {TP1};
+\draw[lead] (6.20,0.85) -- (6.30,1.05);
+\node[tp] at (6.30,1.30) {TP4};
+\draw[lead] (9.60,0.85) -- (9.60,1.05);
+\node[tp] at (9.60,1.30) {TP3};
+\end{tikzpicture}

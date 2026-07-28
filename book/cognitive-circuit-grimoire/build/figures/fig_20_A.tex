@@ -1,0 +1,83 @@
+% Figure 20-A -- external board (two people) vs self board (one ^5 split in
+% time), with the base-tied-to-emitter fault inset underneath.
+\begin{tikzpicture}[
+  font=\sffamily\footnotesize,
+  cap5/.style={casblock, text width=23mm, font=\sffamily\scriptsize,
+               minimum height=9mm},
+  cjt/.style={casblock, text width=14mm, font=\sffamily\scriptsize,
+              minimum height=9mm},
+  tiny/.style={font=\sffamily\scriptsize},
+  vtiny/.style={font=\sffamily\scriptsize\itshape}
+]
+
+% ---------------- LEFT PANEL: external board -------------------------
+\node[cap5, fill=casPfill, draw=casPedge] (lop) at (-2.7, 2.15)
+  {OPERATOR \textasciicircum5\textasciicircum P\\[-1pt]\textit{bias source}};
+\node[cjt] (lq) at (-2.7, 0.50) {CJT\\[-1pt]\textit{cause\,$|$\,bias}};
+\node[cap5, fill=casCfill, draw=casCedge] (ltg) at (-2.7, -1.30)
+  {TARGET \textasciicircum5\textasciicircum C\\[-1pt]\textit{receives effect}};
+
+\draw[flow] (lop) -- node[flowlbl, right=1pt] {bias} (lq);
+\draw[flow] (lq) -- node[flowlbl, right=1pt, pos=0.22] {effect} (ltg);
+\draw[flow] (-4.40,0.50) -- (lq.west);
+\node[tiny] at (-4.05,0.86) {\textasciicircum0};
+
+\draw[dashed, draw=casNedge, line width=0.5pt] (-4.95,-0.42) -- (-0.45,-0.42);
+\node[vtiny, fill=white, inner sep=1pt] at (-2.7,-0.42)
+  {separation: free \textemdash{} two people};
+
+% ---------------- RIGHT PANEL: self board ----------------------------
+\node[cap5, fill=casPfill, draw=casPedge] (sref) at (2.7, 2.15)
+  {\textasciicircum5\textasciicircum P \ ref\_comp.\\[-1pt]$\tau_{\mathrm{ref}}=85$\,d \ \textit{slow}};
+\node[cjt] (sq) at (2.7, 0.50) {CJT\\[-1pt]\textit{cause\,$|$\,bias}};
+\node[cap5, fill=casCfill, draw=casCedge] (swrk) at (2.7, -1.30)
+  {\textasciicircum5\textasciicircum C \ work\_comp.\\[-1pt]$\tau_{\mathrm{work}}=22$\,d \ \textit{fast}};
+
+\draw[flow] (sref) -- node[flowlbl, right=1pt] {bias} (sq);
+\draw[flow] (sq) -- node[flowlbl, right=1pt, pos=0.22] {effect} (swrk);
+\draw[flow] (1.00,0.50) -- (sq.west);
+\node[tiny] at (1.35,0.86) {\textasciicircum0};
+
+\draw[dashed, draw=casNedge, line width=0.5pt] (0.45,-0.42) -- (4.95,-0.42);
+\node[vtiny, fill=white, inner sep=1pt] at (2.7,-0.42)
+  {separation: time \textemdash{} $\tau$ ratio 3.86};
+
+% ---------------- panel frames + titles ------------------------------
+\begin{scope}[on background layer]
+  \draw[groupframe] (-4.95,-2.15) rectangle (-0.45,2.95);
+  \draw[groupframe] (0.45,-2.15) rectangle (4.95,2.95);
+\end{scope}
+\node[grouplbl] at (-2.7,3.20) {EXTERNAL BOARD \ (CCB-HYP, CCB-ADV)};
+\node[grouplbl] at (2.7,3.20) {SELF BOARD \ (CCB-SELF)};
+\node[vtiny] at (-2.7,-1.98) {two \textasciicircum5, two people};
+\node[vtiny] at (2.7,-1.98) {one \textasciicircum5, two time-scales};
+
+% ---------------- FAULT INSET: base tied to emitter -------------------
+\begin{scope}[shift={(0,-4.25)}]
+  \draw[dashed, draw=casEedge, line width=0.6pt, rounded corners=3pt]
+    (-4.95,-1.30) rectangle (4.95,1.05);
+  \node[grouplbl, text=casEedge] at (-2.55,0.83) {FAULT: BIAS TIED TO EFFECT};
+
+  % BJT symbol
+  \begin{scope}[shift={(-3.95,-0.35)}, line width=0.6pt]
+    \draw (0,0) -- (0.55,0);                               % base lead
+    \draw[line width=1.1pt] (0.55,-0.38) -- (0.55,0.38);   % base plate
+    \draw (0.55,0.20) -- (1.15,0.62);                      % collector
+    \draw[-{Latex[length=1.6mm,width=1.3mm]}] (0.55,-0.20) -- (1.15,-0.62);
+    \node[tiny] at (1.40,0.62) {C};
+    \node[tiny] at (1.40,-0.62) {E};
+    \node[tiny] at (0.25,0.20) {B};
+    % the short: base wired straight to emitter
+    \draw[line width=1.2pt, rounded corners=2pt, draw=casEedge]
+      (0,0) -- (-0.40,0) -- (-0.40,-0.95) -- (1.15,-0.95) -- (1.15,-0.62);
+  \end{scope}
+
+  \node[tiny, align=left, anchor=north west, text width=66mm]
+    at (-2.35,0.42)
+    {$V_{BE}=0$ \textemdash{} the transistor sits in \textbf{cutoff}: not weak,
+     \emph{off}. Cognitive form: the reference for the new composition
+     \emph{is} the composition being built, so every dip in the effect
+     drops the bias with it and the stage unbiases itself.};
+\end{scope}
+
+\end{tikzpicture}

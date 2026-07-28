@@ -1,0 +1,121 @@
+% Figure 13-C -- CCB-D assembly drawing.
+% Board outline with a title strip, the five stages as placement rectangles
+% carrying their reference designators, the ^5^P bias rail as a heavy trace with
+% tap ticks at Q0/Q1/Q2, TP1-TP4 as circled callouts with expected bands, the two
+% return loops, and a boxed BOM at lower right. Follows the author's ASCII
+% assembly drawing (diagrams/board_assembly_drawings.md, Figure 13-A).
+\begin{tikzpicture}[
+  x=1cm, y=1cm,
+  lbl/.style={font=\sffamily\scriptsize, align=center, inner sep=1pt},
+  llbl/.style={font=\sffamily\scriptsize, align=left, inner sep=1pt},
+  tiny/.style={font=\sffamily\scriptsize, align=center, inner sep=1pt},
+  stage/.style={casblock, minimum width=16.2mm, minimum height=16mm,
+                font=\sffamily\scriptsize},
+  tpcirc/.style={circle, draw=black, fill=white, line width=0.7pt,
+                 minimum size=5.6mm, inner sep=0pt,
+                 font=\sffamily\scriptsize\bfseries},
+  loopbox/.style={nblock, font=\sffamily\scriptsize, minimum height=5.4mm,
+                  inner sep=2.5pt},
+  trace/.style={line width=0.6pt, draw=black},
+  leader/.style={line width=0.5pt, draw=casNedge}
+]
+
+% ---------------- board outline + title strip -------------------------
+\draw[line width=1.0pt, rounded corners=3pt] (0,0) rectangle (10.4,7.40);
+\filldraw[fill=casNfill, draw=casNedge, line width=0.6pt]
+  (0.12,6.60) rectangle (10.28,7.28);
+\node[font=\sffamily\small\bfseries] at (5.20,7.08)
+  {CCB-D \ \textemdash\ \ DESIRE MANIFESTATION BOARD};
+\node[font=\sffamily\scriptsize] at (5.20,6.78)
+  {assembly --- component placement, bias rail, test points};
+
+% ---------------- test-point callouts ---------------------------------
+\foreach \x/\n/\a/\b in {%
+  1.16/TP1/clarity/0.60--0.90,
+  3.18/TP2/aversion/{$<$ 0.30},
+  5.20/TP3/{vs ceiling}/0.60--0.78,
+  9.24/TP4/delivered/{$\ge$ 0.25}}{%
+  \node[tiny, anchor=south] at (\x,5.80) {\a\\ \textbf{\b}};
+  \node[tpcirc] (t\n) at (\x,5.45) {\n};
+  \draw[leader] (\x,5.17) -- (\x,4.85);
+  \fill (\x,4.85) circle (0.05);
+}
+
+% ---------------- five stage placements -------------------------------
+\node[stage, cblock] (s1) at (1.16,4.05) {\textbf{INTAKE}\\[1pt] D1\ \ R1};
+\node[stage, pblock] (s2) at (3.18,4.05) {\textbf{POLICY}\\[1pt] Q0\ \ Q1\\ MUX1};
+\node[stage, eblock] (s3) at (5.20,4.05) {\textbf{AMPLIFY}\\[1pt] D2\ \ Q2};
+\node[stage, eblock] (s4) at (7.22,4.05) {\textbf{RHYTHM}\\[1pt] OSC1};
+\node[stage, oblock] (s5) at (9.24,4.05) {\textbf{MANIFEST}\\[1pt] D3\ \ Q3};
+
+\foreach \a/\b in {1.97/2.37, 3.99/4.39, 6.01/6.41, 8.03/8.43}{
+  \draw[flow] (\a,4.05) -- (\b,4.05);
+}
+
+% ---------------- REFUSE branch off POLICY ----------------------------
+\draw[flow] (3.18,3.25) -- (3.18,2.98);
+\node[pblock, minimum width=16mm, minimum height=4mm,
+      font=\sffamily\scriptsize] at (3.18,2.78) {F1 $\to$ REFUSE};
+
+% ---------------- ^5^P bias rail --------------------------------------
+\draw[line width=1.4pt] (1.45,1.55) -- (6.30,1.55);
+\foreach \x/\n in {2.55/Q0, 3.45/Q1, 5.20/Q2}{
+  \draw[line width=0.9pt] (\x,1.40) -- (\x,1.70);
+  \draw[trace] (\x,1.70) -- (\x,2.18);
+  \node[tiny, anchor=south] at (\x,2.20) {\n};
+}
+\node[lbl, anchor=west] at (6.45,1.55)
+  {\casnote{\detokenize{^5^P}} bias rail};
+
+% C1 sits at the head of the rail
+\node[pblock, minimum width=9mm, minimum height=4.4mm,
+      font=\sffamily\scriptsize] at (1.00,1.55) {C1};
+\node[tiny, anchor=north] at (1.00,1.28) {$\tau$ 3333\,hr};
+
+% ---------------- LOOP A: FLT1, fast, MANIFEST -> RHYTHM --------------
+\draw[fbflow, rounded corners=2pt]
+  (9.60,3.25) -- (9.60,2.15) -- (7.22,2.15) -- (7.22,3.25);
+\node[loopbox] at (8.41,2.15) {FLT1\ \ $\tau$ 24\,hr};
+
+% ---------------- LOOP B: FLT2 + FB1, slow, MANIFEST -> C1 ------------
+\draw[fbflow, rounded corners=2pt] (9.95,3.25) -- (9.95,0.72) -- (8.55,0.72);
+\draw[fbflow] (6.65,0.72) -- (5.05,0.72);
+\draw[fbflow, rounded corners=2pt]
+  (3.35,0.72) -- (0.25,0.72) -- (0.25,1.55) -- (0.55,1.55);
+\node[loopbox] at (7.60,0.72) {FLT2\ \ $\tau$ 3 weeks};
+\node[loopbox] at (4.20,0.72) {FB1\ \ $\beta$ 0.05};
+
+% ==================== NOTES block =====================================
+\draw[line width=0.7pt, rounded corners=2pt] (0,-3.70) rectangle (3.30,-0.30);
+\node[llbl, anchor=north west, font=\sffamily\scriptsize\bfseries]
+  at (0.18,-0.44) {NOTES};
+\node[llbl, anchor=north west, text width=29mm] at (0.18,-0.84)
+  {1.\ \ $\Sigma$Vf = D2 + D3 = 3.2. Below that drive there is no output.\\[2pt]
+   2.\ \ $|$Dial(\textasciicircum 2) $-$ Dial(\textasciicircum 3)$|\le 4$;
+        $k$ stays in 0.30--0.64.\\[2pt]
+   3.\ \ OSC1 duty $\le$ 0.05, i.e.\ 72 min/day.\\[2pt]
+   4.\ \ FB1 lands on the bias terminal, never on the signal path.};
+
+% ==================== BILL OF MATERIALS ===============================
+\draw[line width=0.7pt, rounded corners=2pt] (3.55,-3.70) rectangle (10.40,-0.30);
+\node[llbl, anchor=north west, font=\sffamily\scriptsize\bfseries]
+  at (3.72,-0.44) {BILL OF MATERIALS \ \textemdash\ \ CCB-D};
+\node[llbl, anchor=north west] at (3.72,-0.86)
+  {\textbf{C1}\ \ \casnote{\detokenize{^5^P}} cap, $\tau$ 3333\,hr\\
+   \textbf{D1}\ \ \casnote{\detokenize{^P->^C}}, Vf 0.7\\
+   \textbf{R1}\ \ divider, $k$ 0.30--0.64\\
+   \textbf{Q0}\ \ $\beta$ 1.0, audit\\
+   \textbf{Q1}\ \ $\beta$ 2.0, sat 0.85\\
+   \textbf{F1}\ \ fuse 0.90, latching\\
+   \textbf{MUX1}\ pass if TP2 $<$ 0.30\\
+   \textbf{D2}\ \ \casnote{\detokenize{^C->^E}}, Vf 1.2};
+\node[llbl, anchor=north west] at (7.20,-0.86)
+  {\textbf{Q2}\ \ $\beta$ by type, sat 0.80\\
+   \textbf{OSC1}\ 24\,hr, duty $\le$ 0.05\\
+   \textbf{D3}\ \ \casnote{\detokenize{^E->^O}}, Vf 2.0\\
+   \textbf{Q3}\ \ $\beta$ = receptivity\\
+   \textbf{FLT1}\ lowpass, $\tau$ 24\,hr\\
+   \textbf{FLT2}\ lowpass, $\tau$ 3 weeks\\
+   \textbf{FB1}\ \ $\beta$ 0.05, to the bias};
+
+\end{tikzpicture}

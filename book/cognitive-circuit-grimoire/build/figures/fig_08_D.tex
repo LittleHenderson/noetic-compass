@@ -1,0 +1,82 @@
+% Figure 8-D -- The lawful O->P return path, drawn OUTSIDE the diode chain.
+% Operations log -> lowpass -> low gain -> bias terminal of the ^5^P capacitor.
+% The tempting route into the D1 signal path is drawn dashed and struck out.
+\begin{tikzpicture}[
+  x=1cm, y=1cm,
+  diodn/.pic={
+    \draw[line width=0.7pt, draw=black, fill=casNfill]
+      (-3.0mm,2.8mm) -- (3.0mm,2.8mm) -- (0mm,-2.8mm) -- cycle;
+    \draw[line width=1.2pt, draw=black] (-3.7mm,-2.8mm) -- (3.7mm,-2.8mm);
+  },
+  dnode/.style={minimum width=19mm, minimum height=9.5mm, align=center},
+  fbnode/.style={text width=25mm, minimum height=9.5mm, align=center},
+  desig/.style={font=\sffamily\scriptsize\bfseries},
+  spec/.style={font=\sffamily\scriptsize},
+  wire/.style={line width=0.6pt, draw=black}
+]
+
+% ---------- the signal path : the diode chain --------------------------
+\node[pblock, dnode] (P) at (0, 0)
+  {{\ttfamily\bfseries\textasciicircum P}\\[1pt]{\scriptsize Principled}};
+\node[cblock, dnode] (C) at (0,-2.4)
+  {{\ttfamily\bfseries\textasciicircum C}\\[1pt]{\scriptsize Cognitive}};
+\node[eblock, dnode] (E) at (0,-4.8)
+  {{\ttfamily\bfseries\textasciicircum E}\\[1pt]{\scriptsize Evaluative}};
+\node[oblock, dnode] (O) at (0,-7.2)
+  {{\ttfamily\bfseries\textasciicircum O}\ \ {\scriptsize ops log}\\[1pt]
+   {\ttfamily\scriptsize \textasciicircum 9\textasciicircum O\_\{F5\}|E}};
+
+\foreach \yd in {-1.2,-3.6,-6.0}{ \pic at (0,\yd) {diodn}; }
+\draw[wire] (0,-0.475) -- (0,-0.92);
+\draw[flow] (0,-1.48)  -- (0,-1.925);
+\draw[wire] (0,-2.875) -- (0,-3.32);
+\draw[flow] (0,-3.88)  -- (0,-4.325);
+\draw[wire] (0,-5.275) -- (0,-5.72);
+\draw[flow] (0,-6.28)  -- (0,-6.70);
+\node[desig, anchor=east] at (-0.46,-1.2) {D1};
+\node[desig, anchor=east] at (-0.46,-3.6) {D2};
+\node[desig, anchor=east] at (-0.46,-6.0) {D3};
+
+\begin{scope}[on background layer]
+  \node[groupframe, fit=(P)(C)(E)(O), inner sep=6pt] (chain) {};
+\end{scope}
+\node[grouplbl, anchor=north, align=center] at (0,-7.98)
+  {signal path\\(diode chain)};
+
+% ---------- the accumulated-formation capacitor ------------------------
+\draw[wire] (0.95,0) -- (2.72,0);
+\draw[line width=1.1pt] (2.72,-0.34) -- (2.72,0.34);
+\draw[line width=1.1pt] (2.94,-0.34) -- (2.94,0.34);
+\draw[wire] (2.94,0) -- (3.62,0);
+\fill (3.62,0) circle (1.1pt);
+\node[spec, anchor=north, align=center] at (2.83,-0.46)
+  {{\ttfamily\scriptsize \textasciicircum 5\textasciicircum P\_\{F7\}|T}\\
+   constitution};
+\node[spec, anchor=west] at (3.72,-0.32) {bias};
+
+% ---------- the lawful return path ------------------------------------
+\node[nblock, fbnode] (flt) at (5.45,-5.70)
+  {\textbf{FLT1} lowpass\\$\tau \geq 3$ weeks};
+\node[nblock, fbnode] (gain) at (5.45,-3.50)
+  {\textbf{FB1} gain\\$\beta = 0.05$};
+
+\draw[wire] (0.95,-7.2) -- (5.45,-7.2);
+\draw[flow] (5.45,-7.2) -- (flt.south);
+\draw[flow] (flt.north) -- (gain.south);
+\draw[wire] (gain.north) -- (5.45,0);
+\draw[flow] (5.45,0) -- (3.68,0);
+\node[flowlbl, anchor=south] at (2.90,-7.18)
+  {lawful \textasciicircum O$\to$\textasciicircum P return};
+
+% ---------- the route it must NOT take --------------------------------
+\draw[fbflow, draw=casRed] (5.05,-2.10) -- (0.26,-0.94);
+\draw[line width=1.0pt, draw=casRed] (3.66,-2.04) -- (4.14,-1.60);
+\draw[line width=1.0pt, draw=casRed] (3.66,-1.60) -- (4.14,-2.04);
+
+% ---------- callout ----------------------------------------------------
+\node[casblock, text width=44mm, align=center, font=\sffamily\scriptsize,
+      fill=white, draw=casNedge] (cal) at (3.55,1.45)
+  {arrives at the \textbf{bias}, never at the signal path};
+\draw[fbflow] (cal.south) -- (3.62,0.10);
+
+\end{tikzpicture}

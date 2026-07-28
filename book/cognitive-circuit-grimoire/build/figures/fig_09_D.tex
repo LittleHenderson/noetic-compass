@@ -1,0 +1,111 @@
+% Figure 9-D -- Schematic: the flyback arrangement.
+% Drive rail -> switch -> L1 in series with R1 to ground, with D1 across L1
+% in the reverse-blocking orientation. TP1-TP4 flagged. Values in the BOM box.
+\begin{tikzpicture}[x=1cm,y=1cm,font=\sffamily\footnotesize,
+  wire/.style={line width=0.7pt, draw=black},
+  coilw/.style={line width=0.9pt, draw=casCedge},
+  lead/.style={line width=0.4pt, draw=casNedge},
+  tpflag/.style={rectangle, rounded corners=1.5pt, draw=casNedge,
+    line width=0.5pt, fill=white, inner sep=2.5pt,
+    font=\sffamily\scriptsize\bfseries, minimum height=4.5mm},
+  tny/.style={font=\sffamily\scriptsize},
+  ref/.style={font=\sffamily\footnotesize\bfseries}]
+
+% ================= rails ==============================================
+\draw[wire] (1.0,0) -- (6.6,0);                       % ground bus
+\draw[wire] (1.0,2.42) -- (1.0,4.8);                  % left rail, above cell
+\draw[wire] (1.0,0) -- (1.0,1.83);                    % left rail, below cell
+\draw[wire] (1.0,4.8) -- (2.70,4.8);                  % top rail to switch
+\draw[wire] (3.30,4.8) -- (6.6,4.8);                  % top rail after switch
+
+% ----- drive cell -----------------------------------------------------
+\draw[wire] (0.72,1.83) -- (1.28,1.83);
+\draw[wire] (0.86,1.98) -- (1.14,1.98);
+\draw[wire] (0.72,2.13) -- (1.28,2.13);
+\draw[wire] (0.86,2.27) -- (1.14,2.27);
+\draw[wire] (1.0,2.27) -- (1.0,2.42);
+\node[tny, anchor=east, align=right] at (0.60,2.05)
+  {$V_{\mathrm{drive}}$\\24\,V$_c$};
+
+% ----- ground symbol --------------------------------------------------
+\draw[wire] (3.80,0) -- (3.80,-0.16);
+\draw[wire] (3.55,-0.16) -- (4.05,-0.16);
+\draw[wire] (3.64,-0.29) -- (3.96,-0.29);
+\draw[wire] (3.72,-0.42) -- (3.88,-0.42);
+
+% ================= switch =============================================
+\fill (2.70,4.8) circle (1.3pt);
+\fill (3.30,4.8) circle (1.3pt);
+\draw[wire] (2.70,4.8) -- (3.26,5.26);
+\node[ref, anchor=east] at (2.56,5.18) {SW};
+
+% ================= L1 : four-loop coil, bumps to the right ============
+\draw[coilw] (6.6,4.8) -- (6.6,4.62);
+\foreach \i in {0,1,2,3}{\draw[coilw] (6.6,{4.62-0.33*\i}) arc(90:-90:0.165);}
+\draw[coilw] (6.6,3.30) -- (6.6,3.12);
+\node[ref, anchor=south east] at (6.48,4.94) {L1};
+
+% ================= R1 =================================================
+\draw[wire] (6.6,3.12) -- (6.6,2.66);
+\draw[fill=casNfill, draw=casNedge, line width=0.6pt]
+  (6.38,2.66) rectangle (6.82,1.76);
+\draw[wire] (6.6,1.76) -- (6.6,0);
+\node[ref, anchor=west] at (6.96,2.21) {R1};
+
+% junction dots
+\fill (6.6,4.8) circle (1.3pt);
+\fill (6.6,3.12) circle (1.3pt);
+
+% ================= D1 : flyback, cathode to the rail ==================
+\draw[wire] (4.80,3.12) -- (6.6,3.12);
+\draw[wire] (4.80,3.12) -- (4.80,3.78);
+\draw[fill=casEfill, draw=casEedge, line width=0.6pt]
+  (4.59,3.78) -- (5.01,3.78) -- (4.80,4.18) -- cycle;
+\draw[draw=casEedge, line width=1.0pt] (4.55,4.18) -- (5.05,4.18);
+\draw[wire] (4.80,4.18) -- (4.80,4.8);
+\fill (4.80,4.8) circle (1.3pt);
+\node[ref, anchor=east] at (4.44,3.98) {D1};
+\node[tny, anchor=north] at (5.30,2.78) {substitute path};
+
+% ----- circulating decay loop (annotation, not a component) -----------
+\draw[line width=0.5pt, draw=casNedge,
+      dash pattern=on 2pt off 1.5pt, rounded corners=4pt]
+  (5.22,4.46) -- (6.18,4.46) -- (6.18,3.52) -- (5.22,3.52) -- (5.22,4.22);
+\draw[line width=0.5pt, draw=casNedge, -{Latex[length=1.8mm,width=1.4mm]}]
+  (5.22,4.22) -- (5.22,4.42);
+\node[tny, align=center, fill=white, inner sep=1pt] at (5.70,3.99)
+  {decay\\loop};
+
+% ================= test points ========================================
+\fill (3.00,5.03) circle (1.2pt);
+\draw[lead] (3.00,5.03) -- (3.00,5.62);
+\node[tpflag, anchor=south] at (3.00,5.62) {TP1};
+
+\fill (4.80,3.45) circle (1.2pt);
+\draw[lead] (4.80,3.45) -- (3.86,3.45);
+\node[tpflag, anchor=east] at (3.86,3.45) {TP4};
+
+% TP3 reads the voltage ACROSS L1: a differential bracket, clear of the coil
+\draw[lead] (6.6,4.8)  -- (7.30,4.8);
+\draw[lead] (6.6,3.12) -- (7.30,3.12);
+\draw[lead] (7.30,4.8) -- (7.30,3.12);
+\draw[lead] (7.30,3.96) -- (7.52,3.96);
+\node[tpflag, anchor=west] at (7.52,3.96) {TP3};
+
+\fill (6.6,1.20) circle (1.2pt);
+\draw[lead] (6.6,1.20) -- (7.52,1.20);
+\node[tpflag, anchor=west] at (7.52,1.20) {TP2};
+
+% ================= BOM / parameter box ================================
+\node[nblock, text width=88mm, align=left, anchor=north,
+      font=\sffamily\scriptsize] at (4.10,-0.85) {%
+  \textbf{L1} 3,200 h$\cdot\Omega_c$ \quad \textbf{R1} 40 $\Omega_c$ \quad
+  \textbf{D1} flyback, C\,$\rightarrow$\,E descent only\\
+  $\tau = L/R = 80$\,h \quad $3\tau = 240$\,h \quad
+  $I_{\mathrm{final}} = V/R = 0.60$\,A$_c$\\[1.5pt]
+  \textbf{TP1} $di/dt$ at the switching node \ (0.002--0.03 A$_c$/h)\\
+  \textbf{TP2} $i(t)$ in the interrupted path, against $I_{\mathrm{final}}$\\
+  \textbf{TP3} $V_{\mathrm{kick}}$ across the coil \ ($\le 3\times V_{\mathrm{drive}}$)\\
+  \textbf{TP4} substitute flow --- non-zero \emph{before} TP1 moves};
+
+\end{tikzpicture}

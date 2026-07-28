@@ -1,0 +1,97 @@
+% Figure 17-E — the Ericksonian bypass, and the detection board that finds it.
+% Upper: two paths from the operator's ^0 to the subject's ^5^P.
+% Lower: CCB-HYP-DET differencing drift against the filter's passed-log.
+\begin{tikzpicture}[x=1cm,y=1cm, font=\sffamily\scriptsize,
+  blk/.style={casblock, align=center, font=\sffamily\scriptsize,
+              inner sep=3pt},
+  cblk/.style={blk, fill=casCfill, draw=casCedge},
+  pblk/.style={blk, fill=casPfill, draw=casPedge},
+  eblk/.style={blk, fill=casEfill, draw=casEedge},
+  oblk/.style={blk, fill=casOfill, draw=casOedge},
+  wire/.style={-{Latex[length=2mm,width=1.5mm]}, line width=0.6pt},
+  fat/.style={-{Latex[length=2.6mm,width=2mm]}, line width=1.5pt},
+  panel/.style={font=\sffamily\scriptsize\bfseries},
+  ldr/.style={dotted, line width=0.4pt, draw=casNedge},
+  tny/.style={font=\sffamily\tiny}]
+
+% ============ panel 1: bypass topology ================================
+\node[panel, anchor=west] at (0,4.90) {UPPER --- bypass topology};
+
+% operator source
+\draw[line width=0.6pt] (0.75,3.00) circle (0.38);
+\node at (0.75,3.00) {\textasciicircum 0};
+\node[tny,align=center] at (0.75,2.32) {operator's\\ proposition};
+
+% the ^6 filter on the upper path
+\node[cblk,minimum width=27mm,minimum height=11mm] (flt) at (4.10,4.05)
+  {\textasciicircum 6\textasciicircum C\textsubscript{F6}|A \ filter\\
+   decomposes, tests, reports};
+% tick, drawn as two strokes so grayscale keeps it
+\draw[ldr] (4.10,3.50) -- (4.10,3.30);
+\draw[line width=1.2pt, draw=casGreen]
+  (2.62,3.08) -- (2.80,2.88) -- (3.12,3.40);
+\node[tny, anchor=west] at (3.24,3.12) {reports CLEAR --- honestly};
+
+% upper path: through the filter
+\draw[wire] (1.10,3.25) -- (2.30,4.05) -- (2.80,4.05);
+\draw[wire] (5.40,4.05) -- (8.30,4.05) -- (8.30,3.56);
+
+% lower path: around it, drawn heavier
+\node[eblk,minimum width=44mm] (byp) at (5.10,1.95)
+  {presupposition \ / \ embedded narrative};
+\draw[fat] (1.10,2.75) -- (2.60,1.95) -- (2.90,1.95);
+\draw[fat] (7.30,1.95) -- (8.30,1.95) -- (8.30,3.24);
+\node[tny,anchor=west,font=\sffamily\tiny\itshape] at (2.75,1.32)
+  {second path --- never entered the filter's input set};
+\node[font=\sffamily\scriptsize\bfseries] at (5.10,0.82)
+  {bypassed, not shorted.};
+
+% substrate capacitor
+\node[circle, fill=black, inner sep=0pt, minimum size=1.6pt] at (8.30,3.40) {};
+\draw[line width=0.6pt] (8.30,3.40) -- (8.88,3.40);
+\draw[line width=1.1pt] (8.88,3.10) -- (8.88,3.70);
+\draw[line width=1.1pt] (9.14,3.10) -- (9.14,3.70);
+\draw[line width=0.6pt] (9.14,3.40) -- (9.45,3.40);
+\node[pblk,minimum width=17mm] at (9.32,4.30)
+  {\textasciicircum 5\textasciicircum P\textsubscript{F7}|T};
+\node[tny,align=center] at (9.32,2.72) {subject's\\ substrate};
+
+\draw[dash pattern=on 1pt off 1.6pt, draw=casNedge, line width=0.5pt]
+  (0,0.36) -- (10.20,0.36);
+
+% ============ panel 2: CCB-HYP-DET ====================================
+\node[panel, anchor=west] at (0,-0.12) {LOWER --- CCB-HYP-DET};
+
+\node[pblk,minimum width=21mm,minimum height=10mm] (drift) at (1.15,-1.20)
+  {measured drift\\ \textasciicircum 5\textasciicircum
+   P\textsubscript{F7}|T};
+\node[cblk,minimum width=21mm,minimum height=10mm] (plog) at (1.15,-2.80)
+  {filter passed-log\\ \textasciicircum 6\textasciicircum
+   C\textsubscript{F6}|A};
+
+% differential block
+\node[blk,minimum width=17mm,minimum height=19mm] (diff) at (3.85,-2.00)
+  {Differential};
+\node[tny] at (3.20,-1.42) {$+$};
+\node[tny] at (3.20,-2.58) {$-$};
+\draw[wire] (2.20,-1.20) -- (2.95,-1.20) -- (2.95,-1.42) -- (3.08,-1.42);
+\draw[wire] (2.20,-2.80) -- (2.95,-2.80) -- (2.95,-2.58) -- (3.08,-2.58);
+\draw[wire] (4.70,-2.00) -- (5.55,-2.00);
+\node[tny] (unacc) at (5.10,-0.95) {unaccounted};
+\draw[ldr] (5.10,-1.12) -- (5.10,-1.92);
+
+\node[oblk,minimum width=20mm,minimum height=14mm] (integ) at (6.55,-2.00)
+  {$\int$ \ integrator\\ window 2880 min\\ (48 h)};
+\draw[wire] (7.55,-2.00) -- (8.25,-2.00);
+\node[eblk,minimum width=19mm,minimum height=14mm] (fuse) at (9.20,-2.00)
+  {fuse, 0.9\\ \textbf{defer\_}\\ \textbf{decision}};
+
+\node[anchor=north west, text width=101mm, align=left, font=\sffamily\tiny]
+  at (0.05,-3.35)
+  {\textit{unaccounted} $=$ drift $-$ passed\_log. If the position moved and
+   no evaluated proposition accounts for it, a bypass carried it. The
+   integrator exists because fractionation keeps every single reading under
+   threshold; the output of a detection board is not a refusal --- it is
+   time.};
+
+\end{tikzpicture}

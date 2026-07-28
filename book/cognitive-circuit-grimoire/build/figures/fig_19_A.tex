@@ -1,0 +1,77 @@
+% Figure 19-A — CCB-PW block diagram.
+% One command node, one intake/split, two opposite-polarity chains, and the
+% cross-feed that makes the pair cheap and therefore visible.
+\begin{tikzpicture}[x=1mm, y=1mm, font=\sffamily\footnotesize]
+  \def\CX{\textasciicircum}
+  \tikzset{
+    col/.style={casblock, text width=28mm},
+    hdr/.style={font=\sffamily\scriptsize\bfseries}
+  }
+
+  % ---- command node, with the CSB guard sitting across it ---------------
+  \node[pblock, text width=32mm] (cmd) at (0,0)
+    {\textbf{COMMAND}\\\casnote{\CX0\CX P\_\{F7\}|T}};
+  \node[pblock, text width=36mm] (csb) at (0,27)
+    {\textbf{CSB} \casnote{\CX3\CX P|$\langle$A,f,T$\rangle$}\\
+     $\beta{=}2.0$\quad sat${=}0.85$};
+
+  % fuse in series between the command node and the CSB
+  \draw[flow] (cmd.north) -- (0,12);
+  \draw[fill=white, draw=casNedge, line width=0.6pt] (-4,12) rectangle (4,18);
+  \draw[casNedge, line width=0.7pt] (-4,15) -- (4,15);
+  \draw[flow] (0,18) -- (csb.south);
+  \node[anchor=west, font=\sffamily\scriptsize, align=left] at (5.5,15)
+    {fuse 0.90 ---\\permanent block};
+  % refusal returns to the command node and blocks it
+  \draw[fbflow, rounded corners=2pt]
+    (csb.west) -- (-26,27) -- (-26,0) -- (cmd.west);
+  \node[flowlbl, anchor=east] at (-26.5,13.5) {block};
+
+  % ---- intake / split ---------------------------------------------------
+  \node[cblock, text width=40mm] (split) at (0,-18)
+    {\textbf{INTAKE / SPLIT} \; $\beta{=}1.0$\\\casnote{\CX6\CX C\_\{F6\}|A}};
+  \draw[flow] (cmd.south) -- (split.north);
+
+  % ---- the two chains ---------------------------------------------------
+  \node[eblock, col] (fort) at (-29,-44)
+    {\textbf{PATH F --- FORTIFY}\\\casnote{\CX2\CX E\_\{F4\}|f}\\
+     $\beta{=}2.0$\quad sat${=}0.80$};
+  \node[eblock, col] (a1) at (29,-44)
+    {\textbf{PATH D --- DEMORALISE}\\\casnote{\CX3\CX E\_\{F3\}|f}\\
+     A1 \; $\beta{=}1.5$};
+  \node[eblock, col] (a2) at (29,-62) {A2 \; $\beta{=}1.5$\\same state, spread};
+  \node[eblock, col] (a3) at (29,-78)
+    {A3 \; $\beta{=}1.6$\quad sat${=}0.90$\\$\beta_{\mathrm{total}}=3.6$};
+  \node[nblock, col] (dosc) at (29,-98)
+    {OSC \; 168\,h\\sustain $=$ campaign};
+  \node[pblock, col] (tgt) at (29,-116)
+    {\textbf{TARGET} \casnote{\CX5\CX P\_\{F1\}|T}\\target morale};
+  \node[nblock, col] (fosc) at (fort |- a3)
+    {OSC \; 168\,h\\sustain $=$ campaign};
+  \node[pblock, col] (own) at (fort |- tgt)
+    {\textbf{OWN} \casnote{\CX5\CX P\_\{F1\}|T}\\own-force morale};
+
+  % fan-out from the split into both chains
+  \draw[flow, rounded corners=2pt] (split.south) -- (0,-31) -- (-29,-31)
+    -- (fort.north);
+  \draw[flow, rounded corners=2pt] (0,-31) -- (29,-31) -- (a1.north);
+  \fill (0,-31) circle (0.7);
+
+  \draw[flow] (fort) -- (fosc);
+  \draw[flow] (fosc) -- (own);
+  \draw[flow] (a1) -- (a2);
+  \draw[flow] (a2) -- (a3);
+  \draw[flow] (a3) -- (dosc);
+  \draw[flow] (dosc) -- (tgt);
+
+  % ---- cross-feed: the coupling, and the leak ---------------------------
+  \node[nblock, text width=15mm] (rc) at (0,-88)
+    {XFEED RC\\$\tau{=}168$\,h\quad $\beta{=}0.30$};
+  \fill (29,-88) circle (0.7);
+  \draw[fbflow] (29,-88) -- (rc.east);
+  \draw[fbflow, rounded corners=2pt]
+    (rc.north) -- (0,-49) -- (fort.east);
+  \node[flowlbl] at (-6,-46.6) {bias};
+  \node[font=\sffamily\scriptsize\itshape, text width=21mm, align=center]
+    at (-1,-105) {coupling ---\\the detectable\\element};
+\end{tikzpicture}

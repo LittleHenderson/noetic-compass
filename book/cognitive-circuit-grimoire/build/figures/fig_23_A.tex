@@ -1,0 +1,70 @@
+% Figure 23-A -- CCB-CAL block diagram (six stages, NO-READ branch, 72 h osc).
+% Serpentine left-to-right: S1..S3 across the top, S4..S6 across the middle.
+\begin{tikzpicture}[
+  x=1mm, y=1mm, font=\sffamily\footnotesize,
+  sblk/.style={rectangle, rounded corners=2pt, draw, line width=0.6pt,
+    align=center, text=black, text width=25mm, minimum height=12mm,
+    inner sep=2pt, font=\sffamily\scriptsize},
+  sC/.style={sblk, fill=casCfill, draw=casCedge},
+  sE/.style={sblk, fill=casEfill, draw=casEedge},
+  sO/.style={sblk, fill=casOfill, draw=casOedge},
+  term/.style={rectangle, rounded corners=3pt, draw=black, fill=white,
+    line width=0.6pt, inner sep=2.5pt, align=center,
+    font=\sffamily\scriptsize\bfseries},
+  tpf/.style={rectangle, rounded corners=1pt, draw=black, fill=white,
+    line width=0.4pt, inner sep=1.5pt, font=\sffamily\scriptsize\bfseries},
+  xlbl/.style={anchor=west, font=\sffamily\scriptsize, inner sep=1pt}]
+
+% ---------- row 1 : intake chain ------------------------------------
+\node[sC] (intake) at (14,0)
+  {\textbf{S1 LOG INTAKE}\\[1pt]$t_\mathrm{op}$,\; $t_\mathrm{conf}$};
+\node[sC] (quant)  at (51,0)
+  {\textbf{S2 QUANTIZER}\\[1pt]5-min grid};
+\node[sC] (horiz)  at (88,0)
+  {\textbf{S3 HORIZON}\\\textbf{GATE}\\[1pt]$t_H$, floor 24\,h};
+\draw[flow] (intake) -- (quant);
+\draw[flow] (quant)  -- (horiz);
+\node[tpf] at (69.5,7.5) {TP1};
+
+% ---------- gate split : NO-READ down, in-horizon left --------------
+\draw[line width=0.6pt] (88,-6) -- (88,-11.5);
+\fill (88,-11.5) circle (0.7mm);
+\draw[flow] (88,-11.5) -- (88,-16.5);
+\node[term] (noread) at (88,-19.5) {NO-READ};
+\node[flowlbl, anchor=east] at (86,-14) {past $t_H$};
+\draw[flow, rounded corners=2pt] (88,-11.5) -- (14,-11.5) -- (14,-30);
+\node[flowlbl] at (58,-11.5) {inside horizon};
+\node[tpf, anchor=east] at (11,-21) {TP2};
+
+% ---------- row 2 : readout chain -----------------------------------
+\node[sE] (ratio) at (14,-36)
+  {\textbf{S4 RATIO}\\[1pt]fixed 3.0 divider\\$A = 3/\eta$};
+\node[sE, minimum height=24mm] (band) at (51,-36)
+  {\textbf{S5 BAND GUARD}\\[1pt]two-threshold\\comparator\\[1pt]$\eta \in [0.333,\,3.000]$};
+\draw[flow] (ratio) -- (band);
+\node[tpf] at (32.5,-31.5) {TP3};
+
+% four band exits
+\foreach \y/\t in {-28/{ACT \quad $A \le 1$},
+                   -34/{CLOSE \quad $1 < A < 3$},
+                   -40/{DRIVE \quad $3 \le A < 9$},
+                   -46/{RE-SPEC \quad $A \ge 9$}} {
+  \draw[flow] (64.2,\y) -- (67.5,\y);
+  \node[xlbl] at (68,\y) {\t};
+}
+
+% ---------- ledger ---------------------------------------------------
+\draw[flow, rounded corners=2pt] (51,-48) -- (51,-52) -- (88,-52) -- (88,-56);
+\node[sE] (ledger) at (88,-62)
+  {\textbf{S6 CAMPAIGN}\\\textbf{LEDGER}\\[1pt]$\rho$ trend, $\tau = 3$ ops};
+\draw[flow] (ledger) -- (88,-76.5);
+\node[term] (nxt) at (88,-80) {next\_op\_spec};
+\node[tpf, anchor=east] at (85,-72) {TP4};
+
+% ---------- schedule oscillator --------------------------------------
+\node[sO] (osc) at (14,-80)
+  {\textbf{OSC1 SCHEDULE}\\[1pt]period 72\,h};
+\draw[fbflow, rounded corners=2pt] (44,-48) -- (44,-80) -- (27.2,-80);
+\node[flowlbl, anchor=west] at (45,-60) {gate};
+\draw[flow, rounded corners=2pt] (0.8,-80) -- (-3,-80) -- (-3,0) -- (0.8,0);
+\end{tikzpicture}

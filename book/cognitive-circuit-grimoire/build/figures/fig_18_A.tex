@@ -1,0 +1,110 @@
+% Figure 18-A — CCB-ADV block diagram.
+% Rhythm charges the capacitor; association installs and flips the cue; the
+% path-select block carries the gap lane (detection-only) above the identity
+% lane; both converge on conversion.  The A/B loop leaves the board outline
+% because ^9^O x ^5^P is refused -- it closes on the advertiser's bench.
+\providecommand{\casU}{\textasciicircum}
+\providecommand{\casS}[1]{\_\{#1\}}
+\begin{tikzpicture}[
+  font=\sffamily\scriptsize,
+  spine/.style={text width=45mm, minimum height=8mm, font=\sffamily\scriptsize}
+]
+
+  % ================= main spine =========================================
+  \node[nblock, spine] (rhy) at (-0.9,0)
+    {\textbf{RHYTHM} \textperiodcentered\ oscillator MEDIA\\
+     f = 3.0/wk, sustain 12 wk};
+
+  \node[pblock, spine] (cap) at (-0.9,-1.75)
+    {\textbf{CHARGE} \textperiodcentered\ capacitor C\_SEG\\
+     \casnote{\casU5\casU P\casS{F4}|f}\\
+     C = 9.50, leak = 0.04/wk};
+
+  \node[cblock, spine] (assoc) at (-0.9,-3.65)
+    {\textbf{ASSOCIATION}\\
+     ASSOC $\beta$=2.0 $\to$ cue \casnote{\casU8\casU C\casS{F4}|A}\\
+     FLIP $\beta$=1.2 $\to$ \casnote{\casU9\casU C\casS{F4}|f}};
+
+  % ---- path select: gap lane over identity lane ------------------------
+  \node[eblock, spine] (gap) at (-0.9,-6.00)
+    {\textbf{GAP lane} \textperiodcentered\ $\beta$ = 2.5\\
+     \casnote{\casU3\casU E\casS{F3}|f}\\
+     raises gain on an existing aversion};
+
+  \node[eblock, spine] (idty) at (-0.9,-7.80)
+    {\textbf{IDENTITY lane} \textperiodcentered\ $\beta$ = 2.0\\
+     \casnote{\casU2\casU E\casS{F4}|f}\\
+     conversion charges its own bias};
+
+  \node[oblock, spine] (conv) at (-0.9,-9.80)
+    {\textbf{CONVERSION}\\
+     D3 diode \casnote{\casU E$\to$\casU O}, Vf = 2.0\\
+     in series with R\_PRICE = 4.0};
+
+  \node[casterm, text width=41mm] (tx) at (-0.9,-11.40)
+    {TRANSACTION \ \casnote{\casU9\casU O\casS{F5}|E}};
+
+  \draw[flow] (rhy)   -- (cap);
+  \draw[flow] (cap)   -- (assoc);
+  \draw[flow] (assoc) -- (gap);
+  \draw[flow] (gap)   -- (idty);
+  \draw[flow] (idty)  -- (conv);
+  \draw[flow] (conv)  -- (tx);
+
+  % PATH SELECT bracket, on the left of the two lanes
+  \draw[line width=0.5pt, draw=casNedge]
+    (-3.55,-4.80) -- (-3.88,-4.80) -- (-3.88,-8.55) -- (-3.55,-8.55);
+  \node[font=\sffamily\scriptsize\bfseries, rotate=90, anchor=south,
+        text=casNedge] at (-3.98,-6.68) {PATH SELECT};
+
+  % ================= endorser side branch ===============================
+  \node[pblock, text width=23mm, minimum height=7mm,
+        font=\sffamily\scriptsize] (endo) at (3.45,-2.35)
+    {\textbf{endorser}\\ \casnote{\casU5\casU P\casS{F7}|T}};
+
+  \draw[flow, rounded corners=3pt]
+    (endo.south) -- (3.45,-3.35) -- (1.48,-3.35);
+  \node[flowlbl, anchor=south] at (2.60,-3.28) {xfmr ENDORSE, n = 0.35};
+
+  % ================= detection-only stamp on the gap lane ===============
+  \node[font=\sffamily\tiny\bfseries, fill=white, draw=casEedge,
+        line width=0.5pt, inner sep=1.5pt, rounded corners=1pt,
+        text width=41mm, align=center] (stamp) at (-0.9,-5.08)
+    {DETECTION-ONLY SCHEMATIC --- DO NOT BUILD};
+
+  % hatched margin around the gap lane, drawn behind the opaque blocks
+  \begin{scope}[on background layer]
+    \fill[white] (-3.52,-6.80) rectangle (1.72,-4.66);
+    \begin{scope}
+      \clip (-3.52,-6.80) rectangle (1.72,-4.66);
+      \foreach \i in {-8.6,-8.3,...,2.2}
+        \draw[draw=casEedge!65, line width=0.45pt] (\i,-7.2) -- (\i+2.8,-4.3);
+    \end{scope}
+    \draw[draw=casEedge, line width=0.7pt] (-3.52,-6.80) rectangle (1.72,-4.66);
+  \end{scope}
+
+  % ================= board outline ======================================
+  \begin{scope}[on background layer]
+    \draw[rounded corners=4pt, draw=casNedge, line width=0.8pt,
+          dash pattern=on 3pt off 2pt]
+      (-4.32,0.78) rectangle (4.95,-12.15);
+  \end{scope}
+  \node[font=\sffamily\scriptsize\bfseries, text=casNedge, anchor=west]
+    at (-4.32,1.08) {CCB-ADV --- board outline};
+
+  % ================= A/B loop, outside the board ========================
+  \node[nblock, text width=40mm, minimum height=8mm,
+        font=\sffamily\scriptsize] (bench) at (1.20,-13.40)
+    {\textbf{advertiser's bench}\\
+     A/B test --- reads sale, adjusts $\beta$};
+
+  \draw[fbflow, rounded corners=3pt]
+    (tx.south) -- (-0.9,-12.75) -- (1.20,-12.75) -- (bench.north);
+
+  \draw[fbflow, rounded corners=3pt]
+    (bench.east) -- (5.55,-13.40) -- (5.55,-4.05) -- (1.48,-4.05);
+  \node[flowlbl, anchor=north west, align=left, text width=27mm]
+    at (2.00,-4.40)
+    {loop closes off-board:\\ \casnote{\casU9\casU O $\times$ \casU5\casU P} refused};
+
+\end{tikzpicture}

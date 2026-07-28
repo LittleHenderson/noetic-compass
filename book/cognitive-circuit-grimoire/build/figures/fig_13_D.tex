@@ -1,0 +1,57 @@
+% Figure 13-D -- TP4 band chart: cutoff / confirmation / manifestation, with the
+% three Red Corvette operations plotted against the bands.
+% Band captions live in the left half; the operations sit in the right quarter,
+% so no caption ever runs under a plotted point.
+\begin{tikzpicture}
+\begin{axis}[casaxis,
+  width=8.6cm, height=7.2cm,
+  xmin=0, xmax=4, ymin=0, ymax=0.40,
+  xtick={2.85,3.25,3.65}, xticklabels={op 1, op 2, op 3},
+  ytick={0,0.05,0.10,0.15,0.20,0.25,0.30,0.35,0.40},
+  yticklabel style={/pgf/number format/fixed,
+                    /pgf/number format/precision=2},
+  ylabel={delivered operational current at TP4},
+  xlabel={Red Corvette operations (13.6)},
+  grid=none, axis on top,
+]
+
+% ---- the three bands -------------------------------------------------
+\fill[casNfill] (axis cs:0,0)    rectangle (axis cs:4,0.05);
+\fill[casEfill] (axis cs:0,0.05) rectangle (axis cs:4,0.25);
+\fill[casOfill] (axis cs:0,0.25) rectangle (axis cs:4,0.40);
+
+\draw[casNedge, line width=0.6pt, dotted] (axis cs:0,0.05) -- (axis cs:4,0.05);
+\draw[casOedge, line width=1.0pt, dashed] (axis cs:0,0.25) -- (axis cs:4,0.25);
+
+% ---- band captions, left half ----------------------------------------
+\node[font=\sffamily\scriptsize, anchor=west]
+  at (axis cs:0.12,0.025) {cutoff --- board not firing};
+
+\node[font=\sffamily\scriptsize\bfseries, anchor=north west]
+  at (axis cs:0.12,0.240) {CONFIRMATION BAND\ \ 0.05--0.25};
+\node[font=\sffamily\scriptsize, anchor=north west, align=left, text width=42mm]
+  at (axis cs:0.12,0.212)
+  {signal reaches the Ether; confirmations arrive and nothing else does};
+\node[font=\sffamily\scriptsize\itshape, anchor=south west, align=left,
+      text width=42mm]
+  at (axis cs:0.12,0.062)
+  {this is where operators conclude the board doesn't work};
+
+\node[font=\sffamily\scriptsize\bfseries, anchor=north west]
+  at (axis cs:0.12,0.392) {MANIFESTATION};
+\node[font=\sffamily\scriptsize, anchor=north west, align=left, text width=42mm]
+  at (axis cs:0.12,0.363)
+  {threshold 0.25 --- the operator makes the calls and visits the lots};
+
+% ---- the three operations -------------------------------------------
+\addplot[black, line width=0.7pt, mark=*, mark size=2.1pt,
+         mark options={fill=white, draw=black, line width=0.7pt}]
+  coordinates {(2.85,0.084) (3.25,0.084) (3.65,0.259)};
+
+\node[font=\sffamily\scriptsize, anchor=east] at (axis cs:2.78,0.084) {0.084};
+\node[font=\sffamily\scriptsize, anchor=north] at (axis cs:3.25,0.072) {0.084};
+\node[font=\sffamily\scriptsize\bfseries, anchor=south east]
+  at (axis cs:3.60,0.272) {0.259};
+
+\end{axis}
+\end{tikzpicture}

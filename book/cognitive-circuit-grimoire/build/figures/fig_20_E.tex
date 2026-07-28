@@ -1,0 +1,135 @@
+% Figure 20-E -- CCB-SELF full schematic with reference designators:
+% C1 -> Q1 bias, R1 + LIM1 into the cause terminal, N1 taking the ^6 audit off
+% the rail, Q1 -> C2, G1 gating OSC1, Q3 at unity into ^9^O, and the S6 return
+% (LP1, F1) landing on C1's bias terminal.  Q2 (CSB) in its own box.
+\begin{tikzpicture}[
+  font=\sffamily\scriptsize,
+  wire/.style={line width=0.6pt, draw=black},
+  sig/.style={-{Latex[length=1.8mm,width=1.4mm]}, line width=0.6pt, draw=black},
+  part/.style={casblock, font=\sffamily\scriptsize, text width=12mm,
+               minimum height=8mm},
+  tp/.style={circle, draw=black, fill=white, line width=0.5pt, inner sep=0pt,
+             minimum size=6.4mm, font=\sffamily\scriptsize\bfseries},
+  lead/.style={font=\sffamily\scriptsize},
+  note/.style={font=\sffamily\scriptsize\itshape}
+]
+
+% ================= S0  C1, the slow reference ========================
+\draw[wire] (0.45,3.50) -- (0.98,3.50);
+\draw[line width=1.1pt] (0.98,3.26) -- (0.98,3.74);
+\draw[line width=1.1pt] (1.14,3.26) -- (1.14,3.74);
+\draw[wire] (1.14,3.50) -- (3.85,3.50);
+\node[lead, anchor=south] at (1.06,3.86) {\textbf{C1}};
+\node[lead, anchor=north] at (1.30,3.16)
+  {\textasciicircum5\textasciicircum P \ $\tau$=85\,d \ (reference)};
+\draw[sig] (3.85,3.50) -- (3.85,0.56);
+\node[flowlbl, anchor=west] at (3.92,2.10) {bias};
+
+% ================= S1  intake: R1 + LIM1 =============================
+\draw[sig] (-0.35,0) -- (0.66,0);
+\node[lead, anchor=south] at (0.12,0.14) {\textasciicircum0 intent};
+\node[part, cblock, text width=10mm] (r1) at (1.15,0) {R1\\30\,$\Omega_c$};
+
+\draw[wire] (1.66,0) -- (2.00,0);
+% LIM1: back-to-back clamp
+\draw[wire, fill=white] (2.00,-0.20) -- (2.00,0.20) -- (2.36,0) -- cycle;
+\draw[line width=1.1pt] (2.36,-0.20) -- (2.36,0.20);
+\draw[line width=1.1pt] (2.44,-0.20) -- (2.44,0.20);
+\draw[wire, fill=white] (2.80,-0.20) -- (2.80,0.20) -- (2.44,0) -- cycle;
+\draw[sig] (2.80,0) -- (3.14,0);
+\node[lead, anchor=east] at (2.05,-0.82) {LIM1 \ max=1.3};
+\draw[line width=0.4pt, draw=casNedge] (2.10,-0.78) -- (2.34,-0.24);
+
+% ================= S2  N1 notch + floating ^6 =========================
+\fill (3.00,0) circle (1.1pt);
+\draw[fbflow] (3.00,0) -- (3.00,-0.95);
+\node[part, nblock, text width=15mm] (n1) at (3.00,-1.45)
+  {\textbf{N1} notch\\reject \textasciicircum6, in\_session};
+\draw[fbflow] (n1.south) -- (3.00,-2.38);
+\node[draw=casNedge, dashed, circle, inner sep=1.2pt, font=\sffamily\scriptsize]
+  (six) at (3.00,-2.62) {\textasciicircum6};
+\node[note, anchor=east, align=right, text width=33mm] at (2.60,-2.55)
+  {audit floats: off the rail, not silenced};
+
+% ================= S3  Q1, the main CJT ==============================
+\node[part, cblock, text width=13mm, minimum height=11mm] (q1) at (3.85,0)
+  {\textbf{Q1}\\$\beta$=1.5 \ sat=0.60\\$r_\pi$=8.0};
+\node[flowlbl] at (2.86,0.30) {cause};
+\node[flowlbl] at (4.85,0.30) {effect};
+
+% ================= S3b  C2, the working composition ==================
+\draw[wire] (4.48,0) -- (5.24,0);
+\draw[line width=1.1pt] (5.24,-0.24) -- (5.24,0.24);
+\draw[line width=1.1pt] (5.40,-0.24) -- (5.40,0.24);
+\draw[wire] (5.40,0) -- (6.15,0);
+\node[lead, anchor=south] at (5.32,0.36) {\textbf{C2}};
+\node[lead, anchor=north] at (5.32,-0.32)
+  {\textasciicircum5\textasciicircum C \ 22\,d};
+
+% ================= S4  G1 Schmitt gate + OSC1 ========================
+\fill (5.75,0) circle (1.1pt);
+\draw[wire] (5.75,0) -- (5.75,1.90) -- (5.60,1.90);
+\draw[wire, fill=casNfill] (5.60,1.55) -- (5.60,2.25) -- (6.35,1.90) -- cycle;
+\node[lead] at (5.86,1.90) {G1};
+\draw[wire] (6.35,1.90) -- (6.75,1.90);
+\draw[sig] (6.75,1.90) -- (6.75,0.42);
+\node[flowlbl, anchor=west] at (6.82,1.30) {enable};
+% positive feedback around G1
+\draw[wire, rounded corners=2pt]
+  (6.55,1.90) -- (6.55,1.22) -- (5.35,1.22) -- (5.35,1.62) -- (5.60,1.62);
+\node[lead, anchor=north] at (5.95,1.16) {$R_f$};
+\node[lead, anchor=south] at (5.95,2.32) {G1 Schmitt \ 8.0 / 9.0};
+
+\node[part, nblock, text width=13mm] (osc) at (6.75,0)
+  {\textbf{OSC1}\\1.0\,d, 0.35};
+
+% ================= S5  Q3 and the ^9^O pad ===========================
+\node[part, oblock, text width=10mm] (q3) at (8.05,0) {\textbf{Q3}\\$\beta$=1.0};
+\draw[sig] (osc.east) -- (q3.west);
+\draw[sig] (q3.east) -- (8.80,0);
+\node[casterm] (out) at (9.12,0) {\textasciicircum9\textasciicircum O};
+\node[lead, anchor=north] at (9.12,-0.36) {enacted};
+
+% ================= S6  return: LP1, F1, into C1's bias ===============
+\node[part, nblock, text width=13mm] (lp1) at (7.30,-3.20)
+  {\textbf{LP1}\\$\tau$=21\,d};
+\node[part, nblock, text width=13mm] (f1) at (4.95,-3.20)
+  {\textbf{F1} fuse\\0.12 pts/d};
+\draw[sig, rounded corners=3pt] (9.12,-0.30) -- (9.12,-3.20) -- (lp1.east);
+\draw[sig] (lp1.west) -- (f1.east);
+\draw[sig, rounded corners=3pt]
+  (f1.west) -- (-0.75,-3.20) -- (-0.75,3.50) -- (0.45,3.50);
+\node[note, anchor=north west, text width=46mm] at (-0.62,-3.72)
+  {S6 \textemdash{} the one lawful O\,$\rightarrow$\,P ascent, $\beta$=0.05: it lands on a bias terminal, never on the rail};
+
+% ================= S7  CSB subcircuit ================================
+\draw[line width=0.7pt, draw=casEedge, rounded corners=3pt]
+  (5.15,-6.15) rectangle (9.65,-4.10);
+\node[grouplbl, text=casEedge, anchor=north west] at (5.28,-4.20)
+  {CSB \textemdash{} Q2 \textemdash{} MANDATORY};
+\node[part, eblock, text width=18mm, minimum height=8mm] (q2) at (7.35,-5.45)
+  {\textbf{Q2}\\$\beta$=1.5, sat=0.70};
+\draw[sig] (5.36,-5.45) -- (q2.west);
+\node[lead, anchor=south] at (5.90,-5.36) {\textasciicircum8\textasciicircum C};
+\node[lead, anchor=north] at (5.90,-5.54) {cause};
+\draw[sig] (7.35,-4.72) -- (q2.north);
+\node[lead, anchor=east] at (7.22,-4.80) {bias \ \textasciicircum3\textasciicircum P};
+\draw[sig] (q2.east) -- (9.42,-5.45);
+\node[lead, anchor=south] at (8.86,-5.36) {\textasciicircum2\textasciicircum E};
+\node[lead, anchor=north] at (8.86,-5.54) {effect};
+
+% ================= test points =======================================
+\node[tp] (tp4) at (2.90,4.20) {TP4};
+\draw[wire] (2.90,3.88) -- (2.90,3.50);
+\fill (2.90,3.50) circle (1.1pt);
+
+\node[tp] (tp3) at (2.35,1.20) {TP3};
+\draw[wire] (2.35,0.88) -- (2.35,0.24);
+
+\node[tp] (tp1) at (5.32,-1.35) {TP1};
+\draw[wire] (5.32,-1.03) -- (5.32,-0.74);
+
+\node[tp] (tp2) at (9.12,1.00) {TP2};
+\draw[wire] (9.12,0.68) -- (9.12,0.26);
+
+\end{tikzpicture}

@@ -40,7 +40,7 @@
 - 3.4 Operating Regions: Cutoff, Active, Saturation, Breakdown
 - 3.5 The CJT Datasheet — Full Parameter Table
 
-### Chapter 4: CAS Ohm's Law and St. John's Equation
+### Chapter 4: CAS Ohm's Law
 - 4.1 Ohm's Law from First Principles — V = I × R
 - 4.2 The Cognitive Isomorphism — V_drive = I_attention × R_constraint
 - 4.3 The Three Modes: Measure, Design, Diagnose
@@ -69,7 +69,7 @@
 - 7.1 The ^5 Female Capacitor — Accumulated Experience as Stored Energy
 - 7.2 The RC Charging Curve — P_cap(t) = 10 × (1 − e^(−t/τ))
 - 7.3 Leakage Current — Why Spells Die When Not Fed
-- 7.4 Dielectric Breakdown — Trauma, Obsession, and Cognitive Fracture
+- 7.4 Dielectric Breakdown — the Structural Failure Mode
 - 7.5 Capacitor Networks — Collective ^5 (Egregores, Group Minds)
 
 ### Chapter 8: Diodes — One-Way Cognitive Valves

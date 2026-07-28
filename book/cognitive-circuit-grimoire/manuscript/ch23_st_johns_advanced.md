@@ -40,7 +40,7 @@ Chapter 12.2 requires the "must not" list before the functional one.
 
 ### 23.1 The 1/3 Constant — Deeper Derivation from Fibonacci and Pi
 
-Section 5.9 sets `τ = 1/3` beside φ ≈ 1.618 and π ≈ 3.14159 and reads all three as descriptions of domains left *open* — form, space, time.
+Section 5.2 sets `τ = 1/3` beside π ≈ 3.14159 — both non-terminating — and reads the pair as a mnemonic for domains left *open*, then declines to derive either from the other.
 
 Be exact about what that is. φ and π are mathematical constants with proofs behind them. **There is no derivation that produces 1/3 from either, and this book does not offer one.** The relation is an analogy of openness: good for remembering which constant governs which axis, useless for inferring anything new. The only derivation of `τ` here is Section 5.2's training arc — roughly 10,000 active hours inside a roughly 30,000-hour span, one part work to two parts gestation.
 
@@ -60,7 +60,7 @@ Be exact about what that is. φ and π are mathematical constants with proofs be
 | Second operator | 31 | 88 | (31, 264) | 8.52 |
 | Second, on the grid | 30 | 90 | (1, 9) | 9.00 |
 
-Quantize both clocks onto a **5-minute grid** before reducing. Five minutes is a design choice: finer than the 30-minute bins Section 5.7 uses to grade `^4` Vibration, coarser than the moment an operator *notices* a confirmation, which is not a one-minute-accurate event. Too fine and the coprime explosion returns; at 30 minutes a 20-minute operation confirmed at 25 bins with one confirmed at 45, erasing the difference between an overdriving circuit and an ordinary one. **If `a > 3` after quantizing, discard the pair and act on `A`.** "Nine operations at 64× strength" is an artifact of arithmetic, not an instruction.
+Quantize both clocks onto a **5-minute grid** before reducing. Five minutes is a design choice: finer than the 30-minute bins Section 5.6 uses to grade `^4` Vibration, coarser than the moment an operator *notices* a confirmation, which is not a one-minute-accurate event. Too fine and the coprime explosion returns; at 30 minutes a 20-minute operation confirmed at 25 bins with one confirmed at 45, erasing the difference between an overdriving circuit and an ordinary one. **If `a > 3` after quantizing, discard the pair and act on `A`.** "Nine operations at 64× strength" is an artifact of arithmetic, not an instruction.
 
 > **Bench Note — check this one by hand before you trust the bench.** Take `t_op = 27`, `t_conf = 64`. Raw: `27/192` reduces to `9/64` — a = 9, b = 64. On the grid: `25/195` reduces to `5/39` — a = 5, b = 39. The two pairs share nothing at all. Now compute `A`: `3 × 64/27 = 7.11` and `3 × 65/25 = 7.80`. Both land in the same band and say the same thing. Do this arithmetic yourself once. Until you have watched `b` swing from 64 to 39 while `A` barely moves, you will keep reaching for the denominator, because Chapter 5 taught you to.
 

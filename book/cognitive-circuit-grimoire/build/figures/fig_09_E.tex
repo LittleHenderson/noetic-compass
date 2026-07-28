@@ -1,0 +1,63 @@
+% Figure 9-E -- Mutual induction between coupled minds, with the
+% opposing-polarity (Lenz) annotation that is the whole point of the plate.
+\begin{tikzpicture}[x=1cm,y=1cm,font=\sffamily\footnotesize,
+  coilw/.style={line width=0.9pt, draw=casCedge},
+  flux/.style={draw=casNedge, line width=0.5pt,
+               dash pattern=on 2.4pt off 1.8pt},
+  tny/.style={font=\sffamily\scriptsize},
+  ref/.style={font=\sffamily\footnotesize\bfseries}]
+
+% ================= L1 : five-loop coil, bumps facing outward ==========
+\draw[coilw] (1.60,0.50) -- (1.60,0.68);
+\foreach \i in {0,1,2,3,4}{\draw[coilw] (1.60,{0.68+0.38*\i}) arc(270:90:0.19);}
+\draw[coilw] (1.60,2.58) -- (1.60,2.76);
+\node[ref, anchor=south] at (1.60,2.90) {L$_1$ = 3,200 h$\cdot\Omega_c$};
+
+% ================= L2 : five-loop coil ================================
+\draw[coilw] (6.40,0.50) -- (6.40,0.68);
+\foreach \i in {0,1,2,3,4}{\draw[coilw] (6.40,{0.68+0.38*\i}) arc(270:450:0.19);}
+\draw[coilw] (6.40,2.58) -- (6.40,2.76);
+\node[ref, anchor=south] at (6.40,2.90) {L$_2$ = 800 h$\cdot\Omega_c$};
+
+% ================= coupling flux -- no wire between them =============
+% dashed body -- an arrow tip on a dashed path renders hollow, so each tip is
+% drawn as a short solid stub on the tangent instead.
+\draw[flux] (2.05,2.30) to[out=18,in=162] (5.95,2.30);
+\draw[flux] (2.05,1.63) to[out=0,in=180]  (5.95,1.63);
+\draw[flux] (2.05,0.96) to[out=-18,in=198] (5.95,0.96);
+\draw[draw=casNedge, line width=0.5pt, -{Latex[length=1.8mm,width=1.4mm]}]
+  (5.798,2.349) -- (5.95,2.30);
+\draw[draw=casNedge, line width=0.5pt, -{Latex[length=1.8mm,width=1.4mm]}]
+  (5.790,1.630) -- (5.95,1.63);
+\draw[draw=casNedge, line width=0.5pt, -{Latex[length=1.8mm,width=1.4mm]}]
+  (5.798,0.911) -- (5.95,0.96);
+
+\node[tny, align=center, fill=white, inner sep=2pt, draw=casNedge,
+      line width=0.4pt, rounded corners=2pt] at (4.00,1.63)
+  {coupling flux\\$k = 0.50$\\$M = k\sqrt{L_1 L_2} = 800$};
+
+% ================= the driving rate in L1 ============================
+\draw[-{Latex[length=2.4mm,width=1.9mm]}, line width=1.6pt, draw=casCedge]
+  (1.00,2.72) -- (1.00,0.54);
+\node[tny, anchor=east, align=right] at (0.84,1.63)
+  {$di_1/dt$\\$= 0.25$\\A$_c$/h};
+
+% ================= the induced response in L2 -- OPPOSING ============
+\draw[-{Latex[length=2.4mm,width=1.9mm]}, line width=1.6pt, draw=casEedge]
+  (7.00,0.54) -- (7.00,2.72);
+\node[tny, anchor=west, align=left] at (7.16,1.63)
+  {induced\\\textbf{opposing}\\$V_2 = 200$\\V$_c$};
+
+% direction contrast, stated in words for the grayscale reader
+\node[tny, anchor=north east, align=right] at (1.46,0.42) {driven\\\emph{down}};
+\node[tny, anchor=north west, align=left]  at (6.54,0.42) {responds\\\emph{up}};
+
+% ================= caption box =======================================
+\node[nblock, text width=92mm, align=left, anchor=north,
+      font=\sffamily\scriptsize] at (4.00,-0.42) {%
+  \textbf{Backlash is proportional to the rate, not the content.}\\[1.5pt]
+  $V_2 = M \times di_1/dt = 800 \times 0.25 = 200$\,V$_c$ --- 8.3$\times$ the
+  listener's own 24\,V$_c$ rail, through no wire.\\[1.5pt]
+  Set $di_1/dt = 0$ and $V_2 = 0$: a steady conviction transmits nothing.};
+
+\end{tikzpicture}

@@ -1,0 +1,74 @@
+% Figure 23-B -- characteristic curve A = 3/eta with the four action bands.
+% eta on a log axis so the sub-1 region (where the re-spec fuse lives) gets room.
+% NB: plain \foreach does not survive pgfplots' deferred axis body --
+% \pgfplotsinvokeforeach does. Do not "simplify" these loops back.
+\begin{tikzpicture}
+\begin{axis}[casaxis,
+    width=10.4cm, height=6.8cm,
+    xmode=log, grid=major, axis on top,
+    xlabel={$\eta = t_\mathrm{op}/t_\mathrm{conf}$\quad (log scale)},
+    ylabel={amplitude requirement $A = 3/\eta$},
+    xmin=0.2, xmax=4, ymin=0, ymax=20,
+    xtick={0.2,0.3333,0.5,1,2,3,4},
+    xticklabels={0.2,1/3,0.5,1,2,3,4},
+    minor xtick={0.25,0.3,0.4,0.6,0.7,0.8,0.9,1.5,2.5,3.5},
+    ytick={0,1,3,6,9,12,15,18},
+    clip mode=individual,
+  ]
+
+  % ---- action bands (filled first; axis on top keeps the grid readable) --
+  \fill[casOfill] (axis cs:0.2,0) rectangle (axis cs:4,1);
+  \fill[casPfill] (axis cs:0.2,1) rectangle (axis cs:4,3);
+  \fill[casCfill] (axis cs:0.2,3) rectangle (axis cs:4,9);
+  \fill[casEfill] (axis cs:0.2,9) rectangle (axis cs:4,20);
+  % hatch the RE-SPEC band by hand (keeps the patterns library out of it)
+  \begin{scope}
+    \clip (axis cs:0.2,9) rectangle (axis cs:4,20);
+    \pgfplotsinvokeforeach{-36,-33,...,96}{
+      \draw[casEedge!55, line width=0.3pt]
+        ([xshift=#1 mm]axis cs:0.2,9) -- ++(38mm,38mm);
+    }
+  \end{scope}
+  \draw[casNedge, line width=0.4pt] (axis cs:0.2,1) -- (axis cs:4,1);
+  \draw[casNedge, line width=0.4pt] (axis cs:0.2,3) -- (axis cs:4,3);
+  \draw[casNedge, line width=0.5pt] (axis cs:0.2,9) -- (axis cs:4,9);
+
+  % ---- band edges in eta -------------------------------------------------
+  \pgfplotsinvokeforeach{0.3333,1,3}{
+    \draw[casNedge, densely dashed, line width=0.5pt]
+      (axis cs:#1,0) -- (axis cs:#1,20);
+  }
+
+  % ---- the characteristic ------------------------------------------------
+  \addplot[black, no marks, line width=1.2pt, domain=0.2:4, samples=400] {3/x};
+
+  % ---- band labels -------------------------------------------------------
+  \node[anchor=west, font=\sffamily\scriptsize\bfseries, fill=casEfill,
+        inner sep=1.5pt]
+    at (axis cs:0.215,17.6) {RE-SPEC \quad $A \ge 9$};
+  \node[anchor=west, font=\sffamily\scriptsize\bfseries, fill=casCfill,
+        inner sep=1.5pt]
+    at (axis cs:1.70,4.3) {DRIVE \quad $3 \le A < 9$};
+  \node[anchor=east, font=\sffamily\scriptsize\bfseries, fill=casPfill,
+        inner sep=1.5pt]
+    at (axis cs:3.94,2.52) {CLOSE \quad $1 < A < 3$};
+  \node[anchor=west, font=\sffamily\scriptsize\bfseries]
+    at (axis cs:0.215,0.45) {ACT \quad $A \le 1$};
+
+  % ---- annotated operating points ----------------------------------------
+  \addplot[only marks, mark=*, mark size=2pt, black]
+    coordinates {(0.3333,9) (0.30,10)};
+  \draw[-{Latex[length=1.6mm]}, casNedge, line width=0.4pt]
+    (axis cs:0.44,13.0) -- (axis cs:0.315,10.2);
+  \node[anchor=west, font=\sffamily\scriptsize, align=left, fill=white,
+        draw=casNedge, line width=0.3pt, inner sep=1.5pt]
+    at (axis cs:0.45,13.4)
+    {derated concurrent cast\\$\eta = 0.30$, $A = 10$};
+  \draw[-{Latex[length=1.6mm]}, casNedge, line width=0.4pt]
+    (axis cs:1.02,6.6) -- (axis cs:0.350,8.82);
+  \node[anchor=west, font=\sffamily\scriptsize, align=left, fill=white,
+        draw=casNedge, line width=0.3pt, inner sep=1.5pt]
+    at (axis cs:1.05,6.6)
+    {Red Corvette\\$\eta = 1/3$, $A = 9$};
+\end{axis}
+\end{tikzpicture}

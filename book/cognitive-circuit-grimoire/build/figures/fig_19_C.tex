@@ -1,0 +1,178 @@
+% Figure 19-C — CCB-PW full schematic, component symbols.
+% DETECTION-ONLY. Architecture and parameters only; no procedure appears here.
+\begin{tikzpicture}[x=1mm, y=1mm, font=\sffamily\footnotesize,
+                    line width=0.6pt]
+  \def\CX{\textasciicircum}
+  \tikzset{
+    lbl/.style={font=\sffamily\scriptsize, align=center, inner sep=1pt},
+    lblL/.style={lbl, anchor=east, align=right},
+    lblR/.style={lbl, anchor=west, align=left},
+    tpf/.style={draw=casNedge, fill=white, rounded corners=1pt, line width=0.5pt,
+                font=\sffamily\scriptsize\bfseries, inner sep=1.5pt},
+    % ---- component symbols -------------------------------------------
+    pics/cjt/.style={code={
+      \path[draw, fill, line width=0.6pt] (-3.5,-6) -- (-3.5,6) -- (5,0) -- cycle;
+      \draw (-5.5,0) -- (-3.5,0);   \draw (5,0) -- (6.5,0);
+      \draw (-0.5,-3.06) -- (-0.5,-9);
+      \coordinate (-in) at (-5.5,0);
+      \coordinate (-out) at (6.5,0);
+      \coordinate (-b) at (-0.5,-9);
+    }},
+    pics/dio/.style={code={
+      \path[draw, fill, line width=0.6pt] (-2,-2.6) -- (-2,2.6) -- (2,0) -- cycle;
+      \draw[line width=0.8pt] (2,-2.6) -- (2,2.6);
+      \draw (-6,0) -- (-2,0);  \draw (2,0) -- (6,0);
+      \coordinate (-in) at (-6,0);
+      \coordinate (-out) at (6,0);
+    }},
+    pics/capv/.style={code={
+      \draw (0,5) -- (0,1.2);  \draw[line width=0.9pt] (-4,1.2) -- (4,1.2);
+      \draw[line width=0.9pt] (-4,-1.2) -- (4,-1.2);  \draw (0,-1.2) -- (0,-5);
+      \coordinate (-in) at (0,5);
+      \coordinate (-out) at (0,-5);
+    }},
+    pics/fusep/.style={code={
+      \path[draw, fill=white, line width=0.6pt] (-5,-2.4) rectangle (5,2.4);
+      \draw (-5,0) -- (5,0);  \draw (-9,0) -- (-5,0);  \draw (5,0) -- (9,0);
+      \coordinate (-in) at (-9,0);
+      \coordinate (-out) at (9,0);
+    }},
+    pics/gnd/.style={code={
+      \draw[line width=0.9pt] (-3.2,0) -- (3.2,0);
+      \draw (-2,-1.5) -- (2,-1.5);  \draw (-0.9,-2.8) -- (0.9,-2.8);
+    }},
+    pics/xfmr/.style={code={
+      \draw (0,9) -- (0,6);
+      \draw (0,6) arc (90:270:1) arc (90:270:1) arc (90:270:1);
+      \draw (0,0) -- (0,-0.6);
+      \draw[line width=0.7pt] (-4.5,-0.6) -- (4.5,-0.6);
+      \draw[line width=0.7pt] (-4.5,-1.8) -- (4.5,-1.8);
+      \draw (0,-1.8) -- (0,-2.4);
+      \draw (0,-2.4) arc (90:270:1) arc (90:270:1) arc (90:270:1);
+      \draw (0,-8.4) -- (0,-9);
+      \draw (0,-6) -- (0,-9);
+      \coordinate (-in) at (0,9);
+      \coordinate (-out) at (0,-9);
+    }}
+  }
+
+  % ================= DETECTION-ONLY banner ==============================
+  \path[fill=casEfill, draw=casEedge, line width=1.4pt]
+    (-52,43) rectangle (50,57);
+  \draw[casEedge, line width=0.4pt] (-50.6,44.4) rectangle (48.6,55.6);
+  \node[font=\sffamily\small\bfseries, text=black] at (-1,51.6)
+    {DETECTION-ONLY --- DO NOT BUILD};
+  \node[font=\sffamily\scriptsize, text=black] at (-1,46.9)
+    {architecture and parameters only: no procedure, channel, message or schedule};
+
+  % ================= input spine ========================================
+  \path[draw, fill=white] (-45,4) circle (4);
+  \draw (-47.6,4) sin (-46.3,6) cos (-45,4) sin (-43.7,2) cos (-42.4,4);
+  \node[lbl] at (-45,-6) {\textbf{COMMAND}\\\casnote{\CX0\CX P|T}};
+
+  \pic[fill=casCfill, draw=casCedge] (q1) at (-35,4) {cjt};
+  \draw (-41,4) -- (q1-in);
+  \node[lbl] at (-35,12.5) {\textbf{Q1} INTAKE\\$\beta{=}1.0$};
+
+  \pic[fill=casNfill, draw=casNedge] (d1) at (-22.5,4) {dio};
+  \pic[fill=casNfill, draw=casNedge] (d2) at (-10.5,4) {dio};
+  \pic[fill=casNfill, draw=casNedge] (d3) at (1.5,4) {dio};
+  \draw (q1-out) -- (d1-in); \draw (d1-out) -- (d2-in); \draw (d2-out) -- (d3-in);
+  \node[lbl] at (-22.5,14) {\textbf{D1}\\\casnote{\CX P$\to$\CX C}\\$V_f{=}0.7$};
+  \node[lbl] at (-10.5,14) {\textbf{D2}\\\casnote{\CX C$\to$\CX E}\\$V_f{=}1.2$};
+  \node[lbl] at (1.5,14)   {\textbf{D3}\\\casnote{\CX E$\to$\CX O}\\$V_f{=}2.0$};
+
+  \draw (d3-out) -- (11,4);
+  \fill (11,4) circle (0.8);
+  \draw (11,4) -- (11,26);      % riser to Path F
+  \draw (11,4) -- (11,-24);     % drop to Path D
+  \node[tpf] (tp1) at (15,9) {TP1};
+  \draw[casNedge, line width=0.4pt] (tp1.south west) -- (11.6,5.4);
+
+  % ================= PATH F — fortify ===================================
+  \pic[fill=casEfill, draw=casEedge] (q2) at (19,26) {cjt};
+  \draw (11,26) -- (q2-in);
+  \node[lbl] at (19,35.5)
+    {\textbf{Q2} FORTIFY\\$\beta{=}2.0$\; sat${=}0.80$\\\casnote{\CX2\CX E\_\{F4\}|f}};
+  \node[nblock, minimum width=14mm, minimum height=8mm, inner sep=1pt] (osc1)
+        at (34,26) {};
+  \draw (q2-out) -- (osc1.west);
+  \draw[line width=0.5pt] (30,26) sin (32,28.4) cos (34,26) sin (36,23.6) cos (38,26);
+  \node[lbl] at (34,20) {OSC1 \; 168\,h};
+  \draw (osc1.east) -- (46,26) -- (46,14);
+  \pic (c1) at (46,9) {capv};
+  \pic (g1) at (46,4) {gnd};
+  \node[lblL] at (41,9) {\textbf{OWN} morale\\\casnote{\CX5\CX P|T}};
+
+  % ================= PATH D — demoralise ================================
+  \pic[fill=casEfill, draw=casEedge] (q3) at (17,-24) {cjt};
+  \pic[fill=casEfill, draw=casEedge] (q4) at (29,-24) {cjt};
+  \pic[fill=casEfill, draw=casEedge] (q5) at (41,-24) {cjt};
+  \draw (11,-24) -- (q3-in);
+  \draw (q3-out) -- (q4-in);  \draw (q4-out) -- (q5-in);
+  \node[lbl] at (17,-13) {\textbf{Q3} a1\\$\beta{=}1.5$};
+  \node[lbl] at (29,-13) {\textbf{Q4} a2\\$\beta{=}1.5$};
+  \node[lbl] at (41,-12) {\textbf{Q5} a3\\$\beta{=}1.6$\\sat 0.90};
+  \draw[line width=1.3pt] (36,-18.4) -- (45,-18.4);
+  % shared bias rail from the target substrate
+  \draw (q3-b) -- (16.5,-33) -- (40.5,-33);
+  \draw (q4-b) -- (28.5,-33);  \draw (q5-b) -- (40.5,-33);
+  \fill (28.5,-33) circle (0.6);
+  \draw (28.5,-33) -- (28.5,-35);
+  \node[lbl] at (10,-37)
+    {bias $=$ tgt substrate\\\casnote{\CX5\CX P\_\{F1\}|T}};
+
+  % path D tail: oscillator, deniability transformer, target capacitor
+  \draw (q5-out) -- (49,-24) -- (49,-34) -- (43,-34);
+  \fill (49,-24) circle (0.8);
+  \node[nblock, minimum width=14mm, minimum height=8mm, inner sep=1pt] (osc2)
+        at (43,-38) {};
+  \draw[line width=0.5pt] (39,-38) sin (41,-35.6) cos (43,-38) sin (45,-40.4) cos (47,-38);
+  \node[lblL] at (35,-38) {OSC2\\168\,h};
+  \pic (xf) at (43,-51) {xfmr};
+  \node[lblL] at (36,-51) {XFMR1 \; 1:1\\deniability};
+  \pic (c2) at (43,-65) {capv};
+  \pic (g2) at (43,-70) {gnd};
+  \node[lblL] at (36,-65) {\textbf{TARGET} morale\\\casnote{\CX5\CX P|T}};
+  \node[tpf] (tp2) at (45,-31) {TP2};
+  \draw[casNedge, line width=0.4pt] (tp2.north east) -- (48.4,-25);
+
+  % ================= cross-feed: the coupling, and the leak =============
+  \draw[fbflow] (49,-24) -- (49,-1) -- (39.5,-1);
+  \node[nblock, minimum width=13mm, minimum height=9mm, inner sep=1pt,
+        font=\sffamily\scriptsize] (rc) at (33,-1) {XFEED RC\\$\tau{=}168$\,h};
+  \draw[fbflow] (rc.west) -- (21,-1) -- (21,17) -- (q2-b);
+  \node[lbl, text width=28mm] at (-3,-7)
+    {\itshape $\beta{=}0.30$ --- six times the Ch.\ 8.4 safe value: the
+     self-inversion defect};
+
+  % ================= inversion branch ===================================
+  \fill (11,-24) circle (0.8);
+  \draw (11,-24) -- (-14,-24);
+  \pic[fill=casEfill, draw=casEedge, rotate=-90] (q6) at (-14,-31) {cjt};
+  \node[lblR] at (-8,-31) {\textbf{Q6} INV\\$\beta{=}2.5$};
+  \draw (-14,-37.5) -- (-14,-41);
+  \node[casterm, text width=26mm] (susp) at (-11,-45)
+    {SUSPICION \casnote{\CX3\CX E\_\{F4\}|f}};
+  \node[tpf] (tp3) at (2,-20) {TP3};
+  \draw[casNedge, line width=0.4pt] (tp3.south) -- (-1.5,-23.4);
+
+  % ================= CSB: the limit the operator sets on themselves =====
+  \fill (-28.5,4) circle (0.8);
+  \draw (-28.5,4) -- (-28.5,-9) -- (-33,-9);
+  \pic[fill=casPfill, draw=casPedge, rotate=-90, yscale=-1] (q7) at (-33,-16) {cjt};
+  \node[lblL] at (-39,-16) {\textbf{Q7} CSB\\$\beta{=}2.0$\\sat${=}0.85$};
+  \draw (-33,-22.5) -- (-33,-23);
+  \pic[rotate=-90] (fu) at (-33,-32) {fusep};
+  \node[lblL] at (-39,-32) {FUSE\\$0.90$};
+  \draw (-33,-41) -- (-33,-43);
+  \node[casterm, text width=17mm] (blk) at (-33,-47) {PERMANENT\\BLOCK};
+  \node[lbl] at (-33,-56) {\casnote{\CX3\CX P\_\{F7\}|$\langle$A,f,T$\rangle$}};
+  \node[tpf] (tp4) at (-23,-25) {TP4};
+  \draw[casNedge, line width=0.4pt] (tp4.west) -- (-32.4,-24.4);
+
+  % ================= notes ==============================================
+  \node[lbl, text width=46mm, align=left] at (-14,-68)
+    {OSC1, OSC2: sustain $=$ campaign. \; Q3 $+$ Q4 $+$ Q5 are co-present, not
+     fused: $\beta_{\mathrm{total}}=3.6$. \; $\Sigma V_f = 3.9$ on the drive rail.};
+\end{tikzpicture}

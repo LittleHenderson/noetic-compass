@@ -1,0 +1,66 @@
+% Figure 8-C -- Domain-diode characteristic. Two panels share one current axis;
+% the horizontal scale is broken between them (// marks) so the forward knee is
+% readable beside an 8.0 reverse breakdown.
+\begin{tikzpicture}[x=1cm, y=1cm]
+
+% ============ reverse quadrant =========================================
+\begin{axis}[
+  casaxis, name=rev,
+  width=4.15cm, height=6.6cm,
+  at={(0,0)}, anchor=outer north west,
+  xmin=-9.4, xmax=-0.05, xtick={-8,-6,-4,-2},
+  ymin=-0.66, ymax=1.62, ytick={0,0.5,1.0,1.5},
+  xlabel={reverse potential},
+  ylabel={$I_\mathrm{attention}$ (rated $=1$)},
+]
+% reverse breakdown cliff
+\addplot[line width=1.0pt, draw=black]
+  coordinates {(-8,-0.02) (-8,-0.64)};
+% flat reverse leakage floor
+\addplot[line width=1.0pt, draw=black]
+  coordinates {(-7.98,-0.02) (-0.05,-0.02)};
+
+\node[font=\sffamily\scriptsize, align=center, fill=white, inner sep=1pt]
+  (lk) at (axis cs:-4.4,0.72)
+  {flat leakage floor\\$I_R = 0.02$ ---\\never zero};
+\draw[fbflow] (lk.south) -- (axis cs:-4.4,0.02);
+
+\node[font=\sffamily\scriptsize, align=left, anchor=north west,
+      fill=white, inner sep=1pt] (br) at (axis cs:-7.75,-0.20)
+  {$V_{BR} = 8.0$\\non-recovering\\(not a Zener)};
+\end{axis}
+
+% ============ forward quadrant =========================================
+\begin{axis}[
+  casaxis, name=fwd,
+  width=5.5cm, height=6.6cm,
+  at={($(rev.outer north east)+(2.5mm,0)$)}, anchor=outer north west,
+  xmin=-0.03, xmax=1.30, xtick={0,0.5,1.0},
+  ymin=-0.66, ymax=1.62, ytick={0,0.5,1.0,1.5}, yticklabels={},
+  xlabel={forward potential},
+]
+% sub-threshold band
+\path[fill=casNfill, fill opacity=0.9]
+  (axis cs:0,-0.66) rectangle (axis cs:0.7,1.62);
+% the exponential characteristic
+\addplot[line width=1.0pt, draw=black, samples=220, domain=0:1.17]
+  {0.08*exp((x-0.7)/0.152) - 0.02};
+% knee marker
+\draw[line width=0.5pt, draw=casNedge, dash pattern=on 2pt off 1.5pt]
+  (axis cs:0.7,-0.66) -- (axis cs:0.7,1.30);
+\node[font=\sffamily\scriptsize\bfseries, anchor=south, fill=white, inner sep=1pt]
+  at (axis cs:0.7,1.31) {$V_f = 0.7$};
+
+\node[font=\sffamily\scriptsize, align=center, fill=white, inner sep=1pt]
+  (sub) at (axis cs:0.40,0.78)
+  {sub-threshold:\\conducting,\\but not working};
+\draw[fbflow] (sub.south) -- (axis cs:0.40,0.05);
+\end{axis}
+
+% ============ scale break between the panels ===========================
+\draw[line width=0.7pt, draw=black]
+  ($(rev.south east)+(0.4mm,-1.3mm)$) -- ++(1.7mm,2.7mm);
+\draw[line width=0.7pt, draw=black]
+  ($(rev.south east)+(2.0mm,-1.3mm)$) -- ++(1.7mm,2.7mm);
+
+\end{tikzpicture}

@@ -1,0 +1,87 @@
+% Figure 9-C -- Back-EMF versus taper time. Same L (3,200 h.Ohm_c), same
+% endpoint (0.60 A_c -> 0), two taper times. Upper panel: the current fall.
+% Lower panel: V_kick = L|di/dt|. The lower axis is logarithmic because on a
+% linear one the 8 V_c taper and the 24 V_c rail both disappear into the
+% thickness of the baseline next to a 19,200 V_c spike.
+\begin{tikzpicture}
+\begin{groupplot}[casaxis,
+  group style={group size=1 by 2, vertical sep=5mm,
+               x descriptions at=edge bottom},
+  width=9.4cm, xmin=-25, xmax=285,
+  xtick={0,60,120,180,240},
+]
+
+% ================= upper panel: i(t) ==================================
+\nextgroupplot[height=3.6cm, ymin=-0.07, ymax=0.80,
+  ylabel={$i(t)$,\ A$_c$}, ytick={0,0.30,0.60},
+  grid=major]
+
+% steady-state reference; same dash as the rail line in the panel below
+\addplot[draw=casNedge, dash pattern=on 3pt off 2pt, line width=0.5pt,
+         forget plot] coordinates {(-25,0.60) (285,0.60)};
+
+% abrupt interrupt, 0.1 h -- horizontal runs dashed, the cliff drawn heavy
+\addplot[line width=1.2pt, draw=casEedge, dash pattern=on 4pt off 2pt,
+         forget plot] coordinates {(-25,0.60) (0,0.60) (0.1,0) (285,0)};
+\draw[line width=2.2pt, draw=casEedge] (axis cs:0,0.60) -- (axis cs:0,0);
+
+% designed taper: 240 h linear ramp, di/dt = 0.0025 A_c/h
+\addplot[line width=1.2pt, draw=casCedge, forget plot]
+  coordinates {(-25,0.60) (0,0.60) (240,0) (285,0)};
+
+\node[font=\sffamily\scriptsize, anchor=west, inner sep=1.5pt] (labA)
+  at (axis cs:16,0.50) {abrupt: 0.1\,h};
+\draw[-{Latex[length=1.5mm,width=1.2mm]}, line width=0.45pt]
+  (labA.west) -- (axis cs:2,0.38);
+
+\node[font=\sffamily\scriptsize, anchor=west, inner sep=1.5pt] (labB)
+  at (axis cs:118,0.44) {taper: 240\,h ($3\tau$)};
+\draw[-{Latex[length=1.5mm,width=1.2mm]}, line width=0.45pt]
+  (labB.south) -- (axis cs:160,0.20);
+
+\node[font=\sffamily\scriptsize\itshape, anchor=west, fill=white,
+      inner sep=1.5pt] at (axis cs:-20,0.71) {0.60 A$_c$ steady};
+
+% ================= lower panel: V_kick ================================
+\nextgroupplot[height=4.4cm, ymode=log, ymin=1, ymax=40000,
+  ylabel={$V_{\mathrm{kick}} = L\,|di/dt|$,\ V$_c$\ (log)},
+  xlabel={hours from the switch opening},
+  ytick={1,10,100,1000,10000},
+  yticklabels={1,10,100,{1{,}000},{10{,}000}},
+  grid=major, minor y tick num=0]
+
+% the 24 V_c drive rail, same dash as the steady line above
+\addplot[draw=casNedge, dash pattern=on 3pt off 2pt, line width=0.5pt,
+         forget plot] coordinates {(-25,24) (285,24)};
+
+% broad, low plateau from the 240 h ramp: 8 V_c
+\addplot[line width=1.2pt, draw=casCedge, forget plot]
+  coordinates {(-25,1) (0,1) (0.6,8) (240,8) (240.6,1) (285,1)};
+
+% the needle: 0.1 h cut, 19,200 V_c -- 0.03% of this axis wide, so it is
+% drawn at minimum stroke width rather than as an area
+\addplot[line width=1.2pt, draw=casEedge, dash pattern=on 4pt off 2pt,
+         forget plot] coordinates {(-25,1) (0,1) (0.05,19200) (0.12,19200)
+                                   (0.17,1) (285,1)};
+\draw[line width=2.2pt, draw=casEedge] (axis cs:0,1) -- (axis cs:0,19200);
+
+% --- the 2,400x span --------------------------------------------------
+\draw[{Latex[length=1.6mm,width=1.3mm]}-{Latex[length=1.6mm,width=1.3mm]},
+      line width=0.5pt, draw=black]
+  (axis cs:172,8) -- (axis cs:172,19200);
+\node[font=\sffamily\scriptsize\bfseries, anchor=west, fill=white,
+      inner sep=1.5pt] at (axis cs:176,400) {2{,}400$\times$};
+
+% --- callouts ----------------------------------------------------------
+\node[font=\sffamily\scriptsize, anchor=west, fill=white, inner sep=1.5pt]
+  at (axis cs:15,19200) {\textbf{19,200\,V$_c$} --- 800$\times$ rail};
+\draw[-{Latex[length=1.5mm,width=1.2mm]}, line width=0.45pt]
+  (axis cs:14,19200) -- (axis cs:3,19200);
+
+\node[font=\sffamily\scriptsize, anchor=west, fill=white, inner sep=1.5pt]
+  at (axis cs:56,2.6) {8\,V$_c$ --- 0.33$\times$ rail};
+\node[font=\sffamily\scriptsize, anchor=west, fill=white, inner sep=1.5pt]
+  at (axis cs:56,52) {24\,V$_c$ drive rail};
+
+\end{groupplot}
+\end{tikzpicture}

@@ -1,0 +1,135 @@
+% Figure 20-F -- CCB-SELF assembly drawing: board outline, titleblock, part
+% placement, the heavy S6 return trace along the bottom edge into C1's bias
+% pad, the CSB block, four test-point callouts and the BOM box.
+\begin{tikzpicture}[
+  font=\sffamily\scriptsize,
+  part/.style={casblock, font=\sffamily\scriptsize, align=center,
+               inner sep=2pt},
+  trace/.style={line width=0.7pt, draw=black},
+  heavy/.style={line width=1.5pt, draw=black},
+  silk/.style={font=\sffamily\scriptsize\itshape, text=casNedge},
+  tp/.style={circle, draw=black, fill=white, line width=0.5pt, inner sep=0pt,
+             minimum size=6.4mm, font=\sffamily\scriptsize\bfseries},
+  lead/.style={line width=0.4pt, draw=black}
+]
+
+% ================= board outline + titleblock ========================
+\draw[line width=0.9pt, draw=casNedge, rounded corners=4pt]
+  (0,0) rectangle (10.40,11.20);
+\draw[line width=0.6pt, draw=casNedge] (0,10.35) -- (10.40,10.35);
+\node[font=\sffamily\footnotesize\bfseries, anchor=west] at (0.25,10.78)
+  {CCB-SELF \ \textbullet\ \ closed loop \ \textbullet\ \ rev A};
+\node[silk, anchor=east] at (10.15,10.78) {ASSEMBLY \ \textbullet\ \ sheet 1 of 1};
+
+% ================= parts =============================================
+\node[part, fill=casPfill, draw=casPedge, minimum width=26mm,
+      minimum height=14mm] (c1) at (1.85,9.20)
+  {\textbf{C1} \ REFERENCE\\\textasciicircum5\textasciicircum P \ $\tau$=85\,d\\leak 180\,d};
+
+\node[part, minimum width=9mm, minimum height=7mm] (r1) at (1.35,7.55)
+  {\textbf{R1}\\30\,$\Omega_c$};
+\node[part, minimum width=9mm, minimum height=7mm] (lim1) at (1.35,6.55)
+  {\textbf{LIM1}\\1.3};
+\node[part, minimum width=13mm, minimum height=7mm] (n1) at (2.75,7.50)
+  {\textbf{N1}\\in\_session};
+
+\node[part, fill=casCfill, draw=casCedge, minimum width=20mm,
+      minimum height=13mm] (q1) at (5.35,6.55)
+  {\textbf{Q1}\\$\beta$=1.5 \ sat=0.60\\$r_\pi$=8.0};
+\node[silk, anchor=south east] at (4.28,6.62) {cause};
+\node[silk, anchor=west] at (5.46,7.34) {bias};
+\node[silk, anchor=west] at (5.46,5.72) {effect};
+
+\node[part, fill=casCfill, draw=casCedge, minimum width=16mm,
+      minimum height=10mm] (c2) at (5.35,4.85)
+  {\textbf{C2}\\\textasciicircum5\textasciicircum C \ $\tau$=22\,d};
+
+\node[part, minimum width=13mm, minimum height=8mm] (g1) at (7.55,6.30)
+  {\textbf{G1}\\8.0 / 9.0};
+\node[part, minimum width=13mm, minimum height=8mm] (osc) at (7.55,5.10)
+  {\textbf{OSC1}\\1.0\,d, 0.35};
+\node[part, fill=casOfill, draw=casOedge, minimum width=13mm,
+      minimum height=9mm] (q3) at (9.15,5.75) {\textbf{Q3}\\$\beta$=1.0};
+
+\node[part, minimum width=13mm, minimum height=7mm] (lp1) at (7.60,0.55)
+  {\textbf{LP1}\\$\tau$=21\,d};
+\node[part, minimum width=13mm, minimum height=7mm] (f1) at (5.35,0.55)
+  {\textbf{F1}\\0.12 pts/d};
+
+% ================= traces ============================================
+% intake: edge pad -> R1 -> LIM1 -> Q1 cause
+\draw[trace] (0.30,7.55) -- (0.90,7.55);
+\fill (0.30,7.55) circle (1.4pt);
+\node[silk, anchor=south] at (0.60,7.64) {\textasciicircum0 in};
+\draw[trace] (1.35,7.20) -- (1.35,6.90);
+\draw[trace] (1.80,6.55) -- (4.35,6.55);
+\draw[trace] (2.75,7.15) -- (2.75,6.55);
+\fill (2.75,6.55) circle (1.4pt);
+
+% C1 -> Q1 bias pad
+\draw[trace] (2.85,8.50) -- (2.85,8.10) -- (5.35,8.10) -- (5.35,7.20);
+
+% Q1 -> C2 -> G1 -> OSC1 -> Q3 -> output pad
+\draw[trace] (5.35,5.90) -- (5.35,5.35);
+\draw[trace] (6.15,4.85) -- (6.60,4.85) -- (6.60,6.30) -- (6.90,6.30);
+\draw[trace] (7.55,5.90) -- (7.55,5.50);
+\draw[trace] (8.20,5.10) -- (8.40,5.10) -- (8.40,5.75) -- (8.50,5.75);
+\draw[trace] (9.80,5.75) -- (9.92,5.75);
+\draw[fill=black] (9.92,5.62) rectangle (10.18,5.88);
+\node[silk, anchor=south] at (10.08,5.96) {\textasciicircum9\textasciicircum O};
+
+% ================= S6 return trace, heavy, along the bottom edge ======
+\draw[heavy, rounded corners=4pt]
+  (10.05,5.60) -- (10.05,0.55) -- (8.26,0.55);
+\draw[heavy] (6.94,0.55) -- (6.01,0.55);
+\draw[heavy, rounded corners=4pt]
+  (4.69,0.55) -- (0.30,0.55) -- (0.30,9.20) -- (0.55,9.20);
+\node[anchor=south, font=\sffamily\scriptsize\itshape] at (5.55,1.02)
+  {O\,$\rightarrow$\,P \ \textemdash\ \ bias terminal only};
+
+% ================= CSB block, hatched ================================
+\begin{scope}
+  \clip[rounded corners=3pt] (6.25,2.45) rectangle (9.85,4.30);
+  \foreach \i in {-2.0,-1.7,...,3.8}{%
+    \draw[line width=0.3pt, draw=casEedge!55] (6.25+\i,2.45) -- (8.10+\i,4.30);}
+\end{scope}
+\draw[line width=0.8pt, draw=casEedge, rounded corners=3pt]
+  (6.25,2.45) rectangle (9.85,4.30);
+\node[font=\sffamily\scriptsize\bfseries, text=casEedge, anchor=north,
+      align=center] at (8.05,4.22)
+  {CSB \textemdash{} MANDATORY\\DO NOT DEPOPULATE};
+\node[part, fill=casEfill, draw=casEedge, minimum width=20mm,
+      minimum height=9mm] (q2) at (8.05,3.02)
+  {\textbf{Q2}\\$\beta$=1.5 \ sat=0.70};
+
+% ================= test points =======================================
+\node[tp] (tp4) at (3.80,9.85) {TP4};
+\draw[lead] (3.58,9.62) -- (3.10,9.30);
+\node[tp] (tp3) at (2.45,6.10) {TP3};
+\draw[lead] (2.23,6.28) -- (1.85,6.45);
+\node[tp] (tp1) at (5.35,3.85) {TP1};
+\draw[lead] (5.35,4.17) -- (5.35,4.35);
+\node[tp] (tp2) at (9.35,4.85) {TP2};
+\draw[lead] (9.62,5.03) -- (10.02,5.50);
+
+% ================= BOM box ===========================================
+\draw[line width=0.6pt, draw=casNedge, rounded corners=3pt]
+  (0.65,1.15) rectangle (4.35,5.70);
+\node[font=\sffamily\scriptsize\bfseries, anchor=north west] at (0.80,5.58)
+  {BILL OF MATERIALS};
+\node[anchor=north west, align=left, font=\sffamily\scriptsize] at (0.80,5.24)
+  {C1 \ \textasciicircum5\textasciicircum P \ $\tau$=85\,d\\
+   C2 \ \textasciicircum5\textasciicircum C \ $\tau$=22\,d\\
+   R1 \ 30\,$\Omega_c$\\
+   LIM1 \ max=1.3\\
+   N1 \ band=in\_session\\
+   Q1 \ $\beta$=1.5 \ sat=0.60 \ $r_\pi$=8.0\\
+   G1 \ 8.0 / 9.0\\
+   OSC1 \ 1.0\,d \ 0.35\\
+   Q3 \ $\beta$=1.0\\
+   LP1 \ $\tau$=21\,d\\
+   F1 \ 0.12 pts/day\\
+   Q2 \ $\beta$=1.5 \ sat=0.70\\
+   S1 \ 7\,d / 10\,min};
+
+\end{tikzpicture}

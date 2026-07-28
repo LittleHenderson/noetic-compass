@@ -1,0 +1,81 @@
+% Figure 8-A -- Domain diode symbol plate.
+% Anode = source domain, cathode = target domain. D1/D2/D3 forward; a fourth
+% instance reversed and struck through to show the blocked ascent.
+\begin{tikzpicture}[
+  x=1cm, y=1cm,
+  % Diode conducting left-to-right: anode (flat back) left, cathode bar right.
+  diofwd/.pic={
+    \draw[line width=0.7pt, draw=black, fill=casNfill]
+      (-2.9mm,-3.2mm) -- (-2.9mm,3.2mm) -- (2.9mm,0mm) -- cycle;
+    \draw[line width=1.2pt, draw=black] (2.9mm,-3.9mm) -- (2.9mm,3.9mm);
+  },
+  % Same part fitted backwards: cathode bar faces the incoming signal.
+  diorev/.pic={
+    \draw[line width=0.7pt, draw=black, fill=casNfill]
+      (2.9mm,-3.2mm) -- (2.9mm,3.2mm) -- (-2.9mm,0mm) -- cycle;
+    \draw[line width=1.2pt, draw=black] (-2.9mm,-3.9mm) -- (-2.9mm,3.9mm);
+  },
+  dnode/.style={minimum width=17mm, minimum height=9.5mm, align=center},
+  desig/.style={font=\sffamily\scriptsize\bfseries},
+  spec/.style={font=\sffamily\scriptsize},
+  note/.style={font=\sffamily\scriptsize, align=center},
+  wire/.style={line width=0.6pt, draw=black}
+]
+
+% ---------- row 1 : D1  ^P -> ^C ---------------------------------------
+\node[pblock, dnode] (s1) at (0,0)
+  {{\ttfamily\bfseries\textasciicircum P}\\[1pt]{\scriptsize Principled}};
+\node[cblock, dnode] (t1) at (5.6,0)
+  {{\ttfamily\bfseries\textasciicircum C}\\[1pt]{\scriptsize Cognitive}};
+\pic at (2.8,0) {diofwd};
+\draw[wire] (s1.east) -- (2.48,0);
+\draw[flow]  (3.12,0) -- (t1.west);
+\node[desig] at (2.8,0.60) {D1};
+\node[spec]  at (2.8,-0.60) {$V_f = 0.7$};
+
+% ---------- row 2 : D2  ^C -> ^E ---------------------------------------
+\node[cblock, dnode] (s2) at (0,-1.5)
+  {{\ttfamily\bfseries\textasciicircum C}\\[1pt]{\scriptsize Cognitive}};
+\node[eblock, dnode] (t2) at (5.6,-1.5)
+  {{\ttfamily\bfseries\textasciicircum E}\\[1pt]{\scriptsize Evaluative}};
+\pic at (2.8,-1.5) {diofwd};
+\draw[wire] (s2.east) -- (2.48,-1.5);
+\draw[flow]  (3.12,-1.5) -- (t2.west);
+\node[desig] at (2.8,-0.90) {D2};
+\node[spec]  at (2.8,-2.10) {$V_f = 1.2$};
+
+% ---------- row 3 : D3  ^E -> ^O ---------------------------------------
+\node[eblock, dnode] (s3) at (0,-3.0)
+  {{\ttfamily\bfseries\textasciicircum E}\\[1pt]{\scriptsize Evaluative}};
+\node[oblock, dnode] (t3) at (5.6,-3.0)
+  {{\ttfamily\bfseries\textasciicircum O}\\[1pt]{\scriptsize Operational}};
+\pic at (2.8,-3.0) {diofwd};
+\draw[wire] (s3.east) -- (2.48,-3.0);
+\draw[flow]  (3.12,-3.0) -- (t3.west);
+\node[desig] at (2.8,-2.40) {D3};
+\node[spec]  at (2.8,-3.60) {$V_f = 2.0$};
+
+% ---------- anode / cathode callouts on the first instance -------------
+\node[note] (an) at (0.95,1.30) {anode\\(source domain)};
+\node[note] (ca) at (4.75,1.30) {cathode\\(target domain)};
+\draw[fbflow] (an.south east) -- (2.44,0.42);
+\draw[fbflow] (ca.south west) -- (3.16,0.42);
+
+% ---------- separator --------------------------------------------------
+\draw[draw=casNedge, line width=0.4pt, dash pattern=on 1.5pt off 1.5pt]
+  (-1.0,-4.05) -- (6.6,-4.05);
+
+% ---------- row 4 : the same part fitted backwards ---------------------
+\node[oblock, dnode] (s4) at (0,-4.85)
+  {{\ttfamily\bfseries\textasciicircum O}\\[1pt]{\scriptsize Operational}};
+\node[pblock, dnode] (t4) at (5.6,-4.85)
+  {{\ttfamily\bfseries\textasciicircum P}\\[1pt]{\scriptsize Principled}};
+\pic at (2.8,-4.85) {diorev};
+\draw[flow] (s4.east) -- (2.36,-4.85);
+\draw[wire, draw=casNedge, dash pattern=on 1.5pt off 1.5pt]
+  (3.12,-4.85) -- (t4.west);
+% struck through with a single stroke, so the backwards part stays legible
+\draw[line width=1.1pt, draw=casRed] (2.40,-5.50) -- (3.20,-4.25);
+\node[spec] at (2.8,-5.72) {reverse-biased --- blocked};
+
+\end{tikzpicture}

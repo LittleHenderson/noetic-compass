@@ -1,0 +1,217 @@
+% Figure 15-B -- CCB-O full schematic, detection-only.
+\begin{tikzpicture}[x=1cm,y=1cm,font=\sffamily]
+\def\cs#1{{\ttfamily\scriptsize\detokenize{#1}}}
+\def\cst#1{{\ttfamily\tiny\detokenize{#1}}}
+\tikzset{
+  tp/.style={circle, draw=black, fill=white, line width=0.5pt,
+             inner sep=0.3pt, minimum size=5mm, font=\sffamily\tiny\bfseries},
+  lead/.style={line width=0.6pt, draw=black},
+  thin/.style={line width=0.4pt, draw=casNedge},
+  spec/.style={casblock, minimum width=16mm, inner sep=1.5pt,
+               font=\sffamily\tiny, minimum height=0mm},
+  carr/.style={casblock, minimum width=15.5mm, inner sep=1.5pt,
+               font=\sffamily\tiny, minimum height=6mm},
+  tag/.style={font=\sffamily\tiny},
+  itag/.style={font=\sffamily\tiny\itshape},
+  conn/.style={circle, draw=black, fill=white, line width=0.5pt,
+               inner sep=0pt, minimum size=4mm, font=\sffamily\tiny\bfseries},
+}
+% ---- symbol macros ------------------------------------------------------
+\def\ampsym#1#2#3#4#5{%
+  \draw[line width=0.7pt, fill=#3, draw=#4]
+    (#1-0.55,#2-0.55) -- (#1+0.55,#2) -- (#1-0.55,#2+0.55) -- cycle;
+  \node[font=\sffamily\scriptsize\bfseries] at (#1-0.24,#2) {#5};}
+\def\diodesym#1#2{%
+  \draw[line width=0.7pt, fill=casNfill, draw=black]
+    (#1-0.22,#2-0.22) -- (#1+0.18,#2) -- (#1-0.22,#2+0.22) -- cycle;
+  \draw[line width=0.9pt] (#1+0.18,#2-0.24) -- (#1+0.18,#2+0.24);}
+\def\fusesym#1#2{%
+  \draw[line width=0.6pt, fill=white, draw=black]
+    (#1-0.30,#2-0.16) rectangle (#1+0.30,#2+0.16);
+  \draw[line width=0.7pt] (#1-0.30,#2) -- (#1+0.30,#2);}
+
+% =========================== DETECTION-ONLY BANNER =======================
+\draw[fill=casEfill, draw=casEedge, line width=1pt, rounded corners=2pt]
+     (0,10.40) rectangle (10.30,11.05);
+\draw[line width=0.7pt, draw=casEedge, fill=white]
+     (0.32,10.58) -- (0.62,10.58) -- (0.47,10.88) -- cycle;
+\node[font=\sffamily\tiny\bfseries] at (0.47,10.68) {!};
+\node[font=\sffamily\scriptsize\bfseries] at (5.30,10.72)
+     {DETECTION-ONLY SCHEMATIC --- DO NOT BUILD};
+
+% =========================== SUBSTRATE BAND ==============================
+\path[groupframe] (0,8.55) rectangle (10.30,10.15);
+\node[grouplbl, anchor=west] at (0.15,9.93) {SUBSTRATE --- NOT OPERATOR-OWNED};
+% PTC thermistor RT1
+\draw[thin] (0.50,9.30) -- (0.77,9.30);
+\draw[thin] (1.53,9.30) -- (2.10,9.30);
+\draw[line width=0.6pt, draw=casNedge, fill=white] (0.77,9.14) rectangle (1.53,9.46);
+\draw[-{Latex[length=1.6mm,width=1.2mm]}, line width=0.5pt] (0.67,9.06) -- (1.63,9.56);
+\node[tag, anchor=west] at (1.60,9.63) {$+t$};
+\node[tag] at (1.15,8.88) {RT1 \ PTC};
+\node[tp] at (2.35,9.30) {TP2};
+\node[font=\sffamily\scriptsize] at (4.90,9.46)
+     {$R_{\mathrm{collective}} = R_{\mathrm{base}} + R_{\mathrm{PTC}}(\theta)$};
+\node[tag] at (4.90,9.06)
+     {$R_{\mathrm{PTC}} = \alpha(\theta-\theta_k)^2$, \ $\theta_k=3.0$, \ $\alpha=4.0$};
+% inset characteristic
+\node[tag] at (8.95,9.93) {PTC characteristic};
+\draw[thin,-{Latex[length=1.4mm,width=1.1mm]}] (7.95,8.85) -- (10.05,8.85);
+\draw[thin,-{Latex[length=1.4mm,width=1.1mm]}] (7.95,8.85) -- (7.95,9.70);
+\draw[line width=0.8pt] (7.95,8.85) -- (8.85,8.85);
+\draw[line width=0.8pt] plot[domain=0:1.05,samples=24]
+      ({8.85+\x},{8.85+0.635*\x*\x});
+\draw[thin,dashed] (8.85,8.85) -- (8.85,9.55);
+\node[tag] at (8.85,8.70) {$\theta_k$=3};
+\node[tag, anchor=west] at (10.00,8.70) {$\theta$};
+\node[tag, anchor=west] at (7.80,9.78) {$R_{\mathrm{PTC}}$};
+
+% =========================== ROW 1 : A1 A2 A3 ============================
+% source, R1, summing junction
+\node[casterm, minimum width=17mm, align=center] (src) at (0.85,6.35)
+     {\textbf{SEED}\\\cst{^0^C_{F2}|A}};
+\draw[flow] (1.70,6.35) -- (2.05,6.35);
+\draw[line width=0.6pt, fill=white, draw=black] (2.05,6.22) rectangle (2.65,6.48);
+\node[tag] at (2.35,6.68) {R1};
+\node[tag] at (2.35,6.05) {95 $\Omega_c$};
+\draw[lead] (2.65,6.35) -- (3.10,6.35);
+\node[circle, draw=black, fill=white, line width=0.6pt, inner sep=0pt,
+      minimum size=4mm, font=\sffamily\scriptsize] (sj) at (3.30,6.35) {$\Sigma$};
+\draw[flow] (3.50,6.35) -- (4.20,6.35);
+
+\ampsym{4.75}{6.35}{casPfill}{casPedge}{A1}
+\ampsym{6.75}{6.35}{casCfill}{casCedge}{A2}
+\ampsym{8.75}{6.35}{casCfill}{casCedge}{A3}
+\draw[line width=1.1pt, draw=casCedge]
+     (8.20,5.80) -- (9.30,6.35) -- (8.20,6.90) -- cycle;
+\draw[flow] (5.30,6.35) -- (6.20,6.35);
+\draw[flow] (7.30,6.35) -- (8.20,6.35);
+\draw[lead] (9.30,6.35) -- (9.90,6.35);
+\fill (5.75,6.35) circle (1.1pt);
+\fill (7.75,6.35) circle (1.1pt);
+\fill (9.75,6.35) circle (1.1pt);
+
+% terminal names, shown once on A1
+\node[itag] at (3.88,6.62) {cause};
+\node[itag] at (5.52,6.10) {effect};
+\node[itag, anchor=west] at (4.90,5.86) {bias};
+
+% stage spec boxes
+\node[spec] at (4.75,7.55)
+  {\textbf{A1} \ 95$\,\to\,$80\\$\beta$=1.2 \ sat=0.80\\$g_m$=0.40\\$r_\pi$=8.0};
+\node[spec] at (6.75,7.55)
+  {\textbf{A2} \ 80$\,\to\,$55\\$\beta$=1.6 \ sat=0.80\\$g_m$=0.40\\$r_\pi$=8.0};
+\node[spec, line width=1.1pt] at (8.75,7.55)
+  {\textbf{A3} \ 55$\,\to\,$30 \ \textbf{HINGE}\\$\beta$=2.0 \ sat=0.80\\$g_m$=0.35\\$r_\pi$=8.0};
+
+% bias carriers
+\node[carr, fill=casPfill, draw=casPedge] at (4.75,5.30)
+  {\cst{^5^P_{F5}|T}\\pioneers};
+\node[carr, fill=casCfill, draw=casCedge] at (6.75,5.30)
+  {\cst{^5^C_{F2}|A}\\credentialed};
+\node[carr, fill=casCfill, draw=casCedge] at (8.75,5.30)
+  {\cst{^5^C_{F2}|A}\\general};
+\foreach \x in {4.75,6.75,8.75} {
+  \draw[flow] (\x,5.60) -- (\x,6.06);
+  \draw[thin] (\x,4.70) -- (\x,5.00);}
+
+% rhythm rail, row 1
+\draw[lead] (0.20,4.70) -- (9.55,4.70);
+\node[nblock, minimum width=27mm, minimum height=7.5mm, align=center,
+      font=\sffamily\tiny] at (1.70,4.70)
+  {\textbf{OSC1} \ \cst{^7} RHYTHM\\period 21 d $\cdot$ duty 0.15};
+
+% substrate feeds the rail at every stage
+\foreach \x/\y in {3.30/6.62,5.75/6.52,7.75/6.52,9.75/6.52}
+  \draw[fbflow] (\x,8.55) -- (\x,\y);
+
+% test points, row 1
+\draw[thin] (3.30,6.15) -- (3.30,5.97);
+\node[tp] at (3.30,5.72) {TP1};
+\draw[thin] (9.75,6.35) -- (9.75,6.00);
+\node[tp] at (9.75,5.75) {TP4};
+
+% ---- carry from A3 effect down to row 2 (off-sheet connector) ----------
+\node[conn] at (10.10,6.35) {1};
+\node[itag, anchor=east] at (10.30,6.82) {to row 2};
+
+% =========================== ROW 2 : diodes, A4, A5 ======================
+\node[conn] at (0.60,1.95) {1};
+\node[itag] at (0.60,2.38) {from A3};
+\draw[flow] (0.80,1.95) -- (1.08,1.95);
+\diodesym{1.30}{1.95}
+\diodesym{2.40}{1.95}
+\diodesym{3.50}{1.95}
+\draw[lead] (1.48,1.95) -- (2.18,1.95);
+\draw[lead] (2.58,1.95) -- (3.28,1.95);
+\draw[flow] (3.68,1.95) -- (4.35,1.95);
+\node[tag, align=center] at (1.30,1.42) {D1\\\cst{^P}$\to$\cst{^C}};
+\node[tag, align=center] at (2.40,1.42) {D2\\\cst{^C}$\to$\cst{^E}};
+\node[tag, align=center] at (3.50,1.42) {D3\\\cst{^E}$\to$\cst{^O}};
+\node[itag, anchor=west] at (0.75,0.95) {lawful descent only};
+
+\ampsym{4.90}{1.95}{casEfill}{casEedge}{A4}
+\ampsym{6.90}{1.95}{casOfill}{casOedge}{A5}
+\draw[flow] (5.45,1.95) -- (6.35,1.95);
+\draw[lead] (7.45,1.95) -- (8.65,1.95);
+\fill (7.85,1.95) circle (1.1pt);
+\node[casterm, fill=casOfill, draw=casOedge, minimum width=16mm,
+      align=center] (out) at (9.45,1.95) {\textbf{POLICY}\\\cst{^9^O_{F6}|E}};
+
+\node[spec] at (4.90,3.40)
+  {\textbf{A4} \ 30$\,\to\,$12\\$\beta$=2.4 \ sat=0.80\\$g_m$=0.30\\$r_\pi$=6.0};
+\node[spec] at (6.90,3.40)
+  {\textbf{A5} \ 12$\,\to\,$2\\$\beta$=3.0 \ sat=0.60\\$g_m$=0.25\\$r_\pi$=6.0};
+
+\node[carr, fill=casEfill, draw=casEedge] at (4.90,0.95)
+  {\cst{^5^E_{F4}|f}\\peer majority};
+\node[carr, fill=casOfill, draw=casOedge] at (6.90,0.95)
+  {\cst{^5^O_{F6}|E}\\institutional};
+\foreach \x in {4.90,6.90} {
+  \draw[flow] (\x,1.25) -- (\x,1.66);
+  \draw[thin] (\x,0.35) -- (\x,0.65);}
+
+% rhythm rail, row 2, and the riser tying both rails to OSC1
+\draw[lead] (0.20,0.35) -- (7.65,0.35);
+\draw[lead] (0.20,4.70) -- (0.20,0.35);
+
+% reverse path blocked by F1
+\draw[fbflow, rounded corners=3pt] (9.45,1.55) -- (9.45,0.85) -- (8.05,0.85)
+      -- (8.05,1.90);
+\fusesym{8.75}{0.85}
+\node[tag] at (8.75,1.15) {F1};
+\node[tag, align=center] at (8.95,0.42)
+  {reverse path, thr=0.85\\\cst{permanent_block}};
+
+\draw[thin] (7.85,1.95) -- (7.85,2.20);
+\node[tp] at (7.85,2.45) {TP3};
+
+% substrate keeps summing into the rail on row 2 as well
+\draw[fbflow] (5.90,2.62) -- (5.90,2.05);
+\draw[fbflow] (8.20,2.62) -- (8.20,2.05);
+\node[itag, anchor=east] at (5.60,2.62) {from RT1};
+
+% off-sheet tap to the CSB stage
+\draw[thin] (0.85,6.00) -- (0.85,5.85);
+\node[conn] at (0.85,5.62) {S};
+\node[itag, anchor=west] at (1.10,5.62) {to CSB};
+
+% =========================== CSB SUB-BLOCK ===============================
+\path[groupframe] (5.30,-2.60) rectangle (10.30,-0.45);
+\node[grouplbl, anchor=west] at (5.45,-0.68) {CSB --- CH 24 \ NOT REMOVABLE};
+\node[conn] at (5.70,-1.45) {S};
+\draw[flow] (5.90,-1.45) -- (6.35,-1.45);
+\ampsym{6.90}{-1.45}{casPfill}{casPedge}{}
+\node[font=\sffamily\tiny\bfseries] at (6.62,-1.45) {CSB};
+\node[tag] at (6.90,-0.98) {$\beta$=2.0 \ sat=0.85};
+\node[carr, fill=casPfill, draw=casPedge, minimum width=24mm] at (6.90,-2.22)
+  {\cst{^3^P_{F7}}$|\langle$\texttt{A,f,T}$\rangle$\\principled refusal, three registers};
+\draw[flow] (6.90,-1.92) -- (6.90,-1.73);
+\draw[lead] (7.45,-1.45) -- (8.00,-1.45);
+\fusesym{8.30}{-1.45}
+\node[tag] at (8.30,-1.12) {F2};
+\node[tag] at (8.30,-1.80) {thr=0.90};
+\draw[flow] (8.60,-1.45) -- (8.85,-1.45);
+\node[casterm, minimum width=14mm] at (9.55,-1.45) {\textbf{REFUSE}};
+\node[tag] at (9.35,-2.05) {\cst{permanent_block}};
+\end{tikzpicture}

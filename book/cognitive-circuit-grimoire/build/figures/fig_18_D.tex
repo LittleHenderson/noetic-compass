@@ -1,0 +1,61 @@
+% Figure 18-D — the endorsement polarity flip (^8/^9 involution).
+% Two panels, BEFORE and AFTER; block sizes reverse to carry the flip.
+\providecommand{\casU}{\textasciicircum}
+\providecommand{\casS}[1]{\_\{#1\}}
+\begin{tikzpicture}[font=\sffamily\scriptsize]
+
+  % ---------------- BEFORE panel ----------------------------------------
+  \node[font=\sffamily\scriptsize\bfseries] (btitle) at (-2.85,1.30) {BEFORE};
+  \node[font=\sffamily\scriptsize\itshape, text width=32mm, align=center]
+        (bsub) at (-2.85,0.92) {the advertiser rents attention};
+
+  \node[pblock, text width=30mm, minimum height=12mm, font=\sffamily\scriptsize]
+        (celeb) at (-2.85,-0.10)
+        {\textbf{celebrity}\\[1pt]\casnote{\casU5\casU P\casS{F7}|T}};
+
+  \node[cblock, text width=15mm, minimum height=6mm, font=\sffamily\scriptsize]
+        (prodA) at (-2.85,-2.30)
+        {\textbf{product}\\[1pt]\casnote{\casU0\casU C}};
+
+  \draw[flow] (celeb) -- (prodA)
+        node[flowlbl, midway, right=1pt] {\casU8 $\to$ \casU9};
+
+  \node[font=\sffamily\scriptsize\itshape, text width=32mm, align=center]
+        (bnote) at (-2.85,-3.15) {the person is the trigger};
+
+  % ---------------- AFTER panel -----------------------------------------
+  \node[font=\sffamily\scriptsize\bfseries] (atitle) at (2.85,1.30) {AFTER};
+  \node[font=\sffamily\scriptsize\itshape, text width=32mm, align=center]
+        (asub) at (2.85,0.92) {the advertiser owns a trigger};
+
+  \node[cblock, text width=15mm, minimum height=6mm, font=\sffamily\scriptsize]
+        (prodB) at (2.85,-0.10)
+        {\textbf{product}\\[1pt]\casnote{\casU0\casU C}};
+
+  \node[cblock, text width=30mm, minimum height=12mm, font=\sffamily\scriptsize]
+        (ident) at (2.85,-2.30)
+        {\textbf{aspirational identity}\\[1pt]\casnote{\casU9\casU C\casS{F4}|f}};
+
+  \draw[flow] (prodB) -- (ident)
+        node[flowlbl, midway, right=1pt] {\casU8 $\to$ \casU9};
+
+  \node[font=\sffamily\scriptsize\itshape, text width=32mm, align=center]
+        (anote) at (2.85,-3.15) {the logo is the trigger};
+
+  % ---------------- the flip --------------------------------------------
+  % Single curve, no chained Beziers: one to[out=,in=] segment.
+  \draw[fbflow, line width=0.7pt, draw=black]
+        (prodA.east) to[out=28,in=214] (prodB.south west);
+
+  \node[font=\sffamily\scriptsize\itshape, text width=24mm, align=center,
+        fill=white, inner sep=1pt] (flip) at (0,-2.55)
+        {polarity flip\\ the campaign's\\ actual deliverable};
+  \draw[dotted, line width=0.4pt, draw=casNedge] (flip.north) -- (0,-1.40);
+
+  % ---------------- panel frames (behind) --------------------------------
+  \begin{scope}[on background layer]
+    \node[groupframe, fit=(btitle)(bsub)(celeb)(prodA)(bnote), inner sep=3pt] {};
+    \node[groupframe, fit=(atitle)(asub)(prodB)(ident)(anote), inner sep=3pt] {};
+  \end{scope}
+
+\end{tikzpicture}

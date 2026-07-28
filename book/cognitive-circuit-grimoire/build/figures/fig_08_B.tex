@@ -1,0 +1,74 @@
+% Figure 8-B -- The descent chain as a series string.
+% V_drive rail feeds ^P; three junctions in series drop 0.7 / 1.2 / 2.0 before
+% anything reaches ^O and ground. The return path is dashed and struck out.
+\begin{tikzpicture}[
+  x=1cm, y=1cm,
+  % Diode conducting downward: triangle apex down, cathode bar below it.
+  diodn/.pic={
+    \draw[line width=0.7pt, draw=black, fill=casNfill]
+      (-3.2mm,3.0mm) -- (3.2mm,3.0mm) -- (0mm,-3.0mm) -- cycle;
+    \draw[line width=1.2pt, draw=black] (-3.9mm,-3.0mm) -- (3.9mm,-3.0mm);
+  },
+  dnode/.style={minimum width=19mm, minimum height=9.5mm, align=center},
+  desig/.style={font=\sffamily\scriptsize\bfseries},
+  spec/.style={font=\sffamily\scriptsize},
+  wire/.style={line width=0.6pt, draw=black}
+]
+
+% ---------- the chain --------------------------------------------------
+\node[pblock, dnode] (P) at (1.4, 0)
+  {{\ttfamily\bfseries\textasciicircum P}\\[1pt]{\scriptsize Principled}};
+\node[cblock, dnode] (C) at (1.4,-2.4)
+  {{\ttfamily\bfseries\textasciicircum C}\\[1pt]{\scriptsize Cognitive}};
+\node[eblock, dnode] (E) at (1.4,-4.8)
+  {{\ttfamily\bfseries\textasciicircum E}\\[1pt]{\scriptsize Evaluative}};
+\node[oblock, dnode] (O) at (1.4,-7.2)
+  {{\ttfamily\bfseries\textasciicircum O}\\[1pt]{\scriptsize Operational}};
+
+\foreach \yd in {-1.2,-3.6,-6.0}{ \pic at (1.4,\yd) {diodn}; }
+\draw[wire] (1.4,-0.475) -- (1.4,-0.90);
+\draw[flow] (1.4,-1.50)  -- (1.4,-1.925);
+\draw[wire] (1.4,-2.875) -- (1.4,-3.30);
+\draw[flow] (1.4,-3.90)  -- (1.4,-4.325);
+\draw[wire] (1.4,-5.275) -- (1.4,-5.70);
+\draw[flow] (1.4,-6.30)  -- (1.4,-6.725);
+
+\node[desig, anchor=east] at (0.94,-1.2) {D1};
+\node[desig, anchor=east] at (0.94,-3.6) {D2};
+\node[desig, anchor=east] at (0.94,-6.0) {D3};
+\node[spec, anchor=west]  at (1.90,-1.2) {$V_f = 0.7$};
+\node[spec, anchor=west]  at (1.90,-3.6) {$V_f = 1.2$};
+\node[spec, anchor=west]  at (1.90,-6.0) {$V_f = 2.0$};
+
+% ---------- ground at the foot of the chain ----------------------------
+\draw[wire] (1.4,-7.675) -- (1.4,-8.20);
+\draw[line width=0.9pt] (1.10,-8.20) -- (1.70,-8.20);
+\draw[line width=0.9pt] (1.20,-8.35) -- (1.60,-8.35);
+\draw[line width=0.9pt] (1.30,-8.50) -- (1.50,-8.50);
+
+% ---------- V_drive rail ----------------------------------------------
+\draw[wire] (-2.2,1.30) -- (1.4,1.30);
+\draw[flow] (1.4,1.30) -- (1.4,0.475);
+\draw[wire] (-2.2,1.30) -- (-2.2,-3.30);
+\draw[line width=0.9pt] (-2.50,-3.30) -- (-1.90,-3.30);
+\draw[line width=1.7pt] (-2.38,-3.56) -- (-2.02,-3.56);
+\draw[wire] (-2.2,-3.56) -- (-2.2,-7.00);
+\draw[line width=0.9pt] (-2.50,-7.00) -- (-1.90,-7.00);
+\draw[line width=0.9pt] (-2.40,-7.15) -- (-2.00,-7.15);
+\draw[line width=0.9pt] (-2.30,-7.30) -- (-2.10,-7.30);
+\node[spec, anchor=south west] at (-2.30,1.42) {$V_\mathrm{drive}$ rail};
+
+% ---------- reverse attempt : dashed, struck out ----------------------
+\draw[fbflow, draw=casRed] (0.45,-7.2) -- (-1.0,-7.2) -- (-1.0,0) -- (0.45,0);
+\draw[line width=1.0pt, draw=casRed] (-1.26,-1.76) -- (-0.74,-1.24);
+\draw[line width=1.0pt, draw=casRed] (-1.26,-1.24) -- (-0.74,-1.76);
+\node[spec, rotate=90, anchor=center, text=casRed] at (-1.40,-4.4)
+  {reverse --- blocked};
+
+% ---------- series-total bracket --------------------------------------
+\draw[wire] (3.72,-0.85) -- (3.92,-0.85) -- (3.92,-6.35) -- (3.72,-6.35);
+\draw[wire] (3.92,-3.60) -- (4.12,-3.60);
+\node[spec, anchor=west, align=left] at (4.16,-3.60)
+  {$\Sigma V_f = 3.9$\\[1pt]{\scriptsize floor on $V_\mathrm{drive}$}};
+
+\end{tikzpicture}

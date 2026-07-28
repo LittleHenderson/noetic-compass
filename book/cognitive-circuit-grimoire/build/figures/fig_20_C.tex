@@ -1,0 +1,80 @@
+% Figure 20-C -- upper: the two charging curves (behaviour at 22 d, identity
+% at 85 d) on one day axis.  lower: field stress E for a fixed identity claim,
+% with the 0.5 design limit and the puncture region above E = 1.0.
+\begin{tikzpicture}[font=\sffamily\scriptsize]
+\begin{groupplot}[
+  casaxis,
+  width=10.2cm, height=5.1cm,
+  group style={group size=1 by 2, vertical sep=1.15cm,
+               x descriptions at=edge bottom},
+  xmin=0, xmax=260,
+  xtick={0,40,80,120,160,200,240},
+  scaled ticks=false,
+]
+
+% ---------------- upper panel: charging ------------------------------
+\nextgroupplot[
+  ymin=0, ymax=10.6, ytick={0,2,4,6,8,10},
+  ylabel={composition \ (0--10)},
+  title={charging: the behaviour and the identity are 188 days apart},
+  legend columns=2,
+  legend style={at={(0.98,0.03)}, anchor=south east},
+]
+\addplot[draw=casCedge, line width=1.0pt, mark=none, domain=0:260, samples=200]
+  {10*(1-exp(-x/22))};
+\addlegendentry{work\_composition \ $\tau$=22\,d}
+\addplot[draw=casPedge, line width=1.0pt, mark=none, dashed, domain=0:260, samples=200]
+  {10*(1-exp(-x/85))};
+\addlegendentry{ref\_composition \ $\tau$=85\,d}
+
+\draw[draw=casNedge, dotted, line width=0.6pt]
+  (axis cs:66,0) -- (axis cs:66,9.5);
+\draw[draw=casNedge, dotted, line width=0.6pt]
+  (axis cs:254,0) -- (axis cs:254,9.5);
+\addplot[only marks, mark=*, mark size=1.5pt, draw=black, fill=black]
+  coordinates {(66,9.50) (66,5.40) (254,9.50)};
+
+\draw[{Latex[length=1.6mm]}-{Latex[length=1.6mm]}, line width=0.5pt]
+  (axis cs:66,3.40) -- (axis cs:254,3.40);
+\node[fill=white, inner sep=1pt, font=\sffamily\scriptsize\itshape]
+  at (axis cs:160,3.40) {188 days apart};
+
+\node[anchor=west, fill=white, inner sep=1pt, align=left]
+  at (axis cs:72,4.75)
+  {\textbf{day 66}\\TP1 = 9.50 \ TP4 = 5.40};
+\node[anchor=east, fill=white, inner sep=1pt, align=right]
+  at (axis cs:250,6.10)
+  {\textbf{day 254}\\TP4 = 9.50};
+
+% ---------------- lower panel: field stress --------------------------
+\nextgroupplot[
+  ymin=0, ymax=2.0, ytick={0,0.5,1.0,1.5,2.0},
+  ylabel={field stress \ $E$},
+  xlabel={days \ (six sessions a week)},
+  title={field stress for a fixed claim $V_{\mathrm{sugg}}=8$},
+]
+\fill[casEfill, opacity=0.65] (axis cs:0,1.0) rectangle (axis cs:260,2.0);
+\draw[draw=casEedge, line width=0.7pt] (axis cs:0,1.0) -- (axis cs:260,1.0);
+\node[anchor=east, font=\sffamily\scriptsize\bfseries, text=casEedge]
+  at (axis cs:252,1.74) {PUNCTURE \ ($E>1.0$: dielectric conducts)};
+
+\draw[draw=casNedge, dashed, line width=0.7pt]
+  (axis cs:0,0.5) -- (axis cs:260,0.5);
+
+\addplot[draw=casEedge, line width=1.0pt, mark=none, domain=47:260, samples=120]
+  {8/(0.1+0.0857*(x-1))};
+\addplot[only marks, mark=*, mark size=1.4pt, draw=black, fill=black]
+  coordinates {(93,1.0) (187,0.5)};
+
+% off-scale entry at day 1
+\draw[-{Latex[length=1.8mm,width=1.4mm]}, line width=0.8pt, draw=casEedge]
+  (axis cs:5,1.28) -- (axis cs:5,1.96);
+\node[anchor=west, fill=white, inner sep=1pt, align=left, text=casEedge]
+  at (axis cs:9,1.45) {day 1:\\$E=80$};
+
+\node[anchor=west, fill=white, inner sep=1pt]
+  at (axis cs:9,0.64) {design limit \ $E\le0.5$};
+\node[anchor=east, fill=white, inner sep=1pt]
+  at (axis cs:255,0.25) {inside the design limit only after day 187};
+\end{groupplot}
+\end{tikzpicture}

@@ -1,0 +1,64 @@
+% Figure 20-B -- CCB-SELF stage architecture, S0-S8, with the single lawful
+% O->P return routed outside the rail into the bias terminal of S0.
+\begin{tikzpicture}[
+  font=\sffamily\scriptsize,
+  stage/.style={casblock, font=\sffamily\scriptsize, text width=13mm,
+                minimum height=13mm},
+  small/.style={casblock, font=\sffamily\scriptsize, text width=13mm,
+                minimum height=7mm},
+  tiny/.style={font=\sffamily\scriptsize},
+  vtiny/.style={font=\sffamily\scriptsize\itshape}
+]
+
+% ---------------- main rail S1 -> S5 ---------------------------------
+\node[stage, cblock] (s1) at (0.00,0)
+  {\textbf{S1} INTAKE\\R1 + LIM1\\max=1.3};
+\node[stage, nblock] (s2) at (2.05,0)
+  {\textbf{S2} NOTCH\\N1\\in\_session};
+\node[stage, cblock] (s3) at (4.10,0)
+  {\textbf{S3} CJT Q1\\$\beta$=1.5\\sat=0.60\\$r_\pi$=8.0};
+\node[stage, nblock] (s4) at (6.15,0)
+  {\textbf{S4} OSC1\\+ G1\\1.0\,d\\0.35 pts};
+\node[stage, oblock] (s5) at (8.20,0)
+  {\textbf{S5} ENACT\\\textasciicircum9\textasciicircum O\\logged};
+
+\draw[flow] (s1) -- (s2);
+\draw[flow] (s2) -- (s3);
+\draw[flow] (s3) -- (s4);
+\draw[flow] (s4) -- (s5);
+\draw[flow] (-1.50,0) -- (s1.west);
+\node[tiny] at (-1.12,0.30) {\textasciicircum0};
+
+% ---------------- S0 reference, dropping into the bias terminal -------
+\node[stage, pblock, text width=27mm, minimum height=9mm] (s0) at (4.10,2.85)
+  {\textbf{S0} REFERENCE\\C1 \ \textasciicircum5\textasciicircum P \ $\tau_{\mathrm{ref}}$=85\,d\\\textit{bias source only}};
+\draw[flow] (s0) -- node[flowlbl, right=1pt] {bias} (s3);
+
+% ---------------- S8 audit instrument, high-impedance probe -----------
+\node[small, dashed, text width=19mm, minimum height=10mm] (s8) at (0.55,1.85)
+  {\textbf{S8} AUDIT \ S1\\7\,d / 10\,min\\\textit{high-Z, off rail}};
+\draw[fbflow] (s8.east) -- (s2.north);
+\fill (s2.north) circle (1.2pt);
+
+% ---------------- S6 evidence feedback: the one lawful O -> P ---------
+\node[small] (lp1) at (6.15,-2.10) {\textbf{S6} LP1\\$\tau$=21\,d};
+\node[small] (f1)  at (3.55,-2.10) {F1 fuse\\0.12 pts/d};
+
+\draw[flow, rounded corners=3pt]
+  (s5.south) -- (8.20,-2.10) -- (lp1.east);
+\draw[flow] (lp1.west) -- (f1.east);
+\draw[flow, rounded corners=3pt]
+  (f1.west) -- (-1.15,-2.10) -- (-1.15,2.85) -- (s0.west);
+\node[vtiny, anchor=north west] at (-1.05,-2.45)
+  {the one lawful O\,$\rightarrow$\,P ascent \ ($\beta$=0.05)};
+
+% ---------------- S7 CSB stage, fed from a miss event ------------------
+\node[small, text width=15mm, minimum height=9mm] (miss) at (2.90,-3.55)
+  {miss event\\\textasciicircum8\textasciicircum C$_{F5}|$f};
+\node[stage, eblock, text width=23mm, minimum height=10mm] (s7) at (6.30,-3.55)
+  {\textbf{S7} CSB \ Q2 \ \textbf{mandatory}\\bias \textasciicircum3\textasciicircum P \ $\Rightarrow$ \ \textasciicircum2\textasciicircum E\\$\beta$=1.5, sat=0.70};
+\draw[flow] (miss) -- (s7);
+\node[vtiny, anchor=north] at (3.80,-4.35)
+  {S7 holds $\tau_{\mathrm{ref}}$ long \textemdash{} a miss must not reach C1};
+
+\end{tikzpicture}

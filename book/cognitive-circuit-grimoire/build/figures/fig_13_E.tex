@@ -1,0 +1,58 @@
+% Figure 13-E -- AMPLIFY (Q2) transfer curve at three gains, with the sat=0.80
+% ceiling and the three Red Corvette operating points. Each operating point sits
+% on its own gain line, so the key carries the annotation and nothing floats.
+\begin{tikzpicture}
+\begin{axis}[casaxis,
+  width=8.2cm, height=8.2cm,
+  xmin=0, xmax=0.80, ymin=0, ymax=0.95,
+  xtick={0,0.2,0.4,0.6,0.8},
+  ytick={0,0.2,0.4,0.6,0.8},
+  xticklabel style={/pgf/number format/fixed,
+                    /pgf/number format/precision=2},
+  yticklabel style={/pgf/number format/fixed,
+                    /pgf/number format/precision=2},
+  xlabel={cause activation $c = \mathrm{TP1}\times k\times(1-\mathrm{TP2})$},
+  ylabel={TP3 --- AMPLIFY output},
+  legend style={at={(0.975,0.04)}, anchor=south east},
+]
+
+% saturation ceiling
+\draw[casNedge, line width=0.9pt, dashed] (axis cs:0,0.80) -- (axis cs:0.80,0.80);
+\node[font=\sffamily\scriptsize, anchor=south east] at (axis cs:0.795,0.808)
+  {ceiling\ \ sat = 0.80};
+
+\addplot[black, line width=0.9pt, domain=0:0.80, samples=201]
+  {min(3.0*x,0.80)};
+\addlegendentry{$\beta$ = 3.00\ \ op 1 --- pinned}
+
+\addplot[black, line width=0.9pt, dashed, domain=0:0.80, samples=201]
+  {min(2.5*x,0.80)};
+\addlegendentry{$\beta$ = 2.50\ \ op 2 --- TP3 0.76}
+
+\addplot[black, line width=0.9pt, dash pattern=on 3pt off 1.5pt on 1pt off 1.5pt,
+         domain=0:0.80, samples=201] {min(1.40*x,0.80)};
+\addlegendentry{$\beta$ = 1.40\ \ op 3 --- TP3 0.77}
+
+% operating points, each on its own gain line; distinct marks so the two that
+% share c = 0.305 stay tellable apart.
+\addplot[only marks, mark=*, mark size=1.9pt, forget plot,
+         mark options={fill=black, draw=black}] coordinates {(0.305,0.80)};
+\addplot[only marks, mark=square*, mark size=1.7pt, forget plot,
+         mark options={fill=white, draw=black, line width=0.7pt}]
+  coordinates {(0.305,0.76)};
+\addplot[only marks, mark=triangle*, mark size=2.3pt, forget plot,
+         mark options={fill=white, draw=black, line width=0.7pt}]
+  coordinates {(0.547,0.77)};
+
+% flat ring: wide enough to read as a highlight, shallow enough that it cannot
+% be mistaken for enclosing op 2, which sits only 0.04 below on the same c.
+\node[draw=casEedge, ellipse, minimum width=7.5mm, minimum height=3.4mm,
+      line width=0.8pt, inner sep=0pt] (pin) at (axis cs:0.305,0.80) {};
+
+\node[font=\sffamily\scriptsize\itshape, align=center, text width=42mm,
+      anchor=north] (note) at (axis cs:0.240,0.945)
+  {pinned --- no calibration reading is valid here};
+\draw[casEedge, line width=0.6pt] (note.south) -- (pin.north);
+
+\end{axis}
+\end{tikzpicture}

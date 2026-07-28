@@ -1,0 +1,199 @@
+% Figure 18-C — assembly drawing, two boards back to back on one substrate.
+% Deck 1 is CCB-ADV, under the detection-only banner.  Deck 2 is CCB-ADV-DET,
+% the consumer-side counter, which carries no banner: it acts on the
+% operator's own board with the operator's own consent.  BOM lower right.
+\providecommand{\casU}{\textasciicircum}
+\providecommand{\casS}[1]{\_\{#1\}}
+\providecommand{\caslit}[1]{{\ttfamily\tiny #1}}
+\begin{tikzpicture}[
+  font=\sffamily\scriptsize,
+  fp/.style={casblock, minimum height=8.5mm, inner sep=2pt, text width=19mm,
+             font=\sffamily\tiny, rounded corners=1.5pt},
+  trace/.style={-{Latex[length=1.4mm,width=1.1mm]}, line width=0.45pt,
+                draw=black, rounded corners=2pt},
+  wire/.style={line width=0.45pt, draw=black, rounded corners=2pt},
+  tpflag/.style={font=\sffamily\tiny\bfseries, inner sep=1.2pt, fill=white,
+                 draw=black, line width=0.4pt, rounded corners=1pt}
+]
+
+  % ================= substrate ==========================================
+  \draw[rounded corners=5pt, draw=casNedge, line width=1.1pt, fill=white]
+    (-5.05,0.45) rectangle (5.05,-16.10);
+  \foreach \p in {(-4.80,0.18),(4.80,0.18),(-4.80,-15.83),(4.80,-15.83)}
+    \draw[draw=casNedge, line width=0.5pt] \p circle (0.10);
+
+  \node[font=\sffamily\scriptsize\bfseries] at (0,0.02)
+    {CCB-ADV \ / \ CCB-ADV-DET --- two decks, one substrate};
+
+  % ================= DECK 1 =============================================
+  \node[font=\sffamily\scriptsize\bfseries, anchor=west, text=casNedge]
+    at (-4.85,-0.62) {DECK 1 \ \textperiodcentered\ \ CCB-ADV --- advertising board};
+
+  % hatched banner, across this half only
+  \begin{scope}
+    \clip[rounded corners=2pt] (-4.85,-1.44) rectangle (4.85,-1.00);
+    \fill[white] (-4.85,-1.44) rectangle (4.85,-1.00);
+    \foreach \i in {-6.4,-6.15,...,5.0}
+      \draw[draw=casEedge!70, line width=0.5pt] (\i,-1.62) -- (\i+0.6,-0.82);
+  \end{scope}
+  \draw[rounded corners=2pt, draw=casEedge, line width=0.7pt]
+    (-4.85,-1.44) rectangle (4.85,-1.00);
+  \node[font=\sffamily\tiny\bfseries, fill=white, inner sep=1.5pt]
+    at (0,-1.22) {DETECTION-ONLY SCHEMATIC --- DO NOT BUILD};
+
+  % ---- row A -----------------------------------------------------------
+  \node[nblock, fp] (media)   at (-3.70,-2.55) {\textbf{MEDIA} \ Osc\\ 3/wk, 12 wk};
+  \node[pblock, fp] (cseg)    at (-1.23,-2.55) {\textbf{C\_SEG} \ Cap\\ 9.50, leak .04};
+  \node[pblock, fp] (endnode) at ( 1.23,-2.55) {\textbf{endorser}\\ \caslit{\casU5\casU P\casS{F7}|T}};
+  \node[pblock, fp] (csb)     at ( 3.70,-2.55) {\textbf{CSB} \ CJT\\ $\beta$ = 2.0};
+
+  % ---- row B -----------------------------------------------------------
+  \node[cblock, fp] (flip)    at (-3.70,-3.95) {\textbf{FLIP} \ CJT\\ $\beta$ = 1.2};
+  \node[cblock, fp] (assoc)   at (-1.23,-3.95) {\textbf{ASSOC} \ CJT\\ $\beta$ = 2.0};
+  \node[nblock, fp] (endorse) at ( 1.23,-3.95) {\textbf{ENDORSE} Xfmr\\ n = 0.35};
+  \node[nblock, fp] (fuse)    at ( 3.70,-3.95) {\textbf{CSB\_FUSE}\\ Fuse 0.90};
+
+  % ---- row C -----------------------------------------------------------
+  \node[eblock, fp] (affirm)  at (-3.70,-5.35) {\textbf{AFFIRM} \ CJT\\ $\beta$ = 2.0};
+  \node[eblock, fp] (want)    at (-1.23,-5.35) {\textbf{WANT} \ CJT\\ $\beta$ = 1.2};
+  \node[eblock, fp] (inject)  at ( 1.23,-5.35) {\textbf{INJECT} \ CJT\\ $\beta$ = 2.5};
+  \node[eblock, fp] (resolve) at ( 3.70,-5.35) {\textbf{RESOLVE} CJT\\ $\beta$ = 2.0};
+
+  % ---- row D -----------------------------------------------------------
+  \node[eblock, fp] (intent)  at (-3.70,-6.75) {\textbf{intent}\\ \caslit{\casU9\casU E\casS{F5}|f}};
+  \node[nblock, fp] (rprice)  at (-1.23,-6.75) {\textbf{R\_PRICE}\\ R = 4.0};
+  \node[nblock, fp] (d3)      at ( 1.23,-6.75) {\textbf{D3} \ Diode\\ Vf = 2.0};
+  \node[oblock, fp] (close)   at ( 3.70,-6.75) {\textbf{CLOSE} \ CJT\\ $\beta$ = 1.0};
+
+  % ---- traces ----------------------------------------------------------
+  \draw[trace] (media)   -- (cseg);
+  \draw[fbflow, draw=casPedge] (cseg.south) -- (assoc.north);
+  \draw[trace] (endnode) -- (endorse);
+  \draw[trace] (endorse.west) -- (assoc.east);
+  \draw[trace] (assoc.west)   -- (flip.east);
+  \draw[trace] (flip)    -- (affirm);
+  \draw[trace] (affirm)  -- (want);
+  \draw[trace] (inject)  -- (resolve);
+  \draw[trace] (intent)  -- (rprice);
+  \draw[trace] (rprice)  -- (d3);
+  \draw[trace] (d3)      -- (close);
+  \draw[trace] (csb)     -- (fuse);
+
+  \draw[wire] (want.south)    -- (-1.23,-5.95) -- (-3.70,-5.95) -- (-3.70,-6.13);
+  \draw[wire] (resolve.south) -- ( 3.70,-6.13) -- (-3.70,-6.13);
+  \fill[black] (-3.70,-6.13) circle (1.1pt);
+  \draw[trace] (-3.70,-6.13) -- (intent.north);
+
+  \draw[wire] (fuse.east) -- (4.86,-3.95) -- (4.86,-6.75) -- (4.80,-6.75);
+  \draw[line width=1.1pt, draw=black] (4.78,-6.55) -- (4.78,-6.95);
+  \draw[trace] (close.south) -- (3.70,-7.45) -- (4.86,-7.45);
+  \node[font=\sffamily\tiny, anchor=east] at (4.86,-7.68) {J1 \ transaction out};
+
+  % ---- detection-only sub-boundary around INJECT / RESOLVE -------------
+  \draw[draw=casEedge, line width=0.7pt, dash pattern=on 2pt off 1.5pt]
+    (0.16,-4.68) rectangle (4.78,-5.90);
+  \node[font=\sffamily\tiny\bfseries, fill=white, inner sep=1.2pt,
+        text=casEedge] at (2.47,-4.68) {gap branch --- detection only};
+
+  % ---- test points -----------------------------------------------------
+  \foreach \x/\y in {-2.10/-2.125, -2.10/-4.375, -4.55/-7.175, 0.00/-6.75}
+    {\fill[black] (\x,\y) circle (1.5pt);
+     \draw[black, line width=0.4pt] (\x,\y) circle (2.7pt);}
+
+  \draw[line width=0.4pt] (-2.10,-2.125) -- (-2.10,-1.88);
+  \node[tpflag, anchor=south] at (-2.10,-1.86) {TP1 \ C\_SEG};
+  \draw[line width=0.4pt] (-2.10,-4.375) -- (-2.10,-4.60);
+  \node[tpflag, anchor=north] at (-2.10,-4.58) {TP2 \ cue};
+  \draw[line width=0.4pt] (-4.55,-7.175) -- (-4.55,-7.42);
+  \node[tpflag, anchor=north west] at (-4.72,-7.40) {TP3 \ intent};
+  \draw[line width=0.4pt] (0.00,-6.75) -- (0.00,-7.42);
+  \node[tpflag, anchor=north] at (0.00,-7.40) {TP4 \ R/D3 junction};
+
+  % ================= deck boundary ======================================
+  \draw[dash pattern=on 3pt off 2pt, line width=0.7pt, draw=casNedge]
+    (-4.90,-8.05) -- (4.90,-8.05);
+  \node[font=\sffamily\tiny\itshape, fill=white, inner sep=1.5pt,
+        text=casNedge] at (0,-8.05) {deck boundary};
+
+  % ================= DECK 2 =============================================
+  \node[font=\sffamily\scriptsize\bfseries, anchor=west, text=casNedge]
+    at (-4.85,-8.50) {DECK 2 \ \textperiodcentered\ \ CCB-ADV-DET --- consumer-side detection};
+  \node[font=\sffamily\tiny\itshape, anchor=west] at (-4.85,-8.85)
+    {no banner --- it acts on the operator's own board, with the operator's own consent};
+
+  \node[casterm, text width=15mm, font=\sffamily\tiny, minimum height=7mm]
+        (win) at (-3.90,-9.80) {observed\\ want};
+  \node[oblock, fp, text width=16mm] (det1) at (-1.95,-9.80)
+    {\textbf{DET-1} Integ\\ cadence, 4 wk};
+  \node[cblock, fp, text width=16mm] (det2) at ( 0.00,-9.80)
+    {\textbf{DET-2} Probe\\ polarity};
+  \node[cblock, fp, text width=16mm] (det3) at ( 1.95,-9.80)
+    {\textbf{DET-3} LPF\\ $\tau$ = 4.0 wk};
+  \node[nblock, fp, text width=16mm] (det4) at ( 3.90,-9.80)
+    {\textbf{DET-4} Xfmr\\ n = 0.0};
+
+  \node[nblock, fp] (det5)  at (-3.70,-11.20) {\textbf{DET-5} \ Hold\\ 2.0 wk};
+  \node[cblock, fp] (det6)  at (-1.23,-11.20) {\textbf{DET-6} Probe\\ register set};
+  \node[eblock, fp] (judge) at ( 1.23,-11.20) {\textbf{JUDGE} \ CJT\\ $\beta$ = 1.0};
+  \node[nblock, fp] (ddesc) at ( 3.70,-11.20) {\textbf{D\_DESC} Diode\\ \caslit{\casU C$\to$\casU E} Vf=1.2};
+
+  \node[casterm, text width=28mm, font=\sffamily\tiny, minimum height=5mm]
+        (wout) at (2.95,-12.35)
+    {verified want \ \caslit{\casU2\casU E\casS{F4}|$\langle$A,f,T$\rangle$}};
+
+  \draw[trace] (win)  -- (det1);
+  \draw[trace] (det1) -- (det2);
+  \draw[trace] (det2) -- (det3);
+  \draw[trace] (det3) -- (det4);
+  \draw[trace] (det4.south) -- (3.90,-10.50) -- (-3.70,-10.50) -- (det5.north);
+  \draw[trace] (det5) -- (det6);
+  \draw[trace] (det6) -- (judge);
+  \draw[trace] (judge) -- (ddesc);
+  \draw[trace] (ddesc.south) -- (3.70,-12.02) -- (2.95,-12.02) -- (wout.north);
+
+  % ---- DET probes ------------------------------------------------------
+  \foreach \n in {det1,det2,det3}
+    {\fill[black] (\n.north west) circle (1.5pt);
+     \draw[black, line width=0.4pt] (\n.north west) circle (2.7pt);}
+  \node[tpflag, anchor=south east] at ($(det1.north west)+(0.12,0.12)$) {tp1};
+  \node[tpflag, anchor=south east] at ($(det2.north west)+(0.12,0.12)$) {tp2};
+  \node[tpflag, anchor=south east] at ($(det3.north west)+(0.12,0.12)$) {tp3};
+
+  \fill[black] (det5.south west) circle (1.5pt);
+  \draw[black, line width=0.4pt] (det5.south west) circle (2.7pt);
+  \draw[line width=0.4pt] (det5.south west) -- ($(det5.south west)+(0,-0.24)$);
+  \node[tpflag, anchor=north west] at ($(det5.south west)+(-0.10,-0.22)$) {tp4};
+
+  % ================= legend =============================================
+  \node[draw=casNedge, line width=0.5pt, rounded corners=2pt, fill=white,
+        inner sep=3pt, align=left, font=\sffamily\tiny,
+        anchor=north west, text width=17mm]
+    at (-4.90,-12.80)
+    {\textbf{DOMAIN KEY}\\[2pt]
+     P \ Principled\\ C \ Cognitive\\ E \ Evaluative\\ O \ Operational\\
+     grey \ component\\[3pt]
+     every value is a\\ design choice,\\ never a\\ measurement};
+
+  % ================= BOM ================================================
+  \node[draw=casNedge, line width=0.6pt, rounded corners=2pt, fill=white,
+        inner sep=3pt, anchor=north east, font=\sffamily\tiny]
+    at (4.90,-12.80)
+    {\setlength{\tabcolsep}{1.2pt}\renewcommand{\arraystretch}{0.86}%
+     \begin{tabular}{@{}p{12mm}p{7mm}p{14mm}@{\hspace{2.5mm}}p{12.5mm}p{7mm}p{14mm}@{}}
+      \multicolumn{6}{@{}l}{\textbf{BILL OF MATERIALS}}\\[1pt]
+      \textbf{Ref} & \textbf{Type} & \textbf{Value} &
+      \textbf{Ref} & \textbf{Type} & \textbf{Value}\\[1pt]
+      C\_SEG   & Cap   & 9.50, leak .04   & CLOSE     & CJT   & 1.0, cut .20 \\
+      MEDIA    & Osc   & 3/wk, 12 wk      & CSB       & CJT   & 2.0, sat .85 \\
+      ENDORSE  & Xfmr  & n = 0.35         & CSB\_FUSE & Fuse  & 0.90 block \\
+      ASSOC    & CJT   & 2.0, sat .85     & DET-1     & Integ & window 4 wk \\
+      FLIP     & CJT   & 1.2, sat .85     & DET-2     & Probe & polarity \\
+      INJECT   & CJT   & 2.5, det.\ only  & DET-3     & LPF   & $\tau$ = 4.0 wk \\
+      RESOLVE  & CJT   & 2.0, det.\ only  & DET-4     & Xfmr  & n = 0.0 \\
+      AFFIRM   & CJT   & 2.0, sat .85     & DET-5     & Hold  & 2.0 wk \\
+      WANT     & CJT   & 1.2, sat .85     & DET-6     & Probe & register set \\
+      D3       & Diode & Vf = 2.0         & JUDGE     & CJT   & 1.0, sat .85 \\
+      R\_PRICE & Res   & R = 4.0          & D\_DESC   & Diode & Vf = 1.2 \\
+    \end{tabular}};
+
+\end{tikzpicture}
