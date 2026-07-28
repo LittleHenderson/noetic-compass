@@ -1,0 +1,96 @@
+{
+  "_README": "MACHINE-READABLE CONTINUATION POINTER. Read this BEFORE any dated CAS Harness handoff, roadmap, or readiness document. Dated documents were accurate at capture time and are historical snapshots, not the current execution frontier.",
+  "as_of": "2026-07-27",
+
+  "current_gate": 2,
+  "ladder_position": 0.38,
+
+  "gate_1_status": "EARNED",
+  "gate_1_event": "Attempt 11 receiver-confirmed technical canary pass",
+  "gate_1_date": "2026-07-24",
+  "gate_1_commit": "f95cc610",
+  "gate_1_score_commit": "194fec39",
+
+  "gate_2_status": "OPEN",
+  "gate_2_condition": "The scoring actually works on a small model, with fair comparisons and honest error bars",
+  "gate_2_threshold": 0.46,
+
+  "next_scientific_lane": "NATIVE_CAS_CJT_JSPACE_JOINED_EXPERIMENT",
+
+  "supersedes": [
+    "Attempt 4 pending-execution status",
+    "Attempts 5 through 10 interim states",
+    "Any PRE_ANCHOR_FROZEN / WAITING_FOR_EXPLICIT_EXTERNAL_DISCLOSURE_APPROVAL status for the technical canary",
+    "Any statement that the Jacobian technical canary has not executed"
+  ],
+
+  "historical_snapshots_do_not_execute_from": [
+    "docs/working/CAS_HARNESS_033_TO_100_COMPLETION_ROADMAP_20260722.md",
+    "docs/working/CAS_HARNESS_COMBINED_LIVE_MODEL_CANARY_READINESS_20260722.md",
+    "docs/working/CAS_HARNESS_CUSTOMER_PRODUCTION_SUCCESSOR_SPEC_20260716.md"
+  ],
+
+  "closed_lanes": {
+    "SCENARIO_84_ITEM_LANE": {
+      "result": "NOT_LICENSED_LEXICAL",
+      "status": "COMPLETE",
+      "reopen": "reproduction, audit, or explicit successor comparison only",
+      "established": [
+        "the original scenario-authoring defect",
+        "successful repair by the contrastive protocol",
+        "valid fold construction and measurement plumbing",
+        "above-chance small-model recovery",
+        "no demonstrated improvement over character n-grams",
+        "an inadmissible World result because of surface leakage"
+      ],
+      "prohibited": "further layer, pooling, classifier, or fold tuning on these 84 items",
+      "commits": ["59e9044c", "c599273a", "db948bf1"]
+    }
+  },
+
+  "code_level_invariants": {
+    "latin_square_folds": "fold = (world_idx + drive_idx) % 4",
+    "pre_score_assertion": "every fold must contain all 7 drives and all 4 Worlds, each present in its training fold",
+    "reporting_rule": "Statistical uncertainty cannot convert 'did not exceed' into 'exceeded'."
+  },
+
+  "semantic_system_separation": {
+    "_rule": "Grid position alone NEVER licenses semantic equivalence.",
+    "TKS_28_FOUNDATION_BENCHMARK": {
+      "authority": "28 Foundations 1.0",
+      "labels": "1a-7d",
+      "drives": ["divine union", "wisdom", "life", "companionship", "worldly power", "material things", "lust/reproduction"],
+      "worlds": ["Spiritual", "Mental", "Emotional", "Physical"],
+      "source": "docs/working/gate2_closure/matched_ab_20260726/tootra_28_full_definitions.json"
+    },
+    "CAS_NATIVE_CIRCUIT_BENCHMARK": {
+      "authority": "CAS PCBA / CAS specification",
+      "drives": ["F1 Unity", "F2 Wisdom", "F3 Vitality", "F4 Connection", "F5 Agency", "F6 Structure", "F7 Purpose"],
+      "coordinates": ["Noetic", "Domain (P/C/E/O)", "Register (T/A/f/E)"]
+    },
+    "TKS_TO_CAS_TRANSLATION_EXPERIMENT": {
+      "status": "NOT YET BUILT",
+      "rule": "the ONLY place cross-system correspondence may be proposed or tested; must be tested, never presumed",
+      "why": "conflating the two voided SMALL-MODEL-SEMANTIC-MATCH-v1 (commit cb0eaffd)"
+    }
+  },
+
+  "reusable_gates_from_june_2026": {
+    "_note": "Do NOT invent a new de-leak framework. These exist and already taught that Register/World is the surface-loud axis.",
+    "surface_baseline_threshold": 0.60,
+    "harness": "answer-stripping surface gate, docs/working/mtc_f28_goemotions_20260615/",
+    "historical_calibration": {
+      "original_tks_definitions": {"foundation_surface": 0.7361, "verdict": "BLOCKED"},
+      "deleak_v1": {"foundation": 0.5721, "register": 0.6282, "note": "Register still surface-loud"},
+      "free_emotion_v4": {"foundation": 0.2396, "drive": 0.3089, "verdict": "PASS"}
+    }
+  },
+
+  "planned_corpus": {
+    "structure": "28 Foundations x 8 independent scenario plans x 3 controlled siblings = 672 items",
+    "minimum_runnable": 336,
+    "plan_independence": "each plan must differ in actor, setting, stakes, causal structure, decision, outcome — NOT paraphrases of one story",
+    "grouping": "all three siblings from a plan stay in one group",
+    "deleak_method": "PRIMARY: regeneration under a frozen prohibited-token list. SECONDARY: deterministic stripping as sensitivity analysis only."
+  }
+}

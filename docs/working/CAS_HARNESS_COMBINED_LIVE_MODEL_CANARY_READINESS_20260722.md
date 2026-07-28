@@ -1,5 +1,17 @@
 # CAS Harness combined live-model canary readiness
 
+> ## HISTORICAL SNAPSHOT - NOT THE CURRENT CONTINUATION ROUTE
+>
+> This document was accurate at capture time. It is **not** the current execution frontier.
+> Its canary status (`PRE_ANCHOR_FROZEN`, `WAITING_FOR_..._APPROVAL`, `NO_MODEL_OR_CUDA_EXECUTION`)
+> is **superseded**: the technical canary **PASSED** on 2026-07-24, receiver-confirmed, at
+> Attempt 11 (commit `f95cc610`), which earned **Gate 1** and moved the ladder to `0.38`
+> (commit `194fec39`).
+>
+> **Read `docs/working/CAS_HARNESS_CURRENT_STATE.json` before acting on anything below.**
+> Do not execute from this file.
+
+
 Date: 2026-07-22  
 Updated: 2026-07-23  
 Status: execution-readiness record; not a model result, capability license, customer verdict, or production acceptance artifact

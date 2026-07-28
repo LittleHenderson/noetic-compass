@@ -1,5 +1,17 @@
 # CAS Harness Customer-Production Successor Specification
 
+> ## HISTORICAL SNAPSHOT - NOT THE CURRENT CONTINUATION ROUTE
+>
+> This document was accurate at capture time. It is **not** the current execution frontier.
+> Its canary status (`PRE_ANCHOR_FROZEN`, `WAITING_FOR_..._APPROVAL`, `NO_MODEL_OR_CUDA_EXECUTION`)
+> is **superseded**: the technical canary **PASSED** on 2026-07-24, receiver-confirmed, at
+> Attempt 11 (commit `f95cc610`), which earned **Gate 1** and moved the ladder to `0.38`
+> (commit `194fec39`).
+>
+> **Read `docs/working/CAS_HARNESS_CURRENT_STATE.json` before acting on anything below.**
+> Do not execute from this file.
+
+
 Status: active handoff; overall customer-production status is `OPEN`; customer-production `ACCEPT` is `NOT LICENSED`.
 
 Snapshot date: 2026-07-16 America/Los_Angeles. The freshest exact customer-API dependency observation recorded in this handoff was `2026-07-16T15:08:14.656237+00:00`; the final authority/manifest audit was `2026-07-16T14:58:03Z`.
