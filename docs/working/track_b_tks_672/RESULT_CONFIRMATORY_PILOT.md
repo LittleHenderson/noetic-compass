@@ -73,10 +73,31 @@ regardless of row.
 3. **Family-grouped folds inside the surface gate.**
 4. Same 16 cells, same logging standard, same mechanical table.
 
-## Status
+## Status — owner-corrected formal dispositions
 
 ```
-V3_FULL_CORPUS_AUTHORIZATION   NOT GRANTED
-corpus                          clean, transferable, World-recoverable, DRIVE-BLURRY
-Gate 2                          OPEN at 0.38
+R4 split status:
+  R4_ABSOLUTE_RECOVERY_FAIL              (heldout joint 0.3542 < 0.55)
+  NO_REALIZATION_FAMILY_OVERFIT_SIGNAL   (heldout EXCEEDED training)
+  -> the grammar transferred; it transferred an insufficiently
+     discriminative motive signal.
+
+Milestone recorded:
+  WORLD_CONTEXT_LEXICAL_RESISTANCE_PARTIAL_PASS
+  scope: on held-out realization families, the blind judge recovered World
+  substantially above chance (0.75 vs 0.25) and outperformed character and
+  TF-IDF baselines (0.52 / 0.56).
+
+NOT licensed:
+  SMALL_MODEL_SEMANTIC_AUTHORITY
+  JOINT_FOUNDATION_AUTHORITY
+  V3_CORPUS_AUTHORIZATION
+
+Gate 2   OPEN at 0.38
 ```
+
+The drive collapses are structured, not random — each target folds into its nearest
+ordinary-language interpretation: erotic/reproductive pursuit → relational closeness;
+acquisition/consumption → bodily well-being; direct divine relation → understanding. The canon
+distinguishes those motives; the scenarios did not make the terminal desire behaviorally decisive.
+Successor: `PREREG_S3_LOCK.md`.
