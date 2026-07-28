@@ -1,0 +1,57 @@
+{
+  "claim_under_test": "expression through context and causal structure, not instructed avoidance",
+  "design": "WORLD_REALIZATION_GRAMMAR_V1_PILOT_S2",
+  "disclosed_context_reduction": "owner spec and canonical definitions are saturated with World words and CANNOT be shown under silent enforcement; author receives drive text + criterion + condensed craft block only",
+  "enforcement": "SILENT \u2014 author never sees a World name, a prohibition, or a word list; regex operates privately after generation",
+  "family_ids": "opaque RF-IDs; mapping sealed in SEALED_realization_family_manifest.json",
+  "frozen_pairs": [
+    [
+      "1d",
+      "1b"
+    ],
+    [
+      "2a",
+      "2b"
+    ],
+    [
+      "5d",
+      "5b"
+    ],
+    [
+      "6a",
+      "6c"
+    ],
+    [
+      "6b",
+      "6d"
+    ],
+    [
+      "7a",
+      "7b"
+    ],
+    [
+      "7c",
+      "2c"
+    ],
+    [
+      "7d",
+      "3d"
+    ]
+  ],
+  "instructed_avoidance_arm": "DEFERRED \u2014 separate quarantined diagnostic, never mixed into a claim-bearing corpus",
+  "metadata_ownership": "runner-owned; author returns only candidate strings",
+  "n_candidates": 5,
+  "n_plans": 4,
+  "pilot_v1": "VOID_APPARATUS_PROMPT_CONTAMINATION \u2014 its 0.4058 is apparatus evidence only",
+  "prompt_audit": "substring for spiritual/physical/emotional (compounds prime), word-boundary for mental ('-mental' suffix is innocent English) \u2014 asymmetry disclosed",
+  "prompt_hash": "0567ff84d9684608dfac666b178e0abd",
+  "quarantine": "no item may enter TKS_672_V3",
+  "v2_baseline_leak": {
+    "1d": 0.275,
+    "5d": 0.35,
+    "6a": 0.3,
+    "7a": 0.3,
+    "7c": 0.375,
+    "overall": 0.142
+  }
+}

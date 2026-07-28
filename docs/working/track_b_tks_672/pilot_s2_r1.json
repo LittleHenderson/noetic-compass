@@ -1,0 +1,72 @@
+{
+  "decides": "R1 (R1B diagnostic)",
+  "overall_leak": 0.196875,
+  "per_cell": {
+    "1b": {
+      "leaked": 14,
+      "total": 20
+    },
+    "1d": {
+      "leaked": 10,
+      "total": 20
+    },
+    "2a": {
+      "leaked": 4,
+      "total": 20
+    },
+    "2b": {
+      "leaked": 5,
+      "total": 20
+    },
+    "2c": {
+      "leaked": 5,
+      "total": 20
+    },
+    "3d": {
+      "leaked": 5,
+      "total": 20
+    },
+    "5b": {
+      "leaked": 3,
+      "total": 20
+    },
+    "5d": {
+      "leaked": 6,
+      "total": 20
+    },
+    "6a": {
+      "leaked": 1,
+      "total": 20
+    },
+    "6b": {
+      "leaked": 4,
+      "total": 20
+    },
+    "6c": {
+      "leaked": 0,
+      "total": 20
+    },
+    "6d": {
+      "leaked": 1,
+      "total": 20
+    },
+    "7a": {
+      "leaked": 2,
+      "total": 20
+    },
+    "7b": {
+      "leaked": 1,
+      "total": 20
+    },
+    "7c": {
+      "leaked": 0,
+      "total": 20
+    },
+    "7d": {
+      "leaked": 2,
+      "total": 20
+    }
+  },
+  "r1b_copy_mean": 0.038994062499999996,
+  "v2_overall": 0.142
+}
