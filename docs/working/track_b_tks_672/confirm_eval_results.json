@@ -1,0 +1,32 @@
+{
+  "all_pass": false,
+  "n_items": 192,
+  "r2": {
+    "drive": 0.5001349527665317,
+    "foundation_16cell": 0.31727395411605935,
+    "world": 0.6345479082321188
+  },
+  "r2_threshold": 0.6,
+  "r3": {
+    "drive": 0.4236111111111111,
+    "joint": 0.2222222222222222,
+    "world": 0.5833333333333334
+  },
+  "r4": {
+    "drive": 0.4791666666666667,
+    "gap": -0.13194444444444448,
+    "joint": 0.3541666666666667,
+    "world": 0.75
+  },
+  "r5": {
+    "char_3_5gram": 0.5208333333333334,
+    "judge_heldout_world": 0.75,
+    "word_tfidf": 0.5625
+  },
+  "verdicts": {
+    "R2_june_gate": false,
+    "R3_joint_train": false,
+    "R4_heldout_transfer": false,
+    "R5_lexical_resistance": true
+  }
+}

@@ -1,0 +1,770 @@
+{
+ "C_1d_0_1": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_1d_0_2": {
+  "world": "d",
+  "drive": "5"
+ },
+ "C_1d_0_3": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_1d_1_1": {
+  "world": "a",
+  "drive": "1"
+ },
+ "C_1d_1_2": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_1d_1_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_1d_2_1": {
+  "world": "a",
+  "drive": "1"
+ },
+ "C_1d_2_2": {
+  "world": "d",
+  "drive": "2"
+ },
+ "C_1d_2_3": {
+  "world": "a",
+  "drive": "1"
+ },
+ "C_1d_3_1": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_1d_3_2": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_1d_3_3": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_2a_0_1": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2a_0_2": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2a_0_3": {
+  "world": "a",
+  "drive": "2"
+ },
+ "C_2a_1_1": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2a_1_2": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_2a_1_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2a_2_1": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2a_2_2": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2a_2_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2a_3_1": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2a_3_2": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2a_3_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_5d_0_1": {
+  "world": "d",
+  "drive": "5"
+ },
+ "C_5d_0_2": {
+  "world": "d",
+  "drive": "5"
+ },
+ "C_5d_0_3": {
+  "world": "d",
+  "drive": "5"
+ },
+ "C_5d_1_1": {
+  "world": "d",
+  "drive": "5"
+ },
+ "C_5d_1_2": {
+  "world": "d",
+  "drive": "5"
+ },
+ "C_5d_1_4": {
+  "world": "d",
+  "drive": "5"
+ },
+ "C_5d_2_1": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_5d_2_2": {
+  "world": "d",
+  "drive": "5"
+ },
+ "C_5d_2_3": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_5d_3_1": {
+  "world": "d",
+  "drive": "5"
+ },
+ "C_5d_3_3": {
+  "world": "d",
+  "drive": "5"
+ },
+ "C_5d_3_4": {
+  "world": "d",
+  "drive": "5"
+ },
+ "C_6a_0_1": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_6a_0_2": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_6a_0_3": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_6a_1_1": {
+  "world": "a",
+  "drive": "1"
+ },
+ "C_6a_1_2": {
+  "world": "a",
+  "drive": "1"
+ },
+ "C_6a_1_3": {
+  "world": "a",
+  "drive": "1"
+ },
+ "C_6a_2_1": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_6a_2_2": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_6a_2_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_6a_3_1": {
+  "world": "c",
+  "drive": "6"
+ },
+ "C_6a_3_2": {
+  "world": "c",
+  "drive": "2"
+ },
+ "C_6a_3_3": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_6b_0_1": {
+  "world": "d",
+  "drive": "6"
+ },
+ "C_6b_0_2": {
+  "world": "d",
+  "drive": "6"
+ },
+ "C_6b_0_3": {
+  "world": "d",
+  "drive": "6"
+ },
+ "C_6b_1_1": {
+  "world": "b",
+  "drive": "6"
+ },
+ "C_6b_1_2": {
+  "world": "d",
+  "drive": "2"
+ },
+ "C_6b_1_3": {
+  "world": "d",
+  "drive": "6"
+ },
+ "C_6b_2_1": {
+  "world": "d",
+  "drive": "5"
+ },
+ "C_6b_2_2": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_6b_2_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_6b_3_1": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_6b_3_2": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_6b_3_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_7a_0_1": {
+  "world": "a",
+  "drive": "1"
+ },
+ "C_7a_0_2": {
+  "world": "a",
+  "drive": "1"
+ },
+ "C_7a_0_3": {
+  "world": "a",
+  "drive": "1"
+ },
+ "C_7a_1_1": {
+  "world": "d",
+  "drive": "7"
+ },
+ "C_7a_1_2": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_7a_1_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_7a_2_1": {
+  "world": "a",
+  "drive": "1"
+ },
+ "C_7a_2_2": {
+  "world": "a",
+  "drive": "1"
+ },
+ "C_7a_2_3": {
+  "world": "a",
+  "drive": "1"
+ },
+ "C_7a_3_1": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_7a_3_2": {
+  "world": "a",
+  "drive": "5"
+ },
+ "C_7a_3_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_7c_0_1": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_7c_0_2": {
+  "world": "c",
+  "drive": "3"
+ },
+ "C_7c_0_3": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_7c_1_1": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_7c_1_2": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_7c_1_3": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_7c_2_1": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_7c_2_2": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_7c_2_3": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_7c_3_1": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_7c_3_2": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_7c_3_3": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_7d_0_1": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_7d_0_2": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_7d_0_3": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_7d_1_1": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_7d_1_2": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_7d_1_3": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_7d_2_1": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_7d_2_2": {
+  "world": "d",
+  "drive": "6"
+ },
+ "C_7d_2_3": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_7d_3_1": {
+  "world": "d",
+  "drive": "7"
+ },
+ "C_7d_3_2": {
+  "world": "d",
+  "drive": "7"
+ },
+ "C_7d_3_3": {
+  "world": "d",
+  "drive": "7"
+ },
+ "C_1b_0_1": {
+  "world": "a",
+  "drive": "2"
+ },
+ "C_1b_0_2": {
+  "world": "a",
+  "drive": "2"
+ },
+ "C_1b_0_4": {
+  "world": "b",
+  "drive": "4"
+ },
+ "C_1b_1_1": {
+  "world": "b",
+  "drive": "4"
+ },
+ "C_1b_1_2": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_1b_1_3": {
+  "world": "b",
+  "drive": "4"
+ },
+ "C_1b_2_1": {
+  "world": "c",
+  "drive": "2"
+ },
+ "C_1b_2_2": {
+  "world": "a",
+  "drive": "1"
+ },
+ "C_1b_2_3": {
+  "world": "b",
+  "drive": "4"
+ },
+ "C_1b_3_1": {
+  "world": "a",
+  "drive": "1"
+ },
+ "C_1b_3_2": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_1b_3_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2b_0_1": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2b_0_2": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2b_0_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2b_1_1": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_2b_1_2": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2b_1_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2b_2_1": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2b_2_2": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2b_2_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2b_3_1": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2b_3_2": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2b_3_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_5b_0_1": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_5b_0_2": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_5b_0_3": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_5b_1_1": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_5b_1_2": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_5b_1_3": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_5b_2_1": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_5b_2_3": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_5b_2_4": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_5b_3_1": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_5b_3_2": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_5b_3_3": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_6c_0_1": {
+  "world": "d",
+  "drive": "6"
+ },
+ "C_6c_0_2": {
+  "world": "c",
+  "drive": "2"
+ },
+ "C_6c_0_3": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_6c_1_1": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_6c_1_2": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_6c_1_3": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_6c_2_1": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_6c_2_2": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_6c_2_3": {
+  "world": "d",
+  "drive": "4"
+ },
+ "C_6c_3_1": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_6c_3_2": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_6c_3_3": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_6d_0_1": {
+  "world": "d",
+  "drive": "6"
+ },
+ "C_6d_0_2": {
+  "world": "d",
+  "drive": "6"
+ },
+ "C_6d_0_3": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_6d_1_1": {
+  "world": "d",
+  "drive": "5"
+ },
+ "C_6d_1_2": {
+  "world": "d",
+  "drive": "6"
+ },
+ "C_6d_1_3": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_6d_2_1": {
+  "world": "d",
+  "drive": "6"
+ },
+ "C_6d_2_2": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_6d_2_3": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_6d_3_1": {
+  "world": "d",
+  "drive": "6"
+ },
+ "C_6d_3_2": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_6d_3_3": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_7b_0_1": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_7b_0_2": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_7b_0_3": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_7b_1_1": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_7b_1_2": {
+  "world": "b",
+  "drive": "5"
+ },
+ "C_7b_1_3": {
+  "world": "d",
+  "drive": "7"
+ },
+ "C_7b_2_1": {
+  "world": "c",
+  "drive": "7"
+ },
+ "C_7b_2_2": {
+  "world": "c",
+  "drive": "7"
+ },
+ "C_7b_2_3": {
+  "world": "c",
+  "drive": "5"
+ },
+ "C_7b_3_1": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_7b_3_2": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_7b_3_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2c_0_1": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2c_0_2": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_2c_0_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2c_1_1": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2c_1_2": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2c_1_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2c_2_1": {
+  "world": "a",
+  "drive": "1"
+ },
+ "C_2c_2_2": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2c_2_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2c_3_1": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_2c_3_2": {
+  "world": "c",
+  "drive": "4"
+ },
+ "C_2c_3_3": {
+  "world": "c",
+  "drive": "2"
+ },
+ "C_3d_0_1": {
+  "world": "d",
+  "drive": "6"
+ },
+ "C_3d_0_2": {
+  "world": "d",
+  "drive": "6"
+ },
+ "C_3d_0_3": {
+  "world": "d",
+  "drive": "5"
+ },
+ "C_3d_1_1": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_3d_1_2": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_3d_1_3": {
+  "world": "d",
+  "drive": "6"
+ },
+ "C_3d_2_1": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_3d_2_2": {
+  "world": "d",
+  "drive": "6"
+ },
+ "C_3d_2_3": {
+  "world": "b",
+  "drive": "2"
+ },
+ "C_3d_3_2": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_3d_3_3": {
+  "world": "d",
+  "drive": "3"
+ },
+ "C_3d_3_4": {
+  "world": "d",
+  "drive": "3"
+ }
+}

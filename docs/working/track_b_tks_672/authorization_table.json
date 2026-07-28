@@ -1,0 +1,66 @@
+{
+  "required_rows": [
+    "R1",
+    "R1B",
+    "R2",
+    "R3-JOINT",
+    "R4",
+    "R5",
+    "R6A",
+    "R6B"
+  ],
+  "rule": "mechanical \u2014 no prose override converts a failed row into a pass",
+  "table": {
+    "R1": {
+      "bar": "A0 leakage <= 0.05, no cell > 0.15",
+      "pass": true,
+      "value": "0.0250 overall, worst cell 0.100"
+    },
+    "R1B": {
+      "bar": "copy recall <= 0.10",
+      "pass": true,
+      "value": "0.0394"
+    },
+    "R2": {
+      "bar": "June gate all axes <= 0.60",
+      "pass": false,
+      "value": "world 0.6345 OVER; drive 0.5001; found16 0.3173"
+    },
+    "R3-DRIVE": {
+      "bar": "reported",
+      "pass": null,
+      "value": "train 0.4236 (chance 0.1429)"
+    },
+    "R3-JOINT": {
+      "bar": ">= 0.70 train",
+      "pass": false,
+      "value": "0.2222"
+    },
+    "R3-WORLD": {
+      "bar": "reported",
+      "pass": null,
+      "value": "train 0.5833 (chance 0.25)"
+    },
+    "R4": {
+      "bar": "heldout joint >= 0.55, gap <= 0.20",
+      "pass": false,
+      "value": "joint 0.3542; gap -0.1319 (heldout BETTER)"
+    },
+    "R5": {
+      "bar": "judge - each lexical >= 0.10 heldout World",
+      "pass": true,
+      "value": "judge 0.7500 vs char 0.5208 / tfidf 0.5625"
+    },
+    "R6A": {
+      "bar": "low-leakage replication (flash)",
+      "pass": true,
+      "value": "0.0063 (1/160)"
+    },
+    "R6B": {
+      "bar": "low-leakage replication (claude)",
+      "pass": true,
+      "value": "0.0063 (1/160)"
+    }
+  },
+  "v3_authorized": false
+}
