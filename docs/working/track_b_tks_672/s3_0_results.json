@@ -1,0 +1,62 @@
+{
+  "note": "apparatus-only diagnosis; CANNOT authorize v3",
+  "pairwise_baselines": {
+    "P12": {
+      "accuracy": 0.6833333333333333,
+      "chance": 0.5,
+      "n_families": 20,
+      "n_items": 60
+    },
+    "P63": {
+      "accuracy": 0.7333333333333333,
+      "chance": 0.5,
+      "n_families": 20,
+      "n_items": 60
+    },
+    "P74": {
+      "accuracy": 0.5833333333333334,
+      "chance": 0.5,
+      "n_families": 16,
+      "n_items": 48
+    }
+  },
+  "phase": "S3-0",
+  "r2_grouped": {
+    "drive": {
+      "grouped_char": 0.4166666666666667,
+      "grouped_word": 0.40625,
+      "ungrouped_word_secondary": 0.453125
+    },
+    "foundation16": {
+      "grouped_char": 0.046875,
+      "grouped_word": 0.052083333333333336,
+      "ungrouped_word_secondary": 0.15625
+    },
+    "world": {
+      "grouped_char": 0.5572916666666666,
+      "grouped_word": 0.5520833333333334,
+      "ungrouped_word_secondary": 0.5520833333333334
+    }
+  },
+  "r3_full_canon": {
+    "heldout": {
+      "drive": 0.6458333333333334,
+      "joint": 0.5833333333333334,
+      "world": 0.875
+    },
+    "train": {
+      "drive": 0.7847222222222222,
+      "joint": 0.6180555555555556,
+      "world": 0.8055555555555556
+    }
+  },
+  "r5_full_canon": {
+    "char_3_5gram": 0.5208333333333334,
+    "judge_heldout_world": 0.875,
+    "word_tfidf": 0.5625
+  },
+  "thin_key_reference": {
+    "heldout_joint": 0.3542,
+    "train_joint": 0.2222
+  }
+}
