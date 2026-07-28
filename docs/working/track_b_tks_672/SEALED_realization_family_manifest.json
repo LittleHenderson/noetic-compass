@@ -1,0 +1,43 @@
+{
+  "_SEALED": "This manifest maps opaque RF-IDs to canonical realization-family names and to the author-facing descriptions. It must NEVER be shown to authors, judges, classifiers, corpus files, or downstream extractors. Only the opaque RF-ID and the author-facing description leave this file, and the description is audited for canonical-word substrings before use.",
+  "design": "WORLD_REALIZATION_GRAMMAR_V1_PILOT_S2",
+  "heldout_rule": "held-out families are reserved for R4/R5 transfer testing and are never assigned to authoring plans",
+  "families": {
+    "RF-01": {"world": "a", "canonical": "nonphysical relationship", "author_text": "a bond with a presence not accessible to ordinary senses", "heldout": false},
+    "RF-02": {"world": "a", "canonical": "sacred obligation", "author_text": "an obligation experienced as sacred and binding beyond human convention", "heldout": false},
+    "RF-03": {"world": "a", "canonical": "continuity beyond bodily presence", "author_text": "continuity that outlasts bodily presence", "heldout": true},
+    "RF-04": {"world": "a", "canonical": "metaphysical belonging", "author_text": "belonging to an order beyond the tangible", "heldout": false},
+    "RF-05": {"world": "a", "canonical": "ritual participation", "author_text": "participation in rite or ceremony directed at an unseen order", "heldout": false},
+    "RF-06": {"world": "a", "canonical": "communion with an unseen order", "author_text": "communion with an unseen order", "heldout": false},
+    "RF-07": {"world": "a", "canonical": "transformation of existential relation", "author_text": "transformation of one's relation to existence itself", "heldout": true},
+
+    "RF-08": {"world": "b", "canonical": "map", "author_text": "a map or model of how things relate", "heldout": false},
+    "RF-09": {"world": "b", "canonical": "distinction", "author_text": "a distinction that separates what was previously confused", "heldout": false},
+    "RF-10": {"world": "b", "canonical": "inference", "author_text": "an inference drawn from evidence", "heldout": false},
+    "RF-11": {"world": "b", "canonical": "explanation", "author_text": "an explanation of why something happens", "heldout": false},
+    "RF-12": {"world": "b", "canonical": "interpretation", "author_text": "an interpretation that settles what something means", "heldout": true},
+    "RF-13": {"world": "b", "canonical": "plan", "author_text": "a plan ordering future steps", "heldout": false},
+    "RF-14": {"world": "b", "canonical": "conceptual organization", "author_text": "an organization of ideas into a coherent scheme", "heldout": true},
+    "RF-15": {"world": "b", "canonical": "understanding", "author_text": "an understanding that reorganizes what was known", "heldout": false},
+
+    "RF-16": {"world": "c", "canonical": "felt attachment", "author_text": "a felt attachment to someone or something", "heldout": false},
+    "RF-17": {"world": "c", "canonical": "comfort", "author_text": "comfort in another's presence or in a familiar circumstance", "heldout": false},
+    "RF-18": {"world": "c", "canonical": "grief", "author_text": "grief at a loss", "heldout": false},
+    "RF-19": {"world": "c", "canonical": "affection", "author_text": "affection expressed and received", "heldout": false},
+    "RF-20": {"world": "c", "canonical": "aversion", "author_text": "a felt aversion or repulsion", "heldout": false},
+    "RF-21": {"world": "c", "canonical": "emotional safety", "author_text": "felt safety with another person", "heldout": false},
+    "RF-22": {"world": "c", "canonical": "resentment", "author_text": "resentment that colors a relation", "heldout": true},
+    "RF-23": {"world": "c", "canonical": "trust", "author_text": "trust extended or withdrawn", "heldout": false},
+    "RF-24": {"world": "c", "canonical": "felt belonging", "author_text": "a felt sense of belonging", "heldout": true},
+
+    "RF-25": {"world": "d", "canonical": "body state", "author_text": "a change in the condition of the body", "heldout": false},
+    "RF-26": {"world": "d", "canonical": "object possession", "author_text": "gaining, holding, or losing an object", "heldout": false},
+    "RF-27": {"world": "d", "canonical": "location", "author_text": "being in, reaching, or controlling a place", "heldout": false},
+    "RF-28": {"world": "d", "canonical": "movement", "author_text": "movement or exertion of the body", "heldout": false},
+    "RF-29": {"world": "d", "canonical": "consumption", "author_text": "consuming food, drink, or material", "heldout": false},
+    "RF-30": {"world": "d", "canonical": "construction", "author_text": "building or assembling something tangible", "heldout": true},
+    "RF-31": {"world": "d", "canonical": "measurable physical condition", "author_text": "a measurable bodily condition", "heldout": true},
+    "RF-32": {"world": "d", "canonical": "material resource", "author_text": "securing or spending a material resource", "heldout": false},
+    "RF-33": {"world": "d", "canonical": "direct action", "author_text": "direct hands-on action with real objects", "heldout": false}
+  }
+}

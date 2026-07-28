@@ -1,7 +1,18 @@
-# RESULT — `WORLD_REALIZATION_GRAMMAR_V1_PILOT`
+# RESULT — `WORLD_REALIZATION_GRAMMAR_PILOT_V1`
 
-**Verdict:** `VOID_APPARATUS_DEFECT` — **not** an `R1` failure against the grammar.
-**Lock:** `e56a6e7a` · parser fix `067ca84a`
+```
+STATUS: VOID_APPARATUS_PROMPT_CONTAMINATION
+CAUSES:
+  1. Canonical target word printed in the author prompt.
+  2. Prohibition repeated the same word.
+  3. Realization-family metadata lost for most records.
+SCIENTIFIC CONCLUSION: NONE
+```
+
+The observed `0.4058` leakage is evidence about the **contaminated apparatus**, not about the
+realization grammar.
+
+**Lock:** `e56a6e7a` · parser fix `067ca84a` · successor: `..._S2` (silent enforcement)
 
 **The grammar was never actually tested.** Two defects in my instrument, both mine.
 
