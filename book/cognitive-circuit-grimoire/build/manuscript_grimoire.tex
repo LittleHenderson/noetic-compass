@@ -1,0 +1,28 @@
+% =====================================================================
+% The Cognitive Circuit Grimoire — master LaTeX document
+% Noetic Compass Press · 2026
+%
+% Build order (run from book/publishing):  python build_all.py grimoire
+%   assemble -> pandoc -> postprocess -> index marks -> xelatex
+%            -> makeindex -> xelatex -> xelatex
+%
+% Index marks go in AFTER pandoc and BEFORE the first xelatex pass, and must
+% never land inside a heading, caption or label. An \index{} in a moving
+% argument corrupts the .aux; in a companion volume that cost 82 pages and
+% produced an empty index.
+% =====================================================================
+
+\documentclass[11pt,openright,twoside]{memoir}
+
+\input{preamble_grimoire.tex}
+
+\begin{document}
+
+\input{frontmatter_grimoire.tex}
+
+\mainmatter
+\pagestyle{book}
+
+\input{body.tex}
+
+\end{document}

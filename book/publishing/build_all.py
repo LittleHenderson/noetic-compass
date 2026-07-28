@@ -81,6 +81,23 @@ BOOKS = {
         "post": [],
         "outdir": None,
     },
+    "grimoire": {
+        "dir": ROOT / "cognitive-circuit-grimoire" / "build",
+        "master": "manuscript_grimoire.tex",
+        "pdf": "manuscript_grimoire.pdf",
+        "target": ROOT / "cognitive-circuit-grimoire" / "Cognitive_Circuit_Grimoire.pdf",
+        # insert_figures runs BEFORE the assembler so the raw-LaTeX float blocks
+        # are already in the chapter files when they are concatenated. It exits
+        # non-zero while any [[FIGURE ...]] marker is still undrawn, which is
+        # deliberate -- shipping a book with literal marker text in it is worse
+        # than a failed build.
+        "assemble": [[sys.executable, "insert_figures.py"],
+                     [sys.executable, "build_book.py"]],
+        "pandoc": [("front_prose.md", "front_prose.tex"),
+                   ("main_body.md", "body.tex")],
+        "post": [[sys.executable, "postprocess_grimoire.py"]],
+        "outdir": None,
+    },
 }
 
 
