@@ -94,7 +94,23 @@ by World · by drive · by World × drive cell · leaked-word identity · own-Wo
 `1b → "spiritual"` is **non-own-World** leakage: drive-topic vocabulary, not a Mental realization
 failure. Collapsing it into a World rate conceals the mechanism.
 
-## Status
+## Status — owner-corrected formal disposition
 
-`E = 0.0094 / policy selected by frozen rule / confirmatory R1–R6 pilot required before v3`
+```
+E_ARM_LEAKAGE_RESULT:  PROVISIONALLY_VERIFIED_INSTRUMENT_SELECTION_EVIDENCE
+NOT YET:               FULLY_REPLAYABLE_CLAIM_BEARING_RESULT
+```
+
+The hostile audit (independent regex recount, substring sweep with per-word decomposition,
+distinctness, cross-arm duplication, sample reads) makes a leak-count coding error unlikely.
+The remaining weakness is **replayability** — exact rendered prompts were not stored per call —
+not the observed arithmetic.
+
+```
+E-arm:                  SELECTED AUTHORING POLICY
+Selected architecture:  motive + unlabeled realization criterion + opaque RF-family
+                        + universal target-blind avoidance instruction + private regex
+Full v3 authorization:  PENDING R1–R6 CONFIRMATORY PILOT
+```
+
 `QUARANTINED / nothing licensed / Gate 2 OPEN at 0.38`
