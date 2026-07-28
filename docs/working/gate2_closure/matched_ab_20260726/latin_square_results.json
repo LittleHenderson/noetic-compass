@@ -1,0 +1,79 @@
+{
+  "arms": {
+    "char_3_5gram": {
+      "drive": 0.4880952380952381,
+      "world": 0.5238095238095238
+    },
+    "pythia160m_L6": {
+      "drive": 0.4523809523809524,
+      "world": 0.5595238095238095
+    },
+    "word_tfidf": {
+      "drive": 0.4523809523809524,
+      "world": 0.4642857142857143
+    }
+  },
+  "controls": {
+    "C_BODY_constant_text_drive": 0.14285714285714285,
+    "C_PERM_group_level_drive": 0.05952380952380952,
+    "majority_rate": 0.14285714285714285
+  },
+  "criteria": {
+    "L1_drive_above_chance": true,
+    "L2_drive_beats_lexical": false,
+    "L3_world_identifiable": true,
+    "L4_world_above_chance": true,
+    "L5_perm_returns_to_chance": true,
+    "L6_body_returns_to_chance": true
+  },
+  "descriptive_ordering": {
+    "best_lexical": 0.4880952380952381,
+    "best_lexical_source": "char_3_5gram",
+    "margin": -0.0357142857142857,
+    "pythia160m_L6": 0.4523809523809524
+  },
+  "design": "LATIN-SQUARE-SUCCESSOR-v1",
+  "fold_table": {
+    "1a": 0,
+    "1b": 1,
+    "1c": 2,
+    "1d": 3,
+    "2a": 1,
+    "2b": 2,
+    "2c": 3,
+    "2d": 0,
+    "3a": 2,
+    "3b": 3,
+    "3c": 0,
+    "3d": 1,
+    "4a": 3,
+    "4b": 0,
+    "4c": 1,
+    "4d": 2,
+    "5a": 0,
+    "5b": 1,
+    "5c": 2,
+    "5d": 3,
+    "6a": 1,
+    "6b": 2,
+    "6c": 3,
+    "6d": 0,
+    "7a": 2,
+    "7b": 3,
+    "7c": 0,
+    "7d": 1
+  },
+  "n_groups": 28,
+  "n_items": 84,
+  "not_runnable": "supervised 28-way CV \u2014 one sibling group per Foundation means the held-out class is absent from training. Needs 28 x 4 independent plans x 3 = 336.",
+  "reporting_rule": "Statistical uncertainty cannot convert 'did not exceed' into 'exceeded'.",
+  "significance_reported_separately": {
+    "group_bootstrap_ci": [
+      -0.14285714285714285,
+      0.0714285714285714
+    ],
+    "permutation_p_vs_chance": 9.999000099990002e-05
+  },
+  "verdict": "NOT_LICENSED_LEXICAL",
+  "world_caveat": "47/84 (56%) of scenarios contain the literal World name; never report alone."
+}
