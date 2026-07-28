@@ -1,0 +1,53 @@
+{
+  "author_model": "models/gemini-2.5-flash-lite",
+  "baselines_to_beat": {
+    "P12": 0.6833,
+    "P63": 0.7333,
+    "P74": 0.5833,
+    "train_joint_full_canon": 0.6181
+  },
+  "changed": "ONLY the motive block (five elements, rejected close rival)",
+  "frozen_rival_map": {
+    "1": {
+      "rival": "a complete explanation, doctrine, or intellectual answer. If the actor gains perfect understanding but no direct relation, the effort still fails",
+      "want": "direct communion, nearness, participation, surrender \u2014 BEING-WITH the divine"
+    },
+    "2": {
+      "rival": "practical success, comfort, or acquisition achieved without understanding. If things go well but the actor still cannot explain why, the effort still fails",
+      "want": "genuine comprehension \u2014 truly understanding why and how"
+    },
+    "3": {
+      "rival": "obtaining possessions or resources. If the actor acquires everything sought but their vitality is not restored, the effort still fails",
+      "want": "renewed vigor, health, and aliveness in themselves"
+    },
+    "4": {
+      "rival": "achievement, admiration, or pleasure without a mutual bond. If the actor is admired or gratified but remains unaccompanied, the effort still fails",
+      "want": "genuine mutual companionship, belonging with another"
+    },
+    "5": {
+      "rival": "merely possessing resources or being liked. If the actor is wealthy and popular but cannot make outcomes bend to their intention, the effort still fails",
+      "want": "their will effectively directing events and others"
+    },
+    "6": {
+      "rival": "improved energy, comfort, or bodily condition. If the actor feels better but never obtains or uses the resource itself, the effort still fails",
+      "want": "acquiring, consuming, possessing, preserving, or gaining access to a concrete resource"
+    },
+    "7": {
+      "rival": "affection, loyalty, or intimacy alone. If the relationship becomes deeply loving but never reaches the generative outcome, the effort still fails",
+      "want": "consummation, fertility, conception, lineage continuation \u2014 an unmistakably generative union"
+    }
+  },
+  "parser_hash": "8c00fc3e25c77420",
+  "phase": "S3-1",
+  "prereg": "PREREG_S3_LOCK.md",
+  "prompt_hash": "ab5890110e485b7eef43bd181b8bf7cba3f66803d49dc9af458be7aa18536f6f",
+  "rival_map_provenance": "owner-specified for 1/6/7; 2/3/4/5 defined pre-data from involution adjacency and the observed confusion matrix",
+  "unchanged": [
+    "World grammar",
+    "universal instruction",
+    "regex+morphology audit",
+    "realization families and splits",
+    "logging",
+    "quarantine"
+  ]
+}
