@@ -1,0 +1,94 @@
+{
+  "pairwise": {
+    "P12": {
+      "accuracy": 0.9333333333333333,
+      "baseline": 0.6833,
+      "improved": true,
+      "n_items": 60
+    },
+    "P63": {
+      "accuracy": 0.85,
+      "baseline": 0.7333,
+      "improved": true,
+      "n_items": 60
+    },
+    "P74": {
+      "accuracy": 0.9375,
+      "baseline": 0.5833,
+      "improved": true,
+      "n_items": 48
+    }
+  },
+  "pending": [
+    "R6A",
+    "R6B"
+  ],
+  "phase": "S3-1-eval",
+  "r3": {
+    "heldout": [
+      0.6875,
+      0.8125,
+      0.6041666666666666
+    ],
+    "train": [
+      0.7986111111111112,
+      0.9166666666666666,
+      0.7569444444444444
+    ]
+  },
+  "table": {
+    "P12": {
+      "pass": true,
+      "value": "0.9333 vs 0.6833"
+    },
+    "P63": {
+      "pass": true,
+      "value": "0.8500 vs 0.7333"
+    },
+    "P74": {
+      "pass": true,
+      "value": "0.9375 vs 0.5833"
+    },
+    "R1": {
+      "pass": true,
+      "value": "0.0219 overall, worst 0.1000"
+    },
+    "R1B": {
+      "pass": true,
+      "value": "0.0415"
+    },
+    "R2-G": {
+      "pass": true,
+      "value": "{\"world\": 0.4948, \"drive\": 0.5365, \"foundation16\": 0.0573}"
+    },
+    "R3-D": {
+      "pass": null,
+      "value": "train 0.9167"
+    },
+    "R3-J": {
+      "pass": true,
+      "value": "train 0.7569 (bar 0.70)"
+    },
+    "R3-W": {
+      "pass": null,
+      "value": "train 0.7986"
+    },
+    "R4": {
+      "pass": true,
+      "value": "heldout 0.6042, gap +0.1528"
+    },
+    "R5": {
+      "pass": true,
+      "value": "judge 0.6875 vs 0.5417/0.4792"
+    },
+    "R6A": {
+      "pass": null,
+      "value": "PENDING \u2014 confirmatory arms used the pre-repair prompt"
+    },
+    "R6B": {
+      "pass": null,
+      "value": "PENDING \u2014 confirmatory arms used the pre-repair prompt"
+    }
+  },
+  "verdict": "ALL_NON_PENDING_PASS_R6_RERUN_REQUIRED"
+}
