@@ -287,7 +287,7 @@ board ccb_hyp_det {                       // detection board — build this one
 
 `unaccounted = drift − passed_log` is the whole board. If your position has moved and you cannot name the proposition you evaluated and accepted that moved it, a bypass carried it. The integrator matters because fractionation is designed to keep every individual reading under any single-session threshold — the CSB's sub-threshold problem, and the same fix. The fuse action is `defer_decision`, not `permanent_block`: the correct output of a detection board is not a refusal. It is time.
 
-[[FIGURE 17-E: Two stacked panels. Upper, "bypass topology": an operator `^0` source at left with two paths to the `^5^P` capacitor at right; the upper path crosses the `^6^C|A` filter block, which carries a green tick and the label "reports CLEAR (honestly)"; the lower path routes around the filter entirely, drawn heavier, labelled "presupposition / embedded narrative", captioned "bypassed, not shorted." Lower, "CCB-HYP-DET": the same `^5^P` node into a differential block, plus input "measured drift", minus input "filter passed-log", output "unaccounted", feeding a 48-hour integrator and a fuse marked defer_decision.]]
+[[FIGURE 17-D: Two stacked panels. Upper, "bypass topology": an operator `^0` source at left with two paths to the `^5^P` capacitor at right; the upper path crosses the `^6^C|A` filter block, which carries a green tick and the label "reports CLEAR (honestly)"; the lower path routes around the filter entirely, drawn heavier, labelled "presupposition / embedded narrative", captioned "bypassed, not shorted." Lower, "CCB-HYP-DET": the same `^5^P` node into a differential block, plus input "measured drift", minus input "filter passed-log", output "unaccounted", feeding a 48-hour integrator and a fuse marked defer_decision.]]
 
 **Four checks you can run without any board**, because a detection circuit you can only run on paper is not one. *Scan width (`N`)*: name three things in the room that are not the speaker; if that takes effort, `N` is elevated. *Cadence (`R`)*: regularity that does not track meaning is an oscillator. *Restatement*: say the last thing back as a flat assertion in your own words, and what was presupposed either surfaces as a claim you can evaluate or evaporates. *Drift ledger*: write your position down before, compare after, and treat movement you cannot attribute to a specific argument as the reading that matters.
 
@@ -350,9 +350,9 @@ At `t = 9`, `g_m = 5.0`: the same sentence displaces `^5` five times as far as a
 | `rπ_0` | 1.00 | 0.74 | 0.57 | 0.46 |
 | Time to reach 0.30 | 9.0 min | 7.6 min | 6.1 min | 4.8 min |
 
-Session 4 reaches in under five minutes what session 1 needed nine for; `β_required = 9` is delivered by accumulation rather than amplitude. Now read that row again as a detection artifact rather than a plan. **An outside operator running the same recursion across four brief encounters reaches session-4 depth in five minutes** — and the subject's honest account of the fourth is that they talked to someone for a few minutes. At no point does anything dramatic happen. That is the design intent.
+Session 4 reaches in under five minutes what session 1 needed nine for; `β_required = 9` arrives by accumulation rather than amplitude. Now read that row as a detection artifact rather than a plan. **An outside operator running the same recursion across four brief encounters reaches session-4 depth in five minutes** — and the subject's honest account of the fourth is that they talked to someone for a few minutes. At no point does anything dramatic happen. That is the design intent.
 
-[[FIGURE 17-D: Assembly drawing, CCB-HYP-SELF board, top view, components placed with reference designators — OSC1 breath oscillator at the input edge, F1 the τ_i = 3 min RC, C1 the `^5^P` substrate capacitor centre-board, N1 the notch (f0 = 0.35, Q = 4.0) on a stub off C1, Q2 the delivery CJT, D1–D2 the descent diodes, R1 the emergence ramp block at the output edge. Four circled test-point callouts: TP1 on the `rπ` node, TP2 on the `g_m` summing node, TP3 on the consent rail, TP4 on the emergence output. Ruled BOM box lower right listing ref, component, CAS state and key parameter for all nine parts, footnoted "closed loop — operator is subject — no DETECTION-ONLY banner required."]]
+[[FIGURE 17-E: Assembly drawing, CCB-HYP-SELF board, top view, components placed with reference designators — OSC1 breath oscillator at the input edge, F1 the τ_i = 3 min RC, C1 the `^5^P` substrate capacitor centre-board, N1 the notch (f0 = 0.35, Q = 4.0) on a stub off C1, Q2 the delivery CJT, D1–D2 the descent diodes, R1 the emergence ramp block at the output edge. Four circled test-point callouts: TP1 on the `rπ` node, TP2 on the `g_m` summing node, TP3 on the consent rail, TP4 on the emergence output. Ruled BOM box lower right listing ref, component, CAS state and key parameter for all nine parts, footnoted "closed loop — operator is subject — no DETECTION-ONLY banner required."]]
 
 ---
 
@@ -362,10 +362,10 @@ Session 4 reaches in under five minutes what session 1 needed nine for; `β_requ
 |---|---|---|---|
 | **TP1** | `rπ` | Bias resistance | Follows `rπ_floor + (rπ_0 − rπ_floor)e^(−t/τ_i)`. Never below `rπ_floor`. Under 0.15 closed-loop means the factor arithmetic was wrong, not that you went deep |
 | **TP2** | `g_m` | Four-factor product | ≤ 6 closed loop, ≤ 20 hetero. **Three or more factors rising together without declared consent is the detection trip** |
-| **TP3** | `veto` | ARMED / DISARMED, **per register member** | `\|f` and `\|T` ARMED at every sample including the deepest. `\|A` may attenuate with `rπ`. All three attenuating together is the CCB-MK boundary; the session ends there |
+| **TP3** | `veto` | ARMED / DISARMED, **per register member** | `\|f` and `\|T` ARMED at every sample including the deepest; `\|A` may attenuate with `rπ`. All three attenuating together is the CCB-MK boundary and the session ends there |
 | **TP4** | `emerge` | Recovered `rπ` vs baseline | ≥ 0.90 × `rπ_0` by end of emergence. A shortfall present 30 minutes later is residual depth: re-run the ramp |
 
-Read them TP3, TP2, TP1, TP4 — confirm the veto is armed before anything else, watch the factors, follow the descent, verify you came back. TP3 first is not ceremony. It is the only reading that distinguishes this board from the previous chapter's.
+Read them TP3, TP2, TP1, TP4 — veto armed first, then the factors, then the descent, then verify you came back. TP3 first is not ceremony. It is the only reading that distinguishes this board from the previous chapter's.
 
 ---
 
@@ -373,13 +373,13 @@ Read them TP3, TP2, TP1, TP4 — confirm the veto is armed before anything else,
 
 | Mode | Mechanism | What you observe | Fix |
 |---|---|---|---|
-| **Ramp overrun** | `di/dt` set by the operator's schedule, not the subject's `L_s` | Stiffening and `^3^E_{F3}\|f` recoil in the first minute; descent stalls above 0.6 | Recompute `τ_i` from `V_kick ≤ 3 × V_drive`. The subject was never the variable |
-| **Ramp underrun** | Run past `0.6 τ_leak`; `^7` lock lost | Descent plateaus, then *rises*; attention leaves the carrier | Shorten to the computed window; restore the oscillator before re-ramping |
-| **`g_m` runaway** | `β` logged, `g_m` not | A preference the subject cannot source, tracing to an incidental remark | Cap `g_m`; keep a verbatim log. Everything said at `g_m = 20` was a suggestion |
-| **Veto in series** | `^3^P` drawing bias through `decomp` instead of `^5^P` | TP3 shows all three register members attenuating together | None. Not a tuning fault — the board is CCB-MK (Ch 16). Stop |
-| **Emergence truncated** | Session ended on a step, not a ramp | TP4 under 0.9 × baseline; elevated `g_m` persisting into ordinary life | Re-run the reverse ramp. Never end on a step; budget the kick both ways |
-| **Unrecallable anchor** | `^8` → `^9` installed below the recall threshold | The pair fires; the subject cannot name when it was installed or cancel it | Trigger installation (§16.3). Counter-circuitry is §16.6–16.7, not this chapter |
-| **Closed-loop over-gain** | Self-board at `β > 2.0` | Suggestions escalate session to session with no external check | Restore `β ≤ 2.0`; take the `a` route, not the `b` route |
+| **Ramp overrun** | `di/dt` set by the operator's schedule, not `L_s` | `^3^E_{F3}\|f` recoil in the first minute; descent stalls above 0.6 | Recompute `τ_i` from `V_kick ≤ 3 × V_drive`. The subject was never the variable |
+| **Ramp underrun** | Run past `0.6 τ_leak`; `^7` lock lost | Descent plateaus, then *rises* | Shorten to the computed window; restore the oscillator first |
+| **`g_m` runaway** | `β` logged, `g_m` not | A preference the subject cannot source | Cap `g_m`; keep a verbatim log. Everything said at `g_m = 20` was a suggestion |
+| **Veto in series** | `^3^P` biased through `decomp`, not `^5^P` | TP3: all three register members attenuating together | None. Not a tuning fault — the board is CCB-MK (Ch 16). Stop |
+| **Emergence truncated** | Session ended on a step, not a ramp | TP4 under 0.9 × baseline; `g_m` elevated in ordinary life | Re-run the reverse ramp; budget the kick both ways |
+| **Unrecallable anchor** | `^8` → `^9` installed below recall threshold | The pair fires; the subject cannot name or cancel it | Trigger installation (§16.3). Counter-circuitry is §16.6–16.7 |
+| **Closed-loop over-gain** | Self-board at `β > 2.0` | Suggestions escalate session to session, unchecked | Restore `β ≤ 2.0`; take the `a` route, not the `b` route |
 
 ---
 
@@ -392,7 +392,7 @@ Read them TP3, TP2, TP1, TP4 — confirm the veto is armed before anything else,
 - **`^1¹` is not an eleventh Noetic.** The conscious/subconscious split is `^1^C|A → ^1^C|f`. The real gate is `^6^C_{F6}|A` in series, and its parameter is a gain, not a door.
 - **The whole hetero-hypnotic attack is one number:** `β_fb` on the lawful O→P path (§8.4), driven 0.2 → 0.9. Nothing ascends illegally.
 - **`^3^P_{F7}|⟨A,f,T⟩` is co-presence, not fusion**, and trance attenuates only `|A`. All three attenuating together is the boundary with Chapter 16, and the only one that matters.
-- **Indirect patterns bypass the `^6` filter while it honestly reports clear.** You detect that as `drift − passed_log`, and the exit is conditions rather than argument: `g_m` is a product, so breaking `N`, `R` and `V` collapses it.
+- **Indirect patterns bypass the `^6` filter while it honestly reports clear.** Detect it as `drift − passed_log`; the exit is conditions, not argument, because `g_m` is a product.
 
 ---
 
@@ -402,17 +402,17 @@ Read them TP3, TP2, TP1, TP4 — confirm the veto is armed before anything else,
 
 **17.1** A subject sits at `β = 2.0`, `rπ = 0.40`. Compute `g_m`. The operator wants `rπ = 0.20` with `β` held at 2.0: what must `g_m` become, and by what factor has framing sensitivity risen against the waking reference of 1.0? Name the factor of the four that most likely supplied the rise, and why.
 
-**17.2** A guarded subject has `L_s = 300 min·Ω_c` on a 24 V_c rail, attention to be moved from 0.85 to 0.15 A_c. Compute the minimum ramp time holding `V_kick ≤ 3 × V_drive`, then for a 1× budget. Say whether the second is a session anyone would sit through, and what that implies about operating on guarded subjects.
+**17.2** A guarded subject has `L_s = 300 min·Ω_c` on a 24 V_c rail, attention moving from 0.85 to 0.15 A_c. Compute the minimum ramp time at `V_kick ≤ 3 × V_drive`, then at a 1× budget. Say whether the second is a session anyone would sit through, and what that implies about operating on guarded subjects.
 
 **17.3** Explain why the recoil at an over-fast induction is written `^3^E_{F3}|f` and not `^6^E_{F6}|A`. Reference the canonical definition of `^3` Negative, say what the `^6` Male state is doing instead, and when it arrives.
 
-**17.4** A colleague reports that a two-hour conversation changed their position on a workplace question, that it was pleasant, and that they cannot reconstruct the argument that changed their mind. Using the CCB-HYP-DET listing, name which probe this is a reading of, state what `unaccounted` evaluates to, and give the one manual check from §17.6 that would have surfaced it during the conversation rather than after.
+**17.4** A colleague reports that a two-hour conversation changed their position on a workplace question, that it was pleasant, and that they cannot reconstruct the argument that changed their mind. Using the CCB-HYP-DET listing, name which probe this is a reading of, state what `unaccounted` evaluates to, and give the manual check from §17.6 that would have surfaced it during the conversation rather than after.
 
-**17.5 (Design)** Specify a 20-minute closed-loop session for `L_s = 150 min·Ω_c` on an 18 V_c rail, holding `V_kick ≤ 1 × V_drive` in both directions, with `rπ_floor = 0.26` and `β = 1.5`. Produce (a) maximum `di/dt` and the resulting `τ_i`; (b) the `rπ` trajectory at 1τ, 2τ, 3τ; (c) the emergence `dt`; (d) a CCDL fragment declaring the oscillator, the RC on the O→P path, the notch, the delivery CJT, both ramps, and four probes. It must compile — check every diode direction and every register before you submit it.
+**17.5 (Design)** Specify a 20-minute closed-loop session for `L_s = 150 min·Ω_c` on an 18 V_c rail, holding `V_kick ≤ 1 × V_drive` in both directions, with `rπ_floor = 0.26` and `β = 1.5`. Produce (a) maximum `di/dt` and the resulting `τ_i`; (b) the `rπ` trajectory at 1τ, 2τ, 3τ; (c) the emergence `dt`; (d) a CCDL fragment declaring the oscillator, the RC on the O→P path, the notch, the delivery CJT, both ramps, and four probes. It must compile — check every diode direction and every register first.
 
 **17.6 (Marquee)** An operator wants an anchor the subject can recall and cancel, and asks you to specify the recall condition as a circuit property rather than a promise.
 
-a) Write, in CCDL, an anchor stage plus whatever components make the `^8` → `^9` pair unable to fire unless a recallable record of its installation exists in the subject's `^5`. Name the enforcing component and the parameter that sets the recall threshold.
+a) Write, in CCDL, an anchor stage plus whatever components make the `^8` → `^9` pair unable to fire unless a recallable record of its installation exists in the subject's `^5`. Name the enforcing component and the parameter setting the recall threshold.
 
 b) Explain why an anchor installed at `g_m = 20` is harder to make recallable than the same anchor at `g_m = 5`, in terms of what `^1` is doing at each depth.
 

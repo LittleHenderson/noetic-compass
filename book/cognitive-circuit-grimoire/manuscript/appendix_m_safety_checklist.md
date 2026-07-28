@@ -1,4 +1,4 @@
-# Appendix K — Safety Checklist
+# Appendix M — Safety Checklist
 
 Run this before anything else. Not before the difficult operations — before all of
 them, including the one you have run forty times. The checklist takes four

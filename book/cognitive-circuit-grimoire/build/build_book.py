@@ -66,18 +66,19 @@ PARTS: list[tuple[str, str, list[str]]] = [
 ]
 
 APPENDICES = [
-    "appendix_a_ccdl_grammar.md",
-    "appendix_b_component_datasheets.md",
-    "appendix_c_forty_states.md",
-    "appendix_d_board_selection.md",
-    "appendix_e_exercise_answers.md",
-    "appendix_f_glossary.md",
-    "appendix_g_failure_mode_index.md",
-    "appendix_h_quantitative_sheets.md",
-    "appendix_i_operation_logs.md",
+    "appendix_a_notation_card.md",
+    "appendix_b_ccdl_reference.md",
+    "appendix_c_component_datasheets.md",
+    "appendix_d_board_designs.md",
+    "appendix_e_tks_crosswalk.md",
+    "appendix_f_st_johns_worksheet.md",
+    "appendix_g_quantitative_table.md",
+    "appendix_h_exercise_answers.md",
+    "appendix_i_glossary.md",
     "appendix_j_further_reading.md",
-    "appendix_k_safety_checklist.md",
+    "appendix_k_tootra_oath.md",
     "appendix_l_mathematical_foundations.md",
+    "appendix_m_safety_checklist.md",
 ]
 
 

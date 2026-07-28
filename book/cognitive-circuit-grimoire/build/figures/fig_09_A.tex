@@ -26,10 +26,11 @@
 
 \node[font=\sffamily\footnotesize\bfseries] at (4.55,0.66) {L1};
 
-\node[nblock, text width=70mm, align=left, anchor=north] at (4.55,-0.58) {%
+\node[nblock, text width=70mm, align=left, anchor=north,
+      font=\sffamily\scriptsize] at (4.55,-0.58) {%
   inductance $L$ in h$\cdot\Omega_c$:\ \ $L = k_d \times H_{\mathrm{practice}}$\\
   opposes the \emph{rate}, not the flow:\ \ $V_{\mathrm{opp}} = L\,|di/dt|$\\
-  depth coefficient $k_d$ = 0.5 / 1.0 / 2.0 / 4.0 (O / E / C / P)};
+  depth coefficient $k_d$ = 0.5 / 1.0 / 2.0 / 4.0 for O/E/C/P};
 
 % ------------- divider ---------------------------------------------
 \draw[draw=casNedge, dash pattern=on 1.5pt off 1.5pt, line width=0.4pt]

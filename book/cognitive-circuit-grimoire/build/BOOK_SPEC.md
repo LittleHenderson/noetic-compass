@@ -140,7 +140,7 @@ and say in the text why the operational version is absent.
 
 ### What This Chapter Established  (5-8 bullets, each a claim not a summary)
 
-### Exercises                      (4-8, with answers in Appendix E)
+### Exercises                      (4-8, with answers in Appendix H)
 ```
 
 ---
@@ -195,12 +195,31 @@ Quick-Start: If You Only Have One Hour.
 | 23 | St. John's Advanced Calibration *(draft exists)* | 4,000 |
 | 24 | The Cognitive Safety Board *(draft exists)* | 5,000 |
 
-### Appendices — 14,000
-A CCDL Grammar · B Component Datasheets · C The 40 States Quick Reference ·
-D Board Selection Guide · E Exercise Answers (**all of them, worked**) ·
-F Glossary · G Failure-Mode Index · H The Quantitative Table Sheets ·
-I Operation Log Templates · J Further Reading ·
-K Safety Checklist · L Mathematical Foundations *(draft exists)*
+### Appendices — 16,000
+
+**The lettering below is the TABLE OF CONTENTS' lettering, and the table of
+contents governs.** An earlier version of this spec invented a different scheme;
+chapters had already been written citing the TOC's letters, so the spec was
+wrong, not the book. If these two ever disagree again, the TOC wins.
+
+| | Appendix | Status |
+|---|---|---|
+| A | CAS Notation Quick-Reference Card | written |
+| B | CCDL Language Reference | written |
+| C | CCB Component Datasheets | needs Part II |
+| D | Standard Board Reference Designs (full CCDL) | needs Part III |
+| E | The TKS Crosswalk — 40 Elements, 7 Foundations, 12 Prerequisites | to write |
+| F | St. John's Equation Worksheet (printable) | to write |
+| G | The Quantitative Table Template | written |
+| H | **Exercise Answers** — every exercise in the book, worked | needs all chapters |
+| I | Glossary | written |
+| J | Further Reading | written |
+| K | The T.O.O.T.R.A. Oath | to write |
+| L | Mathematical Foundations | written |
+| M | Safety Checklist | written |
+
+Cite appendices by letter freely — the scheme is now settled. Exercise answers
+are **Appendix H**.
 
 ---
 
@@ -228,6 +247,6 @@ curve. Figure numbering: `Figure n-A`, `n-B`, … per chapter.
   unless something was actually measured, in which case say what and how.
 - Cross-references must resolve. If you cite "Chapter 9," Chapter 9 must contain
   what you say it does.
-- Exercises get real answers in Appendix E. No "left to the reader."
+- Exercises get real answers in Appendix H. No "left to the reader."
 - The reader has no electronics background and no CAS background. Both are
   taught in passing, at the point of need.

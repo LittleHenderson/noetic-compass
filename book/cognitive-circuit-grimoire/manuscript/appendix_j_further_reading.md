@@ -19,7 +19,7 @@ All three from Noetic Compass Press.
 
 | Volume | Owns | Go there when |
 |---|---|---|
-| *Thinking in Cognitive Architecture* | The CAS framework: 10 Noetics, 4 Domains, 7 Drives, 4 Registers | You want the derivation behind Chapter 2, the admissibility relations, and every Noetic worked in full |
+| *Thinking in Cognitive Architecture* | The CAS framework: 10 Noetics, 4 Domains, 7 Drives, 4 Registers | You want the derivation behind Chapter 2, the admissibility relations, every Noetic in full |
 | *CAS PCBA Engineer* | The component library and five reference boards, in engineering depth | You need parameter ranges beyond Appendix C, or thirty pages on a component this book gives a paragraph |
 | *Reality Engineering* | TKS — the 40 Elements, 7 Foundations, 12 Prerequisites | Appendix E's crosswalk raised a question about the Element grid it maps into |
 
@@ -43,9 +43,9 @@ isomorphism does real work.
 
 | Work | Why |
 |---|---|
-| Herbert A. Simon, *The Sciences of the Artificial* | The founding argument that thinking systems are engineered objects with specifiable interfaces — this book's premise, fifty years early |
+| Herbert A. Simon, *The Sciences of the Artificial* | The founding argument that thinking systems are engineered objects with specifiable interfaces — this book's premise, stated fifty years earlier |
 | Allen Newell, *Unified Theories of Cognition* | What a cognitive architecture must account for; the standard CAS should be measured against |
-| Marvin Minsky, *The Society of Mind* | Mind as many interacting parts — the intuition behind treating `^5` Female as a capacitor network in Section 7.5 |
+| Marvin Minsky, *The Society of Mind* | Mind as many interacting parts — the intuition behind Section 7.5's `^5` capacitor networks |
 | Donald O. Hebb, *The Organization of Behavior* | Where repetition-strengthens-association comes from; the substrate under every `^7` Rhythm claim here |
 | Judea Pearl and Dana Mackenzie, *The Book of Why* | The cleanest statement in print of association versus causation; read it and the `^8` anti-drift rule stops feeling pedantic |
 | Norbert Wiener, *Cybernetics* | Feedback, gain, and stability in systems that include minds — background for Chapter 14's oscillator |
@@ -118,7 +118,7 @@ neither should be used on another person.
 
 ---
 
-## J.7 Self-programming and skill acquisition — Chapters 20 and 23
+## J.7 Self-programming and skill acquisition — Chapters 5 and 20
 
 | Work | Why |
 |---|---|
@@ -146,7 +146,7 @@ tradition. Pretending otherwise would be dishonest.
 | Work | Why |
 |---|---|
 | F. William Lawvere and Stephen H. Schanuel, *Conceptual Mathematics* | Category theory from nothing, with pictures — the gentlest entry to Appendix L's axioms |
-| Saunders Mac Lane, *Categories for the Working Mathematician* | The standard reference for machinery Appendix L cites one line at a time |
+| Saunders Mac Lane, *Categories for the Working Mathematician* | The standard reference for machinery Appendix L cites a line at a time |
 | Saunders Mac Lane and Ieke Moerdijk, *Sheaves in Geometry and Logic* | Topos theory, including the subobject classifier Appendix L.4 turns into three-valued safety logic |
 | Shun-ichi Amari and Hiroshi Nagaoka, *Methods of Information Geometry* | Where the Fisher-Rao metric comes from, and why Euclidean distance on a probability simplex is the wrong tool |
 

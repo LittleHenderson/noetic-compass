@@ -1,4 +1,4 @@
-# Appendix F — Glossary
+# Appendix I — Glossary
 
 Every term this book uses that a reader might arrive at cold. Entries are
 alphabetical, each is self-contained, and each ends with where the term is

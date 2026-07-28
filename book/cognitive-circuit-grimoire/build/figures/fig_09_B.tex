@@ -1,0 +1,60 @@
+% Figure 9-B -- Characteristic curve: RL current rise, i(t)/I_final vs t/tau.
+% Three constraint settings on L = 2,000 h.Ohm_c; the curves are identical in
+% normalised time -- what R changes is the clock (tau) and the ceiling (I_final).
+\begin{tikzpicture}
+\begin{axis}[casaxis,
+  width=10.4cm, height=6.6cm,
+  xlabel={time, in multiples of $\tau$\ \ ($\tau = L/R$)},
+  ylabel={$i(t)\,/\,I_{\mathrm{final}}$},
+  xmin=0, xmax=5, ymin=0, ymax=1.14,
+  xtick={0,1,2,3,4,5},
+  xticklabels={$0$,$\tau$,$2\tau$,$3\tau$,$4\tau$,$5\tau$},
+  ytick={0,0.2,0.4,0.632,0.865,0.950},
+  yticklabels={0,0.20,0.40,0.632,0.865,0.950},
+  legend pos=south east,
+  legend style={font=\sffamily\scriptsize, draw=casNedge, fill=white,
+                inner sep=2.5pt, row sep=0.5pt, at={(0.985,0.05)},
+                anchor=south east},
+]
+
+% --- the 63.2 / 86.5 / 95.0 per-cent construction lines ----------------
+\foreach \yv/\xv in {0.632/1, 0.865/2, 0.950/3} {
+  \addplot[draw=casNedge!70, dash pattern=on 2pt off 1.6pt, line width=0.4pt,
+           forget plot] coordinates {(0,\yv) (\xv,\yv) (\xv,0)};
+}
+
+% --- the three constraint settings ------------------------------------
+% All three share the normalised shape 1 - e^{-t}; they are drawn with
+% distinct dash patterns so the plate survives grayscale printing.
+\addplot[domain=0:5, samples=160, line width=1.4pt, draw=casEedge,
+         dash pattern=on 4pt off 2pt]
+  {1-exp(-x)};
+\addlegendentry{$R=20$: $\tau=100$\,h, $I_{\mathrm{final}}=1.20$ (clips)}
+
+\addplot[domain=0:5, samples=160, line width=1.1pt, draw=casCedge]
+  {1-exp(-x)};
+\addlegendentry{$R=40$: $\tau=50$\,h, $I_{\mathrm{final}}=0.60$ (design pt.)}
+
+\addplot[domain=0:5, samples=160, line width=1.0pt, draw=casOedge,
+         dash pattern=on 1.2pt off 1.6pt]
+  {1-exp(-x)};
+\addlegendentry{$R=80$: $\tau=25$\,h, $I_{\mathrm{final}}=0.30$}
+
+% --- annotations -------------------------------------------------------
+\node[font=\sffamily\scriptsize, anchor=west, align=left,
+      fill=white, inner sep=1.5pt] at (axis cs:1.35,0.40)
+  {$i(t) = I_{\mathrm{final}}\bigl(1-e^{-t/\tau}\bigr)$};
+
+\node[font=\sffamily\scriptsize\itshape, anchor=west,
+      fill=white, inner sep=1.5pt] at (axis cs:3.12,0.905)
+  {95\% -- substrate shifted};
+
+\node[font=\sffamily\scriptsize, anchor=north west, align=left,
+      draw=casNedge, fill=casNfill, line width=0.4pt, rounded corners=2pt,
+      inner sep=3pt] at (axis cs:0.10,1.11)
+  {$L=2{,}000$\,h$\cdot\Omega_c$,\ \ $V_{\mathrm{drive}}=24$\,V$_c$\\
+   $\tau=L/R$ \emph{and} $I_{\mathrm{final}}=V/R$ share a denominator:\\
+   more constraint $\Rightarrow$ sooner \emph{and} shallower.};
+
+\end{axis}
+\end{tikzpicture}

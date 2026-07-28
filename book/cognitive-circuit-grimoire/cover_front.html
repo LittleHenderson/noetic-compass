@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  width: 1913px; height: 2850px;
+  font-family: Georgia, 'Times New Roman', serif;
+  background: #1A1A2E; color: #E8D5B7;
+  position: relative; overflow: hidden;
+}
+.bg-pattern {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  opacity: 0.08;
+  background: 
+    radial-gradient(circle at 50% 20%, #C9A84C 1px, transparent 1px),
+    radial-gradient(circle at 30% 50%, #C9A84C 1px, transparent 1px),
+    radial-gradient(circle at 70% 50%, #C9A84C 1px, transparent 1px),
+    radial-gradient(circle at 40% 70%, #C9A84C 1px, transparent 1px),
+    radial-gradient(circle at 60% 70%, #C9A84C 1px, transparent 1px),
+    radial-gradient(circle at 50% 85%, #C9A84C 1px, transparent 1px);
+  background-size: 300px 300px;
+}
+.border-frame {
+  position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px;
+  border: 2px solid rgba(201, 168, 76, 0.4);
+}
+.border-inner {
+  position: absolute; top: 35px; left: 35px; right: 35px; bottom: 35px;
+  border: 1px solid rgba(201, 168, 76, 0.2);
+}
+.emblem {
+  position: absolute; top: 6%; left: 50%; transform: translateX(-50%);
+  text-align: center; font-size: 100px; color: #C9A84C; line-height: 1;
+  text-shadow: 0 0 50px rgba(201, 168, 76, 0.4);
+}
+.title-block {
+  position: absolute; top: 25%; left: 50%; transform: translateX(-50%);
+  width: 85%; text-align: center;
+}
+.title {
+  font-size: 68px; font-weight: bold; color: #C9A84C;
+  letter-spacing: 6px; line-height: 1.1;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.6); margin-bottom: 30px;
+}
+.subtitle {
+  font-size: 26px; color: #B8A080; letter-spacing: 2px;
+  line-height: 1.3; margin-bottom: 35px;
+}
+.author {
+  position: absolute; bottom: 22%; left: 50%; transform: translateX(-50%);
+  text-align: center;
+}
+.author-name {
+  font-size: 34px; color: #E8D5B7; letter-spacing: 4px; margin-bottom: 6px;
+}
+.author-title {
+  font-size: 17px; color: #8A7A60; letter-spacing: 2px;
+}
+.publisher {
+  position: absolute; bottom: 7%; left: 50%; transform: translateX(-50%);
+  text-align: center; font-size: 15px; color: #6A5A40; letter-spacing: 3px;
+}
+.warning {
+  position: absolute; top: 4%; right: 7%; font-size: 11px;
+  color: #8A2A2A; text-align: right; letter-spacing: 2px; line-height: 1.5;
+}
+</style>
+</head>
+<body>
+<div class="bg-pattern"></div>
+<div class="border-frame"></div>
+<div class="border-inner"></div>
+<div class="warning">FOR THE ADEPT<br>NOT FOR THE GOYIM<br><br>WARNING:<br>OPERATOR'S MANUAL</div>
+<div class="emblem">&#9883;</div>
+<div class="title-block">
+  <div class="title">THE COGNITIVE<br>CIRCUIT GRIMOIRE</div>
+  <div class="subtitle">Spells, Hyperstitions, and Overton Engineering<br>as Formal Cognitive Circuits</div>
+</div>
+<div class="author">
+  <div class="author-name">Little Henderson</div>
+  <div class="author-title">Prof. Hermes M. Thoth</div>
+</div>
+<div class="publisher">NOETIC COMPASS PRESS</div>
+</body>
+</html>

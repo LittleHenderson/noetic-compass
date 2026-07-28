@@ -243,6 +243,8 @@
 ### Appendix I: Glossary
 ### Appendix J: Further Reading
 ### Appendix K: The T.O.O.T.R.A. Oath
+### Appendix L: Mathematical Foundations
+### Appendix M: Safety Checklist
 
 ---
 

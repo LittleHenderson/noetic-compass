@@ -62,7 +62,7 @@ That correction explains what operators routinely misdiagnose as weakness. A per
 
 The curve between them is not a step. It is exponential, and the region below the knee is where operators go wrong.
 
-[[FIGURE 8-C: Characteristic curve — vertical axis I_attention, horizontal axis applied domain potential; exponential forward knee labelled Vf = 0.7; sub-threshold region shaded, annotated "conducting, but not working"; reverse quadrant with a flat leakage floor at I_R = 0.02; vertical breakdown cliff at V_BR = 8.0 annotated "non-recovering — not a Zener".]]
+[[FIGURE 8-C: Characteristic curve for D1, one junction throughout — vertical axis I_attention, horizontal axis applied domain potential; exponential forward knee labelled Vf = 0.7; sub-threshold region shaded, annotated "conducting, but not working"; reverse quadrant with a flat leakage floor at I_R = 0.02; vertical breakdown cliff at V_BR = 12.0 annotated "non-recovering — not a Zener"; a ghosted second cliff at 8.0 labelled "D3 breaks here first — §8.2".]]
 
 > **Bench Note — below the knee, the diode is not off.**
 > A principle at V_drive = 0.6 against a Vf = 0.7 junction is still passing current. A trickle, orders of magnitude below working level, but present. This is why the value you cannot act on still tints everything faintly — the low-grade discomfort with a job you have not quit, the preference you would deny holding that shows up in every small choice anyway. Two consequences. "I have no opinion on that" is a claim about working current, not about conduction. And a principle just under the knee needs only a small drive increase to conduct properly, which makes below-knee states the cheapest things on a board to move. Look there before you reach for a CJT.
@@ -89,9 +89,9 @@ Ascent is blocked. The interesting question is what happens when someone attempt
 
 This is a *different* leakage from Chapter 7.3, where charge drains out of `^5` for want of `^7` Rhythm reinforcement. Diode leakage is signal creeping backwards across a domain boundary. Same word, different component, opposite direction.
 
-**3. Breakdown.** Section 8.2. One event, large enough, and the junction conducts backwards.
+**3. Breakdown.** Section 8.2. One event large enough and a junction conducts backwards — usually D3, the weakest, and there it stops. Only an event clearing all three ratings reaches `^P`.
 
-**4. Counterfeit ascent — the common one.** Most apparent `^O -> ^P` ascent is not ascent. No junction was crossed and no current flowed. What happened is a **relabel**: the operator took a state whose literal was `^9^O` and began asserting it as `^9^P`, by fiat, in their own account of themselves. *It worked, therefore it is right.* The compiler rejects this outright — you cannot rewrite a state's domain field and call it a transition — but a mind has no compiler, and the relabel costs nothing.
+**4. Counterfeit ascent — the common one.** Most apparent `^O -> ^P` ascent is not ascent. No junction was crossed and no current flowed. What happened is a **relabel**: the operator took a state whose literal was `^9^O` and began asserting it as `^9^P`, by fiat, in their own account of themselves. *It worked, therefore it is right.* The grammar has no statement that does this. There is no form that rewrites a state's domain field, and the only upward connection it will accept is the low-gain feedback of section 8.4 — so the relabel is not an illegal listing, it is an *unwritable* one. A mind has no compiler, though, and the relabel costs nothing.
 
 The diagnostic is one question: **what crossed the junction?** If the honest answer is "nothing, I simply started saying it at the principled level," you have a relabel. Real feedback leaves a trace — a filtered signal, a time constant, a gain, a bias that moved measurably. A relabel has an assertion and nothing behind it.
 
@@ -188,8 +188,8 @@ TP1 and TP2 bracket the chain; with both in spec, the junctions between are almo
 - **Forward drops sum.** ΣVf = 3.9 is a hard floor on V_drive before any principle produces any act, which reframes much apparent weakness as a circuit below its knee.
 - **Vf is not overhead; it is the boundary.** A zero-drop junction merges two domains into one.
 - **Below the knee, a junction still conducts.** Sub-threshold states are real and the cheapest thing on a board to move.
-- Attempted ascent has **four outcomes** — standoff, leakage accumulation, breakdown, counterfeit ascent — and one question separates them: *what crossed the junction?*
-- **Counterfeit ascent is a relabel, not a transition.** It is what Overton campaigns install, and it costs the operator nothing.
+- Attempted ascent has **four outcomes** — standoff, leakage accumulation, breakdown, counterfeit ascent — separated by one question, *what crossed the junction?* The commonest is **counterfeit ascent**, which is a relabel rather than a transition, costs the operator nothing, and is what Overton campaigns install.
+- **V_BR ascends the chain — 8.0, 10.0, 12.0.** The exposed junction is built to fail first so a reverse cascade is arrested before it reaches the principled substrate. Equal breakdown ratings across the string remove the ordering, not the risk.
 - The **lawful O→P path goes around the chain**, through a lowpass filter and a low-gain feedback element, terminating at the `^5^P` bias terminal — never at the signal path, which would make it an oscillator.
 - **Both β and τ are required.** Gain bounds how far a sustained input can move the constitution; τ bounds what counts as sustained.
 

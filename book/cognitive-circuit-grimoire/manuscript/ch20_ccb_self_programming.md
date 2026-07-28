@@ -55,7 +55,7 @@ Separation in time is what makes the two nodes genuinely two. The design rule:
 
 Below 3× the nodes track each other closely enough that the loop closes and you are back in the cold open. At the design point of this chapter — an identity-level reference (`τ_ref = 85 days`) against a complex-behavioural working node (`τ_work = 22 days`) — the ratio is 3.86, a 29% margin. Set the reference to something evaluative and fast, like "am I any good at this today?" (τ ≈ 1 day), and the ratio is 0.045. That is the shame topology: the identity node chasing the daily performance, rewritten by every bad session.
 
-> **Bench Note — base tied to emitter is a transistor that is off.** This is worth checking on the bench before you accept it as a cognitive claim, because it is the whole chapter in one component fact. A BJT conducts when `V_BE` clears its forward threshold. Short base to emitter and `V_BE` is identically zero, so no matter what you put on the collector, the device sits in cutoff — not damaged, not weak, *off*. The self-programming analogue: "I will simply be different from now on" supplies no reference distinct from the result. There is nothing for the new composition to be measured against except itself. It is not that the resolution was weak. It is that the stage was never biased.
+> **Bench Note — how to tell a dead stage from a starved one.** They look identical from the output: nothing comes out. On the bench you separate them with a single measurement — a meter across base and emitter. A silicon junction that is conducting sits near its forward drop, the `Vf` threshold of Chapter 8.2; one that is *shorted* reads a hard zero and does not move when you raise the collector supply; one that is merely *under-driven* reads below the threshold and climbs as you raise the drive. Only the third responds to more drive. The cognitive instrument that does the same job is TP4 read against TP2. If the reference moves on the same day a cycle is missed, `V_BE` is zero, the stage is unbiased rather than weakly biased, and additional resolve will produce exactly nothing. If the reference holds steady while the working node sags, the stage is starved and raising the drive is the correct response. One symptom, two faults, opposite interventions — which is why the bring-up order in the Test Points section reads TP4 first.
 
 [[FIGURE 20-A: Two panels. Left, "external board": two ^5 capacitors, operator feeding a CJT bias terminal, target receiving the effect, separation labelled "free — two people". Right, "self board": one ^5 split into a slow upper node (^5^P, τ_ref = 85 d) biasing the CJT and a fast lower node (^5^C, τ_work = 22 d) receiving it, plus a dashed fault inset showing base wired directly to emitter, annotated "V_BE = 0 — cutoff".]]
 
@@ -70,12 +70,12 @@ Eight stages, left to right, with one lawful ascent underneath.
 **S2 NOTCH** — `N1`. Takes the `^6` Male audit off the rail without silencing it.
 **S3 MAIN CJT** — `Q1`. Cause = the assertion, bias = the reference, effect = the working composition.
 **S4 OSCILLATOR + GATE** — `OSC1` with the hysteretic gate `G1`. Generates the `^7` Rhythm and shuts itself off.
-**S5 ENACTMENT** — `Q2out`. The `^9^O` behaviour and its log — the only node on the board that is not self-report.
+**S5 ENACTMENT** — `Q3`, with the confirmation sampler `S2`. The `^9^O` behaviour and its log — the only node on the board that is not self-report.
 **S6 EVIDENCE FEEDBACK** — `LP1` and the slew fuse `F1`, into the bias terminal. The board's one O→P ascent.
 **S7 CSB — SELF-COMPASSION GATE** — `Q2`. Mandatory.
 **S8 AUDIT INSTRUMENT** — `S1`. The `^6` probe, sampled and bounded.
 
-Two things about S2 and S8 are worth stating before the schematic, because they are the same idea in two places.
+S2 and S8 are one component split in two: the same `^6` instrument, notched out of the rail at S2 and re-attached on a schedule at S8.
 
 The `^6` Male audit — *is this working? am I doing it right? this feels ridiculous* — is analytical decomposition of the operation. It is emphatically **not** `^3` Negative; nobody recoils from a practice session, they take it apart and test it. The distinction matters because the two faults have different repairs. `^6^C_{F6}|A` interference is fixed by the notch: move the instrument off the signal path. A genuine `^3^E_{F3}|f` — visceral, can't-stomach-it aversion to the session itself — is not an interference problem at all; it is a rate problem, and the repair is Chapter 9's: lower the amplitude, lengthen the taper, reduce `di/dt`.
 
@@ -124,7 +124,7 @@ E  =  V_sugg / d_evidence        design limit:  E ≤ 0.5 · E_break,  E_break =
 
 On day one the only assertion inside margin is essentially *I practised today*. At day 30 you have room for *I am becoming someone who practises*. At day 254 the evidence is thick enough that the identity claim carries any voltage the scale can supply. This is the structural account of why "I am a millionaire," said by someone with forty pounds and no logged enactments, does nothing useful: `V_sugg ≈ 8`, `d_evidence ≈ 0.1`, `E = 80` — eighty times breakdown. The capacitor does not fail to charge. It *punctures*, and a punctured dielectric conducts: the over-claim discharges the adjacent true claims, which is why the observable symptom is the practitioner losing confidence in things they previously did believe about themselves. The repair is to drop `V_sugg` to half of `d_evidence` and rebuild thickness. There is no version of trying harder that raises `E_break`.
 
-Identity work is this same circuit with the reference at the Principled domain and the schedule in months. Reclaiming a disowned trait — the `^3` you have been attributing outward, recognised and re-composed into `^5` — runs at `β = 1.0`, no amplification, for exactly the field reason above: the point is accurate recognition, and the evidence thickness under a newly recognised trait is by definition near zero.
+Identity work is this same circuit with the reference at the Principled domain and the schedule in months. Reclaiming a disowned trait — the `^3` you have been attributing outward, recognised and re-composed into `^5` — runs at `β = 1.0`, no amplification, for exactly the field reason above: the point is accurate recognition, and the evidence thickness under a newly recognised trait is by definition near zero. The dedicated shadow-integration circuit, which adds the involution guard this board does not carry, is Chapter 25.4; CCB-SELF supplies only the capacitor it charges into.
 
 [[FIGURE 20-C: Two stacked plots on a shared day axis, 0 to 260. Upper: charging curves for work_composition (τ=22 d) and ref_composition (τ=85 d), with markers at day 66 (9.50 / 5.40) and day 254 (9.50). Lower: field stress E = V_sugg/d_evidence against the same axis, with the 0.5 design limit dashed, a shaded puncture region above E = 1.0, and an off-scale arrow at day 1 labelled "E = 80".]]
 
@@ -147,7 +147,7 @@ P = 8.0   at   t = 22 · ln 5   = 35.4 days
 P = 9.0   at   t = 22 · ln 10  = 50.7 days
 ```
 
-So the band spans days 35 to 51 — sixteen days in which the oscillator keeps running while the habit is already mostly formed. Now remove the hysteresis and use a single threshold at 8.5. The gate opens at day 41.7. Leakage at that level is `8.5 / 30 = 0.28` points per day, so the level falls back under the threshold within a day and the gate re-closes. Then it opens again. You have built a comparator without hysteresis, and it chatters — with a period of about one day, which the operator experiences as *I have got this / no I have not*, weekly, indefinitely.
+So the band spans days 35 to 51 — just over fifteen days in which the oscillator keeps running while the habit is already mostly formed. Now remove the hysteresis and use a single threshold at 8.5. The gate opens at day 41.7. Leakage at that level is `8.5 / 30 = 0.28` points per day, so the level falls back under the threshold within a day and the gate re-closes. Then the next session pushes it back over and it opens again. You have built a comparator without hysteresis, and it chatters — with a period of about one day, which the operator experiences as *I have got this / no I have not*, every day, indefinitely.
 
 > **Bench Note — hysteresis converts chatter into a maintenance schedule.** With the band in place the gate opens at `P = 9.0` and the level decays as `9.0 · e^(−t/30)`, reaching 8.0 at `t = 30 · ln(9/8) = 3.5 days`. That is not a failure; that is the designed top-up cadence, and it falls out of the two thresholds and `τ_leak` without anyone choosing it. Note also what happens as the composition ages: `τ_leak` lengthens with evidence thickness — this book's design figure is roughly 90 days past five hundred enactments — and the same arithmetic gives `90 · ln(9/8) = 10.6 days`. Long-established practices tolerate ten-day gaps for a computable reason, and new ones do not.
 
@@ -171,78 +171,82 @@ This book does not give a protocol for it, and the reason is not squeamishness: 
 
 ```cas
 board ccb_self {                        // CCB-SELF — closed loop; operator is target
-    input:  session_cue;                // the ^8 cue that starts a cycle
+    input:  intent;                     // the ^0 the operator asserts this cycle
     output: enacted;                    // the ^9 the cycle produces
+    // the ^8 cue is generated on-board by OSC1 — SI5: there is no external terminal
 
     // ---- S0  REFERENCE: the slow ^5. Bias source, never an output. ----
     node ref_composition: ^5^P_{F7}|T;              // Female: composition built toward
-    capacitor c_ref: Capacitor< node=ref_composition, tau=85.0,
-                                leak_tau=180.0, e_break=1.0 >;      // tau in days
+    capacitor c1: Capacitor< node=ref_composition, tau=85.0,
+                             leak_tau=180.0, e_break=1.0 >;         // tau in days
 
     // ---- S1  INTAKE: the asserted ^0, amplitude-limited ----
     node intent: ^0^C_{F7}|A;                       // Idea: today's assertion
-    resistor r_in:  Resistor< path=intent, R=30.0 >;
-    limiter  v_lim: Limiter< node=intent, max=1.3 >;  // E = 1.3/2.6 = 0.50 at d=2.6
+    resistor r1:   Resistor< path=intent, R=30.0 >;
+    limiter  lim1: Limiter< path=intent, max=1.3 >;   // E = 1.3/2.6 = 0.50 at d=2.6
                                                       // reschedule monthly against TP3
 
     // ---- S2  NOTCH: the ^6 audit off the rail, not silenced ----
     node audit: ^6^C_{F6}|A;                        // Male: decomposition and test
-    notch n_audit: Notch< reject=audit, band=in_session >;
+    notch n1: Notch< in=audit, band=in_session >;
 
     // ---- S3  MAIN CJT: biased from the reference, not from the output ----
     node work_composition: ^5^C_{F5}|⟨A,E⟩;         // Female: as currently performing
-    cjt q_main: CJT< intent | ref_composition => work_composition >
-                [β=1.5, sat=0.60, rπ=8.0, region=active];
+    capacitor c2: Capacitor< node=work_composition, tau=22.0,
+                             leak_tau=30.0, e_break=1.0 >;
+    cjt q1: CJT< intent | ref_composition => work_composition >
+            [β=1.5, sat=0.60, rπ=8.0, region=active];
 
     // ---- S4  OSCILLATOR + HYSTERETIC GATE ----
     node cadence: ^7^C_{F6}|A;                      // Rhythm: the entraining cadence
     node cue:     ^8^O_{F6}|E;                      // Above/Cause: time and place fire it
-    gate g_habit: Schmitt< sense=work_composition, on_below=8.0, off_above=9.0 >;
-    osc  o_habit: Oscillator< signal=cue, source=cadence, period=1.0,
-                              amplitude=0.35, gate=g_habit >;       // period in days
+    schmitt g1: Schmitt< sense=work_composition, on_below=8.0, off_above=9.0 >;
+    osc  osc1:  Oscillator< signal=cue, source=cadence, period=1.0,
+                            amplitude=0.35, gate=g1 >;              // period in days
 
     // ---- S5  ENACTMENT: the only node that is not self-report ----
     node enacted:    ^9^O_{F5}|E;                   // Below/Effect: the behaviour performed
     node impression: ^4^E_{F3}|f;                   // Vibration: what the cycle left behind
-    cjt q_out: CJT< cue | work_composition => enacted > [β=1.0, region=active];
+    cjt    q3: CJT< cue | work_composition => enacted > [β=1.0, region=active];
+    sample s2: Sample< node=impression, period=1.0, window=1440.0 >;  // days, minutes
 
     // ---- S6  EVIDENCE FEEDBACK: the one lawful O -> P ascent (see 8.4) ----
-    filter f_evi:  LowPass< in=enacted, out=evidence_trend, tau=21.0 >;   // three weeks
-    fuse   f_slew: Fuse< ref_composition, threshold=0.12, action=open_feedback >;
+    filter lp1: LowPass< in=enacted, out=evidence_trend, tau=21.0 >;   // three weeks
+    fuse   f1:  Fuse< ref_composition, threshold=0.12, action=open_feedback >;
     feedback evidence_trend -> ref_composition [β=0.05];   // arrives at the BIAS terminal
 
     // ---- S7  CSB STAGE: the self-compassion gate. Mandatory. ----
     node miss_trigger: ^8^C_{F5}|f;                 // Above/Cause: a miss and its associations
     node compassion:   ^3^P_{F7}|⟨A,f,T⟩;           // Negative: recoil from self-condemnation
     node acceptance:   ^2^E_{F4}|f;                 // Positive: affinity for the self that missed
-    cjt q_comp: CJT< miss_trigger | compassion => acceptance > [β=1.5, sat=0.70];
+    cjt q2: CJT< miss_trigger | compassion => acceptance > [β=1.5, sat=0.70];
 
     // ---- S8  INSTRUMENT: the ^6 audit, sampled and bounded ----
-    sample s_audit: Sample< node=audit, period=7.0, window=10.0 >;  // days, minutes
+    sample s1: Sample< node=audit, period=7.0, window=10.0 >;  // days, minutes
 
     // ---- TEST POINTS ----
     probe tp1: work_composition;    // P_cap against 10*(1 - e^(-t/22))
     probe tp2: enacted;             // cycles completed / cycles scheduled
-    probe tp3: v_lim;               // field stress E = V_sugg / d_evidence
+    probe tp3: lim1;                // field stress E = V_sugg / d_evidence
     probe tp4: ref_composition;     // reference slew, points per day
 }
 ```
 
 **The stage walk.**
 
-**S0.** `c_ref` is the same `^5^P_{F7}|T` capacitor Chapter 8.4 calls the constitution. CCB-SELF writes to the node every other board reads as bias, which is why SI1 and the slew fuse exist and why this board is not optional reading for anyone running the others.
+**S0.** `C1` is the same `^5^P_{F7}|T` capacitor Chapter 8.4 calls the constitution. CCB-SELF writes to the node every other board reads as bias, which is why SI1 and the slew fuse exist and why this board is not optional reading for anyone running the others. Its `leak_tau = 180 days` is long for a stated reason: the identity reference is backed by a lifetime of prior enactment, not by this operation's log, and by the §20.4 rule that leak lengthens with evidence thickness it sits well past the 90-day figure. Set it to 30 and the reference drains between operations, `P_eq` on the reference collapses, and the ratio rule of §20.1 cannot hold no matter what `τ_ref` says.
 
 **S1.** `R1 = 30 Ω_c` is moderate intake resistance — enough to let the assertion in without flooding. `LIM1` is a diode clamp (Chapter 8), and it is the one parameter on this board that is *rescheduled during the operation*: as `d_evidence` grows, the ceiling rises. Every other value here is fixed at design time.
 
 **S2.** The notch rejects the audit in-band — during the session — and passes it everywhere else. It does not remove the `^6`; it moves it to S8.
 
-**S3.** `β = 1.5` is moderate: above about 4 the assertion outruns the evidence and `E` clears the limiter faster than the limiter can be rescheduled; below 1 each session yields less composition change than it cost, and the operator correctly concludes it is not working. `sat = 0.60` caps what one cycle may contribute; `rπ = 8.0 Ω_c` keeps the stage from loading the reference.
+**S3.** `C2` is the working capacitor, and it is a separate part from `C1` for the whole reason §20.1 exists: two nodes, two time constants, one `^5`. `τ = 22 d` is this chapter's design figure for a complex behavioural composition, and `leak_tau = 30 d` is what every cadence number in §20.3 is computed from — assume 60 and the weekly schedule looks survivable, which it is not. `Q1` sits between them. `β = 1.5` is moderate: above about 4 the assertion outruns the evidence and `E` clears the limiter faster than the limiter can be rescheduled; below 1 each session yields less composition change than it cost, and the operator correctly concludes it is not working. `sat = 0.60` caps what one cycle may contribute; `rπ = 8.0 Ω_c` keeps the stage from loading the reference.
 
 **S4.** As §20.4. Note `period=1.0` day, not "daily" — the parameter is a number because §20.3's leakage arithmetic needs one.
 
-**S5.** `q_out` runs at unity. The enactment should render what the working composition actually supports, neither inflated nor hedged; a gain above 1 here is the stage that produces a performance the practitioner cannot repeat tomorrow. `impression` is the `^4` Vibration return that Chapter 22.2 grades.
+**S5.** `Q3` runs at unity. The enactment should render what the working composition actually supports, neither inflated nor hedged; a gain above 1 here is the stage that produces a performance the practitioner cannot repeat tomorrow. `impression` is the `^4` Vibration return that Chapter 22.2 grades, and `S2` is the instrument that catches it: one sampling window per cycle, a full day wide, because §20.6's `t_conf` is measured from the end of the session and the return in that worked case arrives three hours later. Narrow the window to the session itself and you record `t_conf` as never — which reads as `η → 0`, and St. John's then asks for a gain the limiter will not grant.
 
-**S6.** `τ = 21.0 days` and `β = 0.05` are inherited from Chapter 8.4, not chosen freshly. The path terminates at `ref_composition`, a bias terminal — never at the signal path, which would make it the oscillator Chapter 14 builds on purpose. `f_slew` enforces the ceiling: a capacitor with `τ_ref = 85` days rises at most `10/85 = 0.118` points per day, so anything above 0.12 means something is writing to the reference directly rather than through the filter, and the fuse opens the feedback.
+**S6.** `τ = 21.0 days` and `β = 0.05` are inherited from Chapter 8.4, not chosen freshly. The path terminates at `ref_composition`, a bias terminal — never at the signal path, which would make it the oscillator Chapter 14 builds on purpose. `F1` enforces the ceiling: a capacitor with `τ_ref = 85` days rises at most `10/85 = 0.118` points per day, so anything above 0.12 means something is writing to the reference directly rather than through the filter, and the fuse opens the feedback.
 
 **S7.** The compassion bias is `^3^P_{F7}|⟨A,f,T⟩` — principled `^3` Negative, present in three registers, no fusion claimed. Check it against the anti-drift rule: this is visceral recoil *from self-condemnation*, the can't-stomach-it response to treating one missed morning as a verdict on a life. It is not an argument against self-condemnation; that would be `^6`, and it arrives later and works less well. The cause is `^8^C_{F5}|f`: a miss triggering its associations — *that reminds me of every other thing I quit*. Associative surfacing, canonical `^8`, not deduction. Domain descends `^C → ^E`.
 
@@ -277,7 +281,7 @@ result  = 1/3 × 1/3     = 1/9        →  a = 1, b = 9
 β_next  = 9      n_ops = 1      T_manifest = 1 × 60 min
 ```
 
-> **Bench Note — on this board, `β_next` is a count, not an amplitude.** Chapter 5 reads `β_next = 9` as an instruction to make the next operation nine times stronger. On CCB-SELF you may not obey that: `LIM1` forbids it, because a ninefold assertion against an unchanged `d_evidence` puts `E` far past breakdown, and the result is Chapter 7.4, not mastery. So convert amplitude into count. Nine times the activation, delivered at the fixed 0.35 amplitude, is nine cycles — nine hours of practice at the current setting, which is exactly what `T_manifest = a × t_op` at 9× reads as when you spend the multiple on the time axis instead of the voltage axis. That conversion is the whole difference between a practice regime and a burnout, and it is available only because this board has an oscillator. A one-shot board like CCB-D has no count to spend into.
+> **Bench Note — on this board, `β_next` is a count, not an amplitude.** Chapter 5 reads `β_next = 9` as an instruction to make the next operation nine times stronger. On CCB-SELF you may not obey that: `LIM1` forbids it, because a ninefold assertion against an unchanged `d_evidence` puts `E` far past breakdown, and the result is Chapter 7.4, not mastery. So convert amplitude into count. Nine times the activation, delivered at the fixed 0.35 amplitude, is nine cycles: `n_ops` absorbs the multiple that `β_next` was asking for, and `T_manifest = n_ops × t_op` becomes 9 × 60 = 540 minutes — nine hours of practice at the current setting. Note that 540 minutes is the same figure Chapter 5's Corvette worked example arrives at from the other direction. That conversion is the whole difference between a practice regime and a burnout, and it is available only because this board has an oscillator. A one-shot board like CCB-D has no count to spend into.
 
 Skill acquisition is where the one legitimate `×` on this board appears. Accumulated composition and entraining cadence, integrated, produce a state neither supplies alone:
 
@@ -289,14 +293,15 @@ Skill acquisition is where the one legitimate `×` on this board appears. Accumu
 
 ---
 
-### Bill of Materials and Parameter Rationale
+### Component and Parameter Table
 
-Every value below is a design choice made in this book, not a measurement.
+Every value below is a design choice made in this book, not a measurement. The
+reference designator is the CCDL identifier in §20.5, uppercased.
 
 | Ref | Component | CAS state / form | Value | Why that value, and what breaks at others |
 |---|---|---|---|---|
-| `C1` | Capacitor | `^5^P_{F7}\|T` | τ=85 d, leak=180 d | The slow reference. `τ_ref/τ_work` = 3.86; below 3 the nodes lock and a bad day rewrites the identity |
-| `C2` | Capacitor | `^5^C_{F5}\|⟨A,E⟩` | τ=22 d, leak=30 d | Complex-behavioural. Assume a longer leak and you schedule weekly, at `P_eq` = 1.5 |
+| `C1` | Capacitor | `^5^P_{F7}\|T` | τ=85 d, leak=180 d | The slow reference. `τ_ref/τ_work` = 3.86; below 3 the nodes lock and a bad day rewrites the identity. leak=180 d because the identity node is backed by a lifetime of enactment; at leak=30 d it drains between operations |
+| `C2` | Capacitor | `^5^C_{F5}\|⟨A,E⟩` | τ=22 d, leak=30 d | Complex-behavioural. Every cadence figure in §20.3 is computed from leak=30 d; assume 60 and the weekly schedule looks survivable when it actually settles at `P_eq` = 1.5 |
 | `R1` | Resistor | on `^0^C_{F7}\|A` | 30 Ω_c | Lets the assertion in without flooding the intake |
 | `LIM1` | Limiter | diode clamp on intent | max=1.3 | Holds `E ≤ 0.5`. Above `E` = 1.0 the dielectric conducts and adjacent true claims discharge |
 | `N1` | Notch | reject `^6^C_{F6}\|A` | band=in_session | Audit off the rail. Leave it in and the operation is measured continuously and never accumulates |
@@ -311,7 +316,8 @@ Every value below is a design choice made in this book, not a measurement.
 | `F1` | Fuse | on `C1` slew | 0.12 pts/day | `10/85 = 0.118`, the maximum lawful slew. Higher leaves SI1 unenforced; lower blows on normal charging |
 | `Q2` | CJT | `^8^C → ^2^E`, bias `^3^P` | β=1.5, sat=0.70 | CSB stage. Removing it puts a shame oscillator where the safety element should be |
 | `S1` | Sample | on `^6^C` | 7 d / 10 min | High-impedance instrument. Continuous sampling is a low-impedance load |
-| Dials | — | involution pairs | `^2`=6 `^3`=5 · `^5`=7 `^6`=5 · `^8`=5 `^9`=6 | All within the 4-point divergence limit. Beyond it, inversion — Chapter 24 |
+| `S2` | Sample | on `^4^E_{F3}\|f` | 1 d / 1,440 min | Catches the `^4` confirmation return so §20.6 has a `t_conf`. Window narrower than a day records `t_conf` as never, and St. John's then asks for a gain `LIM1` will refuse |
+| Dials | — | involution pairs | `^2`=6 `^3`=5 · `^5`=7 `^6`=5 · `^8`=5 `^9`=6 | All within the 4-point divergence limit. Beyond it, inversion — Chapter 25, §25.2 |
 
 ---
 
@@ -343,7 +349,7 @@ That last pair of numbers is the result to carry out of this chapter. **The beha
 | **Reference chasing** | `τ_ref` set by an evaluative node (τ ≈ 1 d) | TP4 moves the day TP2 records a miss | Re-site the reference at `^P`; confirm `F1` intact; confirm S7 present |
 | **Dielectric puncture** | `V_sugg` far above `d_evidence` | Practitioner loses confidence in previously settled beliefs, not just the new one | Drop `V_sugg` to `0.5 × d_evidence`; rebuild thickness. Trying harder raises `E` |
 | **Sub-cadence stall** | Interval above `T_max`; `P_eq` below target | Months of genuine effort, level parked at 1.5–5 | Raise cadence, or raise `ΔP_session`, or lower the target. Two of the three are usually available |
-| **Gate chatter** | Hysteresis removed, or gate sensing an affective node | Weekly on/off cycling; bursts synchronised to nothing | Restore the 1.0-point band; move the sense line to the slow node |
+| **Gate chatter** | Hysteresis removed, or gate sensing an affective node | Daily on/off cycling; bursts synchronised to nothing | Restore the 1.0-point band; move the sense line to the slow node |
 | **Make-up doubling** | SI3 violated after a missed cycle | The streak ends on the catch-up session, not the missed one | Fixed amplitude, recoverable phase. Resume at nominal |
 | **Audit loading** | `^6` left in the signal path | The operation is measured continuously and never accumulates | Notch in-band; move the audit to `S1`, weekly, bounded, written |
 | **Compassion gate absent** | S7 removed as sentimental | One miss produces a principled verdict; abandonment follows within days | Reinstall. It is a decoupling capacitor; the board oscillates without it |
@@ -357,12 +363,12 @@ That last pair of numbers is the result to carry out of this chapter. **The beha
 |---|---|---|---|
 | **TP1** | `work_composition` | `P_cap` on the 0–10 scale | Tracks `10(1 − e^(−t/22))`: 6.32 at day 22, 9.50 at day 66. Flat with TP2 healthy means `Q1` is in cutoff — check the bias, not the drive |
 | **TP2** | `enacted` | Cycles completed / cycles scheduled | ≥ 0.85 for a target of 8.0. The only non-self-report node on the board; if TP1 and TP2 disagree, TP2 is right |
-| **TP3** | `v_lim` | Field stress `E = V_sugg / d_evidence` | ≤ 0.50. Above 1.0 is puncture and the damage shows up first in *adjacent* claims, not the asserted one |
+| **TP3** | `LIM1` | Field stress `E = V_sugg / d_evidence` | ≤ 0.50. Above 1.0 is puncture and the damage shows up first in *adjacent* claims, not the asserted one |
 | **TP4** | `ref_composition` | Reference slew, points per day | ≤ 0.12, and **uncorrelated with a single TP2 miss.** Correlation here is the safety failure: the decoupling has gone and the board is a shame oscillator |
 
 Read them TP4, TP3, TP2, TP1 — confirm the reference is decoupled, confirm the field is in margin, confirm the cycles actually ran, then read the charge. That order is the bring-up procedure, and it puts the two silent failures first.
 
-[[FIGURE 20-F: Assembly drawing. Board outline with titleblock "CCB-SELF · closed loop · rev A". Placement: C1 large and shaded upper left; C2 centre; R1 and LIM1 along the left edge; N1 above the intake trace; Q1 centre with terminals stencilled cause / bias / effect; G1 and OSC1 right of C2; Q3 at the right edge feeding the ^9^O output pad. The S6 return trace runs the bottom edge through LP1 and F1 to C1's bias pad, drawn in heavier weight and labelled "O→P — bias terminal only". Q2 sits in its own hatched block lower right, stencilled "CSB — DO NOT DEPOPULATE". Test-point callout flags with leader lines: TP1 at C2, TP2 at the ^9^O pad, TP3 at LIM1, TP4 at C1. BOM box lower left: C1 ^5^P τ=85 d · C2 ^5^C τ=22 d · R1 30 Ω_c · LIM1 max=1.3 · N1 in_session · Q1 β=1.5 sat=0.60 rπ=8.0 · G1 8.0/9.0 · OSC1 1.0 d 0.35 · Q3 β=1.0 · LP1 τ=21 d · F1 0.12 pts/day · Q2 β=1.5 sat=0.70 · S1 7 d / 10 min.]]
+[[FIGURE 20-F: Assembly drawing. Board outline with titleblock "CCB-SELF · closed loop · rev A". Placement: C1 large and shaded upper left; C2 centre; R1 and LIM1 along the left edge; N1 above the intake trace; Q1 centre with terminals stencilled cause / bias / effect; G1 and OSC1 right of C2; Q3 at the right edge feeding the ^9^O output pad. The S6 return trace runs the bottom edge through LP1 and F1 to C1's bias pad, drawn in heavier weight and labelled "O→P — bias terminal only". Q2 sits in its own hatched block lower right, stencilled "CSB — DO NOT DEPOPULATE". Test-point callout flags with leader lines: TP1 at C2, TP2 at the ^9^O pad, TP3 at LIM1, TP4 at C1. BOM box lower left: C1 ^5^P τ=85 d leak=180 d · C2 ^5^C τ=22 d leak=30 d · R1 30 Ω_c · LIM1 max=1.3 · N1 in_session · Q1 β=1.5 sat=0.60 rπ=8.0 · G1 8.0/9.0 · OSC1 1.0 d 0.35 · Q3 β=1.0 · LP1 τ=21 d · F1 0.12 pts/day · Q2 β=1.5 sat=0.70 · S1 7 d / 10 min · S2 1 d / 1,440 min.]]
 
 ---
 
@@ -382,7 +388,7 @@ Read them TP4, TP3, TP2, TP1 — confirm the reference is decoupled, confirm the
 
 ### Exercises
 
-*(Answers in Appendix E.)*
+*(Answers in Appendix H.)*
 
 **20.1** An operator sets a reference at `^2^E_{F3}|f` — "do I feel like someone who does this?" — with an effective τ of 1.5 days, against a working node at `τ_work = 22 d`. Compute the ratio, state whether it passes, and describe in two sentences what TP4 will show on the first missed cycle.
 
@@ -396,7 +402,7 @@ Read them TP4, TP3, TP2, TP1 — confirm the reference is decoupled, confirm the
 
 **20.6 (Design)** Build a CCB-SELF for a simple behavioural target: `τ_work = 10 d`, `τ_leak = 20 d`, identity reference at `τ_ref = 40 d`, `ΔP_session = 0.30`, target `P_work = 8.5`. Produce (a) the ratio check and whether it passes; (b) the maximum mean interval and the weekly cadence it implies — then state whether the target is reachable at one session per day, and if not, which of the three available levers you would move and why; (c) the `F1` slew threshold, derived; (d) a CCDL fragment declaring `C1`, `C2`, `Q1`, `G1`, `OSC1`, `LP1`, `F1`, and four probes. It must compile — check the feedback's τ and β against Chapter 8.4 before you submit it.
 
-**20.7 (Marquee)** An operator completes 66 days at six sessions a week. TP1 reads 9.50, TP2 reads 0.86, TP3 reads 0.41. TP4 reads 5.40 and has been rising smoothly at 0.06 points per day. The operator reports that the practice is effortless and that they still do not feel like a musician, and proposes to raise `β` on `Q1` from 1.5 to 5.0 to "make it land."
+**20.7 (Marquee)** An operator completes 66 days at six sessions a week. TP1 reads 9.50, TP2 reads 0.86, TP3 reads 0.41. TP4 reads 5.40 and has been rising smoothly at 0.05 points per day. The operator reports that the practice is effortless and that they still do not feel like a musician, and proposes to raise `β` on `Q1` from 1.5 to 5.0 to "make it land."
 
 a) State which test point they are misreading and what the correct reading of it is.
 b) Compute `E` after the proposed change, assuming `V_sugg` scales with `β` and `d_evidence` is unchanged at 5.7, and name the failure mode they would enter.

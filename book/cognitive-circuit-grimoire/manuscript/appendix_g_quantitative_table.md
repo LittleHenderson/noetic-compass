@@ -1,4 +1,4 @@
-# Appendix I — Operation Log Templates
+# Appendix G — The Quantitative Table Template
 
 Three blank forms, meant to be photocopied. Punch the left margin and file by
 operation number rather than by date — one operation can run four months, and its

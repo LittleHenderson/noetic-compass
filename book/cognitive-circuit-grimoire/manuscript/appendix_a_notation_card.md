@@ -1,4 +1,4 @@
-# Appendix C — The 40 Cognitive States — Quick Reference
+# Appendix A — CAS Notation Quick-Reference Card
 
 Ten Noetics × four Domains. Every CAS state literal in this book is one of the
 forty entries below. Chapter 2 teaches the notation; this appendix is for the

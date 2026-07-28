@@ -1,4 +1,4 @@
-# Appendix A — CCDL Grammar
+# Appendix B — CCDL Language Reference
 
 **What this covers.** Every lexical element, statement form, parameter key,
 operator, validation rule and error code used by a CCDL listing *in this book* —
@@ -55,9 +55,9 @@ The optional `_label` **[G]** distinguishes two instances of one state:
 Two literals that tokenise but say the wrong thing, caught on review:
 
 - **`^3` is visceral aversion** — recoil, can't-stomach-it. Analytical critique
-  is `^6` Male. A node named `audit` typed `^3` is a defect.
-- **`^8` is associative triggering** — "that reminds me." Deduction is `^6`
-  into `^9`, not `^8`.
+  is `^6` Male; a node named `audit` typed `^3` is a defect.
+- **`^8` is associative triggering** — "that reminds me." Deduction is `^6` into
+  `^9`.
 
 `|` introduces the Register and nothing else; `F3|Vitality` is a syntax error.
 Involutions `^2`↔`^3`, `^5`↔`^6`, `^8`↔`^9`; self-duals `^0`, `^1`, `^4`, `^7`;
@@ -122,7 +122,7 @@ limiter   integ   counter  delay
 
 The last two rows are **[G]**. `cap`/`capacitor`, `osc`/`oscillator` and
 `integ`/`integrator` are short forms of one another. The prefix is checked
-against the type that follows: `resistor r1: Capacitor< … >` is `E-DECL-002`.
+against the type following it: `resistor r1: Capacitor< … >` is `E-DECL-002`.
 
 **A.2.3 Component type names** (instantiation position):
 
@@ -134,12 +134,12 @@ Sample  Limiter  Hold  Divider  Cascade  Polarity  RegisterSet  Monitor
 Feedback
 ```
 
-Row four onward is **[G]** — the special-purpose parts of Chapter 11, the
-thermistors of §6.3, and the two detection instruments Chapter 18's
-counter-board needs.
+Row four onward is **[G]** — the special-purpose parts of Ch. 11, the
+thermistors of §6.3, and the two detection instruments Ch. 18's counter-board
+needs.
 
-**A.2.4 Parameter keys** are reserved in parameter position only, and are
-enumerated with their ranges in §A.4.
+**A.2.4 Parameter keys** are reserved in parameter position only; §A.4
+enumerates them with their ranges.
 
 ---
 
@@ -183,6 +183,7 @@ node guard:        ^3^P_{F7}|f;   // felt principled aversion
 ```
 cjt_decl ::= "cjt" , identifier , ":" , cjt_expr , [ param_block ] , ";"
 cjt_expr ::= "CJT<" , cause , "|" , bias , "=>" , effect , ">"
+cause    ::= ref ;  bias ::= ref ;  effect ::= ref
 ref      ::= identifier | state_literal
 ```
 
@@ -209,7 +210,7 @@ prompts — update the substrate; `[β=0.05]` to `[β=0.3]` is the Part III band
 
 ```
 probe_decl   ::= "probe" , identifier , ":" , probe_target , ";"
-probe_target ::= ref | param_key | component_expr
+probe_target ::= ref | key | component_expr
 ```
 
 Places a test point; alters nothing. Probing a *parameter* (`probe tp1: rπ;`)
@@ -246,6 +247,8 @@ integrate hm3: ( decompose × confirm ) = composed;
 ```
 component_decl ::= comp_kind , identifier , ":" , component_expr , ";"
 component_expr ::= type_name , "<" , arg_list , ">" , [ param_block ]
+comp_kind      ::= any prefix listed in §A.2.2
+type_name      ::= any type listed in §A.2.3
 arg_list       ::= arg , { "," , arg }
 arg            ::= ref | key "=" value | domain "->" domain
                  | "Phi<" ref { "," ref } ">" | "[" value { "," value } "]"
@@ -269,12 +272,13 @@ cross-domain conductance direction, which is how Domain Descent is enforced.
 ### A.3.9 Layout statements
 
 ```
-layer_decl  ::= "layer" , domain_tag , ":" , "[" , layer_entry
-                , { "," , layer_entry } , "]" , ";"
-layer_entry ::= identifier , ":" , state_literal
-via_decl    ::= "via" , identifier , ":" , via_endpoint , "->"
-                , via_endpoint , [ param_block ] , ";"
-domain_tag  ::= "P" | "C" | "E" | "O"
+layer_decl   ::= "layer" , domain_tag , ":" , "[" , layer_entry
+                 , { "," , layer_entry } , "]" , ";"
+layer_entry  ::= identifier , ":" , state_literal
+via_decl     ::= "via" , identifier , ":" , via_endpoint , "->"
+                 , via_endpoint , [ param_block ] , ";"
+via_endpoint ::= state_literal | domain
+domain_tag   ::= "P" | "C" | "E" | "O"
 ```
 
 A state on a layer carries that layer's domain. Vias run downward (P→C→E→O);
@@ -284,20 +288,20 @@ the only lawful upward via is the low-gain feedback path.
 
 Each takes leading position and is developed in the chapter named.
 
-**Supply and limits.** `rail <Fk>: <Name> [v=…];` Drive rail and supply level ·
-`dial <id>: <^n> [dial=…];` operator limit, integer 3–9 (Ch. 6, §6.2) ·
+**Supply and limits (Ch. 22).** `rail <Fk>: <Name> [v=…];` Drive rail and supply
+level · `dial <id>: <^n> [dial=…];` operator limit, integer 3–9 (Ch. 6, §6.2) ·
 `spec <id> [<key>=… on <Fk>];` attaches a parameter to an instance ·
 `constraint <id> in [lo, hi];` range invariant · `derate <target>
-[beta_scale=…];` scales gain board-wide under stress. (Ch. 22.)
+[beta_scale=…];` scales gain board-wide under stress.
 
-**Flow and state.** `sequence a -> b -> c [enforce=strict];` power-up ordering ·
-`route <src> -> { a + b };` directs cognition to rest states · `enter <state>;` ·
-`force_state <id> [duration=…];` · `hold until <expr>;` blocks until a condition
-clears, which is where hysteresis lives · `use <circuit>;` includes another
-block. (Ch. 22.)
+**Flow and state (Ch. 22).** `sequence a -> b -> c [enforce=strict];` power-up
+ordering · `route <src> -> { a + b };` directs cognition to rest states ·
+`enter <state>;` · `force_state <id> [duration=…];` · `hold until <expr>;` blocks
+until a condition clears, where hysteresis lives · `use <circuit>;` includes
+another block.
 
-**Watch and alarm.** `monitor <id>: <expr>;` with `on <monitor> { … }` as the
-block it fires · `alert "<text>";`. (Ch. 22.)
+**Watch and alarm (Ch. 22).** `monitor <id>: <expr>;` with `on <monitor> { … }`
+as the block it fires · `alert "<text>";`.
 
 **Capacitor bank (Ch. 7).** `charge <expr> -> <bank> [V=…];` ·
 `discharge <cell> -> <node>;` · `decode` · `refresh` · `select` · `scan`.
@@ -315,8 +319,10 @@ instantly — the back-EMF kick.
 ```
 param_block  ::= "[" , param , { "," , param } , "]"
 param        ::= key , "=" , value
+key          ::= any key tabulated below
 value        ::= number | region_value | symbol | "[" value { "," value } "]"
 region_value ::= "cutoff" | "active" | "saturation" | "breakdown"
+symbol       ::= identifier          (* an unquoted enumerated value *)
 ```
 
 | Key | On | Legal range | Default |
@@ -334,12 +340,11 @@ region_value ::= "cutoff" | "active" | "saturation" | "breakdown"
 | `Vf`, `V_BR`, `I_R` | Diode, Zener | > 0 | — |
 | `breakdown` | Zener | [0, 1] | — |
 | `ratio`, `n` | Transformer | > 0 | — |
+| `knee`, `coeff` (Thermistor), `f0`, `Q` (Notch) | as named | > 0 | — |
 | `threshold` | Fuse, Monitor | [0, 1] unless the guarded quantity is unnormalised | — |
 | `action` | Fuse | `permanent_block` \| `permanent_until_manual_reset` \| `block_until_decomposed` \| `defer_decision` \| `open_feedback` \| `warn` | — |
 | `type` | Thermistor, Filter | `PTC` \| `NTC` \| `lowpass` \| `notch` \| `quantize` | — |
 | `period`, `frequency`, `duty` | Oscillator | period, frequency > 0; duty ∈ (0, 1] | — |
-| `knee`, `coeff` | Thermistor | > 0 | — |
-| `f0`, `Q` | Notch | > 0 | — |
 | `from`, `to`, `dt` | Ramp | `dt` > 0 | — |
 | `limit`, `window`, `grid`, `duration`, `max` | Monitor, Integrator, Filter, Hold, Limiter | > 0; an interval `[lo, hi]` must be ordered | — |
 | `target_state`, `tolerance` | Regulator | state literal; tolerance ∈ (0, 1) | — |
@@ -348,7 +353,7 @@ region_value ::= "cutoff" | "active" | "saturation" | "breakdown"
 | `dial` | `dial` statement | integer 3–9 inclusive | — |
 | `enforce` | `sequence` | `strict` | — |
 
-`region` declares intent. If the numbers contradict it — `region=active` with
+`region` declares intent; if the numbers contradict it — `region=active` with
 `cutoff ≥ sat` — the compiler flags the contradiction rather than guessing. A
 reduced block (`[β=…]` alone) is the common case; the rest take defaults.
 
@@ -372,15 +377,15 @@ Rules that bite:
 
 - **`×` requires a named emergent result.** `^3^P|A × ^3^P|f × ^3^P|T` alone is
   invalid. Write `^3^P|A + ^3^P|f + ^3^P|T` for three separately-defeasible
-  co-present guards, `^3^P|⟨A,f,T⟩` for one state occupying three registers with
-  no interaction claimed, or `integrate g: ( … ) = ^3^P|Ω;` if you mean fusion.
-  Three different architectures, three different failure profiles (Ch. 2, §2.6).
+  co-present guards, `^3^P|⟨A,f,T⟩` for one state in three registers with no
+  interaction claimed, or `integrate g: ( … ) = ^3^P|Ω;` if you mean fusion.
+  Three architectures, three failure profiles (Ch. 2, §2.6).
 - **`×` may not ascend the domain order.** P ≻ C ≻ E ≻ O. `^O × ^P` is invalid,
-  and so is any integration whose result outranks its operands.
-- **`->` is binary.** `a -> b -> c` is not an expression. The one place a chained
-  arrow is legal is `sequence`, which is a statement, not an expression.
-- Substitution test: read `+` as "associates with" and `×` as "intensifies
-  through." If the sentence survives, the operator is right.
+  as is any integration whose result outranks its operands.
+- **`->` is binary.** `a -> b -> c` is not an expression; the one place a chained
+  arrow is legal is `sequence`, a statement.
+- Read `+` as "associates with" and `×` as "intensifies through." If the sentence
+  survives, the operator is right.
 
 ---
 

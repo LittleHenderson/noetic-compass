@@ -1,3 +1,5 @@
+# Appendix L — Mathematical Foundations
+
 # APPENDIX L — MATHEMATICAL FOUNDATIONS
 
 ## The Noetic Topos for Operators
