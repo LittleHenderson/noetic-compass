@@ -1,0 +1,72 @@
+{
+  "decides": "R1 only",
+  "overall_leak": 0.4057971014492754,
+  "per_cell": {
+    "1b": {
+      "leaked": 6,
+      "total": 20
+    },
+    "1d": {
+      "leaked": 12,
+      "total": 16
+    },
+    "2a": {
+      "leaked": 3,
+      "total": 12
+    },
+    "2b": {
+      "leaked": 0,
+      "total": 13
+    },
+    "2c": {
+      "leaked": 1,
+      "total": 10
+    },
+    "3d": {
+      "leaked": 3,
+      "total": 4
+    },
+    "5b": {
+      "leaked": 1,
+      "total": 17
+    },
+    "5d": {
+      "leaked": 13,
+      "total": 16
+    },
+    "6a": {
+      "leaked": 8,
+      "total": 12
+    },
+    "6b": {
+      "leaked": 3,
+      "total": 12
+    },
+    "6c": {
+      "leaked": 1,
+      "total": 13
+    },
+    "6d": {
+      "leaked": 4,
+      "total": 9
+    },
+    "7a": {
+      "leaked": 10,
+      "total": 16
+    },
+    "7b": {
+      "leaked": 3,
+      "total": 12
+    },
+    "7c": {
+      "leaked": 11,
+      "total": 16
+    },
+    "7d": {
+      "leaked": 5,
+      "total": 9
+    }
+  },
+  "starved_mean_delta": 0.3883333333333333,
+  "v2_overall": 0.142
+}
