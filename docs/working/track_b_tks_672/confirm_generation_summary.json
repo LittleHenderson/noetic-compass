@@ -1,0 +1,20 @@
+{
+  "A0": {
+    "model": "models/gemini-2.5-flash-lite",
+    "n": 320,
+    "primary": 0.025,
+    "secondary": 0.025
+  },
+  "R6A": {
+    "model": "models/gemini-2.5-flash",
+    "n": 160,
+    "primary": 0.0063,
+    "secondary": 0.0063
+  },
+  "R6B": {
+    "model": "claude-haiku-4-5-20251001",
+    "n": 160,
+    "primary": 0.0063,
+    "secondary": 0.0063
+  }
+}
