@@ -34,9 +34,9 @@ The loop persists because it partly works, the way trial-and-error works. What i
 
 ### 1.2 What Electronics Got Right
 
-Electronics is arguably the most successful design discipline ever practised. The device in your pocket holds on the order of billions of switching elements, assembled by machines that cannot read English, and it works — not usually, but to a stated tolerance with a stated failure rate. It got there on five disciplines, each answered in the CAS library.
+The device in your pocket holds on the order of billions of switching elements, assembled by machines that cannot read English, and it works — not usually, but to a stated tolerance with a stated failure rate. Electronics got there on five disciplines, each answered somewhere in the CAS library.
 
-**1. A notation that is typed and checkable before anything is built.** A schematic is not a picture; it is a typed graph. Every part carries a reference designator, every wire is a named net, and a netlist is validated for shorts, floating inputs and type errors while the board is still a file. Electrical practice made this move long ago, as standardised symbols displaced prose descriptions of apparatus. CAS's equivalent is the state literal plus **CCDL**, the Cognitive Circuit Description Language — compiled and validated rather than interpreted charitably. Chapter 2 teaches it from nothing.
+**1. A notation that is typed and checkable before anything is built.** A schematic is not a picture; it is a typed graph. Every part carries a reference designator, every wire is a named net, and a netlist is validated for shorts, floating inputs and type errors while the board is still a file. Electrical practice made this move long ago, as standardised symbols displaced prose descriptions of apparatus. CAS's equivalent is the state literal plus **CCDL**, the Cognitive Circuit Description Language — compiled and validated rather than interpreted charitably. Chapter 2 teaches the state literal from nothing; Chapter 12 teaches you to read a CCDL schematic, and Appendix B is the language reference you keep open beside the boards.
 
 **2. A component library where every part has a datasheet.** Not "a resistor" but a 10 kΩ ±5% quarter-watt metal-film resistor with a stated temperature coefficient. The datasheet discipline is three-part and never varies: *the parameter, its design range, and what fails outside that range.* Part II is that library, one chapter per component class.
 
@@ -46,7 +46,7 @@ Electronics is arguably the most successful design discipline ever practised. Th
 
 **5. Decomposition into stages with defined interfaces.** What makes the other four pay off: a failure localises to a stage, and the fix touches one part.
 
-> **Bench Note — a notation is worth what it *rejects*, not what it expresses.** A notation that accepts everything you write has told you nothing, which is exactly the comfort of prose: it never pushes back. CCDL pushes back. `^O × ^P` will not compile, because integration cannot ascend the domain order — an operational result does not combine its way up into a principled commitment, and Chapter 8 shows why that boundary is a diode rather than a preference. `(^3^P|A × ^3^P|f × ^3^P|T)` will not compile either: same Noetic, three registers, `×`, no named emergent result. Write `^3^P|⟨A,f,T⟩` for guardrails present together, or `^3^P|A + ^3^P|f + ^3^P|T` for distinct co-present manifestations. A notation that has never told you that you were wrong is decoration.
+> **Bench Note — a notation is worth what it *rejects*, not what it expresses.** A notation that accepts everything you write has told you nothing, which is exactly the comfort of prose: it never pushes back. CCDL pushes back, and it is worth knowing exactly where. Write out an integration that ascends the domain order — `^9^O_{F3}|E × ^3^P_{F7}|T`, an operational result combining its way up into a principled commitment — and the compiler stops at execution with a *domain ascent violation: O × P*. This book writes that rule in shorthand as `^O × ^P`; the shorthand is not itself a literal, so typing it gets you a parse error one stage earlier. Either way it does not build, and Chapter 8 shows why that boundary is a diode rather than a preference. `(^3^P|A × ^3^P|f × ^3^P|T)` fails at a different stage again — the typechecker, on the v7.7 admissibility rule: same Noetic, three registers, `×`, no named emergent result. Write `^3^P|⟨A,f,T⟩` for guardrails present together, or `^3^P|A + ^3^P|f + ^3^P|T` for distinct co-present manifestations. A notation that has never told you that you were wrong is decoration.
 
 ---
 
@@ -62,7 +62,7 @@ That correspondence alone would be weak. Ten and four are small numbers, and any
 
 > **Bench Note — the axis appears twice, and that is the whole of the argument.** If a four-way division showed up only in the ten-operator grid, the honest reading is that someone once cut the material four ways and everything downstream inherited the cut. When the identical division reappears against a seven-element set — one with no arithmetic relationship to ten — it becomes a candidate for being *orthogonal* to both rather than an artifact of either. That is the structural reason the four Phenomenological Registers survive in CAS v7.5 as a separate axis instead of being folded into the Domains. A consistency argument, not a proof. Say so when you use it.
 
-Two things must be stated flatly, because the sloppy version of this section is how the material gets discredited. **Only the axis structure is reconciled** — the metaphysical and cultural content of TKS is not incorporated into CAS. Appendix E's crosswalk of Element to state is a translation table, not a merger.
+Two limits, stated flatly, because the loose version of this section is how the material gets discredited. **Only the axis structure is reconciled** — the metaphysical and cultural content of TKS is not incorporated into CAS. Appendix E's crosswalk of Element to state is a translation table, not a merger.
 
 **And the claim is structural, never supernatural.** When this book calls a candle a resistor, it means the candle constrains where attention can go — one bright point, everything else dark — and that constraint has a value you can reason about with CAS-Ohm (Chapter 4). It means nothing about wax.
 
@@ -82,7 +82,7 @@ Take one operation across three substrates: `^7` **Rhythm** — *the rate and pa
 
 **Biological.** An organism meets a cue repeatedly paired with a consequence. The cue becomes `^8^O_{F3}|E`, an Above/Cause that triggers a different Idea than itself; the response becomes `^9^O_{F3}|E`, the Below/Effect brought to Mind by it. Classical conditioning, described structurally, is `^7` charging a `^5` until an `^8` → `^9` path conducts.
 
-Three substrates, one operator, one topology. Now the discipline that keeps the claim honest.
+Three substrates, one operator, one topology — and one discipline without which the claim turns into a licence to guess.
 
 > **What transfers is the structure. What does not transfer is the time constant.**
 
@@ -96,13 +96,13 @@ The test also works by refusing things. A proposed eleventh operator called "Emo
 
 ### 1.5 What This Book Is (and Is Not)
 
-This is a bench manual: a component library, a description language, nine reference boards, and the calibration and gating procedures that go with them.
+This is a bench manual: a component library, a description language, eight reference boards with their counter-circuits, and the calibration and gating procedures that go with them.
 
 **It is not a grimoire of guaranteed results.** The word on the cover does honest historical work — a grimoire is a book of workings — and the historical grimoires promised outcomes they did not deliver. This book promises something narrower: the circuits here make *failure-mode predictions*, and those are checkable. Set a gain outside its design range and the predicted failure should appear; if it does not, the model is wrong there and should be corrected. Nothing here guarantees that any operation succeeds, and any sentence that reads as though it does is a defect.
 
 **Every number here is a design choice, not a measurement.** When Chapter 13 runs its amplification stage at β=2.5, that is a specified value with a stated reason and a stated failure at other values — not an instrument reading. Presenting chosen values as measured ones is how a framework becomes unfalsifiable, which is the same as becoming useless.
 
-**It is not a psychology text and contains no medical or psychiatric claims.** It does not diagnose, treat, or describe mental illness, trauma, dissociation, or addiction as clinical entities, and must not be used as though it did. Chapters 9, 16, 17 and 20 describe the *routing of attention* in situations that can resemble clinical phenomena, and that resemblance is not a licence. If you are unwell, or if something here describes something that happened to you, that is a matter for a qualified clinician. Nothing in this book substitutes for that care.
+**It is not a psychology text and contains no medical or psychiatric claims.** It does not diagnose, treat, or describe mental illness, trauma, dissociation, or addiction as clinical entities, and must not be used as though it did. Chapters 9, 16, 17, 19 and 20 describe the *routing of attention* in situations that can resemble clinical phenomena, and each carries the same plain safety line where it does. That resemblance is not a licence. If you are unwell, or if something here describes something that happened to you, that is a matter for a qualified clinician. Nothing in this book substitutes for that care.
 
 One thing it *is*: neutral on what you build. Chapter 24's Cognitive Safety Board is not optional. A CJT amplifies whatever reaches its cause terminal, and removing the safety stage is a decision whose consequences — inversion, runaway oscillation, dielectric breakdown — are predictable.
 
@@ -110,13 +110,13 @@ One thing it *is*: neutral on what you build. Chapter 24's Cognitive Safety Boar
 
 ### Core Parameters — the five you meet in every chapter
 
-You do not need to understand these yet, only that each has a range and a stated failure outside it. Every value is a design choice.
+You do not need to understand these yet. Read only the shape of a row: a design range, and a named failure on each side of it. The Owner column is the chapter that derives the range and is authoritative if this table and that chapter ever disagree.
 
 | Parameter | Sets | Design range | Failure below | Failure above | Owner |
 |---|---|---|---|---|---|
 | **β** gain | effect movement per unit cause | 0.5 – 4.0 | attenuates a signal it should carry | cascaded gains run away | Ch 3, 10 |
-| **sat** ceiling | plateau past which more cause does nothing | 0.85 safety; 0.5 – 0.95 general | benign input latches a refusal | headroom left to push a locked decision | Ch 3, 24 |
-| **cutoff** | bias floor below which the stage does not fire | 0.05 – 0.30 | noise fires it; the board flags everything | never fires on real input — the silent failure | Ch 3, 24 |
+| **sat** ceiling | plateau past which more cause does nothing | 0.60 – 0.80 working; 0.85 – 0.97 safety | benign input latches a refusal | headroom left to push a locked decision | Ch 3, 24 |
+| **cutoff** | bias floor below which the stage does not fire | 0.05 – 0.20 | noise fires it; the board flags everything | never fires on real input — the silent failure | Ch 3, 24 |
 | **τ** | time to move the substrate; 3τ ≈ 95% | minutes to months | reprogrammable by a burst of crafted input | cannot learn from sustained evidence | Ch 7, 9, 15 |
 | **R_constraint** | opposition to attention flow | 10 – 90 Ω_c | flow floods paths not built for it | the operation stalls at the output | Ch 4, 6 |
 
@@ -126,7 +126,7 @@ One notational trap, early. **β=∞ is a limit, not a value** — the idealisat
 
 ### Test Points — the instrumentation contract
 
-Every board in Part III exposes four probes in the same four positions. The contract exists because of the one prose defect that cannot be patched: you cannot probe a sentence.
+Every board in Part III exposes four probes in the same four positions. Standardising the positions is what makes readings portable: TP3 means the same thing on the desire board and on the safety board, so a number you learn to interpret once you can interpret everywhere.
 
 | TP | Position | Reads | Why it is there |
 |---|---|---|---|
@@ -137,7 +137,7 @@ Every board in Part III exposes four probes in the same four positions. The cont
 
 Read all four and you have the decision end to end. That record is the auditable trace, and prompt-and-pray cannot produce it.
 
-[[FIGURE 1-D: A five-block signal chain left to right — INPUT STAGE, DISCRIMINATION, COMMITMENT, OUTPUT SELECT, OUT — probe symbols dropping from the nets between them, labelled TP1–TP4. A dashed feedback arc beneath runs from the commitment block to a bias node under discrimination, labelled "slow O→P path, τ long".]]
+[[FIGURE 1-D: A five-block signal chain left to right — INPUT STAGE, DISCRIMINATION, COMMITMENT, OUTPUT SELECT, OUT — probe symbols dropping from the nets between them, labelled TP1–TP4. A dashed feedback arc beneath runs from the OUT block back to a bias node sitting under the discrimination and commitment blocks, labelled "lawful O→P feedback — long τ, terminating at the bias, never at the signal path".]]
 
 ---
 
@@ -160,7 +160,7 @@ Failures of *approach* — how a reader goes wrong before touching a board.
 
 - **Prose fails as a substrate in four specific ways** — no arity, no composition law, no test point, no failure specification. Writing better prose is not a fix for any of them.
 - **A prose instruction is not the absence of a circuit.** Its parameters exist and take numbers; they were set by accident. Illegibility, not absence, is the defect.
-- **A notation is worth what it rejects.** `^O × ^P`, and same-Noetic `×` without a named emergent result, do not compile — and that refusal is the notation earning its place.
+- **A notation is worth what it rejects.** A domain-ascending `×` (`^O × ^P` in shorthand), and a same-Noetic `×` with no named emergent result, do not build — and each fails at a different compiler stage. That refusal is the notation earning its place.
 - **The CAS/TKS convergence rests on a four-way axis appearing at two independent cross-products**, 10 × 4 and 7 × 4. A consistency argument, stated as one. Only the axis structure is reconciled.
 - **Universal applicability is a falsifiable constraint, not a slogan.** `^7` charging `^5` covers a musician's practice, a model's fine-tuning and a conditioned biological response with one topology — and rules out proposals like "Emotional Processing," which merely names the `|f` register.
 - **Structure transfers across substrates; values do not.** Carrying a number across is the most expensive error available: the circuit still looks correct while the schedule is wrong a thousandfold.

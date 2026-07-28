@@ -60,7 +60,7 @@
 % intake: edge pad -> R1 -> LIM1 -> Q1 cause
 \draw[trace] (0.30,7.55) -- (0.90,7.55);
 \fill (0.30,7.55) circle (1.4pt);
-\node[silk, anchor=south] at (0.60,7.64) {\textasciicircum0 in};
+\node[silk, anchor=south] at (0.62,7.64) {\textasciicircum0};
 \draw[trace] (1.35,7.20) -- (1.35,6.90);
 \draw[trace] (1.80,6.55) -- (4.35,6.55);
 \draw[trace] (2.75,7.15) -- (2.75,6.55);
@@ -84,15 +84,28 @@
 \draw[heavy] (6.94,0.55) -- (6.01,0.55);
 \draw[heavy, rounded corners=4pt]
   (4.69,0.55) -- (0.30,0.55) -- (0.30,9.20) -- (0.55,9.20);
-\node[anchor=south, font=\sffamily\scriptsize\itshape] at (5.55,1.02)
+\node[anchor=south west, font=\sffamily\scriptsize\itshape] at (4.55,1.02)
   {O\,$\rightarrow$\,P \ \textemdash\ \ bias terminal only};
 
 % ================= CSB block, hatched ================================
-\begin{scope}
-  \clip[rounded corners=3pt] (6.25,2.45) rectangle (9.85,4.30);
-  \foreach \i in {-2.0,-1.7,...,3.8}{%
-    \draw[line width=0.3pt, draw=casEedge!55] (6.25+\i,2.45) -- (8.10+\i,4.30);}
-\end{scope}
+\draw[line width=0.3pt, draw=casEedge!55] (9.55,2.45) -- (9.85,2.75);
+\draw[line width=0.3pt, draw=casEedge!55] (9.25,2.45) -- (9.85,3.05);
+\draw[line width=0.3pt, draw=casEedge!55] (8.95,2.45) -- (9.85,3.35);
+\draw[line width=0.3pt, draw=casEedge!55] (8.65,2.45) -- (9.85,3.65);
+\draw[line width=0.3pt, draw=casEedge!55] (8.35,2.45) -- (9.85,3.95);
+\draw[line width=0.3pt, draw=casEedge!55] (8.05,2.45) -- (9.85,4.25);
+\draw[line width=0.3pt, draw=casEedge!55] (7.75,2.45) -- (9.60,4.30);
+\draw[line width=0.3pt, draw=casEedge!55] (7.45,2.45) -- (9.30,4.30);
+\draw[line width=0.3pt, draw=casEedge!55] (7.15,2.45) -- (9.00,4.30);
+\draw[line width=0.3pt, draw=casEedge!55] (6.85,2.45) -- (8.70,4.30);
+\draw[line width=0.3pt, draw=casEedge!55] (6.55,2.45) -- (8.40,4.30);
+\draw[line width=0.3pt, draw=casEedge!55] (6.25,2.45) -- (8.10,4.30);
+\draw[line width=0.3pt, draw=casEedge!55] (6.25,2.75) -- (7.80,4.30);
+\draw[line width=0.3pt, draw=casEedge!55] (6.25,3.05) -- (7.50,4.30);
+\draw[line width=0.3pt, draw=casEedge!55] (6.25,3.35) -- (7.20,4.30);
+\draw[line width=0.3pt, draw=casEedge!55] (6.25,3.65) -- (6.90,4.30);
+\draw[line width=0.3pt, draw=casEedge!55] (6.25,3.95) -- (6.60,4.30);
+\draw[line width=0.3pt, draw=casEedge!55] (6.25,4.25) -- (6.30,4.30);
 \draw[line width=0.8pt, draw=casEedge, rounded corners=3pt]
   (6.25,2.45) rectangle (9.85,4.30);
 \node[font=\sffamily\scriptsize\bfseries, text=casEedge, anchor=north,
@@ -105,8 +118,8 @@
 % ================= test points =======================================
 \node[tp] (tp4) at (3.80,9.85) {TP4};
 \draw[lead] (3.58,9.62) -- (3.10,9.30);
-\node[tp] (tp3) at (2.45,6.10) {TP3};
-\draw[lead] (2.23,6.28) -- (1.85,6.45);
+\node[tp] (tp3) at (2.50,6.18) {TP3};
+\draw[lead] (2.26,6.32) -- (1.85,6.48);
 \node[tp] (tp1) at (5.35,3.85) {TP1};
 \draw[lead] (5.35,4.17) -- (5.35,4.35);
 \node[tp] (tp2) at (9.35,4.85) {TP2};

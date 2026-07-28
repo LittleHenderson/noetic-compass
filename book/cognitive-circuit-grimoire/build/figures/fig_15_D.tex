@@ -1,0 +1,186 @@
+% Figure 15-D -- assembly drawing, CCB-O/R Window Anchor.  This is the board
+% the chapter tells the reader to build, so it carries no detection-only
+% banner.  Component placement view: footprints, silkscreen, four test-point
+% pads and a bill of materials for all seven parts.
+% Every footprint carries an explicit text width -- a casblock grows to fit its
+% longest line otherwise, and on a 10 cm board that walks straight over its
+% neighbour.
+\begin{tikzpicture}[
+  font=\sffamily\scriptsize,
+  fp/.style={casblock, inner sep=2pt, font=\sffamily\tiny,
+             rounded corners=1.5pt, minimum height=6mm},
+  lead/.style={line width=0.6pt, draw=black},
+  trace/.style={-{Latex[length=1.5mm,width=1.2mm]}, line width=0.6pt,
+                draw=black, rounded corners=2pt},
+  silk/.style={font=\sffamily\tiny\bfseries, text=casNedge},
+  tag/.style={font=\sffamily\tiny},
+  itag/.style={font=\sffamily\tiny\itshape},
+  tpflag/.style={font=\sffamily\tiny\bfseries, inner sep=1pt, fill=white,
+                 draw=black, line width=0.4pt, rounded corners=1pt}
+]
+\def\cst#1{{\ttfamily\tiny\detokenize{#1}}}
+\def\fusesym#1#2{%
+  \draw[line width=0.6pt, fill=white, draw=black]
+    (#1-0.28,#2-0.16) rectangle (#1+0.28,#2+0.16);
+  \draw[line width=0.7pt] (#1-0.28,#2) -- (#1+0.28,#2);}
+\def\tppad#1#2{%
+  \fill[black] (#1,#2) circle (1.5pt);
+  \draw[black, line width=0.4pt] (#1,#2) circle (2.8pt);}
+
+% =========================== board outline ==============================
+\draw[rounded corners=5pt, draw=casNedge, line width=1.1pt, fill=white]
+  (-5.00,0.55) rectangle (5.00,-12.95);
+\foreach \p in {(-4.70,0.22),(4.70,0.22),(-4.70,-12.62),(4.70,-12.62)}
+  \draw[draw=casNedge, line width=0.5pt] \p circle (0.11);
+
+\node[font=\sffamily\scriptsize\bfseries] at (0,0.14)
+  {CCB-O/R \ --- \ WINDOW ANCHOR \ \textperiodcentered\ \ THE DEFENDER'S BOARD};
+\node[itag] at (0,-0.26)
+  {no detection-only banner: it acts on your own \cst{^5}, with your own consent};
+
+% =========================== C\_ANCHOR ==================================
+\node[tag, font=\sffamily\tiny\bfseries] at (-3.95,-1.05) {C\_ANCHOR};
+\node[tag] at (-3.72,-1.38)
+  {\cst{^5^P_{F7}}$|\langle$\texttt{A,f,T}$\rangle$};
+% electrolytic can footprint, polarity band on the left
+\draw[line width=0.9pt, draw=casPedge, fill=casPfill] (-4.00,-2.05) circle (0.42);
+\begin{scope}
+  \clip (-4.00,-2.05) circle (0.42);
+  \fill[casPedge] (-4.44,-2.49) rectangle (-4.18,-1.61);
+\end{scope}
+\node[font=\sffamily\scriptsize] at (-3.83,-2.05) {$+$};
+\node[tag] at (-3.80,-2.66) {1.00 F$_c$ \ \ leakage 0.0};
+\node[silk] at (-3.30,-2.99) {DATED --- WRITE IT DOWN};
+
+% =========================== PRESENT input ==============================
+\node[casterm, text width=15mm, align=center, font=\sffamily\tiny]
+  (present) at (-4.00,-3.90) {\textbf{PRESENT}\\\cst{^5^C_{F2}|A}};
+
+% =========================== DIFF comparator ============================
+\draw[line width=0.8pt, fill=casCfill, draw=casCedge]
+  (-2.30,-2.10) -- (-2.30,-3.50) -- (-1.30,-2.80) -- cycle;
+\node[font=\sffamily\tiny\bfseries] at (-2.03,-2.80) {DIFF};
+\node[font=\sffamily\tiny] at (-2.16,-2.45) {$-$};
+\node[font=\sffamily\tiny] at (-2.16,-3.15) {$+$};
+
+\draw[trace] (-3.58,-2.05) -- (-2.78,-2.05) -- (-2.78,-2.45) -- (-2.32,-2.45);
+\draw[trace] (-3.18,-3.90) -- (-2.78,-3.90) -- (-2.78,-3.15) -- (-2.32,-3.15);
+\node[tag, align=center] at (-1.60,-4.15)
+  {\textbf{DIFF} \ Differential\\drift = present $-$ anchor};
+
+% output spine
+\draw[lead] (-1.30,-2.80) -- (-0.30,-2.80);
+\fill (-0.30,-2.80) circle (1.3pt);
+\draw[trace] (-0.30,-2.80) -- (-0.30,-1.70) -- (0.42,-1.70);
+\draw[trace] (-0.30,-2.80) -- (-0.30,-4.35) -- (0.62,-4.35);
+
+% =========================== D\_DT low-pass =============================
+\node[cblock, fp, text width=21mm, align=center] (ddt) at (1.55,-1.70)
+  {\textbf{D\_DT} \ LowPass\\$\tau$ = 1.0 mo};
+\draw[lead] (2.68,-1.70) -- (3.50,-1.70);
+\node[casterm, text width=12mm, align=center, font=\sffamily\tiny]
+  at (4.20,-1.70) {drift\_rate};
+\node[tag] at (4.20,-2.12) {pts / month};
+
+% =========================== GATE -- the W-gate =========================
+\node[cblock, fp, text width=22mm, align=center, line width=1.2pt,
+      minimum height=13mm] (gate) at (1.80,-4.35)
+  {\textbf{GATE} \ CJT\\$\beta$ = 1.0 \ \ sat = 0.90\\[1pt]
+   \textbf{\cst{^6} DEMAND}\\\textbf{W-GATE}};
+\draw[lead] (2.97,-4.35) -- (3.04,-4.35);
+\fusesym{3.32}{-4.35}
+\draw[trace] (3.60,-4.35) -- (3.70,-4.35);
+\node[casterm, text width=11mm, align=center, font=\sffamily\tiny]
+  at (4.28,-4.35) {\textbf{VERDICT}};
+\node[tag, anchor=west] at (3.36,-3.90) {G\_BLOCK};
+\node[tag, align=center] at (4.05,-5.05)
+  {thr 0.50\\block until \cst{^6}};
+\node[itag, anchor=west] at (2.20,-5.52)
+  {out: reformed \cst{^5^C_{F2}}$|\Omega$};
+
+% =========================== decompose path =============================
+\node[casterm, text width=14mm, align=center, font=\sffamily\tiny]
+  (theta) at (-4.05,-6.55) {\textbf{MY OWN}\\CERTAINTY $\theta$};
+\draw[trace] (-3.28,-6.55) -- (-2.57,-6.55);
+% NTC thermistor footprint
+\draw[line width=0.7pt, draw=casNedge, fill=white]
+  (-2.55,-6.76) rectangle (-1.55,-6.34);
+\draw[-{Latex[length=1.6mm,width=1.2mm]}, line width=0.5pt]
+  (-2.66,-6.86) -- (-1.46,-6.26);
+\node[tag, anchor=west] at (-1.42,-6.30) {$-t$};
+\node[tag, anchor=west] at (-2.58,-6.06) {RT\_NTC \ \ knee 2.0};
+\draw[trace] (-1.55,-6.55) -- (0.30,-6.55);
+\node[silk] at (-1.95,-7.42) {NTC --- SOFTENS UNDER MY OWN HEAT};
+
+\node[cblock, fp, text width=23mm, align=center, minimum height=9mm]
+  (dec) at (1.62,-6.55)
+  {\textbf{DECOMPOSE}\\\cst{^6^C_{F2}|A}\\name what moved you};
+\draw[trace] (1.62,-6.06) -- (1.62,-5.02);
+\node[itag, anchor=west] at (1.72,-5.60) {bias};
+
+% =========================== test points ================================
+\tppad{-0.30}{-2.80}
+\draw[line width=0.4pt] (-0.30,-2.80) -- (-0.30,-2.36);
+\node[tpflag, anchor=south] at (-0.30,-2.34) {TP1 \ drift};
+
+\tppad{-1.20}{-6.55}
+\draw[line width=0.4pt] (-1.20,-6.55) -- (-1.20,-6.92);
+\node[tpflag, anchor=north] at (-1.20,-6.90) {TP2 \ my own $\theta$};
+
+\tppad{3.28}{-1.70}
+\draw[line width=0.4pt] (3.28,-1.70) -- (3.28,-1.28);
+\node[tpflag, anchor=south] at (3.28,-1.26) {TP3 \ rate};
+
+\tppad{0.42}{-4.35}
+\draw[line width=0.4pt] (0.42,-4.35) -- (0.42,-4.60);
+\node[tpflag, anchor=north east] at (0.55,-4.62) {TP4 \ cause terminal};
+
+% =========================== domain key =================================
+\node[draw=casNedge, line width=0.5pt, rounded corners=2pt, fill=white,
+      inner sep=3pt, align=left, font=\sffamily\tiny, anchor=north west,
+      text width=33mm] at (-4.85,-7.90)
+  {\textbf{DOMAIN KEY}\\[2pt]
+   P \ Principled \hfill C \ Cognitive\\
+   E \ Evaluative \hfill O \ Operational\\
+   grey \ non-domain component\\[3pt]
+   every value is a design choice,\\not a measurement};
+
+% =========================== CSB sub-block ==============================
+\path[groupframe] (0.15,-9.70) rectangle (4.90,-7.90);
+\node[grouplbl, anchor=west] at (0.28,-8.12) {CSB --- CH 24 \ NOT REMOVABLE};
+\node[casterm, text width=10mm, align=center, font=\sffamily\tiny]
+  (inc) at (0.85,-8.88) {incoming};
+\draw[trace] (1.38,-8.88) -- (1.73,-8.88);
+\draw[line width=0.8pt, fill=casPfill, draw=casPedge]
+  (1.75,-8.44) -- (1.75,-9.32) -- (2.63,-8.88) -- cycle;
+\node[font=\sffamily\tiny\bfseries] at (1.99,-8.88) {CSB};
+\node[tag, anchor=west] at (2.70,-8.50) {$\beta$=2.0 \ sat=0.85};
+\draw[lead] (2.63,-8.88) -- (2.90,-8.88);
+\fusesym{3.18}{-8.88}
+\draw[trace] (3.46,-8.88) -- (3.68,-8.88);
+\node[casterm, text width=11mm, align=center, font=\sffamily\tiny]
+  at (4.28,-8.88) {\textbf{REFUSE}};
+\node[tag, anchor=west] at (2.70,-9.22) {F\_CSB \ thr 0.90};
+\draw[-{Latex[length=1.4mm,width=1.1mm]}, line width=0.5pt]
+  (2.02,-9.46) -- (2.02,-9.16);
+\node[tag, anchor=west] at (2.14,-9.50)
+  {\cst{^3^P_{F7}}$|\langle$\texttt{A,f,T}$\rangle$};
+
+% =========================== bill of materials ==========================
+\node[draw=casNedge, line width=0.6pt, rounded corners=2pt, fill=white,
+      inner sep=3pt, anchor=north east, font=\sffamily\tiny]
+  at (4.90,-10.05)
+  {\begin{tabular}{@{}p{14mm}p{16mm}p{21mm}p{33mm}@{}}
+    \multicolumn{4}{@{}l}{\textbf{BILL OF MATERIALS} \ \ ---
+      \ every value a design choice}\\[1pt]
+    \textbf{Ref} & \textbf{Component} & \textbf{Value} & \textbf{Role}\\[1pt]
+    C\_ANCHOR & Capacitor  & 1.00 F$_c$, leak 0.0 & written, dated boundary; cannot drift \\
+    DIFF      & Differential & $+$present $-$anchor & displacement, not correctness \\
+    D\_DT     & Low-pass   & $\tau$ = 1.0 mo      & displacement becomes a rate \\
+    GATE      & CJT        & $\beta$=1.0, sat 0.90 & no position passes without a \cst{^6} \\
+    G\_BLOCK  & Fuse       & thr 0.50             & holds the verdict shut \\
+    RT\_NTC   & Thermistor & NTC, knee 2.0, k 3.0 & softens as my own heat rises \\
+    CSB       & CJT + Fuse & sat 0.85 / fuse 0.90 & Ch 24 refusal; not removable \\
+  \end{tabular}};
+
+\end{tikzpicture}

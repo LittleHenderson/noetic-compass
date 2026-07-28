@@ -8,7 +8,7 @@ The second operator's reading is **264**.
 
 Neither made a mistake. Thirty-one is prime, 264 factors as 8 × 3 × 11, the fraction will not reduce, and the denominator Chapter 5 tells you to read as a required gain comes back thirty times larger for two minutes of honest disagreement about a wristwatch. That is a reduction problem, not a measurement problem, and Chapter 13.5 already fixed it for a single cast: act on the amplitude ratio `A = b/a = 3/η`, never on `b` alone. The two operators' ratios are 9.00 and 8.52.
 
-This chapter builds the rest of the instrument around that fix. Section 13.5 reads one cast. It does not run a **campaign** — a sequence of operations on one desire, scheduled against each other, competing with everything else you have live. Campaigns break in four places a single cast never reaches: at the limits, at the scheduling, at the interference between concurrent operations, and at the point where an operator with three live campaigns wonders why all three went cold in the same week.
+This chapter builds the rest of the instrument around that fix. Section 13.5 reads one cast. It does not run a **campaign** — a sequence of operations on one desire, scheduled against each other, competing with everything else you have live. Campaigns break in four places a single cast never reaches: at the limits of the equation, at the scheduling, at the interference between concurrent operations, and at the point where an operator with three live campaigns wonders why all three went cold in the same week.
 
 This is the instrument board. It does not cast anything. It reads the log.
 
@@ -31,24 +31,22 @@ Chapter 12.2 requires the "must not" list before the functional one.
 | S1 | Report `A ≥ 9` as an amplifier instruction | Re-spec fuse, `block_until_decomposed` |
 | S2 | Admit a confirmation arriving after the horizon | Horizon fuse, `action=no_read` |
 | S3 | Accept a confirmation two live operations could claim | Entry marked `AMBIGUOUS` |
-| S4 | Let a blown ledger reset by re-wording the target | Re-spec changes domain or object |
+| S4 | Let a blown ledger reset by re-wording the target | Re-spec must change domain or object |
 | S5 | Run without the operator's CSB armed (Chapter 24) | No ledger opens on a blown involution monitor |
 
-[[FIGURE 23-A: Block diagram — CCB-CAL left to right: LOG INTAKE (t_op, t_conf) → QUANTIZER (5-min grid) → HORIZON GATE (with a downward branch to a NO-READ terminal) → RATIO (fixed 3.0 divider, output A) → BAND GUARD (four exits ACT / CLOSE / DRIVE / RE-SPEC) → CAMPAIGN LEDGER (ρ trend). A 72-hour scheduling oscillator sits beneath the intake and feeds it. TP1–TP4 flags at quantizer output, ratio input, ratio output, ledger output.]]
+[[FIGURE 23-A: Block diagram — CCB-CAL left to right: LOG INTAKE (t_op, t_conf) → QUANTIZER (5-min grid) → HORIZON GATE with a downward branch to a NO-READ terminal → RATIO (fixed 3.0 divider, output A) → BAND GUARD with four exits ACT / CLOSE / DRIVE / RE-SPEC → CAMPAIGN LEDGER (rho trend). A 72-hour scheduling oscillator sits beneath the intake and feeds it. TP1–TP4 flags at quantizer output, ratio input, ratio output, ledger output.]]
 
 ---
 
 ### 23.1 The 1/3 Constant — Deeper Derivation from Fibonacci and Pi
 
-Section 5.2 sets `τ = 1/3` beside π ≈ 3.14159 — both non-terminating — and reads the pair as a mnemonic for domains left *open*, then declines to derive either from the other.
-
-Be exact about what that is. φ and π are mathematical constants with proofs behind them. **There is no derivation that produces 1/3 from either, and this book does not offer one.** The relation is an analogy of openness: good for remembering which constant governs which axis, useless for inferring anything new. The only derivation of `τ` here is Section 5.2's training arc — roughly 10,000 active hours inside a roughly 30,000-hour span, one part work to two parts gestation.
+Section 5.2 sets `τ = 1/3` beside π ≈ 3.14159 — both non-terminating — and reads the pair as a mnemonic for domains left *open*, then declines to derive either from the other. Be exact about what that is. φ and π are mathematical constants with proofs behind them. **There is no derivation that produces 1/3 from either, and this book does not offer one.** The relation is an analogy of openness: good for remembering which constant governs which axis, useless for inferring anything new. The only derivation of `τ` in these pages is Section 5.2's training arc — roughly 10,000 active hours inside a roughly 30,000-hour span, one part work to two parts gestation.
 
 ```
 η = t_op / t_conf     result = η × τ = a/b     A = b/a = 3/η = 3 t_conf / t_op
 ```
 
-`A` is fixed by two clock readings and by `τ`. Nothing else enters. **`τ` is a scale factor — a unit convention — chosen so a cast's requirement is expressed against the same 1:3 work-to-gestation split the training arc exhibits.** Change `τ` and every number in every log changes by the same factor, while every *comparison between operations* stays where it was. The equation's content is the ordering it puts on operations, not the magnitude. That is a structural analogy, not a measured law. Nothing here establishes that time is quantized at thirds, and a reader who treats `A = 9` the way they treat a resistor's 470 Ω will over-trust two wristwatch readings and a convention.
+`A` is fixed by two clock readings and by `τ`. Nothing else enters. **`τ` is a scale factor — a unit convention — chosen so a cast's requirement is expressed against the same 1:3 work-to-gestation split the training arc exhibits.** Change `τ` and every number in every log changes by the same factor, while every *comparison between operations* stays exactly where it was. The equation's content is the ordering it puts on your operations, not the magnitude of any one reading. That is a structural analogy, not a measured law. Nothing here establishes that time is quantized at thirds, and a reader who treats `A = 9` the way they treat a resistor's 470 Ω will over-trust two wristwatch readings and a convention.
 
 #### Quantize before you reduce
 
@@ -60,7 +58,7 @@ Be exact about what that is. φ and π are mathematical constants with proofs be
 | Second operator | 31 | 88 | (31, 264) | 8.52 |
 | Second, on the grid | 30 | 90 | (1, 9) | 9.00 |
 
-Quantize both clocks onto a **5-minute grid** before reducing. Five minutes is a design choice: finer than the 30-minute bins Section 5.6 uses to grade `^4` Vibration, coarser than the moment an operator *notices* a confirmation, which is not a one-minute-accurate event. Too fine and the coprime explosion returns; at 30 minutes a 20-minute operation confirmed at 25 bins with one confirmed at 45, erasing the difference between an overdriving circuit and an ordinary one. **If `a > 3` after quantizing, discard the pair and act on `A`.** "Nine operations at 64× strength" is an artifact of arithmetic, not an instruction.
+Quantize both clocks onto a **5-minute grid** before reducing. Five minutes is a design choice: finer than the 30-minute bins Section 5.5 uses to grade `^4` Vibration, coarser than the moment an operator *notices* a confirmation, which is not a one-minute-accurate event. Too fine and the coprime explosion returns; at 30 minutes a 20-minute operation confirmed at 25 bins with one confirmed at 45, erasing the difference between an overdriving circuit and an ordinary one. **If `a > 3` after quantizing, discard the pair and act on `A`.** "Nine operations at 64× strength" is an artifact of arithmetic, not an instruction.
 
 > **Bench Note — check this one by hand before you trust the bench.** Take `t_op = 27`, `t_conf = 64`. Raw: `27/192` reduces to `9/64` — a = 9, b = 64. On the grid: `25/195` reduces to `5/39` — a = 5, b = 39. The two pairs share nothing at all. Now compute `A`: `3 × 64/27 = 7.11` and `3 × 65/25 = 7.80`. Both land in the same band and say the same thing. Do this arithmetic yourself once. Until you have watched `b` swing from 64 to 39 while `A` barely moves, you will keep reaching for the denominator, because Chapter 5 taught you to.
 
@@ -77,7 +75,7 @@ Chapter 13.5's bands fall out of `A = 3/η`, and their edges land on clean value
 
 Chapter 5.4's Red Corvette sits at η = 1/3, `A` = 9 — exactly on the re-specification boundary. The canonical worked example in this book is a borderline cast, and that is worth knowing before copying its numbers.
 
-**`t_conf → ∞`, the confirmation never comes.** `η → 0`, `A → ∞`, and the temptation is to write `β=∞` into the listing. That is an idealization the validator rejects: parameter fields are range-checked and refuse non-finite values, as Chapter 24 notes on the CSB's red path, where a real build commits to a large finite number instead. Here there is no finite substitute, because the input is *missing* rather than large. The bench returns **NO-READ**, behind a horizon:
+**`t_conf → ∞`: the confirmation never comes.** `η → 0`, `A → ∞`, and the temptation is to write `β=∞` into the listing. That is an idealization the validator rejects — parameter fields are range-checked and refuse non-finite values — and where a real build would normally substitute a large finite gain, there is no finite substitute here, because the input is *missing* rather than large. The bench returns **NO-READ**, behind a horizon:
 
 ```
 t_H = 3 × median(t_conf over the last 10 logged operations),   floor 24 h
@@ -85,9 +83,9 @@ t_H = 3 × median(t_conf over the last 10 logged operations),   floor 24 h
 
 Over a long enough window *everything* confirms: a loose desire matches some event in any given day, and an operator who keeps the window open until something matches is measuring their own patience. The 3× multiple is wide enough that a genuinely slow circuit still reads, narrow enough that the median stays meaningful; the 24-hour floor covers the early log, where the median comes from too few entries. Too short and live circuits are declared dead; too long and the log fills with base rate.
 
-**`t_conf → 0`, the confirmation arrives inside the operation.** `η → ∞`, `A → 0`, and the reduction degenerates. At `t_op = 30`, `t_conf = 4`: `η = 7.5`, `result = 5/2`, pair (5, 2) — "twice as strong, five more times," for a circuit that confirmed inside four minutes. The quantizer does not save that; only the band guard does. Above η = 3 the bench returns **OUT-OF-BAND-HIGH** and the instruction is Section 13.6's: stop calibrating, take the practical action.
+**`t_conf → 0`: the confirmation arrives inside the operation.** `η → ∞`, `A → 0`, and the reduction degenerates. At `t_op = 30`, `t_conf = 4`: `η = 7.5`, `result = 5/2`, pair (5, 2) — "twice as strong, five more times," for a circuit that confirmed inside four minutes. The quantizer does not save that; only the band guard does. Above η = 3 the bench returns **OUT-OF-BAND-HIGH**, and the instruction is Section 13.6's: stop calibrating, take the practical action.
 
-[[FIGURE 23-B: Characteristic curve — A against η. Horizontal axis η 0 to 4, log-spaced below 1; vertical axis A 0 to 20. Solid hyperbola A = 3/η. Band shading labelled ACT, CLOSE, DRIVE, RE-SPEC (hatched), with vertical dashed lines at η = 1/3, 1, 3. Annotated points: Red Corvette (η = 1/3, A = 9) on the RE-SPEC boundary; derated concurrent cast (η = 0.30, A = 10).]]
+[[FIGURE 23-B: Characteristic curve — A against eta. Horizontal axis eta 0 to 4, log-spaced below 1; vertical axis A 0 to 20. Solid hyperbola A = 3/eta. Band shading labelled ACT, CLOSE, DRIVE, RE-SPEC (hatched), with vertical dashed lines at eta = 1/3, 1, 3. Annotated points: Red Corvette (eta = 1/3, A = 9) on the RE-SPEC boundary; derated concurrent cast (eta = 0.30, A = 10).]]
 
 ---
 
@@ -95,9 +93,9 @@ Over a long enough window *everything* confirms: a loose desire matches some eve
 
 The title states the condition as Chapter 5 states it, because that is how it presents itself: an operator reads a denominator above 10 and asks what to do. On this bench it is `A ≥ 9` — the same complaint with a stable number attached.
 
-A campaign is a sequence of operations on one target, each designed from the last one's reading, and the demand compounds as `demand_{k+1} = demand_k × A_k`. **The compounding is multiplicative.** Two operations each reading `A = 3` demand 9× the original delivered current. Cascaded gains multiply (§10.5) and a campaign is a cascade in time, which is why a high reading is a stop rather than a challenge: it is the head of a geometric series.
+A campaign is a sequence of operations on one target, each designed from the last one's reading, and the demand compounds as `demand_{k+1} = demand_k × A_k`. **The compounding is multiplicative.** Two operations each reading `A = 3` demand nine times the original delivered current. Cascaded gains multiply (§10.5) and a campaign is a cascade in time, which is why a high reading is a stop rather than a challenge: it is the head of a geometric series.
 
-**`A` is not a β setting.** Section 13.5 governs: `A` multiplies the *delivered current* at TP4, and five things set that current — clarity, transmission `k`, residual aversion, the amplifier, and `R_op`. The CJT's design range tops out near **4.0** (Chapter 3.3). So β across a campaign moves under a ceiling, not a formula: step it inside 0.5–4.0 and take everything above from the other four levers or from recruitment. An operator who reads `A = 9` and writes `β = 9` has specified a device that does not exist.
+**`A` is not a β setting.** Section 13.5 governs: `A` multiplies the *delivered current* at TP4, and five things set that current — clarity of the formed `^0` Idea, transmission through the dial divider, residual aversion, the amplifier, and `R_op`. The CJT's design range tops out near **4.0** (Chapter 3.3). So β across a campaign moves under a ceiling, not a formula: step it inside 0.5–4.0, one increment per operation, and take everything above from the other four levers or from recruitment. An operator who reads `A = 9` and writes `β = 9` has specified a device that does not exist.
 
 Two quantities close the loop:
 
@@ -148,7 +146,7 @@ Hence: keep `k(N − 1) ≤ 0.3`, holding derating at or above 0.7. At `k = 0.05
 
 `A ≥ 9` is almost never a statement about how much amplitude you need. It is a statement that the target you specified is not the target that is blocked. Section 21.1 authenticates A0 before an operation; this section is what you do when the bench tells you, three operations in, that the authentication was wrong.
 
-The procedure is decomposition, and the Noetic matters. You take the stated desire apart and test its parts — `^6^C_{F6}|A`, Male, Cognitive domain, analytical register: what is this Idea made of. It is emphatically **not** `^3`. What you are usually *looking for* is a `^3`, a visceral aversion across the path, the can't-stomach-it recoil that keeps the cast from landing — but the finding of it is `^6` work. Confusing the two is the drift Chapter 2.2 warns about, and it costs: an operator who believes aversion-hunting is itself `^3` goes looking for something to recoil from and duly finds it.
+The procedure is decomposition, and the Noetic matters. You take the stated desire apart and test its parts — `^6^C_{F6}|A`, Male, Cognitive domain, analytical register: what is this Idea made of. It is emphatically **not** `^3`. What you are usually *looking for* is a `^3`, a visceral aversion lying across the path, the can't-stomach-it recoil that keeps the cast from landing — but the finding of it is `^6` work. Confusing the two is the drift Chapter 2.2 warns about, and it costs: an operator who believes aversion-hunting is itself `^3` goes looking for something to recoil from and duly finds it.
 
 The arithmetic is the point. A blocking sub-desire sits in the operator's own `^5`, so it is addressed with a self-directed board (Chapter 20) against much lower resistance. Lower `R` means higher η means lower `A`, and sub-desire operations routinely read in DRIVE while the prime desire reads past 9. Then the prime desire is re-read, not re-argued.
 
@@ -188,7 +186,7 @@ board ccb_cal {                           // CCB-CAL — the calibration bench
     node arrival:    ^8^C_{F2}|E;         // Above/Cause: the event that arrives after
     node recalled:   ^9^C_{F2}|A;         // Below/Effect: the desire brought back to Mind
 
-    // ---- S2  QUANTIZER: quantize before you reduce ----
+    // ---- S2  QUANTIZER ----
     filter q_op:   Filter< in=clocked_op, out=t_op,   type=quantize, grid=5.0 >;  // min
     filter q_conf: Filter< in=recalled,   out=t_conf, type=quantize, grid=5.0 >;
 
@@ -223,15 +221,23 @@ board ccb_cal {                           // CCB-CAL — the calibration bench
 }
 ```
 
-**S1.** `^8^C` and `^9^C` sit in one domain deliberately. The confirming event happens in the world, `^O`; what the bench reads is the *recall* it produces, and modelling the trigger at `^C` keeps an unlawful `^O → ^C` ascent out of the listing. The bench samples; it does not drive.
+**S1 — intake.** `^8^C` and `^9^C` sit in one domain deliberately. The confirming event happens in the world, `^O`; what the bench reads is the *recall* it triggers, and modelling the trigger at `^C` keeps an unlawful `^O → ^C` ascent out of the listing. `^8` here is associative arrival — the thing that brings the desire back to Mind — not an inference. The bench samples; it does not drive.
 
-**S2–S3.** A quantizing filter discards resolution below a scale — here, resolution the operator never had. The horizon carries the 24-hour floor as a literal; a running bench recomputes it as 3× the rolling median and holds the floor underneath. `action=no_read`, not a large number, because a confirmation past the horizon is base rate.
+**S2 — quantizer.** A quantizing filter discards resolution below a scale; here, resolution the operator never had. Both clocks pass through identical grids so that no asymmetry enters the quotient.
 
-**S4–S5.** Under CAS-Ohm (Chapter 4.2) flow through a fixed resistance is drive divided by resistance, so the constant is structurally a fixed divider in the readout path — a unit convention realized as a component, which is the honest way to draw it. `Monitor` is a two-threshold comparator with named exits; both violations are logged states, not exceptions.
+**S3 — horizon gate.** The threshold carries the 24-hour floor as a literal; a running bench recomputes it as 3× the rolling median and holds the floor underneath. `action=no_read`, not a large number, because a confirmation past the horizon is base rate.
 
-**S6–S8.** The lowpass over three operations is why one bad reading cannot redirect a campaign while a genuine trend still passes. `block_until_decomposed` is the action Chapter 15 uses on its verdict gate, and it names the only lawful path past this fuse: §23.3 or §23.4. Invariant S4 stops that becoming a loophole. The oscillator is gated by the band guard, so the schedule stops firing the moment the reading leaves the readable window.
+**S4 — ratio.** Under CAS-Ohm (Chapter 4.2) flow through a fixed resistance is drive divided by resistance, so the constant is structurally a fixed divider in the readout path — a unit convention realized as a component, which is the honest way to draw it.
 
-[[FIGURE 23-D: Full schematic with reference designators. Intake at left into FLT1/FLT2 (quantizers, grid 5.0); F1 horizon fuse with a downward NO-READ branch; R1, a fixed 3.0 Ω_c resistor labelled "tau = 1/3"; M1 band guard as a two-threshold comparator with four exits; F2 re-spec fuse in series on the RE-SPEC exit, marked "A = 9, block_until_decomposed"; FLT3 lowpass (tau = 3 operations) to the ledger output; D1 domain diode E→O before next_op_spec; OSC1 along the bottom, gated from M1, wired back to the intake. TP1–TP4 flags at q_conf, eta, requirement, f_ledger.]]
+**S5 — band guard.** `Monitor` is a two-threshold comparator with named exits. Both violations are logged states, not exceptions: OUT-OF-BAND-LOW routes to the re-spec fuse, OUT-OF-BAND-HIGH terminates calibration.
+
+**S6 — ledger.** The lowpass over three operations is why one bad reading cannot redirect a campaign while a genuine trend still passes.
+
+**S7 — re-spec fuse and descent.** `block_until_decomposed` names the only lawful path past this fuse: §23.3 or §23.4. Invariant S4 stops that becoming a loophole. `D1` enforces descent from the Evaluative readout into the Operational next-cast spec.
+
+**S8 — schedule.** The oscillator is gated by the band guard, so the schedule stops firing the moment the reading leaves the readable window.
+
+[[FIGURE 23-D: Full schematic with reference designators. Intake at left into FLT1/FLT2 (quantizers, grid 5.0); F1 horizon fuse with a downward NO-READ branch; R1, a fixed 3.0 ohm-c resistor labelled "tau = 1/3"; M1 band guard as a two-threshold comparator with four exits; F2 re-spec fuse in series on the RE-SPEC exit, marked "A = 9, block_until_decomposed"; FLT3 lowpass (tau = 3 operations) to the ledger output; D1 domain diode E to O before next_op_spec; OSC1 along the bottom, gated from M1, wired back to the intake. TP1–TP4 flags at q_conf, eta, requirement, f_ledger.]]
 
 ---
 
@@ -254,7 +260,7 @@ Every value is a design choice made in this book, not a measurement.
 | OSC1 | Schedule | period = 72 h | One horizon plus `^5` recharge (§7.3) | Shorter: confirmations become unattributable |
 | — | Timing dial | 1.0 | No mechanism claimed (§23.5) | Treated as measured: confounded with `^1` Mind |
 
-[[FIGURE 23-E: Assembly drawing — CCB-CAL layout with test-point callouts and BOM box. Intake at the left edge, next_op_spec at the right; components in signal order FLT1/FLT2, F1, R1, M1, F2, FLT3, D1, with OSC1 along the lower edge feeding back to the intake. TP1–TP4 flags with leader lines. Boxed BOM lower right listing all nine designators with their settings. Corner panel reproduces the band strip ACT / CLOSE / DRIVE / RE-SPEC with η edges 3, 1, 1/3.]]
+[[FIGURE 23-E: Assembly drawing — CCB-CAL layout with test-point callouts and BOM box. Intake at the left edge, next_op_spec at the right; components in signal order FLT1/FLT2, F1, R1, M1, F2, FLT3, D1, with OSC1 along the lower edge feeding back to the intake. TP1–TP4 flags with leader lines. Boxed BOM lower right listing all nine designators with their settings. Corner panel reproduces the band strip ACT / CLOSE / DRIVE / RE-SPEC with eta edges 3, 1, 1/3.]]
 
 ---
 
@@ -274,7 +280,7 @@ Prime desire, present tense per §13.6: *"I hold a paid position doing X."* Boar
 
 **Sub-operation S1.** A0 re-authentication with `^6^C_{F6}|A` decomposition surfaces a blocker in the operator's own `^5`: a visceral aversion to being visible and judged, `^3^E_{F4}|f`. Self-directed board, low resistance: `η = 1`, `A = 3.0`, cleared in one operation. Note what the bench did *not* do — it never named the blocker. It said the prime target's number was wrong for the target as stated.
 
-**Operation 2.** Same cast, blocker cleared: `η = 1`, `A = 3.0`, `ρ = 3.0/9.0 = 0.33`. Delivery `φ = 1/3` — a third of the intended 9× landed, which is 3×: real, short of design. **The amplifier was never touched.** Resistance fell.
+**Operation 2.** Same cast, blocker cleared: `η = 1`, `A = 3.0`, `ρ = 3.0/9.0 = 0.33`. Delivery `φ = 1/3` — a third of the intended 9× landed, which is 3×: real, short of design. **The amplifier was never touched.** β stayed at its Chapter 13 setting; resistance fell.
 
 **Operation 3.** `η = 3`, `result = 1/1`, `A = 1.0`, `ρ = 0.33` again, `φ = 1.0`. `A = 1` is terminal: present strength suffices.
 
@@ -316,11 +322,11 @@ Read them in order: is the measurement admissible, is it in band, what is the re
 - **`τ = 1/3` is a scale factor, not a derivation.** Nothing produces 1/3 from φ or π; the only derivation is Section 5.2's training arc. Change `τ` and every comparison survives untouched — which tells you the equation carries an ordering, not a physical quantity.
 - **The measurement was never the fragile part — the reduction was.** `A` moved 9.00 → 8.52 under a two-minute disagreement that swung the pair from (1, 9) to (31, 264). Quantize on a 5-minute grid; if `a > 3`, act on `A` alone.
 - **Both limits run off the instrument.** As `t_conf → ∞` the bench returns NO-READ behind a horizon rather than a large number — `β=∞` is an idealization the validator rejects, and here no finite substitute exists because the input is missing, not large. As `t_conf → 0` the reduction degenerates above η = 3 and the reading is OUT-OF-BAND-HIGH.
-- **Campaign demand compounds multiplicatively**, so `A ≥ 9` is the head of a geometric series. `A` multiplies delivered current and is never a β setting: the device range ends at 4.0, and everything above comes from the other four levers or from recruitment.
+- **Campaign demand compounds multiplicatively**, so `A ≥ 9` is the head of a geometric series. `A` multiplies delivered current and is never a β setting: the device range ends at 4.0, β steps one increment per operation, and everything above comes from the other four levers or from recruitment.
 - **The only campaign diagnostic is `ρ = A_next / A_current`**, threshold 0.6, believed only after three operations. The absolute-target column is an algebraic identity that holds for any campaign, converging or not.
 - **Concurrent operations interfere through the shared substrate**, derating as `1 − k(N − 1)`. Three coupled operations turned a comfortable cast (`A = 3`) into a re-spec reading (`A = 10`) with nothing wrong with the cast. Hold `k(N − 1) ≤ 0.3`; past 0.5, shed rather than compute.
 - **Re-routing lowers the maximum per-stage demand, not the total.** Hops cascade multiplicatively and obey the diode chain — descent only, `^O × ^P` invalid. The 12-against-36 comparison is retrospective; the promise is that every stage lands inside the feasible band.
-- **The timing dial defaults to 1.0.** No celestial mechanism is asserted; a fixed calendar earns its place as a watchdog timer, and §23.5 gives the falsification and the confound you must name if you claim more.
+- **The timing dial defaults to 1.0.** No celestial mechanism is asserted; a fixed calendar earns its place as a watchdog timer, and §23.5 gives both the falsification and the confound you must name if you claim more.
 
 ---
 
@@ -340,4 +346,4 @@ Read them in order: is the measurement admissible, is it in band, what is the re
 
 **23.7** Design exercise. The bench returns NO-READ past `t_H`. An operator complains their circuits are genuinely slow and the horizon is discarding real data. Write the CCDL fragment that widens `t_H`, then state the failure mode you have just installed and the measurement you would demand before shipping it.
 
-*(Answers in **Appendix E**, worked in full. Every parameter here is a design choice; the arithmetic is arithmetic, and the model behind it is a structural analogy, not a measured law.)*
+*(Answers in **Appendix H**, worked in full. Every parameter here is a design choice; the arithmetic is arithmetic, and the model behind it is a structural analogy, not a measured law.)*

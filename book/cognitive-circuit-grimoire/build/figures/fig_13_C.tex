@@ -53,16 +53,17 @@
 }
 
 % ---------------- REFUSE branch off POLICY ----------------------------
-\draw[flow] (3.18,3.25) -- (3.18,2.98);
+\draw[flow, rounded corners=2pt]
+  (2.60,3.25) -- (2.60,3.02) -- (2.00,3.02) -- (2.00,2.88);
 \node[pblock, minimum width=16mm, minimum height=4mm,
-      font=\sffamily\scriptsize] at (3.18,2.78) {F1 $\to$ REFUSE};
+      font=\sffamily\scriptsize] at (2.00,2.68) {F1 $\to$ REFUSE};
 
 % ---------------- ^5^P bias rail --------------------------------------
 \draw[line width=1.4pt] (1.45,1.55) -- (6.30,1.55);
-\foreach \x/\n in {2.55/Q0, 3.45/Q1, 5.20/Q2}{
+\foreach \x/\n in {3.00/Q0, 3.70/Q1, 5.20/Q2}{
   \draw[line width=0.9pt] (\x,1.40) -- (\x,1.70);
-  \draw[trace] (\x,1.70) -- (\x,2.18);
-  \node[tiny, anchor=south] at (\x,2.20) {\n};
+  \draw[flow] (\x,1.70) -- (\x,3.25);
+  \node[tiny, anchor=west] at (\x+0.07,2.50) {\n};
 }
 \node[lbl, anchor=west] at (6.45,1.55)
   {\casnote{\detokenize{^5^P}} bias rail};
@@ -90,11 +91,10 @@
 \node[llbl, anchor=north west, font=\sffamily\scriptsize\bfseries]
   at (0.18,-0.44) {NOTES};
 \node[llbl, anchor=north west, text width=29mm] at (0.18,-0.84)
-  {1.\ \ $\Sigma$Vf = D2 + D3 = 3.2. Below that drive there is no output.\\[2pt]
-   2.\ \ $|$Dial(\textasciicircum 2) $-$ Dial(\textasciicircum 3)$|\le 4$;
-        $k$ stays in 0.30--0.64.\\[2pt]
-   3.\ \ OSC1 duty $\le$ 0.05, i.e.\ 72 min/day.\\[2pt]
-   4.\ \ FB1 lands on the bias terminal, never on the signal path.};
+  {1.\ \ $\Sigma$Vf (D2+D3) = 3.2 --- the drive floor.\\[2pt]
+   2.\ \ Dial spread $\le 4$, so $k$ = 0.30--0.64.\\[2pt]
+   3.\ \ OSC1 duty $\le$ 0.05 (72 min/day).\\[2pt]
+   4.\ \ FB1 lands on the bias, not the signal.};
 
 % ==================== BILL OF MATERIALS ===============================
 \draw[line width=0.7pt, rounded corners=2pt] (3.55,-3.70) rectangle (10.40,-0.30);

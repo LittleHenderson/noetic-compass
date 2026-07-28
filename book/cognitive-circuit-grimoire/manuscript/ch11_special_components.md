@@ -8,9 +8,9 @@
 
 Open a quartz wristwatch and find the smallest part in it: a metal can the size of a grain of rice, with two wires. Inside is a sliver of quartz trimmed until it vibrates 32,768 times a second. That number is not round by accident. It is 2^15 — halve it fifteen times with fifteen flip-flops and you get one pulse per second, forever, with nothing to accumulate error.
 
-The crystal has no gain. It amplifies nothing. It produces a rhythm stable enough that everything downstream can be built on the assumption that the rhythm is right.
+The crystal has no gain. It amplifies nothing. It produces a rhythm stable enough that everything downstream can be built on the assumption the rhythm is right.
 
-Chapters 6 through 10 gave you the parts that carry the signal — resistor, capacitor, diode, inductor, and the Cognitive Junction Transistor. Every one answers *how much gets through*. None of this chapter's five parts answer that question. A fuse answers *whether, ever again*. An oscillator answers *at what rate and in what pattern*. A filter answers *which rates survive*. An op-amp answers *which of two things is larger*. A transformer answers *at what working point*.
+Chapters 6 through 10 gave you the parts that carry the signal — resistor, capacitor, diode, inductor, and the Cognitive Junction Transistor. Every one answers *how much gets through*. None of this chapter's five answer that question. A fuse answers *whether, ever again*. An oscillator answers *at what rate and in what pattern*. A filter answers *which rates survive*. An op-amp answers *which of two things is larger*. A transformer answers *at what working point*.
 
 Boards fail on these parts more often than on the amplifying ones, and quietly, because a part with no gain gives no symptom when it is wrong. A fuse that cannot blow looks exactly like a fuse. You find these defects by reading parameters against each other, not by watching output.
 
@@ -52,7 +52,7 @@ osc clock: Oscillator< signal=claim, source=cadence, period=7.0, duty=0.15,
                        sustain=90.0 >;                       // days
 ```
 
-It adds no energy. It converts a *sustained* drive into a *periodic* one, and it is worth a component because of Chapter 7.3: the `^5` Female capacitor leaks. One overwhelming impression does not hold; a smaller one redeposited before the last drains does.
+It adds no energy. It converts a *sustained* drive into a *periodic* one, and it is worth a component because of Chapter 7.3: the `^5` Female capacitor leaks. One overwhelming impression does not hold; a smaller one redeposited before the last drains will.
 
 That is a charge pump, and it has arithmetic. Let each exposure deposit `q` into a capacitor with leakage time constant `τ_leak`, on the 0–10 scale of Chapter 7.2:
 
@@ -85,7 +85,7 @@ Thirty times the frequency buys a *pinned* substrate, not a proportionally large
 
 ### 11.3 Filters — Lowpass (τ dampening), Highpass, Notch
 
-A filter passes some rates of change and destroys the rest. Define every filter by what it destroys; define it by what it passes and you will eventually install one that quietly deletes the thing you needed.
+A filter passes some rates of change and destroys the rest. Define every filter by what it destroys; define it by what it passes and you will install one that quietly deletes the thing you needed.
 
 **Lowpass.** One parameter: τ, the dividing line between a trend and a spike.
 
@@ -107,7 +107,7 @@ So you can build one from the lowpass you already have. It gives a detector that
 
 **What a highpass kills is your sense of level.** Monitor only through one and every change registers while nothing says whether the current state is acceptable. Hard rule: **never place a highpass on the O→P feedback path.** It passes precisely the spike the lowpass was installed to destroy, while looking in the listing like a filter.
 
-**Notch.** Rejects a narrow band centred on `f0` and passes everything above and below. `Q = f0 / bandwidth`, so higher Q is narrower.
+**Notch.** Rejects a narrow band centred on `f0`, passing everything above and below. `Q = f0 / bandwidth`, so higher Q is narrower.
 
 ```cas
 filter nf: Notch< in=audit, f0=0.35, Q=4.0 >;   // events/min — in-session only
@@ -130,7 +130,7 @@ An operational amplifier has two inputs and one output, and amplifies only the *
 V_out = A_d × (V₊ − V₋) + A_cm × (V₊ + V₋) / 2
 ```
 
-The first term is what you want. The second is the leak, and the figure of merit is **CMRR** — `A_d / A_cm` — how much better the part is at amplifying the difference than whatever the two inputs share.
+The first term is what you want. The second is the leak, and the figure of merit is **CMRR** — `A_d / A_cm` — how much better the part amplifies the difference than whatever the two inputs share.
 
 ```cas
 opamp cmp: OpAmp< non_inverting=recoil, inverting=draw, output=verdict,
@@ -185,7 +185,7 @@ Work the match. A claim held at `^P|T` — high potential, very few carriers —
 
 Two costs, both load-bearing.
 
-**A transformer passes no DC.** It transmits only change, for the reason Chapter 9.3 gives: coupling is `V₂ = M × di₁/dt`. A steady, deeply-held claim at a constant level transfers *nothing*, however well matched. The transformer requires the oscillator of Section 11.2 upstream.
+**A transformer passes no DC.** It transmits only change, for the reason Chapter 9.3 gives: coupling is `V₂ = M × di₁/dt`. A steady, deeply-held claim at a constant level transfers *nothing*, however well matched. It requires the oscillator of Section 11.2 upstream.
 
 **Step-down lowers the claim's voltage, and there is a floor.** Chapter 8.1 established a total forward drop of **ΣVf = 3.9** down the descent chain, below which no operational output appears. Take a claim at `V₁ = 60 V_c`: at `n = 10`, `V₂ = 6.0 V_c` and clears by 2.1; at `n = 15`, `V₂ = 4.0 V_c` and barely clears; at `n = 20`, `V₂ = 3.0 V_c` and the message **reaches everyone and moves no one**. `n_max = V₁ / ΣVf = 15.4`. That is the popularizer's dilemma exactly, and the fix is not more simplification — it is more `V₁`, or fewer junctions between the audience and the deed.
 
@@ -294,7 +294,7 @@ Read them TP2, TP1, TP3, TP4 — the comparison first, since nothing it reports 
 
 *(Answers in Appendix H.)*
 
-**11.1** A board guards a path whose CJT is `[β=2.0, sat=0.78]` with `Fuse< path=that_node, threshold=0.90 >`. State what this fuse does across every possible input, then give two corrections — one changing the fuse, one changing where it sits — and say which you would ship.
+**11.1** A board guards a path whose CJT is `[β=2.0, sat=0.78]` with `Fuse< path=that_node, threshold=0.90, action=permanent_block >`. State what this fuse does across every input, then give two corrections — one changing the fuse, one changing where it sits — and say which you would ship.
 
 **11.2** A `^5` substrate has `τ_leak = 45 days`; each exposure deposits `q = 0.6`. Compute `Q_max`, `Q_min` and ripple for `T = 7`, `15` and `45 days`. Say which satisfies the design rule, and what the operator reports at `T = 45`.
 

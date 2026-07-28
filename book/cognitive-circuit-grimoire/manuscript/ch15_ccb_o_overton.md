@@ -162,6 +162,22 @@ board ccb_o_overton {                      // CCB-O — DETECTION ONLY
 
 Two notation points a validator checks. The CSB refusal is `^3^P_{F7}|⟨A,f,T⟩` — a register-set specification, three co-present guardrails. It is **not** `(^3^P|A × ^3^P|f × ^3^P|T)`, which would assert a fused refusal state and require a named emergent result under v7.7 discipline; no such fusion is defined, so that form would be invalid. And the diode chain descends only: there is no `^O × ^P` in the listing, and there cannot be.
 
+> **Bench Note — the chain turns illegal at A4, and that is the detection criterion.** Run the bias-domain rule from Chapter 3.2 down the cascade and something falls out that no amount of reading the prose will give you. A regulator's bias must sit **at or above** its cause in the domain order. Check each stage:
+>
+> | | cause | bias | verdict |
+> |---|---|---|---|
+> | A1 | `seed_idea` `^C` | `pioneers` `^5^P` | P above C — admissible |
+> | A2 | `felt_distaste` `^E` | `credentialed` `^5^C` | C above E — admissible |
+> | A3 | `admitted` `^C` | `credentialed` `^5^C` | C at C — admissible |
+> | **A4** | `reasoned` `^C` | `peer_majority` `^5^E` | **E below C — `E-CJT-008`** |
+> | **A5** | `preferred` `^E` | `institutional` `^5^O` | **O below E — `E-CJT-008`** |
+>
+> The first three stages are structurally lawful. The last two are not, and `E-CJT-008 CjtCrossDomainBias` is the same error code the compiler raises for prompt injection — because it is the same thing. At A4 the operator stops arguing and starts letting a felt sense of what the room believes bias what the reader is willing to reason toward. At A5 an Operational fact — this is now policy — biases an Evaluative preference.
+>
+> **This is not a defect in the listing. It is what the listing is for.** A progression that stayed lawful all the way down would be persuasion, and persuasion does not need a board. The signature of an Overton operation is precisely that it *begins* admissible and degrades: the early stages are real argument, and by the time the cascade reaches A4 the influence is arriving from below. A validator run over this board reports two errors and it is right both times.
+>
+> **What to do with that as a reader.** When you suspect a progression is being run on you, do not audit the claim — audit the *direction the bias is arriving from*. If your position is being moved by an argument you could reconstruct, that is A1 through A3 and you are being persuaded. If it is being moved by what appears settled, what everyone seems to hold, or what is already policy, you are downstream of A4 and the mechanism is no longer one you can meet by thinking harder about the claim. Chapter 24's saturating refusal exists because that is the stage at which argument stops helping.
+
 ---
 
 ### 15.4 Pacing — Why τ Must Be Measured in Months, Not Minutes

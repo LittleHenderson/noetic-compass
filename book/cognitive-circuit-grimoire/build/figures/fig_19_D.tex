@@ -1,0 +1,137 @@
+% Figure 19-D — CCB-HM, the hearts-and-minds counter-circuit. Buildable board:
+% no detection-only banner. One lawful integration, plural substrate, slow loop.
+\begin{tikzpicture}[x=1mm, y=1mm, font=\sffamily\footnotesize,
+                    line width=0.6pt]
+  \def\CX{\textasciicircum}
+  \tikzset{
+    lbl/.style={font=\sffamily\scriptsize, align=center, inner sep=1pt},
+    lblL/.style={lbl, anchor=east, align=right},
+    lblR/.style={lbl, anchor=west, align=left},
+    tpf/.style={draw=casNedge, fill=white, rounded corners=1pt, line width=0.5pt,
+                font=\sffamily\scriptsize\bfseries, inner sep=1.5pt},
+    pics/cjt/.style={code={
+      \path[draw, fill, line width=0.6pt] (-3.5,-6) -- (-3.5,6) -- (5,0) -- cycle;
+      \draw (-5.5,0) -- (-3.5,0);   \draw (5,0) -- (6.5,0);
+      \draw (-0.5,-3.06) -- (-0.5,-9);
+      \coordinate (-in) at (-5.5,0);
+      \coordinate (-out) at (6.5,0);
+      \coordinate (-b) at (-0.5,-9);
+    }},
+    pics/dio/.style={code={
+      \path[draw, fill, line width=0.6pt] (-2,-2.6) -- (-2,2.6) -- (2,0) -- cycle;
+      \draw[line width=0.8pt] (2,-2.6) -- (2,2.6);
+      \draw (-6,0) -- (-2,0);  \draw (2,0) -- (6,0);
+      \coordinate (-in) at (-6,0);
+      \coordinate (-out) at (6,0);
+    }},
+    pics/capv/.style={code={
+      \draw (0,5) -- (0,1.2);  \draw[line width=0.9pt] (-3,1.2) -- (3,1.2);
+      \draw[line width=0.9pt] (-3,-1.2) -- (3,-1.2);  \draw (0,-1.2) -- (0,-5);
+      \coordinate (-in) at (0,5);
+      \coordinate (-out) at (0,-5);
+    }},
+    pics/fusep/.style={code={
+      \path[draw, fill=white, line width=0.6pt] (-5,-2.4) rectangle (5,2.4);
+      \draw (-5,0) -- (5,0);  \draw (-9,0) -- (-5,0);  \draw (5,0) -- (9,0);
+      \coordinate (-in) at (-9,0);
+      \coordinate (-out) at (9,0);
+    }},
+    pics/gnd/.style={code={
+      \draw[line width=0.9pt] (-3.2,0) -- (3.2,0);
+      \draw (-2,-1.5) -- (2,-1.5);  \draw (-0.9,-2.8) -- (0.9,-2.8);
+    }}
+  }
+
+  % ================= signal row =========================================
+  \node[casterm, text width=14mm] (inp) at (-45,30) {INCOMING};
+  \pic[fill=casNfill, draw=casNedge] (d1) at (-31,30) {dio};
+  \pic[fill=casPfill, draw=casPedge] (d2) at (-19,30) {dio};
+  \pic[fill=casNfill, draw=casNedge] (d3) at (-7,30)  {dio};
+  \draw (inp.east) -- (d1-in);  \draw (d1-out) -- (d2-in);
+  \draw (d2-out) -- (d3-in);
+  \draw[casPedge, line width=0.9pt] (-19,30) circle (5);
+  \node[lbl] at (-31,39) {\textbf{D1}\\\casnote{\CX P$\to$\CX C}\\$V_f{=}0.7$};
+  \node[lbl] at (-19,39) {\textbf{D2}\\\casnote{\CX C$\to$\CX E}\\$V_f{=}1.6$};
+  \node[lbl] at (-7,39)  {\textbf{D3}\\\casnote{\CX E$\to$\CX O}\\$V_f{=}2.0$};
+  \node[lbl, font=\sffamily\scriptsize\itshape] at (-19,49)
+    {D2 raised from 1.2 ---\\the highest-value\\parameter on this board};
+
+  \pic[fill=casCfill, draw=casCedge] (hm1) at (5,30) {cjt};
+  \draw (d3-out) -- (hm1-in);
+  \node[lbl] at (8,43) {\textbf{HM1}\\$\beta{=}2.0$\\decompose};
+  \fill (17,30) circle (0.8);
+  \node[lbl] at (17,34.5) {\casnote{\CX6\CX C}};
+  \pic[fill=casCfill, draw=casCedge] (hm2) at (29,30) {cjt};
+  \draw (hm1-out) -- (hm2-in);
+  \node[lbl] at (29,42) {\textbf{HM2}\\$\beta{=}1.0$\\confirm};
+  \fill (41,30) circle (0.8);
+  \node[lbl] at (41,34.5) {\casnote{\CX4\CX C}};
+  \draw (hm2-out) -- (41,30);
+  \node[tpf] (tp2) at (11,25) {TP2};
+  \draw[casNedge, line width=0.4pt] (tp2.north east) -- (14,29.4);
+
+  % ---- substrate bias rail (from the capacitor bank, below) -----------
+  \draw (-6,19) -- (28.5,19);
+  \draw (4.5,19) -- (hm1-b);   \draw (28.5,19) -- (hm2-b);
+  \fill (4.5,19) circle (0.6);
+
+  % ================= the one lawful integration =========================
+  \node[cblock, text width=48mm, line width=1.1pt, fill=casCfill] (int) at (21,2)
+    {\textbf{HM3 \; INTEGRATE}\\
+     ( decompose \casnote{\CX6\CX C} $\times$ confirm \casnote{\CX4\CX C} )\\
+     $=$ composed \casnote{\CX5\CX C\_\{F6\}|A}\\
+     \emph{named emergent result}};
+  \draw (17,30) -- (17,12);
+  \draw (41,30) -- (41,12);
+  \draw (21,-8) -- (21,-10);
+  \node[casterm, text width=14mm] (routed) at (18,-14) {ROUTED};
+  \node[tpf] (tp3) at (33,-12) {TP3};
+  \draw[casNedge, line width=0.4pt] (tp3.north west) -- (30,-9);
+
+  % ================= plural substrate: five capacitors in parallel ======
+  \foreach \x in {-38,-30,-22,-14,-6} {
+    \pic (c\x) at (\x,-29) {capv};
+  }
+  \draw (-38,-24) -- (-6,-24);
+  \draw (-38,-34) -- (-6,-34);
+  \draw (-22,-34) -- (-22,-37);
+  \pic (gb) at (-22,-37) {gnd};
+  \draw (-6,-24) -- (-6,19);
+  \node[lbl] at (-21,-45)
+    {\textbf{C5} \casnote{\CX5\CX P\_\{F1\}|T} substrate\\
+     $C{=}2.0$, \; n\_parallel ${=}\,5$, \; leak${=}0.02$};
+
+  % ================= slow O->P feedback, to the bias, not the signal ====
+  \draw[fbflow] (41,30) -- (50,30) -- (50,-22) -- (44,-22);
+  \node[nblock, minimum width=16mm, minimum height=9mm, inner sep=1pt,
+        font=\sffamily\scriptsize] (rc) at (36,-22) {FB LowPass\\$\tau{=}504$\,h};
+  \draw[fbflow] (rc.west) -- (-10,-22) -- (-10,-24);
+  \fill (-10,-24) circle (0.7);
+  \node[lbl, text width=34mm] at (14,-29)
+    {\itshape $\beta{=}0.05$ --- terminates on the substrate bias, never on
+     the signal path};
+
+  % ================= internally sourced oscillator ======================
+  \node[nblock, minimum width=16mm, minimum height=9mm, inner sep=1pt] (osc)
+        at (36,-42) {};
+  \draw[line width=0.5pt] (31,-42) sin (33.5,-39.4) cos (36,-42)
+                          sin (38.5,-44.6) cos (41,-42);
+  \node[lbl] at (36,-50) {\textbf{OSC1} \; 168\,h\\source $=$ internal};
+  \draw[flow] (osc.west) -- (21,-42);
+  \node[lblL] at (17,-39) {own\_clock\\\casnote{\CX7\CX O\_\{F6\}|E}};
+  \node[tpf] (tp1) at (23,-36) {TP1};
+  \draw[casNedge, line width=0.4pt] (tp1.south) -- (23,-41.4);
+
+  % ================= CSB with fuse ======================================
+  \draw (-45,26) -- (-45,19);
+  \pic[fill=casPfill, draw=casPedge, rotate=-90, yscale=-1] (q7) at (-45,12) {cjt};
+  \node[lblR] at (-38,12)
+    {\textbf{CSB} \; $\beta{=}2.0$\\sat${=}0.85$\\\casnote{\CX3\CX P\_\{F7\}|$\langle$A,f,T$\rangle$}};
+  \draw (-45,5.5) -- (-45,5);
+  \pic[rotate=-90] (fu) at (-45,-4) {fusep};
+  \node[lblR] at (-38,-4) {FUSE\\$0.90$};
+  \draw (-45,-13) -- (-45,-15);
+  \node[casterm, text width=13mm] (blk) at (-45,-19) {BLOCK};
+  \node[tpf] (tp4) at (-32,-13) {TP4};
+  \draw[casNedge, line width=0.4pt] (tp4.west) -- (-44.4,-13.6);
+\end{tikzpicture}
