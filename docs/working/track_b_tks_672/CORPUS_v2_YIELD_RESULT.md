@@ -55,17 +55,32 @@ Leak rate by drive:
 Worst individual cells: `7c` `0.375` · `5d` `0.350` · `6a` `0.300` · `7a` `0.300` · `1d` `0.275`.
 **Zero leaks:** `2b`, `7b` — both Mental.
 
-**This is a property of English, not a generator defect.** "Mental" has abundant ordinary
-substitutes — thinking, reasoning, weighing, analysing. "Physical" and "spiritual" are
-load-bearing: writing bodily action or transcendent longing without those words is genuinely
-harder, and the author reaches for them under pressure.
+### CLAIM NARROWED 2026-07-27 at owner instruction
 
-It also **explains two earlier findings retrospectively**: why June found Register/World to be the
-surface-loud axis, and why `56%` of the 84-item corpus leaked. The same asymmetry was operating
-each time.
+**Withdrawn:** *"This is a property of English, not a generator defect"* and *"a finding about the
+framework's expressibility in natural language."* Both over-generalized from a single
+configuration.
 
-**This is a finding about the framework's expressibility in natural language**, not an authoring
-hiccup — and it lands squarely on the Worlds the canon most needs distinguishable.
+**What v2 actually establishes:**
+
+> *Under this author model (`gemini-2.5-flash-lite`), this prompt, this source material, and this
+> forbidden-word policy, Physical and Spiritual scenarios were substantially more likely than
+> Mental scenarios to contain direct World-label leakage.*
+
+**Six live explanations, not yet separated:**
+
+```
+English expressibility          author-model habits
+prompt construction             canonical definition wording
+true overlap between Foundation boundaries
+the direct-word prohibition itself
+```
+
+A **cross-author control** separates these, and it is cheap relative to a full v3 regeneration.
+It is therefore required before v3 spend (`R6` of the realization pilot).
+
+The retrospective consistency with June's Register/World finding and the 84-item `56%` leak is
+**suggestive, not confirmatory** — all three runs used the same author family.
 
 ---
 
