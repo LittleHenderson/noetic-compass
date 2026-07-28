@@ -1,0 +1,51 @@
+{
+  "authority": "28 Foundations 1.0",
+  "authority_sha256": "487d76354094d8e102935e43eacfa4f3194d059bcda375ad51422771f53f00fc",
+  "drives": {
+    "1": "desire to be and be with God",
+    "2": "wisdom, insight, and knowledge",
+    "3": "life, vitality, and health",
+    "4": "companionship, love, and friendship",
+    "5": "worldly power, influence, and control",
+    "6": "material food and things",
+    "7": "lust, sex, and reproduction"
+  },
+  "labels": [
+    "1a",
+    "1b",
+    "1c",
+    "1d",
+    "2a",
+    "2b",
+    "2c",
+    "2d",
+    "3a",
+    "3b",
+    "3c",
+    "3d",
+    "4a",
+    "4b",
+    "4c",
+    "4d",
+    "5a",
+    "5b",
+    "5c",
+    "5d",
+    "6a",
+    "6b",
+    "6c",
+    "6d",
+    "7a",
+    "7b",
+    "7c",
+    "7d"
+  ],
+  "manifest": "TKS_28_FOUNDATION_BENCHMARK",
+  "rule": "governed EXCLUSIVELY by the canonical 28 Foundations; no CAS drive names",
+  "worlds": {
+    "a": "Spiritual",
+    "b": "Mental",
+    "c": "Emotional",
+    "d": "Physical"
+  }
+}

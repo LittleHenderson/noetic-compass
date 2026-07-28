@@ -1,0 +1,13 @@
+{
+  "accepted": 513,
+  "first_pass_acceptance_rate": 0.8143,
+  "generated_siblings": 630,
+  "mean_retries": 0.014,
+  "note": "reported BEFORE any small-model readout; the surviving corpus is never reported alone",
+  "rejected": 117,
+  "rejections_by_cause": {
+    "direct_world_label": 116,
+    "terminology_leak": 1
+  },
+  "world_register_leak_rejection_rate": 0.1841
+}

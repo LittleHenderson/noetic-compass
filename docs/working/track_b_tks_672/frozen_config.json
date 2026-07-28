@@ -1,0 +1,34 @@
+{
+  "author_model": "models/gemini-2.5-flash-lite",
+  "author_prompt_hash": "bf5d73babc0e247c5d87e0c792da0468e27ede84380a18931fe5988bbdb1f406",
+  "canon_sha256": "487d76354094d8e102935e43eacfa4f3194d059bcda375ad51422771f53f00fc",
+  "firewall": "reads no Phase A result; selects no layer, hook, position or direction",
+  "judge_model": "models/gemini-2.5-flash",
+  "judge_repair_policy": "PROHIBITED - a rejected item is never repaired using the judge's predicted label; that makes the judge a co-author",
+  "june_gate_sha256": "6fef2610cb92809c6bc873beaca6b20d8198bc14720b06775ae7092a1deb22ad",
+  "june_judge_sha256": "01afe7931a7eb2ea1676dab62a62fcf9d945293318ee9d6a17ee075c2eb9a7b3",
+  "length_range": [
+    80,
+    160
+  ],
+  "n_plans": 8,
+  "n_siblings": 3,
+  "prohibited_expressions": "\\b(spiritual(ly)?|mental(ly)?|emotional(ly)?|physical(ly)?)\\b",
+  "rejection_rules": [
+    "direct World label",
+    "length outside range",
+    "code leak",
+    "terminology leak",
+    "surface gate above threshold"
+  ],
+  "retry_limit": 2,
+  "retry_policy": "transport errors ONLY, never quality",
+  "seed_policy": "seed = 20260727 + plan_index, recorded per item",
+  "spec_sha256": "6324a44aca54932a3285d28cd278221bae52957fadb925b29835281eb54daac4",
+  "surface_threshold": 0.6,
+  "surface_threshold_source": "June 2026 gate, NOT re-chosen after generation",
+  "target_items": 672,
+  "temperature": 0.95,
+  "top_p": 0.95,
+  "track": "TRACK_B_TKS_672_CORPUS"
+}

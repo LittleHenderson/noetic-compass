@@ -1,0 +1,27 @@
+{
+  "correspondence_hypotheses": [
+    {
+      "cas": "F5 Agency",
+      "evidence_status": "UNTESTED",
+      "falsification": "if power-over and self-direction dissociate behaviourally, reject",
+      "tks": "5 worldly power, influence, control"
+    },
+    {
+      "cas": "F6 Structure",
+      "evidence_status": "UNTESTED",
+      "falsification": "if possession/consumption and ordering dissociate, reject",
+      "tks": "6 material food and things"
+    },
+    {
+      "cas": "F7 Purpose",
+      "evidence_status": "UNTESTED",
+      "falsification": "if replication and aim-orientation dissociate, reject",
+      "tks": "7 lust, sex, reproduction"
+    }
+  ],
+  "hard_rule": "shared grid position NEVER implies shared meaning",
+  "manifest": "TKS_TO_CAS_TRANSLATION_EXPERIMENT",
+  "prior_failure": "conflating these voided SMALL-MODEL-SEMANTIC-MATCH-v1 (cb0eaffd)",
+  "rule": "the ONLY place cross-system correspondence may be proposed or tested",
+  "status": "HYPOTHESES ONLY - NOT TESTED, NOT LICENSED"
+}
