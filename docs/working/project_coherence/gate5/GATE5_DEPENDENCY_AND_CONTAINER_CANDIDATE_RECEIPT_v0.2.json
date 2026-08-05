@@ -1,0 +1,345 @@
+{
+  "schema_version": "project_coherence.gate5_dependency_and_container_candidate_receipt.v0.2",
+  "document_status": "DRAFT / OPEN / NOT FROZEN",
+  "gate5_status": "OPEN",
+  "gate_decision": "KEEP_OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "experimental_execution_status": "NOT_STARTED",
+  "engineering_preflight_execution_status": "COMPLETED_CPU_ONLY_NONEXPERIMENTAL",
+  "security_disposition": "OPEN_SECURITY",
+  "live_execution_authorized": false,
+  "candidate_accepted": false,
+  "candidate_identity": {
+    "source_commit": "4bff437dbcf6d0d38046e63d2aee823e8f316711",
+    "build_ref": "vz8s61131470ab8uivga0qcdq",
+    "image_tag": "atlas-live-trace-worker:gate5-candidate-v0.2",
+    "platform": "linux/amd64",
+    "oci_image_index_digest": "sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c",
+    "platform_manifest_digest": "sha256:60bf92b327ebec84887c659313a97a6369a24fd5d8eb00a012544fcafd26ba27",
+    "image_config_digest": "sha256:966db6e2e05366be99129af5c866a8f7efbf01b04145c49ef431785fdc1432ed",
+    "image_size_bytes": 4396739765,
+    "source_commit_label_matched": true
+  },
+  "build_control_inputs": {
+    "dockerfile": {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile",
+      "sha256": "CCCE6B3227EF6CABE996ECA1F1E2803B0DEEB0852A9BAAD6D0896C4E1E8356C3",
+      "line_count": 143,
+      "bytes": 7971
+    },
+    "dockerignore": {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/.dockerignore",
+      "sha256": "5C7BD9443DB6A5017CD350BF93C09C9B6F21A6ACFF7A6B9B586495236021A47F",
+      "line_count": 40,
+      "bytes": 687
+    },
+    "requirements_lock": {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt",
+      "package_count": 73,
+      "sha256": "37CC64DF8317481F024661C573D4146FA31D27E692C69F311EEB2FF84B793401",
+      "line_count": 1291,
+      "bytes": 95788,
+      "hash_policy": "EXACT_PACKAGE_ARTIFACT_HASHES / NO_DEPENDENCY_TRAVERSAL"
+    },
+    "requirements_input": {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.in",
+      "sha256": "7C33774EFC66F7F385BCE0A0C471739DC4932649BAB4004C3046CEF1E7CB2232",
+      "line_count": 26,
+      "bytes": 942
+    },
+    "application_tree": {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app",
+      "file_count": 24,
+      "bytes": 266912,
+      "tree_sha256": "B6E02418E1E0E934CCD0DE5BFA93146C8A650023D3E60C819115D7D48D726DC7",
+      "serialization": "ORDINAL-SORTED BUILD-CONTEXT-RELATIVE POSIX PATH + NUL + DECIMAL BYTE COUNT + NUL + UPPERCASE FILE SHA256 + LF",
+      "source_commit": "4bff437dbcf6d0d38046e63d2aee823e8f316711",
+      "source_commit_tree_matched": true
+    },
+    "base_images": {
+      "ubuntu": {
+        "reference": "ubuntu:24.04",
+        "digest": "sha256:019e8eb29a85e74d64925745884f2ec79aa27e3feab36353d24656f4d6b89467",
+        "snapshot": "20260805T000000Z"
+      },
+      "python": {
+        "reference": "python:3.12.13-slim-bookworm",
+        "digest": "sha256:6e13e65c55e33adf203d77ee371cf8bf5d81bd4902ef07565721f46bf44917af"
+      }
+    }
+  },
+  "attestations": {
+    "attestation_manifest_digest": "sha256:b1db5924ab8ce96927f0164c4626cd5eb0c86cbd3fb35c0387b622dd7ae390d1",
+    "attestation_config_digest": "sha256:4592edd32ecc05f0ce5fca43216dea1393293b07245db9582989ed3cb77f5ad7",
+    "sbom": {
+      "status": "OBSERVED_LOCAL / RAW_BYTES_NOT_RETAINED",
+      "format": "SPDX",
+      "digest": "sha256:8d039b378dfc422bae2d7479a06bfa2ac9c94a9a19fe8aa115362a28ec41955e",
+      "size_bytes": 2957946
+    },
+    "slsa_provenance": {
+      "status": "OBSERVED_LOCAL / RAW_BYTES_NOT_RETAINED",
+      "predicate_type": "https://slsa.dev/provenance/v1",
+      "digest": "sha256:f8e3677325d096191bb7ec1d075a34addf4e4733a48d3ae442f63c1bb74a6c6f",
+      "size_bytes": 45532,
+      "attachment_digest": "sha256:36bc87d2b88089eda3958edb5dbcf4cbdd5b5c01e16725e1dbeb49171c23b971",
+      "independently_trusted": false
+    },
+    "trust_boundary": "SELF-REPORTED LOCAL BUILDKIT OBSERVATION / RAW ATTESTATIONS NOT RETAINED / NO INDEPENDENT TRUST ROOT"
+  },
+  "external_evidence_retention": {
+    "evidence_class": "SELF_REPORTED_LOCAL_OBSERVATION",
+    "raw_build_history_retained": false,
+    "raw_sbom_retained": false,
+    "raw_slsa_provenance_retained": false,
+    "raw_scanner_report_retained": false,
+    "repository_replayable": false,
+    "remaining_obligation": "Retain and hash-bind raw build inspection, SPDX, SLSA provenance, and scanner output before treating external-tool observations as repository-replayable evidence."
+  },
+  "dependency_runtime_identity": {
+    "python_version": "3.12.13",
+    "transformers_version": "5.14.1",
+    "torch_version": "2.13.0+cu126",
+    "installed_distribution_count": 73,
+    "pip_present": false,
+    "ensurepip_present": false,
+    "runtime_uid": 10001,
+    "runtime_gid": 10001
+  },
+  "model_binding": {
+    "repository_id": "EleutherAI/pythia-160m",
+    "revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "artifact_policy": "EXACT FIVE-FILE SET HASHED BEFORE AND AFTER LOAD",
+    "artifacts": [
+      {
+        "filename": "config.json",
+        "sha256": "76EB275107220E450D31258F792A2EFCBEE109D8B62AE0088260057DEC06362F",
+        "bytes": 569
+      },
+      {
+        "filename": "model.safetensors",
+        "sha256": "29D2E457A664E41C12C735F20A36DC0956A665F614A54CE5DB21A32E75965270",
+        "bytes": 374998696
+      },
+      {
+        "filename": "special_tokens_map.json",
+        "sha256": "6F50AB5A5A509A1C309D6171F339B196A900DC9C99AD0408FF23BB615FDAE7AD",
+        "bytes": 99
+      },
+      {
+        "filename": "tokenizer.json",
+        "sha256": "C24618A1B3E6A38167BEFF1C72CFFD126C3A66254347304B50547D12C5F25624",
+        "bytes": 2113710
+      },
+      {
+        "filename": "tokenizer_config.json",
+        "sha256": "70E38394E494931C6F773BA41E19460DD4436526B852207367F04341B4066D3F",
+        "bytes": 396
+      }
+    ],
+    "offline_cpu_load_and_canary": "PASS",
+    "gpu_real_forward": "NOT_STARTED",
+    "scientific_result_created": false
+  },
+  "build_and_preflight": {
+    "build_status": "COMPLETED",
+    "lock_verification": "PASS / 73 EXACT DISTRIBUTIONS",
+    "offline_model_preflight": "PASS / EXACT PYTHIA ARTIFACT SET",
+    "native_shared_object_count": 385,
+    "native_dependency_closure": {
+      "status": "PASS_WITH_EXACT_HOST_DRIVER_SEAM",
+      "allowed_unresolved_soname": "libcuda.so.1",
+      "allowed_artifact": "torch/lib/libcaffe2_nvrtc.so",
+      "unexpected_unresolved_dependencies": 0
+    },
+    "runtime_no_network_read_only_root": "PASS",
+    "runtime_model_cache": "EXACT / LOCAL_ONLY / READ_ONLY",
+    "runtime_tmpfs": "/tmp:rw,noexec,nosuid,nodev,size=64m"
+  },
+  "runtime_fail_closed_probes": {
+    "production_start_without_worker_token": {
+      "status": "PASS / REFUSED_STARTUP",
+      "exit_code": 3
+    },
+    "production_start_with_token_without_cuda": {
+      "status": "PASS / REFUSED_STARTUP",
+      "exit_code": 3
+    },
+    "production_start_with_token_and_cuda": {
+      "status": "NOT_STARTED",
+      "exit_code": null
+    }
+  },
+  "test_receipts": {
+    "live_trace_worker_complete": {
+      "passed": 364,
+      "failed": 0,
+      "total": 364,
+      "test_ids_sha256": "94566203B3E0FF79B3224C1C5A073698CA99D3C08BC1119A9082E42AF4B178BD"
+    },
+    "api_launcher_fleet_state": {
+      "passed": 76,
+      "failed": 0,
+      "total": 76,
+      "test_ids_sha256": "1ED1E9E3AFA2EDA6881463EE5284DD4902AB94C0246B80D2937066480AC42921",
+      "targets": [
+        "noetic-compass-scaffold/noetic-compass/scripts/test_prepare_large_model_eval.py",
+        "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_fleet_executor.py",
+        "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_fleet_executor_contract.py",
+        "noetic-compass-scaffold/noetic-compass/tests/test_state_ledger_operational_enable.py",
+        "noetic-compass-scaffold/noetic-compass/tests/test_state_substrate_live_migration.py"
+      ]
+    },
+    "receipt_scope": "LOCAL_UNATTESTED_HOST_REGRESSION / SEPARATE COLLECT-ONLY NODE-ID DIGEST / ACTUAL EXECUTED IDS NOT RECEIPTED / NOT GPU EXECUTION / NOT SCIENTIFIC EVIDENCE"
+  },
+  "security_audits": {
+    "python_dependency_audit": {
+      "tool": "pip-audit 2.10.1",
+      "status": "PARTIAL / PASS_WITH_SKIP",
+      "command_scope": "requirements.txt --no-deps --disable-pip --format json",
+      "successfully_audited_lock_entries": 72,
+      "known_vulnerabilities_found": 0,
+      "skipped_lock_entries": [
+        {
+          "package": "torch",
+          "version": "2.13.0+cu126",
+          "reason": "DIRECT URL REQUIREMENT CANNOT BE PINNED BY PIP-AUDIT"
+        }
+      ],
+      "full_lock_pass": false,
+      "full_image_pass": false
+    },
+    "torch_osv_query": {
+      "source": "OSV API",
+      "ecosystem": "PyPI",
+      "package": "torch",
+      "version": "2.13.0",
+      "status": "COMPLETED / ZERO RETURNED VULNERABILITIES",
+      "returned_vulnerability_count": 0,
+      "independent_of_pip_audit_skip": true,
+      "full_image_pass": false
+    },
+    "sbom_full_image_package_scan": {
+      "tool": "Docker Scout 1.24.0",
+      "evidence_class": "SELF_REPORTED_LOCAL_OBSERVATION",
+      "raw_report_retained": false,
+      "repository_replayable": false,
+      "input": "IN-TOTO SPDX ATTESTATION",
+      "input_digest": "sha256:8d039b378dfc422bae2d7479a06bfa2ac9c94a9a19fe8aa115362a28ec41955e",
+      "command_profile": "cves --exit-code --only-severity critical,high,medium,low sbom://",
+      "target_manifest_digest": "sha256:60bf92b327ebec84887c659313a97a6369a24fd5d8eb00a012544fcafd26ba27",
+      "platform": "linux/amd64",
+      "observed_at": "2026-08-05T22:16:49Z",
+      "package_count": 190,
+      "vulnerable_package_count": 7,
+      "vulnerability_count": 7,
+      "status": "COMPLETED_WITH_FINDINGS",
+      "exit_code": 2,
+      "passed": false,
+      "unfiltered_rescan_matched": true,
+      "unspecified_severity_count": 0,
+      "severity_counts": {
+        "critical": 0,
+        "high": 0,
+        "medium": 3,
+        "low": 4
+      },
+      "findings": [
+        {
+          "severity": "MEDIUM",
+          "package": "util-linux",
+          "version": "2.39.3-9ubuntu6.5",
+          "advisory": "CVE-2026-27456",
+          "fix_status": "UNFIXED"
+        },
+        {
+          "severity": "MEDIUM",
+          "package": "libp11-kit0",
+          "version": "0.25.3-4ubuntu2.1",
+          "advisory": "CVE-2026-13757",
+          "fix_status": "UNFIXED"
+        },
+        {
+          "severity": "MEDIUM",
+          "package": "dpkg",
+          "version": "1.22.6ubuntu6.6",
+          "advisory": "CVE-2026-2219",
+          "fix_status": "UNFIXED"
+        },
+        {
+          "severity": "LOW",
+          "package": "zlib1g",
+          "version": "1:1.3.dfsg-3.1ubuntu2.1",
+          "advisory": "CVE-2026-27171",
+          "fix_status": "UNFIXED"
+        },
+        {
+          "severity": "LOW",
+          "package": "libgcrypt20",
+          "version": "1.10.3-2ubuntu0.1",
+          "advisory": "CVE-2024-2236",
+          "fix_status": "UNFIXED"
+        },
+        {
+          "severity": "LOW",
+          "package": "passwd",
+          "version": "1:4.13+dfsg1-4ubuntu3.2",
+          "advisory": "CVE-2024-56433",
+          "fix_status": "UNFIXED"
+        },
+        {
+          "severity": "LOW",
+          "package": "libudev1",
+          "version": "255.4-1ubuntu8.16",
+          "advisory": "CVE-2026-40228",
+          "fix_status": "UNFIXED"
+        }
+      ]
+    },
+    "full_filesystem_image_scan": {
+      "tool": "Docker Scout 1.24.0",
+      "status": "INCOMPLETE / PENDING",
+      "completed": false,
+      "passed": false,
+      "finding_count": null,
+      "observed_result": "A separate direct local image/filesystem scan was attempted for several minutes but did not complete or return a result. The completed SBOM package scan above is the controlling current scan evidence; neither scan supplies a PASS."
+    },
+    "scan_summary": "SBOM FULL-IMAGE PACKAGE SCAN COMPLETED_WITH_FINDINGS / DIRECT LOCAL FILESYSTEM SCAN INCOMPLETE / NO PASS",
+    "security_decision": "OPEN_SECURITY"
+  },
+  "unresolved_boundaries": {
+    "sbom_full_image_package_findings": "OPEN / 3 MEDIUM / 4 LOW / ALL UNFIXED",
+    "direct_local_filesystem_image_scan": "PENDING",
+    "raw_build_security_evidence_retention": "OPEN",
+    "test_runner_hermeticity_and_same_run_node_ids": "OPEN",
+    "hardlink_reparse_and_aba_resistance": "OPEN",
+    "gpu_real_forward": "NOT_STARTED",
+    "independent_clean_reproduction": "OPEN",
+    "durable_append_only_worm_anchor": "OPEN",
+    "independent_manifest_trust_root": "OPEN",
+    "model_artifact_materializer": "OPEN",
+    "worker_to_kernel_protocol": "OPEN",
+    "licensing": "NOT LICENSED",
+    "public_disclosure": "HELD"
+  },
+  "historical_adverse_evidence": {
+    "binding_path": "docs/working/project_coherence/gate5/GATE5_MODEL_AND_DEPENDENCY_BINDING_v0.1.json",
+    "preserved_unchanged": true,
+    "historical_transformers_pin": "4.46.3",
+    "historical_advisory": "CVE-2026-4372 / GHSA-29pf-2h5f-8g72",
+    "interpretation": "The v0.1 binding remains the adverse historical record. This v0.2 candidate does not rewrite it or close G5-ENGINEERING-003."
+  },
+  "claim_boundary": {
+    "integrity_evidence_effect": "STRUCTURAL_CANDIDATE_ONLY",
+    "external_evidence_effect": "SELF_REPORTED_LOCAL_OBSERVATION_ONLY",
+    "security_effect": "OPEN_SECURITY",
+    "scientific_effect": "NONE",
+    "canon_effect": "NONE",
+    "product_claim_effect": "NONE",
+    "license_effect": "NONE",
+    "disclosure_effect": "NONE"
+  }
+}

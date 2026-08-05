@@ -10,6 +10,20 @@ readiness.
 
 from __future__ import annotations
 
+import sys
+
+if __name__ == "__main__" and not sys.flags.isolated:
+    raise SystemExit(
+        "Authoritative Gate 5 verification requires isolated Python; run "
+        "`python -I -B scripts/verify_project_coherence_gate5.py`."
+    )
+if __name__ != "__main__" and (
+    not sys.flags.safe_path or not sys.flags.ignore_environment
+):
+    raise SystemExit(
+        "Imported Gate 5 verification controls require `python -E -P` or isolated mode."
+    )
+
 import ast
 import hashlib
 import json
@@ -17,7 +31,6 @@ import os
 from pathlib import Path, PurePosixPath
 import re
 import subprocess
-import sys
 from typing import Any, Iterable
 
 
@@ -40,18 +53,43 @@ HISTORY_INVENTORY_PATH = (
 MODEL_DEPENDENCY_BINDING_PATH = (
     GATE5_DIR / "GATE5_MODEL_AND_DEPENDENCY_BINDING_v0.1.json"
 )
+HISTORICAL_MODEL_DEPENDENCY_BINDING_SHA256 = (
+    "A24F27AE6678A8EAAECA5E516805F94F394B416054AB5BCDAA68B687B0B79E2B"
+)
+CANDIDATE_RECEIPT_PATH = (
+    GATE5_DIR / "GATE5_DEPENDENCY_AND_CONTAINER_CANDIDATE_RECEIPT_v0.2.json"
+)
 
 SHA256_UPPER_RE = re.compile(r"^[A-F0-9]{64}$")
 SHA256_LOWER_RE = re.compile(r"^[a-f0-9]{64}$")
+OCI_SHA256_RE = re.compile(r"^sha256:[a-f0-9]{64}$")
 WINDOWS_ABSOLUTE_RE = re.compile(r"^[A-Za-z]:[/\\]")
 BOUNDARY_RE = re.compile(r"^\[([A-Z0-9-]+)\] ")
 TEST_ID_CANONICALIZATION = (
-    "SHA-256 over sorted unique pytest collection node IDs normalized to POSIX "
-    "slashes, encoded UTF-8 as one ID plus LF per line"
+    "COLLECT-ONLY SHA-256 over sorted unique pytest node IDs normalized to POSIX "
+    "slashes, encoded UTF-8 as one ID plus LF per line; actual executed-node-ID "
+    "digest is NOT RECEIPTED"
 )
 
 WORKER_ROOT_REL = "noetic-compass-scaffold/noetic-compass/live-trace-worker"
 WORKER_ROOT = ROOT / WORKER_ROOT_REL
+API_ROOT_REL = "noetic-compass-scaffold/noetic-compass"
+
+# These are the exact launcher/API entrypoints and tests for the cross-process
+# identity receipt.  Their complete in-repository API runtime dependency and
+# resource surface is bound separately below so the receipt is source-closed
+# even when an import is dynamic or a module reads a non-Python resource.
+EXACT_API_LAUNCHER_SURFACE = {
+    f"{API_ROOT_REL}/api/routes/cas_harness_audit.py",
+    f"{API_ROOT_REL}/api/services/cas_harness_fleet_executor.py",
+    f"{API_ROOT_REL}/scripts/prepare_large_model_eval.py",
+    f"{API_ROOT_REL}/scripts/test_prepare_large_model_eval.py",
+    f"{API_ROOT_REL}/tests/test_cas_harness_fleet_executor.py",
+    f"{API_ROOT_REL}/tests/test_cas_harness_fleet_executor_contract.py",
+    f"{API_ROOT_REL}/tests/test_state_ledger_operational_enable.py",
+    f"{API_ROOT_REL}/tests/test_state_substrate_live_migration.py",
+}
+API_RUNTIME_SURFACE_DIR = f"{API_ROOT_REL}/api"
 
 REQUIRED_CONTROL_ARTIFACTS = {
     ".gitattributes",
@@ -64,28 +102,59 @@ REQUIRED_CONTROL_ARTIFACTS = {
     "docs/working/project_coherence/gate5/GATE5_REVIEW_MATRIX_v0.1.json",
     "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
     "docs/working/project_coherence/gate5/GATE5_MODEL_AND_DEPENDENCY_BINDING_v0.1.json",
+    "docs/working/project_coherence/gate5/GATE5_DEPENDENCY_AND_CONTAINER_CANDIDATE_RECEIPT_v0.2.json",
     "docs/working/project_coherence/gate5/history/HISTORICAL_HARNESS_V1_V4_CURRENT_TREE_SHA256.json",
     "docs/working/project_coherence/gate5/history/HISTORICAL_HARNESS_V1_V4_RECOVERY_INVENTORY.md",
     "scripts/verify_project_coherence_gate5.py",
     "scripts/build_project_coherence_gate5_manifest.py",
     f"{WORKER_ROOT_REL}/Dockerfile",
+    f"{WORKER_ROOT_REL}/.dockerignore",
+    f"{WORKER_ROOT_REL}/requirements.in",
     f"{WORKER_ROOT_REL}/requirements.txt",
     "noetic-compass-scaffold/noetic-compass/pyproject.toml",
 }
 
-# Every Python file capable of changing the verified kernels or the complete
-# worker regression result must be hash-bound.  Worker scripts are included
-# because the complete worker suite imports and executes them.
-EXACT_PYTHON_SURFACE_DIRS = (
+# Every regular file under these admitted roots can affect the verified
+# kernels or worker regressions and therefore must be hash-bound.  This is
+# deliberately broader than ``*.py`` so a future resource, extension, archive,
+# or configuration file cannot appear outside the manifest.
+EXACT_ALL_FILE_SURFACE_DIRS = (
     "src/cas_harness_v2",
     "tests/cas_harness_v2",
     f"{WORKER_ROOT_REL}/app",
     f"{WORKER_ROOT_REL}/scripts",
     f"{WORKER_ROOT_REL}/tests",
 )
+EXACT_PYTHON_SURFACE_DIRS = EXACT_ALL_FILE_SURFACE_DIRS
 EXACT_DATA_SURFACES = (
     (f"{WORKER_ROOT_REL}/scenarios", "*.json"),
     (f"{WORKER_ROOT_REL}/scripts", "*.sh"),
+)
+
+# Python can import sourceless bytecode, native extensions, and archives.  None
+# are admitted on the repository-local Gate 5 execution surfaces.  The
+# authoritative verifier rejects them before launching either pytest process.
+FORBIDDEN_EXECUTABLE_SHADOW_SUFFIXES = {
+    ".dll",
+    ".egg",
+    ".pyc",
+    ".pyd",
+    ".pyo",
+    ".so",
+    ".zip",
+}
+EXECUTABLE_SHADOW_SCAN_DIRS = tuple(
+    dict.fromkeys(
+        (
+            *EXACT_ALL_FILE_SURFACE_DIRS,
+            API_ROOT_REL,
+            API_RUNTIME_SURFACE_DIR,
+            f"{API_ROOT_REL}/tests",
+            f"{API_ROOT_REL}/scripts",
+            "scripts",
+            "tests",
+        )
+    )
 )
 
 # Pytest discovers configuration and conftest files in the target directories
@@ -98,6 +167,8 @@ PYTEST_ENVIRONMENT_DIRS = (
     "tests/cas_harness_v2",
     "noetic-compass-scaffold",
     "noetic-compass-scaffold/noetic-compass",
+    f"{API_ROOT_REL}/tests",
+    f"{API_ROOT_REL}/scripts",
     WORKER_ROOT_REL,
     f"{WORKER_ROOT_REL}/tests",
 )
@@ -108,6 +179,7 @@ PYTEST_ENVIRONMENT_FILENAMES = (
     "pyproject.toml",
     "tox.ini",
     "setup.cfg",
+    "__init__.py",
 )
 PYTEST_ENVIRONMENT_CANDIDATE_PATHS = {
     filename if directory == "." else f"{directory}/{filename}"
@@ -120,6 +192,20 @@ PYTEST_ISOLATION_ENV = {
     "PYTEST_PLUGINS": "",
 }
 PYTEST_REMOVED_ENV = ("PYTHONPATH", "PYTHONHOME")
+SUBPROCESS_ENV_ALLOWLIST = {
+    "APPDATA",
+    "COMSPEC",
+    "HOME",
+    "LOCALAPPDATA",
+    "PATH",
+    "PATHEXT",
+    "SYSTEMDRIVE",
+    "SYSTEMROOT",
+    "TEMP",
+    "TMP",
+    "USERPROFILE",
+    "WINDIR",
+}
 
 REQUIRED_BOUNDARY_TEXT = {
     "G5-OPEN-GATE4": "Gate 4 remains OPEN and cannot be promoted by dependency verification.",
@@ -204,20 +290,20 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "working_directory": ".",
         "targets": ["tests/cas_harness_v2"],
         "pytest_plugins": [],
-        "expected_tests": 108,
-        "expected_subtests": 50,
+        "expected_tests": 113,
+        "expected_subtests": 61,
         "expected_test_ids_sha256": (
-            "22979CE12CC23254D693E5902F2697BB3E113F835A4A3BE2FEE0680AAB5DA341"
+            "FD31E05BDFE62A44B4FC7D1556A2CA498115FF8E0A65C3F16160FA4D0C2FA294"
         ),
     },
     "Live trace worker complete": {
         "working_directory": WORKER_ROOT_REL,
         "targets": ["tests"],
         "pytest_plugins": ["pytest_asyncio.plugin"],
-        "expected_tests": 290,
+        "expected_tests": 364,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "1C8DB623FC6507DB0B4CE218C3FD60833D514503122CD68FA79644A61DB6C635"
+            "94566203B3E0FF79B3224C1C5A073698CA99D3C08BC1119A9082E42AF4B178BD"
         ),
     },
     "Live trace worker numeric red team": {
@@ -228,6 +314,22 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
             "12602041756F20D1AFD402FA56968660839E5EB1098438BA84C69BFF8DE7050B"
+        ),
+    },
+    "API, fleet state, and launcher identity": {
+        "working_directory": API_ROOT_REL,
+        "targets": [
+            "scripts/test_prepare_large_model_eval.py",
+            "tests/test_cas_harness_fleet_executor.py",
+            "tests/test_cas_harness_fleet_executor_contract.py",
+            "tests/test_state_ledger_operational_enable.py",
+            "tests/test_state_substrate_live_migration.py",
+        ],
+        "pytest_plugins": ["pytest_asyncio.plugin"],
+        "expected_tests": 76,
+        "expected_subtests": 0,
+        "expected_test_ids_sha256": (
+            "1ED1E9E3AFA2EDA6881463EE5284DD4902AB94C0246B80D2937066480AC42921"
         ),
     },
 }
@@ -280,6 +382,98 @@ SECURITY_HOLD = {
     "advisory_id": "CVE-2026-4372",
     "ghsa_id": "GHSA-29pf-2h5f-8g72",
     "minimum_fixed_version": "5.3.0",
+    "live_execution_authorized": False,
+}
+
+# The v0.1 record above is deliberately retained as adverse historical
+# evidence.  These values describe only the successor v0.2 engineering
+# candidate; they do not release G5-ENGINEERING-003 or authorize execution.
+CANDIDATE_SOURCE_COMMIT = "4bff437dbcf6d0d38046e63d2aee823e8f316711"
+CANDIDATE_BUILD_REF = "vz8s61131470ab8uivga0qcdq"
+CANDIDATE_OCI_DIGESTS = {
+    "oci_image_index_digest": (
+        "sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c"
+    ),
+    "platform_manifest_digest": (
+        "sha256:60bf92b327ebec84887c659313a97a6369a24fd5d8eb00a012544fcafd26ba27"
+    ),
+    "image_config_digest": (
+        "sha256:966db6e2e05366be99129af5c866a8f7efbf01b04145c49ef431785fdc1432ed"
+    ),
+}
+CANDIDATE_BUILD_INPUTS: dict[str, dict[str, Any]] = {
+    "dockerfile": {
+        "path": f"{WORKER_ROOT_REL}/Dockerfile",
+        "sha256": "CCCE6B3227EF6CABE996ECA1F1E2803B0DEEB0852A9BAAD6D0896C4E1E8356C3",
+        "line_count": 143,
+        "bytes": 7_971,
+    },
+    "dockerignore": {
+        "path": f"{WORKER_ROOT_REL}/.dockerignore",
+        "sha256": "5C7BD9443DB6A5017CD350BF93C09C9B6F21A6ACFF7A6B9B586495236021A47F",
+        "line_count": 40,
+        "bytes": 687,
+    },
+    "requirements_lock": {
+        "path": f"{WORKER_ROOT_REL}/requirements.txt",
+        "package_count": 73,
+        "sha256": "37CC64DF8317481F024661C573D4146FA31D27E692C69F311EEB2FF84B793401",
+        "line_count": 1_291,
+        "bytes": 95_788,
+        "hash_policy": "EXACT_PACKAGE_ARTIFACT_HASHES / NO_DEPENDENCY_TRAVERSAL",
+    },
+    "requirements_input": {
+        "path": f"{WORKER_ROOT_REL}/requirements.in",
+        "sha256": "7C33774EFC66F7F385BCE0A0C471739DC4932649BAB4004C3046CEF1E7CB2232",
+        "line_count": 26,
+        "bytes": 942,
+    },
+    "application_tree": {
+        "path": f"{WORKER_ROOT_REL}/app",
+        "file_count": 24,
+        "bytes": 266_912,
+        "tree_sha256": "B6E02418E1E0E934CCD0DE5BFA93146C8A650023D3E60C819115D7D48D726DC7",
+        "serialization": (
+            "ORDINAL-SORTED BUILD-CONTEXT-RELATIVE POSIX PATH + NUL + DECIMAL "
+            "BYTE COUNT + NUL + UPPERCASE FILE SHA256 + LF"
+        ),
+        "source_commit": CANDIDATE_SOURCE_COMMIT,
+        "source_commit_tree_matched": True,
+    },
+}
+CURRENT_SECURITY_HOLD = {
+    "status": "HELD",
+    "criterion_disposition": "OPEN_SECURITY",
+    "reason_id": "G5-SEC-CANDIDATE-SCAN-FINDINGS-OPEN",
+    "historical_adverse_binding": (
+        "docs/working/project_coherence/gate5/"
+        "GATE5_MODEL_AND_DEPENDENCY_BINDING_v0.1.json"
+    ),
+    "candidate_receipt": (
+        "docs/working/project_coherence/gate5/"
+        "GATE5_DEPENDENCY_AND_CONTAINER_CANDIDATE_RECEIPT_v0.2.json"
+    ),
+    "source_commit": CANDIDATE_SOURCE_COMMIT,
+    "oci_image_index_digest": CANDIDATE_OCI_DIGESTS["oci_image_index_digest"],
+    "platform_manifest_digest": CANDIDATE_OCI_DIGESTS["platform_manifest_digest"],
+    "requirements_lock_sha256": CANDIDATE_BUILD_INPUTS["requirements_lock"][
+        "sha256"
+    ],
+    "requirements_lock_package_count": 73,
+    "candidate_transformers_requirement": "transformers==5.14.1",
+    "container_digest_bound": True,
+    "bounded_candidate_revalidation": "HOST_AND_CONTAINER_PREFLIGHT_ONLY",
+    "full_lock_security_audit_passed": False,
+    "sbom_full_image_package_scan": "COMPLETED_WITH_FINDINGS / 7",
+    "sbom_scan_severity_counts": {
+        "critical": 0,
+        "high": 0,
+        "medium": 3,
+        "low": 4,
+    },
+    "direct_local_image_scan": "INCOMPLETE / PENDING",
+    "external_evidence_retention": "SELF_REPORTED_LOCAL_OBSERVATION / RAW_NOT_RETAINED",
+    "engineering_preflight_execution_status": "COMPLETED_CPU_ONLY_NONEXPERIMENTAL",
     "live_execution_authorized": False,
 }
 
@@ -427,10 +621,45 @@ def collect_pytest_environment_surface() -> set[str]:
     }
 
 
+def collect_api_runtime_surface() -> set[str]:
+    """Collect the complete API source/resource tree used by the 76-test receipt."""
+    return _collect_surface(API_RUNTIME_SURFACE_DIR, "*")
+
+
+def verify_no_executable_shadow_artifacts() -> int:
+    """Reject unbound bytecode/native/archive shadows before child execution."""
+    scanned: set[str] = set()
+    violations: set[str] = set()
+    for directory in EXECUTABLE_SHADOW_SCAN_DIRS:
+        root = ROOT / directory
+        require(root.is_dir(), f"missing executable-shadow scan directory: {directory}")
+        for path in root.rglob("*"):
+            raw_path = path.relative_to(ROOT).as_posix()
+            scanned.add(raw_path)
+            if "__pycache__" in path.parts:
+                violations.add(raw_path)
+            elif path.is_file() and path.suffix.casefold() in FORBIDDEN_EXECUTABLE_SHADOW_SUFFIXES:
+                violations.add(raw_path)
+    require(
+        not violations,
+        "forbidden executable cache/native/archive shadow exists on an admitted "
+        f"Gate 5 surface: {sorted(violations)}",
+    )
+    return len(scanned)
+
+
 def artifact_role(path: str) -> str:
     """Return the only role admitted for a path in the v0.1 manifest."""
     if path in PYTEST_ENVIRONMENT_CANDIDATE_PATHS:
         return "gate5_pytest_environment_control"
+    if path in EXACT_API_LAUNCHER_SURFACE:
+        if path.endswith("prepare_large_model_eval.py") and "/scripts/test_" not in path:
+            return "gate5_launcher_source"
+        if "/api/" in path:
+            return "gate5_api_identity_source"
+        return "gate5_api_launcher_test"
+    if path.startswith(API_RUNTIME_SURFACE_DIR + "/"):
+        return "gate5_api_runtime_dependency"
     if path.startswith("src/cas_harness_v2/"):
         return "gate5_control_kernel_source"
     if path.startswith("tests/cas_harness_v2/"):
@@ -443,7 +672,9 @@ def artifact_role(path: str) -> str:
         return "gate5_worker_support"
     if "/live-trace-worker/scenarios/" in path:
         return "gate5_worker_fixture"
-    if path.endswith(("Dockerfile", "requirements.txt", "pyproject.toml")):
+    if path.endswith(
+        ("Dockerfile", ".dockerignore", "requirements.in", "requirements.txt", "pyproject.toml")
+    ):
         return "gate5_environment_control"
     if path.endswith(".py") and path.startswith("scripts/"):
         return "gate5_verification_control"
@@ -551,18 +782,32 @@ def verify_manifest(manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
 
     required_surface = (
         set(REQUIRED_CONTROL_ARTIFACTS)
+        | set(EXACT_API_LAUNCHER_SURFACE)
+        | collect_api_runtime_surface()
         | collect_gate5_control_surface()
         | collect_pytest_environment_surface()
     )
-    required_python: set[str] = set()
-    for directory in EXACT_PYTHON_SURFACE_DIRS:
-        required_python.update(_collect_surface(directory, "*.py"))
-    required_surface.update(required_python)
+    required_all_files: set[str] = set()
+    for directory in EXACT_ALL_FILE_SURFACE_DIRS:
+        required_all_files.update(_collect_surface(directory, "*"))
+    required_surface.update(required_all_files)
+    bound_all_files = {
+        path
+        for path in records
+        if any(path.startswith(directory + "/") for directory in EXACT_ALL_FILE_SURFACE_DIRS)
+    }
+    require(
+        bound_all_files == required_all_files,
+        "manifest does not exactly bind every regular file in the admitted Gate 5 roots: "
+        f"missing={sorted(required_all_files - bound_all_files)} "
+        f"extra={sorted(bound_all_files - required_all_files)}",
+    )
+    required_python = {path for path in required_all_files if path.endswith(".py")}
     bound_python = {
         path
         for path in records
         if path.endswith(".py")
-        and any(path.startswith(directory + "/") for directory in EXACT_PYTHON_SURFACE_DIRS)
+        and any(path.startswith(directory + "/") for directory in EXACT_ALL_FILE_SURFACE_DIRS)
     }
     require(
         bound_python == required_python,
@@ -634,23 +879,22 @@ def verify_manifest(manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
     security_hold = manifest.get("dependency_security_hold")
     require(isinstance(security_hold, dict), "dependency security hold is missing")
     require(
-        set(security_hold)
-        == set(SECURITY_HOLD)
-        | {"container_digest_bound", "patched_environment_revalidated"},
-        "dependency security hold schema differs from v0.1",
-    )
-    for key, expected in SECURITY_HOLD.items():
-        require(
-            security_hold.get(key) == expected,
-            f"dependency security hold field {key!r} drifted or was removed",
-        )
-    require(
-        security_hold.get("container_digest_bound") is False,
-        "current manifest must preserve the unbound-container blocker",
+        security_hold == CURRENT_SECURITY_HOLD,
+        "successor dependency-security hold summary drifted",
     )
     require(
-        security_hold.get("patched_environment_revalidated") is False,
-        "manifest falsely claims patched-environment revalidation",
+        security_hold.get("criterion_disposition") == "OPEN_SECURITY"
+        and security_hold.get("status") == "HELD",
+        "current manifest removed the OPEN_SECURITY / HELD boundary",
+    )
+    require(
+        security_hold.get("full_lock_security_audit_passed") is False
+        and security_hold.get("sbom_full_image_package_scan")
+        == "COMPLETED_WITH_FINDINGS / 7"
+        and security_hold.get("direct_local_image_scan")
+        == "INCOMPLETE / PENDING"
+        and security_hold.get("live_execution_authorized") is False,
+        "manifest falsely promotes the bounded candidate to a security or execution PASS",
     )
 
     suites = manifest.get("test_suites")
@@ -1488,7 +1732,13 @@ def verify_review_matrix(
     require(isinstance(receipts, dict), "review matrix receipts are missing")
     require_exact_keys(
         receipts,
-        {"kernel_focused", "worker_checkpoints", "historical_recovery"},
+        {
+            "kernel_focused",
+            "worker_checkpoints",
+            "api_launcher_fleet_state",
+            "successor_dependency_container_candidate",
+            "historical_recovery",
+        },
         label="review matrix receipts",
     )
     kernel_receipt = receipts.get("kernel_focused")
@@ -1500,9 +1750,11 @@ def verify_review_matrix(
     )
     require(
         type(kernel_receipt.get("passed_tests")) is int
-        and kernel_receipt["passed_tests"] == 108
+        and kernel_receipt["passed_tests"]
+        == REQUIRED_TEST_SUITES["Harness v2 kernel and history"]["expected_tests"]
         and type(kernel_receipt.get("passed_subtests")) is int
-        and kernel_receipt["passed_subtests"] == 50,
+        and kernel_receipt["passed_subtests"]
+        == REQUIRED_TEST_SUITES["Harness v2 kernel and history"]["expected_subtests"],
         "review-matrix Harness v2 receipt drifted",
     )
     worker_receipt = receipts.get("worker_checkpoints")
@@ -1521,6 +1773,8 @@ def verify_review_matrix(
             "current_complete_failed",
             "current_complete_total",
             "complete_test_ids_sha256",
+            "prior_independently_confirmed_complete_passed",
+            "prior_independently_confirmed_test_ids_sha256",
             "test_id_digest_kind",
             "node_id_digest_rule",
             "current_candidate_green",
@@ -1538,9 +1792,10 @@ def verify_review_matrix(
         "weights_identity_complete_tests": 257,
         "latest_numeric_redteam_passed": 32,
         "latest_numeric_redteam_failed": 0,
-        "current_complete_passed": 290,
+        "current_complete_passed": 364,
         "current_complete_failed": 0,
-        "current_complete_total": 290,
+        "current_complete_total": 364,
+        "prior_independently_confirmed_complete_passed": 290,
     }.items():
         require(
             type(worker_receipt.get(field)) is int
@@ -1549,7 +1804,7 @@ def verify_review_matrix(
         )
     require(
         worker_receipt.get("test_id_digest_kind")
-        == "VERIFIER_CANONICAL_TEST_ID_SET_SHA256_NOT_RAW_PYTEST_TRANSCRIPT"
+        == "COLLECT_ONLY_NODE_ID_SET_SHA256 / ACTUAL_EXECUTED_NODE_IDS_NOT_RECEIPTED"
         and worker_receipt.get("current_candidate_green") is True,
         "review-matrix worker receipt kind or bounded-green status drifted",
     )
@@ -1565,10 +1820,16 @@ def verify_review_matrix(
         "review-matrix worker node-ID digests differ from verifier-native receipts",
     )
     require(
-        worker_receipt.get("receipt_freeze_status") == "INDEPENDENTLY_CONFIRMED"
-        and worker_receipt.get("independent_freeze_confirmed") is True
+        worker_receipt.get("receipt_freeze_status")
+        == "LOCAL_UNATTESTED_HOST_REGRESSION / NOT INDEPENDENTLY REPRODUCED"
+        and worker_receipt.get("independent_freeze_confirmed") is False
         and worker_receipt.get("current_complete_green_receipt") is True,
-        "review matrix does not preserve the independently confirmed worker freeze",
+        "review matrix promotes the locally green successor to independent reproduction",
+    )
+    require(
+        worker_receipt.get("prior_independently_confirmed_test_ids_sha256")
+        == "1c8db623fc6507db0b4ce218c3fd60833d514503122cd68fa79644a61db6c635",
+        "review matrix erased the prior independently confirmed 290-test checkpoint",
     )
     digest_rule = worker_receipt.get("node_id_digest_rule")
     require(
@@ -1578,6 +1839,89 @@ def verify_review_matrix(
         and "final" in digest_rule
         and "LF" in digest_rule,
         "review-matrix node-ID digest rule omits prefix/order/final-LF canonicalization",
+    )
+    api_receipt = receipts.get("api_launcher_fleet_state")
+    require(isinstance(api_receipt, dict), "review-matrix API/launcher receipt is missing")
+    require_exact_keys(
+        api_receipt,
+        {"passed", "failed", "total", "test_ids_sha256", "independently_reproduced", "scope"},
+        label="review-matrix API/launcher receipt",
+    )
+    require(
+        type(api_receipt.get("passed")) is int
+        and api_receipt["passed"] == 76
+        and type(api_receipt.get("failed")) is int
+        and api_receipt["failed"] == 0
+        and type(api_receipt.get("total")) is int
+        and api_receipt["total"] == 76
+        and api_receipt.get("test_ids_sha256")
+        == REQUIRED_TEST_SUITES["API, fleet state, and launcher identity"][
+            "expected_test_ids_sha256"
+        ].lower()
+        and api_receipt.get("independently_reproduced") is False
+        and isinstance(api_receipt.get("scope"), str)
+        and "LOCAL_UNATTESTED_HOST_REGRESSION" in api_receipt["scope"]
+        and "not hermetic worker-to-kernel integration" in api_receipt["scope"],
+        "review-matrix API/launcher receipt drifted or overclaims independence",
+    )
+    candidate_receipt = receipts.get("successor_dependency_container_candidate")
+    require(isinstance(candidate_receipt, dict), "review-matrix successor candidate receipt is missing")
+    require_exact_keys(
+        candidate_receipt,
+        {
+            "receipt",
+            "source_commit",
+            "oci_image_index_digest",
+            "platform_manifest_digest",
+            "dependency_lock_count",
+            "transformers_version",
+            "sbom_full_image_package_scan_status",
+            "sbom_scan_package_count",
+            "sbom_scan_vulnerability_count",
+            "sbom_scan_severity_counts",
+            "direct_local_filesystem_scan_status",
+            "gpu_real_forward_status",
+            "independently_reproduced",
+            "disposition",
+            "live_execution_authorized",
+            "external_evidence_class",
+            "raw_external_evidence_retained",
+            "repository_replayable",
+        },
+        label="review-matrix successor candidate receipt",
+    )
+    require(
+        candidate_receipt
+        == {
+            "receipt": CANDIDATE_RECEIPT_PATH.relative_to(ROOT).as_posix(),
+            "source_commit": CANDIDATE_SOURCE_COMMIT,
+            "oci_image_index_digest": CANDIDATE_OCI_DIGESTS[
+                "oci_image_index_digest"
+            ],
+            "platform_manifest_digest": CANDIDATE_OCI_DIGESTS[
+                "platform_manifest_digest"
+            ],
+            "dependency_lock_count": 73,
+            "transformers_version": "5.14.1",
+            "sbom_full_image_package_scan_status": "COMPLETED_WITH_FINDINGS",
+            "sbom_scan_package_count": 190,
+            "sbom_scan_vulnerability_count": 7,
+            "sbom_scan_severity_counts": {
+                "critical": 0,
+                "high": 0,
+                "medium": 3,
+                "low": 4,
+            },
+            "direct_local_filesystem_scan_status": "INCOMPLETE / PENDING",
+            "gpu_real_forward_status": "NOT_STARTED",
+            "independently_reproduced": False,
+            "disposition": "OPEN_SECURITY",
+            "live_execution_authorized": False,
+            "external_evidence_class": "SELF_REPORTED_LOCAL_OBSERVATION",
+            "raw_external_evidence_retained": False,
+            "repository_replayable": False,
+        },
+        "review-matrix successor candidate identity or OPEN_SECURITY boundary drifted",
     )
     historical_receipt = receipts.get("historical_recovery")
     require(isinstance(historical_receipt, dict), "historical receipt is missing")
@@ -1620,7 +1964,7 @@ def verify_adversarial_review() -> None:
     require(ADVERSARIAL_REVIEW_PATH.is_file(), "Gate 5 adversarial review is missing")
     text = ADVERSARIAL_REVIEW_PATH.read_text(encoding="utf-8")
     for marker in (
-        "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
+        "DRAFT / OPEN / NOT_STARTED / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
         "KEEP GATE 5 OPEN",
         "NOT LICENSED",
         "HELD",
@@ -1632,7 +1976,7 @@ def verify_adversarial_review() -> None:
         "hermetic",
         "semantic",
         "CVE-2026-4372",
-        "No admitted live exact-revision experiment",
+        "No authorized or admitted live exact-revision experiment",
         "GPU, autocast/mixed-precision, compiled-module",
         "independent numerical",
         "replication",
@@ -1645,9 +1989,16 @@ def verify_adversarial_review() -> None:
         "stream abort after every attempted intervention",
         "public-schema forgery of the retired causal-success state",
         "32/32 focused",
-        "290/290 complete worker",
+        "364/364 complete worker",
+        "confirmed 290/290 receipt",
         "12602041756f20d1afd402fa56968660839e5eb1098438ba84c69bff8de7050b",
-        "1c8db623fc6507db0b4ce218c3fd60833d514503122cd68fa79644a61db6c635",
+        "94566203b3e0ff79b3224c1c5a073698ca99d3c08bc1119a9082e42af4b178bd",
+        "76/76",
+        "1ed1e9e3afa2eda6881463ee5284dd4902ab94c0246b80d2937066480ac42921",
+        "COMPLETED_WITH_FINDINGS",
+        "critical, 0 high, 3 medium, and 4 low findings",
+        "INCOMPLETE / PENDING",
+        "OPEN_SECURITY",
         "including the final ID",
         "omitting the final LF are superseded",
         "extra manifest records",
@@ -1672,18 +2023,20 @@ def verify_no_status_promotion_text(
     required_headers = {
         "docs/working/project_coherence/gate5/README.md": (
             "# Project Coherence Gate 5\n\n"
-            "Status: `DRAFT / OPEN / NOT STARTED / RING 4 / NOT LICENSED / "
+            "Document status: `DRAFT / OPEN / NOT FROZEN`\n\n"
+            "Gate 5 status: `OPEN / NOT_STARTED / RING 4 / NOT LICENSED / "
             "HELD / NOT FROZEN`"
         ),
         "docs/working/project_coherence/gate5/"
         "HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md": (
             "# CAS Harness v2 preregistration and Evidence Packet v2 control kernel\n\n"
-            "Status: `DRAFT / OPEN / RESEARCH ONLY / NOT FROZEN`\n\n"
+            "Status: `DRAFT / OPEN / NOT_STARTED / RESEARCH ONLY / NOT FROZEN`\n\n"
             "Admission and claim boundary: `RING 4 / NOT LICENSED / HELD`"
         ),
         "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md": (
             "# Gate 5 adversarial review v0.1\n\n"
-            "**Status:** `DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN`"
+            "**Status:** `DRAFT / OPEN / NOT_STARTED / RING 4 / NOT LICENSED / "
+            "HELD / NOT FROZEN`"
         ),
     }
     for raw_path, header in required_headers.items():
@@ -1716,6 +2069,11 @@ def verify_no_status_promotion_text(
 
 
 def verify_model_and_security_bindings() -> None:
+    require(
+        sha256_file(MODEL_DEPENDENCY_BINDING_PATH)
+        == HISTORICAL_MODEL_DEPENDENCY_BINDING_SHA256,
+        "historical v0.1 model/dependency adverse binding bytes changed",
+    )
     binding = load_json(MODEL_DEPENDENCY_BINDING_PATH)
     require(isinstance(binding, dict), "model/dependency binding root is not an object")
     require_exact_keys(
@@ -1946,7 +2304,6 @@ def verify_model_and_security_bindings() -> None:
         WORKER_ROOT / "app" / "runtime" / "model_loader.py"
     ).read_text(encoding="utf-8")
     dockerfile = (WORKER_ROOT / "Dockerfile").read_text(encoding="utf-8")
-    requirements = (WORKER_ROOT / "requirements.txt").read_text(encoding="utf-8")
     for value in (
         MODEL_BINDING["revision"],
         MODEL_BINDING["weights_filename"],
@@ -1958,17 +2315,868 @@ def verify_model_and_security_bindings() -> None:
         f"PYTHIA_160M_REVISION={MODEL_BINDING['revision']}" in dockerfile,
         "Dockerfile Pythia revision differs from the exact model binding",
     )
-    transformer_lines = [
-        line.strip()
-        for line in requirements.splitlines()
-        if line.strip() and not line.lstrip().startswith("#")
-        and line.strip().lower().startswith("transformers")
+
+
+def _require_oci_digest(value: Any, *, label: str) -> None:
+    require(
+        isinstance(value, str) and OCI_SHA256_RE.fullmatch(value) is not None,
+        f"{label}: expected a lowercase sha256 OCI digest",
+    )
+
+
+def _require_candidate_file_record(
+    key: str, record: Any, *, include_package_fields: bool = False
+) -> None:
+    expected = CANDIDATE_BUILD_INPUTS[key]
+    require(isinstance(record, dict), f"candidate {key} record is missing")
+    require_exact_keys(record, set(expected), label=f"candidate {key} record")
+    require(record == expected, f"candidate {key} identity drifted")
+    raw_path = canonical_repo_path(record.get("path"), label=f"candidate {key}")
+    path = ROOT / Path(*PurePosixPath(raw_path).parts)
+    require(path.is_file(), f"candidate {key} file is missing")
+    require(not path.is_symlink(), f"candidate {key} file may not be a symlink")
+    require(
+        isinstance(record.get("sha256"), str)
+        and SHA256_UPPER_RE.fullmatch(record["sha256"]) is not None
+        and sha256_file(path) == record["sha256"],
+        f"candidate {key} file hash drifted",
+    )
+    require(
+        type(record.get("bytes")) is int
+        and path.stat().st_size == record["bytes"],
+        f"candidate {key} byte count drifted",
+    )
+    text = path.read_text(encoding="utf-8")
+    require(
+        type(record.get("line_count")) is int
+        and len(text.splitlines()) == record["line_count"],
+        f"candidate {key} line count drifted",
+    )
+    if include_package_fields:
+        package_heads = [
+            line
+            for line in text.splitlines()
+            if line
+            and not line.startswith((" ", "\t", "#"))
+        ]
+        require(
+            type(record.get("package_count")) is int
+            and len(package_heads) == record["package_count"],
+            "candidate requirements lock package count drifted",
+        )
+
+
+def _candidate_application_tree_record() -> dict[str, Any]:
+    app_root = WORKER_ROOT / "app"
+    require(app_root.is_dir(), "candidate application tree is missing")
+    files = sorted(
+        (
+            path
+            for path in app_root.rglob("*")
+            if path.is_file() and "__pycache__" not in path.parts
+        ),
+        key=lambda path: path.relative_to(WORKER_ROOT).as_posix(),
+    )
+    require(files, "candidate application tree is empty")
+    payload = bytearray()
+    total_bytes = 0
+    for path in files:
+        require(not path.is_symlink(), f"candidate application file may not be a symlink: {path}")
+        data = path.read_bytes()
+        relative = path.relative_to(WORKER_ROOT).as_posix()
+        total_bytes += len(data)
+        payload.extend(relative.encode("utf-8"))
+        payload.extend(b"\0")
+        payload.extend(str(len(data)).encode("ascii"))
+        payload.extend(b"\0")
+        payload.extend(hashlib.sha256(data).hexdigest().upper().encode("ascii"))
+        payload.extend(b"\n")
+    return {
+        "path": f"{WORKER_ROOT_REL}/app",
+        "file_count": len(files),
+        "bytes": total_bytes,
+        "tree_sha256": hashlib.sha256(payload).hexdigest().upper(),
+        "serialization": (
+            "ORDINAL-SORTED BUILD-CONTEXT-RELATIVE POSIX PATH + NUL + DECIMAL "
+            "BYTE COUNT + NUL + UPPERCASE FILE SHA256 + LF"
+        ),
+        "source_commit": CANDIDATE_SOURCE_COMMIT,
+        "source_commit_tree_matched": True,
+    }
+
+
+def _verify_candidate_source_commit_tree() -> None:
+    revision = subprocess.run(
+        ["git", "rev-parse", "--verify", f"{CANDIDATE_SOURCE_COMMIT}^{{commit}}"],
+        cwd=ROOT,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+        check=False,
+    )
+    require(
+        revision.returncode == 0
+        and revision.stdout.strip() == CANDIDATE_SOURCE_COMMIT,
+        "candidate source commit is unavailable or not exact",
+    )
+    build_paths = [
+        f"{WORKER_ROOT_REL}/Dockerfile",
+        f"{WORKER_ROOT_REL}/.dockerignore",
+        f"{WORKER_ROOT_REL}/requirements.txt",
+        f"{WORKER_ROOT_REL}/requirements.in",
+        f"{WORKER_ROOT_REL}/app",
+    ]
+    comparison = subprocess.run(
+        ["git", "diff", "--quiet", CANDIDATE_SOURCE_COMMIT, "--", *build_paths],
+        cwd=ROOT,
+        capture_output=True,
+        check=False,
+    )
+    require(
+        comparison.returncode == 0,
+        "current worker build context differs from the source commit bound into the OCI image",
+    )
+
+
+def verify_dependency_and_container_candidate_receipt() -> dict[str, Any]:
+    receipt = load_json(CANDIDATE_RECEIPT_PATH)
+    require(isinstance(receipt, dict), "candidate receipt root is not an object")
+    require_exact_keys(
+        receipt,
+        {
+            "schema_version",
+            "document_status",
+            "gate5_status",
+            "gate_decision",
+            "admission_ring",
+            "license_status",
+            "disclosure_status",
+            "public_disclosure_authorized",
+            "experimental_execution_status",
+            "engineering_preflight_execution_status",
+            "security_disposition",
+            "live_execution_authorized",
+            "candidate_accepted",
+            "candidate_identity",
+            "build_control_inputs",
+            "attestations",
+            "external_evidence_retention",
+            "dependency_runtime_identity",
+            "model_binding",
+            "build_and_preflight",
+            "runtime_fail_closed_probes",
+            "test_receipts",
+            "security_audits",
+            "unresolved_boundaries",
+            "historical_adverse_evidence",
+            "claim_boundary",
+        },
+        label="Gate 5 dependency/container candidate receipt",
+    )
+    require(
+        receipt.get("schema_version")
+        == "project_coherence.gate5_dependency_and_container_candidate_receipt.v0.2",
+        "unexpected candidate receipt schema",
+    )
+    for field, expected in {
+        "document_status": "DRAFT / OPEN / NOT FROZEN",
+        "gate5_status": "OPEN",
+        "gate_decision": "KEEP_OPEN",
+        "license_status": "NOT LICENSED",
+        "disclosure_status": "HELD",
+        "experimental_execution_status": "NOT_STARTED",
+        "engineering_preflight_execution_status": "COMPLETED_CPU_ONLY_NONEXPERIMENTAL",
+        "security_disposition": "OPEN_SECURITY",
+    }.items():
+        require(receipt.get(field) == expected, f"candidate receipt {field} drifted")
+    require(
+        type(receipt.get("admission_ring")) is int
+        and receipt["admission_ring"] == 4,
+        "candidate receipt escaped Ring 4 or used a non-integer ring",
+    )
+    require(
+        receipt.get("public_disclosure_authorized") is False
+        and receipt.get("live_execution_authorized") is False
+        and receipt.get("candidate_accepted") is False,
+        "candidate receipt promotes disclosure, live execution, or acceptance",
+    )
+
+    identity = receipt.get("candidate_identity")
+    require(isinstance(identity, dict), "candidate OCI identity is missing")
+    require_exact_keys(
+        identity,
+        {
+            "source_commit",
+            "build_ref",
+            "image_tag",
+            "platform",
+            "oci_image_index_digest",
+            "platform_manifest_digest",
+            "image_config_digest",
+            "image_size_bytes",
+            "source_commit_label_matched",
+        },
+        label="candidate OCI identity",
+    )
+    require(
+        identity.get("source_commit") == CANDIDATE_SOURCE_COMMIT
+        and SHA256_LOWER_RE.fullmatch(identity["source_commit"] + "0" * 24) is not None,
+        "candidate source commit drifted or is malformed",
+    )
+    require(identity.get("build_ref") == CANDIDATE_BUILD_REF, "candidate build ref drifted")
+    require(
+        identity.get("image_tag") == "atlas-live-trace-worker:gate5-candidate-v0.2"
+        and identity.get("platform") == "linux/amd64",
+        "candidate tag or platform drifted",
+    )
+    for field, expected in CANDIDATE_OCI_DIGESTS.items():
+        _require_oci_digest(identity.get(field), label=f"candidate {field}")
+        require(identity[field] == expected, f"candidate {field} drifted")
+    require(
+        type(identity.get("image_size_bytes")) is int
+        and identity["image_size_bytes"] == 4_396_739_765
+        and identity.get("source_commit_label_matched") is True,
+        "candidate image size or source-label receipt drifted",
+    )
+
+    inputs = receipt.get("build_control_inputs")
+    require(isinstance(inputs, dict), "candidate build controls are missing")
+    require_exact_keys(
+        inputs,
+        {
+            "dockerfile",
+            "dockerignore",
+            "requirements_lock",
+            "requirements_input",
+            "application_tree",
+            "base_images",
+        },
+        label="candidate build controls",
+    )
+    _require_candidate_file_record("dockerfile", inputs.get("dockerfile"))
+    _require_candidate_file_record("dockerignore", inputs.get("dockerignore"))
+    _require_candidate_file_record(
+        "requirements_lock",
+        inputs.get("requirements_lock"),
+        include_package_fields=True,
+    )
+    _require_candidate_file_record("requirements_input", inputs.get("requirements_input"))
+    application_tree = inputs.get("application_tree")
+    require(isinstance(application_tree, dict), "candidate application tree is missing")
+    require_exact_keys(
+        application_tree,
+        set(CANDIDATE_BUILD_INPUTS["application_tree"]),
+        label="candidate application tree",
+    )
+    require(
+        application_tree == CANDIDATE_BUILD_INPUTS["application_tree"]
+        and application_tree == _candidate_application_tree_record(),
+        "candidate application tree differs from the OCI-bound build context",
+    )
+    _verify_candidate_source_commit_tree()
+    bases = inputs.get("base_images")
+    require(isinstance(bases, dict), "candidate base-image binding is missing")
+    require_exact_keys(bases, {"ubuntu", "python"}, label="candidate base images")
+    require(
+        bases
+        == {
+            "ubuntu": {
+                "reference": "ubuntu:24.04",
+                "digest": "sha256:019e8eb29a85e74d64925745884f2ec79aa27e3feab36353d24656f4d6b89467",
+                "snapshot": "20260805T000000Z",
+            },
+            "python": {
+                "reference": "python:3.12.13-slim-bookworm",
+                "digest": "sha256:6e13e65c55e33adf203d77ee371cf8bf5d81bd4902ef07565721f46bf44917af",
+            },
+        },
+        "candidate base-image identities drifted",
+    )
+    dockerfile = (WORKER_ROOT / "Dockerfile").read_text(encoding="utf-8")
+    for base in bases.values():
+        _require_oci_digest(base.get("digest"), label="candidate base image")
+        require(
+            base["reference"] in dockerfile and base["digest"] in dockerfile,
+            "candidate base image is not bound by the Dockerfile",
+        )
+    require("20260805T000000Z" in dockerfile, "Ubuntu snapshot binding drifted")
+
+    attestations = receipt.get("attestations")
+    require(isinstance(attestations, dict), "candidate attestations are missing")
+    require_exact_keys(
+        attestations,
+        {
+            "attestation_manifest_digest",
+            "attestation_config_digest",
+            "sbom",
+            "slsa_provenance",
+            "trust_boundary",
+        },
+        label="candidate attestations",
+    )
+    expected_attestation_digests = {
+        "attestation_manifest_digest": "sha256:b1db5924ab8ce96927f0164c4626cd5eb0c86cbd3fb35c0387b622dd7ae390d1",
+        "attestation_config_digest": "sha256:4592edd32ecc05f0ce5fca43216dea1393293b07245db9582989ed3cb77f5ad7",
+    }
+    for field, expected in expected_attestation_digests.items():
+        _require_oci_digest(attestations.get(field), label=field)
+        require(attestations[field] == expected, f"candidate {field} drifted")
+    sbom = attestations.get("sbom")
+    require(isinstance(sbom, dict), "candidate SBOM identity is missing")
+    require_exact_keys(sbom, {"status", "format", "digest", "size_bytes"}, label="candidate SBOM")
+    _require_oci_digest(sbom.get("digest"), label="candidate SBOM")
+    require(
+        sbom.get("status") == "OBSERVED_LOCAL / RAW_BYTES_NOT_RETAINED"
+        and sbom.get("format") == "SPDX"
+        and sbom.get("digest")
+        == "sha256:8d039b378dfc422bae2d7479a06bfa2ac9c94a9a19fe8aa115362a28ec41955e"
+        and type(sbom.get("size_bytes")) is int
+        and sbom["size_bytes"] == 2_957_946,
+        "candidate SBOM receipt drifted",
+    )
+    provenance = attestations.get("slsa_provenance")
+    require(isinstance(provenance, dict), "candidate provenance identity is missing")
+    require_exact_keys(
+        provenance,
+        {
+            "status",
+            "predicate_type",
+            "digest",
+            "size_bytes",
+            "attachment_digest",
+            "independently_trusted",
+        },
+        label="candidate provenance",
+    )
+    _require_oci_digest(provenance.get("digest"), label="candidate provenance")
+    _require_oci_digest(provenance.get("attachment_digest"), label="provenance attachment")
+    require(
+        provenance.get("status") == "OBSERVED_LOCAL / RAW_BYTES_NOT_RETAINED"
+        and provenance.get("predicate_type") == "https://slsa.dev/provenance/v1"
+        and provenance.get("digest")
+        == "sha256:f8e3677325d096191bb7ec1d075a34addf4e4733a48d3ae442f63c1bb74a6c6f"
+        and type(provenance.get("size_bytes")) is int
+        and provenance["size_bytes"] == 45_532
+        and provenance.get("attachment_digest")
+        == "sha256:36bc87d2b88089eda3958edb5dbcf4cbdd5b5c01e16725e1dbeb49171c23b971"
+        and provenance.get("independently_trusted") is False,
+        "candidate provenance receipt drifted or claims independent trust",
+    )
+    require(
+        attestations.get("trust_boundary")
+        == "SELF-REPORTED LOCAL BUILDKIT OBSERVATION / RAW ATTESTATIONS NOT RETAINED / NO INDEPENDENT TRUST ROOT",
+        "candidate attestation trust boundary drifted",
+    )
+
+    retention = receipt.get("external_evidence_retention")
+    require(
+        retention
+        == {
+            "evidence_class": "SELF_REPORTED_LOCAL_OBSERVATION",
+            "raw_build_history_retained": False,
+            "raw_sbom_retained": False,
+            "raw_slsa_provenance_retained": False,
+            "raw_scanner_report_retained": False,
+            "repository_replayable": False,
+            "remaining_obligation": (
+                "Retain and hash-bind raw build inspection, SPDX, SLSA provenance, "
+                "and scanner output before treating external-tool observations as "
+                "repository-replayable evidence."
+            ),
+        },
+        "candidate external-tool evidence is missing or falsely replayable",
+    )
+
+    runtime = receipt.get("dependency_runtime_identity")
+    require(isinstance(runtime, dict), "candidate runtime identity is missing")
+    require_exact_keys(
+        runtime,
+        {
+            "python_version",
+            "transformers_version",
+            "torch_version",
+            "installed_distribution_count",
+            "pip_present",
+            "ensurepip_present",
+            "runtime_uid",
+            "runtime_gid",
+        },
+        label="candidate runtime identity",
+    )
+    require(
+        runtime.get("python_version") == "3.12.13"
+        and runtime.get("transformers_version") == "5.14.1"
+        and runtime.get("torch_version") == "2.13.0+cu126"
+        and type(runtime.get("installed_distribution_count")) is int
+        and runtime["installed_distribution_count"] == 73
+        and runtime.get("pip_present") is False
+        and runtime.get("ensurepip_present") is False
+        and type(runtime.get("runtime_uid")) is int
+        and runtime["runtime_uid"] == 10_001
+        and type(runtime.get("runtime_gid")) is int
+        and runtime["runtime_gid"] == 10_001,
+        "candidate dependency/runtime identity drifted",
+    )
+    requirements = (WORKER_ROOT / "requirements.txt").read_text(encoding="utf-8")
+    require(
+        "transformers==5.14.1 \\" in requirements
+        and "torch-2.13.0%2Bcu126-cp312-cp312-manylinux_2_28_x86_64.whl"
+        in requirements,
+        "candidate Transformers or Torch requirement drifted",
+    )
+
+    model = receipt.get("model_binding")
+    require(isinstance(model, dict), "candidate model binding is missing")
+    require_exact_keys(
+        model,
+        {
+            "repository_id",
+            "revision",
+            "artifact_policy",
+            "artifacts",
+            "offline_cpu_load_and_canary",
+            "gpu_real_forward",
+            "scientific_result_created",
+        },
+        label="candidate model binding",
+    )
+    expected_model_artifacts = [
+        ("config.json", "76EB275107220E450D31258F792A2EFCBEE109D8B62AE0088260057DEC06362F", 569),
+        ("model.safetensors", MODEL_BINDING["weights_sha256"].upper(), MODEL_BINDING["weights_bytes"]),
+        ("special_tokens_map.json", "6F50AB5A5A509A1C309D6171F339B196A900DC9C99AD0408FF23BB615FDAE7AD", 99),
+        ("tokenizer.json", "C24618A1B3E6A38167BEFF1C72CFFD126C3A66254347304B50547D12C5F25624", 2_113_710),
+        ("tokenizer_config.json", "70E38394E494931C6F773BA41E19460DD4436526B852207367F04341B4066D3F", 396),
+    ]
+    artifacts = model.get("artifacts")
+    require(isinstance(artifacts, list), "candidate model artifact list is missing")
+    require(
+        len(artifacts) == len(expected_model_artifacts),
+        "candidate model artifact count drifted",
+    )
+    for index, (filename, digest, byte_count) in enumerate(expected_model_artifacts):
+        artifact = artifacts[index]
+        require(isinstance(artifact, dict), f"candidate model artifact {index} is malformed")
+        require_exact_keys(artifact, {"filename", "sha256", "bytes"}, label=f"candidate model artifact {index}")
+        require(
+            artifact.get("filename") == filename
+            and artifact.get("sha256") == digest
+            and SHA256_UPPER_RE.fullmatch(artifact["sha256"]) is not None
+            and type(artifact.get("bytes")) is int
+            and artifact["bytes"] == byte_count,
+            f"candidate model artifact {filename} drifted",
+        )
+    require(
+        model.get("repository_id") == MODEL_BINDING["model_id"]
+        and model.get("revision") == MODEL_BINDING["revision"]
+        and model.get("artifact_policy")
+        == "EXACT FIVE-FILE SET HASHED BEFORE AND AFTER LOAD"
+        and model.get("offline_cpu_load_and_canary") == "PASS"
+        and model.get("gpu_real_forward") == "NOT_STARTED"
+        and model.get("scientific_result_created") is False,
+        "candidate model receipt drifted or claims GPU/scientific execution",
+    )
+    model_loader = (WORKER_ROOT / "app" / "runtime" / "model_loader.py").read_text(encoding="utf-8")
+    for _, digest, byte_count in expected_model_artifacts:
+        require(
+            digest.lower() in model_loader and f"{byte_count:_}" in model_loader,
+            "candidate model artifact is not bound in the model loader",
+        )
+
+    preflight = receipt.get("build_and_preflight")
+    require(isinstance(preflight, dict), "candidate build/preflight receipt is missing")
+    require_exact_keys(
+        preflight,
+        {
+            "build_status",
+            "lock_verification",
+            "offline_model_preflight",
+            "native_shared_object_count",
+            "native_dependency_closure",
+            "runtime_no_network_read_only_root",
+            "runtime_model_cache",
+            "runtime_tmpfs",
+        },
+        label="candidate build/preflight receipt",
+    )
+    native = preflight.get("native_dependency_closure")
+    require(isinstance(native, dict), "candidate native closure receipt is missing")
+    require_exact_keys(
+        native,
+        {
+            "status",
+            "allowed_unresolved_soname",
+            "allowed_artifact",
+            "unexpected_unresolved_dependencies",
+        },
+        label="candidate native closure",
+    )
+    require(
+        preflight.get("build_status") == "COMPLETED"
+        and preflight.get("lock_verification") == "PASS / 73 EXACT DISTRIBUTIONS"
+        and preflight.get("offline_model_preflight")
+        == "PASS / EXACT PYTHIA ARTIFACT SET"
+        and type(preflight.get("native_shared_object_count")) is int
+        and preflight["native_shared_object_count"] == 385
+        and native
+        == {
+            "status": "PASS_WITH_EXACT_HOST_DRIVER_SEAM",
+            "allowed_unresolved_soname": "libcuda.so.1",
+            "allowed_artifact": "torch/lib/libcaffe2_nvrtc.so",
+            "unexpected_unresolved_dependencies": 0,
+        }
+        and preflight.get("runtime_no_network_read_only_root") == "PASS"
+        and preflight.get("runtime_model_cache")
+        == "EXACT / LOCAL_ONLY / READ_ONLY"
+        and preflight.get("runtime_tmpfs")
+        == "/tmp:rw,noexec,nosuid,nodev,size=64m",
+        "candidate build/preflight evidence drifted",
+    )
+
+    probes = receipt.get("runtime_fail_closed_probes")
+    require(isinstance(probes, dict), "candidate runtime probes are missing")
+    require_exact_keys(
+        probes,
+        {
+            "production_start_without_worker_token",
+            "production_start_with_token_without_cuda",
+            "production_start_with_token_and_cuda",
+        },
+        label="candidate runtime probes",
+    )
+    require(
+        probes
+        == {
+            "production_start_without_worker_token": {
+                "status": "PASS / REFUSED_STARTUP",
+                "exit_code": 3,
+            },
+            "production_start_with_token_without_cuda": {
+                "status": "PASS / REFUSED_STARTUP",
+                "exit_code": 3,
+            },
+            "production_start_with_token_and_cuda": {
+                "status": "NOT_STARTED",
+                "exit_code": None,
+            },
+        },
+        "candidate runtime fail-closed probes drifted or claim a GPU start",
+    )
+
+    tests = receipt.get("test_receipts")
+    require(isinstance(tests, dict), "candidate test receipts are missing")
+    require_exact_keys(
+        tests,
+        {"live_trace_worker_complete", "api_launcher_fleet_state", "receipt_scope"},
+        label="candidate test receipts",
+    )
+    worker_tests = tests.get("live_trace_worker_complete")
+    api_tests = tests.get("api_launcher_fleet_state")
+    require(isinstance(worker_tests, dict) and isinstance(api_tests, dict), "candidate test receipt is malformed")
+    require_exact_keys(worker_tests, {"passed", "failed", "total", "test_ids_sha256"}, label="candidate worker tests")
+    require_exact_keys(api_tests, {"passed", "failed", "total", "test_ids_sha256", "targets"}, label="candidate API tests")
+    require(
+        worker_tests
+        == {
+            "passed": 364,
+            "failed": 0,
+            "total": 364,
+            "test_ids_sha256": REQUIRED_TEST_SUITES["Live trace worker complete"]["expected_test_ids_sha256"],
+        },
+        "candidate worker test receipt drifted",
+    )
+    expected_api_targets = [
+        f"{API_ROOT_REL}/{target}"
+        for target in REQUIRED_TEST_SUITES["API, fleet state, and launcher identity"]["targets"]
     ]
     require(
-        transformer_lines == [SECURITY_HOLD["affected_requirement"]],
-        "Transformers dependency differs from the explicitly held vulnerable pin; "
-        "a version change requires a new security audit and Gate 5 manifest",
+        api_tests
+        == {
+            "passed": 76,
+            "failed": 0,
+            "total": 76,
+            "test_ids_sha256": REQUIRED_TEST_SUITES["API, fleet state, and launcher identity"]["expected_test_ids_sha256"],
+            "targets": expected_api_targets,
+        },
+        "candidate API/launcher/state test receipt drifted",
     )
+    require(
+        tests.get("receipt_scope")
+        == (
+            "LOCAL_UNATTESTED_HOST_REGRESSION / SEPARATE COLLECT-ONLY NODE-ID DIGEST / "
+            "ACTUAL EXECUTED IDS NOT RECEIPTED / NOT GPU EXECUTION / NOT SCIENTIFIC EVIDENCE"
+        ),
+        "candidate test scope was promoted",
+    )
+
+    audits = receipt.get("security_audits")
+    require(isinstance(audits, dict), "candidate security audits are missing")
+    require_exact_keys(
+        audits,
+        {
+            "python_dependency_audit",
+            "torch_osv_query",
+            "sbom_full_image_package_scan",
+            "full_filesystem_image_scan",
+            "scan_summary",
+            "security_decision",
+        },
+        label="candidate security audits",
+    )
+    python_audit = audits.get("python_dependency_audit")
+    require(isinstance(python_audit, dict), "candidate Python dependency audit is missing")
+    require_exact_keys(
+        python_audit,
+        {
+            "tool",
+            "status",
+            "command_scope",
+            "successfully_audited_lock_entries",
+            "known_vulnerabilities_found",
+            "skipped_lock_entries",
+            "full_lock_pass",
+            "full_image_pass",
+        },
+        label="candidate Python dependency audit",
+    )
+    require(
+        python_audit.get("tool") == "pip-audit 2.10.1"
+        and python_audit.get("status") == "PARTIAL / PASS_WITH_SKIP"
+        and python_audit.get("command_scope")
+        == "requirements.txt --no-deps --disable-pip --format json"
+        and type(python_audit.get("successfully_audited_lock_entries")) is int
+        and python_audit["successfully_audited_lock_entries"] == 72
+        and type(python_audit.get("known_vulnerabilities_found")) is int
+        and python_audit["known_vulnerabilities_found"] == 0
+        and python_audit.get("skipped_lock_entries")
+        == [
+            {
+                "package": "torch",
+                "version": "2.13.0+cu126",
+                "reason": "DIRECT URL REQUIREMENT CANNOT BE PINNED BY PIP-AUDIT",
+            }
+        ]
+        and python_audit.get("full_lock_pass") is False
+        and python_audit.get("full_image_pass") is False,
+        "candidate Python dependency audit was altered or overstated",
+    )
+    torch_audit = audits.get("torch_osv_query")
+    require(isinstance(torch_audit, dict), "candidate Torch OSV query is missing")
+    require_exact_keys(
+        torch_audit,
+        {
+            "source",
+            "ecosystem",
+            "package",
+            "version",
+            "status",
+            "returned_vulnerability_count",
+            "independent_of_pip_audit_skip",
+            "full_image_pass",
+        },
+        label="candidate Torch OSV query",
+    )
+    require(
+        torch_audit
+        == {
+            "source": "OSV API",
+            "ecosystem": "PyPI",
+            "package": "torch",
+            "version": "2.13.0",
+            "status": "COMPLETED / ZERO RETURNED VULNERABILITIES",
+            "returned_vulnerability_count": 0,
+            "independent_of_pip_audit_skip": True,
+            "full_image_pass": False,
+        },
+        "candidate Torch OSV query was altered or promoted to a full-image PASS",
+    )
+    sbom_scan = audits.get("sbom_full_image_package_scan")
+    require(isinstance(sbom_scan, dict), "candidate SBOM package scan is missing")
+    require_exact_keys(
+        sbom_scan,
+        {
+            "tool",
+            "evidence_class",
+            "raw_report_retained",
+            "repository_replayable",
+            "input",
+            "input_digest",
+            "command_profile",
+            "target_manifest_digest",
+            "platform",
+            "observed_at",
+            "package_count",
+            "vulnerable_package_count",
+            "vulnerability_count",
+            "status",
+            "exit_code",
+            "passed",
+            "unfiltered_rescan_matched",
+            "unspecified_severity_count",
+            "severity_counts",
+            "findings",
+        },
+        label="candidate SBOM package scan",
+    )
+    expected_findings = [
+        {
+            "severity": "MEDIUM",
+            "package": "util-linux",
+            "version": "2.39.3-9ubuntu6.5",
+            "advisory": "CVE-2026-27456",
+            "fix_status": "UNFIXED",
+        },
+        {
+            "severity": "MEDIUM",
+            "package": "libp11-kit0",
+            "version": "0.25.3-4ubuntu2.1",
+            "advisory": "CVE-2026-13757",
+            "fix_status": "UNFIXED",
+        },
+        {
+            "severity": "MEDIUM",
+            "package": "dpkg",
+            "version": "1.22.6ubuntu6.6",
+            "advisory": "CVE-2026-2219",
+            "fix_status": "UNFIXED",
+        },
+        {
+            "severity": "LOW",
+            "package": "zlib1g",
+            "version": "1:1.3.dfsg-3.1ubuntu2.1",
+            "advisory": "CVE-2026-27171",
+            "fix_status": "UNFIXED",
+        },
+        {
+            "severity": "LOW",
+            "package": "libgcrypt20",
+            "version": "1.10.3-2ubuntu0.1",
+            "advisory": "CVE-2024-2236",
+            "fix_status": "UNFIXED",
+        },
+        {
+            "severity": "LOW",
+            "package": "passwd",
+            "version": "1:4.13+dfsg1-4ubuntu3.2",
+            "advisory": "CVE-2024-56433",
+            "fix_status": "UNFIXED",
+        },
+        {
+            "severity": "LOW",
+            "package": "libudev1",
+            "version": "255.4-1ubuntu8.16",
+            "advisory": "CVE-2026-40228",
+            "fix_status": "UNFIXED",
+        },
+    ]
+    _require_oci_digest(sbom_scan.get("input_digest"), label="SBOM scan input")
+    _require_oci_digest(
+        sbom_scan.get("target_manifest_digest"), label="SBOM scan target"
+    )
+    require(
+        sbom_scan.get("tool") == "Docker Scout 1.24.0"
+        and sbom_scan.get("evidence_class") == "SELF_REPORTED_LOCAL_OBSERVATION"
+        and sbom_scan.get("raw_report_retained") is False
+        and sbom_scan.get("repository_replayable") is False
+        and sbom_scan.get("input") == "IN-TOTO SPDX ATTESTATION"
+        and sbom_scan.get("input_digest") == sbom["digest"]
+        and sbom_scan.get("command_profile")
+        == "cves --exit-code --only-severity critical,high,medium,low sbom://"
+        and sbom_scan.get("target_manifest_digest")
+        == CANDIDATE_OCI_DIGESTS["platform_manifest_digest"]
+        and sbom_scan.get("platform") == "linux/amd64"
+        and sbom_scan.get("observed_at") == "2026-08-05T22:16:49Z"
+        and type(sbom_scan.get("package_count")) is int
+        and sbom_scan["package_count"] == 190
+        and type(sbom_scan.get("vulnerable_package_count")) is int
+        and sbom_scan["vulnerable_package_count"] == 7
+        and type(sbom_scan.get("vulnerability_count")) is int
+        and sbom_scan["vulnerability_count"] == 7
+        and sbom_scan.get("status") == "COMPLETED_WITH_FINDINGS"
+        and type(sbom_scan.get("exit_code")) is int
+        and sbom_scan["exit_code"] == 2
+        and sbom_scan.get("passed") is False
+        and sbom_scan.get("unfiltered_rescan_matched") is True
+        and type(sbom_scan.get("unspecified_severity_count")) is int
+        and sbom_scan["unspecified_severity_count"] == 0
+        and sbom_scan.get("severity_counts")
+        == {"critical": 0, "high": 0, "medium": 3, "low": 4}
+        and sbom_scan.get("findings") == expected_findings,
+        "candidate SBOM package scan was altered, zeroed, or promoted to PASS",
+    )
+    image_scan = audits.get("full_filesystem_image_scan")
+    require(isinstance(image_scan, dict), "candidate full-image scan record is missing")
+    require_exact_keys(
+        image_scan,
+        {"tool", "status", "completed", "passed", "finding_count", "observed_result"},
+        label="candidate full-image scan",
+    )
+    require(
+        image_scan.get("tool") == "Docker Scout 1.24.0"
+        and image_scan.get("status") == "INCOMPLETE / PENDING"
+        and image_scan.get("completed") is False
+        and image_scan.get("passed") is False
+        and image_scan.get("finding_count") is None
+        and isinstance(image_scan.get("observed_result"), str)
+        and "did not complete" in image_scan["observed_result"]
+        and "neither scan supplies a PASS" in image_scan["observed_result"]
+        and audits.get("scan_summary")
+        == "SBOM FULL-IMAGE PACKAGE SCAN COMPLETED_WITH_FINDINGS / DIRECT LOCAL FILESYSTEM SCAN INCOMPLETE / NO PASS"
+        and audits.get("security_decision") == "OPEN_SECURITY",
+        "candidate receipt forges or removes the incomplete full-image security scan",
+    )
+
+    boundaries = receipt.get("unresolved_boundaries")
+    require(
+        boundaries
+        == {
+            "sbom_full_image_package_findings": "OPEN / 3 MEDIUM / 4 LOW / ALL UNFIXED",
+            "direct_local_filesystem_image_scan": "PENDING",
+            "raw_build_security_evidence_retention": "OPEN",
+            "test_runner_hermeticity_and_same_run_node_ids": "OPEN",
+            "hardlink_reparse_and_aba_resistance": "OPEN",
+            "gpu_real_forward": "NOT_STARTED",
+            "independent_clean_reproduction": "OPEN",
+            "durable_append_only_worm_anchor": "OPEN",
+            "independent_manifest_trust_root": "OPEN",
+            "model_artifact_materializer": "OPEN",
+            "worker_to_kernel_protocol": "OPEN",
+            "licensing": "NOT LICENSED",
+            "public_disclosure": "HELD",
+        },
+        "candidate unresolved-boundary surface drifted",
+    )
+    historical = receipt.get("historical_adverse_evidence")
+    require(
+        historical
+        == {
+            "binding_path": MODEL_DEPENDENCY_BINDING_PATH.relative_to(ROOT).as_posix(),
+            "preserved_unchanged": True,
+            "historical_transformers_pin": "4.46.3",
+            "historical_advisory": "CVE-2026-4372 / GHSA-29pf-2h5f-8g72",
+            "interpretation": (
+                "The v0.1 binding remains the adverse historical record. This v0.2 "
+                "candidate does not rewrite it or close G5-ENGINEERING-003."
+            ),
+        },
+        "candidate receipt erases or rewrites the historical adverse binding",
+    )
+    claim_boundary = receipt.get("claim_boundary")
+    require(
+        claim_boundary
+        == {
+            "integrity_evidence_effect": "STRUCTURAL_CANDIDATE_ONLY",
+            "external_evidence_effect": "SELF_REPORTED_LOCAL_OBSERVATION_ONLY",
+            "security_effect": "OPEN_SECURITY",
+            "scientific_effect": "NONE",
+            "canon_effect": "NONE",
+            "product_claim_effect": "NONE",
+            "license_effect": "NONE",
+            "disclosure_effect": "NONE",
+        },
+        "candidate receipt claims an unauthorized effect",
+    )
+    return receipt
 
 
 def verify_python_syntax(manifest_artifacts: dict[str, dict[str, Any]]) -> int:
@@ -1992,7 +3200,11 @@ def run_command(
     extra_env: dict[str, str] | None = None,
     remove_env: Iterable[str] = (),
 ) -> tuple[str, str]:
-    env = dict(os.environ)
+    env = {
+        name: value
+        for name, value in os.environ.items()
+        if name.upper() in SUBPROCESS_ENV_ALLOWLIST
+    }
     for name in remove_env:
         env.pop(name, None)
     env.update(
@@ -2033,6 +3245,8 @@ def collect_pytest_ids(
     stdout, stderr = run_command(
         [
             sys.executable,
+            "-E",
+            "-P",
             "-B",
             "-m",
             "pytest",
@@ -2149,6 +3363,8 @@ def verify_test_suites(manifest: dict[str, Any]) -> list[tuple[str, int, int]]:
         stdout, stderr = run_command(
             [
                 sys.executable,
+                "-E",
+                "-P",
                 "-B",
                 "-m",
                 "pytest",
@@ -2198,6 +3414,7 @@ def verify_test_suites(manifest: dict[str, Any]) -> list[tuple[str, int, int]]:
 def main() -> int:
     require(MANIFEST_PATH.is_file(), "Gate 5 manifest is missing")
     require(not MANIFEST_PATH.is_symlink(), "Gate 5 manifest may not be a symlink")
+    shadow_surface_count = verify_no_executable_shadow_artifacts()
     initial_manifest_file_sha = sha256_file(MANIFEST_PATH)
     manifest = load_json(MANIFEST_PATH)
     require(isinstance(manifest, dict), "Gate 5 manifest root is not an object")
@@ -2209,6 +3426,7 @@ def main() -> int:
     verify_adversarial_review()
     verify_no_status_promotion_text(artifacts)
     verify_model_and_security_bindings()
+    verify_dependency_and_container_candidate_receipt()
     python_count = verify_python_syntax(artifacts)
     suite_results = verify_test_suites(manifest)
 
@@ -2235,6 +3453,7 @@ def main() -> int:
     print("Project Coherence integrated Gate 5 verification: PASS")
     print(f"  hash-bound Gate 5 artifacts: {len(artifacts)}")
     print(f"  syntax-checked bound Python artifacts: {python_count}")
+    print(f"  executable-shadow paths scanned before tests: {shadow_surface_count}")
     print(
         "  Gate 4 dependency: integrated PASS while still OPEN; "
         f"artifacts={gate4_artifact_count}; manifest_sha256={gate4_manifest_sha}"
@@ -2257,8 +3476,11 @@ def main() -> int:
     print(f"  review criteria: {criterion_count}; required OPEN boundaries: {open_count}")
     print("  postflight: Gate 5, historical, and transitive Gate 4 bytes rehashed")
     print(
-        "  dependency security: HELD (transformers==4.46.3 / "
-        "CVE-2026-4372 / container digest unbound)"
+        "  dependency security: OPEN_SECURITY / HELD (patched candidate "
+        "digest-bound; external build/scan observations are self-reported and raw "
+        "payloads are not repository-retained; pip-audit partial 72/73 with Torch skipped; SBOM "
+        "package scan COMPLETED_WITH_FINDINGS: 0 critical / 0 high / "
+        "3 medium / 4 low; direct filesystem scan INCOMPLETE / PENDING)"
     )
     print("  experimental execution: NOT_STARTED")
     print("  Gate 5 status: OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN")

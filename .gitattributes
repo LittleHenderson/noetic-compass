@@ -33,8 +33,11 @@ noetic-compass-scaffold/noetic-compass/live-trace-worker/app/** text eol=lf
 noetic-compass-scaffold/noetic-compass/live-trace-worker/scenarios/** text eol=lf
 noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/** text eol=lf
 noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/** text eol=lf
+noetic-compass-scaffold/noetic-compass/api/** text eol=lf
 noetic-compass-scaffold/noetic-compass/api/routes/cas_harness_audit.py text eol=lf
 noetic-compass-scaffold/noetic-compass/api/services/cas_harness_fleet_executor.py text eol=lf
+noetic-compass-scaffold/noetic-compass/tests/conftest.py text eol=lf
+noetic-compass-scaffold/noetic-compass/tests/__init__.py text eol=lf
 noetic-compass-scaffold/noetic-compass/scripts/prepare_large_model_eval.py text eol=lf
 noetic-compass-scaffold/noetic-compass/scripts/test_prepare_large_model_eval.py text eol=lf
 noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_fleet_executor.py text eol=lf
@@ -49,6 +52,9 @@ docs/working/research_intervention_pythia160m_v2/** -text
 docs/working/research_intervention_pythia160m_v3/** -text
 docs/working/research_intervention_pythia160m_v4/** -text
 docs/working/research_intervention_pythia160m_v4_execution/** -text
+# These active-API historical worker modules are already committed as LF-only
+# bytes.  -text preserves those evidence bytes exactly; it does not request
+# CRLF conversion and therefore remains portable across clean checkouts.
 noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_*.py -text
 noetic-compass-scaffold/noetic-compass/api/services/cas_harness_research_intervention_worker.py -text
 noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_pythia160m_*.py -text

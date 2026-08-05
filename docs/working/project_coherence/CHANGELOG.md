@@ -2,6 +2,50 @@
 
 All dates use the repository's working timezone. This changelog records control-package changes, not product releases.
 
+## 2026-08-05 - Gate 5 successor dependency/container candidate hardening
+
+### Added
+
+- A successor v0.2 dependency/container candidate receipt binding the repository
+  build controls, 73-distribution lock, exact worker application tree, recorded
+  OCI identities, exact five-file Pythia identity, offline CPU engineering
+  canary, native dependency preflight, and fail-closed runtime probes.
+- Complete Gate 5 direct-or-transitive closure over 325 artifacts, including
+  every regular file in the admitted kernel/worker roots, the complete API
+  source/resource tree used by the launcher/fleet/state receipt, pytest
+  discovery controls, and the unchanged 537-file historical recovery.
+- Repository-local rejection of `__pycache__`, bytecode, native-extension, and
+  archive shadows before child tests, plus retained red-team checks for forged
+  scan status, authority promotion, OCI/source/lock drift, missing controls,
+  external-evidence replayability, and post-test rehash ordering.
+
+### Verified bounded receipts
+
+- Harness v2 kernel/history/verifier: 113 tests and 61 subtests, with 94 active
+  kernel tests, 4 historical-recovery tests, and 15 verifier red-team tests.
+- Live worker: 364/364; API/launcher/fleet/state: 76/76; focused numeric red
+  team: 32/32. The worker and API receipts are
+  `LOCAL_UNATTESTED_HOST_REGRESSION`: node-ID hashes come from separate
+  collect-only subprocesses and do not receipt the actual executed-node set.
+- The integrated static replay binds the unchanged historical v0.1
+  model/dependency record and composes the still-OPEN Gate 4 dependency.
+
+### Preserved open boundaries
+
+- Gate 5 remains `OPEN / NOT_STARTED / Ring 4 / NOT LICENSED / HELD / NOT FROZEN`.
+  `G5-ENGINEERING-003` remains `OPEN_SECURITY`.
+- BuildKit SPDX/SLSA and Docker Scout facts are
+  `SELF_REPORTED_LOCAL_OBSERVATION_ONLY`: raw payloads were not retained, are
+  not repository replayable, and have no independent trust root.
+- The recorded package scan has 0 critical, 0 high, 3 medium, and 4 low unfixed
+  findings; the direct filesystem scan is `INCOMPLETE / PENDING`.
+- Mutable host/user-site runner integrity, same-run executed-node identity,
+  authenticated read-only snapshots, hardlink/reparse/ABA resistance,
+  independent reproduction, real GPU execution, worker-to-kernel integration,
+  scientific validation, licensing, product authority, and disclosure authority
+  remain open. The CPU canary was engineering preflight only and did not create
+  an admitted experiment, Evidence Packet, or scientific result.
+
 ## 2026-08-04 - Gate 4 bounded software candidates and adversarial review
 
 ### Added

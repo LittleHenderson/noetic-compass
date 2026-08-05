@@ -1,6 +1,6 @@
 # CAS Harness v2 preregistration and Evidence Packet v2 control kernel
 
-Status: `DRAFT / OPEN / RESEARCH ONLY / NOT FROZEN`
+Status: `DRAFT / OPEN / NOT_STARTED / RESEARCH ONLY / NOT FROZEN`
 
 Admission and claim boundary: `RING 4 / NOT LICENSED / HELD`
 
@@ -8,6 +8,8 @@ This document specifies the isolated control kernel in
 `src/cas_harness_v2`. It does not close Gate 5, execute an experiment, add a
 live-worker route, authenticate a worker, change a product verdict, license a
 claim, authorize disclosure, or establish production readiness.
+It creates no live-execution, scientific, canon, product, license, or disclosure
+authority.
 
 ## 1. Normative executable schemas
 
@@ -205,12 +207,19 @@ preregistrations:
 
 ## 7. Verification and remaining boundaries
 
-Focused verification command:
+Authoritative manifest build and Gate 5 verifier commands, from the repository
+root:
 
 ```powershell
-$env:PYTHONDONTWRITEBYTECODE='1'
-python -X dev -m pytest tests\cas_harness_v2 -q
+python -I -B scripts\build_project_coherence_gate5_manifest.py
+python -I -B scripts\verify_project_coherence_gate5.py
 ```
+
+The manifest build is appropriate only after an intended admitted-surface
+change. A local focused regression may be run separately with
+`python -E -P -B -X dev -m pytest -q -p no:cacheprovider
+tests\cas_harness_v2`; it is not the authoritative Gate 5 verifier or a locked,
+attested execution environment.
 
 The suite covers missing and extra fields, duplicate JSON keys, raw-input
 mutation, frozen payload mutation, wrong claim and artifact hashes, forged
@@ -225,8 +234,36 @@ outcome access, exact completion binding, bypass-mutated outcome-event replay,
 retained-byte registry mutation, audit contradictions, normalized cross-role
 aliases, and all four repository-known v1 labels.
 
-Current focused receipt: `108 passed, 50 subtests passed` under Python 3.14 with
-bytecode generation disabled. This receipt covers only the isolated kernel.
+Current focused receipt: `113 passed, 61 subtests passed` under Python 3.14 with
+bytecode generation disabled. It comprises 94 active kernel tests, four
+historical-recovery tests, and 15 Gate 5 verifier red-team tests. This receipt
+proves repository-local controls only; it is not live execution, independent
+reproduction, scientific evidence, or product authority.
+
+The companion 364-test worker and 76-test API/launcher/fleet/state suites are
+`LOCAL_UNATTESTED_HOST_REGRESSION` observations. Their node-ID digests are
+collect-only scope identities produced separately from the execution summaries;
+the actual executed-node IDs are not receipted. Mutable user-site Python 3.14.0,
+pytest 9.0.2, pytest-asyncio 1.3.0, and startup-hook state remain outside the
+content-bound runner surface.
+
+The v0.2 container receipt records BuildKit SPDX/SLSA and Docker Scout facts as
+`SELF_REPORTED_LOCAL_OBSERVATION_ONLY`. Raw build history, SPDX, SLSA, and
+scanner payloads were not retained, are not repository replayable, and have no
+independent trust root. One CPU-only, non-scientific engineering preflight
+loaded the exact Pythia artifacts and ran the offline canary. It was not an
+authorized or admitted experiment and created no GPU run, Evidence Packet, or
+scientific result; experimental execution remains `NOT_STARTED` and
+`G5-ENGINEERING-003` remains `OPEN_SECURITY`.
+
+The broad active LF rules in `.gitattributes` are followed by later `-text`
+exceptions for `api/services/cas_harness_pythia160m_*.py`,
+`api/services/cas_harness_research_intervention_worker.py`,
+`tests/test_cas_harness_pythia160m_*.py`, and
+`tests/test_cas_harness_research_intervention_worker.py`. Those specific
+exceptions preserve the already-LF historical worker source blobs as original
+Git bytes while Gate 5's direct-or-transitive hash closure continues to bind
+them.
 
 Still open outside this isolated kernel:
 
@@ -235,7 +272,13 @@ Still open outside this isolated kernel:
 - trusted time, nonce/replay control, one-use run consumption, and protection
   against selective reporting across multiple packets;
 - live-worker and executor/auditor protocol mapping;
-- hermetic execution and environment attestation;
+- hermetic execution and environment attestation, including a locked host
+  runner, same-run executed-node receipt, verified read-only snapshot, and
+  retained raw external evidence;
+- hardlink/reparse-point and before/after ABA resistance, plus cache/bytecode and
+  native-extension shadow exclusion outside the verifier's admitted
+  repository-local executable-shadow check; these runner boundaries remain
+  `OPEN` under `G5-ENGINEERING-002`;
 - independent numerical implementation and authenticated reviewer identity;
 - real person, affiliation, and organizational independence beyond normalized
   declared identity strings;
@@ -247,3 +290,7 @@ Still open outside this isolated kernel:
   authority, authorization, or capability token;
 - Gate 5 control matrix, manifest, verifier, and gate decision; and
 - every production, licensing, compliance, disclosure, and public-route gate.
+
+Until those separately authorized obligations close, Gate 5 remains `OPEN /
+NOT_STARTED / RING 4 / NOT LICENSED / HELD / NOT FROZEN` with no live,
+scientific, canon, product, license, or disclosure authority.

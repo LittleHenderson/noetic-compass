@@ -1,6 +1,6 @@
 # Gate 5 adversarial review v0.1
 
-**Status:** `DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN`
+**Status:** `DRAFT / OPEN / NOT_STARTED / RING 4 / NOT LICENSED / HELD / NOT FROZEN`
 
 ## Decision
 
@@ -11,10 +11,14 @@ trusted ordering, a live scientific result, independent numerical agreement,
 replication, peer review, product readiness, licensing, or disclosure
 authority.
 
-The controlling charter status remains `OPEN / NOT STARTED`. Control-kernel
+The controlling charter status remains `OPEN / NOT_STARTED`. Control-kernel
 engineering has begun, but none of the charter's per-module scientific closure
 conditions has been satisfied by a live admitted experiment. No result in this
-review creates `ACCEPT`, `LICENSED`, a public route, or a product route.
+review creates `ACCEPT`, `LICENSED`, live-execution authority, a public route, a
+product route, disclosure authority, scientific authority, or canon authority.
+One CPU-only non-scientific engineering preflight canary occurred; it was not an
+authorized or admitted experiment and created no GPU run, Evidence Packet, or
+scientific result. Experimental execution remains `NOT_STARTED`.
 
 ## Exact review surface
 
@@ -25,6 +29,8 @@ This review is bounded to the following current surfaces:
 - `HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md`;
 - the current `live-trace-worker` model-identity and intervention-integrity
   controls;
+- the successor dependency/container candidate receipt
+  `GATE5_DEPENDENCY_AND_CONTAINER_CANDIDATE_RECEIPT_v0.2.json`;
 - the exact historical V1-V4 recovery inventory and its independent verifier;
 - the Gate 5 conditions in
   `PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md`; and
@@ -127,9 +133,14 @@ SHA-256 and byte length, and freshly replays them against the current
 pre-outcome chain before public reads. This is process-local tamper detection,
 not WORM authority.
 
-The clean focused receipt is **108 passed tests plus 50 subtests** under Python
-3.14 with bytecode/cache output disabled. The receipt is limited to
+The clean focused receipt is **113 passed tests plus 61 subtests** under Python
+3.14 with bytecode/cache output disabled. It includes five retained candidate
+dependency/container receipt red-team tests covering scan-status promotion,
+live authorization, OCI/source drift, dependency-lock drift, and omitted build
+controls. The receipt is limited to
 `tests/cas_harness_v2`; it is not a repository-wide or production receipt.
+Its canonical node-ID-set SHA-256 is
+`FD31E05BDFE62A44B4FC7D1556A2CA498115FF8E0A65C3F16160FA4D0C2FA294`.
 
 ## Live-worker adverse evidence and bounded repairs
 
@@ -200,21 +211,32 @@ The test
 `test_validated_public_receipt_cannot_be_mutated_into_retired_attestation`
 subsequently reproduced a post-validation assignment bypass. The retained
 repair freezes the public receipt and its nested carriers and revalidates
-copy-with-update. Independent verifier-native reruns confirm **32/32 focused
-numeric** and **290/290 complete worker**. Their verifier-canonical test-ID-set
+copy-with-update. The successor candidate retains the **32/32 focused numeric**
+receipt and confirms **364/364 complete worker**. Their verifier-canonical
+test-ID-set
 SHA-256 values are, respectively,
 `12602041756f20d1afd402fa56968660839e5eb1098438ba84c69bff8de7050b`
 and
-`1c8db623fc6507db0b4ce218c3fd60833d514503122cd68fa79644a61db6c635`.
+`94566203b3e0ff79b3224c1c5a073698ca99d3c08bc1119a9082e42af4b178bd`.
 These are not raw pytest transcript digests. The verifier retains collection
 lines containing `::`, strips whitespace, normalizes path separators to `/`,
 de-duplicates them, sorts by Python ordinal order, and hashes the UTF-8
 serialization of each `live-trace-worker/`-prefixed ID followed by LF,
 including the final ID. Earlier hashes produced by culture-aware sorting or by
-omitting the final LF are superseded and are not evidence. The earlier 255/257
-receipts remain canonical checkpoints only for their earlier bounded bytes and
-test surfaces. None of these receipts is a model-execution or scientific-result
-receipt.
+omitting the final LF are superseded and are not evidence. The independently
+confirmed 290/290 receipt and the earlier 255/257 receipts remain canonical
+checkpoints only for their earlier bounded bytes and test surfaces. The
+successor API/launcher/fleet/state suite also passes **76/76**, with canonical
+node-ID-set SHA-256
+`1ed1e9e3afa2eda6881463ee5284dd4902ab94c0246b80d2937066480ac42921`.
+The 364-test worker and 76-test API/launcher/fleet/state results are
+`LOCAL_UNATTESTED_HOST_REGRESSION` observations. The node-ID hashes come from
+collect-only subprocesses, while pass/fail summaries come from separate
+execution subprocesses; no receipt binds the actual executed-node set from the
+passing run. The mutable user-site runner includes Python 3.14.0, pytest 9.0.2,
+pytest-asyncio 1.3.0, and startup-hook state outside the content-bound test
+surface. None of these receipts is authenticated execution, a GPU
+model-execution receipt, or a scientific-result receipt.
 
 GPU, autocast/mixed-precision, compiled-module hook behavior, multi-device
 comparability, and production-hardware determinism also remain untested external
@@ -245,6 +267,15 @@ rehashes the Gate 5, 537-file historical, and transitive Gate 4 surfaces after
 all subprocesses. Bound Markdown/JSON also rejects explicit contradictory
 status conclusions while preserving its exact OPEN governance headers.
 
+The broad active-surface LF rules in `.gitattributes` are followed by specific
+`-text` exceptions for `api/services/cas_harness_pythia160m_*.py`,
+`api/services/cas_harness_research_intervention_worker.py`,
+`tests/test_cas_harness_pythia160m_*.py`, and
+`tests/test_cas_harness_research_intervention_worker.py`. Because those
+historical worker source blobs are already LF, the later exceptions deliberately
+preserve their original Git bytes without checkout conversion while the
+Gate 5 direct-or-transitive hash closure continues to bind them.
+
 The postflight was also exercised by a real concurrent-write event: an
 independent no-edit verifier began on one manifest while the root process added
 the retained verifier regressions and rebuilt that manifest. After 126.3
@@ -253,13 +284,19 @@ seconds the independent process exited 1 with the error
 independent run on stable bytes; the failed-closed receipt is adverse evidence
 that the non-atomic predecessor path is no longer silently accepted.
 
-This is repository-local integrity, not authenticated or hermetic execution.
-The installed interpreter and explicitly named worker pytest plugin are not
-content-addressed; filesystem races cannot become trusted ordering without an
-external WORM/locking authority; and a verifier controlled by the same writer
-is not an independent signature or reviewer.
+This is static repository-local integrity, not authenticated or hermetic
+execution. The verifier rejects executable shadows inside the admitted
+repository roots, but the installed user-site interpreter, pytest, explicitly
+named worker plugin, and startup hooks are not content-addressed; collect-only
+IDs and execution summaries are separate; and filesystem races cannot become
+trusted ordering without an external WORM/locking authority. Host-runner
+integrity, hardlink/reparse-point aliasing, read-only snapshot and before/after
+ABA resistance, cache/bytecode and native-extension shadows outside that
+admitted snapshot, same-run executed-node identity, and raw external-evidence
+retention remain `OPEN` under `G5-ENGINEERING-002`. A verifier controlled by the
+same writer is not an independent signature or reviewer.
 
-### Exact model-file identity and security hold
+### Exact model-file identity and successor security candidate
 
 The worker's real-model predicate now requires:
 
@@ -277,13 +314,46 @@ The canonical checkpoint records **257/257** complete worker tests and a local
 cached-file match without model execution. This proves a weights-file identity,
 not an in-memory tensor digest, authenticated execution, or scientific result.
 
-The same checkpoint records a security hold: the Docker dependency set still
-pins `transformers==4.46.3`, and the canonical dependency audit identifies that
-version as affected by current advisories, including critical
+The historical v0.1 binding records the prior security hold: its Docker
+dependency set pins `transformers==4.46.3`, and the canonical dependency audit
+identifies that version as affected by current advisories, including
 `CVE-2026-4372` / `GHSA-29pf-2h5f-8g72`, with the cited fixed line at `5.3.0`.
-All live or hosted Gate 5 execution therefore remains `HELD` until a patched
-dependency/container set is digest-bound and the exact Pythia loader and hook
-contract are revalidated in that environment.
+That record remains unchanged adverse evidence.
+
+The successor v0.2 receipt binds its repository source/build controls to source
+commit `4bff437dbcf6d0d38046e63d2aee823e8f316711`, records a 73-distribution
+hash-bound lock with `transformers==5.14.1`, and records locally observed exact
+Ubuntu/Python base-image and OCI index identifiers:
+`sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c`,
+linux/amd64 manifest
+`sha256:60bf92b327ebec84887c659313a97a6369a24fd5d8eb00a012544fcafd26ba27`,
+image config, BuildKit SPDX SBOM, and SLSA provenance identifiers. The raw build
+history, SPDX payload, SLSA payload, and Scout report were not retained, are not
+repository replayable, and have no independent trust root. These external-tool
+facts are `SELF_REPORTED_LOCAL_OBSERVATION_ONLY`. The exact five-file Pythia
+artifact set was locally hashed before and after load. One CPU-only,
+non-scientific engineering preflight loaded it and ran the offline
+geometry/numerics canary; a 385-object native closure with only the declared
+host `libcuda.so.1` seam, no-network/read-only runtime preflight, and fail-closed
+no-token and no-CUDA startup probes were also locally observed. This did not
+authorize or admit an experiment and created no GPU run, Evidence Packet, or
+scientific result; experimental execution remains `NOT_STARTED`.
+
+This is a materially stronger candidate, not security closure. `pip-audit`
+completed for 72 lock entries with zero findings but skipped the direct-URL
+Torch entry; a separate OSV query returned zero results for the exact Torch
+package/version. A local Docker Scout 1.24.0 run against the observed SPDX
+identifier covered 190 packages and reported `COMPLETED_WITH_FINDINGS` with 0
+critical, 0 high, 3 medium, and 4 low findings. All seven are reported unfixed:
+`CVE-2026-27456`, `CVE-2026-13757`, `CVE-2026-2219`, `CVE-2026-27171`,
+`CVE-2024-2236`, `CVE-2024-56433`, and `CVE-2026-40228`. A separate direct
+local image/filesystem scan remains `INCOMPLETE / PENDING`. No scan PASS, real
+GPU forward, independent clean build, independent provenance trust root, or
+independent security receipt exists, and the raw scan report is not retained or
+repository replayable.
+`G5-ENGINEERING-003` therefore remains `OPEN_SECURITY`,
+`live_execution_authorized=false`, and all live or hosted Gate 5 execution
+remains `HELD`.
 
 ## Historical V1-V4 review
 
@@ -336,15 +406,25 @@ path.
 ### Hermeticity and protocol integration
 
 The live worker is not yet mapped into the kernel's exact preregistration,
-outcome-access, executor/auditor, and packet protocol. There is no digest-bound
-patched container receipt, OS/toolchain sandbox, network policy attestation,
-trusted dependency closure, or independently verified environment attestation.
+outcome-access, executor/auditor, and packet protocol. The v0.2 successor now
+provides a digest-bound patched container candidate, exact build controls,
+and a locally observed offline preflight plus BuildKit SBOM/provenance
+identifiers. The raw external payloads are not retained or repository
+replayable, and no independent trust root exists. It does not provide a resolved
+security scan, completed direct-filesystem scan, real GPU execution, a
+separately controlled clean reproduction, or an independently verified
+environment attestation.
 The Gate 5 matrix, manifest, builder, and executable verifier now bind and
 rerun the exact Gate 4 manifest/verifier while preserving Gate 4's controlling
 `OPEN / RING 4 / NOT LICENSED / HELD` boundary. This closes only a structural
 dependency check; a Gate 4 structural PASS cannot be reinterpreted as semantic,
-scientific, product, or disclosure acceptance. Installed dependency bytes,
-runtime isolation, and authenticated execution remain outside this receipt.
+scientific, product, or disclosure acceptance. Authenticated execution remains
+outside this receipt. The bounded lock and runtime-isolation receipts do not
+establish independent hermeticity. The static repository-local executable-shadow
+check does not bind the mutable host/user-site runner. Its collect-only versus
+executed-node gap, hardlink/reparse/ABA risks, cache/bytecode/native-shadow risks
+outside the admitted snapshot, absence of a verified read-only snapshot, and
+raw-evidence retention remain `OPEN` under `G5-ENGINEERING-002`.
 
 ### Semantic and scientific validation
 
@@ -353,8 +433,10 @@ split sources, labels, code, outcomes, receipts, and review artifacts still need
 independent semantic inspection. Byte-different semantic clones or relabeling
 across packets are not resolved by the process-local registry.
 
-No admitted live exact-revision experiment has run through the v2 protocol. No
-module has satisfied the charter's full combination of clean nulls,
+One CPU-only engineering preflight canary occurred outside the admitted
+experimental protocol. No authorized or admitted live exact-revision experiment
+has run through v2, and no GPU run, Evidence Packet, or scientific result was
+created. No module has satisfied the charter's full combination of clean nulls,
 matched-taxonomy and wrong-layer controls, falsifiers, independent numerical
 agreement, held-out replication, and claim-language review. Causal
 interpretation, generalization, utility, safety, and claim scope remain open.
@@ -371,15 +453,22 @@ support, and live-product behavior. Public disclosure additionally requires
 explicit owner and qualified legal/patent approval of exact artifacts and exact
 wording. None is supplied by this Gate 5 candidate.
 
+Accordingly, `live_execution_authorized=false`, public and product routes remain
+false, scientific and canon effects remain `NONE`, the claim remains `NOT
+LICENSED`, and disclosure remains `HELD`.
+
 ## Closure order
 
 The minimum defensible order is:
 
-1. preserve the independently frozen verifier-native 32/32 focused and 290/290
-   complete-worker receipts and every earlier counterexample;
-2. patch and digest-bind the worker dependency/container set, then revalidate
-   the exact model and hook contract, including GPU/autocast/compiled-hook
-   behavior;
+1. preserve the verifier-native 32/32 focused, 364/364 complete-worker, and
+   76/76 API/launcher/fleet/state receipts, the earlier 290/290 checkpoint, and
+   every counterexample;
+2. preserve and independently reproduce the patched digest-bound v0.2
+   dependency/container candidate, resolve or explicitly disposition every
+   scan finding, complete the direct-filesystem scan, and revalidate the exact
+   model and hook contract under real
+   GPU/autocast/compiled-hook behavior;
 3. define and independently review the worker-to-kernel protocol;
 4. materialize trusted time, nonces, one-use run consumption, durable WORM
    ordering, and selective-reporting controls;
@@ -395,4 +484,4 @@ The minimum defensible order is:
 9. evaluate product and disclosure gates separately.
 
 Until every applicable criterion is evidenced, Gate 5 remains
-`OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN`.
+`OPEN / NOT_STARTED / RING 4 / NOT LICENSED / HELD / NOT FROZEN`.

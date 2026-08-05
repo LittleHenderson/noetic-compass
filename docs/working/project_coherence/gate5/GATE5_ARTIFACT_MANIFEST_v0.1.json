@@ -12,12 +12,12 @@
   "product_claim_effect": "NONE",
   "manifest_self_hash": null,
   "generated_by": "scripts/build_project_coherence_gate5_manifest.py",
-  "artifact_count": 116,
+  "artifact_count": 325,
   "artifacts": [
     {
       "path": ".gitattributes",
-      "sha256": "0D2B7D0F1D31D7BA35BF990F727B8E72459E7F8940E598F2AABBE4775BEB82A5",
-      "bytes": 2421,
+      "sha256": "BFF92D5CD1E7885A9BBC60A6F6FE1994ADE298293DFAB9CF7DEA584016C7377D",
+      "bytes": 3754,
       "role": "gate5_control_artifact"
     },
     {
@@ -46,8 +46,14 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
-      "sha256": "2713F6501B6CB4E54CB8D37F78AD11227914661D7295DE6FD52FCB965063B720",
-      "bytes": 20058,
+      "sha256": "61E28356C05773F11930B76BBE2ED5D56790B193B29E7577D6A068B6364AA1FD",
+      "bytes": 25963,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/GATE5_DEPENDENCY_AND_CONTAINER_CANDIDATE_RECEIPT_v0.2.json",
+      "sha256": "99F4DA7F58C2BA38C62D6E4D04040416DB57628B2D8E3373DCD989D622299DA9",
+      "bytes": 13747,
       "role": "gate5_control_artifact"
     },
     {
@@ -58,20 +64,20 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_REVIEW_MATRIX_v0.1.json",
-      "sha256": "01C882FDD35A6143F8637D2F865B9273602D09CC03C1DAF8DFD3C1926D6EC2C5",
-      "bytes": 54560,
+      "sha256": "1331B9646B6843DEC8352B10870392E46A00BB7574A0CA1981FA970D5D41CC14",
+      "bytes": 60794,
       "role": "gate5_control_artifact"
     },
     {
       "path": "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md",
-      "sha256": "6E8FEF07E5BA6BE003D39C917DEA1827A233E2B6260AE133E3817FEBF38EBE6B",
-      "bytes": 13560,
+      "sha256": "F2803B44FF7236762D491A3B249FF13C4CB8D9F336CE19F223F9F716E9A70D2D",
+      "bytes": 16355,
       "role": "gate5_control_artifact"
     },
     {
       "path": "docs/working/project_coherence/gate5/README.md",
-      "sha256": "DAFABD965BA95F98373170EC52560C7580A6DEBF49871DA2625BF57F1B888BA1",
-      "bytes": 10121,
+      "sha256": "EF7A1BA9475B411C9756B1580C88DA856A9508362EF21B6E33F87E9F04803A23",
+      "bytes": 15405,
       "role": "gate5_control_artifact"
     },
     {
@@ -87,15 +93,1179 @@
       "role": "gate5_control_artifact"
     },
     {
+      "path": "noetic-compass-scaffold/noetic-compass/api/__init__.py",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/acceptance_authority_contract.py",
+      "sha256": "B69F975DABE955276D2080ABF09F62C59FE23D364299D73AA357079D139A47C3",
+      "bytes": 3600,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/config.py",
+      "sha256": "D27A7354A9D5B3B0070ADD73CF56964D6619A91724A9B5205DC47AB1E62B9278",
+      "bytes": 53238,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/db.py",
+      "sha256": "6FC698040E10CC35D32A9E724FD58170857E4630DA3EF42042E443A9D22C6879",
+      "bytes": 3091,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/dependencies/__init__.py",
+      "sha256": "C3CC1985C68BEC3EDBE5A5906C5B004C36E591EF47599FDAFA2E8DF96B21617F",
+      "bytes": 442,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/dependencies/authz.py",
+      "sha256": "161643DF3A830DCF1DEB9F59E95E7C348237F2B6A3637D43541BDE6C7189952E",
+      "bytes": 8118,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/errors.py",
+      "sha256": "58D5A96A0DDDA56310483E2778FBB4402DF48BDFFFCF6AED5198345CA580EB6D",
+      "bytes": 1880,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/llm_connectors/__init__.py",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/llm_connectors/anthropic_connector.py",
+      "sha256": "1D3B9847000D99B9314210DBEA1DD4D6E121926DB6565B48371979D78E88A086",
+      "bytes": 1792,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/llm_connectors/base.py",
+      "sha256": "148C3451EB6C47A442F6605FBD15F15DC9FCB94B18C06E1B0A380F875481F3AC",
+      "bytes": 30485,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/llm_connectors/deepseek_connector.py",
+      "sha256": "7E0DC1B0BFAADC808C216777C5C968511BC5DA6AFAEBF9028D6C886CDF0AEF2C",
+      "bytes": 2015,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/llm_connectors/google_connector.py",
+      "sha256": "C655FE9756C20532F3C9C7D73DB81D4CFAF0075853034C44BC15C44D042CA93A",
+      "bytes": 2263,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/llm_connectors/meta_connector.py",
+      "sha256": "82EC81481964112AFB1B1A5F80B819410CA01772DA894D231CB1D753A4CD4540",
+      "bytes": 1941,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/llm_connectors/mock_connector.py",
+      "sha256": "1E3350447FD728C1510887F54126FFDF51D1F0014C6CF36A3C10B6F969F85FD9",
+      "bytes": 4439,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/llm_connectors/openai_connector.py",
+      "sha256": "DD31451EFF0C7FC696B1C29004061DB22F82B1FE49F3903946143F7D0BFEA062",
+      "bytes": 1908,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/llm_connectors/qwen_connector.py",
+      "sha256": "1A2472AEE1D714D4E550D7E35D4E3A7E1883707B93034C2C75D81E07A1F253A8",
+      "bytes": 2150,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/llm_connectors/registry.py",
+      "sha256": "E5575975A834BF32B50000B21DBAFB80FECE2B4417813F8E9E68169FC21D597A",
+      "bytes": 3848,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/llm_connectors/xai_connector.py",
+      "sha256": "5ECEE1700EFD1901336A3ABD3CE3C7905C964C34902C6DF6D6BD6D7E54DB4B60",
+      "bytes": 1996,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/main.py",
+      "sha256": "1EBBFD9AEC321F93AC8F78091B9D6803318086CA47D89EB8729224C42C5BCF8E",
+      "bytes": 27280,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/middleware/__init__.py",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/middleware/audit.py",
+      "sha256": "0D8577D2E25BB002D131E9F2C529AAB4E92CA42602EC2D31AD298E777EE6637D",
+      "bytes": 1458,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/middleware/auth.py",
+      "sha256": "D3D36FDBFCDB63D22CFDE7384DE08D4A2FAFAC2EAE787429E8F16685635ED77B",
+      "bytes": 17000,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/middleware/rate_limit.py",
+      "sha256": "7DB1E9539828724D3726C0763A925BE13A0C87CE6AC6E652A0E6868448A89F20",
+      "bytes": 12048,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/middleware/request_id.py",
+      "sha256": "7EB86726CD83EA2DC770BFF9B2B45241038D492EBE3E955C4965E6D195DF28F0",
+      "bytes": 1610,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/migrations/001_create_assessments.sql",
+      "sha256": "40CE3E116F88DD503295C546A5427D11B8674943C857FAC0881E72B1CD81714B",
+      "bytes": 564,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/models.py",
+      "sha256": "84ED675B8D9F968901DA9D56A7E32A540018D8163A18E673ECDF86FD8EDD70E5",
+      "bytes": 16784,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/models_db.py",
+      "sha256": "BEB10AF51A1C36D9BF80867FBCDDBC6FF3816D27DBDD3FF8EDC0D8D8228646A6",
+      "bytes": 2564,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/__init__.py",
+      "sha256": "39297C63ACACB976E8EB353BBE0483FF87069F63EC21D1C7ACB30BAA3C1A5A53",
+      "bytes": 1091,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/__main__.py",
+      "sha256": "8904485E2B690EDD56FEF470F10F186CC7225EC396634B10B5459DF7FD067A0B",
+      "bytes": 156,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/cli.py",
+      "sha256": "228CD45491B26FC9C661D4BA4E663DC25D6793AADA0C5D4AFE23E6BB57F38E22",
+      "bytes": 3119,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/color_palette.py",
+      "sha256": "8E06B585DE315602FE957A9DEE3009306EC6CDB0EE16236CFC51BF11A0C88F08",
+      "bytes": 6290,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
+      "sha256": "8169188AD73DF8FC3CA709731B3FB4EA07B2513D38D69CF66D22D64CFE88FF4C",
+      "bytes": 243046,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/inversion.py",
+      "sha256": "C176FE2D23270E25B1630D631B8A9FE0473D07EB4E0399231207A42A1A6B0041",
+      "bytes": 9514,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/parser.py",
+      "sha256": "1D64EF36191BFBD871DF276DF4F521E73D65AE44699B10B8286BD120795D985C",
+      "bytes": 6512,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/renderer.py",
+      "sha256": "90857E184635E48D657358AB584471A3A0E07E92D0E2EBB7744D824D8081C1C7",
+      "bytes": 2032,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/turn_admissibility.py",
+      "sha256": "EF8A232D76FB335CA8CEB1BCAF8A5045A7CADA6DDF3915C22A0E2748A1F3A39F",
+      "bytes": 12457,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/pipeline/__init__.py",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/pipeline/forecast.py",
+      "sha256": "6CE365B64A497C1E52B9B9C05656CFD6441DEB178FADFED02DF9604DD71A9BA5",
+      "bytes": 11202,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/pipeline/fractal_analysis.py",
+      "sha256": "9901D5628DBBA7FE2AE19B369FF0F0A1924DA96C38BF6165E32EF0579D90FB06",
+      "bytes": 4392,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/pipeline/interpreter.py",
+      "sha256": "39DF7279EF4C280FB7BBC999825E54201D0CD4F46BF137B9028188D71D636C82",
+      "bytes": 10988,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/pipeline/lacunarity.py",
+      "sha256": "CABBB54E4E49154B83F006630345765AA9BFDA1904179C4685920FF030987A3B",
+      "bytes": 5134,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/pipeline/llm_scorer.py",
+      "sha256": "00625B4EB9DB268744AFE583A2BC7DEB7623B6E746E10AEDD1AA558F71E66B18",
+      "bytes": 6776,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/pipeline/notation_synthesizer.py",
+      "sha256": "0D9F145DEB0A5C3AEF55F92DD04CB6E2C6CDF6B8C0F81B55F392200088D418FE",
+      "bytes": 54937,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/pipeline/runner.py",
+      "sha256": "C4F86A20554DDEEA7D9C2AD0761CBBC634C65E2508655175B56CEB5E30CEBF81",
+      "bytes": 15096,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/pipeline/stages.py",
+      "sha256": "B99DF475D967BC5E6876779068A07137380C9F12BAE3EE7C8FE4C068197E2B27",
+      "bytes": 63961,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/pipeline/text_signal_analyzer.py",
+      "sha256": "16DAF894F8ED859187587BDBAE9A6880F98F3113DE7AD1428A0C054AE33C2699",
+      "bytes": 12757,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/pipeline/trace.py",
+      "sha256": "FD859A0060C1472F48F85487EF1F232E7F053203AF709694DD0EFF0F5DC4426D",
+      "bytes": 6172,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/resources/tks_definition_probe_bundle_manifest.v1.json",
+      "sha256": "DA185210762E5F846B8699F4B8B87EF1749382BA979526CDE1C9A9204E054423",
+      "bytes": 830,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/resources/tks_owner_locked_definitions_20260603.json",
+      "sha256": "5C358C9A114A478092E70C0289BFD171D8613CCCF99E8069E26E194A2E294628",
+      "bytes": 24943,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/__init__.py",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/_visual_grounding_demo.svg",
+      "sha256": "BA89227B3108D0CEEDA51E5D95FD90CEB9651C1754BB05859A3D37F57716123F",
+      "bytes": 4661,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/acceptance_publication_authorizations.py",
+      "sha256": "9C5D893D854A7ED147A93FC48A416C136387432369396E1687A96DE236011313",
+      "bytes": 7443,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/accounts.py",
+      "sha256": "F5D6F3AC08890CD73D00183804057026C9FE3AE6F79BDDD14449072DF423A638",
+      "bytes": 13132,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/assess.py",
+      "sha256": "A113E89889B66DA6E499D377F43F5D278D2219ABE3BB9D15F0778DD11B962DA4",
+      "bytes": 1508,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/atlas_live.py",
+      "sha256": "0F97403B51EAB5D50FF5BA01B13BFC09BD494773F0DBFC3670885BF620F3E421",
+      "bytes": 9072,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/auth.py",
+      "sha256": "A1C28C9D0E27B49AD51D47F0E09C42D677E9FAE076356334305D725E0124C32E",
+      "bytes": 13259,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/batch.py",
+      "sha256": "1EC651F680524D8B0C0D33C38BE87B5B4B172A4BC212AA6CA5C41772F1B9867A",
+      "bytes": 1435,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/benchmark.py",
+      "sha256": "94D56518E1AAEFDAB26980406541F77713891975A8D4C30678022940C7097B68",
+      "bytes": 3947,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/billing.py",
+      "sha256": "498B4886EAA73FF1485612ADC53F3C7DEC247F0FEF32E92E933AA55137B4413A",
+      "bytes": 33018,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/cas_harness_audit.py",
+      "sha256": "A134B12888FEA6C8BDE66D49C8628C77ED355FE18E130E2558B6CD31B95E3FBD",
+      "bytes": 133562,
+      "role": "gate5_api_identity_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/cas_harness_live_worker_health.py",
+      "sha256": "77C1245052B70A172E4EDB505EE869DBCF14E0E2EE3FCE2FF27518492842B350",
+      "bytes": 5125,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/cohort.py",
+      "sha256": "03B4BCA1AE1D4128F97B8BDFFAAB8BFC515C14EBFC4AB8E85937EA84B183A510",
+      "bytes": 3711,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/config.py",
+      "sha256": "DCFDDF64798128178B995877F7D39D571A360EC63FF4DB2BEF2225CB686287A1",
+      "bytes": 1015,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/crm.py",
+      "sha256": "1D01436FC2BC2A5C2FB03CF896597C9C68A4C5A99C24F26AEDD28DD2835F8561",
+      "bytes": 11277,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/customer_production_acceptance_authority.py",
+      "sha256": "4F39F32106D40E1ADB41F385567B7389C66F003BD3FC1053AF062B6BD2719C48",
+      "bytes": 3273,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/evidence.py",
+      "sha256": "AF189789E9D24207EA4575579BF2B32CAE394AB8B51A5BCE0B0DFC49E6A17B7C",
+      "bytes": 66095,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/evidence_shares.py",
+      "sha256": "37F8EAC87628FE6A901CD0CC92F26D3CA618D74390D84081263AD918282309B6",
+      "bytes": 8134,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/export.py",
+      "sha256": "0B098AF6E88580C452373A531CA24329634A582827C2E8E593E15F51F85BECF7",
+      "bytes": 1080,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/forecast.py",
+      "sha256": "4ACE1396EF1C8A1E0E2E7049A87DFBBFCAD2734D6CAA1CD5D3F794580E45AC36",
+      "bytes": 1273,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/health.py",
+      "sha256": "E33691D1922A0E91D85265D2E867BCEE51DD05D65C25608E00F8CFA5C0A2B925",
+      "bytes": 3346,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/human_attestations.py",
+      "sha256": "2AA6E30B933F1721E728499FAFCDA53279A4B5C17D576A3CC7734B2FAD1EDB40",
+      "bytes": 7958,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/idea_atlas.py",
+      "sha256": "AD332482332FD857E0B031E84DCECD767C4910ECDE3D1BB8815FF92869C637F0",
+      "bytes": 22952,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/mode7.py",
+      "sha256": "36129BF6F249824309AA072B35C206AF1D470FDC377D82477A2876704C0F322E",
+      "bytes": 57767,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/notation.py",
+      "sha256": "F6A4094A794D6A6EC873E8BEA1C17A997A7ED4B2FECF4F2A3D8A150580555BCE",
+      "bytes": 7739,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/platform_accounts.py",
+      "sha256": "2C0508EF88CD1B3405231136A93398EEDB1C6FD0AAE22F3FC69FB9EB09262DB0",
+      "bytes": 3804,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/public_capabilities.py",
+      "sha256": "D9853C76CEBCCC651A6B5C5E4BCD48448AEFEA3127EC52A6A33FB61BD1D531AF",
+      "bytes": 1389,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/reproducibility.py",
+      "sha256": "17BC633A5CA30316C3D6005F30172EE5A997F15525DE7BC6F19A77E1DCA7C02C",
+      "bytes": 4365,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/scenarios.py",
+      "sha256": "5441A07279CC2D556B0E0F7D9250E9529DD6B623E085F523629145984B7FA9E1",
+      "bytes": 5838,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/state_ledger_status.py",
+      "sha256": "28A849C8789F935B31C139092F2DA221199D42AEFF879354DFDE3BAB2855DACE",
+      "bytes": 2328,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/support.py",
+      "sha256": "DE7BF74C0A5DC674B32CC97532F841D18964C3130EB4F1AD58ABE4C252568887",
+      "bytes": 13650,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/validation.py",
+      "sha256": "0B47B77D0A49C1B04FC808193AA6B77BC901BF85D21E6F3B8BEFAB499B5903C1",
+      "bytes": 20985,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/visual_grounding.py",
+      "sha256": "24D0DF87BA3C31BE31291B6D05C07B1A90A63B61A94CD40179C6CDB2916E55AF",
+      "bytes": 12236,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/routes/wrap.py",
+      "sha256": "D3B060EEA1ECC06FC16E27BD0C69EAAA9D5EFE236E089F1D100633B4308311B0",
+      "bytes": 1128,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/scenario_notation.py",
+      "sha256": "85A252D51EF4FBFDFAF643187C2700EBA9F595A4E2120DAB833FF7454ED4F8B5",
+      "bytes": 8195,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/__init__.py",
+      "sha256": "01BA4719C80B6FE911B091A7C05124B64EEECE964E09C058EF8F9805DACA546B",
+      "bytes": 1,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/acceptance_publication_authorizations.py",
+      "sha256": "4B0750F63EC8FD7BD95679BD402A513F6DBB6E5D128057E0AC3BD5DF3DF32198",
+      "bytes": 30363,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/accounts/__init__.py",
+      "sha256": "5628FA8C5EF3D48DE7F1882BE1ECC94E68A1AD4ED9470B3629F4ADCF119B0F01",
+      "bytes": 2428,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/accounts/bootstrap.py",
+      "sha256": "F018F16FF812BAF984BC4C7E37CBFD04D4DED781FFB8D4BE04433FFB4F7EF4BB",
+      "bytes": 8861,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/accounts/credentials.py",
+      "sha256": "03C1CBEC013831887EEC20FB26F9B58EA5F349527DB1EF0910F8F359C7349695",
+      "bytes": 3074,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/accounts/invites.py",
+      "sha256": "692B5C55FEA584B4F5477F940DC7AC6A1939324E904ABBB7F91D4350682EC9F0",
+      "bytes": 3735,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/accounts/models.py",
+      "sha256": "C96D455AC55A282FA6EEB18F726152CF6CD3540E9FA00F0DAD786FDABABB5DE1",
+      "bytes": 12651,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/accounts/redemption.py",
+      "sha256": "5034E4EE22BBA0E0B1E1810ADD725574E7A9D4013052057DE797E3DFD05BFF7A",
+      "bytes": 9583,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/accounts/store.py",
+      "sha256": "E395657E034539A6E6AEBEFC3088079A450D78D81FC9C476A7460ACDED59BE42",
+      "bytes": 17028,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/accounts/tenant_provisioning.py",
+      "sha256": "4D0CC7C83991581D9CD01D8B1210A738AF3A70265FA1B41284055177F3D77843",
+      "bytes": 12925,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/accounts_billing_acceptance_binding.py",
+      "sha256": "BB97703D6B9770386C9FD7F3F2F95C7C9D4D386ABB8FE7FAD7D2983BD9B61F68",
+      "bytes": 24613,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/atlas_live_worker_auth.py",
+      "sha256": "8CA032DD770E34927B98114EC21CB36464DECC310208660963EDFF3B251FA8A0",
+      "bytes": 700,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/atlas_live_worker_config.py",
+      "sha256": "7AE601D75EFA95C860A813F6EA31FEC47CD5BA5534428D0566D84C307CA4B838",
+      "bytes": 2733,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/billing_entitlements.py",
+      "sha256": "34B26A5C6F5A67C067B013CD9496C2710F912A498D439145373D8B7C50719188",
+      "bytes": 161564,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/billing_meter_dispatch.py",
+      "sha256": "7D5C4955967E9A1A11AB65D86462063198B711AB3AADE4980C876152288D8C89",
+      "bytes": 9668,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/billing_reconciliation.py",
+      "sha256": "4ED5F3497BFC54E2FECB2D0E3B66DA76229AC27FD851510CA8010F815A0946BF",
+      "bytes": 176339,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_api_endpoint_runner.py",
+      "sha256": "A7F588516EADC6EC16BFF93F083669A50DF7CB5B1C987CA4529C995B2BFF8AD1",
+      "bytes": 21763,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_architecture_adapter.py",
+      "sha256": "B671B5CA824B5C0F71306F58AA46D15EBC8083A07CE414493A5288BE4EF21F6E",
+      "bytes": 18851,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_audit_sessions.py",
+      "sha256": "139C93402B63D8183C1DB73AA2EC685ECEA065AF98F3674997185284413BC8AB",
+      "bytes": 38781,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_compute_feasibility.py",
+      "sha256": "4D526873ACB1B0D7C9F2BA9DDAD16F6AAB788453AF111BBA800C5B673B2A04EE",
+      "bytes": 14985,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_cost_acknowledgment.py",
+      "sha256": "47DD40814AAF7F3F265591914482185BFEC5119960380C67425D73308C3B7216",
+      "bytes": 9141,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_data_governance.py",
+      "sha256": "915CCD536D2C95E7042D9E8EEFE955BB41D4210FCDF3E061EB554AFE9DAC2F1F",
+      "bytes": 8492,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_distributed_audits.py",
+      "sha256": "8CBD9FBCBD880786F84DF1313E03BF167918D0307C5DA6393A7CCEE613F76B63",
+      "bytes": 33320,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_evidence_anchor.py",
+      "sha256": "F656495467D2223B05BB5F73A13D85EB46E9E0646BA300C003E667DB0B746D88",
+      "bytes": 26811,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_evidence_bridge.py",
+      "sha256": "268733C0F1F0052100B2A8D95A99131072E4011DE73CFBD85145AA15D2EB3BF8",
+      "bytes": 24759,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_evidence_object_store.py",
+      "sha256": "0D2D752544BF484327DCFC53995B5453D63772A25C0622244438D68390C42E75",
+      "bytes": 62420,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_fleet_executor.py",
+      "sha256": "E5A80E62CDBC2486B30BDCE1ED5D8E69E8C6001A10A83656684E9F9ACEAB0F59",
+      "bytes": 64275,
+      "role": "gate5_api_identity_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_fleet_verifier.py",
+      "sha256": "6630133C77EA1DA73CC8C605C01F05F5257EF60E081E9E452DA5074EC0E631C8",
+      "bytes": 6460,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_harvest.py",
+      "sha256": "5FCF4ACCFF91BDCE1341D411770996383CCC1118B4C3A164774142684EE7B77F",
+      "bytes": 6729,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_live_worker_runner.py",
+      "sha256": "8F0FE13BA4B017B7907C673D93E99C397B4D2C957FBA4E4481AE7A3114B37179",
+      "bytes": 40828,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_merged_evidence_packets.py",
+      "sha256": "5C66026CFF30ADB133CE23E94C968CB86104608A5FEF9D304253B706615079E3",
+      "bytes": 27399,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_model_access.py",
+      "sha256": "A3E2F4C8C2DFCB752B86EF4BE2DBB43F67BE5CB591892EB3CB29716A5E75EC10",
+      "bytes": 7336,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_model_provenance.py",
+      "sha256": "BB6E6D8481DF48D21B90CF941CF5A3E11792CBF54285FD5BDB814F587446751B",
+      "bytes": 18814,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_probe_compatibility.py",
+      "sha256": "286213A045DBD935D9A562A8B5C941FAB108A77A50F7A0970AE601DAFB4DA5C6",
+      "bytes": 16068,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_layer_specificity_auditor_v4.py",
+      "sha256": "450F56A02675A6C814BD65E9BDCE74345BB4DAADE681CA5F41B7A9C3FCAAF70C",
+      "bytes": 11570,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_layer_specificity_bootstrap_v4.py",
+      "sha256": "DAC72AC5CC633B1307C23C7DCC1AB2614C67D01F077B18295662AE3FFDF91B03",
+      "bytes": 7454,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_layer_specificity_executor_v4.py",
+      "sha256": "5B336650CD23B71490E0245B199D0AA756BA42870E40CBEBC45F16C502016CA6",
+      "bytes": 27005,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_layer_specificity_v4.py",
+      "sha256": "77F4D22637C82C99B1BF65CBA3C85B5548DC046C6FAC2BCA98327464279D5EF6",
+      "bytes": 21880,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_research_auditor.py",
+      "sha256": "0D632894FCA5C57FDF77F0BB44766BF7A20AE97BE6C622AE75C8CFCBD5F10D02",
+      "bytes": 22774,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_research_auditor_v3.py",
+      "sha256": "22B508F0EDE8FFF8177C78CDA3539C5177162B59599778530DA841FDC56D4181",
+      "bytes": 3613,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_research_executor.py",
+      "sha256": "B5F51F854F1AE0B3241BF57E617C439EF0871F76EB06EEFC6677FF410619E78E",
+      "bytes": 36221,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_research_executor_v3.py",
+      "sha256": "38B083C685FC4E3F26DF2D1AEC2CDB0A1BEB2EDE05BB7513FC8BEC6B5EDCB7EB",
+      "bytes": 10284,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_research_lock.py",
+      "sha256": "849BE2A9CE3E9F773698DEAC534E4E2DF9C56CDA3393B81B60DAD00945288E32",
+      "bytes": 18295,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_v3_bootstrap.py",
+      "sha256": "88889D5757EF71B243B55772F6E1D31A9246A3A6C47BB2B19BF4AC06DCCA69BC",
+      "bytes": 14179,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_research_intervention_worker.py",
+      "sha256": "C1B7F4A3535F05504E7B862D23470F72F88AE7AC88757768288B1316F966A13D",
+      "bytes": 33224,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_retention_disclosure.py",
+      "sha256": "674C9DF98B7BE3C272E0D4044488E5A5C5CDBE748B7244E31112E00B379888D0",
+      "bytes": 35217,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_scale_planner.py",
+      "sha256": "FA0CAB3E573A1E27711C5B811422FDFD28D0241576B8C20E681BA486B248056D",
+      "bytes": 23693,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_static_evidence_anchor.py",
+      "sha256": "46ADAE538FB15834EB293679E1045B6ED2B32732D43AE9F5C15C8A3A8850E4FF",
+      "bytes": 9288,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_tks_definition_lock.py",
+      "sha256": "08569C8E9E59F1ED2FE0C4B9A48FA8ADB94398CCA9DCB5BA3F32C7B11EA16F94",
+      "bytes": 4707,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_verdict_runner.py",
+      "sha256": "FB3228DD14F0FA5FB2F20EFF01B53819CE5011012C5C3EF2418396C6D223A984",
+      "bytes": 7154,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_verifier_decision_adapter.py",
+      "sha256": "DBC9F72376276040523D4BC6F7B0F7C13210D8645B8C80D5F26E44B7AA8C2341",
+      "bytes": 9395,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/crm/__init__.py",
+      "sha256": "EF86D22B6BE69AD75CEF54E8DD84FF983DA926EA0EED09AD661B472C7FBEDD97",
+      "bytes": 3423,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/crm/abuse.py",
+      "sha256": "F750C865E1FE136DBA13DD0678640D7FDF99661BEE09457706FA23951C428508",
+      "bytes": 3533,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/crm/models.py",
+      "sha256": "09CACC2294C570D6337FD690DC38FB997F258994D43468F24F1B65874B474974",
+      "bytes": 29587,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/crm/privacy.py",
+      "sha256": "5288409F00B0A875D544B787F562FD71EA3200DB3E4E438402272194D0F0F8F8",
+      "bytes": 4201,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/crm/service.py",
+      "sha256": "3E8D8613D86C37BED2E02045DBDBA0425CB1CAD2D07936BE736B51DBC113CB5B",
+      "bytes": 8697,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/crm/state_store.py",
+      "sha256": "3028DFBB8C763C194F04FA4F643361DCC1F4F2D8412296F2707F500D8EFB028F",
+      "bytes": 8548,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/crm/store.py",
+      "sha256": "313988BDB71B78860985040206A9066C32665DA00F0175AA3B15DB8528503F0B",
+      "bytes": 11750,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/crm/sync.py",
+      "sha256": "375F318E0DACAFBEA9459ADD98E085FD2AD5090D51795E76575170F0F8BCD451",
+      "bytes": 26543,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/customer_production_acceptance_authority.py",
+      "sha256": "2F011C79E338D20C1FDE010BEF2F704593EF31D98E49405E443DFBAD4C77E6FC",
+      "bytes": 161142,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/customer_production_pseudonyms.py",
+      "sha256": "FAED5885957CF5155FCFC6F22CCCC8F1064885A3931509733EAFA71BB60C1000",
+      "bytes": 13287,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/evidence_ownership.py",
+      "sha256": "31A21DE0D440B41C6DE0D146934A73B868802A9EB25BAFDAF67BD7673AF17895",
+      "bytes": 5946,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/evidence_shares.py",
+      "sha256": "1A46197B422597E35B17C7FC3C7152171B286882D594619FEA27BA8FCD817867",
+      "bytes": 29878,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/fleet_service_auth.py",
+      "sha256": "1C0669B738B658B7B1C78FA3F2BA22E1FA8DB3A26BA0DA0DA05A4A8AE0F17C6C",
+      "bytes": 19687,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/hosted_customer_journey_acceptance_binding.py",
+      "sha256": "614856C5FB49449E04A8D1FA97FCE17830FE6FA1B21F6674D704EB8E3674BB15",
+      "bytes": 21941,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/human_attestations.py",
+      "sha256": "A69A5616F82275C28E71CE2DFD14368EAA4DCE9CD58352AD21DBE558155E9ED2",
+      "bytes": 49096,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/live_worker_billing_receipts.py",
+      "sha256": "CCC966E1C008BC1810947E9F12F1B19D821D6EF670396B4E714219D9027C2B65",
+      "bytes": 14139,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/__init__.py",
+      "sha256": "0E5FF7403A6BAE6788129CDC6187E11124984DB44CEE086CCB87BF7D104AEF3A",
+      "bytes": 762,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/artifact_store.py",
+      "sha256": "7F3D1EAA59093770263550892018D796EC752E66D1CCBB87E26FE98C2FA3FFF3",
+      "bytes": 13207,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/billing.py",
+      "sha256": "0A0EF93E47D1A0377DD5DC82BFC4A086283522CBA53685E73BC076F1D6B875E7",
+      "bytes": 23904,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/compliance.py",
+      "sha256": "6C4B0616CA3D6B18CADB0522E3638B4B58EF44569AE5E73D27D615F6D3BAE13D",
+      "bytes": 23960,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/fleet_scale.py",
+      "sha256": "9735B734347EEE1B27244BFFC495DE2076225AB8B68BD420914FE6E4364E9AF0",
+      "bytes": 20088,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/observability.py",
+      "sha256": "599E8A22F1379C1B88585D18325D5F1242B61E5B273B130506A9B7E453850F5F",
+      "bytes": 21347,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/queue_resume.py",
+      "sha256": "20DDC6B12A653D4B36FEF0FE598B6FD68C1A59BF7419B5B09A7A191B15D82241",
+      "bytes": 18086,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/state_substrate/__init__.py",
+      "sha256": "B2FBCBB99CCAED705DF25D3A670F26687BE0430D06CD37067278ADA3518EED39",
+      "bytes": 4795,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/state_substrate/conformance.py",
+      "sha256": "086709C44209D100C70D14509987B6873F7CAA7586381D4571E093773759BFCD",
+      "bytes": 11630,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/state_substrate/fencing.py",
+      "sha256": "675C1A511BB24A2470E3F29A08A7D01B4C18B92950AE90B1598ED8B5A2F19B8E",
+      "bytes": 6579,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/state_substrate/interface.py",
+      "sha256": "D7AE518EFE427C4F5B88B6964122409B05346DAB5DACF0A7A39F192647F58AD5",
+      "bytes": 15492,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/state_substrate/memory_store.py",
+      "sha256": "85F3252A9A540C88B5B831A9277BC1C1A8CEF8FE5BE6B023A3BB54DE7C2DE10C",
+      "bytes": 11333,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/state_substrate/migration.py",
+      "sha256": "0343CDA51CD5A0F56F6D26960F4D84F0DDAAF24DC21BE64C25BCCBE210F82E48",
+      "bytes": 24941,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/state_substrate/observability.py",
+      "sha256": "F4F7704D01760F3160CB50784122B8F56BE7DCFFE5079A7DBFFC1B8EC649B222",
+      "bytes": 5709,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/state_substrate/postgres_store.py",
+      "sha256": "CB9B5D2A3B8045F1D20DBBC791AF06F78AD4467B2D72679E9DE26C333D3E2F8D",
+      "bytes": 34374,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/state_substrate/sqlite_store.py",
+      "sha256": "5E23DA3D2A2D243EAEFD74734C9493B91C2B3E6C41F83B8F67785E4B85E43741",
+      "bytes": 20015,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/state_substrate/sqlite_to_shared_migration.py",
+      "sha256": "5BDB0847D92EAB930DD19497C11A2FFDDA73BA97A69B1A9268981FEE5A44CDF4",
+      "bytes": 10321,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/state_substrate/stress.py",
+      "sha256": "2496F98279D6DC49A243178AC47C5954C6961F5673F378AF663A6FB0419F4B6E",
+      "bytes": 26237,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/tenant_isolation.py",
+      "sha256": "002F35D149CFF9039BEB0CFDBF7241981AFEEECBE125BF0718C59E1D9FE6BDD1",
+      "bytes": 11570,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/worker_verification.py",
+      "sha256": "E5E85411F3B0C2FFE75883B7191A588C3757B629E644A859D9441BF33C377942",
+      "bytes": 16088,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/worm_writes.py",
+      "sha256": "E0B541F89376F367C4E68BAC038746ADC30E45B427F6B5DB3A4833C8954BBF1B",
+      "bytes": 12910,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production_dependency_readiness.py",
+      "sha256": "EA01376DDC04619F07CAD82223002D0E38DC8878889E6EAC3CB1FF40204BC14E",
+      "bytes": 11635,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/quotas.py",
+      "sha256": "A9FCACB5FD449F8A39F76C81269E77BD7DB01010BE2FD1BDE6D58EB08F473FCC",
+      "bytes": 16272,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/revisioned_contact_store.py",
+      "sha256": "200DCD79D61B9148300F798CB5F0D5B9B5504B2619702E7A77A8DB9A404D0388",
+      "bytes": 31057,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/sessions/__init__.py",
+      "sha256": "28DCF4AE5F8395BD1F2E45A20B6831097018AAE0B3C56603AC2815930629D4E8",
+      "bytes": 1742,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/sessions/models.py",
+      "sha256": "8DEE5DD695B2ACB1D291016D850E3D1C9816B96DF2E91C813E0D171A8785B5BA",
+      "bytes": 6769,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/sessions/store.py",
+      "sha256": "FB716696299E5D4C109EB5C4E69D33410CC61412CFE5475F16321312EA7A10C6",
+      "bytes": 14077,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/stripe_billing.py",
+      "sha256": "D08BF82E70F868CA6D53EEACDD9935DFE2D1522764E6F0122585EDE9C90C629D",
+      "bytes": 49118,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/support_crm_acceptance_binding.py",
+      "sha256": "2D47BA59A66E5048C91F2D6D6C35ED28462F9EA269332A9ED568BD2DB57D3C4C",
+      "bytes": 50229,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/support_public_intake_receipts.py",
+      "sha256": "713A1689B4B08395AF678628827F15920B43502B3698F5D998EC68C9B3ADD80C",
+      "bytes": 27571,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/support_ticket_state_store.py",
+      "sha256": "8521EB3E20A5513118CDB89E5E32BE2EF4346C1AE7A40C45EAB39F31E7FD3624",
+      "bytes": 12633,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/support_tickets.py",
+      "sha256": "AB1001F71A5C5BE572C46F55AAF7BA62C90F474BD9C9467B5E845D66BC821AF8",
+      "bytes": 37135,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/similarity/README.md",
+      "sha256": "4EAB318F1850BEC9D2C254E19300FA0DE2F608670C2B4DEE8290D2109EC7123C",
+      "bytes": 14189,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/similarity/__init__.py",
+      "sha256": "E4340BD02B12F590A5FC25F3027A7C65D1CA1C4A2842E79CD6525413429E90C5",
+      "bytes": 848,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/similarity/cosine.py",
+      "sha256": "B1307CC27DB559EEB1FD4DC98093ACE80E4998D966A7833D20AEACA318C1753F",
+      "bytes": 24583,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/state_ledger_bootstrap.py",
+      "sha256": "0B3D383B24DBD1E451E02709E9CE4C3351A794BFBB9DEBCEE0896CA3217B35CF",
+      "bytes": 12599,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/store.py",
+      "sha256": "2C3E8BA441C8E9FB2952222F098AE6C7134E5A04A8907A37D82F22E1EB8365C6",
+      "bytes": 4465,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/validation/__init__.py",
+      "sha256": "CB2139DADFE10C2EEAA8A658215BB1E8BEDD94280B6CEA42FB5F73D880109906",
+      "bytes": 71,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/validation/calibration_sessions.py",
+      "sha256": "ED63A306C93E99BDFAD2E03DEE7B889FBD60F14110B6BD9291E2429138B9BC30",
+      "bytes": 7385,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/validation/correlation.py",
+      "sha256": "3B12CA7E0B6055916407B2D1414266E674C5DFCCC5B242165A0A9C5C47A074C6",
+      "bytes": 18702,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/validation/evidence.py",
+      "sha256": "FC91C17B4E6A21445A8A7C038920C5424E47C6F7C57E18C75A6BE7E8AAAA5D50",
+      "bytes": 24129,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/validation/studies.py",
+      "sha256": "F770FE836D7554BA94AD6F40740A2BCA3D3542206106EC511BB1BC6A68B337F0",
+      "bytes": 16929,
+      "role": "gate5_api_runtime_dependency"
+    },
+    {
       "path": "noetic-compass-scaffold/noetic-compass/conftest.py",
       "sha256": "F51F80ED9BE44E8C8F0E52BCF78706760091BE7EB107ADE3988EA2DC481D3FF4",
       "bytes": 1627,
       "role": "gate5_pytest_environment_control"
     },
     {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/.dockerignore",
+      "sha256": "5C7BD9443DB6A5017CD350BF93C09C9B6F21A6ACFF7A6B9B586495236021A47F",
+      "bytes": 687,
+      "role": "gate5_environment_control"
+    },
+    {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile",
-      "sha256": "71BC3404E772227EBBD916B0CF84D1ECD700E88C699124608612037FE6BDF852",
-      "bytes": 3460,
+      "sha256": "CCCE6B3227EF6CABE996ECA1F1E2803B0DEEB0852A9BAAD6D0896C4E1E8356C3",
+      "bytes": 7971,
       "role": "gate5_environment_control"
     },
     {
@@ -106,14 +1276,14 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/auth.py",
-      "sha256": "A59102E73C4FBC71E1BE4B425D320DB095E5A78D054EA5952889C463FA9CCA59",
-      "bytes": 3614,
+      "sha256": "994510BE467483797D4E7D178CD4F03B9EE52EBF4152AF360841CD0B21559009",
+      "bytes": 3508,
       "role": "gate5_worker_source"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/main.py",
-      "sha256": "73987B596D1C59F7BA576C42DAEDBBF03A1D7ACFF4092AF995FC5B8989737921",
-      "bytes": 2230,
+      "sha256": "234023F34DCAE4D6A43D2CC08E768C4DDB1AA2B9ACBE95396806817C41690994",
+      "bytes": 2902,
       "role": "gate5_worker_source"
     },
     {
@@ -124,8 +1294,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/routes/health.py",
-      "sha256": "FFD14F3EE3E9520DFED8F1CAC3C1CBE01E85D31DD1AC47775C302B42DAF26874",
-      "bytes": 3245,
+      "sha256": "EBE9D4180AC515878BE41D1BEEABE1C9757D6F52EB0AD7E34A0667D526F6BE80",
+      "bytes": 2675,
       "role": "gate5_worker_source"
     },
     {
@@ -153,6 +1323,12 @@
       "role": "gate5_worker_source"
     },
     {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/container_preflight.py",
+      "sha256": "61C5C6E6617671907E0E0175CEFBA983A1AAB821A0016723F1EB1201F19D4BE1",
+      "bytes": 15787,
+      "role": "gate5_worker_source"
+    },
+    {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/cover_library.py",
       "sha256": "89DE471F0628DEBCBE309844D7B1D3F683A0D04583E39C7A65CDB17F76BE9E99",
       "bytes": 8425,
@@ -166,8 +1342,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/fleet_worker.py",
-      "sha256": "542B0ABC9295FFF36C92BD3798B1C4D26BFD84B0BCF722CB84EE8197D80AFD68",
-      "bytes": 22147,
+      "sha256": "CE588395A5A30D3C33F73FE077C2CBDECC3D2C2F6A8D26BB5619198200E97863",
+      "bytes": 31584,
       "role": "gate5_worker_source"
     },
     {
@@ -178,8 +1354,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/model_loader.py",
-      "sha256": "9F682D7522D31C1F84CA4239E9283C304BB34C3A02776EE379752EF9683E0FBA",
-      "bytes": 13445,
+      "sha256": "35EBD2B5406C8E6A74CB1AE1AE9EC2C6E366143436299A6BBB53904D2D5ED1A2",
+      "bytes": 22316,
       "role": "gate5_worker_source"
     },
     {
@@ -208,8 +1384,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/schemas/__init__.py",
-      "sha256": "6309B18970C0C3CB1D957468E4753BB9115282F27E99E6F7DC6E3A41C6F59B51",
-      "bytes": 1244,
+      "sha256": "27284A83EAEF0397734E6E1DFED5864B0D5D4F9E28C1AE54C2DF3A91AF36B968",
+      "bytes": 1306,
       "role": "gate5_worker_source"
     },
     {
@@ -226,8 +1402,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/schemas/manifest.py",
-      "sha256": "C231A5B840CF7C8F9BE20D2A00B3F90E465CF0EA3D5A7D18C41DEA39E2B8D25E",
-      "bytes": 8071,
+      "sha256": "39F0F17B1559C74A16C0121A07DBFE9DD7BC6816241FC0D3CC22AA6B553C76D2",
+      "bytes": 10115,
       "role": "gate5_worker_source"
     },
     {
@@ -237,9 +1413,15 @@
       "role": "gate5_worker_source"
     },
     {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.in",
+      "sha256": "7C33774EFC66F7F385BCE0A0C471739DC4932649BAB4004C3046CEF1E7CB2232",
+      "bytes": 942,
+      "role": "gate5_environment_control"
+    },
+    {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt",
-      "sha256": "1A90FAEC6B365E3F94995E55EB6968672E59D2C1C14492E11493F89F26BB6DCA",
-      "bytes": 842,
+      "sha256": "37CC64DF8317481F024661C573D4146FA31D27E692C69F311EEB2FF84B793401",
+      "bytes": 95788,
       "role": "gate5_environment_control"
     },
     {
@@ -292,8 +1474,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/capture_open_weight_probe_dataset.py",
-      "sha256": "9B1330C261A732026961DB5BE5CEC8AA8DACCF95F8BA1D255C3E72E1B799E083",
-      "bytes": 7799,
+      "sha256": "5E5AE8BFAE2B8A5A726961989E80EE7CE61A1658F54FCCE6D056592A124D001E",
+      "bytes": 9369,
       "role": "gate5_worker_support"
     },
     {
@@ -351,6 +1533,12 @@
       "role": "gate5_worker_support"
     },
     {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/open_weight_artifact_guard.py",
+      "sha256": "B13E48EF1782E2BADBD44CE8A501A0FF303C9DD609AA54B64E9AE2FD16A602F9",
+      "bytes": 21109,
+      "role": "gate5_worker_support"
+    },
+    {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/probe_dataset_common.py",
       "sha256": "0E86902ED5EE03191D47ABCBAB353F87F9C280F73A9AD1DD1B4C32B1600ADDC2",
       "bytes": 6212,
@@ -364,20 +1552,20 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_open_weight_cover_ablation.py",
-      "sha256": "EA795B0CD7C71D57D41A3A1244B9EA560AFF890390B8AD7AD8C9D45B8C3D0701",
-      "bytes": 19591,
+      "sha256": "EBC2FC12EF9B2B114E733F19D36040D8F6619960E75E7D128BB60503ED82981F",
+      "bytes": 20172,
       "role": "gate5_worker_support"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_open_weight_eta_epsilon_bridge.py",
-      "sha256": "F52FBBE33AE28D08EEB932902A2BE1D0CE209204ED57DECE28B98B6BB5B76FAA",
-      "bytes": 43617,
+      "sha256": "2604AC6C9AD756492D96EC1D876093BDC3637B50BF1A82C5337C3B2082A1D4B4",
+      "bytes": 44204,
       "role": "gate5_worker_support"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_open_weight_probe_shard.py",
-      "sha256": "5D48D0A94EED80D508463AD70B9F95D74DACB5173EE858A61A5DBB3397CF66EC",
-      "bytes": 19076,
+      "sha256": "ECE02B3D457CFA471EA7B36A084492AE2C8982DE4A03C260F3A64248D1D08696",
+      "bytes": 23978,
       "role": "gate5_worker_support"
     },
     {
@@ -388,8 +1576,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_stage9_40e_eta_epsilon_bridge.py",
-      "sha256": "92E6FD525BB9E247EE04640AD3F2B95F07B7AE29C48784606CF37DC3F32CF8BF",
-      "bytes": 38031,
+      "sha256": "20BECF8488C14FFE5A0BD82D29CF0CF6110C68CA32833DB204557A83DF88AE9B",
+      "bytes": 38621,
       "role": "gate5_worker_support"
     },
     {
@@ -414,7 +1602,7 @@
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/__init__.py",
       "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
       "bytes": 0,
-      "role": "gate5_worker_test"
+      "role": "gate5_pytest_environment_control"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/conftest.py",
@@ -430,8 +1618,14 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_ablation_probe.py",
-      "sha256": "4587807B4A8E89E4ACFA2F549ED9817B5DC2DBDC39FAEF8848EDE824194FECA8",
-      "bytes": 20097,
+      "sha256": "150282AC75E4BC712DBAA333F7BDA6688F74E280CFB1971671896F6F400B8498",
+      "bytes": 20683,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_auxiliary_open_weight_wrapper_policy.py",
+      "sha256": "F6FE536A75F2ECBC172226879F9EC8699D332EFCACD008FBFB9012C622240397",
+      "bytes": 3369,
       "role": "gate5_worker_test"
     },
     {
@@ -450,6 +1644,12 @@
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_build_tks40_scenarios.py",
       "sha256": "A0ABBF4096BBF2D1767B74739254B937AC09C21CB2CB0DDAD6920B2AFEEBDF16",
       "bytes": 2494,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_container_preflight.py",
+      "sha256": "939D0C893EF16C285C7981BF80B8A543925272CFCBAD5856E8D5169286C655C8",
+      "bytes": 14097,
       "role": "gate5_worker_test"
     },
     {
@@ -490,14 +1690,14 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_fleet_worker_daemon.py",
-      "sha256": "E4982FB3D7785225F93ACCCF94C127BB0D925EAE72AEF8F0D39DC9486ECBEFC0",
-      "bytes": 14248,
+      "sha256": "2E8177C05E46AEA0961E562EA714927EE45B93848D4B050ECFD41E488B81A39F",
+      "bytes": 19400,
       "role": "gate5_worker_test"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_health.py",
-      "sha256": "2308EA448CC8E1EB7A1C59CEECF19435B31B74EA0F6230FE10FC86EFC95DF126",
-      "bytes": 5316,
+      "sha256": "7CB4B2AAE939C9FD695AA89F561904AF2EF4BC563F4042D693707FD7B707C003",
+      "bytes": 5300,
       "role": "gate5_worker_test"
     },
     {
@@ -520,14 +1720,20 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_model_identity.py",
-      "sha256": "FDCBE5F022E27D97F2F99386F71995C84EACF2DE78275DD4699CA433834AD885",
-      "bytes": 8397,
+      "sha256": "8D29F683052BEA6E91D62E4C17A2629053CF23DCDCE45D5A578CD058435DC3D9",
+      "bytes": 17148,
       "role": "gate5_worker_test"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_neuron_cover_schema.py",
       "sha256": "E2D488B308EF04DA69E8A081878ACC7CB81C21674BC55B77F67BCF731B14C7D8",
       "bytes": 5079,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_open_weight_artifact_guard.py",
+      "sha256": "C7037477BC35DC32C8562D6840DA272196A216B5D17336D4B64B0601FE245F12",
+      "bytes": 17796,
       "role": "gate5_worker_test"
     },
     {
@@ -544,8 +1750,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_open_weight_probe_shard.py",
-      "sha256": "543DEB97575997BD46325B874D1ADCEEB681E87AE3C24CF8D36E98502A2BA5FA",
-      "bytes": 5151,
+      "sha256": "C0F04C29D3C82B5A230DE2ABD2C15D1607A621FBF88807E647D1245A2A8C34CC",
+      "bytes": 10819,
       "role": "gate5_worker_test"
     },
     {
@@ -568,8 +1774,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_real_mode_dispatch.py",
-      "sha256": "70BB4320A7DA906C73B18B68E8FD48F2D3A23D5800118B0F22EB306F5786014F",
-      "bytes": 5389,
+      "sha256": "C5A619EDCC9A4966795C8632CEACFC29DB2401296BA82425F79D87359C51D9EA",
+      "bytes": 5630,
       "role": "gate5_worker_test"
     },
     {
@@ -628,8 +1834,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_worker_token_auth.py",
-      "sha256": "1DFFA8A69294D62956A2A9028F6853A169FE3E8B5F32440EB2F4196F99124D0A",
-      "bytes": 3198,
+      "sha256": "0D249926E6470033E539AF1015D5EFB219DECB24D8890EA8F96BDA268065D596",
+      "bytes": 4194,
       "role": "gate5_worker_test"
     },
     {
@@ -639,15 +1845,63 @@
       "role": "gate5_pytest_environment_control"
     },
     {
+      "path": "noetic-compass-scaffold/noetic-compass/scripts/prepare_large_model_eval.py",
+      "sha256": "3B81FD4CAF43BC5C2A4FC405EABD723F2C4FB604C8CECD568521CB9EFB83ADE5",
+      "bytes": 14079,
+      "role": "gate5_launcher_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/scripts/test_prepare_large_model_eval.py",
+      "sha256": "A5145CDE4E14F91E149C569837E9A4F8C22CF3B7838D99ED53B4943EF0827A09",
+      "bytes": 10288,
+      "role": "gate5_api_launcher_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/tests/__init__.py",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0,
+      "role": "gate5_pytest_environment_control"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/tests/conftest.py",
+      "sha256": "F32BA1E3689266C72A06B681A3F783F21C0DC4215B4339AB2ECCF489C43B95DD",
+      "bytes": 1711,
+      "role": "gate5_pytest_environment_control"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_fleet_executor.py",
+      "sha256": "5BDB91784057A8295A444CEB05EBC0677B02874A54D2F8AEB3CDC886E6E95021",
+      "bytes": 57737,
+      "role": "gate5_api_launcher_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_fleet_executor_contract.py",
+      "sha256": "7C9F48B0D89678F00905ACDAD3E573CEFDFE8920A70C16BEA012E642EEAAB2E0",
+      "bytes": 18817,
+      "role": "gate5_api_launcher_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/tests/test_state_ledger_operational_enable.py",
+      "sha256": "679B634FA6B0BAF4263474112B13054AB2AAE5D880BAA56BDD1C795DF0030032",
+      "bytes": 20687,
+      "role": "gate5_api_launcher_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/tests/test_state_substrate_live_migration.py",
+      "sha256": "B5B7B6BD9AA51551D584C9C4128D4538D7EB1010D514C61719B9E17F47874FF3",
+      "bytes": 38680,
+      "role": "gate5_api_launcher_test"
+    },
+    {
       "path": "scripts/build_project_coherence_gate5_manifest.py",
-      "sha256": "A2E61C97A22A9190E5606B2DE896092BC27BDAA00BF7EA5585689516147A7C42",
-      "bytes": 5347,
+      "sha256": "0FA49058926F66575251A3B731914EFD352346A7B8A91182383C53EAE92509C2",
+      "bytes": 6457,
       "role": "gate5_verification_control"
     },
     {
       "path": "scripts/verify_project_coherence_gate5.py",
-      "sha256": "2BEBFF03A7B6DFED98E8BF4B56FC07B21AA12689D975AD435AD0C40A4A837F77",
-      "bytes": 88477,
+      "sha256": "A98D9DCC69E6E43509A2AB20B5E86A1F12A26AF2DE9D99C79C4ED63001C555E7",
+      "bytes": 137723,
       "role": "gate5_verification_control"
     },
     {
@@ -688,8 +1942,8 @@
     },
     {
       "path": "tests/cas_harness_v2/test_gate5_verifier_redteam.py",
-      "sha256": "EEA4BC172CAA4DC36099C050A55008DE98884077DD8DC1843D68442E6AC00A66",
-      "bytes": 8218,
+      "sha256": "956A428227CDB422AD1D6604C327A7AAC7D64E6E98CC4D3E05FDBCC08BD62B9A",
+      "bytes": 18516,
       "role": "gate5_control_kernel_test"
     },
     {
@@ -746,14 +2000,30 @@
   },
   "dependency_security_hold": {
     "status": "HELD",
-    "reason_id": "G5-SEC-TRANSFORMERS-CVE-2026-4372",
-    "affected_requirement": "transformers==4.46.3",
-    "advisory_id": "CVE-2026-4372",
-    "ghsa_id": "GHSA-29pf-2h5f-8g72",
-    "minimum_fixed_version": "5.3.0",
-    "live_execution_authorized": false,
-    "container_digest_bound": false,
-    "patched_environment_revalidated": false
+    "criterion_disposition": "OPEN_SECURITY",
+    "reason_id": "G5-SEC-CANDIDATE-SCAN-FINDINGS-OPEN",
+    "historical_adverse_binding": "docs/working/project_coherence/gate5/GATE5_MODEL_AND_DEPENDENCY_BINDING_v0.1.json",
+    "candidate_receipt": "docs/working/project_coherence/gate5/GATE5_DEPENDENCY_AND_CONTAINER_CANDIDATE_RECEIPT_v0.2.json",
+    "source_commit": "4bff437dbcf6d0d38046e63d2aee823e8f316711",
+    "oci_image_index_digest": "sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c",
+    "platform_manifest_digest": "sha256:60bf92b327ebec84887c659313a97a6369a24fd5d8eb00a012544fcafd26ba27",
+    "requirements_lock_sha256": "37CC64DF8317481F024661C573D4146FA31D27E692C69F311EEB2FF84B793401",
+    "requirements_lock_package_count": 73,
+    "candidate_transformers_requirement": "transformers==5.14.1",
+    "container_digest_bound": true,
+    "bounded_candidate_revalidation": "HOST_AND_CONTAINER_PREFLIGHT_ONLY",
+    "full_lock_security_audit_passed": false,
+    "sbom_full_image_package_scan": "COMPLETED_WITH_FINDINGS / 7",
+    "sbom_scan_severity_counts": {
+      "critical": 0,
+      "high": 0,
+      "medium": 3,
+      "low": 4
+    },
+    "direct_local_image_scan": "INCOMPLETE / PENDING",
+    "external_evidence_retention": "SELF_REPORTED_LOCAL_OBSERVATION / RAW_NOT_RETAINED",
+    "engineering_preflight_execution_status": "COMPLETED_CPU_ONLY_NONEXPERIMENTAL",
+    "live_execution_authorized": false
   },
   "test_suites": [
     {
@@ -763,10 +2033,10 @@
         "tests/cas_harness_v2"
       ],
       "pytest_plugins": [],
-      "expected_tests": 108,
-      "expected_subtests": 50,
-      "expected_test_ids_sha256": "22979CE12CC23254D693E5902F2697BB3E113F835A4A3BE2FEE0680AAB5DA341",
-      "test_id_canonicalization": "SHA-256 over sorted unique pytest collection node IDs normalized to POSIX slashes, encoded UTF-8 as one ID plus LF per line"
+      "expected_tests": 113,
+      "expected_subtests": 61,
+      "expected_test_ids_sha256": "FD31E05BDFE62A44B4FC7D1556A2CA498115FF8E0A65C3F16160FA4D0C2FA294",
+      "test_id_canonicalization": "COLLECT-ONLY SHA-256 over sorted unique pytest node IDs normalized to POSIX slashes, encoded UTF-8 as one ID plus LF per line; actual executed-node-ID digest is NOT RECEIPTED"
     },
     {
       "name": "Live trace worker complete",
@@ -777,10 +2047,10 @@
       "pytest_plugins": [
         "pytest_asyncio.plugin"
       ],
-      "expected_tests": 290,
+      "expected_tests": 364,
       "expected_subtests": 0,
-      "expected_test_ids_sha256": "1C8DB623FC6507DB0B4CE218C3FD60833D514503122CD68FA79644A61DB6C635",
-      "test_id_canonicalization": "SHA-256 over sorted unique pytest collection node IDs normalized to POSIX slashes, encoded UTF-8 as one ID plus LF per line"
+      "expected_test_ids_sha256": "94566203B3E0FF79B3224C1C5A073698CA99D3C08BC1119A9082E42AF4B178BD",
+      "test_id_canonicalization": "COLLECT-ONLY SHA-256 over sorted unique pytest node IDs normalized to POSIX slashes, encoded UTF-8 as one ID plus LF per line; actual executed-node-ID digest is NOT RECEIPTED"
     },
     {
       "name": "Live trace worker numeric red team",
@@ -794,7 +2064,25 @@
       "expected_tests": 32,
       "expected_subtests": 0,
       "expected_test_ids_sha256": "12602041756F20D1AFD402FA56968660839E5EB1098438BA84C69BFF8DE7050B",
-      "test_id_canonicalization": "SHA-256 over sorted unique pytest collection node IDs normalized to POSIX slashes, encoded UTF-8 as one ID plus LF per line"
+      "test_id_canonicalization": "COLLECT-ONLY SHA-256 over sorted unique pytest node IDs normalized to POSIX slashes, encoded UTF-8 as one ID plus LF per line; actual executed-node-ID digest is NOT RECEIPTED"
+    },
+    {
+      "name": "API, fleet state, and launcher identity",
+      "working_directory": "noetic-compass-scaffold/noetic-compass",
+      "targets": [
+        "scripts/test_prepare_large_model_eval.py",
+        "tests/test_cas_harness_fleet_executor.py",
+        "tests/test_cas_harness_fleet_executor_contract.py",
+        "tests/test_state_ledger_operational_enable.py",
+        "tests/test_state_substrate_live_migration.py"
+      ],
+      "pytest_plugins": [
+        "pytest_asyncio.plugin"
+      ],
+      "expected_tests": 76,
+      "expected_subtests": 0,
+      "expected_test_ids_sha256": "1ED1E9E3AFA2EDA6881463EE5284DD4902AB94C0246B80D2937066480AC42921",
+      "test_id_canonicalization": "COLLECT-ONLY SHA-256 over sorted unique pytest node IDs normalized to POSIX slashes, encoded UTF-8 as one ID plus LF per line; actual executed-node-ID digest is NOT RECEIPTED"
     }
   ]
 }

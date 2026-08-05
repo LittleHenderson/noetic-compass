@@ -8,26 +8,42 @@ mechanical producer; it is not an admission, signature, or authority.
 
 from __future__ import annotations
 
+import sys
+
+if not sys.flags.isolated:
+    raise SystemExit(
+        "Gate 5 manifest generation requires isolated Python; run "
+        "`python -I -B scripts/build_project_coherence_gate5_manifest.py`."
+    )
+
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 
-from verify_project_coherence_gate5 import (
-    EXACT_DATA_SURFACES,
-    EXACT_PYTHON_SURFACE_DIRS,
-    MANIFEST_PATH,
-    MODEL_BINDING,
-    REQUIRED_CONTROL_ARTIFACTS,
-    REQUIRED_BOUNDARY_TEXT,
-    REQUIRED_OPEN_BOUNDARY_IDS,
-    REQUIRED_TEST_SUITES,
-    ROOT,
-    SECURITY_HOLD,
-    TEST_ID_CANONICALIZATION,
-    artifact_role,
-    collect_gate5_control_surface,
-    collect_pytest_environment_surface,
-)
+_VERIFIER_PATH = Path(__file__).resolve().with_name("verify_project_coherence_gate5.py")
+_SPEC = importlib.util.spec_from_file_location("gate5_manifest_verifier", _VERIFIER_PATH)
+if _SPEC is None or _SPEC.loader is None:
+    raise RuntimeError("cannot load the Gate 5 verifier by exact file path")
+_VERIFIER = importlib.util.module_from_spec(_SPEC)
+_SPEC.loader.exec_module(_VERIFIER)
+
+EXACT_API_LAUNCHER_SURFACE = _VERIFIER.EXACT_API_LAUNCHER_SURFACE
+EXACT_ALL_FILE_SURFACE_DIRS = _VERIFIER.EXACT_ALL_FILE_SURFACE_DIRS
+EXACT_DATA_SURFACES = _VERIFIER.EXACT_DATA_SURFACES
+MANIFEST_PATH = _VERIFIER.MANIFEST_PATH
+MODEL_BINDING = _VERIFIER.MODEL_BINDING
+REQUIRED_CONTROL_ARTIFACTS = _VERIFIER.REQUIRED_CONTROL_ARTIFACTS
+REQUIRED_BOUNDARY_TEXT = _VERIFIER.REQUIRED_BOUNDARY_TEXT
+REQUIRED_OPEN_BOUNDARY_IDS = _VERIFIER.REQUIRED_OPEN_BOUNDARY_IDS
+REQUIRED_TEST_SUITES = _VERIFIER.REQUIRED_TEST_SUITES
+ROOT = _VERIFIER.ROOT
+CURRENT_SECURITY_HOLD = _VERIFIER.CURRENT_SECURITY_HOLD
+TEST_ID_CANONICALIZATION = _VERIFIER.TEST_ID_CANONICALIZATION
+artifact_role = _VERIFIER.artifact_role
+collect_api_runtime_surface = _VERIFIER.collect_api_runtime_surface
+collect_gate5_control_surface = _VERIFIER.collect_gate5_control_surface
+collect_pytest_environment_surface = _VERIFIER.collect_pytest_environment_surface
 
 
 def _sha256(path: Path) -> str:
@@ -41,14 +57,16 @@ def _sha256(path: Path) -> str:
 def _surface_files() -> set[str]:
     paths = (
         set(REQUIRED_CONTROL_ARTIFACTS)
+        | set(EXACT_API_LAUNCHER_SURFACE)
+        | collect_api_runtime_surface()
         | collect_gate5_control_surface()
         | collect_pytest_environment_surface()
     )
-    for directory in EXACT_PYTHON_SURFACE_DIRS:
+    for directory in EXACT_ALL_FILE_SURFACE_DIRS:
         root = ROOT / directory
         paths.update(
             path.relative_to(ROOT).as_posix()
-            for path in root.rglob("*.py")
+            for path in root.rglob("*")
             if path.is_file() and "__pycache__" not in path.parts
         )
     for directory, pattern in EXACT_DATA_SURFACES:
@@ -130,9 +148,7 @@ def build_manifest() -> dict[str, object]:
         ],
         "model_binding": dict(MODEL_BINDING),
         "dependency_security_hold": {
-            **SECURITY_HOLD,
-            "container_digest_bound": False,
-            "patched_environment_revalidated": False,
+            **CURRENT_SECURITY_HOLD,
         },
         "test_suites": test_suites,
     }
