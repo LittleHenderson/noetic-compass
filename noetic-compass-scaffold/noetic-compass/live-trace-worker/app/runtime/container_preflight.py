@@ -312,7 +312,13 @@ def verify_native_library_closure(
         )
         transcript = f"{completed.stdout}{completed.stderr}"
         missing = _missing_native_sonames(transcript)
-        relative = artifact.relative_to(site_packages).as_posix()
+        if artifact.is_relative_to(site_packages):
+            relative = artifact.relative_to(site_packages).as_posix()
+        else:
+            relative = (
+                Path("lib-dynload")
+                / artifact.relative_to(python_lib_root / "lib-dynload")
+            ).as_posix()
         allowed = ALLOWED_HOST_NATIVE_DEPENDENCIES.get(relative, set())
         unexpected = missing - allowed
         if unexpected:

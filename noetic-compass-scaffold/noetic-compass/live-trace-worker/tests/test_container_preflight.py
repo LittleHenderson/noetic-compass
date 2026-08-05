@@ -362,8 +362,13 @@ def test_native_library_closure_allows_only_exact_host_cuda_seam(
     )
     artifact.parent.mkdir(parents=True)
     artifact.write_bytes(b"synthetic-elf")
+    stdlib_artifact = python_root / "lib-dynload" / "_asyncio.synthetic.so"
+    stdlib_artifact.parent.mkdir(parents=True)
+    stdlib_artifact.write_bytes(b"synthetic-stdlib-elf")
 
-    def _runner(*_args, **_kwargs):
+    def _runner(command, **_kwargs):
+        if str(command[-1]).endswith("_asyncio.synthetic.so"):
+            return SimpleNamespace(returncode=0, stdout="", stderr="")
         return SimpleNamespace(
             returncode=0,
             stdout="\tlibcuda.so.1 => not found\n",
@@ -375,7 +380,7 @@ def test_native_library_closure_allows_only_exact_host_cuda_seam(
             python_lib_root=python_root,
             runner=_runner,
         )
-        == 1
+        == 2
     )
 
 
