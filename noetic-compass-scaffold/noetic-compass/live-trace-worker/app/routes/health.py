@@ -25,8 +25,17 @@ def health() -> dict:
         "status": "ok",
         "worker_version": loaded.manifest.worker_version,
         "model_id": loaded.manifest.model_id,
-        "is_real_model": loaded.manifest.is_real_model,
+        "is_real_model": loaded.is_real,
+        "manifest_is_real_model": loaded.manifest.is_real_model,
         "model_loaded": loaded.is_real,
+        "requested_revision": loaded.manifest.requested_revision,
+        "resolved_revision": loaded.manifest.resolved_revision,
+        "revision_verified": loaded.manifest.revision_verified,
+        "weights_filename": loaded.manifest.weights_filename,
+        "weights_sha256": loaded.manifest.weights_sha256,
+        "weights_bytes": loaded.manifest.weights_bytes,
+        "weights_hash_verified": loaded.manifest.weights_hash_verified,
+        "model_identity_status": loaded.manifest.model_identity_status,
         "load_error": loaded.load_error,
     }
 
@@ -43,6 +52,7 @@ def health_realmode() -> dict:
     loaded = model_loader._LOADED
     manifest = loaded.manifest if loaded is not None else model_loader.PYTHIA_160M_MANIFEST
     manifest_is_real_model = bool(manifest.is_real_model)
+    revision_verified = bool(manifest.revision_verified)
     model_loaded = bool(
         loaded is not None
         and loaded.model is not None
@@ -50,11 +60,8 @@ def health_realmode() -> dict:
     )
     load_error = loaded.load_error if loaded is not None else None
 
-    is_real_model = (
-        not fake_runtime_env
-        and model_loaded
-        and load_error is None
-        and manifest_is_real_model
+    is_real_model = bool(
+        not fake_runtime_env and loaded is not None and loaded.is_real
     )
     verdict = REALMODE_PASS if is_real_model else REALMODE_FAIL
 
@@ -66,5 +73,13 @@ def health_realmode() -> dict:
         "load_error": load_error,
         "manifest_is_real_model": manifest_is_real_model,
         "model_id": model_loader.PYTHIA_160M_MODEL_ID,
+        "requested_revision": manifest.requested_revision,
+        "resolved_revision": manifest.resolved_revision,
+        "revision_verified": revision_verified,
+        "weights_filename": manifest.weights_filename,
+        "weights_sha256": manifest.weights_sha256,
+        "weights_bytes": manifest.weights_bytes,
+        "weights_hash_verified": manifest.weights_hash_verified,
+        "model_identity_status": manifest.model_identity_status,
         "worker_version": manifest.worker_version,
     }

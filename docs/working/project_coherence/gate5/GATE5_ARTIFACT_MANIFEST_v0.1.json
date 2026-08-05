@@ -1,0 +1,800 @@
+{
+  "schema_version": "project_coherence.gate5_artifact_manifest.v0.1",
+  "document_status": "DRAFT / OPEN / NOT FROZEN",
+  "gate5_status": "OPEN",
+  "gate_decision": "KEEP_OPEN",
+  "experimental_execution_status": "NOT_STARTED",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "manifest_self_hash": null,
+  "generated_by": "scripts/build_project_coherence_gate5_manifest.py",
+  "artifact_count": 116,
+  "artifacts": [
+    {
+      "path": ".gitattributes",
+      "sha256": "0D2B7D0F1D31D7BA35BF990F727B8E72459E7F8940E598F2AABBE4775BEB82A5",
+      "bytes": 2421,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/CLAIM_LEDGER_v0.1.json",
+      "sha256": "F62E7451135EC9DA0C333DB318C7C6E02BD92C4387EB167D94895810D805828F",
+      "bytes": 17083,
+      "role": "gate5_bound_dependency"
+    },
+    {
+      "path": "docs/working/project_coherence/OPEN_VS_HELD_BOUNDARY_v0.1.md",
+      "sha256": "D3C7E7F38A1E59F4C2B9E8E527A1033B791555BB669C4E69FCD556E8D87DF863",
+      "bytes": 7779,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md",
+      "sha256": "B87B2E2B4CC4B10C76EE4AA6EA09094572B2A1008E474475E8F642836B83D2BE",
+      "bytes": 29793,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate4/GATE4_ARTIFACT_MANIFEST_v0.1.json",
+      "sha256": "49102F9BCBAA2345804F5EE3CA708FD6A84E83F8CF5ABB51E6612893A090D57B",
+      "bytes": 15810,
+      "role": "gate5_bound_dependency"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
+      "sha256": "2713F6501B6CB4E54CB8D37F78AD11227914661D7295DE6FD52FCB965063B720",
+      "bytes": 20058,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/GATE5_MODEL_AND_DEPENDENCY_BINDING_v0.1.json",
+      "sha256": "A24F27AE6678A8EAAECA5E516805F94F394B416054AB5BCDAA68B687B0B79E2B",
+      "bytes": 3161,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/GATE5_REVIEW_MATRIX_v0.1.json",
+      "sha256": "01C882FDD35A6143F8637D2F865B9273602D09CC03C1DAF8DFD3C1926D6EC2C5",
+      "bytes": 54560,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md",
+      "sha256": "6E8FEF07E5BA6BE003D39C917DEA1827A233E2B6260AE133E3817FEBF38EBE6B",
+      "bytes": 13560,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/README.md",
+      "sha256": "DAFABD965BA95F98373170EC52560C7580A6DEBF49871DA2625BF57F1B888BA1",
+      "bytes": 10121,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/history/HISTORICAL_HARNESS_V1_V4_CURRENT_TREE_SHA256.json",
+      "sha256": "29651AAB7E8B0FF0D8D7082D9878DA36FFEFE7A9532D6BC8DCB1F319882C9B82",
+      "bytes": 262902,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/history/HISTORICAL_HARNESS_V1_V4_RECOVERY_INVENTORY.md",
+      "sha256": "5FD7B0D75490ECFC58B5149B83998B5F8E25F1A9E008ECFC137E0C707BC85A2D",
+      "bytes": 7954,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/conftest.py",
+      "sha256": "F51F80ED9BE44E8C8F0E52BCF78706760091BE7EB107ADE3988EA2DC481D3FF4",
+      "bytes": 1627,
+      "role": "gate5_pytest_environment_control"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile",
+      "sha256": "71BC3404E772227EBBD916B0CF84D1ECD700E88C699124608612037FE6BDF852",
+      "bytes": 3460,
+      "role": "gate5_environment_control"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/__init__.py",
+      "sha256": "66EF7C2A001C4298CC3CECE7C1D0B92BA306E06456C8468179EEACC5A45DE554",
+      "bytes": 39,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/auth.py",
+      "sha256": "A59102E73C4FBC71E1BE4B425D320DB095E5A78D054EA5952889C463FA9CCA59",
+      "bytes": 3614,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/main.py",
+      "sha256": "73987B596D1C59F7BA576C42DAEDBBF03A1D7ACFF4092AF995FC5B8989737921",
+      "bytes": 2230,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/routes/__init__.py",
+      "sha256": "C70973AB35CE04FB1E941C6A02730CE5800D750BD2372BC71CA2DF5C424C4D06",
+      "bytes": 89,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/routes/health.py",
+      "sha256": "FFD14F3EE3E9520DFED8F1CAC3C1CBE01E85D31DD1AC47775C302B42DAF26874",
+      "bytes": 3245,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/routes/live_trace.py",
+      "sha256": "53B2046D9601AC50F048CCC8CACF0231F1F55B64C0683143B054AAE43E3C9140",
+      "bytes": 4122,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/__init__.py",
+      "sha256": "A773B5D895B460516CAF6E62842F9C6FEA9F08C29C6E20301A029C5EE81303B3",
+      "bytes": 1075,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/ablation_probe.py",
+      "sha256": "A7232334A4CF567DFADEECF504C4945DA4097B0B17893B6E435515C184B943FB",
+      "bytes": 17092,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/billing_receipt.py",
+      "sha256": "E2A24C69DD8795914F079D805F3D3FDD055ECB4F83359131E609EB70E1136638",
+      "bytes": 7078,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/cover_library.py",
+      "sha256": "89DE471F0628DEBCBE309844D7B1D3F683A0D04583E39C7A65CDB17F76BE9E99",
+      "bytes": 8425,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/event_stream.py",
+      "sha256": "5CEE637A576853CFB4374AE74B9151A6A1E86AF8F1851976378B60B1910C6A37",
+      "bytes": 13056,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/fleet_worker.py",
+      "sha256": "542B0ABC9295FFF36C92BD3798B1C4D26BFD84B0BCF722CB84EE8197D80AFD68",
+      "bytes": 22147,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/knob_resolution.py",
+      "sha256": "68F9E9249D63ABE6F9510204DA0644F081E95B2D815C68805DCF6089EAC5D246",
+      "bytes": 7108,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/model_loader.py",
+      "sha256": "9F682D7522D31C1F84CA4239E9283C304BB34C3A02776EE379752EF9683E0FBA",
+      "bytes": 13445,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/probe_runner.py",
+      "sha256": "1EE1443F180EF997C721B647A5266C638B69E0B7E879EC2102086086EFEED1EE",
+      "bytes": 41934,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/pythia_runner.py",
+      "sha256": "81AE9531E8FA4CE2FD68A31EA174372B95C0819B27F22E4D343DCAF847F309BB",
+      "bytes": 15405,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/verification_mode.py",
+      "sha256": "7E52C7292EE34B634A0F5949B4F99DFE63DEEC16CAB3C62C8193679269727A08",
+      "bytes": 4378,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/word_spans.py",
+      "sha256": "9DDC42E3645247CE42AB14CA00130088C1CE23D951F884496883C8FE9E9A0467",
+      "bytes": 7330,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/schemas/__init__.py",
+      "sha256": "6309B18970C0C3CB1D957468E4753BB9115282F27E99E6F7DC6E3A41C6F59B51",
+      "bytes": 1244,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/schemas/distributed.py",
+      "sha256": "DBDCA4F06944FF1A8C82144992D1627EB3B1758B8E7E48535777A5CA549FA682",
+      "bytes": 9667,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/schemas/events.py",
+      "sha256": "5178E04A15EC79EF7DD8ECBD4A8076409099E54C721D1FDAF112074F363EE52F",
+      "bytes": 35317,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/schemas/manifest.py",
+      "sha256": "C231A5B840CF7C8F9BE20D2A00B3F90E465CF0EA3D5A7D18C41DEA39E2B8D25E",
+      "bytes": 8071,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/schemas/requests.py",
+      "sha256": "B417783B2F09FC6212566D66317E93951D4A9E10E841AD99730EA0D916BB7EA7",
+      "bytes": 4604,
+      "role": "gate5_worker_source"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt",
+      "sha256": "1A90FAEC6B365E3F94995E55EB6968672E59D2C1C14492E11493F89F26BB6DCA",
+      "bytes": 842,
+      "role": "gate5_environment_control"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scenarios/foundation28_balanced_v0_20260526.json",
+      "sha256": "3669C8C9AD52BB582FF90F3E0DF4760AF55E5755A2A419CD74D047C8FF68BEB8",
+      "bytes": 231483,
+      "role": "gate5_worker_fixture"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scenarios/stage7_foundation_rolebound_pilot_20260526.json",
+      "sha256": "5B8AAD738CA22AFEC11C60186981193ED3B951A4E13DA3FD7BFD5F7ACB54D46D",
+      "bytes": 5577212,
+      "role": "gate5_worker_fixture"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scenarios/tks40_balanced_v0_20260526.json",
+      "sha256": "FAF0704D984BA7297D5B9F0B98E31BA96F53056373A1F2D1F9A456A476446C59",
+      "bytes": 323391,
+      "role": "gate5_worker_fixture"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/ablate_probe_dataset.py",
+      "sha256": "9A2317C08A73A30EBE99918F0E2394B8BB8656E55A75163A1571DC7E3C88967C",
+      "bytes": 18504,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/build_definition_locked_tks_fixture.py",
+      "sha256": "E682DED567A76E3377D0CC49CD1DA372879703062A93881FE8B056CD2492E564",
+      "bytes": 16229,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/build_foundation28_scenarios.py",
+      "sha256": "2A6818D045E8E76976559F3FDEE243324EC01BEEB49FDF190D018D1EED638D29",
+      "bytes": 12274,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/build_stage9_40e_verifier_report.py",
+      "sha256": "591FAAB73A591FED2BA658F88C3C66AB7E775F8969CD51ADBFD138194B11D587",
+      "bytes": 21099,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/build_tks40_scenarios.py",
+      "sha256": "0B3D31CC422E8AF2EEBFC8B83A71AA91C0E83C62D08A1385594590B831F81FFD",
+      "bytes": 12367,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/capture_open_weight_probe_dataset.py",
+      "sha256": "9B1330C261A732026961DB5BE5CEC8AA8DACCF95F8BA1D255C3E72E1B799E083",
+      "bytes": 7799,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/derive_probe_dataset_axis.py",
+      "sha256": "47385AC9EEC1C412658AB64296BCCABF27ED5694FC87109733974409894B2703",
+      "bytes": 4125,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/diagnose_tks40_text_baseline.py",
+      "sha256": "950040BE6F42E0ADC4E137F5A3DB9D29F2909E4A2FA5E1E56A1363CEAEFB6189",
+      "bytes": 11330,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/discover_stage9_40e_neuron_covers.py",
+      "sha256": "8AB1526015A24357149E6C58439764E4355C64F15115F6DF10DE617E88B283F5",
+      "bytes": 22042,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/evaluate_40_element_probe.py",
+      "sha256": "E77C8EA255470BE542F443F41FDFBF060B30D0D3D512D336AAF678DA279C4CB0",
+      "bytes": 26298,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/evaluate_probe_dataset.py",
+      "sha256": "E32916FDA1DD77C0CE9559890A874996259EFC86CA1BCF78F61B4D5863286BF3",
+      "bytes": 11174,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/export_original_stage9_scenarios.py",
+      "sha256": "49678A31F8450CAD157037685060BF1CE097A1F09452614B0764666F3D5F25D8",
+      "bytes": 4752,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/merge_s7_f28_balanced_bridge_evidence_packet.py",
+      "sha256": "3E0F2485B85230B29A965C691D6F8B0DDF15DDC26F490929F364D4F6EE77F9A3",
+      "bytes": 28878,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/merge_stage9_40e_evidence_packet.py",
+      "sha256": "E25C1949DF27FA9DCFD049A52D5DBE05A54F281BEB9DFAE4AD58EAD439D497D8",
+      "bytes": 42889,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/open_atlas_live_tunnel.sh",
+      "sha256": "8DB301C487DCACCA6BF7B99A488DF5981CB86DE255B75188A2DB74F8A527E30D",
+      "bytes": 1713,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/probe_dataset_common.py",
+      "sha256": "0E86902ED5EE03191D47ABCBAB353F87F9C280F73A9AD1DD1B4C32B1600ADDC2",
+      "bytes": 6212,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_fleet_worker.py",
+      "sha256": "D6C5CC7A50C24B957DE57BFB53C8F58F20B4EC044841E54A80462B2D1A50324B",
+      "bytes": 5566,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_open_weight_cover_ablation.py",
+      "sha256": "EA795B0CD7C71D57D41A3A1244B9EA560AFF890390B8AD7AD8C9D45B8C3D0701",
+      "bytes": 19591,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_open_weight_eta_epsilon_bridge.py",
+      "sha256": "F52FBBE33AE28D08EEB932902A2BE1D0CE209204ED57DECE28B98B6BB5B76FAA",
+      "bytes": 43617,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_open_weight_probe_shard.py",
+      "sha256": "5D48D0A94EED80D508463AD70B9F95D74DACB5173EE858A61A5DBB3397CF66EC",
+      "bytes": 19076,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_open_weight_trace_diagnostics.py",
+      "sha256": "8452B5477EABF781BE8E15D2D0BC36A72F690830CBF858BE868681FB9D208860",
+      "bytes": 22702,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_stage9_40e_eta_epsilon_bridge.py",
+      "sha256": "92E6FD525BB9E247EE04640AD3F2B95F07B7AE29C48784606CF37DC3F32CF8BF",
+      "bytes": 38031,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/run_stage9_40e_subspace_ablation.py",
+      "sha256": "1C3F8E3A9B0EC5DB008B3ADF51341F09FACE8BF07AEE8260A148599039958181",
+      "bytes": 28598,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/runpod_pre_start.sh",
+      "sha256": "880D1A12CB6027470209725E120956BF54A239884C24B2A3DF2962F98C04993E",
+      "bytes": 2217,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/runpod_start_atlas_live_worker.sh",
+      "sha256": "47C1BF529DC072D9DB8D904FA071DE701E9476BC1C3F327E95FFF1186F31751B",
+      "bytes": 3559,
+      "role": "gate5_worker_support"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/__init__.py",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "bytes": 0,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/conftest.py",
+      "sha256": "C5A7EC7CC7423D2BA4CFD558BA271FFD4A5895696FEE568B484A5A1511AC0A1D",
+      "bytes": 913,
+      "role": "gate5_pytest_environment_control"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_ablate_probe_dataset.py",
+      "sha256": "22AAA6FB78FCCA52B06729B1177C498C29E760FBD45D8B83A6BE656AEEA28ADC",
+      "bytes": 3220,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_ablation_probe.py",
+      "sha256": "4587807B4A8E89E4ACFA2F549ED9817B5DC2DBDC39FAEF8848EDE824194FECA8",
+      "bytes": 20097,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_build_foundation28_scenarios.py",
+      "sha256": "21E7442585864A21422F8D0F1ED99F43773E04EDA579A6287E5F4440682449D3",
+      "bytes": 2550,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_build_stage9_40e_verifier_report.py",
+      "sha256": "2C5E1283C9AB37DD818A84E1AAA0C68CBB030599E52B72BE0F8FF41C033C795E",
+      "bytes": 8726,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_build_tks40_scenarios.py",
+      "sha256": "A0ABBF4096BBF2D1767B74739254B937AC09C21CB2CB0DDAD6920B2AFEEBDF16",
+      "bytes": 2494,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_derive_probe_dataset_axis.py",
+      "sha256": "10491F80681994B3D77C00CF09B5D727B6BF3BCD352E2C3A8A728B4751871957",
+      "bytes": 1868,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_diagnose_tks40_text_baseline.py",
+      "sha256": "FB5A29390BF045578DF6298F3CECFE42E7409A98BA2DF7010307AFC3E48F2435",
+      "bytes": 3325,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_distributed_schema.py",
+      "sha256": "A0A2AD7CFFDFBB72D2DAF7758A7AA9616F0AB131322280B27443649921DBBC58",
+      "bytes": 6108,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_eraser_execution_integrity.py",
+      "sha256": "B3EA70EDDF27B7A688CACF5F18A0F5CDE441E1B948EFECC7CF69D9A306367C37",
+      "bytes": 17290,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_eraser_numeric_redteam.py",
+      "sha256": "A9C66A28E67FA16D5B30989B0C6D41F555E9A24D4C4E214E313A229A4B718876",
+      "bytes": 26202,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_evaluate_40_element_probe.py",
+      "sha256": "2EEE0CBAE88BEC641DF844D1180843D5CDB0633BF73D3F5B0C86E9CA8E6DD31F",
+      "bytes": 7657,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_fleet_worker_daemon.py",
+      "sha256": "E4982FB3D7785225F93ACCCF94C127BB0D925EAE72AEF8F0D39DC9486ECBEFC0",
+      "bytes": 14248,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_health.py",
+      "sha256": "2308EA448CC8E1EB7A1C59CEECF19435B31B74EA0F6230FE10FC86EFC95DF126",
+      "bytes": 5316,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_knob_effect.py",
+      "sha256": "3FE7E2C05E58B734B8AF9FCE2E8BDF657A0F0A1FB6BB8462A91FF503878095F4",
+      "bytes": 12001,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_live_controls.py",
+      "sha256": "9827A43293C5CAD5C63BC7DE6666D9488375D7F0E3BF3458CB137523AD8420A6",
+      "bytes": 4502,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_merge_stage9_40e_evidence_packet.py",
+      "sha256": "4FBB687CA95CE41E324153B5250ADCDCE20D04FE56F70E7380477E47CED87EE0",
+      "bytes": 25876,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_model_identity.py",
+      "sha256": "FDCBE5F022E27D97F2F99386F71995C84EACF2DE78275DD4699CA433834AD885",
+      "bytes": 8397,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_neuron_cover_schema.py",
+      "sha256": "E2D488B308EF04DA69E8A081878ACC7CB81C21674BC55B77F67BCF731B14C7D8",
+      "bytes": 5079,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_open_weight_cover_ablation.py",
+      "sha256": "09874417A8A1CFFBACE06D5E7505EF47B5B150693737387AD6BCD899F4FBCCC8",
+      "bytes": 3435,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_open_weight_eta_epsilon_bridge.py",
+      "sha256": "C6592DE793955AD9E9F25526E46718402DAF60B6A5CFE9E0CBBD00C8216FF57E",
+      "bytes": 11438,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_open_weight_probe_shard.py",
+      "sha256": "543DEB97575997BD46325B874D1ADCEEB681E87AE3C24CF8D36E98502A2BA5FA",
+      "bytes": 5151,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_open_weight_trace_diagnostics.py",
+      "sha256": "6E203CECC0A812BE314B71CA3D5136030BA09C83577E5773270C12A69CDD91EC",
+      "bytes": 4081,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_probe_dataset_scripts.py",
+      "sha256": "84695FFB15FAF8F50BF5459A0772027C8BCA8ED83CC0BB95B1A9E0848D3799F9",
+      "bytes": 3051,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_probe_summarise.py",
+      "sha256": "4F5F397687159FF1F140CF0174D7ED647F89C71DA3C3F5C039150FE8E493590A",
+      "bytes": 3474,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_real_mode_dispatch.py",
+      "sha256": "70BB4320A7DA906C73B18B68E8FD48F2D3A23D5800118B0F22EB306F5786014F",
+      "bytes": 5389,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_s7_f28_evidence_packet_merge.py",
+      "sha256": "4A606A25A782FC6D26A111DFE59795F41FF0CB29BF51406619155BFA14CC53E6",
+      "bytes": 11392,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_schemas.py",
+      "sha256": "1FB0CBADDC610F98DCD832426AEEAA251340D6E71AEE70269B9635EF115FC603",
+      "bytes": 2781,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_sessions.py",
+      "sha256": "014D7250AFA5EFD09D28704C9DA1F4E3789D139E58B67CFD6F3D8BBC6109E6EA",
+      "bytes": 4425,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_sse_stream.py",
+      "sha256": "514C3B7EE4055F728F8AD3CB9A0F38E4A6E9508D27C181F30656D8517E849E86",
+      "bytes": 1545,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_stage9_40e_eta_epsilon_bridge.py",
+      "sha256": "BE9214A9308B44FDDB303DA7C0487720D91954FB58DEB3E527DDB556BE508BE9",
+      "bytes": 4413,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_stage9_40e_neuron_covers.py",
+      "sha256": "62D5BC822A42F9DB9EAA07ABFDB5BF78F03CB40A9C3364F1E0F877F270E8C44C",
+      "bytes": 5003,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_stage9_40e_subspace_ablation.py",
+      "sha256": "918E45315B82CF9EFDE14DF09DD73306DA5CD25FC0BC1A3D790355BEC7FC92C4",
+      "bytes": 6732,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_verification_mode.py",
+      "sha256": "6EBFE8F66696367016BB5F44C324E5BA0AA23D8B392567C715C48761F4AB0F4A",
+      "bytes": 4362,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_word_spans.py",
+      "sha256": "AD0B82B042BF953A1CB6DC27A7CC55C7C44D4BD083307C182D01A7632FA32C59",
+      "bytes": 8146,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_worker_token_auth.py",
+      "sha256": "1DFFA8A69294D62956A2A9028F6853A169FE3E8B5F32440EB2F4196F99124D0A",
+      "bytes": 3198,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/pyproject.toml",
+      "sha256": "855EA40D69910019D55EC090D3E7CD4A18995585B1542AB0B412BCC5CABBA01F",
+      "bytes": 242,
+      "role": "gate5_pytest_environment_control"
+    },
+    {
+      "path": "scripts/build_project_coherence_gate5_manifest.py",
+      "sha256": "A2E61C97A22A9190E5606B2DE896092BC27BDAA00BF7EA5585689516147A7C42",
+      "bytes": 5347,
+      "role": "gate5_verification_control"
+    },
+    {
+      "path": "scripts/verify_project_coherence_gate5.py",
+      "sha256": "2BEBFF03A7B6DFED98E8BF4B56FC07B21AA12689D975AD435AD0C40A4A837F77",
+      "bytes": 88477,
+      "role": "gate5_verification_control"
+    },
+    {
+      "path": "src/cas_harness_v2/__init__.py",
+      "sha256": "160AF8186AE325073B26D43D86BCA34DEC2644137ECA582E9C29547D49449794",
+      "bytes": 1537,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/_strict_json.py",
+      "sha256": "032EFD78A48A60C2AC0F3CC3B92274A346C5B044B8F22423722FDF55501C9BDC",
+      "bytes": 5760,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/_validation.py",
+      "sha256": "19D1A53C84E028CF94AAC6F0305DB65DC52B71579E9B935DA849E9181415DE8C",
+      "bytes": 7678,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/artifacts.py",
+      "sha256": "A6161525BDA0A289B69F5A4820700AD0F10D5AE5C7C6B08FCF154B4C379253C3",
+      "bytes": 3571,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/evidence_packet.py",
+      "sha256": "925EC4E994063352ED2CF4D58A185D7D336910C2E9C453927D49AB041B6F28FD",
+      "bytes": 29934,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/preregistration.py",
+      "sha256": "C44D56ADDA2F05897346156D1C9352B035FABE7D02B2A309CCA17EB18FD20055",
+      "bytes": 44598,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_gate5_verifier_redteam.py",
+      "sha256": "EEA4BC172CAA4DC36099C050A55008DE98884077DD8DC1843D68442E6AC00A66",
+      "bytes": 8218,
+      "role": "gate5_control_kernel_test"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_historical_v1_v4_recovery.py",
+      "sha256": "0672ABD2E83193BB62EF9CC3693266525AA92CDBFBE31AF792D2FDAB675BF21C",
+      "bytes": 7414,
+      "role": "gate5_control_kernel_test"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_research_control_kernel.py",
+      "sha256": "88C408020DDAA9D821EEA8D18A60B592C89919454106F8B4EE2F8AA049A0EF72",
+      "bytes": 48856,
+      "role": "gate5_control_kernel_test"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_research_control_redteam.py",
+      "sha256": "08AF7CE685BCA5CEBF241B30290EF428D5F9C6F05F2245F4C6493B0CCC737EFE",
+      "bytes": 23259,
+      "role": "gate5_control_kernel_test"
+    }
+  ],
+  "required_open_boundaries": [
+    "[G5-OPEN-AUTHENTICATED-EXECUTION] No independently authenticated execution receipt exists.",
+    "[G5-OPEN-CLAIM-REVIEW] Exact claim-language review remains outstanding.",
+    "[G5-OPEN-DEPENDENCY-SECURITY] The Transformers and container security hold remains open.",
+    "[G5-OPEN-DISCLOSURE] Owner and qualified legal, patent, privacy, and disclosure authorization are absent.",
+    "[G5-OPEN-DOWNSTREAM-AUTHORITY] Downstream systems have not proved that packet data cannot mint authority.",
+    "[G5-OPEN-GATE4] Gate 4 remains OPEN and cannot be promoted by dependency verification.",
+    "[G5-OPEN-GPU-NUMERICS] GPU, autocast, compiled-hook, and multi-device numerics are unverified.",
+    "[G5-OPEN-HERMETICITY] The OS, toolchain, dependencies, inputs, and runtime are not hermetically attested.",
+    "[G5-OPEN-INDEPENDENT-NUMERICAL-AUDIT] No independent numerical audit has agreed with a live v2 run.",
+    "[G5-OPEN-LIVE-EXPERIMENT] No authorized exact-revision Harness v2 experiment has started.",
+    "[G5-OPEN-MATCHED-CONTROLS] Required matched controls and falsifiers have not run under v2.",
+    "[G5-OPEN-NONCE-REPLAY] Authenticated nonce issuance and replay rejection are absent.",
+    "[G5-OPEN-ONE-USE] Atomic one-use run authorization and consumption are absent.",
+    "[G5-OPEN-PEER-REVIEW] External specialist peer review remains outstanding.",
+    "[G5-OPEN-PRODUCT-READINESS] Product, security, operations, billing, privacy, and compliance readiness remain separate open gates.",
+    "[G5-OPEN-REAL-INDEPENDENCE] Declared roles do not prove real identity, affiliation, or independence.",
+    "[G5-OPEN-REPLICATION] No held-out independent replication has been completed.",
+    "[G5-OPEN-SELECTIVE-REPORTING] No complete cross-run registry prevents selective reporting.",
+    "[G5-OPEN-SEMANTIC-VALIDATION] Artifact hashes do not establish semantic correctness.",
+    "[G5-OPEN-TRUST-ROOT] No non-caller-selected identity or signing trust root exists.",
+    "[G5-OPEN-TRUSTED-TIME] No independently trusted time source binds ordering.",
+    "[G5-OPEN-WORM] No durable append-only or WORM authority binds the v2 chain."
+  ],
+  "model_binding": {
+    "model_id": "EleutherAI/pythia-160m",
+    "revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "weights_filename": "model.safetensors",
+    "weights_sha256": "29d2e457a664e41c12c735f20a36dc0956a665f614a54ce5db21a32e75965270",
+    "weights_bytes": 374998696,
+    "identity_scope": "WEIGHTS_FILE_IDENTITY_ONLY",
+    "execution_authentication": "NOT_ESTABLISHED"
+  },
+  "dependency_security_hold": {
+    "status": "HELD",
+    "reason_id": "G5-SEC-TRANSFORMERS-CVE-2026-4372",
+    "affected_requirement": "transformers==4.46.3",
+    "advisory_id": "CVE-2026-4372",
+    "ghsa_id": "GHSA-29pf-2h5f-8g72",
+    "minimum_fixed_version": "5.3.0",
+    "live_execution_authorized": false,
+    "container_digest_bound": false,
+    "patched_environment_revalidated": false
+  },
+  "test_suites": [
+    {
+      "name": "Harness v2 kernel and history",
+      "working_directory": ".",
+      "targets": [
+        "tests/cas_harness_v2"
+      ],
+      "pytest_plugins": [],
+      "expected_tests": 108,
+      "expected_subtests": 50,
+      "expected_test_ids_sha256": "22979CE12CC23254D693E5902F2697BB3E113F835A4A3BE2FEE0680AAB5DA341",
+      "test_id_canonicalization": "SHA-256 over sorted unique pytest collection node IDs normalized to POSIX slashes, encoded UTF-8 as one ID plus LF per line"
+    },
+    {
+      "name": "Live trace worker complete",
+      "working_directory": "noetic-compass-scaffold/noetic-compass/live-trace-worker",
+      "targets": [
+        "tests"
+      ],
+      "pytest_plugins": [
+        "pytest_asyncio.plugin"
+      ],
+      "expected_tests": 290,
+      "expected_subtests": 0,
+      "expected_test_ids_sha256": "1C8DB623FC6507DB0B4CE218C3FD60833D514503122CD68FA79644A61DB6C635",
+      "test_id_canonicalization": "SHA-256 over sorted unique pytest collection node IDs normalized to POSIX slashes, encoded UTF-8 as one ID plus LF per line"
+    },
+    {
+      "name": "Live trace worker numeric red team",
+      "working_directory": "noetic-compass-scaffold/noetic-compass/live-trace-worker",
+      "targets": [
+        "tests/test_eraser_numeric_redteam.py"
+      ],
+      "pytest_plugins": [
+        "pytest_asyncio.plugin"
+      ],
+      "expected_tests": 32,
+      "expected_subtests": 0,
+      "expected_test_ids_sha256": "12602041756F20D1AFD402FA56968660839E5EB1098438BA84C69BFF8DE7050B",
+      "test_id_canonicalization": "SHA-256 over sorted unique pytest collection node IDs normalized to POSIX slashes, encoded UTF-8 as one ID plus LF per line"
+    }
+  ]
+}

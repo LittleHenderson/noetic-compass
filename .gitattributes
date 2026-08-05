@@ -3,6 +3,7 @@
 docs/working/project_coherence/** text eol=lf
 formal/lean/** text eol=lf
 scripts/verify_project_coherence*.py text eol=lf
+scripts/build_project_coherence_gate5_manifest.py text eol=lf
 scripts/verify_noetic_topos2_gate1.py text eol=lf
 scripts/verify_psr8_lean_gate1.py text eol=lf
 scripts/verify_tks_v8_gate1.py text eol=lf
@@ -17,3 +18,28 @@ tests/tks_v8_core/** text eol=lf
 tests/cas_core_v8/** text eol=lf
 tests/cas_pcba_v8/** text eol=lf
 tests/cas_ohm_v1/** text eol=lf
+
+# Project Coherence Gate 5 active verifier/kernel/worker surfaces are hashed as
+# exact LF bytes so a Windows checkout cannot silently invalidate the manifest.
+src/cas_harness_v2/** text eol=lf
+tests/cas_harness_v2/** text eol=lf
+noetic-compass-scaffold/noetic-compass/conftest.py text eol=lf
+noetic-compass-scaffold/noetic-compass/pyproject.toml text eol=lf
+noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile text eol=lf
+noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt text eol=lf
+noetic-compass-scaffold/noetic-compass/live-trace-worker/app/** text eol=lf
+noetic-compass-scaffold/noetic-compass/live-trace-worker/scenarios/** text eol=lf
+noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/** text eol=lf
+noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/** text eol=lf
+
+# Historical Harness V1-V4 recovery is evidence by exact original Git bytes,
+# including its known LF/CRLF inconsistency and binary raw-logit artifacts.
+docs/working/research_intervention_pythia160m_v1/** -text
+docs/working/research_intervention_pythia160m_v2/** -text
+docs/working/research_intervention_pythia160m_v3/** -text
+docs/working/research_intervention_pythia160m_v4/** -text
+docs/working/research_intervention_pythia160m_v4_execution/** -text
+noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_*.py -text
+noetic-compass-scaffold/noetic-compass/api/services/cas_harness_research_intervention_worker.py -text
+noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_pythia160m_*.py -text
+noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_research_intervention_worker.py -text

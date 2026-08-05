@@ -1,0 +1,250 @@
+{
+  "schema_version": "cas_harness_pythia160m_research_lock.v4",
+  "lock_id": "PYTHIA160M_LAYER_SPECIFICITY_DIAGNOSTIC_V4_20260729",
+  "status": "PROSPECTIVE_DIAGNOSTIC_SUCCESSOR_LOCK / MODEL_FREE_LOCAL_PASS / RUN_NOT_AUTHORIZED",
+  "prepared_from_source_commit": "c638df99a799e79afcb9739478bcc52a197b91d1",
+  "correction_scope": "Prospective layer-specificity diagnostic/control design only. V3 remains failed, unchanged, and non-reusable.",
+  "family_scope": {
+    "model_id": "EleutherAI/pythia-160m",
+    "revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "architecture": "GPTNeoXForCausalLM",
+    "layer_count": 12,
+    "hidden_size": 768,
+    "gpt2": "EXCLUDED_LATER_COMPARISON"
+  },
+  "preserved_v3_evidence": {
+    "v3_successor_lock": {
+      "path": "docs/working/research_intervention_pythia160m_v3/PYTHIA160M_RESEARCH_SUCCESSOR_LOCK_V3.json",
+      "byte_count": 10047,
+      "sha256": "37f854fe082cc3923508bb2b3c41e622fb89575270110a35ffe79d24cce17db5"
+    },
+    "v3_consumed_receipt": {
+      "path": "docs/working/research_intervention_pythia160m_v3/authorizations/pythia160m-riv3-20260729161708aa2f7f3eb5b9c6cdfacd.json",
+      "byte_count": 2810,
+      "sha256": "fe681e1b6805b59a476d14e86d15c257d240eef188a8c849aa594b8f2e0bc1b2"
+    },
+    "v3_consumed_nonce_marker": {
+      "path": "docs/working/research_intervention_pythia160m_v3/nonce_ledger/e4956a59af02b045a68271765f6718ce0e445ccef06fb0b5ce7351acc5d9edf5.used",
+      "byte_count": 286,
+      "sha256": "cc9b6ddf423ba765306125e2e8b6c2cb2270bc334342314a3253e0e84bd85eb7"
+    },
+    "v3_result": {
+      "path": "docs/working/research_intervention_pythia160m_v3/runs/pythia160m-riv3-20260729161708aa2f7f3eb5b9c6cdfacd/result.json",
+      "byte_count": 478182,
+      "sha256": "bb9d68c06b86a69b3507b579761356d0d9db8c9396d6268c8255b63aedead90e"
+    },
+    "v3_independent_audit": {
+      "path": "docs/working/research_intervention_pythia160m_v3/runs/pythia160m-riv3-20260729161708aa2f7f3eb5b9c6cdfacd/independent_audit.json",
+      "byte_count": 2583,
+      "sha256": "bd5e02dd6b6e85b664b82aeeef2fafeaa41d39ea05db02b7d7234cfbaaccf308"
+    },
+    "v3_terminal_evidence_manifest": {
+      "path": "docs/working/research_intervention_pythia160m_v3/runs/pythia160m-riv3-20260729161708aa2f7f3eb5b9c6cdfacd/TERMINAL_EVIDENCE_MANIFEST.json",
+      "byte_count": 3766,
+      "sha256": "83f9e34bd7d51bcce6d0d32f48708a1a1f2f3586784f310d8021c30e1ab1340a"
+    }
+  },
+  "frozen_files": {
+    "model_manifest": {
+      "path": "docs/working/research_intervention_pythia160m_v1/PYTHIA160M_MODEL_MANIFEST_V1.json",
+      "byte_count": 2827,
+      "sha256": "e99f29c27aadb7d25cfb74dc91be6e295474e7f86777fccfa9ec7aaa8375667a"
+    },
+    "prompt_split": {
+      "path": "docs/working/research_intervention_pythia160m_v1/PYTHIA160M_PROMPT_SPLIT_V1.json",
+      "byte_count": 6770,
+      "sha256": "fa24863d6a223eb2d760048c412a6bf0e82b54cff00676c3c0ebc4105d896c47"
+    },
+    "intervention_map_v2": {
+      "path": "docs/working/research_intervention_pythia160m_v2/PYTHIA160M_INTERVENTION_MAP_V2.json",
+      "byte_count": 4964,
+      "sha256": "021eae6fd9f4c9174399a9af54cb5c758d4589950614e4964de05944441cb7ef"
+    },
+    "startup_contract_v3": {
+      "path": "docs/working/research_intervention_pythia160m_v3/PYTHIA160M_STARTUP_CONTRACT_V3.json",
+      "byte_count": 4744,
+      "sha256": "5478dbd7ad54a3cf813c32477fc88827721d774a554b85717cd348f417678cdc"
+    },
+    "environment_manifest_v3": {
+      "path": "docs/working/research_intervention_pythia160m_v3/PYTHIA160M_ENVIRONMENT_MANIFEST_V3.json",
+      "byte_count": 2391,
+      "sha256": "c10867f20733d7bfaefed4dee2a3274697eaf344c349d3a72e366ad685376f05"
+    },
+    "prior_compute_manifest": {
+      "path": "docs/working/research_intervention_pythia160m_v2/PYTHIA160M_COMPUTE_MANIFEST_V2.json",
+      "byte_count": 633,
+      "sha256": "92186552c282ef9e82858bac75b3648f9a12b517178d3f107303af06db3067d3"
+    },
+    "layer_specificity_plan": {
+      "path": "docs/working/research_intervention_pythia160m_v4/PYTHIA160M_LAYER_SPECIFICITY_PLAN_V4.json",
+      "byte_count": 4566,
+      "sha256": "7b286f51322a79a3e9bf64402ef5cffe2c5601135013acf80ddc5d034e0ea9d9"
+    },
+    "model_free_controller": {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_layer_specificity_v4.py",
+      "byte_count": 21880,
+      "sha256": "77f4d22637c82c99b1bf65cba3c85b5548dc046c6fac2bca98327464279d5ef6"
+    },
+    "model_free_validation": {
+      "path": "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_pythia160m_layer_specificity_v4.py",
+      "byte_count": 5962,
+      "sha256": "e59ae2d912925749d5c2d58baa84ce94c8d932b3b643b8b6593e620973b891db"
+    }
+  },
+  "diagnostic_design": {
+    "target_label": "^0|C",
+    "contrast_label": "^0|E",
+    "target_layer": 3,
+    "layer_universe": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+    "target_token": "prompt_final_non_padding_token",
+    "target_layer_doses_l2": [-0.5, -0.25, 0.25, 0.5],
+    "off_target_layer_doses_l2": [-0.5, 0.5],
+    "intervention_direction": "unchanged frozen V2 sparse unit-L2 ^0|C direction",
+    "common_endpoint": "same-prompt change in frozen calibration-derived final-layer linear-readout margin",
+    "readout_construction": "unit-L2 difference of baseline final-layer hidden-state means for the sealed 8-vs-8 calibration split; signed toward ^0|C; no held-out use",
+    "projection_patchback": "After layer-2 intervention, remove at layer 3 only the propagated change along the frozen intervention direction relative to the same-prompt baseline layer-3 state.",
+    "full_state_patchback": "Restore the same-prompt baseline prompt-final layer-3 state after layer-2 or target-layer intervention.",
+    "seed_schedule": {
+      "request_seed_base": 460000,
+      "bootstrap_seed": 160409
+    },
+    "planned_forward_passes": 1536
+  },
+  "thresholds_and_stop_rules": {
+    "common_readout_validity": {
+      "minimum_heldout_balanced_accuracy": 0.65,
+      "failure": "FAIL_CLOSED / COMMON_READOUT_INVALID"
+    },
+    "no_op_equivalence": {
+      "max_abs_logit_delta": 0.000001,
+      "failure": "FAIL_CLOSED"
+    },
+    "target_layer_dose_response": {
+      "minimum_spearman_rho": 0.8,
+      "minimum_median_abs_effect_at_dose_0_5": 0.02,
+      "required_sign_alignment": true,
+      "failure": "FAIL_CLOSED / NO LOCALIZATION CONCLUSION"
+    },
+    "layer_specificity": {
+      "target_layer_must_be_unique_max_at_both_signs": true,
+      "maximum_off_target_to_target_median_abs_effect_ratio": 0.5,
+      "bootstrap_samples": 2048,
+      "bootstrap_seed": 160409,
+      "bootstrap_upper_quantile": 0.95,
+      "bootstrap_upper_must_not_exceed_ratio": 0.5,
+      "failure": "FAIL_CLOSED / DISTRIBUTED_OR_UNRESOLVED EFFECT / NO STEERING CLAIM"
+    },
+    "non_layer_controls": {
+      "applies_to": [
+        "same_norm_random_direction",
+        "wrong_token",
+        "wrong_axis"
+      ],
+      "maximum_control_to_target_median_abs_effect_ratio": 0.5,
+      "failure": "FAIL_CLOSED"
+    },
+    "projection_patchback_diagnostic": {
+      "minimum_median_effect_reduction_fraction": 0.8,
+      "classification_if_met": "ADJACENT_TARGET_PROJECTION_MEDIATION_SUPPORTED_RESEARCH_ONLY",
+      "classification_if_unmet": "ADJACENT_TRANSPORT_UNRESOLVED",
+      "decision_authority": "NONE",
+      "important_boundary": "This diagnostic cannot reverse V3 or satisfy layer specificity."
+    },
+    "full_state_patchback": {
+      "maximum_abs_downstream_logit_residual": 0.00001,
+      "failure": "FAIL_CLOSED"
+    },
+    "artifact_integrity": {
+      "finite_logit_share": 1.0,
+      "missing_nonfinite_or_unbound_artifact": "FAIL_CLOSED"
+    },
+    "collateral_floor": {
+      "minimum_top1_preservation_share": 0.8,
+      "failure": "COLLATERAL_HARM_STOP",
+      "interpretation": "Distribution-preservation check only; not a safety or prompt-injection-defense score."
+    }
+  },
+  "expected_outputs_for_future_separately_authorized_executor": {
+    "raw_next_token_logits": {
+      "count": 1536,
+      "dtype": "float32",
+      "hash_each": true
+    },
+    "raw_final_layer_prompt_final_states": {
+      "count": 1536,
+      "shape_each": [768],
+      "dtype": "float32",
+      "hash_each": true
+    },
+    "raw_same_prompt_baseline_layer3_states": {
+      "count": 38,
+      "shape_each": [768],
+      "dtype": "float32",
+      "hash_each": true
+    },
+    "common_readout": "Retain exact calibration inputs, derived 768-coordinate float32 unit vector, norm, sign, and canonical hash.",
+    "journal": "Append-only per-request lineage, hashes, timing, seed, layer, dose, condition, and patch-back metadata.",
+    "terminal_packet": "Result, raw inventory, independent audit, receipt/lock copies, and fail-closed status."
+  },
+  "compute_cap": {
+    "mode": "FUTURE_LOCAL_OFFLINE_RESEARCH_ONLY",
+    "device": "CPU_ONLY",
+    "torch_num_threads": 8,
+    "max_prompt_tokens": 128,
+    "max_forward_passes": 1536,
+    "frozen_planned_forward_passes": 1536,
+    "max_total_prompt_tokens": 262144,
+    "max_wall_clock_seconds": 5400,
+    "max_raw_artifact_bytes": 402653184,
+    "max_generated_tokens": 0,
+    "network_allowed": false,
+    "provider_calls_allowed": false,
+    "paid_compute_allowed": false,
+    "runpod_allowed": false,
+    "gpu_query_allowed": false,
+    "gpu_use_allowed": false,
+    "retry_allowed": false,
+    "resume_allowed": false,
+    "repair_top_up_backfill_allowed": false
+  },
+  "audit_rules": {
+    "independent_standard_library_auditor_required": true,
+    "recompute_common_readout_from_raw_calibration_states": true,
+    "verify_exact_request_order_and_count": true,
+    "verify_every_raw_artifact_hash": true,
+    "recompute_point_and_bootstrap_layer_ratios": true,
+    "verify_both_signs_and_full_layer_universe": true,
+    "recompute_projection_and_full_state_patchback_metrics": true,
+    "verify_compute_cap_and_claim_boundary": true,
+    "any_drift_or_missing_artifact": "FAIL_CLOSED"
+  },
+  "execution_gates": {
+    "feature_flag": "CAS_PYTHIA160M_LAYER_SPECIFICITY_V4_ENABLED",
+    "feature_flag_default": "disabled",
+    "live_flag": "CAS_PYTHIA160M_RESEARCH_LIVE",
+    "live_flag_allowed": false,
+    "live_worker_integration": "prohibited",
+    "product_decision_integration": "prohibited",
+    "evidence_packet_accept_integration": "prohibited",
+    "real_model_executor_status": "NOT_IMPLEMENTED / NOT_AUTHORIZED",
+    "independent_artifact_auditor_status": "NOT_IMPLEMENTED / NOT_AUTHORIZED",
+    "receipt_status": "ABSENT / CREATION_NOT_AUTHORIZED",
+    "output_status": "ABSENT"
+  },
+  "future_execution_lock_prerequisites": [
+    "owner separately authorizes a preparation increment for a receipt-bound real-model V4 executor and independent artifact auditor",
+    "executor implements exact baseline capture, calibration readout, 12-layer paired-sign sweep, projection patch-back, full-state patch-back, raw retention, timeout, and fail-closed cleanup",
+    "auditor independently recomputes all artifacts, readout, thresholds, bootstrap results, caps, and claim boundary",
+    "fresh-interpreter model-free fixtures prove missing/stale/drifted authority fails before framework import, model load, or output",
+    "synthetic end-to-end fixtures prove the final allowed request and first prohibited request at the exact 1536-pass ceiling",
+    "post-commit hashes bind the new executor, auditor, bootstrap, environment, compute manifest, this V4 diagnostic lock, and all preserved V3 evidence",
+    "only a further explicit owner authorization may create a fresh one-use V4 run receipt"
+  ],
+  "no_retry_boundary": "V3 may not be retried or reused. Any future V4 authorized invocation is one-shot and non-reusable whether it passes, fails, stalls, or produces partial output.",
+  "replication": {
+    "second_architecture_required_before_broader_claim": true,
+    "gpt2_status": "LATER / NOT_AUTHORIZED",
+    "broader_claim_status": "OPEN"
+  },
+  "claim_boundary": "Preparation-only V4 diagnostic lock. No receipt exists, no framework or model was loaded, and no diagnostic/model experiment occurred. This does not reinterpret V3 as success. Any future passing result remains bounded research evidence and cannot establish live steering, safety steering, prompt-injection defense, Gate 2, ACCEPT, LICENSED, production readiness, or a production result."
+}

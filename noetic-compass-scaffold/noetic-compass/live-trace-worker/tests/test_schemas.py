@@ -23,6 +23,16 @@ def test_manifest_event_round_trip():
     e2 = ManifestEvent.model_validate_json(j)
     assert e2.manifest.model_id == "EleutherAI/pythia-160m"
     assert e2.manifest.is_real_model is False  # m1 invariant
+    assert e2.manifest.execution_kind == "demo_schema_only"
+    assert "mlp_intermediate_post_activation" in e2.manifest.supported_hooks
+    contract = e2.manifest.intervention_hook_contract
+    assert contract.coordinate_space == "mlp_intermediate_post_activation"
+    assert contract.module_path_template == (
+        "gpt_neox.layers[{layer}].mlp.dense_4h_to_h"
+    )
+    assert contract.tensor_role == "forward_pre_hook.input[0]"
+    assert contract.token_selection == "batch_0_last_sequence_position"
+    assert contract.failure_policy == "fail_closed"
 
 
 def test_token_event_accepts_optional_confidence():

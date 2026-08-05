@@ -318,7 +318,17 @@ def test_real_stream_emits_real_ablation_event(monkeypatch: pytest.MonkeyPatch):
 
     loaded = LoadedModel(
         manifest=model_loader.PYTHIA_160M_MANIFEST.model_copy(
-            update={"is_real_model": True}
+            update={
+                "is_real_model": True,
+                "execution_kind": "real_model_weights",
+                "resolved_revision": model_loader.PYTHIA_160M_REVISION,
+                "revision_verified": True,
+                "weights_filename": model_loader.PYTHIA_160M_WEIGHTS_FILENAME,
+                "weights_sha256": model_loader.PYTHIA_160M_WEIGHTS_SHA256,
+                "weights_bytes": model_loader.PYTHIA_160M_WEIGHTS_BYTES,
+                "weights_hash_verified": True,
+                "model_identity_status": "PINNED_REVISION_AND_WEIGHTS_SHA256",
+            }
         ),
         model=_build_fake_pythia(),
         tokenizer=_FakeTokenizer(),
@@ -425,7 +435,17 @@ def test_real_stream_emits_real_control_event(monkeypatch: pytest.MonkeyPatch):
 
     loaded = LoadedModel(
         manifest=model_loader.PYTHIA_160M_MANIFEST.model_copy(
-            update={"is_real_model": True}
+            update={
+                "is_real_model": True,
+                "execution_kind": "real_model_weights",
+                "resolved_revision": model_loader.PYTHIA_160M_REVISION,
+                "revision_verified": True,
+                "weights_filename": model_loader.PYTHIA_160M_WEIGHTS_FILENAME,
+                "weights_sha256": model_loader.PYTHIA_160M_WEIGHTS_SHA256,
+                "weights_bytes": model_loader.PYTHIA_160M_WEIGHTS_BYTES,
+                "weights_hash_verified": True,
+                "model_identity_status": "PINNED_REVISION_AND_WEIGHTS_SHA256",
+            }
         ),
         model=_build_fake_pythia(),
         tokenizer=_FakeTokenizer(),

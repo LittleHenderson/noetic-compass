@@ -1,0 +1,61 @@
+{
+  "schema_version": "cas_harness_pythia160m_model_manifest.v1",
+  "status": "STATIC_LOCAL_BLOB_INVENTORY_ONLY / MODEL_NOT_LOADED",
+  "model_id": "EleutherAI/pythia-160m",
+  "revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+  "architecture": "GPTNeoXForCausalLM",
+  "architecture_family": "GPT-NeoX",
+  "expected_layers": 12,
+  "hidden_size": 768,
+  "snapshot_path": "C:\\Users\\wakil\\.cache\\huggingface\\hub\\models--EleutherAI--pythia-160m\\snapshots\\50f5173d932e8e61f858120bcb800b97af589f46",
+  "files": [
+    {
+      "name": "config.json",
+      "resolved_blob_path": "C:\\Users\\wakil\\.cache\\huggingface\\hub\\models--EleutherAI--pythia-160m\\blobs\\b8368ff94f3bcf3088de5e9912251fc0208ae524",
+      "byte_count": 569,
+      "sha256": "76eb275107220e450d31258f792a2efcbee109d8b62ae0088260057dec06362f"
+    },
+    {
+      "name": "model.safetensors",
+      "resolved_blob_path": "C:\\Users\\wakil\\.cache\\huggingface\\hub\\models--EleutherAI--pythia-160m\\blobs\\29d2e457a664e41c12c735f20a36dc0956a665f614a54ce5db21a32e75965270",
+      "byte_count": 374998696,
+      "sha256": "29d2e457a664e41c12c735f20a36dc0956a665f614a54ce5db21a32e75965270"
+    },
+    {
+      "name": "special_tokens_map.json",
+      "resolved_blob_path": "C:\\Users\\wakil\\.cache\\huggingface\\hub\\models--EleutherAI--pythia-160m\\blobs\\0204ed10c186a4c7c68f55dff8f26087a45898d6",
+      "byte_count": 99,
+      "sha256": "6f50ab5a5a509a1c309d6171f339b196a900dc9c99ad0408ff23bb615fdae7ad"
+    },
+    {
+      "name": "tokenizer.json",
+      "resolved_blob_path": "C:\\Users\\wakil\\.cache\\huggingface\\hub\\models--EleutherAI--pythia-160m\\blobs\\f74dfbfab8f97770a87769c739fb080c21c8bacc",
+      "byte_count": 2113710,
+      "sha256": "c24618a1b3e6a38167beff1c72cffd126c3a66254347304b50547d12c5f25624"
+    },
+    {
+      "name": "tokenizer_config.json",
+      "resolved_blob_path": "C:\\Users\\wakil\\.cache\\huggingface\\hub\\models--EleutherAI--pythia-160m\\blobs\\f1860edb10f80bcaf7b023fce47c68a23b724c23",
+      "byte_count": 396,
+      "sha256": "70e38394e494931c6f773ba41e19460dd4436526b852207367f04341b4066d3f"
+    }
+  ],
+  "tokenizer_binding": {
+    "model_id": "EleutherAI/pythia-160m",
+    "revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "tokenizer_json_sha256": "c24618a1b3e6a38167beff1c72cffd126c3a66254347304b50547d12c5f25624",
+    "tokenizer_config_sha256": "70e38394e494931c6f773ba41e19460dd4436526b852207367f04341b4066d3f",
+    "special_tokens_map_sha256": "6f50ab5a5a509a1c309d6171f339b196a900dc9c99ad0408ff23bb615fdae7ad",
+    "local_files_only_required": true,
+    "trust_remote_code": false
+  },
+  "inspection_boundary": {
+    "framework_imports_performed": false,
+    "model_loads_performed": 0,
+    "gpu_queries_performed": 0,
+    "network_calls_performed": 0
+  },
+  "excluded_models": [
+    "gpt2"
+  ]
+}

@@ -42,7 +42,7 @@ from .knob_resolution import (
     resolve_knobs,
 )
 from .model_loader import get_loaded_model
-from .probe_runner import resolve_probes
+from .probe_runner import demo_intervention_result, resolve_probes
 from .word_spans import build_word_spans
 
 logger = logging.getLogger(__name__)
@@ -195,6 +195,19 @@ async def stream_fake_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
     layer_list = resolved["foundation_probe"]["layer_range"]
     layer_filter: set[int] | None = set(layer_list) if layer_list else None
     rpm_threshold = float(resolved["rpm_gate_check"]["strictness_threshold"])
+    from .pythia_runner import _eraser_intervention
+
+    demo_intervention = _eraser_intervention(
+        req,
+        execution_kind="demo_schema_only",
+        expected_coordinate_width=loaded.manifest.model_arch.mlp_intermediate_dim,
+        expected_projected_output_width=loaded.manifest.model_arch.hidden_size,
+    )
+    demo_result = (
+        demo_intervention_result(demo_intervention)
+        if demo_intervention is not None
+        else None
+    )
 
     seed = req.seed if req.seed is not None else 1234
     rng = random.Random(seed)
@@ -223,6 +236,7 @@ async def stream_fake_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
             if "confidence_margin" in probes
             else None,
             inversion_risk=_inversion_risk(req, fake_confidence, fake_neurons),
+            eraser_intervention_result=demo_result,
         )
         emitted_tokens.append((i, tok))
         await asyncio.sleep(0.04)

@@ -1,0 +1,64 @@
+{
+  "schema_version": "cas_harness_pythia160m_environment_manifest.v3",
+  "status": "FROZEN_ISOLATED_STARTUP_CONTRACT / FRAMEWORK_IMPORT_FIXTURE_REQUIRED",
+  "python": {
+    "implementation": "CPython",
+    "version": "3.14.0",
+    "executable": "C:\\Python314\\python.exe",
+    "executable_sha256": "467014615a5255aca450ae88100dd2caf887da87657f00e3c2171ec44a685aec",
+    "required_flags": [
+      "-I",
+      "-B"
+    ]
+  },
+  "platform": {
+    "system": "Windows",
+    "machine": "AMD64",
+    "cpu": "Intel Core i7-13700HX",
+    "logical_processors": 24,
+    "memory_gib": 15.71
+  },
+  "startup_contract": {
+    "path": "docs/working/research_intervention_pythia160m_v3/PYTHIA160M_STARTUP_CONTRACT_V3.json",
+    "byte_count": 4744,
+    "sha256": "5478dbd7ad54a3cf813c32477fc88827721d774a554b85717cd348f417678cdc"
+  },
+  "package_root": "C:\\Users\\wakil\\AppData\\Roaming\\Python\\Python314\\site-packages",
+  "packages": [
+    {
+      "distribution": "torch",
+      "version": "2.11.0",
+      "metadata_path": "C:\\Users\\wakil\\AppData\\Roaming\\Python\\Python314\\site-packages\\torch-2.11.0.dist-info\\METADATA",
+      "byte_count": 29801,
+      "sha256": "1087cc25c7edd321d822b5bdca357054f60119db2372a6d38eeda2c538893c17"
+    },
+    {
+      "distribution": "transformers",
+      "version": "5.8.1",
+      "metadata_path": "C:\\Users\\wakil\\AppData\\Roaming\\Python\\Python314\\site-packages\\transformers-5.8.1.dist-info\\METADATA",
+      "byte_count": 33270,
+      "sha256": "a6849e58d566783548c81543ed48a244176b0f1d38725144b56841440e8bb854"
+    },
+    {
+      "distribution": "safetensors",
+      "version": "0.7.0",
+      "metadata_path": "C:\\Users\\wakil\\AppData\\Roaming\\Python\\Python314\\site-packages\\safetensors-0.7.0.dist-info\\METADATA",
+      "byte_count": 4185,
+      "sha256": "8f8c97a6df7b185a07c2b89e7eaf9d13057d657ffb499292efde5b32d614881b"
+    },
+    {
+      "distribution": "tokenizers",
+      "version": "0.22.2",
+      "metadata_path": "C:\\Users\\wakil\\AppData\\Roaming\\Python\\Python314\\site-packages\\tokenizers-0.22.2.dist-info\\METADATA",
+      "byte_count": 7428,
+      "sha256": "5ad9bccf21ae53d45f812703c80c7c03ecea300823655a2968f9e6778779bdb3"
+    }
+  ],
+  "framework_imports_performed": false,
+  "model_loads": 0,
+  "tokenizer_loads": 0,
+  "gpu_queries": 0,
+  "network_calls": 0,
+  "receipt_created": false,
+  "research_output_created": false
+}

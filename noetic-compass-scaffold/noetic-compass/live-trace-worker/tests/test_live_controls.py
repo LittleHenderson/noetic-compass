@@ -98,6 +98,11 @@ def test_drive_local_eraser_uses_selected_f5_runtime_cover():
     intervention = _eraser_intervention(req)
     assert intervention is not None
     assert intervention.gain == 0.5
+    assert intervention.coordinate_space == "mlp_intermediate_post_activation"
+    assert intervention.execution_kind == "typed_test_fixture"
+    assert intervention.source_kind == "typed_test_fixture"
+    assert intervention.expected_coordinate_width == 3072
+    assert intervention.expected_projected_output_width == 768
     assert (1, 142) in intervention.coords
     assert (5, 2346) in intervention.coords
 

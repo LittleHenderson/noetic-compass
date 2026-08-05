@@ -1,0 +1,59 @@
+{
+  "schema_version": "cas_harness_pythia160m_research_audit.v3",
+  "created_at": "2026-07-29T16:24:57.5258530Z",
+  "run_id": "pythia160m-riv3-20260729161708aa2f7f3eb5b9c6cdfacd",
+  "source_commit": "b18384ce8373a4e04648d64c8c42ecc1ba24e4c3",
+  "lock_sha256": "37f854fe082cc3923508bb2b3c41e622fb89575270110a35ffe79d24cce17db5",
+  "receipt_sha256": "fe681e1b6805b59a476d14e86d15c257d240eef188a8c849aa594b8f2e0bc1b2",
+  "auditor_sha256": "22b508f0ede8fff8177c78cda3539c5177162b59599778530da841fdc56d4181",
+  "auditor_framework_imports": [],
+  "audit_status": "FAIL_CLOSED",
+  "findings": [
+    "CONTROL_EFFECT_CEILING_FAIL:wrong_layer"
+  ],
+  "gates": {
+    "exact_request_matrix": true,
+    "no_op_equivalence": true,
+    "bidirectional_dose_response": true,
+    "control_effect_ceiling": false,
+    "wrong_sign_reversal": true,
+    "utility_floor": true,
+    "fluency_floor": true,
+    "safety_collateral_floor": true,
+    "patch_back": true,
+    "compute_cap": true,
+    "claim_boundary": true
+  },
+  "median_target_effect_by_dose": {
+    "-0.5": -0.5,
+    "-0.25": -0.25,
+    "0.0": 0.0,
+    "0.25": 0.25,
+    "0.5": 0.5
+  },
+  "spearman_rho": 1.0,
+  "control_effect_diagnostic": {
+    "classification": "MECHANICAL_EXPLANATION_OF_FROZEN_AUDIT_FINDING / NO DECISION AUTHORITY",
+    "heldout_prompt_count": 38,
+    "target_median_effect_at_positive_0_5": 0.5,
+    "maximum_control_to_target_median_abs_effect_ratio": 0.5,
+    "wrong_layer_median_effect": 0.30732860416173935,
+    "wrong_layer_abs_ratio_to_target": 0.6146572083234787,
+    "wrong_layer_maximum_allowed_abs_effect": 0.25,
+    "same_norm_random_direction_ratio": 0.0,
+    "wrong_token_ratio": 0.0,
+    "wrong_axis_ratio": 0.0,
+    "interpretation": "The wrong-layer control moved the frozen target projection by about 61.5% of the intended target effect, exceeding the preregistered 50% ceiling. This makes the effect insufficiently layer-specific under the frozen rule."
+  },
+  "execution_evidence": {
+    "request_count": 472,
+    "raw_artifact_count": 472,
+    "total_prompt_tokens": 22756,
+    "maximum_prompt_tokens": 94,
+    "finite_logits_all": true,
+    "network_attempts": 0,
+    "result_payload_sha256": "01df6f3ef56bad9a8f8dba13aa4ecdce90f3969f4cc806b0647291329c925053"
+  },
+  "terminal_classification": "FAIL_CLOSED / NON_REUSABLE / NO RETRY / RESEARCH_ONLY / OPEN / NOT_LICENSED / NO ACCEPT / NO PRODUCTION EFFECT",
+  "claim_boundary": "Independent offline research audit only. No live steering, safety or prompt-injection defense, Gate 2, ACCEPT, LICENSED, production readiness, or production result."
+}

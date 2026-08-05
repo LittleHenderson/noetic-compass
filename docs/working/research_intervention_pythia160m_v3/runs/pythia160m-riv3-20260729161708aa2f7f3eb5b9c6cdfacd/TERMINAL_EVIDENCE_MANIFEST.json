@@ -1,0 +1,85 @@
+{
+  "schema_version": "cas_harness_pythia160m_terminal_evidence_manifest.v3",
+  "status": "FAIL_CLOSED / CONTROL_EFFECT_CEILING_FAIL:wrong_layer / NON_REUSABLE / NO RETRY",
+  "run_id": "pythia160m-riv3-20260729161708aa2f7f3eb5b9c6cdfacd",
+  "source_commit": "b18384ce8373a4e04648d64c8c42ecc1ba24e4c3",
+  "lock_sha256": "37f854fe082cc3923508bb2b3c41e622fb89575270110a35ffe79d24cce17db5",
+  "receipt_sha256": "fe681e1b6805b59a476d14e86d15c257d240eef188a8c849aa594b8f2e0bc1b2",
+  "receipt_payload_sha256": "8810672a1206e6f007631a237153b12ac4f57619241003527144a1244cb939ce",
+  "nonce_marker": {
+    "path": "docs/working/research_intervention_pythia160m_v3/nonce_ledger/e4956a59af02b045a68271765f6718ce0e445ccef06fb0b5ce7351acc5d9edf5.used",
+    "byte_count": 286,
+    "sha256": "cc9b6ddf423ba765306125e2e8b6c2cb2270bc334342314a3253e0e84bd85eb7"
+  },
+  "launcher_stdout": {
+    "path": "docs/working/research_intervention_pythia160m_v3/launcher_pythia160m-riv3-20260729161708aa2f7f3eb5b9c6cdfacd.stdout.txt",
+    "byte_count": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "launcher_stderr": {
+    "path": "docs/working/research_intervention_pythia160m_v3/launcher_pythia160m-riv3-20260729161708aa2f7f3eb5b9c6cdfacd.stderr.txt",
+    "byte_count": 323,
+    "sha256": "48abbbb0168051dff79d44a89b9b9fa934e5d497cc7c5b34f893239ab622afbf"
+  },
+  "run_root_files": {
+    "authorization_receipt.json": {
+      "byte_count": 2810,
+      "sha256": "fe681e1b6805b59a476d14e86d15c257d240eef188a8c849aa594b8f2e0bc1b2"
+    },
+    "successor_lock.json": {
+      "byte_count": 10047,
+      "sha256": "37f854fe082cc3923508bb2b3c41e622fb89575270110a35ffe79d24cce17db5"
+    },
+    "journal.jsonl": {
+      "byte_count": 87210,
+      "sha256": "54017656be5b2366b10c61924912887e0af42b9b0bd873cd998ec573cc3c3d56"
+    },
+    "result.json": {
+      "byte_count": 478182,
+      "sha256": "bb9d68c06b86a69b3507b579761356d0d9db8c9396d6268c8255b63aedead90e",
+      "result_payload_sha256": "01df6f3ef56bad9a8f8dba13aa4ecdce90f3969f4cc806b0647291329c925053"
+    },
+    "independent_audit.json": {
+      "byte_count": 2583,
+      "sha256": "bd5e02dd6b6e85b664b82aeeef2fafeaa41d39ea05db02b7d7234cfbaaccf308"
+    },
+    "TERMINAL_STATUS.md": {
+      "byte_count": 2513,
+      "sha256": "3efb82edccb97bdaedcc47d6907c66596a15b06b3c58f8f7b17638c723ac001b"
+    }
+  },
+  "raw_logits": {
+    "artifact_count": 472,
+    "per_artifact_byte_count": 201216,
+    "total_byte_count": 94973952,
+    "inventory_source": "result.json records in exact request order",
+    "inventory_canonical_sha256": "748a016fff6e7e610852de702f31e6a1002521fb9b37c59be6aa9c54c2268b36",
+    "first_artifact": {
+      "relative_path": "raw_logits/0000.f32",
+      "sha256": "923a955c32b764c564f608814c11490a930049df9d8a22d63b73e9d5005cba0d"
+    },
+    "last_artifact": {
+      "relative_path": "raw_logits/0471.f32",
+      "sha256": "9016897e3a63d34a429d332416d3b7706db9d4f5392b261bc1882e4f8205d61d"
+    }
+  },
+  "execution_summary": {
+    "request_count": 472,
+    "total_prompt_tokens": 22756,
+    "maximum_prompt_tokens": 94,
+    "generated_tokens": 0,
+    "finite_logits_all": true,
+    "network_attempts": 0,
+    "gpu_queries": 0,
+    "provider_paid_runpod_calls": 0,
+    "failure_file_present": false
+  },
+  "audit_summary": {
+    "audit_status": "FAIL_CLOSED",
+    "finding": "CONTROL_EFFECT_CEILING_FAIL:wrong_layer",
+    "wrong_layer_abs_ratio_to_target": 0.6146572083234787,
+    "frozen_maximum_ratio": 0.5,
+    "all_other_frozen_audit_gates_passed": true
+  },
+  "claim_boundary": "RESEARCH_ONLY / OPEN / NOT_LICENSED / NO ACCEPT / NO PRODUCTION EFFECT. No live steering, safety or prompt-injection defense, Gate 2, ACCEPT, LICENSED, production readiness, or production result."
+}

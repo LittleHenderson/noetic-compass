@@ -1,0 +1,147 @@
+{
+  "schema_version": "cas_harness_pythia160m_intervention_map.v1",
+  "status": "PROSPECTIVE / NEVER_EXECUTED",
+  "source_evidence": {
+    "cover_discovery": {
+      "path": "D:\\tksCAS-archive\\pythia160m_gate1_reproduction_20260531\\pythia160m_stage9_40e_neuron_covers.json",
+      "byte_count": 413646,
+      "sha256": "e585d119dd7db2592f4b635bce40f785176f4681ecdcf012197da83ebe7ab828",
+      "source_status": "candidate_cover_discovery_completed"
+    },
+    "cover_adapter": {
+      "path": "D:\\tksCAS-archive\\pythia160m_activation_cover_ablation_20260603\\cover_adapter.json",
+      "byte_count": 10302,
+      "sha256": "8be1396ae4a44c27b05846af54f9a28147b8743ca8125b4c9cdf6122446c234a"
+    },
+    "matched_ablation_report": {
+      "path": "D:\\tksCAS-archive\\pythia160m_activation_cover_ablation_20260603\\pythia160m_activation_cover_ablation_report.json",
+      "byte_count": 5738,
+      "sha256": "8093b49935fb37c7498956de4960308d4126c1a3aec428d602fc75678de4860f",
+      "important_limit": "Post-hoc activation-level evidence only; not a live forward-pass intervention result."
+    }
+  },
+  "model_contract": {
+    "model_id": "EleutherAI/pythia-160m",
+    "revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "module": "gpt_neox.layers[3]",
+    "stream": "residual_hidden_state",
+    "hidden_size": 768,
+    "target_layer": 3,
+    "target_token": "prompt_final_non_padding_token",
+    "dtype": "model_native_float32_cpu"
+  },
+  "target": {
+    "label": "^0|C",
+    "construction": "Sparse unit-L2 vector using the eight frozen candidate coordinates and their signed_contrast_z values from the sealed cover-discovery artifact.",
+    "coordinates": [
+      657,
+      162,
+      727,
+      588,
+      739,
+      535,
+      229,
+      365
+    ],
+    "raw_signed_contrast_z": [
+      -1.080503866063064,
+      -1.4021604385922677,
+      0.9159088722614422,
+      1.3730367745611112,
+      0.8199097873039207,
+      0.9285971930001636,
+      1.2242985193683147,
+      -1.433111309034393
+    ],
+    "raw_l2_norm": 3.308310934825981,
+    "unit_values": [
+      -0.3266028760141008,
+      -0.4238297022906712,
+      0.27685090377081484,
+      0.4150265200611603,
+      0.24783335165775414,
+      0.28068619041366144,
+      0.3700675491170885,
+      -0.43318519246431575
+    ]
+  },
+  "fixed_doses_l2": [
+    -0.5,
+    -0.25,
+    0.0,
+    0.25,
+    0.5
+  ],
+  "controls": {
+    "no_op": {
+      "dose": 0.0,
+      "location": "target"
+    },
+    "same_norm_random_direction": {
+      "coordinates": [
+        423,
+        45,
+        172,
+        73,
+        415,
+        560,
+        333,
+        179
+      ],
+      "unit_values": [
+        0.3535533905932738,
+        -0.3535533905932738,
+        0.3535533905932738,
+        -0.3535533905932738,
+        0.3535533905932738,
+        -0.3535533905932738,
+        0.3535533905932738,
+        -0.3535533905932738
+      ],
+      "source_seed": 1007848327
+    },
+    "wrong_layer": {
+      "layer": 2,
+      "token": "prompt_final_non_padding_token",
+      "direction": "target"
+    },
+    "wrong_token": {
+      "layer": 3,
+      "token": "prompt_first_non_padding_token",
+      "direction": "target"
+    },
+    "wrong_sign": {
+      "layer": 3,
+      "token": "prompt_final_non_padding_token",
+      "direction": "negative_target"
+    },
+    "wrong_axis": {
+      "label": "^0|E",
+      "coordinates": [
+        729,
+        14,
+        107,
+        741,
+        171,
+        409,
+        89,
+        696
+      ],
+      "construction": "Frozen wrong-class cover reference from the sealed ^0|C cover record; unit signs are fixed by source readout weights at execution-manifest construction and may not be selected using held-out outcomes."
+    },
+    "patch_back": {
+      "procedure": "Capture the unmodified target-layer/token residual, apply the target intervention, restore the captured residual before downstream execution, and compare downstream logits to baseline."
+    }
+  },
+  "endpoints": {
+    "mechanical_primary": "Frozen ^0|C linear-readout margin at layer 3 after the hook, reported across signed doses.",
+    "downstream_secondary": "Next-token logit and probability-distribution change after the remaining layers.",
+    "collateral": [
+      "baseline top-1 token preservation",
+      "next-token Jensen-Shannon divergence",
+      "finite-logit and finite-probability checks",
+      "patch-back downstream-logit residual"
+    ]
+  },
+  "interpretation_boundary": "A passing result can establish only that this exact offline Pythia snapshot exhibits bounded, dose-sensitive hidden-state intervention mechanics on the frozen prompts. The mechanical primary endpoint is partly construction-linked and cannot by itself establish semantic steering."
+}

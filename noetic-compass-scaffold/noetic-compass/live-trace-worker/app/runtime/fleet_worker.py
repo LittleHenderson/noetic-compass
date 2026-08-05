@@ -304,6 +304,11 @@ class FleetApiClient:
         }
         if result.status == "completed":
             payload["evidence_packet_fragment_ref"] = evidence_packet_fragment_ref
+            if result.evidence_payload is not None:
+                # The API independently recomputes the fragment ref with these
+                # bytes included.  Omitting this field would let a rich local
+                # fragment collapse to an assignment-only receipt.
+                payload["evidence_packet_fragment_payload"] = result.evidence_payload
         else:
             payload["error_message"] = result.error_message or "Probe worker failed."
         return await self._post(
@@ -431,6 +436,7 @@ def write_evidence_fragment(
         expected_outputs=job.expected_outputs,
         produced_outputs=result.produced_outputs,
         missing_outputs=result.missing_outputs,
+        evidence_packet_fragment_payload=result.evidence_payload,
     )
     payload = {
         "schema_version": "cas_harness_worker_evidence_fragment.v1",
@@ -452,7 +458,7 @@ def write_evidence_fragment(
     if result.evidence_payload is not None:
         payload["evidence_payload"] = result.evidence_payload
     path = config.evidence_dir / f"{job.job_id}.evidence-fragment.json"
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
+    _write_json_atomically(path, payload)
     return fragment_ref
 
 
@@ -468,6 +474,7 @@ def build_evidence_fragment_ref(
     expected_outputs: tuple[str, ...] | list[str],
     produced_outputs: tuple[str, ...] | list[str],
     missing_outputs: tuple[str, ...] | list[str] = (),
+    evidence_packet_fragment_payload: dict[str, Any] | None = None,
 ) -> str:
     payload = {
         "schema_version": "cas_harness_evidence_fragment.v1",
@@ -482,8 +489,40 @@ def build_evidence_fragment_ref(
         "produced_outputs": list(produced_outputs),
         "missing_outputs": list(missing_outputs),
     }
+    if evidence_packet_fragment_payload is not None:
+        payload["fragment_payload_sha256"] = hashlib.sha256(
+            json.dumps(
+                evidence_packet_fragment_payload,
+                sort_keys=True,
+                separators=(",", ":"),
+                ensure_ascii=True,
+            ).encode("utf-8")
+        ).hexdigest()
     digest = hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
     return f"cas-fragment://{audit_id}/{job_id}/{worker_id}/{shard_id}/sha256:{digest}"
+
+
+def _write_json_atomically(path: Path, payload: dict[str, Any]) -> None:
+    """Durably replace a fragment only after all bytes reach the local file.
+
+    The receipt is submitted only after this returns.  A process failure while
+    writing therefore leaves either the previous complete fragment or a
+    separately named temporary file, never a truncated acknowledged fragment.
+    """
+
+    encoded = json.dumps(payload, indent=2, sort_keys=True).encode("utf-8")
+    temp_path = path.with_name(
+        f".{path.name}.tmp-{os.getpid()}-{secrets.token_hex(8)}"
+    )
+    try:
+        with temp_path.open("xb") as handle:
+            handle.write(encoded)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temp_path, path)
+    finally:
+        if temp_path.exists():
+            temp_path.unlink()
 
 
 def _parse_command_result(path: Path, job: FleetJob) -> FleetJobExecutionResult:

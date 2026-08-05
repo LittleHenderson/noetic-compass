@@ -1,0 +1,16 @@
+{
+  "schema_version": "cas_harness_pythia160m_receipt_preflight_failure.v2",
+  "status": "VOID / INVALID_RUN_ID / NON_REUSABLE / NO RUN STARTED",
+  "failed_receipt_path": "docs/working/research_intervention_pythia160m_v2/authorizations/pythia160m-riv2-20260729154010-184f6b72aa01ddd1.json",
+  "failed_receipt_byte_count": 2707,
+  "failed_receipt_sha256": "7fc63b32f8dd838427c87302663ebfee980e2ddcab269ada2113476e7c83fec4",
+  "failure": "Receipt run ID is invalid",
+  "reason": "The suffix contained a hyphen, but the frozen regex permits only lowercase alphanumerics after pythia160m-riv2-.",
+  "framework_imports": 0,
+  "model_loads": 0,
+  "nonce_consumed": false,
+  "output_created": false,
+  "network_calls": 0,
+  "retry_classification": "Pre-run paperwork correction only; not a research-run retry.",
+  "reuse_prohibited": true
+}

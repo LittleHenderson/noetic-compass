@@ -22,7 +22,19 @@ from app.schemas.requests import CreateSessionRequest
 
 
 def _real_manifest() -> ModelManifest:
-    return model_loader.PYTHIA_160M_MANIFEST.model_copy(update={"is_real_model": True})
+    return model_loader.PYTHIA_160M_MANIFEST.model_copy(
+        update={
+            "is_real_model": True,
+            "execution_kind": "real_model_weights",
+            "resolved_revision": model_loader.PYTHIA_160M_REVISION,
+            "revision_verified": True,
+            "weights_filename": model_loader.PYTHIA_160M_WEIGHTS_FILENAME,
+            "weights_sha256": model_loader.PYTHIA_160M_WEIGHTS_SHA256,
+            "weights_bytes": model_loader.PYTHIA_160M_WEIGHTS_BYTES,
+            "weights_hash_verified": True,
+            "model_identity_status": "PINNED_REVISION_AND_WEIGHTS_SHA256",
+        }
+    )
 
 
 def _force_real_loaded(monkeypatch: pytest.MonkeyPatch) -> None:

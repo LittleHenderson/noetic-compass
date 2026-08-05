@@ -25,6 +25,7 @@ WORKDIR /worker
 # there at runtime to reuse the warmed cache across restarts; otherwise the
 # weights baked below are used.
 ENV HF_HOME=/worker/.cache/huggingface \
+    PYTHIA_160M_REVISION=50f5173d932e8e61f858120bcb800b97af589f46 \
     PYTHONUNBUFFERED=1 \
     PORT=8080
 
@@ -41,8 +42,9 @@ COPY app ./app
 # the always-on pod for. Non-fatal: if the build host has no network, the
 # model loads on first warm_load instead (and demo mode covers the gap).
 RUN python -c "from transformers import AutoModelForCausalLM, AutoTokenizer; \
-  AutoTokenizer.from_pretrained('EleutherAI/pythia-160m'); \
-  AutoModelForCausalLM.from_pretrained('EleutherAI/pythia-160m')" || \
+  import os; revision=os.environ['PYTHIA_160M_REVISION']; \
+  AutoTokenizer.from_pretrained('EleutherAI/pythia-160m', revision=revision); \
+  AutoModelForCausalLM.from_pretrained('EleutherAI/pythia-160m', revision=revision, use_safetensors=True)" || \
   echo "Pre-cache failed (network?); model will load on first warm_load instead."
 
 # Document the served port for the RunPod HTTP proxy / reverse proxies.

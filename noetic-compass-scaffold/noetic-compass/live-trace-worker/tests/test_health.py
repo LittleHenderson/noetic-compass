@@ -16,8 +16,22 @@ def test_health_ok(client):
 
 
 def _loaded_model(*, manifest_is_real: bool, load_error: str | None = None):
+    identity = (
+        {
+            "execution_kind": "real_model_weights",
+            "resolved_revision": model_loader.PYTHIA_160M_REVISION,
+            "revision_verified": True,
+            "weights_filename": model_loader.PYTHIA_160M_WEIGHTS_FILENAME,
+            "weights_sha256": model_loader.PYTHIA_160M_WEIGHTS_SHA256,
+            "weights_bytes": model_loader.PYTHIA_160M_WEIGHTS_BYTES,
+            "weights_hash_verified": True,
+            "model_identity_status": "PINNED_REVISION_AND_WEIGHTS_SHA256",
+        }
+        if manifest_is_real
+        else {}
+    )
     manifest = model_loader.PYTHIA_160M_MANIFEST.model_copy(
-        update={"is_real_model": manifest_is_real},
+        update={"is_real_model": manifest_is_real, **identity},
     )
     return model_loader.LoadedModel(
         manifest=manifest,
@@ -42,6 +56,17 @@ def test_health_realmode_good_state(client, monkeypatch):
     assert body["load_error"] is None
     assert body["manifest_is_real_model"] is True
     assert body["model_id"] == "EleutherAI/pythia-160m"
+    assert body["requested_revision"] == model_loader.PYTHIA_160M_REVISION
+    assert body["resolved_revision"] == model_loader.PYTHIA_160M_REVISION
+    assert body["revision_verified"] is True
+    assert body["weights_filename"] == model_loader.PYTHIA_160M_WEIGHTS_FILENAME
+    assert body["weights_sha256"] == model_loader.PYTHIA_160M_WEIGHTS_SHA256
+    assert body["weights_bytes"] == model_loader.PYTHIA_160M_WEIGHTS_BYTES
+    assert body["weights_hash_verified"] is True
+    assert (
+        body["model_identity_status"]
+        == "PINNED_REVISION_AND_WEIGHTS_SHA256"
+    )
 
 
 def test_health_realmode_fake_mode_fails_even_with_loaded_model(client, monkeypatch):

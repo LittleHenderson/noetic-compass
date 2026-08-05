@@ -127,10 +127,9 @@ def resolve_drive(raw: Any) -> str:
     """Coerce a drive selector into a known drive string.
 
     Falls back to the default ``F1`` when missing or malformed.
-    Does NOT enforce membership in ``COVER_LIBRARY`` — the runner
-    decides whether to act on the drive (a drive without a cover set
-    becomes a no-op intervention but the user's choice still echoes
-    back via ``KnobResolutionEvent``).
+    Does NOT enforce membership in ``COVER_LIBRARY``. The runner preserves
+    the requested drive and emits a typed ``REJECTED_NO_COORDINATES`` result;
+    an unsupported drive is never treated as a successful no-op.
     """
     if isinstance(raw, str) and raw.startswith("F"):
         return raw
@@ -179,7 +178,7 @@ def resolve_knobs(req: CreateSessionRequest) -> dict[str, dict[str, Any]]:
 
     # drive_local_eraser — drive + gain. Cover-set membership is
     # checked via ``COVER_LIBRARY`` so the cockpit can flag drives
-    # that have no calibrated cover (no-op intervention).
+    # that will receive a typed fail-closed intervention result.
     eraser = raw.get("drive_local_eraser", {})
     drive = resolve_drive(eraser.get("drive"))
     out["drive_local_eraser"] = {

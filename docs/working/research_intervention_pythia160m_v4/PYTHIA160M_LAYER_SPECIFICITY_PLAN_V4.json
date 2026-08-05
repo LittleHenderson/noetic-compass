@@ -1,0 +1,59 @@
+{
+  "schema_version": "cas_harness_pythia160m_layer_specificity_plan.v4",
+  "status": "PROSPECTIVE / MODEL_FREE / NEVER_EXECUTED",
+  "v3_disposition": "FAIL_CLOSED / PRESERVED_UNCHANGED / NON_REUSABLE / NO RETRY",
+  "problem_statement": "V3 injected the frozen direction at layer 2 and measured its layer-3 residual-stream projection, while the target condition measured immediately after layer-3 injection. Ordinary adjacent-layer residual transport can therefore contribute to the wrong-layer effect; the V3 failure remains controlling and cannot distinguish transport from localization.",
+  "hypotheses": {
+    "layer_specificity": "On a common held-out final-layer linear readout frozen from calibration baselines, the layer-3 intervention has the unique largest signed median effect at both +/-0.5 and every off-target layer has no more than 0.5 of the target-layer median absolute effect, including the fixed-bootstrap 95 percent upper bound.",
+    "adjacent_transport_diagnostic": "If layer-2 target-direction influence is carried mainly through the target-direction component present after layer 3, prospectively removing only that propagated component at layer 3 reduces the common-readout effect by at least 80 percent at both signs.",
+    "important_boundary": "Adjacent transport support is explanatory only. It cannot overturn V3, satisfy layer specificity, or authorize a steering claim."
+  },
+  "common_readout": {
+    "capture": "final transformer layer prompt-final non-padding hidden state before LM head",
+    "construction": "unit-L2 difference between the mean baseline final-layer hidden state for 8 sealed calibration ^0|C prompts and the mean for 8 sealed calibration ^0|E prompts; sign fixed toward ^0|C; no held-out use",
+    "heldout_validity_floor": {
+      "metric": "balanced accuracy from sign of baseline readout margin on the 32 sealed target/contrast held-out prompts",
+      "minimum": 0.65,
+      "failure": "FAIL_CLOSED / COMMON_READOUT_INVALID"
+    }
+  },
+  "layer_comparison": {
+    "model_layers": 12,
+    "target_layer": 3,
+    "off_target_layers": [0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11],
+    "direction": "unchanged frozen V2 sparse unit-L2 ^0|C direction",
+    "target_layer_doses_l2": [-0.5, -0.25, 0.25, 0.5],
+    "off_target_layer_doses_l2": [-0.5, 0.5],
+    "common_endpoint": "change from the same-prompt baseline in the frozen final-layer readout margin"
+  },
+  "patchback_controls": {
+    "layer2_projection_patchback": "After layer-2 intervention, at layer 3 subtract only the change from the same-prompt baseline along the frozen intervention direction; retain orthogonal differences; then measure the common final-layer readout and downstream logits.",
+    "layer2_full_state_patchback": "After layer-2 intervention, restore the full prompt-final layer-3 hidden state from the same-prompt baseline; downstream logits must restore within 1e-5 max absolute residual.",
+    "target_layer_full_state_patchback": "After target-layer intervention, restore the full prompt-final layer-3 hidden state from the same-prompt baseline; downstream logits must restore within 1e-5 max absolute residual."
+  },
+  "retained_controls": [
+    "no_op",
+    "same_norm_random_direction",
+    "wrong_token",
+    "wrong_axis",
+    "bidirectional target-layer dose response",
+    "utility/fluency/safety collateral preservation"
+  ],
+  "request_matrix": {
+    "calibration_baselines": 16,
+    "heldout_prompts": 38,
+    "requests_per_heldout_prompt": 40,
+    "planned_forward_passes": 1536,
+    "generated_tokens": 0
+  },
+  "expected_outputs": [
+    "exact receipt and frozen-lock copies only after a future separate authorization",
+    "1536 per-request raw float32 next-token logits with hashes",
+    "1536 per-request raw float32 final-layer prompt-final states with hashes",
+    "38 same-prompt baseline raw float32 layer-3 prompt-final states with hashes",
+    "calibration-derived common-readout vector, construction inputs, and canonical hash",
+    "append-only request journal and terminal result mapping",
+    "independent standard-library audit recomputing the readout, request matrix, ratios, bootstrap interval, controls, patch-backs, caps, and claim boundary"
+  ],
+  "claim_boundary": "Research-only diagnostic design. No model experiment has run. A future pass would be bounded evidence for this exact snapshot, direction, readout, prompts, layers, controls, and endpoints only; it is not live steering, safety steering, prompt-injection prevention, Gate 2, ACCEPT, LICENSED, production readiness, or a production result."
+}

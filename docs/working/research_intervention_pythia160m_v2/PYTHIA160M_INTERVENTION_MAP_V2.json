@@ -1,0 +1,162 @@
+{
+  "schema_version": "cas_harness_pythia160m_intervention_map.v2",
+  "status": "PROSPECTIVE / NEVER_EXECUTED",
+  "prior_map": {
+    "path": "docs/working/research_intervention_pythia160m_v1/PYTHIA160M_INTERVENTION_MAP_V1.json",
+    "sha256": "46b7ddcd78f675a538f6996965789e2c31772430cbdf6d9baf8e0f729294bc72",
+    "change": "Freeze the previously procedural wrong-axis direction numerically; target direction, doses, location, endpoints, and all other controls are unchanged."
+  },
+  "source_evidence": {
+    "cover_discovery": {
+      "path": "D:\\tksCAS-archive\\pythia160m_gate1_reproduction_20260531\\pythia160m_stage9_40e_neuron_covers.json",
+      "byte_count": 413646,
+      "sha256": "e585d119dd7db2592f4b635bce40f785176f4681ecdcf012197da83ebe7ab828"
+    },
+    "matched_ablation_report": {
+      "path": "D:\\tksCAS-archive\\pythia160m_activation_cover_ablation_20260603\\pythia160m_activation_cover_ablation_report.json",
+      "byte_count": 5738,
+      "sha256": "8093b49935fb37c7498956de4960308d4126c1a3aec428d602fc75678de4860f",
+      "important_limit": "Post-hoc activation-level evidence only; not a live forward-pass intervention result."
+    }
+  },
+  "model_contract": {
+    "model_id": "EleutherAI/pythia-160m",
+    "revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "module": "gpt_neox.layers[3]",
+    "stream": "residual_hidden_state",
+    "hidden_size": 768,
+    "target_layer": 3,
+    "target_token": "prompt_final_non_padding_token",
+    "dtype": "model_native_float32_cpu"
+  },
+  "directions": {
+    "target": {
+      "label": "^0|C",
+      "coordinates": [
+        657,
+        162,
+        727,
+        588,
+        739,
+        535,
+        229,
+        365
+      ],
+      "unit_values": [
+        -0.3266028760141008,
+        -0.4238297022906712,
+        0.27685090377081484,
+        0.4150265200611603,
+        0.24783335165775414,
+        0.28068619041366144,
+        0.3700675491170885,
+        -0.43318519246431575
+      ],
+      "construction": "Frozen sparse unit-L2 signed-contrast direction from the sealed ^0|C cover record."
+    },
+    "same_norm_random_direction": {
+      "coordinates": [
+        423,
+        45,
+        172,
+        73,
+        415,
+        560,
+        333,
+        179
+      ],
+      "unit_values": [
+        0.3535533905932738,
+        -0.3535533905932738,
+        0.3535533905932738,
+        -0.3535533905932738,
+        0.3535533905932738,
+        -0.3535533905932738,
+        0.3535533905932738,
+        -0.3535533905932738
+      ],
+      "source_seed": 1007848327
+    },
+    "wrong_axis": {
+      "label": "^0|E",
+      "coordinates": [
+        729,
+        14,
+        107,
+        741,
+        171,
+        409,
+        89,
+        696
+      ],
+      "raw_signed_contrast_z": [
+        -1.8319960792061352,
+        1.234276508980224,
+        1.4159788574001018,
+        1.5802935904802533,
+        -1.3175296010451931,
+        1.1005455940652775,
+        1.5850628022501105,
+        -1.1886391799294616
+      ],
+      "raw_l2_norm": 4.031667661520637,
+      "unit_values": [
+        -0.45440156109374236,
+        0.3061454000190799,
+        0.3512141813956045,
+        0.3919702026937927,
+        -0.32679519039231925,
+        0.2729752763525606,
+        0.39315314041839133,
+        -0.29482568498246176
+      ],
+      "construction": "Frozen sparse unit-L2 signed-contrast direction from the sealed ^0|E wrong-class cover."
+    }
+  },
+  "fixed_doses_l2": [
+    -0.5,
+    -0.25,
+    0.0,
+    0.25,
+    0.5
+  ],
+  "conditions": [
+    "baseline",
+    "no_op",
+    "target_direction",
+    "same_norm_random_direction",
+    "wrong_layer",
+    "wrong_token",
+    "wrong_sign",
+    "wrong_axis",
+    "patch_back"
+  ],
+  "controls": {
+    "wrong_layer": {
+      "layer": 2,
+      "measurement": "target projection at layer 3 prompt-final token"
+    },
+    "wrong_token": {
+      "layer": 3,
+      "token": "prompt_first_non_padding_token",
+      "measurement": "target projection at layer 3 prompt-final token"
+    },
+    "wrong_sign": {
+      "direction": "negative target at positive nominal dose"
+    },
+    "patch_back": {
+      "procedure": "Apply to a clone, retain attempted target projection, return the unmodified block output, and require downstream logits to restore within tolerance."
+    }
+  },
+  "endpoints": {
+    "mechanical_primary": "Change in frozen target-direction projection at layer 3 prompt-final token.",
+    "downstream_secondary": "Next-token logit and probability-distribution change after remaining layers.",
+    "collateral": [
+      "baseline top-1 token preservation",
+      "next-token Jensen-Shannon divergence",
+      "finite-logit and probability checks",
+      "patch-back downstream-logit residual"
+    ]
+  },
+  "interpretation_boundary": "The primary endpoint is construction-linked and cannot alone establish semantic steering. A pass is bounded technical research evidence for this exact snapshot, direction, prompts, controls, and endpoints only."
+}

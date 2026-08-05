@@ -17,6 +17,7 @@ from app.runtime.fleet_worker import (
     DryRunFleetJobExecutor,
     FleetApiClient,
     FleetJob,
+    FleetJobExecutionResult,
     FleetWorkerConfig,
     FleetWorkerDaemon,
     build_evidence_fragment_ref,
@@ -150,9 +151,101 @@ def test_fragment_ref_matches_api_fleet_executor_builder(tmp_path: Path):
         "expected_outputs": job["expected_outputs"],
         "produced_outputs": job["expected_outputs"],
         "missing_outputs": [],
+        "evidence_packet_fragment_payload": {
+            "worker_receipt": {"status": "WORKER_EVIDENCE_UNVERIFIED"}
+        },
     }
 
     assert build_evidence_fragment_ref(**kwargs) == api_builder(**kwargs)
+
+
+def test_rich_evidence_payload_is_persisted_hashed_and_submitted_before_ack(tmp_path: Path):
+    config = _config(tmp_path)
+    leased_job = _leased_job_payload(config)
+    evidence_payload = {
+        "activation_summary": {"layer": 0, "mean": 0.125},
+        "worker_receipt": {"status": "WORKER_EVIDENCE_UNVERIFIED"},
+    }
+    seen_receipt: dict[str, Any] = {}
+
+    class _RichExecutor:
+        execution_mode = "test_rich_evidence"
+
+        async def run(self, job, _config):
+            return FleetJobExecutionResult(
+                produced_outputs=job.expected_outputs,
+                evidence_payload=evidence_payload,
+            )
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/cas-harness/audit/distributed/fleet/worker/register":
+            return httpx.Response(200, json=_worker_payload(config))
+        if request.url.path == f"/api/cas-harness/audit/distributed/fleet/worker/{config.worker_id}/heartbeat":
+            return httpx.Response(200, json=_worker_payload(config))
+        if request.url.path == f"/api/cas-harness/audit/distributed/session/{config.audit_id}/fleet/job/lease":
+            return httpx.Response(200, json=leased_job)
+        if request.url.path.endswith(f"/fleet/job/{leased_job['job_id']}/receipt"):
+            # Persistence must precede acknowledgement.  The handler observes
+            # the filesystem at the exact point the HTTP receipt is sent.
+            fragment_path = tmp_path / f"{leased_job['job_id']}.evidence-fragment.json"
+            assert fragment_path.is_file()
+            persisted = json.loads(fragment_path.read_text(encoding="utf-8"))
+            assert persisted["evidence_payload"] == evidence_payload
+            seen_receipt.update(json.loads(request.content.decode("utf-8")))
+            return httpx.Response(200, json={"verifier_gate_status": "waiting_for_receipts"})
+        raise AssertionError(f"unexpected path {request.url.path}")
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    daemon = FleetWorkerDaemon(
+        config,
+        _RichExecutor(),
+        api_client=FleetApiClient(config, client=client),
+    )
+    result = asyncio.run(daemon.run_once())
+
+    expected_ref = build_evidence_fragment_ref(
+        audit_id=config.audit_id,
+        job_id=leased_job["job_id"],
+        worker_id=config.worker_id,
+        model_id=config.model_id,
+        layer_start=leased_job["layer_start"],
+        layer_end=leased_job["layer_end"],
+        shard_id=leased_job["shard_id"],
+        expected_outputs=leased_job["expected_outputs"],
+        produced_outputs=leased_job["expected_outputs"],
+        missing_outputs=[],
+        evidence_packet_fragment_payload=evidence_payload,
+    )
+    assert result.status == "completed"
+    assert result.evidence_packet_fragment_ref == expected_ref
+    assert seen_receipt["evidence_packet_fragment_ref"] == expected_ref
+    assert seen_receipt["evidence_packet_fragment_payload"] == evidence_payload
+
+
+def test_evidence_payload_one_bit_change_changes_fragment_ref(tmp_path: Path):
+    config = _config(tmp_path)
+    job = _leased_job_payload(config)
+    common = {
+        "audit_id": config.audit_id,
+        "job_id": job["job_id"],
+        "worker_id": config.worker_id,
+        "model_id": config.model_id,
+        "layer_start": job["layer_start"],
+        "layer_end": job["layer_end"],
+        "shard_id": job["shard_id"],
+        "expected_outputs": job["expected_outputs"],
+        "produced_outputs": job["expected_outputs"],
+        "missing_outputs": [],
+    }
+    first = build_evidence_fragment_ref(
+        **common,
+        evidence_packet_fragment_payload={"value": 0},
+    )
+    second = build_evidence_fragment_ref(
+        **common,
+        evidence_packet_fragment_payload={"value": 1},
+    )
+    assert first != second
 
 
 def test_duplicate_registration_heartbeats_existing_worker_and_idles(tmp_path: Path):
