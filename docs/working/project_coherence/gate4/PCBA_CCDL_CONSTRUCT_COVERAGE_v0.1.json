@@ -1,0 +1,143 @@
+{
+  "schema_version": "project_coherence.pcba_ccdl_construct_coverage.v0.1",
+  "document_status": "DRAFT / OPEN / NOT FROZEN",
+  "as_of": "2026-08-04",
+  "source_id": "SRC-PCBA-ENGINEER-20260726",
+  "source_sha256": "294320B39FA521EAC086E99E2D9DB913E2B6CFF0754FF82DB1EF966424566274",
+  "source_pages": 743,
+  "audit_method": [
+    "Text extraction was used to locate candidate pages.",
+    "Every page cited below was rendered from the source PDF and visually inspected.",
+    "The audit compares only published surface syntax with the consolidated EBNF; it is not a parser implementation or a semantic-validation result."
+  ],
+  "formal_language_evidence": {
+    "reserved_words": {
+      "pdf_pages": [578],
+      "book_pages": [562],
+      "finding": "The language reference reserves many Part IV statement leaders, including rail, dial, spec, constraint, sequence, route, derate, monitor, alert, hold, use, force_state, on, charge, discharge, refresh, scan, and select."
+    },
+    "additional_statement_forms": {
+      "pdf_pages": [591, 592],
+      "book_pages": [575, 576],
+      "finding": "The prose tables describe select, scan, interrupt, and a verification sublanguage, and expressly say a form missing from the appendix should be treated as an erratum."
+    },
+    "consolidated_ebnf": {
+      "pdf_pages": [598, 599],
+      "book_pages": [582, 583],
+      "circuit_item_alternatives": [
+        "io_decl",
+        "node_decl",
+        "cjt_decl",
+        "component_decl",
+        "feedback_decl",
+        "probe_decl",
+        "let_decl"
+      ],
+      "board_item_alternatives": ["layer_decl", "via_decl"],
+      "finding": "The consolidated structural EBNF omits the additional reserved statement families that the reference corpus uses."
+    }
+  },
+  "reference_boards": [
+    {
+      "board_id": "CCB-1-CSB",
+      "listing_pdf_pages": [606, 607, 608],
+      "listing_book_pages": [590, 591, 592],
+      "outer_form": "board",
+      "observed_non_board_block_forms": [
+        "input",
+        "output",
+        "node",
+        "cjt",
+        "diff",
+        "mux",
+        "filter",
+        "feedback",
+        "probe"
+      ],
+      "direct_syntactic_counterexample": true,
+      "conclusion": "DIRECT_EBNF_COUNTEREXAMPLE",
+      "reason": "The published board body contains forms other than layer_decl or via_decl."
+    },
+    {
+      "board_id": "CCB-2-COB",
+      "listing_pdf_pages": [613, 614],
+      "listing_book_pages": [597, 598],
+      "outer_form": "circuit",
+      "observed_forms": [
+        "input",
+        "output",
+        "node",
+        "let",
+        "inductor",
+        "capacitor",
+        "tank",
+        "pll",
+        "modulator",
+        "probe"
+      ],
+      "direct_syntactic_counterexample": false,
+      "conclusion": "NO_DIRECT_COUNTEREXAMPLE_IN_BOUNDED_SURFACE_AUDIT",
+      "reason": "The observed statement leaders can fit the published circuit-item/component prefixes. Full parsing and semantic conformance remain untested."
+    },
+    {
+      "board_id": "CCB-3-CDAB",
+      "listing_pdf_pages": [618, 619],
+      "listing_book_pages": [602, 603],
+      "outer_form": "circuit",
+      "observed_outside_component_expression": [
+        "mirror bias_mirror: replicate(shared_bias) -> [cjt_l, cjt_r]"
+      ],
+      "direct_syntactic_counterexample": true,
+      "conclusion": "DIRECT_EBNF_COUNTEREXAMPLE",
+      "reason": "The mirror declaration does not use the required type_name<arg_list> component expression."
+    },
+    {
+      "board_id": "CCB-4-CMB",
+      "listing_pdf_pages": [623, 624],
+      "listing_book_pages": [607, 608],
+      "outer_form": "circuit",
+      "observed_omitted_circuit_items": [
+        "charge",
+        "select",
+        "discharge",
+        "refresh",
+        "scan"
+      ],
+      "direct_syntactic_counterexample": true,
+      "conclusion": "DIRECT_EBNF_COUNTEREXAMPLE",
+      "reason": "The consolidated circuit_item production has no alternative for these statement leaders."
+    },
+    {
+      "board_id": "CCB-5-CPMB",
+      "listing_pdf_pages": [628, 629, 630, 631, 632],
+      "listing_book_pages": [612, 613, 614, 615, 616],
+      "outer_form": "circuit",
+      "observed_omitted_circuit_items": [
+        "rail",
+        "use",
+        "spec",
+        "dial",
+        "constraint",
+        "monitor",
+        "on",
+        "derate",
+        "route",
+        "alert",
+        "hold",
+        "sequence",
+        "gate",
+        "force_state"
+      ],
+      "direct_syntactic_counterexample": true,
+      "conclusion": "DIRECT_EBNF_COUNTEREXAMPLE",
+      "reason": "The consolidated circuit_item production has no alternative for these statement leaders."
+    }
+  ],
+  "corpus_conclusion": "FORMAL_EBNF_DOES_NOT_COVER_PUBLISHED_FIVE_BOARD_CORPUS",
+  "direct_counterexample_count": 4,
+  "bounded_noncounterexample_count": 1,
+  "claim_boundary": "This record establishes a source-internal syntax-coverage mismatch only. It does not establish a complete replacement grammar, parser correctness, executable board semantics, safety effectiveness, certification, or product readiness.",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD"
+}

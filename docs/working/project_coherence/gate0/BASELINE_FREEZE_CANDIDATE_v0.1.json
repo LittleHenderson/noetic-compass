@@ -8,13 +8,13 @@
   "evidence_inputs": [
     {
       "path": "docs/working/project_coherence/PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md",
-      "sha256": "A866C66667E300F9648E7425E7F33DBC5BF53170EDE1D39E981F5365BD43F85F",
-      "bytes": 26432
+      "sha256": "B87B2E2B4CC4B10C76EE4AA6EA09094572B2A1008E474475E8F642836B83D2BE",
+      "bytes": 29793
     },
     {
       "path": "docs/working/project_coherence/CANONICAL_SOURCE_AUTHORITY_MATRIX_v0.1.json",
-      "sha256": "F20E87A0BF3F6E6DA20F0A47AE541A279462A03D1675BC211F337F35202B6F31",
-      "bytes": 23053
+      "sha256": "6BA38A3BE0AF97E0DE27D109D988D01EEDA1D338653AA9DB548D61E7C553A77C",
+      "bytes": 24596
     },
     {
       "path": "docs/working/project_coherence/SYMBOL_AND_TERMINOLOGY_REGISTRY_v0.1.json",
@@ -23,8 +23,8 @@
     },
     {
       "path": "docs/working/project_coherence/INITIAL_MIGRATION_MATRIX_v0.1.json",
-      "sha256": "C5684D3D16FC878045707D2B4464B64E4880805FA1D7538945AEA6EE00B47D52",
-      "bytes": 24207
+      "sha256": "D53AD787D8EA4C53A3850989501D389CA92C0E8FB0BB652DEFA217690A7BF96D",
+      "bytes": 29767
     },
     {
       "path": "docs/working/project_coherence/OPEN_VS_HELD_BOUNDARY_v0.1.md",
@@ -116,7 +116,7 @@
       "member_source_ids": [
         "SRC-PCBA-ENGINEER-20260726"
       ],
-      "authority_policy": "The owner-supplied 743-page build is the current PCBA engineering reference by exact PDF identity. It establishes neither safety certification nor physical telemetry.",
+      "authority_policy": "The owner-supplied 743-page build is the current PCBA engineering reference by exact PDF identity. It establishes neither compiler completeness, executable safety behavior, safety certification, nor physical telemetry; its grammar/board mismatch and CSB threshold contradiction remain explicit open conflicts.",
       "identity_policy": "Use the date-plus-SHA identity. Do not call the build v0.6 or v8 solely from its stale internal changelog label.",
       "candidate_treatment": "FROZEN_HASH_IDENTIFIED_ENGINEERING_BASELINE_IF_CANDIDATE_ACCEPTED"
     },
@@ -127,7 +127,7 @@
         "SRC-CAS-OHM-ADDENDUM-01",
         "SRC-CAS-OHM-PCBA-APP-I"
       ],
-      "authority_policy": "These artifacts define experimental quantitative, operationalization, and calibration proposals. Design values, behavioral proxies, scores, and instrumented measurements remain different types.",
+      "authority_policy": "These artifacts define experimental quantitative, operationalization, and calibration proposals. Design values, behavioral proxies, scores, and instrumented measurements remain different types. Their incompatible scales, units, full-scale methods, gain profiles, network rules, and ASOM/semantic axes remain versioned open conflicts rather than one merged law.",
       "identity_policy": "Preserve every artifact by exact hash and medium. Do not infer an electrical law, calibrated telemetry, or a licensed verdict from a formula or design value.",
       "candidate_treatment": "FROZEN_EXPERIMENTAL_INPUTS_IF_CANDIDATE_ACCEPTED"
     },
@@ -250,7 +250,7 @@
   ],
   "claim_firewalls": [
     "Formal definitions and theorem statements do not establish empirical readability, cognitive correspondence, alignment efficacy, or product readiness.",
-    "Engineering designs and CAS-Ohm quantities do not become instrumented measurements without units, instrument identity, calibration, provenance, and packet eligibility.",
+    "Engineering designs and CAS-Ohm quantities do not become instrumented measurements without units, instrument identity, calibration, provenance, uncertainty, controls, and packet eligibility; score arithmetic, diagrams, and mnemonic crosswalks do not supply those conditions.",
     "Ten Advances results and CAS/TKS transfers remain quarantined individually; manuscript presence does not establish proof, novelty, publication, or peer review.",
     "A structural verifier PASS proves only the checks performed by that verifier.",
     "No source or candidate status changes a product claim from OPEN or NOT LICENSED to LICENSED."

@@ -6,16 +6,16 @@
 
 ## Outcome
 
-The Phase0 starter registry's 24 entries are imported by exact ID and metadata policy. The census then records 49 source-bound groups containing 695 individually identified members:
+The Phase0 starter registry's 24 entries are imported by exact ID and metadata policy. The census then records 49 source-bound groups containing 712 individually identified members:
 
 | Disposition | Member records | Meaning |
 | --- | ---: | --- |
 | `REGISTERED` | 24 | Closed-family members under an existing Phase0 registry entry. |
-| `PROPOSED_ADD` | 309 | Load-bearing terms not yet in the starter registry. |
+| `PROPOSED_ADD` | 326 | Load-bearing terms not yet in the starter registry. |
 | `TYPED_VARIANT` | 348 | Source-, version-, implementation-, or experiment-specific identities that may not be silently interchanged. |
 | `EXPLICITLY_OUT_OF_SCOPE` | 14 | Reviewed surfaces intentionally deferred or excluded under this Gate0 boundary. |
 
-The census does **not** decide which competing definition is canonical. Fourteen conflict guards remain explicitly open.
+The census does **not** decide which competing definition is canonical. Nineteen conflict guards remain explicitly open.
 
 ## Bounded inclusion rule
 
@@ -41,10 +41,12 @@ Ordinary prose, local theorem binders, equation/chapter numbers, and non-seriali
 | Noetic Topos | Site/sheaf vocabulary, distinguished Noetica data, admissibility, coverage clauses, ACBE/RPM data, open/closed simplex and geometry terms. |
 | Paths and dynamics | Typed paths, Cause/Bias/Effect, cascade gain versus local flow, RPM variants, fractal runtime, and CAS production semantics. |
 | Evidence | Nine claim/evidence kinds, all 25 owner-required run bindings, and Evidence Packet instrumentation eligibility. |
-| Measurement | Measurement kinds/statuses, 19 CAS-Ohm quantities, modes/regions/trends, 29 CJT-Q fields, Test Point identity, 27 Calibration Profile fields, and typed ASOM/D-W-P crosswalks. |
+| Measurement | Measurement kinds/statuses, 19 CAS-Ohm quantities, modes/regions/trends, 46 CJT-Q fields, Test Point identity, 27 Calibration Profile fields, and typed ASOM/D-W-P crosswalks. |
 | Compiler vocabulary | 15 type kinds plus load-bearing AST, runtime, production, artifact, meta-set, and tuple fields. |
 
 Every closed family has an expected cardinality checked by the verifier. JSON-backed families include a JSON Pointer template and member index, so each member resolves to an exact source location.
+
+Source-fidelity correction recorded on 2026-08-04: a pre-review census draft incorrectly expanded `ASOM` as Accumulation/Switching/Oscillation/Multiplication. The hash-bound CAS-Ohm Guide page 11 and operationalization addendum Table 2 instead define `S` = Starved, `A` = Aligned, `O` = Oversaturated, and `M` = Misaligned. The machine-readable entries now use those source-defined meanings, and the verifier asserts their exact IDs, labels, and symbols. The label correction itself changed no family cardinality. The same audit added 17 previously omitted CJT-Q fields for resistance decomposition, raw/full-scale response, uncertainty, lineage, units, censoring, and calibration binding, increasing the bounded total from 695 to 712 without promoting CAS-Ohm beyond its experimental boundary.
 
 ## Preserved conflicts
 
@@ -63,7 +65,12 @@ The census blocks these silent collapses:
 11. subcanonicity as an axiom versus a proved theorem;
 12. Production Target `Ω` versus the subobject-classifier notation;
 13. PCBA cell index versus an open-simplex mixed address; and
-14. the active compiler's legacy `Worlds→Domains` alias versus the owner-signed typed-axis rule.
+14. the active compiler's legacy `Worlds→Domains` alias versus the owner-signed typed-axis rule;
+15. CAS-Ohm's Guide scale and `sat=8.5` versus Appendix I's score/fraction scales and calibrated effective-resistance units;
+16. Fisher-Rao gain versus local Jacobian/projection gain, plus profile-gated circuit aggregation rules;
+17. ASOM as a response-region mnemonic versus semantic outcome as an independent axis;
+18. the Appendix C EBNF versus the larger language used by the five PCBA reference boards; and
+19. the CSB's `sat=0.1` output versus its `threshold=0.9` fuse, together with unimplemented latch and fail-closed semantics.
 
 No guard is marked resolved, and no profile is selected as canon.
 
@@ -77,7 +84,7 @@ The machine-readable file pins 22 source identities and hashes. The review inclu
 - both owner 40/28 payloads and all four normalized-canon JSON surfaces;
 - the registered CAS foundational clarifications and the 28-position translation scaffold;
 - the registered conservative Noetic Topos TeX;
-- PCBA address pages and Appendix I's measurement/calibration material;
+- PCBA address pages, Appendix C/D grammar and reference-board surfaces, the CSB design, and Appendix I's measurement/calibration material;
 - all 18 CAS-Ohm Guide pages and the addendum's paragraph/table structure; and
 - the active compiler's grammar, AST, runtime, production, meta-set, and compilation-artifact schemas.
 
@@ -94,7 +101,7 @@ python docs\working\project_coherence\gate0\term_census\verify_gate0_term_census
 Current result:
 
 ```text
-PASS Gate0 term census: 24 starter entries; 49 groups; 695 members; 22 source hashes; 14 preserved conflicts; 13 coverage classes; owner diffs 40=20, 28=8.
+PASS Gate0 term census: 24 starter entries; 49 groups; 712 members; 22 source hashes; 19 preserved conflicts; 13 coverage classes; owner diffs 40=20, 28=8.
 ```
 
 The verifier independently checks:
@@ -109,7 +116,7 @@ The verifier independently checks:
 - all 25 owner-required run bindings;
 - the normalized-index omission of the rich 28 file;
 - raw and LF-normalized compiler identities; and
-- the required conflict guards, including the compiler Worlds alias and Ω collision.
+- the required conflict guards, including the compiler Worlds alias, Ω collision, CAS-Ohm scale/profile distinctions, and PCBA grammar/CSB contradictions.
 
 ## Completeness limits
 

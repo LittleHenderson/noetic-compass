@@ -53,16 +53,16 @@
       "evidence": [
         "All 24 current symbol-registry entries contain id, canonical name, semantic type, version scope, source references, aliases_allowed, and migration policy.",
         "The ten canonical Noetics are present with verbatim definitions and PRESERVE_VERBATIM migration policy.",
-        "The bounded source census records 49 groups, 695 members, 22 pinned source hashes, 14 preserved conflict guards, and 13 coverage classes.",
+        "The bounded source census records 49 groups, 712 members, 22 pinned source hashes, 19 preserved conflict guards, and 13 coverage classes.",
         "Every census group has a semantic class, version scope, exact source locator, typed disposition, alias control, and migration policy; its independent verifier passes.",
-        "The census classifies 309 members as PROPOSED_ADD, 348 as TYPED_VARIANT, and 14 as EXPLICITLY_OUT_OF_SCOPE instead of silently promoting or collapsing them."
+        "The census classifies 326 members as PROPOSED_ADD, 348 as TYPED_VARIANT, and 14 as EXPLICITLY_OUT_OF_SCOPE instead of silently promoting or collapsing them."
       ],
       "missing": [
         "Owner-reviewed registry amendments or accepted typed-variant/out-of-scope dispositions for the census items needed in the exact frozen interface",
         "Population of the source-pending TKS 28 translation identities before they can be admitted as canonical TKS definitions",
         "Integration Board acceptance of the bounded inclusion rule and final term set"
       ],
-      "next_action": "Generate versioned registry amendments and compatibility profiles from the verified census while preserving all 14 conflicts; defer owner choice until one frozen interface truly requires it.",
+      "next_action": "Generate versioned registry amendments and compatibility profiles from the verified census while preserving all 19 conflicts; defer owner choice until one frozen interface truly requires it.",
       "responsible_role": "Canon and Semantics cell"
     },
     {
@@ -101,7 +101,7 @@
       "criterion": "Unresolved source gaps have an owner and closure action.",
       "status": "EVIDENCE_COMPLETE_PENDING_ACCEPTANCE",
       "evidence": [
-        "All 14 Phase 0 conflict records are represented below with a responsible role, conservative continuation control, and closure action.",
+        "All 19 Phase 0 conflict records are represented below with a responsible role, conservative continuation control, and closure action.",
         "Routine ambiguity is contained by version preservation, typed separation, source unavailability, or fail-closed claim controls rather than a fabricated canon choice.",
         "The compiler conflict has new reproducible evidence showing a line-ending-only serialization difference."
       ],
@@ -286,6 +286,66 @@
       "blocks_final_gate0_freeze": false,
       "human_decision_required": false,
       "evidence_ref": "COMPILER_IDENTITY_NORMALIZATION_RECEIPT_v0.1.json"
+    },
+    {
+      "id": "CONFLICT-CAS-OHM-SCALE-UNITS",
+      "upstream_status": "OPEN",
+      "candidate_status": "TYPED_SEPARATION DESIGNED / CALIBRATION OPEN",
+      "resolution_class": "MEASUREMENT_TYPE_AND_CALIBRATION_CONTROL",
+      "responsible_role": "PCBA and Systems Engineering cell",
+      "continuation_control": "Keep constraint scores, normalized region fractions, calibrated effective resistance, physical quantities, and I_FS methods in distinct versioned types; reject mixed-scale arithmetic.",
+      "closure_action": "Implement the CAS-Ohm v1 unit ontology, mixed-scale rejection fixtures, independently fit effective-resistance profiles, and held-out validation.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": true,
+      "human_decision_required": false
+    },
+    {
+      "id": "CONFLICT-CAS-OHM-GAIN-NETWORK-PROFILES",
+      "upstream_status": "OPEN",
+      "candidate_status": "PROFILE SEPARATION DESIGNED / EQUIVALENCE OPEN",
+      "resolution_class": "EXPERIMENTAL_PROFILE_CAPABILITY_CONTROL",
+      "responsible_role": "PCBA and Systems Engineering cell",
+      "continuation_control": "Keep Fisher-Rao and local Jacobian/projection gain profiles distinct and disable series, parallel, or multiplicative aggregation without an exact profile capability receipt.",
+      "closure_action": "Specify coordinate bridges and preregister active-region P2/P3 tests for each aggregation capability; retain non-equivalence when evidence fails.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": true,
+      "human_decision_required": false
+    },
+    {
+      "id": "CONFLICT-CAS-OHM-ASOM-AXES",
+      "upstream_status": "OPEN",
+      "candidate_status": "TWO-AXIS CONTROL DEFINED / ASSOCIATION OPEN",
+      "resolution_class": "SEMANTIC_AND_EMPIRICAL_SEPARATION",
+      "responsible_role": "Harness Experimental Science cell",
+      "continuation_control": "Record dose-response region and semantic outcome independently; the ASOM diagram remains a mnemonic only.",
+      "closure_action": "Implement the two-axis schema and test any claimed association with independent labels, controls, uncertainty, and held-out data.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": true,
+      "human_decision_required": false
+    },
+    {
+      "id": "CONFLICT-PCBA-GRAMMAR-COVERAGE",
+      "upstream_status": "OPEN",
+      "candidate_status": "CONFORMANCE GAP RECORDED / IMPLEMENTATION OPEN",
+      "resolution_class": "GRAMMAR_AND_IMPLEMENTATION_CONFORMANCE",
+      "responsible_role": "PCBA and Systems Engineering cell",
+      "continuation_control": "No reduced parser, linter, or syntax-valid fragment may be described as a complete compiler for the published board language.",
+      "closure_action": "Publish a versioned grammar/conformance matrix and require every admitted reference board to parse, type-check, and round-trip canonically; reject all unsupported forms.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": true,
+      "human_decision_required": false
+    },
+    {
+      "id": "CONFLICT-PCBA-CSB-SAFETY-SEMANTICS",
+      "upstream_status": "OPEN",
+      "candidate_status": "COUNTEREXAMPLE RECORDED / ERRATUM OPEN",
+      "resolution_class": "SAFETY_REFERENCE_DESIGN_ERRATUM",
+      "responsible_role": "PCBA and Systems Engineering cell",
+      "continuation_control": "Treat the unmodified CSB as a known-fault fixture, never a safety proof or passing reference board; no production or certification wording follows.",
+      "closure_action": "Publish a separately versioned repair with finite parameters, threshold reachability, an explicit latch state machine, fail-closed fuse semantics, deterministic traces, and independent safety review.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": true,
+      "human_decision_required": false
     }
   ],
   "deferred_human_decisions": [

@@ -57,6 +57,11 @@ REQUIRED_CONFLICT_GUARDS = {
     "CG-OMEGA-COLLISION",
     "CG-PCBA-ADDRESS",
     "CG-COMPILER-WORLDS-ALIAS",
+    "CG-CAS-OHM-SCALE-UNITS",
+    "CG-CAS-OHM-GAIN-NETWORK-PROFILES",
+    "CG-CAS-OHM-ASOM-AXES",
+    "CG-PCBA-GRAMMAR-COVERAGE",
+    "CG-PCBA-CSB-SAFETY-SEMANTICS",
 }
 
 
@@ -244,6 +249,10 @@ def main() -> int:
 
     guard_ids = {guard.get("guard_id") for guard in census.get("conflict_guards", [])}
     check(guard_ids == REQUIRED_CONFLICT_GUARDS, "conflict-guard set is incomplete or unexpected")
+    check(
+        census.get("completeness", {}).get("conflict_guard_count") == len(guard_ids),
+        "recorded conflict_guard_count is stale",
+    )
     for guard in census.get("conflict_guards", []):
         check(guard.get("status") == "OPEN_PRESERVED", f"{guard.get('guard_id')}: status not OPEN_PRESERVED")
         check(bool(guard.get("forbidden_collapse")), f"{guard.get('guard_id')}: missing collapse guard")
@@ -302,6 +311,53 @@ def main() -> int:
     v74_acq_symbols = {m["symbol"] for m in group_by_id["G-TKS-ACQUISITIONS-V74"]["members"]}
     expected_v74 = {"A0"} | {f"{prefix}{index}" for prefix in "DWP" for index in range(1, 8)}
     check(v74_acq_symbols == expected_v74, "v7.4 Acquisition family is incomplete")
+
+    expected_asom = {
+        "A": ("ASOM-ALIGNED", "ASOM Aligned region"),
+        "S": ("ASOM-STARVED", "ASOM Starved region"),
+        "O": ("ASOM-OVERSATURATED", "ASOM Oversaturated region"),
+        "M": ("ASOM-MISALIGNED", "ASOM Misaligned region"),
+    }
+    actual_asom = {
+        member["symbol"]: (member["term_id"], member["term"])
+        for member in group_by_id["G-CAS-OHM-TYPED-CROSSWALKS"]["members"]
+        if member["symbol"] in expected_asom
+    }
+    check(
+        actual_asom == expected_asom,
+        "CAS-Ohm ASOM expansion differs from the guide/addendum definitions",
+    )
+
+    cjtq_members = group_by_id["G-CJTQ-RECORD-SCHEMA"]["members"]
+    check(
+        [member.get("field_index") for member in cjtq_members]
+        == list(range(len(cjtq_members))),
+        "CJT-Q field indices are not contiguous and ordered",
+    )
+    required_cjtq_fields = {
+        "R_resource",
+        "R_known",
+        "R_hidden",
+        "I_raw",
+        "I_FS",
+        "lambda",
+        "relative_error",
+        "uncertainty",
+        "sample_size",
+        "raw_artifact_refs",
+        "field_lineage",
+        "field_measurement_status",
+        "unit_profile",
+        "ifs_method",
+        "semantic_outcome",
+        "missing_or_censored_reason",
+        "calibration_profile_sha256",
+    }
+    actual_cjtq_fields = {member.get("symbol") for member in cjtq_members}
+    check(
+        required_cjtq_fields <= actual_cjtq_fields,
+        "CJT-Q schema omits audited measurement, lineage, unit, or censoring fields",
+    )
 
     normalized_index = load_json(source_paths["normalized_canon_index"])
     check("canon_subfoundations_28_defs.json" not in normalized_index.get("files", []), "rich 28 unexpectedly indexed; census status needs review")

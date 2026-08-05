@@ -2,23 +2,87 @@
 
 All dates use the repository's working timezone. This changelog records control-package changes, not product releases.
 
+## 2026-08-04 - Gate 4 bounded software candidates and adversarial review
+
+### Added
+
+- Isolated CAS Core v8, CAS PCBA v8, and CAS-Ohm v1 research packages with 208
+  focused tests in the integrated unittest receipt: Core 61, PCBA 82, and Ohm
+  65. Focused pytest runs additionally exercised 19, 195, and 58 parameterized
+  subcases respectively.
+- A 53-criterion cross-domain Gate 4 review matrix with 20 explicitly open
+  criteria, a human-readable adversarial review, exact candidate specifications,
+  and a fail-closed integrated verifier that binds every source/test/control
+  artifact plus the exact passing test-ID sets.
+- A machine-readable five-board PCBA construct-coverage audit: four direct EBNF
+  counterexamples and one bounded listing for which no direct counterexample was
+  established. The defensible conclusion is corpus-level noncoverage.
+- A machine-readable CAS-Ohm source audit preserving eight conflicts or
+  under-specifications with exact source locators and conservative candidate
+  rules.
+- The integrated Gate 4 verifier passes against 54 hash-bound artifacts, all
+  208 exact unittest IDs, the 11-record Ring-4 claim boundary, 53 review
+  criteria with 20 open, the five-board PCBA audit, the eight-record Ohm source
+  audit, and the integrated Gate 1 dependency chain. This is not a gate-close
+  or release/admission claim.
+
+### Corrected
+
+- CAS Core now uses complete semantic identities, bounded type-injective
+  canonicalization, exact-byte-backed registries, fresh isolated compiler replay,
+  exact-type/primitive boundary comparisons, and structural decisions that can
+  never grant authorization. Its v0.2 execution profile also serializes
+  cooperating worker processes without retry, binds the finite lock policy and
+  sanitized Windows architecture inputs, samples runtime identity before
+  compiler execution without WMI or subprocess probing, and emits bounded
+  hash/path-only transport and profile-difference diagnostics on failure.
+- CAS PCBA now uses fixed versioned decimal arithmetic, exact tagged finite
+  values, complete projector/simulation/DRC identities, sounder fuse and
+  per-cycle feedback checks, provenance-validated result graphs, fixed research
+  boundaries, and a hash-bound TKS adapter certificate.
+- CAS-Ohm now binds complete profile/source/evidence identities, derives and
+  replays network and operating assessments, enforces exact Q4 and role-aware
+  resistance/residual rules, and separates structural research-packet
+  completeness from authenticated Evidence Packet eligibility. Authenticated
+  eligibility remains false without external authority and trusted time. Its
+  canonical form also has an explicit 2,048-bit integer bound and normalizes
+  host-runtime integer-conversion failures.
+- Renamed the claim-ledger completeness header from the inaccurate
+  `INITIAL_LOAD_BEARING_NONCLAIMS_ONLY` to
+  `INITIAL_LOAD_BEARING_CLAIM_BOUNDARY_RECORDS`; the ledger contains empirical
+  and product claim-boundary records and remains entirely Ring 4 / `NOT LICENSED`.
+
+### Preserved open boundaries
+
+- Gate 4 remains `OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN`.
+- No test establishes canon acceptance, full semantic migration, hermetic
+  toolchain closure, Python/Rust equivalence, complete CCDL/stateful semantics,
+  live calibration, empirical validity, safety, peer review, product readiness,
+  claim licensing, or public-disclosure authorization.
+- The monolithic repository pytest collector still has older package-shadowing
+  collisions; the integrated verifier uses exact isolated subprocess suites and
+  binds their full test-ID sets.
+
 ## 2026-08-04 - Gate 0 identity correction and Gate 1 prototypes
 
 ### Corrected
 
 - Reclassified the apparent active-compiler hash drift as a CRLF/LF serialization difference. Reproducible normalization of the current 248,859-byte CRLF checkout yields the exact 243,046-byte registry-bound LF Git blob and SHA-256 `8169188A...`; no substantive compiler drift was found.
 - Updated the source-authority and migration records so raw-hash inequality is no longer a false Gate 0 blocker. Both raw and canonical content hashes remain required provenance.
+- Corrected the census's pre-review ASOM expansion to the source-defined Starved, Aligned, Oversaturated, and Misaligned labels.
+- Recorded five newly audited source conflicts rather than silently selecting semantics: CAS-Ohm scale/units, gain/network profiles, ASOM axes, PCBA grammar coverage, and the CSB safety-reference contradiction.
 
 ### Added
 
 - Gate 0 candidate closure, baseline-freeze, standing-authority, and compiler-normalization receipts with a fail-closed verifier.
-- Gate 0 bounded load-bearing term census covering 49 groups and 695 members across 22 hash-pinned sources while preserving 14 conflicts and every competing profile.
+- Gate 0 bounded load-bearing term census covering 49 groups and 712 members across 22 hash-pinned sources while preserving 19 conflicts and every competing profile.
 - Gate 1 v7.4 declaration-surface inventory and bounded corrigendum with 29 adjudicated correction records; every unlisted declaration remains OPEN by default.
 - Gate 1 typed TKS v8 finite-function reference kernel, corrected deterministic-lift fixtures, fixed-order denotational shortlex prototype, ordered-input guards, bounded resource controls, and standard-basis lift functor tests.
 - A pinned Lean 4.32.1 proof seed with exact source hashes, no project-specific axioms or `sorry`, a hardcoded `propext` allowlist, and explicit OPEN boundaries for all unformalized universal claims.
 - Gate 1 Noetic Topos 2.0 transverse marked-context construction, finite witness presheaves, strict canonical cover provenance, a two-parent ACBE/RPM join derivation, schema-valid theorem/obligation ledgers, source verification, and executable model checks.
 - A finite-context proof candidate and exhaustive 298-sieve certificate showing `M_A M_R ~= M_atom ~= M_R M_A` naturally on `PSh(L,Set)`; the product-site lift remains OPEN.
 - A 23-entry integrated Gate 1 hash chain and verifier that composes the Phase 0, Gate 0, v7.4, typed TKS, Noetic, modality, and Lean receipts.
+- Seven Ring 4 / `NOT LICENSED` Gate 4 claim records covering held-out CAS-Ohm response, effective resistance, gain composition, redundancy, residual localization, PCBA compiler conformance, and CSB safety-effectiveness boundaries.
 
 ### Clarified
 

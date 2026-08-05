@@ -102,7 +102,7 @@
       "source_id": "SRC-PHASE0-SOURCE-MATRIX",
       "path": "docs/working/project_coherence/CANONICAL_SOURCE_AUTHORITY_MATRIX_v0.1.json",
       "path_kind": "repo_relative",
-      "sha256": "F20E87A0BF3F6E6DA20F0A47AE541A279462A03D1675BC211F337F35202B6F31",
+      "sha256": "6BA38A3BE0AF97E0DE27D109D988D01EEDA1D338653AA9DB548D61E7C553A77C",
       "authority_status": "DRAFT_PHASE0_AUTHORITY_MATRIX",
       "verify_hash": true
     },
@@ -4121,6 +4121,12 @@
           "locator_kind": "docx_paragraph",
           "locator": "36",
           "note": "extended operationalization fields"
+        },
+        {
+          "source_id": "SRC-CAS-OHM-PCBA-APP-I",
+          "locator_kind": "line_range",
+          "locator": "89-167,171-277",
+          "note": "measurement, residual, full-scale, uncertainty, and calibration fields"
         }
       ],
       "source_location_templates": [],
@@ -4304,6 +4310,108 @@
           "term": "CJT-Q field control_ref",
           "symbol": "control_ref",
           "field_index": 28
+        },
+        {
+          "term_id": "CJTQ-FIELD-R-RESOURCE",
+          "term": "CJT-Q field R_resource",
+          "symbol": "R_resource",
+          "field_index": 29
+        },
+        {
+          "term_id": "CJTQ-FIELD-R-KNOWN",
+          "term": "CJT-Q field R_known",
+          "symbol": "R_known",
+          "field_index": 30
+        },
+        {
+          "term_id": "CJTQ-FIELD-R-HIDDEN",
+          "term": "CJT-Q field R_hidden residual estimate",
+          "symbol": "R_hidden",
+          "field_index": 31
+        },
+        {
+          "term_id": "CJTQ-FIELD-I-RAW",
+          "term": "CJT-Q field I_raw",
+          "symbol": "I_raw",
+          "field_index": 32
+        },
+        {
+          "term_id": "CJTQ-FIELD-I-FS",
+          "term": "CJT-Q field I_FS",
+          "symbol": "I_FS",
+          "field_index": 33
+        },
+        {
+          "term_id": "CJTQ-FIELD-LAMBDA",
+          "term": "CJT-Q field normalized lambda",
+          "symbol": "lambda",
+          "field_index": 34
+        },
+        {
+          "term_id": "CJTQ-FIELD-RELATIVE-ERROR",
+          "term": "CJT-Q field relative_error",
+          "symbol": "relative_error",
+          "field_index": 35
+        },
+        {
+          "term_id": "CJTQ-FIELD-UNCERTAINTY",
+          "term": "CJT-Q field uncertainty",
+          "symbol": "uncertainty",
+          "field_index": 36
+        },
+        {
+          "term_id": "CJTQ-FIELD-SAMPLE-SIZE",
+          "term": "CJT-Q field sample_size",
+          "symbol": "sample_size",
+          "field_index": 37
+        },
+        {
+          "term_id": "CJTQ-FIELD-RAW-ARTIFACT-REFS",
+          "term": "CJT-Q field raw_artifact_refs",
+          "symbol": "raw_artifact_refs",
+          "field_index": 38
+        },
+        {
+          "term_id": "CJTQ-FIELD-LINEAGE",
+          "term": "CJT-Q per-field derivation lineage",
+          "symbol": "field_lineage",
+          "field_index": 39
+        },
+        {
+          "term_id": "CJTQ-FIELD-PER-FIELD-STATUS",
+          "term": "CJT-Q per-field measurement status",
+          "symbol": "field_measurement_status",
+          "field_index": 40
+        },
+        {
+          "term_id": "CJTQ-FIELD-UNIT-PROFILE",
+          "term": "CJT-Q field unit_profile",
+          "symbol": "unit_profile",
+          "field_index": 41
+        },
+        {
+          "term_id": "CJTQ-FIELD-IFS-METHOD",
+          "term": "CJT-Q field I_FS method",
+          "symbol": "ifs_method",
+          "field_index": 42
+        },
+        {
+          "term_id": "CJTQ-FIELD-SEMANTIC-OUTCOME",
+          "term": "CJT-Q field semantic_outcome",
+          "symbol": "semantic_outcome",
+          "field_index": 43
+        },
+        {
+          "term_id": "CJTQ-FIELD-CENSOR-REASON",
+          "term": "CJT-Q field missing_or_censored_reason",
+          "symbol": "missing_or_censored_reason",
+          "field_index": 44
+        },
+        {
+          "term_id": "CJTQ-FIELD-CALIBRATION-PROFILE-SHA256",
+          "term": "CJT-Q field calibration_profile_sha256",
+          "symbol": "calibration_profile_sha256",
+          "field_index": 45
         }
       ],
       "notes": []
@@ -4646,23 +4754,23 @@
       "migration_policy": "STORE_AS_INTERPRETIVE_CROSSWALK_WITH_NON_IDENTITY_GUARD",
       "members": [
         {
-          "term_id": "ASOM-ACCUMULATION",
-          "term": "ASOM Accumulation region",
+          "term_id": "ASOM-ALIGNED",
+          "term": "ASOM Aligned region",
           "symbol": "A"
         },
         {
-          "term_id": "ASOM-SWITCHING",
-          "term": "ASOM Switching region",
+          "term_id": "ASOM-STARVED",
+          "term": "ASOM Starved region",
           "symbol": "S"
         },
         {
-          "term_id": "ASOM-OSCILLATION",
-          "term": "ASOM Oscillation region",
+          "term_id": "ASOM-OVERSATURATED",
+          "term": "ASOM Oversaturated region",
           "symbol": "O"
         },
         {
-          "term_id": "ASOM-MULTIPLICATION",
-          "term": "ASOM Multiplication region",
+          "term_id": "ASOM-MISALIGNED",
+          "term": "ASOM Misaligned region",
           "symbol": "M"
         },
         {
@@ -6392,6 +6500,116 @@
           "locator": "/global_rules/2"
         }
       ]
+    },
+    {
+      "guard_id": "CG-CAS-OHM-SCALE-UNITS",
+      "status": "OPEN_PRESERVED",
+      "competing_identities": [
+        "Guide resistance scale 0.1-10 and sat=8.5",
+        "Appendix I constraint score 0-100 and saturation fraction 0-1",
+        "calibrated effective resistance with alpha/activation units"
+      ],
+      "forbidden_collapse": "A dimensionless score, a normalized region boundary, and a calibrated response ratio may not share one bare R or saturation field.",
+      "required_future_action": "Adopt typed quantity and I_FS profiles, reject mixed scales, and validate effective resistance on held-out data.",
+      "source_locations": [
+        {
+          "source_id": "SRC-CAS-OHM-GUIDE-01",
+          "locator_kind": "pdf_page_range",
+          "locator": "6,12"
+        },
+        {
+          "source_id": "SRC-CAS-OHM-PCBA-APP-I",
+          "locator_kind": "line_range",
+          "locator": "18-59,258-277"
+        },
+        {
+          "source_id": "SRC-CAS-OHM-ADDENDUM-01",
+          "locator_kind": "docx_table",
+          "locator": "Tables 1-3"
+        }
+      ]
+    },
+    {
+      "guard_id": "CG-CAS-OHM-GAIN-NETWORK-PROFILES",
+      "status": "OPEN_PRESERVED",
+      "competing_identities": [
+        "Fisher-Rao cause/effect gain",
+        "local Jacobian/projection gain",
+        "series/parallel resistance and multiplicative cascade hypotheses"
+      ],
+      "forbidden_collapse": "Shared beta or R notation does not establish profile equivalence, coordinate compatibility, or a network law.",
+      "required_future_action": "Name profiles separately and capability-gate network operations after profile-specific P2/P3 evidence.",
+      "source_locations": [
+        {
+          "source_id": "SRC-PCBA-ENGINEER-20260726",
+          "locator_kind": "pdf_page_range",
+          "locator": "153-170"
+        },
+        {
+          "source_id": "SRC-CAS-OHM-ADDENDUM-01",
+          "locator_kind": "docx_table",
+          "locator": "Tables 1 and 3"
+        }
+      ]
+    },
+    {
+      "guard_id": "CG-CAS-OHM-ASOM-AXES",
+      "status": "OPEN_PRESERVED",
+      "competing_identities": [
+        "dose-response region: cutoff/active/saturation/non-ohmic/unstable",
+        "semantic outcome: intended/opposite/off-axis",
+        "ASOM mnemonic correspondence"
+      ],
+      "forbidden_collapse": "A response region does not by itself prove semantic alignment, inversion, or breakdown.",
+      "required_future_action": "Carry response region and semantic outcome as independent fields and test any profile-specific association.",
+      "source_locations": [
+        {
+          "source_id": "SRC-CAS-OHM-GUIDE-01",
+          "locator_kind": "pdf_page",
+          "locator": "11"
+        },
+        {
+          "source_id": "SRC-CAS-OHM-PCBA-APP-I",
+          "locator_kind": "line_range",
+          "locator": "148-167"
+        }
+      ]
+    },
+    {
+      "guard_id": "CG-PCBA-GRAMMAR-COVERAGE",
+      "status": "OPEN_PRESERVED",
+      "competing_identities": [
+        "Appendix C formal EBNF",
+        "constructs used by the five published reference boards",
+        "reduced research parser and linter subsets"
+      ],
+      "forbidden_collapse": "Parsing a reduced component fragment does not establish conformance to the published board language.",
+      "required_future_action": "Version the admitted grammar surface and require golden parse, canonical round-trip, and unsupported-form rejection tests.",
+      "source_locations": [
+        {
+          "source_id": "SRC-PCBA-ENGINEER-20260726",
+          "locator_kind": "pdf_page_range",
+          "locator": "573-625"
+        }
+      ]
+    },
+    {
+      "guard_id": "CG-PCBA-CSB-SAFETY-SEMANTICS",
+      "status": "OPEN_PRESERVED",
+      "competing_identities": [
+        "red-stage saturation clamp 0.1",
+        "downstream fuse threshold 0.9",
+        "claimed threshold crossing, latch, and refusal behavior"
+      ],
+      "forbidden_collapse": "The published CSB numbers and prose may not be treated as an executable safety proof or a passing reference design.",
+      "required_future_action": "Retain the unmodified board as a known-fault fixture and publish separately versioned reachability, latch, and fail-closed fuse semantics.",
+      "source_locations": [
+        {
+          "source_id": "SRC-PCBA-ENGINEER-20260726",
+          "locator_kind": "pdf_page_range",
+          "locator": "337-354"
+        }
+      ]
     }
   ],
   "coverage_map": [
@@ -6554,14 +6772,14 @@
   "completeness": {
     "imported_registered_entries": 24,
     "term_group_count": 49,
-    "enumerated_group_member_count": 695,
+    "enumerated_group_member_count": 712,
     "member_classification_counts": {
       "REGISTERED": 24,
-      "PROPOSED_ADD": 309,
+      "PROPOSED_ADD": 326,
       "TYPED_VARIANT": 348,
       "EXPLICITLY_OUT_OF_SCOPE": 14
     },
-    "conflict_guard_count": 14,
+    "conflict_guard_count": 19,
     "coverage_class_count": 13,
     "independently_checked_source_surfaces": [
       "Owner-signed semantic registry",

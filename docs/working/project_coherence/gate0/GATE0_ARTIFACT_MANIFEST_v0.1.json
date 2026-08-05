@@ -17,37 +17,37 @@
     },
     {
       "path": "BASELINE_FREEZE_CANDIDATE_v0.1.json",
-      "sha256": "EF66E18ECC0F274DECEF9B73DC19A746297175031DD11C44B8F1FCDDADCC6546",
-      "bytes": 15452,
+      "sha256": "12184BAE53390B3BE69F9E93FE41310F2267C1BB1062A19A1A2F5AEA19A7A6C6",
+      "bytes": 15869,
       "role": "Conservative authority and identity policy for all 25 Phase 0 source records"
     },
     {
       "path": "GATE0_CLOSURE_MATRIX_v0.1.json",
-      "sha256": "C00AC7CBFEAF65D65084F9A06A21BCB4CCE4A59CBF79F6B237CC1B19C334E308",
-      "bytes": 19593,
-      "role": "Machine-readable disposition of all six Gate 0 criteria and fourteen source conflicts"
+      "sha256": "43610106921D2255ACBBE1F24BC01166EE4BF5798D7C33C07544B08053527EB2",
+      "bytes": 23527,
+      "role": "Machine-readable disposition of all six Gate 0 criteria and nineteen source conflicts"
     },
     {
       "path": "term_census/GATE0_LOAD_BEARING_TERM_CENSUS_v0.1.json",
-      "sha256": "C8FB20588F9271313498D70E4C605F85196D680D8036757101B41C0085E61614",
-      "bytes": 209715,
-      "role": "Bounded source-linked census of 49 groups, 695 members, and 14 preserved semantic conflicts"
+      "sha256": "6F9418AB3E01D9F11C5C2AB10EEE7F1AF26080A74BFA2A42B6D109408461F987",
+      "bytes": 217479,
+      "role": "Bounded source-linked census of 49 groups, 712 members, and 19 preserved semantic conflicts"
     },
     {
       "path": "term_census/GATE0_TERM_CENSUS_AUDIT_v0.1.md",
-      "sha256": "2B6C777691AF9F523CE4715A3FD62E1F0AFBC5857DFA50CFF13686447846CB8A",
-      "bytes": 7653,
+      "sha256": "C7402E300F2AED650C003805817995E4F83B8470D39E3C7B673486F422EA3DD3",
+      "bytes": 9124,
       "role": "Human-readable census scope, outcome, conflict, validation, and completeness audit"
     },
     {
       "path": "term_census/verify_gate0_term_census.py",
-      "sha256": "070F7BDDCDAFA9A4CEBFC73D7288273335C7362327A5405FE0BF60B8FEBF6CEF",
-      "bytes": 17513,
+      "sha256": "A297DE052858FE1845B70122770E91840F5DBCF4E56ED21A1D83D164C9F35352",
+      "bytes": 19377,
       "role": "Fail-closed source-hash, census-count, locator, coverage, and conflict-preservation verifier"
     },
     {
       "path": "verify_gate0_candidate.py",
-      "sha256": "CB05D2B8B1BAE52511BB89E15E9B91823D8E25AFFBB8576D6726AD4092CDD056",
+      "sha256": "9331A670C4976A85B6E1EEFF6A0A900B8B0106987A0C41713CB06E9C83718595",
       "bytes": 24445,
       "role": "Fail-closed structural, hash, coverage, authority-boundary, and normalization verifier"
     }

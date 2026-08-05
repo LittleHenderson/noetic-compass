@@ -7,9 +7,9 @@
   "license_status": "NOT LICENSED",
   "public_disclosure_authorized": false,
   "artifacts": [
-    {"path": "docs/working/project_coherence/gate0/GATE0_ARTIFACT_MANIFEST_v0.1.json", "sha256": "AD5D94A44CB4B4F63C8C653A0FAC0EDEBC379A54FAA3B624575876B1E34A5DE6", "bytes": 2809, "role": "Gate 0 dependency-chain root"},
+    {"path": "docs/working/project_coherence/gate0/GATE0_ARTIFACT_MANIFEST_v0.1.json", "sha256": "3095117C85E1A0D9A1B12FEC1B906B139325625F3C48ECE171C82AA3D002DBE6", "bytes": 2809, "role": "Gate 0 dependency-chain root"},
     {"path": "scripts/verify_project_coherence_phase0.py", "sha256": "34D892D7A72E3779A339C250A64DE5B6AFF498956F1D1D19B98BE0791482DA6A", "bytes": 20478, "role": "Phase 0 structural verifier"},
-    {"path": "docs/working/project_coherence/gate1/README.md", "sha256": "AE4499B89BF9F7A795CDD2059B0CEE7AD5A424FABEAEDB4B8F587821365E7709", "bytes": 2417, "role": "integrated Gate 1 scope, receipts, and boundaries"},
+    {"path": "docs/working/project_coherence/gate1/README.md", "sha256": "65E7BE36FA8D36EE0BCC4F62428269F5A1F7CA449F03DB82CC411571AAA1F4C0", "bytes": 2417, "role": "integrated Gate 1 scope, receipts, and boundaries"},
     {"path": "docs/working/project_coherence/gate1/v74/README.md", "sha256": "8B6B9554647C3A0004B5CDCE1D5513D8023EADA22809315CAC1FCD7AE58F6DBD", "bytes": 1797, "role": "v7.4 audit scope and boundary"},
     {"path": "docs/working/project_coherence/gate1/v74/TKS_V74_SURFACE_INVENTORY_v0.1.json", "sha256": "64D55E4B766D82A619BFAD969E6170123DDA6AD170BC61F7427B77A24320C454", "bytes": 5510, "role": "bounded declaration-surface inventory"},
     {"path": "docs/working/project_coherence/gate1/v74/TKS_V74_CORRIGENDUM_v0.1.json", "sha256": "C3C4EC6DFA1B2158F83EA716B4D51401E128A20C78C3469649D36755360E7A1B", "bytes": 38412, "role": "machine-readable v7.4 corrigendum"},

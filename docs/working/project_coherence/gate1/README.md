@@ -13,7 +13,7 @@ Noetic Topos 2 finite-context construction, and scoped Lean proof seed.
 ## Current verified receipts
 
 - **Gate 0 dependency:** structural candidate verifier passes, including the
-  49-group/695-member term census; Gate 0 itself remains OPEN and NOT FROZEN.
+  49-group/712-member term census; Gate 0 itself remains OPEN and NOT FROZEN.
 - **v7.4:** 1,258 declaration headings inventoried; 29 correction records
   adjudicated; all unlisted declarations default to OPEN.
 - **Typed TKS v8:** 20 executable tests pass; 12 implementation, test,

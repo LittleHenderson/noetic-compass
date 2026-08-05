@@ -321,8 +321,8 @@ def verify_term_census() -> None:
     require(isinstance(completeness, dict), "term census completeness record missing")
     require(completeness.get("imported_registered_entries") == 24, "term census starter import count drift")
     require(completeness.get("term_group_count") == 49, "term census group count drift")
-    require(completeness.get("enumerated_group_member_count") == 695, "term census member count drift")
-    require(completeness.get("conflict_guard_count") == 14, "term census conflict count drift")
+    require(completeness.get("enumerated_group_member_count") == 712, "term census member count drift")
+    require(completeness.get("conflict_guard_count") == 19, "term census conflict count drift")
     require(completeness.get("coverage_class_count") == 13, "term census coverage count drift")
     require(
         completeness.get("closure_effect", "").startswith("Supplies technical evidence"),
@@ -359,15 +359,15 @@ def verify_closure_matrix(document: dict[str, Any], source_matrix: dict[str, Any
     )
     require(term_criterion["status"] == "PARTIAL", "term census prematurely closed its criterion")
     require(
-        any("695 members" in item for item in term_criterion["evidence"]),
+        any("712 members" in item for item in term_criterion["evidence"]),
         "closure matrix does not bind the completed term census",
     )
 
     upstream_conflicts = source_matrix.get("unresolved_conflicts")
-    require(isinstance(upstream_conflicts, list) and len(upstream_conflicts) == 14, "upstream source matrix must contain 14 conflicts")
+    require(isinstance(upstream_conflicts, list) and len(upstream_conflicts) == 19, "upstream source matrix must contain 19 conflicts")
     upstream_ids = unique_ids(upstream_conflicts, "upstream conflicts")
     dispositions = document.get("conflict_dispositions")
-    require(isinstance(dispositions, list) and len(dispositions) == 14, "Gate 0 must disposition all 14 conflicts")
+    require(isinstance(dispositions, list) and len(dispositions) == 19, "Gate 0 must disposition all 19 conflicts")
     disposition_ids = unique_ids(dispositions, "conflict dispositions")
     require(disposition_ids == upstream_ids, "Gate 0 conflict dispositions do not exactly cover upstream conflicts")
     for item in dispositions:
@@ -410,8 +410,8 @@ def main() -> int:
     print("Project Coherence Gate 0 candidate verification: PASS")
     print("  Phase 0 source records: 25 (24 static hashes verified; 1 mutable authority present)")
     print("  Baseline authority groups: 9 (all 25 source records covered exactly once)")
-    print("  Term census: PASS (24 starter records; 49 groups; 695 members; 14 conflicts retained)")
-    print("  Conflict dispositions: 14 (compiler line-ending identity technically resolved; other actions retained)")
+    print("  Term census: PASS (24 starter records; 49 groups; 712 members; 19 conflicts retained)")
+    print("  Conflict dispositions: 19 (compiler line-ending identity technically resolved; other actions retained)")
     print("  Gate 0 criteria: 6 (overall OPEN; candidate NOT FROZEN)")
     print("This PASS is structural and identity-focused only; it is not canon acceptance, peer review, proof verification, empirical validation, product licensing, or disclosure approval.")
     return 0

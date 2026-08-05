@@ -119,11 +119,11 @@ The following are proposed development namespaces, not released versions.
 
 | Workstream | Proposed namespace | Current status |
 |---|---|---|
-| Typed mathematical core | TKS v8.0 | `OPEN / NOT STARTED` |
-| Categorical and evidence logic | Noetic Topos 2.0 | `OPEN / NOT STARTED` |
-| CAS architecture | CAS Core v8.0-RC | `OPEN / NOT STARTED` |
-| Circuit engineering | CAS PCBA v8.0 | `OPEN / NOT STARTED` |
-| Quantification | CAS-Ohm v1.0 | `OPEN / NOT STARTED` |
+| Typed mathematical core | TKS v8.0 | `OPEN / RING 4 GATE 1 REFERENCE CANDIDATE` |
+| Categorical and evidence logic | Noetic Topos 2.0 | `OPEN / RING 4 GATE 1 REFERENCE CANDIDATE` |
+| CAS architecture | CAS Core v8.0-RC | `OPEN / RING 4 BOUNDED SOFTWARE CANDIDATE TESTED` |
+| Circuit engineering | CAS PCBA v8.0 | `OPEN / RING 4 BOUNDED SOFTWARE CANDIDATE TESTED` |
+| Quantification | CAS-Ohm v1.0 | `OPEN / RING 4 BOUNDED SOFTWARE CANDIDATE TESTED` |
 | Interpretability and experimental platform | CAS Harness v2.0 | `OPEN / NOT STARTED` |
 | Clinical engineering profile | CAS PCBA Clinical 1.0 | `OPEN / NOT STARTED` |
 | Proof and claim control | CAS Evidence and Theorem Registry 1.0 | `DRAFT / OPEN` |
@@ -289,12 +289,14 @@ Closes only when:
 - unresolved source gaps have an owner and closure action.
 
 The bounded load-bearing term census is now technically complete: it records 49
-groups, 695 members, 22 pinned sources, and 14 preserved conflicts. It does not
+groups, 712 members, 22 pinned sources, and 19 preserved conflicts. It does not
 select canon. Current blockers include owner-reviewed registry amendments or
 accepted exclusions for the final frozen interface, the signed registry's
 unresolved semantic conflicts, owner acceptance of the manuscript quarantine
-and closure path, PCBA internal version-label ambiguity, Integration Board
-acceptance, and outstanding disclosure review. The earlier active-compiler
+and closure path, PCBA internal version-label ambiguity, the CAS-Ohm scale/unit,
+gain-profile, and ASOM-axis conflicts, the PCBA grammar and CSB safety-reference
+contradictions, Integration Board acceptance, and outstanding disclosure review.
+The earlier active-compiler
 drift concern is technically resolved: the current CRLF checkout normalizes
 exactly to the registry-bound LF Git blob, as recorded in
 `gate0/COMPILER_IDENTITY_NORMALIZATION_RECEIPT_v0.1.json`.
@@ -333,11 +335,41 @@ observational/product-site provenance, the product-site modality lift,
 backward comparison, richer cross-context semantics, full formal proof, and
 independent review remain open.
 
-### Gate 4 - CAS PCBA 8 and CAS-Ohm 1.0
+### Gate 4 - CAS Core 8, CAS PCBA 8, and CAS-Ohm 1.0
 
-Status: `OPEN / NOT STARTED`
+Status: `OPEN / RING 4 BOUNDED SOFTWARE CANDIDATES TESTED`
 
-Closes only when ports and units are typed, calibration is versioned, child measurements survive aggregation, every simulation emits a trace, known-fault boards are diagnosed, and invalid boards fail the DRC.
+Closes only when:
+
+- CAS Core semantic identities and crosswalks are versioned and nonidentity relations cannot be silently promoted to identity;
+- every compatibility execution binds the requested source, compiler bytes, engine/toolchain profile, complete dependency closure, typed result digest, and conservative research boundary;
+- registries are immutable, exact-schema and hash bound, action intent defaults to deny, and no claim-bearing action can be authorized by a self-authored receipt or caller omission;
+- Python and Rust/compiler profiles are either shown equivalent on a declared conformance surface or retained as explicitly different profiles;
+- PCBA ports, directions, signals, units, nets, test points, component parameters, and admissibility rules are typed;
+- the admitted CCDL grammar has an exact conformance matrix and unsupported board forms fail closed;
+- calibration is versioned, child measurements survive aggregation, and every simulation emits a deterministic trace;
+- known-fault boards include the unmodified CSB threshold contradiction and are diagnosed rather than silently repaired;
+- invalid boards fail the DRC; and
+- CAS-Ohm quantities keep constraint scores, normalized regions, calibrated effective resistance, physical units, gain profiles, response regions, and semantic outcomes type-distinct, with network operations capability-gated by profile evidence.
+
+Current evidence includes three isolated, independently red-teamed bounded
+software candidates: CAS Core has 61 focused tests, CAS PCBA has 82 focused
+tests plus 195 parameterized subcases, and CAS-Ohm has 65 focused tests plus 58
+parameterized subcases. The reviews forced replay-based Core assessment,
+raw-byte-backed registries, fixed PCBA arithmetic and complete provenance,
+sounder DRC cycle/safety analysis, and an Ohm separation between structural
+research completeness and authenticated Evidence Packet eligibility.
+
+The adverse source evidence remains controlling: the formal PCBA EBNF does not
+cover the published five-board corpus (four direct counterexamples), the CSB
+fuse threshold is unreachable under its own saturation value, and the CAS-Ohm
+sources contain eight preserved conflicts or under-specifications across scales,
+units, full-scale methods, gain, network rules, ASOM, residuals, and Q4. Exact
+compiler/toolchain closure, Python/Rust conformance, full CCDL/stateful
+semantics, live calibration, external authority, empirical validity, safety,
+peer review, migration acceptance, canon admission, product readiness, and
+disclosure approval remain open. The bounded tests repair software behavior;
+they do not accept successor semantics or license claims.
 
 ### Gate 5 - CAS Harness 2 research modules
 
@@ -448,11 +480,24 @@ Freezing the charter is a material program decision. It is not inferred from sil
 
 ## 15. Immediate next actions
 
-1. Complete independent proof and novelty review of the supplied *Ten Advances* manuscript, one chapter at a time.
-2. Resolve or explicitly assign ownership for the remaining semantic-registry conflicts, while regression-checking the resolved compiler CRLF/LF identity relation.
-3. Resolve the internal version label for the 2026-07-26 CAS PCBA Engineer build.
-4. Complete the initial symbol registry beyond the load-bearing terms.
-5. Populate the theorem ledger from original statements, not summaries.
-6. Red-team the proposed marked-topos, complexity, repetition, fault-interaction, and quantized-geometry modules; keep the projector-capacity transfer blocked until its intertwiner exists.
-7. Review the open-vs-held boundary with the owner and qualified counsel where needed.
-8. Freeze a revised charter only through explicit owner approval and before beginning successor rewrites.
+1. Keep Gate 0 and Gate 1 open while completing the full theorem/definition
+   census, migration surface, independent proof/novelty review, owner conflict
+   decisions, and explicit charter/canon freeze procedure.
+2. Preserve the Gate 4 candidate as private Ring-4 evidence; complete external
+   formal, semantic, systems, empirical, safety, and claim-language review
+   against its stable hashes.
+3. Build the hermetic runtime/dependency bundle, Python/Rust conformance surface,
+   complete CCDL grammar, stateful PCBA profiles, and materialized authority and
+   calibration identities without promoting unsupported claims.
+4. Build CAS Harness v2 research modules with preregistration, matched controls,
+   clean nulls, falsifiers, independent numerical replay, and Evidence Packet v2
+   structural/authentication separation.
+5. Execute only authorized, budgeted, private held-out experiments; retain all
+   failed or nonreplicated hypotheses in Ring 4 and `NOT LICENSED`.
+6. Complete the theorem-and-claim registry links, reproducibility packages,
+   proof artifacts, migration tools, specialist papers, formal specification,
+   and matching plain-English companion.
+7. Prepare separate private and disclosure-filtered release packages; keep the
+   public package `HELD` until explicit owner and qualified-counsel approval.
+8. Freeze or release any successor only through the charter's explicit human
+   decision procedure; never infer acceptance from a software test or silence.
