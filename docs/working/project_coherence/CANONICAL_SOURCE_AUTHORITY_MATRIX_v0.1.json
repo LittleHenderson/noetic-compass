@@ -386,10 +386,10 @@
       "sha256": "065DC4384F7F52D1D8A081DC2D62AF69980F1F6EA9BF9099D22DE776CE05DF87",
       "verify_hash": true,
       "availability": "present",
-      "authority_status": "FLAG_FOR_HUMAN_REVIEW",
+      "authority_status": "TECHNICALLY_RECONCILED_SERIALIZATION_VARIANT",
       "authority_scope": "Current operational implementation only.",
-      "claim_effect": "Not claim-bearing under the existing signed registry because the registered compiler hash is 8169188A... and the drift is substantive.",
-      "notes": ["Use the frozen registered compiler for reproduction or issue a refreshed owner-approved semantic registry before using current output as claim-bearing evidence."]
+      "claim_effect": "The CRLF checkout normalizes byte-for-byte to the registry-bound LF content hash 8169188A... . Claim-bearing use still requires every other signed-registry run binding and does not follow from content identity alone.",
+      "notes": ["Bind both raw CRLF SHA-256 065DC438... and canonical LF SHA-256 8169188A... . See gate0/COMPILER_IDENTITY_NORMALIZATION_RECEIPT_v0.1.json; the receipt proves serialization identity, not compiler correctness or production readiness."]
     }
   ],
   "unresolved_conflicts": [
@@ -406,6 +406,6 @@
     {"id": "CONFLICT-PROOF-VS-EVIDENCE", "status": "OPEN", "summary": "Paper definitions and proof sketches, implementation tests, formal verification, and empirical evidence require distinct statuses."},
     {"id": "CONFLICT-MISSING-MAIN-MD", "status": "OPEN", "summary": "No separate exact main.md source was located; it must not be represented as reviewed."},
     {"id": "CONFLICT-PCBA-VERSION-LABEL", "status": "FLAG_FOR_HUMAN_REVIEW", "summary": "The supplied 2026-07-26 PCBA build postdates its latest named changelog version."},
-    {"id": "CONFLICT-ACTIVE-COMPILER-DRIFT", "status": "FLAG_FOR_HUMAN_REVIEW", "summary": "The current active compiler differs substantively from the compiler hash bound by the owner-signed registry."}
+    {"id": "CONFLICT-ACTIVE-COMPILER-DRIFT", "status": "RESOLVED_BY_REPRODUCIBLE_TEXT_NORMALIZATION", "summary": "The raw hashes identify CRLF and LF serializations of the same compiler text; the normalized current bytes equal the registry-bound Git blob."}
   ]
 }

@@ -1,0 +1,279 @@
+{
+  "schema_version": "project_coherence_baseline_freeze_candidate.v0.1",
+  "document_status": "CANDIDATE / OPEN / NOT FROZEN / NOT OWNER-ACCEPTED",
+  "as_of": "2026-08-04",
+  "program": "CAS/TKS Provable Systems Evolution",
+  "planned_release": "Provable Systems Release 8.0 (PSR-8)",
+  "repository_evidence_commit": "5a7fdb636d0be5939fbb6b079feb7c404c83236a",
+  "evidence_inputs": [
+    {
+      "path": "docs/working/project_coherence/PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md",
+      "sha256": "A866C66667E300F9648E7425E7F33DBC5BF53170EDE1D39E981F5365BD43F85F",
+      "bytes": 26432
+    },
+    {
+      "path": "docs/working/project_coherence/CANONICAL_SOURCE_AUTHORITY_MATRIX_v0.1.json",
+      "sha256": "F20E87A0BF3F6E6DA20F0A47AE541A279462A03D1675BC211F337F35202B6F31",
+      "bytes": 23053
+    },
+    {
+      "path": "docs/working/project_coherence/SYMBOL_AND_TERMINOLOGY_REGISTRY_v0.1.json",
+      "sha256": "29529E0803BC8EA7BC62CFA0D0B7CC4B2A0B623012E4BCAAC2A569203711FBEB",
+      "bytes": 14851
+    },
+    {
+      "path": "docs/working/project_coherence/INITIAL_MIGRATION_MATRIX_v0.1.json",
+      "sha256": "C5684D3D16FC878045707D2B4464B64E4880805FA1D7538945AEA6EE00B47D52",
+      "bytes": 24207
+    },
+    {
+      "path": "docs/working/project_coherence/OPEN_VS_HELD_BOUNDARY_v0.1.md",
+      "sha256": "D3C7E7F38A1E59F4C2B9E8E527A1033B791555BB669C4E69FCD556E8D87DF863",
+      "bytes": 7779
+    }
+  ],
+  "external_authority_inputs": [
+    {
+      "source_id": "SRC-SEMANTIC-AUTHORITY-REGISTRY-20260720",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\docs\\working\\TKS_CAS_SEMANTIC_SOURCE_REGISTRY_CANDIDATE_20260720.json",
+      "sha256": "9469A10AE330749C61D157518B849A3737B0F5BD268E44C7BD6334625A38C483",
+      "bytes": 19380
+    },
+    {
+      "source_id": "SRC-SEMANTIC-AUTHORITY-RECEIPT-20260724",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\docs\\working\\gate2_closure\\OWNER_SEMANTIC_AUTHORITY_REGISTRY_SIGNED_20260724.json",
+      "sha256": "78D633F7DAD32150C8EA19A5EFC8AC5169B935B579A1840B80E2ABDC01FE9EAC",
+      "bytes": 2792
+    }
+  ],
+  "freeze_meaning": [
+    "Freeze identifies and preserves historical, normative, operational, and research-input baselines by exact version policy; it does not declare every statement inside them correct.",
+    "A source may be authoritative for terminology or provenance while licensing no theorem, empirical claim, product claim, or disclosure.",
+    "Byte-different artifacts remain separately recorded unless a reproducible transformation receipt proves their relation.",
+    "Mutable current-status authorities are named but not frozen by hash; they must be re-read and corroborated at claim time.",
+    "This candidate has not been accepted as the final Gate 0 freeze."
+  ],
+  "claim_bearing_precedence": [
+    "Owner-approved signed semantic authority manifest",
+    "Exact field authority for the definition being used",
+    "Explicit correction overlay",
+    "Corrected v7.4 formal corpus",
+    "Historical inherited source",
+    "CAS operational implementation or extension",
+    "Pedagogical summary",
+    "Generated fixture or model output"
+  ],
+  "baseline_groups": [
+    {
+      "id": "BASELINE-GOVERNANCE-AUTHORITY",
+      "member_source_ids": [
+        "SRC-SEMANTIC-AUTHORITY-REGISTRY-20260720",
+        "SRC-SEMANTIC-AUTHORITY-RECEIPT-20260724"
+      ],
+      "authority_policy": "The registry and its approval receipt govern source precedence, mandatory run bindings, and future-agent rules within their explicit scope. The receipt approves no conflict resolution and licenses no empirical claim.",
+      "identity_policy": "Preserve both JSON artifacts by exact SHA-256. The recorded approval is a transcribed interactive authorization, not a cryptographic or legal signature.",
+      "candidate_treatment": "FROZEN_AUTHORITY_INPUT_IF_CANDIDATE_ACCEPTED"
+    },
+    {
+      "id": "BASELINE-TKS-V7-4",
+      "member_source_ids": [
+        "SRC-TKS74-MASTER-TEX",
+        "SRC-TKS74-FULL-BEAUTIFUL-TEXT",
+        "SRC-TKS74-FULL-BEAUTIFUL-PDF",
+        "SRC-TKS74-REVIEW-CORRECTIONS",
+        "SRC-TKS74-REFEREE",
+        "SRC-TKS74-CORRECTED-CHAPTERS",
+        "SRC-TKS74-FULL-CORRECTED-UNREGISTERED"
+      ],
+      "authority_policy": "Use the master and registered FULL_BEAUTIFUL text as the broad v7.4 formal corpus, with field-specific correction overlays taking precedence. The 539-page PDF is a rendering. The materially different 596-page FULL_CORRECTED PDF is context only until admitted by an explicit transformation or authority record.",
+      "identity_policy": "Preserve every member by exact hash. Never merge the registered and unregistered editions by title similarity or page extraction.",
+      "candidate_treatment": "FROZEN_VERSION_STACK_WITH_OVERLAYS_IF_CANDIDATE_ACCEPTED"
+    },
+    {
+      "id": "BASELINE-NOETIC-TOPOS-CONSERVATIVE",
+      "member_source_ids": [
+        "SRC-NOETOPOS-CONSERVATIVE-TEX-REGISTERED",
+        "SRC-NOETOPOS-CONSERVATIVE-PDF"
+      ],
+      "authority_policy": "The registered TeX governs formal definitions, axioms, and conditional theorem text. The PDF is a review rendering and carries no independent empirical authority.",
+      "identity_policy": "Identify the source by exact hash because it has no explicit version label. Preserve the PDF as a separate byte artifact with a derivative relation, not as a second semantic source.",
+      "candidate_treatment": "FROZEN_CONSERVATIVE_SOURCE_AND_RENDERING_IF_CANDIDATE_ACCEPTED"
+    },
+    {
+      "id": "BASELINE-CAS-SEMANTICS-AND-ROLLOUT",
+      "member_source_ids": [
+        "SRC-CAS77-NORMATIVE-REGISTERED",
+        "SRC-TKS-OWNER-LOCK-20260603",
+        "SRC-TKS-F28-CROSSWALK",
+        "SRC-CAS77-ROLLOUT"
+      ],
+      "authority_policy": "The registered CAS foundational clarifications govern admitted CAS terminology. The A124302E owner-lock payload is one deployed operational definition version. The F28 file is a named crosswalk, not an identity. The rollout plan is time-indexed implementation evidence, not current runtime proof.",
+      "identity_policy": "Preserve source hashes and version labels. Keep the D3DAC0EF and A124302E definition payloads as distinct semantic variants until an owner-adjudicated transformation record exists.",
+      "candidate_treatment": "FROZEN_NORMATIVE_AND_VERSIONED_OPERATIONAL_INPUTS_IF_CANDIDATE_ACCEPTED"
+    },
+    {
+      "id": "BASELINE-PCBA-ENGINEERING",
+      "member_source_ids": [
+        "SRC-PCBA-ENGINEER-20260726"
+      ],
+      "authority_policy": "The owner-supplied 743-page build is the current PCBA engineering reference by exact PDF identity. It establishes neither safety certification nor physical telemetry.",
+      "identity_policy": "Use the date-plus-SHA identity. Do not call the build v0.6 or v8 solely from its stale internal changelog label.",
+      "candidate_treatment": "FROZEN_HASH_IDENTIFIED_ENGINEERING_BASELINE_IF_CANDIDATE_ACCEPTED"
+    },
+    {
+      "id": "BASELINE-CAS-OHM-EXPERIMENTAL",
+      "member_source_ids": [
+        "SRC-CAS-OHM-GUIDE-01",
+        "SRC-CAS-OHM-ADDENDUM-01",
+        "SRC-CAS-OHM-PCBA-APP-I"
+      ],
+      "authority_policy": "These artifacts define experimental quantitative, operationalization, and calibration proposals. Design values, behavioral proxies, scores, and instrumented measurements remain different types.",
+      "identity_policy": "Preserve every artifact by exact hash and medium. Do not infer an electrical law, calibrated telemetry, or a licensed verdict from a formula or design value.",
+      "candidate_treatment": "FROZEN_EXPERIMENTAL_INPUTS_IF_CANDIDATE_ACCEPTED"
+    },
+    {
+      "id": "BASELINE-CAS-HARNESS",
+      "member_source_ids": [
+        "SRC-HARNESS-16-HISTORICAL",
+        "SRC-HARNESS-PRODUCTION-TODO-LIVE"
+      ],
+      "authority_policy": "CAS Harness v1.6 is a historical claim snapshot. The production TODO is the mutable current status authority and must be corroborated by current runtime, provider, CI, deployment, and Evidence Packet evidence.",
+      "identity_policy": "Freeze v1.6 by hash. Name but do not hash-freeze the live TODO; record an observation receipt whenever it supports a time-sensitive claim.",
+      "candidate_treatment": "HISTORICAL_BASELINE_FROZEN_AND_CURRENT_STATUS_SOURCE_NAMED_IF_CANDIDATE_ACCEPTED"
+    },
+    {
+      "id": "BASELINE-RESEARCH-AND-PROPOSAL-INPUTS",
+      "member_source_ids": [
+        "SRC-TEN-ADVANCES-PRIMARY",
+        "SRC-PROJECT-COHERENCE-PLAN-EXPORT",
+        "SRC-TEN-ADVANCES-TRANSFER-EXPORT"
+      ],
+      "authority_policy": "These artifacts establish provenance for a supplied manuscript and proposed work. They do not establish correctness, novelty, peer review, authorship attribution, transfer validity, canon admission, or product readiness.",
+      "identity_policy": "Preserve exact hashes. Keep the manuscript and every bespoke transfer in Ring 4, OPEN, and NOT LICENSED until each independent gate closes.",
+      "candidate_treatment": "FROZEN_QUARANTINED_INPUTS_IF_CANDIDATE_ACCEPTED"
+    },
+    {
+      "id": "BASELINE-ACTIVE-COMPILER",
+      "member_source_ids": [
+        "SRC-ACTIVE-COMPILER-CURRENT"
+      ],
+      "authority_policy": "The compiler is an operational implementation and cannot override locked semantics. The signed registry binds the canonical LF content SHA-256 8169188A... .",
+      "identity_policy": "Record both the CRLF checkout SHA-256 065DC438... and canonical LF content SHA-256 8169188A... . COMPILER_IDENTITY_NORMALIZATION_RECEIPT_v0.1.json proves that the texts are byte-identical after the declared line-ending normalization.",
+      "candidate_treatment": "FROZEN_DUAL_SERIALIZATION_IDENTITY_IF_CANDIDATE_ACCEPTED"
+    }
+  ],
+  "variant_sets": [
+    {
+      "id": "VARIANT-TKS74-REGISTERED-VS-UNREGISTERED-EDITIONS",
+      "members": [
+        "SRC-TKS74-FULL-BEAUTIFUL-TEXT",
+        "SRC-TKS74-FULL-BEAUTIFUL-PDF",
+        "SRC-TKS74-FULL-CORRECTED-UNREGISTERED"
+      ],
+      "relation": "The FULL_BEAUTIFUL PDF is a verified rendering of the registered text. The FULL_CORRECTED PDF is materially different and remains unregistered context.",
+      "single_default_selected": false,
+      "continuation_rule": "Use the registered text plus overlays for claim-bearing audit; retain the unregistered PDF as a separately named comparator."
+    },
+    {
+      "id": "VARIANT-OWNER-40-28-D3DA-VS-A124",
+      "members": [
+        {
+          "registry_source_id": "owner_raw_40_28_workspace",
+          "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\docs\\working\\tks_owner_locked_definitions_20260603.json",
+          "sha256": "D3DAC0EF5C94CCD768DA0F18987846D8D0C0FA0B366E13DCCC49C82252D2FC12"
+        },
+        {
+          "registry_source_id": "owner_deployed_40_28_protected",
+          "phase0_source_id": "SRC-TKS-OWNER-LOCK-20260603",
+          "sha256": "A124302ED93C7B8571B24A5CDF14433ADF904EB94FD65895C6FD25FAE58E28A0"
+        }
+      ],
+      "relation": "Distinct semantic versions: 20 of 40 Element strings and 8 of 28 Foundation strings differ according to the signed registry.",
+      "single_default_selected": false,
+      "continuation_rule": "Label both variants and use separate experimental arms. A single claim-bearing semantic default requires owner adjudication."
+    },
+    {
+      "id": "VARIANT-CAS77-LF-VS-CRLF",
+      "members": [
+        {
+          "serialization": "registered LF",
+          "sha256": "CDA85C03273C47F7DF9AC53258920B95BA7B3B2007B0E760856A67497F661880",
+          "bytes": 64154
+        },
+        {
+          "serialization": "worktree CRLF",
+          "sha256": "8791980E0F4F7D95BA325175FB200A980AC803120EA2EFD3586DA06832A35018",
+          "bytes": 65122
+        }
+      ],
+      "relation": "Replacing each CRLF with LF makes the worktree bytes exactly equal to the registered source bytes.",
+      "single_default_selected": true,
+      "continuation_rule": "Use the registered LF hash as content identity and retain the raw checkout hash as serialization provenance."
+    },
+    {
+      "id": "VARIANT-COMPILER-LF-VS-CRLF",
+      "members": [
+        {
+          "serialization": "registry-bound LF Git blob",
+          "sha256": "8169188AD73DF8FC3CA709731B3FB4EA07B2513D38D69CF66D22D64CFE88FF4C",
+          "bytes": 243046
+        },
+        {
+          "serialization": "current CRLF checkout",
+          "sha256": "065DC4384F7F52D1D8A081DC2D62AF69980F1F6EA9BF9099D22DE776CE05DF87",
+          "bytes": 248859
+        }
+      ],
+      "relation": "Reproducible line-ending normalization proves content identity; no substantive compiler drift was found.",
+      "single_default_selected": true,
+      "continuation_rule": "Bind claim-bearing runs to both raw and canonical LF hashes until artifact pipelines canonicalize text explicitly."
+    },
+    {
+      "id": "VARIANT-PCBA-HASH-VS-INTERNAL-LABEL",
+      "members": [
+        "SRC-PCBA-ENGINEER-20260726"
+      ],
+      "relation": "The PDF hash is unambiguous; its latest named internal changelog version predates the supplied build.",
+      "single_default_selected": false,
+      "continuation_rule": "Use date-plus-hash identity. Do not assign a public version label until a human version decision is recorded."
+    },
+    {
+      "id": "VARIANT-HARNESS-HISTORICAL-VS-LIVE",
+      "members": [
+        "SRC-HARNESS-16-HISTORICAL",
+        "SRC-HARNESS-PRODUCTION-TODO-LIVE"
+      ],
+      "relation": "The PDF is a frozen historical claim snapshot; the TODO is mutable current-status authority. They answer different time-indexed questions.",
+      "single_default_selected": false,
+      "continuation_rule": "Never use the historical PDF as current readiness evidence; never treat the TODO alone as runtime proof."
+    }
+  ],
+  "claim_firewalls": [
+    "Formal definitions and theorem statements do not establish empirical readability, cognitive correspondence, alignment efficacy, or product readiness.",
+    "Engineering designs and CAS-Ohm quantities do not become instrumented measurements without units, instrument identity, calibration, provenance, and packet eligibility.",
+    "Ten Advances results and CAS/TKS transfers remain quarantined individually; manuscript presence does not establish proof, novelty, publication, or peer review.",
+    "A structural verifier PASS proves only the checks performed by that verifier.",
+    "No source or candidate status changes a product claim from OPEN or NOT LICENSED to LICENSED."
+  ],
+  "acceptance_required": {
+    "final_gate0_freeze": true,
+    "authority": "Integration Board with recorded source/semantics owner review and the independent reviews required by the charter",
+    "minimum_record": [
+      "Exact candidate version and SHA-256",
+      "Disposition of every Gate 0 closure criterion",
+      "Accepted compatibility rules and term-population scope",
+      "Disposition or explicit retained-variant policy for every source conflict",
+      "Reviewed open-vs-held boundary",
+      "Explicit statement that acceptance licenses no theorem, empirical claim, product claim, or public disclosure"
+    ]
+  },
+  "candidate_effect": {
+    "research_continuation": "SUPPORTED_UNDER_STANDING_EXECUTION_AUTHORITY",
+    "historical_baseline_preservation": "CANDIDATE_COMPLETE_FOR_25_PHASE0_SOURCE_RECORDS",
+    "final_canon_freeze": "OPEN",
+    "theorem_acceptance": "NONE",
+    "empirical_validation": "NONE",
+    "product_claim_effect": "NONE",
+    "public_disclosure": "NOT AUTHORIZED"
+  }
+}

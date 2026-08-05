@@ -219,8 +219,15 @@ def verify_migration(document: dict[str, Any], source_ids: set[str]) -> int:
     require(isinstance(entries, list) and entries, "migration matrix has no entries")
     ids = unique_ids(entries, "migration entries")
     for entry in entries:
-        require(entry.get("review_state") in {"UNASSESSED", "IN_REVIEW"}, f"{entry['id']}: Phase 0 review state is too strong")
-        require(entry.get("migration_disposition") in {"UNASSESSED", "IN_REVIEW"}, f"{entry['id']}: Phase 0 disposition is prematurely decided")
+        if entry["id"] == "MIG-COMPILER-REGISTRY-DRIFT":
+            require(entry.get("review_state") == "REVIEWED", f"{entry['id']}: normalization receipt is not reflected in review state")
+            require(entry.get("migration_disposition") == "CLARIFIED", f"{entry['id']}: normalization receipt is not reflected in disposition")
+            require(entry.get("blocking") is False, f"{entry['id']}: line-ending identity still blocks migration")
+            closure = " ".join(entry.get("closure_evidence", []))
+            require("COMPILER_IDENTITY_NORMALIZATION_RECEIPT_v0.1.json" in closure, f"{entry['id']}: normalization receipt is not cited")
+        else:
+            require(entry.get("review_state") in {"UNASSESSED", "IN_REVIEW"}, f"{entry['id']}: Phase 0 review state is too strong")
+            require(entry.get("migration_disposition") in {"UNASSESSED", "IN_REVIEW"}, f"{entry['id']}: Phase 0 disposition is prematurely decided")
         require(entry.get("proof_status") in PROOF_STATUSES, f"{entry['id']}: invalid proof status")
         require(entry.get("current_admission_ring") == 4, f"{entry['id']}: initial migration item escaped Ring 4")
         refs = entry.get("source_refs")

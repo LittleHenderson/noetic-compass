@@ -1,0 +1,120 @@
+{
+  "schema_version": "project-coherence.formal-proof-manifest.v0.1",
+  "manifest_id": "LEAN-DETERMINISTIC-LIFT-FUNCTOR-v0.1",
+  "generated_on": "2026-08-04",
+  "status": "PRESENT",
+  "review_state": "INTERNAL_KERNEL_VERIFICATION_PASSED",
+  "evidence_ring": "RING_4",
+  "license_status": "NOT_LICENSED",
+  "public_release_authorized": false,
+  "formal_environment": {
+    "elan_home": "C:\\Users\\wakil\\.codex\\tools\\project-coherence-elan",
+    "lean_version": "4.32.1",
+    "lean_commit": "f054605aea4b840552cca2e725580bffd1e1b704",
+    "lean_build": "Release",
+    "lake_version": "5.0.0-src+f054605",
+    "external_packages": [],
+    "auto_implicit": false,
+    "warnings_as_errors": true
+  },
+  "artifacts": [
+    {
+      "path": "formal/lean/PSR8Formal/DeterministicLiftFunctor.lean",
+      "role": "formal_proof_module",
+      "bytes": 6939,
+      "sha256": "088D69D87A1BAB9863359AA7A2AAB151F6745AD2C997955B74207D4331B8915D"
+    },
+    {
+      "path": "formal/lean/DeterministicLiftFunctorAudit.lean",
+      "role": "kernel_axiom_audit",
+      "bytes": 939,
+      "sha256": "1A0A3413866FBA122CF797618BA26FBECFBCDACB3A00A86C70875C5745A78014"
+    },
+    {
+      "path": "formal/lean/lean-toolchain",
+      "role": "toolchain_pin",
+      "bytes": 25,
+      "sha256": "8E3538E0AB5F81A3EE04927D8838C8C674E0E112838B4B3CE87EC218143276AF"
+    },
+    {
+      "path": "formal/lean/lakefile.toml",
+      "role": "build_configuration",
+      "bytes": 105,
+      "sha256": "4A8867824EA6877970776AAFD9606153842A82CF627E0D3BB40D0308CBCE8D17"
+    },
+    {
+      "path": "formal/lean/lake-manifest.json",
+      "role": "dependency_lock",
+      "bytes": 143,
+      "sha256": "95B2F386990C3A6F47B5ABBC7462D278CD3D64DAED77994AC4E063D6A9827807"
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/formal/lift_functor/LEAN_DETERMINISTIC_LIFT_FUNCTOR_REPORT_v0.1.md",
+      "role": "scoped_proof_report",
+      "bytes": 3712,
+      "sha256": "1037C2C5F7122BA1E938724421AA9F035EF38D7CB4453D63AF96D701E6461CEC"
+    }
+  ],
+  "verification": {
+    "working_directory": "formal/lean",
+    "commands": [
+      "lake build PSR8Formal.DeterministicLiftFunctor",
+      "lake env lean DeterministicLiftFunctorAudit.lean"
+    ],
+    "build_result": "PASS",
+    "audit_result": "PASS",
+    "sorry_ax_present": false,
+    "project_axioms_present": false,
+    "theorem_audits": [
+      {
+        "declaration": "PSR8.DeterministicLiftFunctor.FiniteMap.comp_id_left",
+        "axiom_dependencies": []
+      },
+      {
+        "declaration": "PSR8.DeterministicLiftFunctor.FiniteMap.comp_id_right",
+        "axiom_dependencies": []
+      },
+      {
+        "declaration": "PSR8.DeterministicLiftFunctor.FiniteMap.comp_assoc",
+        "axiom_dependencies": []
+      },
+      {
+        "declaration": "PSR8.DeterministicLiftFunctor.lift_entry_identity",
+        "axiom_dependencies": []
+      },
+      {
+        "declaration": "PSR8.DeterministicLiftFunctor.lift_basis_identity",
+        "axiom_dependencies": []
+      },
+      {
+        "declaration": "PSR8.DeterministicLiftFunctor.lift_basis_composition",
+        "axiom_dependencies": []
+      },
+      {
+        "declaration": "PSR8.DeterministicLiftFunctor.lift_entry_eq_one_iff",
+        "axiom_dependencies": []
+      },
+      {
+        "declaration": "PSR8.DeterministicLiftFunctor.lift_entry_composition_support",
+        "axiom_dependencies": []
+      },
+      {
+        "declaration": "PSR8.DeterministicLiftFunctor.lift_entry_eq_zero_iff",
+        "axiom_dependencies": []
+      }
+    ]
+  },
+  "verified_claims": [
+    "Finite typed-map identity and associativity laws.",
+    "The deterministic standard-basis lift of identity equals the identity entrywise and on each basis vector.",
+    "The lift of a typed composite equals successive lift action on each standard basis vector.",
+    "Composite one-entry support equals the exact relational product of factor one-entry supports."
+  ],
+  "open_claims": [
+    "Literal finite-sum numerical matrix multiplication has not been modeled in this module.",
+    "Linearity on arbitrary vectors has not been modeled in this module.",
+    "A categorical functor into a formally defined module category has not been modeled in this module.",
+    "Operator-norm, Gram, rank, trace, Python-equivalence, and broader TKS claims remain OPEN."
+  ],
+  "claim_boundary": "This Ring 4 artifact proves only the listed finite standard-basis identity/composition statements. It is NOT LICENSED and does not authorize public release."
+}

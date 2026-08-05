@@ -1,0 +1,13 @@
+/.gitattributes text eol=lf
+/.gitignore text eol=lf
+docs/working/project_coherence/** text eol=lf
+formal/lean/** text eol=lf
+scripts/verify_project_coherence*.py text eol=lf
+scripts/verify_noetic_topos2_gate1.py text eol=lf
+scripts/verify_psr8_lean_gate1.py text eol=lf
+scripts/verify_tks_v8_gate1.py text eol=lf
+src/noetic_topos2/** text eol=lf
+src/tks_v8_core/** text eol=lf
+tests/noetic_topos2/** text eol=lf
+tests/noetic_topos2_modality_composition/** text eol=lf
+tests/tks_v8_core/** text eol=lf

@@ -288,7 +288,16 @@ Closes only when:
 - version and compatibility rules are accepted; and
 - unresolved source gaps have an owner and closure action.
 
-Current blockers include incomplete term coverage, the signed registry's twelve unresolved conflicts, substantive active-compiler drift from the registered hash, owner acceptance of the manuscript quarantine and closure path, PCBA internal version-label ambiguity, Integration Board acceptance, and outstanding disclosure review.
+The bounded load-bearing term census is now technically complete: it records 49
+groups, 695 members, 22 pinned sources, and 14 preserved conflicts. It does not
+select canon. Current blockers include owner-reviewed registry amendments or
+accepted exclusions for the final frozen interface, the signed registry's
+unresolved semantic conflicts, owner acceptance of the manuscript quarantine
+and closure path, PCBA internal version-label ambiguity, Integration Board
+acceptance, and outstanding disclosure review. The earlier active-compiler
+drift concern is technically resolved: the current CRLF checkout normalizes
+exactly to the registry-bound LF Git blob, as recorded in
+`gate0/COMPILER_IDENTITY_NORMALIZATION_RECEIPT_v0.1.json`.
 
 ### Gate 1 - theorem, axiom, and claim audit
 
@@ -298,15 +307,31 @@ Closes only when every major statement in scope has a statement kind, proof stat
 
 ### Gate 2 - TKS v8 typed core
 
-Status: `OPEN / NOT STARTED`
+Status: `OPEN / CANDIDATE IMPLEMENTATION IN REVIEW`
 
 Closes only when typed composition, exact/approximate separation, proof artifacts, a compatibility parser, and fail-closed legacy warnings are verified.
 
+Current evidence includes a separate finite typed-function reference kernel,
+bounded exhaustive tests, deterministic-lift corrections, denotational
+shortlex normal forms, and a pinned partial Lean proof seed. The compatibility
+parser, exact/approximate calculus, universal proof obligations, semantic
+mapping from v7.4, independent review, and canon admission remain open.
+
 ### Gate 3 - Noetic Topos 2.0
 
-Status: `OPEN / NOT STARTED`
+Status: `OPEN / FINITE REFERENCE CANDIDATE IN REVIEW`
 
 Closes only when the information loss of the conservative unmarked construction is stated precisely, the reduction of ACBE/RPM coverage is resolved, proposed markings/modalities are well typed, subcanonicity is resolved, a nontrivial finite model exists, and a backward comparison to the hash-identified conservative baseline is proved.
+
+Current evidence includes a sixteen-context transverse-partition model,
+distinct ambient ACBE/RPM witnesses, strict provenance-bearing cover records,
+a two-parent join derivation, schema-valid theorem and obligation ledgers, and
+bounded Lean context lemmas. An internal finite-context proof candidate now
+establishes modality commutation up to natural isomorphism on `PSh(L,Set)`.
+The resolved factor is explicitly only four independent channels;
+observational/product-site provenance, the product-site modality lift,
+backward comparison, richer cross-context semantics, full formal proof, and
+independent review remain open.
 
 ### Gate 4 - CAS PCBA 8 and CAS-Ohm 1.0
 
@@ -424,7 +449,7 @@ Freezing the charter is a material program decision. It is not inferred from sil
 ## 15. Immediate next actions
 
 1. Complete independent proof and novelty review of the supplied *Ten Advances* manuscript, one chapter at a time.
-2. Resolve or explicitly assign ownership for the twelve semantic-registry conflicts and the active-compiler hash drift.
+2. Resolve or explicitly assign ownership for the remaining semantic-registry conflicts, while regression-checking the resolved compiler CRLF/LF identity relation.
 3. Resolve the internal version label for the 2026-07-26 CAS PCBA Engineer build.
 4. Complete the initial symbol registry beyond the load-bearing terms.
 5. Populate the theorem ledger from original statements, not summaries.

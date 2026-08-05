@@ -1,0 +1,338 @@
+{
+  "schema_version": "project_coherence_gate0_closure_matrix.v0.1",
+  "document_status": "OPEN / CANDIDATE EVIDENCE PACKAGE / NOT FROZEN",
+  "as_of": "2026-08-04",
+  "gate": "Gate 0 — charter and canon control",
+  "overall_status": "OPEN",
+  "closure_rule": "Gate 0 closes only after every criterion is SATISFIED_AND_ACCEPTED and an exact-version freeze receipt is recorded. Evidence completeness, standing execution authority, or a verifier PASS is not acceptance.",
+  "evidence_package": [
+    "STANDING_EXECUTION_AUTHORITY_RECEIPT_v0.1.json",
+    "COMPILER_IDENTITY_NORMALIZATION_RECEIPT_v0.1.json",
+    "BASELINE_FREEZE_CANDIDATE_v0.1.json",
+    "term_census/GATE0_LOAD_BEARING_TERM_CENSUS_v0.1.json",
+    "term_census/GATE0_TERM_CENSUS_AUDIT_v0.1.md",
+    "term_census/verify_gate0_term_census.py"
+  ],
+  "criteria": [
+    {
+      "id": "G0-CRITERION-CHARTER-FROZEN",
+      "criterion": "The charter is reviewed and explicitly frozen.",
+      "status": "OPEN",
+      "evidence": [
+        "PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md is DRAFT / OPEN / NOT FROZEN.",
+        "STANDING_EXECUTION_AUTHORITY_RECEIPT_v0.1.json authorizes continued work but explicitly does not freeze the charter."
+      ],
+      "missing": [
+        "Recorded source/semantics review",
+        "Independent mathematical and experimental/engineering review appropriate to the charter scope",
+        "Integration Board exact-version acceptance and freeze receipt"
+      ],
+      "next_action": "Prepare a hash-bound charter revision after the term census, compatibility rules, conflict dispositions, and disclosure review are complete.",
+      "responsible_role": "Integration Board"
+    },
+    {
+      "id": "G0-CRITERION-BASELINE-IDENTITIES",
+      "criterion": "Every top-level baseline has an identity policy and source authority.",
+      "status": "EVIDENCE_COMPLETE_PENDING_ACCEPTANCE",
+      "evidence": [
+        "CANONICAL_SOURCE_AUTHORITY_MATRIX_v0.1.json contains 25 uniquely identified source records and 24 static hashes; the one unhashed record is intentionally mutable current-status authority.",
+        "BASELINE_FREEZE_CANDIDATE_v0.1.json assigns every one of the 25 source records to exactly one authority group and supplies an authority policy and identity policy for each group.",
+        "Competing editions and serializations are preserved in explicit variant sets.",
+        "The Phase 0 source and migration records now incorporate the compiler normalization receipt and no longer describe line-ending-only hash inequality as substantive drift."
+      ],
+      "missing": [
+        "Integration Board acceptance of the candidate version stack"
+      ],
+      "next_action": "Review the candidate group policies and issue a hash-bound freeze receipt only after all Gate 0 criteria close.",
+      "responsible_role": "Canon and Semantics cell"
+    },
+    {
+      "id": "G0-CRITERION-INITIAL-TERM-COVERAGE",
+      "criterion": "Every initial canonical term has a source, version, semantic type, aliases, and migration policy.",
+      "status": "PARTIAL",
+      "evidence": [
+        "All 24 current symbol-registry entries contain id, canonical name, semantic type, version scope, source references, aliases_allowed, and migration policy.",
+        "The ten canonical Noetics are present with verbatim definitions and PRESERVE_VERBATIM migration policy.",
+        "The bounded source census records 49 groups, 695 members, 22 pinned source hashes, 14 preserved conflict guards, and 13 coverage classes.",
+        "Every census group has a semantic class, version scope, exact source locator, typed disposition, alias control, and migration policy; its independent verifier passes.",
+        "The census classifies 309 members as PROPOSED_ADD, 348 as TYPED_VARIANT, and 14 as EXPLICITLY_OUT_OF_SCOPE instead of silently promoting or collapsing them."
+      ],
+      "missing": [
+        "Owner-reviewed registry amendments or accepted typed-variant/out-of-scope dispositions for the census items needed in the exact frozen interface",
+        "Population of the source-pending TKS 28 translation identities before they can be admitted as canonical TKS definitions",
+        "Integration Board acceptance of the bounded inclusion rule and final term set"
+      ],
+      "next_action": "Generate versioned registry amendments and compatibility profiles from the verified census while preserving all 14 conflicts; defer owner choice until one frozen interface truly requires it.",
+      "responsible_role": "Canon and Semantics cell"
+    },
+    {
+      "id": "G0-CRITERION-OPEN-HELD-REVIEW",
+      "criterion": "The open-vs-held boundary has human review.",
+      "status": "OPEN",
+      "evidence": [
+        "OPEN_VS_HELD_BOUNDARY_v0.1.md is DRAFT / FLAG_FOR_HUMAN_REVIEW / NOT LEGAL ADVICE and fails closed as held.",
+        "The standing execution receipt preserves private defaults and explicitly grants no public disclosure."
+      ],
+      "missing": [
+        "Owner or delegated disclosure decision for an exact artifact version",
+        "Qualified legal, patent, licensing, privacy, or contractual review where applicable"
+      ],
+      "next_action": "Keep work held; prepare a separate sanitized disclosure packet only when the owner requests a public decision.",
+      "responsible_role": "Verification, Publication, and IP cell"
+    },
+    {
+      "id": "G0-CRITERION-VERSION-COMPATIBILITY-ACCEPTED",
+      "criterion": "Version and compatibility rules are accepted.",
+      "status": "PARTIAL",
+      "evidence": [
+        "The 2026-07-24 owner receipt accepts the signed registry's 20 sources, eight-tier precedence, 25 run bindings, and seven future-agent rules.",
+        "The Phase 0 charter and freeze candidate define conservative variant preservation, typed crosswalks, correction overlays, mutable-status handling, and dual raw/content hash binding."
+      ],
+      "missing": [
+        "Exact-version acceptance of the broader Project Coherence compatibility rules",
+        "A completed compatibility profile for each legacy/successor namespace",
+        "Owner adjudication only where a single semantic default is ultimately unavoidable"
+      ],
+      "next_action": "Turn the candidate rules into executable compatibility contracts and tests, then submit the hash-bound rule set for acceptance with the final Gate 0 packet.",
+      "responsible_role": "Canon and Semantics cell"
+    },
+    {
+      "id": "G0-CRITERION-GAP-OWNERS-ACTIONS",
+      "criterion": "Unresolved source gaps have an owner and closure action.",
+      "status": "EVIDENCE_COMPLETE_PENDING_ACCEPTANCE",
+      "evidence": [
+        "All 14 Phase 0 conflict records are represented below with a responsible role, conservative continuation control, and closure action.",
+        "Routine ambiguity is contained by version preservation, typed separation, source unavailability, or fail-closed claim controls rather than a fabricated canon choice.",
+        "The compiler conflict has new reproducible evidence showing a line-ending-only serialization difference."
+      ],
+      "missing": [
+        "Acceptance of the assigned responsibility map",
+        "Execution evidence for each still-open closure action"
+      ],
+      "next_action": "Execute technical actions without interruption; request owner input only at the recorded single-default decision triggers.",
+      "responsible_role": "Integration Board"
+    }
+  ],
+  "conflict_dispositions": [
+    {
+      "id": "CONFLICT-ELEMENT-INDEXING",
+      "upstream_status": "OPEN",
+      "candidate_status": "CONTROL_DEFINED / OPEN",
+      "resolution_class": "TECHNICAL_CROSSWALK",
+      "responsible_role": "Canon and Semantics cell",
+      "continuation_control": "Retain source_symbol and normalized_index as separate fields; prohibit positional remapping without the named crosswalk.",
+      "closure_action": "Publish and property-test a bijection between A1-D10 and A0-D9 that preserves source code and meaning.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": true,
+      "human_decision_required": false
+    },
+    {
+      "id": "CONFLICT-OWNER-PAYLOAD-VERSIONS",
+      "upstream_status": "OPEN",
+      "candidate_status": "VARIANTS_PRESERVED / OPEN",
+      "resolution_class": "GENUINE_SEMANTIC_DEFAULT_CHOICE",
+      "responsible_role": "Source/semantics owner",
+      "continuation_control": "Treat D3DAC0EF and A124302E as distinct semantic versions and use separately labeled experimental arms.",
+      "closure_action": "Produce an exact transformation diff and record owner adjudication before selecting one claim-bearing default.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": true,
+      "human_decision_required": true,
+      "decision_trigger": "Only when PSR-8 requires one default definition payload rather than a versioned multi-profile interface."
+    },
+    {
+      "id": "CONFLICT-RICH-28-PROVENANCE",
+      "upstream_status": "OPEN",
+      "candidate_status": "EXPERIMENTAL_VARIANT_ONLY / OPEN",
+      "resolution_class": "AUTHORITY_ADMISSION",
+      "responsible_role": "Source/semantics owner",
+      "continuation_control": "Keep the rich 28-definition source out of claim-bearing canon and label any existing fixtures as experimental provenance.",
+      "closure_action": "Approve a registry amendment admitting the exact hash or replace it with an already locked owner payload.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": true,
+      "human_decision_required": true,
+      "decision_trigger": "Only before the rich 28-definition variant is used as a claim-bearing authority."
+    },
+    {
+      "id": "CONFLICT-ACQUISITION-VOCABULARY",
+      "upstream_status": "OPEN",
+      "candidate_status": "VARIANTS_PRESERVED / UNAVAILABLE_FOR_IDENTITY CLAIMS",
+      "resolution_class": "GENUINE_SEMANTIC_RELATIONSHIP_CHOICE",
+      "responsible_role": "Source/semantics owner",
+      "continuation_control": "Name the two 22-item constructions as separate types and prohibit alias or identity claims.",
+      "closure_action": "Provide an exact crosswalk and decide whether the constructions are layers, aliases, or incompatible versions.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": true,
+      "human_decision_required": true,
+      "decision_trigger": "Only when a shared Acquisition compatibility profile or single public vocabulary is required."
+    },
+    {
+      "id": "CONFLICT-NOETIC-NAME-DRIFT",
+      "upstream_status": "OPEN",
+      "candidate_status": "PRECEDENCE_DEFINED / IMPLEMENTATION_RECONCILIATION_OPEN",
+      "resolution_class": "TECHNICAL_RECONCILIATION",
+      "responsible_role": "Canon and Semantics cell",
+      "continuation_control": "The ten normative Noetic names remain canonical; programming-book names are comparator-only and forbidden as silent aliases.",
+      "closure_action": "Inventory and relabel all claim-bearing prompts, fixtures, book text, training inputs, and UI surfaces that still use the comparator vocabulary.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": true,
+      "human_decision_required": false
+    },
+    {
+      "id": "CONFLICT-WORLD-DOMAIN-REGISTER",
+      "upstream_status": "OPEN",
+      "candidate_status": "TYPED_SEPARATION_DEFINED / CROSSWALKS_OPEN",
+      "resolution_class": "TECHNICAL_TYPED_CROSSWALKS",
+      "responsible_role": "Canon and Semantics cell",
+      "continuation_control": "Native TKS World, CAS Domain, and CAS Register remain three typed axes; no mapping is an identity by position.",
+      "closure_action": "Publish separate versioned World-to-Domain and World-to-Register hypotheses with tests and loss statements.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": true,
+      "human_decision_required": false
+    },
+    {
+      "id": "CONFLICT-FOUNDATION-DRIVE",
+      "upstream_status": "OPEN",
+      "candidate_status": "TYPED_SEPARATION_DEFINED / CROSSWALK_OPEN",
+      "resolution_class": "TECHNICAL_TYPED_CROSSWALK",
+      "responsible_role": "Canon and Semantics cell",
+      "continuation_control": "TKS Foundations and CAS Core Drives remain separate typed systems even where positions coincide.",
+      "closure_action": "Version and test any Foundation-to-Drive crosswalk against exact source definitions and record nonidentity examples.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": true,
+      "human_decision_required": false
+    },
+    {
+      "id": "CONFLICT-ALGEBRA-PROFILES",
+      "upstream_status": "OPEN",
+      "candidate_status": "PROFILE_SEPARATION_DEFINED / EQUIVALENCE OPEN",
+      "resolution_class": "TECHNICAL_PROFILE_VERSIONING",
+      "responsible_role": "Formal Mathematics cell",
+      "continuation_control": "Give every executable or source algebra a distinct algebra_profile identifier and make no blanket equivalence claim.",
+      "closure_action": "Specify profiles, translations, proof obligations, and counterexamples; bind the chosen profile hash to compiler and evidence outputs.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": true,
+      "human_decision_required": false
+    },
+    {
+      "id": "CONFLICT-RUN-BINDINGS",
+      "upstream_status": "OPEN",
+      "candidate_status": "REQUIRED_FIELDS_ACCEPTED / IMPLEMENTATION OPEN",
+      "resolution_class": "ENGINEERING_PROVENANCE_CONTROL",
+      "responsible_role": "Harness Experimental Science cell",
+      "continuation_control": "Outputs lacking mandatory source, crosswalk, fixture, model, code, and environment bindings are not claim-bearing.",
+      "closure_action": "Implement schema validation from generation through capture, evaluation, Evidence Packet creation, and verification; add fail-closed tests.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": true,
+      "human_decision_required": false
+    },
+    {
+      "id": "CONFLICT-TOPOS-CLAIM-SCOPE",
+      "upstream_status": "OPEN",
+      "candidate_status": "CLAIM_FIREWALL_DEFINED / EMPIRICAL VALIDATION OPEN",
+      "resolution_class": "CLAIM_BOUNDARY",
+      "responsible_role": "Harness Experimental Science cell",
+      "continuation_control": "The formal Noetic Topos licenses no detection, cognition, alignment, or safety claim.",
+      "closure_action": "Create separately preregistered empirical hypotheses, controls, falsifiers, held-out replications, and product-claim records.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": true,
+      "human_decision_required": false
+    },
+    {
+      "id": "CONFLICT-PROOF-VS-EVIDENCE",
+      "upstream_status": "OPEN",
+      "candidate_status": "STATUS_TYPES_DEFINED / POPULATION AUDIT OPEN",
+      "resolution_class": "REGISTRY_AND_CLAIM_CONTROL",
+      "responsible_role": "Formal Mathematics cell",
+      "continuation_control": "Definitions, axioms, paper proofs, proof sketches, mechanical proofs, implementation tests, and empirical evidence use different status fields.",
+      "closure_action": "Populate theorem and claim ledgers for every major in-scope statement and reject unlabeled hybrids.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": true,
+      "human_decision_required": false
+    },
+    {
+      "id": "CONFLICT-MISSING-MAIN-MD",
+      "upstream_status": "OPEN",
+      "candidate_status": "UNAVAILABLE RECORDED / OPEN IF LATER SUPPLIED",
+      "resolution_class": "SOURCE_AVAILABILITY",
+      "responsible_role": "Canon and Semantics cell",
+      "continuation_control": "Do not cite, summarize, or claim review of a separate main.md source.",
+      "closure_action": "Record the exact path and hash if the owner later supplies a distinct main.md; otherwise retain unavailable status and use the registered main.tex only.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": true,
+      "human_decision_required": false
+    },
+    {
+      "id": "CONFLICT-PCBA-VERSION-LABEL",
+      "upstream_status": "FLAG_FOR_HUMAN_REVIEW",
+      "candidate_status": "HASH_IDENTITY DEFINED / PUBLIC VERSION LABEL OPEN",
+      "resolution_class": "HUMAN_VERSION_NAMING",
+      "responsible_role": "Source/semantics owner",
+      "continuation_control": "Use the supplied date, 743-page count, source-tree context, and SHA-256; do not infer a version label from the stale changelog.",
+      "closure_action": "Record an owner-approved semantic version or explicitly accept date-plus-hash as the frozen baseline designation.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": true,
+      "human_decision_required": true,
+      "decision_trigger": "Only before a canonical or public PCBA version label is required."
+    },
+    {
+      "id": "CONFLICT-ACTIVE-COMPILER-DRIFT",
+      "upstream_status": "FLAG_FOR_HUMAN_REVIEW",
+      "candidate_status": "RESOLVED_BY_REPRODUCIBLE_TEXT_NORMALIZATION",
+      "resolution_class": "BYTE_SERIALIZATION_IDENTITY",
+      "responsible_role": "Verification, Publication, and IP cell",
+      "continuation_control": "Bind raw CRLF SHA-256 065DC438... and canonical LF SHA-256 8169188A...; the current normalized bytes equal the registered Git blob.",
+      "closure_action": "In the next reviewed source-matrix revision, replace the substantive-drift assertion with the dual-serialization identity receipt and regression-proof the hash canonicalization path.",
+      "blocks_research_continuation": false,
+      "blocks_final_gate0_freeze": false,
+      "human_decision_required": false,
+      "evidence_ref": "COMPILER_IDENTITY_NORMALIZATION_RECEIPT_v0.1.json"
+    }
+  ],
+  "deferred_human_decisions": [
+    {
+      "id": "G0-HUMAN-CHARTER-FREEZE",
+      "required_for": "Final Gate 0 closure",
+      "ask_now": false,
+      "reason": "Research may continue under standing execution authority; freeze requires a completed exact-version packet."
+    },
+    {
+      "id": "G0-HUMAN-D3DA-A124-DEFAULT",
+      "required_for": "A single claim-bearing 40/28 definition default",
+      "ask_now": false,
+      "reason": "Both variants can remain typed and separately evaluated until the release interface genuinely requires one default."
+    },
+    {
+      "id": "G0-HUMAN-RICH28-ADMISSION",
+      "required_for": "Claim-bearing use of the unregistered rich 28-definition source",
+      "ask_now": false,
+      "reason": "The source remains an experimental variant and need not block other work."
+    },
+    {
+      "id": "G0-HUMAN-ACQUISITION-RELATIONSHIP",
+      "required_for": "A shared Acquisition compatibility profile",
+      "ask_now": false,
+      "reason": "The constructions remain distinct and unavailable for identity claims."
+    },
+    {
+      "id": "G0-HUMAN-PCBA-VERSION",
+      "required_for": "Canonical or public PCBA version naming",
+      "ask_now": false,
+      "reason": "Date-plus-hash identity is sufficient for private engineering work."
+    },
+    {
+      "id": "G0-HUMAN-DISCLOSURE",
+      "required_for": "Any public release, patent, licensing, or rights decision",
+      "ask_now": false,
+      "reason": "All current Project Coherence work remains held/private by default."
+    }
+  ],
+  "gate_effect": {
+    "research_continuation": "AUTHORIZED_WITH_CONSERVATIVE_CONTROLS",
+    "gate0_closure": "OPEN",
+    "baseline_freeze": "CANDIDATE_ONLY",
+    "peer_review": "NOT ESTABLISHED",
+    "empirical_validation": "NOT ESTABLISHED",
+    "product_claim_effect": "NONE",
+    "public_disclosure": "NOT AUTHORIZED"
+  }
+}

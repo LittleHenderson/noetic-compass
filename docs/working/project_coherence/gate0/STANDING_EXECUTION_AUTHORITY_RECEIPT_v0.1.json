@@ -1,0 +1,53 @@
+{
+  "schema_version": "project_coherence_standing_execution_authority_receipt.v0.1",
+  "artifact_status": "RECORDED_STANDING_EXECUTION_AUTHORITY / NONCRYPTOGRAPHIC / NONLEGAL",
+  "captured_on": "2026-08-04",
+  "program": "CAS/TKS Provable Systems Evolution",
+  "planned_release": "Provable Systems Release 8.0 (PSR-8)",
+  "authorization_source": {
+    "kind": "UNHASHED_INTERACTIVE_CONVERSATION",
+    "source_locator": "current Codex task; no stable turn identifier was available to this artifact generator",
+    "related_research_conversation_id": "6a6f1b48-8a4c-83e8-ae75-6e613c2d326d",
+    "speaker_role": "user represented in the task as project owner",
+    "speaker_identity_independently_verified": false,
+    "verbatim_quote_recorded_here": false,
+    "transcription_note": "This receipt records the operational scope communicated in the conversation. It is not a verbatim transcript and does not authenticate the speaker outside the task."
+  },
+  "signature_kind": "INTERACTIVE_SESSION_USER_AUTHORIZATION_TRANSCRIBED_BY_CODEX — not a cryptographic signature, legal signature, human attestation, or independent acceptance record",
+  "authorizes": [
+    "Proceed end-to-end through the private PSR-8 research and development mission without routine questions.",
+    "Use conservative private defaults, preserve all identified baselines, and retain competing variants when evidence does not justify an identity or precedence claim.",
+    "Develop the corrected v7.4 record, typed TKS v8, Noetic Topos 2.0, CAS Core v8, CAS PCBA v8, CAS-Ohm v1.0, CAS Harness v2, theorem and claim registries, reference software, tests, proof artifacts, migrations, reproducibility packages, papers, specifications, companions, and private release packages.",
+    "Run ordinary local inspection, editing, testing, version-control, and private-repository operations needed for the mission within existing project access.",
+    "Continue research when a routine ambiguity can be contained by typed separation, explicit versioning, quarantine, or a fail-closed claim boundary."
+  ],
+  "mandatory_defaults": [
+    "Unsupported mathematical statements remain OPEN or carry an explicit proof-gap status.",
+    "Unsupported empirical and product claims remain NOT LICENSED.",
+    "Unverified external or model-generated transfers remain in admission Ring 4.",
+    "Byte-different baselines remain separately identified unless a reproducible transformation receipt proves the relation.",
+    "The work remains private or held unless a separate exact-version disclosure decision says otherwise.",
+    "Negative findings, counterexamples, failed transfers, and null results remain in the audit record."
+  ],
+  "interrupt_only_for": [
+    "A sign-in, MFA challenge, CAPTCHA, unavailable credential, or other identity action the user must personally complete.",
+    "Unbudgeted paid compute or a purchase that has not already been authorized.",
+    "Legal, patent, inventorship, authorship, licensing, or disclosure sign-off requiring a qualified human decision.",
+    "An irreversible public disclosure, destructive action outside the stated mission, or material business choice not already decided.",
+    "A genuinely unavoidable competing-canon choice that cannot be deferred by preserving typed variants without compromising the requested final result."
+  ],
+  "does_not_authorize_or_establish": [
+    "A final freeze or owner acceptance of the Project Coherence charter, baseline-freeze candidate, compatibility rules, theorem migrations, or successor canon.",
+    "Public release, patent filing, legal advice, rights clearance, or a trade-secret decision.",
+    "A cryptographic or legal signature, independent peer review, proof-assistant verification, empirical validation, production readiness, safety certification, or customer acceptance.",
+    "Promotion of an OPEN, NOT LICENSED, quarantined, unassessed, or proof-gap record, or licensing of any product claim.",
+    "Authority to invent credentials, human approvals, legal sign-off, provider receipts, experimental results, or citations."
+  ],
+  "gate_effect": {
+    "research_execution": "AUTHORIZED_TO_CONTINUE",
+    "gate0_freeze": "NOT ESTABLISHED",
+    "integration_board_acceptance": "NOT ESTABLISHED",
+    "disclosure_approval": "NOT ESTABLISHED",
+    "product_claim_effect": "NONE"
+  }
+}

@@ -1,0 +1,6 @@
+name = "psr8_formal"
+version = "0.1.0"
+defaultTargets = ["PSR8Formal"]
+
+[[lean_lib]]
+name = "PSR8Formal"

@@ -302,15 +302,15 @@
       "id": "MIG-COMPILER-REGISTRY-DRIFT",
       "subject": "Current active notation compiler versus owner-signed registry binding",
       "source_refs": ["SRC-SEMANTIC-AUTHORITY-REGISTRY-20260720", "SRC-ACTIVE-COMPILER-CURRENT"],
-      "risk": "Claim-bearing outputs can be produced by code whose substantive bytes differ from the compiler version approved in the semantic registry.",
-      "target_action": "Reproduce with the frozen registered compiler or issue an owner-approved registry amendment after semantic and regression review.",
-      "review_state": "IN_REVIEW",
-      "migration_disposition": "UNASSESSED",
+      "risk": "Raw checkout and registry hashes differ because Git uses LF content while the Windows checkout uses CRLF. Treating raw-hash inequality as semantic drift would create a false integrity blocker; omitting both identities would weaken forensic provenance.",
+      "target_action": "Bind raw CRLF and canonical LF hashes, apply the declared CRLF-to-LF normalization, and continue to require all other signed-registry run bindings.",
+      "review_state": "REVIEWED",
+      "migration_disposition": "CLARIFIED",
       "proof_status": "NOT_APPLICABLE",
       "current_admission_ring": 4,
       "proposed_destination": "Phase 0 source-integrity closure",
-      "blocking": true,
-      "closure_evidence": ["Compiler semantic diff", "Regression suite", "Owner-approved refreshed hash or frozen reproduction receipt"]
+      "blocking": false,
+      "closure_evidence": ["gate0/COMPILER_IDENTITY_NORMALIZATION_RECEIPT_v0.1.json", "Git blob identity at registry commit 7071aa33 and Phase 0 commit 5a7fdb63", "Gate 0 normalization verifier"]
     },
     {
       "id": "MIG-NOETIC-DIMENSION-SCORE",
