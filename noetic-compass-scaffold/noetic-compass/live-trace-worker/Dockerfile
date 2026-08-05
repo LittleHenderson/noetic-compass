@@ -87,6 +87,19 @@ RUN python -m pip uninstall --yes pip \
     && test ! -e /usr/local/bin/pip3 \
     && python -c "import importlib.util; assert importlib.util.find_spec('ensurepip') is None"
 
+# The admitted worker is a single-GPU eager-attention service. Remove optional
+# cluster/RDMA transport plugins whose MPI, UCX, PMIx, libfabric, or InfiniBand
+# hosts are outside that boundary instead of shipping unresolved native code.
+RUN rm -f \
+      /usr/local/lib/python3.12/site-packages/nvidia/nvshmem/lib/nvshmem_bootstrap_mpi.so.3 \
+      /usr/local/lib/python3.12/site-packages/nvidia/nvshmem/lib/nvshmem_bootstrap_pmix.so.3 \
+      /usr/local/lib/python3.12/site-packages/nvidia/nvshmem/lib/nvshmem_bootstrap_shmem.so.3 \
+      /usr/local/lib/python3.12/site-packages/nvidia/nvshmem/lib/nvshmem_transport_ibgda.so.3 \
+      /usr/local/lib/python3.12/site-packages/nvidia/nvshmem/lib/nvshmem_transport_ibdevx.so.3 \
+      /usr/local/lib/python3.12/site-packages/nvidia/nvshmem/lib/nvshmem_transport_libfabric.so.3 \
+      /usr/local/lib/python3.12/site-packages/nvidia/nvshmem/lib/nvshmem_transport_ucx.so.3 \
+      /usr/local/lib/python3.12/site-packages/nvidia/cufile/lib/libcufile_rdma.so.1
+
 COPY app ./app
 
 # Acquisition is the only online model step. Hash verification occurs before

@@ -15,9 +15,11 @@ import argparse
 import hashlib
 import importlib.util
 from importlib import metadata
+import os
 from pathlib import Path
 import platform
 import re
+import subprocess
 import sys
 from typing import Any, Callable, Iterable
 
@@ -37,6 +39,21 @@ EXPECTED_TORCH_REQUIREMENT = (
     "#sha256=8695f3c6b7966d44560275b90c5c28e5091ba33ddbb1ab33b2173782ca1e9145"
 )
 DEFAULT_LOCK_PATH = Path("/worker/requirements.txt")
+PYTHON_LIB_ROOT = Path("/usr/local/lib/python3.12")
+SITE_PACKAGES_ROOT = PYTHON_LIB_ROOT / "site-packages"
+PRUNED_OPTIONAL_NATIVE_ARTIFACTS = (
+    "nvidia/nvshmem/lib/nvshmem_bootstrap_mpi.so.3",
+    "nvidia/nvshmem/lib/nvshmem_bootstrap_pmix.so.3",
+    "nvidia/nvshmem/lib/nvshmem_bootstrap_shmem.so.3",
+    "nvidia/nvshmem/lib/nvshmem_transport_ibgda.so.3",
+    "nvidia/nvshmem/lib/nvshmem_transport_ibdevx.so.3",
+    "nvidia/nvshmem/lib/nvshmem_transport_libfabric.so.3",
+    "nvidia/nvshmem/lib/nvshmem_transport_ucx.so.3",
+    "nvidia/cufile/lib/libcufile_rdma.so.1",
+)
+ALLOWED_HOST_NATIVE_DEPENDENCIES = {
+    "torch/lib/libcaffe2_nvrtc.so": {"libcuda.so.1"},
+}
 _PIN_RE = re.compile(r"^([A-Za-z0-9_.-]+)==([^\s\\]+)$")
 _DIRECT_RE = re.compile(r"^([A-Za-z0-9_.-]+)\s+@\s+(\S+)$")
 _HASH_RE = re.compile(r"^--hash=sha256:[0-9a-f]{64}\s*\\?$")
@@ -228,6 +245,99 @@ def verify_environment(
     return locked
 
 
+def _native_library_search_path(site_packages: Path) -> str:
+    candidates = {
+        path
+        for path in site_packages.iterdir()
+        if path.is_dir() and path.name.endswith(".libs")
+    }
+    for relative in ("torch/lib", "triton/_C"):
+        path = site_packages / relative
+        if path.is_dir():
+            candidates.add(path)
+    nvidia_root = site_packages / "nvidia"
+    if nvidia_root.is_dir():
+        candidates.update(
+            path for path in nvidia_root.rglob("lib") if path.is_dir()
+        )
+    return os.pathsep.join(str(path) for path in sorted(candidates))
+
+
+def _missing_native_sonames(transcript: str) -> set[str]:
+    return {
+        match.group(1)
+        for match in re.finditer(
+            r"(?m)^\s*([^\s]+)\s+=>\s+not found\s*$",
+            transcript,
+        )
+    }
+
+
+def verify_native_library_closure(
+    *,
+    python_lib_root: Path = PYTHON_LIB_ROOT,
+    runner: Callable[..., Any] = subprocess.run,
+) -> int:
+    """Require every shipped native dependency or one exact host-driver seam."""
+
+    site_packages = python_lib_root / "site-packages"
+    for relative in PRUNED_OPTIONAL_NATIVE_ARTIFACTS:
+        if (site_packages / relative).exists():
+            raise RuntimeError(
+                f"out-of-scope cluster/RDMA plugin remains in the image: {relative}"
+            )
+
+    roots = (python_lib_root / "lib-dynload", site_packages)
+    artifacts = sorted(
+        path
+        for root in roots
+        for path in root.rglob("*")
+        if path.is_file() and re.search(r"\.so(?:\.|$)", path.name)
+    )
+    if not artifacts:
+        raise RuntimeError("native-library audit found no shared objects")
+
+    environment = dict(os.environ)
+    environment["LD_LIBRARY_PATH"] = _native_library_search_path(site_packages)
+    observed_external: dict[str, set[str]] = {}
+    for artifact in artifacts:
+        completed = runner(
+            ["ldd", str(artifact)],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            check=False,
+            env=environment,
+        )
+        transcript = f"{completed.stdout}{completed.stderr}"
+        missing = _missing_native_sonames(transcript)
+        relative = artifact.relative_to(site_packages).as_posix()
+        allowed = ALLOWED_HOST_NATIVE_DEPENDENCIES.get(relative, set())
+        unexpected = missing - allowed
+        if unexpected:
+            raise RuntimeError(
+                f"native artifact {relative} has unresolved dependencies: "
+                f"{sorted(unexpected)!r}"
+            )
+        if missing:
+            observed_external[relative] = missing
+        if completed.returncode != 0 and not missing and not any(
+            marker in transcript.lower()
+            for marker in ("not a dynamic executable", "statically linked")
+        ):
+            raise RuntimeError(
+                f"ldd could not inspect native artifact {relative}: {transcript.strip()}"
+            )
+
+    for relative, missing in observed_external.items():
+        if missing != ALLOWED_HOST_NATIVE_DEPENDENCIES[relative]:
+            raise RuntimeError(
+                f"host-native dependency set drifted for {relative}: {sorted(missing)!r}"
+            )
+    return len(artifacts)
+
+
 def fetch_model_cache() -> None:
     """Acquire only the commit-pinned files later verified offline."""
 
@@ -289,7 +399,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--scope",
-        choices=("fetch", "environment", "model", "all"),
+        choices=("fetch", "environment", "native", "model", "all"),
         default="all",
     )
     args = parser.parse_args(argv)
@@ -299,6 +409,12 @@ def main(argv: list[str] | None = None) -> int:
     if args.scope in {"environment", "all"}:
         locked = verify_environment()
         print(f"container environment preflight PASS: {len(locked)} unified packages")
+    if args.scope in {"native", "all"}:
+        native_artifacts = verify_native_library_closure()
+        print(
+            "container native-library preflight PASS: "
+            f"{native_artifacts} shared objects; libcuda.so.1 host seam only"
+        )
     if args.scope in {"model", "all"}:
         verify_model_cache()
         print("container model preflight PASS: exact Pythia identity/API/geometry/numerics")

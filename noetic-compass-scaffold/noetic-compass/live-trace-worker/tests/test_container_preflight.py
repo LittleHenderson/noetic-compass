@@ -347,3 +347,74 @@ def test_model_cache_preflight_executes_target_contract(monkeypatch) -> None:
     assert calls["model"]["use_safetensors"] is True
     assert calls["model"]["local_files_only"] is True
     assert calls["tokenizer"]["local_files_only"] is True
+
+
+def test_native_library_closure_allows_only_exact_host_cuda_seam(
+    tmp_path: Path,
+) -> None:
+    python_root = tmp_path / "python3.12"
+    artifact = (
+        python_root
+        / "site-packages"
+        / "torch"
+        / "lib"
+        / "libcaffe2_nvrtc.so"
+    )
+    artifact.parent.mkdir(parents=True)
+    artifact.write_bytes(b"synthetic-elf")
+
+    def _runner(*_args, **_kwargs):
+        return SimpleNamespace(
+            returncode=0,
+            stdout="\tlibcuda.so.1 => not found\n",
+            stderr="",
+        )
+
+    assert (
+        container_preflight.verify_native_library_closure(
+            python_lib_root=python_root,
+            runner=_runner,
+        )
+        == 1
+    )
+
+
+def test_native_library_closure_rejects_unexpected_missing_soname(
+    tmp_path: Path,
+) -> None:
+    python_root = tmp_path / "python3.12"
+    artifact = python_root / "site-packages" / "example" / "unsafe.so"
+    artifact.parent.mkdir(parents=True)
+    artifact.write_bytes(b"synthetic-elf")
+
+    def _runner(*_args, **_kwargs):
+        return SimpleNamespace(
+            returncode=0,
+            stdout="\tlibmystery.so.1 => not found\n",
+            stderr="",
+        )
+
+    with pytest.raises(RuntimeError, match="libmystery.so.1"):
+        container_preflight.verify_native_library_closure(
+            python_lib_root=python_root,
+            runner=_runner,
+        )
+
+
+def test_native_library_closure_rejects_pruned_cluster_plugin(
+    tmp_path: Path,
+) -> None:
+    python_root = tmp_path / "python3.12"
+    plugin = (
+        python_root
+        / "site-packages"
+        / container_preflight.PRUNED_OPTIONAL_NATIVE_ARTIFACTS[0]
+    )
+    plugin.parent.mkdir(parents=True)
+    plugin.write_bytes(b"synthetic-cluster-plugin")
+
+    with pytest.raises(RuntimeError, match="cluster/RDMA plugin remains"):
+        container_preflight.verify_native_library_closure(
+            python_lib_root=python_root,
+            runner=lambda *_args, **_kwargs: None,
+        )
