@@ -15,12 +15,9 @@ FROM python:3.12.13-slim-bookworm@sha256:6e13e65c55e33adf203d77ee371cf8bf5d81bd4
 
 FROM ubuntu:24.04@sha256:019e8eb29a85e74d64925745884f2ec79aa27e3feab36353d24656f4d6b89467
 
-ARG SOURCE_COMMIT=UNBOUND
 LABEL org.opencontainers.image.title="atlas-live-trace-worker" \
       org.opencontainers.image.description="Private FastAPI worker: Pythia-160M + probe pipeline, SSE trace stream, behind the noetic-compass-api proxy." \
       org.opencontainers.image.source="https://github.com/LittleHenderson/noetic-compass" \
-      org.opencontainers.image.revision="${SOURCE_COMMIT}" \
-      org.opencontainers.image.version="gate5-candidate-v0.2" \
       org.opencontainers.image.base.name="ubuntu:24.04" \
       org.opencontainers.image.base.digest="sha256:019e8eb29a85e74d64925745884f2ec79aa27e3feab36353d24656f4d6b89467" \
       org.opencontainers.image.python.digest="sha256:6e13e65c55e33adf203d77ee371cf8bf5d81bd4902ef07565721f46bf44917af" \
@@ -28,9 +25,6 @@ LABEL org.opencontainers.image.title="atlas-live-trace-worker" \
       org.opencontainers.image.run.readonly-rootfs="required" \
       org.opencontainers.image.run.tmpfs="/tmp:rw,noexec,nosuid,nodev,size=64m" \
       org.opencontainers.image.run.auth="ATLAS_LIVE_WORKER_TOKEN required"
-
-RUN test "${#SOURCE_COMMIT}" -eq 40 \
-    && case "$SOURCE_COMMIT" in *[!0-9a-f]*) exit 1 ;; *) exit 0 ;; esac
 
 # Bootstrap the timestamp-pinned Ubuntu snapshot with the CA bundle from the
 # immutable Python stage, then install only Python's shared runtime libraries.
@@ -109,6 +103,11 @@ RUN python -m app.runtime.container_preflight --scope all
 RUN chown -R 0:0 /worker \
     && find /worker -type d -exec chmod 0555 '{}' + \
     && find /worker -type f -exec chmod 0444 '{}' +
+ARG SOURCE_COMMIT=UNBOUND
+RUN test "${#SOURCE_COMMIT}" -eq 40 \
+    && case "$SOURCE_COMMIT" in *[!0-9a-f]*) exit 1 ;; *) exit 0 ;; esac
+LABEL org.opencontainers.image.revision="${SOURCE_COMMIT}" \
+      org.opencontainers.image.version="gate5-candidate-v0.2"
 USER 10001:10001
 RUN test ! -w /worker/app \
     && test ! -w /worker/requirements.txt \
