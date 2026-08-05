@@ -26,11 +26,21 @@ tests/cas_harness_v2/** text eol=lf
 noetic-compass-scaffold/noetic-compass/conftest.py text eol=lf
 noetic-compass-scaffold/noetic-compass/pyproject.toml text eol=lf
 noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile text eol=lf
+noetic-compass-scaffold/noetic-compass/live-trace-worker/.dockerignore text eol=lf
+noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.in text eol=lf
 noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt text eol=lf
 noetic-compass-scaffold/noetic-compass/live-trace-worker/app/** text eol=lf
 noetic-compass-scaffold/noetic-compass/live-trace-worker/scenarios/** text eol=lf
 noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/** text eol=lf
 noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/** text eol=lf
+noetic-compass-scaffold/noetic-compass/api/routes/cas_harness_audit.py text eol=lf
+noetic-compass-scaffold/noetic-compass/api/services/cas_harness_fleet_executor.py text eol=lf
+noetic-compass-scaffold/noetic-compass/scripts/prepare_large_model_eval.py text eol=lf
+noetic-compass-scaffold/noetic-compass/scripts/test_prepare_large_model_eval.py text eol=lf
+noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_fleet_executor.py text eol=lf
+noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_fleet_executor_contract.py text eol=lf
+noetic-compass-scaffold/noetic-compass/tests/test_state_ledger_operational_enable.py text eol=lf
+noetic-compass-scaffold/noetic-compass/tests/test_state_substrate_live_migration.py text eol=lf
 
 # Historical Harness V1-V4 recovery is evidence by exact original Git bytes,
 # including its known LF/CRLF inconsistency and binary raw-logit artifacts.

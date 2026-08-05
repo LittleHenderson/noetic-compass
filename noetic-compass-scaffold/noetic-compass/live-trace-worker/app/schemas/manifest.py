@@ -58,6 +58,42 @@ ModelIdentityStatus = Literal[
 ]
 
 
+class RuntimeExecutionEvidence(BaseModel):
+    """Observed execution substrate for a real-model manifest."""
+
+    profile: Literal["development", "production"]
+    device: Literal["cpu", "cuda"]
+    dtype: Literal["torch.float32", "torch.float16"]
+    torch_version: str = Field(..., min_length=1)
+    cuda_runtime_version: str | None = None
+    cuda_driver_version: int | None = Field(default=None, ge=1)
+    cuda_device_name: str | None = Field(default=None, min_length=1)
+    cuda_device_capability: str | None = Field(default=None, min_length=3)
+
+    @model_validator(mode="after")
+    def _production_requires_observed_cuda(self) -> "RuntimeExecutionEvidence":
+        if self.profile == "production":
+            if self.device != "cuda" or self.dtype != "torch.float16":
+                raise ValueError("production runtime evidence requires CUDA float16 execution")
+            if not (
+                self.cuda_runtime_version
+                and self.cuda_driver_version
+                and self.cuda_device_name
+                and self.cuda_device_capability
+            ):
+                raise ValueError(
+                    "production runtime evidence requires CUDA runtime, driver, device, "
+                    "and capability observations"
+                )
+            if self.torch_version != "2.13.0+cu126":
+                raise ValueError("production runtime evidence requires Torch 2.13.0+cu126")
+            if self.cuda_runtime_version != "12.6":
+                raise ValueError("production runtime evidence requires CUDA runtime 12.6")
+            if self.cuda_driver_version < 12060:
+                raise ValueError("production runtime evidence requires CUDA driver API 12.6+")
+        return self
+
+
 class ModelArch(BaseModel):
     """Bare architecture facts. Used by the UI to lay out the 3D scene."""
 
@@ -140,6 +176,12 @@ class ModelManifest(BaseModel):
             "weights-file identity; real execution requires the stronger status."
         ),
     )
+    runtime_execution: RuntimeExecutionEvidence | None = Field(
+        default=None,
+        description=(
+            "Observed device, dtype, Torch, and CUDA substrate for this loaded model."
+        ),
+    )
     is_real_model: bool = Field(
         default=False,
         description=(
@@ -199,9 +241,11 @@ class ModelManifest(BaseModel):
             self.revision_verified
             and self.weights_hash_verified
             and full_identity
+            and self.runtime_execution is not None
         ):
             raise ValueError(
-                "is_real_model requires an observed pinned revision and verified weights SHA-256"
+                "is_real_model requires an observed pinned revision, verified weights "
+                "SHA-256, and runtime execution evidence"
             )
         if self.is_real_model and self.execution_kind != "real_model_weights":
             raise ValueError(

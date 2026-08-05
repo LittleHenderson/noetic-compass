@@ -33,6 +33,12 @@ def _real_manifest() -> ModelManifest:
             "weights_bytes": model_loader.PYTHIA_160M_WEIGHTS_BYTES,
             "weights_hash_verified": True,
             "model_identity_status": "PINNED_REVISION_AND_WEIGHTS_SHA256",
+            "runtime_execution": model_loader.RuntimeExecutionEvidence(
+                profile="development",
+                device="cpu",
+                dtype="torch.float32",
+                torch_version="2.13.0+cu126",
+            ),
         }
     )
 

@@ -24,6 +24,7 @@ from .manifest import (
     ModelArch,
     ModelExecutionKind,
     ModelManifest,
+    RuntimeExecutionEvidence,
     SupportedHook,
 )
 from .requests import CreateSessionRequest, CreateSessionResponse
@@ -44,6 +45,7 @@ __all__ = [
     "ModelArch",
     "ModelExecutionKind",
     "ModelManifest",
+    "RuntimeExecutionEvidence",
     "Mode7Edge",
     "NeuronActivation",
     "NeuronCoverMember",

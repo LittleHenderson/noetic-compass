@@ -82,6 +82,8 @@ class CoverAblationConfig:
     output: Path
     axis: str
     model_revision: str | None = None
+    model_artifact_manifest_path: Path | None = None
+    model_artifact_manifest_sha256: str | None = None
     torch_dtype: str = "float16"
     device_map: str = "auto"
     max_scenarios: int = 12
@@ -99,7 +101,9 @@ def parse_args() -> Any:
     parser.add_argument("--cover-map-path", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--axis", required=True, choices=("domain", "drive", "foundation", "operator"))
-    parser.add_argument("--model-revision")
+    parser.add_argument("--model-revision", required=True)
+    parser.add_argument("--model-artifact-manifest-path", required=True, type=Path)
+    parser.add_argument("--model-artifact-manifest-sha256", required=True)
     parser.add_argument("--torch-dtype", default="float16")
     parser.add_argument("--device-map", default="auto")
     parser.add_argument("--max-scenarios", type=int, default=12)
@@ -120,6 +124,8 @@ def main() -> int:
         output=args.output,
         axis=args.axis,
         model_revision=args.model_revision,
+        model_artifact_manifest_path=args.model_artifact_manifest_path,
+        model_artifact_manifest_sha256=args.model_artifact_manifest_sha256,
         torch_dtype=args.torch_dtype,
         device_map=args.device_map,
         max_scenarios=args.max_scenarios,
@@ -137,6 +143,26 @@ def main() -> int:
 
 
 def run_cover_ablation(config: CoverAblationConfig) -> dict[str, Any]:
+    model_config = ProbeShardConfig(
+        model_id=config.model_id,
+        worker_id="local-cover-ablation",
+        audit_id="open-weight-cover-ablation",
+        job_id="manual-27h-equivalent",
+        layer_start=0,
+        layer_end=0,
+        shard_id="cover-ablation",
+        assigned_methods=("drive_local_eraser",),
+        expected_outputs=("forward_pass_cover_ablation", "matched_random_controls", "worker_evidence_manifest"),
+        result_path=config.output,
+        model_revision=config.model_revision,
+        model_artifact_manifest_path=config.model_artifact_manifest_path,
+        model_artifact_manifest_sha256=config.model_artifact_manifest_sha256,
+        torch_dtype=config.torch_dtype,
+        device_map=config.device_map,
+        max_scenarios=config.max_scenarios,
+        max_length=config.max_length,
+        trust_remote_code=config.trust_remote_code,
+    )
     candidates = [
         scenario
         for scenario in load_labeled_scenarios(config.scenario_path)
@@ -151,24 +177,6 @@ def run_cover_ablation(config: CoverAblationConfig) -> dict[str, Any]:
     if not isinstance(cover_axis, dict):
         raise RuntimeError(f"Cover map missing covers.{config.axis}.")
 
-    model_config = ProbeShardConfig(
-        model_id=config.model_id,
-        worker_id="local-cover-ablation",
-        audit_id="open-weight-cover-ablation",
-        job_id="manual-27h-equivalent",
-        layer_start=0,
-        layer_end=0,
-        shard_id="cover-ablation",
-        assigned_methods=("drive_local_eraser",),
-        expected_outputs=("forward_pass_cover_ablation", "matched_random_controls", "worker_evidence_manifest"),
-        result_path=config.output,
-        model_revision=config.model_revision,
-        torch_dtype=config.torch_dtype,
-        device_map=config.device_map,
-        max_scenarios=config.max_scenarios,
-        max_length=config.max_length,
-        trust_remote_code=config.trust_remote_code,
-    )
     model, tokenizer, model_info = load_open_weight_model(model_config)
     layers = locate_transformer_layers(model)
     hidden_size = int(model_info.get("hidden_size") or 0)

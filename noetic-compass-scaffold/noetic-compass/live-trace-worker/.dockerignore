@@ -21,7 +21,7 @@ dist/
 venv/
 env/
 
-# Tests + fixtures (not needed at runtime; demo-mode fallback is covered)
+# Tests + fixtures (not needed by the fail-closed production runtime)
 tests/
 fixtures/
 

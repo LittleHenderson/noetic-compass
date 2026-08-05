@@ -13,6 +13,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 import hashlib
 import json
+import re
 from typing import Any, Mapping, Literal
 
 from api.services.cas_harness_distributed_audits import (
@@ -32,6 +33,7 @@ FleetVerifierGateStatus = Literal[
     "waiting_for_receipts",
     "blocked_failed_worker",
     "blocked_missing_outputs",
+    "blocked_unattested_model",
     "ready_for_verifier",
 ]
 FleetReadinessStatus = Literal["blocked", "waiting", "ready"]
@@ -82,6 +84,15 @@ class FleetJobRecord:
     shard_id: str
     assigned_methods: tuple[str, ...]
     expected_outputs: tuple[str, ...]
+    model_id: str | None = None
+    model_revision: str | None = None
+    model_artifact_manifest_path: str | None = None
+    model_artifact_manifest_sha256: str | None = None
+    execution_mode: str | None = None
+    # Runtime proof that the raw attestation was validated in this process. The
+    # run ledger stores only the fragment ref, not the payload, so completed jobs
+    # rehydrated without WORM payload retrieval must be quarantined.
+    model_attestation_replayable: bool = False
     status: FleetJobStatus = "queued"
     lease_token: str | None = None
     lease_token_hash: str | None = None
@@ -103,6 +114,11 @@ class FleetJobRecord:
             "shard_id": self.shard_id,
             "assigned_methods": list(self.assigned_methods),
             "expected_outputs": list(self.expected_outputs),
+            "model_id": self.model_id,
+            "model_revision": self.model_revision,
+            "model_artifact_manifest_path": self.model_artifact_manifest_path,
+            "model_artifact_manifest_sha256": self.model_artifact_manifest_sha256,
+            "execution_mode": self.execution_mode,
             "status": self.status,
             "lease_token": self.lease_token if include_lease_token else None,
             "lease_expires_at": self.lease_expires_at,
@@ -242,6 +258,11 @@ def _job_ledger_payload(job: FleetJobRecord) -> dict[str, object]:
         "shard_id": job.shard_id,
         "assigned_methods": list(job.assigned_methods),
         "expected_outputs": list(job.expected_outputs),
+        "model_id": job.model_id,
+        "model_revision": job.model_revision,
+        "model_artifact_manifest_path": job.model_artifact_manifest_path,
+        "model_artifact_manifest_sha256": job.model_artifact_manifest_sha256,
+        "execution_mode": job.execution_mode,
         "status": job.status,
         "lease_expires_at": job.lease_expires_at,
         "evidence_packet_fragment_ref": job.evidence_packet_fragment_ref,
@@ -377,6 +398,12 @@ def _job_from_ledger_payload(payload: Mapping[str, object]) -> FleetJobRecord:
         shard_id=payload["shard_id"],
         assigned_methods=tuple(payload["assigned_methods"]),
         expected_outputs=tuple(payload["expected_outputs"]),
+        model_id=payload.get("model_id"),
+        model_revision=payload.get("model_revision"),
+        model_artifact_manifest_path=payload.get("model_artifact_manifest_path"),
+        model_artifact_manifest_sha256=payload.get("model_artifact_manifest_sha256"),
+        execution_mode=payload.get("execution_mode"),
+        model_attestation_replayable=stored_status != "completed",
         status=status,
         lease_token=None,
         lease_token_hash=None,
@@ -561,7 +588,12 @@ def mark_stale_workers(
 
 
 def prepare_fleet_for_audit(
-    audit_id: str, *, require_scoped_workers: bool = False
+    audit_id: str,
+    *,
+    model_revision: str | None = None,
+    model_artifact_manifest_path: str | None = None,
+    model_artifact_manifest_sha256: str | None = None,
+    require_scoped_workers: bool = False,
 ) -> FleetRunRecord | None:
     audit = get_distributed_audit(audit_id)
     if audit is None:
@@ -569,8 +601,54 @@ def prepare_fleet_for_audit(
     if audit.status == "PLANNED":
         raise FleetExecutorStateError("Dispatch the distributed audit before preparing fleet jobs.")
 
+    model_revision, model_artifact_manifest_path, model_artifact_manifest_sha256 = (
+        _validate_optional_model_identity_binding(
+            model_revision=model_revision,
+            model_artifact_manifest_path=model_artifact_manifest_path,
+            model_artifact_manifest_sha256=model_artifact_manifest_sha256,
+        )
+    )
+    if model_revision is not None:
+        provenance_payload = (
+            audit.provenance.to_dict() if audit.provenance is not None else None
+        )
+        provenance_revision = (
+            provenance_payload.get("revision")
+            if isinstance(provenance_payload, Mapping)
+            else None
+        )
+        if (
+            not isinstance(provenance_revision, str)
+            or re.fullmatch(r"[0-9a-f]{40}", provenance_revision) is None
+        ):
+            raise FleetExecutorStateError(
+                "Real-model fleet preparation requires an audit provenance manifest "
+                "with a full 40-character lowercase commit revision."
+            )
+        if provenance_revision != model_revision:
+            raise FleetExecutorStateError(
+                "Fleet model_revision does not match the distributed audit provenance revision."
+            )
+
     existing = _FLEET_RUNS.get(audit_id)
     if existing is not None:
+        requested_identity = (
+            model_revision,
+            model_artifact_manifest_path,
+            model_artifact_manifest_sha256,
+        )
+        existing_identities = {
+            (
+                job.model_revision,
+                job.model_artifact_manifest_path,
+                job.model_artifact_manifest_sha256,
+            )
+            for job in existing.jobs
+        }
+        if existing_identities != {requested_identity}:
+            raise FleetExecutorStateError(
+                "Fleet run already exists with a different model artifact identity binding."
+            )
         return _shadow_run(existing)
 
     now = _utc_now()
@@ -584,6 +662,15 @@ def prepare_fleet_for_audit(
             shard_id=worker.shard_id,
             assigned_methods=worker.assigned_methods,
             expected_outputs=worker.expected_outputs,
+            model_id=audit.plan.model_id,
+            model_revision=model_revision,
+            model_artifact_manifest_path=model_artifact_manifest_path,
+            model_artifact_manifest_sha256=model_artifact_manifest_sha256,
+            execution_mode=(
+                "external_probe_command"
+                if model_revision is not None
+                else "dry_run_control_plane"
+            ),
             updated_at=now,
         )
         for worker in audit.worker_evidence
@@ -690,6 +777,7 @@ def submit_job_receipt(
     missing_outputs: list[str] | None = None,
     error_message: str | None = None,
     job_status: Literal["completed", "failed"] = "completed",
+    execution_mode: str | None = None,
     require_scoped_worker: bool = False,
 ) -> FleetRunRecord | None:
     run = _FLEET_RUNS.get(audit_id)
@@ -718,6 +806,8 @@ def submit_job_receipt(
         raise FleetExecutorStateError("Completed job receipts require evidence_packet_fragment_ref.")
     if job_status == "failed" and not (error_message or "").strip():
         raise FleetExecutorStateError("Failed job receipts require error_message.")
+    if execution_mode not in {None, "dry_run_control_plane", "external_probe_command"}:
+        raise FleetExecutorStateError("Unsupported fleet job execution_mode.")
 
     produced = tuple(_dedupe_nonempty(produced_outputs))
     explicit_missing = set(_dedupe_nonempty(missing_outputs or []))
@@ -728,6 +818,12 @@ def submit_job_receipt(
         raise FleetExecutorStateError(f"Produced and missing outputs overlap: {', '.join(sorted(overlap))}.")
     fragment_ref = (evidence_packet_fragment_ref or "").strip()
     if job_status == "completed":
+        _validate_model_execution_attestation(
+            job=job,
+            worker=worker,
+            evidence_packet_fragment_payload=evidence_packet_fragment_payload,
+            execution_mode=execution_mode,
+        )
         _validate_fragment_ref(
             run=run,
             job=job,
@@ -735,6 +831,7 @@ def submit_job_receipt(
             produced_outputs=produced,
             missing_outputs=missing,
             evidence_packet_fragment_payload=evidence_packet_fragment_payload,
+            execution_mode=execution_mode,
             fragment_ref=fragment_ref,
         )
 
@@ -743,6 +840,11 @@ def submit_job_receipt(
     job.missing_outputs = missing
     job.evidence_packet_fragment_ref = fragment_ref if fragment_ref else None
     job.evidence_packet_fragment_payload = evidence_packet_fragment_payload if fragment_ref else None
+    job.model_attestation_replayable = bool(
+        job_status == "completed"
+        and execution_mode == "external_probe_command"
+        and evidence_packet_fragment_payload is not None
+    )
     job.error_message = error_message.strip() if error_message else None
     job.status = "failed" if job_status == "failed" else "completed"
     job.lease_token = None
@@ -774,6 +876,10 @@ def merge_fleet_evidence(audit_id: str) -> FleetRunRecord | None:
     _refresh_run_gate(run)
     if run.verifier_gate_status in {"waiting_for_workers", "waiting_for_receipts"}:
         raise FleetExecutorStateError("Fleet evidence cannot merge until every assigned job returns a receipt.")
+    if run.verifier_gate_status == "blocked_unattested_model":
+        raise FleetExecutorStateError(
+            "Fleet evidence cannot merge from dry-run or legacy unattested model jobs."
+        )
     if run.verifier_gate_status in {"blocked_failed_worker", "blocked_missing_outputs"}:
         distributed = merge_distributed_audit(audit_id)
         run.status = "FAILED" if run.verifier_gate_status == "blocked_failed_worker" else "COMPLETE"
@@ -804,6 +910,38 @@ def merge_fleet_evidence(audit_id: str) -> FleetRunRecord | None:
     return _mirror_run(run)
 
 
+def _job_has_replayable_model_attestation(
+    job: FleetJobRecord,
+    *,
+    require_scoped: bool,
+) -> bool:
+    """Replay the in-memory attestation before any verifier-ready view."""
+
+    if (
+        job.execution_mode != "external_probe_command"
+        or not job.model_attestation_replayable
+        or not isinstance(job.evidence_packet_fragment_payload, Mapping)
+    ):
+        return False
+    worker = _worker_for(
+        job.audit_id,
+        job.assigned_worker_id,
+        legacy_fallback=not require_scoped,
+    )
+    if worker is None:
+        return False
+    try:
+        _validate_model_execution_attestation(
+            job=job,
+            worker=worker,
+            evidence_packet_fragment_payload=job.evidence_packet_fragment_payload,
+            execution_mode=job.execution_mode,
+        )
+    except FleetExecutorStateError:
+        return False
+    return True
+
+
 def _refresh_run_gate(run: FleetRunRecord) -> None:
     unregistered_jobs = [
         job
@@ -815,6 +953,15 @@ def _refresh_run_gate(run: FleetRunRecord) -> None:
     failed_jobs = [job for job in run.jobs if job.status == "failed"]
     incomplete_jobs = [job for job in run.jobs if job.status not in {"completed", "failed"}]
     missing_jobs = [job for job in run.jobs if job.missing_outputs]
+    unattested_jobs = [
+        job
+        for job in run.jobs
+        if job.status == "completed"
+        and not _job_has_replayable_model_attestation(
+            job,
+            require_scoped=run.require_scoped_workers,
+        )
+    ]
     stale = _stale_assigned_workers(run)
 
     if unregistered_jobs or stale:
@@ -829,6 +976,12 @@ def _refresh_run_gate(run: FleetRunRecord) -> None:
     elif missing_jobs:
         run.verifier_gate_status = "blocked_missing_outputs"
         run.merge_reason = "At least one worker receipt is missing required outputs; cannot ACCEPT."
+    elif unattested_jobs:
+        run.verifier_gate_status = "blocked_unattested_model"
+        run.merge_reason = (
+            "Dry-run or legacy completed receipts do not attest an exact model artifact "
+            "identity and can never reach verifier ACCEPT."
+        )
     else:
         run.verifier_gate_status = "ready_for_verifier"
         run.merge_reason = (
@@ -854,6 +1007,14 @@ def _readiness_payload(
     missing_ready_workers = max(total_jobs - ready_workers, 0)
     incomplete_jobs = [job for job in run.jobs if job.status not in {"completed", "failed"}]
     missing_output_jobs = [job for job in run.jobs if job.missing_outputs]
+    unattested_jobs = [
+        job
+        for job in completed_jobs
+        if not _job_has_replayable_model_attestation(
+            job,
+            require_scoped=run.require_scoped_workers,
+        )
+    ]
 
     blockers: list[str] = []
     next_actions: list[str] = []
@@ -890,6 +1051,14 @@ def _readiness_payload(
         status = "blocked"
         blockers.append(f"{len(missing_output_jobs)} completed receipt(s) are missing required outputs.")
         next_actions.append("Rerun incomplete jobs with all expected outputs or route to human review.")
+    elif unattested_jobs:
+        status = "blocked"
+        blockers.append(
+            f"{len(unattested_jobs)} completed receipt(s) are dry-run or legacy model-unattested."
+        )
+        next_actions.append(
+            "Prepare a new identity-bound fleet and run the external open-weight probe command."
+        )
     elif run.merged_packet_trace_id:
         status = "ready"
         next_actions.append("Run the verifier decision layer over the merged Evidence Packet.")
@@ -1068,6 +1237,7 @@ def build_evidence_fragment_ref(
     produced_outputs: list[str] | tuple[str, ...],
     missing_outputs: list[str] | tuple[str, ...] = (),
     evidence_packet_fragment_payload: Mapping[str, Any] | None = None,
+    execution_mode: str | None = None,
 ) -> str:
     payload = _canonical_fragment_payload(
         audit_id=audit_id,
@@ -1081,9 +1251,162 @@ def build_evidence_fragment_ref(
         produced_outputs=tuple(produced_outputs),
         missing_outputs=tuple(missing_outputs),
         evidence_packet_fragment_payload=evidence_packet_fragment_payload,
+        execution_mode=execution_mode,
     )
     digest = hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
     return f"cas-fragment://{audit_id}/{job_id}/{worker_id}/{shard_id}/sha256:{digest}"
+
+
+def _validate_model_execution_attestation(
+    *,
+    job: FleetJobRecord,
+    worker: FleetWorkerRecord,
+    evidence_packet_fragment_payload: Mapping[str, Any] | None,
+    execution_mode: str | None,
+) -> None:
+    claims_real = _payload_claims_real_model(evidence_packet_fragment_payload)
+    bound_identity = (
+        job.model_revision,
+        job.model_artifact_manifest_path,
+        job.model_artifact_manifest_sha256,
+    )
+    identity_bound = all(value is not None for value in bound_identity)
+    if any(value is None for value in bound_identity) and any(
+        value is not None for value in bound_identity
+    ):
+        raise FleetExecutorStateError("Fleet job contains a partial model identity binding.")
+    if not identity_bound:
+        if job.execution_mode not in {None, "dry_run_control_plane"}:
+            raise FleetExecutorStateError(
+                "Unbound fleet job has an invalid control-plane execution binding."
+            )
+        if execution_mode not in {None, "dry_run_control_plane"} or claims_real:
+            raise FleetExecutorStateError(
+                "Real-model completion is forbidden for a fleet job without a bound model identity."
+            )
+        return
+    if job.execution_mode != "external_probe_command":
+        raise FleetExecutorStateError(
+            "Identity-bound fleet job is not bound to external_probe_command execution."
+        )
+    if execution_mode != "external_probe_command":
+        raise FleetExecutorStateError(
+            "Identity-bound fleet jobs require execution_mode=external_probe_command."
+        )
+    if not claims_real or not isinstance(evidence_packet_fragment_payload, Mapping):
+        raise FleetExecutorStateError(
+            "External probe completion requires a real-model artifact attestation."
+        )
+    if job.model_id is None:
+        raise FleetExecutorStateError("Identity-bound fleet job is missing model_id.")
+    if worker.model_id != job.model_id:
+        raise FleetExecutorStateError(
+            "Receipt worker model_id does not match the identity-bound fleet job."
+        )
+    if evidence_packet_fragment_payload.get("status") != "real_model_forward_completed":
+        raise FleetExecutorStateError(
+            "External probe completion requires status=real_model_forward_completed."
+        )
+    if evidence_packet_fragment_payload.get("audit_id") != job.audit_id:
+        raise FleetExecutorStateError("Real-model attestation audit_id does not match the fleet job.")
+    if evidence_packet_fragment_payload.get("job_id") != job.job_id:
+        raise FleetExecutorStateError("Real-model attestation job_id does not match the fleet job.")
+    if evidence_packet_fragment_payload.get("worker_id") != worker.worker_id:
+        raise FleetExecutorStateError("Real-model attestation worker_id does not match the fleet job.")
+    if evidence_packet_fragment_payload.get("model_id") != job.model_id:
+        raise FleetExecutorStateError("Real-model attestation model_id does not match the fleet job.")
+    if evidence_packet_fragment_payload.get("model_revision") != job.model_revision:
+        raise FleetExecutorStateError(
+            "Real-model attestation revision does not match the fleet job binding."
+        )
+    if evidence_packet_fragment_payload.get("shard_id") != job.shard_id:
+        raise FleetExecutorStateError("Real-model attestation shard_id does not match the fleet job.")
+    if evidence_packet_fragment_payload.get("layer_start") != job.layer_start:
+        raise FleetExecutorStateError("Real-model attestation layer_start does not match the fleet job.")
+    if evidence_packet_fragment_payload.get("layer_end") != job.layer_end:
+        raise FleetExecutorStateError("Real-model attestation layer_end does not match the fleet job.")
+
+    model_info = evidence_packet_fragment_payload.get("model_info")
+    artifact_identity = model_info.get("artifact_identity") if isinstance(model_info, Mapping) else None
+    if not isinstance(artifact_identity, Mapping):
+        raise FleetExecutorStateError(
+            "Real-model completion requires model_info.artifact_identity."
+        )
+    if artifact_identity.get("manifest_path") != job.model_artifact_manifest_path:
+        raise FleetExecutorStateError(
+            "Real-model attestation manifest path does not match the fleet job binding."
+        )
+    if artifact_identity.get("manifest_sha256") != job.model_artifact_manifest_sha256:
+        raise FleetExecutorStateError(
+            "Real-model attestation manifest SHA-256 does not match the fleet job binding."
+        )
+    required_flags = {
+        "all_artifacts_hash_verified": True,
+        "post_load_reverified": True,
+        "local_files_only": True,
+        "trust_remote_code": False,
+        "use_safetensors": True,
+    }
+    for field_name, expected in required_flags.items():
+        if artifact_identity.get(field_name) is not expected:
+            raise FleetExecutorStateError(
+                f"Real-model artifact attestation requires {field_name}={expected!r}."
+            )
+    _validate_exact_artifact_evidence(artifact_identity)
+
+
+def _payload_claims_real_model(payload: Mapping[str, Any] | None) -> bool:
+    if not isinstance(payload, Mapping):
+        return False
+    status = payload.get("status")
+    if isinstance(status, str) and (
+        status.startswith("real_model_forward")
+        or status.startswith("PROBE_PREDICTED_")
+    ):
+        return True
+    model_info = payload.get("model_info")
+    return isinstance(model_info, Mapping) and isinstance(
+        model_info.get("artifact_identity"), Mapping
+    )
+
+
+def _validate_exact_artifact_evidence(artifact_identity: Mapping[str, Any]) -> None:
+    artifacts = artifact_identity.get("artifacts")
+    if not isinstance(artifacts, list) or not artifacts:
+        raise FleetExecutorStateError(
+            "Real-model artifact attestation requires a non-empty exact artifact list."
+        )
+    canonical: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for index, artifact in enumerate(artifacts):
+        if not isinstance(artifact, Mapping) or set(artifact) != {"path", "sha256", "byte_count"}:
+            raise FleetExecutorStateError(
+                f"Real-model artifact attestation entry {index} has invalid fields."
+            )
+        path = artifact.get("path")
+        digest = artifact.get("sha256")
+        byte_count = artifact.get("byte_count")
+        if not isinstance(path, str) or not path or path in seen:
+            raise FleetExecutorStateError("Real-model artifact paths must be unique non-empty strings.")
+        if not isinstance(digest, str) or re.fullmatch(r"[0-9a-f]{64}", digest) is None:
+            raise FleetExecutorStateError("Real-model artifact SHA-256 is malformed.")
+        if type(byte_count) is not int or byte_count < 1:
+            raise FleetExecutorStateError("Real-model artifact byte_count is malformed.")
+        seen.add(path)
+        canonical.append({"path": path, "sha256": digest, "byte_count": byte_count})
+    canonical.sort(key=lambda item: item["path"])
+    if artifact_identity.get("artifact_count") != len(canonical):
+        raise FleetExecutorStateError("Real-model artifact_count does not match the exact list.")
+    artifact_set_sha256 = hashlib.sha256(
+        json.dumps(
+            canonical,
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("utf-8")
+    ).hexdigest()
+    if artifact_identity.get("artifact_set_sha256") != artifact_set_sha256:
+        raise FleetExecutorStateError("Real-model artifact_set_sha256 does not match the exact list.")
 
 
 def _validate_fragment_ref(
@@ -1094,6 +1417,7 @@ def _validate_fragment_ref(
     produced_outputs: tuple[str, ...],
     missing_outputs: tuple[str, ...],
     evidence_packet_fragment_payload: dict[str, Any] | None,
+    execution_mode: str | None,
     fragment_ref: str,
 ) -> None:
     expected = build_evidence_fragment_ref(
@@ -1108,6 +1432,7 @@ def _validate_fragment_ref(
         produced_outputs=produced_outputs,
         missing_outputs=missing_outputs,
         evidence_packet_fragment_payload=evidence_packet_fragment_payload,
+        execution_mode=execution_mode,
     )
     if fragment_ref != expected:
         raise FleetExecutorStateError(
@@ -1130,6 +1455,7 @@ def _canonical_fragment_payload(
     produced_outputs: tuple[str, ...],
     missing_outputs: tuple[str, ...],
     evidence_packet_fragment_payload: Mapping[str, Any] | None = None,
+    execution_mode: str | None = None,
 ) -> dict[str, object]:
     payload: dict[str, object] = {
         "schema_version": "cas_harness_evidence_fragment.v1",
@@ -1147,6 +1473,8 @@ def _canonical_fragment_payload(
     payload_sha = _fragment_payload_sha256(evidence_packet_fragment_payload)
     if payload_sha is not None:
         payload["fragment_payload_sha256"] = payload_sha
+    if execution_mode is not None:
+        payload["execution_mode"] = execution_mode
     return payload
 
 
@@ -1172,6 +1500,58 @@ def _dedupe_nonempty(values: list[str]) -> list[str]:
 def _require_nonempty(value: str, field_name: str) -> None:
     if not isinstance(value, str) or not value.strip():
         raise FleetExecutorStateError(f"{field_name} is required.")
+
+
+def _validate_optional_model_identity_binding(
+    *,
+    model_revision: str | None,
+    model_artifact_manifest_path: str | None,
+    model_artifact_manifest_sha256: str | None,
+) -> tuple[str | None, str | None, str | None]:
+    values = (
+        model_revision,
+        model_artifact_manifest_path,
+        model_artifact_manifest_sha256,
+    )
+    if all(value is None for value in values):
+        return None, None, None
+    if any(value is None for value in values):
+        raise FleetExecutorStateError(
+            "Real-model fleet identity requires revision, artifact manifest path, and manifest SHA-256 together."
+        )
+    assert model_revision is not None
+    assert model_artifact_manifest_path is not None
+    assert model_artifact_manifest_sha256 is not None
+    if re.fullmatch(r"[0-9a-f]{40}", model_revision) is None:
+        raise FleetExecutorStateError(
+            "Fleet model_revision must be a full 40-character lowercase commit SHA."
+        )
+    if (
+        model_artifact_manifest_path != model_artifact_manifest_path.strip()
+        or not model_artifact_manifest_path
+        or len(model_artifact_manifest_path) > 2_048
+    ):
+        raise FleetExecutorStateError(
+            "Fleet model_artifact_manifest_path must be a non-empty canonical worker path."
+        )
+    is_posix_absolute = model_artifact_manifest_path.startswith("/")
+    is_windows_absolute = re.match(
+        r"^[A-Za-z]:[\\/]",
+        model_artifact_manifest_path,
+    ) is not None
+    if not (is_posix_absolute or is_windows_absolute):
+        raise FleetExecutorStateError(
+            "Fleet model_artifact_manifest_path must be absolute on the target worker."
+        )
+    if re.fullmatch(r"[0-9a-f]{64}", model_artifact_manifest_sha256) is None:
+        raise FleetExecutorStateError(
+            "Fleet model_artifact_manifest_sha256 must be 64 lowercase hexadecimal characters."
+        )
+    return (
+        model_revision,
+        model_artifact_manifest_path,
+        model_artifact_manifest_sha256,
+    )
 
 
 def _parse_utc(value: str) -> datetime:

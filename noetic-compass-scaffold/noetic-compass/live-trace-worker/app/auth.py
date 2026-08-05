@@ -17,9 +17,9 @@ Contract
       existing SSH-tunnel deployment are unaffected).
     - **set -> every request MUST send ``X-Atlas-Worker-Token: <token>``** or get
       HTTP 401, EXCEPT the exempt health paths below.
-* Exempt paths: ``/health`` and ``/health/realmode``. RunPod health checks and
-  the API's liveness / real-mode proxy must keep working without the shared
-  secret. These endpoints expose no user data and run no inference.
+* Exempt path: ``/health`` only. It is a minimal liveness response. The richer
+  ``/health/realmode`` proof surface requires the shared secret whenever auth
+  is enabled.
 
 This is a coarse "is this our API" gate (shared-secret bearer), deliberately
 simple. It is NOT user identity (the API owns that) and NOT a replacement for
@@ -38,9 +38,9 @@ from starlette.responses import JSONResponse, Response
 WORKER_TOKEN_ENV = "ATLAS_LIVE_WORKER_TOKEN"
 WORKER_TOKEN_HEADER = "X-Atlas-Worker-Token"
 
-# Health paths are always reachable without the token so platform health checks
-# and the API real-mode proxy keep working. Keep this list tiny and explicit.
-EXEMPT_PATHS: frozenset[str] = frozenset({"/health", "/health/realmode"})
+# Only minimal liveness is public. Real-mode identity and diagnostics follow
+# the same token boundary as inference routes.
+EXEMPT_PATHS: frozenset[str] = frozenset({"/health"})
 
 
 def _configured_token() -> str:

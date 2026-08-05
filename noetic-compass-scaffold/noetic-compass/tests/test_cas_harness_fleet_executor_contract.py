@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
+import hashlib
+import json
 
 import pytest
 
@@ -24,6 +26,15 @@ from api.services.cas_harness_fleet_executor import (
     submit_job_receipt,
 )
 from api.services.cas_harness_scale_planner import ScalePlanRequest
+from api.services.cas_harness_model_provenance import (
+    ModelProvenanceManifest,
+    WeightFileRef,
+)
+
+
+MODEL_REVISION = "a" * 40
+MODEL_ARTIFACT_MANIFEST_PATH = "/workspace/model-artifacts.json"
+MODEL_ARTIFACT_MANIFEST_SHA256 = "b" * 64
 
 
 def setup_function() -> None:
@@ -36,6 +47,7 @@ def _create_dispatched_audit(
     parameter_count_b: int = 20,
     num_layers: int = 8,
     minimum_worker_count: int | None = None,
+    with_provenance: bool = False,
 ):
     audit = create_distributed_audit(
         ScalePlanRequest(
@@ -49,6 +61,23 @@ def _create_dispatched_audit(
         # A fleet run is a real distributed run, so it acknowledges the audit's data
         # capture (universal run-gate 8) -- the harvest happens at every size.
         data_capture_acknowledged=True,
+        provenance=(
+            ModelProvenanceManifest(
+                model_id=f"customer/open-weight-{parameter_count_b}b",
+                source_uri="https://models.example.test/open-weight",
+                license_id="apache-2.0",
+                revision=MODEL_REVISION,
+                weight_files=(
+                    WeightFileRef(
+                        path="model.safetensors",
+                        sha256="c" * 64,
+                        size_bytes=1,
+                    ),
+                ),
+            )
+            if with_provenance
+            else None
+        ),
     )
     dispatched = dispatch_distributed_audit(audit.audit_id)
     assert dispatched is not None
@@ -66,7 +95,14 @@ def _register_assignment_worker(assignment, *, model_id: str = "customer/open-we
     )
 
 
-def _fragment_ref_for_job(job, *, model_id: str, produced_outputs: list[str] | None = None) -> str:
+def _fragment_ref_for_job(
+    job,
+    *,
+    model_id: str,
+    produced_outputs: list[str] | None = None,
+    evidence_payload: dict | None = None,
+    execution_mode: str | None = None,
+) -> str:
     produced = produced_outputs or list(job.expected_outputs)
     return build_evidence_fragment_ref(
         audit_id=job.audit_id,
@@ -78,13 +114,64 @@ def _fragment_ref_for_job(job, *, model_id: str, produced_outputs: list[str] | N
         shard_id=job.shard_id,
         expected_outputs=job.expected_outputs,
         produced_outputs=produced,
+        evidence_packet_fragment_payload=evidence_payload,
+        execution_mode=execution_mode,
     )
+
+
+def _real_model_attestation(job, *, model_id: str) -> dict:
+    artifacts = [
+        {"path": "config.json", "sha256": "d" * 64, "byte_count": 1}
+    ]
+    artifact_set_sha256 = hashlib.sha256(
+        json.dumps(
+            artifacts,
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("utf-8")
+    ).hexdigest()
+    return {
+        "status": "real_model_forward_completed",
+        "audit_id": job.audit_id,
+        "job_id": job.job_id,
+        "worker_id": job.assigned_worker_id,
+        "model_id": model_id,
+        "model_revision": MODEL_REVISION,
+        "shard_id": job.shard_id,
+        "layer_start": job.layer_start,
+        "layer_end": job.layer_end,
+        "model_info": {
+            "artifact_identity": {
+                "manifest_path": MODEL_ARTIFACT_MANIFEST_PATH,
+                "manifest_sha256": MODEL_ARTIFACT_MANIFEST_SHA256,
+                "artifact_count": len(artifacts),
+                "artifact_set_sha256": artifact_set_sha256,
+                "artifacts": artifacts,
+                "all_artifacts_hash_verified": True,
+                "post_load_reverified": True,
+                "local_files_only": True,
+                "trust_remote_code": False,
+                "use_safetensors": True,
+            }
+        },
+    }
 
 
 def _lease_and_complete(audit_id: str, worker_id: str, *, model_id: str):
     job = lease_next_job(audit_id=audit_id, worker_id=worker_id)
     assert job is not None
     produced_outputs = list(job.expected_outputs)
+    evidence_payload = (
+        _real_model_attestation(job, model_id=model_id)
+        if job.execution_mode == "external_probe_command"
+        else None
+    )
+    execution_mode = (
+        "external_probe_command"
+        if job.execution_mode == "external_probe_command"
+        else None
+    )
     run = submit_job_receipt(
         audit_id=audit_id,
         job_id=job.job_id,
@@ -95,7 +182,11 @@ def _lease_and_complete(audit_id: str, worker_id: str, *, model_id: str):
             job,
             model_id=model_id,
             produced_outputs=produced_outputs,
+            evidence_payload=evidence_payload,
+            execution_mode=execution_mode,
         ),
+        evidence_packet_fragment_payload=evidence_payload,
+        execution_mode=execution_mode,
     )
     assert run is not None
     return job
@@ -372,12 +463,18 @@ def test_300b_fleet_run_requires_all_300_worker_receipts_before_merge_completes(
         parameter_count_b=300,
         num_layers=160,
         minimum_worker_count=300,
+        with_provenance=True,
     )
     assert len(audit.worker_evidence) == 300
 
     for assignment in audit.worker_evidence:
         _register_assignment_worker(assignment, model_id=audit.plan.model_id)
-    run = prepare_fleet_for_audit(audit.audit_id)
+    run = prepare_fleet_for_audit(
+        audit.audit_id,
+        model_revision=MODEL_REVISION,
+        model_artifact_manifest_path=MODEL_ARTIFACT_MANIFEST_PATH,
+        model_artifact_manifest_sha256=MODEL_ARTIFACT_MANIFEST_SHA256,
+    )
     assert run is not None
     assert len(run.jobs) == 300
 

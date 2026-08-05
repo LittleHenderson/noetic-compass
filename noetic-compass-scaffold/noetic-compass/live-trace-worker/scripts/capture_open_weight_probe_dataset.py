@@ -11,6 +11,7 @@ from __future__ import annotations
 from argparse import ArgumentParser
 from datetime import UTC, datetime
 import json
+import os
 from pathlib import Path
 import sys
 from typing import Any
@@ -22,13 +23,19 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 from probe_dataset_common import label_distributions, load_labeled_scenarios  # noqa: E402
+from open_weight_artifact_guard import (  # noqa: E402
+    reverify_open_weight_artifacts_after_load,
+    verify_open_weight_artifact_manifest,
+)
 from run_open_weight_probe_shard import (  # noqa: E402
     count_parameters,
     first_real_parameter_device,
     inference_context,
     locate_transformer_layers,
+    require_finite_tensor,
     resolve_torch_dtype,
     select_assigned_layers,
+    validate_loaded_model_execution,
 )
 
 
@@ -38,8 +45,10 @@ def parse_args() -> Any:
     parser.add_argument("--scenario-path", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--metadata-output", type=Path)
-    parser.add_argument("--model-revision")
-    parser.add_argument("--torch-dtype", default="float16")
+    parser.add_argument("--model-revision", required=True)
+    parser.add_argument("--model-artifact-manifest-path", required=True, type=Path)
+    parser.add_argument("--model-artifact-manifest-sha256", required=True)
+    parser.add_argument("--torch-dtype", default="auto")
     parser.add_argument("--device-map", default="auto")
     parser.add_argument("--layer-start", type=int, default=0)
     parser.add_argument("--layer-end", type=int)
@@ -116,29 +125,43 @@ def main() -> int:
 
 
 def load_model(args: Any) -> tuple[Any, Any, dict[str, Any]]:
+    verified_artifacts = verify_open_weight_artifact_manifest(
+        manifest_path=args.model_artifact_manifest_path,
+        expected_manifest_sha256=args.model_artifact_manifest_sha256,
+        model_id=args.model_id,
+        model_revision=args.model_revision,
+        trust_remote_code=args.trust_remote_code,
+    )
     import torch
     from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer
 
-    dtype = resolve_torch_dtype(torch, args.torch_dtype)
+    dtype = resolve_torch_dtype(torch, args.torch_dtype, args.device_map)
+    model_source = os.fspath(verified_artifacts.model_root)
     model_config = AutoConfig.from_pretrained(
-        args.model_id,
-        revision=args.model_revision,
-        trust_remote_code=args.trust_remote_code,
+        model_source,
+        revision=verified_artifacts.model_revision,
+        local_files_only=True,
+        trust_remote_code=False,
     )
     tokenizer = AutoTokenizer.from_pretrained(
-        args.model_id,
-        revision=args.model_revision,
-        trust_remote_code=args.trust_remote_code,
+        model_source,
+        revision=verified_artifacts.model_revision,
+        local_files_only=True,
+        trust_remote_code=False,
     )
     model = AutoModelForCausalLM.from_pretrained(
-        args.model_id,
-        revision=args.model_revision,
-        torch_dtype=dtype,
+        model_source,
+        revision=verified_artifacts.model_revision,
+        dtype=dtype,
         device_map=args.device_map,
         low_cpu_mem_usage=True,
-        trust_remote_code=args.trust_remote_code,
+        local_files_only=True,
+        trust_remote_code=False,
+        use_safetensors=True,
     )
     model.eval()
+    verified_artifacts = reverify_open_weight_artifacts_after_load(verified_artifacts)
+    validate_loaded_model_execution(torch, model)
     return model, tokenizer, {
         "architectures": list(getattr(model_config, "architectures", []) or []),
         "model_type": getattr(model_config, "model_type", None),
@@ -149,6 +172,7 @@ def load_model(args: Any) -> tuple[Any, Any, dict[str, Any]]:
         "torch_dtype": str(dtype) if dtype is not None else "auto",
         "device_map": args.device_map,
         "parameter_count": count_parameters(model),
+        "artifact_identity": verified_artifacts.evidence(post_load_reverified=True),
     }
 
 
@@ -172,7 +196,8 @@ def capture_vectors(
         if device is not None:
             inputs = {key: value.to(device) for key, value in inputs.items()}
         with inference_context():
-            model(**inputs, use_cache=False)
+            outputs = model(**inputs, use_cache=False)
+        require_finite_tensor(outputs.logits, label="model logits")
     finally:
         for handle in handles:
             handle.remove()
@@ -180,13 +205,20 @@ def capture_vectors(
     if missing:
         raise RuntimeError(f"Missing activation captures for layers: {missing}")
     vectors = np.stack([captures[layer_idx].numpy() for layer_idx, _layer in selected_layers], axis=0)
-    return vectors.astype(np.float16), token_count
+    if not np.isfinite(vectors).all():
+        raise RuntimeError("Captured activation matrix contains NaN or infinity.")
+    compact = vectors.astype(np.float16)
+    if not np.isfinite(compact).all():
+        raise RuntimeError("Captured activations overflow float16 dataset storage.")
+    return compact, token_count
 
 
 def _capture_last_token(captures: dict[int, Any], layer_idx: int):
     def hook(_module: Any, _inputs: Any, output: Any) -> None:
         value = output[0] if isinstance(output, tuple) else output
-        captures[layer_idx] = value[0, -1].detach().float().cpu()
+        captured = value[0, -1].detach().float().cpu()
+        require_finite_tensor(captured, label=f"layer {layer_idx} activation")
+        captures[layer_idx] = captured
 
     return hook
 

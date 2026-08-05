@@ -40,8 +40,12 @@ def _config(tmp_path: Path) -> FleetWorkerConfig:
     )
 
 
-def _leased_job_payload(config: FleetWorkerConfig) -> dict[str, Any]:
-    return {
+def _leased_job_payload(
+    config: FleetWorkerConfig,
+    *,
+    bound: bool = False,
+) -> dict[str, Any]:
+    payload = {
         "job_id": "fleet-job-001",
         "audit_id": config.audit_id,
         "assigned_worker_id": config.worker_id,
@@ -57,12 +61,66 @@ def _leased_job_payload(config: FleetWorkerConfig) -> dict[str, Any]:
         ],
         "status": "leased",
         "lease_token": "lease-token-001",
+        "model_id": config.model_id,
+        "execution_mode": (
+            "external_probe_command" if bound else "dry_run_control_plane"
+        ),
         "lease_expires_at": "2026-05-26T00:00:00+00:00",
         "evidence_packet_fragment_ref": None,
         "produced_outputs": [],
         "missing_outputs": [],
         "error_message": None,
         "updated_at": "2026-05-26T00:00:00+00:00",
+    }
+    if bound:
+        payload.update(
+            {
+                "model_revision": "a" * 40,
+                "model_artifact_manifest_path": str(
+                    (config.evidence_dir / "model-artifacts.json").resolve()
+                ),
+                "model_artifact_manifest_sha256": "b" * 64,
+            }
+        )
+    return payload
+
+
+def _real_model_attestation(job: FleetJob) -> dict[str, Any]:
+    artifacts = [
+        {"path": "config.json", "sha256": "c" * 64, "byte_count": 1}
+    ]
+    artifact_set_sha256 = __import__("hashlib").sha256(
+        json.dumps(
+            artifacts,
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("utf-8")
+    ).hexdigest()
+    return {
+        "status": "real_model_forward_completed",
+        "audit_id": job.audit_id,
+        "job_id": job.job_id,
+        "worker_id": job.assigned_worker_id,
+        "model_id": job.model_id,
+        "model_revision": job.model_revision,
+        "shard_id": job.shard_id,
+        "layer_start": job.layer_start,
+        "layer_end": job.layer_end,
+        "model_info": {
+            "artifact_identity": {
+                "manifest_path": job.model_artifact_manifest_path,
+                "manifest_sha256": job.model_artifact_manifest_sha256,
+                "artifact_count": len(artifacts),
+                "artifact_set_sha256": artifact_set_sha256,
+                "artifacts": artifacts,
+                "all_artifacts_hash_verified": True,
+                "post_load_reverified": True,
+                "local_files_only": True,
+                "trust_remote_code": False,
+                "use_safetensors": True,
+            }
+        },
     }
 
 
@@ -111,9 +169,11 @@ def test_daemon_leases_runs_writes_fragment_and_posts_receipt(tmp_path: Path):
                 expected_outputs=leased_job["expected_outputs"],
                 produced_outputs=leased_job["expected_outputs"],
                 missing_outputs=[],
+                execution_mode="dry_run_control_plane",
             )
             assert payload["evidence_packet_fragment_ref"] == expected_ref
             assert payload["job_status"] == "completed"
+            assert payload["execution_mode"] == "dry_run_control_plane"
             return httpx.Response(200, json={"verifier_gate_status": "waiting_for_receipts"})
         raise AssertionError(f"unexpected path {request.url.path}")
 
@@ -154,6 +214,7 @@ def test_fragment_ref_matches_api_fleet_executor_builder(tmp_path: Path):
         "evidence_packet_fragment_payload": {
             "worker_receipt": {"status": "WORKER_EVIDENCE_UNVERIFIED"}
         },
+        "execution_mode": "dry_run_control_plane",
     }
 
     assert build_evidence_fragment_ref(**kwargs) == api_builder(**kwargs)
@@ -169,7 +230,7 @@ def test_rich_evidence_payload_is_persisted_hashed_and_submitted_before_ack(tmp_
     seen_receipt: dict[str, Any] = {}
 
     class _RichExecutor:
-        execution_mode = "test_rich_evidence"
+        execution_mode = "dry_run_control_plane"
 
         async def run(self, job, _config):
             return FleetJobExecutionResult(
@@ -215,6 +276,7 @@ def test_rich_evidence_payload_is_persisted_hashed_and_submitted_before_ack(tmp_
         produced_outputs=leased_job["expected_outputs"],
         missing_outputs=[],
         evidence_packet_fragment_payload=evidence_payload,
+        execution_mode="dry_run_control_plane",
     )
     assert result.status == "completed"
     assert result.evidence_packet_fragment_ref == expected_ref
@@ -313,16 +375,33 @@ def test_service_credential_headers_are_scoped_and_use_fresh_nonces(tmp_path: Pa
     assert secret not in repr(config)
 
 
-def test_command_executor_uses_probe_command_result(tmp_path: Path):
+def test_command_executor_uses_only_lease_bound_identity_and_attested_result(
+    monkeypatch,
+    tmp_path: Path,
+):
     config = _config(tmp_path)
-    job = FleetJob.from_api(_leased_job_payload(config))
+    job = FleetJob.from_api(_leased_job_payload(config, bound=True))
+    attestation = _real_model_attestation(job)
+    result_payload = {
+        "produced_outputs": ["layer_activation_summary"],
+        "evidence_payload": attestation,
+    }
+    monkeypatch.setenv("CAS_FLEET_MODEL_ID", "attacker/model")
+    monkeypatch.setenv("CAS_FLEET_MODEL_REVISION", "f" * 40)
+    monkeypatch.setenv("CAS_FLEET_MODEL_ARTIFACT_MANIFEST_PATH", "/attacker/manifest.json")
+    monkeypatch.setenv("CAS_FLEET_MODEL_ARTIFACT_MANIFEST_SHA256", "f" * 64)
+    monkeypatch.setenv("CAS_FLEET_TRUST_REMOTE_CODE", "true")
     command = (
         sys.executable,
         "-c",
         (
             "import json, os, pathlib; "
-            "pathlib.Path(os.environ['CAS_FLEET_RESULT_PATH']).write_text("
-            "json.dumps({'produced_outputs': ['layer_activation_summary']}), encoding='utf-8')"
+            "p=pathlib.Path(os.environ['CAS_FLEET_RESULT_PATH']); "
+            "p.with_suffix('.env.json').write_text(json.dumps({k: os.environ[k] for k in "
+            "['CAS_FLEET_MODEL_ID','CAS_FLEET_MODEL_REVISION',"
+            "'CAS_FLEET_MODEL_ARTIFACT_MANIFEST_PATH',"
+            "'CAS_FLEET_MODEL_ARTIFACT_MANIFEST_SHA256','CAS_FLEET_TRUST_REMOTE_CODE']})); "
+            f"p.write_text({json.dumps(json.dumps(result_payload))}, encoding='utf-8')"
         ),
     )
     executor = CommandFleetJobExecutor(command, timeout_seconds=20)
@@ -336,6 +415,66 @@ def test_command_executor_uses_probe_command_result(tmp_path: Path):
         "blindspot_overlay",
         "worker_evidence_manifest",
     }
+    observed_env = json.loads(
+        (tmp_path / "fleet-job-001.probe-result.env.json").read_text(encoding="utf-8")
+    )
+    assert observed_env == {
+        "CAS_FLEET_MODEL_ID": config.model_id,
+        "CAS_FLEET_MODEL_REVISION": job.model_revision,
+        "CAS_FLEET_MODEL_ARTIFACT_MANIFEST_PATH": job.model_artifact_manifest_path,
+        "CAS_FLEET_MODEL_ARTIFACT_MANIFEST_SHA256": job.model_artifact_manifest_sha256,
+        "CAS_FLEET_TRUST_REMOTE_CODE": "false",
+    }
+
+
+def test_command_executor_does_not_reuse_stale_result(tmp_path: Path):
+    config = _config(tmp_path)
+    job = FleetJob.from_api(_leased_job_payload(config, bound=True))
+    stale_path = tmp_path / "fleet-job-001.probe-result.json"
+    stale_path.write_text(
+        json.dumps(
+            {
+                "produced_outputs": ["layer_activation_summary"],
+                "evidence_payload": _real_model_attestation(job),
+            }
+        ),
+        encoding="utf-8",
+    )
+    executor = CommandFleetJobExecutor((sys.executable, "-c", "pass"), timeout_seconds=20)
+
+    result = asyncio.run(executor.run(job, config))
+
+    assert result.status == "failed"
+    assert result.error_message == "Probe command did not write CAS_FLEET_RESULT_PATH."
+    assert not stale_path.exists()
+
+
+def test_real_model_forward_status_without_artifact_attestation_is_rejected(
+    tmp_path: Path,
+):
+    config = _config(tmp_path)
+    job = FleetJob.from_api(_leased_job_payload(config, bound=True))
+    result_path = tmp_path / "unattested-result.json"
+    result_path.write_text(
+        json.dumps(
+            {
+                "produced_outputs": ["layer_activation_summary"],
+                "evidence_payload": {
+                    "status": "real_model_forward_completed",
+                    "audit_id": job.audit_id,
+                    "job_id": job.job_id,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    from app.runtime.fleet_worker import _parse_command_result
+
+    result = _parse_command_result(result_path, job)
+
+    assert result.status == "failed"
+    assert "attestation" in (result.error_message or "").lower()
 
 
 def test_command_executor_rejects_unknown_outputs(tmp_path: Path):

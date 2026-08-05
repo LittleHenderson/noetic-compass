@@ -24,6 +24,21 @@ from pathlib import Path
 import sys
 from typing import Any
 
+try:  # Package import for tests/tools; direct import for the executable script.
+    from .open_weight_artifact_guard import (
+        reverify_open_weight_artifacts_after_load,
+        require_commit_revision,
+        require_sha256,
+        verify_open_weight_artifact_manifest,
+    )
+except ImportError:  # pragma: no cover - exercised by direct script execution
+    from open_weight_artifact_guard import (
+        reverify_open_weight_artifacts_after_load,
+        require_commit_revision,
+        require_sha256,
+        verify_open_weight_artifact_manifest,
+    )
+
 
 @dataclass(frozen=True)
 class ProbeScenario:
@@ -46,6 +61,8 @@ class ProbeShardConfig:
     scenario_path: Path | None = None
     prompt: str | None = None
     model_revision: str | None = None
+    model_artifact_manifest_path: Path | None = None
+    model_artifact_manifest_sha256: str | None = None
     torch_dtype: str = "auto"
     device_map: str = "auto"
     max_scenarios: int = 25
@@ -76,13 +93,26 @@ class ProbeShardConfig:
             result_path=result_path,
             scenario_path=_optional_path(source.get("CAS_FLEET_SCENARIO_PATH")),
             prompt=_optional_text(source.get("CAS_FLEET_PROMPT")),
-            model_revision=_optional_text(source.get("CAS_FLEET_MODEL_REVISION")),
+            model_revision=require_commit_revision(
+                _required_text(source, "CAS_FLEET_MODEL_REVISION"),
+                field_name="CAS_FLEET_MODEL_REVISION",
+            ),
+            model_artifact_manifest_path=_required_path(
+                source,
+                "CAS_FLEET_MODEL_ARTIFACT_MANIFEST_PATH",
+            ),
+            model_artifact_manifest_sha256=require_sha256(
+                _required_text(source, "CAS_FLEET_MODEL_ARTIFACT_MANIFEST_SHA256"),
+                field_name="CAS_FLEET_MODEL_ARTIFACT_MANIFEST_SHA256",
+            ),
             torch_dtype=_optional_text(source.get("CAS_FLEET_TORCH_DTYPE")) or "auto",
             device_map=_optional_text(source.get("CAS_FLEET_DEVICE_MAP")) or "auto",
             max_scenarios=int(source.get("CAS_FLEET_MAX_SCENARIOS", "25")),
             max_length=int(source.get("CAS_FLEET_MAX_LENGTH", "512")),
             top_k=int(source.get("CAS_FLEET_TOP_K", "8")),
-            trust_remote_code=_truthy(source.get("CAS_FLEET_TRUST_REMOTE_CODE")),
+            trust_remote_code=_require_remote_code_disabled(
+                source.get("CAS_FLEET_TRUST_REMOTE_CODE")
+            ),
             probe_weights_path=_optional_path(source.get("CAS_FLEET_PROBE_WEIGHTS_PATH")),
             cover_map_path=_optional_path(source.get("CAS_FLEET_COVER_MAP_PATH")),
         )
@@ -118,6 +148,16 @@ def main() -> int:
 
 def run_probe_shard(config: ProbeShardConfig) -> dict[str, Any]:
     scenarios = load_scenarios(config)
+    probe_weights = (
+        load_cas_probe_weights(config.probe_weights_path)
+        if config.probe_weights_path is not None
+        else None
+    )
+    blindspot_overlay = (
+        load_blindspot_cover_map(config.cover_map_path, model_id=config.model_id)
+        if config.cover_map_path is not None
+        else None
+    )
     model, tokenizer, model_info = load_open_weight_model(config)
     layer_modules = locate_transformer_layers(model)
     selected_layers = select_assigned_layers(layer_modules, config.layer_start, config.layer_end)
@@ -156,16 +196,13 @@ def run_probe_shard(config: ProbeShardConfig) -> dict[str, Any]:
             "cover_map_path": str(config.cover_map_path) if config.cover_map_path else None,
         },
     }
-    if config.probe_weights_path is not None:
+    if probe_weights is not None:
         evidence_payload["cas_axis_readout"] = compute_cas_axis_readout(
             evidence_payload,
-            config.probe_weights_path,
+            probe_weights,
         )
-    if config.cover_map_path is not None:
-        evidence_payload["blindspot_overlay"] = load_blindspot_cover_map(
-            config.cover_map_path,
-            model_id=config.model_id,
-        )
+    if blindspot_overlay is not None:
+        evidence_payload["blindspot_overlay"] = blindspot_overlay
 
     produced, missing = classify_outputs(config.expected_outputs, evidence_payload)
     return {
@@ -177,32 +214,46 @@ def run_probe_shard(config: ProbeShardConfig) -> dict[str, Any]:
 
 
 def load_open_weight_model(config: ProbeShardConfig) -> tuple[Any, Any, dict[str, Any]]:
+    verified_artifacts = verify_open_weight_artifact_manifest(
+        manifest_path=config.model_artifact_manifest_path,
+        expected_manifest_sha256=config.model_artifact_manifest_sha256,
+        model_id=config.model_id,
+        model_revision=config.model_revision,
+        trust_remote_code=config.trust_remote_code,
+    )
     try:
         import torch
         from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer
     except Exception as exc:  # pragma: no cover - depends on deployment image
         raise RuntimeError(f"torch/transformers unavailable for real open-weight eval: {exc}") from exc
 
-    dtype = resolve_torch_dtype(torch, config.torch_dtype)
+    dtype = resolve_torch_dtype(torch, config.torch_dtype, config.device_map)
+    model_source = os.fspath(verified_artifacts.model_root)
     model_config = AutoConfig.from_pretrained(
-        config.model_id,
-        revision=config.model_revision,
-        trust_remote_code=config.trust_remote_code,
+        model_source,
+        revision=verified_artifacts.model_revision,
+        local_files_only=True,
+        trust_remote_code=False,
     )
     tokenizer = AutoTokenizer.from_pretrained(
-        config.model_id,
-        revision=config.model_revision,
-        trust_remote_code=config.trust_remote_code,
+        model_source,
+        revision=verified_artifacts.model_revision,
+        local_files_only=True,
+        trust_remote_code=False,
     )
     model = AutoModelForCausalLM.from_pretrained(
-        config.model_id,
-        revision=config.model_revision,
-        torch_dtype=dtype,
+        model_source,
+        revision=verified_artifacts.model_revision,
+        dtype=dtype,
         device_map=config.device_map,
         low_cpu_mem_usage=True,
-        trust_remote_code=config.trust_remote_code,
+        local_files_only=True,
+        trust_remote_code=False,
+        use_safetensors=True,
     )
     model.eval()
+    verified_artifacts = reverify_open_weight_artifacts_after_load(verified_artifacts)
+    validate_loaded_model_execution(torch, model)
     model_info = {
         "architectures": list(getattr(model_config, "architectures", []) or []),
         "model_type": getattr(model_config, "model_type", None),
@@ -213,6 +264,7 @@ def load_open_weight_model(config: ProbeShardConfig) -> tuple[Any, Any, dict[str
         "torch_dtype": str(dtype) if dtype is not None else "auto",
         "device_map": config.device_map,
         "parameter_count": count_parameters(model),
+        "artifact_identity": verified_artifacts.evidence(post_load_reverified=True),
     }
     return model, tokenizer, model_info
 
@@ -239,6 +291,7 @@ def run_activation_capture(
             inputs = {key: value.to(device) for key, value in inputs.items()}
         with inference_context():
             outputs = model(**inputs, use_cache=False)
+        require_finite_tensor(outputs.logits, label="model logits")
         confidence = softmax_margin(outputs.logits[0, -1])
     finally:
         for handle in handles:
@@ -257,7 +310,9 @@ def run_activation_capture(
 def _capture_last_token(captures: dict[int, Any], layer_idx: int):
     def hook(_module: Any, _inputs: Any, output: Any) -> None:
         value = output[0] if isinstance(output, tuple) else output
-        captures[layer_idx] = value[0, -1].detach().float().cpu()
+        captured = value[0, -1].detach().float().cpu()
+        require_finite_tensor(captured, label=f"layer {layer_idx} activation")
+        captures[layer_idx] = captured
 
     return hook
 
@@ -305,20 +360,34 @@ def summarise_layer(layer_idx: int, vector: Any, *, top_k: int) -> dict[str, Any
 
 
 def softmax_margin(logits: Any) -> float:
+    require_finite_tensor(logits, label="softmax logits")
     probs = logits.float().softmax(dim=-1)
     top2 = probs.topk(2).values
     return round(float((top2[0] - top2[1]).item()), 6)
 
 
-def compute_cas_axis_readout(evidence_payload: dict[str, Any], probe_weights_path: Path) -> dict[str, Any]:
+def load_cas_probe_weights(probe_weights_path: Path) -> dict[str, Any]:
+    """Parse the cheap proof input before allocating the open-weight model."""
+
     weights = json.loads(probe_weights_path.read_text(encoding="utf-8"))
+    if not isinstance(weights, dict):
+        raise RuntimeError("CAS probe weights must contain one JSON object.")
     if weights.get("schema_version") != "cas_probe_linear_v1":
         raise RuntimeError("CAS probe weights must use schema_version=cas_probe_linear_v1.")
     axes = weights.get("axes")
     vectors = weights.get("weights")
-    bias = weights.get("bias", {})
     if not isinstance(axes, list) or not isinstance(vectors, dict):
         raise RuntimeError("CAS probe weights require axes and weights.")
+    return weights
+
+
+def compute_cas_axis_readout(
+    evidence_payload: dict[str, Any],
+    weights: dict[str, Any],
+) -> dict[str, Any]:
+    axes = weights["axes"]
+    vectors = weights["weights"]
+    bias = weights.get("bias", {})
     pooled = pooled_activation_vector(evidence_payload)
     scores: dict[str, float] = {}
     for axis in axes:
@@ -393,8 +462,18 @@ def load_scenarios(config: ProbeShardConfig) -> list[ProbeScenario]:
     return scenarios
 
 
-def resolve_torch_dtype(torch: Any, value: str) -> Any:
+def resolve_torch_dtype(torch: Any, value: str, device_map: str = "auto") -> Any:
     normalized = (value or "auto").strip().lower()
+    normalized_device = (device_map or "auto").strip().lower()
+    cuda_available = bool(torch.cuda.is_available())
+    if normalized_device.startswith("cuda") and not cuda_available:
+        raise RuntimeError("CUDA device_map requested but CUDA is unavailable.")
+    cpu_execution = normalized_device == "cpu" or not cuda_available
+    if cpu_execution:
+        # Pythia CPU-half can load successfully while producing only NaNs.
+        # The actual dtype, not the caller's requested hint, is recorded in
+        # model_info so this coercion cannot be hidden in evidence.
+        return torch.float32
     if normalized == "auto":
         return None
     mapping = {
@@ -408,6 +487,43 @@ def resolve_torch_dtype(torch: Any, value: str) -> Any:
     if normalized not in mapping:
         raise RuntimeError(f"Unsupported CAS_FLEET_TORCH_DTYPE={value!r}.")
     return mapping[normalized]
+
+
+def validate_loaded_model_execution(torch: Any, model: Any) -> None:
+    """Reject materialized CPU-half parameters before any evidence is emitted."""
+
+    try:
+        parameters = list(model.parameters())
+    except Exception as exc:
+        raise RuntimeError("Loaded model parameters are not inspectable.") from exc
+    materialized = [
+        parameter
+        for parameter in parameters
+        if getattr(getattr(parameter, "device", None), "type", "") != "meta"
+    ]
+    if not materialized:
+        raise RuntimeError("Loaded model has no materialized parameters.")
+    incompatible = [
+        parameter
+        for parameter in materialized
+        if getattr(getattr(parameter, "device", None), "type", "") == "cpu"
+        and getattr(parameter, "dtype", None) != torch.float32
+    ]
+    if incompatible:
+        raise RuntimeError(
+            "Loaded model contains CPU parameters outside float32; refusing nonfinite evidence risk."
+        )
+
+
+def require_finite_tensor(value: Any, *, label: str) -> None:
+    """Fail closed when a model output or captured activation is nonfinite."""
+
+    try:
+        finite = bool(value.isfinite().all().item())
+    except Exception as exc:
+        raise RuntimeError(f"{label} cannot be checked for finiteness.") from exc
+    if not finite:
+        raise RuntimeError(f"{label} contains NaN or infinity.")
 
 
 def count_parameters(model: Any) -> int:
@@ -480,8 +596,11 @@ def _safe_expected_outputs() -> list[str]:
         return []
 
 
-def _truthy(value: str | None) -> bool:
-    return (value or "").strip().lower() in {"1", "true", "yes", "on"}
+def _require_remote_code_disabled(value: str | None) -> bool:
+    normalized = (value or "").strip().lower()
+    if normalized in {"", "0", "false", "no", "off"}:
+        return False
+    raise ValueError("CAS_FLEET_TRUST_REMOTE_CODE must be false for real-model execution")
 
 
 def _write_json(path: Path, payload: dict[str, Any]) -> None:

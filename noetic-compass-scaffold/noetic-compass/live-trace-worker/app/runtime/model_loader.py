@@ -1,31 +1,16 @@
-"""Model loader — loads real Pythia-160M weights when torch + transformers are
-available, falls back to demo mode otherwise.
+"""Fail-closed loader for the exact Pythia-160M artifact set.
 
-M2 change vs M1: instead of returning a static manifest, this module also
-owns the live torch.nn.Module + tokenizer. The FastAPI app's startup hook
-calls ``warm_load`` once at boot, then ``get_loaded_model()`` returns the
-warm singleton for every subsequent request.
-
-The two modes:
-
-* **real** — torch + transformers import successfully, EleutherAI/pythia-160m
-  weights load into memory. ``manifest.is_real_model = True`` and
-  ``manifest.execution_kind = "real_model_weights"``.
-  pythia_runner.run_pythia drives generation through these weights.
-
-* **demo** — either torch is missing (CI / local dev), or
-  ``LIVE_TRACE_DEMO_MODE=1`` is set, or the explicit load failed.
-  ``manifest.is_real_model = False`` and
-  ``manifest.execution_kind = "demo_schema_only"``. event_stream falls back
-  to the schema-valid fake stream from M1.
-
-User-visible contract: the cockpit's "Live · actual weights" badge MUST
-only show when ``manifest.is_real_model = True``.
+The production profile accepts only the image-bound, non-writable model cache,
+requires CUDA, validates the exact repository revision and every admitted
+artifact before and after loading, and executes a geometry/numerics canary.
+Any unrequested import or load failure raises. Explicit demo mode remains
+available only outside the production profile.
 """
 
 from __future__ import annotations
 
 import logging
+import ctypes
 import hashlib
 import os
 import re
@@ -34,7 +19,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from ..schemas.manifest import ModelArch, ModelManifest
+from ..schemas.manifest import ModelArch, ModelManifest, RuntimeExecutionEvidence
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +49,33 @@ PYTHIA_160M_WEIGHTS_SHA256 = (
     "29d2e457a664e41c12c735f20a36dc0956a665f614a54ce5db21a32e75965270"
 )
 PYTHIA_160M_WEIGHTS_BYTES = 374_998_696
+PYTHIA_160M_ARTIFACTS: dict[str, tuple[str, int]] = {
+    "config.json": (
+        "76eb275107220e450d31258f792a2efcbee109d8b62ae0088260057dec06362f",
+        569,
+    ),
+    PYTHIA_160M_WEIGHTS_FILENAME: (
+        PYTHIA_160M_WEIGHTS_SHA256,
+        PYTHIA_160M_WEIGHTS_BYTES,
+    ),
+    "special_tokens_map.json": (
+        "6f50ab5a5a509a1c309d6171f339b196a900dc9c99ad0408ff23bb615fdae7ad",
+        99,
+    ),
+    "tokenizer.json": (
+        "c24618a1b3e6a38167beff1c72cffd126c3a66254347304b50547d12c5f25624",
+        2_113_710,
+    ),
+    "tokenizer_config.json": (
+        "70e38394e494931c6f773ba41e19460dd4436526b852207367f04341b4066d3f",
+        396,
+    ),
+}
 _COMMIT_SHA_RE = re.compile(r"^[0-9a-f]{40}$")
+WORKER_PROFILE_ENV = "ATLAS_WORKER_PROFILE"
+DEVELOPMENT_PROFILE = "development"
+PRODUCTION_PROFILE = "production"
+PRODUCTION_HF_HOME = "/worker/.cache/huggingface"
 
 # Initial demo-mode manifest. real_load() returns a copy with
 # is_real_model = True. Treat this as the worker's bootstrap default — it
@@ -124,6 +135,10 @@ class LoadedModel:
             and self.manifest.weights_bytes == PYTHIA_160M_WEIGHTS_BYTES
             and self.manifest.model_identity_status
             == "PINNED_REVISION_AND_WEIGHTS_SHA256"
+            and isinstance(
+                self.manifest.runtime_execution,
+                RuntimeExecutionEvidence,
+            )
             and self.model is not None
             and self.tokenizer is not None
             and self.load_error is None
@@ -141,6 +156,37 @@ def _is_demo_mode_forced() -> bool:
     weights, and for cheap integration tests on CI runners.
     """
     return os.environ.get("LIVE_TRACE_DEMO_MODE", "0").strip().lower() in {"1", "true", "yes"}
+
+
+def _worker_profile() -> str:
+    profile = os.environ.get(WORKER_PROFILE_ENV, DEVELOPMENT_PROFILE).strip().lower()
+    if profile not in {DEVELOPMENT_PROFILE, PRODUCTION_PROFILE}:
+        raise RuntimeError(
+            f"{WORKER_PROFILE_ENV} must be {DEVELOPMENT_PROFILE!r} or "
+            f"{PRODUCTION_PROFILE!r}"
+        )
+    return profile
+
+
+def _is_production_profile() -> bool:
+    return _worker_profile() == PRODUCTION_PROFILE
+
+
+def _validate_production_model_cache() -> None:
+    """Require production model bytes to remain in the frozen image cache."""
+
+    configured_home = os.environ.get("HF_HOME")
+    if configured_home != PRODUCTION_HF_HOME:
+        raise RuntimeError(
+            "production worker profile requires the image-bound Hugging Face cache"
+        )
+    cache_root = Path(configured_home)
+    if not cache_root.is_dir() or cache_root.is_symlink():
+        raise RuntimeError(
+            "production Hugging Face cache must be a real image directory"
+        )
+    if os.access(cache_root, os.W_OK):
+        raise RuntimeError("production Hugging Face cache must be non-writable")
 
 
 def _validated_resolved_revision(model: Any) -> str:
@@ -195,56 +241,214 @@ def _stream_file_sha256(path: Path) -> tuple[str, int]:
     return digest.hexdigest(), byte_count
 
 
-def _validated_weights_artifact(hf_hub_download: Any) -> tuple[str, str, int]:
-    """Resolve and recompute the exact pinned Pythia safetensors artifact.
+def _validated_model_artifacts(
+    hf_hub_download: Any,
+) -> dict[str, tuple[str, int]]:
+    """Resolve and recompute every artifact used by the pinned Pythia load.
 
     ``local_files_only=True`` makes this an attestation of bytes already used by
-    the pinned loader, not a second mutable network resolution.  The digest is
-    a file-identity statement; it is not by itself a trust-root signature or a
-    scientific-result attestation.
+    the pinned loader, not a second mutable network resolution. The artifact
+    set covers model configuration, weights, and tokenizer inputs. These
+    digests are file-identity statements; they are not a trust-root signature
+    or a scientific-result attestation.
     """
 
-    raw_path = hf_hub_download(
-        repo_id=PYTHIA_160M_MODEL_ID,
-        filename=PYTHIA_160M_WEIGHTS_FILENAME,
-        revision=PYTHIA_160M_REVISION,
-        local_files_only=True,
+    expected_artifacts = {
+        **PYTHIA_160M_ARTIFACTS,
+        PYTHIA_160M_WEIGHTS_FILENAME: (
+            PYTHIA_160M_WEIGHTS_SHA256,
+            PYTHIA_160M_WEIGHTS_BYTES,
+        ),
+    }
+    observed: dict[str, tuple[str, int]] = {}
+    for filename, (expected_digest, expected_bytes) in expected_artifacts.items():
+        raw_path = hf_hub_download(
+            repo_id=PYTHIA_160M_MODEL_ID,
+            filename=filename,
+            revision=PYTHIA_160M_REVISION,
+            local_files_only=True,
+        )
+        if not isinstance(raw_path, (str, os.PathLike)):
+            raise RuntimeError(
+                f"Hugging Face did not return a filesystem path for {filename}"
+            )
+        path = Path(raw_path)
+        if path.name != filename:
+            raise RuntimeError(f"resolved Pythia artifact filename mismatch: {filename}")
+        digest, byte_count = _stream_file_sha256(path)
+        if digest != expected_digest:
+            raise RuntimeError(f"resolved Pythia {filename} SHA-256 does not match the pin")
+        if byte_count != expected_bytes:
+            raise RuntimeError(f"resolved Pythia {filename} byte length does not match the pin")
+        observed[filename] = (digest, byte_count)
+    return observed
+
+
+def _validated_weights_artifact(hf_hub_download: Any) -> tuple[str, str, int]:
+    """Compatibility wrapper returning the verified weights identity tuple."""
+
+    observed = _validated_model_artifacts(hf_hub_download)
+    digest, byte_count = observed[PYTHIA_160M_WEIGHTS_FILENAME]
+    return PYTHIA_160M_WEIGHTS_FILENAME, digest, byte_count
+
+
+def _validate_model_execution_layout(
+    model: Any,
+    *,
+    expected_device: str,
+    expected_dtype: str,
+) -> None:
+    """Require every model parameter to be materialized on one device/dtype."""
+
+    parameters = tuple(model.parameters())
+    if not parameters:
+        raise RuntimeError("Pythia model exposes no materialized parameters")
+    for index, parameter in enumerate(parameters):
+        observed_device = str(getattr(getattr(parameter, "device", None), "type", ""))
+        observed_dtype = str(getattr(parameter, "dtype", ""))
+        if observed_device != expected_device:
+            raise RuntimeError(
+                f"Pythia parameter {index} is on {observed_device!r}, expected "
+                f"{expected_device!r}"
+            )
+        if observed_dtype != expected_dtype:
+            raise RuntimeError(
+                f"Pythia parameter {index} has dtype {observed_dtype!r}, expected "
+                f"{expected_dtype!r}"
+            )
+
+
+def _read_cuda_driver_version() -> int:
+    """Read the active NVIDIA driver API version from libcuda."""
+
+    libcuda = ctypes.CDLL("libcuda.so.1")
+    if libcuda.cuInit(0) != 0:
+        raise RuntimeError("CUDA driver initialization failed")
+    observed = ctypes.c_int()
+    if libcuda.cuDriverGetVersion(ctypes.byref(observed)) != 0 or observed.value <= 0:
+        raise RuntimeError("CUDA driver version query failed")
+    return int(observed.value)
+
+
+def _runtime_execution_evidence(
+    torch: Any,
+    *,
+    profile: str,
+    device: str,
+    dtype: str,
+) -> RuntimeExecutionEvidence:
+    payload: dict[str, Any] = {
+        "profile": profile,
+        "device": device,
+        "dtype": dtype,
+        "torch_version": str(getattr(torch, "__version__", "UNKNOWN")),
+    }
+    if payload["torch_version"] == "UNKNOWN":
+        raise RuntimeError("Torch runtime version is not observable")
+    if device == "cuda":
+        device_index = int(torch.cuda.current_device())
+        capability = torch.cuda.get_device_capability(device_index)
+        payload.update(
+            {
+                "cuda_runtime_version": str(torch.version.cuda),
+                "cuda_driver_version": _read_cuda_driver_version(),
+                "cuda_device_name": str(torch.cuda.get_device_name(device_index)),
+                "cuda_device_capability": f"{int(capability[0])}.{int(capability[1])}",
+            }
+        )
+    return RuntimeExecutionEvidence.model_validate(payload)
+
+
+def _validate_runtime_canary(
+    torch: Any,
+    model: Any,
+    tokenizer: Any,
+    *,
+    device: str,
+) -> None:
+    """Execute the attention/hook/numerics contract before real status."""
+
+    architecture = PYTHIA_160M_MANIFEST.model_arch
+    projection = model.gpt_neox.layers[0].mlp.dense_4h_to_h
+    observed_hook_widths: list[int] = []
+
+    def _projection_pre_hook(_module: Any, args: tuple[Any, ...]) -> None:
+        if not args or not hasattr(args[0], "shape"):
+            raise RuntimeError("Pythia runtime canary hook did not receive a tensor")
+        activation = args[0]
+        observed_hook_widths.append(int(activation.shape[-1]))
+        if not bool(torch.isfinite(activation).all().item()):
+            raise RuntimeError("Pythia runtime canary hook received nonfinite values")
+
+    handle = projection.register_forward_pre_hook(_projection_pre_hook)
+    try:
+        encoded = tokenizer(
+            "Project Coherence Gate 5 runtime canary.",
+            return_tensors="pt",
+        )
+        inputs = {
+            key: value.to(device) if hasattr(value, "to") else value
+            for key, value in encoded.items()
+        }
+        input_ids = inputs.get("input_ids")
+        if input_ids is None or not hasattr(input_ids, "shape"):
+            raise RuntimeError("Pythia runtime canary tokenizer returned no input_ids")
+        sequence_length = int(input_ids.shape[1])
+        with torch.no_grad():
+            outputs = model(
+                **inputs,
+                output_attentions=True,
+                output_hidden_states=False,
+                use_cache=False,
+            )
+    finally:
+        handle.remove()
+
+    attentions = tuple(outputs.attentions or ())
+    if len(attentions) != architecture.n_layers:
+        raise RuntimeError("Pythia runtime canary returned the wrong attention layer count")
+    expected_shape = (
+        1,
+        architecture.n_heads,
+        sequence_length,
+        sequence_length,
     )
-    if not isinstance(raw_path, (str, os.PathLike)):
-        raise RuntimeError("Hugging Face did not return a filesystem weights path")
-    path = Path(raw_path)
-    if path.name != PYTHIA_160M_WEIGHTS_FILENAME:
-        raise RuntimeError("resolved Pythia weights filename does not match the pin")
-    digest, byte_count = _stream_file_sha256(path)
-    if digest != PYTHIA_160M_WEIGHTS_SHA256:
-        raise RuntimeError("resolved Pythia weights SHA-256 does not match the pin")
-    if byte_count != PYTHIA_160M_WEIGHTS_BYTES:
-        raise RuntimeError("resolved Pythia weights byte length does not match the pin")
-    return path.name, digest, byte_count
+    if any(tuple(attention.shape) != expected_shape for attention in attentions):
+        raise RuntimeError("Pythia runtime canary returned incompatible attention geometry")
+    if observed_hook_widths != [architecture.mlp_intermediate_dim]:
+        raise RuntimeError("Pythia runtime canary returned incompatible hook geometry")
+    if not bool(torch.isfinite(outputs.logits).all().item()):
+        raise RuntimeError("Pythia runtime canary produced nonfinite logits")
+    if any(not bool(torch.isfinite(attention).all().item()) for attention in attentions):
+        raise RuntimeError("Pythia runtime canary produced nonfinite attention")
 
 
 def warm_load() -> LoadedModel:
     """Load Pythia-160M into memory once. Idempotent + thread-safe.
 
     Called from the FastAPI startup hook. Subsequent calls return the
-    cached LoadedModel. If torch / transformers are not importable, OR
-    LIVE_TRACE_DEMO_MODE is set, OR the load raises, we return a demo
-    LoadedModel with is_real_model = False and a populated load_error.
+    cached LoadedModel. LIVE_TRACE_DEMO_MODE is the only path to a demo
+    LoadedModel. Any unrequested load failure raises so real-mode startup
+    cannot silently substitute synthetic execution.
     """
     global _LOADED
     with _LOAD_LOCK:
         if _LOADED is not None:
             return _LOADED
 
+        profile = _worker_profile()
         if _is_demo_mode_forced():
+            if profile == PRODUCTION_PROFILE:
+                raise RuntimeError("production worker profile forbids demo mode")
             logger.info("warm_load: LIVE_TRACE_DEMO_MODE=1 — staying in demo mode")
             _LOADED = LoadedModel(manifest=PYTHIA_160M_MANIFEST)
             return _LOADED
+        if profile == PRODUCTION_PROFILE:
+            _validate_production_model_cache()
 
         try:
-            # Heavy imports kept inside the try so the module is importable
-            # without torch (CI, local dev) — the worker still starts and
-            # just stays in demo mode.
+            # Heavy imports stay local so an explicitly requested development
+            # demo remains lightweight. Any unrequested failure raises.
             import torch  # noqa: F401
             from transformers import AutoModelForCausalLM, AutoTokenizer
             from huggingface_hub import hf_hub_download
@@ -254,32 +458,67 @@ def warm_load() -> LoadedModel:
                 PYTHIA_160M_MODEL_ID,
                 PYTHIA_160M_REVISION,
             )
+            cuda_available = bool(torch.cuda.is_available())
+            if profile == PRODUCTION_PROFILE and not cuda_available:
+                raise RuntimeError(
+                    "production worker profile requires an available CUDA device"
+                )
+            artifact_observations = _validated_model_artifacts(hf_hub_download)
             tokenizer = AutoTokenizer.from_pretrained(
                 PYTHIA_160M_MODEL_ID,
                 revision=PYTHIA_160M_REVISION,
+                local_files_only=True,
             )
+            load_dtype = torch.float16 if cuda_available else torch.float32
             model = AutoModelForCausalLM.from_pretrained(
                 PYTHIA_160M_MODEL_ID,
                 revision=PYTHIA_160M_REVISION,
                 use_safetensors=True,
-                output_hidden_states=True,
-                output_attentions=True,
+                dtype=load_dtype,
+                attn_implementation="eager",
+                local_files_only=True,
             )
             model.eval()
             resolved_revision = _validated_resolved_revision(model)
-            weights_filename, weights_sha256, weights_bytes = (
-                _validated_weights_artifact(hf_hub_download)
+            weights_sha256, weights_bytes = artifact_observations[
+                PYTHIA_160M_WEIGHTS_FILENAME
+            ]
+            weights_filename = PYTHIA_160M_WEIGHTS_FILENAME
+            # Development may run the bounded CPU canary. Production requires
+            # CUDA, and a CUDA-selected float16 load may not fall back to CPU.
+            if cuda_available:
+                model = model.to("cuda")
+                logger.info("warm_load: model moved to cuda")
+                execution_device = "cuda"
+                execution_dtype = "torch.float16"
+            else:
+                logger.info("warm_load: cuda not available — staying on cpu")
+                execution_device = "cpu"
+                execution_dtype = "torch.float32"
+
+            _validate_model_execution_layout(
+                model,
+                expected_device=execution_device,
+                expected_dtype=execution_dtype,
             )
-            # If a CUDA device is visible, move there. CPU fallback is fine
-            # for the M2 acceptance smoke; production lives on RunPod GPU.
-            try:
-                if torch.cuda.is_available():
-                    model = model.to("cuda")
-                    logger.info("warm_load: model moved to cuda")
-                else:
-                    logger.info("warm_load: cuda not available — staying on cpu")
-            except Exception as cuda_exc:  # pragma: no cover — environment-dependent
-                logger.warning("warm_load: cuda move failed (%s) — staying on cpu", cuda_exc)
+
+            _validate_runtime_canary(
+                torch,
+                model,
+                tokenizer,
+                device=execution_device,
+            )
+            post_load_observations = _validated_model_artifacts(hf_hub_download)
+            if post_load_observations != artifact_observations:
+                raise RuntimeError(
+                    "Pythia artifact identity changed during model loading"
+                )
+            runtime_execution = _runtime_execution_evidence(
+                torch,
+                profile=profile,
+                device=execution_device,
+                dtype=execution_dtype,
+            )
 
             real_manifest = ModelManifest.model_validate(
                 {
@@ -295,6 +534,7 @@ def warm_load() -> LoadedModel:
                     "model_identity_status": (
                         "PINNED_REVISION_AND_WEIGHTS_SHA256"
                     ),
+                    "runtime_execution": runtime_execution.model_dump(),
                 },
             )
             _LOADED = LoadedModel(
@@ -303,12 +543,10 @@ def warm_load() -> LoadedModel:
                 tokenizer=tokenizer,
             )
             logger.info("warm_load: model loaded, is_real_model=True")
-        except Exception as exc:  # broad — log full reason, stay demo
-            logger.exception("warm_load: failed; falling back to demo mode")
-            _LOADED = LoadedModel(
-                manifest=PYTHIA_160M_MANIFEST,
-                load_error=str(exc),
-            )
+        except Exception:  # broad boundary: real-mode startup must fail closed
+            logger.exception("warm_load: failed closed; startup cannot proceed")
+            _LOADED = None
+            raise
         return _LOADED
 
 
