@@ -35,7 +35,7 @@
       "path": "docs/working/project_coherence/publication/wave2/adversarial_review/formal_math/UNRESOLVED_AND_REQUIRED_CHANGES_v0.1.json",
       "declared_blocking_items": 3,
       "declared_strengthening_items": 7,
-      "integration_effect": "Three blocking wording/metadata changes incorporated at 42d3d2fd; reviewer acceptance and all 24 upstream obligations remain OPEN."
+      "integration_effect": "Three blocking wording/metadata changes incorporated at 42d3d2fd and residual sweep f91e622d; acceptance review 64d02d20 accepts the publication text only, while all 24 upstream obligations remain OPEN."
     },
     {
       "lane": "category_theory_internal_review",
@@ -43,7 +43,7 @@
       "declared_blocking_items": 3,
       "declared_required_nonblocking_items": 5,
       "declared_strengthening_items": 4,
-      "integration_effect": "Three blocking publication corrections and one terminology correction incorporated at 42d3d2fd; five source/type/reproducibility items and reviewer acceptance remain OPEN."
+      "integration_effect": "Blocking corrections began at 42d3d2fd and the residual evidence/terminology sweep completed at f91e622d; acceptance review 64d02d20 accepts the publication text only, while upstream Gate 1 corrections and all 23 lane obligations remain OPEN."
     },
     {
       "lane": "engineering_internal_review",
@@ -51,7 +51,17 @@
       "declared_blocking_items": 2,
       "declared_strengthening_items": 4,
       "review_commit": "15a3ff3436dc0b312828309a7000fc877b74d57c",
-      "integration_effect": "Six publication corrections incorporated at e4ccfe30; reviewer acceptance and all 27 upstream obligations remain OPEN."
+      "integration_effect": "Six publication corrections incorporated at e4ccfe30 and accepted as publication-text corrections at 64d02d20; all 27 upstream obligations remain OPEN."
+    },
+    {
+      "lane": "lead_correction_acceptance_review",
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/lead_corrections/FINDING_DISPOSITION_MATRIX_v0.1.json",
+      "declared_review_items": 13,
+      "accepted_as_text_corrections": 13,
+      "partial_or_failed": 0,
+      "source_commit": "64d02d200829b86d3bfc11d9a940a13b91dcf06d",
+      "reviewed_head": "f91e622d30ce83b77cbbff8b947d9b125e51ff54",
+      "integration_effect": "PUBLICATION TEXT ACCEPTED / ZERO UPSTREAM OBLIGATIONS CLOSED / ZERO CLAIM PROMOTIONS"
     },
     {
       "lane": "acbe_wave2",
@@ -69,9 +79,10 @@
     },
     {
       "lane": "memristive_wave2",
-      "path": null,
-      "declared_open_items": null,
-      "integration_effect": "AUTHORING PENDING / NO CLAIM"
+      "path": "docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_SUPPLEMENT_UNRESOLVED_OBLIGATIONS_v0.1.json",
+      "declared_open_items": 42,
+      "source_commit": "4666004e973ccbfa7b65cf3341aab15bc5f34524",
+      "integration_effect": "IMPORTED / NONE CLOSED / NO IMPLEMENTATION / EXPERIMENT NOT_STARTED / NO PHYSICAL DEVICE / NO PROJECT EXPERIMENTAL RUNPOD OR GPU JOB"
     }
   ],
   "dependency_clusters": [
@@ -161,11 +172,16 @@
     "formal_review_findings": 10,
     "category_review_findings": 12,
     "engineering_review_findings": 6,
+    "lead_correction_review_items": 13,
+    "lead_correction_text_items_accepted": 13,
     "acbe_wave2_open_obligations": 21,
     "harness2_wave2_open_obligations": 36,
+    "memristive_wave2_open_obligations": 42,
+    "wave2_lane_local_open_obligations_before_deduplication": 99,
+    "all_lane_local_open_obligations_before_deduplication": 173,
     "dependency_clusters": 10,
     "local_or_review_items_closed_by_this_reconciliation": 0,
-    "wave2_counts_pending_import": true
+    "wave2_counts_pending_import": false
   },
   "global_boundary": "This reconciliation is an index, not a closure ledger. It cannot authorize an experiment, spend, publication, product claim, license, disclosure, canon change, or physical-device statement."
 }

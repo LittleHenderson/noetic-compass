@@ -316,11 +316,11 @@
       "category": "HYPOTHESES_ESTIMANDS",
       "priority": "P0",
       "status": "OPEN_EXTERNAL_VALIDATION",
-      "obligation": "Select exact hypotheses, outcomes, estimands, margins, tolerances, uncertainty, missingness, and falsifiers.",
+      "obligation": "Select exact hypotheses, outcomes, estimands, normalization domains, nonzero alpha/y range conditions, degenerate-range handling, margins, tolerances, uncertainty, missingness, and falsifiers.",
       "dependencies": ["MCLIS-OBL-017", "MCLIS-OBL-020", "MCLIS-OBL-023", "MCLIS-OBL-025"],
-      "closure_evidence": "Preregistration candidate frozen before outcome access and independently reviewed.",
+      "closure_evidence": "Preregistration candidate frozen before outcome access and independently reviewed, including declared normalization domains, nonzero alpha/y range requirements, and an explicit missing/undefined rule for degenerate zero-range loops.",
       "blocked_claims": ["any empirical conclusion"],
-      "prohibited_shortcut": "Treating every candidate hypothesis in the draft as simultaneously confirmed or testable in one dataset."
+      "prohibited_shortcut": "Treating every candidate hypothesis in the draft as simultaneously confirmed or testable in one dataset, or reporting normalized loop area when either normalization range is zero."
     },
     {
       "id": "MCLIS-OBL-029",
@@ -479,6 +479,6 @@
   ],
   "obligation_count": 42,
   "all_obligations_open": true,
-  "gpu_or_runpod_required_for_current_draft": false,
+  "project_experimental_runpod_or_gpu_required_for_current_draft": false,
   "closure_statement": "No obligation is closed by drafting, citation, source presence, a local Gate pass, or available compute credit. Null, negative, failed, mixed, nonreplicated, unsafe, unlicensed, or permanently held outcomes remain valid possible endpoints."
 }

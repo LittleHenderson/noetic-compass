@@ -1,0 +1,83 @@
+{
+  "schema_version": "project_coherence.publication.integration.artifact_manifest.v0.1",
+  "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
+  "as_of": "2026-08-05",
+  "manifest_id": "PROJECT-COHERENCE-PUBLICATION-INTEGRATION-v0.1",
+  "branch": "codex/project-coherence-publication-integration",
+  "hash_algorithm": "SHA-256 over exact file bytes",
+  "self_hashing": false,
+  "self_exclusion": "PUBLICATION_INTEGRATION_ARTIFACT_MANIFEST_v0.1.json is deliberately excluded. The final Git object and delivered remote ref bind this manifest without a self-reference loop.",
+  "artifact_count": 8,
+  "artifacts": [
+    {
+      "path": "docs/working/project_coherence/publication/integration/CANONICAL_NOTATION_AND_TYPE_CROSSWALK_v0.1.json",
+      "role": "Lead-owned canonical notation and noninterchangeable-type crosswalk",
+      "bytes": 41741,
+      "sha256": "F2C4510DA1F12BC591817FA1B88D982A92AC489B6AB2E20BE2B3156C5D578C27"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/integration/GATE5_EVIDENCE_SNAPSHOT_CROSSWALK_v0.1.json",
+      "role": "Historical and hardened Gate 5 evidence-snapshot provenance crosswalk",
+      "bytes": 6001,
+      "sha256": "6C7B280DBADA5F3A467A81CD3F23C4DA9B270806C6620E09E42DE703EB373040"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/integration/MEMRISTIVE_SOURCE_SNAPSHOT_CROSSWALK_v0.1.json",
+      "role": "Historical and active Wave 1 engineering source snapshots plus checkout/Git-blob hash-domain controls",
+      "bytes": 9451,
+      "sha256": "0A4C815B021083B742007366DC3671AA8B01EFB59555552E906612E4705D0104"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/integration/PROGRAM_LEAD_HANDOFF_v0.1.md",
+      "role": "Integrated publication-program editorial and authority-boundary handoff",
+      "bytes": 13903,
+      "sha256": "E5F034ABBEBAC6D2AC992BF35AF56D0AF417180A600EF259E24F5BB940E9C3A2"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/integration/PUBLICATION_CLAIM_REGISTRY_CROSSWALK_v0.1.json",
+      "role": "Lane-local claim/control ID registry and cross-lane relation index",
+      "bytes": 22400,
+      "sha256": "249F1BD6759C2618EB2319E23F0DC4B4B8F91F0CB6E7734F0B68E7CFE89648F9"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/integration/PUBLICATION_DEPENDENCY_STATUS_AND_REVIEW_MAP_v0.1.json",
+      "role": "Eight-track dependency, status, and bounded-review map",
+      "bytes": 11334,
+      "sha256": "6C157FF091AB2963CB4E00910EBD22F31C5972A29E2F4E0F883FE28627EC320C"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/integration/UNRESOLVED_OBLIGATION_RECONCILIATION_v0.1.json",
+      "role": "Non-closing reconciliation of lane-local and review obligations",
+      "bytes": 12193,
+      "sha256": "4E2E44740C7C1C95058C795A4EA8B7075094EF67FF2ACF69C9F84736E2CFEE35"
+    },
+    {
+      "path": "scripts/verify_project_coherence_publication_program.py",
+      "role": "Fail-closed structural publication-program verifier",
+      "bytes": 33564,
+      "sha256": "8145A33F3DFC227121A83EF368AB6D27F29E6D2A16672C5B208B1BF197F3BA52"
+    }
+  ],
+  "validation_snapshot": {
+    "publication_json_files": 59,
+    "non_self_hashing_manifests_including_this_manifest": 11,
+    "bound_publication_artifacts_including_this_manifest": 71,
+    "imported_claim_or_control_records": 191,
+    "imported_lanes": 6,
+    "explicit_crosswalks": 11,
+    "notation_or_type_records": 53,
+    "publication_tracks": 8,
+    "obligation_clusters": 10,
+    "lane_local_open_obligations_before_deduplication": 173,
+    "accepted_publication_text_corrections": 13,
+    "upstream_obligations_closed": 0,
+    "claims_promoted": 0,
+    "memristive_local_records": 50,
+    "memristive_open_obligations": 42,
+    "memristive_evidence_anchors": 16,
+    "memristive_source_snapshot_controls": 3,
+    "joined_run_status": "NOT_STARTED",
+    "project_experimental_runpod_or_gpu_job": "NONE_LAUNCHED"
+  },
+  "claim_boundary": "This manifest proves only exact integration-package bytes and structural relationships. It does not admit a theorem, close Gate 1/4/5, validate an experiment, authorize a submission or disclosure, assign authorship, grant a license, alter canon, certify a product, or establish a physical, causal, cognitive, clinical, safety, or regulatory result."
+}

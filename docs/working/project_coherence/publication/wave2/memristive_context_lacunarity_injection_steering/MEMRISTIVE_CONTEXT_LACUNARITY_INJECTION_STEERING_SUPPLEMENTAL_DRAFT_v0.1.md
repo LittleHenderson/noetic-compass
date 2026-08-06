@@ -383,8 +383,9 @@ or plotting choices can also create apparent loops.
 
 ### 5.7 Classical gliding-box lacunarity
 
-Let \(M_r\) be mass in a gliding box at scale \(r\), with nonzero mean. Classical
-gliding-box lacunarity is
+Let \(M_r\) be nonnegative mass in a gliding box at scale \(r\), with
+\(0<\mathbb E[M_r]<\infty\) and \(\mathbb E[M_r^2]<\infty\). Classical
+gliding-box lacunarity is then
 
 \[
 \Lambda_{\mathrm{GB}}(r)
@@ -688,6 +689,11 @@ and normalized loop area
 {(\alpha_{\max}-\alpha_{\min})(y_{\max}-y_{\min})}.
 \]
 
+This normalized form is defined only when
+\(\alpha_{\max}>\alpha_{\min}\) and \(y_{\max}>y_{\min}\). A degenerate
+input or response range must be recorded as undefined rather than coerced to a
+numeric loop score.
+
 Every estimand needs an exact sampling population, grouping, missingness,
 normalization, uncertainty, and multiplicity rule. No numeric threshold or
 effect size is selected here.
@@ -985,8 +991,8 @@ independent reviews exist, the correct status remains:
 - [E9] I. D. Mayergoyz, “Mathematical Models of Hysteresis,” 1986.
 - [E10] L. Ljung, *System Identification: Theory for the User*, second edition,
   1999.
-- [E11] A. M. Turner et al., “Activation Addition: Steering Language Models
-  Without Optimization,” 2023.
+- [E11] A. M. Turner et al., “Steering Language Models With Activation
+  Engineering,” arXiv:2308.10248v5, revised 2024 (originally submitted 2023).
 - [E12] A. Zou et al., “Representation Engineering: A Top-Down Approach to AI
   Transparency,” 2023.
 - [E13] N. Rimsky et al., “Steering Llama 2 via Contrastive Activation

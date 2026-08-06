@@ -56,8 +56,9 @@
         "review_package": "docs/working/project_coherence/publication/wave2/adversarial_review/formal_math",
         "proof_invalidating_failures": 0,
         "blocking_edits_found": 3,
-        "lead_correction_commit": "42d3d2fd",
-        "lead_disposition": "All three blocking wording/metadata findings were corrected in the integration copy; acceptance recheck and all upstream proof, formalization, experiment, and external-review obligations remain OPEN."
+        "lead_correction_commits": ["42d3d2fd0e98bb86dd6f6f233a100514078ebd5f", "f91e622d30ce83b77cbbff8b947d9b125e51ff54"],
+        "acceptance_review_commit": "64d02d200829b86d3bfc11d9a940a13b91dcf06d",
+        "lead_disposition": "All blocking and residual publication wording/metadata findings were corrected and accepted as text corrections; all upstream proof, formalization, experiment, external-review, and authority obligations remain OPEN."
       }
     },
     {
@@ -94,8 +95,9 @@
         "review_package": "docs/working/project_coherence/publication/wave2/adversarial_review/category_theory",
         "blocking_errors_found": 3,
         "required_nonblocking_changes_found": 5,
-        "lead_correction_commit": "42d3d2fd",
-        "lead_disposition": "The three blocking publication errors and the J_atom terminology correction were addressed in the integration copy. The false ambient representable witness was retracted and ambient distinctness remains OPEN. Vorob'ev/acyclicity hypotheses, Farkas citation completion, portable direct legacy-source binding, cellular variance/schema work, acceptance recheck, and external review remain OPEN."
+        "lead_correction_commits": ["42d3d2fd0e98bb86dd6f6f233a100514078ebd5f", "f91e622d30ce83b77cbbff8b947d9b125e51ff54"],
+        "acceptance_review_commit": "64d02d200829b86d3bfc11d9a940a13b91dcf06d",
+        "lead_disposition": "The blocking publication errors and residual evidence/terminology defects were corrected and accepted as text corrections. The false ambient representable witness is retracted, ambient distinctness remains OPEN, and the older upstream Gate 1 source remains explicitly quarantined pending separate repair. Vorob'ev/acyclicity hypotheses, Farkas citation completion, portable direct legacy-source binding, cellular variance/schema work, and external review remain OPEN."
       }
     },
     {
@@ -144,8 +146,9 @@
         "review_package": "docs/working/project_coherence/publication/wave2/adversarial_review/engineering",
         "blocking_changes_found": 2,
         "required_strengthening_changes_found": 4,
-        "lead_correction_commit": "e4ccfe30",
-        "lead_disposition": "All six publication corrections were applied in the integration copy: positive rank d > 0, sole Formal Paper 3 theorem authority, exact Q4 pre-clipping domain, physical-unit boundary, replay-time freshness, and narrow QuickCheck citation scope. Acceptance recheck and every upstream engineering, empirical, external-review, and authority obligation remain OPEN."
+        "lead_correction_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+        "acceptance_review_commit": "64d02d200829b86d3bfc11d9a940a13b91dcf06d",
+        "lead_disposition": "All six publication corrections were applied and accepted as text corrections: positive rank d > 0, sole Formal Paper 3 theorem authority, exact Q4 pre-clipping domain, physical-unit boundary, replay-time freshness, and narrow QuickCheck citation scope. Every upstream engineering, empirical, external-review, and authority obligation remains OPEN."
       }
     },
     {
@@ -247,6 +250,72 @@
         "review_package": null,
         "lead_disposition": "Imported as a source-bound mathematical and causal-identifiability methods package only. Proof sketches, causal review, novelty review, exact implementations, preregistration, joined execution, audit, and replication remain OPEN."
       }
+    },
+    {
+      "lane": "memristive_supplement",
+      "papers": [],
+      "program_role": "proposed supplemental source-bound research track with no charter paper number",
+      "matrix_path": "docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_SUPPLEMENT_THEOREM_CLAIM_TYPE_MATRIX_v0.1.json",
+      "manifest_path": "docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_SUPPLEMENT_ARTIFACT_MANIFEST_v0.1.json",
+      "source_commit": "4666004e973ccbfa7b65cf3341aab15bc5f34524",
+      "local_record_count": 50,
+      "local_ids": [
+        "MCLIS-TYPE-001",
+        "MCLIS-TYPE-002",
+        "MCLIS-TYPE-003",
+        "MCLIS-TYPE-004",
+        "MCLIS-TYPE-005",
+        "MCLIS-TYPE-006",
+        "MCLIS-TYPE-007",
+        "MCLIS-DEF-001",
+        "MCLIS-DEF-002",
+        "MCLIS-DEF-003",
+        "MCLIS-DEF-004",
+        "MCLIS-DEF-005",
+        "MCLIS-DEF-006",
+        "MCLIS-DEF-007",
+        "MCLIS-DEF-008",
+        "MCLIS-DEF-009",
+        "MCLIS-ALG-001",
+        "MCLIS-ALG-002",
+        "MCLIS-ALG-003",
+        "MCLIS-SRC-001",
+        "MCLIS-SRC-002",
+        "MCLIS-SRC-003",
+        "MCLIS-SRC-004",
+        "MCLIS-SRC-005",
+        "MCLIS-SRC-006",
+        "MCLIS-SRC-007",
+        "MCLIS-SRC-008",
+        "MCLIS-SRC-009",
+        "MCLIS-HYP-001",
+        "MCLIS-HYP-002",
+        "MCLIS-HYP-003",
+        "MCLIS-HYP-004",
+        "MCLIS-HYP-005",
+        "MCLIS-HYP-006",
+        "MCLIS-HYP-007",
+        "MCLIS-HYP-008",
+        "MCLIS-BND-001",
+        "MCLIS-BND-002",
+        "MCLIS-BND-003",
+        "MCLIS-BND-004",
+        "MCLIS-BND-005",
+        "MCLIS-BND-006",
+        "MCLIS-BND-007",
+        "MCLIS-BND-008",
+        "MCLIS-BND-009",
+        "MCLIS-BND-010",
+        "MCLIS-BND-011",
+        "MCLIS-BND-012",
+        "MCLIS-BND-013",
+        "MCLIS-BND-014"
+      ],
+      "internal_adversarial_review": {
+        "status": "LEAD STRUCTURAL ACCEPTANCE AUDIT COMPLETE / EXTERNAL SPECIALIST REVIEW OPEN",
+        "review_package": null,
+        "lead_disposition": "Imported as a typed nonphysical research-design package only. No implementation, experiment, physical device, electrical CAS mapping, causal or cognitive mechanism, safety result, product capability, license, canon effect, disclosure authority, or charter paper number follows."
+      }
     }
   ],
   "crosswalks": [
@@ -298,8 +367,9 @@
       "id": "PUB-XW-004",
       "relation": "DEPENDS_ON",
       "members": [
-        {"lane": "category_theory", "local_id": "PUB-P4-006"},
-        {"lane": "engineering", "local_id": "CLM-CAS-OHM-LOCAL-RESPONSE"}
+        {"lane": "category_theory", "local_id": "PUB-P4-007"},
+        {"lane": "engineering", "local_id": "CLM-CAS-OHM-LOCAL-RESPONSE"},
+        {"lane": "cas_harness2", "local_id": "H2-RESULT-001"}
       ],
       "normalized_label": "future empirical methods require authenticated Harness 2 evidence rather than publication prose",
       "integration_disposition": "No admitted experiment or Evidence Packet exists; dependency remains OPEN."
@@ -337,12 +407,66 @@
       ],
       "normalized_label": "causal nonclaim and future ACA experiment require explicit interventions plus authenticated joined-run evidence",
       "integration_disposition": "Markov composition, gluing, local regressions, and a draft protocol do not identify a causal abstraction. No joined run or result exists."
+    },
+    {
+      "id": "PUB-XW-008",
+      "relation": "TYPE_DISTINCT",
+      "members": [
+        {"lane": "memristive_supplement", "local_id": "MCLIS-TYPE-001"},
+        {"lane": "memristive_supplement", "local_id": "MCLIS-TYPE-002"},
+        {"lane": "memristive_supplement", "local_id": "MCLIS-TYPE-003"},
+        {"lane": "memristive_supplement", "local_id": "MCLIS-TYPE-004"},
+        {"lane": "memristive_supplement", "local_id": "MCLIS-TYPE-005"},
+        {"lane": "memristive_supplement", "local_id": "MCLIS-TYPE-006"},
+        {"lane": "memristive_supplement", "local_id": "MCLIS-TYPE-007"}
+      ],
+      "normalized_label": "ideal electrical element, generalized electrical system, metaphor, mathematical history state, software, physical device, and experimental result",
+      "integration_disposition": "No cast between these types is licensed. A metaphor or mathematical equation is not an implementation, experiment, or physical device."
+    },
+    {
+      "id": "PUB-XW-009",
+      "relation": "DEPENDS_ON",
+      "members": [
+        {"lane": "engineering", "local_id": "MEM-OPEN-001"},
+        {"lane": "memristive_supplement", "local_id": "MCLIS-TYPE-004"},
+        {"lane": "memristive_supplement", "local_id": "MCLIS-BND-003"}
+      ],
+      "normalized_label": "stateful CAS-Ohm engineering requires a typed mathematical profile and a separately conforming implementation",
+      "integration_disposition": "The supplemental definition sharpens the obligation but does not close engineering, conformance, calibration, or experimental work."
+    },
+    {
+      "id": "PUB-XW-010",
+      "relation": "DEPENDS_ON",
+      "members": [
+        {"lane": "memristive_supplement", "local_id": "MCLIS-HYP-001"},
+        {"lane": "memristive_supplement", "local_id": "MCLIS-HYP-002"},
+        {"lane": "memristive_supplement", "local_id": "MCLIS-HYP-003"},
+        {"lane": "memristive_supplement", "local_id": "MCLIS-HYP-004"},
+        {"lane": "memristive_supplement", "local_id": "MCLIS-HYP-005"},
+        {"lane": "memristive_supplement", "local_id": "MCLIS-HYP-006"},
+        {"lane": "memristive_supplement", "local_id": "MCLIS-HYP-007"},
+        {"lane": "memristive_supplement", "local_id": "MCLIS-HYP-008"},
+        {"lane": "cas_harness2", "local_id": "H2-RESULT-001"}
+      ],
+      "normalized_label": "eight supplemental hypotheses require a separately authorized Harness 2 joined run and qualifying evidence",
+      "integration_disposition": "All eight hypotheses and the Harness result remain NOT_STARTED; drafting and local gate verification create no experimental conclusion."
+    },
+    {
+      "id": "PUB-XW-011",
+      "relation": "TYPE_DISTINCT",
+      "members": [
+        {"lane": "engineering", "local_id": "CLM-CAS-OHM-PHYSICAL-TELEMETRY"},
+        {"lane": "memristive_supplement", "local_id": "MCLIS-BND-002"},
+        {"lane": "memristive_supplement", "local_id": "MCLIS-BND-007"}
+      ],
+      "normalized_label": "CAS circuit vocabulary versus electrical mapping and fabricated-device evidence",
+      "integration_disposition": "Physical SI quantities remain outside CAS-Ohm UnitKind; no CAS voltage/current/memristance mapping or physical device exists."
     }
   ],
   "wave1_summary": {
     "local_record_total": 71,
     "duplicate_local_ids_across_lanes": 0,
-    "explicit_crosswalks": 7,
+    "explicit_crosswalks_with_wave1_only_members": 5,
     "claims_promoted_by_integration": 0,
     "claims_closed_by_integration": 0,
     "negative_or_open_records_preserved": true,
@@ -350,8 +474,9 @@
     "experimental_program_complete": false
   },
   "integrated_summary": {
-    "imported_local_record_total": 141,
-    "imported_lanes": 5,
+    "imported_local_record_total": 191,
+    "imported_lanes": 6,
+    "explicit_crosswalks": 11,
     "duplicate_local_ids_across_imported_lanes": 0,
     "claims_promoted_by_integration": 0,
     "claims_closed_by_integration": 0,
@@ -360,8 +485,8 @@
   "wave2_import_state": {
     "acbe": "IMPORTED FROM COMMIT f1decd9c61dc3df786f69dc19df7b6ba28fc51af / INTERNAL REVIEW OPEN / NO EXPERIMENT",
     "cas_harness2": "IMPORTED FROM COMMIT 6b3e72dc623366f40256ddb9ebfc725c66d96dd3 / INTERNAL REVIEW OPEN / NO EXPERIMENT",
-    "memristive_context_lacunarity_injection_steering": "PENDING COMMITTED SOURCE-BOUND PACKAGE",
-    "rule": "Append matrix identities and crosswalks only after exact manifests reproduce and lead review confirms status boundaries."
+    "memristive_context_lacunarity_injection_steering": "IMPORTED FROM HISTORICAL COMMIT 4666004e973ccbfa7b65cf3341aab15bc5f34524 / LEAD ACCEPTANCE AUDIT COMPLETE WITH SOURCE-SNAPSHOT CORRECTIONS / EXTERNAL SPECIALIST REVIEW OPEN / NO EXPERIMENT / NO PROJECT EXPERIMENTAL RUNPOD OR GPU JOB",
+    "rule": "Every imported matrix identity is preserved under its lane-local ID; crosswalks add relations only and do not promote or close claims."
   },
   "global_boundary": "This index does not replace the shared CLAIM_LEDGER_v0.1.json or THEOREM_LEDGER_v0.1.json, and it makes no canon, product, license, disclosure, causal, empirical, safety, or publication-submission decision."
 }

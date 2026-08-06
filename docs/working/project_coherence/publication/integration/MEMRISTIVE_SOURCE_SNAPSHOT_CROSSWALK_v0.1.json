@@ -1,0 +1,165 @@
+{
+  "schema_version": "project_coherence.publication.integration.memristive_source_snapshot_crosswalk.v0.1",
+  "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
+  "as_of": "2026-08-05",
+  "purpose": "Preserve the exact Wave 1 engineering snapshot used to author the memristive supplement, bind the corrected Wave 1 engineering snapshot used for integration, and separate Windows checkout hashes from Git-blob content hashes where line-ending conversion changes bytes.",
+  "claim_promotion": "NONE",
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "controls": [
+    {
+      "control_id": "PUB-MEM-SNAP-001",
+      "control_type": "HISTORICAL_AUTHORING_SNAPSHOT",
+      "status": "SOURCE-BOUND / PRESERVED / NO CLAIM PROMOTION",
+      "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+      "role": "Exact historical Wave 1 engineering byte boundary used when the isolated memristive supplement was authored.",
+      "manifest": {
+        "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_ARTIFACT_MANIFEST_v0.1.json",
+        "bytes": 5251,
+        "sha256": "D1EE9BD0EB865FDC5522031375748BEE51DC8774531737F015EE0FF554D0E97B",
+        "artifact_count": 7,
+        "artifact_bytes_total": 133477,
+        "artifact_record_aggregate_sha256": "692405C4634EEF7EE152DBE0FA73492348031FD232708B7FAD009EAB056BD45B"
+      },
+      "artifacts": [
+        {
+          "path": "docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md",
+          "bytes": 21367,
+          "sha256": "7B6376A13B74395A38853E38532F1BBCD690DBBE1F80C9E175EDD5B0CEDDBFC3"
+        },
+        {
+          "path": "docs/working/project_coherence/publication/wave1/engineering/CAS_PCBA_8_ADAPTIVE_COGNITIVE_CIRCUIT_ENGINEERING_DRAFT_v0.1.md",
+          "bytes": 23551,
+          "sha256": "65EDA46D3650CF49DB43709D9748EB1ABD71CE947BD9D77034FB605D002D4F2E"
+        },
+        {
+          "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CITATION_LEDGER_v0.1.json",
+          "bytes": 14952,
+          "sha256": "E798FFD41EDD6D680F13A43AE5E50FA16CF7AE183F04575A097F3FBA7FAB4CC4"
+        },
+        {
+          "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CLAIM_ASSERTION_MATRIX_v0.1.json",
+          "bytes": 24712,
+          "sha256": "5EC2B62E874BDC12FE4106E34AB08064EE4A990FC755F405039CB5515DB4376B"
+        },
+        {
+          "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_EVIDENCE_MAP_v0.1.json",
+          "bytes": 23052,
+          "sha256": "F91A8C4CB0461561D9CEA82CDB1F21CCC211F6BC5CCEFCCA537926635E3D55C1"
+        },
+        {
+          "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_HANDOFF_PACKAGE_v0.1.md",
+          "bytes": 10209,
+          "sha256": "82AC03989A93662837C88CA8F187A7ED3E278FCD2A44B994BD2A1CC748241C0A"
+        },
+        {
+          "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_UNRESOLVED_OBLIGATIONS_v0.1.json",
+          "bytes": 15634,
+          "sha256": "39584E3E47FA0373E571BB17A2591D9C3D091A72E304F9F6A447E818BB9FD9C4"
+        }
+      ],
+      "preservation_rule": "Do not rewrite the isolated supplement as if it had been authored against later Wave 1 engineering bytes."
+    },
+    {
+      "control_id": "PUB-MEM-SNAP-002",
+      "control_type": "ACTIVE_INTEGRATION_SNAPSHOT",
+      "status": "SOURCE-BOUND / ACTIVE FOR INTEGRATION / NO CLAIM PROMOTION",
+      "commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "role": "Corrected Wave 1 engineering byte boundary governing current publication integration and final status decisions.",
+      "manifest": {
+        "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_ARTIFACT_MANIFEST_v0.1.json",
+        "bytes": 5533,
+        "sha256": "EBA9A26302A9CD6BF0E19EFF4B56FD725D232D4AF5FB4911153C01E7309E4DDA",
+        "artifact_count": 7,
+        "artifact_bytes_total": 137996,
+        "artifact_record_aggregate_sha256": "3256ED5F7C8556B6CB802EBEA551DC5A84DE562EC1B14B9E57940ACF1B560E55"
+      },
+      "artifacts": [
+        {
+          "path": "docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md",
+          "bytes": 22136,
+          "sha256": "E94E2AB4EFF7FEAC00E68DDB8D22C58D53E29CEB0412BEF908E90E6A962B2306"
+        },
+        {
+          "path": "docs/working/project_coherence/publication/wave1/engineering/CAS_PCBA_8_ADAPTIVE_COGNITIVE_CIRCUIT_ENGINEERING_DRAFT_v0.1.md",
+          "bytes": 24237,
+          "sha256": "7717F73F6ECDA1A8B849E998617FB2BCF4AD748EE75031091566BB7B044483DA"
+        },
+        {
+          "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CITATION_LEDGER_v0.1.json",
+          "bytes": 15024,
+          "sha256": "CF5D905CB422C447AB9D9B92F4944A6E24A4224D171CCD3AF633DF9B52E43D0F"
+        },
+        {
+          "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CLAIM_ASSERTION_MATRIX_v0.1.json",
+          "bytes": 26422,
+          "sha256": "4856CB67A58447B0871928A1AC68BF9341094B95A7665CE30E8BDB7E611409CB"
+        },
+        {
+          "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_EVIDENCE_MAP_v0.1.json",
+          "bytes": 23888,
+          "sha256": "7E2E69F25BBAB7024403C1386318064F1888A6AFF7CA8671C874A10C5D740638"
+        },
+        {
+          "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_HANDOFF_PACKAGE_v0.1.md",
+          "bytes": 10655,
+          "sha256": "5019EF117D1DF6E09166A9347E88E61EDB3F11D2D69B7972981D154D13380791"
+        },
+        {
+          "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_UNRESOLVED_OBLIGATIONS_v0.1.json",
+          "bytes": 15634,
+          "sha256": "39584E3E47FA0373E571BB17A2591D9C3D091A72E304F9F6A447E818BB9FD9C4"
+        }
+      ],
+      "integration_rule": "Current integration citations use this snapshot while retaining PUB-MEM-SNAP-001 as authoring provenance."
+    },
+    {
+      "control_id": "PUB-MEM-SNAP-003",
+      "control_type": "EOL_AND_HASH_DOMAIN_RECONCILIATION",
+      "status": "DOCUMENTED / DUAL-DOMAIN / NO CLAIM PROMOTION",
+      "repository_checkout_policy": "core.autocrlf=true",
+      "scope": "Three repository source paths whose observed Windows checkout uses CRLF while the committed Git blob uses LF-normalized content bytes.",
+      "records": [
+        {
+          "path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/scoring/lacunarity.rs",
+          "observed_checkout_domain": "WINDOWS WORKING-TREE BYTES / CRLF",
+          "observed_checkout_bytes": 12564,
+          "observed_checkout_sha256": "A4919C75961E33294722585BFA57914196837D1313FDC24CEE77D4935B06922E",
+          "git_blob_domain": "GIT BLOB CONTENT BYTES / LF",
+          "git_blob_oid": "9189a0b137b209798dda9e6bb584b3337acbb4f0",
+          "git_blob_bytes": 12231,
+          "git_blob_content_sha256": "895CAE2BA05D35BC6B4C65C33D7D7F04E0F39E3B0C9DBEA1C449582F7C2C9CB5"
+        },
+        {
+          "path": "noetic-compass-scaffold/noetic-compass/cas-native/model/lacunarity_gate.py",
+          "observed_checkout_domain": "WINDOWS WORKING-TREE BYTES / CRLF",
+          "observed_checkout_bytes": 3139,
+          "observed_checkout_sha256": "D4B33A868B9CC348979388AFD533227314EFFD7E80954D70F1ED2AA575022DDF",
+          "git_blob_domain": "GIT BLOB CONTENT BYTES / LF",
+          "git_blob_oid": "80976a7adcb4519c166c36f6172ae2e1c65d9394",
+          "git_blob_bytes": 3056,
+          "git_blob_content_sha256": "684DD4EE0BF8E3F9EBE27AAD2B5CBD37F93A55ECA327EFE832E66126371C398A"
+        },
+        {
+          "path": "noetic-compass-scaffold/noetic-compass/cas-native/tests/test_lacunarity.py",
+          "observed_checkout_domain": "WINDOWS WORKING-TREE BYTES / CRLF",
+          "observed_checkout_bytes": 4331,
+          "observed_checkout_sha256": "C1B214AA49D8A5DD3B2FB5A3898D2B5C8130D56DB46D39914C78DD80E5C08F9F",
+          "git_blob_domain": "GIT BLOB CONTENT BYTES / LF",
+          "git_blob_oid": "5497b892a00bb99e52a7b3d53527db0757c08eed",
+          "git_blob_bytes": 4208,
+          "git_blob_content_sha256": "1E4F08A108E35A477AF1A0822BC5A20DD5D0B6EE8699143311EEF7A735A99364"
+        }
+      ],
+      "reproducibility_rule": "A verifier must state which byte domain it hashes. Checkout and Git-blob values are both preserved, but a value from one domain cannot validate the other."
+    }
+  ],
+  "control_count": 3,
+  "integration_rules": [
+    "The historical authoring snapshot remains the provenance boundary for the isolated memristive lane.",
+    "The active corrected snapshot governs integrated citations and final publication status decisions.",
+    "No snapshot reconciliation retroactively creates implementation, execution, experiment, physical device, hysteresis, causal, cognitive, safety, product, license, canon, authorship, submission, peer-review, or disclosure evidence.",
+    "All three controls have no claim-promotion effect."
+  ],
+  "global_boundary": "This crosswalk is a provenance and byte-domain control only. It closes no scientific, engineering, security, governance, licensing, canon, product, or disclosure obligation."
+}

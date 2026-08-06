@@ -35,11 +35,12 @@ change, or disclosure decision that lacked evidence remains explicitly open.
 | Category-theory adversarial review | `wave2/adversarial_review/category_theory` | `c2e96622fee44499a5ff37756707625375f1f767` | Bounded internal review; found a false ambient witness |
 | Engineering adversarial review | `wave2/adversarial_review/engineering` | `15a3ff3436dc0b312828309a7000fc877b74d57c` | Conditional pass after two blockers and four strengthening changes |
 | Formal/category lead corrections | integration branch | `42d3d2fd` | Review-driven text and evidence corrections; no claim promotion |
+| Residual formal/category correction sweep | integration branch | `f91e622d30ce83b77cbbff8b947d9b125e51ff54` | Five residual publication-layer issues closed; upstream Gate 1 repair retained open |
 | Engineering lead corrections | integration branch | `e4ccfe30` | Six review-driven corrections; no gate effect |
 | CAS Harness 2 Wave 2 | `codex/project-coherence-wave2-harness` | `6b3e72dc623366f40256ddb9ebfc725c66d96dd3` | Paper 7 control/methods package; no experiment |
 | ACBE Wave 2 | `codex/project-coherence-wave2-acbe` | `f1decd9c61dc3df786f69dc19df7b6ba28fc51af` | Paper 5 mathematical/identifiability package; no causal result |
-| Memristive supplemental track | `codex/project-coherence-wave2-memristive` | `PENDING` | Source-bound supplemental package in progress |
-| Lead-correction acceptance review | `codex/project-coherence-review-lead-corrections` | `PENDING` | Independent acceptance recheck in progress |
+| Memristive supplemental track | `codex/project-coherence-wave2-memristive` | `4666004e973ccbfa7b65cf3341aab15bc5f34524` | Source-bound supplemental package; no charter paper number and no experiment |
+| Lead-correction acceptance review | `codex/project-coherence-review-lead-corrections` | `64d02d200829b86d3bfc11d9a940a13b91dcf06d` | 13/13 publication-text corrections accepted; zero upstream closures |
 | Final integrated publication spine | `codex/project-coherence-publication-integration` | `PENDING` | Must be recorded only after final validation |
 
 The lane commits are historical inputs. Lead corrections are versioned
@@ -86,15 +87,22 @@ commits.
    validation, product readiness, or disclosure authority exists.
 8. **Memristive Context, Lacunarity, Injection, and Steering.** This is a
    proposed supplemental source-bound track, not a silently added charter paper
-   number. Its commit and final integration state remain pending in this draft.
+   number. Its eight-file package contains a 1,003-line draft, 50 typed
+   claim/definition/hypothesis/boundary records, 42 all-open obligations, 17
+   primary citations, 30 exact internal citations, and an exact manifest. Ideal
+   and generalized electrical devices, metaphor, mathematical history state,
+   software, experiment, and physical hardware remain type-distinct. No
+   implementation, experiment, device, causal, cognitive, safety, product,
+   license, canon, disclosure, or RunPod conclusion follows.
 
 No track is submission-eligible at v0.1.
 
 ## 4. Canonical integration decisions
 
-The lead crosswalk currently preserves 42 explicit notation/type records and
-141 imported local claim/control records across formal, category, engineering,
-ACBE, and Harness lanes. Local identifiers are not renumbered or overwritten.
+The lead crosswalk currently preserves 53 explicit notation/type records and
+191 imported local claim/control records across formal, category, engineering,
+ACBE, Harness, and supplemental memristive lanes. Local identifiers are not
+renumbered or overwritten.
 
 The highest-impact decisions are:
 
@@ -117,6 +125,9 @@ The highest-impact decisions are:
 - Evidence Packet v2 is a provenance bundle, not a verdict.
 - Local structural evidence, hosted observation, a joined run, scientific
   validation, and product/disclosure authority require different receipts.
+- `EIM`, `EMS`, `MET`, `MHS`, `SWI`, `PHD`, and experimental-result evidence
+  are noninterchangeable types; there is no CAS electrical mapping or physical
+  device in this program.
 
 This lead layer is an index. It does not mutate the shared canonical symbol,
 claim, or theorem registries.
@@ -136,10 +147,14 @@ The reviews found real defects rather than merely confirming the drafts:
 - four engineering precision/citation problems.
 
 The lead copies correct or retract those publication statements. The separate
-acceptance review records whether each text correction is accepted, partially
-accepted with upstream work retained open, or failed. Even an accepted text
-correction closes no Gate 1, Gate 4, Gate 5, proof, implementation, experiment,
-external-review, or governance obligation.
+acceptance package at `64d02d20` rechecked the exact corrected head `f91e622d`
+and accepted all 13 reviewed items as publication-text corrections: 13
+accepted, zero partial, zero failed, zero claim promotions, and zero upstream
+obligations closed. The older Gate 1 Noetic Topos source still contains the
+false ambient witness and older wording; the publication layer quarantines it
+and leaves its governing repair open. An accepted text correction closes no
+Gate 1, Gate 4, Gate 5, proof, implementation, experiment, external-review, or
+governance obligation.
 
 ## 6. Gate 5 evidence snapshots
 
@@ -159,8 +174,9 @@ disclosure approval.
 
 ## 7. Compute and RunPod decision
 
-No publication, proof, review, manifest, or governing-gate work in this program
-required RunPod or a GPU. Spend was `$0`; the reported `$57` balance was left
+No project experimental target-model run, user-funded RunPod job, or separately
+provisioned project GPU workload was launched for this publication program.
+Project experimental spend was `$0`; the reported `$57` balance was left
 untouched. No top-up is justified for the current work.
 
 A future GPU experiment cannot be costed responsibly from these drafts alone.
@@ -189,19 +205,21 @@ The integration index closes none of the local obligations.
 
 ## 9. Final validation and handoff sequence
 
-Before this handoff is final, the lead must:
+The dependency-ordered authoring and bounded internal review program has now:
 
-1. merge the memristive supplemental package;
-2. merge and disposition the lead-correction acceptance review;
-3. append the resulting local IDs, notation, dependencies, and obligations;
-4. reproduce every publication-package manifest;
-5. validate JSON counts, paths, citations, and crosswalk members;
-6. replay the integrated Gate 1, Gate 4, and hardened Gate 5 verifiers;
-7. bind this lead package in a non-self-hashing manifest;
-8. commit from a clean integration worktree and push the exact branch;
-9. update the canonical CAS Harness production TODO; and
-10. report the exact remaining open boundaries without calling the program
-    published, validated, licensed, canonical, or product-ready.
+1. merged every Wave 1 and Wave 2 source-bound lane, including the supplemental
+   memristive package;
+2. merged all first-wave adversarial reviews and the 13-item correction
+   acceptance package;
+3. appended the resulting local IDs, notation, dependencies, and obligations;
+4. preserved every negative, `OPEN`, `NOT_STARTED`, `NOT LICENSED`, and `HELD`
+   boundary without claim promotion.
+
+Before delivery is complete, the lead still must reproduce every manifest,
+run the publication verifier, replay integrated Gate 1, Gate 4, and hardened
+Gate 5, bind this lead package in a non-self-hashing manifest, commit and test
+the exact clean checkout, push the integration branch, update the canonical CAS
+Harness production TODO, and report the exact remaining open boundaries.
 
 ## 10. Authority boundary
 

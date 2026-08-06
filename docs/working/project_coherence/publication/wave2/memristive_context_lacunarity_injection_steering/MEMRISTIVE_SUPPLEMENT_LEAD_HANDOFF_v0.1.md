@@ -18,7 +18,7 @@
 
 **Physical-device conclusion:** NONE
 
-**RunPod/GPU use:** NONE
+**Project experimental RunPod/GPU job:** NONE LAUNCHED (self-attested; no target-model experiment)
 
 **Public disclosure:** NOT AUTHORIZED / HELD
 
@@ -96,10 +96,15 @@ This package is bound to commit
   intervention, and steering; and
 - the authoritative Gate 4 and Gate 5 verifier sources.
 
-The parent integration branch advanced after this lane was prepared. The lead
-editor must therefore rehash and reconcile this source inventory after applying
-the lane onto the current lead commit. A clean cherry-pick does not prove that
-source identities or statement wording remain current.
+The parent integration branch advanced after this lane was prepared. The
+historical authoring snapshot remains bound to commit
+`56c43caca7e61aea03254ffdc5484ecdf35bcdbe`; the active corrected Wave 1
+engineering snapshot is bound to commit
+`e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4`. The lead-owned
+`MEMRISTIVE_SOURCE_SNAPSHOT_CROSSWALK_v0.1.json` preserves both byte sets and
+records the checkout-versus-Git-blob hash domains for the three EOL-sensitive
+repository sources. A clean cherry-pick alone does not prove that source
+identities or statement wording remain current.
 
 ## 4. Publication status
 
@@ -350,16 +355,19 @@ If any check fails, the package remains held.
 11. Route product, license, canon, authorship, and disclosure decisions
     separately.
 
-No RunPod or GPU is needed for the present package. A future experimental cost
+No user-funded RunPod job or separately provisioned project GPU workload was
+launched or needed for the present publication package. This is a self-attested
+process declaration, not an execution receipt. A future experimental cost
 estimate must wait for the exact model, sequence count, schedules,
 instrumentation, retained evidence, and replication plan. Available credit is
 not experimental authorization and does not close the non-compute obligations.
 
 ## 14. Final handoff state
 
-The package is ready for internal source, type, and boundary review only. It is
-not ready for implementation claims, experimental execution, scientific
-acceptance, physical-device claims, product use, charter numbering, licensing,
-submission, or disclosure.
+The lead adversarial source, type, and boundary acceptance re-audit is complete
+with no claim promotion. Broader independent specialist review remains open.
+The package is not ready for implementation claims, experimental execution,
+scientific acceptance, physical-device claims, product use, charter numbering,
+licensing, submission, or disclosure.
 
 **Final status:** DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD

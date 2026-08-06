@@ -16,11 +16,11 @@
       "title": "Typed Noetic Dynamics and Finite Fractal Semantics",
       "lane": "formal_math",
       "source_commit": "3c8491db6f5559cf090909d9de0efa03d924f53f",
-      "lead_correction_commit": "42d3d2fd",
+      "lead_correction_commits": ["42d3d2fd0e98bb86dd6f6f233a100514078ebd5f", "f91e622d30ce83b77cbbff8b947d9b125e51ff54"],
       "depends_on": ["Gate 0 type/identity boundaries", "Gate 1 TKS v8 candidate and Lean receipt"],
       "provides_to": ["Paper 2 type discipline", "Paper 6 typed board arrows", "lead notation crosswalk"],
       "draft_status": "SUBSTANTIAL SOURCE-BOUND DRAFT COMPLETE",
-      "internal_review": "COMPLETE / 0 proof-invalidating failures / 3 blocking edits found and corrected in lead copy / acceptance recheck OPEN",
+      "internal_review": "COMPLETE / 0 proof-invalidating failures / 3 blocking edits plus residual sweep corrected / 13-item acceptance package 64d02d20 accepts publication text only",
       "external_review": "OPEN",
       "principal_open_work": ["universal formalization", "legacy semantic migration", "full novelty review", "authorship/disclosure/submission records"],
       "submission_eligible": false
@@ -31,11 +31,11 @@
       "title": "The Marked and Modal Noetic Topos",
       "lane": "category_theory",
       "source_commit": "643169e9bd8de6d4bd0cc2cbc3cde4e640f1671c",
-      "lead_correction_commit": "42d3d2fd",
+      "lead_correction_commits": ["42d3d2fd0e98bb86dd6f6f233a100514078ebd5f", "f91e622d30ce83b77cbbff8b947d9b125e51ff54"],
       "depends_on": ["legacy Noetic Topos source audit", "Gate 1 finite context model and modality composition receipt", "Paper 1 type boundaries"],
       "provides_to": ["Paper 4 context/provenance patterns", "Paper 5 type boundaries", "lead notation crosswalk"],
       "draft_status": "SUBSTANTIAL SOURCE-BOUND DRAFT COMPLETE",
-      "internal_review": "COMPLETE / 3 blocking publication errors found and corrected or retracted in lead copy / finite L result survives scoped review / acceptance recheck OPEN",
+      "internal_review": "COMPLETE / 3 blocking publication errors plus residual evidence and terminology issues corrected or retracted / finite L result survives scoped review / acceptance package 64d02d20 accepts publication text only / upstream Gate 1 repair remains OPEN",
       "external_review": "OPEN",
       "principal_open_work": ["ambient product-site construction", "observational-topology interaction", "backward comparison", "full formalization", "external category-theory review", "submission records"],
       "submission_eligible": false
@@ -46,7 +46,7 @@
       "title": "Noetic Projection Geometry and State Capacity",
       "lane": "formal_math",
       "source_commit": "3c8491db6f5559cf090909d9de0efa03d924f53f",
-      "lead_correction_commit": "42d3d2fd",
+      "lead_correction_commits": ["42d3d2fd0e98bb86dd6f6f233a100514078ebd5f", "f91e622d30ce83b77cbbff8b947d9b125e51ff54"],
       "depends_on": ["shared mixed-simplex registry", "standard projector/Grassmannian literature", "exact moving-projector source proposition"],
       "provides_to": ["Paper 6 optional projector profile", "Paper 7 prospective experiment design"],
       "draft_status": "SUBSTANTIAL SOURCE-BOUND DRAFT COMPLETE",
@@ -61,7 +61,7 @@
       "title": "Noetic Markov Sheaves for Contextual AI Assessment",
       "lane": "category_theory",
       "source_commit": "643169e9bd8de6d4bd0cc2cbc3cde4e640f1671c",
-      "lead_correction_commit": "42d3d2fd",
+      "lead_correction_commits": ["42d3d2fd0e98bb86dd6f6f233a100514078ebd5f", "f91e622d30ce83b77cbbff8b947d9b125e51ff54"],
       "depends_on": ["Paper 2 typed context/provenance boundary", "probability-sheaf and Markov-category literature", "Paper 7 for future authenticated experiments"],
       "provides_to": ["Paper 5 noncausal baseline", "Paper 7 contextual assessment protocol"],
       "draft_status": "METHODS DRAFT COMPLETE / IMPLEMENTATION NOT COMPLETE",
@@ -95,7 +95,7 @@
       "depends_on": ["Gate 4 CAS Core/PCBA/CAS-Ohm candidate", "Papers 1-3 type boundaries"],
       "provides_to": ["Paper 7 engineering measurement surface", "supplemental memristive research track"],
       "draft_status": "SUBSTANTIAL SOURCE-BOUND DRAFTS COMPLETE",
-      "internal_review": "COMPLETE / 2 blockers and 4 strengthening changes found and applied in lead copy / acceptance recheck OPEN",
+      "internal_review": "COMPLETE / 2 blockers and 4 strengthening changes found and applied / acceptance package 64d02d20 accepts all six publication-text corrections",
       "external_review": "OPEN",
       "principal_open_work": ["complete CCDL grammar", "stateful profiles", "calibration identities", "security/runtime evidence", "held-out experiments", "independent engineering and safety review"],
       "submission_eligible": false
@@ -120,11 +120,11 @@
       "title": "Memristive Context, Lacunarity, Injection, and Steering",
       "program_role": "proposed supplemental source-bound research paper; not silently added to the frozen charter numbering",
       "lane": "wave2_memristive",
-      "source_commit": null,
+      "source_commit": "4666004e973ccbfa7b65cf3341aab15bc5f34524",
       "depends_on": ["Paper 6 CAS-Ohm/state boundary", "Paper 7 future experiment protocol", "classical memristive-system literature", "typed context/injection/steering definitions"],
       "provides_to": ["future stateful CAS-Ohm profile only if its open obligations are met"],
-      "draft_status": "WORKTREE PREPARED / AUTHORING PENDING SPECIALIST SLOT",
-      "internal_review": "OPEN",
+      "draft_status": "SUBSTANTIAL SOURCE-BOUND SUPPLEMENTAL DRAFT AND TYPE/CONTROL PACKAGE COMPLETE / NO IMPLEMENTATION / NO EXPERIMENT",
+      "internal_review": "SOURCE-LANE STATIC VALIDATION COMPLETE / LEAD ACCEPTANCE AUDIT COMPLETE WITH SOURCE-SNAPSHOT CORRECTIONS / EXTERNAL SPECIALIST REVIEW OPEN",
       "external_review": "OPEN",
       "principal_open_work": ["separate metaphor, mathematical state model, software implementation, and physical device types", "define lacunarity/context/injection/steering observables", "memoryless baseline", "hysteresis/path-dependence falsifier", "experiment and replication"],
       "submission_eligible": false
@@ -132,7 +132,8 @@
   ],
   "lead_integration": {
     "branch": "codex/project-coherence-publication-integration",
-    "lead_package_parent_commit": "d81cd403",
+    "lead_package_parent_commit": "d81cd403b5de3772238becd065db18500e663024",
+    "all_lane_merge_head": "087fe7a03a44c0ca5348bd5bdc016113f675887c",
     "gate5_spine_commit": "fbac9909a2b600ac8bc9f1217c073e4a3269beea",
       "completed": [
       "Wave 1 lane merges",
@@ -143,14 +144,17 @@
       "initial notation and claim-registry crosswalk scaffolds",
       "CAS Harness 2 source-bound package merge",
       "engineering adversarial review merge and six lead corrections",
-      "ACBE Paper 5 source-bound package merge"
+      "ACBE Paper 5 source-bound package merge",
+      "residual formal/category correction sweep f91e622d",
+      "13-of-13 publication-text correction acceptance package 64d02d20",
+      "memristive supplemental source-bound package 4666004e",
+      "final obligation reconciliation and lead handoff",
+      "exact integration manifest and structural verifier expansion"
     ],
     "remaining": [
-      "author and merge supplemental memristive package",
-      "final obligation reconciliation and lead handoff",
-      "exact manifest regeneration",
       "integrated Gate 1, Gate 4, and Gate 5 replay",
-      "intentional commit and remote push"
+      "intentional commit, exact clean-checkout replay, and remote push",
+      "all separately governed external proof, implementation, experiment, review, authorship, license, canon, product, and disclosure obligations"
     ]
   },
   "program_boundary": "A substantial draft or internal review is not a submitted paper, peer-reviewed result, gate closure, canon revision, product claim, license, or disclosure authorization. Every track remains DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN."

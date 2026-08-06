@@ -126,15 +126,27 @@
     {
       "id": "EA-SRC-006",
       "path": "docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md",
-      "sha256": "7B6376A13B74395A38853E38532F1BBCD690DBBE1F80C9E175EDD5B0CEDDBFC3",
-      "bytes": 21367,
+      "sha256": "E94E2AB4EFF7FEAC00E68DDB8D22C58D53E29CEB0412BEF908E90E6A962B2306",
+      "bytes": 22136,
+      "source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "historical_authoring_snapshot": {
+        "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+        "sha256": "7B6376A13B74395A38853E38532F1BBCD690DBBE1F80C9E175EDD5B0CEDDBFC3",
+        "bytes": 21367
+      },
       "evidence_class": "EC0"
     },
     {
       "id": "EA-SRC-007",
       "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_ARTIFACT_MANIFEST_v0.1.json",
-      "sha256": "D1EE9BD0EB865FDC5522031375748BEE51DC8774531737F015EE0FF554D0E97B",
-      "bytes": 5251,
+      "sha256": "EBA9A26302A9CD6BF0E19EFF4B56FD725D232D4AF5FB4911153C01E7309E4DDA",
+      "bytes": 5533,
+      "source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "historical_authoring_snapshot": {
+        "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+        "sha256": "D1EE9BD0EB865FDC5522031375748BEE51DC8774531737F015EE0FF554D0E97B",
+        "bytes": 5251
+      },
       "evidence_class": "EC0"
     },
     {
@@ -177,6 +189,10 @@
       "path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/scoring/lacunarity.rs",
       "sha256": "A4919C75961E33294722585BFA57914196837D1313FDC24CEE77D4935B06922E",
       "bytes": 12564,
+      "hash_domain": "WINDOWS CHECKOUT BYTES AT BASE COMMIT WITH core.autocrlf=true / CRLF",
+      "git_blob_sha256": "895CAE2BA05D35BC6B4C65C33D7D7F04E0F39E3B0C9DBEA1C449582F7C2C9CB5",
+      "git_blob_bytes": 12231,
+      "git_blob_oid": "9189a0b137b209798dda9e6bb584b3337acbb4f0",
       "evidence_class": "EC3"
     },
     {
@@ -184,6 +200,10 @@
       "path": "noetic-compass-scaffold/noetic-compass/cas-native/model/lacunarity_gate.py",
       "sha256": "D4B33A868B9CC348979388AFD533227314EFFD7E80954D70F1ED2AA575022DDF",
       "bytes": 3139,
+      "hash_domain": "WINDOWS CHECKOUT BYTES AT BASE COMMIT WITH core.autocrlf=true / CRLF",
+      "git_blob_sha256": "684DD4EE0BF8E3F9EBE27AAD2B5CBD37F93A55ECA327EFE832E66126371C398A",
+      "git_blob_bytes": 3056,
+      "git_blob_oid": "80976a7adcb4519c166c36f6172ae2e1c65d9394",
       "evidence_class": "EC3"
     },
     {
@@ -191,6 +211,17 @@
       "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_research_intervention_worker.py",
       "sha256": "C1B7F4A3535F05504E7B862D23470F72F88AE7AC88757768288B1316F966A13D",
       "bytes": 33224,
+      "evidence_class": "EC3"
+    },
+    {
+      "id": "EA-SRC-016",
+      "path": "noetic-compass-scaffold/noetic-compass/cas-native/tests/test_lacunarity.py",
+      "sha256": "C1B214AA49D8A5DD3B2FB5A3898D2B5C8130D56DB46D39914C78DD80E5C08F9F",
+      "bytes": 4331,
+      "hash_domain": "WINDOWS CHECKOUT BYTES AT BASE COMMIT WITH core.autocrlf=true / CRLF",
+      "git_blob_sha256": "1E4F08A108E35A477AF1A0822BC5A20DD5D0B6EE8699143311EEF7A735A99364",
+      "git_blob_bytes": 4208,
+      "git_blob_oid": "5497b892a00bb99e52a7b3d53527db0757c08eed",
       "evidence_class": "EC3"
     }
   ],
@@ -301,7 +332,7 @@
       "name": "Wave 1 memristive open obligation",
       "evidence_classes": ["EC0"],
       "source_refs": ["EA-SRC-006", "EA-SRC-007"],
-      "matrix_entry_refs": ["MCLIS-TYPE-003", "MCLIS-TYPE-004", "MCLIS-SRC-001", "MCLIS-DEF-009"],
+      "matrix_entry_refs": ["MCLIS-TYPE-003", "MCLIS-TYPE-004", "MCLIS-SRC-001", "MCLIS-DEF-001", "MCLIS-DEF-009"],
       "supported_statement": "Wave 1 proposed a nonphysical history-state question and matched memoryless baseline while keeping every result open.",
       "boundary": "The supplement elaborates but does not close the inherited obligation."
     },
@@ -346,6 +377,7 @@
       "name": "Ideal and generalized electrical type distinction",
       "evidence_classes": ["EC1", "EC2"],
       "source_refs": [],
+      "citation_refs": ["E1", "E2", "E5"],
       "matrix_entry_refs": ["MCLIS-TYPE-001", "MCLIS-TYPE-002", "MCLIS-BND-002"],
       "supported_statement": "Primary literature distinguishes the ideal electrical constitutive element from generalized electrical state systems.",
       "boundary": "Neither type is assigned to CAS."
@@ -355,6 +387,7 @@
       "name": "Physical-device separation",
       "evidence_classes": ["EC1", "EC7"],
       "source_refs": ["EA-SRC-002"],
+      "citation_refs": ["E3", "E4"],
       "matrix_entry_refs": ["MCLIS-TYPE-006", "MCLIS-BND-007"],
       "supported_statement": "Physical-device evidence requires a materially and instrumentally distinct evidence path, which is absent.",
       "boundary": "The cited device literature is not evidence for a CAS device."
@@ -364,6 +397,7 @@
       "name": "Classical lacunarity",
       "evidence_classes": ["EC1", "EC2"],
       "source_refs": [],
+      "citation_refs": ["E6", "E7"],
       "matrix_entry_refs": ["MCLIS-DEF-007", "MCLIS-DEF-008", "MCLIS-ALG-001", "MCLIS-HYP-007"],
       "supported_statement": "Classical gliding-box lacunarity is multiscale and depends on a declared mass and box process.",
       "boundary": "No history-lacunarity implementation or empirical value is established."
@@ -372,8 +406,8 @@
       "id": "EA-CLUSTER-011",
       "name": "Repository lacunarity label separation",
       "evidence_classes": ["EC0", "EC3"],
-      "source_refs": ["EA-SRC-012", "EA-SRC-013", "EA-SRC-014"],
-      "matrix_entry_refs": ["MCLIS-SRC-004", "MCLIS-SRC-005", "MCLIS-SRC-006", "MCLIS-BND-003"],
+      "source_refs": ["EA-SRC-012", "EA-SRC-013", "EA-SRC-014", "EA-SRC-016"],
+      "matrix_entry_refs": ["MCLIS-SRC-004", "MCLIS-SRC-005", "MCLIS-SRC-006", "MCLIS-SRC-007", "MCLIS-BND-003"],
       "supported_statement": "Exact source text uses the lacunarity label for multiple formula families and a named neural gate.",
       "boundary": "No execution, conformance, classical identity, calibration, cognition, or safety is inferred."
     },
@@ -381,8 +415,9 @@
       "id": "EA-CLUSTER-012",
       "name": "History-state model and baselines",
       "evidence_classes": ["EC1", "EC2"],
-      "source_refs": ["EA-SRC-006"],
-      "matrix_entry_refs": ["MCLIS-TYPE-004", "MCLIS-DEF-002", "MCLIS-DEF-005", "MCLIS-DEF-006", "MCLIS-DEF-009", "MCLIS-ALG-002"],
+      "source_refs": ["EA-SRC-002", "EA-SRC-006", "EA-SRC-008"],
+      "citation_refs": ["E2", "E8", "E9", "E10"],
+      "matrix_entry_refs": ["MCLIS-TYPE-004", "MCLIS-DEF-001", "MCLIS-DEF-002", "MCLIS-DEF-005", "MCLIS-DEF-006", "MCLIS-DEF-009", "MCLIS-ALG-002"],
       "supported_statement": "The draft specifies a nonphysical state model, path and hysteresis criteria, and strict memoryless plus observed-window comparisons.",
       "boundary": "Specification is not implementation, identification, fit, or result."
     },
@@ -390,7 +425,8 @@
       "id": "EA-CLUSTER-013",
       "name": "Injection and steering design",
       "evidence_classes": ["EC1", "EC2", "EC3"],
-      "source_refs": ["EA-SRC-015"],
+      "source_refs": ["EA-SRC-002", "EA-SRC-010", "EA-SRC-015"],
+      "citation_refs": ["E11", "E12", "E13"],
       "matrix_entry_refs": ["MCLIS-DEF-003", "MCLIS-DEF-004", "MCLIS-HYP-008", "MCLIS-SRC-008"],
       "supported_statement": "Primary literature and bounded source text motivate a typed future activation-addition schedule and controls.",
       "boundary": "No execution, steering effect, concept identity, causal effect, security defense, or safety result is established."
@@ -399,7 +435,7 @@
       "id": "EA-CLUSTER-014",
       "name": "Eight empirical hypotheses",
       "evidence_classes": ["EC2", "EC6"],
-      "source_refs": [],
+      "source_refs": ["EA-SRC-002"],
       "matrix_entry_refs": ["MCLIS-HYP-001", "MCLIS-HYP-002", "MCLIS-HYP-003", "MCLIS-HYP-004", "MCLIS-HYP-005", "MCLIS-HYP-006", "MCLIS-HYP-007", "MCLIS-HYP-008"],
       "supported_statement": "Eight falsifiable preregistration candidates are explicitly stated.",
       "boundary": "All eight are NOT_STARTED and have no result."
@@ -408,8 +444,8 @@
       "id": "EA-CLUSTER-015",
       "name": "No-result and authority boundary",
       "evidence_classes": ["EC5", "EC6", "EC7", "EC8", "EC9"],
-      "source_refs": ["EA-SRC-001", "EA-SRC-002", "EA-SRC-003", "EA-SRC-004", "EA-SRC-005"],
-      "matrix_entry_refs": ["MCLIS-BND-003", "MCLIS-BND-004", "MCLIS-BND-005", "MCLIS-BND-006", "MCLIS-BND-007", "MCLIS-BND-008", "MCLIS-BND-009", "MCLIS-BND-010", "MCLIS-BND-011", "MCLIS-BND-012", "MCLIS-BND-013", "MCLIS-BND-014"],
+      "source_refs": ["EA-SRC-001", "EA-SRC-002", "EA-SRC-003", "EA-SRC-004", "EA-SRC-005", "EA-SRC-010"],
+      "matrix_entry_refs": ["MCLIS-TYPE-005", "MCLIS-BND-003", "MCLIS-BND-004", "MCLIS-BND-005", "MCLIS-BND-006", "MCLIS-BND-007", "MCLIS-BND-008", "MCLIS-BND-009", "MCLIS-BND-010", "MCLIS-BND-011", "MCLIS-BND-012", "MCLIS-BND-013", "MCLIS-BND-014"],
       "supported_statement": "Implementation, experiment, physical device, causal/cognitive/safety validation, product, license, canon, authorship, and disclosure conclusions are absent or held.",
       "boundary": "No local source, citation, definition, or verifier can fill an absent evidence or authority class."
     }
@@ -429,7 +465,7 @@
     "No physical device evidence exists.",
     "No causal, cognitive, safety, clinical, regulatory, product, license, canon, authorship, or disclosure decision exists."
   ],
-  "bound_source_anchor_count": 15,
+  "bound_source_anchor_count": 16,
   "evidence_class_count": 10,
   "evidence_cluster_count": 15,
   "closure_statement": "The present evidence supports exact source identities, primary-literature comparisons, a typed mathematical proposal, bounded source-text observations, and two local structural Gate receipts only. It supports no implementation of this supplement, experiment, physical device, hysteresis or path-dependence result, predictive benefit, causal or cognitive interpretation, safety claim, product capability, license, canon admission, authorship, submission, peer review, or disclosure authority."

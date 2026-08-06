@@ -484,9 +484,130 @@
       "must_not_mean": ["automatic ranking", "observational association as intervention", "simulation as empirical validation", "internal proof sketch as causal review"],
       "status": "METHODS VOCABULARY / APPLICATION OPEN",
       "source_refs": ["docs/working/project_coherence/publication/wave2/acbe/PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-043",
+      "token": "EIM",
+      "preferred_rendering": "ideal electrical memristor",
+      "mathematical_type": "charge-flux electrical constitutive element with physical dimensions",
+      "lane": "wave2_memristive supplemental track",
+      "version_scope": "classical circuit-theory source type",
+      "must_not_mean": ["a CAS variable", "a mathematical history-state model", "software state", "a fabricated CAS device"],
+      "status": "STANDARD SOURCE TYPE / NO CAS MAPPING",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_CONTEXT_LACUNARITY_INJECTION_STEERING_SUPPLEMENTAL_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-044",
+      "token": "EMS",
+      "preferred_rendering": "generalized electrical memristive system",
+      "mathematical_type": "electrical state system with declared electrical input, response, and internal state",
+      "lane": "wave2_memristive supplemental track",
+      "version_scope": "classical generalized-device source type",
+      "must_not_mean": ["the ideal memristor by definition", "every history-dependent model", "CAS-Ohm", "software memory"],
+      "status": "STANDARD SOURCE TYPE / NO CAS MAPPING",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_CONTEXT_LACUNARITY_INJECTION_STEERING_SUPPLEMENTAL_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-045",
+      "token": "MET",
+      "preferred_rendering": "conceptual memristor metaphor",
+      "mathematical_type": "documented comparison without a type-preserving mathematical, executable, or physical map",
+      "lane": "wave2_memristive supplemental track",
+      "version_scope": "research motivation only",
+      "must_not_mean": ["theorem", "implementation", "physical device", "causal or cognitive mechanism"],
+      "status": "METAPHOR ONLY / NON-NORMATIVE",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_CONTEXT_LACUNARITY_INJECTION_STEERING_SUPPLEMENTAL_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-046",
+      "token": "MHS",
+      "preferred_rendering": "mathematical history-state model",
+      "mathematical_type": "typed nonphysical state/update/observation system with declared context, timebase, reset, and provenance",
+      "lane": "wave2_memristive supplemental track",
+      "version_scope": "proposed research model",
+      "must_not_mean": ["electrical memristor", "conforming software implementation", "validated cognitive memory", "causal result"],
+      "status": "PROPOSED / FORMAL AND EXPERIMENTAL REVIEW OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_CONTEXT_LACUNARITY_INJECTION_STEERING_SUPPLEMENTAL_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-047",
+      "token": "SWI",
+      "preferred_rendering": "conforming software implementation",
+      "mathematical_type": "exact executable, dependency, environment, data, test, and conformance identity",
+      "lane": "wave2_memristive supplemental track",
+      "version_scope": "future implementation only",
+      "must_not_mean": ["a draft equation", "source-file presence", "MHS by definition", "physical device"],
+      "status": "IMPLEMENTATION ABSENT / OPEN_ENGINEERING",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_CONTEXT_LACUNARITY_INJECTION_STEERING_SUPPLEMENTAL_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-048",
+      "token": "PHD",
+      "preferred_rendering": "physical hardware device",
+      "mathematical_type": "fabricated and instrumented material object with calibration, uncertainty, environment, and provenance",
+      "lane": "wave2_memristive supplemental track",
+      "version_scope": "separately authorized future physical profile only",
+      "must_not_mean": ["software loop", "scalar state", "CAS circuit metaphor", "generic PCBA Unit.VOLT"],
+      "status": "PHYSICAL DEVICE EVIDENCE ABSENT / NOT LICENSED",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_CONTEXT_LACUNARITY_INJECTION_STEERING_SUPPLEMENTAL_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-049",
+      "token": "ContextRecord",
+      "preferred_rendering": "frozen typed experimental context record",
+      "mathematical_type": "task, prompt, model, layer, token, environment, time, and grouping fields available under declared timing",
+      "lane": "wave2_memristive supplemental track",
+      "version_scope": "proposed protocol object",
+      "must_not_mean": ["consciousness", "intent", "post-outcome analyst judgment", "unlogged state"],
+      "status": "PROPOSED / SCHEMA AND VALIDATION OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_CONTEXT_LACUNARITY_INJECTION_STEERING_SUPPLEMENTAL_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-050",
+      "token": "InjectionOperator",
+      "preferred_rendering": "typed activation addition",
+      "mathematical_type": "bound mathematical addition at a declared layer, token rule, direction, coefficient, and time",
+      "lane": "wave2_memristive supplemental track",
+      "version_scope": "proposed intervention operator",
+      "must_not_mean": ["prompt-injection defense", "electrical current", "concept identity", "causal effect"],
+      "status": "PROPOSED / NO IMPLEMENTATION OR EFFECT CONCLUSION",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_CONTEXT_LACUNARITY_INJECTION_STEERING_SUPPLEMENTAL_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-051",
+      "token": "SteeringSchedule",
+      "preferred_rendering": "preregistered injection-and-control schedule",
+      "mathematical_type": "ordered protocol over injection, null, matched-direction, context, reset, and measurement conditions",
+      "lane": "wave2_memristive supplemental track",
+      "version_scope": "future experiment only",
+      "must_not_mean": ["effective steering", "safe steering", "causal control", "product capability"],
+      "status": "PROPOSED / EXPERIMENT NOT_STARTED",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_CONTEXT_LACUNARITY_INJECTION_STEERING_SUPPLEMENTAL_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-052",
+      "token": "HistoryLacunarity",
+      "preferred_rendering": "proposed multiscale statistic over a frozen history-event mass ontology",
+      "mathematical_type": "scale-indexed dispersion statistic with declared mass, boxes, boundary rules, zeros, and sampling",
+      "lane": "wave2_memristive supplemental track",
+      "version_scope": "candidate diagnostic",
+      "must_not_mean": ["cognitive gaps", "validated usefulness", "classical spatial lacunarity without an explicit map", "benefit beyond simpler baselines"],
+      "status": "PROPOSED / NOT IMPLEMENTED / NOT VALIDATED",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_CONTEXT_LACUNARITY_INJECTION_STEERING_SUPPLEMENTAL_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-053",
+      "token": "MatchedMemorylessBaseline",
+      "preferred_rendering": "capacity- and information-matched present-time comparator without recursive state or prior-sequence access",
+      "mathematical_type": "preregistered control profile sharing current inputs, training conditions, compute, and evaluation splits",
+      "lane": "wave2_memristive supplemental track",
+      "version_scope": "future statefulness experiment",
+      "must_not_mean": ["an underpowered comparator", "a history-window model", "proof of memory", "an experiment already run"],
+      "status": "PROPOSED / EXPERIMENT NOT_STARTED",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/memristive_context_lacunarity_injection_steering/MEMRISTIVE_CONTEXT_LACUNARITY_INJECTION_STEERING_SUPPLEMENTAL_DRAFT_v0.1.md"]
     }
   ],
-  "record_count": 42,
+  "record_count": 53,
   "known_cross_lane_relations": [
     {
       "relation": "same scoped mathematical result",
@@ -499,7 +620,25 @@
       "left": "formal PUB-P3-MSC-001",
       "right": "engineering THM-PROJECTOR-CAPACITY-CAS-TRANSFER",
       "merge_policy": "retain source theorem review separately from the absent CAS intertwiner and empirical transfer"
+    },
+    {
+      "relation": "stateful-profile dependency",
+      "left": "engineering MEM-OPEN-001",
+      "right": "memristive MCLIS-TYPE-004 and MCLIS-BND-003",
+      "merge_policy": "the mathematical history-state proposal does not close the engineering implementation obligation"
+    },
+    {
+      "relation": "future evidence dependency",
+      "left": "memristive MCLIS-HYP-001 through MCLIS-HYP-008",
+      "right": "Harness 2 H2-RESULT-001",
+      "merge_policy": "retain every hypothesis as NOT_STARTED until a separately authorized joined run and qualifying Evidence Packet exist"
+    },
+    {
+      "relation": "physical-claim boundary",
+      "left": "engineering CLM-CAS-OHM-PHYSICAL-TELEMETRY",
+      "right": "memristive MCLIS-BND-002 and MCLIS-BND-007",
+      "merge_policy": "no electrical or device meaning transfers from circuit vocabulary, software state, or equations"
     }
   ],
-  "global_boundary": "This crosswalk is a publication-integration index. It does not rewrite the shared canonical registry, prove a comparison functor, close a theorem or gate, admit an experiment, authorize disclosure, or grant a license. The imported Paper 5 records keep ACBE_legacy, ACBE_NT2, ACBE-P5, and ACA type-distinct; the imported Harness 2 records describe control objects and an explicitly NOT_STARTED joined run. Memristive records remain pending a committed source-bound package."
+  "global_boundary": "This crosswalk is a publication-integration index. It does not rewrite the shared canonical registry, prove a comparison functor, close a theorem or gate, admit an experiment, authorize disclosure, or grant a license. The imported Paper 5 records keep ACBE_legacy, ACBE_NT2, ACBE-P5, and ACA type-distinct; the imported Harness 2 records describe control objects and an explicitly NOT_STARTED joined run; the supplemental memristive records keep electrical elements, metaphor, mathematical state, software, experiment, and physical device type-distinct."
 }

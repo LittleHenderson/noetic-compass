@@ -13,6 +13,8 @@
   "experimental_conclusion": "NONE / NOT STARTED",
   "physical_device_conclusion": "NONE",
   "base_commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+  "authoring_source_snapshot_commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+  "integration_source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
   "branch": "codex/project-coherence-wave2-memristive",
   "inventory_date_utc": "2026-08-06",
   "worktree_clean_before_inventory": true,
@@ -22,17 +24,28 @@
     "Source identity proves only exact-byte presence at the bound revision.",
     "Repository source text labelled lacunarity, correction, intervention, or steering is not implementation, runtime, conformance, scientific, cognitive, causal, safety, or product evidence.",
     "Gate passes are ephemeral local structural receipts and preserve every reported negative, open, held, and not-started boundary.",
+    "Wave 1 engineering records bind the corrected integration snapshot while retaining the exact historical authoring snapshot in nested provenance records.",
+    "For S25-S27, observed Windows checkout hashes and Git-blob content hashes are separate byte domains and must never be substituted for one another.",
     "No upstream artifact was recreated or modified by this lane."
   ],
   "package_closures": [
     {
       "id": "SRC-GROUP-WAVE1-ENGINEERING",
       "manifest_path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_ARTIFACT_MANIFEST_v0.1.json",
-      "manifest_sha256": "D1EE9BD0EB865FDC5522031375748BEE51DC8774531737F015EE0FF554D0E97B",
-      "manifest_bytes": 5251,
+      "source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "manifest_sha256": "EBA9A26302A9CD6BF0E19EFF4B56FD725D232D4AF5FB4911153C01E7309E4DDA",
+      "manifest_bytes": 5533,
       "artifact_count": 7,
-      "artifact_bytes_total": 133477,
-      "artifact_record_aggregate_sha256": "692405C4634EEF7EE152DBE0FA73492348031FD232708B7FAD009EAB056BD45B",
+      "artifact_bytes_total": 137996,
+      "artifact_record_aggregate_sha256": "3256ED5F7C8556B6CB802EBEA551DC5A84DE562EC1B14B9E57940ACF1B560E55",
+      "historical_authoring_snapshot": {
+        "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+        "manifest_sha256": "D1EE9BD0EB865FDC5522031375748BEE51DC8774531737F015EE0FF554D0E97B",
+        "manifest_bytes": 5251,
+        "artifact_count": 7,
+        "artifact_bytes_total": 133477,
+        "artifact_record_aggregate_sha256": "692405C4634EEF7EE152DBE0FA73492348031FD232708B7FAD009EAB056BD45B"
+      },
       "aggregate_serialization": "ORDINAL-SORTED PATH + TAB + UPPERCASE SHA256 + TAB + DECIMAL BYTES + TAB + ROLE + LF",
       "status": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
       "claim_effect": "SOURCE_CLOSURE_ONLY"
@@ -224,50 +237,98 @@
     {
       "path": "docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md",
       "category": "WAVE1_ENGINEERING",
-      "bytes": 21367,
-      "sha256": "7B6376A13B74395A38853E38532F1BBCD690DBBE1F80C9E175EDD5B0CEDDBFC3"
+      "bytes": 22136,
+      "sha256": "E94E2AB4EFF7FEAC00E68DDB8D22C58D53E29CEB0412BEF908E90E6A962B2306",
+      "source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "historical_authoring_snapshot": {
+        "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+        "bytes": 21367,
+        "sha256": "7B6376A13B74395A38853E38532F1BBCD690DBBE1F80C9E175EDD5B0CEDDBFC3"
+      }
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/engineering/CAS_PCBA_8_ADAPTIVE_COGNITIVE_CIRCUIT_ENGINEERING_DRAFT_v0.1.md",
       "category": "WAVE1_ENGINEERING",
-      "bytes": 23551,
-      "sha256": "65EDA46D3650CF49DB43709D9748EB1ABD71CE947BD9D77034FB605D002D4F2E"
+      "bytes": 24237,
+      "sha256": "7717F73F6ECDA1A8B849E998617FB2BCF4AD748EE75031091566BB7B044483DA",
+      "source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "historical_authoring_snapshot": {
+        "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+        "bytes": 23551,
+        "sha256": "65EDA46D3650CF49DB43709D9748EB1ABD71CE947BD9D77034FB605D002D4F2E"
+      }
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CLAIM_ASSERTION_MATRIX_v0.1.json",
       "category": "WAVE1_ENGINEERING",
-      "bytes": 24712,
-      "sha256": "5EC2B62E874BDC12FE4106E34AB08064EE4A990FC755F405039CB5515DB4376B"
+      "bytes": 26422,
+      "sha256": "4856CB67A58447B0871928A1AC68BF9341094B95A7665CE30E8BDB7E611409CB",
+      "source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "historical_authoring_snapshot": {
+        "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+        "bytes": 24712,
+        "sha256": "5EC2B62E874BDC12FE4106E34AB08064EE4A990FC755F405039CB5515DB4376B"
+      }
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_EVIDENCE_MAP_v0.1.json",
       "category": "WAVE1_ENGINEERING",
-      "bytes": 23052,
-      "sha256": "F91A8C4CB0461561D9CEA82CDB1F21CCC211F6BC5CCEFCCA537926635E3D55C1"
+      "bytes": 23888,
+      "sha256": "7E2E69F25BBAB7024403C1386318064F1888A6AFF7CA8671C874A10C5D740638",
+      "source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "historical_authoring_snapshot": {
+        "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+        "bytes": 23052,
+        "sha256": "F91A8C4CB0461561D9CEA82CDB1F21CCC211F6BC5CCEFCCA537926635E3D55C1"
+      }
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CITATION_LEDGER_v0.1.json",
       "category": "WAVE1_ENGINEERING",
-      "bytes": 14952,
-      "sha256": "E798FFD41EDD6D680F13A43AE5E50FA16CF7AE183F04575A097F3FBA7FAB4CC4"
+      "bytes": 15024,
+      "sha256": "CF5D905CB422C447AB9D9B92F4944A6E24A4224D171CCD3AF633DF9B52E43D0F",
+      "source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "historical_authoring_snapshot": {
+        "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+        "bytes": 14952,
+        "sha256": "E798FFD41EDD6D680F13A43AE5E50FA16CF7AE183F04575A097F3FBA7FAB4CC4"
+      }
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_UNRESOLVED_OBLIGATIONS_v0.1.json",
       "category": "WAVE1_ENGINEERING",
       "bytes": 15634,
-      "sha256": "39584E3E47FA0373E571BB17A2591D9C3D091A72E304F9F6A447E818BB9FD9C4"
+      "sha256": "39584E3E47FA0373E571BB17A2591D9C3D091A72E304F9F6A447E818BB9FD9C4",
+      "source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "historical_authoring_snapshot": {
+        "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+        "bytes": 15634,
+        "sha256": "39584E3E47FA0373E571BB17A2591D9C3D091A72E304F9F6A447E818BB9FD9C4"
+      }
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_HANDOFF_PACKAGE_v0.1.md",
       "category": "WAVE1_ENGINEERING",
-      "bytes": 10209,
-      "sha256": "82AC03989A93662837C88CA8F187A7ED3E278FCD2A44B994BD2A1CC748241C0A"
+      "bytes": 10655,
+      "sha256": "5019EF117D1DF6E09166A9347E88E61EDB3F11D2D69B7972981D154D13380791",
+      "source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "historical_authoring_snapshot": {
+        "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+        "bytes": 10209,
+        "sha256": "82AC03989A93662837C88CA8F187A7ED3E278FCD2A44B994BD2A1CC748241C0A"
+      }
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_ARTIFACT_MANIFEST_v0.1.json",
       "category": "WAVE1_ENGINEERING",
-      "bytes": 5251,
-      "sha256": "D1EE9BD0EB865FDC5522031375748BEE51DC8774531737F015EE0FF554D0E97B"
+      "bytes": 5533,
+      "sha256": "EBA9A26302A9CD6BF0E19EFF4B56FD725D232D4AF5FB4911153C01E7309E4DDA",
+      "source_snapshot_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "historical_authoring_snapshot": {
+        "commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+        "bytes": 5251,
+        "sha256": "D1EE9BD0EB865FDC5522031375748BEE51DC8774531737F015EE0FF554D0E97B"
+      }
     },
     {
       "path": "docs/working/project_coherence/gate4/README.md",
@@ -357,13 +418,29 @@
       "path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/scoring/lacunarity.rs",
       "category": "REPOSITORY_LABEL_AUDIT",
       "bytes": 12564,
-      "sha256": "A4919C75961E33294722585BFA57914196837D1313FDC24CEE77D4935B06922E"
+      "sha256": "A4919C75961E33294722585BFA57914196837D1313FDC24CEE77D4935B06922E",
+      "hash_domain": "WINDOWS CHECKOUT BYTES AT BASE COMMIT WITH core.autocrlf=true / CRLF",
+      "observed_checkout_bytes": 12564,
+      "observed_checkout_sha256": "A4919C75961E33294722585BFA57914196837D1313FDC24CEE77D4935B06922E",
+      "checkout_policy": "core.autocrlf=true; working-tree bytes use CRLF and are not interchangeable with Git-blob bytes",
+      "git_blob_oid": "9189a0b137b209798dda9e6bb584b3337acbb4f0",
+      "git_blob_bytes": 12231,
+      "git_blob_sha256": "895CAE2BA05D35BC6B4C65C33D7D7F04E0F39E3B0C9DBEA1C449582F7C2C9CB5",
+      "git_blob_content_sha256": "895CAE2BA05D35BC6B4C65C33D7D7F04E0F39E3B0C9DBEA1C449582F7C2C9CB5"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/cas-native/model/lacunarity_gate.py",
       "category": "REPOSITORY_LABEL_AUDIT",
       "bytes": 3139,
-      "sha256": "D4B33A868B9CC348979388AFD533227314EFFD7E80954D70F1ED2AA575022DDF"
+      "sha256": "D4B33A868B9CC348979388AFD533227314EFFD7E80954D70F1ED2AA575022DDF",
+      "hash_domain": "WINDOWS CHECKOUT BYTES AT BASE COMMIT WITH core.autocrlf=true / CRLF",
+      "observed_checkout_bytes": 3139,
+      "observed_checkout_sha256": "D4B33A868B9CC348979388AFD533227314EFFD7E80954D70F1ED2AA575022DDF",
+      "checkout_policy": "core.autocrlf=true; working-tree bytes use CRLF and are not interchangeable with Git-blob bytes",
+      "git_blob_oid": "80976a7adcb4519c166c36f6172ae2e1c65d9394",
+      "git_blob_bytes": 3056,
+      "git_blob_sha256": "684DD4EE0BF8E3F9EBE27AAD2B5CBD37F93A55ECA327EFE832E66126371C398A",
+      "git_blob_content_sha256": "684DD4EE0BF8E3F9EBE27AAD2B5CBD37F93A55ECA327EFE832E66126371C398A"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/cas-native/model/loss.py",
@@ -375,7 +452,15 @@
       "path": "noetic-compass-scaffold/noetic-compass/cas-native/tests/test_lacunarity.py",
       "category": "REPOSITORY_LABEL_AUDIT",
       "bytes": 4331,
-      "sha256": "C1B214AA49D8A5DD3B2FB5A3898D2B5C8130D56DB46D39914C78DD80E5C08F9F"
+      "sha256": "C1B214AA49D8A5DD3B2FB5A3898D2B5C8130D56DB46D39914C78DD80E5C08F9F",
+      "hash_domain": "WINDOWS CHECKOUT BYTES AT BASE COMMIT WITH core.autocrlf=true / CRLF",
+      "observed_checkout_bytes": 4331,
+      "observed_checkout_sha256": "C1B214AA49D8A5DD3B2FB5A3898D2B5C8130D56DB46D39914C78DD80E5C08F9F",
+      "checkout_policy": "core.autocrlf=true; working-tree bytes use CRLF and are not interchangeable with Git-blob bytes",
+      "git_blob_oid": "5497b892a00bb99e52a7b3d53527db0757c08eed",
+      "git_blob_bytes": 4208,
+      "git_blob_sha256": "1E4F08A108E35A477AF1A0822BC5A20DD5D0B6EE8699143311EEF7A735A99364",
+      "git_blob_content_sha256": "1E4F08A108E35A477AF1A0822BC5A20DD5D0B6EE8699143311EEF7A735A99364"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_research_intervention_worker.py",
