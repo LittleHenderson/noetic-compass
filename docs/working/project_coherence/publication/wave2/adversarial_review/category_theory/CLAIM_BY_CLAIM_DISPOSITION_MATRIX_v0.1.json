@@ -1,0 +1,236 @@
+{
+  "schema_version": "project_coherence.adversarial_category_claim_disposition.v0.1",
+  "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD",
+  "review_class": "INTERNAL CROSS-REVIEW INDEPENDENT OF AUTHORING LANE / NOT EXTERNAL PEER REVIEW",
+  "as_of": "2026-08-05",
+  "reviewed_lane_commit": "643169e9bd8de6d4bd0cc2cbc3cde4e640f1671c",
+  "underlying_publication_base": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
+  "default_publication_state": {
+    "draft_status": "DRAFT / OPEN",
+    "admission_ring": 4,
+    "license_status": "NOT LICENSED",
+    "disclosure_status": "HELD",
+    "canon_status": "NOT FROZEN",
+    "state_changed_by_review": false
+  },
+  "disposition_legend": {
+    "SURVIVES_SCOPED_INTERNAL_REVIEW": "No counterexample was found within the exact declared scope. This is not admission, formal verification, external review, or closure.",
+    "SURVIVES_WITH_REQUIRED_PACKAGE_CORRECTION": "The narrow claim survives, but related wording, evidence mapping, or an attempted extension must be corrected before submission editing.",
+    "OPEN_BOUNDARY_CONFIRMED": "The artifact correctly states that the result is absent or conjectural; the review supplies no promotion.",
+    "OPEN_METHOD_CANDIDATE": "The method or architecture is type-plausible but unimplemented and unvalidated.",
+    "REQUIRES_MATHEMATICAL_SCOPE_CORRECTION": "A statement is too broad as written and must be narrowed before it can survive review."
+  },
+  "records": [
+    {
+      "claim_id": "PUB-P2-001",
+      "paper": 2,
+      "review_outcome": "SURVIVES_SCOPED_INTERNAL_REVIEW",
+      "disposition": "The reduction to jointly-surjective coverage follows under the exact conservative source axioms. The result remains conditional on those registered axioms and carries no empirical interpretation.",
+      "counterexample_result": "NO COUNTEREXAMPLE WITHIN DECLARED SOURCE SCOPE",
+      "evidence_result": "Legacy TeX raw and normalized hashes match; registered source lines and internal red-team argument were checked.",
+      "required_change_refs": [],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P2-002",
+      "paper": 2,
+      "review_outcome": "SURVIVES_SCOPED_INTERNAL_REVIEW",
+      "disposition": "A sieve containing ACBE reflexivity contains an identity; a sieve containing the RPM counit also contains an identity by precomposition with its section. Both clauses therefore force maximal sieves.",
+      "counterexample_result": "NO COUNTEREXAMPLE UNDER REGISTERED REFLEXIVITY AND SPLIT-EPIMORPHISM EQUATIONS",
+      "evidence_result": "Exact TeX lines for reflexivity and epsilon_X eta_X=id_X were present and hash-bound.",
+      "required_change_refs": [],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P2-003",
+      "paper": 2,
+      "review_outcome": "SURVIVES_SCOPED_INTERNAL_REVIEW",
+      "disposition": "The two partition cover bases, with the registered null-cover convention, are pullback stable and generate Grothendieck topologies on the sixteen-object context factor.",
+      "counterexample_result": "NULL, EMPTY-PIECE, PULLBACK, AND REFINEMENT CASES CHECKED",
+      "evidence_result": "Eight finite-site tests reproduced; general product-site coverage remains outside scope.",
+      "required_change_refs": [],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P2-004",
+      "paper": 2,
+      "review_outcome": "SURVIVES_SCOPED_INTERNAL_REVIEW",
+      "disposition": "Representables on L satisfy the partition-cover sheaf conditions because covered pieces jointly union to the target and the empty representable value is singleton.",
+      "counterexample_result": "ALL 16 REPRESENTABLE CHECKS REPRODUCED; LEGACY SITE NOT INCLUDED",
+      "evidence_result": "Finite-site test suite passed in exact reviewed worktree.",
+      "required_change_refs": [],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P2-005",
+      "paper": 2,
+      "review_outcome": "SURVIVES_SCOPED_INTERNAL_REVIEW",
+      "disposition": "Finite sets of size at most two with injections give a valid non-subcanonicity countermodel for the jointly-surjective topology. It proves non-derivability only.",
+      "counterexample_result": "TWO POINT-INCLUSIONS HAVE COMPATIBLE LOCAL MAPS TO A SINGLETON BUT NO GLOBAL INJECTION",
+      "evidence_result": "Internal mathematical counterexample is complete at the stated finite level; external review remains open.",
+      "required_change_refs": [],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P2-006",
+      "paper": 2,
+      "review_outcome": "SURVIVES_WITH_REQUIRED_PACKAGE_CORRECTION",
+      "disposition": "The witness presheaves correctly distinguish J_A and J_R on PSh(L,Set). The associated prose's lift by external product with an arbitrary representable on C is false in general because of the null cover and duplicated representable coordinate.",
+      "counterexample_result": "FAIL FOR yC_0 EXTERNAL PRODUCT WHEN Hom_C(c,C_0) IS NOT SINGLETON; TERMINAL C-PRESHEAF IS THE CANDIDATE REPAIR",
+      "evidence_result": "Finite witness tests passed; no ambient product-site test or schema exists.",
+      "required_change_refs": ["CAT-RC-001"],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P2-007",
+      "paper": 2,
+      "review_outcome": "SURVIVES_WITH_REQUIRED_PACKAGE_CORRECTION",
+      "disposition": "The join equals the topology generated by the singleton partition. The local name J_atom must be distinguished from the standard atomic topology, and the evidence edge must point to the modality proof and 298-sieve certificate.",
+      "counterexample_result": "VERIFIER REPORTS 168 OF 298 SIEVES COVERING, SO STANDARD ATOMIC-TOPOLOGY TERMINOLOGY IS NOT LICENSED",
+      "evidence_result": "Modality verifier reproduced equality and 168 covering sieves on both presentations; current evidence-map edge is misbound.",
+      "required_change_refs": ["CAT-RC-003", "CAT-RC-004"],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P2-008",
+      "paper": 2,
+      "review_outcome": "SURVIVES_SCOPED_INTERNAL_REVIEW",
+      "disposition": "The explicit reflector universal property and transverse product expansion support unit-compatible canonical natural isomorphisms in PSh(L,Set). No strict equality or ambient lift follows.",
+      "counterexample_result": "EMPTY CONTEXT, RESTRICTION NATURALITY, PRESHEAF-MAP NATURALITY, INVERSE, AND UNIT CASES CHECKED",
+      "evidence_result": "Modality verifier and six unit tests reproduced; proof-assistant formalization remains absent.",
+      "required_change_refs": [],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P2-009",
+      "paper": 2,
+      "review_outcome": "SURVIVES_SCOPED_INTERNAL_REVIEW",
+      "disposition": "A sheaf for the joined topology is a sheaf for each coarser component topology, so each reflector unit is an isomorphism on the resolved subcategory.",
+      "counterexample_result": "NO COUNTEREXAMPLE WITHIN ORDINARY REFLECTIVE-SUBCATEGORY SETTING",
+      "evidence_result": "Standard consequence of the scoped reflector result; no nontrivial resolved endomodality is licensed.",
+      "required_change_refs": [],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P2-010",
+      "paper": 2,
+      "review_outcome": "OPEN_BOUNDARY_CONFIRMED",
+      "disposition": "No proof or implementation of E_res equivalent to E_legacy^4, the neutral embedding, or strict serialization round trip is present.",
+      "counterexample_result": "NOT TESTABLE UNTIL THE PRODUCT SITE AND COMPARISON FUNCTORS ARE DEFINED",
+      "evidence_result": "The absence is honestly recorded; direct source binding should be strengthened in the next inventory.",
+      "required_change_refs": ["CAT-RC-007"],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P2-011",
+      "paper": 2,
+      "review_outcome": "OPEN_BOUNDARY_CONFIRMED",
+      "disposition": "The finite composition theorem has not been lifted to PSh(C x L) and has not been composed with observational coverage.",
+      "counterexample_result": "THE REPRESENTABLE EXTERNAL-PRODUCT FAILURE SHOWS THAT OBJECTWISE LIFT LANGUAGE REQUIRES CARE EVEN BEFORE J_obs",
+      "evidence_result": "No proof artifact or product-site implementation exists, consistent with the OPEN state.",
+      "required_change_refs": ["CAT-RC-001"],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P2-012",
+      "paper": 2,
+      "review_outcome": "OPEN_BOUNDARY_CONFIRMED",
+      "disposition": "The four singleton factors provide separation but no cross-factor transition or overlap semantics. The ambient-versus-enriched-resolved contract remains a design choice.",
+      "counterexample_result": "THE EXPLICIT REFLECTOR DECOMPOSES INTO INDEPENDENT ATOMIC FACTORS",
+      "evidence_result": "Open obligation is correctly preserved.",
+      "required_change_refs": ["CAT-RC-004"],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P4-001",
+      "paper": 4,
+      "review_outcome": "SURVIVES_SCOPED_INTERNAL_REVIEW",
+      "disposition": "Three binary pair marginals with perfect anticorrelation have uniform compatible singleton marginals but no global joint distribution.",
+      "counterexample_result": "X!=Y AND Y!=Z IMPLY X=Z, CONTRADICTING X!=Z",
+      "evidence_result": "Finite obstruction and primary contextuality/marginal literature are consistent with the claim.",
+      "required_change_refs": [],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P4-002",
+      "paper": 4,
+      "review_outcome": "OPEN_METHOD_CANDIDATE",
+      "disposition": "The six-layer architecture is type-plausible and correctly prevents aliasing. No comparison functor, implementation, or theorem currently connects the layers.",
+      "counterexample_result": "NO CURRENT CROSS-TYPE SUBSTITUTION FOUND IN THE DRAFT; CELLULAR VARIANCE MUST BE FIXED BEFORE IMPLEMENTATION",
+      "evidence_result": "Literature supports the separate background types only.",
+      "required_change_refs": ["CAT-RC-008"],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P4-003",
+      "paper": 4,
+      "review_outcome": "OPEN_METHOD_CANDIDATE",
+      "disposition": "The finite primal feasibility form and Farkas-dual orientation are mathematically correct. The certificate schema, arithmetic profile, verifier, and fixtures do not exist.",
+      "counterexample_result": "DUAL SIGN CHECK PASSES: b^T y=q^T A^T y CANNOT BE NEGATIVE FOR FEASIBLE q>=0",
+      "evidence_result": "Method statement only; no CAS certificate or Evidence Packet.",
+      "required_change_refs": ["CAT-RC-006"],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P4-004",
+      "paper": 4,
+      "review_outcome": "SURVIVES_WITH_REQUIRED_PACKAGE_CORRECTION",
+      "disposition": "Vorob'ev's regular-complex extension boundary is correctly conditional. The draft must not silently identify source regularity with modern acyclicity or invoke junction-tree reconstruction without an exact primary citation and hypotheses.",
+      "counterexample_result": "NO PROJECT COHERENCE CONTEXT FAMILY HAS BEEN SHOWN REGULAR OR ACYCLIC",
+      "evidence_result": "Vorob'ev metadata and regularity theorem verified; junction-tree sentence is currently uncited.",
+      "required_change_refs": ["CAT-RC-005"],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P4-005",
+      "paper": 4,
+      "review_outcome": "REQUIRES_MATHEMATICAL_SCOPE_CORRECTION",
+      "disposition": "Linear stalks and chosen Hilbert inner products or adjoint data are required for the stated Laplacian. Finite dimensionality is required only for the selected finite-matrix profile, not for Laplacians in general.",
+      "counterexample_result": "ONE-EDGE CELLULAR SHEAF WITH ell^2 STALKS AND BOUNDED IDENTITY RESTRICTIONS HAS A BOUNDED INFINITE-DIMENSIONAL LAPLACIAN",
+      "evidence_result": "Hansen-Ghrist explicitly discuss bounded infinite-dimensional Hilbert-space Laplacians, contradicting the universal wording.",
+      "required_change_refs": ["CAT-RC-002", "CAT-RC-008"],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P4-006",
+      "paper": 4,
+      "review_outcome": "OPEN_BOUNDARY_CONFIRMED",
+      "disposition": "Simpson 2017 and Stein 2025 are direct prior art; the draft correctly avoids a novelty claim and leaves the comparison functor open.",
+      "counterexample_result": "NO NOVELTY DETERMINATION ATTEMPTED BY THIS REVIEW",
+      "evidence_result": "Primary records corroborate probability-sheaf and Markov-category bridge descriptions; Stein remains arXiv v2 in the checked record.",
+      "required_change_refs": [],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P4-007",
+      "paper": 4,
+      "review_outcome": "OPEN_BOUNDARY_CONFIRMED",
+      "disposition": "The proposed contextual assessment has no qualifying evidence and is correctly restricted to a future preregistered, controlled, replicated study.",
+      "counterexample_result": "NO EMPIRICAL RESULT EXISTS TO TEST",
+      "evidence_result": "No qualifying Evidence Packet, admitted runner result, or replication was located in the reviewed lane.",
+      "required_change_refs": [],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "claim_id": "PUB-P4-008",
+      "paper": 4,
+      "review_outcome": "SURVIVES_SCOPED_INTERNAL_REVIEW",
+      "disposition": "Markov composition, marginal compatibility, global extension, or an optimizer does not establish causal abstraction without interventions and a causal comparison theorem.",
+      "counterexample_result": "TYPE BOUNDARY CONFIRMED; OBSERVATIONAL FACTORIZATION DOES NOT IDENTIFY CAUSAL DIRECTION",
+      "evidence_result": "The draft makes no Paper 5 causal promotion.",
+      "required_change_refs": [],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    }
+  ],
+  "record_count": 20,
+  "summary": {
+    "survives_scoped_internal_review": 9,
+    "survives_with_required_package_correction": 3,
+    "open_boundary_confirmed": 5,
+    "open_method_candidate": 2,
+    "requires_mathematical_scope_correction": 1,
+    "claims_promoted": 0,
+    "claims_closed": 0
+  },
+  "global_boundary": "Every record remains DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN. 'Survives' means only that this bounded internal adversarial pass found no counterexample in the exact stated scope. It is not formal verification, external review, canon admission, publication acceptance, empirical validation, disclosure authorization, or a license grant."
+}

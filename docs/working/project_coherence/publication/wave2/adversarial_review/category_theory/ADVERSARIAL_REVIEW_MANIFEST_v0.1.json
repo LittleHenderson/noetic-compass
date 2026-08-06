@@ -1,0 +1,69 @@
+{
+  "schema_version": "project_coherence.adversarial_category_review_manifest.v0.1",
+  "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD",
+  "review_class": "INTERNAL ADVERSARIAL CROSS-REVIEW / NOT EXTERNAL PEER REVIEW",
+  "as_of": "2026-08-05",
+  "reviewed_lane_commit": "643169e9bd8de6d4bd0cc2cbc3cde4e640f1671c",
+  "underlying_publication_base": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
+  "review_branch": "codex/project-coherence-review-category",
+  "hash_algorithm": "SHA-256",
+  "hash_scope": "Exact review artifact bytes in the dedicated category-review worktree before the review commit",
+  "self_hash_policy": "This manifest intentionally excludes ADVERSARIAL_REVIEW_MANIFEST_v0.1.json and is therefore non-self-hashing.",
+  "self_excluded": true,
+  "artifact_count": 5,
+  "artifacts": [
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/category_theory/ADVERSARIAL_REVIEW_REPORT_v0.1.md",
+      "media_type": "text/markdown",
+      "bytes": 14541,
+      "sha256": "155CEF080BB34681AE0420E6D7627F1EEE276E8363845CC40BC8E5A32C8FFC7C"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/category_theory/CITATION_AUDIT_v0.1.json",
+      "media_type": "application/json",
+      "bytes": 9741,
+      "sha256": "2959ECD3E42A0CFA82D3BC6081DB420092491CB98F3D4953451CC002E7A8B0DF"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/category_theory/CLAIM_BY_CLAIM_DISPOSITION_MATRIX_v0.1.json",
+      "media_type": "application/json",
+      "bytes": 15663,
+      "sha256": "95127E59A37CD4253D161085B897EF559DA16AF55783772221C79A50CBDB56B2"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/category_theory/MATH_TYPE_INTERFACE_COUNTEREXAMPLE_CHECKS_v0.1.md",
+      "media_type": "text/markdown",
+      "bytes": 10907,
+      "sha256": "E68E4C5778E4A3C38333F3F001164EF27D840BA907F92E2D912D5E8056F92916"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/category_theory/UNRESOLVED_REQUIRED_CHANGES_v0.1.json",
+      "media_type": "application/json",
+      "bytes": 10668,
+      "sha256": "2814D506817F6678662FF0C71A9FFA63ECC312F890F3AB140B359E6E0392D510"
+    }
+  ],
+  "input_verification": {
+    "wave1_artifact_hashes": "PASS / 8 MANIFESTED ARTIFACTS PLUS MANIFEST ITSELF CHECKED",
+    "base_source_hashes": "PASS / 26 OF 26 EXACT BASE-COMMIT BLOBS",
+    "legacy_tex_raw_hash": "PASS",
+    "legacy_tex_lf_normalized_hash": "PASS",
+    "legacy_pdf_local_hash": "PASS / PORTABLE CONTENT-ADDRESSED BUNDLE OPEN"
+  },
+  "reproduction_snapshot": {
+    "finite_site_tests": "PASS / 8",
+    "modality_verifier": "PASS / 18 FIXTURES / 298 SIEVES / 3012 RESTRICTION SQUARES",
+    "modality_unit_tests": "PASS / 6",
+    "lean_gate1": "PASS / LEAN 4.32.1 / 16 AXIOM AUDITS / TOPOLOGY AND REFLECTOR FORMALIZATION OPEN"
+  },
+  "review_summary": {
+    "claim_records_reviewed": 20,
+    "citation_records_checked": 13,
+    "blocking_errors_open": 3,
+    "required_nonblocking_changes_open": 5,
+    "strengthening_suggestions_open": 4,
+    "claims_promoted": 0,
+    "obligations_closed": 0
+  },
+  "claim_boundary": "This manifest binds the internal review-delta bytes only. It does not alter the reviewed Wave 1 artifacts, close OBL-CAT-001 or any Project Coherence gate, constitute external or peer review, admit a theorem, validate an experiment, authorize publication or disclosure, or grant a license."
+}
