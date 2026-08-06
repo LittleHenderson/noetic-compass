@@ -1,0 +1,77 @@
+{
+  "schema_version": "project_coherence.publication.formal_math.artifact_manifest.v0.1",
+  "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
+  "source_baseline_commit": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
+  "as_of": "2026-08-05",
+  "manifest_id": "PROJECT-COHERENCE-PUBLICATION-WAVE1-FORMAL-MATH-v0.1",
+  "hash_algorithm": "SHA-256 over exact file bytes",
+  "self_hashing": false,
+  "self_exclusion": "ARTIFACT_MANIFEST_v0.1.json is deliberately excluded. The final Git commit and lead-owned integration receipt must bind this manifest's own identity.",
+  "artifact_count": 8,
+  "artifacts": [
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/CITATION_LEDGER_v0.1.json",
+      "role": "Primary literature, manuscript-status, use, and nonclaim ledger",
+      "bytes": 10587,
+      "sha256": "3588068E8307D27D9FC479D604A6E60A5F7C40352381569CA113AED1BF868848"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/EVIDENCE_MAP_v0.1.json",
+      "role": "Claim-to-source, proof, test, formal, literature, counterexample, and gap map",
+      "bytes": 14464,
+      "sha256": "3A417C82113FF3547D44DD1F69066D5886C9EE1A6C5358026D699A3F0B2A2535"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/HANDOFF_PACKAGE_v0.1.md",
+      "role": "Lead integration and cross-lane review handoff",
+      "bytes": 8194,
+      "sha256": "47F53D7F9DA0289B2957A495DFD5DF89C360FAF25B69B8D8BC67AAAE1344C020"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/PAPER_1_TYPED_NOETIC_DYNAMICS_AND_FINITE_FRACTAL_SEMANTICS_DELTA_v0.1.md",
+      "role": "Charter Paper 1 source-bound research draft delta",
+      "bytes": 18452,
+      "sha256": "2B63EA028264C72CBAA4F9BEB4ADAAB1CE3D5A8AC34D672C660FA3277F16108C"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md",
+      "role": "Charter Paper 3 source-bound research draft delta",
+      "bytes": 17908,
+      "sha256": "679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/SOURCE_INVENTORY_v0.1.json",
+      "role": "Exact baseline source and external registered-source inventory",
+      "bytes": 16566,
+      "sha256": "E0AAE137C9ECFD7E48E43DED466990121D1403A809B60FB73BC0685C4279F76D"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/THEOREM_AND_CLAIM_MATRIX_v0.1.json",
+      "role": "Twenty local publication theorem, counterexample, definition, model, and empirical-hypothesis records",
+      "bytes": 24421,
+      "sha256": "2FFE25449FBD0710477FE31F76B84ACE2256B200518E8921B702B6C92D9C2EFE"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/UNRESOLVED_OBLIGATIONS_v0.1.json",
+      "role": "Twenty-four open proof, migration, experiment, review, integration, disclosure, and submission obligations",
+      "bytes": 17319,
+      "sha256": "871E7454F5B4A6926464F3149B236E93EEAAB3FD1B0B7E4B50F19F98375D77F7"
+    }
+  ],
+  "validation": {
+    "json_files_parse": true,
+    "theorem_evidence_bijection": "20 / 20",
+    "theorem_record_ids_unique": true,
+    "citation_ids_unique": true,
+    "referenced_citation_ids_resolve": true,
+    "obligation_ids_unique": true,
+    "obligations_open": "24 / 24",
+    "source_inventory_counts": "42 repository / 7 external registered",
+    "external_registered_hash_matches": "7 / 7",
+    "independent_review_complete": false,
+    "experimental_conclusions_complete": false,
+    "gate_or_canon_effect": "NONE",
+    "product_claim_effect": "NONE",
+    "public_disclosure_effect": "NONE"
+  }
+}

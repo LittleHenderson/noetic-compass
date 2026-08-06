@@ -1,0 +1,395 @@
+{
+  "schema_version": "project_coherence.publication.formal_math.source_inventory.v0.1",
+  "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD",
+  "inventory_time": "2026-08-05",
+  "repository": {
+    "baseline_commit": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
+    "branch": "codex/project-coherence-publication-formal",
+    "scope": "Read-only source inventory for publication Wave 1 formal-math deltas"
+  },
+  "policy": {
+    "hash_algorithm": "SHA-256 over exact file bytes",
+    "source_mutation_authorized": false,
+    "shared_registry_mutation_authorized": false,
+    "gate_artifact_mutation_authorized": false,
+    "inventory_hashes_itself": false,
+    "external_paths_are_read_only": true
+  },
+  "validation_snapshot": {
+    "command": "python -B scripts/verify_project_coherence_gate1.py",
+    "result": "PASS",
+    "hash_bound_top_level_artifacts": 23,
+    "subordinate_verifier_receipts": 6,
+    "lean_theorem_audits": 16,
+    "gate_status": "OPEN / RING 4 / NOT LICENSED / NOT FROZEN",
+    "claim_boundary": "A passing scoped verifier is not canon admission, publication acceptance, empirical validation, or independent review."
+  },
+  "repository_sources": [
+    {
+      "category": "program_governance",
+      "path": "docs/working/project_coherence/PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md",
+      "role": "Program charter and seven-paper publication architecture",
+      "bytes": 29793,
+      "sha256": "B87B2E2B4CC4B10C76EE4AA6EA09094572B2A1008E474475E8F642836B83D2BE"
+    },
+    {
+      "category": "mathematical_audit",
+      "path": "docs/working/project_coherence/MATHEMATICAL_RED_TEAM_REPORT_v0.1.md",
+      "role": "Internal counterexamples, corrected statements, and proof gaps",
+      "bytes": 10324,
+      "sha256": "03AEC81BF9F6AA12376C2DF78E6CC410EB636589DA37D2E2534460132BE720C6"
+    },
+    {
+      "category": "literature_audit",
+      "path": "docs/working/project_coherence/LITERATURE_AND_TRANSFER_AUDIT_v0.1.md",
+      "role": "Primary-source status and transfer conditions",
+      "bytes": 7978,
+      "sha256": "C0468B4B63F5CE3DA8B223C6160C518C8BDE65D060E32492F411928E0FCCD791"
+    },
+    {
+      "category": "shared_read_only_registry",
+      "path": "docs/working/project_coherence/CANONICAL_SOURCE_AUTHORITY_MATRIX_v0.1.json",
+      "role": "Source identities and authority boundaries",
+      "bytes": 24596,
+      "sha256": "6BA38A3BE0AF97E0DE27D109D988D01EEDA1D338653AA9DB548D61E7C553A77C"
+    },
+    {
+      "category": "shared_read_only_registry",
+      "path": "docs/working/project_coherence/SYMBOL_AND_TERMINOLOGY_REGISTRY_v0.1.json",
+      "role": "Typed terminology and forbidden aliases",
+      "bytes": 14851,
+      "sha256": "29529E0803BC8EA7BC62CFA0D0B7CC4B2A0B623012E4BCAAC2A569203711FBEB"
+    },
+    {
+      "category": "shared_read_only_registry",
+      "path": "docs/working/project_coherence/THEOREM_LEDGER_v0.1.json",
+      "role": "Existing theorem dispositions and claim boundaries",
+      "bytes": 12459,
+      "sha256": "2646DEE7E801B159E6E82EBDB63129CC5883591D40CF29B6773A9BD4F8578101"
+    },
+    {
+      "category": "shared_read_only_registry",
+      "path": "docs/working/project_coherence/CLAIM_LEDGER_v0.1.json",
+      "role": "Existing empirical and product-claim status",
+      "bytes": 17083,
+      "sha256": "F62E7451135EC9DA0C333DB318C7C6E02BD92C4387EB167D94895810D805828F"
+    },
+    {
+      "category": "shared_read_only_registry",
+      "path": "docs/working/project_coherence/INITIAL_MIGRATION_MATRIX_v0.1.json",
+      "role": "Provisional v7.4-to-successor migration risks and obligations",
+      "bytes": 29767,
+      "sha256": "D53AD787D8EA4C53A3850989501D389CA92C0E8FB0BB652DEFA217690A7BF96D"
+    },
+    {
+      "category": "gate1_control",
+      "path": "docs/working/project_coherence/gate1/README.md",
+      "role": "Integrated Gate 1 scope and boundary",
+      "bytes": 2417,
+      "sha256": "65E7BE36FA8D36EE0BCC4F62428269F5A1F7CA449F03DB82CC411571AAA1F4C0"
+    },
+    {
+      "category": "gate1_control",
+      "path": "docs/working/project_coherence/gate1/GATE1_ARTIFACT_MANIFEST_v0.1.json",
+      "role": "Existing non-self-hashing Gate 1 artifact manifest",
+      "bytes": 6814,
+      "sha256": "816A70524EA4C2B95E5516D6B7DACBC5C85279F87DF118F10D7F154D5FCD2329"
+    },
+    {
+      "category": "tks_v8",
+      "path": "docs/working/project_coherence/gate1/tks_v8/TKS_V8_CORE_FORMAL_SPEC_AND_PROOF_OBLIGATIONS_v0.1.md",
+      "role": "Typed-core specification and open proof obligations",
+      "bytes": 10917,
+      "sha256": "F740BA05AB7ADB2DCDF55E271016D127E45073B015497DE8982D44A49F0EA2C4"
+    },
+    {
+      "category": "tks_v8",
+      "path": "docs/working/project_coherence/gate1/tks_v8/TKS_V8_CORE_PROTOTYPE_MANIFEST_v0.1.json",
+      "role": "Typed-core source and validation bindings",
+      "bytes": 7750,
+      "sha256": "41546BCE70C846D4311563F4282FB9C934017FDF921BA376C072E9F6F69732F7"
+    },
+    {
+      "category": "tks_v8_implementation",
+      "path": "src/tks_v8_core/category.py",
+      "role": "Finite typed-function category reference implementation",
+      "bytes": 9850,
+      "sha256": "B69F494814E9D9CD54C80ADD8D6AF850C5A8F762B1A0C6DFC85435BA4458D947"
+    },
+    {
+      "category": "tks_v8_implementation",
+      "path": "src/tks_v8_core/deterministic_lift.py",
+      "role": "Deterministic standard-basis lift reference implementation",
+      "bytes": 5483,
+      "sha256": "A4649F62B44ED0DE820316E930958D2E32E143406DC1F9BC169A8EC533095115"
+    },
+    {
+      "category": "tks_v8_implementation",
+      "path": "src/tks_v8_core/normal_forms.py",
+      "role": "Finite denotational shortlex closure",
+      "bytes": 9889,
+      "sha256": "7C85D6BA77E39F953F59916C907E4D7C9C0564C7AB0E89CAE05087188BC596E5"
+    },
+    {
+      "category": "tks_v8_test",
+      "path": "tests/tks_v8_core/test_category.py",
+      "role": "Category, powers, and bounded exhaustive tests",
+      "bytes": 5588,
+      "sha256": "0D8592E1231FA02263E63496BE0774441610D3E11A17A6D18DF39DBBCBD789C2"
+    },
+    {
+      "category": "tks_v8_test",
+      "path": "tests/tks_v8_core/test_deterministic_lift.py",
+      "role": "Lift identities, norms, and counterexample regressions",
+      "bytes": 9142,
+      "sha256": "D14126D80A056ED222DB3DFC58BEA4DFFF0E6466D31C43BC8D7B2F78CE509D01"
+    },
+    {
+      "category": "tks_v8_test",
+      "path": "tests/tks_v8_core/test_normal_forms.py",
+      "role": "Normal-form and closure-limit regressions",
+      "bytes": 5672,
+      "sha256": "A4DE6902CC4AD986AAAB1A448473C3D72AE528907577E6F6F1CE328E0C396F9B"
+    },
+    {
+      "category": "tks_v8_test",
+      "path": "tests/tks_v8_core/test_manifest_boundaries.py",
+      "role": "Status and integration-boundary regressions",
+      "bytes": 1965,
+      "sha256": "9D3D1DEA155A5E1F8A13638B915EEF28C4DF51A90226B5826BA862BF10F2E097"
+    },
+    {
+      "category": "tks_v8_verifier",
+      "path": "scripts/verify_tks_v8_gate1.py",
+      "role": "Hash and executable test verifier",
+      "bytes": 4230,
+      "sha256": "E4FF72C5980059BE9359509827CE4D96F39D12765A003CD25AD5063A0590BC28"
+    },
+    {
+      "category": "tks_v74_corrigendum",
+      "path": "docs/working/project_coherence/gate1/v74/README.md",
+      "role": "Corrigendum scope and completeness boundary",
+      "bytes": 1797,
+      "sha256": "8B6B9554647C3A0004B5CDCE1D5513D8023EADA22809315CAC1FCD7AE58F6DBD"
+    },
+    {
+      "category": "tks_v74_corrigendum",
+      "path": "docs/working/project_coherence/gate1/v74/TKS_V74_CORRIGENDUM_v0.1.md",
+      "role": "Human-readable load-bearing theorem and claim corrections",
+      "bytes": 8921,
+      "sha256": "C32A67D670537440BDA5FA7B097E4600BE473375784E49EF0E27FC4F8D8A2B9F"
+    },
+    {
+      "category": "tks_v74_corrigendum",
+      "path": "docs/working/project_coherence/gate1/v74/TKS_V74_CORRIGENDUM_v0.1.json",
+      "role": "Machine-readable 29-record corrected subset",
+      "bytes": 38412,
+      "sha256": "C3C4EC6DFA1B2158F83EA716B4D51401E128A20C78C3469649D36755360E7A1B"
+    },
+    {
+      "category": "tks_v74_corrigendum",
+      "path": "docs/working/project_coherence/gate1/v74/TKS_V74_SURFACE_INVENTORY_v0.1.json",
+      "role": "Mechanical 1,258-declaration surface census",
+      "bytes": 5510,
+      "sha256": "64D55E4B766D82A619BFAD969E6170123DDA6AD170BC61F7427B77A24320C454"
+    },
+    {
+      "category": "lean_control",
+      "path": "docs/working/project_coherence/gate1/formal/LEAN_PROOF_MANIFEST_v0.1.json",
+      "role": "Integrated scoped Lean proof receipt",
+      "bytes": 5959,
+      "sha256": "7C27E50DCD6E45177F279A3B57BCF9B5C27B9D9FE878D34A4AE66742D332EC4A"
+    },
+    {
+      "category": "lean_control",
+      "path": "docs/working/project_coherence/gate1/formal/lift_functor/LEAN_DETERMINISTIC_LIFT_FUNCTOR_REPORT_v0.1.md",
+      "role": "Scoped deterministic-lift proof report",
+      "bytes": 3712,
+      "sha256": "1037C2C5F7122BA1E938724421AA9F035EF38D7CB4453D63AF96D701E6461CEC"
+    },
+    {
+      "category": "lean_control",
+      "path": "docs/working/project_coherence/gate1/formal/lift_functor/LEAN_DETERMINISTIC_LIFT_FUNCTOR_MANIFEST_v0.1.json",
+      "role": "Deterministic-lift exact source and axiom audit bindings",
+      "bytes": 4509,
+      "sha256": "BEED66D60666D48EF33204779D8DCE0557AD43245E5D89CD63691CC97492C3A2"
+    },
+    {
+      "category": "lean_source",
+      "path": "formal/lean/lean-toolchain",
+      "role": "Lean 4.32.1 toolchain pin",
+      "bytes": 25,
+      "sha256": "8E3538E0AB5F81A3EE04927D8838C8C674E0E112838B4B3CE87EC218143276AF"
+    },
+    {
+      "category": "lean_source",
+      "path": "formal/lean/lakefile.toml",
+      "role": "Lake project configuration",
+      "bytes": 105,
+      "sha256": "4A8867824EA6877970776AAFD9606153842A82CF627E0D3BB40D0308CBCE8D17"
+    },
+    {
+      "category": "lean_source",
+      "path": "formal/lean/lake-manifest.json",
+      "role": "Lean dependency lock",
+      "bytes": 143,
+      "sha256": "95B2F386990C3A6F47B5ABBC7462D278CD3D64DAED77994AC4E063D6A9827807"
+    },
+    {
+      "category": "lean_source",
+      "path": "formal/lean/PSR8Formal.lean",
+      "role": "Root formal module",
+      "bytes": 590,
+      "sha256": "65B502B48EB17305ED8D43A47B99961BBE76789B3CD8EDF1FCB9A4842B81B63C"
+    },
+    {
+      "category": "lean_source",
+      "path": "formal/lean/PSR8Formal/TypedCategory.lean",
+      "role": "Typed finite-map category lemmas",
+      "bytes": 1719,
+      "sha256": "C99CF906B6DFFC1BA627D22165FDE31275CACAEC8CA070A339E1AA52D8DB984F"
+    },
+    {
+      "category": "lean_source",
+      "path": "formal/lean/PSR8Formal/DeterministicLiftCounterexample.lean",
+      "role": "Two-state constant-lift function and literal fixtures",
+      "bytes": 1872,
+      "sha256": "9E8375CDCFF1EF498CEDCDFC0E7A5F670590AF2F55784A3789F101198E4FC54A"
+    },
+    {
+      "category": "lean_source",
+      "path": "formal/lean/PSR8Formal/DeterministicLiftFunctor.lean",
+      "role": "Entry, basis-action, and relational-support lift lemmas",
+      "bytes": 6939,
+      "sha256": "088D69D87A1BAB9863359AA7A2AAB151F6745AD2C997955B74207D4331B8915D"
+    },
+    {
+      "category": "lean_source",
+      "path": "formal/lean/ProofAudit.lean",
+      "role": "Integrated theorem dependency audit",
+      "bytes": 609,
+      "sha256": "D2D84A9040D2BA2CC824FE945170A8F7D403407981BEC1E4CAC33AA1927E2942"
+    },
+    {
+      "category": "lean_source",
+      "path": "formal/lean/DeterministicLiftFunctorAudit.lean",
+      "role": "Lift theorem dependency audit",
+      "bytes": 939,
+      "sha256": "1A0A3413866FBA122CF797618BA26FBECFBCDACB3A00A86C70875C5745A78014"
+    },
+    {
+      "category": "gate4_relevant_boundary",
+      "path": "docs/working/project_coherence/gate4/README.md",
+      "role": "Gate 4 scope and nonpromotion boundary",
+      "bytes": 3854,
+      "sha256": "6CC3999A96BF1045A9179FDB333E0E28A9D141F02AE2D34C7484B919786E94DC"
+    },
+    {
+      "category": "gate4_relevant_boundary",
+      "path": "docs/working/project_coherence/gate4/CAS_CORE_V8_CANDIDATE_SPEC_v0.1.md",
+      "role": "Typed runtime and registry boundary relevant to semantic transfer",
+      "bytes": 6903,
+      "sha256": "5FE6F91D005C7268D32C3943C2851138B30E2492C7D73877A04B30685CFCA1FC"
+    },
+    {
+      "category": "gate4_relevant_boundary",
+      "path": "docs/working/project_coherence/gate4/CAS_PCBA_V8_SOURCE_AUDIT_AND_SPEC_v0.1.md",
+      "role": "Mixed-simplex baseline and projector-profile integration boundary",
+      "bytes": 8525,
+      "sha256": "19707B9213040A3B55DB51132C30B90A6004D15A611EC759906335F2E41450F0"
+    },
+    {
+      "category": "gate4_relevant_boundary",
+      "path": "docs/working/project_coherence/gate4/GATE4_ADVERSARIAL_REVIEW_v0.1.md",
+      "role": "Engineering adverse evidence and remaining external gates",
+      "bytes": 16273,
+      "sha256": "9002378FAAEBA99BA277A65ABC8D198223FF6EC091D742C4B35C1F76D59433A6"
+    },
+    {
+      "category": "gate4_relevant_boundary",
+      "path": "docs/working/project_coherence/gate4/GATE4_REVIEW_MATRIX_v0.1.json",
+      "role": "Gate 4 exact open/implemented criteria",
+      "bytes": 45861,
+      "sha256": "44DD99A847DA742C3EBEBC06D64452A6868421EE12129E789D1CC790DAE41B74"
+    },
+    {
+      "category": "gate4_relevant_boundary",
+      "path": "docs/working/project_coherence/gate4/GATE4_ARTIFACT_MANIFEST_v0.1.json",
+      "role": "Gate 4 source and control bindings",
+      "bytes": 15810,
+      "sha256": "49102F9BCBAA2345804F5EE3CA708FD6A84E83F8CF5ABB51E6612893A090D57B"
+    }
+  ],
+  "external_registered_sources": [
+    {
+      "source_id": "SRC-TKS74-FULL-BEAUTIFUL-TEXT",
+      "path": "C:\\Users\\wakil\\Downloads\\Everthing-Tootra-TKS\\TKS_v7_4_FULL_BEAUTIFUL.txt",
+      "role": "Registered line-addressable v7.4 text",
+      "authority_status": "CANONICAL_WITH_OVERLAYS",
+      "bytes": 778738,
+      "sha256": "980ABA9F65ED99AC4961A56BE1750C7F344F2741FEE903349EC7BB201A0F414A",
+      "registered_sha256_match": true
+    },
+    {
+      "source_id": "SRC-TKS74-FULL-BEAUTIFUL-PDF",
+      "path": "C:\\Users\\wakil\\Downloads\\TKS_v7_4_FULL_BEAUTIFUL (1).pdf",
+      "role": "Registered 539-page v7.4 rendering",
+      "authority_status": "FROZEN_RENDERING",
+      "bytes": 1593596,
+      "sha256": "1CE09D96468AA668D9DAF8B3F60CB2CEB01714B76365FA4AAD3D0B613EBCA469",
+      "registered_sha256_match": true
+    },
+    {
+      "source_id": "SRC-TKS74-REVIEW-CORRECTIONS",
+      "path": "C:\\Users\\wakil\\Downloads\\TKS_v7_4_Review_and_Corrections.pdf",
+      "role": "Registered correction overlay",
+      "authority_status": "EXPLICIT_CORRECTION_OVERLAY",
+      "bytes": 71377,
+      "sha256": "1A010C38DA8A141AB557B5F99AD75A2A660619F95E31C4B74FEFF68E137E587B",
+      "registered_sha256_match": true
+    },
+    {
+      "source_id": "SRC-TKS74-REFEREE",
+      "path": "C:\\Users\\wakil\\Downloads\\TKS_v7_4_REFEREE_DEFENSIBLE.pdf",
+      "role": "Registered editorial correction overlay",
+      "authority_status": "EXPLICIT_CORRECTION_OVERLAY",
+      "bytes": 334626,
+      "sha256": "E060D44B4C0EA5082391340C1701EEE2A4E0284D31D36410DB8BE138A8505765",
+      "registered_sha256_match": true
+    },
+    {
+      "source_id": "SRC-TKS74-CORRECTED-CHAPTERS",
+      "path": "C:\\Users\\wakil\\Downloads\\TKS_v7_4_CORRECTED_CHAPTERS.pdf",
+      "role": "Registered field-specific corrected chapters",
+      "authority_status": "EXPLICIT_CORRECTION_OVERLAY",
+      "bytes": 367286,
+      "sha256": "105ACF6A848296842F0B213E09432F3AE5EDE9425089E83C992BC61665A5442C",
+      "registered_sha256_match": true
+    },
+    {
+      "source_id": "SRC-TEN-ADVANCES-PRIMARY",
+      "path": "C:\\Users\\wakil\\Downloads\\ten-proofs-oai.pdf",
+      "role": "Exact supplied manuscript containing moving-projector Proposition 4.1",
+      "authority_status": "UNTRUSTED_RESEARCH_INPUT",
+      "bytes": 2266371,
+      "sha256": "64B900D5FAE6FE22F2AE1B8E3B712D20055194A6C81CF343A2455E5898AC7DD6",
+      "registered_sha256_match": true
+    },
+    {
+      "source_id": "SRC-PCBA-ENGINEER-20260726",
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\book\\CAS_PCBA_Engineer\\CAS_PCBA_Engineer.pdf",
+      "role": "Exact current engineering reference for the mixed-simplex baseline",
+      "authority_status": "ENGINEERING_REFERENCE",
+      "bytes": 1973407,
+      "sha256": "294320B39FA521EAC086E99E2D9DB913E2B6CFF0754FF82DB1EF966424566274",
+      "registered_sha256_match": true
+    }
+  ],
+  "inventory_summary": {
+    "repository_source_count": 42,
+    "external_registered_source_count": 7,
+    "external_registered_hash_matches": 7,
+    "source_mismatches": 0,
+    "missing_sources": 0
+  }
+}
