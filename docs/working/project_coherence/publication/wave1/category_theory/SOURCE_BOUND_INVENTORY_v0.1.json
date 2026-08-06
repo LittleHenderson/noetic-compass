@@ -1,0 +1,197 @@
+{
+  "schema_version": "project_coherence.publication_source_inventory.v0.1",
+  "document_status": "DRAFT / SOURCE-BOUND DELTA / OPEN / RING 4 / NOT LICENSED / HELD",
+  "as_of": "2026-08-05",
+  "lane": "Wave 1 / Category and Sheaf Theory",
+  "base_commit": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
+  "base_branch": "codex/project-coherence-publication-category",
+  "inventory_policy": "Every listed digest is SHA-256 over the bytes in the base commit worktree. This inventory freezes publication inputs; it does not amend, supersede, or admit any governing artifact.",
+  "source_count": 26,
+  "sources": [
+    {
+      "path": "docs/working/project_coherence/PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md",
+      "role": "publication charter and gate boundary",
+      "bytes": 29793,
+      "sha256": "B87B2E2B4CC4B10C76EE4AA6EA09094572B2A1008E474475E8F642836B83D2BE"
+    },
+    {
+      "path": "docs/working/project_coherence/INITIAL_MIGRATION_MATRIX_v0.1.json",
+      "role": "typed migration risks and corrective actions",
+      "bytes": 29767,
+      "sha256": "D53AD787D8EA4C53A3850989501D389CA92C0E8FB0BB652DEFA217690A7BF96D"
+    },
+    {
+      "path": "docs/working/project_coherence/MATHEMATICAL_RED_TEAM_REPORT_v0.1.md",
+      "role": "counterexamples and conservative claim boundaries",
+      "bytes": 10324,
+      "sha256": "03AEC81BF9F6AA12376C2DF78E6CC410EB636589DA37D2E2534460132BE720C6"
+    },
+    {
+      "path": "docs/working/project_coherence/LITERATURE_AND_TRANSFER_AUDIT_v0.1.md",
+      "role": "prior literature status and transfer quarantine",
+      "bytes": 7978,
+      "sha256": "C0468B4B63F5CE3DA8B223C6160C518C8BDE65D060E32492F411928E0FCCD791"
+    },
+    {
+      "path": "docs/working/project_coherence/SYMBOL_AND_TERMINOLOGY_REGISTRY_v0.1.json",
+      "role": "read-only canonical type and term boundary",
+      "bytes": 14851,
+      "sha256": "29529E0803BC8EA7BC62CFA0D0B7CC4B2A0B623012E4BCAAC2A569203711FBEB"
+    },
+    {
+      "path": "docs/working/project_coherence/THEOREM_LEDGER_v0.1.json",
+      "role": "read-only governing theorem records",
+      "bytes": 12459,
+      "sha256": "2646DEE7E801B159E6E82EBDB63129CC5883591D40CF29B6773A9BD4F8578101"
+    },
+    {
+      "path": "docs/working/project_coherence/CLAIM_LEDGER_v0.1.json",
+      "role": "read-only governing empirical and product claim records",
+      "bytes": 17083,
+      "sha256": "F62E7451135EC9DA0C333DB318C7C6E02BD92C4387EB167D94895810D805828F"
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/tks_v8/TKS_V8_CORE_FORMAL_SPEC_AND_PROOF_OBLIGATIONS_v0.1.md",
+      "role": "typed dynamics boundary: deterministic functions only in the current core",
+      "bytes": 10917,
+      "sha256": "F740BA05AB7ADB2DCDF55E271016D127E45073B015497DE8982D44A49F0EA2C4"
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/v74/TKS_V74_CORRIGENDUM_v0.1.md",
+      "role": "human-readable v7.4 correction summary",
+      "bytes": 8921,
+      "sha256": "C32A67D670537440BDA5FA7B097E4600BE473375784E49EF0E27FC4F8D8A2B9F"
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/v74/TKS_V74_CORRIGENDUM_v0.1.json",
+      "role": "machine-readable v7.4 correction records",
+      "bytes": 38412,
+      "sha256": "C3C4EC6DFA1B2158F83EA716B4D51401E128A20C78C3469649D36755360E7A1B"
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/noetic_topos2/NOETIC_TOPOS_2_SPEC_v0.1.md",
+      "role": "Noetic Topos 2.0 governing research candidate",
+      "bytes": 15042,
+      "sha256": "156A5D8C5320F36E81E3B46473BA8A038B35672DCD28839A404D96A3DB1A763A"
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/noetic_topos2/NOETIC_TOPOS_2_THEOREMS_v0.1.json",
+      "role": "scoped successor theorem ledger",
+      "bytes": 12957,
+      "sha256": "52E000652C7DECE64C1E2B3F613D85FEFB2F80414CFAAD53AA38FE339B26E536"
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/noetic_topos2/NOETIC_TOPOS_2_PROOF_OBLIGATIONS_v0.1.json",
+      "role": "successor proof obligations",
+      "bytes": 2152,
+      "sha256": "FD567E3826E4472EFD013DC7F3DEE514B6AD28B9E41CFFFD10087BE1133746C7"
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/noetic_topos2/FINITE_MODEL_CERTIFICATE_v0.1.json",
+      "role": "sixteen-context finite execution certificate",
+      "bytes": 1700,
+      "sha256": "5CB06FC00641A16BEE4784EAB708D86FF39CEE7AC6E8E1D03DFC32605242A84C"
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/noetic_topos2/SOURCE_VERIFICATION_v0.1.json",
+      "role": "legacy Noetic Topos source identity and visible-location record",
+      "bytes": 2972,
+      "sha256": "17DBE1FADB3D80D435B4D282C53849D392ECB622232E8664A74429BD1753F55C"
+    },
+    {
+      "path": "src/noetic_topos2/__init__.py",
+      "role": "finite reference model package surface",
+      "bytes": 880,
+      "sha256": "13623734CF597740950CF32EDD4B6C041F85CC9E0B1824247D96BF5AF2A8F522"
+    },
+    {
+      "path": "src/noetic_topos2/finite_site.py",
+      "role": "marked-cover and finite-site executable reference model",
+      "bytes": 34169,
+      "sha256": "E2C4D7136BF15858D6ED3525B24CD86B318C71D6149FD39B64C72A0B099852A6"
+    },
+    {
+      "path": "tests/noetic_topos2/test_finite_site.py",
+      "role": "finite-site regression tests",
+      "bytes": 6466,
+      "sha256": "C88163F9E1D3BC859BF97F0A9A2B56CB35F36627E364FD33F410BF44EA6A6A10"
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/noetic_topos2/modality_composition/MODALITY_COMPOSITION_PROOF_v0.1.md",
+      "role": "finite-context composition proof candidate",
+      "bytes": 13126,
+      "sha256": "9A037679B5B528B7571B0A9BABC2DB1668D475C67BDF5E886CA03532AE657BD0"
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/noetic_topos2/modality_composition/MODALITY_COMPOSITION_CERTIFICATE_v0.1.json",
+      "role": "finite-context composition execution certificate",
+      "bytes": 5561,
+      "sha256": "648E64A5E760FFAFE326F0FF9194734FE82E8107730D3FC9703951D54315AB0A"
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/noetic_topos2/modality_composition/verify_modality_composition.py",
+      "role": "finite-context composition verifier",
+      "bytes": 5544,
+      "sha256": "4F2ED1538AB7AA69AC0D852C427BB29703A9CF015680A33AB40AAF955FA12D10"
+    },
+    {
+      "path": "src/noetic_topos2/modality_composition/__init__.py",
+      "role": "finite reflector package surface",
+      "bytes": 1087,
+      "sha256": "5ECA55022A655F0A4A1859FDBDF2552A17C2894A80EA074CDE40D858689C5F59"
+    },
+    {
+      "path": "src/noetic_topos2/modality_composition/finite_reflectors.py",
+      "role": "explicit finite reflectors and topology closure",
+      "bytes": 25196,
+      "sha256": "43D32F5AB3FBFA370CC3BB30AE5628116432D4D642552928B733831A05741089"
+    },
+    {
+      "path": "tests/noetic_topos2_modality_composition/test_finite_reflectors.py",
+      "role": "finite reflector regression tests",
+      "bytes": 4390,
+      "sha256": "19B66807B60F62A5FD43DA5AAB823B9D508947917F3074F108133A2EBEFEAD8A"
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/formal/LEAN_PROOF_MANIFEST_v0.1.json",
+      "role": "formal seed scope and axiom audit",
+      "bytes": 5959,
+      "sha256": "7C27E50DCD6E45177F279A3B57BCF9B5C27B9D9FE878D34A4AE66742D332EC4A"
+    },
+    {
+      "path": "formal/lean/PSR8Formal/NoeticContext.lean",
+      "role": "bounded Lean context lemmas",
+      "bytes": 4300,
+      "sha256": "0F8DC16DABE89818C4717E5D1232FCD58B4FA1A098709CA449774C5D27E365C4"
+    }
+  ],
+  "local_reproduction_snapshot": {
+    "executed_at": "2026-08-05",
+    "base_commit": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
+    "finite_site_unit_tests": {
+      "command": "python -B -m unittest discover -s tests/noetic_topos2 -p test_*.py -v",
+      "result": "PASS",
+      "test_count": 8
+    },
+    "modality_verifier": {
+      "command": "python -B docs/working/project_coherence/gate1/noetic_topos2/modality_composition/verify_modality_composition.py",
+      "result": "PASS",
+      "scope": "PSh(L,Set) only",
+      "fixture_count": 18,
+      "sieve_count": 298,
+      "restriction_squares_checked": 3012
+    },
+    "modality_unit_tests": {
+      "command": "python -B -m unittest discover -s tests/noetic_topos2_modality_composition -p test_*.py -v",
+      "result": "PASS",
+      "test_count": 6
+    },
+    "lean_gate1": {
+      "command": "python -B scripts/verify_psr8_lean_gate1.py",
+      "result": "PASS",
+      "toolchain": "Lean 4.32.1 / f054605aea4b840552cca2e725580bffd1e1b704",
+      "scope": "bounded registered modules; full presheaf/topos formalization remains OPEN"
+    }
+  },
+  "claim_boundary": "The hashes and local PASS results establish only source identity and the behavior of the scoped finite artifacts. They are not independent review, peer review, a product-site proof, probabilistic gluing, empirical validation, canon admission, public disclosure approval, or a license grant."
+}
