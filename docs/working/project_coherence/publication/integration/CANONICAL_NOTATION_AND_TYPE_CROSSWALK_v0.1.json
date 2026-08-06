@@ -1,0 +1,505 @@
+{
+  "schema_version": "project_coherence.publication.integration.notation_type_crosswalk.v0.1",
+  "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
+  "as_of": "2026-08-05",
+  "integration_base_commit": "56c43cac",
+  "policy": {
+    "purpose": "Lead-owned publication notation and type reconciliation. It indexes source-bound lane meanings without modifying the shared canonical symbol registry.",
+    "local_ids_preserved": true,
+    "shared_registry_mutation": false,
+    "semantic_identity_from_symbol_reuse": false,
+    "all_cross_type_maps_require": [
+      "explicit source and target types",
+      "versioned profile and provenance",
+      "loss or error statement when noninvertible or approximate",
+      "proof, executable certificate, or retained OPEN status"
+    ]
+  },
+  "records": [
+    {
+      "id": "PUB-NOT-001",
+      "token": "C_fin",
+      "preferred_rendering": "category of named finite sets and typed total functions",
+      "mathematical_type": "category; each object is finite, but the category need not have finitely many objects or arrows",
+      "lane": "formal_math / Paper 1",
+      "version_scope": "publication delta v0.1",
+      "must_not_mean": ["a finite category without a frozen finite carrier catalog", "the active CAS notation compiler", "an empirical cognitive state space"],
+      "status": "SCOPED DEFINITION / DRAFT / OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/formal_math/PAPER_1_TYPED_NOETIC_DYNAMICS_AND_FINITE_FRACTAL_SEMANTICS_DELTA_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-002",
+      "token": "C_frozen",
+      "preferred_rendering": "frozen finite subcategory or finite semigroupoid profile",
+      "mathematical_type": "finite catalog of named carriers and explicitly composable generators",
+      "lane": "formal_math / Paper 1",
+      "version_scope": "proposed profile only",
+      "must_not_mean": ["all finite sets", "a canon migration", "a proof that legacy digit strings are self-typing"],
+      "status": "PROPOSED TYPE / OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/formal_math/HANDOFF_PACKAGE_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-003",
+      "token": "w = f_n ... f_1",
+      "preferred_rendering": "typed path with extensional denotation [[w]]",
+      "mathematical_type": "composable arrow sequence plus its composite",
+      "lane": "formal_math / Paper 1",
+      "version_scope": "finite denotational profile",
+      "must_not_mean": ["a power of one endomap unless every factor is that endomap", "a context-free legacy digit string", "a terminating or confluent inherited rewrite system"],
+      "status": "SCOPED DEFINITION / DRAFT / OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/formal_math/PAPER_1_TYPED_NOETIC_DYNAMICS_AND_FINITE_FRACTAL_SEMANTICS_DELTA_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-004",
+      "token": "A_f",
+      "preferred_rendering": "deterministic standard-basis lift of f:X->Y",
+      "mathematical_type": "linear map sending e_x to e_f(x)",
+      "lane": "formal_math / Paper 1",
+      "version_scope": "checked finite-function lift",
+      "must_not_mean": ["unitary map", "Markov kernel record", "affine distribution channel", "orthogonal projector", "contraction when f has collisions"],
+      "status": "SCOPED STANDARD SPECIALIZATION / DRAFT / OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/formal_math/PAPER_1_TYPED_NOETIC_DYNAMICS_AND_FINITE_FRACTAL_SEMANTICS_DELTA_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-005",
+      "token": "p in Delta_39^o",
+      "preferred_rendering": "MixedSimplexAddress",
+      "mathematical_type": "strictly positive normalized probability profile over 40 registered NDCell coordinates",
+      "lane": "formal_math / Paper 3; engineering / CAS PCBA 8",
+      "version_scope": "registered mixed-simplex profile",
+      "must_not_mean": ["one-hot state", "rank-d projector", "finite TKS carrier", "empirically identified latent cognition"],
+      "status": "REGISTERED BASELINE TYPE / CLAIM TRANSFERS OPEN",
+      "source_refs": [
+        "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md",
+        "docs/working/project_coherence/publication/wave1/engineering/CAS_PCBA_8_ADAPTIVE_COGNITIVE_CIRCUIT_ENGINEERING_DRAFT_v0.1.md"
+      ]
+    },
+    {
+      "id": "PUB-NOT-006",
+      "token": "P_x",
+      "preferred_rendering": "common-rank orthogonal projector profile",
+      "mathematical_type": "self-adjoint idempotent operator of trace and rank d in one declared ambient Hilbert space",
+      "lane": "formal_math / Paper 3",
+      "version_scope": "optional projector research profile",
+      "must_not_mean": ["MixedSimplexAddress", "cognitive state without an experiment", "projector in a different ambient space without typed transport"],
+      "status": "MATHEMATICAL PROFILE / EMPIRICAL MEANING OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-007",
+      "token": "k(x,y) = tr(P_x P_y)/d",
+      "preferred_rendering": "normalized projector Gram kernel",
+      "mathematical_type": "positive-semidefinite Hilbert-Schmidt Gram kernel for common-rank projectors in one ambient space",
+      "lane": "formal_math / Paper 3; engineering crosswalk",
+      "version_scope": "bounded mathematical result",
+      "must_not_mean": ["strictly positive-definite kernel", "cognitive similarity theorem", "capacity certificate", "cross-space comparison without transport"],
+      "status": "STANDARD SPECIALIZATION / FORMALIZATION AND TRANSFER OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-008",
+      "token": "d_c^2(x,y) = d - tr(P_x P_y)",
+      "preferred_rendering": "squared chordal distance under the declared convention",
+      "mathematical_type": "Grassmannian subspace distance statistic",
+      "lane": "formal_math / Paper 3",
+      "version_scope": "common ambient space and rank",
+      "must_not_mean": ["Fisher-Rao distance", "causal separation", "task performance distance"],
+      "status": "STANDARD RESULT / DRAFT / OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-009",
+      "token": "C",
+      "preferred_rendering": "legacy Noetic site category",
+      "mathematical_type": "source-bound category from the conservative Noetic Topos construction",
+      "lane": "category_theory / Paper 2",
+      "version_scope": "legacy conditional baseline",
+      "must_not_mean": ["finite context factor L", "category of finite sets C_fin", "an empirically validated context system"],
+      "status": "CONDITIONAL SOURCE TYPE / OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/category_theory/PAPER_2_THE_MARKED_AND_MODAL_NOETIC_TOPOS_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-010",
+      "token": "L = P({0,1} x {0,1})",
+      "preferred_rendering": "sixteen-object finite context lattice",
+      "mathematical_type": "powerset poset used as the resolved finite context factor",
+      "lane": "category_theory / Paper 2",
+      "version_scope": "Noetic Topos 2.0 finite reference candidate",
+      "must_not_mean": ["legacy site C", "cross-context coupling", "probability model", "causal abstraction"],
+      "status": "FINITE REFERENCE CANDIDATE / DRAFT / OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/category_theory/PAPER_2_THE_MARKED_AND_MODAL_NOETIC_TOPOS_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-011",
+      "token": "J_A and J_R",
+      "preferred_rendering": "transverse partition-generated Grothendieck topologies on L",
+      "mathematical_type": "two finite topologies generated by the declared coordinate partitions and null-cover convention",
+      "lane": "category_theory / Paper 2",
+      "version_scope": "PSh(L,Set) finite result",
+      "must_not_mean": ["legacy ACBE/RPM topology on C", "empirical modalities", "ambient product-site result", "noncommuting reflectors"],
+      "status": "SCOPED FINITE THEOREM CANDIDATE / OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/category_theory/PAPER_2_THE_MARKED_AND_MODAL_NOETIC_TOPOS_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-012",
+      "token": "J_singleton",
+      "legacy_alias": "local J_atom",
+      "preferred_rendering": "topology generated by the four-singleton partition plus the registered null cover",
+      "mathematical_type": "join of J_A and J_R on L",
+      "lane": "category_theory / Paper 2",
+      "version_scope": "PSh(L,Set) finite result",
+      "must_not_mean": ["the standard category-theoretic atomic topology", "a discrete topology by name alone", "a probability-gluing theorem"],
+      "status": "SCOPED FINITE THEOREM CANDIDATE / TERMINOLOGY CORRECTED / OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/category_theory/PAPER_2_THE_MARKED_AND_MODAL_NOETIC_TOPOS_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-013",
+      "token": "M_A and M_R",
+      "preferred_rendering": "explicit associated-sheaf reflectors on PSh(L,Set)",
+      "mathematical_type": "reflective functors for J_A and J_R",
+      "lane": "category_theory / Paper 2",
+      "version_scope": "finite context factor only",
+      "must_not_mean": ["strictly equal functors", "noncommuting modalities", "proved reflectors on PSh(C x L)", "observational-topology composition"],
+      "status": "UNIT-COMPATIBLE CANONICAL NATURAL ISOMORPHISM CANDIDATE / OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/category_theory/PAPER_2_THE_MARKED_AND_MODAL_NOETIC_TOPOS_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-014",
+      "token": "mark",
+      "preferred_rendering": "immutable external provenance record",
+      "mathematical_type": "parallel audit data bound to context and derivation identities",
+      "lane": "category_theory / Paper 2",
+      "version_scope": "finite reference implementation",
+      "must_not_mean": ["internal topos object", "truth value", "sheaf section", "license or disclosure approval"],
+      "status": "IMPLEMENTED BOUNDED RECORD TYPE / OPEN PROGRAM",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/category_theory/PAPER_2_THE_MARKED_AND_MODAL_NOETIC_TOPOS_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-015",
+      "token": "f:X->Y",
+      "preferred_rendering": "deterministic total map",
+      "mathematical_type": "function with explicit source and target",
+      "lane": "shared Papers 1, 2, 4, and 6",
+      "version_scope": "cross-lane type boundary",
+      "must_not_mean": ["Markov kernel", "affine channel", "unitary channel", "causal mechanism"],
+      "status": "SHARED TYPE DISTINCTION / OPEN INTEGRATION",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/category_theory/PAPER_4_NOETIC_MARKOV_SHEAVES_FOR_CONTEXTUAL_AI_ASSESSMENT_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-016",
+      "token": "K:X~>Y",
+      "preferred_rendering": "Markov kernel",
+      "mathematical_type": "stochastic morphism with declared measurable or finite profile and Kleisli composition",
+      "lane": "category_theory / Paper 4",
+      "version_scope": "methods proposal",
+      "must_not_mean": ["deterministic function record", "induced affine map K_*", "causal direction", "global marginal extension", "unitary channel"],
+      "status": "TYPE ARCHITECTURE / IMPLEMENTATION AND VALIDATION OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/category_theory/PAPER_4_NOETIC_MARKOV_SHEAVES_FOR_CONTEXTUAL_AI_ASSESSMENT_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-017",
+      "token": "K_*:Delta(X)->Delta(Y)",
+      "preferred_rendering": "classical distribution channel induced by K",
+      "mathematical_type": "affine map on distribution objects in a frozen finite profile",
+      "lane": "category_theory / Paper 4",
+      "version_scope": "methods proposal",
+      "must_not_mean": ["the serialized kernel K", "quantum channel", "unitary operator", "causal effect"],
+      "status": "TYPE ARCHITECTURE / OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/category_theory/PAPER_4_NOETIC_MARKOV_SHEAVES_FOR_CONTEXTUAL_AI_ASSESSMENT_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-018",
+      "token": "Marg:K_ctx^op->Set",
+      "preferred_rendering": "context-indexed marginal-distribution presheaf candidate",
+      "mathematical_type": "contravariant Set-valued assignment U |-> Delta(Omega_U) with marginalization maps",
+      "lane": "category_theory / Paper 4",
+      "version_scope": "proposed contextual probability profile",
+      "must_not_mean": ["a sheaf before descent is proved", "a unique global distribution", "a cellular sheaf", "a causal model"],
+      "status": "METHOD CANDIDATE / EXECUTION AND PROOF OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/category_theory/PAPER_4_NOETIC_MARKOV_SHEAVES_FOR_CONTEXTUAL_AI_ASSESSMENT_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-019",
+      "token": "Grothendieck sheaf",
+      "preferred_rendering": "Set-valued presheaf satisfying unique descent for one named topology",
+      "mathematical_type": "categorical descent object",
+      "lane": "category_theory / Papers 2 and 4",
+      "version_scope": "topology-specific",
+      "must_not_mean": ["vector-space structure", "inner product", "cellular Laplacian", "probability model without an explicit representation"],
+      "status": "TYPE BOUNDARY / SCOPED FINITE RESULTS ONLY",
+      "source_refs": [
+        "docs/working/project_coherence/publication/wave1/category_theory/PAPER_2_THE_MARKED_AND_MODAL_NOETIC_TOPOS_DRAFT_v0.1.md",
+        "docs/working/project_coherence/publication/wave1/category_theory/PAPER_4_NOETIC_MARKOV_SHEAVES_FOR_CONTEXTUAL_AI_ASSESSMENT_DRAFT_v0.1.md"
+      ]
+    },
+    {
+      "id": "PUB-NOT-020",
+      "token": "F_lin",
+      "preferred_rendering": "explicitly typed linear or Hilbert-valued cellular sheaf profile",
+      "mathematical_type": "cellular sheaf with declared face-poset variance, coefficient field, structure maps, and adjoint data",
+      "lane": "category_theory / Paper 4",
+      "version_scope": "separate proposed representation",
+      "must_not_mean": ["Marg", "Markov kernel", "Grothendieck restriction map with silently reversed variance", "finite-dimensional profile by universal necessity"],
+      "status": "OPEN TYPE-INTERFACE OBLIGATION",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/category_theory/PAPER_4_NOETIC_MARKOV_SHEAVES_FOR_CONTEXTUAL_AI_ASSESSMENT_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-021",
+      "token": "Delta_F",
+      "preferred_rendering": "cellular-sheaf Laplacian under one declared adjoint profile",
+      "mathematical_type": "operator assembled from typed coboundary and adjoint data",
+      "lane": "category_theory / Paper 4",
+      "version_scope": "finite executable matrix profile or separately controlled bounded Hilbert profile",
+      "must_not_mean": ["operator inherited from a Set-valued sheaf", "operator inherited from a Markov kernel", "universal finite-dimensional prerequisite", "empirical inconsistency score without validation"],
+      "status": "METHOD CANDIDATE / IMPLEMENTATION OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/category_theory/PAPER_4_NOETIC_MARKOV_SHEAVES_FOR_CONTEXTUAL_AI_ASSESSMENT_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-022",
+      "token": "SemanticReference",
+      "preferred_rendering": "(namespace, local_id, version, source_id, definition_sha256)",
+      "mathematical_type": "immutable versioned semantic identity record",
+      "lane": "engineering / CAS PCBA 8",
+      "version_scope": "Gate 4 board candidate",
+      "must_not_mean": ["identity inferred from shared spelling or position", "cross-namespace equality", "canon admission"],
+      "status": "IMPLEMENTED BOUNDED ENGINEERING TYPE / GATE 4 OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/engineering/CAS_PCBA_8_ADAPTIVE_COGNITIVE_CIRCUIT_ENGINEERING_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-023",
+      "token": "StateLiteral and NDCell",
+      "preferred_rendering": "StateLiteral = Noetic x Domain x optional Drive x optional Register; NDCell = Noetic x Domain",
+      "mathematical_type": "distinct typed products connected by a generally many-to-one projection",
+      "lane": "engineering / CAS PCBA 8",
+      "version_scope": "Gate 4 semantic and board profile",
+      "must_not_mean": ["interchangeable identifiers", "MixedSimplexAddress", "projector profile", "empirically observed state"],
+      "status": "IMPLEMENTED TYPE DISTINCTION / GATE 4 OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/engineering/CAS_PCBA_8_ADAPTIVE_COGNITIVE_CIRCUIT_ENGINEERING_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-024",
+      "token": "a, y, r_eff",
+      "preferred_rendering": "steering intervention, activation magnitude, calibrated effective resistance",
+      "mathematical_type": "profile-bound quantities with units ALPHA, ACTIVATION, and ALPHA_PER_ACTIVATION",
+      "lane": "engineering / CAS-Ohm 1.0",
+      "version_scope": "one frozen calibration profile",
+      "must_not_mean": ["electrical voltage, current, or resistance", "untyped score", "same-sample identity", "causal effect"],
+      "status": "PROVISIONAL RESPONSE PROFILE / EMPIRICAL VALIDATION OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-025",
+      "token": "y_hat = a / r_eff",
+      "preferred_rendering": "profile-specific held-out response prediction",
+      "mathematical_type": "calibrated predictive relation permitted only with positive uncertain r_eff and disjoint calibration/validation splits",
+      "lane": "engineering / CAS-Ohm 1.0",
+      "version_scope": "declared profile and validity interval",
+      "must_not_mean": ["Ohm's electrical law", "same-sample validation", "causal law", "validated general network rule"],
+      "status": "REGISTERED EMPIRICAL HYPOTHESIS / NOT RUN / OPEN / NOT LICENSED / HELD",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-026",
+      "token": "circuit / board / component / net",
+      "preferred_rendering": "typed software engineering architecture with immutable identities, ports, units, calibration references, and design-rule checks",
+      "mathematical_type": "software records and deterministic validation rules",
+      "lane": "engineering / CAS PCBA 8",
+      "version_scope": "Gate 4 candidate",
+      "must_not_mean": ["physical PCB", "electrical circuit law", "material device", "clinical or safety certification"],
+      "status": "SOFTWARE CANDIDATE / GATE 4 OPEN / NOT LICENSED / HELD",
+      "source_refs": ["docs/working/project_coherence/publication/wave1/engineering/CAS_PCBA_8_ADAPTIVE_COGNITIVE_CIRCUIT_ENGINEERING_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-027",
+      "token": "L0 through L5",
+      "preferred_rendering": "source presence, local structural control, hosted observation, joined protocol run, scientific validation, and product/disclosure authority layers",
+      "mathematical_type": "ordered evidence-and-authority classification whose levels require distinct receipts",
+      "lane": "wave2_harness / Paper 7",
+      "version_scope": "CAS Harness 2 publication and specification delta v0.1",
+      "must_not_mean": ["an automatic maturity ladder", "source presence proving execution", "local tests proving science", "scientific validation granting product or disclosure authority"],
+      "status": "CONTROL ARCHITECTURE / JOINED RUN NOT_STARTED / OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/cas_harness2/CAS_HARNESS_2_EVIDENCE_GROUNDED_VALIDATION_DELTA_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-028",
+      "token": "FrozenDesign",
+      "preferred_rendering": "exact-byte preregistered design object",
+      "mathematical_type": "immutable claim, protocol, analysis, control, exclusion, and identity bindings fixed before outcome access",
+      "lane": "wave2_harness / Paper 7",
+      "version_scope": "proposed joined-run contract",
+      "must_not_mean": ["a completed preregistration", "an authorized run", "a valid experiment", "a scientific result"],
+      "status": "FORMAL CONTROL OBJECT / NO JOINED INSTANCE / OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/cas_harness2/CAS_HARNESS_2_EVIDENCE_GROUNDED_VALIDATION_DELTA_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-029",
+      "token": "AmendmentChain",
+      "preferred_rendering": "append-only pre-outcome design amendment chain",
+      "mathematical_type": "ordered content-addressed amendments with declared reason and invalidation rules",
+      "lane": "wave2_harness / Paper 7",
+      "version_scope": "proposed joined-run contract",
+      "must_not_mean": ["permission to edit after outcome access", "hidden protocol drift", "retroactive preregistration"],
+      "status": "FORMAL CONTROL OBJECT / NO JOINED INSTANCE / OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/cas_harness2/CAS_HARNESS_2_EVIDENCE_GROUNDED_VALIDATION_DELTA_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-030",
+      "token": "OutcomeAccessEvent",
+      "preferred_rendering": "first authorized access to blinded or held-out outcomes",
+      "mathematical_type": "state transition that closes the pre-outcome amendment window",
+      "lane": "wave2_harness / Paper 7",
+      "version_scope": "proposed joined-run contract",
+      "must_not_mean": ["ordinary source inspection", "a local regression test", "an inferred timestamp", "a trusted event without an authenticated receipt"],
+      "status": "FORMAL CONTROL OBJECT / EVENT ABSENT / OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/cas_harness2/CAS_HARNESS_2_EVIDENCE_GROUNDED_VALIDATION_DELTA_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-031",
+      "token": "ArtifactRegistry",
+      "preferred_rendering": "content-addressed role and identity registry for one protocol run",
+      "mathematical_type": "typed mapping from declared evidence roles to exact artifact identities and provenance",
+      "lane": "wave2_harness / Paper 7",
+      "version_scope": "proposed joined-run contract",
+      "must_not_mean": ["a mutable file list", "scientific acceptance", "WORM anchoring", "a signature or trusted timestamp"],
+      "status": "FORMAL CONTROL OBJECT / JOINED INSTANCE ABSENT / OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/cas_harness2/CAS_HARNESS_2_EVIDENCE_GROUNDED_VALIDATION_DELTA_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-032",
+      "token": "EvidencePacketV2",
+      "preferred_rendering": "authenticated provenance bundle for one admitted joined run",
+      "mathematical_type": "structured bundle linking frozen design, execution, identities, access event, raw outcomes, analysis, exceptions, and anchors",
+      "lane": "wave2_harness / Paper 7",
+      "version_scope": "proposed protocol object",
+      "must_not_mean": ["a verdict", "a scientific result by existence alone", "a product-readiness certificate", "a license", "a current packet in this program"],
+      "status": "SPECIFICATION CANDIDATE / PACKET ABSENT / OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/cas_harness2/CAS_HARNESS_2_EVIDENCE_GROUNDED_VALIDATION_DELTA_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-033",
+      "token": "AssessmentVector",
+      "preferred_rendering": "non-escalating vector of separately assessed evidence dimensions",
+      "mathematical_type": "typed multi-axis assessment that preserves unknown, negative, and not-applicable states",
+      "lane": "wave2_harness / Paper 7",
+      "version_scope": "CAS Harness 2 methods profile",
+      "must_not_mean": ["one scalar truth score", "automatic pass", "claim license", "scientific or product authority"],
+      "status": "METHOD CANDIDATE / VALIDATION OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/cas_harness2/CAS_HARNESS_2_EVIDENCE_GROUNDED_VALIDATION_DELTA_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-034",
+      "token": "joined run",
+      "preferred_rendering": "one separately authorized transactional execution binding design, worker, identities, outcomes, and packet",
+      "mathematical_type": "protocol event with exact admission and execution receipts",
+      "lane": "wave2_harness / Paper 7",
+      "version_scope": "future execution only",
+      "must_not_mean": ["the local Gate 5 verifier", "a hosted observation", "an engineering canary", "a model experiment already performed"],
+      "status": "NOT_STARTED / NO RECEIPT / OPEN / NOT LICENSED / HELD",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/cas_harness2/CAS_HARNESS_2_EVIDENCE_GROUNDED_VALIDATION_DELTA_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-035",
+      "token": "ACBE_legacy",
+      "preferred_rendering": "legacy preorder and descent label",
+      "mathematical_type": "source-bound four-level preorder A >= B >= C >= D with designated descent morphisms",
+      "lane": "wave2_acbe / Paper 5 naming boundary",
+      "version_scope": "legacy source only",
+      "must_not_mean": ["an expansion of the letters ACBE", "approximate causal abstraction", "causal variables or interventions", "ACA"],
+      "status": "LEGACY TYPE / MEANING PRESERVED / CAUSAL INTERPRETATION PROHIBITED",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/acbe/PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-036",
+      "token": "ACBE_NT2",
+      "preferred_rendering": "Noetic Topos 2.0 marked-context provenance label",
+      "mathematical_type": "external provenance mark for one finite coordinate-partition generator",
+      "lane": "wave2_acbe / Paper 5; category_theory / Paper 2",
+      "version_scope": "Noetic Topos 2.0 finite reference candidate",
+      "must_not_mean": ["ACBE_legacy", "ACA", "causal direction", "intervention semantics", "truth of a measurement"],
+      "status": "PROVENANCE TYPE / CAUSAL MEANING OPEN AND UNASSERTED",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/acbe/PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-037",
+      "token": "ACBE-P5",
+      "preferred_rendering": "versioned publication-program identifier for Paper 5",
+      "mathematical_type": "document/lane identifier",
+      "lane": "wave2_acbe / Paper 5",
+      "version_scope": "publication program",
+      "must_not_mean": ["a mathematical object", "ACBE_legacy", "ACBE_NT2", "ACA"],
+      "status": "PUBLICATION IDENTIFIER / DRAFT",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/acbe/PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-038",
+      "token": "ACA",
+      "preferred_rendering": "typed approximate causal-abstraction candidate",
+      "mathematical_type": "relation between declared low- and high-level intervention-indexed response profiles with maps, metric, scope, coverage, and error budget",
+      "lane": "wave2_acbe / Paper 5",
+      "version_scope": "new Paper 5 mathematical proposal",
+      "must_not_mean": ["ACBE_legacy", "ACBE_NT2", "an empirically validated abstraction", "causal identification without interventions or assumptions", "canon"],
+      "status": "MATHEMATICAL CANDIDATE / PROOF AND EMPIRICAL REVIEW OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/acbe/PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-039",
+      "token": "M_L and M_H",
+      "preferred_rendering": "low- and high-level interventional response profiles",
+      "mathematical_type": "context- and intervention-indexed families of response kernels K_L and K_H over declared spaces",
+      "lane": "wave2_acbe / Paper 5",
+      "version_scope": "ACA candidate",
+      "must_not_mean": ["observational joint laws alone", "learned representations without intervention semantics", "true causal models by declaration"],
+      "status": "TYPED MODEL PROFILE / EXACT INSTANCES AND VALIDATION OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/acbe/PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-040",
+      "token": "tau, kappa, omega",
+      "preferred_rendering": "state, context, and partial intervention abstraction maps",
+      "mathematical_type": "tau:X_L->X_H and kappa:C_L->C_H measurable maps plus a typed partial omega:I_L->I_H",
+      "lane": "wave2_acbe / Paper 5",
+      "version_scope": "ACA candidate",
+      "must_not_mean": ["automatic semantic identity", "total intervention coverage", "causal correctness", "lossless map without proof"],
+      "status": "PROPOSED MAP TYPES / CONSTRUCTION AND IDENTIFICATION OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/acbe/PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-041",
+      "token": "delta(c,i), Delta_infinity, Delta_mu, Gamma",
+      "preferred_rendering": "case defect, worst-case defect, design-weighted defect, and valid-evaluation coverage",
+      "mathematical_type": "metric/divergence-based nonnegative defects plus a non-vacuity coverage proportion",
+      "lane": "wave2_acbe / Paper 5",
+      "version_scope": "declared evaluation set E and metric d",
+      "must_not_mean": ["causal truth", "low average implying no catastrophic intervention", "zero defect proving either model true", "coverage omitted from interpretation"],
+      "status": "PROPOSED ESTIMANDS / NO ADMITTED RESULTS",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/acbe/PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md"]
+    },
+    {
+      "id": "PUB-NOT-042",
+      "token": "causal_identifiability",
+      "preferred_rendering": "DIRECT_INTERVENTIONAL, ASSUMPTION_IDENTIFIED, PARTIALLY_IDENTIFIED, NOT_IDENTIFIED, or SIMULATION_ONLY",
+      "mathematical_type": "claim-specific evidence and identification classification",
+      "lane": "wave2_acbe / Paper 5",
+      "version_scope": "ACA claim-language policy",
+      "must_not_mean": ["automatic ranking", "observational association as intervention", "simulation as empirical validation", "internal proof sketch as causal review"],
+      "status": "METHODS VOCABULARY / APPLICATION OPEN",
+      "source_refs": ["docs/working/project_coherence/publication/wave2/acbe/PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md"]
+    }
+  ],
+  "record_count": 42,
+  "known_cross_lane_relations": [
+    {
+      "relation": "same scoped mathematical result",
+      "left": "formal PUB-P3-PROP-001",
+      "right": "engineering THM-PROJECTOR-GRAM-KERNEL",
+      "merge_policy": "retain both local IDs; one lead registry crosswalk; no duplicate admission"
+    },
+    {
+      "relation": "same open transfer boundary",
+      "left": "formal PUB-P3-MSC-001",
+      "right": "engineering THM-PROJECTOR-CAPACITY-CAS-TRANSFER",
+      "merge_policy": "retain source theorem review separately from the absent CAS intertwiner and empirical transfer"
+    }
+  ],
+  "global_boundary": "This crosswalk is a publication-integration index. It does not rewrite the shared canonical registry, prove a comparison functor, close a theorem or gate, admit an experiment, authorize disclosure, or grant a license. The imported Paper 5 records keep ACBE_legacy, ACBE_NT2, ACBE-P5, and ACA type-distinct; the imported Harness 2 records describe control objects and an explicitly NOT_STARTED joined run. Memristive records remain pending a committed source-bound package."
+}

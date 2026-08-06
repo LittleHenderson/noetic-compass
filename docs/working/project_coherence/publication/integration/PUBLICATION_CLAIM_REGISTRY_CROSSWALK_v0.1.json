@@ -1,0 +1,367 @@
+{
+  "schema_version": "project_coherence.publication.integration.claim_registry_crosswalk.v0.1",
+  "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
+  "as_of": "2026-08-05",
+  "purpose": "Lead-owned index over lane-local theorem, claim, assertion, counterexample, negative-result, and hypothesis records. Local identifiers and source matrices remain authoritative for their draft lanes.",
+  "normalization_policy": {
+    "copy_or_renumber_local_ids": false,
+    "merge_records_by_similar_wording": false,
+    "negative_results_are_first_class": true,
+    "open_results_may_be_promoted": false,
+    "review_pass_means_admission": false,
+    "default_authority_state": {
+      "document_status": "DRAFT / OPEN",
+      "admission_ring": 4,
+      "license_status": "NOT LICENSED",
+      "disclosure_status": "HELD",
+      "canon_status": "NOT FROZEN",
+      "product_claim_effect": "NONE"
+    },
+    "required_join_key": "lane plus local_id",
+    "allowed_crosswalk_relations": ["SAME_SCOPED_RESULT", "SAME_OPEN_TRANSFER", "DEPENDS_ON", "TYPE_DISTINCT", "CONTRADICTS", "SUPERSEDES_WORDING_ONLY"],
+    "closure_authority": "No integration record closes a local obligation; closure requires the governing registry or gate procedure and applicable human decisions."
+  },
+  "local_claim_sets": [
+    {
+      "lane": "formal_math",
+      "papers": [1, 3],
+      "matrix_path": "docs/working/project_coherence/publication/wave1/formal_math/THEOREM_AND_CLAIM_MATRIX_v0.1.json",
+      "manifest_path": "docs/working/project_coherence/publication/wave1/formal_math/ARTIFACT_MANIFEST_v0.1.json",
+      "local_record_count": 20,
+      "local_ids": [
+        "PUB-P1-DEF-001",
+        "PUB-P1-THM-001",
+        "PUB-P1-THM-002",
+        "PUB-P1-THM-003",
+        "PUB-P1-CTR-001",
+        "PUB-P1-THM-004",
+        "PUB-P1-THM-005",
+        "PUB-P1-THM-006",
+        "PUB-P1-MODEL-001",
+        "PUB-P1-LEM-001",
+        "PUB-P3-DEF-001",
+        "PUB-P3-PROP-001",
+        "PUB-P3-PROP-002",
+        "PUB-P3-PROP-003",
+        "PUB-P3-PROP-004",
+        "PUB-P3-MSC-001",
+        "PUB-P3-CTR-001",
+        "PUB-P3-HYP-001",
+        "PUB-P3-HYP-002",
+        "PUB-P3-NEG-001"
+      ],
+      "internal_adversarial_review": {
+        "status": "COMPLETE AS A BOUNDED INTERNAL REVIEW / NOT EXTERNAL PEER REVIEW",
+        "reviewed_lane_commit": "3c8491db6f5559cf090909d9de0efa03d924f53f",
+        "review_package": "docs/working/project_coherence/publication/wave2/adversarial_review/formal_math",
+        "proof_invalidating_failures": 0,
+        "blocking_edits_found": 3,
+        "lead_correction_commit": "42d3d2fd",
+        "lead_disposition": "All three blocking wording/metadata findings were corrected in the integration copy; acceptance recheck and all upstream proof, formalization, experiment, and external-review obligations remain OPEN."
+      }
+    },
+    {
+      "lane": "category_theory",
+      "papers": [2, 4],
+      "matrix_path": "docs/working/project_coherence/publication/wave1/category_theory/THEOREM_AND_CLAIM_MATRIX_v0.1.json",
+      "manifest_path": "docs/working/project_coherence/publication/wave1/category_theory/PUBLICATION_ARTIFACT_MANIFEST_v0.1.json",
+      "local_record_count": 20,
+      "local_ids": [
+        "PUB-P2-001",
+        "PUB-P2-002",
+        "PUB-P2-003",
+        "PUB-P2-004",
+        "PUB-P2-005",
+        "PUB-P2-006",
+        "PUB-P2-007",
+        "PUB-P2-008",
+        "PUB-P2-009",
+        "PUB-P2-010",
+        "PUB-P2-011",
+        "PUB-P2-012",
+        "PUB-P4-001",
+        "PUB-P4-002",
+        "PUB-P4-003",
+        "PUB-P4-004",
+        "PUB-P4-005",
+        "PUB-P4-006",
+        "PUB-P4-007",
+        "PUB-P4-008"
+      ],
+      "internal_adversarial_review": {
+        "status": "COMPLETE AS A BOUNDED INTERNAL REVIEW / NOT EXTERNAL PEER REVIEW",
+        "reviewed_lane_commit": "643169e9bd8de6d4bd0cc2cbc3cde4e640f1671c",
+        "review_package": "docs/working/project_coherence/publication/wave2/adversarial_review/category_theory",
+        "blocking_errors_found": 3,
+        "required_nonblocking_changes_found": 5,
+        "lead_correction_commit": "42d3d2fd",
+        "lead_disposition": "The three blocking publication errors and the J_atom terminology correction were addressed in the integration copy. The false ambient representable witness was retracted and ambient distinctness remains OPEN. Vorob'ev/acyclicity hypotheses, Farkas citation completion, portable direct legacy-source binding, cellular variance/schema work, acceptance recheck, and external review remain OPEN."
+      }
+    },
+    {
+      "lane": "engineering",
+      "papers": [6],
+      "companion_report": "CAS-Ohm 1.0",
+      "matrix_path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CLAIM_ASSERTION_MATRIX_v0.1.json",
+      "manifest_path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_ARTIFACT_MANIFEST_v0.1.json",
+      "local_record_count": 31,
+      "local_ids": [
+        "PCBA-EA-001",
+        "PCBA-EA-002",
+        "PCBA-EA-003",
+        "PCBA-EA-004",
+        "PCBA-EA-005",
+        "PCBA-EA-006",
+        "PCBA-EA-007",
+        "PCBA-EA-008",
+        "PCBA-SF-001",
+        "PCBA-SF-002",
+        "PCBA-OPEN-001",
+        "PCBA-OPEN-002",
+        "PCBA-OPEN-003",
+        "PCBA-OPEN-004",
+        "OHM-EA-001",
+        "OHM-EA-002",
+        "OHM-EA-003",
+        "OHM-EA-004",
+        "OHM-EA-005",
+        "OHM-EA-006",
+        "OHM-EA-007",
+        "OHM-SF-001",
+        "THM-PROJECTOR-GRAM-KERNEL",
+        "THM-PROJECTOR-CAPACITY-CAS-TRANSFER",
+        "CLM-CAS-OHM-PHYSICAL-TELEMETRY",
+        "CLM-CAS-OHM-LOCAL-RESPONSE",
+        "CLM-CAS-OHM-EFFECTIVE-RESISTANCE",
+        "CLM-CAS-OHM-GAIN-COMPOSITION",
+        "CLM-CAS-OHM-REDUNDANCY",
+        "CLM-CAS-OHM-RESIDUAL-LOCALIZATION",
+        "MEM-OPEN-001"
+      ],
+      "internal_adversarial_review": {
+        "status": "COMPLETE AS A BOUNDED INTERNAL REVIEW / NOT EXTERNAL PEER REVIEW",
+        "reviewed_lane_commit": "c8635270ca6ba7c65504b4fda43cb42a89623015",
+        "review_package": "docs/working/project_coherence/publication/wave2/adversarial_review/engineering",
+        "blocking_changes_found": 2,
+        "required_strengthening_changes_found": 4,
+        "lead_correction_commit": "e4ccfe30",
+        "lead_disposition": "All six publication corrections were applied in the integration copy: positive rank d > 0, sole Formal Paper 3 theorem authority, exact Q4 pre-clipping domain, physical-unit boundary, replay-time freshness, and narrow QuickCheck citation scope. Acceptance recheck and every upstream engineering, empirical, external-review, and authority obligation remain OPEN."
+      }
+    },
+    {
+      "lane": "cas_harness2",
+      "papers": [7],
+      "matrix_path": "docs/working/project_coherence/publication/wave2/cas_harness2/WAVE2_HARNESS_CLAIM_THEOREM_CONTROL_MATRIX_v0.1.json",
+      "manifest_path": "docs/working/project_coherence/publication/wave2/cas_harness2/WAVE2_HARNESS_ARTIFACT_MANIFEST_v0.1.json",
+      "source_commit": "6b3e72dc623366f40256ddb9ebfc725c66d96dd3",
+      "local_record_count": 55,
+      "local_ids": [
+        "H2-THM-001",
+        "H2-THM-002",
+        "H2-THM-003",
+        "H2-CTRL-001",
+        "H2-CTRL-002",
+        "H2-CTRL-003",
+        "H2-CTRL-004",
+        "H2-CTRL-005",
+        "H2-CTRL-006",
+        "H2-CTRL-007",
+        "H2-CTRL-008",
+        "H2-CTRL-009",
+        "H2-CTRL-010",
+        "H2-CTRL-011",
+        "H2-CTRL-012",
+        "H2-CTRL-013",
+        "H2-CTRL-014",
+        "H2-CTRL-015",
+        "H2-WORKER-001",
+        "H2-WORKER-002",
+        "H2-WORKER-003",
+        "H2-HIST-001",
+        "H2-HIST-002",
+        "H2-HIST-003",
+        "H2-INT-001",
+        "H2-INT-002",
+        "H2-TRUST-001",
+        "H2-TRUST-002",
+        "H2-ENG-001",
+        "H2-ENG-002",
+        "H2-ENG-003",
+        "H2-ENG-004",
+        "H2-ENG-005",
+        "H2-SCI-001",
+        "H2-SCI-002",
+        "H2-SCI-003",
+        "H2-SCI-004",
+        "H2-SCI-005",
+        "H2-SCI-006",
+        "H2-HOST-001",
+        "H2-HOST-002",
+        "H2-CLAIM-001",
+        "H2-CLAIM-002",
+        "H2-CLAIM-003",
+        "H2-GOV-001",
+        "H2-GOV-002",
+        "H2-GOV-003",
+        "H2-SCI-007",
+        "H2-INT-003",
+        "H2-RECEIPT-001",
+        "H2-WORM-001",
+        "H2-PROV-001",
+        "H2-AUTH-001",
+        "H2-DATA-001",
+        "H2-RESULT-001"
+      ],
+      "internal_adversarial_review": {
+        "status": "OPEN",
+        "review_package": null,
+        "lead_disposition": "Imported as a source-bound control and methods package only. All scientific, hosted, trust, joined-run, WORM, product, license, canon, disclosure, and result records retain OPEN or NOT_STARTED status."
+      }
+    },
+    {
+      "lane": "acbe",
+      "papers": [5],
+      "matrix_path": "docs/working/project_coherence/publication/wave2/acbe/THEOREM_CLAIM_AND_CAUSAL_IDENTIFIABILITY_MATRIX_v0.1.json",
+      "manifest_path": "docs/working/project_coherence/publication/wave2/acbe/PUBLICATION_ARTIFACT_MANIFEST_v0.1.json",
+      "source_commit": "f1decd9c61dc3df786f69dc19df7b6ba28fc51af",
+      "local_record_count": 15,
+      "local_ids": [
+        "P5-NAME-001",
+        "P5-DEF-001",
+        "P5-DEF-002",
+        "P5-DEF-003",
+        "P5-PROP-001",
+        "P5-PROP-002",
+        "P5-PROP-003",
+        "P5-PROP-004",
+        "P5-CE-001",
+        "P5-CE-002",
+        "P5-CE-003",
+        "P5-BOUND-001",
+        "P5-HYP-001",
+        "P5-HYP-002",
+        "P5-GOV-001"
+      ],
+      "internal_adversarial_review": {
+        "status": "OPEN",
+        "review_package": null,
+        "lead_disposition": "Imported as a source-bound mathematical and causal-identifiability methods package only. Proof sketches, causal review, novelty review, exact implementations, preregistration, joined execution, audit, and replication remain OPEN."
+      }
+    }
+  ],
+  "crosswalks": [
+    {
+      "id": "PUB-XW-001",
+      "relation": "SAME_SCOPED_RESULT",
+      "members": [
+        {"lane": "formal_math", "local_id": "PUB-P3-PROP-001"},
+        {"lane": "engineering", "local_id": "THM-PROJECTOR-GRAM-KERNEL"}
+      ],
+      "normalized_label": "normalized common-rank projector Gram kernel",
+      "sole_theorem_authority": {
+        "lane": "formal_math",
+        "local_id": "PUB-P3-PROP-001",
+        "commit": "3c8491db6f5559cf090909d9de0efa03d924f53f",
+        "path": "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md",
+        "source_draft_sha256": "679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4"
+      },
+      "integration_disposition": "Retain both local IDs, but treat the engineering record as a read-only dependency summary. The normalized kernel requires common rank d > 0. No empirical or capacity meaning is added."
+    },
+    {
+      "id": "PUB-XW-002",
+      "relation": "SAME_OPEN_TRANSFER",
+      "members": [
+        {"lane": "formal_math", "local_id": "PUB-P3-MSC-001"},
+        {"lane": "engineering", "local_id": "THM-PROJECTOR-CAPACITY-CAS-TRANSFER"}
+      ],
+      "normalized_label": "moving-projector source theorem versus absent CAS-specific intertwiner and transfer",
+      "sole_theorem_authority": {
+        "lane": "formal_math",
+        "local_id": "PUB-P3-MSC-001",
+        "commit": "3c8491db6f5559cf090909d9de0efa03d924f53f",
+        "path": "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md",
+        "source_draft_sha256": "679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4"
+      },
+      "integration_disposition": "Keep the source proposition's bounded internal proof audit separate from the CAS transfer and treat the engineering record as a read-only dependency summary. The CAS transfer remains OPEN / PROOF GAP / RING 4."
+    },
+    {
+      "id": "PUB-XW-003",
+      "relation": "TYPE_DISTINCT",
+      "members": [
+        {"lane": "formal_math", "local_id": "PUB-P3-DEF-001"},
+        {"lane": "engineering", "local_id": "PCBA-EA-002"}
+      ],
+      "normalized_label": "MixedSimplexAddress versus projector profile",
+      "integration_disposition": "No canonical identity or equivalence exists in current evidence; any future comparison must be explicitly typed and loss-aware."
+    },
+    {
+      "id": "PUB-XW-004",
+      "relation": "DEPENDS_ON",
+      "members": [
+        {"lane": "category_theory", "local_id": "PUB-P4-006"},
+        {"lane": "engineering", "local_id": "CLM-CAS-OHM-LOCAL-RESPONSE"}
+      ],
+      "normalized_label": "future empirical methods require authenticated Harness 2 evidence rather than publication prose",
+      "integration_disposition": "No admitted experiment or Evidence Packet exists; dependency remains OPEN."
+    },
+    {
+      "id": "PUB-XW-005",
+      "relation": "TYPE_DISTINCT",
+      "members": [
+        {"lane": "category_theory", "local_id": "PUB-P4-002"},
+        {"lane": "engineering", "local_id": "OHM-EA-001"}
+      ],
+      "normalized_label": "stochastic/contextual type architecture versus profile-bound response quantities",
+      "integration_disposition": "Shared matrix or circuit vocabulary does not create a categorical, probabilistic, electrical, or causal identity."
+    },
+    {
+      "id": "PUB-XW-006",
+      "relation": "TYPE_DISTINCT",
+      "members": [
+        {"lane": "category_theory", "local_id": "PUB-P2-001"},
+        {"lane": "category_theory", "local_id": "PUB-P2-002"},
+        {"lane": "acbe", "local_id": "P5-NAME-001"},
+        {"lane": "acbe", "local_id": "P5-DEF-001"}
+      ],
+      "normalized_label": "legacy ACBE preorder, Noetic Topos provenance mark, Paper 5 identifier, and new ACA mathematical construct",
+      "integration_disposition": "Do not expand or reinterpret the legacy letters. Preserve ACBE_legacy, ACBE_NT2, ACBE-P5, and ACA as separate versioned types."
+    },
+    {
+      "id": "PUB-XW-007",
+      "relation": "DEPENDS_ON",
+      "members": [
+        {"lane": "category_theory", "local_id": "PUB-P4-008"},
+        {"lane": "acbe", "local_id": "P5-BOUND-001"},
+        {"lane": "cas_harness2", "local_id": "H2-SCI-007"},
+        {"lane": "cas_harness2", "local_id": "H2-RESULT-001"}
+      ],
+      "normalized_label": "causal nonclaim and future ACA experiment require explicit interventions plus authenticated joined-run evidence",
+      "integration_disposition": "Markov composition, gluing, local regressions, and a draft protocol do not identify a causal abstraction. No joined run or result exists."
+    }
+  ],
+  "wave1_summary": {
+    "local_record_total": 71,
+    "duplicate_local_ids_across_lanes": 0,
+    "explicit_crosswalks": 7,
+    "claims_promoted_by_integration": 0,
+    "claims_closed_by_integration": 0,
+    "negative_or_open_records_preserved": true,
+    "external_review_complete": false,
+    "experimental_program_complete": false
+  },
+  "integrated_summary": {
+    "imported_local_record_total": 141,
+    "imported_lanes": 5,
+    "duplicate_local_ids_across_imported_lanes": 0,
+    "claims_promoted_by_integration": 0,
+    "claims_closed_by_integration": 0,
+    "joined_run_status": "NOT_STARTED"
+  },
+  "wave2_import_state": {
+    "acbe": "IMPORTED FROM COMMIT f1decd9c61dc3df786f69dc19df7b6ba28fc51af / INTERNAL REVIEW OPEN / NO EXPERIMENT",
+    "cas_harness2": "IMPORTED FROM COMMIT 6b3e72dc623366f40256ddb9ebfc725c66d96dd3 / INTERNAL REVIEW OPEN / NO EXPERIMENT",
+    "memristive_context_lacunarity_injection_steering": "PENDING COMMITTED SOURCE-BOUND PACKAGE",
+    "rule": "Append matrix identities and crosswalks only after exact manifests reproduce and lead review confirms status boundaries."
+  },
+  "global_boundary": "This index does not replace the shared CLAIM_LEDGER_v0.1.json or THEOREM_LEDGER_v0.1.json, and it makes no canon, product, license, disclosure, causal, empirical, safety, or publication-submission decision."
+}

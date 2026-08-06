@@ -1,0 +1,121 @@
+{
+  "schema_version": "project_coherence.publication.integration.gate5_evidence_snapshot_crosswalk.v0.1",
+  "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
+  "as_of": "2026-08-05",
+  "purpose": "Preserve the exact historical Gate 5 snapshot used to author the isolated CAS Harness 2 lane while identifying the later hardened Gate 5 snapshot governing final publication integration.",
+  "snapshots": [
+    {
+      "snapshot_id": "G5-SNAPSHOT-HARNESS-LANE-BASE",
+      "role": "immutable Gate 5 source boundary used by the isolated CAS Harness 2 and ACBE authoring lanes",
+      "base_commit": "c8635270ca6ba7c65504b4fda43cb42a89623015",
+      "harness_package_commit": "6b3e72dc623366f40256ddb9ebfc725c66d96dd3",
+      "equivalent_gate5_bytes_also_used_at": {
+        "acbe_base_commit": "143cff40f94cf207a9130d6a7c07975a1fcbf0b9",
+        "acbe_package_commit": "f1decd9c61dc3df786f69dc19df7b6ba28fc51af",
+        "acbe_source_inventory": "docs/working/project_coherence/publication/wave2/acbe/SOURCE_BOUND_INVENTORY_v0.1.json"
+      },
+      "source_inventory": "docs/working/project_coherence/publication/wave2/cas_harness2/WAVE2_HARNESS_SOURCE_INVENTORY_v0.1.json",
+      "gate5_manifest": {
+        "path": "docs/working/project_coherence/gate5/GATE5_ARTIFACT_MANIFEST_v0.1.json",
+        "bytes_at_snapshot": 90499,
+        "sha256_at_snapshot": "5C73F203B4EA7D95B89C3BBB730FFCAE571EECC26E8BA2AF3ABC4A994635B333",
+        "artifact_count": 325
+      },
+      "gate5_verifier": {
+        "path": "scripts/verify_project_coherence_gate5.py",
+        "bytes_at_snapshot": 137723,
+        "sha256_at_snapshot": "A98D9DCC69E6E43509A2AB20B5E86A1F12A26AF2DE9D99C79C4ED63001C555E7"
+      },
+      "gate5_redteam": {
+        "path": "tests/cas_harness_v2/test_gate5_verifier_redteam.py",
+        "bytes_at_snapshot": 18516,
+        "sha256_at_snapshot": "956A428227CDB422AD1D6604C327A7AAC7D64E6E98CC4D3E05FDBCC08BD62B9A"
+      },
+      "replay": {
+        "elapsed_seconds": 204.9,
+        "harness_tests": 113,
+        "harness_subtests": 61,
+        "worker_tests": 364,
+        "numeric_tests": 32,
+        "api_fleet_launcher_tests": 76,
+        "result": "PASS WITH GATE OPEN"
+      },
+      "preservation_rule": "Do not rewrite the CAS Harness 2 or ACBE lane as if it had been authored against later bytes. Their counts and hashes are correct for this declared source snapshot."
+    },
+    {
+      "snapshot_id": "G5-SNAPSHOT-HARDENED-INTEGRATION",
+      "role": "current Gate 5 evidence spine for final publication integration",
+      "source_commit": "fbac9909a2b600ac8bc9f1217c073e4a3269beea",
+      "integration_merge_commit": "56c43cac",
+      "gate5_manifest": {
+        "path": "docs/working/project_coherence/gate5/GATE5_ARTIFACT_MANIFEST_v0.1.json",
+        "bytes": 95468,
+        "sha256": "AF263573DAB68D814A09D75CFEBB2ECDD62B08491BD2D1D66C7D5332F682A72A",
+        "artifact_count": 340
+      },
+      "local_runner_lock": {
+        "path": "docs/working/project_coherence/gate5/GATE5_LOCAL_WINDOWS_TEST_RUNNER_LOCK_v0.1.json",
+        "bytes": 121525,
+        "sha256": "EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13"
+      },
+      "raw_build_security_receipt": {
+        "path": "docs/working/project_coherence/gate5/GATE5_RAW_BUILD_AND_SECURITY_EVIDENCE_RECEIPT_v0.1.json",
+        "bytes": 18726,
+        "sha256": "061B558340F2683D28A0166CFF33844E0C187CEC7D27EF0EFF807161E728EF74",
+        "raw_payload_count": 10,
+        "scanner_findings": 7,
+        "vendor_open_or_deferred": 6,
+        "scanner_vendor_conflicts": 1
+      },
+      "gate5_verifier": {
+        "path": "scripts/verify_project_coherence_gate5.py",
+        "bytes": 228543,
+        "sha256": "A10D1136278DD289BCF4245FC045B9A36535DFD07B25CC90FF20E9CDA134E59B"
+      },
+      "gate5_redteam": {
+        "path": "tests/cas_harness_v2/test_gate5_verifier_redteam.py",
+        "bytes": 35291,
+        "sha256": "860A972334FFED9DC6D055F78055F7EA605DC50B3B7BB82B809EA1992B9A4D7A"
+      },
+      "clean_detached_replay": {
+        "elapsed_seconds": 250.3,
+        "harness_tests": 119,
+        "harness_subtests": 61,
+        "worker_tests": 364,
+        "numeric_tests": 32,
+        "api_fleet_launcher_tests": 76,
+        "result": "PASS WITH GATE OPEN"
+      },
+      "added_evidence_classes": [
+        "same-process bounded test receipts and node-set digests",
+        "exact local Windows interpreter and pytest-support runner lock",
+        "retained raw OCI, BuildKit, SPDX, SLSA, and scanner payloads",
+        "stronger ancestor/leaf identity and postflight red-team controls"
+      ],
+      "retained_open_boundaries": [
+        "complete transient and executed-bytecode history",
+        "complete standard-library, native, and child-process closure",
+        "immutable independently attested execution",
+        "independent reproduction",
+        "trusted time and WORM",
+        "real authorized GPU/model experiment",
+        "scientific validation",
+        "security finding closure",
+        "product, license, canon, and disclosure authority"
+      ]
+    }
+  ],
+  "integration_rules": [
+    "Citations to the CAS Harness 2 or ACBE lane's 325-artifact evidence must carry the historical snapshot ID.",
+    "Final integrated status and next-action decisions use the hardened 340-artifact snapshot unless a later exact commit supersedes it.",
+    "The hardened snapshot improves repository-local evidence; it does not retroactively create a joined run, Evidence Packet v2 scientific result, WORM receipt, independent attestation, or product authority.",
+    "Both snapshots remain OPEN / NOT_STARTED / RING 4 / NOT LICENSED / HELD / NOT FROZEN."
+  ],
+  "final_integrated_replay": {
+    "status": "PENDING AFTER ALL PUBLICATION MERGES",
+    "commit": null,
+    "elapsed_seconds": null,
+    "result": null
+  },
+  "global_boundary": "This is a provenance crosswalk, not a gate-close receipt or an amendment of the immutable source-bound Harness lane."
+}
