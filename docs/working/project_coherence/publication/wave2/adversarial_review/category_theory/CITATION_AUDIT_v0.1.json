@@ -1,0 +1,153 @@
+{
+  "schema_version": "project_coherence.adversarial_category_citation_audit.v0.1",
+  "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD",
+  "review_class": "INTERNAL PRIMARY-RECORD AUDIT / NOVELTY AND EXTERNAL REVIEW STILL OPEN",
+  "as_of": "2026-08-05",
+  "reviewed_lane_commit": "643169e9bd8de6d4bd0cc2cbc3cde4e640f1671c",
+  "policy": "A metadata match and a source-scope match are separate decisions. A primary source supports only the exact background statement identified here; it does not establish a Project Coherence specialization, implementation, experiment, novelty claim, or product claim.",
+  "records": [
+    {
+      "citation_id": "CIT-STKS-00ZC",
+      "primary_url": "https://stacks.math.columbia.edu/tag/00ZC",
+      "metadata_disposition": "PASS",
+      "scope_disposition": "PASS WITH EXISTING BOUNDARY",
+      "verified_support": "Lemma 7.48.1 states that the topology defined by site coverings is a topology and that the site and topology sheaf conditions agree.",
+      "required_change": null,
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "citation_id": "CIT-STKS-00W1",
+      "primary_url": "https://stacks.math.columbia.edu/tag/00W1",
+      "metadata_disposition": "PASS",
+      "scope_disposition": "PASS WITH EXISTING BOUNDARY",
+      "verified_support": "Section 7.10 gives matching families, associated sheafification, the left-adjoint universal property, and exactness in Lemma 7.10.15.",
+      "required_change": "Cite Theorem 7.10.10, the adjunction at lines corresponding to Section 7.10, and Lemma 7.10.15 more precisely in submission form.",
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "citation_id": "CIT-STKS-00WO",
+      "primary_url": "https://stacks.math.columbia.edu/tag/00WO",
+      "metadata_disposition": "PASS",
+      "scope_disposition": "PASS WITH EXISTING BOUNDARY",
+      "verified_support": "Section 7.12 defines subcanonical topologies and states that a general representable must be sheafified when subcanonicity is unavailable.",
+      "required_change": null,
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "citation_id": "CIT-MACLANE-MOERDIJK-1994",
+      "primary_url": "https://link.springer.com/book/10.1007/978-1-4612-0927-0",
+      "metadata_disposition": "PASS",
+      "scope_disposition": "PASS AS GENERAL BACKGROUND ONLY",
+      "verified_support": "Springer identifies Saunders Mac Lane and Ieke Moerdijk, the Universitext title and subtitle, 1994 copyright, and DOI 10.1007/978-1-4612-0927-0.",
+      "required_change": null,
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "citation_id": "CIT-GIRY-1982",
+      "primary_url": "https://link.springer.com/chapter/10.1007/BFb0092872",
+      "metadata_disposition": "PASS / AUTHOR DIACRITIC NORMALIZATION SUGGESTED",
+      "scope_disposition": "PASS AS PROBABILITY-MONAD BACKGROUND",
+      "verified_support": "Springer identifies Michèle Giry, pages 68-85, Lecture Notes in Mathematics volume 915, 1982 copyright, and DOI 10.1007/BFb0092872.",
+      "required_change": "Normalize the full author name to Michèle Giry where the full given name is used.",
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "citation_id": "CIT-FRITZ-2020",
+      "primary_url": "https://arxiv.org/abs/1908.07021",
+      "metadata_disposition": "PASS",
+      "scope_disposition": "PASS WITH EXISTING TYPE BOUNDARY",
+      "verified_support": "The primary author record identifies Tobias Fritz, the exact title, Advances in Mathematics 370 article 107239, DOI 10.1016/j.aim.2020.107239, and Markov-category scope.",
+      "required_change": null,
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "citation_id": "CIT-SIMPSON-2017",
+      "primary_url": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.CALCO.2017.1",
+      "metadata_disposition": "PASS",
+      "scope_disposition": "PASS / DIRECT PRIOR-ART BOUNDARY CONFIRMED",
+      "verified_support": "The CALCO record states that Simpson introduces probability sheaves and generalizes the Giry monad to their category; volume 72, pages 1:1-1:6, and DOI match.",
+      "required_change": null,
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "citation_id": "CIT-STEIN-2025",
+      "primary_url": "https://arxiv.org/abs/2503.02477",
+      "metadata_disposition": "PASS / ARXIV VERSION 2 CONFIRMED",
+      "scope_disposition": "PASS / DIRECT PRIOR-ART BOUNDARY CONFIRMED",
+      "verified_support": "The arXiv record states that suitable Markov categories yield abstract sample-space categories satisfying Simpson's axioms and a synthetic probability-sheaf theory. No journal reference is present on the checked record.",
+      "required_change": "Retain the preprint and peer-review-status caveat and recheck version/publication status at submission freeze.",
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "citation_id": "CIT-VOROBEV-1962",
+      "primary_url": "https://epubs.siam.org/doi/10.1137/1107014",
+      "metadata_disposition": "PASS",
+      "scope_disposition": "USE-SCOPE CORRECTION REQUIRED",
+      "verified_support": "The SIAM record defines regular finite complete complexes and states regularity as necessary and sufficient for extendability of every consistent family in its profile.",
+      "required_change": "State Vorob'ev regularity exactly. Add a separate primary source for any equivalence with a modern acyclicity notion and for junction-tree reconstruction, including zero-separator hypotheses if a quotient formula is used.",
+      "required_change_refs": ["CAT-RC-005"],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "citation_id": "CIT-ABRAMSKY-BRANDENBURGER-2011",
+      "primary_url": "https://arxiv.org/abs/1102.0264",
+      "metadata_disposition": "PASS",
+      "scope_disposition": "PASS WITH EXISTING TRANSFER BOUNDARY",
+      "verified_support": "The primary record states that nonlocality and contextuality correspond to global-section obstructions over arbitrary measurement covers; journal and DOI metadata match.",
+      "required_change": null,
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "citation_id": "CIT-HANSEN-GHRIST-2019",
+      "primary_url": "https://link.springer.com/article/10.1007/s41468-019-00038-7",
+      "metadata_disposition": "PASS",
+      "scope_disposition": "USE-SCOPE CORRECTION REQUIRED",
+      "verified_support": "The source defines weighted cellular sheaves over real or complex vector spaces with inner products and defines Hodge and sheaf Laplacians. It also has a section on infinite-dimensional Hilbert-space stalks and states boundedness conditions under which their Laplacians are bounded.",
+      "required_change": "Replace universal finite-dimensional necessity with a finite-profile requirement; retain linearity and declared inner-product/adjoint conditions.",
+      "required_change_refs": ["CAT-RC-002"],
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "citation_id": "CIT-ROBINSON-2017",
+      "primary_url": "https://www.sciencedirect.com/science/article/abs/pii/S156625351630207X",
+      "metadata_disposition": "PASS",
+      "scope_disposition": "PASS AS APPLIED-SHEAF MOTIVATION ONLY",
+      "verified_support": "The publisher record identifies the title, author, Information Fusion volume 36 pages 208-224, and DOI 10.1016/j.inffus.2016.12.002; it describes consistency and approximate sections for sensor integration.",
+      "required_change": null,
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "citation_id": "CIT-HEWITT-LIANG-2019",
+      "primary_url": "https://aclanthology.org/D19-1275/",
+      "metadata_disposition": "PASS",
+      "scope_disposition": "PASS WITH NARROW TRANSFER BOUNDARY",
+      "verified_support": "The ACL record supports control tasks and selectivity for interpreting linguistic representation probes; title, authors, pages, and DOI match.",
+      "required_change": "Describe the Paper 4 control suite as a conservative protocol transfer, not as a theorem that these exact controls are necessary or sufficient for every AI assessment.",
+      "publication_state": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    }
+  ],
+  "record_count": 13,
+  "missing_or_underbound_sources": [
+    {
+      "id": "MISSING-CIT-FARKAS",
+      "location": "Paper 4 section 5.2",
+      "issue": "The standard Farkas alternative and exact dual certificate orientation are used without a citation-ledger entry.",
+      "required_change_refs": ["CAT-RC-006"]
+    },
+    {
+      "id": "MISSING-CIT-JUNCTION-TREE",
+      "location": "Paper 4 section 6",
+      "issue": "Junction-tree constructive factorization and the relation between Vorob'ev regularity and a selected acyclicity notion are asserted without a dedicated primary source.",
+      "required_change_refs": ["CAT-RC-005"]
+    }
+  ],
+  "summary": {
+    "metadata_records_checked": 13,
+    "metadata_failures": 0,
+    "use_scope_corrections_required": 2,
+    "missing_or_underbound_sources": 2,
+    "novelty_review_complete": false,
+    "external_citation_review_complete": false
+  },
+  "global_boundary": "This audit corroborates primary-record identity and bounded use scopes only. Novelty, priority, exhaustive prior art, external referee acceptance, and publication permission remain OPEN; all publication states remain DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD."
+}
