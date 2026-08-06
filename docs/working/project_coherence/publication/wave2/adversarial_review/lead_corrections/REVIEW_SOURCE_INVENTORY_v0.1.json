@@ -1,0 +1,261 @@
+{
+  "schema_version": "project_coherence.publication.wave2.lead_correction_acceptance.source_inventory.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "reviewed_head": {
+    "commit": "f91e622d30ce83b77cbbff8b947d9b125e51ff54",
+    "tree": "ef78e7a04ec37fc9da0677a37d0c58d4f9a432eb",
+    "parent": "d63b5adbc31338613078b67d5e7b7e299f22ea6c",
+    "branch": "codex/project-coherence-review-lead-corrections",
+    "subject": "Close residual first-wave publication wording gaps"
+  },
+  "correction_commits": [
+    {
+      "commit": "42d3d2fd0e98bb86dd6f6f233a100514078ebd5f",
+      "tree": "152a4c40bc7531acf11e20bdfa7770ae89a027de",
+      "subject": "Resolve first-wave formal and category review blockers",
+      "changed_path_count": 13,
+      "ancestor_of_reviewed_head": true
+    },
+    {
+      "commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4",
+      "tree": "d73aed678722b943347642139b670318b8279469",
+      "subject": "Resolve first-wave engineering review blockers",
+      "changed_path_count": 7,
+      "ancestor_of_reviewed_head": true
+    },
+    {
+      "commit": "f91e622d30ce83b77cbbff8b947d9b125e51ff54",
+      "tree": "ef78e7a04ec37fc9da0677a37d0c58d4f9a432eb",
+      "subject": "Close residual first-wave publication wording gaps",
+      "changed_path_count": 9,
+      "ancestor_of_reviewed_head": true
+    }
+  ],
+  "review_manifests": [
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/formal_math/ADVERSARIAL_REVIEW_MANIFEST_v0.1.json",
+      "bytes": 3905,
+      "sha256": "A3BAF1ADEE5BAFC4043069C42003026587F3848BDFB751DF9504BE67021AC585",
+      "listed_artifact_count": 6
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/category_theory/ADVERSARIAL_REVIEW_MANIFEST_v0.1.json",
+      "bytes": 3524,
+      "sha256": "B260987D2E74EA7ED80059633F7DB5D4D338561FC055E7E2109532FFE89FD8DD",
+      "listed_artifact_count": 5
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/engineering/ADVERSARIAL_REVIEW_MANIFEST_v0.1.json",
+      "bytes": 5922,
+      "sha256": "312B094034ABD989736DF26046DA9277D9CA74B6C9AF4A5F204738B749A27FCA",
+      "listed_artifact_count": 5
+    }
+  ],
+  "correction_artifacts": [
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/ARTIFACT_MANIFEST_v0.1.json",
+      "bytes": 3817,
+      "sha256": "47DE6A59B5D9FA5036B51843B3892807243FD99954B5A008277C081CB51FE405",
+      "last_correction_commit": "f91e622d30ce83b77cbbff8b947d9b125e51ff54"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/CITATION_LEDGER_v0.1.json",
+      "bytes": 10662,
+      "sha256": "E90A158DF7E4079A56F79A68F5C234ECD79E5AB0A6A216C88A739641F06A6D81",
+      "last_correction_commit": "42d3d2fd0e98bb86dd6f6f233a100514078ebd5f"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/HANDOFF_PACKAGE_v0.1.md",
+      "bytes": 8340,
+      "sha256": "DB4354465CB81338B63C828056E3F71CBE9663B9379DD3F444373C7320578EFE",
+      "last_correction_commit": "42d3d2fd0e98bb86dd6f6f233a100514078ebd5f"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/PAPER_1_TYPED_NOETIC_DYNAMICS_AND_FINITE_FRACTAL_SEMANTICS_DELTA_v0.1.md",
+      "bytes": 18661,
+      "sha256": "BB6615D2FD87D437798FE2EDE0775951C41B5E2E36FDC4E49A692B1BBE8C061A",
+      "last_correction_commit": "f91e622d30ce83b77cbbff8b947d9b125e51ff54"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md",
+      "bytes": 18108,
+      "sha256": "833EBA84137DB1B4E45CF85A2BB2E0855F2F1BC41BA8E1E49D00992BA91D4196",
+      "last_correction_commit": "f91e622d30ce83b77cbbff8b947d9b125e51ff54"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/SOURCE_INVENTORY_v0.1.json",
+      "bytes": 16570,
+      "sha256": "7AD1FA077D3DDA63F6D0DD0245B27FA8C7CA0A9AE0AA503A70ED10BB1A7598BE",
+      "last_correction_commit": "f91e622d30ce83b77cbbff8b947d9b125e51ff54"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/THEOREM_AND_CLAIM_MATRIX_v0.1.json",
+      "bytes": 24480,
+      "sha256": "9DF011E02733C5960352AAACDF05F805A5EE317DD6252D060716856E60206E72",
+      "last_correction_commit": "42d3d2fd0e98bb86dd6f6f233a100514078ebd5f"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/formal_math/UNRESOLVED_OBLIGATIONS_v0.1.json",
+      "bytes": 17335,
+      "sha256": "53EFD7198CC327189F75765D362F5F9602B1C5776DA87E98405B17ABD94D0FF0",
+      "last_correction_commit": "f91e622d30ce83b77cbbff8b947d9b125e51ff54"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/category_theory/CITATION_LEDGER_v0.1.json",
+      "bytes": 10377,
+      "sha256": "8B7C1A03EF9B072D2CD8F9F77E0257C964AEC6E61CA96AB6738FCB66F18BD374",
+      "last_correction_commit": "42d3d2fd0e98bb86dd6f6f233a100514078ebd5f"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/category_theory/EVIDENCE_MAP_v0.1.json",
+      "bytes": 12358,
+      "sha256": "CF3C982DA3F24A5119500D805584BDA2FD55C683D05E945FA5BE2B687FB9E1EF",
+      "last_correction_commit": "f91e622d30ce83b77cbbff8b947d9b125e51ff54"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/category_theory/HANDOFF_PACKAGE_v0.1.md",
+      "bytes": 8160,
+      "sha256": "F677F70DC7965FDD076041D99E3356D5EBFE4B8B63B7B638C7B392007BF7F9E7",
+      "last_correction_commit": "42d3d2fd0e98bb86dd6f6f233a100514078ebd5f"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/category_theory/PAPER_2_THE_MARKED_AND_MODAL_NOETIC_TOPOS_DRAFT_v0.1.md",
+      "bytes": 24082,
+      "sha256": "B9FDFE82B50C526238DC17EAD12BF8955FF8AA3C9BD9881F140D1A485332819E",
+      "last_correction_commit": "42d3d2fd0e98bb86dd6f6f233a100514078ebd5f"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/category_theory/PAPER_4_NOETIC_MARKOV_SHEAVES_FOR_CONTEXTUAL_AI_ASSESSMENT_DRAFT_v0.1.md",
+      "bytes": 26631,
+      "sha256": "FDD48FA0B9C4F92691DE574EEF6DB8AF79097C667B09324016466B5F4689178A",
+      "last_correction_commit": "f91e622d30ce83b77cbbff8b947d9b125e51ff54"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/category_theory/PUBLICATION_ARTIFACT_MANIFEST_v0.1.json",
+      "bytes": 3381,
+      "sha256": "ACEAD29C598FDDEB4F9739EC8D50A874C4591633447B200D68BF4E5E3D2FDE3C",
+      "last_correction_commit": "f91e622d30ce83b77cbbff8b947d9b125e51ff54"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/category_theory/THEOREM_AND_CLAIM_MATRIX_v0.1.json",
+      "bytes": 17627,
+      "sha256": "2B59DBA5537910AF73688C292C8FA12DA2A5BAA48F39492AFE859DF27979D5B6",
+      "last_correction_commit": "42d3d2fd0e98bb86dd6f6f233a100514078ebd5f"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/category_theory/UNRESOLVED_OBLIGATIONS_v0.1.json",
+      "bytes": 11003,
+      "sha256": "2D46D50F6B44AECA47BC1F070036F772A0CB0F650D27BA1936E31CC0831C4A0E",
+      "last_correction_commit": "f91e622d30ce83b77cbbff8b947d9b125e51ff54"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md",
+      "bytes": 22136,
+      "sha256": "E94E2AB4EFF7FEAC00E68DDB8D22C58D53E29CEB0412BEF908E90E6A962B2306",
+      "last_correction_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/engineering/CAS_PCBA_8_ADAPTIVE_COGNITIVE_CIRCUIT_ENGINEERING_DRAFT_v0.1.md",
+      "bytes": 24237,
+      "sha256": "7717F73F6ECDA1A8B849E998617FB2BCF4AD748EE75031091566BB7B044483DA",
+      "last_correction_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_ARTIFACT_MANIFEST_v0.1.json",
+      "bytes": 5533,
+      "sha256": "EBA9A26302A9CD6BF0E19EFF4B56FD725D232D4AF5FB4911153C01E7309E4DDA",
+      "last_correction_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CITATION_LEDGER_v0.1.json",
+      "bytes": 15024,
+      "sha256": "CF5D905CB422C447AB9D9B92F4944A6E24A4224D171CCD3AF633DF9B52E43D0F",
+      "last_correction_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CLAIM_ASSERTION_MATRIX_v0.1.json",
+      "bytes": 26422,
+      "sha256": "4856CB67A58447B0871928A1AC68BF9341094B95A7665CE30E8BDB7E611409CB",
+      "last_correction_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_EVIDENCE_MAP_v0.1.json",
+      "bytes": 23888,
+      "sha256": "7E2E69F25BBAB7024403C1386318064F1888A6AFF7CA8671C874A10C5D740638",
+      "last_correction_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_HANDOFF_PACKAGE_v0.1.md",
+      "bytes": 10655,
+      "sha256": "5019EF117D1DF6E09166A9347E88E61EDB3F11D2D69B7972981D154D13380791",
+      "last_correction_commit": "e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4"
+    }
+  ],
+  "retained_upstream_sources": [
+    {
+      "path": "docs/working/project_coherence/gate1/noetic_topos2/NOETIC_TOPOS_2_SPEC_v0.1.md",
+      "bytes": 15042,
+      "sha256": "156A5D8C5320F36E81E3B46473BA8A038B35672DCD28839A404D96A3DB1A763A",
+      "role": "upstream_specification_retaining_false_ambient_witness_and_older_type_terminology"
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/noetic_topos2/NOETIC_TOPOS_2_THEOREMS_v0.1.json",
+      "bytes": 12957,
+      "sha256": "52E000652C7DECE64C1E2B3F613D85FEFB2F80414CFAAD53AA38FE339B26E536",
+      "role": "upstream_theorem_record_retaining_false_ambient_witness"
+    }
+  ],
+  "verifiers": [
+    {
+      "path": "scripts/verify_project_coherence_publication_program.py",
+      "bytes": 15848,
+      "sha256": "ABA4B7683FA60A0211F5629A623941D0A7D6516D55C1CD544FF45CFDE85930BE",
+      "result": "PASS",
+      "result_scope": "50 publication JSON files, 8 non-self-hashing manifests, 53 bound artifacts, 141 claim/control records, 42 notation/type records, 8 tracks, 10 obligation clusters, 340 Gate 5 snapshot artifacts",
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    {
+      "path": "scripts/verify_project_coherence_gate1.py",
+      "bytes": 6081,
+      "sha256": "607CF6DCB34DDBC14DB501B2EFFC4BEEB84645DB7E377A1D5131535436C57F80",
+      "result": "PASS",
+      "result_scope": "23 hash-bound top-level artifacts, 6 subordinate PASS receipts, 16 Lean theorem audits",
+      "retained_status": "OPEN / Ring 4 / NOT LICENSED / NOT FROZEN"
+    },
+    {
+      "path": "scripts/verify_project_coherence_gate4.py",
+      "bytes": 27522,
+      "sha256": "D53F45AFAA97C7AADE1375F0DADEFE6B034C3D4115C7E8DC49403802469BB27F",
+      "result": "PASS",
+      "result_scope": "54 artifacts, 208 test methods, 53 criteria with 20 open, 4 grammar counterexamples across 5 boards, 8 CAS-Ohm conflicts",
+      "retained_status": "OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN"
+    }
+  ],
+  "counts": {
+    "review_manifests": 3,
+    "correction_artifacts": 23,
+    "retained_upstream_sources": 2,
+    "verifiers": 3,
+    "total_file_records": 31
+  },
+  "validation_summary": {
+    "all_file_hashes_and_bytes_exact": true,
+    "all_json_duplicate_key_rejection_pass": true,
+    "formal_claim_evidence_bijection": "20 / 20",
+    "category_claim_edge_coverage": "20 / 20 exactly once",
+    "category_lean_seed_claim_edges": 0,
+    "engineering_claim_ids_unique": "31 / 31",
+    "formal_obligations_open": "24 / 24",
+    "category_obligations_open": "23 / 23",
+    "engineering_obligations_open_or_not_licensed": "27 / 27",
+    "frozen_formal_paper3_authority": "17908 bytes / 679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4"
+  },
+  "claim_boundary": "This inventory binds review inputs and corrected-tree bytes only. It does not prove correctness of a theorem, repair an upstream source, close an obligation, validate an experiment, authorize disclosure, grant a license, admit canon, or establish product readiness."
+}
