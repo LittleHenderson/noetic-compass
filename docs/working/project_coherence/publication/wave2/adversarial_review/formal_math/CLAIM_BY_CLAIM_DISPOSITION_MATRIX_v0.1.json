@@ -1,0 +1,203 @@
+{
+  "schema_version": "project_coherence.publication.adversarial_review.formal_math.claim_disposition.v0.1",
+  "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
+  "as_of": "2026-08-05",
+  "reviewed_commit": "3c8491db6f5559cf090909d9de0efa03d924f53f",
+  "policy": {
+    "pass_meaning": "No contradiction or proof-invalidating defect was found within this bounded internal review. PASS is not theorem admission, external review, canon promotion, or publication approval.",
+    "blocking_meaning": "Must be corrected before submission or registry integration; it does not require deletion of the Ring-4 draft.",
+    "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+  },
+  "record_count": 20,
+  "records": [
+    {
+      "claim_id": "PUB-P1-DEF-001",
+      "disposition": "PASS WITH BLOCKING SCOPE CLARIFICATION",
+      "mathematical_check": "Typed total functions with exact sources and targets form a category.",
+      "evidence_check": "Python and Lean evidence supports the category laws, with the Lean carrier not itself restricted to finite types.",
+      "blocking_findings": ["RFM-BLK-001"],
+      "strengthening_findings": [],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P1-THM-001",
+      "disposition": "PASS AS SCOPED",
+      "mathematical_check": "Left identity, right identity, and associativity are pointwise identities for type-correct total functions.",
+      "evidence_check": "Lean kernel audit and bounded Python replay passed; Python-to-Lean correspondence remains open as stated.",
+      "blocking_findings": [],
+      "strengthening_findings": [],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P1-THM-002",
+      "disposition": "PASS AS SCOPED FORMAL FRAGMENT",
+      "mathematical_check": "The standard-basis lift preserves identities and composition on basis actions, entries, and relational support.",
+      "evidence_check": "The Lean declarations do not implement general scalar matrix multiplication or arbitrary-vector linearity, and the draft states that boundary accurately.",
+      "blocking_findings": [],
+      "strengthening_findings": [],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P1-THM-003",
+      "disposition": "PASS WITH UNIVERSAL FORMALIZATION OPEN",
+      "mathematical_check": "Grouping A_f^*A_f by input fibers produces all-ones blocks whose maximum eigenvalue is the maximum fiber multiplicity.",
+      "evidence_check": "The direct proof is correct and bounded executable checks passed; no generic Lean norm theorem exists.",
+      "blocking_findings": [],
+      "strengthening_findings": [],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P1-CTR-001",
+      "disposition": "PASS",
+      "mathematical_check": "For A=[[1,1],[0,0]], A^2=A, ||A||=sqrt(2), tr(A^*A)=2, rank(A)=1, A^*A is not a projection, and A is not self-adjoint.",
+      "evidence_check": "Executable regression passes; the Lean fixture is correctly described as function/literal-level rather than a generic matrix bridge.",
+      "blocking_findings": [],
+      "strengthening_findings": [],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P1-THM-004",
+      "disposition": "PASS MATHEMATICALLY / BLOCKING EVIDENCE-METADATA EDIT",
+      "mathematical_check": "Functional-graph index and cycle bounds give f^(n!) idempotent; eventual periodicity of one element in a nonempty finite semigroup gives s^(|S|!) idempotent.",
+      "evidence_check": "The record says STANDARD_RESULT_CITED, but it contains no primary citation and points only to the internal red-team report plus bounded tests.",
+      "blocking_findings": ["RFM-BLK-002"],
+      "strengthening_findings": ["RFM-STR-001"],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P1-THM-005",
+      "disposition": "PASS WITH FORMALIZATION OPEN",
+      "mathematical_check": "Heap-ordered breadth-first expansion and first-denotation pruning preserve shortlex leastness because a shorter or lexicographically earlier candidate must be generated no later than a competing candidate.",
+      "evidence_check": "The implementation fails closed on resource guards and bounded brute-force minima agree; a universal pruning proof remains open as stated.",
+      "blocking_findings": [],
+      "strengthening_findings": [],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P1-THM-006",
+      "disposition": "PASS",
+      "mathematical_check": "Monotonicity and H(X) subseteq X make the iterates descend; every fixed subset lies in every iterate, hence in the stabilized greatest fixed subset.",
+      "evidence_check": "An independent exhaustive replay covered 394 families of up to two endomaps on carriers through size three.",
+      "blocking_findings": [],
+      "strengthening_findings": ["RFM-STR-002"],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P1-MODEL-001",
+      "disposition": "PASS AS A NONCANONICAL PUBLICATION PROPOSAL",
+      "mathematical_check": "The finite denotational layer and metric IFS layer are correctly separated.",
+      "evidence_check": "Hutchinson supports only the metric contractive layer, not the finite symbolic layer or any TKS semantic claim.",
+      "blocking_findings": [],
+      "strengthening_findings": ["RFM-STR-003"],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P1-LEM-001",
+      "disposition": "PASS",
+      "mathematical_check": "The displayed bound follows from g_tilde f_tilde-gf=g_tilde(f_tilde-f)+(g_tilde-g)f and submultiplicativity.",
+      "evidence_check": "The draft correctly refuses to elevate the two-factor estimate into a complete exact/approximate calculus.",
+      "blocking_findings": [],
+      "strengthening_findings": [],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P3-DEF-001",
+      "disposition": "PASS AS SOURCE-BOUND TYPE DISTINCTION",
+      "mathematical_check": "A mixed probability-simplex address and a Grassmannian projector profile are different mathematical types without a supplied canonical comparison.",
+      "evidence_check": "The distinction agrees with the symbol registry and Gate 4 PCBA specification.",
+      "blocking_findings": [],
+      "strengthening_findings": ["RFM-STR-004"],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P3-PROP-001",
+      "disposition": "PASS WITH FORMALIZATION OPEN",
+      "mathematical_check": "P_i/sqrt(d) are Hilbert-Schmidt feature vectors, so tr(P_iP_j)/d is a normalized positive-semidefinite Gram kernel in [0,1].",
+      "evidence_check": "The proof correctly uses conjugation for complex coefficients and does not claim strict positive definiteness or semantic validity.",
+      "blocking_findings": [],
+      "strengthening_findings": [],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P3-PROP-002",
+      "disposition": "PASS",
+      "mathematical_check": "The trace overlap equals the sum of squared principal-angle cosines, and the stated chordal convention gives the complementary sine-square sum.",
+      "evidence_check": "Primary literature identities and the scalar-information-loss boundary are correctly represented.",
+      "blocking_findings": [],
+      "strengthening_findings": [],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P3-PROP-003",
+      "disposition": "PASS WITH FORMALIZATION OPEN",
+      "mathematical_check": "Centering by (d/D)I and applying nonnegativity of the squared norm of the sum yields max k(i,j)>=(dN-D)/(D(N-1)) for N>=2 and 1<=d<=D.",
+      "evidence_check": "The manuscript body and matrix hypotheses agree, including the rank-one and full-rank endpoints.",
+      "blocking_findings": [],
+      "strengthening_findings": [],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P3-PROP-004",
+      "disposition": "PASS",
+      "mathematical_check": "The ordinary Welch bound applied to unit Hilbert-Schmidt features gives the stated necessary condition in the declared real feature dimension.",
+      "evidence_check": "Using an ambient dimension upper bound is conservative; no task or capacity interpretation follows.",
+      "blocking_findings": [],
+      "strengthening_findings": [],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P3-MSC-001",
+      "disposition": "PASS AS QUARANTINED CONDITIONAL TRANSFER / CAS TRANSFER OPEN",
+      "mathematical_check": "A direct audit of exact Proposition 4.1 found its proof valid in the source setting; no CAS-specific B, isometry certificate, or intertwining proof was found.",
+      "evidence_check": "The record correctly blocks the CAS transfer, but source-proposition review and CAS-transfer proof status should be represented separately.",
+      "blocking_findings": [],
+      "strengthening_findings": ["RFM-STR-005"],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P3-CTR-001",
+      "disposition": "PASS WITH LOGICAL-PRESENTATION STRENGTHENING",
+      "mathematical_check": "The example refutes the explicit weakening in which Lambda is treated as a free retained parameter after deleting the intertwining hypothesis; no isometry can realize Lambda=1 for both orthogonal code vectors when D=d=1.",
+      "evidence_check": "It does not refute Proposition 4.1 with all hypotheses, as the draft already states.",
+      "blocking_findings": [],
+      "strengthening_findings": ["RFM-STR-006"],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P3-HYP-001",
+      "disposition": "OPEN EMPIRICAL HYPOTHESIS / CORRECTLY HELD",
+      "mathematical_check": "Not susceptible to proof from the current mathematical artifacts.",
+      "evidence_check": "No admitted experiment or Evidence Packet exists; the draft lists appropriate controls and replication requirements.",
+      "blocking_findings": [],
+      "strengthening_findings": [],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P3-HYP-002",
+      "disposition": "OPEN EMPIRICAL HYPOTHESIS / CORRECTLY HELD",
+      "mathematical_check": "Predictive superiority is an empirical comparison and also depends on a certified capacity quantity.",
+      "evidence_check": "No theorem transfer, preregistration, held-out result, replication, or Evidence Packet is present.",
+      "blocking_findings": [],
+      "strengthening_findings": [],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    },
+    {
+      "claim_id": "PUB-P3-NEG-001",
+      "disposition": "PASS AS CURRENT-EVIDENCE NEGATIVE SCOPE FINDING",
+      "mathematical_check": "No canonical identity or equivalence is exhibited by the reviewed source set.",
+      "evidence_check": "The statement is appropriately scoped to current evidence and allows a future typed lossy comparison.",
+      "blocking_findings": [],
+      "strengthening_findings": [],
+      "retained_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD"
+    }
+  ],
+  "summary": {
+    "records_reviewed": 20,
+    "proof_invalidating_failures": 0,
+    "records_with_blocking_publication_edits": 2,
+    "empirical_hypotheses_remaining_open": 2,
+    "claims_promoted": 0,
+    "claims_closed": 0
+  },
+  "global_boundary": "These are internal adversarial dispositions, not admissions into the shared theorem or claim registries. Every upstream record retains DRAFT / OPEN / RING 4 / NOT LICENSED / HELD status."
+}
