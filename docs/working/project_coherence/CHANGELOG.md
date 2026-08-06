@@ -2,7 +2,101 @@
 
 All dates use the repository's working timezone. This changelog records control-package changes, not product releases.
 
-## 2026-08-06 - Gate 5 strict worker-protocol candidate
+## 2026-08-06 - Gate 5 dark prospective run-lifecycle successor
+
+### Added
+
+- A backend-qualified prospective lifecycle registry that reserves a run subject
+  and run-nonce digest before authorization construction, releases the raw nonce
+  only once, uses same-host `StateStore` compare-and-swap for one-use
+  consumption, hash-links terminal/outcome/packet-or-nonreporting transitions,
+  and reconciles tenant-visible lifecycle records. Its default nonce factory is
+  `secrets.token_bytes(32)`, but the factory is injectable and current runtime
+  provenance is unattested. Its SQLite evidence is close/reopen persistence and
+  two-connection same-file arbitration only, with no process-crash, OS-restart,
+  power-loss, host-loss, replication, or independent-attestation claim.
+- A dark orchestration service for exact authorization, server-built
+  consumption, retained output bodies, `SUCCESS`/`FAILURE` terminalization,
+  reserved outcome sealing, strict Evidence Packet v2 attachment or typed
+  nonreporting, and event-bound wrapper replay. Synthetic Object-Lock receipts
+  bind the canonical outer wrapper, not independent retention of the inner exact
+  carrier.
+- A private, default-false, OpenAPI-hidden exact-body router. Callback nonce rows
+  now bind the server-observed method, exact path, job/run identity,
+  authorization digest where applicable, and body digest/length for every
+  accepted route request. These authentication rows are distinct from the
+  terminal-only bridge acceptance wrapper/index. The terminal route body remains
+  opaque until the missing strict adapter validates it, and customer-JWT
+  fallback is forbidden.
+- A standalone exact active-lease-generation validator and a sealed-safe bridge
+  authorization replay port.
+
+### Corrected through P0 adversarial review
+
+- Prevented retroactive/terminal-first authorization by reserving the subject
+  and nonce digest before invoking the builder; interrupted builders remain
+  quarantined and reconciliation-visible and cannot reissue the raw nonce.
+- Required Packet v2 to match retained terminal outputs and transitive artifact
+  bodies; failed runs use a server-built nonreporting envelope instead of a
+  fabricated favorable packet. Packet and supplied dependency bytes are
+  structurally prevalidated before the first write, but a later storage failure
+  can leave already written wrappers outside the lifecycle event chain.
+- Preserved the missing integration boundaries: lifecycle consumption currently
+  trusts passed lease facts rather than calling the standalone active-lease
+  validator; the bridge does not receive the enclosing request-bound intake
+  receipt; service/route paths do not record registry-level
+  `INDETERMINATE`/`REJECTED`/`EXPIRED`; and reconciliation does not enumerate
+  orphan/losing wrappers or every pending output.
+- Preserved the missing run-identity adapter: the route hashes `job_id`, the
+  lifecycle hashes `subject_id`, and the service requires
+  `subject_id == authorization_id`, but no admitted adapter enforces
+  `job_id == subject_id == authorization_id`.
+- Recorded empty-tenant semantics explicitly: an empty configured tenant view
+  has zero counts, `has_registered_runs=false`, and
+  `all_runs_reporting_disposed=false`; an issue-free structural result does not
+  prove that no off-registry execution occurred.
+
+### Verified bounded receipts
+
+- Harness v2 kernel/history/verifier: 150 tests and 99 subtests. The strict
+  worker-protocol subset passes 30 tests and 38 subtests with canonical node-ID
+  digest
+  `534CF4550FF56F3EA5F4235680CDB89A91784D1CEE0B7CB7ABDF9DE1C7B3E7FF`.
+- The API/launcher/fleet/state suite passes 78/78; the dark bridge passes 8/8;
+  and the callback-auth/fake-Object-Lock seam suite passes 35/35. Their
+  canonical node-ID digests are, respectively,
+  `603DEBF7DF9AC7B5A69543C3736F4CD38692D3330690A7559A6F9DE6F0E2AF77`,
+  `6B0B52C30FA70C52E0EA5AC3B15221F4E5B8BC8337AA53B04972B3E543177969`,
+  and `A340034084006FC437AB1F9724FB45D3AE09555F5D302FC36CCD6CF53EC28F57`.
+- The prospective lifecycle/SQLite/default-dark-route suite passes 48/48 with
+  canonical node-ID digest
+  `B7B87D52351B21039A83E4B526BCAEDE0E8F3E11F79E162480FB007375421F44`.
+  All are local same-process engineering receipts, not independent, live, or
+  scientific evidence. The historical 364/364 worker receipt remains unchanged.
+
+### Preserved open boundaries
+
+- Router code now exists, but it is not an admitted or enabled route. Main sets
+  the service port to `None`, excludes the router from OpenAPI, and refuses
+  startup when the flag is enabled without both the isolated root package and a
+  packaged lifespan adapter. No such adapter or explicit HTTP outcome-seal path
+  is wired.
+- `G5-ENGINEERING-001` and `G5-TRUST-002/003/004` remain `OPEN_ENGINEERING`.
+  Trusted time, independent inner-byte/WORM authority, multi-host and host-loss
+  proof, authenticated execution, complete anti-selective-reporting coverage,
+  independent replay, live experiment, science, product, license, canon, and
+  disclosure authority remain absent.
+- The structural verifier binds declared schemas, wording, bytes, and local
+  regression outcomes; it cannot authenticate substantive content truth or
+  establish scientific validity.
+- The user-reported RunPod balance is `$107.00`; no RunPod/GPU/paid job was
+  launched, known spend for this tranche is `$0.00`, and no provider billing
+  ledger or balance receipt was inspected.
+
+## 2026-08-06 - Gate 5 initial strict worker-protocol candidate
+
+This is the predecessor checkpoint. The lifecycle-successor entry above is the
+current semantic boundary; the facts below are retained as chronology.
 
 ### Added
 
@@ -11,7 +105,7 @@ All dates use the repository's working timezone. This changelog records control-
   FleetJob layer range, shard, ordered method/output assignments, exact lease
   model identity, preregistered controls/falsifiers, structural run nonce, and
   fixed `Ring 4 / NOT LICENSED / HELD` authority limits.
-- A pre-outcome-only dark research adapter that requires injected worker
+- An initial pre-outcome-only dark research adapter that requires injected worker
   loaders and a current server FleetJob snapshot, then stores one retry-stable
   terminal wrapper/index
   plus a separate server-authored acceptance wrapper/index for each consumed
@@ -52,7 +146,7 @@ All dates use the repository's working timezone. This changelog records control-
 
 - `G5-ENGINEERING-001`, `G5-TRUST-002`, `G5-TRUST-003`, and `G5-TRUST-004`
   remain `OPEN_ENGINEERING`. No production route, attested loader provenance,
-  authenticated one-use run nonce, trusted time, exhaustive run registry, live
+  authenticated one-use run nonce, trusted time, complete run registry, live
   S3/Object-Lock receipt, full outcome-access/Evidence-Packet sequence,
   independent executor-auditor replay, GPU experiment, science, license,
   product, canon, or disclosure authority was created.

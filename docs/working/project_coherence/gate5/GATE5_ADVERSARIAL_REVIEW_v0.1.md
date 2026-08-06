@@ -29,7 +29,9 @@ This review is bounded to the following current surfaces:
 - `HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md`;
 - the research-only worker protocol candidate
   `GATE5_WORKER_PROTOCOL_BINDING_v0.1.md`, its strict carriers, dark API
-  adapter, callback-auth projection, and immutable-storage seam;
+  bridge, same-host prospective lifecycle registry, exact-wrapper service,
+  default-dark/OpenAPI-hidden router, request-bound callback-auth projection,
+  active-lease validation seam, and synthetic immutable-storage seam;
 - the current `live-trace-worker` model-identity and intervention-integrity
   controls;
 - the successor dependency/container candidate receipt
@@ -143,10 +145,10 @@ SHA-256 and byte length, and freshly replays them against the current
 pre-outcome chain before public reads. This is process-local tamper detection,
 not WORM authority.
 
-The clean focused receipt is **146 passed tests plus 96 subtests** under Python
+The clean focused receipt is **150 passed tests plus 99 subtests** under Python
 3.14 with startup site processing and bytecode/cache output disabled. It
-contains 94 active-kernel tests, 27 strict worker-protocol tests, 4
-historical-recovery tests, and 21 Gate 5 verifier red-team tests. The retained
+contains 94 active-kernel tests, 30 strict worker-protocol tests, 4
+historical-recovery tests, and 22 Gate 5 verifier red-team tests. The retained
 attacks cover hardlink/symlink aliasing,
 same-byte inode replacement, a synthetic reparse attribute, duplicate or
 noncanonical node IDs, raw-evidence security promotion, erasure of the
@@ -158,7 +160,7 @@ object substitution while structural ancestor replacement remains detected.
 The receipt is limited to
 `tests/cas_harness_v2`; it is not a repository-wide or production receipt.
 Its same-process executed-node SHA-256 is
-`EA041DCF5EFC04CB94297C381AFEF4E418FE000A23B6A79274177EC79667DFC1`.
+`6BF70F5569C4BCA5B7D896382A099FC966E9C0622B3A3694BE0B330B66048756`.
 
 ## Worker-protocol adversarial chronology
 
@@ -183,7 +185,9 @@ server-authored nonce receipt is bound instead to the private acceptance
 wrapper and durable per-authorization index. Stable terminal bytes can
 therefore be retried with a fresh HTTP-attempt nonce, while the fleet auth store
 continues to reject reuse of one callback nonce. This transport control is not
-the separate authenticated one-use run nonce required by `G5-TRUST-003`.
+the separate independently authenticated, replica/host-loss-resistant one-use
+run authority required by `G5-TRUST-003`; the later same-host lifecycle
+candidate does not close that requirement.
 
 The terminal loader now supports verification from exact authorization bytes
 after sealing only when the process-local OutcomeAccessEvent binds that exact
@@ -195,9 +199,9 @@ produced artifacts carry
 `QUARANTINED_PARTIAL_NEGATIVE_EVIDENCE_ONLY`. A failed run therefore retains
 negative evidence without minting a scientific result.
 
-The strict worker subset passes **27 tests plus 35 subtests**, with canonical
+The strict worker subset passes **30 tests plus 38 subtests**, with canonical
 node-ID SHA-256
-`1F18A5854B5AF20FE87D9C281AAE0CC0B1F1DC8CB81748A47DC49CB7BC4A549A`.
+`534CF4550FF56F3EA5F4235680CDB89A91784D1CEE0B7CB7ABDF9DE1C7B3E7FF`.
 These are local structural regressions. Loader provenance remains an explicit
 unresolved deployment trust boundary; the adapter has no admitted production
 route and no independent live-worker replay. `G5-ENGINEERING-001` therefore
@@ -208,11 +212,83 @@ failure repairs, then caught three documentation overclaims. The specification
 now distinguishes the authorization's outcome-null chain digest, the outcome
 event's differently schemed sealed-pre-outcome digest, and the packet's final
 post-outcome chain digest. It limits exact carrier-type enforcement to the root
-loaders and keeps injected bridge provenance OPEN. It also records that the
-current bridge still calls the public authorization loader: kernel-level exact
-terminal verification works after an exact outcome seal, but authenticated
-bridge retry is currently pre-outcome only. Post-seal bridge reconciliation
-remains part of `G5-ENGINEERING-001`, not a completed control.
+loaders and keeps injected bridge provenance OPEN. The later sealed-safe replay
+port repairs the former pre-outcome-only bridge defect: a retained exact
+terminal can now replay after an exact seal binding the same terminal artifact
+and completion time. The public authorization loader remains closed after
+outcome access, and no admitted HTTP adapter or independent replay follows from
+that local repair.
+
+### Durable prospective lifecycle P0 review
+
+The successor adds useful local controls while keeping the release blocker
+explicit:
+
+- authorization cannot be created retroactively at terminal intake. The
+  registry reserves the subject and run-nonce digest before calling the builder;
+  the raw server nonce is returned only on the winning issuance, and an
+  interrupted builder leaves a quarantined, reconciliation-visible reservation.
+  The default factory is `secrets.token_bytes(32)`, but the constructor accepts
+  an injected callable and no admitted runtime attests that factory provenance;
+- callback nonce reuse is not merely credential-scoped. The v2 row binds the
+  server-observed method, exact path, job/run IDs, authorization digest when
+  required, and carrier digest/length for every accepted route request. That
+  authentication row is not the bridge's immutable acceptance wrapper/index:
+  only terminal submissions traversing the bridge create the latter. The bridge
+  still receives only the legacy callback carrier; no packaged adapter currently
+  carries and revalidates the enclosing request-bound receipt end to end;
+- consumption uses a same-host `StateStore` compare-and-swap and a server-built
+  digest-only envelope. A separate active-lease validator checks exact current
+  process-local lease generation, worker, model, token digest, and expiry, but
+  `consume_run` currently trusts passed lease facts and no adapter joins the two;
+- terminal intake reloads the prospective authorization and cannot submit a
+  second authorization body at the lifecycle-service boundary. The HTTP route
+  itself treats the body as opaque bytes, so only the missing strict adapter
+  could establish terminal-only semantics or reject embedded authorization.
+  Retained output bodies are required to match the terminal's exact references;
+  packet attachment strict-loads Packet v2, validates the full supplied
+  transitive body set, rebuilds the artifact registry, and runs the structural
+  verifier before its first repository write. A later storage failure can still
+  leave already written dependency or Packet wrappers outside the event chain;
+- the orchestration service retains wired `SUCCESS`/`FAILURE`, reserves
+  outcome-access time before chain mutation, and requires a typed server-built
+  nonreporting envelope for failure instead of a favorable packet. The lower
+  registry has `INDETERMINATE`/`REJECTED`/`EXPIRED` states, but no service/route
+  path records them yet; and
+- tenant reconciliation verifies the event hash chain and event-bound wrappers.
+  It does not enumerate losing/orphan wrapper writes or every output retained
+  while a run remains `RUNNING`, and it cannot prove that an off-registry run
+  did not occur. An entirely empty tenant view yields
+  `has_registered_runs=false`, zero counts, and
+  `all_runs_reporting_disposed=false`; an issue-free result over that empty view
+  is not positive evidence of execution absence.
+
+The route hashes `job_id` into its prospective run ID. The lifecycle hashes
+`subject_id`, while the lifecycle service separately requires
+`subject_id == authorization_id`. No admitted adapter enforces the necessary
+`job_id == subject_id == authorization_id` contract, so route-to-registry run
+identity is not yet established.
+
+The SQLite tests show close/reopen persistence for one file and
+compare-and-swap arbitration between two independent connections to that same
+file. They do not inject a process crash, OS restart, power loss, filesystem
+fault, or storage-device failure; WAL with `synchronous=NORMAL` does not turn
+those untested cases into evidence.
+
+The HTTP router itself remains default-false, absent from OpenAPI, and
+fail-closed without a lifespan service. Main initializes that service to
+`None`, requires the isolated root package when enabled, and has no packaged
+adapter to satisfy the boundary. Therefore this is route code, not an admitted,
+reachable, public, product, or live-execution route. These residual P0 seams
+keep `G5-ENGINEERING-001` and `G5-TRUST-002/003/004` open.
+
+The current bounded local receipts are **8/8** for the worker-terminal bridge
+(`6b0b52c30fa70c52e0ea5ac3b15221f4e5b8bc8337aa53b04972b3e543177969`),
+**35/35** for the callback/Object-Lock seam
+(`a340034084006fc437ab1f9724fb45d3ae09555f5d302fc36ccd6cf53ec28f57`),
+and **48/48** for the prospective lifecycle/SQLite/default-dark route suite
+(`b7b87d52351b21039a83e4b526bcaede0e8f3e11f79e162480fb007375421f44`).
+They are `LOCAL_UNATTESTED_HOST_REGRESSION`, not live or scientific evidence.
 
 ## Live-worker adverse evidence and bounded repairs
 
@@ -300,10 +376,10 @@ Earlier hashes produced by culture-aware sorting or by omitting the final LF
 are superseded and are not evidence. The independently
 confirmed 290/290 receipt and the earlier 255/257 receipts remain canonical
 checkpoints only for their earlier bounded bytes and test surfaces. The
-successor API/launcher/fleet/state suite also passes **76/76**, with canonical
+successor API/launcher/fleet/state suite also passes **78/78**, with canonical
 node-ID-set SHA-256
-`1ed1e9e3afa2eda6881463ee5284dd4902ab94c0246b80d2937066480ac42921`.
-The 364-test worker and 76-test API/launcher/fleet/state results are
+`603debf7df9ac7b5a69543c3736f4cd38692d3330690a7559a6f9de6f0e2af77`.
+The 364-test worker and 78-test API/launcher/fleet/state results are
 `LOCAL_UNATTESTED_HOST_REGRESSION` observations. Their same-process receipts
 bind executed node IDs and exact outcomes. The child starts with `-I -S -B`, a
 fresh bytecode-cache prefix, disabled plugin autoload, and exact pre-admitted
@@ -493,11 +569,15 @@ cannot be automatically upgraded because it lacks prospective v2 facts.
 
 ### Trust, ordering, and authenticity
 
-The kernel uses caller-declared UTC timestamps. It has no independently trusted
-clock, durable append-only database, WORM anchor, nonce authority, one-use run
-consumption, replay registry, or multi-packet selective-reporting guard. A
-process-local chain can detect inconsistent mutation but cannot prove that an
-earlier process did not inspect outcomes or suppress a run.
+The kernel uses caller-declared UTC timestamps. The successor has a same-host
+SQLite compare-and-swap profile, a default `secrets.token_bytes(32)` nonce
+factory that remains injectable and unattested, local one-use
+consumption, event hash chain, and tenant-visible lifecycle reconciliation.
+Those are not an independently trusted clock, replicated append-only database,
+WORM anchor, authenticated execution authority, host-loss-resistant nonce
+authority, or independently complete selective-reporting guard. A local chain
+can detect inconsistent mutation but cannot prove that an earlier or external
+process did not inspect outcomes, execute off-registry, or suppress a run.
 
 No non-caller-selected trust root authenticates an executor, auditor, reviewer,
 or organization. Normalized distinct strings prevent simple aliases; they do
@@ -507,13 +587,19 @@ path.
 
 ### Hermeticity and protocol integration
 
-Strict worker authorization and terminal carriers plus a dark persistence
-adapter now map the current FleetJob shape into a bounded candidate. They do
-not yet wire live lease issuance/execution, authenticated one-use run
-consumption, trusted time, outcome-access creation, complete Evidence Packet
-v2 assembly, or independent executor/auditor replay. The adapter's injected
-loader provenance and production FleetJob-snapshot provider remain unresolved,
-and no route admits it. The v0.2 successor provides a digest-bound patched
+Strict worker carriers, a dark bridge, a same-host lifecycle registry, and an
+exact-wrapper service now map the current FleetJob shape through local
+authorization, consumption, terminal, outcome-access, Packet-v2/nonreporting,
+and reconciliation candidates. A separate active-lease validator and a
+request-bound private router also exist. They are not wired together by an
+admitted packaged adapter: lifecycle consumption trusts passed lease facts, the
+bridge does not receive the enclosing request-bound intake receipt, three
+registry terminal states have no service path, reconciliation does not enumerate
+orphan wrappers, and the route has no explicit outcome-seal adapter. Main fails
+startup if the default-dark flag is enabled without the root package and an
+injected service, and no such service is wired. Trusted time, live independent
+Object Lock, multi-host/host-loss proof, authenticated execution, and independent
+executor/auditor replay remain absent. The v0.2 successor provides a digest-bound patched
 container candidate, exact build controls,
 and a locally observed offline preflight plus BuildKit SBOM/provenance
 identifiers. The later receipt retains ten exact raw payloads and a current
@@ -538,10 +624,13 @@ kernel/filesystem trust. Those remain `OPEN` under `G5-ENGINEERING-002`.
 
 ### Semantic and scientific validation
 
-Hashes establish byte identity, not semantic correctness. The power analysis,
-split sources, labels, code, outcomes, receipts, and review artifacts still need
-independent semantic inspection. Byte-different semantic clones or relabeling
-across packets are not resolved by the process-local registry.
+Hashes establish byte identity, not semantic correctness. The structural
+verifier checks declared schemas, required language, byte identity, and local
+regression outcomes; it cannot authenticate whether document/data content is
+true or establish scientific validity. The power analysis, split sources,
+labels, code, outcomes, receipts, and review artifacts still need independent
+semantic inspection. Byte-different semantic clones or relabeling across
+packets are not resolved by the same-host lifecycle registry.
 
 One CPU-only engineering preflight canary occurred outside the admitted
 experimental protocol. No authorized or admitted live exact-revision experiment
@@ -563,18 +652,18 @@ support, and live-product behavior. Public disclosure additionally requires
 explicit owner and qualified legal/patent approval of exact artifacts and exact
 wording. None is supplied by this Gate 5 candidate.
 
-Accordingly, `live_execution_authorized=false`, public and product routes remain
-false, scientific and canon effects remain `NONE`, the claim remains `NOT
-LICENSED`, and disclosure remains `HELD`.
+Accordingly, `live_execution_authorized=false`; the private default-dark route
+code creates no admitted public or product route; scientific and canon effects
+remain `NONE`; the claim remains `NOT LICENSED`; and disclosure remains `HELD`.
 
 ## Closure order
 
 The minimum defensible order is:
 
-1. preserve the verifier-native 146-test/96-subtest Harness-v2,
-   27-test/35-subtest worker-protocol, 7/7 dark-bridge, 34/34
-   callback/Object-Lock seam,
-   32/32 focused numeric, 364/364 complete-worker, and 76/76
+1. preserve the verifier-native 150-test/99-subtest Harness-v2,
+   30-test/38-subtest worker-protocol, 8/8 dark-bridge, 35/35
+   callback/Object-Lock seam, 48/48 prospective lifecycle/SQLite/dark-route,
+   32/32 focused numeric, 364/364 complete-worker, and 78/78
    API/launcher/fleet/state receipts, the earlier 290/290 checkpoint, and every
    counterexample, including the current ephemeral same-process and retained
    raw-evidence validations;
@@ -584,10 +673,14 @@ The minimum defensible order is:
    scanner conflict, capture complete scanner-process and vendor-source
    evidence, and revalidate the exact model and hook contract under real
    GPU/autocast/compiled-hook behavior;
-3. independently review and wire the worker-to-kernel candidate across live
-   lease, execution, callback, outcome-access, and Evidence Packet boundaries;
-4. materialize trusted time, nonces, one-use run consumption, durable WORM
-   ordering, and selective-reporting controls;
+3. independently review, package, and wire the worker-to-kernel candidate across
+   exact active lease generation, request-bound callback intake, all terminal
+   states, explicit outcome sealing, orphan-aware reconciliation, and Packet or
+   nonreporting boundaries;
+4. replace the same-host SQLite/synthetic-wrapper seams with independently
+   authenticated time and run authority, replicated/host-loss-resistant one-use
+   consumption, live inner-byte/WORM ordering, and independently complete
+   selective-reporting controls;
 5. preserve and independently red-team the exact Gate 4/Gate 5 manifests,
    builder, verifier, and postflight receipts without treating them as trust or
    semantic authority;
@@ -601,3 +694,7 @@ The minimum defensible order is:
 
 Until every applicable criterion is evidenced, Gate 5 remains
 `OPEN / NOT_STARTED / RING 4 / NOT LICENSED / HELD / NOT FROZEN`.
+
+The `$107.00` RunPod balance is user-reported. No provider billing ledger or
+balance receipt was inspected, no RunPod/GPU/paid job was launched, and known
+spend for this tranche is `$0.00`.

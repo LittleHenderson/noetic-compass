@@ -51,6 +51,8 @@ noetic-compass-scaffold/noetic-compass/tests/object_lock_test_support.py text eo
 noetic-compass-scaffold/noetic-compass/tests/test_fleet_service_auth.py text eol=lf
 noetic-compass-scaffold/noetic-compass/tests/test_evidence_packet_object_store.py text eol=lf
 noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_worker_bridge.py text eol=lf
+noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_*.py text eol=lf
+noetic-compass-scaffold/noetic-compass/tests/test_state_substrate_sqlite.py text eol=lf
 noetic-compass-scaffold/noetic-compass/tests/test_state_ledger_operational_enable.py text eol=lf
 noetic-compass-scaffold/noetic-compass/tests/test_state_substrate_live_migration.py text eol=lf
 

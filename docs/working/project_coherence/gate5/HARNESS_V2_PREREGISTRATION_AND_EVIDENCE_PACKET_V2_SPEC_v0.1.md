@@ -234,17 +234,17 @@ outcome access, exact completion binding, bypass-mutated outcome-event replay,
 retained-byte registry mutation, audit contradictions, normalized cross-role
 aliases, and all four repository-known v1 labels.
 
-Current focused validation: `119 passed, 61 subtests passed` under Python 3.14
+Current focused validation: `150 passed, 99 subtests passed` under Python 3.14
 with site startup and bytecode generation disabled. It comprises 94 active
-kernel tests, four historical-recovery tests, and 21 Gate 5 verifier red-team
-tests. Its same-process executed-node digest is
-`8FBC5D8AE4CF3B0BBEB9A1902C6905278126B056FF6961D13EE9830E2363F362`.
+kernel tests, 30 strict worker-protocol tests, four historical-recovery tests,
+and 22 Gate 5 verifier red-team tests. Its same-process executed-node digest is
+`6BF70F5569C4BCA5B7D896382A099FC966E9C0622B3A3694BE0B330B66048756`.
 This ephemeral local receipt is checked inside the verifier but is not retained
 under trusted time or WORM authority. It proves repository-local controls only;
 it is not live execution, independent reproduction, scientific evidence, or
 product authority.
 
-The companion 364-test worker and 76-test API/launcher/fleet/state suites are
+The companion 364-test worker and 78-test API/launcher/fleet/state suites are
 `LOCAL_UNATTESTED_HOST_REGRESSION` observations. One pytest process binds each
 suite's duplicate-free collected/started/finished node IDs and exact
 setup/call/teardown outcomes. The child starts with `-I -S -B`, imports only

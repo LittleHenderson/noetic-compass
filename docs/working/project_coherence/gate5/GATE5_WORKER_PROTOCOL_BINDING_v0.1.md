@@ -17,8 +17,9 @@ document.
 The purpose of this binding is to remove an interface ambiguity recorded by
 `G5-ENGINEERING-001`: the fleet launcher, lease, worker, receipt, and model
 identity controls already exist, and the Harness-v2 preregistration and Evidence
-Packet carriers already exist, but the two surfaces have not previously had one
-exact, reviewable protocol.
+Packet carriers already exist. The dark lifecycle successor now gives those
+surfaces one locally reviewable protocol, but no packaged API adapter admits it
+for live execution.
 
 The current source surfaces are:
 
@@ -28,10 +29,12 @@ The current source surfaces are:
 | Preregistration, amendments, and outcome-access seal | `src/cas_harness_v2/preregistration.py` | `PreregistrationArtifact`, `PreregistrationChain`, `OutcomeAccessEvent` |
 | Evidence Packet v2 | `src/cas_harness_v2/evidence_packet.py` | `EvidencePacketArtifact`, `load_evidence_packet`, `verify_evidence_packet` |
 | Worker-protocol carriers | `src/cas_harness_v2/worker_protocol.py` | `WorkerAuthorizationArtifact`, `WorkerTerminalReceiptArtifact`, `load_worker_authorization`, `load_worker_terminal_receipt` |
-| Tenant/audit/fleet/worker callback identity | `noetic-compass-scaffold/noetic-compass/api/services/fleet_service_auth.py` | `FleetServicePrincipal`, `FleetServiceNonceReceipt`, `FleetServiceAuthenticatedCallback`, `FleetServiceAuthStore.authenticate_with_nonce_receipt`, `verify_authenticated_callback` |
-| Fleet lease and receipt state | `noetic-compass-scaffold/noetic-compass/api/services/cas_harness_fleet_executor.py` | `FleetJobRecord`, `lease_next_job`, `submit_job_receipt` |
+| Tenant/audit/fleet/worker callback identity | `noetic-compass-scaffold/noetic-compass/api/services/fleet_service_auth.py` | `FleetServicePrincipal`, `FleetServiceBoundIntakeReceipt`, `FleetServiceAuthStore.authenticate_with_bound_intake_receipt`, `verify_authenticated_callback` |
+| Fleet lease and receipt state | `noetic-compass-scaffold/noetic-compass/api/services/cas_harness_fleet_executor.py` | `FleetJobRecord`, `ActiveFleetJobLease`, `validate_active_fleet_job_lease`, `lease_next_job`, `submit_job_receipt` |
 | API bridge into the exact protocol | `noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_worker_bridge.py` | typed principal/job/nonce-to-carrier bridge functions admitted by this candidate |
-| API request/response boundary | `noetic-compass-scaffold/noetic-compass/api/routes/cas_harness_audit.py` | `FleetJobResponse`, `FleetJobReceiptRequest`, `_require_fleet_service_callback` |
+| Prospective lifecycle registry | `noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_run_lifecycle.py` | `DurableProspectiveRunLifecycle`, one-use transitions, hash-linked events, tenant reconciliation |
+| Exact wrapper/orchestration seam | `noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_lifecycle_service.py` | `DarkHarnessV2LifecycleService`, exact wrapper replay, output/outcome/packet/nonreporting reconciliation |
+| Default-dark API boundary | `noetic-compass-scaffold/noetic-compass/api/routes/cas_harness_v2_worker_protocol.py` | exact request-bound service authentication and private authorization/output/consume/terminal/packet/nonreporting/reconcile handlers excluded from OpenAPI |
 | Worker lease and terminal callback | `noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/fleet_worker.py` | `FleetJob`, `FleetJobExecutionResult`, `FleetApiClient`, `FleetWorkerDaemon` |
 | Durable callback replay control | `noetic-compass-scaffold/noetic-compass/api/services/fleet_service_auth.py` | credential-scoped `fleet_service_nonce` rows in `StateStore` |
 | Existing immutable packet repository | `noetic-compass-scaffold/noetic-compass/api/services/cas_harness_evidence_object_store.py` | `EvidencePacketRepository`, `S3ObjectLockPacketBackend` |
@@ -67,10 +70,17 @@ and one caller-declared 256-bit run nonce. This carrier is immutable once
 execution may begin.
 
 The authorization is prospective, so it does not contain a later callback
-nonce. Its run nonce identifies one proposed research run, but the kernel checks
-only the declared profile, base64url encoding, and length. It does not issue,
-authenticate, or durably consume the run nonce; those obligations remain
-external and open.
+nonce. The strict kernel checks only the run nonce's declared profile,
+base64url encoding, and length; it still does not authenticate issuance or
+consumption. The lifecycle successor's default factory calls
+`secrets.token_bytes(32)`, reserves the resulting digest before authorization
+construction, releases the raw value only once, and uses a same-host
+`StateStore` compare-and-swap for consumption. The constructor also accepts an
+injected nonce factory, including deterministic test factories, and no admitted
+runtime attests which callable supplied a particular nonce. That local control
+does not alter the strict carrier's
+`EXTERNAL_REQUIRED_NOT_PROVIDED` caveat and does not establish a multi-host,
+host-loss-resistant, independently authenticated run authority.
 
 ### 2.3 Terminal receipt and outcome access
 
@@ -80,19 +90,22 @@ all produced/missing/error facts, and binds stable artifact identities. A
 success carrier does not itself mean the scientific criteria passed. A failure
 carrier is retained negative evidence and must never be erased by a retry.
 
-The transport callback nonce is never a field of either worker carrier. After
-service authentication consumes that nonce, the API bridge places the complete
+The transport callback nonce is never a field of either worker carrier. Every
+accepted dark-route request creates a durable authentication nonce row. For a
+terminal submission only, the API bridge also places the complete
 server-authored `FleetServiceNonceReceipt` in a separate callback-acceptance
-wrapper and index that point to the immutable terminal storage identity. This
-separation lets identical terminal bytes survive a transport retry made with a
-fresh HTTP nonce without allowing the fresh nonce to rewrite worker evidence.
+wrapper and index that point to the immutable terminal storage identity. The
+nonterminal route operations do not create that bridge wrapper. This separation
+lets identical terminal bytes survive a transport retry made with a fresh HTTP
+nonce without allowing the fresh nonce to rewrite worker evidence.
 
 `PreregistrationChain.record_outcome_access` remains a distinct event. Outcome
 access seals the pre-outcome chain and binds the execution-completion timestamp
 plus an exact receipt artifact. It must occur only after terminal execution
-facts exist. The current process-local chain is not durable authority; durable
-ordering remains open until the exact carriers and seal are placed under an
-independently verified append-only/WORM path.
+facts exist. The successor reserves the untrusted access time in the lifecycle
+store before mutating the process-local chain and then retains/replays an exact
+wrapper. This is recoverable local ordering, not durable WORM authority;
+independent append-only ordering remains open.
 
 ### 2.4 Exact executable worker-carrier schemas
 
@@ -168,7 +181,7 @@ matching except where a loader explicitly says so.
 
 | Current principal field | Harness-v2 carrier meaning | Required rule |
 |---|---|---|
-| `credential_id` | server-side callback provenance | Compare to the nonce receipt and retain only in the private callback-acceptance wrapper. The nonce-keyed acceptance index binds safe receipt digest/length facts; the stable terminal index does not. It is not a strict-carrier field or signing authority. Never retain the secret or credential digest. |
+| `credential_id` | server-side callback provenance | Compare to the nonce receipt and, for a terminal bridge submission only, retain it in the private callback-acceptance wrapper. The nonce-keyed terminal-acceptance index binds safe receipt digest/length facts; the stable terminal index does not. Nonterminal route operations retain the authentication row but have no bridge acceptance wrapper. It is not a strict-carrier field or signing authority. Never retain the secret or credential digest. |
 | `tenant_id` | private storage tenant | Use as the `StateStore` and repository scope on every bridge operation. It is intentionally absent from the worker carrier and cannot be caller-selected. |
 | `account_id` | immutable audit-owner provenance | Use only as server-derived private repository/index provenance. It is not a reviewer or executor identity. |
 | `audit_id` | `execution_mapping.audit_id` | Must equal the server FleetJob snapshot, API path, terminal receipt's repeated mapping, and private repository scope. |
@@ -176,19 +189,24 @@ matching except where a loader explicitly says so.
 | `worker_id` | `execution_mapping.assigned_worker_id` | Must be non-null for `submit_receipt` and equal the current server FleetJob assigned worker and terminal receipt's repeated mapping. |
 | `capabilities` | bridge acceptance condition | `persist_terminal_callback` requires `submit_receipt`. Capabilities are not copied into the strict carrier and never imply science, outcome access, publication, licensing, or disclosure authority. |
 
-The additive `FleetServiceAuthStore.authenticate_with_nonce_receipt` surface
-returns `FleetServiceAuthenticatedCallback(principal, nonce_receipt)` after the
-same durable compare-and-set used by `authenticate`. Because this receipt is
-created when the terminal callback arrives, it maps only into the server-side
-API acceptance wrapper and index, never the earlier prospective authorization
-or the immutable terminal carrier:
+The earlier `authenticate_with_nonce_receipt` surface remains available to the
+bridge. The default-dark HTTP boundary uses the stronger additive
+`authenticate_with_bound_intake_receipt` surface. Its create-only v2 nonce row
+atomically binds the successful callback to the server-observed HTTP method,
+exact route path, job ID, deterministic prospective run ID, authorization
+digest where required, and request-carrier digest and byte length. It returns a
+`FleetServiceBoundIntakeReceipt` containing the same
+`FleetServiceAuthenticatedCallback(principal, nonce_receipt)`. The receipt is
+server-side transport evidence only; it never enters the earlier prospective
+authorization or immutable terminal carrier:
 
 | `FleetServiceNonceReceipt` field | API-acceptance destination | Required rule |
 |---|---|---|
-| `nonce_id` | `server_callback_nonce_receipt.nonce_id` and acceptance trace/index identity | Exact server-derived ID for the credential/raw-nonce pair. |
+| `nonce_id` | durable authentication-row identity and, for terminal bridge submissions only, `server_callback_nonce_receipt.nonce_id` plus acceptance trace/index identity | Exact server-derived ID for the credential/raw-nonce pair. |
 | `nonce_sha256`, `byte_length` | same-named safe digest/length facts | Preserve the exact uppercase digest and UTF-8 byte length from the validated durable row; never recompute them from caller-selected replacement text. |
-| `credential_id`, `tenant_id`, `account_id`, `audit_id`, `fleet_id`, `worker_id`, `capabilities` | full authenticated receipt scope | Every value must exactly equal the corresponding `FleetServicePrincipal` value. The acceptance wrapper preserves the full server-authored scope; none is copied into a worker-authored nonce field. |
+| `credential_id`, `tenant_id`, `account_id`, `audit_id`, `fleet_id`, `worker_id`, `capabilities` | full authenticated receipt scope | Every value must exactly equal the corresponding `FleetServicePrincipal` value. The durable row preserves the full server-authored scope; the terminal bridge wrapper repeats it only for terminal acceptance. None is copied into a worker-authored nonce field. |
 | `consumed_at`, `expires_at` | acceptance timing provenance | Preserve both with `time_semantic=FRESHNESS_ONLY_NOT_TRUSTED`; they remain application-clock facts, not trusted-time evidence. |
+| bound intake method/path/job/run/authorization/carrier facts | v2 nonce-row request identity | Re-read and compare the exact server-observed request; the same nonce cannot authorize a different path, run, authorization digest, body digest, or body length. |
 
 `consumed_nonce_receipt` must re-read and validate the durable nonce row,
 including schema, record ID, complete principal scope, digest, length, parents,
@@ -200,9 +218,13 @@ either strict carrier.
 Because the bridge receives a callback carrier rather than the raw nonce, its
 injected `verify_authenticated_callback` port must re-read that exact durable
 row again and return the identical callback object before any carrier is
-accepted. This proves only ledger presence and exact scope under the current
-server store; it is not payload authentication, a signature, trusted time, or
-worker attestation.
+accepted. The bridge sees the legacy `FleetServiceAuthenticatedCallback`, not
+the enclosing `FleetServiceBoundIntakeReceipt`, so it proves only callback-row
+presence and principal scope. The dark route separately creates the
+request-bound receipt and passes it to its service port, but no packaged adapter
+currently preserves and revalidates that binding through the lifecycle and
+bridge. Neither seam is model-execution authentication, a signature, trusted
+time, or worker attestation.
 
 The executor identity written into an Evidence Packet must not be fabricated
 from `account_id`, `tenant_id`, or `credential_id`. The binding may preserve the
@@ -218,8 +240,16 @@ inventing a second scheduler vocabulary. Layer ranges remain ranges,
 lease-bound model tuple is repeated exactly. The root loader rejects missing,
 extra, reordered, type-coerced, or drifted values. The current dark persistence
 bridge still does not construct this carrier from a `FleetJob`; a separately
-reviewed launcher adapter must perform the direct mapping below before a live
-route can exist.
+reviewed launcher adapter must perform the direct mapping below before the
+default-dark route can be admitted or enabled.
+
+The route derives its prospective `run_id` from `job_id`. The lifecycle derives
+the registry `run_id` from `subject_id`, and the lifecycle service independently
+requires `subject_id == authorization_id`. Consequently an admitted adapter
+must enforce the joint identity contract
+`job_id == subject_id == authorization_id` before calling either side. No
+current packaged adapter performs or proves that equality, so matching route
+and lifecycle run identities remain OPEN.
 
 | `FleetJob` / `FleetJobRecord` field | Harness-v2 destination | Required rule |
 |---|---|---|
@@ -321,8 +351,9 @@ and may accept an already sealed chain only when
 receipt reference, completion time, or chain binding fails closed. This does
 not expose a public post-outcome authorization-loading capability and does not
 permit new or changed terminal bytes after outcome access. The current dark
-bridge stops before outcome access and does not yet durably reconcile or author
-that seal.
+bridge does not author that seal, but its sealed-safe replay port can verify the
+same retained terminal after the lifecycle service has sealed it. Independent
+durable reconciliation remains absent.
 
 The bridge does not calculate scientific metrics, choose threshold outcomes,
 declare controls passed, or manufacture independent audit, replication, or
@@ -334,40 +365,48 @@ implementations and identities.
 The protocol state is monotone. Fleet and Harness state names remain distinct,
 but the bridge permits only the transitions below.
 
-This table is the required end-to-end integration state machine. The current
-dark bridge implements only its storage substate
-`PERSISTING_RESEARCH_ONLY -> STORED_AND_REPLAYED_RESEARCH_ONLY`. It throws on a
-pre-reservation binding mismatch and does not yet durably retain a
-`REJECTED_BINDING` record; it also does not consume run authorization, record
-outcome access, or assemble a packet. Those missing durable transitions remain
-open rather than being implied by the table.
+This table is the target end-to-end integration state machine. The dark bridge
+implements only its storage substate
+`PERSISTING_RESEARCH_ONLY -> STORED_AND_REPLAYED_RESEARCH_ONLY`. The lower
+lifecycle registry locally implements `AUTHORIZED`, `RUNNING`, five terminal
+states, `OUTCOME_ACCESSED`, `PACKET_RECORDED`, and
+`NONREPORTING_RECORDED`. The orchestration service wires only
+`SUCCESS`/`FAILURE` terminalization plus later outcome and packet/nonreporting;
+it does not expose registry-level `INDETERMINATE`, `REJECTED`, or `EXPIRED`.
+Its `RUNNING` transition accepts passed lease facts because the separate active-
+lease validator is not wired. Those missing integration paths remain open
+rather than being implied by the broader registry table.
 
 | Protocol state | Required durable facts | Allowed next states |
 |---|---|---|
 | `UNBOUND` | preregistration chain and fleet assignment exist separately | `AUTHORIZED` or terminal `REJECTED_BINDING` evidence |
 | `AUTHORIZED` | exact authorization carrier binds principal, chain, assignment, identities, run nonce, and local deadline | `RUNNING`, `EXPIRED_UNUSED`, or `REJECTED_BINDING` |
-| `RUNNING` | one-use run authorization has been atomically consumed and the lease is active | `TERMINAL_SUCCESS`, `TERMINAL_FAILURE`, or `TERMINAL_INDETERMINATE` |
+| `RUNNING` | one-use run authorization has been atomically consumed; admitted integration must also prove the exact lease generation is active | `TERMINAL_SUCCESS`, `TERMINAL_FAILURE`, or `TERMINAL_INDETERMINATE` |
 | `EXPIRED_UNUSED` | authorization was not consumed before its application deadline | no execution transition; a successor requires a new job and authorization identity |
 | `TERMINAL_SUCCESS` | exact terminal receipt, complete output accounting, and stable artifact identities | `OUTCOME_ACCESSED` and packet assembly |
 | `TERMINAL_FAILURE` | exact failure receipt, complete negative facts, and any available failure artifacts | `OUTCOME_ACCESSED` only when outcomes were exposed; otherwise retained reconciliation |
 | `TERMINAL_INDETERMINATE` | execution may have happened but the terminal outcome cannot be proven | quarantine and external reconciliation only; never automatic retry or success |
 | `OUTCOME_ACCESSED` | exact outcome-access event seals the current pre-outcome chain and terminal completion | packet assembly; no amendment or second outcome-access event |
-| `PACKET_RECORDED` | packet bytes, all referenced bytes, terminal state, and exhaustive run index are durably reconciled | independent audit/review only; no automatic claim promotion |
+| `PACKET_RECORDED` | packet bytes, referenced bytes, terminal state, and event-bound local registry records reconcile; orphan/off-registry completeness remains open | independent audit/review only; no automatic claim promotion |
 | `REJECTED_BINDING` | the mismatch/error and all available source identities are retained | corrected successor assignment only; never mutate the rejected carrier |
 
 The current fleet state transition `queued|expired -> leased -> completed|failed`
 is not sufficient by itself. In particular, a lease is not a prospective
-Harness authorization, process-local `PreregistrationChain` state is not a
-durable registry, and a completed fleet fragment is not an Evidence Packet v2.
+Harness authorization, process-local `PreregistrationChain` state and one-host
+SQLite are not independent WORM authority, and a completed fleet fragment is
+not an Evidence Packet v2.
 
 ## 5. Error mapping
 
 The bridge must map errors without losing the original class or turning missing
 evidence into favorable evidence.
 
-No API route currently calls the dark bridge. The HTTP statuses below describe
-the existing fleet-auth precedent and the required future route behavior. At
-present, the bridge itself raises typed `ResearchWorkerBridgeBindingError`,
+Private route handlers now exist, but no admitted packaged adapter calls the
+dark lifecycle/bridge implementation. The route receives raw carrier bytes and
+passes them to an injected service port; main binds that port to `None` and
+fails startup if the feature is enabled without an adapter. The HTTP statuses
+below therefore describe the default-dark boundary and the required adapter
+behavior. The bridge itself raises typed `ResearchWorkerBridgeBindingError`,
 `ResearchWorkerBridgeConflict`, or `ResearchWorkerBridgePersistenceError` and
 creates no HTTP or product result.
 
@@ -397,17 +436,18 @@ Three values serve different purposes and may never be aliased:
 
 | Value | Issuer and scope | Consumption | Retention rule |
 |---|---|---|---|
-| callback nonce (`X-CAS-Service-Nonce`) | worker client; one credential and one terminal HTTP attempt | atomically consumed by `FleetServiceAuthStore.authenticate` after all scope checks | store only safe receipt/provenance in the durable auth ledger and separate API acceptance wrapper/index; it is forbidden in both worker carriers; a retry uses a fresh callback nonce |
-| lease token | fleet executor; one active lease | checked when the terminal callback is accepted and then removed from live state | secret; never enter protocol carriers, packet artifacts, WORM storage, logs, or responses after lease issuance |
-| `run_nonce.value_b64url` | caller-declared 256-bit CSPRNG profile; one proposed authorization/preregistration/job tuple | kernel validation is encoding/length only; future admitted authority must atomically consume it before execution | the exact value repeats in authorization and terminal carriers, but current structure is not authenticated issuance or durable consumption; that external state must survive restart, replicas, and host loss |
+| callback nonce (`X-CAS-Service-Nonce`) | worker client; one credential and one exact HTTP attempt | atomically consumed after scope checks and bound to method/path/job/run/authorization/body identity | store only safe digest/provenance in the auth ledger; a terminal bridge submission additionally gets a separate acceptance wrapper/index, while nonterminal operations do not; it is forbidden in both worker carriers; a retry uses a fresh callback nonce |
+| lease token | fleet executor; one exact active process-local lease generation | a standalone validator can derive the current job/worker/model/expiry projection, but no adapter yet requires it before lifecycle consumption | secret; never enter protocol carriers, packet artifacts, repository wrappers, logs, or responses after lease issuance; process-local lease state is not multi-host authority |
+| `run_nonce.value_b64url` | lifecycle successor's default `secrets.token_bytes(32)` factory, or an injected and currently unattested callable; one proposed authorization/preregistration/job tuple | exact raw value is released once and same-host `StateStore` compare-and-swap admits one consumption | the value repeats in authorization and terminal carriers; only its digest is reserved before construction. Factory provenance is not attested, the strict carrier still says `EXTERNAL_REQUIRED_NOT_PROVIDED`, and replica/host-loss/independent authentication remain open |
 
-The existing `fleet_service_nonce` compare-and-set proves durable callback
-replay rejection for a configured `StateStore`, and its new safe receipt can be
-bound structurally into the separate acceptance wrapper and index. It does not
-issue or consume the earlier `run_nonce`, prove that only one experiment
-occurred, or create an exhaustive run registry. Reusing the callback nonce as a
-run nonce would make legitimate multi-callback workers impossible and would
-still fail to record an exhaustive run identity.
+The existing `fleet_service_nonce` compare-and-set proves callback replay
+rejection for a configured `StateStore`, and the v2 receipt binds one exact
+observed request. Separately, the lifecycle registry issues and consumes one
+run nonce under its configured local backend. Neither proves that only one
+experiment occurred outside the registry or that the registry survived host
+loss. Reusing the callback nonce as a run nonce would make legitimate
+multi-callback workers impossible and would still fail to record the complete
+run lifecycle.
 
 Idempotency is content identity, not repeated intent:
 
@@ -416,13 +456,13 @@ Idempotency is content identity, not repeated intent:
 2. The same subject with different bytes is an immutable conflict.
 3. Consuming an authorization is one-use even when the caller presents fresh
    callback credentials and a fresh callback nonce.
-4. While the current dark adapter is still operating on a pre-outcome chain,
-   an exact terminal retry authenticated with a fresh HTTP callback nonce may
+4. Before or after an exact outcome seal, an exact terminal retry authenticated
+   with a fresh HTTP callback nonce may
    return the stored terminal receipt and create/reconcile a distinct
    per-attempt acceptance record; it does not change the terminal bytes.
 5. A terminal retry with any different status, output accounting, mode,
    artifact identity, completion time, or error code is a conflict.
-6. A failed or indeterminate run remains in the exhaustive index and cannot be
+6. A failed or indeterminate run remains in the configured registry view and cannot be
    hidden by assigning its job ID or run nonce to a new favorable packet.
 
 There are two different replay questions. Repeating a raw HTTP POST with the
@@ -436,12 +476,13 @@ status, byte sequence, output partition, artifact reference, completion time,
 or error remains an immutable conflict. Neither path may silently author a
 replacement carrier.
 
-That adapter guarantee is currently **pre-outcome only**. The root terminal
-loader can verify exact authorization and terminal bytes after sealing when the
-outcome event binds the same receipt and completion time, but the bridge first
-calls the public pre-outcome authorization loader. A fresh authenticated POST
-after outcome sealing therefore fails closed today. Post-seal bridge retry and
-reconciliation remain an explicit `G5-ENGINEERING-001` obligation.
+The bridge now has an explicit sealed-safe authorization replay port. It can
+verify exact authorization and terminal bytes after sealing only when the
+outcome event binds the same receipt and completion time; its public
+authorization loader remains closed after outcome access. This closes the
+previous pre-outcome-only implementation defect locally. It does not establish
+an admitted post-seal HTTP service, independent replay, or live execution, so
+`G5-ENGINEERING-001` remains open.
 
 ## 7. Time assurance
 
@@ -495,7 +536,7 @@ Reuse has four constraints:
    private Gate 5 namespace. A caller-supplied tenant or public namespace is
    forbidden.
 3. The durable index and append chain are searchable integrity structures, but
-   they do not independently prove trusted time, execution identity, exhaustive
+   they do not independently prove trusted time, execution identity, complete
    run registration, or scientific truth.
 4. Local/disabled storage, an object URL, a hash, a prose retention statement,
    or an unverified receipt can never be called WORM. Failure to obtain and
@@ -509,7 +550,7 @@ The intended private storage sequence is:
 4. create-only store the terminal carrier, including failure or indeterminate
    evidence;
 5. store and seal the outcome-access carrier when outcomes become accessible;
-6. create-only store Evidence Packet v2 and reconcile it against the exhaustive
+6. create-only store Evidence Packet v2 and reconcile it against the configured
    run index; and
 7. re-read and verify every exact version and structured retention receipt
    before reporting only the finite receipt-backed retention claim.
@@ -527,7 +568,8 @@ authorization bytes, exact terminal-receipt bytes, the exact pre-outcome
 `load_fleet_job_snapshot(tenant_id, audit_id, fleet_id, job_id)` port that must
 return the exact `FleetJobSnapshot` type, plus an injected
 `verify_authenticated_callback` port that re-reads the durable callback-nonce
-row. The root Harness-v2 loaders are injected because the API package and
+row and an explicit sealed-safe authorization replay port for terminal
+verification. The root Harness-v2 loaders are injected because the API package and
 repository-root research kernel do not yet share a proven installation
 boundary; the bridge does not copy or weaken the strict schemas. This injection
 is nevertheless an unresolved deployment trust boundary. The bridge's
@@ -541,7 +583,8 @@ Before persistence, the bridge:
 
 1. re-verifies the identical `FleetServiceAuthenticatedCallback` against its
    exact durable nonce row using the injected verifier;
-2. snapshots and strict-loads both exact carriers;
+2. snapshots and strict-loads both exact carriers, using the sealed-safe replay
+   loader when the chain already has an outcome-access event;
 3. verifies the loaders retained the submitted bytes, byte lengths, IDs, and
    uppercase SHA-256 identities;
 4. requires `submit_receipt` in the principal capability tuple;
@@ -594,8 +637,8 @@ It is labeled `SERVER_CALLBACK_ACCEPTANCE_NOT_AN_EVIDENCE_PACKET`.
 After terminal Object-Lock storage, the bridge reloads the exact repository
 version, decodes and compares the original source bytes, replays both injected
 strict-loader ports, stores and reloads the acceptance wrapper, and only then
-finalizes both indices as `STORED_AND_REPLAYED_RESEARCH_ONLY`. Before outcome
-sealing, exact terminal retries with fresh HTTP nonces converge on one terminal
+finalizes both indices as `STORED_AND_REPLAYED_RESEARCH_ONLY`. Before or after
+an exact outcome seal, terminal retries with fresh HTTP nonces converge on one terminal
 object and distinct nonce-keyed acceptance records. A different
 authorization/receipt binding
 under the same authorization ID, or a different binding under the same
@@ -613,14 +656,94 @@ declared and never upgrades that value to authenticated execution or scientific
 assessment. It is a storage result, never a run, science, product, canon,
 license, authorship, submission, or disclosure verdict.
 
-The bridge does not durably consume the strict `run_nonce`, create an
-exhaustive authorization/failure/nonreporting registry, call
-`record_outcome_access`, assemble `EvidencePacketArtifact`, attach scientific
-evidence, or expose an API route. It also stores the terminal receipt's declared
-`ArtifactRef` rows but does not ingest, byte-verify, persist, or replay the
-referenced output-artifact bodies. A production Fleet Executor snapshot
-provider/route and provable root-loader deployment provenance also remain open.
-Those omissions are explicit and keep the corresponding Gate 5 criteria open.
+The bridge alone still does not consume the strict `run_nonce`, create a full
+lifecycle registry, call `record_outcome_access`, assemble
+`EvidencePacketArtifact`, or ingest referenced output bodies. The surrounding
+dark lifecycle successor supplies local versions of those functions while
+retaining the bridge's narrow storage result. A production Fleet Executor
+snapshot/lease provider, packaged root-loader provenance, live Object-Lock
+authority, and admitted route service remain open.
+
+### 8.2 Dark prospective lifecycle and HTTP boundary
+
+`DurableProspectiveRunLifecycle` and `DarkHarnessV2LifecycleService` form the
+new successor around the bridge. The word `Durable` is backend-qualified: with
+`SqliteStateStore` the current evidence is close/reopen persistence for one
+database file and compare-and-swap arbitration between two independent
+connections to that file. It does not test a process crash, OS restart, power
+loss, filesystem fault, or storage-device failure, and it explicitly does not
+mean replication, host-loss survival, independent attestation, or WORM
+authority.
+
+The local transition sequence is:
+
+1. create-only reserve the subject and the digest of a fresh run nonce before
+   calling the injected authorization builder. The default factory is
+   `secrets.token_bytes(32)`, but a caller can inject another callable and the
+   current runtime does not attest factory provenance;
+2. retain/reload the exact authorization wrapper, finalize its immutable
+   binding, create the `AUTHORIZED` genesis event, and return the raw nonce only
+   on the winning issuance call;
+3. accept caller-supplied lease-generation/digest/expiry facts and atomically
+   move `AUTHORIZED -> RUNNING`, retaining a server-built consumption-attempt
+   envelope that contains only safe digests, never raw run, lease, callback, or
+   credential secrets. A separate `validate_active_fleet_job_lease` seam can
+   derive those facts from current process-local Fleet state, but no adapter yet
+   wires that validation into `consume_run`;
+4. retain output bodies only while `RUNNING`, then have the lifecycle service
+   accept a strict terminal carrier only by reloading the prior authorization.
+   The HTTP route itself treats the terminal request body as opaque; until the
+   missing adapter invokes the strict service/bridge loader, the route cannot
+   prove that the body is terminal-only or contains no embedded authorization;
+5. map the strict terminal carrier to `SUCCESS` or `FAILURE`, then reserve one
+   stable untrusted outcome-access time before sealing the chain. The lower
+   lifecycle registry also supports `INDETERMINATE`, `REJECTED`, and `EXPIRED`,
+   but the current orchestration service and route expose no path that records
+   those three states;
+6. for a successful run, strict-load Packet v2, require exact terminal-output
+   references, validate every supplied transitive body, rebuild the artifact
+   registry, and run the kernel verifier before the first repository write.
+   Repository writes then occur sequentially, so a dependency or Packet-storage
+   failure after validation can leave earlier wrappers outside the lifecycle
+   event chain. For a wired failed run, create a typed server-built
+   `cas_harness_v2.nonreporting.v1` envelope instead of fabricating a Packet v2.
+   Indeterminate nonreporting awaits the missing service path; and
+7. replay the event hash chain and every event-bound authorization,
+   consumption, terminal, outcome, and packet/nonreporting wrapper, together
+   with packet-referenced dependency/output bytes, during tenant
+   reconciliation. The service does not enumerate orphan or losing wrapper
+   writes, nor every output retained while a run remains `RUNNING`.
+
+Builder interruption is quarantined in the registry and
+reconciliation-visible; it cannot recover or reissue the raw nonce. Exact
+event-bound retries converge, conflicting bytes or operation facts fail, wired
+failure/nonreporting evidence stays visible, and a packet cannot invent missing
+scientific evidence. Registry-level indeterminate/rejected/expired states and
+postvalidation orphan-wrapper enumeration remain unwired obligations. For an
+entirely empty tenant view, registry reconciliation returns
+`has_registered_runs=false`, all record counts zero, and
+`all_runs_reporting_disposed=false`; an issue-free structural result over that
+empty view does not prove that no off-registry execution occurred. Repository storage uses a
+typed canonical wrapper containing base64 inner bytes plus their digest/length.
+The current synthetic Object-Lock receipt applies to that wrapper object, not
+the inner artifact directly, and therefore cannot establish independent WORM.
+
+The private router defines exact-body handlers under
+`/api/cas-harness/audit/distributed/session/{audit_id}/fleet/v2/job/{job_id}`.
+It is default-false, excluded from OpenAPI, admits no query/compressed/oversized
+or wrong-media-type body, has no customer-JWT fallback, and binds each consumed
+callback nonce to the exact request method/path/job/run/authorization/body
+identity. The route treats the terminal body as opaque bytes. The router code is
+not an operational route: the
+missing adapter is required to establish strict terminal-only semantics. Main
+initializes its service port to `None` and fails startup
+if the flag is enabled without both the isolated root package and an admitted
+lifespan adapter. No such packaged adapter is wired, and there is no explicit
+HTTP outcome-seal adapter. The route hashes `job_id` to derive its run ID while
+the lifecycle hashes `subject_id` and the service requires
+`subject_id == authorization_id`; no adapter enforces
+`job_id == subject_id == authorization_id`. Thus the code remains default-dark
+and unusable for live execution by design.
 
 ## 9. Fail-closed invariants
 
@@ -642,8 +765,8 @@ injected-port boundary, must enforce all of the following:
 - No callback nonce reuse and no substitution of callback nonce, lease token,
   and run-authorization nonce.
 - No callback nonce in authorization or terminal carrier bytes; every accepted
-  POST attempt binds its complete validated server receipt in the separate
-  acceptance wrapper/index.
+  route attempt has a bound durable authentication row, while only a terminal
+  attempt traversing the bridge has the separate acceptance wrapper/index.
 - No retained lease secret.
 - No `dry_run_control_plane` receipt represented as real model execution or
   scientific evidence.
@@ -654,7 +777,9 @@ injected-port boundary, must enforce all of the following:
 - Exact-terminal-byte idempotency across fresh authenticated HTTP nonces only;
   raw POST nonce replay and byte- or semantic-conflicting terminal retries fail.
 - Negative, null, missing, failed, and indeterminate evidence remains visible
-  to exhaustive reconciliation.
+  when it is represented in the configured lifecycle record kinds. This does
+  not claim complete discovery of off-registry executions, postvalidation
+  orphan wrappers, or pending outputs.
 - No packet assembly before outcome access seals the exact current chain.
 - No post-outcome amendment.
 - No packet hash, callback principal, fleet merge, or Object-Lock receipt may
@@ -670,20 +795,23 @@ local scope:
 |---|---|---|
 | `tests/cas_harness_v2/test_research_control_kernel.py` | strict preregistration/chain/outcome-access/packet structure, exact-byte artifact identities, failure-preserving criteria, and fixed Ring-4 governance | live worker integration, durable trust, authenticated execution, external review, or science |
 | `tests/cas_harness_v2/test_gate5_verifier_redteam.py` | adversarial loader/carrier/mutation boundaries admitted by the Gate 5 verifier | a trusted host, independent attestation, or live execution |
-| `tests/cas_harness_v2/test_worker_protocol.py` | 27 focused tests plus 35 subtests cover exact authorization/terminal loading, current FleetJob-shaped mapping, lease model/preregistration equality, ordered output accounting, rejection of transport-nonce fields, structural run-nonce caveat, application-time bounds, completed/unassessed and failed/quarantined-partial effects, exact sealed-outcome replay constraints, fresh replay, collisions, and immutable governance | launcher authorship, durable run consumption, trusted time, callback identity, Object Lock, live execution, or science |
+| `tests/cas_harness_v2/test_worker_protocol.py` | 30 focused tests plus 38 subtests cover exact authorization/terminal loading, current FleetJob-shaped mapping, lease model/preregistration equality, ordered output accounting, rejection of transport-nonce fields, structural run-nonce caveat, application-time bounds, completed/unassessed and failed/quarantined-partial effects, exact sealed-outcome replay constraints, fresh replay, collisions, prospective authorization construction, and immutable governance | launcher authorship, independently authenticated durable run consumption, trusted time, callback identity, Object Lock, live execution, or science |
 | `noetic-compass-scaffold/noetic-compass/tests/test_fleet_service_auth.py::test_nonce_replay_and_concurrent_duplicates_have_exactly_one_winner` | one callback nonce has one successful durable compare-and-set consumer under local test storage | one-use research-run authorization or host-loss behavior |
-| `noetic-compass-scaffold/noetic-compass/tests/test_fleet_service_auth.py::test_expiry_revocation_and_consumed_nonce_survive_sqlite_restart` | credential/revocation/callback-nonce state survives a local SQLite restart | shared-host loss, trusted time, or experiment exhaustiveness |
-| `noetic-compass-scaffold/noetic-compass/tests/test_fleet_service_auth.py::test_authenticated_callback_exposes_exact_durable_nonce_receipt_after_restart` | safe callback receipt re-read binds nonce row schema, ID, credential, uppercase digest, byte length, parent/trace scope, and restart persistence | run-nonce issuance/consumption, trusted time, or execution attestation |
+| `noetic-compass-scaffold/noetic-compass/tests/test_fleet_service_auth.py::test_expiry_revocation_and_consumed_nonce_survive_sqlite_restart` | credential/revocation/callback-nonce state remains after closing and reopening a local SQLite file | process-crash, OS-restart, power-loss, shared-host loss, trusted time, or experiment-registry completeness |
+| `noetic-compass-scaffold/noetic-compass/tests/test_fleet_service_auth.py::test_authenticated_callback_exposes_exact_durable_nonce_receipt_after_restart` | safe callback receipt re-read after close/reopen binds nonce row schema, ID, credential, uppercase digest, byte length, parent/trace scope, and local-file persistence | crash/OS-restart/power-loss durability, run-nonce issuance/consumption, trusted time, or execution attestation |
 | `noetic-compass-scaffold/noetic-compass/tests/test_fleet_service_auth.py::test_tenant_audit_worker_and_capability_scopes_fail_closed` | callback tenant/audit/worker/capability mismatches are rejected | executor personhood, scientific role independence, or trusted execution |
 | `noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_fleet_worker_daemon.py::test_service_credential_headers_are_scoped_and_use_fresh_nonces` | worker sends scoped headers and a fresh callback nonce per HTTP attempt | API-side trusted time or a run nonce |
 | `noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_fleet_worker_daemon.py::test_command_executor_uses_only_lease_bound_identity_and_attested_result` | the command receives lease-bound model identity and rejects ambient substitutions | independently attested model execution or GPU numerical semantics |
 | `noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_fleet_worker_daemon.py::test_fragment_ref_matches_api_fleet_executor_builder` | worker/API fragment-ref algorithms agree on tested mappings | immutable retention, semantic equivalence, or packet completeness |
 | `noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_fleet_executor.py` | bounded fleet preparation, lease, receipt, fragment, model-attestation, merge, and readiness behavior | the Harness-v2 authorization/outcome-access protocol or science |
 | `noetic-compass-scaffold/noetic-compass/tests/test_evidence_packet_object_store.py::test_packet_bytes_and_index_survive_restart_and_second_replica` | exact packet/index persistence over the test backend across restart/replica reconstruction | a live provider receipt or Harness-v2 carrier adapter |
-| `noetic-compass-scaffold/noetic-compass/tests/test_evidence_packet_object_store.py::test_two_replicas_concurrently_create_one_packet_and_one_index` | concurrent identical packet creation converges in the tested repository | exhaustive run registry or trusted external ordering |
+| `noetic-compass-scaffold/noetic-compass/tests/test_evidence_packet_object_store.py::test_two_replicas_concurrently_create_one_packet_and_one_index` | concurrent identical packet creation converges in the tested repository | complete run registry or trusted external ordering |
 | `noetic-compass-scaffold/noetic-compass/tests/test_evidence_packet_object_store.py::test_fleet_merge_publication_is_retry_and_concurrency_idempotent` | tested fleet publication retries converge without conflicting packet bytes | authorization consumption, negative-run completeness, or claim authority |
 | `noetic-compass-scaffold/noetic-compass/tests/test_evidence_packet_object_store.py::test_packet_verify_detects_remote_byte_tampering` | remote byte drift from the durable index is detected | semantic correctness or an independent trust root |
-| `noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_worker_bridge.py` | 7 focused tests cover injected root-loader behavior; exact stable-carrier storage/reload; separate full callback-acceptance and current FleetJob snapshot binding; same-terminal-byte idempotency across fresh nonces; nonce replay rejection; restart and concurrency convergence; scope/job substitutions; pending-on-Object-Lock-failure; and no default loader/route/authority. The confirmed bridge + fleet-auth focused run has 21 passes, and bridge + fleet-auth + object-store has 41 passes. | a live API route, attested injected-loader provenance, launcher-issued authorization, referenced output-body ingestion, lease transition, run-nonce consumption, trusted time, live S3/provider evidence, outcome access, Evidence Packet v2 assembly, or science |
+| `noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_worker_bridge.py` | 8 focused tests cover injected root-loader behavior; exact stable-carrier storage/reload; separate full callback-acceptance and current FleetJob snapshot binding; same-terminal-byte idempotency across fresh nonces; nonce replay rejection; restart and concurrency convergence; scope/job substitutions; pending-on-Object-Lock-failure; sealed-safe retry; and no default loader or admitted route authority. The separately receipted fleet-auth plus object-store seam suite passes 35 tests. | an enabled live API route, attested injected-loader provenance, launcher-issued authorization, referenced output-body ingestion, authenticated lease transition, trusted time, live S3/provider evidence, or science |
+| `noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_run_lifecycle.py` | prospective reservation before nonce-bearing construction, raw nonce release once, same-file SQLite close/reopen and two-connection compare-and-swap behavior, one-use transitions, negative/nonreporting states, tamper detection, and tenant-visible reconciliation | crash/OS-restart/power-loss durability, host-loss or multi-host authority, attested nonce-factory provenance, WORM, absence of off-registry execution, or science |
+| `noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_lifecycle_service.py` | exact wrapper reload, server-built consumption/nonreporting envelopes, retained output bodies, sealed-safe terminal replay, outcome reservation, pre-write strict Packet-v2/transitive-artifact verification, and event-bound local reconciliation | atomic multi-object Packet storage, absence of postvalidation orphan wrappers, wrapper-independent Object-Lock authority, trusted time, an admitted route adapter, execution attestation, or science |
+| `noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_worker_protocol_routes.py` | default-dark/OpenAPI-hidden routing, exact request-bound callback nonce rows, opaque-body media/size limits, no JWT fallback, and fail-start without an admitted service | strict terminal-only parsing, transitive terminal acceptance-wrapper binding, an installed package/service adapter, reachable live provider, authenticated model execution, or product/public authority |
 
 Candidate-specific worker-protocol and bridge tests must additionally prove:
 
@@ -703,15 +831,17 @@ Candidate-specific worker-protocol and bridge tests must additionally prove:
    acceptance identity, raw nonce replay rejection, and conflicting-terminal
    retry rejection;
 8. declared-time ordering without any trusted-time claim;
-9. Ring-4 governance invariance and absence of live/product/disclosure routes;
+9. Ring-4 governance invariance and absence of enabled/admitted live, public,
+   product, or disclosure routes;
 10. authoritative Gate 5 manifest/verifier inclusion without changing the
     fixed open status; and
 11. explicit non-attestation of injected loader provenance plus rejection of
     any claim that referenced output-artifact bodies were ingested or replayed.
 
 Passing those tests can advance only the bounded mapping portion of
-`G5-ENGINEERING-001`. Independent red-team review, durable run consumption,
-trusted time, WORM binding, exhaustive reconciliation, live execution, and all
+`G5-ENGINEERING-001`. Independent reproduction, authenticated and
+host-loss-resistant run authority, trusted time, independent WORM binding,
+proof that reconciliation covers every execution, live execution, and all
 scientific/governance obligations remain separate.
 
 ## 11. Complete remaining Gate 5 OPEN obligations
@@ -723,13 +853,13 @@ or imply closure of any item without criterion-specific evidence and review.
 | Criterion | Disposition | Remaining obligation after this bounded protocol draft |
 |---|---|---|
 | `G5-TRUST-001` | `OPEN_ENGINEERING` | Integrate and independently verify trusted time and bind every relevant event to an authenticated time receipt. Application freshness and declared UTC ordering are insufficient. |
-| `G5-TRUST-002` | `OPEN_ENGINEERING` | Materialize the exact preregistration, authorization, outcome-access, terminal, and packet sequence under durable append-only/WORM authority; test restart, rollback, and host loss; bind independent verification receipts. |
-| `G5-TRUST-003` | `OPEN_ENGINEERING` | Implement an authenticated run-nonce issuer and durable atomic one-use run-consumption registry with concurrency, replay, restart, and host-loss tests. Existing callback nonce control is not this authority. |
-| `G5-TRUST-004` | `OPEN_ENGINEERING` | Create a durable exhaustive run/packet index with failure and indeterminate capture, completeness queries, one-use packet binding, and independent reconciliation against selective reporting. |
+| `G5-TRUST-002` | `OPEN_ENGINEERING` | Move the locally wrapped authorization/consumption/terminal/outcome/packet-or-nonreporting sequence under live independently controlled append-only/WORM authority; test rollback, replica, and host loss; bind independent verification receipts to inner exact bytes as well as wrappers. |
+| `G5-TRUST-003` | `OPEN_ENGINEERING` | Replace the same-host server-nonce/SQLite candidate with an admitted, independently authenticated run authority whose atomic one-use consumption survives concurrency, replay, replicas, and host loss; keep it distinct from transport callback replay protection. |
+| `G5-TRUST-004` | `OPEN_ENGINEERING` | Prove the tenant-visible lifecycle registry is complete against every authorized and executed run, amendment, failure, indeterminate outcome, packet, and nonreporting event across hosts; add independent anti-selective-reporting reconciliation. |
 | `G5-TRUST-005` | `OPEN_GOVERNANCE` | Admit and independently audit a non-caller-selected execution trust root, signing policy, key custody, scope, rotation, revocation, and exact receipt verification. |
 | `G5-TRUST-006` | `OPEN_GOVERNANCE` | Independently verify person, affiliation, conflict, qualification, organizational independence, authorization, and signing controls for executor, auditor, replication, and reviewer roles. |
 | `G5-INTEGRATION-002` | `OPEN_ENGINEERING` | Close Gate 4 through its own semantic, scientific, independent-review, governance, and disclosure authorities, then bind an authorized successor without retroactively promoting this candidate. |
-| `G5-ENGINEERING-001` | `OPEN_ENGINEERING` | Complete and independently red-team the exact live worker/kernel message, artifact, error, nonce, time, identity, persistence, and retry mappings before any experiment. This document plus local code remains a candidate, not closure. |
+| `G5-ENGINEERING-001` | `OPEN_ENGINEERING` | Package and admit the root-kernel/lifecycle adapter, wire active lease generation and explicit outcome sealing into the live worker path, then independently red-team the exact message, artifact, error, nonce, time, identity, persistence, and retry mappings. The default-dark route code and local service remain a candidate, not closure. |
 | `G5-ENGINEERING-002` | `OPEN_ENGINEERING` | Bind transient/dynamic import history and executed bytes; complete standard-library/test/native/descendant closure; cover files absent from distribution records; create an independently verified immutable snapshot; address privileged ABA and loader-alias races; independently reproduce and attest the candidate; compare admitted GPU outputs. |
 | `G5-ENGINEERING-003` | `OPEN_SECURITY` | Remediate or explicitly disposition six vendor-confirmed/fix-deferred findings; reconcile the `dpkg` scanner/vendor conflict; retain scanner database/process evidence; independently rebuild/reproduce; run the admitted exact GPU loader/hook contract; obtain an independent security receipt. |
 | `G5-ENGINEERING-005` | `OPEN_ENGINEERING` | Define typed artifact semantics, derivation/provenance identities, cross-run registry rules, and independent adjudication for byte-different semantic duplicates and relabeling. |
@@ -759,11 +889,19 @@ identity, nonce, or storage systems.
 Its honest effect is narrower than Gate 5 closure: once code, adversarial tests,
 manifest bindings, and an independent review exist, it can establish that the
 current worker and kernel have one explicit fail-closed mapping. It cannot
-establish durable one-use research execution, trusted time, WORM ordering,
-exhaustive reporting, authenticated science, external validation, license,
+establish independently authenticated or host-loss-resistant one-use research
+execution, trusted time, WORM ordering, registry completeness beyond the
+configured local store, authenticated science, external validation, license,
 product readiness, canon, or disclosure authority.
 
-No RunPod execution or funding action is required to author or locally verify
-this protocol candidate. An eventual GPU job remains prohibited until the
+The Gate 5 structural verifier can bind exact bytes, schemas, required status
+language, and local regression outcomes. It cannot authenticate the substantive
+truth of documentation or data, validate scientific interpretation, or turn a
+structurally complete Packet into established science.
+
+The `$107.00` RunPod balance is user-reported; no provider billing ledger or
+balance receipt was inspected, no RunPod/GPU/paid job was launched, and known
+spend for this tranche is `$0.00`. No RunPod execution or funding action is
+required to author or locally verify this protocol candidate. An eventual GPU job remains prohibited until the
 pre-execution engineering, security, trust, protocol-freeze, budget, and
 explicit-authorization gates are satisfied.

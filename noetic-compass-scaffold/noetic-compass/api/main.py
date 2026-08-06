@@ -31,6 +31,7 @@ from api.routes import (
     billing,
     cas_harness_audit,
     cas_harness_live_worker_health,
+    cas_harness_v2_worker_protocol,
     cohort,
     config,
     crm,
@@ -76,6 +77,25 @@ def _browser_managed_cors_credentials_allowed(
     # cookies, client certificates, or browser-managed HTTP auth back on.
     del origins, origin_regex
     return False
+
+
+def _require_harness_v2_worker_protocol_startup_boundary(app: FastAPI) -> None:
+    """Refuse the dark route without both its package and admitted adapter."""
+
+    if not settings.harness_v2_worker_protocol_enabled:
+        return
+    try:
+        import cas_harness_v2  # noqa: F401
+    except ImportError as exc:
+        raise RuntimeError(
+            "Harness-v2 worker protocol was enabled without the isolated "
+            "cas_harness_v2 package."
+        ) from exc
+    if getattr(app.state, "cas_harness_v2_worker_protocol_service", None) is None:
+        raise RuntimeError(
+            "Harness-v2 worker protocol was enabled without an admitted "
+            "lifespan service; no route fallback is permitted."
+        )
 
 
 
@@ -125,6 +145,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.accounts_billing_source_binding_store = None
     app.state.hosted_journey_source_binding_store = None
     app.state.support_crm_source_binding_store = None
+    app.state.cas_harness_v2_worker_protocol_service = None
     configure_evidence_packet_repository(None)
 
     if (not settings.debug or settings.accounts_enabled) and (
@@ -144,6 +165,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             "NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED=true requires "
             "NC_ACCOUNTS_ENABLED=true."
         )
+    _require_harness_v2_worker_protocol_startup_boundary(app)
 
     handle = None
     owned_state_store = None
@@ -556,6 +578,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.support_public_intake_receipt_store = None
         app.state.crm_privacy_notice_contract = None
         app.state.support_public_abuse_guard = None
+        app.state.cas_harness_v2_worker_protocol_service = None
         try:
             if handle is not None:
                 teardown_state_ledger(handle)
@@ -625,6 +648,7 @@ app.include_router(batch.router)
 app.include_router(benchmark.router)
 app.include_router(cas_harness_audit.router)
 app.include_router(cas_harness_live_worker_health.router)
+app.include_router(cas_harness_v2_worker_protocol.router)
 app.include_router(acceptance_publication_authorizations.router)
 app.include_router(human_attestations.router)
 app.include_router(customer_production_acceptance_authority.router)

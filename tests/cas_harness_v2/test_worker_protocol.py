@@ -24,9 +24,11 @@ from cas_harness_v2 import (  # noqa: E402
     WORKER_TERMINAL_RECEIPT_MEDIA_TYPE,
     WorkerAuthorizationArtifact,
     WorkerTerminalReceiptArtifact,
+    build_worker_authorization,
     canonical_sha256,
     load_worker_authorization,
     load_worker_terminal_receipt,
+    replay_worker_authorization_for_terminal,
     sha256_bytes,
 )
 from cas_harness_v2.preregistration import PreregistrationChain  # noqa: E402
@@ -202,6 +204,51 @@ class WorkerAuthorizationTests(unittest.TestCase):
         self.assertIn(self.fx.base.preregistration_id, {ref.artifact_id for ref in loaded.artifact_refs})
         with self.assertRaises(FrozenInstanceError):
             loaded.authorization_id = "changed"  # type: ignore[misc]
+
+    def test_builder_constructs_exact_limited_carrier_from_external_nonce(self) -> None:
+        built = build_worker_authorization(
+            chain=self.fx.chain,
+            authorization_id=self.fx.authorization["authorization_id"],
+            issued_at=self.fx.authorization["freshness"]["issued_at"],
+            expires_at=self.fx.authorization["freshness"]["expires_at"],
+            execution_mapping=self.fx.authorization["execution_mapping"],
+            run_nonce=bytes(range(32)),
+        )
+        self.assertEqual(built.raw_bytes, self.fx.authorization_raw)
+        self.assertEqual(built, self.fx.loaded_authorization)
+        self.assertEqual(
+            built.payload["nonce_binding"]["durable_enforcement"],
+            "EXTERNAL_REQUIRED_NOT_PROVIDED",
+        )
+        self.assertEqual(built.payload["authority"], AUTHORITY)
+
+    def test_builder_rejects_non_exact_nonce_before_constructing_carrier(self) -> None:
+        kwargs = {
+            "chain": self.fx.chain,
+            "authorization_id": self.fx.authorization["authorization_id"],
+            "issued_at": self.fx.authorization["freshness"]["issued_at"],
+            "expires_at": self.fx.authorization["freshness"]["expires_at"],
+            "execution_mapping": self.fx.authorization["execution_mapping"],
+        }
+        for nonce in (b"short", b"X" * 33, "X" * 32):
+            with self.subTest(nonce=nonce):
+                with self.assertRaises(SchemaValidationError):
+                    build_worker_authorization(run_nonce=nonce, **kwargs)  # type: ignore[arg-type]
+
+    def test_terminal_replay_loader_reads_exact_prior_bytes_after_outcome_seal(self) -> None:
+        terminal = self.fx.load_receipt()
+        self.fx.chain.record_outcome_access(
+            accessed_at=terminal.terminal_at,
+            execution_completed_at=terminal.terminal_at,
+            receipt=terminal.outcome_access_receipt_ref,
+        )
+        with self.assertRaises(SchemaValidationError):
+            load_worker_authorization(self.fx.authorization_raw, chain=self.fx.chain)
+        replayed = replay_worker_authorization_for_terminal(
+            self.fx.authorization_raw,
+            chain=self.fx.chain,
+        )
+        self.assertEqual(replayed, self.fx.loaded_authorization)
 
     def test_mutable_input_is_snapshotted(self) -> None:
         raw = bytearray(self.fx.authorization_raw)

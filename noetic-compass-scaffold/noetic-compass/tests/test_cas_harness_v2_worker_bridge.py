@@ -25,6 +25,7 @@ from cas_harness_v2 import (  # noqa: E402
     WORKER_AUTHORIZATION_MEDIA_TYPE,
     load_worker_authorization,
     load_worker_terminal_receipt,
+    replay_worker_authorization_for_terminal,
 )
 from test_worker_protocol import WorkerProtocolFixture, artifact_ref, encode  # noqa: E402
 
@@ -303,6 +304,7 @@ def _case(tmp_path: Path, *, backend: _VerifiedObjectBackend | None = None) -> d
         store=store,
         repository=repository,
         load_authorization=load_worker_authorization,
+        replay_authorization_for_terminal=replay_worker_authorization_for_terminal,
         load_terminal_receipt=load_worker_terminal_receipt,
         load_fleet_job_snapshot=load_snapshot,
         verify_authenticated_callback=auth.verify_authenticated_callback,
@@ -494,6 +496,7 @@ def test_restart_reloads_nonce_index_and_exact_same_terminalization(
         store=restarted_store,
         repository=restarted_repository,
         load_authorization=load_worker_authorization,
+        replay_authorization_for_terminal=replay_worker_authorization_for_terminal,
         load_terminal_receipt=load_worker_terminal_receipt,
         load_fleet_job_snapshot=lambda **_kwargs: case["job_snapshot"],
         verify_authenticated_callback=restarted_auth.verify_authenticated_callback,
@@ -507,6 +510,25 @@ def test_restart_reloads_nonce_index_and_exact_same_terminalization(
     assert second == first
     assert case["backend"].put_count == 2
     restarted_store.close()
+
+
+def test_exact_terminal_replay_remains_available_after_outcome_seal(tmp_path: Path) -> None:
+    case = _case(tmp_path)
+    first = _persist(case)
+    terminal = load_worker_terminal_receipt(
+        case["terminal_receipt_raw"],
+        authorization=case["authorization_raw"],
+        chain=case["fx"].chain,
+    )
+    case["fx"].chain.record_outcome_access(
+        accessed_at=terminal.terminal_at,
+        execution_completed_at=terminal.terminal_at,
+        receipt=terminal.outcome_access_receipt_ref,
+    )
+    replayed = _persist(case)
+    assert replayed == first
+    assert case["backend"].put_count == 2
+    case["store"].close()
 
 
 def test_concurrent_same_bytes_converge_to_one_object_and_one_final_index(
@@ -561,6 +583,7 @@ def test_scope_nonce_and_current_job_substitutions_fail_closed(tmp_path: Path) -
         store=case["store"],
         repository=case["repository"],
         load_authorization=load_worker_authorization,
+        replay_authorization_for_terminal=replay_worker_authorization_for_terminal,
         load_terminal_receipt=load_worker_terminal_receipt,
         load_fleet_job_snapshot=lambda **_kwargs: wrong_snapshot,
         verify_authenticated_callback=case["auth"].verify_authenticated_callback,
@@ -630,6 +653,7 @@ def test_adapter_has_no_default_loader_job_source_route_or_authority(tmp_path: P
             store=case["store"],
             repository=case["repository"],
             load_authorization=load_worker_authorization,
+            replay_authorization_for_terminal=replay_worker_authorization_for_terminal,
             load_terminal_receipt=load_worker_terminal_receipt,
             load_fleet_job_snapshot=None,  # type: ignore[arg-type]
             verify_authenticated_callback=case["auth"].verify_authenticated_callback,

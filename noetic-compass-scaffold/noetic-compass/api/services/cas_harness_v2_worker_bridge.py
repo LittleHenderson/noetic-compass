@@ -222,6 +222,7 @@ class ResearchOnlyHarnessV2WorkerBridge:
         store: StateStore,
         repository: EvidencePacketRepository,
         load_authorization: AuthorizationLoader,
+        replay_authorization_for_terminal: AuthorizationLoader | None = None,
         load_terminal_receipt: TerminalReceiptLoader,
         load_fleet_job_snapshot: FleetJobSnapshotLoader,
         verify_authenticated_callback: AuthenticatedCallbackVerifier,
@@ -234,6 +235,10 @@ class ResearchOnlyHarnessV2WorkerBridge:
             )
         if (
             not callable(load_authorization)
+            or (
+                replay_authorization_for_terminal is not None
+                and not callable(replay_authorization_for_terminal)
+            )
             or not callable(load_terminal_receipt)
             or not callable(load_fleet_job_snapshot)
             or not callable(verify_authenticated_callback)
@@ -254,6 +259,9 @@ class ResearchOnlyHarnessV2WorkerBridge:
         self._store = store
         self._repository = repository
         self._load_authorization = load_authorization
+        self._replay_authorization_for_terminal = (
+            replay_authorization_for_terminal or load_authorization
+        )
         self._load_terminal_receipt = load_terminal_receipt
         self._load_fleet_job_snapshot = load_fleet_job_snapshot
         self._verify_authenticated_callback = verify_authenticated_callback
@@ -288,7 +296,9 @@ class ResearchOnlyHarnessV2WorkerBridge:
             raise ResearchWorkerBridgeBindingError(
                 "Server callback verifier did not return the exact callback carrier."
             )
-        authorization = self._load_authorization(authorization_bytes, chain=chain)
+        authorization = self._replay_authorization_for_terminal(
+            authorization_bytes, chain=chain
+        )
         _verify_loaded_artifact(
             authorization,
             authorization_bytes,
@@ -732,7 +742,7 @@ class ResearchOnlyHarnessV2WorkerBridge:
             raise ResearchWorkerBridgePersistenceError(
                 "Reloaded terminal-receipt source bytes differ from the submitted bytes."
             )
-        replayed_authorization = self._load_authorization(
+        replayed_authorization = self._replay_authorization_for_terminal(
             authorization_raw, chain=chain
         )
         replayed_receipt = self._load_terminal_receipt(

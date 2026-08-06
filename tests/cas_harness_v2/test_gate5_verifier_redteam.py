@@ -42,6 +42,61 @@ def _load_module(name: str, path: Path):
     return module
 
 
+class Gate5HistoricalCandidateReceiptIsolationTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        # This narrow class deliberately does not verify the mutable Gate 5
+        # artifact manifest, so the historical-receipt regression can run while
+        # a successor manifest is being rebuilt.
+        cls.verifier = _load_verifier()
+
+    def _patched_json(self, target: Path, value: object):
+        original = self.verifier.load_json
+
+        def loader(path: Path, *, anchor: Path | None = None):
+            if path == target:
+                return value
+            return original(path, anchor=anchor)
+
+        return patch.object(self.verifier, "load_json", side_effect=loader)
+
+    def test_historical_candidate_receipt_is_immutable_and_decoupled(self) -> None:
+        receipt = self.verifier.load_json(self.verifier.CANDIDATE_RECEIPT_PATH)
+        current_suites = copy.deepcopy(self.verifier.REQUIRED_TEST_SUITES)
+        current_suites["Live trace worker complete"].update(
+            expected_tests=999,
+            expected_test_ids_sha256="0" * 64,
+        )
+        current_suites["API, fleet state, and launcher identity"].update(
+            targets=["tests/future_successor_suite.py"],
+            expected_tests=999,
+            expected_test_ids_sha256="1" * 64,
+        )
+        with patch.object(self.verifier, "REQUIRED_TEST_SUITES", current_suites):
+            verified = (
+                self.verifier.verify_dependency_and_container_candidate_receipt()
+            )
+        self.assertEqual(verified["test_receipts"], receipt["test_receipts"])
+
+        historical = (
+            self.verifier.HISTORICAL_DEPENDENCY_CONTAINER_CANDIDATE_TEST_RECEIPT
+        )
+        with self.assertRaises(TypeError):
+            historical["api_launcher_fleet_state"]["passed"] = 75
+        with self.assertRaises(TypeError):
+            historical["api_launcher_fleet_state"]["targets"][0] = (
+                "tests/forged.py"
+            )
+
+        forged = copy.deepcopy(receipt)
+        forged["test_receipts"]["api_launcher_fleet_state"][
+            "test_ids_sha256"
+        ] = "2" * 64
+        with self._patched_json(self.verifier.CANDIDATE_RECEIPT_PATH, forged):
+            with self.assertRaises(self.verifier.VerificationError):
+                self.verifier.verify_dependency_and_container_candidate_receipt()
+
+
 class Gate5VerifierRedTeamTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -551,6 +606,25 @@ class Gate5VerifierRedTeamTests(unittest.TestCase):
             ]["pytest_plugins"],
             ["pytest_asyncio.plugin"],
         )
+        with patch.dict(
+            os.environ,
+            {
+                "GIT_CONFIG_COUNT": "2",
+                "GIT_CONFIG_KEY_0": "alias.show",
+                "GIT_CONFIG_VALUE_0": "!false",
+                "GIT_CONFIG_KEY_1": "safe.directory",
+                "GIT_CONFIG_VALUE_1": "*",
+            },
+        ):
+            controlled_environment = self.verifier._subprocess_environment()
+        self.assertEqual(controlled_environment["GIT_CONFIG_COUNT"], "1")
+        self.assertEqual(controlled_environment["GIT_CONFIG_KEY_0"], "safe.directory")
+        self.assertEqual(
+            controlled_environment["GIT_CONFIG_VALUE_0"],
+            self.verifier.GIT_SAFE_DIRECTORY,
+        )
+        self.assertNotIn("GIT_CONFIG_KEY_1", controlled_environment)
+        self.assertNotIn("GIT_CONFIG_VALUE_1", controlled_environment)
         stdout, _ = self.verifier.run_command(
             [
                 sys.executable,

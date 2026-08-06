@@ -17,9 +17,10 @@ authority.
 - `HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md` defines the
   isolated executable control-kernel boundary.
 - `GATE5_WORKER_PROTOCOL_BINDING_v0.1.md` defines the research-only exact
-  worker-authorization and terminal-receipt mapping. It distinguishes durable
-  callback replay protection from still-OPEN run authorization, trusted time,
-  WORM ordering, and execution authentication.
+  worker-authorization, prospective lifecycle, terminal, outcome-access,
+  packet/nonreporting, and reconciliation mapping. It distinguishes local
+  same-host compare-and-swap controls from still-OPEN authenticated execution,
+  trusted time, independent WORM ordering, and host-loss authority.
 - `history/HISTORICAL_HARNESS_V1_V4_CURRENT_TREE_SHA256.json` binds the exact
   537-file historical recovery and its adverse evidence.
 - `history/HISTORICAL_HARNESS_V1_V4_RECOVERY_INVENTORY.md` explains the
@@ -57,15 +58,89 @@ authority.
 - `scripts/verify_project_coherence_gate5.py` verifies the complete bounded
   surface and re-runs its dependencies and tests.
 
+## Current dark prospective lifecycle successor
+
+The successor now joins four bounded local controls without promoting any of
+them to live or independent authority:
+
+1. `cas_harness_v2_run_lifecycle.py` reserves a run subject and nonce digest
+   before authorization construction, returns the raw nonce only once, records
+   one-use consumption, retains terminal states including
+   failure/indeterminate/rejected/expired, and hash-links outcome-access,
+   packet, or explicit nonreporting transitions. The default nonce factory is
+   `secrets.token_bytes(32)`, but the constructor accepts an injected callable
+   and no admitted runtime attests which factory was used. Reconciliation is
+   limited to record kinds visible in that tenant's configured `StateStore`;
+   the service/router currently expose only success/failure terminalization,
+   not the lower-level indeterminate/rejected/expired paths. An entirely empty
+   tenant view returns `has_registered_runs=false`, zero counts, and
+   `all_runs_reporting_disposed=false`; its issue-free structural result is not
+   evidence that no execution occurred.
+2. The tested SQLite profile provides close/reopen persistence and
+   compare-and-swap arbitration between two independent connections to one
+   database file on one host. It does not test process-crash, OS-restart,
+   power-loss, filesystem, or storage-device durability. It explicitly reports
+   multi-host support, host-loss survival, and independent attestation as
+   unavailable or not established. This is not a WORM authority and cannot
+   prove that an unregistered execution never occurred.
+3. `cas_harness_v2_lifecycle_service.py` retains exact inner carrier bytes in
+   typed repository wrappers; server-builds consumption and nonreporting
+   envelopes; verifies retained output bodies and transitive packet references;
+   reserves outcome-access time before mutating the chain; and reconciles the
+   event-bound authorization, consumption, terminal, outcome, and
+   packet/nonreporting wrappers plus packet-referenced bodies. Packet attachment
+   validates all supplied dependency bytes and the structural Packet result
+   before its first repository write. A later dependency or Packet storage
+   failure can nevertheless leave already written wrappers outside the event
+   chain; current reconciliation does not enumerate those losing/orphan writes
+   or every output retained while a run remains `RUNNING`. Repository receipts
+   attest the synthetic outer wrapper in current tests, not the inner carrier
+   directly or a live independent Object-Lock provider.
+4. `cas_harness_v2_worker_protocol.py` defines private exact-body HTTP handlers
+   for authorization, output retention, consumption, terminal, packet,
+   nonreporting, and reconciliation. Every accepted route request creates a
+   durable authentication nonce row binding the observed method, exact path,
+   job/run identity, authorization digest when applicable, and carrier
+   digest/length. That row is distinct from the bridge's immutable
+   callback-acceptance wrapper/index, which exists only for terminal submissions.
+   The route passes terminal bytes through as an opaque body; only the missing
+   strict adapter could prove that those bytes are a terminal-only carrier and
+   contain no embedded authorization. Customer JWT fallback is forbidden.
+
+The exact active-lease validator is also a standalone local seam: it checks the
+current process-local job/worker/model/token/expiry generation, but
+`consume_run` currently trusts passed lease facts and no adapter joins the two.
+Likewise, the router passes its request-bound receipt to a service port while
+the bridge sees only the legacy callback carrier; end-to-end preservation and
+revalidation of the request binding is not wired.
+
+The route derives `run_id` from `job_id`, while the lifecycle derives it from
+`subject_id` and the service separately requires
+`subject_id == authorization_id`. No admitted adapter currently enforces the
+required joint identity contract
+`job_id == subject_id == authorization_id`; therefore matching route and
+lifecycle run IDs is not established.
+
+That HTTP router is **default-dark**, excluded from OpenAPI, and returns a dark
+or unavailable response unless an admitted lifespan service is injected. The
+main application currently initializes that service to `None`; enabling the
+flag requires both the isolated root `cas_harness_v2` package and an admitted
+packaged adapter, then fails startup because no such adapter is wired. The
+current API image/package boundary also does not establish that root-kernel
+installation. Therefore route code exists, but no admitted, enabled, public,
+product, or live-execution route exists. An explicit HTTP outcome-seal adapter,
+live Fleet lease/execution integration, and independently controlled storage
+remain unfinished.
+
 ## Current bounded receipts
 
-The stable Harness v2 suite contains 146 pytest node IDs and passes 146 tests
-plus 96 subtests: 94 active control-kernel tests, 27 strict worker-protocol
-tests, 4 historical-recovery tests, and 21 retained Gate 5 verifier red-team
+The stable Harness v2 suite contains 150 pytest node IDs and passes 150 tests
+plus 99 subtests: 94 active control-kernel tests, 30 strict worker-protocol
+tests, 4 historical-recovery tests, and 22 retained Gate 5 verifier red-team
 regressions. Its canonical node-ID
 digest is:
 
-`EA041DCF5EFC04CB94297C381AFEF4E418FE000A23B6A79274177EC79667DFC1`
+`6BF70F5569C4BCA5B7D896382A099FC966E9C0622B3A3694BE0B330B66048756`
 
 The four-test historical subset digest is:
 
@@ -75,10 +150,10 @@ The 94-test active research-control subset digest is:
 
 `E170E51F83B8DEA3B43537737961580E21E08C14DE9DFE5A3809FB7B2EEA0952`
 
-The 27-test strict worker-protocol subset passes 35 subtests. Its canonical
+The 30-test strict worker-protocol subset passes 38 subtests. Its canonical
 node-ID digest is:
 
-`1F18A5854B5AF20FE87D9C281AAE0CC0B1F1DC8CB81748A47DC49CB7BC4A549A`
+`534CF4550FF56F3EA5F4235680CDB89A91784D1CEE0B7CB7ABDF9DE1C7B3E7FF`
 
 That kernel keeps the transport callback nonce outside immutable worker bytes,
 preserves retry-stable terminal identity, allows exact post-seal replay only
@@ -91,33 +166,42 @@ canonical node-ID digest is:
 
 `94566203B3E0FF79B3224C1C5A073698CA99D3C08BC1119A9082E42AF4B178BD`
 
-The companion API/launcher/fleet/state suite passes 76/76. Its canonical
+The companion API/launcher/fleet/state suite passes 78/78. Its canonical
 node-ID digest is:
 
-`1ED1E9E3AFA2EDA6881463EE5284DD4902AB94C0246B80D2937066480AC42921`
+`603DEBF7DF9AC7B5A69543C3736F4CD38692D3330690A7559A6F9DE6F0E2AF77`
 
-The dark worker-terminal bridge suite passes 7/7. Its canonical node-ID digest
+The dark worker-terminal bridge suite passes 8/8. Its canonical node-ID digest
 is:
 
-`C08603CC2AE3176E7BD568D40864BD630918C5F6E1D2395B3FB7780177A8B0BF`
+`6B0B52C30FA70C52E0EA5AC3B15221F4E5B8BC8337AA53B04972B3E543177969`
 
 The separate durable fleet-callback and fake Object-Lock seam suite passes
-34/34. Its canonical node-ID digest is:
+35/35. Its canonical node-ID digest is:
 
-`C7BBD95769FEF8BC6D06C7743E4E4C7792CF7405B3DB7DB9889F0E3A87F676E6`
+`A340034084006FC437AB1F9724FB45D3AE09555F5D302FC36CCD6CF53EC28F57`
+
+The prospective lifecycle, SQLite, and default-dark route suite passes 48/48
+with no subtests. Its canonical node-ID digest is:
+
+`B7B87D52351B21039A83E4B526BCAEDE0E8F3E11F79E162480FB007375421F44`
 
 The bridge stores one retry-stable terminal wrapper/index and binds each
-server-authored callback-attempt receipt in a separate post-authentication
-acceptance wrapper/index rather than the worker terminal carrier. It remains
-dark, route-free, and pre-outcome only; post-seal verification exists in the
-root terminal loader but is not yet wired through the bridge. Its injected
-loader semantics are an unresolved deployment trust boundary, its Object-Lock
-backend is synthetic in these tests, and it
-creates no durable run authorization, outcome-access event, complete Evidence
-Packet v2, live experiment, or claim authority.
+server-authored *terminal* callback-attempt receipt in a separate
+post-authentication acceptance wrapper/index rather than the worker terminal
+carrier. Nonterminal route nonce rows do not receive this bridge wrapper. It now uses
+the sealed-safe authorization replay port, so exact terminal replay can remain
+available after an outcome seal when the same receipt and completion time are
+bound. The surrounding lifecycle successor adds local prospective authorization,
+same-host one-use consumption, output retention, outcome-access reservation,
+Packet-v2/nonreporting attachment, and event-bound reconciliation. These paths
+remain dark and locally injected: strict-loader provenance is unresolved, the
+route has no packaged service adapter, the tested Object-Lock backend is
+synthetic, repository receipts bind wrappers rather than independently retained
+inner bytes, and no live experiment or claim authority is created.
 
-The 364-test worker, 76-test API/launcher/fleet/state, 27-test worker-protocol,
-7-test bridge, and 34-test durable-seam results are
+The 364-test worker, 78-test API/launcher/fleet/state, 30-test worker-protocol,
+8-test bridge, 35-test durable-seam, and 48-test prospective-lifecycle results are
 `LOCAL_UNATTESTED_HOST_REGRESSION` observations. Each suite now binds its
 collected, started, and finished node-ID sequences plus exact
 setup/call/teardown and subtest outcomes inside one pytest process. The child
@@ -355,8 +439,9 @@ classes:
 - upstream Gate 4 remains OPEN;
 - independently trusted time and a non-caller-selected trust root;
 - durable append-only/WORM ordering;
-- authenticated nonces, replay rejection, atomic one-use consumption, and a
-  complete anti-selective-reporting run/packet registry;
+- independently authenticated run issuance, replay rejection and atomic
+  one-use consumption beyond one same-host SQLite file, plus a registry proven
+  complete against external executions and selective reporting;
 - authenticated execution and real identity/affiliation/independence;
 - exact worker-to-kernel protocol mapping and hermetic environment attestation;
 - an independently attested hermetic runner, complete standard-library,
@@ -384,10 +469,16 @@ the external, scientific, governance, product, or disclosure items above.
 
 The SHA-256 values in this lane are integrity identities only. They are not
 signatures, reviewer identities, trusted timestamps, WORM receipts, semantic
-validations, licenses, or capability tokens. `PacketAssessment` remains data,
-not authority. No Gate 5 artifact may be routed into a customer verdict or
-public claim until the applicable independent authorities explicitly close
-their own gates.
+validations, licenses, or capability tokens. The structural verifier can check
+declared schemas, required wording, byte identity, and local regressions; it
+cannot authenticate that a document's substantive claims are true or establish
+scientific validity. `PacketAssessment` remains data, not authority. No Gate 5
+artifact may be routed into a customer verdict or public claim until the
+applicable independent authorities explicitly close their own gates.
+
+The reported RunPod balance is user-supplied `$107.00`. No provider billing
+ledger or balance receipt was inspected, no RunPod/GPU/paid job was launched,
+and known spend for this tranche is `$0.00`.
 
 Nothing in this lane creates live-execution authority, a scientific result,
 canon authority, a licensed claim, a product route, or disclosure authority.

@@ -12,8 +12,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 import hashlib
+import hmac
 import json
 import re
+import secrets
 from typing import Any, Mapping, Literal
 
 from api.services.cas_harness_distributed_audits import (
@@ -22,6 +24,7 @@ from api.services.cas_harness_distributed_audits import (
     merge_distributed_audit,
     record_worker_evidence,
 )
+from api.services.cas_harness_v2_worker_bridge import FleetJobSnapshot
 from api.services.production.state_substrate import INTERIM_TENANT, LedgerMirror, StateStore
 
 
@@ -181,6 +184,22 @@ class FleetRunRecord:
             ),
             "jobs": [job.to_dict(include_lease_token=False) for job in self.jobs],
         }
+
+
+@dataclass(frozen=True, slots=True)
+class ActiveFleetJobLease:
+    """Redacted process-local lease observation for the dark v2 lifecycle.
+
+    This carrier never exposes the lease token and does not promote the legacy
+    in-process fleet dictionaries into a durable or multi-replica authority.
+    """
+
+    snapshot: FleetJobSnapshot
+    lease_generation_id: str
+    lease_token_sha256: str
+    lease_expires_at: str
+    state_authority: str = "PROCESS_LOCAL_FLEET_STATE_NOT_DURABLE"
+    trusted_time: str = "NOT_ESTABLISHED"
 
 
 _WORKERS: dict[str, FleetWorkerRecord] = {}
@@ -765,6 +784,107 @@ def lease_next_job(
     return None
 
 
+def validate_active_fleet_job_lease(
+    *,
+    audit_id: str,
+    job_id: str,
+    worker_id: str,
+    lease_token: str,
+    require_scoped_worker: bool = True,
+    now: datetime | None = None,
+) -> ActiveFleetJobLease:
+    """Fail closed unless the exact current process-local lease is executable.
+
+    The returned digest/generation can be bound into the prospective lifecycle,
+    but this read-only seam cannot establish restart or host-loss durability.
+    """
+
+    _require_nonempty(audit_id, "audit_id")
+    _require_nonempty(job_id, "job_id")
+    _require_nonempty(worker_id, "worker_id")
+    _require_nonempty(lease_token, "lease_token")
+    audit = audit_id.strip()
+    job_key = job_id.strip()
+    worker_key = worker_id.strip()
+    secret = lease_token.strip()
+    run = _FLEET_RUNS.get(audit)
+    if run is None:
+        raise FleetExecutorStateError("Fleet run is unavailable for active-lease validation.")
+    job = _job(run, job_key)
+    if job is None:
+        raise FleetExecutorStateError("Fleet job is unavailable for active-lease validation.")
+    if job.assigned_worker_id != worker_key:
+        raise FleetExecutorStateError("Active fleet lease belongs to another worker.")
+    worker = _worker_for(
+        audit,
+        worker_key,
+        legacy_fallback=not require_scoped_worker,
+    )
+    if worker is None:
+        raise FleetExecutorStateError("Active fleet lease worker is unavailable.")
+    stamp = now or datetime.now(UTC)
+    if job.status != "leased":
+        raise FleetExecutorStateError("Fleet job does not have an active lease.")
+    supplied_hash = _hash_token(secret)
+    if (
+        job.lease_token is None
+        or job.lease_token_hash is None
+        or not hmac.compare_digest(job.lease_token, secret)
+        or not hmac.compare_digest(job.lease_token_hash, supplied_hash)
+    ):
+        raise FleetExecutorStateError("Fleet job lease token does not match the active lease.")
+    if not job.lease_expires_at:
+        raise FleetExecutorStateError("Fleet job lease expiry is unavailable.")
+    try:
+        expiry = _parse_utc(job.lease_expires_at)
+    except (TypeError, ValueError) as exc:
+        raise FleetExecutorStateError("Fleet job lease expiry is invalid.") from exc
+    if stamp >= expiry:
+        raise FleetExecutorStateError("Fleet job lease has expired.")
+    heartbeat_cutoff = stamp - timedelta(seconds=DEFAULT_MAX_HEARTBEAT_AGE_SECONDS)
+    if worker.status != "active" or _parse_utc(worker.last_heartbeat_at) < heartbeat_cutoff:
+        raise FleetExecutorStateError("Active fleet lease worker heartbeat is not current.")
+    model_fields = {
+        "model_id": job.model_id,
+        "model_revision": job.model_revision,
+        "model_artifact_manifest_path": job.model_artifact_manifest_path,
+        "model_artifact_manifest_sha256": job.model_artifact_manifest_sha256,
+        "execution_mode": job.execution_mode,
+    }
+    if any(not isinstance(value, str) or not value.strip() for value in model_fields.values()):
+        raise FleetExecutorStateError(
+            "Active fleet lease lacks the exact model artifact identity required by v2."
+        )
+    snapshot = FleetJobSnapshot(
+        fleet_id=audit,
+        job_id=job.job_id,
+        audit_id=audit,
+        assigned_worker_id=job.assigned_worker_id,
+        layer_start=job.layer_start,
+        layer_end=job.layer_end,
+        shard_id=job.shard_id,
+        assigned_methods=job.assigned_methods,
+        expected_outputs=job.expected_outputs,
+        model_id=str(job.model_id),
+        model_revision=str(job.model_revision),
+        model_artifact_manifest_path=str(job.model_artifact_manifest_path),
+        model_artifact_manifest_sha256=str(job.model_artifact_manifest_sha256),
+        execution_mode=str(job.execution_mode),
+    )
+    lease_generation_id = "flg_" + hashlib.sha256(
+        (
+            f"{audit}:{job.job_id}:{job.assigned_worker_id}:"
+            f"{job.lease_token_hash}:{job.lease_expires_at}:{job.updated_at}"
+        ).encode("utf-8")
+    ).hexdigest()
+    return ActiveFleetJobLease(
+        snapshot=snapshot,
+        lease_generation_id=lease_generation_id,
+        lease_token_sha256=supplied_hash,
+        lease_expires_at=job.lease_expires_at,
+    )
+
+
 def submit_job_receipt(
     *,
     audit_id: str,
@@ -1208,14 +1328,15 @@ def _job_id_for(audit_id: str, worker_id: str, shard_id: str) -> str:
     return f"fleet-job-{digest[:16]}"
 
 
-def _lease_token_for(job: FleetJobRecord, leased_at: datetime) -> str:
-    payload = {
-        "audit_id": job.audit_id,
-        "job_id": job.job_id,
-        "worker_id": job.assigned_worker_id,
-        "leased_at": leased_at.isoformat(),
-    }
-    return hashlib.sha256(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()
+def _lease_token_for(_job: FleetJobRecord, _leased_at: datetime) -> str:
+    """Mint an opaque 256-bit lease capability from the OS CSPRNG.
+
+    Audit, job, worker, and timestamp fields are observable and therefore must
+    not be used to derive the bearer token.  They remain bound separately by
+    the lease record and its token digest.
+    """
+
+    return secrets.token_hex(32)
 
 
 def _hash_token(token: str | None) -> str | None:

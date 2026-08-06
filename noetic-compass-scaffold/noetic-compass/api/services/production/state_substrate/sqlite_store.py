@@ -1,19 +1,18 @@
-"""SQLite backend for :class:`StateStore` -- genuinely durable on a single host.
+"""SQLite backend for :class:`StateStore` on one host and database file.
 
-This is the first *durable* backend on the state-substrate ladder. It persists
-every record and lease to a SQLite database file and, by enabling write-ahead
-logging plus an fsync on every commit, guarantees that a write which returned
-from ``put`` / ``acquire_lease`` / ``renew_lease`` survives a process kill: open
-a fresh :class:`SqliteStateStore` on the same path and the committed state is
-still there. ``test_state_substrate_sqlite.py`` proves exactly that across a
-close/reopen of the real file.
+This backend persists records and leases to a SQLite database file. The current
+tests establish close/reopen persistence for that file and compare-and-swap
+arbitration between two independent connections to the same file. They do not
+inject a process crash, operating-system restart, power loss, filesystem fault,
+or storage-device failure, so this module makes no tested durability claim for
+those events.
 
 Honesty boundary -- what this backend may and may NOT claim:
 
-* **Durable on a single host: yes.** WAL (``PRAGMA journal_mode=WAL``) plus
-  ``PRAGMA synchronous=NORMAL`` and a ``COMMIT`` after every mutation flush the
-  write to the WAL on durable storage, so a committed write survives a process
-  crash or restart on the *same machine and disk*. The restart tests assert this.
+* **Close/reopen persistence on one tested host/file: yes.** The store uses WAL,
+  ``PRAGMA synchronous=NORMAL``, and a ``COMMIT`` after every mutation. The tests
+  close one store and reopen the same file; they do not prove an fsync boundary,
+  crash survival, OS-restart survival, or power-loss survival.
 * **Durable across hosts: NO.** A single SQLite file on one host's filesystem is
   not replicated, not reachable from a second machine, and offers no distributed
   lease arbitration. If that host's disk is lost, the ledger is lost. Multi-host
@@ -30,17 +29,19 @@ the full single-holder / expiring / renew-release lease lifecycle match the
 reference exactly. Nothing about SQLite forces an observable difference through
 the Protocol.
 
-Concurrency note: a single ``threading.RLock`` guards every operation, mirroring
-the reference store's single-lock model -- the simplest model that is also
-correct. The underlying connection is opened with ``check_same_thread=False`` so
-the lock (not SQLite's own thread affinity) is the one synchronisation point;
-because every public method takes the lock for its whole body, no two operations
-ever touch the connection concurrently. Real concurrency tuning belongs to the
-multi-host backend, which pushes concurrency control into the database engine.
+Concurrency note: a ``threading.RLock`` guards each connection within its process,
+and every read-modify-write mutation starts ``BEGIN IMMEDIATE`` before reading.
+SQLite's database write lock therefore serializes independent connections and
+processes using the same single-host database file; expected-version decisions are
+made inside that transaction. This is same-file arbitration, not replication,
+host-loss survival, or multi-host authority. Those stronger properties still
+belong to the shared Postgres backend.
 """
 
 from __future__ import annotations
 
+from collections.abc import Iterator
+from contextlib import contextmanager
 import json
 import os
 import sqlite3
@@ -103,25 +104,24 @@ CREATE UNIQUE INDEX IF NOT EXISTS leases_token_idx ON leases (token)
 
 
 class SqliteStateStore(StateStore):
-    """Single-host durable ``StateStore`` backed by a SQLite database file."""
+    """Single-host ``StateStore`` backed by one SQLite database file."""
 
     def __init__(self, path: str | os.PathLike[str]) -> None:
         self._path = os.fspath(path)
         self._lock = threading.RLock()
         self._closed = False
-        # check_same_thread=False: the RLock below is the single synchronisation
-        # point, so we deliberately allow the connection to be used from whatever
-        # thread holds the lock. isolation_level="" keeps us in explicit-commit
-        # mode (we call .commit() after every mutation, which fsyncs the WAL).
+        # check_same_thread=False lets the per-connection RLock serialize local
+        # threads. Cross-connection/process mutations are serialized separately by
+        # BEGIN IMMEDIATE in _write_transaction. isolation_level="" permits those
+        # explicit transactions and commits.
         self._conn = sqlite3.connect(
             self._path, check_same_thread=False, isolation_level=""
         )
         with self._lock:
-            # WAL + synchronous=NORMAL is the durable single-host configuration:
-            # NORMAL fsyncs the WAL at each commit (safe across process crash and
-            # OS-level restart; only an OS/power loss can lose the last commit, and
-            # even then the database is never corrupted). FULL would be safe too,
-            # just slower; NORMAL is the standard durable WAL setting.
+            # WAL + synchronous=NORMAL is the configured local persistence mode.
+            # Current evidence covers close/reopen and two-connection same-file
+            # arbitration only; it does not test fsync, crash, OS-restart, power-
+            # loss, corruption, or storage-device guarantees.
             self._conn.execute("PRAGMA journal_mode=WAL")
             self._conn.execute("PRAGMA synchronous=NORMAL")
             self._conn.execute("PRAGMA foreign_keys=ON")
@@ -135,62 +135,93 @@ class SqliteStateStore(StateStore):
     def put(self, record: LedgerRecord, *, expected_version: Version) -> LedgerRecord:
         self._ensure_open()
         with self._lock:
-            current = self._read_record(record.tenant_id, record.kind, record.record_id)
-            current_version = current.version if current is not None else 0
-            if current_version != expected_version:
-                raise VersionConflict(
-                    kind=record.kind,
-                    record_id=record.record_id,
-                    expected=expected_version,
-                    actual=current_version,
+            with self._write_transaction():
+                current = self._read_record(
+                    record.tenant_id, record.kind, record.record_id
                 )
-            # created_at is immutable across updates: the row's birth is a fact a
-            # later writer cannot rewrite. updated_at moves to "now" on update; on
-            # first insert it keeps the record's own stamp (mirrors the reference).
-            created_at = current.created_at if current is not None else record.created_at
-            updated_at = utc_now() if current is not None else record.updated_at
-            stored = LedgerRecord(
-                record_id=record.record_id,
-                tenant_id=record.tenant_id,
-                kind=record.kind,
-                version=expected_version + 1,
-                created_at=created_at,
-                updated_at=updated_at,
-                payload=dict(record.payload),
-                parent_ids=tuple(record.parent_ids),
-                source=record.source,
-                trace_id=record.trace_id,
-            )
-            self._conn.execute(
-                """
-                INSERT INTO records
-                    (tenant_id, kind, record_id, version, created_at, updated_at,
-                     payload, parent_ids, source, trace_id)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ON CONFLICT(tenant_id, kind, record_id) DO UPDATE SET
-                    version=excluded.version,
-                    created_at=excluded.created_at,
-                    updated_at=excluded.updated_at,
-                    payload=excluded.payload,
-                    parent_ids=excluded.parent_ids,
-                    source=excluded.source,
-                    trace_id=excluded.trace_id
-                """,
-                (
-                    stored.tenant_id,
-                    stored.kind,
-                    stored.record_id,
-                    stored.version,
-                    stored.created_at.isoformat(),
-                    stored.updated_at.isoformat(),
-                    json.dumps(stored.payload),
-                    json.dumps(list(stored.parent_ids)),
-                    stored.source,
-                    stored.trace_id,
-                ),
-            )
-            self._conn.commit()
-            return stored
+                current_version = current.version if current is not None else 0
+                if current_version != expected_version:
+                    raise VersionConflict(
+                        kind=record.kind,
+                        record_id=record.record_id,
+                        expected=expected_version,
+                        actual=current_version,
+                    )
+                # created_at is immutable across updates: the row's birth is a fact
+                # a later writer cannot rewrite. updated_at moves to "now" on
+                # update; on first insert it keeps the record's own stamp.
+                created_at = (
+                    current.created_at if current is not None else record.created_at
+                )
+                updated_at = utc_now() if current is not None else record.updated_at
+                stored = LedgerRecord(
+                    record_id=record.record_id,
+                    tenant_id=record.tenant_id,
+                    kind=record.kind,
+                    version=expected_version + 1,
+                    created_at=created_at,
+                    updated_at=updated_at,
+                    payload=dict(record.payload),
+                    parent_ids=tuple(record.parent_ids),
+                    source=record.source,
+                    trace_id=record.trace_id,
+                )
+                if current is None:
+                    try:
+                        self._conn.execute(
+                            """
+                            INSERT INTO records
+                                (tenant_id, kind, record_id, version, created_at,
+                                 updated_at, payload, parent_ids, source, trace_id)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            """,
+                            self._record_values(stored),
+                        )
+                    except sqlite3.IntegrityError as exc:
+                        actual = self._read_record(
+                            record.tenant_id, record.kind, record.record_id
+                        )
+                        if actual is not None:
+                            raise VersionConflict(
+                                kind=record.kind,
+                                record_id=record.record_id,
+                                expected=expected_version,
+                                actual=actual.version,
+                            ) from exc
+                        raise
+                else:
+                    cursor = self._conn.execute(
+                        """
+                        UPDATE records SET
+                            version = ?, updated_at = ?, payload = ?, parent_ids = ?,
+                            source = ?, trace_id = ?
+                        WHERE tenant_id = ? AND kind = ? AND record_id = ?
+                          AND version = ?
+                        """,
+                        (
+                            stored.version,
+                            stored.updated_at.isoformat(),
+                            json.dumps(stored.payload),
+                            json.dumps(list(stored.parent_ids)),
+                            stored.source,
+                            stored.trace_id,
+                            stored.tenant_id,
+                            stored.kind,
+                            stored.record_id,
+                            expected_version,
+                        ),
+                    )
+                    if cursor.rowcount != 1:
+                        actual = self._read_record(
+                            record.tenant_id, record.kind, record.record_id
+                        )
+                        raise VersionConflict(
+                            kind=record.kind,
+                            record_id=record.record_id,
+                            expected=expected_version,
+                            actual=actual.version if actual is not None else 0,
+                        )
+                return stored
 
     def get(self, tenant_id: TenantId, kind: Kind, record_id: RecordId) -> Optional[LedgerRecord]:
         self._ensure_open()
@@ -220,40 +251,51 @@ class SqliteStateStore(StateStore):
     def delete(self, tenant_id: TenantId, kind: Kind, record_id: RecordId, *, expected_version: Version) -> None:
         self._ensure_open()
         with self._lock:
-            current = self._read_record(tenant_id, kind, record_id)
-            if current is None:
-                # Does the row exist under a *different* tenant? That is a caller
-                # bug worth surfacing loudly, not a silent no-op.
-                other = self._conn.execute(
-                    "SELECT 1 FROM records "
-                    "WHERE kind = ? AND record_id = ? AND tenant_id != ? LIMIT 1",
-                    (kind, record_id, tenant_id),
-                ).fetchone()
-                if other is not None:
-                    raise TenantScopeViolation(
-                        f"delete addressed tenant {tenant_id!r} but {kind}/{record_id} "
-                        f"belongs to another tenant"
+            with self._write_transaction():
+                current = self._read_record(tenant_id, kind, record_id)
+                if current is None:
+                    # Does the row exist under a *different* tenant? That is a
+                    # caller bug worth surfacing loudly, not a silent no-op.
+                    other = self._conn.execute(
+                        "SELECT 1 FROM records "
+                        "WHERE kind = ? AND record_id = ? AND tenant_id != ? LIMIT 1",
+                        (kind, record_id, tenant_id),
+                    ).fetchone()
+                    if other is not None:
+                        raise TenantScopeViolation(
+                            f"delete addressed tenant {tenant_id!r} but "
+                            f"{kind}/{record_id} belongs to another tenant"
+                        )
+                    # Deleting something absent is a version conflict
+                    # (expected != 0), unless the caller also expected absence.
+                    if expected_version == 0:
+                        return
+                    raise VersionConflict(
+                        kind=kind,
+                        record_id=record_id,
+                        expected=expected_version,
+                        actual=0,
                     )
-                # Deleting something absent is a version conflict (expected != 0),
-                # unless the caller also expected absence (expected_version 0),
-                # which is an idempotent no-op.
-                if expected_version == 0:
-                    return
-                raise VersionConflict(
-                    kind=kind, record_id=record_id, expected=expected_version, actual=0
+                if current.version != expected_version:
+                    raise VersionConflict(
+                        kind=kind,
+                        record_id=record_id,
+                        expected=expected_version,
+                        actual=current.version,
+                    )
+                cursor = self._conn.execute(
+                    "DELETE FROM records WHERE tenant_id = ? AND kind = ? "
+                    "AND record_id = ? AND version = ?",
+                    (tenant_id, kind, record_id, expected_version),
                 )
-            if current.version != expected_version:
-                raise VersionConflict(
-                    kind=kind,
-                    record_id=record_id,
-                    expected=expected_version,
-                    actual=current.version,
-                )
-            self._conn.execute(
-                "DELETE FROM records WHERE tenant_id = ? AND kind = ? AND record_id = ?",
-                (tenant_id, kind, record_id),
-            )
-            self._conn.commit()
+                if cursor.rowcount != 1:
+                    actual = self._read_record(tenant_id, kind, record_id)
+                    raise VersionConflict(
+                        kind=kind,
+                        record_id=record_id,
+                        expected=expected_version,
+                        actual=actual.version if actual is not None else 0,
+                    )
 
     # --- leases ------------------------------------------------------------
 
@@ -271,21 +313,22 @@ class SqliteStateStore(StateStore):
             raise StateStoreError("ttl_seconds must be positive")
         stamp = now or utc_now()
         with self._lock:
-            existing = self._read_lease(tenant_id, resource_id)
-            if existing is not None and not existing.is_expired(now=stamp):
-                if existing.holder != holder:
-                    # Live lease owned by someone else: the caller lost the race.
-                    raise LeaseHeld(resource_id=resource_id, holder=existing.holder)
-                # Same holder re-acquiring a live lease: idempotent extend. The
-                # INSERT-OR-REPLACE below overwrites the row at (tenant, resource)
-                # with a fresh token, so the old token is retired -- a stale token
-                # cannot renew a lease the holder has moved on from.
-            # If existing is expired (any holder) we simply reclaim by overwriting
-            # the row -- again retiring the old token. Either way, write the new lease.
-            lease = self._make_lease(tenant_id, resource_id, holder, stamp, ttl_seconds)
-            self._write_lease(lease)
-            self._conn.commit()
-            return lease
+            with self._write_transaction():
+                existing = self._read_lease(tenant_id, resource_id)
+                if existing is not None and not existing.is_expired(now=stamp):
+                    if existing.holder != holder:
+                        # Live lease owned by someone else: the caller lost the race.
+                        raise LeaseHeld(
+                            resource_id=resource_id, holder=existing.holder
+                        )
+                    # Same holder re-acquiring a live lease: idempotent extend. The
+                    # replacement retires the old token.
+                # An expired lease may be reclaimed by either holder.
+                lease = self._make_lease(
+                    tenant_id, resource_id, holder, stamp, ttl_seconds
+                )
+                self._write_lease(lease)
+                return lease
 
     def renew_lease(self, token: str, *, ttl_seconds: float, now: Optional[datetime] = None) -> Lease:
         self._ensure_open()
@@ -293,23 +336,42 @@ class SqliteStateStore(StateStore):
             raise StateStoreError("ttl_seconds must be positive")
         stamp = now or utc_now()
         with self._lock:
-            lease = self._read_lease_by_token(token)
-            if lease is None:
-                # Token was never issued, was superseded by a re-acquire, or has
-                # already been released. There is no live lease for it.
-                raise UnknownLease(f"no live lease for token {token!r}")
-            if lease.is_expired(now=stamp):
-                # Renew never resurrects a dead lease -- the holder is presumed gone
-                # and the resource is free for anyone. Force them back through acquire.
-                raise LeaseExpired(
-                    f"lease on {lease.resource_id!r} expired at {lease.expires_at.isoformat()}"
+            with self._write_transaction():
+                lease = self._read_lease_by_token(token)
+                if lease is None:
+                    # Token was never issued, was superseded by a re-acquire, or
+                    # has already been released.
+                    raise UnknownLease(f"no live lease for token {token!r}")
+                if lease.is_expired(now=stamp):
+                    # Renew never resurrects a dead lease.
+                    raise LeaseExpired(
+                        f"lease on {lease.resource_id!r} expired at "
+                        f"{lease.expires_at.isoformat()}"
+                    )
+                renewed = self._make_lease(
+                    lease.tenant_id,
+                    lease.resource_id,
+                    lease.holder,
+                    stamp,
+                    ttl_seconds,
+                    token=token,
                 )
-            renewed = self._make_lease(
-                lease.tenant_id, lease.resource_id, lease.holder, stamp, ttl_seconds, token=token
-            )
-            self._write_lease(renewed)
-            self._conn.commit()
-            return renewed
+                cursor = self._conn.execute(
+                    """
+                    UPDATE leases SET acquired_at = ?, expires_at = ?
+                    WHERE tenant_id = ? AND resource_id = ? AND token = ?
+                    """,
+                    (
+                        renewed.acquired_at.isoformat(),
+                        renewed.expires_at.isoformat(),
+                        renewed.tenant_id,
+                        renewed.resource_id,
+                        token,
+                    ),
+                )
+                if cursor.rowcount != 1:
+                    raise UnknownLease(f"no live lease for token {token!r}")
+                return renewed
 
     def release_lease(self, token: str) -> None:
         self._ensure_open()
@@ -318,8 +380,8 @@ class SqliteStateStore(StateStore):
             # is still the stored one. An unknown/superseded/already-released token
             # matches no row, so this is a no-op -- the post-condition ("this token
             # holds nothing") already holds.
-            self._conn.execute("DELETE FROM leases WHERE token = ?", (token,))
-            self._conn.commit()
+            with self._write_transaction():
+                self._conn.execute("DELETE FROM leases WHERE token = ?", (token,))
 
     def get_lease(self, tenant_id: TenantId, resource_id: str, *, now: Optional[datetime] = None) -> Optional[Lease]:
         self._ensure_open()
@@ -348,6 +410,40 @@ class SqliteStateStore(StateStore):
                 self._closed = True
 
     # --- helpers -----------------------------------------------------------
+
+    @contextmanager
+    def _write_transaction(self) -> Iterator[None]:
+        """Serialize one read-modify-write decision across SQLite connections."""
+
+        if self._conn.in_transaction:
+            raise StateStoreError("nested SQLite write transaction is not supported")
+        try:
+            self._conn.execute("BEGIN IMMEDIATE")
+            yield
+            self._conn.commit()
+        except sqlite3.Error as exc:
+            if self._conn.in_transaction:
+                self._conn.rollback()
+            raise StateStoreError(f"SQLite write transaction failed: {exc}") from exc
+        except BaseException:
+            if self._conn.in_transaction:
+                self._conn.rollback()
+            raise
+
+    @staticmethod
+    def _record_values(record: LedgerRecord) -> tuple[object, ...]:
+        return (
+            record.tenant_id,
+            record.kind,
+            record.record_id,
+            record.version,
+            record.created_at.isoformat(),
+            record.updated_at.isoformat(),
+            json.dumps(record.payload),
+            json.dumps(list(record.parent_ids)),
+            record.source,
+            record.trace_id,
+        )
 
     def _make_lease(
         self,

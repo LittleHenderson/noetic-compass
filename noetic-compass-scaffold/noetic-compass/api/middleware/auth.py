@@ -181,6 +181,7 @@ ACCOUNT_MODE_ALLOWED_PREFIXES = (
     "/api/support/tickets",
 )
 
+_FLEET_V2_CALLBACK_ID = r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}"
 _FLEET_SERVICE_CALLBACK_PATTERNS = tuple(
     re.compile(pattern)
     for pattern in (
@@ -191,6 +192,16 @@ _FLEET_SERVICE_CALLBACK_PATTERNS = tuple(
         r"^/api/cas-harness/audit/distributed/session/[^/]+/fleet/job/lease$",
         r"^/api/cas-harness/audit/distributed/session/[^/]+/fleet/job/[^/]+/receipt$",
         r"^/api/cas-harness/audit/distributed/session/[^/]+/fleet/(?:merge|verifier)$",
+        (
+            rf"^/api/cas-harness/audit/distributed/session/{_FLEET_V2_CALLBACK_ID}"
+            rf"/fleet/v2/job/{_FLEET_V2_CALLBACK_ID}"
+            r"/(?:authorization|packet|nonreporting|reconcile)$"
+        ),
+        (
+            rf"^/api/cas-harness/audit/distributed/session/{_FLEET_V2_CALLBACK_ID}"
+            rf"/fleet/v2/job/{_FLEET_V2_CALLBACK_ID}"
+            rf"/worker/{_FLEET_V2_CALLBACK_ID}/(?:output|consume|terminal)$"
+        ),
     )
 )
 

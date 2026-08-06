@@ -33,8 +33,10 @@ from .worker_protocol import (
     WORKER_TERMINAL_RECEIPT_SCHEMA,
     WorkerAuthorizationArtifact,
     WorkerTerminalReceiptArtifact,
+    build_worker_authorization,
     load_worker_authorization,
     load_worker_terminal_receipt,
+    replay_worker_authorization_for_terminal,
 )
 
 __all__ = [
@@ -59,6 +61,7 @@ __all__ = [
     "WORKER_TERMINAL_RECEIPT_SCHEMA",
     "WorkerAuthorizationArtifact",
     "WorkerTerminalReceiptArtifact",
+    "build_worker_authorization",
     "canonical_json_bytes",
     "canonical_sha256",
     "load_amendment",
@@ -66,6 +69,7 @@ __all__ = [
     "load_preregistration",
     "load_worker_authorization",
     "load_worker_terminal_receipt",
+    "replay_worker_authorization_for_terminal",
     "reject_automatic_v1_upgrade",
     "sha256_bytes",
     "verify_evidence_packet",

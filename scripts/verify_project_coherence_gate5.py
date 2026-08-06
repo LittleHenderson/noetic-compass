@@ -38,6 +38,7 @@ import stat
 import subprocess
 import tarfile
 import tempfile
+from types import MappingProxyType
 from typing import Any, Iterable
 
 
@@ -109,10 +110,14 @@ EXACT_API_LAUNCHER_SURFACE = {
     f"{API_ROOT_REL}/tests/test_cas_harness_fleet_executor.py",
     f"{API_ROOT_REL}/tests/test_cas_harness_fleet_executor_contract.py",
     f"{API_ROOT_REL}/tests/test_cas_harness_v2_worker_bridge.py",
+    f"{API_ROOT_REL}/tests/test_cas_harness_v2_run_lifecycle.py",
+    f"{API_ROOT_REL}/tests/test_cas_harness_v2_lifecycle_service.py",
+    f"{API_ROOT_REL}/tests/test_cas_harness_v2_worker_protocol_routes.py",
     f"{API_ROOT_REL}/tests/object_lock_test_support.py",
     f"{API_ROOT_REL}/tests/test_fleet_service_auth.py",
     f"{API_ROOT_REL}/tests/test_evidence_packet_object_store.py",
     f"{API_ROOT_REL}/tests/test_state_ledger_operational_enable.py",
+    f"{API_ROOT_REL}/tests/test_state_substrate_sqlite.py",
     f"{API_ROOT_REL}/tests/test_state_substrate_live_migration.py",
 }
 API_RUNTIME_SURFACE_DIR = f"{API_ROOT_REL}/api"
@@ -239,6 +244,7 @@ SUBPROCESS_ENV_ALLOWLIST = {
     "USERPROFILE",
     "WINDIR",
 }
+GIT_SAFE_DIRECTORY = ROOT.resolve().as_posix()
 
 REQUIRED_BOUNDARY_TEXT = {
     "G5-OPEN-GATE4": "Gate 4 remains OPEN and cannot be promoted by dependency verification.",
@@ -324,10 +330,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "targets": ["tests/cas_harness_v2"],
         "pytest_plugins": [],
         "repo_import_roots": ["src", "tests/cas_harness_v2"],
-        "expected_tests": 146,
-        "expected_subtests": 96,
+        "expected_tests": 150,
+        "expected_subtests": 99,
         "expected_test_ids_sha256": (
-            "EA041DCF5EFC04CB94297C381AFEF4E418FE000A23B6A79274177EC79667DFC1"
+            "6BF70F5569C4BCA5B7D896382A099FC966E9C0622B3A3694BE0B330B66048756"
         ),
     },
     "Live trace worker complete": {
@@ -363,10 +369,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         ],
         "pytest_plugins": ["pytest_asyncio.plugin"],
         "repo_import_roots": [f"{API_ROOT_REL}/scripts"],
-        "expected_tests": 76,
+        "expected_tests": 78,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "1ED1E9E3AFA2EDA6881463EE5284DD4902AB94C0246B80D2937066480AC42921"
+            "603DEBF7DF9AC7B5A69543C3736F4CD38692D3330690A7559A6F9DE6F0E2AF77"
         ),
     },
     "Durable fleet callback and Object-Lock repository seams": {
@@ -377,10 +383,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         ],
         "pytest_plugins": ["pytest_asyncio.plugin"],
         "repo_import_roots": [],
-        "expected_tests": 34,
+        "expected_tests": 35,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "C7BBD95769FEF8BC6D06C7743E4E4C7792CF7405B3DB7DB9889F0E3A87F676E6"
+            "A340034084006FC437AB1F9724FB45D3AE09555F5D302FC36CCD6CF53EC28F57"
         ),
     },
     "Harness v2 worker terminal bridge": {
@@ -388,13 +394,99 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "targets": ["tests/test_cas_harness_v2_worker_bridge.py"],
         "pytest_plugins": ["pytest_asyncio.plugin"],
         "repo_import_roots": ["src", "tests/cas_harness_v2"],
-        "expected_tests": 7,
+        "expected_tests": 8,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "C08603CC2AE3176E7BD568D40864BD630918C5F6E1D2395B3FB7780177A8B0BF"
+            "6B0B52C30FA70C52E0EA5AC3B15221F4E5B8BC8337AA53B04972B3E543177969"
+        ),
+    },
+    "Harness v2 prospective lifecycle, SQLite, and dark route": {
+        "working_directory": API_ROOT_REL,
+        "targets": [
+            "tests/test_state_substrate_sqlite.py",
+            "tests/test_cas_harness_v2_run_lifecycle.py",
+            "tests/test_cas_harness_v2_lifecycle_service.py",
+            "tests/test_cas_harness_v2_worker_protocol_routes.py",
+        ],
+        "pytest_plugins": [],
+        "repo_import_roots": [
+            "src",
+            "tests/cas_harness_v2",
+            f"{API_ROOT_REL}/tests",
+        ],
+        "expected_tests": 48,
+        "expected_subtests": 0,
+        "expected_test_ids_sha256": (
+            "B7B87D52351B21039A83E4B526BCAEDE0E8F3E11F79E162480FB007375421F44"
         ),
     },
 }
+
+# This receipt predates later Gate 5 test-suite expansion.  Keep it immutable
+# and self-contained so editing today's REQUIRED_TEST_SUITES cannot rewrite or
+# invalidate evidence already issued for the dependency/container candidate.
+HISTORICAL_DEPENDENCY_CONTAINER_CANDIDATE_TEST_RECEIPT = MappingProxyType(
+    {
+        "live_trace_worker_complete": MappingProxyType(
+            {
+                "passed": 364,
+                "failed": 0,
+                "total": 364,
+                "test_ids_sha256": (
+                    "94566203B3E0FF79B3224C1C5A073698CA99D3C08BC1119A9082E42AF4B178BD"
+                ),
+            }
+        ),
+        "api_launcher_fleet_state": MappingProxyType(
+            {
+                "passed": 76,
+                "failed": 0,
+                "total": 76,
+                "test_ids_sha256": (
+                    "1ED1E9E3AFA2EDA6881463EE5284DD4902AB94C0246B80D2937066480AC42921"
+                ),
+                "targets": (
+                    "noetic-compass-scaffold/noetic-compass/scripts/"
+                    "test_prepare_large_model_eval.py",
+                    "noetic-compass-scaffold/noetic-compass/tests/"
+                    "test_cas_harness_fleet_executor.py",
+                    "noetic-compass-scaffold/noetic-compass/tests/"
+                    "test_cas_harness_fleet_executor_contract.py",
+                    "noetic-compass-scaffold/noetic-compass/tests/"
+                    "test_state_ledger_operational_enable.py",
+                    "noetic-compass-scaffold/noetic-compass/tests/"
+                    "test_state_substrate_live_migration.py",
+                ),
+            }
+        ),
+        "receipt_scope": (
+            "LOCAL_UNATTESTED_HOST_REGRESSION / SEPARATE COLLECT-ONLY NODE-ID "
+            "DIGEST / ACTUAL EXECUTED IDS NOT RECEIPTED / NOT GPU EXECUTION / "
+            "NOT SCIENTIFIC EVIDENCE"
+        ),
+    }
+)
+
+
+def _historical_dependency_container_candidate_test_receipt() -> dict[str, Any]:
+    """Return the JSON-shaped copy used to verify the historical receipt."""
+
+    worker = HISTORICAL_DEPENDENCY_CONTAINER_CANDIDATE_TEST_RECEIPT[
+        "live_trace_worker_complete"
+    ]
+    api = HISTORICAL_DEPENDENCY_CONTAINER_CANDIDATE_TEST_RECEIPT[
+        "api_launcher_fleet_state"
+    ]
+    return {
+        "live_trace_worker_complete": dict(worker),
+        "api_launcher_fleet_state": {
+            **dict(api),
+            "targets": list(api["targets"]),
+        },
+        "receipt_scope": HISTORICAL_DEPENDENCY_CONTAINER_CANDIDATE_TEST_RECEIPT[
+            "receipt_scope"
+        ],
+    }
 
 # These subset receipts keep the historical recovery, active research-control,
 # and strict worker-protocol kernels independently visible inside the complete
@@ -422,9 +514,10 @@ REQUIRED_SUBSUITE_DIGESTS = {
     "worker protocol kernel": {
         "targets": ["tests/cas_harness_v2/test_worker_protocol.py"],
         "pytest_plugins": [],
-        "expected_tests": 27,
+        "expected_tests": 30,
+        "expected_subtests": 38,
         "expected_test_ids_sha256": (
-            "1F18A5854B5AF20FE87D9C281AAE0CC0B1F1DC8CB81748A47DC49CB7BC4A549A"
+            "534CF4550FF56F3EA5F4235680CDB89A91784D1CEE0B7CB7ABDF9DE1C7B3E7FF"
         ),
     },
 }
@@ -948,7 +1041,7 @@ def collect_pytest_environment_surface() -> set[str]:
 
 
 def collect_api_runtime_surface() -> set[str]:
-    """Collect the complete API source/resource tree used by the 76-test receipt."""
+    """Collect the complete current API source/resource tree admitted by Gate 5."""
     return _collect_surface(API_RUNTIME_SURFACE_DIR, "*")
 
 
@@ -1881,7 +1974,7 @@ def verify_review_matrix(
     )
     require(
         isinstance(matrix.get("review_basis"), str)
-        and "No criterion creates ACCEPT, LICENSED, a public route, or a product route."
+        and "No criterion creates ACCEPT, LICENSED, an enabled public route, or a product route."
         in matrix["review_basis"],
         "Gate 5 review basis omits its non-promotion boundary",
     )
@@ -2090,6 +2183,7 @@ def verify_review_matrix(
             "kernel_focused",
             "worker_protocol_kernel",
             "worker_protocol_bridge_and_durable_seams",
+            "prospective_lifecycle_sqlite_dark_route",
             "worker_checkpoints",
             "api_launcher_fleet_state",
             "successor_dependency_container_candidate",
@@ -2136,7 +2230,8 @@ def verify_review_matrix(
         type(protocol_receipt.get("passed_tests")) is int
         and protocol_receipt["passed_tests"] == protocol_subset["expected_tests"]
         and type(protocol_receipt.get("passed_subtests")) is int
-        and protocol_receipt["passed_subtests"] == 35
+        and protocol_receipt["passed_subtests"]
+        == protocol_subset["expected_subtests"]
         and protocol_receipt.get("test_ids_sha256")
         == protocol_subset["expected_test_ids_sha256"].lower()
         and protocol_receipt.get("independently_reproduced") is False
@@ -2235,17 +2330,16 @@ def verify_review_matrix(
         {"passed", "failed", "total", "test_ids_sha256", "independently_reproduced", "scope"},
         label="review-matrix API/launcher receipt",
     )
+    api_suite = REQUIRED_TEST_SUITES["API, fleet state, and launcher identity"]
     require(
         type(api_receipt.get("passed")) is int
-        and api_receipt["passed"] == 76
+        and api_receipt["passed"] == api_suite["expected_tests"]
         and type(api_receipt.get("failed")) is int
         and api_receipt["failed"] == 0
         and type(api_receipt.get("total")) is int
-        and api_receipt["total"] == 76
+        and api_receipt["total"] == api_suite["expected_tests"]
         and api_receipt.get("test_ids_sha256")
-        == REQUIRED_TEST_SUITES["API, fleet state, and launcher identity"][
-            "expected_test_ids_sha256"
-        ].lower()
+        == api_suite["expected_test_ids_sha256"].lower()
         and api_receipt.get("independently_reproduced") is False
         and isinstance(api_receipt.get("scope"), str)
         and "LOCAL_UNATTESTED_HOST_REGRESSION" in api_receipt["scope"]
@@ -2257,6 +2351,7 @@ def verify_review_matrix(
         isinstance(bridge_receipt, dict),
         "review-matrix worker-protocol bridge receipt is missing",
     )
+    bridge_scope = bridge_receipt.get("scope")
     require_exact_keys(
         bridge_receipt,
         {
@@ -2284,11 +2379,64 @@ def verify_review_matrix(
         and bridge_receipt.get("callback_and_object_lock_seam_test_ids_sha256")
         == seam_suite["expected_test_ids_sha256"].lower()
         and bridge_receipt.get("independently_reproduced") is False
-        and isinstance(bridge_receipt.get("scope"), str)
-        and "LOCAL_UNATTESTED_HOST_REGRESSION" in bridge_receipt["scope"]
-        and "There is no route" in bridge_receipt["scope"]
-        and "complete Evidence Packet v2" in bridge_receipt["scope"],
+        and isinstance(bridge_scope, str)
+        and "LOCAL_UNATTESTED_HOST_REGRESSION" in bridge_scope
+        and "default-dark" in bridge_scope.lower()
+        and "no packaged adapter" in bridge_scope.lower()
+        and "request-bound" in bridge_scope.lower()
+        and "active-lease" in bridge_scope.lower()
+        and "no live" in bridge_scope.lower()
+        and "scientific" in bridge_scope.lower(),
         "review-matrix worker-protocol bridge receipt drifted or promotes authority",
+    )
+    lifecycle_receipt = receipts.get("prospective_lifecycle_sqlite_dark_route")
+    require(
+        isinstance(lifecycle_receipt, dict),
+        "review-matrix prospective lifecycle receipt is missing",
+    )
+    require_exact_keys(
+        lifecycle_receipt,
+        {
+            "passed",
+            "failed",
+            "total",
+            "passed_subtests",
+            "test_ids_sha256",
+            "route_enabled",
+            "packaged_adapter_admitted",
+            "independently_reproduced",
+            "scope",
+        },
+        label="review-matrix prospective lifecycle receipt",
+    )
+    lifecycle_suite = REQUIRED_TEST_SUITES[
+        "Harness v2 prospective lifecycle, SQLite, and dark route"
+    ]
+    lifecycle_scope = lifecycle_receipt.get("scope")
+    require(
+        type(lifecycle_receipt.get("passed")) is int
+        and lifecycle_receipt["passed"] == lifecycle_suite["expected_tests"]
+        and type(lifecycle_receipt.get("failed")) is int
+        and lifecycle_receipt["failed"] == 0
+        and type(lifecycle_receipt.get("total")) is int
+        and lifecycle_receipt["total"] == lifecycle_suite["expected_tests"]
+        and type(lifecycle_receipt.get("passed_subtests")) is int
+        and lifecycle_receipt["passed_subtests"]
+        == lifecycle_suite["expected_subtests"]
+        and lifecycle_receipt.get("test_ids_sha256")
+        == lifecycle_suite["expected_test_ids_sha256"].lower()
+        and lifecycle_receipt.get("route_enabled") is False
+        and lifecycle_receipt.get("packaged_adapter_admitted") is False
+        and lifecycle_receipt.get("independently_reproduced") is False
+        and isinstance(lifecycle_scope, str)
+        and "LOCAL_UNATTESTED_HOST_REGRESSION" in lifecycle_scope
+        and "close/reopen" in lifecycle_scope.lower()
+        and "same-file" in lifecycle_scope.lower()
+        and "no transitive" in lifecycle_scope.lower()
+        and "active-lease" in lifecycle_scope.lower()
+        and "no live" in lifecycle_scope.lower()
+        and "not scientific" in lifecycle_scope.lower(),
+        "review-matrix prospective lifecycle receipt drifted or promotes authority",
     )
     candidate_receipt = receipts.get("successor_dependency_container_candidate")
     require(isinstance(candidate_receipt, dict), "review-matrix successor candidate receipt is missing")
@@ -2530,8 +2678,8 @@ def verify_adversarial_review() -> None:
         "confirmed 290/290 receipt",
         "12602041756f20d1afd402fa56968660839e5eb1098438ba84c69bff8de7050b",
         "94566203b3e0ff79b3224c1c5a073698ca99d3c08bc1119a9082e42af4b178bd",
-        "76/76",
-        "1ed1e9e3afa2eda6881463ee5284dd4902ab94c0246b80d2937066480ac42921",
+        "78/78",
+        "603debf7df9ac7b5a69543c3736f4cd38692d3330690a7559a6f9de6f0e2af77",
         "COMPLETED_WITH_FINDINGS",
         "critical, 0 high, 3 medium, and 4 low findings",
         "SARIF does not embed the candidate identity",
@@ -2951,6 +3099,7 @@ def _verify_candidate_source_commit_tree() -> None:
     revision = subprocess.run(
         ["git", "rev-parse", "--verify", f"{CANDIDATE_SOURCE_COMMIT}^{{commit}}"],
         cwd=ROOT,
+        env=_subprocess_environment(),
         text=True,
         encoding="utf-8",
         errors="replace",
@@ -2972,6 +3121,7 @@ def _verify_candidate_source_commit_tree() -> None:
     comparison = subprocess.run(
         ["git", "diff", "--quiet", CANDIDATE_SOURCE_COMMIT, "--", *build_paths],
         cwd=ROOT,
+        env=_subprocess_environment(),
         capture_output=True,
         check=False,
     )
@@ -3420,37 +3570,8 @@ def verify_dependency_and_container_candidate_receipt() -> dict[str, Any]:
     require_exact_keys(worker_tests, {"passed", "failed", "total", "test_ids_sha256"}, label="candidate worker tests")
     require_exact_keys(api_tests, {"passed", "failed", "total", "test_ids_sha256", "targets"}, label="candidate API tests")
     require(
-        worker_tests
-        == {
-            "passed": 364,
-            "failed": 0,
-            "total": 364,
-            "test_ids_sha256": REQUIRED_TEST_SUITES["Live trace worker complete"]["expected_test_ids_sha256"],
-        },
-        "candidate worker test receipt drifted",
-    )
-    expected_api_targets = [
-        f"{API_ROOT_REL}/{target}"
-        for target in REQUIRED_TEST_SUITES["API, fleet state, and launcher identity"]["targets"]
-    ]
-    require(
-        api_tests
-        == {
-            "passed": 76,
-            "failed": 0,
-            "total": 76,
-            "test_ids_sha256": REQUIRED_TEST_SUITES["API, fleet state, and launcher identity"]["expected_test_ids_sha256"],
-            "targets": expected_api_targets,
-        },
-        "candidate API/launcher/state test receipt drifted",
-    )
-    require(
-        tests.get("receipt_scope")
-        == (
-            "LOCAL_UNATTESTED_HOST_REGRESSION / SEPARATE COLLECT-ONLY NODE-ID DIGEST / "
-            "ACTUAL EXECUTED IDS NOT RECEIPTED / NOT GPU EXECUTION / NOT SCIENTIFIC EVIDENCE"
-        ),
-        "candidate test scope was promoted",
+        tests == _historical_dependency_container_candidate_test_receipt(),
+        "historical candidate test receipt drifted",
     )
 
     audits = receipt.get("security_audits")
@@ -4727,6 +4848,13 @@ def _subprocess_environment(
             "TRANSFORMERS_OFFLINE": "1",
             "TOKENIZERS_PARALLELISM": "false",
             "NO_COLOR": "1",
+            # Gate 0 reads historical blobs with Git.  Codex's isolated child
+            # may run under a sandbox SID distinct from the worktree owner, so
+            # admit only this exact repository without trusting caller-supplied
+            # Git configuration or changing the user's global config.
+            "GIT_CONFIG_COUNT": "1",
+            "GIT_CONFIG_KEY_0": "safe.directory",
+            "GIT_CONFIG_VALUE_0": GIT_SAFE_DIRECTORY,
         }
     )
     if extra_env:
@@ -5475,6 +5603,7 @@ def run_pytest_same_process_receipt(
             "loaded_code_sha256": _canonical_json_digest(loaded_files),
             "warnings": receipt["warning_count"],
             "collected_nodeids": collected,
+            "subtest_reports": subtests,
         }
 
 
@@ -5533,11 +5662,12 @@ def verify_test_suites(
             )
         )
 
-    harness_ids = next(
-        result["collected_nodeids"]
+    harness_result = next(
+        result
         for result in results
         if result["name"] == "Harness v2 kernel and history"
     )
+    harness_ids = harness_result["collected_nodeids"]
     for name, receipt in REQUIRED_SUBSUITE_DIGESTS.items():
         target_paths = set(receipt["targets"])
         ids = [
@@ -5553,6 +5683,21 @@ def verify_test_suites(
             test_id_digest(ids) == receipt["expected_test_ids_sha256"],
             f"{name}: exact same-run executed pytest node-ID subset drifted",
         )
+        if "expected_subtests" in receipt:
+            expected_subtests = receipt["expected_subtests"]
+            require(
+                type(expected_subtests) is int and expected_subtests >= 0,
+                f"{name}: expected subtest count is not an exact integer",
+            )
+            subtests = [
+                report
+                for report in harness_result["subtest_reports"]
+                if report["nodeid"].split("::", 1)[0] in target_paths
+            ]
+            require(
+                len(subtests) == expected_subtests,
+                f"{name}: same-run executed subset subtest count drifted",
+            )
     return results
 
 

@@ -12,6 +12,7 @@ from api.services.cas_harness_distributed_audits import (
     reset_distributed_audits_for_tests,
 )
 from api.services.cas_harness_fleet_executor import (
+    ActiveFleetJobLease,
     FleetExecutorStateError,
     build_evidence_fragment_ref,
     get_fleet_run,
@@ -24,6 +25,7 @@ from api.services.cas_harness_fleet_executor import (
     register_worker,
     reset_fleet_executor_for_tests,
     submit_job_receipt,
+    validate_active_fleet_job_lease,
 )
 from api.services.cas_harness_scale_planner import ScalePlanRequest
 from api.services.cas_harness_model_provenance import (
@@ -216,6 +218,63 @@ def test_register_worker_records_capacity_and_heartbeat_contract():
     assert worker.last_heartbeat_at
 
 
+def test_dark_v2_active_lease_snapshot_is_exact_redacted_and_fail_closed():
+    audit = _create_dispatched_audit(with_provenance=True)
+    assignment = audit.worker_evidence[0]
+    register_worker(
+        worker_id=assignment.worker_id,
+        audit_id=audit.audit_id,
+        model_id=audit.plan.model_id,
+        worker_url=f"https://{assignment.worker_id}.workers.internal",
+        gpu_type="H100-80GB",
+        capacity=1,
+        supported_methods=list(assignment.assigned_methods),
+    )
+    prepare_fleet_for_audit(
+        audit.audit_id,
+        model_revision=MODEL_REVISION,
+        model_artifact_manifest_path=MODEL_ARTIFACT_MANIFEST_PATH,
+        model_artifact_manifest_sha256=MODEL_ARTIFACT_MANIFEST_SHA256,
+        require_scoped_workers=True,
+    )
+    job = lease_next_job(
+        audit_id=audit.audit_id,
+        worker_id=assignment.worker_id,
+        require_scoped_worker=True,
+    )
+    assert job is not None and job.lease_token and job.lease_expires_at
+    token = job.lease_token
+    observed = validate_active_fleet_job_lease(
+        audit_id=audit.audit_id,
+        job_id=job.job_id,
+        worker_id=assignment.worker_id,
+        lease_token=token,
+    )
+    assert isinstance(observed, ActiveFleetJobLease)
+    assert observed.snapshot.execution_mapping()["job_id"] == job.job_id
+    assert observed.lease_generation_id.startswith("flg_")
+    assert observed.lease_token_sha256 == hashlib.sha256(token.encode()).hexdigest()
+    assert token not in repr(observed)
+    assert observed.state_authority == "PROCESS_LOCAL_FLEET_STATE_NOT_DURABLE"
+    assert observed.trusted_time == "NOT_ESTABLISHED"
+
+    with pytest.raises(FleetExecutorStateError, match="does not match"):
+        validate_active_fleet_job_lease(
+            audit_id=audit.audit_id,
+            job_id=job.job_id,
+            worker_id=assignment.worker_id,
+            lease_token="wrong-secret",
+        )
+    with pytest.raises(FleetExecutorStateError, match="expired"):
+        validate_active_fleet_job_lease(
+            audit_id=audit.audit_id,
+            job_id=job.job_id,
+            worker_id=assignment.worker_id,
+            lease_token=token,
+            now=datetime.fromisoformat(job.lease_expires_at) + timedelta(seconds=1),
+        )
+
+
 def test_duplicate_worker_registration_is_rejected():
     worker = register_worker(
         worker_id="probe-worker-001",
@@ -283,6 +342,41 @@ def test_fleet_run_dict_does_not_expose_lease_token_outside_lease_response():
     saved = get_fleet_run(audit.audit_id)
     assert saved is not None
     assert all(job["lease_token"] is None for job in saved.to_dict()["jobs"])
+
+
+def test_lease_token_is_not_derivable_from_public_lease_fields():
+    audit = _create_dispatched_audit(parameter_count_b=1, num_layers=1)
+    assignment = audit.worker_evidence[0]
+    _register_assignment_worker(assignment, model_id=audit.plan.model_id)
+    run = prepare_fleet_for_audit(audit.audit_id)
+    assert run is not None
+
+    lease_seconds = 900
+    leased = lease_next_job(
+        audit_id=audit.audit_id,
+        worker_id=assignment.worker_id,
+        lease_seconds=lease_seconds,
+    )
+    assert leased is not None
+    assert leased.lease_token is not None
+    assert leased.lease_expires_at is not None
+    inferred_leased_at = datetime.fromisoformat(leased.lease_expires_at) - timedelta(
+        seconds=lease_seconds
+    )
+    public_derivation = hashlib.sha256(
+        json.dumps(
+            {
+                "audit_id": leased.audit_id,
+                "job_id": leased.job_id,
+                "worker_id": leased.assigned_worker_id,
+                "leased_at": inferred_leased_at.isoformat(),
+            },
+            sort_keys=True,
+        ).encode("utf-8")
+    ).hexdigest()
+
+    assert len(leased.lease_token) == 64
+    assert leased.lease_token != public_derivation
 
 
 def test_unregistered_worker_cannot_lease_a_job():
