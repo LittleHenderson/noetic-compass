@@ -1,0 +1,233 @@
+{
+  "schema_version": "project_coherence.category_publication_obligations.v0.1",
+  "document_status": "DRAFT / ALL LISTED ITEMS OPEN / RING 4 / NOT LICENSED / HELD",
+  "as_of": "2026-08-05",
+  "policy": "An item closes only when its acceptance_evidence exists, is hash-bound, and survives the named review. Absence of a counterexample is not closure.",
+  "records": [
+    {
+      "id": "OBL-P2-001",
+      "paper": 2,
+      "title": "Independent review of legacy coverage correction",
+      "status": "OPEN",
+      "owner_cell": "Category and Sheaf Theory / external reviewer",
+      "acceptance_evidence": "Signed or otherwise attributable specialist review of the ACBE identity, RPM split-epi, coverage-reduction, and non-subcanonicity arguments with exact source hashes.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P2-002",
+      "paper": 2,
+      "title": "Formalize the finite context site",
+      "status": "OPEN",
+      "owner_cell": "Formal Mathematics",
+      "acceptance_evidence": "Proof-assistant artifacts for all 16 contexts, generating covers, topology axioms, representable sheaf checks, and witness presheaves, with a no-placeholder axiom audit.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P2-003",
+      "paper": 2,
+      "title": "Formalize finite reflector universal properties and commutation",
+      "status": "OPEN",
+      "owner_cell": "Formal Mathematics",
+      "acceptance_evidence": "Proof-assistant construction of R_A, R_R, R_atom, units, universal properties, J_A join J_R=J_atom, natural isomorphisms, and unit coherence.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P2-004",
+      "paper": 2,
+      "title": "Type observational covers and product-site arrows",
+      "status": "OPEN",
+      "owner_cell": "Category and Sheaf Theory",
+      "acceptance_evidence": "Exact schema and implementation for C-coordinate observational covers and general C x L arrows, including source-authority and round-trip tests.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P2-005",
+      "paper": 2,
+      "title": "Lift modality composition to the product site",
+      "status": "OPEN",
+      "owner_cell": "Category and Sheaf Theory",
+      "dependencies": ["OBL-P2-002", "OBL-P2-003", "OBL-P2-004"],
+      "acceptance_evidence": "Reviewed proof of pointwise/coherent lift to PSh(C x L), including interaction with J_obs and an exact statement of any commutation or failure thereof.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P2-006",
+      "paper": 2,
+      "title": "Prove or reject the backward comparison",
+      "status": "OPEN",
+      "owner_cell": "Category and Sheaf Theory",
+      "acceptance_evidence": "Reviewed equivalence or explicit counterexample for E_res ~= E_legacy^4, plus a fully faithful neutral-channel embedding and ev_00 o iota ~= Id.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P2-007",
+      "paper": 2,
+      "title": "Complete strict legacy serialization round trip",
+      "status": "OPEN",
+      "owner_cell": "Canon and Semantics",
+      "dependencies": ["OBL-P2-004", "OBL-P2-006"],
+      "acceptance_evidence": "Fail-closed implementation showing exact registered identifier and canonical payload-hash preservation independently of the categorical natural isomorphism.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P2-008",
+      "paper": 2,
+      "title": "Select the cross-context semantic contract",
+      "status": "OPEN",
+      "owner_cell": "Project Coherence Integration Board",
+      "acceptance_evidence": "Owner-reviewed decision choosing the ambient modal package or a resolved semantics with typed overlaps/transitions, followed by the relevant coherence proof package.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P2-009",
+      "paper": 2,
+      "title": "Novelty review for marked provenance construction",
+      "status": "OPEN",
+      "owner_cell": "Verification, Publication, and IP",
+      "acceptance_evidence": "Dedicated primary-literature search and comparison matrix covering colored/marked sites, indexed structures, provenance-aware descent, and related audit semantics.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P4-001",
+      "paper": 4,
+      "title": "Define the object named Noetic Markov sheaf",
+      "status": "OPEN",
+      "owner_cell": "Category and Sheaf Theory / Dynamics and Geometry",
+      "acceptance_evidence": "One exact definition with object and morphism types, site/topology, descent property, and nonexamples; otherwise revise the title to avoid claiming a sheaf.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P4-002",
+      "paper": 4,
+      "title": "Compare to probability-sheaf prior art",
+      "status": "OPEN",
+      "owner_cell": "Category and Sheaf Theory",
+      "dependencies": ["OBL-P4-001"],
+      "acceptance_evidence": "Proof-level comparison to Simpson 2017 and Stein 2025, including exact hypotheses, functors, equivalences/non-equivalences, and novelty disposition.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P4-003",
+      "paper": 4,
+      "title": "Freeze a finite assessment context schema",
+      "status": "OPEN",
+      "owner_cell": "Harness Experimental Science",
+      "acceptance_evidence": "Versioned finite category/hypergraph, context and overlap identities, variable alphabets, assignment order, restriction maps, and matched synthetic fixtures.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P4-004",
+      "paper": 4,
+      "title": "Implement fail-closed type separation",
+      "status": "OPEN",
+      "owner_cell": "Dynamics and Geometry / PCBA and Systems Engineering",
+      "acceptance_evidence": "Exact schemas and adversarial tests keeping deterministic maps, Markov kernels, affine channels, marginal presheaves, Grothendieck sheaves, and linear cellular sheaves noninterchangeable.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P4-005",
+      "paper": 4,
+      "title": "Verify presheaf and kernel-coherence laws",
+      "status": "OPEN",
+      "owner_cell": "Category and Sheaf Theory",
+      "dependencies": ["OBL-P4-003", "OBL-P4-004"],
+      "acceptance_evidence": "Property and negative tests for identity/composition of marginalization and every declared kernel restriction square.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P4-006",
+      "paper": 4,
+      "title": "Implement exact marginal-feasibility certificates",
+      "status": "OPEN",
+      "owner_cell": "Dynamics and Geometry / Verification",
+      "dependencies": ["OBL-P4-003"],
+      "acceptance_evidence": "Exact or interval-verified primal and Farkas-dual schemas, independent verifier, feasible/nonunique/infeasible fixtures, and solver-identity receipts.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P4-007",
+      "paper": 4,
+      "title": "Discharge any acyclic extension claim",
+      "status": "OPEN",
+      "owner_cell": "Probability specialist",
+      "dependencies": ["OBL-P4-003"],
+      "acceptance_evidence": "Proof that the exact context complex meets the selected source theorem's hypotheses, plus a statement separating existence from uniqueness and optimizer selection.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P4-008",
+      "paper": 4,
+      "title": "Construct and audit any cellular linearization",
+      "status": "OPEN",
+      "owner_cell": "Category and Sheaf Theory / Dynamics and Geometry",
+      "acceptance_evidence": "Finite complex, stalks, linear restrictions, inner products, conversion functor, information-loss statement, and Laplacian tests tied to exact hashes.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P4-009",
+      "paper": 4,
+      "title": "Preregister the empirical study",
+      "status": "OPEN",
+      "owner_cell": "Harness Experimental Science",
+      "dependencies": ["OBL-P4-003", "OBL-P4-004", "OBL-P4-005", "OBL-P4-006"],
+      "acceptance_evidence": "Immutable preregistration naming models, prompts, splits, controls, endpoints, tolerances, uncertainty, exclusions, falsifiers, budget, and stop rules.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P4-010",
+      "paper": 4,
+      "title": "Execute through an admitted runner and retain Evidence Packets",
+      "status": "OPEN",
+      "owner_cell": "Harness Experimental Science / Verification",
+      "dependencies": ["OBL-P4-009", "Project Coherence Gate 5 admission requirements"],
+      "acceptance_evidence": "Current model/run identities, retained raw evidence, independent certificate verification, controls, statistical output, and claim-language review in qualifying Evidence Packets.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-P4-011",
+      "paper": 4,
+      "title": "Independent empirical replication",
+      "status": "OPEN",
+      "owner_cell": "Independent replication team",
+      "dependencies": ["OBL-P4-010"],
+      "acceptance_evidence": "Independent rerun from frozen materials with discrepancies documented and no self-authored acceptance.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-CAT-001",
+      "paper": "2 and 4",
+      "title": "Internal cross-review against other Wave 1 lanes",
+      "status": "OPEN",
+      "owner_cell": "Wave 1 formal-math and engineering specialists",
+      "acceptance_evidence": "Hash-bound review of notation, type boundaries, dependencies, contradictions, and prohibited wording, with every issue resolved or retained OPEN.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-CAT-002",
+      "paper": "2 and 4",
+      "title": "Lead integration and shared-registry reconciliation",
+      "status": "OPEN",
+      "owner_cell": "Lead agent / Canon and Semantics",
+      "acceptance_evidence": "Merged notation and claim crosswalk with no unreviewed edits to canonical registries and no promotion of OPEN or negative results.",
+      "blocks_submission": true
+    },
+    {
+      "id": "OBL-CAT-003",
+      "paper": "2 and 4",
+      "title": "Authorship, disclosure, IP, license, and external referee review",
+      "status": "OPEN",
+      "owner_cell": "Human owner / Verification, Publication, and IP",
+      "acceptance_evidence": "Human-approved authorship and disclosure records, license decision, conflict declarations, final citation audit, and attributable external referee reports.",
+      "blocks_submission": true
+    }
+  ],
+  "record_count": 23,
+  "summary": {
+    "open": 23,
+    "closed": 0,
+    "paper_2_specific": 9,
+    "paper_4_specific": 11,
+    "shared": 3
+  },
+  "claim_boundary": "This list is not evidence that an obligation has started or closed. Cross-review and external review remain OPEN, and no item authorizes canon, publication, scientific, product, disclosure, or licensing promotion."
+}

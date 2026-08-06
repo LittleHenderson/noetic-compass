@@ -1,0 +1,359 @@
+# The Marked and Modal Noetic Topos
+
+Publication track: Project Coherence charter Paper 2
+Artifact status: `DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN`
+Evidence status: `INTERNAL PROOF CANDIDATES PRESENT / FORMAL AND INDEPENDENT REVIEW OPEN`
+Base commit: `a1cd990109e7561dfd03949bf0e1653461c7ae44`
+As of: 2026-08-05
+
+## Abstract
+
+The conservative Noetic Topos construction contains a valid conditional topos-existence argument, but its stated ACBE and RPM cover clauses do not retain the separate information later interpretations assigned to them. ACBE reflexivity places an identity in the corresponding sieve, while the RPM counit has a section and therefore also forces an identity by sieve closure. Each clause alone contributes only maximal sieves, and the combined topology reduces to the jointly-surjective coverage already present in the source. A successor cannot obtain distinct modalities by relabeling those generators.
+
+This source-bound draft presents the existing Noetic Topos 2.0 finite reference candidate as a conservative repair. It augments the legacy site with a four-atom context factor `L=P({0,1}x{0,1})`, equips that factor with two transverse coordinate-partition coverages, and keeps immutable cover provenance outside the ordinary topology. On `PSh(L,Set)`, existing internal proofs and exhaustive finite checks show that the two generated topologies are subcanonical, their associated-sheaf reflectors are distinct and nonidentity, their join is the four-singleton atomic topology, and their reflectors commute up to a unit-compatible canonical natural isomorphism. This last result is positive: the finite modalities are distinct but not noncommuting.
+
+The result is deliberately narrow. The product-site lift to `PSh(C x L)`, interaction with legacy observational coverage, legacy round-trip comparison, cross-context coupling, formal proof of the full sheaf construction, and independent category-theory review remain open. Marks are external audit records, not internal topos objects. The resolved finite factor has four independent channels and therefore supplies separation and provenance, not a completed semantics of contextual cognition or an empirically validated assessment system.
+
+## 1. Status and contribution boundary
+
+This paper is a publication delta over existing Project Coherence artifacts. It does not recreate or supersede the Noetic Topos 2.0 specification, theorem ledger, proof-obligation ledger, finite model, modality-composition proof, v7.4 corrigendum, migration matrix, or canonical registries.
+
+The exact inputs are frozen in `SOURCE_BOUND_INVENTORY_v0.1.json`. The load-bearing source identities include:
+
+| Input | SHA-256 |
+|---|---|
+| Noetic Topos 2.0 specification | `156A5D8C5320F36E81E3B46473BA8A038B35672DCD28839A404D96A3DB1A763A` |
+| Noetic Topos 2.0 theorem ledger | `52E000652C7DECE64C1E2B3F613D85FEFB2F80414CFAAD53AA38FE339B26E536` |
+| Noetic Topos 2.0 proof obligations | `FD567E3826E4472EFD013DC7F3DEE514B6AD28B9E41CFFFD10087BE1133746C7` |
+| Finite model certificate | `5CB06FC00641A16BEE4784EAB708D86FF39CEE7AC6E8E1D03DFC32605242A84C` |
+| Finite modality-composition proof | `9A037679B5B528B7571B0A9BABC2DB1668D475C67BDF5E886CA03532AE657BD0` |
+| Finite modality-composition certificate | `648E64A5E760FFAFE326F0FF9194734FE82E8107730D3FC9703951D54315AB0A` |
+| Mathematical red-team report | `03AEC81BF9F6AA12376C2DF78E6CC410EB636589DA37D2E2534460132BE720C6` |
+| Project Coherence master charter | `B87B2E2B4CC4B10C76EE4AA6EA09094572B2A1008E474475E8F642836B83D2BE` |
+
+The contribution of this draft is editorial and integrative:
+
+1. state the legacy information-loss correction before describing the successor;
+2. collect the finite candidate results in one typed argument;
+3. reconcile the earlier desire for distinct modalities with the proved finite commutation result;
+4. separate categorical objects from external provenance records;
+5. state the exact boundary between the finite context factor and the unresolved product site; and
+6. expose every remaining proof, migration, novelty, empirical, and review obligation.
+
+No theorem, claim, or namespace is promoted by appearing here. The governing status remains `DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD`.
+
+## 2. The conservative baseline and its information loss
+
+Let `C` denote the registered legacy category `Noetica`, and let `J_legacy` denote the coverage defined in the conservative source. The source includes three routes to a covering sieve: jointly-surjective observational families, designated ACBE descent maps, and the RPM counit.
+
+Two simple sieve arguments are decisive.
+
+First, the ACBE clause includes the reflexive descent map at equal contexts. That map is `id_X`. A sieve on `X` containing `id_X` is maximal, because precomposition with every arrow into `X` places every such arrow in the sieve.
+
+Second, the RPM data contain maps
+
+```text
+eta_X : X -> R(X),
+epsilon_X : R(X) -> X,
+epsilon_X o eta_X = id_X.
+```
+
+If a sieve on `X` contains `epsilon_X`, closure under precomposition with `eta_X` puts `id_X` in the sieve. It is again maximal.
+
+Consequently, the two labeled clauses add no nonmaximal covers. Under the registered axioms,
+
+```text
+J_legacy = J_jointly-surjective.
+```
+
+This does not invalidate the generic statement that a verified small site yields a Grothendieck topos. It narrows what the topology records: ordinary sieve generation has forgotten the distinct ACBE and RPM provenance. The v7.4 corrigendum therefore permits the conditional topos statement while retracting any inference that a bare representable is already a sheaf or that the two legacy clauses generate distinct nontrivial modalities.
+
+There is also no derivation of subcanonicity for the legacy topology. The Project Coherence red team supplies a finite countermodel using sets of size at most two and injections. The two point inclusions jointly cover a two-point set, while compatible local injections to a singleton have no global injection. This establishes non-derivability from the current axioms, not universal non-subcanonicity of every possible Noetica model. Until an exact revised site is proved subcanonical, the distinguished legacy object is represented in the sheaf topos by
+
+```text
+a_legacy(yX),
+```
+
+not by silently treating `yX` as a sheaf. This is the standard repair when a representable presheaf is not known to be a sheaf [CIT-STKS-00WO].
+
+## 3. The finite marked context factor
+
+### 3.1 Context lattice
+
+The successor reference model introduces the finite poset
+
+```text
+Omega = {0,1} x {0,1},
+L = P(Omega),
+U -> V iff U is a subset of V.
+```
+
+The coordinate names are formal marks. The first coordinate is called ACBE and the second RPM only to preserve a controlled migration vocabulary. Neither coordinate has an empirical interpretation in this paper.
+
+Define the two transverse partitions
+
+```text
+A_i = {(i,0),(i,1)}       for i in {0,1},
+R_j = {(0,j),(1,j)}       for j in {0,1}.
+```
+
+For `V` in `L`, the generating families are
+
+```text
+K_A(V) = {V intersect A_0 -> V, V intersect A_1 -> V},
+K_R(V) = {V intersect R_0 -> V, V intersect R_1 -> V}.
+```
+
+At the empty context the registered generator is the empty family. Empty intersections at nonempty contexts remain indexed pieces in the finite presentation, but they do not change the generated sieve.
+
+Unlike the legacy clauses, the global pieces are proper subcontexts. Neither global family contains an identity. Pullback along `U -> V` is intersection with `U`, so each basis is stable under pullback. Refining a partition piece by the same partition returns that piece plus empty pieces. Together with identity families and the null cover convention, this supplies a finite coverage basis. The standard passage from a site to a topology is the background result recorded at [CIT-STKS-00ZC].
+
+### 3.2 Marks are parallel audit data
+
+An ordinary Grothendieck topology retains generated sieves, not why a family was proposed. The implementation therefore has two distinct representations:
+
+```text
+UNMARKED_FAMILY = exact arrows consumed by topology generation
+
+MARKED_COVER = {
+  derivation_kind,
+  target,
+  exact_member_arrows,
+  cover_mark_record,
+  parent_cover_sha256s
+}
+```
+
+The mark record binds the cover kind, source authority, assumptions, evidence or proof references, review state, and provenance ancestry. Pullbacks and common refinements are derived records whose parent digests are resolved and rehashed. A common refinement requires exactly one ACBE and one RPM generating parent. Unknown keys, duplicate keys, invalid review states, missing parents, cycles, or recomputation mismatches fail closed in the finite reference implementation.
+
+This provenance mechanism is an external serialization and audit invariant. It is not a proof that `MARKED_COVER` is an internal object of a topos, a colored-site construction in the literature, or a categorical semantics for evidence. The topology consumes the unmarked family; governance code consumes the marked record. Conflating those two interfaces would repeat the original information-loss error.
+
+## 4. The ambient modal candidate
+
+Let
+
+```text
+E_amb = PSh(C x L).
+```
+
+The candidate uses three topology refinements in this ambient presheaf topos:
+
+1. the legacy observational coverage in the `C` coordinate;
+2. the `K_A` coverage in the `L` coordinate; and
+3. the `K_R` coverage in the `L` coordinate.
+
+Write the associated-sheaf reflectors followed by inclusion into the ambient topos as
+
+```text
+M_obs = i_obs a_obs,
+M_A   = i_A a_A,
+M_R   = i_R a_R.
+```
+
+Sheafification is left adjoint to inclusion and is exact for Set-valued sheaves under the standard hypotheses [CIT-STKS-00W1]. The Project Coherence candidate defines
+
+```text
+J_res = J_obs join J_A join J_R,
+E_res = Sh(C x L, J_res).
+```
+
+Assuming `C` is small in the selected universe, the underlying topos candidate is the ambient presheaf topos:
+
+```text
+NoeTop_2 = E_amb.
+```
+
+The complete research package is instead
+
+```text
+NoeSystem_2 =
+  (NoeTop_2, M_obs, M_A, M_R, E_res, EXTERNAL_MARK_RECORD).
+```
+
+`NoeSystem_2` is a structured package, not itself a topos. The external mark record is not silently internalized. Raw and partially resolved objects live in the ambient category; objects satisfying the joined sheaf conditions live in `E_res`.
+
+The v0.1 executable model covers only the `L` coordinate and its mark derivations. Typed observational covers in `C`, general arrows of `C x L`, the product-site comparison, and their serialization remain open. The notation above is therefore a research specification, not a completed implementation.
+
+## 5. Results on the finite context factor
+
+### 5.1 Generated topologies and subcanonicity
+
+The existing candidate proof establishes that `K_A` and `K_R` generate Grothendieck topologies `J_A` and `J_R`. The finite checker exhausts all sixteen contexts and all generating-cover pullbacks.
+
+Each topology is subcanonical on `L`. For a representable `yW`, there is a section at `V` exactly when `V` is a subset of `W`, and that section is unique. If every piece of a partition cover lies in `W`, their union `V` lies in `W`; restrictions and the empty case are unique. The executable model checks all sixteen representables. This statement is only about the context factor. It does not repair the legacy subcanonicity gap.
+
+### 5.2 Distinctness and nonidentity
+
+Define `F_A(V)` to be the set of bit assignments to complete ACBE blocks contained in `V`, with restriction forgetting missing blocks. This presheaf satisfies ACBE gluing. At the global context it has four sections. Each RPM half contains no complete ACBE block, so the RPM matching-family set has one element and the RPM gluing map is not injective. Thus `F_A` is a `J_A`-sheaf but not a `J_R`-sheaf. A symmetric construction `F_R` reverses the roles.
+
+Therefore the two reflective subcategories and their reflectors are distinct and neither reflector is identity on `PSh(L,Set)`. The finite implementation validates functoriality before checking the sheaf condition, so a nonfunctorial section assignment cannot pass as a witness.
+
+The candidate specification also gives an external-product argument for distinguishing the ambient reflectors using a representable in the `C` coordinate. That argument supports ambient distinctness in the stated candidate, but it does not close the harder composition, observational interaction, or product-site coherence obligations.
+
+### 5.3 The joined topology
+
+The common refinement of the two global partitions is
+
+```text
+A_i intersect R_j = {(i,j)}.
+```
+
+Hence every atomic singleton is present in the transverse refinement. Conversely, covering first by ACBE pieces and then each piece by RPM pieces yields the singleton family. The finite proof obtains
+
+```text
+J_A join J_R = J_atom,
+```
+
+where `J_atom` is generated by the four-singleton partition and the same null cover at the empty context.
+
+The exact topology implementation enumerates all 298 sieves over the sixteen contexts and closes maximality, pullback stability, and local character to a fixed point. It reports 168 covering sieves for both the join and atomic presentations.
+
+### 5.4 Explicit reflectors and commutation
+
+For one of the partitions `P` in `{A,R,atom}`, define
+
+```text
+I_P(V) = {B in P | V intersect B is nonempty}
+
+(R_P F)(V) = product over B in I_P(V) of F(V intersect B).
+```
+
+The empty product is the singleton set, so `(R_P F)(empty)=1`. Restrictions drop absent coordinates and apply the original presheaf restrictions on retained pieces. The unit maps a global section to its restrictions over the partition pieces.
+
+The registered proof checks the universal property directly: `R_P F` is a `J_P`-sheaf, and every map from `F` to a `J_P`-sheaf factors uniquely through the unit. Thus `R_P` realizes the associated-sheaf reflector in this finite setting. The proof does not assume that a single generic plus construction sheafifies every presheaf.
+
+Expanding the two transverse products gives, naturally in `F` and `V`,
+
+```text
+(R_A R_R F)(V)
+  = product over i, then j, of F(V intersect A_i intersect R_j)
+  ~= product over omega in V of F({omega})
+  = (R_atom F)(V).
+```
+
+The inverse groups atomic coordinates by the relevant blocks. Swapping `A` and `R` gives the other direction. Both comparisons respect restrictions, natural transformations between presheaves, and reflector units. Therefore
+
+```text
+M_A M_R ~= M_atom ~= M_R M_A
+```
+
+on `PSh(L,Set)`, by canonical natural isomorphisms. These are not strict equalities: nested products need not be literally the same chosen set.
+
+This result corrects an important narrative risk. The finite modalities are distinct and nonidentity, but they commute. Distinctness does not imply noncommutation. No current artifact licenses a noncommutation claim.
+
+### 5.5 Identity on the resolved subcategory
+
+An object sheaf for `J_A join J_R` is separately a sheaf for each component topology. Each component reflector therefore restricts, up to its canonical reflector isomorphism, to identity on the resolved subcategory. The nontrivial modal action belongs to the ambient presheaf category, not to an already fully resolved object.
+
+## 6. What the finite model does not establish
+
+The finite factor is useful because it is explicit, nontrivial, and exhaustively checkable. It is not a complete semantics.
+
+First, the atomic resolution creates four independent factors. Once the joined coverage is imposed, no overlap, transition law, or cross-atom coupling remains in `L`. The finite model supports separation and provenance channels, not contextual dynamics between those channels.
+
+Second, Set-valued gluing cannot be transferred by analogy to probability distributions. Compatible local marginals may have no global joint distribution. A probabilistic extension needs a regular or acyclic cover theorem, an exact finite feasibility certificate, an obstruction calculation with a stated coefficient system, or a quantitative relaxation whose residual and uncertainty are explicit. Paper 4 develops this as an open method program rather than importing Set-valued descent.
+
+Third, a linear or cellular sheaf requires a separate representation with linear maps, finite-dimensional stalks, and chosen inner products before a Laplacian is defined. Nothing in this paper creates that structure.
+
+Fourth, the ACBE and RPM coordinates are labels. The finite theorems do not establish that either coordinate detects a cognitive, causal, safety, or alignment property.
+
+## 7. Backward compatibility is still a conjectural comparison
+
+The frozen legacy topos remains
+
+```text
+E_legacy = Sh(C,J_legacy).
+```
+
+The candidate target is a comparison
+
+```text
+E_res ~= E_legacy^4
+```
+
+after atomic resolution of the context factor. A proposed neutral-channel embedding sends a legacy object to
+
+```text
+X |-> (X,1,1,1),
+```
+
+and should be fully faithful, with evaluation at the neutral channel naturally isomorphic to identity. That categorical round trip is distinct from the serialization requirement that identifiers and canonical payload hashes survive by strict equality.
+
+Neither round trip is complete. The product-site comparison, full-faithfulness proof, natural isomorphism, observational-cover serialization, identifier/hash preservation, and tests remain `PROOF_REQUIRED`. Accordingly, this draft does not claim backward compatibility.
+
+Even if the comparison is proved, `E_legacy^4` makes the expressivity boundary sharper: it is four independent legacy channels. A successor must either select the larger ambient modal package as its principal semantics or enrich the resolved semantics with typed overlaps or transitions and prove their coherence. The canonical choice remains open in `OBL-NT2-CROSS-CONTEXT-SEMANTICS`.
+
+## 8. Type discipline shared with TKS v8
+
+The TKS v8 finite core deliberately admits typed finite functions and excludes stochastic kernels, quantum channels, and empirical dynamics. This paper follows the same discipline:
+
+| Object | Type | Admitted here |
+|---|---|---|
+| Deterministic map | total function with explicit source and target | Background boundary only |
+| Markov kernel | stochastic morphism, e.g. in `FinStoch` | Not part of Paper 2 construction |
+| Classical channel | induced affine map on distribution objects in a selected finite profile | Not silently identified with a function |
+| Grothendieck sheaf | Set-valued presheaf satisfying descent for a named topology | Finite `L` results only |
+| Linear/cellular sheaf | functor on a finite cell poset into vector spaces, with extra weights for spectral theory | Not constructed |
+| Provenance record | immutable external audit data | Implemented in the finite reference model |
+
+An explicit functor or representation may relate two rows, but shared matrix notation is not a conversion theorem.
+
+## 9. Relationship to prior work
+
+The standard site-to-topology, sheafification, representable-sheaf, and topos background is not a Project Coherence novelty claim. It is governed here by the Stacks Project [CIT-STKS-00ZC; CIT-STKS-00W1; CIT-STKS-00WO] and Mac Lane and Moerdijk [CIT-MACLANE-MOERDIJK-1994].
+
+The use of external provenance-bearing cover records alongside ordinary topology generation is an engineering and governance proposal. Its mathematical relationship to colored sites, indexed categories, stacks, or other provenance-sensitive categorical structures has not received a dedicated novelty review.
+
+The finite transverse-partition construction and explicit reflector calculation are Project Coherence internal candidates. They have a direct proof and exhaustive execution evidence, but no independent category-theory review or full proof-assistant formalization. This draft therefore does not call them new theorems in the scholarly sense.
+
+## 10. Reproduction snapshot
+
+The following commands were rerun on 2026-08-05 at the exact base commit:
+
+```powershell
+python -B -m unittest discover -s tests/noetic_topos2 -p "test_*.py" -v
+python -B docs/working/project_coherence/gate1/noetic_topos2/modality_composition/verify_modality_composition.py
+python -B -m unittest discover -s tests/noetic_topos2_modality_composition -p "test_*.py" -v
+python -B scripts/verify_psr8_lean_gate1.py
+```
+
+Observed results:
+
+- finite-site suite: `PASS`, 8 tests;
+- modality verifier: `PASS`, 18 fixtures, 298 sieves, 3,012 restriction squares;
+- modality-composition suite: `PASS`, 6 tests; and
+- pinned Lean Gate 1 verifier: `PASS` on its bounded registered modules.
+
+The Lean scope includes four-atom exhaustiveness, proper global pieces, transverse refinement, and global witness separation. It does not formalize all sixteen presheaves, the sheaf conditions, topology generation, reflector universal properties, product-site comparison, or legacy round trip. Executable corroboration and bounded kernel checking are not independent review.
+
+## 11. Open obligations before submission
+
+This paper is not submission-ready until at least the following close:
+
+1. independent category-theory review of the legacy reduction, countermodel, and finite theorems;
+2. proof-assistant formalization of the finite site, generated topologies, witness presheaves, reflector universal properties, join, and natural isomorphisms;
+3. a typed construction of observational covers and general arrows in `C x L`;
+4. the product-site lift of finite modality composition and its interaction with `J_obs`;
+5. the backward comparison, fully faithful neutral-channel embedding, and both categorical and strict serialization round trips;
+6. a canonical decision on ambient semantics versus typed cross-context coupling;
+7. a dedicated novelty search for the marked/provenance construction;
+8. reconciliation with the shared symbol and theorem registries by the lead agent;
+9. authorship, disclosure, citation, and IP review; and
+10. external referee review.
+
+The unresolved-obligation ledger in this publication package gives acceptance evidence for each item.
+
+## 12. Conclusion
+
+The conservative correction and the successor result fit together cleanly. The legacy ACBE/RPM clauses collapse because identities enter their sieves; the successor obtains nontriviality only by changing the context generators. In the finite context model, the new modalities are distinct and nonidentity, but they commute and jointly resolve to four atomic channels. External mark records preserve derivational provenance that ordinary topology generation forgets.
+
+That is a coherent mathematical reference point, not a finished Noetic Topos 2.0. The product site, observation interaction, legacy comparison, richer context semantics, probability layer, formal verification, novelty assessment, and independent review remain open. Preserving those boundaries is part of the result.
+
+## References
+
+- `[CIT-STKS-00ZC]` The Stacks Project Authors, “The topology defined by a site,” Tag 00ZC. <https://stacks.math.columbia.edu/tag/00ZC>
+- `[CIT-STKS-00W1]` The Stacks Project Authors, “Sheafification,” Tag 00W1. <https://stacks.math.columbia.edu/tag/00W1>
+- `[CIT-STKS-00WO]` The Stacks Project Authors, “Representable sheaves,” Tag 00WO. <https://stacks.math.columbia.edu/tag/00WO>
+- `[CIT-MACLANE-MOERDIJK-1994]` S. Mac Lane and I. Moerdijk, *Sheaves in Geometry and Logic*. DOI: <https://doi.org/10.1007/978-1-4612-0927-0>
+
+Full bibliographic metadata and use boundaries are recorded in `CITATION_LEDGER_v0.1.json`.
