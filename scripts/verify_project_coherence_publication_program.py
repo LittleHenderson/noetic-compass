@@ -25,9 +25,11 @@ PUBLICATION_ROOT = (
 )
 INTEGRATION_ROOT = PUBLICATION_ROOT / "integration"
 
-CURRENT_GATE5_SNAPSHOT_ID = "G5-SNAPSHOT-PROSPECTIVE-LIFECYCLE-SUCCESSOR"
-CURRENT_GATE5_SOURCE_COMMIT = "e0405bf58dfe2a132476fa2672f288dcc097cd77"
-CURRENT_GATE5_ARTIFACT_COUNT = 355
+CURRENT_GATE5_SNAPSHOT_ID = (
+    "G5-SNAPSHOT-ADMITTED-ADAPTER-RECONCILIATION-SUCCESSOR"
+)
+CURRENT_GATE5_SOURCE_COMMIT = "b015da8b46a225168ba3e578d24b9bd0af4c7fe7"
+CURRENT_GATE5_ARTIFACT_COUNT = 377
 HISTORICAL_FINAL_REPLAY_COMMIT = "d24721afe18e05442f3c691f02dcf1608244f0e9"
 HISTORICAL_FINAL_REPLAY_ARTIFACT_COUNT = 348
 INTEGRATED_REPLAY_ORDER = [
@@ -484,7 +486,8 @@ def verify_current_successor_candidate(
         "result": "PASS WITH GATE OPEN",
         "artifact_count": CURRENT_GATE5_ARTIFACT_COUNT,
         "route_enabled": False,
-        "packaged_adapter_admitted": False,
+        "packaged_adapter_admitted": True,
+        "configured_scope_only": True,
         "experimental_execution": "NOT_STARTED",
         "dependency_security": "OPEN_SECURITY / HELD",
     }
@@ -494,6 +497,7 @@ def verify_current_successor_candidate(
         "result",
         "route_enabled",
         "packaged_adapter_admitted",
+        "configured_scope_only",
         "experimental_execution",
         "dependency_security",
     ):
@@ -511,8 +515,9 @@ def verify_current_successor_candidate(
         marker not in scope
         for marker in (
             "DEFAULT-DARK ROUTE",
-            "NO PACKAGED OR ADMITTED ADAPTER",
-            "NO LIVE EXECUTION",
+            "PACKAGED AND ADMITTED BOUNDED ADAPTER",
+            "CONFIGURED-SCOPE RECONCILIATION",
+            "NO LIVE PROVIDER EXECUTION",
             "NOT SCIENTIFIC EVIDENCE",
         )
     ):
@@ -556,6 +561,7 @@ def verify_gate5_snapshot_crosswalk() -> int:
         "G5-SNAPSHOT-HARNESS-LANE-BASE",
         "G5-SNAPSHOT-HARDENED-INTEGRATION",
         "G5-SNAPSHOT-WORKER-PROTOCOL-SUCCESSOR",
+        "G5-SNAPSHOT-PROSPECTIVE-LIFECYCLE-SUCCESSOR",
         CURRENT_GATE5_SNAPSHOT_ID,
     ]
     actual_snapshot_ids = [item.get("snapshot_id") for item in snapshots]
@@ -576,6 +582,11 @@ def verify_gate5_snapshot_crosswalk() -> int:
             348,
             "E370F1CE68550ED166612E90791A5E3A3701D22F5777DDF7831EE36EA0A5A24E",
             "d24721afe18e05442f3c691f02dcf1608244f0e9",
+        ),
+        "G5-SNAPSHOT-PROSPECTIVE-LIFECYCLE-SUCCESSOR": (
+            355,
+            "624E7D577E770BF7CC4490D1D3AC315837E8E753CCD454D2F4E96E6685DC17AB",
+            "e0405bf58dfe2a132476fa2672f288dcc097cd77",
         ),
     }
     snapshots_by_id = {item["snapshot_id"]: item for item in snapshots}
@@ -606,7 +617,7 @@ def verify_gate5_snapshot_crosswalk() -> int:
     if current.get("source_commit") != CURRENT_GATE5_SOURCE_COMMIT:
         fail("current Gate 5 successor source commit is not frozen")
     if current.get("parent_snapshot_id") != (
-        "G5-SNAPSHOT-WORKER-PROTOCOL-SUCCESSOR"
+        "G5-SNAPSHOT-PROSPECTIVE-LIFECYCLE-SUCCESSOR"
     ):
         fail("current Gate 5 successor parent linkage is invalid")
     for key, expected_path in GATE5_SNAPSHOT_RECORD_PATHS.items():
@@ -637,7 +648,10 @@ def verify_gate5_snapshot_crosswalk() -> int:
     if artifact_count != current["gate5_manifest"].get("artifact_count"):
         fail("current Gate 5 successor artifact count mismatch")
     if artifact_count != CURRENT_GATE5_ARTIFACT_COUNT:
-        fail("current Gate 5 successor artifact count is not 355")
+        fail(
+            "current Gate 5 successor artifact count is not "
+            f"{CURRENT_GATE5_ARTIFACT_COUNT}"
+        )
 
     candidate_replay = current.get("clean_candidate_replay")
     if not isinstance(candidate_replay, dict):
@@ -652,8 +666,10 @@ def verify_gate5_snapshot_crosswalk() -> int:
         fail("current Gate 5 successor replay does not preserve the open gate")
     if candidate_replay.get("route_enabled") is not False:
         fail("current Gate 5 successor replay does not preserve default-dark routing")
-    if candidate_replay.get("packaged_adapter_admitted") is not False:
-        fail("current Gate 5 successor replay admits a packaged adapter")
+    if candidate_replay.get("packaged_adapter_admitted") is not True:
+        fail("current Gate 5 successor replay omits the admitted adapter")
+    if candidate_replay.get("configured_scope_only") is not True:
+        fail("current Gate 5 successor replay promotes reconciliation scope")
 
     verify_current_successor_candidate(
         data, clean_candidate_replay=candidate_replay

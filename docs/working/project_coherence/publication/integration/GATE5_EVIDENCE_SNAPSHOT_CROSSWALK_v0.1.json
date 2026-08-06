@@ -3,7 +3,7 @@
   "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
   "as_of": "2026-08-06",
   "purpose": "Preserve the exact historical Gate 5 snapshots used by the isolated publication lanes while identifying the current successor snapshot governing publication integration.",
-  "current_snapshot_id": "G5-SNAPSHOT-PROSPECTIVE-LIFECYCLE-SUCCESSOR",
+  "current_snapshot_id": "G5-SNAPSHOT-ADMITTED-ADAPTER-RECONCILIATION-SUCCESSOR",
   "snapshots": [
     {
       "snapshot_id": "G5-SNAPSHOT-HARNESS-LANE-BASE",
@@ -237,15 +237,85 @@
         "product, license, canon, and disclosure authority"
       ],
       "compute_boundary": "The RunPod balance is user-reported as $107.00; known tranche spend is $0.00, no provider billing ledger or balance receipt was inspected, and no RunPod/GPU/paid job was launched."
+    },
+    {
+      "snapshot_id": "G5-SNAPSHOT-ADMITTED-ADAPTER-RECONCILIATION-SUCCESSOR",
+      "role": "current Gate 5 evidence spine after exact package admission, active-lease route binding, and configured-scope reconciliation",
+      "source_commit": "b015da8b46a225168ba3e578d24b9bd0af4c7fe7",
+      "parent_snapshot_id": "G5-SNAPSHOT-PROSPECTIVE-LIFECYCLE-SUCCESSOR",
+      "gate5_manifest": {
+        "path": "docs/working/project_coherence/gate5/GATE5_ARTIFACT_MANIFEST_v0.1.json",
+        "bytes": 109177,
+        "sha256": "2E5C549679BE5C7C5FD23F172EB52D8F73DC7606529CB9B32F1854DCEE8FB4B2",
+        "artifact_count": 377
+      },
+      "local_runner_lock": {
+        "path": "docs/working/project_coherence/gate5/GATE5_LOCAL_WINDOWS_TEST_RUNNER_LOCK_v0.1.json",
+        "bytes": 121525,
+        "sha256": "EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13"
+      },
+      "raw_build_security_receipt": {
+        "path": "docs/working/project_coherence/gate5/GATE5_RAW_BUILD_AND_SECURITY_EVIDENCE_RECEIPT_v0.1.json",
+        "bytes": 18726,
+        "sha256": "061B558340F2683D28A0166CFF33844E0C187CEC7D27EF0EFF807161E728EF74",
+        "raw_payload_count": 10,
+        "scanner_findings": 7,
+        "vendor_open_or_deferred": 6,
+        "scanner_vendor_conflicts": 1
+      },
+      "gate5_verifier": {
+        "path": "scripts/verify_project_coherence_gate5.py",
+        "bytes": 245511,
+        "sha256": "1ADD83EE2E101F9A1EA6B4EC751AEE435E5ABFCE819BB074FB74E1DD17E504F6"
+      },
+      "gate5_redteam": {
+        "path": "tests/cas_harness_v2/test_gate5_verifier_redteam.py",
+        "bytes": 38513,
+        "sha256": "14C69DEA029965A496C2DAD30927DCD88262AC8964E35A3B1C9F43FFADC6547C"
+      },
+      "clean_candidate_replay": {
+        "commit": "b015da8b46a225168ba3e578d24b9bd0af4c7fe7",
+        "elapsed_seconds": 320.3,
+        "harness_tests": 150,
+        "harness_subtests": 99,
+        "worker_tests": 364,
+        "numeric_tests": 32,
+        "api_fleet_launcher_tests": 78,
+        "durable_callback_object_lock_tests": 38,
+        "worker_terminal_bridge_tests": 17,
+        "prospective_lifecycle_sqlite_dark_route_tests": 76,
+        "admitted_adapter_bounded_reconciliation_tests": 80,
+        "route_enabled": false,
+        "packaged_adapter_admitted": true,
+        "configured_scope_only": true,
+        "experimental_execution": "NOT_STARTED",
+        "dependency_security": "OPEN_SECURITY / HELD",
+        "result": "PASS WITH GATE OPEN"
+      },
+      "added_evidence_classes": [
+        "byte-for-byte packaged Harness-v2 kernel provenance verified before import and admitted only through the exact bounded adapter profile",
+        "joint job, subject, authorization, context, media-type, authorization-digest, request-intake, and active-lease binding across controller and worker routes",
+        "configured-scope reconciliation across current fleet configuration, immutable contexts, lifecycle rows, packet indices, and optional bridge indices with source failure reported as unavailable"
+      ],
+      "retained_open_boundaries": [
+        "Evidence Packet attachment, explicit nonreporting, and outcome-seal HTTP dependency envelopes",
+        "trusted time, live independent WORM, provider-backed startup, multi-host and host-loss authority, and authenticated execution",
+        "global or off-registry execution absence beyond the injected configured reconciliation scope",
+        "independently attested executor-auditor replay and independent reproduction",
+        "live experiment, matched controls, causal or semantic validation, and scientific review",
+        "product, security, operations, billing, privacy, compliance, license, canon, and disclosure authority"
+      ],
+      "compute_boundary": "The RunPod balance is user-reported as $107.00; known tranche spend is $0.00, no provider billing ledger or balance receipt was inspected, and no RunPod/GPU/paid job was launched."
     }
   ],
   "integration_rules": [
     "Citations to the CAS Harness 2 or ACBE lane's 325-artifact evidence must carry the historical snapshot ID.",
     "Citations to the memristive and lead-correction packages' 340-artifact evidence remain historical and must not be rewritten as if authored against successor bytes.",
     "The 348-artifact worker-protocol successor at d24721afe18e05442f3c691f02dcf1608244f0e9 remains an immutable historical snapshot rather than being rewritten against later bytes.",
-    "Current integrated status and next-action decisions use the 355-artifact prospective-lifecycle successor at e0405bf58dfe2a132476fa2672f288dcc097cd77.",
+    "The 355-artifact prospective-lifecycle successor at e0405bf58dfe2a132476fa2672f288dcc097cd77 remains an immutable historical snapshot rather than being rewritten against later bytes.",
+    "Current integrated status and next-action decisions use the 377-artifact admitted-adapter/reconciliation successor at b015da8b46a225168ba3e578d24b9bd0af4c7fe7.",
     "The hardened snapshot improves repository-local evidence; it does not retroactively create a joined run, Evidence Packet v2 scientific result, WORM receipt, independent attestation, or product authority.",
-    "All four snapshots remain OPEN / NOT_STARTED / RING 4 / NOT LICENSED / HELD / NOT FROZEN."
+    "All five snapshots remain OPEN / NOT_STARTED / RING 4 / NOT LICENSED / HELD / NOT FROZEN."
   ],
   "final_integrated_replay": {
     "status": "SUCCESSOR CANDIDATE AND RECEIPT-WORKTREE PASS / RECEIPT COMMIT CLEAN REPLAY REQUIRED",
@@ -261,31 +331,32 @@
   },
   "current_successor_candidate": {
     "status": "CLEAN GATE 5 CANDIDATE PASS / PUBLICATION REBIND AND ORDERED RECEIPT-COMMIT REPLAY REQUIRED",
-    "commit": "e0405bf58dfe2a132476fa2672f288dcc097cd77",
-    "snapshot_id": "G5-SNAPSHOT-PROSPECTIVE-LIFECYCLE-SUCCESSOR",
+    "commit": "b015da8b46a225168ba3e578d24b9bd0af4c7fe7",
+    "snapshot_id": "G5-SNAPSHOT-ADMITTED-ADAPTER-RECONCILIATION-SUCCESSOR",
     "gate5": {
       "result": "PASS WITH GATE OPEN",
-      "elapsed_seconds": 251.3,
-      "artifact_count": 355,
+      "elapsed_seconds": 320.3,
+      "artifact_count": 377,
       "route_enabled": false,
-      "packaged_adapter_admitted": false,
+      "packaged_adapter_admitted": true,
+      "configured_scope_only": true,
       "experimental_execution": "NOT_STARTED",
       "dependency_security": "OPEN_SECURITY / HELD"
     },
     "next_execution_order": ["PUBLICATION_PROGRAM", "GATE1", "GATE4", "CLEAN_RECEIPT_COMMIT_REPLAY"],
-    "receipt_scope": "LOCAL UNATTESTED STRUCTURAL REGRESSION / DEFAULT-DARK ROUTE / NO PACKAGED OR ADMITTED ADAPTER / NO LIVE EXECUTION / NOT TRUSTED TIME / NOT WORM / NOT INDEPENDENT REPLAY / NOT SCIENTIFIC EVIDENCE"
+    "receipt_scope": "LOCAL UNATTESTED STRUCTURAL REGRESSION / DEFAULT-DARK ROUTE / PACKAGED AND ADMITTED BOUNDED ADAPTER / CONFIGURED-SCOPE RECONCILIATION / NO LIVE PROVIDER EXECUTION / NOT TRUSTED TIME / NOT WORM / NOT INDEPENDENT REPLAY / NOT SCIENTIFIC EVIDENCE"
   },
   "current_integrated_replay": {
     "status": "PASS WITH GATE OPEN",
-    "commit": "e0405bf58dfe2a132476fa2672f288dcc097cd77",
+    "commit": "b015da8b46a225168ba3e578d24b9bd0af4c7fe7",
     "execution_order": ["GATE5", "PUBLICATION_PROGRAM", "GATE1", "GATE4"],
     "results": {
-      "gate5": {"result": "PASS", "elapsed_seconds": 251.3, "artifact_count": 355, "experimental_execution": "NOT_STARTED", "dependency_security": "OPEN_SECURITY / HELD"},
-      "publication_program": {"result": "PASS", "elapsed_seconds": 3.4, "json_files": 59, "bound_publication_artifacts": 71},
-      "gate1": {"result": "PASS", "elapsed_seconds": 28.6, "artifact_count": 23, "status_after_pass": "OPEN / Ring 4 / NOT LICENSED / NOT FROZEN"},
-      "gate4": {"result": "PASS", "elapsed_seconds": 92.6, "artifact_count": 54, "status_after_pass": "OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN"}
+      "gate5": {"result": "PASS", "elapsed_seconds": 320.3, "artifact_count": 377, "experimental_execution": "NOT_STARTED", "dependency_security": "OPEN_SECURITY / HELD"},
+      "publication_program": {"result": "PASS", "elapsed_seconds": 1.5, "json_files": 59, "bound_publication_artifacts": 71},
+      "gate1": {"result": "PASS", "elapsed_seconds": 40.1, "artifact_count": 23, "status_after_pass": "OPEN / Ring 4 / NOT LICENSED / NOT FROZEN"},
+      "gate4": {"result": "PASS", "elapsed_seconds": 88.7, "artifact_count": 54, "status_after_pass": "OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN"}
     },
-    "receipt_scope": "GATE 5 ON CLEAN COMMITTED CANDIDATE / PUBLICATION, GATE 1, AND GATE 4 ON RECEIPT WORKTREE / RECEIPT COMMIT CLEAN REPLAY REQUIRED / DEFAULT-DARK ROUTE / NO PACKAGED OR ADMITTED ADAPTER / NO LIVE EXECUTION / NOT TRUSTED TIME / NOT WORM / NOT INDEPENDENT ATTESTATION / NOT SCIENTIFIC EVIDENCE"
+    "receipt_scope": "GATE 5 ON CLEAN COMMITTED CANDIDATE / PUBLICATION, GATE 1, AND GATE 4 ON RECEIPT WORKTREE / RECEIPT COMMIT CLEAN REPLAY REQUIRED / DEFAULT-DARK ROUTE / PACKAGED AND ADMITTED BOUNDED ADAPTER / CONFIGURED-SCOPE RECONCILIATION / NO LIVE PROVIDER EXECUTION / NOT TRUSTED TIME / NOT WORM / NOT INDEPENDENT ATTESTATION / NOT SCIENTIFIC EVIDENCE"
   },
   "global_boundary": "This is a provenance crosswalk, not a gate-close receipt or an amendment of the immutable source-bound Harness lane."
 }

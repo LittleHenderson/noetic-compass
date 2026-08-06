@@ -136,9 +136,9 @@
     "lead_package_parent_commit": "d81cd403b5de3772238becd065db18500e663024",
     "all_lane_merge_head": "087fe7a03a44c0ca5348bd5bdc016113f675887c",
     "historical_gate5_spine_commit": "fbac9909a2b600ac8bc9f1217c073e4a3269beea",
-    "gate5_spine_commit": "e0405bf58dfe2a132476fa2672f288dcc097cd77",
-    "gate5_current_snapshot_id": "G5-SNAPSHOT-PROSPECTIVE-LIFECYCLE-SUCCESSOR",
-    "gate5_current_artifact_count": 355,
+    "gate5_spine_commit": "b015da8b46a225168ba3e578d24b9bd0af4c7fe7",
+    "gate5_current_snapshot_id": "G5-SNAPSHOT-ADMITTED-ADAPTER-RECONCILIATION-SUCCESSOR",
+    "gate5_current_artifact_count": 377,
     "completed": [
       "Wave 1 lane merges",
       "formal and category independent internal review merges",
@@ -157,12 +157,15 @@
       "Gate 5 worker-terminal protocol successor d24721af with the 325- and 340-artifact publication snapshots preserved as historical",
       "successor snapshot crosswalk, dependency map, handoff, verifier, and integration-manifest rebind",
       "Gate 5 prospective-lifecycle successor e0405bf5 with 355 artifacts and the 325-, 340-, and 348-artifact snapshots preserved as immutable history",
-      "receipt-worktree ordered replay of publication program, Gate 1, and Gate 4 against the e0405bf5 successor binding"
+      "receipt-worktree ordered replay of publication program, Gate 1, and Gate 4 against the e0405bf5 successor binding",
+      "Gate 5 admitted-adapter/reconciliation successor b015da8b with 377 artifacts and the 325-, 340-, 348-, and 355-artifact snapshots preserved as immutable history",
+      "byte-verified packaged kernel admission, joint run identity, transitive request-bound intake receipts, active-lease fencing, and fail-closed configured-scope reconciliation",
+      "receipt-worktree ordered replay of the publication program, Gate 1, and Gate 4 against the b015da8b successor binding"
     ],
     "remaining": [
       "exact clean-checkout Gate 5, publication-program, Gate 1, and Gate 4 replay of the receipt-bearing successor commit plus remote-ref verification",
-      "Gate 5 packaged and admitted route adapter, one run-identity contract, transitive request-bound intake-receipt carriage, active-lease fencing, trusted time/WORM, multi-host authority, authenticated provider execution, and complete outcome and Evidence Packet v2 integration",
-      "complete reconciliation of orphan or losing wrappers, pending outputs, unwired terminal states, and off-registry execution, plus independently attested replay and reproduction",
+      "Gate 5 Evidence Packet attachment, explicit nonreporting, outcome-seal HTTP dependency envelopes, trusted time/WORM, multi-host authority, authenticated provider execution, and provider-backed startup",
+      "complete cross-host reconciliation beyond configured process-local sources, proof of off-registry execution absence, and independently attested executor-auditor replay and reproduction",
       "all separately governed external proof, implementation, experiment, review, authorship, license, canon, product, and disclosure obligations"
     ],
     "compute_boundary": "The RunPod balance is user-reported as $107.00; known tranche spend is $0.00, no provider billing ledger or balance receipt was inspected, and no RunPod/GPU/paid job was launched."
