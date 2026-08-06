@@ -1,7 +1,7 @@
 {
   "schema_version": "project_coherence.publication.integration.dependency_status_review_map.v0.1",
   "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
-  "as_of": "2026-08-05",
+  "as_of": "2026-08-06",
   "program_name": "Project Coherence dependency-ordered publication program",
   "execution_model": {
     "wave_1": "Formal mathematics, category/sheaf theory, and engineering publication deltas developed in isolated worktrees from one source baseline.",
@@ -132,10 +132,14 @@
   ],
   "lead_integration": {
     "branch": "codex/project-coherence-publication-integration",
+    "successor_branch": "codex/project-coherence-gate5-successor",
     "lead_package_parent_commit": "d81cd403b5de3772238becd065db18500e663024",
     "all_lane_merge_head": "087fe7a03a44c0ca5348bd5bdc016113f675887c",
-    "gate5_spine_commit": "fbac9909a2b600ac8bc9f1217c073e4a3269beea",
-      "completed": [
+    "historical_gate5_spine_commit": "fbac9909a2b600ac8bc9f1217c073e4a3269beea",
+    "gate5_spine_commit": "d24721afe18e05442f3c691f02dcf1608244f0e9",
+    "gate5_current_snapshot_id": "G5-SNAPSHOT-WORKER-PROTOCOL-SUCCESSOR",
+    "gate5_current_artifact_count": 348,
+    "completed": [
       "Wave 1 lane merges",
       "formal and category independent internal review merges",
       "first blocking-correction commit",
@@ -149,11 +153,13 @@
       "13-of-13 publication-text correction acceptance package 64d02d20",
       "memristive supplemental source-bound package 4666004e",
       "final obligation reconciliation and lead handoff",
-      "exact integration manifest and structural verifier expansion"
+      "exact integration manifest and structural verifier expansion",
+      "Gate 5 worker-terminal protocol successor d24721af with the 325- and 340-artifact publication snapshots preserved as historical",
+      "successor snapshot crosswalk, dependency map, handoff, verifier, and integration-manifest rebind"
     ],
     "remaining": [
-      "integrated Gate 1, Gate 4, and Gate 5 replay",
-      "intentional commit, exact clean-checkout replay, and remote push",
+      "exact clean-checkout replay of the receipt-bearing successor commit and remote-ref verification",
+      "Gate 5 live route, provider execution, run-nonce lifecycle, trusted time/WORM, full outcome and Evidence Packet v2 sealing, and post-seal bridge reconciliation",
       "all separately governed external proof, implementation, experiment, review, authorship, license, canon, product, and disclosure obligations"
     ]
   },

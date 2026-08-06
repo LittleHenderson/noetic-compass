@@ -2,7 +2,8 @@
 """Verify the source-bound Project Coherence publication-program package.
 
 This verifier checks byte manifests, lead crosswalks, imported local claim IDs,
-status boundaries, and the current hardened Gate 5 snapshot.  A PASS is a
+status boundaries, preserved historical Gate 5 snapshots, and the current
+Gate 5 successor snapshot.  A PASS is a
 structural/integration result only.  It does not close a gate, validate a
 theorem or experiment, authorize publication, or grant product/canon/license/
 disclosure authority.
@@ -338,23 +339,61 @@ def verify_dependency_and_obligation_maps() -> tuple[int, int]:
     return len(tracks), len(clusters)
 
 
-def verify_hardened_gate5_snapshot() -> int:
+def verify_gate5_snapshot_crosswalk() -> int:
     path = INTEGRATION_ROOT / "GATE5_EVIDENCE_SNAPSHOT_CROSSWALK_v0.1.json"
     data = load_json(path)
     snapshots = data.get("snapshots")
     if not isinstance(snapshots, list):
         fail("Gate 5 snapshot crosswalk has no snapshots list")
+    expected_snapshot_ids = [
+        "G5-SNAPSHOT-HARNESS-LANE-BASE",
+        "G5-SNAPSHOT-HARDENED-INTEGRATION",
+        "G5-SNAPSHOT-WORKER-PROTOCOL-SUCCESSOR",
+    ]
+    actual_snapshot_ids = [
+        item.get("snapshot_id") for item in snapshots if isinstance(item, dict)
+    ]
+    if actual_snapshot_ids != expected_snapshot_ids:
+        fail("Gate 5 snapshot IDs or historical order changed")
+    historical_expectations = {
+        "G5-SNAPSHOT-HARNESS-LANE-BASE": (
+            325,
+            "5C73F203B4EA7D95B89C3BBB730FFCAE571EECC26E8BA2AF3ABC4A994635B333",
+        ),
+        "G5-SNAPSHOT-HARDENED-INTEGRATION": (
+            340,
+            "AF263573DAB68D814A09D75CFEBB2ECDD62B08491BD2D1D66C7D5332F682A72A",
+        ),
+    }
+    for snapshot_id, (artifact_count, manifest_sha256) in historical_expectations.items():
+        historical = next(
+            item for item in snapshots if item.get("snapshot_id") == snapshot_id
+        )
+        manifest_record = historical.get("gate5_manifest")
+        if not isinstance(manifest_record, dict):
+            fail(f"historical Gate 5 snapshot lacks manifest: {snapshot_id}")
+        declared_count = manifest_record.get("artifact_count")
+        declared_hash = manifest_record.get(
+            "sha256_at_snapshot", manifest_record.get("sha256")
+        )
+        if (declared_count, declared_hash) != (artifact_count, manifest_sha256):
+            fail(f"historical Gate 5 snapshot was rewritten: {snapshot_id}")
+    current_snapshot_id = data.get("current_snapshot_id")
+    if current_snapshot_id != "G5-SNAPSHOT-WORKER-PROTOCOL-SUCCESSOR":
+        fail("current Gate 5 successor snapshot pointer is invalid")
     current = next(
         (
             item
             for item in snapshots
             if isinstance(item, dict)
-            and item.get("snapshot_id") == "G5-SNAPSHOT-HARDENED-INTEGRATION"
+            and item.get("snapshot_id") == current_snapshot_id
         ),
         None,
     )
     if current is None:
-        fail("hardened Gate 5 integration snapshot is missing")
+        fail("current Gate 5 successor snapshot is missing")
+    if current.get("source_commit") != "d24721afe18e05442f3c691f02dcf1608244f0e9":
+        fail("current Gate 5 successor source commit is not frozen")
     for key in (
         "gate5_manifest",
         "local_runner_lock",
@@ -364,23 +403,23 @@ def verify_hardened_gate5_snapshot() -> int:
     ):
         record = current.get(key)
         if not isinstance(record, dict):
-            fail(f"hardened Gate 5 snapshot lacks {key}")
+            fail(f"current Gate 5 successor snapshot lacks {key}")
         target = resolve_repo_path(record.get("path"))
         if not target.is_file():
-            fail(f"hardened Gate 5 snapshot target is missing: {key}")
+            fail(f"current Gate 5 successor snapshot target is missing: {key}")
         if target.stat().st_size != record.get("bytes"):
-            fail(f"hardened Gate 5 snapshot byte mismatch: {key}")
+            fail(f"current Gate 5 successor snapshot byte mismatch: {key}")
         if sha256(target) != record.get("sha256"):
-            fail(f"hardened Gate 5 snapshot hash mismatch: {key}")
+            fail(f"current Gate 5 successor snapshot hash mismatch: {key}")
     gate5_manifest = load_json(resolve_repo_path(current["gate5_manifest"]["path"]))
     artifact_count = gate5_manifest.get("artifact_count")
     if artifact_count != current["gate5_manifest"].get("artifact_count"):
-        fail("hardened Gate 5 artifact count mismatch")
+        fail("current Gate 5 successor artifact count mismatch")
     replay = data.get("final_integrated_replay")
     if not isinstance(replay, dict) or replay.get("commit") != (
-        "0f5e46c1832124813a080b85ed4ec01ad317ff2f"
+        "d24721afe18e05442f3c691f02dcf1608244f0e9"
     ):
-        fail("final integrated replay is not bound to the clean candidate")
+        fail("successor replay is not bound to the frozen Gate 5 candidate")
     if replay.get("execution_order") != [
         "GATE5",
         "PUBLICATION_PROGRAM",
@@ -398,7 +437,7 @@ def verify_hardened_gate5_snapshot() -> int:
         fail("final integrated replay results are incomplete")
     if any(result.get("result") != "PASS" for result in results.values()):
         fail("final integrated replay contains a non-PASS candidate result")
-    if results["gate5"].get("artifact_count") != 340:
+    if results["gate5"].get("artifact_count") != 348:
         fail("final integrated replay Gate 5 artifact count mismatch")
     if results["publication_program"].get("bound_publication_artifacts") != 71:
         fail("final integrated replay publication artifact count mismatch")
@@ -759,7 +798,7 @@ def main() -> int:
         lane_count, claim_count, crosswalk_count = verify_claim_registry()
         notation_count = verify_notation_crosswalk()
         track_count, cluster_count = verify_dependency_and_obligation_maps()
-        gate5_artifacts = verify_hardened_gate5_snapshot()
+        gate5_artifacts = verify_gate5_snapshot_crosswalk()
         (
             acceptance_count,
             mem_claim_count,
@@ -786,7 +825,7 @@ def main() -> int:
         f"  notation/type records: {notation_count}; publication tracks: "
         f"{track_count}; obligation clusters: {cluster_count}"
     )
-    print(f"  hardened Gate 5 snapshot artifacts: {gate5_artifacts}")
+    print(f"  current Gate 5 successor snapshot artifacts: {gate5_artifacts}")
     print(
         f"  correction acceptance: {acceptance_count}/13 text corrections; "
         f"memristive records: {mem_claim_count}; open obligations: "

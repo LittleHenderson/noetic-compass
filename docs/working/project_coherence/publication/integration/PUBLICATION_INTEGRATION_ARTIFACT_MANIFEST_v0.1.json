@@ -1,9 +1,10 @@
 {
   "schema_version": "project_coherence.publication.integration.artifact_manifest.v0.1",
   "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
-  "as_of": "2026-08-05",
+  "as_of": "2026-08-06",
   "manifest_id": "PROJECT-COHERENCE-PUBLICATION-INTEGRATION-v0.1",
   "branch": "codex/project-coherence-publication-integration",
+  "successor_branch": "codex/project-coherence-gate5-successor",
   "hash_algorithm": "SHA-256 over exact file bytes",
   "self_hashing": false,
   "self_exclusion": "PUBLICATION_INTEGRATION_ARTIFACT_MANIFEST_v0.1.json is deliberately excluded. The final Git object and delivered remote ref bind this manifest without a self-reference loop.",
@@ -17,9 +18,9 @@
     },
     {
       "path": "docs/working/project_coherence/publication/integration/GATE5_EVIDENCE_SNAPSHOT_CROSSWALK_v0.1.json",
-      "role": "Historical and hardened Gate 5 evidence-snapshot provenance crosswalk",
-      "bytes": 6857,
-      "sha256": "BA13A8A3A9D27D3EAF72E01D7C460C8D46653F2F0E56E67DC6773F74C3DA3AD6"
+      "role": "Historical and current-successor Gate 5 evidence-snapshot provenance crosswalk",
+      "bytes": 10177,
+      "sha256": "3635C9A27BF8DECFFCE21AFF81617ADC2FED00009B998E4AC8B93995C425DFEA"
     },
     {
       "path": "docs/working/project_coherence/publication/integration/MEMRISTIVE_SOURCE_SNAPSHOT_CROSSWALK_v0.1.json",
@@ -30,8 +31,8 @@
     {
       "path": "docs/working/project_coherence/publication/integration/PROGRAM_LEAD_HANDOFF_v0.1.md",
       "role": "Integrated publication-program editorial and authority-boundary handoff",
-      "bytes": 14255,
-      "sha256": "7890A772F0195DCE0C4B8A6F673AEA55F2707823EA7A08899FDB2AE622754301"
+      "bytes": 15517,
+      "sha256": "5C3D176E50B36C8B86205CE37946A57CA7BCAE4E23D7BA363DFD921137E824C1"
     },
     {
       "path": "docs/working/project_coherence/publication/integration/PUBLICATION_CLAIM_REGISTRY_CROSSWALK_v0.1.json",
@@ -42,8 +43,8 @@
     {
       "path": "docs/working/project_coherence/publication/integration/PUBLICATION_DEPENDENCY_STATUS_AND_REVIEW_MAP_v0.1.json",
       "role": "Eight-track dependency, status, and bounded-review map",
-      "bytes": 11334,
-      "sha256": "6C157FF091AB2963CB4E00910EBD22F31C5972A29E2F4E0F883FE28627EC320C"
+      "bytes": 11984,
+      "sha256": "2366B50D7235060598AB0FA61D9906C10C02560B6DF944B06C33461E059E9AEE"
     },
     {
       "path": "docs/working/project_coherence/publication/integration/UNRESOLVED_OBLIGATION_RECONCILIATION_v0.1.json",
@@ -54,8 +55,8 @@
     {
       "path": "scripts/verify_project_coherence_publication_program.py",
       "role": "Fail-closed structural publication-program verifier",
-      "bytes": 34951,
-      "sha256": "7EE085CF00AC0E831C5518C05049476775D0D645DC7BBD8D995C3A0D81CD0E48"
+      "bytes": 36860,
+      "sha256": "6CDAB53470B5F3AF52F4D3114054B4626ECB400D84C8375D6EE4931E05952353"
     }
   ],
   "validation_snapshot": {
@@ -76,8 +77,10 @@
     "memristive_open_obligations": 42,
     "memristive_evidence_anchors": 16,
     "memristive_source_snapshot_controls": 3,
-    "clean_candidate_commit": "0f5e46c1832124813a080b85ed4ec01ad317ff2f",
-    "clean_candidate_replay": "GATE5 PASS / PUBLICATION PASS / GATE1 PASS / GATE4 PASS",
+    "clean_candidate_commit": "d24721afe18e05442f3c691f02dcf1608244f0e9",
+    "clean_candidate_replay": "GATE5 PASS ON CLEAN CANDIDATE / PUBLICATION PASS ON RECEIPT WORKTREE / GATE1 PASS / GATE4 PASS / RECEIPT COMMIT CLEAN REPLAY REQUIRED",
+    "gate5_current_snapshot_id": "G5-SNAPSHOT-WORKER-PROTOCOL-SUCCESSOR",
+    "gate5_current_artifact_count": 348,
     "joined_run_status": "NOT_STARTED",
     "project_experimental_runpod_or_gpu_job": "NONE_LAUNCHED"
   },

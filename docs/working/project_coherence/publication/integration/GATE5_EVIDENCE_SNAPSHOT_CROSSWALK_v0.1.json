@@ -1,8 +1,9 @@
 {
   "schema_version": "project_coherence.publication.integration.gate5_evidence_snapshot_crosswalk.v0.1",
   "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
-  "as_of": "2026-08-05",
-  "purpose": "Preserve the exact historical Gate 5 snapshot used to author the isolated CAS Harness 2 lane while identifying the later hardened Gate 5 snapshot governing final publication integration.",
+  "as_of": "2026-08-06",
+  "purpose": "Preserve the exact historical Gate 5 snapshots used by the isolated publication lanes while identifying the current successor snapshot governing publication integration.",
+  "current_snapshot_id": "G5-SNAPSHOT-WORKER-PROTOCOL-SUCCESSOR",
   "snapshots": [
     {
       "snapshot_id": "G5-SNAPSHOT-HARNESS-LANE-BASE",
@@ -103,25 +104,92 @@
         "security finding closure",
         "product, license, canon, and disclosure authority"
       ]
+    },
+    {
+      "snapshot_id": "G5-SNAPSHOT-WORKER-PROTOCOL-SUCCESSOR",
+      "role": "current Gate 5 evidence spine after the bounded worker-terminal protocol and pre-outcome bridge successor",
+      "source_commit": "d24721afe18e05442f3c691f02dcf1608244f0e9",
+      "parent_snapshot_id": "G5-SNAPSHOT-HARDENED-INTEGRATION",
+      "gate5_manifest": {
+        "path": "docs/working/project_coherence/gate5/GATE5_ARTIFACT_MANIFEST_v0.1.json",
+        "bytes": 99336,
+        "sha256": "E370F1CE68550ED166612E90791A5E3A3701D22F5777DDF7831EE36EA0A5A24E",
+        "artifact_count": 348
+      },
+      "local_runner_lock": {
+        "path": "docs/working/project_coherence/gate5/GATE5_LOCAL_WINDOWS_TEST_RUNNER_LOCK_v0.1.json",
+        "bytes": 121525,
+        "sha256": "EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13"
+      },
+      "raw_build_security_receipt": {
+        "path": "docs/working/project_coherence/gate5/GATE5_RAW_BUILD_AND_SECURITY_EVIDENCE_RECEIPT_v0.1.json",
+        "bytes": 18726,
+        "sha256": "061B558340F2683D28A0166CFF33844E0C187CEC7D27EF0EFF807161E728EF74",
+        "raw_payload_count": 10,
+        "scanner_findings": 7,
+        "vendor_open_or_deferred": 6,
+        "scanner_vendor_conflicts": 1
+      },
+      "gate5_verifier": {
+        "path": "scripts/verify_project_coherence_gate5.py",
+        "bytes": 233757,
+        "sha256": "A217654E6C7F2D95923C487173EF55641C79E4498B32540F96139D4E2C36B10E"
+      },
+      "gate5_redteam": {
+        "path": "tests/cas_harness_v2/test_gate5_verifier_redteam.py",
+        "bytes": 35291,
+        "sha256": "860A972334FFED9DC6D055F78055F7EA605DC50B3B7BB82B809EA1992B9A4D7A"
+      },
+      "clean_candidate_replay": {
+        "commit": "d24721afe18e05442f3c691f02dcf1608244f0e9",
+        "elapsed_seconds": 279.5,
+        "harness_tests": 146,
+        "harness_subtests": 96,
+        "worker_tests": 364,
+        "numeric_tests": 32,
+        "api_fleet_launcher_tests": 76,
+        "durable_callback_object_lock_tests": 34,
+        "worker_terminal_bridge_tests": 7,
+        "experimental_execution": "NOT_STARTED",
+        "dependency_security": "OPEN_SECURITY / HELD",
+        "result": "PASS WITH GATE OPEN"
+      },
+      "added_evidence_classes": [
+        "exact FleetJob-to-Harness-v2 authorization mapping",
+        "immutable completed and failed terminal receipts with bounded partial-negative-evidence semantics",
+        "retry-stable terminal storage separated from fresh transport-nonce acceptance receipts",
+        "pre-outcome-only bridge with explicit injected-loader provenance and post-seal reconciliation left OPEN"
+      ],
+      "retained_open_boundaries": [
+        "live route and provider execution",
+        "run-nonce issuance and consumption",
+        "trusted time and WORM",
+        "full outcome and Evidence Packet v2 sealing",
+        "post-seal bridge reconciliation",
+        "independent attestation and reproduction",
+        "scientific validation",
+        "product, license, canon, and disclosure authority"
+      ]
     }
   ],
   "integration_rules": [
     "Citations to the CAS Harness 2 or ACBE lane's 325-artifact evidence must carry the historical snapshot ID.",
-    "Final integrated status and next-action decisions use the hardened 340-artifact snapshot unless a later exact commit supersedes it.",
+    "Citations to the memristive and lead-correction packages' 340-artifact evidence remain historical and must not be rewritten as if authored against successor bytes.",
+    "Current integrated status and next-action decisions use the 348-artifact worker-protocol successor at d24721afe18e05442f3c691f02dcf1608244f0e9.",
     "The hardened snapshot improves repository-local evidence; it does not retroactively create a joined run, Evidence Packet v2 scientific result, WORM receipt, independent attestation, or product authority.",
-    "Both snapshots remain OPEN / NOT_STARTED / RING 4 / NOT LICENSED / HELD / NOT FROZEN."
+    "All three snapshots remain OPEN / NOT_STARTED / RING 4 / NOT LICENSED / HELD / NOT FROZEN."
   ],
   "final_integrated_replay": {
-    "status": "PASS ON CLEAN DETACHED CANDIDATE / FINAL RECEIPT COMMIT REPLAY REQUIRED",
-    "commit": "0f5e46c1832124813a080b85ed4ec01ad317ff2f",
+    "status": "SUCCESSOR CANDIDATE AND RECEIPT-WORKTREE PASS / RECEIPT COMMIT CLEAN REPLAY REQUIRED",
+    "commit": "d24721afe18e05442f3c691f02dcf1608244f0e9",
     "execution_order": ["GATE5", "PUBLICATION_PROGRAM", "GATE1", "GATE4"],
     "results": {
-      "gate5": {"result": "PASS", "elapsed_seconds": 291.2, "artifact_count": 340, "experimental_execution": "NOT_STARTED", "dependency_security": "OPEN_SECURITY / HELD"},
-      "publication_program": {"result": "PASS", "elapsed_seconds": 2.5, "json_files": 59, "bound_publication_artifacts": 71},
-      "gate1": {"result": "PASS", "elapsed_seconds": 13.6, "artifact_count": 23, "status_after_pass": "OPEN / Ring 4 / NOT LICENSED / NOT FROZEN"},
-      "gate4": {"result": "PASS", "elapsed_seconds": 92.1, "artifact_count": 54, "status_after_pass": "OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN"}
+      "gate5": {"result": "PASS", "elapsed_seconds": 279.5, "artifact_count": 348, "experimental_execution": "NOT_STARTED", "dependency_security": "OPEN_SECURITY / HELD"},
+      "publication_program": {"result": "PASS", "json_files": 59, "bound_publication_artifacts": 71},
+      "gate1": {"result": "PASS", "artifact_count": 23, "status_after_pass": "OPEN / Ring 4 / NOT LICENSED / NOT FROZEN"},
+      "gate4": {"result": "PASS", "artifact_count": 54, "status_after_pass": "OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN"}
     },
-    "receipt_scope": "EPHEMERAL LOCAL CLEAN-CHECKOUT STRUCTURAL REPLAY / NOT TRUSTED TIME / NOT WORM / NOT INDEPENDENT ATTESTATION"
+    "receipt_scope": "EPHEMERAL LOCAL STRUCTURAL REPLAY / GATE 5 ON CLEAN COMMITTED CANDIDATE / PUBLICATION REBIND ON RECEIPT WORKTREE / RECEIPT COMMIT REPLAY REQUIRED / NOT TRUSTED TIME / NOT WORM / NOT INDEPENDENT ATTESTATION"
   },
   "global_boundary": "This is a provenance crosswalk, not a gate-close receipt or an amendment of the immutable source-bound Harness lane."
 }

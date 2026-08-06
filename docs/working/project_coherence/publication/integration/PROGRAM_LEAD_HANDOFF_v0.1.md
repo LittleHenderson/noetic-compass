@@ -1,8 +1,9 @@
 # Project Coherence Publication Program — Lead Integration Handoff v0.1
 
 **Status:** DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN  
-**As of:** 2026-08-05  
-**Branch:** `codex/project-coherence-publication-integration`  
+**As of:** 2026-08-06
+**Source integration branch:** `codex/project-coherence-publication-integration`
+**Current successor branch:** `codex/project-coherence-gate5-successor`
 **Submission authorized:** No  
 **Public disclosure authorized:** No  
 **Product or canon effect:** None
@@ -23,11 +24,18 @@ separated by mathematical dependency and reconciled through one lead layer.
 Any theorem, causal transfer, experiment, product statement, license, canon
 change, or disclosure decision that lacked evidence remains explicitly open.
 
+The current successor adds a bounded worker-terminal protocol and pre-outcome
+bridge to Gate 5. It is an evidence-spine evolution, not a re-authoring of the
+publication lanes. The 325- and 340-artifact source snapshots remain immutable
+historical inputs; current integration decisions use the separately identified
+348-artifact successor.
+
 ## 2. Immutable lane and review history
 
 | Role | Branch or artifact lane | Commit | Current effect |
 |---|---|---:|---|
 | Hardened Gate 5 evidence spine | `codex/project-coherence-cas-core` | `fbac9909a2b600ac8bc9f1217c073e4a3269beea` | Repository-local evidence improved; Gate 5 remains open |
+| Gate 5 worker-terminal successor | `codex/project-coherence-gate5-successor` | `d24721afe18e05442f3c691f02dcf1608244f0e9` | Current 348-artifact integration spine; live execution and Gate 5 remain open |
 | Formal mathematics Wave 1 | `codex/project-coherence-publication-formal` | `3c8491db6f5559cf090909d9de0efa03d924f53f` | Papers 1 and 3 source lane preserved |
 | Category/sheaf theory Wave 1 | `codex/project-coherence-publication-category` | `643169e9bd8de6d4bd0cc2cbc3cde4e640f1671c` | Papers 2 and 4 source lane preserved |
 | Engineering Wave 1 | `codex/project-coherence-publication-engineering` | `c8635270ca6ba7c65504b4fda43cb42a89623015` | Paper 6 and CAS-Ohm source lane preserved |
@@ -42,6 +50,7 @@ change, or disclosure decision that lacked evidence remains explicitly open.
 | Memristive supplemental track | `codex/project-coherence-wave2-memristive` | `4666004e973ccbfa7b65cf3341aab15bc5f34524` | Source-bound supplemental package; no charter paper number and no experiment |
 | Lead-correction acceptance review | `codex/project-coherence-review-lead-corrections` | `64d02d200829b86d3bfc11d9a940a13b91dcf06d` | 13/13 publication-text corrections accepted; zero upstream closures |
 | Clean integrated publication candidate | `codex/project-coherence-publication-integration` | `0f5e46c1832124813a080b85ed4ec01ad317ff2f` | Clean detached replay passed Gate 5, publication structure, Gate 1, and Gate 4 |
+| Clean Gate 5 successor candidate | `codex/project-coherence-gate5-successor` | `d24721afe18e05442f3c691f02dcf1608244f0e9` | Clean Gate 5 replay passed; publication provenance rebound without rewriting historical lanes |
 
 The lane commits are historical inputs. Lead corrections are versioned
 successor bytes on the integration branch; they do not rewrite the frozen lane
@@ -162,15 +171,20 @@ The isolated Harness 2 and ACBE authors used a correct historical Gate 5
 snapshot with 325 bound artifacts and 113 Harness tests plus 61 subtests. Later,
 the Gate 5 hardening commit added same-process receipt controls, a local runner
 lock, retained raw build/security payloads, and stronger identity/red-team
-checks. The hardened snapshot binds 340 artifacts and 119 Harness tests plus 61
-subtests.
+checks. That second historical snapshot binds 340 artifacts and 119 Harness
+tests plus 61 subtests.
 
-Both snapshots are preserved. The older counts are not rewritten as if the
-papers were authored against newer bytes, and the final integrated status uses
-the hardened snapshot. The hardened evidence still does not establish complete
-execution closure, independent attestation, trusted time/WORM, a joined model
-run, scientific validation, product authority, licensing, canon admission, or
-disclosure approval.
+The worker-terminal successor is a third, separate snapshot. It binds 348
+artifacts and 146 Harness tests plus 96 subtests, including 27 strict worker
+protocol tests, 34 durable callback/Object-Lock seam tests, and 7 pre-outcome
+bridge tests. Its exact clean committed Gate 5 replay passed in 279.5 seconds.
+
+All three snapshots are preserved. Older counts are not rewritten as if the
+papers were authored against newer bytes. Current integration status uses the
+348-artifact successor, which still does not establish complete execution
+closure, independent attestation, trusted time/WORM, a live route, a joined
+model run, full outcome/Evidence Packet v2 sealing, scientific validation,
+product authority, licensing, canon admission, or disclosure approval.
 
 ## 7. Compute and RunPod decision
 
@@ -215,14 +229,14 @@ The dependency-ordered authoring and bounded internal review program has now:
 4. preserved every negative, `OPEN`, `NOT_STARTED`, `NOT LICENSED`, and `HELD`
    boundary without claim promotion.
 
-The exact clean detached candidate
-`0f5e46c1832124813a080b85ed4ec01ad317ff2f` passed the hardened Gate 5
-verifier first in 291.2 seconds, the publication structural verifier in 2.5
-seconds, Gate 1 in 13.6 seconds, and Gate 4 in 92.1 seconds. Gate 5 remained
-open, security remained `OPEN_SECURITY / HELD`, and experimental execution
-remained `NOT_STARTED`.
+The exact clean Gate 5 successor candidate
+`d24721afe18e05442f3c691f02dcf1608244f0e9` passed Gate 5 first in 279.5
+seconds with 348 artifacts. The receipt worktree then passed the publication
+structural verifier, Gate 1 with 23 artifacts, and Gate 4 with 54 artifacts in
+the declared order. Gate 5 remained open, security remained
+`OPEN_SECURITY / HELD`, and experimental execution remained `NOT_STARTED`.
 
-This receipt-bearing commit necessarily succeeds the candidate it records. It
+The receipt-bearing commit necessarily succeeds the candidate it records. It
 must therefore be replayed from its own exact clean checkout, then the exact
 pushed remote ref must be reported externally. That final ref cannot be
 self-recorded inside its own Git bytes without an infinite self-reference loop.
