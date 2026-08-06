@@ -3,9 +3,9 @@
   "document_status": "DRAFT / SOURCE-BOUND DELTA / OPEN / RING 4 / NOT LICENSED / HELD",
   "as_of": "2026-08-05",
   "base_commit": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
-  "branch": "codex/project-coherence-publication-category",
+  "branch": "codex/project-coherence-publication-integration",
   "hash_algorithm": "SHA-256",
-  "hash_scope": "Exact file bytes in the dedicated category-lane worktree",
+  "hash_scope": "Exact file bytes after lead-owned integration of the frozen category lane and internal adversarial-review corrections",
   "self_hash_policy": "This manifest intentionally excludes PUBLICATION_ARTIFACT_MANIFEST_v0.1.json so it is non-self-hashing.",
   "self_excluded": true,
   "artifact_count": 8,
@@ -13,32 +13,32 @@
     {
       "path": "docs/working/project_coherence/publication/wave1/category_theory/CITATION_LEDGER_v0.1.json",
       "media_type": "application/json",
-      "bytes": 10320,
-      "sha256": "F83B4A5BB6DD43265C5879E7487E2147BF4249A7AE042AC378F4D9CFF927EB40"
+      "bytes": 10377,
+      "sha256": "8B7C1A03EF9B072D2CD8F9F77E0257C964AEC6E61CA96AB6738FCB66F18BD374"
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/category_theory/EVIDENCE_MAP_v0.1.json",
       "media_type": "application/json",
-      "bytes": 10623,
-      "sha256": "702978615AF4F25497F4B976CE9636F269157DBE1CEBC68998E8B018908942BD"
+      "bytes": 10928,
+      "sha256": "DA6766A102FD0AF264A55B6C71EFF44ADDF2334A4FE0F9A02E65BF0C7C75839D"
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/category_theory/HANDOFF_PACKAGE_v0.1.md",
       "media_type": "text/markdown",
-      "bytes": 7993,
-      "sha256": "1C0DADCD55E1588E4496187E61A44734B1E12FBECC8BA42C4E70AD68E87A51B9"
+      "bytes": 8160,
+      "sha256": "F677F70DC7965FDD076041D99E3356D5EBFE4B8B63B7B638C7B392007BF7F9E7"
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/category_theory/PAPER_2_THE_MARKED_AND_MODAL_NOETIC_TOPOS_DRAFT_v0.1.md",
       "media_type": "text/markdown",
-      "bytes": 23431,
-      "sha256": "AEEB4C5E5C04E616151D83FBA6816BA217A51B7368FA2894FE0AD2E897B4BC24"
+      "bytes": 24082,
+      "sha256": "B9FDFE82B50C526238DC17EAD12BF8955FF8AA3C9BD9881F140D1A485332819E"
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/category_theory/PAPER_4_NOETIC_MARKOV_SHEAVES_FOR_CONTEXTUAL_AI_ASSESSMENT_DRAFT_v0.1.md",
       "media_type": "text/markdown",
-      "bytes": 26028,
-      "sha256": "19FEB7E0B923EF5FE8A34435E2F65AF4887ABA0B1375A2DD847F627936E67967"
+      "bytes": 26560,
+      "sha256": "8A8C9E1F93D126F7997A5A9B57F4EE0A4801BBCE718770390708922F3C06AF04"
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/category_theory/SOURCE_BOUND_INVENTORY_v0.1.json",
@@ -49,8 +49,8 @@
     {
       "path": "docs/working/project_coherence/publication/wave1/category_theory/THEOREM_AND_CLAIM_MATRIX_v0.1.json",
       "media_type": "application/json",
-      "bytes": 17159,
-      "sha256": "E1A795B0C1A3BB3CBDC95CC9C6D59BEF8281075F79C532811B2AF85892D51034"
+      "bytes": 17627,
+      "sha256": "2B59DBA5537910AF73688C292C8FA12DA2A5BAA48F39492AFE859DF27979D5B6"
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/category_theory/UNRESOLVED_OBLIGATIONS_v0.1.json",

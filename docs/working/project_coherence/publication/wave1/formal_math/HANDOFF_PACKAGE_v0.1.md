@@ -54,7 +54,7 @@ or independent review.
 
 Paper 1 organizes the existing candidate around the following type distinctions:
 
-- a typed path in a finite category/semigroupoid is different from a power of
+- a typed path in the category of named finite sets (or in a separately frozen finite semigroupoid) is different from a power of
   one endomap;
 - a legacy digit string has no meaning without a versioned typed catalog;
 - a deterministic standard-basis lift is different from a stochastic map,
@@ -146,7 +146,7 @@ The citation ledger uses exact DOI or primary URLs.  It distinguishes:
 - direct CAS/TKS specializations;
 - local direct proofs and counterexamples;
 - scoped Lean fragments;
-- the unrefereed OpenAI technical manuscript; and
+- the OpenAI technical manuscript whose peer-review status is unverified and for which no review receipt appears in the reviewed source set; and
 - empirical hypotheses with no admitted experiment.
 
 The standard sources do not validate CAS semantics.  The OpenAI manuscript does

@@ -363,7 +363,7 @@ capacity,” and “causal geometry” are research labels rather than findings.
 | Principal-angle and chordal identities | Established primary literature | `STANDARD_RESULT` | `DRAFT / OPEN` |
 | Centered-projector simplex bound | Direct specialization of standard spherical/Grassmannian geometry | `STANDARD_SPECIALIZATION` | `DRAFT / OPEN / FORMALIZATION OPEN` |
 | Welch feature-dimension check | Established primary literature | `STANDARD_SPECIALIZATION` | `DRAFT / OPEN` |
-| Moving-projector Proposition 4.1 | Supplied unrefereed OpenAI technical manuscript | `MANUSCRIPT_CLAIM` | `PROOF_GAP / RING 4` |
+| Moving-projector Proposition 4.1 | Supplied OpenAI technical manuscript; peer-review status unverified and no review receipt in the reviewed source set | `MANUSCRIPT_CLAIM` | `PROOF_GAP / RING 4` |
 | CAS-specific intertwiner | No construction | `FRAMEWORK_COUPLING` | `OPEN` |
 | Projectors represent cognitive states | No admitted experiment | `EMPIRICAL_HYPOTHESIS` | `OPEN / NOT LICENSED / HELD` |
 | Projector capacity predicts model behavior | No admitted experiment and theorem transfer open | `EMPIRICAL_HYPOTHESIS` | `OPEN / NOT LICENSED / HELD` |
@@ -430,7 +430,7 @@ Grassmannian packings
 subspace perturbation (<https://doi.org/10.1137/0707001>;
 <https://doi.org/10.1007/BF01932678>), and Edelman--Arias--Smith on Grassmann
 geometry (<https://doi.org/10.1137/S0895479895290954>).  The supplied OpenAI
-manuscript is cited separately as an unrefereed technical manuscript at
+manuscript is cited separately as a public technical manuscript whose peer-review status is unverified and for which no review receipt appears in the reviewed source set, at
 <https://cdn.openai.com/pdf/ten-proofs-oai.pdf>.
 
 Casazza--Kutyniok--Li

@@ -39,7 +39,7 @@ First, the legacy ACBE and RPM coverage clauses reduce to maximal sieves and do 
 
 Second, pairwise-compatible marginals may fail to extend globally. Three binary variables that are pairwise perfectly anticorrelated have matching uniform singleton marginals but no joint distribution. The contradiction is immediate: from `X!=Y` and `Y!=Z` one obtains `X=Z`, contradicting `X!=Z`.
 
-Third, a Markov kernel is not a linear cellular sheaf. A cellular Laplacian requires finite-dimensional real or complex stalks, linear restriction maps, and chosen inner products [CIT-HANSEN-GHRIST-2019].
+Third, a Markov kernel is not a linear cellular sheaf. The finite executable/matrix profile proposed here requires finite-dimensional real or complex stalks, linear structure maps, and chosen inner products. Cellular Laplacians are not universally finite-dimensional: bounded Hilbert-valued profiles are a distinct admissible mathematical setting [CIT-HANSEN-GHRIST-2019].
 
 Fourth, deterministic maps, stochastic maps, induced channels, and unitary or quantum channels must remain distinct. Shared matrix notation does not erase different domains, normalization rules, composition laws, reversibility, or norm properties.
 
@@ -56,7 +56,7 @@ The proposed architecture is a stack of related but nonidentical types.
 | Classical distribution channel | affine map `K_*:Delta(X)->Delta(Y)` induced by a frozen finite kernel | affine composition | identity with the kernel record at the serialization/type level |
 | Contextual probability data | presheaf candidate `Marg:K^op->Set`, `U |-> Delta(Omega_U)` | marginalization along context inclusions | the sheaf condition or a unique global distribution |
 | Grothendieck sheaf | Set-valued presheaf satisfying unique descent for a named topology | restriction and unique gluing | vector-space structure, inner products, or a Laplacian |
-| Linear/cellular analysis | functor on a finite cell poset into finite-dimensional vector spaces, plus weights | linear restrictions, coboundary, adjoint | probability normalization, positivity, or Markov semantics without a proved representation |
+| Linear/cellular analysis | explicitly typed cellular sheaf; the selected executable profile uses a finite cell poset and finite-dimensional vector spaces, while bounded Hilbert-valued profiles are type-distinct | linear structure maps, coboundary, declared inner products/adjoints | probability normalization, positivity, or Markov semantics without a proved representation |
 
 Each stored object must declare `semantic_type`, source and target identities, normalization convention, coefficient domain, and conversion provenance. A conversion is a typed morphism or data transformation, not an alias.
 
@@ -215,7 +215,7 @@ Without that bridge, “contextual” in this paper means context-indexed assess
 
 ## 8. A separate weighted cellular representation
 
-Applied and spectral sheaf methods offer useful consistency tools when data are represented linearly [CIT-ROBINSON-2017; CIT-HANSEN-GHRIST-2019]. To use them here, one must construct a separate finite cell complex `X` and a cellular sheaf `F_lin` whose stalks are finite-dimensional real or complex vector spaces and whose face maps are linear.
+Applied and spectral sheaf methods offer useful consistency tools when data are represented linearly [CIT-ROBINSON-2017; CIT-HANSEN-GHRIST-2019]. For the proposed finite executable/matrix profile, one must construct a separate finite cell complex `X` and a cellular sheaf `F_lin` whose stalks are finite-dimensional real or complex vector spaces and whose declared structure maps are linear. This is a selected implementation profile, not a universal prerequisite for cellular Laplacians; bounded Hilbert-valued profiles require their own operator-domain and boundedness controls.
 
 Chosen inner products give adjoints. At degree zero the candidate consistency operator is
 

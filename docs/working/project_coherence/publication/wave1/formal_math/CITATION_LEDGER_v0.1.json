@@ -6,7 +6,7 @@
   "policy": {
     "technical_citation_preference": "Primary literature or authoritative primary system publication",
     "standard_background_does_not_validate_cas_semantics": true,
-    "unrefereed_manuscripts_must_be_labeled": true,
+    "manuscript_review_status_must_be_source_supported": true,
     "citation_completeness": "COMPLETE FOR THIS v0.1 DELTA / SPECIALIST REVIEW OPEN"
   },
   "citations": [
@@ -202,7 +202,7 @@
       "doi": null,
       "url": "https://cdn.openai.com/pdf/ten-proofs-oai.pdf",
       "sha256": "64B900D5FAE6FE22F2AE1B8E3B712D20055194A6C81CF343A2455E5898AC7DD6",
-      "source_class": "UNREFEREED PRIMARY TECHNICAL MANUSCRIPT / UNTRUSTED RESEARCH INPUT",
+      "source_class": "PRIMARY TECHNICAL MANUSCRIPT / PEER-REVIEW STATUS UNVERIFIED / NO REVIEW RECEIPT IN REVIEWED SOURCE SET / UNTRUSTED RESEARCH INPUT",
       "used_for": ["Exact statement of Proposition 4.1 and its isometry/intertwining hypotheses"],
       "does_not_support": ["Independent proof verification", "Peer-review status", "Novelty confirmation", "Named human authorship", "CAS admission", "Product or empirical claims"]
     }

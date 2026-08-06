@@ -17,7 +17,7 @@ dependency structure explicit and to separate four notions that earlier TKS
 materials sometimes blended: typed inter-object paths, powers of one endomap,
 linear lifts of deterministic maps, and metric iterated-function systems.
 
-The supported core consists of a finite category of typed total functions; a
+The supported core consists of the category of named finite sets and typed total functions; a
 standard-basis lift that preserves identities and composition at the checked
 entry, basis-action, and support levels; the exact maximum-fiber formula for the
 lift norm; a finite denotational shortlex catalog; and elementary stabilization
@@ -81,7 +81,9 @@ only.  The semantic migration and any cross-layer bridge remain open.
 ### 2.1 Objects, arrows, and composition
 
 Let \(\mathcal C_{\mathrm{fin}}\) be the category whose objects are named finite
-sets and whose arrows \(f:X\to Y\) are total functions.  Equality of arrows is
+sets and whose arrows \(f:X\to Y\) are total functions. This category need not
+itself have finitely many objects or arrows; a genuinely finite subcategory
+would require a frozen finite carrier catalog. Equality of arrows is
 extensional equality at a fixed source and target.  Given \(f:X\to Y\) and
 \(g:Y\to Z\), composition is
 

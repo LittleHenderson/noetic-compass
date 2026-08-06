@@ -58,7 +58,7 @@
       "evidence_class": "INTERNAL MATHEMATICAL PROOF CANDIDATE",
       "path": "docs/working/project_coherence/gate1/noetic_topos2/modality_composition/MODALITY_COMPOSITION_PROOF_v0.1.md",
       "sha256": "9A037679B5B528B7571B0A9BABC2DB1668D475C67BDF5E886CA03532AE657BD0",
-      "supports": ["explicit finite reflector universal property", "J_A join J_R equals J_atom", "unit-compatible natural isomorphisms M_A M_R ~= M_atom ~= M_R M_A"],
+      "supports": ["explicit finite reflector universal property", "J_A join J_R equals the locally named four-singleton-generated topology J_atom", "unit-compatible natural isomorphisms M_A M_R ~= M_atom ~= M_R M_A"],
       "does_not_support": ["strict equality", "PSh(C x L) lift", "observational topology interaction", "probabilistic or enriched result"]
     },
     {
@@ -137,9 +137,14 @@
       "strength": "source-bound internal argument and countermodel / independent review open"
     },
     {
-      "claim_ids": ["PUB-P2-003", "PUB-P2-004", "PUB-P2-006", "PUB-P2-007"],
+      "claim_ids": ["PUB-P2-003", "PUB-P2-004", "PUB-P2-006"],
       "evidence_ids": ["EVD-NT2-SPEC", "EVD-NT2-THEOREM-LEDGER", "EVD-FINITE-MODEL", "EVD-LEAN-SEED"],
       "strength": "informal proof plus bounded exhaustive execution / full formalization open"
+    },
+    {
+      "claim_ids": ["PUB-P2-007"],
+      "evidence_ids": ["EVD-MODALITY-PROOF", "EVD-MODALITY-EXECUTION"],
+      "strength": "internal topology proof candidate plus exact 298-sieve corroboration / Lean topology formalization and independent review open"
     },
     {
       "claim_ids": ["PUB-P2-008", "PUB-P2-009"],

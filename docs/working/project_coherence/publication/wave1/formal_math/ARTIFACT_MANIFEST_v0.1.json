@@ -12,8 +12,8 @@
     {
       "path": "docs/working/project_coherence/publication/wave1/formal_math/CITATION_LEDGER_v0.1.json",
       "role": "Primary literature, manuscript-status, use, and nonclaim ledger",
-      "bytes": 10587,
-      "sha256": "3588068E8307D27D9FC479D604A6E60A5F7C40352381569CA113AED1BF868848"
+      "bytes": 10662,
+      "sha256": "E90A158DF7E4079A56F79A68F5C234ECD79E5AB0A6A216C88A739641F06A6D81"
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/formal_math/EVIDENCE_MAP_v0.1.json",
@@ -24,20 +24,20 @@
     {
       "path": "docs/working/project_coherence/publication/wave1/formal_math/HANDOFF_PACKAGE_v0.1.md",
       "role": "Lead integration and cross-lane review handoff",
-      "bytes": 8194,
-      "sha256": "47F53D7F9DA0289B2957A495DFD5DF89C360FAF25B69B8D8BC67AAAE1344C020"
+      "bytes": 8340,
+      "sha256": "DB4354465CB81338B63C828056E3F71CBE9663B9379DD3F444373C7320578EFE"
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/formal_math/PAPER_1_TYPED_NOETIC_DYNAMICS_AND_FINITE_FRACTAL_SEMANTICS_DELTA_v0.1.md",
       "role": "Charter Paper 1 source-bound research draft delta",
-      "bytes": 18452,
-      "sha256": "2B63EA028264C72CBAA4F9BEB4ADAAB1CE3D5A8AC34D672C660FA3277F16108C"
+      "bytes": 18614,
+      "sha256": "4E5E41C7BE326688EAAFC77243CF5EEF4134A54C7D29928031DA2758B706C60A"
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md",
       "role": "Charter Paper 3 source-bound research draft delta",
-      "bytes": 17908,
-      "sha256": "679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4"
+      "bytes": 18079,
+      "sha256": "30B63974DBA351BE269D21B2647E61D965768D6B6173038B17D7E7CD12203331"
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/formal_math/SOURCE_INVENTORY_v0.1.json",
@@ -48,8 +48,8 @@
     {
       "path": "docs/working/project_coherence/publication/wave1/formal_math/THEOREM_AND_CLAIM_MATRIX_v0.1.json",
       "role": "Twenty local publication theorem, counterexample, definition, model, and empirical-hypothesis records",
-      "bytes": 24421,
-      "sha256": "2FFE25449FBD0710477FE31F76B84ACE2256B200518E8921B702B6C92D9C2EFE"
+      "bytes": 24480,
+      "sha256": "9DF011E02733C5960352AAACDF05F805A5EE317DD6252D060716856E60206E72"
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/formal_math/UNRESOLVED_OBLIGATIONS_v0.1.json",
