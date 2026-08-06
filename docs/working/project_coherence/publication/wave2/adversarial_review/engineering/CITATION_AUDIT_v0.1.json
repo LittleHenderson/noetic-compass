@@ -1,0 +1,190 @@
+{
+  "schema_version": "project_coherence.publication.wave2.adversarial_review.engineering.citation_audit.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "review_source_commit": "c8635270ca6ba7c65504b4fda43cb42a89623015",
+  "source_ledger_path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CITATION_LEDGER_v0.1.json",
+  "source_ledger_sha256": "E798FFD41EDD6D680F13A43AE5E50FA16CF7AE183F04575A097F3FBA7FAB4CC4",
+  "checked_on": "2026-08-05",
+  "audit_method": "Metadata and narrow-use checks against primary standards bodies, publishers, DOI records, and original sources where available. This is a citation-scope audit, not independent replication of the cited results.",
+  "summary": {
+    "narrow_use_supported": 14,
+    "scope_correction_required": 1,
+    "total": 15
+  },
+  "entries": [
+    {
+      "id": "E1",
+      "title": "IEEE Standard for VHDL Language Reference Manual",
+      "year": 2019,
+      "source_class": "PRIMARY_TECHNICAL_STANDARD",
+      "locator": "https://standards.ieee.org/ieee/1076/5179/",
+      "audit_disposition": "NARROW_USE_SUPPORTED",
+      "supported_use": "Formal machine- and human-readable language framing and separation of a language definition from a design instance.",
+      "required_correction": null,
+      "not_evidence_of": "CCDL conformance, grammar completeness, or CAS PCBA correctness."
+    },
+    {
+      "id": "E2",
+      "title": "Statecharts: A Visual Formalism for Complex Systems",
+      "year": 1987,
+      "source_class": "FOUNDATIONAL_PEER_REVIEWED_PAPER",
+      "locator": "https://doi.org/10.1016/0167-6423(87)90035-9",
+      "audit_disposition": "NARROW_USE_SUPPORTED",
+      "supported_use": "Motivation for explicit state, hierarchy, concurrency, and communication semantics.",
+      "required_correction": null,
+      "not_evidence_of": "Completeness or validity of PCBA stateful semantics."
+    },
+    {
+      "id": "E3",
+      "title": "Depth-First Search and Linear Graph Algorithms",
+      "year": 1972,
+      "source_class": "FOUNDATIONAL_PEER_REVIEWED_PAPER",
+      "locator": "https://doi.org/10.1137/0201010",
+      "audit_disposition": "NARROW_USE_SUPPORTED",
+      "supported_use": "Strongly connected component method family used to frame graph-cycle analysis.",
+      "required_correction": null,
+      "not_evidence_of": "Correctness, completeness, or stability guarantees for the candidate feedback analysis."
+    },
+    {
+      "id": "E4",
+      "title": "IEEE Standard for Floating-Point Arithmetic",
+      "year": 2019,
+      "source_class": "PRIMARY_TECHNICAL_STANDARD",
+      "locator": "https://standards.ieee.org/ieee/754/6210/",
+      "audit_disposition": "NARROW_USE_SUPPORTED",
+      "supported_use": "Discipline around explicit numerical formats, operations, destination formats, and exceptions.",
+      "required_correction": null,
+      "not_evidence_of": "Cross-runtime reproducibility or adequacy of PCBA numerical tolerances."
+    },
+    {
+      "id": "E5",
+      "title": "PROV-O: The PROV Ontology",
+      "year": 2013,
+      "source_class": "PRIMARY_WEB_STANDARD",
+      "locator": "https://www.w3.org/TR/prov-o/",
+      "audit_disposition": "NARROW_USE_SUPPORTED",
+      "supported_use": "Entity, activity, agent, generation, use, and derivation provenance framing.",
+      "required_correction": null,
+      "not_evidence_of": "Truth, authenticity, authority, or CAS-specific PROV-O conformance."
+    },
+    {
+      "id": "E6",
+      "title": "International Vocabulary of Metrology - Basic and General Concepts and Associated Terms (VIM), 3rd edition",
+      "year": 2012,
+      "source_class": "PRIMARY_METROLOGY_STANDARD",
+      "locator": "https://www.bipm.org/en/doi/10.59161/jcgm200-2012",
+      "audit_disposition": "NARROW_USE_SUPPORTED",
+      "supported_use": "Measurement, quantity, calibration, and metrological vocabulary discipline.",
+      "required_correction": null,
+      "not_evidence_of": "CAS-Ohm instrument validation, physical telemetry, or metrological traceability."
+    },
+    {
+      "id": "E7",
+      "title": "Evaluation of Measurement Data - Guide to the Expression of Uncertainty in Measurement",
+      "year": 2008,
+      "source_class": "PRIMARY_METROLOGY_STANDARD",
+      "locator": "https://www.bipm.org/en/doi/10.59161/jcgm100-2008e",
+      "audit_disposition": "NARROW_USE_SUPPORTED",
+      "supported_use": "Uncertainty representation and propagation discipline.",
+      "required_correction": null,
+      "not_evidence_of": "Adequacy of a CAS-Ohm uncertainty model, calibration, or decision threshold."
+    },
+    {
+      "id": "E8",
+      "title": "Verification and Validation of Simulation Models",
+      "year": 2013,
+      "source_class": "PEER_REVIEWED_METHODS_PAPER",
+      "locator": "https://doi.org/10.1057/jos.2012.20",
+      "audit_disposition": "NARROW_USE_SUPPORTED",
+      "supported_use": "Separation of conceptual-model validity, implementation verification, operational validity, and data validity.",
+      "required_correction": null,
+      "not_evidence_of": "Operational validity of CAS PCBA or CAS-Ohm."
+    },
+    {
+      "id": "E9",
+      "title": "QuickCheck: A Lightweight Tool for Random Testing of Haskell Programs",
+      "year": 2000,
+      "source_class": "PEER_REVIEWED_METHODS_PAPER",
+      "locator": "https://doi.org/10.1145/351240.351266",
+      "audit_disposition": "SCOPE_CORRECTION_REQUIRED",
+      "supported_use": "Property-oriented randomized test generation as a future testing method.",
+      "required_correction": "Do not cite E9 as authority for mutation testing. Either add a primary mutation-testing source or leave mutation testing as an uncited open obligation. Avoid an unqualified claim that this source establishes the complete modern shrinking practice.",
+      "not_evidence_of": "Existing property, fuzz, mutation, or exhaustive coverage; implementation correctness."
+    },
+    {
+      "id": "E10",
+      "title": "Information Geometry and Its Applications",
+      "year": 2016,
+      "source_class": "TECHNICAL_MONOGRAPH",
+      "locator": "https://doi.org/10.1007/978-4-431-55978-8",
+      "audit_disposition": "NARROW_USE_SUPPORTED",
+      "supported_use": "Information-geometric framing of positive probability manifolds and Fisher information geometry.",
+      "required_correction": null,
+      "not_evidence_of": "Correctness of a particular binary64 implementation, cognitive validity, or projector-capacity transfer."
+    },
+    {
+      "id": "E11",
+      "title": "Causality: Models, Reasoning, and Inference, 2nd edition",
+      "year": 2009,
+      "source_class": "TECHNICAL_MONOGRAPH",
+      "locator": "https://doi.org/10.1017/CBO9780511803161",
+      "audit_disposition": "NARROW_USE_SUPPORTED",
+      "supported_use": "Requirement for explicit causal assumptions, identification, and intervention logic before causal interpretation.",
+      "required_correction": null,
+      "not_evidence_of": "An identified CAS-Ohm causal model or causal effect."
+    },
+    {
+      "id": "E12",
+      "title": "On Physically Similar Systems; Illustrations of the Use of Dimensional Equations",
+      "year": 1914,
+      "source_class": "FOUNDATIONAL_PEER_REVIEWED_PAPER",
+      "locator": "https://doi.org/10.1103/PhysRev.4.345",
+      "audit_disposition": "NARROW_USE_SUPPORTED",
+      "supported_use": "Dimensional-consistency discipline and the need for an explicit unit bridge.",
+      "required_correction": null,
+      "not_evidence_of": "Physical similarity, materiality, or SI status of CAS quantities."
+    },
+    {
+      "id": "E13",
+      "title": "Memristor-The Missing Circuit Element",
+      "year": 1971,
+      "source_class": "FOUNDATIONAL_PEER_REVIEWED_PAPER",
+      "locator": "https://doi.org/10.1109/TCT.1971.1083337",
+      "audit_disposition": "NARROW_USE_SUPPORTED",
+      "supported_use": "Historical electrical definition of the ideal memristor and distinction between instantaneous resistance and history-dependent constitutive behavior.",
+      "required_correction": null,
+      "not_evidence_of": "A physical CAS memristor, charge/flux mapping, device, material, or validated memory law."
+    },
+    {
+      "id": "E14",
+      "title": "Memristive Devices and Systems",
+      "year": 1976,
+      "source_class": "FOUNDATIONAL_PEER_REVIEWED_PAPER",
+      "locator": "https://doi.org/10.1109/PROC.1976.10092",
+      "audit_disposition": "NARROW_USE_SUPPORTED",
+      "supported_use": "General internal-state framing for memristive systems and motivation for an explicitly typed history-state research profile.",
+      "required_correction": null,
+      "not_evidence_of": "A CAS state equation, material device, hysteresis result, or physical electrical interpretation."
+    },
+    {
+      "id": "E15",
+      "title": "Bayesian Calibration of Computer Models",
+      "year": 2001,
+      "source_class": "PEER_REVIEWED_METHODS_PAPER",
+      "locator": "https://doi.org/10.1111/1467-9868.00294",
+      "audit_disposition": "NARROW_USE_SUPPORTED",
+      "supported_use": "Parameter uncertainty, model discrepancy, and predictive-validation framing for calibrated computer models.",
+      "required_correction": null,
+      "not_evidence_of": "Adequacy of a CAS-Ohm fit, completed calibration, held-out prediction, or external replication."
+    }
+  ],
+  "external_source_count": 15,
+  "closure_statement": "The citations supply standards, definitions, and method context only. None licenses CAS/TKS truth, empirical validation, causal identification, physical materiality, safety, clinical use, regulatory status, product readiness, canon admission, public disclosure, or publication acceptance."
+}

@@ -1,0 +1,181 @@
+{
+  "schema_version": "project_coherence.publication.wave2.adversarial_review.engineering.unresolved_changes.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "review_source_commit": "c8635270ca6ba7c65504b4fda43cb42a89623015",
+  "base_commit": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
+  "review_verdict": "CONDITIONAL_PASS_AFTER_2_PUBLICATION_BLOCKERS_AND_4_STRENGTHENING_CHANGES",
+  "change_policy": "Do not rewrite the frozen Wave 1 lane. The lead editor must apply these corrections in the integrated publication layer or an explicitly versioned successor, preserve exact source bindings, and obtain review of the resulting diff.",
+  "changes": [
+    {
+      "id": "B-ENG-001",
+      "class": "PUBLICATION_BLOCKER",
+      "priority": 1,
+      "title": "Restore the positive-rank projector hypothesis",
+      "affected_claims": [
+        "THM-PROJECTOR-GRAM-KERNEL"
+      ],
+      "affected_source": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CLAIM_ASSERTION_MATRIX_v0.1.json",
+      "problem": "The dependency summary says common finite-rank projectors but its normalized Hilbert-Schmidt overlap divides by the common rank. Rank zero makes the expression undefined.",
+      "counterexample": "For P_i = 0 with common rank d = 0, tr(P_i P_j) / d is 0/0.",
+      "required_change": "State common rank d > 0 everywhere the normalized projector Gram kernel is declared or summarized.",
+      "acceptance_evidence": [
+        "Integrated theorem and claim records contain the explicit d > 0 hypothesis.",
+        "Formal Mathematics Paper 3 remains the governing proof.",
+        "A regression review confirms no summary weakens the positive-rank hypothesis."
+      ],
+      "blocked_until_closed": [
+        "Integrated publication freeze for the projector theorem",
+        "Any downstream claim relying on normalized projector overlap"
+      ],
+      "changes_gate_status": false
+    },
+    {
+      "id": "B-ENG-002",
+      "class": "PUBLICATION_INTEGRATION_BLOCKER",
+      "priority": 1,
+      "title": "Bind one formal theorem authority across lanes",
+      "affected_claims": [
+        "THM-PROJECTOR-GRAM-KERNEL",
+        "THM-PROJECTOR-CAPACITY-CAS-TRANSFER",
+        "PCBA-EA-008"
+      ],
+      "affected_source": "Engineering evidence map, claim registry, and integrated publication dependency graph",
+      "problem": "The engineering lane repeats theorem identifiers as dependency summaries but does not bind the exact parallel Formal Mathematics Paper 3 artifact. Duplicate authority permits hypothesis and status drift.",
+      "required_change": "Designate Formal Mathematics Paper 3 as sole mathematical authority; label engineering theorem entries read-only dependency records; bind formal commit 3c8491db6f5559cf090909d9de0efa03d924f53f and SHA-256 679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4.",
+      "acceptance_evidence": [
+        "Integrated registry has exactly one governing theorem record for each identifier.",
+        "Engineering records point to the exact formal commit, path, and digest.",
+        "The capacity-transfer status remains PROOF_GAP / IN_REVIEW / Ring 4.",
+        "The isometry and adjoint-intertwining hypotheses and weakened-hypothesis counterexample are retained."
+      ],
+      "blocked_until_closed": [
+        "Integrated publication freeze for the two projector entries",
+        "Any CAS-specific capacity-transfer statement"
+      ],
+      "changes_gate_status": false
+    },
+    {
+      "id": "S-ENG-001",
+      "class": "REQUIRED_STRENGTHENING",
+      "priority": 2,
+      "title": "Separate exact Q4 classifier domain from clipped Q10 display",
+      "affected_claims": [
+        "OHM-EA-004"
+      ],
+      "affected_source": "docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md",
+      "problem": "The paper shows Q4 as [7.5, 10], while q4_band evaluates the exact pre-clipping score, which can exceed 10. The displayed q10 value alone is clipped.",
+      "required_change": "Define the exact-input Q4 interval as [7.5, infinity), or state explicitly that [7.5, 10] is the clipped display range and the classifier uses an unbounded exact pre-clipping identity.",
+      "acceptance_evidence": [
+        "Revised prose distinguishes exact_q10, displayed q10, and overload_ratio.",
+        "The overload example raw/full-scale = 1.2 produces exact score 12, displayed q10 10, overload ratio 1.2, and Q4.",
+        "Existing exact boundary tests at 2.5, 5, and 7.5 still pass."
+      ],
+      "blocked_until_closed": [
+        "Editorial freeze of the Q4 section"
+      ],
+      "changes_gate_status": false
+    },
+    {
+      "id": "S-ENG-002",
+      "class": "REQUIRED_STRENGTHENING",
+      "priority": 2,
+      "title": "Correct the CAS-Ohm physical-unit ontology wording",
+      "affected_claims": [
+        "OHM-EA-001",
+        "CLM-CAS-OHM-PHYSICAL-TELEMETRY"
+      ],
+      "affected_source": "docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md",
+      "problem": "The paper says the current unit ontology includes any separately declared physical SI quantity, but the implemented UnitKind has no physical SI members.",
+      "required_change": "Say that physical SI quantities are outside the current CAS-Ohm ontology and would require a separate explicitly typed, instrumented physical profile. Preserve the distinction from the generic PCBA Unit.VOLT vocabulary.",
+      "acceptance_evidence": [
+        "The integrated prose lists only implemented UnitKind members as current.",
+        "No sentence equates a generic PCBA VOLT tag with physical CAS telemetry.",
+        "The physical-telemetry claim remains contradicted and NOT LICENSED."
+      ],
+      "blocked_until_closed": [
+        "Editorial freeze of the CAS-Ohm unit/type section"
+      ],
+      "changes_gate_status": false
+    },
+    {
+      "id": "S-ENG-003",
+      "class": "REQUIRED_STRENGTHENING",
+      "priority": 2,
+      "title": "Qualify freshness as replay-time-current",
+      "affected_claims": [
+        "OHM-EA-006",
+        "OHM-EA-007"
+      ],
+      "affected_source": "CAS-Ohm paper, claim matrix, and any integrated Evidence Packet wording",
+      "problem": "Validity and staleness are evaluated against caller-supplied replay_as_of. The candidate has no admitted trusted current-time authority and authenticated_current always returns false.",
+      "required_change": "Use replay-time-current, not authenticated-current wherever active, current, reviewed, or nonstale language could be read as a live-freshness assertion.",
+      "acceptance_evidence": [
+        "Integrated wording identifies replay_as_of as caller-supplied.",
+        "Authenticated-current eligibility remains false.",
+        "No trusted-clock, signature, WORM, identity, or live-freshness claim is introduced."
+      ],
+      "blocked_until_closed": [
+        "Editorial freeze of freshness and Evidence Packet language"
+      ],
+      "changes_gate_status": false
+    },
+    {
+      "id": "S-ENG-004",
+      "class": "REQUIRED_CITATION_SCOPE_CORRECTION",
+      "priority": 2,
+      "title": "Narrow QuickCheck citation away from mutation testing",
+      "affected_claims": [],
+      "affected_source": "CAS PCBA paper and Wave 1 engineering citation ledger entry E9",
+      "problem": "E9 supports property-oriented randomized testing but is placed next to a future program that separately includes mutation testing. It is not authority for mutation testing.",
+      "required_change": "Cite E9 only for property-based/random generation. Add an appropriate primary mutation-testing reference or leave mutation testing as an uncited open obligation. Avoid unqualified modern shrinking claims.",
+      "acceptance_evidence": [
+        "E9 is not presented as support for mutation testing.",
+        "Any added mutation-testing citation is primary and has a narrow not-evidence-of boundary.",
+        "No future test method is described as already implemented."
+      ],
+      "blocked_until_closed": [
+        "Editorial freeze of the testing-methods citation section"
+      ],
+      "changes_gate_status": false
+    }
+  ],
+  "change_count": 6,
+  "dependency_order": [
+    [
+      "B-ENG-001",
+      "B-ENG-002"
+    ],
+    [
+      "S-ENG-001",
+      "S-ENG-002",
+      "S-ENG-003",
+      "S-ENG-004"
+    ],
+    [
+      "Integrated diff review",
+      "Manifest and claim-registry rebind"
+    ]
+  ],
+  "preserved_open_obligations": [
+    "Complete versioned CCDL grammar, parser, canonical round trip, and corpus conformance",
+    "Stateful, stochastic, adaptive, memory, power, richer-feedback, and memristive semantics",
+    "Hermetic and independent software reproduction",
+    "Live calibration, authenticated instrumentation, uncertainty, drift, and held-out external replication",
+    "Preregistered empirical tests for local response, effective resistance, gain composition, redundancy, and residual localization",
+    "Explicit causal graph, identification assumptions, interventions, and negative controls",
+    "Physical materiality, device, charge/flux, and telemetry mapping",
+    "Safety, clinical, certification, and regulatory validation",
+    "Authenticated claim/capability authority and Evidence Packet eligibility",
+    "Product readiness and acceptance",
+    "Canon and migration admission",
+    "Authorship, license, disclosure, submission, external specialist review, and peer-review decisions"
+  ],
+  "closure_statement": "Closing these six editorial/integration changes would not close Gate 4, Gate 5, experiments, causal validation, physical validation, safety, clinical, regulatory, product, canon, license, disclosure, or external-review obligations."
+}
