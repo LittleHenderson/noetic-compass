@@ -1,0 +1,74 @@
+{
+  "schema_version": "project_coherence.paper5_publication_artifact_manifest.v0.1",
+  "document_status": "DRAFT / OPEN CAUSAL TRANSFER / RING 4 / NOT LICENSED / HELD",
+  "as_of": "2026-08-05",
+  "base_commit": "143cff40f94cf207a9130d6a7c07975a1fcbf0b9",
+  "branch": "codex/project-coherence-wave2-acbe",
+  "package_root": "docs/working/project_coherence/publication/wave2/acbe",
+  "hash_algorithm": "SHA-256",
+  "hash_scope": "Exact file bytes in the dedicated Paper 5 ACBE worktree",
+  "self_hash_policy": "NON_SELF_HASHING: this manifest is intentionally excluded from its own artifacts array and has no self-hash field.",
+  "self_excluded": true,
+  "artifacts": [
+    {
+      "path": "docs/working/project_coherence/publication/wave2/acbe/CITATION_LEDGER_v0.1.json",
+      "role": "Primary technical citation ledger and transfer boundaries",
+      "media_type": "application/json",
+      "bytes": 14273,
+      "sha256": "E5B718F53157BAB2C35C373476A8D8D9BE8D76F2162A3E4EE46036128516DE15"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/acbe/EVIDENCE_MAP_v0.1.json",
+      "role": "Evidence-type map and prohibited inference boundaries",
+      "media_type": "application/json",
+      "bytes": 8510,
+      "sha256": "111D2D5CA1A7EC26DEB18E81F6BDD9DA8A2760CE386E448484B339D22E74CED7"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/acbe/LEAD_HANDOFF_v0.1.md",
+      "role": "Lead integration, naming, dependency, budget, and claim-boundary handoff",
+      "media_type": "text/markdown",
+      "bytes": 7577,
+      "sha256": "16C229E3D9A72BA818AA63FB2ED36AE69E88014F945A44E0256B87BC36890552"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/acbe/PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md",
+      "role": "Substantial source-bound Paper 5 methods draft",
+      "media_type": "text/markdown",
+      "bytes": 33135,
+      "sha256": "DB0D7845709F15276E0304C1561227A03BA7A73109AC867739A678982CF71D5A"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/acbe/SOURCE_BOUND_INVENTORY_v0.1.json",
+      "role": "Hash-identified repository input inventory and verification snapshot",
+      "media_type": "application/json",
+      "bytes": 7248,
+      "sha256": "9E66191D234AB118EFACF6FF4CDEA985E33B907856ADDB3AD526092EE085A63D"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/acbe/THEOREM_CLAIM_AND_CAUSAL_IDENTIFIABILITY_MATRIX_v0.1.json",
+      "role": "Exact definitions, propositions, counterexamples, hypotheses, identification states, and claim ceilings",
+      "media_type": "application/json",
+      "bytes": 18268,
+      "sha256": "AFD0219BA20E2ED45D76BE5F4A5EAE388ECF47522EE8E6683EF514E9110A6445"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/acbe/UNRESOLVED_OBLIGATIONS_v0.1.json",
+      "role": "Fail-closed mathematical, causal, experimental, review, budget, and governance obligations",
+      "media_type": "application/json",
+      "bytes": 13116,
+      "sha256": "343755CE122426B1FBBAA0C4F7482FC910F3623BA2F2A6FFD10EEDAA150FC689"
+    }
+  ],
+  "artifact_count": 7,
+  "validation_receipts": {
+    "json_parse_and_declared_counts": "PASS",
+    "citation_and_obligation_cross_references": "PASS",
+    "source_hash_and_byte_validation": "PASS",
+    "git_diff_check": "PASS",
+    "project_coherence_phase0": "PASS",
+    "project_coherence_gate1": "PASS / gate remains OPEN",
+    "project_coherence_gate5": "PASS / experimental execution NOT_STARTED / gate remains OPEN"
+  },
+  "claim_boundary": "This manifest binds the seven listed package artifacts only. It is not a signature, WORM receipt, proof review, authenticated experiment, causal validation, independent audit, replication, canon admission, product approval, license, disclosure approval, or publication approval."
+}

@@ -1,0 +1,131 @@
+{
+  "schema_version": "project_coherence.paper5_source_bound_inventory.v0.1",
+  "document_status": "DRAFT / SOURCE-BOUND DELTA / OPEN / RING 4 / NOT LICENSED / HELD",
+  "as_of": "2026-08-05",
+  "lane": "Wave 2 / Paper 5 / ACBE-P5 Approximate Causal Abstraction",
+  "base_commit": "143cff40f94cf207a9130d6a7c07975a1fcbf0b9",
+  "base_branch": "codex/project-coherence-wave2-acbe",
+  "inventory_policy": "Every repository digest is SHA-256 over the bytes present at the named base commit before this delta. External primary literature is controlled separately by CITATION_LEDGER_v0.1.json. This inventory does not amend, supersede, admit, or freeze any governing artifact.",
+  "sources": [
+    {
+      "path": "docs/working/project_coherence/PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md",
+      "role": "Paper 5 title, Ring admission requirements, Gate 5 boundary, and publication governance",
+      "bytes": 29793,
+      "sha256": "B87B2E2B4CC4B10C76EE4AA6EA09094572B2A1008E474475E8F642836B83D2BE"
+    },
+    {
+      "path": "docs/working/project_coherence/THEOREM_LEDGER_v0.1.json",
+      "role": "Read-only governing theorem records, including legacy ACBE/RPM coverage reduction",
+      "bytes": 12459,
+      "sha256": "2646DEE7E801B159E6E82EBDB63129CC5883591D40CF29B6773A9BD4F8578101"
+    },
+    {
+      "path": "docs/working/project_coherence/CLAIM_LEDGER_v0.1.json",
+      "role": "Read-only canonical empirical/product claim boundary and control precedents",
+      "bytes": 17083,
+      "sha256": "F62E7451135EC9DA0C333DB318C7C6E02BD92C4387EB167D94895810D805828F"
+    },
+    {
+      "path": "docs/working/project_coherence/SYMBOL_AND_TERMINOLOGY_REGISTRY_v0.1.json",
+      "role": "Read-only term and type authority",
+      "bytes": 14851,
+      "sha256": "29529E0803BC8EA7BC62CFA0D0B7CC4B2A0B623012E4BCAAC2A569203711FBEB"
+    },
+    {
+      "path": "docs/working/project_coherence/INITIAL_MIGRATION_MATRIX_v0.1.json",
+      "role": "Legacy ACBE/RPM information-loss and successor redesign requirements",
+      "bytes": 29767,
+      "sha256": "D53AD787D8EA4C53A3850989501D389CA92C0E8FB0BB652DEFA217690A7BF96D"
+    },
+    {
+      "path": "docs/working/project_coherence/MATHEMATICAL_RED_TEAM_REPORT_v0.1.md",
+      "role": "Legacy ACBE/RPM maximal-sieve counteranalysis and categorical claim boundary",
+      "bytes": 10324,
+      "sha256": "03AEC81BF9F6AA12376C2DF78E6CC410EB636589DA37D2E2534460132BE720C6"
+    },
+    {
+      "path": "docs/working/project_coherence/LITERATURE_AND_TRANSFER_AUDIT_v0.1.md",
+      "role": "Primary-literature transfer quarantine and Markov-category noncausal boundary",
+      "bytes": 7978,
+      "sha256": "C0468B4B63F5CE3DA8B223C6160C518C8BDE65D060E32492F411928E0FCCD791"
+    },
+    {
+      "path": "peer_review/journal_submission/main.tex",
+      "role": "Registered conservative Noetic Topos primary source; line 163 naming boundary",
+      "bytes": 26471,
+      "sha256": "E9885F27581626CCF26AC4809F446AB5044BC92C61923B951B7F4686591BAEF8"
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/noetic_topos2/SOURCE_VERIFICATION_v0.1.json",
+      "role": "Legacy source identity, visible locations, and portability boundary",
+      "bytes": 2972,
+      "sha256": "17DBE1FADB3D80D435B4D282C53849D392ECB622232E8664A74429BD1753F55C"
+    },
+    {
+      "path": "docs/working/project_coherence/gate1/noetic_topos2/NOETIC_TOPOS_2_SPEC_v0.1.md",
+      "role": "Successor ACBE_NT2 formal mark, provenance, and empirical nonclaim",
+      "bytes": 15042,
+      "sha256": "156A5D8C5320F36E81E3B46473BA8A038B35672DCD28839A404D96A3DB1A763A"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/category_theory/PAPER_4_NOETIC_MARKOV_SHEAVES_FOR_CONTEXTUAL_AI_ASSESSMENT_DRAFT_v0.1.md",
+      "role": "Wave 1 stochastic/sheaf dependency and causal-abstraction deferral",
+      "bytes": 26028,
+      "sha256": "19FEB7E0B923EF5FE8A34435E2F65AF4887ABA0B1375A2DD847F627936E67967"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/category_theory/THEOREM_AND_CLAIM_MATRIX_v0.1.json",
+      "role": "Exact PUB-P4-008 causal nonclaim and category-lane claim ceilings",
+      "bytes": 17159,
+      "sha256": "E1A795B0C1A3BB3CBDC95CC9C6D59BEF8281075F79C532811B2AF85892D51034"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/category_theory/CITATION_LEDGER_v0.1.json",
+      "role": "Verified Markov-kernel, probability-sheaf, and probe-control citation precedents",
+      "bytes": 10320,
+      "sha256": "F83B4A5BB6DD43265C5879E7487E2147BF4249A7AE042AC378F4D9CFF927EB40"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md",
+      "role": "Normative preregistration and Evidence Packet v2 control boundary",
+      "bytes": 16355,
+      "sha256": "F2803B44FF7236762D491A3B249FF13C4CB8D9F336CE19F223F9F716E9A70D2D"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
+      "role": "Current joined-run, causal-attestation, authentication, and scientific non-readiness findings",
+      "bytes": 25963,
+      "sha256": "61E28356C05773F11930B76BBE2ED5D56790B193B29E7577D6A068B6364AA1FD"
+    }
+  ],
+  "source_count": 15,
+  "external_primary_source_control": {
+    "ledger": "CITATION_LEDGER_v0.1.json",
+    "citation_count": 17,
+    "review_state": "PRIMARY-SOURCE METADATA CHECK COMPLETE / NOVELTY AND SPECIALIST REVIEW OPEN"
+  },
+  "local_verification_snapshot": {
+    "executed_at": "2026-08-05",
+    "phase0_verifier": {
+      "command": "python -I -B scripts/verify_project_coherence_phase0.py",
+      "result": "PASS",
+      "scope": "25 source records, 24 static hashes, 24 symbols, 28 migrations, 9 theorem records, and 11 NOT LICENSED claim records"
+    },
+    "gate1_verifier": {
+      "command": "python -I -B scripts/verify_project_coherence_gate1.py",
+      "result": "PASS",
+      "scope": "23 hash-bound top-level artifacts, 6 subordinate receipts, and 16 Lean theorem audits",
+      "gate_status": "OPEN / RING 4 / NOT LICENSED / NOT FROZEN"
+    },
+    "gate5_verifier": {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python -I -B scripts/verify_project_coherence_gate5.py",
+      "result": "PASS",
+      "scope": "325 hash-bound Gate 5 artifacts, 296 syntax-checked Python artifacts, 1898 executable-shadow paths, 113 Harness tests plus 61 subtests, 364 live-worker tests, 32 numeric red-team tests, and 76 API/fleet/launcher tests",
+      "experimental_execution": "NOT_STARTED",
+      "gate_status": "OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+    },
+    "package_json_and_reference_validation": "PASS",
+    "verification_boundary": "The PASS receipts prove scoped repository structure and implemented controls only. They are not proof review, an authenticated experiment, causal or semantic validation, independent audit, replication, product readiness, license, or disclosure authority."
+  },
+  "claim_boundary": "These hashes establish the identity of the inputs used for this delta. They do not establish truth of every source claim, independent review, empirical causal transfer, scientific eligibility, product readiness, canon admission, licensing, disclosure approval, or publication approval."
+}

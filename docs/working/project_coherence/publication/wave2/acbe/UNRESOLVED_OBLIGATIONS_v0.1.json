@@ -1,0 +1,275 @@
+{
+  "schema_version": "project_coherence.paper5_unresolved_obligations.v0.1",
+  "document_status": "DRAFT / ALL OBLIGATIONS OPEN / RING 4 / NOT LICENSED / HELD",
+  "as_of": "2026-08-05",
+  "base_commit": "143cff40f94cf207a9130d6a7c07975a1fcbf0b9",
+  "policy": "An obligation closes only with the acceptance evidence named in its record. Draft text, a local hash, a narrow test, or silence does not close an empirical, review, governance, license, or disclosure obligation.",
+  "obligations": [
+    {
+      "id": "P5-OBL-001",
+      "priority": "BLOCKING_BEFORE_INTEGRATION_FREEZE",
+      "title": "Resolve and approve the ACBE-P5 naming convention",
+      "status": "OPEN",
+      "owner_lane": "Lead integration and source authority",
+      "dependency": [],
+      "acceptance_evidence": "Authorized registry decision preserving ACBE_legacy, ACBE_NT2, ACBE-P5, and ACA as distinct types, with no unsupported acronym expansion.",
+      "failure_effect": "Keep title and notation DRAFT; prohibit legacy causal reinterpretation."
+    },
+    {
+      "id": "P5-OBL-002",
+      "priority": "BLOCKING_BEFORE_THEOREM_PROMOTION",
+      "title": "Independent proof review of Propositions 6.1-6.4",
+      "status": "OPEN",
+      "owner_lane": "Independent probability and causal-abstraction reviewer",
+      "dependency": [],
+      "acceptance_evidence": "Attributable line-by-line review of metric conventions, measurable pushforwards, domain compatibility, composition, estimand constants, and collision bound, with all corrections merged.",
+      "failure_effect": "Retain propositions as proof-sketch candidates."
+    },
+    {
+      "id": "P5-OBL-003",
+      "priority": "HIGH",
+      "title": "Formalize the finite/measure-theoretic core",
+      "status": "OPEN",
+      "owner_lane": "Formal mathematics",
+      "dependency": [
+        "P5-OBL-002"
+      ],
+      "acceptance_evidence": "Reproducible proof artifact or executable finite verifier covering definitions, composition, estimand bound, collision bound, and counterexamples with an axiom audit.",
+      "failure_effect": "No machine-checked or verified-extension wording."
+    },
+    {
+      "id": "P5-OBL-004",
+      "priority": "BLOCKING_BEFORE_PREREGISTRATION",
+      "title": "Choose outcome space, metric, tolerance, and error budget",
+      "status": "OPEN",
+      "owner_lane": "Causal methods and statistics",
+      "dependency": [],
+      "acceptance_evidence": "Prospective rationale for the outcome space, total variation or alternative discrepancy, epsilon, mean/tail/worst-case thresholds, and metric-specific composition conditions.",
+      "failure_effect": "No approximate-abstraction test can be preregistered."
+    },
+    {
+      "id": "P5-OBL-005",
+      "priority": "BLOCKING_BEFORE_PREREGISTRATION",
+      "title": "Register one exact Paper 5 empirical claim",
+      "status": "OPEN",
+      "owner_lane": "Claim registry authority",
+      "dependency": [
+        "P5-OBL-001",
+        "P5-OBL-004"
+      ],
+      "acceptance_evidence": "Authorized canonical claim-ledger record containing exact claim text, scope, controls, falsifier, uncertainty, Ring 4, NOT LICENSED, and HELD status.",
+      "failure_effect": "Harness v2 preregistration cannot bind a qualifying claim."
+    },
+    {
+      "id": "P5-OBL-006",
+      "priority": "BLOCKING_BEFORE_PREREGISTRATION",
+      "title": "Freeze the low- and high-level causal models",
+      "status": "OPEN",
+      "owner_lane": "Causal methods and experiment design",
+      "dependency": [],
+      "acceptance_evidence": "Versioned interventional profiles specifying contexts, state spaces, intervention operators, solution/execution semantics, and every allowed intervention.",
+      "failure_effect": "Causal target remains undefined."
+    },
+    {
+      "id": "P5-OBL-007",
+      "priority": "BLOCKING_BEFORE_PREREGISTRATION",
+      "title": "Freeze tau, kappa, omega, and the required evaluation domain",
+      "status": "OPEN",
+      "owner_lane": "Experiment design and Harness integration",
+      "dependency": [
+        "P5-OBL-006"
+      ],
+      "acceptance_evidence": "Content-addressed map artifacts, derivation record, training/discovery boundary, intervention-collision audit, support audit, and complete E table frozen before confirmatory outcome access.",
+      "failure_effect": "Any subsequent result is exploratory only."
+    },
+    {
+      "id": "P5-OBL-008",
+      "priority": "BLOCKING_BEFORE_CAUSAL_WORDING",
+      "title": "Classify causal identification for every estimand",
+      "status": "OPEN",
+      "owner_lane": "Independent causal inference specialist",
+      "dependency": [
+        "P5-OBL-006",
+        "P5-OBL-007"
+      ],
+      "acceptance_evidence": "For each estimand, a DIRECT_INTERVENTIONAL, ASSUMPTION_IDENTIFIED, PARTIALLY_IDENTIFIED, NOT_IDENTIFIED, or SIMULATION_ONLY decision with exact assumptions and derivation.",
+      "failure_effect": "Use NOT_IDENTIFIED wording."
+    },
+    {
+      "id": "P5-OBL-009",
+      "priority": "BLOCKING_BEFORE_PREREGISTRATION",
+      "title": "Operationalize non-vacuity and support gates",
+      "status": "OPEN",
+      "owner_lane": "Causal methods and representation analysis",
+      "dependency": [
+        "P5-OBL-007"
+      ],
+      "acceptance_evidence": "Prospective retention score, minimum intervention discrimination, collision limit, coverage floor, support/extrapolation rule, and failure consequences.",
+      "failure_effect": "A low defect cannot be described as a meaningful abstraction."
+    },
+    {
+      "id": "P5-OBL-010",
+      "priority": "BLOCKING_BEFORE_PREREGISTRATION",
+      "title": "Freeze negative and adversarial controls",
+      "status": "OPEN",
+      "owner_lane": "Harness experimental science",
+      "dependency": [
+        "P5-OBL-006",
+        "P5-OBL-007"
+      ],
+      "acceptance_evidence": "Exact zero, sham, same-norm random, orthogonal/null, wrong-layer, wrong-token, label-shuffle, matched-taxonomy, negative-outcome, permutation, and replication controls with thresholds and falsifiers, or a documented reason each inapplicable control is omitted.",
+      "failure_effect": "Specificity claim remains unavailable."
+    },
+    {
+      "id": "P5-OBL-011",
+      "priority": "BLOCKING_BEFORE_PREREGISTRATION",
+      "title": "Complete power, uncertainty, and multiplicity plan",
+      "status": "OPEN",
+      "owner_lane": "Independent statistician",
+      "dependency": [
+        "P5-OBL-004",
+        "P5-OBL-010"
+      ],
+      "acceptance_evidence": "Exact power-analysis artifact, sampling/group floors, interval method, clustered dependence treatment, multiplicity correction, missing/exclusion maxima, and fixed stopping rule.",
+      "failure_effect": "No confirmatory run is eligible."
+    },
+    {
+      "id": "P5-OBL-012",
+      "priority": "BLOCKING_BEFORE_EXECUTION",
+      "title": "Implement the ACA Harness v2 module and joined runner",
+      "status": "OPEN",
+      "owner_lane": "CAS Harness engineering",
+      "dependency": [
+        "P5-OBL-004",
+        "P5-OBL-006",
+        "P5-OBL-007",
+        "P5-OBL-009",
+        "P5-OBL-010"
+      ],
+      "acceptance_evidence": "Reviewable implementation binding paired high/low interventions, raw records, map identities, case-level defects, controls, split accounting, and Evidence Packet v2 without caller-selected authority fields.",
+      "failure_effect": "No joined-run evidence path exists."
+    },
+    {
+      "id": "P5-OBL-013",
+      "priority": "BLOCKING_BEFORE_EXECUTION",
+      "title": "Create and freeze the per-claim preregistration",
+      "status": "OPEN",
+      "owner_lane": "Harness governance and experiment lead",
+      "dependency": [
+        "P5-OBL-005",
+        "P5-OBL-008",
+        "P5-OBL-009",
+        "P5-OBL-010",
+        "P5-OBL-011",
+        "P5-OBL-012"
+      ],
+      "acceptance_evidence": "Strictly loaded `cas_harness_v2.preregistration.v1` artifact and protected pre-outcome chain binding the exact design and governance state.",
+      "failure_effect": "Any run is exploratory and scientifically ineligible for the candidate claim."
+    },
+    {
+      "id": "P5-OBL-014",
+      "priority": "BLOCKING_BEFORE_QUALIFYING_EXECUTION",
+      "title": "Close runner authentication and durable-ordering gaps",
+      "status": "OPEN",
+      "owner_lane": "Harness security and infrastructure",
+      "dependency": [
+        "P5-OBL-012"
+      ],
+      "acceptance_evidence": "Hermetic execution, verified read-only snapshot, actual executed-node receipt, materialized trust roots/signatures, trusted time, replay control, durable append-only or WORM ordering, and retained raw external evidence.",
+      "failure_effect": "Execution remains unauthenticated and scientific eligibility remains NOT_ESTABLISHED."
+    },
+    {
+      "id": "P5-OBL-015",
+      "priority": "BLOCKING_BEFORE_EMPIRICAL_CONCLUSION",
+      "title": "Execute the authorized confirmatory joined run",
+      "status": "OPEN",
+      "owner_lane": "Independent executor",
+      "dependency": [
+        "P5-OBL-013",
+        "P5-OBL-014"
+      ],
+      "acceptance_evidence": "Complete raw outcome set and Evidence Packet v2 from the frozen execution window, retaining all failed, missing, excluded, and control cases.",
+      "failure_effect": "Empirical status remains NOT_EXECUTED."
+    },
+    {
+      "id": "P5-OBL-016",
+      "priority": "BLOCKING_BEFORE_EMPIRICAL_CONCLUSION",
+      "title": "Independent numerical and semantic audit",
+      "status": "OPEN",
+      "owner_lane": "Independent auditor and causal reviewer",
+      "dependency": [
+        "P5-OBL-015"
+      ],
+      "acceptance_evidence": "Independent recomputation from raw records plus review that the executed interventions implement the registered causal operators and that discrepancies are resolved or reported.",
+      "failure_effect": "No accepted defect estimate or causal wording."
+    },
+    {
+      "id": "P5-OBL-017",
+      "priority": "BLOCKING_BEFORE_EMPIRICAL_CONCLUSION",
+      "title": "Held-out replication",
+      "status": "OPEN",
+      "owner_lane": "Independent replication team",
+      "dependency": [
+        "P5-OBL-015"
+      ],
+      "acceptance_evidence": "Disjoint held-out execution under the frozen mapping policy with complete raw data, uncertainty, controls, and an Evidence Packet-linked replication assessment.",
+      "failure_effect": "No replicated result; mixed or negative outcomes remain visible."
+    },
+    {
+      "id": "P5-OBL-018",
+      "priority": "HIGH",
+      "title": "Dedicated novelty and citation review",
+      "status": "OPEN",
+      "owner_lane": "Independent literature reviewer",
+      "dependency": [],
+      "acceptance_evidence": "Documented search and specialist comparison against exact/approximate abstraction, categorical error, neural causal abstraction, soft intervention, causal representation-learning, and evaluation literature, with priority and overlap corrections.",
+      "failure_effect": "No novelty claim or submission-ready status."
+    },
+    {
+      "id": "P5-OBL-019",
+      "priority": "BLOCKING_BEFORE_SUBMISSION",
+      "title": "External causal-methods and statistical review",
+      "status": "OPEN",
+      "owner_lane": "External reviewers",
+      "dependency": [
+        "P5-OBL-002",
+        "P5-OBL-008",
+        "P5-OBL-011",
+        "P5-OBL-016",
+        "P5-OBL-017",
+        "P5-OBL-018"
+      ],
+      "acceptance_evidence": "Attributable review of model semantics, identification, estimands, controls, uncertainty, evidence provenance, and claim language with resolved comments.",
+      "failure_effect": "Paper remains a held internal research draft."
+    },
+    {
+      "id": "P5-OBL-020",
+      "priority": "BLOCKING_BEFORE_ANY_GPU_SPEND",
+      "title": "Prepare a costed and authorized execution plan",
+      "status": "OPEN",
+      "owner_lane": "Experiment lead and infrastructure",
+      "dependency": [
+        "P5-OBL-011",
+        "P5-OBL-012",
+        "P5-OBL-013"
+      ],
+      "acceptance_evidence": "Exact model size, hardware class, runtime estimate, replication multiplier, storage/egress allowance, failure reserve, hard spend cap, and authorization bound to the preregistration.",
+      "failure_effect": "Do not launch RunPod or another paid GPU run; no additional funding request is supportable yet."
+    },
+    {
+      "id": "P5-OBL-021",
+      "priority": "BLOCKING_BEFORE_PROMOTION_OR_DISCLOSURE",
+      "title": "Separate canon, product, safety, license, and disclosure decisions",
+      "status": "OPEN",
+      "owner_lane": "Integration Board, product authority, safety reviewers, and qualified human counsel as applicable",
+      "dependency": [
+        "P5-OBL-019"
+      ],
+      "acceptance_evidence": "Separate explicit decisions under their governing procedures; none may be inferred from a theorem, experiment, hash, or paper review.",
+      "failure_effect": "Remain RING 4 / NOT LICENSED / HELD with no public or product route."
+    }
+  ],
+  "obligation_count": 21,
+  "causal_transfer_status": "OPEN",
+  "gpu_funding_status": "NO CURRENT FUNDING REQUEST / COSTED RUN PLAN NOT YET AVAILABLE"
+}
