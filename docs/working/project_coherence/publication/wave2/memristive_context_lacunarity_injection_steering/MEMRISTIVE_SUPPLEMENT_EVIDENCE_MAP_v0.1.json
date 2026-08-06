@@ -1,0 +1,436 @@
+{
+  "schema_version": "project_coherence.publication.wave2.memristive_supplement_evidence_map.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "publication_status": "PROPOSED SUPPLEMENTAL TRACK / NO CHARTER PAPER NUMBER",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "implementation_conclusion": "NONE",
+  "experimental_conclusion": "NONE / NOT STARTED",
+  "physical_device_conclusion": "NONE",
+  "base_commit": "56c43caca7e61aea03254ffdc5484ecdf35bcdbe",
+  "verified_on_utc": "2026-08-06",
+  "evidence_rule": "Exact source identity, literature, a mathematical proposal, repository source text, local structural regression, implementation conformance, joined experimental evidence, physical-device evidence, scientific interpretation, and authority are distinct evidence classes. No class automatically promotes to another.",
+  "evidence_classes": [
+    {
+      "id": "EC0",
+      "name": "EXACT_SOURCE_IDENTITY",
+      "current_state": "PRESENT",
+      "maximum_claim": "The named exact bytes existed in the bound repository snapshot.",
+      "not_evidence_of": ["runtime", "correctness", "conformance", "experiment", "physical device", "causality", "cognition", "safety", "product", "license", "canon", "disclosure"]
+    },
+    {
+      "id": "EC1",
+      "name": "PRIMARY_LITERATURE",
+      "current_state": "PRESENT / CITATION_REVIEW_OPEN",
+      "maximum_claim": "The cited source motivates the exact narrow definition or comparison recorded in the citation ledger.",
+      "not_evidence_of": ["CAS transfer", "implementation", "empirical effect", "physical CAS device", "claim license"]
+    },
+    {
+      "id": "EC2",
+      "name": "TYPED_MATHEMATICAL_PROPOSAL",
+      "current_state": "DRAFT / OPEN_FORMAL_REVIEW",
+      "maximum_claim": "A nonphysical state model, type system, definition, hypothesis, or baseline is explicitly proposed.",
+      "not_evidence_of": ["theorem admission", "identifiability", "implementation", "fit", "prediction", "hysteresis", "benefit"]
+    },
+    {
+      "id": "EC3",
+      "name": "REPOSITORY_SOURCE_TEXT_PRESENCE",
+      "current_state": "PRESENT",
+      "maximum_claim": "Exact source text contains the named formula, label, class, test, or boundary.",
+      "not_evidence_of": ["execution", "test pass", "implementation conformance", "training", "validity", "classical lacunarity", "scientific construct"]
+    },
+    {
+      "id": "EC4",
+      "name": "EPHEMERAL_LOCAL_STRUCTURAL_REGRESSION",
+      "current_state": "PRESENT / UNATTESTED / NO TRUSTED TIME / NOT WORM",
+      "maximum_claim": "The exact local Gate verifier reported PASS with its named counts and retained open boundaries.",
+      "not_evidence_of": ["independent audit", "authenticated experiment", "same result on another host", "implementation of this supplement", "scientific result", "WORM"]
+    },
+    {
+      "id": "EC5",
+      "name": "SUPPLEMENT_IMPLEMENTATION_CONFORMANCE",
+      "current_state": "ABSENT / OPEN_ENGINEERING",
+      "maximum_claim": "No current claim.",
+      "not_evidence_of": ["experiment", "physical device", "scientific validity", "product"]
+    },
+    {
+      "id": "EC6",
+      "name": "JOINED_AUTHORIZED_EXPERIMENT",
+      "current_state": "ABSENT / NOT_STARTED",
+      "maximum_claim": "No current claim.",
+      "not_evidence_of": ["independent replay", "replication", "generalization", "causal construct", "safety", "product"]
+    },
+    {
+      "id": "EC7",
+      "name": "PHYSICAL_DEVICE_EVIDENCE",
+      "current_state": "ABSENT / OPEN_EXTERNAL_VALIDATION",
+      "maximum_claim": "No current claim.",
+      "not_evidence_of": ["ideal memristor identity", "CAS cognition", "software conformance", "safety", "product"]
+    },
+    {
+      "id": "EC8",
+      "name": "INDEPENDENT_SCIENTIFIC_CAUSAL_COGNITIVE_SAFETY_VALIDATION",
+      "current_state": "ABSENT / OPEN_EXTERNAL_VALIDATION",
+      "maximum_claim": "No current claim.",
+      "not_evidence_of": ["product readiness", "license", "canon", "disclosure"]
+    },
+    {
+      "id": "EC9",
+      "name": "PRODUCT_LICENSE_CANON_AUTHORSHIP_DISCLOSURE_AUTHORITY",
+      "current_state": "OPEN / NOT LICENSED / CANON EFFECT NONE / HELD",
+      "maximum_claim": "Only an exact future qualified authority decision within its own scope.",
+      "not_evidence_of": ["retroactive implementation", "scientific truth", "physical truth", "causal validity"]
+    }
+  ],
+  "bound_source_anchors": [
+    {
+      "id": "EA-SRC-001",
+      "path": "docs/working/project_coherence/PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md",
+      "sha256": "B87B2E2B4CC4B10C76EE4AA6EA09094572B2A1008E474475E8F642836B83D2BE",
+      "bytes": 29793,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-002",
+      "path": "docs/working/project_coherence/CLAIM_LEDGER_v0.1.json",
+      "sha256": "F62E7451135EC9DA0C333DB318C7C6E02BD92C4387EB167D94895810D805828F",
+      "bytes": 17083,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-003",
+      "path": "docs/working/project_coherence/THEOREM_LEDGER_v0.1.json",
+      "sha256": "2646DEE7E801B159E6E82EBDB63129CC5883591D40CF29B6773A9BD4F8578101",
+      "bytes": 12459,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-004",
+      "path": "docs/working/project_coherence/SYMBOL_AND_TERMINOLOGY_REGISTRY_v0.1.json",
+      "sha256": "29529E0803BC8EA7BC62CFA0D0B7CC4B2A0B623012E4BCAAC2A569203711FBEB",
+      "bytes": 14851,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-005",
+      "path": "docs/working/project_coherence/OPEN_VS_HELD_BOUNDARY_v0.1.md",
+      "sha256": "D3C7E7F38A1E59F4C2B9E8E527A1033B791555BB669C4E69FCD556E8D87DF863",
+      "bytes": 7779,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-006",
+      "path": "docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md",
+      "sha256": "7B6376A13B74395A38853E38532F1BBCD690DBBE1F80C9E175EDD5B0CEDDBFC3",
+      "bytes": 21367,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-007",
+      "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_ARTIFACT_MANIFEST_v0.1.json",
+      "sha256": "D1EE9BD0EB865FDC5522031375748BEE51DC8774531737F015EE0FF554D0E97B",
+      "bytes": 5251,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-008",
+      "path": "docs/working/project_coherence/gate4/GATE4_REVIEW_MATRIX_v0.1.json",
+      "sha256": "44DD99A847DA742C3EBEBC06D64452A6868421EE12129E789D1CC790DAE41B74",
+      "bytes": 45861,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-009",
+      "path": "docs/working/project_coherence/gate4/GATE4_ARTIFACT_MANIFEST_v0.1.json",
+      "sha256": "49102F9BCBAA2345804F5EE3CA708FD6A84E83F8CF5ABB51E6612893A090D57B",
+      "bytes": 15810,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-010",
+      "path": "docs/working/project_coherence/gate5/GATE5_REVIEW_MATRIX_v0.1.json",
+      "sha256": "A36AF54416BE39EBD89D42C5D306426F69898E8B3E5A248A04B30486E60AEBA8",
+      "bytes": 65643,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-011",
+      "path": "docs/working/project_coherence/gate5/GATE5_ARTIFACT_MANIFEST_v0.1.json",
+      "sha256": "AF263573DAB68D814A09D75CFEBB2ECDD62B08491BD2D1D66C7D5332F682A72A",
+      "bytes": 95468,
+      "evidence_class": "EC0"
+    },
+    {
+      "id": "EA-SRC-012",
+      "path": "noetic-compass-scaffold/noetic-compass/api/pipeline/lacunarity.py",
+      "sha256": "CABBB54E4E49154B83F006630345765AA9BFDA1904179C4685920FF030987A3B",
+      "bytes": 5134,
+      "evidence_class": "EC3"
+    },
+    {
+      "id": "EA-SRC-013",
+      "path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/scoring/lacunarity.rs",
+      "sha256": "A4919C75961E33294722585BFA57914196837D1313FDC24CEE77D4935B06922E",
+      "bytes": 12564,
+      "evidence_class": "EC3"
+    },
+    {
+      "id": "EA-SRC-014",
+      "path": "noetic-compass-scaffold/noetic-compass/cas-native/model/lacunarity_gate.py",
+      "sha256": "D4B33A868B9CC348979388AFD533227314EFFD7E80954D70F1ED2AA575022DDF",
+      "bytes": 3139,
+      "evidence_class": "EC3"
+    },
+    {
+      "id": "EA-SRC-015",
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_research_intervention_worker.py",
+      "sha256": "C1B7F4A3535F05504E7B862D23470F72F88AE7AC88757768288B1316F966A13D",
+      "bytes": 33224,
+      "evidence_class": "EC3"
+    }
+  ],
+  "current_local_gate4_receipt": {
+    "id": "EA-RUN-G4-001",
+    "evidence_class": "EC4",
+    "command": "PYTHONDONTWRITEBYTECODE=1 python -I -B scripts/verify_project_coherence_gate4.py",
+    "result": "PASS",
+    "exit_code": 0,
+    "elapsed_seconds": 148.1,
+    "hash_bound_artifacts": 54,
+    "cas_core_v8_tests": 61,
+    "cas_pcba_v8_tests": 82,
+    "cas_ohm_v1_tests": 65,
+    "candidate_test_total": 208,
+    "claim_records": 11,
+    "review_criteria": 53,
+    "explicitly_open_criteria": 20,
+    "pcba_ebnf_reference_counterexamples": 4,
+    "audited_reference_boards": 5,
+    "cas_ohm_conflicts_or_underspecifications": 8,
+    "gate1_dependency": "INTEGRATED PASS",
+    "gate4_status_after_pass": "OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN",
+    "receipt_scope": "EPHEMERAL LOCAL STRUCTURAL REGRESSION",
+    "non_inference": "Not canon acceptance, peer review, empirical validation, safety certification, claim licensing, product readiness, disclosure approval, implementation of this supplement, or experimental evidence."
+  },
+  "current_local_gate5_receipt": {
+    "id": "EA-RUN-G5-001",
+    "evidence_class": "EC4",
+    "command": "PYTHONDONTWRITEBYTECODE=1 python -I -B scripts/verify_project_coherence_gate5.py",
+    "result": "PASS",
+    "exit_code": 0,
+    "elapsed_seconds": 330.1,
+    "hash_bound_artifacts": 340,
+    "syntax_checked_python_artifacts": 298,
+    "executable_shadow_paths_scanned_before_and_after_tests": 1925,
+    "gate4_dependency": "INTEGRATED PASS WHILE STILL OPEN",
+    "gate4_artifacts": 54,
+    "gate4_manifest_sha256": "49102F9BCBAA2345804F5EE3CA708FD6A84E83F8CF5ABB51E6612893A090D57B",
+    "claim_records": 11,
+    "historical_recovery_files": 537,
+    "historical_recovery_bytes": 95945579,
+    "historical_inventory_sha256": "361F8867A1B8983C383B4F4FE6D8D485E5DBBC80EE4F75E4B5D08B4E5F144F5F",
+    "harness_v2_tests": 119,
+    "harness_v2_subtests": 61,
+    "worker_tests": 364,
+    "numeric_redteam_tests": 32,
+    "api_fleet_launcher_tests": 76,
+    "raw_build_security_files": 10,
+    "original_spdx_packages": 199,
+    "direct_spdx_packages": 233,
+    "scanner_findings": 7,
+    "vendor_open_records": 6,
+    "scanner_vendor_conflicts": 1,
+    "review_criteria": 47,
+    "required_open_boundaries": 22,
+    "postflight_files_rechecked": 919,
+    "dependency_security": "OPEN_SECURITY / HELD",
+    "experimental_execution": "NOT_STARTED",
+    "gate5_status_after_pass": "OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN",
+    "receipt_scope": "EPHEMERAL LOCAL SAME-RUN VALIDATION / NOT RETAINED / NO TRUSTED TIME OR WORM",
+    "test_suite_digests": [
+      {
+        "suite": "Harness v2 kernel and history",
+        "executed_nodes_sha256": "8FBC5D8AE4CF3B0BBEB9A1902C6905278126B056FF6961D13EE9830E2363F362",
+        "ordinary_outcomes_sha256": "660060FF4D613F6702CB4746E06B349E6972A573AE865F06D6585ABE10852FCC",
+        "subtest_outcomes_sha256": "6176922D764D11EAB0F55920EFDEC095D4D3918728B3286046D9CE8EC55070FA"
+      },
+      {
+        "suite": "Live trace worker complete",
+        "executed_nodes_sha256": "94566203B3E0FF79B3224C1C5A073698CA99D3C08BC1119A9082E42AF4B178BD",
+        "ordinary_outcomes_sha256": "B4BEB144D07319BB31C109EBF93F5EB9AFC49FD2A82124CDC8401B7E205B1C93"
+      },
+      {
+        "suite": "Live trace worker numeric red team",
+        "executed_nodes_sha256": "12602041756F20D1AFD402FA56968660839E5EB1098438BA84C69BFF8DE7050B",
+        "ordinary_outcomes_sha256": "473227B79854277D5C3363E8F39B008A58BC27E3F5EF86D3E3F49857625E1A0C"
+      },
+      {
+        "suite": "API, fleet state, and launcher identity",
+        "executed_nodes_sha256": "1ED1E9E3AFA2EDA6881463EE5284DD4902AB94C0246B80D2937066480AC42921",
+        "ordinary_outcomes_sha256": "3663119EE2EAB12DFD423816037DA643A69B695A692C4589E1CA0620BF9D2603"
+      }
+    ],
+    "non_inference": "Not an authenticated experiment, implementation of this supplement, causal or semantic validation, independent audit, replication, peer review, WORM receipt, claim license, product readiness, or disclosure approval."
+  },
+  "evidence_clusters": [
+    {
+      "id": "EA-CLUSTER-001",
+      "name": "Charter and supplemental-track boundary",
+      "evidence_classes": ["EC0"],
+      "source_refs": ["EA-SRC-001", "EA-SRC-006"],
+      "matrix_entry_refs": ["MCLIS-BND-001", "MCLIS-BND-010"],
+      "supported_statement": "The current charter lists seven papers and this draft has no assigned charter paper number.",
+      "boundary": "A draft title does not amend the charter."
+    },
+    {
+      "id": "EA-CLUSTER-002",
+      "name": "Shared claim, theorem, term, and disclosure controls",
+      "evidence_classes": ["EC0"],
+      "source_refs": ["EA-SRC-002", "EA-SRC-003", "EA-SRC-004", "EA-SRC-005"],
+      "matrix_entry_refs": ["MCLIS-ALG-003", "MCLIS-SRC-009", "MCLIS-BND-010", "MCLIS-BND-011"],
+      "supported_statement": "No shared theorem, term, claim license, canon, or disclosure authority changes.",
+      "boundary": "Publication-lane records cannot self-promote."
+    },
+    {
+      "id": "EA-CLUSTER-003",
+      "name": "Wave 1 memristive open obligation",
+      "evidence_classes": ["EC0"],
+      "source_refs": ["EA-SRC-006", "EA-SRC-007"],
+      "matrix_entry_refs": ["MCLIS-TYPE-003", "MCLIS-TYPE-004", "MCLIS-SRC-001", "MCLIS-DEF-009"],
+      "supported_statement": "Wave 1 proposed a nonphysical history-state question and matched memoryless baseline while keeping every result open.",
+      "boundary": "The supplement elaborates but does not close the inherited obligation."
+    },
+    {
+      "id": "EA-CLUSTER-004",
+      "name": "Gate 4 local structural receipt",
+      "evidence_classes": ["EC0", "EC4"],
+      "source_refs": ["EA-SRC-008", "EA-SRC-009", "EA-RUN-G4-001"],
+      "matrix_entry_refs": ["MCLIS-SRC-002", "MCLIS-BND-002"],
+      "supported_statement": "The exact local Gate 4 verifier passed its bounded suite and retained Gate 4 as open.",
+      "boundary": "The pass is not implementation conformance, empirical validation, safety, product, license, canon, or disclosure."
+    },
+    {
+      "id": "EA-CLUSTER-005",
+      "name": "Gate 4 preserved adverse evidence",
+      "evidence_classes": ["EC0", "EC4"],
+      "source_refs": ["EA-SRC-008", "EA-RUN-G4-001"],
+      "matrix_entry_refs": ["MCLIS-SRC-002", "MCLIS-BND-002", "MCLIS-BND-005", "MCLIS-BND-008"],
+      "supported_statement": "Twenty criteria remain explicitly open, four PCBA grammar counterexamples persist across five boards, and eight CAS-Ohm conflicts or under-specifications remain.",
+      "boundary": "A passing verifier preserves rather than erases these negatives."
+    },
+    {
+      "id": "EA-CLUSTER-006",
+      "name": "Gate 5 local structural receipt",
+      "evidence_classes": ["EC0", "EC4"],
+      "source_refs": ["EA-SRC-010", "EA-SRC-011", "EA-RUN-G5-001"],
+      "matrix_entry_refs": ["MCLIS-SRC-003", "MCLIS-BND-004"],
+      "supported_statement": "The exact local integrated Gate 5 verifier passed its bounded checks over 340 artifacts and retained experimental execution as NOT_STARTED.",
+      "boundary": "The receipt is ephemeral, local, untrusted-time, not WORM, and not this supplement's experiment."
+    },
+    {
+      "id": "EA-CLUSTER-007",
+      "name": "Gate 5 security and authority holds",
+      "evidence_classes": ["EC0", "EC4", "EC9"],
+      "source_refs": ["EA-SRC-010", "EA-SRC-011", "EA-RUN-G5-001"],
+      "matrix_entry_refs": ["MCLIS-TYPE-007", "MCLIS-BND-004", "MCLIS-BND-009", "MCLIS-BND-011"],
+      "supported_statement": "Dependency security remains OPEN_SECURITY/HELD, 22 required boundaries remain open, and no joined experimental or disclosure authority exists.",
+      "boundary": "Retained local source and scanner evidence is not independent authentication or product acceptance."
+    },
+    {
+      "id": "EA-CLUSTER-008",
+      "name": "Ideal and generalized electrical type distinction",
+      "evidence_classes": ["EC1", "EC2"],
+      "source_refs": [],
+      "matrix_entry_refs": ["MCLIS-TYPE-001", "MCLIS-TYPE-002", "MCLIS-BND-002"],
+      "supported_statement": "Primary literature distinguishes the ideal electrical constitutive element from generalized electrical state systems.",
+      "boundary": "Neither type is assigned to CAS."
+    },
+    {
+      "id": "EA-CLUSTER-009",
+      "name": "Physical-device separation",
+      "evidence_classes": ["EC1", "EC7"],
+      "source_refs": ["EA-SRC-002"],
+      "matrix_entry_refs": ["MCLIS-TYPE-006", "MCLIS-BND-007"],
+      "supported_statement": "Physical-device evidence requires a materially and instrumentally distinct evidence path, which is absent.",
+      "boundary": "The cited device literature is not evidence for a CAS device."
+    },
+    {
+      "id": "EA-CLUSTER-010",
+      "name": "Classical lacunarity",
+      "evidence_classes": ["EC1", "EC2"],
+      "source_refs": [],
+      "matrix_entry_refs": ["MCLIS-DEF-007", "MCLIS-DEF-008", "MCLIS-ALG-001", "MCLIS-HYP-007"],
+      "supported_statement": "Classical gliding-box lacunarity is multiscale and depends on a declared mass and box process.",
+      "boundary": "No history-lacunarity implementation or empirical value is established."
+    },
+    {
+      "id": "EA-CLUSTER-011",
+      "name": "Repository lacunarity label separation",
+      "evidence_classes": ["EC0", "EC3"],
+      "source_refs": ["EA-SRC-012", "EA-SRC-013", "EA-SRC-014"],
+      "matrix_entry_refs": ["MCLIS-SRC-004", "MCLIS-SRC-005", "MCLIS-SRC-006", "MCLIS-BND-003"],
+      "supported_statement": "Exact source text uses the lacunarity label for multiple formula families and a named neural gate.",
+      "boundary": "No execution, conformance, classical identity, calibration, cognition, or safety is inferred."
+    },
+    {
+      "id": "EA-CLUSTER-012",
+      "name": "History-state model and baselines",
+      "evidence_classes": ["EC1", "EC2"],
+      "source_refs": ["EA-SRC-006"],
+      "matrix_entry_refs": ["MCLIS-TYPE-004", "MCLIS-DEF-002", "MCLIS-DEF-005", "MCLIS-DEF-006", "MCLIS-DEF-009", "MCLIS-ALG-002"],
+      "supported_statement": "The draft specifies a nonphysical state model, path and hysteresis criteria, and strict memoryless plus observed-window comparisons.",
+      "boundary": "Specification is not implementation, identification, fit, or result."
+    },
+    {
+      "id": "EA-CLUSTER-013",
+      "name": "Injection and steering design",
+      "evidence_classes": ["EC1", "EC2", "EC3"],
+      "source_refs": ["EA-SRC-015"],
+      "matrix_entry_refs": ["MCLIS-DEF-003", "MCLIS-DEF-004", "MCLIS-HYP-008", "MCLIS-SRC-008"],
+      "supported_statement": "Primary literature and bounded source text motivate a typed future activation-addition schedule and controls.",
+      "boundary": "No execution, steering effect, concept identity, causal effect, security defense, or safety result is established."
+    },
+    {
+      "id": "EA-CLUSTER-014",
+      "name": "Eight empirical hypotheses",
+      "evidence_classes": ["EC2", "EC6"],
+      "source_refs": [],
+      "matrix_entry_refs": ["MCLIS-HYP-001", "MCLIS-HYP-002", "MCLIS-HYP-003", "MCLIS-HYP-004", "MCLIS-HYP-005", "MCLIS-HYP-006", "MCLIS-HYP-007", "MCLIS-HYP-008"],
+      "supported_statement": "Eight falsifiable preregistration candidates are explicitly stated.",
+      "boundary": "All eight are NOT_STARTED and have no result."
+    },
+    {
+      "id": "EA-CLUSTER-015",
+      "name": "No-result and authority boundary",
+      "evidence_classes": ["EC5", "EC6", "EC7", "EC8", "EC9"],
+      "source_refs": ["EA-SRC-001", "EA-SRC-002", "EA-SRC-003", "EA-SRC-004", "EA-SRC-005"],
+      "matrix_entry_refs": ["MCLIS-BND-003", "MCLIS-BND-004", "MCLIS-BND-005", "MCLIS-BND-006", "MCLIS-BND-007", "MCLIS-BND-008", "MCLIS-BND-009", "MCLIS-BND-010", "MCLIS-BND-011", "MCLIS-BND-012", "MCLIS-BND-013", "MCLIS-BND-014"],
+      "supported_statement": "Implementation, experiment, physical device, causal/cognitive/safety validation, product, license, canon, authorship, and disclosure conclusions are absent or held.",
+      "boundary": "No local source, citation, definition, or verifier can fill an absent evidence or authority class."
+    }
+  ],
+  "preserved_negative_and_open_evidence": [
+    "Gate 4 has 20 explicitly open criteria.",
+    "Four direct PCBA EBNF/reference-corpus counterexamples remain across five audited boards.",
+    "Eight CAS-Ohm conflicts or under-specifications remain.",
+    "Gate 5 has 22 required OPEN boundaries.",
+    "Gate 5 dependency security remains OPEN_SECURITY / HELD.",
+    "The direct image scan reports 0 critical, 0 high, 3 medium, and 4 low findings.",
+    "Ubuntu records six vulnerable or deferred packages and one scanner/vendor conflict remains.",
+    "Gate 5 experimental execution remains NOT_STARTED.",
+    "The same-run Gate 5 suite receipt is ephemeral, local, not retained, has no trusted time, and is not WORM.",
+    "No supplement implementation-conformance receipt exists.",
+    "No memristive-history or lacunarity experiment exists.",
+    "No physical device evidence exists.",
+    "No causal, cognitive, safety, clinical, regulatory, product, license, canon, authorship, or disclosure decision exists."
+  ],
+  "bound_source_anchor_count": 15,
+  "evidence_class_count": 10,
+  "evidence_cluster_count": 15,
+  "closure_statement": "The present evidence supports exact source identities, primary-literature comparisons, a typed mathematical proposal, bounded source-text observations, and two local structural Gate receipts only. It supports no implementation of this supplement, experiment, physical device, hysteresis or path-dependence result, predictive benefit, causal or cognitive interpretation, safety claim, product capability, license, canon admission, authorship, submission, peer review, or disclosure authority."
+}
