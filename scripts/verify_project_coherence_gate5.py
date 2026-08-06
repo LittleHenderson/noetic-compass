@@ -113,6 +113,12 @@ EXACT_API_LAUNCHER_SURFACE = {
     f"{API_ROOT_REL}/tests/test_cas_harness_v2_run_lifecycle.py",
     f"{API_ROOT_REL}/tests/test_cas_harness_v2_lifecycle_service.py",
     f"{API_ROOT_REL}/tests/test_cas_harness_v2_worker_protocol_routes.py",
+    f"{API_ROOT_REL}/tests/test_cas_harness_v2_packaged_mirror.py",
+    f"{API_ROOT_REL}/tests/test_cas_harness_v2_fleet_snapshot_loader.py",
+    f"{API_ROOT_REL}/tests/test_cas_harness_v2_route_envelopes.py",
+    f"{API_ROOT_REL}/tests/test_cas_harness_v2_run_context.py",
+    f"{API_ROOT_REL}/tests/test_cas_harness_v2_worker_protocol_adapter.py",
+    f"{API_ROOT_REL}/tests/test_cas_harness_v2_reconciliation_report.py",
     f"{API_ROOT_REL}/tests/object_lock_test_support.py",
     f"{API_ROOT_REL}/tests/test_fleet_service_auth.py",
     f"{API_ROOT_REL}/tests/test_evidence_packet_object_store.py",
@@ -148,6 +154,7 @@ REQUIRED_CONTROL_ARTIFACTS = {
     f"{WORKER_ROOT_REL}/.dockerignore",
     f"{WORKER_ROOT_REL}/requirements.in",
     f"{WORKER_ROOT_REL}/requirements.txt",
+    f"{API_ROOT_REL}/Dockerfile.api",
     "noetic-compass-scaffold/noetic-compass/pyproject.toml",
 }
 
@@ -158,6 +165,7 @@ REQUIRED_CONTROL_ARTIFACTS = {
 EXACT_ALL_FILE_SURFACE_DIRS = (
     "src/cas_harness_v2",
     "tests/cas_harness_v2",
+    f"{API_ROOT_REL}/cas_harness_v2",
     f"{WORKER_ROOT_REL}/app",
     f"{WORKER_ROOT_REL}/scripts",
     f"{WORKER_ROOT_REL}/tests",
@@ -251,9 +259,9 @@ REQUIRED_BOUNDARY_TEXT = {
     "G5-OPEN-TRUSTED-TIME": "No independently trusted time source binds ordering.",
     "G5-OPEN-TRUST-ROOT": "No non-caller-selected identity or signing trust root exists.",
     "G5-OPEN-WORM": "The existing Object-Lock packet repository does not yet bind the complete v2 preregistration, authorization, outcome-access, terminal, and packet order under independent authority.",
-    "G5-OPEN-NONCE-REPLAY": "Durable fleet callback replay rejection is not yet an authenticated run nonce bound to the exact v2 preregistration chain.",
-    "G5-OPEN-ONE-USE": "Atomic one-use v2 run authorization and consumption are not yet durably bound.",
-    "G5-OPEN-SELECTIVE-REPORTING": "No exhaustive v2 authorized-run, failure, nonreporting, and packet registry prevents selective reporting.",
+    "G5-OPEN-NONCE-REPLAY": "Bounded callback and run-nonce replay controls do not establish authenticated restart-, replica-, or host-loss-resistant rejection.",
+    "G5-OPEN-ONE-USE": "Same-host atomic one-use v2 authorization and consumption are tested, but live independently authenticated multi-host durability is not established.",
+    "G5-OPEN-SELECTIVE-REPORTING": "Configured-scope reconciliation cannot establish an exhaustive cross-host registry or prove off-registry execution absence.",
     "G5-OPEN-AUTHENTICATED-EXECUTION": "No independently authenticated execution receipt exists.",
     "G5-OPEN-HERMETICITY": "The OS, toolchain, dependencies, inputs, and runtime are not hermetically attested.",
     "G5-OPEN-SEMANTIC-VALIDATION": "Artifact hashes do not establish semantic correctness.",
@@ -309,6 +317,8 @@ REQUIRED_IMPLEMENTED_CRITERION_IDS = {
     "G5-HISTORY-001",
     "G5-INTEGRATION-001",
     "G5-ENGINEERING-004",
+    "G5-ENGINEERING-007",
+    "G5-ENGINEERING-008",
 }
 REQUIRED_NEGATIVE_CRITERION_IDS = {"G5-HISTORY-002"}
 
@@ -383,10 +393,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         ],
         "pytest_plugins": ["pytest_asyncio.plugin"],
         "repo_import_roots": [],
-        "expected_tests": 35,
+        "expected_tests": 38,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "A340034084006FC437AB1F9724FB45D3AE09555F5D302FC36CCD6CF53EC28F57"
+            "D3EAF533FEDB5B03168200AA399AC53A6E2A6F22874EBABEAECEFB227400778D"
         ),
     },
     "Harness v2 worker terminal bridge": {
@@ -394,10 +404,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "targets": ["tests/test_cas_harness_v2_worker_bridge.py"],
         "pytest_plugins": ["pytest_asyncio.plugin"],
         "repo_import_roots": ["src", "tests/cas_harness_v2"],
-        "expected_tests": 8,
+        "expected_tests": 17,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "6B0B52C30FA70C52E0EA5AC3B15221F4E5B8BC8337AA53B04972B3E543177969"
+            "FA6C985CD6CAA734034E006BB4BAF6BE9D02269D7312BEE7355E9C3833759C51"
         ),
     },
     "Harness v2 prospective lifecycle, SQLite, and dark route": {
@@ -414,10 +424,32 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
             "tests/cas_harness_v2",
             f"{API_ROOT_REL}/tests",
         ],
-        "expected_tests": 48,
+        "expected_tests": 76,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "B7B87D52351B21039A83E4B526BCAEDE0E8F3E11F79E162480FB007375421F44"
+            "5F1197D70B7AFAD39D01BEBEB4E7397C3E075D74A5BFFA5305C62A0EDB3C7D84"
+        ),
+    },
+    "Harness v2 admitted adapter and bounded reconciliation": {
+        "working_directory": API_ROOT_REL,
+        "targets": [
+            "tests/test_cas_harness_v2_packaged_mirror.py",
+            "tests/test_cas_harness_v2_fleet_snapshot_loader.py",
+            "tests/test_cas_harness_v2_route_envelopes.py",
+            "tests/test_cas_harness_v2_run_context.py",
+            "tests/test_cas_harness_v2_worker_protocol_adapter.py",
+            "tests/test_cas_harness_v2_reconciliation_report.py",
+        ],
+        "pytest_plugins": [],
+        "repo_import_roots": [
+            "src",
+            "tests/cas_harness_v2",
+            f"{API_ROOT_REL}/tests",
+        ],
+        "expected_tests": 80,
+        "expected_subtests": 0,
+        "expected_test_ids_sha256": (
+            "2E45FCD920E0B52916A7341D2FF766FDC9F7911EC2CB11C27BC3FF8FEC3815FB"
         ),
     },
 }
@@ -1099,6 +1131,8 @@ def artifact_role(path: str) -> str:
         return "gate5_api_runtime_dependency"
     if path.startswith("src/cas_harness_v2/"):
         return "gate5_control_kernel_source"
+    if path.startswith(f"{API_ROOT_REL}/cas_harness_v2/"):
+        return "gate5_packaged_control_kernel_mirror"
     if path.startswith("tests/cas_harness_v2/"):
         return "gate5_control_kernel_test"
     if "/live-trace-worker/app/" in path:
@@ -1110,7 +1144,14 @@ def artifact_role(path: str) -> str:
     if "/live-trace-worker/scenarios/" in path:
         return "gate5_worker_fixture"
     if path.endswith(
-        ("Dockerfile", ".dockerignore", "requirements.in", "requirements.txt", "pyproject.toml")
+        (
+            "Dockerfile",
+            "Dockerfile.api",
+            ".dockerignore",
+            "requirements.in",
+            "requirements.txt",
+            "pyproject.toml",
+        )
     ):
         return "gate5_environment_control"
     if path.endswith(".py") and path.startswith("scripts/"):
@@ -2184,6 +2225,7 @@ def verify_review_matrix(
             "worker_protocol_kernel",
             "worker_protocol_bridge_and_durable_seams",
             "prospective_lifecycle_sqlite_dark_route",
+            "admitted_adapter_and_bounded_reconciliation",
             "worker_checkpoints",
             "api_launcher_fleet_state",
             "successor_dependency_container_candidate",
@@ -2382,7 +2424,7 @@ def verify_review_matrix(
         and isinstance(bridge_scope, str)
         and "LOCAL_UNATTESTED_HOST_REGRESSION" in bridge_scope
         and "default-dark" in bridge_scope.lower()
-        and "no packaged adapter" in bridge_scope.lower()
+        and "admitted adapter" in bridge_scope.lower()
         and "request-bound" in bridge_scope.lower()
         and "active-lease" in bridge_scope.lower()
         and "no live" in bridge_scope.lower()
@@ -2426,17 +2468,62 @@ def verify_review_matrix(
         and lifecycle_receipt.get("test_ids_sha256")
         == lifecycle_suite["expected_test_ids_sha256"].lower()
         and lifecycle_receipt.get("route_enabled") is False
-        and lifecycle_receipt.get("packaged_adapter_admitted") is False
+        and lifecycle_receipt.get("packaged_adapter_admitted") is True
         and lifecycle_receipt.get("independently_reproduced") is False
         and isinstance(lifecycle_scope, str)
         and "LOCAL_UNATTESTED_HOST_REGRESSION" in lifecycle_scope
         and "close/reopen" in lifecycle_scope.lower()
         and "same-file" in lifecycle_scope.lower()
-        and "no transitive" in lifecycle_scope.lower()
+        and "transitively" in lifecycle_scope.lower()
         and "active-lease" in lifecycle_scope.lower()
         and "no live" in lifecycle_scope.lower()
         and "not scientific" in lifecycle_scope.lower(),
         "review-matrix prospective lifecycle receipt drifted or promotes authority",
+    )
+    adapter_receipt = receipts.get("admitted_adapter_and_bounded_reconciliation")
+    require(
+        isinstance(adapter_receipt, dict),
+        "review-matrix admitted-adapter/reconciliation receipt is missing",
+    )
+    require_exact_keys(
+        adapter_receipt,
+        {
+            "passed",
+            "failed",
+            "total",
+            "passed_subtests",
+            "test_ids_sha256",
+            "route_enabled",
+            "configured_scope_only",
+            "independently_reproduced",
+            "scope",
+        },
+        label="review matrix admitted-adapter/reconciliation receipt",
+    )
+    adapter_suite = REQUIRED_TEST_SUITES[
+        "Harness v2 admitted adapter and bounded reconciliation"
+    ]
+    adapter_scope = adapter_receipt.get("scope")
+    require(
+        type(adapter_receipt.get("passed")) is int
+        and adapter_receipt["passed"] == adapter_suite["expected_tests"]
+        and adapter_receipt.get("failed") == 0
+        and adapter_receipt.get("total") == adapter_suite["expected_tests"]
+        and adapter_receipt.get("passed_subtests")
+        == adapter_suite["expected_subtests"]
+        and adapter_receipt.get("test_ids_sha256")
+        == adapter_suite["expected_test_ids_sha256"].lower()
+        and adapter_receipt.get("route_enabled") is False
+        and adapter_receipt.get("configured_scope_only") is True
+        and adapter_receipt.get("independently_reproduced") is False
+        and isinstance(adapter_scope, str)
+        and "LOCAL_UNATTESTED_HOST_REGRESSION" in adapter_scope
+        and "configured-scope" in adapter_scope.lower()
+        and "off-registry absence" in adapter_scope.lower()
+        and "does not establish" in adapter_scope.lower()
+        and "provider-backed durability" in adapter_scope.lower()
+        and "live execution" in adapter_scope.lower(),
+        "review-matrix admitted-adapter/reconciliation receipt drifted or promotes authority",
     )
     candidate_receipt = receipts.get("successor_dependency_container_candidate")
     require(isinstance(candidate_receipt, dict), "review-matrix successor candidate receipt is missing")
@@ -2649,7 +2736,12 @@ def verify_adversarial_review() -> None:
     require(ADVERSARIAL_REVIEW_PATH.is_file(), "Gate 5 adversarial review is missing")
     text = read_stable_text(ADVERSARIAL_REVIEW_PATH)
     for marker in (
-        "DRAFT / OPEN / NOT_STARTED / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
+        "Document status: `DRAFT / OPEN / NOT FROZEN`",
+        "Decision status: `OPEN / KEEP_OPEN`",
+        "Engineering status: `RING 4 / BOUNDED SOFTWARE CANDIDATE TESTED`",
+        "Experimental execution status: `NOT_STARTED`",
+        "License / disclosure / canon status: `NOT LICENSED / HELD / NOT FROZEN`",
+        "Live / product route status: `unavailable / not authorized`",
         "KEEP GATE 5 OPEN",
         "NOT LICENSED",
         "HELD",
@@ -2680,6 +2772,14 @@ def verify_adversarial_review() -> None:
         "94566203b3e0ff79b3224c1c5a073698ca99d3c08bc1119a9082e42af4b178bd",
         "78/78",
         "603debf7df9ac7b5a69543c3736f4cd38692d3330690a7559a6f9de6f0e2af77",
+        "17/17",
+        "fa6c985cd6caa734034e006bb4baf6be9d02269d7312bee7355e9c3833759c51",
+        "38/38",
+        "d3eaf533fedb5b03168200aa399ac53a6e2a6f22874ebabeaecefb227400778d",
+        "76/76",
+        "5f1197d70b7afad39d01bebeb4e7397c3e075d74a5bffa5305c62a0edb3c7d84",
+        "80/80",
+        "2e45fcd920e0b52916a7341d2ff766fdc9f7911ec2cb11c27bc3ff8fec3815fb",
         "COMPLETED_WITH_FINDINGS",
         "critical, 0 high, 3 medium, and 4 low findings",
         "SARIF does not embed the candidate identity",
@@ -2713,19 +2813,30 @@ def verify_no_status_promotion_text(
         "docs/working/project_coherence/gate5/README.md": (
             "# Project Coherence Gate 5\n\n"
             "Document status: `DRAFT / OPEN / NOT FROZEN`\n\n"
-            "Gate 5 status: `OPEN / NOT_STARTED / RING 4 / NOT LICENSED / "
-            "HELD / NOT FROZEN`"
+            "Decision status: `OPEN / KEEP_OPEN`\n\n"
+            "Engineering status: `RING 4 / BOUNDED SOFTWARE CANDIDATE TESTED`\n\n"
+            "Experimental execution status: `NOT_STARTED`\n\n"
+            "License / disclosure / canon status: `NOT LICENSED / HELD / NOT FROZEN`\n\n"
+            "Live / product route status: `unavailable / not authorized`"
         ),
         "docs/working/project_coherence/gate5/"
         "HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md": (
             "# CAS Harness v2 preregistration and Evidence Packet v2 control kernel\n\n"
-            "Status: `DRAFT / OPEN / NOT_STARTED / RESEARCH ONLY / NOT FROZEN`\n\n"
-            "Admission and claim boundary: `RING 4 / NOT LICENSED / HELD`"
+            "Document status: `DRAFT / OPEN / NOT FROZEN`\n\n"
+            "Decision status: `OPEN / KEEP_OPEN`\n\n"
+            "Engineering status: `RING 4 / BOUNDED SOFTWARE CANDIDATE TESTED`\n\n"
+            "Experimental execution status: `NOT_STARTED`\n\n"
+            "License / disclosure / canon status: `NOT LICENSED / HELD / NOT FROZEN`\n\n"
+            "Live / product route status: `unavailable / not authorized`"
         ),
         "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md": (
             "# Gate 5 adversarial review v0.1\n\n"
-            "**Status:** `DRAFT / OPEN / NOT_STARTED / RING 4 / NOT LICENSED / "
-            "HELD / NOT FROZEN`"
+            "Document status: `DRAFT / OPEN / NOT FROZEN`\n\n"
+            "Decision status: `OPEN / KEEP_OPEN`\n\n"
+            "Engineering status: `RING 4 / BOUNDED SOFTWARE CANDIDATE TESTED`\n\n"
+            "Experimental execution status: `NOT_STARTED`\n\n"
+            "License / disclosure / canon status: `NOT LICENSED / HELD / NOT FROZEN`\n\n"
+            "Live / product route status: `unavailable / not authorized`"
         ),
     }
     for raw_path, header in required_headers.items():

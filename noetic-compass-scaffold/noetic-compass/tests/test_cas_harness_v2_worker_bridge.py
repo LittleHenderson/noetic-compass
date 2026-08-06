@@ -6,6 +6,7 @@ from copy import deepcopy
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 import hashlib
+import json
 from pathlib import Path
 import sys
 import threading
@@ -38,6 +39,7 @@ from api.services.cas_harness_v2_worker_bridge import (  # noqa: E402
     PERSISTING,
     RESEARCH_WORKER_ACCEPTANCE_INDEX_KIND,
     RESEARCH_WORKER_ACCEPTANCE_NAMESPACE,
+    RESEARCH_WORKER_BOUND_ACCEPTANCE_SCHEMA,
     RESEARCH_WORKER_BRIDGE_INDEX_KIND,
     RESEARCH_WORKER_BRIDGE_NAMESPACE,
     STORED_AND_REPLAYED,
@@ -52,6 +54,8 @@ from api.services.fleet_service_auth import (  # noqa: E402
     FleetServiceAuthenticatedCallback,
     FleetServiceAuthenticationError,
     FleetServiceAuthStore,
+    FleetServiceBoundIntakeReceipt,
+    FleetServiceIntakeBinding,
 )
 from api.services.production.state_substrate.sqlite_store import (  # noqa: E402
     SqliteStateStore,
@@ -61,6 +65,7 @@ from tests.object_lock_test_support import issue_test_object_lock_receipt  # noq
 
 
 PEPPER = "worker-bridge-test-pepper-at-least-32-bytes"
+LEASE_TOKEN = "opaque!worker-bridge-lease:" + "z" * 37
 
 
 class _VerifiedObjectBackend:
@@ -327,6 +332,109 @@ def _case(tmp_path: Path, *, backend: _VerifiedObjectBackend | None = None) -> d
     }
 
 
+def _prospective_run_id(job_id: str) -> str:
+    return "h2run_" + hashlib.sha256(job_id.encode("utf-8")).hexdigest()
+
+
+def _strict_bound_case(tmp_path: Path) -> dict:
+    case = _case(tmp_path)
+    mapping = case["fx"].authorization["execution_mapping"]
+    job_id = mapping["job_id"]
+    callback_nonce = "B" * 32
+    stamp = datetime.now(UTC)
+    binding = FleetServiceIntakeBinding(
+        http_method="POST",
+        route_path=(
+            "/api/cas-harness/audit/distributed/session/"
+            f"{mapping['audit_id']}/fleet/v2/job/{job_id}/worker/"
+            f"{mapping['assigned_worker_id']}/terminal"
+        ),
+        job_id=job_id,
+        run_id=_prospective_run_id(job_id),
+        authorization_sha256=hashlib.sha256(case["authorization_raw"])
+        .hexdigest()
+        .upper(),
+        carrier_sha256=hashlib.sha256(case["terminal_receipt_raw"])
+        .hexdigest()
+        .upper(),
+        carrier_byte_length=len(case["terminal_receipt_raw"]),
+        lease_token_sha256=hashlib.sha256(LEASE_TOKEN.encode("utf-8"))
+        .hexdigest()
+        .upper(),
+    )
+    bound = case["auth"].authenticate_with_bound_intake_receipt(
+        tenant_id="tenant-research",
+        api_credential=case["credential"].api_credential,
+        timestamp=str(int(stamp.timestamp())),
+        nonce=callback_nonce,
+        required_capability="submit_receipt",
+        audit_id=mapping["audit_id"],
+        fleet_id=mapping["fleet_id"],
+        worker_id=mapping["assigned_worker_id"],
+        intake_binding=binding,
+        now=stamp,
+    )
+    observed_bound_verifications: list[FleetServiceBoundIntakeReceipt] = []
+
+    def verify_bound_intake_receipt(
+        receipt: FleetServiceBoundIntakeReceipt,
+    ) -> FleetServiceBoundIntakeReceipt:
+        observed_bound_verifications.append(receipt)
+        return case["auth"].verify_bound_intake_receipt(receipt)
+
+    def load_snapshot(**kwargs) -> FleetJobSnapshot:
+        case["snapshot_requests"].append(dict(kwargs))
+        return case["job_snapshot"]
+
+    bridge = ResearchOnlyHarnessV2WorkerBridge(
+        store=case["store"],
+        repository=case["repository"],
+        load_authorization=load_worker_authorization,
+        replay_authorization_for_terminal=replay_worker_authorization_for_terminal,
+        load_terminal_receipt=load_worker_terminal_receipt,
+        load_fleet_job_snapshot=load_snapshot,
+        verify_authenticated_callback=case["auth"].verify_authenticated_callback,
+        verify_bound_intake_receipt=verify_bound_intake_receipt,
+    )
+    case.update(
+        {
+            "bridge": bridge,
+            "callback": bound.callback,
+            "callback_nonce": callback_nonce,
+            "bound_intake_receipt": bound,
+            "bound_verifications": observed_bound_verifications,
+            "lease_token": LEASE_TOKEN,
+        }
+    )
+    return case
+
+
+def _mint_bound_receipt(
+    case: dict,
+    *,
+    nonce: str,
+    **binding_changes: object,
+) -> FleetServiceBoundIntakeReceipt:
+    mapping = case["fx"].authorization["execution_mapping"]
+    stamp = datetime.now(UTC)
+    binding = replace(
+        case["bound_intake_receipt"].intake_binding,
+        **binding_changes,
+    )
+    return case["auth"].authenticate_with_bound_intake_receipt(
+        tenant_id="tenant-research",
+        api_credential=case["credential"].api_credential,
+        timestamp=str(int(stamp.timestamp())),
+        nonce=nonce,
+        required_capability="submit_receipt",
+        audit_id=mapping["audit_id"],
+        fleet_id=mapping["fleet_id"],
+        worker_id=mapping["assigned_worker_id"],
+        intake_binding=binding,
+        now=stamp,
+    )
+
+
 def _persist(case: dict, **overrides):
     values = {
         "authorization_raw": case["authorization_raw"],
@@ -334,6 +442,8 @@ def _persist(case: dict, **overrides):
         "chain": case["fx"].chain,
         "callback": case["callback"],
     }
+    if "bound_intake_receipt" in case:
+        values["bound_intake_receipt"] = case["bound_intake_receipt"]
     values.update(overrides)
     return case["bridge"].persist_terminal_callback(**values)
 
@@ -597,6 +707,196 @@ def test_scope_nonce_and_current_job_substitutions_fail_closed(tmp_path: Path) -
         )
     assert not case["store"].list(
         "tenant-research", RESEARCH_WORKER_BRIDGE_INDEX_KIND
+    )
+    case["store"].close()
+
+
+def test_bound_terminal_intake_is_reverified_and_persisted_digest_only(
+    tmp_path: Path,
+) -> None:
+    case = _strict_bound_case(tmp_path)
+    result = _persist(case)
+    bound = case["bound_intake_receipt"]
+    binding = bound.intake_binding
+    assert case["bound_verifications"] == [bound]
+
+    acceptance_index = case["store"].list(
+        "tenant-research", RESEARCH_WORKER_ACCEPTANCE_INDEX_KIND
+    )
+    assert len(acceptance_index) == 1
+    acceptance_payload = acceptance_index[0].payload
+    assert acceptance_payload["schema_version"] == (
+        RESEARCH_WORKER_BOUND_ACCEPTANCE_SCHEMA
+    )
+    intake = acceptance_payload["bound_http_intake"]
+    assert set(intake) == {
+        "schema_version",
+        "http_method",
+        "route_path",
+        "job_id",
+        "run_id",
+        "authorization_sha256",
+        "carrier_sha256",
+        "carrier_byte_length",
+        "lease_token_sha256",
+        "assurance",
+    }
+    assert intake["authorization_sha256"] == hashlib.sha256(
+        case["authorization_raw"]
+    ).hexdigest().upper()
+    assert intake["carrier_sha256"] == hashlib.sha256(
+        case["terminal_receipt_raw"]
+    ).hexdigest().upper()
+    assert intake["carrier_byte_length"] == len(case["terminal_receipt_raw"])
+    assert intake["job_id"] == case["job_snapshot"].job_id
+    assert intake["run_id"] == _prospective_run_id(case["job_snapshot"].job_id)
+    assert intake["lease_token_sha256"] == hashlib.sha256(
+        LEASE_TOKEN.encode("utf-8")
+    ).hexdigest().upper()
+    canonical = hashlib.sha256(
+        json.dumps(
+            intake,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=True,
+            allow_nan=False,
+        ).encode("ascii")
+    ).hexdigest().upper()
+    assert acceptance_payload["bound_http_intake_sha256"] == canonical
+
+    acceptance, acceptance_sha = case[
+        "repository"
+    ].load_packet_with_content_sha256(
+        tenant_id="tenant-research",
+        namespace=RESEARCH_WORKER_ACCEPTANCE_NAMESPACE,
+        trace_id=acceptance_payload["trace_id"],
+    )
+    assert acceptance_sha == result.callback_acceptance_content_sha256
+    assert acceptance["schema_version"] == RESEARCH_WORKER_BOUND_ACCEPTANCE_SCHEMA
+    assert acceptance["bound_http_intake"] == intake
+    assert acceptance["bound_http_intake_sha256"] == canonical
+    assert acceptance["server_callback_nonce_receipt"]["nonce_id"] == (
+        bound.callback.nonce_receipt.nonce_id
+    )
+
+    terminal, _terminal_sha = case["repository"].load_packet_with_content_sha256(
+        tenant_id="tenant-research",
+        namespace=RESEARCH_WORKER_BRIDGE_NAMESPACE,
+        trace_id=case["fx"].authorization["authorization_id"],
+    )
+    persisted = json.dumps(
+        {
+            "acceptance_index": acceptance_payload,
+            "acceptance": acceptance,
+            "terminal": terminal,
+        },
+        sort_keys=True,
+    )
+    for raw_secret in (
+        case["lease_token"],
+        case["credential"].api_credential,
+        case["callback_nonce"],
+    ):
+        assert raw_secret not in persisted
+    assert binding.lease_token_sha256 in persisted
+    case["store"].close()
+
+
+def test_strict_bridge_cannot_bypass_or_substitute_exact_bound_receipt(
+    tmp_path: Path,
+) -> None:
+    case = _strict_bound_case(tmp_path)
+    with pytest.raises(ResearchWorkerBridgeBindingError, match="receipt is required"):
+        _persist(case, bound_intake_receipt=None)
+
+    forged_callback = replace(case["callback"])
+    callback_substitution = replace(
+        case["bound_intake_receipt"], callback=forged_callback
+    )
+    with pytest.raises(ResearchWorkerBridgeBindingError, match="exact callback"):
+        _persist(case, bound_intake_receipt=callback_substitution)
+
+    forged_binding = replace(
+        case["bound_intake_receipt"].intake_binding,
+        carrier_sha256="F" * 64,
+    )
+    forged_receipt = replace(
+        case["bound_intake_receipt"], intake_binding=forged_binding
+    )
+    with pytest.raises(ResearchWorkerBridgeBindingError, match="transitively"):
+        _persist(case, bound_intake_receipt=forged_receipt)
+
+    copying_verifier_bridge = ResearchOnlyHarnessV2WorkerBridge(
+        store=case["store"],
+        repository=case["repository"],
+        load_authorization=load_worker_authorization,
+        replay_authorization_for_terminal=replay_worker_authorization_for_terminal,
+        load_terminal_receipt=load_worker_terminal_receipt,
+        load_fleet_job_snapshot=lambda **_kwargs: case["job_snapshot"],
+        verify_authenticated_callback=case["auth"].verify_authenticated_callback,
+        verify_bound_intake_receipt=lambda receipt: replace(receipt),
+    )
+    with pytest.raises(ResearchWorkerBridgeBindingError, match="exact receipt carrier"):
+        copying_verifier_bridge.persist_terminal_callback(
+            authorization_raw=case["authorization_raw"],
+            terminal_receipt_raw=case["terminal_receipt_raw"],
+            chain=case["fx"].chain,
+            callback=case["callback"],
+            bound_intake_receipt=case["bound_intake_receipt"],
+        )
+    assert not case["store"].list(
+        "tenant-research", RESEARCH_WORKER_BRIDGE_INDEX_KIND
+    )
+    assert not case["store"].list(
+        "tenant-research", RESEARCH_WORKER_ACCEPTANCE_INDEX_KIND
+    )
+    case["store"].close()
+
+
+@pytest.mark.parametrize(
+    "mismatch",
+    (
+        "carrier_sha256",
+        "carrier_byte_length",
+        "authorization_sha256",
+        "job_id",
+        "run_id",
+        "lease_token_sha256",
+        "route_path",
+    ),
+)
+def test_durably_valid_but_scope_mismatched_intake_receipts_fail_closed(
+    tmp_path: Path,
+    mismatch: str,
+) -> None:
+    case = _strict_bound_case(tmp_path)
+    binding = case["bound_intake_receipt"].intake_binding
+    changes: dict[str, object] = {
+        "carrier_sha256": "F" * 64,
+        "carrier_byte_length": binding.carrier_byte_length + 1,
+        "authorization_sha256": "F" * 64,
+        "job_id": "different-job",
+        "run_id": "h2run_" + "f" * 64,
+        "lease_token_sha256": None,
+        "route_path": binding.route_path.removesuffix("terminal") + "output",
+    }
+    mismatched = _mint_bound_receipt(
+        case,
+        nonce="C" * 32,
+        **{mismatch: changes[mismatch]},
+    )
+    with pytest.raises(ResearchWorkerBridgeBindingError, match="[Bb]ound HTTP intake"):
+        _persist(
+            case,
+            callback=mismatched.callback,
+            bound_intake_receipt=mismatched,
+        )
+    assert case["bound_verifications"] == [mismatched]
+    assert not case["store"].list(
+        "tenant-research", RESEARCH_WORKER_BRIDGE_INDEX_KIND
+    )
+    assert not case["store"].list(
+        "tenant-research", RESEARCH_WORKER_ACCEPTANCE_INDEX_KIND
     )
     case["store"].close()
 

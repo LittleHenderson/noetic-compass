@@ -366,6 +366,8 @@ def test_bound_intake_nonce_is_atomic_exact_restart_safe_and_non_authoritative(
     path = tmp_path / "fleet-auth-bound-intake.db"
     stamp = datetime.now(UTC)
     nonce = secrets.token_urlsafe(24)
+    lease_token = secrets.token_hex(32)
+    lease_digest = hashlib.sha256(lease_token.encode("utf-8")).hexdigest().upper()
     carrier = b'{"strict":"terminal-bytes"}'
     binding = FleetServiceIntakeBinding(
         http_method="POST",
@@ -376,6 +378,7 @@ def test_bound_intake_nonce_is_atomic_exact_restart_safe_and_non_authoritative(
         job_id="job-a",
         run_id="run-a",
         authorization_sha256="A" * 64,
+        lease_token_sha256=lease_digest,
         carrier_sha256=hashlib.sha256(carrier).hexdigest().upper(),
         carrier_byte_length=len(carrier),
     )
@@ -405,8 +408,10 @@ def test_bound_intake_nonce_is_atomic_exact_restart_safe_and_non_authoritative(
     assert stored is not None
     assert stored.payload["schema_version"] == "cas_fleet_service_bound_intake_receipt.v2"
     assert stored.payload["intake_binding"] == binding.to_payload()
+    assert stored.payload["intake_binding"]["lease_token_sha256"] == lease_digest
     serialized = repr(dict(stored.payload))
     assert nonce not in serialized
+    assert lease_token not in serialized
     assert credential.api_credential not in serialized
     first_backend.close()
 
@@ -420,6 +425,17 @@ def test_bound_intake_nonce_is_atomic_exact_restart_safe_and_non_authoritative(
                 bound,
                 intake_binding=replace(binding, carrier_sha256="B" * 64),
             )
+        )
+    with pytest.raises(FleetServiceAuthenticationError):
+        second.verify_bound_intake_receipt(
+            replace(
+                bound,
+                intake_binding=replace(binding, lease_token_sha256="B" * 64),
+            )
+        )
+    with pytest.raises(FleetServiceAuthenticationError):
+        FleetServiceIntakeBinding.from_payload(
+            {**binding.to_payload(), "lease_token": lease_token}
         )
     with pytest.raises(FleetServiceAuthenticationError):
         second.authenticate_with_bound_intake_receipt(

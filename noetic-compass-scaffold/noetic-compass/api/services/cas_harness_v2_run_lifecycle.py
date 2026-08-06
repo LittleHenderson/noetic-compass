@@ -502,6 +502,8 @@ class DurableProspectiveRunLifecycle:
         worker_id: str,
         consumption_artifact: ArtifactBinding,
         started_at: datetime,
+        lease_fence: Mapping[str, Any] | None = None,
+        clock_observation: Mapping[str, Any] | None = None,
     ) -> RunLifecycleMutation:
         """Atomically move one exact authorization from AUTHORIZED to RUNNING."""
 
@@ -512,7 +514,22 @@ class DurableProspectiveRunLifecycle:
                 consumption_artifact, "consumption_artifact"
             ),
         }
+        if (lease_fence is None) != (clock_observation is None):
+            raise RunLifecycleValidationError(
+                "lease_fence and clock_observation must be supplied together"
+            )
+        if lease_fence is not None and clock_observation is not None:
+            details["lease_fence"] = _lease_fence_dict(lease_fence)
+            details["clock_observation"] = _clock_observation_dict(
+                clock_observation
+            )
         occurred_at = _utc_iso(started_at, "started_at")
+        if clock_observation is not None and details["clock_observation"][
+            "observed_at"
+        ] != occurred_at:
+            raise RunLifecycleValidationError(
+                "clock_observation must match the RUNNING event time"
+            )
 
         def validate(record: LedgerRecord) -> None:
             payload = record.payload
@@ -548,6 +565,9 @@ class DurableProspectiveRunLifecycle:
         terminal_status: str,
         terminal_artifact: ArtifactBinding,
         terminal_at: datetime,
+        lease_fence: Mapping[str, Any] | None = None,
+        clock_observation: Mapping[str, Any] | None = None,
+        disposition_reason_code: str | None = None,
     ) -> RunLifecycleMutation:
         """Record success or an adverse terminal disposition with exact bytes."""
 
@@ -556,24 +576,64 @@ class DurableProspectiveRunLifecycle:
                 f"terminal_status must be one of {sorted(TERMINAL_STATES)!r}."
             )
         allowed = (
-            frozenset({AUTHORIZED, RUNNING})
+            frozenset({AUTHORIZED})
             if terminal_status in {REJECTED, EXPIRED}
             else frozenset({RUNNING})
         )
+        if lease_fence is not None and clock_observation is None:
+            raise RunLifecycleValidationError(
+                "a terminal lease_fence requires a clock_observation"
+            )
+        details: dict[str, Any] = {
+            "terminal_status": terminal_status,
+            "terminal_artifact": _artifact_dict(
+                terminal_artifact, "terminal_artifact"
+            ),
+        }
+        if clock_observation is not None:
+            details["clock_observation"] = _clock_observation_dict(
+                clock_observation
+            )
+        if lease_fence is not None:
+            details["lease_fence"] = _lease_fence_dict(lease_fence)
+        if disposition_reason_code is not None:
+            if terminal_status not in {INDETERMINATE, REJECTED, EXPIRED}:
+                raise RunLifecycleValidationError(
+                    "disposition_reason_code is available only for server dispositions"
+                )
+            details["disposition_reason_code"] = _required_text(
+                disposition_reason_code, "disposition_reason_code"
+            )
+        occurred_at = _utc_iso(terminal_at, "terminal_at")
+        if clock_observation is not None and details["clock_observation"][
+            "observed_at"
+        ] != occurred_at:
+            raise RunLifecycleValidationError(
+                "clock_observation must match the terminal event time"
+            )
+
+        def validate(record: LedgerRecord) -> None:
+            expiry = _parse_utc(_payload_text(record.payload, "expires_at"))
+            observed = _parse_utc(occurred_at)
+            if terminal_status == EXPIRED and observed < expiry:
+                raise RunLifecycleConflict(
+                    "EXPIRED cannot be recorded before authorization expiry"
+                )
+            if terminal_status == REJECTED and observed >= expiry:
+                raise RunLifecycleConflict(
+                    "REJECTED cannot replace EXPIRED after authorization expiry"
+                )
+
         return self._append_transition(
             tenant_id=tenant_id,
             subject_id=subject_id,
             operation_id=operation_id,
             event_type="TERMINAL_RECORDED",
-            occurred_at=_utc_iso(terminal_at, "terminal_at"),
-            details={
-                "terminal_status": terminal_status,
-                "terminal_artifact": _artifact_dict(
-                    terminal_artifact, "terminal_artifact"
-                ),
-            },
+            occurred_at=occurred_at,
+            details=details,
             allowed_from=allowed,
             state_after=terminal_status,
+            precondition=validate,
         )
 
     def reserve_outcome_access(
@@ -615,9 +675,9 @@ class DurableProspectiveRunLifecycle:
 
         lifecycle = self._require_lifecycle(tenant_id, subject_id)
         terminal_state = _payload_text(lifecycle.payload, "current_state")
-        if terminal_state not in TERMINAL_STATES:
+        if terminal_state not in {SUCCESS, FAILURE}:
             raise RunLifecycleConflict(
-                "outcome access can only be reserved from a terminal state"
+                "outcome access requires a strict completed or failed execution receipt"
             )
         terminal_sequence = _payload_int(
             lifecycle.payload, "event_count", minimum=1
@@ -714,7 +774,7 @@ class DurableProspectiveRunLifecycle:
                     outcome_access_artifact, "outcome_access_artifact"
                 )
             },
-            allowed_from=TERMINAL_STATES,
+            allowed_from=frozenset({SUCCESS, FAILURE}),
             state_after=OUTCOME_ACCESSED,
         )
 
@@ -788,7 +848,9 @@ class DurableProspectiveRunLifecycle:
                     nonreporting_artifact, "nonreporting_artifact"
                 ),
             },
-            allowed_from=frozenset({OUTCOME_ACCESSED}),
+            allowed_from=frozenset(
+                {OUTCOME_ACCESSED, INDETERMINATE, REJECTED, EXPIRED}
+            ),
             state_after=NONREPORTING_RECORDED,
         )
 
@@ -1836,13 +1898,19 @@ def _assert_valid_transition(
         valid = state_before == AUTHORIZED and state_after == RUNNING
     elif event_type == "TERMINAL_RECORDED":
         valid = state_after in TERMINAL_STATES and (
-            state_before == RUNNING
+            (state_before == RUNNING and state_after not in {REJECTED, EXPIRED})
             or (state_before == AUTHORIZED and state_after in {REJECTED, EXPIRED})
         )
     elif event_type == OUTCOME_ACCESSED:
         valid = state_before in TERMINAL_STATES and state_after == OUTCOME_ACCESSED
-    elif event_type in REPORTING_DISPOSITIONS:
+    elif event_type == PACKET_RECORDED:
         valid = state_before == OUTCOME_ACCESSED and state_after == event_type
+    elif event_type == NONREPORTING_RECORDED:
+        valid = (
+            state_before
+            in {OUTCOME_ACCESSED, INDETERMINATE, REJECTED, EXPIRED}
+            and state_after == event_type
+        )
     if not valid:
         raise RunLifecyclePersistenceError(
             f"invalid lifecycle transition {state_before}->{state_after} ({event_type})"
@@ -1913,6 +1981,84 @@ def _artifact_dict(value: ArtifactBinding, field: str) -> dict[str, object]:
     if not isinstance(value, ArtifactBinding):
         raise RunLifecycleValidationError(f"{field} must be an ArtifactBinding.")
     return value.as_dict()
+
+
+def _lease_fence_dict(value: Mapping[str, Any]) -> dict[str, object]:
+    if not isinstance(value, Mapping) or set(value) != {
+        "job_id",
+        "lease_generation_id",
+        "lease_token_sha256",
+        "lease_expires_at",
+        "state_authority",
+        "trusted_time",
+    }:
+        raise RunLifecycleValidationError(
+            "lease_fence must contain only the redacted active-lease fields"
+        )
+    trusted_time = _required_text(value.get("trusted_time"), "lease_fence.trusted_time")
+    if trusted_time != "NOT_ESTABLISHED":
+        raise RunLifecycleValidationError(
+            "lease_fence cannot claim trusted time"
+        )
+    expires_at = _canonical_caller_timestamp(
+        value.get("lease_expires_at"), "lease_fence.lease_expires_at"
+    )
+    state_authority = _required_text(
+        value.get("state_authority"), "lease_fence.state_authority"
+    )
+    if state_authority != "PROCESS_LOCAL_FLEET_STATE_NOT_DURABLE":
+        raise RunLifecycleValidationError(
+            "lease_fence exceeds the bounded process-local authority"
+        )
+    return {
+        "job_id": _required_text(value.get("job_id"), "lease_fence.job_id"),
+        "lease_generation_id": _required_text(
+            value.get("lease_generation_id"), "lease_fence.lease_generation_id"
+        ),
+        "lease_token_sha256": _required_lower_sha256(
+            value.get("lease_token_sha256"), "lease_fence.lease_token_sha256"
+        ),
+        "lease_expires_at": expires_at,
+        "state_authority": state_authority,
+        "trusted_time": trusted_time,
+    }
+
+
+def _clock_observation_dict(value: Mapping[str, Any]) -> dict[str, str]:
+    if not isinstance(value, Mapping) or set(value) != {
+        "observed_at",
+        "source",
+        "assurance",
+    }:
+        raise RunLifecycleValidationError(
+            "clock_observation must contain the exact untrusted clock fields"
+        )
+    assurance = _required_text(
+        value.get("assurance"), "clock_observation.assurance"
+    )
+    if assurance != "PROCESS_OR_INJECTED_CLOCK_NOT_TRUSTED":
+        raise RunLifecycleValidationError(
+            "clock_observation cannot claim trusted time"
+        )
+    return {
+        "observed_at": _canonical_caller_timestamp(
+            value.get("observed_at"), "clock_observation.observed_at"
+        ),
+        "source": _required_text(value.get("source"), "clock_observation.source"),
+        "assurance": assurance,
+    }
+
+
+def _canonical_caller_timestamp(value: object, field: str) -> str:
+    if not isinstance(value, str):
+        raise RunLifecycleValidationError(f"{field} must be an ISO-8601 string")
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise RunLifecycleValidationError(f"{field} is not ISO-8601") from exc
+    if parsed.tzinfo is None:
+        raise RunLifecycleValidationError(f"{field} must be timezone-aware")
+    return _utc_iso(parsed, field)
 
 
 def _run_id(subject_id: str) -> str:

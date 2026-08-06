@@ -39,6 +39,7 @@ from api.services.cas_harness_merged_evidence_packets import (
 )
 from api.services.evidence_ownership import record_evidence_ownership
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
+from api.services.production.state_substrate import StateStoreError
 from api.services.production.worm_writes import LockReceipt, RetentionPolicy
 from tests.object_lock_test_support import issue_test_object_lock_receipt
 from api.services.sessions import SessionStore
@@ -485,6 +486,97 @@ def test_packet_bytes_and_index_survive_restart_and_second_replica(tmp_path: Pat
         tenant_id="tenant-a", namespace="", trace_id="trace-restart"
     ) == packet
     reopened_store.close()
+
+
+def test_packet_index_inventory_is_redacted_scoped_sorted_and_filterable(
+    tmp_path: Path,
+) -> None:
+    store = SqliteStateStore(tmp_path / "packet-inventory.db")
+    backend = _SharedVerifiedObjectBackend()
+    repository = _repository(store, backend, "inventory-replica")
+    for namespace, trace_id in (
+        ("zeta", "trace-z"),
+        ("", "trace-default"),
+        ("alpha", "trace-a"),
+    ):
+        repository.put_packet(
+            tenant_id="tenant-inventory",
+            account_id="account-inventory",
+            namespace=namespace,
+            trace_id=trace_id,
+            packet=_packet(trace_id),
+        )
+    repository.put_packet(
+        tenant_id="tenant-other",
+        namespace="alpha",
+        trace_id="trace-other",
+        packet=_packet("trace-other"),
+    )
+
+    inventory = repository.list_packet_indices(tenant_id="tenant-inventory")
+    default_only = repository.list_packet_indices(
+        tenant_id="tenant-inventory", namespace=""
+    )
+
+    assert [(row.namespace, row.trace_id) for row in inventory] == [
+        ("", "trace-default"),
+        ("alpha", "trace-a"),
+        ("zeta", "trace-z"),
+    ]
+    assert [(row.namespace, row.trace_id) for row in default_only] == [
+        ("", "trace-default")
+    ]
+    assert all(row.tenant_id == "tenant-inventory" for row in inventory)
+    assert all(row.account_id == "account-inventory" for row in inventory)
+    assert all(
+        row.inventory_scope == "CONFIGURED_TENANT_STATE_STORE_ONLY"
+        and row.off_registry_execution_absence == "NOT_ESTABLISHED"
+        for row in inventory
+    )
+    assert not hasattr(inventory[0], "object_key")
+    assert repository.list_packet_indices(tenant_id="tenant-missing") == ()
+    store.close()
+
+
+def test_packet_index_inventory_fails_closed_on_malformed_row(tmp_path: Path) -> None:
+    store = SqliteStateStore(tmp_path / "packet-inventory-malformed.db")
+    backend = _SharedVerifiedObjectBackend()
+    repository = _repository(store, backend, "inventory-replica")
+    repository.put_packet(
+        tenant_id="tenant-inventory",
+        namespace="lifecycle",
+        trace_id="trace-malformed",
+        packet=_packet("trace-malformed"),
+    )
+    index = store.list("tenant-inventory", PACKET_INDEX_KIND)[0]
+    malformed = dict(index.payload)
+    malformed["byte_length"] = True
+    store.put(index.with_payload(malformed), expected_version=index.version)
+
+    with pytest.raises(
+        EvidenceObjectStoreUnavailable, match="inventory row is malformed"
+    ):
+        repository.list_packet_indices(tenant_id="tenant-inventory")
+    store.close()
+
+
+def test_packet_index_inventory_fails_closed_when_enumeration_is_unavailable() -> None:
+    class _ListFailingStore:
+        def list(self, tenant_id: str, kind: str):
+            del tenant_id, kind
+            raise StateStoreError("synthetic enumeration failure")
+
+    repository = EvidencePacketRepository(
+        store=_ListFailingStore(),  # type: ignore[arg-type]
+        backend=_SharedVerifiedObjectBackend(),
+        policy=RetentionPolicy(mode="GOVERNANCE", retention_days=30),
+        replica_id="inventory-failure-replica",
+    )
+
+    with pytest.raises(
+        EvidenceObjectStoreUnavailable, match="enumeration is unavailable"
+    ):
+        repository.list_packet_indices(tenant_id="tenant-inventory")
 
 
 def test_durable_reverify_uses_stored_minimum_and_preserves_original_verified_at(

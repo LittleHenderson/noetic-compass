@@ -29,17 +29,23 @@ from api.services.cas_harness_evidence_object_store import (
 )
 from api.services.cas_harness_v2_run_lifecycle import (
     AUTHORIZED,
+    EXPIRED,
     FAILURE,
+    INDETERMINATE,
     NONREPORTING_RECORDED,
     OUTCOME_ACCESSED,
     PACKET_RECORDED,
+    REJECTED,
     RUNNING,
     SUCCESS,
     ArtifactBinding,
 )
 from api.services.cas_harness_v2_worker_bridge import (
     ResearchOnlyHarnessV2WorkerBridge,
+    ResearchWorkerBridgeBindingError,
+    ResearchWorkerBridgeConflict,
     ResearchWorkerBridgeError,
+    ResearchWorkerBridgePersistenceError,
     ResearchWorkerBridgeResult,
 )
 
@@ -48,6 +54,9 @@ EXACT_WRAPPER_SCHEMA = "cas_harness_v2.lifecycle_exact_bytes.v1"
 AUTHORIZATION_NAMESPACE = "research-only/harness-v2/lifecycle-authorization"
 CONSUMPTION_NAMESPACE = "research-only/harness-v2/lifecycle-consumption"
 TERMINAL_NAMESPACE = "research-only/harness-v2/lifecycle-terminal"
+TERMINAL_DISPOSITION_NAMESPACE = (
+    "research-only/harness-v2/lifecycle-terminal-disposition"
+)
 OUTPUT_NAMESPACE = "research-only/harness-v2/lifecycle-output"
 OUTCOME_ACCESS_NAMESPACE = "research-only/harness-v2/lifecycle-outcome-access"
 DEPENDENCY_NAMESPACE = "research-only/harness-v2/lifecycle-dependency"
@@ -56,12 +65,25 @@ NONREPORTING_NAMESPACE = "research-only/harness-v2/lifecycle-nonreporting"
 
 AUTHORIZATION_MEDIA_TYPE = "application/vnd.cas-harness.worker-authorization+json"
 TERMINAL_MEDIA_TYPE = "application/vnd.cas-harness.worker-terminal-receipt+json"
+TERMINAL_DISPOSITION_MEDIA_TYPE = (
+    "application/vnd.cas-harness.terminal-disposition+json"
+)
 OUTCOME_ACCESS_MEDIA_TYPE = "application/vnd.cas-harness.outcome-access+json"
 EVIDENCE_PACKET_MEDIA_TYPE = "application/vnd.cas-harness.evidence-packet+json"
 CONSUMPTION_MEDIA_TYPE = (
     "application/vnd.cas-harness.run-consumption-attempt+json"
 )
 NONREPORTING_MEDIA_TYPE = "application/vnd.cas-harness.nonreporting+json"
+
+SERVER_TERMINAL_DISPOSITIONS = frozenset({INDETERMINATE, REJECTED, EXPIRED})
+TERMINAL_DISPOSITION_REASON_CODES = {
+    INDETERMINATE: frozenset(
+        {"EXECUTION_COMPLETION_UNRESOLVED", "LEASE_LOST_DURING_RUNNING"}
+    ),
+    REJECTED: frozenset({"ACTION_REJECTED_BEFORE_CONSUMPTION"}),
+    EXPIRED: frozenset({"AUTHORIZATION_EXPIRED_BEFORE_CONSUMPTION"}),
+}
+UNTRUSTED_CLOCK_ASSURANCE = "PROCESS_OR_INJECTED_CLOCK_NOT_TRUSTED"
 
 
 class AuthorizationCarrier(Protocol):
@@ -95,6 +117,57 @@ class EvidencePacketCarrier(Protocol):
     packet_id: str
     payload: Mapping[str, Any]
     artifact_refs: tuple[Any, ...]
+
+
+class ActiveLeaseCarrier(Protocol):
+    snapshot: Any
+    lease_generation_id: str
+    lease_token_sha256: str
+    lease_expires_at: str
+    state_authority: str
+    trusted_time: str
+
+
+class LifecycleClock(Protocol):
+    def observe(self, *, operation: str) -> "LifecycleClockObservation": ...
+
+
+@dataclass(frozen=True, slots=True)
+class LifecycleClockObservation:
+    """One application-clock reading that explicitly establishes no trusted time."""
+
+    observed_at: datetime
+    source: str
+    assurance: str = UNTRUSTED_CLOCK_ASSURANCE
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.observed_at, datetime) or self.observed_at.tzinfo is None:
+            raise LifecycleServiceBindingError(
+                "Lifecycle clock observations must be timezone-aware."
+            )
+        _required_text(self.source, "clock source")
+        if self.assurance != UNTRUSTED_CLOCK_ASSURANCE:
+            raise LifecycleServiceBindingError(
+                "Lifecycle clock cannot claim trusted time."
+            )
+
+    def as_dict(self) -> dict[str, str]:
+        return {
+            "observed_at": _registry_timestamp(self.observed_at),
+            "source": self.source,
+            "assurance": self.assurance,
+        }
+
+
+class ProcessUtcLifecycleClock:
+    """Default process wall clock; useful for ordering, never a trusted-time receipt."""
+
+    def observe(self, *, operation: str) -> LifecycleClockObservation:
+        _required_text(operation, "clock operation")
+        return LifecycleClockObservation(
+            observed_at=datetime.now(UTC),
+            source="PROCESS_UTC_WALL_CLOCK",
+        )
 
 
 class LifecyclePort(Protocol):
@@ -199,6 +272,22 @@ class LifecycleTerminalResult:
 
 
 @dataclass(frozen=True, slots=True)
+class LifecycleDispositionResult:
+    lifecycle: Any
+    terminal_status: str
+    reason_code: str
+    disposition_storage: ExactArtifactReceipt
+    observed_at: str
+    idempotent_replay: bool
+    criteria_status: str = "OPEN"
+    execution_authentication: str = "NOT_ESTABLISHED"
+    trusted_time: str = "NOT_ESTABLISHED"
+    scientific_status: str = "NOT_ESTABLISHED"
+    license_status: str = "NOT LICENSED"
+    disclosure_status: str = "HELD"
+
+
+@dataclass(frozen=True, slots=True)
 class LifecycleOutcomeResult:
     lifecycle: Any
     outcome_access: Any
@@ -264,6 +353,8 @@ class DarkHarnessV2LifecycleService:
         verify_evidence_packet: Callable[..., Any],
         artifact_registry_factory: Callable[[Mapping[str, bytes]], Any],
         verify_authenticated_callback: Callable[[Any], Any],
+        validate_active_lease: Callable[..., ActiveLeaseCarrier],
+        clock: LifecycleClock | None = None,
     ) -> None:
         if repository is None or lifecycle is None or bridge is None:
             raise LifecycleServiceError(
@@ -278,6 +369,7 @@ class DarkHarnessV2LifecycleService:
             verify_evidence_packet,
             artifact_registry_factory,
             verify_authenticated_callback,
+            validate_active_lease,
         )
         if any(not callable(item) for item in callables):
             raise LifecycleServiceError("Every strict kernel/callback port must be injected.")
@@ -292,6 +384,10 @@ class DarkHarnessV2LifecycleService:
         self._verify_evidence_packet = verify_evidence_packet
         self._artifact_registry_factory = artifact_registry_factory
         self._verify_authenticated_callback = verify_authenticated_callback
+        self._validate_active_lease = validate_active_lease
+        self._clock = clock or ProcessUtcLifecycleClock()
+        if not callable(getattr(self._clock, "observe", None)):
+            raise LifecycleServiceError("Lifecycle clock must provide observe().")
 
     def issue_run(
         self,
@@ -312,9 +408,9 @@ class DarkHarnessV2LifecycleService:
             account_id=account_id,
             execution_mapping=execution_mapping,
         )
-        if subject_id != authorization_id:
+        if subject_id != authorization_id or scope["job_id"] != subject_id:
             raise LifecycleServiceBindingError(
-                "subject_id must equal the strict authorization_id."
+                "subject_id, authorization_id, and execution_mapping.job_id must match."
             )
         authorization_request_sha256 = _authorization_request_sha256(
             chain=chain,
@@ -417,12 +513,10 @@ class DarkHarnessV2LifecycleService:
         operation_id: str,
         worker_id: str,
         consumption_id: str,
-        lease_generation_id: str,
-        lease_token_sha256: str,
-        lease_expires_at: datetime,
-        started_at: datetime,
+        job_id: str,
+        lease_token: str,
     ) -> Any:
-        """Atomically consume only a previously retained authorization."""
+        """Consume with a server-validated active lease; retain no raw lease token."""
 
         lifecycle = self._require_lifecycle(tenant_id, subject_id)
         authorization, scope, authorization_storage = self._reload_authorization(
@@ -439,67 +533,104 @@ class DarkHarnessV2LifecycleService:
             raise LifecycleServiceBindingError(
                 "Consuming worker does not match the prospective execution mapping."
             )
-        started_iso = _registry_timestamp(started_at)
-        if _parse_timestamp(authorization.expires_at) <= _parse_timestamp(started_iso):
+        if job_id != scope["job_id"]:
+            raise LifecycleServiceBindingError(
+                "Consuming job does not match the prospective execution mapping."
+            )
+        if lifecycle.state not in {AUTHORIZED, RUNNING}:
+            raise LifecycleServiceBindingError(
+                "Consumption attempts require an AUTHORIZED or replayed RUNNING lifecycle."
+            )
+
+        operation = _required_text(operation_id, "operation_id")
+        consumption = _required_text(consumption_id, "consumption_id")
+        observation = self._observe_clock(operation="consume_run")
+        lease_fence = self._active_lease_fence(
+            scope=scope,
+            job_id=job_id,
+            worker_id=worker_id,
+            lease_token=lease_token,
+            observation=observation,
+            authorization=authorization,
+        )
+
+        if lifecycle.state == RUNNING:
+            running_event = _event(self._events(tenant_id, subject_id), RUNNING)
+            if running_event is None or running_event.get("operation_id") != operation:
+                raise LifecycleServiceConflict(
+                    "RUNNING lifecycle accepts only the exact winning consumption replay."
+                )
+            details = running_event.get("details")
+            if not isinstance(details, Mapping):
+                raise LifecycleServicePersistenceError(
+                    "RUNNING event details are unavailable."
+                )
+            recorded_fence = _lease_fence_from_event(running_event)
+            if lease_fence != recorded_fence or details.get("worker_id") != worker_id:
+                raise LifecycleServiceConflict(
+                    "Active lease differs from the winning RUNNING lease fence."
+                )
+            binding = _binding_from_mapping(details.get("consumption_artifact"))
+            if binding.artifact_id != consumption:
+                raise LifecycleServiceConflict(
+                    "RUNNING lifecycle accepts only the exact winning consumption replay."
+                )
+            stored = self._load_exact(
+                scope=scope,
+                subject_id=subject_id,
+                purpose="consumption",
+                namespace=CONSUMPTION_NAMESPACE,
+                artifact_id=binding.artifact_id,
+                expected_binding=binding,
+            )
+            _validate_consumption_envelope(
+                stored.raw_bytes,
+                subject_id=subject_id,
+                run_id=lifecycle.run_id,
+                authorization_binding=authorization_storage.lifecycle_binding,
+                running_event=running_event,
+            )
+            recorded_clock = _clock_observation_from_event(running_event)
+            return self._lifecycle.consume_authorization(
+                tenant_id=tenant_id,
+                subject_id=subject_id,
+                run_nonce=run_nonce,
+                operation_id=operation,
+                worker_id=worker_id,
+                consumption_artifact=stored.lifecycle_binding,
+                started_at=_parse_timestamp(str(running_event.get("occurred_at"))),
+                lease_fence=recorded_fence,
+                clock_observation=recorded_clock,
+            )
+
+        started_iso = observation.as_dict()["observed_at"]
+        if _parse_timestamp(authorization.expires_at) <= observation.observed_at.astimezone(UTC):
             raise LifecycleServiceBindingError(
                 "Authorization expiry was reached before the consumption attempt."
             )
-        lease_expires_iso = _registry_timestamp(lease_expires_at)
-        if _parse_timestamp(lease_expires_iso) <= _parse_timestamp(started_iso):
-            raise LifecycleServiceBindingError(
-                "lease_expires_at must follow the consumption start time."
-            )
-        token_digest = _required_lower_sha256(
-            lease_token_sha256, "lease_token_sha256"
-        )
         raw = _canonical_json_bytes(
             {
-                "schema_version": "cas_harness_v2.run_consumption_attempt.v1",
-                "consumption_id": _required_text(consumption_id, "consumption_id"),
+                "schema_version": "cas_harness_v2.run_consumption_attempt.v2",
+                "consumption_id": consumption,
                 "subject_id": subject_id,
                 "run_id": lifecycle.run_id,
+                "job_id": job_id,
                 "worker_id": worker_id,
                 "authorization_artifact": authorization_storage.lifecycle_binding.as_dict(),
-                "lease_generation_id": _required_text(
-                    lease_generation_id, "lease_generation_id"
-                ),
-                "lease_token_sha256": token_digest,
-                "lease_expires_at": lease_expires_iso,
+                "lease_fence": lease_fence,
+                "clock_observation": observation.as_dict(),
                 "started_at": started_iso,
                 "secret_retention": "DIGEST_ONLY_NO_RAW_RUN_LEASE_OR_CALLBACK_NONCES",
                 "record_effect": "ATTEMPT_ONLY_NOT_PROOF_OF_EXECUTION",
                 "authority": _authority(),
             }
         )
-        attempted_binding = ArtifactBinding.from_bytes(
-            artifact_id=consumption_id,
-            media_type=CONSUMPTION_MEDIA_TYPE,
-            body=raw,
-        )
-        if lifecycle.state == RUNNING:
-            running_event = _event(self._events(tenant_id, subject_id), RUNNING)
-            if (
-                running_event is None
-                or running_event.get("operation_id") != operation_id
-                or running_event.get("occurred_at") != started_iso
-                or not isinstance(running_event.get("details"), Mapping)
-                or running_event["details"].get("worker_id") != worker_id
-                or running_event["details"].get("consumption_artifact")
-                != attempted_binding.as_dict()
-            ):
-                raise LifecycleServiceConflict(
-                    "RUNNING lifecycle accepts only the exact winning consumption replay."
-                )
-        elif lifecycle.state != AUTHORIZED:
-            raise LifecycleServiceBindingError(
-                "Consumption attempts require an AUTHORIZED lifecycle."
-            )
         stored = self._store_exact(
             scope=scope,
             subject_id=subject_id,
             purpose="consumption",
             namespace=CONSUMPTION_NAMESPACE,
-            artifact_id=consumption_id,
+            artifact_id=consumption,
             media_type=CONSUMPTION_MEDIA_TYPE,
             raw=raw,
         )
@@ -507,14 +638,48 @@ class DarkHarnessV2LifecycleService:
             tenant_id=tenant_id,
             subject_id=subject_id,
             run_nonce=run_nonce,
-            operation_id=operation_id,
+            operation_id=operation,
             worker_id=worker_id,
             consumption_artifact=stored.lifecycle_binding,
-            started_at=started_at,
+            started_at=observation.observed_at,
+            lease_fence=lease_fence,
+            clock_observation=observation.as_dict(),
         )
         if lifecycle.run_id != mutation.lifecycle.run_id:
             raise LifecycleServiceBindingError("Run identity changed during consumption.")
         return mutation
+
+    def replay_run_authorization(
+        self,
+        *,
+        tenant_id: str,
+        account_id: str,
+        subject_id: str,
+        chain: object,
+    ) -> LifecycleIssueResult:
+        """Reverify an already-issued authorization without mutating its run.
+
+        Authorization issuance is a create/recovery operation and cannot be
+        reused as a read once later lifecycle events have advanced the durable
+        record.  This explicit replay port reloads the exact retained carrier
+        against the current chain and scope while withholding the one-time run
+        nonce and raw-release authority.
+        """
+
+        lifecycle = self._require_lifecycle(tenant_id, subject_id)
+        authorization, _scope, stored = self._reload_authorization(
+            tenant_id=tenant_id,
+            account_id=account_id,
+            subject_id=subject_id,
+            chain=chain,
+        )
+        return LifecycleIssueResult(
+            lifecycle=lifecycle,
+            authorization=authorization,
+            authorization_storage=stored,
+            run_nonce=None,
+            issued_now=False,
+        )
 
     def accept_terminal(
         self,
@@ -527,6 +692,9 @@ class DarkHarnessV2LifecycleService:
         output_bodies: Mapping[str, bytes | bytearray | memoryview],
         callback: Any,
         operation_id: str,
+        job_id: str,
+        lease_token: str,
+        bound_intake_receipt: Any | None = None,
     ) -> LifecycleTerminalResult:
         """Accept a callback only for a consumed, prospectively stored run."""
 
@@ -537,6 +705,10 @@ class DarkHarnessV2LifecycleService:
             subject_id=subject_id,
             chain=chain,
         )
+        if job_id != scope["job_id"]:
+            raise LifecycleServiceBindingError(
+                "Terminal job does not match the prospective execution mapping."
+            )
         terminal_raw = _snapshot(terminal_receipt_raw, "terminal_receipt_raw")
         terminal = self._load_terminal_receipt(
             terminal_raw,
@@ -557,10 +729,34 @@ class DarkHarnessV2LifecycleService:
                 "Callback verifier did not return the exact authenticated carrier."
             )
 
-        existing_terminal = _terminal_event(self._events(tenant_id, subject_id))
+        events = self._events(tenant_id, subject_id)
+        running_event = _event(events, RUNNING)
+        _verify_terminal_started_at(terminal, running_event)
+        existing_terminal = _terminal_event(events)
         if existing_terminal is not None:
+            existing_details = existing_terminal.get("details")
+            if not isinstance(existing_details, Mapping):
+                raise LifecycleServicePersistenceError(
+                    "Terminal event details are unavailable."
+                )
+            terminal_status = existing_details.get("terminal_status")
+            if terminal_status not in {SUCCESS, FAILURE}:
+                raise LifecycleServiceConflict(
+                    "A server terminal disposition cannot be replaced by a worker receipt."
+                )
+            recorded_fence = _lease_fence_from_event(existing_terminal)
+            if (
+                recorded_fence["job_id"] != job_id
+                or not hmac.compare_digest(
+                    recorded_fence["lease_token_sha256"],
+                    _lease_token_sha256(lease_token),
+                )
+            ):
+                raise LifecycleServiceConflict(
+                    "Terminal replay does not match the previously accepted lease fence."
+                )
             expected = _binding_from_mapping(
-                existing_terminal["details"]["terminal_artifact"]
+                existing_details["terminal_artifact"]
             )
             stored_terminal = self._load_exact(
                 scope=scope,
@@ -586,7 +782,14 @@ class DarkHarnessV2LifecycleService:
                     terminal_receipt_raw=terminal_raw,
                     chain=chain,
                     callback=callback,
+                    bound_intake_receipt=bound_intake_receipt,
                 )
+            except ResearchWorkerBridgePersistenceError as exc:
+                raise LifecycleServicePersistenceError(str(exc)) from exc
+            except ResearchWorkerBridgeConflict as exc:
+                raise LifecycleServiceConflict(str(exc)) from exc
+            except ResearchWorkerBridgeBindingError as exc:
+                raise LifecycleServiceBindingError(str(exc)) from exc
             except ResearchWorkerBridgeError as exc:
                 raise LifecycleServiceBindingError(str(exc)) from exc
             if (
@@ -613,6 +816,21 @@ class DarkHarnessV2LifecycleService:
             raise LifecycleServiceBindingError(
                 "A first terminal callback cannot be accepted after outcome sealing."
             )
+        observation = self._observe_clock(operation="accept_terminal")
+        active_fence = self._active_lease_fence(
+            scope=scope,
+            job_id=job_id,
+            worker_id=scope["worker_id"],
+            lease_token=lease_token,
+            observation=observation,
+            authorization=authorization,
+        )
+        if running_event is None or active_fence != _lease_fence_from_event(
+            running_event
+        ):
+            raise LifecycleServiceConflict(
+                "Terminal lease differs from the lease fence that consumed the run."
+            )
         outputs = self._ensure_terminal_outputs(
             scope=scope,
             subject_id=subject_id,
@@ -625,7 +843,14 @@ class DarkHarnessV2LifecycleService:
                 terminal_receipt_raw=terminal_raw,
                 chain=chain,
                 callback=callback,
+                bound_intake_receipt=bound_intake_receipt,
             )
+        except ResearchWorkerBridgePersistenceError as exc:
+            raise LifecycleServicePersistenceError(str(exc)) from exc
+        except ResearchWorkerBridgeConflict as exc:
+            raise LifecycleServiceConflict(str(exc)) from exc
+        except ResearchWorkerBridgeBindingError as exc:
+            raise LifecycleServiceBindingError(str(exc)) from exc
         except ResearchWorkerBridgeError as exc:
             raise LifecycleServiceBindingError(str(exc)) from exc
         if (
@@ -651,7 +876,9 @@ class DarkHarnessV2LifecycleService:
             operation_id=operation_id,
             terminal_status=state,
             terminal_artifact=terminal_storage.lifecycle_binding,
-            terminal_at=_parse_timestamp(terminal.terminal_at),
+            terminal_at=observation.observed_at,
+            lease_fence=active_fence,
+            clock_observation=observation.as_dict(),
         )
         return LifecycleTerminalResult(
             lifecycle=mutation.lifecycle,
@@ -659,6 +886,169 @@ class DarkHarnessV2LifecycleService:
             terminal_storage=terminal_storage,
             output_storage=outputs,
             bridge_result=bridge_result,
+            idempotent_replay=mutation.idempotent_replay,
+        )
+
+    def record_terminal_disposition(
+        self,
+        *,
+        tenant_id: str,
+        account_id: str,
+        subject_id: str,
+        chain: object,
+        operation_id: str,
+        job_id: str,
+        terminal_status: str,
+        reason_code: str,
+    ) -> LifecycleDispositionResult:
+        """Build a control-plane terminal disposition without inventing an outcome."""
+
+        if terminal_status not in SERVER_TERMINAL_DISPOSITIONS:
+            raise LifecycleServiceBindingError(
+                "Server dispositions are limited to INDETERMINATE, REJECTED, and EXPIRED."
+            )
+        allowed_reasons = TERMINAL_DISPOSITION_REASON_CODES[terminal_status]
+        reason = _required_text(reason_code, "reason_code")
+        if reason not in allowed_reasons:
+            raise LifecycleServiceBindingError(
+                f"reason_code is not allowed for {terminal_status}."
+            )
+        operation = _required_text(operation_id, "operation_id")
+        lifecycle = self._require_lifecycle(tenant_id, subject_id)
+        authorization, scope, authorization_storage = self._reload_authorization(
+            tenant_id=tenant_id,
+            account_id=account_id,
+            subject_id=subject_id,
+            chain=chain,
+        )
+        if job_id != scope["job_id"]:
+            raise LifecycleServiceBindingError(
+                "Disposition job does not match the prospective execution mapping."
+            )
+        events = self._events(tenant_id, subject_id)
+        existing_terminal = _terminal_event(events)
+        disposition_id = _terminal_disposition_artifact_id(subject_id)
+        if existing_terminal is not None:
+            details = existing_terminal.get("details")
+            if (
+                not isinstance(details, Mapping)
+                or existing_terminal.get("operation_id") != operation
+                or details.get("terminal_status") != terminal_status
+                or details.get("disposition_reason_code") != reason
+            ):
+                raise LifecycleServiceConflict(
+                    "Run is already terminal with different immutable disposition facts."
+                )
+            binding = _binding_from_mapping(details.get("terminal_artifact"))
+            if binding.artifact_id != disposition_id:
+                raise LifecycleServicePersistenceError(
+                    "Stored disposition artifact id is not deterministic."
+                )
+            stored = self._load_exact(
+                scope=scope,
+                subject_id=subject_id,
+                purpose="terminal-disposition",
+                namespace=TERMINAL_DISPOSITION_NAMESPACE,
+                artifact_id=disposition_id,
+                expected_binding=binding,
+            )
+            _validate_terminal_disposition_envelope(
+                stored.raw_bytes,
+                subject_id=subject_id,
+                run_id=lifecycle.run_id,
+                job_id=job_id,
+                authorization_binding=authorization_storage.lifecycle_binding,
+                terminal_event=existing_terminal,
+                running_event=_event(events, RUNNING),
+            )
+            return LifecycleDispositionResult(
+                lifecycle=lifecycle,
+                terminal_status=terminal_status,
+                reason_code=reason,
+                disposition_storage=stored,
+                observed_at=str(existing_terminal.get("occurred_at")),
+                idempotent_replay=True,
+            )
+
+        required_state = RUNNING if terminal_status == INDETERMINATE else AUTHORIZED
+        if lifecycle.state != required_state:
+            raise LifecycleServiceBindingError(
+                f"{terminal_status} requires a {required_state} lifecycle."
+            )
+        observation = self._observe_clock(operation="record_terminal_disposition")
+        if terminal_status == EXPIRED and observation.observed_at.astimezone(UTC) < _parse_timestamp(
+            authorization.expires_at
+        ):
+            raise LifecycleServiceBindingError(
+                "EXPIRED cannot be recorded before authorization expiry."
+            )
+        if terminal_status == REJECTED and observation.observed_at.astimezone(UTC) >= _parse_timestamp(
+            authorization.expires_at
+        ):
+            raise LifecycleServiceBindingError(
+                "REJECTED cannot replace EXPIRED after authorization expiry."
+            )
+        running_event = _event(events, RUNNING)
+        lease_fence = (
+            _lease_fence_from_event(running_event)
+            if terminal_status == INDETERMINATE and running_event is not None
+            else None
+        )
+        consumption_artifact = None
+        if running_event is not None:
+            details = running_event.get("details")
+            if not isinstance(details, Mapping):
+                raise LifecycleServicePersistenceError(
+                    "RUNNING event details are unavailable for disposition."
+                )
+            consumption_artifact = _binding_from_mapping(
+                details.get("consumption_artifact")
+            ).as_dict()
+        raw = _canonical_json_bytes(
+            {
+                "schema_version": "cas_harness_v2.terminal_disposition.v1",
+                "disposition_id": disposition_id,
+                "subject_id": subject_id,
+                "run_id": lifecycle.run_id,
+                "job_id": job_id,
+                "terminal_status": terminal_status,
+                "reason_code": reason,
+                "state_before": lifecycle.state,
+                "authorization_artifact": authorization_storage.lifecycle_binding.as_dict(),
+                "consumption_artifact": consumption_artifact,
+                "lease_fence": lease_fence,
+                "clock_observation": observation.as_dict(),
+                "outcome_access": "NOT_RECORDED",
+                "reporting_effect": "NONREPORTING_REQUIRED_NO_OUTCOME_FABRICATED",
+                "authority": _authority(),
+            }
+        )
+        stored = self._store_exact(
+            scope=scope,
+            subject_id=subject_id,
+            purpose="terminal-disposition",
+            namespace=TERMINAL_DISPOSITION_NAMESPACE,
+            artifact_id=disposition_id,
+            media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+            raw=raw,
+        )
+        mutation = self._lifecycle.record_terminal(
+            tenant_id=tenant_id,
+            subject_id=subject_id,
+            operation_id=operation,
+            terminal_status=terminal_status,
+            terminal_artifact=stored.lifecycle_binding,
+            terminal_at=observation.observed_at,
+            lease_fence=lease_fence,
+            clock_observation=observation.as_dict(),
+            disposition_reason_code=reason,
+        )
+        return LifecycleDispositionResult(
+            lifecycle=mutation.lifecycle,
+            terminal_status=terminal_status,
+            reason_code=reason,
+            disposition_storage=stored,
+            observed_at=observation.as_dict()["observed_at"],
             idempotent_replay=mutation.idempotent_replay,
         )
 
@@ -673,6 +1063,8 @@ class DarkHarnessV2LifecycleService:
         artifact_id: str,
         media_type: str,
         output_raw: bytes | bytearray | memoryview,
+        job_id: str,
+        lease_token: str,
     ) -> ExactArtifactReceipt:
         """Retain one authorized output callback while the run is RUNNING."""
 
@@ -687,6 +1079,26 @@ class DarkHarnessV2LifecycleService:
             subject_id=subject_id,
             chain=chain,
         )
+        if job_id != scope["job_id"]:
+            raise LifecycleServiceBindingError(
+                "Output job does not match the prospective execution mapping."
+            )
+        observation = self._observe_clock(operation="retain_output")
+        active_fence = self._active_lease_fence(
+            scope=scope,
+            job_id=job_id,
+            worker_id=scope["worker_id"],
+            lease_token=lease_token,
+            observation=observation,
+            authorization=authorization,
+        )
+        running_event = _event(self._events(tenant_id, subject_id), RUNNING)
+        if running_event is None or active_fence != _lease_fence_from_event(
+            running_event
+        ):
+            raise LifecycleServiceConflict(
+                "Output lease differs from the lease fence that consumed the run."
+            )
         name = _required_text(output_name, "output_name")
         expected_outputs = authorization.payload["execution_mapping"][
             "expected_outputs"
@@ -727,8 +1139,16 @@ class DarkHarnessV2LifecycleService:
         terminal_event = _terminal_event(self._events(tenant_id, subject_id))
         if terminal_event is None:
             raise LifecycleServiceBindingError("Outcome sealing requires a terminal run.")
+        terminal_details = terminal_event.get("details")
+        if (
+            not isinstance(terminal_details, Mapping)
+            or terminal_details.get("terminal_status") not in {SUCCESS, FAILURE}
+        ):
+            raise LifecycleServiceBindingError(
+                "Server dispositions have no execution outcome to seal."
+            )
         terminal_binding = _binding_from_mapping(
-            terminal_event["details"]["terminal_artifact"]
+            terminal_details["terminal_artifact"]
         )
         terminal_storage = self._load_exact(
             scope=scope,
@@ -1029,9 +1449,15 @@ class DarkHarnessV2LifecycleService:
         """Attach an explicit negative/nonreporting envelope instead of Packet v2."""
 
         lifecycle = self._require_lifecycle(tenant_id, subject_id)
-        if lifecycle.state not in {OUTCOME_ACCESSED, NONREPORTING_RECORDED}:
+        if lifecycle.state not in {
+            OUTCOME_ACCESSED,
+            INDETERMINATE,
+            REJECTED,
+            EXPIRED,
+            NONREPORTING_RECORDED,
+        }:
             raise LifecycleServiceBindingError(
-                "Nonreporting requires a sealed terminal outcome."
+                "Nonreporting requires a sealed outcome or a no-outcome server disposition."
             )
         _authorization, scope, _ = self._reload_authorization(
             tenant_id=tenant_id,
@@ -1048,18 +1474,37 @@ class DarkHarnessV2LifecycleService:
         terminal_binding = _binding_from_mapping(
             terminal_event["details"]["terminal_artifact"]
         )
+        terminal_status = terminal_event["details"]["terminal_status"]
+        outcome_event = _event(events, OUTCOME_ACCESSED)
+        direct_no_outcome = terminal_status in SERVER_TERMINAL_DISPOSITIONS
+        if direct_no_outcome and outcome_event is not None:
+            raise LifecycleServicePersistenceError(
+                "Server disposition unexpectedly has an outcome-access event."
+            )
+        if not direct_no_outcome and outcome_event is None:
+            raise LifecycleServiceBindingError(
+                "Strict worker terminal nonreporting requires a sealed outcome."
+            )
         reason = _required_text(reason_code, "reason_code")
         nonreporting_id = _nonreporting_artifact_id(subject_id)
         raw = _canonical_json_bytes(
             {
-                "schema_version": "cas_harness_v2.nonreporting.v1",
+                "schema_version": "cas_harness_v2.nonreporting.v2",
                 "nonreporting_id": nonreporting_id,
                 "subject_id": subject_id,
                 "run_id": lifecycle.run_id,
-                "terminal_status": terminal_event["details"]["terminal_status"],
+                "terminal_status": terminal_status,
                 "terminal_artifact": terminal_binding.as_dict(),
                 "reason_code": reason,
                 "recorded_at": _registry_timestamp(recorded_at),
+                "outcome_access": (
+                    "NOT_RECORDED" if direct_no_outcome else "RECORDED"
+                ),
+                "preregistration_chain_closure": (
+                    "NOT_ESTABLISHED_NO_OUTCOME_EVENT"
+                    if direct_no_outcome
+                    else "SEALED_OUTCOME_EVENT_RECORDED_NOT_SCIENTIFIC_AUTHORITY"
+                ),
                 "reporting_effect": "NO_EVIDENCE_PACKET_V2_FABRICATED",
                 "authority": _authority(),
             }
@@ -1129,28 +1574,53 @@ class DarkHarnessV2LifecycleService:
         terminal_event = _terminal_event(events)
         terminal: TerminalCarrier | None = None
         if terminal_event is not None:
+            terminal_details = terminal_event.get("details")
+            if not isinstance(terminal_details, Mapping):
+                raise LifecycleServicePersistenceError(
+                    "Terminal event details are unavailable."
+                )
             binding = _binding_from_mapping(
-                terminal_event["details"]["terminal_artifact"]
+                terminal_details["terminal_artifact"]
             )
-            terminal_storage = self._load_exact(
-                scope=scope,
-                subject_id=subject_id,
-                purpose="terminal",
-                namespace=TERMINAL_NAMESPACE,
-                artifact_id=binding.artifact_id,
-                expected_binding=binding,
-            )
-            terminal = self._load_terminal_receipt(
-                terminal_storage.raw_bytes,
-                authorization=authorization,
-                chain=chain,
-            )
-            self._require_retained_outputs(
-                scope=scope,
-                subject_id=subject_id,
-                terminal=terminal,
-                submitted={},
-            )
+            if terminal_details.get("terminal_status") in SERVER_TERMINAL_DISPOSITIONS:
+                terminal_storage = self._load_exact(
+                    scope=scope,
+                    subject_id=subject_id,
+                    purpose="terminal-disposition",
+                    namespace=TERMINAL_DISPOSITION_NAMESPACE,
+                    artifact_id=binding.artifact_id,
+                    expected_binding=binding,
+                )
+                _validate_terminal_disposition_envelope(
+                    terminal_storage.raw_bytes,
+                    subject_id=subject_id,
+                    run_id=lifecycle.run_id,
+                    job_id=scope["job_id"],
+                    authorization_binding=authorization_storage.lifecycle_binding,
+                    terminal_event=terminal_event,
+                    running_event=running_event,
+                )
+            else:
+                terminal_storage = self._load_exact(
+                    scope=scope,
+                    subject_id=subject_id,
+                    purpose="terminal",
+                    namespace=TERMINAL_NAMESPACE,
+                    artifact_id=binding.artifact_id,
+                    expected_binding=binding,
+                )
+                terminal = self._load_terminal_receipt(
+                    terminal_storage.raw_bytes,
+                    authorization=authorization,
+                    chain=chain,
+                )
+                _verify_terminal_started_at(terminal, running_event)
+                self._require_retained_outputs(
+                    scope=scope,
+                    subject_id=subject_id,
+                    terminal=terminal,
+                    submitted={},
+                )
         outcome_event = _event(events, OUTCOME_ACCESSED)
         if outcome_event is not None:
             binding = _binding_from_mapping(
@@ -1245,6 +1715,7 @@ class DarkHarnessV2LifecycleService:
                 run_id=lifecycle.run_id,
                 terminal_event=terminal_event,
                 nonreporting_event=nonreporting_event,
+                outcome_event=outcome_event,
             )
         return LifecycleReconciliationResult(
             lifecycle=lifecycle,
@@ -1276,6 +1747,7 @@ class DarkHarnessV2LifecycleService:
             "account_id": account_id,
             "audit_id": "PENDING_STRICT_RELOAD",
             "fleet_id": "PENDING_STRICT_RELOAD",
+            "job_id": "PENDING_STRICT_RELOAD",
             "worker_id": "PENDING_STRICT_RELOAD",
         }
         # Scope is stored inside the immutable wrapper, so first load it without
@@ -1296,6 +1768,13 @@ class DarkHarnessV2LifecycleService:
             account_id=account_id,
             execution_mapping=authorization.payload["execution_mapping"],
         )
+        if (
+            subject_id != scope["job_id"]
+            or authorization.authorization_id != subject_id
+        ):
+            raise LifecycleServiceBindingError(
+                "Reloaded subject_id, authorization_id, and job_id differ."
+            )
         self._load_exact(
             scope=scope,
             subject_id=subject_id,
@@ -1560,6 +2039,7 @@ class DarkHarnessV2LifecycleService:
             "account_id",
             "audit_id",
             "fleet_id",
+            "job_id",
             "worker_id",
         }:
             raise LifecycleServicePersistenceError(
@@ -1626,6 +2106,101 @@ class DarkHarnessV2LifecycleService:
     def _events(self, tenant_id: str, subject_id: str) -> tuple[Mapping[str, Any], ...]:
         return self._lifecycle.list_events(tenant_id=tenant_id, subject_id=subject_id)
 
+    def _observe_clock(self, *, operation: str) -> LifecycleClockObservation:
+        try:
+            observation = self._clock.observe(operation=operation)
+        except LifecycleServiceError:
+            raise
+        except (TypeError, ValueError, RuntimeError) as exc:
+            raise LifecycleServiceBindingError(
+                "Untrusted lifecycle clock observation failed."
+            ) from exc
+        if not isinstance(observation, LifecycleClockObservation):
+            raise LifecycleServiceBindingError(
+                "Lifecycle clock returned an invalid observation carrier."
+            )
+        # Materialize the exact representation now so malformed injected clocks
+        # fail before any repository or lifecycle write.
+        observation.as_dict()
+        return observation
+
+    def _active_lease_fence(
+        self,
+        *,
+        scope: Mapping[str, str],
+        job_id: str,
+        worker_id: str,
+        lease_token: str,
+        observation: LifecycleClockObservation,
+        authorization: AuthorizationCarrier,
+    ) -> dict[str, str]:
+        secret = _required_text(lease_token, "lease_token")
+        try:
+            active = self._validate_active_lease(
+                audit_id=scope["audit_id"],
+                job_id=job_id,
+                worker_id=worker_id,
+                lease_token=secret,
+                now=observation.observed_at,
+            )
+        except LifecycleServiceError:
+            raise
+        except (AttributeError, TypeError, ValueError, RuntimeError) as exc:
+            raise LifecycleServiceBindingError(
+                "Active fleet lease validation failed."
+            ) from exc
+        try:
+            snapshot_mapping = active.snapshot.execution_mapping()
+            generation = _required_text(
+                active.lease_generation_id, "active lease generation"
+            )
+            token_digest = _required_lower_sha256(
+                active.lease_token_sha256, "active lease token digest"
+            )
+            expires_at = _registry_timestamp(
+                _parse_timestamp(active.lease_expires_at)
+            )
+            state_authority = _required_text(
+                active.state_authority, "active lease state authority"
+            )
+            trusted_time = _required_text(
+                active.trusted_time, "active lease trusted-time status"
+            )
+        except (AttributeError, TypeError, ValueError) as exc:
+            raise LifecycleServiceBindingError(
+                "Active fleet lease result is malformed."
+            ) from exc
+        expected_mapping = authorization.payload.get("execution_mapping")
+        if (
+            not isinstance(snapshot_mapping, Mapping)
+            or not isinstance(expected_mapping, Mapping)
+            or _plain_json(snapshot_mapping) != _plain_json(expected_mapping)
+        ):
+            raise LifecycleServiceBindingError(
+                "Active fleet lease snapshot differs from the prospective authorization."
+            )
+        if (
+            trusted_time != "NOT_ESTABLISHED"
+            or state_authority != "PROCESS_LOCAL_FLEET_STATE_NOT_DURABLE"
+        ):
+            raise LifecycleServiceBindingError(
+                "Active fleet lease result exceeds the bounded process-local authority."
+            )
+        if not hmac.compare_digest(token_digest, _lease_token_sha256(secret)):
+            raise LifecycleServiceBindingError(
+                "Active fleet lease digest does not bind the supplied secret."
+            )
+        if _parse_timestamp(expires_at) <= observation.observed_at.astimezone(UTC):
+            raise LifecycleServiceBindingError("Active fleet lease has expired.")
+        return {
+            "job_id": job_id,
+            "lease_generation_id": generation,
+            "lease_token_sha256": token_digest,
+            "lease_expires_at": expires_at,
+            "state_authority": state_authority,
+            "trusted_time": trusted_time,
+        }
+
     def _require_lifecycle(self, tenant_id: str, subject_id: str) -> Any:
         lifecycle = self._lifecycle.get_lifecycle(
             tenant_id=tenant_id, subject_id=subject_id
@@ -1661,6 +2236,118 @@ def _event(
             f"Lifecycle contains multiple {event_type} events."
         )
     return matches[0] if matches else None
+
+
+def _lease_fence_from_event(event: Mapping[str, Any]) -> dict[str, str]:
+    details = event.get("details")
+    value = details.get("lease_fence") if isinstance(details, Mapping) else None
+    if not isinstance(value, Mapping) or set(value) != {
+        "job_id",
+        "lease_generation_id",
+        "lease_token_sha256",
+        "lease_expires_at",
+        "state_authority",
+        "trusted_time",
+    }:
+        raise LifecycleServicePersistenceError(
+            "Lifecycle event has no exact redacted lease fence."
+        )
+    try:
+        result = {
+            "job_id": _required_text(value.get("job_id"), "lease fence job_id"),
+            "lease_generation_id": _required_text(
+                value.get("lease_generation_id"), "lease fence generation"
+            ),
+            "lease_token_sha256": _required_lower_sha256(
+                value.get("lease_token_sha256"), "lease fence token digest"
+            ),
+            "lease_expires_at": _registry_timestamp(
+                _parse_timestamp(value.get("lease_expires_at"))
+            ),
+            "state_authority": _required_text(
+                value.get("state_authority"), "lease fence state authority"
+            ),
+            "trusted_time": _required_text(
+                value.get("trusted_time"), "lease fence trusted-time status"
+            ),
+        }
+    except LifecycleServiceBindingError as exc:
+        raise LifecycleServicePersistenceError(
+            "Lifecycle event lease fence is malformed."
+        ) from exc
+    if (
+        result["trusted_time"] != "NOT_ESTABLISHED"
+        or result["state_authority"] != "PROCESS_LOCAL_FLEET_STATE_NOT_DURABLE"
+        or dict(value) != result
+    ):
+        raise LifecycleServicePersistenceError(
+            "Lifecycle event lease fence changed or claims trusted time."
+        )
+    return result
+
+
+def _clock_observation_from_event(event: Mapping[str, Any]) -> dict[str, str]:
+    details = event.get("details")
+    value = details.get("clock_observation") if isinstance(details, Mapping) else None
+    if not isinstance(value, Mapping) or set(value) != {
+        "observed_at",
+        "source",
+        "assurance",
+    }:
+        raise LifecycleServicePersistenceError(
+            "Lifecycle event has no exact untrusted clock observation."
+        )
+    try:
+        result = {
+            "observed_at": _registry_timestamp(
+                _parse_timestamp(value.get("observed_at"))
+            ),
+            "source": _required_text(value.get("source"), "clock source"),
+            "assurance": _required_text(
+                value.get("assurance"), "clock assurance"
+            ),
+        }
+    except LifecycleServiceBindingError as exc:
+        raise LifecycleServicePersistenceError(
+            "Lifecycle event clock observation is malformed."
+        ) from exc
+    if result["assurance"] != UNTRUSTED_CLOCK_ASSURANCE or dict(value) != result:
+        raise LifecycleServicePersistenceError(
+            "Lifecycle event clock observation changed or claims trusted time."
+        )
+    if result["observed_at"] != event.get("occurred_at"):
+        raise LifecycleServicePersistenceError(
+            "Lifecycle event clock observation differs from occurred_at."
+        )
+    return result
+
+
+def _verify_terminal_started_at(
+    terminal: TerminalCarrier,
+    running_event: Mapping[str, Any] | None,
+) -> None:
+    if running_event is None:
+        raise LifecycleServiceBindingError(
+            "Strict worker terminal has no prospective RUNNING parent."
+        )
+    freshness = terminal.payload.get("freshness")
+    worker_started_at = (
+        freshness.get("worker_started_at") if isinstance(freshness, Mapping) else None
+    )
+    occurred_at = running_event.get("occurred_at")
+    if not isinstance(worker_started_at, str) or not isinstance(occurred_at, str):
+        raise LifecycleServiceBindingError(
+            "Strict terminal worker start time is unavailable."
+        )
+    if _parse_timestamp(worker_started_at) != _parse_timestamp(occurred_at):
+        raise LifecycleServiceBindingError(
+            "Strict terminal worker_started_at differs from the RUNNING event time."
+        )
+
+
+def _lease_token_sha256(value: object) -> str:
+    secret = _required_text(value, "lease_token")
+    return hashlib.sha256(secret.encode("utf-8")).hexdigest()
 
 
 def _binding_from_mapping(value: object) -> ArtifactBinding:
@@ -1824,6 +2511,7 @@ def _scope_from_execution(
         "account_id": _required_text(account_id, "account_id"),
         "audit_id": _required_text(execution_mapping.get("audit_id"), "audit_id"),
         "fleet_id": _required_text(execution_mapping.get("fleet_id"), "fleet_id"),
+        "job_id": _required_text(execution_mapping.get("job_id"), "job_id"),
         "worker_id": _required_text(
             execution_mapping.get("assigned_worker_id"), "assigned_worker_id"
         ),
@@ -1837,6 +2525,7 @@ def _verify_execution_scope(payload: Mapping[str, Any], scope: Mapping[str, str]
     expected = {
         "audit_id": scope["audit_id"],
         "fleet_id": scope["fleet_id"],
+        "job_id": scope["job_id"],
         "assigned_worker_id": scope["worker_id"],
     }
     for field, value in expected.items():
@@ -1958,6 +2647,10 @@ def _nonreporting_artifact_id(subject_id: str) -> str:
     return "h2nonreport_" + hashlib.sha256(subject_id.encode("utf-8")).hexdigest()
 
 
+def _terminal_disposition_artifact_id(subject_id: str) -> str:
+    return "h2disposition_" + hashlib.sha256(subject_id.encode("utf-8")).hexdigest()
+
+
 def _decode_nonce(value: str) -> bytes:
     if not isinstance(value, str) or len(value) != 43:
         raise LifecycleServiceBindingError("Registry nonce is not canonical base64url.")
@@ -2035,6 +2728,90 @@ def _registry_timestamp(value: datetime) -> str:
     )
 
 
+def _strict_canonical_object(raw: bytes, label: str) -> dict[str, Any]:
+    duplicates: list[str] = []
+
+    def strict_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        result: dict[str, Any] = {}
+        for key, value in pairs:
+            if key in result:
+                duplicates.append(key)
+            result[key] = value
+        return result
+
+    try:
+        value = json.loads(raw.decode("ascii"), object_pairs_hook=strict_object)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise LifecycleServicePersistenceError(
+            f"Retained {label} is not strict canonical JSON."
+        ) from exc
+    if (
+        duplicates
+        or not isinstance(value, dict)
+        or _canonical_json_bytes(value) != raw
+    ):
+        raise LifecycleServicePersistenceError(
+            f"Retained {label} is not one strict canonical object."
+        )
+    return value
+
+
+def _validate_terminal_disposition_envelope(
+    raw: bytes,
+    *,
+    subject_id: str,
+    run_id: str,
+    job_id: str,
+    authorization_binding: ArtifactBinding,
+    terminal_event: Mapping[str, Any],
+    running_event: Mapping[str, Any] | None,
+) -> None:
+    value = _strict_canonical_object(raw, "terminal disposition")
+    details = terminal_event.get("details")
+    if not isinstance(details, Mapping):
+        raise LifecycleServicePersistenceError(
+            "Terminal disposition event details are unavailable."
+        )
+    terminal_status = details.get("terminal_status")
+    if terminal_status not in SERVER_TERMINAL_DISPOSITIONS:
+        raise LifecycleServicePersistenceError(
+            "Terminal disposition event has a worker terminal state."
+        )
+    consumption_artifact = None
+    lease_fence = None
+    if running_event is not None:
+        running_details = running_event.get("details")
+        if not isinstance(running_details, Mapping):
+            raise LifecycleServicePersistenceError(
+                "RUNNING event details are unavailable for disposition replay."
+            )
+        consumption_artifact = _binding_from_mapping(
+            running_details.get("consumption_artifact")
+        ).as_dict()
+        lease_fence = _lease_fence_from_event(running_event)
+    expected = {
+        "schema_version": "cas_harness_v2.terminal_disposition.v1",
+        "disposition_id": _terminal_disposition_artifact_id(subject_id),
+        "subject_id": subject_id,
+        "run_id": run_id,
+        "job_id": job_id,
+        "terminal_status": terminal_status,
+        "reason_code": details.get("disposition_reason_code"),
+        "state_before": terminal_event.get("state_before"),
+        "authorization_artifact": authorization_binding.as_dict(),
+        "consumption_artifact": consumption_artifact,
+        "lease_fence": lease_fence if terminal_status == INDETERMINATE else None,
+        "clock_observation": _clock_observation_from_event(terminal_event),
+        "outcome_access": "NOT_RECORDED",
+        "reporting_effect": "NONREPORTING_REQUIRED_NO_OUTCOME_FABRICATED",
+        "authority": _authority(),
+    }
+    if value != expected:
+        raise LifecycleServicePersistenceError(
+            "Retained terminal disposition differs from its lifecycle facts."
+        )
+
+
 def _validate_nonreporting_envelope(
     raw: bytes,
     *,
@@ -2042,6 +2819,7 @@ def _validate_nonreporting_envelope(
     run_id: str,
     terminal_event: Mapping[str, Any],
     nonreporting_event: Mapping[str, Any],
+    outcome_event: Mapping[str, Any] | None,
 ) -> None:
     duplicates: list[str] = []
 
@@ -2068,17 +2846,29 @@ def _validate_nonreporting_envelope(
     terminal_binding = _binding_from_mapping(
         terminal_event["details"]["terminal_artifact"]
     )
+    terminal_status = terminal_event["details"].get("terminal_status")
+    direct_no_outcome = terminal_status in SERVER_TERMINAL_DISPOSITIONS
+    if direct_no_outcome == (outcome_event is not None):
+        raise LifecycleServicePersistenceError(
+            "Nonreporting outcome-access ancestry conflicts with terminal status."
+        )
     reason = nonreporting_event["details"].get("reason_code")
     occurred_at = nonreporting_event.get("occurred_at")
     expected = {
-        "schema_version": "cas_harness_v2.nonreporting.v1",
+        "schema_version": "cas_harness_v2.nonreporting.v2",
         "nonreporting_id": _nonreporting_artifact_id(subject_id),
         "subject_id": subject_id,
         "run_id": run_id,
-        "terminal_status": terminal_event["details"].get("terminal_status"),
+        "terminal_status": terminal_status,
         "terminal_artifact": terminal_binding.as_dict(),
         "reason_code": reason,
         "recorded_at": occurred_at,
+        "outcome_access": "NOT_RECORDED" if direct_no_outcome else "RECORDED",
+        "preregistration_chain_closure": (
+            "NOT_ESTABLISHED_NO_OUTCOME_EVENT"
+            if direct_no_outcome
+            else "SEALED_OUTCOME_EVENT_RECORDED_NOT_SCIENTIFIC_AUTHORITY"
+        ),
         "reporting_effect": "NO_EVIDENCE_PACKET_V2_FABRICATED",
         "authority": _authority(),
     }
@@ -2117,11 +2907,11 @@ def _validate_consumption_envelope(
         "consumption_id",
         "subject_id",
         "run_id",
+        "job_id",
         "worker_id",
         "authorization_artifact",
-        "lease_generation_id",
-        "lease_token_sha256",
-        "lease_expires_at",
+        "lease_fence",
+        "clock_observation",
         "started_at",
         "secret_retention",
         "record_effect",
@@ -2143,12 +2933,15 @@ def _validate_consumption_envelope(
         )
     event_binding = _binding_from_mapping(details.get("consumption_artifact"))
     expected_static = {
-        "schema_version": "cas_harness_v2.run_consumption_attempt.v1",
+        "schema_version": "cas_harness_v2.run_consumption_attempt.v2",
         "consumption_id": event_binding.artifact_id,
         "subject_id": subject_id,
         "run_id": run_id,
+        "job_id": _lease_fence_from_event(running_event)["job_id"],
         "worker_id": details.get("worker_id"),
         "authorization_artifact": authorization_binding.as_dict(),
+        "lease_fence": _lease_fence_from_event(running_event),
+        "clock_observation": _clock_observation_from_event(running_event),
         "started_at": running_event.get("occurred_at"),
         "secret_retention": "DIGEST_ONLY_NO_RAW_RUN_LEASE_OR_CALLBACK_NONCES",
         "record_effect": "ATTEMPT_ONLY_NOT_PROOF_OF_EXECUTION",
@@ -2159,19 +2952,14 @@ def _validate_consumption_envelope(
             "Retained consumption envelope differs from lifecycle facts."
         )
     try:
-        generation = _required_text(
-            value.get("lease_generation_id"), "lease_generation_id"
-        )
-        token_digest = _required_lower_sha256(
-            value.get("lease_token_sha256"), "lease_token_sha256"
-        )
-        expires = _parse_timestamp(value.get("lease_expires_at"))
+        fence = _lease_fence_from_event(running_event)
+        expires = _parse_timestamp(fence["lease_expires_at"])
         started = _parse_timestamp(value.get("started_at"))
     except LifecycleServiceBindingError as exc:
         raise LifecycleServicePersistenceError(
             "Retained consumption lease facts are malformed."
         ) from exc
-    if not generation or not token_digest or expires <= started:
+    if expires <= started:
         raise LifecycleServicePersistenceError(
             "Retained consumption lease facts are not active and exact."
         )
@@ -2203,8 +2991,13 @@ __all__ = [
     "OUTCOME_ACCESS_NAMESPACE",
     "OUTPUT_NAMESPACE",
     "TERMINAL_NAMESPACE",
+    "TERMINAL_DISPOSITION_NAMESPACE",
+    "TERMINAL_DISPOSITION_REASON_CODES",
     "DarkHarnessV2LifecycleService",
     "ExactArtifactReceipt",
+    "LifecycleClockObservation",
+    "ProcessUtcLifecycleClock",
+    "LifecycleDispositionResult",
     "LifecycleIssueResult",
     "LifecycleOutcomeResult",
     "LifecyclePacketResult",

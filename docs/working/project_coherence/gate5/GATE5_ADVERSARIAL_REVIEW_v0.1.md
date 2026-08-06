@@ -1,6 +1,16 @@
 # Gate 5 adversarial review v0.1
 
-**Status:** `DRAFT / OPEN / NOT_STARTED / RING 4 / NOT LICENSED / HELD / NOT FROZEN`
+Document status: `DRAFT / OPEN / NOT FROZEN`
+
+Decision status: `OPEN / KEEP_OPEN`
+
+Engineering status: `RING 4 / BOUNDED SOFTWARE CANDIDATE TESTED`
+
+Experimental execution status: `NOT_STARTED`
+
+License / disclosure / canon status: `NOT LICENSED / HELD / NOT FROZEN`
+
+Live / product route status: `unavailable / not authorized`
 
 ## Decision
 
@@ -11,11 +21,12 @@ trusted ordering, a live scientific result, independent numerical agreement,
 replication, peer review, product readiness, licensing, or disclosure
 authority.
 
-The controlling charter status remains `OPEN / NOT_STARTED`. Control-kernel
-engineering has begun, but none of the charter's per-module scientific closure
-conditions has been satisfied by a live admitted experiment. No result in this
-review creates `ACCEPT`, `LICENSED`, live-execution authority, a public route, a
-product route, disclosure authority, scientific authority, or canon authority.
+The decision remains `OPEN / KEEP_OPEN`, while engineering has reached
+`RING 4 / BOUNDED SOFTWARE CANDIDATE TESTED` and experimental execution remains
+`NOT_STARTED`. None of the charter's per-module scientific closure conditions
+has been satisfied by a live admitted experiment. No result in this review
+creates `ACCEPT`, `LICENSED`, live-execution authority, a public route, a product
+route, disclosure authority, scientific authority, or canon authority.
 One CPU-only non-scientific engineering preflight canary occurred; it was not an
 authorized or admitted experiment and created no GPU run, Evidence Packet, or
 scientific result. Experimental execution remains `NOT_STARTED`.
@@ -31,6 +42,7 @@ This review is bounded to the following current surfaces:
   `GATE5_WORKER_PROTOCOL_BINDING_v0.1.md`, its strict carriers, dark API
   bridge, same-host prospective lifecycle registry, exact-wrapper service,
   default-dark/OpenAPI-hidden router, request-bound callback-auth projection,
+  admitted packaged adapter, controller reconciliation-report path,
   active-lease validation seam, and synthetic immutable-storage seam;
 - the current `live-trace-worker` model-identity and intervention-integrity
   controls;
@@ -48,9 +60,9 @@ This review is bounded to the following current surfaces:
   `GATE5_REVIEW_MATRIX_v0.1.json`.
 
 The companion matrix schema is
-`project_coherence.gate5_review_matrix.v0.1`. It contains **47 criteria**:
+`project_coherence.gate5_review_matrix.v0.1`. It contains **49 criteria**:
 
-- 18 `IMPLEMENTED_AND_REGRESSION_TESTED`;
+- 20 `IMPLEMENTED_AND_REGRESSION_TESTED`;
 - 3 `IMPLEMENTED_AND_HASH_VERIFIED`;
 - 1 `PRESERVED_NEGATIVE_EVIDENCE`;
 - 10 `OPEN_ENGINEERING`;
@@ -203,9 +215,10 @@ The strict worker subset passes **30 tests plus 38 subtests**, with canonical
 node-ID SHA-256
 `534CF4550FF56F3EA5F4235680CDB89A91784D1CEE0B7CB7ABDF9DE1C7B3E7FF`.
 These are local structural regressions. Loader provenance remains an explicit
-unresolved deployment trust boundary; the adapter has no admitted production
-route and no independent live-worker replay. `G5-ENGINEERING-001` therefore
-remains `OPEN_ENGINEERING`.
+unresolved deployment trust boundary. The packaged adapter is admitted only as
+a bounded local candidate; it has no provider-backed production startup,
+authorized live route, or independent live-worker replay.
+`G5-ENGINEERING-001` therefore remains `OPEN_ENGINEERING`.
 
 A second read-only adversarial pass confirmed the nonce chronology and partial-
 failure repairs, then caught three documentation overclaims. The specification
@@ -216,8 +229,9 @@ loaders and keeps injected bridge provenance OPEN. The later sealed-safe replay
 port repairs the former pre-outcome-only bridge defect: a retained exact
 terminal can now replay after an exact seal binding the same terminal artifact
 and completion time. The public authorization loader remains closed after
-outcome access, and no admitted HTTP adapter or independent replay follows from
-that local repair.
+outcome access. The packaged HTTP adapter now uses the sealed-safe lifecycle
+replay port, but no provider-backed live replay or independent authority follows
+from that local repair.
 
 ### Durable prospective lifecycle P0 review
 
@@ -234,17 +248,17 @@ explicit:
   server-observed method, exact path, job/run IDs, authorization digest when
   required, and carrier digest/length for every accepted route request. That
   authentication row is not the bridge's immutable acceptance wrapper/index:
-  only terminal submissions traversing the bridge create the latter. The bridge
-  still receives only the legacy callback carrier; no packaged adapter currently
-  carries and revalidates the enclosing request-bound receipt end to end;
+  only terminal submissions traversing the bridge create the latter. The
+  admitted adapter now carries the enclosing request-bound receipt through the
+  lifecycle, and the bridge revalidates its exact callback and intake binding;
 - consumption uses a same-host `StateStore` compare-and-swap and a server-built
-  digest-only envelope. A separate active-lease validator checks exact current
-  process-local lease generation, worker, model, token digest, and expiry, but
-  `consume_run` currently trusts passed lease facts and no adapter joins the two;
+  digest-only envelope. The admitted adapter passes the raw lease capability
+  process-locally to the active-lease validator, which checks the exact current
+  lease generation, worker, model, token digest, and expiry before consumption;
 - terminal intake reloads the prospective authorization and cannot submit a
   second authorization body at the lifecycle-service boundary. The HTTP route
-  itself treats the body as opaque bytes, so only the missing strict adapter
-  could establish terminal-only semantics or reject embedded authorization.
+  treats the body as opaque bytes, and the admitted adapter invokes the strict
+  lifecycle/bridge loaders to establish terminal-only semantics.
   Retained output bodies are required to match the terminal's exact references;
   packet attachment strict-loads Packet v2, validates the full supplied
   transitive body set, rebuilds the artifact registry, and runs the structural
@@ -253,8 +267,9 @@ explicit:
 - the orchestration service retains wired `SUCCESS`/`FAILURE`, reserves
   outcome-access time before chain mutation, and requires a typed server-built
   nonreporting envelope for failure instead of a favorable packet. The lower
-  registry has `INDETERMINATE`/`REJECTED`/`EXPIRED` states, but no service/route
-  path records them yet; and
+  registry and lifecycle service can record typed
+  `INDETERMINATE`/`REJECTED`/`EXPIRED` dispositions, but the admitted worker
+  adapter/router exposes no path for them; and
 - tenant reconciliation verifies the event hash chain and event-bound wrappers.
   It does not enumerate losing/orphan wrapper writes or every output retained
   while a run remains `RUNNING`, and it cannot prove that an off-registry run
@@ -265,9 +280,10 @@ explicit:
 
 The route hashes `job_id` into its prospective run ID. The lifecycle hashes
 `subject_id`, while the lifecycle service separately requires
-`subject_id == authorization_id`. No admitted adapter enforces the necessary
-`job_id == subject_id == authorization_id` contract, so route-to-registry run
-identity is not yet established.
+`subject_id == authorization_id`. The admitted adapter now enforces the
+necessary `job_id == subject_id == authorization_id` contract before lifecycle
+use. This establishes the bounded software identity mapping, not an executor
+identity attestation.
 
 The SQLite tests show close/reopen persistence for one file and
 compare-and-swap arbitration between two independent connections to that same
@@ -277,17 +293,23 @@ those untested cases into evidence.
 
 The HTTP router itself remains default-false, absent from OpenAPI, and
 fail-closed without a lifespan service. Main initializes that service to
-`None`, requires the isolated root package when enabled, and has no packaged
-adapter to satisfy the boundary. Therefore this is route code, not an admitted,
-reachable, public, product, or live-execution route. These residual P0 seams
-keep `G5-ENGINEERING-001` and `G5-TRUST-002/003/004` open.
+`None`, then constructs the exact admitted adapter only when the byte-verified
+packaged kernel, shared state, immutable repository, and fleet-auth ports are
+available. Local import, factory, and startup-boundary tests establish
+constructibility, but no provider-backed enabled startup has passed. Therefore
+the route remains unavailable and not authorized as a public, product, or
+live-execution route. The remaining deployment and trust seams keep
+`G5-ENGINEERING-001` and `G5-TRUST-002/003/004` open.
 
-The current bounded local receipts are **8/8** for the worker-terminal bridge
-(`6b0b52c30fa70c52e0ea5ac3b15221f4e5b8bc8337aa53b04972b3e543177969`),
-**35/35** for the callback/Object-Lock seam
-(`a340034084006fc437ab1f9724fb45d3ae09555f5d302fc36ccd6cf53ec28f57`),
-and **48/48** for the prospective lifecycle/SQLite/default-dark route suite
-(`b7b87d52351b21039a83e4b526bcaede0e8f3e11f79e162480fb007375421f44`).
+The current bounded local receipts are **17/17** for the worker-terminal bridge
+(`fa6c985cd6caa734034e006bb4baf6be9d02269d7312bee7355e9c3833759c51`),
+**38/38** for the callback/Object-Lock seam
+(`d3eaf533fedb5b03168200aa399ac53a6e2a6f22874ebabeaecefb227400778d`),
+**76/76** for the prospective lifecycle/SQLite/default-dark route suite
+(`5f1197d70b7afad39d01bebeb4e7397c3e075d74a5bffa5305c62a0edb3c7d84`),
+and **80/80** for packaging, snapshot, envelope, context, admitted-adapter,
+and bounded-reconciliation tests
+(`2e45fcd920e0b52916a7341d2ff766fdc9f7911ec2cb11c27bc3ff8fec3815fb`).
 They are `LOCAL_UNATTESTED_HOST_REGRESSION`, not live or scientific evidence.
 
 ## Live-worker adverse evidence and bounded repairs
@@ -590,17 +612,18 @@ path.
 Strict worker carriers, a dark bridge, a same-host lifecycle registry, and an
 exact-wrapper service now map the current FleetJob shape through local
 authorization, consumption, terminal, outcome-access, Packet-v2/nonreporting,
-and reconciliation candidates. A separate active-lease validator and a
-request-bound private router also exist. They are not wired together by an
-admitted packaged adapter: lifecycle consumption trusts passed lease facts, the
-bridge does not receive the enclosing request-bound intake receipt, three
-registry terminal states have no service path, reconciliation does not enumerate
-orphan wrappers, and the route has no explicit outcome-seal adapter. Main fails
-startup if the default-dark flag is enabled without the root package and an
-injected service, and no such service is wired. Trusted time, live independent
-Object Lock, multi-host/host-loss proof, authenticated execution, and independent
-executor/auditor replay remain absent. The v0.2 successor provides a digest-bound patched
-container candidate, exact build controls,
+and reconciliation candidates. The admitted packaged adapter now joins exact
+Fleet snapshots, joint run identity, active-lease validation, request-bound
+terminal intake, lifecycle replay, and a controller reconciliation report.
+Three registry terminal states still have no admitted worker route,
+reconciliation does not enumerate orphan wrappers, and the route has no
+explicit outcome-seal adapter. Main refuses enabled startup without the
+byte-verified root package, exact adapter profile, shared state, immutable
+repository, and fleet-auth ports. This has been constructed only in local tests;
+no provider-backed application startup has passed. Trusted time, live
+independent Object Lock, multi-host/host-loss proof, authenticated execution,
+and independent executor/auditor replay remain absent. The v0.2 successor
+provides a digest-bound patched container candidate, exact build controls,
 and a locally observed offline preflight plus BuildKit SBOM/provenance
 identifiers. The later receipt retains ten exact raw payloads and a current
 direct scan, but does not replay the complete tool execution or establish an
@@ -661,8 +684,9 @@ remain `NONE`; the claim remains `NOT LICENSED`; and disclosure remains `HELD`.
 The minimum defensible order is:
 
 1. preserve the verifier-native 150-test/99-subtest Harness-v2,
-   30-test/38-subtest worker-protocol, 8/8 dark-bridge, 35/35
-   callback/Object-Lock seam, 48/48 prospective lifecycle/SQLite/dark-route,
+   30-test/38-subtest worker-protocol, 17/17 dark-bridge, 38/38
+   callback/Object-Lock seam, 76/76 prospective lifecycle/SQLite/dark-route,
+   80/80 admitted-adapter/configured-reconciliation,
    32/32 focused numeric, 364/364 complete-worker, and 78/78
    API/launcher/fleet/state receipts, the earlier 290/290 checkpoint, and every
    counterexample, including the current ephemeral same-process and retained
@@ -673,10 +697,11 @@ The minimum defensible order is:
    scanner conflict, capture complete scanner-process and vendor-source
    evidence, and revalidate the exact model and hook contract under real
    GPU/autocast/compiled-hook behavior;
-3. independently review, package, and wire the worker-to-kernel candidate across
-   exact active lease generation, request-bound callback intake, all terminal
-   states, explicit outcome sealing, orphan-aware reconciliation, and Packet or
-   nonreporting boundaries;
+3. independently review, reproduce, and provider-start the packaged
+   worker-to-kernel candidate; specify and admit explicit outcome sealing and
+   Packet/nonreporting dependency routes, then replace configured-scope
+   reconciliation with provider-backed cross-host completeness before any live
+   authorization;
 4. replace the same-host SQLite/synthetic-wrapper seams with independently
    authenticated time and run authority, replicated/host-loss-resistant one-use
    consumption, live inner-byte/WORM ordering, and independently complete
@@ -692,8 +717,11 @@ The minimum defensible order is:
    control review, and external peer review; and
 9. evaluate product and disclosure gates separately.
 
-Until every applicable criterion is evidenced, Gate 5 remains
-`OPEN / NOT_STARTED / RING 4 / NOT LICENSED / HELD / NOT FROZEN`.
+Until every applicable criterion is evidenced, the six axes remain: document
+`DRAFT / OPEN / NOT FROZEN`; decision `OPEN / KEEP_OPEN`; engineering
+`RING 4 / BOUNDED SOFTWARE CANDIDATE TESTED`; experiment `NOT_STARTED`;
+license/disclosure/canon `NOT LICENSED / HELD / NOT FROZEN`; and live/product
+route `UNAVAILABLE / NOT AUTHORIZED`.
 
 The `$107.00` RunPod balance is user-reported. No provider billing ledger or
 balance receipt was inspected, no RunPod/GPU/paid job was launched, and known

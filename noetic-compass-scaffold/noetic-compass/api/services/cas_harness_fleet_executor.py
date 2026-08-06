@@ -24,7 +24,10 @@ from api.services.cas_harness_distributed_audits import (
     merge_distributed_audit,
     record_worker_evidence,
 )
-from api.services.cas_harness_v2_worker_bridge import FleetJobSnapshot
+from api.services.cas_harness_v2_worker_bridge import (
+    FleetJobSnapshot,
+    ResearchWorkerBridgeBindingError,
+)
 from api.services.production.state_substrate import INTERIM_TENANT, LedgerMirror, StateStore
 
 
@@ -200,6 +203,66 @@ class ActiveFleetJobLease:
     lease_expires_at: str
     state_authority: str = "PROCESS_LOCAL_FLEET_STATE_NOT_DURABLE"
     trusted_time: str = "NOT_ESTABLISHED"
+
+
+@dataclass(frozen=True, slots=True)
+class HarnessV2ConfiguredFleetInventory:
+    """Redacted process-local configuration inventory for later reconciliation.
+
+    ``tenant_id`` must come from the authenticated service boundary. The legacy
+    fleet executor does not retain tenant ownership, so this carrier deliberately
+    records that limitation instead of pretending the in-process dictionaries are
+    a tenant or durable authority. ``jobs`` contains no lease capability, receipt
+    payload, output body, or worker error text.
+    """
+
+    tenant_id: str
+    audit_id: str
+    fleet_id: str
+    jobs: tuple[FleetJobSnapshot, ...]
+    state_authority: str = "PROCESS_LOCAL_FLEET_STATE_NOT_DURABLE"
+    tenant_scope_authority: str = (
+        "AUTHENTICATED_SCOPE_REQUIRED_NOT_RETAINED_BY_FLEET_EXECUTOR"
+    )
+
+    def __post_init__(self) -> None:
+        tenant = _harness_v2_scope_text(self.tenant_id, "inventory tenant_id")
+        audit = _harness_v2_scope_text(self.audit_id, "inventory audit_id")
+        fleet = _harness_v2_scope_text(self.fleet_id, "inventory fleet_id")
+        if audit != fleet:
+            raise FleetExecutorStateError(
+                "Harness-v2 inventory fleet_id must exactly equal audit_id."
+            )
+        if type(self.jobs) is not tuple or not self.jobs:
+            raise FleetExecutorStateError(
+                "Harness-v2 inventory requires a non-empty exact snapshot tuple."
+            )
+        if any(type(job) is not FleetJobSnapshot for job in self.jobs):
+            raise FleetExecutorStateError(
+                "Harness-v2 inventory contains a non-snapshot job."
+            )
+        job_ids = tuple(job.job_id for job in self.jobs)
+        if len(set(job_ids)) != len(job_ids):
+            raise FleetExecutorStateError(
+                "Harness-v2 inventory contains duplicate job identities."
+            )
+        if any(job.audit_id != audit or job.fleet_id != fleet for job in self.jobs):
+            raise FleetExecutorStateError(
+                "Harness-v2 inventory contains a cross-scope job."
+            )
+        if (
+            tenant != self.tenant_id
+            or self.state_authority != "PROCESS_LOCAL_FLEET_STATE_NOT_DURABLE"
+            or self.tenant_scope_authority
+            != "AUTHENTICATED_SCOPE_REQUIRED_NOT_RETAINED_BY_FLEET_EXECUTOR"
+        ):
+            raise FleetExecutorStateError(
+                "Harness-v2 inventory authority limitations drifted."
+            )
+
+    @property
+    def job_ids(self) -> tuple[str, ...]:
+        return tuple(job.job_id for job in self.jobs)
 
 
 _WORKERS: dict[str, FleetWorkerRecord] = {}
@@ -743,6 +806,109 @@ def list_fleet_runs() -> list[FleetRunRecord]:
             _RUN_KIND, {r.audit_id: _run_ledger_payload(r) for r in runs}
         )
     return runs
+
+
+def enumerate_harness_v2_configured_fleet(
+    *,
+    tenant_id: str,
+    audit_id: str,
+    fleet_id: str,
+) -> HarnessV2ConfiguredFleetInventory:
+    """Return the exact configured job mappings without any runtime secrets.
+
+    This reads only the current process-local fleet dictionaries. The caller must
+    already have authenticated ``tenant_id`` and established that the tenant owns
+    ``audit_id``; tenant ownership is not stored by this legacy executor.
+    """
+
+    inventory, _ = _harness_v2_configured_fleet(
+        tenant_id=tenant_id,
+        audit_id=audit_id,
+        fleet_id=fleet_id,
+    )
+    return inventory
+
+
+def load_harness_v2_fleet_job_snapshot_for_issuance(
+    *,
+    tenant_id: str,
+    audit_id: str,
+    fleet_id: str,
+    job_id: str,
+) -> FleetJobSnapshot:
+    """Load one server-derived preterminal job mapping without a lease secret.
+
+    The returned snapshot can bind prospective Harness-v2 authorization issuance.
+    It does not prove tenant ownership, execution, active lease possession, durable
+    state, trusted time, or scientific validity. Active execution must separately
+    pass :func:`validate_active_fleet_job_lease`.
+    """
+
+    requested_job_id = _harness_v2_scope_text(job_id, "job_id")
+    inventory, run = _harness_v2_configured_fleet(
+        tenant_id=tenant_id,
+        audit_id=audit_id,
+        fleet_id=fleet_id,
+    )
+    matches = tuple(job for job in run.jobs if job.job_id == requested_job_id)
+    if len(matches) != 1:
+        raise FleetExecutorStateError(
+            "Harness-v2 fleet job must be configured exactly once for issuance."
+        )
+    job = matches[0]
+    if run.status in {"COMPLETE", "FAILED"} or job.status not in {
+        "queued",
+        "leased",
+        "expired",
+    }:
+        raise FleetExecutorStateError(
+            "Harness-v2 authorization issuance requires a preterminal fleet job."
+        )
+    snapshots = tuple(
+        snapshot for snapshot in inventory.jobs if snapshot.job_id == requested_job_id
+    )
+    if len(snapshots) != 1:
+        raise FleetExecutorStateError(
+            "Harness-v2 redacted fleet inventory lost the requested job identity."
+        )
+    return snapshots[0]
+
+
+def load_harness_v2_fleet_job_snapshot_current(
+    *,
+    tenant_id: str,
+    audit_id: str,
+    fleet_id: str,
+    job_id: str,
+) -> FleetJobSnapshot:
+    """Load one exact current configured mapping, including terminal state.
+
+    This seam exists for replay and reconciliation after the legacy Fleet run
+    has advanced beyond issuance.  It preserves the same authenticated-scope,
+    unique-job, redaction, and process-local-authority limits as the issuance
+    loader, but deliberately does not require a preterminal status.  It is not
+    permission to issue a new authorization or proof of execution.
+    """
+
+    requested_job_id = _harness_v2_scope_text(job_id, "job_id")
+    inventory, run = _harness_v2_configured_fleet(
+        tenant_id=tenant_id,
+        audit_id=audit_id,
+        fleet_id=fleet_id,
+    )
+    matches = tuple(job for job in run.jobs if job.job_id == requested_job_id)
+    if len(matches) != 1:
+        raise FleetExecutorStateError(
+            "Harness-v2 fleet job must be configured exactly once for replay."
+        )
+    snapshots = tuple(
+        snapshot for snapshot in inventory.jobs if snapshot.job_id == requested_job_id
+    )
+    if len(snapshots) != 1:
+        raise FleetExecutorStateError(
+            "Harness-v2 redacted fleet inventory lost the requested job identity."
+        )
+    return snapshots[0]
 
 
 def lease_next_job(
@@ -1303,6 +1469,198 @@ def _job(run: FleetRunRecord, job_id: str) -> FleetJobRecord | None:
         if job.job_id == job_id:
             return job
     return None
+
+
+def _harness_v2_configured_fleet(
+    *,
+    tenant_id: str,
+    audit_id: str,
+    fleet_id: str,
+) -> tuple[HarnessV2ConfiguredFleetInventory, FleetRunRecord]:
+    tenant = _harness_v2_scope_text(tenant_id, "tenant_id")
+    audit_key = _harness_v2_scope_text(audit_id, "audit_id")
+    fleet_key = _harness_v2_scope_text(fleet_id, "fleet_id")
+    if audit_key != fleet_key:
+        raise FleetExecutorStateError(
+            "Harness-v2 fleet_id must exactly equal the authenticated audit_id."
+        )
+    run = _FLEET_RUNS.get(audit_key)
+    if run is None:
+        raise FleetExecutorStateError(
+            "Harness-v2 configured fleet is unavailable in process-local state."
+        )
+    if run.audit_id != audit_key:
+        raise FleetExecutorStateError(
+            "Harness-v2 configured fleet audit scope drifted from its process-local key."
+        )
+    if type(run.jobs) is not list or not run.jobs:
+        raise FleetExecutorStateError(
+            "Harness-v2 configured fleet has no job inventory."
+        )
+
+    audit = get_distributed_audit(audit_key)
+    if audit is None or audit.audit_id != audit_key:
+        raise FleetExecutorStateError(
+            "Harness-v2 configured fleet lacks its distributed-audit source."
+        )
+
+    seen_job_ids: set[str] = set()
+    snapshots: list[FleetJobSnapshot] = []
+    for job in run.jobs:
+        job_key = _harness_v2_scope_text(job.job_id, "configured job_id")
+        if job_key in seen_job_ids:
+            raise FleetExecutorStateError(
+                "Harness-v2 configured fleet contains a duplicate job_id."
+            )
+        seen_job_ids.add(job_key)
+        if job.audit_id != audit_key:
+            raise FleetExecutorStateError(
+                "Harness-v2 configured job crossed its audit/fleet scope."
+            )
+        if job.status not in {"queued", "leased", "completed", "failed", "expired"}:
+            raise FleetExecutorStateError(
+                "Harness-v2 configured job has an unknown lifecycle status."
+            )
+        snapshots.append(
+            _harness_v2_snapshot_from_configured_job(
+                fleet_id=fleet_key,
+                audit=audit,
+                job=job,
+            )
+        )
+
+    identities = {
+        (
+            snapshot.model_id,
+            snapshot.model_revision,
+            snapshot.model_artifact_manifest_path,
+            snapshot.model_artifact_manifest_sha256,
+            snapshot.execution_mode,
+        )
+        for snapshot in snapshots
+    }
+    if len(identities) != 1:
+        raise FleetExecutorStateError(
+            "Harness-v2 configured jobs contain drifted model identity bindings."
+        )
+    model_id, revision, _manifest_path, _manifest_sha256, execution_mode = next(
+        iter(identities)
+    )
+    if model_id != audit.plan.model_id:
+        raise FleetExecutorStateError(
+            "Harness-v2 configured model_id drifted from the distributed audit plan."
+        )
+    provenance = audit.provenance.to_dict() if audit.provenance is not None else None
+    if (
+        not isinstance(provenance, Mapping)
+        or provenance.get("revision") != revision
+    ):
+        raise FleetExecutorStateError(
+            "Harness-v2 configured model revision drifted from audit provenance."
+        )
+    if execution_mode != "external_probe_command":
+        raise FleetExecutorStateError(
+            "Harness-v2 configured fleet is not identity-bound to external probe execution."
+        )
+
+    inventory = HarnessV2ConfiguredFleetInventory(
+        tenant_id=tenant,
+        audit_id=audit_key,
+        fleet_id=fleet_key,
+        jobs=tuple(sorted(snapshots, key=lambda snapshot: snapshot.job_id)),
+    )
+    return inventory, run
+
+
+def _harness_v2_snapshot_from_configured_job(
+    *,
+    fleet_id: str,
+    audit: Any,
+    job: FleetJobRecord,
+) -> FleetJobSnapshot:
+    model_id = _harness_v2_scope_text(job.model_id, "configured model_id")
+    execution_mode = _harness_v2_scope_text(
+        job.execution_mode, "configured execution_mode"
+    )
+    try:
+        revision, manifest_path, manifest_sha256 = (
+            _validate_optional_model_identity_binding(
+                model_revision=job.model_revision,
+                model_artifact_manifest_path=job.model_artifact_manifest_path,
+                model_artifact_manifest_sha256=job.model_artifact_manifest_sha256,
+            )
+        )
+    except FleetExecutorStateError as exc:
+        raise FleetExecutorStateError(
+            "Harness-v2 configured job has an invalid model identity binding."
+        ) from exc
+    if revision is None or manifest_path is None or manifest_sha256 is None:
+        raise FleetExecutorStateError(
+            "Harness-v2 configured job lacks its full model identity binding."
+        )
+
+    assignment_matches = [
+        assignment
+        for assignment in audit.worker_evidence
+        if assignment.worker_id == job.assigned_worker_id
+        and assignment.shard_id == job.shard_id
+    ]
+    if len(assignment_matches) != 1:
+        raise FleetExecutorStateError(
+            "Harness-v2 configured job is missing or duplicated in the audit assignment plan."
+        )
+    assignment = assignment_matches[0]
+    expected_job_id = _job_id_for(
+        job.audit_id,
+        assignment.worker_id,
+        assignment.shard_id,
+    )
+    if (
+        job.job_id != expected_job_id
+        or job.layer_start != assignment.layer_start
+        or job.layer_end != assignment.layer_end
+        or job.assigned_methods != assignment.assigned_methods
+        or job.expected_outputs != assignment.expected_outputs
+    ):
+        raise FleetExecutorStateError(
+            "Harness-v2 configured job drifted from its audit assignment plan."
+        )
+
+    try:
+        return FleetJobSnapshot(
+            fleet_id=fleet_id,
+            job_id=job.job_id,
+            audit_id=job.audit_id,
+            assigned_worker_id=job.assigned_worker_id,
+            layer_start=job.layer_start,
+            layer_end=job.layer_end,
+            shard_id=job.shard_id,
+            assigned_methods=job.assigned_methods,
+            expected_outputs=job.expected_outputs,
+            model_id=model_id,
+            model_revision=revision,
+            model_artifact_manifest_path=manifest_path,
+            model_artifact_manifest_sha256=manifest_sha256,
+            execution_mode=execution_mode,
+        )
+    except ResearchWorkerBridgeBindingError as exc:
+        raise FleetExecutorStateError(
+            "Harness-v2 configured job cannot form a strict redacted snapshot."
+        ) from exc
+
+
+def _harness_v2_scope_text(value: object, field_name: str) -> str:
+    if (
+        type(value) is not str
+        or not value
+        or value != value.strip()
+        or len(value) > 256
+        or any(ord(character) < 32 or ord(character) == 127 for character in value)
+    ):
+        raise FleetExecutorStateError(
+            f"Harness-v2 {field_name} must be exact non-empty bounded text."
+        )
+    return value
 
 
 def _worker_key(worker_id: str, audit_id: str | None) -> str:

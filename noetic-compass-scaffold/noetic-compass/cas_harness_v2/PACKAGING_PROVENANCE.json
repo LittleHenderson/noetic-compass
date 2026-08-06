@@ -1,0 +1,42 @@
+{
+  "schema_version": "cas_harness_v2.packaged_mirror_provenance.v1",
+  "canonical_source_path": "src/cas_harness_v2",
+  "packaged_destination_path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2",
+  "copy_policy": "BYTE_FOR_BYTE_SOURCE_MIRROR",
+  "source_files": {
+    "__init__.py": {
+      "sha256": "31c40048c5eecd4287dbb6e4cc37d7e1a75276e409877fed6ef9e4e1478512f7",
+      "size_bytes": 2304
+    },
+    "_strict_json.py": {
+      "sha256": "032efd78a48a60c2ac0f3cc3b92274a346c5b044b8f22423722fdf55501c9bdc",
+      "size_bytes": 5760
+    },
+    "_validation.py": {
+      "sha256": "19d1a53c84e028cf94aac6f0305db65dc52b71579e9b935da849e9181415de8c",
+      "size_bytes": 7678
+    },
+    "artifacts.py": {
+      "sha256": "a6161525bda0a289b69f5a4820700ad0f10d5ae5c7c6b08fcf154b4c379253c3",
+      "size_bytes": 3571
+    },
+    "evidence_packet.py": {
+      "sha256": "925ec4e994063352ed2cf4d58a185d7d336910c2e9c453927d49ab041b6f28fd",
+      "size_bytes": 29934
+    },
+    "preregistration.py": {
+      "sha256": "c44d56adda2f05897346156d1c9352b035fabe7d02b2a309cca17eb18fd20055",
+      "size_bytes": 44598
+    },
+    "worker_protocol.py": {
+      "sha256": "80792dce5938b61735b060e1455ab07b2c1257e34b3d4bea59f6402635168a09",
+      "size_bytes": 33689
+    }
+  },
+  "authority_limitations": {
+    "canonical_source_remains_authoritative": true,
+    "deployment_readiness": "NOT ESTABLISHED",
+    "license_authority": "NOT GRANTED",
+    "schema_fork_permitted": false
+  }
+}

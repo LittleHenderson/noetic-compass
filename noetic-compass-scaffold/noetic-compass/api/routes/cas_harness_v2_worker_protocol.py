@@ -19,10 +19,8 @@ to enable this router without that admitted service boundary.
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 import hashlib
 import inspect
-import json
 import logging
 import re
 from typing import Annotated, Any, Protocol
@@ -31,6 +29,17 @@ from fastapi import APIRouter, HTTPException, Path, Request
 from fastapi.responses import JSONResponse
 
 from api.config import settings
+from api.routes.cas_harness_v2_worker_protocol_dto import (
+    AuthorizationRouteResultDTO,
+    ConsumptionRouteResultDTO,
+    EvidencePacketRouteResultDTO,
+    NonreportingRouteResultDTO,
+    OutputRetentionRouteResultDTO,
+    ReconciliationRouteResultDTO,
+    TerminalRouteResultDTO,
+    WorkerProtocolResultDTOError,
+    serialize_exact_route_result,
+)
 from api.services.fleet_service_auth import (
     FleetServiceAuthenticationError,
     FleetServiceAuthorizationError,
@@ -49,6 +58,8 @@ router = APIRouter(
 logger = logging.getLogger(__name__)
 
 MAX_EXACT_BODY_BYTES = 2_000_000
+MIN_LEASE_TOKEN_BYTES = 32
+MAX_LEASE_TOKEN_BYTES = 256
 ROUTE_ID_PATTERN = r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}"
 _UPPER_SHA256_RE = re.compile(r"^[0-9A-F]{64}$")
 
@@ -82,19 +93,19 @@ _AUTHORITY = {
 class HarnessV2WorkerProtocolRouteService(Protocol):
     """Lifespan-injected adapter; the underlying orchestrator may evolve."""
 
-    def issue_authorization(self, **kwargs: Any) -> Mapping[str, Any]: ...
+    def issue_authorization(self, **kwargs: Any) -> AuthorizationRouteResultDTO: ...
 
-    def retain_output(self, **kwargs: Any) -> Mapping[str, Any]: ...
+    def retain_output(self, **kwargs: Any) -> OutputRetentionRouteResultDTO: ...
 
-    def consume_authorization(self, **kwargs: Any) -> Mapping[str, Any]: ...
+    def consume_authorization(self, **kwargs: Any) -> ConsumptionRouteResultDTO: ...
 
-    def accept_terminal(self, **kwargs: Any) -> Mapping[str, Any]: ...
+    def accept_terminal(self, **kwargs: Any) -> TerminalRouteResultDTO: ...
 
-    def attach_evidence_packet(self, **kwargs: Any) -> Mapping[str, Any]: ...
+    def attach_evidence_packet(self, **kwargs: Any) -> EvidencePacketRouteResultDTO: ...
 
-    def record_nonreporting(self, **kwargs: Any) -> Mapping[str, Any]: ...
+    def record_nonreporting(self, **kwargs: Any) -> NonreportingRouteResultDTO: ...
 
-    def reconcile_run(self, **kwargs: Any) -> Mapping[str, Any]: ...
+    def reconcile_run(self, **kwargs: Any) -> ReconciliationRouteResultDTO: ...
 
 
 class WorkerProtocolRouteError(RuntimeError):
@@ -221,6 +232,55 @@ def _authorization_digest(request: Request, *, required: bool) -> str | None:
     return value
 
 
+def _lease_token(
+    request: Request,
+    *,
+    required: bool,
+) -> tuple[str | None, str | None]:
+    values = request.headers.getlist("X-CAS-Lease-Token")
+    if not required:
+        if values:
+            raise HTTPException(
+                status_code=422,
+                detail="X-CAS-Lease-Token is forbidden on controller operations.",
+            )
+        return None, None
+    if len(values) != 1:
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                "X-CAS-Lease-Token must be one opaque 32-256 byte secret."
+            ),
+        )
+    value = values[0]
+    try:
+        encoded = value.encode("utf-8")
+    except UnicodeEncodeError:
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                "X-CAS-Lease-Token must be one opaque 32-256 byte secret."
+            ),
+        ) from None
+    if (
+        not MIN_LEASE_TOKEN_BYTES <= len(encoded) <= MAX_LEASE_TOKEN_BYTES
+        or value != value.strip()
+        or any(
+            character.isspace()
+            or ord(character) < 0x20
+            or ord(character) == 0x7F
+            for character in value
+        )
+    ):
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                "X-CAS-Lease-Token must be one opaque 32-256 byte secret."
+            ),
+        )
+    return value, hashlib.sha256(encoded).hexdigest().upper()
+
+
 def _authenticate_intake(
     request: Request,
     *,
@@ -230,6 +290,7 @@ def _authenticate_intake(
     capability: str,
     raw: bytes,
     authorization_sha256: str | None,
+    lease_token_sha256: str | None,
 ) -> FleetServiceBoundIntakeReceipt:
     authorization = request.headers.get("Authorization", "")
     if not authorization.startswith("CAS-Service ") or not authorization[12:]:
@@ -243,10 +304,12 @@ def _authenticate_intake(
             job_id=job_id,
             run_id=prospective_run_id(job_id),
             authorization_sha256=authorization_sha256,
+            lease_token_sha256=lease_token_sha256,
             carrier_sha256=hashlib.sha256(raw).hexdigest().upper(),
             carrier_byte_length=len(raw),
         )
-        receipt = _fleet_auth_store(request).authenticate_with_bound_intake_receipt(
+        auth_store = _fleet_auth_store(request)
+        receipt = auth_store.authenticate_with_bound_intake_receipt(
             tenant_id=request.headers.get("X-CAS-Tenant-ID", ""),
             api_credential=authorization[len("CAS-Service ") :],
             timestamp=request.headers.get("X-CAS-Service-Timestamp", ""),
@@ -257,6 +320,11 @@ def _authenticate_intake(
             worker_id=worker_id,
             intake_binding=binding,
         )
+        if type(receipt) is not FleetServiceBoundIntakeReceipt:
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        verified = auth_store.verify_bound_intake_receipt(receipt)
+        if verified is not receipt or receipt.intake_binding != binding:
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
     except FleetServiceAuthenticationError as exc:
         raise HTTPException(status_code=401, detail="Invalid fleet service credential.") from exc
     except FleetServiceAuthorizationError as exc:
@@ -266,11 +334,6 @@ def _authenticate_intake(
             status_code=503,
             detail="Fleet service authentication is unavailable.",
         ) from exc
-    if not isinstance(receipt, FleetServiceBoundIntakeReceipt):
-        raise HTTPException(
-            status_code=503,
-            detail="Fleet service authentication is unavailable.",
-        )
     return receipt
 
 
@@ -285,56 +348,79 @@ async def _invoke_service(
     worker_id: str | None,
     raw: bytes,
     media_type: str,
-) -> Mapping[str, Any]:
+    lease_token: str | None,
+) -> dict[str, object]:
     handler = getattr(service, operation, None)
     if not callable(handler):
         status = 501 if optional else 503
         raise HTTPException(
             status_code=status,
-            detail=f"Harness-v2 worker protocol operation {operation!r} is unavailable.",
+            detail="Harness-v2 worker protocol operation is unavailable.",
         )
     principal = receipt.callback.principal
     try:
+        service_kwargs: dict[str, Any] = {
+            "tenant_id": principal.tenant_id,
+            "account_id": principal.account_id,
+            "audit_id": audit_id,
+            "fleet_id": principal.fleet_id,
+            "job_id": job_id,
+            "run_id": prospective_run_id(job_id),
+            "worker_id": worker_id,
+            "raw_body": raw,
+            "body_media_type": media_type,
+            "authenticated_callback": receipt.callback,
+            "bound_intake_receipt": receipt,
+        }
+        if lease_token is not None:
+            # This is the sole raw-secret handoff.  It remains process-local and
+            # is never placed in the bound receipt, route response, or a log.
+            service_kwargs["lease_token"] = lease_token
         result = handler(
-            tenant_id=principal.tenant_id,
-            account_id=principal.account_id,
-            audit_id=audit_id,
-            fleet_id=principal.fleet_id,
-            job_id=job_id,
-            run_id=prospective_run_id(job_id),
-            worker_id=worker_id,
-            raw_body=raw,
-            body_media_type=media_type,
-            authenticated_callback=receipt.callback,
-            bound_intake_receipt=receipt,
+            **service_kwargs,
         )
         if inspect.isawaitable(result):
             result = await result
-    except WorkerProtocolRouteNotFound as exc:
-        raise HTTPException(status_code=404, detail=str(exc)) from exc
-    except (WorkerProtocolRouteConflict, WorkerProtocolRouteRejected) as exc:
-        raise HTTPException(status_code=409, detail=str(exc)) from exc
-    except WorkerProtocolRouteUnavailable as exc:
-        raise HTTPException(status_code=503, detail=str(exc)) from exc
+    except WorkerProtocolRouteNotFound:
+        raise HTTPException(
+            status_code=404,
+            detail="Harness-v2 worker protocol resource was not found.",
+        ) from None
+    except (WorkerProtocolRouteConflict, WorkerProtocolRouteRejected):
+        raise HTTPException(
+            status_code=409,
+            detail="Harness-v2 worker protocol request conflicts with current state.",
+        ) from None
+    except WorkerProtocolRouteUnavailable:
+        raise HTTPException(
+            status_code=503,
+            detail="Harness-v2 worker protocol service is unavailable.",
+        ) from None
     except Exception as exc:
-        logger.error("Harness-v2 worker protocol service failed", exc_info=True)
+        logger.error(
+            "Harness-v2 worker protocol service failed closed operation=%s error_type=%s",
+            operation,
+            type(exc).__name__,
+        )
         raise HTTPException(
             status_code=503,
             detail="Harness-v2 worker protocol service failed closed.",
-        ) from exc
-    if not isinstance(result, Mapping):
+        ) from None
+    try:
+        safe_result = serialize_exact_route_result(operation, result)
+    except WorkerProtocolResultDTOError:
+        raise HTTPException(
+            status_code=503,
+            detail="Harness-v2 worker protocol service returned an invalid result.",
+        ) from None
+    if lease_token is not None and any(
+        isinstance(value, str) and lease_token in value
+        for value in safe_result.values()
+    ):
         raise HTTPException(
             status_code=503,
             detail="Harness-v2 worker protocol service returned an invalid result.",
         )
-    safe_result = dict(result)
-    try:
-        json.dumps(safe_result, allow_nan=False)
-    except (TypeError, ValueError) as exc:
-        raise HTTPException(
-            status_code=503,
-            detail="Harness-v2 worker protocol service returned an invalid result.",
-        ) from exc
     return safe_result
 
 
@@ -348,12 +434,16 @@ async def _handle(
     capability: str,
     media_type: str,
     authorization_digest_required: bool,
+    lease_token_required: bool,
     optional_operation: bool = False,
 ) -> JSONResponse:
     service = _route_service(request)
     raw = await _read_exact_body(request, media_type=media_type)
     authorization_sha256 = _authorization_digest(
         request, required=authorization_digest_required
+    )
+    lease_token, lease_token_sha256 = _lease_token(
+        request, required=lease_token_required
     )
     receipt = _authenticate_intake(
         request,
@@ -363,6 +453,7 @@ async def _handle(
         capability=capability,
         raw=raw,
         authorization_sha256=authorization_sha256,
+        lease_token_sha256=lease_token_sha256,
     )
     result = await _invoke_service(
         service,
@@ -374,6 +465,7 @@ async def _handle(
         worker_id=worker_id,
         raw=raw,
         media_type=media_type,
+        lease_token=lease_token,
     )
     binding = receipt.intake_binding
     return JSONResponse(
@@ -413,6 +505,7 @@ async def issue_authorization(
         capability="merge_fleet",
         media_type=ISSUE_REQUEST_MEDIA_TYPE,
         authorization_digest_required=False,
+        lease_token_required=False,
     )
 
 
@@ -429,6 +522,7 @@ async def retain_output(
         capability="submit_evidence",
         media_type=OUTPUT_RETENTION_MEDIA_TYPE,
         authorization_digest_required=True,
+        lease_token_required=True,
     )
 
 
@@ -445,6 +539,7 @@ async def consume_authorization(
         capability="lease_job",
         media_type=CONSUMPTION_MEDIA_TYPE,
         authorization_digest_required=True,
+        lease_token_required=True,
     )
 
 
@@ -461,6 +556,7 @@ async def accept_terminal(
         capability="submit_receipt",
         media_type=TERMINAL_MEDIA_TYPE,
         authorization_digest_required=True,
+        lease_token_required=True,
     )
 
 
@@ -477,6 +573,7 @@ async def attach_evidence_packet(
         capability="merge_fleet",
         media_type=EVIDENCE_PACKET_MEDIA_TYPE,
         authorization_digest_required=True,
+        lease_token_required=False,
         optional_operation=True,
     )
 
@@ -494,6 +591,7 @@ async def record_nonreporting(
         capability="merge_fleet",
         media_type=NONREPORTING_MEDIA_TYPE,
         authorization_digest_required=True,
+        lease_token_required=False,
         optional_operation=True,
     )
 
@@ -511,5 +609,6 @@ async def reconcile_run(
         capability="verify_fleet",
         media_type=RECONCILIATION_MEDIA_TYPE,
         authorization_digest_required=True,
+        lease_token_required=False,
         optional_operation=True,
     )

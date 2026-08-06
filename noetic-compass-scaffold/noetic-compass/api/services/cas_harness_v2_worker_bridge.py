@@ -9,11 +9,12 @@ provenance or exact carrier classes.  Correct loader injection is therefore an
 explicit unresolved deployment trust boundary, not a property proved here.
 
 The only claim made here is structural: an already server-authenticated fleet
-principal, its server-authored durable callback-nonce record, and an injected
-current server-side FleetJob snapshot were bound to stable worker-envelope bytes.
-Those stable bytes and a separate per-callback acceptance record were placed in
-immutable tenant-indexed wrappers and reloaded.  The callback nonce is never
-required inside worker-authored authorization or terminal bytes.
+principal, its server-authored durable callback-nonce record, an optional exact
+server-bound HTTP intake receipt, and an injected current server-side FleetJob
+snapshot were bound to stable worker-envelope bytes.  Those stable bytes and a
+separate per-callback acceptance record were placed in immutable tenant-indexed
+wrappers and reloaded.  The callback nonce and lease token are never required
+inside worker-authored authorization or terminal bytes or persisted raw here.
 It does not establish trusted time, server issuance of the run nonce, authenticated
 model execution, scientific validity, licensing, product readiness, canon,
 authorship, submission, or disclosure authority.  No API route enables this
@@ -37,7 +38,11 @@ from api.services.cas_harness_evidence_object_store import (
     EvidencePacketRepository,
     ImmutableEvidenceConflict,
 )
-from api.services.fleet_service_auth import FleetServiceAuthenticatedCallback
+from api.services.fleet_service_auth import (
+    FleetServiceAuthenticatedCallback,
+    FleetServiceBoundIntakeReceipt,
+    FleetServiceIntakeBinding,
+)
 from api.services.production.state_substrate import (
     LedgerRecord,
     StateStore,
@@ -50,6 +55,9 @@ RESEARCH_WORKER_BRIDGE_SCHEMA = "cas_harness_v2.worker_bridge_storage.v1"
 RESEARCH_WORKER_BRIDGE_INDEX_KIND = "cas_harness_v2_worker_bridge_index"
 RESEARCH_WORKER_BRIDGE_NAMESPACE = "research-only/harness-v2/worker-terminal"
 RESEARCH_WORKER_ACCEPTANCE_SCHEMA = "cas_harness_v2.worker_callback_acceptance.v1"
+RESEARCH_WORKER_BOUND_ACCEPTANCE_SCHEMA = (
+    "cas_harness_v2.worker_callback_acceptance.v2"
+)
 RESEARCH_WORKER_ACCEPTANCE_INDEX_KIND = "cas_harness_v2_worker_acceptance_index"
 RESEARCH_WORKER_ACCEPTANCE_NAMESPACE = "research-only/harness-v2/worker-acceptance"
 STORED_AND_REPLAYED = "STORED_AND_REPLAYED_RESEARCH_ONLY"
@@ -79,6 +87,9 @@ TerminalReceiptLoader = Callable[..., WorkerTerminalReceiptPort]
 FleetJobSnapshotLoader = Callable[..., "FleetJobSnapshot"]
 AuthenticatedCallbackVerifier = Callable[
     [FleetServiceAuthenticatedCallback], FleetServiceAuthenticatedCallback
+]
+BoundIntakeReceiptVerifier = Callable[
+    [FleetServiceBoundIntakeReceipt], FleetServiceBoundIntakeReceipt
 ]
 
 
@@ -226,6 +237,7 @@ class ResearchOnlyHarnessV2WorkerBridge:
         load_terminal_receipt: TerminalReceiptLoader,
         load_fleet_job_snapshot: FleetJobSnapshotLoader,
         verify_authenticated_callback: AuthenticatedCallbackVerifier,
+        verify_bound_intake_receipt: BoundIntakeReceiptVerifier | None = None,
         namespace: str = RESEARCH_WORKER_BRIDGE_NAMESPACE,
         acceptance_namespace: str = RESEARCH_WORKER_ACCEPTANCE_NAMESPACE,
     ) -> None:
@@ -242,6 +254,10 @@ class ResearchOnlyHarnessV2WorkerBridge:
             or not callable(load_terminal_receipt)
             or not callable(load_fleet_job_snapshot)
             or not callable(verify_authenticated_callback)
+            or (
+                verify_bound_intake_receipt is not None
+                and not callable(verify_bound_intake_receipt)
+            )
         ):
             raise ResearchWorkerBridgeError(
                 "Worker loaders, callback verifier, and current FleetJob loader must be injected."
@@ -265,6 +281,7 @@ class ResearchOnlyHarnessV2WorkerBridge:
         self._load_terminal_receipt = load_terminal_receipt
         self._load_fleet_job_snapshot = load_fleet_job_snapshot
         self._verify_authenticated_callback = verify_authenticated_callback
+        self._verify_bound_intake_receipt = verify_bound_intake_receipt
         self._namespace = namespace
         self._acceptance_namespace = acceptance_namespace
 
@@ -275,6 +292,7 @@ class ResearchOnlyHarnessV2WorkerBridge:
         terminal_receipt_raw: bytes | bytearray | memoryview,
         chain: object,
         callback: FleetServiceAuthenticatedCallback,
+        bound_intake_receipt: FleetServiceBoundIntakeReceipt | None = None,
     ) -> ResearchWorkerBridgeResult:
         """Load through injected ports, scope-bind, store, reload, then return.
 
@@ -286,16 +304,10 @@ class ResearchOnlyHarnessV2WorkerBridge:
 
         authorization_bytes = _snapshot(authorization_raw, "authorization_raw")
         receipt_bytes = _snapshot(terminal_receipt_raw, "terminal_receipt_raw")
-        try:
-            verified_callback = self._verify_authenticated_callback(callback)
-        except Exception as exc:
-            raise ResearchWorkerBridgeBindingError(
-                "Server callback nonce receipt could not be re-verified."
-            ) from exc
-        if verified_callback is not callback:
-            raise ResearchWorkerBridgeBindingError(
-                "Server callback verifier did not return the exact callback carrier."
-            )
+        verified_intake_receipt = self._reverify_callback_carriers(
+            callback=callback,
+            bound_intake_receipt=bound_intake_receipt,
+        )
         authorization = self._replay_authorization_for_terminal(
             authorization_bytes, chain=chain
         )
@@ -347,6 +359,20 @@ class ResearchOnlyHarnessV2WorkerBridge:
             callback=callback,
             job_snapshot=job_snapshot,
         )
+        bound_http_intake: dict[str, Any] | None = None
+        bound_http_intake_sha256: str | None = None
+        if verified_intake_receipt is not None:
+            self._verify_bound_intake_binding(
+                receipt=verified_intake_receipt,
+                authorization=authorization,
+                terminal_receipt=terminal_receipt,
+                terminal_receipt_raw=receipt_bytes,
+                job_snapshot=job_snapshot,
+            )
+            bound_http_intake = _redacted_bound_http_intake(
+                verified_intake_receipt.intake_binding
+            )
+            bound_http_intake_sha256 = _mapping_sha256(bound_http_intake)
 
         worker_id = _required_text(principal.worker_id, "authenticated principal worker_id")
         trace_id = _required_text(
@@ -418,8 +444,12 @@ class ResearchOnlyHarnessV2WorkerBridge:
         acceptance_trace_id = _acceptance_trace_id(
             trace_id, callback.nonce_receipt.nonce_id
         )
-        acceptance_binding = {
-            "schema_version": RESEARCH_WORKER_ACCEPTANCE_SCHEMA,
+        acceptance_binding: dict[str, object] = {
+            "schema_version": (
+                RESEARCH_WORKER_BOUND_ACCEPTANCE_SCHEMA
+                if bound_http_intake is not None
+                else RESEARCH_WORKER_ACCEPTANCE_SCHEMA
+            ),
             "authorization_id": trace_id,
             "authorization_sha256": authorization.sha256,
             "receipt_id": terminal_receipt.receipt_id,
@@ -444,6 +474,11 @@ class ResearchOnlyHarnessV2WorkerBridge:
             "namespace": self._acceptance_namespace,
             "trace_id": acceptance_trace_id,
         }
+        if bound_http_intake is not None:
+            acceptance_binding["bound_http_intake"] = bound_http_intake
+            acceptance_binding["bound_http_intake_sha256"] = (
+                bound_http_intake_sha256
+            )
         acceptance_index_id = _acceptance_index_id(acceptance_trace_id)
         self._reserve_binding(
             tenant_id=principal.tenant_id,
@@ -461,6 +496,8 @@ class ResearchOnlyHarnessV2WorkerBridge:
             terminal_receipt=terminal_receipt,
             callback=callback,
             job_snapshot=job_snapshot,
+            bound_http_intake=bound_http_intake,
+            bound_http_intake_sha256=bound_http_intake_sha256,
         )
         (
             acceptance_storage_receipt,
@@ -559,6 +596,122 @@ class ResearchOnlyHarnessV2WorkerBridge:
                 "Reloaded worker-callback wrapper differs from submitted bytes."
             )
         return storage_receipt, loaded, content_sha256
+
+    def _reverify_callback_carriers(
+        self,
+        *,
+        callback: FleetServiceAuthenticatedCallback,
+        bound_intake_receipt: FleetServiceBoundIntakeReceipt | None,
+    ) -> FleetServiceBoundIntakeReceipt | None:
+        bound_verifier = self._verify_bound_intake_receipt
+        if bound_verifier is None:
+            if bound_intake_receipt is not None:
+                raise ResearchWorkerBridgeBindingError(
+                    "Bound HTTP intake receipt verifier was not injected."
+                )
+        else:
+            if type(bound_intake_receipt) is not FleetServiceBoundIntakeReceipt:
+                raise ResearchWorkerBridgeBindingError(
+                    "Exact bound HTTP intake receipt is required."
+                )
+            if bound_intake_receipt.callback is not callback:
+                raise ResearchWorkerBridgeBindingError(
+                    "Bound HTTP intake receipt callback is not the exact callback carrier."
+                )
+            try:
+                verified_intake = bound_verifier(bound_intake_receipt)
+            except Exception as exc:
+                raise ResearchWorkerBridgeBindingError(
+                    "Bound HTTP intake receipt could not be transitively re-verified."
+                ) from exc
+            if (
+                verified_intake is not bound_intake_receipt
+                or verified_intake.callback is not callback
+            ):
+                raise ResearchWorkerBridgeBindingError(
+                    "Bound HTTP intake verifier did not return the exact receipt carrier."
+                )
+
+        try:
+            verified_callback = self._verify_authenticated_callback(callback)
+        except Exception as exc:
+            raise ResearchWorkerBridgeBindingError(
+                "Server callback nonce receipt could not be re-verified."
+            ) from exc
+        if verified_callback is not callback:
+            raise ResearchWorkerBridgeBindingError(
+                "Server callback verifier did not return the exact callback carrier."
+            )
+        return bound_intake_receipt
+
+    def _verify_bound_intake_binding(
+        self,
+        *,
+        receipt: FleetServiceBoundIntakeReceipt,
+        authorization: WorkerAuthorizationPort,
+        terminal_receipt: WorkerTerminalReceiptPort,
+        terminal_receipt_raw: bytes,
+        job_snapshot: FleetJobSnapshot,
+    ) -> None:
+        binding = receipt.intake_binding
+        if type(binding) is not FleetServiceIntakeBinding:
+            raise ResearchWorkerBridgeBindingError(
+                "Bound HTTP intake contains the wrong binding carrier type."
+            )
+        authorization_sha256 = _required_sha256(
+            authorization.sha256, "worker authorization sha256"
+        )
+        intake_authorization_sha256 = _required_sha256(
+            binding.authorization_sha256,
+            "bound HTTP intake authorization_sha256",
+        )
+        if not hmac.compare_digest(
+            intake_authorization_sha256, authorization_sha256
+        ):
+            raise ResearchWorkerBridgeBindingError(
+                "Bound HTTP intake authorization digest does not match the strict authorization."
+            )
+        receipt_sha256 = _required_sha256(
+            terminal_receipt.sha256, "worker terminal receipt sha256"
+        )
+        intake_carrier_sha256 = _required_sha256(
+            binding.carrier_sha256, "bound HTTP intake carrier_sha256"
+        )
+        if (
+            not hmac.compare_digest(intake_carrier_sha256, receipt_sha256)
+            or not hmac.compare_digest(
+                intake_carrier_sha256, _sha256(terminal_receipt_raw)
+            )
+            or binding.carrier_byte_length != len(terminal_receipt_raw)
+            or binding.carrier_byte_length != terminal_receipt.byte_length
+        ):
+            raise ResearchWorkerBridgeBindingError(
+                "Bound HTTP intake carrier digest or length does not match terminal bytes."
+            )
+        _required_sha256(
+            binding.lease_token_sha256,
+            "bound HTTP intake lease_token_sha256",
+        )
+        expected_job_id = _required_text(job_snapshot.job_id, "FleetJobSnapshot.job_id")
+        if binding.job_id != expected_job_id:
+            raise ResearchWorkerBridgeBindingError(
+                "Bound HTTP intake job scope does not match the server FleetJob."
+            )
+        expected_run_id = _prospective_run_id(expected_job_id)
+        if binding.run_id != expected_run_id:
+            raise ResearchWorkerBridgeBindingError(
+                "Bound HTTP intake run scope is not the deterministic FleetJob run."
+            )
+        principal = receipt.callback.principal
+        expected_route_path = (
+            "/api/cas-harness/audit/distributed/session/"
+            f"{principal.audit_id}/fleet/v2/job/{expected_job_id}/worker/"
+            f"{principal.worker_id}/terminal"
+        )
+        if binding.http_method != "POST" or binding.route_path != expected_route_path:
+            raise ResearchWorkerBridgeBindingError(
+                "Bound HTTP intake route does not match the terminal callback scope."
+            )
 
     def _verify_callback_binding(
         self,
@@ -820,11 +973,17 @@ def _acceptance_storage_wrapper(
     terminal_receipt: WorkerTerminalReceiptPort,
     callback: FleetServiceAuthenticatedCallback,
     job_snapshot: FleetJobSnapshot,
+    bound_http_intake: Mapping[str, Any] | None,
+    bound_http_intake_sha256: str | None,
 ) -> dict[str, Any]:
     principal = callback.principal
     nonce = callback.nonce_receipt
-    return {
-        "schema_version": RESEARCH_WORKER_ACCEPTANCE_SCHEMA,
+    result: dict[str, Any] = {
+        "schema_version": (
+            RESEARCH_WORKER_BOUND_ACCEPTANCE_SCHEMA
+            if bound_http_intake is not None
+            else RESEARCH_WORKER_ACCEPTANCE_SCHEMA
+        ),
         "trace_id": trace_id,
         "storage_profile": "SERVER_CALLBACK_ACCEPTANCE_NOT_AN_EVIDENCE_PACKET",
         "terminal_storage": {
@@ -869,6 +1028,34 @@ def _acceptance_storage_wrapper(
         },
         "authority": _non_authority_boundary(),
         "loader_assurance": "INJECTED_CALLABLE_PROVENANCE_NOT_ATTESTED",
+    }
+    if bound_http_intake is not None:
+        result["bound_http_intake"] = dict(bound_http_intake)
+        result["bound_http_intake_sha256"] = bound_http_intake_sha256
+    return result
+
+
+def _redacted_bound_http_intake(
+    binding: FleetServiceIntakeBinding,
+) -> dict[str, object]:
+    """Whitelist the digest-only v2 intake facts admitted to acceptance storage."""
+
+    return {
+        "schema_version": "cas_fleet_service_bound_intake_receipt.v2",
+        "http_method": binding.http_method,
+        "route_path": binding.route_path,
+        "job_id": binding.job_id,
+        "run_id": binding.run_id,
+        "authorization_sha256": binding.authorization_sha256,
+        "carrier_sha256": binding.carrier_sha256,
+        "carrier_byte_length": binding.carrier_byte_length,
+        "lease_token_sha256": binding.lease_token_sha256,
+        "assurance": {
+            "scope": "SERVER_OBSERVED_HTTP_INTAKE_ONLY",
+            "payload_authentication": "NOT_ESTABLISHED",
+            "execution_authentication": "NOT_ESTABLISHED",
+            "trusted_time": "NOT_ESTABLISHED",
+        },
     }
 
 
@@ -1025,6 +1212,10 @@ def _acceptance_index_id(trace_id: str) -> str:
     return "g5wai_" + hashlib.sha256(trace_id.encode("utf-8")).hexdigest()
 
 
+def _prospective_run_id(job_id: str) -> str:
+    return "h2run_" + hashlib.sha256(job_id.encode("utf-8")).hexdigest()
+
+
 def _require_same_binding(
     actual: Mapping[str, object], expected: Mapping[str, object]
 ) -> None:
@@ -1051,6 +1242,7 @@ __all__ = [
     "RESEARCH_WORKER_ACCEPTANCE_INDEX_KIND",
     "RESEARCH_WORKER_ACCEPTANCE_NAMESPACE",
     "RESEARCH_WORKER_ACCEPTANCE_SCHEMA",
+    "RESEARCH_WORKER_BOUND_ACCEPTANCE_SCHEMA",
     "RESEARCH_WORKER_BRIDGE_INDEX_KIND",
     "RESEARCH_WORKER_BRIDGE_NAMESPACE",
     "RESEARCH_WORKER_BRIDGE_SCHEMA",

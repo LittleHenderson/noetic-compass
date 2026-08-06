@@ -7,7 +7,7 @@
   "license_status": "NOT LICENSED",
   "public_disclosure_authorized": false,
   "artifacts": [
-    {"path": "docs/working/project_coherence/gate0/GATE0_ARTIFACT_MANIFEST_v0.1.json", "sha256": "3095117C85E1A0D9A1B12FEC1B906B139325625F3C48ECE171C82AA3D002DBE6", "bytes": 2809, "role": "Gate 0 dependency-chain root"},
+    {"path": "docs/working/project_coherence/gate0/GATE0_ARTIFACT_MANIFEST_v0.1.json", "sha256": "771C8143F083E785A0451CF68A30508FA202EADFEA6974EA2A8A6E9098800D9A", "bytes": 2809, "role": "Gate 0 dependency-chain root"},
     {"path": "scripts/verify_project_coherence_phase0.py", "sha256": "34D892D7A72E3779A339C250A64DE5B6AFF498956F1D1D19B98BE0791482DA6A", "bytes": 20478, "role": "Phase 0 structural verifier"},
     {"path": "docs/working/project_coherence/gate1/README.md", "sha256": "65E7BE36FA8D36EE0BCC4F62428269F5A1F7CA449F03DB82CC411571AAA1F4C0", "bytes": 2417, "role": "integrated Gate 1 scope, receipts, and boundaries"},
     {"path": "docs/working/project_coherence/gate1/v74/README.md", "sha256": "8B6B9554647C3A0004B5CDCE1D5513D8023EADA22809315CAC1FCD7AE58F6DBD", "bytes": 1797, "role": "v7.4 audit scope and boundary"},

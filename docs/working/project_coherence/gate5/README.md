@@ -2,7 +2,15 @@
 
 Document status: `DRAFT / OPEN / NOT FROZEN`
 
-Gate 5 status: `OPEN / NOT_STARTED / RING 4 / NOT LICENSED / HELD / NOT FROZEN`
+Decision status: `OPEN / KEEP_OPEN`
+
+Engineering status: `RING 4 / BOUNDED SOFTWARE CANDIDATE TESTED`
+
+Experimental execution status: `NOT_STARTED`
+
+License / disclosure / canon status: `NOT LICENSED / HELD / NOT FROZEN`
+
+Live / product route status: `unavailable / not authorized`
 
 Gate 5 is the private research-control integration lane for CAS Harness v2. It
 binds the prospective preregistration and Evidence Packet v2 kernel, the
@@ -60,8 +68,8 @@ authority.
 
 ## Current dark prospective lifecycle successor
 
-The successor now joins four bounded local controls without promoting any of
-them to live or independent authority:
+The successor now joins bounded local controls without promoting any of them to
+live or independent authority:
 
 1. `cas_harness_v2_run_lifecycle.py` reserves a run subject and nonce digest
    before authorization construction, returns the raw nonce only once, records
@@ -70,9 +78,10 @@ them to live or independent authority:
    packet, or explicit nonreporting transitions. The default nonce factory is
    `secrets.token_bytes(32)`, but the constructor accepts an injected callable
    and no admitted runtime attests which factory was used. Reconciliation is
-   limited to record kinds visible in that tenant's configured `StateStore`;
-   the service/router currently expose only success/failure terminalization,
-   not the lower-level indeterminate/rejected/expired paths. An entirely empty
+   limited to record kinds visible in that tenant's configured `StateStore`.
+   The lifecycle service can record typed indeterminate/rejected/expired server
+   dispositions, but the admitted worker adapter/router does not expose those
+   paths. An entirely empty
    tenant view returns `has_registered_runs=false`, zero counts, and
    `all_runs_reporting_disposed=false`; its issue-free structural result is not
    evidence that no execution occurred.
@@ -103,34 +112,35 @@ them to live or independent authority:
    job/run identity, authorization digest when applicable, and carrier
    digest/length. That row is distinct from the bridge's immutable
    callback-acceptance wrapper/index, which exists only for terminal submissions.
-   The route passes terminal bytes through as an opaque body; only the missing
-   strict adapter could prove that those bytes are a terminal-only carrier and
-   contain no embedded authorization. Customer JWT fallback is forbidden.
+   The admitted packaged adapter passes the exact terminal carrier through the
+   strict lifecycle/bridge loaders and preserves the request-bound intake
+   receipt through terminal acceptance. Customer JWT fallback is forbidden.
+   These are bounded software bindings, not live-worker authentication.
 
-The exact active-lease validator is also a standalone local seam: it checks the
-current process-local job/worker/model/token/expiry generation, but
-`consume_run` currently trusts passed lease facts and no adapter joins the two.
-Likewise, the router passes its request-bound receipt to a service port while
-the bridge sees only the legacy callback carrier; end-to-end preservation and
-revalidation of the request binding is not wired.
+The admitted adapter now hands the raw lease token only to the lifecycle's
+exact active-lease validator, which checks the current process-local
+job/worker/model/token/expiry generation before consumption and retains only a
+digest fence. The terminal route's request-bound receipt is preserved and
+revalidated across route, adapter, lifecycle, and bridge. These controls do not
+establish multi-host lease authority, trusted time, or authenticated execution.
 
 The route derives `run_id` from `job_id`, while the lifecycle derives it from
 `subject_id` and the service separately requires
-`subject_id == authorization_id`. No admitted adapter currently enforces the
-required joint identity contract
-`job_id == subject_id == authorization_id`; therefore matching route and
-lifecycle run IDs is not established.
+`subject_id == authorization_id`. The admitted adapter now enforces the joint
+identity contract `job_id == subject_id == authorization_id` before lifecycle
+use. That bounded identity check is not an executor identity attestation.
 
 That HTTP router is **default-dark**, excluded from OpenAPI, and returns a dark
 or unavailable response unless an admitted lifespan service is injected. The
-main application currently initializes that service to `None`; enabling the
-flag requires both the isolated root `cas_harness_v2` package and an admitted
-packaged adapter, then fails startup because no such adapter is wired. The
-current API image/package boundary also does not establish that root-kernel
-installation. Therefore route code exists, but no admitted, enabled, public,
-product, or live-execution route exists. An explicit HTTP outcome-seal adapter,
-live Fleet lease/execution integration, and independently controlled storage
-remain unfinished.
+main application initializes that service to `None`, then constructs the exact
+admitted adapter only when the feature is enabled and shared state, immutable
+repository, and fleet-auth ports are present. The API image now contains a
+byte-verified packaged `cas_harness_v2` mirror and startup rejects any other
+adapter type or admission profile. Local import, factory, and startup-boundary
+tests establish constructibility only. No positive provider-backed application
+startup, enabled deployment, public/product route, or live execution has been
+authorized or observed. Explicit HTTP outcome sealing, live Fleet execution,
+trusted time, and independently controlled storage remain unfinished.
 
 ## Current bounded receipts
 
@@ -171,20 +181,26 @@ node-ID digest is:
 
 `603DEBF7DF9AC7B5A69543C3736F4CD38692D3330690A7559A6F9DE6F0E2AF77`
 
-The dark worker-terminal bridge suite passes 8/8. Its canonical node-ID digest
+The dark worker-terminal bridge suite passes 17/17. Its canonical node-ID digest
 is:
 
-`6B0B52C30FA70C52E0EA5AC3B15221F4E5B8BC8337AA53B04972B3E543177969`
+`FA6C985CD6CAA734034E006BB4BAF6BE9D02269D7312BEE7355E9C3833759C51`
 
 The separate durable fleet-callback and fake Object-Lock seam suite passes
-35/35. Its canonical node-ID digest is:
+38/38. Its canonical node-ID digest is:
 
-`A340034084006FC437AB1F9724FB45D3AE09555F5D302FC36CCD6CF53EC28F57`
+`D3EAF533FEDB5B03168200AA399AC53A6E2A6F22874EBABEAECEFB227400778D`
 
-The prospective lifecycle, SQLite, and default-dark route suite passes 48/48
+The prospective lifecycle, SQLite, and default-dark route suite passes 76/76
 with no subtests. Its canonical node-ID digest is:
 
-`B7B87D52351B21039A83E4B526BCAEDE0E8F3E11F79E162480FB007375421F44`
+`5F1197D70B7AFAD39D01BEBEB4E7397C3E075D74A5BFFA5305C62A0EDB3C7D84`
+
+The packaging, snapshot, envelope, context, admitted-adapter, and bounded-
+reconciliation suite passes 80/80 with no subtests. Its canonical node-ID
+digest is:
+
+`2E45FCD920E0B52916A7341D2FF766FDC9F7911EC2CB11C27BC3FF8FEC3815FB`
 
 The bridge stores one retry-stable terminal wrapper/index and binds each
 server-authored *terminal* callback-attempt receipt in a separate
@@ -195,13 +211,16 @@ available after an outcome seal when the same receipt and completion time are
 bound. The surrounding lifecycle successor adds local prospective authorization,
 same-host one-use consumption, output retention, outcome-access reservation,
 Packet-v2/nonreporting attachment, and event-bound reconciliation. These paths
-remain dark and locally injected: strict-loader provenance is unresolved, the
-route has no packaged service adapter, the tested Object-Lock backend is
-synthetic, repository receipts bind wrappers rather than independently retained
-inner bytes, and no live experiment or claim authority is created.
+remain dark and locally bounded: the packaged service adapter and
+reconciliation report path now exist and are locally tested, while
+strict-loader provenance is not independently attested, the tested Object-Lock
+backend is synthetic, repository receipts bind wrappers rather than
+independently retained inner bytes, no provider-backed startup has passed, and
+no live experiment or claim authority is created.
 
 The 364-test worker, 78-test API/launcher/fleet/state, 30-test worker-protocol,
-8-test bridge, 35-test durable-seam, and 48-test prospective-lifecycle results are
+17-test bridge, 38-test durable-seam, 76-test prospective-lifecycle, and 80-test
+admitted-adapter/reconciliation results are
 `LOCAL_UNATTESTED_HOST_REGRESSION` observations. Each suite now binds its
 collected, started, and finished node-ID sequences plus exact
 setup/call/teardown and subtest outcomes inside one pytest process. The child
@@ -296,11 +315,11 @@ non-integer numeric-count substitution. After every subprocess it rehashes the
 complete Gate 5 surface, all 537 historical files, and all transitively bound
 Gate 4 artifacts before printing PASS.
 
-A verifier `PASS` must still print:
-
-`OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN`
-
-and `experimental execution: NOT_STARTED`.
+A verifier `PASS` remains bounded by the six prose axes: document
+`DRAFT / OPEN / NOT FROZEN`; decision `OPEN / KEEP_OPEN`; engineering
+`RING 4 / BOUNDED SOFTWARE CANDIDATE TESTED`; experiment `NOT_STARTED`;
+license/disclosure/canon `NOT LICENSED / HELD / NOT FROZEN`; and live/product
+route `UNAVAILABLE / NOT AUTHORIZED`. A structural PASS changes none of them.
 
 ## Manifest contract
 
@@ -443,7 +462,8 @@ classes:
   one-use consumption beyond one same-host SQLite file, plus a registry proven
   complete against external executions and selective reporting;
 - authenticated execution and real identity/affiliation/independence;
-- exact worker-to-kernel protocol mapping and hermetic environment attestation;
+- provider-backed startup and independent reproduction of the bounded
+  worker-to-kernel mapping, plus hermetic environment attestation;
 - an independently attested hermetic runner, complete standard-library,
   test/native/descendant-process closure, immutable read-only snapshot,
   privileged/metadata-preserving ABA resistance, hosted and auxiliary loader

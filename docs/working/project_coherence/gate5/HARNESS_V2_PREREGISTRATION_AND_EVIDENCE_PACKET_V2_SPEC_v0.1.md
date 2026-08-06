@@ -1,8 +1,16 @@
 # CAS Harness v2 preregistration and Evidence Packet v2 control kernel
 
-Status: `DRAFT / OPEN / NOT_STARTED / RESEARCH ONLY / NOT FROZEN`
+Document status: `DRAFT / OPEN / NOT FROZEN`
 
-Admission and claim boundary: `RING 4 / NOT LICENSED / HELD`
+Decision status: `OPEN / KEEP_OPEN`
+
+Engineering status: `RING 4 / BOUNDED SOFTWARE CANDIDATE TESTED`
+
+Experimental execution status: `NOT_STARTED`
+
+License / disclosure / canon status: `NOT LICENSED / HELD / NOT FROZEN`
+
+Live / product route status: `unavailable / not authorized`
 
 This document specifies the isolated control kernel in
 `src/cas_harness_v2`. It does not close Gate 5, execute an experiment, add a
@@ -10,6 +18,11 @@ live-worker route, authenticate a worker, change a product verdict, license a
 claim, authorize disclosure, or establish production readiness.
 It creates no live-execution, scientific, canon, product, license, or disclosure
 authority.
+
+The packaged private adapter and reconciliation-report path now exist as tested
+bounded software around this isolated kernel. They do not change this kernel's
+trust ceiling, prove provider-backed startup, or authorize a live route or
+experiment.
 
 ## 1. Normative executable schemas
 
@@ -290,7 +303,8 @@ Still open outside this isolated kernel:
 - materialized, non-caller-selected trust roots and signature verification;
 - trusted time, nonce/replay control, one-use run consumption, and protection
   against selective reporting across multiple packets;
-- live-worker and executor/auditor protocol mapping;
+- provider-backed live-worker execution and independent executor/auditor
+  validation of the bounded protocol mapping;
 - hermetic execution and environment attestation, including complete
   standard-library/test/native/descendant closure, an immutable read-only
   snapshot, privileged/metadata-preserving ABA protection, hosted/auxiliary
@@ -309,6 +323,9 @@ Still open outside this isolated kernel:
 - Gate 5 control matrix, manifest, verifier, and gate decision; and
 - every production, licensing, compliance, disclosure, and public-route gate.
 
-Until those separately authorized obligations close, Gate 5 remains `OPEN /
-NOT_STARTED / RING 4 / NOT LICENSED / HELD / NOT FROZEN` with no live,
-scientific, canon, product, license, or disclosure authority.
+Until those separately authorized obligations close, the six axes remain:
+document `DRAFT / OPEN / NOT FROZEN`; decision `OPEN / KEEP_OPEN`; engineering
+`RING 4 / BOUNDED SOFTWARE CANDIDATE TESTED`; experiment `NOT_STARTED`;
+license/disclosure/canon `NOT LICENSED / HELD / NOT FROZEN`; and live/product
+route `UNAVAILABLE / NOT AUTHORIZED`. No live, scientific, canon, product,
+license, or disclosure authority is created.

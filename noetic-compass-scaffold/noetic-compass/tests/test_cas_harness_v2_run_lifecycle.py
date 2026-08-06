@@ -513,30 +513,51 @@ def test_every_terminal_disposition_can_be_exhaustively_nonreported(
         _consume(service, issuance.run_nonce, subject_id=subject_id)
 
     terminal_artifact = _artifact(f"terminal-{terminal_status.lower()}")
+    terminal_at = (
+        NOW + timedelta(hours=1, minutes=1)
+        if terminal_status == EXPIRED
+        else NOW + timedelta(minutes=2)
+    )
     terminal = service.record_terminal(
         tenant_id="tenant-a",
         subject_id=subject_id,
         operation_id=f"terminal-{terminal_status.lower()}",
         terminal_status=terminal_status,
         terminal_artifact=terminal_artifact,
-        terminal_at=NOW + timedelta(minutes=2),
+        terminal_at=terminal_at,
     )
     assert terminal.lifecycle.state == terminal_status
-    service.record_outcome_access(
-        tenant_id="tenant-a",
-        subject_id=subject_id,
-        operation_id=f"outcome-{terminal_status.lower()}",
-        terminal_artifact=terminal_artifact,
-        outcome_access_artifact=_artifact(f"outcome-{terminal_status.lower()}"),
-        accessed_at=NOW + timedelta(minutes=3),
-    )
+    if terminal_status in {SUCCESS, FAILURE}:
+        service.record_outcome_access(
+            tenant_id="tenant-a",
+            subject_id=subject_id,
+            operation_id=f"outcome-{terminal_status.lower()}",
+            terminal_artifact=terminal_artifact,
+            outcome_access_artifact=_artifact(f"outcome-{terminal_status.lower()}"),
+            accessed_at=NOW + timedelta(minutes=3),
+        )
+    else:
+        with pytest.raises(
+            RunLifecycleConflict,
+            match="strict completed or failed execution receipt",
+        ):
+            service.record_outcome_access(
+                tenant_id="tenant-a",
+                subject_id=subject_id,
+                operation_id=f"fabricated-outcome-{terminal_status.lower()}",
+                terminal_artifact=terminal_artifact,
+                outcome_access_artifact=_artifact(
+                    f"fabricated-outcome-{terminal_status.lower()}"
+                ),
+                accessed_at=terminal_at + timedelta(minutes=1),
+            )
     nonreporting = service.record_nonreporting(
         tenant_id="tenant-a",
         subject_id=subject_id,
         operation_id=f"nonreporting-{terminal_status.lower()}",
         nonreporting_artifact=_artifact(f"nonreporting-{terminal_status.lower()}"),
         reason_code=f"DECLARED_{terminal_status}",
-        recorded_at=NOW + timedelta(minutes=4),
+        recorded_at=terminal_at + timedelta(minutes=2),
     )
     assert nonreporting.lifecycle.state == NONREPORTING_RECORDED
     report = service.reconcile(tenant_id="tenant-a")

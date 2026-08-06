@@ -19,7 +19,7 @@
     },
     {
       "path": "docs/working/project_coherence/gate1/GATE1_ARTIFACT_MANIFEST_v0.1.json",
-      "sha256": "816A70524EA4C2B95E5516D6B7DACBC5C85279F87DF118F10D7F154D5FCD2329",
+      "sha256": "17FA8E25C23DD1D3275AAF526E2655A224D026CF3187D548CF4045D10F708B25",
       "bytes": 6814,
       "role": "gate4_control_artifact"
     },

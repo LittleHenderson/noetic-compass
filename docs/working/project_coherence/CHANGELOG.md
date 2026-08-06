@@ -2,6 +2,76 @@
 
 All dates use the repository's working timezone. This changelog records control-package changes, not product releases.
 
+## 2026-08-06 - Gate 5 admitted adapter and bounded reconciliation successor
+
+### Added
+
+- A byte-for-byte application-local mirror of the isolated Harness-v2 kernel,
+  an exact provenance record, and a startup verifier that rejects file,
+  inventory, authority-boundary, and provenance drift before kernel import.
+- An exact default-dark admitted adapter binding controller issuance, worker
+  consumption/output/terminal calls, immutable pre-nonce context, joint
+  `job_id == subject_id == authorization_id` identity, server-derived Fleet
+  configuration, active lease generation, one-time raw authorization release,
+  request-bound intake receipt transitivity, and exact redacted route DTOs.
+- Server-built `INDETERMINATE`/`REJECTED`/`EXPIRED` dispositions and a
+  terminal-safe current-snapshot loader so exact replay remains possible after
+  legacy Fleet completion without reopening authorization issuance.
+- A fail-closed configured-scope reconciliation service and controller route.
+  It joins only injected Fleet configuration, immutable contexts, tenant
+  lifecycle rows, artifact indices, and optional bridge indices; marks source
+  enumeration failure `UNAVAILABLE`; reports missing/orphan/pending states;
+  re-verifies but excludes prior reconciliation wrappers from recursive state;
+  and retains canonical exact report bytes without claiming global or
+  off-registry execution absence.
+
+### Corrected through adversarial review
+
+- Preserved terminal replay after legacy Fleet state advances to
+  `COMPLETE`/`FAILED` by separating issuance-only snapshots from exact current
+  configuration snapshots.
+- Classified bridge persistence failures as unavailable/retryable authority
+  failures rather than caller conflicts; kept bridge binding and immutable
+  conflicts distinct.
+- Mapped invalid internal DTOs and corrupted retained context to service
+  unavailability, while preserving request-originated closed-envelope errors as
+  conflicts. Retained authorization digests now require canonical uppercase;
+  the lifecycle kernel's canonical lowercase artifact binding uses an explicit
+  one-way HTTP translation rather than permissive case normalization.
+- Required terminal callbacks to carry and reverify the exact bound intake
+  receipt through bridge persistence. Raw lease and credential capabilities
+  remain process-local and are never stored or returned.
+
+### Verified bounded receipts
+
+- Worker-terminal bridge: 17/17, node-ID digest
+  `FA6C985CD6CAA734034E006BB4BAF6BE9D02269D7312BEE7355E9C3833759C51`.
+- Fleet callback/Object-Lock seams: 38/38, node-ID digest
+  `D3EAF533FEDB5B03168200AA399AC53A6E2A6F22874EBABEAECEFB227400778D`.
+- Prospective lifecycle/SQLite/default-dark route: 76/76, node-ID digest
+  `5F1197D70B7AFAD39D01BEBEB4E7397C3E075D74A5BFFA5305C62A0EDB3C7D84`.
+- Packaging/snapshot/envelope/context/admitted-adapter/reconciliation: 80/80,
+  node-ID digest
+  `2E45FCD920E0B52916A7341D2FF766FDC9F7911EC2CB11C27BC3FF8FEC3815FB`.
+- These remain `LOCAL_UNATTESTED_HOST_REGRESSION`; they do not establish a
+  provider-backed enabled startup, live execution, trusted time, host-loss
+  durability, independent reproduction, or science.
+
+### Preserved open boundaries
+
+- Gate 5 decision remains `OPEN / KEEP_OPEN`; engineering is
+  `RING 4 / BOUNDED SOFTWARE CANDIDATE TESTED`; experimental execution remains
+  `NOT_STARTED`; license/disclosure/canon remain `NOT LICENSED / HELD / NOT
+  FROZEN`; the live/product route remains unavailable and not authorized.
+- `G5-ENGINEERING-001` and `G5-TRUST-001/002/003/004/005` remain open. Missing
+  HTTP Packet-v2, explicit nonreporting, and outcome-seal dependency envelopes,
+  provider-backed WORM/trusted-time/multi-host authority, authenticated
+  execution, off-registry completeness, independent replay, and every live,
+  scientific, product, license, canon, and disclosure decision remain absent.
+- The user-reported RunPod balance remains `$107.00`; no RunPod/GPU/paid job was
+  launched, known spend for this tranche remains `$0.00`, and no provider
+  billing ledger or balance receipt was inspected.
+
 ## 2026-08-06 - Gate 5 dark prospective run-lifecycle successor
 
 ### Added

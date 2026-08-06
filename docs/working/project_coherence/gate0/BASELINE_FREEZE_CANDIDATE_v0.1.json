@@ -8,8 +8,8 @@
   "evidence_inputs": [
     {
       "path": "docs/working/project_coherence/PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md",
-      "sha256": "B87B2E2B4CC4B10C76EE4AA6EA09094572B2A1008E474475E8F642836B83D2BE",
-      "bytes": 29793
+      "sha256": "7EE0E8F0DA5C1776D4837DBDB78298BA5BB6F2D04AA2BA46E0D8B5CEA7DE6267",
+      "bytes": 30565
     },
     {
       "path": "docs/working/project_coherence/CANONICAL_SOURCE_AUTHORITY_MATRIX_v0.1.json",

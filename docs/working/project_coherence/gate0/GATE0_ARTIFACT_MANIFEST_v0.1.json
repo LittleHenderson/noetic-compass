@@ -17,7 +17,7 @@
     },
     {
       "path": "BASELINE_FREEZE_CANDIDATE_v0.1.json",
-      "sha256": "12184BAE53390B3BE69F9E93FE41310F2267C1BB1062A19A1A2F5AEA19A7A6C6",
+      "sha256": "A8BE9F0D29B9141DB95AC5C39D477BECA22BF39EADA819CDB4B85C2C282528E8",
       "bytes": 15869,
       "role": "Conservative authority and identity policy for all 25 Phase 0 source records"
     },

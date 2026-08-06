@@ -227,6 +227,7 @@ class FleetServiceIntakeBinding:
     authorization_sha256: str | None
     carrier_sha256: str
     carrier_byte_length: int
+    lease_token_sha256: str | None = None
 
     def __post_init__(self) -> None:
         if not re.fullmatch(r"[A-Z]{3,12}", self.http_method or ""):
@@ -248,6 +249,12 @@ class FleetServiceIntakeBinding:
             raise FleetServiceAuthError(
                 "Bound-intake authorization_sha256 must be uppercase SHA-256."
             )
+        if self.lease_token_sha256 is not None and not _UPPER_SHA256_RE.fullmatch(
+            self.lease_token_sha256
+        ):
+            raise FleetServiceAuthError(
+                "Bound-intake lease_token_sha256 must be uppercase SHA-256."
+            )
         if not _UPPER_SHA256_RE.fullmatch(self.carrier_sha256 or ""):
             raise FleetServiceAuthError(
                 "Bound-intake carrier_sha256 must be uppercase SHA-256."
@@ -266,6 +273,7 @@ class FleetServiceIntakeBinding:
             "job_id": self.job_id,
             "run_id": self.run_id,
             "authorization_sha256": self.authorization_sha256,
+            "lease_token_sha256": self.lease_token_sha256,
             "carrier_sha256": self.carrier_sha256,
             "carrier_byte_length": self.carrier_byte_length,
             "assurance": {
@@ -278,6 +286,21 @@ class FleetServiceIntakeBinding:
 
     @classmethod
     def from_payload(cls, payload: Mapping[str, object]) -> "FleetServiceIntakeBinding":
+        required_keys = {
+            "http_method",
+            "route_path",
+            "job_id",
+            "run_id",
+            "authorization_sha256",
+            "carrier_sha256",
+            "carrier_byte_length",
+            "assurance",
+        }
+        payload_keys = set(payload)
+        if not required_keys.issubset(payload_keys) or not payload_keys.issubset(
+            required_keys | {"lease_token_sha256"}
+        ):
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
         assurance = payload.get("assurance")
         if assurance != {
             "scope": "SERVER_OBSERVED_HTTP_INTAKE_ONLY",
@@ -294,6 +317,11 @@ class FleetServiceIntakeBinding:
             authorization_sha256, str
         ):
             raise FleetServiceAuthenticationError("Invalid fleet service credential.")
+        lease_token_sha256 = payload.get("lease_token_sha256")
+        if lease_token_sha256 is not None and not isinstance(
+            lease_token_sha256, str
+        ):
+            raise FleetServiceAuthenticationError("Invalid fleet service credential.")
         try:
             return cls(
                 http_method=str(payload["http_method"]),
@@ -301,6 +329,7 @@ class FleetServiceIntakeBinding:
                 job_id=str(payload["job_id"]),
                 run_id=str(payload["run_id"]),
                 authorization_sha256=authorization_sha256,
+                lease_token_sha256=lease_token_sha256,
                 carrier_sha256=str(payload["carrier_sha256"]),
                 carrier_byte_length=length,
             )

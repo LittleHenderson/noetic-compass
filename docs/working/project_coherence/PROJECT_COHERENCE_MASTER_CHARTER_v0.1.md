@@ -124,7 +124,7 @@ The following are proposed development namespaces, not released versions.
 | CAS architecture | CAS Core v8.0-RC | `OPEN / RING 4 BOUNDED SOFTWARE CANDIDATE TESTED` |
 | Circuit engineering | CAS PCBA v8.0 | `OPEN / RING 4 BOUNDED SOFTWARE CANDIDATE TESTED` |
 | Quantification | CAS-Ohm v1.0 | `OPEN / RING 4 BOUNDED SOFTWARE CANDIDATE TESTED` |
-| Interpretability and experimental platform | CAS Harness v2.0 | `OPEN / NOT STARTED` |
+| Interpretability and experimental platform | CAS Harness v2.0 | `RING 4 / BOUNDED SOFTWARE CANDIDATE TESTED` |
 | Clinical engineering profile | CAS PCBA Clinical 1.0 | `OPEN / NOT STARTED` |
 | Proof and claim control | CAS Evidence and Theorem Registry 1.0 | `DRAFT / OPEN` |
 
@@ -246,7 +246,7 @@ The initial migration matrix is machine-readable in `INITIAL_MIGRATION_MATRIX_v0
 14. keep historical Harness claims separate from current product status and future Harness 2 experiments; and
 15. reject the transferred projector-capacity theorem until the omitted isometry/intertwining hypothesis is supplied by a CAS-specific construction.
 
-All initial entries remain `UNASSESSED` or `IN_REVIEW`. Nothing in v8 is inherited yet.
+The initial matrix records review-state counts of 26 `IN_REVIEW`, 1 `UNASSESSED`, and 1 `REVIEWED`; its migration-disposition counts are 27 `UNASSESSED` and 1 `CLARIFIED`. No inherited or canonical promotion has occurred.
 
 ## 9. Workstreams and decision authority
 
@@ -373,7 +373,18 @@ they do not accept successor semantics or license claims.
 
 ### Gate 5 - CAS Harness 2 research modules
 
-Status: `OPEN / NOT STARTED`
+Status is split across independent axes:
+
+| Axis | Current status |
+|---|---|
+| Document | `DRAFT / OPEN / NOT FROZEN` |
+| Decision | `OPEN / KEEP_OPEN` |
+| Engineering | `RING 4 / BOUNDED SOFTWARE CANDIDATE TESTED` |
+| Experimental | `NOT_STARTED` |
+| License / disclosure / canon | `NOT LICENSED / HELD / NOT FROZEN` |
+| Live / product route | `unavailable / not authorized` |
+
+The engineering status records bounded software-candidate testing only; it does not claim a joined or live run. Experimental conclusions remain unavailable while the experimental axis is `NOT_STARTED` and the live/product route is `unavailable / not authorized`.
 
 Each module closes separately only after execution integrity, preregistration, clean nulls, matched-taxonomy and wrong-layer controls, executor-auditor numerical agreement, held-out replication, falsifiers, Evidence Packet emission, and claim-language review.
 
