@@ -1,0 +1,234 @@
+{
+  "schema_version": "project_coherence.publication.formal_math.evidence_map.v0.1",
+  "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD",
+  "source_baseline_commit": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
+  "as_of": "2026-08-05",
+  "evidence_classes": {
+    "SOURCE_BOUND": "Exact local or registered source bytes establish what was stated, not whether it is true.",
+    "DIRECT_PROOF": "A mathematical derivation is present in the named draft or audit and still awaits independent review unless separately recorded.",
+    "COUNTEREXAMPLE": "A concrete object refutes the scoped universal statement.",
+    "EXECUTABLE_BOUNDED": "Tests establish only their exact finite covered surface.",
+    "LEAN_FRAGMENT": "The pinned Lean kernel checked only the named declarations and dependencies.",
+    "PRIMARY_LITERATURE": "Primary literature supports standard background, not bespoke CAS/TKS semantics.",
+    "MANUSCRIPT_CLAIM": "The supplied OpenAI technical manuscript states the result; independent proof, novelty, and peer review remain open.",
+    "NO_ADMITTED_EXPERIMENT": "No qualifying empirical evidence packet exists."
+  },
+  "maps": [
+    {
+      "claim_id": "PUB-P1-DEF-001",
+      "evidence": [
+        {"class": "SOURCE_BOUND", "refs": ["docs/working/project_coherence/gate1/tks_v8/TKS_V8_CORE_FORMAL_SPEC_AND_PROOF_OBLIGATIONS_v0.1.md"]},
+        {"class": "EXECUTABLE_BOUNDED", "refs": ["src/tks_v8_core/category.py", "tests/tks_v8_core/test_category.py"]},
+        {"class": "LEAN_FRAGMENT", "refs": ["formal/lean/PSR8Formal/TypedCategory.lean"]},
+        {"class": "PRIMARY_LITERATURE", "refs": ["CIT-EILENBERG-MACLANE-1945"]}
+      ],
+      "supports": "A typed finite-function reference category.",
+      "does_not_support": "A canonical or empirical interpretation of its arrows as Noetics.",
+      "residual": ["Semantic migration", "Python-to-Lean correspondence", "Independent review"]
+    },
+    {
+      "claim_id": "PUB-P1-THM-001",
+      "evidence": [
+        {"class": "DIRECT_PROOF", "refs": ["docs/working/project_coherence/gate1/tks_v8/TKS_V8_CORE_FORMAL_SPEC_AND_PROOF_OBLIGATIONS_v0.1.md"]},
+        {"class": "EXECUTABLE_BOUNDED", "refs": ["tests/tks_v8_core/test_category.py"]},
+        {"class": "LEAN_FRAGMENT", "refs": ["formal/lean/PSR8Formal/TypedCategory.lean", "formal/lean/ProofAudit.lean"]}
+      ],
+      "supports": "Typed identity and associativity in the exact finite-map model.",
+      "does_not_support": "Equivalence of the Python and Lean encodings or TKS semantic fidelity.",
+      "residual": ["Encoding correspondence", "Independent formal-methods review"]
+    },
+    {
+      "claim_id": "PUB-P1-THM-002",
+      "evidence": [
+        {"class": "DIRECT_PROOF", "refs": ["docs/working/project_coherence/gate1/tks_v8/TKS_V8_CORE_FORMAL_SPEC_AND_PROOF_OBLIGATIONS_v0.1.md"]},
+        {"class": "EXECUTABLE_BOUNDED", "refs": ["tests/tks_v8_core/test_deterministic_lift.py"]},
+        {"class": "LEAN_FRAGMENT", "refs": ["formal/lean/PSR8Formal/DeterministicLiftFunctor.lean", "formal/lean/DeterministicLiftFunctorAudit.lean"]}
+      ],
+      "supports": "Identity/composition at the entry, basis-action, and relational-support levels.",
+      "does_not_support": "A formal numerical matrix product theorem, arbitrary-vector linearity, or a module-category functor.",
+      "residual": ["Finite-sum bridge", "Arbitrary-vector theorem", "Independent review"]
+    },
+    {
+      "claim_id": "PUB-P1-THM-003",
+      "evidence": [
+        {"class": "DIRECT_PROOF", "refs": ["docs/working/project_coherence/MATHEMATICAL_RED_TEAM_REPORT_v0.1.md", "docs/working/project_coherence/publication/wave1/formal_math/PAPER_1_TYPED_NOETIC_DYNAMICS_AND_FINITE_FRACTAL_SEMANTICS_DELTA_v0.1.md"]},
+        {"class": "EXECUTABLE_BOUNDED", "refs": ["src/tks_v8_core/deterministic_lift.py", "tests/tks_v8_core/test_deterministic_lift.py"]},
+        {"class": "COUNTEREXAMPLE", "refs": ["PUB-P1-CTR-001"]}
+      ],
+      "supports": "The maximum-fiber norm formula and the rejection of a universal contraction bound.",
+      "does_not_support": "A universal Lean theorem or any empirical/cognitive contractivity claim.",
+      "residual": ["Universal formalization", "Generic Gram/spectral bridge", "Operator-theory review"]
+    },
+    {
+      "claim_id": "PUB-P1-CTR-001",
+      "evidence": [
+        {"class": "SOURCE_BOUND", "refs": ["docs/working/project_coherence/gate1/v74/TKS_V74_CORRIGENDUM_v0.1.json"]},
+        {"class": "COUNTEREXAMPLE", "refs": ["formal/lean/PSR8Formal/DeterministicLiftCounterexample.lean", "tests/tks_v8_core/test_deterministic_lift.py"]},
+        {"class": "LEAN_FRAGMENT", "refs": ["formal/lean/PSR8Formal/DeterministicLiftCounterexample.lean"]}
+      ],
+      "supports": "Refutation of the exact inherited universal lift/projector cluster.",
+      "does_not_support": "A generic Lean matrix/Gram/trace/rank theorem.",
+      "residual": ["Generic formal bridge", "Independent review"]
+    },
+    {
+      "claim_id": "PUB-P1-THM-004",
+      "evidence": [
+        {"class": "DIRECT_PROOF", "refs": ["docs/working/project_coherence/MATHEMATICAL_RED_TEAM_REPORT_v0.1.md"]},
+        {"class": "EXECUTABLE_BOUNDED", "refs": ["tests/tks_v8_core/test_category.py"]}
+      ],
+      "supports": "Idempotent powers of one fixed finite map or semigroup element.",
+      "does_not_support": "Eventual periodicity of a time-varying generator sequence.",
+      "residual": ["Lean formalization", "Independent semigroup review"]
+    },
+    {
+      "claim_id": "PUB-P1-THM-005",
+      "evidence": [
+        {"class": "DIRECT_PROOF", "refs": ["docs/working/project_coherence/gate1/tks_v8/TKS_V8_CORE_FORMAL_SPEC_AND_PROOF_OBLIGATIONS_v0.1.md", "docs/working/project_coherence/publication/wave1/formal_math/PAPER_1_TYPED_NOETIC_DYNAMICS_AND_FINITE_FRACTAL_SEMANTICS_DELTA_v0.1.md"]},
+        {"class": "EXECUTABLE_BOUNDED", "refs": ["src/tks_v8_core/normal_forms.py", "tests/tks_v8_core/test_normal_forms.py"]},
+        {"class": "PRIMARY_LITERATURE", "refs": ["CIT-KNUTH-BENDIX-1970"]}
+      ],
+      "supports": "A finite completed denotational shortlex catalog with fail-closed guards.",
+      "does_not_support": "Termination or confluence of an inherited TKS rewrite system.",
+      "residual": ["Formal leastness proof", "Algorithms review"]
+    },
+    {
+      "claim_id": "PUB-P1-THM-006",
+      "evidence": [
+        {"class": "SOURCE_BOUND", "refs": ["docs/working/project_coherence/gate1/v74/TKS_V74_CORRIGENDUM_v0.1.md"]},
+        {"class": "DIRECT_PROOF", "refs": ["docs/working/project_coherence/publication/wave1/formal_math/PAPER_1_TYPED_NOETIC_DYNAMICS_AND_FINITE_FRACTAL_SEMANTICS_DELTA_v0.1.md"]}
+      ],
+      "supports": "Finite stabilization to a greatest reached fixed subset.",
+      "does_not_support": "A unique metric attractor, contraction, or fractal dimension.",
+      "residual": ["Formalization", "Independent dynamics review"]
+    },
+    {
+      "claim_id": "PUB-P1-MODEL-001",
+      "evidence": [
+        {"class": "SOURCE_BOUND", "refs": ["docs/working/project_coherence/gate1/v74/TKS_V74_CORRIGENDUM_v0.1.md"]},
+        {"class": "PRIMARY_LITERATURE", "refs": ["CIT-HUTCHINSON-1981"]}
+      ],
+      "supports": "A publication vocabulary that separates finite denotation from metric IFS hypotheses.",
+      "does_not_support": "Canon, empirical cognition, or transfinite fractal conclusions.",
+      "residual": ["Terminology review", "Semantic migration", "Independent review"]
+    },
+    {
+      "claim_id": "PUB-P1-LEM-001",
+      "evidence": [
+        {"class": "DIRECT_PROOF", "refs": ["docs/working/project_coherence/publication/wave1/formal_math/PAPER_1_TYPED_NOETIC_DYNAMICS_AND_FINITE_FRACTAL_SEMANTICS_DELTA_v0.1.md"]}
+      ],
+      "supports": "A norm-aware two-factor error estimate under explicit bounded-operator hypotheses.",
+      "does_not_support": "The missing full exact/approximate TKS v8 calculus.",
+      "residual": ["Versioned metric and error-budget profiles", "Formalization"]
+    },
+    {
+      "claim_id": "PUB-P3-DEF-001",
+      "evidence": [
+        {"class": "SOURCE_BOUND", "refs": ["docs/working/project_coherence/SYMBOL_AND_TERMINOLOGY_REGISTRY_v0.1.json", "docs/working/project_coherence/gate4/CAS_PCBA_V8_SOURCE_AUDIT_AND_SPEC_v0.1.md", "SRC-PCBA-ENGINEER-20260726"]}
+      ],
+      "supports": "A preserved mixed-simplex baseline and a type-distinct projector research profile.",
+      "does_not_support": "An identity or replacement relation between the profiles.",
+      "residual": ["Define any future cross-profile map and its loss"]
+    },
+    {
+      "claim_id": "PUB-P3-PROP-001",
+      "evidence": [
+        {"class": "DIRECT_PROOF", "refs": ["docs/working/project_coherence/MATHEMATICAL_RED_TEAM_REPORT_v0.1.md", "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md"]},
+        {"class": "PRIMARY_LITERATURE", "refs": ["CIT-ARONSZAJN-1950", "CIT-CONWAY-HARDIN-SLOANE-1996"]}
+      ],
+      "supports": "A normalized PSD Hilbert-Schmidt projector kernel in [0,1].",
+      "does_not_support": "Strict positive definiteness, latent semantics, or empirical validity.",
+      "residual": ["Formalization", "Operator-theory review"]
+    },
+    {
+      "claim_id": "PUB-P3-PROP-002",
+      "evidence": [
+        {"class": "PRIMARY_LITERATURE", "refs": ["CIT-BJORCK-GOLUB-1973", "CIT-CONWAY-HARDIN-SLOANE-1996"]},
+        {"class": "DIRECT_PROOF", "refs": ["docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md"]}
+      ],
+      "supports": "Principal-angle, overlap, and chordal-distance identities.",
+      "does_not_support": "That scalar overlap retains the full angle spectrum or predicts task behavior.",
+      "residual": ["Formalization", "Numerical convention audit"]
+    },
+    {
+      "claim_id": "PUB-P3-PROP-003",
+      "evidence": [
+        {"class": "DIRECT_PROOF", "refs": ["docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md"]},
+        {"class": "PRIMARY_LITERATURE", "refs": ["CIT-RANKIN-1955", "CIT-CONWAY-HARDIN-SLOANE-1996"]}
+      ],
+      "supports": "A necessary centered-projector coherence lower bound and its conditional N envelope.",
+      "does_not_support": "The stronger manuscript projection bound, hardware capacity, or empirical cognitive state count.",
+      "residual": ["Proof-assistant formalization", "Coding-theory review"]
+    },
+    {
+      "claim_id": "PUB-P3-PROP-004",
+      "evidence": [
+        {"class": "PRIMARY_LITERATURE", "refs": ["CIT-WELCH-1974"]},
+        {"class": "DIRECT_PROOF", "refs": ["docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md"]}
+      ],
+      "supports": "A standard feature-dimension coherence check.",
+      "does_not_support": "Task, memory, engineering, or cognitive capacity.",
+      "residual": ["Formalization", "Numerical implementation audit"]
+    },
+    {
+      "claim_id": "PUB-P3-MSC-001",
+      "evidence": [
+        {"class": "SOURCE_BOUND", "refs": ["SRC-TEN-ADVANCES-PRIMARY", "docs/working/project_coherence/LITERATURE_AND_TRANSFER_AUDIT_v0.1.md"]},
+        {"class": "MANUSCRIPT_CLAIM", "refs": ["CIT-OPENAI-TEN-ADVANCES-2026"]},
+        {"class": "COUNTEREXAMPLE", "refs": ["PUB-P3-CTR-001"]}
+      ],
+      "supports": "The exact conditional statement and identification of its load-bearing intertwining hypothesis.",
+      "does_not_support": "Independent correctness, novelty, or any CAS specialization.",
+      "residual": ["Independent proof review", "CAS-specific intertwiner", "Formal certificate"]
+    },
+    {
+      "claim_id": "PUB-P3-CTR-001",
+      "evidence": [
+        {"class": "COUNTEREXAMPLE", "refs": ["docs/working/project_coherence/MATHEMATICAL_RED_TEAM_REPORT_v0.1.md", "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md"]}
+      ],
+      "supports": "Refutation of the weakened rank-and-coherence-only transfer.",
+      "does_not_support": "Refutation of manuscript Proposition 4.1 with every hypothesis present.",
+      "residual": ["Independent review"]
+    },
+    {
+      "claim_id": "PUB-P3-HYP-001",
+      "evidence": [
+        {"class": "SOURCE_BOUND", "refs": ["docs/working/project_coherence/CLAIM_LEDGER_v0.1.json"]},
+        {"class": "NO_ADMITTED_EXPERIMENT", "refs": []},
+        {"class": "PRIMARY_LITERATURE", "refs": ["CIT-DAVIS-KAHAN-1970", "CIT-WEDIN-1972"]}
+      ],
+      "supports": "A preregistrable empirical question and stability methodology requirements.",
+      "does_not_support": "That learned subspaces are stable, specific, causal, or cognitively meaningful.",
+      "residual": ["Preregistration", "Controls", "Held-out replication", "Independent audit", "Evidence Packets"]
+    },
+    {
+      "claim_id": "PUB-P3-HYP-002",
+      "evidence": [
+        {"class": "SOURCE_BOUND", "refs": ["docs/working/project_coherence/CLAIM_LEDGER_v0.1.json"]},
+        {"class": "NO_ADMITTED_EXPERIMENT", "refs": []},
+        {"class": "MANUSCRIPT_CLAIM", "refs": ["PUB-P3-MSC-001"]}
+      ],
+      "supports": "An explicitly open predictive hypothesis with a theorem dependency.",
+      "does_not_support": "Any current capacity or held-out prediction claim.",
+      "residual": ["Resolve theorem dependency", "Preregistered baseline comparison", "Independent replication"]
+    },
+    {
+      "claim_id": "PUB-P3-NEG-001",
+      "evidence": [
+        {"class": "SOURCE_BOUND", "refs": ["docs/working/project_coherence/SYMBOL_AND_TERMINOLOGY_REGISTRY_v0.1.json", "docs/working/project_coherence/INITIAL_MIGRATION_MATRIX_v0.1.json", "docs/working/project_coherence/gate4/CAS_PCBA_V8_SOURCE_AUDIT_AND_SPEC_v0.1.md"]}
+      ],
+      "supports": "No identity/equivalence is admitted by the current source and evidence set.",
+      "does_not_support": "Impossibility of every future typed comparison.",
+      "residual": ["Define any proposed comparison with metric, loss, scope, and version"]
+    }
+  ],
+  "summary": {
+    "mapped_claim_count": 20,
+    "formal_fragments_present": true,
+    "universal_formalization_complete": false,
+    "independent_review_complete": false,
+    "experimental_evidence_packets": 0,
+    "canon_effect": "NONE",
+    "product_claim_effect": "NONE",
+    "disclosure_effect": "NONE"
+  }
+}
