@@ -25,6 +25,34 @@ PUBLICATION_ROOT = (
 )
 INTEGRATION_ROOT = PUBLICATION_ROOT / "integration"
 
+CURRENT_GATE5_SNAPSHOT_ID = "G5-SNAPSHOT-PROSPECTIVE-LIFECYCLE-SUCCESSOR"
+CURRENT_GATE5_SOURCE_COMMIT = "e0405bf58dfe2a132476fa2672f288dcc097cd77"
+CURRENT_GATE5_ARTIFACT_COUNT = 355
+HISTORICAL_FINAL_REPLAY_COMMIT = "d24721afe18e05442f3c691f02dcf1608244f0e9"
+HISTORICAL_FINAL_REPLAY_ARTIFACT_COUNT = 348
+INTEGRATED_REPLAY_ORDER = [
+    "GATE5",
+    "PUBLICATION_PROGRAM",
+    "GATE1",
+    "GATE4",
+]
+GATE5_SNAPSHOT_RECORD_PATHS = {
+    "gate5_manifest": (
+        "docs/working/project_coherence/gate5/"
+        "GATE5_ARTIFACT_MANIFEST_v0.1.json"
+    ),
+    "local_runner_lock": (
+        "docs/working/project_coherence/gate5/"
+        "GATE5_LOCAL_WINDOWS_TEST_RUNNER_LOCK_v0.1.json"
+    ),
+    "raw_build_security_receipt": (
+        "docs/working/project_coherence/gate5/"
+        "GATE5_RAW_BUILD_AND_SECURITY_EVIDENCE_RECEIPT_v0.1.json"
+    ),
+    "gate5_verifier": "scripts/verify_project_coherence_gate5.py",
+    "gate5_redteam": "tests/cas_harness_v2/test_gate5_verifier_redteam.py",
+}
+
 
 class VerificationError(RuntimeError):
     """Raised when a publication integration invariant fails."""
@@ -64,12 +92,21 @@ def sha256(path: Path) -> str:
     return digest.hexdigest().upper()
 
 
-def git_blob_identity(raw: str) -> tuple[str, int, str]:
-    """Return the HEAD blob OID, byte count, and content SHA-256 for a path."""
+def git_blob_identity(
+    raw: str, *, commit: str = "HEAD"
+) -> tuple[str, int, str]:
+    """Return a commit's blob OID, byte count, and content SHA-256 for a path.
+
+    The exact repository path is admitted for this invocation only.  This keeps
+    Git source-binding checks usable in ownership-restricted sandboxes without
+    mutating system, global, or repository configuration.
+    """
     resolve_repo_path(raw)
-    revision = f"HEAD:{raw}"
+    safe_directory = REPO_ROOT.resolve().as_posix()
+    git_prefix = ["git", "-c", f"safe.directory={safe_directory}"]
+    revision = f"{commit}:{raw}"
     oid_result = subprocess.run(
-        ["git", "rev-parse", revision],
+        [*git_prefix, "rev-parse", "--verify", revision],
         cwd=REPO_ROOT,
         capture_output=True,
         check=False,
@@ -80,7 +117,7 @@ def git_blob_identity(raw: str) -> tuple[str, int, str]:
         fail(f"cannot resolve Git blob for {raw}: {oid_result.stderr.strip()}")
     oid = oid_result.stdout.strip()
     blob_result = subprocess.run(
-        ["git", "cat-file", "blob", oid],
+        [*git_prefix, "cat-file", "blob", oid],
         cwd=REPO_ROOT,
         capture_output=True,
         check=False,
@@ -339,36 +376,215 @@ def verify_dependency_and_obligation_maps() -> tuple[int, int]:
     return len(tracks), len(clusters)
 
 
+def verify_current_gate5_pointer_reconciliation(
+    *, snapshot_id: str, source_commit: str, artifact_count: int
+) -> None:
+    """Require every integration-owned current Gate 5 pointer to agree."""
+    dependency = load_json(
+        INTEGRATION_ROOT
+        / "PUBLICATION_DEPENDENCY_STATUS_AND_REVIEW_MAP_v0.1.json"
+    )
+    lead = dependency.get("lead_integration")
+    if not isinstance(lead, dict):
+        fail("dependency map lacks lead integration Gate 5 pointers")
+    dependency_pointer = (
+        lead.get("gate5_spine_commit"),
+        lead.get("gate5_current_snapshot_id"),
+        lead.get("gate5_current_artifact_count"),
+    )
+    expected_pointer = (source_commit, snapshot_id, artifact_count)
+    if dependency_pointer != expected_pointer:
+        fail("dependency map current Gate 5 pointer disagrees with crosswalk")
+
+    integration_manifest = load_json(
+        INTEGRATION_ROOT
+        / "PUBLICATION_INTEGRATION_ARTIFACT_MANIFEST_v0.1.json"
+    )
+    validation = integration_manifest.get("validation_snapshot")
+    if not isinstance(validation, dict):
+        fail("integration manifest lacks validation snapshot Gate 5 pointers")
+    integration_pointer = (
+        validation.get("clean_candidate_commit"),
+        validation.get("gate5_current_snapshot_id"),
+        validation.get("gate5_current_artifact_count"),
+    )
+    if integration_pointer != expected_pointer:
+        fail("integration manifest current Gate 5 pointer disagrees with crosswalk")
+
+
+def verify_integrated_replay(
+    replay: Any,
+    *,
+    label: str,
+    expected_commit: str,
+    expected_gate5_artifact_count: int,
+) -> None:
+    """Verify one complete ordered Gate 5/publication/Gate 1/Gate 4 replay."""
+    if not isinstance(replay, dict):
+        fail(f"{label} is not an object")
+    if replay.get("commit") != expected_commit:
+        fail(f"{label} commit mismatch")
+    if replay.get("execution_order") != INTEGRATED_REPLAY_ORDER:
+        fail(f"{label} execution order is invalid")
+    results = replay.get("results")
+    if not isinstance(results, dict) or set(results) != {
+        "gate5",
+        "publication_program",
+        "gate1",
+        "gate4",
+    }:
+        fail(f"{label} results are incomplete")
+    if any(not isinstance(result, dict) for result in results.values()):
+        fail(f"{label} contains a non-object result")
+    if any(result.get("result") != "PASS" for result in results.values()):
+        fail(f"{label} contains a non-PASS result")
+    gate5 = results["gate5"]
+    if gate5.get("artifact_count") != expected_gate5_artifact_count:
+        fail(f"{label} Gate 5 artifact count mismatch")
+    if gate5.get("experimental_execution") != "NOT_STARTED":
+        fail(f"{label} promotes Gate 5 experimental execution")
+    if gate5.get("dependency_security") != "OPEN_SECURITY / HELD":
+        fail(f"{label} promotes Gate 5 dependency security")
+    if results["publication_program"].get("bound_publication_artifacts") != 71:
+        fail(f"{label} publication artifact count mismatch")
+    if results["gate1"].get("artifact_count") != 23:
+        fail(f"{label} Gate 1 artifact count mismatch")
+    if results["gate4"].get("artifact_count") != 54:
+        fail(f"{label} Gate 4 artifact count mismatch")
+    if results["gate1"].get("status_after_pass") != (
+        "OPEN / Ring 4 / NOT LICENSED / NOT FROZEN"
+    ):
+        fail(f"{label} promotes Gate 1 status")
+    if results["gate4"].get("status_after_pass") != (
+        "OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN"
+    ):
+        fail(f"{label} promotes Gate 4 status")
+
+
+def verify_current_successor_candidate(
+    data: dict[str, Any], *, clean_candidate_replay: dict[str, Any]
+) -> None:
+    """Verify the current default-dark candidate separately from old replay."""
+    candidate = data.get("current_successor_candidate")
+    if not isinstance(candidate, dict):
+        fail("current Gate 5 successor candidate is missing")
+    if candidate.get("status") != (
+        "CLEAN GATE 5 CANDIDATE PASS / PUBLICATION REBIND AND ORDERED "
+        "RECEIPT-COMMIT REPLAY REQUIRED"
+    ):
+        fail("current Gate 5 successor candidate status is invalid")
+    if candidate.get("commit") != CURRENT_GATE5_SOURCE_COMMIT:
+        fail("current Gate 5 successor candidate commit mismatch")
+    if candidate.get("snapshot_id") != CURRENT_GATE5_SNAPSHOT_ID:
+        fail("current Gate 5 successor candidate snapshot mismatch")
+    gate5 = candidate.get("gate5")
+    if not isinstance(gate5, dict):
+        fail("current Gate 5 successor candidate lacks Gate 5 result")
+    expected_fields = {
+        "result": "PASS WITH GATE OPEN",
+        "artifact_count": CURRENT_GATE5_ARTIFACT_COUNT,
+        "route_enabled": False,
+        "packaged_adapter_admitted": False,
+        "experimental_execution": "NOT_STARTED",
+        "dependency_security": "OPEN_SECURITY / HELD",
+    }
+    if any(gate5.get(key) != value for key, value in expected_fields.items()):
+        fail("current Gate 5 successor candidate boundary mismatch")
+    for key in (
+        "result",
+        "route_enabled",
+        "packaged_adapter_admitted",
+        "experimental_execution",
+        "dependency_security",
+    ):
+        if gate5.get(key) != clean_candidate_replay.get(key):
+            fail(f"current Gate 5 successor candidate disagrees on {key}")
+    if candidate.get("next_execution_order") != [
+        "PUBLICATION_PROGRAM",
+        "GATE1",
+        "GATE4",
+        "CLEAN_RECEIPT_COMMIT_REPLAY",
+    ]:
+        fail("current Gate 5 successor candidate next execution order is invalid")
+    scope = candidate.get("receipt_scope")
+    if not isinstance(scope, str) or any(
+        marker not in scope
+        for marker in (
+            "DEFAULT-DARK ROUTE",
+            "NO PACKAGED OR ADMITTED ADAPTER",
+            "NO LIVE EXECUTION",
+            "NOT SCIENTIFIC EVIDENCE",
+        )
+    ):
+        fail("current Gate 5 successor candidate scope is not fail-closed")
+
+
+def verify_optional_current_integrated_replay(data: dict[str, Any]) -> None:
+    """Allow no e040 replay yet, but verify it exactly once represented."""
+    if "current_integrated_replay" not in data:
+        return
+    replay = data["current_integrated_replay"]
+    if not isinstance(replay, dict):
+        fail("current integrated replay is not an object")
+    if replay.get("status") == "PENDING / NOT_STARTED":
+        if replay.get("commit") != CURRENT_GATE5_SOURCE_COMMIT:
+            fail("pending current integrated replay commit mismatch")
+        if replay.get("execution_order") != INTEGRATED_REPLAY_ORDER:
+            fail("pending current integrated replay execution order is invalid")
+        if "results" in replay:
+            fail("pending current integrated replay contains result claims")
+        return
+    if replay.get("status") != "PASS WITH GATE OPEN":
+        fail("completed current integrated replay status is not fail-closed")
+    verify_integrated_replay(
+        replay,
+        label="current integrated replay",
+        expected_commit=CURRENT_GATE5_SOURCE_COMMIT,
+        expected_gate5_artifact_count=CURRENT_GATE5_ARTIFACT_COUNT,
+    )
+
+
 def verify_gate5_snapshot_crosswalk() -> int:
     path = INTEGRATION_ROOT / "GATE5_EVIDENCE_SNAPSHOT_CROSSWALK_v0.1.json"
     data = load_json(path)
     snapshots = data.get("snapshots")
     if not isinstance(snapshots, list):
         fail("Gate 5 snapshot crosswalk has no snapshots list")
+    if any(not isinstance(item, dict) for item in snapshots):
+        fail("Gate 5 snapshot crosswalk contains a non-object snapshot")
     expected_snapshot_ids = [
         "G5-SNAPSHOT-HARNESS-LANE-BASE",
         "G5-SNAPSHOT-HARDENED-INTEGRATION",
         "G5-SNAPSHOT-WORKER-PROTOCOL-SUCCESSOR",
+        CURRENT_GATE5_SNAPSHOT_ID,
     ]
-    actual_snapshot_ids = [
-        item.get("snapshot_id") for item in snapshots if isinstance(item, dict)
-    ]
+    actual_snapshot_ids = [item.get("snapshot_id") for item in snapshots]
     if actual_snapshot_ids != expected_snapshot_ids:
         fail("Gate 5 snapshot IDs or historical order changed")
     historical_expectations = {
         "G5-SNAPSHOT-HARNESS-LANE-BASE": (
             325,
             "5C73F203B4EA7D95B89C3BBB730FFCAE571EECC26E8BA2AF3ABC4A994635B333",
+            None,
         ),
         "G5-SNAPSHOT-HARDENED-INTEGRATION": (
             340,
             "AF263573DAB68D814A09D75CFEBB2ECDD62B08491BD2D1D66C7D5332F682A72A",
+            "fbac9909a2b600ac8bc9f1217c073e4a3269beea",
+        ),
+        "G5-SNAPSHOT-WORKER-PROTOCOL-SUCCESSOR": (
+            348,
+            "E370F1CE68550ED166612E90791A5E3A3701D22F5777DDF7831EE36EA0A5A24E",
+            "d24721afe18e05442f3c691f02dcf1608244f0e9",
         ),
     }
-    for snapshot_id, (artifact_count, manifest_sha256) in historical_expectations.items():
-        historical = next(
-            item for item in snapshots if item.get("snapshot_id") == snapshot_id
-        )
+    snapshots_by_id = {item["snapshot_id"]: item for item in snapshots}
+    for snapshot_id, (
+        artifact_count,
+        manifest_sha256,
+        source_commit,
+    ) in historical_expectations.items():
+        historical = snapshots_by_id[snapshot_id]
         manifest_record = historical.get("gate5_manifest")
         if not isinstance(manifest_record, dict):
             fail(f"historical Gate 5 snapshot lacks manifest: {snapshot_id}")
@@ -378,32 +594,27 @@ def verify_gate5_snapshot_crosswalk() -> int:
         )
         if (declared_count, declared_hash) != (artifact_count, manifest_sha256):
             fail(f"historical Gate 5 snapshot was rewritten: {snapshot_id}")
+        if (
+            source_commit is not None
+            and historical.get("source_commit") != source_commit
+        ):
+            fail(f"historical Gate 5 source commit was rewritten: {snapshot_id}")
     current_snapshot_id = data.get("current_snapshot_id")
-    if current_snapshot_id != "G5-SNAPSHOT-WORKER-PROTOCOL-SUCCESSOR":
+    if current_snapshot_id != CURRENT_GATE5_SNAPSHOT_ID:
         fail("current Gate 5 successor snapshot pointer is invalid")
-    current = next(
-        (
-            item
-            for item in snapshots
-            if isinstance(item, dict)
-            and item.get("snapshot_id") == current_snapshot_id
-        ),
-        None,
-    )
-    if current is None:
-        fail("current Gate 5 successor snapshot is missing")
-    if current.get("source_commit") != "d24721afe18e05442f3c691f02dcf1608244f0e9":
+    current = snapshots_by_id[current_snapshot_id]
+    if current.get("source_commit") != CURRENT_GATE5_SOURCE_COMMIT:
         fail("current Gate 5 successor source commit is not frozen")
-    for key in (
-        "gate5_manifest",
-        "local_runner_lock",
-        "raw_build_security_receipt",
-        "gate5_verifier",
-        "gate5_redteam",
+    if current.get("parent_snapshot_id") != (
+        "G5-SNAPSHOT-WORKER-PROTOCOL-SUCCESSOR"
     ):
+        fail("current Gate 5 successor parent linkage is invalid")
+    for key, expected_path in GATE5_SNAPSHOT_RECORD_PATHS.items():
         record = current.get(key)
         if not isinstance(record, dict):
             fail(f"current Gate 5 successor snapshot lacks {key}")
+        if record.get("path") != expected_path:
+            fail(f"current Gate 5 successor snapshot path mismatch: {key}")
         target = resolve_repo_path(record.get("path"))
         if not target.is_file():
             fail(f"current Gate 5 successor snapshot target is missing: {key}")
@@ -411,40 +622,54 @@ def verify_gate5_snapshot_crosswalk() -> int:
             fail(f"current Gate 5 successor snapshot byte mismatch: {key}")
         if sha256(target) != record.get("sha256"):
             fail(f"current Gate 5 successor snapshot hash mismatch: {key}")
+        _, blob_bytes, blob_sha256 = git_blob_identity(
+            record.get("path"), commit=CURRENT_GATE5_SOURCE_COMMIT
+        )
+        if (record.get("bytes"), record.get("sha256")) != (
+            blob_bytes,
+            blob_sha256,
+        ):
+            fail(
+                f"current Gate 5 successor source-commit blob mismatch: {key}"
+            )
     gate5_manifest = load_json(resolve_repo_path(current["gate5_manifest"]["path"]))
     artifact_count = gate5_manifest.get("artifact_count")
     if artifact_count != current["gate5_manifest"].get("artifact_count"):
         fail("current Gate 5 successor artifact count mismatch")
-    replay = data.get("final_integrated_replay")
-    if not isinstance(replay, dict) or replay.get("commit") != (
-        "d24721afe18e05442f3c691f02dcf1608244f0e9"
-    ):
-        fail("successor replay is not bound to the frozen Gate 5 candidate")
-    if replay.get("execution_order") != [
-        "GATE5",
-        "PUBLICATION_PROGRAM",
-        "GATE1",
-        "GATE4",
-    ]:
-        fail("final integrated replay order does not preserve Gate 5 isolation")
-    results = replay.get("results")
-    if not isinstance(results, dict) or set(results) != {
-        "gate5",
-        "publication_program",
-        "gate1",
-        "gate4",
-    }:
-        fail("final integrated replay results are incomplete")
-    if any(result.get("result") != "PASS" for result in results.values()):
-        fail("final integrated replay contains a non-PASS candidate result")
-    if results["gate5"].get("artifact_count") != 348:
-        fail("final integrated replay Gate 5 artifact count mismatch")
-    if results["publication_program"].get("bound_publication_artifacts") != 71:
-        fail("final integrated replay publication artifact count mismatch")
-    if results["gate1"].get("artifact_count") != 23:
-        fail("final integrated replay Gate 1 artifact count mismatch")
-    if results["gate4"].get("artifact_count") != 54:
-        fail("final integrated replay Gate 4 artifact count mismatch")
+    if artifact_count != CURRENT_GATE5_ARTIFACT_COUNT:
+        fail("current Gate 5 successor artifact count is not 355")
+
+    candidate_replay = current.get("clean_candidate_replay")
+    if not isinstance(candidate_replay, dict):
+        fail("current Gate 5 successor lacks a clean candidate replay")
+    if candidate_replay.get("commit") != current.get("source_commit"):
+        fail("current Gate 5 successor replay commit differs from source commit")
+    if candidate_replay.get("experimental_execution") != "NOT_STARTED":
+        fail("current Gate 5 successor replay promotes experimental execution")
+    if candidate_replay.get("dependency_security") != "OPEN_SECURITY / HELD":
+        fail("current Gate 5 successor replay promotes dependency security")
+    if candidate_replay.get("result") != "PASS WITH GATE OPEN":
+        fail("current Gate 5 successor replay does not preserve the open gate")
+    if candidate_replay.get("route_enabled") is not False:
+        fail("current Gate 5 successor replay does not preserve default-dark routing")
+    if candidate_replay.get("packaged_adapter_admitted") is not False:
+        fail("current Gate 5 successor replay admits a packaged adapter")
+
+    verify_current_successor_candidate(
+        data, clean_candidate_replay=candidate_replay
+    )
+    verify_integrated_replay(
+        data.get("final_integrated_replay"),
+        label="historical d247 final integrated replay",
+        expected_commit=HISTORICAL_FINAL_REPLAY_COMMIT,
+        expected_gate5_artifact_count=HISTORICAL_FINAL_REPLAY_ARTIFACT_COUNT,
+    )
+    verify_optional_current_integrated_replay(data)
+    verify_current_gate5_pointer_reconciliation(
+        snapshot_id=current_snapshot_id,
+        source_commit=current["source_commit"],
+        artifact_count=artifact_count,
+    )
     return int(artifact_count)
 
 

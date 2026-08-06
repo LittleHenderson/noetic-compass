@@ -24,11 +24,13 @@ separated by mathematical dependency and reconciled through one lead layer.
 Any theorem, causal transfer, experiment, product statement, license, canon
 change, or disclosure decision that lacked evidence remains explicitly open.
 
-The current successor adds a bounded worker-terminal protocol and pre-outcome
-bridge to Gate 5. It is an evidence-spine evolution, not a re-authoring of the
-publication lanes. The 325- and 340-artifact source snapshots remain immutable
+The worker-protocol successor added a bounded worker-terminal protocol and
+pre-outcome bridge to Gate 5. The current prospective-lifecycle successor adds
+local lifecycle, SQLite-concurrency, and default-dark private-route controls.
+These are evidence-spine evolutions, not re-authorings of the publication
+lanes. The 325-, 340-, and 348-artifact source snapshots remain immutable
 historical inputs; current integration decisions use the separately identified
-348-artifact successor.
+355-artifact successor at `e0405bf58dfe2a132476fa2672f288dcc097cd77`.
 
 ## 2. Immutable lane and review history
 
@@ -36,6 +38,7 @@ historical inputs; current integration decisions use the separately identified
 |---|---|---:|---|
 | Hardened Gate 5 evidence spine | `codex/project-coherence-cas-core` | `fbac9909a2b600ac8bc9f1217c073e4a3269beea` | Repository-local evidence improved; Gate 5 remains open |
 | Gate 5 worker-terminal successor | `codex/project-coherence-gate5-successor` | `d24721afe18e05442f3c691f02dcf1608244f0e9` | Current 348-artifact integration spine; live execution and Gate 5 remain open |
+| Gate 5 prospective-lifecycle successor | `codex/project-coherence-gate5-successor` | `e0405bf58dfe2a132476fa2672f288dcc097cd77` | Current 355-artifact integration spine; route remains default-dark without a packaged or admitted adapter, and Gate 5 remains open |
 | Formal mathematics Wave 1 | `codex/project-coherence-publication-formal` | `3c8491db6f5559cf090909d9de0efa03d924f53f` | Papers 1 and 3 source lane preserved |
 | Category/sheaf theory Wave 1 | `codex/project-coherence-publication-category` | `643169e9bd8de6d4bd0cc2cbc3cde4e640f1671c` | Papers 2 and 4 source lane preserved |
 | Engineering Wave 1 | `codex/project-coherence-publication-engineering` | `c8635270ca6ba7c65504b4fda43cb42a89623015` | Paper 6 and CAS-Ohm source lane preserved |
@@ -179,19 +182,39 @@ artifacts and 146 Harness tests plus 96 subtests, including 27 strict worker
 protocol tests, 34 durable callback/Object-Lock seam tests, and 7 pre-outcome
 bridge tests. Its exact clean committed Gate 5 replay passed in 279.5 seconds.
 
-All three snapshots are preserved. Older counts are not rewritten as if the
-papers were authored against newer bytes. Current integration status uses the
-348-artifact successor, which still does not establish complete execution
-closure, independent attestation, trusted time/WORM, a live route, a joined
-model run, full outcome/Evidence Packet v2 sealing, scientific validation,
-product authority, licensing, canon admission, or disclosure approval.
+At the `d24721af` checkpoint, all three snapshots were preserved. Older counts
+were not rewritten as if the papers had been authored against newer bytes.
+That checkpoint used the 348-artifact successor, which did not establish
+complete execution closure, independent attestation, trusted time/WORM, a live
+route, a joined model run, full outcome/Evidence Packet v2 sealing, scientific
+validation, product authority, licensing, canon admission, or disclosure
+approval.
+
+The prospective-lifecycle successor is a fourth, separately identified
+snapshot. It binds 355 artifacts and 150 Harness tests plus 99 subtests,
+including 30 strict worker-protocol tests plus 38 subtests, 35 durable
+callback/Object-Lock seam tests, 8 pre-outcome bridge tests, and 48 focused
+lifecycle/SQLite/default-dark-route tests. Candidate
+`e0405bf58dfe2a132476fa2672f288dcc097cd77` passed its clean Gate 5 replay in
+251.3 seconds with Gate 5 still open, dependency security still
+`OPEN_SECURITY / HELD`, and experimental execution still `NOT_STARTED`.
+
+All four snapshots are preserved. The current private route exists, is
+excluded from OpenAPI, and remains default-dark. No packaged or admitted
+adapter wires one run-identity contract, the request-bound intake receipt, or
+the active-lease seam into the lifecycle, and no live provider execution has
+occurred. Trusted time, live WORM, multi-host and host-loss authority,
+authenticated execution, exhaustive reconciliation, independently attested
+replay and reproduction, scientific validation, product authority, licensing,
+canon admission, and disclosure approval all remain open.
 
 ## 7. Compute and RunPod decision
 
 No project experimental target-model run, user-funded RunPod job, or separately
 provisioned project GPU workload was launched for this publication program.
-Project experimental spend was `$0`; the reported `$57` balance was left
-untouched. No top-up is justified for the current work.
+Known tranche spend was `$0.00`; the `$107.00` balance is user-reported, and no
+provider billing ledger or balance receipt was inspected. No top-up is
+justified for the current work.
 
 A future GPU experiment cannot be costed responsibly from these drafts alone.
 Before any spend, the program still needs a frozen model/hardware profile,
@@ -240,6 +263,15 @@ The receipt-bearing commit necessarily succeeds the candidate it records. It
 must therefore be replayed from its own exact clean checkout, then the exact
 pushed remote ref must be reported externally. That final ref cannot be
 self-recorded inside its own Git bytes without an infinite self-reference loop.
+
+That `d24721af` sequence remains an immutable historical receipt. The later
+prospective-lifecycle candidate
+`e0405bf58dfe2a132476fa2672f288dcc097cd77` now binds 355 artifacts and passed
+its clean Gate 5 replay in 251.3 seconds. Publication-program, Gate 1, and Gate
+4 rebinding then passed on the receipt worktree with 71, 23, and 54 bound
+artifacts respectively. The final clean receipt-commit replay remains required;
+this handoff does not convert the candidate into trusted-time, WORM,
+independent, scientific, product, license, canon, or disclosure evidence.
 
 ## 10. Authority boundary
 
