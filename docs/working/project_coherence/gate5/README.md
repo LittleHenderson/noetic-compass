@@ -16,6 +16,10 @@ authority.
 
 - `HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md` defines the
   isolated executable control-kernel boundary.
+- `GATE5_WORKER_PROTOCOL_BINDING_v0.1.md` defines the research-only exact
+  worker-authorization and terminal-receipt mapping. It distinguishes durable
+  callback replay protection from still-OPEN run authorization, trusted time,
+  WORM ordering, and execution authentication.
 - `history/HISTORICAL_HARNESS_V1_V4_CURRENT_TREE_SHA256.json` binds the exact
   537-file historical recovery and its adverse evidence.
 - `history/HISTORICAL_HARNESS_V1_V4_RECOVERY_INVENTORY.md` explains the
@@ -55,12 +59,13 @@ authority.
 
 ## Current bounded receipts
 
-The stable Harness v2 suite contains 119 pytest node IDs and passes 119 tests
-plus 61 subtests: 94 active control-kernel tests, 4 historical-recovery tests,
-and 21 retained Gate 5 verifier red-team regressions. Its canonical node-ID
+The stable Harness v2 suite contains 146 pytest node IDs and passes 146 tests
+plus 96 subtests: 94 active control-kernel tests, 27 strict worker-protocol
+tests, 4 historical-recovery tests, and 21 retained Gate 5 verifier red-team
+regressions. Its canonical node-ID
 digest is:
 
-`8FBC5D8AE4CF3B0BBEB9A1902C6905278126B056FF6961D13EE9830E2363F362`
+`EA041DCF5EFC04CB94297C381AFEF4E418FE000A23B6A79274177EC79667DFC1`
 
 The four-test historical subset digest is:
 
@@ -69,6 +74,17 @@ The four-test historical subset digest is:
 The 94-test active research-control subset digest is:
 
 `E170E51F83B8DEA3B43537737961580E21E08C14DE9DFE5A3809FB7B2EEA0952`
+
+The 27-test strict worker-protocol subset passes 35 subtests. Its canonical
+node-ID digest is:
+
+`1F18A5854B5AF20FE87D9C281AAE0CC0B1F1DC8CB81748A47DC49CB7BC4A549A`
+
+That kernel keeps the transport callback nonce outside immutable worker bytes,
+preserves retry-stable terminal identity, allows exact post-seal replay only
+when the outcome-access event binds the same terminal receipt and completion
+time, and quarantines partial failure artifacts as negative evidence. These
+are structural controls, not authenticated execution or a scientific result.
 
 The current successor-candidate worker receipt is 364/364. Its
 canonical node-ID digest is:
@@ -80,7 +96,28 @@ node-ID digest is:
 
 `1ED1E9E3AFA2EDA6881463EE5284DD4902AB94C0246B80D2937066480AC42921`
 
-The 364-test worker and 76-test API/launcher/fleet/state results are
+The dark worker-terminal bridge suite passes 7/7. Its canonical node-ID digest
+is:
+
+`C08603CC2AE3176E7BD568D40864BD630918C5F6E1D2395B3FB7780177A8B0BF`
+
+The separate durable fleet-callback and fake Object-Lock seam suite passes
+34/34. Its canonical node-ID digest is:
+
+`C7BBD95769FEF8BC6D06C7743E4E4C7792CF7405B3DB7DB9889F0E3A87F676E6`
+
+The bridge stores one retry-stable terminal wrapper/index and binds each
+server-authored callback-attempt receipt in a separate post-authentication
+acceptance wrapper/index rather than the worker terminal carrier. It remains
+dark, route-free, and pre-outcome only; post-seal verification exists in the
+root terminal loader but is not yet wired through the bridge. Its injected
+loader semantics are an unresolved deployment trust boundary, its Object-Lock
+backend is synthetic in these tests, and it
+creates no durable run authorization, outcome-access event, complete Evidence
+Packet v2, live experiment, or claim authority.
+
+The 364-test worker, 76-test API/launcher/fleet/state, 27-test worker-protocol,
+7-test bridge, and 34-test durable-seam results are
 `LOCAL_UNATTESTED_HOST_REGRESSION` observations. Each suite now binds its
 collected, started, and finished node-ID sequences plus exact
 setup/call/teardown and subtest outcomes inside one pytest process. The child

@@ -27,6 +27,9 @@ This review is bounded to the following current surfaces:
 - the isolated control kernel under `src/cas_harness_v2/`;
 - the nominal and independent adversarial tests under `tests/cas_harness_v2/`;
 - `HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md`;
+- the research-only worker protocol candidate
+  `GATE5_WORKER_PROTOCOL_BINDING_v0.1.md`, its strict carriers, dark API
+  adapter, callback-auth projection, and immutable-storage seam;
 - the current `live-trace-worker` model-identity and intervention-integrity
   controls;
 - the successor dependency/container candidate receipt
@@ -74,12 +77,14 @@ authority. A reported metric is not treated as independently recomputed truth.
 
 ## Control-kernel adversarial chronology
 
-The stable kernel exposes three public schema families:
+The bounded candidate exposes five public schema families:
 
 | Artifact | Exact schema |
 |---|---|
 | Per-claim preregistration | `cas_harness_v2.preregistration.v1` |
 | Preregistration amendment | `cas_harness_v2.preregistration_amendment.v1` |
+| Worker authorization | `cas_harness_v2.worker_authorization.v1` |
+| Worker terminal receipt | `cas_harness_v2.worker_terminal_receipt.v1` |
 | Evidence Packet | `cas_harness_v2.evidence_packet.v2` |
 
 An internal exact-byte outcome-access carrier uses
@@ -138,10 +143,11 @@ SHA-256 and byte length, and freshly replays them against the current
 pre-outcome chain before public reads. This is process-local tamper detection,
 not WORM authority.
 
-The clean focused receipt is **119 passed tests plus 61 subtests** under Python
+The clean focused receipt is **146 passed tests plus 96 subtests** under Python
 3.14 with startup site processing and bytecode/cache output disabled. It
-contains 94 active-kernel tests, 4 historical-recovery tests, and 21 Gate 5
-verifier red-team tests. The retained attacks cover hardlink/symlink aliasing,
+contains 94 active-kernel tests, 27 strict worker-protocol tests, 4
+historical-recovery tests, and 21 Gate 5 verifier red-team tests. The retained
+attacks cover hardlink/symlink aliasing,
 same-byte inode replacement, a synthetic reparse attribute, duplicate or
 noncanonical node IDs, raw-evidence security promotion, erasure of the
 scanner/vendor conflict, duplicate normalized runner distributions, unbound
@@ -152,7 +158,61 @@ object substitution while structural ancestor replacement remains detected.
 The receipt is limited to
 `tests/cas_harness_v2`; it is not a repository-wide or production receipt.
 Its same-process executed-node SHA-256 is
-`8FBC5D8AE4CF3B0BBEB9A1902C6905278126B056FF6961D13EE9830E2363F362`.
+`EA041DCF5EFC04CB94297C381AFEF4E418FE000A23B6A79274177EC79667DFC1`.
+
+## Worker-protocol adversarial chronology
+
+The first strict carrier draft matched the current FleetJob layer range,
+shard, ordered method/output, and exact model-lease fields, but an independent
+adversarial pass reproduced four integration defects:
+
+1. it placed the transport callback nonce in worker-authored terminal bytes,
+   although the live client creates that nonce only when posting and an exact
+   authenticated retry must use a fresh transport nonce;
+2. it could parse a terminal only before outcome access, so the exact retained
+   carrier could not be replayed after its own outcome-access seal;
+3. it rejected every produced artifact on `FAILED`, erasing the live worker's
+   possible partial-produced plus missing plus error facts; and
+4. the dark API adapter accepted injected loader ports and could retain exact
+   bytes, but duck typing alone could not prove that the injected functions
+   were the root strict loaders.
+
+The retained repair keeps all transport callback-nonce facts out of immutable
+worker authorization and terminal carriers. After callback authentication, the
+server-authored nonce receipt is bound instead to the private acceptance
+wrapper and durable per-authorization index. Stable terminal bytes can
+therefore be retried with a fresh HTTP-attempt nonce, while the fleet auth store
+continues to reject reuse of one callback nonce. This transport control is not
+the separate authenticated one-use run nonce required by `G5-TRUST-003`.
+
+The terminal loader now supports verification from exact authorization bytes
+after sealing only when the process-local OutcomeAccessEvent binds that exact
+terminal artifact reference and the same execution-completion time. The public
+authorization loader remains closed after outcome access. `COMPLETED` outputs
+must carry `DECLARED_OUTPUTS_NOT_SCIENTIFICALLY_ASSESSED`; `FAILED` outputs and
+missing names must form the exact ordered expected-output partition and any
+produced artifacts carry
+`QUARANTINED_PARTIAL_NEGATIVE_EVIDENCE_ONLY`. A failed run therefore retains
+negative evidence without minting a scientific result.
+
+The strict worker subset passes **27 tests plus 35 subtests**, with canonical
+node-ID SHA-256
+`1F18A5854B5AF20FE87D9C281AAE0CC0B1F1DC8CB81748A47DC49CB7BC4A549A`.
+These are local structural regressions. Loader provenance remains an explicit
+unresolved deployment trust boundary; the adapter has no admitted production
+route and no independent live-worker replay. `G5-ENGINEERING-001` therefore
+remains `OPEN_ENGINEERING`.
+
+A second read-only adversarial pass confirmed the nonce chronology and partial-
+failure repairs, then caught three documentation overclaims. The specification
+now distinguishes the authorization's outcome-null chain digest, the outcome
+event's differently schemed sealed-pre-outcome digest, and the packet's final
+post-outcome chain digest. It limits exact carrier-type enforcement to the root
+loaders and keeps injected bridge provenance OPEN. It also records that the
+current bridge still calls the public authorization loader: kernel-level exact
+terminal verification works after an exact outcome seal, but authenticated
+bridge retry is currently pre-outcome only. Post-seal bridge reconciliation
+remains part of `G5-ENGINEERING-001`, not a completed control.
 
 ## Live-worker adverse evidence and bounded repairs
 
@@ -447,9 +507,14 @@ path.
 
 ### Hermeticity and protocol integration
 
-The live worker is not yet mapped into the kernel's exact preregistration,
-outcome-access, executor/auditor, and packet protocol. The v0.2 successor now
-provides a digest-bound patched container candidate, exact build controls,
+Strict worker authorization and terminal carriers plus a dark persistence
+adapter now map the current FleetJob shape into a bounded candidate. They do
+not yet wire live lease issuance/execution, authenticated one-use run
+consumption, trusted time, outcome-access creation, complete Evidence Packet
+v2 assembly, or independent executor/auditor replay. The adapter's injected
+loader provenance and production FleetJob-snapshot provider remain unresolved,
+and no route admits it. The v0.2 successor provides a digest-bound patched
+container candidate, exact build controls,
 and a locally observed offline preflight plus BuildKit SBOM/provenance
 identifiers. The later receipt retains ten exact raw payloads and a current
 direct scan, but does not replay the complete tool execution or establish an
@@ -506,17 +571,21 @@ LICENSED`, and disclosure remains `HELD`.
 
 The minimum defensible order is:
 
-1. preserve the verifier-native 32/32 focused, 364/364 complete-worker, and
-   76/76 API/launcher/fleet/state receipts, the earlier 290/290 checkpoint, and
-   every counterexample, including the current ephemeral same-process and
-   retained raw-evidence validations;
+1. preserve the verifier-native 146-test/96-subtest Harness-v2,
+   27-test/35-subtest worker-protocol, 7/7 dark-bridge, 34/34
+   callback/Object-Lock seam,
+   32/32 focused numeric, 364/364 complete-worker, and 76/76
+   API/launcher/fleet/state receipts, the earlier 290/290 checkpoint, and every
+   counterexample, including the current ephemeral same-process and retained
+   raw-evidence validations;
 2. preserve and independently reproduce the patched digest-bound v0.2
    dependency/container candidate, remediate or explicitly disposition the six
    vendor-confirmed vulnerable/fix-deferred records, reconcile the `dpkg`
    scanner conflict, capture complete scanner-process and vendor-source
    evidence, and revalidate the exact model and hook contract under real
    GPU/autocast/compiled-hook behavior;
-3. define and independently review the worker-to-kernel protocol;
+3. independently review and wire the worker-to-kernel candidate across live
+   lease, execution, callback, outcome-access, and Evidence Packet boundaries;
 4. materialize trusted time, nonces, one-use run consumption, durable WORM
    ordering, and selective-reporting controls;
 5. preserve and independently red-team the exact Gate 4/Gate 5 manifests,

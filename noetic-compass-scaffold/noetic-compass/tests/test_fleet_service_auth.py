@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import replace
 from datetime import UTC, datetime, timedelta
+import hashlib
 import secrets
 
 from fastapi import FastAPI
@@ -29,6 +31,7 @@ from api.services.cas_harness_evidence_object_store import (
 )
 from api.services.evidence_ownership import tenant_owns_trace
 from api.services.fleet_service_auth import (
+    FleetServiceAuthenticatedCallback,
     FleetServiceAuthenticationError,
     FleetServiceAuthorizationError,
     FleetServiceAuthStore,
@@ -286,6 +289,73 @@ def test_nonce_replay_and_concurrent_duplicates_have_exactly_one_winner() -> Non
     assert results.count("rejected") == 7
     with pytest.raises(FleetServiceAuthenticationError):
         _authenticate(auth, credential, nonce=nonce, now=stamp)
+
+
+def test_authenticated_callback_exposes_exact_durable_nonce_receipt_after_restart(
+    tmp_path,
+) -> None:
+    path = tmp_path / "fleet-auth-nonce-receipt.db"
+    stamp = datetime.now(UTC)
+    nonce = secrets.token_urlsafe(24)
+    first_backend = SqliteStateStore(path)
+    first = FleetServiceAuthStore(first_backend, pepper=PEPPER)
+    first.record_audit_owner(
+        tenant_id="tenant-a", account_id="account-a", audit_id="audit-a"
+    )
+    credential = _issue_worker(first, now=stamp)
+    callback = first.authenticate_with_nonce_receipt(
+        tenant_id="tenant-a",
+        api_credential=credential.api_credential,
+        timestamp=str(int(stamp.timestamp())),
+        nonce=nonce,
+        required_capability="submit_receipt",
+        audit_id="audit-a",
+        fleet_id="audit-a",
+        worker_id="probe-worker-1",
+        now=stamp,
+    )
+    assert isinstance(callback, FleetServiceAuthenticatedCallback)
+    assert callback.nonce_receipt.nonce_id.startswith("fsn_")
+    assert callback.nonce_receipt.tenant_id == callback.principal.tenant_id
+    assert callback.nonce_receipt.account_id == callback.principal.account_id
+    assert callback.nonce_receipt.audit_id == callback.principal.audit_id
+    assert callback.nonce_receipt.fleet_id == callback.principal.fleet_id
+    assert callback.nonce_receipt.worker_id == callback.principal.worker_id
+    assert callback.nonce_receipt.capabilities == callback.principal.capabilities
+    assert callback.nonce_receipt.nonce_sha256 == hashlib.sha256(
+        nonce.encode("utf-8")
+    ).hexdigest().upper()
+    assert callback.nonce_receipt.byte_length == len(nonce.encode("utf-8"))
+    first_backend.close()
+
+    second_backend = SqliteStateStore(path)
+    second = FleetServiceAuthStore(second_backend, pepper=PEPPER)
+    reloaded = second.consumed_nonce_receipt(
+        principal=callback.principal,
+        nonce=nonce,
+    )
+    assert reloaded == callback.nonce_receipt
+    assert second.verify_authenticated_callback(callback) is callback
+    with pytest.raises(FleetServiceAuthenticationError):
+        second.verify_authenticated_callback(
+            FleetServiceAuthenticatedCallback(
+                principal=callback.principal,
+                nonce_receipt=replace(reloaded, nonce_id="fsn_" + "f" * 64),
+            )
+        )
+    with pytest.raises(FleetServiceAuthenticationError):
+        second.authenticate_with_nonce_receipt(
+            tenant_id="tenant-a",
+            api_credential=credential.api_credential,
+            timestamp=str(int((stamp + timedelta(seconds=1)).timestamp())),
+            nonce=nonce,
+            required_capability="submit_receipt",
+            audit_id="audit-a",
+            fleet_id="audit-a",
+            worker_id="probe-worker-1",
+            now=stamp + timedelta(seconds=1),
+        )
+    second_backend.close()
 
 
 def test_expiry_revocation_and_consumed_nonce_survive_sqlite_restart(tmp_path) -> None:

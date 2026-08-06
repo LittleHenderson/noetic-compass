@@ -26,6 +26,16 @@ from .preregistration import (
     load_amendment,
     load_preregistration,
 )
+from .worker_protocol import (
+    WORKER_AUTHORIZATION_MEDIA_TYPE,
+    WORKER_AUTHORIZATION_SCHEMA,
+    WORKER_TERMINAL_RECEIPT_MEDIA_TYPE,
+    WORKER_TERMINAL_RECEIPT_SCHEMA,
+    WorkerAuthorizationArtifact,
+    WorkerTerminalReceiptArtifact,
+    load_worker_authorization,
+    load_worker_terminal_receipt,
+)
 
 __all__ = [
     "AMENDMENT_SCHEMA",
@@ -43,11 +53,19 @@ __all__ = [
     "PreregistrationChain",
     "SchemaValidationError",
     "StrictJSONError",
+    "WORKER_AUTHORIZATION_MEDIA_TYPE",
+    "WORKER_AUTHORIZATION_SCHEMA",
+    "WORKER_TERMINAL_RECEIPT_MEDIA_TYPE",
+    "WORKER_TERMINAL_RECEIPT_SCHEMA",
+    "WorkerAuthorizationArtifact",
+    "WorkerTerminalReceiptArtifact",
     "canonical_json_bytes",
     "canonical_sha256",
     "load_amendment",
     "load_evidence_packet",
     "load_preregistration",
+    "load_worker_authorization",
+    "load_worker_terminal_receipt",
     "reject_automatic_v1_upgrade",
     "sha256_bytes",
     "verify_evidence_packet",

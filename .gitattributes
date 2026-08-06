@@ -47,6 +47,10 @@ noetic-compass-scaffold/noetic-compass/scripts/prepare_large_model_eval.py text 
 noetic-compass-scaffold/noetic-compass/scripts/test_prepare_large_model_eval.py text eol=lf
 noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_fleet_executor.py text eol=lf
 noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_fleet_executor_contract.py text eol=lf
+noetic-compass-scaffold/noetic-compass/tests/object_lock_test_support.py text eol=lf
+noetic-compass-scaffold/noetic-compass/tests/test_fleet_service_auth.py text eol=lf
+noetic-compass-scaffold/noetic-compass/tests/test_evidence_packet_object_store.py text eol=lf
+noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_worker_bridge.py text eol=lf
 noetic-compass-scaffold/noetic-compass/tests/test_state_ledger_operational_enable.py text eol=lf
 noetic-compass-scaffold/noetic-compass/tests/test_state_substrate_live_migration.py text eol=lf
 

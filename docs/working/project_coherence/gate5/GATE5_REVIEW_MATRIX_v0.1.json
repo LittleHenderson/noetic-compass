@@ -27,6 +27,8 @@
   "kernel_schemas": [
     "cas_harness_v2.preregistration.v1",
     "cas_harness_v2.preregistration_amendment.v1",
+    "cas_harness_v2.worker_authorization.v1",
+    "cas_harness_v2.worker_terminal_receipt.v1",
     "cas_harness_v2.outcome_access_event.v1",
     "cas_harness_v2.evidence_packet.v2"
   ],
@@ -34,9 +36,24 @@
   "receipts": {
     "kernel_focused": {
       "command": "python -I -B scripts/verify_project_coherence_gate5.py (integrated verifier launches python -I -S -B same-process pytest receipts)",
-      "passed_tests": 119,
-      "passed_subtests": 61,
-      "scope": "Local same-process collection/start/finish and exact setup/call/teardown PASS receipt for the Harness v2 kernel, historical recovery, and 21 Gate 5 verifier red-team tests; not hermetic or independently attested"
+      "passed_tests": 146,
+      "passed_subtests": 96,
+      "scope": "Local same-process collection/start/finish and exact setup/call/teardown PASS receipt for the Harness v2 kernel, including 27 strict worker-protocol tests with 35 subtests, historical recovery, and 21 Gate 5 verifier red-team tests; not hermetic or independently attested"
+    },
+    "worker_protocol_kernel": {
+      "passed_tests": 27,
+      "passed_subtests": 35,
+      "test_ids_sha256": "1f18a5854b5af20fe87d9c281aae0cc0b1f1dc8cb81748a47dc49cb7bc4a549a",
+      "independently_reproduced": false,
+      "scope": "LOCAL_UNATTESTED_HOST_REGRESSION for strict exact-byte worker authorization and terminal-receipt structure. This proves no authentication, durable one-use run consumption, trusted time, WORM authority, live execution, science, license, product route, canon effect, or disclosure authority."
+    },
+    "worker_protocol_bridge_and_durable_seams": {
+      "bridge_passed": 7,
+      "bridge_test_ids_sha256": "c08603cc2ae3176e7bd568d40864bd630918c5f6e1d2395b3fb7780177a8b0bf",
+      "callback_and_object_lock_seam_passed": 34,
+      "callback_and_object_lock_seam_test_ids_sha256": "c7bbd95769fef8bc6d06c7743e4e4c7792cf7405b3db7db9889f0e3a87f676e6",
+      "independently_reproduced": false,
+      "scope": "LOCAL_UNATTESTED_HOST_REGRESSION for a dark adapter, injected current FleetJob snapshot, retry-stable terminal wrapper/index, separate per-callback server acceptance wrapper/index, durable callback-nonce receipt projection, SQLite state, and fake Object-Lock byte-replay seam. Injected strict-loader provenance is not attested. There is no route, live S3 authority, multi-host or host-loss proof, authenticated run nonce, outcome-access event, complete Evidence Packet v2, experiment, or claim authority."
     },
     "worker_checkpoints": {
       "intervention_integrity_adversarial_tests": 13,
@@ -403,10 +420,10 @@
       "subsystem": "TRUST_AND_ORDERING",
       "question": "Is preregistration and outcome ordering durably append-only and WORM-anchored?",
       "acceptance_requirement": "A durable independently controlled append-only store must prevent deletion, replacement, rollback, and alternate-history construction across process and host loss.",
-      "observed_result": "The amendment and outcome guards are process-local deterministic controls; no WORM store or external anchor exists for this Gate 5 path.",
+      "observed_result": "The amendment and outcome guards remain process-local deterministic controls. An existing EvidencePacketRepository has locally regression-tested S3 Object-Lock/versioned-byte and durable-index seams, and the dark research worker adapter can place one strict terminal wrapper through that repository and reload its exact carrier bytes. That partial path is not the complete preregistration, authorization, outcome-access, terminal, and Evidence Packet sequence; its tests use an injected fake Object-Lock backend rather than a live independently controlled store and do not prove rollback or host-loss resistance.",
       "disposition": "OPEN_ENGINEERING",
-      "evidence_refs": ["src/cas_harness_v2/preregistration.py", "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md"],
-      "remaining_obligation": "Materialize a durable append-only/WORM authority, test restart/rollback/host-loss behavior, and bind independent verification receipts.",
+      "evidence_refs": ["src/cas_harness_v2/preregistration.py", "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_evidence_object_store.py", "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_worker_bridge.py", "noetic-compass-scaffold/noetic-compass/tests/test_evidence_packet_object_store.py", "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_worker_bridge.py", "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md", "docs/working/project_coherence/gate5/GATE5_WORKER_PROTOCOL_BINDING_v0.1.md"],
+      "remaining_obligation": "Materialize the complete ordered v2 artifact sequence under a live independently controlled append-only/WORM authority; test restart, rollback, replica, and host-loss behavior; and bind independent verification receipts.",
       "canon_effect": "NONE",
       "product_claim_effect": "NONE"
     },
@@ -415,10 +432,10 @@
       "subsystem": "TRUST_AND_ORDERING",
       "question": "Are run nonces, replay rejection, and one-use consumption durably enforced?",
       "acceptance_requirement": "Each authorized run must receive a unique authenticated nonce consumed exactly once, with durable replay and reuse rejection across workers and restarts.",
-      "observed_result": "The v2 kernel has no nonce authority or durable one-use run-consumption registry; historical consumed nonces are not reusable v2 authority.",
+      "observed_result": "Fleet callback authentication now exposes and re-reads an exact durable callback-nonce receipt after local SQLite restart, while existing tests preserve replay rejection and a thread-concurrency seam. The strict v2 authorization separately carries a 32-byte run nonce with an explicit EXTERNAL_REQUIRED_NOT_PROVIDED durability caveat. Callback replay protection is not authenticated run-nonce issuance or atomic one-use execution consumption, and no multi-host or host-loss authority is established.",
       "disposition": "OPEN_ENGINEERING",
-      "evidence_refs": ["docs/working/project_coherence/gate5/history/HISTORICAL_HARNESS_V1_V4_RECOVERY_INVENTORY.md", "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md"],
-      "remaining_obligation": "Implement an authenticated nonce issuer and durable atomic consumption ledger with concurrency, replay, restart, and host-loss tests.",
+      "evidence_refs": ["src/cas_harness_v2/worker_protocol.py", "tests/cas_harness_v2/test_worker_protocol.py", "noetic-compass-scaffold/noetic-compass/api/services/fleet_service_auth.py", "noetic-compass-scaffold/noetic-compass/tests/test_fleet_service_auth.py", "docs/working/project_coherence/gate5/history/HISTORICAL_HARNESS_V1_V4_RECOVERY_INVENTORY.md", "docs/working/project_coherence/gate5/GATE5_WORKER_PROTOCOL_BINDING_v0.1.md", "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md"],
+      "remaining_obligation": "Implement an authenticated run-nonce issuer and durable atomic one-use execution-consumption ledger with concurrency, replay, restart, replica, and host-loss tests; keep it distinct from transport callback replay protection.",
       "canon_effect": "NONE",
       "product_claim_effect": "NONE"
     },
@@ -427,10 +444,10 @@
       "subsystem": "TRUST_AND_ORDERING",
       "question": "Does a durable run registry prevent selective reporting across packets and preregistrations?",
       "acceptance_requirement": "Every authorized run, failure, packet, amendment, and nonreporting event must be discoverable so favorable subsets cannot be silently selected.",
-      "observed_result": "The process-local registry verifies one supplied packet and cannot prove that other runs or packets were suppressed.",
+      "observed_result": "The process-local Harness-v2 registry verifies one supplied packet. The dark worker adapter adds a durable per-authorization index for one submitted terminal wrapper and conflict-rejects changed bytes, but it is not an exhaustive authorization/run/failure/nonreporting/Evidence-Packet registry and cannot prove that other runs or packets were suppressed.",
       "disposition": "OPEN_ENGINEERING",
-      "evidence_refs": ["src/cas_harness_v2/artifacts.py", "src/cas_harness_v2/evidence_packet.py"],
-      "remaining_obligation": "Create a durable exhaustive run/packet index with one-use run binding, failure capture, completeness queries, and independent reconciliation.",
+      "evidence_refs": ["src/cas_harness_v2/artifacts.py", "src/cas_harness_v2/evidence_packet.py", "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_worker_bridge.py", "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_worker_bridge.py", "docs/working/project_coherence/gate5/GATE5_WORKER_PROTOCOL_BINDING_v0.1.md"],
+      "remaining_obligation": "Create a durable exhaustive authorization/run/packet index with atomic one-use run binding, failure and indeterminate capture, nonreporting records, completeness queries, and independent reconciliation.",
       "canon_effect": "NONE",
       "product_claim_effect": "NONE"
     },
@@ -487,10 +504,10 @@
       "subsystem": "GATE5_INTEGRATION",
       "question": "Is the live worker mapped into the exact v2 preregistration, execution, outcome-access, and packet protocol?",
       "acceptance_requirement": "The worker must consume an immutable authorized run, bind every requested control and identity, emit exact artifacts/receipts, and support independent executor-auditor replay without caller-selected substitutions.",
-      "observed_result": "The launcher, API lease, worker environment, receipt, and ledger now transport exact model revision, manifest path, and manifest digest under bounded regression tests. Worker structural controls and the v2 kernel still exist separately; no public or product route binds them into one verified preregistration/outcome-access/packet protocol.",
+      "observed_result": "The launcher, API lease, worker environment, receipt, and ledger transport exact model revision, manifest path, and manifest digest under bounded regression tests. New strict exact-byte worker-authorization and terminal-receipt carriers bind the current FleetJob field shape, preregistered identities/design, ordered methods and outputs, structural run nonce, retry-stable terminal bytes, explicit unassessed/quarantined output effects, partial-failure partitions, sealed-chain replay, and immutable Ring-4/NOT-LICENSED/HELD authority limits. A dark research adapter requires injected loader ports plus a current server FleetJob snapshot, persists one retry-stable terminal wrapper/index and a separate server-authored callback-acceptance wrapper/index per transport nonce through the existing immutable repository, reloads exact source bytes, and conflict-rejects changed terminalization. That adapter is pre-outcome only because it still calls the public authorization loader; kernel-level post-seal terminal verification is not yet a post-seal bridge retry path. The adapter has no route, cannot itself prove injected strict-loader provenance, and does not bind live lease issuance/execution, durable run-nonce consumption, outcome-access creation, full Evidence Packet v2 assembly, independent executor-auditor replay, or public/product authority.",
       "disposition": "OPEN_ENGINEERING",
-      "evidence_refs": ["src/cas_harness_v2", "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/probe_runner.py", "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_fleet_executor.py", "docs/working/project_coherence/gate5/GATE5_DEPENDENCY_AND_CONTAINER_CANDIDATE_RECEIPT_v0.2.json", "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md"],
-      "remaining_obligation": "Specify, implement, and independently red-team exact worker/kernel message, artifact, error, nonce, time, and identity mappings before any experiment.",
+      "evidence_refs": ["src/cas_harness_v2/worker_protocol.py", "tests/cas_harness_v2/test_worker_protocol.py", "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_worker_bridge.py", "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_worker_bridge.py", "noetic-compass-scaffold/noetic-compass/api/services/fleet_service_auth.py", "noetic-compass-scaffold/noetic-compass/tests/test_fleet_service_auth.py", "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_evidence_object_store.py", "noetic-compass-scaffold/noetic-compass/tests/test_evidence_packet_object_store.py", "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/fleet_worker.py", "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_fleet_executor.py", "docs/working/project_coherence/gate5/GATE5_WORKER_PROTOCOL_BINDING_v0.1.md", "docs/working/project_coherence/gate5/GATE5_DEPENDENCY_AND_CONTAINER_CANDIDATE_RECEIPT_v0.2.json", "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md"],
+      "remaining_obligation": "Wire and independently red-team the exact protocol at live lease issuance, execution, callback, outcome-access, and Evidence Packet v2 boundaries; add authenticated durable one-use run authorization, trusted time, exhaustive registry, independent executor-auditor replay, and external storage/host-loss evidence before any experiment.",
       "canon_effect": "NONE",
       "product_claim_effect": "NONE"
     },

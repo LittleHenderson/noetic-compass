@@ -2,6 +2,63 @@
 
 All dates use the repository's working timezone. This changelog records control-package changes, not product releases.
 
+## 2026-08-06 - Gate 5 strict worker-protocol candidate
+
+### Added
+
+- Strict exact-byte `cas_harness_v2.worker_authorization.v1` and
+  `cas_harness_v2.worker_terminal_receipt.v1` carriers binding the current
+  FleetJob layer range, shard, ordered method/output assignments, exact lease
+  model identity, preregistered controls/falsifiers, structural run nonce, and
+  fixed `Ring 4 / NOT LICENSED / HELD` authority limits.
+- A pre-outcome-only dark research adapter that requires injected worker
+  loaders and a current server FleetJob snapshot, then stores one retry-stable
+  terminal wrapper/index
+  plus a separate server-authored acceptance wrapper/index for each consumed
+  transport callback nonce through the existing immutable repository seam.
+- An additive durable fleet-callback nonce receipt projection that can be
+  re-read after SQLite restart while retaining the distinction between
+  transport replay protection and still-open authenticated one-use run
+  authorization.
+
+### Corrected through adversarial review
+
+- Removed the transport callback nonce from worker-authored immutable terminal
+  bytes because the live client creates it only at HTTP-post time and an exact
+  retry must use a fresh callback nonce.
+- Added exact terminal replay from stored authorization bytes after outcome
+  sealing, permitted only when the seal binds the same terminal artifact and
+  execution-completion time; public post-outcome authorization loading remains
+  rejected.
+- Preserved partial failures as an ordered produced/missing partition with
+  typed errors and mandatory
+  `QUARANTINED_PARTIAL_NEGATIVE_EVIDENCE_ONLY`; completed outputs remain
+  `DECLARED_OUTPUTS_NOT_SCIENTIFICALLY_ASSESSED`.
+- Made injected strict-loader provenance an explicit unresolved deployment
+  trust boundary instead of treating byte-retaining duck types as attestation.
+
+### Verified bounded receipts
+
+- Harness v2 kernel/history/verifier: 146 tests and 96 subtests. The strict
+  worker-protocol subset passes 27 tests and 35 subtests with canonical node-ID
+  digest
+  `1F18A5854B5AF20FE87D9C281AAE0CC0B1F1DC8CB81748A47DC49CB7BC4A549A`.
+- The dark bridge passes 7/7; the callback-auth and fake Object-Lock seam suite
+  passes 34/34; their combined local replay passes 41/41. These are
+  `LOCAL_UNATTESTED_HOST_REGRESSION` receipts, not live provider or scientific
+  evidence.
+
+### Preserved open boundaries
+
+- `G5-ENGINEERING-001`, `G5-TRUST-002`, `G5-TRUST-003`, and `G5-TRUST-004`
+  remain `OPEN_ENGINEERING`. No production route, attested loader provenance,
+  authenticated one-use run nonce, trusted time, exhaustive run registry, live
+  S3/Object-Lock receipt, full outcome-access/Evidence-Packet sequence,
+  independent executor-auditor replay, GPU experiment, science, license,
+  product, canon, or disclosure authority was created.
+- Gate 5 remains `OPEN / NOT_STARTED / Ring 4 / NOT LICENSED / HELD / NOT
+  FROZEN`. No RunPod job was launched.
+
 ## 2026-08-05 - Gate 5 retained evidence and same-run verifier hardening
 
 ### Added

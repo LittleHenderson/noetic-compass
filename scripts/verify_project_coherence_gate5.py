@@ -108,6 +108,10 @@ EXACT_API_LAUNCHER_SURFACE = {
     f"{API_ROOT_REL}/scripts/test_prepare_large_model_eval.py",
     f"{API_ROOT_REL}/tests/test_cas_harness_fleet_executor.py",
     f"{API_ROOT_REL}/tests/test_cas_harness_fleet_executor_contract.py",
+    f"{API_ROOT_REL}/tests/test_cas_harness_v2_worker_bridge.py",
+    f"{API_ROOT_REL}/tests/object_lock_test_support.py",
+    f"{API_ROOT_REL}/tests/test_fleet_service_auth.py",
+    f"{API_ROOT_REL}/tests/test_evidence_packet_object_store.py",
     f"{API_ROOT_REL}/tests/test_state_ledger_operational_enable.py",
     f"{API_ROOT_REL}/tests/test_state_substrate_live_migration.py",
 }
@@ -122,6 +126,7 @@ REQUIRED_CONTROL_ARTIFACTS = {
     "docs/working/project_coherence/gate4/GATE4_ARTIFACT_MANIFEST_v0.1.json",
     "docs/working/project_coherence/gate5/README.md",
     "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md",
+    "docs/working/project_coherence/gate5/GATE5_WORKER_PROTOCOL_BINDING_v0.1.md",
     "docs/working/project_coherence/gate5/GATE5_REVIEW_MATRIX_v0.1.json",
     "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
     "docs/working/project_coherence/gate5/GATE5_MODEL_AND_DEPENDENCY_BINDING_v0.1.json",
@@ -239,10 +244,10 @@ REQUIRED_BOUNDARY_TEXT = {
     "G5-OPEN-GATE4": "Gate 4 remains OPEN and cannot be promoted by dependency verification.",
     "G5-OPEN-TRUSTED-TIME": "No independently trusted time source binds ordering.",
     "G5-OPEN-TRUST-ROOT": "No non-caller-selected identity or signing trust root exists.",
-    "G5-OPEN-WORM": "No durable append-only or WORM authority binds the v2 chain.",
-    "G5-OPEN-NONCE-REPLAY": "Authenticated nonce issuance and replay rejection are absent.",
-    "G5-OPEN-ONE-USE": "Atomic one-use run authorization and consumption are absent.",
-    "G5-OPEN-SELECTIVE-REPORTING": "No complete cross-run registry prevents selective reporting.",
+    "G5-OPEN-WORM": "The existing Object-Lock packet repository does not yet bind the complete v2 preregistration, authorization, outcome-access, terminal, and packet order under independent authority.",
+    "G5-OPEN-NONCE-REPLAY": "Durable fleet callback replay rejection is not yet an authenticated run nonce bound to the exact v2 preregistration chain.",
+    "G5-OPEN-ONE-USE": "Atomic one-use v2 run authorization and consumption are not yet durably bound.",
+    "G5-OPEN-SELECTIVE-REPORTING": "No exhaustive v2 authorized-run, failure, nonreporting, and packet registry prevents selective reporting.",
     "G5-OPEN-AUTHENTICATED-EXECUTION": "No independently authenticated execution receipt exists.",
     "G5-OPEN-HERMETICITY": "The OS, toolchain, dependencies, inputs, and runtime are not hermetically attested.",
     "G5-OPEN-SEMANTIC-VALIDATION": "Artifact hashes do not establish semantic correctness.",
@@ -318,11 +323,11 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "working_directory": ".",
         "targets": ["tests/cas_harness_v2"],
         "pytest_plugins": [],
-        "repo_import_roots": ["src"],
-        "expected_tests": 119,
-        "expected_subtests": 61,
+        "repo_import_roots": ["src", "tests/cas_harness_v2"],
+        "expected_tests": 146,
+        "expected_subtests": 96,
         "expected_test_ids_sha256": (
-            "8FBC5D8AE4CF3B0BBEB9A1902C6905278126B056FF6961D13EE9830E2363F362"
+            "EA041DCF5EFC04CB94297C381AFEF4E418FE000A23B6A79274177EC79667DFC1"
         ),
     },
     "Live trace worker complete": {
@@ -364,10 +369,36 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
             "1ED1E9E3AFA2EDA6881463EE5284DD4902AB94C0246B80D2937066480AC42921"
         ),
     },
+    "Durable fleet callback and Object-Lock repository seams": {
+        "working_directory": API_ROOT_REL,
+        "targets": [
+            "tests/test_fleet_service_auth.py",
+            "tests/test_evidence_packet_object_store.py",
+        ],
+        "pytest_plugins": ["pytest_asyncio.plugin"],
+        "repo_import_roots": [],
+        "expected_tests": 34,
+        "expected_subtests": 0,
+        "expected_test_ids_sha256": (
+            "C7BBD95769FEF8BC6D06C7743E4E4C7792CF7405B3DB7DB9889F0E3A87F676E6"
+        ),
+    },
+    "Harness v2 worker terminal bridge": {
+        "working_directory": API_ROOT_REL,
+        "targets": ["tests/test_cas_harness_v2_worker_bridge.py"],
+        "pytest_plugins": ["pytest_asyncio.plugin"],
+        "repo_import_roots": ["src", "tests/cas_harness_v2"],
+        "expected_tests": 7,
+        "expected_subtests": 0,
+        "expected_test_ids_sha256": (
+            "C08603CC2AE3176E7BD568D40864BD630918C5F6E1D2395B3FB7780177A8B0BF"
+        ),
+    },
 }
 
-# These subset receipts make the four historical recovery tests and the 94
-# active-kernel tests independently visible instead of hiding them in 98.
+# These subset receipts keep the historical recovery, active research-control,
+# and strict worker-protocol kernels independently visible inside the complete
+# Harness-v2 suite.
 REQUIRED_SUBSUITE_DIGESTS = {
     "historical recovery": {
         "targets": ["tests/cas_harness_v2/test_historical_v1_v4_recovery.py"],
@@ -386,6 +417,14 @@ REQUIRED_SUBSUITE_DIGESTS = {
         "expected_tests": 94,
         "expected_test_ids_sha256": (
             "E170E51F83B8DEA3B43537737961580E21E08C14DE9DFE5A3809FB7B2EEA0952"
+        ),
+    },
+    "worker protocol kernel": {
+        "targets": ["tests/cas_harness_v2/test_worker_protocol.py"],
+        "pytest_plugins": [],
+        "expected_tests": 27,
+        "expected_test_ids_sha256": (
+            "1F18A5854B5AF20FE87D9C281AAE0CC0B1F1DC8CB81748A47DC49CB7BC4A549A"
         ),
     },
 }
@@ -1833,6 +1872,8 @@ def verify_review_matrix(
         == [
             "cas_harness_v2.preregistration.v1",
             "cas_harness_v2.preregistration_amendment.v1",
+            "cas_harness_v2.worker_authorization.v1",
+            "cas_harness_v2.worker_terminal_receipt.v1",
             "cas_harness_v2.outcome_access_event.v1",
             "cas_harness_v2.evidence_packet.v2",
         ],
@@ -2047,6 +2088,8 @@ def verify_review_matrix(
         receipts,
         {
             "kernel_focused",
+            "worker_protocol_kernel",
+            "worker_protocol_bridge_and_durable_seams",
             "worker_checkpoints",
             "api_launcher_fleet_state",
             "successor_dependency_container_candidate",
@@ -2071,6 +2114,36 @@ def verify_review_matrix(
         and kernel_receipt["passed_subtests"]
         == REQUIRED_TEST_SUITES["Harness v2 kernel and history"]["expected_subtests"],
         "review-matrix Harness v2 receipt drifted",
+    )
+    protocol_receipt = receipts.get("worker_protocol_kernel")
+    require(
+        isinstance(protocol_receipt, dict),
+        "review-matrix worker-protocol kernel receipt is missing",
+    )
+    require_exact_keys(
+        protocol_receipt,
+        {
+            "passed_tests",
+            "passed_subtests",
+            "test_ids_sha256",
+            "independently_reproduced",
+            "scope",
+        },
+        label="review-matrix worker-protocol kernel receipt",
+    )
+    protocol_subset = REQUIRED_SUBSUITE_DIGESTS["worker protocol kernel"]
+    require(
+        type(protocol_receipt.get("passed_tests")) is int
+        and protocol_receipt["passed_tests"] == protocol_subset["expected_tests"]
+        and type(protocol_receipt.get("passed_subtests")) is int
+        and protocol_receipt["passed_subtests"] == 35
+        and protocol_receipt.get("test_ids_sha256")
+        == protocol_subset["expected_test_ids_sha256"].lower()
+        and protocol_receipt.get("independently_reproduced") is False
+        and isinstance(protocol_receipt.get("scope"), str)
+        and "LOCAL_UNATTESTED_HOST_REGRESSION" in protocol_receipt["scope"]
+        and "no authentication" in protocol_receipt["scope"].lower(),
+        "review-matrix worker-protocol kernel receipt drifted or promotes authority",
     )
     worker_receipt = receipts.get("worker_checkpoints")
     require(isinstance(worker_receipt, dict), "worker receipt is missing")
@@ -2178,6 +2251,44 @@ def verify_review_matrix(
         and "LOCAL_UNATTESTED_HOST_REGRESSION" in api_receipt["scope"]
         and "not hermetic worker-to-kernel integration" in api_receipt["scope"],
         "review-matrix API/launcher receipt drifted or overclaims independence",
+    )
+    bridge_receipt = receipts.get("worker_protocol_bridge_and_durable_seams")
+    require(
+        isinstance(bridge_receipt, dict),
+        "review-matrix worker-protocol bridge receipt is missing",
+    )
+    require_exact_keys(
+        bridge_receipt,
+        {
+            "bridge_passed",
+            "bridge_test_ids_sha256",
+            "callback_and_object_lock_seam_passed",
+            "callback_and_object_lock_seam_test_ids_sha256",
+            "independently_reproduced",
+            "scope",
+        },
+        label="review-matrix worker-protocol bridge receipt",
+    )
+    bridge_suite = REQUIRED_TEST_SUITES["Harness v2 worker terminal bridge"]
+    seam_suite = REQUIRED_TEST_SUITES[
+        "Durable fleet callback and Object-Lock repository seams"
+    ]
+    require(
+        type(bridge_receipt.get("bridge_passed")) is int
+        and bridge_receipt["bridge_passed"] == bridge_suite["expected_tests"]
+        and bridge_receipt.get("bridge_test_ids_sha256")
+        == bridge_suite["expected_test_ids_sha256"].lower()
+        and type(bridge_receipt.get("callback_and_object_lock_seam_passed")) is int
+        and bridge_receipt["callback_and_object_lock_seam_passed"]
+        == seam_suite["expected_tests"]
+        and bridge_receipt.get("callback_and_object_lock_seam_test_ids_sha256")
+        == seam_suite["expected_test_ids_sha256"].lower()
+        and bridge_receipt.get("independently_reproduced") is False
+        and isinstance(bridge_receipt.get("scope"), str)
+        and "LOCAL_UNATTESTED_HOST_REGRESSION" in bridge_receipt["scope"]
+        and "There is no route" in bridge_receipt["scope"]
+        and "complete Evidence Packet v2" in bridge_receipt["scope"],
+        "review-matrix worker-protocol bridge receipt drifted or promotes authority",
     )
     candidate_receipt = receipts.get("successor_dependency_container_candidate")
     require(isinstance(candidate_receipt, dict), "review-matrix successor candidate receipt is missing")
