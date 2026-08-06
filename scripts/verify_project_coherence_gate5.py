@@ -319,6 +319,7 @@ REQUIRED_IMPLEMENTED_CRITERION_IDS = {
     "G5-ENGINEERING-004",
     "G5-ENGINEERING-007",
     "G5-ENGINEERING-008",
+    "G5-ENGINEERING-009",
 }
 REQUIRED_NEGATIVE_CRITERION_IDS = {"G5-HISTORY-002"}
 
@@ -424,10 +425,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
             "tests/cas_harness_v2",
             f"{API_ROOT_REL}/tests",
         ],
-        "expected_tests": 76,
+        "expected_tests": 97,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "5F1197D70B7AFAD39D01BEBEB4E7397C3E075D74A5BFFA5305C62A0EDB3C7D84"
+            "727F58CC716F5ADD0BAB8FB965CC1E6B68245E60DB6C160A33AF96ED9EC5E5F9"
         ),
     },
     "Harness v2 admitted adapter and bounded reconciliation": {
@@ -446,10 +447,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
             "tests/cas_harness_v2",
             f"{API_ROOT_REL}/tests",
         ],
-        "expected_tests": 80,
+        "expected_tests": 90,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "2E45FCD920E0B52916A7341D2FF766FDC9F7911EC2CB11C27BC3FF8FEC3815FB"
+            "761038779E00511179D4FC5AA3522829D9BDEFB37C231061D04FB3AAD541F733"
         ),
     },
 }
@@ -2776,10 +2777,10 @@ def verify_adversarial_review() -> None:
         "fa6c985cd6caa734034e006bb4baf6be9d02269d7312bee7355e9c3833759c51",
         "38/38",
         "d3eaf533fedb5b03168200aa399ac53a6e2a6f22874ebabeaecefb227400778d",
-        "76/76",
-        "5f1197d70b7afad39d01bebeb4e7397c3e075d74a5bffa5305c62a0edb3c7d84",
-        "80/80",
-        "2e45fcd920e0b52916a7341d2ff766fdc9f7911ec2cb11c27bc3ff8fec3815fb",
+        "97/97",
+        "727f58cc716f5add0bab8fb965cc1e6b68245e60db6c160a33af96ed9ec5e5f9",
+        "90/90",
+        "761038779e00511179d4fc5aa3522829d9bdefb37c231061d04fb3aad541f733",
         "COMPLETED_WITH_FINDINGS",
         "critical, 0 high, 3 medium, and 4 low findings",
         "SARIF does not embed the candidate identity",

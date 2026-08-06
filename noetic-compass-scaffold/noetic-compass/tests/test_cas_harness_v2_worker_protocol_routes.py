@@ -17,6 +17,7 @@ from api.routes.cas_harness_v2_worker_protocol import (
     EVIDENCE_PACKET_MEDIA_TYPE,
     ISSUE_REQUEST_MEDIA_TYPE,
     NONREPORTING_MEDIA_TYPE,
+    OUTCOME_SEAL_MEDIA_TYPE,
     OUTPUT_RETENTION_MEDIA_TYPE,
     RECONCILIATION_MEDIA_TYPE,
     TERMINAL_MEDIA_TYPE,
@@ -29,6 +30,7 @@ from api.routes.cas_harness_v2_worker_protocol_dto import (
     ConsumptionRouteResultDTO,
     EvidencePacketRouteResultDTO,
     NonreportingRouteResultDTO,
+    OutcomeSealRouteResultDTO,
     OutputRetentionRouteResultDTO,
     ReconciliationRouteResultDTO,
     TerminalRouteResultDTO,
@@ -97,9 +99,31 @@ class RecordingService:
                 .upper(),
                 started_at=STARTED_AT,
             )
+        if operation == "seal_outcome":
+            return OutcomeSealRouteResultDTO(
+                receipt_id="route-receipt-seal_outcome",
+                receipt_sha256=hashlib.sha256(operation.encode("utf-8"))
+                .hexdigest()
+                .upper(),
+                accessed_at=STARTED_AT,
+                sealed_preregistration_chain_sha256="B" * 64,
+                receipt_media_type="application/vnd.cas-harness-v2.outcome-access+json",
+                receipt_byte_length=128,
+                outcome_event_sha256="C" * 64,
+            )
+        if operation == "accept_terminal":
+            return TerminalRouteResultDTO(
+                receipt_id="route-receipt-accept_terminal",
+                receipt_sha256=hashlib.sha256(operation.encode("utf-8"))
+                .hexdigest()
+                .upper(),
+                receipt_media_type="application/vnd.cas-harness-v2.worker-terminal+json",
+                receipt_byte_length=256,
+                terminal_status="SUCCESS",
+                terminal_event_sha256="D" * 64,
+            )
         result_type = {
             "retain_output": OutputRetentionRouteResultDTO,
-            "accept_terminal": TerminalRouteResultDTO,
             "attach_evidence_packet": EvidencePacketRouteResultDTO,
             "record_nonreporting": NonreportingRouteResultDTO,
             "reconcile_run": ReconciliationRouteResultDTO,
@@ -122,6 +146,9 @@ class RecordingService:
 
     def accept_terminal(self, **kwargs: Any):
         return self._accept("accept_terminal", kwargs)
+
+    def seal_outcome(self, **kwargs: Any):
+        return self._accept("seal_outcome", kwargs)
 
     def attach_evidence_packet(self, **kwargs: Any):
         return self._accept("attach_evidence_packet", kwargs)
@@ -162,7 +189,13 @@ def _credentials(backend: InMemoryStateStore):
         audit_id=AUDIT_ID,
         fleet_id=AUDIT_ID,
         worker_id=None,
-        capabilities=["merge_fleet", "verify_fleet"],
+        capabilities=[
+            "merge_fleet",
+            "verify_fleet",
+            "seal_outcome",
+            "attach_evidence_packet",
+            "record_nonreporting",
+        ],
         ttl_seconds=3600,
     )
     worker = auth.issue_credential(
@@ -251,6 +284,7 @@ def test_main_startup_boundary_rejects_enabled_flag_without_service(
 def test_machine_callback_allowlist_is_exact() -> None:
     accepted = (
         f"{CONTROLLER_PATH}/authorization",
+        f"{CONTROLLER_PATH}/outcome",
         f"{CONTROLLER_PATH}/packet",
         f"{CONTROLLER_PATH}/nonreporting",
         f"{CONTROLLER_PATH}/reconcile",
@@ -490,6 +524,85 @@ def test_terminal_replay_scope_and_no_jwt_or_first_seen_fallback(
     assert len(service.calls) == 1
 
 
+@pytest.mark.parametrize(
+    ("header_name", "expected_status"),
+    (
+        ("Content-Type", 415),
+        ("X-CAS-Authorization-SHA256", 422),
+        ("Authorization", 400),
+        ("X-CAS-Tenant-ID", 400),
+        ("X-CAS-Audit-ID", 400),
+        ("X-CAS-Service-Timestamp", 400),
+        ("X-CAS-Service-Nonce", 400),
+    ),
+)
+def test_duplicate_exact_or_security_header_is_rejected_before_nonce_consumption(
+    enabled: None,
+    header_name: str,
+    expected_status: int,
+) -> None:
+    backend = InMemoryStateStore()
+    controller, _worker = _credentials(backend)
+    service = RecordingService()
+    client = TestClient(_application(service, backend))
+    nonce = f"duplicate_header_{header_name.lower().replace('-', '_')}"
+    headers = _headers(
+        controller,
+        media_type=OUTCOME_SEAL_MEDIA_TYPE,
+        nonce=nonce,
+        authorization_sha256=AUTHORIZATION_SHA256,
+    )
+    duplicated = list(headers.items())
+    duplicated.append((header_name, headers[header_name]))
+
+    rejected = client.post(
+        f"{CONTROLLER_PATH}/outcome",
+        content=b"{}",
+        headers=duplicated,
+    )
+    assert rejected.status_code == expected_status
+    assert service.calls == []
+
+    accepted = client.post(
+        f"{CONTROLLER_PATH}/outcome",
+        content=b"{}",
+        headers=headers,
+    )
+    assert accepted.status_code == 200, accepted.text
+    assert len(service.calls) == 1
+
+
+def test_transfer_encoding_is_rejected_before_nonce_consumption(
+    enabled: None,
+) -> None:
+    backend = InMemoryStateStore()
+    controller, _worker = _credentials(backend)
+    service = RecordingService()
+    client = TestClient(_application(service, backend))
+    nonce = "transfer_encoding_rejected_0001"
+    headers = _headers(
+        controller,
+        media_type=OUTCOME_SEAL_MEDIA_TYPE,
+        nonce=nonce,
+        authorization_sha256=AUTHORIZATION_SHA256,
+    )
+    rejected = client.post(
+        f"{CONTROLLER_PATH}/outcome",
+        content=b"{}",
+        headers={**headers, "Transfer-Encoding": "chunked"},
+    )
+    assert rejected.status_code == 400
+    assert service.calls == []
+
+    accepted = client.post(
+        f"{CONTROLLER_PATH}/outcome",
+        content=b"{}",
+        headers=headers,
+    )
+    assert accepted.status_code == 200, accepted.text
+    assert len(service.calls) == 1
+
+
 def test_output_retention_is_separate_and_terminal_accepts_no_authorization_body(
     enabled: None,
 ) -> None:
@@ -557,6 +670,7 @@ def test_output_retention_is_separate_and_terminal_accepts_no_authorization_body
     (
         ("packet", EVIDENCE_PACKET_MEDIA_TYPE, "attach_evidence_packet"),
         ("nonreporting", NONREPORTING_MEDIA_TYPE, "record_nonreporting"),
+        ("outcome", OUTCOME_SEAL_MEDIA_TYPE, "seal_outcome"),
         ("reconcile", RECONCILIATION_MEDIA_TYPE, "reconcile_run"),
     ),
 )
@@ -633,6 +747,7 @@ def test_worker_operations_require_one_bounded_lease_header_before_authenticatio
     ("suffix", "media_type", "authorization_sha256"),
     (
         ("authorization", ISSUE_REQUEST_MEDIA_TYPE, None),
+        ("outcome", OUTCOME_SEAL_MEDIA_TYPE, AUTHORIZATION_SHA256),
         ("packet", EVIDENCE_PACKET_MEDIA_TYPE, AUTHORIZATION_SHA256),
         ("nonreporting", NONREPORTING_MEDIA_TYPE, AUTHORIZATION_SHA256),
         ("reconcile", RECONCILIATION_MEDIA_TYPE, AUTHORIZATION_SHA256),
@@ -761,6 +876,10 @@ def test_consumption_result_returns_only_canonical_untrusted_start_time(
         TerminalRouteResultDTO(
             receipt_id="wrong-operation-dto",
             receipt_sha256="A" * 64,
+            receipt_media_type="application/json",
+            receipt_byte_length=1,
+            terminal_status="SUCCESS",
+            terminal_event_sha256="B" * 64,
         ),
         ExtendedAuthorizationRouteResultDTO(
             receipt_id="extended-dto",

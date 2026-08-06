@@ -52,6 +52,7 @@ from api.services.cas_harness_v2_run_lifecycle import (  # noqa: E402
     EXPIRED,
     FAILURE,
     INDETERMINATE,
+    LIFECYCLE_KIND,
     NONREPORTING_RECORDED,
     OUTCOME_ACCESSED,
     PACKET_RECORDED,
@@ -60,7 +61,9 @@ from api.services.cas_harness_v2_run_lifecycle import (  # noqa: E402
     SUCCESS,
     DurableProspectiveRunLifecycle,
     RunLifecycleConflict,
+    RunLifecyclePersistenceError as RegistryLifecyclePersistenceError,
 )
+from api.services.production.state_substrate import StateStoreError  # noqa: E402
 from api.services.cas_harness_fleet_executor import ActiveFleetJobLease  # noqa: E402
 from api.services.cas_harness_v2_worker_bridge import (  # noqa: E402
     ResearchOnlyHarnessV2WorkerBridge,
@@ -1034,6 +1037,67 @@ def test_exact_retries_converge_and_conflicts_do_not_rewrite(tmp_path: Path) -> 
     system["store"].close()
 
 
+def test_service_retry_repairs_pending_consumption_before_fresh_clock_bytes(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    system = _system(tmp_path)
+    issue = _issue(system)
+    original_put = system["store"].put
+    fail_next_index_update = True
+
+    def fail_once(record, *, expected_version: int):
+        nonlocal fail_next_index_update
+        if (
+            fail_next_index_update
+            and record.kind == LIFECYCLE_KIND
+            and expected_version > 0
+        ):
+            fail_next_index_update = False
+            raise StateStoreError("synthetic service crash after event write")
+        return original_put(record, expected_version=expected_version)
+
+    monkeypatch.setattr(system["store"], "put", fail_once)
+    with pytest.raises(
+        RegistryLifecyclePersistenceError,
+        match="synthetic service crash after event write",
+    ):
+        _consume(system, issue, clock_at=STARTED_AT)
+
+    raw_lifecycle = system["store"].get(
+        "tenant-research",
+        LIFECYCLE_KIND,
+        issue.lifecycle.run_id,
+    )
+    assert raw_lifecycle is not None
+    assert raw_lifecycle.payload["current_state"] == "AUTHORIZED"
+    object_put_count = system["backend"].put_count
+
+    retry = _consume(
+        system,
+        issue,
+        clock_at=STARTED_AT + timedelta(minutes=1),
+    )
+    assert retry.idempotent_replay is True
+    assert retry.lifecycle.state == RUNNING
+    assert system["backend"].put_count == object_put_count
+    running = next(
+        event
+        for event in system["registry"].list_events(
+            tenant_id="tenant-research",
+            subject_id="worker-auth-h2-001",
+        )
+        if event["state_after"] == RUNNING
+    )
+    assert running["occurred_at"] == STARTED_AT.isoformat(
+        timespec="microseconds"
+    ).replace("+00:00", "Z")
+    assert system["registry"].reconcile(
+        tenant_id="tenant-research"
+    ).structurally_valid is True
+    system["store"].close()
+
+
 def test_outcome_time_is_reserved_once_and_terminal_replays_after_seal(
     tmp_path: Path,
 ) -> None:
@@ -1088,4 +1152,3 @@ def test_outcome_time_is_reserved_once_and_terminal_replays_after_seal(
     assert reconciled.outcome_storage is not None
     assert reconciled.packet_storage is None
     system["store"].close()
-    REJECTED,

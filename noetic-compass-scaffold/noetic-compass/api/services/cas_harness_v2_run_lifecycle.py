@@ -46,6 +46,9 @@ SUBJECT_RESERVATION_SCHEMA = "cas_harness_v2.run_subject_reservation.v1"
 NONCE_RESERVATION_SCHEMA = "cas_harness_v2.run_nonce_reservation.v1"
 AUTHORIZATION_FINALIZATION_SCHEMA = "cas_harness_v2.authorization_finalization.v1"
 OUTCOME_ACCESS_RESERVATION_SCHEMA = "cas_harness_v2.outcome_access_reservation.v1"
+REPORTING_DISPOSITION_RESERVATION_SCHEMA = (
+    "cas_harness_v2.reporting_disposition_reservation.v1"
+)
 
 LIFECYCLE_KIND = "cas_harness_v2_prospective_run_lifecycle"
 EVENT_KIND = "cas_harness_v2_prospective_run_event"
@@ -53,6 +56,9 @@ SUBJECT_RESERVATION_KIND = "cas_harness_v2_run_subject_reservation"
 NONCE_RESERVATION_KIND = "cas_harness_v2_run_nonce_reservation"
 AUTHORIZATION_FINALIZATION_KIND = "cas_harness_v2_authorization_finalization"
 OUTCOME_ACCESS_RESERVATION_KIND = "cas_harness_v2_outcome_access_reservation"
+REPORTING_DISPOSITION_RESERVATION_KIND = (
+    "cas_harness_v2_reporting_disposition_reservation"
+)
 
 AUTHORIZED = "AUTHORIZED"
 RUNNING = "RUNNING"
@@ -69,6 +75,7 @@ TERMINAL_STATES = frozenset(
     {SUCCESS, FAILURE, INDETERMINATE, REJECTED, EXPIRED}
 )
 REPORTING_DISPOSITIONS = frozenset({PACKET_RECORDED, NONREPORTING_RECORDED})
+REPORTING_ACTIONS = frozenset({"PACKET", "NONREPORTING"})
 
 _GENESIS_PREVIOUS_SHA256 = "0" * 64
 _MAX_TEXT_LENGTH = 1024
@@ -198,10 +205,35 @@ class OutcomeAccessReservation:
     subject_id: str
     reservation_id: str
     operation_id: str
+    request_sha256: str | None
     accessed_at: str
     terminal_state: str
     terminal_event_sha256: str
     terminal_artifact: Mapping[str, object]
+    clock_observation: Mapping[str, str]
+    backend_durability_profile: Mapping[str, str]
+    authority: Mapping[str, str]
+    criteria_status: str = "OPEN"
+    license_status: str = "NOT LICENSED"
+    disclosure_status: str = "HELD"
+
+
+@dataclass(frozen=True, slots=True)
+class ReportingDispositionReservation:
+    tenant_id: str
+    run_id: str
+    subject_id: str
+    reservation_id: str
+    operation_id: str
+    disposition: str
+    reason_code: str | None
+    request_sha256: str
+    dependency_binding_sha256: str
+    planned_artifact: Mapping[str, object]
+    parent_state: str
+    parent_head_sha256: str
+    recorded_at: str
+    clock_observation: Mapping[str, str]
     backend_durability_profile: Mapping[str, str]
     authority: Mapping[str, str]
     criteria_status: str = "OPEN"
@@ -225,6 +257,7 @@ class RunLifecycleReconciliation:
     nonce_reservation_count: int
     authorization_finalization_count: int
     outcome_access_reservation_count: int
+    reporting_disposition_reservation_count: int
     event_count: int
     state_counts: Mapping[str, int]
     issue_count: int
@@ -644,6 +677,8 @@ class DurableProspectiveRunLifecycle:
         operation_id: str,
         requested_at: datetime,
         terminal_artifact: ArtifactBinding,
+        request_sha256: str | None = None,
+        clock_observation: Mapping[str, Any] | None = None,
     ) -> OutcomeAccessReservation:
         """Fix outcome-access time and terminal binding before chain mutation."""
 
@@ -651,22 +686,43 @@ class DurableProspectiveRunLifecycle:
         subject_id = _required_text(subject_id, "subject_id")
         operation_id = _required_text(operation_id, "operation_id")
         accessed_at = _utc_iso(requested_at, "requested_at")
+        observation = _clock_observation_dict(
+            clock_observation
+            or {
+                "observed_at": accessed_at,
+                "source": "DIRECT_REGISTRY_CALLER_TIME",
+                "assurance": "CALLER_DECLARED_TIME_NOT_TRUSTED",
+            }
+        )
+        if observation["observed_at"] != accessed_at:
+            raise RunLifecycleValidationError(
+                "outcome clock observation must match requested_at"
+            )
         terminal_binding = _artifact_dict(terminal_artifact, "terminal_artifact")
+        request_digest = (
+            None
+            if request_sha256 is None
+            else _required_lower_sha256(request_sha256, "request_sha256")
+        )
+        fingerprint_facts: dict[str, object] = {
+            "run_id": _run_id(subject_id),
+            "subject_id": subject_id,
+            "operation_id": operation_id,
+            "request_sha256": request_digest,
+            "terminal_artifact": terminal_binding,
+        }
+        if request_digest is None:
+            # Direct/internal callers own their declared time.  Strict HTTP owns
+            # no time field, so its exact request digest—not competing process
+            # clock observations—defines semantic replay identity.
+            fingerprint_facts["accessed_at"] = accessed_at
+        expected_fingerprint = _sha256_json(fingerprint_facts)
         run_id = _run_id(subject_id)
         reservation_id = _outcome_access_reservation_id(run_id)
         existing = self._store.get(
             tenant_id, OUTCOME_ACCESS_RESERVATION_KIND, reservation_id
         )
         if existing is not None:
-            expected_fingerprint = _sha256_json(
-                {
-                    "run_id": run_id,
-                    "subject_id": subject_id,
-                    "operation_id": operation_id,
-                    "accessed_at": accessed_at,
-                    "terminal_artifact": terminal_binding,
-                }
-            )
             if existing.payload.get("request_fingerprint_sha256") != expected_fingerprint:
                 raise RunLifecycleConflict(
                     "outcome-access reservation operation conflicts with stored facts"
@@ -679,6 +735,7 @@ class DurableProspectiveRunLifecycle:
             raise RunLifecycleConflict(
                 "outcome access requires a strict completed or failed execution receipt"
             )
+        self.list_events(tenant_id=tenant_id, subject_id=subject_id)
         terminal_sequence = _payload_int(
             lifecycle.payload, "event_count", minimum=1
         ) - 1
@@ -697,15 +754,12 @@ class DurableProspectiveRunLifecycle:
         terminal_event_sha256 = _payload_text(
             terminal_event.payload, "event_sha256"
         )
-        request_fingerprint = _sha256_json(
-            {
-                "run_id": run_id,
-                "subject_id": subject_id,
-                "operation_id": operation_id,
-                "accessed_at": accessed_at,
-                "terminal_artifact": terminal_binding,
-            }
-        )
+        if _parse_utc(accessed_at) < _parse_utc(
+            _payload_text(terminal_event.payload, "occurred_at")
+        ):
+            raise RunLifecycleConflict(
+                "outcome access cannot precede terminal completion"
+            )
         payload = {
             "schema": OUTCOME_ACCESS_RESERVATION_SCHEMA,
             "reservation": "CREATE_ONLY_PENDING_OUTCOME_ACCESS_FINALIZATION",
@@ -713,10 +767,13 @@ class DurableProspectiveRunLifecycle:
             "subject_id": subject_id,
             "reservation_id": reservation_id,
             "operation_id": operation_id,
-            "request_fingerprint_sha256": request_fingerprint,
+            "request_sha256": request_digest,
+            "request_fingerprint_sha256": expected_fingerprint,
             "accessed_at": accessed_at,
             "time_assurance": "CALLER_OR_PROCESS_TIME_NOT_TRUSTED",
+            "clock_observation": observation,
             "terminal_state": terminal_state,
+            "terminal_sequence": terminal_sequence,
             "terminal_event_sha256": terminal_event_sha256,
             "terminal_artifact": terminal_binding,
             "backend_durability_profile": _json_copy(
@@ -724,18 +781,47 @@ class DurableProspectiveRunLifecycle:
             ),
             "authority": _authority(),
         }
-        stored = self._create_exact(
-            LedgerRecord.new(
-                tenant_id=tenant_id,
-                kind=OUTCOME_ACCESS_RESERVATION_KIND,
-                record_id=reservation_id,
-                payload=payload,
-                parent_ids=(run_id, terminal_event.record_id),
-                source="cas_harness_v2_run_lifecycle.outcome_access_reservation",
-                trace_id=run_id,
-            )
+        candidate = LedgerRecord.new(
+            tenant_id=tenant_id,
+            kind=OUTCOME_ACCESS_RESERVATION_KIND,
+            record_id=reservation_id,
+            payload=payload,
+            parent_ids=(run_id, terminal_event.record_id),
+            source="cas_harness_v2_run_lifecycle.outcome_access_reservation",
+            trace_id=run_id,
         )
+        try:
+            stored = self._create_exact(candidate)
+        except RunLifecycleConflict:
+            concurrent = self._store.get(
+                tenant_id,
+                OUTCOME_ACCESS_RESERVATION_KIND,
+                reservation_id,
+            )
+            if (
+                concurrent is None
+                or concurrent.payload.get("request_fingerprint_sha256")
+                != expected_fingerprint
+            ):
+                raise
+            return _outcome_reservation_snapshot(concurrent)
         return _outcome_reservation_snapshot(stored)
+
+    def get_outcome_access_reservation(
+        self,
+        *,
+        tenant_id: str,
+        subject_id: str,
+    ) -> OutcomeAccessReservation | None:
+        tenant_id = _required_text(tenant_id, "tenant_id")
+        subject_id = _required_text(subject_id, "subject_id")
+        run_id = _run_id(subject_id)
+        record = self._store.get(
+            tenant_id,
+            OUTCOME_ACCESS_RESERVATION_KIND,
+            _outcome_access_reservation_id(run_id),
+        )
+        return None if record is None else _outcome_reservation_snapshot(record)
 
     def finalize_outcome_access(
         self,
@@ -770,6 +856,7 @@ class DurableProspectiveRunLifecycle:
                 "outcome_access_reservation_id": reservation.reservation_id,
                 "terminal_event_sha256": reservation.terminal_event_sha256,
                 "terminal_artifact": dict(reservation.terminal_artifact),
+                "clock_observation": dict(reservation.clock_observation),
                 "outcome_access_artifact": _artifact_dict(
                     outcome_access_artifact, "outcome_access_artifact"
                 )
@@ -787,6 +874,7 @@ class DurableProspectiveRunLifecycle:
         terminal_artifact: ArtifactBinding,
         outcome_access_artifact: ArtifactBinding,
         accessed_at: datetime,
+        request_sha256: str | None = None,
     ) -> RunLifecycleMutation:
         """Convenience wrapper that still persists reservation before finalization."""
 
@@ -796,6 +884,7 @@ class DurableProspectiveRunLifecycle:
             operation_id=operation_id,
             requested_at=accessed_at,
             terminal_artifact=terminal_artifact,
+            request_sha256=request_sha256,
         )
         return self.finalize_outcome_access(
             tenant_id=tenant_id,
@@ -803,6 +892,219 @@ class DurableProspectiveRunLifecycle:
             reservation_id=reservation.reservation_id,
             outcome_access_artifact=outcome_access_artifact,
         )
+
+    def get_reporting_disposition_reservation(
+        self,
+        *,
+        tenant_id: str,
+        subject_id: str,
+    ) -> ReportingDispositionReservation | None:
+        tenant_id = _required_text(tenant_id, "tenant_id")
+        subject_id = _required_text(subject_id, "subject_id")
+        run_id = _run_id(subject_id)
+        record = self._store.get(
+            tenant_id,
+            REPORTING_DISPOSITION_RESERVATION_KIND,
+            _reporting_disposition_reservation_id(run_id),
+        )
+        return None if record is None else _reporting_reservation_snapshot(record)
+
+    def reserve_reporting_disposition(
+        self,
+        *,
+        tenant_id: str,
+        subject_id: str,
+        operation_id: str,
+        disposition: str,
+        reason_code: str | None,
+        request_sha256: str,
+        dependency_binding_sha256: str,
+        planned_artifact: ArtifactBinding,
+        observed_at: datetime,
+        clock_observation: Mapping[str, Any] | None = None,
+    ) -> ReportingDispositionReservation:
+        """Choose packet or nonreporting once, before any immutable artifact write."""
+
+        tenant_id = _required_text(tenant_id, "tenant_id")
+        subject_id = _required_text(subject_id, "subject_id")
+        operation_id = _required_text(operation_id, "operation_id")
+        if disposition not in REPORTING_ACTIONS:
+            raise RunLifecycleValidationError(
+                "reporting disposition must be PACKET or NONREPORTING"
+            )
+        if disposition == "PACKET":
+            if reason_code is not None:
+                raise RunLifecycleValidationError(
+                    "PACKET reporting reservations must not declare a reason_code"
+                )
+            bound_reason_code = None
+        else:
+            bound_reason_code = _required_text(reason_code, "reason_code")
+        request_sha256 = _required_lower_sha256(
+            request_sha256, "request_sha256"
+        )
+        dependency_binding_sha256 = _required_lower_sha256(
+            dependency_binding_sha256, "dependency_binding_sha256"
+        )
+        planned_artifact_binding = _artifact_dict(
+            planned_artifact,
+            "planned_artifact",
+        )
+        run_id = _run_id(subject_id)
+        reservation_id = _reporting_disposition_reservation_id(run_id)
+        existing = self._store.get(
+            tenant_id,
+            REPORTING_DISPOSITION_RESERVATION_KIND,
+            reservation_id,
+        )
+        if existing is not None:
+            reservation = _reporting_reservation_snapshot(existing)
+            expected = (
+                run_id,
+                subject_id,
+                operation_id,
+                disposition,
+                bound_reason_code,
+                request_sha256,
+                dependency_binding_sha256,
+                planned_artifact_binding,
+            )
+            observed = (
+                reservation.run_id,
+                reservation.subject_id,
+                reservation.operation_id,
+                reservation.disposition,
+                reservation.reason_code,
+                reservation.request_sha256,
+                reservation.dependency_binding_sha256,
+                reservation.planned_artifact,
+            )
+            if observed != expected:
+                raise RunLifecycleConflict(
+                    "reporting disposition is already reserved for different exact facts"
+                )
+            return reservation
+
+        lifecycle = self._require_lifecycle(tenant_id, subject_id)
+        parent_state = _payload_text(lifecycle.payload, "current_state")
+        if disposition == "PACKET":
+            allowed = {OUTCOME_ACCESSED}
+        else:
+            allowed = {OUTCOME_ACCESSED, INDETERMINATE, REJECTED, EXPIRED}
+        if parent_state not in allowed:
+            raise RunLifecycleConflict(
+                f"cannot reserve {disposition} from lifecycle state {parent_state}"
+            )
+        parent_head_sha256 = _required_lower_sha256(
+            lifecycle.payload.get("head_event_sha256"),
+            "parent_head_sha256",
+        )
+        recorded_at = _utc_iso(observed_at, "observed_at")
+        observation = _clock_observation_dict(
+            clock_observation
+            or {
+                "observed_at": recorded_at,
+                "source": "DIRECT_REGISTRY_CALLER_TIME",
+                "assurance": "CALLER_DECLARED_TIME_NOT_TRUSTED",
+            }
+        )
+        if observation["observed_at"] != recorded_at:
+            raise RunLifecycleValidationError(
+                "reporting clock observation must match observed_at"
+            )
+        verified_events = self.list_events(
+            tenant_id=tenant_id,
+            subject_id=subject_id,
+        )
+        parent_event = verified_events[-1]
+        if (
+            parent_event.get("event_sha256") != parent_head_sha256
+            or parent_event.get("state_after") != parent_state
+        ):
+            raise RunLifecyclePersistenceError(
+                "reporting reservation parent differs from the verified lifecycle head"
+            )
+        if _parse_utc(recorded_at) < _parse_utc(
+            _payload_text(parent_event, "occurred_at")
+        ):
+            raise RunLifecycleConflict(
+                "reporting disposition cannot precede its lifecycle parent"
+            )
+        payload = {
+            "schema": REPORTING_DISPOSITION_RESERVATION_SCHEMA,
+            "reservation": "CREATE_ONLY_PENDING_REPORTING_FINALIZATION",
+            "run_id": run_id,
+            "subject_id": subject_id,
+            "reservation_id": reservation_id,
+            "operation_id": operation_id,
+            "disposition": disposition,
+            "reason_code": bound_reason_code,
+            "request_sha256": request_sha256,
+            "dependency_binding_sha256": dependency_binding_sha256,
+            "planned_artifact": planned_artifact_binding,
+            "parent_state": parent_state,
+            "parent_head_sha256": parent_head_sha256,
+            "recorded_at": recorded_at,
+            "time_assurance": "CALLER_OR_PROCESS_TIME_NOT_TRUSTED",
+            "clock_observation": observation,
+            "backend_durability_profile": _json_copy(
+                lifecycle.payload.get("backend_durability_profile")
+            ),
+            "authority": _authority(),
+        }
+        candidate = LedgerRecord.new(
+            tenant_id=tenant_id,
+            kind=REPORTING_DISPOSITION_RESERVATION_KIND,
+            record_id=reservation_id,
+            payload=payload,
+            parent_ids=(run_id,),
+            source=(
+                "cas_harness_v2_run_lifecycle.reporting_disposition_reservation"
+            ),
+            trace_id=run_id,
+        )
+        try:
+            stored = self._create_exact(candidate)
+        except RunLifecycleConflict:
+            # Concurrent exact retries may observe different process-clock values
+            # before one create-only reservation wins.  The winner's time is the
+            # only retained time; request identity excludes the losing observation.
+            existing = self._store.get(
+                tenant_id,
+                REPORTING_DISPOSITION_RESERVATION_KIND,
+                reservation_id,
+            )
+            if existing is None:
+                raise
+            reservation = _reporting_reservation_snapshot(existing)
+            expected = (
+                run_id,
+                subject_id,
+                operation_id,
+                disposition,
+                bound_reason_code,
+                request_sha256,
+                dependency_binding_sha256,
+                planned_artifact_binding,
+                parent_state,
+                parent_head_sha256,
+            )
+            observed = (
+                reservation.run_id,
+                reservation.subject_id,
+                reservation.operation_id,
+                reservation.disposition,
+                reservation.reason_code,
+                reservation.request_sha256,
+                reservation.dependency_binding_sha256,
+                reservation.planned_artifact,
+                reservation.parent_state,
+                reservation.parent_head_sha256,
+            )
+            if observed != expected:
+                raise
+            return reservation
+        return _reporting_reservation_snapshot(stored)
 
     def record_packet(
         self,
@@ -812,7 +1114,21 @@ class DurableProspectiveRunLifecycle:
         operation_id: str,
         packet_artifact: ArtifactBinding,
         recorded_at: datetime,
+        reporting_reservation_id: str,
     ) -> RunLifecycleMutation:
+        reservation_id = _required_text(
+            reporting_reservation_id, "reporting_reservation_id"
+        )
+        reservation = self._require_reporting_reservation_for_finalization(
+            tenant_id=tenant_id,
+            subject_id=subject_id,
+            reservation_id=reservation_id,
+            operation_id=operation_id,
+            disposition="PACKET",
+            reason_code=None,
+            recorded_at=recorded_at,
+            final_artifact=packet_artifact,
+        )
         return self._append_transition(
             tenant_id=tenant_id,
             subject_id=subject_id,
@@ -820,7 +1136,15 @@ class DurableProspectiveRunLifecycle:
             event_type=PACKET_RECORDED,
             occurred_at=_utc_iso(recorded_at, "recorded_at"),
             details={
-                "packet_artifact": _artifact_dict(packet_artifact, "packet_artifact")
+                "packet_artifact": _artifact_dict(packet_artifact, "packet_artifact"),
+                "reporting_reservation_id": reservation_id,
+                "reporting_request_sha256": reservation.request_sha256,
+                "reporting_dependency_binding_sha256": (
+                    reservation.dependency_binding_sha256
+                ),
+                "reporting_clock_observation": dict(
+                    reservation.clock_observation
+                ),
             },
             allowed_from=frozenset({OUTCOME_ACCESSED}),
             state_after=PACKET_RECORDED,
@@ -835,7 +1159,22 @@ class DurableProspectiveRunLifecycle:
         nonreporting_artifact: ArtifactBinding,
         reason_code: str,
         recorded_at: datetime,
+        reporting_reservation_id: str,
     ) -> RunLifecycleMutation:
+        reason = _required_text(reason_code, "reason_code")
+        reservation_id = _required_text(
+            reporting_reservation_id, "reporting_reservation_id"
+        )
+        reservation = self._require_reporting_reservation_for_finalization(
+            tenant_id=tenant_id,
+            subject_id=subject_id,
+            reservation_id=reservation_id,
+            operation_id=operation_id,
+            disposition="NONREPORTING",
+            reason_code=reason,
+            recorded_at=recorded_at,
+            final_artifact=nonreporting_artifact,
+        )
         return self._append_transition(
             tenant_id=tenant_id,
             subject_id=subject_id,
@@ -843,9 +1182,17 @@ class DurableProspectiveRunLifecycle:
             event_type=NONREPORTING_RECORDED,
             occurred_at=_utc_iso(recorded_at, "recorded_at"),
             details={
-                "reason_code": _required_text(reason_code, "reason_code"),
+                "reason_code": reason,
                 "nonreporting_artifact": _artifact_dict(
                     nonreporting_artifact, "nonreporting_artifact"
+                ),
+                "reporting_reservation_id": reservation_id,
+                "reporting_request_sha256": reservation.request_sha256,
+                "reporting_dependency_binding_sha256": (
+                    reservation.dependency_binding_sha256
+                ),
+                "reporting_clock_observation": dict(
+                    reservation.clock_observation
                 ),
             },
             allowed_from=frozenset(
@@ -862,26 +1209,79 @@ class DurableProspectiveRunLifecycle:
         record = self._store.get(tenant_id, LIFECYCLE_KIND, _run_id(subject_id))
         if record is None:
             return None
+        record = self._repair_pending_transition_index(record)
         return _snapshot(record)
 
     def list_events(
         self, *, tenant_id: str, subject_id: str
     ) -> tuple[Mapping[str, Any], ...]:
+        """Return events only after full run/index/hash/reservation verification."""
+
         tenant_id = _required_text(tenant_id, "tenant_id")
         subject_id = _required_text(subject_id, "subject_id")
-        record = self._require_lifecycle(tenant_id, subject_id)
-        count = _payload_int(record.payload, "event_count", minimum=1)
-        events: list[Mapping[str, Any]] = []
-        for sequence in range(count):
-            event = self._store.get(
-                tenant_id, EVENT_KIND, _event_record_id(record.record_id, sequence)
-            )
-            if event is None:
-                raise RunLifecyclePersistenceError(
-                    f"indexed event {sequence} is missing for {record.record_id}"
+        record = self._repair_pending_transition_index(
+            self._require_lifecycle(tenant_id, subject_id)
+        )
+        nonce_sha256 = _payload_text(record.payload, "run_nonce_sha256")
+        finalization_id = _payload_text(
+            record.payload,
+            "authorization_finalization_record_id",
+        )
+        subject_record = self._store.get(
+            tenant_id,
+            SUBJECT_RESERVATION_KIND,
+            _subject_record_id(subject_id),
+        )
+        nonce_record = self._store.get(
+            tenant_id,
+            NONCE_RESERVATION_KIND,
+            _nonce_record_id(nonce_sha256),
+        )
+        finalization_record = self._store.get(
+            tenant_id,
+            AUTHORIZATION_FINALIZATION_KIND,
+            finalization_id,
+        )
+        event_records = [
+            event
+            for event in self._store.list(tenant_id, EVENT_KIND)
+            if event.payload.get("run_id") == record.record_id
+        ]
+        self._verify_lifecycle(
+            record,
+            subject_by_id=(
+                {}
+                if subject_record is None
+                else {subject_record.record_id: subject_record}
+            ),
+            nonce_by_id=(
+                {} if nonce_record is None else {nonce_record.record_id: nonce_record}
+            ),
+            finalization_by_id=(
+                {}
+                if finalization_record is None
+                else {finalization_record.record_id: finalization_record}
+            ),
+            outcome_reservation_by_id={
+                item.record_id: item
+                for item in self._store.list(
+                    tenant_id,
+                    OUTCOME_ACCESS_RESERVATION_KIND,
                 )
-            events.append(dict(event.payload))
-        return tuple(events)
+            },
+            reporting_reservation_by_id={
+                item.record_id: item
+                for item in self._store.list(
+                    tenant_id,
+                    REPORTING_DISPOSITION_RESERVATION_KIND,
+                )
+            },
+            event_records=event_records,
+        )
+        event_records.sort(
+            key=lambda event: _payload_int(event.payload, "sequence", minimum=0)
+        )
+        return tuple(dict(event.payload) for event in event_records)
 
     def reconcile(self, *, tenant_id: str) -> RunLifecycleReconciliation:
         """Exhaustively reconcile all tenant-visible lifecycle registry records."""
@@ -896,6 +1296,9 @@ class DurableProspectiveRunLifecycle:
         outcome_reservations = self._store.list(
             tenant_id, OUTCOME_ACCESS_RESERVATION_KIND
         )
+        reporting_reservations = self._store.list(
+            tenant_id, REPORTING_DISPOSITION_RESERVATION_KIND
+        )
         events = self._store.list(tenant_id, EVENT_KIND)
         issues: list[ReconciliationIssue] = []
         state_counts: dict[str, int] = {}
@@ -908,6 +1311,9 @@ class DurableProspectiveRunLifecycle:
         }
         outcome_reservation_by_id = {
             record.record_id: record for record in outcome_reservations
+        }
+        reporting_reservation_by_id = {
+            record.record_id: record for record in reporting_reservations
         }
         events_by_run: dict[str, list[LedgerRecord]] = {}
         for event in events:
@@ -927,6 +1333,8 @@ class DurableProspectiveRunLifecycle:
         referenced_nonces: set[str] = set()
         referenced_finalizations: set[str] = set()
         finalized_outcome_reservations: set[str] = set()
+        finalized_reporting_reservations: set[str] = set()
+        reporting_finalization_counts: dict[str, int] = {}
         for lifecycle in lifecycles:
             try:
                 self._verify_lifecycle(
@@ -935,6 +1343,7 @@ class DurableProspectiveRunLifecycle:
                     nonce_by_id=nonce_by_id,
                     finalization_by_id=finalization_by_id,
                     outcome_reservation_by_id=outcome_reservation_by_id,
+                    reporting_reservation_by_id=reporting_reservation_by_id,
                     event_records=events_by_run.get(lifecycle.record_id, []),
                 )
             except RunLifecycleError as exc:
@@ -960,13 +1369,98 @@ class DurableProspectiveRunLifecycle:
             if isinstance(finalization_id, str):
                 referenced_finalizations.add(finalization_id)
             for event in events_by_run.get(lifecycle.record_id, []):
-                if event.payload.get("event_type") != OUTCOME_ACCESSED:
-                    continue
+                event_type = event.payload.get("event_type")
                 details = event.payload.get("details")
-                if isinstance(details, Mapping):
+                if event_type == OUTCOME_ACCESSED and isinstance(details, Mapping):
                     reservation_id = details.get("outcome_access_reservation_id")
                     if isinstance(reservation_id, str):
                         finalized_outcome_reservations.add(reservation_id)
+                if event_type in REPORTING_DISPOSITIONS and isinstance(
+                    details, Mapping
+                ):
+                    reservation_id = details.get("reporting_reservation_id")
+                    if isinstance(reservation_id, str):
+                        reporting_finalization_counts[reservation_id] = (
+                            reporting_finalization_counts.get(reservation_id, 0) + 1
+                        )
+                        reservation_record = reporting_reservation_by_id.get(
+                            reservation_id
+                        )
+                        if reservation_record is None:
+                            issues.append(
+                                ReconciliationIssue(
+                                    "UNREGISTERED_REPORTING_DISPOSITION_RESERVATION",
+                                    event.record_id,
+                                    "final event references no create-only reporting reservation",
+                                )
+                            )
+                            continue
+                        try:
+                            reservation = _reporting_reservation_snapshot(
+                                reservation_record
+                            )
+                        except RunLifecycleError:
+                            # The reservation loop below reports the exact integrity
+                            # failure once, and this event remains unfinalized.
+                            continue
+                        expected_disposition = (
+                            "PACKET"
+                            if event_type == PACKET_RECORDED
+                            else "NONREPORTING"
+                        )
+                        final_artifact_field = (
+                            "packet_artifact"
+                            if event_type == PACKET_RECORDED
+                            else "nonreporting_artifact"
+                        )
+                        finalization_facts = (
+                            reservation.run_id == lifecycle.record_id,
+                            reservation.subject_id
+                            == lifecycle.payload.get("subject_id"),
+                            reservation.operation_id
+                            == event.payload.get("operation_id"),
+                            reservation.disposition == expected_disposition,
+                            reservation.reason_code
+                            == (
+                                details.get("reason_code")
+                                if event_type == NONREPORTING_RECORDED
+                                else None
+                            ),
+                            reservation.recorded_at
+                            == event.payload.get("occurred_at"),
+                            reservation.parent_state
+                            == event.payload.get("state_before"),
+                            reservation.parent_head_sha256
+                            == event.payload.get("previous_event_sha256"),
+                            reservation.request_sha256
+                            == details.get("reporting_request_sha256"),
+                            reservation.dependency_binding_sha256
+                            == details.get(
+                                "reporting_dependency_binding_sha256"
+                            ),
+                            reservation.planned_artifact
+                            == details.get(final_artifact_field),
+                            reservation.clock_observation
+                            == details.get("reporting_clock_observation"),
+                        )
+                        if not all(finalization_facts):
+                            issues.append(
+                                ReconciliationIssue(
+                                    "REPORTING_FINALIZATION_BINDING_FAILURE",
+                                    event.record_id,
+                                    "final event differs from its reporting reservation",
+                                )
+                            )
+                            continue
+                        finalized_reporting_reservations.add(reservation_id)
+                    elif "reporting_reservation_id" in details:
+                        issues.append(
+                            ReconciliationIssue(
+                                "REPORTING_FINALIZATION_RESERVATION_ID_INVALID",
+                                event.record_id,
+                                "reporting reservation reference is not an exact string",
+                            )
+                        )
 
         for subject in subjects:
             run_id = subject.payload.get("run_id")
@@ -1001,22 +1495,117 @@ class DurableProspectiveRunLifecycle:
                         "create-only authorization finalization has no lifecycle index",
                     )
                 )
-        for reservation in outcome_reservations:
-            run_id = reservation.payload.get("run_id")
-            if run_id not in lifecycle_by_id:
+        for record in outcome_reservations:
+            try:
+                reservation = _outcome_reservation_snapshot(record)
+            except RunLifecycleError as exc:
+                issues.append(
+                    ReconciliationIssue(
+                        "OUTCOME_RESERVATION_INTEGRITY_FAILURE",
+                        record.record_id,
+                        str(exc),
+                    )
+                )
+                continue
+            if reservation.run_id not in lifecycle_by_id:
                 issues.append(
                     ReconciliationIssue(
                         "ORPHAN_OUTCOME_ACCESS_RESERVATION",
-                        reservation.record_id,
+                        record.record_id,
                         "outcome-access reservation has no lifecycle index",
                     )
                 )
-            elif reservation.record_id not in finalized_outcome_reservations:
+                continue
+            lifecycle = lifecycle_by_id[reservation.run_id]
+            parent_matches = [
+                event
+                for event in events_by_run.get(reservation.run_id, [])
+                if event.payload.get("event_sha256")
+                == reservation.terminal_event_sha256
+                and event.payload.get("state_after")
+                == reservation.terminal_state
+            ]
+            if (
+                len(parent_matches) != 1
+                or reservation.subject_id != lifecycle.payload.get("subject_id")
+                or reservation.backend_durability_profile
+                != lifecycle.payload.get("backend_durability_profile")
+                or reservation.authority != lifecycle.payload.get("authority")
+            ):
+                issues.append(
+                    ReconciliationIssue(
+                        "OUTCOME_RESERVATION_PARENT_BINDING_FAILURE",
+                        record.record_id,
+                        "outcome reservation parent or authority differs from its lifecycle",
+                    )
+                )
+            if record.record_id not in finalized_outcome_reservations:
                 issues.append(
                     ReconciliationIssue(
                         "PENDING_OUTCOME_ACCESS_FINALIZATION",
-                        reservation.record_id,
+                        record.record_id,
                         "reserved accessed_at has no OUTCOME_ACCESSED event",
+                    )
+                )
+        for record in reporting_reservations:
+            try:
+                reservation = _reporting_reservation_snapshot(record)
+            except RunLifecycleError as exc:
+                issues.append(
+                    ReconciliationIssue(
+                        "REPORTING_RESERVATION_INTEGRITY_FAILURE",
+                        record.record_id,
+                        str(exc),
+                    )
+                )
+                continue
+            if reservation.run_id not in lifecycle_by_id:
+                issues.append(
+                    ReconciliationIssue(
+                        "ORPHAN_REPORTING_DISPOSITION_RESERVATION",
+                        record.record_id,
+                        "reporting reservation has no lifecycle index",
+                    )
+                )
+                continue
+            lifecycle = lifecycle_by_id[reservation.run_id]
+            run_events = events_by_run.get(reservation.run_id, [])
+            parent_matches = [
+                event
+                for event in run_events
+                if event.payload.get("event_sha256")
+                == reservation.parent_head_sha256
+                and event.payload.get("state_after") == reservation.parent_state
+            ]
+            if (
+                len(parent_matches) != 1
+                or reservation.subject_id != lifecycle.payload.get("subject_id")
+                or reservation.backend_durability_profile
+                != lifecycle.payload.get("backend_durability_profile")
+                or reservation.authority != lifecycle.payload.get("authority")
+            ):
+                issues.append(
+                    ReconciliationIssue(
+                        "REPORTING_RESERVATION_PARENT_BINDING_FAILURE",
+                        record.record_id,
+                        "reporting reservation parent or authority differs from its lifecycle",
+                    )
+                )
+            if record.record_id not in finalized_reporting_reservations:
+                issues.append(
+                    ReconciliationIssue(
+                        "PENDING_REPORTING_DISPOSITION_FINALIZATION",
+                        record.record_id,
+                        "reporting reservation has no matching final event",
+                    )
+                )
+        for reservation_id, count in reporting_finalization_counts.items():
+            if count > 1:
+                issues.append(
+                    ReconciliationIssue(
+                        "DUPLICATE_REPORTING_DISPOSITION_FINALIZATION",
+                        reservation_id,
+                        "one reporting reservation is referenced by multiple final events",
                     )
                 )
         for run_id, run_events in events_by_run.items():
@@ -1043,6 +1632,7 @@ class DurableProspectiveRunLifecycle:
                 *nonces,
                 *finalizations,
                 *outcome_reservations,
+                *reporting_reservations,
                 *events,
             )
         ]
@@ -1062,6 +1652,7 @@ class DurableProspectiveRunLifecycle:
             nonce_reservation_count=len(nonces),
             authorization_finalization_count=len(finalizations),
             outcome_access_reservation_count=len(outcome_reservations),
+            reporting_disposition_reservation_count=len(reporting_reservations),
             event_count=len(events),
             state_counts=dict(sorted(state_counts.items())),
             issue_count=len(issues),
@@ -1309,6 +1900,7 @@ class DurableProspectiveRunLifecycle:
             or event.trace_id != run_id
         ):
             raise RunLifecyclePersistenceError("event traceability envelope conflicts")
+        _stored_event_time(payload.get("occurred_at"), "event.occurred_at")
         details = payload.get("details")
         if not isinstance(details, Mapping):
             raise RunLifecyclePersistenceError("event details are invalid")
@@ -1340,13 +1932,22 @@ class DurableProspectiveRunLifecycle:
         """Finish a valid event-first/index-second write interrupted before CAS."""
 
         sequence = _payload_int(lifecycle.payload, "event_count", minimum=1)
-        pending = self._store.get(
-            lifecycle.tenant_id,
-            EVENT_KIND,
-            _event_record_id(lifecycle.record_id, sequence),
-        )
-        if pending is None:
+        unindexed: list[tuple[int, LedgerRecord]] = []
+        for event in self._store.list(lifecycle.tenant_id, EVENT_KIND):
+            if event.payload.get("run_id") != lifecycle.record_id:
+                continue
+            event_sequence = _payload_int(event.payload, "sequence", minimum=0)
+            if event_sequence >= sequence:
+                unindexed.append((event_sequence, event))
+        if not unindexed:
             return lifecycle
+        if len(unindexed) != 1 or unindexed[0][0] != sequence:
+            observed = sorted(item[0] for item in unindexed)
+            raise RunLifecyclePersistenceError(
+                "pending event/index divergence; "
+                f"expected exactly sequence {sequence}, observed={observed}"
+            )
+        pending = unindexed[0][1]
         event_sha256 = self._verify_event_record(
             lifecycle, pending, expected_sequence=sequence
         )
@@ -1365,6 +1966,13 @@ class DurableProspectiveRunLifecycle:
             raise RunLifecyclePersistenceError(
                 "pending event predecessor does not match the lifecycle head"
             )
+        head = self._verified_current_head_event(lifecycle)
+        _require_nondecreasing_event_time(
+            previous=head.payload.get("occurred_at"),
+            candidate=payload.get("occurred_at"),
+            context="pending lifecycle transition",
+            stored=True,
+        )
         _assert_valid_transition(
             event_type=event_type,
             state_before=state_before,
@@ -1378,9 +1986,66 @@ class DurableProspectiveRunLifecycle:
                 "head_event_sha256": event_sha256,
             }
         )
+        candidate_lifecycle = lifecycle.with_payload(updated_payload)
+        subject_id = _payload_text(lifecycle.payload, "subject_id")
+        nonce_sha256 = _payload_text(lifecycle.payload, "run_nonce_sha256")
+        finalization_id = _payload_text(
+            lifecycle.payload,
+            "authorization_finalization_record_id",
+        )
+        subject_record = self._store.get(
+            lifecycle.tenant_id,
+            SUBJECT_RESERVATION_KIND,
+            _subject_record_id(subject_id),
+        )
+        nonce_record = self._store.get(
+            lifecycle.tenant_id,
+            NONCE_RESERVATION_KIND,
+            _nonce_record_id(nonce_sha256),
+        )
+        finalization_record = self._store.get(
+            lifecycle.tenant_id,
+            AUTHORIZATION_FINALIZATION_KIND,
+            finalization_id,
+        )
+        self._verify_lifecycle(
+            candidate_lifecycle,
+            subject_by_id=(
+                {}
+                if subject_record is None
+                else {subject_record.record_id: subject_record}
+            ),
+            nonce_by_id=(
+                {} if nonce_record is None else {nonce_record.record_id: nonce_record}
+            ),
+            finalization_by_id=(
+                {}
+                if finalization_record is None
+                else {finalization_record.record_id: finalization_record}
+            ),
+            outcome_reservation_by_id={
+                item.record_id: item
+                for item in self._store.list(
+                    lifecycle.tenant_id,
+                    OUTCOME_ACCESS_RESERVATION_KIND,
+                )
+            },
+            reporting_reservation_by_id={
+                item.record_id: item
+                for item in self._store.list(
+                    lifecycle.tenant_id,
+                    REPORTING_DISPOSITION_RESERVATION_KIND,
+                )
+            },
+            event_records=[
+                item
+                for item in self._store.list(lifecycle.tenant_id, EVENT_KIND)
+                if item.payload.get("run_id") == lifecycle.record_id
+            ],
+        )
         try:
             return self._store.put(
-                lifecycle.with_payload(updated_payload),
+                candidate_lifecycle,
                 expected_version=lifecycle.version,
             )
         except VersionConflict:
@@ -1415,6 +2080,7 @@ class DurableProspectiveRunLifecycle:
         tenant_id = _required_text(tenant_id, "tenant_id")
         subject_id = _required_text(subject_id, "subject_id")
         operation_id = _required_text(operation_id, "operation_id")
+        _stored_event_time(occurred_at, "event.occurred_at")
         details_copy = _json_copy(details)
         fingerprint = _operation_fingerprint(
             event_type=event_type,
@@ -1450,6 +2116,12 @@ class DurableProspectiveRunLifecycle:
                 event_sha256=_payload_text(prior.payload, "event_sha256"),
                 idempotent_replay=True,
             )
+        head = self._verified_current_head_event(record)
+        _require_nondecreasing_event_time(
+            previous=head.payload.get("occurred_at"),
+            candidate=occurred_at,
+            context=f"new {event_type} transition",
+        )
         current_state = _payload_text(record.payload, "current_state")
         if current_state not in allowed_from:
             raise RunLifecycleConflict(
@@ -1527,6 +2199,70 @@ class DurableProspectiveRunLifecycle:
             idempotent_replay=False,
         )
 
+    def _verified_current_head_event(self, lifecycle: LedgerRecord) -> LedgerRecord:
+        sequence = _payload_int(lifecycle.payload, "event_count", minimum=1) - 1
+        event = self._store.get(
+            lifecycle.tenant_id,
+            EVENT_KIND,
+            _event_record_id(lifecycle.record_id, sequence),
+        )
+        if event is None:
+            raise RunLifecyclePersistenceError("lifecycle head event is missing")
+        event_sha256 = self._verify_event_record(
+            lifecycle,
+            event,
+            expected_sequence=sequence,
+        )
+        if (
+            event_sha256 != lifecycle.payload.get("head_event_sha256")
+            or event.payload.get("state_after")
+            != lifecycle.payload.get("current_state")
+        ):
+            raise RunLifecyclePersistenceError(
+                "lifecycle head event does not match the current index"
+            )
+        return event
+
+    def _require_reporting_reservation_for_finalization(
+        self,
+        *,
+        tenant_id: str,
+        subject_id: str,
+        reservation_id: str,
+        operation_id: str,
+        disposition: str,
+        reason_code: str | None,
+        recorded_at: datetime,
+        final_artifact: ArtifactBinding,
+    ) -> ReportingDispositionReservation:
+        run_id = _run_id(subject_id)
+        if reservation_id != _reporting_disposition_reservation_id(run_id):
+            raise RunLifecycleConflict(
+                "reporting reservation identity is not canonical for the run"
+            )
+        record = self._store.get(
+            tenant_id,
+            REPORTING_DISPOSITION_RESERVATION_KIND,
+            reservation_id,
+        )
+        if record is None:
+            raise RunLifecycleNotFound("reporting disposition reservation not found")
+        reservation = _reporting_reservation_snapshot(record)
+        if (
+            reservation.run_id != run_id
+            or reservation.subject_id != subject_id
+            or reservation.operation_id != operation_id
+            or reservation.disposition != disposition
+            or reservation.reason_code != reason_code
+            or reservation.recorded_at != _utc_iso(recorded_at, "recorded_at")
+            or reservation.planned_artifact
+            != _artifact_dict(final_artifact, "final_artifact")
+        ):
+            raise RunLifecycleConflict(
+                "reporting finalization differs from its durable reservation"
+            )
+        return reservation
+
     def _require_lifecycle(self, tenant_id: str, subject_id: str) -> LedgerRecord:
         record = self._store.get(tenant_id, LIFECYCLE_KIND, _run_id(subject_id))
         if record is None:
@@ -1582,6 +2318,7 @@ class DurableProspectiveRunLifecycle:
         nonce_by_id: Mapping[str, LedgerRecord],
         finalization_by_id: Mapping[str, LedgerRecord],
         outcome_reservation_by_id: Mapping[str, LedgerRecord],
+        reporting_reservation_by_id: Mapping[str, LedgerRecord],
         event_records: list[LedgerRecord],
     ) -> None:
         payload = lifecycle.payload
@@ -1677,11 +2414,21 @@ class DurableProspectiveRunLifecycle:
             )
 
         previous = _GENESIS_PREVIOUS_SHA256
+        previous_occurred_at: object | None = None
         prior_state: str | None = None
         operation_ids: set[str] = set()
         for sequence in range(event_count):
             event = events_by_sequence[sequence]
             event_payload = event.payload
+            occurred_at = event_payload.get("occurred_at")
+            _stored_event_time(occurred_at, "event.occurred_at")
+            if previous_occurred_at is not None:
+                _require_nondecreasing_event_time(
+                    previous=previous_occurred_at,
+                    candidate=occurred_at,
+                    context="stored lifecycle replay",
+                    stored=True,
+                )
             if event.record_id != _event_record_id(lifecycle.record_id, sequence):
                 raise RunLifecyclePersistenceError("event record id is not canonical")
             if event_payload.get("schema") != EVENT_SCHEMA:
@@ -1722,23 +2469,90 @@ class DurableProspectiveRunLifecycle:
                     raise RunLifecyclePersistenceError(
                         "outcome-access reservation is missing"
                     )
-                reservation_payload = reservation.payload
+                reservation_snapshot = _outcome_reservation_snapshot(
+                    reservation
+                )
                 if (
-                    reservation_payload.get("schema")
-                    != OUTCOME_ACCESS_RESERVATION_SCHEMA
-                    or reservation_payload.get("run_id") != lifecycle.record_id
-                    or reservation_payload.get("subject_id") != subject_id
-                    or reservation_payload.get("operation_id") != operation_id
-                    or reservation_payload.get("accessed_at")
+                    reservation_snapshot.run_id != lifecycle.record_id
+                    or reservation_snapshot.subject_id != subject_id
+                    or reservation_snapshot.operation_id != operation_id
+                    or reservation_snapshot.accessed_at
                     != event_payload.get("occurred_at")
-                    or reservation_payload.get("terminal_event_sha256")
+                    or reservation_snapshot.terminal_state != state_before
+                    or reservation_snapshot.terminal_event_sha256
                     != details.get("terminal_event_sha256")
-                    or reservation_payload.get("terminal_artifact")
+                    or reservation_snapshot.terminal_artifact
                     != details.get("terminal_artifact")
-                    or reservation_payload.get("authority") != _authority()
+                    or reservation_snapshot.clock_observation
+                    != details.get("clock_observation")
+                    or reservation_snapshot.backend_durability_profile
+                    != payload.get("backend_durability_profile")
+                    or reservation_snapshot.authority != payload.get("authority")
                 ):
                     raise RunLifecyclePersistenceError(
                         "outcome-access reservation/event binding conflicts"
+                    )
+            if event_type in REPORTING_DISPOSITIONS:
+                details = event_payload.get("details")
+                if not isinstance(details, Mapping):
+                    raise RunLifecyclePersistenceError(
+                        "reporting event details are invalid"
+                    )
+                reservation_id = _required_text(
+                    details.get("reporting_reservation_id"),
+                    "reporting event reservation id",
+                )
+                reservation_record = reporting_reservation_by_id.get(
+                    reservation_id
+                )
+                if reservation_record is None:
+                    raise RunLifecyclePersistenceError(
+                        "reporting disposition reservation is missing"
+                    )
+                reservation = _reporting_reservation_snapshot(
+                    reservation_record
+                )
+                expected_disposition = (
+                    "PACKET"
+                    if event_type == PACKET_RECORDED
+                    else "NONREPORTING"
+                )
+                final_artifact_field = (
+                    "packet_artifact"
+                    if event_type == PACKET_RECORDED
+                    else "nonreporting_artifact"
+                )
+                if (
+                    reservation.run_id != lifecycle.record_id
+                    or reservation.subject_id != subject_id
+                    or reservation.operation_id != operation_id
+                    or reservation.disposition != expected_disposition
+                    or reservation.reason_code
+                    != (
+                        details.get("reason_code")
+                        if event_type == NONREPORTING_RECORDED
+                        else None
+                    )
+                    or reservation.recorded_at
+                    != event_payload.get("occurred_at")
+                    or reservation.parent_state != state_before
+                    or reservation.parent_head_sha256 != previous
+                    or reservation.request_sha256
+                    != details.get("reporting_request_sha256")
+                    or reservation.dependency_binding_sha256
+                    != details.get(
+                        "reporting_dependency_binding_sha256"
+                    )
+                    or reservation.planned_artifact
+                    != details.get(final_artifact_field)
+                    or reservation.clock_observation
+                    != details.get("reporting_clock_observation")
+                    or reservation.backend_durability_profile
+                    != payload.get("backend_durability_profile")
+                    or reservation.authority != payload.get("authority")
+                ):
+                    raise RunLifecyclePersistenceError(
+                        "reporting reservation/event binding conflicts"
                     )
             if sequence == 0:
                 if (
@@ -1777,6 +2591,7 @@ class DurableProspectiveRunLifecycle:
                     state_after=state_after,
                 )
             previous = expected_hash
+            previous_occurred_at = occurred_at
             prior_state = state_after
         if payload.get("head_event_sha256") != previous:
             raise RunLifecyclePersistenceError("lifecycle head digest conflicts")
@@ -1952,35 +2767,230 @@ def _outcome_reservation_snapshot(record: LedgerRecord) -> OutcomeAccessReservat
             "outcome-access reservation schema is invalid"
         )
     terminal_artifact = payload.get("terminal_artifact")
+    clock_observation = payload.get("clock_observation")
     profile = payload.get("backend_durability_profile")
     authority = payload.get("authority")
     if (
         not isinstance(terminal_artifact, Mapping)
+        or not isinstance(clock_observation, Mapping)
         or not isinstance(profile, Mapping)
         or not isinstance(authority, Mapping)
     ):
         raise RunLifecyclePersistenceError(
             "outcome-access reservation bindings are invalid"
         )
-    return OutcomeAccessReservation(
+    if payload.get("time_assurance") != "CALLER_OR_PROCESS_TIME_NOT_TRUSTED":
+        raise RunLifecyclePersistenceError(
+            "outcome-access reservation time assurance changed"
+        )
+    accessed_at = _payload_text(payload, "accessed_at")
+    if _utc_iso(_parse_utc(accessed_at), "outcome.accessed_at") != accessed_at:
+        raise RunLifecyclePersistenceError(
+            "outcome-access reservation timestamp is not canonical"
+        )
+    request_sha256 = (
+        None
+        if payload.get("request_sha256") is None
+        else _required_lower_sha256(
+            payload.get("request_sha256"),
+            "outcome.request_sha256",
+        )
+    )
+    reservation = OutcomeAccessReservation(
         tenant_id=record.tenant_id,
         run_id=_payload_text(payload, "run_id"),
         subject_id=_payload_text(payload, "subject_id"),
         reservation_id=record.record_id,
         operation_id=_payload_text(payload, "operation_id"),
-        accessed_at=_payload_text(payload, "accessed_at"),
+        request_sha256=request_sha256,
+        accessed_at=accessed_at,
         terminal_state=_payload_text(payload, "terminal_state"),
-        terminal_event_sha256=_payload_text(payload, "terminal_event_sha256"),
-        terminal_artifact=_json_copy(terminal_artifact),
+        terminal_event_sha256=_required_lower_sha256(
+            payload.get("terminal_event_sha256"),
+            "outcome.terminal_event_sha256",
+        ),
+        terminal_artifact=_artifact_mapping(
+            terminal_artifact,
+            "outcome.terminal_artifact",
+        ),
+        clock_observation=_clock_observation_dict(clock_observation),
         backend_durability_profile=_json_copy(profile),
         authority=_json_copy(authority),
     )
+    fingerprint_facts: dict[str, object] = {
+        "run_id": reservation.run_id,
+        "subject_id": reservation.subject_id,
+        "operation_id": reservation.operation_id,
+        "request_sha256": reservation.request_sha256,
+        "terminal_artifact": dict(reservation.terminal_artifact),
+    }
+    if reservation.request_sha256 is None:
+        fingerprint_facts["accessed_at"] = reservation.accessed_at
+    if payload.get("request_fingerprint_sha256") != _sha256_json(
+        fingerprint_facts
+    ):
+        raise RunLifecyclePersistenceError(
+            "outcome-access reservation request fingerprint conflicts"
+        )
+    if reservation.clock_observation["observed_at"] != reservation.accessed_at:
+        raise RunLifecyclePersistenceError(
+            "outcome-access clock observation differs from accessed_at"
+        )
+    if (
+        reservation.terminal_state not in {SUCCESS, FAILURE}
+        or authority != _authority()
+        or record.record_id != _outcome_access_reservation_id(reservation.run_id)
+        or record.parent_ids
+        != (
+            reservation.run_id,
+            _event_record_id(
+                reservation.run_id,
+                _payload_int(payload, "terminal_sequence", minimum=0),
+            ),
+        )
+        or record.source
+        != "cas_harness_v2_run_lifecycle.outcome_access_reservation"
+        or record.trace_id != reservation.run_id
+    ):
+        raise RunLifecyclePersistenceError(
+            "outcome-access reservation traceability envelope conflicts"
+        )
+    return reservation
+
+
+def _reporting_reservation_snapshot(
+    record: LedgerRecord,
+) -> ReportingDispositionReservation:
+    payload = record.payload
+    if payload.get("schema") != REPORTING_DISPOSITION_RESERVATION_SCHEMA:
+        raise RunLifecyclePersistenceError(
+            "reporting disposition reservation schema is invalid"
+        )
+    profile = payload.get("backend_durability_profile")
+    authority = payload.get("authority")
+    planned_artifact = payload.get("planned_artifact")
+    clock_observation = payload.get("clock_observation")
+    if (
+        not isinstance(profile, Mapping)
+        or not isinstance(authority, Mapping)
+        or not isinstance(planned_artifact, Mapping)
+        or not isinstance(clock_observation, Mapping)
+    ):
+        raise RunLifecyclePersistenceError(
+            "reporting disposition reservation assurances are invalid"
+        )
+    disposition = _payload_text(payload, "disposition")
+    if disposition not in REPORTING_ACTIONS:
+        raise RunLifecyclePersistenceError(
+            "reporting disposition reservation action is invalid"
+        )
+    if "reason_code" not in payload:
+        raise RunLifecyclePersistenceError(
+            "reporting disposition reservation reason binding is missing"
+        )
+    reason_value = payload.get("reason_code")
+    if disposition == "PACKET":
+        if reason_value is not None:
+            raise RunLifecyclePersistenceError(
+                "PACKET reporting reservation has a reason_code"
+            )
+        reason_code = None
+    else:
+        try:
+            reason_code = _required_text(reason_value, "reporting.reason_code")
+        except RunLifecycleValidationError as exc:
+            raise RunLifecyclePersistenceError(str(exc)) from exc
+    if payload.get("time_assurance") != "CALLER_OR_PROCESS_TIME_NOT_TRUSTED":
+        raise RunLifecyclePersistenceError(
+            "reporting disposition reservation time assurance changed"
+        )
+    if authority != _authority():
+        raise RunLifecyclePersistenceError(
+            "reporting disposition reservation authority changed"
+        )
+    recorded_at = _payload_text(payload, "recorded_at")
+    if _utc_iso(_parse_utc(recorded_at), "reporting.recorded_at") != recorded_at:
+        raise RunLifecyclePersistenceError(
+            "reporting disposition reservation timestamp is not canonical"
+        )
+    reservation = ReportingDispositionReservation(
+        tenant_id=record.tenant_id,
+        run_id=_payload_text(payload, "run_id"),
+        subject_id=_payload_text(payload, "subject_id"),
+        reservation_id=record.record_id,
+        operation_id=_payload_text(payload, "operation_id"),
+        disposition=disposition,
+        reason_code=reason_code,
+        request_sha256=_required_lower_sha256(
+            payload.get("request_sha256"), "reporting.request_sha256"
+        ),
+        dependency_binding_sha256=_required_lower_sha256(
+            payload.get("dependency_binding_sha256"),
+            "reporting.dependency_binding_sha256",
+        ),
+        planned_artifact=_artifact_mapping(
+            planned_artifact,
+            "reporting.planned_artifact",
+        ),
+        parent_state=_payload_text(payload, "parent_state"),
+        parent_head_sha256=_required_lower_sha256(
+            payload.get("parent_head_sha256"),
+            "reporting.parent_head_sha256",
+        ),
+        recorded_at=recorded_at,
+        clock_observation=_clock_observation_dict(clock_observation),
+        backend_durability_profile=_json_copy(profile),
+        authority=_json_copy(authority),
+    )
+    if record.record_id != _reporting_disposition_reservation_id(
+        reservation.run_id
+    ):
+        raise RunLifecyclePersistenceError(
+            "reporting disposition reservation identity is not canonical"
+        )
+    if reservation.clock_observation["observed_at"] != reservation.recorded_at:
+        raise RunLifecyclePersistenceError(
+            "reporting clock observation differs from recorded_at"
+        )
+    if (
+        record.parent_ids != (reservation.run_id,)
+        or record.source
+        != "cas_harness_v2_run_lifecycle.reporting_disposition_reservation"
+        or record.trace_id != reservation.run_id
+    ):
+        raise RunLifecyclePersistenceError(
+            "reporting disposition reservation traceability envelope conflicts"
+        )
+    allowed_parent_states = (
+        {OUTCOME_ACCESSED}
+        if reservation.disposition == "PACKET"
+        else {OUTCOME_ACCESSED, INDETERMINATE, REJECTED, EXPIRED}
+    )
+    if reservation.parent_state not in allowed_parent_states:
+        raise RunLifecyclePersistenceError(
+            "reporting disposition reservation parent state is invalid"
+        )
+    return reservation
 
 
 def _artifact_dict(value: ArtifactBinding, field: str) -> dict[str, object]:
     if not isinstance(value, ArtifactBinding):
         raise RunLifecycleValidationError(f"{field} must be an ArtifactBinding.")
     return value.as_dict()
+
+
+def _artifact_mapping(value: Mapping[str, Any], field: str) -> dict[str, object]:
+    if set(value) != {"artifact_id", "media_type", "sha256", "byte_length"}:
+        raise RunLifecyclePersistenceError(f"{field} shape is invalid")
+    try:
+        return ArtifactBinding(
+            artifact_id=_required_text(value.get("artifact_id"), f"{field}.artifact_id"),
+            media_type=_required_text(value.get("media_type"), f"{field}.media_type"),
+            sha256=_required_lower_sha256(value.get("sha256"), f"{field}.sha256"),
+            byte_length=value.get("byte_length"),
+        ).as_dict()
+    except RunLifecycleValidationError as exc:
+        raise RunLifecyclePersistenceError(str(exc)) from exc
 
 
 def _lease_fence_dict(value: Mapping[str, Any]) -> dict[str, object]:
@@ -2036,7 +3046,10 @@ def _clock_observation_dict(value: Mapping[str, Any]) -> dict[str, str]:
     assurance = _required_text(
         value.get("assurance"), "clock_observation.assurance"
     )
-    if assurance != "PROCESS_OR_INJECTED_CLOCK_NOT_TRUSTED":
+    if assurance not in {
+        "PROCESS_OR_INJECTED_CLOCK_NOT_TRUSTED",
+        "CALLER_DECLARED_TIME_NOT_TRUSTED",
+    }:
         raise RunLifecycleValidationError(
             "clock_observation cannot claim trusted time"
         )
@@ -2082,6 +3095,11 @@ def _outcome_access_reservation_id(run_id: str) -> str:
     # operation id or timestamp addresses this same create-only record and fails
     # as a conflict instead of leaving competing access reservations.
     return "h2outcome_" + run_id.removeprefix("h2run_")
+
+
+def _reporting_disposition_reservation_id(run_id: str) -> str:
+    # PACKET and NONREPORTING intentionally contend for this one create-only ID.
+    return "h2reporting_" + run_id.removeprefix("h2run_")
 
 
 def _event_record_id(run_id: str, sequence: int) -> str:
@@ -2142,6 +3160,35 @@ def _parse_utc(value: str) -> datetime:
     return parsed.astimezone(UTC)
 
 
+def _stored_event_time(value: object, field: str) -> datetime:
+    try:
+        text = _required_text(value, field)
+    except RunLifecycleValidationError as exc:
+        raise RunLifecyclePersistenceError(
+            f"stored {field} must be a canonical timestamp"
+        ) from exc
+    parsed = _parse_utc(text)
+    if _utc_iso(parsed, field) != text:
+        raise RunLifecyclePersistenceError(
+            f"stored {field} is not canonical UTC microsecond form"
+        )
+    return parsed
+
+
+def _require_nondecreasing_event_time(
+    *,
+    previous: object,
+    candidate: object,
+    context: str,
+    stored: bool = False,
+) -> None:
+    previous_at = _stored_event_time(previous, "previous event occurred_at")
+    candidate_at = _stored_event_time(candidate, "candidate event occurred_at")
+    if candidate_at < previous_at:
+        error = RunLifecyclePersistenceError if stored else RunLifecycleConflict
+        raise error(f"{context} cannot precede the verified lifecycle head")
+
+
 def _encode_nonce(value: bytes) -> str:
     return base64.urlsafe_b64encode(value).rstrip(b"=").decode("ascii")
 
@@ -2194,6 +3241,7 @@ __all__ = [
     "RunLifecycleExpired",
     "RunLifecycleMutation",
     "OutcomeAccessReservation",
+    "ReportingDispositionReservation",
     "RunLifecycleNotFound",
     "RunLifecyclePersistenceError",
     "RunLifecycleQuarantined",
@@ -2214,10 +3262,12 @@ __all__ = [
     "NONREPORTING_RECORDED",
     "TERMINAL_STATES",
     "REPORTING_DISPOSITIONS",
+    "REPORTING_ACTIONS",
     "LIFECYCLE_KIND",
     "EVENT_KIND",
     "SUBJECT_RESERVATION_KIND",
     "NONCE_RESERVATION_KIND",
     "AUTHORIZATION_FINALIZATION_KIND",
     "OUTCOME_ACCESS_RESERVATION_KIND",
+    "REPORTING_DISPOSITION_RESERVATION_KIND",
 ]

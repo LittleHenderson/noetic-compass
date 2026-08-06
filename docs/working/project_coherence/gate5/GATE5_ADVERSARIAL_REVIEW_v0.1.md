@@ -60,9 +60,9 @@ This review is bounded to the following current surfaces:
   `GATE5_REVIEW_MATRIX_v0.1.json`.
 
 The companion matrix schema is
-`project_coherence.gate5_review_matrix.v0.1`. It contains **49 criteria**:
+`project_coherence.gate5_review_matrix.v0.1`. It contains **50 criteria**:
 
-- 20 `IMPLEMENTED_AND_REGRESSION_TESTED`;
+- 21 `IMPLEMENTED_AND_REGRESSION_TESTED`;
 - 3 `IMPLEMENTED_AND_HASH_VERIFIED`;
 - 1 `PRESERVED_NEGATIVE_EVIDENCE`;
 - 10 `OPEN_ENGINEERING`;
@@ -278,6 +278,61 @@ explicit:
   `all_runs_reporting_disposed=false`; an issue-free result over that empty view
   is not positive evidence of execution absence.
 
+### Controller continuation adversarial review
+
+The successor closes a narrower missing HTTP tranche without changing the gate
+decision. Dedicated controller capabilities now admit exact outcome-seal,
+Packet-v2 attachment, and explicit-nonreporting envelopes. Review reproduced
+and retained regressions for the following failure classes:
+
+1. a fresh HTTP request could begin with a new in-memory chain that lacked an
+   already retained outcome event;
+2. Packet and nonreporting callers could race without a common create-only
+   disposition intent;
+3. a reporting reservation did not initially bind the exact planned final
+   artifact;
+4. request retries could observe different process times or poison a future
+   reservation with a backward declared time;
+5. raw indexed events could be read without first replaying the full lifecycle;
+6. continuation responses omitted fields needed to construct the next exact
+   request, encouraging callers to guess or resubmit server-owned bytes;
+7. duplicate security/entity headers and transfer encoding could create an
+   ambiguous signed-body boundary; and
+8. reconciliation returned an outer receipt ID paired with an inner report
+   digest and did not retain the strict per-run replay binding;
+9. nonreporting finalization could declare a reason different from the winning
+   reporting reservation while still reconciling as structurally valid;
+10. `RUNNING` and terminal events could move backward in declared time before
+   the already-protected outcome/reporting edges; and
+11. an event-first/index-second interruption was recoverable by an exact raw
+   registry retry but could fail before repair through the admitted lifecycle
+   service.
+
+The repaired path reloads the retained authorization, terminal, outcome, and
+dependency facts for each request; records one winning untrusted clock
+observation; uses a create-only `PACKET`-versus-`NONREPORTING` reservation bound
+to request, dependency plan, parent head, clock observation, and planned final
+artifact; rejects competing or mismatched finalization; and verifies the full
+lifecycle before event reads. Exact duplicate entity/security headers and any
+transfer encoding fail before authentication-nonce consumption. Reconciliation
+now returns a coherent content-addressed wrapper receipt and embeds separately
+hashed strict-run and configured-scope report identities. A forged report with
+a non-content-derived report ID is rejected before storage, and an evolved run
+gets a new receipt while the prior immutable snapshot remains verifiable. The
+winning nonreporting reason is now reservation-bound (`null` is required for a
+Packet reservation), all event transitions and stored-history replay enforce
+canonical nondecreasing time, and controller reads repair exactly one verified
+pending successor while corrupt or divergent successors fail closed.
+
+The route-to-real-adapter regression traverses authorization, consumption,
+output, terminal, outcome, and explicit nonreporting through the FastAPI
+boundary while the feature remains default-dark. This is still local software
+evidence. The lower registry outcome reservation does not yet carry a separate
+planned-final-artifact intent, output-retention response replay is not yet
+distinguished, the three non-success/failure terminal-disposition routes remain
+unwired, and provider, cross-host, host-loss, trusted-time, independent WORM,
+off-registry, and scientific authority remain absent.
+
 The route hashes `job_id` into its prospective run ID. The lifecycle hashes
 `subject_id`, while the lifecycle service separately requires
 `subject_id == authorization_id`. The admitted adapter now enforces the
@@ -305,11 +360,11 @@ The current bounded local receipts are **17/17** for the worker-terminal bridge
 (`fa6c985cd6caa734034e006bb4baf6be9d02269d7312bee7355e9c3833759c51`),
 **38/38** for the callback/Object-Lock seam
 (`d3eaf533fedb5b03168200aa399ac53a6e2a6f22874ebabeaecefb227400778d`),
-**76/76** for the prospective lifecycle/SQLite/default-dark route suite
-(`5f1197d70b7afad39d01bebeb4e7397c3e075d74a5bffa5305c62a0edb3c7d84`),
-and **80/80** for packaging, snapshot, envelope, context, admitted-adapter,
+**97/97** for the prospective lifecycle/SQLite/default-dark route suite
+(`727f58cc716f5add0bab8fb965cc1e6b68245e60db6c160a33af96ed9ec5e5f9`),
+and **90/90** for packaging, snapshot, envelope, context, admitted-adapter,
 and bounded-reconciliation tests
-(`2e45fcd920e0b52916a7341d2ff766fdc9f7911ec2cb11c27bc3ff8fec3815fb`).
+(`761038779e00511179d4fc5aa3522829d9bdefb37c231061d04fb3aad541f733`).
 They are `LOCAL_UNATTESTED_HOST_REGRESSION`, not live or scientific evidence.
 
 ## Live-worker adverse evidence and bounded repairs
@@ -614,10 +669,12 @@ exact-wrapper service now map the current FleetJob shape through local
 authorization, consumption, terminal, outcome-access, Packet-v2/nonreporting,
 and reconciliation candidates. The admitted packaged adapter now joins exact
 Fleet snapshots, joint run identity, active-lease validation, request-bound
-terminal intake, lifecycle replay, and a controller reconciliation report.
-Three registry terminal states still have no admitted worker route,
-reconciliation does not enumerate orphan wrappers, and the route has no
-explicit outcome-seal adapter. Main refuses enabled startup without the
+terminal intake, controller-only outcome/Packet/nonreporting continuations,
+strict lifecycle replay, and a bounded reconciliation report. Three registry
+terminal states still have no admitted worker route, reconciliation does not
+enumerate every orphan wrapper or off-registry run, and lower-level outcome
+finalization still lacks a separately immutable planned-artifact intent. Main
+refuses enabled startup without the
 byte-verified root package, exact adapter profile, shared state, immutable
 repository, and fleet-auth ports. This has been constructed only in local tests;
 no provider-backed application startup has passed. Trusted time, live
@@ -685,8 +742,8 @@ The minimum defensible order is:
 
 1. preserve the verifier-native 150-test/99-subtest Harness-v2,
    30-test/38-subtest worker-protocol, 17/17 dark-bridge, 38/38
-   callback/Object-Lock seam, 76/76 prospective lifecycle/SQLite/dark-route,
-   80/80 admitted-adapter/configured-reconciliation,
+   callback/Object-Lock seam, 97/97 prospective lifecycle/SQLite/dark-route,
+   90/90 admitted-adapter/configured-reconciliation,
    32/32 focused numeric, 364/364 complete-worker, and 78/78
    API/launcher/fleet/state receipts, the earlier 290/290 checkpoint, and every
    counterexample, including the current ephemeral same-process and retained
@@ -698,8 +755,9 @@ The minimum defensible order is:
    evidence, and revalidate the exact model and hook contract under real
    GPU/autocast/compiled-hook behavior;
 3. independently review, reproduce, and provider-start the packaged
-   worker-to-kernel candidate; specify and admit explicit outcome sealing and
-   Packet/nonreporting dependency routes, then replace configured-scope
+   worker-to-kernel candidate; independently replay the admitted outcome and
+   Packet/nonreporting routes, finish the remaining terminal dispositions and
+   lower-level outcome-finalization intent, then replace configured-scope
    reconciliation with provider-backed cross-host completeness before any live
    authorization;
 4. replace the same-host SQLite/synthetic-wrapper seams with independently

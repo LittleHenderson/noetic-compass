@@ -195,7 +195,7 @@ _FLEET_SERVICE_CALLBACK_PATTERNS = tuple(
         (
             rf"^/api/cas-harness/audit/distributed/session/{_FLEET_V2_CALLBACK_ID}"
             rf"/fleet/v2/job/{_FLEET_V2_CALLBACK_ID}"
-            r"/(?:authorization|packet|nonreporting|reconcile)$"
+            r"/(?:authorization|outcome|packet|nonreporting|reconcile)$"
         ),
         (
             rf"^/api/cas-harness/audit/distributed/session/{_FLEET_V2_CALLBACK_ID}"

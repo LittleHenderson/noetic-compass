@@ -95,9 +95,17 @@ live or independent authority:
 3. `cas_harness_v2_lifecycle_service.py` retains exact inner carrier bytes in
    typed repository wrappers; server-builds consumption and nonreporting
    envelopes; verifies retained output bodies and transitive packet references;
-   reserves outcome-access time before mutating the chain; and reconciles the
-   event-bound authorization, consumption, terminal, outcome, and
-   packet/nonreporting wrappers plus packet-referenced bodies. Packet attachment
+   reserves one untrusted outcome-access time before mutating the chain; and
+   uses a separate create-only reporting reservation to bind the request,
+   dependency plan, parent head, clock observation, and exact planned Packet or
+   nonreporting artifact before finalization. A nonreporting reservation also
+   binds its closed reason code, while a Packet reservation requires a null
+   reason. Lifecycle transitions and full replay enforce canonical
+   nondecreasing event time. Reads repair exactly one verified event-first/
+   index-second pending successor and reject corrupt or divergent successors.
+   It reconciles the event-bound
+   authorization, consumption, terminal, outcome, and packet/nonreporting
+   wrappers plus packet-referenced bodies. Packet attachment
    validates all supplied dependency bytes and the structural Packet result
    before its first repository write. A later dependency or Packet storage
    failure can nevertheless leave already written wrappers outside the event
@@ -106,8 +114,13 @@ live or independent authority:
    attest the synthetic outer wrapper in current tests, not the inner carrier
    directly or a live independent Object-Lock provider.
 4. `cas_harness_v2_worker_protocol.py` defines private exact-body HTTP handlers
-   for authorization, output retention, consumption, terminal, packet,
-   nonreporting, and reconciliation. Every accepted route request creates a
+   for authorization, output retention, consumption, terminal, outcome sealing,
+   Packet attachment, explicit nonreporting, and reconciliation. The three
+   controller continuation operations have distinct capabilities and exact
+   dependency envelopes; Packet requests cannot resubmit server-owned chain,
+   output, or terminal bytes. Ambiguous duplicate security/entity headers and
+   all transfer-encoding requests fail before nonce consumption. Every accepted
+   route request creates a
    durable authentication nonce row binding the observed method, exact path,
    job/run identity, authorization digest when applicable, and carrier
    digest/length. That row is distinct from the bridge's immutable
@@ -115,7 +128,12 @@ live or independent authority:
    The admitted packaged adapter passes the exact terminal carrier through the
    strict lifecycle/bridge loaders and preserves the request-bound intake
    receipt through terminal acceptance. Customer JWT fallback is forbidden.
-   These are bounded software bindings, not live-worker authentication.
+   Outcome replay reconstructs a fresh request-local chain from retained server
+   facts, not from caller-resubmitted history. Reconciliation first performs a
+   strict per-run replay and then retains a content-addressed wrapper binding
+   that run head and artifact inventory to the separately limited configured-
+   scope report. These are bounded software bindings, not live-worker
+   authentication, rollback resistance, or host-loss recovery.
 
 The admitted adapter now hands the raw lease token only to the lifecycle's
 exact active-lease validator, which checks the current process-local
@@ -139,7 +157,9 @@ byte-verified packaged `cas_harness_v2` mirror and startup rejects any other
 adapter type or admission profile. Local import, factory, and startup-boundary
 tests establish constructibility only. No positive provider-backed application
 startup, enabled deployment, public/product route, or live execution has been
-authorized or observed. Explicit HTTP outcome sealing, live Fleet execution,
+authorized or observed. The admitted HTTP outcome/Packet/nonreporting tranche
+is locally tested but remains default-dark. HTTP exposure for the lower
+`INDETERMINATE`/`REJECTED`/`EXPIRED` dispositions, live Fleet execution,
 trusted time, and independently controlled storage remain unfinished.
 
 ## Current bounded receipts
@@ -191,16 +211,16 @@ The separate durable fleet-callback and fake Object-Lock seam suite passes
 
 `D3EAF533FEDB5B03168200AA399AC53A6E2A6F22874EBABEAECEFB227400778D`
 
-The prospective lifecycle, SQLite, and default-dark route suite passes 76/76
+The prospective lifecycle, SQLite, and default-dark route suite passes 97/97
 with no subtests. Its canonical node-ID digest is:
 
-`5F1197D70B7AFAD39D01BEBEB4E7397C3E075D74A5BFFA5305C62A0EDB3C7D84`
+`727F58CC716F5ADD0BAB8FB965CC1E6B68245E60DB6C160A33AF96ED9EC5E5F9`
 
 The packaging, snapshot, envelope, context, admitted-adapter, and bounded-
-reconciliation suite passes 80/80 with no subtests. Its canonical node-ID
+reconciliation suite passes 90/90 with no subtests. Its canonical node-ID
 digest is:
 
-`2E45FCD920E0B52916A7341D2FF766FDC9F7911EC2CB11C27BC3FF8FEC3815FB`
+`761038779E00511179D4FC5AA3522829D9BDEFB37C231061D04FB3AAD541F733`
 
 The bridge stores one retry-stable terminal wrapper/index and binds each
 server-authored *terminal* callback-attempt receipt in a separate
@@ -219,7 +239,7 @@ independently retained inner bytes, no provider-backed startup has passed, and
 no live experiment or claim authority is created.
 
 The 364-test worker, 78-test API/launcher/fleet/state, 30-test worker-protocol,
-17-test bridge, 38-test durable-seam, 76-test prospective-lifecycle, and 80-test
+17-test bridge, 38-test durable-seam, 97-test prospective-lifecycle, and 90-test
 admitted-adapter/reconciliation results are
 `LOCAL_UNATTESTED_HOST_REGRESSION` observations. Each suite now binds its
 collected, started, and finished node-ID sequences plus exact

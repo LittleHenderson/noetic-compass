@@ -3,11 +3,9 @@
 This module is the narrow join between authenticated server-observed HTTP
 intake, server-derived FleetJob configuration, the immutable pre-nonce route
 context, the prospective lifecycle service, and bounded configured-scope
-reconciliation.  It deliberately implements only the operations whose exact
-request semantics are established here: authorization issuance, authorization
-consumption, output retention, a strict terminal callback, and reconciliation.
-Evidence-packet, explicit nonreporting, and outcome-seal HTTP operations remain
-unavailable until their complete dependency envelopes are specified.
+reconciliation.  The admitted operation set also includes server-timed outcome
+sealing plus mutually exclusive packet or explicit nonreporting disposition
+through exact dependency envelopes and a create-only reporting reservation.
 
 Nothing in this adapter establishes trusted time, model execution, scientific
 validity, product readiness, licensing, or disclosure authority.
@@ -26,7 +24,10 @@ from cas_harness_v2 import canonical_json_bytes
 
 from api.routes.cas_harness_v2_worker_protocol import (
     CONSUMPTION_MEDIA_TYPE,
+    EVIDENCE_PACKET_MEDIA_TYPE,
     ISSUE_REQUEST_MEDIA_TYPE,
+    NONREPORTING_MEDIA_TYPE,
+    OUTCOME_SEAL_MEDIA_TYPE,
     OUTPUT_RETENTION_MEDIA_TYPE,
     RECONCILIATION_MEDIA_TYPE,
     TERMINAL_MEDIA_TYPE,
@@ -39,6 +40,9 @@ from api.routes.cas_harness_v2_worker_protocol import (
 from api.routes.cas_harness_v2_worker_protocol_dto import (
     AuthorizationRouteResultDTO,
     ConsumptionRouteResultDTO,
+    EvidencePacketRouteResultDTO,
+    NonreportingRouteResultDTO,
+    OutcomeSealRouteResultDTO,
     OutputRetentionRouteResultDTO,
     ReconciliationRouteResultDTO,
     TerminalRouteResultDTO,
@@ -74,7 +78,10 @@ from api.services.cas_harness_v2_route_envelopes import (
     RouteEnvelopeError,
     load_authorization_request_envelope,
     load_consumption_request_envelope,
+    load_nonreporting_request_envelope,
+    load_outcome_seal_request_envelope,
     load_output_retention_envelope,
+    load_packet_attachment_request_envelope,
     load_reconciliation_request,
 )
 from api.services.cas_harness_v2_reconciliation_report import (
@@ -95,7 +102,12 @@ from api.services.cas_harness_v2_run_context import (
     StoredHarnessV2RunContext,
 )
 from api.services.cas_harness_v2_run_lifecycle import (
+    FAILURE,
+    NONREPORTING_RECORDED,
+    OUTCOME_ACCESSED,
+    PACKET_RECORDED,
     RUNNING,
+    SUCCESS,
     DurableProspectiveRunLifecycle,
     RunLifecycleConflict,
     RunLifecycleError,
@@ -128,11 +140,24 @@ _OPERATION_CONTRACTS: dict[str, tuple[str, str, bool, bool]] = {
     "retain_output": ("output", "submit_evidence", True, True),
     "consume_authorization": ("consume", "lease_job", True, True),
     "accept_terminal": ("terminal", "submit_receipt", True, True),
+    "seal_outcome": ("outcome", "seal_outcome", True, False),
+    "attach_evidence_packet": (
+        "packet",
+        "attach_evidence_packet",
+        True,
+        False,
+    ),
+    "record_nonreporting": (
+        "nonreporting",
+        "record_nonreporting",
+        True,
+        False,
+    ),
     "reconcile_run": ("reconcile", "verify_fleet", True, False),
 }
 
 RECONCILIATION_WRAPPER_SCHEMA = (
-    "cas_harness_v2.reconciliation_report_storage_wrapper.v1"
+    "cas_harness_v2.reconciliation_report_storage_wrapper.v2"
 )
 RECONCILIATION_REPORT_MEDIA_TYPE = (
     "application/vnd.cas-harness.configured-scope-reconciliation+json"
@@ -521,9 +546,329 @@ class AdmittedHarnessV2WorkerProtocolAdapter:
                 lease_token=lease_token,
                 bound_intake_receipt=bound_intake_receipt,
             )
+            terminal_event = self._terminal_event(
+                tenant_id=tenant_id,
+                subject_id=job_id,
+            )
+            terminal_details = terminal_event.get("details")
+            if not isinstance(terminal_details, Mapping):
+                raise WorkerProtocolRouteUnavailable(
+                    "Terminal lifecycle continuation facts are unavailable."
+                )
             return TerminalRouteResultDTO(
                 receipt_id=result.terminal_storage.artifact_id,
                 receipt_sha256=result.terminal_storage.sha256,
+                idempotent_replay=result.idempotent_replay,
+                receipt_media_type=result.terminal_storage.media_type,
+                receipt_byte_length=result.terminal_storage.byte_length,
+                terminal_status=_required_terminal_status(
+                    terminal_details.get("terminal_status")
+                ),
+                terminal_event_sha256=_event_sha256_upper(terminal_event),
+            )
+        except Exception as exc:
+            self._raise_route_error(exc)
+
+    def seal_outcome(
+        self,
+        *,
+        tenant_id: str,
+        account_id: str,
+        audit_id: str,
+        fleet_id: str,
+        job_id: str,
+        run_id: str,
+        worker_id: str | None,
+        raw_body: bytes,
+        body_media_type: str,
+        authenticated_callback: FleetServiceAuthenticatedCallback,
+        bound_intake_receipt: FleetServiceBoundIntakeReceipt,
+    ) -> OutcomeSealRouteResultDTO:
+        try:
+            binding = self._verify_intake(
+                operation="seal_outcome",
+                tenant_id=tenant_id,
+                account_id=account_id,
+                audit_id=audit_id,
+                fleet_id=fleet_id,
+                job_id=job_id,
+                run_id=run_id,
+                worker_id=worker_id,
+                raw_body=raw_body,
+                body_media_type=body_media_type,
+                authenticated_callback=authenticated_callback,
+                bound_intake_receipt=bound_intake_receipt,
+                lease_token=None,
+            )
+            request_envelope = load_outcome_seal_request_envelope(raw_body)
+            context, authorization_envelope, _authorization = (
+                self._load_existing_controller_run(
+                    tenant_id=tenant_id,
+                    account_id=account_id,
+                    audit_id=audit_id,
+                    fleet_id=fleet_id,
+                    job_id=job_id,
+                    run_id=run_id,
+                    worker_id=worker_id,
+                    authorization_sha256=binding.authorization_sha256,
+                )
+            )
+            del context
+            terminal_event = self._terminal_event(
+                tenant_id=tenant_id,
+                subject_id=job_id,
+            )
+            self._verify_terminal_parent(
+                terminal_event=terminal_event,
+                terminal_status=request_envelope.terminal_status,
+                terminal_artifact=request_envelope.terminal_artifact,
+                terminal_event_sha256=request_envelope.terminal_event_sha256,
+                expected_parent_head_sha256=(
+                    request_envelope.expected_lifecycle_head_sha256
+                ),
+            )
+            result = self._lifecycle_service.seal_outcome_from_route(
+                tenant_id=tenant_id,
+                account_id=account_id,
+                subject_id=job_id,
+                chain=authorization_envelope.chain,
+                operation_id=_operation_id("outcome", job_id),
+                outcome_request_sha256=binding.carrier_sha256.lower(),
+            )
+            outcome_event = self._state_event(
+                tenant_id=tenant_id,
+                subject_id=job_id,
+                expected_state=OUTCOME_ACCESSED,
+            )
+            return OutcomeSealRouteResultDTO(
+                receipt_id=result.outcome_storage.artifact_id,
+                receipt_sha256=result.outcome_storage.sha256,
+                idempotent_replay=result.idempotent_replay,
+                accessed_at=_canonical_route_time(result.accessed_at),
+                sealed_preregistration_chain_sha256=(
+                    authorization_envelope.chain.chain_sha256.upper()
+                ),
+                receipt_media_type=result.outcome_storage.media_type,
+                receipt_byte_length=result.outcome_storage.byte_length,
+                outcome_event_sha256=_event_sha256_upper(outcome_event),
+            )
+        except Exception as exc:
+            self._raise_route_error(exc)
+
+    def attach_evidence_packet(
+        self,
+        *,
+        tenant_id: str,
+        account_id: str,
+        audit_id: str,
+        fleet_id: str,
+        job_id: str,
+        run_id: str,
+        worker_id: str | None,
+        raw_body: bytes,
+        body_media_type: str,
+        authenticated_callback: FleetServiceAuthenticatedCallback,
+        bound_intake_receipt: FleetServiceBoundIntakeReceipt,
+    ) -> EvidencePacketRouteResultDTO:
+        try:
+            binding = self._verify_intake(
+                operation="attach_evidence_packet",
+                tenant_id=tenant_id,
+                account_id=account_id,
+                audit_id=audit_id,
+                fleet_id=fleet_id,
+                job_id=job_id,
+                run_id=run_id,
+                worker_id=worker_id,
+                raw_body=raw_body,
+                body_media_type=body_media_type,
+                authenticated_callback=authenticated_callback,
+                bound_intake_receipt=bound_intake_receipt,
+                lease_token=None,
+            )
+            request_envelope = load_packet_attachment_request_envelope(raw_body)
+            _context, authorization_envelope, _authorization = (
+                self._load_existing_controller_run(
+                    tenant_id=tenant_id,
+                    account_id=account_id,
+                    audit_id=audit_id,
+                    fleet_id=fleet_id,
+                    job_id=job_id,
+                    run_id=run_id,
+                    worker_id=worker_id,
+                    authorization_sha256=binding.authorization_sha256,
+                )
+            )
+            preregistration_artifact_bodies = _authorization_artifact_bodies(
+                authorization_envelope
+            )
+            terminal_event = self._terminal_event(
+                tenant_id=tenant_id,
+                subject_id=job_id,
+            )
+            self._verify_terminal_parent(
+                terminal_event=terminal_event,
+                terminal_status=SUCCESS,
+                terminal_artifact=request_envelope.terminal_artifact,
+                terminal_event_sha256=None,
+                expected_parent_head_sha256=None,
+            )
+            outcome_event = self._state_event(
+                tenant_id=tenant_id,
+                subject_id=job_id,
+                expected_state=OUTCOME_ACCESSED,
+            )
+            self._verify_outcome_parent(
+                outcome_event=outcome_event,
+                outcome_artifact=request_envelope.outcome_access_artifact,
+                expected_parent_head_sha256=(
+                    request_envelope.expected_lifecycle_head_sha256
+                ),
+            )
+            outcome_storage = (
+                self._lifecycle_service.replay_recorded_outcome_for_route(
+                    tenant_id=tenant_id,
+                    account_id=account_id,
+                    subject_id=job_id,
+                    chain=authorization_envelope.chain,
+                )
+            )
+            if not _route_binding_matches_receipt(
+                request_envelope.outcome_access_artifact,
+                outcome_storage,
+            ):
+                raise WorkerProtocolRouteConflict(
+                    "Outcome dependency differs from retained exact bytes."
+                )
+            if not hmac.compare_digest(
+                request_envelope.sealed_preregistration_chain_sha256,
+                authorization_envelope.chain.chain_sha256.upper(),
+            ):
+                raise WorkerProtocolRouteConflict(
+                    "Sealed preregistration chain digest differs."
+                )
+            result = self._lifecycle_service.attach_evidence_packet(
+                tenant_id=tenant_id,
+                account_id=account_id,
+                subject_id=job_id,
+                chain=authorization_envelope.chain,
+                operation_id=_operation_id("packet", job_id),
+                packet_raw=request_envelope.packet.raw_bytes,
+                artifact_bodies={
+                    item.artifact_id: item.raw_bytes
+                    for item in request_envelope.artifact_bodies
+                    if item.artifact_id is not None
+                },
+                reporting_request_sha256=binding.carrier_sha256.lower(),
+                preregistration_artifact_bodies=preregistration_artifact_bodies,
+                enforce_route_dependency_partition=True,
+            )
+            return EvidencePacketRouteResultDTO(
+                receipt_id=result.packet_storage.artifact_id,
+                receipt_sha256=result.packet_storage.sha256,
+                idempotent_replay=result.idempotent_replay,
+            )
+        except Exception as exc:
+            self._raise_route_error(exc)
+
+    def record_nonreporting(
+        self,
+        *,
+        tenant_id: str,
+        account_id: str,
+        audit_id: str,
+        fleet_id: str,
+        job_id: str,
+        run_id: str,
+        worker_id: str | None,
+        raw_body: bytes,
+        body_media_type: str,
+        authenticated_callback: FleetServiceAuthenticatedCallback,
+        bound_intake_receipt: FleetServiceBoundIntakeReceipt,
+    ) -> NonreportingRouteResultDTO:
+        try:
+            binding = self._verify_intake(
+                operation="record_nonreporting",
+                tenant_id=tenant_id,
+                account_id=account_id,
+                audit_id=audit_id,
+                fleet_id=fleet_id,
+                job_id=job_id,
+                run_id=run_id,
+                worker_id=worker_id,
+                raw_body=raw_body,
+                body_media_type=body_media_type,
+                authenticated_callback=authenticated_callback,
+                bound_intake_receipt=bound_intake_receipt,
+                lease_token=None,
+            )
+            request_envelope = load_nonreporting_request_envelope(raw_body)
+            _context, authorization_envelope, _authorization = (
+                self._load_existing_controller_run(
+                    tenant_id=tenant_id,
+                    account_id=account_id,
+                    audit_id=audit_id,
+                    fleet_id=fleet_id,
+                    job_id=job_id,
+                    run_id=run_id,
+                    worker_id=worker_id,
+                    authorization_sha256=binding.authorization_sha256,
+                )
+            )
+            terminal_event = self._terminal_event(
+                tenant_id=tenant_id,
+                subject_id=job_id,
+            )
+            self._verify_terminal_parent(
+                terminal_event=terminal_event,
+                terminal_status=request_envelope.terminal_status,
+                terminal_artifact=request_envelope.terminal_artifact,
+                terminal_event_sha256=None,
+                expected_parent_head_sha256=None,
+            )
+            outcome_event = self._optional_state_event(
+                tenant_id=tenant_id,
+                subject_id=job_id,
+                expected_state=OUTCOME_ACCESSED,
+            )
+            if request_envelope.outcome_access_artifact is None:
+                if outcome_event is not None:
+                    raise WorkerProtocolRouteConflict(
+                        "No-outcome nonreporting request has an outcome parent."
+                    )
+                expected_parent = terminal_event
+            else:
+                if outcome_event is None:
+                    raise WorkerProtocolRouteConflict(
+                        "Strict-terminal nonreporting has no outcome parent."
+                    )
+                self._verify_outcome_parent(
+                    outcome_event=outcome_event,
+                    outcome_artifact=request_envelope.outcome_access_artifact,
+                    expected_parent_head_sha256=(
+                        request_envelope.expected_lifecycle_head_sha256
+                    ),
+                )
+                expected_parent = outcome_event
+            if not hmac.compare_digest(
+                request_envelope.expected_lifecycle_head_sha256,
+                _event_sha256_upper(expected_parent),
+            ):
+                raise WorkerProtocolRouteConflict(
+                    "Nonreporting parent head differs from the retained lifecycle."
+                )
+            result = self._lifecycle_service.record_nonreporting(
+                tenant_id=tenant_id,
+                account_id=account_id,
+                subject_id=job_id,
+                chain=authorization_envelope.chain,
+                operation_id=_operation_id("nonreporting", job_id),
+                reason_code=request_envelope.reason_code,
+                reporting_request_sha256=binding.carrier_sha256.lower(),
+            )
+            return NonreportingRouteResultDTO(
+                receipt_id=result.nonreporting_storage.artifact_id,
+                receipt_sha256=result.nonreporting_storage.sha256,
                 idempotent_replay=result.idempotent_replay,
             )
         except Exception as exc:
@@ -563,16 +908,28 @@ class AdmittedHarnessV2WorkerProtocolAdapter:
                 lease_token=None,
             )
             load_reconciliation_request(raw_body)
-            self._load_existing_controller_run(
+            _context, authorization_envelope, _authorization = (
+                self._load_existing_controller_run(
+                    tenant_id=tenant_id,
+                    account_id=account_id,
+                    audit_id=audit_id,
+                    fleet_id=fleet_id,
+                    job_id=job_id,
+                    run_id=run_id,
+                    worker_id=worker_id,
+                    authorization_sha256=binding.authorization_sha256,
+                )
+            )
+            per_run = self._lifecycle_service.reconcile_run(
                 tenant_id=tenant_id,
                 account_id=account_id,
-                audit_id=audit_id,
-                fleet_id=fleet_id,
-                job_id=job_id,
-                run_id=run_id,
-                worker_id=worker_id,
-                authorization_sha256=binding.authorization_sha256,
+                subject_id=job_id,
+                chain=authorization_envelope.chain,
             )
+            if not per_run.structurally_valid:
+                raise WorkerProtocolRouteUnavailable(
+                    "Strict per-run lifecycle replay reported integrity issues."
+                )
             report = self._reconciliation_reports.reconcile(
                 tenant_id=tenant_id,
                 account_id=account_id,
@@ -587,22 +944,143 @@ class AdmittedHarnessV2WorkerProtocolAdapter:
                 fleet_id=fleet_id,
                 job_id=job_id,
             )
-            receipt_id, idempotent_replay = self._retain_reconciliation_report(
+            strict_run_binding = self._strict_run_reconciliation_binding(
+                per_run=per_run,
                 report=report,
+                tenant_id=tenant_id,
+                job_id=job_id,
+                run_id=run_id,
+            )
+            receipt_id, receipt_sha256, idempotent_replay = (
+                self._retain_reconciliation_report(
+                report=report,
+                strict_run_binding=strict_run_binding,
                 tenant_id=tenant_id,
                 account_id=account_id,
                 audit_id=audit_id,
                 fleet_id=fleet_id,
                 job_id=job_id,
                 run_id=run_id,
+                )
             )
             return ReconciliationRouteResultDTO(
                 receipt_id=receipt_id,
-                receipt_sha256=report.sha256,
+                receipt_sha256=receipt_sha256,
                 idempotent_replay=idempotent_replay,
             )
         except Exception as exc:
             self._raise_route_error(exc)
+
+    def _terminal_event(
+        self,
+        *,
+        tenant_id: str,
+        subject_id: str,
+    ) -> Mapping[str, Any]:
+        matches = tuple(
+            event
+            for event in self._lifecycle_registry.list_events(
+                tenant_id=tenant_id,
+                subject_id=subject_id,
+            )
+            if event.get("event_type") == "TERMINAL_RECORDED"
+        )
+        if len(matches) != 1:
+            raise WorkerProtocolRouteConflict(
+                "Exactly one terminal lifecycle parent is required."
+            )
+        return matches[0]
+
+    def _optional_state_event(
+        self,
+        *,
+        tenant_id: str,
+        subject_id: str,
+        expected_state: str,
+    ) -> Mapping[str, Any] | None:
+        matches = tuple(
+            event
+            for event in self._lifecycle_registry.list_events(
+                tenant_id=tenant_id,
+                subject_id=subject_id,
+            )
+            if event.get("state_after") == expected_state
+        )
+        if len(matches) > 1:
+            raise WorkerProtocolRouteUnavailable(
+                "Lifecycle contains duplicate state parents."
+            )
+        return matches[0] if matches else None
+
+    def _state_event(
+        self,
+        *,
+        tenant_id: str,
+        subject_id: str,
+        expected_state: str,
+    ) -> Mapping[str, Any]:
+        event = self._optional_state_event(
+            tenant_id=tenant_id,
+            subject_id=subject_id,
+            expected_state=expected_state,
+        )
+        if event is None:
+            raise WorkerProtocolRouteConflict(
+                f"Lifecycle state parent {expected_state} is unavailable."
+            )
+        return event
+
+    @staticmethod
+    def _verify_terminal_parent(
+        *,
+        terminal_event: Mapping[str, Any],
+        terminal_status: str,
+        terminal_artifact: Any,
+        terminal_event_sha256: str | None,
+        expected_parent_head_sha256: str | None,
+    ) -> None:
+        details = terminal_event.get("details")
+        if (
+            not isinstance(details, Mapping)
+            or details.get("terminal_status") != terminal_status
+            or terminal_event.get("state_after") != terminal_status
+            or not _route_binding_matches_mapping(
+                terminal_artifact,
+                details.get("terminal_artifact"),
+            )
+        ):
+            raise WorkerProtocolRouteConflict(
+                "Terminal dependency differs from retained lifecycle facts."
+            )
+        observed = _event_sha256_upper(terminal_event)
+        for expected in (terminal_event_sha256, expected_parent_head_sha256):
+            if expected is not None and not hmac.compare_digest(expected, observed):
+                raise WorkerProtocolRouteConflict(
+                    "Terminal event dependency differs from the retained lifecycle."
+                )
+
+    @staticmethod
+    def _verify_outcome_parent(
+        *,
+        outcome_event: Mapping[str, Any],
+        outcome_artifact: Any,
+        expected_parent_head_sha256: str,
+    ) -> None:
+        details = outcome_event.get("details")
+        if (
+            not isinstance(details, Mapping)
+            or not _route_binding_matches_mapping(
+                outcome_artifact,
+                details.get("outcome_access_artifact"),
+            )
+            or not hmac.compare_digest(
+                expected_parent_head_sha256,
+                _event_sha256_upper(outcome_event),
+            )
+        ):
+            raise WorkerProtocolRouteConflict(
+                "Outcome dependency differs from retained lifecycle facts."
+            )
 
     def _load_existing_run(
         self,
@@ -783,6 +1261,11 @@ class AdmittedHarnessV2WorkerProtocolAdapter:
                 "Reconciliation report identity is invalid."
             )
         payload = report.to_dict()
+        identity_body = dict(payload)
+        identity_body.pop("report_id", None)
+        expected_report_id = "h2reconcile_" + hashlib.sha256(
+            canonical_json_bytes(identity_body)
+        ).hexdigest()
         expected_scope = {
             "tenant_id": tenant_id,
             "account_id": account_id,
@@ -792,6 +1275,7 @@ class AdmittedHarnessV2WorkerProtocolAdapter:
         jobs = payload.get("jobs")
         if (
             payload.get("report_id") != report.report_id
+            or report.report_id != expected_report_id
             or payload.get("availability") != report.availability
             or payload.get("scope") != expected_scope
             or type(jobs) is not list
@@ -817,18 +1301,128 @@ class AdmittedHarnessV2WorkerProtocolAdapter:
                 "Reconciliation authority limitations are unavailable."
             )
 
+    @staticmethod
+    def _strict_run_reconciliation_binding(
+        *,
+        per_run: Any,
+        report: HarnessV2ReconciliationReport,
+        tenant_id: str,
+        job_id: str,
+        run_id: str,
+    ) -> dict[str, Any]:
+        """Bind the admitted per-run replay to the retained configured report."""
+
+        lifecycle = getattr(per_run, "lifecycle", None)
+        registry = getattr(per_run, "registry_reconciliation", None)
+        if (
+            lifecycle is None
+            or registry is None
+            or getattr(lifecycle, "tenant_id", None) != tenant_id
+            or getattr(lifecycle, "subject_id", None) != job_id
+            or getattr(lifecycle, "run_id", None) != run_id
+            or getattr(per_run, "state", None) != getattr(lifecycle, "state", None)
+            or getattr(per_run, "structurally_valid", None) is not True
+            or getattr(registry, "tenant_id", None) != tenant_id
+            or getattr(registry, "structurally_valid", None) is not True
+        ):
+            raise WorkerProtocolRouteUnavailable(
+                "Strict per-run lifecycle replay crossed its admitted scope."
+            )
+
+        def artifact_binding(name: str) -> Mapping[str, object] | None:
+            receipt = getattr(per_run, name, None)
+            if receipt is None:
+                return None
+            binding = getattr(receipt, "lifecycle_binding", None)
+            as_dict = getattr(binding, "as_dict", None)
+            if not callable(as_dict):
+                raise WorkerProtocolRouteUnavailable(
+                    "Strict per-run artifact binding is unavailable."
+                )
+            value = as_dict()
+            if not isinstance(value, Mapping):
+                raise WorkerProtocolRouteUnavailable(
+                    "Strict per-run artifact binding is unavailable."
+                )
+            return dict(value)
+
+        event_count = getattr(lifecycle, "event_count", None)
+        if type(event_count) is not int or event_count < 1:
+            raise WorkerProtocolRouteUnavailable(
+                "Strict per-run lifecycle event count is unavailable."
+            )
+        return {
+            "schema_version": "cas_harness_v2.strict_run_reconciliation_binding.v1",
+            "run": {
+                "tenant_id": tenant_id,
+                "subject_id": job_id,
+                "run_id": run_id,
+                "state": _required_result_id(lifecycle.state, "lifecycle state"),
+                "event_count": event_count,
+                "head_event_sha256": _required_lower_sha256_as_upper(
+                    lifecycle.head_event_sha256,
+                    "lifecycle head event",
+                ),
+            },
+            "registry": {
+                "registry_sha256": _required_lower_sha256_as_upper(
+                    registry.registry_sha256,
+                    "lifecycle registry",
+                ),
+                "structurally_valid": True,
+            },
+            "artifacts": {
+                "authorization": artifact_binding("authorization_storage"),
+                "consumption": artifact_binding("consumption_storage"),
+                "terminal": artifact_binding("terminal_storage"),
+                "outcome": artifact_binding("outcome_storage"),
+                "packet": artifact_binding("packet_storage"),
+                "nonreporting": artifact_binding("nonreporting_storage"),
+            },
+            "configured_report": {
+                "artifact_id": report.report_id,
+                "sha256": report.sha256,
+                "byte_length": len(report.canonical_bytes),
+            },
+            "authority": {
+                "snapshot_atomicity": "NOT_ESTABLISHED",
+                "trusted_time": "NOT_ESTABLISHED",
+                "off_registry_execution_absence": "NOT_ESTABLISHED",
+                "criteria_status": "OPEN",
+                "license_status": "NOT LICENSED",
+                "disclosure_status": "HELD",
+            },
+        }
+
     def _retain_reconciliation_report(
         self,
         *,
         report: HarnessV2ReconciliationReport,
+        strict_run_binding: Mapping[str, Any],
         tenant_id: str,
         account_id: str,
         audit_id: str,
         fleet_id: str,
         job_id: str,
         run_id: str,
-    ) -> tuple[str, bool]:
-        trace_id = _operation_id("reconciliation", report.report_id, job_id)
+    ) -> tuple[str, str, bool]:
+        try:
+            strict_run_binding_bytes = canonical_json_bytes(strict_run_binding)
+        except Exception as exc:
+            raise WorkerProtocolRouteUnavailable(
+                "Strict run reconciliation binding is not canonical."
+            ) from exc
+        strict_run_binding_sha256 = hashlib.sha256(
+            strict_run_binding_bytes
+        ).hexdigest().upper()
+        trace_id = _operation_id(
+            "reconciliation",
+            report.report_id,
+            report.sha256,
+            strict_run_binding_sha256,
+            job_id,
+            run_id,
+        )
         wrapper = {
             "schema_version": RECONCILIATION_WRAPPER_SCHEMA,
             "trace_id": trace_id,
@@ -851,6 +1445,10 @@ class AdmittedHarnessV2WorkerProtocolAdapter:
                 "byte_length": len(report.canonical_bytes),
                 "raw_base64": base64.b64encode(report.canonical_bytes).decode("ascii"),
             },
+            "strict_run_binding": {
+                "sha256": strict_run_binding_sha256,
+                "binding": strict_run_binding,
+            },
             "authority": {
                 "criteria_status": "OPEN",
                 "coverage": "CONFIGURED_INJECTED_SOURCES_ONLY",
@@ -868,6 +1466,7 @@ class AdmittedHarnessV2WorkerProtocolAdapter:
             raise WorkerProtocolRouteUnavailable(
                 "Reconciliation storage wrapper is not canonical."
             ) from exc
+        wrapper_sha256 = hashlib.sha256(expected_wrapper_bytes).hexdigest().upper()
         idempotent_replay = False
         try:
             existing, _existing_sha = self._repository.load_packet_with_content_sha256(
@@ -929,7 +1528,7 @@ class AdmittedHarnessV2WorkerProtocolAdapter:
             raise WorkerProtocolRouteUnavailable(
                 "Reconciliation report retention did not reverify."
             )
-        return trace_id, idempotent_replay
+        return trace_id, wrapper_sha256, idempotent_replay
 
     def _verify_intake(
         self,
@@ -957,6 +1556,9 @@ class AdmittedHarnessV2WorkerProtocolAdapter:
             "retain_output": OUTPUT_RETENTION_MEDIA_TYPE,
             "consume_authorization": CONSUMPTION_MEDIA_TYPE,
             "accept_terminal": TERMINAL_MEDIA_TYPE,
+            "seal_outcome": OUTCOME_SEAL_MEDIA_TYPE,
+            "attach_evidence_packet": EVIDENCE_PACKET_MEDIA_TYPE,
+            "record_nonreporting": NONREPORTING_MEDIA_TYPE,
             "reconcile_run": RECONCILIATION_MEDIA_TYPE,
         }[operation]
         if type(raw_body) is not bytes or not raw_body:
@@ -1266,6 +1868,92 @@ def build_admitted_harness_v2_worker_protocol_adapter(
     )
 
 
+def _event_sha256_upper(event: Mapping[str, Any]) -> str:
+    return _required_lower_sha256_as_upper(
+        event.get("event_sha256"),
+        "lifecycle event",
+    )
+
+
+def _route_binding_matches_mapping(binding: Any, value: object) -> bool:
+    if not isinstance(value, Mapping):
+        return False
+    try:
+        return (
+            value.get("artifact_id") == binding.artifact_id
+            and value.get("media_type") == binding.media_type
+            and value.get("byte_length") == binding.byte_length
+            and hmac.compare_digest(
+                _required_lower_sha256_as_upper(
+                    value.get("sha256"),
+                    "lifecycle artifact",
+                ),
+                binding.sha256,
+            )
+        )
+    except WorkerProtocolRouteError:
+        return False
+
+
+def _route_binding_matches_receipt(binding: Any, receipt: Any) -> bool:
+    try:
+        return (
+            binding.artifact_id == receipt.artifact_id
+            and binding.media_type == receipt.media_type
+            and binding.byte_length == receipt.byte_length
+            and hmac.compare_digest(binding.sha256, receipt.sha256)
+        )
+    except (AttributeError, TypeError):
+        return False
+
+
+def _authorization_artifact_bodies(
+    envelope: AuthorizationRequestEnvelope,
+) -> dict[str, bytes]:
+    provided = {
+        item.artifact_id: item.raw_bytes
+        for item in envelope.artifact_bodies
+        if item.artifact_id is not None
+    }
+    claim_binding = envelope.chain.base.payload.get("claim_binding")
+    claim_reference = (
+        claim_binding.get("claim_ledger")
+        if isinstance(claim_binding, Mapping)
+        else None
+    )
+    claim_artifact_id = (
+        claim_reference.get("artifact_id")
+        if isinstance(claim_reference, Mapping)
+        else None
+    )
+    if not isinstance(claim_artifact_id, str):
+        raise WorkerProtocolRouteUnavailable(
+            "Retained claim-ledger identity is unavailable."
+        )
+    result: dict[str, bytes] = {}
+    for reference in envelope.chain.artifact_refs:
+        if reference.artifact_id == claim_artifact_id:
+            if not (
+                reference.byte_length == envelope.claim_ledger.byte_length
+                and hmac.compare_digest(
+                    reference.sha256.upper(),
+                    envelope.claim_ledger.sha256,
+                )
+            ):
+                raise WorkerProtocolRouteUnavailable(
+                    "Retained claim-ledger bytes differ from their exact reference."
+                )
+            result[reference.artifact_id] = envelope.claim_ledger.raw_bytes
+            continue
+        body = provided.get(reference.artifact_id)
+        if body is None:
+            raise WorkerProtocolRouteUnavailable(
+                "Retained preregistration dependency bytes are unavailable."
+            )
+        result[reference.artifact_id] = body
+    return result
+
+
 def _operation_id(prefix: str, *values: str) -> str:
     digest = hashlib.sha256("\0".join(values).encode("utf-8")).hexdigest()
     return f"h2{prefix}_{digest}"
@@ -1275,6 +1963,14 @@ def _required_worker(value: str | None) -> str:
     if not isinstance(value, str) or not value:
         raise WorkerProtocolRouteRejected("A worker-scoped callback is required.")
     return value
+
+
+def _required_terminal_status(value: object) -> str:
+    if value not in {SUCCESS, FAILURE}:
+        raise WorkerProtocolRouteUnavailable(
+            "Strict terminal continuation status is unavailable."
+        )
+    return str(value)
 
 
 def _required_result_id(value: object, label: str) -> str:

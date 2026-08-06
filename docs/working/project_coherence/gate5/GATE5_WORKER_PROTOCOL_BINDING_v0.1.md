@@ -358,12 +358,60 @@ and may accept an already sealed chain only when
 `OutcomeAccessEvent.execution_completed_at == terminal_at`. Any different
 receipt reference, completion time, or chain binding fails closed. This does
 not expose a public post-outcome authorization-loading capability and does not
-permit new or changed terminal bytes after outcome access. The current dark
-bridge does not author that seal, but its sealed-safe replay port can verify the
-same retained terminal after the lifecycle service has sealed it. A packaged
-reconciliation-report path now replays configured local lifecycle, context,
-Fleet mapping, and bridge evidence. Independent, provider-backed reconciliation
-that proves registry completeness remains absent.
+permit new or changed terminal bytes after outcome access. The admitted dark
+lifecycle/adapter tranche now authors that seal through the controller-only
+route; the bridge's narrower sealed-safe replay port verifies the same retained
+terminal afterward. A packaged reconciliation-report path now first replays the
+strict per-run lifecycle and then binds its run head/artifact inventory to the
+separately configured-scope lifecycle, context, Fleet-mapping, and bridge
+report. Independent, provider-backed reconciliation that proves registry
+completeness remains absent.
+
+### 3.5 Admitted controller continuation envelopes
+
+Three controller-only continuations are now exact, separate operations:
+
+| Operation | Exact request schema | Required capability | Bounded effect |
+|---|---|---|---|
+| outcome seal | `cas_harness_v2.route_outcome_seal_request.v1` | `seal_outcome` | replays retained authorization/terminal facts, reserves one untrusted time observation, and records the exact outcome-access carrier |
+| Packet attachment | `cas_harness_v2.route_packet_attachment_request.v1` | `attach_evidence_packet` | accepts Packet-v2 bytes plus Packet-specific dependency bodies only; server-owned chain, output, and terminal bodies are reloaded rather than resubmitted |
+| explicit nonreporting | `cas_harness_v2.route_nonreporting_request.v1` | `record_nonreporting` | records a closed reason code and server-built negative/nonreporting envelope rather than manufacturing a favorable Packet |
+
+The terminal response exposes the terminal receipt media type, byte length,
+status, and terminal event digest needed by the exact outcome request. The
+outcome response analogously exposes the outcome receipt media type, byte
+length, outcome event digest, sealed-chain digest, and recorded untrusted time
+needed by the next continuation. It does not expose the run nonce, lease token,
+credential, retained chain bytes, output bodies, or internal lifecycle rows.
+
+Outcome reservation is create-only and records the winning declared time plus
+its source and untrusted assurance. Exact HTTP retries converge on that winning
+reservation even when competing process-clock observations differ. Each
+request still reconstructs a fresh local chain from retained server facts, so
+this is not process/host-loss recovery, rollback resistance, or proof that no
+earlier outcome access occurred.
+
+After outcome access, a second create-only reservation arbitrates `PACKET`
+versus `NONREPORTING`. It binds the exact request digest, dependency-plan
+digest, parent lifecycle head, clock observation, planned final artifact, and
+the closed nonreporting reason; Packet reservations require a null reason.
+Finalization must echo those bindings and match the planned artifact and reason;
+a losing or semantically changed branch cannot silently replace the winner.
+Every new lifecycle event and complete replay must also preserve canonical
+nondecreasing event time. After an event-first/index-second interruption, a
+read may repair exactly one structurally verified pending successor; corrupt or
+divergent successors fail closed. This tested compare-and-set and repair scope
+is local to the configured state substrate. Cross-host authority,
+partial-write/orphan completeness, and independent ordering remain open.
+
+Reconciliation retains
+`cas_harness_v2.reconciliation_report_storage_wrapper.v2`. Its returned
+receipt ID and SHA-256 identify the same wrapper bytes. That wrapper contains
+the exact configured-scope report as an inner artifact and a separately hashed
+strict-run binding covering the current lifecycle head, state, event count,
+artifact inventory, and registry digest. The wrapper explicitly states that
+snapshot atomicity, trusted time, off-registry execution absence, licensing,
+and disclosure authority are not established.
 
 The bridge does not calculate scientific metrics, choose threshold outcomes,
 declare controls passed, or manufacture independent audit, replication, or
@@ -415,7 +463,8 @@ evidence into favorable evidence.
 
 Private route handlers and an admitted packaged adapter now call the dark
 lifecycle/bridge implementation for the bounded authorization, output,
-consumption, terminal, and reconciliation paths. Main still begins with a dark
+consumption, terminal, outcome, Packet/nonreporting, and reconciliation paths.
+Main still begins with a dark
 service port and refuses enabled startup unless the exact packaged kernel,
 adapter profile, shared state, immutable repository, and fleet-auth ports are
 present. The HTTP statuses below describe that default-dark boundary and tested
@@ -721,7 +770,7 @@ The local transition sequence is:
    Repository writes then occur sequentially, so a dependency or Packet-storage
    failure after validation can leave earlier wrappers outside the lifecycle
    event chain. For a wired failed run, create a typed server-built
-   `cas_harness_v2.nonreporting.v1` envelope instead of fabricating a Packet v2.
+   `cas_harness_v2.nonreporting.v2` envelope instead of fabricating a Packet v2.
    Indeterminate nonreporting awaits the missing service path; and
 7. replay the event hash chain and every event-bound authorization,
    consumption, terminal, outcome, and packet/nonreporting wrapper, together
@@ -754,10 +803,10 @@ transitive bound-intake verification, exact active-lease validation, joint
 reconciliation-report path. Main initializes its service port to `None` and
 fails enabled startup unless the byte-verified packaged kernel, exact admitted
 adapter profile, shared state, immutable repository, and fleet-auth ports are
-present. Local construction and startup-boundary tests pass; no provider-backed
-enabled startup has passed, and there is no explicit HTTP outcome-seal adapter.
-Thus the route remains default-dark, unavailable as a live/product route, and
-not authorized for execution.
+present. Local construction and startup-boundary tests pass, and the explicit
+controller outcome/Packet/nonreporting adapters are regression tested. No
+provider-backed enabled startup has passed. Thus the route remains default-
+dark, unavailable as a live/product route, and not authorized for execution.
 
 ## 9. Fail-closed invariants
 
@@ -874,7 +923,7 @@ or imply closure of any item without criterion-specific evidence and review.
 | `G5-TRUST-005` | `OPEN_GOVERNANCE` | Admit and independently audit a non-caller-selected execution trust root, signing policy, key custody, scope, rotation, revocation, and exact receipt verification. |
 | `G5-TRUST-006` | `OPEN_GOVERNANCE` | Independently verify person, affiliation, conflict, qualification, organizational independence, authorization, and signing controls for executor, auditor, replication, and reviewer roles. |
 | `G5-INTEGRATION-002` | `OPEN_ENGINEERING` | Close Gate 4 through its own semantic, scientific, independent-review, governance, and disclosure authorities, then bind an authorized successor without retroactively promoting this candidate. |
-| `G5-ENGINEERING-001` | `OPEN_ENGINEERING` | Independently reproduce and provider-start the packaged root-kernel/lifecycle adapter, wire explicit outcome sealing and the remaining packet/nonreporting/terminal-disposition paths into an authorized live worker lane, then independently red-team the exact message, artifact, error, nonce, time, identity, persistence, and retry mappings. The tested default-dark adapter is a bounded software candidate, not closure. |
+| `G5-ENGINEERING-001` | `OPEN_ENGINEERING` | Independently reproduce and provider-start the packaged root-kernel/lifecycle adapter, connect the admitted outcome/Packet/nonreporting tranche plus the remaining terminal-disposition and outcome-finalization-intent paths to an authorized live worker lane, then independently red-team the exact message, artifact, error, nonce, time, identity, persistence, and retry mappings. The tested default-dark adapter is a bounded software candidate, not closure. |
 | `G5-ENGINEERING-002` | `OPEN_ENGINEERING` | Bind transient/dynamic import history and executed bytes; complete standard-library/test/native/descendant closure; cover files absent from distribution records; create an independently verified immutable snapshot; address privileged ABA and loader-alias races; independently reproduce and attest the candidate; compare admitted GPU outputs. |
 | `G5-ENGINEERING-003` | `OPEN_SECURITY` | Remediate or explicitly disposition six vendor-confirmed/fix-deferred findings; reconcile the `dpkg` scanner/vendor conflict; retain scanner database/process evidence; independently rebuild/reproduce; run the admitted exact GPU loader/hook contract; obtain an independent security receipt. |
 | `G5-ENGINEERING-005` | `OPEN_ENGINEERING` | Define typed artifact semantics, derivation/provenance identities, cross-run registry rules, and independent adjudication for byte-different semantic duplicates and relabeling. |

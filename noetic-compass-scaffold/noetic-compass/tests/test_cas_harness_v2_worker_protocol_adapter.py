@@ -18,10 +18,14 @@ for candidate in (ROOT_KERNEL_TESTS, Path(__file__).resolve().parent):
         sys.path.insert(0, str(candidate))
 
 from test_research_control_kernel import Fixture, encode  # noqa: E402
+from cas_harness_v2 import canonical_json_bytes  # noqa: E402
 
 from api.routes.cas_harness_v2_worker_protocol import (  # noqa: E402
     CONSUMPTION_MEDIA_TYPE,
+    EVIDENCE_PACKET_MEDIA_TYPE,
     ISSUE_REQUEST_MEDIA_TYPE,
+    NONREPORTING_MEDIA_TYPE,
+    OUTCOME_SEAL_MEDIA_TYPE,
     OUTPUT_RETENTION_MEDIA_TYPE,
     RECONCILIATION_MEDIA_TYPE,
     TERMINAL_MEDIA_TYPE,
@@ -45,12 +49,24 @@ from api.services.cas_harness_v2_reconciliation_report import (  # noqa: E402
 from api.services.cas_harness_v2_route_envelopes import (  # noqa: E402
     AUTHORIZATION_REQUEST_SCHEMA,
     CONSUMPTION_REQUEST_SCHEMA,
+    NONREPORTING_REQUEST_SCHEMA,
     OUTPUT_RETENTION_SCHEMA,
+    OUTCOME_SEAL_REQUEST_SCHEMA,
+    PACKET_ATTACHMENT_REQUEST_SCHEMA,
     RECONCILIATION_REQUEST_SCHEMA,
+    load_authorization_request_envelope,
 )
 from api.services.cas_harness_v2_run_context import (  # noqa: E402
     HarnessV2RunContextStore,
     RUN_CONTEXT_NAMESPACE,
+)
+from api.services.cas_harness_v2_run_lifecycle import (  # noqa: E402
+    FAILURE,
+    NONREPORTING_RECORDED,
+    OUTCOME_ACCESSED,
+    PACKET_RECORDED,
+    RUNNING,
+    SUCCESS,
 )
 from api.services.cas_harness_v2_worker_protocol_adapter import (  # noqa: E402
     ADMISSION_PROFILE,
@@ -60,9 +76,13 @@ from api.services.cas_harness_v2_worker_protocol_adapter import (  # noqa: E402
 from api.services.fleet_service_auth import FleetServiceIntakeBinding  # noqa: E402
 from test_cas_harness_v2_lifecycle_service import (  # noqa: E402
     LEASE_TOKEN,
+    OUTCOME_AT,
+    PACKET_AT,
     STARTED_AT,
     TERMINAL_AT,
     _issue as _lifecycle_issue,
+    _failed_receipt,
+    _packet_for,
     _system,
 )
 
@@ -100,6 +120,17 @@ def _authorization_request() -> bytes:
                 "base_preregistration": _exact(fixture.prereg_bytes),
                 "amendments": [],
             },
+            "artifact_bodies": [
+                _exact(
+                    fixture.blobs[reference.artifact_id],
+                    artifact_id=reference.artifact_id,
+                )
+                for reference in sorted(
+                    fixture.loaded.artifact_refs,
+                    key=lambda item: item.artifact_id,
+                )
+                if reference.artifact_id != "claim-ledger"
+            ],
         }
     )
 
@@ -167,13 +198,22 @@ def _bound(
     lease_token: str | None = None,
 ):
     del media_type  # media identity is transported separately to the adapter.
-    controller_operations = {"issue_authorization", "reconcile_run"}
+    controller_operations = {
+        "issue_authorization",
+        "seal_outcome",
+        "attach_evidence_packet",
+        "record_nonreporting",
+        "reconcile_run",
+    }
     worker = None if operation in controller_operations else WORKER
     capability = {
         "issue_authorization": "merge_fleet",
         "consume_authorization": "lease_job",
         "retain_output": "submit_evidence",
         "accept_terminal": "submit_receipt",
+        "seal_outcome": "seal_outcome",
+        "attach_evidence_packet": "attach_evidence_packet",
+        "record_nonreporting": "record_nonreporting",
         "reconcile_run": "verify_fleet",
     }[operation]
     suffix = {
@@ -181,6 +221,9 @@ def _bound(
         "consume_authorization": "consume",
         "retain_output": "output",
         "accept_terminal": "terminal",
+        "seal_outcome": "outcome",
+        "attach_evidence_packet": "packet",
+        "record_nonreporting": "nonreporting",
         "reconcile_run": "reconcile",
     }[operation]
     path = f"/api/cas-harness/audit/distributed/session/{AUDIT}/fleet/v2/job/{JOB}"
@@ -259,6 +302,369 @@ def _issue(system: dict, adapter: AdmittedHarnessV2WorkerProtocolAdapter):
 
 def _reconciliation_request() -> bytes:
     return encode({"schema_version": RECONCILIATION_REQUEST_SCHEMA})
+
+
+def _route_binding(value: dict[str, object]) -> dict[str, object]:
+    return {
+        "artifact_id": value["artifact_id"],
+        "media_type": value["media_type"],
+        "sha256": str(value["sha256"]).upper(),
+        "byte_length": value["byte_length"],
+    }
+
+
+def _event(system: dict, state_after: str) -> dict[str, object]:
+    matches = [
+        event
+        for event in system["registry"].list_events(
+            tenant_id=TENANT,
+            subject_id=JOB,
+        )
+        if event["state_after"] == state_after
+    ]
+    assert len(matches) == 1
+    return matches[0]
+
+
+def _outcome_request(system: dict) -> bytes:
+    terminal_event = next(
+        event
+        for event in system["registry"].list_events(
+            tenant_id=TENANT,
+            subject_id=JOB,
+        )
+        if event["event_type"] == "TERMINAL_RECORDED"
+    )
+    details = terminal_event["details"]
+    return encode(
+        {
+            "schema_version": OUTCOME_SEAL_REQUEST_SCHEMA,
+            "terminal_status": details["terminal_status"],
+            "terminal_artifact": _route_binding(details["terminal_artifact"]),
+            "terminal_event_sha256": terminal_event["event_sha256"].upper(),
+            "expected_lifecycle_head_sha256": terminal_event[
+                "event_sha256"
+            ].upper(),
+        }
+    )
+
+
+def _seal_adapter_outcome(
+    system: dict,
+    adapter: AdmittedHarnessV2WorkerProtocolAdapter,
+    issued,
+    *,
+    nonce_character: str,
+):
+    raw = _outcome_request(system)
+    receipt = _bound(
+        system,
+        operation="seal_outcome",
+        raw=raw,
+        media_type=OUTCOME_SEAL_MEDIA_TYPE,
+        nonce_character=nonce_character,
+        authorization_sha256=issued.receipt_sha256,
+    )
+    system["clock"].now = OUTCOME_AT
+    return adapter.seal_outcome(
+        **_kwargs(receipt, raw=raw, media_type=OUTCOME_SEAL_MEDIA_TYPE)
+    )
+
+
+def _complete_adapter_terminal(
+    system: dict,
+    adapter: AdmittedHarnessV2WorkerProtocolAdapter,
+    *,
+    terminal_raw: bytes | None = None,
+    nonce_prefix: str,
+):
+    _request_raw, issued = _issue(system, adapter)
+    consume_raw = encode(
+        {
+            "schema_version": CONSUMPTION_REQUEST_SCHEMA,
+            "run_nonce_b64url": system["fx"].run_nonce,
+        }
+    )
+    consume_receipt = _bound(
+        system,
+        operation="consume_authorization",
+        raw=consume_raw,
+        media_type=CONSUMPTION_MEDIA_TYPE,
+        nonce_character=nonce_prefix[0],
+        authorization_sha256=issued.receipt_sha256,
+        lease_token=LEASE_TOKEN,
+    )
+    system["clock"].now = STARTED_AT
+    adapter.consume_authorization(
+        **_kwargs(
+            consume_receipt,
+            raw=consume_raw,
+            media_type=CONSUMPTION_MEDIA_TYPE,
+            lease_token=LEASE_TOKEN,
+        )
+    )
+    selected_terminal = terminal_raw or system["terminal_receipt_raw"]
+    if terminal_raw is None:
+        output_raw = encode(
+            {
+                "schema_version": OUTPUT_RETENTION_SCHEMA,
+                "output_name": "raw-outcomes",
+                "artifact": _exact(
+                    system["fx"].output_bytes,
+                    artifact_id="worker-output-shard-00",
+                    media_type="application/jsonl",
+                ),
+            }
+        )
+        output_receipt = _bound(
+            system,
+            operation="retain_output",
+            raw=output_raw,
+            media_type=OUTPUT_RETENTION_MEDIA_TYPE,
+            nonce_character=nonce_prefix[1],
+            authorization_sha256=issued.receipt_sha256,
+            lease_token=LEASE_TOKEN,
+        )
+        adapter.retain_output(
+            **_kwargs(
+                output_receipt,
+                raw=output_raw,
+                media_type=OUTPUT_RETENTION_MEDIA_TYPE,
+                lease_token=LEASE_TOKEN,
+            )
+        )
+    terminal_receipt = _bound(
+        system,
+        operation="accept_terminal",
+        raw=selected_terminal,
+        media_type=TERMINAL_MEDIA_TYPE,
+        nonce_character=nonce_prefix[2],
+        authorization_sha256=issued.receipt_sha256,
+        lease_token=LEASE_TOKEN,
+    )
+    system["clock"].now = TERMINAL_AT
+    terminal = adapter.accept_terminal(
+        **_kwargs(
+            terminal_receipt,
+            raw=selected_terminal,
+            media_type=TERMINAL_MEDIA_TYPE,
+            lease_token=LEASE_TOKEN,
+        )
+    )
+    return issued, terminal
+
+
+def _packet_request(system: dict, *, run_id: str) -> bytes:
+    authorization_envelope = load_authorization_request_envelope(
+        _authorization_request()
+    )
+    system["service"].replay_recorded_outcome_for_route(
+        tenant_id=TENANT,
+        account_id=ACCOUNT,
+        subject_id=JOB,
+        chain=authorization_envelope.chain,
+    )
+    original_chain = system["fx"].chain
+    system["fx"].chain = authorization_envelope.chain
+    try:
+        packet_raw, bodies = _packet_for(system, run_id)
+    finally:
+        system["fx"].chain = original_chain
+    terminal_event = next(
+        event
+        for event in system["registry"].list_events(
+            tenant_id=TENANT,
+            subject_id=JOB,
+        )
+        if event["event_type"] == "TERMINAL_RECORDED"
+    )
+    outcome_event = _event(system, OUTCOME_ACCESSED)
+    chain_ids = {
+        reference.artifact_id
+        for reference in authorization_envelope.chain.artifact_refs
+    }
+    output_ids = {
+        row["artifact"]["artifact_id"]
+        for row in system["fx"].receipt["terminal"]["produced_outputs"]
+    }
+    packet_specific = {
+        artifact_id: body
+        for artifact_id, body in bodies.items()
+        if artifact_id not in chain_ids | output_ids
+    }
+    return encode(
+        {
+            "schema_version": PACKET_ATTACHMENT_REQUEST_SCHEMA,
+            "terminal_artifact": _route_binding(
+                terminal_event["details"]["terminal_artifact"]
+            ),
+            "outcome_access_artifact": _route_binding(
+                outcome_event["details"]["outcome_access_artifact"]
+            ),
+            "sealed_preregistration_chain_sha256": (
+                authorization_envelope.chain.chain_sha256.upper()
+            ),
+            "expected_lifecycle_head_sha256": outcome_event[
+                "event_sha256"
+            ].upper(),
+            "packet": _exact(packet_raw),
+            "artifact_bodies": [
+                _exact(body, artifact_id=artifact_id)
+                for artifact_id, body in sorted(packet_specific.items())
+            ],
+        }
+    )
+
+
+def _nonreporting_request(system: dict, *, terminal_status: str) -> bytes:
+    terminal_event = next(
+        event
+        for event in system["registry"].list_events(
+            tenant_id=TENANT,
+            subject_id=JOB,
+        )
+        if event["event_type"] == "TERMINAL_RECORDED"
+    )
+    outcome_event = _event(system, OUTCOME_ACCESSED)
+    reason = {
+        SUCCESS: "SUCCESS_NO_PACKET_RECORDED",
+        FAILURE: "TERMINAL_FAILURE_NO_PACKET",
+    }[terminal_status]
+    return encode(
+        {
+            "schema_version": NONREPORTING_REQUEST_SCHEMA,
+            "terminal_status": terminal_status,
+            "terminal_artifact": _route_binding(
+                terminal_event["details"]["terminal_artifact"]
+            ),
+            "outcome_access_artifact": _route_binding(
+                outcome_event["details"]["outcome_access_artifact"]
+            ),
+            "expected_lifecycle_head_sha256": outcome_event[
+                "event_sha256"
+            ].upper(),
+            "reason_code": reason,
+        }
+    )
+
+
+def test_adapter_fresh_requests_seal_outcome_attach_packet_and_replay(
+    tmp_path: Path,
+) -> None:
+    system = _system(tmp_path, bound_intake=True)
+    adapter = _adapter(system)
+    issued, _terminal = _complete_adapter_terminal(
+        system,
+        adapter,
+        nonce_prefix="RST",
+    )
+    assert system["registry"].get_lifecycle(
+        tenant_id=TENANT,
+        subject_id=JOB,
+    ).state == SUCCESS
+
+    outcome = _seal_adapter_outcome(
+        system,
+        adapter,
+        issued,
+        nonce_character="U",
+    )
+    assert outcome.idempotent_replay is False
+    assert outcome.time_assurance == "PROCESS_OR_INJECTED_CLOCK_NOT_TRUSTED"
+
+    raw = _packet_request(system, run_id=RUN)
+    receipt = _bound(
+        system,
+        operation="attach_evidence_packet",
+        raw=raw,
+        media_type=EVIDENCE_PACKET_MEDIA_TYPE,
+        nonce_character="V",
+        authorization_sha256=issued.receipt_sha256,
+    )
+    system["clock"].now = PACKET_AT
+    attached = adapter.attach_evidence_packet(
+        **_kwargs(receipt, raw=raw, media_type=EVIDENCE_PACKET_MEDIA_TYPE)
+    )
+    assert attached.idempotent_replay is False
+    assert attached.receipt_sha256 == attached.receipt_sha256.upper()
+    assert system["registry"].get_lifecycle(
+        tenant_id=TENANT,
+        subject_id=JOB,
+    ).state == PACKET_RECORDED
+
+    replay_receipt = _bound(
+        system,
+        operation="attach_evidence_packet",
+        raw=raw,
+        media_type=EVIDENCE_PACKET_MEDIA_TYPE,
+        nonce_character="W",
+        authorization_sha256=issued.receipt_sha256,
+    )
+    replay = adapter.attach_evidence_packet(
+        **_kwargs(
+            replay_receipt,
+            raw=raw,
+            media_type=EVIDENCE_PACKET_MEDIA_TYPE,
+        )
+    )
+    assert replay.idempotent_replay is True
+    assert replay.receipt_id == attached.receipt_id
+    assert replay.receipt_sha256 == attached.receipt_sha256
+    system["store"].close()
+
+
+def test_adapter_failed_run_seals_outcome_records_nonreporting_and_replays_outcome(
+    tmp_path: Path,
+) -> None:
+    system = _system(tmp_path, bound_intake=True)
+    adapter = _adapter(system)
+    issued, _terminal = _complete_adapter_terminal(
+        system,
+        adapter,
+        terminal_raw=_failed_receipt(system),
+        nonce_prefix="RST",
+    )
+    assert system["registry"].get_lifecycle(
+        tenant_id=TENANT,
+        subject_id=JOB,
+    ).state == FAILURE
+    first_outcome = _seal_adapter_outcome(
+        system,
+        adapter,
+        issued,
+        nonce_character="U",
+    )
+    assert first_outcome.idempotent_replay is False
+
+    raw = _nonreporting_request(system, terminal_status=FAILURE)
+    receipt = _bound(
+        system,
+        operation="record_nonreporting",
+        raw=raw,
+        media_type=NONREPORTING_MEDIA_TYPE,
+        nonce_character="V",
+        authorization_sha256=issued.receipt_sha256,
+    )
+    system["clock"].now = PACKET_AT
+    recorded = adapter.record_nonreporting(
+        **_kwargs(receipt, raw=raw, media_type=NONREPORTING_MEDIA_TYPE)
+    )
+    assert recorded.idempotent_replay is False
+    assert system["registry"].get_lifecycle(
+        tenant_id=TENANT,
+        subject_id=JOB,
+    ).state == NONREPORTING_RECORDED
+
+    replay_outcome = _seal_adapter_outcome(
+        system,
+        adapter,
+        issued,
+        nonce_character="W",
+    )
+    assert replay_outcome.idempotent_replay is True
+    assert replay_outcome.receipt_id == first_outcome.receipt_id
+    assert replay_outcome.accessed_at == first_outcome.accessed_at
+    system["store"].close()
 
 
 def test_admitted_adapter_executes_exact_issue_consume_output_terminal_flow(
@@ -546,11 +952,6 @@ def test_reconcile_run_retains_exact_canonical_report_and_replays_exact_dto(
             media_type=RECONCILIATION_MEDIA_TYPE,
         )
     )
-    expected_receipt_id = "h2reconciliation_" + hashlib.sha256(
-        "\0".join((report.report_id, JOB)).encode("utf-8")
-    ).hexdigest()
-    assert first.receipt_id == expected_receipt_id
-    assert first.receipt_sha256 == report.sha256
     assert first.idempotent_replay is False
     assert reporter.calls == [
         {
@@ -566,6 +967,26 @@ def test_reconcile_run_retains_exact_canonical_report_and_replays_exact_dto(
         trace_id=first.receipt_id,
     )
     assert wrapper["trace_id"] == first.receipt_id
+    strict = wrapper["strict_run_binding"]
+    strict_sha256 = hashlib.sha256(
+        canonical_json_bytes(strict["binding"])
+    ).hexdigest().upper()
+    assert strict["sha256"] == strict_sha256
+    expected_receipt_id = "h2reconciliation_" + hashlib.sha256(
+        "\0".join(
+            (report.report_id, report.sha256, strict_sha256, JOB, RUN)
+        ).encode("utf-8")
+    ).hexdigest()
+    assert first.receipt_id == expected_receipt_id
+    assert first.receipt_sha256 == hashlib.sha256(
+        canonical_json_bytes(wrapper)
+    ).hexdigest().upper()
+    assert first.receipt_sha256 != report.sha256
+    assert strict["binding"]["run"]["state"] == "AUTHORIZED"
+    assert strict["binding"]["artifacts"]["authorization"] is not None
+    assert strict["binding"]["authority"]["snapshot_atomicity"] == (
+        "NOT_ESTABLISHED"
+    )
     inner = wrapper["inner_artifact"]
     retained_raw = base64.b64decode(inner["raw_base64"], validate=True)
     assert retained_raw == report.canonical_bytes
@@ -607,6 +1028,183 @@ def test_reconcile_run_retains_exact_canonical_report_and_replays_exact_dto(
         },
     ]
     assert system["backend"].put_count == before + 1
+    system["store"].close()
+
+
+def test_reconcile_run_rejects_non_content_derived_report_identity_before_write(
+    tmp_path: Path,
+) -> None:
+    system = _system(tmp_path)
+    bootstrap = _adapter(system)
+    _raw, issued = _issue(system, bootstrap)
+    report = _reconciliation_service(system).reconcile(
+        tenant_id=TENANT,
+        account_id=ACCOUNT,
+        audit_id=AUDIT,
+        fleet_id=AUDIT,
+    )
+    forged_id = "h2reconcile_" + ("0" * 64)
+    forged_payload = report.to_dict()
+    forged_payload["report_id"] = forged_id
+    forged_raw = canonical_json_bytes(forged_payload)
+    forged = replace(
+        report,
+        report_id=forged_id,
+        canonical_bytes=forged_raw,
+        sha256=hashlib.sha256(forged_raw).hexdigest().upper(),
+    )
+    adapter = _adapter(
+        system,
+        reconciliation_report_service=_FixedReconciliationService(forged),
+    )
+    request_raw = _reconciliation_request()
+    receipt = _bound(
+        system,
+        operation="reconcile_run",
+        raw=request_raw,
+        media_type=RECONCILIATION_MEDIA_TYPE,
+        nonce_character="L",
+        authorization_sha256=issued.receipt_sha256,
+    )
+    before = system["backend"].put_count
+
+    with pytest.raises(WorkerProtocolRouteUnavailable):
+        adapter.reconcile_run(
+            **_kwargs(
+                receipt,
+                raw=request_raw,
+                media_type=RECONCILIATION_MEDIA_TYPE,
+            )
+        )
+
+    assert system["backend"].put_count == before
+    assert system["repository"].list_packet_indices(
+        tenant_id=TENANT,
+        namespace=RECONCILIATION_NAMESPACE,
+    ) == ()
+    system["store"].close()
+
+
+def test_reconciliation_receipt_identity_evolves_with_strict_run_head(
+    tmp_path: Path,
+) -> None:
+    system = _system(tmp_path)
+    bootstrap = _adapter(system)
+    _raw, issued = _issue(system, bootstrap)
+    fixed_report = _reconciliation_service(system).reconcile(
+        tenant_id=TENANT,
+        account_id=ACCOUNT,
+        audit_id=AUDIT,
+        fleet_id=AUDIT,
+    )
+    adapter = _adapter(
+        system,
+        reconciliation_report_service=_FixedReconciliationService(fixed_report),
+    )
+    request_raw = _reconciliation_request()
+
+    first_receipt = _bound(
+        system,
+        operation="reconcile_run",
+        raw=request_raw,
+        media_type=RECONCILIATION_MEDIA_TYPE,
+        nonce_character="L",
+        authorization_sha256=issued.receipt_sha256,
+    )
+    first = adapter.reconcile_run(
+        **_kwargs(
+            first_receipt,
+            raw=request_raw,
+            media_type=RECONCILIATION_MEDIA_TYPE,
+        )
+    )
+    first_wrapper = system["repository"].load_packet(
+        tenant_id=TENANT,
+        namespace=RECONCILIATION_NAMESPACE,
+        trace_id=first.receipt_id,
+    )
+
+    consume_raw = encode(
+        {
+            "schema_version": CONSUMPTION_REQUEST_SCHEMA,
+            "run_nonce_b64url": system["fx"].run_nonce,
+        }
+    )
+    consume_receipt = _bound(
+        system,
+        operation="consume_authorization",
+        raw=consume_raw,
+        media_type=CONSUMPTION_MEDIA_TYPE,
+        nonce_character="M",
+        authorization_sha256=issued.receipt_sha256,
+        lease_token=LEASE_TOKEN,
+    )
+    system["clock"].now = STARTED_AT
+    adapter.consume_authorization(
+        **_kwargs(
+            consume_receipt,
+            raw=consume_raw,
+            media_type=CONSUMPTION_MEDIA_TYPE,
+            lease_token=LEASE_TOKEN,
+        )
+    )
+
+    evolved_receipt = _bound(
+        system,
+        operation="reconcile_run",
+        raw=request_raw,
+        media_type=RECONCILIATION_MEDIA_TYPE,
+        nonce_character="N",
+        authorization_sha256=issued.receipt_sha256,
+    )
+    evolved = adapter.reconcile_run(
+        **_kwargs(
+            evolved_receipt,
+            raw=request_raw,
+            media_type=RECONCILIATION_MEDIA_TYPE,
+        )
+    )
+    evolved_wrapper = system["repository"].load_packet(
+        tenant_id=TENANT,
+        namespace=RECONCILIATION_NAMESPACE,
+        trace_id=evolved.receipt_id,
+    )
+
+    first_run = first_wrapper["strict_run_binding"]["binding"]["run"]
+    evolved_binding = evolved_wrapper["strict_run_binding"]["binding"]
+    assert first_run["state"] == "AUTHORIZED"
+    assert evolved_binding["run"]["state"] == RUNNING
+    assert evolved_binding["run"]["head_event_sha256"] != (
+        first_run["head_event_sha256"]
+    )
+    assert evolved_binding["artifacts"]["consumption"] is not None
+    assert evolved.receipt_id != first.receipt_id
+    assert evolved.receipt_sha256 != first.receipt_sha256
+    assert evolved.idempotent_replay is False
+    assert system["repository"].verify_packet(
+        tenant_id=TENANT,
+        namespace=RECONCILIATION_NAMESPACE,
+        trace_id=first.receipt_id,
+    )["match"] is True
+
+    replay_receipt = _bound(
+        system,
+        operation="reconcile_run",
+        raw=request_raw,
+        media_type=RECONCILIATION_MEDIA_TYPE,
+        nonce_character="O",
+        authorization_sha256=issued.receipt_sha256,
+    )
+    replay = adapter.reconcile_run(
+        **_kwargs(
+            replay_receipt,
+            raw=request_raw,
+            media_type=RECONCILIATION_MEDIA_TYPE,
+        )
+    )
+    assert replay.receipt_id == evolved.receipt_id
+    assert replay.receipt_sha256 == evolved.receipt_sha256
+    assert replay.idempotent_replay is True
     system["store"].close()
 
 
@@ -918,4 +1516,282 @@ def test_reconcile_run_rejects_lowercase_retained_authorization_storage_digest(
 
     assert reporter.calls == []
     assert system["backend"].put_count == before
+    system["store"].close()
+
+
+def test_real_http_route_executes_admitted_adapter_through_nonreporting(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Prove the HTTP boundary and admitted adapter compose without a route fake."""
+
+    from fastapi import FastAPI
+    from fastapi.testclient import TestClient
+
+    from api.config import settings
+    from api.middleware.auth import JWTAuthMiddleware
+    from api.routes.cas_harness_v2_worker_protocol import router
+
+    monkeypatch.setattr(settings, "harness_v2_worker_protocol_enabled", True)
+    monkeypatch.setattr(settings, "accounts_enabled", True)
+    monkeypatch.setattr(settings, "fleet_service_auth_enabled", True)
+
+    system = _system(tmp_path, bound_intake=True)
+    adapter = _adapter(system)
+    controller = system["auth"].issue_credential(
+        tenant_id=TENANT,
+        account_id=ACCOUNT,
+        audit_id=AUDIT,
+        fleet_id=AUDIT,
+        worker_id=None,
+        capabilities=[
+            "merge_fleet",
+            "seal_outcome",
+            "record_nonreporting",
+        ],
+        ttl_seconds=3600,
+    )
+    worker = system["auth"].issue_credential(
+        tenant_id=TENANT,
+        account_id=ACCOUNT,
+        audit_id=AUDIT,
+        fleet_id=AUDIT,
+        worker_id=WORKER,
+        capabilities=["lease_job", "submit_evidence", "submit_receipt"],
+        ttl_seconds=3600,
+    )
+
+    app = FastAPI()
+    app.state.cas_harness_v2_worker_protocol_service = adapter
+    app.state.fleet_service_auth_store = system["auth"]
+    app.include_router(router)
+    app.add_middleware(JWTAuthMiddleware)
+    client = TestClient(app)
+    controller_path = (
+        f"/api/cas-harness/audit/distributed/session/{AUDIT}/fleet/v2/job/{JOB}"
+    )
+    worker_path = f"{controller_path}/worker/{WORKER}"
+
+    def headers(
+        credential,
+        *,
+        media_type: str,
+        nonce: str,
+        authorization_sha256: str | None = None,
+        lease_token: str | None = None,
+    ) -> dict[str, str]:
+        values = {
+            "Authorization": f"CAS-Service {credential.api_credential}",
+            "Content-Type": media_type,
+            "X-CAS-Tenant-ID": TENANT,
+            "X-CAS-Audit-ID": AUDIT,
+            "X-CAS-Service-Timestamp": str(int(datetime.now(UTC).timestamp())),
+            "X-CAS-Service-Nonce": nonce,
+        }
+        if authorization_sha256 is not None:
+            values["X-CAS-Authorization-SHA256"] = authorization_sha256
+        if lease_token is not None:
+            values["X-CAS-Lease-Token"] = lease_token
+        return values
+
+    issue_raw = _authorization_request()
+    issue_response = client.post(
+        f"{controller_path}/authorization",
+        content=issue_raw,
+        headers=headers(
+            controller,
+            media_type=ISSUE_REQUEST_MEDIA_TYPE,
+            nonce="route_adapter_issue_nonce_0001",
+        ),
+    )
+    assert issue_response.status_code == 200, issue_response.text
+    issue_result = issue_response.json()["result"]
+    assert set(issue_result) == {
+        "schema_version",
+        "result_kind",
+        "receipt_id",
+        "receipt_sha256",
+        "idempotent_replay",
+        "issued_now",
+        "authorization_byte_length",
+        "authorization_raw_base64",
+    }
+    assert issue_result["issued_now"] is True
+    assert issue_result["idempotent_replay"] is False
+    assert base64.b64decode(issue_result["authorization_raw_base64"]) == system[
+        "authorization_raw"
+    ]
+    authorization_sha256 = issue_result["receipt_sha256"]
+
+    consume_raw = encode(
+        {
+            "schema_version": CONSUMPTION_REQUEST_SCHEMA,
+            "run_nonce_b64url": system["fx"].run_nonce,
+        }
+    )
+    system["clock"].now = STARTED_AT
+    consume_response = client.post(
+        f"{worker_path}/consume",
+        content=consume_raw,
+        headers=headers(
+            worker,
+            media_type=CONSUMPTION_MEDIA_TYPE,
+            nonce="route_adapter_consume_nonce_0002",
+            authorization_sha256=authorization_sha256,
+            lease_token=LEASE_TOKEN,
+        ),
+    )
+    assert consume_response.status_code == 200, consume_response.text
+    assert set(consume_response.json()["result"]) == {
+        "schema_version",
+        "result_kind",
+        "receipt_id",
+        "receipt_sha256",
+        "idempotent_replay",
+        "started_at",
+        "time_assurance",
+    }
+
+    output_raw = encode(
+        {
+            "schema_version": OUTPUT_RETENTION_SCHEMA,
+            "output_name": "raw-outcomes",
+            "artifact": _exact(
+                system["fx"].output_bytes,
+                artifact_id="worker-output-shard-00",
+                media_type="application/jsonl",
+            ),
+        }
+    )
+    output_response = client.post(
+        f"{worker_path}/output",
+        content=output_raw,
+        headers=headers(
+            worker,
+            media_type=OUTPUT_RETENTION_MEDIA_TYPE,
+            nonce="route_adapter_output_nonce_0003",
+            authorization_sha256=authorization_sha256,
+            lease_token=LEASE_TOKEN,
+        ),
+    )
+    assert output_response.status_code == 200, output_response.text
+    assert output_response.json()["result"]["receipt_id"] == (
+        "worker-output-shard-00"
+    )
+
+    system["clock"].now = TERMINAL_AT
+    terminal_response = client.post(
+        f"{worker_path}/terminal",
+        content=system["terminal_receipt_raw"],
+        headers=headers(
+            worker,
+            media_type=TERMINAL_MEDIA_TYPE,
+            nonce="route_adapter_terminal_nonce_0004",
+            authorization_sha256=authorization_sha256,
+            lease_token=LEASE_TOKEN,
+        ),
+    )
+    assert terminal_response.status_code == 200, terminal_response.text
+    terminal_result = terminal_response.json()["result"]
+    assert set(terminal_result) == {
+        "schema_version",
+        "result_kind",
+        "receipt_id",
+        "receipt_sha256",
+        "idempotent_replay",
+        "receipt_media_type",
+        "receipt_byte_length",
+        "terminal_status",
+        "terminal_event_sha256",
+    }
+    assert terminal_result["terminal_status"] == SUCCESS
+
+    outcome_raw = _outcome_request(system)
+    system["clock"].now = OUTCOME_AT
+    outcome_response = client.post(
+        f"{controller_path}/outcome",
+        content=outcome_raw,
+        headers=headers(
+            controller,
+            media_type=OUTCOME_SEAL_MEDIA_TYPE,
+            nonce="route_adapter_outcome_nonce_0005",
+            authorization_sha256=authorization_sha256,
+        ),
+    )
+    assert outcome_response.status_code == 200, outcome_response.text
+    outcome_result = outcome_response.json()["result"]
+    assert set(outcome_result) == {
+        "schema_version",
+        "result_kind",
+        "receipt_id",
+        "receipt_sha256",
+        "idempotent_replay",
+        "accessed_at",
+        "sealed_preregistration_chain_sha256",
+        "time_assurance",
+        "receipt_media_type",
+        "receipt_byte_length",
+        "outcome_event_sha256",
+    }
+    assert outcome_result["result_kind"] == "OUTCOME_ACCESS_SEAL"
+
+    nonreporting_raw = _nonreporting_request(system, terminal_status=SUCCESS)
+    system["clock"].now = PACKET_AT
+    nonreporting_response = client.post(
+        f"{controller_path}/nonreporting",
+        content=nonreporting_raw,
+        headers=headers(
+            controller,
+            media_type=NONREPORTING_MEDIA_TYPE,
+            nonce="route_adapter_nonreport_nonce_0006",
+            authorization_sha256=authorization_sha256,
+        ),
+    )
+    assert nonreporting_response.status_code == 200, nonreporting_response.text
+    assert nonreporting_response.json()["result"] == {
+        "schema_version": "cas_harness_v2.nonreporting_route_result.v1",
+        "result_kind": "NONREPORTING_RECORD",
+        "receipt_id": nonreporting_response.json()["result"]["receipt_id"],
+        "receipt_sha256": nonreporting_response.json()["result"]["receipt_sha256"],
+        "idempotent_replay": False,
+    }
+    assert nonreporting_response.json()["authority"]["criteria_status"] == "OPEN"
+    assert nonreporting_response.json()["authority"]["license_status"] == (
+        "NOT LICENSED"
+    )
+    assert system["registry"].get_lifecycle(
+        tenant_id=TENANT,
+        subject_id=JOB,
+    ).state == NONREPORTING_RECORDED
+
+    bad_request = json.loads(nonreporting_raw.decode("utf-8"))
+    bad_request["expected_lifecycle_head_sha256"] = "0" * 64
+    conflict = client.post(
+        f"{controller_path}/nonreporting",
+        content=encode(bad_request),
+        headers=headers(
+            controller,
+            media_type=NONREPORTING_MEDIA_TYPE,
+            nonce="route_adapter_conflict_nonce_0007",
+            authorization_sha256=authorization_sha256,
+        ),
+    )
+    assert conflict.status_code == 409
+    assert conflict.json() == {
+        "detail": "Harness-v2 worker protocol request conflicts with current state."
+    }
+    combined_http = "\n".join(
+        response.text
+        for response in (
+            issue_response,
+            consume_response,
+            output_response,
+            terminal_response,
+            outcome_response,
+            nonreporting_response,
+            conflict,
+        )
+    )
+    assert LEASE_TOKEN not in combined_http
+    assert "INJECTED_TEST_CLOCK" not in combined_http
     system["store"].close()

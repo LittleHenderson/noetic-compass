@@ -19,10 +19,17 @@ claim, authorize disclosure, or establish production readiness.
 It creates no live-execution, scientific, canon, product, license, or disclosure
 authority.
 
-The packaged private adapter and reconciliation-report path now exist as tested
-bounded software around this isolated kernel. They do not change this kernel's
-trust ceiling, prove provider-backed startup, or authorize a live route or
-experiment.
+The packaged private adapter now includes tested controller-only outcome-seal,
+Packet-v2 attachment, explicit-nonreporting, and reconciliation paths as
+bounded software around this isolated kernel. Exact transport envelopes remain
+separate from the normative kernel carriers. The application reconstructs each
+request-local chain from retained server facts, reserves one declared untrusted
+outcome time, and uses a create-only Packet-versus-nonreporting intent bound to
+the planned final artifact. Reconciliation binds strict per-run replay to a
+separately limited configured-scope report. These controls do not change this
+kernel's trust ceiling, prove provider-backed startup, create trusted time or
+WORM authority, establish absence of off-registry execution, or authorize a
+live route or experiment.
 
 ## 1. Normative executable schemas
 

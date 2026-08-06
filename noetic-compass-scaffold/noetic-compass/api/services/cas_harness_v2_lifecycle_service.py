@@ -317,6 +317,20 @@ class LifecyclePacketResult:
 
 
 @dataclass(frozen=True, slots=True)
+class LifecycleNonreportingResult:
+    lifecycle: Any
+    nonreporting_storage: ExactArtifactReceipt
+    reason_code: str
+    idempotent_replay: bool
+    criteria_status: str = "OPEN"
+    execution_authentication: str = "NOT_ESTABLISHED"
+    trusted_time: str = "NOT_ESTABLISHED"
+    scientific_status: str = "NOT_ESTABLISHED"
+    license_status: str = "NOT LICENSED"
+    disclosure_status: str = "HELD"
+
+
+@dataclass(frozen=True, slots=True)
 class LifecycleReconciliationResult:
     lifecycle: Any
     registry_reconciliation: Any
@@ -1127,6 +1141,8 @@ class DarkHarnessV2LifecycleService:
         chain: object,
         operation_id: str,
         requested_accessed_at: datetime,
+        outcome_request_sha256: str | None = None,
+        clock_observation: LifecycleClockObservation | None = None,
     ) -> LifecycleOutcomeResult:
         """Reserve one stable untrusted time, seal the chain, then finalize it."""
 
@@ -1169,6 +1185,12 @@ class DarkHarnessV2LifecycleService:
             operation_id=operation_id,
             requested_at=requested_accessed_at,
             terminal_artifact=terminal_binding,
+            request_sha256=outcome_request_sha256,
+            clock_observation=(
+                None
+                if clock_observation is None
+                else clock_observation.as_dict()
+            ),
         )
         current = getattr(chain, "outcome_access", None)
         if current is None:
@@ -1211,6 +1233,118 @@ class DarkHarnessV2LifecycleService:
             idempotent_replay=mutation.idempotent_replay,
         )
 
+    def seal_outcome_from_route(
+        self,
+        *,
+        tenant_id: str,
+        account_id: str,
+        subject_id: str,
+        chain: object,
+        operation_id: str,
+        outcome_request_sha256: str,
+    ) -> LifecycleOutcomeResult:
+        """Use one server-observed untrusted time and replay it across HTTP retries."""
+
+        events = self._events(tenant_id, subject_id)
+        if _event(events, OUTCOME_ACCESSED) is not None:
+            reservation = self._lifecycle.get_outcome_access_reservation(
+                tenant_id=tenant_id,
+                subject_id=subject_id,
+            )
+            expected_request_sha256 = _required_lower_sha256(
+                outcome_request_sha256,
+                "outcome_request_sha256",
+            )
+            if (
+                reservation is None
+                or reservation.operation_id != operation_id
+                or reservation.request_sha256 != expected_request_sha256
+            ):
+                raise LifecycleServiceConflict(
+                    "Outcome replay differs from its exact route reservation."
+                )
+            authorization, scope, _authorization_storage = self._reload_authorization(
+                tenant_id=tenant_id,
+                account_id=account_id,
+                subject_id=subject_id,
+                chain=chain,
+            )
+            outcome_storage = self._restore_recorded_outcome(
+                tenant_id=tenant_id,
+                subject_id=subject_id,
+                chain=chain,
+                authorization=authorization,
+                scope=scope,
+                events=events,
+            )
+            current = getattr(chain, "outcome_access", None)
+            if outcome_storage is None or current is None:
+                raise LifecycleServicePersistenceError(
+                    "Recorded outcome access could not be replayed."
+                )
+            return LifecycleOutcomeResult(
+                lifecycle=self._require_lifecycle(tenant_id, subject_id),
+                outcome_access=current,
+                outcome_storage=outcome_storage,
+                accessed_at=current.accessed_at,
+                idempotent_replay=True,
+            )
+        reservation = self._lifecycle.get_outcome_access_reservation(
+            tenant_id=tenant_id,
+            subject_id=subject_id,
+        )
+        if reservation is None:
+            route_clock_observation = self._observe_clock(
+                operation="seal_outcome_http"
+            )
+            requested_at = route_clock_observation.observed_at
+        else:
+            route_clock_observation = None
+            requested_at = _parse_timestamp(reservation.accessed_at)
+        return self.seal_outcome(
+            tenant_id=tenant_id,
+            account_id=account_id,
+            subject_id=subject_id,
+            chain=chain,
+            operation_id=operation_id,
+            requested_accessed_at=requested_at,
+            outcome_request_sha256=_required_lower_sha256(
+                outcome_request_sha256,
+                "outcome_request_sha256",
+            ),
+            clock_observation=route_clock_observation,
+        )
+
+    def replay_recorded_outcome_for_route(
+        self,
+        *,
+        tenant_id: str,
+        account_id: str,
+        subject_id: str,
+        chain: object,
+    ) -> ExactArtifactReceipt:
+        """Rebuild one sealed request-local chain only from retained server facts."""
+
+        authorization, scope, _authorization_storage = self._reload_authorization(
+            tenant_id=tenant_id,
+            account_id=account_id,
+            subject_id=subject_id,
+            chain=chain,
+        )
+        outcome_storage = self._restore_recorded_outcome(
+            tenant_id=tenant_id,
+            subject_id=subject_id,
+            chain=chain,
+            authorization=authorization,
+            scope=scope,
+            events=self._events(tenant_id, subject_id),
+        )
+        if outcome_storage is None:
+            raise LifecycleServiceNotFound(
+                "A retained outcome-access dependency is required."
+            )
+        return outcome_storage
+
     def attach_evidence_packet(
         self,
         *,
@@ -1221,7 +1355,12 @@ class DarkHarnessV2LifecycleService:
         operation_id: str,
         packet_raw: bytes | bytearray | memoryview,
         artifact_bodies: Mapping[str, bytes | bytearray | memoryview],
-        recorded_at: datetime,
+        recorded_at: datetime | None = None,
+        reporting_request_sha256: str | None = None,
+        preregistration_artifact_bodies: Mapping[
+            str, bytes | bytearray | memoryview
+        ] | None = None,
+        enforce_route_dependency_partition: bool = False,
     ) -> LifecyclePacketResult:
         """Strict-load, retain every referenced body, verify, and attach Packet v2."""
 
@@ -1230,13 +1369,31 @@ class DarkHarnessV2LifecycleService:
             raise LifecycleServiceBindingError(
                 "Evidence Packet attachment requires a sealed outcome."
             )
-        authorization, scope, _ = self._reload_authorization(
+        authorization, scope, authorization_storage = self._reload_authorization(
             tenant_id=tenant_id,
             account_id=account_id,
             subject_id=subject_id,
             chain=chain,
         )
-        terminal_event = _terminal_event(self._events(tenant_id, subject_id))
+        events = self._events(tenant_id, subject_id)
+        restored_outcome = self._restore_recorded_outcome(
+            tenant_id=tenant_id,
+            subject_id=subject_id,
+            chain=chain,
+            authorization=authorization,
+            scope=scope,
+            events=events,
+        )
+        if restored_outcome is None:
+            raise LifecycleServicePersistenceError(
+                "Evidence Packet state has no retained outcome-access dependency."
+            )
+        authorization = self._load_authorization_for_chain(
+            authorization_storage.raw_bytes,
+            chain=chain,
+        )
+        _verify_execution_scope(authorization.payload, scope)
+        terminal_event = _terminal_event(events)
         if terminal_event is None:
             raise LifecycleServiceBindingError("Evidence Packet has no terminal parent.")
         if terminal_event["details"].get("terminal_status") != SUCCESS:
@@ -1302,11 +1459,19 @@ class DarkHarnessV2LifecycleService:
             inventory[binding.artifact_id] = (reference, binding)
 
         supplied = _snapshot_mapping(artifact_bodies, "artifact_bodies")
-        if terminal.receipt_id in supplied:
+        preregistered = _snapshot_mapping(
+            preregistration_artifact_bodies or {},
+            "preregistration_artifact_bodies",
+        )
+        if set(supplied).intersection(preregistered):
+            raise LifecycleServiceBindingError(
+                "Packet-specific and preregistration artifact bodies overlap."
+            )
+        if terminal.receipt_id in supplied or terminal.receipt_id in preregistered:
             raise LifecycleServiceBindingError(
                 "artifact_bodies must not replace the server-retained terminal receipt."
             )
-        unexpected = set(supplied) - set(inventory)
+        unexpected = (set(supplied) | set(preregistered)) - set(inventory)
         if unexpected:
             raise LifecycleServiceBindingError(
                 f"Unreferenced artifact bodies were supplied: {sorted(unexpected)!r}."
@@ -1344,6 +1509,27 @@ class DarkHarnessV2LifecycleService:
             seen_output_names.add(output_name)
             output_names[reference.artifact_id] = output_name
 
+        chain_artifact_ids = {
+            reference.artifact_id for reference in chain.artifact_refs
+        }
+        if enforce_route_dependency_partition:
+            forbidden_route_ids = set(supplied).intersection(
+                chain_artifact_ids | set(output_names) | {terminal.receipt_id}
+            )
+            if forbidden_route_ids:
+                raise LifecycleServiceBindingError(
+                    "Packet request attempted to resubmit a server-retained "
+                    "chain, output, or terminal artifact."
+                )
+            missing_preregistered = chain_artifact_ids - {
+                terminal.receipt_id,
+                *preregistered,
+            }
+            if missing_preregistered:
+                raise LifecycleServiceNotFound(
+                    "Server-retained preregistration dependencies are incomplete."
+                )
+
         registry_bytes: dict[str, bytes] = {}
         dependency_plan: list[tuple[Any, ArtifactBinding, bytes]] = []
         for artifact_id, (reference, expected_binding) in inventory.items():
@@ -1366,7 +1552,12 @@ class DarkHarnessV2LifecycleService:
                         f"Packet supplied different bytes for retained output {artifact_id!r}."
                     )
             else:
-                body = supplied.get(artifact_id)
+                body = (
+                    preregistered.get(artifact_id)
+                    if enforce_route_dependency_partition
+                    and artifact_id in chain_artifact_ids
+                    else supplied.get(artifact_id)
+                )
                 if body is None:
                     raise LifecycleServiceNotFound(
                         f"Referenced artifact body {artifact_id!r} is unavailable."
@@ -1392,6 +1583,93 @@ class DarkHarnessV2LifecycleService:
         if getattr(assessment, "structural_completeness", None) != "COMPLETE":
             raise LifecycleServiceBindingError(
                 "Evidence Packet verifier did not establish structural completeness."
+            )
+
+        server_owned_ids = chain_artifact_ids | set(output_names) | {
+            terminal.receipt_id
+        }
+        packet_specific_ids = sorted(
+            {
+                reference.artifact_id
+                for reference in packet.artifact_refs
+                if reference.artifact_id not in server_owned_ids
+            }
+        )
+        dependency_binding_sha256 = hashlib.sha256(
+            _canonical_json_bytes(
+                {
+                    "packet_sha256": packet.sha256,
+                    "artifact_bodies": [
+                        {
+                            "artifact_id": artifact_id,
+                            "sha256": hashlib.sha256(
+                                registry_bytes[artifact_id]
+                            ).hexdigest(),
+                            "byte_length": len(registry_bytes[artifact_id]),
+                        }
+                        for artifact_id in packet_specific_ids
+                    ],
+                }
+            )
+        ).hexdigest()
+        request_sha256 = (
+            _required_lower_sha256(
+                reporting_request_sha256,
+                "reporting_request_sha256",
+            )
+            if reporting_request_sha256 is not None
+            else hashlib.sha256(
+                _canonical_json_bytes(
+                    {
+                        "source": "DIRECT_LIFECYCLE_SERVICE_CALL",
+                        "operation": "PACKET",
+                        "packet_sha256": packet.sha256,
+                        "dependency_binding_sha256": dependency_binding_sha256,
+                    }
+                )
+            ).hexdigest()
+        )
+        existing_reservation = (
+            self._lifecycle.get_reporting_disposition_reservation(
+                tenant_id=tenant_id,
+                subject_id=subject_id,
+            )
+        )
+        reporting_clock_observation = None
+        if existing_reservation is None:
+            if recorded_at is not None:
+                observed_at = recorded_at
+            else:
+                reporting_clock_observation = self._observe_clock(
+                    operation="attach_evidence_packet_http"
+                )
+                observed_at = reporting_clock_observation.observed_at
+        else:
+            observed_at = _parse_timestamp(existing_reservation.recorded_at)
+        reporting_reservation = self._lifecycle.reserve_reporting_disposition(
+            tenant_id=tenant_id,
+            subject_id=subject_id,
+            operation_id=operation_id,
+            disposition="PACKET",
+            reason_code=None,
+            request_sha256=request_sha256,
+            dependency_binding_sha256=dependency_binding_sha256,
+            planned_artifact=ArtifactBinding.from_bytes(
+                artifact_id=packet.packet_id,
+                media_type=EVIDENCE_PACKET_MEDIA_TYPE,
+                body=raw,
+            ),
+            observed_at=observed_at,
+            clock_observation=(
+                None
+                if reporting_clock_observation is None
+                else reporting_clock_observation.as_dict()
+            ),
+        )
+        recorded_at = _parse_timestamp(reporting_reservation.recorded_at)
+        if recorded_at is None:
+            raise LifecycleServiceBindingError(
+                "Evidence Packet recorded_at is unavailable."
             )
 
         retained: list[ExactArtifactReceipt] = []
@@ -1425,6 +1703,7 @@ class DarkHarnessV2LifecycleService:
             operation_id=operation_id,
             packet_artifact=packet_storage.lifecycle_binding,
             recorded_at=recorded_at,
+            reporting_reservation_id=reporting_reservation.reservation_id,
         )
         return LifecyclePacketResult(
             lifecycle=mutation.lifecycle,
@@ -1444,8 +1723,9 @@ class DarkHarnessV2LifecycleService:
         chain: object,
         operation_id: str,
         reason_code: str,
-        recorded_at: datetime,
-    ) -> Any:
+        recorded_at: datetime | None = None,
+        reporting_request_sha256: str | None = None,
+    ) -> LifecycleNonreportingResult:
         """Attach an explicit negative/nonreporting envelope instead of Packet v2."""
 
         lifecycle = self._require_lifecycle(tenant_id, subject_id)
@@ -1459,7 +1739,7 @@ class DarkHarnessV2LifecycleService:
             raise LifecycleServiceBindingError(
                 "Nonreporting requires a sealed outcome or a no-outcome server disposition."
             )
-        _authorization, scope, _ = self._reload_authorization(
+        authorization, scope, authorization_storage = self._reload_authorization(
             tenant_id=tenant_id,
             account_id=account_id,
             subject_id=subject_id,
@@ -1476,6 +1756,20 @@ class DarkHarnessV2LifecycleService:
         )
         terminal_status = terminal_event["details"]["terminal_status"]
         outcome_event = _event(events, OUTCOME_ACCESSED)
+        if outcome_event is not None:
+            self._restore_recorded_outcome(
+                tenant_id=tenant_id,
+                subject_id=subject_id,
+                chain=chain,
+                authorization=authorization,
+                scope=scope,
+                events=events,
+            )
+            authorization = self._load_authorization_for_chain(
+                authorization_storage.raw_bytes,
+                chain=chain,
+            )
+            _verify_execution_scope(authorization.payload, scope)
         direct_no_outcome = terminal_status in SERVER_TERMINAL_DISPOSITIONS
         if direct_no_outcome and outcome_event is not None:
             raise LifecycleServicePersistenceError(
@@ -1487,28 +1781,118 @@ class DarkHarnessV2LifecycleService:
             )
         reason = _required_text(reason_code, "reason_code")
         nonreporting_id = _nonreporting_artifact_id(subject_id)
-        raw = _canonical_json_bytes(
-            {
-                "schema_version": "cas_harness_v2.nonreporting.v2",
-                "nonreporting_id": nonreporting_id,
-                "subject_id": subject_id,
-                "run_id": lifecycle.run_id,
-                "terminal_status": terminal_status,
-                "terminal_artifact": terminal_binding.as_dict(),
-                "reason_code": reason,
-                "recorded_at": _registry_timestamp(recorded_at),
-                "outcome_access": (
-                    "NOT_RECORDED" if direct_no_outcome else "RECORDED"
-                ),
-                "preregistration_chain_closure": (
-                    "NOT_ESTABLISHED_NO_OUTCOME_EVENT"
-                    if direct_no_outcome
-                    else "SEALED_OUTCOME_EVENT_RECORDED_NOT_SCIENTIFIC_AUTHORITY"
-                ),
-                "reporting_effect": "NO_EVIDENCE_PACKET_V2_FABRICATED",
-                "authority": _authority(),
-            }
+
+        def build_nonreporting_bytes(at: datetime) -> bytes:
+            return _canonical_json_bytes(
+                {
+                    "schema_version": "cas_harness_v2.nonreporting.v2",
+                    "nonreporting_id": nonreporting_id,
+                    "subject_id": subject_id,
+                    "run_id": lifecycle.run_id,
+                    "terminal_status": terminal_status,
+                    "terminal_artifact": terminal_binding.as_dict(),
+                    "reason_code": reason,
+                    "recorded_at": _registry_timestamp(at),
+                    "outcome_access": (
+                        "NOT_RECORDED" if direct_no_outcome else "RECORDED"
+                    ),
+                    "preregistration_chain_closure": (
+                        "NOT_ESTABLISHED_NO_OUTCOME_EVENT"
+                        if direct_no_outcome
+                        else "SEALED_OUTCOME_EVENT_RECORDED_NOT_SCIENTIFIC_AUTHORITY"
+                    ),
+                    "reporting_effect": "NO_EVIDENCE_PACKET_V2_FABRICATED",
+                    "authority": _authority(),
+                }
+            )
+
+        outcome_binding = (
+            None
+            if outcome_event is None
+            else _binding_from_mapping(
+                outcome_event["details"]["outcome_access_artifact"]
+            ).as_dict()
         )
+        dependency_binding_sha256 = hashlib.sha256(
+            _canonical_json_bytes(
+                {
+                    "terminal_status": terminal_status,
+                    "terminal_artifact": terminal_binding.as_dict(),
+                    "outcome_access_artifact": outcome_binding,
+                    "reason_code": reason,
+                }
+            )
+        ).hexdigest()
+        request_sha256 = (
+            _required_lower_sha256(
+                reporting_request_sha256,
+                "reporting_request_sha256",
+            )
+            if reporting_request_sha256 is not None
+            else hashlib.sha256(
+                _canonical_json_bytes(
+                    {
+                        "source": "DIRECT_LIFECYCLE_SERVICE_CALL",
+                        "operation": "NONREPORTING",
+                        "dependency_binding_sha256": dependency_binding_sha256,
+                    }
+                )
+            ).hexdigest()
+        )
+        existing_reservation = (
+            self._lifecycle.get_reporting_disposition_reservation(
+                tenant_id=tenant_id,
+                subject_id=subject_id,
+            )
+        )
+        reporting_clock_observation = None
+        if existing_reservation is None:
+            if recorded_at is not None:
+                observed_at = recorded_at
+            else:
+                reporting_clock_observation = self._observe_clock(
+                    operation="record_nonreporting_http"
+                )
+                observed_at = reporting_clock_observation.observed_at
+        else:
+            observed_at = _parse_timestamp(existing_reservation.recorded_at)
+        reporting_reservation = self._lifecycle.reserve_reporting_disposition(
+            tenant_id=tenant_id,
+            subject_id=subject_id,
+            operation_id=operation_id,
+            disposition="NONREPORTING",
+            reason_code=reason,
+            request_sha256=request_sha256,
+            dependency_binding_sha256=dependency_binding_sha256,
+            planned_artifact=ArtifactBinding.from_bytes(
+                artifact_id=nonreporting_id,
+                media_type=NONREPORTING_MEDIA_TYPE,
+                body=build_nonreporting_bytes(observed_at),
+            ),
+            observed_at=observed_at,
+            clock_observation=(
+                None
+                if reporting_clock_observation is None
+                else reporting_clock_observation.as_dict()
+            ),
+        )
+        recorded_at = _parse_timestamp(reporting_reservation.recorded_at)
+        if recorded_at is None:
+            raise LifecycleServiceBindingError(
+                "Nonreporting recorded_at is unavailable."
+            )
+        raw = build_nonreporting_bytes(recorded_at)
+        if (
+            ArtifactBinding.from_bytes(
+                artifact_id=nonreporting_id,
+                media_type=NONREPORTING_MEDIA_TYPE,
+                body=raw,
+            ).as_dict()
+            != reporting_reservation.planned_artifact
+        ):
+            raise LifecycleServiceConflict(
+                "Nonreporting bytes differ from the winning reporting reservation."
+            )
         stored = self._store_exact(
             scope=scope,
             subject_id=subject_id,
@@ -1518,13 +1902,20 @@ class DarkHarnessV2LifecycleService:
             media_type=NONREPORTING_MEDIA_TYPE,
             raw=raw,
         )
-        return self._lifecycle.record_nonreporting(
+        mutation = self._lifecycle.record_nonreporting(
             tenant_id=tenant_id,
             subject_id=subject_id,
             operation_id=operation_id,
             nonreporting_artifact=stored.lifecycle_binding,
             reason_code=reason,
             recorded_at=recorded_at,
+            reporting_reservation_id=reporting_reservation.reservation_id,
+        )
+        return LifecycleNonreportingResult(
+            lifecycle=mutation.lifecycle,
+            nonreporting_storage=stored,
+            reason_code=reason,
+            idempotent_replay=mutation.idempotent_replay,
         )
 
     def reconcile_run(
@@ -1546,8 +1937,22 @@ class DarkHarnessV2LifecycleService:
             chain=chain,
         )
         events = self._events(tenant_id, subject_id)
+        restored_outcome = self._restore_recorded_outcome(
+            tenant_id=tenant_id,
+            subject_id=subject_id,
+            chain=chain,
+            authorization=authorization,
+            scope=scope,
+            events=events,
+        )
+        if restored_outcome is not None:
+            authorization = self._load_authorization_for_chain(
+                authorization_storage.raw_bytes,
+                chain=chain,
+            )
+            _verify_execution_scope(authorization.payload, scope)
         terminal_storage: ExactArtifactReceipt | None = None
-        outcome_storage: ExactArtifactReceipt | None = None
+        outcome_storage: ExactArtifactReceipt | None = restored_outcome
         packet_storage: ExactArtifactReceipt | None = None
         consumption_storage: ExactArtifactReceipt | None = None
         nonreporting_storage: ExactArtifactReceipt | None = None
@@ -1626,14 +2031,13 @@ class DarkHarnessV2LifecycleService:
             binding = _binding_from_mapping(
                 outcome_event["details"]["outcome_access_artifact"]
             )
-            outcome_storage = self._load_exact(
-                scope=scope,
-                subject_id=subject_id,
-                purpose="outcome-access",
-                namespace=OUTCOME_ACCESS_NAMESPACE,
-                artifact_id=binding.artifact_id,
-                expected_binding=binding,
-            )
+            if (
+                outcome_storage is None
+                or outcome_storage.lifecycle_binding != binding
+            ):
+                raise LifecycleServicePersistenceError(
+                    "Retained outcome-access dependency changed during replay."
+                )
             current = getattr(chain, "outcome_access", None)
             if current is None or _carrier_bytes(current, "outcome access event") != outcome_storage.raw_bytes:
                 raise LifecycleServiceBindingError(
@@ -1692,6 +2096,41 @@ class DarkHarnessV2LifecycleService:
                 raise LifecycleServiceBindingError(
                     "Replayed packet is not structurally complete."
                 )
+            reporting_digest = packet_event["details"].get(
+                "reporting_dependency_binding_sha256"
+            )
+            if reporting_digest is not None:
+                server_owned_ids = {
+                    reference.artifact_id for reference in chain.artifact_refs
+                } | output_ids | {terminal.receipt_id}
+                packet_specific_ids = sorted(
+                    {
+                        reference.artifact_id
+                        for reference in packet.artifact_refs
+                        if reference.artifact_id not in server_owned_ids
+                    }
+                )
+                recomputed = hashlib.sha256(
+                    _canonical_json_bytes(
+                        {
+                            "packet_sha256": packet.sha256,
+                            "artifact_bodies": [
+                                {
+                                    "artifact_id": artifact_id,
+                                    "sha256": hashlib.sha256(
+                                        bodies[artifact_id]
+                                    ).hexdigest(),
+                                    "byte_length": len(bodies[artifact_id]),
+                                }
+                                for artifact_id in packet_specific_ids
+                            ],
+                        }
+                    )
+                ).hexdigest()
+                if not hmac.compare_digest(reporting_digest, recomputed):
+                    raise LifecycleServicePersistenceError(
+                        "Packet reporting reservation plan does not replay."
+                    )
         nonreporting_event = _event(events, NONREPORTING_RECORDED)
         if nonreporting_event is not None:
             if terminal_event is None:
@@ -1717,6 +2156,42 @@ class DarkHarnessV2LifecycleService:
                 nonreporting_event=nonreporting_event,
                 outcome_event=outcome_event,
             )
+            reporting_digest = nonreporting_event["details"].get(
+                "reporting_dependency_binding_sha256"
+            )
+            if reporting_digest is not None:
+                terminal_details = terminal_event.get("details")
+                if not isinstance(terminal_details, Mapping):
+                    raise LifecycleServicePersistenceError(
+                        "Nonreporting terminal details are unavailable."
+                    )
+                outcome_binding = (
+                    None
+                    if outcome_event is None
+                    else _binding_from_mapping(
+                        outcome_event["details"]["outcome_access_artifact"]
+                    ).as_dict()
+                )
+                recomputed = hashlib.sha256(
+                    _canonical_json_bytes(
+                        {
+                            "terminal_status": terminal_details[
+                                "terminal_status"
+                            ],
+                            "terminal_artifact": _binding_from_mapping(
+                                terminal_details["terminal_artifact"]
+                            ).as_dict(),
+                            "outcome_access_artifact": outcome_binding,
+                            "reason_code": nonreporting_event["details"][
+                                "reason_code"
+                            ],
+                        }
+                    )
+                ).hexdigest()
+                if not hmac.compare_digest(reporting_digest, recomputed):
+                    raise LifecycleServicePersistenceError(
+                        "Nonreporting reservation plan does not replay."
+                    )
         return LifecycleReconciliationResult(
             lifecycle=lifecycle,
             registry_reconciliation=registry_reconciliation,
@@ -1731,6 +2206,90 @@ class DarkHarnessV2LifecycleService:
                 getattr(registry_reconciliation, "structurally_valid", False)
             ),
         )
+
+    def _restore_recorded_outcome(
+        self,
+        *,
+        tenant_id: str,
+        subject_id: str,
+        chain: object,
+        authorization: AuthorizationCarrier,
+        scope: Mapping[str, str],
+        events: tuple[Mapping[str, Any], ...],
+    ) -> ExactArtifactReceipt | None:
+        """Replay retained outcome bytes into a fresh request-local chain."""
+
+        outcome_event = _event(events, OUTCOME_ACCESSED)
+        if outcome_event is None:
+            return None
+        terminal_event = _terminal_event(events)
+        if terminal_event is None:
+            raise LifecycleServicePersistenceError(
+                "Outcome-access event has no terminal parent."
+            )
+        terminal_details = terminal_event.get("details")
+        outcome_details = outcome_event.get("details")
+        if not isinstance(terminal_details, Mapping) or not isinstance(
+            outcome_details, Mapping
+        ):
+            raise LifecycleServicePersistenceError(
+                "Outcome-access dependency details are unavailable."
+            )
+        if terminal_details.get("terminal_status") not in {SUCCESS, FAILURE}:
+            raise LifecycleServicePersistenceError(
+                "Outcome-access event points to a non-execution disposition."
+            )
+        terminal_binding = _binding_from_mapping(
+            terminal_details["terminal_artifact"]
+        )
+        if outcome_details.get("terminal_artifact") != terminal_binding.as_dict():
+            raise LifecycleServicePersistenceError(
+                "Outcome-access terminal binding differs from its terminal parent."
+            )
+        terminal_storage = self._load_exact(
+            scope=scope,
+            subject_id=subject_id,
+            purpose="terminal",
+            namespace=TERMINAL_NAMESPACE,
+            artifact_id=terminal_binding.artifact_id,
+            expected_binding=terminal_binding,
+        )
+        terminal = self._load_terminal_receipt(
+            terminal_storage.raw_bytes,
+            authorization=authorization,
+            chain=chain,
+        )
+        outcome_binding = _binding_from_mapping(
+            outcome_details["outcome_access_artifact"]
+        )
+        outcome_storage = self._load_exact(
+            scope=scope,
+            subject_id=subject_id,
+            purpose="outcome-access",
+            namespace=OUTCOME_ACCESS_NAMESPACE,
+            artifact_id=outcome_binding.artifact_id,
+            expected_binding=outcome_binding,
+        )
+        current = getattr(chain, "outcome_access", None)
+        if current is None:
+            try:
+                current = chain.record_outcome_access(
+                    accessed_at=_required_text(
+                        outcome_event.get("occurred_at"),
+                        "outcome accessed_at",
+                    ),
+                    execution_completed_at=terminal.terminal_at,
+                    receipt=terminal.artifact_ref,
+                )
+            except Exception as exc:
+                raise LifecycleServiceBindingError(
+                    "Retained outcome-access facts cannot reconstruct the sealed chain."
+                ) from exc
+        if _carrier_bytes(current, "outcome access event") != outcome_storage.raw_bytes:
+            raise LifecycleServiceBindingError(
+                "Retained outcome-access bytes do not match the reconstructed chain."
+            )
+        return outcome_storage
 
     def _reload_authorization(
         self,
@@ -2999,6 +3558,7 @@ __all__ = [
     "ProcessUtcLifecycleClock",
     "LifecycleDispositionResult",
     "LifecycleIssueResult",
+    "LifecycleNonreportingResult",
     "LifecycleOutcomeResult",
     "LifecyclePacketResult",
     "LifecycleReconciliationResult",

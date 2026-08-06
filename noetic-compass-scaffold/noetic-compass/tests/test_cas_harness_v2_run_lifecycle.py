@@ -23,6 +23,7 @@ from api.services.cas_harness_v2_run_lifecycle import (
     OUTCOME_ACCESSED,
     OUTCOME_ACCESS_RESERVATION_KIND,
     PACKET_RECORDED,
+    REPORTING_DISPOSITION_RESERVATION_KIND,
     REJECTED,
     RUNNING,
     SUBJECT_RESERVATION_KIND,
@@ -35,6 +36,7 @@ from api.services.cas_harness_v2_run_lifecycle import (
     RunLifecycleNotFound,
     RunLifecyclePersistenceError,
     RunLifecycleQuarantined,
+    RunLifecycleValidationError,
 )
 from api.services.production.state_substrate import (
     InMemoryStateStore,
@@ -123,6 +125,34 @@ def _consume(
         consumption_artifact=_artifact(f"{operation_id}-consumption"),
         started_at=NOW + timedelta(minutes=1),
     )
+
+
+def _advance_to_outcome_access(
+    service: DurableProspectiveRunLifecycle,
+    *,
+    subject_id: str = "worker-auth-001",
+) -> ArtifactBinding:
+    issuance = _issue(service, subject_id=subject_id)
+    assert issuance.run_nonce is not None
+    _consume(service, issuance.run_nonce, subject_id=subject_id)
+    terminal_artifact = _artifact(f"{subject_id}-terminal-success")
+    service.record_terminal(
+        tenant_id="tenant-a",
+        subject_id=subject_id,
+        operation_id=f"{subject_id}-terminal",
+        terminal_status=SUCCESS,
+        terminal_artifact=terminal_artifact,
+        terminal_at=NOW + timedelta(minutes=2),
+    )
+    service.record_outcome_access(
+        tenant_id="tenant-a",
+        subject_id=subject_id,
+        operation_id=f"{subject_id}-outcome",
+        terminal_artifact=terminal_artifact,
+        outcome_access_artifact=_artifact(f"{subject_id}-outcome-access"),
+        accessed_at=NOW + timedelta(minutes=3),
+    )
+    return terminal_artifact
 
 
 def _stored_payload_text(store, tenant_id: str) -> str:
@@ -377,6 +407,11 @@ def test_success_path_hash_binds_every_artifact_and_exact_retries_converge() -> 
     )
     assert reservation_retry == reservation
     assert reservation.accessed_at == "2026-08-06T16:03:00.000000Z"
+    assert reservation.clock_observation == {
+        "observed_at": "2026-08-06T16:03:00.000000Z",
+        "source": "DIRECT_REGISTRY_CALLER_TIME",
+        "assurance": "CALLER_DECLARED_TIME_NOT_TRUSTED",
+    }
     pending = service.reconcile(tenant_id="tenant-a")
     assert "PENDING_OUTCOME_ACCESS_FINALIZATION" in {
         issue.code for issue in pending.issues
@@ -397,12 +432,24 @@ def test_success_path_hash_binds_every_artifact_and_exact_retries_converge() -> 
     )
     assert outcome.lifecycle.state == OUTCOME_ACCESSED
     packet_artifact = _artifact("evidence-packet-v2")
+    reporting = service.reserve_reporting_disposition(
+        tenant_id="tenant-a",
+        subject_id="worker-auth-001",
+        operation_id="packet-001",
+        disposition="PACKET",
+        reason_code=None,
+        request_sha256="d" * 64,
+        dependency_binding_sha256="e" * 64,
+        planned_artifact=packet_artifact,
+        observed_at=NOW + timedelta(minutes=4),
+    )
     packet = service.record_packet(
         tenant_id="tenant-a",
         subject_id="worker-auth-001",
         operation_id="packet-001",
         packet_artifact=packet_artifact,
         recorded_at=NOW + timedelta(minutes=4),
+        reporting_reservation_id=reporting.reservation_id,
     )
     assert packet.lifecycle.state == PACKET_RECORDED
 
@@ -412,10 +459,11 @@ def test_success_path_hash_binds_every_artifact_and_exact_retries_converge() -> 
         operation_id="packet-001",
         packet_artifact=packet_artifact,
         recorded_at=NOW + timedelta(minutes=4),
+        reporting_reservation_id=reporting.reservation_id,
     )
     assert packet_retry.idempotent_replay is True
     assert packet_retry.event_sha256 == packet.event_sha256
-    with pytest.raises(RunLifecycleConflict, match="cannot append"):
+    with pytest.raises(RunLifecycleConflict, match="durable reservation"):
         service.record_nonreporting(
             tenant_id="tenant-a",
             subject_id="worker-auth-001",
@@ -423,6 +471,7 @@ def test_success_path_hash_binds_every_artifact_and_exact_retries_converge() -> 
             nonreporting_artifact=_artifact("nonreporting-conflict"),
             reason_code="PACKET_ALREADY_RECORDED",
             recorded_at=NOW + timedelta(minutes=5),
+            reporting_reservation_id=reporting.reservation_id,
         )
 
     events = service.list_events(tenant_id="tenant-a", subject_id="worker-auth-001")
@@ -474,19 +523,111 @@ def test_exact_retry_repairs_event_written_before_lifecycle_index() -> None:
 
     with pytest.raises(RunLifecyclePersistenceError, match="synthetic crash"):
         _consume(service, issuance.run_nonce)
-    assert service.get_lifecycle(
-        tenant_id="tenant-a", subject_id="worker-auth-001"
-    ).state == AUTHORIZED
+    raw_lifecycle = store.get("tenant-a", LIFECYCLE_KIND, issuance.lifecycle.run_id)
+    assert raw_lifecycle is not None
+    assert raw_lifecycle.payload["current_state"] == AUTHORIZED
     assert len(store.list("tenant-a", EVENT_KIND)) == 2
     interrupted = service.reconcile(tenant_id="tenant-a")
     assert interrupted.structurally_valid is False
     assert "event/index divergence" in interrupted.issues[0].detail
+
+    repaired_read = service.get_lifecycle(
+        tenant_id="tenant-a", subject_id="worker-auth-001"
+    )
+    assert repaired_read is not None
+    assert repaired_read.state == RUNNING
+    assert repaired_read.event_count == 2
 
     repaired = _consume(service, issuance.run_nonce)
     assert repaired.idempotent_replay is True
     assert repaired.lifecycle.state == RUNNING
     assert repaired.lifecycle.event_count == 2
     assert service.reconcile(tenant_id="tenant-a").structurally_valid is True
+    store.close()
+
+
+def test_verified_read_refuses_invalid_pending_successor_without_indexing() -> None:
+    store = _FailOnceLifecycleIndexUpdateStore()
+    service = _service(store)
+    issuance = _issue(service)
+    assert issuance.run_nonce is not None
+    store.fail_next_lifecycle_update = True
+
+    with pytest.raises(RunLifecyclePersistenceError, match="synthetic crash"):
+        _consume(service, issuance.run_nonce)
+    pending = next(
+        event
+        for event in store.list("tenant-a", EVENT_KIND)
+        if event.payload.get("sequence") == 1
+    )
+    tampered_payload = dict(pending.payload)
+    tampered_payload["event_sha256"] = "0" * 64
+    store.put(
+        pending.with_payload(tampered_payload),
+        expected_version=pending.version,
+    )
+
+    with pytest.raises(RunLifecyclePersistenceError, match="digest does not verify"):
+        service.get_lifecycle(
+            tenant_id="tenant-a",
+            subject_id="worker-auth-001",
+        )
+    raw_lifecycle = store.get(
+        "tenant-a",
+        LIFECYCLE_KIND,
+        issuance.lifecycle.run_id,
+    )
+    assert raw_lifecycle is not None
+    assert raw_lifecycle.payload["current_state"] == AUTHORIZED
+    assert raw_lifecycle.payload["event_count"] == 1
+    store.close()
+
+
+def test_verified_read_refuses_divergent_pending_successors_without_indexing() -> None:
+    store = _FailOnceLifecycleIndexUpdateStore()
+    service = _service(store)
+    issuance = _issue(service)
+    assert issuance.run_nonce is not None
+    store.fail_next_lifecycle_update = True
+
+    with pytest.raises(RunLifecyclePersistenceError, match="synthetic crash"):
+        _consume(service, issuance.run_nonce)
+    pending = next(
+        event
+        for event in store.list("tenant-a", EVENT_KIND)
+        if event.payload.get("sequence") == 1
+    )
+    divergent_payload = dict(pending.payload)
+    divergent_payload["sequence"] = 2
+    store.put(
+        LedgerRecord.new(
+            tenant_id="tenant-a",
+            kind=EVENT_KIND,
+            record_id=f"{pending.record_id}-divergent",
+            payload=divergent_payload,
+            parent_ids=pending.parent_ids,
+            source="adversarial-test",
+            trace_id=pending.trace_id,
+        ),
+        expected_version=0,
+    )
+
+    with pytest.raises(
+        RunLifecyclePersistenceError,
+        match="pending event/index divergence",
+    ):
+        service.get_lifecycle(
+            tenant_id="tenant-a",
+            subject_id="worker-auth-001",
+        )
+    raw_lifecycle = store.get(
+        "tenant-a",
+        LIFECYCLE_KIND,
+        issuance.lifecycle.run_id,
+    )
+    assert raw_lifecycle is not None
+    assert raw_lifecycle.payload["current_state"] == AUTHORIZED
+    assert raw_lifecycle.payload["event_count"] == 1
     store.close()
 
 
@@ -551,13 +692,27 @@ def test_every_terminal_disposition_can_be_exhaustively_nonreported(
                 ),
                 accessed_at=terminal_at + timedelta(minutes=1),
             )
+    nonreporting_artifact = _artifact(f"nonreporting-{terminal_status.lower()}")
+    nonreporting_at = terminal_at + timedelta(minutes=2)
+    reporting = service.reserve_reporting_disposition(
+        tenant_id="tenant-a",
+        subject_id=subject_id,
+        operation_id=f"nonreporting-{terminal_status.lower()}",
+        disposition="NONREPORTING",
+        reason_code=f"DECLARED_{terminal_status}",
+        request_sha256="d" * 64,
+        dependency_binding_sha256="e" * 64,
+        planned_artifact=nonreporting_artifact,
+        observed_at=nonreporting_at,
+    )
     nonreporting = service.record_nonreporting(
         tenant_id="tenant-a",
         subject_id=subject_id,
         operation_id=f"nonreporting-{terminal_status.lower()}",
-        nonreporting_artifact=_artifact(f"nonreporting-{terminal_status.lower()}"),
+        nonreporting_artifact=nonreporting_artifact,
         reason_code=f"DECLARED_{terminal_status}",
-        recorded_at=terminal_at + timedelta(minutes=2),
+        recorded_at=nonreporting_at,
+        reporting_reservation_id=reporting.reservation_id,
     )
     assert nonreporting.lifecycle.state == NONREPORTING_RECORDED
     report = service.reconcile(tenant_id="tenant-a")
@@ -679,13 +834,26 @@ def test_sqlite_restart_preserves_digest_chain_without_promoting_backend_claims(
         outcome_access_artifact=_artifact("outcome-after-restart"),
         accessed_at=NOW + timedelta(minutes=3),
     )
+    restart_nonreporting_artifact = _artifact("nonreporting-after-restart")
+    reporting = restarted.reserve_reporting_disposition(
+        tenant_id="tenant-a",
+        subject_id="worker-auth-001",
+        operation_id="nonreporting-after-restart",
+        disposition="NONREPORTING",
+        reason_code="DECLARED_FAILURE",
+        request_sha256="d" * 64,
+        dependency_binding_sha256="e" * 64,
+        planned_artifact=restart_nonreporting_artifact,
+        observed_at=NOW + timedelta(minutes=4),
+    )
     restarted.record_nonreporting(
         tenant_id="tenant-a",
         subject_id="worker-auth-001",
         operation_id="nonreporting-after-restart",
-        nonreporting_artifact=_artifact("nonreporting-after-restart"),
+        nonreporting_artifact=restart_nonreporting_artifact,
         reason_code="DECLARED_FAILURE",
         recorded_at=NOW + timedelta(minutes=4),
+        reporting_reservation_id=reporting.reservation_id,
     )
     restarted_store.close()
 
@@ -754,6 +922,518 @@ def test_concurrent_sqlite_consumption_has_one_winner_and_exact_retries_converge
     assert len({result.event_sha256 for result in retries}) == 1
     assert len(service.list_events(tenant_id="tenant-a", subject_id="worker-auth-001")) == 2
     store.close()
+
+
+def test_reporting_reservation_blocks_alternate_action_and_exposes_pending_state() -> None:
+    store = InMemoryStateStore()
+    service = _service(store)
+    _advance_to_outcome_access(service)
+    recorded_at = NOW + timedelta(minutes=4)
+    reservation = service.reserve_reporting_disposition(
+        tenant_id="tenant-a",
+        subject_id="worker-auth-001",
+        operation_id="packet-fixed-operation",
+        disposition="PACKET",
+        reason_code=None,
+        request_sha256="1" * 64,
+        dependency_binding_sha256="2" * 64,
+        planned_artifact=_artifact("reserved-packet"),
+        observed_at=recorded_at,
+    )
+    assert reservation.disposition == "PACKET"
+    assert reservation.recorded_at == "2026-08-06T16:04:00.000000Z"
+    assert reservation.clock_observation == {
+        "observed_at": "2026-08-06T16:04:00.000000Z",
+        "source": "DIRECT_REGISTRY_CALLER_TIME",
+        "assurance": "CALLER_DECLARED_TIME_NOT_TRUSTED",
+    }
+    with pytest.raises(RunLifecycleConflict, match="different exact facts"):
+        service.reserve_reporting_disposition(
+            tenant_id="tenant-a",
+            subject_id="worker-auth-001",
+            operation_id="packet-fixed-operation",
+            disposition="PACKET",
+            reason_code=None,
+            request_sha256="1" * 64,
+            dependency_binding_sha256="2" * 64,
+            planned_artifact=_artifact("different-planned-packet"),
+            observed_at=recorded_at,
+        )
+    pending = service.reconcile(tenant_id="tenant-a")
+    assert pending.reporting_disposition_reservation_count == 1
+    assert pending.structurally_valid is False
+    assert "PENDING_REPORTING_DISPOSITION_FINALIZATION" in {
+        issue.code for issue in pending.issues
+    }
+
+    with pytest.raises(RunLifecycleConflict, match="different exact facts"):
+        service.reserve_reporting_disposition(
+            tenant_id="tenant-a",
+            subject_id="worker-auth-001",
+            operation_id="nonreporting-fixed-operation",
+            disposition="NONREPORTING",
+            reason_code="SUCCESS_NO_PACKET_RECORDED",
+            request_sha256="3" * 64,
+            dependency_binding_sha256="4" * 64,
+            planned_artifact=_artifact("alternate-nonreporting"),
+            observed_at=recorded_at + timedelta(seconds=1),
+        )
+    assert len(
+        store.list("tenant-a", REPORTING_DISPOSITION_RESERVATION_KIND)
+    ) == 1
+
+    with pytest.raises(RunLifecycleConflict, match="durable reservation"):
+        service.record_packet(
+            tenant_id="tenant-a",
+            subject_id="worker-auth-001",
+            operation_id="packet-fixed-operation",
+            packet_artifact=_artifact("different-unreserved-packet"),
+            recorded_at=recorded_at,
+            reporting_reservation_id=reservation.reservation_id,
+        )
+    assert service.get_lifecycle(
+        tenant_id="tenant-a",
+        subject_id="worker-auth-001",
+    ).state == OUTCOME_ACCESSED
+
+    mutation = service.record_packet(
+        tenant_id="tenant-a",
+        subject_id="worker-auth-001",
+        operation_id="packet-fixed-operation",
+        packet_artifact=_artifact("reserved-packet"),
+        recorded_at=recorded_at,
+        reporting_reservation_id=reservation.reservation_id,
+    )
+    assert mutation.lifecycle.state == PACKET_RECORDED
+    report = service.reconcile(tenant_id="tenant-a")
+    assert report.structurally_valid is True
+    assert report.all_runs_reporting_disposed is True
+    store.close()
+
+
+def test_reporting_reservation_binds_nonreporting_reason_and_forbids_packet_reason() -> None:
+    store = InMemoryStateStore()
+    service = _service(store)
+    _advance_to_outcome_access(service)
+    recorded_at = NOW + timedelta(minutes=4)
+
+    with pytest.raises(
+        RunLifecycleValidationError,
+        match="PACKET reporting reservations must not declare a reason_code",
+    ):
+        service.reserve_reporting_disposition(
+            tenant_id="tenant-a",
+            subject_id="worker-auth-001",
+            operation_id="invalid-packet-reason-operation",
+            disposition="PACKET",
+            reason_code="PACKET_DOES_NOT_HAVE_A_REASON",
+            request_sha256="1" * 64,
+            dependency_binding_sha256="2" * 64,
+            planned_artifact=_artifact("invalid-packet-reason"),
+            observed_at=recorded_at,
+        )
+    with pytest.raises(RunLifecycleValidationError, match="reason_code"):
+        service.reserve_reporting_disposition(
+            tenant_id="tenant-a",
+            subject_id="worker-auth-001",
+            operation_id="missing-nonreporting-reason-operation",
+            disposition="NONREPORTING",
+            reason_code=None,
+            request_sha256="3" * 64,
+            dependency_binding_sha256="4" * 64,
+            planned_artifact=_artifact("missing-nonreporting-reason"),
+            observed_at=recorded_at,
+        )
+
+    artifact = _artifact("reason-bound-nonreporting")
+    reservation = service.reserve_reporting_disposition(
+        tenant_id="tenant-a",
+        subject_id="worker-auth-001",
+        operation_id="reason-bound-nonreporting-operation",
+        disposition="NONREPORTING",
+        reason_code="SUCCESS_NO_PACKET_RECORDED",
+        request_sha256="5" * 64,
+        dependency_binding_sha256="6" * 64,
+        planned_artifact=artifact,
+        observed_at=recorded_at,
+    )
+    assert reservation.reason_code == "SUCCESS_NO_PACKET_RECORDED"
+
+    with pytest.raises(RunLifecycleConflict, match="durable reservation"):
+        service.record_nonreporting(
+            tenant_id="tenant-a",
+            subject_id="worker-auth-001",
+            operation_id=reservation.operation_id,
+            nonreporting_artifact=artifact,
+            reason_code="DIFFERENT_UNRESERVED_REASON",
+            recorded_at=recorded_at,
+            reporting_reservation_id=reservation.reservation_id,
+        )
+    assert service.get_lifecycle(
+        tenant_id="tenant-a",
+        subject_id="worker-auth-001",
+    ).state == OUTCOME_ACCESSED
+
+    service.record_nonreporting(
+        tenant_id="tenant-a",
+        subject_id="worker-auth-001",
+        operation_id=reservation.operation_id,
+        nonreporting_artifact=artifact,
+        reason_code="SUCCESS_NO_PACKET_RECORDED",
+        recorded_at=recorded_at,
+        reporting_reservation_id=reservation.reservation_id,
+    )
+    report = service.reconcile(tenant_id="tenant-a")
+    assert report.structurally_valid is True
+    assert report.all_runs_reporting_disposed is True
+    store.close()
+
+
+def test_route_owned_outcome_reservation_concurrent_clock_reads_converge(
+    tmp_path: Path,
+) -> None:
+    store = SqliteStateStore(tmp_path / "outcome-reservation-race.db")
+    service = _service(store, nonce=b"O" * 32)
+    issuance = _issue(service)
+    assert issuance.run_nonce is not None
+    _consume(service, issuance.run_nonce)
+    terminal = _artifact("outcome-race-terminal")
+    service.record_terminal(
+        tenant_id="tenant-a",
+        subject_id="worker-auth-001",
+        operation_id="outcome-race-terminal-operation",
+        terminal_status=SUCCESS,
+        terminal_artifact=terminal,
+        terminal_at=NOW + timedelta(minutes=2),
+    )
+    barrier = threading.Barrier(8)
+
+    def reserve(index: int):
+        barrier.wait()
+        return service.reserve_outcome_access(
+            tenant_id="tenant-a",
+            subject_id="worker-auth-001",
+            operation_id="fixed-http-outcome-operation",
+            requested_at=NOW + timedelta(minutes=3, microseconds=index),
+            terminal_artifact=terminal,
+            request_sha256="b" * 64,
+        )
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        reservations = list(pool.map(reserve, range(8)))
+    assert len({item.reservation_id for item in reservations}) == 1
+    assert len({item.accessed_at for item in reservations}) == 1
+    assert len(store.list("tenant-a", OUTCOME_ACCESS_RESERVATION_KIND)) == 1
+    winner = reservations[0]
+    service.finalize_outcome_access(
+        tenant_id="tenant-a",
+        subject_id="worker-auth-001",
+        reservation_id=winner.reservation_id,
+        outcome_access_artifact=_artifact("outcome-race-access"),
+    )
+    assert service.reconcile(tenant_id="tenant-a").structurally_valid is True
+    store.close()
+
+
+def test_backward_clock_cannot_poison_outcome_or_reporting_reservation() -> None:
+    store = InMemoryStateStore()
+    service = _service(store)
+    issuance = _issue(service)
+    assert issuance.run_nonce is not None
+    _consume(service, issuance.run_nonce)
+    terminal = _artifact("causality-terminal")
+    service.record_terminal(
+        tenant_id="tenant-a",
+        subject_id="worker-auth-001",
+        operation_id="causality-terminal-operation",
+        terminal_status=SUCCESS,
+        terminal_artifact=terminal,
+        terminal_at=NOW + timedelta(minutes=2),
+    )
+    with pytest.raises(RunLifecycleConflict, match="cannot precede"):
+        service.reserve_outcome_access(
+            tenant_id="tenant-a",
+            subject_id="worker-auth-001",
+            operation_id="causality-outcome-operation",
+            requested_at=NOW + timedelta(minutes=1),
+            terminal_artifact=terminal,
+            request_sha256="c" * 64,
+        )
+    assert not store.list("tenant-a", OUTCOME_ACCESS_RESERVATION_KIND)
+
+    service.record_outcome_access(
+        tenant_id="tenant-a",
+        subject_id="worker-auth-001",
+        operation_id="causality-outcome-operation",
+        terminal_artifact=terminal,
+        outcome_access_artifact=_artifact("causality-outcome"),
+        accessed_at=NOW + timedelta(minutes=3),
+        request_sha256="c" * 64,
+    )
+    with pytest.raises(RunLifecycleConflict, match="cannot precede"):
+        service.reserve_reporting_disposition(
+            tenant_id="tenant-a",
+            subject_id="worker-auth-001",
+            operation_id="causality-reporting-operation",
+            disposition="PACKET",
+            reason_code=None,
+            request_sha256="d" * 64,
+            dependency_binding_sha256="e" * 64,
+            planned_artifact=_artifact("causality-packet"),
+            observed_at=NOW + timedelta(minutes=2),
+        )
+    assert not store.list(
+        "tenant-a",
+        REPORTING_DISPOSITION_RESERVATION_KIND,
+    )
+    store.close()
+
+
+def test_backward_clock_cannot_create_running_or_terminal_transition() -> None:
+    store = InMemoryStateStore()
+    service = _service(store)
+    issuance = _issue(service)
+    assert issuance.run_nonce is not None
+
+    with pytest.raises(RunLifecycleConflict, match="cannot precede"):
+        service.consume_authorization(
+            tenant_id="tenant-a",
+            subject_id="worker-auth-001",
+            run_nonce=issuance.run_nonce,
+            operation_id="backward-running-operation",
+            worker_id="worker-001",
+            consumption_artifact=_artifact("backward-running-consumption"),
+            started_at=NOW - timedelta(microseconds=1),
+        )
+    authorized = service.get_lifecycle(
+        tenant_id="tenant-a", subject_id="worker-auth-001"
+    )
+    assert authorized is not None
+    assert authorized.state == AUTHORIZED
+    assert authorized.event_count == 1
+    assert len(store.list("tenant-a", EVENT_KIND)) == 1
+
+    running = _consume(service, issuance.run_nonce)
+    assert running.lifecycle.state == RUNNING
+    with pytest.raises(RunLifecycleConflict, match="cannot precede"):
+        service.record_terminal(
+            tenant_id="tenant-a",
+            subject_id="worker-auth-001",
+            operation_id="backward-terminal-operation",
+            terminal_status=SUCCESS,
+            terminal_artifact=_artifact("backward-terminal"),
+            terminal_at=NOW,
+        )
+    still_running = service.get_lifecycle(
+        tenant_id="tenant-a", subject_id="worker-auth-001"
+    )
+    assert still_running is not None
+    assert still_running.state == RUNNING
+    assert still_running.event_count == 2
+    assert len(store.list("tenant-a", EVENT_KIND)) == 2
+    assert service.reconcile(tenant_id="tenant-a").structurally_valid is True
+    store.close()
+
+
+def test_replay_rejects_rehashed_history_with_decreasing_event_time() -> None:
+    store = InMemoryStateStore()
+    service = _service(store)
+    issuance = _issue(service)
+    assert issuance.run_nonce is not None
+    _consume(service, issuance.run_nonce)
+
+    running_event = next(
+        event
+        for event in store.list("tenant-a", EVENT_KIND)
+        if event.payload.get("sequence") == 1
+    )
+    tampered = dict(running_event.payload)
+    tampered["occurred_at"] = (
+        NOW - timedelta(microseconds=1)
+    ).isoformat(timespec="microseconds").replace("+00:00", "Z")
+    tampered["operation_fingerprint_sha256"] = hashlib.sha256(
+        json.dumps(
+            {
+                "event_type": tampered["event_type"],
+                "occurred_at": tampered["occurred_at"],
+                "details": tampered["details"],
+                "state_after": tampered["state_after"],
+            },
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=True,
+            allow_nan=False,
+        ).encode("utf-8")
+    ).hexdigest()
+    without_hash = dict(tampered)
+    without_hash.pop("event_sha256")
+    tampered["event_sha256"] = hashlib.sha256(
+        json.dumps(
+            without_hash,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=True,
+            allow_nan=False,
+        ).encode("utf-8")
+    ).hexdigest()
+    store.put(
+        running_event.with_payload(tampered),
+        expected_version=running_event.version,
+    )
+    lifecycle = store.get("tenant-a", LIFECYCLE_KIND, issuance.lifecycle.run_id)
+    assert lifecycle is not None
+    lifecycle_payload = dict(lifecycle.payload)
+    lifecycle_payload["head_event_sha256"] = tampered["event_sha256"]
+    store.put(
+        lifecycle.with_payload(lifecycle_payload),
+        expected_version=lifecycle.version,
+    )
+
+    with pytest.raises(RunLifecyclePersistenceError, match="cannot precede"):
+        service.list_events(
+            tenant_id="tenant-a",
+            subject_id="worker-auth-001",
+        )
+    report = service.reconcile(tenant_id="tenant-a")
+    assert report.structurally_valid is False
+    assert any("cannot precede" in issue.detail for issue in report.issues)
+    store.close()
+
+
+def test_concurrent_reporting_reservations_choose_one_action_and_exact_calls_converge(
+    tmp_path: Path,
+) -> None:
+    store = SqliteStateStore(tmp_path / "reporting-race.db")
+    service = _service(store, nonce=b"Y" * 32)
+    _advance_to_outcome_access(service)
+    barrier = threading.Barrier(8)
+
+    def contend(index: int):
+        disposition = "PACKET" if index % 2 == 0 else "NONREPORTING"
+        operation_id = (
+            "packet-fixed-operation"
+            if disposition == "PACKET"
+            else "nonreporting-fixed-operation"
+        )
+        request_sha256 = "5" * 64 if disposition == "PACKET" else "6" * 64
+        dependency_sha256 = "7" * 64 if disposition == "PACKET" else "8" * 64
+        barrier.wait()
+        try:
+            reserved = service.reserve_reporting_disposition(
+                tenant_id="tenant-a",
+                subject_id="worker-auth-001",
+                operation_id=operation_id,
+                disposition=disposition,
+                reason_code=(
+                    None
+                    if disposition == "PACKET"
+                    else "SUCCESS_NO_PACKET_RECORDED"
+                ),
+                request_sha256=request_sha256,
+                dependency_binding_sha256=dependency_sha256,
+                planned_artifact=_artifact(
+                    "race-winning-packet"
+                    if disposition == "PACKET"
+                    else "race-winning-nonreporting"
+                ),
+                observed_at=NOW
+                + timedelta(minutes=4, microseconds=index),
+            )
+            return ("reserved", disposition, reserved)
+        except RunLifecycleConflict as exc:
+            return ("conflict", disposition, str(exc))
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        outcomes = list(pool.map(contend, range(8)))
+    winners = [row for row in outcomes if row[0] == "reserved"]
+    losers = [row for row in outcomes if row[0] == "conflict"]
+    assert len(winners) == 4
+    assert len(losers) == 4
+    winning_disposition = winners[0][1]
+    assert {row[1] for row in winners} == {winning_disposition}
+    assert len({row[2].recorded_at for row in winners}) == 1
+    assert len(
+        store.list("tenant-a", REPORTING_DISPOSITION_RESERVATION_KIND)
+    ) == 1
+
+    reservation = winners[0][2]
+    recorded_at = datetime.fromisoformat(
+        reservation.recorded_at.replace("Z", "+00:00")
+    )
+    if winning_disposition == "PACKET":
+        service.record_packet(
+            tenant_id="tenant-a",
+            subject_id="worker-auth-001",
+            operation_id=reservation.operation_id,
+            packet_artifact=_artifact("race-winning-packet"),
+            recorded_at=recorded_at,
+            reporting_reservation_id=reservation.reservation_id,
+        )
+    else:
+        service.record_nonreporting(
+            tenant_id="tenant-a",
+            subject_id="worker-auth-001",
+            operation_id=reservation.operation_id,
+            nonreporting_artifact=_artifact("race-winning-nonreporting"),
+            reason_code="SUCCESS_NO_PACKET_RECORDED",
+            recorded_at=recorded_at,
+            reporting_reservation_id=reservation.reservation_id,
+        )
+    assert service.reconcile(tenant_id="tenant-a").structurally_valid is True
+    store.close()
+
+
+def test_pending_reporting_reservation_survives_restart_and_exact_finalization(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "reporting-restart.db"
+    first_store = SqliteStateStore(path)
+    first = _service(first_store, nonce=b"Z" * 32)
+    _advance_to_outcome_access(first)
+    reservation = first.reserve_reporting_disposition(
+        tenant_id="tenant-a",
+        subject_id="worker-auth-001",
+        operation_id="restart-nonreporting-operation",
+        disposition="NONREPORTING",
+        reason_code="SUCCESS_NO_PACKET_RECORDED",
+        request_sha256="9" * 64,
+        dependency_binding_sha256="a" * 64,
+        planned_artifact=_artifact("restart-nonreporting"),
+        observed_at=NOW + timedelta(minutes=4),
+    )
+    first_store.close()
+
+    restarted_store = SqliteStateStore(path)
+    restarted = _service(restarted_store, nonce=b"unused".ljust(32, b"_"))
+    loaded = restarted.get_reporting_disposition_reservation(
+        tenant_id="tenant-a",
+        subject_id="worker-auth-001",
+    )
+    assert loaded == reservation
+    pending = restarted.reconcile(tenant_id="tenant-a")
+    assert pending.structurally_valid is False
+    assert "PENDING_REPORTING_DISPOSITION_FINALIZATION" in {
+        issue.code for issue in pending.issues
+    }
+    restarted.record_nonreporting(
+        tenant_id="tenant-a",
+        subject_id="worker-auth-001",
+        operation_id=reservation.operation_id,
+        nonreporting_artifact=_artifact("restart-nonreporting"),
+        reason_code="SUCCESS_NO_PACKET_RECORDED",
+        recorded_at=datetime.fromisoformat(
+            reservation.recorded_at.replace("Z", "+00:00")
+        ),
+        reporting_reservation_id=reservation.reservation_id,
+    )
+    restarted_store.close()
+
+    verifier_store = SqliteStateStore(path)
+    verifier = _service(verifier_store, nonce=b"unused".ljust(32, b"_"))
+    report = verifier.reconcile(tenant_id="tenant-a")
+    assert report.structurally_valid is True
+    assert report.state_counts == {NONREPORTING_RECORDED: 1}
+    verifier_store.close()
 
 
 def test_two_sqlite_connections_have_one_authorization_consumer(

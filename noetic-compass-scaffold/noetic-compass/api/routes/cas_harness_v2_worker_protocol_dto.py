@@ -191,10 +191,135 @@ class ConsumptionRouteResultDTO(_ExactRedactedResultDTO):
         return result
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True, slots=True, kw_only=True)
 class TerminalRouteResultDTO(_ExactRedactedResultDTO):
+    receipt_media_type: str
+    receipt_byte_length: int
+    terminal_status: str
+    terminal_event_sha256: str
+
     schema_version: ClassVar[str] = "cas_harness_v2.terminal_route_result.v1"
     result_kind: ClassVar[str] = "TERMINAL_ACCEPTANCE"
+
+    def __post_init__(self) -> None:
+        super(TerminalRouteResultDTO, self).__post_init__()
+        _validate_continuation_binding(
+            media_type=self.receipt_media_type,
+            byte_length=self.receipt_byte_length,
+            event_sha256=self.terminal_event_sha256,
+        )
+        if self.terminal_status not in {"SUCCESS", "FAILURE"}:
+            raise WorkerProtocolResultDTOError(
+                "Terminal continuation status must be SUCCESS or FAILURE."
+            )
+
+    def to_public_dict(self) -> dict[str, object]:
+        result = super(TerminalRouteResultDTO, self).to_public_dict()
+        result.update(
+            {
+                "receipt_media_type": self.receipt_media_type,
+                "receipt_byte_length": self.receipt_byte_length,
+                "terminal_status": self.terminal_status,
+                "terminal_event_sha256": self.terminal_event_sha256,
+            }
+        )
+        return result
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class OutcomeSealRouteResultDTO(_ExactRedactedResultDTO):
+    accessed_at: str
+    sealed_preregistration_chain_sha256: str
+    receipt_media_type: str
+    receipt_byte_length: int
+    outcome_event_sha256: str
+
+    schema_version: ClassVar[str] = "cas_harness_v2.outcome_route_result.v1"
+    result_kind: ClassVar[str] = "OUTCOME_ACCESS_SEAL"
+    time_assurance: ClassVar[str] = _UNTRUSTED_TIME_ASSURANCE
+
+    def __post_init__(self) -> None:
+        super(OutcomeSealRouteResultDTO, self).__post_init__()
+        if not isinstance(self.accessed_at, str):
+            raise WorkerProtocolResultDTOError(
+                "Outcome access time must be canonical UTC."
+            )
+        try:
+            parsed = datetime.fromisoformat(self.accessed_at.replace("Z", "+00:00"))
+        except ValueError as exc:
+            raise WorkerProtocolResultDTOError(
+                "Outcome access time must be canonical UTC."
+            ) from exc
+        if parsed.tzinfo is None:
+            raise WorkerProtocolResultDTOError(
+                "Outcome access time must be canonical UTC."
+            )
+        canonical = parsed.astimezone(UTC).isoformat(
+            timespec="microseconds"
+        ).replace("+00:00", "Z")
+        if self.accessed_at != canonical:
+            raise WorkerProtocolResultDTOError(
+                "Outcome access time must be canonical UTC."
+            )
+        if not _UPPER_SHA256_RE.fullmatch(
+            self.sealed_preregistration_chain_sha256 or ""
+        ):
+            raise WorkerProtocolResultDTOError(
+                "Sealed preregistration chain digest must be uppercase SHA-256."
+            )
+        _validate_continuation_binding(
+            media_type=self.receipt_media_type,
+            byte_length=self.receipt_byte_length,
+            event_sha256=self.outcome_event_sha256,
+        )
+
+    def to_public_dict(self) -> dict[str, object]:
+        result = super(OutcomeSealRouteResultDTO, self).to_public_dict()
+        result.update(
+            {
+                "accessed_at": self.accessed_at,
+                "sealed_preregistration_chain_sha256": (
+                    self.sealed_preregistration_chain_sha256
+                ),
+                "time_assurance": self.time_assurance,
+                "receipt_media_type": self.receipt_media_type,
+                "receipt_byte_length": self.receipt_byte_length,
+                "outcome_event_sha256": self.outcome_event_sha256,
+            }
+        )
+        return result
+
+
+def _validate_continuation_binding(
+    *,
+    media_type: object,
+    byte_length: object,
+    event_sha256: object,
+) -> None:
+    if (
+        not isinstance(media_type, str)
+        or not media_type
+        or media_type != media_type.strip()
+        or any(character.isspace() for character in media_type)
+        or "/" not in media_type
+    ):
+        raise WorkerProtocolResultDTOError(
+            "Continuation media type is invalid."
+        )
+    if (
+        type(byte_length) is not int
+        or isinstance(byte_length, bool)
+        or byte_length < 1
+    ):
+        raise WorkerProtocolResultDTOError(
+            "Continuation byte length is invalid."
+        )
+    if not isinstance(event_sha256, str) or not _UPPER_SHA256_RE.fullmatch(
+        event_sha256
+    ):
+        raise WorkerProtocolResultDTOError(
+            "Continuation event digest must be uppercase SHA-256."
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -220,6 +345,7 @@ ExactRouteResultDTO = (
     | OutputRetentionRouteResultDTO
     | ConsumptionRouteResultDTO
     | TerminalRouteResultDTO
+    | OutcomeSealRouteResultDTO
     | EvidencePacketRouteResultDTO
     | NonreportingRouteResultDTO
     | ReconciliationRouteResultDTO
@@ -231,6 +357,7 @@ _EXPECTED_RESULT_TYPES: dict[str, type[_ExactRedactedResultDTO]] = {
     "retain_output": OutputRetentionRouteResultDTO,
     "consume_authorization": ConsumptionRouteResultDTO,
     "accept_terminal": TerminalRouteResultDTO,
+    "seal_outcome": OutcomeSealRouteResultDTO,
     "attach_evidence_packet": EvidencePacketRouteResultDTO,
     "record_nonreporting": NonreportingRouteResultDTO,
     "reconcile_run": ReconciliationRouteResultDTO,
@@ -256,6 +383,7 @@ __all__ = [
     "EvidencePacketRouteResultDTO",
     "ExactRouteResultDTO",
     "NonreportingRouteResultDTO",
+    "OutcomeSealRouteResultDTO",
     "OutputRetentionRouteResultDTO",
     "ReconciliationRouteResultDTO",
     "TerminalRouteResultDTO",

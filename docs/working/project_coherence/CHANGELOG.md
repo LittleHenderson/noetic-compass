@@ -2,6 +2,76 @@
 
 All dates use the repository's working timezone. This changelog records control-package changes, not product releases.
 
+## 2026-08-06 - Gate 5 explicit controller-continuation successor
+
+### Added
+
+- Exact controller-only outcome-seal, Evidence-Packet-v2 attachment, and
+  explicit-nonreporting request envelopes, capabilities, private routes, and
+  continuation DTOs. The feature remains default-dark and excluded from
+  OpenAPI.
+- Fresh request-local outcome reconstruction from retained authorization,
+  terminal, lifecycle, and outcome facts. The create-only outcome reservation
+  preserves one winning declared time and its explicit untrusted provenance.
+- A mandatory create-only `PACKET`-versus-`NONREPORTING` reservation that binds
+  operation, request, dependency plan, parent head, clock observation, and the
+  exact planned final artifact before any final reporting transition.
+- A reconciliation storage-wrapper v2 whose returned ID and digest identify
+  the same retained bytes. It binds a hashed strict per-run lifecycle/artifact
+  snapshot to the separately limited configured-scope report.
+- One real FastAPI-to-admitted-adapter regression traversing authorization,
+  consumption, output retention, terminal acceptance, outcome sealing, and
+  explicit nonreporting without enabling a live provider lane.
+
+### Corrected through adversarial review
+
+- Made the planned reporting artifact part of both ordinary and concurrent
+  reservation equality. Packet/nonreporting lifecycle finalization can no
+  longer bypass the reservation, and direct lifecycle-service calls derive a
+  deterministic request identity rather than taking an unreserved legacy path.
+- Rejected a duplicate claim-ledger artifact source in authorization envelopes,
+  including both byte-identical and conflicting duplicates.
+- Rejected ambiguous duplicate security/entity headers and every transfer-
+  encoding request before callback-nonce consumption. Corrected fresh-chain
+  replay, backward-clock poisoning, claim-ledger identity selection,
+  continuation bindings, and reporting dependency replay.
+- Distinguished direct caller-declared time from process/injected-clock
+  provenance without promoting either to trusted time.
+- Rejected forged non-content-derived reconciliation report IDs and preserved
+  immutable prior receipts when a strict run head evolves.
+- Bound the closed nonreporting reason into the create-only reporting
+  reservation, rejected backward lifecycle event time at every transition and
+  during full replay, and made controller reads repair exactly one verified
+  event-first/index-second pending successor while rejecting corrupt or
+  divergent pending histories.
+
+### Verified bounded receipts
+
+- Prospective lifecycle/SQLite/default-dark route: 97/97, node-ID digest
+  `727F58CC716F5ADD0BAB8FB965CC1E6B68245E60DB6C160A33AF96ED9EC5E5F9`.
+- Packaging/snapshot/envelope/context/admitted-adapter/reconciliation: 90/90,
+  node-ID digest
+  `761038779E00511179D4FC5AA3522829D9BDEFB37C231061D04FB3AAD541F733`.
+- A focused development run across the changed route, lifecycle, service,
+  adapter, authentication, and bridge surfaces passed 154/154. These are local,
+  unattested software regressions, not live execution or scientific evidence.
+
+### Preserved open boundaries
+
+- Gate 5 remains `OPEN / KEEP_OPEN`; engineering remains `RING 4 / BOUNDED
+  SOFTWARE CANDIDATE TESTED`; experiment status remains `NOT_STARTED`; and
+  license/disclosure/canon remain `NOT LICENSED / HELD / NOT FROZEN`.
+- The lower outcome reservation still lacks a separately immutable planned-
+  final-artifact intent; output-retention responses do not yet identify exact
+  replay; `INDETERMINATE`/`REJECTED`/`EXPIRED` HTTP dispositions, complete
+  partial-write/orphan inventory, provider-backed enabled startup, trusted
+  time, independent inner-byte WORM retention, cross-host/host-loss authority,
+  authenticated execution, independent replay, and every experimental,
+  scientific, product, license, canon, and disclosure conclusion remain open.
+- The user-reported RunPod balance remains `$107.00`; no RunPod/GPU/paid job was
+  launched, known spend for this tranche remains `$0.00`, and no provider
+  billing ledger or balance receipt was inspected.
+
 ## 2026-08-06 - Gate 5 admitted adapter and bounded reconciliation successor
 
 ### Added

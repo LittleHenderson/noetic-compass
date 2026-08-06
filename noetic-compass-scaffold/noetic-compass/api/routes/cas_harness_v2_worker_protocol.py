@@ -34,6 +34,7 @@ from api.routes.cas_harness_v2_worker_protocol_dto import (
     ConsumptionRouteResultDTO,
     EvidencePacketRouteResultDTO,
     NonreportingRouteResultDTO,
+    OutcomeSealRouteResultDTO,
     OutputRetentionRouteResultDTO,
     ReconciliationRouteResultDTO,
     TerminalRouteResultDTO,
@@ -73,7 +74,10 @@ CONSUMPTION_MEDIA_TYPE = "application/vnd.cas-harness.run-consumption+json"
 TERMINAL_MEDIA_TYPE = (
     "application/vnd.cas-harness.worker-terminal-receipt+json"
 )
-EVIDENCE_PACKET_MEDIA_TYPE = "application/vnd.cas-harness.evidence-packet+json"
+OUTCOME_SEAL_MEDIA_TYPE = "application/vnd.cas-harness.outcome-seal-request+json"
+EVIDENCE_PACKET_MEDIA_TYPE = (
+    "application/vnd.cas-harness.evidence-packet-attachment+json"
+)
 NONREPORTING_MEDIA_TYPE = "application/vnd.cas-harness.nonreporting-request+json"
 RECONCILIATION_MEDIA_TYPE = "application/vnd.cas-harness.reconciliation-request+json"
 
@@ -100,6 +104,8 @@ class HarnessV2WorkerProtocolRouteService(Protocol):
     def consume_authorization(self, **kwargs: Any) -> ConsumptionRouteResultDTO: ...
 
     def accept_terminal(self, **kwargs: Any) -> TerminalRouteResultDTO: ...
+
+    def seal_outcome(self, **kwargs: Any) -> OutcomeSealRouteResultDTO: ...
 
     def attach_evidence_packet(self, **kwargs: Any) -> EvidencePacketRouteResultDTO: ...
 
@@ -180,12 +186,26 @@ def _fleet_auth_store(request: Request) -> FleetServiceAuthStore:
 async def _read_exact_body(request: Request, *, media_type: str) -> bytes:
     if request.url.query:
         raise HTTPException(status_code=400, detail="Query parameters are not accepted.")
-    if request.headers.get("Content-Encoding", "").strip() not in {"", "identity"}:
+    transfer_encoding = request.headers.getlist("Transfer-Encoding")
+    if transfer_encoding:
+        raise HTTPException(
+            status_code=400,
+            detail="Transfer-Encoding is not accepted for exact carriers.",
+        )
+    encoding_values = request.headers.getlist("Content-Encoding")
+    if len(encoding_values) > 1:
+        raise HTTPException(status_code=400, detail="Duplicate Content-Encoding.")
+    encoding = encoding_values[0].strip() if encoding_values else ""
+    if encoding not in {"", "identity"}:
         raise HTTPException(status_code=415, detail="Content encoding is not accepted.")
-    if request.headers.get("Content-Type", "") != media_type:
+    content_types = request.headers.getlist("Content-Type")
+    if len(content_types) != 1 or content_types[0] != media_type:
         raise HTTPException(status_code=415, detail="Unsupported exact carrier media type.")
 
-    declared_length = request.headers.get("Content-Length")
+    length_values = request.headers.getlist("Content-Length")
+    if len(length_values) > 1:
+        raise HTTPException(status_code=400, detail="Duplicate Content-Length.")
+    declared_length = length_values[0] if length_values else None
     if declared_length is not None:
         try:
             parsed_length = int(declared_length)
@@ -213,9 +233,9 @@ async def _read_exact_body(request: Request, *, media_type: str) -> bytes:
 
 
 def _authorization_digest(request: Request, *, required: bool) -> str | None:
-    value = request.headers.get("X-CAS-Authorization-SHA256", "")
+    values = request.headers.getlist("X-CAS-Authorization-SHA256")
     if not required:
-        if value:
+        if values:
             raise HTTPException(
                 status_code=422,
                 detail=(
@@ -224,6 +244,12 @@ def _authorization_digest(request: Request, *, required: bool) -> str | None:
                 ),
             )
         return None
+    if len(values) != 1:
+        raise HTTPException(
+            status_code=422,
+            detail="X-CAS-Authorization-SHA256 must occur exactly once.",
+        )
+    value = values[0]
     if not _UPPER_SHA256_RE.fullmatch(value):
         raise HTTPException(
             status_code=422,
@@ -292,10 +318,30 @@ def _authenticate_intake(
     authorization_sha256: str | None,
     lease_token_sha256: str | None,
 ) -> FleetServiceBoundIntakeReceipt:
-    authorization = request.headers.get("Authorization", "")
+    authorization_values = request.headers.getlist("Authorization")
+    audit_values = request.headers.getlist("X-CAS-Audit-ID")
+    tenant_values = request.headers.getlist("X-CAS-Tenant-ID")
+    timestamp_values = request.headers.getlist("X-CAS-Service-Timestamp")
+    nonce_values = request.headers.getlist("X-CAS-Service-Nonce")
+    if any(
+        len(values) > 1
+        for values in (
+            authorization_values,
+            audit_values,
+            tenant_values,
+            timestamp_values,
+            nonce_values,
+        )
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail="Security headers must each occur exactly once.",
+        )
+    authorization = authorization_values[0] if authorization_values else ""
     if not authorization.startswith("CAS-Service ") or not authorization[12:]:
         raise HTTPException(status_code=401, detail="Invalid fleet service credential.")
-    if request.headers.get("X-CAS-Audit-ID", "") != audit_id:
+    audit_header = audit_values[0] if audit_values else ""
+    if audit_header != audit_id:
         raise HTTPException(status_code=403, detail="Fleet service scope denied.")
     try:
         binding = FleetServiceIntakeBinding(
@@ -310,10 +356,10 @@ def _authenticate_intake(
         )
         auth_store = _fleet_auth_store(request)
         receipt = auth_store.authenticate_with_bound_intake_receipt(
-            tenant_id=request.headers.get("X-CAS-Tenant-ID", ""),
+            tenant_id=tenant_values[0] if tenant_values else "",
             api_credential=authorization[len("CAS-Service ") :],
-            timestamp=request.headers.get("X-CAS-Service-Timestamp", ""),
-            nonce=request.headers.get("X-CAS-Service-Nonce", ""),
+            timestamp=timestamp_values[0] if timestamp_values else "",
+            nonce=nonce_values[0] if nonce_values else "",
             required_capability=capability,
             audit_id=audit_id,
             fleet_id=audit_id,
@@ -570,11 +616,10 @@ async def attach_evidence_packet(
         job_id=job_id,
         worker_id=None,
         operation="attach_evidence_packet",
-        capability="merge_fleet",
+        capability="attach_evidence_packet",
         media_type=EVIDENCE_PACKET_MEDIA_TYPE,
         authorization_digest_required=True,
         lease_token_required=False,
-        optional_operation=True,
     )
 
 
@@ -588,11 +633,27 @@ async def record_nonreporting(
         job_id=job_id,
         worker_id=None,
         operation="record_nonreporting",
-        capability="merge_fleet",
+        capability="record_nonreporting",
         media_type=NONREPORTING_MEDIA_TYPE,
         authorization_digest_required=True,
         lease_token_required=False,
-        optional_operation=True,
+    )
+
+
+@router.post("/session/{audit_id}/fleet/v2/job/{job_id}/outcome")
+async def seal_outcome(
+    request: Request, audit_id: RouteId, job_id: RouteId
+) -> JSONResponse:
+    return await _handle(
+        request,
+        audit_id=audit_id,
+        job_id=job_id,
+        worker_id=None,
+        operation="seal_outcome",
+        capability="seal_outcome",
+        media_type=OUTCOME_SEAL_MEDIA_TYPE,
+        authorization_digest_required=True,
+        lease_token_required=False,
     )
 
 
