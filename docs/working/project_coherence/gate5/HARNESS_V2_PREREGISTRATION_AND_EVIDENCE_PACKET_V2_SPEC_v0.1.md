@@ -218,8 +218,8 @@ python -I -B scripts\verify_project_coherence_gate5.py
 The manifest build is appropriate only after an intended admitted-surface
 change. A local focused regression may be run separately with
 `python -E -P -B -X dev -m pytest -q -p no:cacheprovider
-tests\cas_harness_v2`; it is not the authoritative Gate 5 verifier or a locked,
-attested execution environment.
+tests\cas_harness_v2`; it bypasses the same-process receipt control and is not
+the authoritative Gate 5 verifier or a locked, attested execution environment.
 
 The suite covers missing and extra fields, duplicate JSON keys, raw-input
 mutation, frozen payload mutation, wrong claim and artifact hashes, forged
@@ -234,23 +234,42 @@ outcome access, exact completion binding, bypass-mutated outcome-event replay,
 retained-byte registry mutation, audit contradictions, normalized cross-role
 aliases, and all four repository-known v1 labels.
 
-Current focused receipt: `113 passed, 61 subtests passed` under Python 3.14 with
-bytecode generation disabled. It comprises 94 active kernel tests, four
-historical-recovery tests, and 15 Gate 5 verifier red-team tests. This receipt
-proves repository-local controls only; it is not live execution, independent
-reproduction, scientific evidence, or product authority.
+Current focused validation: `119 passed, 61 subtests passed` under Python 3.14
+with site startup and bytecode generation disabled. It comprises 94 active
+kernel tests, four historical-recovery tests, and 21 Gate 5 verifier red-team
+tests. Its same-process executed-node digest is
+`8FBC5D8AE4CF3B0BBEB9A1902C6905278126B056FF6961D13EE9830E2363F362`.
+This ephemeral local receipt is checked inside the verifier but is not retained
+under trusted time or WORM authority. It proves repository-local controls only;
+it is not live execution, independent reproduction, scientific evidence, or
+product authority.
 
 The companion 364-test worker and 76-test API/launcher/fleet/state suites are
-`LOCAL_UNATTESTED_HOST_REGRESSION` observations. Their node-ID digests are
-collect-only scope identities produced separately from the execution summaries;
-the actual executed-node IDs are not receipted. Mutable user-site Python 3.14.0,
-pytest 9.0.2, pytest-asyncio 1.3.0, and startup-hook state remain outside the
-content-bound runner surface.
+`LOCAL_UNATTESTED_HOST_REGRESSION` observations. One pytest process binds each
+suite's duplicate-free collected/started/finished node IDs and exact
+setup/call/teardown outcomes. The child starts with `-I -S -B`, imports only
+locally locked pytest/plugin code before prepending exact repository roots, and
+uses a fresh bytecode-cache prefix. The local runner lock binds three
+interpreter files, 508 exact files owned by seven runner distributions, and
+three disabled `.pth` files. Pytest and explicit plugin origins must match the
+per-file lock before import; the lock is hashed and parsed from one stable byte
+buffer. The surviving-module endpoint inventory maps cache paths to source and
+does not prove exact executed bytecode or capture transient/unloaded/dynamic
+imports, unresolved/deleted origins, native-loader dependencies, or child
+processes. The standard library, distribution files absent from upstream
+`RECORD`, complete test/native/descendant closure, kernel/filesystem trust, and
+independent attestation remain outside the lock.
 
-The v0.2 container receipt records BuildKit SPDX/SLSA and Docker Scout facts as
-`SELF_REPORTED_LOCAL_OBSERVATION_ONLY`. Raw build history, SPDX, SLSA, and
-scanner payloads were not retained, are not repository replayable, and have no
-independent trust root. One CPU-only, non-scientific engineering preflight
+The time-indexed v0.2 container receipt records BuildKit SPDX/SLSA and Docker
+Scout facts as `SELF_REPORTED_LOCAL_OBSERVATION_ONLY`; at issuance, its raw
+payloads were not retained. A later additive receipt now retains ten exact OCI,
+BuildKit, SPDX, SLSA, and current Scout 1.21 payloads. The current direct scan is
+`COMPLETED_WITH_FINDINGS`: six records are vendor-confirmed vulnerable or
+fix-deferred and one `dpkg` record remains a scanner/vendor conflict. The SARIF
+does not embed the candidate invocation, scanner database/process transcripts
+are absent, and linked Ubuntu vendor pages were not snapshotted. No independent
+trust root or complete tool-execution replay exists. One CPU-only,
+non-scientific engineering preflight
 loaded the exact Pythia artifacts and ran the offline canary. It was not an
 authorized or admitted experiment and created no GPU run, Evidence Packet, or
 scientific result; experimental execution remains `NOT_STARTED` and
@@ -272,13 +291,12 @@ Still open outside this isolated kernel:
 - trusted time, nonce/replay control, one-use run consumption, and protection
   against selective reporting across multiple packets;
 - live-worker and executor/auditor protocol mapping;
-- hermetic execution and environment attestation, including a locked host
-  runner, same-run executed-node receipt, verified read-only snapshot, and
-  retained raw external evidence;
-- hardlink/reparse-point and before/after ABA resistance, plus cache/bytecode and
-  native-extension shadow exclusion outside the verifier's admitted
-  repository-local executable-shadow check; these runner boundaries remain
-  `OPEN` under `G5-ENGINEERING-002`;
+- hermetic execution and environment attestation, including complete
+  standard-library/test/native/descendant closure, an immutable read-only
+  snapshot, privileged/metadata-preserving ABA protection, hosted/auxiliary
+  loader alias hardening, and independent reproduction; the repository-local
+  same-process, hardlink, reparse, descriptor, and ordinary replacement
+  controls do not close `G5-ENGINEERING-002`;
 - independent numerical implementation and authenticated reviewer identity;
 - real person, affiliation, and organizational independence beyond normalized
   declared identity strings;

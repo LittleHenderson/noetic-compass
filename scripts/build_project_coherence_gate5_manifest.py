@@ -16,7 +16,6 @@ if not sys.flags.isolated:
         "`python -I -B scripts/build_project_coherence_gate5_manifest.py`."
     )
 
-import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -26,6 +25,7 @@ _SPEC = importlib.util.spec_from_file_location("gate5_manifest_verifier", _VERIF
 if _SPEC is None or _SPEC.loader is None:
     raise RuntimeError("cannot load the Gate 5 verifier by exact file path")
 _VERIFIER = importlib.util.module_from_spec(_SPEC)
+sys.modules[_SPEC.name] = _VERIFIER
 _SPEC.loader.exec_module(_VERIFIER)
 
 EXACT_API_LAUNCHER_SURFACE = _VERIFIER.EXACT_API_LAUNCHER_SURFACE
@@ -38,20 +38,14 @@ REQUIRED_BOUNDARY_TEXT = _VERIFIER.REQUIRED_BOUNDARY_TEXT
 REQUIRED_OPEN_BOUNDARY_IDS = _VERIFIER.REQUIRED_OPEN_BOUNDARY_IDS
 REQUIRED_TEST_SUITES = _VERIFIER.REQUIRED_TEST_SUITES
 ROOT = _VERIFIER.ROOT
+FILESYSTEM_ANCHOR = _VERIFIER.FILESYSTEM_ANCHOR
 CURRENT_SECURITY_HOLD = _VERIFIER.CURRENT_SECURITY_HOLD
 TEST_ID_CANONICALIZATION = _VERIFIER.TEST_ID_CANONICALIZATION
 artifact_role = _VERIFIER.artifact_role
 collect_api_runtime_surface = _VERIFIER.collect_api_runtime_surface
 collect_gate5_control_surface = _VERIFIER.collect_gate5_control_surface
 collect_pytest_environment_surface = _VERIFIER.collect_pytest_environment_surface
-
-
-def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for block in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(block)
-    return digest.hexdigest().upper()
+observe_regular_file = _VERIFIER.observe_regular_file
 
 
 def _surface_files() -> set[str]:
@@ -84,13 +78,12 @@ def build_manifest() -> dict[str, object]:
     artifact_records: list[dict[str, object]] = []
     for raw_path in sorted(_surface_files()):
         path = ROOT / raw_path
-        if not path.is_file() or path.is_symlink():
-            raise RuntimeError(f"required regular artifact is missing: {raw_path}")
+        observation = observe_regular_file(path, anchor=FILESYSTEM_ANCHOR)
         artifact_records.append(
             {
                 "path": raw_path,
-                "sha256": _sha256(path),
-                "bytes": path.stat().st_size,
+                "sha256": observation.sha256,
+                "bytes": observation.byte_count,
                 "role": artifact_role(raw_path),
             }
         )
@@ -105,9 +98,14 @@ def build_manifest() -> dict[str, object]:
             or type(receipt["expected_subtests"]) is not int
             or not isinstance(receipt["expected_test_ids_sha256"], str)
             or not isinstance(receipt["pytest_plugins"], list)
+            or not isinstance(receipt["repo_import_roots"], list)
             or not all(
                 isinstance(plugin, str) and plugin
                 for plugin in receipt["pytest_plugins"]
+            )
+            or not all(
+                isinstance(path, str) and path
+                for path in receipt["repo_import_roots"]
             )
         ):
             raise RuntimeError(f"test receipt is not frozen: {name}")
@@ -117,6 +115,7 @@ def build_manifest() -> dict[str, object]:
                 "working_directory": receipt["working_directory"],
                 "targets": receipt["targets"],
                 "pytest_plugins": receipt["pytest_plugins"],
+                "repo_import_roots": receipt["repo_import_roots"],
                 "expected_tests": receipt["expected_tests"],
                 "expected_subtests": receipt["expected_subtests"],
                 "expected_test_ids_sha256": receipt[

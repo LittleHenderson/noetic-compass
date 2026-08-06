@@ -12,12 +12,18 @@
   "product_claim_effect": "NONE",
   "manifest_self_hash": null,
   "generated_by": "scripts/build_project_coherence_gate5_manifest.py",
-  "artifact_count": 325,
+  "artifact_count": 340,
   "artifacts": [
     {
       "path": ".gitattributes",
-      "sha256": "BFF92D5CD1E7885A9BBC60A6F6FE1994ADE298293DFAB9CF7DEA584016C7377D",
-      "bytes": 3754,
+      "sha256": "4DD6B062632F8B5AC39CDE6598129370AA354B3C34B930E40D51FFBAC234362F",
+      "bytes": 4106,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/CHANGELOG.md",
+      "sha256": "458D01D232BB908F07AC0D561290154155B3FC56948292AFE12740DDB9E0DD5A",
+      "bytes": 16541,
       "role": "gate5_control_artifact"
     },
     {
@@ -46,8 +52,8 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
-      "sha256": "61E28356C05773F11930B76BBE2ED5D56790B193B29E7577D6A068B6364AA1FD",
-      "bytes": 25963,
+      "sha256": "EFADC3C9C04C45AFB45953AF068C89D55D533EF14A79476B078C82B348967D1A",
+      "bytes": 29084,
       "role": "gate5_control_artifact"
     },
     {
@@ -57,27 +63,99 @@
       "role": "gate5_control_artifact"
     },
     {
+      "path": "docs/working/project_coherence/gate5/GATE5_LOCAL_WINDOWS_TEST_RUNNER_LOCK_v0.1.json",
+      "sha256": "EB7D2D661BFE262C1E3BB4657E418EADE8339F35D1089C7AE6A87EFC6A360B13",
+      "bytes": 121525,
+      "role": "gate5_control_artifact"
+    },
+    {
       "path": "docs/working/project_coherence/gate5/GATE5_MODEL_AND_DEPENDENCY_BINDING_v0.1.json",
       "sha256": "A24F27AE6678A8EAAECA5E516805F94F394B416054AB5BCDAA68B687B0B79E2B",
       "bytes": 3161,
       "role": "gate5_control_artifact"
     },
     {
+      "path": "docs/working/project_coherence/gate5/GATE5_RAW_BUILD_AND_SECURITY_EVIDENCE_RECEIPT_v0.1.json",
+      "sha256": "061B558340F2683D28A0166CFF33844E0C187CEC7D27EF0EFF807161E728EF74",
+      "bytes": 18726,
+      "role": "gate5_control_artifact"
+    },
+    {
       "path": "docs/working/project_coherence/gate5/GATE5_REVIEW_MATRIX_v0.1.json",
-      "sha256": "1331B9646B6843DEC8352B10870392E46A00BB7574A0CA1981FA970D5D41CC14",
-      "bytes": 60794,
+      "sha256": "A36AF54416BE39EBD89D42C5D306426F69898E8B3E5A248A04B30486E60AEBA8",
+      "bytes": 65643,
       "role": "gate5_control_artifact"
     },
     {
       "path": "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md",
-      "sha256": "F2803B44FF7236762D491A3B249FF13C4CB8D9F336CE19F223F9F716E9A70D2D",
-      "bytes": 16355,
+      "sha256": "8853CD3280F70FFCE08D5E199E21A8DDCF343E52D63C2E67A0B9F1C2EC60D7B8",
+      "bytes": 17728,
       "role": "gate5_control_artifact"
     },
     {
       "path": "docs/working/project_coherence/gate5/README.md",
-      "sha256": "EF7A1BA9475B411C9756B1580C88DA856A9508362EF21B6E33F87E9F04803A23",
-      "bytes": 15405,
+      "sha256": "9D97D8B9D4FD7206348751A509008F1ACCB80DAF4346CFC87D435FF6D7DACF2C",
+      "bytes": 19162,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/atlas-live-trace-worker_gate5-candidate-v0.2.scout.cves.exit2.sarif.json",
+      "sha256": "5D152C419DC6207D197C29C934E480B281864DAAF233F662B6AD6A69894E75B1",
+      "bytes": 38589,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/atlas-live-trace-worker_gate5-candidate-v0.2.scout.spdx.json",
+      "sha256": "5434A19BD5DEF2770FE60929F3AF321713080A94D960B1F9EB4401A9EA812F15",
+      "bytes": 869291,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/attestation-config.json",
+      "sha256": "4592EDD32ECC05F0CE5FCA43216DEA1393293B07245DB9582989ED3CB77F5AD7",
+      "bytes": 241,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/attestation-manifest.json",
+      "sha256": "B1DB5924AB8CE96927F0164C4626CD5EB0C86CBD3FB35C0387B622DD7AE390D1",
+      "bytes": 839,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/image-config.json",
+      "sha256": "966DB6E2E05366BE99129AF5C866A8F7EFBF01B04145C49EF431785FDC1432ED",
+      "bytes": 11727,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/oci-index.json",
+      "sha256": "3D747B379938A5148E4A028FF8BA2F242847B17E8842F19F0D2C204B3FE9A95C",
+      "bytes": 856,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/platform-manifest.json",
+      "sha256": "60BF92B327EBEC84887C659313A97A6369A24FD5D8EB00A012544FCAFD26BA27",
+      "bytes": 3528,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/provenance.intoto.slsa-v1.json",
+      "sha256": "F8E3677325D096191BB7EC1D075A34ADDF4E4733A48D3AE442F63C1BB74A6C6F",
+      "bytes": 45532,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/sbom.intoto.spdx.json",
+      "sha256": "8D039B378DFC422BAE2D7479A06BFA2AC9C94A9A19FE8AA115362A28EC41955E",
+      "bytes": 2957946,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/vz8s61131470ab8uivga0qcdq.dockerbuild",
+      "sha256": "4E9B23B4CAE00C566AC0BD952F1DDDFF2FCC5811D06F43CA093639369B81E017",
+      "bytes": 29058,
       "role": "gate5_control_artifact"
     },
     {
@@ -1894,14 +1972,26 @@
     },
     {
       "path": "scripts/build_project_coherence_gate5_manifest.py",
-      "sha256": "0FA49058926F66575251A3B731914EFD352346A7B8A91182383C53EAE92509C2",
-      "bytes": 6457,
+      "sha256": "2B42FA6D379B93C809600D325D6612ED8E81CB711BDAB5B9772C96BEB3C4DA23",
+      "bytes": 6565,
+      "role": "gate5_verification_control"
+    },
+    {
+      "path": "scripts/build_project_coherence_gate5_runner_lock.py",
+      "sha256": "412C01D2A371F4CD5CB1DE91E7C98E1B8684956040AB3828EDCC792203F7B1AA",
+      "bytes": 13306,
+      "role": "gate5_verification_control"
+    },
+    {
+      "path": "scripts/run_project_coherence_gate5_pytest.py",
+      "sha256": "E637092B123AF0958F2601CAEA0E03370D7AFD0E7F5449B77ADD0399F500DBB6",
+      "bytes": 22017,
       "role": "gate5_verification_control"
     },
     {
       "path": "scripts/verify_project_coherence_gate5.py",
-      "sha256": "A98D9DCC69E6E43509A2AB20B5E86A1F12A26AF2DE9D99C79C4ED63001C555E7",
-      "bytes": 137723,
+      "sha256": "A10D1136278DD289BCF4245FC045B9A36535DFD07B25CC90FF20E9CDA134E59B",
+      "bytes": 228543,
       "role": "gate5_verification_control"
     },
     {
@@ -1942,8 +2032,8 @@
     },
     {
       "path": "tests/cas_harness_v2/test_gate5_verifier_redteam.py",
-      "sha256": "956A428227CDB422AD1D6604C327A7AAC7D64E6E98CC4D3E05FDBCC08BD62B9A",
-      "bytes": 18516,
+      "sha256": "860A972334FFED9DC6D055F78055F7EA605DC50B3B7BB82B809EA1992B9A4D7A",
+      "bytes": 35291,
       "role": "gate5_control_kernel_test"
     },
     {
@@ -2004,6 +2094,7 @@
     "reason_id": "G5-SEC-CANDIDATE-SCAN-FINDINGS-OPEN",
     "historical_adverse_binding": "docs/working/project_coherence/gate5/GATE5_MODEL_AND_DEPENDENCY_BINDING_v0.1.json",
     "candidate_receipt": "docs/working/project_coherence/gate5/GATE5_DEPENDENCY_AND_CONTAINER_CANDIDATE_RECEIPT_v0.2.json",
+    "raw_build_security_evidence_receipt": "docs/working/project_coherence/gate5/GATE5_RAW_BUILD_AND_SECURITY_EVIDENCE_RECEIPT_v0.1.json",
     "source_commit": "4bff437dbcf6d0d38046e63d2aee823e8f316711",
     "oci_image_index_digest": "sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c",
     "platform_manifest_digest": "sha256:60bf92b327ebec84887c659313a97a6369a24fd5d8eb00a012544fcafd26ba27",
@@ -2020,8 +2111,9 @@
       "medium": 3,
       "low": 4
     },
-    "direct_local_image_scan": "INCOMPLETE / PENDING",
-    "external_evidence_retention": "SELF_REPORTED_LOCAL_OBSERVATION / RAW_NOT_RETAINED",
+    "direct_local_image_scan": "COMPLETED_WITH_FINDINGS / 7 / RAW SARIF RETAINED",
+    "vendor_security_triage": "6 VENDOR-CONFIRMED VULNERABLE OR DEFERRED / 1 SCANNER-VENDOR CONFLICT",
+    "external_evidence_retention": "RAW BUILDKIT/OCI/SPDX/SLSA/DIRECT SCOUT REPORTS RETAINED / LOCAL SELF-OBSERVED / NOT INDEPENDENTLY ATTESTED",
     "engineering_preflight_execution_status": "COMPLETED_CPU_ONLY_NONEXPERIMENTAL",
     "live_execution_authorized": false
   },
@@ -2033,10 +2125,13 @@
         "tests/cas_harness_v2"
       ],
       "pytest_plugins": [],
-      "expected_tests": 113,
+      "repo_import_roots": [
+        "src"
+      ],
+      "expected_tests": 119,
       "expected_subtests": 61,
-      "expected_test_ids_sha256": "FD31E05BDFE62A44B4FC7D1556A2CA498115FF8E0A65C3F16160FA4D0C2FA294",
-      "test_id_canonicalization": "COLLECT-ONLY SHA-256 over sorted unique pytest node IDs normalized to POSIX slashes, encoded UTF-8 as one ID plus LF per line; actual executed-node-ID digest is NOT RECEIPTED"
+      "expected_test_ids_sha256": "8FBC5D8AE4CF3B0BBEB9A1902C6905278126B056FF6961D13EE9830E2363F362",
+      "test_id_canonicalization": "SAME-PROCESS EXECUTED-NODE SHA-256 over ordinal-sorted unique pytest node IDs normalized only to POSIX slashes, encoded UTF-8 as one ID plus LF per line; collection, start, finish, and all-pass outcomes are bound in one local subprocess receipt"
     },
     {
       "name": "Live trace worker complete",
@@ -2047,10 +2142,14 @@
       "pytest_plugins": [
         "pytest_asyncio.plugin"
       ],
+      "repo_import_roots": [
+        "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts",
+        "noetic-compass-scaffold/noetic-compass"
+      ],
       "expected_tests": 364,
       "expected_subtests": 0,
       "expected_test_ids_sha256": "94566203B3E0FF79B3224C1C5A073698CA99D3C08BC1119A9082E42AF4B178BD",
-      "test_id_canonicalization": "COLLECT-ONLY SHA-256 over sorted unique pytest node IDs normalized to POSIX slashes, encoded UTF-8 as one ID plus LF per line; actual executed-node-ID digest is NOT RECEIPTED"
+      "test_id_canonicalization": "SAME-PROCESS EXECUTED-NODE SHA-256 over ordinal-sorted unique pytest node IDs normalized only to POSIX slashes, encoded UTF-8 as one ID plus LF per line; collection, start, finish, and all-pass outcomes are bound in one local subprocess receipt"
     },
     {
       "name": "Live trace worker numeric red team",
@@ -2061,10 +2160,11 @@
       "pytest_plugins": [
         "pytest_asyncio.plugin"
       ],
+      "repo_import_roots": [],
       "expected_tests": 32,
       "expected_subtests": 0,
       "expected_test_ids_sha256": "12602041756F20D1AFD402FA56968660839E5EB1098438BA84C69BFF8DE7050B",
-      "test_id_canonicalization": "COLLECT-ONLY SHA-256 over sorted unique pytest node IDs normalized to POSIX slashes, encoded UTF-8 as one ID plus LF per line; actual executed-node-ID digest is NOT RECEIPTED"
+      "test_id_canonicalization": "SAME-PROCESS EXECUTED-NODE SHA-256 over ordinal-sorted unique pytest node IDs normalized only to POSIX slashes, encoded UTF-8 as one ID plus LF per line; collection, start, finish, and all-pass outcomes are bound in one local subprocess receipt"
     },
     {
       "name": "API, fleet state, and launcher identity",
@@ -2079,10 +2179,13 @@
       "pytest_plugins": [
         "pytest_asyncio.plugin"
       ],
+      "repo_import_roots": [
+        "noetic-compass-scaffold/noetic-compass/scripts"
+      ],
       "expected_tests": 76,
       "expected_subtests": 0,
       "expected_test_ids_sha256": "1ED1E9E3AFA2EDA6881463EE5284DD4902AB94C0246B80D2937066480AC42921",
-      "test_id_canonicalization": "COLLECT-ONLY SHA-256 over sorted unique pytest node IDs normalized to POSIX slashes, encoded UTF-8 as one ID plus LF per line; actual executed-node-ID digest is NOT RECEIPTED"
+      "test_id_canonicalization": "SAME-PROCESS EXECUTED-NODE SHA-256 over ordinal-sorted unique pytest node IDs normalized only to POSIX slashes, encoded UTF-8 as one ID plus LF per line; collection, start, finish, and all-pass outcomes are bound in one local subprocess receipt"
     }
   ]
 }

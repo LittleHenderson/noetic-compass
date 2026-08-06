@@ -33,21 +33,34 @@ authority.
   preflight, fail-closed runtime probes, bounded audits, and every remaining
   `OPEN_SECURITY` item. Its external-tool evidence effect is
   `SELF_REPORTED_LOCAL_OBSERVATION_ONLY`.
+- `GATE5_RAW_BUILD_AND_SECURITY_EVIDENCE_RECEIPT_v0.1.json` is the later,
+  additive receipt for ten repository-retained OCI, BuildKit, SPDX, SLSA, and
+  Scout payloads. It makes those exact bytes locally replayable without making
+  the original tool execution, scanner database, or trust chain replayable.
+- `GATE5_LOCAL_WINDOWS_TEST_RUNNER_LOCK_v0.1.json` records the local Python and
+  pytest content lock. Its exact scope is `LOCAL_CONTENT_LOCK /
+  SELF-OBSERVED / NOT HERMETIC / NOT INDEPENDENTLY ATTESTED`.
 - `GATE5_ARTIFACT_MANIFEST_v0.1.json` is the non-self-hashing exact artifact
   and test receipt manifest.
 - `scripts/build_project_coherence_gate5_manifest.py` deterministically builds
   that manifest from the closed surface.
+- `scripts/build_project_coherence_gate5_runner_lock.py` deterministically
+  drafts the local runner lock and fails drift within its exact
+  distribution-`RECORD` surface. Files absent from those upstream inventories
+  and transient execution remain part of the explicit OPEN boundary.
+- `scripts/run_project_coherence_gate5_pytest.py` runs one suite and emits its
+  same-process collection, execution, and outcome receipt.
 - `scripts/verify_project_coherence_gate5.py` verifies the complete bounded
   surface and re-runs its dependencies and tests.
 
 ## Current bounded receipts
 
-The stable Harness v2 suite contains 113 pytest node IDs and passes 113 tests
+The stable Harness v2 suite contains 119 pytest node IDs and passes 119 tests
 plus 61 subtests: 94 active control-kernel tests, 4 historical-recovery tests,
-and 15 retained Gate 5 verifier red-team regressions. Its canonical node-ID
+and 21 retained Gate 5 verifier red-team regressions. Its canonical node-ID
 digest is:
 
-`FD31E05BDFE62A44B4FC7D1556A2CA498115FF8E0A65C3F16160FA4D0C2FA294`
+`8FBC5D8AE4CF3B0BBEB9A1902C6905278126B056FF6961D13EE9830E2363F362`
 
 The four-test historical subset digest is:
 
@@ -68,12 +81,26 @@ node-ID digest is:
 `1ED1E9E3AFA2EDA6881463EE5284DD4902AB94C0246B80D2937066480AC42921`
 
 The 364-test worker and 76-test API/launcher/fleet/state results are
-`LOCAL_UNATTESTED_HOST_REGRESSION` observations. Their node-ID digests were
-computed from collect-only subprocesses; pass/fail summaries came from separate
-execution subprocesses. They do not receipt the node IDs that actually executed
-in the passing runs. The runner uses mutable user-site Python 3.14.0, pytest
-9.0.2, pytest-asyncio 1.3.0, and startup-hook state that is not content-bound by
-these receipts.
+`LOCAL_UNATTESTED_HOST_REGRESSION` observations. Each suite now binds its
+collected, started, and finished node-ID sequences plus exact
+setup/call/teardown and subtest outcomes inside one pytest process. The child
+starts with `-I -S -B`, uses a fresh bytecode-cache prefix, disables plugin
+autoload, and admits only the locked pytest site root and exact suite-specific
+repository import roots. The local lock binds Python 3.14.0, pytest 9.0.2,
+pytest-asyncio 1.3.0, three interpreter files, 508 exact files owned by seven
+runner distributions, and three `.pth` files whose startup execution is
+disabled. Before importing pytest or an explicit plugin, the child requires its
+resolved origin and package search root to match those exact file records; the
+parent rechecks the origin records and the surviving loaded-module inventory.
+The inventory is an endpoint snapshot of surviving `sys.modules` entries. It
+maps cache paths back to source and therefore does not prove the exact bytecode
+executed, and it cannot see transient/unloaded/dynamic execution, unresolved or
+deleted origins, native-loader dependencies, or descendant processes. The
+standard library, complete test/native/descendant-process closure, Windows
+kernel, filesystem, and independent trust root remain `OPEN`. Each detailed
+JSON receipt is ephemeral inside the verifier; the verifier prints its
+executed-node, outcome, locked-origin, and loaded-code digests, but no trusted
+time, WORM retention, or independently replayable receipt is created.
 
 The nested numerical/state/schema red team passes 32/32. Its canonical node-ID
 digest is:
@@ -87,11 +114,12 @@ subsequently reproduced mutable-model-state and public-receipt mutation
 bypasses. They are adverse chronology, not current receipts, and must not be
 used in the manifest.
 
-Collect-only test-ID canonicalization is exact: collect with pytest, normalize
-path separators to `/`, sort unique node IDs ordinally, encode each as UTF-8
-followed by LF, and SHA-256 the concatenation. Source/test hashes remain
-independently load-bearing; a collect-only node-ID digest does not replace file
-identity or prove the actual executed-node set.
+Same-process test-ID canonicalization is exact: require duplicate-free
+collected, started, and finished sequences to agree, normalize path separators
+to `/` without Unicode normalization, sort node IDs ordinally, encode each as
+UTF-8 followed by LF, and SHA-256 the concatenation. Source/test hashes and the
+exact outcome ledger remain independently load-bearing; a node-ID digest alone
+does not replace file identity or prove hermetic execution.
 
 ## Build and run the verifier
 
@@ -104,8 +132,9 @@ python -I -B scripts\verify_project_coherence_gate5.py
 
 The manifest build is appropriate only after an intended change to the admitted
 surface. Both authoritative scripts require Python isolated mode and disabled
-bytecode writes. Their child test runs are sanitized local regressions, not a
-locked or independently attested runner.
+bytecode writes. Child suites run through the locally content-locked
+same-process runner; they remain sanitized local regressions, not hermetic or
+independently attested execution.
 
 The verifier also forces offline Hugging Face/Transformers mode for test
 subprocesses. Pytest subprocesses additionally clear caller-provided
@@ -113,16 +142,31 @@ subprocesses. Pytest subprocesses additionally clear caller-provided
 entry-point plugin autoload; bind every existing ancestor `conftest.py` and
 pytest configuration candidate in either admitted test path; and explicitly
 load only `pytest_asyncio.plugin` for the worker because the bound parent
-configuration declares `asyncio_mode`. Installed interpreter/plugin bytes are
-still part of the explicitly OPEN hermetic-environment boundary. The static
-verifier rejects executable shadows inside the admitted repository roots;
-host-runner integrity, hardlink/reparse-point aliasing, read-only snapshot and
-before/after ABA resistance, cache/bytecode and native-extension shadows outside
-that admitted snapshot, same-run executed-node receipts, and raw
-external-evidence retention remain `OPEN` under `G5-ENGINEERING-002`.
+configuration declares `asyncio_mode`. The local lock is checked before and
+after all suites. The lock file is read once through one identity-checked
+descriptor, and those same bytes are hashed and parsed. Installed
+standard-library/test/native/descendant code, distribution files absent from
+upstream `RECORD`, transient imports, exact loader-executed bytecode, and other
+runtime activity outside its declared scope remain part of the explicitly OPEN
+hermeticity boundary.
+
+For repository artifacts, the verifier rejects symlink or reparse path
+components and hardlinked leaf files, compares pathname and opened-handle
+identity, hashes through that same handle, checks stable structural ancestor
+identity before and after each read, and compares the integrated Gate 5, Gate
+4, and history identity map after tests. Structural ancestry binds device,
+inode, type, link count, and reparse state; volatile directory byte counts and
+timestamps are excluded because unrelated child activity can change them
+without replacing the observed path. Full leaf identity and exact bytes remain
+bound. These controls catch ordinary aliasing and same-byte replacement. They
+do not establish an immutable read-only snapshot, privileged or
+metadata-preserving ABA resistance, hosted/auxiliary model-loader alias
+protection, kernel/filesystem trust, or independent reproduction. Those remain
+`OPEN` under `G5-ENGINEERING-002`.
 
 The verifier rejects a missing or extra artifact, byte/hash/role drift,
-absolute or traversing paths, case-folded duplicate paths, symlinked artifacts,
+absolute or traversing paths, case-folded duplicate paths, symlink/reparse
+components, hardlinked artifacts, opened-handle or ancestor-identity drift,
 a manifest self-hash, an unbound Gate 5/Python/script/data/pytest-environment
 file, stale test counts or node IDs, a red test result, a removed security hold,
 a missing historical defect, a missing or rewritten OPEN boundary, a malformed
@@ -235,25 +279,34 @@ index
 `sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c`
 and linux/amd64 manifest
 `sha256:60bf92b327ebec84887c659313a97a6369a24fd5d8eb00a012544fcafd26ba27`.
-The receipt records locally observed BuildKit SPDX SBOM and SLSA provenance
-identifiers, but the raw build history, SPDX payload, SLSA payload, and Scout
-report were not retained, are not repository replayable, and have no independent
-trust root. Their claim effect is `SELF_REPORTED_LOCAL_OBSERVATION_ONLY`. Exact
+The time-indexed v0.2 receipt records locally observed BuildKit SPDX SBOM and
+SLSA provenance identifiers. At issuance, the raw build history, SPDX payload,
+SLSA payload, and Scout report were not retained or repository replayable; that
+historical statement remains unchanged and its claim effect is
+`SELF_REPORTED_LOCAL_OBSERVATION_ONLY`. Exact
 offline Pythia loading, one CPU-only engineering geometry/numerics canary,
 385-object native closure with only the declared host `libcuda.so.1` seam, a
 no-network/read-only runtime preflight, and fail-closed startup without token or
 CUDA were locally observed.
 
-Those receipts materially advance the candidate but do not close
+The later additive raw-evidence receipt retains ten exact payloads, including
+the original OCI index/config/manifests, BuildKit history, SPDX statement, and
+SLSA statement. It also retains a current direct Scout 1.21 image SPDX report
+and SARIF scan. The current direct scan is `COMPLETED_WITH_FINDINGS`: 0
+critical, 0 high, 3 medium, and 4 low across seven records. Vendor triage
+currently classifies six as vulnerable or fix-deferred and one as a
+scanner/vendor conflict because the exact scanned `dpkg` version is
+vendor-fixed. The SARIF does not embed the candidate identity or retained
+invocation, and the linked Ubuntu vendor pages were not snapshotted. The
+original Scout 1.24 raw report, scanner database identity, complete process
+transcript, independent trust root, and independent reproduction remain
+unavailable.
+
+These receipts materially advance the candidate but do not close
 `G5-ENGINEERING-003`. `pip-audit` examined 72 lock entries with zero findings
 and skipped the direct-URL Torch entry; a separate OSV package/version query
-returned zero Torch findings. A local Docker Scout 1.24.0 run against the
-observed SPDX identifier covered 190 packages and reported
-`COMPLETED_WITH_FINDINGS`: 0 critical, 0 high, 3 medium, and 4 low across seven
-unfixed vulnerabilities. A separate direct local image/filesystem scan did not
-complete and remains `INCOMPLETE / PENDING`. No scan PASS, real GPU forward, or
-independent clean reproduction exists, and the raw scan report is not retained
-or repository replayable. The disposition therefore remains
+returned zero Torch findings. No scan PASS, real GPU forward, admitted
+experiment, or independent security receipt exists. The disposition therefore remains
 `OPEN_SECURITY`; `live_execution_authorized = false`, Gate 5 remains `HELD`,
 and the candidate is not accepted.
 
@@ -269,15 +322,15 @@ classes:
   complete anti-selective-reporting run/packet registry;
 - authenticated execution and real identity/affiliation/independence;
 - exact worker-to-kernel protocol mapping and hermetic environment attestation;
-- a locked and independently attested host runner, same-run executed-node
-  receipt, read-only snapshot, hardlink/reparse/ABA resistance, cache/native
-  shadow exclusion beyond the repository-local check, and retained raw
-  build/security evidence under
-  `G5-ENGINEERING-002`;
+- an independently attested hermetic runner, complete standard-library,
+  test/native/descendant-process closure, immutable read-only snapshot,
+  privileged/metadata-preserving ABA resistance, hosted and auxiliary loader
+  alias hardening, and independent reproduction under `G5-ENGINEERING-002`;
 - semantic artifact/data/power-analysis/coordinate validation;
-- the remaining dependency/container `OPEN_SECURITY` hold, including a
-  disposition for every current scan finding, direct-filesystem coverage, and
-  independent reproduction;
+- the remaining dependency/container `OPEN_SECURITY` hold, including
+  remediation or disposition of six vendor-confirmed vulnerable/fix-deferred
+  records, reconciliation of the `dpkg` conflict, complete scanner-process
+  evidence, and independent reproduction;
 - one separately authorized live exact-revision experiment;
 - GPU/autocast/compiled-hook numerical determinism;
 - matched controls and falsifiers;

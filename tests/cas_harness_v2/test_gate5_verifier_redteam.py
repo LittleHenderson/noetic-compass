@@ -2,17 +2,24 @@ from __future__ import annotations
 
 import ast
 import copy
+import hashlib
 import importlib.util
 import json
+import os
 from pathlib import Path
 import sys
 import tempfile
 import unittest
 from unittest.mock import patch
+from types import SimpleNamespace
 
 
 ROOT = Path(__file__).resolve().parents[2]
 VERIFIER_PATH = ROOT / "scripts" / "verify_project_coherence_gate5.py"
+RUNNER_PATH = ROOT / "scripts" / "run_project_coherence_gate5_pytest.py"
+RUNNER_LOCK_BUILDER_PATH = (
+    ROOT / "scripts" / "build_project_coherence_gate5_runner_lock.py"
+)
 
 
 def _load_verifier():
@@ -20,6 +27,17 @@ def _load_verifier():
     if spec is None or spec.loader is None:
         raise RuntimeError("cannot load Gate 5 verifier")
     module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def _load_module(name: str, path: Path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"cannot load {path}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
 
@@ -28,16 +46,20 @@ class Gate5VerifierRedTeamTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.verifier = _load_verifier()
+        cls.runner = _load_module("gate5_runner_redteam", RUNNER_PATH)
+        cls.runner_lock_builder = _load_module(
+            "gate5_runner_lock_builder_redteam", RUNNER_LOCK_BUILDER_PATH
+        )
         cls.manifest = cls.verifier.load_json(cls.verifier.MANIFEST_PATH)
         cls.artifacts = cls.verifier.verify_manifest(cls.manifest)
 
     def _patched_json(self, target: Path, value: object):
         original = self.verifier.load_json
 
-        def loader(path: Path):
+        def loader(path: Path, *, anchor: Path | None = None):
             if path == target:
                 return value
-            return original(path)
+            return original(path, anchor=anchor)
 
         return patch.object(self.verifier, "load_json", side_effect=loader)
 
@@ -124,11 +146,104 @@ class Gate5VerifierRedTeamTests(unittest.TestCase):
         forged_suite["test_suites"][0]["expected_subtests"] = 60.0
         with patch.object(
             self.verifier,
-            "collect_pytest_ids",
-            side_effect=AssertionError("collection must not run"),
+            "run_pytest_same_process_receipt",
+            side_effect=AssertionError("same-run execution must not start"),
         ):
             with self.assertRaises(self.verifier.VerificationError):
-                self.verifier.verify_test_suites(forged_suite)
+                self.verifier.verify_test_suites(forged_suite, {})
+
+    def test_stable_observer_rejects_hardlink_and_symlink_aliases(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            source = root / "source.json"
+            source.write_bytes(b"{}\n")
+            alias = root / "alias.json"
+            os.link(source, alias)
+            with self.assertRaisesRegex(
+                self.verifier.VerificationError, "st_nlink|aliases"
+            ):
+                self.verifier.observe_regular_file(source, anchor=root)
+
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            source = root / "source.json"
+            source.write_bytes(b"{}\n")
+            alias = root / "alias.json"
+            try:
+                alias.symlink_to(source)
+            except OSError as exc:
+                self.skipTest(f"symlink creation is unavailable: {exc}")
+            with self.assertRaisesRegex(
+                self.verifier.VerificationError, "symlink|reparse"
+            ):
+                self.verifier.observe_regular_file(alias, anchor=root)
+
+    def test_stable_observer_detects_same_byte_inode_replacement(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            container = root / "container"
+            container.mkdir()
+            target = container / "artifact.json"
+            target.write_bytes(b"same bytes\n")
+            before = self.verifier.observe_regular_file(target, anchor=root)
+
+            root_stat = root.stat()
+            os.utime(
+                root,
+                ns=(root_stat.st_atime_ns, root_stat.st_mtime_ns + 1_000_000_000),
+            )
+            metadata_only = self.verifier.observe_regular_file(target, anchor=root)
+            self.assertEqual(before, metadata_only)
+
+            replacement = container / "replacement.json"
+            replacement.write_bytes(b"same bytes\n")
+            os.replace(replacement, target)
+            after = self.verifier.observe_regular_file(target, anchor=root)
+            self.assertEqual(before.sha256, after.sha256)
+            self.assertEqual(before.byte_count, after.byte_count)
+            self.assertNotEqual(before.identity, after.identity)
+
+            ancestor_target = container / "ancestor-bound.json"
+            ancestor_target.write_bytes(b"ancestor bytes\n")
+            ancestor_before = self.verifier.observe_regular_file(
+                ancestor_target, anchor=root
+            )
+            moved_container = root / "moved-container"
+            os.replace(container, moved_container)
+            container.mkdir()
+            ancestor_target = container / "ancestor-bound.json"
+            ancestor_target.write_bytes(b"ancestor bytes\n")
+            ancestor_after = self.verifier.observe_regular_file(
+                ancestor_target, anchor=root
+            )
+            self.assertEqual(ancestor_before.sha256, ancestor_after.sha256)
+            self.assertNotEqual(
+                ancestor_before.component_identities,
+                ancestor_after.component_identities,
+            )
+
+    def test_stable_observer_rejects_synthetic_reparse_attribute(self) -> None:
+        identity = self.verifier.PathIdentity(
+            device=1,
+            inode=2,
+            mode_type=0,
+            link_count=1,
+            byte_count=0,
+            mtime_ns=0,
+            ctime_ns=0,
+            file_attributes=0x400,
+            reparse_tag=0,
+        )
+        self.assertTrue(self.verifier._is_reparse(identity))
+
+    def test_test_id_digest_rejects_duplicate_or_noncanonical_ids(self) -> None:
+        for values in (
+            ["test_a.py::test_one", "test_a.py::test_one"],
+            ["test_a.py::test_one\nforged"],
+            ["tests\\test_a.py::test_one"],
+        ):
+            with self.assertRaises(self.verifier.VerificationError):
+                self.verifier.test_id_digest(values)
 
     def test_review_matrix_rejects_contradictory_extra_status(self) -> None:
         matrix = self.verifier.load_json(self.verifier.REVIEW_MATRIX_PATH)
@@ -217,6 +332,111 @@ class Gate5VerifierRedTeamTests(unittest.TestCase):
                     with self.assertRaises(self.verifier.VerificationError):
                         self.verifier.verify_dependency_and_container_candidate_receipt()
 
+    def test_raw_evidence_receipt_rejects_security_promotion(self) -> None:
+        receipt = self.verifier.load_json(
+            self.verifier.RAW_BUILD_SECURITY_RECEIPT_PATH
+        )
+        forged = copy.deepcopy(receipt)
+        forged["security_disposition"] = "PASS"
+        forged["live_execution_authorized"] = True
+        forged["current_vendor_triage"]["scanner_vendor_conflict_count"] = 0
+        with self._patched_json(
+            self.verifier.RAW_BUILD_SECURITY_RECEIPT_PATH, forged
+        ):
+            with self.assertRaises(self.verifier.VerificationError):
+                self.verifier.verify_raw_build_and_security_evidence_receipt()
+
+        forged_closure = copy.deepcopy(receipt)
+        forged_closure["original_oci_and_attestation_closure"][
+            "independent_signature_or_trust_root"
+        ] = True
+        with self._patched_json(
+            self.verifier.RAW_BUILD_SECURITY_RECEIPT_PATH, forged_closure
+        ):
+            with self.assertRaises(self.verifier.VerificationError):
+                self.verifier.verify_raw_build_and_security_evidence_receipt()
+
+        forged_bundle = copy.deepcopy(receipt)
+        forged_bundle["buildkit_history_bundle"]["trust_boundary"] = (
+            "INDEPENDENTLY ATTESTED / PASS"
+        )
+        with self._patched_json(
+            self.verifier.RAW_BUILD_SECURITY_RECEIPT_PATH, forged_bundle
+        ):
+            with self.assertRaises(self.verifier.VerificationError):
+                self.verifier.verify_raw_build_and_security_evidence_receipt()
+
+        forged_sarif_boundary = copy.deepcopy(receipt)
+        forged_sarif_boundary["unresolved_boundaries"][
+            "sarif_to_candidate_execution_binding"
+        ] = "PASS"
+        with self._patched_json(
+            self.verifier.RAW_BUILD_SECURITY_RECEIPT_PATH, forged_sarif_boundary
+        ):
+            with self.assertRaises(self.verifier.VerificationError):
+                self.verifier.verify_raw_build_and_security_evidence_receipt()
+
+        forged_nested_status = copy.deepcopy(receipt)
+        forged_nested_status["direct_local_image_reports"]["security_pass"] = True
+        with self._patched_json(
+            self.verifier.RAW_BUILD_SECURITY_RECEIPT_PATH, forged_nested_status
+        ):
+            with self.assertRaises(self.verifier.VerificationError):
+                self.verifier.verify_raw_build_and_security_evidence_receipt()
+
+        direct_spdx = self.verifier.load_json(
+            self.verifier.RAW_EVIDENCE_DIR
+            / "atlas-live-trace-worker_gate5-candidate-v0.2.scout.spdx.json"
+        )
+        forged_spdx = copy.deepcopy(direct_spdx)
+        root_package = next(
+            package
+            for package in forged_spdx["packages"]
+            if package["SPDXID"] == "SPDXRef-DocumentRoot"
+        )
+        root_package["externalRefs"][0]["referenceLocator"] = (
+            "pkg:oci/atlas-live-trace-worker@sha256:" + "0" * 64
+        )
+        direct_spdx_path = (
+            self.verifier.RAW_EVIDENCE_DIR
+            / "atlas-live-trace-worker_gate5-candidate-v0.2.scout.spdx.json"
+        )
+        with self._patched_json(direct_spdx_path, forged_spdx):
+            with self.assertRaises(self.verifier.VerificationError):
+                self.verifier.verify_raw_build_and_security_evidence_receipt()
+
+    def test_raw_evidence_receipt_preserves_vendor_scanner_conflict(self) -> None:
+        receipt = self.verifier.load_json(
+            self.verifier.RAW_BUILD_SECURITY_RECEIPT_PATH
+        )
+        forged = copy.deepcopy(receipt)
+        dpkg = next(
+            assessment
+            for assessment in forged["current_vendor_triage"]["assessments"]
+            if assessment["advisory"] == "CVE-2026-2219"
+        )
+        dpkg["ubuntu_status"] = "Vulnerable"
+        dpkg["disposition"] = "OPEN / VENDOR CONFIRMS VULNERABLE"
+        with self._patched_json(
+            self.verifier.RAW_BUILD_SECURITY_RECEIPT_PATH, forged
+        ):
+            with self.assertRaises(self.verifier.VerificationError):
+                self.verifier.verify_raw_build_and_security_evidence_receipt()
+
+        forged_other = copy.deepcopy(receipt)
+        libgcrypt = next(
+            assessment
+            for assessment in forged_other["current_vendor_triage"]["assessments"]
+            if assessment["advisory"] == "CVE-2024-2236"
+        )
+        libgcrypt["package"] = "different-package"
+        libgcrypt["ubuntu_status"] = "Fixed"
+        with self._patched_json(
+            self.verifier.RAW_BUILD_SECURITY_RECEIPT_PATH, forged_other
+        ):
+            with self.assertRaises(self.verifier.VerificationError):
+                self.verifier.verify_raw_build_and_security_evidence_receipt()
+
     def test_candidate_receipt_rejects_source_or_oci_digest_drift(self) -> None:
         receipt = self.verifier.load_json(self.verifier.CANDIDATE_RECEIPT_PATH)
         for field, value in (
@@ -301,7 +521,7 @@ class Gate5VerifierRedTeamTests(unittest.TestCase):
                 self.verifier.verify_history()
 
     def test_markdown_rejects_explicit_contradictory_conclusion(self) -> None:
-        original = Path.read_text
+        original = self.verifier.read_stable_text
         target = self.verifier.ADVERSARIAL_REVIEW_PATH.resolve()
 
         def reader(path: Path, *args, **kwargs):
@@ -310,7 +530,7 @@ class Gate5VerifierRedTeamTests(unittest.TestCase):
                 return "FINAL STATUS: GATE 5 CLOSED / ACCEPT / LICENSED / PUBLIC\n" + text
             return text
 
-        with patch.object(Path, "read_text", new=reader):
+        with patch.object(self.verifier, "read_stable_text", side_effect=reader):
             with self.assertRaises(self.verifier.VerificationError):
                 self.verifier.verify_no_status_promotion_text(self.artifacts)
 
@@ -334,8 +554,9 @@ class Gate5VerifierRedTeamTests(unittest.TestCase):
         stdout, _ = self.verifier.run_command(
             [
                 sys.executable,
-                "-E",
-                "-P",
+                "-I",
+                "-S",
+                "-B",
                 "-c",
                 (
                     "import json, os, sys; print(json.dumps({"
@@ -346,7 +567,12 @@ class Gate5VerifierRedTeamTests(unittest.TestCase):
                     "'pythonhome': 'PYTHONHOME' in os.environ,"
                     "'coverage_startup': 'COVERAGE_PROCESS_START' in os.environ,"
                     "'safe_path': bool(sys.flags.safe_path),"
-                    "'ignore_environment': bool(sys.flags.ignore_environment)}))"
+                    "'ignore_environment': bool(sys.flags.ignore_environment),"
+                    "'isolated': bool(sys.flags.isolated),"
+                    "'no_site': bool(sys.flags.no_site),"
+                    "'no_user_site': bool(sys.flags.no_user_site),"
+                    "'dont_write_bytecode': bool(sys.flags.dont_write_bytecode),"
+                    "'site_loaded': 'site' in sys.modules}))"
                 ),
             ],
             cwd=ROOT,
@@ -365,7 +591,128 @@ class Gate5VerifierRedTeamTests(unittest.TestCase):
                 "coverage_startup": False,
                 "safe_path": True,
                 "ignore_environment": True,
+                "isolated": True,
+                "no_site": True,
+                "no_user_site": True,
+                "dont_write_bytecode": True,
+                "site_loaded": False,
             },
+        )
+
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            temporary = Path(temporary_directory)
+            site_root = temporary / "site-packages"
+            locked_package = site_root / "pytest"
+            locked_package.mkdir(parents=True)
+            locked_file = locked_package / "__init__.py"
+            locked_file.write_bytes(b"LOCKED = True\n")
+            rogue_file = locked_package / "rogue.py"
+            rogue_file.write_bytes(b"ROGUE = True\n")
+            locked_bytes = locked_file.read_bytes()
+            lock = {
+                "admitted_pytest_site_root": str(site_root),
+                "python_identity": {"stdlib_root": str(Path(sys.base_prefix) / "Lib")},
+                "admitted_runner_distributions": [
+                    {
+                        "distribution": "pytest",
+                        "canonical_distribution": "pytest",
+                        "version": "test",
+                        "file_count": 1,
+                        "byte_count": len(locked_bytes),
+                        "tree_sha256": "0" * 64,
+                        "files": [
+                            {
+                                "path": "pytest/__init__.py",
+                                "bytes": len(locked_bytes),
+                                "sha256": hashlib.sha256(locked_bytes)
+                                .hexdigest()
+                                .upper(),
+                                "owner_distribution": "pytest",
+                            }
+                        ],
+                        "excluded_outside_site_files": [],
+                        "tree_digest_rule": "test fixture",
+                    }
+                ],
+            }
+            rogue_bytes = rogue_file.read_bytes()
+            rogue_record = {
+                "path": str(rogue_file),
+                "bytes": len(rogue_bytes),
+                "sha256": hashlib.sha256(rogue_bytes).hexdigest().upper(),
+                "module_names": ["pytest.rogue"],
+                "kind": "PYTHON_OR_DATA",
+            }
+            with self.assertRaisesRegex(
+                self.verifier.VerificationError, "masqueraded"
+            ):
+                self.verifier._validate_loaded_module_records(
+                    name="synthetic post-test",
+                    records=[rogue_record],
+                    lock=lock,
+                    admitted_artifact_paths=set(),
+                    pre_test=False,
+                )
+
+            python_root = temporary / "python-root"
+            python_root.mkdir()
+            shadow = python_root / "gate5_shadow_probe.py"
+            shadow.write_bytes(b"VALUE = 'shadow'\n")
+            admitted = site_root / "gate5_shadow_probe.py"
+            admitted.write_bytes(b"VALUE = 'locked'\n")
+            admitted_bytes = admitted.read_bytes()
+            admitted_map = {
+                str(admitted).casefold(): {
+                    "path": "gate5_shadow_probe.py",
+                    "bytes": len(admitted_bytes),
+                    "sha256": hashlib.sha256(admitted_bytes).hexdigest().upper(),
+                    "owner_distribution": "pytest",
+                }
+            }
+            importlib.invalidate_caches()
+            with patch.object(sys, "path", [str(python_root), str(site_root)]):
+                with self.assertRaisesRegex(ValueError, "outside its file lock"):
+                    self.runner._locked_import_origin(
+                        "gate5_shadow_probe",
+                        site_root=site_root,
+                        locked_files=admitted_map,
+                    )
+            sys.modules.pop("gate5_shadow_probe", None)
+
+            lock_path = temporary / "runner-lock.json"
+            lock_path.write_bytes(b'{"value":"A"}\n')
+            stable_bytes = self.runner._read_stable_unique_file(lock_path)
+            replacement = temporary / "replacement.json"
+            replacement.write_bytes(b'{"value":"B"}\n')
+            os.replace(replacement, lock_path)
+            self.assertEqual(self.runner._load_unique_json(stable_bytes), {"value": "A"})
+
+        duplicate_distributions = [
+            SimpleNamespace(metadata={"Name": "pytest_asyncio"}),
+            SimpleNamespace(metadata={"Name": "pytest-asyncio"}),
+        ]
+        with patch.object(
+            self.runner_lock_builder.importlib.metadata,
+            "distributions",
+            return_value=duplicate_distributions,
+        ):
+            with self.assertRaisesRegex(RuntimeError, "duplicate normalized"):
+                self.runner_lock_builder._distribution_records(Path.cwd())
+
+        runner_tree = ast.parse(RUNNER_PATH.read_bytes(), filename=RUNNER_PATH.as_posix())
+        runner_main = next(
+            node
+            for node in runner_tree.body
+            if isinstance(node, ast.FunctionDef) and node.name == "main"
+        )
+        runner_calls = {
+            node.func.id
+            for node in ast.walk(runner_main)
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+        }
+        self.assertTrue(
+            {"_read_stable_unique_file", "_load_unique_json", "_import_locked_module"}
+            <= runner_calls
         )
 
     def test_main_retains_post_subprocess_rehashes(self) -> None:
@@ -387,6 +734,10 @@ class Gate5VerifierRedTeamTests(unittest.TestCase):
                 "verify_history",
                 "verify_gate4_artifact_bytes",
                 "verify_no_executable_shadow_artifacts",
+                "verify_raw_build_and_security_evidence_receipt",
+                "verify_local_test_runner_lock",
+                "capture_integrated_file_observations",
+                "verify_integrated_file_observations_unchanged",
             }
             <= names
         )
@@ -396,12 +747,36 @@ class Gate5VerifierRedTeamTests(unittest.TestCase):
         gate4_post_lines = sorted(
             line for name, line in calls if name == "verify_gate4_artifact_bytes"
         )
-        shadow_line = next(
+        shadow_lines = sorted(
             line for name, line in calls if name == "verify_no_executable_shadow_artifacts"
+        )
+        capture_line = next(
+            line for name, line in calls if name == "capture_integrated_file_observations"
+        )
+        identity_post_line = next(
+            line
+            for name, line in calls
+            if name == "verify_integrated_file_observations_unchanged"
+        )
+        runner_lock_lines = sorted(
+            line for name, line in calls if name == "verify_local_test_runner_lock"
+        )
+        manifest_observation_lines = sorted(
+            line for name, line in calls if name == "observe_regular_file"
         )
         self.assertGreaterEqual(len(manifest_lines), 2)
         self.assertGreaterEqual(len(history_lines), 2)
-        self.assertLess(shadow_line, test_line)
+        self.assertGreaterEqual(len(shadow_lines), 2)
+        self.assertLess(shadow_lines[0], test_line)
+        self.assertGreater(shadow_lines[-1], test_line)
+        self.assertLess(capture_line, test_line)
+        self.assertGreater(identity_post_line, test_line)
+        self.assertGreaterEqual(len(runner_lock_lines), 2)
+        self.assertGreaterEqual(len(manifest_observation_lines), 2)
+        self.assertLess(manifest_observation_lines[0], test_line)
+        self.assertGreater(manifest_observation_lines[-1], test_line)
+        self.assertLess(runner_lock_lines[0], test_line)
+        self.assertGreater(runner_lock_lines[-1], test_line)
         self.assertLess(manifest_lines[0], test_line)
         self.assertGreater(manifest_lines[-1], test_line)
         self.assertGreater(history_lines[-1], test_line)

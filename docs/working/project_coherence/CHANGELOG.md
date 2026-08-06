@@ -2,6 +2,63 @@
 
 All dates use the repository's working timezone. This changelog records control-package changes, not product releases.
 
+## 2026-08-05 - Gate 5 retained evidence and same-run verifier hardening
+
+### Added
+
+- An additive raw build/security receipt and ten exact retained payloads: the
+  original OCI index, platform/config/attestation records, BuildKit history,
+  SPDX and SLSA statements, plus a current direct Scout 1.21 SPDX and SARIF
+  report. The historical v0.2 issuance-time receipt remains byte-unchanged and
+  continues to record that those raw payloads were unavailable at issuance.
+- A local Windows runner lock over three interpreter files, 508 exact files
+  owned by seven pytest-support distributions, and three `.pth` files disabled
+  at startup by `-I -S`. Pytest and explicit-plugin origins are checked against
+  the exact file lock before import. The child hashes and parses the same
+  identity-checked lock byte buffer.
+- Same-process collection/start/finish and exact setup/call/teardown/subtest
+  receipts for each admitted suite, with ephemeral digests for executed node
+  IDs, outcomes, locked import origins, pre-test module endpoints, and final
+  module endpoints.
+- Descriptor-bound repository observations that reject symlink/reparse path
+  components and hardlinked leaves, compare pathname/open-handle/ancestor
+  identities, separately preserve the non-self-hashed manifest identity, and
+  recheck the integrated Gate 5/Gate 4/history surface after child execution.
+  Ancestor checks bind stable structural identity (device, inode, type, link,
+  and reparse state) while intentionally excluding directory size/timestamps,
+  which can change when unrelated Codex work occurs outside the worktree.
+
+### Verified bounded receipts
+
+- The intended manifest surface contains 340 hash-bound artifacts, including
+  298 syntax-checked Python files, while retaining the exact 537-file historical
+  recovery and transitive Gate 4 dependency.
+- Harness v2 kernel/history/verifier: 119 tests and 61 subtests, comprising 94
+  active kernel tests, 4 historical-recovery tests, and 21 Gate 5 verifier
+  red-team tests. Live worker: 364/364; API/launcher/fleet/state: 76/76; focused
+  numeric red team: 32/32. These are local same-process engineering receipts,
+  not scientific or independently attested execution.
+- The direct Scout payload reports 0 critical, 0 high, 3 medium, and 4 low
+  findings. Current Ubuntu-source triage leaves six records vulnerable or
+  fix-deferred and identifies one scanner/vendor conflict because the exact
+  scanned `dpkg` version is vendor-fixed.
+
+### Preserved open boundaries
+
+- Gate 5 remains `OPEN / NOT_STARTED / Ring 4 / NOT LICENSED / HELD / NOT
+  FROZEN`; `G5-ENGINEERING-002` remains `OPEN_ENGINEERING` and
+  `G5-ENGINEERING-003` remains `OPEN_SECURITY`.
+- The endpoint module inventory contains only surviving `sys.modules` file
+  origins and maps cache paths to source. It does not capture
+  transient/unloaded/dynamic execution, exact loader-executed bytecode,
+  unresolved/deleted origins, native-loader dependencies, descendant
+  processes, or files absent from upstream distribution `RECORD` inventories.
+- Complete standard-library/test/native/process closure, an immutable and
+  independently attested snapshot, trusted time/WORM ordering, privileged ABA
+  resistance, independent reproduction, real GPU execution, worker-to-kernel
+  integration, scientific validation, licensing, product authority, and
+  disclosure authority all remain open.
+
 ## 2026-08-05 - Gate 5 successor dependency/container candidate hardening
 
 ### Added

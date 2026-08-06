@@ -31,6 +31,11 @@ This review is bounded to the following current surfaces:
   controls;
 - the successor dependency/container candidate receipt
   `GATE5_DEPENDENCY_AND_CONTAINER_CANDIDATE_RECEIPT_v0.2.json`;
+- the additive raw build/security receipt
+  `GATE5_RAW_BUILD_AND_SECURITY_EVIDENCE_RECEIPT_v0.1.json` and its ten retained
+  payloads;
+- the local runner lock `GATE5_LOCAL_WINDOWS_TEST_RUNNER_LOCK_v0.1.json`, the
+  same-process pytest runner, and both deterministic builders;
 - the exact historical V1-V4 recovery inventory and its independent verifier;
 - the Gate 5 conditions in
   `PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md`; and
@@ -133,14 +138,21 @@ SHA-256 and byte length, and freshly replays them against the current
 pre-outcome chain before public reads. This is process-local tamper detection,
 not WORM authority.
 
-The clean focused receipt is **113 passed tests plus 61 subtests** under Python
-3.14 with bytecode/cache output disabled. It includes five retained candidate
-dependency/container receipt red-team tests covering scan-status promotion,
-live authorization, OCI/source drift, dependency-lock drift, and omitted build
-controls. The receipt is limited to
+The clean focused receipt is **119 passed tests plus 61 subtests** under Python
+3.14 with startup site processing and bytecode/cache output disabled. It
+contains 94 active-kernel tests, 4 historical-recovery tests, and 21 Gate 5
+verifier red-team tests. The retained attacks cover hardlink/symlink aliasing,
+same-byte inode replacement, a synthetic reparse attribute, duplicate or
+noncanonical node IDs, raw-evidence security promotion, erasure of the
+scanner/vendor conflict, duplicate normalized runner distributions, unbound
+code inside a locked runner namespace, Python-root import shadowing, and
+lock-byte replacement before parsing. The stable-observer regression also
+confirms that metadata-only ancestor timestamp churn is not misclassified as
+object substitution while structural ancestor replacement remains detected.
+The receipt is limited to
 `tests/cas_harness_v2`; it is not a repository-wide or production receipt.
-Its canonical node-ID-set SHA-256 is
-`FD31E05BDFE62A44B4FC7D1556A2CA498115FF8E0A65C3F16160FA4D0C2FA294`.
+Its same-process executed-node SHA-256 is
+`8FBC5D8AE4CF3B0BBEB9A1902C6905278126B056FF6961D13EE9830E2363F362`.
 
 ## Live-worker adverse evidence and bounded repairs
 
@@ -218,24 +230,35 @@ SHA-256 values are, respectively,
 `12602041756f20d1afd402fa56968660839e5eb1098438ba84c69bff8de7050b`
 and
 `94566203b3e0ff79b3224c1c5a073698ca99d3c08bc1119a9082e42af4b178bd`.
-These are not raw pytest transcript digests. The verifier retains collection
-lines containing `::`, strips whitespace, normalizes path separators to `/`,
-de-duplicates them, sorts by Python ordinal order, and hashes the UTF-8
-serialization of each `live-trace-worker/`-prefixed ID followed by LF,
-including the final ID. Earlier hashes produced by culture-aware sorting or by
-omitting the final LF are superseded and are not evidence. The independently
+These are not raw pytest transcript digests. One pytest process must report
+identical duplicate-free collected, started, and finished sequences, exact
+setup/call/teardown PASS outcomes, and separately passing subtests. The parent
+normalizes path separators to `/` without Unicode normalization, sorts by
+Python ordinal order, and hashes the UTF-8 serialization of each
+`live-trace-worker/`-prefixed ID followed by LF, including the final ID.
+Earlier hashes produced by culture-aware sorting or by omitting the final LF
+are superseded and are not evidence. The independently
 confirmed 290/290 receipt and the earlier 255/257 receipts remain canonical
 checkpoints only for their earlier bounded bytes and test surfaces. The
 successor API/launcher/fleet/state suite also passes **76/76**, with canonical
 node-ID-set SHA-256
 `1ed1e9e3afa2eda6881463ee5284dd4902ab94c0246b80d2937066480ac42921`.
 The 364-test worker and 76-test API/launcher/fleet/state results are
-`LOCAL_UNATTESTED_HOST_REGRESSION` observations. The node-ID hashes come from
-collect-only subprocesses, while pass/fail summaries come from separate
-execution subprocesses; no receipt binds the actual executed-node set from the
-passing run. The mutable user-site runner includes Python 3.14.0, pytest 9.0.2,
-pytest-asyncio 1.3.0, and startup-hook state outside the content-bound test
-surface. None of these receipts is authenticated execution, a GPU
+`LOCAL_UNATTESTED_HOST_REGRESSION` observations. Their same-process receipts
+bind executed node IDs and exact outcomes. The child starts with `-I -S -B`, a
+fresh bytecode-cache prefix, disabled plugin autoload, and exact pre-admitted
+repository import roots. The local lock binds three interpreter files, seven
+runner distributions containing 508 exact file records, and three inventoried
+`.pth` files whose startup execution is disabled. Pytest and explicit plugin
+origins are checked against that per-file lock before import, and the child
+hashes and parses the same stable lock bytes. The endpoint module inventory
+contains only surviving `sys.modules` file origins, maps `.pyc` paths back to
+source, and misses transient/unloaded/dynamic execution, unresolved or deleted
+origins, native-loader dependencies, and child processes. Distribution files
+absent from upstream `RECORD` also remain outside the lock. The standard
+library, complete test/native/descendant closure, kernel/filesystem trust, and
+independent attestation remain OPEN. None of these receipts is authenticated
+execution, a GPU
 model-execution receipt, or a scientific-result receipt.
 
 GPU, autocast/mixed-precision, compiled-module hook behavior, multi-device
@@ -244,8 +267,8 @@ boundaries.
 
 ### Manifest and verifier red team
 
-The integrated verifier red team reproduced and retained five additional
-fail-closed defects before the manifest was admitted:
+The integrated verifier red team first reproduced and retained five
+fail-closed defect classes before the manifest was admitted:
 
 - extra manifest records, unchecked artifact roles/counts, and rewritten OPEN
   boundary prose could coexist with the required records;
@@ -259,13 +282,26 @@ fail-closed defects before the manifest was admitted:
 - files could change after their initial hash check because subprocesses ran
   before the verifier's final PASS without a postflight rehash.
 
+The successor hardening then retained six more attacks:
+
+- hardlinked and symlinked artifacts could alias admitted path bytes;
+- same-byte pathname replacement could evade a digest-only postflight;
+- a Windows reparse attribute could be hidden behind non-symlink semantics;
+- duplicate or noncanonical node IDs could be collapsed into a plausible set;
+- raw-evidence fields could be promoted into security acceptance; and
+- the six-plus-one vendor disposition could be rewritten to erase the
+  `dpkg` scanner/vendor conflict.
+
 The retained repair makes the v0.1 structured carriers extra-forbid, requires
 exact scalar types, derives artifact roles from canonical paths, binds the
 complete Gate 5 directory and every existing pytest discovery/configuration
 candidate, disables unsolicited pytest plugin and environment injection, and
-rehashes the Gate 5, 537-file historical, and transitive Gate 4 surfaces after
-all subprocesses. Bound Markdown/JSON also rejects explicit contradictory
-status conclusions while preserving its exact OPEN governance headers.
+observes the Gate 5, 537-file historical, and transitive Gate 4 surfaces before
+and after all subprocesses. Stable reads reject symlink/reparse components and
+hardlinked leaves, compare pathname and opened-handle identity, hash through
+that handle, and retain ancestor identities. Bound Markdown/JSON also rejects
+explicit contradictory status conclusions while preserving its exact OPEN
+governance headers.
 
 The broad active-surface LF rules in `.gitattributes` are followed by specific
 `-text` exceptions for `api/services/cas_harness_pythia160m_*.py`,
@@ -284,17 +320,16 @@ seconds the independent process exited 1 with the error
 independent run on stable bytes; the failed-closed receipt is adverse evidence
 that the non-atomic predecessor path is no longer silently accepted.
 
-This is static repository-local integrity, not authenticated or hermetic
-execution. The verifier rejects executable shadows inside the admitted
-repository roots, but the installed user-site interpreter, pytest, explicitly
-named worker plugin, and startup hooks are not content-addressed; collect-only
-IDs and execution summaries are separate; and filesystem races cannot become
-trusted ordering without an external WORM/locking authority. Host-runner
-integrity, hardlink/reparse-point aliasing, read-only snapshot and before/after
-ABA resistance, cache/bytecode and native-extension shadows outside that
-admitted snapshot, same-run executed-node identity, and raw external-evidence
-retention remain `OPEN` under `G5-ENGINEERING-002`. A verifier controlled by the
-same writer is not an independent signature or reviewer.
+This is repository-local integrity and same-process regression evidence, not
+authenticated or hermetic execution. The local runner lock and descriptor-based
+observer close the former separate-collection ambiguity and ordinary repository
+alias/replacement paths. They do not bind transient/unloaded/dynamic imports,
+exact loader-executed bytecode, unresolved or deleted module origins, the
+complete standard library, test/native/descendant-process closure, immutable
+snapshot, privileged or metadata-preserving ABA resistance, hosted/auxiliary
+model-loader aliases, kernel/filesystem trust, or external WORM ordering. Those remain `OPEN` under
+`G5-ENGINEERING-002`. A verifier controlled by the same writer is not an
+independent signature or reviewer.
 
 ### Exact model-file identity and successor security candidate
 
@@ -320,17 +355,17 @@ identifies that version as affected by current advisories, including
 `CVE-2026-4372` / `GHSA-29pf-2h5f-8g72`, with the cited fixed line at `5.3.0`.
 That record remains unchanged adverse evidence.
 
-The successor v0.2 receipt binds its repository source/build controls to source
+The time-indexed successor v0.2 receipt binds its repository source/build controls to source
 commit `4bff437dbcf6d0d38046e63d2aee823e8f316711`, records a 73-distribution
 hash-bound lock with `transformers==5.14.1`, and records locally observed exact
 Ubuntu/Python base-image and OCI index identifiers:
 `sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c`,
 linux/amd64 manifest
 `sha256:60bf92b327ebec84887c659313a97a6369a24fd5d8eb00a012544fcafd26ba27`,
-image config, BuildKit SPDX SBOM, and SLSA provenance identifiers. The raw build
-history, SPDX payload, SLSA payload, and Scout report were not retained, are not
-repository replayable, and have no independent trust root. These external-tool
-facts are `SELF_REPORTED_LOCAL_OBSERVATION_ONLY`. The exact five-file Pythia
+image config, BuildKit SPDX SBOM, and SLSA provenance identifiers. At issuance,
+the raw build history, SPDX payload, SLSA payload, and Scout report were not
+retained or repository replayable. That historical statement remains unchanged,
+and those external-tool facts are `SELF_REPORTED_LOCAL_OBSERVATION_ONLY`. The exact five-file Pythia
 artifact set was locally hashed before and after load. One CPU-only,
 non-scientific engineering preflight loaded it and ran the offline
 geometry/numerics canary; a 385-object native closure with only the declared
@@ -339,18 +374,25 @@ no-token and no-CUDA startup probes were also locally observed. This did not
 authorize or admit an experiment and created no GPU run, Evidence Packet, or
 scientific result; experimental execution remains `NOT_STARTED`.
 
+The later additive raw-evidence receipt retains ten exact payloads: the OCI
+index/config/manifests, BuildKit history bundle, original SPDX and SLSA
+statements, and a current direct Scout 1.21 SPDX and SARIF report. Retaining the
+bytes does not replay the complete tool execution or provide an independent
+trust root.
+
 This is a materially stronger candidate, not security closure. `pip-audit`
 completed for 72 lock entries with zero findings but skipped the direct-URL
 Torch entry; a separate OSV query returned zero results for the exact Torch
-package/version. A local Docker Scout 1.24.0 run against the observed SPDX
-identifier covered 190 packages and reported `COMPLETED_WITH_FINDINGS` with 0
-critical, 0 high, 3 medium, and 4 low findings. All seven are reported unfixed:
+package/version. The historical Docker Scout 1.24.0 observation has no retained
+raw report. The current direct Scout 1.21 scan is retained and reports
+`COMPLETED_WITH_FINDINGS` with 0 critical, 0 high, 3 medium, and 4 low findings:
 `CVE-2026-27456`, `CVE-2026-13757`, `CVE-2026-2219`, `CVE-2026-27171`,
-`CVE-2024-2236`, `CVE-2024-56433`, and `CVE-2026-40228`. A separate direct
-local image/filesystem scan remains `INCOMPLETE / PENDING`. No scan PASS, real
-GPU forward, independent clean build, independent provenance trust root, or
-independent security receipt exists, and the raw scan report is not retained or
-repository replayable.
+`CVE-2024-2236`, `CVE-2024-56433`, and `CVE-2026-40228`. Current vendor triage
+classifies six as vulnerable or fix-deferred and one as a scanner/vendor
+conflict because the exact scanned `dpkg` version is vendor-fixed. The scanner
+database identity and complete process transcript are not retained. No scan
+PASS, real GPU forward, independent clean build, independent provenance trust
+root, or independent security receipt exists.
 `G5-ENGINEERING-003` therefore remains `OPEN_SECURITY`,
 `live_execution_authorized=false`, and all live or hosted Gate 5 execution
 remains `HELD`.
@@ -409,22 +451,25 @@ The live worker is not yet mapped into the kernel's exact preregistration,
 outcome-access, executor/auditor, and packet protocol. The v0.2 successor now
 provides a digest-bound patched container candidate, exact build controls,
 and a locally observed offline preflight plus BuildKit SBOM/provenance
-identifiers. The raw external payloads are not retained or repository
-replayable, and no independent trust root exists. It does not provide a resolved
-security scan, completed direct-filesystem scan, real GPU execution, a
-separately controlled clean reproduction, or an independently verified
-environment attestation.
+identifiers. The later receipt retains ten exact raw payloads and a current
+direct scan, but does not replay the complete tool execution or establish an
+independent trust root. The SARIF does not embed the candidate identity or its
+invocation, and the linked Ubuntu vendor pages were not snapshotted. It does not
+provide a scan PASS, real GPU execution, a separately controlled clean
+reproduction, or an independently verified environment attestation.
 The Gate 5 matrix, manifest, builder, and executable verifier now bind and
 rerun the exact Gate 4 manifest/verifier while preserving Gate 4's controlling
 `OPEN / RING 4 / NOT LICENSED / HELD` boundary. This closes only a structural
 dependency check; a Gate 4 structural PASS cannot be reinterpreted as semantic,
 scientific, product, or disclosure acceptance. Authenticated execution remains
 outside this receipt. The bounded lock and runtime-isolation receipts do not
-establish independent hermeticity. The static repository-local executable-shadow
-check does not bind the mutable host/user-site runner. Its collect-only versus
-executed-node gap, hardlink/reparse/ABA risks, cache/bytecode/native-shadow risks
-outside the admitted snapshot, absence of a verified read-only snapshot, and
-raw-evidence retention remain `OPEN` under `G5-ENGINEERING-002`.
+establish independent hermeticity. The local same-process receipt, runner lock,
+and descriptor observer bind a stronger repository-local surface, but the
+same-run JSON is ephemeral and not WORM-retained. The controls do not bind the
+transient/unloaded/dynamic import history, exact loader-executed bytecode,
+complete standard-library/test/native/descendant closure, immutable read-only
+snapshot, privileged ABA resistance, hosted/auxiliary loader aliases, or
+kernel/filesystem trust. Those remain `OPEN` under `G5-ENGINEERING-002`.
 
 ### Semantic and scientific validation
 
@@ -463,11 +508,13 @@ The minimum defensible order is:
 
 1. preserve the verifier-native 32/32 focused, 364/364 complete-worker, and
    76/76 API/launcher/fleet/state receipts, the earlier 290/290 checkpoint, and
-   every counterexample;
+   every counterexample, including the current ephemeral same-process and
+   retained raw-evidence validations;
 2. preserve and independently reproduce the patched digest-bound v0.2
-   dependency/container candidate, resolve or explicitly disposition every
-   scan finding, complete the direct-filesystem scan, and revalidate the exact
-   model and hook contract under real
+   dependency/container candidate, remediate or explicitly disposition the six
+   vendor-confirmed vulnerable/fix-deferred records, reconcile the `dpkg`
+   scanner conflict, capture complete scanner-process and vendor-source
+   evidence, and revalidate the exact model and hook contract under real
    GPU/autocast/compiled-hook behavior;
 3. define and independently review the worker-to-kernel protocol;
 4. materialize trusted time, nonces, one-use run consumption, durable WORM
