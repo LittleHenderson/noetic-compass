@@ -1,0 +1,96 @@
+{
+  "schema_version": "project_coherence.publication.wave1.engineering_artifact_manifest.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "base_commit": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
+  "branch": "codex/project-coherence-publication-engineering",
+  "manifest_self_hash": null,
+  "self_hash_policy": "NON_SELF_HASHING: this manifest intentionally excludes its own path and digest. Git binds the manifest bytes with the package commit.",
+  "artifact_count": 7,
+  "package_file_count_including_manifest": 8,
+  "artifacts": [
+    {
+      "path": "docs/working/project_coherence/publication/wave1/engineering/CAS_OHM_1_PROVISIONAL_TECHNICAL_REPORT_v0.1.md",
+      "sha256": "7B6376A13B74395A38853E38532F1BBCD690DBBE1F80C9E175EDD5B0CEDDBFC3",
+      "bytes": 21367,
+      "media_type": "text/markdown",
+      "role": "provisional_cas_ohm_technical_report_not_charter_approved_standalone_paper"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/engineering/CAS_PCBA_8_ADAPTIVE_COGNITIVE_CIRCUIT_ENGINEERING_DRAFT_v0.1.md",
+      "sha256": "65EDA46D3650CF49DB43709D9748EB1ABD71CE947BD9D77034FB605D002D4F2E",
+      "bytes": 23551,
+      "media_type": "text/markdown",
+      "role": "charter_paper_6_research_draft"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CITATION_LEDGER_v0.1.json",
+      "sha256": "E798FFD41EDD6D680F13A43AE5E50FA16CF7AE183F04575A097F3FBA7FAB4CC4",
+      "bytes": 14952,
+      "media_type": "application/json",
+      "role": "source_bound_internal_and_primary_external_citation_ledger"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_CLAIM_ASSERTION_MATRIX_v0.1.json",
+      "sha256": "5EC2B62E874BDC12FE4106E34AB08064EE4A990FC755F405039CB5515DB4376B",
+      "bytes": 24712,
+      "media_type": "application/json",
+      "role": "theorem_claim_source_finding_and_engineering_assertion_matrix"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_EVIDENCE_MAP_v0.1.json",
+      "sha256": "F91A8C4CB0461561D9CEA82CDB1F21CCC211F6BC5CCEFCCA537926635E3D55C1",
+      "bytes": 23052,
+      "media_type": "application/json",
+      "role": "exact_source_inventory_hashes_evidence_map_and_receipt_boundaries"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_HANDOFF_PACKAGE_v0.1.md",
+      "sha256": "82AC03989A93662837C88CA8F187A7ED3E278FCD2A44B994BD2A1CC748241C0A",
+      "bytes": 10209,
+      "media_type": "text/markdown",
+      "role": "lead_editor_and_cross_review_handoff"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave1/engineering/WAVE1_ENGINEERING_UNRESOLVED_OBLIGATIONS_v0.1.json",
+      "sha256": "39584E3E47FA0373E571BB17A2591D9C3D091A72E304F9F6A447E818BB9FD9C4",
+      "bytes": 15634,
+      "media_type": "application/json",
+      "role": "open_obligations_and_required_closure_evidence"
+    }
+  ],
+  "validation_invariants": [
+    "Every artifact path is repository-relative, POSIX-normalized, unique, and confined to this engineering lane.",
+    "Every artifact except this manifest contains the exact package status label.",
+    "Every listed SHA-256 is uppercase hexadecimal over exact file bytes and every byte count is exact.",
+    "The manifest path is absent from artifacts and manifest_self_hash is null.",
+    "All JSON artifacts parse with duplicate-key rejection and their declared counts equal their array lengths.",
+    "All repository source hashes in the evidence map match the bound base commit.",
+    "All four external PCBA/CAS-Ohm source bindings were present and matched their authority-matrix hashes during the lane inventory.",
+    "No artifact changes Gate 4 or Gate 5 status or edits a shared registry or specification."
+  ],
+  "internal_cross_review": "OPEN",
+  "external_specialist_review": "OPEN",
+  "experiment_status": "NO EXPERIMENT EXECUTED",
+  "gpu_or_runpod_use": "NONE",
+  "required_open_boundaries": [
+    "Complete CCDL grammar and independent conformance",
+    "Stateful, stochastic, adaptive, and memristive dynamics",
+    "Hermetic and independent software reproduction",
+    "Live calibration, uncertainty, drift, and held-out replication",
+    "Explicit causal model, identification, and intervention evidence",
+    "Physical materiality and authenticated instrumentation",
+    "Safety, clinical, and regulatory validation",
+    "Authenticated claim/capability authority and Evidence Packet eligibility",
+    "Product readiness and acceptance",
+    "Canon and migration admission",
+    "Authorship, disclosure, license, submission, and peer-review decisions"
+  ],
+  "closure_statement": "This manifest binds a Wave 1 draft handoff only. It is not a signature, trusted timestamp, WORM receipt, scientific result, safety case, product verdict, canon decision, license, disclosure approval, authorship record, or peer-review acceptance."
+}

@@ -1,0 +1,298 @@
+{
+  "schema_version": "project_coherence.publication.wave1.engineering_citation_ledger.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "base_commit": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
+  "checked_on": "2026-08-05",
+  "citation_policy": "External literature supplies definitions, algorithms, standards, and methodological comparisons only. It does not validate CAS/TKS semantics, cognition, physical mapping, causation, safety, clinical or regulatory use, product readiness, canon admission, licensing, or disclosure.",
+  "external_primary_sources": [
+    {
+      "id": "E1",
+      "authors_or_body": ["IEEE"],
+      "year": 2019,
+      "title": "IEEE Standard for VHDL Language Reference Manual",
+      "container": "IEEE Std 1076-2019",
+      "source_class": "PRIMARY_TECHNICAL_STANDARD",
+      "doi": null,
+      "url": "https://standards.ieee.org/ieee/1076/5179/",
+      "used_for": ["Machine- and human-readable engineering language framing", "Separation of language definition from a particular design instance"],
+      "not_evidence_of": "CCDL conformance or CAS PCBA correctness."
+    },
+    {
+      "id": "E2",
+      "authors_or_body": ["David Harel"],
+      "year": 1987,
+      "title": "Statecharts: A Visual Formalism for Complex Systems",
+      "container": "Science of Computer Programming 8(3), 231-274",
+      "source_class": "FOUNDATIONAL_PEER_REVIEWED_PAPER",
+      "doi": "10.1016/0167-6423(87)90035-9",
+      "url": "https://doi.org/10.1016/0167-6423(87)90035-9",
+      "used_for": ["Explicit state, hierarchy, concurrency, and communication semantics"],
+      "not_evidence_of": "Completeness of PCBA stateful semantics."
+    },
+    {
+      "id": "E3",
+      "authors_or_body": ["Robert Tarjan"],
+      "year": 1972,
+      "title": "Depth-First Search and Linear Graph Algorithms",
+      "container": "SIAM Journal on Computing 1(2), 146-160",
+      "source_class": "FOUNDATIONAL_PEER_REVIEWED_PAPER",
+      "doi": "10.1137/0201010",
+      "url": "https://doi.org/10.1137/0201010",
+      "used_for": ["Strongly connected component method family used to frame feedback-cycle analysis"],
+      "not_evidence_of": "Correctness or completeness of the candidate's implementation or gain rules."
+    },
+    {
+      "id": "E4",
+      "authors_or_body": ["IEEE"],
+      "year": 2019,
+      "title": "IEEE Standard for Floating-Point Arithmetic",
+      "container": "IEEE Std 754-2019",
+      "source_class": "PRIMARY_TECHNICAL_STANDARD",
+      "doi": "10.1109/IEEESTD.2019.8766229",
+      "url": "https://standards.ieee.org/ieee/754/6210/",
+      "used_for": ["Explicit numerical formats, operations, destination formats, and exception behavior"],
+      "not_evidence_of": "Cross-runtime reproducibility or adequacy of PCBA numerical tolerances."
+    },
+    {
+      "id": "E5",
+      "authors_or_body": ["W3C Provenance Working Group"],
+      "year": 2013,
+      "title": "PROV-O: The PROV Ontology",
+      "container": "W3C Recommendation, 30 April 2013",
+      "source_class": "PRIMARY_WEB_STANDARD",
+      "doi": null,
+      "url": "https://www.w3.org/TR/prov-o/",
+      "used_for": ["Entity, activity, agent, generation, use, and derivation provenance framing"],
+      "not_evidence_of": "Truth, authenticity, authority, or CAS-specific PROV-O conformance."
+    },
+    {
+      "id": "E6",
+      "authors_or_body": ["Joint Committee for Guides in Metrology"],
+      "year": 2012,
+      "title": "International Vocabulary of Metrology - Basic and General Concepts and Associated Terms (VIM), 3rd edition",
+      "container": "JCGM 200:2012",
+      "source_class": "PRIMARY_METROLOGY_STANDARD",
+      "doi": "10.59161/JCGM200-2012",
+      "url": "https://www.bipm.org/en/doi/10.59161/jcgm200-2012",
+      "used_for": ["Measurement, quantity, calibration, and metrological vocabulary discipline"],
+      "not_evidence_of": "CAS-Ohm instrument validation or metrological traceability."
+    },
+    {
+      "id": "E7",
+      "authors_or_body": ["Joint Committee for Guides in Metrology"],
+      "year": 2008,
+      "title": "Evaluation of Measurement Data - Guide to the Expression of Uncertainty in Measurement",
+      "container": "JCGM 100:2008(E)",
+      "source_class": "PRIMARY_METROLOGY_STANDARD",
+      "doi": "10.59161/JCGM100-2008E",
+      "url": "https://www.bipm.org/en/doi/10.59161/jcgm100-2008e",
+      "used_for": ["Uncertainty representation and propagation discipline"],
+      "not_evidence_of": "Adequacy of any CAS-Ohm uncertainty model or threshold."
+    },
+    {
+      "id": "E8",
+      "authors_or_body": ["Robert G. Sargent"],
+      "year": 2013,
+      "title": "Verification and Validation of Simulation Models",
+      "container": "Journal of Simulation 7(1), 12-24",
+      "source_class": "PEER_REVIEWED_METHODS_PAPER",
+      "doi": "10.1057/jos.2012.20",
+      "url": "https://doi.org/10.1057/jos.2012.20",
+      "used_for": ["Separation of conceptual-model validity, implementation verification, operational validity, and data validity"],
+      "not_evidence_of": "Operational validity of CAS PCBA or CAS-Ohm."
+    },
+    {
+      "id": "E9",
+      "authors_or_body": ["Koen Claessen", "John Hughes"],
+      "year": 2000,
+      "title": "QuickCheck: A Lightweight Tool for Random Testing of Haskell Programs",
+      "container": "Proceedings of ICFP 2000, 268-279",
+      "source_class": "PEER_REVIEWED_METHODS_PAPER",
+      "doi": "10.1145/351240.351266",
+      "url": "https://doi.org/10.1145/351240.351266",
+      "used_for": ["Property-based generation and shrinking as a future DRC/testing method"],
+      "not_evidence_of": "Existing property/fuzz coverage or exhaustive correctness."
+    },
+    {
+      "id": "E10",
+      "authors_or_body": ["Shun-ichi Amari"],
+      "year": 2016,
+      "title": "Information Geometry and Its Applications",
+      "container": "Applied Mathematical Sciences 194, Springer",
+      "source_class": "TECHNICAL_MONOGRAPH",
+      "doi": "10.1007/978-4-431-55978-8",
+      "url": "https://doi.org/10.1007/978-4-431-55978-8",
+      "used_for": ["Information-geometric framing of positive probability manifolds and Fisher information geometry"],
+      "not_evidence_of": "Correctness of a specific binary64 distance implementation or cognitive validity of a simplex profile."
+    },
+    {
+      "id": "E11",
+      "authors_or_body": ["Judea Pearl"],
+      "year": 2009,
+      "title": "Causality: Models, Reasoning, and Inference, 2nd edition",
+      "container": "Cambridge University Press",
+      "source_class": "TECHNICAL_MONOGRAPH",
+      "doi": "10.1017/CBO9780511803161",
+      "url": "https://doi.org/10.1017/CBO9780511803161",
+      "used_for": ["Requirement for explicit causal assumptions, identification, and intervention logic before causal interpretation"],
+      "not_evidence_of": "A causal model or identifiable CAS-Ohm effect."
+    },
+    {
+      "id": "E12",
+      "authors_or_body": ["Edgar Buckingham"],
+      "year": 1914,
+      "title": "On Physically Similar Systems; Illustrations of the Use of Dimensional Equations",
+      "container": "Physical Review 4(4), 345-376",
+      "source_class": "FOUNDATIONAL_PEER_REVIEWED_PAPER",
+      "doi": "10.1103/PhysRev.4.345",
+      "url": "https://doi.org/10.1103/PhysRev.4.345",
+      "used_for": ["Dimensional-consistency discipline and the need for an explicit unit bridge"],
+      "not_evidence_of": "Physical similarity or materiality of CAS quantities."
+    },
+    {
+      "id": "E13",
+      "authors_or_body": ["Leon O. Chua"],
+      "year": 1971,
+      "title": "Memristor-The Missing Circuit Element",
+      "container": "IEEE Transactions on Circuit Theory 18(5), 507-519",
+      "source_class": "FOUNDATIONAL_PEER_REVIEWED_PAPER",
+      "doi": "10.1109/TCT.1971.1083337",
+      "url": "https://doi.org/10.1109/TCT.1971.1083337",
+      "used_for": ["Historical electrical definition of an ideal memristor and the distinction between instantaneous resistance and history-dependent constitutive behavior"],
+      "not_evidence_of": "A physical memristor, charge/flux mapping, or validated memory law in CAS."
+    },
+    {
+      "id": "E14",
+      "authors_or_body": ["Leon O. Chua", "Sung-Mo Kang"],
+      "year": 1976,
+      "title": "Memristive Devices and Systems",
+      "container": "Proceedings of the IEEE 64(2), 209-223",
+      "source_class": "FOUNDATIONAL_PEER_REVIEWED_PAPER",
+      "doi": "10.1109/PROC.1976.10092",
+      "url": "https://doi.org/10.1109/PROC.1976.10092",
+      "used_for": ["General internal-state framing for memristive systems and motivation for an explicitly typed history-state research profile"],
+      "not_evidence_of": "A CAS state equation, material device, hysteresis result, or physical electrical interpretation."
+    },
+    {
+      "id": "E15",
+      "authors_or_body": ["Marc C. Kennedy", "Anthony O'Hagan"],
+      "year": 2001,
+      "title": "Bayesian Calibration of Computer Models",
+      "container": "Journal of the Royal Statistical Society: Series B 63(3), 425-464",
+      "source_class": "PEER_REVIEWED_METHODS_PAPER",
+      "doi": "10.1111/1467-9868.00294",
+      "url": "https://doi.org/10.1111/1467-9868.00294",
+      "used_for": ["Parameter uncertainty, model discrepancy, and predictive validation framing for calibrated computer models"],
+      "not_evidence_of": "Adequacy of the current CAS-Ohm fit or a completed calibration experiment."
+    }
+  ],
+  "internal_source_citations": [
+    {
+      "id": "I1",
+      "title": "Project Coherence Master Charter v0.1",
+      "path": "docs/working/project_coherence/PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md",
+      "sha256": "B87B2E2B4CC4B10C76EE4AA6EA09094572B2A1008E474475E8F642836B83D2BE",
+      "used_for": "Paper 6 title, publication program, gate statuses, and authority boundaries."
+    },
+    {
+      "id": "I2",
+      "title": "Canonical Source Authority Matrix v0.1",
+      "path": "docs/working/project_coherence/CANONICAL_SOURCE_AUTHORITY_MATRIX_v0.1.json",
+      "sha256": "6BA38A3BE0AF97E0DE27D109D988D01EEDA1D338653AA9DB548D61E7C553A77C",
+      "used_for": "External baseline identities, precedence, and claim boundaries."
+    },
+    {
+      "id": "I3",
+      "title": "CAS Core v8 Research Candidate Specification v0.1",
+      "path": "docs/working/project_coherence/gate4/CAS_CORE_V8_CANDIDATE_SPEC_v0.1.md",
+      "sha256": "5FE6F91D005C7268D32C3943C2851138B30E2492C7D73877A04B30685CFCA1FC",
+      "used_for": "Semantic identity, canonical evidence, research boundary, and authority separation."
+    },
+    {
+      "id": "I4",
+      "title": "CAS PCBA v8 Source Audit and Candidate Specification v0.1",
+      "path": "docs/working/project_coherence/gate4/CAS_PCBA_V8_SOURCE_AUDIT_AND_SPEC_v0.1.md",
+      "sha256": "19707B9213040A3B55DB51132C30B90A6004D15A611EC759906335F2E41450F0",
+      "used_for": "Paper 6 engineering contract and explicit open boundaries."
+    },
+    {
+      "id": "I5",
+      "title": "CAS-Ohm v1 Source Audit and Candidate Specification v0.1",
+      "path": "docs/working/project_coherence/gate4/CAS_OHM_V1_SOURCE_AUDIT_AND_SPEC_v0.1.md",
+      "sha256": "5E59C34084D825EC14A8434EBBEAD80BD964D5FDD6DEDF168E9A5A65BD4C056E",
+      "used_for": "Provisional response/calibration model and closure experiments."
+    },
+    {
+      "id": "I6",
+      "title": "CAS-Ohm Source Conflict Evidence v0.1",
+      "path": "docs/working/project_coherence/gate4/CAS_OHM_SOURCE_CONFLICT_EVIDENCE_v0.1.json",
+      "sha256": "F24BD64A21B944724993AC9C3A0996293FE6242E4F724D4B104DBAA7A6505507",
+      "used_for": "Eight exact conflicts, source locators, and conservative dispositions."
+    },
+    {
+      "id": "I7",
+      "title": "PCBA CCDL Construct Coverage v0.1",
+      "path": "docs/working/project_coherence/gate4/PCBA_CCDL_CONSTRUCT_COVERAGE_v0.1.json",
+      "sha256": "5BB797EC37CF289B4CBE8DF1256F07425C3DA13AA8CF2DA03E47DFCE1CB46808",
+      "used_for": "Five-board grammar audit and four direct syntax counterexamples."
+    },
+    {
+      "id": "I8",
+      "title": "Gate 4 Review Matrix v0.1",
+      "path": "docs/working/project_coherence/gate4/GATE4_REVIEW_MATRIX_v0.1.json",
+      "sha256": "44DD99A847DA742C3EBEBC06D64452A6868421EE12129E789D1CC790DAE41B74",
+      "used_for": "Implemented, quarantined, and open criterion states."
+    },
+    {
+      "id": "I9",
+      "title": "Gate 4 Artifact Manifest v0.1",
+      "path": "docs/working/project_coherence/gate4/GATE4_ARTIFACT_MANIFEST_v0.1.json",
+      "sha256": "49102F9BCBAA2345804F5EE3CA708FD6A84E83F8CF5ABB51E6612893A090D57B",
+      "used_for": "Exact source/test hashes and test-suite identity receipts."
+    },
+    {
+      "id": "I10",
+      "title": "Claim Ledger v0.1",
+      "path": "docs/working/project_coherence/CLAIM_LEDGER_v0.1.json",
+      "sha256": "F62E7451135EC9DA0C333DB318C7C6E02BD92C4387EB167D94895810D805828F",
+      "used_for": "Exact product and empirical claim text, controls, falsifiers, and NOT LICENSED boundaries."
+    },
+    {
+      "id": "I11",
+      "title": "TKS v8 Core Formal Specification and Proof Obligations v0.1",
+      "path": "docs/working/project_coherence/gate1/tks_v8/TKS_V8_CORE_FORMAL_SPEC_AND_PROOF_OBLIGATIONS_v0.1.md",
+      "sha256": "F740BA05AB7ADB2DCDF55E271016D127E45073B015497DE8982D44A49F0EA2C4",
+      "used_for": "FiniteArrow, Endomap, and SemigroupoidPath boundary."
+    },
+    {
+      "id": "I12",
+      "title": "Noetic Topos 2.0 Formal Research Specification v0.1",
+      "path": "docs/working/project_coherence/gate1/noetic_topos2/NOETIC_TOPOS_2_SPEC_v0.1.md",
+      "sha256": "156A5D8C5320F36E81E3B46473BA8A038B35672DCD28839A404D96A3DB1A763A",
+      "used_for": "Ambient/resolved evidence and marked-cover boundary."
+    },
+    {
+      "id": "I13",
+      "title": "CAS Harness v2 Preregistration and Evidence Packet v2 Control Kernel",
+      "path": "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md",
+      "sha256": "F2803B44FF7236762D491A3B249FF13C4CB8D9F336CE19F223F9F716E9A70D2D",
+      "used_for": "Read-only downstream preregistration, negative-result, Evidence Packet, and OPEN gate boundary."
+    }
+  ],
+  "external_source_count": 15,
+  "internal_source_count": 13,
+  "unresolved_citation_obligations": [
+    "Obtain external specialist confirmation that every citation supports only the narrow use recorded here.",
+    "Complete journal-specific bibliography formatting only after venue and authorship decisions.",
+    "Do not cite the internal Gate 4 adversarial review as external independent peer review.",
+    "Do not use classical electrical memristor papers as evidence for a physical CAS mapping.",
+    "Perform novelty and related-work review for the combined CAS PCBA engineering architecture before submission."
+  ]
+}
