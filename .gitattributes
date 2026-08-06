@@ -1,9 +1,14 @@
 /.gitattributes text eol=lf
 /.gitignore text eol=lf
 docs/working/project_coherence/** text eol=lf
+# Native BuildKit history exports are OCI tar archives, not text.  Preserve
+# their exact bytes even though they live inside the otherwise-LF control tree.
+docs/working/project_coherence/gate5/evidence/raw/**/*.dockerbuild -text
 formal/lean/** text eol=lf
 scripts/verify_project_coherence*.py text eol=lf
 scripts/build_project_coherence_gate5_manifest.py text eol=lf
+scripts/build_project_coherence_gate5_runner_lock.py text eol=lf
+scripts/run_project_coherence_gate5_pytest.py text eol=lf
 scripts/verify_noetic_topos2_gate1.py text eol=lf
 scripts/verify_psr8_lean_gate1.py text eol=lf
 scripts/verify_tks_v8_gate1.py text eol=lf

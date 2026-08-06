@@ -25,16 +25,24 @@ if __name__ != "__main__" and (
     )
 
 import ast
+from dataclasses import dataclass
 import hashlib
+import importlib.util
+import io
 import json
 import os
 from pathlib import Path, PurePosixPath
 import re
+import secrets
+import stat
 import subprocess
+import tarfile
+import tempfile
 from typing import Any, Iterable
 
 
 ROOT = Path(__file__).resolve().parents[1]
+FILESYSTEM_ANCHOR = Path(ROOT.anchor)
 PROJECT_COHERENCE_DIR = ROOT / "docs" / "working" / "project_coherence"
 GATE5_DIR = PROJECT_COHERENCE_DIR / "gate5"
 MANIFEST_PATH = GATE5_DIR / "GATE5_ARTIFACT_MANIFEST_v0.1.json"
@@ -59,6 +67,19 @@ HISTORICAL_MODEL_DEPENDENCY_BINDING_SHA256 = (
 CANDIDATE_RECEIPT_PATH = (
     GATE5_DIR / "GATE5_DEPENDENCY_AND_CONTAINER_CANDIDATE_RECEIPT_v0.2.json"
 )
+RAW_BUILD_SECURITY_RECEIPT_PATH = (
+    GATE5_DIR / "GATE5_RAW_BUILD_AND_SECURITY_EVIDENCE_RECEIPT_v0.1.json"
+)
+RAW_EVIDENCE_DIR = (
+    GATE5_DIR / "evidence" / "raw" / "candidate_v0.2_20260805"
+)
+RUNNER_LOCK_PATH = (
+    GATE5_DIR / "GATE5_LOCAL_WINDOWS_TEST_RUNNER_LOCK_v0.1.json"
+)
+SAME_RUN_PYTEST_RUNNER_PATH = ROOT / "scripts" / "run_project_coherence_gate5_pytest.py"
+RUNNER_LOCK_BUILDER_PATH = (
+    ROOT / "scripts" / "build_project_coherence_gate5_runner_lock.py"
+)
 
 SHA256_UPPER_RE = re.compile(r"^[A-F0-9]{64}$")
 SHA256_LOWER_RE = re.compile(r"^[a-f0-9]{64}$")
@@ -66,9 +87,10 @@ OCI_SHA256_RE = re.compile(r"^sha256:[a-f0-9]{64}$")
 WINDOWS_ABSOLUTE_RE = re.compile(r"^[A-Za-z]:[/\\]")
 BOUNDARY_RE = re.compile(r"^\[([A-Z0-9-]+)\] ")
 TEST_ID_CANONICALIZATION = (
-    "COLLECT-ONLY SHA-256 over sorted unique pytest node IDs normalized to POSIX "
-    "slashes, encoded UTF-8 as one ID plus LF per line; actual executed-node-ID "
-    "digest is NOT RECEIPTED"
+    "SAME-PROCESS EXECUTED-NODE SHA-256 over ordinal-sorted unique pytest node "
+    "IDs normalized only to POSIX slashes, encoded UTF-8 as one ID plus LF per "
+    "line; collection, start, finish, and all-pass outcomes are bound in one "
+    "local subprocess receipt"
 )
 
 WORKER_ROOT_REL = "noetic-compass-scaffold/noetic-compass/live-trace-worker"
@@ -93,6 +115,7 @@ API_RUNTIME_SURFACE_DIR = f"{API_ROOT_REL}/api"
 
 REQUIRED_CONTROL_ARTIFACTS = {
     ".gitattributes",
+    "docs/working/project_coherence/CHANGELOG.md",
     "docs/working/project_coherence/CLAIM_LEDGER_v0.1.json",
     "docs/working/project_coherence/PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md",
     "docs/working/project_coherence/OPEN_VS_HELD_BOUNDARY_v0.1.md",
@@ -103,10 +126,14 @@ REQUIRED_CONTROL_ARTIFACTS = {
     "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
     "docs/working/project_coherence/gate5/GATE5_MODEL_AND_DEPENDENCY_BINDING_v0.1.json",
     "docs/working/project_coherence/gate5/GATE5_DEPENDENCY_AND_CONTAINER_CANDIDATE_RECEIPT_v0.2.json",
+    "docs/working/project_coherence/gate5/GATE5_RAW_BUILD_AND_SECURITY_EVIDENCE_RECEIPT_v0.1.json",
+    "docs/working/project_coherence/gate5/GATE5_LOCAL_WINDOWS_TEST_RUNNER_LOCK_v0.1.json",
     "docs/working/project_coherence/gate5/history/HISTORICAL_HARNESS_V1_V4_CURRENT_TREE_SHA256.json",
     "docs/working/project_coherence/gate5/history/HISTORICAL_HARNESS_V1_V4_RECOVERY_INVENTORY.md",
     "scripts/verify_project_coherence_gate5.py",
     "scripts/build_project_coherence_gate5_manifest.py",
+    "scripts/build_project_coherence_gate5_runner_lock.py",
+    "scripts/run_project_coherence_gate5_pytest.py",
     f"{WORKER_ROOT_REL}/Dockerfile",
     f"{WORKER_ROOT_REL}/.dockerignore",
     f"{WORKER_ROOT_REL}/requirements.in",
@@ -151,6 +178,7 @@ EXECUTABLE_SHADOW_SCAN_DIRS = tuple(
             API_RUNTIME_SURFACE_DIR,
             f"{API_ROOT_REL}/tests",
             f"{API_ROOT_REL}/scripts",
+            "docs/working/project_coherence/gate5",
             "scripts",
             "tests",
         )
@@ -290,16 +318,18 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "working_directory": ".",
         "targets": ["tests/cas_harness_v2"],
         "pytest_plugins": [],
-        "expected_tests": 113,
+        "repo_import_roots": ["src"],
+        "expected_tests": 119,
         "expected_subtests": 61,
         "expected_test_ids_sha256": (
-            "FD31E05BDFE62A44B4FC7D1556A2CA498115FF8E0A65C3F16160FA4D0C2FA294"
+            "8FBC5D8AE4CF3B0BBEB9A1902C6905278126B056FF6961D13EE9830E2363F362"
         ),
     },
     "Live trace worker complete": {
         "working_directory": WORKER_ROOT_REL,
         "targets": ["tests"],
         "pytest_plugins": ["pytest_asyncio.plugin"],
+        "repo_import_roots": [f"{WORKER_ROOT_REL}/scripts", API_ROOT_REL],
         "expected_tests": 364,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
@@ -310,6 +340,7 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "working_directory": WORKER_ROOT_REL,
         "targets": ["tests/test_eraser_numeric_redteam.py"],
         "pytest_plugins": ["pytest_asyncio.plugin"],
+        "repo_import_roots": [],
         "expected_tests": 32,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
@@ -326,6 +357,7 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
             "tests/test_state_substrate_live_migration.py",
         ],
         "pytest_plugins": ["pytest_asyncio.plugin"],
+        "repo_import_roots": [f"{API_ROOT_REL}/scripts"],
         "expected_tests": 76,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
@@ -453,6 +485,10 @@ CURRENT_SECURITY_HOLD = {
         "docs/working/project_coherence/gate5/"
         "GATE5_DEPENDENCY_AND_CONTAINER_CANDIDATE_RECEIPT_v0.2.json"
     ),
+    "raw_build_security_evidence_receipt": (
+        "docs/working/project_coherence/gate5/"
+        "GATE5_RAW_BUILD_AND_SECURITY_EVIDENCE_RECEIPT_v0.1.json"
+    ),
     "source_commit": CANDIDATE_SOURCE_COMMIT,
     "oci_image_index_digest": CANDIDATE_OCI_DIGESTS["oci_image_index_digest"],
     "platform_manifest_digest": CANDIDATE_OCI_DIGESTS["platform_manifest_digest"],
@@ -471,8 +507,12 @@ CURRENT_SECURITY_HOLD = {
         "medium": 3,
         "low": 4,
     },
-    "direct_local_image_scan": "INCOMPLETE / PENDING",
-    "external_evidence_retention": "SELF_REPORTED_LOCAL_OBSERVATION / RAW_NOT_RETAINED",
+    "direct_local_image_scan": "COMPLETED_WITH_FINDINGS / 7 / RAW SARIF RETAINED",
+    "vendor_security_triage": "6 VENDOR-CONFIRMED VULNERABLE OR DEFERRED / 1 SCANNER-VENDOR CONFLICT",
+    "external_evidence_retention": (
+        "RAW BUILDKIT/OCI/SPDX/SLSA/DIRECT SCOUT REPORTS RETAINED / "
+        "LOCAL SELF-OBSERVED / NOT INDEPENDENTLY ATTESTED"
+    ),
     "engineering_preflight_execution_status": "COMPLETED_CPU_ONLY_NONEXPERIMENTAL",
     "live_execution_authorized": False,
 }
@@ -507,24 +547,271 @@ def _unique_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     return value
 
 
-def load_json(path: Path) -> Any:
-    require(path.is_file(), f"missing JSON artifact: {path}")
+@dataclass(frozen=True)
+class PathIdentity:
+    device: int
+    inode: int
+    mode_type: int
+    link_count: int
+    byte_count: int
+    mtime_ns: int
+    ctime_ns: int
+    file_attributes: int | None
+    reparse_tag: int | None
+
+
+@dataclass(frozen=True)
+class StructuralPathIdentity:
+    """Stable identity fields for an observed path component.
+
+    Directory byte counts and timestamps legitimately change when unrelated
+    children are created or removed.  They are metadata, not object identity,
+    so ancestry checks bind the filesystem object and alias/reparse state while
+    the leaf file retains the complete ``PathIdentity`` below.
+    """
+
+    device: int
+    inode: int
+    mode_type: int
+    link_count: int
+    file_attributes: int | None
+    reparse_tag: int | None
+
+
+@dataclass(frozen=True)
+class FileObservation:
+    sha256: str
+    byte_count: int
+    identity: PathIdentity
+    component_identities: tuple[tuple[str, StructuralPathIdentity], ...]
+
+
+def _path_identity(value: os.stat_result) -> PathIdentity:
+    return PathIdentity(
+        device=int(value.st_dev),
+        inode=int(value.st_ino),
+        mode_type=int(stat.S_IFMT(value.st_mode)),
+        link_count=int(value.st_nlink),
+        byte_count=int(value.st_size),
+        mtime_ns=int(value.st_mtime_ns),
+        ctime_ns=int(value.st_ctime_ns),
+        file_attributes=(
+            None
+            if not hasattr(value, "st_file_attributes")
+            else int(value.st_file_attributes)
+        ),
+        reparse_tag=(
+            None if not hasattr(value, "st_reparse_tag") else int(value.st_reparse_tag)
+        ),
+    )
+
+
+def _structural_path_identity(identity: PathIdentity) -> StructuralPathIdentity:
+    return StructuralPathIdentity(
+        device=identity.device,
+        inode=identity.inode,
+        mode_type=identity.mode_type,
+        link_count=identity.link_count,
+        file_attributes=identity.file_attributes,
+        reparse_tag=identity.reparse_tag,
+    )
+
+
+def _is_reparse(identity: PathIdentity) -> bool:
+    reparse_attribute = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+    return bool(
+        (identity.file_attributes is not None and identity.file_attributes & reparse_attribute)
+        or (identity.reparse_tag not in (None, 0))
+    )
+
+
+def _component_identities(
+    path: Path, *, anchor: Path
+) -> tuple[tuple[str, StructuralPathIdentity], ...]:
+    absolute_anchor = Path(os.path.abspath(anchor))
+    absolute_path = Path(os.path.abspath(path))
     try:
-        return json.loads(
-            path.read_text(encoding="utf-8"), object_pairs_hook=_unique_object
+        relative = absolute_path.relative_to(absolute_anchor)
+    except ValueError as exc:
+        raise VerificationError(f"path escapes its observation anchor: {path}") from exc
+    require(relative.parts, f"observation target may not equal its directory anchor: {path}")
+
+    records: list[tuple[str, StructuralPathIdentity]] = []
+    current = absolute_anchor
+    components = (".", *relative.parts)
+    for index, component in enumerate(components):
+        if component != ".":
+            current = current / component
+        try:
+            identity = _path_identity(current.lstat())
+        except OSError as exc:
+            raise VerificationError(f"cannot lstat observed path component {current}: {exc}") from exc
+        require(not current.is_symlink(), f"observed path contains a symlink: {current}")
+        require(not _is_reparse(identity), f"observed path contains a reparse point: {current}")
+        is_leaf = index == len(components) - 1
+        if is_leaf:
+            require(
+                identity.mode_type == stat.S_IFREG,
+                f"observed leaf is not a regular file: {current}",
+            )
+            require(
+                identity.link_count == 1,
+                f"observed leaf has aliases (st_nlink={identity.link_count}): {current}",
+            )
+        else:
+            require(
+                identity.mode_type == stat.S_IFDIR,
+                f"observed ancestor is not a directory: {current}",
+            )
+        records.append((str(current), _structural_path_identity(identity)))
+    return tuple(records)
+
+
+def _same_open_file(path_identity: PathIdentity, handle_identity: PathIdentity) -> bool:
+    common_matches = (
+        path_identity.device,
+        path_identity.inode,
+        path_identity.mode_type,
+        path_identity.link_count,
+        path_identity.byte_count,
+        path_identity.mtime_ns,
+    ) == (
+        handle_identity.device,
+        handle_identity.inode,
+        handle_identity.mode_type,
+        handle_identity.link_count,
+        handle_identity.byte_count,
+        handle_identity.mtime_ns,
+    )
+    if not common_matches:
+        return False
+    if os.name == "nt":
+        # CPython's Windows ``fstat`` currently reports ``st_ctime_ns`` as the
+        # last-write time, while ``lstat`` reports the filesystem change time.
+        # They cannot be compared across APIs.  File ID/device plus the other
+        # stable fields bind the handle to the pathname; the before/after
+        # pathname observations independently retain and compare the real
+        # change time.
+        return (
+            path_identity.file_attributes == handle_identity.file_attributes
+            and path_identity.reparse_tag == handle_identity.reparse_tag
         )
+    return path_identity.ctime_ns == handle_identity.ctime_ns
+
+
+def _observe_regular_file(
+    path: Path, *, anchor: Path | None = None, collect_bytes: bool = False
+) -> tuple[FileObservation, bytes | None]:
+    absolute_path = Path(os.path.abspath(path))
+    observation_anchor = (
+        Path(os.path.abspath(anchor)) if anchor is not None else absolute_path.parent
+    )
+    before_components = _component_identities(absolute_path, anchor=observation_anchor)
+    before_leaf = _path_identity(absolute_path.lstat())
+    require(
+        before_leaf.mode_type == stat.S_IFREG
+        and before_leaf.link_count == 1
+        and not _is_reparse(before_leaf),
+        f"observed leaf changed before open or is aliased: {absolute_path}",
+    )
+    flags = os.O_RDONLY | getattr(os, "O_BINARY", 0) | getattr(os, "O_CLOEXEC", 0)
+    flags |= getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(absolute_path, flags)
+    except OSError as exc:
+        raise VerificationError(f"cannot open observed file {absolute_path}: {exc}") from exc
+    digest = hashlib.sha256()
+    chunks: list[bytes] | None = [] if collect_bytes else None
+    byte_count = 0
+    try:
+        opened_before = _path_identity(os.fstat(descriptor))
+        require(
+            opened_before.mode_type == stat.S_IFREG and opened_before.link_count == 1,
+            f"opened handle is not a unique regular file: {absolute_path}",
+        )
+        require(
+            _same_open_file(before_leaf, opened_before),
+            f"pathname and opened handle identity differ: {absolute_path}",
+        )
+        while True:
+            block = os.read(descriptor, 1024 * 1024)
+            if not block:
+                break
+            digest.update(block)
+            byte_count += len(block)
+            if chunks is not None:
+                chunks.append(block)
+        opened_after = _path_identity(os.fstat(descriptor))
+    finally:
+        os.close(descriptor)
+    require(
+        opened_after == opened_before,
+        f"opened file identity changed while reading: {absolute_path}",
+    )
+    require(
+        byte_count == opened_after.byte_count,
+        f"opened file byte count differs from fstat: {absolute_path}",
+    )
+    after_components = _component_identities(absolute_path, anchor=observation_anchor)
+    require(
+        after_components == before_components,
+        f"path or ancestor identity changed while reading: {absolute_path}",
+    )
+    observation = FileObservation(
+        sha256=digest.hexdigest().upper(),
+        byte_count=byte_count,
+        identity=opened_after,
+        component_identities=after_components,
+    )
+    return observation, None if chunks is None else b"".join(chunks)
+
+
+def observe_regular_file(path: Path, *, anchor: Path | None = None) -> FileObservation:
+    observation, _ = _observe_regular_file(path, anchor=anchor, collect_bytes=False)
+    return observation
+
+
+def read_stable_bytes(path: Path, *, anchor: Path | None = None) -> bytes:
+    _, payload = _observe_regular_file(path, anchor=anchor, collect_bytes=True)
+    require(payload is not None, f"stable read did not retain bytes: {path}")
+    return payload
+
+
+def read_stable_text(
+    path: Path, *, anchor: Path | None = None, encoding: str = "utf-8"
+) -> str:
+    effective_anchor = (
+        FILESYSTEM_ANCHOR
+        if anchor is None and path.is_absolute() and ROOT in path.parents
+        else anchor
+    )
+    try:
+        return read_stable_bytes(path, anchor=effective_anchor).decode(encoding)
+    except UnicodeError as exc:
+        raise VerificationError(f"cannot decode stable text file {path}: {exc}") from exc
+
+
+def load_json(path: Path, *, anchor: Path | None = None) -> Any:
+    try:
+        payload = read_stable_bytes(
+            path,
+            anchor=(
+                FILESYSTEM_ANCHOR
+                if anchor is None and path.is_absolute() and ROOT in path.parents
+                else anchor
+            ),
+        )
+        return json.loads(payload.decode("utf-8"), object_pairs_hook=_unique_object)
     except VerificationError:
         raise
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         raise VerificationError(f"cannot parse {path}: {exc}") from exc
 
 
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for block in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(block)
-    return digest.hexdigest().upper()
+def sha256_file(path: Path, *, anchor: Path | None = None) -> str:
+    if anchor is None and path.is_absolute() and ROOT in path.parents:
+        anchor = FILESYSTEM_ANCHOR
+    return observe_regular_file(path, anchor=anchor).sha256
 
 
 def sha256_bytes(payload: bytes) -> str:
@@ -627,18 +914,36 @@ def collect_api_runtime_surface() -> set[str]:
 
 
 def verify_no_executable_shadow_artifacts() -> int:
-    """Reject unbound bytecode/native/archive shadows before child execution."""
+    """Reject repository aliases and unbound executable shadows."""
     scanned: set[str] = set()
     violations: set[str] = set()
     for directory in EXECUTABLE_SHADOW_SCAN_DIRS:
         root = ROOT / directory
         require(root.is_dir(), f"missing executable-shadow scan directory: {directory}")
+        root_identity = _path_identity(root.lstat())
+        require(
+            root_identity.mode_type == stat.S_IFDIR
+            and not root.is_symlink()
+            and not _is_reparse(root_identity),
+            f"executable-shadow scan root is a symlink/reparse alias: {directory}",
+        )
         for path in root.rglob("*"):
             raw_path = path.relative_to(ROOT).as_posix()
             scanned.add(raw_path)
-            if "__pycache__" in path.parts:
+            try:
+                identity = _path_identity(path.lstat())
+            except OSError as exc:
+                raise VerificationError(
+                    f"cannot lstat executable-shadow path {raw_path}: {exc}"
+                ) from exc
+            if path.is_symlink() or _is_reparse(identity):
                 violations.add(raw_path)
-            elif path.is_file() and path.suffix.casefold() in FORBIDDEN_EXECUTABLE_SHADOW_SUFFIXES:
+            elif "__pycache__" in path.parts:
+                violations.add(raw_path)
+            elif (
+                identity.mode_type == stat.S_IFREG
+                and path.suffix.casefold() in FORBIDDEN_EXECUTABLE_SHADOW_SUFFIXES
+            ):
                 violations.add(raw_path)
     require(
         not violations,
@@ -754,10 +1059,15 @@ def verify_manifest(manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
             f"artifact {raw_path}: role differs from the path-bound v0.1 role",
         )
         path = ROOT / Path(*PurePosixPath(raw_path).parts)
-        require(path.is_file(), f"artifact is missing: {raw_path}")
-        require(not path.is_symlink(), f"artifact may not be a symlink: {raw_path}")
-        require(path.stat().st_size == expected_bytes, f"artifact byte drift: {raw_path}")
-        require(sha256_file(path) == expected_hash, f"artifact hash drift: {raw_path}")
+        observation = observe_regular_file(path, anchor=FILESYSTEM_ANCHOR)
+        require(
+            observation.byte_count == expected_bytes,
+            f"artifact byte drift: {raw_path}",
+        )
+        require(
+            observation.sha256 == expected_hash,
+            f"artifact hash drift: {raw_path}",
+        )
         records[raw_path] = record
         artifact_paths.append(raw_path)
 
@@ -892,7 +1202,9 @@ def verify_manifest(manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
         and security_hold.get("sbom_full_image_package_scan")
         == "COMPLETED_WITH_FINDINGS / 7"
         and security_hold.get("direct_local_image_scan")
-        == "INCOMPLETE / PENDING"
+        == "COMPLETED_WITH_FINDINGS / 7 / RAW SARIF RETAINED"
+        and security_hold.get("vendor_security_triage")
+        == "6 VENDOR-CONFIRMED VULNERABLE OR DEFERRED / 1 SCANNER-VENDOR CONFLICT"
         and security_hold.get("live_execution_authorized") is False,
         "manifest falsely promotes the bounded candidate to a security or execution PASS",
     )
@@ -904,6 +1216,7 @@ def verify_manifest(manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
         "working_directory",
         "targets",
         "pytest_plugins",
+        "repo_import_roots",
         "expected_tests",
         "expected_subtests",
         "expected_test_ids_sha256",
@@ -1432,7 +1745,7 @@ def verify_history() -> tuple[int, int, str]:
         "historical V1 dependency failure was erased",
     )
 
-    inventory_text = HISTORY_INVENTORY_PATH.read_text(encoding="utf-8")
+    inventory_text = read_stable_text(HISTORY_INVENTORY_PATH)
     for marker in (
         "361f8867a1b8983c383b4f4fe6d8d485e5dbbc80ee4f75e4b5d08b4e5f144f5f",
         "HISTORICALLY_INCONSISTENT",
@@ -1737,6 +2050,8 @@ def verify_review_matrix(
             "worker_checkpoints",
             "api_launcher_fleet_state",
             "successor_dependency_container_candidate",
+            "local_test_runner",
+            "raw_build_and_security_evidence",
             "historical_recovery",
         },
         label="review matrix receipts",
@@ -1804,7 +2119,7 @@ def verify_review_matrix(
         )
     require(
         worker_receipt.get("test_id_digest_kind")
-        == "COLLECT_ONLY_NODE_ID_SET_SHA256 / ACTUAL_EXECUTED_NODE_IDS_NOT_RECEIPTED"
+        == "SAME_PROCESS_EXECUTED_NODE_ID_SET_SHA256 / LOCAL_UNATTESTED_HOST_REGRESSION"
         and worker_receipt.get("current_candidate_green") is True,
         "review-matrix worker receipt kind or bounded-green status drifted",
     )
@@ -1923,6 +2238,117 @@ def verify_review_matrix(
         },
         "review-matrix successor candidate identity or OPEN_SECURITY boundary drifted",
     )
+    local_runner_receipt = receipts.get("local_test_runner")
+    require(isinstance(local_runner_receipt, dict), "local runner receipt is missing")
+    require_exact_keys(
+        local_runner_receipt,
+        {
+            "receipt",
+            "lock_scope",
+            "python_version",
+            "pytest_version",
+            "interpreter_file_count",
+            "runner_distribution_count",
+            "runner_file_record_count",
+            "startup_pth_file_count",
+            "startup_pth_execution",
+            "preimport_origin_check",
+            "endpoint_module_inventory_limit",
+            "same_process_outcome_receipts",
+            "same_process_receipt_retention",
+            "independently_attested",
+            "disposition",
+        },
+        label="review-matrix local runner receipt",
+    )
+    require(
+        local_runner_receipt
+        == {
+            "receipt": RUNNER_LOCK_PATH.relative_to(ROOT).as_posix(),
+            "lock_scope": (
+                "LOCAL_CONTENT_LOCK / SELF-OBSERVED / NOT HERMETIC / "
+                "NOT INDEPENDENTLY ATTESTED"
+            ),
+            "python_version": "3.14.0",
+            "pytest_version": "9.0.2",
+            "interpreter_file_count": 3,
+            "runner_distribution_count": 7,
+            "runner_file_record_count": 508,
+            "startup_pth_file_count": 3,
+            "startup_pth_execution": "DISABLED BY -I -S",
+            "preimport_origin_check": (
+                "EXACT LOCKED FILE IDENTITY / LOCAL SELF-OBSERVATION"
+            ),
+            "endpoint_module_inventory_limit": (
+                "SURVIVING SYS.MODULES ONLY / TRANSIENT AND EXACT LOADER BYTES OPEN"
+            ),
+            "same_process_outcome_receipts": True,
+            "same_process_receipt_retention": (
+                "EPHEMERAL LOCAL SAME-RUN VALIDATION / NOT RETAINED / NO TRUSTED "
+                "TIME OR WORM"
+            ),
+            "independently_attested": False,
+            "disposition": "OPEN_ENGINEERING",
+        },
+        "review-matrix local runner receipt drifted or promotes hermeticity",
+    )
+    raw_security_receipt = receipts.get("raw_build_and_security_evidence")
+    require(isinstance(raw_security_receipt, dict), "raw security receipt is missing")
+    require_exact_keys(
+        raw_security_receipt,
+        {
+            "receipt",
+            "retained_file_count",
+            "original_buildkit_spdx_package_count",
+            "direct_scout_spdx_package_count",
+            "scout_version",
+            "direct_scan_status",
+            "finding_count",
+            "severity_counts",
+            "vendor_confirmed_vulnerable_or_deferred",
+            "scanner_vendor_conflict",
+            "historical_scout_1_24_raw_report_retained",
+            "sarif_to_candidate_execution_binding",
+            "vendor_source_payloads_retained",
+            "raw_payloads_repository_replayable",
+            "complete_tool_execution_replayable",
+            "independently_reproduced",
+            "independent_trust_root",
+            "disposition",
+        },
+        label="review-matrix raw build/security receipt",
+    )
+    require(
+        raw_security_receipt
+        == {
+            "receipt": RAW_BUILD_SECURITY_RECEIPT_PATH.relative_to(ROOT).as_posix(),
+            "retained_file_count": 10,
+            "original_buildkit_spdx_package_count": 199,
+            "direct_scout_spdx_package_count": 233,
+            "scout_version": "1.21.0",
+            "direct_scan_status": "COMPLETED_WITH_FINDINGS",
+            "finding_count": 7,
+            "severity_counts": {
+                "critical": 0,
+                "high": 0,
+                "medium": 3,
+                "low": 4,
+            },
+            "vendor_confirmed_vulnerable_or_deferred": 6,
+            "scanner_vendor_conflict": 1,
+            "historical_scout_1_24_raw_report_retained": False,
+            "sarif_to_candidate_execution_binding": (
+                "OPEN / NOT EMBEDDED / INVOCATION NOT RETAINED"
+            ),
+            "vendor_source_payloads_retained": False,
+            "raw_payloads_repository_replayable": True,
+            "complete_tool_execution_replayable": False,
+            "independently_reproduced": False,
+            "independent_trust_root": False,
+            "disposition": "OPEN_SECURITY",
+        },
+        "review-matrix raw evidence receipt drifted or promotes security",
+    )
     historical_receipt = receipts.get("historical_recovery")
     require(isinstance(historical_receipt, dict), "historical receipt is missing")
     require_exact_keys(
@@ -1962,7 +2388,7 @@ def verify_review_matrix(
 
 def verify_adversarial_review() -> None:
     require(ADVERSARIAL_REVIEW_PATH.is_file(), "Gate 5 adversarial review is missing")
-    text = ADVERSARIAL_REVIEW_PATH.read_text(encoding="utf-8")
+    text = read_stable_text(ADVERSARIAL_REVIEW_PATH)
     for marker in (
         "DRAFT / OPEN / NOT_STARTED / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
         "KEEP GATE 5 OPEN",
@@ -1997,10 +2423,14 @@ def verify_adversarial_review() -> None:
         "1ed1e9e3afa2eda6881463ee5284dd4902ab94c0246b80d2937066480ac42921",
         "COMPLETED_WITH_FINDINGS",
         "critical, 0 high, 3 medium, and 4 low findings",
-        "INCOMPLETE / PENDING",
+        "SARIF does not embed the candidate identity",
+        "508 exact file records",
+        "surviving `sys.modules`",
+        "lock-byte replacement before parsing",
         "OPEN_SECURITY",
         "including the final ID",
-        "omitting the final LF are superseded",
+        "Earlier hashes produced by culture-aware sorting",
+        "omitting the final LF",
         "extra manifest records",
         "contradictory extra fields",
         "JSON floating-point values",
@@ -2040,7 +2470,7 @@ def verify_no_status_promotion_text(
         ),
     }
     for raw_path, header in required_headers.items():
-        text = (ROOT / raw_path).read_text(encoding="utf-8")
+        text = read_stable_text(ROOT / raw_path)
         require(text.startswith(header), f"{raw_path}: governance header drifted")
 
     forbidden_patterns = (
@@ -2058,9 +2488,7 @@ def verify_no_status_promotion_text(
             continue
         if not raw_path.endswith((".md", ".json")):
             continue
-        text = (ROOT / Path(*PurePosixPath(raw_path).parts)).read_text(
-            encoding="utf-8"
-        )
+        text = read_stable_text(ROOT / Path(*PurePosixPath(raw_path).parts))
         for pattern in forbidden_patterns:
             require(
                 re.search(pattern, text, flags=re.IGNORECASE) is None,
@@ -2300,10 +2728,10 @@ def verify_model_and_security_bindings() -> None:
         "model/dependency binding claims an unauthorized effect",
     )
 
-    model_loader = (
+    model_loader = read_stable_text(
         WORKER_ROOT / "app" / "runtime" / "model_loader.py"
-    ).read_text(encoding="utf-8")
-    dockerfile = (WORKER_ROOT / "Dockerfile").read_text(encoding="utf-8")
+    )
+    dockerfile = read_stable_text(WORKER_ROOT / "Dockerfile")
     for value in (
         MODEL_BINDING["revision"],
         MODEL_BINDING["weights_filename"],
@@ -2335,18 +2763,21 @@ def _require_candidate_file_record(
     path = ROOT / Path(*PurePosixPath(raw_path).parts)
     require(path.is_file(), f"candidate {key} file is missing")
     require(not path.is_symlink(), f"candidate {key} file may not be a symlink")
+    data = read_stable_bytes(path, anchor=FILESYSTEM_ANCHOR)
     require(
         isinstance(record.get("sha256"), str)
         and SHA256_UPPER_RE.fullmatch(record["sha256"]) is not None
-        and sha256_file(path) == record["sha256"],
+        and sha256_bytes(data) == record["sha256"],
         f"candidate {key} file hash drifted",
     )
     require(
-        type(record.get("bytes")) is int
-        and path.stat().st_size == record["bytes"],
+        type(record.get("bytes")) is int and len(data) == record["bytes"],
         f"candidate {key} byte count drifted",
     )
-    text = path.read_text(encoding="utf-8")
+    try:
+        text = data.decode("utf-8")
+    except UnicodeError as exc:
+        raise VerificationError(f"candidate {key} is not UTF-8 text: {exc}") from exc
     require(
         type(record.get("line_count")) is int
         and len(text.splitlines()) == record["line_count"],
@@ -2382,7 +2813,7 @@ def _candidate_application_tree_record() -> dict[str, Any]:
     total_bytes = 0
     for path in files:
         require(not path.is_symlink(), f"candidate application file may not be a symlink: {path}")
-        data = path.read_bytes()
+        data = read_stable_bytes(path, anchor=FILESYSTEM_ANCHOR)
         relative = path.relative_to(WORKER_ROOT).as_posix()
         total_bytes += len(data)
         payload.extend(relative.encode("utf-8"))
@@ -2593,7 +3024,7 @@ def verify_dependency_and_container_candidate_receipt() -> dict[str, Any]:
         },
         "candidate base-image identities drifted",
     )
-    dockerfile = (WORKER_ROOT / "Dockerfile").read_text(encoding="utf-8")
+    dockerfile = read_stable_text(WORKER_ROOT / "Dockerfile")
     for base in bases.values():
         _require_oci_digest(base.get("digest"), label="candidate base image")
         require(
@@ -2718,7 +3149,7 @@ def verify_dependency_and_container_candidate_receipt() -> dict[str, Any]:
         and runtime["runtime_gid"] == 10_001,
         "candidate dependency/runtime identity drifted",
     )
-    requirements = (WORKER_ROOT / "requirements.txt").read_text(encoding="utf-8")
+    requirements = read_stable_text(WORKER_ROOT / "requirements.txt")
     require(
         "transformers==5.14.1 \\" in requirements
         and "torch-2.13.0%2Bcu126-cp312-cp312-manylinux_2_28_x86_64.whl"
@@ -2776,7 +3207,9 @@ def verify_dependency_and_container_candidate_receipt() -> dict[str, Any]:
         and model.get("scientific_result_created") is False,
         "candidate model receipt drifted or claims GPU/scientific execution",
     )
-    model_loader = (WORKER_ROOT / "app" / "runtime" / "model_loader.py").read_text(encoding="utf-8")
+    model_loader = read_stable_text(
+        WORKER_ROOT / "app" / "runtime" / "model_loader.py"
+    )
     for _, digest, byte_count in expected_model_artifacts:
         require(
             digest.lower() in model_loader and f"{byte_count:_}" in model_loader,
@@ -3179,6 +3612,976 @@ def verify_dependency_and_container_candidate_receipt() -> dict[str, Any]:
     return receipt
 
 
+def verify_raw_build_and_security_evidence_receipt() -> dict[str, Any]:
+    receipt = load_json(RAW_BUILD_SECURITY_RECEIPT_PATH)
+    require(isinstance(receipt, dict), "raw build/security receipt is not an object")
+    require_exact_keys(
+        receipt,
+        {
+            "schema_version",
+            "document_status",
+            "gate5_status",
+            "gate_decision",
+            "admission_ring",
+            "license_status",
+            "disclosure_status",
+            "public_disclosure_authorized",
+            "experimental_execution_status",
+            "security_disposition",
+            "live_execution_authorized",
+            "candidate_accepted",
+            "collection_context",
+            "candidate_identity",
+            "evidence_files",
+            "original_oci_and_attestation_closure",
+            "buildkit_history_bundle",
+            "direct_local_image_reports",
+            "current_vendor_triage",
+            "retention_status",
+            "unresolved_boundaries",
+            "claim_boundary",
+        },
+        label="Gate 5 raw build/security receipt",
+    )
+    require(
+        receipt.get("schema_version")
+        == "project_coherence.gate5_raw_build_and_security_evidence_receipt.v0.1",
+        "unexpected raw build/security receipt schema",
+    )
+    for field, expected in {
+        "document_status": "DRAFT / OPEN / NOT FROZEN",
+        "gate5_status": "OPEN",
+        "gate_decision": "KEEP_OPEN",
+        "admission_ring": 4,
+        "license_status": "NOT LICENSED",
+        "disclosure_status": "HELD",
+        "public_disclosure_authorized": False,
+        "experimental_execution_status": "NOT_STARTED",
+        "security_disposition": "OPEN_SECURITY",
+        "live_execution_authorized": False,
+        "candidate_accepted": False,
+    }.items():
+        value = receipt.get(field)
+        if field == "admission_ring":
+            require(type(value) is int, "raw evidence ring must be an exact integer")
+        require(value == expected, f"raw build/security receipt {field} drifted")
+
+    require(
+        receipt.get("collection_context")
+        == {
+            "collection_parent_commit": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
+            "candidate_source_commit": CANDIDATE_SOURCE_COMMIT,
+            "local_clock_date": "2026-08-05",
+            "trusted_time_established": False,
+            "collector_class": "LOCAL_SELF_OBSERVED / NOT INDEPENDENTLY ATTESTED",
+            "docker_client_version": "29.6.1",
+            "docker_engine_version": "29.6.1",
+            "docker_cli_binary_sha256": "E768033E4B3F0DC760162F417A80360094644D16CD9FB12AD65C9D97508C076F",
+            "buildx_version": "0.35.0-desktop.2",
+            "buildx_commit": "b554ce1decd8b509893b1e7c6227eabfb923d094",
+            "buildkit_version_from_attestation": "0.31.1",
+            "scout_version": "1.21.0",
+            "scout_commit": "9ef488e4004aa6924ec709d3c601e0bd761212c7",
+            "scout_binary_sha256": "115670A40189EB05571130471BBE0AF7743AC5E86D00BA1B42A0546ECF7E1C83",
+            "scanner_database_identity": "NOT EXPOSED OR RETAINED",
+        },
+        "raw evidence collection context drifted or claims trusted collection",
+    )
+    require(
+        receipt.get("candidate_identity")
+        == {
+            "build_ref": CANDIDATE_BUILD_REF,
+            "image_tag": "atlas-live-trace-worker:gate5-candidate-v0.2",
+            "platform": "linux/amd64",
+            **CANDIDATE_OCI_DIGESTS,
+            "attestation_manifest_digest": "sha256:b1db5924ab8ce96927f0164c4626cd5eb0c86cbd3fb35c0387b622dd7ae390d1",
+            "attestation_config_digest": "sha256:4592edd32ecc05f0ce5fca43216dea1393293b07245db9582989ed3cb77f5ad7",
+            "image_size_bytes": 4_396_739_765,
+            "source_commit_label_matched": True,
+        },
+        "raw evidence candidate identity drifted",
+    )
+
+    expected_files = {
+        "G5-RAW-BUILDKIT-HISTORY-EXPORT": (
+            "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/vz8s61131470ab8uivga0qcdq.dockerbuild",
+            29_058,
+            "4E9B23B4CAE00C566AC0BD952F1DDDFF2FCC5811D06F43CA093639369B81E017",
+        ),
+        "G5-RAW-OCI-INDEX": (
+            "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/oci-index.json",
+            856,
+            "3D747B379938A5148E4A028FF8BA2F242847B17E8842F19F0D2C204B3FE9A95C",
+        ),
+        "G5-RAW-PLATFORM-MANIFEST": (
+            "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/platform-manifest.json",
+            3_528,
+            "60BF92B327EBEC84887C659313A97A6369A24FD5D8EB00A012544FCAFD26BA27",
+        ),
+        "G5-RAW-IMAGE-CONFIG": (
+            "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/image-config.json",
+            11_727,
+            "966DB6E2E05366BE99129AF5C866A8F7EFBF01B04145C49EF431785FDC1432ED",
+        ),
+        "G5-RAW-ATTESTATION-MANIFEST": (
+            "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/attestation-manifest.json",
+            839,
+            "B1DB5924AB8CE96927F0164C4626CD5EB0C86CBD3FB35C0387B622DD7AE390D1",
+        ),
+        "G5-RAW-ATTESTATION-CONFIG": (
+            "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/attestation-config.json",
+            241,
+            "4592EDD32ECC05F0CE5FCA43216DEA1393293B07245DB9582989ED3CB77F5AD7",
+        ),
+        "G5-RAW-ORIGINAL-SPDX": (
+            "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/sbom.intoto.spdx.json",
+            2_957_946,
+            "8D039B378DFC422BAE2D7479A06BFA2AC9C94A9A19FE8AA115362A28EC41955E",
+        ),
+        "G5-RAW-ORIGINAL-SLSA": (
+            "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/provenance.intoto.slsa-v1.json",
+            45_532,
+            "F8E3677325D096191BB7EC1D075A34ADDF4E4733A48D3AE442F63C1BB74A6C6F",
+        ),
+        "G5-RAW-CURRENT-DIRECT-SBOM": (
+            "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/atlas-live-trace-worker_gate5-candidate-v0.2.scout.spdx.json",
+            869_291,
+            "5434A19BD5DEF2770FE60929F3AF321713080A94D960B1F9EB4401A9EA812F15",
+        ),
+        "G5-RAW-CURRENT-DIRECT-CVE-SCAN": (
+            "docs/working/project_coherence/gate5/evidence/raw/candidate_v0.2_20260805/atlas-live-trace-worker_gate5-candidate-v0.2.scout.cves.exit2.sarif.json",
+            38_589,
+            "5D152C419DC6207D197C29C934E480B281864DAAF233F662B6AD6A69894E75B1",
+        ),
+    }
+    expected_file_metadata = {
+        "G5-RAW-BUILDKIT-HISTORY-EXPORT": {
+            "role": "NATIVE_BUILDKIT_HISTORY_OCI_ARCHIVE",
+            "media_type": "application/vnd.oci.image.layout.v1.tar",
+            "origin": (
+                "docker buildx history export --output <path> "
+                "vz8s61131470ab8uivga0qcdq"
+            ),
+            "evidence_class": (
+                "ORIGINAL LOCAL BUILDKIT RECORD / RAW BYTES RETAINED"
+            ),
+        },
+        "G5-RAW-OCI-INDEX": {
+            "role": "ORIGINAL_OCI_IMAGE_INDEX",
+            "media_type": "application/vnd.oci.image.index.v1+json",
+            "origin": (
+                "docker buildx history inspect attachment vz8s61131470ab8uivga0qcdq "
+                "sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c"
+            ),
+            "evidence_class": (
+                "ORIGINAL OCI ATTACHMENT / DIGEST-MATCHED RAW BYTES RETAINED"
+            ),
+        },
+        "G5-RAW-PLATFORM-MANIFEST": {
+            "role": "ORIGINAL_OCI_PLATFORM_MANIFEST",
+            "media_type": "application/vnd.oci.image.manifest.v1+json",
+            "origin": (
+                "docker buildx history inspect attachment vz8s61131470ab8uivga0qcdq "
+                "sha256:60bf92b327ebec84887c659313a97a6369a24fd5d8eb00a012544fcafd26ba27"
+            ),
+            "evidence_class": (
+                "ORIGINAL OCI ATTACHMENT / DIGEST-MATCHED RAW BYTES RETAINED"
+            ),
+        },
+        "G5-RAW-IMAGE-CONFIG": {
+            "role": "ORIGINAL_OCI_IMAGE_CONFIG",
+            "media_type": "application/vnd.oci.image.config.v1+json",
+            "origin": (
+                "docker buildx history inspect attachment vz8s61131470ab8uivga0qcdq "
+                "sha256:966db6e2e05366be99129af5c866a8f7efbf01b04145c49ef431785fdc1432ed"
+            ),
+            "evidence_class": (
+                "ORIGINAL OCI ATTACHMENT / DIGEST-MATCHED RAW BYTES RETAINED"
+            ),
+        },
+        "G5-RAW-ATTESTATION-MANIFEST": {
+            "role": "ORIGINAL_OCI_ATTESTATION_MANIFEST",
+            "media_type": "application/vnd.oci.image.manifest.v1+json",
+            "origin": (
+                "docker buildx history inspect attachment vz8s61131470ab8uivga0qcdq "
+                "sha256:b1db5924ab8ce96927f0164c4626cd5eb0c86cbd3fb35c0387b622dd7ae390d1"
+            ),
+            "evidence_class": (
+                "ORIGINAL OCI ATTACHMENT / DIGEST-MATCHED RAW BYTES RETAINED"
+            ),
+        },
+        "G5-RAW-ATTESTATION-CONFIG": {
+            "role": "ORIGINAL_OCI_ATTESTATION_CONFIG",
+            "media_type": "application/vnd.oci.image.config.v1+json",
+            "origin": (
+                "docker buildx history inspect attachment vz8s61131470ab8uivga0qcdq "
+                "sha256:4592edd32ecc05f0ce5fca43216dea1393293b07245db9582989ed3cb77f5ad7"
+            ),
+            "evidence_class": (
+                "ORIGINAL OCI ATTACHMENT / DIGEST-MATCHED RAW BYTES RETAINED"
+            ),
+        },
+        "G5-RAW-ORIGINAL-SPDX": {
+            "role": "ORIGINAL_BUILDKIT_IN_TOTO_SPDX_STATEMENT",
+            "media_type": (
+                "application/vnd.in-toto+json; predicate=https://spdx.dev/Document"
+            ),
+            "origin": (
+                "docker buildx history inspect attachment vz8s61131470ab8uivga0qcdq "
+                "sha256:8d039b378dfc422bae2d7479a06bfa2ac9c94a9a19fe8aa115362a28ec41955e"
+            ),
+            "evidence_class": (
+                "ORIGINAL BUILDKIT ATTESTATION / DIGEST-MATCHED RAW BYTES RETAINED"
+            ),
+        },
+        "G5-RAW-ORIGINAL-SLSA": {
+            "role": "ORIGINAL_BUILDKIT_IN_TOTO_SLSA_STATEMENT",
+            "media_type": (
+                "application/vnd.in-toto+json; predicate=https://slsa.dev/provenance/v1"
+            ),
+            "origin": (
+                "docker buildx history inspect attachment vz8s61131470ab8uivga0qcdq "
+                "sha256:f8e3677325d096191bb7ec1d075a34addf4e4733a48d3ae442f63c1bb74a6c6f"
+            ),
+            "evidence_class": (
+                "ORIGINAL BUILDKIT ATTESTATION / DIGEST-MATCHED RAW BYTES RETAINED"
+            ),
+        },
+        "G5-RAW-CURRENT-DIRECT-SBOM": {
+            "role": "CURRENT_DIRECT_LOCAL_IMAGE_SPDX_REPORT",
+            "media_type": "application/spdx+json",
+            "origin": (
+                "docker scout sbom --format spdx --output <path> "
+                "local://atlas-live-trace-worker:gate5-candidate-v0.2"
+            ),
+            "evidence_class": (
+                "NEW SCOUT 1.21.0 DIRECT LOCAL IMAGE REPORT / RAW REPORT RETAINED"
+            ),
+        },
+        "G5-RAW-CURRENT-DIRECT-CVE-SCAN": {
+            "role": "CURRENT_DIRECT_LOCAL_IMAGE_CVE_SARIF_REPORT",
+            "media_type": "application/sarif+json",
+            "origin": (
+                "docker scout cves --exit-code --format sarif --only-severity "
+                "critical,high,medium,low --output <path> "
+                "local://atlas-live-trace-worker:gate5-candidate-v0.2"
+            ),
+            "evidence_class": (
+                "NEW SCOUT 1.21.0 DIRECT LOCAL IMAGE REPORT / RAW REPORT RETAINED"
+            ),
+        },
+    }
+    records = receipt.get("evidence_files")
+    require(isinstance(records, list), "raw evidence file index is missing")
+    require(len(records) == len(expected_files), "raw evidence file count drifted")
+    observed_ids: list[str] = []
+    raw_paths: dict[str, Path] = {}
+    for index, record in enumerate(records):
+        require(isinstance(record, dict), f"raw evidence file {index} is malformed")
+        require_exact_keys(
+            record,
+            {
+                "evidence_id",
+                "role",
+                "path",
+                "media_type",
+                "bytes",
+                "sha256",
+                "origin",
+                "evidence_class",
+            },
+            label=f"raw evidence file {index}",
+        )
+        evidence_id = record.get("evidence_id")
+        require(evidence_id in expected_files, f"unknown raw evidence ID: {evidence_id}")
+        expected_path, expected_bytes, expected_sha = expected_files[evidence_id]
+        require(
+            type(record.get("bytes")) is int
+            and record
+            == {
+                "evidence_id": evidence_id,
+                **expected_file_metadata[evidence_id],
+                "path": expected_path,
+                "bytes": expected_bytes,
+                "sha256": expected_sha,
+            },
+            f"raw evidence record {evidence_id} drifted or claims independent trust",
+        )
+        raw_path = ROOT / canonical_repo_path(expected_path, label=evidence_id)
+        observation = observe_regular_file(raw_path, anchor=FILESYSTEM_ANCHOR)
+        require(
+            observation.byte_count == expected_bytes and observation.sha256 == expected_sha,
+            f"raw evidence bytes drifted: {evidence_id}",
+        )
+        observed_ids.append(evidence_id)
+        raw_paths[evidence_id] = raw_path
+    require(
+        observed_ids == list(expected_files),
+        "raw evidence records are not in the frozen evidence-ID order",
+    )
+
+    oci_index = load_json(raw_paths["G5-RAW-OCI-INDEX"])
+    platform_manifest = load_json(raw_paths["G5-RAW-PLATFORM-MANIFEST"])
+    image_config = load_json(raw_paths["G5-RAW-IMAGE-CONFIG"])
+    attestation_manifest = load_json(raw_paths["G5-RAW-ATTESTATION-MANIFEST"])
+    attestation_config = load_json(raw_paths["G5-RAW-ATTESTATION-CONFIG"])
+    require(
+        oci_index.get("schemaVersion") == 2
+        and oci_index.get("mediaType") == "application/vnd.oci.image.index.v1+json"
+        and [entry["digest"] for entry in oci_index.get("manifests", [])]
+        == [
+            CANDIDATE_OCI_DIGESTS["platform_manifest_digest"],
+            "sha256:b1db5924ab8ce96927f0164c4626cd5eb0c86cbd3fb35c0387b622dd7ae390d1",
+        ],
+        "original OCI index does not close over the platform and attestation manifests",
+    )
+    require(
+        platform_manifest.get("config")
+        == {
+            "mediaType": "application/vnd.oci.image.config.v1+json",
+            "digest": CANDIDATE_OCI_DIGESTS["image_config_digest"],
+            "size": 11_727,
+        }
+        and len(platform_manifest.get("layers", [])) == 17,
+        "original platform manifest config/layer closure drifted",
+    )
+    labels = image_config.get("config", {}).get("Labels", {})
+    require(
+        image_config.get("architecture") == "amd64"
+        and image_config.get("os") == "linux"
+        and image_config.get("config", {}).get("User") == "10001:10001"
+        and labels.get("org.opencontainers.image.revision") == CANDIDATE_SOURCE_COMMIT,
+        "original image config identity drifted",
+    )
+    require(
+        attestation_manifest.get("config")
+        == {
+            "mediaType": "application/vnd.oci.image.config.v1+json",
+            "digest": "sha256:4592edd32ecc05f0ce5fca43216dea1393293b07245db9582989ed3cb77f5ad7",
+            "size": 241,
+        }
+        and [entry["digest"] for entry in attestation_manifest.get("layers", [])]
+        == [
+            "sha256:8d039b378dfc422bae2d7479a06bfa2ac9c94a9a19fe8aa115362a28ec41955e",
+            "sha256:f8e3677325d096191bb7ec1d075a34addf4e4733a48d3ae442f63c1bb74a6c6f",
+        ],
+        "original attestation manifest closure drifted",
+    )
+    require(
+        attestation_config.get("rootfs", {}).get("diff_ids")
+        == [
+            "sha256:8d039b378dfc422bae2d7479a06bfa2ac9c94a9a19fe8aa115362a28ec41955e",
+            "sha256:f8e3677325d096191bb7ec1d075a34addf4e4733a48d3ae442f63c1bb74a6c6f",
+        ],
+        "original attestation config does not bind both statement digests",
+    )
+
+    original_spdx = load_json(raw_paths["G5-RAW-ORIGINAL-SPDX"])
+    require_exact_keys(
+        original_spdx,
+        {"_type", "predicateType", "subject", "predicate"},
+        label="original BuildKit SPDX statement",
+    )
+    spdx_predicate = original_spdx.get("predicate")
+    require(isinstance(spdx_predicate, dict), "original SPDX predicate is missing")
+    require(
+        original_spdx.get("_type") == "https://in-toto.io/Statement/v1"
+        and original_spdx.get("predicateType") == "https://spdx.dev/Document"
+        and original_spdx.get("subject")
+        == [
+            {
+                "name": "pkg:docker/atlas-live-trace-worker@gate5-candidate-v0.2?platform=linux%2Famd64",
+                "digest": {
+                    "sha256": CANDIDATE_OCI_DIGESTS["platform_manifest_digest"].split(":", 1)[1]
+                },
+            }
+        ]
+        and spdx_predicate.get("spdxVersion") == "SPDX-2.3"
+        and len(spdx_predicate.get("packages", [])) == 199
+        and len(spdx_predicate.get("files", [])) == 3_130
+        and len(spdx_predicate.get("relationships", [])) == 3_971
+        and spdx_predicate.get("creationInfo", {}).get("creators")
+        == [
+            "Organization: Anchore, Inc",
+            "Tool: syft-v1.42.3",
+            "Tool: buildkit-v0.31.1",
+        ],
+        "original BuildKit SPDX content/subject drifted",
+    )
+
+    original_slsa = load_json(raw_paths["G5-RAW-ORIGINAL-SLSA"])
+    require_exact_keys(
+        original_slsa,
+        {"_type", "predicateType", "subject", "predicate"},
+        label="original BuildKit SLSA statement",
+    )
+    slsa_predicate = original_slsa.get("predicate")
+    require(isinstance(slsa_predicate, dict), "original SLSA predicate is missing")
+    build_definition = slsa_predicate.get("buildDefinition", {})
+    run_details = slsa_predicate.get("runDetails", {})
+    metadata = run_details.get("metadata", {})
+    external = build_definition.get("externalParameters", {})
+    root_request = external.get("request", {}).get("root", {}).get("request", {})
+    require(
+        original_slsa.get("_type") == "https://in-toto.io/Statement/v1"
+        and original_slsa.get("predicateType") == "https://slsa.dev/provenance/v1"
+        and original_slsa.get("subject") == original_spdx.get("subject")
+        and build_definition.get("buildType")
+        == "https://github.com/moby/buildkit/blob/master/docs/attestations/slsa-definitions.md"
+        and len(build_definition.get("resolvedDependencies", [])) == 3
+        and root_request.get("args", {}).get("vcs:revision") == CANDIDATE_SOURCE_COMMIT
+        and root_request.get("args", {}).get("vcs:source")
+        == "https://github.com/LittleHenderson/noetic-compass.git"
+        and run_details.get("builder") == {"id": ""}
+        and metadata.get("startedOn") == "2026-08-05T21:53:38.606917835Z"
+        and metadata.get("finishedOn") == "2026-08-05T21:55:13.232859726Z"
+        and metadata.get("buildkit_completeness")
+        == {"request": True, "resolvedDependencies": False},
+        "original BuildKit SLSA content, source, or adverse trust facts drifted",
+    )
+    require(
+        receipt.get("original_oci_and_attestation_closure")
+        == {
+            "index_references_platform_and_attestation_manifests": (
+                [entry["digest"] for entry in oci_index["manifests"]]
+                == [
+                    CANDIDATE_OCI_DIGESTS["platform_manifest_digest"],
+                    "sha256:b1db5924ab8ce96927f0164c4626cd5eb0c86cbd3fb35c0387b622dd7ae390d1",
+                ]
+            ),
+            "platform_manifest_references_exact_image_config": (
+                platform_manifest["config"]["digest"]
+                == CANDIDATE_OCI_DIGESTS["image_config_digest"]
+            ),
+            "attestation_manifest_references_exact_config_and_two_statements": (
+                attestation_manifest["config"]["digest"]
+                == "sha256:4592edd32ecc05f0ce5fca43216dea1393293b07245db9582989ed3cb77f5ad7"
+                and [entry["digest"] for entry in attestation_manifest["layers"]]
+                == [
+                    "sha256:8d039b378dfc422bae2d7479a06bfa2ac9c94a9a19fe8aa115362a28ec41955e",
+                    "sha256:f8e3677325d096191bb7ec1d075a34addf4e4733a48d3ae442f63c1bb74a6c6f",
+                ]
+            ),
+            "attestation_config_diff_ids_match_statement_digests": (
+                attestation_config["rootfs"]["diff_ids"]
+                == [entry["digest"] for entry in attestation_manifest["layers"]]
+            ),
+            "image_architecture": image_config["architecture"],
+            "image_os": image_config["os"],
+            "image_user": image_config["config"]["User"],
+            "image_source_revision": labels["org.opencontainers.image.revision"],
+            "spdx_predicate_type": original_spdx["predicateType"],
+            "spdx_version": spdx_predicate["spdxVersion"],
+            "spdx_subject_digest": (
+                "sha256:" + original_spdx["subject"][0]["digest"]["sha256"]
+            ),
+            "spdx_package_records": len(spdx_predicate["packages"]),
+            "spdx_file_records": len(spdx_predicate["files"]),
+            "spdx_relationship_records": len(spdx_predicate["relationships"]),
+            "spdx_creators": spdx_predicate["creationInfo"]["creators"],
+            "slsa_predicate_type": original_slsa["predicateType"],
+            "slsa_subject_digest": (
+                "sha256:" + original_slsa["subject"][0]["digest"]["sha256"]
+            ),
+            "slsa_build_type": build_definition["buildType"],
+            "slsa_builder_id": run_details["builder"]["id"],
+            "slsa_resolved_dependency_count": len(
+                build_definition["resolvedDependencies"]
+            ),
+            "slsa_source_revision": root_request["args"]["vcs:revision"],
+            "slsa_started_on": metadata["startedOn"],
+            "slsa_finished_on": metadata["finishedOn"],
+            "slsa_request_complete": metadata["buildkit_completeness"]["request"],
+            "slsa_resolved_dependencies_complete": metadata[
+                "buildkit_completeness"
+            ]["resolvedDependencies"],
+            "independent_signature_or_trust_root": False,
+        },
+        "raw receipt OCI/SPDX/SLSA closure summary is not derived from retained bytes",
+    )
+
+    bundle_payload = read_stable_bytes(raw_paths["G5-RAW-BUILDKIT-HISTORY-EXPORT"])
+    expected_bundle_members = {
+        "blobs": ("dir", 0),
+        "blobs/sha256": ("dir", 0),
+        "blobs/sha256/0b2b290a282392c00a2c74122716b45609c1be1132300e2727794858db912cb7": ("file", 95_098),
+        "blobs/sha256/36bc87d2b88089eda3958edb5dbcf4cbdd5b5c01e16725e1dbeb49171c23b971": ("file", 113_223),
+        "blobs/sha256/3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c": ("file", 856),
+        "blobs/sha256/5595d0120176d269bc15ee7030eef2392bd9b7373db290a2c4ac959f33c4be28": ("file", 13_879),
+        "blobs/sha256/b0a65a75178d815489cd11cc3a2d89c0e57040e806f78647c81a341738a46305": ("file", 24_374),
+        "blobs/sha256/c23dfeeea6a44c6f250fc3c7ea2c572f1664d54e65ec1c96d675007d76b43fdc": ("file", 1_218),
+        "index.json": ("file", 241),
+        "oci-layout": ("file", 30),
+    }
+    try:
+        archive = tarfile.open(fileobj=io.BytesIO(bundle_payload), mode="r:*")
+    except (tarfile.TarError, OSError) as exc:
+        raise VerificationError(f"cannot parse native BuildKit history bundle: {exc}") from exc
+    with archive:
+        members = archive.getmembers()
+        require(
+            len(members) == len({member.name for member in members}),
+            "BuildKit history bundle contains duplicate member names",
+        )
+        require(
+            {member.name for member in members} == set(expected_bundle_members),
+            "BuildKit history bundle member surface drifted",
+        )
+        extracted: dict[str, bytes] = {}
+        for member in members:
+            pure = PurePosixPath(member.name)
+            require(
+                not pure.is_absolute() and "." not in pure.parts and ".." not in pure.parts,
+                f"BuildKit history bundle member traverses: {member.name}",
+            )
+            expected_kind, expected_size = expected_bundle_members[member.name]
+            require(
+                member.size == expected_size
+                and ((expected_kind == "dir" and member.isdir()) or (expected_kind == "file" and member.isfile()))
+                and not member.issym()
+                and not member.islnk()
+                and not member.isdev(),
+                f"BuildKit history member type/size drifted: {member.name}",
+            )
+            if member.isfile():
+                handle = archive.extractfile(member)
+                require(handle is not None, f"cannot read BuildKit history member: {member.name}")
+                payload = handle.read()
+                extracted[member.name] = payload
+                if member.name.startswith("blobs/sha256/"):
+                    require(
+                        hashlib.sha256(payload).hexdigest() == PurePosixPath(member.name).name,
+                        f"BuildKit blob digest differs from its name: {member.name}",
+                    )
+        bundle_index = json.loads(
+            extracted["index.json"].decode("utf-8"), object_pairs_hook=_unique_object
+        )
+        oci_layout = json.loads(
+            extracted["oci-layout"].decode("utf-8"), object_pairs_hook=_unique_object
+        )
+        require(
+            oci_layout == {"imageLayoutVersion": "1.0.0"},
+            "BuildKit history bundle OCI layout version drifted",
+        )
+        require(
+            bundle_index.get("manifests")
+            == [
+                {
+                    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+                    "digest": "sha256:c23dfeeea6a44c6f250fc3c7ea2c572f1664d54e65ec1c96d675007d76b43fdc",
+                    "size": 1_218,
+                }
+            ],
+            "BuildKit bundle index cross-link drifted",
+        )
+        bundle_manifest = json.loads(
+            extracted[
+                "blobs/sha256/c23dfeeea6a44c6f250fc3c7ea2c572f1664d54e65ec1c96d675007d76b43fdc"
+            ].decode("utf-8"),
+            object_pairs_hook=_unique_object,
+        )
+        require(
+            bundle_manifest.get("config", {}).get("digest")
+            == "sha256:5595d0120176d269bc15ee7030eef2392bd9b7373db290a2c4ac959f33c4be28"
+            and [layer["digest"] for layer in bundle_manifest.get("layers", [])]
+            == [
+                "sha256:0b2b290a282392c00a2c74122716b45609c1be1132300e2727794858db912cb7",
+                "sha256:b0a65a75178d815489cd11cc3a2d89c0e57040e806f78647c81a341738a46305",
+                "sha256:36bc87d2b88089eda3958edb5dbcf4cbdd5b5c01e16725e1dbeb49171c23b971",
+                CANDIDATE_OCI_DIGESTS["oci_image_index_digest"],
+            ],
+            "BuildKit bundle manifest cross-link drifted",
+        )
+        history_record = json.loads(
+            extracted[
+                "blobs/sha256/5595d0120176d269bc15ee7030eef2392bd9b7373db290a2c4ac959f33c4be28"
+            ].decode("utf-8"),
+            object_pairs_hook=_unique_object,
+        )
+        attrs = history_record.get("FrontendAttrs", {})
+        require(
+            history_record.get("Ref") == CANDIDATE_BUILD_REF
+            and attrs.get("vcs:revision") == CANDIDATE_SOURCE_COMMIT
+            and attrs.get("vcs:source") == "https://github.com/LittleHenderson/noetic-compass.git"
+            and attrs.get("attest:provenance") == "type=provenance,mode=max"
+            and attrs.get("attest:sbom") == "type=sbom"
+            and history_record.get("DefaultPlatform") == "linux/amd64"
+            and history_record.get("numCompletedSteps") == 36
+            and history_record.get("numTotalSteps") == 36
+            and history_record.get("numCachedSteps") == 18,
+            "BuildKit history record identity or completion facts drifted",
+        )
+        bundle_layers = [layer["digest"] for layer in bundle_manifest["layers"]]
+        require(
+            receipt.get("buildkit_history_bundle")
+            == {
+                "oci_layout_version": oci_layout["imageLayoutVersion"],
+                "member_count": len(members),
+                "regular_file_count": sum(member.isfile() for member in members),
+                "history_record_digest": bundle_manifest["config"]["digest"],
+                "expanded_provenance_predicate_digest": bundle_layers[2],
+                "trace_digest": bundle_layers[0],
+                "status_log_digest": bundle_layers[1],
+                "build_ref_matched": history_record["Ref"] == CANDIDATE_BUILD_REF,
+                "source_commit_matched": (
+                    attrs["vcs:revision"] == CANDIDATE_SOURCE_COMMIT
+                ),
+                "source_repository_matched": (
+                    attrs["vcs:source"]
+                    == "https://github.com/LittleHenderson/noetic-compass.git"
+                ),
+                "provenance_requested_mode": attrs["attest:provenance"],
+                "sbom_requested_mode": attrs["attest:sbom"],
+                "platform": history_record["DefaultPlatform"],
+                "completed_steps": history_record["numCompletedSteps"],
+                "total_steps": history_record["numTotalSteps"],
+                "cached_steps": history_record["numCachedSteps"],
+                "trust_boundary": (
+                    "LOCAL BUILDKIT CONTENT RECORD / NO INDEPENDENT SIGNER OR "
+                    "TRUST ROOT"
+                ),
+            },
+            "raw receipt BuildKit bundle summary is not derived from retained bytes",
+        )
+
+    direct_spdx = load_json(raw_paths["G5-RAW-CURRENT-DIRECT-SBOM"])
+    direct_packages = direct_spdx.get("packages", [])
+    require(
+        direct_spdx.get("spdxVersion") == "SPDX-2.3"
+        and direct_spdx.get("name") == "atlas-live-trace-worker"
+        and isinstance(direct_packages, list)
+        and len(direct_packages) == 233
+        and direct_spdx.get("creationInfo", {}).get("creators")
+        == ["Organization: Docker, Inc", "Tool: docker-scout-1.21.0"],
+        "current direct local-image SPDX report drifted",
+    )
+    root_packages = [
+        package
+        for package in direct_packages
+        if isinstance(package, dict) and package.get("SPDXID") == "SPDXRef-DocumentRoot"
+    ]
+    require(
+        root_packages
+        == [
+            {
+                "name": "atlas-live-trace-worker",
+                "SPDXID": "SPDXRef-DocumentRoot",
+                "versionInfo": "gate5-candidate-v0.2",
+                "supplier": "NOASSERTION",
+                "downloadLocation": "NOASSERTION",
+                "filesAnalyzed": False,
+                "licenseConcluded": "NOASSERTION",
+                "licenseDeclared": "NOASSERTION",
+                "externalRefs": [
+                    {
+                        "referenceCategory": "PACKAGE-MANAGER",
+                        "referenceType": "purl",
+                        "referenceLocator": (
+                            "pkg:oci/atlas-live-trace-worker@"
+                            "sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c"
+                            "?repository_url=docker.io&tag=gate5-candidate-v0.2"
+                        ),
+                    }
+                ],
+                "primaryPackagePurpose": "CONTAINER",
+            }
+        ],
+        "direct SPDX root package is not bound to the exact candidate index digest/tag",
+    )
+    direct_spdx_purls = {
+        reference["referenceLocator"]
+        for package in direct_packages
+        if isinstance(package, dict)
+        for reference in package.get("externalRefs", [])
+        if isinstance(reference, dict)
+        and reference.get("referenceType") == "purl"
+        and isinstance(reference.get("referenceLocator"), str)
+    }
+    sarif = load_json(raw_paths["G5-RAW-CURRENT-DIRECT-CVE-SCAN"])
+    require(
+        sarif.get("version") == "2.1.0"
+        and isinstance(sarif.get("runs"), list)
+        and len(sarif["runs"]) == 1,
+        "current direct local-image SARIF envelope drifted",
+    )
+    run = sarif["runs"][0]
+    driver = run.get("tool", {}).get("driver", {})
+    rules = driver.get("rules", [])
+    results = run.get("results", [])
+    require(
+        driver.get("name") == "docker scout"
+        and driver.get("version") == "1.21.0"
+        and len(rules) == 7
+        and len(results) == 7,
+        "current direct local-image SARIF tool or finding count drifted",
+    )
+    parsed_findings = [
+        {
+            "advisory": rule["id"],
+            "severity": rule["properties"]["cvssV3_severity"],
+            "purl": rule["properties"]["purls"][0],
+            "scanner_fixed_version": rule["properties"]["fixed_version"],
+        }
+        for rule in rules
+    ]
+    parsed_severity_counts = {"critical": 0, "high": 0, "medium": 0, "low": 0}
+    for finding in parsed_findings:
+        severity = finding["severity"].lower()
+        require(
+            severity in parsed_severity_counts,
+            f"SARIF finding has an unexpected severity: {finding['severity']!r}",
+        )
+        parsed_severity_counts[severity] += 1
+    require(
+        parsed_severity_counts == {"critical": 0, "high": 0, "medium": 3, "low": 4}
+        and all(
+            finding["scanner_fixed_version"] == "not fixed"
+            for finding in parsed_findings
+        ),
+        "SARIF severity or scanner fixed-version disposition drifted",
+    )
+    require(
+        all(finding["purl"] in direct_spdx_purls for finding in parsed_findings),
+        "SARIF finding package purl is absent from the retained direct SPDX report",
+    )
+    direct_reports = receipt.get("direct_local_image_reports")
+    require(isinstance(direct_reports, dict), "direct local-image report summary is missing")
+    require_exact_keys(
+        direct_reports,
+        {"sbom", "cve_scan", "findings"},
+        label="direct local-image report summary",
+    )
+    require(
+        direct_reports.get("findings") == parsed_findings
+        and direct_reports.get("sbom")
+        == {
+            "status": "COMPLETED",
+            "tool": "docker scout 1.21.0",
+            "created_at": "2026-08-05T23:28:12Z",
+            "document_name": "atlas-live-trace-worker",
+            "spdx_version": "SPDX-2.3",
+            "scanner_indexed_component_count": 232,
+            "spdx_package_records_including_root_image": 233,
+            "stdout_stderr_retained": False,
+        }
+        and direct_reports.get("cve_scan")
+        == {
+            "status": "COMPLETED_WITH_FINDINGS",
+            "tool": "docker scout 1.21.0",
+            "exit_code": 2,
+            "sarif_version": "2.1.0",
+            "rule_count": 7,
+            "result_count": 7,
+            "severity_counts": parsed_severity_counts,
+            "scanner_fixed_version_disposition": "ALL SEVEN REPORTED AS NOT FIXED",
+            "stdout_stderr_retained": False,
+            "scanner_database_identity_retained": False,
+            "networklessness_certified": False,
+        }
+        and all(result.get("kind") == "fail" for result in results)
+        and [result.get("ruleId") for result in results]
+        == [finding["advisory"] for finding in parsed_findings],
+        "direct local-image report summary was zeroed, promoted, or detached from SARIF",
+    )
+
+    vendor = receipt.get("current_vendor_triage")
+    require(isinstance(vendor, dict), "current vendor triage is missing")
+    require_exact_keys(
+        vendor,
+        {
+            "checked_on_local_date",
+            "authoritative_source",
+            "vendor_vulnerable_or_deferred_count",
+            "vendor_marks_exact_scanned_version_fixed_count",
+            "scanner_vendor_conflict_count",
+            "assessments",
+            "security_decision",
+        },
+        label="current vendor triage",
+    )
+    vendor_expectations = {
+        "CVE-2024-2236": (
+            "libgcrypt20",
+            "Vulnerable, fix deferred",
+            "2025-07-11",
+            "OPEN / VENDOR CONFIRMS VULNERABLE",
+        ),
+        "CVE-2024-56433": (
+            "shadow",
+            "Vulnerable, fix deferred",
+            "2025-07-11",
+            "OPEN / VENDOR CONFIRMS VULNERABLE",
+        ),
+        "CVE-2026-13757": (
+            "p11-kit",
+            "Vulnerable, fix deferred",
+            "2026-07-01",
+            "OPEN / VENDOR CONFIRMS VULNERABLE",
+        ),
+        "CVE-2026-2219": (
+            "dpkg",
+            "Fixed 1.22.6ubuntu6.6",
+            "2026-05-13",
+            "OPEN RECONCILIATION / VENDOR MARKS EXACT SCANNED VERSION FIXED",
+        ),
+        "CVE-2026-27171": (
+            "zlib",
+            "Vulnerable",
+            "2026-06-26",
+            "OPEN / VENDOR CONFIRMS VULNERABLE",
+        ),
+        "CVE-2026-27456": (
+            "util-linux",
+            "Vulnerable",
+            "2026-04-08",
+            "OPEN / VENDOR CONFIRMS VULNERABLE",
+        ),
+        "CVE-2026-40228": (
+            "systemd",
+            "Vulnerable, fix deferred",
+            "2026-06-06",
+            "OPEN / VENDOR CONFIRMS VULNERABLE",
+        ),
+    }
+    scanner_packages: dict[str, str] = {}
+    purl_prefix = "pkg:deb/ubuntu/"
+    for finding in parsed_findings:
+        advisory = finding["advisory"]
+        purl = finding["purl"]
+        require(
+            advisory not in scanner_packages
+            and isinstance(purl, str)
+            and purl.startswith(purl_prefix)
+            and "@" in purl,
+            "scanner finding has a duplicate advisory or malformed Ubuntu purl",
+        )
+        scanner_packages[advisory] = purl.split("@", 1)[0][len(purl_prefix) :]
+    require(
+        set(scanner_packages) == set(vendor_expectations),
+        "vendor assessment advisory set is detached from retained SARIF findings",
+    )
+    expected_assessments = []
+    for advisory in sorted(vendor_expectations):
+        package, ubuntu_status, last_updated, disposition = vendor_expectations[
+            advisory
+        ]
+        require(
+            scanner_packages[advisory] == package,
+            f"vendor package does not match retained scanner purl: {advisory}",
+        )
+        expected_assessments.append(
+            {
+                "advisory": advisory,
+                "package": package,
+                "ubuntu_release": "24.04 LTS noble",
+                "ubuntu_status": ubuntu_status,
+                "source_url": f"https://ubuntu.com/security/{advisory}",
+                "source_last_updated": last_updated,
+                "disposition": disposition,
+            }
+        )
+    vendor_open_count = sum(
+        assessment["disposition"] == "OPEN / VENDOR CONFIRMS VULNERABLE"
+        for assessment in expected_assessments
+    )
+    vendor_fixed_count = sum(
+        assessment["ubuntu_status"].startswith("Fixed ")
+        for assessment in expected_assessments
+    )
+    scanner_vendor_conflict_count = sum(
+        assessment["disposition"].startswith("OPEN RECONCILIATION")
+        for assessment in expected_assessments
+    )
+    require(
+        type(vendor.get("vendor_vulnerable_or_deferred_count")) is int
+        and type(vendor.get("vendor_marks_exact_scanned_version_fixed_count")) is int
+        and type(vendor.get("scanner_vendor_conflict_count")) is int
+        and vendor
+        == {
+            "checked_on_local_date": "2026-08-05",
+            "authoritative_source": "Ubuntu Security CVE records",
+            "vendor_vulnerable_or_deferred_count": vendor_open_count,
+            "vendor_marks_exact_scanned_version_fixed_count": vendor_fixed_count,
+            "scanner_vendor_conflict_count": scanner_vendor_conflict_count,
+            "assessments": expected_assessments,
+            "security_decision": (
+                "OPEN_SECURITY / SIX VENDOR-CONFIRMED VULNERABLE OR DEFERRED / "
+                "ONE SCANNER-VENDOR CONFLICT"
+            ),
+        },
+        "vendor triage hides the open findings or scanner/vendor conflict",
+    )
+    require(
+        receipt.get("retention_status")
+        == {
+            "raw_build_history_retained": True,
+            "raw_original_oci_descriptors_retained": True,
+            "raw_original_buildkit_spdx_retained": True,
+            "raw_original_buildkit_slsa_retained": True,
+            "raw_current_direct_sbom_retained": True,
+            "raw_current_direct_cve_report_retained": True,
+            "raw_payloads_repository_replayable": True,
+            "original_scout_1_24_cve_report_retained": False,
+            "current_scout_process_stdout_stderr_retained": False,
+            "scanner_database_identity_retained": False,
+            "vendor_source_payloads_retained": False,
+            "trusted_time_established": False,
+            "independent_reproduction_completed": False,
+            "independent_attestation_trust_root_established": False,
+            "complete_tool_execution_replayable": False,
+        },
+        "raw retention status is incomplete or overstates replay/trust",
+    )
+    unresolved = receipt.get("unresolved_boundaries")
+    require(
+        unresolved
+        == {
+            "direct_local_image_security_findings": (
+                "OPEN / 7 SCANNER FINDINGS / 6 VENDOR-CONFIRMED VULNERABLE OR "
+                "DEFERRED / 1 VENDOR-SCANNER CONFLICT"
+            ),
+            "original_scout_1_24_cve_report": "NOT RETAINED",
+            "current_scout_process_transcripts": "NOT RETAINED",
+            "sarif_to_candidate_execution_binding": (
+                "OPEN / NOT EMBEDDED / INVOCATION NOT RETAINED"
+            ),
+            "vendor_triage_source_snapshot": "NOT RETAINED / LINKS ONLY",
+            "scanner_database_identity": "OPEN",
+            "networkless_scan_execution": "NOT CERTIFIED",
+            "independent_clean_reproduction": "OPEN",
+            "independent_attestation_trust_root": "OPEN",
+            "trusted_time_and_worm_retention": "OPEN",
+            "gpu_real_forward": "NOT_STARTED",
+            "gate5_engineering_003": "OPEN_SECURITY",
+            "licensing": "NOT LICENSED",
+            "public_disclosure": "HELD",
+        },
+        "raw evidence receipt removed an OPEN security/governance boundary",
+    )
+    require(
+        receipt.get("claim_boundary")
+        == {
+            "integrity_evidence_effect": "RAW LOCAL PAYLOAD RETENTION AND STRUCTURAL CROSS-LINK VERIFICATION ONLY",
+            "external_evidence_effect": "LOCAL SELF-OBSERVED / NOT INDEPENDENTLY ATTESTED",
+            "security_effect": "OPEN_SECURITY",
+            "scientific_effect": "NONE",
+            "canon_effect": "NONE",
+            "product_claim_effect": "NONE",
+            "license_effect": "NONE",
+            "disclosure_effect": "NONE",
+        },
+        "raw evidence receipt claims unauthorized authority",
+    )
+    return {
+        "retained_files": len(records),
+        "original_spdx_packages": len(spdx_predicate["packages"]),
+        "direct_spdx_packages": len(direct_spdx["packages"]),
+        "scanner_findings": len(results),
+        "vendor_confirmed_open": vendor["vendor_vulnerable_or_deferred_count"],
+        "vendor_scanner_conflicts": vendor["scanner_vendor_conflict_count"],
+    }
+
+
 def verify_python_syntax(manifest_artifacts: dict[str, dict[str, Any]]) -> int:
     python_paths = sorted(path for path in manifest_artifacts if path.endswith(".py"))
     for raw_path in python_paths:
@@ -3186,20 +4589,18 @@ def verify_python_syntax(manifest_artifacts: dict[str, dict[str, Any]]) -> int:
         try:
             # Parse exact bytes so Python's own PEP 263 encoding detection accepts
             # valid UTF-8 BOM and encoding-cookie sources without normalizing them.
-            ast.parse(path.read_bytes(), filename=raw_path)
+            ast.parse(
+                read_stable_bytes(path, anchor=FILESYSTEM_ANCHOR),
+                filename=raw_path,
+            )
         except (OSError, SyntaxError) as exc:
             raise VerificationError(f"cannot parse bound Python artifact {raw_path}: {exc}") from exc
     return len(python_paths)
 
 
-def run_command(
-    command: list[str],
-    *,
-    cwd: Path,
-    timeout: int,
-    extra_env: dict[str, str] | None = None,
-    remove_env: Iterable[str] = (),
-) -> tuple[str, str]:
+def _subprocess_environment(
+    *, extra_env: dict[str, str] | None = None, remove_env: Iterable[str] = ()
+) -> dict[str, str]:
     env = {
         name: value
         for name, value in os.environ.items()
@@ -3219,6 +4620,18 @@ def run_command(
     )
     if extra_env:
         env.update(extra_env)
+    return env
+
+
+def run_command(
+    command: list[str],
+    *,
+    cwd: Path,
+    timeout: int,
+    extra_env: dict[str, str] | None = None,
+    remove_env: Iterable[str] = (),
+) -> tuple[str, str]:
+    env = _subprocess_environment(extra_env=extra_env, remove_env=remove_env)
     completed = subprocess.run(
         command,
         cwd=cwd,
@@ -3238,52 +4651,725 @@ def run_command(
     return completed.stdout, completed.stderr
 
 
-def collect_pytest_ids(
-    *, cwd: Path, targets: list[str], pytest_plugins: list[str]
-) -> list[str]:
-    plugin_args = [part for plugin in pytest_plugins for part in ("-p", plugin)]
-    stdout, stderr = run_command(
-        [
-            sys.executable,
-            "-E",
-            "-P",
-            "-B",
-            "-m",
-            "pytest",
-            "--collect-only",
-            "-q",
-            "-p",
-            "no:cacheprovider",
-            *plugin_args,
-            *targets,
-        ],
-        cwd=cwd,
-        timeout=240,
-        extra_env=PYTEST_ISOLATION_ENV,
-        remove_env=PYTEST_REMOVED_ENV,
-    )
-    transcript = stdout + stderr
-    ids = sorted(
-        {
-            line.strip().replace("\\", "/")
-            for line in transcript.splitlines()
-            if "::" in line and line.strip() and not line.startswith((" ", "="))
-        }
-    )
-    require(ids, f"pytest collection returned no test IDs for {targets}")
-    require(
-        all("\r" not in test_id and "\n" not in test_id for test_id in ids),
-        "pytest collection returned a multiline test ID",
-    )
-    return ids
-
-
 def test_id_digest(test_ids: Iterable[str]) -> str:
-    ids = sorted(set(test_ids))
+    values = list(test_ids)
+    require(values, "same-run pytest receipt has no test IDs")
+    require(
+        all(
+            isinstance(test_id, str)
+            and test_id
+            and "\\" not in test_id
+            and not any(marker in test_id for marker in ("\x00", "\r", "\n"))
+            for test_id in values
+        ),
+        "same-run pytest receipt has a noncanonical test ID",
+    )
+    require(
+        len(values) == len(set(values)),
+        "same-run pytest receipt contains duplicate test IDs",
+    )
+    ids = sorted(values)
     return sha256_bytes(("\n".join(ids) + "\n").encode("utf-8"))
 
 
-def verify_test_suites(manifest: dict[str, Any]) -> list[tuple[str, int, int]]:
+def _load_runner_lock_builder() -> Any:
+    spec = importlib.util.spec_from_file_location(
+        "gate5_runner_lock_builder", RUNNER_LOCK_BUILDER_PATH
+    )
+    require(spec is not None and spec.loader is not None, "cannot load runner-lock builder")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def verify_local_test_runner_lock() -> dict[str, Any]:
+    lock = load_json(RUNNER_LOCK_PATH)
+    require(isinstance(lock, dict), "local test-runner lock is not an object")
+    require_exact_keys(
+        lock,
+        {
+            "schema_version",
+            "document_status",
+            "gate5_status",
+            "gate_decision",
+            "experimental_execution_status",
+            "admission_ring",
+            "license_status",
+            "disclosure_status",
+            "public_disclosure_authorized",
+            "canon_effect",
+            "product_claim_effect",
+            "lock_scope",
+            "required_child_invocation",
+            "python_identity",
+            "admitted_pytest_site_root",
+            "pytest_version",
+            "admitted_runner_distributions",
+            "startup_pth_inventory",
+            "startup_pth_execution",
+            "unbound_runtime_surface",
+            "claim_boundary",
+        },
+        label="Gate 5 local test-runner lock",
+    )
+    require(
+        lock.get("schema_version")
+        == "project_coherence.gate5_local_test_runner_lock.v0.1",
+        "unexpected local test-runner lock schema",
+    )
+    verify_governance_header(lock, label="Gate 5 local test-runner lock")
+    require(
+        lock.get("lock_scope")
+        == "LOCAL_CONTENT_LOCK / SELF-OBSERVED / NOT HERMETIC / NOT INDEPENDENTLY ATTESTED"
+        and lock.get("required_child_invocation")
+        == "python -I -S -B -X pycache_prefix=<fresh-empty-directory>",
+        "local test-runner lock overstates its scope or changes invocation",
+    )
+    require(
+        lock.get("unbound_runtime_surface")
+        == {
+            "stdlib_content": "OPEN",
+            "test_import_dependencies_outside_admitted_runner_distributions": "OPEN",
+            "distribution_files_absent_from_upstream_record": "OPEN",
+            "transient_unloaded_or_dynamic_module_execution": "OPEN",
+            "exact_loader_executed_bytecode": "OPEN",
+            "unresolved_or_deleted_module_origins": "OPEN",
+            "native_dependency_closure": "OPEN",
+            "child_process_closure": "OPEN",
+            "kernel_and_filesystem_trust": "OPEN",
+            "independent_signer_or_trust_root": "OPEN",
+        },
+        "local test-runner lock hides an unbound execution surface",
+    )
+    require(
+        lock.get("claim_boundary")
+        == {
+            "same_run_receipt_effect": "LOCAL ENGINEERING REGRESSION ONLY",
+            "hermeticity_effect": "NONE",
+            "scientific_effect": "NONE",
+            "canon_effect": "NONE",
+            "product_claim_effect": "NONE",
+            "license_effect": "NONE",
+            "disclosure_effect": "NONE",
+        },
+        "local test-runner lock claims unauthorized effect",
+    )
+    builder = _load_runner_lock_builder()
+    expected = builder.build_lock(Path(lock["admitted_pytest_site_root"]))
+    require(
+        lock == expected,
+        "local interpreter, pytest distributions, or disabled .pth inventory drifted",
+    )
+    interpreter = Path(lock["python_identity"]["interpreter_files"][0]["path"])
+    require(
+        Path(sys.executable).resolve() == interpreter.resolve(),
+        "authoritative verifier is not using the locked local interpreter",
+    )
+    return lock
+
+
+def _canonical_json_digest(value: Any) -> str:
+    return sha256_bytes(
+        json.dumps(
+            value, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+        ).encode("utf-8")
+    )
+
+
+def _allowed_loaded_module_anchor(path: Path, lock: dict[str, Any]) -> Path:
+    allowed_roots = [
+        ROOT.resolve(),
+        Path(lock["admitted_pytest_site_root"]).resolve(),
+        Path(lock["python_identity"]["stdlib_root"]).resolve().parent,
+    ]
+    resolved = path.resolve(strict=True)
+    for allowed in allowed_roots:
+        try:
+            resolved.relative_to(allowed)
+            return Path(resolved.anchor)
+        except ValueError:
+            continue
+    raise VerificationError(f"pytest loaded code outside the declared local surface: {resolved}")
+
+
+def _expected_runner_sys_paths(
+    lock: dict[str, Any], *, working_directory: Path, repo_import_roots: list[Path]
+) -> tuple[list[str], list[str]]:
+    python_identity = lock["python_identity"]
+    interpreter = Path(python_identity["interpreter_files"][0]["path"])
+    python_root = interpreter.parent.resolve(strict=True)
+    version_parts = python_identity["version"].split(".")
+    require(
+        len(version_parts) >= 2
+        and all(part.isdecimal() for part in version_parts[:2]),
+        "runner-lock Python version is malformed",
+    )
+    absent_stdlib_zip = python_root / (
+        f"python{version_parts[0]}{version_parts[1]}.zip"
+    )
+    require(
+        not absent_stdlib_zip.exists() and not absent_stdlib_zip.is_symlink(),
+        "unbound standard-library zip appeared on the runner sys.path",
+    )
+    startup = [
+        str(absent_stdlib_zip),
+        str((python_root / "DLLs").resolve(strict=True)),
+        str(Path(python_identity["stdlib_root"]).resolve(strict=True)),
+        str(python_root),
+    ]
+    site_root = str(Path(lock["admitted_pytest_site_root"]).resolve(strict=True))
+    return startup, [
+        str(working_directory.resolve(strict=True)),
+        *(str(path.resolve(strict=True)) for path in repo_import_roots),
+        *startup,
+        site_root,
+    ]
+
+
+def _validate_loaded_module_records(
+    *,
+    name: str,
+    records: Any,
+    lock: dict[str, Any],
+    admitted_artifact_paths: set[str],
+    pre_test: bool,
+) -> list[dict[str, Any]]:
+    require(isinstance(records, list) and records, f"{name}: loaded-code inventory is missing")
+    loaded_paths: set[str] = set()
+    root = ROOT.resolve()
+    site_root = Path(lock["admitted_pytest_site_root"]).resolve(strict=True)
+    admitted_site_files: dict[str, dict[str, Any]] = {}
+    admitted_site_namespaces: set[str] = set()
+    admitted_distributions: set[str] = set()
+    for distribution_index, distribution in enumerate(
+        lock["admitted_runner_distributions"]
+    ):
+        require(
+            isinstance(distribution, dict),
+            f"{name}: locked runner distribution {distribution_index} is malformed",
+        )
+        require_exact_keys(
+            distribution,
+            {
+                "distribution",
+                "canonical_distribution",
+                "version",
+                "file_count",
+                "byte_count",
+                "tree_sha256",
+                "files",
+                "excluded_outside_site_files",
+                "tree_digest_rule",
+            },
+            label=f"{name} locked runner distribution {distribution_index}",
+        )
+        files = distribution["files"]
+        canonical_distribution = distribution["canonical_distribution"]
+        require(
+            isinstance(files, list)
+            and isinstance(canonical_distribution, str)
+            and isinstance(distribution["distribution"], str)
+            and canonical_distribution
+            and canonical_distribution
+            == re.sub(r"[-_.]+", "-", distribution["distribution"]).casefold()
+            and canonical_distribution not in admitted_distributions
+            and type(distribution["file_count"]) is int
+            and distribution["file_count"] == len(files),
+            f"{name}: locked runner distribution file inventory is malformed",
+        )
+        admitted_distributions.add(canonical_distribution)
+        excluded_files = distribution["excluded_outside_site_files"]
+        require(
+            isinstance(excluded_files, list),
+            f"{name}: excluded runner entry-point inventory is malformed",
+        )
+        for excluded_index, excluded_file in enumerate(excluded_files):
+            require(
+                isinstance(excluded_file, dict),
+                f"{name}: excluded runner entry point is malformed",
+            )
+            require_exact_keys(
+                excluded_file,
+                {"record_path", "path", "reason"},
+                label=(
+                    f"{name} excluded runner entry point "
+                    f"{distribution_index}:{excluded_index}"
+                ),
+            )
+            require(
+                excluded_file["reason"]
+                == "SIBLING_SCRIPTS_ENTRY_POINT / NOT EXECUTED",
+                f"{name}: excluded runner entry point changed scope",
+            )
+        for file_index, locked_file in enumerate(files):
+            require(
+                isinstance(locked_file, dict),
+                f"{name}: locked runner file {distribution_index}:{file_index} is malformed",
+            )
+            require_exact_keys(
+                locked_file,
+                {"path", "bytes", "sha256", "owner_distribution"},
+                label=f"{name} locked runner file {distribution_index}:{file_index}",
+            )
+            raw_path = locked_file["path"]
+            require(
+                isinstance(raw_path, str)
+                and raw_path
+                and "\\" not in raw_path
+                and not PurePosixPath(raw_path).is_absolute()
+                and all(
+                    part not in {"", ".", ".."}
+                    for part in PurePosixPath(raw_path).parts
+                )
+                and locked_file["owner_distribution"] == canonical_distribution
+                and type(locked_file["bytes"]) is int
+                and locked_file["bytes"] >= 0
+                and isinstance(locked_file["sha256"], str)
+                and re.fullmatch(r"[0-9A-F]{64}", locked_file["sha256"]) is not None,
+                f"{name}: locked runner file path is noncanonical",
+            )
+            locked_path = site_root.joinpath(*PurePosixPath(raw_path).parts).resolve(
+                strict=True
+            )
+            try:
+                locked_path.relative_to(site_root)
+            except ValueError as exc:
+                raise VerificationError(
+                    f"{name}: locked runner file escaped the admitted site root"
+                ) from exc
+            folded_locked_path = str(locked_path).casefold()
+            require(
+                folded_locked_path not in admitted_site_files,
+                f"{name}: duplicate file across locked runner distributions",
+            )
+            admitted_site_files[folded_locked_path] = locked_file
+            first_part = PurePosixPath(raw_path).parts[0].casefold()
+            if not first_part.endswith(".dist-info"):
+                admitted_site_namespaces.add(first_part)
+    for index, record in enumerate(records):
+        require(isinstance(record, dict), f"{name}: loaded-code record {index} is malformed")
+        require_exact_keys(
+            record,
+            {"path", "bytes", "sha256", "module_names", "kind"},
+            label=f"{name} loaded-code record {index}",
+        )
+        path = Path(record["path"])
+        anchor = _allowed_loaded_module_anchor(path, lock)
+        observation = observe_regular_file(path, anchor=anchor)
+        require(
+            type(record.get("bytes")) is int
+            and record["bytes"] == observation.byte_count
+            and record.get("sha256") == observation.sha256
+            and isinstance(record.get("module_names"), list)
+            and record["module_names"]
+            and all(isinstance(module, str) and module for module in record["module_names"])
+            and record.get("kind") in {"PYTHON_OR_DATA", "NATIVE"},
+            f"{name}: loaded-code identity drifted after the child exited",
+        )
+        resolved = path.resolve(strict=True)
+        folded = str(resolved).casefold()
+        require(folded not in loaded_paths, f"{name}: duplicate loaded-code path")
+        loaded_paths.add(folded)
+        try:
+            repo_relative = resolved.relative_to(root).as_posix()
+        except ValueError:
+            repo_relative = None
+        if repo_relative is not None:
+            require(
+                (
+                    repo_relative
+                    == SAME_RUN_PYTEST_RUNNER_PATH.relative_to(ROOT).as_posix()
+                    if pre_test
+                    else repo_relative in admitted_artifact_paths
+                ),
+                f"{name}: pytest loaded an unbound repository file: {repo_relative}",
+            )
+        try:
+            site_relative = resolved.relative_to(site_root)
+        except ValueError:
+            site_relative = None
+        if site_relative is not None:
+            locked_file = admitted_site_files.get(folded)
+            if pre_test:
+                require(
+                    locked_file is not None
+                    and locked_file["bytes"] == observation.byte_count
+                    and locked_file["sha256"] == observation.sha256,
+                    f"{name}: pytest startup loaded an unbound runner file: {resolved}",
+                )
+            elif locked_file is None:
+                require(
+                    site_relative.parts[0].casefold()
+                    not in admitted_site_namespaces,
+                    f"{name}: unbound test dependency masqueraded inside a locked "
+                    f"runner namespace: {resolved}",
+                )
+    return records
+
+
+def run_pytest_same_process_receipt(
+    *,
+    name: str,
+    suite: dict[str, Any],
+    lock: dict[str, Any],
+    admitted_artifact_paths: set[str],
+) -> dict[str, Any]:
+    cwd = (
+        ROOT
+        if suite["working_directory"] == "."
+        else ROOT
+        / canonical_repo_path(
+            suite["working_directory"], label=f"{name} working directory"
+        )
+    )
+    require(cwd.is_dir(), f"{name}: working directory is missing")
+    targets = suite["targets"]
+    plugins = suite["pytest_plugins"]
+    raw_repo_import_roots = suite["repo_import_roots"]
+    require(
+        isinstance(targets, list)
+        and targets
+        and all(isinstance(target, str) and target for target in targets),
+        f"{name}: targets are malformed",
+    )
+    require(
+        isinstance(plugins, list)
+        and all(isinstance(plugin, str) and plugin for plugin in plugins),
+        f"{name}: explicit pytest plugin list is malformed",
+    )
+    require(
+        isinstance(raw_repo_import_roots, list)
+        and len(raw_repo_import_roots) == len(set(raw_repo_import_roots))
+        and all(isinstance(path, str) and path for path in raw_repo_import_roots),
+        f"{name}: repository import-root list is malformed",
+    )
+    repo_import_roots = [
+        ROOT / canonical_repo_path(path, label=f"{name} repository import root")
+        for path in raw_repo_import_roots
+    ]
+    require(
+        all(path.is_dir() for path in repo_import_roots),
+        f"{name}: a repository import root is missing or not a directory",
+    )
+    lock_sha256 = sha256_file(RUNNER_LOCK_PATH)
+    nonce = secrets.token_hex(32)
+    interpreter = lock["python_identity"]["interpreter_files"][0]["path"]
+    with tempfile.TemporaryDirectory(prefix="gate5-same-run-pytest-") as raw_temp:
+        temporary = Path(raw_temp)
+        receipt_path = temporary / "receipt.json"
+        pycache_prefix = temporary / "fresh-pycache"
+        pycache_prefix.mkdir()
+        command = [
+            interpreter,
+            "-I",
+            "-S",
+            "-B",
+            "-X",
+            f"pycache_prefix={pycache_prefix}",
+            str(SAME_RUN_PYTEST_RUNNER_PATH),
+            "--receipt",
+            str(receipt_path),
+            "--lock",
+            str(RUNNER_LOCK_PATH),
+            "--expected-lock-sha256",
+            lock_sha256,
+            "--suite-name",
+            name,
+            "--nonce",
+            nonce,
+            "--expected-parent-pid",
+            str(os.getpid()),
+            "--working-directory",
+            str(cwd.resolve()),
+            "--pycache-prefix",
+            str(pycache_prefix),
+        ]
+        for target in targets:
+            command.extend(("--target", target))
+        for plugin in plugins:
+            command.extend(("--plugin", plugin))
+        for import_root in repo_import_roots:
+            command.extend(("--repo-import-root", str(import_root.resolve())))
+        try:
+            completed = subprocess.run(
+                command,
+                cwd=ROOT,
+                env=_subprocess_environment(
+                    extra_env=PYTEST_ISOLATION_ENV,
+                    remove_env=PYTEST_REMOVED_ENV,
+                ),
+                capture_output=True,
+                check=False,
+                timeout=600,
+            )
+        except subprocess.TimeoutExpired as exc:
+            raise VerificationError(f"{name}: same-run pytest process timed out") from exc
+        require(
+            receipt_path.is_file(),
+            f"{name}: same-run pytest receipt is missing "
+            f"(process={completed.returncode}, "
+            f"stdout={completed.stdout.decode('utf-8', errors='replace')!r}, "
+            f"stderr={completed.stderr.decode('utf-8', errors='replace')!r})",
+        )
+        receipt = load_json(receipt_path, anchor=temporary)
+        require(isinstance(receipt, dict), f"{name}: same-run pytest receipt is malformed")
+        require_exact_keys(
+            receipt,
+            {
+                "schema_version",
+                "suite_name",
+                "nonce",
+                "pid",
+                "parent_pid",
+                "working_directory",
+                "targets",
+                "explicit_pytest_plugins",
+                "admitted_repo_import_roots",
+                "pytest_version",
+                "pytest_exit_status",
+                "runner_lock_sha256",
+                "python_flags",
+                "startup_sys_path",
+                "locked_import_origin_files",
+                "pre_test_loaded_module_files",
+                "final_sys_path",
+                "pytest_rootdir",
+                "pytest_inifile",
+                "plugin_inventory",
+                "collected_nodeids",
+                "started_nodeids",
+                "finished_nodeids",
+                "ordinary_reports",
+                "subtest_reports",
+                "collection_errors",
+                "internal_errors",
+                "deselected_nodeids",
+                "warning_count",
+                "captured_stdout_sha256",
+                "captured_stderr_sha256",
+                "loaded_module_files",
+                "pycache_prefix_empty_after_run",
+            },
+            label=f"{name} same-run pytest receipt",
+        )
+        require(
+            receipt.get("schema_version")
+            == "project_coherence.gate5_same_run_pytest_receipt.v0.1"
+            and receipt.get("suite_name") == name
+            and receipt.get("nonce") == nonce
+            and type(receipt.get("pid")) is int
+            and receipt["pid"] != os.getpid()
+            and receipt.get("parent_pid") == os.getpid()
+            and receipt.get("working_directory") == str(cwd.resolve())
+            and receipt.get("targets") == targets
+            and receipt.get("explicit_pytest_plugins") == plugins
+            and receipt.get("admitted_repo_import_roots")
+            == [str(path.resolve()) for path in repo_import_roots]
+            and receipt.get("pytest_version") == lock["pytest_version"]
+            and receipt.get("runner_lock_sha256") == lock_sha256,
+            f"{name}: receipt identity differs from the launched process",
+        )
+        require(
+            receipt.get("python_flags")
+            == {
+                "isolated": 1,
+                "no_site": 1,
+                "no_user_site": 1,
+                "safe_path": True,
+                "ignore_environment": 1,
+                "dont_write_bytecode": 1,
+            },
+            f"{name}: child Python startup was not -I -S -B",
+        )
+        require(
+            completed.returncode == 0
+            and receipt.get("pytest_exit_status") == 0,
+            f"{name}: same-run pytest failed (process={completed.returncode}, "
+            f"pytest={receipt.get('pytest_exit_status')}, "
+            f"stdout={completed.stdout.decode('utf-8', errors='replace')!r}, "
+            f"stderr={completed.stderr.decode('utf-8', errors='replace')!r})",
+        )
+        require(
+            completed.stdout == b"" and completed.stderr == b"",
+            f"{name}: runner emitted unreceipted process output",
+        )
+        require(
+            receipt.get("pycache_prefix_empty_after_run") is True
+            and not any(pycache_prefix.iterdir()),
+            f"{name}: fresh bytecode cache prefix was populated",
+        )
+        collected = receipt.get("collected_nodeids")
+        started = receipt.get("started_nodeids")
+        finished = receipt.get("finished_nodeids")
+        require(
+            isinstance(collected, list)
+            and collected == started == finished,
+            f"{name}: collection/start/finish node-ID sequences differ",
+        )
+        require(
+            len(collected) == suite["expected_tests"],
+            f"{name}: executed {len(collected)} tests, expected {suite['expected_tests']}",
+        )
+        executed_digest = test_id_digest(collected)
+        require(
+            executed_digest == suite["expected_test_ids_sha256"],
+            f"{name}: same-run executed pytest node-ID set drifted",
+        )
+        require(
+            receipt.get("collection_errors") == []
+            and receipt.get("internal_errors") == []
+            and receipt.get("deselected_nodeids") == [],
+            f"{name}: collection, internal, or deselection events occurred",
+        )
+        ordinary = receipt.get("ordinary_reports")
+        require(isinstance(ordinary, list), f"{name}: ordinary outcome ledger is missing")
+        phases: dict[str, list[dict[str, Any]]] = {nodeid: [] for nodeid in collected}
+        for index, report in enumerate(ordinary):
+            require(isinstance(report, dict), f"{name}: ordinary report {index} is malformed")
+            require_exact_keys(
+                report,
+                {"nodeid", "when", "outcome", "wasxfail"},
+                label=f"{name} ordinary report {index}",
+            )
+            require(report.get("nodeid") in phases, f"{name}: report names an unexecuted test")
+            phases[report["nodeid"]].append(report)
+        for nodeid in collected:
+            reports = phases[nodeid]
+            require(
+                [report["when"] for report in reports] == ["setup", "call", "teardown"]
+                and all(report["outcome"] == "passed" for report in reports)
+                and all(report["wasxfail"] is False for report in reports),
+                f"{name}: {nodeid} lacks an exact setup/call/teardown all-pass outcome",
+            )
+        subtests = receipt.get("subtest_reports")
+        require(isinstance(subtests, list), f"{name}: subtest outcome ledger is missing")
+        require(
+            len(subtests) == suite["expected_subtests"],
+            f"{name}: observed {len(subtests)} subtests, expected {suite['expected_subtests']}",
+        )
+        for index, report in enumerate(subtests):
+            require(isinstance(report, dict), f"{name}: subtest report {index} is malformed")
+            require_exact_keys(
+                report,
+                {"nodeid", "when", "outcome", "wasxfail", "context"},
+                label=f"{name} subtest report {index}",
+            )
+            require(
+                report.get("nodeid") in phases
+                and report.get("when") == "call"
+                and report.get("outcome") == "passed"
+                and report.get("wasxfail") is False,
+                f"{name}: a subtest was not an exact same-run PASS",
+            )
+        rootdir = receipt.get("pytest_rootdir")
+        require(isinstance(rootdir, str), f"{name}: pytest rootdir is missing")
+        try:
+            Path(rootdir).resolve().relative_to(ROOT.resolve())
+        except ValueError as exc:
+            raise VerificationError(f"{name}: pytest rootdir escaped the repository") from exc
+        inifile = receipt.get("pytest_inifile")
+        if inifile is not None:
+            require(isinstance(inifile, str), f"{name}: pytest inifile is malformed")
+            try:
+                Path(inifile).resolve().relative_to(ROOT.resolve())
+            except ValueError as exc:
+                raise VerificationError(f"{name}: pytest inifile escaped the repository") from exc
+        inventory = receipt.get("plugin_inventory")
+        require(isinstance(inventory, list) and inventory, f"{name}: plugin inventory is missing")
+        for index, plugin_record in enumerate(inventory):
+            require(isinstance(plugin_record, dict), f"{name}: plugin record {index} is malformed")
+            require_exact_keys(
+                plugin_record,
+                {"name", "implementation"},
+                label=f"{name} plugin record {index}",
+            )
+        require(
+            any(
+                record["implementation"] == "__main__.SameRunReceiptPlugin"
+                for record in inventory
+            ),
+            f"{name}: same-run receipt plugin was not registered",
+        )
+        for explicit_plugin in plugins:
+            require(
+                any(record["implementation"] == explicit_plugin for record in inventory),
+                f"{name}: explicit plugin {explicit_plugin!r} was not registered",
+            )
+        expected_startup_sys_path, expected_final_sys_path = _expected_runner_sys_paths(
+            lock,
+            working_directory=cwd,
+            repo_import_roots=repo_import_roots,
+        )
+        require(
+            receipt.get("startup_sys_path") == expected_startup_sys_path
+            and receipt.get("final_sys_path") == expected_final_sys_path,
+            f"{name}: runner sys.path differs from the exact -I -S admission surface",
+        )
+        locked_import_origin_files = _validate_loaded_module_records(
+            name=f"{name} locked import origin",
+            records=receipt.get("locked_import_origin_files"),
+            lock=lock,
+            admitted_artifact_paths=admitted_artifact_paths,
+            pre_test=True,
+        )
+        expected_origin_modules = ["pytest"]
+        for explicit_plugin in plugins:
+            top_level = explicit_plugin.split(".", 1)[0]
+            if top_level not in expected_origin_modules:
+                expected_origin_modules.append(top_level)
+            if explicit_plugin not in expected_origin_modules:
+                expected_origin_modules.append(explicit_plugin)
+        require(
+            [record["module_names"] for record in locked_import_origin_files]
+            == [[module] for module in expected_origin_modules],
+            f"{name}: pytest/plugin import-origin preflight differs from the locked modules",
+        )
+        pre_test_loaded_files = _validate_loaded_module_records(
+            name=f"{name} pre-test",
+            records=receipt.get("pre_test_loaded_module_files"),
+            lock=lock,
+            admitted_artifact_paths=admitted_artifact_paths,
+            pre_test=True,
+        )
+        loaded_files = _validate_loaded_module_records(
+            name=name,
+            records=receipt.get("loaded_module_files"),
+            lock=lock,
+            admitted_artifact_paths=admitted_artifact_paths,
+            pre_test=False,
+        )
+        for field in ("captured_stdout_sha256", "captured_stderr_sha256"):
+            require(
+                isinstance(receipt.get(field), str)
+                and SHA256_UPPER_RE.fullmatch(receipt[field]),
+                f"{name}: captured transcript digest is malformed",
+            )
+        require(
+            type(receipt.get("warning_count")) is int and receipt["warning_count"] >= 0,
+            f"{name}: warning count is malformed",
+        )
+        return {
+            "name": name,
+            "tests": len(collected),
+            "subtests": len(subtests),
+            "executed_node_ids_sha256": executed_digest,
+            "ordinary_outcomes_sha256": _canonical_json_digest(ordinary),
+            "subtest_outcomes_sha256": _canonical_json_digest(subtests),
+            "locked_import_origins_sha256": _canonical_json_digest(
+                locked_import_origin_files
+            ),
+            "pre_test_loaded_code_sha256": _canonical_json_digest(
+                pre_test_loaded_files
+            ),
+            "loaded_code_sha256": _canonical_json_digest(loaded_files),
+            "warnings": receipt["warning_count"],
+            "collected_nodeids": collected,
+        }
+
+
+def verify_test_suites(
+    manifest: dict[str, Any], lock: dict[str, Any]
+) -> list[dict[str, Any]]:
     suites = manifest.get("test_suites")
     require(isinstance(suites, list), "manifest test_suites is not a list")
     by_name = {
@@ -3291,7 +5377,12 @@ def verify_test_suites(manifest: dict[str, Any]) -> list[tuple[str, int, int]]:
         for suite in suites
         if isinstance(suite, dict) and isinstance(suite.get("name"), str)
     }
-    results: list[tuple[str, int, int]] = []
+    admitted_artifact_paths = {
+        record["path"]
+        for record in manifest.get("artifacts", [])
+        if isinstance(record, dict) and isinstance(record.get("path"), str)
+    }
+    results: list[dict[str, Any]] = []
     for name, required in REQUIRED_TEST_SUITES.items():
         require(
             isinstance(required["expected_tests"], int)
@@ -3304,6 +5395,7 @@ def verify_test_suites(manifest: dict[str, Any]) -> list[tuple[str, int, int]]:
             "working_directory",
             "targets",
             "pytest_plugins",
+            "repo_import_roots",
             "expected_tests",
             "expected_subtests",
             "expected_test_ids_sha256",
@@ -3316,106 +5408,93 @@ def verify_test_suites(manifest: dict[str, Any]) -> list[tuple[str, int, int]]:
             suite.get("test_id_canonicalization") == TEST_ID_CANONICALIZATION,
             f"{name}: test-ID canonicalization drifted",
         )
-        if suite["working_directory"] == ".":
-            cwd = ROOT
-        else:
-            cwd_raw = canonical_repo_path(
-                suite["working_directory"], label=f"{name} working directory"
-            )
-            cwd = ROOT / cwd_raw
-        require(cwd.is_dir(), f"{name}: working directory is missing")
-        targets = suite["targets"]
-        require(
-            isinstance(targets, list)
-            and targets
-            and all(isinstance(target, str) and target for target in targets),
-            f"{name}: targets are malformed",
-        )
-        pytest_plugins = suite["pytest_plugins"]
-        require(
-            isinstance(pytest_plugins, list)
-            and all(
-                isinstance(plugin, str) and plugin for plugin in pytest_plugins
-            ),
-            f"{name}: explicit pytest plugin list is malformed",
-        )
         require(
             type(suite["expected_tests"]) is int
             and type(suite["expected_subtests"]) is int,
             f"{name}: expected test counts must be exact integers",
         )
-        ids = collect_pytest_ids(
-            cwd=cwd,
-            targets=targets,
-            pytest_plugins=pytest_plugins,
-        )
-        require(
-            len(ids) == suite["expected_tests"],
-            f"{name}: collected {len(ids)} tests, expected {suite['expected_tests']}",
-        )
-        require(
-            test_id_digest(ids) == suite["expected_test_ids_sha256"],
-            f"{name}: exact pytest node-ID set drifted",
-        )
-        plugin_args = [
-            part for plugin in pytest_plugins for part in ("-p", plugin)
-        ]
-        stdout, stderr = run_command(
-            [
-                sys.executable,
-                "-E",
-                "-P",
-                "-B",
-                "-m",
-                "pytest",
-                "-q",
-                "-p",
-                "no:cacheprovider",
-                *plugin_args,
-                *targets,
-            ],
-            cwd=cwd,
-            timeout=480,
-            extra_env=PYTEST_ISOLATION_ENV,
-            remove_env=PYTEST_REMOVED_ENV,
-        )
-        transcript = stdout + stderr
-        expected = suite["expected_tests"]
-        subtests = suite["expected_subtests"]
-        if subtests:
-            summary = re.compile(
-                rf"(?m)^{expected} passed, {subtests} subtests passed in [0-9.]+s$"
+        results.append(
+            run_pytest_same_process_receipt(
+                name=name,
+                suite=suite,
+                lock=lock,
+                admitted_artifact_paths=admitted_artifact_paths,
             )
-        else:
-            summary = re.compile(rf"(?m)^{expected} passed in [0-9.]+s$")
-        require(
-            summary.search(transcript) is not None,
-            f"{name}: exact all-pass receipt is missing or includes another outcome",
         )
-        results.append((name, expected, subtests))
 
+    harness_ids = next(
+        result["collected_nodeids"]
+        for result in results
+        if result["name"] == "Harness v2 kernel and history"
+    )
     for name, receipt in REQUIRED_SUBSUITE_DIGESTS.items():
-        ids = collect_pytest_ids(
-            cwd=ROOT,
-            targets=receipt["targets"],
-            pytest_plugins=receipt["pytest_plugins"],
-        )
+        target_paths = set(receipt["targets"])
+        ids = [
+            nodeid
+            for nodeid in harness_ids
+            if nodeid.split("::", 1)[0] in target_paths
+        ]
         require(
             len(ids) == receipt["expected_tests"],
-            f"{name}: collected test count drifted",
+            f"{name}: same-run executed subset count drifted",
         )
         require(
             test_id_digest(ids) == receipt["expected_test_ids_sha256"],
-            f"{name}: exact pytest node-ID subset drifted",
+            f"{name}: exact same-run executed pytest node-ID subset drifted",
         )
     return results
+
+
+def capture_integrated_file_observations(
+    manifest_artifacts: dict[str, dict[str, Any]],
+) -> dict[str, FileObservation]:
+    paths = set(manifest_artifacts)
+    gate4 = load_json(GATE4_MANIFEST_PATH)
+    history = load_json(HISTORY_MANIFEST_PATH)
+    require(
+        isinstance(gate4, dict)
+        and isinstance(gate4.get("artifacts"), list)
+        and isinstance(history, dict)
+        and isinstance(history.get("files"), list),
+        "cannot assemble integrated identity-observation surface",
+    )
+    for index, record in enumerate(gate4["artifacts"]):
+        require(isinstance(record, dict), f"Gate 4 identity record {index} is malformed")
+        paths.add(canonical_repo_path(record.get("path"), label=f"Gate 4 identity {index}"))
+    for index, record in enumerate(history["files"]):
+        require(isinstance(record, dict), f"history identity record {index} is malformed")
+        paths.add(canonical_repo_path(record.get("path"), label=f"history identity {index}"))
+    observations: dict[str, FileObservation] = {}
+    for raw_path in sorted(paths):
+        observations[raw_path] = observe_regular_file(
+            ROOT / Path(*PurePosixPath(raw_path).parts), anchor=FILESYSTEM_ANCHOR
+        )
+    return observations
+
+
+def verify_integrated_file_observations_unchanged(
+    before: dict[str, FileObservation],
+) -> None:
+    after = {
+        raw_path: observe_regular_file(
+            ROOT / Path(*PurePosixPath(raw_path).parts), anchor=FILESYSTEM_ANCHOR
+        )
+        for raw_path in sorted(before)
+    }
+    require(
+        after == before,
+        "Gate 5/Gate 4/history file or ancestor identity changed during child execution",
+    )
 
 
 def main() -> int:
     require(MANIFEST_PATH.is_file(), "Gate 5 manifest is missing")
     require(not MANIFEST_PATH.is_symlink(), "Gate 5 manifest may not be a symlink")
     shadow_surface_count = verify_no_executable_shadow_artifacts()
-    initial_manifest_file_sha = sha256_file(MANIFEST_PATH)
+    manifest_observation = observe_regular_file(
+        MANIFEST_PATH, anchor=FILESYSTEM_ANCHOR
+    )
+    initial_manifest_file_sha = manifest_observation.sha256
     manifest = load_json(MANIFEST_PATH)
     require(isinstance(manifest, dict), "Gate 5 manifest root is not an object")
     artifacts = verify_manifest(manifest)
@@ -3427,14 +5506,32 @@ def main() -> int:
     verify_no_status_promotion_text(artifacts)
     verify_model_and_security_bindings()
     verify_dependency_and_container_candidate_receipt()
+    raw_evidence_result = verify_raw_build_and_security_evidence_receipt()
     python_count = verify_python_syntax(artifacts)
-    suite_results = verify_test_suites(manifest)
+    runner_lock = verify_local_test_runner_lock()
+    integrated_observations = capture_integrated_file_observations(artifacts)
+    suite_results = verify_test_suites(manifest, runner_lock)
+    require(
+        verify_local_test_runner_lock() == runner_lock,
+        "local test-runner lock or external runner packages changed during tests",
+    )
+    verify_integrated_file_observations_unchanged(integrated_observations)
+    post_shadow_surface_count = verify_no_executable_shadow_artifacts()
+    require(
+        post_shadow_surface_count == shadow_surface_count,
+        "admitted repository path count changed during executable-shadow postflight",
+    )
 
     # Subprocesses execute bound tests and conftests.  Re-read and rehash the
     # complete current tree before PASS so a test, hook, or concurrent writer
     # cannot leave the repository in a state different from the admitted one.
     post_manifest = load_json(MANIFEST_PATH)
     require(post_manifest == manifest, "Gate 5 manifest changed during verification")
+    require(
+        observe_regular_file(MANIFEST_PATH, anchor=FILESYSTEM_ANCHOR)
+        == manifest_observation,
+        "Gate 5 manifest file or ancestor identity changed during verification",
+    )
     require(
         sha256_file(MANIFEST_PATH) == initial_manifest_file_sha,
         "Gate 5 manifest bytes changed during verification",
@@ -3453,7 +5550,10 @@ def main() -> int:
     print("Project Coherence integrated Gate 5 verification: PASS")
     print(f"  hash-bound Gate 5 artifacts: {len(artifacts)}")
     print(f"  syntax-checked bound Python artifacts: {python_count}")
-    print(f"  executable-shadow paths scanned before tests: {shadow_surface_count}")
+    print(
+        "  executable-shadow paths scanned before and after tests: "
+        f"{shadow_surface_count}"
+    )
     print(
         "  Gate 4 dependency: integrated PASS while still OPEN; "
         f"artifacts={gate4_artifact_count}; manifest_sha256={gate4_manifest_sha}"
@@ -3467,20 +5567,43 @@ def main() -> int:
         f"{history_count} files; {history_bytes} bytes; inventory_sha256={history_digest}"
     )
     print(
-        "  test suites: "
-        + "; ".join(
-            f"{name}={tests}" + (f"+{subtests} subtests" if subtests else "")
-            for name, tests, subtests in suite_results
+        "  test suites: EPHEMERAL LOCAL SAME-RUN VALIDATION / NOT RETAINED / "
+        "NO TRUSTED TIME OR WORM"
+    )
+    for result in suite_results:
+        print(
+            f"    {result['name']}: tests={result['tests']}; "
+            f"subtests={result['subtests']}; "
+            f"executed_nodes={result['executed_node_ids_sha256']}; "
+            f"ordinary_outcomes={result['ordinary_outcomes_sha256']}; "
+            f"subtest_outcomes={result['subtest_outcomes_sha256']}; "
+            f"locked_import_origins={result['locked_import_origins_sha256']}; "
+            f"pre_test_code={result['pre_test_loaded_code_sha256']}; "
+            f"loaded_code={result['loaded_code_sha256']}; "
+            f"warnings={result['warnings']}"
         )
+    print(
+        "  raw build/security evidence: "
+        f"files={raw_evidence_result['retained_files']}; "
+        f"original_spdx_packages={raw_evidence_result['original_spdx_packages']}; "
+        f"direct_spdx_packages={raw_evidence_result['direct_spdx_packages']}; "
+        f"scanner_findings={raw_evidence_result['scanner_findings']}; "
+        f"vendor_open={raw_evidence_result['vendor_confirmed_open']}; "
+        f"scanner_vendor_conflicts={raw_evidence_result['vendor_scanner_conflicts']}"
     )
     print(f"  review criteria: {criterion_count}; required OPEN boundaries: {open_count}")
-    print("  postflight: Gate 5, historical, and transitive Gate 4 bytes rehashed")
+    print(
+        "  postflight: Gate 5, historical, and transitive Gate 4 bytes plus "
+        f"same-run file identities rechecked ({len(integrated_observations)} files)"
+    )
     print(
         "  dependency security: OPEN_SECURITY / HELD (patched candidate "
-        "digest-bound; external build/scan observations are self-reported and raw "
-        "payloads are not repository-retained; pip-audit partial 72/73 with Torch skipped; SBOM "
-        "package scan COMPLETED_WITH_FINDINGS: 0 critical / 0 high / "
-        "3 medium / 4 low; direct filesystem scan INCOMPLETE / PENDING)"
+        "digest-bound; original BuildKit/OCI/SPDX/SLSA and current direct Scout "
+        "report bytes are repository-retained but remain local self-observations; "
+        "pip-audit partial 72/73 with Torch skipped; direct image scan "
+        "COMPLETED_WITH_FINDINGS: 0 critical / 0 high / 3 medium / 4 low; "
+        "Ubuntu currently confirms six vulnerable/deferred records and marks the "
+        "exact dpkg version fixed, leaving one scanner/vendor conflict)"
     )
     print("  experimental execution: NOT_STARTED")
     print("  Gate 5 status: OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN")
