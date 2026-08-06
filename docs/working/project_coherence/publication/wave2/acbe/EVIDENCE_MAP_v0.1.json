@@ -1,0 +1,212 @@
+{
+  "schema_version": "project_coherence.paper5_evidence_map.v0.1",
+  "document_status": "DRAFT / OPEN CAUSAL TRANSFER / RING 4 / NOT LICENSED / HELD",
+  "as_of": "2026-08-05",
+  "base_commit": "143cff40f94cf207a9130d6a7c07975a1fcbf0b9",
+  "evidence_policy": "Source identity, mathematical proof sketches, software controls, and experimental evidence are different evidence types. No map entry may be used outside its explicit supports list.",
+  "entries": [
+    {
+      "id": "EV-P5-001",
+      "evidence_kind": "GOVERNING_CHARTER",
+      "locator": "docs/working/project_coherence/PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md",
+      "sha256": "B87B2E2B4CC4B10C76EE4AA6EA09094572B2A1008E474475E8F642836B83D2BE",
+      "supports": [
+        "Paper 5 working title",
+        "Ring 3 admission requirements",
+        "Gate 5 open/not-started boundary",
+        "requirement that approximate relations have a metric and error budget"
+      ],
+      "does_not_support": [
+        "a frozen paper title",
+        "a completed ACA definition",
+        "an empirical result",
+        "publication authority"
+      ]
+    },
+    {
+      "id": "EV-P5-002",
+      "evidence_kind": "REGISTERED_LEGACY_PRIMARY_SOURCE",
+      "locator": "peer_review/journal_submission/main.tex",
+      "sha256": "E9885F27581626CCF26AC4809F446AB5044BC92C61923B951B7F4686591BAEF8",
+      "supports": [
+        "line 163 states ACBE is only a name for the fixed four-level preorder",
+        "legacy ACBE descent structure is formal",
+        "source explicitly defers empirical validation"
+      ],
+      "does_not_support": [
+        "an expansion of the letters ACBE",
+        "approximate causal abstraction semantics",
+        "empirical cognition, alignment, or safety claims"
+      ]
+    },
+    {
+      "id": "EV-P5-003",
+      "evidence_kind": "SOURCE_IDENTITY_AND_LOCATION_RECORD",
+      "locator": "docs/working/project_coherence/gate1/noetic_topos2/SOURCE_VERIFICATION_v0.1.json",
+      "sha256": "17DBE1FADB3D80D435B4D282C53849D392ECB622232E8664A74429BD1753F55C",
+      "supports": [
+        "legacy TeX raw hash",
+        "ACBE reflexivity source location",
+        "RPM and coverage-reduction source locations"
+      ],
+      "does_not_support": [
+        "agreement with every theorem",
+        "external peer review",
+        "causal validation"
+      ]
+    },
+    {
+      "id": "EV-P5-004",
+      "evidence_kind": "INTERNAL_MATHEMATICAL_RED_TEAM",
+      "locator": "docs/working/project_coherence/MATHEMATICAL_RED_TEAM_REPORT_v0.1.md",
+      "sha256": "03AEC81BF9F6AA12376C2DF78E6CC410EB636589DA37D2E2534460132BE720C6",
+      "supports": [
+        "legacy ACBE reflexivity forces an identity-containing maximal sieve",
+        "legacy ACBE/RPM provenance is not retained by bare conservative topology"
+      ],
+      "does_not_support": [
+        "empirical meaning for successor marks",
+        "a causal interpretation of covers",
+        "external acceptance"
+      ]
+    },
+    {
+      "id": "EV-P5-005",
+      "evidence_kind": "SUCCESSOR_FORMAL_SPECIFICATION",
+      "locator": "docs/working/project_coherence/gate1/noetic_topos2/NOETIC_TOPOS_2_SPEC_v0.1.md",
+      "sha256": "156A5D8C5320F36E81E3B46473BA8A038B35672DCD28839A404D96A3DB1A763A",
+      "supports": [
+        "ACBE_NT2 is a formal coordinate-partition mark",
+        "marked cover provenance is externally recorded",
+        "the finite construction withholds empirical interpretation"
+      ],
+      "does_not_support": [
+        "causal direction",
+        "intervention semantics",
+        "ACA validity"
+      ]
+    },
+    {
+      "id": "EV-P5-006",
+      "evidence_kind": "WAVE1_DEPENDENCY_BOUNDARY",
+      "locator": "docs/working/project_coherence/publication/wave1/category_theory/PAPER_4_NOETIC_MARKOV_SHEAVES_FOR_CONTEXTUAL_AI_ASSESSMENT_DRAFT_v0.1.md",
+      "sha256": "19FEB7E0B923EF5FE8A34435E2F65AF4887ABA0B1375A2DD847F627936E67967",
+      "supports": [
+        "Paper 4 reserves causal abstraction for Paper 5",
+        "Markov composition, gluing, and low residual do not establish causal direction",
+        "Paper 4 provides a stochastic evidence-organization interface only"
+      ],
+      "does_not_support": [
+        "an intervention model",
+        "causal identification",
+        "Paper 5 empirical evidence"
+      ]
+    },
+    {
+      "id": "EV-P5-007",
+      "evidence_kind": "WAVE1_EXACT_CLAIM_BOUNDARY",
+      "locator": "docs/working/project_coherence/publication/wave1/category_theory/THEOREM_AND_CLAIM_MATRIX_v0.1.json",
+      "sha256": "E1A795B0C1A3BB3CBDC95CC9C6D59BEF8281075F79C532811B2AF85892D51034",
+      "supports": [
+        "PUB-P4-008 exact causal nonclaim",
+        "legacy ACBE/RPM empirical nonclaims"
+      ],
+      "does_not_support": [
+        "Paper 5 theorem acceptance",
+        "causal transfer"
+      ]
+    },
+    {
+      "id": "EV-P5-008",
+      "evidence_kind": "HARNESS_CONTROL_SPECIFICATION",
+      "locator": "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md",
+      "sha256": "F2803B44FF7236762D491A3B249FF13C4CB8D9F336CE19F223F9F716E9A70D2D",
+      "supports": [
+        "per-claim preregistration fields",
+        "protected amendment and outcome-access sequence",
+        "Evidence Packet v2 structural and governance boundaries",
+        "reported criteria are not truth",
+        "no current authenticated scientific path"
+      ],
+      "does_not_support": [
+        "an executed ACA experiment",
+        "authenticated execution",
+        "scientific eligibility",
+        "product or disclosure authority"
+      ]
+    },
+    {
+      "id": "EV-P5-009",
+      "evidence_kind": "PRIMARY_LITERATURE_SET",
+      "locator": "CITATION_LEDGER_v0.1.json",
+      "citation_refs": [
+        "CIT-RUBENSTEIN-2017",
+        "CIT-BECKERS-HALPERN-2019",
+        "CIT-BECKERS-EBERHARDT-HALPERN-2020",
+        "CIT-RISCHEL-WEICHWALD-2021",
+        "CIT-GEIGER-ETAL-2021",
+        "CIT-MASSIDDA-ETAL-2023"
+      ],
+      "supports": [
+        "causal abstraction is an established technical research area",
+        "state and intervention maps are load-bearing",
+        "approximation requires a declared discrepancy",
+        "interventional comparison can be tested in neural networks",
+        "compositional error is an established desideratum"
+      ],
+      "does_not_support": [
+        "novelty of the Paper 5 specialization",
+        "any CAS/TKS empirical result",
+        "a valid legacy-ACBE reinterpretation"
+      ]
+    },
+    {
+      "id": "EV-P5-010",
+      "evidence_kind": "INTERNAL_PROOF_SKETCHES",
+      "locator": "PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md#6-mathematical-results-and-proof-sketches",
+      "supports": [
+        "candidate zero-defect equivalence",
+        "candidate total-variation composition bound",
+        "candidate bounded-estimand transfer bound",
+        "candidate intervention-collision lower bound"
+      ],
+      "does_not_support": [
+        "machine-checked proof",
+        "independent mathematical acceptance",
+        "empirical validity"
+      ]
+    },
+    {
+      "id": "EV-P5-011",
+      "evidence_kind": "EXPLICIT_FINITE_COUNTEREXAMPLES",
+      "locator": "PAPER_5_ACBE_AS_APPROXIMATE_CAUSAL_ABSTRACTION_DRAFT_v0.1.md#7-counterexamples-and-non-identifiability",
+      "supports": [
+        "observational equivalence can hide different intervention laws",
+        "constant maps can trivialize defect",
+        "weighted mean defect can hide worst-case failure"
+      ],
+      "does_not_support": [
+        "failure of every possible ACA candidate",
+        "empirical frequency of these failure modes"
+      ]
+    },
+    {
+      "id": "EV-P5-012",
+      "evidence_kind": "ABSENCE_OF_QUALIFYING_RESULT_IN_SCOPED_REPOSITORY_STATE",
+      "locator": "base commit 143cff40f94cf207a9130d6a7c07975a1fcbf0b9 and this delta package",
+      "supports": [
+        "no completed ACA preregistration is cited",
+        "no joined-run ACA Evidence Packet v2 is cited",
+        "no authenticated ACA audit or held-out replication is cited",
+        "causal transfer remains OPEN"
+      ],
+      "does_not_support": [
+        "a universal assertion that no external experiment exists anywhere",
+        "permission to infer missing evidence",
+        "a permanent negative conclusion"
+      ]
+    }
+  ],
+  "entry_count": 12,
+  "current_evidence_ceiling": "Definitions, bounded proof sketches, explicit counterexamples, source identity, and a proposed protocol only. No empirical conclusion."
+}
