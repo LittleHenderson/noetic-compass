@@ -122,10 +122,12 @@
       "source_refs": ["G4-PCBA-004", "TERM-FISHER-RAO", "TERM-PROJECTOR-PROFILE"],
       "evidence_refs": [
         "src/cas_pcba_v8/geometry.py",
-        "tests/cas_pcba_v8/test_types_and_geometry.py"
+        "tests/cas_pcba_v8/test_types_and_geometry.py",
+        "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md"
       ],
       "allowed_wording": "The candidate implements two separately named numerical geometry profiles.",
-      "prohibited_inference": "A projector profile is the canonical PCBA address or a validated latent cognitive subspace."
+      "prohibited_inference": "A projector profile is the canonical PCBA address or a validated latent cognitive subspace.",
+      "theorem_authority": "Formal Mathematics Paper 3 at commit 3c8491db6f5559cf090909d9de0efa03d924f53f and source-draft SHA-256 679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4; this engineering record is a read-only dependency summary."
     },
     {
       "id": "PCBA-SF-001",
@@ -244,7 +246,7 @@
     {
       "id": "OHM-EA-004",
       "assertion_class": "ENGINEERING_ASSERTION",
-      "statement": "Q4 bands use exact unrounded values and half-open boundaries at 2.5, 5, and 7.5.",
+      "statement": "Q4 bands classify exact pre-clipping Q10 values using [0,2.5), [2.5,5), [5,7.5), and [7.5,infinity); the displayed q10 is clipped at 10 and overload_ratio is retained separately.",
       "status": "SUPPORTED_BY_BOUNDED_SOFTWARE_AND_REVIEW_RECEIPT",
       "source_refs": ["G4-OHM-006", "OHM-CONFLICT-Q4-BOUNDARIES"],
       "evidence_refs": [
@@ -270,7 +272,7 @@
     {
       "id": "OHM-EA-006",
       "assertion_class": "ENGINEERING_ASSERTION",
-      "statement": "Residual diagnosis is restricted to matching active, reviewed, nonstale, held-out instrumented evidence with uncertainty and remains explicitly non-identifying.",
+      "statement": "Residual diagnosis is restricted to matching active, reviewed, replay-time-current held-out instrumented evidence with uncertainty and remains explicitly non-identifying; replay-time status uses caller-supplied replay_as_of and is not authenticated-current.",
       "status": "SUPPORTED_STRUCTURAL_SOFTWARE_ONLY",
       "source_refs": ["G4-OHM-005", "OHM-CONFLICT-RESIDUAL-IDENTIFICATION"],
       "evidence_refs": [
@@ -283,7 +285,7 @@
     {
       "id": "OHM-EA-007",
       "assertion_class": "ENGINEERING_ASSERTION",
-      "statement": "Structural research-packet completeness and authenticated Evidence Packet eligibility are separate, and authenticated eligibility is false in the current candidate.",
+      "statement": "Structural research-packet completeness and authenticated Evidence Packet eligibility are separate; replay-time-current uses caller-supplied replay_as_of, while authenticated-current eligibility is false in the current candidate.",
       "status": "SUPPORTED_BY_BOUNDED_SOFTWARE / AUTHORITY_OPEN",
       "source_refs": ["G4-OHM-009", "G4-OHM-013", "G4-OHM-014"],
       "evidence_refs": [
@@ -309,29 +311,33 @@
     },
     {
       "id": "THM-PROJECTOR-GRAM-KERNEL",
-      "assertion_class": "INHERITED_THEOREM_DEPENDENCY",
-      "statement": "For common finite-rank orthogonal projectors in one Hilbert space, normalized Hilbert-Schmidt overlap is a positive-semidefinite kernel in [0,1].",
+      "assertion_class": "READ_ONLY_INHERITED_THEOREM_DEPENDENCY",
+      "statement": "For common-rank d > 0 finite-rank orthogonal projectors in one Hilbert space, normalized Hilbert-Schmidt overlap tr(P_i P_j)/d is a positive-semidefinite kernel in [0,1].",
       "status": "IN_REVIEW / STANDARD_RESULT_CITED / Ring 4",
-      "source_refs": ["THM-PROJECTOR-GRAM-KERNEL@0.1"],
+      "source_refs": ["PUB-P3-PROP-001@3c8491db6f5559cf090909d9de0efa03d924f53f"],
       "evidence_refs": [
+        "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md",
         "docs/working/project_coherence/THEOREM_LEDGER_v0.1.json",
         "docs/working/project_coherence/MATHEMATICAL_RED_TEAM_REPORT_v0.1.md"
       ],
       "allowed_wording": "The registered standard kernel result is an optional geometry dependency under its stated assumptions.",
-      "prohibited_inference": "Strict positive definiteness, latent cognitive validity, or capacity."
+      "prohibited_inference": "Strict positive definiteness, a rank-zero normalized kernel, latent cognitive validity, or capacity.",
+      "theorem_authority": "Formal Mathematics Paper 3 is sole authority: commit 3c8491db6f5559cf090909d9de0efa03d924f53f; source-draft SHA-256 679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4."
     },
     {
       "id": "THM-PROJECTOR-CAPACITY-CAS-TRANSFER",
-      "assertion_class": "INHERITED_CONJECTURE",
+      "assertion_class": "READ_ONLY_INHERITED_CONJECTURE_DEPENDENCY",
       "statement": "A proposed CAS projector-capacity specialization would require a CAS-specific representation satisfying every source hypothesis, including the omitted isometry/intertwining identity.",
       "status": "PROOF_GAP / IN_REVIEW / Ring 4",
-      "source_refs": ["THM-PROJECTOR-CAPACITY-CAS-TRANSFER@0.1"],
+      "source_refs": ["PUB-P3-MSC-001@3c8491db6f5559cf090909d9de0efa03d924f53f"],
       "evidence_refs": [
+        "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md",
         "docs/working/project_coherence/THEOREM_LEDGER_v0.1.json",
         "docs/working/project_coherence/MATHEMATICAL_RED_TEAM_REPORT_v0.1.md"
       ],
       "allowed_wording": "The capacity transfer is an open conjectural dependency.",
-      "prohibited_inference": "Any engineering or empirical capacity bound is established."
+      "prohibited_inference": "Any engineering or empirical capacity bound is established.",
+      "theorem_authority": "Formal Mathematics Paper 3 is sole authority: commit 3c8491db6f5559cf090909d9de0efa03d924f53f; source-draft SHA-256 679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4. The CAS transfer remains PROOF_GAP / IN_REVIEW / Ring 4."
     },
     {
       "id": "CLM-CAS-OHM-PHYSICAL-TELEMETRY",
@@ -343,8 +349,8 @@
         "docs/working/project_coherence/CLAIM_LEDGER_v0.1.json",
         "docs/working/project_coherence/gate4/CAS_OHM_V1_SOURCE_AUDIT_AND_SPEC_v0.1.md"
       ],
-      "allowed_wording": "Current uninstrumented quantities are design values, scores, proxies, or model-derived values as typed.",
-      "prohibited_inference": "Physical voltage, current, resistance, charge, flux, power, or telemetry."
+      "allowed_wording": "Current uninstrumented quantities are design values, scores, proxies, or model-derived values as typed; physical SI quantities are outside CAS-Ohm UnitKind, and generic PCBA Unit.VOLT does not license telemetry.",
+      "prohibited_inference": "Physical voltage, current, resistance, charge, flux, power, telemetry, or a physical profile inferred from a generic unit tag."
     },
     {
       "id": "CLM-CAS-OHM-LOCAL-RESPONSE",

@@ -117,8 +117,8 @@
       "source_class": "PEER_REVIEWED_METHODS_PAPER",
       "doi": "10.1145/351240.351266",
       "url": "https://doi.org/10.1145/351240.351266",
-      "used_for": ["Property-based generation and shrinking as a future DRC/testing method"],
-      "not_evidence_of": "Existing property/fuzz coverage or exhaustive correctness."
+      "used_for": ["Property-oriented randomized test generation as a future DRC/testing method"],
+      "not_evidence_of": "Mutation testing, existing property/fuzz coverage, exhaustive correctness, or an unqualified modern shrinking implementation."
     },
     {
       "id": "E10",

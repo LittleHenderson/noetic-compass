@@ -166,6 +166,15 @@ tolerance, and validation residuals. The registered projector Gram-kernel result
 does not establish latent cognitive capacity; the stronger CAS capacity transfer
 retains a proof gap.
 
+Formal Mathematics Paper 3 at commit
+`3c8491db6f5559cf090909d9de0efa03d924f53f` (source-draft SHA-256
+`679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4`)
+is the sole mathematical authority for the projector theorem statements. The
+engineering records are read-only dependency summaries. In particular, the
+normalized Gram kernel requires common rank `d > 0`, and the CAS capacity
+transfer remains `PROOF_GAP / IN_REVIEW / Ring 4` without the required isometry
+and adjoint-intertwining certificate.
+
 ### 4.3 Board structure
 
 A board contains immutable, identity-bearing records for:
@@ -397,8 +406,10 @@ and audit hypotheses without being an ontology of cognition.
 ### Internal validity
 
 The DRC and simulator have bounded regression suites, not a formal proof of all
-paths. Property/fuzz testing, independent implementations, and mutation testing
-remain open. The full CCDL parser does not exist.
+paths. Property-based/random generation [E9], fuzz testing, independent
+implementations, and a separately sourced mutation-testing campaign remain
+open. E9 is not authority for mutation testing. The full CCDL parser does not
+exist.
 
 ### External validity
 
@@ -434,8 +445,9 @@ The next defensible steps are:
    syntax;
 3. define separate capacitor, PLL, memory, power, feedback, stochastic, and
    memristive state/time profiles;
-4. create property-based and mutation test campaigns over DRC and simulation
-   invariants [E9];
+4. create a property-based/random-generation campaign over DRC and simulation
+   invariants [E9], and separately specify and source any mutation-testing
+   campaign;
 5. independently reproduce the exact source and test bundle in a hermetic
    toolchain;
 6. preregister calibration and held-out validation through the Gate 5 control

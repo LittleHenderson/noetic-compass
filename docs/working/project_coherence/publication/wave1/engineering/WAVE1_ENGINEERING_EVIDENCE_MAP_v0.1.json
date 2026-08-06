@@ -411,6 +411,18 @@
       "limit": "No automatic CAS semantic theorem; capacity transfer retains a proof gap."
     },
     {
+      "id": "EVC-FORMAL-PAPER3-SOLE-THEOREM-AUTHORITY",
+      "supports_matrix_entries": ["PCBA-EA-008", "THM-PROJECTOR-GRAM-KERNEL", "THM-PROJECTOR-CAPACITY-CAS-TRANSFER"],
+      "frozen_source_snapshot": {
+        "commit": "3c8491db6f5559cf090909d9de0efa03d924f53f",
+        "path": "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md",
+        "bytes": 17908,
+        "sha256": "679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4"
+      },
+      "strength": "SOLE_MATHEMATICAL_AUTHORITY_FOR_PROJECTOR_PUBLICATION_STATEMENTS",
+      "limit": "The engineering entries are read-only dependency summaries. Common rank d > 0 is required for normalized overlap, and the CAS capacity transfer remains PROOF_GAP / IN_REVIEW / Ring 4."
+    },
+    {
       "id": "EVC-GATE5-DOWNSTREAM",
       "supports_matrix_entries": ["PCBA-OPEN-003", "CLM-CAS-OHM-LOCAL-RESPONSE", "CLM-CAS-OHM-EFFECTIVE-RESISTANCE", "CLM-CAS-OHM-GAIN-COMPOSITION", "CLM-CAS-OHM-REDUNDANCY", "CLM-CAS-OHM-RESIDUAL-LOCALIZATION", "MEM-OPEN-001"],
       "primary_paths": ["docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md"],

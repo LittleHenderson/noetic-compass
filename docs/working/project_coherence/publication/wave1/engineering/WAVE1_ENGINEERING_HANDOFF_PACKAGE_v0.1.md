@@ -97,6 +97,14 @@ The drafts support the following narrow statements:
 - The CAS-Ohm sources retain eight exact conflicts or under-specifications.
 - The Gate 4 receipt is bounded software evidence, not an experiment.
 
+Formal Mathematics Paper 3 is the sole mathematical authority for the
+projector Gram-kernel and capacity-transfer statements. Its frozen lane source
+is commit `3c8491db6f5559cf090909d9de0efa03d924f53f`, SHA-256
+`679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4`.
+The engineering records are read-only summaries: normalized overlap requires
+common rank `d > 0`, and the capacity transfer remains
+`PROOF_GAP / IN_REVIEW / Ring 4`.
+
 ## 5. Claims the lead must not promote
 
 The following remain prohibited or open:

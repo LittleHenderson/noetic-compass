@@ -23,8 +23,8 @@ Its preferred description is an **experimental response model and calibration
 proposal**. It is not physical Ohm's law, an electrical implementation, a measure
 of attention, or a causal law. The current candidate separates design scores,
 normalized regions, steering alpha, activation projections, calibrated effective
-resistance, physical SI quantities, measurement kinds, uncertainty, and evidence
-lineage. An effective resistance has model-specific units of alpha per activation
+resistance, measurement kinds, uncertainty, and evidence lineage while keeping
+physical SI quantities outside the current ontology. An effective resistance has model-specific units of alpha per activation
 and may support prediction only after being fit on calibration data and evaluated
 on a disjoint held-out split. Defining resistance as alpha divided by response on
 the same samples and then reporting the same identity as confirmation is rejected
@@ -138,12 +138,15 @@ The current unit ontology includes distinct types for:
 - Q10 and Q100 scores;
 - normalized fractions;
 - effective resistance in alpha per activation;
-- dimensionless gain and ratios; and
-- any separately declared physical SI quantity.
+- dimensionless gain and ratios.
 
 Physical `volt`, `ampere`, and `ohm` labels are forbidden aliases for model
-quantities. Dimensional consistency is necessary for a model relation [E12]. It
-is not sufficient for empirical or causal validity.
+quantities. Physical SI quantities are outside the current CAS-Ohm `UnitKind`
+ontology and would require a separate, explicitly typed and instrumented
+physical profile. The generic CAS PCBA vocabulary member `Unit.VOLT` does not
+license physical CAS telemetry or create a CAS-Ohm unit. Dimensional consistency
+is necessary for a model relation [E12]. It is not sufficient for empirical or
+causal validity.
 
 ## 4. Profile-specific response model
 
@@ -229,24 +232,29 @@ insensitivity, or measurement failure. ASOM is therefore retained as a mnemonic,
 not an identity theorem.
 
 No diagnostic is emitted from a cutoff, saturated, unstable, uncalibrated,
-stale, wrong-model, or semantically unassessed profile.
+replay-time-stale, wrong-model, or semantically unassessed profile. Replay-time
+status is evaluated against the caller-supplied `replay_as_of`; it is not an
+authenticated live-freshness assertion.
 
 ## 7. Exact normalization and Q4
 
-For a profile-specific full-scale activation `I_FS`, normalized Q10 flow is
-computed from exact pre-rounding values. The four bands are:
+For a profile-specific full-scale activation `I_FS`, the classifier uses the
+exact pre-clipping identity `exact_q10 = 10 * raw / I_FS`. The displayed `q10`
+is clipped at 10 and `overload_ratio = raw / I_FS` is retained separately. The
+four exact-input bands are:
 
 ```text
 [0, 2.5)   -> Q1
 [2.5, 5)   -> Q2
 [5, 7.5)   -> Q3
-[7.5, 10]  -> Q4
+[7.5, infinity) -> Q4
 ```
 
 Display rounding cannot move a value across a band boundary. Trend tags require
 an explicit axis, interval, minimum effect, and uncertainty rule. The choice of
 `I_FS` is part of the calibration profile; the three inherited methods are not
-interchangeable.
+interchangeable. For example, `raw / I_FS = 1.2` gives `exact_q10 = 12`,
+displayed `q10 = 10`, `overload_ratio = 1.2`, and band `Q4`.
 
 ## 8. Structural network operations
 
@@ -307,14 +315,16 @@ Structural research completeness requires, among other fields:
 - raw artifact bytes and resolvable references;
 - relevant controls;
 - uncertainty and per-field lineage;
-- a nonstale reviewed calibration profile; and
+- a reviewed calibration profile that is replay-time-current at the
+  caller-supplied `replay_as_of`; and
 - at least one genuinely instrumented field.
 
 Score-only, zero-instrumentation, mixed-scale, unresolved, stale, unknown-profile,
 or tampered records fail closed.
 
-Authenticated Evidence Packet eligibility is a different axis and is always
-false in the current CAS-Ohm candidate. It requires an independently admitted
+Replay-time-current does not mean authenticated-current. Authenticated Evidence
+Packet eligibility is a different axis and is always false in the current
+CAS-Ohm candidate. It requires an independently admitted
 authority manifest, protected key lifecycle and revocation, trusted current-time
 receipt, materialized model/code/runtime dependencies, authenticated instrument
 evidence, and an admitted packet policy. Self-hashes and deterministic fixture
