@@ -376,6 +376,36 @@ def verify_hardened_gate5_snapshot() -> int:
     artifact_count = gate5_manifest.get("artifact_count")
     if artifact_count != current["gate5_manifest"].get("artifact_count"):
         fail("hardened Gate 5 artifact count mismatch")
+    replay = data.get("final_integrated_replay")
+    if not isinstance(replay, dict) or replay.get("commit") != (
+        "0f5e46c1832124813a080b85ed4ec01ad317ff2f"
+    ):
+        fail("final integrated replay is not bound to the clean candidate")
+    if replay.get("execution_order") != [
+        "GATE5",
+        "PUBLICATION_PROGRAM",
+        "GATE1",
+        "GATE4",
+    ]:
+        fail("final integrated replay order does not preserve Gate 5 isolation")
+    results = replay.get("results")
+    if not isinstance(results, dict) or set(results) != {
+        "gate5",
+        "publication_program",
+        "gate1",
+        "gate4",
+    }:
+        fail("final integrated replay results are incomplete")
+    if any(result.get("result") != "PASS" for result in results.values()):
+        fail("final integrated replay contains a non-PASS candidate result")
+    if results["gate5"].get("artifact_count") != 340:
+        fail("final integrated replay Gate 5 artifact count mismatch")
+    if results["publication_program"].get("bound_publication_artifacts") != 71:
+        fail("final integrated replay publication artifact count mismatch")
+    if results["gate1"].get("artifact_count") != 23:
+        fail("final integrated replay Gate 1 artifact count mismatch")
+    if results["gate4"].get("artifact_count") != 54:
+        fail("final integrated replay Gate 4 artifact count mismatch")
     return int(artifact_count)
 
 

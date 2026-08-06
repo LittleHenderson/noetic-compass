@@ -112,10 +112,16 @@
     "Both snapshots remain OPEN / NOT_STARTED / RING 4 / NOT LICENSED / HELD / NOT FROZEN."
   ],
   "final_integrated_replay": {
-    "status": "PENDING AFTER ALL PUBLICATION MERGES",
-    "commit": null,
-    "elapsed_seconds": null,
-    "result": null
+    "status": "PASS ON CLEAN DETACHED CANDIDATE / FINAL RECEIPT COMMIT REPLAY REQUIRED",
+    "commit": "0f5e46c1832124813a080b85ed4ec01ad317ff2f",
+    "execution_order": ["GATE5", "PUBLICATION_PROGRAM", "GATE1", "GATE4"],
+    "results": {
+      "gate5": {"result": "PASS", "elapsed_seconds": 291.2, "artifact_count": 340, "experimental_execution": "NOT_STARTED", "dependency_security": "OPEN_SECURITY / HELD"},
+      "publication_program": {"result": "PASS", "elapsed_seconds": 2.5, "json_files": 59, "bound_publication_artifacts": 71},
+      "gate1": {"result": "PASS", "elapsed_seconds": 13.6, "artifact_count": 23, "status_after_pass": "OPEN / Ring 4 / NOT LICENSED / NOT FROZEN"},
+      "gate4": {"result": "PASS", "elapsed_seconds": 92.1, "artifact_count": 54, "status_after_pass": "OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN"}
+    },
+    "receipt_scope": "EPHEMERAL LOCAL CLEAN-CHECKOUT STRUCTURAL REPLAY / NOT TRUSTED TIME / NOT WORM / NOT INDEPENDENT ATTESTATION"
   },
   "global_boundary": "This is a provenance crosswalk, not a gate-close receipt or an amendment of the immutable source-bound Harness lane."
 }

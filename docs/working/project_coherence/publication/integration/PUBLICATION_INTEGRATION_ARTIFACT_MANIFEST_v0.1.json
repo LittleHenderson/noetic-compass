@@ -18,8 +18,8 @@
     {
       "path": "docs/working/project_coherence/publication/integration/GATE5_EVIDENCE_SNAPSHOT_CROSSWALK_v0.1.json",
       "role": "Historical and hardened Gate 5 evidence-snapshot provenance crosswalk",
-      "bytes": 6001,
-      "sha256": "6C7B280DBADA5F3A467A81CD3F23C4DA9B270806C6620E09E42DE703EB373040"
+      "bytes": 6857,
+      "sha256": "BA13A8A3A9D27D3EAF72E01D7C460C8D46653F2F0E56E67DC6773F74C3DA3AD6"
     },
     {
       "path": "docs/working/project_coherence/publication/integration/MEMRISTIVE_SOURCE_SNAPSHOT_CROSSWALK_v0.1.json",
@@ -30,8 +30,8 @@
     {
       "path": "docs/working/project_coherence/publication/integration/PROGRAM_LEAD_HANDOFF_v0.1.md",
       "role": "Integrated publication-program editorial and authority-boundary handoff",
-      "bytes": 13903,
-      "sha256": "E5F034ABBEBAC6D2AC992BF35AF56D0AF417180A600EF259E24F5BB940E9C3A2"
+      "bytes": 14255,
+      "sha256": "7890A772F0195DCE0C4B8A6F673AEA55F2707823EA7A08899FDB2AE622754301"
     },
     {
       "path": "docs/working/project_coherence/publication/integration/PUBLICATION_CLAIM_REGISTRY_CROSSWALK_v0.1.json",
@@ -54,8 +54,8 @@
     {
       "path": "scripts/verify_project_coherence_publication_program.py",
       "role": "Fail-closed structural publication-program verifier",
-      "bytes": 33564,
-      "sha256": "8145A33F3DFC227121A83EF368AB6D27F29E6D2A16672C5B208B1BF197F3BA52"
+      "bytes": 34951,
+      "sha256": "7EE085CF00AC0E831C5518C05049476775D0D645DC7BBD8D995C3A0D81CD0E48"
     }
   ],
   "validation_snapshot": {
@@ -76,6 +76,8 @@
     "memristive_open_obligations": 42,
     "memristive_evidence_anchors": 16,
     "memristive_source_snapshot_controls": 3,
+    "clean_candidate_commit": "0f5e46c1832124813a080b85ed4ec01ad317ff2f",
+    "clean_candidate_replay": "GATE5 PASS / PUBLICATION PASS / GATE1 PASS / GATE4 PASS",
     "joined_run_status": "NOT_STARTED",
     "project_experimental_runpod_or_gpu_job": "NONE_LAUNCHED"
   },

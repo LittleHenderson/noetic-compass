@@ -41,7 +41,7 @@ change, or disclosure decision that lacked evidence remains explicitly open.
 | ACBE Wave 2 | `codex/project-coherence-wave2-acbe` | `f1decd9c61dc3df786f69dc19df7b6ba28fc51af` | Paper 5 mathematical/identifiability package; no causal result |
 | Memristive supplemental track | `codex/project-coherence-wave2-memristive` | `4666004e973ccbfa7b65cf3341aab15bc5f34524` | Source-bound supplemental package; no charter paper number and no experiment |
 | Lead-correction acceptance review | `codex/project-coherence-review-lead-corrections` | `64d02d200829b86d3bfc11d9a940a13b91dcf06d` | 13/13 publication-text corrections accepted; zero upstream closures |
-| Final integrated publication spine | `codex/project-coherence-publication-integration` | `PENDING` | Must be recorded only after final validation |
+| Clean integrated publication candidate | `codex/project-coherence-publication-integration` | `0f5e46c1832124813a080b85ed4ec01ad317ff2f` | Clean detached replay passed Gate 5, publication structure, Gate 1, and Gate 4 |
 
 The lane commits are historical inputs. Lead corrections are versioned
 successor bytes on the integration branch; they do not rewrite the frozen lane
@@ -215,11 +215,17 @@ The dependency-ordered authoring and bounded internal review program has now:
 4. preserved every negative, `OPEN`, `NOT_STARTED`, `NOT LICENSED`, and `HELD`
    boundary without claim promotion.
 
-Before delivery is complete, the lead still must reproduce every manifest,
-run the publication verifier, replay integrated Gate 1, Gate 4, and hardened
-Gate 5, bind this lead package in a non-self-hashing manifest, commit and test
-the exact clean checkout, push the integration branch, update the canonical CAS
-Harness production TODO, and report the exact remaining open boundaries.
+The exact clean detached candidate
+`0f5e46c1832124813a080b85ed4ec01ad317ff2f` passed the hardened Gate 5
+verifier first in 291.2 seconds, the publication structural verifier in 2.5
+seconds, Gate 1 in 13.6 seconds, and Gate 4 in 92.1 seconds. Gate 5 remained
+open, security remained `OPEN_SECURITY / HELD`, and experimental execution
+remained `NOT_STARTED`.
+
+This receipt-bearing commit necessarily succeeds the candidate it records. It
+must therefore be replayed from its own exact clean checkout, then the exact
+pushed remote ref must be reported externally. That final ref cannot be
+self-recorded inside its own Git bytes without an infinite self-reference loop.
 
 ## 10. Authority boundary
 
