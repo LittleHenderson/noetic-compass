@@ -98,8 +98,9 @@ X_0\xrightarrow{f_1}X_1\xrightarrow{f_2}\cdots
 \xrightarrow{f_r}X_r
 \]
 
-is a **typed path** only when each adjacent target and source agree.  This is a
-small finite-category or semigroupoid calculation.  It is not automatically a
+is a **typed path** only when each adjacent target and source agree.  For a
+frozen finite carrier and generator profile, this is a finite typed-path or
+semigroupoid calculation.  It is not automatically a
 word in one transformation semigroup.
 
 An **endomap** is an arrow \(f:X\to X\).  Powers \(f^n\), orbit periodicity,

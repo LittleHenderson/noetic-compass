@@ -112,7 +112,7 @@
     {
       "category": "tks_v8_implementation",
       "path": "src/tks_v8_core/category.py",
-      "role": "Finite typed-function category reference implementation",
+      "role": "Typed finite-set/function category reference implementation",
       "bytes": 9850,
       "sha256": "B69F494814E9D9CD54C80ADD8D6AF850C5A8F762B1A0C6DFC85435BA4458D947"
     },

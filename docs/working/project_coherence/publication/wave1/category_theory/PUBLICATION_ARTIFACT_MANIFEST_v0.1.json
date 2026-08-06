@@ -19,8 +19,8 @@
     {
       "path": "docs/working/project_coherence/publication/wave1/category_theory/EVIDENCE_MAP_v0.1.json",
       "media_type": "application/json",
-      "bytes": 10928,
-      "sha256": "DA6766A102FD0AF264A55B6C71EFF44ADDF2334A4FE0F9A02E65BF0C7C75839D"
+      "bytes": 12358,
+      "sha256": "CF3C982DA3F24A5119500D805584BDA2FD55C683D05E945FA5BE2B687FB9E1EF"
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/category_theory/HANDOFF_PACKAGE_v0.1.md",
@@ -37,8 +37,8 @@
     {
       "path": "docs/working/project_coherence/publication/wave1/category_theory/PAPER_4_NOETIC_MARKOV_SHEAVES_FOR_CONTEXTUAL_AI_ASSESSMENT_DRAFT_v0.1.md",
       "media_type": "text/markdown",
-      "bytes": 26560,
-      "sha256": "8A8C9E1F93D126F7997A5A9B57F4EE0A4801BBCE718770390708922F3C06AF04"
+      "bytes": 26631,
+      "sha256": "FDD48FA0B9C4F92691DE574EEF6DB8AF79097C667B09324016466B5F4689178A"
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/category_theory/SOURCE_BOUND_INVENTORY_v0.1.json",
@@ -55,8 +55,8 @@
     {
       "path": "docs/working/project_coherence/publication/wave1/category_theory/UNRESOLVED_OBLIGATIONS_v0.1.json",
       "media_type": "application/json",
-      "bytes": 10897,
-      "sha256": "63E01CEA477AE90208095279124682B0FF1926C098C91BA712E7DF4CDCC534B3"
+      "bytes": 11003,
+      "sha256": "2D46D50F6B44AECA47BC1F070036F772A0CB0F650D27BA1936E31CC0831C4A0E"
     }
   ],
   "validation_snapshot": {

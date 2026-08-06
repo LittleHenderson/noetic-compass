@@ -332,7 +332,7 @@ The packet must not be self-authorizing. A valid hash proves byte identity, not 
 
 ## 11. Relationship to Papers 2 and 5
 
-Paper 2 provides a sixteen-context Set-valued reference model with transverse coverages and external provenance records. Its atomic join yields four independent channels. Paper 4 may reuse its software patterns for exact context identity and derivation tracking, but it may not infer probability gluing or empirical meaning from Paper 2's Set-valued theorems.
+Paper 2 provides a sixteen-context Set-valued reference model with transverse coverages and external provenance records. Its four-singleton-generated join (locally `J_atom`, not the standard atomic topology) yields four independent channels. Paper 4 may reuse its software patterns for exact context identity and derivation tracking, but it may not infer probability gluing or empirical meaning from Paper 2's Set-valued theorems.
 
 Paper 5 is reserved for ACBE as Approximate Causal Abstraction. Paper 4 makes no causal-abstraction claim. Markov composition expresses stochastic information flow; it does not identify causal direction. A global distribution, unique optimizer, low residual, or naturality square does not substitute for interventions and a causal comparison theorem.
 

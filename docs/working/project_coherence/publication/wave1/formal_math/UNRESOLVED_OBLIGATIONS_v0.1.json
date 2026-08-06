@@ -148,7 +148,7 @@
       "paper": 3,
       "category": "INDEPENDENT_PROOF_REVIEW",
       "obligation": "Independently verify or reject Proposition 4.1 in the exact supplied OpenAI manuscript, including every dimension, isometry, adjoint, and inequality step.",
-      "current_evidence": "Primary-source transcription and internal audit exist; the manuscript has no independent peer-review receipt.",
+      "current_evidence": "Primary-source transcription and internal audit exist; no independent peer-review receipt appears in the reviewed source set.",
       "closure_evidence": ["Qualified independent proof report against SHA-256 64B900D5...AC7DD6", "Resolved comments", "Formal artifact or complete checked derivation", "Novelty review"],
       "owner_role": "Independent coding/operator-theory reviewer",
       "dependencies": [],

@@ -58,7 +58,8 @@ geometry specification.  Its exact source inputs are inventoried in
   called a canonical PCBA address or validated hidden-state representation;
 - the supplied *Ten Advances in Mathematics and Theoretical Computer Science*
   is an exact, hash-bound, public OpenAI technical manuscript without a DOI,
-  named chapter authors, venue, or independent peer-review receipt; and
+  named chapter authors, venue, or independent peer-review receipt in the
+  reviewed source set; and
 - every bespoke CAS transfer remains `OPEN / NOT LICENSED / HELD / Ring 4`.
 
 Standard projector geometry can be proved and cited independently of that

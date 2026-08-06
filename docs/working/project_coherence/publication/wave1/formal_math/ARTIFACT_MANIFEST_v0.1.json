@@ -30,20 +30,20 @@
     {
       "path": "docs/working/project_coherence/publication/wave1/formal_math/PAPER_1_TYPED_NOETIC_DYNAMICS_AND_FINITE_FRACTAL_SEMANTICS_DELTA_v0.1.md",
       "role": "Charter Paper 1 source-bound research draft delta",
-      "bytes": 18614,
-      "sha256": "4E5E41C7BE326688EAAFC77243CF5EEF4134A54C7D29928031DA2758B706C60A"
+      "bytes": 18661,
+      "sha256": "BB6615D2FD87D437798FE2EDE0775951C41B5E2E36FDC4E49A692B1BBE8C061A"
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/formal_math/PAPER_3_NOETIC_PROJECTION_GEOMETRY_AND_STATE_CAPACITY_DELTA_v0.1.md",
       "role": "Charter Paper 3 source-bound research draft delta",
-      "bytes": 18079,
-      "sha256": "30B63974DBA351BE269D21B2647E61D965768D6B6173038B17D7E7CD12203331"
+      "bytes": 18108,
+      "sha256": "833EBA84137DB1B4E45CF85A2BB2E0855F2F1BC41BA8E1E49D00992BA91D4196"
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/formal_math/SOURCE_INVENTORY_v0.1.json",
       "role": "Exact baseline source and external registered-source inventory",
-      "bytes": 16566,
-      "sha256": "E0AAE137C9ECFD7E48E43DED466990121D1403A809B60FB73BC0685C4279F76D"
+      "bytes": 16570,
+      "sha256": "7AD1FA077D3DDA63F6D0DD0245B27FA8C7CA0A9AE0AA503A70ED10BB1A7598BE"
     },
     {
       "path": "docs/working/project_coherence/publication/wave1/formal_math/THEOREM_AND_CLAIM_MATRIX_v0.1.json",
@@ -54,8 +54,8 @@
     {
       "path": "docs/working/project_coherence/publication/wave1/formal_math/UNRESOLVED_OBLIGATIONS_v0.1.json",
       "role": "Twenty-four open proof, migration, experiment, review, integration, disclosure, and submission obligations",
-      "bytes": 17319,
-      "sha256": "871E7454F5B4A6926464F3149B236E93EEAAB3FD1B0B7E4B50F19F98375D77F7"
+      "bytes": 17335,
+      "sha256": "53EFD7198CC327189F75765D362F5F9602B1C5776DA87E98405B17ABD94D0FF0"
     }
   ],
   "validation": {

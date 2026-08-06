@@ -28,7 +28,7 @@
       "title": "Formalize finite reflector universal properties and commutation",
       "status": "OPEN",
       "owner_cell": "Formal Mathematics",
-      "acceptance_evidence": "Proof-assistant construction of R_A, R_R, R_atom, units, universal properties, J_A join J_R=J_atom, natural isomorphisms, and unit coherence.",
+      "acceptance_evidence": "Proof-assistant construction of R_A, R_R, R_singleton, units, universal properties, J_A join J_R=J_singleton (the four-singleton-generated topology locally called J_atom, not the standard atomic topology), natural isomorphisms, and unit coherence.",
       "blocks_submission": true
     },
     {

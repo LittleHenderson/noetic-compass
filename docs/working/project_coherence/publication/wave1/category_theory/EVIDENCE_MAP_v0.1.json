@@ -26,7 +26,7 @@
       "path": "docs/working/project_coherence/gate1/noetic_topos2/NOETIC_TOPOS_2_SPEC_v0.1.md",
       "sha256": "156A5D8C5320F36E81E3B46473BA8A038B35672DCD28839A404D96A3DB1A763A",
       "supports": ["typed finite context construction", "ambient-versus-resolved distinction", "external mark-record boundary", "backward-comparison target and explicit open gates"],
-      "does_not_support": ["completed product-site implementation", "legacy equivalence", "probability gluing", "canon admission"]
+      "does_not_support": ["the false arbitrary-representable external-product witness", "ambient product-site distinctness", "completed product-site implementation", "legacy equivalence", "probability gluing", "canon admission"]
     },
     {
       "id": "EVD-NT2-THEOREM-LEDGER",
@@ -34,7 +34,7 @@
       "path": "docs/working/project_coherence/gate1/noetic_topos2/NOETIC_TOPOS_2_THEOREMS_v0.1.json",
       "sha256": "52E000652C7DECE64C1E2B3F613D85FEFB2F80414CFAAD53AA38FE339B26E536",
       "supports": ["exact theorem statements, dependencies, proof statuses, and claim boundaries"],
-      "does_not_support": ["peer review", "publication acceptance", "closure of PROOF_REQUIRED records"]
+      "does_not_support": ["correctness of the false upstream ambient external-product witness", "peer review", "publication acceptance", "closure of PROOF_REQUIRED records"]
     },
     {
       "id": "EVD-FINITE-MODEL",
@@ -58,7 +58,7 @@
       "evidence_class": "INTERNAL MATHEMATICAL PROOF CANDIDATE",
       "path": "docs/working/project_coherence/gate1/noetic_topos2/modality_composition/MODALITY_COMPOSITION_PROOF_v0.1.md",
       "sha256": "9A037679B5B528B7571B0A9BABC2DB1668D475C67BDF5E886CA03532AE657BD0",
-      "supports": ["explicit finite reflector universal property", "J_A join J_R equals the locally named four-singleton-generated topology J_atom", "unit-compatible natural isomorphisms M_A M_R ~= M_atom ~= M_R M_A"],
+      "supports": ["explicit finite reflector universal property", "J_A join J_R equals the locally named four-singleton-generated topology J_atom (not the standard atomic topology)", "unit-compatible natural isomorphisms M_A M_R ~= M_atom ~= M_R M_A"],
       "does_not_support": ["strict equality", "PSh(C x L) lift", "observational topology interaction", "probabilistic or enriched result"]
     },
     {
@@ -92,6 +92,14 @@
       "rerun_result": "PASS / Lean 4.32.1 / 16 axiom audits / 2026-08-05",
       "supports": ["registered bounded context lemmas and axiom audit"],
       "does_not_support": ["full presheaf formalization", "topology generation", "reflector theorem", "legacy comparison"]
+    },
+    {
+      "id": "EVD-CATEGORY-ADVERSARIAL-CORRECTION",
+      "evidence_class": "INTERNAL ADVERSARIAL CORRECTION RECEIPT",
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/category_theory/ADVERSARIAL_REVIEW_REPORT_v0.1.md",
+      "sha256": "155CEF080BB34681AE0420E6D7627F1EEE276E8363845CC40BC8E5A32C8FFC7C",
+      "supports": ["retraction of the false arbitrary-representable external-product witness", "finite-context versus ambient product-site scope correction", "ambient distinctness retained OPEN"],
+      "does_not_support": ["replacement ambient witness", "ambient product-site distinctness", "external specialist acceptance", "closure of the upstream Gate 1 record"]
     },
     {
       "id": "EVD-BACKWARD-COMPARISON-GAP",
@@ -137,9 +145,14 @@
       "strength": "source-bound internal argument and countermodel / independent review open"
     },
     {
-      "claim_ids": ["PUB-P2-003", "PUB-P2-004", "PUB-P2-006"],
-      "evidence_ids": ["EVD-NT2-SPEC", "EVD-NT2-THEOREM-LEDGER", "EVD-FINITE-MODEL", "EVD-LEAN-SEED"],
-      "strength": "informal proof plus bounded exhaustive execution / full formalization open"
+      "claim_ids": ["PUB-P2-003", "PUB-P2-004"],
+      "evidence_ids": ["EVD-NT2-SPEC", "EVD-NT2-THEOREM-LEDGER", "EVD-FINITE-MODEL"],
+      "strength": "informal proof plus bounded exhaustive execution / full topology and presheaf formalization open"
+    },
+    {
+      "claim_ids": ["PUB-P2-006"],
+      "evidence_ids": ["EVD-FINITE-MODEL", "EVD-CATEGORY-ADVERSARIAL-CORRECTION"],
+      "strength": "finite-context witness execution plus negative correction receipt / arbitrary-representable ambient witness retracted and ambient distinctness open"
     },
     {
       "claim_ids": ["PUB-P2-007"],
@@ -152,9 +165,14 @@
       "strength": "internal proof candidate plus exact finite corroboration / independent review open"
     },
     {
-      "claim_ids": ["PUB-P2-010", "PUB-P2-011", "PUB-P2-012"],
+      "claim_ids": ["PUB-P2-010", "PUB-P2-012"],
       "evidence_ids": ["EVD-BACKWARD-COMPARISON-GAP"],
       "strength": "explicit evidence of noncompletion"
+    },
+    {
+      "claim_ids": ["PUB-P2-011"],
+      "evidence_ids": ["EVD-BACKWARD-COMPARISON-GAP", "EVD-CATEGORY-ADVERSARIAL-CORRECTION"],
+      "strength": "explicit noncompletion plus retraction of the proposed ambient witness"
     },
     {
       "claim_ids": ["PUB-P4-001"],
