@@ -1,0 +1,338 @@
+{
+  "schema_version": "project_coherence.publication.wave2.cas_harness2_citation_ledger.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "base_commit": "c8635270ca6ba7c65504b4fda43cb42a89623015",
+  "checked_on": "2026-08-06",
+  "citation_policy": "Primary standards, official specifications, original research articles, and authoritative consensus sources provide terminology and design comparisons only. No external citation is evidence that a CAS Harness control is implemented, that a hosted state is current, that a scientific hypothesis is true, or that a product, safety, license, canon, or disclosure gate is closed.",
+  "external_primary_sources": [
+    {
+      "id": "E1",
+      "source_type": "INTERNET_STANDARD",
+      "title": "The JavaScript Object Notation (JSON) Data Interchange Format",
+      "authors_or_issuer": "T. Bray; RFC Editor",
+      "year": 2017,
+      "url": "https://www.rfc-editor.org/rfc/rfc8259.html",
+      "doi": "10.17487/RFC8259",
+      "narrow_use": "Baseline JSON syntax and interoperability terminology.",
+      "non_inference": "The CAS Harness strict JSON profile is narrower and is not claimed to be validated by this RFC."
+    },
+    {
+      "id": "E2",
+      "source_type": "INFORMATIONAL_RFC",
+      "title": "JSON Canonicalization Scheme (JCS)",
+      "authors_or_issuer": "A. Rundgren, B. Jordan, S. Erdtman; RFC Editor",
+      "year": 2020,
+      "url": "https://www.rfc-editor.org/rfc/rfc8785.html",
+      "doi": "10.17487/RFC8785",
+      "narrow_use": "Comparison source for invariant JSON representations used with hashing and signing.",
+      "non_inference": "The internal CAS canonical serializer is not asserted to conform to JCS."
+    },
+    {
+      "id": "E3",
+      "source_type": "FEDERAL_STANDARD",
+      "title": "Secure Hash Standard (SHS), FIPS PUB 180-4",
+      "authors_or_issuer": "National Institute of Standards and Technology",
+      "year": 2015,
+      "url": "https://csrc.nist.gov/pubs/fips/180-4/upd1/final",
+      "doi": "10.6028/NIST.FIPS.180-4",
+      "narrow_use": "Definition and integrity role of SHA-256 message digests.",
+      "non_inference": "A SHA-256 identity alone is not a signature, trusted timestamp, producer identity, WORM receipt, or semantic validation."
+    },
+    {
+      "id": "E4",
+      "source_type": "FEDERAL_STANDARD",
+      "title": "Digital Signature Standard (DSS), FIPS PUB 186-5",
+      "authors_or_issuer": "National Institute of Standards and Technology",
+      "year": 2023,
+      "url": "https://csrc.nist.gov/pubs/fips/186-5/final",
+      "doi": "10.6028/NIST.FIPS.186-5",
+      "narrow_use": "Distinguishes digital-signature authentication properties from bare hashing.",
+      "non_inference": "No Gate 5 artifact is asserted to carry an independently verified FIPS 186-5 signature."
+    },
+    {
+      "id": "E5",
+      "source_type": "INTERNET_STANDARD",
+      "title": "Internet X.509 Public Key Infrastructure Time-Stamp Protocol (TSP)",
+      "authors_or_issuer": "C. Adams, P. Cain, D. Pinkas, R. Zuccherato; RFC Editor",
+      "year": 2001,
+      "url": "https://www.rfc-editor.org/rfc/rfc3161.html",
+      "doi": "10.17487/RFC3161",
+      "narrow_use": "Reference architecture for a time-stamping authority and proof-of-existence assertions.",
+      "non_inference": "CAS Harness currently uses caller-declared process-local timestamps and does not claim RFC 3161 implementation or trusted time."
+    },
+    {
+      "id": "E6",
+      "source_type": "INTERNET_STANDARD",
+      "title": "Certificate Transparency Version 2.0",
+      "authors_or_issuer": "B. Laurie, E. Messeri, R. Stradling; RFC Editor",
+      "year": 2021,
+      "url": "https://www.rfc-editor.org/rfc/rfc9162.html",
+      "doi": "10.17487/RFC9162",
+      "narrow_use": "Reference for Merkle-based append-only logging, inclusion, and consistency concepts.",
+      "non_inference": "CAS Harness does not claim Certificate Transparency conformance, public transparency, or an independently trusted log."
+    },
+    {
+      "id": "E7",
+      "source_type": "W3C_RECOMMENDATION",
+      "title": "PROV-O: The PROV Ontology",
+      "authors_or_issuer": "W3C Provenance Working Group",
+      "year": 2013,
+      "url": "https://www.w3.org/TR/prov-o/",
+      "doi": null,
+      "narrow_use": "Vocabulary for entities, activities, agents, derivation, plans, and provenance bundles.",
+      "non_inference": "No current Evidence Packet is asserted to be a complete or conformant PROV-O export."
+    },
+    {
+      "id": "E8",
+      "source_type": "SOFTWARE_SUPPLY_CHAIN_SPECIFICATION",
+      "title": "SLSA Specification v1.2: Provenance and Build Track",
+      "authors_or_issuer": "Supply-chain Levels for Software Artifacts project",
+      "year": 2026,
+      "url": "https://slsa.dev/spec/v1.2/provenance",
+      "doi": null,
+      "narrow_use": "Definition of software provenance and distinction among provenance existence, signed hosted provenance, and hardened builds.",
+      "non_inference": "A locally observed SLSA predicate identifier without retained raw bytes or an independent trust root is not a SLSA assurance claim."
+    },
+    {
+      "id": "E9",
+      "source_type": "SOFTWARE_ATTESTATION_SPECIFICATION",
+      "title": "in-toto Attestation Framework Specification v1.2",
+      "authors_or_issuer": "in-toto project",
+      "year": 2026,
+      "url": "https://github.com/in-toto/attestation/blob/main/spec/README.md",
+      "doi": null,
+      "narrow_use": "Separation of attestation predicate, statement, envelope, and bundle layers.",
+      "non_inference": "CAS Harness does not claim that current local receipts are authenticated in-toto attestations."
+    },
+    {
+      "id": "E10",
+      "source_type": "CONTAINER_IMAGE_SPECIFICATION",
+      "title": "Open Container Initiative Image Format Specification v1.1.1",
+      "authors_or_issuer": "Open Container Initiative",
+      "year": 2025,
+      "url": "https://github.com/opencontainers/image-spec/tree/v1.1.1",
+      "doi": null,
+      "narrow_use": "Container image descriptors, manifests, configurations, layers, and content-addressed identities.",
+      "non_inference": "Recorded OCI digests do not establish a hermetic runner, source correctness, or independent build provenance."
+    },
+    {
+      "id": "E11",
+      "source_type": "SBOM_SPECIFICATION",
+      "title": "SPDX Specification 3.0.1",
+      "authors_or_issuer": "SPDX Workgroup, Linux Foundation",
+      "year": 2025,
+      "url": "https://spdx.github.io/spdx-spec/v3.0.1/",
+      "doi": null,
+      "narrow_use": "Open standard for communicating software bill-of-materials information, provenance, and integrity metadata.",
+      "non_inference": "A recorded SPDX digest whose raw payload is not retained is not repository-replayable SBOM evidence."
+    },
+    {
+      "id": "E12",
+      "source_type": "NIST_SPECIAL_PUBLICATION",
+      "title": "Security Guidelines for Storage Infrastructure, NIST SP 800-209",
+      "authors_or_issuer": "R. Chandramouli and D. Pinhas; National Institute of Standards and Technology",
+      "year": 2020,
+      "url": "https://csrc.nist.gov/pubs/sp/800/209/final",
+      "doi": "10.6028/NIST.SP.800-209",
+      "narrow_use": "Storage-security control families including authentication, authorization, configuration control, data protection, isolation, restoration assurance, and encryption.",
+      "non_inference": "The publication does not certify the CAS Harness storage implementation or hosted configuration."
+    },
+    {
+      "id": "E13",
+      "source_type": "PRIMARY_PROVIDER_DOCUMENTATION",
+      "title": "Locking objects with Amazon S3 Object Lock",
+      "authors_or_issuer": "Amazon Web Services",
+      "year": 2026,
+      "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html",
+      "doi": null,
+      "narrow_use": "Provider-defined versioning, WORM retention, legal hold, governance mode, compliance mode, and bypass semantics.",
+      "non_inference": "Provider documentation does not prove that any specific bucket, credential, object version, retention state, receipt, or CAS run is correctly configured or current."
+    },
+    {
+      "id": "E14",
+      "source_type": "PRIMARY_REGISTRY_DOCUMENTATION",
+      "title": "Welcome to Registrations and Preregistrations",
+      "authors_or_issuer": "Center for Open Science, OSF Support",
+      "year": 2026,
+      "url": "https://help.osf.io/article/330-welcome-to-registrations",
+      "doi": null,
+      "narrow_use": "Operational comparison for time-stamped, read-only study plans and frozen registrations.",
+      "non_inference": "The private CAS Harness preregistration is not asserted to be deposited, timestamped, or governed by OSF."
+    },
+    {
+      "id": "E15",
+      "source_type": "ORIGINAL_EDITORIAL",
+      "title": "Registered Reports: A New Publishing Initiative at Cortex",
+      "authors_or_issuer": "Christopher D. Chambers",
+      "year": 2013,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23347556/",
+      "doi": "10.1016/j.cortex.2012.12.016",
+      "narrow_use": "Original registered-report publication model separating design review from outcome-dependent publication decisions.",
+      "non_inference": "CAS Harness has not received in-principle acceptance or journal review."
+    },
+    {
+      "id": "E16",
+      "source_type": "ORIGINAL_RESEARCH_PERSPECTIVE",
+      "title": "The Preregistration Revolution",
+      "authors_or_issuer": "Brian A. Nosek, Charles R. Ebersole, Alexander C. DeHaven, David T. Mellor",
+      "year": 2018,
+      "url": "https://doi.org/10.1073/pnas.1708274114",
+      "doi": "10.1073/pnas.1708274114",
+      "narrow_use": "Rationale for distinguishing confirmatory from exploratory analysis and recording plans before outcomes are known.",
+      "non_inference": "Preregistration alone does not establish design quality, execution integrity, truth, replication, or CAS validity."
+    },
+    {
+      "id": "E17",
+      "source_type": "ORIGINAL_METHODS_ARTICLE",
+      "title": "Negative Controls: A Tool for Detecting Confounding and Bias in Observational Studies",
+      "authors_or_issuer": "Marc Lipsitch, Eric Tchetgen Tchetgen, Ted Cohen",
+      "year": 2010,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3053408/",
+      "doi": "10.1097/EDE.0b013e3181d61eeb",
+      "narrow_use": "Methodological rationale for negative controls as detectors of spurious causal inference.",
+      "non_inference": "The article does not establish that the Harness control set identifies all CAS-specific confounding or supports a causal claim."
+    },
+    {
+      "id": "E18",
+      "source_type": "ORIGINAL_GUIDING_PRINCIPLES_ARTICLE",
+      "title": "The FAIR Guiding Principles for Scientific Data Management and Stewardship",
+      "authors_or_issuer": "Mark D. Wilkinson et al.",
+      "year": 2016,
+      "url": "https://www.nature.com/articles/sdata201618",
+      "doi": "10.1038/sdata.2016.18",
+      "narrow_use": "Persistent identity, metadata, interoperability, and reuse principles for digital research objects.",
+      "non_inference": "FAIR principles are not an implementation standard and do not make restricted Harness data public or scientifically valid."
+    },
+    {
+      "id": "E19",
+      "source_type": "AUTHORITATIVE_CONSENSUS_REPORT",
+      "title": "Reproducibility and Replicability in Science",
+      "authors_or_issuer": "National Academies of Sciences, Engineering, and Medicine",
+      "year": 2019,
+      "url": "https://nap.nationalacademies.org/catalog/25303/reproducibility-and-replicability-in-science",
+      "doi": "10.17226/25303",
+      "narrow_use": "Terminological distinction between computational reproducibility and obtaining consistent results across studies.",
+      "non_inference": "The report does not deem the CAS Harness artifacts reproducible, replicated, or scientifically accepted."
+    },
+    {
+      "id": "E20",
+      "source_type": "PRIMARY_SCHOLARLY_MONOGRAPH",
+      "title": "Causality: Models, Reasoning, and Inference, Second Edition",
+      "authors_or_issuer": "Judea Pearl",
+      "year": 2009,
+      "url": "https://doi.org/10.1017/CBO9780511803161",
+      "doi": "10.1017/CBO9780511803161",
+      "narrow_use": "Reference for explicit causal models, interventions, identification assumptions, and the distinction between association and causal effect.",
+      "non_inference": "No causal model or identification result for CAS Harness is supplied by citation alone."
+    }
+  ],
+  "internal_source_citations": [
+    {
+      "id": "S1",
+      "path": "docs/working/project_coherence/PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md",
+      "sha256": "B87B2E2B4CC4B10C76EE4AA6EA09094572B2A1008E474475E8F642836B83D2BE",
+      "role": "Charter authority, Paper 7 title, Gate 5 closure conditions, and non-promotion rules."
+    },
+    {
+      "id": "S2",
+      "path": "docs/working/project_coherence/CLAIM_LEDGER_v0.1.json",
+      "sha256": "F62E7451135EC9DA0C333DB318C7C6E02BD92C4387EB167D94895810D805828F",
+      "role": "Exact Ring-4 and NOT-LICENSED claim records, including current Harness readiness."
+    },
+    {
+      "id": "S3",
+      "path": "docs/working/project_coherence/THEOREM_LEDGER_v0.1.json",
+      "sha256": "2646DEE7E801B159E6E82EBDB63129CC5883591D40CF29B6773A9BD4F8578101",
+      "role": "Theorem boundary; this delta admits no new theorem and does not promote existing proof-gap records."
+    },
+    {
+      "id": "S4",
+      "path": "docs/working/project_coherence/OPEN_VS_HELD_BOUNDARY_v0.1.md",
+      "sha256": "D3C7E7F38A1E59F4C2B9E8E527A1033B791555BB669C4E69FCD556E8D87DF863",
+      "role": "Disclosure authority and HELD handling for Harness methods, evidence, provider details, and claims."
+    },
+    {
+      "id": "S5",
+      "path": "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md",
+      "sha256": "F2803B44FF7236762D491A3B249FF13C4CB8D9F336CE19F223F9F716E9A70D2D",
+      "role": "Existing normative control-kernel specification preserved by this delta."
+    },
+    {
+      "id": "S6",
+      "path": "docs/working/project_coherence/gate5/GATE5_REVIEW_MATRIX_v0.1.json",
+      "sha256": "1331B9646B6843DEC8352B10870392E46A00BB7574A0CA1981FA970D5D41CC14",
+      "role": "Exact 47-criterion implemented, negative, security, governance, and external-validation boundary."
+    },
+    {
+      "id": "S7",
+      "path": "docs/working/project_coherence/gate5/GATE5_ARTIFACT_MANIFEST_v0.1.json",
+      "sha256": "5C73F203B4EA7D95B89C3BBB730FFCAE571EECC26E8BA2AF3ABC4A994635B333",
+      "role": "Exact non-self-hashing 325-artifact Gate 5 closure."
+    },
+    {
+      "id": "S8",
+      "path": "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
+      "sha256": "61E28356C05773F11930B76BBE2ED5D56790B193B29E7577D6A068B6364AA1FD",
+      "role": "Attack chronology, bounded repairs, adverse evidence, and residual obligations."
+    },
+    {
+      "id": "S9",
+      "path": "docs/working/project_coherence/gate5/GATE5_DEPENDENCY_AND_CONTAINER_CANDIDATE_RECEIPT_v0.2.json",
+      "sha256": "99F4DA7F58C2BA38C62D6E4D04040416DB57628B2D8E3373DCD989D622299DA9",
+      "role": "Successor container/dependency candidate, local observations, and OPEN_SECURITY boundary."
+    },
+    {
+      "id": "S10",
+      "path": "src/cas_harness_v2/preregistration.py",
+      "sha256": "C44D56ADDA2F05897346156D1C9352B035FABE7D02B2A309CCA17EB18FD20055",
+      "role": "Executable preregistration, amendment-chain, and outcome-access carrier implementation."
+    },
+    {
+      "id": "S11",
+      "path": "src/cas_harness_v2/evidence_packet.py",
+      "sha256": "925EC4E994063352ED2CF4D58A185D7D336910C2E9C453927D49AB041B6F28FD",
+      "role": "Executable Evidence Packet v2 loader, verifier, assessment vector, and v1 rejection."
+    },
+    {
+      "id": "S12",
+      "path": "tests/cas_harness_v2/test_research_control_redteam.py",
+      "sha256": "08AF7CE685BCA5CEBF241B30290EF428D5F9C6F05F2245F4C6493B0CCC737EFE",
+      "role": "Independent-style adversarial regressions for the isolated kernel."
+    },
+    {
+      "id": "S13",
+      "path": "scripts/verify_project_coherence_gate5.py",
+      "sha256": "A98D9DCC69E6E43509A2AB20B5E86A1F12A26AF2DE9D99C79C4ED63001C555E7",
+      "role": "Authoritative repository-local integrated Gate 5 verifier."
+    },
+    {
+      "id": "S14",
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_evidence_object_store.py",
+      "sha256": "0D2D752544BF484327DCFC53995B5453D63772A25C0622244438D68390C42E75",
+      "role": "Product-side S3 Object Lock packet storage and re-read receipt source, not joined Gate 5 evidence."
+    },
+    {
+      "id": "S15",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/docs/working/cas_harness_production_todo.md",
+      "sha256": "0E290E9C69A429965D7983CAF622CA2BEF7878026E2D156D393707D29FDAF487",
+      "role": "Read-only mutable production dashboard snapshot; contextual only and not a Gate 5 scientific receipt."
+    }
+  ],
+  "external_source_count": 20,
+  "internal_source_count": 15,
+  "unresolved_citation_obligations": [
+    "Recheck versioned standards and provider documentation immediately before any external submission.",
+    "Complete a clause-level conformance map before claiming implementation of RFC 3161, RFC 9162, PROV-O, SLSA, in-toto, OCI, SPDX, FAIR, or any provider retention profile.",
+    "Obtain qualified rights and disclosure review before distributing internal Harness methods, exact paths, provider details, artifacts, or derived diagrams.",
+    "Have independent statistical, causal, security, software-supply-chain, provenance, and research-integrity reviewers verify every citation-to-sentence use.",
+    "Do not use an external methodological citation as substitute evidence for a CAS-specific construct, intervention, causal, safety, product, or scientific claim."
+  ],
+  "closure_statement": "This ledger supports a held research draft only. Citation presence does not establish implementation, standards conformance, hosted state, WORM, causality, scientific validity, safety, product readiness, licensing, canon admission, disclosure permission, authorship, submission, or peer-review acceptance."
+}
