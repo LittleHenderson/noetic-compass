@@ -1,0 +1,73 @@
+{
+  "schema_version": "project_coherence.publication.adversarial_review.formal_math.manifest.v0.1",
+  "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
+  "as_of": "2026-08-05",
+  "manifest_id": "PROJECT-COHERENCE-WAVE2-ADVERSARIAL-REVIEW-FORMAL-MATH-v0.1",
+  "reviewed_commit": "3c8491db6f5559cf090909d9de0efa03d924f53f",
+  "review_branch": "codex/project-coherence-review-formal",
+  "hash_algorithm": "SHA-256 over exact file bytes",
+  "self_hashing": false,
+  "self_exclusion": "ADVERSARIAL_REVIEW_MANIFEST_v0.1.json is intentionally excluded so the manifest is non-self-hashing. The Git commit and lead-owned integration receipt must bind this manifest.",
+  "artifact_count": 6,
+  "artifacts": [
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/formal_math/CITATION_AUDIT_v0.1.json",
+      "role": "Citation identity, metadata, use-boundary, and source-status audit",
+      "media_type": "application/json",
+      "bytes": 9265,
+      "sha256": "B73A1B677036EFEF362E8757619897652C559072A2F5690F1E5881648768C964"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/formal_math/CLAIM_BY_CLAIM_DISPOSITION_MATRIX_v0.1.json",
+      "role": "Twenty-record independent claim disposition matrix",
+      "media_type": "application/json",
+      "bytes": 12111,
+      "sha256": "65580216D6E43DE56D40514C2EAB891D29757CB613A45AEB401A0745D6F92BFB"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/formal_math/REVIEW_SOURCE_INVENTORY_v0.1.json",
+      "role": "Exact reviewed-artifact, governing-reference, nested-source, primary-manuscript, and replay binding",
+      "media_type": "application/json",
+      "bytes": 6113,
+      "sha256": "6AC62F6405AB4FB1DBB46546C37018B93E69F294904B6BF5F5A26A337EB6E5DA"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/formal_math/SOURCE_BOUND_REVIEW_REPORT_v0.1.md",
+      "role": "Source-bound adversarial review report and lead handoff",
+      "media_type": "text/markdown",
+      "bytes": 13325,
+      "sha256": "5141CE67E35B3000EA96B14CB7098ABEAE68EF30CCCE92B43E56C24D39A46AEA"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/formal_math/THEOREM_PROOF_COUNTEREXAMPLE_AND_NOTATION_CHECKS_v0.1.json",
+      "role": "Nineteen theorem, proof, counterexample, formal-interface, and notation checks",
+      "media_type": "application/json",
+      "bytes": 9885,
+      "sha256": "AC4BC29600AA8CD295DBC242F5BA42937F5D2B98993B4BB97CB10B6406F5C313"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/adversarial_review/formal_math/UNRESOLVED_AND_REQUIRED_CHANGES_v0.1.json",
+      "role": "Blocking-change, strengthening-suggestion, and retained-obligation list",
+      "media_type": "application/json",
+      "bytes": 7982,
+      "sha256": "DDB41348C184CE1C1C868ECF22378EFE4301BEC66718BB9815DD2A01FA4723C3"
+    }
+  ],
+  "validation_snapshot": {
+    "json_files_parse": true,
+    "manifested_artifact_hashes_match": "6 / 6",
+    "reviewed_wave1_artifact_hashes_match": "9 / 9",
+    "nested_repository_source_hashes_match": "42 / 42",
+    "nested_external_source_hashes_match": "7 / 7",
+    "claim_dispositions_map": "20 / 20",
+    "citation_audits_map": "15 / 15",
+    "technical_checks": 19,
+    "upstream_obligations_retained_open": "24 / 24",
+    "blocking_required_changes": 3,
+    "proof_invalidating_failures": 0,
+    "claims_promoted": 0,
+    "external_review_complete": false,
+    "empirical_review_complete": false
+  },
+  "claim_boundary": "This manifest binds only the six review artifacts. It does not modify or admit the Wave 1 papers, close a theorem or obligation, provide external review, authorize disclosure or submission, grant a license, or validate an empirical or product claim."
+}

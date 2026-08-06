@@ -1,0 +1,177 @@
+{
+  "schema_version": "project_coherence.publication.adversarial_review.formal_math.citation_audit.v0.1",
+  "document_status": "DRAFT / OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN",
+  "as_of": "2026-08-05",
+  "reviewed_ledger": {
+    "path": "docs/working/project_coherence/publication/wave1/formal_math/CITATION_LEDGER_v0.1.json",
+    "bytes": 10587,
+    "sha256": "3588068E8307D27D9FC479D604A6E60A5F7C40352381569CA113AED1BF868848"
+  },
+  "method": [
+    "Resolved DOI metadata through the DOI registry and publisher pages.",
+    "Checked title, authorship, year, venue, volume/issue, pages, and the narrow use/nonuse boundary.",
+    "Fetched the public OpenAI PDF directly, compared its byte length and SHA-256 with the registered local source, and visually inspected the proposition pages.",
+    "Searched all claim and evidence records for unresolved citation IDs; none were found."
+  ],
+  "citation_count": 15,
+  "records": [
+    {
+      "citation_id": "CIT-EILENBERG-MACLANE-1945",
+      "doi": "10.1090/S0002-9947-1945-0013131-6",
+      "verification": "PASS",
+      "metadata_result": "Title, authors, year, journal, volume, and pages resolve consistently.",
+      "use_scope_result": "PASS / category and functor background only",
+      "required_change": null
+    },
+    {
+      "citation_id": "CIT-HUTCHINSON-1981",
+      "doi": "10.1512/iumj.1981.30.30055",
+      "verification": "PASS",
+      "metadata_result": "The Indiana University Mathematics Journal page confirms John E. Hutchinson, title, volume 30 issue 5, year 1981, and pages 713-747.",
+      "use_scope_result": "PASS / compact contractive IFS background only",
+      "required_change": null
+    },
+    {
+      "citation_id": "CIT-KNUTH-BENDIX-1970",
+      "doi": "10.1016/B978-0-08-012975-4.50028-X",
+      "verification": "PASS",
+      "metadata_result": "DOI metadata confirms the chapter title, authors, year, proceedings volume, and pages 263-297.",
+      "use_scope_result": "PASS / rewrite-completion distinction only",
+      "required_change": null
+    },
+    {
+      "citation_id": "CIT-LEAN-2015",
+      "doi": "10.1007/978-3-319-21401-6_26",
+      "verification": "PASS",
+      "metadata_result": "Springer DOI metadata confirms the title, five authors, CADE-25/LNCS context, year, and pages 378-388.",
+      "use_scope_result": "PASS / proof-assistant system background only",
+      "required_change": null
+    },
+    {
+      "citation_id": "CIT-ARONSZAJN-1950",
+      "doi": "10.1090/S0002-9947-1950-0051437-7",
+      "verification": "PASS",
+      "metadata_result": "AMS/DOI metadata confirms the article title, author, journal, volume 68 issue 3, year, and pages 337-404.",
+      "use_scope_result": "PASS / positive-kernel background only",
+      "required_change": null
+    },
+    {
+      "citation_id": "CIT-BJORCK-GOLUB-1973",
+      "doi": "10.1090/S0025-5718-1973-0348991-3",
+      "verification": "PASS WITH NORMALIZATION SUGGESTION",
+      "metadata_result": "Title, journal, volume 27 issue 123, year, and pages 579-594 match; the ledger transliterates the first author's name as Ake Bjorck.",
+      "use_scope_result": "PASS / principal-angle and numerical-subspace background",
+      "required_change": null,
+      "suggestion": "Normalize the author display to Åke Björck if the publication toolchain preserves Unicode."
+    },
+    {
+      "citation_id": "CIT-RANKIN-1955",
+      "doi": "10.1017/S2040618500033219",
+      "verification": "PASS",
+      "metadata_result": "DOI metadata confirms the title, author, journal, volume 2 issue 3, year, and pages 139-144.",
+      "use_scope_result": "PASS / spherical simplex and packing background only",
+      "required_change": null
+    },
+    {
+      "citation_id": "CIT-WELCH-1974",
+      "doi": "10.1109/TIT.1974.1055219",
+      "verification": "PASS WITH NORMALIZATION SUGGESTION",
+      "metadata_result": "IEEE/DOI metadata confirms author, journal, volume 20 issue 3, year, and pages 397-399; the registered title omits the publisher suffix '(Corresp.)'.",
+      "use_scope_result": "PASS / feature-dimension coherence bound only",
+      "required_change": null,
+      "suggestion": "Use the publisher title 'Lower Bounds on the Maximum Cross Correlation of Signals (Corresp.)' or document the shortened-title policy."
+    },
+    {
+      "citation_id": "CIT-CONWAY-HARDIN-SLOANE-1996",
+      "doi": "10.1080/10586458.1996.10504585",
+      "verification": "PASS",
+      "metadata_result": "DOI metadata confirms title, three authors, Experimental Mathematics 5(2), year, and pages 139-159.",
+      "use_scope_result": "PASS / projector embedding, chordal distance, and Grassmannian packing background",
+      "required_change": null
+    },
+    {
+      "citation_id": "CIT-DAVIS-KAHAN-1970",
+      "doi": "10.1137/0707001",
+      "verification": "PASS",
+      "metadata_result": "SIAM/DOI metadata confirms title, authors, volume 7 issue 1, year, and pages 1-46.",
+      "use_scope_result": "PASS / conditional Hermitian subspace-perturbation background",
+      "required_change": null
+    },
+    {
+      "citation_id": "CIT-WEDIN-1972",
+      "doi": "10.1007/BF01932678",
+      "verification": "PASS",
+      "metadata_result": "The Springer article page confirms P.-Å. Wedin, title, BIT Numerical Mathematics 12(1), year 1972, and pages 99-111.",
+      "use_scope_result": "PASS / conditional singular-subspace perturbation background",
+      "required_change": null
+    },
+    {
+      "citation_id": "CIT-EDELMAN-ARIAS-SMITH-1998",
+      "doi": "10.1137/S0895479895290954",
+      "verification": "PASS",
+      "metadata_result": "SIAM/DOI metadata confirms title, three authors, volume 20 issue 2, year, and pages 303-353.",
+      "use_scope_result": "PASS / Grassmann and Stiefel geometry background",
+      "required_change": null
+    },
+    {
+      "citation_id": "CIT-CASAZZA-KUTYNIOK-LI-2008",
+      "doi": "10.1016/j.acha.2007.10.001",
+      "verification": "PASS",
+      "metadata_result": "DOI metadata confirms title, three authors, Applied and Computational Harmonic Analysis 25(1), year, and pages 114-132.",
+      "use_scope_result": "PASS / fusion-frame background only",
+      "required_change": null
+    },
+    {
+      "citation_id": "CIT-BACHOC-VALLENTIN-2008",
+      "doi": "10.1090/S0894-0347-07-00589-9",
+      "verification": "PASS",
+      "metadata_result": "The AMS source confirms title, authors, Journal of the American Mathematical Society 21(3), July 2008, and pages 909-924.",
+      "use_scope_result": "PASS / established spherical-code SDP background only",
+      "required_change": null
+    },
+    {
+      "citation_id": "CIT-OPENAI-TEN-ADVANCES-2026",
+      "doi": null,
+      "verification": "PASS FOR IDENTITY AND CONTENT / REVIEW STATUS WORDING REQUIRED",
+      "metadata_result": "The current public URL returns a 249-page, 2,266,371-byte PDF whose SHA-256 exactly matches the registered local artifact. PDF metadata identifies the title and corporate author OpenAI; no DOI, venue, named chapter-author list, or peer-review receipt appears in the reviewed source set.",
+      "use_scope_result": "PASS / exact source of Chapter 2 Proposition 4.1 only",
+      "required_change": "RFM-BLK-003"
+    }
+  ],
+  "cross_reference_audit": {
+    "claim_records_checked": 20,
+    "evidence_maps_checked": 20,
+    "unresolved_citation_ids": 0,
+    "duplicate_citation_ids": 0,
+    "result": "PASS"
+  },
+  "ledger_level_findings": [
+    {
+      "id": "RFM-BLK-002",
+      "class": "BLOCKING EVIDENCE-METADATA ERROR",
+      "finding": "PUB-P1-THM-004 is labeled STANDARD_RESULT_CITED although neither its claim record nor the citation ledger supplies a finite-semigroup citation.",
+      "required_resolution": "Change the proof status to DIRECT ELEMENTARY PROOF / FORMALIZATION OPEN or add and actually use a suitable primary or authoritative semigroup reference."
+    },
+    {
+      "id": "RFM-BLK-003",
+      "class": "BLOCKING SOURCE-STATUS WORDING",
+      "finding": "The source set proves that no peer-review receipt is present; it does not prove the universal negative assertion that the OpenAI manuscript is unrefereed.",
+      "required_resolution": "Use PUBLIC TECHNICAL MANUSCRIPT / PEER-REVIEW STATUS UNVERIFIED / NO RECEIPT IN REVIEWED SOURCE SET unless attributable review-status evidence is added."
+    },
+    {
+      "id": "RFM-STR-004",
+      "class": "STRENGTHENING SUGGESTION",
+      "finding": "The publication-facing Fisher-Rao baseline is source-bound internally but has no primary Fisher-information-geometry citation in this delta ledger.",
+      "suggested_resolution": "Add an authoritative primary or standard reference if the final paper presents Fisher-Rao geometry as mathematical background rather than merely quoting the internal PCBA baseline."
+    }
+  ],
+  "summary": {
+    "citations_checked": 15,
+    "identity_or_metadata_failures": 0,
+    "blocking_wording_or_evidence_metadata_changes": 2,
+    "normalization_suggestions": 2,
+    "missing_primary_background_suggestions": 1,
+    "citation_status_promotions": 0
+  },
+  "claim_boundary": "This is an internal citation audit against the named sources as of 2026-08-05. It is not a novelty opinion, legal clearance, authorship determination, external peer review, or publication authorization."
+}
