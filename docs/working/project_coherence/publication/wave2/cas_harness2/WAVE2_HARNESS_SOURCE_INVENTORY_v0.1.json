@@ -1,0 +1,431 @@
+{
+  "schema_version": "project_coherence.publication.wave2.cas_harness2_source_inventory.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "base_commit": "c8635270ca6ba7c65504b4fda43cb42a89623015",
+  "branch": "codex/project-coherence-wave2-harness",
+  "inventory_date_utc": "2026-08-06",
+  "worktree_clean_before_inventory": true,
+  "inventory_policy": [
+    "Existing Gate 5 and CAS Harness specifications, registries, manifests, TODOs, source, tests, and historical records were read-only inputs.",
+    "Repository-relative paths use POSIX separators; SHA-256 values are uppercase hexadecimal over exact file bytes; byte counts are exact.",
+    "The exact 325-file Gate 5 closure is delegated to its canonical non-self-hashing manifest rather than duplicated here.",
+    "Role-group aggregates sort records by ordinal repository path and serialize path, SHA-256, decimal bytes, and role separated by TAB with LF after every record.",
+    "The external production TODO is a mutable read-only snapshot outside this worktree and is contextual only. Its hash does not join product observations to Gate 5 scientific evidence.",
+    "Source presence is not execution, hosted reachability, WORM, empirical truth, scientific validation, product readiness, licensing, canon admission, or disclosure authority."
+  ],
+  "canonical_gate5_closure": {
+    "manifest_path": "docs/working/project_coherence/gate5/GATE5_ARTIFACT_MANIFEST_v0.1.json",
+    "manifest_sha256": "5C73F203B4EA7D95B89C3BBB730FFCAE571EECC26E8BA2AF3ABC4A994635B333",
+    "manifest_bytes": 90499,
+    "artifact_count": 325,
+    "artifact_bytes_total": 11810517,
+    "artifact_record_aggregate_sha256": "26179DE71D4129DCEB8B78B4B996BB79599BA12910231603CF88867497BFB561",
+    "aggregate_serialization": "ORDINAL PATH + TAB + UPPERCASE SHA256 + TAB + DECIMAL BYTES + TAB + ROLE + LF",
+    "manifest_self_hash": null,
+    "claim_effect": "EXACT_REPOSITORY_SOURCE_CLOSURE_ONLY"
+  },
+  "gate5_role_groups": [
+    {
+      "role": "gate5_api_identity_source",
+      "file_count": 2,
+      "bytes": 197837,
+      "aggregate_sha256": "B627A074F9BCAC4324A55A10AABEEF2F96C0285C46397A4E3A9BF3701C49F58A"
+    },
+    {
+      "role": "gate5_api_launcher_test",
+      "file_count": 5,
+      "bytes": 146209,
+      "aggregate_sha256": "7F76CA9D2F2A247009CF2E1F333865534ADC41FEB53A78C914953D73642A3DC0"
+    },
+    {
+      "role": "gate5_api_runtime_dependency",
+      "file_count": 191,
+      "bytes": 3348117,
+      "aggregate_sha256": "CC50B203D227D084948ABD8F79B71E3713214A7E8F9CF01D42A4DC892ECFDCEC"
+    },
+    {
+      "role": "gate5_bound_dependency",
+      "file_count": 2,
+      "bytes": 32893,
+      "aggregate_sha256": "EC56BD4E8FF6701C846009C47CF290178FEBB6763E088736F5E4B8BCDB6C3976"
+    },
+    {
+      "role": "gate5_control_artifact",
+      "file_count": 11,
+      "bytes": 447607,
+      "aggregate_sha256": "3EA0FF6914E8E8A6AC53A9A1B0006F1403E1850C44F246536542E4EE677AD69B"
+    },
+    {
+      "role": "gate5_control_kernel_source",
+      "file_count": 6,
+      "bytes": 93078,
+      "aggregate_sha256": "AE3E9A464E9E2FA1510497524E15BD856DE136685F57C83D29C2481762881223"
+    },
+    {
+      "role": "gate5_control_kernel_test",
+      "file_count": 4,
+      "bytes": 98045,
+      "aggregate_sha256": "FC0D63F0A3CDDC0F3EE257B2EF1874AD55E14A2486951D0A12E79F6188EB897E"
+    },
+    {
+      "role": "gate5_environment_control",
+      "file_count": 4,
+      "bytes": 105388,
+      "aggregate_sha256": "6C6E2A4448A02437D9C3D2691328F2BBC6F5625A9055F40402C3FFCE3AC5EFE5"
+    },
+    {
+      "role": "gate5_launcher_source",
+      "file_count": 1,
+      "bytes": 14079,
+      "aggregate_sha256": "CDDC3B10B087D990E145331528B3232622BFFCA910FB1D9E66470D8D4D17C0D4"
+    },
+    {
+      "role": "gate5_pytest_environment_control",
+      "file_count": 6,
+      "bytes": 4493,
+      "aggregate_sha256": "34AC5645D9A7C3EC648F6E49E8AFDFB3D0CB140F73F0F04F3120F9CA3E01AC0D"
+    },
+    {
+      "role": "gate5_verification_control",
+      "file_count": 2,
+      "bytes": 144180,
+      "aggregate_sha256": "DEBFB681AFC8F1F91199EB8EAF946F5B985E7B31AC23848666CE50887CFCE806"
+    },
+    {
+      "role": "gate5_worker_fixture",
+      "file_count": 3,
+      "bytes": 6132086,
+      "aggregate_sha256": "A519F418963D355BC5EB0215798798DEAEB5CF7BD1368C168334100B737A760C"
+    },
+    {
+      "role": "gate5_worker_source",
+      "file_count": 24,
+      "bytes": 266912,
+      "aggregate_sha256": "4E164C06D9AE39E212515B2336C3598C45B09C5985A58F0EEAFADCF1DABC1F4B"
+    },
+    {
+      "role": "gate5_worker_support",
+      "file_count": 26,
+      "bytes": 459981,
+      "aggregate_sha256": "696BF4BF30425CEA52A4C2841226F92D55699A1A870B7CAE62323DAB0E5DBBA8"
+    },
+    {
+      "role": "gate5_worker_test",
+      "file_count": 38,
+      "bytes": 319612,
+      "aggregate_sha256": "8FB4F3DBD7EC610E750645D42FFB408BA2A6D7E7E769AE0BFB20564566B4F446"
+    }
+  ],
+  "key_repository_sources": [
+    {
+      "path": "docs/working/project_coherence/PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md",
+      "bytes": 29793,
+      "sha256": "B87B2E2B4CC4B10C76EE4AA6EA09094572B2A1008E474475E8F642836B83D2BE",
+      "category": "SHARED_GOVERNANCE"
+    },
+    {
+      "path": "docs/working/project_coherence/CLAIM_LEDGER_v0.1.json",
+      "bytes": 17083,
+      "sha256": "F62E7451135EC9DA0C333DB318C7C6E02BD92C4387EB167D94895810D805828F",
+      "category": "SHARED_CLAIM_BOUNDARY"
+    },
+    {
+      "path": "docs/working/project_coherence/THEOREM_LEDGER_v0.1.json",
+      "bytes": 12459,
+      "sha256": "2646DEE7E801B159E6E82EBDB63129CC5883591D40CF29B6773A9BD4F8578101",
+      "category": "SHARED_THEOREM_BOUNDARY"
+    },
+    {
+      "path": "docs/working/project_coherence/SYMBOL_AND_TERMINOLOGY_REGISTRY_v0.1.json",
+      "bytes": 14851,
+      "sha256": "29529E0803BC8EA7BC62CFA0D0B7CC4B2A0B623012E4BCAAC2A569203711FBEB",
+      "category": "SHARED_NOTATION_BOUNDARY"
+    },
+    {
+      "path": "docs/working/project_coherence/OPEN_VS_HELD_BOUNDARY_v0.1.md",
+      "bytes": 7779,
+      "sha256": "D3C7E7F38A1E59F4C2B9E8E527A1033B791555BB669C4E69FCD556E8D87DF863",
+      "category": "SHARED_DISCLOSURE_BOUNDARY"
+    },
+    {
+      "path": "docs/working/project_coherence/gate4/GATE4_ARTIFACT_MANIFEST_v0.1.json",
+      "bytes": 15810,
+      "sha256": "49102F9BCBAA2345804F5EE3CA708FD6A84E83F8CF5ABB51E6612893A090D57B",
+      "category": "UPSTREAM_GATE4_DEPENDENCY"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/README.md",
+      "bytes": 15405,
+      "sha256": "EF7A1BA9475B411C9756B1580C88DA856A9508362EF21B6E33F87E9F04803A23",
+      "category": "GATE5_CONTROL"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md",
+      "bytes": 16355,
+      "sha256": "F2803B44FF7236762D491A3B249FF13C4CB8D9F336CE19F223F9F716E9A70D2D",
+      "category": "GATE5_NORMATIVE_SPECIFICATION"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/GATE5_REVIEW_MATRIX_v0.1.json",
+      "bytes": 60794,
+      "sha256": "1331B9646B6843DEC8352B10870392E46A00BB7574A0CA1981FA970D5D41CC14",
+      "category": "GATE5_CONTROL_MATRIX"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/GATE5_ARTIFACT_MANIFEST_v0.1.json",
+      "bytes": 90499,
+      "sha256": "5C73F203B4EA7D95B89C3BBB730FFCAE571EECC26E8BA2AF3ABC4A994635B333",
+      "category": "GATE5_MANIFEST"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
+      "bytes": 25963,
+      "sha256": "61E28356C05773F11930B76BBE2ED5D56790B193B29E7577D6A068B6364AA1FD",
+      "category": "GATE5_ADVERSARIAL_REVIEW"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/GATE5_MODEL_AND_DEPENDENCY_BINDING_v0.1.json",
+      "bytes": 3161,
+      "sha256": "A24F27AE6678A8EAAECA5E516805F94F394B416054AB5BCDAA68B687B0B79E2B",
+      "category": "GATE5_HISTORICAL_SECURITY_HOLD"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/GATE5_DEPENDENCY_AND_CONTAINER_CANDIDATE_RECEIPT_v0.2.json",
+      "bytes": 13747,
+      "sha256": "99F4DA7F58C2BA38C62D6E4D04040416DB57628B2D8E3373DCD989D622299DA9",
+      "category": "GATE5_SUCCESSOR_SECURITY_CANDIDATE"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/history/HISTORICAL_HARNESS_V1_V4_RECOVERY_INVENTORY.md",
+      "bytes": 7954,
+      "sha256": "5FD7B0D75490ECFC58B5149B83998B5F8E25F1A9E008ECFC137E0C707BC85A2D",
+      "category": "GATE5_HISTORICAL_NEGATIVE_EVIDENCE"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/history/HISTORICAL_HARNESS_V1_V4_CURRENT_TREE_SHA256.json",
+      "bytes": 262902,
+      "sha256": "29651AAB7E8B0FF0D8D7082D9878DA36FFEFE7A9532D6BC8DCB1F319882C9B82",
+      "category": "GATE5_HISTORICAL_EXACT_TREE"
+    },
+    {
+      "path": "scripts/build_project_coherence_gate5_manifest.py",
+      "bytes": 6457,
+      "sha256": "0FA49058926F66575251A3B731914EFD352346A7B8A91182383C53EAE92509C2",
+      "category": "GATE5_VERIFICATION_CONTROL"
+    },
+    {
+      "path": "scripts/verify_project_coherence_gate5.py",
+      "bytes": 137723,
+      "sha256": "A98D9DCC69E6E43509A2AB20B5E86A1F12A26AF2DE9D99C79C4ED63001C555E7",
+      "category": "GATE5_VERIFICATION_CONTROL"
+    },
+    {
+      "path": "src/cas_harness_v2/__init__.py",
+      "bytes": 1537,
+      "sha256": "160AF8186AE325073B26D43D86BCA34DEC2644137ECA582E9C29547D49449794",
+      "category": "HARNESS_V2_KERNEL_SOURCE"
+    },
+    {
+      "path": "src/cas_harness_v2/_strict_json.py",
+      "bytes": 5760,
+      "sha256": "032EFD78A48A60C2AC0F3CC3B92274A346C5B044B8F22423722FDF55501C9BDC",
+      "category": "HARNESS_V2_KERNEL_SOURCE"
+    },
+    {
+      "path": "src/cas_harness_v2/_validation.py",
+      "bytes": 7678,
+      "sha256": "19D1A53C84E028CF94AAC6F0305DB65DC52B71579E9B935DA849E9181415DE8C",
+      "category": "HARNESS_V2_KERNEL_SOURCE"
+    },
+    {
+      "path": "src/cas_harness_v2/artifacts.py",
+      "bytes": 3571,
+      "sha256": "A6161525BDA0A289B69F5A4820700AD0F10D5AE5C7C6B08FCF154B4C379253C3",
+      "category": "HARNESS_V2_KERNEL_SOURCE"
+    },
+    {
+      "path": "src/cas_harness_v2/preregistration.py",
+      "bytes": 44598,
+      "sha256": "C44D56ADDA2F05897346156D1C9352B035FABE7D02B2A309CCA17EB18FD20055",
+      "category": "HARNESS_V2_KERNEL_SOURCE"
+    },
+    {
+      "path": "src/cas_harness_v2/evidence_packet.py",
+      "bytes": 29934,
+      "sha256": "925EC4E994063352ED2CF4D58A185D7D336910C2E9C453927D49AB041B6F28FD",
+      "category": "HARNESS_V2_KERNEL_SOURCE"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_research_control_kernel.py",
+      "bytes": 48856,
+      "sha256": "88C408020DDAA9D821EEA8D18A60B592C89919454106F8B4EE2F8AA049A0EF72",
+      "category": "HARNESS_V2_KERNEL_TEST"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_research_control_redteam.py",
+      "bytes": 23259,
+      "sha256": "08AF7CE685BCA5CEBF241B30290EF428D5F9C6F05F2245F4C6493B0CCC737EFE",
+      "category": "HARNESS_V2_KERNEL_TEST"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_historical_v1_v4_recovery.py",
+      "bytes": 7414,
+      "sha256": "0672ABD2E83193BB62EF9CC3693266525AA92CDBFBE31AF792D2FDAB675BF21C",
+      "category": "HARNESS_V2_HISTORY_TEST"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_gate5_verifier_redteam.py",
+      "bytes": 18516,
+      "sha256": "956A428227CDB422AD1D6604C327A7AAC7D64E6E98CC4D3E05FDBCC08BD62B9A",
+      "category": "GATE5_VERIFIER_REDTEAM_TEST"
+    }
+  ],
+  "product_and_hosted_boundary_sources": [
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_audit_sessions.py",
+      "bytes": 38781,
+      "sha256": "139C93402B63D8183C1DB73AA2EC685ECEA065AF98F3674997185284413BC8AB",
+      "bounded_interpretation": "Product-side audit-session source exists; hosted execution is not inferred."
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_live_worker_runner.py",
+      "bytes": 40828,
+      "sha256": "8F0FE13BA4B017B7907C673D93E99C397B4D2C957FBA4E4481AE7A3114B37179",
+      "bounded_interpretation": "Worker-runner source exists; no joined Gate 5 run is inferred."
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_evidence_anchor.py",
+      "bytes": 26811,
+      "sha256": "F656495467D2223B05BB5F73A13D85EB46E9E0646BA300C003E667DB0B746D88",
+      "bounded_interpretation": "Local and S3 anchor source exists; current provider state and WORM authority are not inferred."
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_static_evidence_anchor.py",
+      "bytes": 9288,
+      "sha256": "46ADAE538FB15834EB293679E1045B6ED2B32732D43AE9F5C15C8A3A8850E4FF",
+      "bounded_interpretation": "Static anchor source exists; a static hash is not hosted WORM or trusted ordering."
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_evidence_object_store.py",
+      "bytes": 62420,
+      "sha256": "0D2D752544BF484327DCFC53995B5453D63772A25C0622244438D68390C42E75",
+      "bounded_interpretation": "S3 Object Lock packet-storage source exists; configuration and receipts require live exact-version verification."
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_merged_evidence_packets.py",
+      "bytes": 27399,
+      "sha256": "5C66026CFF30ADB133CE23E94C968CB86104608A5FEF9D304253B706615079E3",
+      "bounded_interpretation": "Merged-packet and hash-log source exists; it is distinct from the Gate 5 v2 kernel packet."
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_distributed_audits.py",
+      "bytes": 33320,
+      "sha256": "8CBD9FBCBD880786F84DF1313E03BF167918D0307C5DA6393A7CCEE613F76B63",
+      "bounded_interpretation": "Distributed-audit source exists; real independence and authenticated execution are not inferred."
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_fleet_executor.py",
+      "bytes": 64275,
+      "sha256": "E5A80E62CDBC2486B30BDCE1ED5D8E69E8C6001A10A83656684E9F9ACEAB0F59",
+      "bounded_interpretation": "Fleet-executor source exists; current fleet reachability and joined protocol execution are not inferred."
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_fleet_verifier.py",
+      "bytes": 6460,
+      "sha256": "6630133C77EA1DA73CC8C605C01F05F5257EF60E081E9E452DA5074EC0E631C8",
+      "bounded_interpretation": "Fleet-verifier source exists; it is not an independent trust root."
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_model_provenance.py",
+      "bytes": 18814,
+      "sha256": "BB6E6D8481DF48D21B90CF941CF5A3E11792CBF54285FD5BDB814F587446751B",
+      "bounded_interpretation": "Model-provenance source exists; model identity is not execution or scientific validity."
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_data_governance.py",
+      "bytes": 8492,
+      "sha256": "915CCD536D2C95E7042D9E8EEFE955BB41D4210FCDF3E061EB554AFE9DAC2F1F",
+      "bounded_interpretation": "Data-governance source exists; customer-data rights, privacy, and compliance remain separate."
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_retention_disclosure.py",
+      "bytes": 35217,
+      "sha256": "674C9DF98B7BE3C272E0D4044488E5A5C5CDBE748B7244E31112E00B379888D0",
+      "bounded_interpretation": "Receipt-backed retention-disclosure source exists; provider facts require fresh exact receipt verification."
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/production/worm_writes.py",
+      "bytes": 12910,
+      "sha256": "E0B541F89376F367C4E68BAC038746ADC30E45B427F6B5DB3A4833C8954BBF1B",
+      "bounded_interpretation": "WORM seam and explicit nonproduction stub exist; the stub cannot license WORM commitment."
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/human_attestations.py",
+      "bytes": 49096,
+      "sha256": "A69A5616F82275C28E71CE2DFD14368EAA4DCE9CD58352AD21DBE558155E9ED2",
+      "bounded_interpretation": "Human-attestation source exists; natural identity, qualifications, independence, and actual approval are not inferred."
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/services/acceptance_publication_authorizations.py",
+      "bytes": 30363,
+      "sha256": "4B0750F63EC8FD7BD95679BD402A513F6DBB6E5D128057E0AC3BD5DF3DF32198",
+      "bounded_interpretation": "Publication-authorization source exists; this package has no authorization record."
+    }
+  ],
+  "external_mutable_sources": [
+    {
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/docs/working/cas_harness_production_todo.md",
+      "source_kind": "READ_ONLY_MUTABLE_PRODUCTION_DASHBOARD_SNAPSHOT",
+      "bytes": 2054992,
+      "sha256": "0E290E9C69A429965D7983CAF622CA2BEF7878026E2D156D393707D29FDAF487",
+      "last_write_utc": "2026-08-06T02:16:31.9892378Z",
+      "joined_to_gate5_protocol": false,
+      "claim_effect": "CONTEXT_ONLY",
+      "required_use": "Recheck mutable provider and runtime facts directly before any product or hosted-state claim; do not use this snapshot as a Gate 5 scientific receipt."
+    }
+  ],
+  "historical_recovery": {
+    "source_revision": "d9c1879762233855cd5974676b8179b1e4e75d16",
+    "file_count": 537,
+    "bytes": 95945579,
+    "canonical_inventory_sha256": "361F8867A1B8983C383B4F4FE6D8D485E5DBBC80EE4F75E4B5D08B4E5F144F5F",
+    "preserved_model_free_receipt": "43 PASSED / 4 FAILED",
+    "preserved_v1_worker_receipt": "31 FAILED",
+    "claim_effect": "EXACT_HISTORICAL_AND_NEGATIVE_EVIDENCE_ONLY"
+  },
+  "current_local_verifier_receipt": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python -I -B scripts/verify_project_coherence_gate5.py",
+    "verified_on_utc": "2026-08-06",
+    "elapsed_seconds": 204.9,
+    "exit_code": 0,
+    "result": "PASS",
+    "hash_bound_gate5_artifacts": 325,
+    "syntax_checked_python_artifacts": 296,
+    "executable_shadow_paths_scanned": 1898,
+    "gate4_artifacts": 54,
+    "claim_records": 11,
+    "harness_v2_tests": 113,
+    "harness_v2_subtests": 61,
+    "worker_tests": 364,
+    "numeric_redteam_tests": 32,
+    "api_fleet_launcher_tests": 76,
+    "review_criteria": 47,
+    "required_open_boundaries": 22,
+    "receipt_class": "LOCAL_UNATTESTED_HOST_REGRESSION",
+    "experimental_execution_status": "NOT_STARTED",
+    "gate5_status_after_pass": "OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN",
+    "non_inference": "Not authenticated execution, a joined experiment, causal or semantic validation, independent audit, replication, peer review, WORM, product readiness, licensing, canon admission, or disclosure approval."
+  },
+  "key_repository_source_count": 27,
+  "product_and_hosted_boundary_source_count": 15,
+  "gate5_role_group_count": 15,
+  "external_mutable_source_count": 1,
+  "closure_statement": "This inventory binds exact source snapshots and a current local verifier receipt. It neither recreates nor changes the existing Gate 5 surface and cannot promote any empirical, hosted, WORM, scientific, safety, product, licensing, canon, or disclosure claim."
+}

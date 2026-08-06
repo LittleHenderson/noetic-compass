@@ -1,0 +1,103 @@
+{
+  "schema_version": "project_coherence.publication.wave2.cas_harness2_artifact_manifest.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "base_commit": "c8635270ca6ba7c65504b4fda43cb42a89623015",
+  "branch": "codex/project-coherence-wave2-harness",
+  "manifest_self_hash": null,
+  "self_hash_policy": "NON_SELF_HASHING: this manifest intentionally excludes its own path and digest. Git binds the manifest bytes with the package commit.",
+  "artifact_count": 7,
+  "package_file_count_including_manifest": 8,
+  "artifacts": [
+    {
+      "path": "docs/working/project_coherence/publication/wave2/cas_harness2/CAS_HARNESS_2_EVIDENCE_GROUNDED_VALIDATION_DELTA_v0.1.md",
+      "sha256": "553736986661AE5FA340A780DECDF0F6D4DBC4CB1756E1ED6922538CDCE997A6",
+      "bytes": 38176,
+      "media_type": "text/markdown",
+      "role": "charter_paper_7_source_bound_publication_and_specification_delta"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/cas_harness2/WAVE2_HARNESS_CITATION_LEDGER_v0.1.json",
+      "sha256": "C3D9833D96AD2BD561585CAD40E330A11474D1C16E49232568A53BF3110CE27C",
+      "bytes": 18442,
+      "media_type": "application/json",
+      "role": "primary_external_and_internal_source_citation_ledger"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/cas_harness2/WAVE2_HARNESS_CLAIM_THEOREM_CONTROL_MATRIX_v0.1.json",
+      "sha256": "D1D3BCD57D6CCFD4AFCB8E221A484F79D92008603A2C2CAB1A9C6F2EDED701FF",
+      "bytes": 49023,
+      "media_type": "application/json",
+      "role": "exact_claim_theorem_control_and_authority_matrix"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/cas_harness2/WAVE2_HARNESS_EVIDENCE_MAP_v0.1.json",
+      "sha256": "C5076C6841371AEDC5DB40E4C61D563F89D16AC498C0A15C0FC6990A9D220FB4",
+      "bytes": 20061,
+      "media_type": "application/json",
+      "role": "evidence_class_source_anchor_cluster_and_joined_run_map"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/cas_harness2/WAVE2_HARNESS_LEAD_HANDOFF_v0.1.md",
+      "sha256": "1F64A3EA0C23377AD105C674AF4BB29254B0567F611BAC42EFFE53F0A0BC9BB6",
+      "bytes": 13596,
+      "media_type": "text/markdown",
+      "role": "lead_editor_integration_and_cross_review_handoff"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/cas_harness2/WAVE2_HARNESS_SOURCE_INVENTORY_v0.1.json",
+      "sha256": "7BE11FA5E0D820212C23BD0C847803FF431E26FB3C4CA9013EB418F09D84DE29",
+      "bytes": 19466,
+      "media_type": "application/json",
+      "role": "exact_repository_external_snapshot_and_gate5_role_aggregate_inventory"
+    },
+    {
+      "path": "docs/working/project_coherence/publication/wave2/cas_harness2/WAVE2_HARNESS_UNRESOLVED_OBLIGATIONS_v0.1.json",
+      "sha256": "DFA331D652EBF3192BF4DCE430F102165D32B2E7E812E809C15A60704EB46880",
+      "bytes": 22710,
+      "media_type": "application/json",
+      "role": "open_obligations_closure_evidence_and_prohibited_shortcuts"
+    }
+  ],
+  "validation_invariants": [
+    "Every artifact path is repository-relative, POSIX-normalized, unique, and confined to this CAS Harness 2 Wave 2 lane.",
+    "Every artifact except this manifest contains the exact package status label DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD.",
+    "Every listed SHA-256 is uppercase hexadecimal over exact file bytes and every byte count is exact.",
+    "The manifest path is absent from artifacts and manifest_self_hash is null.",
+    "All JSON artifacts parse with duplicate-key rejection and their declared counts equal their actual collection lengths.",
+    "All internal source paths, hashes, byte counts, Gate 5 record aggregates, and Gate 5 per-role aggregates match the bound base source snapshot.",
+    "Every paper citation identifier resolves to one primary external citation-ledger record, and every matrix source reference resolves to a cited source, upstream criterion, shared claim, shared theorem, or matrix entry.",
+    "The production TODO is represented only as a read-only, time-indexed, mutable external snapshot and has no Gate 5 scientific or product-status effect.",
+    "No empirical result, hosted identity, WORM receipt, scientific validation, product verdict, safety finding, license, canon admission, or disclosure authority is inferred from source presence or local regression evidence.",
+    "No artifact changes Gate 4 or Gate 5 status or edits a shared registry, specification, manifest, Gate file, or production TODO."
+  ],
+  "internal_cross_review": "OPEN",
+  "external_specialist_review": "OPEN",
+  "experiment_status": "NO EXPERIMENT EXECUTED / NOT_STARTED",
+  "joined_run_evidence": "ABSENT",
+  "gpu_or_runpod_use": "NONE",
+  "required_open_boundaries": [
+    "Lead-editor reconciliation with Wave 1, Wave 2, charter, and shared registries",
+    "Formal-math and category-semantic review",
+    "Independent citation and primary-source review",
+    "Authenticated same-run model, tokenizer, code, dependency, container, hardware, and environment identity",
+    "Hermetic execution and complete supply-chain and vulnerability closure",
+    "Trusted time, monotone ordering, replay resistance, and nonce one-use",
+    "Exact-version WORM retention and independently verified anchoring",
+    "A separately authorized transactional joined run",
+    "Valid target-model intervention evidence without silent fallback",
+    "Independent numerical replay, controls, falsifiers, and held-out replication",
+    "Construct-validity, causal-identification, generalization, and claim-language review",
+    "Data rights, privacy, ethics, security, and safety review",
+    "Current hosted product, operational, commercial, compliance, and support readiness",
+    "Qualified product, licensing, canon, authorship, and disclosure decisions",
+    "External specialist review and any eventual submission or peer-review process"
+  ],
+  "closure_statement": "This non-self-hashing manifest binds a held CAS Harness 2 Wave 2 research-draft package only. It is not a signature, trusted timestamp, WORM receipt, joined experiment, scientific or causal result, safety case, product verdict, canon decision, license, disclosure approval, authorship record, submission receipt, or peer-review acceptance."
+}
