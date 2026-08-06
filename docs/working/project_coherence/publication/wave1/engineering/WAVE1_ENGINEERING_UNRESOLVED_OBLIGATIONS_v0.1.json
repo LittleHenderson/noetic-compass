@@ -1,0 +1,262 @@
+{
+  "schema_version": "project_coherence.publication.wave1.engineering_unresolved_obligations.v0.1",
+  "status_label": "DRAFT / OPEN / Ring 4 / NOT LICENSED / HELD",
+  "document_status": "DRAFT / OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "base_commit": "a1cd990109e7561dfd03949bf0e1653461c7ae44",
+  "internal_cross_review": "OPEN",
+  "external_specialist_review": "OPEN",
+  "obligations": [
+    {
+      "id": "PUB-ENG-001",
+      "category": "PUBLICATION_GOVERNANCE",
+      "status": "OPEN",
+      "priority": "P0",
+      "obligation": "Complete dependency-ordered internal cross-review of both drafts against stable artifact hashes and resolve every actionable finding.",
+      "closure_evidence": "Signed or authenticated review assignments, comment ledger, dispositions, revised hashes, and lead-editor acceptance.",
+      "blocked_claims": ["submission readiness", "internally reviewed publication package"]
+    },
+    {
+      "id": "PUB-ENG-002",
+      "category": "PUBLICATION_GOVERNANCE",
+      "status": "OPEN",
+      "priority": "P0",
+      "obligation": "Commission external specialist review in systems/EDA, formal methods, information geometry, experimental design, causal inference, and claim language.",
+      "closure_evidence": "Reviewer identity and independence evidence, stable reviewed hashes, reports, author responses, and resolved dispositions.",
+      "blocked_claims": ["external independent review", "peer-review acceptance"]
+    },
+    {
+      "id": "PUB-ENG-003",
+      "category": "PUBLICATION_GOVERNANCE",
+      "status": "OPEN",
+      "priority": "P0",
+      "obligation": "Record authorship, contributorship, conflicts of interest, acknowledgements, and publication responsibility without inferring them from repository history or model output.",
+      "closure_evidence": "Human-approved authorship/contribution record bound to the submission version.",
+      "blocked_claims": ["authorship", "submission"]
+    },
+    {
+      "id": "PUB-ENG-004",
+      "category": "PUBLICATION_GOVERNANCE",
+      "status": "OPEN",
+      "priority": "P0",
+      "obligation": "Decide whether CAS-Ohm should become a charter-approved standalone paper or remain a provisional technical report.",
+      "closure_evidence": "Explicit charter amendment or explicit decision to retain technical-report status.",
+      "blocked_claims": ["CAS-Ohm charter paper status"]
+    },
+    {
+      "id": "PUB-ENG-005",
+      "category": "DISCLOSURE_AND_IP",
+      "status": "OPEN",
+      "priority": "P0",
+      "obligation": "Complete owner and qualified-counsel disclosure review before any public release, submission, preprint, or external bundle transfer.",
+      "closure_evidence": "Explicit human disclosure decision for exact artifact hashes.",
+      "blocked_claims": ["public disclosure", "external distribution"]
+    },
+    {
+      "id": "PCBA-ENG-001",
+      "category": "LANGUAGE_ENGINEERING",
+      "status": "OPEN",
+      "priority": "P0",
+      "obligation": "Specify and implement a complete versioned CCDL grammar with an exact construct-coverage matrix for the declared five-board corpus.",
+      "closure_evidence": "Grammar version, parser implementation, golden corpus, direct-negative corpus, exact coverage matrix, and independent conformance review.",
+      "blocked_claims": ["complete CCDL conformance", "five-board compiler support"]
+    },
+    {
+      "id": "PCBA-ENG-002",
+      "category": "LANGUAGE_ENGINEERING",
+      "status": "OPEN",
+      "priority": "P1",
+      "obligation": "Implement canonical parse/serialize round trips and fail closed on every unsupported or ambiguous form.",
+      "closure_evidence": "Round-trip property suite, ambiguity tests, mutation tests, and independently replayed fixtures.",
+      "blocked_claims": ["canonical CCDL representation"]
+    },
+    {
+      "id": "PCBA-ENG-003",
+      "category": "STATE_AND_TIME_SEMANTICS",
+      "status": "OPEN",
+      "priority": "P0",
+      "obligation": "Define separate versioned capacitor, PLL, memory, power, richer feedback, stochastic, and reset/time-integration profiles.",
+      "closure_evidence": "Typed state equations, initialization/reset rules, timebase, stability/resource rules, deterministic or stochastic replay contract, and negative fixtures.",
+      "blocked_claims": ["complete stateful PCBA semantics", "adaptive dynamics"]
+    },
+    {
+      "id": "PCBA-ENG-004",
+      "category": "SOFTWARE_ASSURANCE",
+      "status": "OPEN",
+      "priority": "P1",
+      "obligation": "Add property-based, fuzz, mutation, and differential tests for board identity, DRC, cycle analysis, threshold propagation, simulation, and adapters.",
+      "closure_evidence": "Versioned generators, seeds, corpora, mutation score, minimized counterexamples, and independent replay.",
+      "blocked_claims": ["broad software assurance", "checker completeness"]
+    },
+    {
+      "id": "PCBA-ENG-005",
+      "category": "SOFTWARE_ASSURANCE",
+      "status": "OPEN",
+      "priority": "P1",
+      "obligation": "Build and independently reproduce a content-addressed hermetic OS/toolchain/environment bundle and remove repository collector collisions.",
+      "closure_evidence": "Sealed dependency/runtime manifest, clean independent replay, collision-free global collection, exact logs, and stable digests.",
+      "blocked_claims": ["hermetic reproducibility", "repository-wide verification"]
+    },
+    {
+      "id": "PCBA-ENG-006",
+      "category": "CROSS_RUNTIME_CONFORMANCE",
+      "status": "OPEN",
+      "priority": "P2",
+      "obligation": "Specify and test Python/Rust or other cross-engine conformance, or retain explicitly different named profiles.",
+      "closure_evidence": "Typed conformance relation, common fixtures, independently reproduced results, difference ledger, and disposition.",
+      "blocked_claims": ["cross-runtime semantic parity"]
+    },
+    {
+      "id": "OHM-EXP-001",
+      "category": "CALIBRATION_AND_MEASUREMENT",
+      "status": "OPEN",
+      "priority": "P0",
+      "obligation": "Select and justify one named full-scale method per experiment and validate its stability without silently reconciling the three inherited methods.",
+      "closure_evidence": "Preregistration, calibration and held-out split artifacts, uncertainty, drift analysis, and method-specific digest.",
+      "blocked_claims": ["normalized cross-run comparability", "validated Q4 interpretation"]
+    },
+    {
+      "id": "OHM-EXP-002",
+      "category": "CALIBRATION_AND_MEASUREMENT",
+      "status": "OPEN",
+      "priority": "P0",
+      "obligation": "Execute the local-response and effective-resistance hypotheses with randomized alpha, matched controls, disjoint splits, uncertainty, falsifiers, and held-out prediction.",
+      "closure_evidence": "Gate 5 preregistration, authenticated execution evidence, raw artifacts, Evidence Packet v2, independent numerical audit, negative outcomes, and replication.",
+      "blocked_claims": ["CLM-CAS-OHM-LOCAL-RESPONSE", "CLM-CAS-OHM-EFFECTIVE-RESISTANCE"]
+    },
+    {
+      "id": "OHM-EXP-003",
+      "category": "GAIN_AND_NETWORK_VALIDATION",
+      "status": "OPEN",
+      "priority": "P1",
+      "obligation": "Establish or reject a coordinate bridge between Fisher-Rao displacement gain and local Jacobian/projection gain, then test active-region gain composition.",
+      "closure_evidence": "Formal typed bridge or explicit nonidentity disposition, preregistered local/end-to-end estimates, uncertainty, controls, falsifiers, and replication.",
+      "blocked_claims": ["CLM-CAS-OHM-GAIN-COMPOSITION", "general multiplicative gain"]
+    },
+    {
+      "id": "OHM-EXP-004",
+      "category": "GAIN_AND_NETWORK_VALIDATION",
+      "status": "OPEN",
+      "priority": "P1",
+      "obligation": "Test candidate redundancy only on non-safety paths using genuine-branch, sham, single-path, and matched random-head ablations.",
+      "closure_evidence": "Preregistered Evidence Packet v2 with branch topology, interaction/covariance analysis, controls, falsifiers, independent audit, and replication.",
+      "blocked_claims": ["CLM-CAS-OHM-REDUNDANCY", "validated parallel equivalence"]
+    },
+    {
+      "id": "OHM-EXP-005",
+      "category": "DIAGNOSTIC_VALIDATION",
+      "status": "OPEN",
+      "priority": "P1",
+      "obligation": "Evaluate residual localization on blinded implanted non-safety faults against shuffled, no-fault, noise-only, and scorer-bias controls.",
+      "closure_evidence": "Preregistered localization metric, raw blinded assignments, uncertainty, negative cases, independent audit, replication, and claim-language review.",
+      "blocked_claims": ["CLM-CAS-OHM-RESIDUAL-LOCALIZATION", "hidden-cause language"]
+    },
+    {
+      "id": "OHM-EXP-006",
+      "category": "RELIABILITY_AND_DRIFT",
+      "status": "OPEN",
+      "priority": "P1",
+      "obligation": "Validate bootstrap uncertainty, cross-split direction reproducibility, checkpoint drift, environmental validity, and human/LLM inter-rater reliability where scores are used.",
+      "closure_evidence": "Independent repeated measurements, registered thresholds, complete uncertainty/reliability receipt, and held-out replication.",
+      "blocked_claims": ["stable calibration", "cross-checkpoint or cross-model comparability"]
+    },
+    {
+      "id": "MEM-EXP-001",
+      "category": "STATEFUL_MEMRISTIVE_RESEARCH",
+      "status": "OPEN",
+      "priority": "P2",
+      "obligation": "Specify a nonphysical history-state profile with initialization, update, timebase, reset, drift, uncertainty, and provenance, then compare it against a matched memoryless baseline.",
+      "closure_evidence": "Versioned state equation, implementation, synthetic negative fixtures, preregistered hysteresis/path-dependence experiment, held-out prediction, independent audit, and replication.",
+      "blocked_claims": ["memristive CAS dynamics", "learned resistance state", "hysteresis"]
+    },
+    {
+      "id": "MEM-MAT-001",
+      "category": "PHYSICAL_MATERIALITY",
+      "status": "OPEN",
+      "priority": "P2",
+      "obligation": "Keep any physical memristor, voltage/current/resistance, charge/flux, device, or material mapping separate unless an instrumented physical profile and qualified review are explicitly authorized.",
+      "closure_evidence": "A separately scoped physical engineering program with SI units, devices, instrumentation, calibration, uncertainty, safety, and independent review.",
+      "blocked_claims": ["physical CAS circuit", "material memristor implementation", "physical telemetry"]
+    },
+    {
+      "id": "CAUS-ENG-001",
+      "category": "CAUSAL_VALIDITY",
+      "status": "OPEN",
+      "priority": "P0",
+      "obligation": "State an explicit causal model and identification assumptions before interpreting gain, ablation, constraint manipulation, or residual localization causally.",
+      "closure_evidence": "Reviewed causal graph/structural model, estimand, identification proof, preregistered intervention, sensitivity analysis, falsifiers, and replication.",
+      "blocked_claims": ["causal gain", "causal resistance", "hidden-cause localization"]
+    },
+    {
+      "id": "NUM-ENG-001",
+      "category": "NUMERICAL_VALIDATION",
+      "status": "OPEN",
+      "priority": "P1",
+      "obligation": "Obtain an independent numerical implementation and tolerance audit for Fisher-Rao, projector, gain, uncertainty, and network calculations.",
+      "closure_evidence": "Independent code, stable input corpus, executor/auditor agreement criteria, discrepancy ledger, and reviewed receipt.",
+      "blocked_claims": ["independent numerical agreement", "cross-runtime numerical stability"]
+    },
+    {
+      "id": "SAFE-ENG-001",
+      "category": "SAFETY_CLINICAL_REGULATORY",
+      "status": "OPEN",
+      "priority": "P0",
+      "obligation": "Design any CSB repair as a new version with finite parameters, reachable thresholds, explicit latch/fuse truth tables, deterministic traces, hazard analysis, and fail-closed fault handling.",
+      "closure_evidence": "Versioned repair, full trace suite, hazard/risk analysis, independent safety engineering review, and separately authorized validation plan.",
+      "blocked_claims": ["CSB safety effectiveness", "safety certification"]
+    },
+    {
+      "id": "SAFE-ENG-002",
+      "category": "SAFETY_CLINICAL_REGULATORY",
+      "status": "OPEN",
+      "priority": "P0",
+      "obligation": "Keep all clinical, diagnostic, treatment, regulatory, and certification claims prohibited until qualified human processes independently validate and authorize them.",
+      "closure_evidence": "Separately scoped clinical/regulatory program, legally required human attestations, validated evidence, and exact approved claim language.",
+      "blocked_claims": ["clinical suitability", "regulatory compliance", "certification"]
+    },
+    {
+      "id": "AUTH-ENG-001",
+      "category": "AUTHORITY_AND_EVIDENCE",
+      "status": "OPEN",
+      "priority": "P0",
+      "obligation": "Admit and independently audit an external capability/claim authority, protected key lifecycle, revocation, trusted current time, authenticated instrument evidence, and reviewed packet policy.",
+      "closure_evidence": "Explicit governance admission, independent security audit, protected operational receipts, and adversarial verification.",
+      "blocked_claims": ["authenticated Evidence Packet eligibility", "claim-bearing action authorization"]
+    },
+    {
+      "id": "G5-ENG-001",
+      "category": "HARNESS_INTEGRATION",
+      "status": "OPEN",
+      "priority": "P0",
+      "obligation": "Integrate future engineering experiments with the joined Gate 5 runner and Evidence Packet v2 controls without changing Gate 5 status from software tests alone.",
+      "closure_evidence": "Stable runner and environment identity, authenticated execution, retained raw evidence, packet verification, independent numerical audit, replication, and external review.",
+      "blocked_claims": ["admitted experiment", "scientific eligibility", "Harness integration"]
+    },
+    {
+      "id": "CANON-ENG-001",
+      "category": "CANON_AND_MIGRATION",
+      "status": "OPEN",
+      "priority": "P0",
+      "obligation": "Complete semantic migration, conflict adjudication, Integration Board review, and owner decision before any CAS PCBA 8 or CAS-Ohm 1 artifact enters a frozen canonical baseline.",
+      "closure_evidence": "Versioned migration matrix, resolved conflicts, independent review, owner-approved canon record, and frozen exact hashes.",
+      "blocked_claims": ["canonical CAS PCBA 8", "canonical CAS-Ohm 1", "PSR-8 admission"]
+    },
+    {
+      "id": "PRODUCT-ENG-001",
+      "category": "PRODUCT_READINESS",
+      "status": "OPEN",
+      "priority": "P0",
+      "obligation": "Evaluate any product use only through the separate current product authority and live runtime/provider/CI/deployment/acceptance evidence.",
+      "closure_evidence": "Current production gate decisions bound to exact deployment identity and approved claim records.",
+      "blocked_claims": ["production readiness", "customer efficacy", "licensed product capability"]
+    }
+  ],
+  "obligation_count": 27,
+  "all_obligations_open": true,
+  "closure_statement": "This list is intentionally not a promise that every research hypothesis will close positively. Negative, null, unsafe, underpowered, or nonreplicable outcomes must remain evidence and may require claim withdrawal."
+}
