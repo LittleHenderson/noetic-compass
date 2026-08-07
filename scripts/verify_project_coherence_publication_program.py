@@ -26,12 +26,25 @@ PUBLICATION_ROOT = (
 INTEGRATION_ROOT = PUBLICATION_ROOT / "integration"
 
 CURRENT_GATE5_SNAPSHOT_ID = (
-    "G5-SNAPSHOT-ADMITTED-ADAPTER-RECONCILIATION-SUCCESSOR"
+    "G5-SNAPSHOT-CONTROLLER-CONTINUATION-SUCCESSOR"
 )
-CURRENT_GATE5_SOURCE_COMMIT = "b015da8b46a225168ba3e578d24b9bd0af4c7fe7"
+CURRENT_GATE5_SOURCE_COMMIT = "a3236dace93839cd283f1bc8c875340790bb2442"
 CURRENT_GATE5_ARTIFACT_COUNT = 377
+CURRENT_GATE5_PROSPECTIVE_TESTS = 130
+CURRENT_GATE5_PROSPECTIVE_TEST_IDS_SHA256 = (
+    "0CA9217040958125285BFA0F6A7C6D517808B4AC4F4078C152620190767B6BB0"
+)
+CURRENT_GATE5_ADMITTED_TESTS = 90
+CURRENT_GATE5_ADMITTED_TEST_IDS_SHA256 = (
+    "761038779E00511179D4FC5AA3522829D9BDEFB37C231061D04FB3AAD541F733"
+)
 HISTORICAL_FINAL_REPLAY_COMMIT = "d24721afe18e05442f3c691f02dcf1608244f0e9"
 HISTORICAL_FINAL_REPLAY_ARTIFACT_COUNT = 348
+HISTORICAL_B015_REPLAY_COMMIT = "b015da8b46a225168ba3e578d24b9bd0af4c7fe7"
+HISTORICAL_B015_REPLAY_ARTIFACT_COUNT = 377
+HISTORICAL_B015_REPLAY_CANONICAL_SHA256 = (
+    "59197647B9CDDA045D9E60251E1BD6D40682FEC5450831F8642DBB2DB6DE1859"
+)
 INTEGRATED_REPLAY_ORDER = [
     "GATE5",
     "PUBLICATION_PROGRAM",
@@ -52,7 +65,29 @@ GATE5_SNAPSHOT_RECORD_PATHS = {
         "GATE5_RAW_BUILD_AND_SECURITY_EVIDENCE_RECEIPT_v0.1.json"
     ),
     "gate5_verifier": "scripts/verify_project_coherence_gate5.py",
+    "gate5_adversarial_review": (
+        "docs/working/project_coherence/gate5/"
+        "GATE5_ADVERSARIAL_REVIEW_v0.1.md"
+    ),
     "gate5_redteam": "tests/cas_harness_v2/test_gate5_verifier_redteam.py",
+}
+
+HISTORICAL_GATE5_SNAPSHOT_CANONICAL_SHA256 = {
+    "G5-SNAPSHOT-HARNESS-LANE-BASE": (
+        "FA1A48F426D8A5A50A0E202759591FCC1BA9F3264BE041104B5138DCABF5EAD8"
+    ),
+    "G5-SNAPSHOT-HARDENED-INTEGRATION": (
+        "F356DB82D63CA6FE02DEF46194F178244FDC8832AC21A71D817D5BCAB6FCF847"
+    ),
+    "G5-SNAPSHOT-WORKER-PROTOCOL-SUCCESSOR": (
+        "0254F078155BD186EC5F698FDFD3D8423DE9390FD2B0F5A1DADB14E91A81C687"
+    ),
+    "G5-SNAPSHOT-PROSPECTIVE-LIFECYCLE-SUCCESSOR": (
+        "1A439D3366CBD94AE79FB7F13B2650FD4C70B314F6C5162B9367BB9E6D601E36"
+    ),
+    "G5-SNAPSHOT-ADMITTED-ADAPTER-RECONCILIATION-SUCCESSOR": (
+        "59722065EF1FDEAD06430A630800763C19BD41353C4D313AFB298AD3D21454CD"
+    ),
 }
 
 
@@ -92,6 +127,18 @@ def sha256(path: Path) -> str:
         for block in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest().upper()
+
+
+def canonical_json_sha256(value: Any) -> str:
+    """Hash one JSON value with a deterministic, lossless semantic encoding."""
+    payload = json.dumps(
+        value,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        allow_nan=False,
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest().upper()
 
 
 def git_blob_identity(
@@ -447,6 +494,27 @@ def verify_integrated_replay(
         fail(f"{label} promotes Gate 5 experimental execution")
     if gate5.get("dependency_security") != "OPEN_SECURITY / HELD":
         fail(f"{label} promotes Gate 5 dependency security")
+    if expected_commit == CURRENT_GATE5_SOURCE_COMMIT:
+        expected_current_fields = {
+            "controller_continuations_admitted": True,
+            "prospective_lifecycle_sqlite_dark_route_tests": (
+                CURRENT_GATE5_PROSPECTIVE_TESTS
+            ),
+            "prospective_lifecycle_sqlite_dark_route_test_ids_sha256": (
+                CURRENT_GATE5_PROSPECTIVE_TEST_IDS_SHA256
+            ),
+            "admitted_adapter_bounded_reconciliation_tests": (
+                CURRENT_GATE5_ADMITTED_TESTS
+            ),
+            "admitted_adapter_bounded_reconciliation_test_ids_sha256": (
+                CURRENT_GATE5_ADMITTED_TEST_IDS_SHA256
+            ),
+        }
+        if any(
+            gate5.get(key) != value
+            for key, value in expected_current_fields.items()
+        ):
+            fail(f"{label} current Gate 5 test receipt drifted")
     if results["publication_program"].get("bound_publication_artifacts") != 71:
         fail(f"{label} publication artifact count mismatch")
     if results["gate1"].get("artifact_count") != 23:
@@ -471,8 +539,8 @@ def verify_current_successor_candidate(
     if not isinstance(candidate, dict):
         fail("current Gate 5 successor candidate is missing")
     if candidate.get("status") != (
-        "CLEAN GATE 5 CANDIDATE PASS / PUBLICATION REBIND AND ORDERED "
-        "RECEIPT-COMMIT REPLAY REQUIRED"
+        "CLEAN GATE 5 CANDIDATE PASS / PUBLICATION REBIND PASS ON RECEIPT "
+        "WORKTREE / ORDERED RECEIPT-COMMIT REPLAY REQUIRED"
     ):
         fail("current Gate 5 successor candidate status is invalid")
     if candidate.get("commit") != CURRENT_GATE5_SOURCE_COMMIT:
@@ -487,7 +555,20 @@ def verify_current_successor_candidate(
         "artifact_count": CURRENT_GATE5_ARTIFACT_COUNT,
         "route_enabled": False,
         "packaged_adapter_admitted": True,
+        "controller_continuations_admitted": True,
         "configured_scope_only": True,
+        "prospective_lifecycle_sqlite_dark_route_tests": (
+            CURRENT_GATE5_PROSPECTIVE_TESTS
+        ),
+        "prospective_lifecycle_sqlite_dark_route_test_ids_sha256": (
+            CURRENT_GATE5_PROSPECTIVE_TEST_IDS_SHA256
+        ),
+        "admitted_adapter_bounded_reconciliation_tests": (
+            CURRENT_GATE5_ADMITTED_TESTS
+        ),
+        "admitted_adapter_bounded_reconciliation_test_ids_sha256": (
+            CURRENT_GATE5_ADMITTED_TEST_IDS_SHA256
+        ),
         "experimental_execution": "NOT_STARTED",
         "dependency_security": "OPEN_SECURITY / HELD",
     }
@@ -497,7 +578,12 @@ def verify_current_successor_candidate(
         "result",
         "route_enabled",
         "packaged_adapter_admitted",
+        "controller_continuations_admitted",
         "configured_scope_only",
+        "prospective_lifecycle_sqlite_dark_route_tests",
+        "prospective_lifecycle_sqlite_dark_route_test_ids_sha256",
+        "admitted_adapter_bounded_reconciliation_tests",
+        "admitted_adapter_bounded_reconciliation_test_ids_sha256",
         "experimental_execution",
         "dependency_security",
     ):
@@ -516,6 +602,7 @@ def verify_current_successor_candidate(
         for marker in (
             "DEFAULT-DARK ROUTE",
             "PACKAGED AND ADMITTED BOUNDED ADAPTER",
+            "CONTROLLER CONTINUATIONS ADMITTED",
             "CONFIGURED-SCOPE RECONCILIATION",
             "NO LIVE PROVIDER EXECUTION",
             "NOT SCIENTIFIC EVIDENCE",
@@ -525,7 +612,7 @@ def verify_current_successor_candidate(
 
 
 def verify_optional_current_integrated_replay(data: dict[str, Any]) -> None:
-    """Allow no e040 replay yet, but verify it exactly once represented."""
+    """Allow a pending current replay, but verify it exactly once represented."""
     if "current_integrated_replay" not in data:
         return
     replay = data["current_integrated_replay"]
@@ -562,6 +649,7 @@ def verify_gate5_snapshot_crosswalk() -> int:
         "G5-SNAPSHOT-HARDENED-INTEGRATION",
         "G5-SNAPSHOT-WORKER-PROTOCOL-SUCCESSOR",
         "G5-SNAPSHOT-PROSPECTIVE-LIFECYCLE-SUCCESSOR",
+        "G5-SNAPSHOT-ADMITTED-ADAPTER-RECONCILIATION-SUCCESSOR",
         CURRENT_GATE5_SNAPSHOT_ID,
     ]
     actual_snapshot_ids = [item.get("snapshot_id") for item in snapshots]
@@ -588,8 +676,17 @@ def verify_gate5_snapshot_crosswalk() -> int:
             "624E7D577E770BF7CC4490D1D3AC315837E8E753CCD454D2F4E96E6685DC17AB",
             "e0405bf58dfe2a132476fa2672f288dcc097cd77",
         ),
+        "G5-SNAPSHOT-ADMITTED-ADAPTER-RECONCILIATION-SUCCESSOR": (
+            377,
+            "2E5C549679BE5C7C5FD23F172EB52D8F73DC7606529CB9B32F1854DCEE8FB4B2",
+            "b015da8b46a225168ba3e578d24b9bd0af4c7fe7",
+        ),
     }
     snapshots_by_id = {item["snapshot_id"]: item for item in snapshots}
+    if set(HISTORICAL_GATE5_SNAPSHOT_CANONICAL_SHA256) != set(
+        historical_expectations
+    ):
+        fail("historical Gate 5 snapshot fingerprint registry is incomplete")
     for snapshot_id, (
         artifact_count,
         manifest_sha256,
@@ -610,6 +707,10 @@ def verify_gate5_snapshot_crosswalk() -> int:
             and historical.get("source_commit") != source_commit
         ):
             fail(f"historical Gate 5 source commit was rewritten: {snapshot_id}")
+        if canonical_json_sha256(historical) != (
+            HISTORICAL_GATE5_SNAPSHOT_CANONICAL_SHA256[snapshot_id]
+        ):
+            fail(f"historical Gate 5 snapshot object was rewritten: {snapshot_id}")
     current_snapshot_id = data.get("current_snapshot_id")
     if current_snapshot_id != CURRENT_GATE5_SNAPSHOT_ID:
         fail("current Gate 5 successor snapshot pointer is invalid")
@@ -617,7 +718,7 @@ def verify_gate5_snapshot_crosswalk() -> int:
     if current.get("source_commit") != CURRENT_GATE5_SOURCE_COMMIT:
         fail("current Gate 5 successor source commit is not frozen")
     if current.get("parent_snapshot_id") != (
-        "G5-SNAPSHOT-PROSPECTIVE-LIFECYCLE-SUCCESSOR"
+        "G5-SNAPSHOT-ADMITTED-ADAPTER-RECONCILIATION-SUCCESSOR"
     ):
         fail("current Gate 5 successor parent linkage is invalid")
     for key, expected_path in GATE5_SNAPSHOT_RECORD_PATHS.items():
@@ -670,6 +771,26 @@ def verify_gate5_snapshot_crosswalk() -> int:
         fail("current Gate 5 successor replay omits the admitted adapter")
     if candidate_replay.get("configured_scope_only") is not True:
         fail("current Gate 5 successor replay promotes reconciliation scope")
+    expected_current_replay_fields = {
+        "controller_continuations_admitted": True,
+        "prospective_lifecycle_sqlite_dark_route_tests": (
+            CURRENT_GATE5_PROSPECTIVE_TESTS
+        ),
+        "prospective_lifecycle_sqlite_dark_route_test_ids_sha256": (
+            CURRENT_GATE5_PROSPECTIVE_TEST_IDS_SHA256
+        ),
+        "admitted_adapter_bounded_reconciliation_tests": (
+            CURRENT_GATE5_ADMITTED_TESTS
+        ),
+        "admitted_adapter_bounded_reconciliation_test_ids_sha256": (
+            CURRENT_GATE5_ADMITTED_TEST_IDS_SHA256
+        ),
+    }
+    if any(
+        candidate_replay.get(key) != value
+        for key, value in expected_current_replay_fields.items()
+    ):
+        fail("current Gate 5 successor replay test receipt drifted")
 
     verify_current_successor_candidate(
         data, clean_candidate_replay=candidate_replay
@@ -679,6 +800,20 @@ def verify_gate5_snapshot_crosswalk() -> int:
         label="historical d247 final integrated replay",
         expected_commit=HISTORICAL_FINAL_REPLAY_COMMIT,
         expected_gate5_artifact_count=HISTORICAL_FINAL_REPLAY_ARTIFACT_COUNT,
+    )
+    historical_replays = data.get("historical_integrated_replays")
+    if not isinstance(historical_replays, list) or len(historical_replays) != 1:
+        fail("historical integrated replay archive is incomplete")
+    historical_b015_replay = historical_replays[0]
+    if canonical_json_sha256(historical_b015_replay) != (
+        HISTORICAL_B015_REPLAY_CANONICAL_SHA256
+    ):
+        fail("historical b015 integrated replay object was rewritten")
+    verify_integrated_replay(
+        historical_b015_replay,
+        label="historical b015 integrated replay",
+        expected_commit=HISTORICAL_B015_REPLAY_COMMIT,
+        expected_gate5_artifact_count=HISTORICAL_B015_REPLAY_ARTIFACT_COUNT,
     )
     verify_optional_current_integrated_replay(data)
     verify_current_gate5_pointer_reconciliation(

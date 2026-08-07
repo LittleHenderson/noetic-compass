@@ -136,8 +136,8 @@
     "lead_package_parent_commit": "d81cd403b5de3772238becd065db18500e663024",
     "all_lane_merge_head": "087fe7a03a44c0ca5348bd5bdc016113f675887c",
     "historical_gate5_spine_commit": "fbac9909a2b600ac8bc9f1217c073e4a3269beea",
-    "gate5_spine_commit": "b015da8b46a225168ba3e578d24b9bd0af4c7fe7",
-    "gate5_current_snapshot_id": "G5-SNAPSHOT-ADMITTED-ADAPTER-RECONCILIATION-SUCCESSOR",
+    "gate5_spine_commit": "a3236dace93839cd283f1bc8c875340790bb2442",
+    "gate5_current_snapshot_id": "G5-SNAPSHOT-CONTROLLER-CONTINUATION-SUCCESSOR",
     "gate5_current_artifact_count": 377,
     "completed": [
       "Wave 1 lane merges",
@@ -160,12 +160,18 @@
       "receipt-worktree ordered replay of publication program, Gate 1, and Gate 4 against the e0405bf5 successor binding",
       "Gate 5 admitted-adapter/reconciliation successor b015da8b with 377 artifacts and the 325-, 340-, 348-, and 355-artifact snapshots preserved as immutable history",
       "byte-verified packaged kernel admission, joint run identity, transitive request-bound intake receipts, active-lease fencing, and fail-closed configured-scope reconciliation",
-      "receipt-worktree ordered replay of the publication program, Gate 1, and Gate 4 against the b015da8b successor binding"
+      "receipt-worktree ordered replay of the publication program, Gate 1, and Gate 4 against the b015da8b successor binding",
+      "Gate 5 controller-continuation successor a3236dac with 377 artifacts and every earlier snapshot preserved as immutable history",
+      "exact default-dark controller outcome sealing, mutually exclusive Packet-v2 or explicit nonreporting disposition, reporting reservations, continuation DTOs, and strict per-run reconciliation",
+      "full event/lifecycle/dependency envelope and profile cross-binding, canonical event-identity discovery, and exact tenant/event-kind verification",
+      "bounded lifecycle-fingerprint refresh for stale post-CAS acknowledgements, simultaneous exact retries, reservation replays, and pending-successor repairs",
+      "clean Gate 5 candidate replay at a3236dac in 227.3 seconds with 130 prospective-lifecycle tests and 90 admitted-adapter/reconciliation tests",
+      "receipt-worktree publication-program structural rebind PASS with every gate, experiment, license, canon, product, and disclosure boundary retained open"
     ],
     "remaining": [
       "exact clean-checkout Gate 5, publication-program, Gate 1, and Gate 4 replay of the receipt-bearing successor commit plus remote-ref verification",
-      "Gate 5 Evidence Packet attachment, explicit nonreporting, outcome-seal HTTP dependency envelopes, trusted time/WORM, multi-host authority, authenticated provider execution, and provider-backed startup",
-      "complete cross-host reconciliation beyond configured process-local sources, proof of off-registry execution absence, and independently attested executor-auditor replay and reproduction",
+      "Gate 5 lower-level separately immutable planned-final-artifact intent, exact output-replay receipt, INDETERMINATE/REJECTED/EXPIRED HTTP terminal dispositions, trusted time/WORM, multi-host authority, authenticated provider execution, and provider-backed startup",
+      "complete partial-write/orphan and cross-host reconciliation beyond configured process-local sources, proof of off-registry execution absence, and independently attested executor-auditor replay and reproduction",
       "all separately governed external proof, implementation, experiment, review, authorship, license, canon, product, and disclosure obligations"
     ],
     "compute_boundary": "The RunPod balance is user-reported as $107.00; known tranche spend is $0.00, no provider billing ledger or balance receipt was inspected, and no RunPod/GPU/paid job was launched."

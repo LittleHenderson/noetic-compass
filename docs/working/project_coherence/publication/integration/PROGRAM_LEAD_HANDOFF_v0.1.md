@@ -27,13 +27,16 @@ change, or disclosure decision that lacked evidence remains explicitly open.
 The worker-protocol successor added a bounded worker-terminal protocol and
 pre-outcome bridge to Gate 5. The prospective-lifecycle successor then added
 local lifecycle, SQLite-concurrency, and default-dark private-route controls.
-The current successor adds byte-verified kernel packaging, an exact admitted
-adapter, active-lease route binding, and configured-scope reconciliation.
-These are evidence-spine evolutions, not re-authorings of the publication
-lanes. The 325-, 340-, 348-, and 355-artifact source snapshots remain
-immutable historical inputs; current integration decisions use the separately
-identified 377-artifact successor at
-`b015da8b46a225168ba3e578d24b9bd0af4c7fe7`.
+The admitted-adapter successor added byte-verified kernel packaging, an exact
+admitted adapter, active-lease route binding, and configured-scope
+reconciliation. The current controller-continuation successor adds exact
+controller-only outcome sealing, mutually exclusive Packet-v2 or explicit
+nonreporting disposition, and strict per-run reconciliation while keeping the
+route default-dark. These are evidence-spine evolutions, not re-authorings of
+the publication lanes. The 325-, 340-, 348-, 355-, and earlier 377-artifact
+source snapshots remain immutable historical inputs; current integration
+decisions use the separately identified 377-artifact successor at
+`a3236dace93839cd283f1bc8c875340790bb2442`.
 
 ## 2. Immutable lane and review history
 
@@ -42,7 +45,8 @@ identified 377-artifact successor at
 | Hardened Gate 5 evidence spine | `codex/project-coherence-cas-core` | `fbac9909a2b600ac8bc9f1217c073e4a3269beea` | Repository-local evidence improved; Gate 5 remains open |
 | Gate 5 worker-terminal successor | `codex/project-coherence-gate5-successor` | `d24721afe18e05442f3c691f02dcf1608244f0e9` | Historical 348-artifact integration spine; live execution and Gate 5 remain open |
 | Gate 5 prospective-lifecycle successor | `codex/project-coherence-gate5-successor` | `e0405bf58dfe2a132476fa2672f288dcc097cd77` | Historical 355-artifact integration spine; route remained default-dark without a packaged or admitted adapter |
-| Gate 5 admitted-adapter/reconciliation successor | `codex/project-coherence-gate5-successor` | `b015da8b46a225168ba3e578d24b9bd0af4c7fe7` | Current 377-artifact integration spine; bounded adapter is admitted, configured-scope reconciliation is tested, route remains default-dark, and Gate 5 remains open |
+| Gate 5 admitted-adapter/reconciliation successor | `codex/project-coherence-gate5-successor` | `b015da8b46a225168ba3e578d24b9bd0af4c7fe7` | Historical 377-artifact integration spine; bounded adapter was admitted, configured-scope reconciliation was tested, route remained default-dark, and Gate 5 remained open |
+| Gate 5 controller-continuation successor | `codex/project-coherence-gate5-successor` | `a3236dace93839cd283f1bc8c875340790bb2442` | Current 377-artifact integration spine; controller outcome/Packet/nonreporting continuations and strict per-run reconciliation are locally tested, route remains default-dark, and Gate 5 remains open |
 | Formal mathematics Wave 1 | `codex/project-coherence-publication-formal` | `3c8491db6f5559cf090909d9de0efa03d924f53f` | Papers 1 and 3 source lane preserved |
 | Category/sheaf theory Wave 1 | `codex/project-coherence-publication-category` | `643169e9bd8de6d4bd0cc2cbc3cde4e640f1671c` | Papers 2 and 4 source lane preserved |
 | Engineering Wave 1 | `codex/project-coherence-publication-engineering` | `c8635270ca6ba7c65504b4fda43cb42a89623015` | Paper 6 and CAS-Ohm source lane preserved |
@@ -58,7 +62,8 @@ identified 377-artifact successor at
 | Lead-correction acceptance review | `codex/project-coherence-review-lead-corrections` | `64d02d200829b86d3bfc11d9a940a13b91dcf06d` | 13/13 publication-text corrections accepted; zero upstream closures |
 | Clean integrated publication candidate | `codex/project-coherence-publication-integration` | `0f5e46c1832124813a080b85ed4ec01ad317ff2f` | Clean detached replay passed Gate 5, publication structure, Gate 1, and Gate 4 |
 | Historical clean Gate 5 successor candidate | `codex/project-coherence-gate5-successor` | `d24721afe18e05442f3c691f02dcf1608244f0e9` | Clean Gate 5 replay passed; publication provenance rebound without rewriting historical lanes |
-| Current clean Gate 5 successor candidate | `codex/project-coherence-gate5-successor` | `b015da8b46a225168ba3e578d24b9bd0af4c7fe7` | Clean Gate 5 replay passed with the bounded adapter and reconciliation receipt; ordered publication/Gate 1/Gate 4 receipt-worktree replay also passed, with clean receipt-commit replay still required |
+| Historical clean Gate 5 admitted-adapter candidate | `codex/project-coherence-gate5-successor` | `b015da8b46a225168ba3e578d24b9bd0af4c7fe7` | Clean Gate 5 and ordered publication/Gate 1/Gate 4 receipt-worktree replays passed; its snapshot remains immutable history |
+| Current clean Gate 5 successor candidate | `codex/project-coherence-gate5-successor` | `a3236dace93839cd283f1bc8c875340790bb2442` | Clean Gate 5 replay and receipt-worktree publication rebind passed with controller continuations and strict per-run reconciliation; Gate 1, Gate 4, and clean receipt-commit replay remain pending |
 
 The lane commits are historical inputs. Lead corrections are versioned
 successor bytes on the integration branch; they do not rewrite the frozen lane
@@ -211,17 +216,36 @@ in 320.3 seconds, including 38 durable callback/Object-Lock seam tests, 17
 worker-terminal bridge tests, 76 lifecycle/SQLite/default-dark-route tests,
 and 80 packaging/adapter/reconciliation tests.
 
-All five snapshots are preserved. The current private route exists, is
+The controller-continuation successor is a sixth, separately identified
+snapshot. It also binds 377 artifacts. Candidate
+`a3236dace93839cd283f1bc8c875340790bb2442` passed its clean Gate 5 replay
+in 227.3 seconds, including 130 lifecycle/SQLite/default-dark-route tests with
+node-ID digest
+`0CA9217040958125285BFA0F6A7C6D517808B4AC4F4078C152620190767B6BB0`
+and 90 packaging/adapter/reconciliation tests with node-ID digest
+`761038779E00511179D4FC5AA3522829D9BDEFB37C231061D04FB3AAD541F733`.
+
+All six snapshots are preserved. The current private route exists, is
 excluded from OpenAPI, and remains default-dark. The packaged and admitted
 bounded adapter now wires the joint run identity, request-bound intake
-receipt, and active-lease seam into the lifecycle. Reconciliation remains
-limited to configured process-local sources, and no live provider execution
-has occurred. Evidence Packet attachment, explicit nonreporting, outcome-seal
-HTTP dependencies, trusted time, live WORM, multi-host and host-loss
-authority, authenticated execution, proof of off-registry absence,
-independently attested replay and reproduction, scientific validation,
-product authority, licensing, canon admission, and disclosure approval all
-remain open.
+receipt, active-lease seam, controller-only outcome seal, and mutually
+exclusive Packet-v2 or explicit nonreporting disposition into the lifecycle.
+Strict per-run reconciliation precedes the separately configured-scope report,
+but neither layer proves global or off-registry absence, and no live provider
+execution has occurred. The repaired replay path now verifies every indexed
+event's tenant, canonical event kind, event and lifecycle envelopes,
+dependency cross-bindings, and registry/reservation/builder/backend profiles.
+Canonical event identities remain discoverable despite a forged payload run
+identifier. A bounded lifecycle-fingerprint refresh makes stale post-CAS
+acknowledgements, simultaneous exact retries, reservation replays, and pending
+successor repairs converge only through a fully verified stable tuple. The
+lower outcome reservation's separately immutable
+planned-final-artifact intent, exact output-replay receipt, three remaining
+HTTP terminal dispositions, complete cross-host partial-write/orphan
+inventory, trusted time, live independent WORM, multi-host and host-loss
+authority, authenticated execution, independently attested replay and
+reproduction, scientific validation, product authority, licensing, canon
+admission, and disclosure approval all remain open.
 
 ## 7. Compute and RunPod decision
 
@@ -288,11 +312,13 @@ artifacts respectively. The final clean receipt-commit replay remains required;
 this handoff does not convert the candidate into trusted-time, WORM,
 independent, scientific, product, license, canon, or disclosure evidence.
 
-The current admitted-adapter/reconciliation candidate
-`b015da8b46a225168ba3e578d24b9bd0af4c7fe7` binds 377 artifacts and passed
-its clean Gate 5 replay in 320.3 seconds. Its publication-program, Gate 1, and
-Gate 4 receipt-worktree replay passed with 71, 23, and 54 bound artifacts,
-respectively. The final clean receipt-commit replay remains required.
+The admitted-adapter/reconciliation candidate and its prior ordered replay at
+`b015da8b46a225168ba3e578d24b9bd0af4c7fe7` remain an immutable historical
+377-artifact snapshot and receipt. The current controller-continuation candidate
+`a3236dace93839cd283f1bc8c875340790bb2442` binds 377 artifacts and passed
+its clean Gate 5 replay in 227.3 seconds. The receipt-worktree publication
+structural rebind now passes. Gate 1, Gate 4, and final clean receipt-commit
+replay for the new binding remain required and are not claimed by this handoff.
 
 ## 10. Authority boundary
 
