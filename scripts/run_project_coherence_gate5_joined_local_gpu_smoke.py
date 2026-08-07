@@ -89,7 +89,7 @@ CLAIM_TEXT = (
     "this observation excludes prompt-injection detection and steering efficacy."
 )
 BOUNDARY = (
-    "LOCAL SINGLE-HOST / NOT WORM / NON-PRODUCTION / NON-ADMITTED ROUTE / "
+    "LOCAL SINGLE-HOST / NOT WORM / NON-PRODUCTION / NON-ADMITTED ROUTE / POST-FAILURE ADAPTED / "
     "RESEARCH ONLY / DIAGNOSTIC_ONLY / NO EVIDENCE PACKET / "
     "NO PROMPT-INJECTION DETECTION CLAIM / NO STEERING EFFICACY CLAIM / "
     "GATE 5 OPEN / RING 4 / NOT LICENSED / HELD"
@@ -107,10 +107,22 @@ REQUEST_SOURCE = (
 REQUEST_SOURCE_SHA256 = "6f52c4070b2b81cb47f3b85947299109152419db98d9294fa2ec60cd2be4e115"
 DEFAULT_ROOT = (
     REPO_ROOT / "docs" / "working" / "project_coherence" / "gate5"
-    / "joined_model_smoke"
+    / "joined_model_smoke_v0.2"
 )
-DEFAULT_PROTOCOL = DEFAULT_ROOT / "GATE5_JOINED_LOCAL_GPU_SMOKE_PROTOCOL_v0.1.json"
+DEFAULT_PROTOCOL = DEFAULT_ROOT / "GATE5_JOINED_LOCAL_GPU_SMOKE_PROTOCOL_v0.2.json"
 DEFAULT_RUNS = DEFAULT_ROOT / "runs"
+PREDECESSOR_ROOT = (
+    REPO_ROOT / "docs" / "working" / "project_coherence" / "gate5"
+    / "joined_model_smoke" / "runs"
+    / "gate5-joined-20260807T061801Z-dae9471700c1"
+)
+PREDECESSOR_RECEIPT = PREDECESSOR_ROOT / "runtime_receipt.json"
+PREDECESSOR_CLEANUP = PREDECESSOR_ROOT / "cleanup_proof.json"
+PREDECESSOR_RUN_ID = "gate5-joined-20260807T061801Z-dae9471700c1"
+PREDECESSOR_RECEIPT_SHA256 = "67f69744a6a89a7cd30c6769e2d2cdf1d840e7bb79002fdc8450ce99675b29f9"
+PREDECESSOR_RECEIPT_BYTES = 2_258
+PREDECESSOR_CLEANUP_SHA256 = "c0cad307977ad676199a25e19968572b6a2660190d471194965513c8b2db2706"
+PREDECESSOR_CLEANUP_BYTES = 186
 CLAIM_SCHEMA = REPO_ROOT / "docs" / "working" / "project_coherence" / "CLAIM_RECORD.schema.json"
 IMAGE_ID_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
 GIT_SHA_RE = re.compile(r"^[0-9a-f]{40}$")
@@ -131,6 +143,9 @@ PREPARED_ARTIFACT_NAMES = (
     "fixed_sample_plan.json",
     "live_dump.request.json",
     "model_artifact_manifest.json",
+    "network_none_adaptation.json",
+    "predecessor_cleanup_proof.json",
+    "predecessor_failure_receipt.json",
     "preregistration.json",
     "source_manifest.json",
     "split_confirmatory.json",
@@ -141,7 +156,7 @@ PROTOCOL_KEYS = frozenset({
     "schema_version", "protocol_id", "status", "created_at", "claim_id",
     "claim_text", "claim_ceiling", "boundary", "source_commit", "image",
     "artifact_bindings", "model", "job", "invocation_id", "output",
-    "controls", "limitations",
+    "controls", "limitations", "predecessor_failure_binding",
 })
 
 
@@ -296,11 +311,16 @@ def _container_has_exact_none_network(inspect: Any) -> bool:
     none = networks["none"]
     if not isinstance(none, Mapping):
         return False
+    if (
+        re.fullmatch(r"[0-9a-f]{64}", str(none.get("NetworkID") or "")) is None
+        or re.fullmatch(r"[0-9a-f]{64}", str(none.get("EndpointID") or "")) is None
+    ):
+        return False
     return all(
         none.get(field) in {None, "", 0}
         for field in (
-            "NetworkID", "EndpointID", "Gateway", "IPAddress", "MacAddress",
-            "IPPrefixLen", "IPv6Gateway", "GlobalIPv6Address",
+            "Gateway", "IPAddress", "MacAddress", "IPPrefixLen",
+            "IPv6Gateway", "GlobalIPv6Address",
             "GlobalIPv6PrefixLen",
         )
     )
@@ -417,7 +437,7 @@ def _source_manifest(commit: str) -> dict[str, Any]:
 
 def _claim_record() -> dict[str, Any]:
     return {
-        "id": CLAIM_ID, "version": "0.1",
+        "id": CLAIM_ID, "version": "0.2",
         "title": "Bounded joined Gate 5 mechanics observation",
         "statement_kind": "EMPIRICAL_HYPOTHESIS", "claim_text": CLAIM_TEXT,
         "source_refs": ["RUN-LOCAL-NONCANONICAL-MECHANICS-PROTOCOL"],
@@ -434,14 +454,56 @@ def _claim_record() -> dict[str, Any]:
         "product_claim_status": "NOT LICENSED", "admission_ring": 4,
         "disclosure_status": "HELD", "theorem_refs": [], "reviewers": [],
         "last_reviewed_at": None,
-        "notes": ["Run-local and noncanonical.", "Prompt-injection detection and steering efficacy are expressly excluded."],
+        "notes": [
+            "Run-local and noncanonical.",
+            "Post-failure successor to a retained zero-model-invocation network-verifier rejection.",
+            "Prompt-injection detection and steering efficacy are expressly excluded.",
+        ],
     }
+
+
+def _load_predecessor_failure() -> tuple[bytes, bytes]:
+    receipt_raw = PREDECESSOR_RECEIPT.read_bytes()
+    cleanup_raw = PREDECESSOR_CLEANUP.read_bytes()
+    if (
+        _sha_lower(receipt_raw) != PREDECESSOR_RECEIPT_SHA256
+        or len(receipt_raw) != PREDECESSOR_RECEIPT_BYTES
+        or _sha_lower(cleanup_raw) != PREDECESSOR_CLEANUP_SHA256
+        or len(cleanup_raw) != PREDECESSOR_CLEANUP_BYTES
+    ):
+        raise JoinedLocalSmokeError("predecessor failure evidence bytes drifted")
+    receipt = json.loads(receipt_raw)
+    cleanup = json.loads(cleanup_raw)
+    if not (
+        type(receipt) is dict
+        and receipt.get("run_id") == PREDECESSOR_RUN_ID
+        and receipt.get("status") == "FAIL_CLOSED"
+        and receipt.get("model_invocation_count") == 0
+        and receipt.get("joined_result") is None
+        and receipt.get("error")
+        == "JoinedLocalSmokeError: container is not attached only to the addressless none network"
+        and receipt.get("packet_status") == "NOT CREATED"
+        and receipt.get("scientific_efficacy") == "NOT ESTABLISHED"
+        and receipt.get("provider_calls") == 0
+        and receipt.get("provider_spend_usd") == "0.00"
+        and cleanup == {
+            "container_absence_specifically_verified": True,
+            "container_remove_command_succeeded": True,
+            "ephemeral_env_file_removed_after_context": True,
+            "network_none_reverified_before_removal": False,
+        }
+    ):
+        raise JoinedLocalSmokeError(
+            "predecessor is not the exact retained pre-invocation verifier failure"
+        )
+    return receipt_raw, cleanup_raw
 
 
 def _prepare(output_root: Path, *, image_reference: str) -> Path:
     commit = _require_clean_source()
     image = _image_summary(image_reference, _inspect_image(image_reference))
     created_at = _iso()
+    predecessor_receipt_raw, predecessor_cleanup_raw = _load_predecessor_failure()
     store = LocalExactByteStore(output_root)
 
     request_raw = REQUEST_SOURCE.read_bytes()
@@ -467,11 +529,43 @@ def _prepare(output_root: Path, *, image_reference: str) -> Path:
         "status": "IMAGE_BOUND_RUNTIME_IDENTITY / NOT A SEPARATE TOKENIZER HASH CLAIM",
     })
     source_raw = _json_bytes(_source_manifest(commit))
+    network_adaptation_raw = _json_bytes({
+        "schema_version": "cas_harness_gate5_network_none_adaptation.v1",
+        "recorded_at": created_at,
+        "clock_authority": "LOCAL ORCHESTRATOR CLOCK / NOT TRUSTED TIME",
+        "diagnostic_kind": "NON_MODEL_ENTRYPOINT_CONTAINER",
+        "worker_image_id": image["image_id"],
+        "model_invocations": 0,
+        "observed_network_mode": "none",
+        "observed_published_ports": {},
+        "observed_attached_network_names": ["none"],
+        "running_network_id_profile": "EXACT 64-CHAR LOWERCASE HEX / NON-ROUTABLE IDENTITY ONLY",
+        "running_endpoint_id_profile": "EXACT 64-CHAR LOWERCASE HEX / NON-ROUTABLE IDENTITY ONLY",
+        "observed_gateway": "",
+        "observed_ip_address": "",
+        "observed_ipv6_gateway": "",
+        "observed_global_ipv6_address": "",
+        "adaptation": "Accept exact none-network identity IDs while continuing to require no bridge or user-network attachment and empty IPv4/IPv6 routing fields before and after execution.",
+        "claim_boundary": "DOCKER NETWORK-STATE MECHANICS ONLY / NOT MODEL EXECUTION",
+    })
     analysis_raw = _json_bytes({
-        "schema_version": "cas_harness_gate5_joined_analysis_plan.v1",
+        "schema_version": "cas_harness_gate5_joined_analysis_plan.v2",
         "success_status": SUCCESS_NO_PACKET_RECORDED, "maximum_model_invocations": 1,
         "required_order": ["consume", "invoke_once", "retain_output", "terminal", "outcome_access", "nonreporting", "reconcile"],
-        "efficacy_analysis": "EXCLUDED", "packet_creation": "FORBIDDEN", "boundary": BOUNDARY,
+        "efficacy_analysis": "EXCLUDED", "packet_creation": "FORBIDDEN",
+        "predecessor_failure_receipt": _artifact_value(
+            "joined-predecessor-failure-receipt-v01", predecessor_receipt_raw,
+            "application/json",
+        ),
+        "predecessor_cleanup_proof": _artifact_value(
+            "joined-predecessor-cleanup-proof-v01", predecessor_cleanup_raw,
+            "application/json",
+        ),
+        "network_none_adaptation": _artifact_value(
+            "joined-network-none-adaptation-v02", network_adaptation_raw,
+            "application/json",
+        ),
+        "boundary": BOUNDARY,
     })
     dependency_raw = _json_bytes({
         "schema_version": "cas_harness_gate5_joined_dependency_lock.v1",
@@ -493,6 +587,18 @@ def _prepare(output_root: Path, *, image_reference: str) -> Path:
         "split_held_out.json": (heldout_raw, "mechanics-split-held-out", "application/json"),
         "fixed_sample_plan.json": (fixed_raw, "mechanics-fixed-sample-plan", "application/json"),
         "live_dump.request.json": (request_raw, "joined-live-dump-request", "application/json"),
+        "predecessor_failure_receipt.json": (
+            predecessor_receipt_raw, "joined-predecessor-failure-receipt-v01",
+            "application/json",
+        ),
+        "predecessor_cleanup_proof.json": (
+            predecessor_cleanup_raw, "joined-predecessor-cleanup-proof-v01",
+            "application/json",
+        ),
+        "network_none_adaptation.json": (
+            network_adaptation_raw, "joined-network-none-adaptation-v02",
+            "application/json",
+        ),
     }
     for name, (raw, artifact_id, media_type) in artifacts.items():
         store.put_exact(name, raw, artifact_id=artifact_id, media_type=media_type)
@@ -516,7 +622,7 @@ def _prepare(output_root: Path, *, image_reference: str) -> Path:
 
     prereg = {
         "schema_version": "cas_harness_v2.preregistration.v1",
-        "preregistration_id": "prereg-gate5-joined-mechanics-001",
+        "preregistration_id": "prereg-gate5-joined-mechanics-002",
         "created_at": created_at,
         "claim_binding": {
             "claim_ledger": _artifact_value("joined-noncanonical-claim-ledger", ledger_raw, "application/json"),
@@ -547,14 +653,14 @@ def _prepare(output_root: Path, *, image_reference: str) -> Path:
         "identities": {
             "model": {"model_id": MODEL_ID, "revision": MODEL_REVISION, "weights": {"artifact_id": "pythia-160m-model-safetensors", "sha256": WEIGHTS_SHA256.upper(), "byte_length": WEIGHTS_BYTES, "media_type": "application/vnd.safetensors"}, "tokenizer": _artifact_value("pythia-tokenizer-identity", tokenizer_raw, "application/json"), "license_basis": "Open-weight research use; no product license decision"},
             "code": {"commit_sha": commit, "dirty_worktree": False, "source_manifest": _artifact_value("joined-source-manifest", source_raw, "application/json"), "analysis_manifest": _artifact_value("joined-analysis-manifest", analysis_raw, "application/json")},
-            "environment": {"environment_id": "gate5-local-joined-bf16-v1", "runtime": "Local Docker NVIDIA GPU / exact joined overlay", "dependency_lock": _artifact_value("joined-dependency-lock", dependency_raw, "application/json"), "container_image_digest": image["image_id"], "hardware_profile": "One local CUDA GPU; actual identity retained at execution"},
+            "environment": {"environment_id": "gate5-local-joined-bf16-v2", "runtime": "Local Docker NVIDIA GPU / exact joined overlay / post-failure network-none adaptation", "dependency_lock": _artifact_value("joined-dependency-lock", dependency_raw, "application/json"), "container_image_digest": image["image_id"], "hardware_profile": "One local CUDA GPU; actual identity retained at execution"},
         },
         "permitted_wording": {"allowed": ["bounded joined mechanics observation", "SUCCESS_NO_PACKET_RECORDED", "research-only diagnostic"], "forbidden": ["prompt-injection detection validated", "steering efficacy validated", "Gate 5 closed", "production ready", "Evidence Packet created"], "claim_ceiling": "DIAGNOSTIC_ONLY"},
         "governance": {"admission_ring": 4, "product_claim_status": "NOT LICENSED", "disclosure_status": "HELD", "public_release": False, "product_route": False, "license_decision": "NONE"},
     }
     prereg_raw = _json_bytes(prereg)
     store.put_exact("preregistration.json", prereg_raw,
-                    artifact_id="prereg-gate5-joined-mechanics-001",
+                    artifact_id="prereg-gate5-joined-mechanics-002",
                     media_type="application/vnd.cas-harness.preregistration+json")
     load_preregistration(prereg_raw, claim_ledger_bytes=ledger_raw)
 
@@ -566,21 +672,38 @@ def _prepare(output_root: Path, *, image_reference: str) -> Path:
         raw = (output_root / name).read_bytes()
         bindings.append({"path": name, "sha256": _sha_lower(raw), "byte_length": len(raw)})
     protocol = {
-        "schema_version": "cas_harness_gate5_joined_local_gpu_smoke_protocol.v1",
-        "protocol_id": "gate5-joined-local-gpu-smoke-v0.1",
+        "schema_version": "cas_harness_gate5_joined_local_gpu_smoke_protocol.v2",
+        "protocol_id": "gate5-joined-local-gpu-smoke-v0.2",
         "status": "FROZEN / EXECUTION NOT STARTED", "created_at": created_at,
         "claim_id": CLAIM_ID, "claim_text": CLAIM_TEXT, "claim_ceiling": "DIAGNOSTIC_ONLY",
         "boundary": BOUNDARY, "source_commit": commit, "image": image,
         "artifact_bindings": bindings,
         "model": {"model_id": MODEL_ID, "revision": MODEL_REVISION, "weights_filename": WEIGHTS_FILE, "weights_sha256": WEIGHTS_SHA256, "weights_bytes": WEIGHTS_BYTES},
-        "job": {"fleet_id": "fleet-gate5-local", "job_id": "gate5-joined-mechanics-001", "audit_id": "audit-gate5-joined-mechanics-001", "assigned_worker_id": "worker-local-gpu-001", "layer_start": 0, "layer_end": 11, "shard_id": "shard-pythia-all-layers", "assigned_methods": request["method_config"]["enabled_methods"], "expected_outputs": ["joined_worker_dump"], "execution_mode": "external_probe_command"},
-        "invocation_id": "invocation-gate5-joined-0001",
-        "output": {"output_name": "joined_worker_dump", "artifact_id": "joined-worker-dump-output-001", "media_type": "application/json", "terminal_receipt_id": "joined-terminal-receipt-001"},
+        "job": {"fleet_id": "fleet-gate5-local", "job_id": "gate5-joined-mechanics-002", "audit_id": "audit-gate5-joined-mechanics-002", "assigned_worker_id": "worker-local-gpu-001", "layer_start": 0, "layer_end": 11, "shard_id": "shard-pythia-all-layers", "assigned_methods": request["method_config"]["enabled_methods"], "expected_outputs": ["joined_worker_dump"], "execution_mode": "external_probe_command"},
+        "invocation_id": "invocation-gate5-joined-0002",
+        "output": {"output_name": "joined_worker_dump", "artifact_id": "joined-worker-dump-output-002", "media_type": "application/json", "terminal_receipt_id": "joined-terminal-receipt-002"},
         "controls": {"maximum_protocols": 1, "maximum_jobs": 1, "maximum_model_invocations": 1, "automatic_model_retry": False, "evidence_packet": "FORBIDDEN"},
         "limitations": {"worm": "NOT ESTABLISHED", "postgres": "NOT USED", "admitted_route": "NOT USED", "scientific_efficacy": "NOT ESTABLISHED", "gate5": "OPEN", "packet": "NOT CREATED"},
+        "predecessor_failure_binding": {
+            "run_id": PREDECESSOR_RUN_ID,
+            "status": "FAIL_CLOSED / ZERO MODEL INVOCATIONS",
+            "failure_phase": "PRE-MODEL NETWORK-NONE VERIFIER",
+            "failure_receipt": _artifact_value(
+                "joined-predecessor-failure-receipt-v01",
+                predecessor_receipt_raw, "application/json",
+            ),
+            "cleanup_proof": _artifact_value(
+                "joined-predecessor-cleanup-proof-v01",
+                predecessor_cleanup_raw, "application/json",
+            ),
+            "adaptation": _artifact_value(
+                "joined-network-none-adaptation-v02",
+                network_adaptation_raw, "application/json",
+            ),
+        },
     }
     store.put_exact(DEFAULT_PROTOCOL.name, _json_bytes(protocol),
-                    artifact_id="gate5-joined-local-protocol-v01", media_type="application/json")
+                    artifact_id="gate5-joined-local-protocol-v02", media_type="application/json")
     return output_root / DEFAULT_PROTOCOL.name
 
 
@@ -602,7 +725,7 @@ class Prepared:
 def _load_prepared(protocol_path: Path) -> Prepared:
     protocol_raw = protocol_path.read_bytes()
     protocol = json.loads(protocol_raw)
-    if not isinstance(protocol, dict) or set(protocol) != PROTOCOL_KEYS or protocol.get("schema_version") != "cas_harness_gate5_joined_local_gpu_smoke_protocol.v1" or protocol.get("status") != "FROZEN / EXECUTION NOT STARTED" or protocol.get("boundary") != BOUNDARY:
+    if not isinstance(protocol, dict) or set(protocol) != PROTOCOL_KEYS or protocol.get("schema_version") != "cas_harness_gate5_joined_local_gpu_smoke_protocol.v2" or protocol.get("status") != "FROZEN / EXECUTION NOT STARTED" or protocol.get("boundary") != BOUNDARY:
         raise JoinedLocalSmokeError("prepared protocol is not the exact frozen local contract")
     root = protocol_path.parent.resolve()
     rows = protocol["artifact_bindings"]
@@ -649,6 +772,33 @@ def _load_prepared(protocol_path: Path) -> Prepared:
     )
     validate_real_worker_dump_request(request_raw=request_raw, expected_manifest=expected)
     request_payload = json.loads(request_raw)
+    predecessor_receipt_raw = (root / "predecessor_failure_receipt.json").read_bytes()
+    predecessor_cleanup_raw = (root / "predecessor_cleanup_proof.json").read_bytes()
+    network_adaptation_raw = (root / "network_none_adaptation.json").read_bytes()
+    if (
+        predecessor_receipt_raw != PREDECESSOR_RECEIPT.read_bytes()
+        or predecessor_cleanup_raw != PREDECESSOR_CLEANUP.read_bytes()
+    ):
+        raise JoinedLocalSmokeError("prepared predecessor bytes differ from the retained failure")
+    network_adaptation = json.loads(network_adaptation_raw)
+    if not (
+        type(network_adaptation) is dict
+        and network_adaptation.get("schema_version")
+        == "cas_harness_gate5_network_none_adaptation.v1"
+        and network_adaptation.get("worker_image_id") == protocol["image"]["image_id"]
+        and network_adaptation.get("diagnostic_kind") == "NON_MODEL_ENTRYPOINT_CONTAINER"
+        and network_adaptation.get("model_invocations") == 0
+        and network_adaptation.get("observed_network_mode") == "none"
+        and network_adaptation.get("observed_published_ports") == {}
+        and network_adaptation.get("observed_attached_network_names") == ["none"]
+        and network_adaptation.get("observed_gateway") == ""
+        and network_adaptation.get("observed_ip_address") == ""
+        and network_adaptation.get("observed_ipv6_gateway") == ""
+        and network_adaptation.get("observed_global_ipv6_address") == ""
+        and network_adaptation.get("claim_boundary")
+        == "DOCKER NETWORK-STATE MECHANICS ONLY / NOT MODEL EXECUTION"
+    ):
+        raise JoinedLocalSmokeError("network-none successor adaptation is incomplete")
     expected_controls = {
         "maximum_protocols": 1,
         "maximum_jobs": 1,
@@ -673,8 +823,8 @@ def _load_prepared(protocol_path: Path) -> Prepared:
     }
     expected_job = {
         "fleet_id": "fleet-gate5-local",
-        "job_id": "gate5-joined-mechanics-001",
-        "audit_id": "audit-gate5-joined-mechanics-001",
+        "job_id": "gate5-joined-mechanics-002",
+        "audit_id": "audit-gate5-joined-mechanics-002",
         "assigned_worker_id": "worker-local-gpu-001",
         "layer_start": 0,
         "layer_end": 11,
@@ -685,13 +835,31 @@ def _load_prepared(protocol_path: Path) -> Prepared:
     }
     expected_output = {
         "output_name": "joined_worker_dump",
-        "artifact_id": "joined-worker-dump-output-001",
+        "artifact_id": "joined-worker-dump-output-002",
         "media_type": "application/json",
-        "terminal_receipt_id": "joined-terminal-receipt-001",
+        "terminal_receipt_id": "joined-terminal-receipt-002",
+    }
+    expected_predecessor = {
+        "run_id": PREDECESSOR_RUN_ID,
+        "status": "FAIL_CLOSED / ZERO MODEL INVOCATIONS",
+        "failure_phase": "PRE-MODEL NETWORK-NONE VERIFIER",
+        "failure_receipt": _artifact_value(
+            "joined-predecessor-failure-receipt-v01",
+            predecessor_receipt_raw, "application/json",
+        ),
+        "cleanup_proof": _artifact_value(
+            "joined-predecessor-cleanup-proof-v01",
+            predecessor_cleanup_raw, "application/json",
+        ),
+        "adaptation": _artifact_value(
+            "joined-network-none-adaptation-v02",
+            network_adaptation_raw, "application/json",
+        ),
     }
     prereg_payload = chain.base.payload
     if not (
-        protocol["protocol_id"] == "gate5-joined-local-gpu-smoke-v0.1"
+        protocol["protocol_id"] == "gate5-joined-local-gpu-smoke-v0.2"
+        and chain.base.preregistration_id == "prereg-gate5-joined-mechanics-002"
         and protocol["claim_id"] == CLAIM_ID == chain.base.claim_id
         and protocol["claim_text"] == CLAIM_TEXT
         == prereg_payload["claim_binding"]["claim_text"]
@@ -702,10 +870,11 @@ def _load_prepared(protocol_path: Path) -> Prepared:
         == prereg_payload["identities"]["code"]["commit_sha"]
         and protocol["model"] == expected_model
         and protocol["job"] == expected_job
-        and protocol["invocation_id"] == "invocation-gate5-joined-0001"
+        and protocol["invocation_id"] == "invocation-gate5-joined-0002"
         and protocol["output"] == expected_output
         and protocol["controls"] == expected_controls
         and protocol["limitations"] == expected_limitations
+        and protocol["predecessor_failure_binding"] == expected_predecessor
         and type(protocol["image"]) is dict
         and set(protocol["image"]) == {
             "supplied_reference", "image_id", "architecture", "os", "size_bytes",
@@ -1356,7 +1525,7 @@ def _execute(protocol_path: Path, runs_root: Path) -> Path:
         artifact_id="joined-run-artifact-manifest", media_type="application/json")
     status = SUCCESS_NO_PACKET_RECORDED if error is None and not secret_found and all(cleanup.values()) else "FAIL_CLOSED"
     receipt = {
-        "schema_version": "cas_harness_gate5_joined_local_gpu_smoke_receipt.v1",
+        "schema_version": "cas_harness_gate5_joined_local_gpu_smoke_receipt.v2",
         "run_id": run_id, "status": status, "model_invocation_count": invocation_count,
         "joined_result": None if result is None else asdict(result), "error": error,
         "packet_status": "NOT CREATED", "scientific_efficacy": "NOT ESTABLISHED",

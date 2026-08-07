@@ -141,6 +141,19 @@ def test_prepare_emits_schema_loadable_noncanonical_claim_and_preregistration(
         "gate5": "OPEN",
         "packet": "NOT CREATED",
     }
+    assert protocol["predecessor_failure_binding"]["run_id"] == runner.PREDECESSOR_RUN_ID
+    assert protocol["predecessor_failure_binding"]["status"] == (
+        "FAIL_CLOSED / ZERO MODEL INVOCATIONS"
+    )
+    assert protocol["predecessor_failure_binding"]["failure_receipt"]["sha256"] == (
+        runner.PREDECESSOR_RECEIPT_SHA256.upper()
+    )
+    adaptation = json.loads(
+        (protocol_path.parent / "network_none_adaptation.json").read_bytes()
+    )
+    assert adaptation["diagnostic_kind"] == "NON_MODEL_ENTRYPOINT_CONTAINER"
+    assert adaptation["model_invocations"] == 0
+    assert adaptation["observed_network_mode"] == "none"
     assert prepared.request_raw == runner.REQUEST_SOURCE.read_bytes()
     manifest = json.loads(prepared.model_manifest_raw)
     assert manifest["artifacts"] == [{
@@ -190,7 +203,7 @@ def test_network_none_validation_rejects_an_attached_bridge():
             "Ports": {},
             "Networks": {
                 "none": {
-                    "NetworkID": "", "EndpointID": "", "Gateway": "",
+                    "NetworkID": "a" * 64, "EndpointID": "b" * 64, "Gateway": "",
                     "IPAddress": "", "MacAddress": "", "IPPrefixLen": 0,
                     "IPv6Gateway": "", "GlobalIPv6Address": "",
                     "GlobalIPv6PrefixLen": 0,
@@ -205,6 +218,9 @@ def test_network_none_validation_rejects_an_attached_bridge():
 
     assert runner._container_has_exact_none_network(none)
     assert not runner._container_has_exact_none_network(attached)
+    missing_runtime_identity = json.loads(json.dumps(none))
+    missing_runtime_identity["NetworkSettings"]["Networks"]["none"]["EndpointID"] = ""
+    assert not runner._container_has_exact_none_network(missing_runtime_identity)
 
 
 def test_docker_exec_port_prevalidates_without_entering_subprocess(monkeypatch):
@@ -426,7 +442,7 @@ def test_execute_mocked_success_retains_true_cleanup_and_success_receipt(
         runner._load_prepared(protocol_path),
         validated_execution_commit=COMMIT,
         validated_source_to_execution_paths=(
-            "docs/working/project_coherence/gate5/joined_model_smoke/protocol.json",
+            "docs/working/project_coherence/gate5/joined_model_smoke_v0.2/protocol.json",
         ),
     )
     monkeypatch.setattr(runner, "_execute_preflight", lambda _path: prepared)
@@ -437,7 +453,7 @@ def test_execute_mocked_success_retains_true_cleanup_and_success_receipt(
             "Ports": {},
             "Networks": {
                 "none": {
-                    "NetworkID": "", "EndpointID": "", "Gateway": "",
+                    "NetworkID": "a" * 64, "EndpointID": "b" * 64, "Gateway": "",
                     "IPAddress": "", "MacAddress": "", "IPPrefixLen": 0,
                     "IPv6Gateway": "", "GlobalIPv6Address": "",
                     "GlobalIPv6PrefixLen": 0,
