@@ -1,0 +1,17 @@
+INFO:     127.0.0.1:60214 - "GET /health/realmode HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60220 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60224 - "POST /sessions/dump HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60238 - "POST /sessions/dump HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42450 - "POST /sessions/dump HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42462 - "POST /sessions/dump HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42474 - "POST /sessions/dump HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42478 - "POST /sessions/dump HTTP/1.1" 200 OK
+INFO:     Started server process [7]
+INFO:     Waiting for application startup.
+Loading weights:   0%|          | 0/148 [00:00<?, ?it/s]Loading weights:  50%|█████     | 74/148 [00:00<00:00, 721.84it/s]Loading weights: 100%|██████████| 148/148 [00:00<00:00, 1034.24it/s]
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+run_pythia: ending stream after rejected intervention to avoid continuing from unverified mutable model state
+run_pythia: ending stream after rejected intervention to avoid continuing from unverified mutable model state
+run_pythia: ending stream after rejected intervention to avoid continuing from unverified mutable model state
+run_pythia: ending stream after rejected intervention to avoid continuing from unverified mutable model state
