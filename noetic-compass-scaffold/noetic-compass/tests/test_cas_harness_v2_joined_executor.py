@@ -181,7 +181,10 @@ def _fixture() -> tuple[JoinedGate5RunPlan, bytes]:
     )
     request = live_fixture._request(causal=False)
     request["model_id"] = base_model["model_id"]
-    request["method_config"] = {"enabled_methods": ["foundation_probe"]}
+    request["method_config"] = {
+        "enabled_methods": ["foundation_probe"],
+        "knobs": {"foundation_probe": {"layer_range": [2]}},
+    }
     request_raw = _encode(request)
     response = deepcopy(live_fixture._response(causal=False))
     manifest = response["events"][0]["manifest"]  # type: ignore[index]
@@ -189,6 +192,13 @@ def _fixture() -> tuple[JoinedGate5RunPlan, bytes]:
     manifest["tokenizer_id"] = base_model["model_id"]
     manifest["requested_revision"] = base_model["revision"]
     manifest["resolved_revision"] = base_model["revision"]
+    response["events"][1]["resolved_knobs"]["foundation_probe"][  # type: ignore[index]
+        "layer_range"
+    ] = [2]
+    for event in response["events"]:  # type: ignore[union-attr]
+        if event["type"] == "token":
+            for activation in event["top_activated_neurons"]:
+                activation["layer"] = 2
     run_id = prospective_run_id(job.job_id)
     response_raw = _joined_response(
         request_raw=request_raw,
@@ -224,6 +234,7 @@ class _Ports:
         self.fail_phase: str | None = None
         self.cancel_phase: str | None = None
         self.worker_started_at = STARTED_AT
+        self.terminal_at = TERMINAL_AT
         self.consume_idempotent_replay = False
         self.block_invoke = False
         self.invoke_entered = asyncio.Event()
@@ -275,7 +286,7 @@ class _Ports:
     async def observe_terminal_at(self):
         self.calls.append("clock")
         self._fail("clock")
-        return TERMINAL_AT
+        return self.terminal_at
 
     async def retain_output(
         self,
@@ -623,6 +634,36 @@ async def test_preflight_requires_exact_explicit_assigned_methods(
     assert ports.calls == []
 
 
+@pytest.mark.parametrize(
+    "foundation_knobs",
+    [
+        {},
+        {"layer_range": []},
+        {"layer_range": [1]},
+    ],
+    ids=["missing", "empty", "out-of-range"],
+)
+@pytest.mark.asyncio
+async def test_preflight_requires_explicit_in_assignment_foundation_layers(
+    foundation_knobs: dict[str, object],
+) -> None:
+    plan, response_raw = _fixture()
+    request = json.loads(plan.live_request_raw)
+    request["method_config"] = {
+        "enabled_methods": ["foundation_probe"],
+        "knobs": {"foundation_probe": foundation_knobs},
+    }
+    ports = _Ports(response_raw)
+
+    result = await _executor(ports).execute(
+        replace(plan, live_request_raw=_encode(request))
+    )
+
+    assert result.status == PREFLIGHT_REJECTED
+    assert result.model_invocation_count == 0
+    assert ports.calls == []
+
+
 @pytest.mark.asyncio
 async def test_preflight_binds_exact_model_artifact_manifest_digest() -> None:
     plan, response_raw = _fixture()
@@ -692,6 +733,33 @@ async def test_invalid_consumption_timestamp_never_invokes_model(
     assert result.reconciled is True
     assert ports.calls == ["consume", "reconcile"]
     assert ports.live_calls == 0
+
+
+@pytest.mark.parametrize(
+    "terminal_at",
+    [
+        "2026-08-05T08:34:59.999999Z",
+        "2026-08-05T09:30:00.000001Z",
+    ],
+    ids=["before-worker-start", "after-authorization-expiry"],
+)
+@pytest.mark.asyncio
+async def test_terminal_time_outside_execution_window_never_retains_output(
+    terminal_at: str,
+) -> None:
+    plan, response_raw = _fixture()
+    ports = _Ports(response_raw)
+    ports.terminal_at = terminal_at
+
+    result = await _executor(ports).execute(plan)
+
+    assert result.status == CONTINUATION_UNRESOLVED
+    assert result.model_invocation_count == 1
+    assert result.reconciled is True
+    assert result.terminal_at == terminal_at
+    assert ports.output_body is None
+    assert ports.calls == ["consume", "invoke", "clock", "reconcile"]
+    assert ports.live_calls == 1
 
 
 @pytest.mark.asyncio

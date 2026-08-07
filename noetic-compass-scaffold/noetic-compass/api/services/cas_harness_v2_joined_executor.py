@@ -454,7 +454,19 @@ class JoinedGate5Executor:
         terminal_receipt: WorkerTerminalReceiptArtifact | None = None
         try:
             terminal_at = await self._clock.observe_terminal_at()
-            _require_canonical_timestamp(terminal_at, "terminal_at")
+            terminal_observed_at = _parse_canonical_timestamp(
+                terminal_at, "terminal_at"
+            )
+            worker_started_at = _parse_canonical_timestamp(
+                consumption.worker_started_at, "worker_started_at"
+            )
+            authorization_expires_at = datetime.fromisoformat(
+                facts.authorization.expires_at.replace("Z", "+00:00")
+            ).astimezone(UTC)
+            if not worker_started_at <= terminal_observed_at <= authorization_expires_at:
+                raise SchemaValidationError(
+                    "terminal_at lies outside the consumed execution window"
+                )
             output_artifact = ArtifactRef(
                 artifact_id=plan.output_artifact_id,
                 sha256=binding.response_sha256,
@@ -711,6 +723,16 @@ def _preflight(plan: JoinedGate5RunPlan) -> _PreflightFacts:
         or enabled_methods != plan.job_snapshot.assigned_methods
     ):
         raise _PreflightError("request methods differ from the job assignment")
+    if "foundation_probe" in plan.job_snapshot.assigned_methods:
+        foundation_layers = _effective_foundation_layers(method_config)
+        if not foundation_layers or any(
+            layer < plan.job_snapshot.layer_start
+            or layer > plan.job_snapshot.layer_end
+            for layer in foundation_layers
+        ):
+            raise _PreflightError(
+                "foundation probe layers are absent or outside the job assignment"
+            )
     run_id = prospective_run_id(plan.job_snapshot.job_id)
     billing = request.request_payload.get("billing_measurement_context")
     if billing is not None and not plan.allow_billing_receipt:
@@ -729,6 +751,26 @@ def _preflight(plan: JoinedGate5RunPlan) -> _PreflightFacts:
         request=request,
         joined_identity=joined_identity,
     )
+
+
+def _effective_foundation_layers(method_config: Mapping[str, Any]) -> tuple[int, ...]:
+    knobs = method_config.get("knobs")
+    if not isinstance(knobs, Mapping):
+        return ()
+    foundation = knobs.get("foundation_probe")
+    if not isinstance(foundation, Mapping) or "layer_range" not in foundation:
+        return ()
+    layer_range = foundation["layer_range"]
+    if type(layer_range) is not tuple or not layer_range:
+        return ()
+    if len(layer_range) == 2:
+        low, high = layer_range
+        if type(low) is not int or type(high) is not int or low > high:
+            return ()
+        return tuple(range(low, high + 1))
+    if any(type(layer) is not int for layer in layer_range):
+        return ()
+    return tuple(sorted(set(layer_range)))
 
 
 def _validate_consumption(
@@ -922,12 +964,6 @@ def _parse_canonical_timestamp(value: Any, field: str) -> datetime:
     if value != canonical:
         raise SchemaValidationError(f"{field} must be a canonical UTC timestamp")
     return normalized
-
-
-def _require_canonical_timestamp(value: Any, field: str) -> None:
-    _parse_canonical_timestamp(value, field)
-
-
 def _result(
     plan: Any,
     *,
