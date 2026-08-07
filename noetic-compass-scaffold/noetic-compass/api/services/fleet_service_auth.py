@@ -42,6 +42,7 @@ FleetServiceCapability = Literal[
     "seal_outcome",
     "attach_evidence_packet",
     "record_nonreporting",
+    "record_terminal_disposition",
 ]
 
 CAPABILITIES: frozenset[str] = frozenset(
@@ -58,6 +59,7 @@ CAPABILITIES: frozenset[str] = frozenset(
         "seal_outcome",
         "attach_evidence_packet",
         "record_nonreporting",
+        "record_terminal_disposition",
     }
 )
 WORKER_CAPABILITIES: frozenset[str] = frozenset(

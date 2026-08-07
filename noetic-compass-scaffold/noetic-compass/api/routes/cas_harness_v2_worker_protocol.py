@@ -37,6 +37,7 @@ from api.routes.cas_harness_v2_worker_protocol_dto import (
     OutcomeSealRouteResultDTO,
     OutputRetentionRouteResultDTO,
     ReconciliationRouteResultDTO,
+    TerminalDispositionRouteResultDTO,
     TerminalRouteResultDTO,
     WorkerProtocolResultDTOError,
     serialize_exact_route_result,
@@ -74,6 +75,9 @@ CONSUMPTION_MEDIA_TYPE = "application/vnd.cas-harness.run-consumption+json"
 TERMINAL_MEDIA_TYPE = (
     "application/vnd.cas-harness.worker-terminal-receipt+json"
 )
+TERMINAL_DISPOSITION_MEDIA_TYPE = (
+    "application/vnd.cas-harness.terminal-disposition-request+json"
+)
 OUTCOME_SEAL_MEDIA_TYPE = "application/vnd.cas-harness.outcome-seal-request+json"
 EVIDENCE_PACKET_MEDIA_TYPE = (
     "application/vnd.cas-harness.evidence-packet-attachment+json"
@@ -104,6 +108,10 @@ class HarnessV2WorkerProtocolRouteService(Protocol):
     def consume_authorization(self, **kwargs: Any) -> ConsumptionRouteResultDTO: ...
 
     def accept_terminal(self, **kwargs: Any) -> TerminalRouteResultDTO: ...
+
+    def record_terminal_disposition(
+        self, **kwargs: Any
+    ) -> TerminalDispositionRouteResultDTO: ...
 
     def seal_outcome(self, **kwargs: Any) -> OutcomeSealRouteResultDTO: ...
 
@@ -603,6 +611,30 @@ async def accept_terminal(
         media_type=TERMINAL_MEDIA_TYPE,
         authorization_digest_required=True,
         lease_token_required=True,
+    )
+
+
+@router.post("/session/{audit_id}/fleet/v2/job/{job_id}/disposition")
+async def record_terminal_disposition(
+    request: Request, audit_id: RouteId, job_id: RouteId
+) -> JSONResponse:
+    """Record a control-plane no-outcome terminal disposition.
+
+    This controller-only continuation cannot fabricate a worker result or an
+    outcome.  The lifecycle service derives observation time and enforces the
+    exact authorized/running transition boundary.
+    """
+
+    return await _handle(
+        request,
+        audit_id=audit_id,
+        job_id=job_id,
+        worker_id=None,
+        operation="record_terminal_disposition",
+        capability="record_terminal_disposition",
+        media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+        authorization_digest_required=True,
+        lease_token_required=False,
     )
 
 

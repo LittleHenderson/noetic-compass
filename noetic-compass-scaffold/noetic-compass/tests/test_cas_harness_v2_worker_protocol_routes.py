@@ -20,6 +20,7 @@ from api.routes.cas_harness_v2_worker_protocol import (
     OUTCOME_SEAL_MEDIA_TYPE,
     OUTPUT_RETENTION_MEDIA_TYPE,
     RECONCILIATION_MEDIA_TYPE,
+    TERMINAL_DISPOSITION_MEDIA_TYPE,
     TERMINAL_MEDIA_TYPE,
     WorkerProtocolRouteConflict,
     prospective_run_id,
@@ -33,6 +34,7 @@ from api.routes.cas_harness_v2_worker_protocol_dto import (
     OutcomeSealRouteResultDTO,
     OutputRetentionRouteResultDTO,
     ReconciliationRouteResultDTO,
+    TerminalDispositionRouteResultDTO,
     TerminalRouteResultDTO,
     WorkerProtocolResultDTOError,
 )
@@ -122,6 +124,21 @@ class RecordingService:
                 terminal_status="SUCCESS",
                 terminal_event_sha256="D" * 64,
             )
+        if operation == "record_terminal_disposition":
+            return TerminalDispositionRouteResultDTO(
+                receipt_id="route-receipt-record_terminal_disposition",
+                receipt_sha256=hashlib.sha256(operation.encode("utf-8"))
+                .hexdigest()
+                .upper(),
+                disposition_media_type=(
+                    "application/vnd.cas-harness.terminal-disposition+json"
+                ),
+                disposition_byte_length=384,
+                terminal_status="INDETERMINATE",
+                reason_code="EXECUTION_COMPLETION_UNRESOLVED",
+                observed_at=STARTED_AT,
+                terminal_event_sha256="E" * 64,
+            )
         result_type = {
             "retain_output": OutputRetentionRouteResultDTO,
             "attach_evidence_packet": EvidencePacketRouteResultDTO,
@@ -146,6 +163,9 @@ class RecordingService:
 
     def accept_terminal(self, **kwargs: Any):
         return self._accept("accept_terminal", kwargs)
+
+    def record_terminal_disposition(self, **kwargs: Any):
+        return self._accept("record_terminal_disposition", kwargs)
 
     def seal_outcome(self, **kwargs: Any):
         return self._accept("seal_outcome", kwargs)
@@ -195,6 +215,7 @@ def _credentials(backend: InMemoryStateStore):
             "seal_outcome",
             "attach_evidence_packet",
             "record_nonreporting",
+            "record_terminal_disposition",
         ],
         ttl_seconds=3600,
     )
@@ -284,6 +305,7 @@ def test_main_startup_boundary_rejects_enabled_flag_without_service(
 def test_machine_callback_allowlist_is_exact() -> None:
     accepted = (
         f"{CONTROLLER_PATH}/authorization",
+        f"{CONTROLLER_PATH}/disposition",
         f"{CONTROLLER_PATH}/outcome",
         f"{CONTROLLER_PATH}/packet",
         f"{CONTROLLER_PATH}/nonreporting",
@@ -669,6 +691,11 @@ def test_output_retention_is_separate_and_terminal_accepts_no_authorization_body
     ("suffix", "media_type", "operation"),
     (
         ("packet", EVIDENCE_PACKET_MEDIA_TYPE, "attach_evidence_packet"),
+        (
+            "disposition",
+            TERMINAL_DISPOSITION_MEDIA_TYPE,
+            "record_terminal_disposition",
+        ),
         ("nonreporting", NONREPORTING_MEDIA_TYPE, "record_nonreporting"),
         ("outcome", OUTCOME_SEAL_MEDIA_TYPE, "seal_outcome"),
         ("reconcile", RECONCILIATION_MEDIA_TYPE, "reconcile_run"),
@@ -699,6 +726,105 @@ def test_controller_packet_nonreporting_and_reconcile_when_supported(
         .intake_binding.lease_token_sha256
         is None
     )
+
+
+def test_disposition_route_is_controller_only_and_serializes_untrusted_time(
+    enabled: None,
+) -> None:
+    backend = InMemoryStateStore()
+    controller, worker = _credentials(backend)
+    service = RecordingService()
+    client = TestClient(_application(service, backend))
+    raw = (
+        b'{"schema_version":"cas_harness_v2.route_terminal_disposition_request.v1",'
+        b'"terminal_status":"INDETERMINATE",'
+        b'"reason_code":"EXECUTION_COMPLETION_UNRESOLVED"}'
+    )
+
+    accepted = client.post(
+        f"{CONTROLLER_PATH}/disposition",
+        content=raw,
+        headers=_headers(
+            controller,
+            media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+            nonce="disposition_controller_nonce_0001",
+            authorization_sha256=AUTHORIZATION_SHA256,
+        ),
+    )
+    assert accepted.status_code == 200, accepted.text
+    assert service.calls[0][0] == "record_terminal_disposition"
+    call = service.calls[0][1]
+    assert call["worker_id"] is None
+    assert call["raw_body"] == raw
+    assert call["bound_intake_receipt"].intake_binding.route_path == (
+        f"{CONTROLLER_PATH}/disposition"
+    )
+    assert call["bound_intake_receipt"].intake_binding.job_id == JOB_ID
+    assert call["bound_intake_receipt"].intake_binding.run_id == (
+        prospective_run_id(JOB_ID)
+    )
+    assert call["bound_intake_receipt"].intake_binding.authorization_sha256 == (
+        AUTHORIZATION_SHA256
+    )
+    assert accepted.json()["result"] == {
+        "schema_version": "cas_harness_v2.terminal_disposition_route_result.v1",
+        "result_kind": "TERMINAL_DISPOSITION_RECORD",
+        "receipt_id": "route-receipt-record_terminal_disposition",
+        "receipt_sha256": hashlib.sha256(
+            b"record_terminal_disposition"
+        ).hexdigest().upper(),
+        "idempotent_replay": False,
+        "disposition_media_type": (
+            "application/vnd.cas-harness.terminal-disposition+json"
+        ),
+        "disposition_byte_length": 384,
+        "terminal_status": "INDETERMINATE",
+        "reason_code": "EXECUTION_COMPLETION_UNRESOLVED",
+        "observed_at": STARTED_AT,
+        "time_assurance": "PROCESS_OR_INJECTED_CLOCK_NOT_TRUSTED",
+        "terminal_event_sha256": "E" * 64,
+    }
+
+    denied = client.post(
+        f"{CONTROLLER_PATH}/disposition",
+        content=raw,
+        headers=_headers(
+            worker,
+            media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+            nonce="disposition_worker_nonce_0002",
+            authorization_sha256=AUTHORIZATION_SHA256,
+        ),
+    )
+    assert denied.status_code == 403
+    assert len(service.calls) == 1
+
+
+def test_disposition_result_dto_rejects_reason_time_and_authority_forgery() -> None:
+    common = {
+        "receipt_id": "disposition-dto-validation",
+        "receipt_sha256": "A" * 64,
+        "disposition_media_type": (
+            "application/vnd.cas-harness.terminal-disposition+json"
+        ),
+        "disposition_byte_length": 1,
+        "terminal_status": "REJECTED",
+        "reason_code": "ACTION_REJECTED_BEFORE_CONSUMPTION",
+        "observed_at": STARTED_AT,
+        "terminal_event_sha256": "B" * 64,
+    }
+    with pytest.raises(WorkerProtocolResultDTOError):
+        TerminalDispositionRouteResultDTO(
+            **{**common, "reason_code": "EXECUTION_COMPLETION_UNRESOLVED"}
+        )
+    with pytest.raises(WorkerProtocolResultDTOError):
+        TerminalDispositionRouteResultDTO(
+            **{**common, "observed_at": "2026-08-06T00:00:00Z"}
+        )
+    with pytest.raises(TypeError):
+        TerminalDispositionRouteResultDTO(
+            **common,
+            time_assurance="TRUSTED",  # type: ignore[call-arg]
+        )
 
 
 @pytest.mark.parametrize(
@@ -748,6 +874,7 @@ def test_worker_operations_require_one_bounded_lease_header_before_authenticatio
     (
         ("authorization", ISSUE_REQUEST_MEDIA_TYPE, None),
         ("outcome", OUTCOME_SEAL_MEDIA_TYPE, AUTHORIZATION_SHA256),
+        ("disposition", TERMINAL_DISPOSITION_MEDIA_TYPE, AUTHORIZATION_SHA256),
         ("packet", EVIDENCE_PACKET_MEDIA_TYPE, AUTHORIZATION_SHA256),
         ("nonreporting", NONREPORTING_MEDIA_TYPE, AUTHORIZATION_SHA256),
         ("reconcile", RECONCILIATION_MEDIA_TYPE, AUTHORIZATION_SHA256),

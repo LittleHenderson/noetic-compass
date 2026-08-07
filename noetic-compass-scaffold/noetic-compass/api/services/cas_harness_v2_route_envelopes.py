@@ -29,6 +29,9 @@ from cas_harness_v2._strict_json import load_json_object
 
 AUTHORIZATION_REQUEST_SCHEMA = "cas_harness_v2.route_authorization_request.v1"
 CONSUMPTION_REQUEST_SCHEMA = "cas_harness_v2.route_consumption_request.v1"
+TERMINAL_DISPOSITION_REQUEST_SCHEMA = (
+    "cas_harness_v2.route_terminal_disposition_request.v1"
+)
 OUTPUT_RETENTION_SCHEMA = "cas_harness_v2.output_retention.v1"
 OUTCOME_SEAL_REQUEST_SCHEMA = "cas_harness_v2.route_outcome_seal_request.v1"
 PACKET_ATTACHMENT_REQUEST_SCHEMA = (
@@ -49,6 +52,13 @@ NONREPORTING_REASON_CODES = {
     "INDETERMINATE": frozenset({"NO_OUTCOME_INDETERMINATE"}),
     "REJECTED": frozenset({"NO_OUTCOME_REJECTED"}),
     "EXPIRED": frozenset({"NO_OUTCOME_EXPIRED"}),
+}
+TERMINAL_DISPOSITION_REASON_CODES = {
+    "INDETERMINATE": frozenset(
+        {"EXECUTION_COMPLETION_UNRESOLVED", "LEASE_LOST_DURING_RUNNING"}
+    ),
+    "REJECTED": frozenset({"ACTION_REJECTED_BEFORE_CONSUMPTION"}),
+    "EXPIRED": frozenset({"AUTHORIZATION_EXPIRED_BEFORE_CONSUMPTION"}),
 }
 
 
@@ -99,6 +109,15 @@ class ConsumptionRequestEnvelope:
     sha256: str
     byte_length: int
     run_nonce_b64url: str
+
+
+@dataclass(frozen=True, slots=True)
+class TerminalDispositionRequestEnvelope:
+    raw_bytes: bytes
+    sha256: str
+    byte_length: int
+    terminal_status: str
+    reason_code: str
 
 
 @dataclass(frozen=True, slots=True)
@@ -345,6 +364,42 @@ def load_consumption_request_envelope(
         sha256=hashlib.sha256(snapshot).hexdigest().upper(),
         byte_length=len(snapshot),
         run_nonce_b64url=nonce,
+    )
+
+
+def load_terminal_disposition_request_envelope(
+    raw: bytes | bytearray | memoryview,
+) -> TerminalDispositionRequestEnvelope:
+    """Load one closed control-plane disposition request.
+
+    The caller supplies only the disposition and its enumerated reason.  Time,
+    lifecycle state, artifact identity, and reporting effects remain
+    server-derived by ``DarkHarnessV2LifecycleService``.
+    """
+
+    snapshot, value = _load(raw)
+    _exact_keys(value, {"schema_version", "terminal_status", "reason_code"}, "$")
+    if value["schema_version"] != TERMINAL_DISPOSITION_REQUEST_SCHEMA:
+        raise RouteEnvelopeError(
+            "schema_version must equal "
+            f"{TERMINAL_DISPOSITION_REQUEST_SCHEMA!r}."
+        )
+    terminal_status = _machine_id(value["terminal_status"], "$.terminal_status")
+    if terminal_status not in TERMINAL_DISPOSITION_REASON_CODES:
+        raise RouteEnvelopeError(
+            "$.terminal_status must be INDETERMINATE, REJECTED, or EXPIRED."
+        )
+    reason_code = _machine_id(value["reason_code"], "$.reason_code")
+    if reason_code not in TERMINAL_DISPOSITION_REASON_CODES[terminal_status]:
+        raise RouteEnvelopeError(
+            "$.reason_code is not allowed for the declared terminal disposition."
+        )
+    return TerminalDispositionRequestEnvelope(
+        raw_bytes=snapshot,
+        sha256=hashlib.sha256(snapshot).hexdigest().upper(),
+        byte_length=len(snapshot),
+        terminal_status=terminal_status,
+        reason_code=reason_code,
     )
 
 
@@ -742,6 +797,9 @@ __all__ = [
     "PacketAttachmentRequestEnvelope",
     "RECONCILIATION_REQUEST_SCHEMA",
     "RouteEnvelopeError",
+    "TERMINAL_DISPOSITION_REASON_CODES",
+    "TERMINAL_DISPOSITION_REQUEST_SCHEMA",
+    "TerminalDispositionRequestEnvelope",
     "load_authorization_request_envelope",
     "load_consumption_request_envelope",
     "load_nonreporting_request_envelope",
@@ -749,4 +807,5 @@ __all__ = [
     "load_output_retention_envelope",
     "load_packet_attachment_request_envelope",
     "load_reconciliation_request",
+    "load_terminal_disposition_request_envelope",
 ]

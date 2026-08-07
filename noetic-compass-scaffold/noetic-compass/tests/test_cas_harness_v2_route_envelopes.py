@@ -25,6 +25,7 @@ from api.services.cas_harness_v2_route_envelopes import (  # noqa: E402
     OUTCOME_SEAL_REQUEST_SCHEMA,
     PACKET_ATTACHMENT_REQUEST_SCHEMA,
     RECONCILIATION_REQUEST_SCHEMA,
+    TERMINAL_DISPOSITION_REQUEST_SCHEMA,
     RouteEnvelopeError,
     load_authorization_request_envelope,
     load_consumption_request_envelope,
@@ -33,6 +34,7 @@ from api.services.cas_harness_v2_route_envelopes import (  # noqa: E402
     load_output_retention_envelope,
     load_packet_attachment_request_envelope,
     load_reconciliation_request,
+    load_terminal_disposition_request_envelope,
 )
 
 
@@ -283,6 +285,50 @@ def test_consumption_envelope_contains_run_nonce_but_no_lease_capability() -> No
         load_consumption_request_envelope(
             encode({**value, "lease_token": "never-retain-this-secret"})
         )
+
+
+@pytest.mark.parametrize(
+    ("terminal_status", "reason_code"),
+    (
+        ("INDETERMINATE", "EXECUTION_COMPLETION_UNRESOLVED"),
+        ("INDETERMINATE", "LEASE_LOST_DURING_RUNNING"),
+        ("REJECTED", "ACTION_REJECTED_BEFORE_CONSUMPTION"),
+        ("EXPIRED", "AUTHORIZATION_EXPIRED_BEFORE_CONSUMPTION"),
+    ),
+)
+def test_terminal_disposition_envelope_is_closed_and_reason_bound(
+    terminal_status: str,
+    reason_code: str,
+) -> None:
+    value = {
+        "schema_version": TERMINAL_DISPOSITION_REQUEST_SCHEMA,
+        "terminal_status": terminal_status,
+        "reason_code": reason_code,
+    }
+    raw = encode(value)
+    loaded = load_terminal_disposition_request_envelope(raw)
+    assert loaded.raw_bytes == raw
+    assert loaded.sha256 == hashlib.sha256(raw).hexdigest().upper()
+    assert loaded.terminal_status == terminal_status
+    assert loaded.reason_code == reason_code
+
+    wrong_reason = {**value, "reason_code": "ACTION_REJECTED_BEFORE_CONSUMPTION"}
+    if terminal_status == "REJECTED":
+        wrong_reason["reason_code"] = "EXECUTION_COMPLETION_UNRESOLVED"
+    with pytest.raises(RouteEnvelopeError, match="not allowed"):
+        load_terminal_disposition_request_envelope(encode(wrong_reason))
+
+    with_client_time = {**value, "observed_at": "2026-08-05T09:31:00Z"}
+    with pytest.raises(RouteEnvelopeError, match="missing or unknown"):
+        load_terminal_disposition_request_envelope(encode(with_client_time))
+
+    with_lease = {**value, "lease_token": "forbidden-secret"}
+    with pytest.raises(RouteEnvelopeError, match="missing or unknown"):
+        load_terminal_disposition_request_envelope(encode(with_lease))
+
+    malformed_type = {**value, "terminal_status": [terminal_status]}
+    with pytest.raises(RouteEnvelopeError, match="machine identifier"):
+        load_terminal_disposition_request_envelope(encode(malformed_type))
 
 
 def test_output_envelope_binds_exact_artifact_and_rejects_digest_drift() -> None:

@@ -30,6 +30,7 @@ from api.routes.cas_harness_v2_worker_protocol import (
     OUTCOME_SEAL_MEDIA_TYPE,
     OUTPUT_RETENTION_MEDIA_TYPE,
     RECONCILIATION_MEDIA_TYPE,
+    TERMINAL_DISPOSITION_MEDIA_TYPE,
     TERMINAL_MEDIA_TYPE,
     WorkerProtocolRouteConflict,
     WorkerProtocolRouteError,
@@ -45,6 +46,7 @@ from api.routes.cas_harness_v2_worker_protocol_dto import (
     OutcomeSealRouteResultDTO,
     OutputRetentionRouteResultDTO,
     ReconciliationRouteResultDTO,
+    TerminalDispositionRouteResultDTO,
     TerminalRouteResultDTO,
     WorkerProtocolResultDTOError,
 )
@@ -83,6 +85,7 @@ from api.services.cas_harness_v2_route_envelopes import (
     load_output_retention_envelope,
     load_packet_attachment_request_envelope,
     load_reconciliation_request,
+    load_terminal_disposition_request_envelope,
 )
 from api.services.cas_harness_v2_reconciliation_report import (
     AVAILABLE,
@@ -140,6 +143,12 @@ _OPERATION_CONTRACTS: dict[str, tuple[str, str, bool, bool]] = {
     "retain_output": ("output", "submit_evidence", True, True),
     "consume_authorization": ("consume", "lease_job", True, True),
     "accept_terminal": ("terminal", "submit_receipt", True, True),
+    "record_terminal_disposition": (
+        "disposition",
+        "record_terminal_disposition",
+        True,
+        False,
+    ),
     "seal_outcome": ("outcome", "seal_outcome", True, False),
     "attach_evidence_packet": (
         "packet",
@@ -564,6 +573,109 @@ class AdmittedHarnessV2WorkerProtocolAdapter:
                 terminal_status=_required_terminal_status(
                     terminal_details.get("terminal_status")
                 ),
+                terminal_event_sha256=_event_sha256_upper(terminal_event),
+            )
+        except Exception as exc:
+            self._raise_route_error(exc)
+
+    def record_terminal_disposition(
+        self,
+        *,
+        tenant_id: str,
+        account_id: str,
+        audit_id: str,
+        fleet_id: str,
+        job_id: str,
+        run_id: str,
+        worker_id: str | None,
+        raw_body: bytes,
+        body_media_type: str,
+        authenticated_callback: FleetServiceAuthenticatedCallback,
+        bound_intake_receipt: FleetServiceBoundIntakeReceipt,
+    ) -> TerminalDispositionRouteResultDTO:
+        """Record one controller-only no-outcome terminal disposition."""
+
+        try:
+            binding = self._verify_intake(
+                operation="record_terminal_disposition",
+                tenant_id=tenant_id,
+                account_id=account_id,
+                audit_id=audit_id,
+                fleet_id=fleet_id,
+                job_id=job_id,
+                run_id=run_id,
+                worker_id=worker_id,
+                raw_body=raw_body,
+                body_media_type=body_media_type,
+                authenticated_callback=authenticated_callback,
+                bound_intake_receipt=bound_intake_receipt,
+                lease_token=None,
+            )
+            request_envelope = load_terminal_disposition_request_envelope(raw_body)
+            context, authorization_envelope, _authorization = (
+                self._load_existing_controller_run(
+                    tenant_id=tenant_id,
+                    account_id=account_id,
+                    audit_id=audit_id,
+                    fleet_id=fleet_id,
+                    job_id=job_id,
+                    run_id=run_id,
+                    worker_id=worker_id,
+                    authorization_sha256=binding.authorization_sha256,
+                )
+            )
+            operation_id = _operation_id(
+                "disposition",
+                job_id,
+                binding.carrier_sha256.lower(),
+            )
+            result = self._lifecycle_service.record_terminal_disposition(
+                tenant_id=tenant_id,
+                account_id=account_id,
+                subject_id=context.subject_id,
+                chain=authorization_envelope.chain,
+                operation_id=operation_id,
+                job_id=job_id,
+                terminal_status=request_envelope.terminal_status,
+                reason_code=request_envelope.reason_code,
+            )
+            terminal_event = self._terminal_event(
+                tenant_id=tenant_id,
+                subject_id=context.subject_id,
+            )
+            details = terminal_event.get("details")
+            disposition_binding = result.disposition_storage.lifecycle_binding.as_dict()
+            observed_at = _canonical_route_time(result.observed_at)
+            if (
+                not isinstance(details, Mapping)
+                or terminal_event.get("operation_id") != operation_id
+                or terminal_event.get("state_after")
+                != request_envelope.terminal_status
+                or details.get("terminal_status")
+                != request_envelope.terminal_status
+                or details.get("disposition_reason_code")
+                != request_envelope.reason_code
+                or details.get("terminal_artifact") != disposition_binding
+                or result.lifecycle.tenant_id != tenant_id
+                or result.lifecycle.subject_id != context.subject_id
+                or result.lifecycle.run_id != run_id
+                or result.lifecycle.state != request_envelope.terminal_status
+                or result.terminal_status != request_envelope.terminal_status
+                or result.reason_code != request_envelope.reason_code
+                or terminal_event.get("occurred_at") != result.observed_at
+            ):
+                raise WorkerProtocolRouteUnavailable(
+                    "Terminal disposition continuation facts are unavailable."
+                )
+            return TerminalDispositionRouteResultDTO(
+                receipt_id=result.disposition_storage.artifact_id,
+                receipt_sha256=result.disposition_storage.sha256,
+                idempotent_replay=result.idempotent_replay,
+                disposition_media_type=result.disposition_storage.media_type,
+                disposition_byte_length=result.disposition_storage.byte_length,
+                terminal_status=result.terminal_status,
+                reason_code=result.reason_code,
+                observed_at=observed_at,
                 terminal_event_sha256=_event_sha256_upper(terminal_event),
             )
         except Exception as exc:
@@ -1171,7 +1283,7 @@ class AdmittedHarnessV2WorkerProtocolAdapter:
     ) -> tuple[StoredHarnessV2RunContext, AuthorizationRequestEnvelope, Any]:
         if worker_id is not None:
             raise WorkerProtocolRouteRejected(
-                "Reconciliation requires a controller credential."
+                "This continuation requires a controller credential."
             )
         if authorization_sha256 is None:
             raise WorkerProtocolRouteRejected(
@@ -1208,7 +1320,7 @@ class AdmittedHarnessV2WorkerProtocolAdapter:
             tenant_id=tenant_id, subject_id=context.subject_id
         ) is None:
             raise WorkerProtocolRouteConflict(
-                "The authorization route must finish issuance before reconciliation."
+                "The authorization route must finish issuance before controller use."
             )
         issuance = self._lifecycle_service.replay_run_authorization(
             tenant_id=tenant_id,
@@ -1218,7 +1330,7 @@ class AdmittedHarnessV2WorkerProtocolAdapter:
         )
         if issuance.issued_now or issuance.run_nonce is not None:
             raise WorkerProtocolRouteConflict(
-                "Reconciliation cannot become the first authorization issuance."
+                "A controller continuation cannot become first authorization issuance."
             )
         self._verify_authorization_result(
             result=issuance,
@@ -1556,6 +1668,7 @@ class AdmittedHarnessV2WorkerProtocolAdapter:
             "retain_output": OUTPUT_RETENTION_MEDIA_TYPE,
             "consume_authorization": CONSUMPTION_MEDIA_TYPE,
             "accept_terminal": TERMINAL_MEDIA_TYPE,
+            "record_terminal_disposition": TERMINAL_DISPOSITION_MEDIA_TYPE,
             "seal_outcome": OUTCOME_SEAL_MEDIA_TYPE,
             "attach_evidence_packet": EVIDENCE_PACKET_MEDIA_TYPE,
             "record_nonreporting": NONREPORTING_MEDIA_TYPE,

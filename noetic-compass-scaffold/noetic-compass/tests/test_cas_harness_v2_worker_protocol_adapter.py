@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import base64
 from dataclasses import replace
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 import hashlib
 import json
 from pathlib import Path
@@ -28,6 +28,7 @@ from api.routes.cas_harness_v2_worker_protocol import (  # noqa: E402
     OUTCOME_SEAL_MEDIA_TYPE,
     OUTPUT_RETENTION_MEDIA_TYPE,
     RECONCILIATION_MEDIA_TYPE,
+    TERMINAL_DISPOSITION_MEDIA_TYPE,
     TERMINAL_MEDIA_TYPE,
     WorkerProtocolRouteConflict,
     WorkerProtocolRouteRejected,
@@ -54,6 +55,7 @@ from api.services.cas_harness_v2_route_envelopes import (  # noqa: E402
     OUTCOME_SEAL_REQUEST_SCHEMA,
     PACKET_ATTACHMENT_REQUEST_SCHEMA,
     RECONCILIATION_REQUEST_SCHEMA,
+    TERMINAL_DISPOSITION_REQUEST_SCHEMA,
     load_authorization_request_envelope,
 )
 from api.services.cas_harness_v2_run_context import (  # noqa: E402
@@ -61,11 +63,15 @@ from api.services.cas_harness_v2_run_context import (  # noqa: E402
     RUN_CONTEXT_NAMESPACE,
 )
 from api.services.cas_harness_v2_run_lifecycle import (  # noqa: E402
+    AUTHORIZED,
+    EXPIRED,
     FAILURE,
+    INDETERMINATE,
     NONREPORTING_RECORDED,
     OUTCOME_ACCESSED,
     PACKET_RECORDED,
     RUNNING,
+    REJECTED,
     SUCCESS,
 )
 from api.services.cas_harness_v2_worker_protocol_adapter import (  # noqa: E402
@@ -203,6 +209,7 @@ def _bound(
         "seal_outcome",
         "attach_evidence_packet",
         "record_nonreporting",
+        "record_terminal_disposition",
         "reconcile_run",
     }
     worker = None if operation in controller_operations else WORKER
@@ -214,6 +221,7 @@ def _bound(
         "seal_outcome": "seal_outcome",
         "attach_evidence_packet": "attach_evidence_packet",
         "record_nonreporting": "record_nonreporting",
+        "record_terminal_disposition": "record_terminal_disposition",
         "reconcile_run": "verify_fleet",
     }[operation]
     suffix = {
@@ -224,6 +232,7 @@ def _bound(
         "seal_outcome": "outcome",
         "attach_evidence_packet": "packet",
         "record_nonreporting": "nonreporting",
+        "record_terminal_disposition": "disposition",
         "reconcile_run": "reconcile",
     }[operation]
     path = f"/api/cas-harness/audit/distributed/session/{AUDIT}/fleet/v2/job/{JOB}"
@@ -302,6 +311,49 @@ def _issue(system: dict, adapter: AdmittedHarnessV2WorkerProtocolAdapter):
 
 def _reconciliation_request() -> bytes:
     return encode({"schema_version": RECONCILIATION_REQUEST_SCHEMA})
+
+
+def _disposition_request(terminal_status: str, reason_code: str) -> bytes:
+    return encode(
+        {
+            "schema_version": TERMINAL_DISPOSITION_REQUEST_SCHEMA,
+            "terminal_status": terminal_status,
+            "reason_code": reason_code,
+        }
+    )
+
+
+def _consume_for_disposition(
+    system: dict,
+    adapter: AdmittedHarnessV2WorkerProtocolAdapter,
+    issued,
+    *,
+    nonce_character: str,
+) -> None:
+    consume_raw = encode(
+        {
+            "schema_version": CONSUMPTION_REQUEST_SCHEMA,
+            "run_nonce_b64url": system["fx"].run_nonce,
+        }
+    )
+    receipt = _bound(
+        system,
+        operation="consume_authorization",
+        raw=consume_raw,
+        media_type=CONSUMPTION_MEDIA_TYPE,
+        nonce_character=nonce_character,
+        authorization_sha256=issued.receipt_sha256,
+        lease_token=LEASE_TOKEN,
+    )
+    system["clock"].now = STARTED_AT
+    adapter.consume_authorization(
+        **_kwargs(
+            receipt,
+            raw=consume_raw,
+            media_type=CONSUMPTION_MEDIA_TYPE,
+            lease_token=LEASE_TOKEN,
+        )
+    )
 
 
 def _route_binding(value: dict[str, object]) -> dict[str, object]:
@@ -665,6 +717,334 @@ def test_adapter_failed_run_seals_outcome_records_nonreporting_and_replays_outco
     assert replay_outcome.receipt_id == first_outcome.receipt_id
     assert replay_outcome.accessed_at == first_outcome.accessed_at
     system["store"].close()
+
+
+@pytest.mark.parametrize(
+    ("terminal_status", "reason_code", "observed_at", "requires_running"),
+    (
+        (
+            INDETERMINATE,
+            "EXECUTION_COMPLETION_UNRESOLVED",
+            TERMINAL_AT,
+            True,
+        ),
+        (
+            REJECTED,
+            "ACTION_REJECTED_BEFORE_CONSUMPTION",
+            STARTED_AT,
+            False,
+        ),
+        (
+            EXPIRED,
+            "AUTHORIZATION_EXPIRED_BEFORE_CONSUMPTION",
+            OUTCOME_AT + timedelta(minutes=1),
+            False,
+        ),
+    ),
+)
+def test_adapter_records_each_controller_terminal_disposition_and_exact_replay(
+    tmp_path: Path,
+    terminal_status: str,
+    reason_code: str,
+    observed_at: datetime,
+    requires_running: bool,
+) -> None:
+    system = _system(tmp_path, bound_intake=True)
+    adapter = _adapter(system)
+    _authorization_raw, issued = _issue(system, adapter)
+    if requires_running:
+        _consume_for_disposition(
+            system,
+            adapter,
+            issued,
+            nonce_character="B",
+        )
+    assert system["registry"].get_lifecycle(
+        tenant_id=TENANT,
+        subject_id=JOB,
+    ).state == (RUNNING if requires_running else AUTHORIZED)
+
+    raw = _disposition_request(terminal_status, reason_code)
+    receipt = _bound(
+        system,
+        operation="record_terminal_disposition",
+        raw=raw,
+        media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+        nonce_character="C",
+        authorization_sha256=issued.receipt_sha256,
+    )
+    system["clock"].now = observed_at
+    first = adapter.record_terminal_disposition(
+        **_kwargs(
+            receipt,
+            raw=raw,
+            media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+        )
+    )
+    assert first.terminal_status == terminal_status
+    assert first.reason_code == reason_code
+    assert first.observed_at == observed_at.isoformat(
+        timespec="microseconds"
+    ).replace("+00:00", "Z")
+    assert first.time_assurance == "PROCESS_OR_INJECTED_CLOCK_NOT_TRUSTED"
+    assert first.disposition_media_type == (
+        "application/vnd.cas-harness.terminal-disposition+json"
+    )
+    assert first.disposition_byte_length > 0
+    assert first.receipt_sha256 == first.receipt_sha256.upper()
+    assert first.idempotent_replay is False
+    terminal_event = _event(system, terminal_status)
+    assert first.terminal_event_sha256 == terminal_event["event_sha256"].upper()
+    assert system["registry"].get_lifecycle(
+        tenant_id=TENANT,
+        subject_id=JOB,
+    ).state == terminal_status
+
+    replay_receipt = _bound(
+        system,
+        operation="record_terminal_disposition",
+        raw=raw,
+        media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+        nonce_character="D",
+        authorization_sha256=issued.receipt_sha256,
+    )
+    replay = adapter.record_terminal_disposition(
+        **_kwargs(
+            replay_receipt,
+            raw=raw,
+            media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+        )
+    )
+    assert replay.idempotent_replay is True
+    assert replay.receipt_id == first.receipt_id
+    assert replay.receipt_sha256 == first.receipt_sha256
+    assert replay.observed_at == first.observed_at
+    system["store"].close()
+
+
+def test_adapter_disposition_enforces_state_time_reason_scope_and_exact_conflict(
+    tmp_path: Path,
+) -> None:
+    def isolated_system(name: str) -> dict:
+        directory = tmp_path / name
+        directory.mkdir()
+        return _system(directory, bound_intake=True)
+
+    # INDETERMINATE cannot be asserted before the worker consumes authorization.
+    system = isolated_system("indeterminate")
+    adapter = _adapter(system)
+    _request_raw, issued = _issue(system, adapter)
+    indeterminate = _disposition_request(
+        INDETERMINATE,
+        "EXECUTION_COMPLETION_UNRESOLVED",
+    )
+    indeterminate_receipt = _bound(
+        system,
+        operation="record_terminal_disposition",
+        raw=indeterminate,
+        media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+        nonce_character="E",
+        authorization_sha256=issued.receipt_sha256,
+    )
+    system["clock"].now = TERMINAL_AT
+    with pytest.raises(WorkerProtocolRouteRejected):
+        adapter.record_terminal_disposition(
+            **_kwargs(
+                indeterminate_receipt,
+                raw=indeterminate,
+                media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+            )
+        )
+    system["store"].close()
+
+    # REJECTED and EXPIRED cannot replace RUNNING, and their time boundary is
+    # enforced only by the server-observed lifecycle clock.
+    for status, reason, clock_at in (
+        (REJECTED, "ACTION_REJECTED_BEFORE_CONSUMPTION", STARTED_AT),
+        (
+            EXPIRED,
+            "AUTHORIZATION_EXPIRED_BEFORE_CONSUMPTION",
+            OUTCOME_AT + timedelta(minutes=1),
+        ),
+    ):
+        running_system = isolated_system(status.lower())
+        running_adapter = _adapter(running_system)
+        _raw, running_issued = _issue(running_system, running_adapter)
+        _consume_for_disposition(
+            running_system,
+            running_adapter,
+            running_issued,
+            nonce_character="F",
+        )
+        request_raw = _disposition_request(status, reason)
+        intake = _bound(
+            running_system,
+            operation="record_terminal_disposition",
+            raw=request_raw,
+            media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+            nonce_character="G",
+            authorization_sha256=running_issued.receipt_sha256,
+        )
+        running_system["clock"].now = clock_at
+        with pytest.raises(WorkerProtocolRouteRejected):
+            running_adapter.record_terminal_disposition(
+                **_kwargs(
+                    intake,
+                    raw=request_raw,
+                    media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+                )
+            )
+        running_system["store"].close()
+
+    for status, reason, invalid_clock in (
+        (
+            EXPIRED,
+            "AUTHORIZATION_EXPIRED_BEFORE_CONSUMPTION",
+            OUTCOME_AT - timedelta(microseconds=1),
+        ),
+        (
+            REJECTED,
+            "ACTION_REJECTED_BEFORE_CONSUMPTION",
+            OUTCOME_AT,
+        ),
+    ):
+        timed_system = isolated_system(f"time-{status.lower()}")
+        timed_adapter = _adapter(timed_system)
+        _raw, timed_issued = _issue(timed_system, timed_adapter)
+        request_raw = _disposition_request(status, reason)
+        intake = _bound(
+            timed_system,
+            operation="record_terminal_disposition",
+            raw=request_raw,
+            media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+            nonce_character="H",
+            authorization_sha256=timed_issued.receipt_sha256,
+        )
+        timed_system["clock"].now = invalid_clock
+        with pytest.raises(WorkerProtocolRouteRejected):
+            timed_adapter.record_terminal_disposition(
+                **_kwargs(
+                    intake,
+                    raw=request_raw,
+                    media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+                )
+            )
+        timed_system["store"].close()
+
+    # A closed-envelope reason mismatch is rejected before lifecycle mutation.
+    reason_system = isolated_system("reason")
+    reason_adapter = _adapter(reason_system)
+    _raw, reason_issued = _issue(reason_system, reason_adapter)
+    valid_reason = _disposition_request(
+        REJECTED,
+        "ACTION_REJECTED_BEFORE_CONSUMPTION",
+    )
+    invalid_reason = _disposition_request(
+        REJECTED,
+        "EXECUTION_COMPLETION_UNRESOLVED",
+    )
+    exact_receipt = _bound(
+        reason_system,
+        operation="record_terminal_disposition",
+        raw=valid_reason,
+        media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+        nonce_character="I",
+        authorization_sha256=reason_issued.receipt_sha256,
+    )
+    with pytest.raises(WorkerProtocolRouteRejected):
+        reason_adapter.record_terminal_disposition(
+            **_kwargs(
+                exact_receipt,
+                raw=invalid_reason,
+                media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+            )
+        )
+    reason_receipt = _bound(
+        reason_system,
+        operation="record_terminal_disposition",
+        raw=invalid_reason,
+        media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+        nonce_character="J",
+        authorization_sha256=reason_issued.receipt_sha256,
+    )
+    with pytest.raises(WorkerProtocolRouteRejected):
+        reason_adapter.record_terminal_disposition(
+            **_kwargs(
+                reason_receipt,
+                raw=invalid_reason,
+                media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+            )
+        )
+    assert reason_system["registry"].get_lifecycle(
+        tenant_id=TENANT,
+        subject_id=JOB,
+    ).state == AUTHORIZED
+    reason_system["store"].close()
+
+    # Same exact bytes replay; a different valid terminal request cannot replace it.
+    conflict_system = isolated_system("conflict")
+    conflict_adapter = _adapter(conflict_system)
+    _raw, conflict_issued = _issue(conflict_system, conflict_adapter)
+    first_raw = _disposition_request(
+        REJECTED,
+        "ACTION_REJECTED_BEFORE_CONSUMPTION",
+    )
+    first_receipt = _bound(
+        conflict_system,
+        operation="record_terminal_disposition",
+        raw=first_raw,
+        media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+        nonce_character="J",
+        authorization_sha256=conflict_issued.receipt_sha256,
+    )
+    conflict_system["clock"].now = STARTED_AT
+    conflict_adapter.record_terminal_disposition(
+        **_kwargs(
+            first_receipt,
+            raw=first_raw,
+            media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+        )
+    )
+    changed_raw = _disposition_request(
+        EXPIRED,
+        "AUTHORIZATION_EXPIRED_BEFORE_CONSUMPTION",
+    )
+    changed_receipt = _bound(
+        conflict_system,
+        operation="record_terminal_disposition",
+        raw=changed_raw,
+        media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+        nonce_character="K",
+        authorization_sha256=conflict_issued.receipt_sha256,
+    )
+    conflict_system["clock"].now = OUTCOME_AT + timedelta(minutes=1)
+    with pytest.raises(WorkerProtocolRouteConflict):
+        conflict_adapter.record_terminal_disposition(
+            **_kwargs(
+                changed_receipt,
+                raw=changed_raw,
+                media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+            )
+        )
+
+    # The adapter never accepts a worker-scoped substitution for controller authority.
+    controller_receipt = _bound(
+        conflict_system,
+        operation="record_terminal_disposition",
+        raw=first_raw,
+        media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+        nonce_character="L",
+        authorization_sha256=conflict_issued.receipt_sha256,
+    )
+    worker_kwargs = _kwargs(
+        controller_receipt,
+        raw=first_raw,
+        media_type=TERMINAL_DISPOSITION_MEDIA_TYPE,
+    )
+    worker_kwargs["worker_id"] = WORKER
+    with pytest.raises(WorkerProtocolRouteRejected):
+        conflict_adapter.record_terminal_disposition(**worker_kwargs)
+    conflict_system["store"].close()
 
 
 def test_admitted_adapter_executes_exact_issue_consume_output_terminal_flow(

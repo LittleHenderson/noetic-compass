@@ -23,6 +23,13 @@ _UPPER_SHA256_RE = re.compile(r"^[0-9A-F]{64}$")
 _MAX_AUTHORIZATION_BYTES = 2_000_000
 _MAX_AUTHORIZATION_BASE64_CHARS = ((_MAX_AUTHORIZATION_BYTES + 2) // 3) * 4
 _UNTRUSTED_TIME_ASSURANCE = "PROCESS_OR_INJECTED_CLOCK_NOT_TRUSTED"
+_TERMINAL_DISPOSITION_REASONS = {
+    "INDETERMINATE": frozenset(
+        {"EXECUTION_COMPLETION_UNRESOLVED", "LEASE_LOST_DURING_RUNNING"}
+    ),
+    "REJECTED": frozenset({"ACTION_REJECTED_BEFORE_CONSUMPTION"}),
+    "EXPIRED": frozenset({"AUTHORIZATION_EXPIRED_BEFORE_CONSUMPTION"}),
+}
 
 
 class WorkerProtocolResultDTOError(ValueError):
@@ -227,6 +234,79 @@ class TerminalRouteResultDTO(_ExactRedactedResultDTO):
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
+class TerminalDispositionRouteResultDTO(_ExactRedactedResultDTO):
+    disposition_media_type: str
+    disposition_byte_length: int
+    terminal_status: str
+    reason_code: str
+    observed_at: str
+    terminal_event_sha256: str
+
+    schema_version: ClassVar[str] = (
+        "cas_harness_v2.terminal_disposition_route_result.v1"
+    )
+    result_kind: ClassVar[str] = "TERMINAL_DISPOSITION_RECORD"
+    time_assurance: ClassVar[str] = _UNTRUSTED_TIME_ASSURANCE
+
+    def __post_init__(self) -> None:
+        super(TerminalDispositionRouteResultDTO, self).__post_init__()
+        _validate_continuation_binding(
+            media_type=self.disposition_media_type,
+            byte_length=self.disposition_byte_length,
+            event_sha256=self.terminal_event_sha256,
+        )
+        allowed_reasons = (
+            _TERMINAL_DISPOSITION_REASONS.get(self.terminal_status)
+            if type(self.terminal_status) is str
+            else None
+        )
+        if (
+            allowed_reasons is None
+            or type(self.reason_code) is not str
+            or self.reason_code not in allowed_reasons
+        ):
+            raise WorkerProtocolResultDTOError(
+                "Terminal disposition status and reason are invalid."
+            )
+        if not isinstance(self.observed_at, str):
+            raise WorkerProtocolResultDTOError(
+                "Terminal disposition observation time must be canonical UTC."
+            )
+        try:
+            parsed = datetime.fromisoformat(self.observed_at.replace("Z", "+00:00"))
+        except ValueError as exc:
+            raise WorkerProtocolResultDTOError(
+                "Terminal disposition observation time must be canonical UTC."
+            ) from exc
+        if parsed.tzinfo is None:
+            raise WorkerProtocolResultDTOError(
+                "Terminal disposition observation time must be canonical UTC."
+            )
+        canonical = parsed.astimezone(UTC).isoformat(
+            timespec="microseconds"
+        ).replace("+00:00", "Z")
+        if self.observed_at != canonical:
+            raise WorkerProtocolResultDTOError(
+                "Terminal disposition observation time must be canonical UTC."
+            )
+
+    def to_public_dict(self) -> dict[str, object]:
+        result = super(TerminalDispositionRouteResultDTO, self).to_public_dict()
+        result.update(
+            {
+                "disposition_media_type": self.disposition_media_type,
+                "disposition_byte_length": self.disposition_byte_length,
+                "terminal_status": self.terminal_status,
+                "reason_code": self.reason_code,
+                "observed_at": self.observed_at,
+                "time_assurance": self.time_assurance,
+                "terminal_event_sha256": self.terminal_event_sha256,
+            }
+        )
+        return result
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
 class OutcomeSealRouteResultDTO(_ExactRedactedResultDTO):
     accessed_at: str
     sealed_preregistration_chain_sha256: str
@@ -345,6 +425,7 @@ ExactRouteResultDTO = (
     | OutputRetentionRouteResultDTO
     | ConsumptionRouteResultDTO
     | TerminalRouteResultDTO
+    | TerminalDispositionRouteResultDTO
     | OutcomeSealRouteResultDTO
     | EvidencePacketRouteResultDTO
     | NonreportingRouteResultDTO
@@ -357,6 +438,7 @@ _EXPECTED_RESULT_TYPES: dict[str, type[_ExactRedactedResultDTO]] = {
     "retain_output": OutputRetentionRouteResultDTO,
     "consume_authorization": ConsumptionRouteResultDTO,
     "accept_terminal": TerminalRouteResultDTO,
+    "record_terminal_disposition": TerminalDispositionRouteResultDTO,
     "seal_outcome": OutcomeSealRouteResultDTO,
     "attach_evidence_packet": EvidencePacketRouteResultDTO,
     "record_nonreporting": NonreportingRouteResultDTO,
@@ -387,6 +469,7 @@ __all__ = [
     "OutputRetentionRouteResultDTO",
     "ReconciliationRouteResultDTO",
     "TerminalRouteResultDTO",
+    "TerminalDispositionRouteResultDTO",
     "WorkerProtocolResultDTOError",
     "serialize_exact_route_result",
 ]
