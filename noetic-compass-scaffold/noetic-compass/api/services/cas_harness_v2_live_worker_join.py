@@ -18,6 +18,7 @@ from __future__ import annotations
 from collections import Counter
 from collections.abc import Mapping
 from dataclasses import dataclass
+from datetime import UTC, datetime, timedelta
 import hashlib
 import json
 import math
@@ -33,7 +34,12 @@ MAX_INTEGER_BITS = 2_048
 
 _REVISION_RE = re.compile(r"^[0-9a-f]{40}$")
 _LOWER_SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+_UPPER_SHA256_RE = re.compile(r"^[0-9A-F]{64}$")
 _SAFE_CONTEXT_ID_RE = re.compile(r"^[A-Za-z0-9._:-]{1,160}$")
+_MODEL_ID_RE = re.compile(r"^[A-Za-z0-9._:/-]{1,200}$")
+_NONCE_RE = re.compile(r"^[A-Za-z0-9_-]{32,128}$")
+_LOWER_SIGNATURE_RE = re.compile(r"^hmac-sha256:[0-9a-f]{64}$")
+_COORDINATE_LABEL_RE = re.compile(r"^L([0-9]+)N([0-9]+)$")
 
 _REQUEST_REQUIRED_KEYS = frozenset(
     {
@@ -78,6 +84,205 @@ _EVENT_PHASE = {
     "ablation_effect": 2,
     "ablation_control_effect": 3,
 }
+_EVENT_KEYS = {
+    "manifest": frozenset({"type", "manifest"}),
+    "knob_resolution": frozenset({"type", "resolved_knobs"}),
+    "neuron_covers": frozenset({"type", "per_class_neuron_covers"}),
+    "token": frozenset(
+        {
+            "type",
+            "token_index",
+            "token",
+            "top_activated_neurons",
+            "mode7_attribution",
+            "confidence",
+            "inversion_risk",
+            "verification_mode",
+            "verification_verdict",
+            "verification_threshold",
+            "verification_score",
+            "verification_score_source",
+            "verification_invalid_mode",
+            "eraser_intervention_result",
+        }
+    ),
+    "ablation_effect": frozenset(
+        {
+            "type",
+            "target",
+            "mode",
+            "is_real_model",
+            "baseline_top_token",
+            "ablated_top_token",
+            "baseline_top_token_id",
+            "ablated_top_token_id",
+            "logit_delta",
+            "confidence_delta",
+            "top_token_changed",
+            "detail",
+        }
+    ),
+    "ablation_control_effect": frozenset(
+        {
+            "type",
+            "target",
+            "mode",
+            "is_real_model",
+            "n_controls",
+            "control_units",
+            "target_abs_logit_delta",
+            "control_mean_abs_logit_delta",
+            "control_max_abs_logit_delta",
+            "margin_over_control_max",
+            "selectivity_passed",
+            "seed",
+            "detail",
+        }
+    ),
+    "word_spans": frozenset(
+        {"type", "spans", "structural_token_indices", "total_tokens_covered"}
+    ),
+    "error": frozenset({"type", "message", "retryable"}),
+    "complete": frozenset({"type", "total_tokens"}),
+}
+_TOKEN_ACTIVATION_KEYS = frozenset({"layer", "index", "activation"})
+_MODE7_EDGE_KEYS = frozenset({"from_token_index", "to_token_index", "weight"})
+_WORD_SPAN_KEYS = frozenset({"word", "token_indices", "char_start", "char_end"})
+_COVER_MEMBER_KEYS = frozenset(
+    {"label", "confidence", "confidence_band", "evidence_sources"}
+)
+_INTERVENTION_KEYS = frozenset(
+    {
+        "contract_version",
+        "method_id",
+        "execution_kind",
+        "source_kind",
+        "structural_status",
+        "structurally_valid",
+        "coordinate_space",
+        "hook_semantics",
+        "token_selection",
+        "requested_gain",
+        "effective_gain",
+        "expected_coordinate_width",
+        "expected_projected_output_width",
+        "hook_fired",
+        "required_hook_layers",
+        "hook_fired_layers",
+        "observed_tensor_geometry",
+        "reference_tensor_geometry",
+        "stability_control_tensor_geometry",
+        "requested_coordinates",
+        "valid_coordinates",
+        "invalid_coordinates",
+        "applied_coordinates",
+        "activation_changed",
+        "output_changed",
+        "stability_control_performed",
+        "baseline_output_stable",
+        "baseline_geometry_stable",
+        "detail",
+    }
+)
+_INTERVENTION_COORDINATE_KEYS = frozenset({"layer", "index", "coordinate_space"})
+_INTERVENTION_GEOMETRY_KEYS = frozenset(
+    {
+        "layer",
+        "shape",
+        "rank",
+        "width",
+        "projected_output_width",
+        "coordinate_space",
+        "observation_phase",
+        "hook_module_path",
+        "tensor_role",
+        "dtype",
+        "device",
+        "all_finite",
+        "rng_state_sha256",
+        "rng_state_after_sha256",
+        "hook_call_count",
+    }
+)
+_INTERVENTION_STATUSES = frozenset(
+    {
+        "REJECTED_NO_COORDINATES",
+        "REJECTED_INVALID_GAIN",
+        "REJECTED_WRONG_COORDINATE_SPACE",
+        "REJECTED_MISSING_PREFLIGHT",
+        "REJECTED_HOOK_CONTRACT",
+        "REJECTED_HOOK_CARDINALITY",
+        "REJECTED_NONFINITE_TENSOR",
+        "REJECTED_RNG_STATE_MISMATCH",
+        "REJECTED_MISSING_STABILITY_CONTROL",
+        "REJECTED_UNSTABLE_BASELINE",
+        "REJECTED_ALL_COORDINATES_INVALID",
+        "REJECTED_PARTIALLY_INVALID_COORDINATES",
+        "REJECTED_RUNTIME_GEOMETRY",
+        "HOOK_NOT_FIRED",
+        "ACTIVATION_UNCHANGED",
+        "OUTPUT_CHANGE_UNAVAILABLE",
+        "OUTPUT_UNCHANGED",
+        "APPLIED_ACTIVATION_CHANGE_OUTPUT_DELTA_UNATTRIBUTED",
+    }
+)
+_KNOWN_METHODS = frozenset(
+    {
+        "foundation_probe",
+        "rpm_gate_check",
+        "inversion_scan",
+        "blindspot_detection",
+        "verification_stack",
+        "drive_local_eraser",
+    }
+)
+_KNOWN_DRIVES = frozenset({f"F{index}" for index in range(1, 8)})
+_VERIFICATION_THRESHOLDS = {
+    "BALANCED": (0.65, 0.45),
+    "HIGH_PRECISION": (0.85, 0.55),
+    "MAX_COVERAGE_TRIAGE": (0.50, 0.30),
+}
+_BILLING_RECEIPT_KEYS = frozenset(
+    {
+        "schema_version",
+        "key_id",
+        "issuer",
+        "tenant_id",
+        "billing_account_id",
+        "run_id",
+        "worker_id",
+        "provider_id",
+        "model_id",
+        "accelerator_type",
+        "accelerator_count",
+        "accelerator_milliseconds",
+        "measurement_started_at",
+        "measurement_ended_at",
+        "issued_at",
+        "nonce",
+        "payload_sha256",
+        "signature",
+    }
+)
+_BILLING_RECEIPT_SCHEMA = "cas_harness_live_worker_measurement_receipt.v1"
+_MAX_BILLING_RECEIPT_BYTES = 16_384
+_JOINED_EXECUTION_BINDING_KEYS = frozenset(
+    {
+        "schema_version",
+        "status",
+        "authority",
+        "authorization_sha256",
+        "prospective_run_id",
+        "invocation_id_sha256",
+        "request_sha256",
+        "request_byte_length",
+        "events_sha256",
+        "events_byte_length",
+        "digest_profile",
+        "binding_scope",
+        "nonclaim",
+    }
+)
 _SUPPORTED_HOOKS = frozenset(
     {
         "residual_stream",
@@ -195,6 +400,23 @@ class ExpectedRealWorkerManifest:
 
 
 @dataclass(frozen=True, slots=True)
+class ExpectedJoinedExecutionIdentity:
+    """Caller-known identity required to check the worker process binding."""
+
+    authorization_sha256: str
+    prospective_run_id: str
+    invocation_id: str
+
+    def __post_init__(self) -> None:
+        if _UPPER_SHA256_RE.fullmatch(self.authorization_sha256) is None:
+            raise ValueError("authorization_sha256 must be uppercase SHA-256")
+        if _SAFE_CONTEXT_ID_RE.fullmatch(self.prospective_run_id) is None:
+            raise ValueError("prospective_run_id must be a canonical machine identifier")
+        if _SAFE_CONTEXT_ID_RE.fullmatch(self.invocation_id) is None:
+            raise ValueError("invocation_id must be a canonical ASCII identifier")
+
+
+@dataclass(frozen=True, slots=True)
 class RealWorkerManifestFacts:
     model_id: str
     revision: str
@@ -208,6 +430,46 @@ class RealWorkerManifestFacts:
     cuda_device_name: str
     cuda_device_capability: str
     supported_hooks: tuple[str, ...]
+    n_layers: int
+    hidden_size: int
+    mlp_intermediate_dim: int
+    n_heads: int
+
+
+@dataclass(frozen=True, slots=True)
+class JoinedExecutionBindingFacts:
+    authorization_sha256: str
+    prospective_run_id: str
+    invocation_id_sha256: str
+    request_sha256: str
+    request_byte_length: int
+    events_sha256: str
+    events_byte_length: int
+    authority: str = "WORKER_PROCESS_OBSERVATION_ONLY"
+    nonclaim: str = "NOT_A_SIGNATURE_OR_TRUSTED_EXECUTION_ATTESTATION"
+
+
+@dataclass(frozen=True, slots=True)
+class StrictRealWorkerRequestBinding:
+    """Immutable pre-consumption result for exact worker-request bytes."""
+
+    request_raw: bytes
+    request_sha256: str
+    request_byte_length: int
+    request_payload: Mapping[str, Any]
+    model_id: str
+    causal_ablation_requested: bool
+    ablation_target: tuple[int, int]
+    ablation_mode: str
+    claim_scope: str = "EXACT_REQUEST_BYTES_AND_EXPECTED_MODEL_CONSISTENCY_ONLY"
+    execution_authentication: str = "NOT_ESTABLISHED"
+    image_identity: str = "NOT_ESTABLISHED"
+    scientific_status: str = "NOT_ESTABLISHED"
+    criteria_status: str = "OPEN"
+    product_status: str = "RESEARCH_ONLY"
+    license_status: str = "NOT LICENSED"
+    disclosure_status: str = "HELD"
+    terminal_completion_authority: str = "NOT_AUTHORIZED"
 
 
 @dataclass(frozen=True, slots=True)
@@ -227,6 +489,7 @@ class StrictRealWorkerDumpBinding:
     output_text: str
     causal_ablation_requested: bool
     billing_measurement_receipt: Mapping[str, Any] | None
+    joined_execution_binding: JoinedExecutionBindingFacts | None
     manifest: RealWorkerManifestFacts
     claim_scope: str = "EXACT_BYTES_AND_DECLARED_MANIFEST_CONSISTENCY_ONLY"
     execution_authentication: str = "NOT_ESTABLISHED"
@@ -236,6 +499,40 @@ class StrictRealWorkerDumpBinding:
     product_status: str = "RESEARCH_ONLY"
     license_status: str = "NOT LICENSED"
     disclosure_status: str = "HELD"
+    response_pairing_status: str = "UNBOUND_LEGACY_RESPONSE"
+    billing_receipt_authentication: str = "NOT_ESTABLISHED"
+    terminal_completion_authority: str = "NOT_AUTHORIZED"
+
+
+def validate_real_worker_dump_request(
+    *,
+    request_raw: bytes | bytearray | memoryview,
+    expected_manifest: ExpectedRealWorkerManifest,
+) -> StrictRealWorkerRequestBinding:
+    """Validate and freeze request bytes before any caller sends them.
+
+    This function performs no I/O. Its result establishes only the exact
+    request syntax and its consistency with the caller-supplied model identity;
+    it does not authorize, execute, authenticate, or retry a model run.
+    """
+
+    if type(expected_manifest) is not ExpectedRealWorkerManifest:
+        raise RealWorkerDumpValidationError(
+            "expected_manifest must be an exact ExpectedRealWorkerManifest"
+        )
+    request_snapshot, request = _load_json_object(request_raw, "request")
+    _validate_request(request, expected_manifest=expected_manifest)
+    causal_requested, target, mode = _causal_request(request)
+    return StrictRealWorkerRequestBinding(
+        request_raw=request_snapshot,
+        request_sha256=_sha256(request_snapshot),
+        request_byte_length=len(request_snapshot),
+        request_payload=_freeze_json(request),
+        model_id=request["model_id"],
+        causal_ablation_requested=causal_requested,
+        ablation_target=target,
+        ablation_mode=mode,
+    )
 
 
 def bind_successful_real_worker_dump(
@@ -243,6 +540,7 @@ def bind_successful_real_worker_dump(
     request_raw: bytes | bytearray | memoryview,
     response_raw: bytes | bytearray | memoryview,
     expected_manifest: ExpectedRealWorkerManifest,
+    expected_joined_execution: ExpectedJoinedExecutionIdentity | None = None,
     allow_billing_receipt: bool = False,
 ) -> StrictRealWorkerDumpBinding:
     """Strict-load and bind one already-returned successful dump.
@@ -252,26 +550,36 @@ def bind_successful_real_worker_dump(
     authorize a retry.
     """
 
-    if type(expected_manifest) is not ExpectedRealWorkerManifest:
-        raise RealWorkerDumpValidationError(
-            "expected_manifest must be an exact ExpectedRealWorkerManifest"
-        )
     if type(allow_billing_receipt) is not bool:
         raise RealWorkerDumpValidationError(
             "allow_billing_receipt must be an exact boolean"
         )
+    if expected_joined_execution is not None and type(
+        expected_joined_execution
+    ) is not ExpectedJoinedExecutionIdentity:
+        raise RealWorkerDumpValidationError(
+            "expected_joined_execution must use the exact joined identity type"
+        )
 
-    request_snapshot, request = _load_json_object(request_raw, "request")
-    _validate_request(request, expected_manifest=expected_manifest)
-    causal_requested, expected_target, expected_mode = _causal_request(request)
+    request_binding = validate_real_worker_dump_request(
+        request_raw=request_raw,
+        expected_manifest=expected_manifest,
+    )
 
     response_snapshot, response = _load_json_object(response_raw, "response")
     allowed_response_keys = {"events"}
-    if allow_billing_receipt:
+    billing_context = request_binding.request_payload.get(
+        "billing_measurement_context"
+    )
+    if billing_context is not None:
+        if not allow_billing_receipt:
+            raise RealWorkerDumpValidationError(
+                "a billing request requires explicit receipt consumption"
+            )
         allowed_response_keys.add("billing_measurement_receipt")
-    if set(response) != allowed_response_keys and not (
-        allow_billing_receipt and set(response) == {"events"}
-    ):
+    if expected_joined_execution is not None:
+        allowed_response_keys.add("joined_execution_binding")
+    if set(response) != allowed_response_keys:
         raise RealWorkerDumpValidationError(
             "response top-level keys differ from the exact dump contract"
         )
@@ -284,33 +592,228 @@ def bind_successful_real_worker_dump(
         raise RealWorkerDumpValidationError(
             "billing_measurement_receipt must be an object when present"
         )
+    if billing_context is None and billing_present:
+        raise RealWorkerDumpValidationError(
+            "a response receipt is forbidden without request billing context"
+        )
+    if isinstance(billing_context, Mapping):
+        _validate_billing_receipt(
+            billing,
+            expected_context=billing_context,
+            expected_model_id=request_binding.model_id,
+        )
+
+    joined_facts = None
+    if expected_joined_execution is not None:
+        joined_facts = _validate_joined_execution_binding(
+            response.get("joined_execution_binding"),
+            expected=expected_joined_execution,
+            request_binding=request_binding,
+            events=events,
+        )
 
     manifest_facts, event_counts, output_text, token_count = _validate_events(
         events,
         expected_manifest=expected_manifest,
-        causal_requested=causal_requested,
-        expected_target=expected_target,
-        expected_mode=expected_mode,
+        request_payload=request_binding.request_payload,
+        causal_requested=request_binding.causal_ablation_requested,
+        expected_target=request_binding.ablation_target,
+        expected_mode=request_binding.ablation_mode,
     )
-    frozen_request = _freeze_json(request)
     frozen_events = tuple(_freeze_json(event) for event in events)
     frozen_billing = _freeze_json(billing) if billing is not None else None
     return StrictRealWorkerDumpBinding(
-        request_raw=request_snapshot,
-        request_sha256=_sha256(request_snapshot),
-        request_byte_length=len(request_snapshot),
+        request_raw=request_binding.request_raw,
+        request_sha256=request_binding.request_sha256,
+        request_byte_length=request_binding.request_byte_length,
         response_raw=response_snapshot,
         response_sha256=_sha256(response_snapshot),
         response_byte_length=len(response_snapshot),
-        request_payload=frozen_request,
+        request_payload=request_binding.request_payload,
         events=frozen_events,
         event_counts=MappingProxyType(dict(sorted(event_counts.items()))),
         token_count=token_count,
         output_text=output_text,
-        causal_ablation_requested=causal_requested,
+        causal_ablation_requested=request_binding.causal_ablation_requested,
         billing_measurement_receipt=frozen_billing,
+        joined_execution_binding=joined_facts,
         manifest=manifest_facts,
+        response_pairing_status=(
+            "WORKER_PROCESS_OBSERVED_REQUEST_EVENTS_PAIR"
+            if joined_facts is not None
+            else "UNBOUND_LEGACY_RESPONSE"
+        ),
     )
+
+
+def _validate_joined_execution_binding(
+    value: object,
+    *,
+    expected: ExpectedJoinedExecutionIdentity,
+    request_binding: StrictRealWorkerRequestBinding,
+    events: list[Any],
+) -> JoinedExecutionBindingFacts:
+    if type(value) is not dict or set(value) != _JOINED_EXECUTION_BINDING_KEYS:
+        raise RealWorkerDumpValidationError(
+            "joined execution binding has invalid exact structure"
+        )
+    constants = {
+        "schema_version": "cas_harness_live_worker.joined_execution_binding.v1",
+        "status": "OBSERVED_REQUEST_AND_EVENTS_BOUND",
+        "authority": "WORKER_PROCESS_OBSERVATION_ONLY",
+        "digest_profile": "UTF8_SORTED_KEYS_COMPACT_JSON_ENSURE_ASCII_FALSE_V1",
+        "binding_scope": "EXACT_REQUEST_BYTES_AND_CANONICAL_EVENTS_MEMBER_ONLY",
+        "nonclaim": "NOT_A_SIGNATURE_OR_TRUSTED_EXECUTION_ATTESTATION",
+    }
+    if any(value[field] != expected_value for field, expected_value in constants.items()):
+        raise RealWorkerDumpValidationError("joined execution binding contract drifted")
+    invocation_sha256 = _sha256(expected.invocation_id.encode("ascii"))
+    expected_identity = {
+        "authorization_sha256": expected.authorization_sha256,
+        "prospective_run_id": expected.prospective_run_id,
+        "invocation_id_sha256": invocation_sha256,
+        "request_sha256": request_binding.request_sha256,
+        "request_byte_length": request_binding.request_byte_length,
+    }
+    if any(value[field] != expected_value for field, expected_value in expected_identity.items()):
+        raise RealWorkerDumpValidationError(
+            "joined execution binding differs from the exact request or caller identity"
+        )
+    events_raw = _canonical_json_bytes(events)
+    if (
+        value["events_sha256"] != _sha256(events_raw)
+        or type(value["events_byte_length"]) is not int
+        or value["events_byte_length"] != len(events_raw)
+    ):
+        raise RealWorkerDumpValidationError(
+            "joined execution binding differs from the canonical events member"
+        )
+    return JoinedExecutionBindingFacts(
+        authorization_sha256=expected.authorization_sha256,
+        prospective_run_id=expected.prospective_run_id,
+        invocation_id_sha256=invocation_sha256,
+        request_sha256=request_binding.request_sha256,
+        request_byte_length=request_binding.request_byte_length,
+        events_sha256=value["events_sha256"],
+        events_byte_length=value["events_byte_length"],
+    )
+
+
+def _validate_billing_receipt(
+    value: object,
+    *,
+    expected_context: Mapping[str, Any],
+    expected_model_id: str,
+) -> None:
+    if type(value) is not dict or set(value) != _BILLING_RECEIPT_KEYS:
+        raise RealWorkerDumpValidationError(
+            "billing measurement receipt has invalid exact structure"
+        )
+    if len(_canonical_json_bytes(value)) > _MAX_BILLING_RECEIPT_BYTES:
+        raise RealWorkerDumpValidationError(
+            "billing measurement receipt exceeds 16,384 canonical bytes"
+        )
+    if value["schema_version"] != _BILLING_RECEIPT_SCHEMA:
+        raise RealWorkerDumpValidationError("billing receipt schema version drifted")
+    for field in (
+        "key_id",
+        "issuer",
+        "tenant_id",
+        "billing_account_id",
+        "run_id",
+        "worker_id",
+        "provider_id",
+    ):
+        if type(value[field]) is not str or _SAFE_CONTEXT_ID_RE.fullmatch(value[field]) is None:
+            raise RealWorkerDumpValidationError(
+                f"billing receipt {field} is not a canonical identifier"
+            )
+    if any(
+        value[field] != expected_context[field]
+        for field in ("tenant_id", "billing_account_id", "run_id")
+    ):
+        raise RealWorkerDumpValidationError(
+            "billing receipt contradicts the exact request billing context"
+        )
+    if (
+        value["model_id"] != expected_model_id
+        or type(value["model_id"]) is not str
+        or _MODEL_ID_RE.fullmatch(value["model_id"]) is None
+        or value["accelerator_type"] != "cuda"
+    ):
+        raise RealWorkerDumpValidationError(
+            "billing receipt model or accelerator identity drifted"
+        )
+    accelerator_count = value["accelerator_count"]
+    accelerator_milliseconds = value["accelerator_milliseconds"]
+    if (
+        type(accelerator_count) is not int
+        or not 1 <= accelerator_count <= 128
+        or type(accelerator_milliseconds) is not int
+        or accelerator_milliseconds <= 0
+    ):
+        raise RealWorkerDumpValidationError(
+            "billing receipt accelerator measurement is invalid"
+        )
+    started = _canonical_utc_time(
+        value["measurement_started_at"], "measurement_started_at"
+    )
+    ended = _canonical_utc_time(value["measurement_ended_at"], "measurement_ended_at")
+    issued = _canonical_utc_time(value["issued_at"], "issued_at")
+    span = ended - started
+    if span <= timedelta(0) or span > timedelta(hours=1):
+        raise RealWorkerDumpValidationError(
+            "billing receipt measurement window is invalid"
+        )
+    maximum_quantity = int(span.total_seconds() * 1000) * accelerator_count
+    if accelerator_milliseconds > maximum_quantity:
+        raise RealWorkerDumpValidationError(
+            "billing receipt quantity exceeds its measured CUDA window"
+        )
+    if not ended <= issued <= ended + timedelta(minutes=1):
+        raise RealWorkerDumpValidationError(
+            "billing receipt issuance is outside the measured window"
+        )
+    if type(value["nonce"]) is not str or _NONCE_RE.fullmatch(value["nonce"]) is None:
+        raise RealWorkerDumpValidationError("billing receipt nonce is invalid")
+    if (
+        type(value["payload_sha256"]) is not str
+        or _LOWER_SHA256_RE.fullmatch(value["payload_sha256"]) is None
+        or type(value["signature"]) is not str
+        or _LOWER_SIGNATURE_RE.fullmatch(value["signature"]) is None
+    ):
+        raise RealWorkerDumpValidationError(
+            "billing receipt digest or signature encoding is invalid"
+        )
+    unsigned = dict(value)
+    unsigned.pop("signature")
+    claimed_payload_sha256 = unsigned.pop("payload_sha256")
+    expected_payload_sha256 = hashlib.sha256(_canonical_json_bytes(unsigned)).hexdigest()
+    if claimed_payload_sha256 != expected_payload_sha256:
+        raise RealWorkerDumpValidationError(
+            "billing receipt payload digest does not match its exact fields"
+        )
+
+
+def _canonical_utc_time(value: object, field: str) -> datetime:
+    if type(value) is not str or not value:
+        raise RealWorkerDumpValidationError(f"billing receipt {field} is invalid")
+    try:
+        parsed = datetime.fromisoformat(value)
+    except ValueError as exc:
+        raise RealWorkerDumpValidationError(
+            f"billing receipt {field} is invalid"
+        ) from exc
+    if parsed.tzinfo is None:
+        raise RealWorkerDumpValidationError(
+            f"billing receipt {field} lacks a UTC offset"
+        )
+    normalized = parsed.astimezone(UTC)
+    if value != normalized.isoformat():
+        raise RealWorkerDumpValidationError(
+            f"billing receipt {field} is not canonical UTC ISO-8601"
+        )
+    return normalized
 
 
 def _validate_request(
@@ -346,6 +849,7 @@ def _validate_request(
         raise RealWorkerDumpValidationError("request probes are invalid or duplicated")
     if type(request["method_config"]) is not dict:
         raise RealWorkerDumpValidationError("request method_config must be an object")
+    _validate_method_config(request["method_config"])
 
     target = request.get("ablation_target")
     if target is not None:
@@ -382,6 +886,84 @@ def _validate_request(
             )
 
 
+def _validate_method_config(config: dict[str, Any]) -> None:
+    if set(config) - {"enabled_methods", "verification_mode", "mode", "knobs"}:
+        raise RealWorkerDumpValidationError(
+            "request method_config contains an unknown top-level control"
+        )
+    enabled = config.get("enabled_methods")
+    if enabled is not None and (
+        type(enabled) is not list
+        or any(type(method) is not str or method not in _KNOWN_METHODS for method in enabled)
+        or len(set(enabled)) != len(enabled)
+    ):
+        raise RealWorkerDumpValidationError("request enabled_methods are invalid")
+    for field in ("verification_mode", "mode"):
+        if field in config and not _bounded_text(config[field], maximum=128):
+            raise RealWorkerDumpValidationError(
+                f"request method_config {field} is invalid"
+            )
+    knobs = config.get("knobs")
+    if knobs is None:
+        return
+    if type(knobs) is not dict or set(knobs) - _KNOWN_METHODS:
+        raise RealWorkerDumpValidationError("request method knobs are invalid")
+    allowed_fields = {
+        "foundation_probe": {"top_k", "layer_range"},
+        "rpm_gate_check": {"strictness_threshold"},
+        "inversion_scan": {"severity_threshold"},
+        "blindspot_detection": {"scope", "drive"},
+        "verification_stack": {"mode", "verification_mode"},
+        "drive_local_eraser": {"drive", "gain"},
+    }
+    for method, values in knobs.items():
+        if type(values) is not dict or set(values) - allowed_fields[method]:
+            raise RealWorkerDumpValidationError(
+                f"request {method} knobs differ from the closed worker controls"
+            )
+    foundation = knobs.get("foundation_probe", {})
+    if "top_k" in foundation and (
+        type(foundation["top_k"]) is not int
+        or not 1 <= foundation["top_k"] <= 128
+    ):
+        raise RealWorkerDumpValidationError("request foundation top_k is invalid")
+    if "layer_range" in foundation and (
+        type(foundation["layer_range"]) is not list
+        or len(foundation["layer_range"]) > 128
+        or any(
+            type(layer) is not int or layer < 0 for layer in foundation["layer_range"]
+        )
+    ):
+        raise RealWorkerDumpValidationError("request foundation layer_range is invalid")
+    for method, field in (
+        ("rpm_gate_check", "strictness_threshold"),
+        ("inversion_scan", "severity_threshold"),
+    ):
+        values = knobs.get(method, {})
+        if field in values and (
+            not _finite_number(values[field]) or not 0.0 <= values[field] <= 1.0
+        ):
+            raise RealWorkerDumpValidationError(f"request {method} threshold is invalid")
+    eraser = knobs.get("drive_local_eraser", {})
+    if "gain" in eraser and (
+        not _finite_number(eraser["gain"]) or not 0.0 <= eraser["gain"] <= 1.0
+    ):
+        raise RealWorkerDumpValidationError("request eraser gain is invalid")
+    for method in ("drive_local_eraser", "blindspot_detection"):
+        values = knobs.get(method, {})
+        for field in ("drive", "scope"):
+            if field in values and not _bounded_text(values[field], maximum=64):
+                raise RealWorkerDumpValidationError(
+                    f"request {method} {field} is invalid"
+                )
+    stack = knobs.get("verification_stack", {})
+    for field in ("mode", "verification_mode"):
+        if field in stack and not _bounded_text(stack[field], maximum=128):
+            raise RealWorkerDumpValidationError(
+                f"request verification_stack {field} is invalid"
+            )
+
+
 def _causal_request(
     request: Mapping[str, Any],
 ) -> tuple[bool, tuple[int, int], str]:
@@ -396,6 +978,7 @@ def _validate_events(
     events: list[Any],
     *,
     expected_manifest: ExpectedRealWorkerManifest,
+    request_payload: Mapping[str, Any],
     causal_requested: bool,
     expected_target: tuple[int, int],
     expected_mode: str,
@@ -405,6 +988,10 @@ def _validate_events(
             raise RealWorkerDumpValidationError("every event must be an object")
         if type(event.get("type")) is not str or event["type"] not in _ALLOWED_EVENT_TYPES:
             raise RealWorkerDumpValidationError("worker dump contains an unknown event type")
+        if set(event) != _EVENT_KEYS[event["type"]]:
+            raise RealWorkerDumpValidationError(
+                f"{event['type']} event differs from its exact worker schema"
+            )
 
     types = [event["type"] for event in events]
     counts: Counter[str] = Counter(types)
@@ -450,8 +1037,18 @@ def _validate_events(
         expected=expected_manifest,
         causal_requested=causal_requested,
     )
+    _validate_knob_resolution(events[1], request_payload=request_payload)
+    _validate_neuron_covers(
+        events[2],
+        request_payload=request_payload,
+        manifest=manifest_facts,
+    )
 
     token_events = [event for event in events if event["type"] == "token"]
+    if not token_events:
+        raise RealWorkerDumpValidationError(
+            "a successful real-worker dump must contain at least one token"
+        )
     observed_indices: list[int] = []
     output_parts: list[str] = []
     for event in token_events:
@@ -459,6 +1056,11 @@ def _validate_events(
         token = event.get("token")
         if type(token_index) is not int or token_index < 0 or type(token) is not str:
             raise RealWorkerDumpValidationError("token event has invalid critical fields")
+        _validate_token_event(
+            event,
+            request_payload=request_payload,
+            manifest=manifest_facts,
+        )
         observed_indices.append(token_index)
         output_parts.append(token)
     if observed_indices != list(range(len(token_events))):
@@ -478,14 +1080,14 @@ def _validate_events(
         )
     _validate_word_spans(
         events[-2],
-        token_count=len(token_events),
-        output_text=output_text,
+        token_events=token_events,
     )
     _validate_causal_events(
         events,
         requested=causal_requested,
         expected_target=expected_target,
         expected_mode=expected_mode,
+        manifest=manifest_facts,
     )
     return manifest_facts, counts, output_text, len(token_events)
 
@@ -592,71 +1194,767 @@ def _validate_manifest(
         cuda_device_name=runtime["cuda_device_name"],
         cuda_device_capability=runtime["cuda_device_capability"],
         supported_hooks=tuple(hooks),
+        n_layers=arch["n_layers"],
+        hidden_size=arch["hidden_size"],
+        mlp_intermediate_dim=arch["mlp_intermediate_dim"],
+        n_heads=arch["n_heads"],
     )
 
 
-def _validate_word_spans(
-    event: dict[str, Any], *, token_count: int, output_text: str
+def _validate_knob_resolution(
+    event: Mapping[str, Any], *, request_payload: Mapping[str, Any]
 ) -> None:
-    required = {
-        "type",
-        "spans",
-        "structural_token_indices",
-        "total_tokens_covered",
-    }
-    if set(event) != required:
-        raise RealWorkerDumpValidationError("word_spans event has invalid exact structure")
-    spans = event["spans"]
-    structural = event["structural_token_indices"]
-    total = event["total_tokens_covered"]
-    if (
-        type(spans) is not list
-        or type(structural) is not list
-        or type(total) is not int
-        or total != token_count
-    ):
-        raise RealWorkerDumpValidationError("word_spans token count is invalid")
-    seen: set[int] = set()
-    previous_end = 0
-    for span in spans:
-        if type(span) is not dict or not {
-            "word",
-            "token_indices",
-            "char_start",
-            "char_end",
-        } <= set(span):
-            raise RealWorkerDumpValidationError("word span has invalid critical fields")
-        word = span["word"]
-        indices = span["token_indices"]
-        start = span["char_start"]
-        end = span["char_end"]
-        if (
-            type(word) is not str
-            or not word
-            or type(indices) is not list
-            or not indices
-            or type(start) is not int
-            or type(end) is not int
-            or start < previous_end
-            or not 0 <= start < end <= len(output_text)
-            or output_text[start:end] != word
-        ):
-            raise RealWorkerDumpValidationError("word span text or range is invalid")
-        previous_end = end
-        for index in indices:
-            if type(index) is not int or index < 0 or index in seen:
-                raise RealWorkerDumpValidationError("word span token backing is duplicated")
-            seen.add(index)
-    for index in structural:
-        if type(index) is not int or index < 0 or index in seen:
-            raise RealWorkerDumpValidationError(
-                "structural token backing is invalid or duplicated"
-            )
-        seen.add(index)
-    if seen != set(range(token_count)):
+    resolved = event["resolved_knobs"]
+    expected = _expected_resolved_knobs(request_payload)
+    if type(resolved) is not dict or not _exact_json_equal(resolved, expected):
         raise RealWorkerDumpValidationError(
-            "word_spans coverage differs from the contiguous token range"
+            "knob_resolution differs from the request's exact worker resolution"
         )
+
+
+def _expected_resolved_knobs(
+    request_payload: Mapping[str, Any],
+) -> dict[str, dict[str, Any]]:
+    config = request_payload["method_config"]
+    knobs_value = config.get("knobs", {}) if isinstance(config, Mapping) else {}
+    knobs = knobs_value if isinstance(knobs_value, Mapping) else {}
+    enabled_value = config.get("enabled_methods", ()) if isinstance(config, Mapping) else ()
+    enabled = set(enabled_value) if isinstance(enabled_value, (list, tuple)) else set()
+
+    foundation = _mapping_or_empty(knobs.get("foundation_probe"))
+    rpm = _mapping_or_empty(knobs.get("rpm_gate_check"))
+    inversion = _mapping_or_empty(knobs.get("inversion_scan"))
+    eraser = _mapping_or_empty(knobs.get("drive_local_eraser"))
+    blindspot = _mapping_or_empty(knobs.get("blindspot_detection"))
+
+    drive = _resolved_drive(eraser.get("drive"))
+    blindspot_raw = blindspot.get("scope") or blindspot.get("drive")
+    if blindspot_raw == "all_7":
+        blindspot_result = {
+            "scope": "all_7",
+            "drive": "all_7",
+            "cover_available": True,
+        }
+    else:
+        blindspot_drive = _resolved_drive(blindspot_raw)
+        blindspot_result = {
+            "scope": blindspot_drive,
+            "drive": blindspot_drive,
+            "cover_available": blindspot_drive in _KNOWN_DRIVES,
+        }
+    return {
+        "foundation_probe": {
+            "top_k": _resolved_positive_int(foundation.get("top_k"), default=8),
+            "layer_range": _resolved_layer_range(foundation.get("layer_range")),
+        },
+        "rpm_gate_check": {
+            "strictness_threshold": _resolved_unit_float(
+                rpm.get("strictness_threshold")
+            )
+        },
+        "inversion_scan": {
+            "severity_threshold": _resolved_unit_float(
+                inversion.get("severity_threshold")
+            ),
+            "active": "inversion_scan" in enabled,
+        },
+        "drive_local_eraser": {
+            "drive": drive,
+            "gain": _resolved_nonnegative_float(eraser.get("gain"), default=1.0),
+            "cover_available": drive in _KNOWN_DRIVES,
+            "active": "drive_local_eraser" in enabled,
+        },
+        "blindspot_detection": blindspot_result,
+    }
+
+
+def _mapping_or_empty(value: object) -> Mapping[str, Any]:
+    return value if isinstance(value, Mapping) else MappingProxyType({})
+
+
+def _resolved_positive_int(value: object, *, default: int) -> int:
+    try:
+        parsed = int(value)  # type: ignore[arg-type]
+    except (TypeError, ValueError, OverflowError):
+        return default
+    return parsed if parsed > 0 else default
+
+
+def _resolved_layer_range(value: object) -> list[int]:
+    if not isinstance(value, (list, tuple)):
+        return []
+    if len(value) == 2 and all(type(item) in (int, float) for item in value):
+        low, high = int(value[0]), int(value[1])
+        return list(range(max(0, low), high + 1)) if low <= high else []
+    resolved: list[int] = []
+    for item in value:
+        try:
+            parsed = int(item)
+        except (TypeError, ValueError, OverflowError):
+            continue
+        if parsed >= 0:
+            resolved.append(parsed)
+    return sorted(set(resolved))
+
+
+def _resolved_unit_float(value: object) -> float:
+    try:
+        parsed = float(value)  # type: ignore[arg-type]
+    except (TypeError, ValueError, OverflowError):
+        return 0.0
+    return max(0.0, min(1.0, parsed))
+
+
+def _resolved_nonnegative_float(value: object, *, default: float) -> float:
+    try:
+        parsed = float(value)  # type: ignore[arg-type]
+    except (TypeError, ValueError, OverflowError):
+        return default
+    return max(0.0, parsed)
+
+
+def _resolved_drive(value: object) -> str:
+    return value if type(value) is str and value.startswith("F") else "F1"
+
+
+def _resolved_probes(request_payload: Mapping[str, Any]) -> frozenset[str]:
+    probes = request_payload["probes"]
+    config = request_payload["method_config"]
+    if not probes:
+        if isinstance(config, Mapping) and config and "enabled_methods" in config:
+            return frozenset()
+        return frozenset(
+            {
+                "active_trace",
+                "blindspot_covers",
+                "mode7_attribution",
+                "confidence_margin",
+            }
+        )
+    return frozenset(
+        "blindspot_covers" if probe == "blindspots_f1" else probe for probe in probes
+    )
+
+
+def _validate_neuron_covers(
+    event: Mapping[str, Any],
+    *,
+    request_payload: Mapping[str, Any],
+    manifest: RealWorkerManifestFacts,
+) -> None:
+    covers = event["per_class_neuron_covers"]
+    if type(covers) is not dict:
+        raise RealWorkerDumpValidationError("neuron_covers payload must be an object")
+    probes = _resolved_probes(request_payload)
+    if "blindspot_covers" not in probes:
+        if covers:
+            raise RealWorkerDumpValidationError(
+                "worker emitted neuron covers when that probe was not requested"
+            )
+        return
+    scope = _expected_resolved_knobs(request_payload)["blindspot_detection"]["scope"]
+    if scope == "all_7":
+        expected_classes = {
+            f"F{drive}{suffix}"
+            for drive in range(1, 8)
+            for suffix in ("A", "T", "f", "E")
+        }
+    elif scope in _KNOWN_DRIVES:
+        expected_classes = {f"{scope}{suffix}" for suffix in ("A", "T", "f", "E")}
+    else:
+        expected_classes = set()
+    if set(covers) != expected_classes:
+        raise RealWorkerDumpValidationError(
+            "neuron cover classes differ from the resolved blindspot scope"
+        )
+    for class_name, members in covers.items():
+        if type(members) is not list or not members:
+            raise RealWorkerDumpValidationError(
+                f"neuron cover {class_name} must contain calibrated members"
+            )
+        seen_labels: set[str] = set()
+        for member in members:
+            if type(member) is not dict or set(member) != _COVER_MEMBER_KEYS:
+                raise RealWorkerDumpValidationError(
+                    "neuron cover member differs from its exact schema"
+                )
+            label = member["label"]
+            match = _COORDINATE_LABEL_RE.fullmatch(label) if type(label) is str else None
+            if match is None:
+                raise RealWorkerDumpValidationError("neuron cover label is invalid")
+            layer, unit = int(match.group(1)), int(match.group(2))
+            if (
+                layer >= manifest.n_layers
+                or unit >= manifest.mlp_intermediate_dim
+                or label in seen_labels
+            ):
+                raise RealWorkerDumpValidationError(
+                    "neuron cover coordinate is duplicated or out of range"
+                )
+            seen_labels.add(label)
+            confidence = member["confidence"]
+            if confidence is not None and (
+                not _finite_number(confidence) or not 0.0 <= confidence <= 1.0
+            ):
+                raise RealWorkerDumpValidationError("neuron cover confidence is invalid")
+            expected_band = _confidence_band(confidence)
+            evidence_sources = member["evidence_sources"]
+            if (
+                member["confidence_band"] != expected_band
+                or type(evidence_sources) is not list
+                or any(
+                    type(source) is not str or not _bounded_text(source, maximum=256)
+                    for source in evidence_sources
+                )
+            ):
+                raise RealWorkerDumpValidationError(
+                    "neuron cover band or evidence sources are invalid"
+                )
+
+
+def _confidence_band(value: object) -> str:
+    if not _finite_number(value):
+        return "unavailable"
+    if 0.80 <= value <= 0.95:
+        return "high"
+    if 0.60 <= value < 0.80:
+        return "medium"
+    if 0.40 <= value < 0.60:
+        return "low"
+    return "unavailable"
+
+
+def _validate_token_event(
+    event: Mapping[str, Any],
+    *,
+    request_payload: Mapping[str, Any],
+    manifest: RealWorkerManifestFacts,
+) -> None:
+    token_index = event["token_index"]
+    probes = _resolved_probes(request_payload)
+    resolved = _expected_resolved_knobs(request_payload)
+    activations = event["top_activated_neurons"]
+    if type(activations) is not list:
+        raise RealWorkerDumpValidationError("token activations must be an array")
+    if "active_trace" not in probes:
+        if activations:
+            raise RealWorkerDumpValidationError(
+                "token emitted activations without the active_trace probe"
+            )
+    else:
+        top_k = resolved["foundation_probe"]["top_k"]
+        if len(activations) != top_k:
+            raise RealWorkerDumpValidationError(
+                "token activation count differs from resolved foundation top_k"
+            )
+    layer_filter = set(resolved["foundation_probe"]["layer_range"])
+    seen_activations: set[tuple[int, int]] = set()
+    for activation in activations:
+        if type(activation) is not dict or set(activation) != _TOKEN_ACTIVATION_KEYS:
+            raise RealWorkerDumpValidationError(
+                "token activation differs from its exact schema"
+            )
+        layer = activation["layer"]
+        unit = activation["index"]
+        coordinate = (layer, unit)
+        if (
+            type(layer) is not int
+            or not 0 <= layer < manifest.n_layers
+            or (layer_filter and layer not in layer_filter)
+            or type(unit) is not int
+            or not 0 <= unit < manifest.mlp_intermediate_dim
+            or not _finite_number(activation["activation"])
+            or coordinate in seen_activations
+        ):
+            raise RealWorkerDumpValidationError(
+                "token activation is duplicated, nonfinite, or out of range"
+            )
+        seen_activations.add(coordinate)
+
+    edges = event["mode7_attribution"]
+    if type(edges) is not list:
+        raise RealWorkerDumpValidationError("token Mode-7 attribution must be an array")
+    if "mode7_attribution" not in probes and edges:
+        raise RealWorkerDumpValidationError(
+            "token emitted Mode-7 edges without that probe"
+        )
+    if "mode7_attribution" in probes and token_index == 0 and not edges:
+        raise RealWorkerDumpValidationError("first token lacks its Mode-7 root edge")
+    rpm_threshold = resolved["rpm_gate_check"]["strictness_threshold"]
+    seen_sources: set[int | None] = set()
+    for edge in edges:
+        if type(edge) is not dict or set(edge) != _MODE7_EDGE_KEYS:
+            raise RealWorkerDumpValidationError("Mode-7 edge differs from its exact schema")
+        source = edge["from_token_index"]
+        weight = edge["weight"]
+        if (
+            (source is not None and (type(source) is not int or not 0 <= source < token_index))
+            or (source is None and token_index != 0)
+            or edge["to_token_index"] != token_index
+            or source in seen_sources
+            or not _finite_number(weight)
+            or not rpm_threshold <= weight <= 1.0
+        ):
+            raise RealWorkerDumpValidationError("Mode-7 edge is invalid or misbound")
+        seen_sources.add(source)
+
+    confidence = event["confidence"]
+    if "confidence_margin" in probes:
+        if not _finite_number(confidence) or not 0.0 <= confidence <= 1.0:
+            raise RealWorkerDumpValidationError("token confidence is unavailable or invalid")
+    elif confidence is not None:
+        raise RealWorkerDumpValidationError(
+            "token emitted confidence without the confidence probe"
+        )
+    inversion = event["inversion_risk"]
+    inversion_knob = resolved["inversion_scan"]
+    if inversion_knob["active"]:
+        if (
+            not _finite_number(inversion)
+            or not 0.0 <= inversion <= 1.0
+            or (inversion != 0.0 and inversion < inversion_knob["severity_threshold"])
+        ):
+            raise RealWorkerDumpValidationError("token inversion-risk telemetry is invalid")
+    elif inversion is not None:
+        raise RealWorkerDumpValidationError(
+            "token emitted inversion risk while the method was inactive"
+        )
+    _validate_verification_telemetry(event, request_payload=request_payload)
+    _validate_intervention_result(
+        event["eraser_intervention_result"],
+        resolved_eraser=resolved["drive_local_eraser"],
+        manifest=manifest,
+    )
+
+
+def _validate_verification_telemetry(
+    event: Mapping[str, Any], *, request_payload: Mapping[str, Any]
+) -> None:
+    fields = (
+        "verification_mode",
+        "verification_verdict",
+        "verification_threshold",
+        "verification_score",
+        "verification_score_source",
+        "verification_invalid_mode",
+    )
+    config = request_payload["method_config"]
+    enabled = config.get("enabled_methods", ()) if isinstance(config, Mapping) else ()
+    knobs = config.get("knobs", {}) if isinstance(config, Mapping) else {}
+    requested = (
+        "verification_stack" in enabled
+        or (isinstance(config, Mapping) and ("verification_mode" in config or "mode" in config))
+        or (isinstance(knobs, Mapping) and "verification_stack" in knobs)
+    )
+    if not requested:
+        if any(event[field] is not None for field in fields):
+            raise RealWorkerDumpValidationError(
+                "token emitted verification telemetry when it was not requested"
+            )
+        return
+    mode, invalid_mode = _resolved_verification_mode(config)
+    accept, flag = _VERIFICATION_THRESHOLDS[mode]
+    score = event["verification_score"]
+    if score is not None and (not _finite_number(score) or not 0.0 <= score <= 1.0):
+        raise RealWorkerDumpValidationError("token verification score is invalid")
+    expected_verdict = (
+        "FLAG"
+        if score is None
+        else "ACCEPT"
+        if score >= accept
+        else "FLAG"
+        if score >= flag
+        else "SUPPRESS"
+    )
+    source = event["verification_score_source"]
+    if (
+        event["verification_mode"] != mode
+        or event["verification_threshold"] != accept
+        or event["verification_verdict"] != expected_verdict
+        or event["verification_invalid_mode"] != invalid_mode
+        or source not in {"confidence", "proxy_confidence", "unavailable"}
+        or (score is None) != (source == "unavailable")
+    ):
+        raise RealWorkerDumpValidationError(
+            "token verification verdict contradicts its requested mode or score"
+        )
+    confidence = event["confidence"]
+    if source == "confidence" and confidence is not None and score != round(confidence, 3):
+        raise RealWorkerDumpValidationError(
+            "token verification score differs from emitted confidence"
+        )
+
+
+def _resolved_verification_mode(config: Mapping[str, Any]) -> tuple[str, str | None]:
+    raw_mode: object = None
+    knobs = config.get("knobs")
+    if isinstance(knobs, Mapping):
+        stack = knobs.get("verification_stack")
+        if isinstance(stack, Mapping):
+            raw_mode = stack.get("mode", stack.get("verification_mode"))
+    if raw_mode is None:
+        raw_mode = config.get("verification_mode", config.get("mode"))
+    if raw_mode is None:
+        return "BALANCED", None
+    normalized = str(raw_mode).strip().upper().replace("-", "_").replace(" ", "_")
+    if normalized in _VERIFICATION_THRESHOLDS:
+        return normalized, None
+    return "HIGH_PRECISION", str(raw_mode)
+
+
+def _validate_intervention_result(
+    value: object,
+    *,
+    resolved_eraser: Mapping[str, Any],
+    manifest: RealWorkerManifestFacts,
+) -> None:
+    if not resolved_eraser["active"]:
+        if value is not None:
+            raise RealWorkerDumpValidationError(
+                "token emitted an intervention receipt while eraser was inactive"
+            )
+        return
+    if type(value) is not dict or set(value) != _INTERVENTION_KEYS:
+        raise RealWorkerDumpValidationError(
+            "active eraser token lacks its exact intervention receipt"
+        )
+    constants = {
+        "contract_version": "harness_v2.mlp_intermediate_eraser.v2",
+        "method_id": "drive_local_eraser",
+        "execution_kind": "real_model_weights",
+        "source_kind": "stage27f_calibrated_cover",
+        "structurally_valid": False,
+        "coordinate_space": "mlp_intermediate_post_activation",
+        "hook_semantics": (
+            "gpt_neox.layers[{layer}].mlp.dense_4h_to_h:"
+            "forward_pre_hook.input[0]"
+        ),
+        "token_selection": "batch_0_last_sequence_position",
+        "expected_coordinate_width": manifest.mlp_intermediate_dim,
+        "expected_projected_output_width": manifest.hidden_size,
+    }
+    if any(value[field] != expected for field, expected in constants.items()):
+        raise RealWorkerDumpValidationError("intervention receipt contract drifted")
+    if value["structural_status"] not in _INTERVENTION_STATUSES:
+        raise RealWorkerDumpValidationError("intervention structural status is invalid")
+    requested_gain = value["requested_gain"]
+    effective_gain = value["effective_gain"]
+    if (
+        not _finite_number(requested_gain)
+        or requested_gain != resolved_eraser["gain"]
+        or not _finite_number(effective_gain)
+        or effective_gain != min(1.0, requested_gain)
+    ):
+        raise RealWorkerDumpValidationError(
+            "intervention gain differs from the resolved eraser request"
+        )
+    if any(
+        type(value[field]) is not bool
+        for field in ("hook_fired", "stability_control_performed")
+    ) or any(
+        value[field] is not None and type(value[field]) is not bool
+        for field in (
+            "activation_changed",
+            "output_changed",
+            "baseline_output_stable",
+            "baseline_geometry_stable",
+        )
+    ):
+        raise RealWorkerDumpValidationError("intervention boolean evidence is invalid")
+    if not _bounded_text(value["detail"], maximum=4096):
+        raise RealWorkerDumpValidationError("intervention detail is invalid")
+
+    coordinate_lists: dict[str, list[Any]] = {}
+    coordinate_sets: dict[str, set[tuple[int, int, str]]] = {}
+    for field in (
+        "requested_coordinates",
+        "valid_coordinates",
+        "invalid_coordinates",
+        "applied_coordinates",
+    ):
+        items = value[field]
+        if type(items) is not list:
+            raise RealWorkerDumpValidationError("intervention coordinates must be arrays")
+        coordinate_lists[field] = items
+        keys: set[tuple[int, int, str]] = set()
+        for item in items:
+            if type(item) is not dict or set(item) != _INTERVENTION_COORDINATE_KEYS:
+                raise RealWorkerDumpValidationError(
+                    "intervention coordinate differs from its exact schema"
+                )
+            layer, unit, space = item["layer"], item["index"], item["coordinate_space"]
+            key = (layer, unit, space)
+            if (
+                type(layer) is not int
+                or type(unit) is not int
+                or type(space) is not str
+                or not space
+                or key in keys
+            ):
+                raise RealWorkerDumpValidationError(
+                    "intervention coordinate is invalid or duplicated"
+                )
+            keys.add(key)
+        coordinate_sets[field] = keys
+    requested = coordinate_sets["requested_coordinates"]
+    valid = coordinate_sets["valid_coordinates"]
+    invalid = coordinate_sets["invalid_coordinates"]
+    applied = coordinate_sets["applied_coordinates"]
+    if (
+        valid | invalid != requested
+        or valid & invalid
+        or not applied <= valid
+        or any(
+            not 0 <= layer < manifest.n_layers
+            or not 0 <= unit < manifest.mlp_intermediate_dim
+            or space != "mlp_intermediate_post_activation"
+            for layer, unit, space in valid | applied
+        )
+    ):
+        raise RealWorkerDumpValidationError(
+            "intervention coordinate partition or range is invalid"
+        )
+    required_layers = value["required_hook_layers"]
+    fired_layers = value["hook_fired_layers"]
+    if (
+        type(required_layers) is not list
+        or type(fired_layers) is not list
+        or any(type(layer) is not int for layer in required_layers + fired_layers)
+        or len(set(required_layers)) != len(required_layers)
+        or len(set(fired_layers)) != len(fired_layers)
+        or set(required_layers)
+        != {layer for layer, _unit, _space in requested if layer >= 0}
+        or value["hook_fired"]
+        != (bool(required_layers) and set(required_layers) <= set(fired_layers))
+    ):
+        raise RealWorkerDumpValidationError("intervention hook-layer evidence is invalid")
+    observed_geometry = _validate_geometry_list(
+        value["observed_tensor_geometry"],
+        expected_phase="intervention_attempt",
+        manifest=manifest,
+    )
+    reference_geometry = _validate_geometry_list(
+        value["reference_tensor_geometry"],
+        expected_phase="unmodified_forward",
+        manifest=manifest,
+    )
+    stability_geometry = _validate_geometry_list(
+        value["stability_control_tensor_geometry"],
+        expected_phase="unmodified_forward",
+        manifest=manifest,
+    )
+    if value["structural_status"] == "APPLIED_ACTIVATION_CHANGE_OUTPUT_DELTA_UNATTRIBUTED":
+        if not (
+            value["hook_fired"]
+            and value["activation_changed"] is True
+            and value["output_changed"] is True
+            and applied
+            and not invalid
+            and value["stability_control_performed"]
+            and value["baseline_output_stable"] is True
+            and value["baseline_geometry_stable"] is True
+        ):
+            raise RealWorkerDumpValidationError(
+                "unattributed intervention delta lacks required structural controls"
+            )
+        required_set = set(required_layers)
+        if (
+            set(observed_geometry) != required_set
+            or set(reference_geometry) != required_set
+            or set(stability_geometry) != required_set
+            or any(
+                not observed_geometry[layer]["all_finite"]
+                or observed_geometry[layer]["hook_call_count"] != 1
+                or not reference_geometry[layer]["all_finite"]
+                or reference_geometry[layer]["hook_call_count"] != 1
+                or not stability_geometry[layer]["all_finite"]
+                or stability_geometry[layer]["hook_call_count"] != 1
+                or not _paired_geometry_equal(
+                    reference_geometry[layer], stability_geometry[layer]
+                )
+                or not _paired_geometry_equal(
+                    reference_geometry[layer], observed_geometry[layer]
+                )
+                for layer in required_set
+            )
+        ):
+            raise RealWorkerDumpValidationError(
+                "unattributed intervention delta lacks exact paired geometry"
+            )
+    if value["structural_status"].startswith("REJECTED_") and applied:
+        raise RealWorkerDumpValidationError(
+            "a rejected intervention cannot report applied coordinates"
+        )
+
+
+def _validate_geometry_list(
+    value: object,
+    *,
+    expected_phase: str,
+    manifest: RealWorkerManifestFacts,
+) -> dict[int, dict[str, Any]]:
+    if type(value) is not list:
+        raise RealWorkerDumpValidationError("intervention geometry must be an array")
+    seen_layers: set[int] = set()
+    by_layer: dict[int, dict[str, Any]] = {}
+    for geometry in value:
+        if type(geometry) is not dict or set(geometry) != _INTERVENTION_GEOMETRY_KEYS:
+            raise RealWorkerDumpValidationError(
+                "intervention geometry differs from its exact schema"
+            )
+        layer = geometry["layer"]
+        shape = geometry["shape"]
+        if (
+            type(layer) is not int
+            or not 0 <= layer < manifest.n_layers
+            or layer in seen_layers
+            or type(shape) is not list
+            or not shape
+            or any(type(dimension) is not int or dimension < 1 for dimension in shape)
+            or geometry["rank"] != len(shape)
+            or geometry["width"] != shape[-1]
+            or geometry["width"] != manifest.mlp_intermediate_dim
+            or geometry["projected_output_width"] != manifest.hidden_size
+            or geometry["coordinate_space"] != "mlp_intermediate_post_activation"
+            or geometry["observation_phase"] != expected_phase
+            or geometry["hook_module_path"]
+            != f"gpt_neox.layers[{layer}].mlp.dense_4h_to_h"
+            or geometry["tensor_role"] != "forward_pre_hook.input[0]"
+            or not _bounded_text(geometry["dtype"], maximum=128)
+            or not _bounded_text(geometry["device"], maximum=128)
+            or type(geometry["all_finite"]) is not bool
+            or type(geometry["hook_call_count"]) is not int
+            or geometry["hook_call_count"] < 1
+        ):
+            raise RealWorkerDumpValidationError("intervention geometry is invalid")
+        for digest_field in ("rng_state_sha256", "rng_state_after_sha256"):
+            digest = geometry[digest_field]
+            if digest != "UNAVAILABLE" and (
+                type(digest) is not str or _LOWER_SHA256_RE.fullmatch(digest) is None
+            ):
+                raise RealWorkerDumpValidationError(
+                    "intervention RNG identity is invalid"
+                )
+        seen_layers.add(layer)
+        by_layer[layer] = geometry
+    return by_layer
+
+
+def _paired_geometry_equal(
+    reference: Mapping[str, Any], observed: Mapping[str, Any]
+) -> bool:
+    normalized = dict(observed)
+    normalized["observation_phase"] = "unmodified_forward"
+    return _exact_json_equal(dict(reference), normalized)
+
+
+def _validate_word_spans(
+    event: dict[str, Any], *, token_events: list[dict[str, Any]]
+) -> None:
+    expected = _expected_word_spans(token_events)
+    if not _exact_json_equal(event, expected):
+        raise RealWorkerDumpValidationError(
+            "word_spans differs from deterministic token-text reconstruction"
+        )
+
+
+def _expected_word_spans(token_events: list[dict[str, Any]]) -> dict[str, Any]:
+    token_ranges: list[tuple[int, int, int, str]] = []
+    cursor = 0
+    for event in token_events:
+        token = event["token"]
+        start = cursor
+        cursor += len(token)
+        token_ranges.append((event["token_index"], start, cursor, token))
+    output_text = "".join(item[3] for item in token_ranges)
+
+    raw_runs: list[tuple[int, int]] = []
+    index = 0
+    while index < len(output_text):
+        if output_text[index].isspace():
+            index += 1
+            continue
+        start = index
+        while index < len(output_text) and not output_text[index].isspace():
+            index += 1
+        raw_runs.append((start, index))
+
+    structural: list[int] = []
+    token_to_runs: dict[int, list[int]] = {}
+    for token_index, token_start, token_end, token in token_ranges:
+        if token == "" or token.isspace():
+            structural.append(token_index)
+            continue
+        overlaps: list[int] = []
+        for run_index, (run_start, run_end) in enumerate(raw_runs):
+            if run_end <= token_start:
+                continue
+            if run_start >= token_end:
+                break
+            if max(token_start, run_start) < min(token_end, run_end):
+                overlaps.append(run_index)
+        token_to_runs[token_index] = overlaps
+
+    parents = list(range(len(raw_runs)))
+
+    def find(item: int) -> int:
+        while parents[item] != item:
+            parents[item] = parents[parents[item]]
+            item = parents[item]
+        return item
+
+    def union(left: int, right: int) -> None:
+        left_root, right_root = find(left), find(right)
+        if left_root != right_root:
+            parents[max(left_root, right_root)] = min(left_root, right_root)
+
+    for overlaps in token_to_runs.values():
+        for offset in range(1, len(overlaps)):
+            union(overlaps[0], overlaps[offset])
+
+    root_members: dict[int, list[int]] = {}
+    for run_index in range(len(raw_runs)):
+        root_members.setdefault(find(run_index), []).append(run_index)
+    ordered_roots: list[int] = []
+    for run_index in range(len(raw_runs)):
+        root = find(run_index)
+        if root not in ordered_roots:
+            ordered_roots.append(root)
+
+    span_for_run: dict[int, int] = {}
+    span_specs: list[tuple[str, int, int]] = []
+    for span_index, root in enumerate(ordered_roots):
+        members = root_members[root]
+        start = raw_runs[members[0]][0]
+        end = raw_runs[members[-1]][1]
+        span_specs.append((output_text[start:end], start, end))
+        for run_index in members:
+            span_for_run[run_index] = span_index
+    token_indices: list[list[int]] = [[] for _ in span_specs]
+    for token_index, _start, _end, token in token_ranges:
+        if token == "" or token.isspace():
+            continue
+        overlaps = token_to_runs[token_index]
+        if not overlaps:
+            structural.append(token_index)
+            continue
+        token_indices[span_for_run[overlaps[0]]].append(token_index)
+    spans = [
+        {
+            "word": word,
+            "token_indices": indices,
+            "char_start": start,
+            "char_end": end,
+        }
+        for (word, start, end), indices in zip(span_specs, token_indices)
+        if indices
+    ]
+    return {
+        "type": "word_spans",
+        "spans": spans,
+        "structural_token_indices": structural,
+        "total_tokens_covered": len(token_events),
+    }
 
 
 def _validate_causal_events(
@@ -665,6 +1963,7 @@ def _validate_causal_events(
     requested: bool,
     expected_target: tuple[int, int],
     expected_mode: str,
+    manifest: RealWorkerManifestFacts,
 ) -> None:
     effects = [event for event in events if event["type"] == "ablation_effect"]
     controls = [
@@ -690,40 +1989,88 @@ def _validate_causal_events(
     _validate_event_target(
         controls[0], expected_target=expected_target, expected_mode=expected_mode
     )
+    if not (
+        0 <= expected_target[0] < manifest.n_layers
+        and 0 <= expected_target[1] < manifest.mlp_intermediate_dim
+    ):
+        raise RealWorkerDumpValidationError(
+            "requested causal target is outside the declared model geometry"
+        )
     effect = effects[0]
+    baseline_token = effect["baseline_top_token"]
+    ablated_token = effect["ablated_top_token"]
+    baseline_id = effect["baseline_top_token_id"]
+    ablated_id = effect["ablated_top_token_id"]
     if (
-        effect.get("is_real_model") is not True
-        or not _finite_number(effect.get("logit_delta"))
-        or not _finite_number(effect.get("confidence_delta"))
-        or type(effect.get("top_token_changed")) is not bool
+        effect["is_real_model"] is not True
+        or type(baseline_token) is not str
+        or type(ablated_token) is not str
+        or type(baseline_id) is not int
+        or baseline_id < 0
+        or type(ablated_id) is not int
+        or ablated_id < 0
+        or not _finite_number(effect["logit_delta"])
+        or not _finite_number(effect["confidence_delta"])
+        or not -1.0 <= effect["confidence_delta"] <= 1.0
+        or type(effect["top_token_changed"]) is not bool
+        or effect["top_token_changed"] != (baseline_id != ablated_id)
+        or (baseline_id != ablated_id) != (baseline_token != ablated_token)
+        or not _bounded_text(effect["detail"], maximum=4096)
     ):
         raise RealWorkerDumpValidationError(
             "causal effect lacks a finite real-model measurement"
         )
     control = controls[0]
-    n_controls = control.get("n_controls")
-    units = control.get("control_units")
+    n_controls = control["n_controls"]
+    units = control["control_units"]
+    target_abs = control["target_abs_logit_delta"]
+    control_mean = control["control_mean_abs_logit_delta"]
+    control_max = control["control_max_abs_logit_delta"]
+    margin = control["margin_over_control_max"]
     if (
-        control.get("is_real_model") is not True
+        control["is_real_model"] is not True
         or type(n_controls) is not int
         or n_controls < 1
         or type(units) is not list
         or len(units) != n_controls
-        or any(type(unit) is not int or unit < 0 for unit in units)
-        or len(set(units)) != len(units)
-        or type(control.get("selectivity_passed")) is not bool
         or any(
-            not _finite_number(control.get(field))
-            for field in (
-                "target_abs_logit_delta",
-                "control_mean_abs_logit_delta",
-                "control_max_abs_logit_delta",
-                "margin_over_control_max",
-            )
+            type(unit) is not int
+            or not 0 <= unit < manifest.mlp_intermediate_dim
+            or unit == expected_target[1]
+            for unit in units
+        )
+        or units != sorted(units)
+        or len(set(units)) != len(units)
+        or type(control["selectivity_passed"]) is not bool
+        or type(control["seed"]) is not int
+        or not _bounded_text(control["detail"], maximum=4096)
+        or any(
+            not _finite_number(value)
+            for value in (target_abs, control_mean, control_max, margin)
+        )
+        or min(target_abs, control_mean, control_max) < 0.0
+        or control_mean > control_max + 0.0002
+        or not math.isclose(
+            margin,
+            target_abs - control_max,
+            rel_tol=0.0,
+            abs_tol=0.0002,
+        )
+        or not math.isclose(
+            target_abs,
+            abs(effect["logit_delta"]),
+            rel_tol=0.0,
+            abs_tol=0.0002,
         )
     ):
         raise RealWorkerDumpValidationError(
             "matched control lacks a finite real-model measurement"
+        )
+    if abs(target_abs - control_max) > 0.0002 and control[
+        "selectivity_passed"
+    ] != (target_abs > control_max):
+        raise RealWorkerDumpValidationError(
+            "matched-control selectivity contradicts its measured deltas"
         )
 
 
@@ -898,17 +2245,51 @@ def _bounded_text(value: object, *, maximum: int) -> bool:
     )
 
 
+def _canonical_json_bytes(value: object) -> bytes:
+    try:
+        return json.dumps(
+            value,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=False,
+            allow_nan=False,
+        ).encode("utf-8")
+    except (TypeError, ValueError) as exc:
+        raise RealWorkerDumpValidationError(
+            "validated value cannot use the canonical JSON digest profile"
+        ) from exc
+
+
+def _exact_json_equal(observed: object, expected: object) -> bool:
+    if type(observed) is not type(expected):
+        return False
+    if type(observed) is dict:
+        return set(observed) == set(expected) and all(
+            _exact_json_equal(observed[key], expected[key]) for key in observed
+        )
+    if type(observed) is list:
+        return len(observed) == len(expected) and all(
+            _exact_json_equal(left, right)
+            for left, right in zip(observed, expected)
+        )
+    return observed == expected
+
+
 def _sha256(raw: bytes) -> str:
     return hashlib.sha256(raw).hexdigest().upper()
 
 
 __all__ = [
+    "ExpectedJoinedExecutionIdentity",
     "ExpectedRealWorkerManifest",
+    "JoinedExecutionBindingFacts",
     "MAX_CARRIER_BYTES",
     "RealWorkerDumpValidationError",
     "RealWorkerJoinError",
     "RealWorkerManifestFacts",
     "RealWorkerPostSendAmbiguousError",
     "StrictRealWorkerDumpBinding",
+    "StrictRealWorkerRequestBinding",
     "bind_successful_real_worker_dump",
+    "validate_real_worker_dump_request",
 ]
