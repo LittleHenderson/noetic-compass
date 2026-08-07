@@ -73,6 +73,7 @@ PYTHIA_160M_ARTIFACTS: dict[str, tuple[str, int]] = {
 }
 _COMMIT_SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 WORKER_PROFILE_ENV = "ATLAS_WORKER_PROFILE"
+TORCH_NATIVE_JIT_DISABLE_ENV = "TORCH_DISABLE_NATIVE_JIT"
 DEVELOPMENT_PROFILE = "development"
 PRODUCTION_PROFILE = "production"
 PRODUCTION_HF_HOME = "/worker/.cache/huggingface"
@@ -318,6 +319,23 @@ def _validate_model_execution_layout(
             )
 
 
+def _resolve_model_dtype(torch: Any, *, cuda_available: bool) -> tuple[Any, str]:
+    """Choose a finite, no-JIT inference dtype for the active runtime.
+
+    Torch 2.13's CUDA-native override path requires a runtime C compiler. The
+    production worker intentionally ships no compiler, and disabling that path
+    exposed non-finite Pythia logits in float16 on the bounded RTX 4070 canary.
+    BF16 is finite on supported GPUs. Production fails closed when hardware
+    BF16 is absent instead of silently changing the admitted CUDA substrate.
+    """
+
+    if not cuda_available:
+        return torch.float32, "torch.float32"
+    if not bool(torch.cuda.is_bf16_supported(including_emulation=False)):
+        raise RuntimeError("production CUDA execution requires native BF16 support")
+    return torch.bfloat16, "torch.bfloat16"
+
+
 def _read_cuda_driver_version() -> int:
     """Read the active NVIDIA driver API version from libcuda."""
 
@@ -342,6 +360,9 @@ def _runtime_execution_evidence(
         "device": device,
         "dtype": dtype,
         "torch_version": str(getattr(torch, "__version__", "UNKNOWN")),
+        "torch_native_jit_disabled": (
+            os.getenv(TORCH_NATIVE_JIT_DISABLE_ENV) == "1"
+        ),
     }
     if payload["torch_version"] == "UNKNOWN":
         raise RuntimeError("Torch runtime version is not observable")
@@ -354,6 +375,9 @@ def _runtime_execution_evidence(
                 "cuda_driver_version": _read_cuda_driver_version(),
                 "cuda_device_name": str(torch.cuda.get_device_name(device_index)),
                 "cuda_device_capability": f"{int(capability[0])}.{int(capability[1])}",
+                "cuda_bfloat16_supported": bool(
+                    torch.cuda.is_bf16_supported(including_emulation=False)
+                ),
             }
         )
     return RuntimeExecutionEvidence.model_validate(payload)
@@ -445,6 +469,11 @@ def warm_load() -> LoadedModel:
             return _LOADED
         if profile == PRODUCTION_PROFILE:
             _validate_production_model_cache()
+            if os.getenv(TORCH_NATIVE_JIT_DISABLE_ENV) != "1":
+                raise RuntimeError(
+                    "production worker requires TORCH_DISABLE_NATIVE_JIT=1 "
+                    "because the runtime image intentionally has no compiler"
+                )
 
         try:
             # Heavy imports stay local so an explicitly requested development
@@ -469,7 +498,10 @@ def warm_load() -> LoadedModel:
                 revision=PYTHIA_160M_REVISION,
                 local_files_only=True,
             )
-            load_dtype = torch.float16 if cuda_available else torch.float32
+            load_dtype, execution_dtype = _resolve_model_dtype(
+                torch,
+                cuda_available=cuda_available,
+            )
             model = AutoModelForCausalLM.from_pretrained(
                 PYTHIA_160M_MODEL_ID,
                 revision=PYTHIA_160M_REVISION,
@@ -485,16 +517,14 @@ def warm_load() -> LoadedModel:
             ]
             weights_filename = PYTHIA_160M_WEIGHTS_FILENAME
             # Development may run the bounded CPU canary. Production requires
-            # CUDA, and a CUDA-selected float16 load may not fall back to CPU.
+            # CUDA; the resolved finite dtype is preserved across the move.
             if cuda_available:
                 model = model.to("cuda")
                 logger.info("warm_load: model moved to cuda")
                 execution_device = "cuda"
-                execution_dtype = "torch.float16"
             else:
                 logger.info("warm_load: cuda not available — staying on cpu")
                 execution_device = "cpu"
-                execution_dtype = "torch.float32"
 
             _validate_model_execution_layout(
                 model,

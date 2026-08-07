@@ -63,8 +63,10 @@ class RuntimeExecutionEvidence(BaseModel):
 
     profile: Literal["development", "production"]
     device: Literal["cpu", "cuda"]
-    dtype: Literal["torch.float32", "torch.float16"]
+    dtype: Literal["torch.float32", "torch.float16", "torch.bfloat16"]
     torch_version: str = Field(..., min_length=1)
+    torch_native_jit_disabled: bool = False
+    cuda_bfloat16_supported: bool | None = None
     cuda_runtime_version: str | None = None
     cuda_driver_version: int | None = Field(default=None, ge=1)
     cuda_device_name: str | None = Field(default=None, min_length=1)
@@ -73,8 +75,12 @@ class RuntimeExecutionEvidence(BaseModel):
     @model_validator(mode="after")
     def _production_requires_observed_cuda(self) -> "RuntimeExecutionEvidence":
         if self.profile == "production":
-            if self.device != "cuda" or self.dtype != "torch.float16":
-                raise ValueError("production runtime evidence requires CUDA float16 execution")
+            if self.device != "cuda" or self.dtype != "torch.bfloat16":
+                raise ValueError("production runtime evidence requires CUDA bfloat16 execution")
+            if self.torch_native_jit_disabled is not True:
+                raise ValueError("production runtime evidence requires native JIT disabled")
+            if self.cuda_bfloat16_supported is not True:
+                raise ValueError("production runtime evidence requires native CUDA BF16 support")
             if not (
                 self.cuda_runtime_version
                 and self.cuda_driver_version

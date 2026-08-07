@@ -57,6 +57,7 @@ def _install_fake_runtime(
     tmp_path: Path,
     *,
     cuda_available: bool = False,
+    cuda_bfloat16_supported: bool = True,
 ) -> list[tuple[str, str, dict]]:
     calls: list[tuple[str, str, dict]] = []
     artifact_bytes = {
@@ -102,11 +103,20 @@ def _install_fake_runtime(
     torch_module = ModuleType("torch")
     torch_module.__version__ = "2.13.0+cu126"
     torch_module.cuda = SimpleNamespace(is_available=lambda: cuda_available)
+
+    def _is_bf16_supported(*, including_emulation=True):
+        calls.append(
+            ("bfloat16_support", str(including_emulation), {"hardware_only": True})
+        )
+        return cuda_bfloat16_supported
+
+    torch_module.cuda.is_bf16_supported = _is_bf16_supported
     torch_module.cuda.current_device = lambda: 0
     torch_module.cuda.get_device_name = lambda _index: "Synthetic Gate5 GPU"
     torch_module.cuda.get_device_capability = lambda _index: (9, 0)
     torch_module.version = SimpleNamespace(cuda="12.6")
     torch_module.float16 = "torch.float16"
+    torch_module.bfloat16 = "torch.bfloat16"
     torch_module.float32 = "torch.float32"
     transformers_module = ModuleType("transformers")
     transformers_module.AutoTokenizer = _TokenizerFactory
@@ -191,11 +201,14 @@ def test_warm_load_pins_revision_and_recomputes_weights_identity(
     assert loaded.manifest.runtime_execution.dtype == "torch.float32"
 
 
-def test_cuda_load_uses_float16_eager_attention_and_moves_to_cuda(
+def test_cuda_load_uses_bfloat16_eager_attention_and_moves_to_cuda(
     monkeypatch,
     tmp_path: Path,
 ) -> None:
     monkeypatch.delenv("LIVE_TRACE_DEMO_MODE", raising=False)
+    monkeypatch.setenv(model_loader.WORKER_PROFILE_ENV, model_loader.PRODUCTION_PROFILE)
+    monkeypatch.setenv(model_loader.TORCH_NATIVE_JIT_DISABLE_ENV, "1")
+    monkeypatch.setattr(model_loader, "_validate_production_model_cache", lambda: None)
     model = _FakeModel(model_loader.PYTHIA_160M_REVISION)
     calls = _install_fake_runtime(
         monkeypatch,
@@ -211,7 +224,7 @@ def test_cuda_load_uses_float16_eager_attention_and_moves_to_cuda(
 
     assert loaded.is_real is True
     model_call = next(call for call in calls if call[0] == "model")
-    assert model_call[2]["dtype"] == "torch.float16"
+    assert model_call[2]["dtype"] == "torch.bfloat16"
     assert model_call[2]["attn_implementation"] == "eager"
     assert model.to_calls == ["cuda"]
     canary_position = calls.index(("canary", "cuda", {}))
@@ -221,7 +234,36 @@ def test_cuda_load_uses_float16_eager_attention_and_moves_to_cuda(
     assert canary_position < final_artifact_position
     assert loaded.manifest.runtime_execution is not None
     assert loaded.manifest.runtime_execution.device == "cuda"
+    assert loaded.manifest.runtime_execution.dtype == "torch.bfloat16"
+    assert loaded.manifest.runtime_execution.torch_native_jit_disabled is True
+    assert loaded.manifest.runtime_execution.cuda_bfloat16_supported is True
     assert loaded.manifest.runtime_execution.cuda_driver_version == 12060
+    support_calls = [call for call in calls if call[0] == "bfloat16_support"]
+    assert len(support_calls) == 2
+    assert all(call[1] == "False" for call in support_calls)
+
+
+def test_cuda_load_fails_closed_when_native_bfloat16_is_unsupported(
+    monkeypatch,
+    tmp_path: Path,
+) -> None:
+    monkeypatch.delenv("LIVE_TRACE_DEMO_MODE", raising=False)
+    model = _FakeModel(model_loader.PYTHIA_160M_REVISION)
+    calls = _install_fake_runtime(
+        monkeypatch,
+        model,
+        tmp_path,
+        cuda_available=True,
+        cuda_bfloat16_supported=False,
+    )
+    model_loader.reset_for_test()
+    try:
+        with pytest.raises(RuntimeError, match="native BF16 support"):
+            model_loader.warm_load()
+    finally:
+        model_loader.reset_for_test()
+
+    assert not any(call[0] == "model" for call in calls)
 
 
 def test_runtime_canary_failure_fails_closed_to_startup_error(
@@ -415,12 +457,28 @@ def test_loaded_model_property_rejects_forged_model_copy() -> None:
 def test_production_profile_requires_cuda(monkeypatch, tmp_path: Path) -> None:
     monkeypatch.delenv("LIVE_TRACE_DEMO_MODE", raising=False)
     monkeypatch.setenv(model_loader.WORKER_PROFILE_ENV, model_loader.PRODUCTION_PROFILE)
+    monkeypatch.setenv(model_loader.TORCH_NATIVE_JIT_DISABLE_ENV, "1")
     model = _FakeModel(model_loader.PYTHIA_160M_REVISION)
     _install_fake_runtime(monkeypatch, model, tmp_path, cuda_available=False)
     monkeypatch.setattr(model_loader, "_validate_production_model_cache", lambda: None)
     model_loader.reset_for_test()
     try:
         with pytest.raises(RuntimeError, match="requires an available CUDA device"):
+            model_loader.warm_load()
+    finally:
+        model_loader.reset_for_test()
+
+
+def test_production_profile_requires_native_jit_disabled(
+    monkeypatch,
+) -> None:
+    monkeypatch.delenv("LIVE_TRACE_DEMO_MODE", raising=False)
+    monkeypatch.setenv(model_loader.WORKER_PROFILE_ENV, model_loader.PRODUCTION_PROFILE)
+    monkeypatch.delenv(model_loader.TORCH_NATIVE_JIT_DISABLE_ENV, raising=False)
+    monkeypatch.setattr(model_loader, "_validate_production_model_cache", lambda: None)
+    model_loader.reset_for_test()
+    try:
+        with pytest.raises(RuntimeError, match="TORCH_DISABLE_NATIVE_JIT=1"):
             model_loader.warm_load()
     finally:
         model_loader.reset_for_test()

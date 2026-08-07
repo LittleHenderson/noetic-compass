@@ -60,11 +60,14 @@ WORKDIR /worker
 
 # Pin the Hugging Face cache to the image-owned location. The production
 # loader rejects HF_HOME redirection and a writable cache; a separate mutable
-# network-volume cache is not admitted by this candidate.
+# network-volume cache is not admitted by this candidate. Torch native JIT is
+# disabled because this serving image intentionally contains no C compiler;
+# the loader validates that setting and selects a finite no-JIT GPU dtype.
 ENV HF_HOME=/worker/.cache/huggingface \
     PYTHIA_160M_REVISION=50f5173d932e8e61f858120bcb800b97af589f46 \
     ATLAS_WORKER_PROFILE=production \
     ATLAS_WORKER_REQUIRE_READ_ONLY_ROOTFS=1 \
+    TORCH_DISABLE_NATIVE_JIT=1 \
     NVIDIA_VISIBLE_DEVICES=all \
     NVIDIA_DRIVER_CAPABILITIES=compute,utility \
     PYTHONDONTWRITEBYTECODE=1 \
