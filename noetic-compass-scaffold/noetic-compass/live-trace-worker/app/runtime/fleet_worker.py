@@ -18,6 +18,7 @@ model/probe command for the assigned shard.
 from __future__ import annotations
 
 import asyncio
+import base64
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 import hashlib
@@ -34,6 +35,62 @@ import httpx
 FleetJobStatus = Literal["queued", "leased", "completed", "failed", "expired"]
 FleetWorkerResultStatus = Literal["idle", "completed", "failed"]
 
+HARNESS_V2_CONSUMPTION_REQUEST_SCHEMA = (
+    "cas_harness_v2.route_consumption_request.v1"
+)
+HARNESS_V2_OUTPUT_RETENTION_SCHEMA = "cas_harness_v2.output_retention.v1"
+HARNESS_V2_CONSUMPTION_MEDIA_TYPE = (
+    "application/vnd.cas-harness.run-consumption+json"
+)
+HARNESS_V2_OUTPUT_RETENTION_MEDIA_TYPE = (
+    "application/vnd.cas-harness.output-retention+json"
+)
+HARNESS_V2_TERMINAL_MEDIA_TYPE = (
+    "application/vnd.cas-harness.worker-terminal-receipt+json"
+)
+
+_HARNESS_V2_ROUTE_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
+_HARNESS_V2_RUN_NONCE_RE = re.compile(r"^[A-Za-z0-9_-]{43}$")
+_HARNESS_V2_UPPER_SHA256_RE = re.compile(r"^[0-9A-F]{64}$")
+_HARNESS_V2_CREDENTIAL_ID_RE = re.compile(r"^fsc_[0-9a-f]{32}$")
+_HARNESS_V2_MAX_EXACT_BODY_BYTES = 2_000_000
+_HARNESS_V2_MAX_ARTIFACT_BYTES = 1_500_000
+_HARNESS_V2_MAX_MEDIA_TYPE_BYTES = 255
+_HARNESS_V2_MAX_RESPONSE_BYTES = 128_000
+_HARNESS_V2_FAILURE = "Harness-v2 worker protocol request failed closed."
+_HARNESS_V2_AUTHORITY = {
+    "criteria_status": "OPEN",
+    "execution_authentication": "NOT_ESTABLISHED",
+    "trusted_time": "NOT_ESTABLISHED",
+    "worm_authority": "NOT_ESTABLISHED",
+    "independent_authority": "NOT_ESTABLISHED",
+    "scientific_status": "NOT_ESTABLISHED",
+    "product_status": "NOT_ESTABLISHED",
+    "license_status": "NOT LICENSED",
+    "disclosure_status": "HELD",
+}
+
+_HARNESS_V2_RESPONSE_OPERATIONS = {
+    "consume": "consume_authorization",
+    "output": "retain_output",
+    "terminal": "accept_terminal",
+}
+
+_HARNESS_V2_RESULT_CONTRACTS = {
+    "consume": (
+        "cas_harness_v2.consumption_route_result.v1",
+        "AUTHORIZATION_CONSUMPTION",
+    ),
+    "output": (
+        "cas_harness_v2.output_route_result.v1",
+        "OUTPUT_RETENTION",
+    ),
+    "terminal": (
+        "cas_harness_v2.terminal_route_result.v1",
+        "TERMINAL_ACCEPTANCE",
+    ),
+}
+
 _BOUND_MODEL_ENV_KEYS = frozenset(
     {
         "CAS_FLEET_MODEL_ID",
@@ -47,6 +104,35 @@ _BOUND_MODEL_ENV_KEYS = frozenset(
 
 class FleetWorkerError(RuntimeError):
     """Raised when the worker cannot complete a fleet protocol step."""
+
+
+class HarnessV2WorkerPreSendFailure(FleetWorkerError):
+    """Local validation failed before any Harness-v2 HTTP attempt began."""
+
+    outcome_certainty = "DEFINITE_PRE_SEND_FAILURE"
+    reconcile_only = False
+    retry_allowed = False
+
+
+class HarnessV2WorkerPostSendIndeterminate(FleetWorkerError):
+    """An entered Harness-v2 HTTP attempt has no fully bound success receipt."""
+
+    outcome_certainty = "POST_SEND_INDETERMINATE"
+    reconcile_only = True
+    retry_allowed = False
+
+
+class _HarnessV2ResponseError(ValueError):
+    """Private response-contract failure; never surface its detail to callers."""
+
+
+@dataclass(frozen=True, slots=True)
+class _HarnessV2ExpectedResult:
+    receipt_id: str | None = None
+    receipt_sha256: str | None = None
+    receipt_media_type: str | None = None
+    receipt_byte_length: int | None = None
+    terminal_status: str | None = None
 
 
 @dataclass(frozen=True)
@@ -370,6 +456,213 @@ class FleetApiClient:
             payload,
         )
 
+    async def consume_harness_v2_authorization(
+        self,
+        job: FleetJob,
+        *,
+        authorization_sha256: str,
+        run_nonce_b64url: str,
+    ) -> dict[str, Any]:
+        """Consume one authorization before any Harness-v2 model execution."""
+
+        raw = build_harness_v2_consumption_request(run_nonce_b64url)
+        return await self._post_harness_v2_worker_exact(
+            job,
+            operation="consume",
+            raw=raw,
+            media_type=HARNESS_V2_CONSUMPTION_MEDIA_TYPE,
+            authorization_sha256=authorization_sha256,
+            expected_result=_HarnessV2ExpectedResult(
+                receipt_id=_harness_v2_operation_id("consumption", job.job_id),
+            ),
+        )
+
+    async def retain_harness_v2_output(
+        self,
+        job: FleetJob,
+        *,
+        authorization_sha256: str,
+        output_name: str,
+        artifact_id: str,
+        artifact_media_type: str,
+        artifact_body: bytes | bytearray | memoryview,
+    ) -> dict[str, Any]:
+        """Retain one exact output after consumption and before terminal submission."""
+
+        raw = build_harness_v2_output_retention_request(
+            output_name=output_name,
+            artifact_id=artifact_id,
+            artifact_media_type=artifact_media_type,
+            artifact_body=artifact_body,
+        )
+        return await self._post_harness_v2_worker_exact(
+            job,
+            operation="output",
+            raw=raw,
+            media_type=HARNESS_V2_OUTPUT_RETENTION_MEDIA_TYPE,
+            authorization_sha256=authorization_sha256,
+            expected_result=_HarnessV2ExpectedResult(
+                receipt_id=artifact_id,
+                receipt_sha256=hashlib.sha256(bytes(artifact_body)).hexdigest().upper(),
+            ),
+        )
+
+    async def submit_harness_v2_terminal(
+        self,
+        job: FleetJob,
+        *,
+        authorization_sha256: str,
+        terminal_receipt_raw: bytes | bytearray | memoryview,
+    ) -> dict[str, Any]:
+        """Submit exact terminal-receipt bytes after all outputs are retained."""
+
+        raw = _snapshot_harness_v2_exact_body(terminal_receipt_raw)
+        receipt_id, terminal_status = _terminal_result_binding(raw)
+        return await self._post_harness_v2_worker_exact(
+            job,
+            operation="terminal",
+            raw=raw,
+            media_type=HARNESS_V2_TERMINAL_MEDIA_TYPE,
+            authorization_sha256=authorization_sha256,
+            expected_result=_HarnessV2ExpectedResult(
+                receipt_id=receipt_id,
+                receipt_sha256=hashlib.sha256(raw).hexdigest().upper(),
+                receipt_media_type=HARNESS_V2_TERMINAL_MEDIA_TYPE,
+                receipt_byte_length=len(raw),
+                terminal_status=terminal_status,
+            ),
+        )
+
+    async def _post_harness_v2_worker_exact(
+        self,
+        job: FleetJob,
+        *,
+        operation: Literal["consume", "output", "terminal"],
+        raw: bytes,
+        media_type: str,
+        authorization_sha256: str,
+        expected_result: _HarnessV2ExpectedResult,
+    ) -> dict[str, Any]:
+        """Perform one exact worker-scoped attempt with no automatic retry."""
+
+        tenant_id, service_credential, credential_id = (
+            self._harness_v2_service_identity()
+        )
+        path, lease_token = self._harness_v2_worker_path(job, operation=operation)
+        if (
+            type(authorization_sha256) is not str
+            or not _HARNESS_V2_UPPER_SHA256_RE.fullmatch(authorization_sha256)
+        ):
+            raise HarnessV2WorkerPreSendFailure(_HARNESS_V2_FAILURE)
+        raw = _snapshot_harness_v2_exact_body(raw)
+        request_sha256 = hashlib.sha256(raw).hexdigest().upper()
+        callback_nonce = secrets.token_urlsafe(24)
+        expected_nonce_id = "fsn_" + hashlib.sha256(
+            f"{credential_id}:{callback_nonce}".encode("utf-8")
+        ).hexdigest()
+        headers = {
+            "Authorization": f"CAS-Service {service_credential}",
+            "Content-Type": media_type,
+            "X-CAS-Tenant-ID": tenant_id,
+            "X-CAS-Audit-ID": job.audit_id,
+            "X-CAS-Service-Timestamp": str(int(datetime.now(UTC).timestamp())),
+            "X-CAS-Service-Nonce": callback_nonce,
+            "X-CAS-Authorization-SHA256": authorization_sha256,
+            "X-CAS-Lease-Token": lease_token,
+        }
+        try:
+            # Entering the transport is the certainty boundary. Any exception,
+            # non-200, or malformed/mismatched success after this point may
+            # follow a committed server-side transition. It is therefore
+            # reconcile-only and never an automatic retry signal.
+            async with self._client.stream(
+                "POST",
+                f"{self.config.base_url}{path}",
+                content=raw,
+                headers=headers,
+            ) as response:
+                if response.status_code != 200:
+                    raise _HarnessV2ResponseError("non-success status")
+                response_raw = await _read_harness_v2_response(response)
+            payload = _load_harness_v2_json_object(response_raw)
+            _validate_harness_v2_worker_response(
+                payload,
+                operation=operation,
+                job=job,
+                request_sha256=request_sha256,
+                request_byte_length=len(raw),
+                expected_nonce_id=expected_nonce_id,
+                expected_result=expected_result,
+            )
+        except asyncio.CancelledError:
+            raise HarnessV2WorkerPostSendIndeterminate(_HARNESS_V2_FAILURE) from None
+        except Exception:
+            raise HarnessV2WorkerPostSendIndeterminate(_HARNESS_V2_FAILURE) from None
+        return payload
+
+    def _harness_v2_service_identity(self) -> tuple[str, str, str]:
+        tenant_id = (self.config.tenant_id or "").strip()
+        service_credential = (self.config.service_credential or "").strip()
+        credential_id = None
+        if service_credential.startswith("casfs_") and "." in service_credential:
+            head, secret = service_credential[len("casfs_") :].split(".", 1)
+            if _HARNESS_V2_CREDENTIAL_ID_RE.fullmatch(head) and len(secret) >= 32:
+                credential_id = head
+        if (
+            not _HARNESS_V2_ROUTE_ID_RE.fullmatch(tenant_id)
+            or credential_id is None
+            or not service_credential.isascii()
+            or any(
+                character.isspace()
+                or ord(character) < 0x20
+                or ord(character) == 0x7F
+                for character in service_credential
+            )
+        ):
+            # Harness-v2 never falls back to a customer/bearer credential.
+            raise HarnessV2WorkerPreSendFailure(_HARNESS_V2_FAILURE)
+        return tenant_id, service_credential, credential_id
+
+    def _harness_v2_worker_path(
+        self,
+        job: FleetJob,
+        *,
+        operation: Literal["consume", "output", "terminal"],
+    ) -> tuple[str, str]:
+        ids = (job.audit_id, job.job_id, job.assigned_worker_id)
+        lease_token = job.lease_token
+        if type(lease_token) is not str:
+            raise HarnessV2WorkerPreSendFailure(_HARNESS_V2_FAILURE)
+        try:
+            lease_bytes = lease_token.encode("utf-8")
+        except UnicodeEncodeError:
+            raise HarnessV2WorkerPreSendFailure(_HARNESS_V2_FAILURE) from None
+        if (
+            job.status != "leased"
+            or job.audit_id != self.config.audit_id
+            or job.assigned_worker_id != self.config.worker_id
+            or any(
+                type(value) is not str
+                or not _HARNESS_V2_ROUTE_ID_RE.fullmatch(value)
+                for value in ids
+            )
+            or not 32 <= len(lease_bytes) <= 256
+            or lease_token != lease_token.strip()
+            or any(
+                character.isspace()
+                or ord(character) < 0x20
+                or ord(character) == 0x7F
+                for character in lease_token
+            )
+        ):
+            raise HarnessV2WorkerPreSendFailure(_HARNESS_V2_FAILURE)
+        path = (
+            "/api/cas-harness/audit/distributed/session/"
+            f"{job.audit_id}/fleet/v2/job/{job.job_id}/worker/"
+            f"{job.assigned_worker_id}/{operation}"
+        )
+        return path, lease_token
+
     async def _post(self, path: str, payload: dict[str, Any] | None) -> Any:
         headers = {"Content-Type": "application/json"}
         service_credential = (self.config.service_credential or "").strip()
@@ -401,6 +694,327 @@ class FleetApiClient:
         if not response.content:
             return None
         return response.json()
+
+
+def build_harness_v2_consumption_request(run_nonce_b64url: str) -> bytes:
+    """Build the exact canonical one-use consumption carrier."""
+
+    if type(run_nonce_b64url) is not str or not _HARNESS_V2_RUN_NONCE_RE.fullmatch(
+        run_nonce_b64url
+    ):
+        raise HarnessV2WorkerPreSendFailure(_HARNESS_V2_FAILURE)
+    try:
+        nonce_bytes = base64.b64decode(
+            run_nonce_b64url + "=", altchars=b"-_", validate=True
+        )
+    except (ValueError, TypeError):
+        raise HarnessV2WorkerPreSendFailure(_HARNESS_V2_FAILURE) from None
+    if (
+        len(nonce_bytes) != 32
+        or base64.urlsafe_b64encode(nonce_bytes).decode("ascii").rstrip("=")
+        != run_nonce_b64url
+    ):
+        raise HarnessV2WorkerPreSendFailure(_HARNESS_V2_FAILURE)
+    return _canonical_harness_v2_json_bytes(
+        {
+            "schema_version": HARNESS_V2_CONSUMPTION_REQUEST_SCHEMA,
+            "run_nonce_b64url": run_nonce_b64url,
+        }
+    )
+
+
+def build_harness_v2_output_retention_request(
+    *,
+    output_name: str,
+    artifact_id: str,
+    artifact_media_type: str,
+    artifact_body: bytes | bytearray | memoryview,
+) -> bytes:
+    """Build one canonical exact-output retention envelope."""
+
+    if (
+        type(output_name) is not str
+        or not _HARNESS_V2_ROUTE_ID_RE.fullmatch(output_name)
+        or type(artifact_id) is not str
+        or not _HARNESS_V2_ROUTE_ID_RE.fullmatch(artifact_id)
+        or not _valid_harness_v2_media_type(artifact_media_type)
+        or type(artifact_body) not in (bytes, bytearray, memoryview)
+    ):
+        raise HarnessV2WorkerPreSendFailure(_HARNESS_V2_FAILURE)
+    body = bytes(artifact_body)
+    if not 1 <= len(body) <= _HARNESS_V2_MAX_ARTIFACT_BYTES:
+        raise HarnessV2WorkerPreSendFailure(_HARNESS_V2_FAILURE)
+    raw = _canonical_harness_v2_json_bytes(
+        {
+            "schema_version": HARNESS_V2_OUTPUT_RETENTION_SCHEMA,
+            "output_name": output_name,
+            "artifact": {
+                "artifact_id": artifact_id,
+                "media_type": artifact_media_type,
+                "sha256": hashlib.sha256(body).hexdigest().upper(),
+                "byte_length": len(body),
+                "raw_base64": base64.b64encode(body).decode("ascii"),
+            },
+        }
+    )
+    return _snapshot_harness_v2_exact_body(raw)
+
+
+def _valid_harness_v2_media_type(value: object) -> bool:
+    if type(value) is not str or not value or value != value.strip():
+        return False
+    try:
+        encoded = value.encode("utf-8")
+    except UnicodeEncodeError:
+        return False
+    return (
+        len(encoded) <= _HARNESS_V2_MAX_MEDIA_TYPE_BYTES
+        and not any(character.isspace() for character in value)
+        and "/" in value
+    )
+
+
+def _canonical_harness_v2_json_bytes(value: dict[str, Any]) -> bytes:
+    try:
+        return json.dumps(
+            value,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=True,
+            allow_nan=False,
+        ).encode("ascii")
+    except (TypeError, ValueError, UnicodeError):
+        raise HarnessV2WorkerPreSendFailure(_HARNESS_V2_FAILURE) from None
+
+
+def _snapshot_harness_v2_exact_body(
+    raw: bytes | bytearray | memoryview,
+) -> bytes:
+    if type(raw) not in (bytes, bytearray, memoryview):
+        raise HarnessV2WorkerPreSendFailure(_HARNESS_V2_FAILURE)
+    snapshot = bytes(raw)
+    if not snapshot or len(snapshot) > _HARNESS_V2_MAX_EXACT_BODY_BYTES:
+        raise HarnessV2WorkerPreSendFailure(_HARNESS_V2_FAILURE)
+    return snapshot
+
+
+async def _read_harness_v2_response(response: httpx.Response) -> bytes:
+    content_types = response.headers.get_list("Content-Type")
+    if len(content_types) != 1 or content_types[0] != "application/json":
+        raise _HarnessV2ResponseError("invalid response media type")
+    length_values = response.headers.get_list("Content-Length")
+    if len(length_values) > 1:
+        raise _HarnessV2ResponseError("duplicate response length")
+    if length_values:
+        try:
+            declared_length = int(length_values[0])
+        except ValueError as exc:
+            raise _HarnessV2ResponseError("invalid response length") from exc
+        if not 1 <= declared_length <= _HARNESS_V2_MAX_RESPONSE_BYTES:
+            raise _HarnessV2ResponseError("response exceeds bound")
+    else:
+        declared_length = None
+    captured = bytearray()
+    async for chunk in response.aiter_bytes():
+        if len(captured) + len(chunk) > _HARNESS_V2_MAX_RESPONSE_BYTES:
+            raise _HarnessV2ResponseError("response exceeds bound")
+        captured.extend(chunk)
+    raw = bytes(captured)
+    if not raw or (declared_length is not None and declared_length != len(raw)):
+        raise _HarnessV2ResponseError("response length differs")
+    return raw
+
+
+def _load_harness_v2_json_object(raw: bytes) -> dict[str, Any]:
+    def reject_constant(_value: str) -> None:
+        raise _HarnessV2ResponseError("non-finite JSON value")
+
+    def exact_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        result: dict[str, Any] = {}
+        for key, value in pairs:
+            if key in result:
+                raise _HarnessV2ResponseError("duplicate JSON key")
+            result[key] = value
+        return result
+
+    try:
+        text = raw.decode("utf-8")
+        value = json.loads(
+            text,
+            object_pairs_hook=exact_object,
+            parse_constant=reject_constant,
+        )
+    except _HarnessV2ResponseError:
+        raise
+    except (UnicodeError, ValueError, TypeError, RecursionError) as exc:
+        raise _HarnessV2ResponseError("invalid JSON response") from exc
+    if type(value) is not dict:
+        raise _HarnessV2ResponseError("response must be an object")
+    return value
+
+
+def _terminal_result_binding(raw: bytes) -> tuple[str, str]:
+    try:
+        value = _load_harness_v2_json_object(raw)
+        receipt_id = value.get("receipt_id")
+        terminal = value.get("terminal")
+        if (
+            value.get("schema_version")
+            != "cas_harness_v2.worker_terminal_receipt.v1"
+            or type(receipt_id) is not str
+            or not _HARNESS_V2_ROUTE_ID_RE.fullmatch(receipt_id)
+            or type(terminal) is not dict
+        ):
+            raise _HarnessV2ResponseError("terminal receipt binding is unavailable")
+        terminal_status = {"COMPLETED": "SUCCESS", "FAILED": "FAILURE"}.get(
+            terminal.get("status")
+        )
+        if terminal_status is None:
+            raise _HarnessV2ResponseError("terminal status is unavailable")
+        return receipt_id, terminal_status
+    except Exception:
+        raise HarnessV2WorkerPreSendFailure(_HARNESS_V2_FAILURE) from None
+
+
+def _harness_v2_operation_id(prefix: str, *values: str) -> str:
+    digest = hashlib.sha256("\0".join(values).encode("utf-8")).hexdigest()
+    return f"h2{prefix}_{digest}"
+
+
+def _validate_harness_v2_worker_response(
+    payload: dict[str, Any],
+    *,
+    operation: Literal["consume", "output", "terminal"],
+    job: FleetJob,
+    request_sha256: str,
+    request_byte_length: int,
+    expected_nonce_id: str,
+    expected_result: _HarnessV2ExpectedResult,
+) -> None:
+    _expect_harness_v2_keys(
+        payload,
+        {
+            "status",
+            "operation",
+            "audit_id",
+            "job_id",
+            "run_id",
+            "intake_receipt",
+            "result",
+            "authority",
+        },
+    )
+    expected_run_id = "h2run_" + hashlib.sha256(
+        job.job_id.encode("utf-8")
+    ).hexdigest()
+    if (
+        payload["status"] != "ACCEPTED_RESEARCH_ONLY"
+        or payload["operation"] != _HARNESS_V2_RESPONSE_OPERATIONS[operation]
+        or payload["audit_id"] != job.audit_id
+        or payload["job_id"] != job.job_id
+        or payload["run_id"] != expected_run_id
+        or payload["authority"] != _HARNESS_V2_AUTHORITY
+    ):
+        raise _HarnessV2ResponseError("response scope differs")
+
+    intake = payload["intake_receipt"]
+    if type(intake) is not dict:
+        raise _HarnessV2ResponseError("intake receipt is invalid")
+    _expect_harness_v2_keys(
+        intake,
+        {"nonce_id", "carrier_sha256", "carrier_byte_length", "scope"},
+    )
+    if (
+        intake["nonce_id"] != expected_nonce_id
+        or intake["carrier_sha256"] != request_sha256
+        or type(intake["carrier_byte_length"]) is not int
+        or isinstance(intake["carrier_byte_length"], bool)
+        or intake["carrier_byte_length"] != request_byte_length
+        or intake["scope"] != "SERVER_OBSERVED_HTTP_INTAKE_ONLY"
+    ):
+        raise _HarnessV2ResponseError("intake binding differs")
+
+    result = payload["result"]
+    if type(result) is not dict:
+        raise _HarnessV2ResponseError("result is invalid")
+    common_keys = {
+        "schema_version",
+        "result_kind",
+        "receipt_id",
+        "receipt_sha256",
+        "idempotent_replay",
+    }
+    operation_keys = {
+        "consume": {"started_at", "time_assurance"},
+        "output": set(),
+        "terminal": {
+            "receipt_media_type",
+            "receipt_byte_length",
+            "terminal_status",
+            "terminal_event_sha256",
+        },
+    }[operation]
+    _expect_harness_v2_keys(result, common_keys | operation_keys)
+    expected_schema, expected_kind = _HARNESS_V2_RESULT_CONTRACTS[operation]
+    if (
+        result["schema_version"] != expected_schema
+        or result["result_kind"] != expected_kind
+        or type(result["receipt_id"]) is not str
+        or not _HARNESS_V2_ROUTE_ID_RE.fullmatch(result["receipt_id"])
+        or type(result["receipt_sha256"]) is not str
+        or not _HARNESS_V2_UPPER_SHA256_RE.fullmatch(result["receipt_sha256"])
+        or type(result["idempotent_replay"]) is not bool
+    ):
+        raise _HarnessV2ResponseError("result contract differs")
+    if (
+        expected_result.receipt_id is not None
+        and result["receipt_id"] != expected_result.receipt_id
+    ) or (
+        expected_result.receipt_sha256 is not None
+        and result["receipt_sha256"] != expected_result.receipt_sha256
+    ):
+        raise _HarnessV2ResponseError("result artifact differs")
+
+    if operation == "consume":
+        if (
+            not _canonical_harness_v2_utc_time(result["started_at"])
+            or result["time_assurance"]
+            != "PROCESS_OR_INJECTED_CLOCK_NOT_TRUSTED"
+        ):
+            raise _HarnessV2ResponseError("consumption result differs")
+    elif operation == "terminal":
+        if (
+            result["receipt_media_type"] != expected_result.receipt_media_type
+            or type(result["receipt_byte_length"]) is not int
+            or isinstance(result["receipt_byte_length"], bool)
+            or result["receipt_byte_length"] != expected_result.receipt_byte_length
+            or result["terminal_status"] != expected_result.terminal_status
+            or type(result["terminal_event_sha256"]) is not str
+            or not _HARNESS_V2_UPPER_SHA256_RE.fullmatch(
+                result["terminal_event_sha256"]
+            )
+        ):
+            raise _HarnessV2ResponseError("terminal result differs")
+
+
+def _canonical_harness_v2_utc_time(value: object) -> bool:
+    if type(value) is not str:
+        return False
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    if parsed.tzinfo is None:
+        return False
+    canonical = parsed.astimezone(UTC).isoformat(timespec="microseconds").replace(
+        "+00:00", "Z"
+    )
+    return value == canonical
+
+
+def _expect_harness_v2_keys(value: dict[str, Any], expected: set[str]) -> None:
+    if set(value) != expected:
+        raise _HarnessV2ResponseError("response fields differ")
 
 
 class FleetWorkerDaemon:
