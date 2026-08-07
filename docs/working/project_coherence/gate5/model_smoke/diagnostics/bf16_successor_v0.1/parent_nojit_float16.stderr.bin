@@ -1,0 +1,15 @@
+Loading weights:   0%|          | 0/148 [00:00<?, ?it/s]Loading weights:  79%|███████▉  | 117/148 [00:00<00:00, 1158.13it/s]Loading weights: 100%|██████████| 148/148 [00:00<00:00, 1348.33it/s]
+warm_load: failed closed; startup cannot proceed
+Traceback (most recent call last):
+  File "/worker/app/runtime/model_loader.py", line 505, in warm_load
+    _validate_runtime_canary(
+  File "/worker/app/runtime/model_loader.py", line 421, in _validate_runtime_canary
+    raise RuntimeError("Pythia runtime canary produced nonfinite logits")
+RuntimeError: Pythia runtime canary produced nonfinite logits
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/worker/app/runtime/model_loader.py", line 505, in warm_load
+    _validate_runtime_canary(
+  File "/worker/app/runtime/model_loader.py", line 421, in _validate_runtime_canary
+    raise RuntimeError("Pythia runtime canary produced nonfinite logits")
+RuntimeError: Pythia runtime canary produced nonfinite logits

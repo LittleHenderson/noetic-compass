@@ -1,0 +1,1 @@
+{"dtype": "torch.bfloat16", "native_bfloat16": true, "logits_finite": true, "attention_finite": true, "logit_elements": 452736, "nonfinite_logits": 0, "attention_tensors": 12}
