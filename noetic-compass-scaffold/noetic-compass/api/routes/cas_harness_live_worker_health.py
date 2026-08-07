@@ -22,6 +22,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 
 from api.config import settings
+from api.services.atlas_live_worker_auth import atlas_worker_auth_headers
 from api.services.atlas_live_worker_config import (
     WORKER_CONFIG_INVALID_URL,
     WORKER_CONFIG_NOT_CONFIGURED,
@@ -108,7 +109,10 @@ async def get_live_worker_health() -> CasHarnessLiveWorkerHealth:
     payload: dict[str, object] | None = None
     try:
         async with httpx.AsyncClient(timeout=timeout) as client:
-            resp = await client.get(f"{base}/health/realmode")
+            resp = await client.get(
+                f"{base}/health/realmode",
+                headers=atlas_worker_auth_headers(),
+            )
         if resp.status_code < 400:
             body = resp.json()
             if isinstance(body, dict):
