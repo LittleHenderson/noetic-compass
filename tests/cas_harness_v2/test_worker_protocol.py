@@ -25,6 +25,7 @@ from cas_harness_v2 import (  # noqa: E402
     WorkerAuthorizationArtifact,
     WorkerTerminalReceiptArtifact,
     build_worker_authorization,
+    build_worker_terminal_receipt,
     canonical_sha256,
     load_worker_authorization,
     load_worker_terminal_receipt,
@@ -401,6 +402,169 @@ class WorkerAuthorizationTests(unittest.TestCase):
 class WorkerTerminalReceiptTests(unittest.TestCase):
     def setUp(self) -> None:
         self.fx = WorkerProtocolFixture()
+
+    def test_builder_completed_roundtrip_derives_exact_authorization_bindings(self) -> None:
+        built = build_worker_terminal_receipt(
+            chain=self.fx.chain,
+            authorization=self.fx.authorization_raw,
+            receipt_id=self.fx.receipt["receipt_id"],
+            worker_started_at=self.fx.receipt["freshness"]["worker_started_at"],
+            terminal_at=self.fx.receipt["freshness"]["terminal_at"],
+            terminal_status="COMPLETED",
+            produced_outputs=self.fx.receipt["terminal"]["produced_outputs"],
+            missing_outputs=[],
+            error=None,
+        )
+        self.assertEqual(built.raw_bytes, encode(self.fx.receipt))
+        self.assertEqual(built, self.fx.load_receipt())
+        self.assertEqual(
+            built.payload["terminal"]["produced_output_effect"],
+            "DECLARED_OUTPUTS_NOT_SCIENTIFICALLY_ASSESSED",
+        )
+        for field in (
+            "preregistration_binding",
+            "identity_binding",
+            "required_design",
+            "execution_mapping",
+            "nonce_binding",
+            "authority",
+            "governance",
+        ):
+            self.assertEqual(
+                built.payload[field],
+                self.fx.loaded_authorization.payload[field],
+            )
+
+    def test_builder_failed_roundtrip_selects_quarantine_effect_and_typed_error(self) -> None:
+        error = {
+            "code": "cuda-oom",
+            "category": "RESOURCE_EXHAUSTED",
+            "message": "The research worker exhausted its assigned device memory.",
+            "retryable": True,
+        }
+        built = build_worker_terminal_receipt(
+            chain=self.fx.chain,
+            authorization=self.fx.loaded_authorization,
+            receipt_id="worker-receipt-h2-failed-builder",
+            worker_started_at="2026-08-05T08:35:00Z",
+            terminal_at="2026-08-05T09:20:00Z",
+            terminal_status="FAILED",
+            produced_outputs=[],
+            missing_outputs=["raw-outcomes"],
+            error=error,
+        )
+        replayed = load_worker_terminal_receipt(
+            built.raw_bytes,
+            authorization=self.fx.authorization_raw,
+            chain=self.fx.chain,
+        )
+        self.assertEqual(replayed, built)
+        self.assertEqual(built.terminal_status, "FAILED")
+        self.assertEqual(built.outcome_artifact_refs, ())
+        self.assertEqual(
+            built.payload["terminal"]["produced_output_effect"],
+            "QUARANTINED_PARTIAL_NEGATIVE_EVIDENCE_ONLY",
+        )
+        self.assertEqual(built.payload["terminal"]["error"], error)
+
+    def test_builder_replays_authorization_and_rejects_forged_projection_or_bytes(self) -> None:
+        kwargs = {
+            "chain": self.fx.chain,
+            "receipt_id": "worker-receipt-h2-forgery",
+            "worker_started_at": "2026-08-05T08:35:00Z",
+            "terminal_at": "2026-08-05T09:20:00Z",
+            "terminal_status": "COMPLETED",
+            "produced_outputs": self.fx.receipt["terminal"]["produced_outputs"],
+            "missing_outputs": [],
+            "error": None,
+        }
+        forged_projection = replace(
+            self.fx.loaded_authorization,
+            expires_at="2027-08-05T09:30:00Z",
+        )
+        with self.assertRaisesRegex(SchemaValidationError, "exact-byte loader replay"):
+            build_worker_terminal_receipt(
+                authorization=forged_projection,
+                **kwargs,
+            )
+
+        forged_bytes = deepcopy(self.fx.authorization)
+        forged_bytes["governance"]["product_claim_status"] = "LICENSED"
+        with self.assertRaises(SchemaValidationError):
+            build_worker_terminal_receipt(
+                authorization=encode(forged_bytes),
+                **kwargs,
+            )
+
+    def test_builder_rejects_terminal_times_outside_authorization_window(self) -> None:
+        for worker_started_at, terminal_at in (
+            ("2026-08-05T08:20:00Z", "2026-08-05T09:20:00Z"),
+            ("2026-08-05T08:35:00Z", "2026-08-05T08:34:59Z"),
+            ("2026-08-05T08:35:00Z", "2026-08-05T09:30:01Z"),
+        ):
+            with self.subTest(
+                worker_started_at=worker_started_at,
+                terminal_at=terminal_at,
+            ):
+                with self.assertRaises(SchemaValidationError):
+                    build_worker_terminal_receipt(
+                        chain=self.fx.chain,
+                        authorization=self.fx.authorization_raw,
+                        receipt_id="worker-receipt-h2-bad-time",
+                        worker_started_at=worker_started_at,
+                        terminal_at=terminal_at,
+                        terminal_status="COMPLETED",
+                        produced_outputs=self.fx.receipt["terminal"][
+                            "produced_outputs"
+                        ],
+                        missing_outputs=[],
+                        error=None,
+                    )
+
+    def test_builder_rejects_invalid_completed_and_failed_output_partitions(self) -> None:
+        error = {
+            "code": "worker-failed",
+            "category": "EXECUTION_FAILED",
+            "message": "worker failed",
+            "retryable": False,
+        }
+        cases = (
+            {
+                "terminal_status": "COMPLETED",
+                "produced_outputs": [],
+                "missing_outputs": [],
+                "error": None,
+            },
+            {
+                "terminal_status": "COMPLETED",
+                "produced_outputs": self.fx.receipt["terminal"]["produced_outputs"],
+                "missing_outputs": ["raw-outcomes"],
+                "error": None,
+            },
+            {
+                "terminal_status": "FAILED",
+                "produced_outputs": self.fx.receipt["terminal"]["produced_outputs"],
+                "missing_outputs": ["raw-outcomes"],
+                "error": error,
+            },
+            {
+                "terminal_status": "FAILED",
+                "produced_outputs": [],
+                "missing_outputs": [],
+                "error": error,
+            },
+        )
+        for index, case in enumerate(cases):
+            with self.subTest(index=index):
+                with self.assertRaises(SchemaValidationError):
+                    build_worker_terminal_receipt(
+                        chain=self.fx.chain,
+                        authorization=self.fx.authorization_raw,
+                        receipt_id=f"worker-receipt-h2-bad-partition-{index}",
+                        worker_started_at="2026-08-05T08:35:00Z",
+                        terminal_at="2026-08-05T09:20:00Z",
+                        **case,
+                    )
 
     def test_completed_receipt_loads_and_exposes_outcome_access_ref(self) -> None:
         loaded = self.fx.load_receipt()

@@ -8,7 +8,7 @@ decision maker, license grant, product route, or disclosure authority.
 from __future__ import annotations
 
 import base64
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import datetime
 import re
@@ -676,6 +676,33 @@ def _same_authorization(
     )
 
 
+def _replay_authorization_carrier(
+    authorization: WorkerAuthorizationArtifact | bytes | bytearray | memoryview,
+    *,
+    chain: PreregistrationChain,
+) -> WorkerAuthorizationArtifact:
+    """Replay exact authorization bytes and reject forged artifact projections."""
+
+    if type(authorization) is WorkerAuthorizationArtifact:
+        replayed = replay_worker_authorization_for_terminal(
+            authorization.raw_bytes,
+            chain=chain,
+        )
+        if not _same_authorization(replayed, authorization):
+            raise SchemaValidationError(
+                "authorization carrier does not match a fresh exact-byte loader replay"
+            )
+        return replayed
+    if type(authorization) in (bytes, bytearray, memoryview):
+        return replay_worker_authorization_for_terminal(
+            authorization,
+            chain=chain,
+        )
+    raise SchemaValidationError(
+        "authorization must be an exact WorkerAuthorizationArtifact or exact bytes-like carrier"
+    )
+
+
 def _validate_terminal(
     value: Any,
     *,
@@ -780,6 +807,90 @@ def _validate_terminal(
     return status, tuple(refs)
 
 
+def build_worker_terminal_receipt(
+    *,
+    chain: PreregistrationChain,
+    authorization: WorkerAuthorizationArtifact | bytes | bytearray | memoryview,
+    receipt_id: str,
+    worker_started_at: str,
+    terminal_at: str,
+    terminal_status: str,
+    produced_outputs: Sequence[Mapping[str, Any]],
+    missing_outputs: Sequence[str],
+    error: Mapping[str, Any] | None,
+) -> WorkerTerminalReceiptArtifact:
+    """Build and strict-load one terminal carrier from a retained authorization.
+
+    Every preregistration, identity, design, execution, nonce, authority, and
+    governance field is derived from a fresh exact-byte authorization replay.
+    The caller supplies only terminal observations; this helper cannot accept a
+    promoted binding or status effect.  It remains a structural carrier builder,
+    not execution authentication, trusted time, durable replay protection,
+    scientific assessment, licensing, product, or disclosure authority.
+    """
+
+    loaded_authorization = _replay_authorization_carrier(
+        authorization,
+        chain=chain,
+    )
+    if type(produced_outputs) not in (list, tuple):
+        raise SchemaValidationError("produced_outputs must be an exact list or tuple")
+    if not all(isinstance(row, Mapping) for row in produced_outputs):
+        raise SchemaValidationError("produced_outputs must contain only mappings")
+    if type(missing_outputs) not in (list, tuple):
+        raise SchemaValidationError("missing_outputs must be an exact list or tuple")
+    if error is not None and not isinstance(error, Mapping):
+        raise SchemaValidationError("error must be a mapping or null")
+
+    terminal_effects = {
+        "COMPLETED": "DECLARED_OUTPUTS_NOT_SCIENTIFICALLY_ASSESSED",
+        "FAILED": "QUARANTINED_PARTIAL_NEGATIVE_EVIDENCE_ONLY",
+    }
+    if type(terminal_status) is not str:
+        raise SchemaValidationError("terminal_status must be COMPLETED or FAILED")
+    produced_output_effect = terminal_effects.get(terminal_status)
+    if produced_output_effect is None:
+        raise SchemaValidationError("terminal_status must be COMPLETED or FAILED")
+
+    value = {
+        "schema_version": WORKER_TERMINAL_RECEIPT_SCHEMA,
+        "receipt_id": receipt_id,
+        "authorization": _artifact_ref_value(loaded_authorization.artifact_ref),
+        "freshness": {
+            "worker_started_at": worker_started_at,
+            "terminal_at": terminal_at,
+            **_TIME_ASSURANCE,
+        },
+        "preregistration_binding": thaw_json(
+            loaded_authorization.payload["preregistration_binding"]
+        ),
+        "identity_binding": thaw_json(
+            loaded_authorization.payload["identity_binding"]
+        ),
+        "required_design": thaw_json(
+            loaded_authorization.payload["required_design"]
+        ),
+        "execution_mapping": thaw_json(
+            loaded_authorization.payload["execution_mapping"]
+        ),
+        "nonce_binding": thaw_json(loaded_authorization.payload["nonce_binding"]),
+        "terminal": {
+            "status": terminal_status,
+            "produced_output_effect": produced_output_effect,
+            "produced_outputs": [thaw_json(row) for row in produced_outputs],
+            "missing_outputs": list(missing_outputs),
+            "error": None if error is None else thaw_json(error),
+        },
+        "authority": thaw_json(loaded_authorization.payload["authority"]),
+        "governance": thaw_json(loaded_authorization.payload["governance"]),
+    }
+    return load_worker_terminal_receipt(
+        canonical_json_bytes(value),
+        authorization=loaded_authorization,
+        chain=chain,
+    )
+
+
 def load_worker_terminal_receipt(
     raw: bytes | bytearray | memoryview,
     *,
@@ -788,28 +899,7 @@ def load_worker_terminal_receipt(
 ) -> WorkerTerminalReceiptArtifact:
     """Load a terminal receipt and replay every authorization/chain binding."""
 
-    supplied_authorization = authorization
-    if type(supplied_authorization) is WorkerAuthorizationArtifact:
-        replayed = _load_worker_authorization(
-            supplied_authorization.raw_bytes,
-            chain=chain,
-            require_pre_outcome=False,
-        )
-        if not _same_authorization(replayed, supplied_authorization):
-            raise SchemaValidationError(
-                "authorization carrier does not match a fresh exact-byte loader replay"
-            )
-        authorization = replayed
-    elif type(supplied_authorization) in (bytes, bytearray, memoryview):
-        authorization = _load_worker_authorization(
-            supplied_authorization,
-            chain=chain,
-            require_pre_outcome=False,
-        )
-    else:
-        raise SchemaValidationError(
-            "authorization must be an exact WorkerAuthorizationArtifact or exact bytes-like carrier"
-        )
+    authorization = _replay_authorization_carrier(authorization, chain=chain)
     base = _require_chain(chain, require_pre_outcome=False)
     sealed_outcome_access = chain.outcome_access
     snapshot, obj = load_json_object(raw)
