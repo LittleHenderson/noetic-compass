@@ -44,16 +44,29 @@ All dates use the repository's working timezone. This changelog records control-
   during full replay, and made controller reads repair exactly one verified
   event-first/index-second pending successor while rejecting corrupt or
   divergent pending histories.
+- Required exact Packet/nonreporting event-detail shapes, full indexed-history
+  verification before every replay, append, repair winner, and fresh-success
+  return, and exact verification of a concurrent repair winner before it can be
+  exposed as lifecycle state.
+- Extended full replay to verify every indexed event envelope plus lifecycle,
+  subject, nonce, finalization, registry, reservation, builder, and backend
+  profile cross-bindings. Canonical event identities can no longer be hidden by
+  a forged payload run ID. A bounded fingerprint-refresh loop now converges on
+  valid later state after stale reads, post-CAS acknowledgement races,
+  simultaneous exact retries, and concurrent pending-successor repair.
+- Moved outcome/reporting reservation replay and state checks behind the same
+  repair/full-verification loop, closing corrupt-history and interrupted-write
+  recovery gaps. Event-record verification now also binds tenant and event kind.
 
 ### Verified bounded receipts
 
-- Prospective lifecycle/SQLite/default-dark route: 97/97, node-ID digest
-  `727F58CC716F5ADD0BAB8FB965CC1E6B68245E60DB6C160A33AF96ED9EC5E5F9`.
+- Prospective lifecycle/SQLite/default-dark route: 130/130, node-ID digest
+  `0CA9217040958125285BFA0F6A7C6D517808B4AC4F4078C152620190767B6BB0`.
 - Packaging/snapshot/envelope/context/admitted-adapter/reconciliation: 90/90,
   node-ID digest
   `761038779E00511179D4FC5AA3522829D9BDEFB37C231061D04FB3AAD541F733`.
 - A focused development run across the changed route, lifecycle, service,
-  adapter, authentication, and bridge surfaces passed 154/154. These are local,
+  adapter, authentication, and bridge surfaces passed 187/187. These are local,
   unattested software regressions, not live execution or scientific evidence.
 
 ### Preserved open boundaries

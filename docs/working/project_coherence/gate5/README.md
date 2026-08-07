@@ -103,6 +103,15 @@ live or independent authority:
    reason. Lifecycle transitions and full replay enforce canonical
    nondecreasing event time. Reads repair exactly one verified event-first/
    index-second pending successor and reject corrupt or divergent successors.
+    Packet and nonreporting events have exact per-type detail shapes, and the
+    complete indexed history plus reservations is verified before every replay,
+    append, repair-winner return, and fresh-success return. Full verification
+    also checks every event envelope, lifecycle/dependency/profile cross-binding,
+    and canonical event identity. A bounded fingerprint refresh makes stale
+    reads, post-CAS acknowledgements, simultaneous exact retries, and competing
+    pending repairs converge only through a fully verified stable state.
+    Outcome/reporting reservation replays and state checks enter that loop first,
+    and event-record verification also binds the exact tenant and event kind.
    It reconciles the event-bound
    authorization, consumption, terminal, outcome, and packet/nonreporting
    wrappers plus packet-referenced bodies. Packet attachment
@@ -211,10 +220,10 @@ The separate durable fleet-callback and fake Object-Lock seam suite passes
 
 `D3EAF533FEDB5B03168200AA399AC53A6E2A6F22874EBABEAECEFB227400778D`
 
-The prospective lifecycle, SQLite, and default-dark route suite passes 97/97
+The prospective lifecycle, SQLite, and default-dark route suite passes 130/130
 with no subtests. Its canonical node-ID digest is:
 
-`727F58CC716F5ADD0BAB8FB965CC1E6B68245E60DB6C160A33AF96ED9EC5E5F9`
+`0CA9217040958125285BFA0F6A7C6D517808B4AC4F4078C152620190767B6BB0`
 
 The packaging, snapshot, envelope, context, admitted-adapter, and bounded-
 reconciliation suite passes 90/90 with no subtests. Its canonical node-ID
@@ -239,7 +248,7 @@ independently retained inner bytes, no provider-backed startup has passed, and
 no live experiment or claim authority is created.
 
 The 364-test worker, 78-test API/launcher/fleet/state, 30-test worker-protocol,
-17-test bridge, 38-test durable-seam, 97-test prospective-lifecycle, and 90-test
+17-test bridge, 38-test durable-seam, 99-test prospective-lifecycle, and 90-test
 admitted-adapter/reconciliation results are
 `LOCAL_UNATTESTED_HOST_REGRESSION` observations. Each suite now binds its
 collected, started, and finished node-ID sequences plus exact

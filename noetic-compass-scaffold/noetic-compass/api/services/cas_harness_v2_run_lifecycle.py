@@ -719,6 +719,9 @@ class DurableProspectiveRunLifecycle:
         expected_fingerprint = _sha256_json(fingerprint_facts)
         run_id = _run_id(subject_id)
         reservation_id = _outcome_access_reservation_id(run_id)
+        lifecycle, verified_events = self._repair_and_verify_lifecycle(
+            self._require_lifecycle(tenant_id, subject_id)
+        )
         existing = self._store.get(
             tenant_id, OUTCOME_ACCESS_RESERVATION_KIND, reservation_id
         )
@@ -729,21 +732,15 @@ class DurableProspectiveRunLifecycle:
                 )
             return _outcome_reservation_snapshot(existing)
 
-        lifecycle = self._require_lifecycle(tenant_id, subject_id)
         terminal_state = _payload_text(lifecycle.payload, "current_state")
         if terminal_state not in {SUCCESS, FAILURE}:
             raise RunLifecycleConflict(
                 "outcome access requires a strict completed or failed execution receipt"
             )
-        self.list_events(tenant_id=tenant_id, subject_id=subject_id)
+        terminal_event = verified_events[-1]
         terminal_sequence = _payload_int(
-            lifecycle.payload, "event_count", minimum=1
-        ) - 1
-        terminal_event = self._store.get(
-            tenant_id, EVENT_KIND, _event_record_id(run_id, terminal_sequence)
+            terminal_event.payload, "sequence", minimum=0
         )
-        if terminal_event is None:
-            raise RunLifecyclePersistenceError("terminal event is missing")
         terminal_details = terminal_event.payload.get("details")
         if not isinstance(terminal_details, Mapping):
             raise RunLifecyclePersistenceError("terminal event details are invalid")
@@ -952,6 +949,9 @@ class DurableProspectiveRunLifecycle:
         )
         run_id = _run_id(subject_id)
         reservation_id = _reporting_disposition_reservation_id(run_id)
+        lifecycle, verified_events = self._repair_and_verify_lifecycle(
+            self._require_lifecycle(tenant_id, subject_id)
+        )
         existing = self._store.get(
             tenant_id,
             REPORTING_DISPOSITION_RESERVATION_KIND,
@@ -985,7 +985,6 @@ class DurableProspectiveRunLifecycle:
                 )
             return reservation
 
-        lifecycle = self._require_lifecycle(tenant_id, subject_id)
         parent_state = _payload_text(lifecycle.payload, "current_state")
         if disposition == "PACKET":
             allowed = {OUTCOME_ACCESSED}
@@ -1012,20 +1011,16 @@ class DurableProspectiveRunLifecycle:
             raise RunLifecycleValidationError(
                 "reporting clock observation must match observed_at"
             )
-        verified_events = self.list_events(
-            tenant_id=tenant_id,
-            subject_id=subject_id,
-        )
         parent_event = verified_events[-1]
         if (
-            parent_event.get("event_sha256") != parent_head_sha256
-            or parent_event.get("state_after") != parent_state
+            parent_event.payload.get("event_sha256") != parent_head_sha256
+            or parent_event.payload.get("state_after") != parent_state
         ):
             raise RunLifecyclePersistenceError(
                 "reporting reservation parent differs from the verified lifecycle head"
             )
         if _parse_utc(recorded_at) < _parse_utc(
-            _payload_text(parent_event, "occurred_at")
+            _payload_text(parent_event.payload, "occurred_at")
         ):
             raise RunLifecycleConflict(
                 "reporting disposition cannot precede its lifecycle parent"
@@ -1209,7 +1204,7 @@ class DurableProspectiveRunLifecycle:
         record = self._store.get(tenant_id, LIFECYCLE_KIND, _run_id(subject_id))
         if record is None:
             return None
-        record = self._repair_pending_transition_index(record)
+        record, _events = self._repair_and_verify_lifecycle(record)
         return _snapshot(record)
 
     def list_events(
@@ -1219,67 +1214,8 @@ class DurableProspectiveRunLifecycle:
 
         tenant_id = _required_text(tenant_id, "tenant_id")
         subject_id = _required_text(subject_id, "subject_id")
-        record = self._repair_pending_transition_index(
+        record, event_records = self._repair_and_verify_lifecycle(
             self._require_lifecycle(tenant_id, subject_id)
-        )
-        nonce_sha256 = _payload_text(record.payload, "run_nonce_sha256")
-        finalization_id = _payload_text(
-            record.payload,
-            "authorization_finalization_record_id",
-        )
-        subject_record = self._store.get(
-            tenant_id,
-            SUBJECT_RESERVATION_KIND,
-            _subject_record_id(subject_id),
-        )
-        nonce_record = self._store.get(
-            tenant_id,
-            NONCE_RESERVATION_KIND,
-            _nonce_record_id(nonce_sha256),
-        )
-        finalization_record = self._store.get(
-            tenant_id,
-            AUTHORIZATION_FINALIZATION_KIND,
-            finalization_id,
-        )
-        event_records = [
-            event
-            for event in self._store.list(tenant_id, EVENT_KIND)
-            if event.payload.get("run_id") == record.record_id
-        ]
-        self._verify_lifecycle(
-            record,
-            subject_by_id=(
-                {}
-                if subject_record is None
-                else {subject_record.record_id: subject_record}
-            ),
-            nonce_by_id=(
-                {} if nonce_record is None else {nonce_record.record_id: nonce_record}
-            ),
-            finalization_by_id=(
-                {}
-                if finalization_record is None
-                else {finalization_record.record_id: finalization_record}
-            ),
-            outcome_reservation_by_id={
-                item.record_id: item
-                for item in self._store.list(
-                    tenant_id,
-                    OUTCOME_ACCESS_RESERVATION_KIND,
-                )
-            },
-            reporting_reservation_by_id={
-                item.record_id: item
-                for item in self._store.list(
-                    tenant_id,
-                    REPORTING_DISPOSITION_RESERVATION_KIND,
-                )
-            },
-            event_records=event_records,
-        )
-        event_records.sort(
-            key=lambda event: _payload_int(event.payload, "sequence", minimum=0)
         )
         return tuple(dict(event.payload) for event in event_records)
 
@@ -1375,9 +1311,25 @@ class DurableProspectiveRunLifecycle:
                     reservation_id = details.get("outcome_access_reservation_id")
                     if isinstance(reservation_id, str):
                         finalized_outcome_reservations.add(reservation_id)
-                if event_type in REPORTING_DISPOSITIONS and isinstance(
-                    details, Mapping
-                ):
+                if event_type in REPORTING_DISPOSITIONS:
+                    try:
+                        (
+                            expected_disposition,
+                            final_artifact_field,
+                            event_reason_code,
+                        ) = _reporting_event_details_contract(
+                            event_type,
+                            details,
+                        )
+                    except RunLifecycleError as exc:
+                        issues.append(
+                            ReconciliationIssue(
+                                "REPORTING_FINALIZATION_BINDING_FAILURE",
+                                event.record_id,
+                                str(exc),
+                            )
+                        )
+                        continue
                     reservation_id = details.get("reporting_reservation_id")
                     if isinstance(reservation_id, str):
                         reporting_finalization_counts[reservation_id] = (
@@ -1403,16 +1355,6 @@ class DurableProspectiveRunLifecycle:
                             # The reservation loop below reports the exact integrity
                             # failure once, and this event remains unfinalized.
                             continue
-                        expected_disposition = (
-                            "PACKET"
-                            if event_type == PACKET_RECORDED
-                            else "NONREPORTING"
-                        )
-                        final_artifact_field = (
-                            "packet_artifact"
-                            if event_type == PACKET_RECORDED
-                            else "nonreporting_artifact"
-                        )
                         finalization_facts = (
                             reservation.run_id == lifecycle.record_id,
                             reservation.subject_id
@@ -1420,12 +1362,7 @@ class DurableProspectiveRunLifecycle:
                             reservation.operation_id
                             == event.payload.get("operation_id"),
                             reservation.disposition == expected_disposition,
-                            reservation.reason_code
-                            == (
-                                details.get("reason_code")
-                                if event_type == NONREPORTING_RECORDED
-                                else None
-                            ),
+                            reservation.reason_code == event_reason_code,
                             reservation.recorded_at
                             == event.payload.get("occurred_at"),
                             reservation.parent_state
@@ -1860,6 +1797,10 @@ class DurableProspectiveRunLifecycle:
         payload = event.payload
         run_id = lifecycle.record_id
         subject_id = _payload_text(lifecycle.payload, "subject_id")
+        if event.tenant_id != lifecycle.tenant_id:
+            raise RunLifecyclePersistenceError("event tenant envelope conflicts")
+        if event.kind != EVENT_KIND:
+            raise RunLifecyclePersistenceError("event kind envelope conflicts")
         if event.record_id != _event_record_id(run_id, expected_sequence):
             raise RunLifecyclePersistenceError("event record id is not canonical")
         if payload.get("schema") != EVENT_SCHEMA:
@@ -1926,6 +1867,184 @@ class DurableProspectiveRunLifecycle:
             raise RunLifecyclePersistenceError("event digest does not verify")
         return observed_hash
 
+    def _verify_indexed_lifecycle(
+        self,
+        lifecycle: LedgerRecord,
+    ) -> tuple[LedgerRecord, ...]:
+        """Verify one indexed run and every dependency without repairing it."""
+
+        tenant_id = lifecycle.tenant_id
+        subject_id = _payload_text(lifecycle.payload, "subject_id")
+        nonce_sha256 = _payload_text(lifecycle.payload, "run_nonce_sha256")
+        finalization_id = _payload_text(
+            lifecycle.payload,
+            "authorization_finalization_record_id",
+        )
+        subject_record = self._store.get(
+            tenant_id,
+            SUBJECT_RESERVATION_KIND,
+            _subject_record_id(subject_id),
+        )
+        nonce_record = self._store.get(
+            tenant_id,
+            NONCE_RESERVATION_KIND,
+            _nonce_record_id(nonce_sha256),
+        )
+        finalization_record = self._store.get(
+            tenant_id,
+            AUTHORIZATION_FINALIZATION_KIND,
+            finalization_id,
+        )
+        event_records = [
+            event
+            for event in self._store.list(tenant_id, EVENT_KIND)
+            if _event_belongs_to_run(event, lifecycle.record_id)
+        ]
+        self._verify_lifecycle(
+            lifecycle,
+            subject_by_id=(
+                {}
+                if subject_record is None
+                else {subject_record.record_id: subject_record}
+            ),
+            nonce_by_id=(
+                {} if nonce_record is None else {nonce_record.record_id: nonce_record}
+            ),
+            finalization_by_id=(
+                {}
+                if finalization_record is None
+                else {finalization_record.record_id: finalization_record}
+            ),
+            outcome_reservation_by_id={
+                item.record_id: item
+                for item in self._store.list(
+                    tenant_id,
+                    OUTCOME_ACCESS_RESERVATION_KIND,
+                )
+            },
+            reporting_reservation_by_id={
+                item.record_id: item
+                for item in self._store.list(
+                    tenant_id,
+                    REPORTING_DISPOSITION_RESERVATION_KIND,
+                )
+            },
+            event_records=event_records,
+        )
+        event_records.sort(
+            key=lambda event: _payload_int(event.payload, "sequence", minimum=0)
+        )
+        return tuple(event_records)
+
+    def _repair_and_verify_lifecycle(
+        self,
+        lifecycle: LedgerRecord,
+    ) -> tuple[LedgerRecord, tuple[LedgerRecord, ...]]:
+        """Converge a repairable event/index race, otherwise fail closed."""
+
+        tenant_id = lifecycle.tenant_id
+        run_id = lifecycle.record_id
+        subject_id = _payload_text(lifecycle.payload, "subject_id")
+        for _attempt in range(16):
+            current = self._require_lifecycle(tenant_id, subject_id)
+            if current.record_id != run_id:
+                raise RunLifecyclePersistenceError(
+                    "lifecycle refresh changed the canonical run identity"
+                )
+            before = self._run_store_revision_fingerprint(current)
+            try:
+                candidate = self._repair_pending_transition_index(current)
+                verified_events = self._verify_indexed_lifecycle(candidate)
+            except RunLifecycleError:
+                latest = self._require_lifecycle(tenant_id, subject_id)
+                after = self._run_store_revision_fingerprint(latest)
+                if after != before:
+                    continue
+                raise
+            latest = self._require_lifecycle(tenant_id, subject_id)
+            after = self._run_store_revision_fingerprint(latest)
+            if (
+                after != before
+                or latest.version != candidate.version
+                or dict(latest.payload) != dict(candidate.payload)
+                or latest.parent_ids != candidate.parent_ids
+                or latest.source != candidate.source
+                or latest.trace_id != candidate.trace_id
+            ):
+                continue
+            return candidate, verified_events
+        raise RunLifecycleConflict(
+            "lifecycle repair did not converge after concurrent transitions"
+        )
+
+    def _run_store_revision_fingerprint(
+        self,
+        lifecycle: LedgerRecord,
+    ) -> str:
+        """Fingerprint every tenant-visible record that can validate one run."""
+
+        tenant_id = lifecycle.tenant_id
+        subject_id = _payload_text(lifecycle.payload, "subject_id")
+        nonce_sha256 = _payload_text(lifecycle.payload, "run_nonce_sha256")
+        finalization_id = _payload_text(
+            lifecycle.payload,
+            "authorization_finalization_record_id",
+        )
+        records: list[LedgerRecord | None] = [
+            lifecycle,
+            self._store.get(
+                tenant_id,
+                SUBJECT_RESERVATION_KIND,
+                _subject_record_id(subject_id),
+            ),
+            self._store.get(
+                tenant_id,
+                NONCE_RESERVATION_KIND,
+                _nonce_record_id(nonce_sha256),
+            ),
+            self._store.get(
+                tenant_id,
+                AUTHORIZATION_FINALIZATION_KIND,
+                finalization_id,
+            ),
+            self._store.get(
+                tenant_id,
+                OUTCOME_ACCESS_RESERVATION_KIND,
+                _outcome_access_reservation_id(lifecycle.record_id),
+            ),
+            self._store.get(
+                tenant_id,
+                REPORTING_DISPOSITION_RESERVATION_KIND,
+                _reporting_disposition_reservation_id(lifecycle.record_id),
+            ),
+        ]
+        records.extend(
+            event
+            for event in self._store.list(tenant_id, EVENT_KIND)
+            if _event_belongs_to_run(event, lifecycle.record_id)
+        )
+        rows = [
+            None
+            if record is None
+            else {
+                "kind": record.kind,
+                "record_id": record.record_id,
+                "version": record.version,
+                "payload": dict(record.payload),
+                "parent_ids": list(record.parent_ids),
+                "source": record.source,
+                "trace_id": record.trace_id,
+            }
+            for record in records
+        ]
+        rows.sort(
+            key=lambda row: (
+                "" if row is None else str(row["kind"]),
+                "" if row is None else str(row["record_id"]),
+            )
+        )
+        return hashlib.sha256(_canonical_bytes(rows)).hexdigest()
+
     def _repair_pending_transition_index(
         self, lifecycle: LedgerRecord
     ) -> LedgerRecord:
@@ -1934,7 +2053,7 @@ class DurableProspectiveRunLifecycle:
         sequence = _payload_int(lifecycle.payload, "event_count", minimum=1)
         unindexed: list[tuple[int, LedgerRecord]] = []
         for event in self._store.list(lifecycle.tenant_id, EVENT_KIND):
-            if event.payload.get("run_id") != lifecycle.record_id:
+            if not _event_belongs_to_run(event, lifecycle.record_id):
                 continue
             event_sequence = _payload_int(event.payload, "sequence", minimum=0)
             if event_sequence >= sequence:
@@ -1987,62 +2106,7 @@ class DurableProspectiveRunLifecycle:
             }
         )
         candidate_lifecycle = lifecycle.with_payload(updated_payload)
-        subject_id = _payload_text(lifecycle.payload, "subject_id")
-        nonce_sha256 = _payload_text(lifecycle.payload, "run_nonce_sha256")
-        finalization_id = _payload_text(
-            lifecycle.payload,
-            "authorization_finalization_record_id",
-        )
-        subject_record = self._store.get(
-            lifecycle.tenant_id,
-            SUBJECT_RESERVATION_KIND,
-            _subject_record_id(subject_id),
-        )
-        nonce_record = self._store.get(
-            lifecycle.tenant_id,
-            NONCE_RESERVATION_KIND,
-            _nonce_record_id(nonce_sha256),
-        )
-        finalization_record = self._store.get(
-            lifecycle.tenant_id,
-            AUTHORIZATION_FINALIZATION_KIND,
-            finalization_id,
-        )
-        self._verify_lifecycle(
-            candidate_lifecycle,
-            subject_by_id=(
-                {}
-                if subject_record is None
-                else {subject_record.record_id: subject_record}
-            ),
-            nonce_by_id=(
-                {} if nonce_record is None else {nonce_record.record_id: nonce_record}
-            ),
-            finalization_by_id=(
-                {}
-                if finalization_record is None
-                else {finalization_record.record_id: finalization_record}
-            ),
-            outcome_reservation_by_id={
-                item.record_id: item
-                for item in self._store.list(
-                    lifecycle.tenant_id,
-                    OUTCOME_ACCESS_RESERVATION_KIND,
-                )
-            },
-            reporting_reservation_by_id={
-                item.record_id: item
-                for item in self._store.list(
-                    lifecycle.tenant_id,
-                    REPORTING_DISPOSITION_RESERVATION_KIND,
-                )
-            },
-            event_records=[
-                item
-                for item in self._store.list(lifecycle.tenant_id, EVENT_KIND)
-                if item.payload.get("run_id") == lifecycle.record_id
-            ],
-        )
+        self._verify_indexed_lifecycle(candidate_lifecycle)
         try:
             return self._store.put(
                 candidate_lifecycle,
@@ -2057,9 +2121,22 @@ class DurableProspectiveRunLifecycle:
                 raise RunLifecycleConflict(
                     "concurrent lifecycle update did not index the pending event"
                 )
-            self._verify_event_record(
-                latest, pending, expected_sequence=sequence
+            indexed = self._store.get(
+                lifecycle.tenant_id,
+                EVENT_KIND,
+                _event_record_id(lifecycle.record_id, sequence),
             )
+            if (
+                indexed is None
+                or indexed.record_id != pending.record_id
+                or indexed.parent_ids != pending.parent_ids
+                or indexed.source != pending.source
+                or indexed.trace_id != pending.trace_id
+                or dict(indexed.payload) != dict(pending.payload)
+            ):
+                raise RunLifecycleConflict(
+                    "concurrent lifecycle update indexed a different pending event"
+                )
             return latest
         except StateStoreError as exc:
             raise RunLifecyclePersistenceError(str(exc)) from exc
@@ -2093,10 +2170,9 @@ class DurableProspectiveRunLifecycle:
         # an exact replay of an already indexed operation.
         if precondition is not None:
             precondition(record)
-        record = self._repair_pending_transition_index(record)
-        prior = self._find_operation_event(
-            tenant_id=tenant_id,
-            run_id=record.record_id,
+        record, verified_events = self._repair_and_verify_lifecycle(record)
+        prior = self._find_operation_event_in_records(
+            verified_events,
             operation_id=operation_id,
         )
         if prior is not None:
@@ -2168,10 +2244,9 @@ class DurableProspectiveRunLifecycle:
             )
         except VersionConflict:
             latest = self._require_lifecycle(tenant_id, subject_id)
-            latest = self._repair_pending_transition_index(latest)
-            existing = self._find_operation_event(
-                tenant_id=tenant_id,
-                run_id=record.record_id,
+            latest, verified_events = self._repair_and_verify_lifecycle(latest)
+            existing = self._find_operation_event_in_records(
+                verified_events,
                 operation_id=operation_id,
             )
             if existing is not None:
@@ -2193,6 +2268,7 @@ class DurableProspectiveRunLifecycle:
             )
         except StateStoreError as exc:
             raise RunLifecyclePersistenceError(str(exc)) from exc
+        updated, _verified_events = self._repair_and_verify_lifecycle(updated)
         return RunLifecycleMutation(
             lifecycle=_snapshot(updated),
             event_sha256=_payload_text(event.payload, "event_sha256"),
@@ -2272,14 +2348,16 @@ class DurableProspectiveRunLifecycle:
             raise RunLifecyclePersistenceError("lifecycle subject binding conflicts")
         return record
 
-    def _find_operation_event(
-        self, *, tenant_id: str, run_id: str, operation_id: str
+    @staticmethod
+    def _find_operation_event_in_records(
+        event_records: tuple[LedgerRecord, ...],
+        *,
+        operation_id: str,
     ) -> LedgerRecord | None:
         matches = [
             event
-            for event in self._store.list(tenant_id, EVENT_KIND)
-            if event.payload.get("run_id") == run_id
-            and event.payload.get("operation_id") == operation_id
+            for event in event_records
+            if event.payload.get("operation_id") == operation_id
         ]
         if len(matches) > 1:
             raise RunLifecyclePersistenceError(
@@ -2324,20 +2402,84 @@ class DurableProspectiveRunLifecycle:
         payload = lifecycle.payload
         if payload.get("schema") != LIFECYCLE_SCHEMA:
             raise RunLifecyclePersistenceError("lifecycle schema is invalid")
+        if (
+            payload.get("registry_profile")
+            != "DARK_RESEARCH_ONLY_PROSPECTIVE"
+            or payload.get("append_only_profile")
+            != "STATESTORE_CREATE_ONLY_EVENTS_HASH_CHAINED_NO_EXTERNAL_WORM"
+        ):
+            raise RunLifecyclePersistenceError(
+                "lifecycle registry profile binding conflicts"
+            )
         if payload.get("authority") != _authority():
             raise RunLifecyclePersistenceError("lifecycle authority boundary changed")
+        profile = payload.get("backend_durability_profile")
+        if not isinstance(profile, Mapping) or dict(profile) != dict(
+            self._backend_profile
+        ):
+            raise RunLifecyclePersistenceError(
+                "lifecycle backend durability profile conflicts"
+            )
         subject_id = _payload_text(payload, "subject_id")
-        if lifecycle.record_id != _run_id(subject_id):
+        if (
+            lifecycle.record_id != _run_id(subject_id)
+            or payload.get("run_id") != lifecycle.record_id
+        ):
             raise RunLifecyclePersistenceError("lifecycle id/subject binding conflicts")
         nonce_sha = _payload_text(payload, "run_nonce_sha256")
         _required_lower_sha256(nonce_sha, "lifecycle.run_nonce_sha256")
+        finalization_id = _payload_text(
+            payload, "authorization_finalization_record_id"
+        )
+        expected_lifecycle_parents = (
+            _subject_record_id(subject_id),
+            _nonce_record_id(nonce_sha),
+            finalization_id,
+        )
+        _require_record_envelope(
+            lifecycle,
+            expected_tenant_id=lifecycle.tenant_id,
+            expected_kind=LIFECYCLE_KIND,
+            expected_record_id=lifecycle.record_id,
+            expected_parent_ids=expected_lifecycle_parents,
+            expected_source="cas_harness_v2_run_lifecycle.index",
+            expected_trace_id=lifecycle.record_id,
+            context="lifecycle",
+        )
         subject = subject_by_id.get(_subject_record_id(subject_id))
         nonce = nonce_by_id.get(_nonce_record_id(nonce_sha))
         if subject is None:
             raise RunLifecyclePersistenceError("subject reservation is missing")
         if nonce is None:
             raise RunLifecyclePersistenceError("nonce reservation is missing")
-        for reservation, label in ((subject, "subject"), (nonce, "nonce")):
+        _require_record_envelope(
+            subject,
+            expected_tenant_id=lifecycle.tenant_id,
+            expected_kind=SUBJECT_RESERVATION_KIND,
+            expected_record_id=_subject_record_id(subject_id),
+            expected_parent_ids=(),
+            expected_source="cas_harness_v2_run_lifecycle.issue_with_builder",
+            expected_trace_id=lifecycle.record_id,
+            context="subject reservation",
+        )
+        _require_record_envelope(
+            nonce,
+            expected_tenant_id=lifecycle.tenant_id,
+            expected_kind=NONCE_RESERVATION_KIND,
+            expected_record_id=_nonce_record_id(nonce_sha),
+            expected_parent_ids=(_subject_record_id(subject_id),),
+            expected_source="cas_harness_v2_run_lifecycle.issue_with_builder",
+            expected_trace_id=lifecycle.record_id,
+            context="nonce reservation",
+        )
+        for reservation, label, schema in (
+            (subject, "subject", SUBJECT_RESERVATION_SCHEMA),
+            (nonce, "nonce", NONCE_RESERVATION_SCHEMA),
+        ):
+            if reservation.payload.get("schema") != schema:
+                raise RunLifecyclePersistenceError(
+                    f"{label} reservation schema is invalid"
+                )
             if reservation.payload.get("run_id") != lifecycle.record_id:
                 raise RunLifecyclePersistenceError(
                     f"{label} reservation run binding conflicts"
@@ -2350,11 +2492,42 @@ class DurableProspectiveRunLifecycle:
                 raise RunLifecyclePersistenceError(
                     f"{label} reservation authority boundary changed"
                 )
+            if reservation.payload.get("backend_durability_profile") != profile:
+                raise RunLifecyclePersistenceError(
+                    f"{label} reservation backend profile conflicts"
+                )
+        if (
+            subject.payload.get("reservation")
+            != "CREATE_ONLY_PENDING_AUTHORIZATION"
+            or nonce.payload.get("reservation")
+            != "CREATE_ONLY_DIGEST_ONLY_PENDING_AUTHORIZATION"
+        ):
+            raise RunLifecyclePersistenceError(
+                "authorization reservation profile binding conflicts"
+            )
         if subject.payload.get("request_sha256") != payload.get("request_sha256"):
             raise RunLifecyclePersistenceError("request digest binding conflicts")
-        finalization_id = _payload_text(
-            payload, "authorization_finalization_record_id"
-        )
+        for field in (
+            "run_id",
+            "subject_id",
+            "request_sha256",
+            "authorization_request_sha256",
+            "run_nonce_sha256",
+            "authorized_at",
+            "expires_at",
+            "backend_durability_profile",
+            "authority",
+        ):
+            expected = (
+                lifecycle.record_id if field == "run_id" else payload.get(field)
+            )
+            if (
+                subject.payload.get(field) != expected
+                or nonce.payload.get(field) != expected
+            ):
+                raise RunLifecyclePersistenceError(
+                    f"authorization dependency {field} binding conflicts"
+                )
         finalization = finalization_by_id.get(finalization_id)
         if finalization is None:
             raise RunLifecyclePersistenceError(
@@ -2366,9 +2539,34 @@ class DurableProspectiveRunLifecycle:
             raise RunLifecyclePersistenceError(
                 "authorization finalization id is not canonical"
             )
+        _require_record_envelope(
+            finalization,
+            expected_tenant_id=lifecycle.tenant_id,
+            expected_kind=AUTHORIZATION_FINALIZATION_KIND,
+            expected_record_id=finalization_id,
+            expected_parent_ids=(
+                _subject_record_id(subject_id),
+                _nonce_record_id(nonce_sha),
+            ),
+            expected_source=(
+                "cas_harness_v2_run_lifecycle.authorization_finalization"
+            ),
+            expected_trace_id=lifecycle.record_id,
+            context="authorization finalization",
+        )
         if finalization.payload.get("schema") != AUTHORIZATION_FINALIZATION_SCHEMA:
             raise RunLifecyclePersistenceError(
                 "authorization finalization schema is invalid"
+            )
+        if (
+            finalization.payload.get("record_profile")
+            != "CREATE_ONLY_AUTHORIZATION_BINDING"
+            or finalization.payload.get("builder_assurance")
+            != "INJECTED_CALLABLE_PROVENANCE_NOT_ATTESTED"
+            or finalization.payload.get("backend_durability_profile") != profile
+        ):
+            raise RunLifecyclePersistenceError(
+                "authorization finalization profile binding conflicts"
             )
         for field in (
             "run_id",
@@ -2386,6 +2584,15 @@ class DurableProspectiveRunLifecycle:
                 raise RunLifecyclePersistenceError(
                     f"authorization finalization {field} binding conflicts"
                 )
+        if (
+            subject.payload.get("issuance_id")
+            != nonce.payload.get("issuance_id")
+            or finalization.payload.get("issuance_id")
+            != subject.payload.get("issuance_id")
+        ):
+            raise RunLifecyclePersistenceError(
+                "authorization finalization issuance binding conflicts"
+            )
         if finalization.payload.get("authorization_artifact") != payload.get(
             "authorization_artifact"
         ):
@@ -2396,6 +2603,45 @@ class DurableProspectiveRunLifecycle:
             raise RunLifecyclePersistenceError(
                 "authorization finalization authority boundary changed"
             )
+        authorized_at = _stored_event_time(
+            payload.get("authorized_at"), "lifecycle.authorized_at"
+        )
+        expires_at = _stored_event_time(
+            payload.get("expires_at"), "lifecycle.expires_at"
+        )
+        if expires_at <= authorized_at:
+            raise RunLifecyclePersistenceError(
+                "lifecycle expiry does not follow authorization"
+            )
+
+        outcome_record = outcome_reservation_by_id.get(
+            _outcome_access_reservation_id(lifecycle.record_id)
+        )
+        if outcome_record is not None:
+            outcome = _outcome_reservation_snapshot(outcome_record)
+            if (
+                outcome.run_id != lifecycle.record_id
+                or outcome.subject_id != subject_id
+                or outcome.backend_durability_profile != profile
+                or outcome.authority != payload.get("authority")
+            ):
+                raise RunLifecyclePersistenceError(
+                    "outcome-access reservation lifecycle binding conflicts"
+                )
+        reporting_record = reporting_reservation_by_id.get(
+            _reporting_disposition_reservation_id(lifecycle.record_id)
+        )
+        if reporting_record is not None:
+            reporting = _reporting_reservation_snapshot(reporting_record)
+            if (
+                reporting.run_id != lifecycle.record_id
+                or reporting.subject_id != subject_id
+                or reporting.backend_durability_profile != profile
+                or reporting.authority != payload.get("authority")
+            ):
+                raise RunLifecyclePersistenceError(
+                    "reporting reservation lifecycle binding conflicts"
+                )
 
         event_count = _payload_int(payload, "event_count", minimum=1)
         events_by_sequence: dict[int, LedgerRecord] = {}
@@ -2421,7 +2667,11 @@ class DurableProspectiveRunLifecycle:
             event = events_by_sequence[sequence]
             event_payload = event.payload
             occurred_at = event_payload.get("occurred_at")
-            _stored_event_time(occurred_at, "event.occurred_at")
+            expected_hash = self._verify_event_record(
+                lifecycle,
+                event,
+                expected_sequence=sequence,
+            )
             if previous_occurred_at is not None:
                 _require_nondecreasing_event_time(
                     previous=previous_occurred_at,
@@ -2429,25 +2679,8 @@ class DurableProspectiveRunLifecycle:
                     context="stored lifecycle replay",
                     stored=True,
                 )
-            if event.record_id != _event_record_id(lifecycle.record_id, sequence):
-                raise RunLifecyclePersistenceError("event record id is not canonical")
-            if event_payload.get("schema") != EVENT_SCHEMA:
-                raise RunLifecyclePersistenceError("event schema is invalid")
-            if event_payload.get("run_id") != lifecycle.record_id:
-                raise RunLifecyclePersistenceError("event run binding conflicts")
-            if event_payload.get("subject_id") != subject_id:
-                raise RunLifecyclePersistenceError("event subject binding conflicts")
-            if event_payload.get("authority") != _authority():
-                raise RunLifecyclePersistenceError("event authority boundary changed")
             if event_payload.get("previous_event_sha256") != previous:
                 raise RunLifecyclePersistenceError("event hash-chain predecessor conflicts")
-            event_without_hash = dict(event_payload)
-            observed_hash = event_without_hash.pop("event_sha256", None)
-            expected_hash = hashlib.sha256(
-                _canonical_bytes(event_without_hash)
-            ).hexdigest()
-            if observed_hash != expected_hash:
-                raise RunLifecyclePersistenceError("event digest does not verify")
             operation_id = _payload_text(event_payload, "operation_id")
             if operation_id in operation_ids:
                 raise RunLifecyclePersistenceError("operation_id was reused")
@@ -2493,11 +2726,15 @@ class DurableProspectiveRunLifecycle:
                         "outcome-access reservation/event binding conflicts"
                     )
             if event_type in REPORTING_DISPOSITIONS:
-                details = event_payload.get("details")
-                if not isinstance(details, Mapping):
-                    raise RunLifecyclePersistenceError(
-                        "reporting event details are invalid"
-                    )
+                (
+                    expected_disposition,
+                    final_artifact_field,
+                    event_reason_code,
+                ) = _reporting_event_details_contract(
+                    event_type,
+                    event_payload.get("details"),
+                )
+                details = event_payload["details"]
                 reservation_id = _required_text(
                     details.get("reporting_reservation_id"),
                     "reporting event reservation id",
@@ -2512,27 +2749,12 @@ class DurableProspectiveRunLifecycle:
                 reservation = _reporting_reservation_snapshot(
                     reservation_record
                 )
-                expected_disposition = (
-                    "PACKET"
-                    if event_type == PACKET_RECORDED
-                    else "NONREPORTING"
-                )
-                final_artifact_field = (
-                    "packet_artifact"
-                    if event_type == PACKET_RECORDED
-                    else "nonreporting_artifact"
-                )
                 if (
                     reservation.run_id != lifecycle.record_id
                     or reservation.subject_id != subject_id
                     or reservation.operation_id != operation_id
                     or reservation.disposition != expected_disposition
-                    or reservation.reason_code
-                    != (
-                        details.get("reason_code")
-                        if event_type == NONREPORTING_RECORDED
-                        else None
-                    )
+                    or reservation.reason_code != event_reason_code
                     or reservation.recorded_at
                     != event_payload.get("occurred_at")
                     or reservation.parent_state != state_before
@@ -2597,6 +2819,75 @@ class DurableProspectiveRunLifecycle:
             raise RunLifecyclePersistenceError("lifecycle head digest conflicts")
         if payload.get("current_state") != prior_state:
             raise RunLifecyclePersistenceError("lifecycle current state conflicts")
+
+
+def _require_record_envelope(
+    record: LedgerRecord,
+    *,
+    expected_tenant_id: str,
+    expected_kind: str,
+    expected_record_id: str,
+    expected_parent_ids: tuple[str, ...],
+    expected_source: str,
+    expected_trace_id: str,
+    context: str,
+) -> None:
+    if (
+        record.tenant_id != expected_tenant_id
+        or record.kind != expected_kind
+        or record.record_id != expected_record_id
+        or record.parent_ids != expected_parent_ids
+        or record.source != expected_source
+        or record.trace_id != expected_trace_id
+    ):
+        raise RunLifecyclePersistenceError(
+            f"{context} traceability envelope conflicts"
+        )
+
+
+def _reporting_event_details_contract(
+    event_type: str,
+    details: object,
+) -> tuple[str, str, str | None]:
+    """Validate the exact final reporting-event shape and reason semantics."""
+
+    if not isinstance(details, Mapping):
+        raise RunLifecyclePersistenceError("reporting event details are invalid")
+    common = {
+        "reporting_reservation_id",
+        "reporting_request_sha256",
+        "reporting_dependency_binding_sha256",
+        "reporting_clock_observation",
+    }
+    if event_type == PACKET_RECORDED:
+        expected_keys = common | {"packet_artifact"}
+        disposition = "PACKET"
+        artifact_field = "packet_artifact"
+        reason_code = None
+    elif event_type == NONREPORTING_RECORDED:
+        expected_keys = common | {"nonreporting_artifact", "reason_code"}
+        disposition = "NONREPORTING"
+        artifact_field = "nonreporting_artifact"
+        try:
+            reason_code = _required_text(
+                details.get("reason_code"),
+                "reporting event reason_code",
+            )
+        except RunLifecycleValidationError as exc:
+            raise RunLifecyclePersistenceError(str(exc)) from exc
+    else:
+        raise RunLifecyclePersistenceError(
+            "reporting event type is invalid"
+        )
+    observed_keys = set(details)
+    if observed_keys != expected_keys:
+        missing = sorted(expected_keys - observed_keys)
+        unexpected = sorted(observed_keys - expected_keys, key=str)
+        raise RunLifecyclePersistenceError(
+            "reporting event details shape is invalid; "
+            f"missing={missing}, unexpected={unexpected}"
+        )
+    return disposition, artifact_field, reason_code
 
 
 def _authority() -> dict[str, str]:
@@ -3100,6 +3391,14 @@ def _outcome_access_reservation_id(run_id: str) -> str:
 def _reporting_disposition_reservation_id(run_id: str) -> str:
     # PACKET and NONREPORTING intentionally contend for this one create-only ID.
     return "h2reporting_" + run_id.removeprefix("h2run_")
+
+
+def _event_belongs_to_run(event: LedgerRecord, run_id: str) -> bool:
+    canonical_prefix = f"h2event_{run_id.removeprefix('h2run_')}_"
+    return (
+        event.payload.get("run_id") == run_id
+        or event.record_id.startswith(canonical_prefix)
+    )
 
 
 def _event_record_id(run_id: str, sequence: int) -> str:

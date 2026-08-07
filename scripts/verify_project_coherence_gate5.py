@@ -425,10 +425,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
             "tests/cas_harness_v2",
             f"{API_ROOT_REL}/tests",
         ],
-        "expected_tests": 97,
+        "expected_tests": 130,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "727F58CC716F5ADD0BAB8FB965CC1E6B68245E60DB6C160A33AF96ED9EC5E5F9"
+            "0CA9217040958125285BFA0F6A7C6D517808B4AC4F4078C152620190767B6BB0"
         ),
     },
     "Harness v2 admitted adapter and bounded reconciliation": {
@@ -2777,10 +2777,13 @@ def verify_adversarial_review() -> None:
         "fa6c985cd6caa734034e006bb4baf6be9d02269d7312bee7355e9c3833759c51",
         "38/38",
         "d3eaf533fedb5b03168200aa399ac53a6e2a6f22874ebabeaecefb227400778d",
-        "97/97",
-        "727f58cc716f5add0bab8fb965cc1e6b68245e60db6c160a33af96ed9ec5e5f9",
+        "130/130",
+        "0ca9217040958125285bfa0f6a7c6d517808b4ac4f4078c152620190767b6bb0",
         "90/90",
         "761038779e00511179d4fc5aa3522829d9bdefb37c231061d04fb3aad541f733",
+        "Both reservation entry",
+        "points now enter that repair/full-verification loop",
+        "retained tenant and event kind",
         "COMPLETED_WITH_FINDINGS",
         "critical, 0 high, 3 medium, and 4 low findings",
         "SARIF does not embed the candidate identity",

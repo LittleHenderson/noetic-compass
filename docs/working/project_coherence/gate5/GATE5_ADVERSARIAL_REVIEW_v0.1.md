@@ -306,7 +306,24 @@ and retained regressions for the following failure classes:
    the already-protected outcome/reporting edges; and
 11. an event-first/index-second interruption was recoverable by an exact raw
    registry retry but could fail before repair through the admitted lifecycle
-   service.
+   service;
+12. a rehashed Packet event could carry a forbidden event-level reason while
+   its reservation still declared a null reason;
+13. an idempotent retry or later append could spot-check only its selected event
+    and bypass a rehashed backward-time prefix that reconciliation rejected; and
+14. one repair compare-and-swap conflict branch could return an unverified
+    concurrent lifecycle winner;
+15. full replay omitted load-bearing event, lifecycle, dependency, and profile
+    envelope checks, so a rehashed forged envelope could be accepted or extended;
+16. a stale post-compare-and-swap acknowledgement could reject a valid lifecycle
+    after another writer completed later transitions; and
+17. simultaneous exact retries and pending-successor repairs could miss a valid
+    stable winner instead of re-entering common full verification;
+18. exact outcome/reporting reservation replays could return before common full
+    verification, both accepting corrupt history and missing a repairable pending
+    terminal or outcome event; and
+19. event-record verification did not bind the retained tenant and event kind,
+    allowing otherwise rehashed forged envelope metadata from a faulty store.
 
 The repaired path reloads the retained authorization, terminal, outcome, and
 dependency facts for each request; records one winning untrusted clock
@@ -322,7 +339,20 @@ gets a new receipt while the prior immutable snapshot remains verifiable. The
 winning nonreporting reason is now reservation-bound (`null` is required for a
 Packet reservation), all event transitions and stored-history replay enforce
 canonical nondecreasing time, and controller reads repair exactly one verified
-pending successor while corrupt or divergent successors fail closed.
+pending successor while corrupt or divergent successors fail closed. Packet and
+nonreporting events now have exact per-type detail shapes. The complete indexed
+history and its reservations are reverified before every replay, append, repair
+winner, and fresh-success return; a concurrent repair winner must contain the
+exact pending event at the winning sequence or it is rejected. Every indexed
+event now passes exact record-envelope verification, lifecycle and dependency
+envelopes plus registry/reservation/builder/backend profiles are cross-bound,
+and canonical event identities remain discoverable even if a payload forges its
+run ID. One bounded lifecycle-fingerprint refresh loop makes stale reads,
+post-CAS acknowledgements, simultaneous exact retries, and competing repairs
+converge only through a fully verified stable tuple. Both reservation entry
+points now enter that repair/full-verification loop before state inspection or
+an existing-reservation return. Event-record verification also binds the exact
+tenant and canonical event kind, so those envelope fields cannot drift silently.
 
 The route-to-real-adapter regression traverses authorization, consumption,
 output, terminal, outcome, and explicit nonreporting through the FastAPI
@@ -360,8 +390,8 @@ The current bounded local receipts are **17/17** for the worker-terminal bridge
 (`fa6c985cd6caa734034e006bb4baf6be9d02269d7312bee7355e9c3833759c51`),
 **38/38** for the callback/Object-Lock seam
 (`d3eaf533fedb5b03168200aa399ac53a6e2a6f22874ebabeaecefb227400778d`),
-**97/97** for the prospective lifecycle/SQLite/default-dark route suite
-(`727f58cc716f5add0bab8fb965cc1e6b68245e60db6c160a33af96ed9ec5e5f9`),
+**130/130** for the prospective lifecycle/SQLite/default-dark route suite
+(`0ca9217040958125285bfa0f6a7c6d517808b4ac4f4078c152620190767b6bb0`),
 and **90/90** for packaging, snapshot, envelope, context, admitted-adapter,
 and bounded-reconciliation tests
 (`761038779e00511179d4fc5aa3522829d9bdefb37c231061d04fb3aad541f733`).
@@ -742,7 +772,7 @@ The minimum defensible order is:
 
 1. preserve the verifier-native 150-test/99-subtest Harness-v2,
    30-test/38-subtest worker-protocol, 17/17 dark-bridge, 38/38
-   callback/Object-Lock seam, 97/97 prospective lifecycle/SQLite/dark-route,
+   callback/Object-Lock seam, 130/130 prospective lifecycle/SQLite/dark-route,
    90/90 admitted-adapter/configured-reconciliation,
    32/32 focused numeric, 364/364 complete-worker, and 78/78
    API/launcher/fleet/state receipts, the earlier 290/290 checkpoint, and every

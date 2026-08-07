@@ -22,8 +22,8 @@
     },
     {
       "path": "docs/working/project_coherence/CHANGELOG.md",
-      "sha256": "7E3D465EE77CD0A5ACEFAFA042681817BBB7D11C36173EFF1B1ED45CADF18605",
-      "bytes": 33279,
+      "sha256": "8DE7E70A679ADC31773B59A08CAC5B6AF20D8F36768C03DE46F8A0BB78E22E41",
+      "bytes": 34240,
       "role": "gate5_control_artifact"
     },
     {
@@ -52,8 +52,8 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
-      "sha256": "013254B1F0209C64E06E0D9D901F0DB3D0850A4E905265CB832FEFDD159AA268",
-      "bytes": 44772,
+      "sha256": "01E21908617F947F94D0323FC4475ACCF52ABA306A32E2D163AFFE18192B0428",
+      "bytes": 47001,
       "role": "gate5_control_artifact"
     },
     {
@@ -82,14 +82,14 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_REVIEW_MATRIX_v0.1.json",
-      "sha256": "F80EDB305DB29D3F173E4DE469A06410CBFAD8D16F87682E62A233767F77699A",
-      "bytes": 88060,
+      "sha256": "01F897997342B58BC75372F1D1EC8868AEF7B45B7E589C14488A6C6661F4669B",
+      "bytes": 89385,
       "role": "gate5_control_artifact"
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_WORKER_PROTOCOL_BINDING_v0.1.md",
-      "sha256": "66A5DA141D6EACF8F74481D1025B916AE2F1A304E77BF831323237B5454B3F2A",
-      "bytes": 80269,
+      "sha256": "BE9A075143CA4D1F33148074ED739F0204672B4F98A3607DA2D11E82A492DF45",
+      "bytes": 81143,
       "role": "gate5_control_artifact"
     },
     {
@@ -100,8 +100,8 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/README.md",
-      "sha256": "235DFF0C3D3E25538AAF671C8D4774954FCB645E9E99EC4AC1D55B28D52FCE98",
-      "bytes": 29623,
+      "sha256": "4FB90A70A0053F5DC07F493DF8D1544129C0830420C56BCC5C2338E4C0D36F6B",
+      "bytes": 30332,
       "role": "gate5_control_artifact"
     },
     {
@@ -1030,8 +1030,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_run_lifecycle.py",
-      "sha256": "345ACEAC4D5F4EAF091022AA5F50DCEC3F40F0BD0FC7BBD3C6AB93C4C6CC683E",
-      "bytes": 134753,
+      "sha256": "FE597BB097E90ACFC6B5C2616241F0C4D92E839C84FE6F7071CC4D838963CB20",
+      "bytes": 146080,
       "role": "gate5_api_runtime_dependency"
     },
     {
@@ -2128,8 +2128,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_run_lifecycle.py",
-      "sha256": "A4C219BA041B13B0609503726AAAA2B5517D0A63632A21D29A8C24052A1518B4",
-      "bytes": 56666,
+      "sha256": "399828EB84E6E4EF7F46DC1E431ACFA859FDC0AB28651B7D89005CBFCA196BA3",
+      "bytes": 97875,
       "role": "gate5_api_launcher_test"
     },
     {
@@ -2200,8 +2200,8 @@
     },
     {
       "path": "scripts/verify_project_coherence_gate5.py",
-      "sha256": "F0800B46D60EBB21863D6D5780DC5726ACCDAEF29AF2CDCEE349D695589D1E57",
-      "bytes": 245537,
+      "sha256": "5E5BD4BFCE3F104F96012C499CD3354E6404CCF9568956252C61A62F462435AC",
+      "bytes": 245679,
       "role": "gate5_verification_control"
     },
     {
@@ -2459,9 +2459,9 @@
         "tests/cas_harness_v2",
         "noetic-compass-scaffold/noetic-compass/tests"
       ],
-      "expected_tests": 97,
+      "expected_tests": 130,
       "expected_subtests": 0,
-      "expected_test_ids_sha256": "727F58CC716F5ADD0BAB8FB965CC1E6B68245E60DB6C160A33AF96ED9EC5E5F9",
+      "expected_test_ids_sha256": "0CA9217040958125285BFA0F6A7C6D517808B4AC4F4078C152620190767B6BB0",
       "test_id_canonicalization": "SAME-PROCESS EXECUTED-NODE SHA-256 over ordinal-sorted unique pytest node IDs normalized only to POSIX slashes, encoded UTF-8 as one ID plus LF per line; collection, start, finish, and all-pass outcomes are bound in one local subprocess receipt"
     },
     {

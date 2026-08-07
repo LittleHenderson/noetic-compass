@@ -400,8 +400,19 @@ a losing or semantically changed branch cannot silently replace the winner.
 Every new lifecycle event and complete replay must also preserve canonical
 nondecreasing event time. After an event-first/index-second interruption, a
 read may repair exactly one structurally verified pending successor; corrupt or
-divergent successors fail closed. This tested compare-and-set and repair scope
-is local to the configured state substrate. Cross-host authority,
+divergent successors fail closed. Packet and nonreporting events have exact
+per-type detail shapes, and the complete indexed history plus reservations is
+verified before any replay, append, repair-winner return, or fresh-success
+return. A concurrent repair winner must index the exact pending event at the
+winning sequence. Full verification checks each event record envelope; the
+lifecycle, subject, nonce, and finalization envelopes; exact dependency and
+profile bindings; and canonical event identities independently of untrusted
+payload run IDs. A bounded fingerprint refresh makes stale reads, post-CAS
+acknowledgements, simultaneous exact retries, and competing repairs converge
+only on one fully verified stable tuple. Outcome and reporting reservations
+enter that loop before existing-reservation replay or lifecycle-state inspection,
+and each event record binds its exact tenant and canonical kind. This tested
+compare-and-set and repair scope is local to the configured state substrate. Cross-host authority,
 partial-write/orphan completeness, and independent ordering remain open.
 
 Reconciliation retains
