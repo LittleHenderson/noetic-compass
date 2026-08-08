@@ -2,8 +2,8 @@
 
 \section{Why two axes, and why they are independent}\label{ch07:sec:why}
 
-Every classification decision in CAS-Ohm 1.0 descends from a single retained
-source conflict: the Quantification Guide's ASOM mnemonic
+A single retained source conflict stands behind every classification
+decision in CAS-Ohm 1.0: the Quantification Guide's ASOM mnemonic
 (Starved/Aligned/Oversaturated/Misaligned) overlays semantic judgments onto
 dose-response regions, while the operationalization addendum states plainly
 that dose-response signatures and effect-axis outcomes are distinct and that a
@@ -65,8 +65,8 @@ type system, and the classification container
 member of this enumeration.
 \end{definition}
 
-A structural fact about the implementation deserves emphasis before the
-region-by-region treatment, because it governs how several members must be
+Before the region-by-region treatment, one structural fact about the
+implementation governs how several members must be
 read. The candidate distinguishes two classification modes. In
 \texttt{NUMERIC\_DERIVED} mode, a factory function derives the region from at
 least three sweep observations bracketing an interior index, using only the
@@ -283,8 +283,8 @@ context-dependent activation at the hooked site, or drift within a session.
 The three-point classifier, which sees a single sweep, is structurally
 incapable of assessing reproducibility, which is why it never emits this
 label; assessing it would require repeated sweeps under controlled
-randomization, which is exactly item eight of the closure experiment list
-(bootstrap uncertainty and cross-split reproducibility), an experiment that
+randomization, which is exactly the bootstrap-uncertainty and
+cross-split-reproducibility closure experiment, an experiment that
 has not been admitted.
 
 \emph{What it does not imply.} \texttt{UNSTABLE} does not imply that the
@@ -463,7 +463,7 @@ classification container stores the two axes as separate fields with no
 consistency coupling beyond enumeration membership.
 \end{ruleenv}
 
-The principle is worth developing at length, because it is the load-bearing
+The principle is developed at length here because it is the load-bearing
 wall between this chapter and the mnemonic it replaces.
 
 \emph{Active does not mean aligned.} The region axis sees the magnitude of a
@@ -583,8 +583,8 @@ Region & U & I & Op & Off \\
 \bottomrule
 \end{tabular}
 \caption{The $7 \times 4$ classification product and its derived ASOM
-overlay. The overlay names only six of the twenty-eight cells distinctly;
-fourteen cells share \texttt{MISALIGNED}, and eight cells have no name.}
+overlay. The overlay names only three of the twenty-eight cells distinctly;
+fourteen cells share \texttt{MISALIGNED}, and eleven cells have no name.}
 \label{ch07:tab:cross}
 \end{table}
 
@@ -678,7 +678,7 @@ no-diagnosis condition rather than a diagnosable state.
 The table's practical function is negative. It exists so that no
 combination can be declared impossible by vocabulary, and so that every
 overlay word can be traced to the cells it covers and the cells it merges.
-Twenty-two of twenty-eight cells receive either no ASOM word or a shared
+Twenty-five of twenty-eight cells receive either no ASOM word or a shared
 one; any analysis pipeline that operates at ASOM granularity therefore
 discards most of the classification structure by construction.
 \end{remark}

@@ -43,7 +43,8 @@ A calibration profile is an immutable record binding: a profile identifier;
 the exact model identity (model, configuration, tokenizer, weights); the
 code revision and dependency lock; the runtime identity and dtype; temporal
 validity (creation, validity start, expiry) and drift state with its
-checking evidence; the registered test points; the direction vectors with
+checking evidence; the instrument identities with their resolving
+implementation references; the registered test points; the direction vectors with
 identity, norm, sign, and provenance; the corpus manifest and its rights
 record; the calibration and validation split references; the random seed and
 randomization method; the alpha grid with its endpoints; the full-scale
@@ -78,8 +79,8 @@ why the inversion is forced: the sources themselves demonstrate
 (Conflict~\ref{ch04:conf:ifs}) that even the framework's own full-scale
 denominators were never one quantity.
 
-A second consequence of Definition~\ref{ch05:def:profile} deserves emphasis
-before the field-by-field walk: the profile is \emph{immutable}. There is no
+A second consequence of Definition~\ref{ch05:def:profile} frames the
+field-by-field walk: the profile is \emph{immutable}. There is no
 ``update a profile'' operation. A changed condition---new weights, a revised
 corpus, a different tolerance---produces a new profile with a new digest,
 and history accumulates as a set of distinct profiles rather than as
@@ -192,7 +193,12 @@ The drift state is a four-valued enumeration---\texttt{CURRENT},
 drift-check reference. \texttt{CURRENT} asserts a passing recent check;
 \texttt{STALE} that the check is overdue; \texttt{FAILED} that a check ran
 and did not pass; \texttt{REVOKED} that the profile was withdrawn by
-decision. The distinction between \texttt{STALE} and \texttt{FAILED}
+decision. No drift-check cadence is declared in the governing sources:
+``recent'' and ``overdue'' are therefore judgments the drift-check evidence
+reference must carry, not comparisons against a declared interval, and
+declaring such an interval --- an exact positive duration bound into the
+digest like every other threshold --- is an open documentation item. The
+distinction between \texttt{STALE} and \texttt{FAILED}
 preserves an important asymmetry of ignorance: an overdue check means
 \emph{we do not know} whether calibration holds, while a failed check means
 \emph{we know it does not}. Both block operation (only \texttt{CURRENT}
@@ -230,8 +236,7 @@ agreement on layer, positions, direction, sign, and hook type
 simultaneously. Anything less---``layer 12, roughly the same place''---is
 not an identity, and the type system does not accept it as one.
 
-The hook type deserves a word, since it is the field most often left
-implicit in informal practice. A transformer layer is not a point; it is a
+The hook type is the field most often left implicit in informal practice. A transformer layer is not a point; it is a
 pipeline of sublayer computations, and ``the activation at layer 12'' could
 mean the residual stream before the block, after attention, after the MLP,
 or after the final layer norm---numerically different vectors with different
@@ -459,10 +464,10 @@ The fit receipt reference binds the artifact recording the actual fit run:
 inputs consumed, estimates produced, diagnostics observed. Its presence in
 the profile closes the loop between declaration and execution---the profile
 does not merely promise a fit method, it references the receipt of the fit
-that was actually performed. In the Kennedy--O'Hagan framing of computer
-model calibration, the receipt is where the calibration data, the parameter
-posterior (or point estimate with its uncertainty), and the discrepancy
-evidence live \cite{kennedyohagan}; Chapter~\ref{ch06:response} returns to
+that was actually performed. The receipt is the candidate's record of
+exactly what the Kennedy--O'Hagan framing says a calibration must carry ---
+the calibration data, the parameter posterior (or point estimate with its
+uncertainty), and the discrepancy evidence \cite{kennedyohagan}; Chapter~\ref{ch06:response} returns to
 what the receipt must show before a resistance earns the
 \texttt{CALIBRATED\_HELD\_OUT} role.
 
@@ -724,9 +729,8 @@ as a subtly wrong number at analysis time.
 
 \section{Profile Relativity in Practice}\label{ch05:relativity}
 
-It is worth spelling out what Invariant~\ref{ch05:inv:relativity} concretely
-forbids and what it permits, because the invariant is the profile's entire
-point.
+What Invariant~\ref{ch05:inv:relativity} concretely forbids, and what it
+permits, is the profile's entire point; this section spells out both.
 
 Forbidden by default: comparing Q10 scores across profiles (different
 denominators, per Rule~\ref{ch05:rule:ifs}); pooling sweep observations
@@ -753,7 +757,8 @@ ambient assumption.
 
 \begin{remark}\label{ch05:rem:units-analogy}
 Profile relativity generalizes the familiar rule that quantities in
-different units may not be added without conversion \cite{buckingham}. A
+different units may not be added without conversion --- the elementary face
+of the dimensional-homogeneity requirement formalized in \cite{buckingham}. A
 profile is, in effect, a very large compound unit: the ``unit'' in which a
 CAS-Ohm number is expressed includes the weights digest, the direction, the
 denominator method, the dtype, and the rest. Two numbers in different
@@ -873,8 +878,7 @@ uncertainty method; (4) on the response-region method; (5) on the distinct
 validation split and the tolerance profile; (6) on the receipt's required
 diagnostics.
 
-Two interactions between estimation and the rest of the profile deserve
-explicit note. First, estimation interacts with \emph{drift}: a resistance
+Two interactions tie estimation to the rest of the profile. First, estimation interacts with \emph{drift}: a resistance
 fitted under a profile inherits the profile's validity window, and the
 drift-check discipline is what stands between ``was calibrated'' and ``is
 calibrated.'' A fitted $r_{\mathrm{eff}}$ under a profile whose drift state

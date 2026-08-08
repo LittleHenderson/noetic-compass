@@ -129,8 +129,9 @@ conversion table.
 
 \begin{remark}\label{ch04:rem:locators}
 The reason to belabor locator systems is that the entire audit inherits its
-credibility from them. A conflict record asserts that two sources say
-incompatible things. That assertion is only as strong as the reader's ability
+credibility from them. A conflict record asserts that sources say incompatible things --- or, for
+the under-specification kinds, that a source's text fails to determine what
+its own downstream use requires. That assertion is only as strong as the reader's ability
 to open each source at the cited position and confirm the recorded fact. If
 locators were informal---``somewhere in the Guide''---the conflicts would be
 paraphrases, contestable and unfalsifiable. Because every locator is exact
@@ -286,8 +287,8 @@ produce numbers that are wrong by an order of magnitude while looking
 perfectly well formed. Mixed-scale failure is silent: nothing about the
 floating-point value $8.5$ announces which scale it came from.
 
-The $\mathrm{sat}=8.5$ case deserves emphasis as a documented instance of the
-failure actually occurring \emph{inside the source corpus itself}. This is
+The $\mathrm{sat}=8.5$ case is a documented instance of the failure actually
+occurring \emph{inside the source corpus itself}. This is
 not a hypothetical about what a careless integrator might do; the Guide's own
 worked example, per Appendix~I's reading, already committed the mixed-scale
 error that the framework's downstream users would be warned against. When a
@@ -296,8 +297,8 @@ the specification cannot be said to carry one coherent scale system, and any
 implementation claiming to inherit ``the'' scale system is choosing among
 contradictory parents without saying so.
 
-It is worth being precise about what the third evidence record does and does
-not assert. Appendix~I \emph{identifies} $\mathrm{sat}=8.5$ as a mixed-scale
+What the third evidence record does and does not assert must be stated
+precisely. Appendix~I \emph{identifies} $\mathrm{sat}=8.5$ as a mixed-scale
 error and states that its component value is $0.85$. That is a reading by one
 source of another source's text---a diagnosis, with a proposed intended
 value---not a repair the audit endorses. The audit's posture is deliberately
@@ -876,8 +877,8 @@ must localize independently identified causes above a shuffled-control
 baseline. If shuffled controls localize as well as real residuals, the
 diagnostic is noise and its causal vocabulary must be withdrawn.
 
-The ``diagnostic walk'' ordering deserves a further word, because it encodes
-a cost asymmetry that pure statistics does not capture. The identifiable
+The ``diagnostic walk'' ordering encodes a cost asymmetry that pure
+statistics does not capture. The identifiable
 causes ahead of hidden content in the walk---wrong region, stale
 calibration, degraded direction, noise---are all \emph{checkable} at bounded
 cost: each has an associated record in the profile or the observation chain
@@ -905,9 +906,10 @@ observations are censored.''
 job. In the candidate, a residual exists only for an admitted active-region
 prediction, with instrumented held-out observations, matching test points and
 profile, calibrated resistance, and propagated uncertainty; at zero or
-zero-compatible predicted response---the saturated-stage case Appendix~I
-flags---no residual quantity is emitted at all (the observation is censored
-with a recorded reason rather than divided into a meaningless ratio). What a
+zero-compatible observed response no ratio quantity is emitted at all (the
+observation is censored with a recorded reason rather than divided into a
+meaningless ratio), and the saturated-stage case Appendix~I flags is
+excluded upstream by the active-region admission gate. What a
 residual may do is \emph{rank follow-up probes}: allocate investigative
 attention. What it may never do is appear as the proof of a hidden policy,
 bypass, opposition, or cause. The registered hypothesis
@@ -964,8 +966,14 @@ fact about a value, not about its printout.
 normalization may not round a value across a band boundary.''
 \end{ruleenv}
 
-\texttt{DEFINE\_EXACT\_HALF\_OPEN\_BINS} completes the specification in the
-only way that composes cleanly: half-open intervals $[0,2.5)$, $[2.5,5)$,
+\texttt{DEFINE\_EXACT\_HALF\_OPEN\_BINS} completes the specification with
+lower-closed half-open intervals. The mirror convention --- upper-closed
+bins $(0,2.5]$, $(2.5,5]$, and so on --- would be equally total and equally
+exact, but it would assign $2.50$ to the first band, contradicting the
+Guide's own displayed membership, in which $2.50$ opens the band
+``2.50--4.99''; the lower-closed convention is therefore the unique total
+completion consistent with the source's display. The chosen intervals are
+$[0,2.5)$, $[2.5,5)$,
 $[5,7.5)$, $[7.5,\infty)$ evaluated on the exact pre-rounding value, with
 boundary points assigned to the upper band by the half-open convention. The
 candidate implements the comparison over exact rational arithmetic on the
@@ -1133,7 +1141,7 @@ licensed / held}.
 It may seem deflationary to end a chapter of conflicts with no resolutions.
 The claim of this section is the opposite: for a framework in CAS-Ohm's
 epistemic position, the preserved audit is worth more than any resolution
-currently available, for four reasons.
+currently available, for five reasons.
 
 \emph{First, harmonization without evidence is fabrication.} Every conflict
 above could have been ``resolved'' editorially: declare $R$ to be $0$--$100$,

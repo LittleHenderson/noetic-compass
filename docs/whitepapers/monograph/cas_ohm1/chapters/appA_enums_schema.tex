@@ -1,6 +1,6 @@
 \chapter{Enumerations and Schema Tables}\label{enums:chapter}
 
-This appendix collects, in tabular form, the enumerations and record schemas of the CAS-Ohm 1.0 candidate as implemented at the Gate~4 receipt. The tables are normative transcriptions, not summaries: every enumeration member is listed exactly, under its implementation spelling, and the prose notes attached to each table record the validation rules that give the members their force. Where a chapter develops a table's subject at length, the chapter is named in the table's introduction. All member names are implementation identifiers and are typeset verbatim in typewriter face.
+This appendix collects, in tabular form, the principal value-level enumerations and record schemas of the CAS-Ohm 1.0 candidate as implemented at the Gate~4 receipt. The tables are normative transcriptions, not summaries: every enumeration member of each collected table is listed exactly, under its implementation spelling, and the prose notes attached to each table record the validation rules that give the members their force. Not every closed enumeration in the candidate is tabulated here: the resistance-role, trust-mode, authorization-state, rejection-class, censoring-marker, and board fault-mode enumerations are defined normatively in Chapters~5, 9, 10, and~11, and this appendix does not restate them. Where a chapter develops a table's subject at length, the chapter is named in the table's introduction. All member names are implementation identifiers and are typeset verbatim in typewriter face.
 
 \section{Quantity kinds}\label{enums:sec:quantity}
 
@@ -32,7 +32,7 @@ Quantity kind & Admissible unit(s) & Notes \\
 \texttt{SATURATION\_FRACTION} & \texttt{FRACTION} & region fraction in $[0,1]$ \\
 \texttt{CUTOFF\_FRACTION} & \texttt{FRACTION} & region fraction in $[0,1]$ \\
 \texttt{OVERLOAD\_RATIO} & \texttt{DIMENSIONLESS} & nonnegative; retained separately from clipped display \\
-\texttt{FLOW\_RESIDUAL} & \texttt{ACTIVATION} & censored at zero-compatible prediction \\
+\texttt{FLOW\_RESIDUAL} & \texttt{ACTIVATION} & ratio companions censored at zero-compatible observation \\
 \texttt{RELATIVE\_ERROR} & \texttt{DIMENSIONLESS} & nonnegative \\
 \end{longtable}
 
@@ -105,7 +105,7 @@ Region & Meaning \\
 \end{tabular}
 \end{table}
 
-No diagnostic is emitted from a \texttt{CUTOFF}, \texttt{SATURATION}, \texttt{UNSTABLE}, uncalibrated, replay-time-stale, wrong-model, or semantically unassessed profile.
+No diagnostic is emitted unless the region is \texttt{ACTIVE}: \texttt{UNASSESSED}, \texttt{CUTOFF}, \texttt{SATURATION}, \texttt{BREAKDOWN}, \texttt{NON\_OHMIC}, and \texttt{UNSTABLE} regions all silence diagnosis, as do uncalibrated, replay-time-stale, wrong-model, or semantically unassessed profiles.
 
 \section{Semantic outcomes}\label{enums:sec:outcomes}
 
@@ -253,13 +253,16 @@ Field group & Bound content \\
 Model identity & model id, revision, weights/config/tokenizer SHA-256 digests \\
 Code identity & exact code revision \\
 Runtime & runtime identity and dtype \\
+Dependency lock & closed third-party dependency set, digest-bound \\
+Instruments & instrument identities with implementation-digest references \\
 Test point & layer, token positions, hook type, bound model identity \\
 Direction & direction id and digest, norm (exactly one), sign, provenance \\
 Corpus & corpus manifest and rights \\
 Randomization & seeds and randomization procedure \\
+Splits & calibration and validation split references (digests distinct) \\
 Alpha grid & the declared dose schedule \\
-Full-scale method & one \texttt{IFSMethod} member (Table~\ref{enums:tab:ifs}) \\
-Fit method & declared resistance-fit procedure \\
+Full-scale method & one \texttt{IFSMethod} member (Table~\ref{enums:tab:ifs}); per-test-point full-scale value records, with percentile parameter where the corpus-percentile method is declared \\
+Fit method & declared resistance-fit procedure, with artifact reference to the performed fit run \\
 Uncertainty method & declared uncertainty procedure \\
 Tolerances & prediction and comparison tolerances \\
 Region rules & response-region classification rules \\

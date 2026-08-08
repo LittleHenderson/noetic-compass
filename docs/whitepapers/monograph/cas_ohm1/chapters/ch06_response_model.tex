@@ -95,6 +95,15 @@ region axis;
 \end{enumerate}
 \end{ruleenv}
 
+The region predicate above is pointwise in origin: the implemented
+classifier labels one interior sweep index at a time
+(Chapter~\ref{ch07:classification}), and the governing sources record no
+aggregation rule by which pointwise labels induce the dose interval over
+which predictions are admissible. Declaring that rule exactly --- which
+point's label governs a dose between classified sweep points --- is a
+required element of any Gate~5 per-run freeze, since as written the
+gate's criterion is not frozen.
+
 The role vocabulary in condition (4) is the load-bearing novelty. The
 candidate types every effective resistance with a \emph{resistance role},
 an enumeration of four values, and the roles are not interchangeable:

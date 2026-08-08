@@ -193,7 +193,7 @@ across a band boundary, because the displayed value never re-enters
 classification.
 \end{proposition}
 
-\begin{proof}
+\begin{designargument}
 The claim decomposes into three parts.
 
 (i) \emph{The band function reads only the exact value.} By construction,
@@ -231,7 +231,7 @@ I_{\mathrm{FS}})$ to (band, display) computes the band from the exact
 quotient by total exact comparison and computes the display independently
 downstream; no display operation participates in, or can alter, band
 assignment.
-\end{proof}
+\end{designargument}
 
 Two small consequences are worth separating from the proposition,
 because they answer questions a careful reader will ask next.
@@ -385,9 +385,10 @@ inputs, not only from round numbers.
 
 \begin{example}[Uncertainty straddling a cut point]\label{ch08:ex:straddle}
 All values illustrative. A raw flow of $1.24$ with standard
-uncertainty $0.03$ against $I_{\mathrm{FS}} = 5$ (with its own small
-uncertainty) yields exact value $2.48$ and, after propagation, an
-interval on the Q10 coordinate of roughly $[2.34, 2.62]$. The point
+uncertainty $0.03$ against $I_{\mathrm{FS}} = 5$ (with standard
+uncertainty $0.25$) yields exact value $2.48$ and, after propagation, an
+interval on the Q10 coordinate of $[2.34, 2.62]$ (first-order
+combination: $2.48\cdot\sqrt{(0.03/1.24)^2 + (0.25/5)^2} \approx 0.14$). The point
 value is $Q1$; the interval spans the $2.5$ cut. The record reports
 all three facts. What the record does not do is report ``$Q1$--$Q2$''
 or a probability over bands: banding stays exact on the point value,
@@ -456,9 +457,10 @@ therefore not a cosmetic defect: it is a mechanism by which two honest
 readers of the same underlying value can carry incompatible categorical
 claims forward, each traceable to the same source, with the disagreement
 invisible unless the rendering rule is recovered. The dose-response
-literature's insistence that analysis be conducted on the modeled
-continuous response, with categorization applied only at the reporting
-layer if at all \cite{ritz}, is the same discipline in statistical form;
+tradition's practice of modeling the continuous response directly
+\cite{ritz} --- together with the broader statistical caution against
+premature categorization of continuous quantities --- is the same
+discipline in statistical form;
 the candidate implements it as a type-level separation between an exact
 ratio that classifies and a display that does not.
 
@@ -472,15 +474,20 @@ from upper over lower), standard uncertainty by the first-order
 combination of the two relative contributions, and clipping applied to the
 Q10 display bounds at $10$ while the overload ratio's bounds remain
 unclipped. The confidence level attached to the normalized quantities is
-the minimum of the input confidence levels --- a deliberately conservative
-convention. Treating the normalized best value as if it were the truth,
+the minimum of the input confidence levels. That label is an upper bound
+on joint coverage, not a conservative floor: the quotient interval covers
+the true ratio only when both input intervals cover, an event with
+probability at most the minimum (approximately the product under
+independence), so reading the recorded level as attained coverage would
+overstate the evidence; replacing the convention with a Bonferroni-style
+lower bound $\max(0,\,1-\sum_i(1-c_i))$ is an open revision item.
+Treating the normalized best value as if it were the truth,
 with the uncertainty discarded at the seam, is the calibration sin the
 wider candidate architecture is built to refuse \cite{kennedyohagan}; the
 quantizer participates by never emitting a normalized value object without
 its propagated uncertainty attached.
 
-The interaction between propagated uncertainty and exact banding deserves
-one explicit paragraph, because the two disciplines answer different
+Propagated uncertainty and exact banding answer different
 questions and are easily conflated. Banding is exact on the point value:
 a record whose exact value is $2.4999$ is a $Q1$ record, full stop. But if
 that record's propagated interval spans $[2.3, 2.7]$, then the statement
@@ -496,7 +503,7 @@ where they are made explicit --- which is the trend-tag rule.
 
 The quantization conflict is the audit's eighth; its first --- the
 mixed-scale conflict --- is enforced partly here, and the connection
-deserves explicit statement because the two conflicts compound. The
+is stated explicitly here because the two conflicts compound. The
 Guide's worked example uses $\mathrm{sat} = 8.5$ as a component
 threshold on a page whose conventions make saturation a $0$--$1$
 fraction; Appendix~I identifies the value as a mixed-scale error whose
@@ -592,9 +599,9 @@ the rule is stated for the discipline it imposes on future admitted data,
 and its components (axis, interval, minimum effect, uncertainty rule) are
 deliberately the same components a preregistered comparison would freeze
 in advance. The kinship with dose-response practice is direct: a trend
-over dose is a model claim, and the modeling tradition insists it be
-fit and tested on the continuous response with declared error structure
-rather than read off category transitions \cite{ritz}; the trend-tag
+over dose is a model claim, and the modeling tradition fits and tests it
+on the continuous response with declared error structure \cite{ritz},
+rather than reading it off category transitions; the trend-tag
 rule is that insistence, restated for the replay-frame axis.
 
 \section{What the quantization layer does and does not establish}\label{ch08:sec:close}

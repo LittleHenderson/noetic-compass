@@ -65,7 +65,8 @@ arithmetic: the software verifies its gates exhaustively; validation of the
 composition laws themselves belongs to the registered hypotheses and has
 not occurred.
 
-A second, quieter principle governs the layer: \emph{everything replays}.
+A second, quieter principle governs the layer: \emph{every network
+resistance replays}.
 Every network result is factory-only --- direct construction is rejected by
 token check --- and every result binds its exact ordered children by digest,
 so that a verifier holding the result and the evidence registry can
@@ -121,7 +122,11 @@ high precision with deterministic behavior across platforms, and the
 digest-equality replay obligation of
 Section~\ref{ch09:sec:philosophy} is meaningful --- bit-identical
 replay would be unachievable over platform-dependent binary floating
-point.
+point. The context's precision and rounding mode are implementation
+constants participating in the code and dependency-lock identities; the
+governing sources do not restate their numeric values, and recording
+them in this text is an open documentation item, since the
+digest-equality replay guarantee below depends on them.
 
 \section{Series equivalence}\label{ch09:sec:series}
 
@@ -195,14 +200,29 @@ error.
 \end{enumerate}
 \end{ruleenv}
 
+Like topology, a component's declared region and linearity coefficient
+are caller-asserted at this gate: the admission rules check enumeration
+membership and threshold, not provenance. The gate does not require the
+\texttt{ACTIVE} declaration to bind a replayable assessment
+(Chapter~\ref{ch07:classification}) or the coefficient to derive from
+the profile's fit receipt; a misdeclaring caller is undetectable at this
+layer, and the limitation is declared rather than hidden.
+
 When admitted, the arithmetic is the expected sum: the equivalent value is
 $\sum_i r_i$; interval bounds sum lower-with-lower and upper-with-upper
 (with the upper bound floored at the computed value); standard uncertainty
 combines in quadrature, which silently encodes an independence assumption
 that the covariance limitation of Section~\ref{ch09:sec:binding} makes
 loud; the confidence level is the minimum across children; and the sample
-size is the minimum across children --- both deliberately conservative
-conventions. The result is emitted with resistance role
+size is the minimum across children. The sample-size convention is
+conservative bookkeeping; the confidence convention is not conservative
+--- the combined interval covers only when every child interval covers,
+an event with probability at most $\min_i c_i$ (approximately
+$\prod_i c_i$ under the declared zero-covariance approximation), so the
+recorded level is an upper bound on joint coverage, and reading it as
+attained coverage would overstate the evidence; replacing it with a
+Bonferroni-style lower bound $\max\bigl(0,\,1-\sum_i(1-c_i)\bigr)$ is an
+open revision item. The result is emitted with resistance role
 \texttt{NETWORK\_EQUIVALENT}, which marks it as replayable-derived rather
 than calibrated, and which downstream consumers (notably the prediction
 gate) treat as a distinct role with its own replay obligation.
@@ -510,7 +530,7 @@ There is no lenient mode, no warning-and-continue path, and no partial
 aggregate: an aggregate that cannot bind everything binds nothing.
 \end{ruleenv}
 
-The replay obligation deserves its own paragraph because it is the layer's
+The replay obligation is the layer's
 strongest structural property. A network-equivalent resistance presented
 anywhere downstream --- as a child of a larger network, or as the
 resistance input to the prediction gate --- is not consumed on the
@@ -524,7 +544,7 @@ its leaves, and a single altered leaf invalidates every ancestor. The
 uncertainty carried at each level remains a zero-covariance approximation
 at that level --- the limitation marker propagates with the binding ---
 so what the induction guarantees is integrity of derivation, not validity
-of the composition law \cite{kennedyohagan}.
+of the composition law.
 
 \section{Replay, and the prediction gate as consumer}\label{ch09:sec:replay}
 
@@ -609,6 +629,12 @@ one-profile, one-test-point, uncertainty-and-sample-size, ordered-child-binding,
 duplicate-rejection, and covariance-limitation requirements.}
 \label{ch09:tab:ops}
 \end{table}
+
+The gain column's \emph{factory-only} entry is a declared asymmetry, not
+an oversight: composed gains are factory-bound at construction, but the
+replay algorithm dispatches only the series and parallel resistance
+methods, so gain compositions have no digest-replay verifier in this
+candidate; closing that gap is an open item.
 
 \section{The Ed25519 fixture-key mode}\label{ch09:sec:ed25519}
 

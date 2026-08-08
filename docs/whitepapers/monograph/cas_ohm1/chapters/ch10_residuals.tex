@@ -94,7 +94,7 @@ registered prediction, calibrated parameter, replayable assessment. There
 is no API by which two bare numbers can be subtracted into a
 \texttt{FLOW\_RESIDUAL}.
 
-Requirement 4 deserves one further paragraph, because it is the
+Requirement 4 is the
 admission rule with the longest reach. The gate does not compare the
 presented prediction to a recomputation \emph{of its value}; it compares
 canonical digests, which cover value, unit, uncertainty, sample size,
@@ -216,7 +216,7 @@ evaporated.
 The central claim of this chapter, and the one the source audit shows
 the source material itself half-knows, is that a residual --- however
 clean its derivation --- cannot identify its own cause. The argument
-deserves to be made in full rather than gestured at.
+is made here in full rather than gestured at.
 
 A residual is a one-dimensional summary: a signed magnitude (with
 interval) of disagreement between one observation and one model
@@ -378,12 +378,14 @@ The registered residual-localization hypothesis
 (\textsc{clm-cas-ohm-residual-localization}) is the candidate's one
 sanctioned route by which residuals could ever earn more than the
 triage role --- and it is constructed so that failure is meaningful.
-The program, fixed in the preregistered closure protocol and the
-synthetic known-fault infrastructure, has the following shape.
+The program---whose general terms are fixed by the closure protocol and
+whose substrate exists in the synthetic known-fault infrastructure, but
+whose scoring statistic, margins, and fault distribution await a per-run
+Gate~5 freeze---has the following shape.
 
 Faults with known ground truth are implanted into synthetic boards ---
-hidden constraints, bypasses, cutoffs, saturations, off-axis couplings,
-non-ohmic responses --- by a process separated from the analysis: the
+cutoffs, saturations, non-ohmic responses, parallel paths, confounded
+covariates, bypasses --- by a process separated from the analysis: the
 analyst receives sweeps and residual diagnostics without fault labels.
 The diagnostic pipeline ranks candidate fault locations from residual
 evidence alone. Performance is scored against the implantation record,
@@ -394,14 +396,15 @@ measured on truly clean substrate) and \emph{shuffled baselines}
 (residual-to-location assignments permuted, so that the information
 content of the actual assignment is measured against chance under the
 same marginals). Localization is claimed only if ranking performance
-exceeds both references at the preregistered margin; negative outcomes,
+exceeds both references at a margin frozen under Gate~5 before the run;
+negative outcomes,
 exclusions, and instability are recorded without erasure, per the
 closure protocol's general terms.
 
 \begin{protocol}[Withdrawal clause]\label{ch10:prot:withdrawal}
 If the blinded program fails --- ranking not above shuffled baseline, or
 false-positive behavior on matched controls incompatible with the
-preregistered margin --- causal language about residuals is withdrawn,
+margin its Gate~5 freeze fixed --- causal language about residuals is withdrawn,
 not weakened. The registered hypothesis is closed as refuted; the
 non-identifying contract of Rule~\ref{ch10:rule:nonident} remains the
 permanent ceiling on residual semantics; and no rephrasing (``suggests,''
@@ -411,16 +414,15 @@ attribution the failed test failed to earn.
 \end{protocol}
 
 The synthetic substrate for the program already exists in the bounded
-software evidence and is worth describing, because it fixes what
+software evidence, and it fixes what
 ``implanted fault'' means operationally. A synthetic board is a typed
 generator with a declared base resistance and a declared fault mode
-drawn from a closed enumeration --- none, hidden constraint (base
-opposition raised by a hidden component), bypass (base opposition
-reduced), cutoff (zero flow below a drive threshold), saturation (flow
-capped at a ceiling), off-axis (a declared fraction of flow diverted
-off the measured axis), and non-ohmic (flow quadratic in drive) ---
-each altering the board's dose-response law in a known, parameterized
-way. Sweeps over such boards produce observation tuples
+drawn from a closed enumeration --- none (the linear board), cutoff,
+saturation, non-ohmic response (the nonlinear board), parallel path,
+confounded covariate, and bypass --- so the generator's fault
+vocabulary and the seven synthetic known-fault boards of Chapter~14
+name the same set. Each fault mode alters the board's dose-response
+law in a known, parameterized way. Sweeps over such boards produce observation tuples
 indistinguishable in type from any other sweep, which is the property
 the blinding leans on: the analysis pipeline runs the same typed path
 --- classification, prediction, residual --- that any admitted data
@@ -429,7 +431,7 @@ record held outside the analysis. The known-fault suite currently
 serves as golden-fixture verification (the pipeline detects each
 implanted signature where detection is defined, and stays silent where
 silence is required); the blinded \emph{scoring} run, with its matched
-controls and shuffled baselines and preregistered margins, is the part
+controls and shuffled baselines and Gate~5-frozen margins, is the part
 that has not been executed, and it is the part on which any upgrade of
 residual semantics depends.
 
@@ -444,9 +446,9 @@ success is carried by the residual-to-location \emph{assignment} as
 opposed to the marginal distribution of residual magnitudes: a
 pipeline that scores no better than its own shuffle is exploiting
 magnitude statistics that any location would satisfy. Passing one
-reference and failing the other is a fail; the preregistered claim
-requires exceeding both at the stated margin, and the margin is fixed
-before the run, not after.
+reference and failing the other is a fail; the claim
+requires exceeding both at a margin that the Gate~5 freeze fixes
+before the run, not after; no margin is yet frozen.
 
 Two boundaries on the program itself, so that this section cannot be
 overread. First, the synthetic boards validate \emph{software behavior}:
@@ -530,7 +532,7 @@ allocate probes, they do not name contents \\
 Addendum: residual validity requires independently identified causes
 above a shuffled-control baseline &
 Blinded implanted-fault program with matched controls, shuffled
-baselines, preregistered margins, and the withdrawal clause
+baselines, margins frozen per run under Gate~5, and the withdrawal clause
 (Protocol~\ref{ch10:prot:withdrawal}) \\
 \addlinespace
 Both: ratios reported at negligible response &

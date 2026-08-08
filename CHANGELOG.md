@@ -4,6 +4,60 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-08 — CAS-Ohm 1.0 monograph: 17-failure-mode audit + corrections (11-agent workflow)
+
+- Same audit protocol as CAS Core 8, run over docs/whitepapers/monograph/cas_ohm1/
+  (16 chapter files). 122 raw findings, ~110 corrections applied.
+- Systematic censoring-rule misstatement fixed at 10 sites: text keyed censoring
+  to "zero-compatible predicted response" and/or claimed the residual is
+  suppressed, contradicting the defining ch10 rule (observed-side trigger,
+  marker OBSERVED_INTERVAL_INCLUDES_ZERO; residual retained, only ratio
+  quantities censored). Fixed in ch01, ch03 x2, ch04, ch11, ch12, ch14, appA, appB.
+- Arithmetic/count fixes: ch07 ASOM cross-table caption+remark miscounted the
+  printed table (6/14/8 -> 3/14/11; 22 -> 25 of 28 cells); "five literatures"
+  -> seven (matching ch02's own count); "three sources" -> four (the PCBA book
+  is the audit's registered fourth source); "four reasons" -> five; "twice the
+  minimum" -> three times; ch10's synthetic fault-mode enumeration reconciled
+  with the seven-board catalog used everywhere else incl. the governing v0.2
+  paper; a dangling "item eight of the closure experiment list" citation fixed.
+- Citation fixes: five Kennedy-O'Hagan over-attributions (preregistration,
+  validation trichotomy, split discipline, "the receipt", decorative replay
+  cite) corrected or re-attributed; three Zou et al. over-attributions (control
+  inventory, sign flips, sweep phenomenology) re-scoped; two Ritz
+  over-attributions reworded; VIM wording credited to VIM not GUM; decorative
+  Buckingham cite anchored to dimensional homogeneity.
+- Close paraphrase: four VIM3 definitions (quantity, measurand, uncertainty,
+  traceability) now properly quoted against jcgm.bipm.org wording.
+- Stale literature: 2024-2026 steering-reliability results added (Tan et al.
+  NeurIPS 2024; Da Silva et al. ACL 2025), SAE feature-steering family +
+  AxBench added as fourth construction family, Brynjarsdottir & O'Hagan 2014
+  discrepancy-prior result added; preregistration section now cites
+  Simmons/Gelman-Loken/Chambers/ICMJE instead of gesturing at "the literature".
+- Substance: unexecutable "best memoryless model" evidentiary bar (ch13) made
+  executable via frozen baseline family; "preregistered margin" constants
+  re-scoped to per-run Gate-5 freeze (ch10 x6); anti-conservative min-confidence
+  convention honestly characterized as an upper bound on joint coverage with
+  Bonferroni revision flagged (ch08+ch09); gain-composition replay gap declared;
+  caller-trust status of component region/linearity declared; five "declared
+  X never declared" constants marked sources-silent/open (drift cadence,
+  decimal context, resource limits, unit-norm rule, region aggregation);
+  provenance-enum gap vs ch02's four families acknowledged; Q10 floor
+  divergence marked as candidate choice; half-open-bin "only way" uniqueness
+  claim replaced with the real Guide-display argument.
+- Appendix/glossary reconciliation: appA scope honestly narrowed, no-diagnosis
+  list completed (3 -> 6 regions), profile field table gains splits/instruments/
+  dependency-lock/fit-receipt/full-scale rows; glossary calibration-profile,
+  censoring, Q4-banding, status-vector, link entries corrected.
+- Scholarly practice: AI-assistance disclosure added to \thanks (series-standard
+  sentence); three QED tombstones on design arguments converted to the shared
+  designargument environment; per-volume bibliography created (was printing ~35
+  never-cited shared entries; now 20 entries, all cited).
+- Style: 37 fixes — sevenfold verbatim "deserves emphasis" scaffold, ~30-strong
+  worth/deserves family, five "Every ..." chapter openers varied. Classic AI
+  vocabulary scan clean (delve/tapestry/landscape/paradigm = 0).
+- All five volumes rebuilt: zero undefined references, zero undefined citations.
+  Corrected PDF copied to docs/whitepapers/pdf/ and Downloads.
+
 ## 2026-08-08 — Monograph cross-reference repair (tks_v8, cas_pcba8, cas_ohm1)
 
 - Fixed all 14 pre-existing undefined `\ref` targets that rendered as "??"

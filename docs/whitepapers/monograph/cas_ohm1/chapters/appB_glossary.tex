@@ -28,7 +28,7 @@ This glossary defines the technical vocabulary of the monograph. Each entry give
 
 \item[Breakdown region.] The source-retained dose-response region (\texttt{BREAKDOWN}) beyond saturation, kept in the implementation alongside the audit's five-region summary. (Chapter 7; Appendix A.)
 
-\item[Calibration profile.] The record binding the complete experimental context---model, code, runtime, test point, direction, corpus, seeds, alpha grid, full-scale method, fit and uncertainty methods, tolerances, region rules, controls, drift and expiry, review state---under one canonical digest. All quantities are profile-relative. (Chapter 5; Appendix A.)
+\item[Calibration profile.] The record binding the complete experimental context---model, code, runtime, instruments, test point, direction, corpus, seeds, calibration and held-out splits, alpha grid, full-scale method, fit and uncertainty methods, tolerances, region rules, controls, drift and expiry, review state---under one canonical digest. All quantities are profile-relative. (Chapter 5; Appendix A.)
 
 \item[Calibration split.] The registered data split on which a resistance or response curve is fit. Must be disjoint from the held-out split. (Chapters 5, 6, and 12.)
 
@@ -36,7 +36,7 @@ This glossary defines the technical vocabulary of the monograph. Each entry give
 
 \item[Capability gate.] The set of preconditions (coordinates, units, topology, region, profile, evidence) under which a network operation is permitted to run at all. (Chapter 9.)
 
-\item[Censoring.] The typed refusal to emit a quantity---with an explicit recorded reason---where it would be undefined or meaningless, as with residual ratios at zero-compatible predicted response. (Chapters 10 and 11.)
+\item[Censoring.] The typed refusal to emit a quantity---with an explicit recorded reason---where it would be undefined or meaningless, as with residual ratios at zero-compatible observed response. (Chapters 10 and 11.)
 
 \item[Claim identifier.] The stable ledger identifier of a registered claim, of the form \texttt{CLM-CAS-OHM-*}. (Chapter 12.)
 
@@ -76,7 +76,7 @@ This glossary defines the technical vocabulary of the monograph. Each entry give
 
 \item[Kind non-fungibility.] The rule that derivation never upgrades epistemic type: a derived value does not become instrumented because a parent was, and a score does not become telemetry by storage adjacency. (Chapter 3.)
 
-\item[Limiting vocabulary of status.] The four-coordinate status vector: \textsc{open} or \textsc{in review} (text under revision), \textsc{ring 4} (outermost admission ring), \textsc{not licensed} (no downstream reliance), \textsc{held} (undisclosed). (Chapters 1 and 12.)
+\item[Limiting vocabulary of status.] The four-coordinate status vector: \textsc{open} (registered, unresolved, awaiting evidence) or \textsc{in review} (text under revision), \textsc{ring 4} (outermost admission ring), \textsc{not licensed} (no downstream reliance), \textsc{held} (undisclosed). (Chapters 1 and 12.)
 
 \item[Memristive-form profile.] The provisional nonphysical extension typing a state-dependent resistance $x_{t+1} = F_{\mathrm{profile}}(x_t,a_t,y_t,c_t;\theta)$, $r_{\mathrm{eff},t} = G_{\mathrm{profile}}(x_t;\theta)$, admissible only with a full model-state record and only past the evidentiary bar. Not implemented. (Chapter 13.)
 
@@ -96,7 +96,7 @@ This glossary defines the technical vocabulary of the monograph. Each entry give
 
 \item[Profile digest.] The canonical SHA-256 identity of a calibration profile. Any mutation of a bound field changes the digest; an unverifiable digest fails the packet closed. (Chapters 5 and 11.)
 
-\item[Q4 quantization.] The exact half-open banding of Q10 display values at cut points 2.5, 5, and 7.5, computed on pre-rounding decimals so that display rounding can never move a value across a band. (Chapter 8.)
+\item[Q4 quantization.] The exact half-open banding of exact Q10 values at cut points 2.5, 5, and 7.5, computed on pre-rounding decimals so that display rounding can never move a value across a band. (Chapter 8.)
 
 \item[Q10 / Q100.] The two score scales of the sources, kept as distinct unit kinds with enforced ranges so that the inherited mixed-scale conflict is unrepresentable. (Chapters 3, 4, and 8.)
 
