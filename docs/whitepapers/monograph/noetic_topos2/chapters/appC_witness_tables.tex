@@ -1,0 +1,292 @@
+\chapter{Witness Presheaf Value Tables}
+\label{appC:chapter}
+
+This appendix tabulates the two witness presheaves $F_A$ and $F_R$ in
+full: their value sets at all sixteen contexts, as counts and as explicit
+bit-assignment sets; their restriction maps; and the gluing computations
+at the global context $\Omega$ for both topologies, which are the
+registered core of the distinctness theorem (Theorem NT2-3) and of the
+certificate verdicts
+\texttt{acbe\_witness\_is\_acbe\_sheaf} /
+\texttt{acbe\_witness\_is\_rpm\_sheaf} and their RPM mirrors
+(Chapter~11). Every entry is derived directly from the definitions; the
+derivations are shown. Context names and complete-block containments are
+those of Appendix~A.
+
+\section{Definitions and the counting rule}
+\label{appC:sec:defs}
+
+\begin{notation}
+\label{appC:not:witness}
+$F_A(V)$ is the set of functions from
+$\{\, i \in \{0,1\} \mid A_i \subseteq V \,\}$ to $\{0, 1\}$: bit
+assignments on the \emph{complete} ACBE blocks contained in $V$. For
+$U \subseteq V$, the restriction map forgets the coordinates $i$ with
+$A_i \subseteq V$ but $A_i \not\subseteq U$ and keeps the remaining bits
+unchanged. $F_R$ is defined symmetrically on complete RPM blocks. We
+write a section of $F_A(V)$ as a tuple over its index set: at $\Omega$
+the four sections are $(b_0, b_1)$ with $b_i \in \{0,1\}$ the bit on
+$A_i$; at a context with one complete block the two sections are $(0)$
+and $(1)$; at a context with no complete block the unique section is the
+empty assignment, written $()$.
+\end{notation}
+
+The counting rule is immediate: $|F_A(V)| = 2^{k_A(V)}$ where $k_A(V)$
+is the number of complete $A$-blocks contained in $V$, and likewise
+$|F_R(V)| = 2^{k_R(V)}$. The containment table of Appendix~A gives
+$k_A(V)$ and $k_R(V)$ at every context, and the two facts that drive
+every verdict below are worth isolating before the tables:
+
+\begin{finding}
+\label{appC:fnd:novaluecrossing}
+No RPM piece ever contains a complete ACBE block: for every context $V$
+and every $j$, $V \cap R_j \subseteq R_j$, and $A_i \subseteq R_j$ is
+impossible since $A_i \cap R_j = \{(i,j)\}$ is a proper subset of
+$A_i$. Hence $F_A(V \cap R_j) = \{()\}$ is a one-element set for every
+$V$ and $j$. Symmetrically, $F_R(V \cap A_i)$ is a one-element set for
+every $V$ and $i$. This single observation determines the entire
+failure pattern of the cross gluing computations below.
+\end{finding}
+
+\section{Value tables}
+\label{appC:sec:values}
+
+\begin{longtable}{@{}lccll@{}}
+\toprule
+Context $V$ & $|F_A(V)|$ & $|F_R(V)|$ & $F_A(V)$ explicitly &
+$F_R(V)$ explicitly \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+$\varnothing$ & 1 & 1 & $\{()\}$ & $\{()\}$ \\
+$\{\omega_{00}\}$ & 1 & 1 & $\{()\}$ & $\{()\}$ \\
+$\{\omega_{01}\}$ & 1 & 1 & $\{()\}$ & $\{()\}$ \\
+$\{\omega_{10}\}$ & 1 & 1 & $\{()\}$ & $\{()\}$ \\
+$\{\omega_{11}\}$ & 1 & 1 & $\{()\}$ & $\{()\}$ \\
+$A_0$ & 2 & 1 & $\{(0), (1)\}$ on $A_0$ & $\{()\}$ \\
+$A_1$ & 2 & 1 & $\{(0), (1)\}$ on $A_1$ & $\{()\}$ \\
+$R_0$ & 1 & 2 & $\{()\}$ & $\{(0), (1)\}$ on $R_0$ \\
+$R_1$ & 1 & 2 & $\{()\}$ & $\{(0), (1)\}$ on $R_1$ \\
+$\Delta$ & 1 & 1 & $\{()\}$ & $\{()\}$ \\
+$\nabla$ & 1 & 1 & $\{()\}$ & $\{()\}$ \\
+$T_{00}$ & 2 & 2 & $\{(0), (1)\}$ on $A_1$ & $\{(0), (1)\}$ on $R_1$ \\
+$T_{01}$ & 2 & 2 & $\{(0), (1)\}$ on $A_1$ & $\{(0), (1)\}$ on $R_0$ \\
+$T_{10}$ & 2 & 2 & $\{(0), (1)\}$ on $A_0$ & $\{(0), (1)\}$ on $R_1$ \\
+$T_{11}$ & 2 & 2 & $\{(0), (1)\}$ on $A_0$ & $\{(0), (1)\}$ on $R_0$ \\
+$\Omega$ & 4 & 4 & $\{(b_0, b_1) : b_i \in \{0,1\}\}$ &
+$\{(c_0, c_1) : c_j \in \{0,1\}\}$ \\
+\end{longtable}
+
+Derivation: each row applies the counting rule to the complete-block
+columns of Appendix~A. Nine contexts contain no complete $A$-block
+(value $1$), six contain exactly one ($A_0$, $A_1$, and the four
+triples; value $2$), and $\Omega$ contains both (value $4$); mirrored
+for $F_R$. The section totals over all contexts are
+$9 \cdot 1 + 6 \cdot 2 + 4 = 25$ for each witness.
+
+\section{Restriction maps}
+\label{appC:sec:restrictions}
+
+Restriction in $F_A$ is determined by which complete blocks survive the
+inclusion. The following table describes every qualitatively distinct
+class of inclusions; all others are composites or have singleton source
+or target value sets (where the map is the unique one). Bits are named
+as in the value table.
+
+\begin{longtable}{@{}llll@{}}
+\toprule
+Inclusion class & Surviving $A$-blocks & $F_A$ restriction map &
+Character \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+$\Omega \supseteq T_{0j}$ & $A_1$ &
+$(b_0, b_1) \mapsto (b_1)$ & drops $b_0$; two-to-one \\
+$\Omega \supseteq T_{1j}$ & $A_0$ &
+$(b_0, b_1) \mapsto (b_0)$ & drops $b_1$; two-to-one \\
+$\Omega \supseteq A_i$ & $A_i$ &
+$(b_0, b_1) \mapsto (b_i)$ & drops the other bit; two-to-one \\
+$\Omega \supseteq R_j, \Delta, \nabla$, singletons, $\varnothing$ &
+none & $(b_0, b_1) \mapsto ()$ & constant; four-to-one \\
+$T_{ij} \supseteq A_{1-i}$ & $A_{1-i}$ &
+$(b) \mapsto (b)$ & identity on the surviving bit \\
+$T_{ij} \supseteq$ any $U$ with $A_{1-i} \not\subseteq U$ & none &
+$(b) \mapsto ()$ & constant; two-to-one \\
+$A_i \supseteq$ proper $U$ & none &
+$(b) \mapsto ()$ & constant; two-to-one \\
+source with $k_A = 0$ & none & $() \mapsto ()$ & identity of a
+singleton \\
+\end{longtable}
+
+Functoriality is visible in the table: a composite of inclusions
+survives a bit exactly when both steps do, and on surviving bits every
+map is the identity, so both functor laws hold coordinatewise. This is
+the content the certificate validates as
+\texttt{acbe\_witness\_functorial} before computing any verdict; the
+$F_R$ table is the mirror image under the coordinate exchange (replace
+$A$-blocks by $R$-blocks, $T_{ij} \supseteq A_{1-i}$ by
+$T_{ij} \supseteq R_{1-j}$, and $b_i$ by $c_j$), validated as
+\texttt{rpm\_witness\_functorial}.
+
+\section{Gluing at $\Omega$: the four registered computations}
+\label{appC:sec:gluing}
+
+The sheaf condition at $\Omega$ compares the value set with the set of
+matching families over each global cover. Since distinct pieces of
+either cover meet in $\varnothing$, where both witnesses have the
+one-element value $\{()\}$, compatibility is automatic and the
+matching-family set is the plain product of the piece values. The four
+computations, tabulated:
+
+\begin{longtable}{@{}llccl@{}}
+\toprule
+Witness / cover & Piece values & Matching families & Value at $\Omega$ &
+Gluing map and verdict \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+$F_A$ over $K_A(\Omega)$ & $F_A(A_0) = \{(0),(1)\}$,
+$F_A(A_1) = \{(0),(1)\}$ & $2 \times 2 = 4$ & 4 &
+$(b_0, b_1) \mapsto ((b_0), (b_1))$: bijection --- sheaf condition
+holds \\
+$F_A$ over $K_R(\Omega)$ & $F_A(R_0) = \{()\}$, $F_A(R_1) = \{()\}$ &
+$1 \times 1 = 1$ & 4 &
+all four of $(0,0), (0,1), (1,0), (1,1) \mapsto ((),())$: not
+injective --- fails \\
+$F_R$ over $K_R(\Omega)$ & $F_R(R_0) = \{(0),(1)\}$,
+$F_R(R_1) = \{(0),(1)\}$ & $2 \times 2 = 4$ & 4 &
+$(c_0, c_1) \mapsto ((c_0), (c_1))$: bijection --- sheaf condition
+holds \\
+$F_R$ over $K_A(\Omega)$ & $F_R(A_0) = \{()\}$, $F_R(A_1) = \{()\}$ &
+$1 \times 1 = 1$ & 4 &
+four-to-one onto $((),())$: not injective --- fails \\
+\end{longtable}
+
+Derivations. Row 1: a matching family for $K_A(\Omega)$ is a free pair
+(one section over each $A_i$; the overlap $A_0 \cap A_1 = \varnothing$
+imposes agreement in a singleton), and the canonical map sends the
+global assignment $(b_0, b_1)$ to its restrictions, which by the
+restriction table are $(b_0)$ on $A_0$ and $(b_1)$ on $A_1$; this is
+the evident bijection, so $F_A$ satisfies the ACBE gluing condition at
+$\Omega$. Row 2: by Finding~\ref{appC:fnd:novaluecrossing} each RPM
+half carries the one-element value, so exactly one matching family
+exists; the canonical map sends each of the four global sections to it,
+failing injectivity, so $F_A$ is not a $J_R$-sheaf --- this is the
+registered ``$4 \to 1$'' computation, exhibited here element by
+element. Rows 3 and 4 are the mirror computations.
+
+\section{Gluing at the remaining contexts}
+\label{appC:sec:othercontexts}
+
+The certificate's verdicts quantify over \emph{all} contexts, not only
+$\Omega$; for completeness we tabulate the matching-family counts
+everywhere. For the own-partition cover the count is
+$|F_A(V \cap A_0)| \cdot |F_A(V \cap A_1)|$ (empty pieces contribute
+the factor $1$); for the cross cover it is identically $1$ by
+Finding~\ref{appC:fnd:novaluecrossing}. At $\varnothing$ the null
+cover has exactly one matching family.
+
+\begin{longtable}{@{}lcccc@{}}
+\toprule
+Context $V$ & $|F_A(V)|$ & Matching for $K_A(V)$ & Matching for
+$K_R(V)$ & Verdicts for $F_A$ (own / cross) \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+$\varnothing$ & 1 & 1 & 1 & holds / holds \\
+$\{\omega_{ij}\}$ (each) & 1 & $1 \cdot 1 = 1$ & 1 & holds / holds \\
+$A_0$ & 2 & $2 \cdot 1 = 2$ & 1 & holds / fails ($2 \to 1$) \\
+$A_1$ & 2 & $1 \cdot 2 = 2$ & 1 & holds / fails ($2 \to 1$) \\
+$R_0$ & 1 & $1 \cdot 1 = 1$ & 1 & holds / holds \\
+$R_1$ & 1 & $1 \cdot 1 = 1$ & 1 & holds / holds \\
+$\Delta$ & 1 & $1 \cdot 1 = 1$ & 1 & holds / holds \\
+$\nabla$ & 1 & $1 \cdot 1 = 1$ & 1 & holds / holds \\
+$T_{00}$ & 2 & $1 \cdot 2 = 2$ & 1 & holds / fails ($2 \to 1$) \\
+$T_{01}$ & 2 & $1 \cdot 2 = 2$ & 1 & holds / fails ($2 \to 1$) \\
+$T_{10}$ & 2 & $2 \cdot 1 = 2$ & 1 & holds / fails ($2 \to 1$) \\
+$T_{11}$ & 2 & $2 \cdot 1 = 2$ & 1 & holds / fails ($2 \to 1$) \\
+$\Omega$ & 4 & $2 \cdot 2 = 4$ & 1 & holds / fails ($4 \to 1$) \\
+\end{longtable}
+
+Reading the table: in the own-partition column the matching count
+equals the value count at every context, and inspection of the
+canonical maps (as in Row~1 of the $\Omega$ table; at contexts with an
+identity piece the condition is trivial) shows each is a bijection ---
+$F_A$ is a $J_A$-sheaf, and by the basis criterion the generating
+families suffice. In the cross column the matching count is constantly
+$1$, so the gluing map fails injectivity at exactly the seven contexts
+where $|F_A(V)| \ge 2$: the two $A$-blocks, the four triples, and
+$\Omega$. The registered $\Omega$ computation is thus one instance of
+a uniform failure pattern; any one of the seven already establishes
+that $F_A$ is not a $J_R$-sheaf, and the certificate's exhaustive run
+confirms the pattern at all of them. The mirrored table for $F_R$
+(exchange the two partitions, the two block families, and the two
+cover columns) shows $F_R$ is a $J_R$-sheaf failing $J_A$-gluing at
+the two $R$-blocks, the four triples, and $\Omega$.
+
+\section{Reflector values on the witnesses}
+\label{appC:sec:reflectorvalues}
+
+For completeness we tabulate what the three reflectors of Chapter~10 do
+to the witnesses, since these values are quoted in the body (the
+annihilation example and the both-routes example). Each entry is
+computed from the reflector formula
+$(R_P F)(V) = \prod_{B \in I_P(V)} F(V \cap B)$ together with
+Finding~\ref{appC:fnd:novaluecrossing} and the value tables above.
+
+\begin{longtable}{@{}lccc@{}}
+\toprule
+Presheaf & $R_A$ applied & $R_R$ applied & $R_Q$ applied \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+$F_A$ & $\cong F_A$ (unit iso; $F_A$ is a $J_A$-sheaf) &
+terminal ($1$ at every context) & terminal \\
+$F_R$ & terminal ($1$ at every context) &
+$\cong F_R$ (unit iso) & terminal \\
+\end{longtable}
+
+Derivations. $R_A F_A \cong F_A$: the unit of a reflector is an
+isomorphism exactly on sheaves (Chapter~10), and the own-partition
+column of Section~\ref{appC:sec:othercontexts} verifies the sheaf
+condition. $R_A F_R$ terminal: every piece $V \cap A_i$ lies in a
+single ACBE block, hence contains no complete RPM block, so every
+factor $F_R(V \cap A_i)$ is a one-element set and the product is a
+one-element set at every context. $R_Q F_A$ terminal: every factor
+$F_A(\{\omega\})$ is a one-element set since a singleton contains no
+complete block. The terminal presheaf is a sheaf for all three
+topologies (every matching-family set of a constant-singleton presheaf
+is a singleton, including at the null cover), so these values are
+consistent with the sheaf lemma. The table also exhibits, in minimal
+form, the content of the composition theorem on these fixtures: both
+composite routes applied to either witness give the terminal presheaf,
+so the two routes agree here for the strongest possible reason ---
+they agree with each other by agreeing with $R_Q$.
+
+\section{Section counts at a glance}
+\label{appC:sec:glance}
+
+Summing the value tables: each witness has $25$ sections in total over
+the sixteen contexts ($9$ contexts contributing one section, $6$
+contributing two, $\Omega$ contributing four); each reflected
+cross-image ($R_A F_R$, $R_R F_A$, $R_Q F_A$, $R_Q F_R$) has exactly
+$16$ sections, one per context. The asymmetry $25$ versus $16$ is the
+quantitative footprint of nontriviality: a modality that were
+naturally isomorphic to the identity would preserve section counts at
+every context, and the drop from $(1,2,4)$-valued to constantly
+$1$-valued is what the certificate's false verdicts measure
+context-by-context.
+
+\begin{boundary}
+\label{appC:bnd:scope}
+These tables establish combinatorial facts about two specific finite
+presheaves on $L$ and nothing more. They corroborate the distinctness
+theorem's witnesses (Theorem NT2-3, scoped to $\PSh(L, \Set)$); they
+attach no interpretation to the ACBE and RPM marks, and they license
+no ambient, probabilistic, empirical, or product statement.
+\end{boundary}

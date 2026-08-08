@@ -1,0 +1,749 @@
+\chapter{Introduction}\label{ch01:introduction}
+
+\section{Motivation and setting}\label{ch01:motivation}
+
+Every research community that models complex adaptive behavior eventually
+confronts the same methodological hazard: the informal diagram. A block sketch
+of a hypothesized cognitive pathway --- boxes for stages, arrows for influence,
+annotations for thresholds and gains --- is cheap to draw, easy to circulate,
+and almost impossible to audit. Two readers of the same sketch can disagree
+about whether an arrow denotes causation, correlation, data flow, or mere
+suggestion; whether a threshold is a design intention or a measured property;
+whether a feedback loop is stable, unstable, or simply unanalyzed; and whether
+the sketch as a whole is a claim about the world or a claim about a model of
+the world. The sketch has no type system, no versioning, no diagnostics, no
+replayable execution semantics, and no evidence discipline. When such sketches
+accumulate into a large body of design work --- in the present case, a
+743-page engineering baseline --- the hazard compounds: assertions of very
+different epistemic standing sit side by side on the page, typeset with equal
+confidence, and nothing in the medium itself distinguishes a tested software
+behavior from a hypothesis, an idealization, or an error.
+
+Hardware engineering solved a structurally similar problem decades ago, not by
+proving anything about physics that physicists did not already know, but by
+changing the medium of design description. Machine-readable hardware
+description languages, explicit state formalisms, netlist-centered design
+databases, design-rule checkers that fail closed, deterministic simulators
+with archived traces, and sign-off disciplines that separate verification from
+validation together converted circuit design from a craft of annotated
+drawings into an auditable engineering practice. Chapter~\ref{ch02:background}
+surveys that heritage in detail. The essential observation for this monograph
+is that the value of those tools was largely \emph{methodological}: they made
+design intent explicit, mechanically checkable, and reproducible, and they
+made whole categories of error observable before fabrication.
+
+CAS PCBA 8 --- the subject of this monograph --- asks whether the same
+methodological move is available to cognitive-system modeling. It proposes a
+typed, provenance-bearing research architecture in which a candidate
+cognitive-system hypothesis is written down as a \emph{circuit-shaped model}:
+a directed, typed network of components with declared ports, signal kinds,
+units, parameters, state annotations, calibration references, feedback
+declarations, and evidence limits, subject to a deterministic design-rule
+checker and, where supported, a narrow deterministic simulator that emits
+canonical traces. The proposal is emphatically \emph{not} that cognition is
+electronics. The proposal is that the engineering \emph{organization} of
+electronics --- its description discipline, its checking discipline, and its
+evidence discipline --- can be borrowed as a modeling grammar while every
+physical, causal, safety, and product claim is explicitly withheld.
+
+This introductory chapter states the research question precisely, explains
+what ``circuit'' does and does not mean in this work, develops the three
+load-bearing separations that keep the analogy from decaying into an identity
+claim, enumerates the six contributions, states the qualified-affirmative
+thesis defended in the remainder of the monograph, fixes the claim discipline
+under which every subsequent chapter operates, and closes with a reading
+guide.
+
+\section{The name of the discipline}\label{ch01:name}
+
+The monograph's subtitle names its subject \emph{adaptive cognitive circuit
+engineering}, and each word of the name is a scoped commitment worth fixing
+before the technical development begins.
+
+\emph{Engineering} commits the work to the practices of that word: declared
+interfaces, versioned artifacts, deterministic tools, catalogs of checks,
+archived evidence, and an explicit boundary between what has been tested and
+what has been asserted. It deliberately does not commit the work to science:
+no chapter of this monograph reports an experiment, and the word
+``engineering'' is chosen partly to keep that fact in the reader's view.
+What is engineered here is a modeling and checking apparatus --- a language,
+a checker, a simulator, adapters, and an evidence discipline --- and the
+apparatus is the deliverable.
+
+\emph{Circuit} commits the work to the specific engineering organization of
+Definition~\ref{ch01:def:circuit} and Boundary~\ref{ch01:bnd:circuit}: typed
+components, ports, nets, state annotations, calibration references,
+deterministic traces. The commitment is organizational, never physical.
+
+\emph{Cognitive} commits the work to a subject matter --- hypotheses about
+cognitive systems, drawn from the CAS framework whose semantic identities
+the typed model carries --- while committing it to no position on whether
+any such hypothesis is true. The cognitive content enters the architecture
+only through typed semantic references with their own namespaces, sources,
+and definition hashes, and the architecture's machinery is deliberately
+indifferent to whether those references denote anything real: it checks
+structure, connectivity, calibration shape, and reachability identically
+whether the board models a mind, a control loop, or nothing at all. That
+indifference is a feature. A checker that needed the cognitive hypotheses
+to be true in order to run would have smuggled the conclusion into the
+tool.
+
+\emph{Adaptive} commits the work, prospectively, to systems whose
+parameters, structure, or behavior change over time --- the eventual
+subject matter includes feedback, state, drift, and recalibration --- while
+the honest present tense is narrower: the current candidate supports
+declared feedback with unit delays and conservative gain bounds, and
+treats stateful, stochastic, and richer adaptive semantics as explicitly
+open, failing closed wherever they are encountered. The word marks the
+direction of the research program, not an achieved capability.
+
+The workflow the name describes is a loop the later chapters will make
+precise. A hypothesis is written as a board (design); the board is checked
+against the closed diagnostic catalog (rule check); supported boards are
+simulated under declared profiles, emitting canonical traces (simulate);
+boards, reports, and traces are audited against their sources and against
+the claim discipline (audit); and the resulting artifacts enter the
+evidence ledgers typed as what they are --- software receipts, never more
+(evidence). Every stage is deterministic, identity-bound, and fail-closed,
+and the loop's product is not a validated model of cognition but a
+falsifiable, replayable, honestly bounded description of one.
+
+\section{The research question}\label{ch01:question}
+
+The engineering question is not whether cognition \emph{is} electronics. It
+is:
+
+\begin{quote}
+Can a circuit-shaped modeling language make cognitive-system hypotheses more
+explicit, type-safe, replayable, and falsifiable without converting an analogy
+into a physical, causal, safety, or product claim?
+\end{quote}
+
+Each adjective in the question carries weight, and it is worth unpacking them
+before anything else is asserted.
+
+\emph{Explicit} means that every element of a hypothesis that the modeler
+relies on --- the components, their interfaces, the values they may carry, the
+transfer behavior they are assumed to exhibit, their statefulness, their time
+semantics, their calibration status, and the boundary of what the model does
+not claim --- appears in the model text as a declared, typed object rather
+than as an unstated assumption. An informal diagram is explicit about
+topology and silent about almost everything else; a circuit-shaped model in
+the sense of this monograph is required to be explicit about all of it, and a
+model that omits a required declaration does not degrade gracefully into a
+vaguer model --- it fails the checker.
+
+\emph{Type-safe} means that the modeling language distinguishes kinds of
+things that must not be silently interchanged, and that the distinction is
+enforced mechanically. A semantic state literal is not a probability profile
+over states; a probability profile is not an element of a finite kernel; a
+design parameter is not a measurement; a locally asserted calibration label is
+not authenticated calibration evidence; an integer $1$, a Boolean
+\emph{true}, and a string \texttt{"true"} are three distinct values
+everywhere. Type safety in this sense is the primary technical instrument by
+which the analogy is prevented from leaking: the places where an analogy
+would like to become an identity are exactly the places where the type system
+refuses a coercion.
+
+\emph{Replayable} means that every executable claim is bound to enough
+identity material --- source hashes, profile identities, decimal-context
+identity, component-catalog identity, input samples, and a canonical trace ---
+that an independent party holding the same artifacts can rerun the exact
+computation and compare results value for value. Replayability is a property
+of the software contract, not of the world: replaying a simulation
+demonstrates that the software is deterministic under its declared profile,
+and nothing more.
+
+\emph{Falsifiable} means that the model text exposes surfaces on which it can
+fail, and that failures are preserved rather than repaired away. The
+design-rule checker can reject a board; the threshold-reachability analysis
+can prove that a published safety stage cannot activate; a grammar-coverage
+audit can show that a published formal grammar does not cover its own
+published corpus. The monograph's source audit (summarized in
+Chapter~\ref{ch03:source} and developed in full in later chapters) records
+precisely such failures against the engineering baseline itself, and the
+architecture retains them as first-class findings and permanent regression
+fixtures.
+
+The final clause of the question --- \emph{without converting an analogy into
+a physical, causal, safety, or product claim} --- is the constraint that
+makes the question nontrivial. It is easy to build an evocative circuit
+metaphor; the literature of every era is full of cognitive models dressed in
+the technological costume of their day --- hydraulic, telegraphic,
+telephonic, computational. The historical failure mode of such metaphors is
+not that they are useless but that they are boundless: the costume is
+mistaken for anatomy. The question this monograph addresses is whether the
+costume can be worn with a mechanically enforced boundary --- whether the
+analogy can be made load-bearing for design, audit, and falsification while
+remaining, checkably and permanently, an analogy.
+
+\section{What ``circuit'' means here --- and what it does not}\label{ch01:circuit}
+
+\begin{definition}[Circuit-shaped model, informal]\label{ch01:def:circuit}
+In this monograph, a \emph{circuit-shaped model} is a directed, typed network
+whose elements must declare: (i) interfaces (ports with direction, signal
+kind, and unit); (ii) allowed values (typed parameters and finite-state
+annotations); (iii) transfer behavior (a declared component profile, where
+one is supported); (iv) statefulness and time semantics; (v) calibration
+references for any point at which observation is claimed; and (vi) evidence
+limits (a fixed research boundary carried in the model's own identity
+material). ``Circuit'' names this engineering organization and nothing else.
+\end{definition}
+
+\begin{boundary}[What ``circuit'' does not assert]\label{ch01:bnd:circuit}
+The word ``circuit'' in CAS PCBA 8 does not assert a physical electrical
+implementation. It does not identify any model quantity with voltage,
+current, resistance, charge, flux, or power in the SI sense. It does not
+assert that any cognitive system --- human, artificial, or biological ---
+contains components corresponding to the model's components, nets
+corresponding to its nets, or thresholds corresponding to its thresholds. It
+does not assert that a simulated behavior of the model is a behavior of any
+system outside the model. Any statement in this monograph that appears to
+approach such an assertion is governed by this boundary and by the claim
+quarantine of Section~\ref{ch01:discipline}.
+\end{boundary}
+
+The choice of the circuit organization, rather than some other engineering
+organization, is motivated by a specific list of disciplines that circuit
+practice developed and that informal cognitive diagrams lack. Six are worth
+naming here, because each reappears as a concrete mechanism in later
+chapters.
+
+First, \emph{interface discipline}: in circuit practice a component is
+usable only through declared ports, and connecting incompatible ports is a
+detectable error rather than a silent reinterpretation. Second,
+\emph{connectivity discipline}: a netlist makes the complete connection
+structure of a design a single queryable object, so that floating inputs,
+contending drivers, and dangling outputs are mechanical findings. Third,
+\emph{rule discipline}: design-rule checking established, industrially, that
+a design is not done when it looks right but when it passes a versioned,
+deterministic body of checks --- and that the checks fail closed. Fourth,
+\emph{trace discipline}: simulation practice archives waveforms against exact
+design versions, so that a claimed behavior is inseparable from the identity
+of the thing that behaved. Fifth, \emph{calibration discipline}: a probe
+reading means nothing without an instrument identity, a protocol, and an
+uncertainty; hardware measurement culture keeps design values and measured
+values in separate ledgers. Sixth, \emph{sign-off discipline}: verification
+(does the artifact implement its specification?) and validation (is the
+specification adequate for an external purpose?) are distinct activities with
+distinct evidence, and passing the first is never silently promoted into the
+second.
+
+Each of these is an organizational and methodological achievement, not a
+physical one. None of them depends on electrons. That is precisely why they
+are candidates for transfer: a modeling language for cognitive-system
+hypotheses can adopt interface, connectivity, rule, trace, calibration, and
+sign-off discipline wholesale, without adopting a single claim about
+physics. The engineering literature surveyed in
+Chapter~\ref{ch02:background} supports this transfer at the level of
+\emph{method} --- machine-readable formal design description \cite{vhdl},
+explicit state semantics \cite{harel}, verification as distinct from
+validation \cite{sargent} --- while validating nothing about CAS itself.
+
+\section{Three load-bearing separations}\label{ch01:separations}
+
+The architecture's claim discipline rests on three separations. They are
+called \emph{load-bearing} because every mechanism described in this
+monograph --- the type system, the design-rule checker, the simulator's trace
+bindings, the calibration rules, the adapter boundaries --- exists to enforce
+at least one of them, and because the historical failure modes of
+circuit-flavored cognitive modeling are, on inspection, violations of exactly
+these three. Each separation is stated as a rule and then developed through
+an extended examination of the failure it prevents.
+
+\subsection{Separation I: model versus world}\label{ch01:sep:modelworld}
+
+\begin{ruleenv}[Model versus world]\label{ch01:rule:modelworld}
+A simulated transfer rule is behavior of the declared software profile, not
+evidence that a cognitive or physical system obeys it. No output of the
+architecture --- no green test, no deterministic trace, no diagnostic-free
+design-rule report --- is admissible as evidence about any system other than
+the software that produced it.
+\end{ruleenv}
+
+The failure this separation prevents is the quiet migration of a claim from
+the model column to the world column. The migration rarely happens in a
+single dishonest step; it happens through a chain of individually plausible
+restatements. Consider a concrete, deliberately detailed example. A modeler
+constructs a board containing a component intended to represent an
+aversion-triggered refusal stage: an input carrying an activation-like
+quantity, a comparator against a threshold parameter, an output that gates a
+downstream path. The modeler writes a simulation fixture in which the input
+ramps past the threshold and the gate closes, runs it, and obtains a green
+result with a canonical trace. So far every statement is safe: \emph{the
+software performed the declared typed transition and produced the declared
+trace for the exact fixture under the exact profile}.
+
+Now watch the restatements. In a status report, the green fixture becomes
+``the refusal mechanism works.'' In a slide, ``the refusal mechanism works''
+becomes ``the model refuses under overload.'' In a discussion section, ``the
+model refuses under overload'' becomes ``this architecture exhibits the
+refusal behavior observed in deployed systems,'' and in a grant abstract the
+architecture has become evidence about cognition. Not one of the
+restatements was flagged as a new claim; each merely dropped a
+qualifier. The end state is a world-claim resting entirely on a software
+fixture that was never designed, powered, or entitled to support it. The
+history of simulation-based fields shows this slope is not hypothetical:
+wherever simulation output is cheap and empirical access is expensive, the
+simulated column bleeds into the empirical column unless the medium itself
+resists.
+
+A second example shows the same failure in the opposite emotional
+register --- not enthusiasm but reassurance. Suppose a board's design-rule
+report comes back clean: no errors, no warnings, every net driven, every
+threshold reachable, every declared feedback loop bounded. The clean report
+is a real and useful fact about the model text. The migration begins when
+``the design checks out'' is heard as ``the design is safe,'' and completes
+when a clean DRC report on a refusal-pathway model is offered as comfort
+about the behavior of a deployed system that the model was never validated
+against. Here the world-claim is not even about the model's subject; it is
+about a different artifact entirely, connected to the model by nothing but
+shared vocabulary. The checker's own fail-closed design anticipates the
+first half of this slope --- unresolved analyses yield unresolved
+diagnostics, never a pass --- but no tool can prevent a reader from
+over-reading a clean report about A as evidence about B. Only the evidence
+discipline can, by typing the report as a statement about the exact board
+digest it names and nothing else.
+
+CAS PCBA 8 makes the medium resist in three ways. First, every simulation
+result carries its research boundary in its own identity material: the trace
+binds a fixed Ring-4 boundary object, so the artifact that would be quoted as
+evidence physically contains the statement of what it is not evidence for.
+Second, the interpretation rule for a green fixture is stated normatively and
+verbatim in the architecture's own documents and is repeated in this
+monograph wherever a result is reported: the software performed the declared
+transition; nothing else. Third, the evidence taxonomy (developed later in
+the monograph) assigns software receipts, experiments, measurement
+validation, safety evidence, and authority to disjoint categories, so that a
+receipt cannot be counted in a category it does not belong to without a
+detectable category error. The separation costs something --- it forbids the
+architecture from ever advertising its most exciting-sounding
+interpretations --- and that cost is accepted deliberately.
+
+\subsection{Separation II: design value versus measurement}\label{ch01:sep:designmeasure}
+
+\begin{ruleenv}[Design value versus measurement]\label{ch01:rule:designmeasure}
+A locally supplied parameter or calibration label remains structural metadata
+until authenticated measurement evidence and uncertainty are supplied. The
+architecture never promotes a value from the design ledger to the measurement
+ledger on the strength of anything the model author alone can construct.
+\end{ruleenv}
+
+The failure this separation prevents is \emph{self-certification}: the
+laundering of an assumption into a datum by passing it through
+official-looking machinery. Again an extended example makes the mechanism
+concrete. A modeler declares a test point on a net and attaches a
+calibration reference: an instrument identity, a protocol name, an
+uncertainty figure, a measurement kind. All of these fields are well-formed;
+the design-rule checker verifies their shape, their unit compatibility with
+the net, and their presence where safety-marked paths require probes. A
+simulation run then emits test-point observations, each carrying measurement
+identifiers with parent/child derivations and the calibration reference.
+
+Every artifact in this chain looks like measurement. There are instrument
+fields, protocol fields, uncertainty figures, measurement IDs, and derivation
+graphs. And yet nothing was measured: every field was typed in by the same
+author who typed in the model, and the ``observation'' is a value computed by
+the author's own declared transfer rules. If the architecture allowed these
+records to flow into its evidence stream, it would have built an automated
+assumption-laundering machine --- more dangerous than an informal diagram,
+because the informal diagram at least looks informal. The hardware world
+knows this failure intimately: a datasheet's typical values are design
+targets until a characterization lab, with traceable instruments and stated
+uncertainty, turns them into measurements, and no amount of typesetting the
+target in the measurement column makes it one.
+
+A second form of the same failure operates on parameters rather than
+observations. A transfer-stage gain of $0.85$, a threshold of $0.9$, a
+clamp of $0.1$ --- every such number in a board is a \emph{design value}: a
+quantity the modeler chose, perhaps thoughtfully, perhaps arbitrarily, and
+wrote into the model text. Design values are indispensable; nothing can be
+checked or simulated without them. The failure is the citation loop: the
+model is simulated with the chosen parameters, the simulation exhibits some
+behavior, the behavior is written up, and in the write-up the parameters
+have become findings --- ``the refusal stage saturates at $0.1$'' reported
+in the tone of a discovered property rather than a typed-in choice. Six
+months later the write-up is a source, and the design value has completed
+its unearned journey to datum. The architecture's countermeasure is
+ledger-keeping at the type level: parameters are typed as parameters
+everywhere --- in the board, in the DRC report, in the trace --- and no
+representation exists in which a parameter's provenance as a supplied value
+is absent. The number can be quoted, but it cannot be quoted \emph{as a
+measurement} without the quotation being checkably false against the
+artifact it cites.
+
+The architecture therefore enforces the separation structurally. Locally
+constructed calibration records are typed as structural, test-only metadata:
+they satisfy the checker's shape requirements, they enable simulation
+fixtures, and they are permanently ineligible to confer authenticated
+evidence status. Nothing the modeler can write in the model text --- no
+field, no flag, no self-hash --- crosses the ledger boundary. Crossing it
+requires an authenticated evidence pathway that the model author alone
+cannot fabricate, and at the bound state of the work described in this
+monograph, that pathway has not been exercised at all: there is no live
+calibrated model, no instrument chain, and no measurement claim anywhere in
+the admitted evidence. The measurement ledger is not merely separate; it is,
+at present, deliberately empty.
+
+\subsection{Separation III: analogy versus identity}\label{ch01:sep:analogy}
+
+\begin{ruleenv}[Analogy versus identity]\label{ch01:rule:analogy}
+Names borrowed from circuits do not make CAS quantities SI electrical
+quantities. Physical voltage, current, resistance, charge, flux, and power
+are outside the candidate unless a separately typed, instrumented physical
+profile is proposed and validated. No such profile exists at the state of
+work described in this monograph.
+\end{ruleenv}
+
+The failure this separation prevents is \emph{nominal capture}: the drift by
+which a borrowed name gradually acquires the semantics of its origin. The
+mechanism is linguistic before it is technical. A model component is called a
+\emph{fuse} because its declared behavior --- open the path when a threshold
+is crossed --- is shaped like a fuse's behavior. The name is apt, memorable,
+and dangerous. Within a few pages of informal writing, the fuse ``blows,''
+``protects the downstream stages,'' and ``guarantees'' something; within a
+few documents, the model containing it is a ``safety architecture''; and at
+the end of the slope someone is asserting, on the strength of a noun, that a
+cognitive system has an overcurrent-protection property that no one has
+defined, let alone measured. The same slope exists for every borrowed term:
+gain, impedance, saturation, rail, ground. Each is a compressed description
+of declared software behavior, and each invites its physical semantics to
+follow the name through the door.
+
+The engineering baseline that this monograph audits provides a vivid
+demonstration of why the separation must be mechanical rather than
+rhetorical. The baseline's published Cognitive Safety Board --- its flagship
+safety-flavored design --- contains a red-stage saturation clamp of $0.1$
+upstream of a fuse threshold of $0.9$. Under the declared clamp semantics
+the fuse input can never exceed $0.1$, and the protective crossing is
+unreachable: the fuse, as published, cannot trip. (The finding is stated
+precisely, with page anchors and a formalized unreachability argument, later
+in the monograph; Chapter~\ref{ch03:source} locates it in the source basis.)
+A reader relying on the name \emph{fuse} and the label \emph{safety} would
+have attributed a protective property to a design whose own parameters
+forbid it. The design-rule checker, which propagates conservative bounds
+through the declared path and flags unreachable safety thresholds, catches
+the contradiction mechanically --- because it reasons about declared
+semantics and never about names.
+
+The separation also governs the quantitative vocabulary. CAS quantities in
+this architecture carry their own units and signal kinds, checked under a
+closed admissibility table; none of them is an SI electrical quantity, and
+the checker treats an attempt to wire incompatible kinds together as an
+error rather than a metaphor. If future work ever proposes that some CAS
+quantity has a physical correlate, the architecture's position is that this
+is a new, separately typed, instrumented physical profile requiring its own
+validation program --- not a renaming of an existing model quantity. Until
+such a profile exists and is validated, every electrical-sounding word in
+this monograph is a typed pun, and the type system knows it.
+
+\subsection{The separations jointly}\label{ch01:sep:jointly}
+
+The three separations are stated independently but function as a system.
+Model-versus-world polices the \emph{output} direction: what a computed
+result may be said to show. Design-value-versus-measurement polices the
+\emph{input} direction: what a supplied number may be said to be.
+Analogy-versus-identity polices the \emph{vocabulary}: what a name may be
+said to mean. A modeling practice that enforced only two of the three would
+leak through the third: with the first two but not the third, names would
+smuggle physics; with the first and third but not the second,
+self-certified ``measurements'' would seed honest simulations with
+counterfeit data; with the second and third but not the first, honest inputs
+and honest names would still be spent on world-claims the software cannot
+support. The monograph will return to this triangulation repeatedly, because
+almost every design decision in the architecture --- from tagged exact
+values to trace-bound research boundaries to the adapter's refusal to coerce
+--- is most easily explained as the enforcement of one of these separations
+at a specific interface.
+
+\section{The six contributions}\label{ch01:contributions}
+
+Against this background, the monograph develops six contributions. They are
+the contributions of the current candidate --- a software research artifact
+at a bound source state --- and each is claimed at the software-contract
+level only.
+
+\begin{enumerate}
+\item \textbf{A typed board model} separating semantic state, geometry,
+signal kind, unit, component contract, calibration metadata, and evidence
+provenance. The model distinguishes state literals from ND-cells, keeps the
+strictly positive simplex address of a mixed profile disjoint from both, uses
+tagged exact type-plus-value identity for finite carrier values, and runs
+all decimal arithmetic under one immutable, versioned context. Board
+identity includes the complete canonical structure, so any structural edit
+changes the board's digest.
+
+\item \textbf{A deterministic design-rule checker (DRC) with fail-closed
+diagnostics.} The DRC computes one deterministic report under a closed
+35-code \texttt{PCBA8-*} catalog spanning model, semantics, parameters,
+states, bias, nets, test points, calibration, feedback, safety, and
+TKS-adapter classes. Errors fail the board; warnings never become an
+implicit clean result; unsupported or resource-bounded analysis yields an
+unresolved diagnostic, never a pass.
+
+\item \textbf{A narrow trace-emitting reference simulator} for declared
+deterministic component profiles. Supported components declare ports,
+transfer rules, clipping, statefulness, and time semantics; every run emits
+a canonical trace binding board, component, DRC-report, catalog,
+decimal-context, profile, and source identities together with typed samples,
+events, observations, measurement derivations, and the fixed research
+boundary.
+
+\item \textbf{A source- and profile-bound adapter} from certified finite
+component tables to the TKS v8 finite reference kernel. Only a certified
+total, finite, deterministic, stateless, non-stochastic transition may cross;
+the adapter returns an immutable certificate and proves at most type-correct
+representation, carrying no automatic semantic theorem.
+
+\item \textbf{A source audit that preserves, rather than silently repairs,
+adverse findings.} The audit records that the baseline's consolidated
+grammar does not cover its own published five-board corpus (four direct
+syntactic counterexamples) and that the published Cognitive Safety Board's
+protective crossing is unreachable under its declared parameters; both
+findings are retained with page anchors as permanent fixtures.
+
+\item \textbf{An evidence discipline} distinguishing green software tests
+from experiments, measurement validation, safety evidence, and authority,
+with every claim record at the bound state classified Ring~4 and
+\textsc{not licensed}.
+\end{enumerate}
+
+Two remarks about this list. First, none of the six is an empirical result
+about cognition; the list is deliberately and entirely architectural.
+Second, the fifth contribution deserves emphasis because it is the one most
+often absent from projects of this kind: the architecture treats the
+discovery that its own source material is defective --- syntactically
+incomplete in its grammar, self-contradictory in its flagship safety design
+--- as a result to be formalized and guarded, not an embarrassment to be
+patched. A checker that has flagged its own canon is a checker whose
+fail-closed behavior has been demonstrated on a case that mattered.
+
+\section{The thesis: a qualified affirmative at the software-contract level}\label{ch01:thesis}
+
+\begin{hypothesis}[Thesis of the monograph]\label{ch01:hyp:thesis}
+The research question of Section~\ref{ch01:question} admits a qualified
+affirmative answer at the software-contract level: a circuit-shaped modeling
+language, equipped with the type system, design-rule checker, trace-bound
+simulator, adapter boundaries, source audit, and evidence discipline
+developed in this monograph, makes cognitive-system hypotheses more explicit,
+type-safe, replayable, and falsifiable than their informal-diagram
+equivalents, while mechanically withholding physical, causal, safety, and
+product claims.
+\end{hypothesis}
+
+Every word of the qualification is intended. \emph{Qualified}: the
+affirmative is supported by bounded software evidence --- at the bound
+source state, an integrated receipt records three green focused suites
+totaling 208 test methods and 272 parameterized subtests, of which 82
+methods belong to CAS PCBA v8 itself --- and by two formalized adverse
+findings against the source; it is not supported by any experiment,
+measurement, replication, or external review, all of which remain open.
+\emph{At the software-contract level}: the affirmative asserts that the
+software honors its declared contracts on its tested surface, and asserts
+nothing about any system outside the software. The thesis would be
+falsified by, for example, a demonstration that the checker passes a board
+violating a cataloged rule, that the simulator's traces are not
+deterministic under a declared profile, that a coercion crosses a boundary
+the type system claims to close, or that the preserved adverse findings
+misstate the source at the cited anchors. The thesis is \emph{not}
+strengthened by any accumulation of green fixtures beyond its tested
+surface, and the monograph will not argue as if it were.
+
+\subsection{Falsifiability surfaces of the thesis}\label{ch01:thesis:falsifiers}
+
+Because the monograph asks its models to expose failure surfaces, it owes
+the same of its thesis. The qualified affirmative of
+Hypothesis~\ref{ch01:hyp:thesis} is falsifiable on at least five distinct
+surfaces, each checkable by a party holding the bound artifacts, and the
+monograph invites exactly this scrutiny:
+
+\begin{enumerate}
+\item \textbf{Checker soundness.} Exhibit a board that violates a rule of
+the closed diagnostic catalog and nonetheless receives a clean report
+from the checker at the bound implementation. One such witness defeats
+the fail-closed claim for the violated rule class.
+\item \textbf{Determinism.} Exhibit two runs of the checker or the
+simulator, on identical inputs under identical declared profiles and
+contexts, producing non-identical reports or traces. One such pair
+defeats the replayability claim.
+\item \textbf{Boundary leakage.} Exhibit a coercion the type system
+claims to forbid --- a state literal accepted where a simplex address is
+required, an untagged value crossing the adapter, a locally constructed
+calibration record acquiring authenticated evidence status --- actually
+succeeding in the bound implementation.
+\item \textbf{Audit fidelity.} Show that a preserved adverse finding
+misstates the source at its cited anchors --- that the consolidated
+grammar in fact contains an alternative producing a cited surface form,
+or that the safety-board listing does not carry the cited clamp and
+threshold values at the cited pages of the hashed build.
+\item \textbf{Evidence typing.} Show that the architecture's own
+artifacts, read as typed, license an inference the claim quarantine
+prohibits --- that some receipt, certificate, or report, under its
+declared semantics rather than a careless reading, constitutes a
+physical, causal, safety, or product claim.
+\end{enumerate}
+
+Symmetrically, the thesis is \emph{not} falsified by demonstrations that
+belong to the withheld levels: showing that no board in the candidate
+corresponds to any real cognitive mechanism would defeat a validity
+claim the thesis does not make, and showing that the checker's rules
+encode contestable modeling taste would defeat an objectivity claim it
+does not make either. The thesis lives and dies at the software
+contract, on the five surfaces above.
+
+It is worth stating plainly what would be required to answer the research
+question affirmatively at any level beyond the software contract, because
+the distance is part of the honest content of this work: a complete
+versioned grammar with round-trip conformance; stateful and stochastic
+component semantics; live calibration with authenticated instruments and
+uncertainty; preregistered held-out validation; independent replication in
+a hermetic toolchain; and separate formal, systems, experimental, safety,
+and claim-language review. That program is laid out, dependency-ordered, at
+the end of the monograph. None of it has begun in the admitted evidence,
+and nothing in the intervening chapters will pretend otherwise.
+
+\section{What is gained over informal practice}\label{ch01:gained}
+
+Because the thesis withholds so much, it is fair to ask what, concretely,
+is left --- what a modeler gains by writing a cognitive-system hypothesis
+as a checked board rather than as a diagram. The answer, developed
+mechanism by mechanism in the later chapters, is that whole categories of
+error become \emph{observable earlier}, mechanically, at design time
+rather than at argument time. Eight categories recur throughout the
+monograph and are worth previewing as a list, since together they are the
+practical content of the qualified affirmative:
+
+\begin{enumerate}
+\item \textbf{Scale and unit substitution.} Quantities of different
+declared kinds or units cannot be wired together; the admissibility table
+is closed, and a mismatch is a distinct diagnostic rather than a silent
+reinterpretation.
+\item \textbf{Ambiguous semantic crosswalks.} Semantic references live in
+disjoint namespaces with source and definition hashes; two objects sharing
+a label or a position never silently become the same object, so an
+equivocation must be written down as an explicit (and checkable)
+translation to exist at all.
+\item \textbf{Incomplete grammar claims.} A language that claims to
+describe a corpus can be audited, construct by construct, against that
+corpus --- and when the monograph's own source canon failed such an audit,
+the failure was recordable at page-anchor resolution precisely because the
+claim had been made mechanical.
+\item \textbf{Multiple-driver and unresolved-port defects.} The netlist
+discipline makes contention, floating inputs, and dangling references
+findings rather than latent ambiguities.
+\item \textbf{Unreachable threshold paths.} Conservative bound propagation
+can prove that a declared protective crossing cannot occur --- the
+category of defect that condemns the source's own safety board.
+\item \textbf{Undisciplined feedback.} Cycles must be declared, delayed,
+calibrated, and bounded; an undeclared cycle is an error, and an
+unanalyzable one is unresolved, never clean.
+\item \textbf{Fabricated or disconnected measurement lineage.} Measurement
+records must form acyclic, existence-checked derivation chains bound to
+calibration references, and locally asserted calibration can never
+self-authenticate.
+\item \textbf{Receipts misrepresented as authority.} Software receipts,
+claim records, and review ledgers are typed artifacts; a green suite, a
+self-hash, or a generated receipt is checkably \emph{not} a license, a
+certification, or a review.
+\end{enumerate}
+
+None of these categories requires the cognitive hypotheses to be true.
+That is the design: the gains are gains in the hygiene of hypothesizing,
+available in full even if every hypothesis so expressed turns out false.
+An informal diagram can be wrong invisibly in all eight ways at once; a
+checked board can be wrong too --- about the world, richly and perhaps
+irreparably --- but not invisibly in these ways, and the difference is
+what the word ``falsifiable'' in the research question is doing.
+
+\section{Claim discipline and artifact status}\label{ch01:discipline}
+
+\begin{boundary}[Standing claim boundary for the monograph]\label{ch01:bnd:standing}
+The work described here is a research candidate with artifact status
+\textsc{draft / open / ring 4 / not licensed / held}. Ring~4 designates the
+outermost research ring: no live, scientific, canon, product, license, or
+disclosure authority exists or is created by this text. All claim records at
+the bound source state are Ring~4 and \textsc{not licensed}. Drafting,
+compiling, or circulating this monograph promotes no claim; independent
+systems, safety, regulatory, clinical, and formal review remains open.
+\end{boundary}
+
+The following claim quarantine, inherited verbatim in substance from the
+governing research paper and the Gate~4 audit, applies to every chapter. The
+items below remain hypotheses or prohibited product inferences, and no
+sentence in this monograph asserts any of them: exact thought/transistor
+isomorphism; shared four-region identity; overload-induced semantic
+involution; Fisher--Rao causal gain; physical electrical identity for CAS
+quantities; semantic correctness inferred from a response-region label;
+safety effectiveness, certification, regulatory compliance, or clinical use;
+complete compiler conformance; production readiness; and disclosure or
+license authority derived from a self-hash or generated receipt. Historical
+AI-authored, self-hashed licensing receipts are not an authenticated
+reviewer or legal authority, and none is treated as one here.
+
+Three further conventions govern the text. First, \emph{background is
+background}: Chapter~\ref{ch02:background} surveys established engineering
+and mathematical literature, and nothing in that survey is presented as a
+novelty of this project or as validation of CAS. Second, \emph{sources are
+bound by identity}: every fact about the engineering baseline and the
+controlling repository artifacts is cited against the exact content hashes
+recorded in Chapter~\ref{ch03:source}, and where the sources do not specify
+a fact, the monograph says so rather than estimating. Third, \emph{negative
+results are first-class}: adverse findings are stated in their own
+environments, at full evidential resolution, and are never softened in
+summary.
+
+\section{Reading guide}\label{ch01:guide}
+
+The monograph is organized so that a reader can locate the boundary of every
+claim without reading linearly, but a linear reading is the intended one.
+
+Chapter~\ref{ch02:background} is a tutorial survey of the background this
+work stands on: hardware description languages and what VHDL demonstrated
+about formal, machine-readable design description; Statecharts and the
+explicit semantics of state, hierarchy, and concurrency; the industrial
+practice of netlists, design-rule checking, and electrical-rule-style
+connectivity checks; graph algorithms for circuit analysis; the
+verification/validation distinction; property-based testing; provenance
+modeling; floating-point versus decimal arithmetic control; and a primer on
+information geometry over probability simplices, including the Fisher--Rao
+metric and its closed-form geodesic distance. The chapter is deliberately
+self-contained so that readers from cognitive-science, software, and
+hardware backgrounds can each acquire the vocabulary the later chapters
+assume. Nothing in it is new, and it is careful to say so.
+
+Chapter~\ref{ch03:source} fixes the versioned source basis: the 743-page
+engineering baseline with its source ID and SHA-256 hash; the reasons the
+work identifies sources by content hash rather than by an invented public
+version; the baseline's own disclaimer and the Phase-0 authority matrix;
+the controlling repository artifacts and their hashes; the downstream
+read-only boundaries into the TKS v8 finite kernel and the Noetic Topos 2.0
+evidence discipline; and the read-only status of the Gate-5 preregistration
+kernel. Everything later in the monograph that mentions a source fact
+resolves through this chapter.
+
+The chapters that follow the source basis develop the architecture in
+dependency order: the typed semantic and board model, including state
+types, tagged values, the single decimal context, and board identity; the
+design-rule checker and its closed diagnostic catalog, check class by check
+class; the narrow deterministic simulator and its canonical trace bindings;
+the geometry profiles --- the Fisher--Rao baseline and the optional
+projector profile --- with their disclosed numerical limits; and the
+certified-transition adapter into the TKS v8 finite kernel, together with
+the Noetic Topos ambient/resolved boundary. After the architecture, the
+monograph presents the adverse source audit at full resolution --- the
+grammar-coverage finding with its board-by-board evidence table, and the
+Cognitive Safety Board finding with the formalized unreachability argument
+--- followed by the bounded software evidence at the bound commit, the
+threats to validity, and the dependency-ordered research program. A reader
+interested only in what this work does \emph{not} claim can read
+Section~\ref{ch01:discipline}, the boundary environments of each chapter,
+and the threats-to-validity chapter, and will have an accurate picture.
+
+A note on tone. The monograph is written in the declarative voice of an
+engineering document, and long stretches of it describe machinery that
+works as declared. The reader is asked to hold that voice together with the
+standing boundary of Section~\ref{ch01:discipline} at all times: ``works''
+always means ``performs its declared software contract on its tested
+surface,'' the tested surface is finite and disclosed, and the most
+important results in the monograph are the two places where the machinery,
+applied to its own source canon, correctly said \emph{no}.

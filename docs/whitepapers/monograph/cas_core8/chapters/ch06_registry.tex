@@ -1,0 +1,827 @@
+\chapter{Registry Integrity}\label{ch06:registry}
+
+\section{Registries as the kernel's memory}\label{ch06:role}
+
+The kernel components of the preceding chapters are stateless disciplines:
+references, boundaries, and encodings constrain values in flight. The claim
+and theorem registries are where the program's assertions come to rest. A
+\emph{claim registry} is the ledger of empirical hypotheses and product
+claims the program tracks, each with its scope, falsifier, evidence
+packets, review state, and product-claim status; a \emph{theorem registry}
+is the ledger of mathematical statements---axioms, definitions, theorems,
+propositions, lemmas, corollaries, conjectures, models---each with its
+proof status, migration disposition, novelty status, and admission ring.
+Both ledgers are governed by the Project Coherence record contracts, which
+fix the field inventory, the enumeration vocabularies, and the conditional
+requirements that couple them.
+
+Registries are therefore the highest-value target in the kernel's threat
+model. Every downstream consumer that wants to know ``what does the
+program claim, and with what status?'' reads a registry; an adversary---or
+an honest bug---that can make a registry \emph{appear} to say something it
+does not say has subverted the program's memory without touching any other
+mechanism. And the historical failure class of Chapter 1 applies with full
+force: a ledger row containing the word \textsc{licensed} is precisely the
+kind of structural artifact that gets read as authority. The registry
+design must accordingly do two jobs at once that pull in opposite
+directions: bind the in-memory view to exact bytes so tightly that no
+substitution is representable, while ensuring that even a perfectly bound,
+perfectly parsed \textsc{licensed} row authorizes nothing.
+
+This chapter develops both jobs. Sections~\ref{ch06:bytebacked} and
+\ref{ch06:recheck} give the exact-byte backing and the
+reconstruct-and-recheck loading rule, including the constructor-
+substitution attack the rule exists to defeat.
+Section~\ref{ch06:rejection} walks the full rejection catalog.
+Sections~\ref{ch06:immutability} and \ref{ch06:digests} cover recursive
+immutability and per-record digests. Section~\ref{ch06:metadata} states
+the metadata-is-not-authority invariant, which is where the chapter's two
+jobs meet.
+
+\begin{boundary}[Chapter scope]\label{ch06:bd:scope}
+As throughout the monograph, statements that the loader ``rejects'' or
+``verifies'' describe the v0.1 candidate's tested behavior on the bound
+Gate-4 fixture families (registry loader rejection cases are an enumerated
+component of the suite). They are bounded software receipts, not
+guarantees over untested inputs. The registries themselves, and every view
+the kernel constructs of them, are Ring-4 research artifacts: admission
+\textsc{open}, product \textsc{not licensed}, disclosure withheld.
+\end{boundary}
+
+\section{Exact-byte backing}\label{ch06:bytebacked}
+
+\subsection{Bytes first, views second}
+
+The foundational design decision is about what a loaded registry \emph{is}.
+The conventional answer---a parsed data structure, with the source file
+forgotten once parsing succeeds---is exactly wrong for evidence, because
+it makes the parse the artifact of record. Two different parsers, or two
+versions of one parser, can produce different views of the same bytes;
+a view can be constructed with no bytes behind it at all; and once the
+bytes are gone, no consumer can distinguish a faithful view from a
+fabricated one. The kernel inverts this: the artifact of record is the
+byte string, and a loaded registry is a \emph{claim about bytes} that
+carries the bytes with it.
+
+\begin{definition}[Byte-backed registry]\label{ch06:def:bytebacked}
+A loaded registry is a value comprising: the retained raw ledger bytes and
+the retained raw schema bytes; the dual artifact identities (raw and
+CRLF-to-LF comparison digests with line-ending census,
+Chapter 5) computed from each; two externally supplied pinned digests, one
+per byte string; the parsed header, schema document, and record tuple; a
+canonical digest for the schema document and for each record; and the
+kernel research boundary. Construction fails unless every derived
+component reconstructs from the retained bytes and every identity matches
+its external pin.
+\end{definition}
+
+Two clauses of this definition carry the weight. First, the bytes are
+\emph{retained}, not merely read: the loaded value holds the exact ledger
+and schema bytes for its entire lifetime, so any later verification can go
+back to ground truth without touching the filesystem, whose content may
+have changed since load. Second, the expected digests are
+\emph{externally supplied}: the loader's caller passes the pinned raw
+digest of the ledger and of the schema as arguments, and the loader
+verifies the bytes it read against those pins before anything else.
+
+\begin{ruleenv}[External pins are trust inputs]\label{ch06:rule:pins}
+The pinned digests a registry is loaded against come from the caller---
+ultimately from a reviewed manifest outside the loaded artifact---and
+never from the loaded bytes themselves. A ledger cannot vouch for its own
+identity: a digest stored inside the ledger would be recomputed by
+whoever rewrote the ledger, per the self-hash analysis of
+Chapter 4. The loader's contract is conditional and honest: \emph{if}
+the caller's pin identifies the intended bytes, \emph{then} the loaded
+view is bound to those bytes; the kernel takes no position on whether the
+pin itself is correct, which is a provenance question outside v0.1's
+scope \cite{prov}.
+\end{ruleenv}
+
+\subsection{Both ledger and schema are pinned}
+
+It deserves emphasis that the schema document---the machine-readable
+record contract the ledger is validated against---is pinned and retained
+with exactly the same discipline as the ledger. An unpinned schema is a
+laundering channel: an adversary who cannot touch the ledger could
+substitute a permissive schema, and previously invalid content would
+validate. The v0.1 loader reads the schema bytes, checks them against the
+caller's schema pin, validates the schema's own structure (it must be a
+closed-object contract: the canonical draft dialect, the canonical
+identifier for its kind, additional properties forbidden, and required
+and declared fields exactly matching the contract embedded in the kernel),
+and only then validates records. The kernel thus checks the schema against
+its own embedded expectations as well as against the pin---a deliberate
+redundancy, so that neither a wrong pin alone nor a drifted embedded
+contract alone can silently widen what validates.
+
+\section{The reconstruct-and-recheck loading rule}\label{ch06:recheck}
+
+\subsection{The rule}
+
+Byte retention makes strong verification \emph{possible}; the loading rule
+makes it \emph{mandatory and repeated}.
+
+\begin{ruleenv}[Reconstruct and recheck]\label{ch06:rule:reconstruct}
+Every parsed component of a loaded registry---header, schema document, and
+each record---is reconstructed from the retained raw bytes and compared,
+under canonical encoding, against the component the registry presents.
+The full reconstruction runs at construction time and again at every
+consuming operation (record resolution, serialization, integrity query).
+A registry whose presented components do not reconstruct from its
+retained bytes is rejected with a typed raw-binding error naming the
+component that failed.
+\end{ruleenv}
+
+Concretely, the recheck re-derives the artifact identities from the
+retained ledger and schema bytes and compares them field-by-field
+(including the line-ending census) against the stored identities and the
+external pins; re-decodes the ledger bytes with the full duplicate-key-
+rejecting parse; re-validates the root fields, header, and schema
+document; re-parses and re-validates every record from the decoded
+ledger; recomputes every record's canonical digest; and compares the
+freshly reconstructed record tuple against the presented one---kind,
+identity, version, canonical payload digest, and boundary, record by
+record. Only if every comparison agrees does the operation proceed.
+
+This is the registry-layer instance of Chapter 4's recheck-not-trust
+invariant, and the same rationale applies: validation performed once, at
+load, protects nothing against in-process mutation afterward, and
+protects nothing against values that never went through the load path at
+all. The second case is the interesting one, and it is the subject of the
+next subsection.
+
+\subsection{The substitution attack}\label{ch06:attack}
+
+The load path---read bytes, verify pins, parse, validate, construct---is
+not the only way to obtain a value of the registry type in a memory-safe-
+but-not-capability-safe host language. The registry and record types are
+ordinary records with public constructors, and the language provides
+generic copy-with-changes machinery for such records. This creates the
+\emph{substitution attack}: construct a registry value directly, or copy
+an honestly loaded one field-by-field, keeping the retained bytes, the
+identities, and the pins from the honest artifact while substituting the
+parsed content---a record tuple with one extra claim, one altered status
+field, one relaxed schema document. The forged value would present
+impeccable byte credentials (the bytes \emph{are} the honest bytes) around
+a payload the bytes do not contain. Any consumer that trusted the
+credentials and read the payload would be reading fiction with a valid
+pedigree.
+
+\begin{threat}[Parsed-content substitution]\label{ch06:threat:substitution}
+An agent constructs a registry or record value through the public
+constructor or generic dataclass-copy machinery, retaining an honest
+artifact's raw bytes, identities, and pinned digests while substituting
+parsed header, schema, or record content. The presented view diverges
+from the retained bytes while every byte-level credential verifies.
+\end{threat}
+
+\subsection{The defense}
+
+The defense is that Rule~\ref{ch06:rule:reconstruct} runs \emph{inside
+construction itself}, not merely inside the blessed load path. The
+registry type's initializer---executed identically whether the value is
+built by the loader, by a direct constructor call, or by dataclass-copy
+(which routes through the same initializer)---performs the full
+reconstruction: it re-parses the retained bytes and compares the result
+against whatever parsed content the constructor was handed. The attack is
+therefore self-defeating:
+
+\begin{proposition}[Substitution is unrepresentable]
+\label{ch06:prop:substitution}
+No value of the registry type can simultaneously retain byte strings $B$
+and present a parsed component that is not the canonical parse of $B$.
+Construction with substituted content fails the raw-binding comparison;
+construction with substituted bytes fails the pin comparison; and
+post-construction mutation of either side is caught by the same
+reconstruction rerun at the next consuming operation. The only values of
+the registry type that exist are those whose views are recomputed-and-
+matched parses of their own retained, pinned bytes.
+\end{proposition}
+
+\begin{proof}[Design argument]
+The initializer receives bytes and parsed components as separate inputs
+and derives the comparison itself; there is no constructor parameter that
+suppresses the check, and the copy machinery cannot bypass the
+initializer. A forger must therefore supply bytes whose canonical parse
+equals the forged content---which is not substitution but honest
+authorship of a different ledger, and that ledger's raw digest will not
+match the external pin the consumer supplies. The residual path,
+in-memory mutation after construction, does not create a stable forged
+value: every consuming operation reruns the reconstruction
+(Rule~\ref{ch06:rule:reconstruct}), so the mutated value fails at first
+use. As always, an adversary who rewrites the kernel's own code is out of
+scope (Chapter 4).
+\end{proof}
+
+The corollary for reviewers is a pleasant inversion of the usual audit
+burden: to check what a v0.1 registry value says, it suffices to check
+what its retained bytes say, because no representable value of the type
+can disagree with its bytes. The bytes are reviewable with independent
+tools; the binding is the kernel's job and is exercised by the bound
+fixtures; the meaning of the bytes is the record contract's job, to which
+we now turn.
+
+\subsection{The load procedure}
+
+For reference in the rejection catalog, the complete load path is worth
+setting out as an ordered procedure; each step names the class of
+rejection it can raise, and the catalog of Section~\ref{ch06:rejection}
+expands each class.
+
+\begin{protocol}[Registry loading]\label{ch06:prot:load}
+Loading a registry of a declared kind, against caller-supplied expected
+raw digests for ledger and schema, proceeds:
+\begin{enumerate}
+\item resolve the kind to its embedded contract (canonical schema-version
+string, record-schema name, record-identifier grammar, field
+inventories); an unsupported kind fails closed;
+\item validate both caller-supplied pins as well-formed digest values
+before any input is read, so a malformed pin cannot degrade into a
+skipped comparison;
+\item read the exact ledger bytes; compute the dual artifact identity;
+reject on unreadable input, non-UTF-8 content, duplicate JSON keys,
+or a non-object root;
+\item compare the ledger's raw digest against its pin; mismatch fails
+closed before any content-level validation runs, so no diagnostic
+about unpinned content is ever emitted;
+\item validate the root field set exactly; validate the embedded schema
+identifiers against the kind's contract; extract and validate the
+header;
+\item read the schema bytes (from the declared companion location or a
+caller-specified path); compute their identity; compare against the
+schema pin; validate the schema document as the closed-object
+contract for the kind;
+\item parse and validate every record against the field inventories,
+shape rules, enumeration vocabularies, identifier grammar, and
+conditional contracts; compute each record's canonical digest;
+construct each record value (whose own initializer revalidates);
+\item construct the registry value, whose initializer enforces kind
+homogeneity, identity uniqueness, boundary exactness, and then runs
+the full reconstruction of Rule~\ref{ch06:rule:reconstruct} against
+the retained bytes before the value ever escapes to the caller.
+\end{enumerate}
+\end{protocol}
+
+The step order embodies a policy: identity before content. The pins are
+checked before any semantic validation, so every error message the
+loader can produce is a statement about bytes the caller intended to
+load; the loader never leaks a detailed parse diagnosis of an artifact
+that was not the pinned one, which would otherwise be a convenient
+oracle for probing unpinned content through error channels.
+
+\section{The rejection catalog}\label{ch06:rejection}
+
+The loader's validation is deliberately exhaustive, and this section
+enumerates it. The organizing principle is a closed-world reading of the
+record contracts: everything not explicitly admitted is rejected, every
+rejection carries a typed error code naming the violated rule, and no
+rejection is downgraded to a warning. The catalog is presented in the
+order the loader encounters each class.
+
+\subsection{Byte and parse layer}
+
+\emph{Non-retained or non-UTF-8 bytes.} The decode layer requires exact
+byte strings (not paths, not streams, not text already decoded by an
+unknown convention) and rejects content that is not valid UTF-8. This
+anchors everything downstream: there is exactly one byte string in play,
+and its decoding is unambiguous.
+
+\emph{Duplicate JSON keys.} The parse installs a pair-collision hook so
+that an object with a repeated key is rejected at parse time. Standard
+JSON parsers silently keep the last binding, which is a smuggling
+channel: a ledger containing
+\texttt{"product\_claim\_status"} twice---once benign, once elevated---
+would validate against schema and read differently depending on parser
+convention. The kernel refuses to let parser convention decide evidence
+content; a duplicate key is an error, full stop.
+
+\emph{Non-object roots.} A ledger whose top level is not a JSON object is
+rejected before any field logic runs.
+
+\subsection{Root and header layer}
+
+\emph{Unknown or missing root fields.} The ledger root must contain
+exactly the six canonical fields---schema version, record-schema name,
+document status, as-of date, completeness statement, and the record
+array---no more and no fewer. The error for a mismatch reports both the
+missing and the surplus field names. Surplus rejection is the closed-world
+principle at the root: an unrecognized root field is not ``extra
+information'' but a place where content invisible to the contract could
+ride along inside pinned bytes.
+
+\emph{Wrong schema identifiers.} The root's schema-version and
+record-schema fields must equal, exactly, the canonical strings for the
+registry's kind (claim ledger versus theorem ledger, each with its own
+versioned identifier). A ledger of one kind cannot load as the other, and
+a ledger authored against a different contract version fails loudly
+rather than best-effort parsing.
+
+\emph{Malformed header.} The header triple extracted from the root is
+validated on its own: document status and completeness must be nonblank
+strings of admissible canonical text, and the as-of field must be a real
+calendar date in ISO form---pattern-checked \emph{and} calendar-checked,
+so \texttt{2026-02-30} fails even though it matches the pattern.
+
+\subsection{Schema-document layer}
+
+As Section~\ref{ch06:bytebacked} described, the schema document must
+declare the canonical JSON-Schema dialect, carry the exact canonical
+identifier for its kind, describe a closed object (additional properties
+forbidden), declare required and optional fields exactly matching the
+kernel's embedded contract (duplicate entries in the required list are
+rejected), and contain its conditional-contract clauses. A schema
+document that is valid JSON Schema but not \emph{this} contract is
+rejected.
+
+\subsection{Record layer: shape}
+
+\emph{Unknown and missing record fields.} Each record is checked against
+the exact required and optional field inventories for its kind---sixteen
+required fields for a claim (identity, version, title, statement kind,
+claim text, source references, scope, controls, falsifier, uncertainty,
+evidence packets, review state, product-claim status, admission ring,
+disclosure status, reviewers), seventeen for a theorem---with the same
+two-sided error reporting as the root: missing fields are named, surplus
+fields are named, and either is fatal.
+
+\emph{Wrong shapes.} Every field has an exact shape requirement: nonblank
+strings where prose is required; arrays of strings for reference lists
+(with per-kind minimums---at least one source reference always); the
+claim scope must be an object with exactly the five canonical subfields
+(population, models, architectures, contexts, time window) of the exact
+required types; timestamp fields must be RFC 3339 date-times \emph{with
+an explicit timezone}, pattern-checked and parse-checked. Shape errors
+name the record and field.
+
+\emph{Wrong enumerations.} Every status field is validated against its
+closed vocabulary: claim statement kinds (empirical hypothesis or product
+claim); review states; product-claim status (\textsc{licensed},
+\textsc{not licensed}, or \textsc{open}); disclosure status (open, held,
+or flagged for human review); theorem statement kinds; the ten migration
+dispositions; the nine proof statuses; the five novelty statuses. A value
+outside the vocabulary---including a case variant or a padded string---is
+rejected. The admission ring is checked as an exact integer in the
+admitted range for its kind (claims: 3 or 4; theorems: 1 through 4), with
+the host language's boolean-integer conflation explicitly excluded, so
+\texttt{true} cannot pose as ring 1.
+
+\emph{Conditional contracts.} The contracts couple fields across a
+record, and the loader enforces the couplings: a claim whose product
+status reads \textsc{licensed} must also be in review state
+\textsc{reviewed}, at admission ring 3, with nonempty evidence packets,
+nonempty reviewers, and a present review timestamp---a \textsc{licensed}
+row missing any of these is not a weaker license but a contract
+violation, rejected outright; a theorem marked formally verified must be
+reviewed and cite proof artifacts; a theorem admitted at ring 1 or 2 must
+be reviewed and dated. These conditions encode, at the data layer, the
+same necessary-condition discipline as Chapter 4's boundary rules: the
+loader ensures that elevated statuses cannot be \emph{written} without
+their structural prerequisites, while conferring nothing when they are
+(Section~\ref{ch06:metadata}).
+
+\subsection{Closed vocabularies and migration audit}
+
+The theorem registry's vocabularies deserve a paragraph beyond their
+role as rejection triggers, because their structure encodes the
+program's migration posture. The \emph{migration disposition} vocabulary
+distinguishes ten outcomes for a legacy statement under review---
+unassessed, in review, inherited, clarified, corrected, conditional,
+downgraded, deprecated, refuted, replaced---and the point of the closed
+enumeration is that a migrating statement must land in exactly one of
+them, explicitly. The historically dangerous alternatives are the open
+ones: free-text dispositions, where ``mostly carried over'' and
+``carried over'' blur; or absence, where a statement's survival into a
+new version is inferred from its continued presence in a document. The
+same logic governs the \emph{proof status} vocabulary, which separates
+gradations that overclaim tends to collapse---an informal proof present
+is not proved; a standard result cited is not a new result proved; a
+counterexample present coexists in the vocabulary with proof statuses
+precisely so that refutation is a recordable state rather than a
+deletion; and \emph{independent replication required} exists so that
+``proved here'' and ``established'' remain distinguishable. The
+\emph{novelty status} vocabulary does the same for the claim of
+originality, separating standard results and standard specializations
+from framework couplings and candidate new results, with
+novelty-unassessed as the honest default. None of these vocabularies is
+enforced semantically by the kernel---the loader cannot check that a
+proof exists, only that the status field is a member of the closed set
+and that the conditional contracts hold (a formally verified entry must
+cite artifacts and be reviewed). The kernel's contribution is
+structural: every migration question the program has historically
+answered vaguely now has a field that must be filled from a finite
+list, and a review of the registry is a review of those explicit
+answers.
+
+\subsection{Record layer: identity}
+
+\emph{Invalid identifiers.} Record identifiers must match the declared
+identifier grammar for their kind---a fixed uppercase prefix
+(\texttt{CLM-} for claims, \texttt{THM-} for theorems) followed by an
+alphanumeric-initial body over an explicit uppercase alphabet. The
+grammar is a machine-identifier profile in the sense of Chapter 5:
+ASCII, closed alphabet, no invisible characters, no confusables.
+
+\emph{Identity--payload agreement.} The record value's identity and
+version fields must equal the corresponding fields inside its payload;
+a record cannot present one identity while carrying another.
+
+\emph{Duplicate and ambiguous identities.} Within a registry, the
+(identifier, version) pair must be unique; a duplicate is rejected at
+load. Resolution is correspondingly strict: resolving an identifier that
+matches no record is a not-found error, and resolving an identifier that
+matches multiple versions without specifying which is an
+\emph{ambiguity} error, not a default to latest. ``Latest'' is a
+convention, and conventions are where readers and writers diverge
+silently; the kernel requires the caller to say which version of a claim
+it means whenever the question has more than one answer.
+
+\emph{Missing metadata.} Finally, the absence-of-metadata cases: required
+fields absent (caught by the inventory check), required timestamps absent
+where a conditional contract demands them, empty reference arrays where
+minimums apply, and blank strings where nonblank prose is required. The
+loader treats missing metadata identically to wrong metadata---rejection
+with a named field---because an evidence ledger with holes is not a
+smaller ledger but an unvalidatable one.
+
+\begin{remark}[Why warnings are absent]\label{ch06:rem:nowarnings}
+The catalog contains no warning tier: every violation is fatal to the
+load. The rationale is the desensitization argument of Chapter 5 applied
+to validation: a warning tier trains consumers to proceed past
+violations, and the one violation that matters will arrive dressed like
+the hundred that did not. A registry either satisfies its contract
+exactly or is not a registry; partial credit is a property of the
+authoring workflow, which can run the loader and read the typed errors,
+not of the loaded artifact.
+\end{remark}
+
+\subsection{The catalog at a glance}
+
+Table~\ref{ch06:tab:catalog} summarizes the catalog by rejection family
+and the layer at which each fires. Every family carries a typed error
+class whose code names the family (the implementation prefixes these
+\texttt{E-REGISTRY-}, for example
+\texttt{E-REGISTRY-DUPLICATE-KEY} for repeated JSON keys and
+\texttt{E-REGISTRY-AMBIGUOUS} for underspecified version resolution),
+so that fixtures and operational logs can assert the family, not merely
+the fact, of a failure.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{lll}
+\toprule
+Layer & Rejection family & Representative trigger \\
+\midrule
+Bytes & unreadable / non-bytes input & path unreadable; non-byte payload \\
+Bytes & encoding & ledger not valid UTF-8 \\
+Parse & duplicate JSON key & repeated key in any object \\
+Parse & root shape & top level not an object \\
+Pin & ledger hash mismatch & raw digest differs from pin \\
+Pin & schema hash mismatch & schema digest differs from pin \\
+Root & root field set & missing or surplus root field \\
+Root & schema identifiers & wrong kind or contract version \\
+Header & header shape / date & blank status; invalid as-of date \\
+Schema & contract mismatch & open object; field set drift \\
+Record & field inventory & missing or unknown record field \\
+Record & shape & wrong type; malformed scope; bad timestamp \\
+Record & enumeration & value outside closed vocabulary \\
+Record & ring & non-integer or out-of-range ring \\
+Record & conditional contract & licensed row without reviewers \\
+Record & identifier grammar & id fails prefix/alphabet rule \\
+Record & identity agreement & id/version differ from payload \\
+Registry & duplicate identity & repeated (id, version) pair \\
+Registry & kind homogeneity & foreign-kind record in registry \\
+Registry & boundary & non-Ring-4 kernel boundary \\
+Resolve & not found & no record for cited id \\
+Resolve & ambiguity & multiple versions, none specified \\
+Binding & raw reconstruction & view diverges from retained bytes \\
+\bottomrule
+\end{tabular}
+\caption{The registry rejection catalog by layer. Each family is fatal;
+there is no warning tier. ``Binding'' failures are raised by the
+reconstruction rule at construction and at every consuming operation.}
+\label{ch06:tab:catalog}
+\end{table}
+
+\subsection{Worked rejections}
+
+Three of the families repay concrete illustration, because the inputs
+that trigger them look innocent.
+
+\begin{example}[Duplicate-key smuggling]\label{ch06:ex:dupkey}
+A crafted claim record contains, in its serialized bytes, the pair
+\texttt{"product\_claim\_status":"NOT LICENSED"} followed later in the
+same object by \texttt{"product\_claim\_status":"LICENSED"}. Under a
+last-binding parser the record reads as licensed; under a first-binding
+parser, as not licensed; a validator using one convention and a
+consumer using the other disagree about the same pinned bytes---the
+worst possible property for evidence. The kernel's parse hook rejects
+the object at the first repeated key, before validation begins, so the
+bytes are simply not a loadable ledger under any convention.
+\end{example}
+
+\begin{example}[Ambiguity is not latest]\label{ch06:ex:ambiguous}
+A ledger legitimately carries two versions of one claim---say versions
+\texttt{1.0} and \texttt{1.1} of \texttt{CLM-EXAMPLE}---as the record
+contracts permit. A consumer resolves \texttt{CLM-EXAMPLE} without a
+version, expecting ``the current one.'' The kernel raises the ambiguity
+error instead of choosing, because the two plausible conventions
+(latest by version-string order, latest by review date) can disagree
+with each other and with the author's intent, and a citation minted
+under one convention would verify differently under the other. The
+consumer must cite \texttt{CLM-EXAMPLE} at an exact version; the
+citation quadruple of Definition~\ref{ch06:def:citation} then names one
+record forever.
+\end{example}
+
+\begin{example}[Schema swap]\label{ch06:ex:schemaswap}
+An agent leaves a pinned ledger untouched but supplies a widened schema
+document---additional properties permitted, an enumeration extended---
+hoping previously rejected content will validate in a future load of a
+modified ledger. The swap fails twice before it can matter: the schema
+bytes fail their own external pin (step 6 of
+Protocol~\ref{ch06:prot:load}), and even a schema that somehow carried
+a correct pin is validated against the kernel's \emph{embedded}
+contract, which rejects an open object or a drifted field set outright.
+The double check means a schema-layer attack must subvert the pin
+manifest and the kernel code together, not either alone.
+\end{example}
+
+\section{Recursive immutability}\label{ch06:immutability}
+
+A loaded registry is shared: multiple components hold references to it,
+and its records are handed out on resolution. If the parsed values were
+ordinary mutable structures, every recipient could alter what every other
+recipient sees---an aliasing channel that would undermine the byte
+binding from inside, since Rule~\ref{ch06:rule:reconstruct} catches
+mutation only at the next consuming operation, and an in-place mutation
+between operations could mislead a reader that consulted the structure
+directly.
+
+The kernel therefore freezes loaded values recursively at construction.
+Every parsed mapping is wrapped in a read-only mapping view; every parsed
+array is converted to an immutable sequence carrier that preserves
+JSON-array semantics; and the freeze descends through the entire
+structure, so there is no depth at which a mutable container survives.
+Scalars are validated as they are frozen---strings must be admissible
+canonical text (the control- and format-character rules of Chapter 5
+apply to ledger content as to everything else), and the reserved
+canonical type tag is rejected wherever it appears in ledger data, which
+closes the tag-forgery channel of Chapter 5 at the registry layer as well
+as at the encoder.
+
+Two design details deserve note. First, the immutable array carrier is a
+distinct type, not the host language's tuple: the canonical encoding
+distinguishes tuples from JSON arrays (Chapter 5), so an array frozen
+into a tuple would change its canonical digest---immutability must not
+alter identity. The freeze machinery accordingly rejects bare tuples in
+registry data as a shape error rather than guessing which identity was
+meant. Second, thawing---recovering plain structures for revalidation---
+is the exact inverse and is used only inside the reconstruction rule,
+where the recovered structure is immediately compared against a fresh
+parse of the retained bytes; frozen and thawed forms are two views of one
+canonical content, with equality of canonical digests as the invariant
+connecting them.
+
+\begin{invariant}[Frozen views, stable digests]\label{ch06:inv:frozen}
+The recursive freeze applied at load, and the thaw applied during
+reconstruction, preserve canonical content: the canonical digest of a
+record's payload is identical before freezing, after freezing, and after
+a freeze--thaw round trip. Immutability changes who can write; it never
+changes what the bytes say.
+\end{invariant}
+
+\section{Per-record digests bound to registry bytes}\label{ch06:digests}
+
+Consumers rarely cite a whole registry; they cite a record---\emph{this}
+claim, at \emph{this} version. The kernel therefore gives each record its
+own deterministic digest: the canonical-encoding digest (Chapter 5) of
+the record's complete payload, computed from content that
+Rule~\ref{ch06:rule:reconstruct} has bound to the retained ledger bytes.
+The record digest inherits the byte binding transitively: it is not an
+independent assertion about the record but a compressed name for content
+whose provenance is the pinned ledger.
+
+\begin{definition}[Record citation]\label{ch06:def:citation}
+A record citation is the quadruple (registry kind, record identifier,
+record version, record canonical digest), optionally accompanied by the
+registry's pinned raw digest. A consumer holding a citation can verify,
+against any independently obtained copy of the ledger bytes, that the
+cited record exists in those bytes with exactly the cited content---
+without trusting the kernel instance that issued the citation.
+\end{definition}
+
+This is the registry layer's contribution to the program's evidence
+chain: downstream artifacts (compatibility receipts, evidence packets,
+the runtime gate's decision records) refer to claims by citation, and
+the citation is checkable end-to-end---ledger pin to ledger bytes, bytes
+to parse, parse to record, record to digest---with each link exercised
+by the reconstruction rule. Per the standing distinction, the whole
+chain establishes tamper evidence and reference integrity only. A
+correct citation of a \textsc{licensed} record proves that the ledger
+says \textsc{licensed}; what that is worth is the next section's
+question.
+
+\subsection{Serialized views re-verify}
+
+The registry and its records export serialized views---for display, for
+inclusion in receipts, for cross-process transfer---and the export path
+is disciplined the same way as every other consuming operation: a
+record's view export first re-runs the record's full integrity check,
+and a registry's view export first re-runs the complete reconstruction
+of Rule~\ref{ch06:rule:reconstruct}. An exported view therefore cannot
+be produced from a value that has drifted from its bytes; the last act
+before serialization is a fresh proof of binding. The exported view
+itself is ordinary canonical-encodable content (Chapter 5), so a
+consumer can digest it, and the record's embedded canonical digest
+gives the consumer a cross-check that survives the export boundary:
+recompute the digest of the exported payload and compare it to the
+digest the export carries. The pattern generalizes: every time registry
+content crosses a boundary---load, resolve, export---the crossing is
+preceded by reverification and followed by content that carries the
+means of its own recheck. What the pattern never produces, per the next
+section, is content that carries the means of its own authorization.
+
+\section{Two registries, one discipline}\label{ch06:tworegistries}
+
+The division into a claim registry and a theorem registry is itself a
+design decision worth a section, because it enforces at the ledger
+layer a distinction the program has historically blurred: the
+difference between an empirical assertion about systems in the world
+and a mathematical assertion about defined structures. The two kinds
+have different falsification semantics (a claim names its falsifier
+and its uncertainty as required fields; a theorem names its
+assumptions, dependencies, and proof artifacts), different status
+vocabularies (product-claim status and disclosure status on one side;
+proof status, migration disposition, and novelty status on the other),
+and different admission-ring ranges (claims are admitted only at rings
+3 and 4---an empirical claim is never ``reviewed mathematics''---while
+theorems span rings 1 through 4). A single mixed ledger would invite
+category slippage: an empirical result drifting into citation as
+established theory, or a theorem's proof status being read as evidence
+for an empirical deployment claim. Separate kinds, separate contracts,
+separate identifier prefixes, and a loader that rejects a record of
+one kind in a registry of the other make the slippage a shape error.
+
+The kinds are nonetheless linked, deliberately and in one direction:
+a claim record may carry theorem references among its optional fields,
+citing the mathematical statements it depends on, and a theorem record
+carries its dependencies on other theorems. Both are citation lists
+over the identifier grammars---strings, validated for shape, not
+resolved by the loader. The v0.1 kernel does not chase references
+across registries, does not verify that a cited theorem exists, and
+does not compute transitive dependency closures; those are integrity
+properties of the \emph{corpus}, not of a single pinned artifact, and
+checking them requires fixing which set of registries constitutes the
+corpus---exactly the trusted-manifest question that
+Rule~\ref{ch06:rule:pins} defers to the process layer. The kernel's
+per-artifact discipline is designed so that a future corpus-level
+checker has sound material to work with: every reference it would
+chase is grammatically valid, every target it would resolve is
+byte-pinned and citable by digest, and every version it would need is
+explicit because ambiguity is unresolvable
+(Example~\ref{ch06:ex:ambiguous}). Cross-registry closure is recorded
+as an open obligation in Chapter 12.
+
+\section{Metadata is not authority}\label{ch06:metadata}
+
+\subsection{The invariant}
+
+Everything in this chapter so far makes registries harder to falsify.
+Nothing in it makes registries \emph{authoritative}, and the design goes
+out of its way to keep the two properties separate.
+
+\begin{invariant}[Metadata is not authority]\label{ch06:inv:metadata}
+The text \textsc{licensed} inside a registry record is necessary
+metadata, never sufficient authority. Loading, validating, digesting,
+and citing a record whose product-claim status reads \textsc{licensed}
+establishes only that the pinned ledger bytes carry a contractually
+well-formed row with that status. No kernel operation treats that fact
+as authorization for any claim-bearing action; in v0.1 the runtime
+gate's answer to claim-bearing intent is constant denial regardless of
+registry content, because the kernel has no authenticated reviewer and
+no legal trust root against which a \textsc{licensed} row could be
+verified as an act rather than a string.
+\end{invariant}
+
+The invariant's phrasing---necessary, never sufficient---is exact. The
+conditional contracts of Section~\ref{ch06:rejection} make well-formed
+\textsc{licensed} metadata a \emph{necessary} condition for any future
+authorization: a future reviewed design will require, at minimum, a
+reviewed, ring-3, evidence-backed, reviewer-named, dated record, and the
+loader guarantees that nothing less can even be written. But the
+sufficiency direction requires what v0.1 deliberately lacks: a trust
+root. The reviewers field of a record is a list of names---strings,
+authored by whoever authored the ledger. Nothing binds a name to a
+person, a person to a review act, or a review act to an entitlement.
+Verifying such bindings is the function of authentication
+infrastructure---signatures, enrolled identities, revocation---which is
+a separate technology from integrity checking and cannot be improvised
+out of it \cite{anderson}. A kernel that pretended otherwise would be
+manufacturing the historical failure this monograph opened with:
+structurally impeccable receipts read as authority.
+
+\subsection{Descriptive queries are marked as such}
+
+The kernel does provide a convenience query that reports whether a claim
+record's payload satisfies the full licensed-metadata contract
+(status \textsc{licensed}, state \textsc{reviewed}, ring 3, nonempty
+packets and reviewers, dated). Its existence is worth a remark because
+of what it is careful \emph{not} to be: it is a descriptive predicate
+over ledger content, documented as such, returning a fact about bytes;
+it feeds display and reporting, and no decision path consumes it as a
+permission. The runtime gate (Chapter 9) does not call it to decide
+anything, because the gate's decision on claim-bearing intent is not a
+function of ledger content at all in v0.1---it is the constant
+\emph{no}. Keeping the descriptive query and the decision path visibly
+disconnected is a small design choice with a large purpose: the day a
+future design connects them, the connection must be an explicit,
+reviewed edge binding a trust root, not the quiet reuse of a boolean
+that was lying around.
+
+\subsection{Worked scenario: the perfect forged ledger}
+
+The chapter's disciplines compose into a useful worst-case exercise.
+Suppose an agent authors, from scratch, a complete claim ledger in which
+every record is contractually perfect and every status reads
+\textsc{licensed}: correct fields, valid enumerations, ring 3,
+\textsc{reviewed}, plausible reviewer names, dated, with evidence-packet
+identifiers that resolve to artifacts the agent also authored. Every
+mechanism in this chapter behaves as designed: the bytes parse; the
+records validate; digests bind; citations verify. What has the agent
+obtained?
+
+Within the kernel: nothing. The loaded registry is a Ring-4 open
+artifact like every other (its kernel boundary is pinned to Ring-4 open
+regardless of what its records say---the layering of Chapter 4); the
+descriptive query truthfully reports that the ledger says
+\textsc{licensed}; and the runtime gate denies claim-bearing intent
+exactly as it would against an empty ledger, because no code path
+consults ledger content for authorization. Outside the kernel: the
+agent still needs a caller to load the forged ledger, which requires
+the caller to supply its digest as a pin---and pins, by
+Rule~\ref{ch06:rule:pins}, come from reviewed manifests, not from the
+artifact's author. The forgery thus fails twice over: it cannot pass
+the pin gate without subverting the manifest process, and even loaded,
+it authorizes nothing. The residual risk is the one the kernel cannot
+reach and does not claim to: a human reader shown the forged ledger
+outside any kernel discipline may believe it. The kernel's contribution
+is that belief would have to be formed \emph{against} the kernel's
+every output, not through it.
+
+\section{Limits and obligations}\label{ch06:limits}
+
+The chapter closes by naming what the registry design leaves open; the
+items join the obligation set of Chapter 12.
+
+First, the pin-provenance gap: the loader verifies bytes against
+caller-supplied pins, and the discipline governing the pins themselves
+---the reviewed manifest, its own integrity, its update process---is a
+process-layer obligation outside the v0.1 kernel. The registry
+machinery is exactly as trustworthy as the weakest pin its caller
+supplies.
+
+Second, the authority gap, stated throughout: no authenticated reviewer
+identity, no legal trust root, no authorization semantics for
+\textsc{licensed} rows. The future-design constraints (an exact trusted
+registry and schema manifest among them) are recorded with the runtime
+decision model in Chapter 9.
+
+Third, the coverage bound: every ``rejects'' in this chapter is
+evidenced by the bound fixture families of the Gate-4 receipt, which
+exercise representatives of each rejection class, not the space of all
+malformed inputs. The reconstruct-and-recheck rule reduces what a
+consumer must trust to the correctness of one reconstruction function;
+it does not prove that function correct, and independent review of it
+remains an open obligation.
+
+\begin{checkclass}[Registry fixture families]\label{ch06:check:fixtures}
+The bound suite's registry families track
+Table~\ref{ch06:tab:catalog}: (i) pin-mismatch fixtures for ledger and
+schema; (ii) parse-layer fixtures (duplicate keys, non-UTF-8 bytes,
+non-object roots); (iii) root, header, and schema-contract fixtures
+covering missing, surplus, and drifted fields; (iv) per-field record
+fixtures for each shape rule, each closed vocabulary, the identifier
+grammar, and each conditional contract, for both claim and theorem
+kinds; (v) identity fixtures (payload disagreement, duplicate and
+ambiguous identities, not-found and underspecified resolution); (vi)
+substitution fixtures constructing registry and record values with
+swapped parsed content, swapped bytes, and subclassed types, asserting
+the typed binding failures of
+Proposition~\ref{ch06:prop:substitution}; and (vii) immutability and
+digest fixtures asserting frozen views, freeze--thaw digest stability
+(Invariant~\ref{ch06:inv:frozen}), and citation verification against
+independently re-read bytes. As throughout, passing receipts for these
+families are bounded historical evidence, not conformance claims.
+\end{checkclass}
+
+Within those limits, the registry layer completes the kernel's
+structural story: bytes are pinned, views are reconstructed and
+rechecked, every irregularity in the catalog is a typed rejection,
+loaded values are frozen, records are citable by digest---and at the
+end of all that machinery, the word \textsc{licensed} is still just a
+word. The next chapters take up the execution side of the kernel: the
+hash-verified legacy compiler profile (Chapter 7), its concurrency and
+failure disciplines (Chapter 8), and the decision model (Chapter 9)
+where the constant-false authorization invariant turns this chapter's
+distinction between metadata and authority into an enforced runtime
+answer.

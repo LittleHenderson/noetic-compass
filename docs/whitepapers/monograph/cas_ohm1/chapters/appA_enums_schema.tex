@@ -1,0 +1,272 @@
+\chapter{Enumerations and Schema Tables}\label{enums:chapter}
+
+This appendix collects, in tabular form, the enumerations and record schemas of the CAS-Ohm 1.0 candidate as implemented at the Gate~4 receipt. The tables are normative transcriptions, not summaries: every enumeration member is listed exactly, under its implementation spelling, and the prose notes attached to each table record the validation rules that give the members their force. Where a chapter develops a table's subject at length, the chapter is named in the table's introduction. All member names are implementation identifiers and are typeset verbatim in typewriter face.
+
+\section{Quantity kinds}\label{enums:sec:quantity}
+
+The sixteen quantity kinds (Chapter~3) partition every numeric value the candidate can carry. Each kind admits only the unit or units shown; the admissibility map is enforced at construction, and a kind-unit pairing outside the map raises the candidate's validation error. Range rules attach to the unit (Q10 in $[0,10]$, Q100 in $[0,100]$, \texttt{FRACTION} in $[0,1]$) and to the kind (nonnegativity and strict positivity as noted).
+
+\begin{longtable}{@{}lll@{}}
+\caption{The sixteen quantity kinds and their admissible units.}\label{enums:tab:quantity}\\
+\toprule
+Quantity kind & Admissible unit(s) & Notes \\
+\midrule
+\endfirsthead
+\toprule
+Quantity kind & Admissible unit(s) & Notes \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\texttt{DRIVE\_INTERVENTION} & \texttt{ALPHA} & steering dose coordinate \\
+\texttt{DRIVE\_SCORE} & \texttt{Q10} & scored drive level; not a dose \\
+\texttt{SIGNED\_ACTIVATION} & \texttt{ACTIVATION} & signed directional projection \\
+\texttt{FLOW\_MAGNITUDE} & \texttt{ACTIVATION} & nonnegative \\
+\texttt{NORMALIZED\_FLOW} & \texttt{Q10} & full-scale-relative display value \\
+\texttt{CONSTRAINT\_SCORE} & \texttt{Q10}, \texttt{Q100} & the sources' two constraint scales, kept distinct \\
+\texttt{EFFECTIVE\_RESISTANCE} & \texttt{ALPHA\_PER\_ACTIVATION} & strictly positive; requires a resistance role \\
+\texttt{RESISTANCE\_DELTA} & \texttt{ALPHA\_PER\_ACTIVATION} & paired-difference of resistances \\
+\texttt{CAPABILITY\_SCORE} & \texttt{Q10} & scored capability level \\
+\texttt{GAIN\_MAGNITUDE} & \texttt{DIMENSIONLESS} & nonnegative local gain \\
+\texttt{EFFECT\_PROJECTION} & \texttt{ACTIVATION} & effect-axis projection \\
+\texttt{SATURATION\_FRACTION} & \texttt{FRACTION} & region fraction in $[0,1]$ \\
+\texttt{CUTOFF\_FRACTION} & \texttt{FRACTION} & region fraction in $[0,1]$ \\
+\texttt{OVERLOAD\_RATIO} & \texttt{DIMENSIONLESS} & nonnegative; retained separately from clipped display \\
+\texttt{FLOW\_RESIDUAL} & \texttt{ACTIVATION} & censored at zero-compatible prediction \\
+\texttt{RELATIVE\_ERROR} & \texttt{DIMENSIONLESS} & nonnegative \\
+\end{longtable}
+
+The kinds encode the audit's first and third conflicts directly: Q10 scores, Q100 constraint scores, fractions, alpha doses, activation projections, and effective resistance are distinct kinds precisely so that no silent conversion among the sources' mixed scales is expressible, and so that no score kind can occupy the resistance position in a prediction.
+
+\section{Measurement kinds}\label{enums:sec:measurement}
+
+The six measurement kinds (Chapter~3) classify how a value came to be. Kind non-fungibility governs: derivation preserves parent lineage and never upgrades a value's kind.
+
+\begin{table}[htbp]
+\centering
+\caption{The six measurement kinds.}\label{enums:tab:measurement}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Measurement kind & Meaning \\
+\midrule
+\texttt{DESIGN\_VALUE} & declared by a board or profile; not measured \\
+\texttt{INSTRUMENTED} & produced by an identified instrument chain with calibration binding \\
+\texttt{BEHAVIORAL\_PROXY} & inferred from external behavior \\
+\texttt{MODEL\_DERIVED} & computed from other records \\
+\texttt{HUMAN\_SCORE} & rated by a person \\
+\texttt{LLM\_SCORE} & rated by a language model \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Per-kind obligations (Chapter~11): \texttt{INSTRUMENTED} requires instrument identity, test point, calibration-profile binding, and raw artifact references; \texttt{MODEL\_DERIVED} requires ordered derivation parents; \texttt{BEHAVIORAL\_PROXY}, \texttt{HUMAN\_SCORE}, and \texttt{LLM\_SCORE} require raw artifact references.
+
+\section{Unit kinds}\label{enums:sec:units}
+
+The seven unit kinds (Chapter~3) are the complete unit ontology. Physical SI units are absent by design: \texttt{volt}, \texttt{ampere}, and \texttt{ohm} are forbidden aliases for model quantities, and a physical profile would require separate explicit typing and instrumentation.
+
+\begin{table}[htbp]
+\centering
+\caption{The unit kinds.}\label{enums:tab:units}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Unit kind & Meaning \\
+\midrule
+\texttt{ALPHA} & steering dose \\
+\texttt{ACTIVATION} & directional projection magnitude \\
+\texttt{Q10} & score scale $[0,10]$ \\
+\texttt{Q100} & score scale $[0,100]$ \\
+\texttt{ALPHA\_PER\_ACTIVATION} & effective resistance \\
+\texttt{DIMENSIONLESS} & gains, ratios, relative errors \\
+\texttt{FRACTION} & normalized region fractions $[0,1]$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Dose-response regions}\label{enums:sec:regions}
+
+The dose-response region axis (Chapter~7) classifies where on its response curve a profile is operating. The implemented enumeration has seven members; the source's fifth \texttt{BREAKDOWN} region is retained in the implementation alongside the audit's five-region summary, and \texttt{UNASSESSED} is the typed absence of a classification.
+
+\begin{table}[htbp]
+\centering
+\caption{Dose-response regions.}\label{enums:tab:regions}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Region & Meaning \\
+\midrule
+\texttt{UNASSESSED} & no classification performed \\
+\texttt{CUTOFF} & dose below response threshold; flat \\
+\texttt{ACTIVE} & locally responsive operating region \\
+\texttt{SATURATION} & response flattened at ceiling \\
+\texttt{BREAKDOWN} & source-retained beyond-saturation regime \\
+\texttt{NON\_OHMIC} & responsive but without an admissible linear region \\
+\texttt{UNSTABLE} & classification not reproducible under declared rules \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+No diagnostic is emitted from a \texttt{CUTOFF}, \texttt{SATURATION}, \texttt{UNSTABLE}, uncalibrated, replay-time-stale, wrong-model, or semantically unassessed profile.
+
+\section{Semantic outcomes}\label{enums:sec:outcomes}
+
+The semantic outcome axis (Chapter~7) is classified independently of region; no region mechanically determines an outcome.
+
+\begin{table}[htbp]
+\centering
+\caption{Semantic outcomes.}\label{enums:tab:outcomes}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Outcome & Meaning \\
+\midrule
+\texttt{UNASSESSED} & no semantic assessment performed \\
+\texttt{INTENDED} & response on the intended effect axis \\
+\texttt{OPPOSITE} & response opposed to the intended axis \\
+\texttt{OFF\_AXIS} & response on a different axis \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{ASOM labels}\label{enums:sec:asom}
+
+ASOM is a derived display mnemonic only (Conflict~5 of Chapter~4); the label is computed from the two independent axes and never replaces them. \texttt{MISALIGNED} derives from outcome alone (\texttt{OPPOSITE} or \texttt{OFF\_AXIS}); the remaining labels require outcome \texttt{INTENDED} and derive from region; combinations outside the map yield no label.
+
+\begin{table}[htbp]
+\centering
+\caption{ASOM display labels and their derivations.}\label{enums:tab:asom}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Label & Derived from region & Derived from outcome \\
+\midrule
+\texttt{STARVED} & \texttt{CUTOFF} & \texttt{INTENDED} \\
+\texttt{ALIGNED} & \texttt{ACTIVE} & \texttt{INTENDED} \\
+\texttt{OVERSATURATED} & \texttt{SATURATION} & \texttt{INTENDED} \\
+\texttt{MISALIGNED} & any & \texttt{OPPOSITE} or \texttt{OFF\_AXIS} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Full-scale methods}\label{enums:sec:ifs}
+
+The three full-scale ($I_{\mathrm{FS}}$) methods (Conflict~2 of Chapter~4) are the sources' three incompatible normalization procedures, kept as separately named calibration methods with different profile digests. They are not interchangeable, and no conversion between them is defined.
+
+\begin{table}[htbp]
+\centering
+\caption{Full-scale methods (\texttt{IFSMethod}).}\label{enums:tab:ifs}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Method & Source procedure \\
+\midrule
+\texttt{RAIL\_AND\_FLOOR\_PER\_PATH} & measured once per path at drive rail and constraint floor \\
+\texttt{CORPUS\_PERCENTILE\_PER\_TEST\_POINT} & 95th percentile of absolute projection over a fixed hashed corpus \\
+\texttt{DECLARED\_DESIGN\_FULL\_SCALE} & board-selected design value \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Direction provenance}\label{enums:sec:direction}
+
+Every test point binds a direction vector with unit norm (\texttt{direction\_norm} must equal exactly one), an explicit sign (\texttt{POSITIVE} or \texttt{NEGATIVE}), and a provenance member recording how the direction was derived.
+
+\begin{table}[htbp]
+\centering
+\caption{Direction provenance.}\label{enums:tab:direction}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Provenance & Derivation \\
+\midrule
+\texttt{PROBE\_DERIVED} & from a trained probe \\
+\texttt{JACOBIAN\_DERIVED} & from a local Jacobian computation \\
+\texttt{DIFF\_DERIVED} & from a contrastive activation difference \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Review states}\label{enums:sec:review}
+
+Review states attach to calibration profiles and reviewable records (Chapters~5 and~11). Completeness requires an admissible review state; the flag state routes a record to a person and is never cleared mechanically.
+
+\begin{table}[htbp]
+\centering
+\caption{Review states.}\label{enums:tab:review}
+\begin{tabular}{@{}ll@{}}
+\toprule
+State & Meaning \\
+\midrule
+\texttt{UNASSESSED} & no review performed \\
+\texttt{IN\_REVIEW} & review open \\
+\texttt{REVIEWED} & review completed at the recorded scope \\
+\texttt{FLAG\_FOR\_HUMAN\_REVIEW} & routed to mandatory human attention \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{The ObservedValue schema}\label{enums:sec:observed}
+
+The observed-value schema (Chapter~3, Definition of observed value) is the no-bare-numbers rule in record form: every numeric record carries at least the fourteen fields below. The implementation realizes the schema as the measurement-value record with typed provenance; field names below follow the audit's schema listing.
+
+\begin{longtable}{@{}ll@{}}
+\caption{The ObservedValue schema.}\label{enums:tab:observed}\\
+\toprule
+Field & Content \\
+\midrule
+\endfirsthead
+\toprule
+Field & Content \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\texttt{quantity\_kind} & one of the sixteen quantity kinds \\
+\texttt{exact\_decimal\_value} & exact decimal, never a bare binary float \\
+\texttt{unit\_id} & one of the seven unit kinds, admissible for the quantity kind \\
+\texttt{measurement\_kind} & one of the six measurement kinds \\
+\texttt{method\_id} & identifier of the producing method \\
+\texttt{calibration\_profile\_sha256} & digest of the binding calibration profile \\
+\texttt{estimate\_or\_observation} & epistemic status marker \\
+\texttt{uncertainty} & typed uncertainty: unit, standard uncertainty, bounds, method \\
+\texttt{confidence\_interval} & interval containing the value, with confidence level in $(0,1)$ \\
+\texttt{sample\_size} & positive integer where applicable \\
+\texttt{raw\_artifact\_refs} & references to raw evidence bytes, digest-bound \\
+\texttt{control\_refs} & references to bound controls, matching the control bindings \\
+\texttt{derivation\_parents} & ordered, contiguous, duplicate-free parent references \\
+\texttt{missing\_or\_censored\_reason} & explicit reason wherever a value is absent \\
+\end{longtable}
+
+Additional typed fields attach conditionally in the implementation: \texttt{resistance\_role} is mandatory for---and valid only for---\texttt{EFFECTIVE\_RESISTANCE} values, and a held-out dataset split reference is mandatory for the calibrated role.
+
+\section{Calibration-profile fields}\label{enums:sec:profile}
+
+The calibration profile (Chapter~5) binds the complete experimental context under one canonical digest. All CAS-Ohm quantities are profile-relative; nothing transfers across profiles without a stated comparison rule.
+
+\begin{longtable}{@{}ll@{}}
+\caption{Calibration-profile fields.}\label{enums:tab:profile}\\
+\toprule
+Field group & Bound content \\
+\midrule
+\endfirsthead
+\toprule
+Field group & Bound content \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Model identity & model id, revision, weights/config/tokenizer SHA-256 digests \\
+Code identity & exact code revision \\
+Runtime & runtime identity and dtype \\
+Test point & layer, token positions, hook type, bound model identity \\
+Direction & direction id and digest, norm (exactly one), sign, provenance \\
+Corpus & corpus manifest and rights \\
+Randomization & seeds and randomization procedure \\
+Alpha grid & the declared dose schedule \\
+Full-scale method & one \texttt{IFSMethod} member (Table~\ref{enums:tab:ifs}) \\
+Fit method & declared resistance-fit procedure \\
+Uncertainty method & declared uncertainty procedure \\
+Tolerances & prediction and comparison tolerances \\
+Region rules & response-region classification rules \\
+Controls & bound control set with relevance methods \\
+Drift and expiry & drift model, validity interval, staleness rule \\
+Review state & one member of Table~\ref{enums:tab:review} \\
+Canonical digest & SHA-256 over the canonical encoding of all of the above \\
+\end{longtable}
+
+The digest closes the record: any mutation of any bound field changes the profile identity, which is what makes the audit's three full-scale methods, and every other profile-level disagreement, non-interchangeable by construction.

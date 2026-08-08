@@ -1,0 +1,598 @@
+\chapter{Boundaries, Downstream Roles, and the Research Program}\label{ch12:program}
+
+A kernel this small earns its keep in two ways: by what it makes possible
+and by what it refuses to permit. The preceding chapters developed the
+first; this closing chapter develops the second, and then turns the
+refusals into a program. We itemize the excluded transfers --- the pieces
+of the wider TKS/CAS research corpus that this artifact deliberately does
+not encode, every one of them Ring~4 / \textsc{not licensed} --- examine
+in depth the three downstream consumers designed to use the kernel
+strictly through its types, walk the full eleven-row proof-obligation
+ledger with a substantive discussion of each row, situate the work among
+its intellectual neighbors, and conclude.
+
+\section{Excluded transfers}\label{ch12:sec:excluded}
+
+The specification's exclusion list is the artifact's constitution. Each
+item below is excluded from the kernel and carries the status
+\textsc{open}; as research transfers, all remain Ring~4 /
+\textsc{not licensed} --- meaning no artifact, document, or downstream
+system may treat the transfer as available, and any future admission
+requires its own review, not an appeal to this monograph.
+
+\subsection{Surface syntax}
+
+The kernel neither parses nor evaluates TKS v7.4 or v8 surface syntax. No
+tokenizer, grammar, or expression evaluator appears anywhere in the three
+modules. This is not a deferred convenience: the production notation
+compiler already owns surface syntax, and a second parser in the kernel
+would create exactly the dual-authority hazard --- two implementations
+with divergent corner cases, each citable as ``the'' semantics --- that
+the red-team methodology exists to prevent. The kernel's interface is
+typed data (objects, arrows, words over declared generators), constructed
+programmatically; text stays outside.
+
+\subsection{The Noetic and CAS mapping}
+
+No identifier in the kernel names a Noetic, a Domain, a Drive, a
+Register, or any of the 40 Cognitive States, and no table anywhere maps
+canonical constructs to kernel arrows. This is the deepest exclusion, and
+the one most tempting to violate informally --- it takes one line of
+client code to name an object \texttt{"Mind"} and begin drawing
+conclusions. The prohibition is therefore worth stating with its reason:
+mapping the canon onto the substrate is a \emph{semantic} act with its
+own correctness conditions --- which canonical construct is an object,
+which an arrow, which a path; whether canonical composition is kernel
+composition --- and none of those conditions have been reviewed. The
+mapping is PO-TKS8-CORE-08, \textsc{open / not licensed}; until it
+closes, a kernel arrow named after a Noetic is a string, not a claim.
+
+\subsection{The RPM monad}
+
+The kernel contains no RPM data, no monad structure, and no prerequisite
+gate. The corrected v7.4 record is precise that RPM is a
+section-retraction pair --- one-directional prerequisite satisfaction,
+not an adjunction --- and formalizing that structure over kernel types
+would require design decisions (what object models a pathway state,
+what arrow a satisfaction step) that are exactly the deferred semantic
+mapping. Importing the kernel's factorial-power theorem into RPM
+reasoning without that mapping would reproduce the invalid power
+inference the kernel was built to block.
+
+\subsection{Rewrite systems}
+
+The normal-form machinery of Chapter~8 is denotational: shortlex
+minimization over a completed closure of \emph{semantic} objects. It is
+not a rewrite system for inherited TKS equations, and no termination or
+confluence claim for any such system follows from it. The distinction is
+easy to blur because both produce ``canonical forms''; the claim boundary
+in the specification is explicit that changing the declared generator
+order may change representatives, which no confluent rewriting story
+would tolerate. A syntactic rewrite layer, if ever wanted, is a separate
+artifact with separate obligations.
+
+\subsection{Noetic Topos 2.0 coverage and modalities}
+
+The companion topos-theoretic development --- sites, coverage, sheaf
+conditions, modal operators --- shares a type discipline with the kernel
+(Section~\ref{ch12:sec:nt2}) but transfers nothing else. The kernel's
+four-atom context lemmas in the Lean seed (Chapter~11) are finite case
+analyses housed alongside for toolchain convenience; the presheaf and
+sheaf layers themselves are in the Lean open scope and outside the
+kernel's Python entirely.
+
+\subsection{Stochastic, quantum, and empirical dynamics}
+
+The deterministic lift is a bookkeeping functor for finite deterministic
+maps. Stochastic kernels, quantum channels, contractivity claims, and
+any empirical cognitive-dynamics content are excluded --- the permanent
+noncontractivity fixture exists precisely to block the most tempting
+bridge, the reading of $A_f$ as a channel with norm at most one. A
+future stochastic extension would change the mathematics (column-
+stochastic real matrices, a genuinely different norm theory) and the
+evidence obligations; nothing in this artifact licenses it.
+
+\subsection{The Ten Advances}
+
+No transfer from the Ten Advances manuscript is admitted: none of its
+constructions appear in kernel types, none of its claims inherit kernel
+evidence. The manuscript remains a research input to the wider program,
+Ring~4 / \textsc{not licensed} like every other transfer in this
+section.
+
+\begin{boundary}\label{ch12:bdy:excluded}
+The exclusions are load-bearing, not provisional politeness. Every
+downstream consumer in Section~\ref{ch12:sec:downstream} is designed
+so that its use of the kernel would survive an auditor checking each
+exclusion above; any design that requires breaching one is, by that
+fact, blocked pending the corresponding ledger row.
+\end{boundary}
+
+\begin{threat}[Semantic transfer by naming]\label{ch12:thr:naming}
+The cheapest breach of the exclusion regime requires no code change at
+all: construct kernel objects and arrows whose \emph{presentation
+names} are canonical terms --- an object named after a Noetic, a
+generator labeled after a Drive --- and then read kernel theorems as
+if they were theorems about the named constructs. The kernel's own
+design partially blunts this (names are excluded from arrow equality
+and carry no semantics anywhere in the code), but no type system can
+stop a human from reading meaning into a string. The defense is
+procedural and must be stated as such: under the artifact's claim
+discipline, a canonical name on a kernel value confers exactly nothing
+--- any document deriving a canonical conclusion from a named kernel
+computation is making the PO-08 transfer without a license, and the
+boundary regression's \texttt{cas\_semantic\_transfer\_status}
+assertion is the tripwire that keeps the manifest, at least, honest
+about it.
+\end{threat}
+
+\begin{threat}[Evidence transfer by association]\label{ch12:thr:evidence}
+A subtler breach transfers not semantics but \emph{credibility}: citing
+the kernel's proof-and-test discipline as if it attached to a
+downstream system that merely uses the kernel. The certified-adapter
+design of Section~\ref{ch12:sec:pcba8} shows the correct form ---
+certificates bind exact kernel bytes and explicitly carry ``no
+automatic CAS semantic theorem'' --- and the incorrect form is any
+sentence of the shape ``built on the formally verified TKS kernel,''
+which is wrong twice (the kernel is not formally verified, per
+Chapter~11; and evidence does not compose across an unverified
+boundary). Downstream documents inherit the kernel's obligations, not
+its receipts.
+\end{threat}
+
+\section{The three downstream consumers}\label{ch12:sec:downstream}
+
+Three companion candidates are designed to consume the kernel strictly
+through its public types. None is part of the bound artifact; each is
+documented here because the kernel's design choices are partly
+explained by the loads these consumers will place on it.
+
+\subsection{CAS Core 8: the fractal bridge}\label{ch12:sec:core8}
+
+CAS Core~8 confronts a legacy: fractal digit sequences (the X.Y.Z
+cognitive-fractal addresses of the wider system) whose composition
+semantics were historically implicit. Its bridge design uses the kernel
+as a type discipline for that legacy. The caller --- not the bridge ---
+supplies an explicit catalog of typed arrows, one per legacy digit or
+digit transition, declaring for each its source and target object. The
+bridge then interprets a digit sequence as a \texttt{SemigroupoidPath}
+over the supplied catalog: adjacent-object matching is checked by the
+path constructor at every junction, composition is the path composite,
+and --- decisively --- \emph{missing digits or type mismatches fail
+closed}: an unmapped digit or an ill-typed junction raises rather than
+guesses.
+
+Two properties of this design deserve emphasis. First, the bridge is
+honest about its authority: as the specification puts it, it ``proves
+type-correct composition only, not the meaning of a legacy digit.'' The
+caller's catalog is an assertion, not a theorem; the bridge certifies
+that \emph{given} the catalog, the sequence composes with exact types.
+Whether digit 3 \emph{means} the arrow the caller mapped it to is a
+semantic question belonging to PO-08's lane. Second, the choice of
+paths rather than endomaps is itself an application of Chapter~6's
+discipline: a digit sequence is a heterogeneous generator sequence,
+so the bridge exposes composites and never powers --- a legacy
+``iterate this address'' idiom would have to produce a certified
+endomap first, through the same gate as everyone else.
+
+The failure modes the design forecloses are worth naming, because they
+are the failure modes the legacy idiom invites. A digit sequence whose
+adjacent stages do not actually connect --- stage output in one state
+space, next stage input in another --- historically produced a
+computed \emph{something}; under the bridge it produces
+\texttt{CompositionTypeError} at the exact junction, with both stage
+signatures in the message. A digit with no catalog entry historically
+defaulted; under the bridge it fails closed. And a fractal address
+treated as ``the same operator at every scale'' --- the reading that
+would license powers --- is exactly the invalid power inference of
+Chapter~1's audit findings, unwritable here because the bridge's output
+type has no power operation. What the bridge cannot do is equally
+sharp: it cannot tell a caller that their catalog is \emph{right}. Two
+callers with conflicting catalogs for the same legacy corpus will each
+get flawlessly typed, mutually contradictory composites. Catalog
+review is semantic work, and the bridge's design honestly locates it
+outside itself.
+
+\subsection{CAS PCBA 8: the certified-transition adapter}\label{ch12:sec:pcba8}
+
+CAS PCBA~8 (the printed-circuit-board-assembly engineering line)
+consumes the kernel from the opposite direction: not legacy addresses
+but live component models. Its adapter admits a component transition
+function into the kernel only under a certificate that the transition
+is \emph{total, finite, deterministic, stateless, and non-stochastic}
+--- the five conditions under which a transition genuinely is a
+finite-function arrow. A certified transition becomes a kernel arrow;
+transition chains become semigroupoid paths; and a feedback loop ---
+the case where iteration talk is wanted --- requires a certified
+\emph{endomap}, so the factorial-power theorem and the idempotence
+machinery become available exactly when the type system says they may.
+
+The adapter's certificate discipline mirrors the manifest's: a
+certificate ``binds the exact kernel bytes'' --- it names the hash of
+the kernel version against which the adaptation was certified, so a
+kernel change invalidates outstanding certificates rather than silently
+re-interpreting them. And the specification is explicit that the
+certificate ``carries no automatic CAS semantic theorem'': adapting a
+solder-paste dispenser's state machine into kernel arrows yields typed
+composition guarantees for that machine, not a cognitive claim about
+anything. The adapter is thus the template for how empirical
+engineering systems touch the kernel: through a narrow, certified,
+hash-bound gate, gaining type discipline and gaining nothing else.
+
+Each of the five certificate conditions excludes a specific
+misadaptation, and enumerating them shows how much real-world texture
+the finite-function abstraction refuses to absorb silently.
+\emph{Totality} excludes transitions with undefined regions --- a
+component that jams on some input is not a total function until its
+jam behavior is modeled as an explicit state. \emph{Finiteness}
+excludes continuous state (temperatures, analog positions) until it
+is discretized by an explicit, reviewed quantization.
+\emph{Determinism} excludes transitions with tolerance bands or race
+outcomes --- the single largest gap between datasheet behavior and
+function semantics. \emph{Statelessness} excludes hidden memory: a
+component whose response depends on history is not one arrow but a
+family, and must be certified as a transition on an enlarged explicit
+state space. \emph{Non-stochasticity} excludes failure rates and
+noise, which belong --- if anywhere --- to the excluded stochastic
+extension, not to this lift. A transition failing any condition does
+not get a degraded certificate; it gets no certificate, and its chain
+gets no kernel typing. The discipline's value to the engineering line
+is exactly this refusal: what passes the gate composes with
+mathematical guarantees, and what does not pass is visibly,
+recordedly outside them.
+
+\subsection{Noetic Topos 2.0: shared type discipline and PO-08}\label{ch12:sec:nt2}
+
+The relationship with Noetic Topos 2.0 is subtler: not consumption of
+kernel objects but \emph{convergence on a discipline}. The topos
+program admits deterministic maps as morphisms and deliberately
+refuses to identify Markov kernels, channels, or enriched sheaves
+with functions --- the same determinism boundary the kernel draws
+with its lift, arrived at independently from the sheaf-theoretic
+side. Both artifacts, that is, encode the decision that the
+deterministic/stochastic line is a \emph{type} distinction, not a
+parameter. The shared discipline makes the eventual reconciliation
+--- matching the kernel's objects and arrows with the topos
+development's sites and the corrected v7.4 theorem records --- a
+well-posed problem, and that problem has a name: it \emph{is}
+PO-TKS8-CORE-08, no more and no less. Until that row closes, the two
+artifacts cite each other's boundaries, share a Lean toolchain and
+verifier discipline (the four-atom context lemmas of Chapter~11 are
+the visible overlap), and transfer nothing semantic.
+
+\section{The obligation ledger, row by row}\label{ch12:sec:ledger}
+
+The eleven-row ledger is reproduced in tabular form in Appendix~B; this
+section discusses each row substantively --- what closing it would
+require, why it matters, and how it is ordered against the others.
+
+\subsection{PO-TKS8-CORE-01: identity and associativity}
+
+\emph{Status: partial formal verification present.} The category laws
+carry a pointwise informal proof, bounded exhaustive tests ($19{,}683$
+associativity triples, typed identity families), and exact Lean lemmas
+in the \texttt{TypedCategory} module. What remains is not the
+mathematics --- the laws are as standard as mathematics gets --- but
+the \emph{correspondence}: the Lean lemmas govern a model, and the
+equivalence of model and Python is open. Closing the row outright
+means either a verified extraction (generate the composition core from
+the checked development) or a formalized semantics of the Python
+fragment in use; both are heavyweight, and the row is best read as an
+anchor whose residual gap is shared with every row that cites Lean
+evidence. It matters because every other law in the artifact composes
+through this one: functoriality, powering, closure soundness all quote
+associativity. Ordering: its residual is subsumed by any serious
+attack on PO-07.
+
+\subsection{PO-TKS8-CORE-02: reject every source/target mismatch}
+
+\emph{Status: executable validation.} The rejection behavior is a
+finite, directly observable property of four code sites (compose, the
+endomap wrapper, the path validator, catalog evaluation), and the
+negative suites drive each. The row could be strengthened --- a Lean
+model of the \emph{partiality} of composition, or an exhaustive
+mismatch sweep over bounded object families --- but its practical
+force is already the strongest in the ledger: this is the row that
+makes untyped composition unwritable, the first of the three audit
+failures the kernel answers. It matters because it is the row
+downstream consumers lean on hardest: the fractal bridge's fail-closed
+junctions and the PCBA adapter's chain checks are this row wearing
+application clothes. No ordering constraints; it is closed at its
+evidence level and stays open only in the sense that all executable
+validation is bounded.
+
+\subsection{PO-TKS8-CORE-03: powers distinct from paths}
+
+\emph{Status: executable validation.} The separation is enforced by
+the runtime type system (no \texttt{power} on paths, endomap
+certification at construction) and tested negatively. Its
+strengthening would be a formal statement that the exported API admits
+no derivation of a path power --- an API-level metatheorem, which is
+unusual territory and probably not worth its cost given that the
+property is syntactically evident: the method does not exist. The row
+matters because it kills the invalid power inference --- the second
+audit failure --- and because its discipline is what makes the
+factorial theorem \emph{safe} to publish: the theorem is dangerous
+precisely when applied to things that are not single endomaps.
+Ordering: none; conceptually prior to PO-04.
+
+\subsection{PO-TKS8-CORE-04: factorial idempotence}
+
+\emph{Status: standard result; formalization open.} The mathematics
+(Chapter~5) is classical finite-semigroup material \cite{pin}: tails
+enter cycles within $|X|-1$ steps, all cycle lengths divide $|X|!$.
+The exhaustive 289-endomap check covers carriers through size four.
+Closing the row means a Lean proof of the universal statement, which
+requires formalized cycle decomposition of functional graphs and
+divisibility of factorials --- genuine but well-trodden formalization
+work, with likely reusable library support. It matters for two
+reasons: it is the theorem downstream feedback-loop analysis will
+quote (via the PCBA adapter's certified endomaps), and it is the
+simplest ledger row whose closure would demonstrate the seed can
+grow beyond definition-adjacent lemmas. Ordering: independent of the
+lift rows; a natural first target for seed expansion.
+
+\subsection{PO-TKS8-CORE-05: the exact norm formula}
+
+\emph{Status: informal proof present; universal formalization open.}
+The fiber-block Gram proof (Chapter~7) is complete informally, the
+structural tests check the formula's consequences on the bounded
+family, and Lean checks only the two-state constant expansion.
+Closing the row requires formalizing spectral reasoning --- largest
+eigenvalue of a PSD Gram matrix, permutation similarity, the all-ones
+block spectrum --- or an alternative elementary route (directly
+bounding $\lVert A_f v\rVert^2$ by Cauchy--Schwarz per fiber and
+exhibiting the maximizing vector), the latter probably being the
+formalization-friendly path since it avoids general spectral theory
+\cite{horn}. The row matters because the norm formula is the
+artifact's main quantitative theorem and the anchor of its
+noncontractivity boundary. Ordering: depends on the matrix bridge
+(part of PO-11) if done spectrally; the elementary route depends only
+on arbitrary-vector linearity.
+
+\subsection{PO-TKS8-CORE-06: shortlex soundness and leastness}
+
+\emph{Status: informal correctness argument; formalization open.} The
+pruning lemma's induction (Chapter~8) and the finiteness argument are
+short but subtle --- the suffix-transfer step is exactly the kind of
+argument where informal proofs hide gaps. Closing the row means
+formalizing the closure algorithm's invariants: heap order delivers
+shortlex order, first insertion is least, pruning preserves
+reachability. This is program-adjacent verification (an algorithm,
+not just a definition), so it likely proceeds by modeling the
+algorithm abstractly in Lean rather than verifying the Python.
+It matters because canonical forms are only as trustworthy as
+leastness: a wrong representative is not detectably wrong to a
+consumer, unlike a type error. Ordering: independent of the lift
+rows; benefits from whatever induction infrastructure PO-04 builds.
+
+\subsection{PO-TKS8-CORE-07: independent theorem-prover formalization}
+
+\emph{Status: partial; present.} Chapter~11 is this row in full: the
+pinned seed exists with its axiom audit, and the open scope is
+itemized. Closing it means discharging the open-scope items --- the
+universal norm, the matrix bridge, finite-sum multiplication,
+arbitrary-vector linearity, factorial power, shortlex leastness ---
+at which point rows 01, 04, 05, 06, and 11 all upgrade
+simultaneously. The row matters as the aggregate index of formal
+depth, and its ordering is the reverse of the others': it closes
+last, when its constituents do. A second-prover corroboration (Coq
+or Agda, both \textsc{unavailable} in the probe environment) would
+strengthen it further but is not, on the ledger's text, required.
+
+\subsection{PO-TKS8-CORE-08: reconcile kernel types with corrected v7.4 records}
+
+\emph{Status: open; not licensed.} The deepest row, and the only one
+whose closure is a semantic act rather than a mathematical or
+engineering one. Closing it requires: a reviewed mapping proposal
+(which canonical constructs correspond to objects, arrows, endomaps,
+paths); verification that the corrected v7.4 theorem records ---
+admissibility relations, the section-retraction RPM structure, the
+open-simplex state space --- are representable, or explicitly not
+representable, in kernel terms; and a licensing decision by review,
+not by drafting. It matters more than any other row because it is
+the bridge over which the kernel would stop being ``an independent
+reference model'' and start carrying canonical content; every
+downstream consumer's semantic silence is provisional on this row.
+Ordering constraints are the strictest in the ledger: it should not
+close before PO-10 (review) has structure, and nothing in Ring~4
+crosses until it does.
+
+\subsection{PO-TKS8-CORE-09: integrate with the active notation compiler}
+
+\emph{Status: open (outside this lane).} The kernel and the
+production compiler currently share nothing but intent. Integration
+--- whether as a semantic checking layer behind the compiler's kinds,
+as a validation oracle in compiler tests, or as a type-annotation
+target --- requires a compatibility design: mapping compiler kinds
+onto kernel types, deciding failure behavior when the kernel rejects
+what the compiler accepts, and versioning the joint artifact. The
+manifest's integration boundary (\texttt{active\_cas\_compiler\_modified:
+false}, \texttt{production\_runtime\_dependency: false}) is the
+row's current truth, and the boundary regression of Chapter~10 tests
+it. The row matters because the audit findings that motivated the
+kernel are findings about the production system; the kernel repays
+its cost only when its discipline reaches production. Ordering: after
+PO-08 for any semantically loaded integration; a purely structural
+integration (type-checking composition of compiler programs) could
+in principle proceed earlier under its own review.
+
+\subsection{PO-TKS8-CORE-10: independent specialist review}
+
+\emph{Status: open; no external review receipt.} Every evidence
+channel in the artifact --- proofs, tests, seed --- is
+project-authored. Closing this row means an external reviewer with
+category-theoretic and formal-methods competence examines the claims,
+the code, and the seed, and issues a receipt that the artifact then
+binds. It matters because it is the only row that addresses
+statement-selection risk (Chapter~11's closing observation): insiders
+choose what to prove and what to test, and only outside eyes audit
+the choosing. Ordering: it gates PO-08's closure and should precede
+any licensing decision; it can begin at any time --- nothing in the
+ledger blocks review, and review would sharpen everything else.
+
+\subsection{PO-TKS8-CORE-11: lift preserves identities and composition}
+
+\emph{Status: partial formal verification; finite-sum matrix bridge
+open.} The functor laws hold on $1{,}678$ exact bounded pairs and in
+Lean at entry, basis, and support levels; what is missing is the
+finite-sum matrix multiplication bridge that would let the
+basis-level Lean statements imply the entrywise matrix statements the
+Python tests check. Closing it is the most mechanical of the open
+formalizations --- finite sums over Kronecker deltas --- and would
+knit the two evidence channels together at their closest point of
+approach. It matters because functoriality is what makes the lift a
+\emph{functor} rather than a family of matrices, and because its
+closure is a prerequisite for the spectral route to PO-05. Ordering:
+before PO-05 (spectral route); independent otherwise.
+
+\subsection{Ordering constraints in one view}
+
+Collecting the per-row ordering remarks into a single dependency
+sketch:
+
+\begin{center}
+\small
+\begin{tabular}{@{}lp{8.6cm}@{}}
+\toprule
+Row & Depends on / naturally follows \\
+\midrule
+PO-01 residual & subsumed by PO-07's open scope (model equivalence apart) \\
+PO-02, PO-03 & no dependencies; closed at their evidence level \\
+PO-04 & independent; natural first seed-expansion target \\
+PO-05 & elementary route: linearity item of PO-07 scope; spectral route: PO-11 bridge \\
+PO-06 & independent; shares induction infrastructure with PO-04 \\
+PO-07 & aggregates: closes when 04, 05, 06, 11 formalizations land \\
+PO-08 & gated by PO-10; gates semantic use everywhere \\
+PO-09 & semantically loaded form gated by PO-08; structural form separately reviewable \\
+PO-10 & no dependencies; can begin immediately; gates PO-08 \\
+PO-11 & bridge is mechanical; precedes spectral PO-05 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The sketch exposes the program's critical path: PO-10 (review) is the
+only row that gates the semantic future and depends on nothing, which
+makes commissioning review the highest-leverage single action
+available; and the formalization rows form an almost-parallel bundle
+whose one internal edge (bridge before spectral norm) dissolves if
+the elementary norm route is taken. A program that started review and
+the two mechanical Lean items simultaneously would be attacking every
+hub at once.
+
+\subsection{Reading the ledger whole}
+
+Three structural observations. First, the ledger separates
+\emph{evidence upgrades} (04, 05, 06, 11, and ultimately 07: open
+formalizations of proved mathematics) from \emph{semantic gates} (08,
+09: acts requiring review and licensing) from \emph{process
+obligations} (10: review itself); the three kinds close by different
+means and no amount of progress in one kind substitutes for another.
+Second, the dependency structure is shallow --- most rows are
+independent --- with two hubs: PO-07 aggregates the formalization
+rows, and PO-10 gates the semantic rows. Third, the ledger is
+conserved under this monograph: drafting these chapters upgraded no
+row, and the artifact's status line --- \textsc{gate 1 prototype /
+ring 4 / not licensed} --- is exactly what it was when the manifest
+was written. The program is the ledger; the monograph is its
+documentation.
+
+\section{Related work}\label{ch12:sec:related}
+
+The mathematics deployed here is deliberately standard. The categorical
+framework --- objects, arrows, functors, the discipline of typed
+composition --- is textbook material \cite{maclanecwm}, and the kernel's
+category is among the simplest nontrivial examples in that literature: a
+skeleton-free category of finite sets with named objects. The
+finite-semigroup facts underlying the power discipline, including the
+idempotent-power phenomenon in finite semigroups, belong to the
+tradition surveyed by Pin \cite{pin}. The spectral analysis behind the
+norm theorem --- Gram matrices, permutation similarity, the all-ones
+block spectrum --- is standard matrix analysis \cite{horn}. The
+artifact's registered position is that none of its mathematical content
+is new: the theorem ledger records standard results and definitions,
+and no novelty search has been commissioned.
+
+The methodological neighbors are likewise explicit. Bounded-exhaustive
+checking as a design philosophy descends from the small-scope
+hypothesis and the Alloy tradition of Jackson \cite{jackson};
+Chapter~10 details both the debt and the contrast with sampled
+property-based testing in the QuickCheck lineage \cite{quickcheck}.
+The formal seed follows standard kernel-checking practice in Lean~4
+\cite{lean4}, with the axiom-audit discipline --- single admissible
+standard axiom, mechanical per-theorem dependency reports --- as its
+distinguishing procedural feature.
+
+What the artifact offers as a contribution is consequently not
+mathematics but \emph{engineering discipline}: name-inclusive object
+identity, ordered-input rejection of hash-order nondeterminism, the
+endomap/path type separation, fail-closed closure semantics,
+hash-bound artifacts with an explicit self-binding boundary, and a
+claim ledger that tracks evidence kind per statement. Each element is
+individually known practice somewhere; their joint application to a
+cognitive-architecture semantic substrate, with the claim discipline
+held as strictly as the proofs, is the design.
+
+Three contrasts locate the design more precisely among its neighbors.
+Against \emph{model finders} in the Alloy tradition \cite{jackson},
+the kernel inverts the workflow: Alloy checks declarative models
+against small scopes to find counterexamples before implementation,
+whereas this artifact implements first and then exhausts small scopes
+to tie the implementation to prior proofs --- the small-scope
+hypothesis serving as post-hoc validation warrant rather than
+design-time exploration. Against \emph{property-based testing
+practice} \cite{quickcheck}, the kernel's suites give up generator
+generality (there is no combinator library, no shrinking) in exchange
+for countable, derivable, deterministic coverage --- a trade sensible
+only because the instance spaces are tiny, and explicitly the wrong
+trade for the large-state systems where the QuickCheck tradition
+thrives. Against \emph{verified-kernel developments} in the Lean
+ecosystem \cite{lean4}, the artifact is deliberately more modest ---
+a seed with an audited boundary rather than a formalized theory ---
+and correspondingly more explicit than is customary about the
+unformalized remainder, which the ledger enumerates item by item
+rather than leaving implicit in what the repository happens not to
+contain. The standard mathematical content, meanwhile, is simply
+inherited with attribution --- category theory \cite{maclanecwm},
+finite semigroups \cite{pin}, matrix analysis \cite{horn} --- with
+the ledger's \textsc{standard result} tag marking exactly where the
+artifact claims curation rather than creation.
+
+\section{Conclusion}\label{ch12:sec:conclusion}
+
+TKS v8.0, as documented across this monograph, is a small object with
+sharp edges. Its positive content fits in a sentence each: typed
+composition that cannot silently mistype; powers that exist only where
+a monoid exists, with the factorial bound as the one safe general
+theorem; a deterministic lift whose exact norm is proved rather than
+assumed, permanently accompanied by the counterexample that blocks its
+over-reading; and canonical forms that are deterministic because their
+inputs are ordered and their closure completes or refuses. Its
+evidence is layered and labeled: informal proofs for everything,
+bounded-exhaustive executable validation ($19{,}683$ triples, $289$
+endomaps, $499$ typed maps, $1{,}678$ lift pairs, 20 tests green at
+the 2026-08-04 snapshot), and a pinned, axiom-audited Lean seed for
+the definition-adjacent core --- with the gaps between layers
+itemized, not blurred.
+
+Its negative content is the part most easily lost in summary and most
+important to keep: the kernel encodes no Noetic, no Drive, no
+Register; it parses nothing; it claims nothing empirical; its
+manifest is not yet outer-bound; its suite proves nothing beyond its
+bounds; its seed verifies a model, not the program; and every
+transfer that would make it mean something canonically remains
+Ring~4 / \textsc{not licensed} behind an eleven-row ledger whose
+open rows close by proof, by engineering, or by review --- never by
+prose. The three downstream consumers show that this austerity is
+usable: legacy addresses, certified component transitions, and a
+companion topos program can each take exactly the discipline they
+need through the types, and nothing more, today.
+
+The research program, then, is not a promise appended to a result;
+it is the ledger read forward. Formalize the factorial theorem and
+the shortlex invariants; build the finite-sum bridge and take the
+elementary route to the universal norm; commission the review that
+audits the choosing; and only then, with receipts in hand, open the
+question the whole design defers --- whether and how the canon maps
+onto the substrate. The kernel's refusal to answer that question
+prematurely is not a limitation of the work. It is the work.

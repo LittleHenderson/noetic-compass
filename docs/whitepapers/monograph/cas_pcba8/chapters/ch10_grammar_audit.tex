@@ -1,0 +1,447 @@
+\chapter{The CCDL Grammar Audit}\label{ch10:main}
+
+\section{Why a grammar audit, and why here}\label{ch10:why}
+
+Every chapter of this monograph before this one has described what the CAS PCBA 8 candidate implementation \emph{does}: the types it declares, the boards it models, the diagnostics it emits, the traces it binds, and the adapter certificates it issues. This chapter and the next describe what the candidate deliberately \emph{preserves}: adverse findings about its own source of authority. The present chapter concerns the Cognitive Circuit Description Language (CCDL), the textual board-description language published in the 743-page engineering baseline (source ID \textsc{src-pcba-engineer-20260726}, SHA-256 \texttt{294320B39FA521EAC086E99E2D9DB913E2B6CFF0754FF82DB1EF966424566274}). The finding, stated plainly at the outset and developed at full evidential resolution below, is this: \emph{the consolidated formal grammar published in the source does not cover the source's own five-board reference corpus}. Four of the five published reference listings are direct syntactic counterexamples to the consolidated EBNF; the fifth admits no direct counterexample within the bounded surface audit, and its full conformance remains untested.
+
+The finding matters for three reasons, each of which shapes the candidate's engineering posture.
+
+First, it bounds what any implementation can claim. A parser cannot be conformant to a grammar that the source corpus itself violates; a claim of ``full CCDL support'' would be either a claim about the published EBNF (in which case it fails the published corpus) or a claim about the corpus (in which case it exceeds the published EBNF and rests on an implementer's private reconstruction of the missing productions). The candidate refuses both horns: the v0.1 implementation declares only its programmatic Python object model and does not claim to parse the complete CCDL book language (Rule~\ref{ch10:rule-candidate}).
+
+Second, it is a case study in a failure mode that is endemic to language-bearing engineering documents: the formal appendix and the worked examples evolve on different schedules, and the document itself ships with the divergence unreconciled. The source is partially self-aware of this---its prose expressly instructs the reader to treat a form missing from the appendix as an erratum---but an erratum clause is not a grammar, and Section~\ref{ch10:erratum} examines why.
+
+Third, it exercises the evidence discipline that the whole monograph is built on. The audit record that this chapter reproduces, \texttt{PCBA\_CCDL\_CONSTRUCT\_COVERAGE\_v0.1.json} (schema \texttt{project\_coherence.pcba\_ccdl\_construct\_coverage.v0.1}, as of 2026-08-04, status \textsc{draft / open / not frozen}, admission Ring~4, \textsc{not licensed}, disclosure \textsc{held}), is a machine-readable artifact with page anchors, per-board observations, and an explicit claim boundary. This chapter is a faithful prose rendering of that record. Where the record says a board is a counterexample, this chapter says so and shows the observed forms; where the record declines to say so, this chapter declines too, and says why the declination is itself informative. Nothing in this chapter extends the record's page anchors, adds observed forms, or upgrades its conclusions.
+
+\begin{boundary}[Scope of the entire chapter]\label{ch10:scope}
+Everything in this chapter is a claim about the internal syntactic consistency of one identified source document: whether the surface syntax of its published reference listings is derivable from its published consolidated EBNF. Nothing in this chapter is a claim about the semantic correctness of the boards, the quality of the CCDL design, the behavior of any implementation, the validity of the CAS ontology, safety, certification, or product readiness. The record establishes a source-internal syntax-coverage mismatch only.
+\end{boundary}
+
+\section{The audit method}\label{ch10:method}
+
+The method is deliberately narrow, and the narrowness is load-bearing. The audit record declares its method in three sentences, which we reproduce in substance and then examine one at a time.
+
+\begin{enumerate}
+\item Text extraction was used to locate candidate pages.
+\item Every page cited in the record was rendered from the source PDF and visually inspected.
+\item The audit compares only published surface syntax with the consolidated EBNF; it is not a parser implementation and not a semantic-validation result.
+\end{enumerate}
+
+\subsection{Text extraction as a locator, not as evidence}\label{ch10:method-extraction}
+
+The source is a 743-page PDF. Locating the grammar appendix, the reserved-word tables, and the five reference listings by hand would be error-prone in the opposite direction from the one usually worried about: the risk is not misreading a located page but \emph{missing} a relevant page altogether. Text extraction over the full document was therefore used as a search instrument---to find candidate pages containing grammar productions, reserved-word enumerations, statement-form tables, and board listings. But extracted text is a lossy artifact of the PDF's internal encoding: ligatures, hyphenation, column ordering, code-listing fonts, and layout reconstruction all introduce artifacts that could manufacture or hide a syntactic discrepancy. For that reason the extraction output was assigned no evidential weight of its own. Its only role in the audit was to nominate pages for the second step.
+
+\subsection{Rendered-page visual inspection}\label{ch10:method-render}
+
+Every page cited in the coverage record---the reserved-word page, the two statement-form prose pages, the two consolidated-EBNF pages, and all sixteen reference-listing pages across the five boards---was rendered from the source PDF and visually inspected. The claims in the record are claims about what is visibly printed on those rendered pages: which statement leaders open the lines of a board body, whether a declaration matches the printed component-expression shape, which productions the printed EBNF enumerates. Visual inspection of a rendered page is the closest available analogue to reading the physical book, and it eliminates the extraction-artifact risk of Section~\ref{ch10:method-extraction} at the cost of being a human, bounded act. The record accepts that cost and discloses it.
+
+Dual page anchoring follows from the same discipline. The PDF's page numbering and the book's printed folio numbering differ by a fixed front-matter offset; every anchor in the record and in this chapter is therefore given both ways (for example, PDF page 578 is book page 562). A reader with the PDF can verify by PDF index; a reader with a printed copy can verify by folio. The SHA-256 of the source binds every anchor to one exact document, so the anchors cannot silently drift onto a revised build.
+
+\subsection{Surface syntax only}\label{ch10:method-surface}
+
+The third methodological sentence is the one that most tightly bounds the result, and it deserves expansion because both an overclaim and an underclaim are near at hand.
+
+The audit is a \emph{surface-syntax comparison}: it asks whether the statement forms visibly used in a published listing are among the alternatives that the published consolidated EBNF admits at the corresponding position. It does not implement a parser for the EBNF; it does not tokenize the listings; it does not build derivation trees; it does not check context-sensitive constraints (identifier resolution, type agreement, arity); and it performs no semantic validation of any kind. Consequently:
+
+\begin{itemize}
+\item A \textbf{negative} result at the surface level---a statement leader with no corresponding production alternative---\emph{is} decisive, because no parse of the listing under the published grammar can exist if the grammar has no production for a form the listing uses. This is why the record can assert direct counterexamples without a parser: the counterexample is visible at the coarsest level of analysis, and refining the analysis could not repair it.
+\item A \textbf{positive} result at the surface level---every observed leader fits some published prefix---is \emph{not} decisive, because surface fit does not establish that the full statement bodies, argument lists, expression forms, and nesting derive from the grammar. This is why the record's verdict for the one non-counterexample board is phrased as ``no direct counterexample in the bounded surface audit'' with full parsing and semantic conformance expressly untested (Section~\ref{ch10:ccb2}).
+\end{itemize}
+
+The asymmetry is the methodological heart of the chapter. Surface-syntax audit is a cheap instrument, but it is cheap in a direction that makes its adverse findings robust and its favorable findings weak; the record exploits the former and refuses to trade on the latter. The distinction between verifying an artifact against its specification and validating the specification against its intended use is a classical one in simulation and model methodology \cite{sargent}; the audit sits entirely on the verification side, and even there it verifies only one visible layer.
+
+\begin{remark}[What a parser-level audit would add]\label{ch10:parser-audit}
+A future parser-level audit could, in principle, convert the bounded non-counterexample into either a conformance result or a fifth counterexample, and could enumerate exactly which productions each conforming listing exercises. That instrument does not exist at the bound commit; building it is step one and step two of the research program (Chapter~12), because a grammar with a published coverage matrix and canonical round trips is a prerequisite for every downstream conformance claim. Until then, the surface audit is the strongest honest instrument available, and its results are labeled with its name.
+\end{remark}
+
+\subsection{Threats to the audit itself}\label{ch10:method-threats}
+
+An audit that catalogs a source's defects owes the reader an equally frank catalog of its own. Four threats are worth naming, with their mitigations and their residues.
+
+\begin{threat}[Rendering fidelity]\label{ch10:threat-render}
+The audit inspects \emph{rendered} pages, and rendering is itself a computation: a defective renderer could, in principle, drop or garble a line of a listing. Mitigation: the claims at issue are coarse---the presence of a statement leader at the start of a printed line, the identity of an outer block keyword---and are far above the failure granularity of mainstream PDF rendering; moreover, the direct counterexamples rest on \emph{presence} of out-of-grammar forms, which a rendering defect could manufacture only by inventing legible text, not merely by omitting it. Residue: the bounded non-counterexample for CCB-2-COB is the verdict most exposed to an \emph{omission}-type rendering defect, and it is also the verdict asserted most weakly; the exposure and the weakness are aligned.
+\end{threat}
+
+\begin{threat}[Anchor transcription]\label{ch10:threat-anchor}
+Page anchors could be mistranscribed between inspection and record. Mitigation: every anchor is carried in two independent numbering systems (PDF index and book folio) whose fixed offset provides a consistency check---a transcription slip in one array that is not mirrored in the other is detectable arithmetically. Residue: a coordinated slip in both arrays remains logically possible and would be caught only by re-inspection, which the record's structure (Section~\ref{ch10:artifact}) is designed to make cheap.
+\end{threat}
+
+\begin{threat}[Observer effects]\label{ch10:threat-observer}
+A single bounded inspection can miss forms (understating $\sigma(\ell)$) or misread them (overstating it). Mitigation: understatement is conservative for the audit's negative findings---missed forms could only add counterexamples, never remove the recorded ones---and each recorded observation is stated at the coarsest legible level (a leader keyword), minimizing misreading surface. Residue: understatement is \emph{not} conservative for the CCB-2 verdict, which is one reason that verdict is bounded; and the audit is a single-pass human act, not a replicated one. Independent re-inspection is subsumed under the research program's independent-review step.
+\end{threat}
+
+\begin{threat}[Selection of exhibits]\label{ch10:threat-selection}
+The formal-language evidence (Section~\ref{ch10:evidence}) cites three loci; a critic might ask whether other pages of a 743-page source contain a second, wider grammar that the audit ignored. Mitigation: the exhibit is the source's own \emph{consolidated} EBNF---the construct the document itself designates as the collected formal grammar---and the erratum instruction at PDF pages 591--592 confirms that the source knows of no wider consolidated grammar (else the instruction would be needless). Residue: if a revised build publishes a wider grammar, the audit re-runs against that build's hash; the present findings are bound to the present hash and neither transfer nor need to.
+\end{threat}
+
+The pattern across all four threats is the one already observed in Section~\ref{ch10:method-surface}: the audit's design consistently places its residual uncertainty on the side of its weakest claim. Every threat that survives mitigation attacks the bounded non-counterexample or the completeness of the observation set; none supplies a mechanism by which the four direct counterexamples could be artifacts of the method.
+
+\section{A formal statement of the coverage question}\label{ch10:formal}
+
+Before turning to the evidence, it is worth fixing precisely what mathematical object a ``coverage mismatch'' is, because the precision explains both why the audit's negative findings are indefeasible and why its positive finding is bounded. Nothing in this section adds content to the audit record; it restates the record's logic in the monograph's own notation so that the per-board sections can appeal to it.
+
+\begin{notation}[Grammar, language, and listings]\label{ch10:not-grammar}
+Let $G$ denote the consolidated structural EBNF as printed at PDF pages 598--599, taken as a context-free grammar over a terminal alphabet of tokens, with distinguished nonterminals including \texttt{circuit\_item} and \texttt{board\_item}. Let $L(G)$ denote the set of token sequences derivable from $G$'s start symbol. Let $\ell_1,\ldots,\ell_5$ denote the five published reference listings, regarded as the token sequences visibly printed at their cited pages. The corpus-level conformance claim is the universal statement
+\[
+\forall i\in\{1,\ldots,5\}:\ \ell_i\in L(G).
+\]
+\end{notation}
+
+\begin{definition}[Surface projection]\label{ch10:def-surface}
+For a listing $\ell$, let $\sigma(\ell)$ denote its \emph{surface projection}: the finite set of statement leaders (initial keywords of top-level and block-level statements) visibly occurring in $\ell$, together with the outer block form of $\ell$ and any expression shapes explicitly recorded by the audit. For a grammar $G$ and a block context $B$ (such as the body of a \texttt{board} or \texttt{circuit}), let $\mathrm{Adm}_G(B)$ denote the set of statement leaders and expression shapes admissible in context $B$ under $G$'s printed productions.
+\end{definition}
+
+The surface audit computes $\sigma(\ell_i)$ by rendered-page inspection and compares it with $\mathrm{Adm}_G(B_i)$, where $B_i$ is the outer context of $\ell_i$. The logical yield of that comparison is captured by one lemma and one carefully asymmetric proposition.
+
+\begin{lemma}[Surface refutation is sound]\label{ch10:lem-refute}
+If some leader or shape in $\sigma(\ell)$ is absent from $\mathrm{Adm}_G(B)$, where $B$ is the outer context of $\ell$, then $\ell\notin L(G)$.
+\end{lemma}
+
+\begin{proof}
+A derivation of $\ell$ in $G$ must, at the position of the offending statement, apply some production alternative admissible in context $B$. Every such alternative begins a statement whose leader (or governs an expression whose shape) lies in $\mathrm{Adm}_G(B)$ by the definition of $\mathrm{Adm}_G$. Since the offending leader or shape of $\ell$ lies outside $\mathrm{Adm}_G(B)$, no alternative matches the printed text at that position, and no derivation of $\ell$ exists.
+\end{proof}
+
+\begin{proposition}[Surface confirmation is not complete]\label{ch10:prop-noconf}
+$\sigma(\ell)\subseteq\mathrm{Adm}_G(B)$ does not imply $\ell\in L(G)$.
+\end{proposition}
+
+\begin{proof}
+The surface projection forgets everything below the leader: argument lists, operator syntax, nesting, and token-level detail. Two listings with identical surface projections can differ arbitrarily in their statement bodies; a grammar admitting the leaders may still fail to derive the bodies. Hence membership in $L(G)$ is not determined by $\sigma(\ell)$ alone.
+\end{proof}
+
+\begin{remark}[The audit in this notation]\label{ch10:rem-formal}
+The record's four direct counterexamples are four instances of Lemma~\ref{ch10:lem-refute}: for $i\in\{1,3,4,5\}$ the audit exhibits elements of $\sigma(\ell_i)\setminus\mathrm{Adm}_G(B_i)$---nine out-of-context block forms for CCB-1, one underivable expression shape for CCB-3, five missing leaders for CCB-4, fourteen missing leaders for CCB-5. The record's verdict for CCB-2 is an instance of Proposition~\ref{ch10:prop-noconf} read honestly: the audit found $\sigma(\ell_2)\subseteq\mathrm{Adm}_G(B_2)$ under the leader-as-kind reading and therefore asserted nothing about $\ell_2\in L(G)$. The corpus conclusion is the negation of the universal claim of Notation~\ref{ch10:not-grammar}, witnessed four times over.
+\end{remark}
+
+\begin{remark}[Robustness under reading disputes]\label{ch10:rem-robust}
+Lemma~\ref{ch10:lem-refute} also explains why the finding survives disputes about how to read particular productions. Suppose a reader argues that some printed production should be read more generously---say, that \texttt{component\_decl} tolerates unfamiliar component kinds. Such generosity enlarges $\mathrm{Adm}_G(B)$ only within the shapes the production actually prints; it cannot admit the \texttt{board}-body forms of CCB-1 into a two-alternative \texttt{board\_item}, cannot supply an arrow-and-bracket expression production for CCB-3, and cannot manufacture alternatives for the nineteen missing leaders of CCB-4 and CCB-5. To defeat the corpus conclusion, a reader would need all four counterexamples to dissolve simultaneously under some uniform reading of the printed pages---and no such reading has been proposed, including by the source itself, whose erratum instruction concedes the gap in advance (Section~\ref{ch10:erratum}).
+\end{remark}
+
+\section{The formal-language evidence}\label{ch10:evidence}
+
+The counterexamples of Sections~\ref{ch10:ccb1}--\ref{ch10:ccb5} are counterexamples \emph{against} something, and the something must itself be established from the source with the same page-anchored care. Three bodies of evidence fix what the published CCDL formally is: the reserved-word enumeration, the prose statement-form tables with their erratum instruction, and the consolidated EBNF.
+
+\subsection{The reserved Part-IV statement leaders}\label{ch10:reserved}
+
+At PDF page 578 (book page 562), the language reference reserves a substantial vocabulary of Part-IV statement leaders. The record enumerates eighteen of them:
+
+\begin{center}
+\begin{tabular}{@{}llllll@{}}
+\toprule
+\texttt{rail} & \texttt{dial} & \texttt{spec} & \texttt{constraint} & \texttt{sequence} & \texttt{route} \\
+\texttt{derate} & \texttt{monitor} & \texttt{alert} & \texttt{hold} & \texttt{use} & \texttt{force\_state} \\
+\texttt{on} & \texttt{charge} & \texttt{discharge} & \texttt{refresh} & \texttt{scan} & \texttt{select} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Reservation of a word is a strong act in language design. A reserved word cannot be used as an ordinary identifier; the reservation exists precisely so that the word can serve as the leader of a statement form. A language reference that reserves \texttt{rail}, \texttt{monitor}, and \texttt{force\_state} is announcing that rail declarations, monitor statements, and forced-state statements are part of the language. The reservation page is therefore the first exhibit: it establishes that the source itself regards these statement families as belonging to CCDL, independently of whether the formal appendix got around to defining them.
+
+Two observations sharpen the exhibit. First, the reserved list includes words---\texttt{on}, \texttt{use}, \texttt{hold}---whose reservation is only intelligible if event-handler, import-or-profile, and hold-condition statement forms exist; these are not plausible identifier names someone would reserve defensively. Second, the list includes an entire memory-discipline vocabulary (\texttt{charge}, \texttt{discharge}, \texttt{refresh}, \texttt{scan}, \texttt{select}) whose members appear together in exactly one published listing (Section~\ref{ch10:ccb4}), which confirms that the reservations are backed by intended usage rather than being vestigial.
+
+\subsection{The prose statement-form tables and the erratum instruction}\label{ch10:erratum}
+
+At PDF pages 591--592 (book pages 575--576), prose tables describe additional statement forms: \texttt{select}, \texttt{scan}, \texttt{interrupt}, and a verification sublanguage. The same passage expressly says that a form missing from the appendix should be treated as an erratum.
+
+The erratum instruction is remarkable, and it cuts in both directions. In the source's favor: the document is not oblivious to the gap between its prose and its appendix; it anticipates that a reader will find statement forms described in Part IV that the consolidated grammar omits, and it tells the reader how to interpret the omission---as a defect of the appendix, not as a prohibition of the form. Against the source: an erratum instruction is an admission wearing the clothes of a repair. It concedes, in the document's own voice, that the consolidated grammar is known to be incomplete relative to the language the document elsewhere describes and uses.
+
+The concession has a precise consequence for audit methodology, and it is worth stating as a rule because a naive audit could be argued out of its own findings by the erratum clause.
+
+\begin{ruleenv}[The erratum clause does not repair coverage]\label{ch10:rule-erratum}
+For the purpose of a syntax-coverage audit, the published consolidated EBNF is taken as the formal grammar of record, and the erratum instruction is taken as evidence that the source anticipated incompleteness---not as a license to imagine the missing productions. A grammar is a generative object: either a production for a form exists on the page or it does not. ``Treat the omission as an erratum'' names the defect; it does not supply the production, the precedence, the argument structure, or the nesting rules that a production would supply. The audit therefore records forms covered by the printed grammar as covered, and forms not covered as not covered, regardless of the erratum clause.
+\end{ruleenv}
+
+The rule is not pedantry. Suppose the audit had accepted the erratum clause as constructive---treating every reserved leader as implicitly grammatical. Then no counterexample could ever be recorded, the coverage question would be unfalsifiable, and any implementer's private reconstruction of the missing productions would be as authoritative as any other. Divergent implementations would each be ``conformant'' to a grammar that exists nowhere. The entire value of a formal grammar---one derivation relation, shared by all implementations---is forfeited the moment omissions are patched by instruction rather than by productions. The audit's refusal to accept the patch is what makes its result a result.
+
+\subsection{The consolidated EBNF}\label{ch10:ebnf}
+
+At PDF pages 598--599 (book pages 582--583), the source publishes its consolidated structural EBNF. Two productions carry the whole coverage question.
+
+The \texttt{circuit\_item} production admits exactly seven alternatives:
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\texttt{io\_decl} & \texttt{node\_decl} & \texttt{cjt\_decl} \\
+\texttt{component\_decl} & \texttt{feedback\_decl} & \texttt{probe\_decl} \\
+\texttt{let\_decl} & & \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+That is: input/output declarations, node declarations, cognitive-junction-transistor declarations, generic component declarations, feedback declarations, probe declarations, and let bindings. Nothing else may appear as an item of a circuit body under the printed grammar.
+
+The \texttt{board\_item} production is even narrower: a board body may contain only \texttt{layer\_decl} or \texttt{via\_decl}. Under the printed grammar, a \texttt{board} block is a physical-stackup construct---layers and vias---and nothing else.
+
+Setting Section~\ref{ch10:reserved} beside this section yields the structural tension of the whole chapter before any board is examined: the language reference reserves at least eighteen Part-IV statement leaders, the prose describes further forms and a verification sublanguage, and the consolidated grammar has \emph{seven} circuit-item alternatives and \emph{two} board-item alternatives. None of the eighteen reserved leaders of Section~\ref{ch10:reserved} corresponds to any of the seven \texttt{circuit\_item} alternatives. The formal grammar and the reserved vocabulary describe languages of visibly different extent. The reference corpus decides which of the two the source's own boards are written in.
+
+\begin{finding}[Consolidated grammar versus reserved vocabulary]\label{ch10:find-tension}
+The consolidated structural EBNF at PDF pages 598--599 omits the additional reserved statement families that the language reference reserves at PDF page 578 and describes in prose at PDF pages 591--592. This omission is antecedently acknowledged by the source's own erratum instruction and is confirmed against the published corpus by the per-board findings below.
+\end{finding}
+
+\section{Board CCB-1-CSB: the Cognitive Safety Board listing}\label{ch10:ccb1}
+
+The first reference listing is the Cognitive Safety Board, CCB-1-CSB, published at PDF pages 606--608 (book pages 590--592). It is the same board whose published parameter values are the subject of Chapter~11; here only its syntax is at issue.
+
+\subsection{Outer form and observed body}
+
+CCB-1-CSB is the only board of the five whose outer form is a \texttt{board} block. Under the consolidated EBNF this is immediately consequential: as established in Section~\ref{ch10:ebnf}, a \texttt{board} body may contain only \texttt{layer\_decl} or \texttt{via\_decl}. The published listing's body, as visually inspected on the rendered pages, contains block forms with the following leaders:
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\texttt{input} & \texttt{output} & \texttt{node} \\
+\texttt{cjt} & \texttt{diff} & \texttt{mux} \\
+\texttt{filter} & \texttt{feedback} & \texttt{probe} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+None of these is a layer declaration; none is a via declaration. Every single body item of the flagship safety listing falls outside the two alternatives that the printed \texttt{board\_item} production admits.
+
+\begin{finding}[CCB-1-CSB is a direct EBNF counterexample]\label{ch10:find-ccb1}
+The published board body of CCB-1-CSB (PDF pages 606--608) contains forms other than \texttt{layer\_decl} or \texttt{via\_decl}---namely \texttt{input}, \texttt{output}, \texttt{node}, \texttt{cjt}, \texttt{diff}, \texttt{mux}, \texttt{filter}, \texttt{feedback}, and \texttt{probe}. No derivation of the listing from the consolidated EBNF exists. Verdict of record: \textsc{direct ebnf counterexample}.
+\end{finding}
+
+\subsection{Discussion}
+
+Two readings of the discrepancy are possible, and the audit is careful to need neither. On one reading, the \texttt{board} production was drafted for a physical-stackup construct and the listing authors used \texttt{board} as an informal synonym for \texttt{circuit}; the intended fix would be to change the listing's outer keyword. On the other reading, \texttt{board} was always intended to admit circuit content and the production is truncated; the intended fix would be to widen \texttt{board\_item}. The source does not say which, and the two fixes produce different languages---under the first, a board is physical and a circuit is logical; under the second, the distinction collapses. An implementer forced to choose would be legislating language design, not implementing it. This is precisely the situation the candidate rule (Section~\ref{ch10:candidate-rule}) exists to prohibit: the v0.1 implementation models boards programmatically and declines to guess.
+
+It is also worth registering \emph{which} board carries this defect. CCB-1-CSB is the safety exemplar---the listing that Chapter~11 shows to contain an unreachable fuse threshold. The corpus's most safety-salient artifact is thus doubly defective: its syntax is underivable from the published grammar, and its published parameters defeat its published protective function. The two defects are independent (one syntactic, one semantic) and are preserved by the candidate as two separate findings; but their coincidence on the same listing is a fact about the source's review process that the research program's independent-review step (Chapter~12) is designed to address.
+
+\section{Board CCB-2-COB: the bounded non-counterexample}\label{ch10:ccb2}
+
+The second reference listing, CCB-2-COB, is published at PDF pages 613--614 (book pages 597--598). Its outer form is \texttt{circuit}, so the governing production is \texttt{circuit\_item} with its seven alternatives, not the two-alternative \texttt{board\_item}.
+
+\subsection{Observed forms}
+
+Visual inspection of the rendered pages records the following statement leaders in the listing body:
+
+\begin{center}
+\begin{tabular}{@{}lllll@{}}
+\toprule
+\texttt{input} & \texttt{output} & \texttt{node} & \texttt{let} & \texttt{inductor} \\
+\texttt{capacitor} & \texttt{tank} & \texttt{pll} & \texttt{modulator} & \texttt{probe} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Each observed leader can be fitted to a published alternative: \texttt{input} and \texttt{output} to \texttt{io\_decl}; \texttt{node} to \texttt{node\_decl}; \texttt{let} to \texttt{let\_decl}; \texttt{probe} to \texttt{probe\_decl}; and \texttt{inductor}, \texttt{capacitor}, \texttt{tank}, \texttt{pll}, and \texttt{modulator} to \texttt{component\_decl}, on the reading that these are component declarations whose component kinds are inductors, capacitors, tank stages, phase-locked loops, and modulators.
+
+\begin{finding}[CCB-2-COB admits no direct counterexample in the bounded audit]\label{ch10:find-ccb2}
+The observed statement leaders of CCB-2-COB (PDF pages 613--614) can fit the published circuit-item and component prefixes. Verdict of record: \textsc{no direct counterexample in bounded surface audit}. Full parsing and semantic conformance remain untested.
+\end{finding}
+
+\subsection{Why the weak verdict is the honest verdict}
+
+It would have been rhetorically convenient for the record to report a clean sweep---five boards, five counterexamples---and the difference between four and five changes no downstream conclusion, since a single counterexample already defeats corpus-level conformance. The record nevertheless declines the fifth counterexample, and the declination is the audit's best credential. A surface audit's favorable finding is weak by construction (Section~\ref{ch10:method-surface}): leader fit does not establish that argument lists, expression grammar, and statement bodies derive from the printed productions; the component-kind reading of \texttt{inductor} and its siblings assumes a leader-as-kind convention the surface audit cannot itself confirm; and the bodies were not tokenized or parsed. So the record reports exactly what its instrument can see---no visible violation---and marks everything beyond the instrument's reach as untested.
+
+The corpus conclusion (Section~\ref{ch10:corpus}) is phrased to preserve this asymmetry: four direct counterexamples and one bounded non-counterexample, not five counterexamples and not ``one conforming board.'' A future parser-level audit (Remark~\ref{ch10:parser-audit}) may move CCB-2-COB in either direction; nothing in this monograph presumes the outcome.
+
+\section{Board CCB-3-CDAB: the mirror declaration}\label{ch10:ccb3}
+
+The third reference listing, CCB-3-CDAB, is published at PDF pages 618--619 (book pages 602--603). Its outer form is \texttt{circuit}. Unlike CCB-1-CSB, where every body item is out of grammar, and unlike CCB-4 and CCB-5, where whole statement families are missing, CCB-3-CDAB is a precision counterexample: a single declaration whose printed shape cannot be produced by the grammar's component-expression production.
+
+\subsection{The observed declaration}
+
+The listing contains, outside any component expression admitted by the grammar, the declaration:
+
+\begin{center}
+\texttt{mirror bias\_mirror: replicate(shared\_bias) -> [cjt\_l, cjt\_r]}
+\end{center}
+
+Read as engineering intent, the line is legible: it declares a current-mirror-like construct named \texttt{bias\_mirror} that replicates a shared bias signal \texttt{shared\_bias} and fans it out to two cognitive junction transistors \texttt{cjt\_l} and \texttt{cjt\_r}. The engineering intent is not in question; the derivability is.
+
+\subsection{Why it cannot derive}
+
+Under the consolidated EBNF, a component declaration's right-hand side must be a component expression of the shape \texttt{type\_name<arg\_list>}: a type name followed by an angle-bracketed argument list. The mirror declaration matches this shape at no point:
+
+\begin{itemize}
+\item Its operative construct is a \emph{call-shaped} form, \texttt{replicate(shared\_bias)}---a function-application syntax with parentheses, which is not the \texttt{type\_name<arg\_list>} shape.
+\item It employs an arrow \texttt{->} mapping the replicated source onto a \emph{bracketed target list} \texttt{[cjt\_l, cjt\_r]}. Neither an arrow operator nor a bracketed fan-out list appears in the component-expression production.
+\item Its leader, \texttt{mirror}, corresponds to no \texttt{circuit\_item} alternative: it is not an \texttt{io\_decl}, \texttt{node\_decl}, \texttt{cjt\_decl}, \texttt{feedback\_decl}, \texttt{probe\_decl}, or \texttt{let\_decl}, and the only remaining alternative, \texttt{component\_decl}, requires the \texttt{type\_name<arg\_list>} expression that the line does not use.
+\end{itemize}
+
+Any one of the three mismatches would suffice; jointly they leave no derivation path at all.
+
+\begin{finding}[CCB-3-CDAB is a direct EBNF counterexample]\label{ch10:find-ccb3}
+The declaration \texttt{mirror bias\_mirror: replicate(shared\_bias) -> [cjt\_l, cjt\_r]}, observed in the published listing of CCB-3-CDAB (PDF pages 618--619), does not use the required \texttt{type\_name<arg\_list>} component expression. Verdict of record: \textsc{direct ebnf counterexample}.
+\end{finding}
+
+\subsection{Discussion}
+
+CCB-3-CDAB demonstrates that the coverage gap is not confined to whole missing statement families (as in CCB-4 and CCB-5) or to a mismatched outer form (as in CCB-1). It reaches down into expression syntax: the corpus uses at least one expression-level idiom---call-shaped replication with arrow fan-out---for which the grammar has no production. This matters for anyone estimating the \emph{size} of the repair. Adding missing statement leaders to \texttt{circuit\_item} is a bounded, mechanical widening; admitting a new expression grammar (application syntax, an arrow operator, list targets, and their precedence and typing) is language design. A future complete grammar (Chapter~12, program steps 1--2) must therefore publish not merely more alternatives but a genuinely extended expression grammar, with the construct-coverage matrix recording exactly which listings exercise it.
+
+\section{Board CCB-4-CMB: the memory-discipline statements}\label{ch10:ccb4}
+
+The fourth reference listing, CCB-4-CMB, is published at PDF pages 623--624 (book pages 607--608). Its outer form is \texttt{circuit}.
+
+\subsection{Observed omissions}
+
+The listing employs the memory-discipline statement family whose reservation was noted in Section~\ref{ch10:reserved}. Five statement leaders are observed in the published body for which the consolidated \texttt{circuit\_item} production has no alternative:
+
+\begin{center}
+\begin{tabular}{@{}lllll@{}}
+\toprule
+\texttt{charge} & \texttt{select} & \texttt{discharge} & \texttt{refresh} & \texttt{scan} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{finding}[CCB-4-CMB is a direct EBNF counterexample]\label{ch10:find-ccb4}
+The published listing of CCB-4-CMB (PDF pages 623--624) uses the statement leaders \texttt{charge}, \texttt{select}, \texttt{discharge}, \texttt{refresh}, and \texttt{scan}, for which the consolidated \texttt{circuit\_item} production has no alternative. Verdict of record: \textsc{direct ebnf counterexample}.
+\end{finding}
+
+\subsection{Discussion}
+
+CCB-4-CMB closes an evidentiary loop that began at the reservation page. Section~\ref{ch10:reserved} observed that the reserved-word list includes a coherent memory vocabulary; Section~\ref{ch10:erratum} observed that the prose tables describe \texttt{select} and \texttt{scan} among the additional forms; and here the corpus uses all five leaders in a published listing. The three exhibits triangulate: the memory-discipline statements are reserved, described, and used---and absent from the formal grammar. This is the cleanest instance of the general pattern, because no alternative reading is available. One might argue about whether \texttt{board} should have admitted circuit content (CCB-1) or whether \texttt{mirror} could have been a component kind under a different expression syntax (CCB-3); there is no analogous argument by which \texttt{refresh} or \texttt{discharge} fits any of the seven printed alternatives. The family is simply missing.
+
+The omission also has a semantic shadow that the audit records only as motivation, not as finding: memory-discipline statements are exactly the statements whose semantics are \emph{stateful} and \emph{temporal}---charging, refreshing, and scanning are operations over persistent state across time. The candidate's reference simulator (Chapter~8) supports only declared deterministic stateless profiles with unit-delay feedback; stateful capacitor, memory, and power semantics are explicitly open obligations. The grammar gap and the semantics gap coincide on the same constructs, which is unsurprising---the hardest constructs to formalize are the ones the appendix postponed---but the coincidence means a future grammar for these statements cannot be validated by syntax alone: it will need the state/time profiles of program step~3 (Chapter~12) before any listing that uses them can be executed rather than merely parsed.
+
+\section{Board CCB-5-CPMB: the power-management vocabulary}\label{ch10:ccb5}
+
+The fifth reference listing, CCB-5-CPMB, is the largest, published across five pages at PDF pages 628--632 (book pages 612--616). Its outer form is \texttt{circuit}.
+
+\subsection{Observed omissions}
+
+The listing uses fourteen statement leaders for which the consolidated \texttt{circuit\_item} production has no alternative:
+
+\begin{center}
+\begin{tabular}{@{}lllll@{}}
+\toprule
+\texttt{rail} & \texttt{use} & \texttt{spec} & \texttt{dial} & \texttt{constraint} \\
+\texttt{monitor} & \texttt{on} & \texttt{derate} & \texttt{route} & \texttt{alert} \\
+\texttt{hold} & \texttt{sequence} & \texttt{gate} & \texttt{force\_state} & \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{finding}[CCB-5-CPMB is a direct EBNF counterexample]\label{ch10:find-ccb5}
+The published listing of CCB-5-CPMB (PDF pages 628--632) uses the statement leaders \texttt{rail}, \texttt{use}, \texttt{spec}, \texttt{dial}, \texttt{constraint}, \texttt{monitor}, \texttt{on}, \texttt{derate}, \texttt{route}, \texttt{alert}, \texttt{hold}, \texttt{sequence}, \texttt{gate}, and \texttt{force\_state}, for which the consolidated \texttt{circuit\_item} production has no alternative. Verdict of record: \textsc{direct ebnf counterexample}.
+\end{finding}
+
+\subsection{Discussion}
+
+CCB-5-CPMB is the counterexample of scale. Where CCB-3 exhibited one underivable line and CCB-4 one missing family, CCB-5 exhibits an entire register of the language---power rails, usage/import statements, specifications, dials, constraints, monitors, event handlers (\texttt{on}), derating, routing, alerts, hold conditions, sequencing, gating, and forced states---that exists in the corpus and the reserved vocabulary but not in the grammar. Thirteen of the fourteen leaders appear on the reservation page examined in Section~\ref{ch10:reserved}; the fourteenth, \texttt{gate}, is observed in the listing without appearing in the record's reserved-word enumeration, a detail the record preserves exactly and this chapter neither smooths over nor extends: the audit reports observed forms against printed productions, and \texttt{gate} has no production regardless of its reservation status.
+
+The scale has a corpus-level implication. Across the four counterexample boards, the observed out-of-grammar forms number at least twenty-eight distinct leaders and one expression idiom. The consolidated grammar, recall, has seven circuit-item alternatives in total. By raw count, the reference corpus exercises \emph{more} statement vocabulary outside the grammar than inside it. The published EBNF is thus not a grammar with edge-case gaps; it is a core-fragment grammar---an accurate formalization of perhaps the declarative skeleton of the language (I/O, nodes, junctions, generic components, feedback, probes, bindings) that was never extended to the operational, temporal, and management registers in which the corpus's most distinctive content lives. Naming the situation precisely matters because the two diagnoses have different repairs: gap-filling is errata work, while formalizing an unformalized half of a language is a specification project. The research program treats it as the latter.
+
+\section{A taxonomy of the counterexamples}\label{ch10:taxonomy}
+
+The four counterexamples are not four instances of one defect. Classified by \emph{where} in the grammar the derivation fails, they form three kinds, and the kinds have different repair costs, different blast radii for implementers, and different lessons. Making the taxonomy explicit also guards against a rhetorical compression that would misstate the evidence---``the grammar is missing some keywords''---which is true of only two of the four.
+
+\begin{definition}[Kinds of surface counterexample]\label{ch10:def-kinds}
+Relative to a grammar $G$ and a listing $\ell$ with outer context $B$:
+\begin{enumerate}
+\item A \emph{context mismatch} occurs when $\ell$'s body items are drawn from a statement register that $G$ admits, if at all, only in a different block context: the printed forms exist somewhere in $G$'s world, but not under $B$.
+\item An \emph{expression mismatch} occurs when a statement's leader could be accommodated but its right-hand side uses expression syntax (operators, application forms, aggregate targets) for which $G$ prints no production.
+\item A \emph{register omission} occurs when an entire family of statement leaders used by $\ell$ has no production alternative anywhere in $G$.
+\end{enumerate}
+\end{definition}
+
+CCB-1-CSB is a context mismatch: its body forms (\texttt{input}, \texttt{node}, \texttt{cjt}, and the rest) resemble circuit content, but its outer form is \texttt{board}, whose printed body admits only \texttt{layer\_decl} and \texttt{via\_decl}. CCB-3-CDAB is an expression mismatch: one line, one underivable right-hand side. CCB-4-CMB and CCB-5-CPMB are register omissions: the memory-discipline family (five leaders) and the power-management family (fourteen leaders) respectively.
+
+The repair costs escalate along the taxonomy. A context mismatch can be repaired by a one-line production change (widen \texttt{board\_item}) or a one-token corpus change (rename the outer block)---but, as Section~\ref{ch10:ccb1} discussed, choosing between those repairs is a language-design decision the source does not determine. An expression mismatch requires new expression grammar with precedence and typing decisions. A register omission requires specifying entire statement families---syntax, and eventually semantics---essentially from prose. An implementer who reads only the corpus conclusion would budget for keyword additions; an implementer who reads the taxonomy budgets for a specification project. The research program's first two steps (Chapter~12) are sized for the latter.
+
+The taxonomy also refines the audit's robustness argument (Remark~\ref{ch10:rem-robust}): the three kinds fail derivation at three different grammatical loci (block context, expression production, production inventory), so no single generous reading of any single production can dissolve more than one kind.
+
+\section{The corpus conclusion}\label{ch10:corpus}
+
+The record's corpus-level conclusion, reproduced exactly:
+
+\begin{finding}[Corpus conclusion of record]\label{ch10:find-corpus}
+\textsc{formal ebnf does not cover published five-board corpus}. Direct counterexample count: four (CCB-1-CSB, CCB-3-CDAB, CCB-4-CMB, CCB-5-CPMB). Bounded non-counterexample count: one (CCB-2-COB). The corpus-level conformance claim fails without overstating the result for any individual board.
+\end{finding}
+
+Three features of the conclusion's logical form deserve explicit statement.
+
+\emph{Universality fails by existence.} ``The grammar covers the corpus'' is a universal claim over five listings; a single counterexample refutes it. The record has four, of three structurally distinct kinds---an outer-form mismatch (CCB-1), an expression-level mismatch (CCB-3), and two missing-statement-family mismatches (CCB-4, CCB-5). The refutation is therefore robust: it does not hinge on the reading of any single page, and it would survive the reclassification of any single board.
+
+\emph{The existential remainder is not converted into a positive.} From ``CCB-2-COB shows no visible violation'' the record does not conclude that CCB-2-COB conforms, because the instrument cannot see conformance (Section~\ref{ch10:method-surface}). The count is stated as ``four and one bounded,'' never ``four out of five failed'' with the implication that one passed.
+
+\emph{Per-board resolution is preserved.} The record could have reported only the corpus verdict. Instead it carries a per-board block with pages, outer form, observed forms, verdict, and reason---so that any future challenge (a re-rendering of a page, a parser-level re-audit, a revised source build with a different hash) can be adjudicated board by board against the exact printed evidence rather than against a summary.
+
+\section{The candidate grammar rule}\label{ch10:candidate-rule}
+
+The audit's findings are about the source; the candidate's obligation is about itself. The v0.1 implementation responds to the coverage gap with a deliberately austere posture, recorded as a rule.
+
+\begin{ruleenv}[Programmatic model only; no CCDL parsing claim]\label{ch10:rule-candidate}
+The CAS PCBA 8 v0.1 implementation declares only its programmatic Python object model (Chapters~4--5). It does not claim to parse the complete CCDL book language, and no part of its test evidence may be represented as CCDL conformance evidence. Any later grammar must: (i) publish an exact construct-coverage matrix stating, for every construct of the published language and every listing of the golden corpus, whether the construct is supported and where it is exercised; (ii) reject unsupported forms fail-closed rather than skipping, warning, or best-effort parsing them; and (iii) round-trip every admitted board canonically, so that parse followed by serialization is the identity on a canonical form and the canonical form's digest is stable.
+\end{ruleenv}
+
+Each clause answers a specific failure mode that the audit made visible.
+
+\emph{Why a coverage matrix.} The source's own defect is precisely a missing coverage statement: a grammar published without any accounting of which corpus constructs it covers, discovered years-equivalent later (in document time) to cover a minority register of its own corpus. A published matrix makes the coverage claim itself falsifiable and mechanically checkable---the audit of this chapter becomes a regression test rather than an archaeology project.
+
+\emph{Why fail-closed rejection.} A best-effort parser that skips unknown statements would silently discard exactly the content---monitors, constraints, forced states, memory discipline---where the operational meaning of a board lives, and downstream tools would draw conclusions from a board that is not the board on the page. Fail-closed rejection converts the coverage boundary into an error surface: every unsupported construct is a loud, coded event (the DRC analogue is the closed \texttt{PCBA8-*} catalog of Chapter~7 and Appendix~A), never a quiet subtraction.
+
+\emph{Why canonical round trips.} Round-tripping is the only cheap, total test that a parser and serializer agree about the language they implement; it protects the hash-binding discipline (a board's identity is the digest of its canonical structure, Chapter~5) from divergence between textual and programmatic forms; and property-based generation of boards through the round trip \cite{quickcheck} is the planned instrument for exercising the grammar far beyond the five published listings.
+
+\begin{example}[What a coverage-matrix row looks like]\label{ch10:ex-matrix}
+This example is \emph{illustrative only}; no such matrix exists at the bound commit, and the row below describes a hypothetical future grammar, not the published one. A construct-coverage matrix under Rule~\ref{ch10:rule-candidate} would contain, for each construct, a row of the shape:
+
+\begin{center}
+\small
+\begin{tabular}{@{}lllll@{}}
+\toprule
+Construct & Grammar production & Status & Exercised by & Round-trip test \\
+\midrule
+\texttt{monitor} stmt & \texttt{monitor\_decl} v1.0 & supported & CCB-5 listing & \texttt{rt\_monitor\_001} \\
+\texttt{interrupt} stmt & --- & rejected (fail-closed) & none admitted & \texttt{rej\_interrupt\_001} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Every construct of the published language appears with exactly one status; ``absent from the matrix'' is not a state. A listing is admitted only if every one of its constructs has status \emph{supported}, and each supported row names the corpus listings that exercise it and the round-trip test that guards it. Under this discipline, the audit of this chapter reduces to checking that the matrix's ``rejected'' rows are empty for the golden corpus---a regression assertion, not a research finding.
+\end{example}
+
+\begin{remark}[Relation to the DRC]\label{ch10:relation-drc}
+The candidate's DRC (Chapter~7) operates on the programmatic model directly and is therefore unaffected by the grammar gap in its own domain of claims: a \texttt{DrcReport} speaks about a validated in-memory \texttt{Board} object with a canonical digest, not about a CCDL text. The gap constrains only the bridge from published listings to programmatic boards---which is exactly the bridge the candidate declines to claim until the Rule~\ref{ch10:rule-candidate} obligations can be met.
+\end{remark}
+
+\section{The coverage record as a machine-readable artifact}\label{ch10:artifact}
+
+This chapter has repeatedly deferred to ``the record.'' The record deserves a section of its own, because its form---a versioned, schema-tagged, hash-anchored JSON document---is as much a methodological contribution as its content, and because the monograph's evidence discipline (Chapter~12) treats such artifacts, not prose, as the primary carriers of findings.
+
+\subsection{Structure of the record}
+
+\texttt{PCBA\_CCDL\_CONSTRUCT\_COVERAGE\_v0.1.json} carries, in order: a schema identifier (\texttt{project\_coherence.pcba\_ccdl\_construct\_coverage.v0.1}) that fixes the field vocabulary against silent drift; a document status (\textsc{draft / open / not frozen}) and an as-of date (2026-08-04); the source identity triple---source ID \textsc{src-pcba-engineer-20260726}, SHA-256, and page count (743)---that binds every subsequent anchor to one exact document; the three-sentence audit method of Section~\ref{ch10:method}; a \texttt{formal\_language\_evidence} block with the three exhibits of Section~\ref{ch10:evidence}, each carrying its own PDF and book page arrays and a one-sentence finding; a \texttt{reference\_boards} array with one entry per board carrying board ID, listing pages (both numberings), outer form, the observed forms relevant to that board's verdict, a Boolean \texttt{direct\_syntactic\_counterexample}, a controlled-vocabulary conclusion, and a reason sentence; and finally the corpus conclusion, the two counts (four direct, one bounded), the claim boundary, and the governance labels (admission Ring~4, \textsc{not licensed}, disclosure \textsc{held}).
+
+Three design choices in this structure repay attention.
+
+\emph{Controlled verdict vocabulary.} Each board's conclusion is drawn from a closed set---\textsc{direct ebnf counterexample} or \textsc{no direct counterexample in bounded surface audit}---rather than free prose. The closed set makes the record diffable and queryable, prevents verdict inflation (there is no ``conforms'' value to reach for), and mirrors the closed diagnostic catalog philosophy of the DRC (Chapter~7): a finding is a coded event, not a paragraph.
+
+\emph{Separation of observation from verdict.} The per-board entries record observed forms as data (\texttt{observed\_non\_board\_block\_forms}, \texttt{observed\_omitted\_circuit\_items}, \texttt{observed\_outside\_component\_expression}) distinct from the Boolean and the conclusion. A reviewer who disputes a verdict can check it against the recorded observations without re-deriving them; a reviewer who disputes an observation knows exactly which rendered pages to re-inspect. The record thus factors cleanly into the empirical layer (what is printed) and the logical layer (what follows by Lemma~\ref{ch10:lem-refute}).
+
+\emph{Both page numberings, always.} Every anchor carries parallel \texttt{pdf\_pages} and \texttt{book\_pages} arrays. The redundancy is deliberate verification affordance, as discussed in Section~\ref{ch10:method-render}.
+
+\subsection{Why machine-readable}
+
+A prose audit finding is read once and paraphrased thereafter; each paraphrase is an opportunity for strengthening drift---``no direct counterexample in the bounded surface audit'' becomes ``passed the audit'' becomes ``conforms.'' A machine-readable record resists this decay in two ways. First, downstream artifacts can \emph{consume} it rather than restate it: the Gate~4 receipt counts ``4 direct EBNF counterexamples'' by reading this record, and any monograph table can in principle be regenerated from it. Second, it can be \emph{diffed}: when a v0.2 audit is performed (for instance, at parser level, per Remark~\ref{ch10:parser-audit}), the change from v0.1 will be an inspectable structural delta---which boards moved, which observations were added---rather than a rewritten narrative. The provenance discipline here follows the same separation of entities (the source PDF), activities (the audit), and derived artifacts (the record) that the W3C provenance model formalizes \cite{prov}, without claiming conformance to that model.
+
+\subsection{Governance labels}
+
+The record closes with its own governance: admission Ring~4, license status \textsc{not licensed}, disclosure status \textsc{held}. In the project's evidence discipline these labels mean: the record is admitted as a working research artifact, not as canon; no claim in it is licensed for external assertion; and the artifact itself is not approved for disclosure. This monograph inherits those labels (they are restated on its title page) and adds none. The practical consequence for a reader is that every sentence of this chapter, however firmly evidenced, is a held research finding awaiting independent review---and that the record, not this prose, is the artifact of authority if the two ever diverge.
+
+\section{Claim boundary of the record}\label{ch10:record-boundary}
+
+\begin{boundary}[What the coverage record establishes, verbatim in substance]\label{ch10:boundary-record}
+The record establishes a source-internal syntax-coverage mismatch only. It does not establish: a complete replacement grammar; parser correctness for any implementation; executable board semantics; safety effectiveness; certification; or product readiness. The record's own status labels govern: \textsc{draft / open / not frozen}, admission Ring~4, \textsc{not licensed}, disclosure \textsc{held}.
+\end{boundary}
+
+The boundary bears expansion on two points where a motivated reader might otherwise extrapolate.
+
+First, the finding is not a quality verdict on the CCDL \emph{design}. A language whose formal appendix lags its corpus can still embody sound design ideas; conversely, a fully covered grammar can formalize a poor language. The audit measures internal consistency of a document, nothing more. Second, the finding does not transfer to any \emph{revised} source build. Every anchor in this chapter binds to the exact SHA-256 identified in Section~\ref{ch10:why}; a future build that consolidates the grammar would require a fresh audit under its own hash, and nothing here prejudges its outcome.
+
+\section{Lessons for language-bearing engineering documents}\label{ch10:lessons}
+
+The chapter closes with the general lessons the audit supports---stated as method, since (per Boundary~\ref{ch10:scope}) the audit licenses no claims beyond its source.
+
+\emph{Grammars and corpora must be co-versioned.} The root cause visible in the source is schedule divergence: reserved words, prose tables, and listings kept growing while the consolidated appendix did not. The mechanical remedy is to make the corpus part of the grammar's test suite---every published listing parsed in CI against the published grammar, with the coverage matrix regenerated on every change. Under that discipline the state documented in this chapter is unrepresentable: the build fails before the divergence ships.
+
+\emph{Erratum clauses are confessions, not repairs.} A document that instructs readers to treat omissions as errata has documented its own incompleteness. The clause has archival value---it fixes the author's intent that the prose forms are language---but it must never be given generative force in an audit or an implementation (Rule~\ref{ch10:rule-erratum}).
+
+\emph{Audit instruments should be chosen for the robustness of their negative results.} The surface-syntax method was selected because its counterexamples are indefeasible under refinement while its confirmations are visibly weak; the record then reports both with their native strength. An instrument whose positive results outrun its resolution produces conformance theater; an instrument that will not report a favorable result it cannot see produces findings that survive review.
+
+\emph{Preserve the defect; do not silently repair it.} The strongest engineering temptation, on discovering that the corpus outruns the grammar, is to quietly implement the ``obvious'' extended grammar and move on. The candidate refuses, for reasons developed at length in Chapter~11 for the CSB parameter fault and applying with equal force here: a silent repair destroys the evidence that the authority document requires independent review, substitutes the implementer's reconstruction for the source's authority while still trading on the source's name, and removes the regression guard that keeps the gap from being papered over in downstream claims. The coverage record---four direct counterexamples, one bounded non-counterexample, page anchors, claim boundary, held disclosure---is the durable form of the finding, and this chapter is its prose mirror.
+
+\emph{Downstream consumers must carry the boundary with the finding.} Finally, the audit illustrates how a bounded result should travel. The Gate~4 receipt (Chapter~12) does not say ``the grammar is broken''; it counts ``4 direct EBNF counterexamples,'' a number that is exactly as large as the evidence. The source-audit specification's candidate rule does not say ``we will write a better grammar''; it forbids conformance claims until a matrix, rejection, and round trips exist. And this chapter, the longest prose treatment the finding will receive, closes not with the finding but with its boundary (Boundary~\ref{ch10:boundary-record}): a source-internal syntax mismatch, in one identified build, established by a bounded surface method, held at Ring~4, licensed for nothing. When the finding travels further---into the evidence chapter, into any future disclosure---it must travel in that form: the counts, the anchors, the method, and the boundary, together or not at all.

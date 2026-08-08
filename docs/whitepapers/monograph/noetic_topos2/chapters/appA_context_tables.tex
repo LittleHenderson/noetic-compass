@@ -1,0 +1,350 @@
+\chapter{Context and Cover Tables}
+\label{appA:chapter}
+
+This appendix tabulates, exhaustively and with derivations, the raw
+combinatorial data of the finite context site: the sixteen contexts and
+their complete-block content, the generating cover families $K_A(V)$ and
+$K_R(V)$ at every context, the contexts at which the two families coincide
+as unmarked data, and the per-context sieve and covering-sieve counts that
+the exact-topology enumeration of Chapter~11 reports. Everything here is
+derivable by hand from the definitions in Chapter~10; where a value is also
+registered in the executable certificate, the correspondence is noted. No
+entry in this appendix carries any status beyond finite combinatorics: the
+ACBE and RPM coordinate names remain formal marks with no empirical
+interpretation.
+
+\section{Naming conventions}
+\label{appA:sec:naming}
+
+\begin{notation}
+\label{appA:not:names}
+Atoms are $\omega_{ij} = (i, j) \in \Omega$ for $i, j \in \{0, 1\}$, where
+the first coordinate is the formal ACBE mark and the second the formal RPM
+mark. Blocks are $A_i = \{\omega_{i0}, \omega_{i1}\}$ (fixed first
+coordinate) and $R_j = \{\omega_{0j}, \omega_{1j}\}$ (fixed second
+coordinate). For the ten contexts that are neither $\varnothing$, a block,
+nor $\Omega$, we use: the four singletons $\{\omega_{ij}\}$; the two
+diagonals
+\[
+\Delta = \{\omega_{00}, \omega_{11}\}, \qquad
+\nabla = \{\omega_{01}, \omega_{10}\};
+\]
+and the four triples $T_{ij} = \Omega \setminus \{\omega_{ij}\}$, each
+named by the atom it omits. A block $B$ is \emph{complete in} $V$ when
+$B \subseteq V$; the witness presheaves of Appendix~C are built on
+complete-block content, so the containment columns below feed directly into
+those tables.
+\end{notation}
+
+The containment rules used throughout are immediate from the definitions:
+$A_0 \subseteq V$ iff $\omega_{00}, \omega_{01} \in V$;
+$A_1 \subseteq V$ iff $\omega_{10}, \omega_{11} \in V$;
+$R_0 \subseteq V$ iff $\omega_{00}, \omega_{10} \in V$;
+$R_1 \subseteq V$ iff $\omega_{01}, \omega_{11} \in V$. Note that a
+two-element context contains a complete $A$-block only if it \emph{is} that
+block, and likewise for $R$-blocks; the diagonals $\Delta$ and $\nabla$
+contain no complete block of either partition, because each meets each
+block in exactly one atom. A triple $T_{ij}$ omits one atom and therefore
+breaks exactly one $A$-block ($A_i$) and exactly one $R$-block ($R_j$),
+containing the other one of each.
+
+\section{The sixteen contexts and their complete blocks}
+\label{appA:sec:contexts}
+
+\begin{longtable}{@{}llccll@{}}
+\toprule
+Context $V$ & Elements & $|V|$ & Arrows into $V$ & Complete $A$-blocks &
+Complete $R$-blocks \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+$\varnothing$ & --- & 0 & 1 & none & none \\
+$\{\omega_{00}\}$ & $\omega_{00}$ & 1 & 2 & none & none \\
+$\{\omega_{01}\}$ & $\omega_{01}$ & 1 & 2 & none & none \\
+$\{\omega_{10}\}$ & $\omega_{10}$ & 1 & 2 & none & none \\
+$\{\omega_{11}\}$ & $\omega_{11}$ & 1 & 2 & none & none \\
+$A_0$ & $\omega_{00}, \omega_{01}$ & 2 & 4 & $A_0$ & none \\
+$A_1$ & $\omega_{10}, \omega_{11}$ & 2 & 4 & $A_1$ & none \\
+$R_0$ & $\omega_{00}, \omega_{10}$ & 2 & 4 & none & $R_0$ \\
+$R_1$ & $\omega_{01}, \omega_{11}$ & 2 & 4 & none & $R_1$ \\
+$\Delta$ & $\omega_{00}, \omega_{11}$ & 2 & 4 & none & none \\
+$\nabla$ & $\omega_{01}, \omega_{10}$ & 2 & 4 & none & none \\
+$T_{00}$ & $\omega_{01}, \omega_{10}, \omega_{11}$ & 3 & 8 & $A_1$ & $R_1$ \\
+$T_{01}$ & $\omega_{00}, \omega_{10}, \omega_{11}$ & 3 & 8 & $A_1$ & $R_0$ \\
+$T_{10}$ & $\omega_{00}, \omega_{01}, \omega_{11}$ & 3 & 8 & $A_0$ & $R_1$ \\
+$T_{11}$ & $\omega_{00}, \omega_{01}, \omega_{10}$ & 3 & 8 & $A_0$ & $R_0$ \\
+$\Omega$ & all four & 4 & 16 & $A_0, A_1$ & $R_0, R_1$ \\
+\end{longtable}
+
+The ``arrows into $V$'' column counts the inclusions $U \subseteq V$,
+i.e.\ $2^{|V|}$; summing the column gives
+$1 + 4 \cdot 2 + 6 \cdot 4 + 4 \cdot 8 + 16 = 81$, the registered arrow
+count of the site (Chapter~11). The complete-block columns support a
+consistency count on the distribution of complete $A$-blocks over
+contexts: $k = 2$ occurs only at $\Omega$ (one context); $k = 1$ occurs at
+$A_0$, $A_1$, and the four triples (six contexts); $k = 0$ occurs at the
+remaining nine contexts ($\varnothing$, four singletons, $R_0$, $R_1$,
+$\Delta$, $\nabla$). Totals: $1 + 6 + 9 = 16$. The same distribution holds
+for $R$-blocks by the evident symmetry exchanging the two coordinates.
+These counts give the value cardinalities $|F_A(V)| = 2^{k}$ tabulated in
+Appendix~C: nine contexts with one section, six with two, one with four.
+
+\section{The generating family $K_A(V)$ at every context}
+\label{appA:sec:ka}
+
+$K_A(V) = \{ V \cap A_0 \to V,\; V \cap A_1 \to V \}$ at nonempty $V$,
+retaining empty pieces; the null family at $\varnothing$. Each row lists
+the two pieces; ``$= V$'' flags a piece equal to the whole context (an
+identity arrow) and ``$= A_i$'' flags a piece that is a full block.
+
+\begin{longtable}{@{}llll@{}}
+\toprule
+Context $V$ & $A_0$-piece $V \cap A_0$ & $A_1$-piece $V \cap A_1$ &
+Remarks \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+$\varnothing$ & \multicolumn{2}{l}{null family (no members)} &
+covers by convention \\
+$\{\omega_{00}\}$ & $\{\omega_{00}\} = V$ & $\varnothing$ &
+identity piece present \\
+$\{\omega_{01}\}$ & $\{\omega_{01}\} = V$ & $\varnothing$ &
+identity piece present \\
+$\{\omega_{10}\}$ & $\varnothing$ & $\{\omega_{10}\} = V$ &
+identity piece present \\
+$\{\omega_{11}\}$ & $\varnothing$ & $\{\omega_{11}\} = V$ &
+identity piece present \\
+$A_0$ & $A_0 = V$ & $\varnothing$ & identity piece present \\
+$A_1$ & $\varnothing$ & $A_1 = V$ & identity piece present \\
+$R_0$ & $\{\omega_{00}\}$ & $\{\omega_{10}\}$ & both proper singletons \\
+$R_1$ & $\{\omega_{01}\}$ & $\{\omega_{11}\}$ & both proper singletons \\
+$\Delta$ & $\{\omega_{00}\}$ & $\{\omega_{11}\}$ & both proper singletons \\
+$\nabla$ & $\{\omega_{01}\}$ & $\{\omega_{10}\}$ & both proper singletons \\
+$T_{00}$ & $\{\omega_{01}\}$ & $\{\omega_{10}, \omega_{11}\} = A_1$ &
+both proper \\
+$T_{01}$ & $\{\omega_{00}\}$ & $\{\omega_{10}, \omega_{11}\} = A_1$ &
+both proper \\
+$T_{10}$ & $\{\omega_{00}, \omega_{01}\} = A_0$ & $\{\omega_{11}\}$ &
+both proper \\
+$T_{11}$ & $\{\omega_{00}, \omega_{01}\} = A_0$ & $\{\omega_{10}\}$ &
+both proper \\
+$\Omega$ & $A_0$ & $A_1$ & both proper: the global cover \\
+\end{longtable}
+
+Two structural observations, both used in the body of the monograph.
+First, the generated sieve is nonmaximal exactly when \emph{no} piece is
+an identity: this happens at $R_0$, $R_1$, $\Delta$, $\nabla$, the four
+triples, and $\Omega$ (ten contexts). At the four singletons and at $A_0$,
+$A_1$, one piece is the identity, the generated sieve is maximal, and the
+cover imposes no sheaf constraint beyond functoriality; at $\varnothing$
+the null cover imposes the one-section constraint. The certificate check
+\texttt{proper\_global\_covers} registers the $\Omega$ row. Second, at
+every context each nonempty piece lies inside a single block, so the
+singleton-factor bijection of Chapter~10 applies to it; this is visible in
+the table as the absence of any piece meeting both blocks.
+
+\section{The generating family $K_R(V)$ at every context}
+\label{appA:sec:kr}
+
+$K_R(V) = \{ V \cap R_0 \to V,\; V \cap R_1 \to V \}$, same conventions.
+
+\begin{longtable}{@{}llll@{}}
+\toprule
+Context $V$ & $R_0$-piece $V \cap R_0$ & $R_1$-piece $V \cap R_1$ &
+Remarks \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+$\varnothing$ & \multicolumn{2}{l}{null family (no members)} &
+covers by convention \\
+$\{\omega_{00}\}$ & $\{\omega_{00}\} = V$ & $\varnothing$ &
+identity piece present \\
+$\{\omega_{01}\}$ & $\varnothing$ & $\{\omega_{01}\} = V$ &
+identity piece present \\
+$\{\omega_{10}\}$ & $\{\omega_{10}\} = V$ & $\varnothing$ &
+identity piece present \\
+$\{\omega_{11}\}$ & $\varnothing$ & $\{\omega_{11}\} = V$ &
+identity piece present \\
+$A_0$ & $\{\omega_{00}\}$ & $\{\omega_{01}\}$ & both proper singletons \\
+$A_1$ & $\{\omega_{10}\}$ & $\{\omega_{11}\}$ & both proper singletons \\
+$R_0$ & $R_0 = V$ & $\varnothing$ & identity piece present \\
+$R_1$ & $\varnothing$ & $R_1 = V$ & identity piece present \\
+$\Delta$ & $\{\omega_{00}\}$ & $\{\omega_{11}\}$ & both proper singletons \\
+$\nabla$ & $\{\omega_{10}\}$ & $\{\omega_{01}\}$ & both proper singletons \\
+$T_{00}$ & $\{\omega_{10}\}$ & $\{\omega_{01}, \omega_{11}\} = R_1$ &
+both proper \\
+$T_{01}$ & $\{\omega_{00}, \omega_{10}\} = R_0$ & $\{\omega_{11}\}$ &
+both proper \\
+$T_{10}$ & $\{\omega_{00}\}$ & $\{\omega_{01}, \omega_{11}\} = R_1$ &
+both proper \\
+$T_{11}$ & $\{\omega_{00}, \omega_{10}\} = R_0$ & $\{\omega_{01}\}$ &
+both proper \\
+$\Omega$ & $R_0$ & $R_1$ & both proper: the global cover \\
+\end{longtable}
+
+The table is the image of the $K_A$ table under the coordinate exchange
+$(i, j) \mapsto (j, i)$, which swaps $A$-blocks with $R$-blocks, fixes
+$\varnothing$, $\Delta$, and $\Omega$, and permutes the remaining contexts
+accordingly ($A_i \leftrightarrow R_i$, $\nabla$ fixed as a set with its
+atoms swapped, $T_{01} \leftrightarrow T_{10}$). This symmetry is the
+tabular form of the fact, used in Chapter~10, that every ACBE statement
+has an exact RPM mirror.
+
+\section{Coincidence of the unmarked families}
+\label{appA:sec:coincide}
+
+The marks chapter and the certificate checks
+\texttt{singleton\_unmarked\_families\_coincide} /
+\texttt{singleton\_marked\_covers\_distinct} turn on the question: at
+which contexts do $K_A(V)$ and $K_R(V)$ carry the same information once
+the block labels are stripped? Comparing the two tables row by row, as
+\emph{unordered sets of member arrows} (the exact list the topology
+consumes, forgetting which block indexed which piece):
+
+\begin{longtable}{@{}lllc@{}}
+\toprule
+Context $V$ & $K_A(V)$ as arrow set & $K_R(V)$ as arrow set &
+Coincide? \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+$\varnothing$ & null & null & yes \\
+$\{\omega_{ij}\}$ (each of 4) & $\{V, \varnothing\}$ &
+$\{V, \varnothing\}$ & yes \\
+$A_0$ & $\{A_0, \varnothing\}$ &
+$\{\{\omega_{00}\}, \{\omega_{01}\}\}$ & no \\
+$A_1$ & $\{A_1, \varnothing\}$ &
+$\{\{\omega_{10}\}, \{\omega_{11}\}\}$ & no \\
+$R_0$ & $\{\{\omega_{00}\}, \{\omega_{10}\}\}$ &
+$\{R_0, \varnothing\}$ & no \\
+$R_1$ & $\{\{\omega_{01}\}, \{\omega_{11}\}\}$ &
+$\{R_1, \varnothing\}$ & no \\
+$\Delta$ & $\{\{\omega_{00}\}, \{\omega_{11}\}\}$ &
+$\{\{\omega_{00}\}, \{\omega_{11}\}\}$ & yes \\
+$\nabla$ & $\{\{\omega_{01}\}, \{\omega_{10}\}\}$ &
+$\{\{\omega_{01}\}, \{\omega_{10}\}\}$ & yes \\
+$T_{00}$ & $\{\{\omega_{01}\}, A_1\}$ & $\{\{\omega_{10}\}, R_1\}$ & no \\
+$T_{01}$ & $\{\{\omega_{00}\}, A_1\}$ & $\{R_0, \{\omega_{11}\}\}$ & no \\
+$T_{10}$ & $\{A_0, \{\omega_{11}\}\}$ & $\{\{\omega_{00}\}, R_1\}$ & no \\
+$T_{11}$ & $\{A_0, \{\omega_{10}\}\}$ & $\{R_0, \{\omega_{01}\}\}$ & no \\
+$\Omega$ & $\{A_0, A_1\}$ & $\{R_0, R_1\}$ & no \\
+\end{longtable}
+
+\begin{finding}
+\label{appA:fnd:coincide}
+The unmarked families coincide at exactly seven of the sixteen contexts:
+the empty context, the four singletons, and the two diagonals $\Delta$ and
+$\nabla$. At these contexts the generated sieves are equal and the
+topology retains no trace of which partition produced the cover; only the
+marked records (different cover kinds, different digests) distinguish
+them. At the remaining nine contexts the arrow sets differ and the
+topology itself separates the covers. Three refinements of this statement
+are worth recording. (i) The singleton and empty cases are the ones
+registered as certificate checks; the diagonal cases are derived here
+directly from the tables and are not separately registered in v0.1.
+(ii) At $\Delta$ the coincidence is aligned block-by-block: the
+$A_0$-piece equals the $R_0$-piece ($\{\omega_{00}\}$) and the $A_1$-piece
+equals the $R_1$-piece ($\{\omega_{11}\}$). At $\nabla$ the coincidence
+is \emph{crossed}: the $A_0$-piece equals the $R_1$-piece
+($\{\omega_{01}\}$) and the $A_1$-piece equals the $R_0$-piece
+($\{\omega_{10}\}$). So even among coinciding contexts, the
+indexed-by-block families agree at $\Delta$-type contexts only up to
+relabeling and at $\nabla$ only up to a label crossing --- a second,
+finer layer of information the unmarked arrow set forgets. (iii) The
+coincidence pattern is forced by block geometry: $K_A(V) = K_R(V)$ as
+arrow sets can happen only when every piece of both covers has at most
+one atom, i.e.\ when $V$ meets each block in at most one atom, which
+characterizes exactly the seven listed contexts (the subsets of $\Omega$
+containing no complete block and no two atoms sharing a block occur
+precisely at sizes $\le 1$ and at the two diagonals).
+\end{finding}
+
+\section{The common refinement at every context}
+\label{appA:sec:refinement}
+
+The common refinement of $K_A(V)$ and $K_R(V)$ has as members the four
+pairwise intersections $V \cap A_i \cap R_j$, $(i, j) \in \{0,1\}^2$.
+By transversality, $V \cap A_i \cap R_j = V \cap \{\omega_{ij}\}$: the
+member indexed by $(i, j)$ is $\{\omega_{ij}\}$ when
+$\omega_{ij} \in V$ and $\varnothing$ otherwise. The refinement is thus
+the singleton family of $V$ padded with empty pieces --- the
+context-by-context content of the certificate check
+\texttt{transverse\_refinement\_is\_singletons} and, at $\Omega$, of
+\texttt{joint\_refinement\_is\_four\_singletons}.
+
+\begin{longtable}{@{}llc@{}}
+\toprule
+Context $V$ & Nonempty refinement members & Empty members \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+$\varnothing$ & none & 4 \\
+$\{\omega_{ij}\}$ (each of 4) & $\{\omega_{ij}\}$ & 3 \\
+$A_0$ & $\{\omega_{00}\}, \{\omega_{01}\}$ & 2 \\
+$A_1$ & $\{\omega_{10}\}, \{\omega_{11}\}$ & 2 \\
+$R_0$ & $\{\omega_{00}\}, \{\omega_{10}\}$ & 2 \\
+$R_1$ & $\{\omega_{01}\}, \{\omega_{11}\}$ & 2 \\
+$\Delta$ & $\{\omega_{00}\}, \{\omega_{11}\}$ & 2 \\
+$\nabla$ & $\{\omega_{01}\}, \{\omega_{10}\}$ & 2 \\
+$T_{ij}$ (each of 4) & the three singletons of $T_{ij}$ & 1 \\
+$\Omega$ & all four singletons & 0 \\
+\end{longtable}
+
+Empty members and their repetitions do not change the generated sieve,
+so at every context the refinement generates the sieve of size-$\le 1$
+subcontexts --- the generating sieve of $J_{\mathrm{atom}}$. This is
+the per-context form of the join computation in Chapter~10, and it also
+explains the coincidence pattern of
+Finding~\ref{appA:fnd:coincide} from another angle: at the seven
+coinciding contexts, $K_A(V)$ and $K_R(V)$ each \emph{already equal}
+their own common refinement up to empty members, so nothing remains to
+distinguish them at the arrow level.
+
+\section{Per-context sieve and covering-sieve counts}
+\label{appA:sec:sievecounts}
+
+For completeness we tabulate the sieve universe and the joined-topology
+covering counts underlying the registered totals $298$ and $168$
+(Chapter~11). A sieve on $V$ is a down-set of $\mathcal{P}(V)$, counted by
+the Dedekind number $M(|V|)$; a sieve is covering for
+$J_A \vee J_R = J_{\mathrm{atom}}$ iff it contains every singleton of $V$
+(Chapter~10).
+
+\begin{longtable}{@{}lcccc@{}}
+\toprule
+Context class & Count of contexts & Sieves on each & Covering (join) on
+each & Subtotals (sieves / covering) \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+$|V| = 0$ & 1 & $M(0) = 2$ & 2 & 2 / 2 \\
+$|V| = 1$ & 4 & $M(1) = 3$ & 1 & 12 / 4 \\
+$|V| = 2$ & 6 & $M(2) = 6$ & 2 & 36 / 12 \\
+$|V| = 3$ & 4 & $M(3) = 20$ & 9 & 80 / 36 \\
+$|V| = 4$ & 1 & $M(4) = 168$ & 114 & 168 / 114 \\
+\midrule
+Totals & 16 & --- & --- & 298 / 168 \\
+\end{longtable}
+
+Derivation notes for the covering column. At $\varnothing$ both sieves
+cover: the null cover generates the empty sieve, and its unique supersieve
+is maximal. At a singleton the only covering sieve is maximal (the sole
+generating family contains the identity piece). At $|V| = 2$ the covering
+sieves are the sieve of all proper subcontexts and the maximal sieve. At
+$|V| = 3$, a covering sieve contains all four subcontexts of size
+$\le 1$; the free data is a down-set over the three $2$-subsets and the
+top, giving $2^3 = 8$ choices without the top plus $1$ with it (the top
+forces all $2$-subsets), total $9$. At $\Omega$, the free data is a
+down-set of the eleven subcontexts of size $\ge 2$; counting by the set of
+included $3$-subsets (each forcing its three $2$-subsets, with any two
+$3$-subsets sharing one $2$-subset and any three covering all six) gives
+$64 + 32 + 12 + 4 + 1 = 113$ down-sets without $\Omega$ itself plus $1$
+with it, total $114$. These hand counts reproduce the enumeration totals
+that the modality-composition verifier computes independently and reports
+identically for both presentations of the joined topology.

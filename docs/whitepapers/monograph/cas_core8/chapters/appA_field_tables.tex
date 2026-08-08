@@ -1,0 +1,236 @@
+\chapter{Reference Tables}\label{tables:chapter}
+
+This appendix collects, in tabular form, the field inventories, valid combinations, rule catalogs, and enumerations that the mechanism chapters introduced in prose. The tables are a convenience for implementers and reviewers, not an independent authority: where a table and a mechanism chapter's normative text could be read to differ, the chapter governs, and the difference is a defect in this appendix to be reported. All content is Ring-4 candidate material at the bounded Gate-4 receipt; field names are the v0.1 names and change only through Core revision under review.
+
+Three usage notes. First, the tables are designed to be checked, not only read: every ``rationale'' cell names the failure the field or rule exists to block, so a reviewer can audit each row by asking whether the named failure is in fact unrepresentable or rejected in the implementation --- the row-by-row form of the threat model's coverage question. Second, the rejection-side tables (encoding rules, loader catalog, failure taxonomy) are \emph{closed lists} in the specification's sense: the implementation rejects what the rows say and accepts the complement within its declared domain, so a behavior found in the software that corresponds to no row --- an undocumented rejection as much as an undocumented acceptance --- is a conformance defect even if it seems benign. Third, where a table row summarizes a numeric constant (lock bounds, path limits), the constant is a declared policy value, not a derived optimum; the review criteria tracking whether those constants deserve empirical study are among the open items recorded in the evidence chapter.
+
+\section{Semantic-reference fields}\label{tables:semref}
+
+Table~\ref{tables:tab:semref} lists the five fields of the semantic-reference tuple. Identity is structural equality of the full tuple; no subset of fields, and no rendered string, substitutes for it. The exact-type discipline applies: a reference is the exact kernel type, not a subclass, and each field is the exact primitive type named below.
+
+\begin{table}[htbp]
+\centering
+\caption{Semantic-reference fields.}
+\label{tables:tab:semref}
+\begin{tabular}{@{}p{0.21\textwidth}p{0.2\textwidth}p{0.49\textwidth}@{}}
+\toprule
+Field & Type & Rationale \\
+\midrule
+\texttt{namespace} & enum (7 values) & Places the referent in exactly one ontological family; makes cross-family equality structurally false, blocking conflation (threat T1) at the type level rather than by convention. \\
+\addlinespace
+\texttt{local\_id} & string (identifier profile) & The referent's name within its namespace. Confined to the declared normalized/ASCII identifier profile so that comparison never depends on Unicode equivalence classes; prose names live elsewhere. \\
+\addlinespace
+\texttt{version} & string (identifier profile) & Distinguishes revisions of the same-named referent. Unversioned reference is unrepresentable; ``the current one'' is not an identity. \\
+\addlinespace
+\texttt{source\_id} & string (identifier profile) & Names the defining source document or corpus. Binds the reference to a provenance context, so two definitions of one name in different sources are two references. \\
+\addlinespace
+\texttt{definition\_sha256} & string (64 lowercase hex) & Digest of the exact defining bytes in the identified source. Makes definitional drift observable at the identity layer: if the defining text changes, the reference changes. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The \texttt{namespace} enumeration, exhaustively: \textsc{tks-foundation}, \textsc{tks-world}, \textsc{cas-drive}, \textsc{cas-domain}, \textsc{cas-register}, \textsc{cas-state}, \textsc{noetic-topos-object}. The families are pairwise disjoint by declaration; no namespace is a subset, alias, or refinement of another, and no coercion between namespaces exists.
+
+Cross-namespace links carry exactly one \texttt{kind} from the enumeration \textsc{translation}, \textsc{alignment}, \textsc{hypothesis}, plus their own \texttt{source\_id} and review-state field. There is no \textsc{identity} member of the link-kind enumeration --- the omission is the mechanism. Table~\ref{tables:tab:links} inventories the link fields for completeness.
+
+\begin{table}[htbp]
+\centering
+\caption{Cross-namespace link fields.}
+\label{tables:tab:links}
+\begin{tabular}{@{}p{0.2\textwidth}p{0.24\textwidth}p{0.46\textwidth}@{}}
+\toprule
+Field & Type & Rationale \\
+\midrule
+\texttt{kind} & enum (3 values) & Grades the strength of the asserted correspondence; the maximum representable strength is \textsc{translation}, which is still not identity. \\
+\addlinespace
+source reference & semantic reference & The link's domain endpoint, as a full structural tuple. \\
+\addlinespace
+target reference & semantic reference & The link's codomain endpoint. Endpoints in the same namespace are a construction error: links exist for crossings. \\
+\addlinespace
+\texttt{source\_id} & string (identifier profile) & Names the document asserting the correspondence, so every link is traceable to a citable origin rather than to tooling convenience. \\
+\addlinespace
+review state & enum & Records the correspondence's standing in review; a link is data about a relationship, and its trustworthiness is a separate, recorded fact. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+A reading example ties the two tables together. The historically incident-bearing pair --- a TKS Foundation position and the positionally corresponding CAS Drive --- is representable exactly once and exactly honestly: two references (namespaces \textsc{tks-foundation} and \textsc{cas-drive}, each with its own \texttt{definition\_sha256}) joined by a link of kind \textsc{translation} or \textsc{alignment} citing the translation-key document, at whatever review state that document holds. Every stronger representation is unconstructible; every weaker one (bare strings) is outside the kernel and outside its protection.
+
+\section{Boundary fields and valid combinations}\label{tables:boundary}
+
+Table~\ref{tables:tab:boundaryfields} lists the three boundary fields; Table~\ref{tables:tab:boundarycombos} gives the combination rules for Ring-4 candidate material. The boundary is validated jointly at construction --- there is no partially valid boundary --- and every public operation derives and rechecks it from inputs.
+
+\begin{table}[htbp]
+\centering
+\caption{Research-boundary fields.}
+\label{tables:tab:boundaryfields}
+\begin{tabular}{@{}p{0.22\textwidth}p{0.24\textwidth}p{0.44\textwidth}@{}}
+\toprule
+Field & Type & Rationale \\
+\midrule
+admission state & enum (incl.\ \textsc{open}) & Records where the artifact stands in the program's admission process. \textsc{open} = under research, not admitted to any further status. \\
+\addlinespace
+product state & enum (incl.\ \textsc{not licensed}) & Records legal/product standing. \textsc{not licensed} is the only value constructible for Ring-4 material in v0.1. \\
+\addlinespace
+public disclosure & boolean & Records whether the artifact is designated for disclosure beyond the program. False throughout Ring 4. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Boundary combinations for Ring-4 material.}
+\label{tables:tab:boundarycombos}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Admission & Product & Disclosure & Verdict at construction \\
+\midrule
+\textsc{open} & \textsc{not licensed} & false & valid (the Ring-4 triple) \\
+\textsc{open} & licensed value & any & invalid: contradiction \\
+\textsc{open} & \textsc{not licensed} & true & invalid: disclosure in Ring 4 \\
+non-\textsc{open} & any & any & invalid in v0.1: no such ring is constructible \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Reading note: the single valid row is not a default that other rows override; it is the only constructible state. The invalid rows fail at the constructor with a diagnostic naming the contradiction, and no operation accepts an unvalidated triple. A self-digest field accompanies the boundary for post-construction tamper evidence; it appears in no validity rule because it grants nothing.
+
+\section{Canonical-encoding rules}\label{tables:encoding}
+
+Table~\ref{tables:tab:encoding} restates the encoder's closed rule set with accept/reject examples. ``Reject'' always means: canonicalization fails with a diagnostic naming the offending path; nothing is coerced, rounded, sorted-into-acceptability, or dropped.
+
+\begin{longtable}{@{}p{0.26\textwidth}p{0.33\textwidth}p{0.33\textwidth}@{}}
+\caption{Canonical-encoding rules with examples.}\label{tables:tab:encoding}\\
+\toprule
+Rule & Accepted example & Rejected example \\
+\midrule
+\endfirsthead
+\toprule
+Rule & Accepted example & Rejected example \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+UTF-8 JSON, sorted string keys, deterministic bytes & mapping with keys \texttt{"a"}, \texttt{"b"} encodes with \texttt{"a"} first regardless of insertion order & mapping with a non-string key; any encoding whose byte output depends on iteration order \\
+\addlinespace
+No unordered containers & list \texttt{[1, 2, 3]} (order is the caller's declared order) & any set value, however small; acceptance would force an undeclared ordering \\
+\addlinespace
+No binary floats & tagged decimal from $\mathrm{Decimal}(\texttt{"0.1"})$ & the float \texttt{0.1}; also \texttt{1e308}, \texttt{-0.0} \\
+\addlinespace
+No NaN or infinities & --- (no accepted spelling exists) & \texttt{NaN}, \texttt{+inf}, \texttt{-inf} in any position \\
+\addlinespace
+Tagged exact decimals; no type puns & $\mathrm{Decimal}(\texttt{"1.0"})$, string \texttt{"1.0"}, integer \texttt{1} all encode, with pairwise distinct bytes & any encoder configuration in which two of the three share an encoding \\
+\addlinespace
+One serialization route per public type & a receipt encoded via its single declared route & a second ad hoc dict-dump of the same receipt type; route multiplicity is a defect, not a convenience \\
+\addlinespace
+Bounded depth and node count & structures within declared limits & any structure exceeding declared depth or node limits; failure names the limit \\
+\addlinespace
+Cycle-aware; no cycles & finite trees and DAGs within bounds (DAG sharing encoded by declared expansion) & any self-referential structure; failure, not truncation \\
+\end{longtable}
+
+The byte-identity discipline sits beside the encoder and is tabulated with it for convenience: for any tracked file, the record carries \texttt{raw\_sha256} (digest of exact bytes), \texttt{lf\_sha256} (digest after declared CRLF-to-LF comparison normalization), and the three counts \texttt{crlf\_count}, \texttt{lone\_cr\_count}, \texttt{lone\_lf\_count}. No other normalizations exist; neither digest substitutes for the other.
+
+\section{Compatibility-receipt fields}\label{tables:receipt}
+
+Table~\ref{tables:tab:receipt} inventories the fields of a compatibility receipt, grouped by protocol concern. Every field is populated on every successful execution; the failure taxonomy (Section~\ref{tables:failures}) governs what is recorded instead when a worker fails.
+
+\begin{longtable}{@{}p{0.3\textwidth}p{0.62\textwidth}@{}}
+\caption{Receipt fields of the compatibility protocol.}\label{tables:tab:receipt}\\
+\toprule
+Field group & Contents and role \\
+\midrule
+\endfirsthead
+\toprule
+Field group & Contents and role \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Source identity & Requested source digest, verified before execution; the execution is \emph{about} these bytes and refuses others. \\
+\addlinespace
+Compiler identity & Raw and LF digests of the compiler bytes, read and hashed before execution; newline counts per the byte-identity discipline. \\
+\addlinespace
+Engine and policy profile & The forced Python-only engine profile and exact frozen policy identifiers; syntax and semantic profile identifiers. No native profile exists in v0.1. \\
+\addlinespace
+Worker runtime binding & Interpreter fields, \texttt{sys.platform} or POSIX \texttt{os.uname} data, profile-bound Windows architecture inputs; sampled before compiler code executes; no WMI or subprocess probing. \\
+\addlinespace
+Worker environment & Interpreter and worker bytes identification, import search paths, loaded-module inventory --- the sanitized \texttt{-I -S -B} environment as actually observed. \\
+\addlinespace
+Result & Digest of the canonical result; diagnostics stream. \\
+\addlinespace
+Concurrency record & Lock acquisition outcome under the 90-second bound, 10 ms poll, 10 ms post-release yield discipline; no fairness assertion. \\
+\addlinespace
+Capability fields & Explicit \emph{false} flags: hermetic execution false, OS-level sandbox false. Present so that no consumer can honestly over-read the receipt. \\
+\addlinespace
+Research boundary & The full Ring-4 triple, rechecked at receipt construction. \\
+\addlinespace
+Replay linkage & Identities required for fresh replay; a structural decision consumes agreement between this receipt and a fresh execution, never this receipt alone. \\
+\end{longtable}
+
+\section{Worker-failure taxonomy}\label{tables:failures}
+
+For failed executions the receipt is replaced by a failure record whose information content is deliberately bounded: exit code; stdout byte count and SHA-256; stderr byte count and SHA-256. An empty or malformed transport response fails closed and is never retried. Dependency-profile divergence between two successful workers produces the bounded divergence record: both profile hashes; at most 32 keyed difference paths; environment values and dependency paths represented only by hashes. No failure class records cleartext environment content.
+
+\section{Registry-loader rejection catalog}\label{tables:loader}
+
+Table~\ref{tables:tab:loader} is the loader's rejection catalog. Each row is exercised by at least one fixture family in the Gate-4 suite; a bytes-level input matching any row does not load, and there is no lenient mode.
+
+\begin{longtable}{@{}p{0.3\textwidth}p{0.62\textwidth}@{}}
+\caption{Rejection catalog of the registry loader.}\label{tables:tab:loader}\\
+\toprule
+Rejection & Meaning and rationale \\
+\midrule
+\endfirsthead
+\toprule
+Rejection & Meaning and rationale \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Duplicate JSON keys & The bytes admit two parses depending on which duplicate wins; ambiguity at the byte layer is never resolved by preference. \\
+\addlinespace
+Unknown root fields & The ledger asserts structure the schema does not define; silently ignoring it would let content ride outside validation. \\
+\addlinespace
+Unknown record fields & As above, per record. \\
+\addlinespace
+Wrong enum values & A field carries a value outside its declared enumeration (e.g.\ an undefined ring or state). \\
+\addlinespace
+Wrong shapes & Structural mismatch: list where object required, missing nesting, wrong arity. \\
+\addlinespace
+Invalid identifiers & An identifier field violates the declared normalized/ASCII profile. \\
+\addlinespace
+Ambiguous versions & Version fields that collide or cannot be totally resolved within the ledger. \\
+\addlinespace
+Missing required metadata & A record lacks a field the contract marks required; absence is not defaulted. \\
+\end{longtable}
+
+Complementing the catalog, three loader guarantees from the mechanism chapter belong in any implementer's checklist: parses are reconstructed from and rechecked against retained raw ledger and schema bytes (no constructor or dataclass-copy route can pair old raw identity with new content); loaded values are recursively immutable; and each selected record carries a deterministic digest bound to the registry bytes, not merely to its own fields.
+
+\section{Decision-model enumerations}\label{tables:decision}
+
+Table~\ref{tables:tab:decision} collects the runtime decision model's enumerated dimensions and constant fields. There is no stringly-typed action path: an action is describable only in these enums, and an indescribable action is not executable through the kernel.
+
+\begin{table}[htbp]
+\centering
+\caption{Decision-model enumerations and constants.}
+\label{tables:tab:decision}
+\begin{tabular}{@{}p{0.28\textwidth}p{0.64\textwidth}@{}}
+\toprule
+Dimension & Values and notes \\
+\midrule
+Action operation & Enum of the kernel's admitted operations (compatibility execution, registry load, record selection, replay comparison, \ldots); closed set, widened only by Core revision. \\
+\addlinespace
+Action target & Enum of target artifact classes (source, compiler, ledger, receipt, \ldots). \\
+\addlinespace
+Effect class & Enum separating \emph{nonclaim research evidence} from \emph{claim-bearing} effect; the load-bearing distinction of the model. \\
+\addlinespace
+Structural verdict & A nonclaim replay comparison may pass structurally when every exact compatibility field and digest validates under fresh replay; otherwise fail. \\
+\addlinespace
+\texttt{authorization\_granted} & Constant \emph{false} in v0.1; no code path assigns true. \\
+\addlinespace
+\texttt{allowed} (compatibility spelling) & Constant \emph{false} in v0.1; same invariant, legacy field name. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The two constant-false rows are the appendix's summary of the kernel's thesis, and they are the two rows a future revision would touch last, under the future-authorization design constraints: exact trusted registry/schema manifest; authenticated authority and trust root; reviewer and admission receipts; Evidence Packet identities and verification status; claim ID and exact version; and code, model, environment, semantic, and calibration identities of the requested operation. Until a reviewed design binds all of these, every table in this appendix describes a kernel whose answer to claim-bearing intent is \emph{no}.

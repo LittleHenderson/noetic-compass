@@ -1,0 +1,1087 @@
+\chapter{The Type System}\label{ch04:chapter}
+
+\section{Design stance}\label{ch04:sec:stance}
+
+Every later chapter of this monograph --- the board model, the design-rule
+checker, the simulator, the geometry profiles, the TKS adapter, and the
+adverse source audit --- rests on a single decision made at the lowest layer
+of the candidate: \emph{semantic distinctions are enforced by types, not by
+convention}. The CAS PCBA~8 type system is the place where that decision is
+made concrete. It fixes, once, which values may exist at all; everything
+downstream can then reason about which values may be \emph{connected},
+\emph{checked}, \emph{simulated}, or \emph{adapted}, without re-litigating
+what the values are.
+
+The stance has four components, each of which recurs throughout this
+chapter.
+
+\begin{ruleenv}[Exact-type discipline]\label{ch04:rule:exact}
+Every typed record in the candidate accepts only its exact runtime type.
+Subclasses are rejected at construction and again at every revalidation.
+A value that merely \emph{behaves like} a state literal, a port
+specification, or a calibration reference is not one; the candidate refuses
+to consume it.
+\end{ruleenv}
+
+\begin{ruleenv}[Fail-closed construction]\label{ch04:rule:failclosed}
+Construction validates; revalidation re-validates. A record that cannot
+prove its own well-formedness at the moment it is touched raises a typed
+error rather than degrading into a permissive default. No field is ever
+filled in silently: an absent Drive is absent, an unknown unit is an error,
+an unsupported value type has no canonical identity and therefore cannot
+enter a trace.
+\end{ruleenv}
+
+\begin{ruleenv}[Identity from structure]\label{ch04:rule:identity}
+Wherever a value participates in evidence --- board digests, trace events,
+measurement records, geometry profiles --- its identity is a canonical,
+versioned, deterministic serialization of its complete typed structure,
+hashed with SHA-256. Two values are the same exactly when their canonical
+payloads are byte-identical. There is no ambient notion of equality that
+can be substituted for this one.
+\end{ruleenv}
+
+\begin{ruleenv}[Boundary in the types]\label{ch04:rule:boundary}
+The research boundary --- Ring~4, \textsc{open}, \textsc{not licensed},
+\textsc{held} --- is itself a type. Artifacts do not carry a mutable status
+field that a caller could upgrade; they carry a value of a type whose only
+inhabitant \emph{is} the fixed boundary, rederived and rechecked by every
+public operation.
+\end{ruleenv}
+
+Nothing in this chapter is a claim about cognition, about any deployed
+model, or about physical electronics. The type system is a software
+contract. Where a type carries a CAS name (Noetic, Domain, Drive,
+Register), the name records which CAS coordinate the type is \emph{intended}
+to represent inside the research candidate; it does not assert that the
+coordinate is realized in any external system. That boundary is restated
+formally in Section~\ref{ch04:sec:boundary}.
+
+\section{The four semantic factors}\label{ch04:sec:factors}
+
+The candidate models the CAS state space as a product of finite coordinate
+sets. Four enumerated factor types are declared, and --- deliberately ---
+nothing else is assumed about their interaction. In particular, the
+implementation's own module documentation is explicit that the factors are
+\emph{not} called geometrically orthogonal: no orthogonality theorem is
+assumed by the type layer, and none is imported from the source book.
+
+\begin{definition}[Noetic factor]\label{ch04:def:noetic}
+$\mathrm{Noetic}$ is a ten-element enumeration carried on the integers
+$0$ through $9$: \textsc{idea}~(0), \textsc{mind}~(1),
+\textsc{positive}~(2), \textsc{negative}~(3), \textsc{vibration}~(4),
+\textsc{female}~(5), \textsc{male}~(6), \textsc{rhythm}~(7),
+\textsc{above-cause}~(8), \textsc{below-effect}~(9).
+\end{definition}
+
+\begin{definition}[Domain factor]\label{ch04:def:domain}
+$\mathrm{Domain}$ is a four-element enumeration carried on the strings
+\texttt{P}, \texttt{C}, \texttt{E}, \texttt{O} (Principled, Cognitive,
+Evaluative, Operational). Each domain exposes a total precedence rank
+$P \mapsto 0$, $C \mapsto 1$, $E \mapsto 2$, $O \mapsto 3$, encoding the
+structural order $P \succ C \succ E \succ O$ as data available to the
+checker; the type layer itself attaches no descent semantics to the rank.
+\end{definition}
+
+\begin{definition}[Drive factor]\label{ch04:def:drive}
+$\mathrm{Drive}$ is a seven-element enumeration carried on the strings
+\texttt{F1} through \texttt{F7}.
+\end{definition}
+
+\begin{definition}[Register factor]\label{ch04:def:register}
+$\mathrm{Register}$ is a four-element enumeration carried on the strings
+\texttt{T} (Transcendent), \texttt{A} (Analytical), \texttt{f} (Affective),
+and \texttt{E} (Embodied). The lowercase \texttt{f} is deliberate and
+canonical; it prevents a case-folding collision with the Embodied register
+\texttt{E} and with the Evaluative domain \texttt{E}, which lives in a
+different enumeration entirely.
+\end{definition}
+
+\begin{remark}[Domain \texttt{E} versus Register \texttt{E}]
+The string \texttt{E} appears as a carrier value in both
+$\mathrm{Domain}$ and $\mathrm{Register}$. Under the exact-type discipline
+of Rule~\ref{ch04:rule:exact} this is harmless: the two values inhabit
+disjoint enumeration types and no operation in the candidate accepts a bare
+string where a factor is required. The collision would be hazardous only in
+a stringly-typed design --- which is precisely the design the candidate
+refuses. This is a small, early illustration of why the type system exists.
+\end{remark}
+
+\section{State literals}\label{ch04:sec:literals}
+
+\begin{definition}[State literal]\label{ch04:def:stateliteral}
+A state literal is an element of
+\[
+\mathrm{StateLiteral}
+ = \mathrm{Noetic} \times \mathrm{Domain}
+ \times \mathrm{Drive}_{\mathrm{opt}} \times \mathrm{Register}_{\mathrm{opt}},
+\]
+where $\mathrm{Drive}_{\mathrm{opt}} = \mathrm{Drive} \sqcup \{\bot\}$ and
+$\mathrm{Register}_{\mathrm{opt}} = \mathrm{Register} \sqcup \{\bot\}$
+adjoin an explicit absence marker. In the implementation the type is the
+frozen record \texttt{CasState} with fields \texttt{noetic},
+\texttt{domain}, \texttt{drive} (optional), and \texttt{register}
+(optional).
+\end{definition}
+
+Three points about this definition carry analytical weight.
+
+First, \emph{optionality is explicit, not defaulted}. The implementation's
+own docstring states the contract: Drive and Register are optional because
+the inherited notation permits partial literals, and ``their absence is
+explicit and never filled by a default or inferred from another state.''
+A literal with no Drive is a different mathematical object from a literal
+with any particular Drive, and the candidate never manufactures the latter
+from the former. This matters because the source notation
+(\texttt{\^{}n\^{}D}, \texttt{\^{}n\^{}D\_\{Fk\}},
+\texttt{\^{}n\^{}D\_\{Fk\}|R}) treats the shorter forms as legitimate
+partial specifications, not as abbreviations of some canonical completion.
+A type system that auto-completed them would be inventing semantics the
+source does not license.
+
+Second, \emph{construction and revalidation enforce factor exactness}. Each
+field must be an exact member of its factor enumeration; \texttt{None} is
+admitted only for the two optional fields. A string \texttt{"P"} in the
+domain position, an integer \texttt{3} in the noetic position, or a
+subclass of any factor type is rejected with a typed error.
+
+Third, \emph{the literal has a canonical rendering}. The record exposes a
+rendering of the form \texttt{\^{}3\^{}P}, \texttt{\^{}3\^{}P\_\{F2\}}, or
+\texttt{\^{}3\^{}P\_\{F2\}|A}, produced only after revalidation. The
+rendering is derived output, never an alternative identity: equality and
+hashing are structural, over the typed fields, and the canonical trace
+identity of a state literal (Section~\ref{ch04:sec:traceid}) serializes the
+fields individually rather than the rendered string. A rendered string can
+be regenerated from the fields; the fields cannot be safely regenerated
+from an arbitrary string without a parser, and the v0.1 candidate
+deliberately declares no parser (Chapter~10 records why).
+
+\section{ND-cells and the forgetful projection}\label{ch04:sec:ndcells}
+
+\begin{definition}[ND-cell]\label{ch04:def:ndcell}
+An ND-cell is an element of
+\[
+\mathrm{NDCell} = \mathrm{Noetic} \times \mathrm{Domain},
+\]
+implemented as the frozen record \texttt{NdCell} with typed fields
+\texttt{domain} and \texttt{noetic} and a derived label of the form
+\texttt{P0}, \texttt{C7}, \texttt{O9}. The forty canonical cells are fixed
+in the order $P0,\ldots,P9,\,C0,\ldots,C9,\,E0,\ldots,E9,\,O0,\ldots,O9$,
+exported as an immutable tuple together with the parallel tuple of canonical
+labels.
+\end{definition}
+
+The canonical order is load-bearing: it is the coordinate order of every
+simplex address (Section~\ref{ch04:sec:simplex}), the row discipline of
+every geometry identity payload, and the order against which the mixed-simplex
+validator checks incoming cell tuples. A permutation of the forty cells is
+not ``the same cells in a different order''; it is a malformed address.
+Table~\ref{ch04:tab:cells} fixes the correspondence between coordinate
+index, label, and factor pair once, for reference throughout the
+monograph.
+
+\begin{longtable}{@{}rllcrll@{}}
+\caption{The forty canonical ND-cells in canonical order. Index $k$ is the
+coordinate position used by every simplex address and geometry payload.}
+\label{ch04:tab:cells}\\
+\toprule
+$k$ & Label & Factors & \hspace{2em} & $k$ & Label & Factors \\
+\midrule
+\endfirsthead
+\toprule
+$k$ & Label & Factors & \hspace{2em} & $k$ & Label & Factors \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+1 & \texttt{P0} & (Idea, Principled) & & 21 & \texttt{E0} & (Idea, Evaluative) \\
+2 & \texttt{P1} & (Mind, Principled) & & 22 & \texttt{E1} & (Mind, Evaluative) \\
+3 & \texttt{P2} & (Positive, Principled) & & 23 & \texttt{E2} & (Positive, Evaluative) \\
+4 & \texttt{P3} & (Negative, Principled) & & 24 & \texttt{E3} & (Negative, Evaluative) \\
+5 & \texttt{P4} & (Vibration, Principled) & & 25 & \texttt{E4} & (Vibration, Evaluative) \\
+6 & \texttt{P5} & (Female, Principled) & & 26 & \texttt{E5} & (Female, Evaluative) \\
+7 & \texttt{P6} & (Male, Principled) & & 27 & \texttt{E6} & (Male, Evaluative) \\
+8 & \texttt{P7} & (Rhythm, Principled) & & 28 & \texttt{E7} & (Rhythm, Evaluative) \\
+9 & \texttt{P8} & (Above/Cause, Principled) & & 29 & \texttt{E8} & (Above/Cause, Evaluative) \\
+10 & \texttt{P9} & (Below/Effect, Principled) & & 30 & \texttt{E9} & (Below/Effect, Evaluative) \\
+11 & \texttt{C0} & (Idea, Cognitive) & & 31 & \texttt{O0} & (Idea, Operational) \\
+12 & \texttt{C1} & (Mind, Cognitive) & & 32 & \texttt{O1} & (Mind, Operational) \\
+13 & \texttt{C2} & (Positive, Cognitive) & & 33 & \texttt{O2} & (Positive, Operational) \\
+14 & \texttt{C3} & (Negative, Cognitive) & & 34 & \texttt{O3} & (Negative, Operational) \\
+15 & \texttt{C4} & (Vibration, Cognitive) & & 35 & \texttt{O4} & (Vibration, Operational) \\
+16 & \texttt{C5} & (Female, Cognitive) & & 36 & \texttt{O5} & (Female, Operational) \\
+17 & \texttt{C6} & (Male, Cognitive) & & 37 & \texttt{O6} & (Male, Operational) \\
+18 & \texttt{C7} & (Rhythm, Cognitive) & & 38 & \texttt{O7} & (Rhythm, Operational) \\
+19 & \texttt{C8} & (Above/Cause, Cognitive) & & 39 & \texttt{O8} & (Above/Cause, Operational) \\
+20 & \texttt{C9} & (Below/Effect, Cognitive) & & 40 & \texttt{O9} & (Below/Effect, Operational) \\
+\end{longtable}
+
+\begin{definition}[Forgetful projection]\label{ch04:def:projection}
+The projection
+\[
+\pi : \mathrm{StateLiteral} \longrightarrow \mathrm{NDCell},
+\qquad
+\pi(n, d, f, r) = (n, d)
+\]
+forgets the Drive and Register coordinates. In the implementation it is the
+method \texttt{to\_nd\_cell}, whose docstring states that it projects
+``explicitly forgetting two axes.''
+\end{definition}
+
+\begin{proposition}[The projection is many-to-one and not an isomorphism]
+\label{ch04:prop:manytoone}
+Each fiber $\pi^{-1}(c)$ over a canonical cell $c$ has cardinality
+$(7+1)\cdot(4+1) = 40$, so
+\[
+\lvert \mathrm{StateLiteral} \rvert = 40 \cdot 40 = 1600,
+\qquad
+\lvert \mathrm{NDCell} \rvert = 40 .
+\]
+In particular $\pi$ is surjective but not injective, and no map
+$s : \mathrm{NDCell} \to \mathrm{StateLiteral}$ satisfies
+$s \circ \pi = \id_{\mathrm{StateLiteral}}$.
+\end{proposition}
+
+\begin{proof}
+Fix a cell $c = (n, d)$. A literal in the fiber is determined by its Drive
+coordinate, ranging over the seven drives together with the explicit
+absence $\bot$, and its Register coordinate, ranging over the four
+registers together with $\bot$: $8 \cdot 5 = 40$ choices, all realized and
+pairwise distinct by construction of the record type. Surjectivity is
+witnessed by the partial literal $(n, d, \bot, \bot)$. Injectivity fails
+because any fiber contains more than one element; a left inverse
+$s$ with $s \circ \pi = \id$ would force injectivity of $\pi$.
+\end{proof}
+
+\subsection{Why forgetting Drive and Register matters analytically}
+\label{ch04:sec:whyforget}
+
+Proposition~\ref{ch04:prop:manytoone} is elementary as counting; its
+consequences are not. The candidate keeps both types --- and keeps the
+projection explicit --- because three distinct analytical hazards arise
+when the collapse is performed silently.
+
+\emph{First hazard: aggregation is a modeling decision, not a
+formality.} A simplex address (next section) distributes mass over the
+forty ND-cells. When a state literal carrying a Drive and a Register is
+scored into that address, forty distinct literals land in the same
+coordinate. Whatever distinguished analytical work the Drive coordinate was
+doing --- which motivational architecture the state participates in --- and
+whatever the Register coordinate was doing --- which operational character
+the state manifests under --- is unrecoverable from the address. Under
+Correction~2 of the framework's own mathematical discipline (prerequisite
+satisfaction is one-directional; a retraction is not an inverse), this is
+exactly the situation of a section-retraction failure: one can embed a cell
+into a canonical partial literal and project back to the same cell, but one
+cannot project a full literal to a cell and re-embed without loss. The type
+system makes the loss visible as a typed operation
+(\texttt{to\_nd\_cell}) rather than an implicit coercion, so that any
+analysis pipeline that crossed the projection can be audited for whether it
+was entitled to.
+
+\emph{Second hazard: distinctness claims silently weaken.} Two literals
+$\ell_1 = ({\wedge}3, P, F2, A)$ and $\ell_2 = ({\wedge}3, P, F6, f)$ are
+distinct objects with, on the framework's own account, different
+diagnostic content. Their projections coincide. A report that compared
+board state bindings at cell resolution and found ``the same state on both
+ports'' would be making a claim that is true of the projections and false
+of the literals. Because the candidate's canonical trace identity for a
+state value serializes all four fields (Section~\ref{ch04:sec:traceid}),
+identity-level evidence never passes through the projection; only an
+analysis that explicitly chose cell resolution can conflate the two, and
+that choice is then legible in the analysis, not buried in the types.
+
+\emph{Third hazard: the inverse direction invites fabrication.} Since no
+section of $\pi$ exists (Proposition~\ref{ch04:prop:manytoone}), any
+procedure that produces a full literal from cell-resolution data has
+\emph{added} information --- a Drive attribution and a Register attribution
+--- that the data did not contain. In an evidence-bearing pipeline that
+addition must be declared as a modeling step with its own provenance, or it
+is fabrication. The type system cannot prevent an analyst from writing such
+a procedure, but it can and does refuse to provide one: there is no
+``default drive,'' no ``neutral register,'' and no constructor that lifts a
+cell to a literal by fiat. The only canonical object available at cell
+resolution is the cell itself.
+
+\begin{remark}[Relation to the register-multiplicity discipline]
+The v7.7 framework layer distinguishes register-set specification,
+co-presence, and cross-register integration precisely because collapsing
+them destroys diagnostic content. The type layer of this candidate sits
+below that discipline --- a single \texttt{CasState} carries at most one
+register --- but the same conservative instinct governs both: where the
+notation distinguishes, the types distinguish, and any collapse is an
+explicit, auditable act. Multi-register expressions are the business of the
+notation and its (future) parser, not of the state-literal record; the
+record's single optional register is the correct target for one
+register-specified primitive, not a claim that richer expressions do not
+exist.
+\end{remark}
+
+\section{Simplex addresses}\label{ch04:sec:simplex}
+
+\begin{definition}[SimplexAddress40]\label{ch04:def:simplex}
+A $\mathrm{SimplexAddress}_{40}$ is a strictly positive normalized profile
+over the forty canonical ND-cells:
+\[
+p \in \mathbb{R}^{40},
+\qquad p_k > 0 \ \text{for all } k,
+\qquad \sum_{k=1}^{40} p_k = 1 .
+\]
+Equivalently, $p$ is a point of the \emph{open} 39-dimensional probability
+simplex
+\[
+\Delta_{39}^{\circ}
+ = \Bigl\{\, p \in \mathbb{R}^{40} \ :\ p_k > 0,\ \textstyle\sum_k p_k = 1 \,\Bigr\},
+\]
+with coordinates indexed in the canonical cell order of
+Definition~\ref{ch04:def:ndcell}. The implementation is the frozen record
+\texttt{MixedSimplexAddress} with exactly forty finite, strictly positive
+\texttt{Decimal} weights whose \emph{exact} sum is $1$, cells fixed to the
+canonical tuple, and a fixed profile discriminator
+\texttt{CANONICAL\_MIXED\_SIMPLEX\_BASELINE} under the versioned profile
+name \texttt{cas-pcba-v8.mixed-simplex.v1}.
+\end{definition}
+
+\subsection{Why strict positivity}\label{ch04:sec:positivity}
+
+The open simplex --- rather than the closed simplex
+$\overline{\Delta}_{39}$, which admits zero coordinates --- is a deliberate
+and threefold choice.
+
+\emph{Geometric reason.} The Fisher--Rao metric, which
+Chapter~\ref{ch06:chapter} develops as the baseline geometry, has
+coordinate expression
+\[
+g_p(u, v) = \sum_{k} \frac{u_k v_k}{p_k}
+\]
+on the tangent space at $p$. The expression degenerates as any
+$p_k \to 0$: the metric coefficients blow up, the closed simplex is not a
+Riemannian manifold under this metric, and geodesics can reach the boundary
+only in a limiting sense. Restricting the type to the open simplex is what
+makes ``the geometry profile'' a coherent phrase at all: every value the
+type admits is a point where the metric is defined and smooth
+\cite{amari,ay}. The type system thus enforces, at construction time, the
+precondition of every downstream geometric computation, instead of letting
+each computation rediscover boundary pathologies at run time.
+
+\emph{Semantic reason.} A zero coordinate is not a small quantity; it is a
+categorical assertion --- \emph{this cell carries no mass whatsoever}. That
+is a different and much stronger claim type than a profile that
+concentrates mass elsewhere, and it is a claim the candidate's evidence
+discipline has no basis to admit: no measurement in the admitted evidence
+distinguishes ``vanishingly small'' from ``structurally absent.'' By
+excluding zeros the type refuses to let an address smuggle in an
+impossibility claim. Analysts who need absence claims must make them in a
+different vocabulary (the framework's lacunarity analysis), where they can
+carry their own evidence burden.
+
+\emph{Numerical reason.} Downstream computations divide by coordinates and
+take logarithms and square roots of them. Strict positivity, validated
+strictly at construction and at every revalidation, means no downstream
+profile computation needs a guard against division by zero on data that
+passed the type. The validation is exact, not tolerance-based: weights are
+\texttt{Decimal} values, positivity is exact comparison, and the sum
+constraint is checked with an exact aligned-integer summation
+(Section~\ref{ch04:sec:decimal}) rather than a floating tolerance. Distinct
+questions --- ``is this a well-formed address?'' and ``are these two
+addresses numerically distinguishable?'' --- get distinct answers from
+distinct machinery; the second is the pseudometric disclosure of
+Chapter~\ref{ch06:chapter}.
+
+\subsection{Exact normalization}\label{ch04:sec:normalization}
+
+The type provides one constructor from unnormalized data:
+\texttt{from\_positive\_weights} accepts exactly forty finite, strictly
+positive \texttt{Decimal} values, divides by their exact sum under the
+fixed decimal context, and then repairs the residual: the exact sum of the
+normalized weights is recomputed, the deviation from exactly $1$ is
+computed by exact arithmetic, and that residual is added to a
+deterministically chosen anchor coordinate (the largest input weight, ties
+broken by lowest index). If the repair would drive the anchor coordinate
+nonpositive, construction fails rather than admitting a boundary point.
+The result is an address whose weights sum to \texttt{Decimal("1")}
+\emph{exactly} --- not to within an epsilon --- so the sum constraint in
+Definition~\ref{ch04:def:simplex} is a checkable identity, not an
+approximation, and the constructor is deterministic: the same input tuple
+yields the same address and the same identity digest on every run.
+
+\subsection{What a simplex address is not}\label{ch04:sec:simplexnot}
+
+\begin{ruleenv}[Not one-hot]\label{ch04:rule:notonehot}
+A one-hot vector --- mass $1$ on one cell, $0$ elsewhere --- is a vertex of
+the closed simplex and is excluded from $\Delta_{39}^{\circ}$ by strict
+positivity. A simplex address therefore can never assert ``the system is in
+cell $c$.'' The object that names a single cell is \texttt{NdCell} itself;
+the object that names a single full state is \texttt{CasState}. Conflating
+a sharply concentrated address with a definite cell is a category error the
+type system makes unrepresentable rather than merely inadvisable.
+\end{ruleenv}
+
+\begin{ruleenv}[Not a finite TKS kernel element]\label{ch04:rule:nottks}
+The TKS~v8 finite reference kernel traffics in finite carriers: tagged
+finite values, finite transition tables, finite arrows. A simplex address
+has an uncountable ambient type and continuous structure; it is not an
+element of any finite carrier, and the adapter boundary
+(Chapter~9, and the boundary discipline restated in the
+seed specification) rejects any attempt to coerce one into a finite arrow.
+The signal-kind vocabulary of Section~\ref{ch04:sec:ports} keeps the two
+worlds apart at the wiring level: \texttt{MIXED\_SIMPLEX\_ADDRESS} and
+\texttt{FINITE\_STATE} are distinct signal kinds with disjoint admissible
+units, so a net cannot silently deliver a continuous profile to a port that
+expects a finite state.
+\end{ruleenv}
+
+\begin{remark}[Identity of an address]
+Every address exposes a canonical identity payload --- profile name,
+profile kind, the decimal-context digest, the forty canonical labels in
+order, and the forty weights as tagged decimal strings --- and a SHA-256
+over that payload. Two addresses are evidentially the same exactly when
+these digests agree. This is the exact-identity discipline that
+Chapter~\ref{ch06:chapter} contrasts with the binary64 pseudometric: the
+digest separates all distinct addresses; the floating-point distance does
+not promise to.
+\end{remark}
+
+\section{Ports: direction, signal kind, unit}\label{ch04:sec:ports}
+
+Ports are where the type system meets wiring. A port specification is a
+frozen record with five typed fields.
+
+\begin{definition}[Port specification]\label{ch04:def:portspec}
+A \texttt{PortSpec} consists of: a reference string \texttt{ref} conforming
+to the safe-reference profile (Section~\ref{ch04:sec:provenance}); a
+\texttt{direction} in the two-element enumeration
+$\{\textsc{input}, \textsc{output}\}$; a \texttt{signal\_kind} in a
+nine-element enumeration; a \texttt{unit} in a nine-element enumeration;
+and a boolean \texttt{required} (default true).
+\end{definition}
+
+The signal kinds are: \textsc{activation}, \textsc{decision},
+\textsc{cas\_state}, \textsc{finite\_state},
+\textsc{mixed\_simplex\_address}, \textsc{projector\_profile},
+\textsc{text}, \textsc{clock}, and \textsc{scalar}. The units are:
+\textsc{none}, \textsc{activation\_0\_1}, \textsc{boolean},
+\textsc{probability}, \textsc{normalized\_0\_10},
+\textsc{cas\_ohm\_score}, \textsc{volt}, \textsc{second}, and
+\textsc{hertz}.
+
+\begin{ruleenv}[Closed signal-kind/unit admissibility]\label{ch04:rule:sigunit}
+Admissible pairings of signal kind and unit form a closed, immutable table
+(Table~\ref{ch04:tab:sigunit}). The admissibility predicate returns
+false --- it does not raise, and it does not guess --- for any pair
+involving a value that is not an exact member of the respective
+enumeration.
+\end{ruleenv}
+
+\begin{longtable}{@{}lp{7.2cm}@{}}
+\caption{Closed signal-kind/unit admissibility table.}
+\label{ch04:tab:sigunit}\\
+\toprule
+Signal kind & Admissible units \\
+\midrule
+\endfirsthead
+\toprule
+Signal kind & Admissible units \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\textsc{activation} & \textsc{activation\_0\_1} \\
+\textsc{decision} & \textsc{boolean} \\
+\textsc{cas\_state} & \textsc{none} \\
+\textsc{finite\_state} & \textsc{none} \\
+\textsc{mixed\_simplex\_address} & \textsc{probability} \\
+\textsc{projector\_profile} & \textsc{none} \\
+\textsc{text} & \textsc{none} \\
+\textsc{clock} & \textsc{hertz} \\
+\textsc{scalar} & \textsc{none}, \textsc{probability},
+\textsc{normalized\_0\_10}, \textsc{cas\_ohm\_score}, \textsc{volt},
+\textsc{second}, \textsc{hertz} \\
+\end{longtable}
+
+The table encodes a semantic commitment per row. An activation is a
+bounded intensity in $[0,1]$ and nothing else; a decision is a boolean and
+nothing else; the four ``carrier-typed'' kinds (CAS state, finite state,
+projector profile, text) are unitless because their values are structured
+identities rather than magnitudes; a mixed-simplex address is
+probability-typed because its coordinates are exactly a normalized
+profile; a clock is a rate. Only the deliberately generic \textsc{scalar}
+kind admits a menu of units, and it is correspondingly excluded from every
+semantically loaded role: no reference component contract in the closed
+catalog exposes a scalar port where an activation is meant, so a scalar
+can never impersonate an activation merely by carrying a compatible
+number.
+
+Two remarks on this table. First, the presence of \textsc{volt} among the
+scalar units is a naming admission, not a physics claim: the unit exists so
+that source-derived example boards can be transcribed faithfully, and the
+research boundary (Section~\ref{ch04:sec:boundary}) denies physical
+telemetry regardless of unit names. A scalar labeled volts is a scalar
+labeled volts; nothing in the candidate measures electric potential.
+Second, the table is deliberately closed: an unsupported pairing is not a
+warning but a structural impossibility that the DRC reports under its net
+diagnostics. Extending the table is a versioned change to the engine
+identity, visible in every downstream digest.
+
+\section{Component kinds and typed parameter contracts}
+\label{ch04:sec:contracts}
+
+A component on a board names a \emph{kind}; the kind resolves, through a
+closed catalog, to a \emph{contract} that fixes what the component is
+allowed to look like.
+
+\begin{definition}[Parameter rule]\label{ch04:def:paramrule}
+A \texttt{ParameterRule} declares, for one named parameter: a value type
+(\textsc{decimal} or \textsc{string}); whether the parameter is required;
+optional finite \texttt{Decimal} bounds \texttt{minimum} and
+\texttt{maximum} (with an exclusive-maximum flag); and, for string
+parameters, a closed set of admissible choices, each of which must itself
+conform to the safe-reference profile. Construction rejects a minimum
+exceeding a maximum, non-finite bounds, and untyped flags.
+\end{definition}
+
+\begin{definition}[Component contract]\label{ch04:def:contract}
+A \texttt{ComponentContract} binds: a kind name and a versioned semantic
+profile string; a tuple of \texttt{PortSpec} values; an immutable mapping
+from parameter names to \texttt{ParameterRule} values; a set of required
+state-binding names; and three booleans --- \texttt{deterministic},
+\texttt{stateful}, and \texttt{tks\_finite\_adapter\_eligible} --- which
+downstream stages consult before simulating or adapting the component.
+\end{definition}
+
+The default catalog in the v0.1 implementation is small and closed. Its
+kinds are: \texttt{pass} (identity on one activation), \texttt{scale}
+(activation scaling with a nonnegative decimal \texttt{factor} and an
+activation-level \texttt{ceiling}), \texttt{cjt} (the cognitive-junction
+reference: two activation inputs \texttt{cause} and \texttt{bias}, one
+activation output \texttt{effect}; parameters \texttt{beta} (nonnegative
+finite decimal), \texttt{saturation}, and \texttt{cutoff} (both
+activation-level); required state bindings \texttt{cause},
+\texttt{bias}, \texttt{effect}), \texttt{decision\_threshold}
+(activation in, boolean decision out, with an activation-level
+\texttt{threshold}), \texttt{mux} (two activation inputs selected by a
+decision input), \texttt{fuse} (activation in and out, with an
+activation-level \texttt{threshold} and a string \texttt{action}
+restricted to the closed choice set \texttt{permanent\_block} or
+\texttt{warn}; stateful, because a permanently blocking fuse carries
+run-local open/closed state), \texttt{delay} (the unit delay, stateful,
+with an activation-level \texttt{initial}), and \texttt{finite\_transition}
+(finite state in and out, the only kind eligible for the TKS finite
+adapter). The catalog as a whole has a canonical digest that enters the
+engine identity and hence every board identity
+(Chapter~\ref{ch05:chapter}); adding a kind, changing a bound, or widening
+a choice set is a visible engineering event, not a quiet edit.
+
+Two consequences deserve emphasis. The \texttt{beta} parameter of the
+reference junction is typed as a \emph{finite} nonnegative decimal: the
+source book's idealized infinite gain (the $\beta = \infty$ of the
+published Cognitive Safety Board, Chapter~11) is
+unrepresentable in the candidate's parameter types, which converts a
+documented source inconsistency into a construction-time impossibility.
+And the \texttt{fuse} kind's \texttt{action} parameter is a closed string
+choice, not free text: there is no way to declare a fuse whose action the
+simulator would have to guess at.
+
+\section{Nets, endpoints, and driver/consumer discipline}
+\label{ch04:sec:nets}
+
+\begin{definition}[Endpoint and net]\label{ch04:def:net}
+An \texttt{Endpoint} is a pair of reference strings
+(\texttt{owner\_ref}, \texttt{port\_ref}); the distinguished owner sentinel
+\texttt{\$board} denotes the board's own external port surface and is the
+only reference exempt from the leading-alphanumeric rule of the
+safe-reference profile. A \texttt{Net} is a reference string, a tuple of
+endpoints, and a boolean \texttt{safety\_critical} flag.
+\end{definition}
+
+At the type layer a net is deliberately dumb: it is a set of typed
+attachment points, nothing more. The intelligence lives in the design-rule
+checker (Chapter~7), which resolves every endpoint to a
+declared owner and port, requires exactly one driver per net, and enforces
+signal-kind and unit agreement between the driver and every consumer under
+the closed table of Rule~\ref{ch04:rule:sigunit}. The type layer's
+contribution is to make the checker's job well-posed: because endpoints are
+exact typed records with validated references, the checker's questions
+(``does this owner exist?'', ``does this port exist on that owner?'',
+``what kind and unit does it carry?'') have deterministic answers, and
+because nets are immutable, the answers cannot change between the check and
+the use of its report. The driver/consumer rules themselves ---
+\emph{one} driving output per net, at least one load, direction
+compatibility, no multiply-connected port, required inputs connected or
+defaulted in the selected simulator profile --- are stated and itemized as
+\texttt{NET}-class diagnostics in Chapter~7; here they are
+named only to record that every rule is expressible as a predicate over the
+exact types of this chapter, with no reflection, no string parsing, and no
+appeal to convention.
+
+\section{Test points and calibration references}\label{ch04:sec:tpcal}
+
+\begin{definition}[Test point]\label{ch04:def:testpoint}
+A \texttt{TestPoint} names a reference, the net it observes
+(\texttt{net\_ref}), an optional \texttt{calibration\_ref}, and a boolean
+\texttt{safety\_critical} flag.
+\end{definition}
+
+\begin{definition}[Calibration reference]\label{ch04:def:calref}
+A \texttt{CalibrationRef} carries: reference and version strings; a
+\texttt{profile\_sha256} in exact uppercase 64-hex form; a typed
+\texttt{measurement\_kind} drawn from the six-element enumeration
+\textsc{design\_value}, \textsc{behavioral\_proxy},
+\textsc{instrumented}, \textsc{human\_score}, \textsc{llm\_score},
+\textsc{model\_derived}; a typed \texttt{unit}; instrument and protocol
+identity strings; a finite \texttt{Decimal} \texttt{uncertainty}; and a
+boolean \texttt{packet\_eligible}, default false.
+\end{definition}
+
+The design intent is to make the \emph{shape} of measurement honesty a
+type. A test point is a declared observation site, not an observation; a
+calibration reference is a declared pointer to calibration metadata, not
+evidence that calibration occurred. The fields force every calibration
+claim to name its instrument identity, protocol identity, uncertainty, and
+measurement kind at declaration time --- so the later question ``what would
+it take for this observation to count?'' has a typed answer --- while the
+\texttt{packet\_eligible} flag records the candidate's standing rule that
+locally constructed calibration records are structural, test-only objects:
+nothing a board author writes can make a calibration reference
+Evidence-Packet eligible, because eligibility is granted by an
+authentication process outside the type system, never by the record
+itself. The measurement-kind enumeration also encodes one substantive
+prohibition enforced at simulation intake: a board \emph{input} sample may
+not claim \textsc{model\_derived} provenance, which blocks the circular
+move of feeding a model-derived quantity back in as if it were fresh
+external data.
+
+\section{Deterministic trace and measurement identity}
+\label{ch04:sec:traceid}
+
+Everything the simulator emits is identity-bearing. The type layer
+provides the vocabulary in three parts.
+
+\emph{Canonical value identities.} Every value that can flow through a
+port or appear in a trace has exactly one canonical tagged JSON identity
+under the versioned profile \texttt{cas-pcba-v8.trace-value.v1}: finite
+decimals (tagged with the decimal-context digest), tagged finite atoms
+(Section~\ref{ch04:sec:tagged}), full CAS state literals (all four fields
+serialized, including explicit nulls for absent Drive or Register),
+mixed-simplex addresses (by their complete identity payload and its
+digest), and projector profiles (likewise, with the matrix digest linked).
+Any other runtime type has \emph{no} canonical identity and is rejected;
+``unsupported value'' is an error, never a best-effort string. A canonical
+identity round-trips: the serialized text must re-canonicalize to itself
+byte-for-byte, and its digest is the SHA-256 of that canonical text. Port
+validation is performed against the serialized identity, per signal kind:
+an activation port's value must be a decimal identity in $[0,1]$; a
+decision port's must be an exact boolean atom; a mixed-simplex port's must
+be a mixed-simplex identity; and so on --- so a value's fitness for a port
+is checked on the same bytes that enter the evidence, not on a live object
+that could differ from what was recorded.
+
+\emph{Measurement records.} A \texttt{MeasurementRecord} (profile
+\texttt{cas-pcba-v8.measurement-record.v2}) binds: an identity-scope
+digest tying the record to one exact run scope; a non-negative integer
+tick; producer and port references; the canonical value text and its
+digest; typed unit and measurement kind; an optional calibration
+reference; the \texttt{packet\_eligible} flag, fixed false at creation;
+an ordered tuple of \emph{child measurement identities}; and the fixed
+research boundary. The record's own \texttt{measurement\_id} is the
+SHA-256 of its complete canonical payload --- so a measurement cannot be
+edited, re-parented, re-ticked, or re-valued without changing its
+identity, and the child tuple gives each derived measurement an explicit,
+acyclic ancestry that the result constructor validates (children must
+exist; derivation must be acyclic; ticks and trace linkage must agree).
+The discipline resembles the entity/activity/derivation separation of the
+W3C provenance model \cite{prov}, and the candidate is explicit that the
+resemblance is methodological only: no PROV-O conformance is claimed.
+
+\emph{Trace events and results.} Trace events and simulation results carry
+their own versioned profiles (\texttt{cas-pcba-v8.trace-event.v2},
+\texttt{cas-pcba-v8.simulation-result.v2}) and bind the exact DRC report
+identity, engine and simulator profiles, component catalog and
+decimal-context digests, source-bundle digest, and research boundary, as
+Chapter~8 details. What matters at the type layer is
+uniformity: every one of those bindings is a typed field holding a
+validated digest or a validated record, so ``the trace says X'' is always
+reducible to ``these exact bytes, under this exact profile, hash to this
+exact identity.''
+
+\section{Research boundary and source provenance types}
+\label{ch04:sec:provenance}
+
+\begin{definition}[Research boundary type]\label{ch04:def:boundary}
+\texttt{ResearchBoundary} is a class with \emph{no instance storage}
+(empty slots). Its constructor validates that every argument equals the
+fixed research posture --- admission ring $4$, status \textsc{open},
+license status \textsc{not licensed}, disclosure status \textsc{held},
+safety certification false, telemetry authorization false, regulatory
+authority false, and the fixed research claim sentence --- and raises
+otherwise. All accessors are constant properties. Equality holds exactly
+between values of the exact type.
+\end{definition}
+
+The empty-slots design is the point: because instances store nothing, even
+low-level attribute forcing cannot mutate a boundary value into an
+``accepted,'' ``licensed,'' ``disclosed,'' or ``certified'' state --- there
+is nowhere for the forged field to live. Every public operation that
+consumes a boundary calls the revalidation function, which checks the exact
+type and re-reads every property against the fixed posture. The boundary
+travels inside measurement records, projector identities, and simulation
+results, so the Ring-4 / \textsc{not licensed} posture is not a banner on
+the paper; it is a field in the evidence.
+
+\begin{definition}[Safe-reference profile]\label{ch04:def:saferef}
+Every reference string in the candidate (component, port, net, test-point,
+calibration, feedback, profile, basis, and source identifiers) must match
+the versioned profile \texttt{cas-pcba-v8.safe-reference-ascii.v1}: ASCII
+only, first character alphanumeric, up to 128 characters drawn from
+alphanumerics, dot, underscore, colon, and hyphen. The validator rejects
+control characters, bidirectional and formatting characters, and confusable
+non-ASCII lookalikes.
+\end{definition}
+
+This is a human-review defense encoded as a type rule: an identifier that
+will appear in audit reports, diffs, and evidence packets must not be able
+to spoof another identifier under visual review or reorder text under
+bidirectional rendering. The sole sanctioned exception is the
+\texttt{\$board} endpoint sentinel of Definition~\ref{ch04:def:net}, which
+is permitted only where an endpoint owner is expected and only by an
+explicit flag at the call site.
+
+\emph{Source provenance.} The candidate binds its own implementation
+identity into everything it produces: a source-bundle digest over the
+package's Python sources (profile
+\texttt{cas-pcba-v8.python-source-bundle.v1}), an engine identity payload
+(profile \texttt{cas-pcba-v8.reference-engine.v1}) that nests the source
+identity, the component-catalog digest, and the complete decimal-context
+payload with its digest. Board identities embed the engine identity;
+traces embed both; so every artifact answers not only ``what was
+modeled?'' but ``which exact software, under which exact arithmetic and
+catalog, said so?''
+
+\section{Tagged exact values}\label{ch04:sec:tagged}
+
+\begin{definition}[Tagged finite value]\label{ch04:def:tagged}
+A finite carrier atom is exactly one of: a boolean, an integer, or a
+string. Its canonical identity is a tagged payload under the versioned
+profile \texttt{cas-pcba-v8.tagged-finite-value.v1} carrying the type tag
+(\texttt{bool}, \texttt{int}, or \texttt{string}) and a canonical value
+representation --- booleans as JSON booleans, integers as their exact
+decimal string, strings as themselves. Equality of finite values is
+equality of tagged payloads: type tag \emph{and} value.
+\end{definition}
+
+\begin{ruleenv}[Type-pun exclusion]\label{ch04:rule:typepun}
+Integer $1$, Boolean \emph{true}, and string \texttt{"true"} are three
+distinct values everywhere in the candidate: in DRC evaluation, in
+execution, in traces, in measurement identities, and across the TKS
+adapter. No implicit conversion between them exists at any layer.
+\end{ruleenv}
+
+The hazards this rule blocks are concrete, and each corresponds to a
+failure mode observed in mainstream ecosystems.
+
+\emph{The bool/int pun.} In the implementation language, booleans are a
+subtype of integers: \texttt{True == 1} evaluates true, the two hash
+identically, and a dictionary keyed by \texttt{1} silently swallows a later
+entry keyed by \texttt{True}. A finite transition table keyed by untagged
+atoms could therefore conflate a numeric state $1$ with a logical state
+\emph{true} --- merging two rows of the table, changing its size, and
+corrupting its certificate --- without any error being raised. The tagged
+payload assigns the two atoms different type tags, hence different
+canonical texts, hence different digests; the kernel-facing
+\texttt{TaggedFiniteValue} token exists precisely so that hash-based
+containers ``whose native equality conflates types'' (the implementation's
+own words) can key on the tag pair instead of the raw atom.
+
+\emph{The string-coercion pun.} Configuration formats, spreadsheets, and
+lenient parsers routinely deliver \texttt{"true"} where a boolean was
+meant, or \texttt{"1"} where an integer was meant. A permissive layer that
+coerced these would make a board's semantics depend on which serialization
+path a parameter happened to travel. In the candidate, a string parameter
+is a string parameter: the tagged identity of \texttt{"true"} shares
+nothing with the tagged identity of \emph{true}, canonical validation
+rejects a payload whose tag and value disagree (an \texttt{int} tag whose
+value string is not the exact canonical decimal form; a \texttt{bool} tag
+whose value is not a JSON boolean), and the round-trip check of
+Section~\ref{ch04:sec:traceid} ensures the distinction survives
+serialization.
+
+\emph{The evidence pun.} The deepest reason is evidential. Identities are
+hashes of canonical bytes; if two semantically distinct values could share
+canonical bytes, the identity system would licence false equalities in the
+permanent record. Tagging makes the value space injective into the payload
+space by construction: distinct (tag, value) pairs yield distinct
+canonical texts. Where floating-point values must enter a canonical
+payload (board metadata admits them), they are serialized by exact hexadecimal
+representation with explicit \texttt{NaN} and infinity markers --- again an
+injective encoding, chosen so that ``same digest'' can never paper over
+``different value.''
+
+\section{The single immutable decimal context}\label{ch04:sec:decimal}
+
+All decimal arithmetic in the candidate runs under one versioned context
+profile, \texttt{cas-pcba-v8.decimal-context.v1}: precision $60$;
+rounding half-even; exponent range $E_{\min} = -999{,}999$ to
+$E_{\max} = 999{,}999$; clamping off; capitals on; and traps armed for
+division by zero, invalid operation, and overflow.
+
+\begin{ruleenv}[Per-operation context creation]\label{ch04:rule:context}
+The context is created \emph{from primitive constants} for each public
+operation, used for exactly that operation's dynamic extent, and discarded.
+No caller-supplied or ambient (thread-local) decimal context is ever
+consulted; a caller running under precision $3$, or under a context with
+traps disarmed, obtains bit-identical results to a caller running under
+defaults. Public arithmetic entry points are wrapped so that the fixed
+context is installed before the operation begins and uninstalled after it
+completes.
+\end{ruleenv}
+
+The rule has an evidence corollary. The complete context payload is hashed
+once, at import, into the constant \texttt{DECIMAL\_CONTEXT\_SHA256}, and
+that digest enters: every decimal value identity in a trace; every
+mixed-simplex identity payload; every projector identity payload; every
+component identity payload; every board identity payload; and the engine
+identity itself. A future reader of any artifact can therefore verify not
+only \emph{what} was computed but \emph{under which arithmetic} --- and any
+change to the arithmetic profile, however small, changes every downstream
+digest, making silent arithmetic drift structurally impossible.
+
+Three trapped conditions replace three silent failure modes: division by
+zero raises instead of yielding an infinity; invalid operations raise
+instead of yielding \texttt{NaN}; overflow raises instead of saturating.
+Since the type layer separately excludes non-finite decimals from every
+record field (weights, uncertainties, bounds, gains must be finite), the
+combination gives a closed world: no \texttt{NaN} or infinity can be
+constructed by candidate arithmetic, and none can be smuggled in through a
+field.
+
+Alongside context-governed arithmetic, the candidate provides
+\emph{context-independent} exact summation: finite decimals are summed by
+aligning exponents and adding integer coefficients, with no rounding at any
+precision. This is the operation behind the exact sum-to-one constraint of
+Definition~\ref{ch04:def:simplex} and the exact residual computation of
+Section~\ref{ch04:sec:normalization}: a constraint checked by exact
+summation is an identity of integers, not a tolerance judgment.
+
+\begin{remark}[Relation to IEEE 754]\label{ch04:rem:ieee}
+IEEE~754 \cite{ieee754} is cited here as the external reference point for
+explicitly controlled computer arithmetic: reproducible results require a
+fully specified format, rounding rule, and exception discipline, and the
+candidate adopts exactly that posture. But the candidate's decimal profile
+is its \emph{own} software contract, not an instance of an IEEE
+interchange format: precision $60$ is not an IEEE decimal format
+parameter, the exponent range is the candidate's, and conformance claims
+to the standard are neither made nor needed. The standard supplies the
+engineering lesson (specify the arithmetic, or lose determinism); the
+profile supplies the specification; the digest supplies the proof of which
+specification was in force. Where binary64 floating point \emph{is} used
+--- solely inside the disclosed Fisher--Rao pseudometric of
+Chapter~\ref{ch06:chapter} --- that use is named, profiled, and bounded,
+and its limits are part of the disclosure rather than an ambient
+assumption.
+\end{remark}
+
+\section{Canonical identity is injective}\label{ch04:sec:injective}
+
+The tagged-value discipline of Section~\ref{ch04:sec:tagged} and the
+canonical serializations of Section~\ref{ch04:sec:traceid} exist to
+support one property, which is worth stating and proving at the level of
+the declared encodings.
+
+\begin{proposition}[Injectivity of the finite-atom encoding]
+\label{ch04:prop:injective}
+Let $V = \mathbb{B} \sqcup \mathbb{Z} \sqcup \Sigma^{*}$ be the disjoint
+union of booleans, integers, and finite strings, and let
+$e : V \to \Sigma^{*}$ be the canonical tagged encoding: $e(v)$ is the
+canonical JSON text of the payload carrying the profile constant, the type
+tag of the summand $v$ inhabits, and the canonical value representation
+(JSON boolean; exact decimal integer string; the string itself). Then $e$
+is injective: $e(v) = e(w)$ implies $v = w$, \emph{including} across
+summands.
+\end{proposition}
+
+\begin{proof}
+Suppose $e(v) = e(w)$. Canonical JSON serialization with sorted keys and
+fixed separators is injective on payload objects, so the payloads of $v$
+and $w$ are equal as objects; in particular their type tags agree, so $v$
+and $w$ inhabit the same summand. Within a summand, the value
+representation is injective: JSON booleans distinguish the two booleans;
+the exact decimal string of an integer determines the integer (the
+canonical form forbids leading zeros and non-canonical signs, and the
+validator rejects any value string that does not round-trip through
+integer parsing to itself); a string represents itself. Hence $v = w$.
+The cross-summand cases that defeat untagged encodings --- integer $1$
+versus Boolean \emph{true} versus string \texttt{"true"}, or integer $1$
+versus string \texttt{"1"} --- are separated at the first step, by the
+type tag.
+\end{proof}
+
+\begin{corollary}[Digest separation for finite atoms]
+\label{ch04:cor:digest}
+Distinct finite atoms have distinct canonical texts, hence distinct
+SHA-256 identities up to hash collision. The candidate treats SHA-256
+collision resistance as an external assumption, disclosed as such: no
+claim in this monograph depends on it beyond the standard evidentiary use
+of content digests.
+\end{corollary}
+
+The corollary marks a contrast that Chapter~\ref{ch06:chapter} develops at
+length: the \emph{identity} layer of the candidate separates all distinct
+values by construction (modulo the disclosed hash assumption), while the
+\emph{numerical geometry} layer explicitly does not promise separation at
+binary64 resolution. Claims of sameness belong to the identity layer;
+claims of closeness belong to the geometry layer; the type system keeps
+the two vocabularies apart so that neither can borrow the other's
+strength.
+
+\section{Measurement kinds as a claim taxonomy}\label{ch04:sec:measkinds}
+
+The six-element \texttt{MeasurementKind} enumeration of
+Definition~\ref{ch04:def:calref} is small, but it is the type-level
+skeleton of the candidate's entire evidence discipline, so its semantics
+deserve explicit statement.
+
+\begin{description}
+\item[\textsc{design\_value}.] A quantity asserted by the board author as
+part of the design: a parameter, a fixture input, a declared constant. It
+carries no measurement claim at all; it is structural metadata. The
+default measurement kind of every input sample is \textsc{design\_value},
+so a fixture that says nothing claims nothing.
+\item[\textsc{behavioral\_proxy}.] A quantity derived from observed
+behavior of some system under a declared protocol, offered as a proxy for
+a modeled quantity. The kind records that the link from observation to
+quantity is itself a modeling assumption.
+\item[\textsc{instrumented}.] A quantity attributed to an instrument
+chain with declared identity, protocol, and uncertainty. In the v0.1
+candidate this kind can be \emph{declared} but never \emph{authenticated}:
+no instrument chain exists in the admitted evidence, and locally declared
+instrumented records remain structural/test-only.
+\item[\textsc{human\_score}, \textsc{llm\_score}.] Quantities produced by
+a human rater or a language-model rater under a declared protocol. The
+kinds exist so that rater-derived numbers can never be conflated with
+instrumented ones by type.
+\item[\textsc{model\_derived}.] A quantity computed by the candidate
+itself from other quantities. Board \emph{inputs} may not carry this kind
+(Section~\ref{ch04:sec:tpcal}); it exists for derived, child measurements
+inside a trace, where the parent linkage documents the derivation.
+\end{description}
+
+The enumeration is thus a closed taxonomy of \emph{how a number came to
+be}, attached at the type level to every number that enters the evidence.
+The DRC and simulator consume it (calibration compatibility, input
+admissibility); the Evidence-Packet discipline consumes it (eligibility by
+kind); and the audit consumes it (a report can be filtered, by type, to
+exactly the claims of a given evidentiary strength).
+
+\section{Worked type-level fragments}\label{ch04:sec:worked}
+
+The fragments below are \emph{illustrative only}: they are not normative
+source code, they elide imports and error text, and they exist to make the
+failure modes of this chapter concrete. Chapter~\ref{ch05:chapter} gives
+the corresponding board-level constructions.
+
+\begin{example}[Legal state literals]\label{ch04:ex:legal}
+The partial literal $({\wedge}3, P, \bot, \bot)$ --- constructed as
+\texttt{CasState(noetic=Noetic.NEGATIVE, domain=Domain.PRINCIPLED)} ---
+is legal, renders as \texttt{\^{}3\^{}P}, and projects to the cell
+\texttt{P3} (index $4$ in Table~\ref{ch04:tab:cells}). The full literal
+\texttt{CasState(Noetic.NEGATIVE, Domain.PRINCIPLED, Drive.F2,
+Register.ANALYTICAL)} is equally legal, renders as
+\texttt{\^{}3\^{}P\_\{F2\}|A}, and projects to the \emph{same} cell ---
+the worked instance of Proposition~\ref{ch04:prop:manytoone}.
+\end{example}
+
+\begin{example}[Illegal state literals]\label{ch04:ex:illegal}
+Each of the following is rejected at construction with a typed error, not
+repaired: \texttt{CasState(3, Domain.PRINCIPLED)} (bare integer where a
+\texttt{Noetic} is required); \texttt{CasState(Noetic.NEGATIVE, "P")}
+(bare string where a \texttt{Domain} is required);
+\texttt{CasState(Noetic.NEGATIVE, Register.EMBODIED)} (a Register in the
+Domain position --- rejected even though both carry the string \texttt{E}
+family, because the enumerations are disjoint types); and any instance of
+a subclass of \texttt{CasState}, however faithful its fields
+(Rule~\ref{ch04:rule:exact}).
+\end{example}
+
+\begin{example}[Simplex boundary rejection]\label{ch04:ex:simplexreject}
+The uniform profile with all forty weights \texttt{Decimal("0.025")} is a
+legal address: weights are strictly positive and their exact sum is
+\texttt{Decimal("1")}. The ``one-hot'' tuple with weight \texttt{1} on
+\texttt{P0} and \texttt{0} elsewhere is rejected (zero coordinates); the
+tuple of forty weights \texttt{0.02} and \texttt{0.03} alternating is
+rejected if its exact sum differs from one; a tuple of thirty-nine
+weights is rejected on arity; and a tuple containing
+\texttt{float 0.025} rather than \texttt{Decimal("0.025")} is rejected on
+value type, because binary64 atoms have no place in an exact address.
+\end{example}
+
+\begin{example}[Type-pun rejection]\label{ch04:ex:pun}
+A finite transition table over carrier $\{0, 1\}$ and a table over carrier
+$\{\mathit{false}, \mathit{true}\}$ have disjoint tagged carriers and
+distinct certificates, even though the underlying language would happily
+evaluate \texttt{True == 1} as true. A fixture that attempts to feed the
+string \texttt{"true"} to a decision port fails port validation: the
+serialized identity has tag \texttt{string}, and a decision port requires
+tag \texttt{bool} (Section~\ref{ch04:sec:traceid}).
+\end{example}
+
+\begin{example}[Ambient-context irrelevance]\label{ch04:ex:ambient}
+A caller that sets its thread-local decimal precision to $3$ and then
+normalizes the weight tuple $(1, 1, 1, \ldots, 1)$ (forty ones) obtains
+the same address, with the same forty weights of
+\texttt{Decimal("0.025")} and the same profile digest, as a caller running
+under default precision: the normalization runs under the fixed
+sixty-digit context of Rule~\ref{ch04:rule:context} regardless of ambient
+state, and the exact-sum check is context-free integer arithmetic. The
+ambient precision is not consulted, not restored incorrectly, and not
+recorded --- because it never mattered.
+\end{example}
+
+\section{Invariant summary}\label{ch04:sec:invariants}
+
+\begin{invariant}[Type-layer invariants]\label{ch04:inv:summary}
+For every value admitted by the type system:
+(i) its runtime type is exact --- no subclass, no coercion;
+(ii) every factor field is an exact enumeration member, with absence
+explicit where permitted and nowhere defaulted;
+(iii) every reference string satisfies the safe-reference profile (with
+the single audited \texttt{\$board} exception);
+(iv) every decimal field is finite, and all decimal arithmetic occurred
+under the fixed versioned context, whose digest accompanies the value;
+(v) every finite atom carries its type tag, and no two distinct tagged
+atoms share a canonical identity;
+(vi) every simplex address has exactly forty strictly positive weights in
+canonical cell order with exact sum one;
+(vii) every evidence-bearing record binds the fixed research boundary and
+is identified by the SHA-256 of its complete canonical payload; and
+(viii) revalidation of any record at any later time either reconfirms all
+of the above or raises --- there is no degraded acceptance path.
+\end{invariant}
+
+\begin{threat}[What the type system does not do]\label{ch04:threat:limits}
+The type system validates form, not truth. A well-typed calibration
+reference does not evidence calibration; a well-typed state binding does
+not evidence that any system occupies that state; a well-typed simplex
+address does not evidence that forty numbers describe anything outside the
+software. Type-level guarantees are also bounded by the implementation's
+own correctness: the invariants above are enforced by tested code, not
+proved code, and the bounded-evidence posture of
+Chapter~12 applies to them in full.
+\end{threat}
+
+\section{Claim boundary}\label{ch04:sec:boundary}
+
+\begin{boundary}\label{ch04:bnd:main}
+This chapter specifies software contracts of the CAS PCBA~8 v0.1 research
+candidate, at Ring~4, \textsc{not licensed}. The types named after CAS
+coordinates represent those coordinates inside the candidate only; no
+claim is made that any human, biological, or artificial system realizes
+them. Strict positivity, exact summation, tagged identity, and the fixed
+decimal context are properties of the candidate's arithmetic and records,
+not of any external quantity. No physical, causal, safety, clinical,
+regulatory, or product claim is made or licensed by anything in this
+chapter, and the projection, positivity, and identity results stated here
+(Propositions and Rules \ref{ch04:prop:manytoone},
+\ref{ch04:rule:notonehot}, \ref{ch04:rule:nottks},
+\ref{ch04:rule:typepun}, \ref{ch04:rule:context}) are statements about
+declared types and tested code paths, offered for independent review.
+\end{boundary}

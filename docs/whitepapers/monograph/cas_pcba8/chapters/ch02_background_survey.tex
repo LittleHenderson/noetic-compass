@@ -1,0 +1,976 @@
+\chapter{Background: Hardware Description, State Formalisms, and Verification}\label{ch02:background}
+
+\section{Purpose and reading discipline of this survey}\label{ch02:purpose}
+
+This chapter assembles, at tutorial depth, the established engineering and
+mathematical background on which the rest of the monograph stands: hardware
+description languages; explicit state formalisms; the industrial practice of
+netlists and rule checking; graph algorithms for circuit analysis; the
+distinction between simulation verification and operational validation;
+property-based testing; provenance modeling; arithmetic control; and
+information geometry on probability simplices. The survey is self-contained
+because the monograph's readership spans communities --- cognitive-science
+readers who have never read a netlist, software readers who have never
+derived a Fisher metric, hardware readers who have never needed a formal
+provenance vocabulary --- and the later chapters assume all of this
+vocabulary at once.
+
+Two disciplines govern the reading of every section below.
+
+\begin{boundary}[Background is background]\label{ch02:bnd:background}
+Nothing in this chapter is a contribution of the CAS PCBA 8 project. Every
+concept, formalism, algorithm, standard, and theorem surveyed here is prior
+art of its own community, cited where a citation exists in this monograph's
+reference list and described in general terms where the material is
+standard industrial practice. Conversely, nothing in this chapter validates
+CAS: the fact that VHDL, Statecharts, design-rule checking, Tarjan's
+algorithm, verification-and-validation discipline, QuickCheck, PROV, IEEE
+754, or the Fisher--Rao metric are sound and useful in their home domains
+is evidence about \emph{those} domains and about engineering method. It is
+not evidence that the CAS ontology, its cognitive interpretation, or any
+CAS PCBA 8 design choice is empirically correct. The support this
+literature lends is at the level of method only.
+\end{boundary}
+
+The second discipline is a map. For each background item, the section
+states (i) what the item is, (ii) what its home community learned from it,
+and (iii) which mechanism of the CAS PCBA 8 architecture borrows the lesson
+--- always as an organizational borrowing, never as a transferred validity
+claim. Section~\ref{ch02:summary} collects the map in one table.
+
+\section{Hardware description languages}\label{ch02:hdl}
+
+\subsection{From annotated drawings to machine-readable design text}\label{ch02:hdl:drawings}
+
+Before the mid-1980s, the dominant medium of digital-hardware design
+description was the schematic drawing supplemented by prose. The medium had
+the same epistemic weaknesses that Chapter~\ref{ch01:introduction} attributed
+to informal cognitive diagrams: a drawing fixes topology but leaves timing,
+interface contracts, allowed values, and intended behavior to convention and
+caption; two engineering teams could read the same drawing into different
+circuits; and there was no mechanical way to ask a drawing whether it was
+even self-consistent. As designs grew from hundreds to millions of gates,
+the medium failed to scale in three independent ways: description (the
+drawing could not be complete), communication (the drawing could not be
+unambiguous), and verification (the drawing could not be executed or
+checked).
+
+Hardware description languages (HDLs) answered all three failures at once by
+making the design text itself formal, machine-readable, and executable. An
+HDL description is not documentation \emph{about} a design; under the
+language's semantics, it \emph{is} the design, and every downstream activity
+--- simulation, synthesis, rule checking, equivalence checking, archiving
+--- consumes the same text. This is the single most consequential idea the
+present monograph borrows: the move from diagram-plus-prose to a typed
+design language with defined semantics is a methodological act, independent
+of subject matter, whose payoff is that design intent becomes checkable.
+
+\subsection{What VHDL demonstrated}\label{ch02:hdl:vhdl}
+
+VHDL, standardized by the IEEE as Std 1076 and maintained through successive
+revisions to the current language reference manual \cite{vhdl}, is the
+canonical demonstration of this move, and several of its specific design
+decisions are instructive far beyond hardware.
+
+First, VHDL separates \emph{interface} from \emph{implementation} as a
+matter of language structure: an entity declaration fixes the ports ---
+names, directions, and types --- through which a design unit may be used,
+while one or more architecture bodies supply behavior. A component is usable
+only through its declared interface, and the language makes it impossible to
+connect to a port that was not declared. The lesson is interface
+discipline: contracts live in the text, not in the reader's head.
+
+Second, VHDL is strongly and expressively typed. Signals and variables
+carry declared types; operations between incompatible types are rejected at
+analysis time rather than misinterpreted at run time; and the language's
+package mechanism lets a community standardize shared types with resolved
+semantics. Decades of industrial experience taught that the type checker's
+refusals are not bureaucratic friction but early defect detection: a large
+class of wiring and width errors that would otherwise surface as silent
+simulation misbehavior surface instead as analysis errors with source
+locations. The lesson is that type safety is a defect-prevention
+technology.
+
+Third, VHDL has defined simulation semantics --- an event-driven model with
+delta cycles, in which the meaning of a description is the trace of signal
+transactions it produces under a defined scheduling discipline. Because the
+semantics is part of the standard, two conforming simulators must agree on
+what a description means, and a simulation result is a property of the
+description rather than of one vendor's tool. The lesson is that
+executability with defined semantics converts design text into a
+replayable object.
+
+Fourth, VHDL demonstrated the value of \emph{standardization of description
+itself}. The language emerged from a documentation requirement --- the need
+for a uniform, tool-independent way to describe hardware across
+contractors and decades --- and its longevity shows that a stable,
+versioned, publicly specified description language is an archival
+technology: a design written down in it remains interpretable when the
+tools, companies, and engineers of its era are gone.
+
+Fifth --- a point easily missed from outside the field --- VHDL culture
+developed the \emph{testbench} as a first-class design artifact: a
+description, written in the same language, whose sole purpose is to
+exercise another description and check its responses. The design under
+test and the apparatus that tests it share a type system, a simulator, and
+an archive, so a verification claim (``this entity passed this testbench'')
+is a statement about two identified artifacts and can be rerun by anyone
+holding both. The testbench idea generalizes far beyond hardware: it is
+the recognition that checking apparatus deserves the same rigor of
+description, identity, and versioning as the thing checked. CAS PCBA 8's
+fixtures --- including, notably, its known-fault fixtures, which encode
+designs that \emph{must} fail the checker in a declared way --- are
+testbench culture applied to a rule checker.
+
+Sixth, the industry's experience with the \emph{synthesis subset} carries
+a cautionary lesson in the other direction. Not every legal VHDL
+description can be synthesized into hardware; synthesizable VHDL is a
+subset, and for years the boundary of that subset was tool-dependent and
+imperfectly documented, so that a description could simulate one behavior
+and synthesize another --- the simulation/synthesis mismatch, a notorious
+class of defect. The lesson is that when a language is richer than the
+machinery that consumes it, the gap between what can be \emph{written}
+and what is actually \emph{supported} must be explicit, versioned, and
+checked, or it becomes a source of silent divergence. This lesson bears
+directly on the monograph's central adverse finding: the source
+baseline's published grammar covers only a fraction of the constructs its
+own reference designs use, an unmanaged written/supported gap of exactly
+the kind synthesis history warns about. The candidate's response ---
+declare the supported surface exactly, fail closed outside it, and demand
+that any future grammar publish a construct-coverage matrix --- is the
+hardware community's remedy, transplanted.
+
+For this monograph, VHDL's demonstration is cited strictly at the level of
+method \cite{vhdl}: formal machine-readable design description with typed
+interfaces and defined execution semantics is feasible, scalable, and
+industrially transformative. CAS PCBA 8's typed board model, closed
+component catalog, and deterministic simulator borrow the organization.
+The borrowing carries no validity: a cognitive-system hypothesis written in
+a typed board model is exactly as conjectural as the same hypothesis on a
+whiteboard --- it is merely explicit, checkable, and replayable in a way
+the whiteboard version is not.
+
+\subsection{Description versus realization}\label{ch02:hdl:realization}
+
+One further HDL lesson deserves its own subsection because it prefigures
+the monograph's first load-bearing separation. An HDL description that
+simulates correctly is not thereby a working chip. Between description and
+silicon lie synthesis, technology mapping, layout, parasitics, process
+variation, and physical verification, and hardware culture maintains a
+strict vocabulary boundary between what simulation shows (the description's
+behavior under a model) and what characterization of fabricated parts shows
+(the artifact's behavior in the world). The industry learned, sometimes
+expensively, that eliding this boundary --- treating simulation sign-off as
+silicon sign-off --- is a category error with recall-sized consequences.
+The model-versus-world separation of
+Section~\ref{ch01:sep:modelworld} is this hardware lesson, imported whole.
+
+\section{Statecharts and explicit state semantics}\label{ch02:statecharts}
+
+\subsection{The problem: state explosion and implicit dynamics}\label{ch02:statecharts:problem}
+
+Finite-state machines are the classical formalism for reactive behavior,
+but flat state machines fail on realistic systems for a structural reason:
+the number of global states is the product of the states of the system's
+independently varying parts, so a handful of concurrent features multiplies
+into an unreadable and unmaintainable diagram. Practitioners of the 1970s
+and early 1980s responded by leaving most of the state structure implicit
+--- in prose, in code, in convention --- which reproduced, for dynamics,
+exactly the auditability failure that schematics-plus-prose produced for
+structure.
+
+\subsection{Harel's contribution}\label{ch02:statecharts:harel}
+
+Harel's Statecharts \cite{harel} attacked the problem by enriching the
+visual formalism itself with three orthogonal mechanisms, each with defined
+semantics. \emph{Hierarchy} (depth): states may contain substates, and a
+transition from a superstate abstracts a bundle of transitions from all its
+substates, so the diagram supports abstraction and refinement without
+losing precision. \emph{Orthogonality} (concurrency): a state may be the
+AND-composition of independent regions, so the diagram represents a product
+of $n$ regions in size proportional to their sum, taming the exponential
+blowup syntactically. \emph{Broadcast communication}: events raised in one
+region are visible to others, giving a defined mechanism for coupling
+concurrent parts. Harel's summary formula --- statecharts = state-diagrams
++ depth + orthogonality + broadcast-communication --- names precisely the
+three additions.
+
+The deeper lesson of the Statecharts program, however, is not any single
+mechanism but the demand it institutionalized: \emph{a visual formalism
+must have a semantics}. A diagram whose boxes and arrows lack defined
+meaning is not a specification, however suggestive; once depth,
+concurrency, and communication have defined semantics, the diagram becomes
+a mathematical object that tools can execute, check, and transform. The
+subsequent absorption of statechart variants into mainstream modeling
+practice testifies that the demand was answerable at industrial scale.
+
+\subsection{The aftermath: semantics is where the work is}\label{ch02:statecharts:aftermath}
+
+The years after the original paper taught a second lesson that the first
+had made possible. Once statecharts were executable, the community
+discovered that the notation admitted many defensible but different
+semantics: whether transitions taken in one step can trigger further
+transitions in the same step; how conflicts between a superstate's
+transition and a substate's are resolved; whether the effects of
+simultaneous events are perceived instantaneously or in the next step;
+what history connectors restore, exactly, on re-entry. Dozens of published
+variants differed on such points, and two tools could disagree about the
+behavior of the same chart while both plausibly claiming to implement
+``statecharts.'' The lesson is not that the formalism failed --- it is
+that formalization \emph{surfaced} ambiguities which informal boxes and
+arrows had contained invisibly all along, and that the surfacing is the
+value. A notation without semantics cannot even disagree with itself;
+executable semantics converts hidden ambiguity into visible, decidable,
+versionable choice. For the present work the corollary is direct: a
+modeling language for cognitive hypotheses must expect that its early
+versions under-specify, must version its semantic choices explicitly, and
+must treat a discovered ambiguity (such as a grammar that does not say
+what its own corpus means) as a first-class finding to record rather than
+a nuance to gloss.
+
+\subsection{The lesson borrowed}\label{ch02:statecharts:lesson}
+
+CAS PCBA 8 borrows the demand, not the notation. Its board model requires
+every component to declare statefulness and time semantics explicitly;
+components without declared state semantics are unsupported by the
+simulator and fail closed rather than defaulting to an implicit dynamics;
+feedback --- the circuit-shaped analog of coupled concurrent regions ---
+must be declared, delayed, and bounded rather than left emergent. Where the
+architecture currently supports only a narrow deterministic profile
+(stateless transfer with declared unit delays), it says so, and richer
+state semantics are recorded as open obligations rather than assumed. The
+Statecharts literature \cite{harel} is cited for the methodological point
+that explicit state, hierarchy, concurrency, and communication semantics
+are what turn behavioral diagrams into checkable objects; it neither
+knows of nor validates any cognitive interpretation.
+
+\section{Electronic design automation practice: netlists and rule checking}\label{ch02:eda}
+
+The material in this section is standard industrial practice, described in
+general terms; it is the accumulated craft of the electronic design
+automation (EDA) industry rather than the contribution of any single
+citable source.
+
+\subsection{The netlist as central data structure}\label{ch02:eda:netlist}
+
+At the center of every EDA flow sits the netlist: a complete, queryable
+enumeration of a design's components (with their kinds and parameters),
+their ports, and the nets --- the connection equivalence classes --- that
+join port to port. The netlist is the design's connectivity reduced to a
+data structure, and its centrality is a methodological fact: once
+connectivity is a data structure rather than a drawing, connectivity
+questions become computations. Which inputs are unconnected? Which nets
+have two drivers? Which component instances share a reference designator?
+What is the fan-out of this output? Every such question, undecidable
+against a pile of schematic sheets by anything but human inspection, is a
+traversal over the netlist.
+
+The netlist also established an identity discipline. Each component
+instance carries a unique reference designator; each net a unique name;
+and the design database treats collisions as errors. This sounds trivial
+and is not: unique, stable identity is what makes diff, review, archive,
+and cross-reference possible across a design's lifetime, and its absence
+is what makes informal diagrams unauditable. CAS PCBA 8's board structure
+--- immutable, identity-bearing records for components, ports, nets, test
+points, calibrations, and feedback declarations, with uniqueness enforced
+by its checker --- is the netlist discipline, borrowed whole.
+
+\subsection{Design-rule checking as an industrial discipline}\label{ch02:eda:drc}
+
+Design-rule checking (DRC) arose in physical design: fabrication processes
+publish geometric rules (minimum widths, spacings, enclosures), and a DRC
+tool checks a layout against the rule deck exhaustively, emitting a
+report of violations with locations. Over decades this practice hardened
+into a sign-off culture with several transferable characteristics.
+
+First, \emph{the rule deck is versioned and closed}: checks come from a
+defined catalog with stable identifiers, so that ``DRC clean'' is a
+statement relative to an exact deck, and two runs against the same deck
+and the same design are comparable. Second, \emph{checking is exhaustive
+and deterministic}: the tool checks every instance of every rule, and its
+report is a function of its inputs, not of operator attention. Third,
+\emph{clean is a gate, not a grade}: a design with violations does not
+proceed, and waivers --- deliberate acceptances of specific flagged
+violations --- are themselves recorded artifacts with identities and
+justifications, never silent. Fourth, \emph{the report is the product}:
+what sign-off consumes is not the designer's assurance but the tool's
+report bound to the design version it checked.
+
+Electrical rule checking (ERC) extended the same discipline from geometry
+to connectivity semantics, and its standard check families are worth
+enumerating because they map so directly onto the monograph's subject
+matter: outputs shorted to outputs (multiple drivers on one net); inputs
+left floating (undriven loads); ports connected across incompatible
+signal families (a power-kind pin into a signal-kind pin); fan-out and
+loading violations; and unconnected required pins. ERC checks are shallow
+individually and powerful collectively: each encodes a semantic
+expectation about connectivity that a drawing cannot enforce, and
+industrial experience is that they catch, mechanically and early, a class
+of defect that no amount of careful drawing eliminates.
+
+CAS PCBA 8's design-rule checker is a deliberate transplant of this
+discipline: a closed, versioned diagnostic catalog (\texttt{PCBA8-*});
+deterministic single-report semantics; errors that fail the board;
+warnings that never decay into an implicit pass; and net-class checks ---
+unknown endpoint owner, invalid driver count, missing net load,
+signal-kind mismatch, unit mismatch, multiply-connected ports, required
+ports unconnected --- that any ERC engineer would recognize at a glance.
+The transplant is organizational. That DRC/ERC discipline works for
+electronics establishes that fail-closed cataloged checking is a sound
+engineering practice; it establishes nothing about whether any particular
+CAS rule expresses a true constraint on cognition, and the monograph
+never argues otherwise.
+
+\subsection{Consistency checking between representations}\label{ch02:eda:lvs}
+
+A third pillar of EDA sign-off practice, alongside DRC and ERC, deserves
+mention because it names a check \emph{shape} the monograph reuses:
+layout-versus-schematic (LVS) checking, which extracts the connectivity
+actually present in a physical layout and compares it, device by device
+and net by net, against the schematic netlist that the layout purports to
+implement. LVS institutionalized the insight that when the same design
+exists in two representations, their agreement is not to be assumed but
+computed --- and that the comparison must be canonical (both sides reduced
+to a normal form before matching) for the verdict to be meaningful. The
+general shape --- two representations of one design, a canonicalization,
+a mechanical equivalence check, and a fail-closed verdict --- is exactly
+the shape of the round-trip obligations the candidate imposes on any
+future CCDL grammar (parse the corpus, serialize canonically, and match),
+and of the audit's comparison between the source's published grammar and
+the source's published boards. In LVS terms, the monograph's
+grammar-coverage finding is a failed cross-representation consistency
+check on the source canon itself, executed at the level of surface
+syntax under a disclosed, bounded method.
+
+Waiver practice completes the sign-off picture. Real designs sometimes
+carry deliberate rule violations --- a spacing waived for a matched
+analog pair, a floating pin documented as intentionally unused --- and
+mature flows do not handle these by relaxing the rule or hand-editing
+the report. They record a \emph{waiver}: an identified, justified,
+reviewed artifact that acknowledges the specific violation instance and
+travels with the design. The report stays true (the violation is real);
+the disposition is explicit; and an auditor can enumerate every place
+where human judgment overrode the deck. The candidate's analog is its
+explicit exception discipline --- for instance, declared low-gain
+exceptions in feedback analysis --- in which every departure from the
+conservative default is itself a typed, identified declaration rather
+than a silent tolerance.
+
+\subsection{Fail-closed as a cultural achievement}\label{ch02:eda:failclosed}
+
+One aspect of EDA practice deserves separate emphasis because it is a
+culture, not an algorithm. Mature checking tools treat \emph{inability to
+check} as failure: a rule the tool cannot evaluate on a given structure
+produces an error or an explicit unresolved status, never a silent pass.
+The alternative --- treating unevaluated as clean --- is seductive
+(reports look better) and catastrophic (the report's silence becomes
+uninterpretable). The fail-closed convention is what makes a clean report
+mean something. CAS PCBA 8 adopts it globally: unsupported feedback
+analysis yields an unresolved-safety diagnostic; unsupported simulation
+behavior fails closed; an unresolved reachability bound is not treated as
+reachable. The convention costs green checkmarks and buys interpretability,
+and the monograph regards the trade as settled by several decades of
+industrial precedent.
+
+\section{Graph algorithms for circuit analysis}\label{ch02:graphs}
+
+\subsection{Circuits as directed graphs}\label{ch02:graphs:directed}
+
+A netlist induces graphs, and most connectivity analyses are graph
+algorithms. For the analyses relevant to this monograph, the induced
+object is a directed graph on components: an edge runs from component $u$
+to component $v$ when some net is driven by a port of $u$ and loads a
+port of $v$. Questions about signal flow become questions about this
+graph: acyclicity determines whether a design can be evaluated in one
+forward pass; cycles locate feedback; reachability delimits the influence
+cone of an input; and topological order, when it exists, is an
+evaluation schedule.
+
+\subsection{Depth-first search and strongly connected components}\label{ch02:graphs:tarjan}
+
+The classical toolkit here is depth-first search, and its crown result for
+present purposes is Tarjan's algorithm \cite{tarjan}, which computes the
+strongly connected components (SCCs) of a directed graph in a single
+depth-first traversal, in time linear in the number of vertices and
+edges. A strongly connected component is a maximal vertex set within
+which every vertex reaches every other; contracting each SCC to a single
+node yields the condensation of the graph, which is always acyclic. The
+decomposition is exactly the right primitive for feedback analysis:
+every directed cycle lies within one SCC, so the SCCs of size greater
+than one (together with trivial SCCs bearing self-loops) enumerate the
+regions of a design where feedback exists, and the acyclic condensation
+orders everything else for straight-line evaluation.
+
+The algorithm itself repays a paragraph of description, both because its
+economy is instructive and because the monograph's checker relies on its
+completeness. A depth-first search from each unvisited vertex assigns
+every vertex a discovery index and maintains a stack of vertices whose
+component is not yet determined. For each vertex $v$ the algorithm
+computes a \emph{lowlink}: the smallest discovery index reachable from
+$v$ by following tree edges and at most one back or cross edge into the
+stack. When the search finishes a vertex whose lowlink equals its own
+discovery index, that vertex is the root of a strongly connected
+component, and the component is exactly the set of vertices above it on
+the stack, which are popped together. Every vertex is pushed once and
+popped once, and every edge is examined a constant number of times ---
+hence linearity --- and the components are emitted in reverse
+topological order of the condensation, so a single pass yields both the
+feedback regions and an evaluation order for the acyclic remainder
+\cite{tarjan}. That last property is quietly load-bearing for the
+architecture: the same classical computation that finds every cycle also
+schedules everything that is not a cycle, which is why a checker and a
+simulator can share one graph analysis.
+
+Two properties of this result matter methodologically. First, it is
+\emph{complete}: linear-time SCC computation finds all feedback regions,
+so a checker built on it can assert the absence of undeclared cycles, not
+merely the presence of found ones. Second, it is \emph{cheap}: linearity
+means the analysis scales to any design a database can hold, so there is
+no engineering pressure to sample or skip. CAS PCBA 8's feedback check
+class builds the directed component graph, computes SCCs by the classical
+method \cite{tarjan}, and then applies its own conservative policy to
+each realizable declared cycle: an exact feedback declaration, a declared
+unit delay, an existing dimensionless calibration, and a sub-unity gain
+bound, with explicit declared exceptions and with stateful or stochastic
+loops unsupported and failing closed. The graph theory is classical; the
+policy layered on it is the candidate's own contract, and its
+conservatism is a design choice, not a theorem.
+
+\subsection{Bound propagation on acyclic structure}\label{ch02:graphs:bounds}
+
+The condensation's acyclicity also underwrites a second analysis pattern
+used later in the monograph: conservative bound propagation. On an
+acyclic evaluation order, an upper bound on each component's output can
+be computed from upper bounds on its inputs and the component's declared
+behavior (a clamp caps a bound; a monotone non-amplifying stage preserves
+it; a gain stage scales it), and the composition of per-stage bounds
+along a path yields a sound bound at the path's end. Interval-style
+propagation of this kind is standard static-analysis practice; its
+soundness depends on each per-stage bound being sound and on the
+traversal respecting dependency order. The design-rule checker's
+threshold-reachability class --- which flags a safety-critical threshold
+that provably exceeds the best upstream bound --- is an application of
+this standard pattern, and its verdict on the source's Cognitive Safety
+Board is developed in later chapters.
+
+\section{Simulation verification versus operational validation}\label{ch02:vandv}
+
+\subsection{Two questions that must not be merged}\label{ch02:vandv:questions}
+
+The modeling-and-simulation community maintains a foundational distinction,
+surveyed authoritatively by Sargent \cite{sargent}, between
+\emph{verification} and \emph{validation}. Verification asks: does the
+implemented model correctly implement its conceptual specification --- is
+the code a faithful realization of the model the developers intended?
+Validation asks: is the conceptual model an adequate representation of the
+problem entity for the model's intended purpose --- does the model,
+however faithfully implemented, track the world well enough to use? The
+two questions have different subjects (software versus world), different
+evidence (testing, tracing, and code analysis versus comparison against
+system data, expert scrutiny of behavior, and predictive trials), and
+different failure modes (bugs versus wrong models), and Sargent's
+framework further distinguishes conceptual-model validity, data validity,
+and operational validity as separate obligations within the overall
+modeling process, each requiring its own evidence at its own stage.
+
+Sargent's survey is valuable to this monograph not only for the
+distinction but for its catalog of \emph{validation techniques}, because
+the catalog shows concretely how different the two evidence regimes are.
+Verification draws on software-engineering technique: structured
+walkthroughs, traces of program logic, testing against the conceptual
+model's specification. Validation draws on a different toolbox entirely:
+comparison of model output against data from the real system where such
+data exist; comparison against other validated models; degenerate-case
+and extreme-condition tests (does the model behave sensibly when inputs
+are driven to zero or to their limits?); internal-validity checks on
+stochastic replications; face validation by domain experts examining
+behavior; historical data validation with held-out samples; predictive
+validation against outcomes not used in construction; and animation or
+operational graphics reviewed by people who know the modeled system.
+Almost every item on the validation side presupposes access to the
+modeled system, to its data, or to experts on it --- which is exactly
+why validation evidence cannot be manufactured inside the development
+loop, and why a project that possesses only development-loop evidence
+must say so in so many words. Sargent's framework also emphasizes that
+validity is always relative to an \emph{intended purpose} and required
+accuracy: a model is not valid in the abstract but adequate-for-use, and
+a validity claim without a stated purpose is not yet a claim.
+
+The community codified this distinction because merging the questions
+produces a specific, recurring error: a model that reproduces its own
+specification perfectly is treated as if it had been shown to represent
+reality. Verification evidence is comparatively cheap --- it can be
+manufactured entirely inside the development loop --- while operational
+validation requires access to the modeled system, experimental design,
+and statistical care. Wherever the expensive evidence is scarce, the
+cheap evidence expands to fill the vacuum unless the vocabulary itself
+resists.
+
+\subsection{Position of the present work}\label{ch02:vandv:position}
+
+In Sargent's vocabulary \cite{sargent}, everything green in CAS PCBA 8 at
+the bound source state is verification evidence: bounded regression
+suites showing that the checker, simulator, and adapters implement their
+declared contracts on their tested surfaces. Operational validation ---
+evidence that any circuit-shaped cognitive model tracks any cognitive
+system --- has not been attempted, is not claimed, and appears in the
+monograph only as an open obligation in the research program. The
+model-versus-world separation of Chapter~\ref{ch01:introduction} is the
+verification/validation distinction enforced mechanically: by binding
+every trace to a research boundary and typing every receipt as software
+evidence, the architecture makes the cheap-evidence-expansion error a
+detectable category violation rather than a rhetorical drift. The
+distinction itself is the simulation community's, not this project's;
+the project's contribution, if any, is only the mechanical enforcement.
+
+\section{Property-based testing}\label{ch02:pbt}
+
+\subsection{From examples to properties}\label{ch02:pbt:idea}
+
+Conventional unit testing checks a program against hand-chosen
+input/output examples. Its blind spot is structural: the examples test
+the cases the author thought of, and defects live disproportionately in
+the cases nobody thought of. Property-based testing, introduced to
+practice by Claessen and Hughes's QuickCheck \cite{quickcheck}, inverts
+the economy: the author writes a \emph{property} --- a predicate that
+should hold for all inputs of a type --- and the framework generates
+random inputs from that type's distribution, checks the property on each,
+and reports the first counterexample. Two further ideas complete the
+method. \emph{Generators} are first-class: the author controls the
+distribution of random inputs, composing generators for structured data
+so that random boards, random expressions, or random traces are
+constructible. \emph{Shrinking} makes counterexamples usable: on
+failure, the framework searches for a smaller input that still fails,
+typically presenting a near-minimal witness rather than the sprawling
+random structure that first triggered the fault.
+
+Concreteness helps here, because the properties relevant to this
+monograph are of a recognizable family. A round-trip property says that
+serialization inverts parsing: for every generated board $b$,
+$\mathrm{parse}(\mathrm{serialize}(b)) = b$ under canonical equality. A
+determinism property says that a computation is a function of its
+declared inputs: for every generated board, two runs of the checker
+yield byte-identical reports. An invariance property says that an
+equivalence the design intends is real: for every board and every
+permutation of its component declaration order, the canonical digest is
+unchanged. A metamorphic property relates outputs across related inputs
+without knowing either output in advance: adding an undriven net to any
+clean board must produce exactly one new missing-load diagnostic. Each
+property is a few lines to state; each quantifies over a space no
+example suite can cover; and each, under random generation with
+shrinking, yields on failure a small witness board that a developer can
+read. The QuickCheck lesson \cite{quickcheck} is that
+specifications of this shape are cheap to write and disproportionately
+effective to check --- and the corresponding honesty obligation is that
+until such a campaign is run, invariants of this shape are contracts
+with example-level evidence only.
+
+The method's track record established a general lesson: for software
+whose specification is expressible as invariants --- parsers that must
+round-trip, checkers that must be deterministic, orders that must be
+total, encodings that must invert --- randomized property checking finds
+defects that example suites systematically miss, at low authoring cost.
+The lesson comes with an honest converse: property testing samples the
+input space and therefore establishes confidence, not proof; a passed
+property is evidence proportional to the generator's coverage of the
+space, and a biased generator can starve the very region where the
+defect lives.
+
+\subsection{Role in this work}\label{ch02:pbt:role}
+
+CAS PCBA 8's contracts are invariant-shaped throughout --- one
+deterministic DRC report per board; trace determinism under a declared
+profile; digest stability under canonical serialization; admissibility
+tables that must be closed under their own composition rules --- and are
+therefore natural property-testing targets. The monograph is explicit
+about status: at the bound source state, the architecture's evidence is
+bounded example-style regression suites, and a property-based/random
+generation campaign over DRC and simulation invariants is a scheduled
+step of the research program \cite{quickcheck}, not an accomplished one.
+The citation is to the method; no property-testing result is claimed,
+and QuickCheck is not authority for the separately listed
+mutation-testing obligation, which requires its own sources and
+specification.
+
+\section{Provenance}\label{ch02:prov}
+
+\subsection{The provenance vocabulary}\label{ch02:prov:vocab}
+
+When computational results feed decisions, the question ``where did this
+number come from?'' needs a machine-readable answer. The W3C PROV family
+of specifications, with PROV-O as its ontology realization \cite{prov},
+standardizes a small core vocabulary for exactly this: \emph{entities}
+(things with fixed state --- documents, datasets, results),
+\emph{activities} (processes that occur over time and act on entities),
+and \emph{agents} (things bearing responsibility), connected by typed
+relations --- an entity \emph{was generated by} an activity, an activity
+\emph{used} entities, an entity \emph{was derived from} another entity,
+an entity or activity \emph{was attributed to} or \emph{associated with}
+an agent. The apparent modesty of the vocabulary is its strength: with
+generation, use, derivation, and attribution made explicit and typed,
+lineage questions become graph queries --- what did this result depend
+on, transitively? which results does this defective input contaminate?
+--- and independent systems can exchange lineage without bilateral
+format agreements.
+
+The vocabulary scales in both directions. Downward, PROV supports
+specialization and qualified relations, so that a bare ``was derived
+from'' can be refined --- which activity performed the derivation, using
+which entity, in which role --- when finer lineage matters. Upward, PROV
+supports \emph{bundles}: provenance descriptions that are themselves
+entities, so that one can record the provenance of a provenance record
+--- who asserted this lineage, generated by what process, when. The
+bundle idea matters for any architecture whose receipts might be
+mistaken for authority: it makes ``this receipt was generated by the
+same process it vouches for'' an expressible, queryable fact rather than
+a buried circumstance, which is precisely the fact one needs surfaced to
+refuse self-certification.
+
+Two design points of PROV matter for the borrowing at hand. First,
+derivations form a directed structure whose acyclicity within a record
+set is a checkable well-formedness condition: nothing is its own
+ancestor. Second, provenance assertions are claims by agents, not
+oracles; PROV records who says a derivation held, and reconciling or
+trusting such claims is explicitly out of the vocabulary's scope. The
+vocabulary makes lineage sayable and queryable; it does not make it
+true.
+
+\subsection{Role in this work}\label{ch02:prov:role}
+
+The canonical traces and measurement records of CAS PCBA 8 keep the same
+separations the PROV vocabulary keeps --- results (entity-like) apart
+from runs (activity-like) apart from derivations, with parent/child
+measurement links validated for existence and acyclicity, and every
+record bound to identities rather than descriptions. The monograph's
+claim here is deliberately minimal and matches the source documents: the
+record discipline \emph{resembles} the entity/activity/derivation
+separation of W3C PROV \cite{prov}, and no PROV-O conformance is
+claimed. The resemblance is cited to locate the design in a known
+methodological tradition; conformance would be a checkable claim the
+project has not earned and therefore does not make. The second PROV
+design point --- provenance as claim, not oracle --- reappears in the
+architecture's rule that locally asserted calibration metadata cannot
+authenticate itself: recording lineage in valid shape never converts the
+recorded content into evidence.
+
+\section{Arithmetic control: floating point and decimal contexts}\label{ch02:arith}
+
+\subsection{Why arithmetic is a reproducibility concern}\label{ch02:arith:why}
+
+A deterministic, replayable computation contract must specify its
+arithmetic, because ``the same computation'' is underdetermined without
+it. IEEE Std 754 \cite{ieee754} is the standard that made binary
+floating-point arithmetic specifiable: it defines the binary formats
+(binary64 being the ubiquitous double precision), the rounding-direction
+attributes, the required correctly rounded basic operations, exceptional
+values and their propagation, and the status flags that record inexact,
+overflow, underflow, and invalid events. The standard's achievement is
+frequently misstated, and the accurate statement matters here: IEEE 754
+makes each \emph{individual operation} exactly specified, but a
+\emph{computation} composed of many operations remains sensitive to
+evaluation order, compiler transformations, intermediate precisions,
+library function variation, and parallel reduction order. Bitwise
+reproducibility across toolchains is achievable but is an engineering
+discipline built on the standard, not a free consequence of it. Floating
+point is also, famously, non-associative in the small: rounding makes
+$(a+b)+c$ and $a+(b+c)$ potentially different, which is exactly why
+evaluation order is part of a computation's identity.
+
+Decimal arithmetic under an explicit context object is the other
+established control regime the monograph's subject draws on. In a
+context-based decimal system, every operation executes under a context
+that fixes precision, rounding mode, and exceptional-condition handling;
+the context is data, so a computation can construct, version, and record
+the context it ran under, and two parties holding the same context and
+the same operation sequence obtain identical digit strings. The
+trade-offs between the regimes are conventional: binary64 buys hardware
+speed and a vast numerical literature at the price of representation
+error for decimal quantities and order sensitivity; explicit decimal
+contexts buy exact decimal representation and recordable, versioned
+arithmetic identity at the price of speed.
+
+\subsection{Role in this work}\label{ch02:arith:role}
+
+CAS PCBA 8 uses both regimes, each disclosed. Candidate arithmetic runs
+under one immutable, versioned decimal context created from primitive
+constants for each operation, with ambient caller precision made
+irrelevant and the context identity bound into reports and results ---
+an application of the context-control pattern, with IEEE 754
+\cite{ieee754} cited as the external reference point for explicit
+arithmetic control while the candidate's decimal profile remains its own
+software contract. Separately, the disclosed binary64 implementation of
+the Fisher--Rao distance (Section~\ref{ch02:infogeo}) is characterized in
+the source documents as a numerical pseudometric at its resolution ---
+an honest floating-point disclosure of exactly the kind this section's
+background predicts is necessary: near-identical profiles may be
+numerically indistinguishable, so the implementation does not claim to
+separate all distinct points, and independent numerical audit remains an
+open obligation.
+
+\section{Information geometry on probability simplices: a primer}\label{ch02:infogeo}
+
+This section develops, at primer depth, the geometry that the
+architecture's mixed-profile state addresses inhabit. The material is
+classical; modern book-length treatments are Amari \cite{amari} and Ay et
+al.\ \cite{ay}, and the founding papers are Fisher's on the information
+quantity \cite{fisher} and Rao's on the induced distance \cite{rao}.
+
+\subsection{The open probability simplex}\label{ch02:infogeo:simplex}
+
+Fix $n$ mutually exclusive categories. A probability distribution over
+them is a point of the closed simplex
+$\Delta_{n-1}=\{p\in\mathbb{R}^n : p_k\ge 0,\ \sum_k p_k=1\}$; the
+\emph{open} simplex $\Delta_{n-1}^{\circ}$ requires strict positivity,
+$p_k>0$ for all $k$. The open simplex is an $(n-1)$-dimensional smooth
+manifold, and restricting to it is not pedantry: the geometric structure
+below degenerates on the boundary (where some $p_k=0$), and a state
+space defined on the open simplex builds ``every category retains
+nonzero mass'' into the type. A tangent vector $u$ at $p$ is a direction
+of infinitesimal reweighting and satisfies $\sum_k u_k=0$, since motion
+must preserve total mass.
+
+\subsection{The Fisher--Rao metric}\label{ch02:infogeo:metric}
+
+A Riemannian metric assigns each point an inner product on its tangent
+space, thereby defining lengths of curves and distances between points.
+The Euclidean metric inherited from $\mathbb{R}^n$ is available but
+statistically arbitrary: it treats a mass shift of $0.01$ the same
+whether it moves between categories holding $0.5$ each or between
+categories holding $0.011$ and $0.989$, though the statistical
+distinguishability of the two changes is utterly different. Fisher's
+information quantity \cite{fisher} supplies the statistically motivated
+alternative: for a parametric family, the Fisher information measures
+the expected curvature of the log-likelihood --- how sharply data
+discriminate nearby parameter values. Taking the categorical family with
+the probabilities themselves as coordinates, the Fisher information
+matrix induces the \emph{Fisher--Rao metric} on
+$\Delta_{n-1}^{\circ}$:
+\[
+g^{\mathrm{FR}}_p(u,v)\;=\;\sum_{k=1}^{n}\frac{u_k\,v_k}{p_k},
+\]
+for tangent vectors $u,v$ at $p$. The $1/p_k$ weighting encodes the
+statistical intuition exactly: reweighting a rare category is a longer
+move, per unit of mass, than reweighting a common one. Rao's 1945 paper
+\cite{rao} was the first to treat this induced Riemannian structure as a
+geometry on the space of distributions and to propose its geodesic
+distance as a measure of dissimilarity between populations --- the
+founding act of the field now called information geometry
+\cite{amari,ay}.
+
+A two-category example makes the weighting tangible. On
+$\Delta_1^{\circ}$, parameterize points by $p=(t,1-t)$ with $0<t<1$; a
+tangent vector is $u=(s,-s)$. The Fisher--Rao squared length of $u$ at
+$p$ is
+\[
+g^{\mathrm{FR}}_p(u,u)=\frac{s^2}{t}+\frac{s^2}{1-t}
+=\frac{s^2}{t(1-t)},
+\]
+which is minimized at $t=\tfrac12$ and diverges as $t\to 0$ or
+$t\to 1$: the same nominal mass shift $s$ is geometrically short between
+balanced categories and arbitrarily long near the boundary. The
+divergence at the boundary is the concrete face of the earlier remark
+that the geometry degenerates when any $p_k=0$, and it is the
+mathematical reason a state space built on this metric is typed over the
+\emph{open} simplex: the metric itself refuses the boundary.
+
+\subsection{The sphere map and the closed-form geodesic distance}\label{ch02:infogeo:geodesic}
+
+The categorical Fisher--Rao geometry admits a classical closed form via
+the square-root embedding. Map $p\mapsto \xi(p) =
+2(\sqrt{p_1},\dots,\sqrt{p_n})$. Since $\sum_k(\sqrt{p_k})^2=1$, the
+image $\xi(p)$ lies on the sphere of radius $2$ in $\mathbb{R}^n$, in
+its strictly positive orthant; and a short computation shows the map is
+an isometry from $(\Delta_{n-1}^{\circ}, g^{\mathrm{FR}})$ onto its
+image with the sphere's round metric. The computation is one line of
+calculus: since $\xi_k = 2\sqrt{p_k}$, an infinitesimal displacement
+satisfies $d\xi_k = dp_k/\sqrt{p_k}$, so the Euclidean squared line
+element of the image is
+$\sum_k d\xi_k^2 = \sum_k dp_k^2/p_k$ --- which is exactly the
+Fisher--Rao squared line element on the simplex. The curved statistical
+geometry is, up to this change of variables, a piece of a round sphere. Geodesic distance on a sphere of
+radius $r$ is $r$ times the angle between unit vectors, so the
+Fisher--Rao geodesic distance pulls back to
+\[
+d(p,q)\;=\;2\arccos\Bigl(\sum_{k=1}^{n}\sqrt{p_k\,q_k}\Bigr).
+\]
+The argument of the arccosine, $\sum_k\sqrt{p_k q_k}$, is the
+Bhattacharyya coefficient of $p$ and $q$; it equals $1$ exactly when
+$p=q$ (giving distance $0$) and decreases as the distributions
+separate. Because the positive orthant of the sphere has angular
+diameter $\pi/2$ between its axis points, distances are bounded:
+$0\le d(p,q)\le \pi$ on the closed simplex, with the maximum attained
+only between distributions of disjoint support --- which the open
+simplex excludes, so on $\Delta_{n-1}^{\circ}$ the distance is always
+strictly less than $\pi$. The formula makes the earlier metric intuition
+quantitative and gives implementations a two-line evaluation: an inner
+product of square roots and an arccosine.
+
+Numerically, the formula has a disclosed sharp edge that
+Section~\ref{ch02:arith} predicts: for very close $p$ and $q$ the
+Bhattacharyya sum approaches $1$, where the arccosine's derivative
+diverges, so binary64 evaluation loses relative accuracy exactly in the
+near-coincident regime. A binary64 implementation is therefore honestly
+described as a numerical pseudometric at its resolution --- it may fail
+to separate distinct but extremely close profiles --- and that is
+precisely the characterization the architecture's source documents
+adopt.
+
+\subsection{Invariance, and what the geometry does and does not say}\label{ch02:infogeo:invariance}
+
+The Fisher--Rao metric is not merely one defensible choice among many;
+classical results in information geometry (associated with Chentsov and
+treated in the modern monographs \cite{amari,ay}) single it out, up to
+scale, as the Riemannian metric on these spaces invariant under the
+natural statistical maps between categorical models. Invariance is the
+principled reason a system committed to representing distributional
+states might adopt this metric rather than the Euclidean one: the
+geometry then reflects statistical structure rather than an arbitrary
+coordinate convention.
+
+The boundary statement for this monograph is the same as every other
+section's. That the Fisher--Rao geometry is well-founded mathematics
+\cite{fisher,rao,amari,ay} makes it a sound \emph{setting} for
+strictly positive normalized profiles over a finite cell set --- which
+is how CAS PCBA 8 uses it, as the named metric profile for its
+40-dimensional mixed-state addresses. The mathematics does not identify
+a learned model's internal state with a CAS state, does not make a
+profile over ND-cells an empirical measurement of anything, and does
+not convert geodesic distance between two software-constructed profiles
+into a cognitive quantity. The geometry constrains the model's internal
+bookkeeping; it asserts nothing about the world.
+
+\section{A note on causal claims}\label{ch02:causal}
+
+One further piece of background belongs in this survey because its
+\emph{absence} from the architecture's claims is load-bearing. The
+modern mathematics of causal inference, systematized by Pearl
+\cite{pearl}, draws a sharp line between associational quantities
+(computable from observed joint distributions) and causal quantities
+(defined by interventions, requiring a causal model and identification
+assumptions to connect to data). A directed graph whose edges depict
+influence is, by itself, on the associational side of the line: drawing
+an arrow, propagating a bound along it, or simulating a transfer rule
+across it does not establish that intervening on the source would move
+the target. CAS PCBA 8's boards are directed graphs with declared
+transfer semantics, and the temptation to read them causally is
+therefore structural. The architecture's position, developed with the
+threats to validity later in the monograph, is Pearl's line enforced as
+a boundary: graph connectivity, gain composition, prediction, and
+residual localization do not establish causation; causal claims would
+require explicit causal models, identification assumptions, and
+interventions \cite{pearl}; and none is admitted.
+
+\section{What was deliberately not borrowed}\label{ch02:notborrowed}
+
+A survey of borrowings is incomplete without its negative space: several
+prominent instruments of the surveyed fields were considered by the
+architecture's design lineage and \emph{not} adopted, and the reasons are
+themselves methodological content.
+
+From hardware practice, the architecture does not borrow \emph{physical
+modeling}. Electronic simulation's deepest layer --- device physics,
+parasitic extraction, timing derived from geometry and process ---
+presupposes that the modeled quantities are physical quantities with
+instruments that measure them. Importing any of it would contradict
+Boundary~\ref{ch02:bnd:background}'s companion discipline in
+Chapter~\ref{ch01:introduction}: there is no physical profile in the
+candidate, so there is nothing for device physics to be about. The
+borrowing stops, deliberately, at the design-database layer ---
+description, connectivity, rules, traces --- which is the layer that is
+physics-free.
+
+From formal methods, the architecture does not (yet) borrow \emph{proof}.
+Model checking, theorem proving, and verified compilation all offer
+stronger guarantees than cataloged checking and bounded suites, and
+nothing in the architecture's design forecloses them. They are absent
+because the honest sequencing runs the other way: proof obligations are
+worth their cost when the specification is stable and complete, and the
+monograph's own source audit shows the specification layer (the CCDL
+grammar) is neither. Proving theorems about a grammar that does not
+cover its corpus would harden the wrong artifact. The research program
+places grammar completion and round-trip conformance before any formal
+escalation, and until then the candidate claims exactly what bounded
+suites support.
+
+From statistics and machine learning, the architecture does not borrow
+\emph{fitting}. Nothing in the candidate estimates parameters from data,
+and this is a boundary, not a gap: a fitted parameter is a measurement
+claim in disguise, and the design-value-versus-measurement separation
+requires that the measurement ledger stay empty until an authenticated,
+preregistered pathway fills it. The information geometry of
+Section~\ref{ch02:infogeo} is adopted as a metric structure for typed
+addresses, not as an estimation apparatus.
+
+Each refusal could be reversed by future work with the appropriate
+evidence discipline --- a physical profile with instruments, a proof
+layer over a completed grammar, a preregistered estimation pathway ---
+and the research program names the preconditions. The refusals are
+recorded here so that their reversal, if it comes, is a visible event
+with a visible warrant rather than a drift.
+
+\section{Summary: the borrowings and their limits}\label{ch02:summary}
+
+Table~\ref{ch02:tab:map} condenses the chapter. Each row names a
+background item, the methodological lesson its home community
+established, the CAS PCBA 8 mechanism that borrows the lesson, and ---
+the column this monograph exists to keep honest --- what the borrowing
+does not license.
+
+\begin{longtable}{@{}p{2.6cm}p{3.4cm}p{3.4cm}p{4.0cm}@{}}
+\caption{Background borrowings and their limits.}\label{ch02:tab:map}\\
+\toprule
+Background & Established lesson & Borrowing mechanism & Not licensed \\
+\midrule
+\endfirsthead
+\toprule
+Background & Established lesson & Borrowing mechanism & Not licensed \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+VHDL \cite{vhdl} & Formal machine-readable design text with typed
+interfaces and defined execution semantics & Typed board model; closed
+catalogs; deterministic simulator & Any validity of CAS content written
+in the language \\
+Statecharts \cite{harel} & Behavioral diagrams need explicit state,
+hierarchy, concurrency, communication semantics & Declared statefulness
+and time semantics; declared feedback; fail-closed on undeclared
+dynamics & Any cognitive interpretation of the states \\
+EDA practice (general) & Netlist identity discipline; versioned closed
+rule decks; fail-closed sign-off & Board identity records;
+\texttt{PCBA8-*} catalog; errors fail the board & Truth of any specific
+CAS rule about cognition \\
+Tarjan \cite{tarjan} & Linear-time complete SCC decomposition & Feedback
+region enumeration; acyclic evaluation order; bound propagation &
+Soundness of the candidate's feedback policy beyond its stated
+conservatism \\
+Sargent \cite{sargent} & Verification and operational validation are
+distinct obligations & Evidence taxonomy; trace-bound research boundary
+& Any operational validation of any board \\
+QuickCheck \cite{quickcheck} & Randomized property checking finds
+defects example suites miss & Scheduled research-program campaign over
+DRC/simulation invariants & Any completed property-testing result;
+mutation-testing authority \\
+PROV \cite{prov} & Typed generation/use/derivation vocabulary makes
+lineage queryable & Trace and measurement record discipline; derivation
+acyclicity checks & PROV-O conformance; truth of recorded content \\
+IEEE 754 \cite{ieee754} & Arithmetic must be explicitly specified for
+reproducibility & One immutable decimal context; disclosed binary64
+pseudometric caveat & Bitwise reproducibility beyond the declared
+contract \\
+Fisher, Rao, Amari, Ay \cite{fisher,rao,amari,ay} & Invariant Riemannian
+geometry on the open simplex with closed-form geodesic distance & Named
+Fisher--Rao profile for 40-cell mixed addresses & Identification of
+model states with CAS states; empirical meaning of distances \\
+Pearl \cite{pearl} & Association and intervention are distinct; causal
+claims need models and assumptions & Causal-claim quarantine in the
+threat model & Any causal reading of board structure or simulation \\
+\end{longtable}
+
+The chapter closes where it began. Everything above is the
+accomplishment of other communities, surveyed because the architecture
+of this monograph is assembled from their methods. The assembly is the
+subject of the chapters that follow; its evidence begins with the
+versioned source basis fixed in Chapter~\ref{ch03:source}; and at no
+point does the strength of the surveyed foundations transfer, by
+association, to the cognitive content modeled on top of them.

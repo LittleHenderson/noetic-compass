@@ -1,0 +1,1189 @@
+\chapter{Canonical Evidence Encoding}\label{ch05:encoding}
+
+\section{Why digests are load-bearing}\label{ch05:loadbearing}
+
+Every mechanism described in this monograph eventually reduces a question
+about meaning to a question about bytes. A semantic reference binds a concept
+to the digest of its defining text (Chapter 3). A registry record carries a
+digest bound to the ledger bytes it was parsed from (Chapter 6). A
+compatibility receipt binds compiler bytes, worker bytes, and a result digest
+(Chapter 7), and the replay requirement compares fresh digests against
+recorded ones before any structural decision can pass (Chapter 9). In each
+case the operative comparison is hash equality of encoded values: two
+artifacts are treated as the same evidence exactly when their canonical
+encodings hash identically.
+
+This reduction is what makes the kernel auditable---byte equality is a
+question any party can settle without trusting the kernel---but it places the
+entire weight of the system on one function: the encoder that turns in-memory
+values into the bytes that get hashed. If that function is nondeterministic,
+platform-dependent, or many-to-one in the wrong places, then every downstream
+comparison is silently invalid, and no amount of care in the layers above
+repairs it. The failure is maximally quiet: hashes still compute, receipts
+still verify against themselves, tests still pass on the machine that wrote
+them, and the divergence surfaces---if it surfaces at all---as an
+irreproducible mismatch between two honest parties, months later, with the
+original context gone.
+
+\begin{definition}[Canonical evidence encoding]\label{ch05:def:encoding}
+The \emph{canonical evidence encoding} is the kernel's single function from
+admissible in-memory values to byte strings, with the contract that (i) equal
+admissible values encode to equal bytes on every platform and every run
+(determinism), (ii) values the kernel treats as semantically distinct encode
+to distinct bytes (injectivity on the admitted domain), and (iii) every value
+outside the admissible domain is rejected with a typed error rather than
+encoded by best effort (fail-closed totality).
+\end{definition}
+
+The three clauses are jointly the definition of ``canonical'' as this
+monograph uses the word. Clause (i) rules out dependence on iteration order,
+hash seeds, locale, word size, and library version. Clause (ii) rules out
+\emph{type puns}: pairs of distinct values that encode identically, so that
+evidence about one can be replayed as evidence about the other. Clause (iii)
+is the clause most often skipped in practice and the one the kernel is most
+insistent about: an encoder that guesses on hard inputs converts every hard
+input into a latent comparison bug, whereas an encoder that rejects them
+converts the same inputs into visible errors at the moment of encoding, when
+the context needed to fix them still exists.
+
+The design follows the same instinct as content-addressed artifact naming in
+the reproducible-builds discipline \cite{reprobuilds}: identity is a function
+of bytes, so byte production must be an engineered, specified, testable
+process rather than an incidental property of whatever serializer was handy.
+And, per the standing distinction of Chapter 4, none of this confers
+authority. A canonical digest says \emph{these bytes}; it never says
+\emph{these bytes are approved}. The encoding chapter is about making the
+first statement exact so that the second statement, if a future reviewed
+design ever makes it, has a definite object.
+
+\begin{boundary}[Chapter scope]\label{ch05:bd:scope}
+This chapter specifies the v0.1 encoding profile and the rationale for each
+rule, with worked encodings. Statements that the kernel ``rejects'' or
+``produces'' particular bytes are statements about the v0.1 candidate's
+tested behavior on the Gate-4 fixture families (acceptance and rejection
+cases for sets, floats, NaN, infinity, decimal tagging, cycles, and depth
+bounds are among the enumerated suite contents); they are bounded software
+receipts in the sense of Chapter 12, not conformance claims over untested
+inputs, and the profile itself remains a Ring-4 research candidate.
+\end{boundary}
+
+\section{The threat model for encodings}\label{ch05:threats}
+
+Before the rules, the failures they answer. Encoding failures come in two
+dual families, and it is worth having both clearly in view because several
+rules exist to block one family without reintroducing the other.
+
+\begin{threat}[Digest instability: same evidence, different bytes]
+\label{ch05:threat:instability}
+Two encodings of the same value differ---across runs, platforms, library
+versions, or processes---so hash comparison reports difference where there is
+none. Consequences: replay verification fails spuriously; deduplication
+splits; honest parties cannot reproduce each other's digests; and, worst,
+operators learn to treat digest mismatches as noise, at which point the
+mismatch that matters is waved through. Classic causes: unordered container
+iteration, hash-seed-dependent ordering, float formatting drift, locale-
+dependent case mapping, newline rewriting in transit, Unicode normalization
+applied by one layer and not another.
+\end{threat}
+
+\begin{threat}[Type puns: different evidence, same bytes]
+\label{ch05:threat:puns}
+Two values the system treats as semantically distinct encode to the same
+bytes, so a digest computed over one validates the other. Consequences: an
+evidence record can be constructed to collide with a different record;
+quantities can be silently reinterpreted (an exact decimal read back as a
+string, a tuple as a list, an enumeration member as its underlying value);
+and any downstream logic keyed on digests inherits the confusion. Classic
+causes: encoders that erase type distinctions on output (most JSON encoders
+erase tuple/list, and many erase decimal/float/string distinctions), and
+container coercions applied before encoding.
+\end{threat}
+
+The two threats pull in opposite directions. Aggressive normalization
+(lowercase everything, sort everything, coerce everything to strings) fights
+instability and manufactures puns; aggressive type preservation fights puns
+and, done casually, reintroduces instability (embedding a language-specific
+repr string preserves type at the cost of platform dependence). The rule set
+below is best read as a sequence of decisions about exactly where to
+normalize and exactly where to distinguish, with each decision justified
+against both threats at once.
+
+\section{The rule set}\label{ch05:rules}
+
+\begin{ruleenv}[Canonical encoding, v0.1 profile]\label{ch05:rule:master}
+The canonical evidence encoding:
+\begin{enumerate}
+\item is deterministic UTF-8 JSON with sorted string keys and minimal
+separators, terminated by a single line feed;
+\item rejects unordered containers (sets and frozen sets), binary floating-
+point values, NaN, and infinities;
+\item tags exact decimals, tuples, and enumeration members as typed objects,
+so that $\mathrm{Decimal}(\texttt{"1.0"})$, the string \texttt{"1.0"}, and
+the integer $1$ have pairwise distinct encodings, and reserves the tag key
+so payload data cannot forge a tagged value;
+\item gives each public type exactly one declared serialization route; and
+\item is bounded and cycle-aware: it enforces declared depth, node-count,
+byte-size, and integer-width limits, and fails closed on any reference
+cycle.
+\end{enumerate}
+\end{ruleenv}
+
+Before the clause-by-clause development, the profile's central property
+can be stated once, in the vocabulary of
+Definition~\ref{ch05:def:encoding}.
+
+\begin{proposition}[Determinism and injectivity on the admitted domain]
+\label{ch05:prop:injective}
+On the domain of values the profile admits, the canonical encoding is a
+function of value content alone---independent of construction history,
+platform, process, and run---and is injective up to the profile's
+declared identifications: two admitted values encode to the same bytes
+if and only if they present the same canonical content under their
+declared serialization routes.
+\end{proposition}
+
+\begin{proof}[Design argument]
+Determinism: every source of environmental variation is either
+eliminated (sorted keys remove ordering dependence; minimal separators
+remove formatting dependence; UTF-8 with direct non-ASCII emission
+removes escaping choices) or excluded from the domain (unordered
+containers, floats, and locale-sensitive text transformations are
+rejected, so no admitted value's encoding consults them). Injectivity:
+the JSON grammar is uniquely parseable; distinct admitted scalars
+receive distinct token forms, with the JSON-inexpressible distinctions
+(decimal, tuple, enumeration) carried by tagged objects under a key that
+is reserved and therefore cannot arise from payload data; and route
+uniqueness (Rule~\ref{ch05:rule:oneroute}) ensures no value has two
+derivations. The argument is a design argument, checked by the
+acceptance, rejection, and determinism fixture families of the bound
+suite (Section~\ref{ch05:testing}); it is not a machine-checked proof,
+and the open obligation to formalize it is recorded in Chapter 12.
+\end{proof}
+
+Each clause now gets its own section, with the rationale, the worked
+encodings, and the specific incident or attack it answers.
+
+\section{Deterministic UTF-8 JSON with sorted keys}\label{ch05:json}
+
+\subsection{The base grammar}
+
+The encoding's surface grammar is JSON: objects with string keys, arrays,
+strings, integers, booleans, and null. JSON is chosen not for expressiveness
+---the whole point of the profile is to restrict it---but for auditability:
+the encoded bytes are readable by a human reviewer and parseable by
+independent tooling in any language, so a digest dispute can be settled by
+inspection. Three determinism decisions turn the grammar into an encoding.
+
+\emph{Key order.} Object keys are emitted in sorted order, so that the bytes
+do not depend on insertion order, hash seeding, or any other artifact of how
+the in-memory mapping was built. Two mappings with the same key--value pairs
+encode identically regardless of construction history. The sort is over the
+key strings themselves as sequences of code points; Section~\ref{ch05:jcs}
+returns to the subtlety that this ordering choice is not the same as RFC
+8785's.
+
+\emph{Separators and whitespace.} The encoding uses minimal separators---a
+comma between items, a colon between key and value, no spaces, no
+indentation---so that formatting conventions cannot create spurious byte
+differences. Pretty-printing is a display concern; display transformations
+of evidence are computed from the canonical bytes, never the reverse.
+
+\emph{Text encoding and terminator.} The bytes are UTF-8 with non-ASCII
+characters emitted directly rather than escaped, and the encoding is
+terminated by exactly one line feed. The terminator is a profile decision
+worth flagging: it makes an encoded evidence record a well-formed
+single-line text file on POSIX conventions, at the cost of a deliberate,
+documented divergence from encoders that emit no terminator
+(Section~\ref{ch05:jcs}).
+
+\begin{example}[Worked base encoding]\label{ch05:ex:base}
+The mapping with pairs \texttt{b} $\mapsto 2$, \texttt{a} $\mapsto 1$,
+\texttt{c} $\mapsto$ [\texttt{true}, \texttt{null}] encodes as the bytes
+\begin{center}
+\texttt{\{"a":1,"b":2,"c":[true,null]\}}
+\end{center}
+followed by one line feed---regardless of the order in which the pairs were
+inserted, the platform, or the process's hash seed. The same mapping built
+by parsing, by literal construction, or by merging two mappings encodes to
+the same twenty-nine bytes plus terminator, and therefore to the same
+SHA-256 digest.
+\end{example}
+
+\subsection{Text admissibility}
+
+Determinism of the byte layer is necessary but not sufficient: the
+\emph{content} of strings can smuggle instability and confusion. The profile
+therefore restricts admissible text before it restricts anything else. Every
+string entering the encoding---keys and values alike---is validated to
+exclude three Unicode categories: control characters, invisible format
+controls, and surrogate code points. Control characters make encoded
+evidence unsafe to display and diff; invisible format controls (zero-width
+spaces, directional overrides) make two visually identical strings
+byte-distinct, which is Threat~\ref{ch05:threat:instability} weaponized
+against human review; and surrogates are not characters at all---their
+presence means the value was manufactured through an encoding error, and
+encoding them produces byte sequences that independent UTF-8 parsers
+legitimately reject or repair differently.
+
+Rejection, not repair, is the deliberate choice. A profile that silently
+strips a directional override produces clean bytes from dirty input---and
+thereby makes the dirty input and its cleaned twin encode identically, a pun
+between a string that renders deceptively and one that does not. The
+kernel's position is that deceptive text is not admissible evidence, and the
+place to discover that is at encoding time, with an error naming the field.
+
+\subsection{The hash layer}\label{ch05:hashlayer}
+
+The encoding exists to be hashed, and the hash layer has its own small
+profile, stated here once so the rest of the monograph can say
+``canonical digest'' without ambiguity. The digest function is SHA-256
+over the canonical encoding's bytes---terminator included---and nothing
+else: no salt, no key, no truncation, no double hashing. The choice is
+conservative and deliberately uninteresting: a single, universally
+implemented, unbroken cryptographic hash, so that any party with any
+toolchain can recompute a digest from bytes and so that a digest value
+in an evidence record has exactly one possible derivation.
+
+Digest \emph{values}, when they appear as fields in payloads and
+records, are governed by the identifier discipline of
+Section~\ref{ch05:identifiers} in its strictest form: exactly sixty-four
+hexadecimal digits, carried in a single declared letter case, with
+case normalization applied at the field boundary so that a digest
+arriving in the other case is normalized on intake rather than stored
+in mixed conventions. The alternative---tolerant, case-insensitive
+digest comparison scattered across consumers---is a standing invitation
+for one consumer to forget the tolerance, at which point the same
+digest exists as two unequal strings on two sides of a comparison.
+
+One caveat belongs to this layer and is stated here rather than
+repeated: every identity claim of the form ``equal digest, therefore
+equal bytes'' holds up to the collision resistance of SHA-256. The
+kernel makes no contribution to, and no claims about, that
+cryptographic property; it inherits the standard assumption and records
+it as an assumption. What the kernel does ensure is the converse
+direction and the preimage discipline around it: equal admitted values
+always produce equal digests (Proposition~\ref{ch05:prop:injective}),
+and every digest in a kernel record names bytes that are retained or
+pinned somewhere a verifier can reach, so the assumption is only ever
+invoked about bytes that exist, never about bytes taken on faith.
+
+\section{The rejection set: what cannot be evidence}\label{ch05:rejections}
+
+Clause (2) of Rule~\ref{ch05:rule:master} names four rejections. Each is a
+value family that mainstream serializers accept, and each is rejected here
+because it is \emph{poisonous to digests}: its presence anywhere in a payload
+makes the encoding either nondeterministic or many-to-one. This section
+takes them in turn.
+
+\subsection{Unordered containers}\label{ch05:sets}
+
+A set has no canonical element order, so any encoding of a set must choose
+one. Every available choice is bad. Iteration order is the worst: in the
+host language it depends on insertion history and, for strings, on a
+per-process hash seed, so the same set encodes differently in the same
+program across runs---pure Threat~\ref{ch05:threat:instability}. Sorting the
+elements repairs determinism for homogeneous sets of totally ordered
+elements and fails for everything else: mixed-type sets have no total order,
+and imposing an artificial one (sort by type name, then value) builds a
+subtle language-specific convention into the byte layer, which is
+instability displaced, not removed. Worse, sort-based set encoding
+manufactures a pun: the set $\{1, 2\}$ and the \emph{list} $[1, 2]$ become
+byte-identical, though one is an unordered membership assertion and the
+other an ordered sequence---evidence with different semantics.
+
+The kernel refuses the choice entirely: sets and frozen sets are rejected
+with a typed error. A caller holding set-shaped data must decide, at the
+call site and visibly in code review, what ordered artifact the evidence
+actually is---usually a sorted list under an ordering the caller can state
+and defend. The decision is forced to the layer that has the semantics,
+instead of being made silently and identically-for-everyone by the encoder,
+which is the one layer guaranteed not to know what the set means.
+
+\subsection{Binary floats}\label{ch05:floats}
+
+Binary floating-point values are rejected outright---not merely NaN and
+infinities, but every float, including innocent-looking ones. The rationale
+has three independent layers, any one of which would suffice.
+
+First, representation: most decimal literals are not representable in
+binary floating point. The value written \texttt{0.1} is stored as the
+nearest double, $0.1000000000000000055511151231257827\ldots$; the value
+written \texttt{0.3} is not the sum of the stored \texttt{0.1} and
+\texttt{0.2}. Evidence records exist to carry exact commitments, and a float
+is an inexact commitment wearing exact-looking digits.
+
+Second, formatting: turning a double back into digits is a rendering
+algorithm with a history of divergence---shortest-round-trip rendering
+versus fixed precision, differences across languages, libraries, and
+versions. Two systems holding bit-identical doubles can emit different
+digit strings, and two different doubles can emit the same short string
+under loose formatting. That is both threats of
+Section~\ref{ch05:threats} at once, seated in the innermost byte layer.
+
+Third, arithmetic provenance: floats invite computation before encoding,
+and float computation is order-sensitive ($ (a+b)+c \neq a+(b+c) $ in
+general), platform-tunable, and non-reproducible by default. A digest over
+a float-bearing payload is a digest over the accumulated rounding history
+of whatever machine produced it.
+
+The kernel's alternative is Section~\ref{ch05:decimal}'s tagged exact
+decimals: values that carry precisely the digits the recorder committed to,
+no more and no fewer. The rejection of floats is enforced by exact type
+check, which has a small but important corollary in the host language:
+booleans, which the language implements as an integer subtype, are tested
+for \emph{before} integers, so \texttt{true} encodes as a boolean and can
+never be punned with the integer $1$---a miniature instance of the same
+discipline.
+
+\subsection{NaN}\label{ch05:nan}
+
+NaN would be rejected even if floats were not, and it is worth recording
+why, because NaN is uniquely corrosive to an evidence system. NaN is not a
+value; it is the propagating absence of one. It is the only widely deployed
+datum that is unequal to itself, so its presence breaks the reflexivity that
+every comparison-based mechanism in this monograph assumes: a record
+containing NaN cannot even be said to equal \emph{itself}, and ``same
+evidence, same digest'' loses meaning at the semantic layer no matter what
+the byte layer does. Serialization compounds this: the JSON grammar has no
+NaN token, so encoders that accept NaN emit a nonstandard extension token
+that independent parsers variously accept, reject, or translate---meaning
+the encoded bytes are not, in fact, JSON, and cross-tool audit fails on
+exactly the payloads containing the least meaningful data. A NaN in an
+evidence payload is always a symptom: some upstream computation failed and
+the failure was allowed to flow. The kernel's fail-closed contract requires
+surfacing that failure at its origin, not laundering it into a hashed
+record whose digest then faithfully commits to nothing.
+
+\subsection{Infinities}\label{ch05:inf}
+
+Positive and negative infinity share NaN's grammatical problem---no JSON
+token, nonstandard extensions, parser divergence---without its reflexivity
+pathology, and they add a subtler one: they encode a claim (``this quantity
+exceeds every finite bound'') that is essentially never the fact a recorder
+means to commit to. In practice an infinity in a payload records an
+overflow, a division by zero, or a sentinel convention (``no limit'')
+that belongs in the schema as an explicit optional field, not in the
+number line. Because the kernel's exact-decimal carrier is finite by
+construction---the decimal type admits non-finite values, and the encoder
+checks finiteness and rejects them---the profile makes ``every encoded
+number is a finite, exact decimal or a bounded integer'' an invariant a
+consumer can rely on without reading any schema.
+
+\begin{invariant}[Finite exact numerics]\label{ch05:inv:finite}
+Every numeric value in a canonical evidence payload is either an integer
+within the declared width bound or a finite tagged decimal. No encoded
+payload contains a binary float, a NaN, or an infinity; fixtures for each
+rejection are part of the bound suite.
+\end{invariant}
+
+\section{Tagged exact values}\label{ch05:decimal}
+
+\subsection{The pun problem, concretely}
+
+Clause (3) is the profile's answer to Threat~\ref{ch05:threat:puns}, and the
+motivating instance is numeric. Consider three values a program might hold:
+the exact decimal constructed from the digits \texttt{1.0}; the five-
+character string \texttt{"1.0"}; and the integer $1$. A naive encoder maps
+the decimal to the JSON number token \texttt{1.0}, the string to
+\texttt{"1.0"}, and the integer to \texttt{1}---three distinct byte
+strings, which looks fine until one notices that the decimal's token
+collides with what a float encoder would emit, that many decimal encoders
+``simplify'' \texttt{1.0} to \texttt{1} and collide with the integer, and
+that string-typed numeric fields (ubiquitous in ledger data) collide with
+stringified decimals. Across real serializer configurations, some pair of
+these three values collides somewhere. An evidence system cannot tolerate
+that: a quantity asserted as an exact decimal with one decimal place of
+recorded precision is a different commitment from the bare integer and
+from a piece of prose that happens to contain digits.
+
+\subsection{The tagging scheme}
+
+The kernel encodes every type-distinct scalar that JSON cannot natively
+distinguish as a small tagged object under a reserved key. The tag key is
+\texttt{\$cas\$type}; its value names the carried type; the remaining fields
+carry the value in a deterministic rendering.
+
+\begin{example}[The three encodings differ]\label{ch05:ex:decimal}
+Under the v0.1 profile:
+\begin{itemize}
+\item the exact decimal $\mathrm{Decimal}(\texttt{"1.0"})$ encodes as
+\texttt{\{"\$cas\$type":"decimal","value":"1.0"\}};
+\item the string \texttt{"1.0"} encodes as \texttt{"1.0"};
+\item the integer $1$ encodes as \texttt{1}.
+\end{itemize}
+The three byte strings are pairwise distinct, so the three digests are
+pairwise distinct (up to hash collision), and no evidence about one value
+can validate a record about another. The decimal's digits are rendered in
+fixed-point form from the decimal's own exact state---never through a
+binary float---so the rendering is a function of the committed digits
+alone.
+\end{example}
+
+\begin{remark}[Precision is part of the value]\label{ch05:rem:precision}
+Because the rendering preserves the decimal's stored exponent,
+$\mathrm{Decimal}(\texttt{"1.0"})$ and $\mathrm{Decimal}(\texttt{"1.00"})$
+encode differently: \texttt{"1.0"} versus \texttt{"1.00"} in the tagged
+value field. This is deliberate. In measurement contexts the recorded
+precision is part of the assertion---a companion candidate records
+calibrated quantities where one decimal place versus two is a different
+claim about the instrument. Callers for whom trailing zeros are \emph{not}
+significant must normalize before encoding, visibly, at the call site; the
+encoder will not decide for them. The same one-way principle as
+Section~\ref{ch05:sets}: normalization is a semantic act and belongs to
+the layer that knows the semantics.
+\end{remark}
+
+The same scheme carries two further distinctions. Tuples---used in the
+kernel for fixed-shape positional data---encode as
+\texttt{\{"\$cas\$type":"tuple","items":[\ldots]\}}, distinct from JSON
+arrays, which carry variable-length sequence data; a loader can therefore
+reject a sequence where a fixed shape was committed, and vice versa.
+Enumeration members encode as a tagged object carrying both the
+enumeration's fully qualified type name and the underlying value, so the
+member \textsc{open} of the admission-status enumeration can never be
+punned with the bare string \texttt{"OPEN"}---which matters directly for
+Chapter 4's boundary carrier, whose digested form must not be forgeable
+from string-typed data that happens to spell the same words.
+
+\begin{example}[Worked enumeration encoding]\label{ch05:ex:enum}
+Let \textsc{open} be a member of an admission-status enumeration whose
+fully qualified type name is
+\texttt{cas\_core\_v8.semantics.AdmissionStatus} and whose underlying
+value is the string \texttt{"OPEN"}. Encoded directly, the member
+produces (with keys shown sorted, as emitted):
+\begin{center}
+\texttt{\{"\$cas\$type":"enum",}\\
+\texttt{"enum\_type":"cas\_core\_v8.semantics.AdmissionStatus",}\\
+\texttt{"value":"OPEN"\}}
+\end{center}
+while the bare string \texttt{"OPEN"} produces the six bytes
+\texttt{"OPEN"} (with quotes). The tagged form binds three facts the
+bare string cannot: that the value is an enumeration member at all,
+\emph{which} enumeration it belongs to, and what its underlying value
+is. Two enumerations that happen to share the word \textsc{open}---an
+admission status and, say, a disclosure status---therefore encode
+distinctly, and a digest over a payload containing one can never
+validate a payload containing the other. The enumeration check runs
+before the scalar checks precisely because scalar-backed enumerations
+would otherwise decay to their underlying values and lose all three
+facts. Note also the dual reading: a \emph{declared view} may choose to
+project an enumeration to its plain string (Chapter 4's boundary view
+does exactly this), and under Rule~\ref{ch05:rule:oneroute} that
+projection is stable and unambiguous because it is the type's only
+route; what the tagging forbids is not projection but \emph{collision}
+---the projected string lives inside a view whose shape is fixed, not
+loose in a position where a raw enumeration member could also appear.
+\end{example}
+
+\subsection{Reserving the tag}
+
+A tagging scheme creates its own forgery surface: if payload data may
+contain the tag key, then a mapping in user data with key
+\texttt{\$cas\$type} and value \texttt{"decimal"} is byte-
+indistinguishable from an encoder-produced tagged decimal, and the pun
+returns one level up. The profile closes this by reservation: the tag key
+is forbidden as an ordinary mapping key anywhere in admissible payloads,
+enforced at encoding time (and independently at registry-load time,
+Chapter 6). Within the admitted domain, an encoded object bearing the tag
+key was produced by the encoder's own tagging path---there is no other
+way for those bytes to arise---which is what makes clause (ii) of
+Definition~\ref{ch05:def:encoding} (injectivity) hold across the tagged
+extension: the encoding remains one-to-one because the tagged and untagged
+worlds cannot collide by construction.
+
+\section{One serialization route per public type}\label{ch05:oneroute}
+
+Clause (4) is a rule about the codebase rather than about any single byte
+string, and it exists because multi-route encoding is how determinism dies
+in mature systems even when every individual route is deterministic.
+
+Consider a public type---say, the artifact-identity record of
+Section~\ref{ch05:byteid}---that can reach bytes two ways: a hand-written
+view that emits selected fields in a chosen shape, and a generic reflective
+path that walks the record's fields mechanically. Both are deterministic.
+They are also different: the hand-written view may include a derived
+field the reflective path omits, order or name fields differently, or
+render a nested value through a different sub-route. Every digest computed
+on route A is incomparable with every digest computed on route B, and
+\emph{nothing fails}: each route round-trips its own output, each verifies
+its own digests, and the system contains two parallel, internally
+consistent evidence universes. The divergence surfaces only when a record
+digested on one route is verified on the other---typically at the worst
+seam, between two components maintained by different people, each of whom
+is provably ``correct.''
+
+\begin{ruleenv}[Single-route encoding]\label{ch05:rule:oneroute}
+Each public type has exactly one declared serialization route into the
+canonical encoding. Types with a declared evidence view are encoded through
+that view and only that view; the generic structural path is a fallback for
+types without one, and the encoder consults the declared view first, so no
+admissible value has two derivations. Adding a second route to an existing
+type is a breaking change to evidence comparability and is treated as such.
+\end{ruleenv}
+
+The v0.1 encoder implements the rule by a fixed dispatch order: tagged
+scalars first, then declared views, then the generic structural walk for
+plain field-record types, with the reflective walk deliberately reimplemented
+inside the bounded traversal of Section~\ref{ch05:bounded} rather than
+delegated to a library helper whose recursion is neither cycle- nor
+depth-bounded. The rule's payoff is a property worth stating:
+
+\begin{proposition}[Route uniqueness implies comparability]
+\label{ch05:prop:comparability}
+Under Rule~\ref{ch05:rule:oneroute}, for any two encoded payloads of the
+same public type, digest inequality implies value distinction under the
+type's declared view, and digest equality implies byte-identical canonical
+content. Without route uniqueness, neither implication holds: digest
+inequality may reflect route choice, and digest equality on one route says
+nothing about encodings on another.
+\end{proposition}
+
+\subsection{A worked end-to-end encoding}\label{ch05:worked}
+
+The rules compose; a full example shows how. Consider the Ring-4
+research boundary of Chapter 4, whose declared view presents four
+fields: the admission ring (integer), the admission status and license
+status (enumerations, projected by the view to their plain string
+values), and the disclosure flag (boolean). The encoder consults the
+declared view (Rule~\ref{ch05:rule:oneroute}), obtains a four-key
+mapping, validates each key and each string value as admissible text,
+sorts the keys, and emits:
+\begin{center}
+\texttt{\{"admission\_ring":4,"license\_status":"NOT LICENSED",}\\
+\texttt{"public\_disclosure\_authorized":false,"status":"OPEN"\}}
+\end{center}
+followed by the terminating line feed. Every profile decision is
+visible in these bytes. The keys appear in sorted order regardless of
+the view's construction order. The ring is a bare JSON integer---
+admissible because bounded---and could not have been a float; had the
+view held the ring as a float $4.0$, encoding would have failed with a
+typed error rather than emitting \texttt{4} or \texttt{4.0}. The two
+status strings are the view's declared projections; they are ordinary
+strings here because the view says so, and the same enumeration members
+encoded \emph{outside} this view would take the tagged form of
+Example~\ref{ch05:ex:enum}---no ambiguity arises because each public
+type has one route and the route fixes the shape. The boolean is
+\texttt{false}, not $0$: exact-type dispatch keeps the boolean/integer
+distinction. There are no spaces after separators, no escaping of the
+space inside \texttt{"NOT LICENSED"} (UTF-8 direct emission), and
+exactly one terminator byte at the end. The SHA-256 of these bytes is
+the carrier's canonical digest; by
+Proposition~\ref{ch05:prop:injective} any process on any platform that
+holds an equal boundary value computes the same digest, and no
+admissible value other than this boundary's view content computes it
+(up to hash collision, per Section~\ref{ch05:hashlayer}).
+
+The example also illustrates the division of labor between this chapter
+and Chapter 4: the encoding guarantees that these bytes faithfully and
+uniquely name the carrier's content; it is the boundary discipline, not
+the encoding, that determines what the content \emph{means}---and, per
+the standing invariants, the digest of these bytes evidences their
+integrity, never anyone's authorization of them.
+
+\section{Bounded, cycle-aware canonicalization}\label{ch05:bounded}
+
+Clause (5) addresses a family of failures that are not about which bytes
+come out but about whether the encoder terminates and stays within resource
+bounds when handed adversarial or accidentally pathological structure. An
+encoder that is part of a fail-closed evidence path is itself an attack
+surface: if hashing a payload can be made to hang, recurse without bound, or
+allocate without bound, then the evidence path is a denial-of-service lever
+against every operation that must hash before proceeding---which, in this
+kernel, is every operation.
+
+The v0.1 profile enforces four declared limits and one structural check.
+
+\emph{Depth.} Traversal beyond a declared nesting depth (64 in v0.1) fails
+closed. Legitimate evidence in this program is shallow; a payload nested
+hundreds deep is either a bug or a crafted recursion bomb, and the encoder
+refuses both identically.
+
+\emph{Node count.} Traversal visits at most a declared number of nodes
+(10{,}000 in v0.1). This bounds work even for wide, shallow structures that
+evade the depth limit.
+
+\emph{Byte size.} Accumulated text is metered during traversal and the final
+encoding is checked against a declared output bound (8 MiB in v0.1), so a
+payload cannot balloon past what downstream storage and review can handle.
+The in-flight metering matters: it stops runaway text at the point of
+accumulation instead of after a gigabyte-scale join.
+
+\emph{Integer width.} Integers beyond a declared bit width (2{,}048 bits in
+v0.1) are rejected. Arbitrary-precision integers are otherwise a quiet
+amplification channel---a small in-memory object whose decimal rendering is
+enormous---and no legitimate evidence quantity in this program approaches
+the bound.
+
+\emph{Cycles.} The traversal maintains the set of composite objects on the
+current path; revisiting an active object fails closed immediately with a
+cycle error. The alternative behaviors are both unacceptable: infinite
+recursion is a crash at best, and silent cycle-breaking (encode the first
+visit, elide the second) makes the encoding depend on traversal entry
+point---two references to the same cyclic structure would encode
+differently depending on where the walk began, which is
+Threat~\ref{ch05:threat:instability} in structural clothing. Note the check
+is scoped to the \emph{active path}: acyclic sharing (the same immutable
+value referenced twice in different branches) is legal and encodes by
+value at each occurrence, which is the correct evidence semantics---the
+payload commits to content, not to in-memory object graph shape.
+
+\begin{remark}[Limits are part of the profile]\label{ch05:rem:limits}
+The four numeric limits are declared constants of the profile, not tuning
+parameters: two implementations of the encoding agree only if they enforce
+the same bounds, since a payload accepted by one and rejected by the other
+breaks fail-closed interoperability exactly at the margin. Any future
+revision of the limits is therefore a version change of the encoding
+profile itself, visible in the profile identity that receipts record.
+\end{remark}
+
+\section{Byte identity versus comparison identity}\label{ch05:byteid}
+
+\subsection{Two identities, both recorded}
+
+Everything so far concerns values the kernel encodes. A second identity
+problem attaches to artifacts the kernel merely \emph{reads}: source files,
+ledgers, schemas, compiler bytes. For these, the bytes already exist, and
+the question is what ``the same file'' means across platforms whose text
+conventions differ. The program's operating history makes this concrete:
+files authored on one platform arrive on another with carriage-return/
+line-feed sequences rewritten to bare line feeds or vice versa---by
+version-control autocrlf settings, editor defaults, or transfer tooling.
+After such a rewrite the file's raw digest has changed while, on the
+program's declared comparison convention, its content has not.
+
+Collapsing this situation in either direction loses information that
+incidents have shown to matter. Recording only the raw digest makes every
+platform transit look like tampering, flooding review with false
+mismatches until reviewers stop looking---the desensitization failure of
+Threat~\ref{ch05:threat:instability}. Recording only a normalized digest
+makes genuine byte differences invisible whenever they hide in line
+endings, and byte-exactness is precisely what Chapter 6's registries and
+Chapter 7's compiler verification pin.
+
+\begin{ruleenv}[Dual identity]\label{ch05:rule:dual}
+Every artifact identity records both a \emph{raw} identity---digest and
+byte count of the exact bytes---and a declared \emph{comparison}
+identity---digest and byte count after the single declared normalization,
+CRLF-to-LF, and no other transformation. The two are separate fields with
+separate roles; neither substitutes for the other, and no kernel operation
+silently accepts one where the other is required.
+\end{ruleenv}
+
+The normalization is deliberately minimal and closed: replace each
+two-byte CRLF sequence with LF, touch nothing else. It is not trailing-
+whitespace trimming, not encoding transcoding, not Unicode normalization.
+A one-transformation comparison identity can be reasoned about exactly;
+an open-ended ``semantic'' normalization cannot.
+
+\subsection{The line-ending census}
+
+Alongside the two digests, the identity records a three-way census of the
+artifact's line-ending sequences: the count of CRLF sequences, of lone
+line feeds, and of lone carriage returns. The three counts are never
+conflated into a single ``line count,'' because their joint pattern is
+diagnostic in a way no aggregate is. All-CRLF with zero lone characters is
+a consistent foreign-convention file; all-LF is a consistent native one;
+nonzero counts in more than one column mean a \emph{mixed} file---almost
+always the fingerprint of a partial rewrite, a bad merge, or an editor
+that converted only the lines it touched; and lone carriage returns,
+rare on modern platforms, flag either ancient tooling or bytes that were
+never text. The identity derives a summary profile (CRLF, LF, CR, mixed,
+or no line endings) from the census for human display, but the counts
+themselves are the recorded evidence.
+
+The census also underwrites an internal consistency check that turns the
+dual identity from two assertions into one verifiable structure: since
+the only transformation is CRLF-to-LF and each application shortens the
+artifact by exactly one byte, the normalized byte count must equal the
+raw byte count minus the CRLF count. An identity record violating this
+arithmetic is rejected at construction---it could not have been produced
+by measuring any real byte string, so it is either corrupt or fabricated.
+
+\begin{proposition}[Census arithmetic]\label{ch05:prop:census}
+For any byte string, the CRLF-to-LF normalized length equals the raw
+length minus the number of CRLF sequences, and the total of
+$2\cdot(\textrm{CRLF count}) + (\textrm{lone LF count}) + (\textrm{lone
+CR count})$ cannot exceed the raw length. Both facts are enforced as
+construction-time checks on identity records, so a record's five numeric
+fields are mutually corroborating rather than independently assertable.
+\end{proposition}
+
+\subsection{The incidents this answers}
+
+Three recurring incident shapes, all previously observed in the program's
+operations, are each made visible-instead-of-silent by the dual identity.
+A cross-platform checkout changes raw digests en masse while comparison
+digests hold: the pattern ``raw differs, LF-normalized matches, CRLF
+census changed'' names the event exactly, and review can wave it through
+\emph{as that event} rather than as an unexplained mismatch. A genuine
+content change hidden in a reformatting commit shows the opposite
+signature---comparison digests differ---which no amount of newline noise
+can mask. And a partial conversion produces a mixed census where either
+consistent convention stood before, surfacing the half-rewritten file
+that per-digest comparison alone would report only as ``different,''
+without the why.
+
+\section{Identifier profiles}\label{ch05:identifiers}
+
+Text in evidence records serves two masters. Machine identifiers---record
+identities, namespace names, version strings, hash fields---must be
+comparable, greppable, unambiguous in logs, and safe across every tool in
+the audit chain. Prose---titles, notes, definitions quoted from source
+documents---must be carried faithfully, including in languages and scripts
+the identifiers' rules would forbid. A single admissibility rule for both
+either cripples prose or opens identifiers to confusable-character and
+normalization attacks. The profile therefore declares two tiers.
+
+\begin{ruleenv}[Two-tier text]\label{ch05:rule:tiers}
+Review-visible machine identifiers satisfy a declared restricted profile:
+nonblank, trimmed, ASCII-only, drawn from an explicit identifier alphabet
+(alphanumerics plus a short list of structural punctuation), and a fixed
+point of compatibility normalization---the identifier must already equal
+its own NFKC normal form. Prose fields carry unrestricted Unicode subject
+only to the global text admissibility of Section~\ref{ch05:json}
+(no controls, no invisible format characters, no surrogates). Prose never
+participates in identifier comparison, and identifiers are compared as
+exact byte sequences with no case folding or locale participation.
+\end{ruleenv}
+
+Each clause of the restricted profile closes a specific hole. ASCII-only
+removes the entire homoglyph space---no Cyrillic \texttt{a} posing as
+Latin \texttt{a} in a record identity. The NFKC fixed-point requirement is
+subtler: rather than normalizing identifiers on intake (which would make
+two visually distinct inputs collide post-hoc, a pun manufactured by the
+kernel itself), the profile requires that the identifier \emph{already be}
+normal, rejecting anything that normalization would change. The kernel
+thus never rewrites an identifier; it only refuses non-canonical ones---
+the same reject-don't-repair stance as Section~\ref{ch05:json}, applied
+one tier up. Hash-valued fields get a stricter micro-profile still: exactly
+sixty-four hexadecimal digits, normalized to a single declared letter case
+at the boundary, so that digest comparison is byte comparison everywhere
+downstream and a mixed-case digest can never split into two apparently
+different values.
+
+\section{Comparison with RFC 8785 (JCS)}\label{ch05:jcs}
+
+The obvious question about any bespoke canonical JSON profile is why it is
+not simply the standard one. RFC 8785, the JSON Canonicalization Scheme
+\cite{jcs}, solves an overlapping problem: deterministic bytes for JSON
+data, for exactly the hashing-and-signing use cases this chapter cares
+about. The kernel's profile agrees with JCS on the load-bearing
+architecture and departs from it in documented, deliberate ways; this
+section states both sides precisely, because ``roughly JCS'' is exactly
+the kind of claim the monograph's discipline forbids.
+
+\subsection{Where the profile follows JCS}
+
+The agreements are the structural ones. Both use UTF-8 as the sole byte
+encoding. Both emit objects with sorted keys, so member order carries no
+information. Both use minimal separators with no insignificant whitespace.
+Both emit non-ASCII text directly rather than ASCII-escaped. Both are
+designed so that hashing the output is meaningful: same data, same bytes,
+same digest. A reader who knows JCS can read the kernel's encoded evidence
+without relearning anything at the surface level.
+
+\subsection{Where the profile is stricter}
+
+Every departure is a restriction or an extension motivated by the evidence
+threat model, and each is flagged in Table~\ref{ch05:tab:jcs}.
+
+\emph{Numbers.} The deepest divergence. JCS inherits I-JSON's number
+model: numbers are IEEE-754 doubles, serialized by the ECMAScript
+shortest-round-trip algorithm. This is the right call for JCS's goal---
+canonicalizing arbitrary interoperable JSON---and it is unacceptable
+here, for every reason in Section~\ref{ch05:floats}: doubles are inexact
+carriers, and shortest-round-trip rendering, while deterministic, commits
+evidence to binary-rounding artifacts. The kernel rejects floats entirely
+and carries exact quantities as tagged decimals. In JCS terms: the
+kernel's numeric domain is integers (bounded) plus a tagged-object
+extension, and no value in the kernel's domain exercises JCS's
+double-serialization machinery at all.
+
+\emph{Key ordering.} JCS sorts object members by the UTF-16 code units of
+their names; the kernel's encoder sorts by Unicode code points. The two
+orders agree on all-ASCII keys---which covers every machine identifier
+under Rule~\ref{ch05:rule:tiers}---but can differ when keys mix
+supplementary-plane characters with code points in the upper basic
+multilingual plane, because surrogate-pair code units interleave
+differently than code points. The kernel documents this as a divergence
+rather than hiding it: its encoded bytes for such keys are \emph{not}
+JCS bytes. The practical exposure is narrow (non-ASCII keys are rare in
+kernel payloads and forbidden in identifier positions), but narrow is not
+zero, and the profile says so.
+
+\emph{Type discrimination.} JCS canonicalizes JSON's data model and
+therefore cannot distinguish what JSON cannot: it has no tuples, no
+decimals-as-distinct-from-numbers, no enumerations. The kernel's tagged
+extension (Section~\ref{ch05:decimal}) is strictly outside JCS's scope---
+JCS would happily canonicalize the tagged objects as ordinary objects,
+which is compatible but meaningless without the reservation rule that
+makes tags unforgeable.
+
+\emph{Admissibility.} JCS canonicalizes whatever valid JSON it is given;
+it has no rejection set. The kernel rejects sets and floats at the host-
+language boundary, rejects control and format characters inside strings,
+rejects the reserved tag key in data, and enforces the resource bounds of
+Section~\ref{ch05:bounded}, none of which JCS contemplates. In the same
+spirit, the kernel's registry layer rejects duplicate keys at parse time
+(Chapter 6), where JCS---operating downstream of a parser---assumes
+I-JSON well-formedness rather than enforcing it.
+
+\emph{Output framing.} The kernel terminates encodings with a line feed;
+JCS output is unterminated. A JCS digest and a kernel digest of the same
+object therefore differ even when every byte before the terminator
+agrees. This is the one divergence with no semantic content, retained
+because the kernel's encoded records live as files in a line-oriented
+audit toolchain; it is called out so that no consumer expects cross-
+verification against a JCS implementation to succeed byte-for-byte.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{lll}
+\toprule
+Dimension & RFC 8785 (JCS) & CAS Core 8 v0.1 profile \\
+\midrule
+Byte encoding & UTF-8 & UTF-8 (same) \\
+Key order & UTF-16 code units & code points (differs off-ASCII) \\
+Whitespace & none & none (same) \\
+Numbers & IEEE doubles, ES6 rendering & floats rejected; tagged decimals \\
+NaN / infinity & inexpressible in I-JSON & rejected with typed error \\
+Sets / tuples / enums & out of scope & rejected / tagged / tagged \\
+String admissibility & any JSON string & controls, format chars, surrogates rejected \\
+Duplicate keys & assumed absent (I-JSON) & rejected at parse (registry layer) \\
+Resource bounds & none & depth, nodes, bytes, integer width \\
+Terminator & none & single LF \\
+\bottomrule
+\end{tabular}
+\caption{Agreement and divergence between the JCS canonicalization and the
+kernel's evidence-encoding profile. ``Rejected'' means a typed error at
+encoding time; the kernel is a restricted profile with a tagged extension,
+not a JCS implementation.}
+\label{ch05:tab:jcs}
+\end{table}
+
+\begin{remark}[Relation to I-JSON]\label{ch05:rem:ijson}
+JCS is defined over the I-JSON message profile---the interoperable
+subset of JSON that excludes duplicate keys, surrogates, and numbers
+outside double precision \cite{jcs}. The kernel's admitted domain is,
+by construction, inside I-JSON's spirit and stricter than its letter:
+duplicate keys are actively rejected rather than assumed absent,
+surrogate and format-control code points are rejected rather than
+discouraged, and the number question is mooted by the float rejection.
+One divergence runs the other way and should be flagged: I-JSON bounds
+integers to the double-representable range, while the kernel admits
+integers up to its declared 2{,}048-bit width, carried as exact JSON
+integer tokens. A consumer parsing kernel evidence with a
+double-backed JSON library would silently round such integers; the
+kernel's own parse layer does not, and the profile documents that
+evidence consumers must use exact-integer parsing. In practice kernel
+payloads carry digests as strings and quantities as tagged decimals,
+so wide integers are rare---but rare is not absent, and the profile
+says which side of the divergence it stands on.
+\end{remark}
+
+The summary judgment: the kernel follows JCS wherever JCS's choice is
+about determinism, and overrides JCS wherever JCS's choice is about
+\emph{tolerance}---of floats, of arbitrary strings, of unbounded
+structure---because an evidence kernel's job is precisely to be
+intolerant there. The profile should be read as ``JCS's architecture,
+minus JCS's number model, plus a typed extension and a rejection set,''
+and receipts that name the encoding profile name the kernel's, never
+JCS, so no consumer can mistake one for the other.
+
+\section{A failure-mode gallery}\label{ch05:gallery}
+
+The chapter closes with a gallery of concrete failures, each stated as it
+would occur in an undisciplined encoder, with the clause of the profile
+that blocks it. The gallery serves the same role as Chapter 4's misuse
+scenarios: it is the rule set exercised against realistic trouble, and
+each entry corresponds to a rejection or determinism fixture family in
+the bound suite.
+
+\begin{example}[Hash-seed shuffle]\label{ch05:ex:seed}
+A payload containing a set of identifier strings encodes in iteration
+order; the process's string-hash seed differs per run; the same evidence
+hashes differently on every execution, and replay verification fails
+intermittently in a way that vanishes under debugging (fixed seeds).
+\emph{Blocked by} the set rejection of Section~\ref{ch05:sets}: the
+payload never encodes; the caller must supply a sorted list.
+\end{example}
+
+\begin{example}[The point-one trap]\label{ch05:ex:pointone}
+A measurement of \texttt{0.1} units is stored as a double and encoded as
+a number. A second system recomputes the quantity as
+\texttt{0.30000000000000004}-style arithmetic residue, or renders the
+same double with different formatting, and the digests diverge---or,
+under loose formatting, two genuinely different stored quantities render
+to the same short string and the digests collide. \emph{Blocked by} the
+float rejection of Section~\ref{ch05:floats} and the tagged-decimal
+carrier: the recorder must commit to exact digits, and those digits are
+what is hashed.
+\end{example}
+
+\begin{example}[NaN equals nothing]\label{ch05:ex:nan}
+An upstream failure yields NaN in a numeric field; the encoder emits a
+nonstandard token; one downstream parser errors, another accepts, a third
+reads null. Meanwhile the record is unequal to itself under the very
+comparison semantics the registry relies on. \emph{Blocked by} the NaN
+rejection of Section~\ref{ch05:nan}: the upstream failure surfaces at
+encoding time as a typed error naming the field.
+\end{example}
+
+\begin{example}[Decimal--string--integer pun]\label{ch05:ex:pun}
+A ledger field holding the string \texttt{"1.0"} is compared, via digest,
+against a record whose author stored the decimal $1.0$; an untagged
+encoder emits identical bytes for both, and evidence about a prose field
+validates a numeric commitment. \emph{Blocked by} the tagging of
+Section~\ref{ch05:decimal}: the encodings differ
+(Example~\ref{ch05:ex:decimal}).
+\end{example}
+
+\begin{example}[Tag forgery]\label{ch05:ex:tagforgery}
+An author embeds \texttt{\{"\$cas\$type":"decimal","value":"2.0"\}} as
+ordinary data in a payload, crafting bytes identical to an encoder-
+produced tagged decimal. \emph{Blocked by} the reservation rule: the tag
+key is rejected in data positions at encoding time and again at registry
+load, so the forged bytes are not producible through the admitted path.
+\end{example}
+
+\begin{example}[Two-route drift]\label{ch05:ex:tworoutes}
+A convenience helper serializes a public record type reflectively for a
+cache, while the evidence path uses the type's declared view; a field is
+added to the view only; cache digests and evidence digests silently fork,
+and a verification months later compares digests from different
+universes. \emph{Blocked by} Rule~\ref{ch05:rule:oneroute}: one route per
+public type, with route addition treated as a breaking change.
+\end{example}
+
+\begin{example}[Autocrlf masquerade]\label{ch05:ex:autocrlf}
+A checkout rewrites a pinned source file from LF to CRLF; raw digests
+change across the whole tree; a reviewer, habituated to platform noise,
+approves a diff in which one file's change is \emph{not} line-ending
+noise. \emph{Blocked by} the dual identity and census of
+Section~\ref{ch05:byteid}: the noise files show ``raw differs, LF
+matches, census flipped''; the real change shows ``LF differs,'' a
+signature no newline rewrite can produce.
+\end{example}
+
+\begin{example}[Invisible ink]\label{ch05:ex:invisible}
+An identifier contains a zero-width character; it renders identically to
+its clean twin in every review surface, while comparing unequal and
+hashing differently---two records that every human reads as one.
+\emph{Blocked by} text admissibility (format controls rejected) and the
+ASCII identifier profile of Section~\ref{ch05:identifiers}.
+\end{example}
+
+\begin{example}[Compatibility confusable]\label{ch05:ex:confusable}
+An identifier uses a Unicode compatibility character (a full-width Latin
+letter, a ligature) that NFKC would fold to the plain form; depending on
+which layer normalizes, the identifier intermittently equals its folded
+twin. \emph{Blocked by} the NFKC fixed-point requirement: the non-normal
+form is rejected at intake, and the kernel itself never folds, so there
+is no layer-dependent equality.
+\end{example}
+
+\begin{example}[Recursion bomb and cycle]\label{ch05:ex:bomb}
+A crafted payload nests two thousand levels deep, or contains a mapping
+that transitively contains itself; a naive encoder overflows the stack or
+recurses forever inside the evidence path, denying service to every
+operation that hashes first. \emph{Blocked by} the bounds and active-path
+cycle check of Section~\ref{ch05:bounded}: depth and node limits fail
+closed with typed errors; the cycle is detected at first re-entry.
+\end{example}
+
+\begin{example}[Big-integer balloon]\label{ch05:ex:bigint}
+A payload carries $2^{100000}$ in a field where no legitimate quantity
+exceeds a few hundred bits; the decimal rendering alone is tens of
+kilobytes, and a stream of such records exhausts storage metered by
+record count. \emph{Blocked by} the integer-width bound; quantities that
+genuinely need arbitrary width must be redesigned as explicit structures,
+visibly, rather than smuggled through the number path.
+\end{example}
+
+\begin{example}[Locale case surprise]\label{ch05:ex:locale}
+A pipeline ``normalizes'' identifiers by lowercasing them, and one
+stage runs under a locale in which case mapping differs from the ASCII
+expectation (the classic instance maps the letter \texttt{I} outside
+the ASCII pair), so the same identifier lowercases to different byte
+strings on different hosts. \emph{Blocked by} the identifier profile of
+Section~\ref{ch05:identifiers}: identifiers are compared as exact bytes
+with no case folding anywhere in the kernel, and the one sanctioned
+case normalization---hexadecimal digest case---is locale-independent by
+construction. A transformation that is not in the profile does not
+happen; a transformation that is in the profile is total and
+deterministic.
+\end{example}
+
+\begin{example}[Escape-style fork]\label{ch05:ex:escape}
+Two encoders serialize the same non-ASCII string, one emitting raw
+UTF-8 and the other emitting ASCII escape sequences; both outputs parse
+back to the same string, but the bytes---and therefore the digests---
+differ, and a digest computed by one toolchain fails verification in
+the other. \emph{Blocked by} profile fixity: the canonical encoding
+emits non-ASCII directly, always, and receipts name the encoding
+profile, so a consumer either implements the declared emission or is
+not computing canonical digests at all. Parse-equivalence is explicitly
+not the profile's identity relation; byte equality is.
+\end{example}
+
+\begin{example}[Terminator mismatch]\label{ch05:ex:terminator}
+An independent implementation reproduces every rule but omits the final
+line feed; all of its digests differ from the kernel's on every
+payload, and the divergence is invisible to any inspection of the
+pre-terminator content. \emph{Blocked by} documentation and fixtures
+rather than by code: the terminator is a declared clause of
+Rule~\ref{ch05:rule:master}, Table~\ref{ch05:tab:jcs} flags it as a
+deliberate JCS divergence, and the determinism fixture family includes
+known-answer encodings whose recorded digests any conforming
+implementation must reproduce byte-for-byte. A known-answer test is the
+cheapest possible cross-implementation contract, and the terminator is
+exactly the kind of detail it exists to catch.
+\end{example}
+
+\section{Placement in the evidence pipeline}\label{ch05:pipeline}
+
+Before the testing discipline, it is worth walking the encoder's actual
+consumers, because the profile's rules were each motivated by a threat
+in the abstract and each lands somewhere concrete in the kernel.
+
+\emph{Semantic references} (Chapter 3) carry a definition digest: the
+hash of the exact defining text of the referenced concept in its
+identified source. The dual-identity discipline of
+Section~\ref{ch05:byteid} governs how that source text is identified
+across platforms, and the identifier profile governs the reference's
+namespace and identifier components. A reference is thus a consumer of
+this chapter twice over---its target is named by a digest, and its own
+rendered form obeys the identifier tier.
+
+\emph{Boundary carriers} (Chapter 4) are encoded through their declared
+view, as worked in Section~\ref{ch05:worked}; their digests appear
+inside every artifact that embeds a boundary, which is every artifact.
+The tagging rules guarantee that a boundary's digested content cannot
+be counterfeited from look-alike string data, and the single-route rule
+guarantees that two components digesting the same boundary agree.
+
+\emph{Registry records} (Chapter 6) are the heaviest consumers: every
+record carries the canonical digest of its payload, recomputed and
+compared during the reconstruction rule at every load, resolution, and
+export. The registry layer additionally enforces the parse-side
+counterparts of this chapter's rules---duplicate-key rejection, text
+admissibility of ledger strings, reserved-tag rejection in ledger
+data---so that content entering by parse meets the same bar as content
+entering by construction.
+
+\emph{Compatibility receipts and replay} (Chapters 7 through 9) reduce
+to digest comparison end to end: compiler bytes are hashed before
+execution, raw and LF compiler identities are recorded as separate
+fields per Rule~\ref{ch05:rule:dual}, result payloads are canonically
+digested, and the replay requirement compares fresh digests against
+recorded ones before any structural decision passes. Here the encoding
+carries its largest responsibility: a nondeterministic encoder would
+make honest replays fail and---far worse---a punning encoder could make
+a dishonest replay pass. The entire force of the replay gate rests on
+Proposition~\ref{ch05:prop:injective}.
+
+\begin{threat}[Profile drift across versions]\label{ch05:threat:drift}
+A future revision of the encoding profile---a changed limit, a new
+tagged type, a different key ordering---silently invalidates every
+stored digest computed under the old profile, or, worse, coexists with
+it so that the same value has two ``canonical'' digests in circulation.
+\emph{Answered by} treating the profile itself as an identified
+artifact: the profile's rules and limits are part of the kernel's
+specified surface (Remark~\ref{ch05:rem:limits}), receipts record the
+profile identity alongside their digests, and any profile change is a
+version change that new receipts name explicitly. Old digests remain
+verifiable under the old profile, new digests under the new, and no
+digest is ever compared across profiles. The known-answer fixtures of
+Section~\ref{ch05:testing} are the tripwire: a profile change that was
+not intended as one fails the recorded encodings immediately.
+\end{threat}
+
+The pipeline view also clarifies a division of responsibility that
+recurs in review discussions. The encoder guarantees that equal values
+produce equal bytes; it does not guarantee that the \emph{right} values
+were encoded. A receipt that digests the wrong compiler bytes, or a
+record that faithfully encodes a false statement, passes every rule in
+this chapter. Those failures belong to the layers that choose what to
+encode---the protocol disciplines of Chapter 7 and the registry
+contracts of Chapter 6---and the encoding's contribution is to make
+their choices exact, durable, and comparable, so that a wrong choice is
+at least a definite, citable, refutable one.
+
+\section{Testing discipline}\label{ch05:testing}
+
+The encoding profile is only as credible as the fixtures that pin it
+down, and the bound Gate-4 suite organizes them into families that
+mirror the rule set. It is worth recording the families explicitly,
+both because they are the concrete referent of every ``blocked by''
+clause above and because their structure is itself a design artifact:
+each family tests one clause in isolation, so a future regression names
+its rule.
+
+\begin{checkclass}[Encoding fixture families]\label{ch05:check:fixtures}
+(i) \emph{Acceptance and determinism}: admissible payloads encoded
+repeatedly and across permuted construction orders, asserting
+byte-identical output, plus known-answer encodings with recorded
+digests. (ii) \emph{Rejection, per clause}: sets and frozen sets;
+floats; NaN; infinities (including non-finite decimals); non-string
+keys; the reserved tag key in data positions; control, format, and
+surrogate code points in text; oversized integers. (iii) \emph{Tagging}:
+the decimal/string/integer triple of Example~\ref{ch05:ex:decimal};
+precision-preserving decimals; tuple-versus-list; enumeration-versus-
+value; boolean-versus-integer. (iv) \emph{Bounds and cycles}: payloads
+at and just beyond the depth, node, and byte limits; self-referential
+and mutually referential structures asserting the typed cycle error;
+shared acyclic substructure asserting by-value encoding. (v) \emph{Dual
+identity}: artifacts in CRLF, LF, CR, mixed, and no-line-ending forms,
+asserting raw and comparison digests, census counts, the census
+arithmetic of Proposition~\ref{ch05:prop:census}, and profile
+classification. (vi) \emph{Identifier profiles}: admissible and
+inadmissible identifiers across the ASCII, NFKC-fixed-point, and
+alphabet clauses, and digest-case normalization. The Gate-4 receipt
+records these families within the 61-method focused suite; per the
+evidence bounds of Chapter 12, they establish tested behavior on the
+fixtures, not conformance over all inputs.
+\end{checkclass}
+
+Two testing-discipline points generalize beyond this chapter. First,
+rejection tests are first-class citizens, equal in number and care to
+acceptance tests: a fail-closed system's contract \emph{is} mostly its
+rejections, and a suite that only exercises the happy path verifies the
+least important half of the design. Second, determinism is tested by
+adversarial construction rather than by repetition alone---the same
+logical payload built through different insertion orders, merge
+histories, and container provenances---because repetition under one
+construction path can pass forever while a second path diverges. Both
+points are inherited by the registry fixtures of Chapter 6, which
+layer parse-level rejections on top of this chapter's encoding-level
+ones.
+
+\section{Summary and boundaries}\label{ch05:summary}
+
+The canonical evidence encoding is the kernel's answer to a simple
+observation with unforgiving consequences: every comparison the kernel
+ever makes is a comparison of bytes, so the value-to-bytes function must
+be engineered to the same standard as any other trust-bearing component.
+The v0.1 profile achieves this by restriction and explicitness---sorted
+deterministic JSON as the surface; a rejection set (unordered containers,
+floats, NaN, infinities, dirty text, oversize structure) that converts
+every source of nondeterminism or punning into a typed error; a tagged
+extension that keeps exact decimals, tuples, and enumerations distinct
+where JSON would conflate them; a single declared route per public type;
+and a dual raw/comparison identity with a line-ending census for the
+artifacts the kernel reads rather than writes. Where the profile follows
+RFC 8785 it does so knowingly, and where it departs---numbers above all
+---the departure is a stated consequence of the evidence threat model
+rather than an accident of implementation.
+
+\begin{boundary}[What the encoding does not establish]\label{ch05:bd:close}
+Determinism and injectivity on the admitted domain are properties of the
+encoding function, evidenced by the bounded Gate-4 fixtures; they are not
+proofs over all inputs, not a cryptographic analysis of SHA-256, and not
+statements about layers above or below the encoder. A canonical digest
+identifies bytes. It does not validate the semantics of what the bytes
+say, does not establish who produced them, and---per
+Invariant~\ref{ch04:inv:selfdigest}---never functions as authorization.
+Those limits are not defects of the profile; they are its honest
+perimeter, and the registry and decision layers of Chapters 6 and 9 are
+built against exactly that perimeter.
+\end{boundary}

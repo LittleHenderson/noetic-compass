@@ -1,0 +1,134 @@
+\chapter{Catalogs}\label{appA:catalogs}
+
+This appendix collects the reference tables cited throughout the monograph. All
+identifiers are reproduced from the implementation's diagnostic module and the
+Gate~4 candidate specification; none is invented here. The governing status
+remains \textsc{draft / open / ring 4 / not licensed / held}: these catalogs
+describe a research candidate's software contracts, not a certified language,
+safety mechanism, or product.
+
+\section{The diagnostic-code catalog}\label{appA:codes}
+
+Table~\ref{appA:codetable} lists the deterministic \texttt{PCBA8-*} diagnostic
+catalog. The design-rule checker treats warnings as non-clean and never lets a
+warning stand in for a pass.
+
+\begin{longtable}{@{}lll@{}}
+\caption{The \texttt{PCBA8-*} diagnostic catalog.}\label{appA:codetable}\\
+\toprule
+Code & Class & Condition \\
+\midrule
+\endfirsthead
+\toprule
+Code & Class & Condition \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\texttt{PCBA8-MDL-001} & Model & invalid board metadata \\
+\texttt{PCBA8-MDL-002} & Model & duplicate reference \\
+\texttt{PCBA8-SEM-001} & Semantics & unknown component kind \\
+\texttt{PCBA8-SEM-002} & Semantics & unresolved semantics \\
+\texttt{PCBA8-PAR-001} & Parameters & unknown parameter \\
+\texttt{PCBA8-PAR-002} & Parameters & missing parameter \\
+\texttt{PCBA8-PAR-003} & Parameters & invalid parameter \\
+\texttt{PCBA8-STATE-001} & States & unknown state binding \\
+\texttt{PCBA8-STATE-002} & States & missing state binding \\
+\texttt{PCBA8-STATE-003} & States & invalid state binding \\
+\texttt{PCBA8-BIAS-001} & Bias & bias-domain incoherence \\
+\texttt{PCBA8-NET-001} & Nets & unknown endpoint owner \\
+\texttt{PCBA8-NET-002} & Nets & unknown port \\
+\texttt{PCBA8-NET-003} & Nets & invalid driver count \\
+\texttt{PCBA8-NET-004} & Nets & missing net load \\
+\texttt{PCBA8-NET-005} & Nets & signal-kind mismatch \\
+\texttt{PCBA8-NET-006} & Nets & unit mismatch \\
+\texttt{PCBA8-NET-007} & Nets & port multiply connected \\
+\texttt{PCBA8-NET-008} & Nets & required port unconnected \\
+\texttt{PCBA8-NET-009} & Nets & invalid signal/unit pair \\
+\texttt{PCBA8-TP-001} & Test points & unknown test-point net \\
+\texttt{PCBA8-TP-002} & Test points & missing safety test point \\
+\texttt{PCBA8-TP-003} & Test points & safety test point not marked \\
+\texttt{PCBA8-CAL-001} & Calibration & unknown calibration \\
+\texttt{PCBA8-CAL-002} & Calibration & invalid calibration \\
+\texttt{PCBA8-CAL-003} & Calibration & calibration unit mismatch \\
+\texttt{PCBA8-CAL-004} & Calibration & missing test-point calibration \\
+\texttt{PCBA8-FBK-001} & Feedback & undeclared feedback \\
+\texttt{PCBA8-FBK-002} & Feedback & feedback without delay \\
+\texttt{PCBA8-FBK-003} & Feedback & unsafe feedback gain \\
+\texttt{PCBA8-FBK-004} & Feedback & invalid feedback declaration \\
+\texttt{PCBA8-SAF-001} & Safety & unreachable safety threshold \\
+\texttt{PCBA8-SAF-002} & Safety & unsafe fuse action \\
+\texttt{PCBA8-SAF-003} & Safety & unresolved safety analysis \\
+\texttt{PCBA8-TKS-001} & TKS adapter & invalid finite transition \\
+\bottomrule
+\end{longtable}
+
+\section{Check class to code mapping}\label{appA:classmap}
+
+\begin{longtable}{@{}ll@{}}
+\caption{Check classes and the codes they emit.}\label{appA:classtable}\\
+\toprule
+Check class & Codes \\
+\midrule
+\endfirsthead
+\toprule
+Check class & Codes \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Structural integrity & \texttt{MDL-001/002}, \texttt{SEM-001/002}, \texttt{PAR-001/002/003}, \texttt{STATE-001/002/003} \\
+Typed connectivity & \texttt{NET-001} through \texttt{NET-009} \\
+Calibration and probe integrity & \texttt{TP-001/002/003}, \texttt{CAL-001/002/003/004}, \texttt{BIAS-001} \\
+Feedback analysis & \texttt{FBK-001/002/003/004} \\
+Threshold reachability & \texttt{SAF-001/002/003} \\
+Adapter boundary & \texttt{TKS-001} \\
+\bottomrule
+\end{longtable}
+
+\section{Canonical trace schema}\label{appA:trace}
+
+\begin{longtable}{@{}ll@{}}
+\caption{Canonical trace fields.}\label{appA:tracetable}\\
+\toprule
+Field group & Contents \\
+\midrule
+\endfirsthead
+\toprule
+Field group & Contents \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Source identities & board and component identities; source baseline \\
+Analysis identities & design-rule report identity; simulator profile \\
+Context identities & component catalog identity; decimal-context identity \\
+Signal record & typed input samples; typed outputs \\
+Event record & component events; tick linkage \\
+Observation record & test-point observations \\
+Measurement lineage & measurement IDs; parent/child derivations; calibration references \\
+Boundary & fixed Ring-4 research boundary \\
+\bottomrule
+\end{longtable}
+
+\section{Adapter certificate fields}\label{appA:adapter}
+
+\begin{longtable}{@{}ll@{}}
+\caption{Adapter certificate fields.}\label{appA:adaptertable}\\
+\toprule
+Field & Role \\
+\midrule
+\endfirsthead
+\toprule
+Field & Role \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+TKS kernel bytes / profile & exact identity of the finite kernel used \\
+Board / component / transition identities & the PCBA object adapted \\
+Tagged carrier & the exact-type tagged finite carrier \\
+Semantic profile & the declared semantic profile \\
+Fixed boundary & the Ring-4 research boundary \\
+\bottomrule
+\end{longtable}

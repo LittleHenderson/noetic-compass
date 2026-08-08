@@ -26,6 +26,7 @@ __pycache__/
 /tmp_*
 /manual_tmp_test/
 /codex_*_pytest_tmp*/
+/codex_pytest_tmp*/
 /.pytest-tmp/
 /stage6_v6_artifacts/
 /graphify-out/
@@ -90,3 +91,9 @@ docs/self_improving_harness.pdf
 /dist/*-test.html
 /dist/offline-demo-smoke/
 /dist/offline-recipe-pwa.*
+superiority_of_tks/_figbuild/
+superiority_of_tks/figures/
+
+# Monograph LaTeX build artifacts
+docs/whitepapers/monograph/*/build/
+docs/whitepapers/tex/build/

@@ -1,0 +1,955 @@
+\chapter{The Calibration Profile}\label{ch05:profile}
+
+Every quantity in CAS-Ohm 1.0 is relative to a calibration profile. This
+chapter develops that object field by field: what each field binds, why the
+binding is mandatory rather than advisory, what failure the field's absence
+would permit, and how the fields jointly support the two principles that
+organize the whole candidate---\emph{profile relativity} (no quantity means
+anything except under its profile, and nothing transfers across profiles
+without a stated comparison rule) and \emph{anti-circularity} (an effective
+resistance is fit on calibration data and earns its keep only by predicting
+held-out data, developed fully in Chapter~\ref{ch06:response}).
+
+The motivating observation is simple and easy to underestimate. A
+directional activation projection is not a property of ``the model'' in the
+abstract. It is a property of a specific weights file, read by specific
+code, under a specific runtime and numeric precision, at a specific layer
+and token position, projected onto a specific direction vector of specific
+provenance, normalized against a full-scale value obtained by a specific
+method from a specific corpus, with specific seeds. Change any element and
+the number changes---sometimes negligibly, sometimes qualitatively, and
+\emph{which} of those it will be is exactly what nobody knows in advance for
+systems of this kind. Metrological practice long ago internalized the
+consequence: a measurement result is inseparable from the procedure and
+conditions that produced it, and a reported value without its conditions is
+not a result but a rumor \cite{vim,gum}. The calibration profile is the
+candidate's mechanization of that doctrine. It is a single, frozen,
+content-addressed record binding every condition that could plausibly move a
+number, so that ``the same measurement'' has an exact meaning: same profile
+digest, nothing less.
+
+The chapter's claim discipline matches the rest of the monograph. The
+profile is an implemented data contract with validation rules exercised by
+bounded software tests; no live profile for any production model has been
+admitted, no field's adequacy has been empirically validated, and the whole
+apparatus is \textsc{ring 4 / not licensed / held}. What is defended here is
+the \emph{design argument}: why each field exists and what its omission
+would break.
+
+\section{The Profile as the Unit of Meaning}\label{ch05:unit}
+
+\begin{definition}[Calibration profile]\label{ch05:def:profile}
+A calibration profile is an immutable record binding: a profile identifier;
+the exact model identity (model, configuration, tokenizer, weights); the
+code revision and dependency lock; the runtime identity and dtype; temporal
+validity (creation, validity start, expiry) and drift state with its
+checking evidence; the registered test points; the direction vectors with
+identity, norm, sign, and provenance; the corpus manifest and its rights
+record; the calibration and validation split references; the random seed and
+randomization method; the alpha grid with its endpoints; the full-scale
+($I_{\mathrm{FS}}$) method, its per-test-point full-scale values, and, where
+applicable, its percentile parameter; the fit method and its receipt; the
+uncertainty method; the response-region method; the tolerance profile; the
+control references and per-test-point control bindings; the source
+references; and a review state. The profile's canonical digest is the
+SHA-256 of its canonical encoding, and every measurement made under the
+profile binds that digest.
+\end{definition}
+
+\begin{invariant}[Profile relativity]\label{ch05:inv:relativity}
+No CAS-Ohm quantity is interpretable except relative to the calibration
+profile whose digest it binds. No quantity, threshold, region boundary,
+full-scale value, fitted resistance, or classification transfers to another
+profile---including a profile differing in a single field---without an
+explicitly stated and separately evidenced comparison rule.
+\end{invariant}
+
+The invariant sounds austere; it is in fact merely honest. Two profiles that
+differ in, say, dtype may produce projections that differ in the third
+decimal or in the first, and absent a comparison experiment no one knows
+which. Declaring the numbers comparable by default would be an empirical
+claim made without evidence. The candidate's default is therefore
+incomparability, with comparability available as a first-class,
+evidence-bearing assertion when someone does the work to establish it. This
+inverts the usual failure mode of measurement systems, in which comparability
+is assumed until an incident proves otherwise; here incomparability is
+assumed until a comparison rule is admitted. Chapter~\ref{ch04:audit} showed
+why the inversion is forced: the sources themselves demonstrate
+(Conflict~\ref{ch04:conf:ifs}) that even the framework's own full-scale
+denominators were never one quantity.
+
+A second consequence of Definition~\ref{ch05:def:profile} deserves emphasis
+before the field-by-field walk: the profile is \emph{immutable}. There is no
+``update a profile'' operation. A changed condition---new weights, a revised
+corpus, a different tolerance---produces a new profile with a new digest,
+and history accumulates as a set of distinct profiles rather than as
+mutations of one. Immutability is what makes the digest meaningful: a digest
+that could survive edits would identify nothing.
+
+\section{Identity of the Measured System}\label{ch05:model}
+
+The profile's model identity binds five values: a model identifier, a
+revision string, and three content digests---weights, configuration, and
+tokenizer. The rationale for the identifier and revision is ordinary
+bookkeeping; the rationale for the three digests is that names and revisions
+are assertions while digests are checkable facts. Model repositories reuse
+names across incompatible checkpoints; configurations change activation
+functions and attention variants without renaming the model; tokenizers
+change vocabulary and merge rules in ways that silently re-index every token
+position a test point names. Each of the three artifacts can vary
+independently of the other two, and each variation invalidates measurements
+in a different way: changed weights change every activation; a changed
+configuration can change the meaning of ``layer 12''; a changed tokenizer
+changes which token sits at position 7 of a probe prompt, which is enough to
+re-aim every token-position-bound test point at different content.
+
+The profile also requires that its model artifact references \emph{resolve}:
+the set of digests among the artifact references must equal the set of
+digests named in the model identity. This closes a subtle gap between
+naming and having. A profile that named a weights digest without a
+resolvable artifact reference would be unfalsifiable---nobody could re-derive
+its measurements, because nobody could obtain its weights. The resolution
+rule makes the profile self-supporting: everything it names, it references,
+and the evidence registry can demand the bytes.
+
+\section{Code Revision, Dependency Lock, Runtime, and Dtype}\label{ch05:code}
+
+Measurements are produced by code, and code has the same identity problems
+as models. The profile binds a code reference (the exact revision of the
+measuring implementation) and a dependency lock reference (the closed set of
+third-party versions beneath it). The dependency lock matters because the
+measuring code's behavior is not a function of its own source alone:
+numerical libraries change reduction orders, kernel selections, and default
+tolerances between versions, and any of these can move low-order digits of
+an activation projection. A measurement that binds its code revision but not
+its dependency closure has fixed the recipe while leaving the ingredients
+loose. The lock reference freezes the closure; re-execution under a
+different closure is, by
+Invariant~\ref{ch05:inv:relativity}, a different profile.
+
+The runtime identity and dtype fields record the execution substrate and the
+numeric precision of the computation. Dtype is the more consequential of
+the two and the easier to lose track of, since frameworks freely and
+sometimes implicitly cast between precisions. Half-precision, bfloat16, and
+single-precision evaluations of the same network on the same input are three
+different computations with three different rounding profiles; whether their
+differences matter for a given direction projection is an empirical question
+that cannot even be \emph{asked} unless the precision is recorded. The
+profile makes the recording mandatory, so that the question is always
+askable and never silently begged.
+
+\section{Instruments}\label{ch05:instruments}
+
+The profile binds a non-empty tuple of instrument identities---each carrying
+an instrument identifier, a kind, a version, and an implementation content
+digest---together with implementation references that must resolve exactly
+the set of implementation digests the instruments name. An instrument, in
+the candidate's vocabulary, is the identified software chain that produces
+an instrumented measurement: the hooking and projection code that reads an
+activation, applies the direction, and emits the raw value. The term is
+borrowed deliberately from laboratory practice, and so is the discipline: a
+laboratory result is attributed to a specific instrument with a calibration
+binding, not to ``the lab'' \cite{vim}.
+
+Two rationales drive the field. First, the measurement-kind rules of the
+ontology make \texttt{INSTRUMENTED} the most privileged kind---the only kind
+that can anchor structural research-packet completeness---and privilege must
+be checkable: an instrumented measurement must name a registered instrument,
+and the profile must hold the bytes of that instrument's implementation, or
+the claim ``this number came from an identified instrument chain'' is
+unverifiable decoration. Second, instruments version independently of the
+main code revision. The measuring harness may be stable across many profile
+revisions while a projection kernel changes, or vice versa; giving
+instruments their own identities and digests means the question ``did the
+instrument change between these two profiles?'' has a mechanical answer,
+field by field, rather than requiring a code archaeology expedition.
+
+The uniqueness rule (instrument identifiers unique within a profile) and
+the resolution rule (implementation references exactly matching declared
+digests) mirror the model-artifact discipline of
+Section~\ref{ch05:model}, and for the same reason: naming without having is
+the failure mode, and exact set equality between names and holdings is the
+check.
+
+\section{Temporal Validity, Drift, and Expiry}\label{ch05:drift}
+
+A profile carries three timestamps---created at, valid from, expires
+at---ordered by the validation rule (creation not after validity start,
+validity start strictly before expiry), plus a drift state and a drift-check
+evidence reference. Together they implement a position the candidate takes
+deliberately: \emph{calibration decays}. Nothing about a frozen weights file
+decays, of course; what decays is the environment of assumptions around
+it---upstream serving stacks change, corpora age relative to usage,
+directions estimated from one data distribution meet another. A calibration
+regime without expiry drifts into exactly the ``stale profile'' condition
+that Chapter~\ref{ch04:audit}'s residual discipline identified as a standing
+alternative explanation for anomalies. The profile therefore expires by
+construction, and expiry is checked mechanically: the currency assertion
+fails outside the validity window.
+
+The drift state is a four-valued enumeration---\texttt{CURRENT},
+\texttt{STALE}, \texttt{FAILED}, \texttt{REVOKED}---bound to evidence by the
+drift-check reference. \texttt{CURRENT} asserts a passing recent check;
+\texttt{STALE} that the check is overdue; \texttt{FAILED} that a check ran
+and did not pass; \texttt{REVOKED} that the profile was withdrawn by
+decision. The distinction between \texttt{STALE} and \texttt{FAILED}
+preserves an important asymmetry of ignorance: an overdue check means
+\emph{we do not know} whether calibration holds, while a failed check means
+\emph{we know it does not}. Both block operation (only \texttt{CURRENT}
+passes the currency assertion), but they license different remediations and
+different retrospective doubts about recent results.
+
+Operationally, the profile's currency assertion requires the conjunction:
+review state \texttt{REVIEWED}, drift state \texttt{CURRENT}, and the
+replay time inside the validity window. All admitted operations evaluate it
+against a caller-supplied replay time---which, as
+Chapter~\ref{ch04:audit}'s eligibility discussion notes, is a historical
+replay coordinate, never an authenticated assertion about the actual
+present.
+
+\section{Test Points}\label{ch05:testpoints}
+
+A test point is the profile's answer to ``measured \emph{where}?'' Each
+registered test point binds: the model identity (which must equal the
+profile's model---a test point cannot smuggle in a different system); the
+layer; the token positions (a non-empty tuple of distinct non-negative
+indices); the direction vector's identifier, content digest, provenance,
+norm, and sign; and the hook type (where in the layer's computation the
+activation is read). Test points must be unique within a profile, and every
+per-test-point structure elsewhere in the profile---full-scale values,
+control bindings---must cover the registered test points exactly.
+
+The rationale is locality. CAS-Ohm's response model is explicitly a
+\emph{local} hypothesis: a dose-response relation at a particular place in a
+particular computation, not a global property of a model. All of the audit's
+warnings about transfer (full-scales that ``do not transfer,'' flow that
+``remains local'') are warnings that locality is real and unforgiving. The
+test point is locality made into an identity: two measurements are at the
+same place if and only if their test-point digests are equal, which requires
+agreement on layer, positions, direction, sign, and hook type
+simultaneously. Anything less---``layer 12, roughly the same place''---is
+not an identity, and the type system does not accept it as one.
+
+The hook type deserves a word, since it is the field most often left
+implicit in informal practice. A transformer layer is not a point; it is a
+pipeline of sublayer computations, and ``the activation at layer 12'' could
+mean the residual stream before the block, after attention, after the MLP,
+or after the final layer norm---numerically different vectors with different
+relationships to the direction vector. Recording the hook type turns an
+ambiguous phrase into an exact coordinate.
+
+\section{Direction Vectors: Identity, Norm, Sign, and Provenance}\label{ch05:directions}
+
+The direction vector is the most epistemically delicate object in the
+profile. Every response magnitude in the framework is a projection onto some
+direction; the direction, in effect, \emph{is} the instrument's aperture.
+The profile binds four aspects.
+
+\emph{Identity.} Each direction carries an identifier and a content digest,
+and the profile's direction references must resolve exactly the digests
+named by its test points---the same resolution discipline as for model
+artifacts, for the same reason: a direction that cannot be re-obtained
+byte-for-byte cannot anchor a reproducible measurement.
+
+\emph{Norm.} The candidate fixes direction norm to exactly one (validated as
+\texttt{Decimal("1")}, an exact equality, not a tolerance). Projections
+scale linearly with the direction's norm, so unnormalized directions would
+fold an arbitrary multiplicative constant into every response value and
+every fitted resistance. Fixing the norm removes a gauge freedom that would
+otherwise make numbers incomparable even within one profile.
+
+\emph{Sign.} A direction and its negation define the same line; a
+projection onto one is the negative of the projection onto the other. Sign
+conventions are thus pure convention---but an \emph{unrecorded} convention
+is a latent sign error, and a sign error in a response model flips the
+apparent semantic outcome (\texttt{INTENDED} versus \texttt{OPPOSITE})
+wholesale. The profile records the sign explicitly so that the convention is
+an auditable fact rather than tribal knowledge.
+
+\emph{Provenance.} The candidate enumerates three direction provenance
+kinds, and the enumeration is closed:
+
+\begin{description}
+\item[\texttt{PROBE\_DERIVED}.] The direction is the weight vector of a
+probe---typically a linear classifier---trained to separate labeled
+activation examples. Its epistemic character: the direction is an
+\emph{estimate from data}, inheriting the probe corpus, its labels, its
+regularization, and its sampling noise. Probe directions answer ``along
+which axis do these labeled classes separate?''---which is related to, but
+not the same as, ``along which axis does the model \emph{use} this
+concept?''
+\item[\texttt{JACOBIAN\_DERIVED}.] The direction is obtained from
+differentiation---a gradient or Jacobian row of some downstream quantity
+with respect to the activation. Its character: the direction is a
+\emph{local analytic object}, exact for the computation at the linearization
+point but valid only there; it answers ``what perturbation most moves this
+output, here?''
+\item[\texttt{DIFF\_DERIVED}.] The direction is a difference of activation
+statistics between two conditions (for example, means under contrasting
+prompts). Its character: a \emph{contrast estimate}, simple and robust, but
+credited with meaning only to the extent the two conditions differ in one
+thing.
+\end{description}
+
+Three kinds, three different failure surfaces: probe directions fail with
+their training distribution, Jacobian directions fail away from their
+linearization point, and diff directions fail when the contrast was
+confounded. The profile does not rank them---each is legitimate---but it
+refuses to let them blur, for the by-now familiar reason: a number whose
+production method is unrecorded cannot be doubted \emph{specifically}, and
+undoubtable numbers are the enemy. The provenance field also feeds the
+registered reproducibility obligations (cross-split direction
+reproducibility appears among the closure experiments), which are stated
+per-provenance because the reproduction procedure differs by kind.
+
+A corollary worth stating explicitly: directions of different provenance are
+not interchangeable even when they point in nearly the same place. A probe
+direction and a diff direction for ``the same concept'' at the same test
+point are estimates of related but distinct estimands, with distinct error
+structures; a resistance fitted against projections on one is not a
+resistance for the other, and the profile machinery enforces this
+automatically because the direction digest participates in the test-point
+identity, which participates in everything downstream. If two provenances'
+directions are claimed equivalent for some purpose, that claim is a
+comparison rule in the sense of Invariant~\ref{ch05:inv:relativity}---an
+assertable, evidence-bearing statement---not a default. The candidate's
+posture is uniform: geometric proximity is measurable, semantic
+equivalence is a claim, and claims need evidence.
+
+\section{Corpus Manifest and Rights}\label{ch05:corpus}
+
+Two references bind the data environment: the corpus manifest and the corpus
+rights record. The manifest is a content-addressed inventory of the corpus
+from which calibration stimuli, probe data, and (under the percentile
+method) full-scale statistics are drawn. Content addressing does for the
+corpus what digests do for weights: ``the corpus'' stops being a mutable
+directory and becomes an exact set of bytes, so that corpus-derived
+statistics---above all the 95th-percentile full-scale of
+Conflict~\ref{ch04:conf:ifs}---are anchored to something that cannot
+silently gain or lose documents.
+
+The rights reference is the field most likely to strike a technical reader
+as out of place, and its inclusion is deliberate. A calibration built on
+data whose use rights are unestablished is a calibration that may not be
+lawfully re-executed, shared with a reviewer, or retained---which makes
+every downstream measurement irreproducible in the practical sense that
+matters, whatever its technical merits. Binding a rights record into the
+profile digest makes rights status part of measurement identity: a profile
+cannot be complete without it, and a rights change (a revoked license, a
+newly discovered encumbrance) is visible as exactly what it is, a change to
+the conditions under which the numbers exist.
+
+\section{Splits, Seeds, and Randomization}\label{ch05:splits}
+
+The profile binds a calibration split reference and a validation split
+reference, and its validation rules require the two digests to differ. This
+pair of fields is the structural footprint of the anti-circularity rule: the
+data on which the effective resistance is fit (calibration split) and the
+data on which its predictions are scored (validation split) are distinct
+artifacts, distinguished at the type level, before any statistics happen.
+Chapter~\ref{ch06:response} develops the statistical argument; here we note
+only the design point that the split separation is a \emph{profile} fact,
+not a habit of the analyst. An analyst cannot forget the held-out discipline
+without constructing a profile that fails validation.
+
+The random seed (a non-negative integer) and the randomization method (an
+identifier for how randomness was consumed---assignment of items to splits,
+ordering of sweeps, any stochastic element of the fit) close the remaining
+degrees of freedom. Randomization without a recorded seed is
+irreproducibility by construction; a seed without a recorded method is a
+seed for an unspecified generator consumed in an unspecified order, which
+reproduces nothing. Together they make the stochastic parts of calibration
+replayable, and---as important---they make \emph{selective} reruns visible:
+a report whose seed differs from its profile's seed is advertising that
+something was rerun.
+
+\section{The Alpha Grid}\label{ch05:alphagrid}
+
+The alpha grid is the ordered tuple of intervention doses at which the
+dose-response relation is probed. The validation rules are specific: at
+least three doses; exact decimal values; strictly increasing and duplicate
+free; the declared minimum and maximum equal to the grid's endpoints; and
+zero included.
+
+Each clause has a job. \emph{Three doses minimum}: two points determine a
+line exactly, leaving zero residual degrees of freedom---no way to detect
+curvature, hence no way to distinguish a genuinely linear response from any
+monotone response whatsoever; three is the least count at which
+``linearity'' is even falsifiable, and the region classifier's own minimum
+(interior points with neighbors on both sides) matches it. \emph{Exactness
+and strict ordering}: the grid is part of measurement identity, and a grid
+with representation-dependent values or ambiguous ordering would leak
+platform noise into the profile digest. \emph{Endpoints declared}: the
+declared range is the region over which the profile claims to have probed;
+predictions outside it are extrapolations, and the admissibility machinery
+can only know that if the range is a recorded fact. \emph{Zero included}:
+the zero dose is the null intervention---the control column built into the
+grid itself. Without it, the fit has no anchor at the origin and the
+zero-intervention control comparisons required by the closure experiments
+have no in-grid reference.
+
+The grid also encodes a modeling humility: it is a \emph{grid}, not a
+distribution. The candidate does not assume responses at unprobed doses; the
+response region machinery classifies behavior at and between probed doses,
+and the tolerance profile (Section~\ref{ch05:tolerances}) governs how much
+interpolation credence the fit may claim.
+
+\section{The Full-Scale Method}\label{ch05:ifs}
+
+Conflict~\ref{ch04:conf:ifs} established that the sources supply three
+incompatible procedures for the full-scale reference $I_{\mathrm{FS}}$. The
+profile's response is the \texttt{IFSMethod} enumeration, with the audit's
+disposition implemented literally: one method per profile, declared up
+front, inside the digest.
+
+\begin{description}
+\item[\texttt{RAIL\_AND\_FLOOR\_PER\_PATH}.] The Appendix~I procedure:
+$I_{\mathrm{FS}}$ measured once per path at drive rail and constraint
+floor. An extreme-operating-point probe; local by construction, with the
+source's own warning that it does not transfer.
+\item[\texttt{CORPUS\_PERCENTILE\_PER\_TEST\_POINT}.] The addendum
+procedure: the per-test-point 95th percentile of absolute directional
+projection over a fixed hashed corpus. A statistic, requiring the
+percentile parameter; the profile's validation rules enforce that the
+percentile is present exactly when this method is declared and lies
+strictly between 0 and 100.
+\item[\texttt{DECLARED\_DESIGN\_FULL\_SCALE}.] The Guide procedure: a
+board-selected design value. A declaration rather than a measurement, typed
+accordingly (its natural measurement kind is a design value, not an
+instrumented one).
+\end{description}
+
+\begin{ruleenv}[Non-interchangeability of full-scale methods]\label{ch05:rule:ifs}
+The three \texttt{IFSMethod} values name different calibration procedures
+producing different quantities. No value obtained under one method may be
+substituted for, averaged with, or compared against a value obtained under
+another except through an explicitly admitted comparison rule. Because the
+method is bound into the profile digest, any cross-method comparison is a
+cross-profile comparison and is blocked by default under
+Invariant~\ref{ch05:inv:relativity}.
+\end{ruleenv}
+
+Whatever the method, the profile must carry a full-scale \emph{value record}
+for every registered test point, exactly one each. The value record is
+itself typed evidence: a strictly positive value in activation units, an
+uncertainty whose interval is positive and contains the value, a sample
+size, and non-empty source references. Note the asymmetry with the method
+enumeration: the method says how the denominator was obtained; the value
+record proves the denominator exists, with uncertainty, for each place it
+will be used. Normalization (Chapter~\ref{ch08:quantization} where present)
+divides by these values and propagates their uncertainty into every Q10
+score; a full-scale without uncertainty would launder the denominator's
+error out of every displayed value.
+
+\section{Fit Method, Uncertainty Method, and the Fit Receipt}\label{ch05:fit}
+
+Three fields govern how the effective resistance is estimated: the fit
+method identifier, the uncertainty method identifier, and the fit receipt
+reference. The method identifiers are deliberately identifiers rather than
+enumerations: the candidate does not legislate a unique estimator (least
+squares on the active region, robust variants, and others are all
+conceivable), but it insists the choice be named, because estimator choice
+moves results and an unnamed estimator is an unfalsifiable one. The
+uncertainty method is bound separately because uncertainty computation is a
+procedure in its own right (analytic propagation, bootstrap, and interval
+methods differ), and the audit's discipline requires every emitted
+uncertainty to say how it was obtained \cite{gum}.
+
+The fit receipt reference binds the artifact recording the actual fit run:
+inputs consumed, estimates produced, diagnostics observed. Its presence in
+the profile closes the loop between declaration and execution---the profile
+does not merely promise a fit method, it references the receipt of the fit
+that was actually performed. In the Kennedy--O'Hagan framing of computer
+model calibration, the receipt is where the calibration data, the parameter
+posterior (or point estimate with its uncertainty), and the discrepancy
+evidence live \cite{kennedyohagan}; Chapter~\ref{ch06:response} returns to
+what the receipt must show before a resistance earns the
+\texttt{CALIBRATED\_HELD\_OUT} role.
+
+\section{Tolerances}\label{ch05:tolerances}
+
+The tolerance profile is a five-field record of exact decimals: an absolute
+tolerance, a relative tolerance, a residual floor, a minimum linearity
+coefficient of determination, and a maximum off-target fraction. Validation
+requires the absolute tolerance and residual floor strictly positive and the
+relative tolerance, linearity minimum, and off-target maximum in the unit
+interval.
+
+The rationale is that every downstream judgment of the form ``close
+enough,'' ``linear enough,'' or ``clean enough'' must be a comparison
+against a declared number rather than an analyst's mood. The absolute and
+relative tolerances govern agreement checks between predicted and observed
+response. The residual floor sets the magnitude below which a residual is
+treated as indistinguishable from zero---the operational meaning of
+``zero-compatible'' in the residual-censoring rule of
+Conflict~\ref{ch04:conf:residual}. The linearity minimum is the floor an
+active-region fit must clear before any operation gated on ``adequate
+linearity'' (notably the network compositions of
+Conflict~\ref{ch04:conf:networks}) may proceed. The off-target maximum
+bounds the fraction of response appearing on axes other than the target
+direction before the measurement is disqualified as off-axis-contaminated.
+
+Putting the five numbers in the profile---rather than in code defaults or
+per-analysis choices---has two effects. It makes tolerance-shopping visible:
+loosening a tolerance to admit a marginal result requires minting a new
+profile with a new digest, an auditable event. And it makes strictness
+comparable: two profiles' tolerance records can be diffed field by field,
+so ``profile B is laxer than profile A'' is a checkable statement.
+
+\section{Response-Region Rules}\label{ch05:regions}
+
+The response-region method identifier names the procedure by which sweep
+observations are classified into the dose-response regions
+(\texttt{CUTOFF}, \texttt{ACTIVE}, \texttt{SATURATION}, \texttt{BREAKDOWN},
+\texttt{NON\_OHMIC}, \texttt{UNSTABLE}, with \texttt{UNASSESSED} as the
+honest default). The field exists in the profile for the same reason as the
+fit method: region assignment is a procedure with alternatives, region
+labels gate consequential operations (predictions are admissible only in the
+active region; network compositions require active-region components;
+saturated-stage residuals are censored), and a gate whose criterion is not
+frozen is not a gate. Binding the method into the digest means a
+reclassification standard cannot drift under a fixed profile: the same
+sweep, replayed, classifies the same way.
+
+\section{Controls and Control Bindings}\label{ch05:controls}
+
+The profile binds a set of control references and a set of per-test-point
+control bindings, with validation rules enforcing exact correspondence: the
+bound control artifacts must exactly equal the declared control references,
+every binding must name a registered test point, and the bindings must
+cover every test point. Controls here are the comparison conditions the
+closure experiments require---zero-intervention runs, random same-norm
+directions, wrong-layer and wrong-token probes, label shuffles, norm-matched
+perturbations---represented as artifacts with relevance methods binding them
+to the specific test points they control for.
+
+The design point is that controls are part of the \emph{calibration},
+not an optional garnish on the analysis. A measurement under the profile
+carries the profile's control set; the validation machinery rejects
+non-design measurements whose control references do not equal the profile's.
+This forecloses the quiet failure in which controls exist somewhere in a
+repository but the measurement that mattered was taken without them. The
+coverage rule (every test point controlled) similarly forecloses the partial
+version, where the well-behaved test points get controls and the interesting
+one does not.
+
+\section{Review State}\label{ch05:review}
+
+The profile carries a review state: \texttt{UNASSESSED}, \texttt{IN\_REVIEW},
+or \texttt{REVIEWED}; the implementation additionally provides
+\texttt{FLAG\_FOR\_HUMAN\_REVIEW} for records requiring escalation. Only
+\texttt{REVIEWED} passes the currency assertion---an unreviewed profile can
+be constructed, stored, and studied, but no operation that requires a
+current profile will run under it.
+
+The field encodes a separation the candidate is careful about everywhere:
+\emph{structural validity is not endorsement}. A profile that passes every
+validation rule is well formed; whether its choices are \emph{sensible}---is
+this corpus appropriate, are these tolerances defensible, is this direction
+provenance suited to this question---is a judgment no type system can make.
+The review state is the socket where human judgment plugs into the
+machinery, and its default is the honest \texttt{UNASSESSED}. Note what the
+field does not claim: \texttt{REVIEWED} records that review occurred within
+whatever process governs the record; it is not an independent-authority
+attestation, which belongs to the separate authority machinery of
+Chapter~\ref{ch11:eligibility} where present, and which the candidate
+implements with constant-false authenticated eligibility.
+
+\section{The Canonical Digest}\label{ch05:digest}
+
+Every field above participates in the profile's canonical payload, which is
+serialized by the candidate's canonical encoding (exact-type tagged,
+cycle-aware, bounded) and hashed to produce the profile's SHA-256 digest.
+The digest is the profile's identity for every purpose: measurements bind
+it, operation contexts snapshot it and re-verify it on every subsequent
+operation (the context fails closed if the profile, its authority manifest,
+its attestations, or the replay time change after admission), and
+cross-profile comparisons are detected by digest inequality.
+
+Three design properties make the digest trustworthy. \emph{Totality}: the
+payload includes every semantically relevant field---including the status
+constants (admission ring, license status, disclosure status) and the
+schema label---so no meaningful variation escapes the hash. \emph{Canonical
+form}: field ordering and collection ordering are normalized (references
+sorted by digest, bindings by their own hashes), so equality of content
+implies equality of bytes implies equality of digest, with no
+representation-dependent false negatives. \emph{Exactness}: numeric fields
+are exact decimals, not binary floats, so the digest cannot be perturbed by
+platform-dependent rounding in the serialization path. The result is that
+``same profile'' is decidable by string comparison, which is the property
+every downstream fail-closed check relies on.
+
+\section{The Operation Context: Admission and Revalidation}\label{ch05:context}
+
+The profile does not act alone; it acts inside an \emph{operation context},
+the runtime object through which every measurement validation, normalization,
+and structural operation flows. A context binds the profile, the evidence
+registry holding the referenced bytes, the authority configuration with its
+trust mode, any capability attestations, the caller-supplied replay time,
+and optionally a clock-receipt record. At admission, the context performs
+the full battery: it revalidates the evidence registry, resolves the
+authority manifest's bytes against its digest, asserts the profile current
+at the replay time (review state \texttt{REVIEWED}, drift
+\texttt{CURRENT}, replay time inside the validity window), and demands that
+every artifact the profile references---model artifacts, instrument
+implementations, directions, splits, corpus, rights, controls, sources,
+full-scale sources, the fit receipt---be present and resolvable. Then it
+snapshots: the profile digest, the manifest digest, the attestation digests,
+the replay time, and the clock-receipt digest are recorded, and every
+subsequent operation re-verifies the snapshot before doing anything else.
+Any drift---a profile object swapped, an attestation added, a replay time
+edited---fails the operation closed.
+
+The design rationale is time-of-check versus time-of-use. A validation
+performed once at construction protects nothing if the validated objects can
+change before use; the snapshot-and-revalidate pattern makes the context's
+guarantees continuous rather than momentary. For the audit posture of this
+monograph, the significant property is that the context is where profile
+discipline becomes \emph{unavoidable}: there is no API path to a
+normalization or a structural operation that does not pass through a
+context, hence through the currency assertion, hence through the profile's
+review, drift, and validity gates. The context also fixes the epistemic
+status of time: the replay time is caller-supplied history, useful for
+replaying past states, and the context's authenticated-currency answer is
+constant false---no admitted external time authority exists in the
+candidate, and the machinery says so rather than pretending.
+
+\section{What Each Field Defends Against}\label{ch05:threats}
+
+A compact way to review the chapter is by threat: for each family of
+fields, the failure it renders unrepresentable or fail-closed.
+Table~\ref{ch05:tab:threats} gives the mapping.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}p{0.42\linewidth}p{0.5\linewidth}@{}}
+\toprule
+Field family & Failure defended against \\
+\midrule
+Model identity + artifact resolution & silent checkpoint/config/tokenizer
+substitution; unobtainable weights behind a name \\
+Code ref + dependency lock & behavior drift from unpinned libraries;
+``same code'' with different numerics \\
+Runtime + dtype & precision-dependent results with no record of precision \\
+Instruments + implementation refs & privileged \texttt{INSTRUMENTED} claims
+with unverifiable production chains \\
+Validity window + drift state + check ref & stale calibration operating as
+current; unknown-vs-known-bad conflation \\
+Test points + hook type & ``roughly the same place'' passing as identity \\
+Direction identity/norm/sign/provenance & gauge freedom in magnitudes; sign
+flips in outcomes; method-blind pooling of estimates \\
+Corpus manifest + rights & mutable corpora under fixed statistics;
+legally unre-executable calibrations \\
+Distinct splits + seed + method & circular fitting; unreplayable randomness;
+silent selective reruns \\
+Alpha grid rules & unfalsifiable linearity; undeclared extrapolation;
+missing null dose \\
+\texttt{IFSMethod} + full-scale records + percentile rule &
+denominator-method conflation (Conflict~\ref{ch04:conf:ifs});
+uncertainty-free denominators \\
+Fit/uncertainty/region method ids + receipt & unnamed estimators; bare point
+estimates; drifting region criteria; promised-but-unperformed fits \\
+Tolerance profile & analyst-relative ``close enough''; invisible
+tolerance-shopping \\
+Controls + bindings + coverage & control-free measurements; selectively
+controlled test points \\
+Review state & structural validity mistaken for endorsement \\
+Canonical digest & identity by name rather than content; representation
+noise in identity \\
+\bottomrule
+\end{tabular}
+\caption{Profile fields and the failures they foreclose.}
+\label{ch05:tab:threats}
+\end{table}
+
+\begin{threat}\label{ch05:threat:residue}
+The table's coverage claim should itself be read with the monograph's
+discipline: these are the failures the fields are \emph{designed} to
+foreclose, at the data-contract level, as exercised by bounded software
+tests. Whether the fields suffice against adversarial construction of
+profiles, against collusion between a profile author and a reviewer, or
+against failure modes not yet enumerated is unassessed; the authenticated
+authority layer that would address the adversarial cases is exactly the
+part the candidate implements as constant-false eligibility
+(Chapter~\ref{ch11:eligibility} where present).
+\end{threat}
+
+\section{An Illustrative Construction}\label{ch05:construction}
+
+\begin{construction}[Hypothetical profile walk-through; all values
+illustrative]\label{ch05:constr:example}
+The following is a fabricated example to make the field interactions
+concrete. Every value is invented for exposition; nothing here describes a
+real model, corpus, or measurement.
+
+An analyst wishes to calibrate a response model at one test point of a
+hypothetical checkpoint. She constructs: a model identity naming the
+checkpoint with its three digests, and three artifact references resolving
+them; a code reference at her harness revision and a dependency lock from
+her environment export; runtime identifier and dtype
+(say, \texttt{"runtime-x"} and \texttt{"float32"}); a validity window of
+ninety days from a drift check whose passing record she references, drift
+state \texttt{CURRENT}; one instrument identity for her projection hook
+with its implementation digest resolved; one test point at layer
+\texttt{"blocks.12.hook\_resid\_post"}, token positions $(5, 9)$, with a
+\texttt{DIFF\_DERIVED} direction of unit norm, positive sign, and resolved
+digest; corpus and rights references for her fixed prompt set; two split
+references partitioning it (digests distinct, as required); seed $17$ with
+a named shuffling method; an alpha grid
+$(-1.0, -0.5, 0, 0.5, 1.0)$ with endpoints declared and zero present;
+\texttt{IFSMethod.CORPUS\_PERCENTILE\_PER\_TEST\_POINT} with percentile
+$95$ and one full-scale record for her test point (value, uncertainty
+interval, sample size, sources); fit method
+\texttt{"ols-active-region-v1"} with a receipt reference; uncertainty
+method \texttt{"bootstrap-1000-v1"}; region method
+\texttt{"piecewise-slope-v1"}; tolerances (absolute $0.05$, relative
+$0.10$, residual floor $0.02$, linearity minimum $0.95$, off-target
+maximum $0.20$); control references and bindings covering the test point
+(zero-dose, random-direction, wrong-layer artifacts); source references to
+her design notes; review state \texttt{UNASSESSED}.
+
+The profile validates structurally---every rule of this chapter
+passes---and receives its digest. Note what she can and cannot now do. She
+cannot run a normalization: the currency assertion fails on
+\texttt{UNASSESSED}. After review, with state \texttt{REVIEWED} (a new
+profile, hence a new digest---immutability), operations under an admitted
+context become possible. If she later regenerates her direction vector,
+even ``equivalently,'' its digest changes, so the test point changes, so
+the profile changes; her earlier full-scale record no longer covers the
+new test point, and validation forces her to remeasure it. The contract has
+done its job: an easy-to-overlook invalidation (new direction, old
+denominator) was surfaced as a hard error at construction time rather than
+as a subtly wrong number at analysis time.
+\end{construction}
+
+\section{Profile Relativity in Practice}\label{ch05:relativity}
+
+It is worth spelling out what Invariant~\ref{ch05:inv:relativity} concretely
+forbids and what it permits, because the invariant is the profile's entire
+point.
+
+Forbidden by default: comparing Q10 scores across profiles (different
+denominators, per Rule~\ref{ch05:rule:ifs}); pooling sweep observations
+across profiles into one fit; carrying a fitted $r_{\mathrm{eff}}$ from one
+model revision to the next (``the model barely changed'' is an empirical
+claim requiring evidence, not a default); quoting a region classification
+under a profile whose drift state is not current; and every flavor of
+cross-model league table---``model A has lower resistance than model
+B''---absent an admitted comparison rule. The last of these is the
+politically hardest to resist, since ranking is what audiences want; it is
+also the least defensible, compounding every incomparability at once
+(different weights, tokenizers, geometries, direction provenances, and
+full-scale denominators).
+
+Permitted: anything within one digest, subject to the other gates; and
+cross-profile statements made \emph{through} an explicitly admitted
+comparison rule---a registered procedure with its own evidence establishing
+that a specific quantity is comparable across a specific pair of profiles
+under specific conditions. The registered checkpoint-replication hypothesis
+is an instance: replicate on a held-out checkpoint \emph{under a
+prespecified comparison rule}. The invariant does not make cross-profile
+science impossible; it makes it a deliberate, evidenced act instead of an
+ambient assumption.
+
+\begin{remark}\label{ch05:rem:units-analogy}
+Profile relativity generalizes the familiar rule that quantities in
+different units may not be added without conversion \cite{buckingham}. A
+profile is, in effect, a very large compound unit: the ``unit'' in which a
+CAS-Ohm number is expressed includes the weights digest, the direction, the
+denominator method, the dtype, and the rest. Two numbers in different
+compound units need a conversion---the comparison rule---and the burden of
+producing it lies with whoever asserts comparability. The type system merely
+refuses to pretend the conversion is the identity.
+\end{remark}
+
+\section{The Profile Against the Audit}\label{ch05:vsaudit}
+
+The profile can also be read as the point-by-point answer to
+Chapter~\ref{ch04:audit}. Each preserved conflict deposits at least one
+field.
+
+Conflict~\ref{ch04:conf:scale} (scale and saturation) appears as the
+insistence on exact decimal values everywhere and on typed quantities bound
+to unit kinds; the profile contains no field where a number floats free of
+its scale. Conflict~\ref{ch04:conf:ifs} (full-scale profile) deposits the
+\texttt{IFSMethod} enumeration, the percentile-presence rule, and the
+per-test-point full-scale records with mandatory uncertainty---the audit's
+``separate named profiles'' realized as literally separate digests.
+Conflict~\ref{ch04:conf:bridge} (dimensional bridge) deposits the entire
+fit apparatus: the split references, fit method, fit receipt, and
+uncertainty method exist so that an alpha-per-activation quantity can come
+into existence by calibration rather than by relabeling a score.
+Conflict~\ref{ch04:conf:gain} (gain definition) deposits the method-identity
+discipline---dimensionless quantities carry method identifiers because unit
+checking cannot distinguish them. Conflict~\ref{ch04:conf:asom} (ASOM axes)
+deposits the response-region method field, which fixes the region axis's
+procedure while leaving the semantic axis to independent assessment.
+Conflict~\ref{ch04:conf:networks} (network rules) deposits the tolerance
+profile's linearity minimum and the region method, which are the
+preconditions the capability gates consult.
+Conflict~\ref{ch04:conf:residual} (residual identification) deposits the
+residual floor---the operational meaning of ``zero-compatible''---and the
+control bindings that make shuffled and matched controls a structural
+requirement rather than an aspiration. Conflict~\ref{ch04:conf:q4} (Q4
+boundaries) deposits the exactness discipline itself: band assignment is
+computable from exact pre-rounding values only because the profile's
+numeric fields are exact from end to end.
+
+This mapping is the concrete sense in which the audit ``compiles'' into the
+candidate: the conflicts of Chapter~\ref{ch04:audit} are not commemorated in
+a document appendix but disassembled into validation rules that run on
+every profile ever constructed.
+
+\section{Anatomy of a Comparison Rule}\label{ch05:comparison}
+
+Invariant~\ref{ch05:inv:relativity} repeatedly defers to ``a stated
+comparison rule.'' Since the deferral carries so much weight, the candidate
+owes a statement of what such a rule must contain, even though none has yet
+been admitted. A comparison rule, to be admissible, must at minimum
+declare: (i) the two profile digests it relates, exactly---not families,
+not patterns; (ii) the specific quantity kinds it renders comparable, with
+all others remaining incomparable; (iii) the transformation, if any,
+applied in the comparison (identity, rescaling, requantization), with its
+own uncertainty contribution; (iv) the evidence establishing the
+comparability---which, for anything beyond definitional identity, means a
+measurement campaign under both profiles with agreement scored against
+declared tolerances; (v) its own validity window and drift obligations,
+since comparability decays for the same reasons calibration does; and (vi)
+its own review state. In other words, a comparison rule is itself a
+profile-like object: typed, evidenced, digested, expiring, reviewed. The
+symmetry is intentional. If crossing between profiles were cheaper than
+staying inside one, the system would leak at the crossings; making the
+crossing artifact carry the same discipline as the endpoints closes the
+arbitrage.
+
+\begin{remark}\label{ch05:rem:comparison}
+The prespecified comparison rule required by the registered
+checkpoint-replication hypothesis is the intended first instance: a rule
+relating a profile on one checkpoint to a profile on a held-out checkpoint,
+admitted \emph{before} the replication runs, so that the replication cannot
+quietly tune the comparison to the result. As of this writing no such rule
+exists; the slot for it does.
+\end{remark}
+
+\section{Estimating Effective Resistance Under a Profile}\label{ch05:reff}
+
+The profile exists so that one quantity can be estimated honestly: the
+effective resistance $r_{\mathrm{eff}}$, in alpha-per-activation units, for
+a given test point. The estimation requirements, stated here and developed
+statistically in Chapter~\ref{ch06:response}, are:
+
+\begin{enumerate}
+\item \emph{Fit on the calibration split only.} The estimator consumes
+dose-response observations drawn from the calibration split referenced by
+the profile, at doses from the profile's alpha grid, under the profile's
+seed and randomization method.
+\item \emph{Declared method, receipted run.} The estimator is the profile's
+named fit method; the run is recorded in the fit receipt with its
+diagnostics.
+\item \emph{Uncertainty mandatory.} The estimate carries an uncertainty
+produced by the profile's named uncertainty method; a bare point estimate is
+not an admissible resistance.
+\item \emph{Region-conditioned.} The fit claims validity only in the active
+region as classified by the profile's response-region method; observations
+in cutoff, saturation, breakdown, or unstable regions do not certify it.
+\item \emph{Predict held-out data.} The estimate's admissible role,
+\texttt{CALIBRATED\_HELD\_OUT}, is earned by prediction on the validation
+split---data the fit never saw---scored against the profile's tolerances.
+Defining $r = a/y$ on a sample and ``verifying'' $\hat y = a/r$ on the same
+sample is the circular procedure the candidate rejects outright.
+\item \emph{Discrepancy acknowledged.} Following the computer-model
+calibration literature, the estimation must represent not only parameter
+uncertainty but model discrepancy---the structured difference between the
+best-fitting linear response and the system's actual response---rather than
+treating the best fit as truth \cite{kennedyohagan}. A calibration that
+hides discrepancy inside its parameter estimate will predict confidently
+and wrongly; one that models discrepancy knows where its linear hypothesis
+stops.
+\end{enumerate}
+
+Every requirement lands on a profile field: (1) on the split references and
+randomization fields; (2) on the fit method and receipt; (3) on the
+uncertainty method; (4) on the response-region method; (5) on the distinct
+validation split and the tolerance profile; (6) on the receipt's required
+diagnostics.
+
+Two interactions between estimation and the rest of the profile deserve
+explicit note. First, estimation interacts with \emph{drift}: a resistance
+fitted under a profile inherits the profile's validity window, and the
+drift-check discipline is what stands between ``was calibrated'' and ``is
+calibrated.'' A fitted $r_{\mathrm{eff}}$ under a profile whose drift state
+has left \texttt{CURRENT} is not merely older evidence; it is evidence
+whose preconditions are no longer certified, and the currency assertion
+removes it from service automatically rather than trusting consumers to
+check dates. Second, estimation interacts with \emph{region
+classification} bidirectionally: the fit claims validity only in the
+active region, but the active region is itself identified from sweep data
+by the profile's region method. The candidate handles the circularity the
+only defensible way---both procedures are frozen in the profile before
+either runs, so neither can be adjusted to flatter the other, and the
+region method's verdicts are replayable facts under the digest. This is the sense in which the profile is not bureaucracy
+around the science but the science's own preconditions, itemized. The
+chapter's boundary, however, is unchanged from the monograph's: these are
+requirements an estimate \emph{would} have to meet. No estimate meeting
+them---no admitted live calibration of any production system---exists in the
+current evidence, and nothing in this chapter asserts otherwise.
+
+\section{What the Profile Is Not}\label{ch05:isnot}
+
+Because the profile is the most infrastructure-like object in the
+candidate, it attracts misreadings that the chapter should close by naming.
+
+\emph{The profile is not a certification.} Passing profile validation means
+the record is well formed and self-consistent: references resolve, splits
+differ, grids are ordered, coverage rules hold. It does not mean the
+calibration is good, the direction meaningful, the corpus adequate, or the
+model safe. The review state carries human judgment about sensibleness;
+the authenticated-eligibility machinery (constant false in this candidate)
+would carry independent authority; neither is implied by structural
+validity, and nothing in the digest should be read as a seal of quality.
+
+\emph{The profile is not a claim that its fields are sufficient.} The field
+set was derived from the audit's conflicts and from general reproducibility
+practice; it forecloses the enumerated failures of
+Table~\ref{ch05:tab:threats}. Whether further conditions move numbers in
+ways the profile does not record---hardware nondeterminism below the dtype
+level, undocumented runtime kernel dispatch, environmental dependencies
+outside the lock---is an open empirical question. The honest statement is
+that the profile records every condition the candidate's authors currently
+know to matter, and that discovering another such condition would mean
+extending the schema, versioning it, and treating older profiles'
+comparability to newer ones as---again---a comparison-rule question rather
+than an assumption.
+
+\emph{The profile is not portable authority.} A profile is bytes; anyone can
+construct one. Its digest proves integrity (these exact fields, unaltered),
+never provenance in the social sense (a trustworthy party constructed
+this). The trust architecture that would bind profiles to accountable
+parties---protected key lifecycles, independent authority manifests,
+trusted time---is deliberately unimplemented, and the candidate's operation
+contexts say so on every binding by carrying unauthenticated authorization
+states. Treating a structurally valid profile from an unknown source as
+trustworthy input would be a category error the type system permits but the
+process rules forbid.
+
+\emph{The profile is not the science.} It is the container the science
+requires. The registered hypotheses of
+Chapter~\ref{ch12:hypotheses} where present---local response above matched
+controls, held-out predictive resistance, gain composition, redundancy,
+residual localization---are the science, and every one of them presupposes a
+profile precisely so that a failed prediction is informative: with all
+conditions frozen and recorded, a miss cannot be blamed on an unrecorded
+condition, which is what makes the hypotheses falsifiable in the first
+place. A framework that let conditions float would be unfalsifiable in the
+weakest sense---its failures would always have an alibi. The profile
+removes the alibis, for successes and failures alike.
+
+\begin{boundary}\label{ch05:bound}
+This chapter specifies a data contract and its rationale. It establishes no
+empirical adequacy of any field choice, no validated calibration of any live
+system, no comparability of any pair of profiles, and no authority beyond
+\textsc{ring 4 / not licensed / held}. Where the chapter argues that a field
+prevents a failure, the claim is architectural---the failure becomes
+unrepresentable or fail-closed in the candidate's types---not a claim that
+deployed systems exhibiting the failure have been observed or measured.
+\end{boundary}

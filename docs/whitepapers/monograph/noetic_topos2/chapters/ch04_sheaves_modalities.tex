@@ -1,0 +1,1056 @@
+\chapter{Sheaves, Sheafification, and Modalities}\label{ch04:main}
+
+This chapter completes the background half of the monograph. Chapter~2 fixed the
+categorical vocabulary; Chapter~3 introduced sites: categories equipped with a
+Grothendieck topology that declares which sieves count as covers. The present
+chapter explains what covers are \emph{for}. A topology is interesting only
+because it selects a class of presheaves---the sheaves---whose sections are
+determined by compatible local data, and because the passage from an arbitrary
+presheaf to its best sheaf approximation---sheafification---is a functor with
+exceptionally good properties. Composing sheafification with the inclusion of
+sheaves back into presheaves yields a left-exact idempotent monad, which this
+monograph calls a \emph{modality}. Modalities are the objects whose existence,
+distinctness, triviality, and composition laws the remainder of the monograph
+interrogates: Chapter~\ref{ch05:main} proves that the legacy cover clauses
+generate only trivial modalities, and the later constructive chapters build a
+finite site on which two genuinely distinct nontrivial modalities exist and
+commute.
+
+Everything in this chapter is standard material. The definitions and theorems
+are drawn from the textbook and reference literature
+\cite{maclane,johnstone,stacks00W1,stacks00ZC}, and no novelty whatsoever is
+claimed for them; they are cited as background throughout. What is specific to
+this monograph is the selection and the emphasis: we dwell on exactly the
+points---matching families on sieves containing identities, the basis
+criterion, the behavior of sheafification on finite posets, and the criterion
+for a modality to be trivial---that carry the weight of the collapse analysis
+in Chapter~\ref{ch05:main} and of the finite constructions later. Examples are
+chosen on small finite posets, deliberately miniature versions of the
+sixteen-context lattice used by the successor construction, so that every
+verification in this chapter can be redone by hand in a few minutes and every
+later exhaustive machine check has a hand-checked prototype here.
+
+\begin{notation}\label{ch04:not:conventions}
+Throughout this chapter $\cC$ denotes a small category, $\PSh(\cC)$ the
+category of presheaves $F:\cC^{\mathrm{op}}\to\Set$, and $yC=\Hom_{\cC}(-,C)$
+the representable presheaf at $C\in\Ob(\cC)$. For $x\in F(C)$ and
+$f:D\to C$ we write $x|_f$ for $F(f)(x)\in F(D)$, and when $\cC$ is a poset and
+$U\le V$ we write $x|_U$ for the restriction of $x\in F(V)$ along the unique
+arrow $U\to V$. Sieves, pullback sieves $g^{*}S$, the maximal sieve $m_C$, and
+Grothendieck topologies $J$ are as in Chapter~3. A sieve on $C$ is identified
+with a subfunctor of $yC$.
+\end{notation}
+
+\section{Sections, restriction, and the idea of local data}\label{ch04:sec:idea}
+
+A presheaf is a system of ``data assignments'': to every object $C$ a set
+$F(C)$ of \emph{sections over $C$}, and to every arrow $f:D\to C$ a
+\emph{restriction} operation $F(C)\to F(D)$, contravariantly and
+compatibly with composition. Nothing in the presheaf axioms relates sections
+over an object to sections over the things that map into it, beyond the bare
+existence of restriction. A presheaf may have many sections over $C$ that all
+restrict to the same local data, or local data that assemble compatibly yet
+come from no section over $C$ at all. Both phenomena will be exhibited on a
+four-element poset in Section~\ref{ch04:sec:nonexamples}.
+
+The sheaf condition is precisely the statement that neither pathology occurs
+over covers. Informally: \emph{a section over $C$ is exactly a compatible
+family of sections over any cover of $C$}. The slogan has two halves.
+Uniqueness---two sections over $C$ agreeing on a cover are equal---is called
+\emph{separation}. Existence---every compatible family of local sections glues
+to a section over $C$---is the properly ``sheafy'' half. The definition below
+makes ``compatible family'' precise for an arbitrary sieve; the version for a
+generating family of arrows, which is what one actually checks in practice,
+follows in Section~\ref{ch04:sec:basis}.
+
+Why should an evidence-integration program care? The program's ambition,
+recorded in the governing specification, is to treat locally gathered
+observations as sections of presheaves over a site of contexts, and to let the
+topology encode which families of contexts are jointly informative. Under that
+reading, the sheaf condition is a \emph{composability discipline}: it says
+which systems of local observations determine a global one and insists the
+determination be unique. The mathematics of this chapter is entirely neutral
+about any such interpretation---the theorems are about sets and arrows---but
+the choice of what to prove is driven by it, and the claim boundaries of the
+program (Ring~4, not licensed, no empirical interpretation) apply to every
+interpretive gloss in this paragraph.
+
+\section{Matching families and amalgamation}\label{ch04:sec:matching}
+
+\begin{definition}[Matching family]\label{ch04:def:matching}
+Let $F\in\PSh(\cC)$, let $C\in\Ob(\cC)$, and let $S$ be a sieve on $C$. A
+\emph{matching family} for $S$ with values in $F$ is a function assigning to
+every arrow $f:D\to C$ belonging to $S$ an element $x_f\in F(D)$, such that
+for every arrow $h:E\to D$,
+\[
+x_{f\circ h} \;=\; x_f|_h \qquad\text{in } F(E).
+\]
+Note that $f\circ h\in S$ automatically, because $S$ is closed under
+precomposition, so the condition is well posed. We write
+$\mathrm{Match}(S,F)$ for the set of matching families.
+\end{definition}
+
+The compatibility equation quantifies over \emph{all} arrows $h$, not merely
+over some chosen overlaps. This is the right level of generality for sieves;
+when one works with a generating family and the category has pullbacks (or the
+poset has meets), compatibility reduces to agreement on pairwise overlaps, as
+we prove in Lemma~\ref{ch04:lem:meets} below.
+
+\begin{remark}[Matching families are natural transformations]\label{ch04:rem:nat}
+Regard the sieve $S$ as a subfunctor of $yC$: $S(D)\subseteq\Hom(D,C)$ is the
+set of members of $S$ with domain $D$. Then a matching family for $S$ with
+values in $F$ is exactly a natural transformation $S\Rightarrow F$: the
+component at $D$ sends $f\in S(D)$ to $x_f$, and the compatibility equation is
+exactly naturality. Hence
+\[
+\mathrm{Match}(S,F)\;=\;\Hom_{\PSh(\cC)}(S,F),
+\]
+and matching families inherit all the functoriality one expects: they can be
+restricted along inclusions of sieves $S'\subseteq S$, pulled back along
+arrows $g:D\to C$ (giving a matching family for $g^{*}S$), and pushed forward
+along maps of presheaves $F\to G$. These three operations are used constantly
+below and in the plus construction of Section~\ref{ch04:sec:plus}.
+\end{remark}
+
+\begin{definition}[Amalgamation; separated; sheaf]\label{ch04:def:sheaf}
+Let $S$ be a sieve on $C$ and $(x_f)_{f\in S}$ a matching family for $S$ with
+values in $F$. An \emph{amalgamation} of the family is an element $x\in F(C)$
+with $x|_f=x_f$ for every $f\in S$. Every $x\in F(C)$ determines a canonical
+matching family $(x|_f)_{f\in S}$; amalgamation asks for the converse. Define
+the \emph{gluing map}
+\[
+\mathrm{glue}_{S,F}\;:\;F(C)\longrightarrow \mathrm{Match}(S,F),\qquad
+x\longmapsto (x|_f)_{f\in S}.
+\]
+Given a Grothendieck topology $J$ on $\cC$, a presheaf $F$ is
+\begin{enumerate}
+\item \emph{separated} for $J$ if $\mathrm{glue}_{S,F}$ is injective for every
+$C$ and every $S\in J(C)$;
+\item a \emph{sheaf} for $J$ if $\mathrm{glue}_{S,F}$ is bijective for every
+$C$ and every $S\in J(C)$.
+\end{enumerate}
+We write $\Sh(\cC,J)\subseteq\PSh(\cC)$ for the full subcategory of sheaves.
+A topology is \emph{subcanonical} if every representable presheaf is a sheaf
+\cite{maclane,stacks00WO}.
+\end{definition}
+
+Under the identification of Remark~\ref{ch04:rem:nat}, the gluing map is
+composition with the inclusion $S\hookrightarrow yC$ followed by the Yoneda
+identification $\Hom_{\PSh}(yC,F)\cong F(C)$; the sheaf condition says exactly
+that the inclusion of every covering sieve into its representable becomes
+invisible to $F$. This one-line reformulation is worth internalizing: it is the
+source of both the triviality criterion of
+Proposition~\ref{ch04:prop:trivial} and the collapse diagnosis of
+Chapter~\ref{ch05:main}.
+
+\begin{example}[Maximal sieves are free]\label{ch04:ex:maximal}
+For every presheaf $F$ and every object $C$, the gluing map for the maximal
+sieve $m_C$ is a bijection. Indeed a matching family $(x_f)_{f\in m_C}$ is
+determined by its value at the identity: $x_f=x_{\id_C\circ f}=x_{\id_C}|_f$,
+so the assignment $(x_f)\mapsto x_{\id_C}$ is inverse to
+$\mathrm{glue}_{m_C,F}$. Consequently axiom (J1)---every maximal sieve
+covers---imposes no condition at all on presheaves. A topology whose covering
+sieves are \emph{only} the maximal ones therefore has every presheaf as a
+sheaf. This innocuous computation is the engine of the legacy collapse: a
+cover clause that generates only maximal sieves is a cover clause that
+constrains nothing (Proposition~\ref{ch04:prop:trivial} and
+Chapter~\ref{ch05:main}).
+\end{example}
+
+\begin{lemma}[Compatibility via meets on a poset]\label{ch04:lem:meets}
+Let $\cC$ be a poset with binary meets, $V\in\cC$, and let
+$\{U_i\le V\}_{i\in I}$ be a family generating the sieve
+$S=\{W \mid W\le U_i \text{ for some } i\}$. Then a matching family for $S$
+with values in $F$ is the same data as a tuple $(x_i\in F(U_i))_{i\in I}$
+satisfying
+\[
+x_i|_{U_i\wedge U_j} \;=\; x_j|_{U_i\wedge U_j}\qquad\text{for all } i,j\in I.
+\]
+\end{lemma}
+
+\begin{proof}
+Given a matching family $(x_W)_{W\in S}$, set $x_i=x_{U_i}$; compatibility at
+$U_i\wedge U_j\le U_i,U_j$ follows from the matching condition applied to the
+two factorizations of $U_i\wedge U_j\to V$. Conversely, given a compatible
+tuple, define $x_W=x_i|_W$ for any $i$ with $W\le U_i$; this is well defined
+because if also $W\le U_j$ then $W\le U_i\wedge U_j$ and the two candidate
+values agree by compatibility after restriction. The matching condition for
+$(x_W)$ is then immediate, since restriction is functorial and every arrow of a
+poset is a unique inequality. The two constructions are mutually inverse.
+\end{proof}
+
+Lemma~\ref{ch04:lem:meets} is why finite poset examples are so pleasant: a
+matching family is just a compatible tuple, and both the matching-family set
+and the section set are finite sets one can list. All the finite sites in this
+monograph---the miniature examples below, and the sixteen-context lattice of
+the successor---are posets with meets (intersections), so the lemma applies
+verbatim throughout.
+
+\section{First examples on a small poset}\label{ch04:sec:examples}
+
+Fix the four-element poset
+\[
+L_2\;=\;\mathcal{P}(\{a,b\})\;=\;\{\varnothing,\ \{a\},\ \{b\},\ \{a,b\}\},
+\]
+ordered by inclusion. It has meets (intersection) and joins (union). Equip it
+with the coverage whose generating data are: the two-element family
+$\{\{a\}\to\{a,b\},\ \{b\}\to\{a,b\}\}$ covering the top; the identity family
+at each object; and the \emph{null cover}---the empty family---covering
+$\varnothing$. Write $J_2$ for the generated topology. (That these data
+generate a topology is an instance of the basis machinery of
+Section~\ref{ch04:sec:basis}; the reader may also verify (J1)--(J3) directly,
+a worthwhile finger exercise.) The poset $L_2$ is the two-atom miniature of
+the four-atom context lattice $L=\mathcal{P}(\{0,1\}\times\{0,1\})$ on which
+the successor construction lives, and the covering pattern---partition the
+top into its atoms, null-cover the bottom---is the miniature of the partition
+coverages there.
+
+One point deserves emphasis before any example: the null cover at
+$\varnothing$ is a genuine covering sieve (the empty sieve), and the sheaf
+condition for it reads: $F(\varnothing)\to\mathrm{Match}(\varnothing\text{-sieve},F)$
+is a bijection. A matching family for the empty sieve is a function defined on
+no arrows; there is exactly one such function. Hence:
+
+\begin{lemma}[The null cover forces a singleton]\label{ch04:lem:null}
+If the empty sieve covers an object $Z$, then every sheaf $F$ has
+$F(Z)$ a one-element set.
+\end{lemma}
+
+\begin{proof}
+$\mathrm{Match}(\varnothing,F)$ is a singleton (the empty family, vacuously
+matching), and the gluing map $F(Z)\to\mathrm{Match}(\varnothing,F)$ must be a
+bijection.
+\end{proof}
+
+\begin{example}[The function presheaf is a sheaf]\label{ch04:ex:functions}
+Fix a set $X$ and let $F(V)=\Set(V,X)$, the set of all functions from the
+subset $V\subseteq\{a,b\}$ to $X$, with restriction of functions as
+restriction. Then $F$ is a $J_2$-sheaf. At the null cover:
+$F(\varnothing)=\Set(\varnothing,X)$ is a singleton (the empty function), as
+Lemma~\ref{ch04:lem:null} requires. At the top cover: by
+Lemma~\ref{ch04:lem:meets} a matching family is a pair
+$(s\in\Set(\{a\},X),\ t\in\Set(\{b\},X))$ agreeing on
+$\{a\}\cap\{b\}=\varnothing$---a vacuous condition since
+$F(\varnothing)$ is a singleton---so
+$\mathrm{Match}\cong X\times X$; and $F(\{a,b\})=\Set(\{a,b\},X)\cong
+X\times X$ by evaluation at $a$ and $b$. The gluing map is exactly this
+identification, hence bijective. Identity covers are free by
+Example~\ref{ch04:ex:maximal}. This is the paradigm sheaf: sections are
+literally functions, and functions are determined by, and glued from, their
+values on the pieces of a partition.
+\end{example}
+
+\begin{example}[Representables; subcanonicity of $J_2$]\label{ch04:ex:representables}
+For $W\in L_2$ the representable $yW$ has $yW(V)$ a singleton if $V\subseteq W$
+and empty otherwise. Every representable is a $J_2$-sheaf, so $J_2$ is
+subcanonical. The check at the top cover splits into cases. If
+$W=\{a,b\}$: sections over $\{a\}$, $\{b\}$, and the top are all singletons,
+matching families are singletons, gluing is a bijection of singletons. If
+$W=\{a\}$: then $yW(\{b\})=\varnothing$, so there is \emph{no} matching family
+at all for the top cover (a matching family must supply an element over every
+member of the sieve, including $\{b\}\to\{a,b\}$), and also
+$yW(\{a,b\})=\varnothing$; the gluing map is the unique map
+$\varnothing\to\varnothing$, a bijection. The case $W=\{b\}$ is symmetric, and
+$W=\varnothing$ likewise gives $\varnothing\to\varnothing$ at the top and
+singletons at the null cover ($\varnothing\subseteq W$ always). The general
+shape of this argument---if every piece of a partition of $V$ lies inside $W$
+then $V$ itself lies inside $W$, because $V$ is the union of the
+pieces---reappears as the subcanonicity theorem for the full context lattice
+in the successor development, and stands in instructive contrast to
+Chapter~\ref{ch06:main}, where a jointly-surjective coverage on a category
+with \emph{too few} morphisms fails subcanonicity.
+\end{example}
+
+\begin{example}[Sheaves of bounded functions; a mild variation]\label{ch04:ex:bounded}
+Let $X=\{0,1\}$ and let $G(V)\subseteq\Set(V,X)$ consist of those functions
+that are \emph{not} constantly $1$, with $G(\varnothing)$ the singleton empty
+function. Then $G$ is separated (it is a subpresheaf of a sheaf, and
+injectivity of gluing is inherited by subpresheaves) but not a sheaf: the pair
+$(s,t)$ with $s(a)=1$, $t(b)=1$ is a matching family---each piece separately
+is not constantly $1$? No: $s$ \emph{is} constantly $1$ on $\{a\}$, so $s\notin
+G(\{a\})$. Take instead the subpresheaf $G'$ of functions that are not
+constantly $1$ \emph{when the domain is the top}, with no condition on smaller
+domains. Then $s(a)=1$ and $t(b)=1$ are both allowed locally, they match
+vacuously, but any amalgamation would be the constant function $1$ on
+$\{a,b\}$, which $G'$ excludes. So $G'$ is separated but not a sheaf: a
+compatible family with no gluing. This is the standard failure mode of
+``global side conditions'': a property imposed at the top but not stable under
+gluing from pieces destroys sheafhood without harming separation.
+\end{example}
+
+\section{Non-examples, and what each failure teaches}\label{ch04:sec:nonexamples}
+
+Non-examples are where the sheaf condition earns its keep. We record three on
+$L_2$, each isolating one failure mode, and summarize the verdicts in
+Table~\ref{ch04:tab:verdicts}.
+
+\begin{example}[The constant presheaf fails the null cover]\label{ch04:ex:constant}
+Fix a set $X$ with at least two elements and let $\Delta_X(V)=X$ for
+\emph{every} $V$, all restrictions the identity. At the top cover,
+matching families are pairs $(x,y)\in X\times X$ with $x|_\varnothing =
+y|_\varnothing$, i.e.\ $x=y$ since restrictions are identities; so
+$\mathrm{Match}\cong X$, and gluing $X\to X$ is the identity---fine. But at
+the null cover, Lemma~\ref{ch04:lem:null} demands
+$|\Delta_X(\varnothing)|=1$, whereas $|X|\ge 2$. So $\Delta_X$ is not a
+$J_2$-sheaf, and the failure is entirely concentrated at the empty context.
+The lesson: the empty cover is not a degenerate afterthought; it normalizes
+the value at the initial context, and every finite construction later in the
+monograph (the reflector formula in particular, whose empty product clause
+sets the value at $\varnothing$ to a singleton) must and does handle it
+explicitly.
+\end{example}
+
+\begin{example}[Separated but not a sheaf: missing gluings]\label{ch04:ex:separated}
+Let $X$ have at least two elements. Define $H(\varnothing)=\{*\}$,
+$H(\{a\})=H(\{b\})=H(\{a,b\})=X$, with the restrictions between nonempty
+contexts the identity on $X$ and the restrictions to $\varnothing$ the unique
+map to the singleton. At the top cover, a matching family is any pair
+$(x,y)\in X\times X$: the compatibility condition lives in
+$H(\varnothing)=\{*\}$ and is vacuous. An amalgamation of $(x,y)$ is an
+element $z\in X$ with $z=x$ and $z=y$; it exists if and only if $x=y$ and is
+then unique. So $\mathrm{glue}$ is injective but not surjective: $H$ is
+separated, not a sheaf. The presheaf ``thinks'' a section over the top is a
+single element of $X$, but the cover sees two independent local choices. Its
+sheafification, computed in Example~\ref{ch04:ex:plusworked} below, repairs
+this by \emph{creating} the missing sections: the associated sheaf has
+$X\times X$ over the top. The witness presheaves that separate the two
+modalities in the successor's finite theory are exactly presheaves of this
+character: sheaf-like along one partition, gluing-deficient along the other.
+\end{example}
+
+\begin{example}[Not separated: redundant global sections]\label{ch04:ex:nonseparated}
+Define $K(\{a,b\})=\{u,v\}$ with $u\ne v$, and $K(V)=\{*\}$ for all proper
+$V\subseteq\{a,b\}$, with the only possible restrictions. At the top cover
+there is exactly one matching family (all values are forced into singletons),
+and \emph{both} $u$ and $v$ are amalgamations of it: gluing is surjective but
+not injective. $K$ is not separated. The presheaf carries a distinction at the
+top---$u$ versus $v$---that no cover can see; sheafification will identify
+$u$ and $v$. In audit language: $K$ records a difference with no observational
+support on the covering contexts, and passage to sheaves deletes exactly that
+difference. Whether such deletion is desirable is a modeling decision, not a
+mathematical one; the mathematics only says that \emph{if} one demands the
+sheaf discipline, unsupported distinctions cannot survive.
+\end{example}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{lllll}
+\toprule
+Presheaf & Defined by & Null cover & Top cover & Verdict \\
+\midrule
+$F=\Set(-,X)$ & functions into $X$ & singleton & bijective & sheaf \\
+$yW$ & representable & singleton & bijective & sheaf \\
+$G'$ & top-only side condition & singleton & not surjective & separated only \\
+$\Delta_X$, $|X|\ge2$ & constant & fails & bijective & not a sheaf \\
+$H$, $|X|\ge2$ & identity restrictions & singleton & not surjective & separated only \\
+$K$ & doubled top & singleton & not injective & not separated \\
+\bottomrule
+\end{tabular}
+\caption{Verdicts for the presheaves of
+Sections~\ref{ch04:sec:examples}--\ref{ch04:sec:nonexamples} on the poset
+$L_2$ with topology $J_2$.}
+\label{ch04:tab:verdicts}
+\end{table}
+
+\begin{exercise}\label{ch04:exr:census}
+$L_2$ has four objects; list all sieves on each object (there are six on the
+top, three on each singleton, two on $\varnothing$) and determine exactly
+which collections of sieves form Grothendieck topologies on $L_2$. Verify
+that $J_2$ is the smallest topology in which the atom family covers the top
+and the empty sieve covers $\varnothing$. This is the two-atom warm-up for
+the $298$-sieve census that the finite certificate performs on the
+sixteen-context lattice.
+\end{exercise}
+
+\section{The basis criterion}\label{ch04:sec:basis}
+
+Definition~\ref{ch04:def:sheaf} quantifies over all covering sieves of a
+topology, which even on the sixteen-object successor lattice means $168$
+covering sieves. In practice one never checks them all directly; one checks a
+\emph{generating} family of covers and appeals to the basis criterion. This
+section states the criterion, proves it in the finite-poset generality used
+throughout the monograph, and cites the general statement.
+
+\begin{definition}[Coverage basis]\label{ch04:def:basis}
+A \emph{coverage basis} (or pretopology-style basis) on $\cC$ assigns to each
+object $C$ a set $K(C)$ of families of arrows with codomain $C$, such that:
+\begin{enumerate}
+\item (Identity) the singleton family $\{\id_C\}$ belongs to $K(C)$;
+\item (Stability) for every $\{f_i:C_i\to C\}\in K(C)$ and every arrow
+$g:D\to C$, there is a family $\{h_j:D_j\to D\}\in K(D)$ such that every
+composite $g\circ h_j$ factors through some $f_i$;
+\item (Composition) if $\{f_i:C_i\to C\}\in K(C)$ and for each $i$ a family
+$\{g_{ik}:C_{ik}\to C_i\}\in K(C_i)$ is given, then some family in $K(C)$
+refines the composite family $\{f_i\circ g_{ik}\}$---in the strong form used
+here, the composite family itself generates a sieve containing a member of
+$K(C)$'s generated sieves.
+\end{enumerate}
+The \emph{generated topology} $J_K$ is the smallest Grothendieck topology in
+which, for every $C$ and every family in $K(C)$, the sieve generated by that
+family is covering. Smallest makes sense because the collection of topologies
+containing a given set of sieves is closed under intersection; this closure
+point is developed at length in Chapter~\ref{ch05:main}, where it becomes the
+provenance-erasure argument. See \cite{stacks00ZC} and
+\cite[Chap.~III]{maclane} for the standard treatment.
+\end{definition}
+
+\begin{theorem}[Basis criterion]\label{ch04:thm:basis}
+Let $K$ be a coverage basis on $\cC$ and $J_K$ the generated topology. A
+presheaf $F$ is a $J_K$-sheaf if and only if for every object $C$ and every
+generating family $\{f_i:C_i\to C\}\in K(C)$, the gluing map from $F(C)$ to
+matching families for the sieve generated by $\{f_i\}$ is a bijection.
+\end{theorem}
+
+The forward implication is trivial (generated sieves are covering). The
+substantive converse is standard \cite{stacks00ZC,maclane}; we prove it in the
+setting of finite posets with meets, which covers every site analyzed
+computationally in this monograph and exposes the mechanism---saturation---in
+its executable form.
+
+\begin{algorithm}[Saturation of a basis on a finite poset]\label{ch04:alg:saturation}
+Input: a finite poset $P$ with meets and a coverage basis $K$. Initialize
+$\mathcal{S}$ as the set of all pairs $(V,S)$ where $S$ is either a maximal
+sieve or the sieve generated by a member of $K(V)$. Repeat until no change:
+\begin{enumerate}
+\item (Maximality) for every $(V,S)\in\mathcal{S}$ with $S=m_V$, keep;
+add $(V,m_V)$ for every $V$;
+\item (Pullback) for every $(V,S)\in\mathcal{S}$ and every $U\le V$, add
+$(U,\,U^{*}S)$ where $U^{*}S=\{W\le U \mid W\in S\}$;
+\item (Local character) for every $V$ and sieve $T$ on $V$: if some
+$(V,S)\in\mathcal{S}$ has, for every $W\in S$, the pair
+$(W,\,W^{*}T)\in\mathcal{S}$, add $(V,T)$.
+\end{enumerate}
+Output the fixed point $\mathcal{S}^{\infty}$.
+\end{algorithm}
+
+\begin{lemma}\label{ch04:lem:saturation}
+On a finite poset, Algorithm~\ref{ch04:alg:saturation} terminates and its
+fixed point is exactly the generated topology $J_K$.
+\end{lemma}
+
+\begin{proof}
+Termination: the set of (object, sieve) pairs is finite and $\mathcal{S}$
+grows monotonically. The fixed point satisfies (J1) by step (1), (J2) by step
+(2), and (J3) by step (3), so it is a topology containing the generated
+sieves; conversely each step only adds sieves that every topology containing
+the generators must contain---(J1), (J2), (J3) are exactly the three
+closure rules---so by induction on the stage at which a pair enters
+$\mathcal{S}$, the fixed point is contained in every such topology. Hence it
+equals the smallest one.
+\end{proof}
+
+This is not merely an existence device: the successor's modality-composition
+verifier literally runs this saturation on the sixteen-context lattice,
+enumerating all $298$ sieves and reporting $168$ covering ones, and then
+re-verifies (J1)--(J3) on the computed fixed point as an independent check.
+Algorithm~\ref{ch04:alg:saturation} is the hand-sized description of that
+computation.
+
+\begin{proof}[Proof of Theorem~\ref{ch04:thm:basis} for finite posets with meets]
+Suppose $F$ glues bijectively along every basis-generated sieve; we show $F$
+glues bijectively along every $S\in J_K(V)$, by induction over the stages of
+Algorithm~\ref{ch04:alg:saturation}. Stage $0$: basis-generated sieves hold by
+hypothesis; maximal sieves hold by Example~\ref{ch04:ex:maximal}.
+
+Pullback step: suppose the claim holds for $(V,S)$ and let $U\le V$. On a
+poset, $U^{*}S=\{W\le U\mid W\in S\}$. We must show $F(U)\to
+\mathrm{Match}(U^{*}S,F)$ is bijective. By basis stability (Definition
+\ref{ch04:def:basis}(2)) the pullback of a basis family is refined by a basis
+family at $U$; in the poset setting used here---and in every concrete basis in
+this monograph---the pullback of a generating family \emph{is} a generating
+family at $U$ (intersection with $U$ carries blocks to blocks), so
+$U^{*}S$ is again basis-generated or maximal and the hypothesis applies
+directly. (This is the point where a general-category proof needs more care;
+the general statement is \cite{stacks00ZC}.)
+
+Local-character step: suppose $T$ is a sieve on $V$, $S\in J_K(V)$ satisfies
+the bijective-gluing conclusion (inductively, together with all its
+pullbacks), and for every $W\in S$ the pullback $W^{*}T$ does too. Injectivity
+of gluing along $T$: if $x,y\in F(V)$ agree on all of $T$, then for each
+$W\in S$, the restrictions $x|_W,y|_W$ agree on $W^{*}T$, which glues
+bijectively over $W$; hence $x|_W=y|_W$ for all $W\in S$, and gluing along
+$S$ (injective) gives $x=y$. Surjectivity: let $(x_W)_{W\in T}$ be a matching
+family for $T$. For each $W\in S$, the family restricts to a matching family
+for $W^{*}T$, which glues to a unique $z_W\in F(W)$. The $z_W$ form a matching
+family for $S$: for $W'\le W$ in $S$, both $z_W|_{W'}$ and $z_{W'}$ glue the
+restricted family on $W'^{*}T$, and uniqueness of gluing along $W'^{*}T$
+forces them equal. Gluing along $S$ yields $z\in F(V)$; one checks
+$z|_{W}=x_{W}$ for $W\in T$ by comparing both sides on the covering sieve
+$W^{*}S$ of $W$ and using injectivity there (each $W''\in W^{*}S$ lies in both
+$S$-land and $T$-land, where the values agree by construction). Hence gluing
+along $T$ is bijective, completing the induction.
+\end{proof}
+
+\begin{remark}\label{ch04:rem:basispractice}
+The practical import: to certify sheafhood on the successor lattice one checks
+each presheaf against the generating partition families only---two families
+per nonempty context plus the null cover---rather than against all $168$
+covering sieves. The finite certificate does exactly this for the sixteen
+representables and the two witness presheaves, and
+Theorem~\ref{ch04:thm:basis} is the license. Conversely, when
+\emph{refuting} sheafhood (as for the witness presheaves against the
+transverse topology, or for the representable in the countermodel of
+Chapter~\ref{ch06:main}), a single failed generating family suffices, since
+generated sieves are covering.
+\end{remark}
+
+\section{The equalizer formulation, and life beyond posets}\label{ch04:sec:equalizer}
+
+The matching-family formulation of the sheaf condition is the right one for
+sieves; for a generating family of arrows there is an older and equally
+useful formulation as an equalizer, which we record both for completeness and
+because it is the form in which gluing computations are usually organized in
+the literature \cite{maclane,stacks00ZC}.
+
+\begin{proposition}[Equalizer form]\label{ch04:prop:equalizer}
+Let $\cC$ have pullbacks, let $\{f_i:C_i\to C\}_{i\in I}$ be a family of
+arrows generating the sieve $S$, and let $F\in\PSh(\cC)$. Then the gluing map
+for $S$ is a bijection if and only if the diagram
+\[
+F(C)\;\longrightarrow\;\prod_{i\in I}F(C_i)
+\;\rightrightarrows\;\prod_{i,j\in I}F(C_i\times_C C_j)
+\]
+is an equalizer of sets, where the first map is restriction along the $f_i$
+and the parallel pair restricts along the two pullback projections
+$C_i\times_C C_j\to C_i$ and $C_i\times_C C_j\to C_j$.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+An element of the equalizer is a tuple $(x_i)$ with
+$x_i|_{\pi_1}=x_j|_{\pi_2}$ on every pullback. Given such a tuple, define
+$x_f=x_i|_g$ for any factorization $f=f_i\circ g$ of a member $f\in S$; the
+pullback compatibility makes this independent of the chosen factorization
+(two factorizations through $f_i$ and $f_j$ induce a map to
+$C_i\times_C C_j$ through which both restrictions agree), and the resulting
+assignment is a matching family. Conversely a matching family restricts to an
+equalizer element on the generators. The two constructions are mutually
+inverse; details are in \cite[Chap.~III]{maclane}.
+\end{proof}
+
+On a poset with meets, $C_i\times_C C_j$ is the meet $U_i\wedge U_j$ and the
+proposition specializes to Lemma~\ref{ch04:lem:meets}. Two warnings attach to
+the general case, and both matter later. First, if $\cC$ lacks the relevant
+pullbacks, the equalizer form is not available and one must either use the
+sieve form directly or check compatibility over \emph{all} pairs of
+factorizations, as in Definition~\ref{ch04:def:matching}; the sieve form is
+the primitive notion, the equalizer form a convenience. Second, even when
+pullbacks exist, a family can have empty or degenerate pullbacks that make
+the compatibility condition vacuous while gluing still fails---this is
+exactly the geometry of the countermodel in Chapter~\ref{ch06:main}, where
+two point inclusions into a two-element set have empty overlap, so every pair
+of local sections is ``compatible,'' yet no global section exists. Vacuous
+compatibility plus failed gluing is the signature of a cover that is
+surjective on points but not effective on morphisms, and the reader should
+hold the $L_2$ intuition (Example~\ref{ch04:ex:functions}) and that failure
+side by side: the function presheaf glues because functions out of a union
+are determined by functions on the pieces; a representable in an
+injection-only category may not glue because the would-be glued map is not an
+arrow of the category at all.
+
+\begin{example}[A non-poset site in miniature]\label{ch04:ex:nonposet}
+Let $\cC$ be the category with two objects $D$, $C$, two parallel arrows
+$u,v:D\to C$, and identities. Let $S$ be the sieve on $C$ generated by
+$\{u,v\}$; its members are $u$, $v$ (and nothing else, as there is nothing to
+precompose with except identities). A matching family for $S$ valued in $F$
+is a pair $(x_u,x_v)$ with $x_u,x_v\in F(D)$ and \emph{no} compatibility
+condition, since there are no nonidentity arrows into $D$. The gluing map
+sends $x\in F(C)$ to $(x|_u,x|_v)$. For $F=yD$: $yD(C)=\varnothing$ (no
+arrows $C\to D$) while $yD(D)=\{\id_D\}$, so the matching-family set is a
+singleton and the gluing map $\varnothing\to\{*\}$ is not surjective---the
+representable $yD$ fails gluing for any topology declaring $S$ covering. This
+tiny computation is the structural germ of the subcanonicity countermodel of
+Chapter~\ref{ch06:main}: nothing about it is exotic, and its entire content
+is that the category supplies no arrow to serve as the glued section. It also
+illustrates why Definition~\ref{ch04:def:matching} quantifies over all
+precompositions: on posets that quantification collapses to meets, but in
+general the sieve's own arrow structure is the compatibility data.
+\end{example}
+
+\begin{remark}[Separated presheaves as an intermediate reflection]
+\label{ch04:rem:separated}
+Between $\PSh(\cC)$ and $\Sh(\cC,J)$ sits the full subcategory of separated
+presheaves. It too is reflective: the first plus construction (Section
+\ref{ch04:sec:plus}) composed with an image factorization reflects a presheaf
+onto its separated quotient, identifying sections that agree on some cover.
+The two-step structure of sheafification---first kill unsupported
+distinctions, then adjoin missing gluings---is thus a composite of two
+reflections, and the two steps are conceptually independent: Example
+\ref{ch04:ex:nonseparated} needs only the first, Example
+\ref{ch04:ex:separated} only the second. In audit terms the two steps have
+different characters: separation \emph{deletes} data (a quotient), gluing
+\emph{creates} data (new sections from compatible families), and a
+provenance-conscious pipeline must track both, since neither is injective on
+information. This is one of the structural reasons the successor stores
+provenance outside the topology; the inside-the-topos operations are
+irreversibly lossy by design.
+\end{remark}
+
+\begin{remark}[The canonical topology]\label{ch04:rem:canonical}
+For every small category $\cC$ there is a largest subcanonical topology, the
+\emph{canonical topology}, whose covering sieves are those along which every
+representable glues uniquely (the universally effective-epimorphic sieves)
+\cite{maclane,johnstone}. Subcanonicity of a given topology $J$ is exactly
+the containment of $J$ in the canonical topology. This gives the right frame
+for two later results: the successor's partition topologies on the context
+lattice are subcanonical (they sit inside the canonical topology, as the
+representable checks show), while the legacy jointly-surjective coverage on
+the countermodel category of Chapter~\ref{ch06:main} is \emph{not} contained
+in the canonical topology of that category---joint surjectivity on points
+simply does not imply effective epimorphy of the family. ``Subcanonical'' is
+thus not a decoration but a containment statement with content, and it can
+fail.
+\end{remark}
+
+\section{Sheafification: the universal property}\label{ch04:sec:sheafification}
+
+Not every presheaf is a sheaf, but every presheaf has a best sheaf
+approximation, characterized by a universal property, constructed by the plus
+construction, and enjoying left exactness. We take these in order.
+
+\begin{definition}[Associated sheaf]\label{ch04:def:assoc}
+Let $(\cC,J)$ be a site and $F\in\PSh(\cC)$. An \emph{associated sheaf} (or
+\emph{sheafification}) of $F$ is a sheaf $aF$ together with a map
+$\eta_F:F\to aF$ such that for every sheaf $G$, composition with $\eta_F$ is a
+bijection
+\[
+\Hom_{\PSh}(aF,\,G)\;\xrightarrow{\ \cong\ }\;\Hom_{\PSh}(F,\,G).
+\]
+\end{definition}
+
+\begin{proposition}\label{ch04:prop:uniqueness}
+An associated sheaf, if it exists, is unique up to unique isomorphism
+compatible with the units; and the assignment $F\mapsto aF$ extends uniquely
+to a functor $a:\PSh(\cC)\to\Sh(\cC,J)$ left adjoint to the inclusion
+$i:\Sh(\cC,J)\hookrightarrow\PSh(\cC)$.
+\end{proposition}
+
+\begin{proof}
+Both statements are formal consequences of the universal property, by the
+standard argument for reflections \cite{maclanecwm,riehl}: uniqueness because
+two reflections of the same object corepresent the same functor on the
+subcategory; functoriality because $\eta_{F'}\circ\alpha:F\to aF'$ extends
+uniquely across $\eta_F$ for any $\alpha:F\to F'$; adjointness because the
+defining bijection is exactly the adjunction isomorphism, and its naturality
+follows from uniqueness of extensions.
+\end{proof}
+
+\begin{theorem}[Existence and exactness; background]\label{ch04:thm:sheafification}
+For every small site $(\cC,J)$ the associated-sheaf functor
+$a:\PSh(\cC)\to\Sh(\cC,J)$ exists, and it is \emph{left exact}: it preserves
+all finite limits. Consequently $\Sh(\cC,J)$ is a reflective subcategory of
+$\PSh(\cC)$ whose reflector preserves finite limits, and $\Sh(\cC,J)$ is a
+Grothendieck topos.
+\end{theorem}
+
+This is textbook material \cite[Chap.~III and VII]{maclane},
+\cite{stacks00W1}, \cite{johnstone}; we present the construction in the next
+section both because the monograph's finite computations imitate it and
+because seeing it makes the left-exactness statement believable rather than
+oracular. Left exactness matters for the program for a concrete reason: a
+left-exact reflector preserves monomorphisms, finite products, and equalizers,
+hence preserves the shape of relational and subobject structure when evidence
+objects are pushed from the presheaf level into sheaves. A right adjoint that
+merely existed, without exactness, would permit the reflection to distort
+exactly the finite-limit structure that admissibility relations and typed
+comparisons live in.
+
+\section{The plus construction, and computing on finite sites}\label{ch04:sec:plus}
+
+\begin{construction}[The plus construction]\label{ch04:con:plus}
+For $F\in\PSh(\cC)$ and $C\in\Ob(\cC)$, the covering sieves of $C$ form a
+directed poset under \emph{refinement}: $S'$ refines $S$ when $S'\subseteq S$,
+and any two covering sieves have a common covering refinement
+$S\cap S'$ (an instance of (J2) plus (J3)). Restriction of matching families
+along inclusions gives a directed system, and one defines
+\[
+F^{+}(C)\;=\;\operatorname*{colim}_{S\in J(C)}\ \mathrm{Match}(S,F),
+\]
+the colimit over ever-finer covering sieves. An element of $F^{+}(C)$ is an
+equivalence class of matching families, two families being identified when
+they agree on a common covering refinement. Restriction along $g:D\to C$ sends
+the class of $(S,(x_f))$ to the class of $(g^{*}S,(x_{g\circ h})_h)$; the unit
+$F\to F^{+}$ sends $x\in F(C)$ to the class of the canonical family
+$(x|_f)_{f\in m_C}$.
+\end{construction}
+
+\begin{theorem}[Background; \cite{stacks00W1,maclane}]\label{ch04:thm:plus}
+$F^{+}$ is a separated presheaf for every $F$; if $F$ is separated, $F^{+}$ is
+a sheaf. Hence $aF=F^{++}$, with unit the composite $F\to F^{+}\to F^{++}$,
+satisfies the universal property of Definition~\ref{ch04:def:assoc}. Moreover
+$a$ is left exact: each application of $(-)^{+}$ is a filtered colimit of
+finite-limit-preserving operations $\mathrm{Match}(S,-)$, and filtered
+colimits commute with finite limits in $\Set$.
+\end{theorem}
+
+Two applications of $(-)^{+}$ are needed in general: the first pass merges
+sections that a cover cannot distinguish (repairing separation), the second
+pass adjoins gluings for compatible families (repairing existence). On
+particular presheaves one pass may happen to suffice, but no general theorem
+says so, and the successor's proof artifacts are deliberately structured so as
+never to assume it.
+
+\begin{example}[A worked sheafification on $L_2$]\label{ch04:ex:plusworked}
+Take $H$ from Example~\ref{ch04:ex:separated} ($H$ separated, identity
+restrictions between nonempty contexts, $|X|\ge 2$). We compute $H^{+}$ for
+$J_2$. On $L_2$ every object has a \emph{minimum} covering sieve: the
+intersection of all covering sieves is covering (finitely many sieves, and
+covering sieves are closed under pairwise intersection), so the directed
+colimit collapses to its terminal stage:
+\[
+F^{+}(V)\;\cong\;\mathrm{Match}(S_{\min}(V),\,F)
+\qquad\text{on any finite site.}
+\]
+Here $S_{\min}(\{a,b\})$ is the sieve generated by the two atoms,
+$S_{\min}$ at each singleton is the maximal sieve, and
+$S_{\min}(\varnothing)$ is the empty sieve. Therefore
+$H^{+}(\{a,b\})=\mathrm{Match}(S_{\min},H)\cong X\times X$ (Example
+\ref{ch04:ex:separated}), $H^{+}$ agrees with $H$ on singletons, and
+$H^{+}(\varnothing)$ is a singleton. One checks directly that $H^{+}$ is
+already a $J_2$-sheaf (it is isomorphic to the function presheaf
+$\Set(-,X)$ of Example~\ref{ch04:ex:functions}), so here a single pass
+sufficed---because $H$ was separated to begin with, exactly as
+Theorem~\ref{ch04:thm:plus} predicts. Redoing the computation for the
+non-separated $K$ of Example~\ref{ch04:ex:nonseparated} shows the first pass
+collapsing $u$ and $v$ to a single class, after which the second pass has
+nothing left to add.
+\end{example}
+
+\begin{remark}[Why direct constructions can beat the plus construction in
+finite settings]\label{ch04:rem:direct}
+On a finite site the plus construction is entirely computable, as
+Example~\ref{ch04:ex:plusworked} shows, but it is rarely the best way to
+\emph{certify} a sheafification, for three reasons. First, bookkeeping: the
+colimit ranges over all covering sieves ($168$ of them on the successor
+lattice), and although the minimum-sieve collapse tames this, an implementation
+still owes a proof that the collapse is legitimate on the exact site at hand.
+Second, the one-pass question: whether $F^{+}$ is already a sheaf depends on
+separation hypotheses that must be re-established for every input, and an
+implementation that silently assumes one pass is wrong on non-separated
+inputs. Third, and decisively for audit: the universal property, not the
+construction, is the specification. A closed-form candidate reflector---such
+as the product-over-blocks formula the successor uses on its partition
+coverages, which assigns to each context the product of the presheaf's values
+on the pieces---can be verified \emph{directly} against
+Definition~\ref{ch04:def:assoc}: prove the candidate lands in sheaves, prove
+composition with the unit is a bijection onto $\Hom_{\PSh}(F,G)$ for every
+sheaf $G$, and conclude by uniqueness (Proposition~\ref{ch04:prop:uniqueness})
+that the candidate \emph{is} sheafification, with no plus-construction
+bookkeeping anywhere in the trusted path. The successor's
+modality-composition proof takes exactly this route, and its stated reason is
+the one just given: the direct proof avoids assuming that a single generic
+plus construction sheafifies an arbitrary presheaf. In finite settings the
+direct route is simultaneously more honest and easier to check exhaustively:
+a formula evaluated at sixteen contexts, against a universal property checked
+on finitely many fixtures, is a better certificate substrate than a two-pass
+colimit whose intermediate objects are themselves quotients of function
+spaces.
+\end{remark}
+
+\begin{exercise}\label{ch04:exr:plus}
+Compute $\Delta_X^{+}$ and $\Delta_X^{++}$ on $(L_2,J_2)$ for $|X|=2$ and
+verify that the result is the function presheaf $\Set(-,X)$'s subsheaf of
+constant-on-atoms families---that is, identify exactly which sections the
+null-cover normalization creates and which the top cover creates.
+\end{exercise}
+
+\section{Reflective subcategories and idempotent monads}\label{ch04:sec:reflective}
+
+Sheafification exhibits $\Sh(\cC,J)$ as a reflective subcategory of
+$\PSh(\cC)$. This section isolates the abstract shape, because the monograph's
+later chapters manipulate several reflections at once and their composites,
+and the abstract calculus is what makes those manipulations safe.
+
+\begin{definition}\label{ch04:def:reflective}
+A full subcategory $\mathcal{B}\subseteq\mathcal{A}$ is \emph{reflective} if
+the inclusion $i:\mathcal{B}\to\mathcal{A}$ has a left adjoint
+$a:\mathcal{A}\to\mathcal{B}$, the \emph{reflector}. The composite
+$M=ia:\mathcal{A}\to\mathcal{A}$, together with the unit
+$\eta:\mathrm{Id}\Rightarrow M$ and multiplication induced by the adjunction
+counit, is a monad on $\mathcal{A}$ \cite{maclanecwm,riehl,awodey}.
+\end{definition}
+
+\begin{proposition}[Idempotency]\label{ch04:prop:idempotent}
+For a reflective subcategory as above, the monad $M=ia$ is \emph{idempotent}:
+the multiplication $\mu:MM\Rightarrow M$ is a natural isomorphism;
+equivalently, $M\eta_F$ and $\eta_{MF}$ are equal isomorphisms
+$MF\to MMF$ for every $F$.
+\end{proposition}
+
+\begin{proof}
+Because $\mathcal{B}$ is full, the counit of the adjunction is an isomorphism
+$a i\cong\mathrm{Id}_{\mathcal{B}}$ (the reflection of an object already in
+$\mathcal{B}$ is itself, by the universal property applied to the identity).
+Whiskering, $MM=iaia\cong ia=M$, and the triangle identities identify this
+isomorphism with $\mu$; the two unit maps into $MMF$ agree because both are
+the unique extension of $\eta_F$ across itself.
+\end{proof}
+
+Idempotency is what lets one speak of the subcategory and the monad
+interchangeably: $\mathcal{B}$ is recovered inside $\mathcal{A}$ as the
+objects for which the unit is an isomorphism, and $M$ is determined up to
+canonical isomorphism by its image. The next definition packages the objects
+side.
+
+\begin{definition}[Local objects]\label{ch04:def:local}
+Let $M=ia$ arise from a reflective subcategory. An object $F\in\mathcal{A}$ is
+\emph{$M$-local} (or just \emph{local} when $M$ is understood) if
+$\eta_F:F\to MF$ is an isomorphism.
+\end{definition}
+
+\begin{proposition}\label{ch04:prop:localssheaves}
+For $M=ia$ with $a$ sheafification for a topology $J$ on $\cC$, an object of
+$\PSh(\cC)$ is $M$-local if and only if it is a $J$-sheaf. In general, the
+$M$-local objects are exactly the objects isomorphic to objects of the
+reflective subcategory, and $M$ restricted to local objects is naturally
+isomorphic to the identity.
+\end{proposition}
+
+\begin{proof}
+If $F$ is a sheaf then $\eta_F$ is an isomorphism by the universal property
+(extend $\id_F$ across $\eta_F$; the two composites are identities by
+uniqueness of extensions). Conversely if $\eta_F$ is an isomorphism then $F$
+is isomorphic to the sheaf $iaF$, and the sheaf condition---bijectivity of a
+class of gluing maps---transfers across isomorphism. The general statements
+are proved the same way, using only fullness and the universal property.
+\end{proof}
+
+\section{Modalities}\label{ch04:sec:modalities}
+
+\begin{definition}[Modality]\label{ch04:def:modality}
+A \emph{modality} on a presheaf category $\PSh(\cC)$ is a left-exact
+idempotent monad $M$ on $\PSh(\cC)$ arising as $M=ia$ for a reflective
+subcategory whose reflector $a$ preserves finite limits. A modality is
+\emph{trivial} if it is naturally isomorphic to the identity functor. Two
+modalities are \emph{distinct} if they are not naturally isomorphic;
+equivalently (by Proposition~\ref{ch04:prop:localssheaves}) if their
+subcategories of local objects differ.
+\end{definition}
+
+The word ``modality'' is borrowed deliberately. In topos theory, left-exact
+reflective subcategories of a presheaf topos correspond to Lawvere--Tierney
+topologies on it, which for $\PSh(\cC)$ correspond in turn to Grothendieck
+topologies on $\cC$; the closure operators $j$ on the subobject classifier
+that encode them behave like modal operators on the internal logic (``it is
+locally the case that''), and the sheaf condition says exactly that a
+predicate or object is insensitive to the modal blur. See
+\cite[Chap.~V]{maclane} and \cite{johnstone} for this correspondence; in the
+formal-logic and type-theoretic literature the same abstract shape---a
+left-exact idempotent monad and its local objects---also travels under the
+name modality. This monograph uses the term exclusively in the sense of
+Definition~\ref{ch04:def:modality}, and always for modalities of
+sheafification type: $M_J=i_Ja_J$ for a Grothendieck topology $J$ on the site
+in question. No claim is made here about modal logics, and none is needed:
+every later theorem about ``modalities'' is a theorem about sheafification
+monads.
+
+The program-level motivation, stated once and bounded: the governing
+specification intends distinct modalities to serve as distinct
+\emph{resolution disciplines} on evidence presheaves---one reflector
+enforcing compatibility along one family of covers, another along a
+transverse family---so that partially resolved objects (local for one
+modality but not the other) are representable states of an audit pipeline.
+For that intent to be realizable at all, the modalities in play must be
+provably distinct and provably nontrivial, and their composites must be
+understood. Those are precisely the questions the finite theory answers, and
+the questions the legacy site fails, which is why the criterion below is the
+hinge of the whole monograph.
+
+\begin{proposition}[Triviality criterion]\label{ch04:prop:trivial}
+Let $J$ be a Grothendieck topology on a small category $\cC$ and
+$M_J=i_Ja_J$ the associated modality on $\PSh(\cC)$. The following are
+equivalent:
+\begin{enumerate}
+\item $M_J$ is trivial (naturally isomorphic to the identity);
+\item every presheaf on $\cC$ is a $J$-sheaf;
+\item every covering sieve of $J$ is maximal: $J(C)=\{m_C\}$ for all $C$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(3)$\Rightarrow$(2): Example~\ref{ch04:ex:maximal}---gluing along a maximal
+sieve is bijective for every presheaf. (2)$\Rightarrow$(1): if every presheaf
+is a sheaf then every unit $\eta_F:F\to M_JF$ is an isomorphism
+(Proposition~\ref{ch04:prop:localssheaves}), and these assemble to a natural
+isomorphism $\mathrm{Id}\cong M_J$. (1)$\Rightarrow$(3): we prove the
+contrapositive with an explicit witness. Suppose some $S_0\in J(C)$ is not
+maximal. Consider the presheaf of sieves
+\[
+\Omega(D)\;=\;\{\,\text{sieves on } D\,\},\qquad
+\Omega(g:E\to D)\;=\;g^{*}(-),
+\]
+the subobject classifier of $\PSh(\cC)$; functoriality is the identity
+$(g\circ h)^{*}=h^{*}g^{*}$ on sieves. Define a matching family for $S_0$
+with values in $\Omega$ by assigning to every $f:D\to C$ in $S_0$ the maximal
+sieve $m_D\in\Omega(D)$. This matches: $h^{*}m_D=m_E$ for every $h:E\to D$.
+An amalgamation is a sieve $T$ on $C$ with $f^{*}T=m_D$ for all $f\in S_0$;
+since $f^{*}T=m_D$ if and only if $\id_D\in f^{*}T$ if and only if $f\in T$,
+the amalgamations are exactly the sieves $T\supseteq S_0$. There are at least
+two: $S_0$ itself and $m_C$, distinct because $S_0$ is not maximal. So
+$\Omega$ is not even separated for $J$, hence not a sheaf; if $M_J$ were
+naturally isomorphic to the identity, $\Omega\cong M_J\Omega$ would be
+isomorphic to a sheaf and hence a sheaf, a contradiction.
+\end{proof}
+
+\begin{remark}\label{ch04:rem:trivialreading}
+The proof of (1)$\Rightarrow$(3) deserves a second look, because it is the
+cleanest possible statement of what a nonmaximal cover \emph{does}: it forces
+the presheaf of sieves to carry unsupported global distinctions (many sieves
+over $C$ restrict to the maximal sieve everywhere on the cover), and
+sheafification must therefore act nontrivially on $\Omega$. Conversely, a
+topology all of whose covers are maximal never forces anything. The relevance
+to the program is immediate and is spelled out in
+Chapter~\ref{ch05:main}: the legacy ACBE and RPM clauses each generate only
+maximal sieves, so by Proposition~\ref{ch04:prop:trivial} the modalities
+built from either clause alone are trivial---naturally isomorphic to the
+identity, local on every presheaf, incapable of supporting any distinction
+between resolution states. The collapse theorem is, in this exact sense, an
+instance of the triviality criterion, and the successor's entire design
+problem is to manufacture covers that are honestly nonmaximal.
+\end{remark}
+
+\subsection{Closed sieves and the classifier viewpoint}\label{ch04:sub:closed}
+
+The subobject classifier $\Omega$ of $\PSh(\cC)$, which appeared as the
+witness in Proposition~\ref{ch04:prop:trivial}, supports a second description
+of modalities that is worth having even though the monograph's proofs never
+depend on it. Given a topology $J$, call a sieve $T$ on $C$
+\emph{$J$-closed} if every arrow that lies in $T$ locally already lies in
+$T$: whenever $f:D\to C$ has $f^{*}T\in J(D)$, then $f\in T$. Closing a sieve
+(adding all such arrows) defines an operator $j:\Omega\to\Omega$, natural in
+$C$, which is inflationary, idempotent, and meet-preserving; such an operator
+on the classifier is a \emph{Lawvere--Tierney topology}, and on a presheaf
+topos these correspond exactly to Grothendieck topologies on the base
+category \cite[Chap.~V]{maclane}, \cite{johnstone}. The $J$-sheaves are then
+the objects orthogonal to the class of \emph{dense} monomorphisms (those
+whose closure is everything), and sheafification is the universal way of
+inverting dense monos. Three consequences of this viewpoint are used later,
+and we state them as background \cite{maclane,johnstone}:
+\begin{enumerate}
+\item The covering sieves of $J$ are exactly the sieves whose closure is
+maximal; in particular a topology is determined by its closed sieves, and the
+presheaf $\Omega_j$ of closed sieves is the subobject classifier of
+$\Sh(\cC,J)$.
+\item A modality of sheafification type inverts the inclusions
+$S\hookrightarrow yC$ for covering $S$; this is the precise sense in which
+``the topology cannot see the difference between a covering sieve and the
+whole representable,'' and it is the abstract root of the provenance-erasure
+discussion in Chapter~\ref{ch05:main}.
+\item Meets of topologies correspond to pointwise meets of the associated
+closure operators, and the join of two topologies is the topology generated
+by their union---the operation the successor computes explicitly when it
+identifies the join of its two partition topologies with the
+singleton-partition topology.
+\end{enumerate}
+For the finite sites of this monograph, every one of these statements is also
+directly checkable by enumeration, and the certificate chapters do so; the
+classifier viewpoint is offered as orientation, not as a load-bearing
+dependency.
+
+\begin{exercise}\label{ch04:exr:closed}
+On $(L_2,J_2)$, compute the closure of each of the six sieves on the top
+object and verify: (i) the closed sieves on the top are exactly the maximal
+sieve and the sieves generated by $\{a\}$, by $\{b\}$, and by nothing;
+(ii) the covering sieves are exactly those whose closure is maximal;
+(iii) $\Omega_j$ at the top has exactly four elements, matching the sheaf
+condition's verdict on Exercise~\ref{ch04:exr:omega}.
+\end{exercise}
+
+\begin{remark}[Distinctness, composition, and what is \emph{not} claimed]
+\label{ch04:rem:distinctness}
+Two further points of the abstract calculus recur later. First, distinctness
+of modalities is witnessed by objects: $M_J\ne M_{J'}$ (not naturally
+isomorphic) as soon as some presheaf is local for one and not the other, since
+reflectors fix exactly their local objects. This is how the successor's two
+finite modalities are separated: an explicit presheaf that satisfies one
+partition's gluing and fails the other's. Second, composites of modalities
+are subtle in general---the composite of two left-exact idempotent monads
+need not be idempotent, and when it is, identifying it requires a theorem,
+not a reflex. On the successor's finite lattice the composite of the two
+partition modalities is, by a proved and exhaustively corroborated canonical
+natural isomorphism, the modality of the joined topology, and in particular
+the two modalities \emph{commute}; distinctness does not imply
+noncommutation, and no artifact of the program licenses a noncommutation
+claim. Both facts are proved in the finite-theory chapters; they are
+previewed here only so that the reader does not import an expectation of
+order-sensitivity that the mathematics does not support.
+\end{remark}
+
+\begin{boundary}\label{ch04:bnd:status}
+Status discipline for this chapter: every numbered statement above is either
+(i) standard background, cited to \cite{maclane}, \cite{maclanecwm},
+\cite{johnstone}, \cite{stacks00W1}, \cite{stacks00ZC}, \cite{riehl}, or
+\cite{awodey}, with no novelty claimed; or (ii) an elementary finite
+verification (the $L_2$ examples, Algorithm~\ref{ch04:alg:saturation} and its
+lemma, and the finite-poset case of Theorem~\ref{ch04:thm:basis}) offered at
+tutorial level. Forward references to properties of the successor
+construction (distinct nontrivial commuting modalities, the $298$-sieve and
+$168$-cover census, the direct reflector) describe results whose registered
+status is \textsc{informal proof present} with exhaustive executable
+corroboration; they are not peer-reviewed theorems, and nothing in this
+chapter promotes them. No statement in this chapter carries any empirical,
+causal, safety, or product interpretation.
+\end{boundary}
+
+\section{Chapter summary and the road ahead}\label{ch04:sec:summary}
+
+The chapter assembled the four-piece toolkit the rest of the monograph runs
+on. (1) \emph{The sheaf condition}: sections over an object biject with
+matching families over each covering sieve; separation is the injective half,
+gluing the surjective half; on posets with meets, matching families are
+compatible tuples (Lemma~\ref{ch04:lem:meets}); the null cover normalizes the
+initial context (Lemma~\ref{ch04:lem:null}). The examples and non-examples of
+Sections~\ref{ch04:sec:examples}--\ref{ch04:sec:nonexamples} exhibit each
+failure mode in the smallest possible habitat. (2) \emph{The basis
+criterion}: sheafhood needs checking only on generating families
+(Theorem~\ref{ch04:thm:basis}), and on finite posets the generated topology
+is the fixed point of an explicit saturation
+(Algorithm~\ref{ch04:alg:saturation})---the exact computation the finite
+certificate later performs. (3) \emph{Sheafification}: a left-exact
+reflection characterized by its universal property
+(Definition~\ref{ch04:def:assoc}, Theorem~\ref{ch04:thm:sheafification}),
+constructible by the two-pass plus construction
+(Construction~\ref{ch04:con:plus}) but, on finite sites, better certified by
+closed-form candidates verified directly against the universal property
+(Remark~\ref{ch04:rem:direct}). (4) \emph{Modalities}: left-exact idempotent
+monads of sheafification type, with local objects the sheaves
+(Proposition~\ref{ch04:prop:localssheaves}), and with a sharp triviality
+criterion---trivial exactly when every cover is maximal
+(Proposition~\ref{ch04:prop:trivial}).
+
+The criterion is the pivot on which the monograph now turns. Chapter
+\ref{ch05:main} takes the registered legacy site, whose ACBE and RPM cover
+clauses were intended to seed two distinct modalities, and shows by two
+one-line sieve computations that every sieve either clause generates is
+maximal. By Proposition~\ref{ch04:prop:trivial}, the intended modalities are
+trivial; by the closure-operator analysis there, no relabeling, sub-sieve
+surgery, or object-adjunction can help; and by
+Chapter~\ref{ch06:main}, the same axioms also fail to deliver subcanonicity,
+so even the representables must be handled through their associated sheaves.
+Only after both negative results are fully absorbed does the successor
+construction begin.
+
+\begin{exercise}\label{ch04:exr:omega}
+Compute $\Omega$ explicitly on $L_2$ (six sieves on the top, three on each
+singleton, two on the bottom; compare Exercise~\ref{ch04:exr:census}),
+identify the matching family used in the proof of
+Proposition~\ref{ch04:prop:trivial} for the atom cover of the top, and list
+its amalgamations. Then compute $a\Omega$ for $J_2$ and verify that the
+result classifies $J_2$-closed sieves only.
+\end{exercise}
+
+\begin{exercise}\label{ch04:exr:twotopologies}
+On $L_2$, let $J_a$ be generated by the single family $\{\{a\}\to\{a,b\}\}$
+(and identities and the null cover), and $J_2$ as above. Determine which
+representables are sheaves for $J_a$, whether $J_a\subseteq J_2$, and whether
+the two modalities $M_{J_a}$ and $M_{J_2}$ are distinct, exhibiting a
+separating presheaf if so. (This exercise previews the witness-presheaf
+technique of the finite theory.)
+\end{exercise}
+
+\begin{exercise}\label{ch04:exr:leftexact}
+Using the description $F^{+}(C)=\mathrm{Match}(S_{\min}(C),F)$ valid on
+finite sites (Example~\ref{ch04:ex:plusworked}), verify by direct computation
+that $(-)^{+}$ preserves finite products and equalizers on
+$(L_2,J_2)$, and exhibit the natural isomorphism
+$a(F\times G)\cong aF\times aG$ for $F=G=\Delta_X$.
+\end{exercise}

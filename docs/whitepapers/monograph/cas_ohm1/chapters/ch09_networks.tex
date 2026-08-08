@@ -1,0 +1,695 @@
+\chapter{Structural Network Operations}\label{ch09:networks}
+
+\section{The capability-gating philosophy}\label{ch09:sec:philosophy}
+
+The network layer is where the Ohm analogy is most seductive and least
+earned. The Quantification Guide presents series addition of resistances,
+reciprocal aggregation of parallel resistances, and multiplication of stage
+gains as working rules --- arithmetic one may simply perform on constraint
+values to obtain system-level conclusions. The operationalization addendum,
+read against it, reclassifies the same arithmetic as \emph{preregistered
+predictions}: falsifiable hypotheses (the gain-composition and redundancy
+hypotheses of the registered claim ledger) whose defining rules must be
+dropped if the corresponding experiments fail. And Appendix~I applies the
+arithmetic to paths while warning, in the same breath, that co-present
+guardrails are not parallel routes and that flow remains local. This is the
+validation-status conflict preserved in the source audit, and the candidate's
+response to it is the organizing principle of this chapter:
+
+\begin{ruleenv}[Structural-only network operations]\label{ch09:rule:structural}
+Series equivalence, parallel equivalence, and gain composition exist in the
+candidate only as \emph{unauthenticated structural research calculations}.
+Each operation is capability-gated: it runs only inside an admitted
+operation context, under a reviewed and current calibration profile, on
+typed inputs that satisfy coordinate, unit, topology, region, linearity,
+and evidence requirements; it emits a result that binds its complete
+derivation; and it carries an authorization state that is, in every
+implemented mode, explicitly unauthenticated. No network result asserts
+that the arithmetic is empirically valid; it asserts only that the
+arithmetic was performed, on these children, under these gates, with this
+provenance.
+\end{ruleenv}
+
+The word ``capability'' is doing precise work here. The implemented
+capability enumeration names the network operations
+(\texttt{SERIES\_EQUIVALENCE}, \texttt{PARALLEL\_EQUIVALENCE},
+\texttt{GAIN\_COMPOSITION}) alongside the prediction and diagnosis
+capabilities, and every operation result embeds an operation binding whose
+capability field records which gate was exercised. The binding also records
+a trust mode --- \texttt{STRUCTURAL\_RESEARCH\_ONLY} or
+\texttt{INTEGRITY\_CONFIGURATION} --- and an authorization state that is
+locked to the trust mode by validation: structural mode must carry
+\texttt{UNAUTHENTICATED\_STRUCTURAL}, integrity mode must carry
+\texttt{UNAUTHENTICATED\_INTEGRITY}, and any other pairing is a validation
+error. There is no third mode. The type system does not contain an
+authenticated authorization state for these operations, so no configuration
+of the candidate, however keyed or attested, can produce a network result
+that claims authenticated authority (Section~\ref{ch09:sec:ed25519}).
+
+Why gate so heavily what is, after all, elementary arithmetic? Because the
+arithmetic is not where the risk lives. Adding two positive decimals is
+harmless; \emph{calling the sum an equivalent resistance} is a modeling
+claim with unstated preconditions --- that the two components are actually
+in series in the relevant causal topology, that their local linear regimes
+are simultaneously applicable, that their fitted parameters share
+coordinates and units, that their errors combine as declared, and that no
+interaction term is being silently zeroed. The electrical formulas are
+theorems in circuit theory because Kirchhoff's laws supply those
+preconditions; here, nothing supplies them. The candidate therefore inverts
+the Guide's presentation: instead of rules that are valid until questioned,
+it implements calculations that are inert until every stated precondition
+is demonstrated to the type system, and whose outputs remain, even then,
+research structures awaiting the preregistered experiments. This is the
+verification-validation separation \cite{sargent} applied to network
+arithmetic: the software verifies its gates exhaustively; validation of the
+composition laws themselves belongs to the registered hypotheses and has
+not occurred.
+
+A second, quieter principle governs the layer: \emph{everything replays}.
+Every network result is factory-only --- direct construction is rejected by
+token check --- and every result binds its exact ordered children by digest,
+so that a verifier holding the result and the evidence registry can
+re-resolve the children, re-run the factory, and demand digest equality
+with the original. A network value that cannot be replayed to its exact
+bytes does not validate. This converts the network layer from a calculator
+into a closed derivation system: there are no free-floating equivalent
+resistances anywhere in the candidate, only endpoints of replayable
+derivation chains.
+
+\section{Context admission and immutability}\label{ch09:sec:context}
+
+Before any network operation runs, an operation context must be admitted,
+and the admission mechanics matter enough to the layer's guarantees to be
+spelled out here rather than assumed.
+
+A context binds five things: the calibration profile; an evidence
+registry; a capability authority (manifest plus verification machinery);
+a tuple of capability attestations, possibly empty, with duplicate
+capabilities rejected; and the caller-supplied replay time, with an
+optional recorded clock receipt. Admission is not a constructor
+formality. At admission the context re-validates every object in the
+evidence registry; resolves the authority's manifest reference and
+requires byte equality between the registered artifact payload and the
+manifest's canonical bytes; asserts the profile current at the replay
+time (reviewed, drift-current, inside the validity window); requires
+every artifact the profile references --- code, dependency lock, corpus,
+corpus rights, both splits, drift check, directions, full-scale sources,
+controls --- to be resolvable in the registry; and requires the evidence
+behind every presented attestation. Only then does it take digest
+snapshots: of the profile, the manifest, each attestation, the replay
+time, and the clock receipt.
+
+The snapshots are the immutability mechanism. Every subsequent operation
+--- series, parallel, gain, prediction, residual --- begins by
+re-validating the context against its snapshots: the types must be
+unchanged, the registry must re-validate, and the profile digest,
+manifest digest, attestation digests, replay time, and clock receipt
+must equal their admitted values, with any divergence a validation
+error. A context is therefore not a session that can drift; it is a
+frozen frame, and every network result records which frame it was
+computed in. Two results with the same binding digests were computed
+under identical premises; two results with different profile digests are
+formally incomparable, and nothing in the layer will combine them ---
+the one-profile requirement of the admission rules is checked against
+the context's single profile, so cross-profile aggregation is not a
+forbidden option but an unexpressible one.
+
+One further mechanical point completes the picture: all network
+arithmetic runs inside a declared exact-decimal arithmetic context, so
+that sums, reciprocals, products, and square roots are computed at fixed
+high precision with deterministic behavior across platforms, and the
+digest-equality replay obligation of
+Section~\ref{ch09:sec:philosophy} is meaningful --- bit-identical
+replay would be unachievable over platform-dependent binary floating
+point.
+
+\section{Series equivalence}\label{ch09:sec:series}
+
+\subsection{The electrical analogy, bracketed}
+
+In circuit theory, resistances in series add because the same current
+traverses each element and voltages sum along the path. Both premises are
+physical facts about charge conservation and potential. The candidate's
+series rule borrows the \emph{arithmetic} --- the equivalent value is the
+sum of component values --- while explicitly bracketing the premises: there
+is no conserved current in a steered activation pathway, no potential
+whose drops sum, and no theorem that two locally linear response segments
+compose into one. The bracketing is not rhetorical. It is implemented as
+the requirement set below, which demands precisely the structural
+conditions under which the sum is at least \emph{coherent} (same
+coordinates, same units, same profile, contiguous topology), while the
+question of whether the sum \emph{predicts} anything is left, deliberately
+unanswered, to the registered redundancy and composition experiments. Until
+those close, a series equivalent is a bookkeeping object: the sum of some
+fitted parameters, with provenance.
+
+\subsection{Requirements as implemented}
+
+\begin{ruleenv}[Series admission]\label{ch09:rule:series}
+A series equivalence over components $C_1, \ldots, C_n$ ($n \ge 2$) is
+admitted only when all of the following hold.
+\begin{enumerate}
+\item \emph{Typed components.} Each $C_i$ is an exact resistance-component
+object: a component identity, a resistance measurement, a source node, a
+target node, a declared region, and a declared linearity coefficient.
+Duplicate component identities, duplicate component digests, and duplicate
+underlying resistance digests are all rejected --- the same fitted
+resistance cannot be counted twice under two names.
+\item \emph{Calibrated or replayable resistances.} Each component's
+resistance is of quantity kind \texttt{EFFECTIVE\_RESISTANCE} with role
+\texttt{CALIBRATED\_HELD\_OUT} or \texttt{NETWORK\_EQUIVALENT}; apparent
+same-sample and design-proposal roles are inadmissible. A
+network-equivalent child is not taken on faith: it is recursively replayed
+through its own factory and digest-checked before use.
+\item \emph{One unit.} Every resistance is in the single unit
+\texttt{ALPHA\_PER\_ACTIVATION}; the equivalent is emitted in the same
+unit. No unit conversion exists in the layer.
+\item \emph{Compatible coordinates.} Source and target nodes are typed
+coordinate identities of quantity kind \texttt{DRIVE\_INTERVENTION} in
+\textsc{alpha} units, and every node in the chain binds the same
+registered test-point digest; a component whose topology nodes and whose
+resistance measurement bind different test points is rejected.
+\item \emph{Simple acyclic directed chain.} Adjacent components must link
+exactly --- the target node of $C_i$ equals the source node of
+$C_{i+1}$ --- and the full node path (first source, then each target in
+order) must contain no repeated node. This excludes cycles, self-loops
+(already rejected at the component level), branching, and re-visiting: the
+topology is a simple directed path or nothing.
+\item \emph{Active region.} Every component's declared region is
+\texttt{ACTIVE}; the component type itself rejects any other region at
+construction. Cutoff, saturated, non-ohmic, unstable, and unassessed
+segments cannot enter a series computation at all.
+\item \emph{Adequate linearity.} Every component's linearity coefficient
+(an $R^2$ in $[0,1]$) is at or above the profile's declared minimum;
+the threshold is a profile tolerance, not a constant.
+\item \emph{One profile, with evidence.} Every component resistance is
+validated against the single admitted calibration profile of the operation
+context; all components bind one test point; each carries positive-lower-bound
+uncertainty and a recorded sample size.
+\item \emph{Complete ordered child provenance.} The emitted equivalent's
+derivation parents are exactly the ordered component digests, in
+role-stamped positions ($\texttt{component[0]}, \texttt{component[1]},
+\ldots$); the result object re-verifies this binding at construction, and
+any mismatch between claimed children and bound parents is a validation
+error.
+\end{enumerate}
+\end{ruleenv}
+
+When admitted, the arithmetic is the expected sum: the equivalent value is
+$\sum_i r_i$; interval bounds sum lower-with-lower and upper-with-upper
+(with the upper bound floored at the computed value); standard uncertainty
+combines in quadrature, which silently encodes an independence assumption
+that the covariance limitation of Section~\ref{ch09:sec:binding} makes
+loud; the confidence level is the minimum across children; and the sample
+size is the minimum across children --- both deliberately conservative
+conventions. The result is emitted with resistance role
+\texttt{NETWORK\_EQUIVALENT}, which marks it as replayable-derived rather
+than calibrated, and which downstream consumers (notably the prediction
+gate) treat as a distinct role with its own replay obligation.
+
+\subsection{The arithmetic, explicitly}
+
+For admitted components with resistances $r_1, \ldots, r_n$, intervals
+$[\ell_i, u_i]$, standard uncertainties $s_i$, confidence levels $c_i$,
+and sample sizes $m_i$, the emitted equivalent is
+\[
+r_{\mathrm{series}} = \sum_{i=1}^{n} r_i, \qquad
+\bigl[\;\textstyle\sum_i \ell_i,\; \max\bigl(r_{\mathrm{series}},
+\sum_i u_i\bigr)\;\bigr], \qquad
+s_{\mathrm{series}} = \Bigl(\sum_{i=1}^{n} s_i^2\Bigr)^{1/2},
+\]
+with confidence $\min_i c_i$ and sample size $\min_i m_i$. The
+quadrature form for $s_{\mathrm{series}}$ is exact for uncorrelated
+child errors and an approximation otherwise; since cross-input
+covariance is unavailable in the current evidence model, the zero-covariance
+approximation is declared on the binding rather than assumed silently
+(Rule~\ref{ch09:rule:parallel-limits} applies to series results too).
+If child errors were positively correlated, the true combined standard
+uncertainty would exceed the quadrature value --- the reported
+uncertainty would be optimistic --- and this direction of possible error
+is precisely what the declared limitation warns a consumer to expect.
+
+\begin{example}[Illustrative series computation]\label{ch09:ex:series}
+All numbers illustrative. Two admitted components on one test point:
+$r_1 = 2.0$ alpha-per-activation with interval $[1.8, 2.2]$, standard
+uncertainty $0.1$, confidence $0.95$, sample size $40$; and $r_2 = 3.0$
+with $[2.7, 3.3]$, standard uncertainty $0.15$, confidence $0.90$,
+sample size $25$. Topology: $A \to B$, $B \to C$, distinct nodes, so the
+chain is simple and acyclic. The equivalent is $r = 5.0$ with interval
+$[4.5, 5.5]$, standard uncertainty $\sqrt{0.01 + 0.0225} \approx 0.18$,
+confidence $0.90$ (the minimum), sample size $25$ (the minimum), role
+\texttt{NETWORK\_EQUIVALENT}, derivation parents
+$(\texttt{component[0]}, \texttt{component[1]})$ by digest, and the full
+operation binding of Definition~\ref{ch09:def:binding}. If the same two
+components were presented in the orders $(C_1, C_2)$ and $(C_2, C_1)$
+with correspondingly re-declared node chains, the two results would be
+distinct objects with distinct digests: child order is part of identity,
+because the declared topology is directional.
+\end{example}
+
+\begin{remark}[What a series equivalent is not]\label{ch09:rem:series-not}
+A series equivalent is not evidence that the two mechanisms are ``in
+series'' in any causal sense; the chain topology is asserted by the
+caller's component construction, not discovered. It is not a claim that
+end-to-end response equals drive over summed resistance; that is the
+content of a registered hypothesis, untested. And it is not transferable:
+it binds one profile, one test point, and one replay frame, like every
+other quantity in the candidate.
+\end{remark}
+
+\section{Parallel equivalence}\label{ch09:sec:parallel}
+
+\subsection{Requirements as implemented}
+
+Parallel equivalence shares the entire admission apparatus of
+Rule~\ref{ch09:rule:series} --- typed components, calibrated or replayed
+resistances, one unit, coordinate compatibility, active region, linearity
+threshold, one profile, uncertainty and sample-size evidence, ordered child
+binding, duplicate rejection --- and replaces the chain condition with an
+endpoint condition:
+
+\begin{ruleenv}[Parallel topology]\label{ch09:rule:parallel}
+All components must share \emph{identical directed endpoints}: one
+common source node and one common target node, as typed coordinate
+identities on one registered test point. The set of (source, target) pairs
+across components must have exactly one element. Components that merely
+coexist, or that connect overlapping-but-distinct coordinates, do not form
+a parallel topology and are rejected.
+\end{ruleenv}
+
+The admitted arithmetic is reciprocal aggregation:
+\[
+r_{\mathrm{parallel}} = \Bigl(\sum_{i=1}^{n} \frac{1}{r_i}\Bigr)^{-1},
+\qquad
+s_{\mathrm{parallel}} = \Biggl(\;\sum_{i=1}^{n}
+\Bigl(\Bigl(\frac{r_{\mathrm{parallel}}}{r_i}\Bigr)^{2} s_i\Bigr)^{2}
+\Biggr)^{1/2},
+\]
+with interval bounds computed by the same reciprocal form on the child
+bounds, and the same minimum-confidence, minimum-sample-size,
+role-\texttt{NETWORK\_EQUIVALENT}, factory-only, replay-bound conventions
+as the series case. The weighting in $s_{\mathrm{parallel}}$ is the
+first-order sensitivity of the reciprocal sum: a child whose resistance
+is small relative to the equivalent dominates both the value and the
+uncertainty, matching the electrical intuition that the lowest-resistance
+branch dominates a parallel combination --- an intuition which, once
+again, is inherited as arithmetic, not as validated mechanism.
+
+\begin{example}[Illustrative parallel computation]\label{ch09:ex:parallel}
+All numbers illustrative. The same two components as
+Example~\ref{ch09:ex:series}, now declared with identical directed
+endpoints $A \to B$ for both. The reciprocal sum is
+$1/2.0 + 1/3.0 = 5/6$, so $r_{\mathrm{parallel}} = 1.2$ exactly in the
+declared decimal precision, below both children, with interval bounds
+$[\,1/(1/1.8 + 1/2.7),\; \max(1.2,\, 1/(1/2.2 + 1/3.3))\,] = [1.08, 1.32]$
+and the propagated standard uncertainty computed from the squared-ratio
+weights $(1.2/2.0)^2 = 0.36$ and $(1.2/3.0)^2 = 0.16$. Reading: under
+the declared topology, \emph{if} the two components were genuine
+alternative routes and \emph{if} the reciprocal law held empirically ---
+the registered redundancy hypothesis, untested --- the aggregate
+opposition would be $1.2$. Neither conditional is discharged by the
+computation, and the result object says so through its binding.
+\end{example}
+
+\subsection{Co-present guardrails are not parallel paths}\label{ch09:sec:guardrails}
+
+The electrical intuition behind reciprocal aggregation is that parallel
+resistors offer \emph{alternative routes} for the same current: adding a
+path can only decrease equivalent resistance, because flow that cannot
+pass one way passes another. Imported uncritically into the safety domain,
+this intuition produces a specific and consequential misreading, flagged
+in Appendix~I and preserved in the source audit: that multiple co-present
+guardrails --- several safety mechanisms bearing on the same behavior ---
+constitute parallel resistances, so that adding a guardrail \emph{lowers}
+total resistance and thereby \emph{weakens} the system. The arithmetic
+would even look self-consistent, which is exactly what makes it dangerous.
+The error is in the premise, not the algebra: co-presence is not
+alternativeness.
+
+Consider three scenarios, stated at the structural level the candidate can
+actually represent.
+
+\emph{Scenario 1: genuine alternatives.} Two mechanisms connect the same
+source coordinate to the same target coordinate, and the response
+suppressed along one route demonstrably appears along the other when the
+first is ablated. This --- and only this --- is the situation the
+reciprocal rule's intuition describes. Note that the italicized clause is
+an experimental outcome, not a topological declaration: it is precisely
+the registered redundancy hypothesis (ablation of genuine alternative
+branches produces the specific response predicted by reciprocal
+aggregation, above matched random-head controls), which is unproven. The
+candidate will \emph{compute} the parallel equivalent for declared
+same-endpoint components, but the computation's predictive meaning is
+suspended pending that experiment.
+
+\emph{Scenario 2: co-present guardrails on one pathway.} Three safety
+mechanisms each independently gate the same route from drive to response
+--- serially, as it were: each can block, none provides an alternative
+route around another. Modeling these as parallel is not a poor
+approximation; it is a category error with an inverted sign, since each
+added guardrail here can only maintain or increase opposition to flow,
+while the reciprocal rule asserts it decreases it. Structurally, the
+candidate resists the error at the coordinate level: guardrails
+instantiated at different layers or positions have different test-point or
+coordinate identities and therefore fail the identical-endpoints gate.
+Where a caller nonetheless declares them as same-endpoint components, the
+type system cannot detect the misdeclaration --- topology is caller-asserted
+--- and this is stated plainly as a limitation rather than hidden: the
+parallel gate checks the declared topology's coherence, not its truth.
+
+\emph{Scenario 3: correlated mechanisms.} Two mechanisms genuinely offer
+alternative routes, but they share training provenance, circuitry, or
+failure modes, so that conditions degrading one degrade the other. The
+reciprocal arithmetic, and its quadrature uncertainty combination, assume
+away exactly this correlation. The candidate cannot measure the
+correlation (no cross-input covariance is available in the current
+evidence model); what it can do is refuse to let the assumption pass
+silently, which is the function of the mandatory covariance limitation
+below.
+
+\begin{ruleenv}[Declared limitations on every parallel result]\label{ch09:rule:parallel-limits}
+Interaction, dependence, and covariance are not modeled by the parallel
+operation and are declared, not waived: every network result's operation
+binding carries the fixed covariance-limitation marker
+(\texttt{CROSS\_INPUT\_COVARIANCE\_UNAVAILABLE\_ZERO\_COVARIANCE\_APPROXIMATION}),
+and the binding validator rejects any binding in which the marker has been
+altered or removed. A parallel equivalent thus cannot be excerpted without
+excerpting its own disclaimer.
+\end{ruleenv}
+
+\section{Gain composition}\label{ch09:sec:gain}
+
+\subsection{Requirements as implemented}
+
+\begin{ruleenv}[Gain-composition admission]\label{ch09:rule:gain}
+A gain composition over stages $S_1, \ldots, S_n$ ($n \ge 1$) is admitted
+only when: each stage is an exact typed stage object with a unique stage
+identity; each stage's gain is a \texttt{GAIN\_MAGNITUDE} in
+\textsc{dimensionless} units with uncertainty and a recorded sample size,
+validated against the context's single profile; each stage's source and
+target coordinates are typed coordinate identities of \emph{identical}
+quantity kind and unit binding one common test point (a dimensionless gain
+may not map unlike coordinates); each stage's declared region is
+\texttt{ACTIVE} (enforced at stage construction); each stage's linearity
+coefficient meets the profile minimum; adjacent stages compose exactly ---
+the target coordinate of $S_i$ equals the source coordinate of $S_{i+1}$
+--- and the full coordinate path is simple and acyclic (no repeated
+coordinate); and the emitted composite binds the ordered stage digests as
+role-stamped derivation parents (\texttt{stage[0]}, \texttt{stage[1]},
+\ldots), factory-only.
+\end{ruleenv}
+
+The admitted arithmetic is the product $\prod_i g_i$, with interval bounds
+as products of child bounds, first-order product-rule propagation of
+standard uncertainty (each child's contribution weighted by the product of
+the others), minimum confidence, and minimum sample size. The composite is
+emitted as a dimensionless gain magnitude named for its end-to-end
+coordinate pair, with full provenance.
+
+\subsection{The Fisher--Rao versus Jacobian distinction, and the missing bridge}\label{ch09:sec:gain-bridge}
+
+The gain gate has a conceptual precondition that no runtime check can
+discharge, preserved in the source audit as the gain-definition conflict.
+The PCBA source defines stage gain $\beta$ by Fisher--Rao displacement
+ratios on the open probability simplex: the magnitude of induced
+displacement in an information-geometric metric, at small or large signal,
+between cause and effect coordinates. The operationalization addendum
+defines $\beta$ as a local Jacobian or projection derivative between cause
+and effect test points: a ratio of infinitesimal changes in two activation
+projections. These are distinct mathematical objects. One lives on a
+statistical manifold and measures distributional displacement; the other
+lives in activation space and measures a directional derivative. They have
+different invariances (the Fisher--Rao quantity is
+reparameterization-invariant on the simplex; the Jacobian quantity is
+basis- and projection-dependent), different units discipline (both can be
+rendered dimensionless, but by different normalizations), and no theorem
+in the candidate's corpus identifies them --- no chain rule connects a
+product of projection derivatives to a product of Fisher--Rao displacement
+ratios except under assumptions (local diffeomorphism between coordinates,
+metric compatibility) that nobody has stated, let alone verified.
+
+The candidate's handling is deliberately unheroic: the two gains are
+\emph{separately named profiles}. A gain magnitude enters the composition
+gate carrying its method identity in provenance, and compositions are
+computed within a method, under one profile. The missing bridge is
+recorded as missing. What would supply it is one of two things: a theorem,
+deriving one quantity from the other under stated conditions on the
+coordinate maps; or the registered gain-composition experiment, which
+tests empirically whether local derivative gains compose to end-to-end
+gain in the active region within stated tolerance. Until one of these
+exists, a composed gain is a product of numbers that were each,
+individually, admitted under their own definition --- and the composite's
+meaning is exactly as strong as the weakest link in that chain of
+definitions, which is to say: structural.
+
+\begin{conflict}[No licensed identification of gain profiles]\label{ch09:conf:gain}
+Fisher--Rao displacement gain and local Jacobian/projection gain remain
+distinct typed profiles in the candidate. No implemented operation
+converts between them, no composition mixes them, and no result asserts
+their equality. Any external text that multiplies a Fisher--Rao stage
+figure by a Jacobian stage figure is performing an operation the candidate
+refuses.
+\end{conflict}
+
+\section{What every aggregate binds}\label{ch09:sec:binding}
+
+Every network result --- series, parallel, or gain --- embeds a provenance
+structure and an operation binding whose fields are enumerated here,
+because the binding \emph{is} the claim. A network equivalent, stripped of
+its binding, is a number; with its binding, it is a replayable derivation
+whose every premise is named.
+
+\begin{definition}[Aggregate binding contents]\label{ch09:def:binding}
+An admitted aggregate binds, at minimum:
+\begin{enumerate}
+\item \emph{Exact child order and identity} --- the ordered, role-stamped
+digests of the components or stages, positionally contiguous from zero,
+with duplicates rejected;
+\item \emph{Topology} --- the declared chain or endpoint structure,
+re-derivable from the typed children and re-verified on replay;
+\item \emph{Profile identity} --- the calibration profile digest, binding
+model, configuration, tokenizer, weights, code revision, runtime, dtype,
+corpus, splits, seeds, alpha grid, full-scale method, fit and uncertainty
+methods, tolerances, controls, drift and expiry, and review state;
+\item \emph{Source and control evidence} --- the deduplicated source
+artifact references of all children (with conflicting metadata for one
+digest rejected), the profile's control references, and the profile's
+control bindings, carried on the result's provenance;
+\item \emph{Capability label} --- which gate was exercised
+(\texttt{SERIES\_EQUIVALENCE}, \texttt{PARALLEL\_EQUIVALENCE},
+\texttt{GAIN\_COMPOSITION});
+\item \emph{Authority-manifest identity} --- the digest of the trust
+authority's manifest under which the context was admitted;
+\item \emph{Attestation identities} --- the sorted, deduplicated digests
+of any capability attestations present in the context, \emph{possibly
+empty}: structural mode carries none, and emptiness is a recorded fact,
+not an omission;
+\item \emph{Trust mode and authorization state} --- locked to each other
+as described in Section~\ref{ch09:sec:philosophy}, both unauthenticated;
+\item \emph{Historical replay time} --- the caller-supplied
+\texttt{replay\_as\_of}, with the non-freshness semantics of
+Chapter~\ref{ch07:classification}, plus the optional clock-receipt digest
+when one was recorded;
+\item \emph{Runtime, code, and dependency identities} --- the runtime
+identifier, the code artifact reference, and the dependency-lock artifact
+reference, each an exact typed reference with digest;
+\item \emph{Covariance limitation} --- the fixed marker of
+Rule~\ref{ch09:rule:parallel-limits}, mandatory on every binding, series
+and gain included, because quadrature and product-rule propagation embed
+the same zero-covariance approximation.
+\end{enumerate}
+\end{definition}
+
+\begin{ruleenv}[Fail-closed topology]\label{ch09:rule:failclosed}
+Duplicate children (by component identity, component digest, or underlying
+resistance digest), repeated nodes in a series path, repeated coordinates
+in a gain path, self-loops, non-contiguous parent positions, non-canonical
+parent roles, unknown topology methods on replay, and any digest mismatch
+between a claimed equivalent and its factory replay are validation errors.
+There is no lenient mode, no warning-and-continue path, and no partial
+aggregate: an aggregate that cannot bind everything binds nothing.
+\end{ruleenv}
+
+The replay obligation deserves its own paragraph because it is the layer's
+strongest structural property. A network-equivalent resistance presented
+anywhere downstream --- as a child of a larger network, or as the
+resistance input to the prediction gate --- is not consumed on the
+strength of its role field. The consumer resolves its ordered parents from
+the evidence registry, type-checks each as an exact component, re-runs the
+declared topology method (series or parallel, and only those; an unknown
+method identifier fails), and requires the replayed equivalent's digest to
+equal the presented one. Nesting is therefore sound by induction: a tree
+of aggregates validates only if every internal node replays exactly over
+its leaves, and a single altered leaf invalidates every ancestor. The
+uncertainty carried at each level remains a zero-covariance approximation
+at that level --- the limitation marker propagates with the binding ---
+so what the induction guarantees is integrity of derivation, not validity
+of the composition law \cite{kennedyohagan}.
+
+\section{Replay, and the prediction gate as consumer}\label{ch09:sec:replay}
+
+The replay obligation sketched in Section~\ref{ch09:sec:philosophy} is
+concrete enough to state as an algorithm, and doing so makes the layer's
+inductive soundness inspectable.
+
+\begin{algorithm}[Exact factory replay of a network equivalent]\label{ch09:alg:replay}
+Input: an admitted operation context; a measurement value $R$ claimed to
+be a network equivalent. Output: the replayed result, or a validation
+error.
+\begin{enumerate}
+\item Require $R$ to be an exact measurement value with resistance role
+\texttt{NETWORK\_EQUIVALENT}; validate $R$ against the context (unit
+admissibility, profile binding, evidence resolution).
+\item Read $R$'s derivation parents in order. For each position $i$,
+require the parent role to be exactly $\texttt{component[}i\texttt{]}$;
+resolve the parent digest through the evidence registry; require the
+resolved object to be an exact resistance component. Any missing,
+misrolled, misordered, or mistyped parent fails.
+\item Dispatch on $R$'s provenance method identity: the series topology
+method replays through the series factory, the parallel topology method
+through the parallel factory; any other method identity fails as an
+unknown topology.
+\item Re-run the factory on the resolved children under the current
+context. This re-executes every admission gate of
+Rules~\ref{ch09:rule:series} and~\ref{ch09:rule:parallel} --- including
+recursive replay of any child that is itself a network equivalent ---
+and recomputes the arithmetic in the exact decimal context.
+\item Require digest equality between the replayed equivalent and $R$.
+Inequality --- from altered children, altered profile, altered
+tolerances, or any drift whatsoever --- fails the replay.
+\end{enumerate}
+\end{algorithm}
+
+Step 4 is where the induction closes: replay of a parent that is itself
+an equivalent triggers the same algorithm one level down, so validating
+the root of an aggregate tree validates every interior node against its
+leaves. Step 5 is where integrity becomes binary: there is no
+``approximately replayed'' outcome, and a single changed decimal
+anywhere in the tree surfaces as root-level digest inequality.
+
+The principal consumer of replayed equivalents is the prediction gate.
+When a network-equivalent resistance is presented as the
+$r_{\mathrm{eff}}$ of a candidate prediction $\hat y = a /
+r_{\mathrm{eff}}$, the gate accepts the role --- calibrated-held-out and
+network-equivalent are the only two roles it admits --- but only after
+running Algorithm~\ref{ch09:alg:replay} to completion. The design
+declines a tempting shortcut: it would have been cheaper to trust the
+role tag and the stored digest. The gate instead re-derives, because the
+role tag asserts a derivation history and the candidate's uniform rule
+is that asserted history is checked history. A prediction computed from
+a network equivalent therefore carries, transitively, the entire
+admission record of every component in the tree --- and its own status
+remains what Chapter~\ref{ch07:classification}'s boundary discipline
+makes it: a structural research calculation whose empirical adequacy is
+a registered, open question.
+
+Table~\ref{ch09:tab:ops} summarizes the three operations side by side.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}llll@{}}
+\toprule
+ & Series & Parallel & Gain composition \\
+\midrule
+Children & $\ge 2$ components & $\ge 2$ components & $\ge 1$ stages \\
+Child quantity & \texttt{EFFECTIVE\_RESISTANCE} & \texttt{EFFECTIVE\_RESISTANCE} & \texttt{GAIN\_MAGNITUDE} \\
+Child unit & \texttt{ALPHA\_PER\_ACTIVATION} & \texttt{ALPHA\_PER\_ACTIVATION} & \texttt{DIMENSIONLESS} \\
+Topology & simple directed chain & identical directed endpoints & simple coordinate chain \\
+Region gate & \texttt{ACTIVE} only & \texttt{ACTIVE} only & \texttt{ACTIVE} only \\
+Linearity gate & profile minimum & profile minimum & profile minimum \\
+Value law & $\sum_i r_i$ & $(\sum_i r_i^{-1})^{-1}$ & $\prod_i g_i$ \\
+Result role & \texttt{NETWORK\_EQUIVALENT} & \texttt{NETWORK\_EQUIVALENT} & (dimensionless gain) \\
+Capability & \texttt{SERIES\_EQUIVALENCE} & \texttt{PARALLEL\_EQUIVALENCE} & \texttt{GAIN\_COMPOSITION} \\
+Replayable & yes, by digest & yes, by digest & factory-only \\
+\bottomrule
+\end{tabular}
+\caption{The three structural network operations. All three share the
+one-profile, one-test-point, uncertainty-and-sample-size, ordered-child-binding,
+duplicate-rejection, and covariance-limitation requirements.}
+\label{ch09:tab:ops}
+\end{table}
+
+\section{The Ed25519 fixture-key mode}\label{ch09:sec:ed25519}
+
+The candidate's second trust mode, \texttt{INTEGRITY\_CONFIGURATION},
+admits optional capability attestations: Ed25519 signatures over
+canonical attestation payloads, verified against a capability authority's
+manifest, checked for capability match, profile binding, validity window
+against the replay time, and evidence presence, and replayed like
+everything else. The keys involved are \emph{fixture keys}: deterministic
+in-repository test keys, present so that the signature-verification code
+path is real, exercised, and bounded by tests, rather than a stub awaiting
+hardware.
+
+What the mode is for: integrity and replay discipline. A signed
+attestation binds a capability grant to a manifest digest, a profile
+digest, and a validity window, so that tests can verify the candidate
+rejects expired attestations, wrong-capability attestations,
+wrong-profile attestations, tampered payloads, and unknown signers ---
+the whole negative space of a capability system --- with real
+cryptographic verification rather than mocks.
+
+The verification path, when the mode is engaged, checks in sequence:
+that an attestation for the requested capability is present in the
+context (absence is a capability error, not a silent downgrade); that
+the signature verifies over the attestation's canonical bytes against
+the key identified in the authority manifest; that the attestation binds
+the context's exact profile digest; that the replay time falls inside
+the attestation's validity window; and that the attestation's evidence
+reference resolves in the registry. Each check fails closed, and the
+attestation digests --- sorted, deduplicated --- enter the operation
+binding of every result computed under the context, so that a replayed
+result re-verifies the same attestations it was computed under. In
+structural mode, by contrast, the attestation tuple is empty, the
+integrity requirement is simply not asserted, and the binding records
+the emptiness. The two modes thus differ observably, in their recorded
+bindings, while agreeing on the only point that matters for authority:
+neither is authenticated.
+
+What the mode is not, stated with the bluntness the source material uses:
+
+\begin{ruleenv}[Fixture keys confer no authority]\label{ch09:rule:fixture}
+Verification of an Ed25519 fixture-key attestation establishes only that
+a payload was signed by a key present in the repository's test
+configuration and that the structural checks pass. It is never
+independent reviewer authority, never legal authority, never product
+authority, and never Evidence-Packet authority. The authorization state
+of an integrity-mode operation remains
+\texttt{UNAUTHENTICATED\_INTEGRITY} --- unauthenticated by type --- and
+authenticated Evidence-Packet eligibility remains constant false in this
+candidate. Deterministic in-repository keys and caller-supplied replay
+time can never satisfy the eligibility preconditions (independently
+admitted authority manifest, protected key lifecycle and revocation,
+trusted current-time receipt, materialized dependency identities,
+authenticated instrument evidence, reviewed packet policy). No
+authenticated capability path is implemented: there is no code in the
+candidate that, given better keys, would begin asserting authority ---
+the assertion itself is absent from the type system.
+\end{ruleenv}
+
+The design rationale mirrors the completeness-versus-eligibility split
+that runs through the whole candidate. It would have been easy, and
+misleading, to ship the network layer with a configuration flag named
+something like ``trusted mode.'' The implemented alternative is a pair of
+modes that differ in \emph{which integrity checks run}, not in \emph{what
+authority results carry}: both are unauthenticated, and the enumeration
+contains nothing else. A future authenticated path, if ever built, would
+be a new admission --- new types, new review, new gates --- not a
+configuration change to this one.
+
+\section{Chapter boundary}\label{ch09:sec:boundary}
+
+\begin{boundary}[What the network layer establishes]\label{ch09:bound:networks}
+The network layer establishes that series, parallel, and gain arithmetic
+can be performed under exhaustive structural gating with complete,
+replayable provenance, and that every result carries its own limitations
+--- unauthenticated status, zero-covariance approximation, profile
+relativity, caller-asserted topology --- inseparably. It establishes
+nothing about whether steered activation pathways compose like circuits.
+The Guide's network rules remain, in this candidate, preregistered
+predictions with named falsifiers; the redundancy and gain-composition
+experiments have not been run; and every equivalent resistance and
+composed gain in existence under this candidate is a structural research
+calculation, Ring~4, not licensed, held.
+\end{boundary}

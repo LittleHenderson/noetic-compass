@@ -1,0 +1,401 @@
+\chapter{Worked Examples}\label{appA:examples}
+
+This appendix computes, entirely by hand, three complete examples of the
+kernel's machinery: an endomap on a three-element carrier taken through
+its functional graph and its powers to idempotence; the deterministic
+lift of the same map with all of its derived operators and its exact
+norm; and a full closure run of the normal-form catalog on a two-element
+carrier, with the shortlex table shown at every step. Nothing here
+requires the software --- every line is derivable from the definitions
+of Chapters~3--8 --- and that is the point: the examples are small
+enough to audit the implementation against, and the bounded-exhaustive
+suites of Chapter~10 are, in essence, these computations repeated over
+every small instance.
+
+\section{A three-carrier endomap and its powers}\label{appA:sec:endomap}
+
+\subsection{The object and the map}
+
+Fix the object $X = (\texttt{"X"}, (a, b, c))$: name \texttt{"X"},
+ordered carrier $(a, b, c)$, standard indices $0, 1, 2$. Define the
+endomap $f : X \to X$ by the mapping tuple
+
+\[
+f = (1, 2, 2), \qquad\text{i.e.}\qquad
+f(a) = b,\quad f(b) = c,\quad f(c) = c .
+\]
+
+Construction succeeds: the name is non-blank, the carrier elements are
+distinct and hashable, the mapping has length $3 = |X|$, and every image
+index lies in $\{0, 1, 2\}$. Since source and target are the same
+object, \texttt{is\_endomap} holds and the \texttt{Endomap} wrapper
+accepts $f$.
+
+\subsection{The functional graph}
+
+The functional graph of $f$ has an edge $x \to f(x)$ from each index:
+
+\[
+0 \longrightarrow 1 \longrightarrow 2 \circlearrowleft
+\]
+
+Index $2$ is a fixed point --- a cycle of length $\ell = 1$ --- and
+indices $0$ and $1$ form a tail feeding it. Tail lengths (distance to
+the cycle): $d(0) = 2$, $d(1) = 1$, $d(2) = 0$. The maximum tail length
+is $2 = |X| - 1$, the extreme the safe-power proof allows.
+
+\subsection{Iterates}
+
+Compute the iterates by composing mapping tuples,
+$(g \circ f)(i) = g(f(i))$:
+
+\begin{align*}
+f^1 &= (1, 2, 2) \\
+f^2 &= (f(1), f(2), f(2)) = (2, 2, 2) \\
+f^3 &= (f(2), f(2), f(2)) = (2, 2, 2) = f^2 .
+\end{align*}
+
+So the iterates stabilize at the constant map to $c$ from exponent $2$
+onward. Check idempotence of $f^2$ directly:
+$f^2 \circ f^2 = (2,2,2) \circ (2,2,2)$; entry $i$ is
+$f^2(f^2(i)) = f^2(2) = 2$, so $f^2 \circ f^2 = (2,2,2) = f^2$.
+Idempotent. Note $f$ itself is \emph{not} idempotent:
+$f \circ f = (2,2,2) \ne (1,2,2) = f$.
+
+\subsection{The factorial power by binary powering}
+
+The safe exponent is $|X|! = 3! = 6$. The implementation computes
+$f^6$ by binary powering (Chapter~9); we trace it exactly. Write the
+exponent in binary: $6 = 110_2$. Initialize the accumulator
+$r = \id_X = (0, 1, 2)$ and the base $b = f = (1, 2, 2)$, with
+$\mathrm{remaining} = 6$.
+
+\begin{center}
+\begin{tabular}{@{}clll@{}}
+\toprule
+Step & remaining (binary) & low bit & action \\
+\midrule
+1 & $110$ & $0$ & no accumulation; square: $b \leftarrow b \circ b = (2,2,2)$ \\
+2 & $11$  & $1$ & $r \leftarrow b \circ r = (2,2,2)$; square: $b \leftarrow (2,2,2)\circ(2,2,2) = (2,2,2)$ \\
+3 & $1$   & $1$ & $r \leftarrow b \circ r = (2,2,2)$; remaining becomes $0$, final squaring skipped \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+In step 2, $b \circ r$ with $r = \id$ gives $b = (2,2,2)$; in step 3,
+$(2,2,2) \circ (2,2,2) = (2,2,2)$ as computed above. The result is
+
+\[
+f^{6} = (2, 2, 2),
+\]
+
+which agrees with $f^2 = f^3 = \cdots$ from the iterate table, and is
+idempotent as the safe-power theorem requires. The returned arrow
+carries the presentation name \texttt{f\^{}(6)} --- the exponent is
+well under the $256$-bit threshold, so the compact label is plain
+decimal --- and, by extensional equality, equals the arrow $(2,2,2)$
+regardless of its name.
+
+\subsection{A contrasting endomap: a genuine cycle}
+
+For contrast, let $g = (1, 0, 2)$: the transposition of $a, b$ with
+$c$ fixed. Its functional graph is a $2$-cycle plus a fixed point;
+there are no tails. Iterates: $g^2 = (g(1), g(0), g(2)) = (0, 1, 2) =
+\id$, so $g^3 = g$, $g^4 = \id$, and in general the iterates alternate.
+The safe power is $g^{6} = (g^2)^3 = \id^3 = \id$, which is idempotent
+--- and here the factorial exponent is genuinely needed in the sense
+that odd exponents never yield an idempotent: $g^n = g$ for odd $n$,
+and $g \circ g = \id \ne g$. The two examples bracket the theorem's
+content: for tail-dominated maps the iterates stabilize early and
+$|X|!$ is generous; for permutation-like maps stabilization never
+happens, but $|X|!$ is divisible by every cycle length ($1$ and $2$
+here, with $2 \mid 6$) and so lands every point back at the start of
+its cycle simultaneously.
+
+\section{The lift of $f$, its operators, and its norm}\label{appA:sec:lift}
+
+\subsection{The matrix}
+
+Lift the endomap $f = (1,2,2)$ of the previous section. The matrix
+$A_f$ is $|X| \times |X| = 3 \times 3$, with entry $(r, c)$ equal to
+$1$ iff $f(c) = r$; column $c$ has its single $1$ in row $f(c)$:
+
+\[
+A_f \;=\;
+\begin{pmatrix}
+0 & 0 & 0 \\
+1 & 0 & 0 \\
+0 & 1 & 1
+\end{pmatrix}
+\]
+
+(columns $0,1,2$ carry their $1$ in rows $1, 2, 2$ respectively).
+
+\subsection{Fibers}
+
+The fibers of $f$ are $f^{-1}(0) = \emptyset$, $f^{-1}(1) = \{0\}$,
+$f^{-1}(2) = \{1, 2\}$, so
+
+\[
+\texttt{fiber\_sizes} = (0, 1, 2), \qquad
+\texttt{max\_fiber\_size} = 2 .
+\]
+
+\subsection{The three derived operators}
+
+\emph{Input Gram matrix} $A_f^{*} A_f$: entry $(x, x')$ is $1$ iff
+$f(x) = f(x')$. The image tuple is $(1, 2, 2)$, so indices $1$ and $2$
+collide and index $0$ is alone:
+
+\[
+A_f^{*} A_f \;=\;
+\begin{pmatrix}
+1 & 0 & 0 \\
+0 & 1 & 1 \\
+0 & 1 & 1
+\end{pmatrix}
+\]
+
+\emph{Output Gram matrix} $A_f A_f^{*}$: diagonal of fiber sizes,
+
+\[
+A_f A_f^{*} \;=\; \mathrm{diag}(0, 1, 2) .
+\]
+
+\emph{Support projector}: diagonal $0/1$ marking of nonempty fibers,
+
+\[
+P_{\mathrm{supp}} \;=\; \mathrm{diag}(0, 1, 1) .
+\]
+
+Note $A_f A_f^{*} \ne P_{\mathrm{supp}}$ precisely because the fiber
+over index $2$ has size two --- this instance witnesses the
+three-operator distinction that Chapter~9 documents and the test suite
+enforces.
+
+\subsection{Scalar invariants}
+
+Reading off the implemented consequences:
+
+\[
+\trace(A_f^{*} A_f) = 1 + 1 + 1 = 3 = |X|, \qquad
+\rk(A_f) = |\{1, 2\}| = 2 = |\im f| ,
+\]
+
+with the trace computable either as the Gram diagonal sum (three ones)
+or as the sum of fiber sizes $0 + 1 + 2 = 3$; both agree, as they
+must. $f$ is not injective (fiber size $2$ over index $2$), so
+\texttt{is\_injective}, \texttt{is\_isometry}, and
+\texttt{is\_partial\_isometry} are all false. $f$ is an endomap but
+$\texttt{mapping}[1] = 2 \ne 1$ for the image value $1$, so
+\texttt{is\_idempotent} is false --- consistent with
+$f \circ f \ne f$ above --- and \texttt{is\_orthogonal\_projector} is
+false since the mapping is not the identity tuple.
+
+\subsection{The exact norm, spectrally and by witness}
+
+\emph{Spectral route.} Group the input basis by fibers: the singleton
+fiber $\{0\}$ contributes the block $J_1 = (1)$ with eigenvalue $1$;
+the fiber $\{1, 2\}$ contributes the all-ones block
+$J_2 = \bigl(\begin{smallmatrix}1&1\\1&1\end{smallmatrix}\bigr)$
+with eigenvalues $2$ and $0$. (Here the basis is already
+fiber-grouped, so no permutation is needed.) The spectrum of
+$A_f^{*} A_f$ is $\{1, 2, 0\}$, whence
+
+\[
+\lVert A_f \rVert^2 = \max\{1, 2, 0\} = 2
+= \max_y |f^{-1}(y)|, \qquad
+\lVert A_f \rVert = \sqrt{2} .
+\]
+
+\emph{Witness route.} The unit vector
+$v = \bigl(0, \tfrac{1}{\sqrt 2}, \tfrac{1}{\sqrt 2}\bigr)$,
+supported on the largest fiber, maps under the scatter-add rule to
+
+\[
+A_f v = \Bigl(0,\; 0,\; \tfrac{1}{\sqrt2} + \tfrac{1}{\sqrt2}\Bigr)
+      = (0, 0, \sqrt 2),
+\]
+
+of norm $\sqrt 2$: the two colliding coordinates add coherently in the
+shared output slot. So $\lVert A_f\rVert \ge \sqrt 2$, and the Gram
+spectrum shows equality. The adjoint, for comparison, acts by
+gathering: $A_f^{*}(w_0, w_1, w_2) = (w_1, w_2, w_2)$.
+
+\subsection{An idempotent lift of norm $\sqrt 3$}
+
+Finally, lift $h = f^2 = (2,2,2)$, the constant map to $c$. Its matrix
+has a single nonzero row:
+
+\[
+A_h \;=\;
+\begin{pmatrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+1 & 1 & 1
+\end{pmatrix},
+\qquad
+\texttt{fiber\_sizes} = (0, 0, 3) .
+\]
+
+Every image value is $2$ and $\texttt{mapping}[2] = 2$, so
+\texttt{is\_idempotent} is \emph{true} --- indeed $A_h^2 = A_h$, since
+row $2$ of $A_h A_h$ is again all ones. Yet
+$\lVert A_h \rVert^2 = 3$, $\rk(A_h) = 1$,
+$\trace(A_h^* A_h) = 3$, and $A_h$ is not symmetric, hence not an
+orthogonal projector, and \texttt{is\_orthogonal\_projector} is false.
+This is the two-state noncontractivity fixture of Chapter~7 scaled to
+three states: an idempotent deterministic lift of norm $\sqrt 3 > 1$,
+maximally far from a contraction, produced by two applications of a
+perfectly ordinary endomap.
+
+\section{A closure run with the shortlex table}\label{appA:sec:closure}
+
+\subsection{The catalog}
+
+Take one object $B = (\texttt{"B"}, (0, 1))$ and two generators, in
+this declared order:
+
+\begin{center}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Rank & Label & Mapping & Denotation \\
+\midrule
+$0$ & \texttt{s} & $(1, 0)$ & the swap \\
+$1$ & \texttt{k} & $(0, 0)$ & the constant to carrier index $0$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Both generators are endo on $B$, so every extension is well-typed and
+the closure explores freely. The four total maps on a two-element
+carrier are $\id = (0,1)$, the swap $(1,0)$, and the two constants
+$(0,0)$ and $(1,1)$; a complete run must find all four (this catalog
+generates the full transformation monoid) and assign each its
+shortlex-least word. Recall the word convention: a word's labels apply
+left to right, so the word $(\texttt{k}, \texttt{s})$ denotes
+$s \circ k$ --- first \texttt{k}, then \texttt{s}.
+
+\subsection{The run, step by step}
+
+\emph{Seeding.} The empty word $\varepsilon_B$ at $B$, denoting
+$\id = (0,1)$, is pushed with key $(0, (), 0)$ (length $0$, empty rank
+sequence, object rank $0$). Frontier: $\{\varepsilon_B\}$; queued
+denotations: $\{(0,1)\}$.
+
+\emph{Step 1: pop $\varepsilon_B$.} Its denotation $(0,1)$ is new;
+accept it with representative $\varepsilon_B$. Extend by each
+generator in rank order:
+\begin{itemize}
+\item by \texttt{s}: word $(\texttt{s})$, denotation
+      $s \circ \id = (1,0)$ --- new; push with key $(1, (0), 0)$.
+\item by \texttt{k}: word $(\texttt{k})$, denotation $(0,0)$ --- new;
+      push with key $(1, (1), 0)$.
+\end{itemize}
+Table so far: $(0,1) \mapsto \varepsilon_B$. Queued: $(1,0), (0,0)$.
+
+\emph{Step 2: pop $(\texttt{s})$} (key $(1,(0),0)$, the least in the
+frontier). Accept $(1,0) \mapsto (\texttt{s})$. Extend:
+\begin{itemize}
+\item by \texttt{s}: denotation $s \circ s = (0,1)$ --- already
+      represented (it is $\id$); skip, do not push.
+\item by \texttt{k}: denotation $k \circ s = (k(1), k(0)) = (0,0)$
+      --- not represented, but already \emph{queued} (the word
+      $(\texttt{k})$ carries it); skip. This is the frontier
+      deduplication of Chapter~9 doing its work: the queued word
+      $(\texttt{k})$ has key $(1,(1),0)$, shortlex-smaller than the
+      candidate $(\texttt{s},\texttt{k})$ at $(2,(0,1),0)$, so
+      discarding the newcomer loses nothing.
+\end{itemize}
+
+\emph{Step 3: pop $(\texttt{k})$} (key $(1,(1),0)$). Accept
+$(0,0) \mapsto (\texttt{k})$. Extend:
+\begin{itemize}
+\item by \texttt{s}: denotation $s \circ k = (s(0), s(0)) = (1,1)$
+      --- new; push word $(\texttt{k}, \texttt{s})$ with key
+      $(2, (1,0), 0)$.
+\item by \texttt{k}: denotation $k \circ k = (0,0)$ --- already
+      represented; skip.
+\end{itemize}
+
+\emph{Step 4: pop $(\texttt{k}, \texttt{s})$.} Accept
+$(1,1) \mapsto (\texttt{k}, \texttt{s})$. Extend:
+\begin{itemize}
+\item by \texttt{s}: $s \circ (1,1) = (0,0)$ --- represented; skip.
+\item by \texttt{k}: $k \circ (1,1) = (0,0)$ --- represented; skip.
+\end{itemize}
+Frontier empty; the closure completes.
+
+\subsection{The completed table and its evolution}
+
+\begin{center}
+\begin{tabular}{@{}cllll@{}}
+\toprule
+After step & $(0,1)$ & $(1,0)$ & $(0,0)$ & $(1,1)$ \\
+\midrule
+seeding & --- & --- & --- & --- \\
+1 & $\varepsilon_B$ & --- & --- & --- \\
+2 & $\varepsilon_B$ & $(\texttt{s})$ & --- & --- \\
+3 & $\varepsilon_B$ & $(\texttt{s})$ & $(\texttt{k})$ & --- \\
+4 & $\varepsilon_B$ & $(\texttt{s})$ & $(\texttt{k})$ & $(\texttt{k},\texttt{s})$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The final catalog has $\texttt{denotation\_count} = 4$, and the
+\texttt{normal\_forms} listing, sorted by shortlex key, is
+$\varepsilon_B$, $(\texttt{s})$, $(\texttt{k})$,
+$(\texttt{k},\texttt{s})$.
+
+\subsection{Verifying leastness by enumeration}
+
+Because the instance is tiny we can confirm shortlex-leastness against
+brute force. The words of length $\le 2$ and their denotations:
+
+\begin{center}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Word & Key & Denotes & Least for its denotation? \\
+\midrule
+$\varepsilon_B$ & $(0,(),0)$ & $(0,1)$ & yes \\
+$(\texttt{s})$ & $(1,(0),0)$ & $(1,0)$ & yes \\
+$(\texttt{k})$ & $(1,(1),0)$ & $(0,0)$ & yes \\
+$(\texttt{s},\texttt{s})$ & $(2,(0,0),0)$ & $(0,1)$ & no: $\varepsilon_B$ is shorter \\
+$(\texttt{s},\texttt{k})$ & $(2,(0,1),0)$ & $(0,0)$ & no: $(\texttt{k})$ is shorter \\
+$(\texttt{k},\texttt{s})$ & $(2,(1,0),0)$ & $(1,1)$ & yes \\
+$(\texttt{k},\texttt{k})$ & $(2,(1,1),0)$ & $(0,0)$ & no \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Every denotation's least word is exactly the table's representative.
+In particular $(1,1)$ --- the constant to carrier index $1$ --- is
+reachable only at length two, and among length-two words only
+$(\texttt{k},\texttt{s})$ denotes it, so leastness there is by
+uniqueness. Queries now behave as Chapter~9 describes:
+$\texttt{normalize}((\texttt{s},\texttt{k})) = (\texttt{k})$,
+$\texttt{normalize}((\texttt{s},\texttt{s})) = \varepsilon_B$, and
+\texttt{representative\_for} on the arrow $(1,1)$ returns
+$(\texttt{k},\texttt{s})$, while on any arrow over an object other
+than $B$ it raises \texttt{UnreachableDenotationError}.
+
+\subsection{Order-dependence and the resource guard, exhibited}
+
+Two boundary behaviors of Chapter~8 are visible even at this scale.
+First, \emph{representatives depend on the declared generator order}:
+re-declaring the catalog with \texttt{k} at rank $0$ and \texttt{s} at
+rank $1$ changes no denotation and no reachability, but the length-one
+words swap keys, and the constant $(1,1)$ keeps the same spelling with
+different key $(2,(0,1),0)$ --- while in a richer catalog a
+reordering can change which of two equal-length words wins. Canonical
+forms are relative to the versioned catalog identity, exactly as the
+claim boundary states. Second, \emph{the guard fails closed}: rerunning
+this catalog with \texttt{max\_arrows} $= 3$ proceeds through steps
+1--3 and then, at step 4, finds the accepted count already at the cap
+\emph{before} inserting $(1,1)$ and raises
+\texttt{ClosureLimitExceeded} out of the constructor --- so no catalog
+object exists, and no caller can mistake the three-entry table for a
+completed closure. The reader who traces these four steps has, in
+miniature, executed every branch of the closure engine: acceptance,
+both skip paths, the push-side deduplication, completion, and (in the
+rerun) the fail-closed guard.

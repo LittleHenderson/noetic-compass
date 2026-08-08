@@ -1,0 +1,227 @@
+\chapter{Structural Completeness versus Authenticated Eligibility}\label{elig:chapter}
+
+Every evidence architecture eventually confronts the same temptation: a record that has accumulated enough structure---enough hashes, enough cross-references, enough well-typed fields---begins to \emph{look} authoritative, and the system's operators begin to \emph{treat} it as authoritative. The CAS-Ohm 1.0 candidate is built to make that slide impossible by construction. It maintains two entirely separate predicates over a research packet: \emph{structural research-packet completeness}, which asks whether the packet is internally well-formed, fully referenced, and analytically usable; and \emph{authenticated Evidence-Packet eligibility}, which asks whether any independent authority has admitted the packet's claims into a trust regime. The first predicate can be true today, inside this repository, using nothing but the candidate's own validators. The second predicate is \emph{constant false} in the current candidate, and this chapter explains at full resolution why it is false, what six preconditions would have to be independently established before it could ever become true, and why no amount of accumulation along the first axis moves a packet along the second.
+
+The design mirrors a foundational rule of the CAS Core 8 canonical-encoding and admission discipline: \emph{structural consistency is never authorization}. A byte string that canonicalizes deterministically, hashes stably, and round-trips through every validator has demonstrated exactly one thing---that it is a well-formed byte string. It has not demonstrated that its content is true, that its signer had authority, that its clock was honest, or that any reviewer ever read it. CAS-Ohm implements this rule as two independent axes so that no packet can drift from ``complete'' to ``authoritative'' by accumulation. The rest of this chapter develops each axis in turn, then examines the boundary between them: the fail-closed rejection classes, the six missing preconditions of authentication, the specific reasons that deterministic fixture keys and caller-supplied replay time can never satisfy those preconditions, the distinction between replay-time-current and authenticated-current, and the general principle---inherited from provenance-modeling practice \cite{prov}---that provenance structure alone is not truth.
+
+Throughout, the governing artifact status applies: everything in this chapter describes a candidate whose status is \textsc{open / ring 4 / not licensed / held}. The completeness predicate described here is a tested software behavior at the Gate~4 receipt; the eligibility predicate is a tested \emph{constant}, and the tests confirm precisely that it cannot be made true by any input the candidate accepts.
+
+\section{The two-axis design}\label{elig:sec:twoaxis}
+
+\begin{definition}[Structural research-packet completeness]\label{elig:def:completeness}
+A research packet is \emph{structurally complete} when every one of the following holds: it binds an exact model revision; it carries a valid calibration-profile digest; its raw artifact bytes are present and all artifact references resolve; relevant controls are bound; uncertainty is represented; every field carries lineage and status; the bound calibration profile is reviewed, nonstale, and replay-time-current at the caller-supplied \texttt{replay\_as\_of}; and at least one field is genuinely instrumented. Completeness is a property of the packet's internal structure and of the artifacts it references; it is decidable by the candidate's own validators without any external party.
+\end{definition}
+
+\begin{definition}[Authenticated Evidence-Packet eligibility]\label{elig:def:eligibility}
+A research packet is \emph{eligible} as an authenticated Evidence Packet only when an independently admitted authority manifest, a protected key lifecycle with a revocation policy, a trusted current-time receipt, materialized model, code, and runtime dependency identities, authenticated instrument evidence, and a reviewed packet policy are all simultaneously present and bound to the packet. Eligibility is a property of the packet's relationship to independent external authorities; it is not decidable by the candidate's own validators, and in the current candidate it is a stored constant equal to false.
+\end{definition}
+
+\begin{invariant}[No drift by accumulation]\label{elig:inv:nodrift}
+No sequence of operations available in the CAS-Ohm 1.0 candidate---adding fields, adding artifacts, adding hashes, adding fixture-key attestations, re-running validators, or re-canonicalizing---changes the value of authenticated Evidence-Packet eligibility. The two predicates are computed from disjoint evidence classes: completeness from the packet's internal structure, eligibility from external authorities that the candidate does not implement. A packet therefore cannot drift from complete to authoritative by accumulation.
+\end{invariant}
+
+The reason this invariant is architectural rather than procedural deserves emphasis. Many evidence systems enforce the same intent by policy: reviewers are instructed not to treat internal records as authoritative. Policy-level enforcement fails in the presence of ordinary institutional pressure, because the artifacts themselves look identical whether or not the policy was followed. The CAS-Ohm design instead makes the eligibility field a distinct typed value with no admitted write path. The tested behavior at the Gate~4 receipt includes the negative capability result: \emph{zero authenticated Evidence-Packet eligibility paths exist in the implementation}. There is nothing to misuse, because there is nothing there.
+
+\begin{remark}[Mirror of the CAS Core 8 rule]\label{elig:rem:core8}
+The CAS Core 8 contract, which CAS-Ohm inherits for all canonical encoding, already establishes that a canonical digest proves byte identity and nothing else. The two-axis packet design is the same rule lifted from the encoding layer to the evidence layer. At the encoding layer: a stable hash is not a true statement. At the evidence layer: a complete packet is not an admitted claim. In both cases the dangerous inference runs from syntactic success to semantic authority, and in both cases the candidate blocks the inference by refusing to give the syntactic layer any vocabulary in which the semantic conclusion could even be stated.
+\end{remark}
+
+\begin{example}[The accumulation scenario]\label{elig:ex:accumulation}
+Consider a hypothetical operator who assembles a packet with an exact model revision, a valid profile digest, complete raw bytes, six bound controls, propagated uncertainty on every numeric field, full per-field lineage, a reviewed and current calibration profile, and three genuinely instrumented fields---twice the minimum. The operator then attaches Ed25519 attestations produced with the repository's deterministic fixture keys, binds a canonical operation record, and replays the whole bundle successfully. Under Definition~\ref{elig:def:completeness} the packet is structurally complete, and every validator confirms it. Under Definition~\ref{elig:def:eligibility} the packet is exactly as ineligible as an empty one, because none of the six preconditions concerns anything the operator did: no independent authority admitted a manifest, no protected key ceremony occurred, no trusted timestamp was obtained, no external review of the packet policy exists. The scenario illustrates the design intent: effort along the completeness axis is real and valuable---it is what makes the packet \emph{analyzable}---but it purchases nothing along the eligibility axis, by construction.
+\end{example}
+
+\section{Structural completeness requirements}\label{elig:sec:completeness}
+
+This section discusses each completeness requirement in turn. Each requirement exists because a specific, historically observed failure mode becomes representable when the requirement is dropped; where the source audit of Chapter~4 preserved a conflict on the point, the connection is drawn explicitly.
+
+\subsection{Exact model revision}\label{elig:sec:modelrev}
+
+A packet must bind the exact identity of the model under audit: model identifier, revision, and the weights, configuration, and tokenizer digests, as materialized in the candidate's \texttt{ModelIdentity} record. The requirement is exact rather than approximate because every CAS-Ohm quantity is profile-relative (Chapter~5): an effective resistance fitted against one checkpoint has no defined meaning against another, and the candidate's comparison rules refuse cross-profile transfer without a stated bridge. An inexact model reference---a family name, a version range, a ``latest'' pointer---would make the profile digest unstable in exactly the way that silently reintroduces the cross-model comparability that the forbidden-wording list rules out.
+
+The revision binding also serves the replication half of the Gate~5 protocol (Chapter~12): replication on a held-out checkpoint is only a meaningful act if the original checkpoint is pinned beyond dispute. A packet that cannot say precisely which weights produced its observations cannot be replicated, only imitated.
+
+\subsection{Valid profile digest}\label{elig:sec:profiledigest}
+
+The calibration profile of Chapter~5 binds the full experimental context---model identities, code revision, runtime and dtype, test point, direction vector with norm, sign, and provenance, corpus manifest and rights, seeds, alpha grid, full-scale method, fit and uncertainty methods, tolerances, response-region rules, controls, drift and expiry, and review state---under one canonical digest. Completeness requires that the packet's profile digest be \emph{valid}: well-formed, resolvable to a profile record, and matching the recomputed canonical hash of that record. An invalid or dangling digest is not repaired or defaulted; the packet fails closed as \textsc{unknown-profile} (Section~\ref{elig:sec:failclosed}).
+
+The profile digest is the single point through which the eight preserved source conflicts are prevented from re-entering downstream analysis. The three incompatible full-scale methods, for instance, are distinguished precisely by producing different profile digests; a packet whose digest is unverifiable could be quietly mixing rail-and-floor normalization with corpus-percentile normalization, which is the mixed-scale error the audit was built to catch.
+
+\subsection{Raw artifact bytes and resolvable references}\label{elig:sec:rawbytes}
+
+Every artifact reference in the packet carries an identifier, a URI, a SHA-256 digest, and a media type, and completeness requires both that the referenced raw bytes exist and that every reference resolves to bytes matching its digest. The rule has two halves and both are load-bearing. The digest half prevents substitution: a reference that resolves to different bytes than were hashed is a tampered record. The existence half prevents a subtler failure, the \emph{citation-shaped void}: a packet that references raw evidence which no longer exists---or never existed---retains the typographical appearance of evidential grounding while having none. Requiring the bytes themselves keeps the packet honest about what it can actually show a future auditor.
+
+This requirement is also what makes the Gate~5 retention step (Chapter~12, step seven) enforceable in advance: a protocol that promises to retain full raw evidence can only be audited if raw evidence was a first-class packet obligation from the beginning.
+
+\subsection{Relevant controls}\label{elig:sec:controls}
+
+A packet must bind the controls relevant to its measurements---not merely reference control artifacts, but bind them through control bindings that name the test point and the relevance method by which the control is claimed to be relevant. The candidate's provenance validator enforces exact agreement between the bound control set and the declared control references; a control that is referenced but not bound, or bound but not referenced, is a structural error.
+
+The insistence on \emph{relevance} rather than mere presence reflects the control taxonomy of the closure protocol: zero-intervention, random same-norm direction, wrong-layer, wrong-token, label-shuffle, and norm-matched controls each rule out a different alternative explanation, and a control of the wrong type provides the appearance of rigor without the discriminating power. A relevance method identifier makes the claimed function of each control explicit and therefore checkable by a reviewer.
+
+\subsection{Uncertainty}\label{elig:sec:uncertainty}
+
+Numeric fields carry a typed uncertainty record: unit, standard uncertainty, interval bounds, confidence level strictly between zero and one, and the identifier of the method that produced the uncertainty. The measurement value must lie inside its own interval, the interval bounds must themselves satisfy the quantity's unit constraints, and the uncertainty unit must match the measurement unit. This is the packet-level expression of the no-bare-numbers rule of Chapter~3: a displayed number without its uncertainty is not a smaller piece of evidence, it is a different and lesser kind of object, and the completeness predicate refuses to count it.
+
+Uncertainty at the completeness layer is deliberately agnostic about method quality. A packet is complete if its uncertainties are present, typed, and internally consistent; whether the uncertainty method was \emph{appropriate} is a question for review and for the preregistered protocol, not for the structural validator. The two-axis design recurs in miniature here: structural presence of uncertainty is checkable; adequacy of uncertainty is an authority-level judgment.
+
+\subsection{Per-field lineage and status}\label{elig:sec:lineage}
+
+Every field carries provenance: source references, method identifier, and---where applicable---calibration binding, instrument identity, test point, raw artifact references, control bindings, dataset split reference, derivation parents, and operation binding. Derivation parents are ordered, contiguous from position zero, and unique in both role and identity, so that the derivation graph of any value can be reconstructed exactly and in order. Measurement-kind rules bind lineage to type: a model-derived value without derivation parents is invalid; an instrumented value without instrument, test point, calibration binding, and raw artifacts is invalid; behavioral-proxy, human-score, and LLM-score values without raw artifacts are invalid.
+
+Status accompanies lineage: each value is marked as estimate or observation, and missing or censored values carry an explicit reason rather than an empty slot. The censoring reason requirement matters most at the residual boundary (Chapter~10): a zero-compatible predicted response yields no residual quantity, and the packet records \emph{why} the quantity is absent, so that absence-by-censoring can never be confused with absence-by-omission.
+
+\subsection{Nonstale reviewed calibration profile at replay time}\label{elig:sec:nonstale}
+
+The bound calibration profile must be in an admissible review state and must be current---within its declared validity interval and drift bounds---\emph{as evaluated at the caller-supplied} \texttt{replay\_as\_of}. Two design decisions are folded into this requirement and both must be stated plainly.
+
+First, staleness is real: profiles expire. A profile with a declared drift model and expiry that has lapsed no longer describes the system it once calibrated, and a packet bound to a lapsed profile is not complete no matter how pristine its other fields are.
+
+Second, and critically, the time against which staleness is evaluated is \emph{supplied by the caller}. The candidate has no trusted clock. The \texttt{replay\_as\_of} value allows historical replay---evaluating whether a packet \emph{was} current at a stated moment---and it makes every currency verdict conditional on an unauthenticated input. The completeness predicate is therefore honest about its own epistemic standing: it asserts ``current at the time the caller claims,'' never ``current now.'' Section~\ref{elig:sec:replaytime} develops the consequences of this distinction at length; here it suffices to note that the conditionality is not a defect of the requirement but a designed refusal to overstate it.
+
+\subsection{At least one genuinely instrumented field}\label{elig:sec:instrumented}
+
+Finally, a complete packet must contain at least one field whose measurement kind is \textsc{instrumented} and which satisfies the full instrumented obligations: instrument identity, test point, calibration-profile binding, and raw artifact references. The kind non-fungibility rule of Chapter~3 governs the word ``genuinely'': a derived value does not become instrumented because a parent was, and a score does not become telemetry by proximity to a measurement.
+
+\begin{proposition}[Necessity and insufficiency of instrumentation]\label{elig:prop:instrumented}
+The presence of at least one genuinely instrumented field is necessary for structural research-packet completeness and is not sufficient for it; a fortiori it is not sufficient for authenticated Evidence-Packet eligibility.
+\end{proposition}
+
+\begin{proof}
+Necessity is by definition of the completeness predicate: the zero-instrumentation rejection class (Section~\ref{elig:sec:failclosed}) fails any packet without such a field, whatever else it contains. Insufficiency for completeness follows from the independence of the remaining requirements: a packet may hold one valid instrumented field while lacking a resolvable profile digest, missing raw bytes for another reference, or binding a stale profile, and each of those conditions independently fails the predicate. Insufficiency for eligibility follows from Invariant~\ref{elig:inv:nodrift}: eligibility is computed from external-authority preconditions disjoint from packet content, so no packet content, instrumented or otherwise, can establish it.
+\end{proof}
+
+The rationale for making instrumentation a floor rather than a preference is historical. The addendum source explicitly concedes that its own operationalization contains zero instrumented fields and is therefore not an Evidence Packet; the completeness predicate encodes that concession as a rule. A packet built entirely from design values and scores can be internally flawless and still be, evidentially, a description of intentions. One instrumented field is the minimum contact with the system under audit that distinguishes a research packet about a model from a research packet about a plan.
+
+\section{The fail-closed rejection classes}\label{elig:sec:failclosed}
+
+The completeness predicate is enforced negatively by six named rejection classes. Each class fails closed: a packet matching the class is rejected in full, with no partial admission, no repair, and no downgrade to a lesser packet type. The classes are deliberately coarse---each names a whole family of defects---because the purpose of the layer is not diagnosis but refusal; finer diagnosis belongs to tooling that operates on already-rejected packets.
+
+\begin{checkclass}[Score-only]\label{elig:cc:scoreonly}
+Every numeric field is a design value, human score, LLM score, or derivation thereof. The packet describes assessments and intentions, not measurements. Rejected: a score does not become telemetry by aggregation, and a packet of scores does not become a research packet by volume. This class enforces Proposition~\ref{elig:prop:instrumented} from the negative side and is the packet-level shadow of the \textsc{clm-cas-ohm-physical-telemetry} prohibition discussed in Chapter~12.
+\end{checkclass}
+
+\begin{checkclass}[Zero-instrumentation]\label{elig:cc:zeroinstr}
+No field satisfies the full instrumented obligations, even if some fields are neither scores nor design values. This class differs from score-only in that it also catches packets whose fields are behavioral proxies or model-derived values with intact lineage: such packets can be analytically interesting, and they are still not complete, because nothing in them was produced by an identified instrument chain against the bound profile.
+\end{checkclass}
+
+\begin{checkclass}[Missing-provenance]\label{elig:cc:missingprov}
+Some field lacks required lineage: a model-derived value without derivation parents, an instrumented value without its instrument or test point, a proxy or score without raw artifacts, a control referenced without a binding, or a dangling artifact reference. The class is triggered by any single omission because provenance is only useful when total; a packet that is ninety percent traceable offers an attacker a ten percent unaudited channel.
+\end{checkclass}
+
+\begin{checkclass}[Mixed-scale]\label{elig:cc:mixedscale}
+A value is presented under a unit inconsistent with its quantity kind, or quantities from incompatible scales are combined---a Q10 score where a Q100 constraint is declared, a fraction compared against a Q10 threshold, an effective resistance without the alpha-per-activation unit. This class is the direct descendant of the audit's first preserved conflict, in which a worked example carried a saturation threshold of $8.5$ on a scale where the correct component value was $0.85$; the rejection class makes that historical error unrepresentable in an admitted packet.
+\end{checkclass}
+
+\begin{checkclass}[Unknown-profile]\label{elig:cc:unknownprofile}
+The packet's calibration-profile digest is malformed, unresolvable, or fails recomputation against the resolved profile record, or the resolved profile is in an inadmissible review state or stale at the caller-supplied \texttt{replay\_as\_of}. Every quantity in CAS-Ohm is profile-relative; a packet without a verifiable profile is a set of numbers without a coordinate system.
+\end{checkclass}
+
+\begin{checkclass}[Tampered]\label{elig:cc:tampered}
+Any digest mismatch between a reference and its resolved bytes, any canonical-encoding failure, any attestation that fails verification or replay, or any internal inconsistency indicating post-hoc alteration. Tampering is not adjudicated; it is not distinguished from corruption; the packet is rejected identically in both cases, because the completeness layer has no authority to decide intent and does not attempt to.
+\end{checkclass}
+
+\begin{finding}[Rejection is symmetric across origins]\label{elig:find:symmetric}
+The six classes apply identically to packets generated by the candidate's own synthetic boards, packets assembled by hand, and packets produced by any future harness. The tested Gate~4 behavior includes golden rejection fixtures exercising these classes; the suite verifies not only that bad packets are rejected but that the rejection is closed---no API path admits a partially valid packet under a weaker type.
+\end{finding}
+
+\section{Authenticated eligibility: constant false}\label{elig:sec:eligibility}
+
+\begin{ruleenv}[Eligibility constant]\label{elig:rule:constfalse}
+Authenticated Evidence-Packet eligibility is a separate field from structural completeness and is \emph{always false} in the CAS-Ohm 1.0 candidate. It cannot become true until all six of the following are present: an independently admitted authority manifest; a protected key lifecycle and revocation policy; a trusted current-time receipt; materialized model, code, and runtime dependency identities; authenticated instrument evidence; and a reviewed packet policy. The candidate implements none of the six, provides no write path to the field, and the Gate~4 receipt records zero authenticated eligibility paths.
+\end{ruleenv}
+
+The six preconditions are not a checklist that the project has simply not gotten around to; each names a category of external fact that no amount of internal engineering can manufacture. The following subsections analyze them one at a time: what each precondition is, what attack or failure its absence leaves open, and why the candidate's existing machinery---however disciplined---does not and cannot substitute for it.
+
+\subsection{Independently admitted authority manifest}\label{elig:sec:authority}
+
+An authority manifest declares who may assert what: which parties, identified by which keys, are entitled to sign which classes of statement about which artifacts. The candidate's operation bindings already carry an authority-manifest digest field---the \emph{slot} exists---but the digest currently identifies a document that no independent party has admitted. An authority manifest admitted by its own subject is a description of self-trust, and self-trust is precisely the thing an Evidence Packet exists to exceed.
+
+\begin{threat}[Self-admitted authority]\label{elig:threat:selfauthority}
+If the candidate treated its own manifest as admitted, any operator with repository write access could extend the manifest to authorize any key, then sign any statement. The signature chain would verify perfectly, because verification only ever checks consistency with the manifest---and the manifest itself would be the forged object. Independence of admission is therefore not a formality: it is the only property that places the root of the trust chain outside the reach of the parties being trusted.
+\end{threat}
+
+Independent admission requires an admitting party with its own identity, its own records, and its own accountability---an institutional fact, not a software feature. Until such an admission exists, the manifest digest in every operation binding is honest metadata about an unadmitted document, and the candidate's authorization states say so: both implemented trust modes map to explicitly \emph{unauthenticated} authorization states (\texttt{UNAUTHENTICATED\_STRUCTURAL} and \texttt{UNAUTHENTICATED\_INTEGRITY}), and the validator rejects any attempt to pair a trust mode with a stronger authorization claim.
+
+\subsection{Protected key lifecycle and revocation}\label{elig:sec:keys}
+
+Authenticated evidence requires signing keys whose entire lifecycle is protected: generation in a controlled environment, storage that prevents extraction, use that is logged and rate-limited, rotation on schedule, and---indispensably---revocation that actually propagates. A signature is only as meaningful as the counterfactual it excludes; if a compromised key cannot be revoked, or if verifiers do not consult revocation state, then a valid signature excludes nothing, because the attacker signs as fluently as the owner.
+
+The candidate's Ed25519 machinery is real cryptography with a deliberately unreal key story: the keys are deterministic fixtures committed to the repository. Section~\ref{elig:sec:fixturekeys} treats the consequences in full; the present point is narrower. Even if the fixture keys were replaced tomorrow with well-generated secrets, the lifecycle precondition would remain unmet, because a lifecycle is a set of ongoing institutional processes---custody, ceremony records, rotation calendars, revocation infrastructure---and not a property of any key material as such. The precondition names a practice, not an artifact.
+
+\subsection{Trusted current-time receipt}\label{elig:sec:time}
+
+Every currency judgment in the candidate---profile staleness, validity intervals, drift expiry---is evaluated against the caller-supplied \texttt{replay\_as\_of}. This is the correct design for a replay system and a disqualifying design for an authentication system. A trusted current-time receipt is a statement from an accountable time authority, cryptographically bound to the packet, that a specific moment had genuinely arrived when the statement was made. Without it, ``current'' means ``current according to whoever called the function,'' and a verifier a decade from now cannot distinguish a packet honestly evaluated in 2026 from one assembled later and replayed with a flattering timestamp.
+
+\begin{threat}[Time travel by parameter]\label{elig:threat:time}
+An operator holding a profile that expired in March may simply supply a February \texttt{replay\_as\_of} and obtain a currency verdict of true. Within the candidate's semantics this is not an attack---the verdict genuinely means ``current as of the supplied time,'' and the supplied time is bound into the record---but any consumer who reads the verdict as a statement about the present has been misled by their own reading. The trusted-time precondition exists to close the gap between what the verdict says and what a hurried reader hears.
+\end{threat}
+
+The operation-binding schema anticipates the missing piece: it carries an optional clock-receipt digest field, present but unpopulated by any trusted source. As with the authority manifest, the slot is engineering; the receipt is an institution.
+
+\subsection{Materialized model, code, and runtime dependency identities}\label{elig:sec:materialized}
+
+The candidate's records \emph{name} their dependencies exactly: model identity with weights, config, and tokenizer digests; code references; dependency-lock references; runtime identifiers. Naming, however, is not materialization. A materialized dependency identity is one whose referent has been captured, archived, and verified end-to-end, so that an independent party can reconstruct the exact execution environment and rerun the computation. The difference is the difference between a bibliography and a library.
+
+The eligibility precondition requires materialization because authenticated evidence must survive the disappearance of its birthplace. A packet whose code reference points into a repository that has since been rewritten, or whose runtime identifier names a container image that no registry still serves, retains perfect structural validity and has lost its reproducibility. Independent recomputation---step five of the Gate~5 protocol---presupposes exactly this materialization, which is why the protocol lists authenticated execution evidence alongside it.
+
+\subsection{Authenticated instrument evidence}\label{elig:sec:instrauth}
+
+Structural completeness requires that instrumented fields bind an instrument identity---an identifier, kind, version, and implementation digest. Eligibility requires more: evidence that the named instrument actually ran, on the named test point, at the recorded time, producing the recorded raw bytes. This is attestation of \emph{execution}, not of \emph{identity}. The candidate can verify that a record claims the right instrument shape; it cannot verify that any instrument ever executed, because execution evidence must be produced by the execution environment and vouched for by an authority independent of the packet author.
+
+The gap matters because instrumented status is the load-bearing floor of the completeness predicate (Proposition~\ref{elig:prop:instrumented}). An adversarial packet author who fabricates an instrumented field---plausible raw bytes, a well-formed instrument identity, a consistent test point---passes every structural check. Only authenticated execution evidence distinguishes measurement from the simulation of measurement, and the candidate, having no such evidence channel, correctly refuses to claim the distinction.
+
+\subsection{Reviewed packet policy}\label{elig:sec:policy}
+
+The final precondition is a packet policy---the rules governing what packets may claim, how they are versioned, who may amend them, and how outcome access is controlled---that has itself been reviewed by parties independent of its authors. The candidate has packet \emph{rules} in abundance; every validator in this chapter enforces some of them. It does not have a \emph{reviewed policy}, because review is an event in the world involving reviewers, and the project's own review states record that internal cross-review and independent external review both remain open.
+
+This precondition is deliberately last in the list because it subsumes the epistemics of the other five: an authority manifest, a key ceremony, a time authority, a materialization archive, and an instrument attestation channel are each only as good as the policy that says how they compose, and that policy is only as good as the scrutiny it has survived. A policy reviewed only by its authors has survived nothing.
+
+\section{Why fixture keys and caller-supplied time can never satisfy the preconditions}\label{elig:sec:fixturekeys}
+
+Two features of the current candidate are sometimes mistaken, by hopeful readers, for down payments on authentication: the Ed25519 fixture-key attestations available in the integrity-configuration trust mode, and the replay-time machinery. Both are genuinely useful. Neither can ever mature into a satisfied precondition, and the reasons are structural, not circumstantial.
+
+The fixture keys are deterministic and committed to the repository. Every party with read access to the repository---which includes every party the attestations might be shown to---can produce a valid signature under them. A signature scheme in which verifiers can sign proves integrity of transport (the bytes were not accidentally corrupted between writer and reader, and replay reproduces them) and proves nothing about origin, because origin is exactly the property the shared key erases. This is not a weakness to be patched by hiding the keys better: the keys are fixtures \emph{by design}, so that the test suite can exercise the verification and replay code paths deterministically on any machine. Their purpose is to test the machinery, and a test instrument that doubled as a production authority would contaminate both roles. The candidate accordingly types the integrity mode's authorization state as \texttt{UNAUTHENTICATED\_INTEGRITY} and rejects, at validation time, any operation binding that pairs the integrity trust mode with a stronger authorization claim.
+
+Caller-supplied replay time fails the trusted-time precondition for the symmetric reason. The value of a time authority is that it is \emph{not} the caller: its receipts are meaningful because the party asserting the time is distinct from, and unaccountable to, the party benefiting from the assertion. \texttt{replay\_as\_of} is supplied by the most interested party in the transaction. No enrichment of the parameter---finer resolution, signed requests, logged calls---changes who chooses the value. The parameter is the right tool for its actual job, historical replay, precisely because it lets the caller ask counterfactual questions about past moments; that same property makes it permanently unusable as evidence about the present.
+
+\begin{finding}[Structural impossibility, not implementation gap]\label{elig:find:impossible}
+The fixture-key and replay-time mechanisms do not partially satisfy the key-lifecycle and trusted-time preconditions; they satisfy them to degree zero, and further engineering on either mechanism cannot change this. Both preconditions require an independent party---a key custodian with revocation authority, a time authority with accountability---and independence cannot be implemented inside the candidate, only contracted outside it. The Gate~4 suite pins this finding as tested behavior: the eligibility field is false in every fixture, including those with maximal attestation and replay success.
+\end{finding}
+
+\section{Replay-time-current versus authenticated-current}\label{elig:sec:replaytime}
+
+The distinction between the two currency notions deserves its own treatment, because it is the point at which careful readers most often stumble.
+
+\begin{definition}[Replay-time-current]\label{elig:def:replaycurrent}
+A calibration profile is \emph{replay-time-current at} $t$ when its declared validity interval and drift bounds contain $t$, where $t$ is the caller-supplied \texttt{replay\_as\_of}. The judgment is a pure function of the profile record and the parameter; it asserts nothing about when the judgment itself is made.
+\end{definition}
+
+\begin{definition}[Authenticated-current]\label{elig:def:authcurrent}
+A calibration profile would be \emph{authenticated-current} when it is replay-time-current at a time $t$ attested by a trusted current-time receipt bound to the evaluation. No such receipts exist in the candidate; the notion is defined here only to be distinguished from Definition~\ref{elig:def:replaycurrent}.
+\end{definition}
+
+\begin{proposition}[Strict one-way entailment]\label{elig:prop:oneway}
+Authenticated-current would entail replay-time-current at the attested time; replay-time-current entails authenticated-current under no circumstances realizable in the candidate.
+\end{proposition}
+
+\begin{proof}
+The first entailment is immediate from the definitions: an attested $t$ inside the validity interval is in particular a supplied $t$ inside the interval. For the second: authenticated currency requires a trusted receipt, the candidate contains no channel by which such a receipt can be produced or verified (Section~\ref{elig:sec:time}), and Invariant~\ref{elig:inv:nodrift} excludes any accumulation of unauthenticated material from synthesizing one. Hence no evaluation in the candidate, whatever its parameters, yields the authenticated notion.
+\end{proof}
+
+The practical reading of the proposition is a discipline for report language. Every currency statement the candidate emits must be read---and, in derived documents, written---with its conditionality intact: ``current at the supplied replay time,'' never ``current.'' The monograph adopts this discipline throughout, and Chapter~14's limitations catalog lists the absence of live calibration as an open boundary rather than a caveat, because a boundary is what it is: the entire authenticated-current half of the vocabulary is unoccupied.
+
+\begin{remark}[Why keep the weaker notion at all]\label{elig:rem:whyreplay}
+One might ask why a system that cannot authenticate time bothers evaluating currency at all. The answer is that replay-time currency is exactly what historical audit needs. An auditor reconstructing what the candidate would have concluded on a given date must be able to pose that date; a reviewer checking that a profile was not used past its expiry needs staleness-at-$t$ as a queryable predicate. The weaker notion is not a failed version of the stronger one; it is a different instrument, correctly labeled.
+\end{remark}
+
+\section{Provenance structure is not truth}\label{elig:sec:provnotruth}
+
+The chapter closes with the general principle underneath all of its particulars. The candidate's provenance machinery is structurally rich: typed artifact references, ordered derivation parents, control bindings with relevance methods, operation bindings carrying authority, attestation, trust, time, and dependency identities. It is tempting to regard such a structure, once fully populated and internally consistent, as self-certifying---as if a sufficiently detailed account of where a value came from amounted to evidence that the account is true.
+
+Provenance modeling practice itself rejects the temptation. The W3C PROV model \cite{prov}, which the candidate's lineage design consciously parallels, is explicit that a provenance record is an \emph{assertion} about derivation, attributable to whoever asserted it, and that consuming applications must decide separately how much trust to place in the asserter. PROV gives a vocabulary for saying ``entity $E$ was derived from entity $F$ by activity $A$ under agent $G$''; it deliberately does not give, and cannot give, a procedure for concluding that the saying is so. Structure constrains what can be coherently asserted; it cannot compel the world to have cooperated.
+
+Applied to CAS-Ohm: a research packet's provenance graph, canonically encoded and digest-stable, establishes that a specific, fully articulated \emph{story} about the packet's origin was fixed at a specific byte boundary and has not changed since. Whether the story is true is exactly the question the six eligibility preconditions exist to address---an admitted authority to anchor who may tell stories, protected keys to bind tellers to tellings, trusted time to anchor when, materialized dependencies and authenticated instruments to make the story's physical half checkable, and a reviewed policy to govern the whole. Absent those, the candidate holds the story with perfect fidelity and asserts, about its truth, precisely nothing.
+
+\begin{boundary}[Chapter claim boundary]\label{elig:bound:chapter}
+This chapter describes tested software behavior of the CAS-Ohm 1.0 candidate at the Gate~4 receipt: the structural completeness predicate, the six fail-closed rejection classes, and the constancy of the authenticated-eligibility field. It establishes no authenticated evidence, no authority, no trusted time, no instrument attestation, no reviewed policy, and no eligibility of any packet, present or future. Statements about what authenticated eligibility \emph{would} require are design analysis, not commitments that the preconditions will be pursued or met. Artifact status \textsc{open / ring 4 / not licensed / held} governs.
+\end{boundary}

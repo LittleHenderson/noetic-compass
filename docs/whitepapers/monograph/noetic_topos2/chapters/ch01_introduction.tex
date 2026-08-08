@@ -1,0 +1,1057 @@
+\chapter{Introduction}\label{ch01:chap}
+
+This monograph is a complete, self-contained development of the research
+candidate known internally as \emph{Noetic Topos 2.0}: a marked and modal
+successor to the conservative Noetic site, together with the finite-context
+theory that the successor rests on, the collapse theorem that made a successor
+necessary, and the evidence discipline under which every one of these
+statements is held. It expands the corresponding v0.2 research paper without
+changing any claim, status, or boundary recorded there. The mathematics is
+elementary category theory --- categories, presheaves, sieves, Grothendieck
+topologies, sheafification --- applied to a bookkeeping problem that arises in
+the assessment of AI systems. The bookkeeping problem is real; the mathematics
+is standard; the specific construction is a Ring~4 research candidate that has
+not been independently reviewed, and this chapter explains, among other
+things, exactly what that sentence means and why the monograph repeats it so
+often.
+
+The present chapter does six things. It describes the program context in
+which the construction arose and the structural (not numerical) difficulty
+that motivates it (Sections~\ref{ch01:sec:problem}--\ref{ch01:sec:composition}).
+It explains informally why sites and sheaves are the natural candidate
+formalism for that difficulty (Section~\ref{ch01:sec:sites}). It recounts the
+legacy construction and its intent, and states the collapse problem that the
+legacy construction runs into --- informally here, with full proofs deferred
+to Chapter~5 (Sections~\ref{ch01:sec:legacy}--\ref{ch01:sec:collapse}). It
+presents the three moves that define the successor
+(Section~\ref{ch01:sec:threemoves}) and summarizes what the finite theory
+actually establishes (Section~\ref{ch01:sec:results}). It gives a detailed
+reading guide to the remaining chapters (Section~\ref{ch01:sec:guide}).
+Finally, it states the evidence discipline --- rings, ledger proof statuses,
+and the precise scope of the executable corroboration --- and fixes the
+notation used throughout (Sections~\ref{ch01:sec:evidence}--\ref{ch01:sec:notation}).
+
+\section{The bookkeeping problem}\label{ch01:sec:problem}
+
+AI-assessment work in the Cognitive Architecture System (CAS) program, and in
+the Project Coherence effort that grew out of it, increasingly relies on
+heterogeneous evidence: observations of a system gathered under different
+prompts, different tasks, different roles, and different deployment contexts.
+An assessment pipeline may hold, at the same time, transcripts elicited under
+one prompting regime, scored behavior under another, structured probe results
+from a third, and audit records whose provenance passes through several hands
+before reaching the analyst. Each item of evidence is \emph{local}: it was
+gathered under specific conditions, and it speaks, in the first instance, only
+about the system's behavior under those conditions.
+
+The recurring difficulty is structural rather than numerical. It is not that
+the individual observations are noisy --- noise is a familiar problem with
+familiar statistical treatments --- but that the observations need not
+\emph{compose}. Two local views, each internally coherent, may fail to be
+views of any single consistent whole. Three views may be pairwise compatible
+and yet jointly incompatible. A conclusion drawn from a family of local views
+is only as good as the compatibility of that family, and ordinary aggregation
+--- averaging scores, concatenating transcripts, tallying pass rates ---
+silently assumes a compatibility that nothing in the pipeline checks.
+
+A concrete schematic (deliberately content-free, in keeping with the claim
+discipline of Section~\ref{ch01:sec:evidence}): suppose an assessment records
+a system's behavior separately under context $A$ and under context $B$, and
+each record is separately well-formed. Whether the two records can be
+regarded as restrictions of one description of the system --- whether there
+exists a single global section of which both are shadows --- is a further
+question, and it is a question with mathematical content. Sometimes the
+answer is yes and the gluing is unique; sometimes yes but not uniquely;
+sometimes no. A bookkeeping discipline for heterogeneous evidence must be
+able to pose this question precisely, answer it where an answer exists, and
+refuse to fabricate an answer where none does.
+
+The word ``bookkeeping'' is chosen deliberately. Nothing in this monograph
+measures a system, scores a behavior, or validates an assessment method. The
+subject matter is the \emph{ledger}: the formal apparatus that records which
+local views were gathered, under which admission rule each family of views
+was accepted as jointly informative, and what compatibility constraints a
+purported global conclusion must satisfy. The apparatus is useful exactly to
+the extent that it is honest --- that it refuses to remember less than it
+was told and refuses to assert more than it can check --- and the central
+technical drama of this monograph, the collapse theorem of Chapter~5, is
+precisely a case in which a proposed apparatus turned out, provably, to
+remember less than its designers intended.
+
+\section{From aggregation to composition}\label{ch01:sec:composition}
+
+To see why the problem calls for more than statistics, consider the three
+questions any discipline for local-to-global reasoning must answer.
+
+\begin{enumerate}
+\item \textbf{Which families of local views count?} Not every collection of
+observations deserves to be treated as jointly informative about a single
+target. A family gathered under systematically related conditions --- for
+instance, conditions that jointly exhaust a space of contexts --- has a
+claim to joint significance that an arbitrary grab-bag does not. The
+discipline must say, for each target of assessment, which families of
+``restrictions to sub-contexts'' are admitted as \emph{covers} of that
+target.
+\item \textbf{When are local data compatible?} Given an admitted family, the
+local data attached to its members overlap: two sub-contexts may share a
+common further sub-context, and the data restricted to that overlap must
+agree if the family is to describe one thing. The discipline must define
+compatibility on overlaps and must be able to check it.
+\item \textbf{What glues?} Given an admitted family with compatible local
+data, the discipline must say whether a global datum exists that restricts
+to the given local data, and whether it is unique. Existence without
+uniqueness, and uniqueness without existence, are both live possibilities,
+and both must be nameable.
+\end{enumerate}
+
+Aggregation answers none of these questions; it presupposes affirmative
+answers to all three. Composition --- in the mathematician's sense of
+building global objects from local ones along specified interfaces --- is
+the activity these questions describe, and the mathematics of composition
+along covers is sheaf theory. The reader who has met sheaves in geometry
+will recognize the three questions as, respectively, the choice of a
+Grothendieck topology, the matching-family condition, and the sheaf (gluing)
+condition. The reader who has not will find all three developed from
+scratch, at tutorial depth, in Chapters~2--4.
+
+\subsection{Desiderata for a bookkeeping discipline}\label{ch01:sec:desiderata}
+
+The three questions can be sharpened into desiderata against which any
+candidate formalism --- including the one this monograph develops --- can
+be audited. A bookkeeping discipline for heterogeneous assessment evidence
+should be:
+
+\begin{enumerate}
+\item \emph{Explicit about admission.} The rule by which a family of local
+views is admitted as jointly informative must be a registered, inspectable
+object, not an implicit habit of the pipeline. (In the formalism: the
+topology is declared, not inferred.)
+\item \emph{Compositional.} Admitted families must behave coherently under
+restriction and iteration: restricting an admitted family to a sub-target
+yields an admitted family, and admitting families locally on an admitted
+family admits the composite. (The second and third topology axioms.)
+\item \emph{Honest about gluing.} The discipline must distinguish, and be
+able to certify, the three outcomes: unique gluing, non-unique gluing, and
+no gluing. (The sheaf condition as a bijection demand, with its injectivity
+and surjectivity halves separately meaningful.)
+\item \emph{Provenance-preserving.} The record of \emph{why} each family
+was admitted --- under which clause, on which authority, in which review
+state --- must survive every derivation the discipline performs. (The
+marked-cover layer; by the collapse theorem, this cannot be delegated to
+the topology.)
+\item \emph{Self-limiting.} The discipline must state the boundaries of
+its own guarantees --- which data types it covers, which it provably does
+not, and which of its own components are unproven --- with the same
+precision as its positive results. (The claim-boundary apparatus of this
+monograph.)
+\end{enumerate}
+
+Desiderata (1)--(3) are satisfied by the standard site-and-sheaf machinery
+and are not project contributions. Desideratum (4) is where the legacy
+construction failed and where the successor's principal design work lies.
+Desideratum (5) is a discipline on the text itself, enforced throughout by
+the evidence rules of Section~\ref{ch01:sec:evidence}.
+
+Two adjacent temptations should be flagged immediately, because the
+discipline of this monograph blocks both explicitly (the full treatment is
+in the seed paper's gluing-boundary section and recurs in
+Chapter~12). First, \emph{probabilistic} local data do not inherit
+set-valued gluing by analogy: pairwise-compatible marginal distributions may
+admit no global joint distribution, a classical phenomenon studied by
+Vorob'ev \cite{vorobev} and, in the sheaf-theoretic language adopted here,
+by Abramsky and Brandenburger \cite{abramskybrandenburger}. Second,
+\emph{linear} or cellular data require a separate linear representation ---
+stalks, inner products, weighted coboundaries --- before spectral tools such
+as sheaf Laplacians are even defined \cite{hansenghrist}. Nothing in this
+monograph constructs either structure, and no set-valued result proved here
+licenses a probabilistic or spectral claim.
+
+\section{Sites and sheaves as the natural candidate}\label{ch01:sec:sites}
+
+Category theory supplies a compact formal answer to question (1) above: a
+\emph{site}. A site is a category --- objects are the targets of assessment
+and morphisms are the ways one target restricts to, or maps into, another
+--- together with a \emph{Grothendieck topology}, an assignment to each
+object of a collection of \emph{covering sieves}. A sieve on an object $C$
+is a set of morphisms into $C$ closed under precomposition; intuitively, a
+downward-closed family of ``ways of looking at $C$ from below.'' The
+topology's three axioms (stated and motivated in Chapter~3) guarantee that
+the covering notion behaves like a covering notion should: the trivial cover
+covers, covers restrict along morphisms, and a family that covers locally on
+a cover covers globally.
+
+Questions (2) and (3) are then answered uniformly by the \emph{sheaf
+condition}: a presheaf --- an assignment of a set of local data to each
+object, contravariant along morphisms --- is a sheaf when, for every
+covering sieve, compatible families of local data over the sieve correspond
+bijectively to global data over the covered object. The category of sheaves
+on a small site is a Grothendieck topos \cite{maclane,johnstone}, and the
+inclusion of sheaves into presheaves has a left-exact left adjoint,
+\emph{sheafification} \cite{stacks00W1}. Composing sheafification with the
+inclusion yields a left-exact idempotent monad on presheaves; this monograph
+follows the seed paper in calling such composites \emph{modalities}, and in
+calling a modality \emph{trivial} when it is naturally isomorphic to the
+identity.
+
+\subsection{A miniature vignette}\label{ch01:sec:vignette}
+
+Because the sheaf condition is the load-bearing idea of the entire
+monograph, it is worth seeing it once, informally, on a structure small
+enough to hold in the head --- a two-point miniature of the sixteen-context
+lattice of Part~II. Let the ``contexts'' be the subsets of a two-element
+set $\{1, 2\}$: the empty context $\varnothing$, the two singleton contexts
+$\{1\}$ and $\{2\}$, and the full context $\{1,2\}$, ordered by inclusion.
+Declare that the family $\{ \{1\} \subseteq \{1,2\},\ \{2\} \subseteq
+\{1,2\} \}$ \emph{covers} the full context --- the two singletons jointly
+exhaust it --- and that the empty family covers the empty context.
+
+A presheaf of ``local records'' assigns a set of records to each context
+and a restriction map to each inclusion. Consider first the presheaf $G$
+where a record over a context $V$ is an arbitrary function from $V$ to
+$\{0,1\}$ --- a bit written on each point in view --- and restriction
+forgets the bits of points no longer in view. Take a compatible pair of
+local records over the cover: a bit for point $1$ (a record over $\{1\}$)
+and a bit for point $2$ (a record over $\{2\}$); compatibility on the
+overlap is automatic, because the overlap is the empty context, over which
+$G$ has exactly one record (the empty function). The pair assembles into
+exactly one record over $\{1,2\}$, and every record over $\{1,2\}$ arises
+this way from exactly one pair. The gluing map is a bijection: $G$ is a
+sheaf for this cover. Local bit-records compose perfectly.
+
+Now consider the presheaf $H$ that assigns to \emph{every} nonempty
+context the same two-element set $\{\mathsf{p}, \mathsf{q}\}$ --- read: a
+global verdict recorded redundantly at each context --- with identity
+restrictions, and a single record over the empty context. A compatible
+pair over the cover is any pair of verdicts, one over $\{1\}$ and one over
+$\{2\}$ (again the empty overlap enforces nothing), so there are four
+compatible pairs; but there are only two records over $\{1,2\}$, each of
+which restricts to a \emph{matching} pair. The gluing map $2 \to 4$ is
+injective but not surjective: the mixed pairs $(\mathsf{p}, \mathsf{q})$
+and $(\mathsf{q}, \mathsf{p})$ are locally coherent families that no
+global record explains. $H$ is not a sheaf for this cover, and the failure
+is informative --- it says that verdict-type data cannot be treated as
+freely localizable over these covers, on pain of manufacturing global
+verdicts that nothing global supports.
+
+This tiny example already displays every phenomenon the monograph trades
+in: covers as admitted families, compatibility on overlaps, gluing as a
+bijection demand, sheafhood as a property a presheaf has \emph{relative to
+a choice of covers}, and non-sheafhood as a diagnosis rather than a
+disaster --- the associated sheaf construction of Chapter~4 repairs $H$
+canonically, and what it repairs it to is itself informative. The witness
+presheaves that separate the ACBE and RPM modalities in Chapter~9 are
+elaborations of exactly the two patterns above, and the reader may find it
+useful to keep the pair $(G, H)$ in mind as the germ of that argument.
+
+\subsection{What the formalism promised}\label{ch01:sec:promise}
+
+The promise this formalism held for the assessment program was twofold.
+First, the topology is a place to \emph{register admission rules}: to say,
+once and in one place, which families of restricted observations count as
+covers, and to have the topos machinery enforce the compatibility and gluing
+disciplines downstream. Second --- and this was the more ambitious hope ---
+different \emph{kinds} of admission rules might generate different
+topologies, whose sheafification modalities would then act as distinct
+``lenses'' on the same ambient evidence: one modality resolving evidence up
+to one kind of cover, another up to another kind, with the interaction of
+the lenses itself carrying structure. It is exactly this second promise that
+the legacy construction failed to deliver, for reasons that turned out to be
+theorems.
+
+\section{The legacy construction and its intent}\label{ch01:sec:legacy}
+
+The conservative Noetic Topos paper --- the ``legacy construction''
+throughout this monograph --- introduced a site for the registered category
+$\cC$, written $\mathrm{Noetica}$ in the source artifacts: a small concrete
+category of finite sets indexed by the forty distinguished CAS indices, with
+admissibility-relation generating maps and pullback closure. On $\cC$ it
+defined a coverage $J_{\mathrm{legacy}}$ generated by three clauses:
+
+\begin{enumerate}
+\item[(O)] \emph{jointly-surjective observational families}: families of
+maps into a target whose images jointly exhaust it;
+\item[(A)] \emph{designated ACBE descent maps}, including, by reflexivity,
+the descent map at equal contexts;
+\item[(R)] \emph{the RPM counit} $\varepsilon_X : R(X) \to X$, where the
+registered RPM data supply a unit $\eta_X : X \to R(X)$ with
+$\varepsilon_X \circ \eta_X = \id_X$ --- a section-retraction pair, and
+deliberately \emph{not} an adjunction, in keeping with the program-wide
+correction that prerequisite satisfaction is one-directional.
+\end{enumerate}
+
+Each clause encodes a defensible bookkeeping intuition, and it is worth
+recording the intuitions, because the successor preserves them even as it
+discards their legacy formalization. Clause (O) says that a family of
+observation channels which jointly exhausts a target is entitled to speak
+for the target as a whole --- the ordinary local-to-global entitlement.
+Clause (A) was meant to encode a descent discipline along designated
+context relationships: evidence gathered at related contexts should
+descend to, and be answerable at, a common context. Clause (R) was meant
+to encode a prerequisite discipline: the counit's passage from a
+prerequisite-enriched representation back to the base object was to count
+as an evidence-bearing cover, so that satisfaction established at the
+enriched level would be creditable at the base. The intuitions survive in
+the successor as the two formal coordinates of the context lattice; their
+legacy formalizations, as the next section explains, could not.
+
+The legacy paper proved a conditional topos-existence theorem: when $\cC$ is
+small, the category of sheaves $\Sh(\cC, J_{\mathrm{legacy}})$ is a
+Grothendieck topos. That theorem is valid and is not disputed anywhere in
+this monograph. The \emph{intent} attached to the construction, however,
+went further: the ACBE clause (A) and the RPM clause (R) were meant to be
+remembered by the topology as distinguishable contributions, so that later
+work could build one modal operator from the (A)-generated covers and a
+different modal operator from the (R)-generated covers --- two separate
+lenses on evidence, with the observational clause (O) supplying the common
+substrate. The names ACBE and RPM travel through this monograph as formal
+labels for these two intended lenses; the reader needs no expansion of the
+acronyms, and, as Section~\ref{ch01:sec:evidence} makes precise, the labels
+carry no empirical interpretation in any theorem below.
+
+\section{The collapse problem, stated informally}\label{ch01:sec:collapse}
+
+The intent was unrealizable, and the reason is elementary. Two facts about
+sieves, each provable in three lines (they are proved, with care, in
+Chapter~3), do all the damage:
+
+\begin{enumerate}
+\item A sieve containing the identity of its target is the \emph{maximal}
+sieve: it contains every morphism into the target, because every morphism
+factors through the identity.
+\item A sieve containing a \emph{split epimorphism} --- a map with a
+one-sided inverse on the right --- contains the identity, by closing under
+precomposition with the splitting; hence it is maximal by fact (1).
+\end{enumerate}
+
+Now look at the legacy clauses. Clause (A) includes, by reflexivity, the
+descent map at equal contexts, which is an identity; every sieve it
+generates is maximal by fact (1). Clause (R) includes the counit
+$\varepsilon_X$, which is split by the unit $\eta_X$ since
+$\varepsilon_X \circ \eta_X = \id_X$; every sieve it generates is maximal by
+fact (2). But maximal sieves belong to \emph{every} Grothendieck topology
+--- that is the first topology axiom --- so neither clause contributes
+anything that the observational clause (O) did not already provide. The
+topology generated by all three clauses equals the topology generated by (O)
+alone, and any modality built from the (A)- or (R)-generated topology is
+trivial. Chapter~5 states this as the Legacy Collapse proposition and proves
+it; the registered finite certificate independently re-executes both
+mechanisms as the checks
+\texttt{legacy\_acbe\_identity\_forces\_maximal\_sieve} and
+\texttt{legacy\_rpm\_split\_epi\_forces\_identity}.
+
+Three remarks fix the correct reading of this result.
+
+First, the collapse is \emph{not} a defect of the topos machinery, and it
+does not invalidate the legacy topos-existence theorem. What collapses is
+the intended interpretive structure. The result is best read as a theorem
+about which information a Grothendieck topology is \emph{capable} of
+retaining: sieve generation is a closure operator, closure operators forget
+how their output was reached, and a topology therefore cannot remember
+\emph{why} a family was admitted --- only \emph{that} the sieve it generates
+is covering. Provenance is exactly the kind of information a topology
+discards by design.
+
+Second, the collapse cannot be escaped by relabeling. Any successor clause
+that again contains an identity, or again contains a split epimorphism onto
+its target, generates only maximal sieves and collapses the same way. A
+successor must \emph{change the generators}, not rename them.
+
+Third, a separate and independent gap accompanies the collapse:
+subcanonicity of the legacy site --- the property that representable
+presheaves are sheaves, which is what licenses treating a site object as its
+own evidence-carrier inside the topos --- is \emph{not derivable} from the
+registered axioms. Chapter~6 exhibits a countermodel: a model of the axioms
+(finite sets of size at most two, with injections) in which a
+jointly-surjective family exists whose gluing map for a representable fails
+to be surjective. The consequence is a standing rule, not a repair: until an
+exact revised site is proved subcanonical, the distinguished legacy object
+is represented in the sheaf topos by its sheafification
+$a_{\mathrm{legacy}}(yX)$, never by silently treating $yX$ as a sheaf
+\cite{stacks00WO}.
+
+\subsection{Why a topology cannot remember: closure and
+provenance}\label{ch01:sec:closure}
+
+It is worth dwelling for a moment on the mechanism behind the collapse,
+because it explains the shape of the entire successor design and not merely
+the failure of one construction. Passing from a generating family of
+morphisms to the sieve it generates, and from a collection of generating
+sieves to the topology they generate, are both instances of \emph{closure}:
+monotone, extensive, idempotent operations that add everything the axioms
+force and record nothing about the order or origin of the forcing. Closure
+operators are forgetful by design --- that is what makes them canonical.
+The closure of a set of premises under logical consequence does not
+remember which consequences came from which premises; the subgroup
+generated by a set of elements does not remember which generator produced
+which product; and the topology generated by a set of covers does not
+remember which clause admitted which cover. Asking the generated topology
+to distinguish an (A)-cover from an (R)-cover is asking a closure operator
+to be injective on histories, which no closure operator is.
+
+Seen this way, the legacy failure decomposes into a general fact and a
+specific misfortune. The general fact: even with well-chosen generators,
+the topology would remember only the \emph{join} of the admitted covers,
+not their labels; any design that needs labels needs a second structure.
+The specific misfortune: the legacy generators were not merely unlabeled
+but degenerate --- each contained an identity or a split epimorphism, so
+each generated only the maximal sieve and contributed nothing at all, not
+even unlabeled content. The successor therefore needs two distinct
+repairs, and Moves~1 and~2 below are exactly those repairs: new generators
+that contribute genuine nonmaximal covers (curing the degeneracy), and an
+external provenance record that survives closure (curing the
+forgetfulness). Neither repair substitutes for the other. Nonmaximal
+covers without external marks would still be anonymous after closure ---
+the singleton-context example of Section~\ref{ch01:sec:move2} exhibits
+this concretely --- and marks without nonmaximal covers would be labels on
+nothing.
+
+\subsection{The two negative results are independent}\label{ch01:sec:independence}
+
+The collapse (Chapter~5) and the subcanonicity gap (Chapter~6) are
+logically independent defects, and the monograph keeps them separate
+because their repairs are separate. The collapse concerns clauses (A) and
+(R) and is repaired by the successor's new generators; it would persist
+even if the legacy site were proved subcanonical. The subcanonicity gap
+concerns clause (O) --- the jointly-surjective coverage itself --- and is
+not repaired by the successor at all: the successor's subcanonicity
+theorem (Chapter~9) covers only the new context factor $L$, and the
+monograph states explicitly, twice, that it neither repairs nor bears on
+the legacy gap. What the successor does about the legacy gap is
+disciplinary rather than mathematical: it adopts the representation rule
+that bare legacy site objects are sheafified before use whenever
+$J_{\mathrm{legacy}}$ is not known subcanonical. A reader auditing the
+construction should verify that no argument in Part~II quietly assumes
+legacy representables are sheaves; the countermodel of Chapter~6 is the
+standing reason such an assumption would be unearned.
+
+\section{The three moves of the successor}\label{ch01:sec:threemoves}
+
+The successor candidate --- Noetic Topos 2.0 --- responds to the collapse
+with three moves. Each is developed fully in Part~II of this monograph
+(Chapters~7--12); this section states them and their rationale.
+
+\subsection{Move 1: change the generators}\label{ch01:sec:move1}
+
+Since no relabeling of the legacy clauses can produce nonmaximal covers, the
+successor introduces a new, separate, finite \emph{context} dimension on
+which nontrivial coverage is possible, and leaves the legacy category
+untouched. The context factor is the sixteen-element powerset lattice
+\[
+L = \mathcal{P}(\Omega), \qquad \Omega = \{0,1\} \times \{0,1\},
+\]
+ordered by inclusion, with $U \to V$ if and only if $U \subseteq V$. The
+four atoms of $\Omega$ carry two coordinates; the first coordinate is the
+formal ACBE mark and the second the formal RPM mark. Two \emph{transverse
+partitions} of $\Omega$,
+\[
+A_i = \{(i,0),(i,1)\}, \qquad R_j = \{(0,j),(1,j)\}, \qquad i,j \in \{0,1\},
+\]
+generate two coverages: at a nonempty context $V$, the ACBE generating
+family is $\{V \cap A_0 \to V,\ V \cap A_1 \to V\}$ and the RPM generating
+family is the analogue with the $R_j$; the empty context is covered by the
+null (empty) family. The decisive structural point is that the pieces of the
+global covers are \emph{proper} subsets of $\Omega$: the new generators
+contain no identity and no split epimorphism onto their target, so the
+collapse mechanism has nothing to grip. The transversality identity
+$A_i \cap R_j = \{(i,j)\}$ --- each ACBE block meets each RPM block in
+exactly one atom --- powers essentially every theorem of the finite theory.
+Chapter~7 develops the lattice, and Chapter~9 proves that the generated
+topologies $J_A$ and $J_R$ are genuine Grothendieck topologies, are
+subcanonical, and support distinct, non-identity sheafification modalities.
+
+\subsection{Move 2: externalize provenance}\label{ch01:sec:move2}
+
+The collapse theorem says a topology cannot remember why a cover was
+admitted; the successor stops asking it to. Provenance is stored
+\emph{outside} the topology, in immutable, hash-chained \emph{marked cover}
+records that travel in parallel with the unmarked arrow families the
+topology consumes. A marked cover binds, under canonical JSON serialization
+and SHA-256 digesting: a derivation kind (generator, pullback, or common
+refinement), the target, the exact member arrows, a mark record (cover kind,
+source authority reference, assumptions, evidence references, review state,
+provenance chain), and the sorted set of parent-cover digests. The integrity
+rules are fail-closed: unknown or duplicate keys are rejected, derived
+records require a parent resolver that rehashes every parent digest and
+recomputes the child, and a common refinement lacking exactly one ACBE and
+one RPM generating parent is rejected rather than treated as evidence.
+
+The division of labor is strict and is stated as an invariant of the design:
+\emph{the topology consumes the unmarked family; governance and audit code
+consume the marked record}. The necessity of the parallel record is not
+hypothetical --- it is exhibited inside the finite model itself. At a
+singleton context $\{(i,j)\}$, the bare ACBE and RPM families coincide as
+arrow lists, so the topology literally cannot distinguish them; the marked
+records carry different cover kinds and different digests, and the
+certificate confirms both facts
+(\texttt{singleton\_unmarked\_families\_coincide},
+\texttt{singleton\_marked\_covers\_distinct}). Provenance survives exactly
+where the topology forgets. Chapter~8 develops the mechanism, with the
+claim boundary --- repeated there and binding here --- that the mark
+mechanism is an external serialization and audit invariant, not a proof of
+an internal topos object, not a colored-site construction from the
+literature, and not yet the subject of a dedicated novelty review.
+
+\subsection{Move 3: name the ambient package honestly}\label{ch01:sec:move3}
+
+The third move is a naming decision with mathematical content. It would be
+natural --- and it would be wrong --- to define the successor as the
+category of sheaves for the \emph{join} of all the topologies in play, the
+``fully resolved'' subtopos. Wrong, because on that subtopos the ACBE and
+RPM reflectors provably restrict to the identity (every jointly resolved
+object already satisfies both sheaf conditions), which would erase the modal
+structure a second time --- an ironic repetition of the collapse by
+over-resolution rather than by bad generators. The successor is therefore
+defined as the \emph{ambient} package: the presheaf topos
+$\mathcal{E}_{\mathrm{amb}} = \PSh(\cC \times L)$, equipped with three
+topology refinements (observational in the $\cC$ coordinate, $J_A$ and $J_R$
+in the $L$ coordinate), their three sheafification modalities
+$M_{\mathrm{obs}}, M_A, M_R$, the resolved subtopos
+$\mathcal{E}_{\mathrm{res}}$ for the joined topology, and the external mark
+record. The underlying topos candidate is
+$\mathrm{NoeTop}_2 = \mathcal{E}_{\mathrm{amb}}$; the full research object
+is the structured package
+\[
+\mathrm{NoeSystem}_2 = \bigl(\mathrm{NoeTop}_2,\ M_{\mathrm{obs}},\ M_A,\
+M_R,\ \mathcal{E}_{\mathrm{res}},\ \textsc{external mark record}\bigr),
+\]
+which is a package, not itself a topos or category, with the provenance
+record as external audit data rather than an internal topos object. The
+intended discipline: raw and partially resolved evidence lives in the
+ambient topos, acted on by the modalities; only jointly resolved objects
+enter $\mathcal{E}_{\mathrm{res}}$. Chapter~12 develops the ambient program
+and its open obligations, including the explicit boundary that the v0.1
+executable schema is deliberately narrower than the ambient construction:
+typed observational covers in the $\cC$ coordinate, general arrows of
+$\cC \times L$, and full product-site covers remain \textsc{open}.
+
+\section{What the finite theory establishes}\label{ch01:sec:results}
+
+On the context factor $L$ alone --- sixteen objects, small enough to check
+exhaustively --- the theory is complete, and Chapters~9--10 prove all of
+it. In summary, with ledger identifiers attached as recorded in the
+registered theorem ledger:
+
+\begin{enumerate}
+\item \emph{Generated topologies} (\textsc{thm-nt2-marked-coverage}): the
+ACBE and RPM generating families form pullback-stable coverage bases and
+generate Grothendieck topologies $J_A$ and $J_R$ on $L$.
+\item \emph{Proper global covers}
+(\textsc{thm-nt2-nontrivial-global-covers}): at the global context $\Omega$
+both generating families consist of proper pieces, and the generated sieves
+are nonmaximal --- the exact point at which the successor escapes the
+collapse.
+\item \emph{Subcanonicity} (\textsc{thm-nt2-subcanonical-context-factor}):
+$J_A$ and $J_R$ are subcanonical on $L$. This concerns $L$ only and neither
+repairs nor bears on the legacy subcanonicity gap.
+\item \emph{Distinct, non-identity modalities}
+(\textsc{thm-nt2-distinct-modalities}): explicit finite witness presheaves
+$F_A$ and $F_R$ --- bit assignments on complete blocks --- separate the two
+sheaf subcategories: $F_A$ is a $J_A$-sheaf but not a $J_R$-sheaf, and
+symmetrically. Hence the reflective subcategories are distinct and neither
+sheafification modality is trivial. The scope is $\PSh(L, \Set)$; the
+ambient lift proposed in the v0.1 specification contained an error, the
+corrected witness remains unverified, and ambient distinctness is
+\textsc{open}.
+\item \emph{The join} (\textsc{thm-nt2-join-discrete-context}): the common
+refinement of the two global covers is the four-singleton cover, and
+$J_A \vee J_R$ is the topology generated by the singleton partition ---
+equivalently, the ordinary union topology on the finite powerset lattice.
+\item \emph{Explicit reflectors}: a product-over-blocks construction
+realizes each associated-sheaf reflector concretely, verified directly
+against the universal property rather than through the general plus
+construction.
+\item \emph{The composition theorem}
+(\textsc{thm-nt2-modality-composition}, v0.2): the two modalities satisfy
+unit-compatible canonical natural isomorphisms
+$M_A M_R \cong M_{\mathrm{atom}} \cong M_R M_A$, and either composite is
+naturally isomorphic to sheafification for the joined topology.
+\item \emph{Identity on the resolved subcategory}
+(\textsc{thm-nt2-resolved-modalities-identity}): every sheaf for the join
+is separately a sheaf for each factor topology, so both reflectors restrict
+to the identity on the resolved subcategory --- the formal content of
+Move~3.
+\end{enumerate}
+
+One consequence deserves its own statement, because it corrects a live
+narrative risk rather than fulfilling a hope.
+
+\begin{finding}[Distinct but commuting]\label{ch01:finding:commuting}
+The finite-context modalities are distinct and non-identity, yet they
+commute up to canonical natural isomorphism. Earlier informal program
+materials hoped for interacting, order-sensitive modal structure;
+distinctness does not imply noncommutation, no current artifact licenses a
+noncommutation claim, and any successor construction seeking genuinely
+order-sensitive modalities must change the site again rather than
+reinterpret this one.
+\end{finding}
+
+Beyond the finite theory, the monograph carries exactly one conjecture and a
+register of open obligations. The conjecture
+(\textsc{thm-nt2-product-site-backward-compatibility}, status
+\textsc{proof required}) is the product-site round trip: after atomic
+resolution of the context factor, an equivalence
+$\mathcal{E}_{\mathrm{res}} \simeq \mathcal{E}_{\mathrm{legacy}}^{4}$ under
+which a neutral-channel embedding is fully faithful and evaluation at the
+neutral channel is naturally isomorphic to the identity. Two round trips are
+required and neither is complete: the categorical comparison, and the strict
+serialization requirement that registered identifiers and canonical payload
+hashes survive migration bit-for-bit --- a categorical natural isomorphism
+is not a serialization receipt. This monograph claims no backward
+compatibility. And even a proved round trip would expose an expressivity
+boundary, stated in the seed paper and developed in Chapter~12: the resolved
+product is four \emph{independent} legacy channels with no remaining
+overlap, transition law, or cross-atom coupling, so the sixteen-context
+construction is a finite separation and provenance reference model, not a
+substantively rich final semantics for contextual cognition. The registered
+obligation \textsc{obl-nt2-cross-context-semantics} demands a canonical
+decision between naming the ambient modal package as principal semantics and
+adding typed coupling with proved coherence; v0.1 licenses neither branch.
+
+\section{Reading guide}\label{ch01:sec:guide}
+
+The monograph is organized in two parts around a hinge. Part~I
+(Chapters~2--6) is background and diagnosis: the standard category theory
+needed to read everything else, and the two negative results about the
+legacy construction. Part~II (Chapters~7--12) is the successor: the finite
+context factor, the provenance layer, the finite theorems, the reflector
+calculus, the executable certificate, and the ambient program. Four
+appendices collect exhaustive finite data. In more detail:
+
+\begin{description}
+\item[Chapter 2 (Categories, functors, and presheaves: a primer).] A
+tutorial-depth development of categories, functors, natural transformations,
+opposite categories, presheaves, representables, the Yoneda lemma (with a
+full proof in the poset case, which is the case the finite theory lives in),
+and limits with emphasis on pullbacks --- including the fact, used
+constantly, that pullbacks in a poset are meets and in a powerset lattice
+are intersections. Everything in the chapter is standard material
+\cite{awodey,riehl,maclanecwm,maclane}, presented as such, with many worked
+examples on two-, three-, and four-element posets chosen to rehearse in
+miniature the sixteen-element lattice of Part~II.
+\item[Chapter 3 (Sieves, Grothendieck topologies, and sites).] Sieves and
+their identification with subfunctors of representables; pullback sieves;
+the three topology axioms with intuition; coverage bases and the generated
+topology; the two elementary maximality facts that drive the collapse; a
+complete enumeration of all Grothendieck topologies on the two-element
+chain; and the union coverage on a powerset lattice. Again standard
+material \cite{maclane,stacks00ZC,johnstone}, at tutorial depth.
+\item[Chapter 4 (Sheaves, sheafification, and modalities).] Matching
+families, the sheaf condition, sheafification and its exactness
+\cite{stacks00W1}, subcanonicity and representable sheaves
+\cite{stacks00WO}, and the definition of modality (left-exact idempotent
+monad from sheafification-then-inclusion) with the triviality criterion.
+\item[Chapter 5 (The legacy construction and the collapse).] The registered
+legacy site in full; the Legacy Collapse proposition with proof; what the
+collapse does and does not invalidate; the corrigendum reading.
+\item[Chapter 6 (The countermodel).] Non-derivability of legacy
+subcanonicity: the injections-on-small-sets countermodel, worked in
+complete detail, and the resulting representation rule for legacy objects.
+\item[Chapter 7 (The context lattice).] The lattice $L$, its
+combinatorics (sixteen contexts, eighty-one inclusion arrows), the
+transverse partitions, the generating families, and the transversality
+identity.
+\item[Chapter 8 (Marked covers).] The provenance layer: record schemas,
+canonical serialization, hash chaining, derivation kinds, the fail-closed
+integrity rules, the singleton-context necessity example, and the claim
+boundary on the mechanism's mathematical status.
+\item[Chapter 9 (The finite theorems).] Full proofs of the coverage-basis
+lemma, the generated-topology theorem, properness of global covers,
+subcanonicity, the witness-presheaf distinctness theorem, and the join
+identification.
+\item[Chapter 10 (Reflectors and composition).] The explicit
+product-over-blocks reflector; its sheafhood; the universal-property
+verification; the composition theorem with its unit-compatibility and
+naturality checks; identity on the resolved subcategory; the
+distinct-but-commuting finding.
+\item[Chapter 11 (The executable certificate).] What the finite-site
+checker and the modality-composition verifier actually execute, item by
+item; the formal (Lean) layer and its limits; and the certificate's own
+claim boundary, quoted and adopted.
+\item[Chapter 12 (The ambient program).] The ambient package
+$\mathrm{NoeSystem}_2$; the gluing boundary for probabilistic and linear
+data; the backward-compatibility conjecture and the expressivity boundary;
+related work and novelty status; the full register of open obligations and
+admission gates.
+\item[Appendix A (Context tables).] The sixteen contexts of $L$ with their
+partition pieces and inclusion data.
+\item[Appendix B (Sieve census).] The enumeration underlying the
+certificate's sieve counts.
+\item[Appendix C (Witness tables).] The witness presheaves $F_A$ and $F_R$
+tabulated on all sixteen contexts, with the gluing computations displayed.
+\item[Appendix D (Glossary).] Project terms, ledger identifiers, and status
+vocabulary.
+\end{description}
+
+The logical dependencies among the chapters are summarized below; a
+chapter presupposes the chapters listed against it and nothing else beyond
+Chapter~1.
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Chapter & Depends on & Character \\
+\midrule
+2 & --- & standard background \\
+3 & 2 & standard background \\
+4 & 2, 3 & standard background \\
+5 & 3 & project diagnosis (negative) \\
+6 & 3, 4 & project diagnosis (negative) \\
+7 & 2, 3 & project construction \\
+8 & 7 & project construction (external layer) \\
+9 & 4, 7 & project theorems (finite, proved) \\
+10 & 9 & project theorems (finite, proved) \\
+11 & 9, 10 & corroboration record \\
+12 & 5--10 & program, conjecture, obligations \\
+A--D & as cited & exhaustive finite data \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\emph{Prerequisites and pedagogy.} The monograph presupposes comfort with
+naive set theory --- sets, functions, images, unions, intersections,
+partitions --- and with reading and writing elementary proofs; a reader
+wanting a refresher on proof technique may consult a standard
+introduction such as Hammack's \emph{Book of Proof} \cite{bookofproof}. No
+prior category theory is assumed: Chapters~2--4 build everything used
+later, and they build it on posets wherever posets suffice, because the
+finite theory of Part~II lives entirely on a poset and the poset case
+strips away every distraction. The tutorial chapters follow three habits
+throughout. First, every abstract definition is followed immediately by
+its instantiation on a two-, three-, or four-element poset, and the same
+small posets recur so that the reader accumulates a portable laboratory.
+Second, enumerations are actually carried out --- all sieves on a small
+object, all topologies on the two-element chain --- rather than gestured
+at, because the exhaustive habit is precisely the habit the certificate of
+Chapter~11 mechanizes at scale. Third, exercises are interleaved where
+working a computation by hand is more instructive than reading it;
+solutions are not provided, but every exercise is within reach of the
+worked examples that precede it, and none is needed for the logical
+development.
+
+\emph{Suggested paths.} A reader new to category theory should read
+Chapters~2--4 in order, then 5--6, then Part~II linearly; the small-poset
+examples of Chapters~2--3 are designed so that every later construction has
+already been met in miniature. A reader fluent in topos theory can skim
+Chapters~2--4 for notation, read Chapter~5 and Chapter~6 for the negative
+results (both are short), and then work through Chapters~7--12, consulting
+the appendices as the exhaustive data are cited. A reader whose interest is
+the evidence discipline itself --- what is proved, what is corroborated,
+what is open --- should read Sections~\ref{ch01:sec:evidence} below,
+Chapter~11, and Chapter~12, in that order, before anything else.
+
+\section{Evidence discipline}\label{ch01:sec:evidence}
+
+Nothing in this monograph is peer-reviewed, and the monograph is written so
+that this fact is impossible to lose. This section states the discipline
+once, in full; individual chapters repeat the locally relevant boundaries in
+\emph{Claim Boundary} environments at the point of use.
+
+\subsection{Artifact status and rings}\label{ch01:sec:rings}
+
+The governing artifact status, inherited verbatim from the v0.2 seed paper
+and its source basis, is: \textsc{draft / gate 1 research candidate /
+ring 4 / not licensed / held}. Ring~4 is the program's outermost evidence
+ring: material that may be developed, executed, and internally corroborated,
+but that licenses no external claim --- no empirical claim, no causal claim,
+no safety claim, no product claim --- and that may leave the ring only
+through the explicit admission gates listed in Chapter~12. Those gates
+include, among others: independent category-theory review of every
+proposition and theorem; proof-assistant formalization of the finite site,
+topologies, witnesses, reflectors, join, and natural isomorphisms; the
+typed observational-cover construction; the product-site lift; the
+backward-compatibility conjecture with both round trips; the
+cross-context-semantics decision; separate probability-gluing theorems; a
+dedicated novelty search for the marked-cover mechanism; registry,
+authorship, and IP reconciliation; and external referee review with
+explicit confirmation that no empirical or product wording was licensed.
+Drafting this monograph promotes no claim and closes no gate.
+
+\subsection{Source basis}\label{ch01:sec:sources}
+
+Every project fact, status, hash, and count in this monograph comes from the
+registered source artifacts and from nowhere else: the formal specification
+\texttt{NOETIC\_TOPOS\_2\_SPEC\_v0.1.md} (SHA-256
+\texttt{156A5D8C5320F36E81E3B46473BA8A038B35672DCD28839A404D96A3DB1A763A});
+the theorem ledger v0.1 (digest abbreviated \texttt{52E00065}\ldots\ in the
+seed paper, full value in the registered ledger); the proof-obligation
+ledger v0.1 (abbreviated \texttt{FD567E38}\ldots); the finite model
+certificate \texttt{FINITE\_MODEL\_CERTIFICATE\_v0.1.json} (model identifier
+\textsc{nt2-context-2x2-transverse-partitions}); the composition proof
+\texttt{MODALITY\_COMPOSITION\_PROOF\_v0.1.md} and its certificate; the
+publication delta at base commit
+\texttt{a1cd990109e7561dfd03949bf0e1653461c7ae44}; and the reference
+implementation under \texttt{src/noetic\_topos2/}. Where this monograph
+states a number --- sixteen contexts, eighty-one arrows, and so on --- the
+number is either proved in the text from the definitions or attributed to
+the certificate; where a detail is unspecified in the sources, the monograph
+says so rather than supplying one.
+
+\subsection{Ledger proof statuses}\label{ch01:sec:statuses}
+
+Every theorem-shaped statement in this monograph carries the proof status
+recorded in the registered theorem ledger, and the status vocabulary is
+fixed as follows. \textsc{informal proof present} means a written
+mathematical proof exists in the source artifacts and is reproduced or
+expanded here; all finite-context theorems of Chapters~9--10 carry this
+status, together with exhaustive executable corroboration.
+\textsc{conjecture} / \textsc{proof required} means precisely what it says;
+the backward-compatibility statement is the only such item.
+\textsc{open} marks constructions specified but not built or not proved
+(the typed observational covers, the ambient lift of distinctness, the
+product-site lift of the composition theorem, the cross-context semantics
+decision). \textsc{novelty unassessed} is carried by all eight
+theorem-ledger records: no dedicated literature search has been performed,
+and this monograph accordingly never calls any project construction a new
+theorem in the scholarly sense. Standard results are cited to the standard
+literature \cite{maclane,johnstone,stacks00ZC,stacks00W1,stacks00WO} and
+presented as standard; the boundary between textbook material and project
+candidate is marked in every chapter.
+
+\subsection{What exhaustive finite corroboration does and does not
+mean}\label{ch01:sec:corroboration}
+
+The finite theory of Part~II is small enough to check by exhaustive
+computation, and the project does so with two independent executable
+layers, described fully in Chapter~11. The finite-site checker verifies,
+over all four atoms and sixteen contexts: properness and joint
+exhaustiveness of the global covers, pullback stability of every generating
+cover, sheafhood of all sixteen representables, functoriality and the four
+sheaf/non-sheaf verdicts for the witness presheaves, the transverse
+refinement identity, the singleton coincidence-and-distinctness pair for
+marked covers, marked-cover round-trip and parent-provenance binding, and
+both legacy collapse mechanisms --- twenty-three registered checks, all
+passing. The modality-composition verifier computes exact finite
+Grothendieck topologies by enumerating all 298 sieves over the sixteen
+contexts, saturating maximality, pullback stability, and local character to
+a fixed point; it reports 168 covering sieves for both the joined and
+singleton presentations, verifies the Grothendieck axioms independently on
+both computed topologies, and checks the composite decompositions, both
+canonical natural isomorphisms, inverse laws, restriction naturality,
+commutation naturality, and unit compatibility across 18 executable
+fixtures and 3{,}012 restriction squares. At the bound commit, the
+finite-site suite (8 tests), the modality-composition suite (6 tests), and
+the pinned Lean Gate~1 verifier pass; the Lean scope covers four-atom
+exhaustiveness, proper global pieces, transverse refinement, and
+witness-map lemmas, and does \emph{not} formalize the sixteen presheaves,
+sheaf conditions, topology generation, reflector universal properties, the
+composition theorem, the product-site comparison, or the legacy round trip.
+
+The two executable layers differ in method: the finite-site checker
+(described in the sources as dependency-free) works from the coverage bases
+and checks basis-level conditions directly, while the composition verifier
+constructs the full topologies by saturating all sieves under maximality,
+pullback stability, and local character to a fixed point and then
+re-verifies the Grothendieck axioms independently on the computed result.
+The methodological difference means the two layers do not simply re-run one
+encoding of ``topology'' twice; the deterministic run at the bound commit
+passes both.
+
+What this corroboration \emph{means}: for a statement quantified over a
+finite structure, an exhaustive check of every instance is a genuine and
+strong form of evidence --- there is no sampling, no approximation, and no
+untested case within the model checked. It caught, during development,
+exactly the kinds of slips (a nonfunctorial witness candidate, an unstated
+empty-context convention) that informal proofs are prone to.
+
+What it does \emph{not} mean, in the certificate's own words, adopted here
+as governing: exhaustive execution over one sixteen-object site
+``corroborates the finite proofs; it is not proof-assistant verification,
+external peer review, empirical validation, or a product-claim license.''
+Corroboration is relative to the implementation's encoding of the
+definitions; a shared misreading of a definition by prover and programmer
+would survive it. That is why proof-assistant formalization and independent
+review remain listed as open admission gates rather than as formalities.
+
+\subsection{Formal marks carry no empirical
+interpretation}\label{ch01:sec:marks-boundary}
+
+\begin{boundary}\label{ch01:bdy:marks}
+The coordinate names ACBE and RPM, wherever they appear in Part~II, are
+formal labels preserved for controlled migration vocabulary. They carry no
+empirical interpretation until a separate operationalization and validation
+record exists. No theorem in this monograph attaches meaning to them beyond
+their combinatorics, and no theorem here establishes that either coordinate
+detects a cognitive, causal, safety, or alignment property.
+\end{boundary}
+
+\subsection{How to read a claim in this monograph}\label{ch01:sec:reading-claims}
+
+Because the status vocabulary carries real weight, two worked parses may
+help calibrate the reader.
+
+\emph{Parse 1: a finite theorem.} The distinctness theorem of Chapter~9
+(ledger \textsc{thm-nt2-distinct-modalities}) asserts that two explicitly
+constructed presheaves separate the two sheaf subcategories of
+$\PSh(L, \Set)$. Its full epistemic position is: a written informal proof
+exists (reproduced and expanded in Chapter~9); every step quantifies over
+a sixteen-object structure and has been exhaustively executed by the
+certificate (the checks \texttt{acbe\_witness\_functorial},
+\texttt{acbe\_witness\_is\_acbe\_sheaf} true,
+\texttt{acbe\_witness\_is\_rpm\_sheaf} false, and their RPM-side
+counterparts); the statement's scope is $\PSh(L, \Set)$ and \emph{not} the
+ambient category, because the v0.1 ambient-lift witness was found to be
+erroneous and the corrected ambient statement is \textsc{open}; the ledger
+record includes the ambient-lift sentence, and the publication layer ---
+followed by this monograph --- corrects it; the result is
+\textsc{novelty unassessed} and has no independent review. Every clause of
+that position is part of what the theorem \emph{is}, here.
+
+\emph{Parse 2: the conjecture.} The backward-compatibility statement
+(ledger \textsc{thm-nt2-product-site-backward-compatibility}) is written
+in theorem-like language --- an equivalence, a fully faithful embedding, a
+natural isomorphism --- but carries status \textsc{proof required}. In
+this monograph such a statement licenses exactly nothing: no chapter may
+use it as a premise, no summary may report it as a property of the
+construction, and the correct citation form is ``conjectured, proof
+required.'' The same reading applies to every \textsc{open} item: the
+ambient lift, the typed observational covers, the product-site lift of the
+composition theorem, and the cross-context-semantics decision are
+specifications of future work, not results.
+
+The general rule the parses instantiate: in this monograph, a claim is the
+conjunction of its mathematical statement and its recorded status, and
+quoting the former without the latter is a misquotation.
+
+\subsection{Relation to the seed artifacts}\label{ch01:sec:seed-relation}
+
+The monograph's textual relationship to its sources is expansion, not
+revision. The v0.2 research paper (which itself superseded a v0.1 white
+paper) fixed the claim set: the collapse diagnosis, the countermodel, the
+finite-context theorems and composition law, the marked-cover mechanism,
+the ambient package, the conjecture, and the open-obligation register.
+This monograph adds tutorial background (Chapters~2--4), fully expanded
+proofs where the paper compressed them, worked small-poset laboratories,
+exhaustive appendix tables, and extended discussion of the evidence
+discipline --- and it adds no new mathematical claim, promotes no status,
+and closes no obligation. Where the monograph's expanded prose and a
+source artifact could be read to differ, the source artifact governs; the
+statuses, hashes, and counts of Section~\ref{ch01:sec:sources} are the
+fixed points of that ordering. Readers who need the compressed,
+single-artifact form of the material should read the v0.2 paper; readers
+who need the executable ground truth should read the certificate and the
+implementation under \texttt{src/noetic\_topos2/}; this monograph sits
+between them as the didactic layer.
+
+\subsection{Writing rules}\label{ch01:sec:rules}
+
+\begin{ruleenv}[Claim discipline for this monograph]\label{ch01:rule:claims}
+(i) Standard mathematics is presented at tutorial depth, cited to the
+standard literature, and never presented as project novelty. (ii) Project
+constructions are presented with their ledger statuses attached and are
+never called novel; all carry \textsc{novelty unassessed}. (iii) No
+sentence asserts an empirical, causal, safety, or product property of any
+AI system. (iv) Hashes, counts, and identifiers appear only as recorded in
+the source artifacts; unspecified details are declared unspecified. (v)
+Claim boundaries travel with the material they bound: each chapter restates
+the boundaries relevant to its content.
+\end{ruleenv}
+
+\section{Notation and conventions}\label{ch01:sec:notation}
+
+\begin{notation}\label{ch01:not:general}
+Categories are written in calligraphic or roman letters; $\cC$ is reserved
+for the registered legacy category ($\mathrm{Noetica}$ in the source
+artifacts). $\Set$ is the category of sets and functions in a fixed
+Grothendieck universe; smallness assumptions are stated where used.
+$\Ob(\cC)$ is the class of objects; $\Hom_{\cC}(A,B)$ the set of morphisms
+from $A$ to $B$; $\id_A$ the identity. Composition is written
+$g \circ f$ for $f : A \to B$ followed by $g : B \to C$, applied right to
+left. $\PSh(\cC)$ denotes the category of presheaves
+$\cC^{\mathrm{op}} \to \Set$, and $\Sh(\cC, J)$ the full subcategory of
+sheaves for a topology $J$. The representable presheaf of an object $C$ is
+written $yC = \Hom_{\cC}(-, C)$.
+\end{notation}
+
+\begin{notation}\label{ch01:not:posets}
+A poset $(P, \le)$ is regarded as a category with a unique morphism
+$U \to V$ exactly when $U \le V$; Chapter~2 verifies that this is a
+category and that all diagrams in it commute. In the powerset lattice
+$\mathcal{P}(X)$ the order is inclusion, meets are intersections, and joins
+are unions. The successor's context lattice is
+$L = \mathcal{P}(\Omega)$ with $\Omega = \{0,1\} \times \{0,1\}$; its
+atoms are written $(i,j)$, its ACBE blocks $A_i$, its RPM blocks $R_j$,
+and its generated topologies $J_A$, $J_R$, with join
+$J_A \vee J_R$. The seed artifacts' internal label $J_{\mathrm{atom}}$ for
+the join is retained where the ledger is quoted, with the standing caution
+that it does not assert the standard category-theoretic atomic topology;
+$J_{\mathrm{singleton}}$ is the preferred publication-layer name.
+\end{notation}
+
+\begin{notation}\label{ch01:not:project}
+Modalities are composites $M = i a$ of sheafification $a$ followed by
+inclusion $i$; $M_{\mathrm{obs}}$, $M_A$, $M_R$ are the observational,
+ACBE, and RPM modalities of the ambient construction. The ambient and
+resolved categories are $\mathcal{E}_{\mathrm{amb}} = \PSh(\cC \times L)$
+and $\mathcal{E}_{\mathrm{res}} = \Sh(\cC \times L, J_{\mathrm{res}})$
+with $J_{\mathrm{res}} = J_{\mathrm{obs}} \vee J_A \vee J_R$;
+$\mathcal{E}_{\mathrm{legacy}} = \Sh(\cC, J_{\mathrm{legacy}})$. Ledger
+identifiers are set in small capitals (\textsc{thm-nt2-marked-coverage});
+executable check names and file names are set in typewriter face with
+escaped underscores (\texttt{finite\_site.py}). Statuses are set in small
+capitals: \textsc{open}, \textsc{proof required}, \textsc{informal proof
+present}, \textsc{novelty unassessed}, \textsc{not licensed}.
+\end{notation}
+
+\begin{notation}[Environment conventions]\label{ch01:not:environments}
+The monograph uses a fixed repertoire of numbered environments, and their
+names are part of the claim discipline. \emph{Theorem}, \emph{Proposition},
+\emph{Lemma}, and \emph{Corollary} are reserved for statements with written
+proofs in this text; when such a statement corresponds to a ledger record,
+the ledger identifier is displayed with the statement. \emph{Conjecture}
+marks the backward-compatibility statement and nothing else.
+\emph{Definition}, \emph{Construction}, \emph{Example}, and
+\emph{Exercise} have their usual meanings; \emph{Notation} fixes symbols.
+\emph{Remark} is expository and carries no claim weight. \emph{Claim
+Boundary} (the \texttt{boundary} environment) is normative: it restricts
+what the surrounding material may be taken to assert, and it binds every
+reading of that material. \emph{Finding} records a corrective result ---
+something the mathematics settled against a prior informal expectation ---
+and \emph{Rule} records a standing discipline adopted by the text.
+Proofs end with the usual tombstone; proof sketches are labeled as
+sketches and are used only for standard results whose full proofs are
+cited.
+\end{notation}
+
+\begin{notation}\label{ch01:not:typography}
+The monograph source is ASCII; all mathematical symbols are produced by
+LaTeX commands. Numbered environments (theorem, proposition, lemma,
+definition, example, remark, boundary, and the rest) are shared across the
+monograph with per-chapter numbering; labels are prefixed by chapter slug.
+Tables use booktabs rules. Displayed equations are numbered only when
+referenced.
+\end{notation}
+
+The following summary table collects the recurring symbols for reference.
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Symbol & Meaning \\
+\midrule
+$\cC$ & registered legacy category ($\mathrm{Noetica}$) \\
+$J_{\mathrm{legacy}}$ & legacy coverage, clauses (O), (A), (R) \\
+$\Omega$ & the four-atom set $\{0,1\} \times \{0,1\}$ \\
+$L$ & context lattice $\mathcal{P}(\Omega)$, sixteen objects \\
+$A_i$, $R_j$ & ACBE and RPM partition blocks \\
+$J_A$, $J_R$ & generated context topologies \\
+$J_A \vee J_R$ & joined (singleton) topology \\
+$F_A$, $F_R$ & witness presheaves for distinctness \\
+$M_A$, $M_R$, $M_{\mathrm{obs}}$ & sheafification modalities \\
+$\mathcal{E}_{\mathrm{amb}}$, $\mathcal{E}_{\mathrm{res}}$ & ambient and resolved categories \\
+$\mathrm{NoeTop}_2$, $\mathrm{NoeSystem}_2$ & topos candidate; full research package \\
+$yC$ & representable presheaf of $C$ \\
+$m_C$ & maximal sieve on $C$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{remark}\label{ch01:rem:tone}
+A last word on tone. The monograph's subject is a repair, and the repair is
+presented together with the failure it repairs, the certificate that
+corroborates it, and the list of everything it does not yet establish. This
+is deliberate. In the program's experience, the value of a bookkeeping
+formalism is inseparable from the honesty of its own bookkeeping: a
+construction that overstated its status would fail the very discipline it
+proposes. Preserving the boundaries with the same precision as the theorems
+is part of the result.
+\end{remark}

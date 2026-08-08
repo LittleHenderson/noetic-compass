@@ -1,0 +1,191 @@
+\chapter{The Proof-Obligation Ledger}\label{appB:ledger}
+
+This appendix reproduces, as a reference, the complete proof and
+integration ledger of the TKS v8.0 typed core prototype, exactly as
+recorded in the governing specification
+(\texttt{TKS\_V8\_CORE\_FORMAL\_SPEC\_AND\_PROOF\_OBLIGATIONS\_v0.1.md},
+Section~5) at the bound snapshot. The discussion chapters of this
+monograph cite these rows constantly; here they are gathered in one
+place, first as a compact table and then row by row with the current
+evidence and status text kept faithful to the source document. The
+ledger is normative for the artifact: a claim not supported by a row's
+recorded status is not a claim the artifact makes. Drafting this
+monograph changed no row.
+
+\section{Reference table}\label{appB:sec:table}
+
+\begin{longtable}{@{}lp{6.2cm}p{4.6cm}@{}}
+\toprule
+ID & Obligation & Status \\
+\midrule
+\endhead
+PO-TKS8-CORE-01 & Identity and associativity for finite-function composition & \textsc{partial formal verification present} \\
+\addlinespace
+PO-TKS8-CORE-02 & Reject every source/target mismatch & \textsc{executable validation} \\
+\addlinespace
+PO-TKS8-CORE-03 & Keep one-carrier powers distinct from heterogeneous paths & \textsc{executable validation} \\
+\addlinespace
+PO-TKS8-CORE-04 & $f^{|X|!}$ is idempotent for finite endomaps & \textsc{standard result / formalization open} \\
+\addlinespace
+PO-TKS8-CORE-05 & Exact deterministic-lift norm formula & \textsc{informal proof present / universal formalization open} \\
+\addlinespace
+PO-TKS8-CORE-06 & Soundness and leastness of shortlex catalog & \textsc{informal correctness argument / formalization open} \\
+\addlinespace
+PO-TKS8-CORE-07 & Independent theorem-prover formalization & \textsc{partial / present} \\
+\addlinespace
+PO-TKS8-CORE-08 & Reconcile kernel object/arrow types with corrected v7.4 theorem records & \textsc{open / not licensed} \\
+\addlinespace
+PO-TKS8-CORE-09 & Integrate with the active notation compiler & \textsc{open} \\
+\addlinespace
+PO-TKS8-CORE-10 & Independent specialist review & \textsc{open} \\
+\addlinespace
+PO-TKS8-CORE-11 & Standard-basis lift preserves identities and composition & \textsc{partial formal verification present / finite-sum matrix bridge open} \\
+\bottomrule
+\end{longtable}
+
+\section{Per-row status and evidence}\label{appB:sec:rows}
+
+\subsection*{PO-TKS8-CORE-01}
+\emph{Obligation.} Identity and associativity for finite-function
+composition. \emph{Current evidence.} Pointwise argument; unit and
+bounded exhaustive tests; exact Lean \texttt{TypedCategory} lemmas.
+\emph{Status.} \textsc{partial formal verification present}.
+\emph{Reading.} The mathematics is Chapter~4; the executable coverage
+is the $19{,}683$ three-point associativity triples and the typed
+identity families of Chapter~10; the formal fraction is the
+\texttt{TypedCategory} module of Chapter~11. The residual is the
+Python-to-Lean model equivalence, which no row of the ledger claims.
+
+\subsection*{PO-TKS8-CORE-02}
+\emph{Obligation.} Reject every source/target mismatch.
+\emph{Current evidence.} Constructor and negative tests.
+\emph{Status.} \textsc{executable validation}.
+\emph{Reading.} The rejection sites are \texttt{compose}, the
+\texttt{Endomap} validator, the \texttt{SemigroupoidPath} validator,
+and catalog evaluation (Chapter~9); the negative fixtures of the
+category and normal-form suites drive each site to its typed error.
+Executable validation is the row's ceiling by design: the property is
+about runtime behavior of the implementation.
+
+\subsection*{PO-TKS8-CORE-03}
+\emph{Obligation.} Keep one-carrier powers distinct from heterogeneous
+paths. \emph{Current evidence.} Separate runtime types and negative
+tests. \emph{Status.} \textsc{executable validation}.
+\emph{Reading.} \texttt{Endomap} and \texttt{SemigroupoidPath} are
+distinct runtime types; the path type exposes no power operation; the
+endomap wrapper rejects non-endo arrows with
+\texttt{CompositionTypeError}. The Lean seed's endomap-only powering
+discipline (Chapter~11) independently mirrors the separation in the
+model, though the ledger row itself records executable evidence.
+
+\subsection*{PO-TKS8-CORE-04}
+\emph{Obligation.} $f^{|X|!}$ is idempotent for finite endomaps.
+\emph{Current evidence.} Standard finite-semigroup result; bounded
+exhaustive test. \emph{Status.} \textsc{standard result /
+formalization open}. \emph{Reading.} The tail-and-cycle proof is
+Chapter~5; the exhaustive check covers all $289$ endomaps on carriers
+through size four via the binary powering pathway. Open: a Lean proof
+of the universal statement (functional-graph decomposition,
+divisibility of $|X|!$ by all cycle lengths).
+
+\subsection*{PO-TKS8-CORE-05}
+\emph{Obligation.} Exact deterministic-lift norm formula,
+$\lVert A_f\rVert^2 = \max_{y}|f^{-1}(y)|$.
+\emph{Current evidence.} Block-Gram proof; bounded exhaustive
+structural tests; Lean checks only the exact two-state expansion, not
+the universal norm or the generic matrix/trace/rank bridge.
+\emph{Status.} \textsc{informal proof present / universal
+formalization open}. \emph{Reading.} The fiber-block spectral proof is
+Chapter~7; the structural suites tie the implemented shortcuts (norm,
+trace, rank, Gram forms) to matrix reality on the bounded family; the
+kernel-checked fragment is the two-state constant-lift expansion and
+noncontractivity (ledger record
+\textsc{thm-lift-norm-fiber-formula}; counterexample record
+\textsc{thm-lift-occupation-counterexample}).
+
+\subsection*{PO-TKS8-CORE-06}
+\emph{Obligation.} Soundness and leastness of the shortlex catalog.
+\emph{Current evidence.} Finiteness and pruning argument; regression
+tests. \emph{Status.} \textsc{informal correctness argument /
+formalization open}. \emph{Reading.} The pruning-soundness induction
+and the $|Y|^{|X|}$ finiteness bound are Chapter~8; the regression
+suite verifies representatives, counts, rejection, and fail-closed
+resource guards on hand-checkable catalogs (Appendix~A works one in
+full). Open: formalization of the exploration invariants ---
+shortlex-ordered dequeueing and first-insertion leastness.
+
+\subsection*{PO-TKS8-CORE-07}
+\emph{Obligation.} Independent theorem-prover formalization.
+\emph{Current evidence.} Pinned Lean 4.32.1 seed and axiom audit at
+\texttt{formal/lean}; exact scope in
+\texttt{LEAN\_PROOF\_MANIFEST\_v0.1.json}.
+\emph{Status.} \textsc{partial / present}.
+\emph{Reading.} Chapter~11 in full: toolchain pinned by commit,
+verifier hardcoding \texttt{propext} as the sole standard axiom,
+rejection of project axioms and \texttt{sorry}, source-hash checks,
+Lake build, per-theorem dependency audit. The verified and open
+scopes are itemized in Chapter~11; the row closes when the open scope
+does.
+
+\subsection*{PO-TKS8-CORE-08}
+\emph{Obligation.} Reconcile kernel object/arrow types with the
+corrected v7.4 theorem records. \emph{Current evidence.} No semantic
+mapping admitted in this prototype. \emph{Status.}
+\textsc{open / not licensed}. \emph{Reading.} The kernel deliberately
+encodes no Noetic or CAS construct (Chapter~9's boundary; Chapter~12's
+exclusions). This row is the sole gate through which canonical content
+could ever reach the substrate, and its licensing requires review, not
+drafting. The manifest's integration boundary field
+\texttt{cas\_semantic\_transfer\_status: OPEN / NOT LICENSED} is this
+row's machine-readable form, and the boundary regression test asserts
+it on every suite run.
+
+\subsection*{PO-TKS8-CORE-09}
+\emph{Obligation.} Integrate with the active notation compiler.
+\emph{Current evidence.} Explicitly outside this lane; requires
+compatibility design and review. \emph{Status.} \textsc{open}.
+\emph{Reading.} The kernel is an independent reference model; the
+manifest asserts \texttt{active\_cas\_compiler\_modified: false} and
+\texttt{production\_runtime\_dependency: false}, both pinned by the
+boundary regression. Integration needs its own design artifact and
+review lane (Chapter~12).
+
+\subsection*{PO-TKS8-CORE-10}
+\emph{Obligation.} Independent specialist review.
+\emph{Current evidence.} No external review receipt.
+\emph{Status.} \textsc{open}. \emph{Reading.} Every evidence channel
+is project-authored; this row is the only one addressing that fact.
+It gates the semantic rows (08, and any semantically loaded 09) and
+audits statement selection in the formal seed. Nothing blocks its
+start.
+
+\subsection*{PO-TKS8-CORE-11}
+\emph{Obligation.} The standard-basis lift preserves identities and
+composition. \emph{Current evidence.} $1{,}678$ exact bounded
+matrix-composition cases; Lean entry/basis/support proofs.
+\emph{Status.} \textsc{partial formal verification present /
+finite-sum matrix bridge open}. \emph{Reading.} The executable half is
+the exact integer matrix sweep over all composable typed pairs through
+size three, including empty carriers (Chapter~10); the formal half is
+the identity-entrywise, identity-on-basis, typed-basis-composition,
+and relational-product support lemmas (Chapter~11). Open: finite-sum
+numerical matrix multiplication and arbitrary-vector linear extension,
+which would connect the basis-level Lean statements to the entrywise
+matrix statements the tests check.
+
+\section{Reading conventions}\label{appB:sec:conventions}
+
+Three conventions govern citation of this ledger elsewhere in the
+repository and in downstream documents. First, \emph{status strings
+are quoted, not paraphrased}: \textsc{executable validation} is not
+``verified,'' \textsc{partial / present} is not ``formalized,'' and
+\textsc{standard result} is not ``proved here.'' Second, \emph{rows do
+not aggregate}: no combination of green rows yields a status any
+single row lacks --- in particular, no combination amounts to
+canonical TKS v8 status, CAS semantic transfer, or specialist review.
+Third, \emph{changes are events}: a row's status changes only with a
+new bound artifact snapshot (a revised specification and manifest with
+new hashes), never by narrative reference. The ledger as printed here
+is the ledger as of the v0.1 specification and the 2026-08-04
+validation snapshot; any later document claiming a different status
+must exhibit the later snapshot that grounds it.

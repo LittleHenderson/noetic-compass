@@ -1,0 +1,617 @@
+\chapter{Exact Normalization and Quantization}\label{ch08:quantization}
+
+\section{The problem a quantizer inherits}\label{ch08:sec:problem}
+
+Of the eight conflicts preserved in the source audit, the quantization
+conflict is the smallest in surface area and the most instructive in kind.
+The Quantification Guide displays four score bands with two-decimal
+endpoints --- $0.00$--$2.49$, $2.50$--$4.99$, $5.00$--$7.49$,
+$7.50$--$10.00$ --- and provides no rule for values of higher precision.
+The conflict is not between two sources; it is between the display and the
+mathematics. Two-decimal endpoint pairs like $2.49$ and $2.50$ presuppose
+that scores arrive already rounded to two decimals, and are silent about
+every value in the open gap between them. A value of $2.495$, a value of
+$2.4999$, a value produced by dividing two exact decimals whose quotient
+does not terminate at two places --- all fall outside the displayed
+partition. A classification system whose bands are defined on displayed
+values inherits the rounding rule of its display layer as an invisible
+classification parameter, and different rounding conventions then classify
+the same underlying value differently.
+
+The candidate's resolution is structural: classification is computed from
+the exact pre-rounding value, over half-open bins whose cut points are the
+exact rationals $5/2$, $5$, and $15/2$; the displayed value is derived
+afterward and never re-enters classification. This chapter states the exact
+formulas as implemented, proves the boundary-preservation property they
+were designed for, works the boundary cases numerically, and explains
+precisely why the Guide's two-decimal bands underdetermine classification.
+It closes with the trend-tag discipline, which extends the same
+exactness-first posture from single values to comparisons across values.
+
+As everywhere in this monograph, the status frame governs: the quantizer is
+tested software operating on typed records
+(\textsc{open / ring 4 / not licensed / held}); no normalized score
+reported here derives from an admitted live-model measurement, and all
+numeric values in the worked examples are illustrative constructions.
+
+\section{Exact normalization as implemented}\label{ch08:sec:exact}
+
+\begin{definition}[Normalization formulas]\label{ch08:def:formulas}
+Let $\mathrm{raw} \ge 0$ be an instrumented flow magnitude in
+\textsc{activation} units at a registered test point, and let
+$I_{\mathrm{FS}} > 0$ be the calibration profile's full-scale value for
+that test point, produced under the profile's declared full-scale method.
+The implemented normalization computes three quantities:
+\[
+q_{10}^{\mathrm{exact}} \;=\; 10 \cdot \frac{\mathrm{raw}}{I_{\mathrm{FS}}},
+\qquad
+\mathrm{overload} \;=\; \frac{\mathrm{raw}}{I_{\mathrm{FS}}},
+\qquad
+q_{10}^{\mathrm{disp}} \;=\; \min\bigl(q_{10}^{\mathrm{exact}},\, 10\bigr).
+\]
+The displayed score $q_{10}^{\mathrm{disp}}$ is clipped at $10$; the
+overload ratio is never clipped; and the exact value
+$q_{10}^{\mathrm{exact}}$ is retained as an exact ratio object --- numerator
+$\mathrm{raw}$, denominator $I_{\mathrm{FS}}$, scale $10$ --- whose value is
+evaluated in exact rational arithmetic, not in binary floating point.
+\end{definition}
+
+Three implementation details make the definition load-bearing rather than
+decorative.
+
+First, the three quantities are constructed together, inside a factory, and
+sealed into a single result object (\texttt{NormalizedFlow}) that cannot be
+built by any other path: the constructor validates a factory token and
+rejects direct construction. The result object re-verifies, at admission,
+the arithmetic identity between its parts --- that the stored displayed
+value equals $\min(10, 10 \cdot \mathrm{raw}/I_{\mathrm{FS}})$ and the
+stored overload ratio equals $\mathrm{raw}/I_{\mathrm{FS}}$, both recomputed
+from the exact ratio --- so a normalized record whose display has drifted
+from its exact value is unrepresentable, not merely unlikely.
+
+Second, the inputs are typed evidence, not numbers. The raw flow must be a
+\texttt{FLOW\_MAGNITUDE} in \textsc{activation} units, of measurement kind
+\texttt{INSTRUMENTED}, with a recorded sample size, bound to the same test
+point for which the profile's full-scale value is registered; the
+full-scale value itself is resolved from the profile and re-verified against
+the evidence registry. A quantity of the wrong kind, unit, provenance, or
+test point is rejected before any arithmetic occurs. The mixed-scale error
+preserved in the source audit --- the Guide's $\mathrm{sat}=8.5$ read
+against a $0$--$1$ fraction convention --- is in this sense not merely
+avoided but unrepresentable: a Q10 score, a Q100 constraint score, a
+fraction, and an activation magnitude are four different unit kinds, and
+the unit-admissibility table refuses the cross-assignments.
+
+Third, the exact value is carried as a ratio of decimals evaluated through
+exact rational arithmetic (numerator and denominator lifted to arbitrary-precision
+rationals), so that the band comparisons of the next section are performed
+on a representation in which equality and order at the cut points are exact
+questions with exact answers. No binary float participates in
+classification.
+
+\begin{remark}[Why the overload ratio is a separate quantity]\label{ch08:rem:overload}
+Clipping the display at $10$ is a presentation decision inherited from the
+Q10 score convention; it deliberately destroys information above full
+scale. The overload ratio preserves exactly the destroyed information: a
+reading of $\mathrm{overload} = 1.2$ records that the raw flow exceeded the
+declared full scale by twenty percent, which the clipped display
+$q_{10}^{\mathrm{disp}} = 10$ cannot distinguish from a reading exactly at
+full scale. Because the full-scale value is itself method-relative --- the
+profile's declared \texttt{IFSMethod} is one of three non-interchangeable
+procedures, per the preserved full-scale conflict --- an overload above $1$
+is ambiguous between a genuinely extreme response and a full-scale value
+selected too low for the point; the ratio does not resolve the ambiguity,
+it preserves it in a typed, dimensionless quantity
+(\texttt{OVERLOAD\_RATIO}) that downstream analysis can interrogate.
+Overload is also the natural bridge to the saturation discussions of
+Chapter~\ref{ch07:classification}: a saturated region label with overload
+near $1$ reads differently from the same label with overload far above $1$,
+and neither reading is licensed automatically.
+\end{remark}
+
+\section{Representation: decimals in, rationals underneath}\label{ch08:sec:representation}
+
+The exactness claims of this chapter rest on a representation choice
+that the candidate makes globally and the quantizer inherits: every
+numeric value in the evidence layer is an exact decimal --- a scaled
+integer, not a binary float --- and every ratio that classification
+consumes is carried as an explicit numerator-denominator pair evaluated
+in arbitrary-precision rational arithmetic. The choice forecloses three
+familiar failure classes at once.
+
+First, \emph{representation error at the boundary}. The cut point $2.5$
+is exactly representable in decimal and in rational arithmetic; a value
+like $2.4999$ is likewise exact. In binary floating point, neither the
+inputs nor the cut points of a decimal band scheme are generally
+representable, and a comparison at the boundary inherits up to half an
+ulp of silent displacement --- small, but structurally identical to the
+rendering gap of Section~\ref{ch08:sec:underdetermine}, and
+platform-honest rather than convention-honest. The rational route makes
+the comparison a cross-multiplication of integers, which is exact on
+every platform.
+
+Second, \emph{division before comparison}. A naive implementation would
+compute $10 \cdot \mathrm{raw} / I_{\mathrm{FS}}$ as a quotient first
+and compare afterward, forcing a precision decision (how many digits of
+quotient?) before the comparison that needed the answer. The
+implemented route stores the ratio unevaluated --- numerator, denominator,
+scale --- and compares by cross-multiplication, so no quotient precision
+is ever chosen for classification purposes. The displayed quotient, by
+contrast, is computed in the candidate's declared decimal arithmetic
+context, where a precision \emph{is} chosen; the asymmetry is the whole
+design: presentation gets a precision, classification gets none because
+it needs none.
+
+Third, \emph{drift between stored value and stored band}. Because the
+band is a function, not a field --- it is recomputed from the exact
+ratio on demand, and the sealed result object verifies its internal
+identities at construction --- there is no stored band to fall out of
+sync with a stored value. Nothing in the evidence model can hold a
+record asserting exact value $2.4$ and band $Q2$; the assertion is not
+storable, and this unstorability is the quantizer's contribution to the
+candidate's general no-bare-numbers discipline.
+
+\section{Half-open bins}\label{ch08:sec:bins}
+
+\begin{definition}[Q4 bands]\label{ch08:def:bands}
+Band assignment is a total function of the exact value
+$q_{10}^{\mathrm{exact}}$, through half-open intervals closed on the left:
+\[
+[0, 2.5) \mapsto Q1, \qquad
+[2.5, 5) \mapsto Q2, \qquad
+[5, 7.5) \mapsto Q3, \qquad
+[7.5, \infty) \mapsto Q4 .
+\]
+Equivalently, as implemented: the value is compared in exact rational
+arithmetic against $5/2$, then $5$, then $15/2$, returning the band at the
+first strict-inequality success and $Q4$ otherwise.
+\end{definition}
+
+Three observations. First, the bins partition the entire non-negative ray:
+every admissible exact value, including values above $10$ produced by
+overload, receives exactly one band. The implementation's top band is
+$[7.5, \infty)$, not $[7.5, 10]$: an overloaded value of $12$ is a $Q4$
+value with an overload ratio recorded alongside, rather than an error or an
+out-of-range special case. (The audit's prose summary states the top bin as
+$[7.5, 10]$; the implemented comparison function has no upper test, and the
+two agree on all clipped displays while differing on the exact values above
+$10$ that only the overload path produces. This monograph records the
+implemented behavior.) Second, each cut point belongs to the upper band:
+$2.5$ is $Q2$, $5$ is $Q3$, $7.5$ is $Q4$. The choice of upward assignment
+is a convention, but having \emph{some} exact convention is not: it is what
+makes band assignment a function. Third, the cut points are exact rationals,
+so membership questions are decidable without tolerance: there is no
+epsilon, no rounding mode, and no platform dependence in the band function.
+
+\section{The boundary-preservation proposition}\label{ch08:sec:boundary}
+
+\begin{proposition}[Boundary preservation]\label{ch08:prop:boundary}
+Band assignment is computed from $q_{10}^{\mathrm{exact}}$ by exact
+comparison against $2.5$, $5$, and $7.5$. Display derivation --- clipping at
+$10$ and any subsequent rounding for presentation --- cannot move a value
+across a band boundary, because the displayed value never re-enters
+classification.
+\end{proposition}
+
+\begin{proof}
+The claim decomposes into three parts.
+
+(i) \emph{The band function reads only the exact value.} By construction,
+the implemented band function accepts only the sealed normalized-flow
+result and evaluates only its exact-ratio component; the displayed value
+and the overload ratio are not arguments to any comparison. The band of a
+record is therefore a function of
+$(\mathrm{raw}, I_{\mathrm{FS}})$ alone, through the exact quotient.
+
+(ii) \emph{Exact comparison is total and unambiguous at the cut points.}
+The exact value is a non-negative rational with an explicit numerator and
+denominator; the cut points $5/2$, $5$, and $15/2$ are rationals. For any
+two rationals, exactly one of $<$, $=$, $>$ holds, and the comparison is
+computed exactly in integer arithmetic on cross-multiplied numerators and
+denominators. Hence for every representable input the guarded cascade
+($< 5/2$, else $< 5$, else $< 15/2$, else $Q4$) selects exactly one band.
+In particular, an input exactly equal to a cut point fails the strict
+inequality at that cut point and is assigned to the upper band; equality is
+not a boundary anomaly but an ordinary, deterministically handled case.
+
+(iii) \emph{Display is derived afterward and is inert.} The displayed value
+$q_{10}^{\mathrm{disp}} = \min(q_{10}^{\mathrm{exact}}, 10)$, and any
+two-decimal (or other) rounding applied for presentation, are computed from
+the exact value after classification and are consumed only by presentation
+surfaces. Since no classification path accepts a displayed value as input
+--- the band function's type signature admits only the sealed result, whose
+exact component is verified at admission against its own display --- there
+is no composition of implemented functions in which a rounded value
+determines a band. A display rounding that crosses a cut point (say,
+$2.4999 \rightarrow 2.50$) therefore changes what a human reads, and
+nothing else.
+
+Combining (i)--(iii): the composite map from $(\mathrm{raw},
+I_{\mathrm{FS}})$ to (band, display) computes the band from the exact
+quotient by total exact comparison and computes the display independently
+downstream; no display operation participates in, or can alter, band
+assignment.
+\end{proof}
+
+Two small consequences are worth separating from the proposition,
+because they answer questions a careful reader will ask next.
+
+\begin{lemma}[Display is monotone and non-injective]\label{ch08:lem:display}
+The display map $q_{10}^{\mathrm{exact}} \mapsto q_{10}^{\mathrm{disp}}
+= \min(q_{10}^{\mathrm{exact}}, 10)$ is order-preserving (weakly) and
+not injective: it is the identity on $[0, 10]$ and constant on
+$[10, \infty)$. Consequently the pair (display, overload) determines
+the exact value --- the overload ratio is injective on the whole ray
+--- while the display alone determines it only below full scale.
+\end{lemma}
+
+\begin{proof}
+Monotonicity and the two-piece description are immediate from the
+definition of $\min$. Injectivity of the overload ratio holds because
+$\mathrm{overload} = q_{10}^{\mathrm{exact}} / 10$ identically ---
+overload is the same exact quotient at unit scale --- so the exact
+value is recoverable from it by multiplication by $10$; the display
+coincides with the exact value on $[0,10]$ and discards it above.
+\end{proof}
+
+\begin{corollary}[Band recoverability]\label{ch08:cor:recover}
+The band of a record is recoverable from its overload ratio alone
+(compare against $1/4$, $1/2$, $3/4$), and from its display alone if
+and only if the display is strictly below $10$ or the band is $Q4$.
+In particular, a consumer holding only clipped displays can still
+classify correctly, because every clipped record displays $10$ and
+$10 \ge 7.5$ lies in $Q4$; what such a consumer cannot do is anything
+finer than banding in the overload regime.
+\end{corollary}
+
+Table~\ref{ch08:tab:bands} collects the band structure with its
+boundary behavior in one place.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}lllll@{}}
+\toprule
+Band & Exact interval & Cut point at left & Guide display band & Gap under two decimals \\
+\midrule
+$Q1$ & $[0, 2.5)$ & $0$ (closed) & $0.00$--$2.49$ & $(2.49, 2.50)$ unruled \\
+$Q2$ & $[2.5, 5)$ & $2.5 \in Q2$ & $2.50$--$4.99$ & $(4.99, 5.00)$ unruled \\
+$Q3$ & $[5, 7.5)$ & $5 \in Q3$ & $5.00$--$7.49$ & $(7.49, 7.50)$ unruled \\
+$Q4$ & $[7.5, \infty)$ & $7.5 \in Q4$ & $7.50$--$10.00$ & overload collapsed at $10.00$ \\
+\bottomrule
+\end{tabular}
+\caption{Exact half-open bands versus the Guide's printed two-decimal
+display bands. Every printed endpoint pair leaves an unruled open gap;
+the implemented cut points rule every value; the top band differs
+additionally in its treatment of overload.}
+\label{ch08:tab:bands}
+\end{table}
+
+\begin{remark}\label{ch08:rem:proof-scope}
+The proposition is a software-structural statement, verified by the
+candidate's test suite at the level of golden boundary fixtures; it is not
+a metrological claim. It says that the quantizer cannot \emph{add} a
+boundary error to whatever measurement error the raw value already
+carries; it does not say the raw value is right. Uncertainty attached to
+the raw flow propagates through normalization as interval and standard
+uncertainty on the ratio (Section~\ref{ch08:sec:uncertainty}); a raw value
+whose uncertainty interval straddles a cut point yields a band assignment
+that is exact for the point value and undecided across the interval, and
+honest reporting of that situation is the trend-tag discipline's concern
+(Section~\ref{ch08:sec:trend}).
+\end{remark}
+
+\section{Worked examples}\label{ch08:sec:worked}
+
+All values below are illustrative constructions, labeled as such; none is a
+measurement.
+
+\begin{example}[Overload: $\mathrm{raw}/I_{\mathrm{FS}} = 1.2$]\label{ch08:ex:overload}
+Take $\mathrm{raw} = 6$ activation units at a test point whose declared
+full scale is $I_{\mathrm{FS}} = 5$. Then
+\[
+q_{10}^{\mathrm{exact}} = 10 \cdot \tfrac{6}{5} = 12, \qquad
+\mathrm{overload} = \tfrac{6}{5} = 1.2, \qquad
+q_{10}^{\mathrm{disp}} = \min(12, 10) = 10 .
+\]
+Band assignment reads the exact value $12$: since $12 \ge 15/2$, the band
+is $Q4$. The record thus carries four coordinated facts --- exact $12$,
+display $10$, overload $1.2$, band $Q4$ --- and the sealed result object
+verifies their mutual consistency at construction. Note what the display
+alone would have lost: a reader of ``$10.00$'' cannot distinguish this
+record from a reading exactly at full scale, but the record itself can,
+and any consumer that reads the typed object rather than its rendering
+retains the distinction.
+\end{example}
+
+\begin{example}[Exact cut point: $q_{10}^{\mathrm{exact}} = 2.5$]\label{ch08:ex:cut}
+Take $\mathrm{raw} = 1$ and $I_{\mathrm{FS}} = 4$, so
+$q_{10}^{\mathrm{exact}} = 10/4 = 5/2$ exactly. The first guard
+($< 5/2$) fails on equality; the second guard ($< 5$) succeeds; the band
+is $Q2$. The half-open convention assigns every cut point upward, so
+$2.5$ is $Q2$, $5$ is $Q3$, and $7.5$ is $Q4$, deterministically. Under
+the Guide's displayed bands the value $2.50$ also reads as the second band
+($2.50$--$4.99$), so at exactly representable two-decimal values the
+implemented convention and the Guide's display agree; the divergence
+appears strictly between the displayed endpoints, as the next example
+shows.
+\end{example}
+
+\begin{example}[Near-boundary value: $q_{10}^{\mathrm{exact}} = 2.4999$]\label{ch08:ex:near}
+Take $\mathrm{raw} = 2.4999$ and $I_{\mathrm{FS}} = 10$, so
+$q_{10}^{\mathrm{exact}} = 2.4999$ exactly. Since $2.4999 < 5/2$, the band
+is $Q1$. A two-decimal display that rounds half up renders this value as
+$2.50$ --- the printed lower endpoint of the Guide's \emph{second} band.
+A reader classifying from the display would place the record in $Q2$; the
+implemented classifier, reading the exact value, places it in $Q1$; and by
+Proposition~\ref{ch08:prop:boundary} the rendered ``$2.50$'' has no way to
+leak back into classification. The example generalizes: every value in
+$[2.495, 2.5)$ rounds to $2.50$ at two decimals while lying exactly in
+$Q1$, so the display-classification gap is an interval of positive width
+at every cut point, not an isolated pathological value.
+\end{example}
+
+\begin{example}[Gap value under the Guide's bands: $2.495$]\label{ch08:ex:gap}
+The value $2.495$ lies in the open gap between the Guide's printed
+endpoints $2.49$ and $2.50$: it belongs to neither $0.00$--$2.49$ nor
+$2.50$--$4.99$ as literally written. The Guide provides no rule for it.
+The implemented convention answers instantly: $2.495 < 5/2$, band $Q1$.
+The point of the example is not that the Guide's authors intended
+otherwise --- plausibly they intended truncation, or rounding, or never
+contemplated the gap --- but that ``plausibly intended'' is not a
+classification rule, and three incompatible completions (truncate at two
+decimals, round half up, round half even) each classify parts of the gap
+differently.
+\end{example}
+
+\begin{example}[Remaining cut points and degenerate inputs]\label{ch08:ex:more}
+All values illustrative. (i) $\mathrm{raw} = 2$, $I_{\mathrm{FS}} = 4$:
+exact value $5$ exactly; the first two guards fail (at the second, on
+equality); band $Q3$. (ii) $\mathrm{raw} = 7.4999$,
+$I_{\mathrm{FS}} = 10$: exact value $7.4999 < 15/2$; band $Q3$,
+although a two-decimal display renders $7.50$, the printed floor of
+the Guide's top band --- the $Q4$-boundary instance of the rendering
+gap. (iii) $\mathrm{raw} = 0$: exact value $0$; band $Q1$ by the closed
+left end of the first bin; overload $0$; and note that a zero
+\emph{observed} flow is banded without difficulty even though ratio
+diagnostics elsewhere in the pipeline would censor at a zero-compatible
+observation --- banding divides by the full scale, which is strictly
+positive by profile construction, never by the observation.
+(iv) $\mathrm{raw} = 1.874975$, $I_{\mathrm{FS}} = 7.4999$: exact value
+$10 \cdot 1.874975 / 7.4999 = 2.5$ exactly (the numerator is
+$0.25 \times 7.4999$); band $Q2$ by upward assignment --- an example
+chosen to show that cut-point equality arises from unremarkable-looking
+inputs, not only from round numbers.
+\end{example}
+
+\begin{example}[Uncertainty straddling a cut point]\label{ch08:ex:straddle}
+All values illustrative. A raw flow of $1.24$ with standard
+uncertainty $0.03$ against $I_{\mathrm{FS}} = 5$ (with its own small
+uncertainty) yields exact value $2.48$ and, after propagation, an
+interval on the Q10 coordinate of roughly $[2.34, 2.62]$. The point
+value is $Q1$; the interval spans the $2.5$ cut. The record reports
+all three facts. What the record does not do is report ``$Q1$--$Q2$''
+or a probability over bands: banding stays exact on the point value,
+and the interval stays available to any consumer whose question is
+distributional. A trend or comparison built on this record must use
+the interval under the declared uncertainty rule of
+Section~\ref{ch08:sec:trend}; a display built on it will render
+$2.48$; and neither operation can move the recorded band.
+\end{example}
+
+\section{Why two-decimal display bands underdetermine classification}\label{ch08:sec:underdetermine}
+
+The preceding examples can now be assembled into the general argument,
+which is the content of the preserved quantization conflict.
+
+A band scheme defined on two-decimal displays is a partition of the
+\emph{rendered} values $\{0.00, 0.01, \ldots\}$, not of the underlying
+value space. To classify an underlying value, the scheme must be composed
+with a rendering rule, and the composition --- not the printed bands ---
+is the actual classifier. The Guide prints the bands and omits the
+rendering rule; therefore the Guide's scheme is not one classifier but a
+family of classifiers indexed by the omitted rule, and members of the
+family disagree on every interval of the form
+$[c - 0.005, c)$ for each cut point $c \in \{2.5, 5.0, 7.5\}$ (under
+round-half-up rendering; the disagreeing intervals shift with the
+rendering convention but never vanish). The underdetermination is thus
+structural, not editorial: no choice of printed two-decimal endpoints can
+close it, because the gap lives between the printed values.
+
+The conflict is sharpest at the top band --- the Q4-boundaries conflict of
+the source audit --- for two compounding reasons. First, the Guide's top
+band is printed as $7.50$--$10.00$, closed above, which presupposes that
+no value exceeds $10.00$; but the normalization that produces the score
+admits raw values above full scale, and the clipped display maps all of
+them to exactly $10.00$. Under a display-defined scheme, the entire
+overload regime collapses into the top endpoint, and the scheme cannot
+even express the question ``by how much was full scale exceeded.'' The
+implemented scheme keeps the top band half-open to infinity on the exact
+value and records overload separately, so the collapse happens only in
+presentation. Second, the boundary $7.50$ itself inherits the rendering
+gap like every other cut point: a value of $7.4999$ renders as $7.50$ and
+would read as top-band under the display while lying exactly in $Q3$. A
+two-decimal scheme therefore misclassifies (relative to the exact
+convention) in both directions at the Q4 boundary --- upward across the
+cut by rounding, and degenerately at the top by clipping --- and these are
+precisely the two failure modes the exact-value-plus-overload design
+eliminates.
+
+\begin{finding}[Display bands are not a classifier]\label{ch08:find:display}
+The Guide's two-decimal bands, as printed, do not determine a
+classification function on exact values; they determine one only relative
+to an unstated rendering rule, and distinct reasonable rules yield
+distinct classifications on intervals of positive width at every band
+boundary. The implemented candidate closes the gap by fiat --- exact
+values, half-open bins, upward cut-point assignment, display derived
+afterward --- and Proposition~\ref{ch08:prop:boundary} certifies that the
+closure is complete: no rendering choice can re-open it.
+\end{finding}
+
+It bears stating why this matters at monograph length rather than as a
+footnote. Quantized bands are the layer at which numeric evidence becomes
+categorical language --- ``$Q1$'' reads as \emph{low} and ``$Q4$'' as
+\emph{high} --- and categorical language is what travels into summaries,
+dashboards, and decisions. A classification gap at the band boundary is
+therefore not a cosmetic defect: it is a mechanism by which two honest
+readers of the same underlying value can carry incompatible categorical
+claims forward, each traceable to the same source, with the disagreement
+invisible unless the rendering rule is recovered. The dose-response
+literature's insistence that analysis be conducted on the modeled
+continuous response, with categorization applied only at the reporting
+layer if at all \cite{ritz}, is the same discipline in statistical form;
+the candidate implements it as a type-level separation between an exact
+ratio that classifies and a display that does not.
+
+\section{Uncertainty through normalization}\label{ch08:sec:uncertainty}
+
+Normalization does not launder uncertainty. The implemented path requires
+uncertainty on the raw flow and on the full-scale value, and propagates
+both through the ratio: interval bounds by the monotone quotient rule
+(lower display bound from lower numerator over upper denominator, upper
+from upper over lower), standard uncertainty by the first-order
+combination of the two relative contributions, and clipping applied to the
+Q10 display bounds at $10$ while the overload ratio's bounds remain
+unclipped. The confidence level attached to the normalized quantities is
+the minimum of the input confidence levels --- a deliberately conservative
+convention. Treating the normalized best value as if it were the truth,
+with the uncertainty discarded at the seam, is the calibration sin the
+wider candidate architecture is built to refuse \cite{kennedyohagan}; the
+quantizer participates by never emitting a normalized value object without
+its propagated uncertainty attached.
+
+The interaction between propagated uncertainty and exact banding deserves
+one explicit paragraph, because the two disciplines answer different
+questions and are easily conflated. Banding is exact on the point value:
+a record whose exact value is $2.4999$ is a $Q1$ record, full stop. But if
+that record's propagated interval spans $[2.3, 2.7]$, then the statement
+``the underlying quantity is in $Q1$'' is supported only at the point
+estimate, not across the interval, and the record carries everything a
+consumer needs to see this: exact value, band, and interval, jointly. The
+candidate's position is that the band function must not blur itself to
+accommodate uncertainty (a fuzzy band is a second, worse rendering rule);
+instead, uncertainty-aware statements are pushed to the comparison layer,
+where they are made explicit --- which is the trend-tag rule.
+
+\section{The quantizer and the mixed-scale conflict}\label{ch08:sec:mixedscale}
+
+The quantization conflict is the audit's eighth; its first --- the
+mixed-scale conflict --- is enforced partly here, and the connection
+deserves explicit statement because the two conflicts compound. The
+Guide's worked example uses $\mathrm{sat} = 8.5$ as a component
+threshold on a page whose conventions make saturation a $0$--$1$
+fraction; Appendix~I identifies the value as a mixed-scale error whose
+intended magnitude is $0.85$. On a Q10 coordinate, $8.5$ and $0.85$
+fall in different bands ($Q4$ and $Q1$); on a fraction coordinate,
+$8.5$ is not even admissible. A quantizer that accepted bare numbers
+would classify the error fluently --- $8.5$ is a perfectly bandable
+float --- and the misclassification would propagate wearing a band
+label of unimpeachable exactness.
+
+The implemented defense is the unit ontology upstream of the band
+function. The quantizer's input is a typed measurement whose quantity
+kind (\texttt{FLOW\_MAGNITUDE}) and unit (\textsc{activation}) are
+checked before normalization; its output Q10 score is a
+\texttt{NORMALIZED\_FLOW} in unit \texttt{Q10}, range-checked to
+$[0, 10]$; fractions are a distinct unit kind range-checked to
+$[0, 1]$; Q100 constraint scores are a third, range-checked to
+$[0, 100]$; and the unit-admissibility table permits each quantity kind
+only its declared units, with no conversion function anywhere in the
+layer. A saturation fraction of $8.5$ is a construction-time validation
+error; a Q10 score used where a fraction is required is a type error;
+and the Guide's $\mathrm{sat}=8.5$ is therefore not a value the
+candidate handles \emph{incorrectly} but a value it cannot admit at
+all. Exact banding sits behind these gates: exactness is only worth
+proving about values whose kind and scale are already beyond dispute,
+which is why this chapter's guarantees are stated for typed inputs and
+why the mixed-scale defense, though implemented elsewhere, is properly
+part of the quantization story.
+
+\section{Trend tags}\label{ch08:sec:trend}
+
+A single normalized value invites a band word; a pair of them invites a
+trend word --- \emph{rising}, \emph{falling}, \emph{stable} --- and trend
+words smuggle in even more unstated structure than band words do. A trend
+is a claim about two or more values \emph{of the same quantity, on the
+same axis, over a stated interval}, and it is empty or misleading if any
+of those qualifiers is left implicit: values from different test points do
+not form a trend; values under different profiles do not form a trend;
+a difference smaller than the propagated uncertainty does not evidence a
+trend; and a difference smaller than a declared minimum effect is not a
+trend worth naming even if statistically resolvable.
+
+\begin{ruleenv}[Trend-tag admission]\label{ch08:rule:trend}
+A trend tag is admissible only when it declares, explicitly: (i) the axis
+--- which typed quantity, at which test point, under which profile digest,
+the profile identity fixing model, method, and full-scale convention;
+(ii) the interval --- the ordered replay frame over which the compared
+values were produced, with the caller-supplied replay semantics of
+Chapter~\ref{ch07:classification} understood; (iii) the minimum effect ---
+a declared threshold below which differences are reported as no trend,
+fixed before comparison; and (iv) the uncertainty rule --- how the
+propagated uncertainties of the compared values enter the judgment (for
+example, non-overlap of intervals at the stated confidence, or a stated
+multiple of combined standard uncertainty). A tag missing any component is
+not a degraded trend statement; it is inadmissible.
+\end{ruleenv}
+
+The rule is the comparison-layer twin of the banding discipline: just as a
+band must come from the exact value and not the rendering, a trend must
+come from a declared comparison rule and not from the visual suggestion of
+two displayed numbers. The two-decimal display is again the cautionary
+instrument: displays of $2.50$ and $2.50$ can cover exact values $2.4950$
+and $2.5049$ --- a difference of $0.0099$ in the exact coordinate rendered
+as perfect stability --- while displays of $2.49$ and $2.50$ can cover
+exact values differing by one part in $10^4$, rendered as a visible step.
+Display-level trend reading therefore manufactures both false stability
+and false movement at the rendering quantum, and the admission rule
+forecloses it by requiring the comparison to be defined on the exact
+values with an explicit uncertainty rule.
+
+\begin{example}[An admissible trend tag, fully declared]\label{ch08:ex:trend}
+All values illustrative. An admissible tag reads, in full: ``Axis:
+normalized flow (\texttt{I\_Q}, Q10) at test point
+\texttt{tp-}$\langle$digest$\rangle$ under profile
+$\langle$digest$\rangle$. Interval: replay frames $t_1 < t_2$, both
+inside the profile validity window. Minimum effect: $0.5$ Q10 units,
+declared before comparison. Uncertainty rule: report \emph{rising} only
+if the lower bound of the later value exceeds the upper bound of the
+earlier value and the difference of point values exceeds the minimum
+effect.'' Under this tag, exact values $6.1 \to 6.9$ with intervals
+$[5.9, 6.3]$ and $[6.7, 7.1]$ read \emph{rising} (intervals disjoint,
+difference $0.8 > 0.5$); exact values $6.1 \to 6.5$ with the same
+half-widths read \emph{no trend} (difference below minimum effect,
+whatever the intervals); and exact values $6.1 \to 6.9$ with intervals
+$[5.5, 6.7]$ and $[6.3, 7.5]$ read \emph{no trend} (intervals overlap),
+even though the displayed values suggest movement. Delete any one of
+the four declarations and each verdict becomes contestable, which is
+the rule's point.
+\end{example}
+
+No trend tag over live-model data is asserted anywhere in this monograph;
+the rule is stated for the discipline it imposes on future admitted data,
+and its components (axis, interval, minimum effect, uncertainty rule) are
+deliberately the same components a preregistered comparison would freeze
+in advance. The kinship with dose-response practice is direct: a trend
+over dose is a model claim, and the modeling tradition insists it be
+fit and tested on the continuous response with declared error structure
+rather than read off category transitions \cite{ritz}; the trend-tag
+rule is that insistence, restated for the replay-frame axis.
+
+\section{What the quantization layer does and does not establish}\label{ch08:sec:close}
+
+\begin{boundary}[Scope of the exactness guarantees]\label{ch08:bound:scope}
+The guarantees of this chapter are guarantees about representation and
+classification mechanics: exact normalization, total and deterministic
+banding, display inertness, uncertainty propagation, and comparison
+admission. They are not guarantees about measurement validity. An exact
+$Q4$ band over a mismeasured raw flow is an exact classification of a
+wrong number; a faithfully propagated uncertainty is only as honest as
+the input uncertainty model; and the full-scale denominators remain
+method-relative under the preserved full-scale conflict, so cross-profile
+band comparisons are undefined absent a stated comparison rule. The
+quantization layer's contribution is negative and structural: of the ways
+a score pipeline can silently corrupt a classification --- rounding across
+boundaries, clipping away overload, unit slippage, display feedback ---
+none is available here, and the tests that pin each closure are part of
+the bounded software evidence at the Gate~4 receipt.
+\end{boundary}

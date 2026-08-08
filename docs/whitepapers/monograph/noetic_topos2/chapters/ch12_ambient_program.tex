@@ -1,0 +1,600 @@
+\chapter{The Ambient Candidate, Boundaries, and the Research Program}
+\label{ch12:chapter}
+
+\section{From the finite factor to the ambient package}
+\label{ch12:sec:ambient}
+
+The finite-context theory of Chapters~10 and~11 is complete on its own
+terms, but it is a theory of the context factor $L$ alone. The Noetic Topos
+2.0 candidate is a construction over the \emph{product} of the registered
+legacy category with that factor, and the way the candidate is packaged is
+itself a mathematical decision with a theorem behind it. This closing
+chapter assembles the package, states every boundary that fences it, records
+the backward-compatibility conjecture in its exact conjectural form, sets
+out the expressivity obligation with its acceptance criteria, situates the
+work against the literature, and lists the admission gates that stand
+between the present artifact set and any change of status.
+
+\begin{construction}[The successor package]
+\label{ch12:con:package}
+Let $\cC$ denote the registered legacy category $\mathrm{Noetica}$, assumed
+small in the chosen universe, with its proven jointly-surjective topology
+$J_{\mathrm{obs}}$ (the legacy topology, written $J_{\mathrm{legacy}}$ in
+the baseline chapters). The successor begins with the ambient presheaf topos
+\[
+\Eamb = \PSh(\cC \times L),
+\]
+and generates three topology refinements on it:
+\begin{enumerate}
+\item legacy observational covers in the $\cC$ coordinate;
+\item $K_A$ covers in the $L$ coordinate; and
+\item $K_R$ covers in the $L$ coordinate.
+\end{enumerate}
+Writing sheafification-followed-by-inclusion for these refinements as
+$M_{\mathrm{obs}}$, $M_A$, and $M_R$, the fully resolved topology and
+subtopos are
+\[
+J_{\mathrm{res}} = J_{\mathrm{obs}} \vee J_A \vee J_R,
+\qquad
+\Eres = \Sh(\cC \times L,\, J_{\mathrm{res}}).
+\]
+The underlying topos candidate and the full research object are
+\[
+\mathrm{NoeTop}_2 := \Eamb,
+\qquad
+\mathrm{NoeSystem}_2 = \bigl( \mathrm{NoeTop}_2,\; M_{\mathrm{obs}},\;
+M_A,\; M_R,\; \Eres,\; \textsc{external mark record} \bigr).
+\]
+$\mathrm{NoeSystem}_2$ is a structured package --- a tuple of a topos, three
+modalities, a subtopos, and an external audit layer. It is \emph{not} itself
+a topos or a category, and the provenance record is external audit data,
+not an internal topos object.
+\end{construction}
+
+The definitional choice $\mathrm{NoeTop}_2 := \Eamb$ --- the ambient topos,
+not the resolved subtopos --- is forced by the resolved-identity theorem of
+Chapter~10: every sheaf for the joined context coverage is separately a
+sheaf for each factor topology, so on $\Eres$ both $M_A$ and $M_R$ restrict
+to the identity up to canonical isomorphism. Had the successor been defined
+as the already-joined sheaf category, the ACBE and RPM reflectors would be
+identity on every admitted object and the modal structure would be erased a
+second time --- a repetition, one level up, of exactly the collapse the
+successor exists to repair. The intended discipline is therefore: raw and
+partially resolved evidence lives in the ambient topos, acted on by the
+modalities; only jointly resolved objects enter $\Eres$; and no text may
+describe $M_A$ or $M_R$ as nontrivial endomodalities of the resolved
+subtopos.
+
+\begin{boundary}[The executable schema is narrower than the notation]
+\label{ch12:bnd:schema}
+Construction~\ref{ch12:con:package} is a research specification, not a
+completed implementation. The v0.1 executable schema is deliberately
+narrower: it represents ACBE/RPM context-factor families and their joint
+refinement only. \emph{Typed observational covers} in the legacy $\cC$
+coordinate remain \textsc{open}: no typed construction of observational
+cover records, general arrows of $\cC \times L$, full product-site covers,
+or their serialization exists in v0.1. Consequently $M_{\mathrm{obs}}$,
+$J_{\mathrm{res}}$, and $\Eres$ are, at present, notation with stated
+intent, awaiting the typed constructions and proofs listed in the admission
+gates below. Relatedly, the once-proposed lift of the distinctness theorem
+to $\PSh(\cC \times L)$ by external product of each witness with a
+representable $y\cC_0$ is \emph{not} sound as stated --- at the null cover
+over $(c, \varnothing)$ the product value need not be a singleton, and
+duplicated representable coordinates can obstruct gluing --- so ambient
+distinctness of $M_A$ and $M_R$ also remains \textsc{open}; the proved
+distinctness result is scoped to $\PSh(L, \Set)$.
+\end{boundary}
+
+\begin{remark}[Anatomy of the failed ambient lift, and the candidate
+repair]
+\label{ch12:rem:ambientlift}
+The failed lift is instructive enough to dissect. The proposal was to
+carry the witness $F_A$ to the product site as an external product
+$y\cC_0 \times F_A$ --- representable in the legacy coordinate, witness
+in the context coordinate --- and argue that at $(\cC_0, \Omega)$ the
+four-versus-one counting argument survives. Two things go wrong. At a
+null cover over a pair $(c, \varnothing)$, the sheaf condition for the
+context-coordinate refinement requires a one-element value, but the
+product value there has as many elements as $y\cC_0(c)$, which can be
+empty or large; the external product does not satisfy the empty-context
+discipline that Chapter~10's terminal-empty-value lemma forces on every
+sheaf. And along legacy arrows duplicating representable coordinates,
+matching families can fail to glue for reasons that have nothing to do
+with the context factor, contaminating the witness argument. The
+candidate repair replaces $y\cC_0$ by the terminal $\cC$-presheaf,
+trivializing the legacy coordinate --- but that repair is only
+well-posed after the lifted topology is actually defined, requires
+$\cC$ nonempty, and needs naturality checked in both coordinates. None
+of that has been done, and the lesson already banked is
+methodological: ambient statements do not follow from finite-context
+statements by decorating witnesses, and every future lift claim must be
+proved against the typed product-site definitions of admission gate 3.
+\end{remark}
+
+\begin{remark}[Coordinates, refinements, and the intended evidence flow]
+\label{ch12:rem:flow}
+Some unpacking of Construction~\ref{ch12:con:package} is useful even
+while its product-site layer remains open. The three refinements are
+\emph{coordinate-local} by design: an observational cover touches only
+the $\cC$ coordinate (it is a legacy jointly-surjective family, paired
+with identities on the context coordinate), while an ACBE or RPM cover
+touches only the $L$ coordinate (a $K_A$ or $K_R$ family paired with
+identities on the legacy coordinate). Generating a topology on the
+product from coordinate-local families is standard in outline, but the
+candidate treats none of it as automatic: which sieves the joint
+generation produces at mixed objects, whether sheafification for a
+context-coordinate refinement can be computed objectwise in $\cC$
+(pointwise application of Chapter~10's reflector formula), and how the
+three refinements interact under joins are precisely the contents of
+admission gates 3 and 4 below. Subject to those gates, the intended
+evidence flow through the package is a pipeline with typed stages: raw
+evidence enters as a presheaf on $\cC \times L$ (an object of $\Eamb$),
+carrying arbitrary context-coordinate structure and its marked cover
+records; partial resolution applies $M_A$ or $M_R$ --- meaningfully, in
+either order, by the composition theorem --- while audit code reads the
+marks that the reflectors provably do not see; and joint resolution
+lands the object in the modally inert resolved zone, after which only
+observational structure remains active. The stage boundaries are
+mathematically enforced: Chapter~10's resolved-identity theorem makes
+``resolved but still ACBE-active'' a contradiction in terms, which is
+exactly the kind of design error the package's typing is meant to make
+unwritable.
+\end{remark}
+
+\begin{remark}[What the package buys, conditionally]
+\label{ch12:rem:buys}
+Even in its partly-open state, the package fixes three commitments that
+constrain all future work. First, the carrier of modal structure is ambient:
+any future theorem about modal dynamics must be stated on $\Eamb$, and any
+statement on $\Eres$ must be about resolved, modally inert objects. Second,
+provenance is external: the marks travel beside the topology, in
+hash-chained records with fail-closed resolution (Chapter~11), because the
+topology provably cannot carry them. Third, the package is honest about its
+own type: $\mathrm{NoeSystem}_2$ is a tuple, and calling it a topos would
+overclaim structure that only its first component has.
+\end{remark}
+
+\section{Gluing boundaries: what Set-valued descent does not license}
+\label{ch12:sec:gluing}
+
+The finite theory is a theory of $\Set$-valued descent: gluing means
+bijectivity of the canonical map from global sections to matching families
+of local sections. Two adjacent temptations --- reading probabilistic or
+linear-algebraic consequences out of $\Set$-valued sheaf conditions --- must
+be blocked explicitly, because both are natural-sounding and both are
+wrong.
+
+\subsection{The probabilistic boundary and the marginal problem}
+\label{ch12:sec:probability}
+
+Probability distributions do not inherit $\Set$-valued gluing by analogy.
+The obstruction is classical: a family of pairwise-compatible marginal
+distributions need not extend to any global joint distribution. This is the
+\emph{marginal problem}, and nonextendable compatible families were
+exhibited already by Vorob'ev \cite{vorobev}; the sheaf-theoretic
+reformulation of such obstructions, in which empirical models are
+compatible families over a cover of measurement contexts and contextuality
+is precisely the failure of a global section, is developed by Abramsky and
+Brandenburger \cite{abramskybrandenburger}. The relevance to this program
+is direct and cautionary: the entire motivation for a context site is to
+manage heterogeneous evidence, evidence in practice is often probabilistic,
+and it is therefore tempting to treat a passing $\Set$-valued sheaf test as
+evidence that probabilistic summaries over the same cover cohere. They need
+not.
+
+\begin{example}[The obstruction in miniature]
+\label{ch12:ex:marginal}
+The phenomenon fits in three binary variables. Let $X$, $Y$, $Z$ each
+take values in $\{0, 1\}$, and prescribe the three pairwise marginals to
+be perfect anticorrelation: each of $(X, Y)$, $(Y, Z)$, $(X, Z)$ is
+uniform on $\{(0,1), (1,0)\}$. Every pair of these marginals is
+compatible --- each single-variable marginal is uniform on $\{0,1\}$
+however computed, so the family agrees on all overlaps. Yet no joint
+distribution has all three as marginals: a joint supported on triples
+$(x, y, z)$ with $x \neq y$, $y \neq z$, and $x \neq z$ would need three
+pairwise-distinct values from a two-element set, so its support is
+empty, contradicting total mass one. Pairwise compatibility --- the
+exact probabilistic analogue of a matching family --- holds; the global
+section does not exist. In gate terms
+(Protocol~\ref{ch12:prot:probgates}): the cover
+$\{XY, YZ, XZ\}$ is cyclic, so gate 1 does not apply; the gate-2 linear
+program for this instance is infeasible, with the counting argument
+just given convertible into a Farkas witness; and the family has a
+nonvanishing obstruction in the sense of the contextuality literature
+\cite{abramskybrandenburger}. Any evidence-aggregation design over the
+Noetic context factor that reports probabilistic summaries per cover
+piece must therefore treat joint consistency as a per-instance
+obligation, not a structural gift of the site.
+\end{example}
+
+A probabilistic successor to the present construction must therefore pass
+through one of four explicit gates, each of which supplies what the analogy
+omits:
+
+\begin{protocol}[The four probabilistic gates]
+\label{ch12:prot:probgates}
+\begin{enumerate}
+\item \textbf{Junction-tree extension.} Restrict to covers whose
+intersection structure is acyclic (a junction tree), and supply a proved
+extension theorem that compatible marginals over such a cover always admit
+a global joint. Acyclicity is exactly the classical regime in which the
+marginal problem is solvable, and the proof obligation is the extension
+theorem itself, stated for the specific cover class used.
+\item \textbf{LP feasibility certificate.} For a fixed finite cover and
+finite outcome spaces, existence of a global joint is a finite linear
+program: variables the putative joint probabilities, constraints the
+marginalization equations and nonnegativity. A probabilistic consistency
+claim is then licensed by a feasibility certificate for that LP --- an
+explicit feasible point or a solver artifact --- and refuted by an
+infeasibility certificate (a Farkas witness). The certificate is
+per-instance: it licenses the instance, not the method.
+\item \textbf{Obstruction calculation with stated coefficients.} Compute a
+cohomological obstruction to extending the compatible family, in the style
+of the sheaf-theoretic contextuality literature
+\cite{abramskybrandenburger}, with the coefficient system stated
+explicitly. Vanishing of the obstruction in the stated coefficients is the
+licensed claim --- no more; such obstructions can be one-directional, and
+the direction proved must be the direction cited.
+\item \textbf{Quantitative relaxation.} Where exact extension fails or is
+not decided, a quantitative claim is permitted only with the relaxation
+stated (e.g. nearest extendable family in a named metric), the residual
+reported, and the uncertainty of the residual reported.
+\end{enumerate}
+No passing $\Set$-valued sheaf test licenses a probabilistic consistency
+claim; only a gate artifact of one of these four kinds does.
+\end{protocol}
+
+\subsection{The linear and cellular boundary}
+\label{ch12:sec:linear}
+
+A second analogy must be blocked in the same motion. The applied-topology
+literature attaches spectral invariants --- sheaf Laplacians, harmonic
+sections, diffusion dynamics --- to \emph{cellular sheaves} of vector
+spaces, and these tools are attractive for evidence aggregation. But a
+linear or cellular sheaf is additional structure, not a reinterpretation:
+it requires finite-dimensional stalks (or controlled Hilbert-space stalks),
+chosen inner products, and weighted coboundary or restriction data before a
+Laplacian is even defined \cite{hansenghrist}. Nothing in the present
+construction creates that structure. The context lattice $L$ carries
+$\Set$-valued presheaves; no stalk is a vector space, no inner product has
+been chosen, and no coboundary operator exists. Any future spectral or
+diffusion-style claim over the Noetic context factor requires a separate
+linear representation with its own registered definitions and proofs, and
+bounded Hilbert-valued cellular sheaves need not be finite-dimensional, so
+even the passage from finite to infinite dimensions requires care rather
+than analogy.
+
+To make the missing structure concrete: a cellular sheaf in the sense of
+\cite{hansenghrist} assigns a vector space to each cell of a complex and
+a linear map to each incidence, and its Laplacian is built from a chosen
+coboundary operator and inner products on stalks --- so that
+``harmonic'' sections, spectral gaps, and consistency energies are all
+statements about \emph{that chosen linear data}, and change when the
+inner products change. The Noetic context factor supplies only the
+incidence skeleton (the inclusion order on $L$) and $\Set$-valued
+stalks. Between here and any Laplacian-style consistency score lie, at
+minimum: a linearization of section sets (itself a modeling decision
+with alternatives), a choice of inner products with a stated rationale,
+a weighting of the coboundary reflecting cover semantics, and proofs
+that the resulting invariants respect the reflectors of Chapter~10 or
+an argument for why they need not. Each is a registered-definition-sized
+gap, none is closed by this monograph, and any program text that
+computes a ``coherence energy'' over the context factor without them is
+operating outside the licensed mathematics.
+
+\section{Backward compatibility as a conjectural comparison}
+\label{ch12:sec:compat}
+
+The successor would be of limited use if it stranded the legacy theory. The
+intended relationship is a comparison, and its status is exactly
+\textsc{conjecture} with \textsc{proof required} --- the only record in the
+finite theorem set that is not backed by a proof, and the monograph states
+it in conjectural form for that reason.
+
+\begin{conjecture}[Product-site round trip; ledger
+\textsc{thm-nt2-product-site-backward-compatibility}, \textsc{proof
+required}]
+\label{ch12:conj:roundtrip}
+Let $\Eleg = \Sh(\cC, J_{\mathrm{legacy}})$ be the legacy sheaf topos,
+preserved verbatim. After atomic resolution of the context factor there is
+an equivalence
+\[
+\Eres \;\simeq\; \Eleg^{4},
+\]
+under which, for a registry-fixed neutral atom $\omega_{00}$, the embedding
+\[
+\iota : X \longmapsto (X, 1, 1, 1)
+\]
+--- the legacy object in the neutral channel, terminal objects in the
+remaining three channels --- is fully faithful, and evaluation at the
+neutral channel satisfies a specified natural isomorphism
+\[
+\mathrm{ev}_{00} \circ \iota \;\cong\; \mathrm{Id}_{\Eleg}.
+\]
+\end{conjecture}
+
+\begin{remark}[Why the shape is plausible and why that is not a proof]
+\label{ch12:rem:whyplausible}
+The finite-context theory makes the \emph{shape} of the conjecture
+plausible: the joined context coverage resolves the four singleton atoms
+(Chapter~10), and sheaves on a discrete four-point context factor should
+decompose into four independent components. But the conjecture is a
+statement about the \emph{product} site $\cC \times L$ with the
+observational topology in play, and none of the required ingredients ---
+the typed product-site covers (Boundary~\ref{ch12:bnd:schema}), the
+comparison functors, the full-faithfulness argument, the coherence of the
+equivalence with $J_{\mathrm{obs}}$ --- currently exists. A proof would
+need, at minimum: a typed construction of $J_{\mathrm{res}}$ on
+$\cC \times L$; a computation showing sheafification for the joined context
+coordinate is objectwise in $\cC$ (the product-site lift of the composition
+theorem, itself open); and the equivalence with naturality in all data.
+\end{remark}
+
+\begin{boundary}[Two round trips, and neither is complete]
+\label{ch12:bnd:tworoundtrips}
+The compatibility contract requires \emph{two distinct} round trips, and
+they must not be conflated:
+\begin{enumerate}
+\item \textbf{The categorical round trip.} The equivalence and natural
+isomorphism of Conjecture~\ref{ch12:conj:roundtrip}. This is mathematics,
+and its status is \textsc{proof required}.
+\item \textbf{The serialization round trip.} The implementation requirement
+that registered identifiers and canonical payload hashes survive migration
+into and out of the new context factor \emph{by strict equality}. This is
+engineering with a cryptographic acceptance test, and it is likewise
+incomplete: the v0.1 context-factor checker does not establish it.
+\end{enumerate}
+A categorical natural isomorphism is not a bit-for-bit serialization
+receipt, and a passing serialization test would not prove the equivalence.
+Both are required; possession of one licenses nothing about the other.
+Additionally, because subcanonicity of the legacy site is not derivable
+from the registered axioms (the baseline countermodel), bare legacy site
+objects are represented in the sheaf topos by their sheafifications
+$a_{\mathrm{legacy}}(yX)$ before any marking or migration --- never by
+silently treating $yX$ as a sheaf \cite{stacks00WO}. This monograph claims
+no backward compatibility; no legacy theorem is promoted merely because it
+has been serialized into the new context factor.
+\end{boundary}
+
+\begin{remark}[What full faithfulness would and would not buy]
+\label{ch12:rem:fullfaithful}
+It is worth spelling out the operational content the conjecture would
+have if proved, because that content is the reason the conjecture is
+registered at all. Full faithfulness of $\iota$ would say that legacy
+objects and \emph{all their morphisms} survive the move into the
+neutral channel without collapse or spurious identification: maps
+between embedded legacy objects in the resolved successor would
+correspond exactly to legacy maps. The natural isomorphism
+$\mathrm{ev}_{00} \circ \iota \cong \mathrm{Id}$ would say the move is
+reversible at the object level by evaluation. Together they would
+license the migration discipline the program wants: analyze in the
+successor, project back, and lose nothing that the legacy semantics
+could see. What even a full proof would \emph{not} buy: preservation of
+anything the legacy semantics could not see (marks are external on both
+sides and migrate by their own serialization contract); any statement
+about the three non-neutral channels, which the embedding deliberately
+fills with terminal objects; and any transfer of legacy theorem
+\emph{statuses} --- a legacy theorem cited in successor context still
+carries its own ledger record, including the legacy subcanonicity gap.
+The neutral channel being registry-fixed matters for the same
+discipline: if different artifacts chose different neutral atoms, their
+embeddings would disagree by a nontrivial symmetry of the context
+factor, and cross-artifact comparisons would silently break; fixing
+$\omega_{00}$ in the registry makes the choice auditable.
+\end{remark}
+
+\section{The expressivity boundary and the cross-context obligation}
+\label{ch12:sec:expressivity}
+
+Suppose Conjecture~\ref{ch12:conj:roundtrip} were proved tomorrow. A
+further boundary would immediately bind, and it is in some ways the deepest
+one in the monograph: $\Eleg^4$ is four \emph{independent} legacy channels.
+The discrete resolved context factor contains no remaining overlap, no
+transition law, and no cross-atom coupling. The composition theorem lands
+every composite in the atomic subcategory, where the modalities freeze
+(Chapter~10, identity-on-atomic corollary); after resolution there is
+nothing left for the context factor to say about how the four channels
+relate. The sixteen-context construction is therefore a finite
+\emph{separation and provenance reference model} --- it proves that
+distinct, nontrivial, commuting context modalities are possible where the
+legacy clauses provably could not provide them --- and not a substantively
+rich final semantics for contextual cognition.
+
+The registered proof-obligation ledger carries this as a first-class
+record, and its content is reproduced here in full because it, rather than
+any theorem, determines the shape of the next stage of the program.
+
+\begin{invariant}[Obligation \textsc{obl-nt2-cross-context-semantics},
+v0.1]
+\label{ch12:inv:obligation}
+\emph{Kind:} design-and-proof obligation. \emph{Statement:} choose and
+formalize one conservative successor contract: either (a) the structured
+ambient modal package is the principal Noetic Topos 2.0 semantics, or (b)
+the resolved semantics gains typed overlap or transition data with proved
+coherence. The finite discrete product $\Eleg^4$ alone supplies separation
+and provenance channels but no cross-atom coupling. \emph{Assumptions:} the
+joined context coverage resolves the four singleton atoms; the proposed
+product-site comparison is $\Eres \simeq \Eleg^4$. \emph{Dependencies:} the
+join theorem (ledger \textsc{thm-nt2-join-discrete-context}) and the
+backward-compatibility conjecture (ledger
+\textsc{thm-nt2-product-site-backward-compatibility}). \emph{Review state:}
+\textsc{unassessed}; \emph{resolution status:} \textsc{open}; \emph{ring:}
+4.
+
+\emph{Acceptance criteria} (all four required):
+\begin{enumerate}
+\item a single conservative successor contract is selected without
+asserting unproved equivalences;
+\item the selected contract has typed definitions and explicit coherence
+obligations;
+\item any claimed coherence theorem has a schema-valid theorem-ledger
+record and a reviewable proof artifact; and
+\item the four-independent-channel limitation remains explicit unless
+cross-context coupling is proved.
+\end{enumerate}
+\emph{Claim boundary of the record itself:} the current finite model is a
+reference construction; it is not licensed as the final substantive Noetic
+Topos 2.0 semantics.
+\end{invariant}
+
+\begin{remark}[The two branches, concretely]
+\label{ch12:rem:branches}
+Branch (a) names the ambient package --- topos plus modalities plus
+resolved subtopos plus marks --- as the semantics, accepting that the
+interesting structure lives in the \emph{unresolved} region and that
+resolution is an endpoint, not a home. Branch (b) enriches the resolved
+side: typed overlap objects, transition data between atoms, or a
+coarser-than-discrete resolved context structure, each with a coherence
+theorem. The branches are not exclusive forever, but the obligation demands
+that \emph{one} be selected and formalized first, precisely to prevent the
+program from oscillating between an unformalized version of each. v0.1
+licenses neither branch, and this monograph selects neither; selection is a
+gated decision with its own review.
+\end{remark}
+
+\section{Related work and novelty status}
+\label{ch12:sec:related}
+
+The mathematical background this monograph stands on is entirely standard,
+and no novelty is claimed for any of it: sites, sieves, and the passage
+from a coverage to a Grothendieck topology; sheafification as a left-exact
+left adjoint and its universal property; representable sheaves and
+subcanonicity; and the Grothendieck-topos framework generally
+\cite{maclane, stacks00ZC, stacks00W1, stacks00WO}; with the local-operator
+perspective on modalities available in \cite{johnstone}. Two applied
+literatures motivate the explicit boundaries of
+Section~\ref{ch12:sec:gluing} without being incorporated into the
+construction: the sheaf-theoretic treatment of nonlocality and
+contextuality, where global-section failure over a cover of measurement
+contexts is the formal content of contextuality
+\cite{abramskybrandenburger}, with the underlying marginal-problem
+obstructions classical \cite{vorobev}; and the spectral theory of cellular
+sheaves \cite{hansenghrist}, which shows exactly how much added linear
+structure a Laplacian requires and therefore exactly what the present
+$\Set$-valued theory lacks.
+
+Against that background, the candidate's specific contributions are three:
+the collapse diagnosis as applied to the registered legacy ACBE/RPM
+clauses; the transverse two-partition finite context factor with its exact
+reflector calculus (Chapter~10); and the parallel hash-chained provenance
+layer with fail-closed resolution (Chapter~11). Their status must be
+stated exactly: all theorem-ledger records carry
+\textsc{novelty unassessed}. No dedicated literature search has been
+performed for the relationship of the marked-cover construction to colored
+sites, indexed categories, or stacks; nor for whether the explicit
+product-over-blocks reflector for partition coverages on a powerset
+lattice appears elsewhere (it is elementary enough that it plausibly
+does); nor for prior uses of transverse partition pairs to manufacture
+commuting distinct modalities. This monograph accordingly does not call
+any of its results new theorems in the scholarly sense. The claim made is
+weaker and auditable: the results are \emph{internally novel} to the
+program, correctly scoped, and fully proved or fully flagged.
+
+\section{The admission gates}
+\label{ch12:sec:gates}
+
+Noetic Topos 2.0 may leave Ring~4 only after all ten of the following
+close. The list is registered; this section adds, for each gate, what
+closing it concretely requires.
+
+\begin{protocol}[The ten admission gates]
+\label{ch12:prot:gates}
+\begin{enumerate}
+\item \textbf{Independent category-theory review} of the collapse and
+countermodel propositions and of the finite-context theorems through the
+composition theorem. Closing requires a named, independent reviewer;
+internal re-derivation, however careful, does not qualify.
+\item \textbf{Proof-assistant formalization} of the finite site, the
+generated topologies, the witness presheaves, the reflector universal
+properties, the join, and the natural isomorphisms --- the full
+sheaf-theoretic layer excluded from the current Lean scope (Chapter~11).
+\item \textbf{Typed observational and product-site covers:} a typed
+construction of observational covers and general arrows in
+$\cC \times L$, discharging Boundary~\ref{ch12:bnd:schema}.
+\item \textbf{The product-site lift} of the composition theorem: its
+coherence in the $\cC$ coordinate and its interaction with
+$J_{\mathrm{obs}}$. Until this closes, commutation is a finite-context
+fact only.
+\item \textbf{The backward-compatibility conjecture}
+(Conjecture~\ref{ch12:conj:roundtrip}) with \emph{both} round trips of
+Boundary~\ref{ch12:bnd:tworoundtrips}: the categorical equivalence with
+proofs, and the strict-equality serialization round trip with tests.
+\item \textbf{A canonical cross-context decision} under obligation
+\textsc{obl-nt2-cross-context-semantics}
+(Invariant~\ref{ch12:inv:obligation}), meeting all four acceptance
+criteria.
+\item \textbf{Probabilistic descent}: separate probability-gluing theorems
+or feasibility certificates through the four gates of
+Protocol~\ref{ch12:prot:probgates}, for any probabilistic use of the site.
+\item \textbf{A dedicated novelty search} for the marked/provenance
+construction and the reflector calculus, converting
+\textsc{novelty unassessed} into an assessed status in either direction.
+\item \textbf{Registry reconciliation and IP review}: reconciliation with
+the shared symbol and theorem registries, and authorship, disclosure,
+citation, and IP review of the whole artifact set.
+\item \textbf{External referee review}, with explicit confirmation that no
+empirical or product wording was licensed anywhere in the artifact set.
+\end{enumerate}
+\end{protocol}
+
+Gates 1, 2, and 10 concern trust in the mathematics; gates 3, 4, and 5
+concern the ambient and legacy extensions; gates 6 and 7 concern semantics
+beyond the finite reference model; gates 8 and 9 concern scholarly and
+institutional hygiene. They are conjunctive: no subset suffices, and no
+gate is closed by the drafting of this monograph.
+
+The gates also carry an implicit dependency order that any realistic
+program plan must respect. Gate 3 (typed product-site covers) is
+upstream of gates 4 and 5: neither the product-site lift nor the
+backward-compatibility equivalence can even be \emph{stated} precisely
+until the typed constructions exist, which is why both are conjectural
+or open rather than merely unproved. Gate 5 is upstream of gate 6: the
+cross-context obligation's assumptions include the proposed comparison
+$\Eres \simeq \Eleg^4$, so a canonical semantics decision made before
+the comparison is settled would rest on an unproved premise ---
+permitted only under branch (a), which does not need the comparison, and
+then only with the four-channel limitation stated as conditional. Gates
+1 and 2 can proceed in parallel with everything else and de-risk it:
+independent review or formalization that found an error in the
+finite-context theory would invalidate downstream work cheaply rather
+than expensively. Gates 8, 9, and 10 are terminal: novelty search,
+registry and IP review, and external refereeing evaluate the finished
+artifact set, and doing them against a moving target would waste their
+one-shot evidential value. None of this ordering relaxes conjunctivity;
+it only says in which order the program can stop being wrong soonest.
+
+\section{Conclusion}
+\label{ch12:sec:conclusion}
+
+The monograph's argument closes where it began, with the two collapse
+mechanisms. The legacy ACBE and RPM cover clauses could not carry modal
+structure because identities entered their sieves: the reflexive descent
+map directly, the RPM counit through its section by sieve closure. That is
+not a defect of topos machinery but a theorem about what a Grothendieck
+topology can remember, and it dictated both halves of the repair. The
+topological half changes the generators: a finite context lattice with two
+transverse partition coverages whose global pieces are proper, so that the
+generated sieves are nonmaximal and the modalities live. On that factor
+the theory is complete and exact --- genuine subcanonical topologies;
+distinct, non-identity modalities separated by explicit witnesses; a
+computed join; explicit reflectors verified directly against the universal
+property; and the composition theorem, which is corrective as well as
+constructive: the modalities are distinct but \emph{commuting}, either
+composite is sheafification for the join, and no artifact licenses a
+noncommutation claim. The provenance half moves what the topology forgets
+into hash-chained marked records that fail closed, checked at the
+serialization level by the same certificate that checks the theorems.
+
+Around that completed core, every remaining surface is fenced. The ambient
+package is named honestly as a structured tuple whose executable schema is
+narrower than its notation; the probabilistic and linear analogies are
+blocked by explicit gates; backward compatibility is a conjecture with two
+incomplete round trips; the resolved semantics is four independent
+channels until coupling is proved, under a registered obligation with
+acceptance criteria; novelty is unassessed; and ten conjunctive gates
+stand between the artifact set and any exit from Ring~4. The monograph's
+contribution is the pairing: a small theory proved to the bottom, and a
+boundary discipline maintained with the same precision as the proofs.
+Preserving that pairing --- promoting nothing that the ledger does not
+promote, while defending everything it does --- is the standard against
+which any successor to this successor should be judged.

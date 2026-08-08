@@ -1,0 +1,147 @@
+\chapter{Evidence, Limitations, and Conclusion}\label{evid:chapter}
+
+A monograph that spent thirteen chapters teaching its reader to distrust unearned claims owes its final chapter an exact accounting of what it can itself show. The accounting has three parts. First, the evidence: the bound Gate~4 receipt, stated to the digit and the digest, together with a precise description of what the tested behaviors are and---with equal precision---what kind of evidence software tests are and are not. Second, the limitations: the complete catalog of open boundaries, expanded rather than summarized, because a limitations list that compresses is a limitations list that leaks. Third, the conclusion, which restates the monograph's thesis in its final form: CAS-Ohm 1.0 is viable as a profile-specific experimental response and calibration proposal precisely because its type system makes the Ohm analogy testable and rejectable, and everything the analogy might someday assert remains, today, deliberately unasserted.
+
+\section{The Gate-4 receipt}\label{evid:sec:receipt}
+
+\begin{finding}[Bound software evidence at the Gate-4 receipt]\label{evid:find:receipt}
+At the bound Gate~4 source boundary, the CAS-Ohm suite records exactly: 65 passing test methods, with suite test-ID SHA-256
+\texttt{2E81A685961286D944894A22EB93345B97211B4433B6C71EAF628D84CD8EB1EF};
+58 passing parameterized subtests in the combined focused receipt; eight retained source conflicts or under-specifications; and zero authenticated Evidence-Packet eligibility paths.
+\end{finding}
+
+Each of the four numbers is a different kind of fact, and the receipt's value lies in keeping the kinds separate. The 65 test methods are the suite's enumerable surface: named test functions, each encoding an obligation of the candidate specification, whose identifiers are canonically hashed so that the receipt binds \emph{which} tests passed, not merely how many---a suite that silently swapped a hard test for an easy one would change the digest. The 58 parameterized subtests are the combinatorial interior: single obligations exercised across systematically varied inputs (boundary values, enum members, malformed variants), counted in the combined focused receipt. The eight retained conflicts are not test results at all but preserved \emph{negative} knowledge---the source audit of Chapter~4 carried forward unresolved, exactly as the audit rule requires, so that the receipt attests the suite passed \emph{without} the sources having been harmonized. And the zero is the receipt's most important number: the tested absence of any code path by which authenticated Evidence-Packet eligibility could become true (Chapter~11), a negative capability result that turns a design promise into a checked property.
+
+\begin{remark}[What a receipt is]\label{evid:rem:receipt}
+The receipt is historical software evidence: a statement that, at one bound commit, one suite passed under one runtime. It is not a proof of correctness, not a statement about any other commit, and not evidence about any live model. The monograph cites it as what it is---the strongest fact currently available about the candidate, and a fact strictly about software.
+\end{remark}
+
+The epistemology deserves one further paragraph, because the monograph's claim discipline depends on readers holding three distinctions simultaneously. First, \emph{tested is not proved}: a passing suite establishes that the implementation behaved as specified on the exercised inputs; it bounds neither the unexercised input space nor the specification's own adequacy. Second, \emph{verification is not validation}: in the classical simulation vocabulary adopted in Chapter~6, the suite verifies that the software implements its stated contracts, and validation---whether the contracts describe anything real---is precisely what the unexecuted hypotheses of Chapter~12 would address. Every sentence in this chapter about ``tested behavior'' is a verification sentence. Third, \emph{historical is not current}: the receipt binds one commit; the monograph is source-bound to the same boundary, and any statement about later states of the repository would require a later receipt. The digest makes this bounding checkable: a reader holding the repository can recompute the suite identity and confirm that the tests this chapter counts are the tests that ran.
+
+\section{Threats to the receipt's validity}\label{evid:sec:threats}
+
+A receipt this load-bearing should disclose its own weaknesses. Four are structural and admitted here rather than left for reviewers to discover.
+
+\begin{threat}[Coverage is enumerable, adequacy is not]\label{evid:threat:coverage}
+The suite exercises the behaviors its authors thought to test. The ten areas of Section~\ref{evid:sec:suite} were derived from the specification and the audit, but no coverage metric---line, branch, or mutation---is bound into the receipt, and a specification obligation with no corresponding test is invisible to it. The receipt attests what passed, not what was omitted.
+\end{threat}
+
+\begin{threat}[The specification and the tests share authors]\label{evid:threat:sharedauthors}
+The tests encode the same team's reading of the same sources as the implementation. A shared misreading---of a source conflict, of a boundary convention---would pass symmetrically. Independent recomputation and external review (Chapters 11 and 12) are the designed correctives, and both remain open.
+\end{threat}
+
+\begin{threat}[Single runtime, single platform]\label{evid:threat:runtime}
+The receipt binds one runtime environment. Behaviors normalized by the candidate (such as the host integer-conversion case in the canonical layer) are tested on that runtime; other platforms' failure surfaces are untested, and the dependency identities that would make cross-platform replay authoritative are named but not materialized (Chapter~11).
+\end{threat}
+
+\begin{threat}[Fixtures resemble their authors' expectations]\label{evid:threat:fixtures}
+Golden rejection fixtures and synthetic boards are constructed adversarially, but by the same imagination that built the validators. An adversary with different incentives may find inputs outside the fixture family. The bounded canonical-encoding limits reduce this surface; they do not close it.
+\end{threat}
+
+None of the four threats is an argument against the receipt; they are the reasons the receipt is bounded evidence rather than assurance, and the reasons steps five through eight of the closure protocol place recomputation, replication, audit, and review outside the project's own hands.
+
+\section{What the suite exercises}\label{evid:sec:suite}
+
+The suite's coverage groups into ten behavioral areas. For each, the paragraph below states what is tested and what the passing tests establish; the uniform caveat---established \emph{for the software}, at the receipt, and nothing more---applies to all ten and is not repeated.
+
+\emph{Quantity and unit rejection.} The admissibility map from quantity kinds to unit kinds (sixteen kinds against seven units; Appendix~A) is exercised positively and negatively: every allowed pairing constructs, every forbidden pairing raises the candidate's validation error, range constraints hold (Q10 in $[0,10]$, Q100 in $[0,100]$, fractions in $[0,1]$, nonnegativity where declared, strict positivity of effective resistance), and the mixed-scale confusions preserved in Conflict~1 are unrepresentable as admitted values.
+
+\emph{Canonical evidence limits.} The canonical encoder's declared bounds---depth, node count, container size, text length, output size, and the 2{,}048-bit integer limit---are tested at and beyond each boundary; exact-type tagging rejects subtype smuggling; cycles are detected; unsafe Unicode is rejected; and a host-runtime integer-conversion failure is normalized to the candidate's validation error rather than leaking a platform exception.
+
+\emph{Calibration identity.} Profile digests recompute stably; any mutation of a bound field changes the digest; records binding a digest that fails recomputation are rejected; and profile-relative quantities refuse cross-profile use without a stated comparison rule.
+
+\emph{Split separation.} The anti-circularity contract of Chapter~6 is enforced in type: calibrated resistance requires a held-out dataset split reference, the same-sample role is typed as \texttt{APPARENT\_SAME\_SAMPLE} and refused wherever prediction demands calibration, and the circular procedure---fit and evaluate on one sample---cannot be expressed as an admitted prediction.
+
+\emph{Exact Q4 boundaries.} The quantization of Chapter~8 is tested at the cut points: exact decimal comparison at $2.5$, $5$, and $7.5$; half-open band assignment including values exactly at a cut; the pre-clipping identity and separate overload ratio (the worked $1.2$ full-scale case yielding exact $12$, displayed $10$, overload $1.2$, band Q4); and the boundary-preservation property that display rounding never moves a value across a band.
+
+\emph{Structural network constraints.} The capability gates of Chapter~9 are exercised: series requires a simple acyclic chain, unit agreement, active-region components, and one profile; parallel requires genuine alternative branches with shared endpoints; gain composition requires adjacent coordinate agreement and dimensionless gains; duplicate and cyclic paths fail closed; and every aggregate binds ordered child provenance, topology, and the declared covariance limitation.
+
+\emph{Residual censoring.} The rules of Chapter~10: residuals require instrumented held-out observations, matching test points, a registered prediction, and calibrated resistance; at zero or zero-compatible predicted response the ratios are censored with explicit reasons and no residual quantity is emitted.
+
+\emph{Uncertainty.} Typed uncertainty records validate their internal order (lower bound, value, upper bound), unit agreement with the measurement, confidence strictly inside $(0,1)$, and unit-constraint satisfaction of the interval endpoints themselves; values without required uncertainty are refused where the schema demands it.
+
+\emph{Lineage.} Provenance obligations per measurement kind are enforced: instrumented values require instrument, test point, calibration binding, and raw artifacts; model-derived values require ordered, contiguous, duplicate-free derivation parents; proxy and score kinds require raw artifacts; control references and control bindings must agree exactly.
+
+\emph{Fail-closed capability behavior.} The rejection classes of Chapter~11 (score-only, zero-instrumentation, missing-provenance, mixed-scale, unknown-profile, tampered) reject fully and without partial admission; trust modes pair only with their unauthenticated authorization states; fixture-key attestations verify and replay as integrity checks while the eligibility field remains false in every fixture---the tested constant behind the receipt's fourth number.
+
+\section{The seven synthetic known-fault boards}\label{evid:sec:boards}
+
+The suite's most instructive fixtures are seven synthetic boards---software-defined response surfaces with declared, known faults---against which the candidate's classification and diagnostic machinery is run end to end. The boards are software-only validation: each is a constructed function, not a model, and what a board can establish is exactly that the candidate's code draws the intended conclusion \emph{when the fault is real by construction}. The boards are, in effect, the unit tests of the diagnostic vocabulary.
+
+The board set is not arbitrary. Its seven members map onto the program's own structure: the first four boards (linear, cutoff, saturation, nonlinear) exercise the dose-response classification axis of Chapter~7 across its principal regions; the fifth (parallel) exercises the network arithmetic of Chapter~9; and the last two (confounded, bypass) are constructed temptations---each realizes, in software, the exact overinterpretation that a preserved source conflict warns against, so that the suite can verify the candidate declines it even when the tempting conclusion happens to be true by construction. Each board declares its fault parameters as design values under the ontology of Chapter~3, runs through the same typed pipeline as any future live data would, and asserts both positive expectations (the intended classification and diagnostics) and negative ones (the absence of every diagnostic the region and censoring rules forbid).
+
+\emph{Linear.} A clean proportional response within declared bounds. The reference board: classification must find the active region, the fitted resistance must match the constructed slope within the declared tolerance, and residuals must center on zero. A candidate that fails the linear board fails everywhere; a candidate that passes only the linear board has been tested against nothing.
+
+\emph{Cutoff.} A dead zone below a constructed dose threshold. Tests that the classifier reports \textsc{cutoff} rather than fitting a spurious shallow slope through the flat region, and that no diagnostic is emitted from the cutoff region---the flat-response ambiguity of Chapter~7 handled as the sources' own addendum requires.
+
+\emph{Saturation.} Response flattening above a constructed ceiling. Tests \textsc{saturation} classification, the meaninglessness of saturated-stage residuals (Conflict~7), and the separate retention of overload where the normalized value clips.
+
+\emph{Nonlinear.} A smoothly curved response with no linear region of the declared minimum width. Tests that the candidate refuses the ohmic vocabulary entirely---\textsc{non-ohmic} classification, no admitted resistance fit---rather than reporting the least-bad line through a curve.
+
+\emph{Parallel.} A constructed two-branch topology whose branch resistances and aggregate obey reciprocal arithmetic by construction. Tests the parallel capability gate end to end: branch validation, aggregation, child provenance---while establishing only that the arithmetic is implemented correctly, since the branches are parallel by fiat, which is precisely what no live topology is (Chapter~12).
+
+\emph{Confounded.} A board whose apparent dose response is constructed to arise from a covariate correlated with dose. Tests that the control machinery detects the confound---the label-shuffle and matched-control comparisons exposing that the ``response'' survives dose randomization---and that the candidate declines the response claim.
+
+\emph{Bypass.} A board with a constructed route around a declared constraint, producing the positive-residual signature that the sources' most overinterpreted passage reads as hidden bypass. Tests the discipline of Chapter~10 under maximal temptation: the candidate must rank the anomaly for follow-up \emph{without} emitting a bypass identification, because even here---where the bypass is real by construction---the residual alone does not identify it.
+
+\begin{remark}[Why known faults, and why only software]\label{evid:rem:boards}
+The boards invert the epistemic direction of testing: instead of asking whether the model has a property, they construct the property and ask whether the code sees it. This yields true positives and true negatives for the \emph{software}, with ground truth by fiat. It yields nothing about any live model, because the boards' ground truth is stipulated, not discovered---the boards cannot establish causal or empirical validity, only that the instrument would report correctly if the world were as constructed. The distinction is the verification/validation boundary in classical simulation terms: the boards verify; nothing yet validates.
+\end{remark}
+
+\section{The limitations catalog}\label{evid:sec:limits}
+
+The catalog below is exhaustive by intent. Each entry names the boundary, states what is \emph{not} established, and records what closing it would require.
+
+\emph{Conflicts are preserved, not resolved.} The eight source conflicts of Chapter~4 remain open. The candidate prevents them from contaminating downstream computation by typing---separate quantity kinds, separately named full-scale methods, separately named gain profiles---but the sources still disagree, and no reconciliation, theorem, or experiment has closed any of the eight. Closure would require, per conflict, either a proved bridge or a preregistered experiment; until then, downstream artifacts inherit disciplined disagreement, not resolution.
+
+\emph{No live calibration.} There is no admitted live calibration of any profile: no held-out resistance estimate on a real model, no drift-threshold validation, no inter-rater reliability result for scored kinds. Every calibrated object in this monograph is schema, fixture, or synthetic. Closure requires Gate~5 runs (Chapter~12) with everything that entails.
+
+\emph{A guarded contract, not a validated law.} The implemented prediction $\hat y = a / r_{\mathrm{eff}}$ is a software contract with guards---positivity, uncertainty, split discipline, role checks---not a validated empirical law. The guards ensure that \emph{if} the relation holds in a profile, the candidate can carry it honestly; whether it holds anywhere is exactly hypothesis \texttt{CLM-CAS-OHM-EFFECTIVE-RESISTANCE}, which is untested.
+
+\emph{Networks are structural-only.} Series, parallel, and gain-product operations exist as unauthenticated structural research calculations behind capability gates. Their empirical content---composition, redundancy---is the untested subject of two registered hypotheses, and their known theoretical weakness (interaction, dependence, covariance; the declared zero-covariance approximation) is carried as a limitation on every aggregate rather than discharged.
+
+\emph{Noncausal throughout.} Gain, redundancy, and residual diagnostics are noncausal. No causal model is declared, no identification strategy exists, and the one hypothesis that could earn limited causal vocabulary (\texttt{CLM-CAS-OHM-RESIDUAL-LOCALIZATION}) carries an explicit withdrawal clause on failure. Causal interpretation requires an explicit causal model and identifiable interventions \cite{pearl}; the candidate contains neither.
+
+\emph{State dynamics are open.} Memristive, lacunary, adaptive, and all other history-dependent dynamics remain open (Chapter~13): no state variable, no update law, no hysteresis experiment, and an evidentiary bar that is unmet vacuously.
+
+\emph{No physical quantities.} No CAS-Ohm quantity is a physical voltage, current, resistance, charge, flux, or device property; physical SI units are absent from the ontology and their names are forbidden aliases. The registered product claim asserting otherwise is \textsc{not licensed} and contradicted by current evidence (Chapter~12).
+
+\emph{No authority.} Authenticated Evidence-Packet eligibility is constant false; none of its six preconditions---independently admitted authority manifest, protected key lifecycle, trusted time, materialized dependencies, authenticated instrument evidence, reviewed packet policy---exists (Chapter~11). No safety, clinical, regulatory, product, canon, license, or disclosure authority exists anywhere in the candidate.
+
+\emph{No review.} Internal cross-review and independent external review have not occurred. The monograph itself is \textsc{draft / open / ring 4 / not licensed / held}, and drafting it promotes nothing.
+
+\begin{boundary}[Reading rule for the catalog]\label{evid:bound:catalog}
+The entries above are boundaries, not caveats: each marks vocabulary that is entirely unoccupied, not claims that are weakly supported. A derived artifact may cite this monograph only in ways consistent with every entry simultaneously.
+\end{boundary}
+
+\section{Related work}\label{evid:sec:related}
+
+The candidate's intellectual debts have been cited where incurred; this section gathers them by role rather than repeating their content.
+
+The \emph{metrological} frame---that a quantity's identity, procedure, and uncertainty are inseparable from its value---is the international vocabulary of metrology and the uncertainty-expression guide \cite{vim,gum}. CAS-Ohm borrows their discipline for a nonphysical setting without claiming to be metrology: the no-bare-numbers rule of Chapter~3 is their central lesson transposed into a type system, and the transposition is acknowledged as such---nothing in the borrowed discipline validates the candidate's instruments, which remain unauthenticated (Chapter~11).
+
+The \emph{calibration} frame---that fitting a model to data must represent parameter uncertainty and model discrepancy rather than crowning the best fit as truth---follows the Bayesian calibration tradition \cite{kennedyohagan}. It shapes the anti-circularity rule of Chapter~6 and the uncertainty obligations threaded through every schema; the candidate implements the discipline's bookkeeping while leaving its statistical practice to the unexecuted Gate~5 runs.
+
+The \emph{causal} frame---that causal claims require causal models and identifiable interventions, and cannot be read off associations or residuals---is Pearl's \cite{pearl}. It governs by prohibition: Chapters~10 and~12 use it to fence what residuals and ablations may say, and the forbidden-wording list is in large part its enforcement arm.
+
+The \emph{provenance} frame---typed, attributable derivation records whose structure is explicitly not truth---parallels the W3C PROV model \cite{prov}. Chapter~11's two-axis design is the candidate's rendering of PROV's own caution: provenance is assertion, and trust in the asserter is a separate decision that no record structure can make for its consumer.
+
+The \emph{dynamical} frame---state-dependent constitutive relations, and a behavioral signature for memory---is the memristor and memristive-systems literature \cite{chua71,chuakang76}, borrowed in Chapter~13 as motivating mathematics under an explicit vocabulary gate, with its electrical content and its controversies left where they were found.
+
+What the candidate takes from all five frames is the same single habit: separating what a formalism can carry from what it has earned. What it adds is the enforcement of that habit in software---typed to the point where the historically observed failures of its own sources are unrepresentable, and tested to a receipt.
+
+\section{Conclusion}\label{evid:sec:conclusion}
+
+The thesis of this monograph can now be stated in one paragraph and defended in three.
+
+CAS-Ohm 1.0 is viable as a profile-specific experimental response and calibration proposal precisely because its type system makes the Ohm analogy \emph{testable and rejectable}. Not tested: the five registered hypotheses stand open, their Evidence Packets unadmitted, their protocol frozen but unexecuted. Not accepted: every status label in the artifact chain---\textsc{open}, \textsc{ring 4}, \textsc{not licensed}, \textsc{held}---asserts the absence of promotion. Testable and rejectable: the analogy has been given exact enough types, exact enough splits, exact enough controls, and exact enough falsifiers that a future run must return a verdict one way or the other, and the negative verdict has a prepared, enforceable meaning---capabilities confined, vocabulary withdrawn, outcomes retained.
+
+The first defense is the ontology. Sixteen quantity kinds, seven units, six measurement kinds, and an admissibility map make the historically observed failure modes of the sources---the mixed-scale saturation threshold, the dimensionally unmoored $V/R$, the score-as-telemetry slide, the residual-as-cause leap---unrepresentable or fail-closed. A proposal that cannot state the old errors cannot silently repeat them.
+
+The second defense is the audit. Eight conflicts preserved at evidence-record granularity, none harmonized, each bound to a disposition rule, so that no downstream artifact can claim an inherited coherence the three sources demonstrably lack. The monograph's willingness to keep its sources' disagreements on the record is the same discipline it demands of future experiments: negative knowledge is retained, not managed.
+
+The third defense is the falsification program. Five hypotheses with frozen claim identifiers; a closure protocol whose eight steps fix the analyses, the controls, the falsifiers, and even the permitted sentences before any data exist; an evidentiary bar for the stateful extension set in advance of any implementation; and an eligibility axis that no internal accumulation can move. Whether the model predicts anything is exactly the question this program leaves to controlled, independently audited, independently reviewed experiments---and nothing in this monograph, from its first chapter to this sentence, preempts their answer.
+
+\begin{boundary}[Final claim boundary]\label{evid:bound:final}
+This monograph establishes tested software behavior at the Gate~4 receipt and nothing beyond it: no live execution, no scientific conclusion, no physical measurement, no causal effect, no safety, clinical, or regulatory conclusion, no product capability, no license, no canon admission, and no disclosure. All five registered hypotheses remain \textsc{in review / ring 4 / not licensed / held} without admitted Evidence Packets; authenticated Evidence-Packet eligibility remains constant false; internal cross-review and independent external review remain open. Artifact status \textsc{draft / open / ring 4 / not licensed / held} governs this text and every use of it.
+\end{boundary}

@@ -1,0 +1,734 @@
+\chapter{The Subcanonicity Countermodel and the Representable Repair}\label{ch06:main}
+
+Chapter~\ref{ch05:main} established that the legacy topology is exactly the
+jointly-surjective observational topology and that the modalities intended
+to ride on the ACBE and RPM clauses are trivial. One question about the
+legacy site remains, and it is the question that determines how legacy
+\emph{objects}---as opposed to legacy covers---must be handled by any
+successor: is the legacy topology subcanonical? If every representable
+presheaf $yX$ is a sheaf, then the objects of $\mathrm{Noetica}$ pass into
+the sheaf topos unmodified, carrying their morphisms and their identities
+with them, and every downstream artifact may treat ``the legacy object $X$''
+and ``the sheaf $yX$'' as the same thing. If subcanonicity fails, or merely
+fails to be provable, that identification is illegitimate, and a repair with
+its own discipline is required.
+
+This chapter shows that subcanonicity is \emph{not derivable} from the
+registered axioms, by exhibiting a complete, finite, elementary
+countermodel: the category of sets of size at most two with injections,
+carrying its jointly-surjective coverage. In that model the representable of
+a one-element set fails the sheaf condition against the two-point cover of a
+two-element set, by a computation short enough to display in full and
+instructive enough to reward the display: the matching-family set is a
+singleton, the global-section set is empty, and the gluing map from the
+empty set to the singleton has nowhere to send nothing. We then delimit the
+exact logical status of the result---non-derivability, not universal
+non-subcanonicity---and present the standard repair: the distinguished
+legacy object is represented in the sheaf topos by the associated sheaf
+$a_{\mathrm{legacy}}(yX)$, never by silently treating $yX$ as a sheaf
+\cite{stacks00WO}. Because the countermodel is fully computable, we can go
+further than the repair's statement and compute exactly what the repair does
+in the model---the answer is drastic, and knowing it is drastic is itself
+valuable calibration. The chapter closes with extended remarks on
+countermodel methodology in axiomatic auditing, since the technique used
+here---small finite model, exhaustive verification, sharp scope
+statement---is a template the program relies on repeatedly.
+
+\begin{boundary}\label{ch06:bnd:status}
+Status discipline. The countermodel argument originates in the registered
+mathematical red-team report of Project Coherence (registered under SHA-256
+\texttt{03AEC81BF9F6AA12376C2DF78E6CC410EB636589DA37D2E2534460132BE720C6})
+and is restated here with full proofs; its status, like that of every finite
+result in this monograph, is \textsc{informal proof present}---elementary,
+finite, and checkable, but not peer-reviewed and not formalized in a proof
+assistant. The extended computations of
+Section~\ref{ch06:sec:repaircomputed} (the explicit identification of the
+associated sheaves in the countermodel) are tutorial-level verifications
+presented in this monograph with informal proofs; they are not among the
+registered certificate checks, and nothing promotes them by their appearance
+here. The chapter makes no empirical, causal, safety, or product claim.
+\end{boundary}
+
+\section{What subcanonicity buys}\label{ch06:sec:buys}
+
+A topology $J$ on a small category $\cC$ is \emph{subcanonical} when every
+representable presheaf is a $J$-sheaf
+(Definition~\ref{ch04:def:sheaf}; \cite{maclane,johnstone}). The definition
+is one line; its consequences are the reason anyone cares, and it is worth
+listing them with some precision, because each one is something the legacy
+construction implicitly wanted and---as this chapter shows---was not
+entitled to assume.
+
+First, \emph{the site embeds in its topos}. If $J$ is subcanonical, the
+Yoneda embedding factors through sheaves,
+\[
+y \;:\; \cC \longrightarrow \Sh(\cC,J) \subseteq \PSh(\cC),
+\]
+and remains full and faithful: for all objects $X,Y$,
+\[
+\Hom_{\Sh(\cC,J)}(yX,\,yY)\;=\;\Hom_{\PSh(\cC)}(yX,\,yY)\;\cong\;\Hom_{\cC}(X,Y),
+\]
+the first equality because $\Sh$ is a full subcategory, the second by the
+Yoneda lemma. The objects of the site appear in the topos \emph{as
+themselves}: same morphisms, no new morphisms, no identifications. For a
+program whose objects carry registered identities, this is the property that
+lets ``the object $X$'' name one thing on both sides of the site/topos
+boundary.
+
+Second, \emph{evaluation is representable}. For any sheaf $F$, the Yoneda
+lemma gives $\Hom(yX,F)\cong F(X)$; under subcanonicity this computes
+sections of sheaves by maps in the topos from an object that is itself a
+sheaf. Diagrammatic reasoning about sections---gluing arguments, naturality
+arguments, limit computations---can then be conducted entirely inside
+$\Sh(\cC,J)$.
+
+Third, \emph{covers become genuine colimit statements}. A covering sieve
+$S\in J(X)$ with $yX$ a sheaf exhibits $yX$ as a colimit of the
+representables over $S$ in the sheaf category; covering families become
+effective-epimorphic families. The topology's covers acquire an exactness
+meaning, not merely a bookkeeping one \cite{maclane,johnstone}.
+
+Fourth, there is a largest subcanonical topology on any small category, the
+\emph{canonical topology}, whose covers are the universally
+effective-epimorphic sieves (Remark~\ref{ch04:rem:canonical}). Subcanonicity
+of $J$ is precisely the containment of $J$ in the canonical topology.
+Asserting subcanonicity is therefore asserting a comparison between the
+given coverage and an intrinsic invariant of the category---and comparisons
+require proofs. The legacy source supplied none, and the next section
+explains why none was forthcoming.
+
+\section{Why the legacy axioms do not derive subcanonicity}
+\label{ch06:sec:whynot}
+
+Unfold what subcanonicity demands of the jointly-surjective coverage. Let
+$\{f_i:U_i\to X\}$ be a jointly surjective family and $Y$ any object. The
+sheaf condition for $yY$ along (the sieve generated by) this family says:
+for every family of morphisms $g_i:U_i\to Y$ compatible on all overlaps,
+there is a unique morphism $g:X\to Y$ with $g\circ f_i=g_i$. That is: the
+family is \emph{effective-epimorphic}, and since covers pull back, it must
+be so universally.
+
+Joint surjectivity is a statement about \emph{elements}: every point of $X$
+is hit. Effective epimorphy is a statement about the \emph{morphism supply}
+of the category: the function one would define piecewise---send
+$x=f_i(u)$ to $g_i(u)$, well defined by compatibility---must actually be an
+arrow of $\cC$. In the category of all finite sets and all functions, it
+always is: the piecewise definition is a function, functions are arrows, and
+jointly surjective families are universally effective-epimorphic; the
+jointly-surjective coverage on that category is subcanonical. The registered
+axioms, however, do not say that $\mathrm{Noetica}$ has all functions as
+morphisms. They say its morphisms are generated by designated
+admissibility-relation maps and closed under pullback---a \emph{restricted}
+morphism supply, of unspecified extent. Nothing in the axioms requires the
+piecewise-glued function to be admissible. The gap between
+elementwise covering and morphism-level gluing is exactly the gap the
+axioms leave open, and a derivation of subcanonicity would have to close it
+for every admissible instantiation. The countermodel shows it cannot be
+closed: there is an instantiation---finite concrete sets, a
+composition-closed and pullback-closed class of structure maps, the
+jointly-surjective coverage---in which a glued arrow fails to exist at the
+very first nontrivial cover.
+
+One more framing before the construction. The failure mode has a
+recognizable signature, previewed in Example~\ref{ch04:ex:nonposet}:
+\emph{vacuous compatibility plus missing gluing}. When cover pieces have
+small or empty overlaps, the compatibility condition on a would-be glued
+family degenerates---every family is compatible---while the gluing
+requirement stays fully strong. Categories with restricted morphism supply
+are precisely where this bites, because the compatibility condition is the
+only brake on the demand side, and the morphism supply is the only source on
+the offer side. The countermodel is engineered so that the brake is fully
+released and the source is empty.
+
+\section{The countermodel}\label{ch06:sec:countermodel}
+
+\begin{definition}[The countermodel site]\label{ch06:def:inj2}
+Fix a countable set $\mathcal{U}$ of atoms (so that the category is small)
+and let $\mathcal{I}_{\le 2}$ be the category whose objects are the subsets
+of $\mathcal{U}$ of size at most two, and whose morphisms are the
+\emph{injections} between them, with ordinary composition of functions.
+Declare a sieve $S$ on an object $X$ to be covering when the family of its
+members is jointly surjective:
+$\bigcup_{f\in S}\im(f)=X$. Write $J_{\mathrm{js}}$ for this assignment.
+\end{definition}
+
+Everything about $\mathcal{I}_{\le 2}$ is finite and enumerable at each
+object, and it is useful to have the counts explicit. For objects $D$, $X$
+with $|D|=d$ and $|X|=n$ (each in $\{0,1,2\}$), the morphism counts are:
+\[
+|\Hom(D,X)| \;=\;
+\begin{cases}
+1 & d=0,\\
+n & d=1,\\
+n(n-1) & d=2,
+\end{cases}
+\]
+so in particular $\Hom(D,X)=\varnothing$ whenever $d>n$: there is no
+injection from a two-element set to a one-element set (pigeonhole), and this
+single emptiness is the engine of the entire countermodel. Composites of
+injections are injections; identities are injections; and pullbacks exist
+and are computed as in $\Set$: the pullback of two injections
+$U\to X\leftarrow V$ is (isomorphic to) the intersection of their images,
+which has size at most two, so $\mathcal{I}_{\le 2}$ is closed under the
+pullbacks the site machinery uses. Up to isomorphism the category has three
+objects---$\varnothing$, a singleton, a doubleton---and readers who prefer a
+skeleton may work with $0=\varnothing$, $1=\{1\}$, $2=\{1,2\}$ throughout;
+we keep named sets $\{a\}$, $\{b\}$, $\{a,b\}$, $\{*\}$ for readability.
+
+\begin{lemma}[Covering sieves contain all point inclusions]
+\label{ch06:lem:points}
+Let $S$ be a sieve on $X$ in $\mathcal{I}_{\le 2}$. Then $S$ is jointly
+surjective if and only if for every $x\in X$ the point inclusion
+$p_x:\{x\}\hookrightarrow X$ belongs to $S$. (For $X=\varnothing$ every
+sieve, including the empty sieve, is jointly surjective.)
+\end{lemma}
+
+\begin{proof}
+($\Leftarrow$) The images of the point inclusions are the singletons
+$\{x\}$, whose union is $X$. ($\Rightarrow$) Let $x\in X$ and choose
+$f:E\to X$ in $S$ with $x\in\im(f)$, say $f(e)=x$. Let $k:\{x\}\to E$ be the
+injection sending $x$ to $e$. Then $f\circ k:\{x\}\to X$ is a member of $S$
+by precomposition closure, and it is an injection from $\{x\}$ sending $x$
+to $x$---but any two injections $\{x\}\to X$ with the same image point are
+equal as functions, and $f\circ k$ has image $\{x\}$, so $f\circ k=p_x$.
+Hence $p_x\in S$.
+\end{proof}
+
+\begin{proposition}[$J_{\mathrm{js}}$ is a Grothendieck topology]
+\label{ch06:prop:topology}
+The assignment $J_{\mathrm{js}}$ of Definition~\ref{ch06:def:inj2}
+satisfies (J1), (J2), and (J3); hence
+$(\mathcal{I}_{\le 2},J_{\mathrm{js}})$ is a site.
+\end{proposition}
+
+\begin{proof}
+(J1) The maximal sieve on $X$ contains $\id_X$, whose image is $X$.
+
+(J2) Let $S$ be covering on $X$ and $g:D\to X$ any arrow; we must show
+$g^{*}S=\{h \mid g\circ h\in S\}$ is covering on $D$. Let $d\in D$. Then
+$g(d)\in X$, so by Lemma~\ref{ch06:lem:points} the point inclusion
+$p_{g(d)}:\{g(d)\}\to X$ lies in $S$. Consider the point inclusion
+$p_d:\{d\}\to D$; the composite $g\circ p_d:\{d\}\to X$ is an injection with
+image $\{g(d)\}$. As in the proof of Lemma~\ref{ch06:lem:points},
+$g\circ p_d$ equals $p_{g(d)}$ precomposed with the bijection
+$\{d\}\to\{g(d)\}$, hence lies in $S$ by closure. So $p_d\in g^{*}S$, for
+every $d\in D$; by Lemma~\ref{ch06:lem:points}, $g^{*}S$ is covering. (If
+$D=\varnothing$ there is nothing to check.)
+
+(J3) Let $S$ be covering on $X$ and let $T$ be a sieve on $X$ such that
+$f^{*}T$ is covering on $D$ for every $f:D\to X$ in $S$. Let $x\in X$; we
+find a member of $T$ hitting $x$. By Lemma~\ref{ch06:lem:points},
+$p_x\in S$; by hypothesis $p_x^{*}T$ is covering on $\{x\}$, so it contains
+the point inclusion $\id_{\{x\}}$ (Lemma~\ref{ch06:lem:points} again, at the
+object $\{x\}$). Membership $\id_{\{x\}}\in p_x^{*}T$ means
+$p_x\circ\id=p_x\in T$, and $\im(p_x)\ni x$. Hence $T$ is jointly
+surjective, i.e.\ covering.
+\end{proof}
+
+\begin{remark}[The countermodel instantiates the registered
+axioms]\label{ch06:rem:instantiation}
+To serve as a countermodel to \emph{derivability}, the site must satisfy
+what the registered axioms demand, at the level at which a derivation would
+have to operate (Boundary~\ref{ch05:bnd:schema}). The checklist: the objects
+are finite concrete sets; the category is small; the morphisms form a
+designated class of structure-preserving maps (injections) containing all
+identities, closed under composition and under the pullbacks used by the
+site machinery; the observational clause (O) is instantiated by the
+jointly-surjective coverage just verified. Clauses (A) and (R) are
+instantiated degenerately but legitimately: take the ACBE designation to be
+the reflexive one (the identity at each context), and take the RPM data to
+be $R(X)=X$ with $\eta_X=\varepsilon_X=\id_X$, a valid section-retraction
+pair. By Theorem~\ref{ch05:thm:collapse} these clauses contribute only
+maximal sieves in \emph{every} model, so the total legacy topology of this
+model is exactly the $J_{\mathrm{js}}$ of
+Proposition~\ref{ch06:prop:topology}. Where the registry's fuller
+instantiation data (the forty-index object class, the specific admissibility
+generators) are not reproduced here, that is because a derivation of
+subcanonicity from the axioms could not lean on them either---no registered
+axiom ties the index structure to the existence of glued morphisms, and a
+proof from the axioms must survive every instantiation the axioms permit.
+That is precisely what the next section refutes.
+\end{remark}
+
+\section{The failed gluing, in full}\label{ch06:sec:failure}
+
+We now carry out the central computation with nothing suppressed. Fix two
+atoms $a\ne b$ and a third atom $*$, giving objects $\{a\}$, $\{b\}$,
+$\{a,b\}$, $\{*\}$ of $\mathcal{I}_{\le 2}$.
+
+\begin{lemma}[The cover and its sieve]\label{ch06:lem:sieve}
+Let $S_2$ be the sieve on $\{a,b\}$ generated by the two point inclusions
+$p_a:\{a\}\hookrightarrow\{a,b\}$ and $p_b:\{b\}\hookrightarrow\{a,b\}$.
+Then:
+\begin{enumerate}
+\item $S_2$ is covering for $J_{\mathrm{js}}$;
+\item $S_2$ consists exactly of the arrows into $\{a,b\}$ whose domain has
+size at most one---that is, all four injections from singletons (two with
+image $\{a\}$, two with image $\{b\}$, allowing arbitrary singleton domains
+from $\mathcal{U}$) at each singleton domain, together with the unique
+arrow from $\varnothing$;
+\item $S_2$ is not maximal: neither $\id_{\{a,b\}}$ nor the swap
+automorphism belongs to it;
+\item $S_2$ is the \emph{minimum} covering sieve on $\{a,b\}$: it is
+contained in every covering sieve.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(1) The images $\{a\}$ and $\{b\}$ of the generators union to $\{a,b\}$.
+
+(2) Membership in the generated sieve means factoring through $p_a$ or
+$p_b$. Any arrow $f:D\to\{a,b\}$ with $|D|\le 1$ has image contained in
+$\{a\}$ or in $\{b\}$ (its image has at most one point), hence factors
+through the corresponding point inclusion: for $D=\varnothing$ via the empty
+injection into either singleton, and for $D=\{d\}$ via the bijection
+$\{d\}\to\{f(d)\}$ followed by $p_{f(d)}$. Conversely any arrow factoring
+through a singleton has domain of size at most one, injections being
+injective. So the members are exactly the arrows from objects of size at
+most one.
+
+(3) The two automorphisms of $\{a,b\}$ have two-element domain, hence are
+not members by (2). (Equivalently: were either present,
+Lemma~\ref{ch05:lem:iso} would make $S_2$ maximal, and (2) shows it is
+not.)
+
+(4) By Lemma~\ref{ch06:lem:points} every covering sieve on $\{a,b\}$
+contains $p_a$ and $p_b$, hence contains the sieve they generate.
+\end{proof}
+
+\begin{theorem}[The representable $y\{*\}$ is not a sheaf]
+\label{ch06:thm:notsheaf}
+Consider the representable presheaf $y\{*\}=\Hom_{\mathcal{I}_{\le 2}}(-,\{*\})$
+and the covering sieve $S_2$ on $\{a,b\}$. Then:
+\begin{enumerate}
+\item the matching-family set $\mathrm{Match}(S_2,\,y\{*\})$ has exactly one
+element;
+\item the section set $y\{*\}(\{a,b\})$ is empty;
+\item hence the gluing map
+$y\{*\}(\{a,b\})\to\mathrm{Match}(S_2,\,y\{*\})$ is injective but not
+surjective: $y\{*\}$ is separated for $S_2$ but has a matching family with
+no amalgamation, and is therefore not a $J_{\mathrm{js}}$-sheaf.
+\end{enumerate}
+Consequently $(\mathcal{I}_{\le 2},J_{\mathrm{js}})$ is not subcanonical.
+\end{theorem}
+
+\begin{proof}
+(1) A matching family assigns to each $f:D\to\{a,b\}$ in $S_2$ an element
+$x_f\in y\{*\}(D)=\Hom(D,\{*\})$, naturally. By
+Lemma~\ref{ch06:lem:sieve}(2), every member has $|D|\le 1$, and for such $D$
+the set $\Hom(D,\{*\})$ is a \emph{singleton}: the empty injection when
+$D=\varnothing$, the unique bijection $D\to\{*\}$ when $|D|=1$. So there is
+exactly one candidate assignment---$x_f$ is the unique element of its
+singleton---and no freedom anywhere. It remains to observe that the
+candidate is in fact matching: for any $h:E\to D$, both $x_{f\circ h}$ and
+$x_f|_h=x_f\circ h$ are elements of $\Hom(E,\{*\})$, which is again a
+singleton (as $|E|\le|D|\le 1$), so they are equal. Hence
+$\mathrm{Match}(S_2,y\{*\})$ is a singleton: the compatibility conditions
+are all vacuously satisfied by forced data. This is the ``vacuous
+compatibility'' half of the signature announced in
+Section~\ref{ch06:sec:whynot}: the pieces $\{a\}$ and $\{b\}$ overlap only
+over $\varnothing$, where $y\{*\}$ holds no information, so the cover
+imposes no constraint that could rule the family out.
+
+(2) $y\{*\}(\{a,b\})=\Hom(\{a,b\},\{*\})$ is the set of injections from a
+two-element set to a one-element set, which is empty by pigeonhole. This is
+the ``missing gluing'' half: the would-be amalgamation---the function
+sending both $a$ and $b$ to $*$---exists perfectly well as a function, but
+it is not injective, so it is not an arrow of $\mathcal{I}_{\le 2}$. The
+category's morphism supply stops exactly one arrow short of what the cover
+demands.
+
+(3) The gluing map is a map $\varnothing\to\{\text{pt}\}$; it is vacuously
+injective and not surjective. A sheaf requires bijectivity for every
+covering sieve; $S_2$ is covering by Lemma~\ref{ch06:lem:sieve}(1); so
+$y\{*\}$ is not a sheaf, and subcanonicity fails for the site.
+\end{proof}
+
+\begin{corollary}[Non-derivability]\label{ch06:cor:nonderivable}
+Subcanonicity of the legacy site is not derivable from the registered
+axioms: there exists a model of the axioms
+(Remark~\ref{ch06:rem:instantiation}) whose jointly-surjective coverage is
+not subcanonical (Theorem~\ref{ch06:thm:notsheaf}). Hence every artifact
+that treated a bare legacy representable as a sheaf was relying on an
+unproved assumption, and the v7.4 corrigendum's retraction of that usage
+(Section~\ref{ch05:sec:corrigendum}) is mandatory, not precautionary.
+\end{corollary}
+
+\begin{remark}[How little was needed]\label{ch06:rem:minimal}
+It is worth tallying the ingredients, because the economy of the
+countermodel is itself methodologically instructive
+(Section~\ref{ch06:sec:methodology}). The argument used: one cover with two
+pieces whose overlap carries no data; one target object small enough that
+pigeonhole empties the crucial hom-set; and the injectivity constraint on
+morphisms, which is what prevents the set-level gluing from being an arrow.
+No infinite structure, no exotic category, no interaction with the ACBE/RPM
+clauses (which contribute only maximal sieves and hence cannot rescue
+gluing: a maximal sieve's gluing condition is automatic and so adds no
+constraint that would exclude the offending matching family---nor any new
+way to satisfy it). Three objects up to isomorphism suffice. When an
+axiom system's intended theorem fails, it usually fails small, and the
+audit practice of searching small models first
+(Protocol~\ref{ch06:prot:audit}) is calibrated to exactly this experience.
+\end{remark}
+
+\section{The exact logical status}\label{ch06:sec:status}
+
+Precision about what has and has not been proved is the difference between
+an audit finding and a rhetorical flourish. Three statements must be held
+apart.
+
+\emph{First: what is proved.} The registered axioms do not entail
+subcanonicity. This is a non-derivability result, established by the
+standard model-theoretic route: a structure satisfying the axioms in which
+the candidate theorem is false. Any purported proof of subcanonicity from
+the registered axioms alone is unsound---it would prove a false statement
+about $(\mathcal{I}_{\le 2},J_{\mathrm{js}})$.
+
+\emph{Second: what is not proved.} Universal non-subcanonicity is not
+established. Nothing here shows that the intended, fully instantiated
+$\mathrm{Noetica}$---with its registered forty-index object class and its
+actual admissibility generators---fails subcanonicity. That question is
+simply open, and it is a question about a particular site, answerable only
+by working with that site's registered data. The countermodel neither
+answers it nor prejudges it.
+
+\emph{Third: the independence observation.} The same axiom schema also
+admits models in which subcanonicity \emph{holds}, so the statement is
+independent of the schema: neither it nor its negation is derivable. A
+witness is already in hand from Chapter~\ref{ch04:main}: take the site to
+be a finite powerset poset with inclusion maps---inclusions are injections
+between finite sets, identities are present, composition and pullback
+(intersection) closure hold---with the jointly-surjective coverage, which
+for inclusions is exactly the union coverage. There, every representable is
+a sheaf: if every piece of a covering family lands in $W$, their union,
+which is the covered object, lands in $W$; this is
+Example~\ref{ch04:ex:representables} generalized, and it is the same
+argument that proves the successor's context-factor topologies subcanonical
+later in the monograph. The two models bracket the axioms from both sides,
+and the bracket is the correct summary: \emph{the registered axioms
+underdetermine subcanonicity}. Deriving it for an exact revised site is a
+registered open obligation of the program, with a proof required; until
+that obligation closes, the repair of the next section is the only
+licensed handling of legacy representables.
+
+\begin{finding}\label{ch06:fnd:status}
+Subcanonicity is independent of the registered legacy axiom schema:
+$(\mathcal{I}_{\le 2},J_{\mathrm{js}})$ satisfies the axioms and refutes
+it; finite powerset posets with union coverage satisfy the axioms and
+verify it. All prior text asserting or silently using legacy subcanonicity
+is retracted to the conditional form: \emph{if} a revised exact site is
+proved subcanonical, \emph{then} representables may be used as sheaves
+there; otherwise the associated-sheaf repair applies.
+\end{finding}
+
+\section{The standard repair: $a_{\mathrm{legacy}}(yX)$}
+\label{ch06:sec:repair}
+
+The repair is classical and requires no invention; what it requires is
+discipline in use. Let $a_{\mathrm{legacy}}$ denote sheafification for the
+legacy site, and let $X$ be a distinguished legacy object. The
+representable $yX$ is a presheaf in any case; its associated sheaf
+\[
+a_{\mathrm{legacy}}(yX)\;\in\;\Sh(\cC,\,J_{\mathrm{legacy}}),
+\qquad
+\eta_{yX}\;:\;yX\longrightarrow a_{\mathrm{legacy}}(yX),
+\]
+is the canonical---and, absent a subcanonicity proof, the only
+licensed---avatar of $X$ in the legacy sheaf topos \cite{stacks00WO}. Three
+properties govern its use.
+
+\begin{proposition}[What the repair preserves]\label{ch06:prop:preserves}
+For every sheaf $G\in\Sh(\cC,J_{\mathrm{legacy}})$, composition with the
+unit induces a bijection
+\[
+\Hom_{\Sh}\bigl(a_{\mathrm{legacy}}(yX),\,G\bigr)
+\;\cong\;
+\Hom_{\PSh}(yX,\,G)
+\;\cong\;
+G(X),
+\]
+naturally in $G$. That is: mapping \emph{out of} the repaired object into
+sheaves computes exactly evaluation at $X$, just as mapping out of $yX$
+does.
+\end{proposition}
+
+\begin{proof}
+The first bijection is the universal property of sheafification
+(Definition~\ref{ch04:def:assoc}); the second is the Yoneda lemma. Both are
+natural in $G$.
+\end{proof}
+
+So a pipeline that uses legacy objects only as \emph{probes}---evaluating
+sheaves at $X$, forming matching data over covers of $X$, indexing
+assessments by $X$---loses nothing under the repair: the repaired object
+represents evaluation at $X$ on the entire sheaf category. What the repair
+does \emph{not} preserve is the internal structure of the object itself:
+its sections over other objects, its automorphisms in the topos, its
+distinctness from other repaired objects. The countermodel makes this
+concrete, and the computation is worth doing in full because it
+demonstrates that the repair can be as far from innocuous as it is from
+optional.
+
+\subsection{The repair computed in the countermodel}
+\label{ch06:sec:repaircomputed}
+
+\begin{proposition}[Associated sheaves of representables in
+$\mathcal{I}_{\le 2}$]\label{ch06:prop:computed}
+In $(\mathcal{I}_{\le 2},J_{\mathrm{js}})$, write $\Set(-,X)$ for the
+presheaf $D\mapsto\Set(D,X)$ of \emph{all} functions into the underlying
+set of $X$, with restriction by precomposition. Then for every object $X$:
+\begin{enumerate}
+\item $\Set(-,X)$ is a $J_{\mathrm{js}}$-sheaf;
+\item the evident inclusion $yX\hookrightarrow\Set(-,X)$ (injections are
+functions) exhibits $\Set(-,X)$ as the associated sheaf of $yX$, i.e.\
+$a(yX)\cong\Set(-,X)$ with the inclusion as unit;
+\item in particular $a(y\{*\})\cong\mathbf{1}$, the terminal sheaf: the
+repaired singleton representable has exactly one section over every
+object.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) We check the sheaf condition using the minimum covering sieves, which
+exist at every object; by Lemma~\ref{ch06:lem:points} every covering sieve
+on $D$ contains the sieve generated by the point inclusions of $D$, and a
+presheaf gluing bijectively along a subsieve that is itself covering glues
+bijectively along any larger covering sieve provided its verdicts are
+consistent---here we simply check all cases directly. At $D=\varnothing$:
+the empty sieve covers, and $\Set(\varnothing,X)$ is a singleton (the empty
+function), as required (Lemma~\ref{ch04:lem:null}). At $|D|=1$: by
+Lemma~\ref{ch06:lem:points} a covering sieve contains
+$\id_D$ (the point inclusion of the unique point is the identity up to the
+bijection of singletons; precomposition closure then yields $\id_D$ itself),
+hence is maximal, and maximal sieves glue freely
+(Example~\ref{ch04:ex:maximal}). At $|D|=2$, say $D=\{x,y\}$: a matching
+family for the minimum sieve $S_{\min}(D)$ assigns to each singleton-domain
+member an element of a $\Set(E,X)$ with $|E|=1$, naturally; unwinding as in
+Theorem~\ref{ch06:thm:notsheaf}(1), the family is freely determined by its
+values at the two point inclusions $p_x,p_y$, i.e.\ by a pair of functions
+$\{x\}\to X$, $\{y\}\to X$, i.e.\ by an arbitrary function $D\to X$; and
+the gluing map sends $g\in\Set(D,X)$ to exactly that pair. It is therefore
+a bijection. Larger covering sieves on $D$ contain additionally arrows with
+doubleton domain (isomorphisms onto $D$ or injections into $D$ from other
+doubletons---the latter do not exist for $|D|=2$ except isomorphisms);
+a matching family's values there are forced by naturality from the point
+values, and the same bijection results.
+
+(2) By Proposition~\ref{ch04:prop:uniqueness} it suffices to show the
+inclusion $\iota:yX\to\Set(-,X)$ has the universal property: every map
+$\alpha:yX\to G$ with $G$ a sheaf factors uniquely through $\iota$. Both
+existence and uniqueness follow from the plus-construction description, but
+the direct route is cleaner here: the presheaf $\Set(-,X)$ is generated
+over $yX$ by gluing, in the precise sense that every section
+$g\in\Set(D,X)$ restricts along the minimum covering sieve of $D$ to
+sections lying in the image of $\iota$ (over domains of size at most one,
+every function is injective or empty, hence \emph{is} an injection---this
+is the pivotal smallness fact). Given $\alpha:yX\to G$, define
+$\bar\alpha_D(g)$ as the amalgamation in $G(D)$ of the matching family
+$\bigl(\alpha_E(g\circ h)\bigr)_{(h:E\to D)\in S_{\min}(D)}$---well
+defined since $G$ is a sheaf and the family matches by naturality of
+$\alpha$; uniqueness of amalgamations makes $\bar\alpha$ natural and forces
+it on all of $\Set(-,X)$, and $\bar\alpha\circ\iota=\alpha$ because for
+injective $g$ the family already has the amalgamation $\alpha_D(g)$. Any
+other factorization agrees with $\bar\alpha$ on restrictions to the
+covering sieve, hence everywhere, by separatedness of $G$.
+
+(3) $\Set(D,\{*\})$ is a singleton for every $D$.
+\end{proof}
+
+\begin{remark}[Reading the computation]\label{ch06:rem:reading}
+Proposition~\ref{ch06:prop:computed} says that in the countermodel,
+sheafification of representables \emph{manufactures exactly the missing
+non-injective maps}: the topology demanded function-like gluing, the
+category supplied only injections, and the associated sheaf completes the
+hom-presheaf $\mathrm{Inj}(-,X)$ to the full function presheaf
+$\Set(-,X)$. Three consequences deserve explicit statement, because each
+is a live risk for any successor that handles legacy objects casually.
+First, \emph{objects can collapse}: all repaired singleton representables
+become terminal, hence pairwise isomorphic---$a(y\{a\})\cong
+a(y\{b\})\cong\mathbf{1}$ even though $\{a\}$ and $\{b\}$ are distinct
+objects of the site. The repair functor need not be injective on objects up
+to isomorphism. Second, \emph{morphisms can appear}: computing with
+Proposition~\ref{ch06:prop:preserves},
+$\Hom_{\Sh}(a(yX),a(yY))\cong a(yY)(X)=\Set(X,Y)$, which strictly contains
+$\Hom_{\mathcal{I}_{\le 2}}(X,Y)$ whenever a non-injective function
+$X\to Y$ exists. The repaired image of the site sees maps the site does not
+have; the composite $X\mapsto a(yX)$ is faithful here but not full. Third,
+\emph{units need not be surjective or bijective}: the unit
+$yX\to\Set(-,X)$ is a proper inclusion at every doubleton evaluated at
+doubletons. None of this is pathology; it is what sheafification is
+\emph{for}---enforcing descent that the site's raw hom-structure does not
+satisfy. But it means that under a non-subcanonical (or
+not-known-subcanonical) topology, ``the object $X$'' and ``the sheaf
+avatar of $X$'' are different mathematical citizens, and no identification
+between them may be made silently.
+\end{remark}
+
+\subsection{Handling discipline for legacy objects}
+\label{ch06:sec:discipline}
+
+\begin{ruleenv}[Representable repair rule]\label{ch06:rule:repair}
+Until an exact revised legacy site is proved subcanonical, every successor
+artifact that places a distinguished legacy object $X$ inside the legacy
+sheaf topos must use $a_{\mathrm{legacy}}(yX)$ and must record that it has
+done so. Prohibited: silently treating $yX$ as a sheaf; transferring
+site-level identities of objects to topos-level isomorphism classes
+(Remark~\ref{ch06:rem:reading} shows repaired objects may become
+isomorphic); inferring site-level morphism counts from topos-level
+hom-sets (the repair may add morphisms). Permitted without further proof:
+using $a_{\mathrm{legacy}}(yX)$ as the representing object for evaluation
+at $X$ on sheaves (Proposition~\ref{ch06:prop:preserves}); forming its
+covers, subobjects, and diagrams inside the sheaf topos.
+\end{ruleenv}
+
+\begin{invariant}[Identity lives at the registry, not in the topos]
+\label{ch06:inv:identity}
+The identity of a legacy object---its registered identifier and canonical
+payload hash---is site-level and serialization-level data. It must travel
+with the marked records of the successor architecture, never be
+reconstructed from topos-level isomorphism class, and never be presumed
+stable under sheafification. A categorical isomorphism is not an identity
+receipt. (This invariant restates, for objects, the division of labor that
+Chapter~\ref{ch05:main} established for covers: the topos computes
+semantics; the registry carries identity and provenance.)
+\end{invariant}
+
+\begin{remark}[If subcanonicity is later proved]\label{ch06:rem:dissolve}
+The repair is self-liquidating. If a future exact revised site is proved
+subcanonical, then for that site every $yX$ is already a sheaf, the unit
+$\eta_{yX}:yX\to a(yX)$ is an isomorphism
+(Proposition~\ref{ch04:prop:localssheaves}), and every use of
+$a_{\mathrm{legacy}}(yX)$ made under Rule~\ref{ch06:rule:repair} becomes
+canonically isomorphic to the bare representable---no migration, no debt,
+no stranded artifacts. This is the reason the rule mandates the repaired
+form rather than waiting: the repaired form is correct in both futures,
+the bare form in only one. Successors should prefer constructions that
+remain valid when open obligations close in either direction; the repair
+is the type specimen of that design principle.
+\end{remark}
+
+\section{Countermodel methodology in axiomatic auditing}
+\label{ch06:sec:methodology}
+
+The countermodel of this chapter is a two-page argument, but it carried
+real weight in the program: it converted an implicit assumption into a
+named open obligation, forced a corrigendum, and imposed a handling rule on
+every downstream artifact. This closing section abstracts the technique,
+because the program's audit posture treats countermodel construction as a
+first-class tool, on par with proof and executable check, and the abstract
+lessons transfer beyond this instance.
+
+\emph{Countermodels refute derivability, which is the auditable claim.}
+An assertion inside a formal program rarely fails by being false in the
+intended model, which is usually rich and forgiving; it fails by being
+underivable from what was actually written down---and underivability is
+what a countermodel certifies. The audit question is never ``do we believe
+subcanonicity?'' but ``does the registered text entail it?''. Model both
+answers: exhibit a structure satisfying exactly the registered text where
+the claim fails (refuting entailment), and where possible a second
+structure where it holds (blocking the overcorrection to
+``the axioms refute it''). The bracket of Finding~\ref{ch06:fnd:status} is
+the complete deliverable; either half alone invites misuse.
+
+\emph{Search small, and search where the demands are strongest and the
+supplies weakest.} The heuristic that found this countermodel generalizes:
+identify what the candidate theorem demands (here: glued morphisms over
+covers) and what the axioms supply (here: an unspecified morphism class),
+then construct the leanest structure that honors every axiom while
+starving the demand. Finiteness is not a concession but a weapon---finite
+models are exhaustively checkable, communicable in full, and immune to the
+suspicion that the failure hides an error in an infinite limit. The size
+cap of two in $\mathcal{I}_{\le 2}$ is exactly the point at which
+pigeonhole first bites; no smaller cap yields a countermodel, which is
+itself worth verifying as an exercise (Exercise~\ref{ch06:exr:minimality}).
+
+\emph{A countermodel is a permanent regression test.} Because the model is
+finite and concrete, its failing computation can be executed, not merely
+believed: enumerate the sieve (Lemma~\ref{ch06:lem:sieve}), count the
+matching families (one), count the sections (zero), compare. The program's
+practice of registering such computations alongside certificates---as it
+does for the collapse mechanisms of Chapter~\ref{ch05:main}---turns each
+audit finding into a machine-checkable invariant that future revisions must
+continue to pass or consciously retire. An axiom change that silently
+restores the broken derivation will trip the executable form of the
+countermodel before it reaches prose.
+
+\emph{Countermodels bound repairs.} The countermodel does not merely
+destroy; it specifies. Any future subcanonicity proof for a revised site
+must visibly use some feature that $(\mathcal{I}_{\le 2},J_{\mathrm{js}})$
+lacks---a richer morphism supply, a restricted cover class, or additional
+axioms---and referees of such a proof should demand to see where the
+countermodel is excluded. Conversely the repair adopted in the meantime
+(Rule~\ref{ch06:rule:repair}) is exactly the construction the countermodel
+shows to be necessary and the universal property shows to be sufficient
+for the mapping-out uses the program actually has. This
+demand--supply--repair triangle is the shape of a completed audit item.
+
+\begin{protocol}[Countermodel audit protocol]\label{ch06:prot:audit}
+For a claim $\Sigma$ asserted or assumed within an axiomatized artifact:
+(1) isolate the registered axioms $A$ actually written, distinguishing
+them from intended-model folklore; (2) restate $\Sigma$ as a demand on
+structures satisfying $A$; (3) attempt derivation sketches to locate the
+load-bearing gap; (4) search finite structures satisfying $A$ that starve
+the gap, smallest first; (5) on success, verify $A$ and refute $\Sigma$ in
+the model with complete proofs, and where feasible register an executable
+form; (6) determine the complementary side---does some model satisfy
+$\Sigma$?---to classify $\Sigma$ as refuted, derivable, or independent;
+(7) issue the scope statement (non-derivability versus universal failure),
+the corrigendum for affected text, and the interim handling rule; (8)
+record the obligations that would license removing the rule.
+Steps (5)--(7) are the deliverable; a countermodel without a scope
+statement and a handling rule is an incident report without a fix.
+\end{protocol}
+
+\begin{boundary}\label{ch06:bnd:closing}
+Applying Protocol~\ref{ch06:prot:audit} to the present chapter: $\Sigma$ is
+legacy subcanonicity; the model refuting it is
+$(\mathcal{I}_{\le 2},J_{\mathrm{js}})$ with the degenerate but licensed
+clause instantiation of Remark~\ref{ch06:rem:instantiation}; the model
+satisfying it is the powerset-poset instantiation of
+Section~\ref{ch06:sec:status}; the classification is \emph{independent};
+the corrigendum item is registered in v7.4; the handling rule is
+Rule~\ref{ch06:rule:repair}; and the discharging obligation---a
+subcanonicity proof for an exact revised site---remains \textsc{open} in
+the registered obligation ledger. No part of this chapter licenses any
+statement beyond that classification.
+\end{boundary}
+
+\begin{exercise}\label{ch06:exr:minimality}
+Show that the size cap two is minimal: in the category of sets of size at
+most one with injections, every jointly-surjective sieve on every object
+is maximal (use Lemma~\ref{ch06:lem:points} and
+Lemma~\ref{ch05:lem:iso}), hence the coverage is subcanonical there.
+Conclude that every countermodel to subcanonicity built from injections
+requires an object with at least two elements, and identify exactly which
+step of Theorem~\ref{ch06:thm:notsheaf} uses it.
+\end{exercise}
+
+\begin{exercise}\label{ch06:exr:othersheaves}
+Determine all sheaves on $(\mathcal{I}_{\le 2},J_{\mathrm{js}})$ up to
+isomorphism in terms of their values at the skeleton objects $0,1,2$ and
+the induced structure maps: show a sheaf is determined by a set
+$F_1=F(1)$ together with an action of the two-element automorphism group
+of $2$ on $F(2)\cong F_1\times F_1$ compatible with the projections, and
+verify your description against Proposition~\ref{ch06:prop:computed}.
+\end{exercise}
+
+\begin{exercise}\label{ch06:exr:emptyrep}
+Verify that $y\varnothing$ \emph{is} a sheaf on
+$(\mathcal{I}_{\le 2},J_{\mathrm{js}})$: its value is a singleton at
+$\varnothing$ and empty elsewhere; check the null cover, the singleton
+covers, and the doubleton covers separately, and reconcile the doubleton
+case with Theorem~\ref{ch06:thm:notsheaf} (why does the empty
+matching-family set rescue $y\varnothing$ but not $y\{*\}$?).
+\end{exercise}
+
+\begin{exercise}\label{ch06:exr:functor}
+Using Proposition~\ref{ch06:prop:preserves}, show that in any site the
+assignment $X\mapsto a(yX)$ extends to a functor $\cC\to\Sh(\cC,J)$, and
+that it is full and faithful if and only if $J$ is subcanonical. Then
+locate the failure of fullness in the countermodel explicitly: exhibit the
+map $a(y\{a,b\})\to a(y\{a,b\})$ corresponding under
+Remark~\ref{ch06:rem:reading} to the constant function and show it is not
+in the image of $\Hom_{\mathcal{I}_{\le 2}}(\{a,b\},\{a,b\})$.
+\end{exercise}

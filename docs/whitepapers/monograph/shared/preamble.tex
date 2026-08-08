@@ -1,0 +1,53 @@
+% Shared preamble for the Project Coherence monograph series.
+% Chapters must use ONLY these packages, environments, and macros.
+\usepackage[margin=1.2in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs,longtable,array}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+% Theorem-like environments, numbered within chapters.
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{construction}[theorem]{Construction}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{ruleenv}[theorem]{Rule}
+\newtheorem{protocol}[theorem]{Protocol}
+\newtheorem{invariant}[theorem]{Invariant}
+\newtheorem{checkclass}[theorem]{Check Class}
+\newtheorem{finding}[theorem]{Adverse Finding}
+\newtheorem{conflict}[theorem]{Preserved Conflict}
+\newtheorem{hypothesis}[theorem]{Registered Hypothesis}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{boundary}[theorem]{Claim Boundary}
+\newtheorem{threat}[theorem]{Threat}
+\newtheorem{notation}[theorem]{Notation}
+
+% Shared macros.
+\providecommand{\llbracket}{[\![}
+\providecommand{\rrbracket}{]\!]}
+\newcommand{\id}{\mathrm{id}}
+\newcommand{\im}{\mathrm{im}}
+\newcommand{\Ob}{\mathrm{Ob}}
+\newcommand{\Hom}{\mathrm{Hom}}
+\newcommand{\PSh}{\mathrm{PSh}}
+\newcommand{\Sh}{\mathrm{Sh}}
+\newcommand{\Set}{\mathbf{Set}}
+\newcommand{\NF}{\mathrm{NF}}
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\rk}{\mathrm{rank}}
+\newcommand{\trace}{\mathrm{tr}}
+% Noetic Topos 2.0 named objects (used by the NT2 monograph chapters).
+\newcommand{\Eamb}{\mathcal{E}_{\mathrm{amb}}}
+\newcommand{\Eres}{\mathcal{E}_{\mathrm{res}}}
+\newcommand{\Eleg}{\mathcal{E}_{\mathrm{legacy}}}
+\newcommand{\Noe}{\mathrm{Noetica}}
+\newcommand{\Jleg}{J_{\mathrm{legacy}}}

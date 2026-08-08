@@ -1,0 +1,225 @@
+\chapter{Registered Hypotheses and the Preregistered Closure Protocol}\label{hyp:chapter}
+
+The preceding chapters built a type system in which the Ohm analogy can be stated without overstating itself. This chapter presents the part of the program that makes the analogy \emph{rejectable}: five registered, falsifiable hypotheses, held in the shared claim ledger under uniform status, together with the preregistered protocol---the Gate~5 closure path---under which any of them could someday be tested. The chapter is long because each hypothesis deserves a full experimental treatment: not merely its claim text, but the design considerations that shape a fair test, the controls that discriminate its predictions from cheaper explanations, the conditions under which it is refuted, and---most important for claim discipline---the exact boundary of what a success would and would not license.
+
+Three governing facts frame everything below and are repeated deliberately at the outset. First, all five hypotheses carry the status \textsc{in review / ring 4 / not licensed / held}; none is established, none is promoted, and none has an admitted Evidence Packet. Second, the ledger additionally records one \emph{product} claim, \texttt{CLM-CAS-OHM-PHYSICAL-TELEMETRY}, as \textsc{not licensed}---and, more strongly, as contradicted by the current evidence; Section~\ref{hyp:sec:telemetry} treats it separately because a prohibited claim is a different object from an untested one. Third, no experiment is admitted in this monograph. The protocol of Section~\ref{hyp:sec:protocol} is a specification of how closure would have to proceed, not a report that it has begun.
+
+\section{The claim ledger and the status discipline}\label{hyp:sec:ledger}
+
+Each hypothesis is registered in the shared claim ledger under a stable claim identifier of the form \texttt{CLM-CAS-OHM-*}. Registration fixes the claim text, its status vector, and its relationship to the Gate~5 preregistration kernel; the ledger artifact and its digest are bound at the Gate~4 source boundary (Chapter~14). The status vector has four coordinates, and their joint meaning bears spelling out once so that the per-hypothesis sections can use the labels without ceremony.
+
+\textsc{in review} states that the claim's own text and framing are still subject to revision by internal cross-review; even the \emph{wording} of the hypotheses is not final. \textsc{ring 4} places the claims in the outermost admission ring: research material, structurally tracked, with no admission into any inner ring of reviewed or relied-upon results. \textsc{not licensed} states that no downstream artifact---product, marketing, incident analysis, or derived paper---may present the claim as established or rely on its truth. \textsc{held} states that the claims are not disclosed beyond the project boundary. The four coordinates are independent; the discipline of Chapter~11 applies here in miniature, since no accumulation of internal polish moves a claim along any of the four axes.
+
+\begin{remark}[Hypotheses are not ordered by confidence]\label{hyp:rem:noorder}
+The five hypotheses are presented in dependency order---local response before resistance, resistance before composition, composition before redundancy and localization---because later ones presuppose machinery whose meaningfulness earlier ones test. The order encodes no confidence ranking. The project records no probability assessments, and the ledger's uniform status makes any such ranking unrepresentable in the artifacts.
+\end{remark}
+
+\begin{remark}[Ledger text governs]\label{hyp:rem:ledgertext}
+The hypothesis statements reproduced in this chapter are faithful restatements for exposition; the registered claim text in the ledger, under its digest, is the governing object. Where this chapter's prose and the ledger's frozen wording could be read differently, the ledger wording controls---the same rule by which the glossary defers to chapters and the monograph defers to its source artifacts. This matters operationally because the Gate~5 freeze (Section~\ref{hyp:sec:step1}) freezes the \emph{ledger} text, and a future run's permitted claim language will be derived from it, not from any secondary description.
+\end{remark}
+
+\section{\texttt{CLM-CAS-OHM-LOCAL-RESPONSE}: held-out local response to randomized alpha}\label{hyp:sec:localresponse}
+
+\begin{hypothesis}[\texttt{CLM-CAS-OHM-LOCAL-RESPONSE}]\label{hyp:hyp:localresponse}
+Within one calibration profile, the held-out local response of the directional activation projection to randomized steering alpha exceeds the response observed under matched controls.
+\end{hypothesis}
+
+This is the foundation hypothesis: it asserts only that the dose coordinate does \emph{something} to the response coordinate, in the profile's active region, beyond what null and mismatched interventions do. Every other hypothesis presupposes it, since a resistance, a gain, or a residual over a nonexistent response relation would be arithmetic on noise.
+
+\subsection{Design considerations}
+
+The operative words are ``within one calibration profile,'' ``held-out,'' and ``randomized,'' and each excludes a familiar failure. Profile confinement excludes the cross-model and cross-test-point aggregation that the sources' vocabulary invites but the audit forbids: a response demonstrated by pooling test points with different directions and full-scale methods would inherit the mixed-scale conflict rather than escape it. The held-out requirement excludes the circularity rejected in Chapter~6: any curve fit on the same samples used to demonstrate it demonstrates only interpolation. Randomization of the alpha schedule excludes confounding between dose level and drift, position in the sweep, or corpus order; a monotone sweep would confound dose with time, and a model drifting over the session would masquerade as dose-responsive.
+
+The design must also fix, in advance, what ``local response'' is measured as---the fit family, the estimator, and the minimum effect size---because a post-hoc choice among estimators is a multiple-comparisons engine. These are precisely the items the Gate~5 freeze (Section~\ref{hyp:sec:step1}) locks before any run.
+
+A further consideration is dose-range placement. The hypothesis concerns \emph{local} response, and the classification machinery of Chapter~7 partitions the dose axis into regions; a randomized grid that spends most of its budget in cutoff or saturation measures the flat shoulders of the curve and starves the active region of samples. The frozen alpha grid must therefore be designed against the profile's declared region rules, and---because region boundaries are themselves estimated---the design must state in advance how sessions whose active region turns out narrower than planned are handled: as censored (with reasons, per Chapter~11) or as failures of the profile's region declaration. Either choice is defensible; an after-the-fact choice is a forking path.
+
+\subsection{Controls}
+
+The applicable controls from the protocol's kit are the zero-intervention control (alpha grid replaced by zeros, establishing the no-dose baseline and its variance); the random same-norm direction control (dose applied along a random unit vector, establishing how much apparent response any norm-matched perturbation produces); the wrong-layer and wrong-token controls (dose applied at a mismatched site, establishing site specificity); and the norm-matched control family generally, which ensures that no comparison confounds direction with magnitude. The hypothesis text's phrase ``matched controls'' binds the comparison to these, under the relevance-method bindings of Chapter~11.
+
+\subsection{Falsification conditions}
+
+The hypothesis is refuted within a profile if the prespecified held-out response statistic fails to exceed the control envelope at the preregistered effect size and confidence---or if it exceeds it only under analysis choices not frozen in advance, which the protocol counts as failure, not as near-success. Refutation is recorded without erasure (Section~\ref{hyp:sec:step4}); a profile in which the model shows no local response is a result, and under the ledger's rules it is a result that contradicts the foundation of the other four hypotheses in that profile.
+
+\subsection{What success would and would not license}
+
+Success would license exactly this sentence: in the tested profile, randomized alpha produced held-out-predictable response above matched controls. It would not license: any statement about other profiles, models, layers, or directions; any causal reading beyond the intervention actually randomized; any claim that the response is linear, ohmic, or stable over time; any product language; and no movement of the claim's status vector, which changes only through the ledger's own review process. Success here is a load-bearing floor for the hypotheses below, and nothing more.
+
+\section{\texttt{CLM-CAS-OHM-EFFECTIVE-RESISTANCE}: held-out prediction and inverse-slope constraint response}\label{hyp:sec:resistance}
+
+\begin{hypothesis}[\texttt{CLM-CAS-OHM-EFFECTIVE-RESISTANCE}]\label{hyp:hyp:resistance}
+A calibrated effective resistance $r_{\mathrm{eff}}$ predicts held-out response within the profile's stated tolerance, and an independent manipulation of a non-safety constraint moves the observed response with the inverse slope that the resistance model predicts.
+\end{hypothesis}
+
+This hypothesis gives the model its first genuinely Ohm-shaped content. It has two conjuncts, and the conjunction is essential. The first conjunct---held-out prediction---establishes that $r_{\mathrm{eff}}$, fit on the calibration split with the declared method and uncertainty, transfers to unseen samples: $\hat y = a/r_{\mathrm{eff}}$ within tolerance. The second conjunct---constraint manipulation---establishes that $r_{\mathrm{eff}}$ is not merely a fitted slope but tracks something manipulable: increasing the constraint should decrease response as $1/r$, with the specific inverse-slope signature the model predicts, under an intervention chosen independently of the fitting procedure.
+
+\subsection{Design considerations}
+
+The first conjunct inherits the full split discipline of Chapter~5: registered calibration split, disjoint held-out split, declared fit method, represented parameter uncertainty and model discrepancy. Predicting within tolerance must mean within \emph{propagated} tolerance---a prediction interval, not a point---or the test quietly rewards underclaimed uncertainty.
+
+The second conjunct carries two deliberate restrictions. The manipulated constraint must be \emph{independent}: identified and varied by a procedure that never saw the calibration data, so that the inverse-slope prediction is a genuine out-of-sample commitment rather than a re-description of the fit. And it must be \emph{non-safety}: the design forbids degrading safety-relevant constraints as an experimental convenience. The restriction is both an ethics rule and a claim-discipline rule---a safety constraint manipulated for curve-fitting would entangle the hypothesis with exactly the safety-verdict vocabulary the forbidden-wording list excludes.
+
+The inverse-slope form deserves emphasis because it is the falsifiable heart. Many models predict that more constraint yields less response; monotone decrease is cheap. The resistance model predicts the \emph{shape} of the decrease. A test that checked only the sign would not test this hypothesis.
+
+The dimensional discipline of Chapter~3 also constrains the second conjunct's bookkeeping. The manipulated constraint arrives as a constraint score (Q10 or Q100, per the preserved scale conflict), and a score is not an effective resistance; the design must therefore register, in advance, the bridge by which constraint-level changes are mapped into predicted resistance changes---a fitted \texttt{RESISTANCE\_DELTA} per constraint step, carried in \textsc{alpha per activation} with uncertainty, never a raw score difference. Without the registered bridge, the inverse-slope comparison would silently commit the dimensional-bridge error (Conflict~3) that the type system exists to block, and the candidate's validators would in fact refuse the comparison records.
+
+\subsection{Controls}
+
+Both conjuncts use the standard kit---zero-intervention, random-direction, wrong-layer, wrong-token, norm-matched---and the second adds constraint-side controls: a sham manipulation (the manipulation procedure executed with null effect) to expose response drift correlated with the act of intervening, and a label-shuffle over constraint levels to establish the no-structure baseline for the slope estimate.
+
+\subsection{Falsification conditions}
+
+The hypothesis fails if either conjunct fails: held-out prediction outside tolerance refutes the transfer claim; a constraint response that is absent, non-inverse, or inconsistent in slope with the fitted $r_{\mathrm{eff}}$ beyond the preregistered comparison rule refutes the manipulability claim. A success on the first conjunct with failure on the second is recorded as overall failure with the partial result retained---the model would then be a predictor but not a resistance, and the ledger language would have to be revised accordingly rather than the result rounded up.
+
+\subsection{What success would and would not license}
+
+Success would license: in the tested profile, $r_{\mathrm{eff}}$ functioned as a calibrated, manipulable inverse-slope parameter. It would not license: the word ``resistance'' in any physical sense; transfer of $r_{\mathrm{eff}}$ across profiles; any statement about \emph{why} the constraint moves the response; any safety claim, since the manipulated constraint is by design non-safety; and no promotion of the network rules of Chapter~9, which depend on the separate composition hypotheses below.
+
+\section{\texttt{CLM-CAS-OHM-GAIN-COMPOSITION}: local-to-end-to-end derivative composition}\label{hyp:sec:gain}
+
+\begin{hypothesis}[\texttt{CLM-CAS-OHM-GAIN-COMPOSITION}]\label{hyp:hyp:gain}
+In the active region, locally measured derivative gains along a declared chain compose multiplicatively to the independently measured end-to-end gain within the stated tolerance.
+\end{hypothesis}
+
+The sources present cascade gain multiplication as a working rule; the audit demoted it to a preregistered prediction (Conflict~6 of Chapter~4), and this hypothesis is that prediction. Its content is a commutation claim: measure each stage's local Jacobian/projection derivative separately, multiply, and compare against the end-to-end derivative measured directly across the whole chain. The chain rule of calculus guarantees this identity for exact derivatives of a smooth composite map evaluated at matched points; the hypothesis is empirical because none of those idealizations holds automatically---the measured gains are finite-difference or fitted estimates, at test points that may not compose, in a system that need not be smooth or stable across the chain.
+
+\subsection{Design considerations}
+
+Three design constraints do the work. \emph{Coordinate agreement}: adjacent stages must share their interface coordinate exactly---the output projection of stage $k$ must be the input coordinate of stage $k{+}1$, per the capability gate of Chapter~9---or the product is dimensionally well-formed but semantically undefined. \emph{Active-region confinement}: every stage must be classified \textsc{active} at the operating point; a saturated intermediate stage clips the composition and the audit's warning that flow is local becomes quantitative. \emph{Matched operating points}: local gains must be measured at the operating point the composite trajectory actually visits, not at each stage's convenient default. The gain-definition conflict (Conflict~4) additionally constrains vocabulary: the gains here are local Jacobian/projection derivatives; Fisher--Rao displacement gain remains a separately named profile, and a success of this hypothesis would \emph{not} bridge the two.
+
+\subsection{Controls}
+
+The composition claim is tested against a shuffled-chain control (stage gains multiplied in an order or pairing that does not correspond to the declared topology, establishing how often near-agreement arises by accident); wrong-layer stage substitutions (one stage's gain replaced by an off-chain measurement); and the norm-matched random-direction control applied per stage. The end-to-end measurement itself carries the standard intervention controls of Section~\ref{hyp:sec:localresponse}.
+
+\subsection{Falsification conditions}
+
+The hypothesis fails if the product of local gains disagrees with the end-to-end gain beyond the preregistered tolerance under the frozen comparison rule, in the active region, with coordinates verified. Failure has a specific documented consequence for the candidate: the gain-product capability of Chapter~9 remains structural-only \emph{permanently} in that profile family---the rule ``must be dropped if the tests fail'' is inherited from the addendum's own falsification rows and is recorded in the ledger, so a failed composition test cannot be quietly survived by the network code that assumed it.
+
+\subsection{What success would and would not license}
+
+Success would license: within the tested profile and chain, multiplicative composition of local derivative gains within tolerance---a statement about the composability of measurements. It would not license: composition across profiles or untested chains; any identification of Jacobian gain with Fisher--Rao gain; the unguarded use of gain products in downstream scoring; and no causal reading of the chain, since a derivative along a declared path is not evidence that the path is the mechanism.
+
+\section{\texttt{CLM-CAS-OHM-REDUNDANCY}: genuine-branch ablation versus matched random-head controls}\label{hyp:sec:redundancy}
+
+\begin{hypothesis}[\texttt{CLM-CAS-OHM-REDUNDANCY}]\label{hyp:hyp:redundancy}
+Ablation of genuine alternative branches produces the specific quantitative response change predicted by reciprocal parallel aggregation, above the change produced by ablating matched random-head controls.
+\end{hypothesis}
+
+The parallel rule of Chapter~9---conductances add, so resistances aggregate reciprocally---is the sources' second network rule and the audit's second demotion. Its empirical content is a redundancy claim: if two branches are genuinely alternative routes between the same endpoints, then removing one should change the effective resistance by the specific amount reciprocal arithmetic predicts, not merely by \emph{some} amount. The hypothesis therefore has the same shape as the resistance hypothesis: a cheap qualitative prediction (ablation changes something) is sharpened into an expensive quantitative one (ablation changes it by \emph{this much}).
+
+\subsection{Design considerations}
+
+The design must first establish that the branches are ``genuine alternative directed branches with the same endpoints'' in the sense of the parallel capability gate---a topological and coordinate condition checked before any ablation, because the audit's sharpest warning here is that co-present guardrails are not automatically parallel routes. Two mechanisms that both suppress a behavior need not be alternative paths for the same flow; they may be sequential, interacting, or entirely disjoint in coordinate. Running the ablation test on non-branches would produce an uninterpretable number, not a refutation.
+
+Second, the ablation itself must be matched: the control ablates randomly selected heads (or units) matched in count, layer distribution, and---where feasible---norm contribution, so that the comparison isolates \emph{branchhood} rather than the generic fragility of the network to any lesion of that size. The audit's covariance limitation applies with full force: reciprocal aggregation assumes independence that real branches need not have, and the declared limitation (cross-input covariance unavailable; zero-covariance approximation) is carried on every aggregate record precisely so that this hypothesis, if tested, tests the approximation too.
+
+\subsection{Controls}
+
+Matched random-head ablations, as above; sham ablation (the ablation machinery engaged with null mask) to expose harness-induced drift; single-branch versus multi-branch ablation series to check that predicted changes compose across successive removals; and the standard intervention controls on the response measurement itself.
+
+\subsection{Falsification conditions}
+
+The hypothesis fails if the post-ablation response change is statistically indistinguishable from matched-random-control changes, or distinguishable but quantitatively inconsistent with the reciprocal prediction beyond tolerance. As with gain composition, failure permanently confines the parallel capability to structural-only status in that profile family, and the ledger records the outcome without erasure.
+
+\subsection{What success would and would not license}
+
+Success would license: in the tested profile and topology, reciprocal aggregation predicted the ablation response of the identified branches. It would not license: the inference that redundancy found here is safety redundancy; any claim about branches not tested; the general validity of parallel arithmetic over co-present mechanisms; and no interpretation of the branches as ``the'' implementation of the behavior, since ablation identifies contribution under lesion, not unique mechanism.
+
+\section{\texttt{CLM-CAS-OHM-RESIDUAL-LOCALIZATION}: blinded implanted faults above shuffled baselines}\label{hyp:sec:localization}
+
+\begin{hypothesis}[\texttt{CLM-CAS-OHM-RESIDUAL-LOCALIZATION}]\label{hyp:hyp:localization}
+Blinded implanted faults are localized by the residual diagnostics of the candidate at a rate above shuffled and matched-control baselines. On failure, all causal language attached to residual diagnostics is withdrawn.
+\end{hypothesis}
+
+Chapter~10 established that a residual is a non-identifying diagnostic: it can rank follow-up probes and cannot, by sign alone, identify a hidden policy, bypass, or cause. This hypothesis is the one channel through which residuals could earn a stronger role, and its design is correspondingly the most defensive of the five. The test is an implanted-fault study: known faults---of the kinds the synthetic boards of Chapter~14 model in software---are introduced into a live profile by an implanting party, and a diagnosing party, blind to the implantation schedule, uses residual diagnostics to localize them.
+
+\subsection{Design considerations}
+
+Blinding is the load-bearing feature. The implanting and diagnosing roles must be separated by an information barrier fixed in the preregistration: fault type, site, magnitude, and schedule are drawn from a frozen distribution by the implanter and revealed to the diagnoser only after localization reports are committed. Without blinding, residual localization is unfalsifiable in practice, because the diagnostician's priors about where faults ``should'' be leak into threshold and probe choices. The fault distribution must include \emph{no-fault} sessions at a frozen rate, so that the false-positive behavior of the diagnostics is measured, not assumed; a localizer that finds faults everywhere is worse than none, since Chapter~10's whole warning is against residual-driven overinterpretation.
+
+The censoring rules of Chapter~10 apply inside the test: faults implanted at operating points with zero-compatible predicted response are expected to be non-localizable, and the preregistration must decide in advance whether such sessions count against the localizer or are excluded as censored---either is defensible; choosing after unblinding is not.
+
+\subsection{Controls}
+
+Shuffled baselines (localization reports scored against a permuted fault schedule, establishing chance agreement); matched-control diagnostics (the same reports scored on no-fault sessions); and a strength gradient in the implanted faults, so that the result characterizes a detection curve rather than a single operating point.
+
+\subsection{Falsification conditions and the withdrawal clause}
+
+The hypothesis fails if blinded localization does not exceed the shuffled and matched baselines at the preregistered rate. Uniquely among the five, this hypothesis carries an explicit \emph{withdrawal clause}, inherited from the audit's residual conflict: on failure, causal language is withdrawn wherever residual diagnostics appear---in the candidate's documentation, in the diagnostic output vocabulary, and in any derived artifact. The clause exists because residuals are the point of maximum drift risk in the entire model: the temptation to read a signed residual as ``hidden resistance'' or ``bypass'' is documented in the sources themselves, and a failed localization test converts that temptation from a discipline problem into a refuted claim.
+
+\subsection{What success would and would not license}
+
+Success would license: in the tested profile, residual diagnostics localized implanted faults of the tested kinds above chance, blind. It would not license: localization claims for fault kinds outside the implanted distribution; any assertion that a residual in the wild indicates a fault (base rates differ); the phrase ``proves hidden resistance,'' which remains on the forbidden-wording list regardless of outcome; and no safety-monitoring role, which would require the separate authority and review machinery of Chapter~11 in addition to statistical success here.
+
+\section{Dependency structure and joint outcomes}\label{hyp:sec:joint}
+
+The five hypotheses are not independent bets, and the program's honesty depends on saying in advance what the possible joint outcomes would mean. The dependency structure is a partial order. \texttt{LOCAL-RESPONSE} is the root: if a profile shows no held-out response above controls, then a resistance fitted in that profile is a parameter of nothing, a gain measured there is a derivative of noise, an ablation study has no response variable, and residuals have no registered prediction to deviate from. \texttt{EFFECTIVE-RESISTANCE} depends on the root and is depended on, in turn, by the two network hypotheses: \texttt{GAIN-COMPOSITION} requires per-stage calibration of the kind the resistance hypothesis tests, and \texttt{REDUNDANCY} requires that per-branch resistances be meaningful before their reciprocal aggregate can be. \texttt{RESIDUAL-LOCALIZATION} depends on the root and on resistance (a residual is defined against a calibrated prediction) but not on the network pair.
+
+Four joint-outcome regions are worth fixing in advance. \emph{Total failure}: if the root fails in every tested profile, the entire empirical program in those profiles terminates, and the candidate's honest description contracts to what Chapter~14 calls its strongest present achievement---a type system and audit discipline---with the response model marked refuted-as-tested. The ledger records this outcome like any other; the type system's value does not depend on it. \emph{Foundation without law}: the root passes but \texttt{EFFECTIVE-RESISTANCE} fails---response exists but is not stably inverse-parameterized. The permitted vocabulary would then include local response and exclude the entire resistance family, and the network capabilities would be permanently confined in the affected profile family. \emph{Law without networks}: resistance passes but one or both network hypotheses fail. The prediction contract survives at single test points; series, parallel, or gain-product arithmetic is dropped per the addendum's own falsification rows; and the audit's warning that flow is local becomes the established result rather than the cautious default. \emph{Asymmetric network outcomes}: composition may pass while redundancy fails, or conversely---the two test different structural commitments (chain smoothness versus branch independence), and neither outcome licenses the other's rule.
+
+The order also disciplines scheduling. A Gate~5 run plan that tested a downstream hypothesis before its prerequisites would spend its frozen design on a question whose meaningfulness was still open; the protocol does not forbid this, but the frozen comparison rules must then state the conditional structure explicitly---a composition result obtained before the resistance result is admissible only under the explicit registered assumption that the prerequisite would pass, and it is voided, not reinterpreted, if the prerequisite later fails.
+
+\section{\texttt{CLM-CAS-OHM-PHYSICAL-TELEMETRY}: a prohibited product claim}\label{hyp:sec:telemetry}
+
+The sixth ledger entry is not a hypothesis and must not be grouped with the five. \texttt{CLM-CAS-OHM-PHYSICAL-TELEMETRY} is a \emph{product} claim---the claim that CAS-Ohm quantities constitute physical telemetry of the audited system---registered in the ledger for the specific purpose of being marked \textsc{not licensed}.
+
+Its evidentiary standing is worse than untested: it is \emph{contradicted by current evidence}. The candidate's own ontology establishes the contradiction internally. Design values are declared, not measured (Chapter~3); behavioral proxies are inferences from external behavior; model-derived values inherit their parents' epistemic type under the kind non-fungibility rule; and the unit ontology contains no physical SI units at all, with volt, ampere, and ohm registered as forbidden aliases. A blanket representation of any of these as physical telemetry would therefore assert a measurement-kind and unit typing that every validator in the candidate rejects. The claim is registered rather than merely omitted because omission is silent and silence drifts: a future artifact could innocently reinvent the claim. A registered \textsc{not licensed} entry gives reviewers a stable identifier to cite when striking the language, and it gives the forbidden-wording list of the audit---``physical telemetry,'' ``measures attention,'' ``electrical law,'' ``causal by construction,'' ``cross-model comparable,'' ``proves hidden resistance''---an anchor in the claim ledger itself.
+
+\begin{boundary}[No rehabilitation path inside CAS-Ohm 1.0]\label{hyp:bound:telemetry}
+No outcome of the five registered hypotheses, singly or jointly, would license \texttt{CLM-CAS-OHM-PHYSICAL-TELEMETRY}. The hypotheses concern model-internal response structure under the nonphysical unit ontology; physical telemetry would require the separate, explicitly typed and instrumented physical profile that Chapter~3 names and the candidate does not contain. The claim could only be revisited under a different candidate with different ontology, instrumentation, and review.
+\end{boundary}
+
+\section{The Gate-5 preregistered closure protocol}\label{hyp:sec:protocol}
+
+No experiment is admitted in this monograph. The path by which any of the five hypotheses could reach closure is fixed in advance: a future run must use the Gate~5 per-claim preregistration and Evidence-Packet v2 control kernel, and Gate~5's own status is preserved until its separate gates close---the protocol governing experiments is itself an artifact under review, and using it does not promote it.
+
+\begin{protocol}[Gate-5 closure path]\label{hyp:prot:gate5}
+At minimum, a closing run must: (1) freeze the exact claim text, model, checkpoint, tokenizer, and weights, code and environment, test point and direction, corpus, splits, and seeds, alpha grid, fit and uncertainty methods, controls, falsifiers, and permitted claim language; (2) keep calibration and validation splits disjoint; (3) include zero-intervention, random same-norm direction, wrong-layer, wrong-token, label-shuffle, and norm-matched controls as applicable; (4) record cutoff, saturation, instability, drift, missingness, exclusions, and negative outcomes without erasure; (5) require independent numerical recomputation and authenticated execution evidence; (6) replicate on a held-out checkpoint or model under a prespecified comparison rule; (7) retain the full raw evidence and amendment/outcome-access chain; and (8) keep scientific eligibility \texttt{NOT\_ESTABLISHED} until independent audit, replication, claim review, and external scientific review exist.
+\end{protocol}
+
+The eight steps are now expanded in turn.
+
+\subsection{Step one: the freeze}\label{hyp:sec:step1}
+
+The freeze is the protocol's center of gravity, and its item list is long because every unfrozen item is a degree of freedom that can be spent, after the data arrive, to manufacture success. Freezing the \emph{claim text} prevents outcome-directed rewording---the quiet migration from ``predicts within tolerance'' to ``correlates significantly.'' Freezing \emph{model, checkpoint, tokenizer, and weights} pins the system under test to exact digests, so that a favorable result cannot be sourced from an unrecorded checkpoint sweep. Freezing \emph{code and environment} closes the analytic garden of forking paths at the implementation level; freezing \emph{test point and direction} closes it at the measurement level, where the choice among layers, positions, and direction-derivation methods is otherwise a silent multiple-comparisons engine. Freezing \emph{corpus, splits, and seeds} makes the randomization real and the split discipline auditable. Freezing the \emph{alpha grid} prevents post-hoc restriction to a flattering dose range; freezing \emph{fit and uncertainty methods} prevents estimator shopping; freezing \emph{controls and falsifiers} converts the control kit from a menu into an obligation; and freezing the \emph{permitted claim language} decides, before the outcome exists, exactly which sentences a success would license---the per-hypothesis ``would and would not license'' paragraphs above are drafts of precisely this frozen language.
+
+\subsection{Step two: disjoint splits}\label{hyp:sec:step2}
+
+Calibration and validation splits must be disjoint---the anti-circularity rule of Chapter~6 elevated from a type constraint to a protocol obligation. The protocol adds what the type system cannot check: disjointness must hold at the level of \emph{information}, not merely record identity. Near-duplicate prompts, shared templates, or leakage through the direction-derivation corpus can make formally disjoint splits informationally entangled; the frozen corpus manifest and split procedure are required to state the deduplication and leakage rules by which disjointness is claimed.
+
+\subsection{Step three: the six control types}\label{hyp:sec:step3}
+
+The control kit has six members, each excluding a named alternative explanation. \emph{Zero-intervention}: the response exists without dosing; establishes baseline and drift. \emph{Random same-norm direction}: any perturbation of that magnitude does this; establishes direction specificity. \emph{Wrong-layer}: dosing anywhere does this; establishes site specificity in depth. \emph{Wrong-token}: dosing any position does this; establishes site specificity in position. \emph{Label-shuffle}: the analysis finds structure in noise; establishes the no-structure baseline for fitted statistics. \emph{Norm-matched}: the effect is magnitude, not content; establishes that comparisons never confound the two. The phrase ``as applicable'' in the protocol is load-bearing and narrow: a control is inapplicable only when its manipulated factor does not exist in the design (a single-layer probe has no wrong-layer variant), never because it is expected to be inconvenient.
+
+Two structural facts about the kit deserve note. First, the controls are typed evidence like everything else: each control run produces records under the same schemas, bound to the packet through the control bindings of Chapter~11 with an explicit relevance method, so that an auditor can verify not merely that controls existed but that the claimed control was the claimed kind. Second, the kit composes: a random same-norm direction at the wrong layer is a meaningful joint control when the design's inferential target requires it, and the freeze must enumerate which compositions are in scope, because an unenumerated control added after unblinding is analytically indistinguishable from a fishing expedition even when innocently intended.
+
+\subsection{Step four: non-erasure of negative outcomes}\label{hyp:sec:step4}
+
+Cutoff, saturation, instability, drift, missingness, exclusions, and negative outcomes are recorded without erasure. This step is where the protocol meets the file-drawer problem: a preregistered design that silently discards its failed sessions is worse than no preregistration, because the registration lends unearned credibility to the surviving subset. The candidate's type system already gives every excluded observation a censoring reason (Chapter~11); the protocol extends the obligation to the run level---an aborted session, a drifted profile, or a refuted conjunct is an artifact with a digest, bound into the packet, visible to the auditor. The per-hypothesis falsification sections above all terminate in this step: refutation is an outcome to be retained, not an absence to be managed.
+
+\subsection{Step five: independent recomputation and authenticated execution}\label{hyp:sec:step5}
+
+Every reported statistic must be independently recomputed---by a party other than the run's operator, from the retained raw evidence, using independently maintained analysis code---and the run must carry authenticated execution evidence in the sense of Chapter~11: attestation that the frozen code actually executed against the frozen model in the declared environment. The two halves close different gaps: recomputation catches analysis error and analysis fraud; execution authentication catches the deeper substitution in which the analysis is honest but its inputs were never produced by the claimed run. Step five is where the protocol's demands exceed the current candidate's capabilities \emph{by design}---authenticated execution evidence requires the instrument-attestation and authority machinery whose absence Chapter~11 documents, which is one of the concrete senses in which no experiment can currently be admitted.
+
+\subsection{Step six: held-out replication}\label{hyp:sec:step6}
+
+A result must replicate on a held-out checkpoint or model under a comparison rule specified before the replication. The prespecification matters as much as the replication: without a frozen comparison rule, any pair of results can be narrated as agreement (both positive) or as expected variation (one null). The rule must state, in advance, which statistic must agree, within what tolerance, and what verdict follows from each cell of the agreement table. Replication on a held-out \emph{checkpoint} tests stability under training progression; replication on a held-out \emph{model} is a strictly stronger and separately stated claim---the protocol permits either, but the frozen language of step one must say which was committed to, since profile-relativity (Chapter~5) makes cross-model statements expensive. Replication also interacts with the freeze: the replication profile is a \emph{different} calibration profile with its own digest, and the comparison rule is the stated bridge between the two profiles that Chapter~5 requires for any cross-profile statement. A replication reported without its frozen bridge would be exactly the unlicensed cross-profile transfer the type system rejects; the protocol makes the bridge a preregistered object so that the replication claim is well-typed before it is well-evidenced.
+
+\subsection{Step seven: raw-evidence retention and amendment chains}\label{hyp:sec:step7}
+
+The full raw evidence---not summaries, not statistics, the bytes---is retained, together with the amendment and outcome-access chain: a record of every change to the preregistration after freezing (each amendment itself dated, justified, and hashed) and of every access to outcome data (who saw what, when). The amendment chain preserves the distinction between a protocol deviation confessed in advance and one reconstructed afterward; the outcome-access chain makes blinding claims (Section~\ref{hyp:sec:localization}) auditable rather than asserted. Retention obligations are packet obligations in the sense of Chapter~11: raw bytes with digests, resolvable indefinitely.
+
+\subsection{Step eight: eligibility remains \texttt{NOT\_ESTABLISHED}}\label{hyp:sec:step8}
+
+Even a run that executes steps one through seven flawlessly does not, by itself, establish anything. Scientific eligibility remains \texttt{NOT\_ESTABLISHED} until four independent events occur: independent audit of the run's evidence, independent replication, claim review through the ledger's own process, and external scientific review. Step eight is the protocol-level image of Chapter~11's two-axis design: steps one through seven build a packet that is \emph{complete}; step eight states that completeness is not authority, and that the authority events are performed by parties the protocol cannot conscript. The gate closes from outside or not at all.
+
+\section{Preregistration in experimental practice}\label{hyp:sec:prereg}
+
+The protocol's shape is not novel, and its familiarity is a feature. Prospective registration of trials---fixing hypotheses, endpoints, and analyses before data collection---became standard in clinical research precisely because retrospective flexibility had been shown, repeatedly and quantitatively, to inflate apparent effects: outcome switching, selective reporting, and post-hoc subgroup discovery all survive peer review when the reviewer cannot see what was planned. The registered-report format in psychology and neuroscience extends the same logic to publication itself, with journals accepting or rejecting the frozen design before results exist, so that the incentive to narrate whatever occurred as confirmation is removed at the source. Methodological work on researcher degrees of freedom---the garden of forking paths, in the phrase that has become standard---establishes that a analyst making reasonable-seeming choices \emph{after} seeing data can produce significance from noise without any intent to deceive, which is why the Gate~5 freeze enumerates its items so exhaustively: every item on the list is a documented forking point somewhere in the experimental literature.
+
+Three features of Gate~5 are stricter than common preregistration practice, and deliberately so. First, the freeze includes \emph{permitted claim language}, not just analyses---the protocol registers the sentences, because the project's claim discipline treats wording drift as a first-class failure mode. Second, negative-outcome retention is total and typed, with censoring reasons and digests, rather than a reporting norm. Third, step eight decouples even a perfect run from any status change: where a registered report culminates in publication, a Gate~5 run culminates in a packet whose eligibility is still \texttt{NOT\_ESTABLISHED}---the protocol has no success state that bypasses independent audit, replication, and review. These references to practice are contextual; the protocol stands on its own text, and no external methodology is incorporated by them.
+
+\begin{boundary}[Chapter claim boundary]\label{hyp:bound:chapter}
+This chapter registers hypotheses and specifies a protocol. It reports no experiment, no data, no partial run, and no pilot. All five hypotheses remain \textsc{in review / ring 4 / not licensed / held} with no admitted Evidence Packet; \texttt{CLM-CAS-OHM-PHYSICAL-TELEMETRY} remains \textsc{not licensed} and contradicted by current evidence; the Gate~5 kernel remains under its own open status, and its use in a future run would promote neither the run's claims nor the kernel itself. Artifact status \textsc{open / ring 4 / not licensed / held} governs.
+\end{boundary}

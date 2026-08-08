@@ -1,0 +1,649 @@
+\chapter{The Executable Certificate}
+\label{ch11:chapter}
+
+\section{Why an executable layer exists}
+\label{ch11:sec:why}
+
+The finite-context theory of the preceding chapters has an unusual property
+for a body of category-theoretic results: every quantifier in every statement
+ranges over finite, small, explicitly enumerable data. There are $4$ atoms,
+$16$ contexts, $81$ inclusion arrows, and --- as we derive below --- exactly
+$298$ sieves in total across all contexts. The witness presheaves have at most
+four sections at any context. Nothing is infinite, nothing is chosen, nothing
+depends on a universe beyond bookkeeping. A theory this small can be checked
+\emph{exhaustively}: not sampled, not spot-checked, but walked in its
+entirety by a machine.
+
+The Noetic Topos 2.0 candidate does exactly that, with two independent
+executable layers and a bounded proof-assistant layer. The first layer is a
+dependency-free finite-site checker whose output is the registered artifact
+\texttt{FINITE\_MODEL\_CERTIFICATE\_v0.1.json}, covering the site
+combinatorics, subcanonicity, the witnesses, the marked-cover integrity
+rules, and both legacy collapse mechanisms. The second is the
+modality-composition verifier, which implements the explicit reflector of
+Chapter~10 and computes both relevant Grothendieck topologies \emph{exactly},
+by enumeration and saturation, rather than trusting the pen-and-paper join
+argument. The third is a deliberately narrow Lean scope. This chapter walks
+through all three, check by check, and closes with the certificate's own
+statement of what all this execution does and does not establish.
+
+\begin{boundary}
+\label{ch11:bnd:role}
+The relationship between the proofs and the programs must be stated with
+care, because it is easy to overclaim in either direction. The chapters'
+informal proofs are general arguments over the fixed finite site; the
+programs are exhaustive executions over the same site. Execution
+\emph{corroborates} the proofs --- a bug in a proof about a $16$-object site
+would almost certainly produce a counterexample the exhaustive run would
+find --- but it is not itself a proof: the checker could share a
+misformalization with the prose, and passing tests are evidence about the
+implemented model, not about the mathematical English. Conversely the proofs
+do not make the programs redundant: the programs pin down every convention
+(indexing, empty pieces, null covers, serialization) at a level of
+concreteness prose cannot reach, and they are what a future reviewer can
+rerun. Neither layer is licensed to substitute for the other, and neither is
+licensed to substitute for independent review.
+\end{boundary}
+
+\section{Methodology of exhaustive checking}
+\label{ch11:sec:methodology}
+
+Before walking the checks, four methodological commitments deserve
+statement, because they distinguish this executable layer from ordinary
+software testing and because each is auditable in its own right.
+
+\emph{Determinism.} Both verifiers are deterministic programs over fixed
+finite data. There is no randomness, no sampling, no property-based
+generation with a seed: a run either passes identically every time at a
+given commit or fails identically every time. This is what allows the
+certificate to be a \emph{record} rather than a statistic --- the
+expected-result block asserts exact values, not distributions, and a
+reviewer who reruns the registered command either reproduces the block
+bit-for-bit or has found a discrepancy worth filing.
+
+\emph{Dependency-freedom.} The finite-site checker is deliberately free
+of third-party dependencies: contexts are frozen sets, presheaves are
+dictionaries, sieves are sets of subsets, and every categorical notion is
+implemented from its definition rather than imported from a library. The
+cost is verbosity; the benefit is that the trusted computing base for the
+certificate is the checker file itself plus the language runtime, and a
+reviewer auditing the formalization has one file to read against
+Chapter~10's definitions.
+
+\emph{Exhaustive quantification.} Every ``for all'' in the checked
+properties is discharged by enumeration over its entire domain: all
+contexts, all inclusion arrows, all generating covers, all members, all
+sieves where sieves are quantified. Section~\ref{ch11:sec:domains}
+tabulates the domain of each check explicitly, because ``exhaustive'' is
+only meaningful relative to a stated domain.
+
+\emph{Negative expectations as first-class results.} The certificate
+registers expected \emph{failures} --- the two false sheaf verdicts, the
+rejection branches of the resolver, the two legacy collapse mechanisms
+--- with the same standing as expected successes. A model in which
+$F_A$ accidentally satisfied RPM gluing would \emph{fail} the
+certificate, exactly as a model in which a representable failed the
+sheaf condition would. This matters for evidential value: a check suite
+that can only confirm positives cannot catch a construction that is
+degenerately too strong, and the historical failure being repaired ---
+the legacy collapse --- was precisely a construction whose covers were
+degenerately too strong (maximal everywhere).
+
+\section{The finite-site checker and its twenty-three checks}
+\label{ch11:sec:finitesite}
+
+The finite-site layer is the module \texttt{src/noetic\_topos2/finite\_site.py}
+with test suite \texttt{tests/noetic\_topos2/test\_finite\_site.py}. Its
+certificate declares schema version
+\texttt{noetic\_topos2.finite\_model\_certificate.v0.1}, document status
+\textsc{internal finite check complete / independent proof review open}, and
+model identifier
+\begin{center}
+\texttt{NT2-CONTEXT-2X2-TRANSVERSE-PARTITIONS},
+\end{center}
+naming exactly the model of the monograph: the $2 \times 2$ atom grid, its
+powerset context lattice, and the two transverse coordinate partitions. The
+certificate's expected-result block registers two cardinality checks and
+twenty-one named verdicts (counting each paired ACBE/RPM verdict as a single
+named check), twenty-three registered checks in all, together with an
+aggregate flag \texttt{all\_required\_checks\_pass}. All pass at the bound
+commit. We take them in order, stating for each what is computed and which
+result of the monograph it corroborates.
+
+\subsection{Cardinalities and cover geometry}
+\label{ch11:sec:geometry}
+
+\begin{checkclass}
+\label{ch11:chk:cardinalities}
+\textbf{\texttt{atom\_count} $= 4$, \texttt{context\_count} $= 16$.} The
+checker constructs $\Omega$ and $L = \mathcal{P}(\Omega)$ from scratch and
+counts. These two numbers anchor every later enumeration: a model that
+silently dropped an atom or a context would fail here before any
+sheaf-theoretic check ran. Corroborates the standing data of the context
+lattice definition (the sixteen-object poset with $81$ inclusion arrows; the
+arrow count $\sum_{V} 2^{|V|} = 1 + 4 \cdot 2 + 6 \cdot 4 + 4 \cdot 8 + 16 =
+81$ is exercised by the composition verifier below).
+\end{checkclass}
+
+\begin{checkclass}
+\label{ch11:chk:proper}
+\textbf{\texttt{proper\_global\_covers} (ACBE and RPM).} Verifies that at the
+global context $\Omega$, every member of $K_A(\Omega) = \{A_0 \to \Omega,
+A_1 \to \Omega\}$ and of $K_R(\Omega)$ is a \emph{proper} subcontext. This is
+the single most load-bearing geometric fact in the repair: the legacy
+clauses collapsed precisely because their generating sieves contained
+identities, and a sieve on a poset generated by arrows from proper subobjects
+cannot contain the identity. Corroborates the properness proposition of the
+finite-context theory (ledger \textsc{thm-nt2-nontrivial-global-covers}) and,
+by contrast, the collapse diagnosis for the legacy site.
+\end{checkclass}
+
+\begin{checkclass}
+\label{ch11:chk:exhaustive}
+\textbf{\texttt{jointly\_exhaustive} (ACBE and RPM).} Verifies
+$A_0 \cup A_1 = \Omega = R_0 \cup R_1$ and, contextwise, that the pieces of
+$K_P(V)$ union to $V$. Joint exhaustiveness is what makes the generating
+families \emph{covers} in the intuitive sense and is used in the
+subcanonicity proof (a compatible family over all pieces determines behavior
+on all of $V$). Corroborates the coverage-basis lemma behind Theorem NT2-1.
+\end{checkclass}
+
+\begin{checkclass}
+\label{ch11:chk:pullback}
+\textbf{\texttt{pullback\_stable} (ACBE and RPM).} For every pair
+$U \subseteq V$ and both partitions, the checker pulls back every member of
+$K_P(V)$ along the inclusion and verifies the resulting family is $K_P(U)$
+(as an indexed family; identity arrows on the empty object when
+$U = \varnothing$, where the registered null cover covers as well). Pullback
+stability is axiom (J2) at the level of the basis and is the hypothesis under
+which basis-level gluing suffices for the generated topology
+\cite{stacks00ZC}. Corroborates the coverage-basis lemma and hence Theorem
+NT2-1 (ledger \textsc{thm-nt2-marked-coverage}).
+\end{checkclass}
+
+\subsection{Subcanonicity}
+\label{ch11:sec:subcanonicity}
+
+\begin{checkclass}
+\label{ch11:chk:representables}
+\textbf{\texttt{representables\_are\_sheaves}.} For each of the $16$ objects
+$W \in L$, the checker builds the representable presheaf $yW$ (a singleton
+at $V$ when $V \subseteq W$, empty otherwise), and verifies the gluing
+bijection at every context against every generating cover of both
+topologies, including the null cover at the empty context. This is the full
+finite content of Theorem NT2-2 (ledger
+\textsc{thm-nt2-subcanonical-context-factor}): both $J_A$ and $J_R$ are
+subcanonical on $L$. It is worth noting what a failure here would mean: a
+representable failing the sheaf condition would put the finite site in the
+same position as the legacy site, whose jointly-surjective coverage is
+provably not derivably subcanonical; the check certifies that the repair
+does not reintroduce that gap on the context factor.
+\end{checkclass}
+
+\subsection{Witness functoriality and the four verdicts}
+\label{ch11:sec:witnesses}
+
+\begin{checkclass}
+\label{ch11:chk:functorial}
+\textbf{\texttt{acbe\_witness\_functorial}, \texttt{rpm\_witness\_functorial}.}
+Before any sheaf verdict is computed, the checker validates that the proposed
+witness data $F_A$ and $F_R$ --- bit assignments on complete contained
+blocks, with restriction forgetting coordinates --- actually constitute
+presheaves: identity restrictions are identities and all composable
+restriction pairs commute. This ordering is deliberate methodology:
+a nonfunctorial section assignment could otherwise pass or fail sheaf
+conditions meaninglessly. The check corroborates the well-definedness half of
+the distinctness theorem's witness construction (Theorem NT2-3), and it
+enforces the program-wide discipline that a ``witness'' must be validated as
+an object before being scored as evidence.
+\end{checkclass}
+
+\begin{checkclass}
+\label{ch11:chk:verdicts}
+\textbf{The four sheaf/non-sheaf verdicts:
+\texttt{acbe\_witness\_is\_acbe\_sheaf} (true),
+\texttt{acbe\_witness\_is\_rpm\_sheaf} (false),
+\texttt{rpm\_witness\_is\_rpm\_sheaf} (true),
+\texttt{rpm\_witness\_is\_acbe\_sheaf} (false).} The checker computes, for
+each witness and each topology, the matching-family set of every generating
+cover at every context and compares it with the value set. The registered
+expectations are asymmetric on purpose: two verdicts are expected
+\emph{true} and two expected \emph{false}, and the certificate records the
+false ones as first-class expectations rather than as absences. Together the
+four verdicts are exactly the content of Theorem NT2-3 (ledger
+\textsc{thm-nt2-distinct-modalities}) as scoped to $\PSh(L, \Set)$: each
+subcategory $\Sh(L, J_A)$, $\Sh(L, J_R)$ contains an explicit object the
+other excludes, so the subcategories are distinct and neither modality is
+trivial. The quantitative core --- $F_A(\Omega)$ has $4$ sections while the
+RPM matching-family set at $\Omega$ is a singleton, so the gluing map
+$4 \to 1$ fails injectivity --- is tabulated in full in Appendix~C.
+\end{checkclass}
+
+\subsection{Transverse refinement and singleton contexts}
+\label{ch11:sec:refinement}
+
+\begin{checkclass}
+\label{ch11:chk:transverse}
+\textbf{\texttt{transverse\_refinement\_is\_singletons}.} Computes all
+sixteen intersections $A_i \cap R_j$ over the four index pairs and verifies
+each equals the singleton $\{(i, j)\}$; contextwise, verifies that the
+common refinement of $K_A(V)$ and $K_R(V)$ has as nonempty members exactly
+the singletons of $V$. This is the transversality identity, the one equation
+on which the join lemma, the composition theorem's flattening bijection, and
+the four-channel expressivity boundary all rest. Corroborates Theorem NT2-4
+(ledger \textsc{thm-nt2-join-discrete-context}) and the input identity of
+Chapter~10's Theorem on modality composition.
+\end{checkclass}
+
+\begin{checkclass}
+\label{ch11:chk:singleton}
+\textbf{\texttt{singleton\_unmarked\_families\_coincide},
+\texttt{singleton\_marked\_covers\_distinct}.} At each singleton context
+$\{(i, j)\}$, the checker verifies two facts in deliberate tension. First,
+the bare arrow families coincide:
+$K_A(\{(i,j)\})$ and $K_R(\{(i,j)\})$ are the same unmarked list (the
+identity piece and an empty piece), so the generated sieves are equal and
+\emph{the topology cannot distinguish the two covers there}. Second, the
+marked records of those same covers remain distinct: they carry different
+cover kinds (\textsc{acbe} versus \textsc{rpm}) and therefore different
+canonical digests. The pair corroborates the central design argument of the
+marks chapter: provenance survives exactly where the topology forgets, and
+an audit trail that lived only in the topology would be lost at precisely
+these contexts. (Appendix~A additionally derives, from the definitions, the
+full list of contexts where the unmarked families coincide; the certificate
+registers the singleton instances, which are the load-bearing ones.)
+\end{checkclass}
+
+\subsection{Marked-cover integrity}
+\label{ch11:sec:marks}
+
+\begin{checkclass}
+\label{ch11:chk:roundtrip}
+\textbf{\texttt{marked\_cover\_roundtrip\_stable}.} Serializes marked covers
+to canonical JSON, rehashes, deserializes, and verifies that the
+reconstructed record and its SHA-256 digest are stable across the round
+trip. This is the base integrity property of the provenance layer: a digest
+that did not survive its own serialization could not chain.
+\end{checkclass}
+
+\begin{checkclass}
+\label{ch11:chk:pullbackprov}
+\textbf{\texttt{marked\_pullbacks\_bind\_parent\_provenance},
+\texttt{marked\_pullbacks\_preserve\_topology\_family}.} Pulling a marked
+cover back along an inclusion creates a new record of derivation kind
+\textsc{pullback}; the first check verifies the child's provenance chain
+contains its exact parent digest, so derived records are cryptographically
+bound to their origins. The second verifies that pullback does not mutate
+the cover family: the child's members are exactly the pullback of the
+parent's members, i.e. the marked layer and the topological layer move in
+lockstep under (J2). Together they corroborate the marked-cover construction
+of the marks chapter and the pullback-stability geometry of
+Check~\ref{ch11:chk:pullback}, now at the serialization level.
+\end{checkclass}
+
+\begin{checkclass}
+\label{ch11:chk:joint}
+\textbf{\texttt{joint\_refinement\_is\_four\_singletons},
+\texttt{joint\_refinement\_retains\_both\_parent\_digests}.} The ACBE/RPM
+common refinement at $\Omega$ is built as a derived record of kind
+\textsc{common refinement}. The first check verifies its members are exactly
+the four singleton covers --- the marked-layer image of the transversality
+identity (Check~\ref{ch11:chk:transverse}). The second verifies the derived
+record carries \emph{both} generating-cover digests as parents: the joint
+refinement remembers that it came from one ACBE and one RPM cover, which is
+the provenance fact the joined topology itself provably cannot retain.
+Corroborates Theorem NT2-4 on the topological side and the derivation-node
+schema on the audit side.
+\end{checkclass}
+
+\begin{checkclass}
+\label{ch11:chk:resolve}
+\textbf{\texttt{marked\_derived\_records\_resolve}.} Exercises the
+fail-closed deserialization contract for derived records: resolution of a
+derived record requires a parent resolver; every parent digest is rehashed,
+the complete acyclic parent derivation is checked, and the child's members
+and mark are recomputed and compared. The check also covers the rejection
+branches: a common refinement without exactly one ACBE and one RPM
+generating parent, or a pullback without its exact parent, is rejected
+rather than treated as evidence, as are unknown or duplicate JSON keys and
+uncontrolled review states. This corroborates no theorem; it corroborates an
+\emph{invariant} --- the integrity discipline that makes the marked layer
+usable as audit data at all.
+\end{checkclass}
+
+\subsection{The legacy collapse checks}
+\label{ch11:sec:legacy}
+
+\begin{checkclass}
+\label{ch11:chk:legacycollapse}
+\textbf{\texttt{legacy\_acbe\_identity\_forces\_maximal\_sieve},
+\texttt{legacy\_rpm\_split\_epi\_forces\_identity}.} The checker builds small
+executable models of the two legacy failure mechanisms and confirms each.
+For the ACBE clause: a sieve containing an identity is closed under
+precomposition, hence contains every arrow into its target and is maximal.
+For the RPM clause: a sieve containing a split epimorphism
+$\varepsilon$ with section $\eta$ contains $\varepsilon \circ \eta = \id$ by
+precomposition closure, hence is maximal by the first mechanism. These are
+the two elementary facts that make the legacy ACBE/RPM cover clauses
+contribute only maximal sieves, collapsing the legacy topology to its
+jointly-surjective clause and erasing all intended modal structure.
+Corroborates the legacy-collapse proposition of the baseline chapter ---
+the negative result the entire successor construction exists to repair ---
+and does so inside the same certificate that verifies the repair, so that
+the diagnosis and the cure are checked by one artifact.
+\end{checkclass}
+
+\begin{finding}
+\label{ch11:fnd:sitesuite}
+At the bound commit, the finite-site suite comprises $8$ tests and passes in
+full; the certificate's aggregate flag
+\texttt{all\_required\_checks\_pass} is \emph{true} over the twenty-three
+registered checks above. The distinction between the $8$ tests and the $23$
+checks is granularity, not content: a test is a unit-test method that may
+assert many registered checks (for example, one test sweeps all pullback
+verifications for both partitions), while a check is a named line of the
+certificate's expected-result block. The certificate, not the test count,
+is the audit surface.
+\end{finding}
+
+\subsection{Quantifier domains and counterfactual failures}
+\label{ch11:sec:domains}
+
+Exhaustiveness claims are only as strong as their stated domains. The
+following table records, for each registered check group, the exact domain
+enumerated and what a failure would have falsified. Domain sizes use the
+site constants: $16$ contexts, $81$ inclusion arrows, $2$ partitions with
+$2$ members each, $16$ representables, $2$ witnesses, $4$ singleton
+contexts.
+
+\begin{longtable}{@{}lll@{}}
+\toprule
+Check group & Domain exhausted & A failure would falsify \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+cardinalities & the constructed $\Omega$ and $L$ &
+the standing data themselves \\
+proper global covers & $2$ partitions $\times$ $2$ members at $\Omega$ &
+nonmaximality of the generated sieves \\
+jointly exhaustive & $2$ partitions $\times$ $16$ contexts &
+the coverage-basis lemma (union of pieces) \\
+pullback stable & $2$ partitions $\times$ $81$ arrows $\times$ $2$
+members & basis axiom (J2); Theorem NT2-1 \\
+representables are sheaves & $16$ representables $\times$ $2$ topologies
+$\times$ all generating covers at all $16$ contexts &
+Theorem NT2-2 (subcanonicity) \\
+witness functoriality & $2$ witnesses $\times$ $81$ arrows (identities
+and all composable pairs) & well-definedness of the witnesses \\
+four sheaf verdicts & $2$ witnesses $\times$ $2$ topologies $\times$ all
+generating covers at all contexts & Theorem NT2-3 (distinctness), in
+either direction \\
+transverse refinement & $4$ index pairs; refinements at all $16$
+contexts & Theorem NT2-4; the composition theorem's input identity \\
+singleton coincidence pair & $4$ singleton contexts $\times$ both
+families, unmarked and marked & the marks-necessity argument \\
+marked integrity trio & serialization round trips, pullback derivations
+along arrows, family preservation & the provenance-layer invariants \\
+joint refinement pair & the derived record at $\Omega$ and its parent
+set & the derivation-node schema; NT2-4 at the marked layer \\
+derived-record resolution & resolution and all rejection branches &
+the fail-closed contract \\
+legacy collapse pair & both executable collapse mechanisms &
+the collapse diagnosis motivating the successor \\
+\end{longtable}
+
+Reading the third column as a whole makes the certificate's structure
+visible: the checks are not a grab-bag but a covering of the monograph's
+finite claims --- standing data, coverage basis, subcanonicity,
+distinctness, transversality, marks, and the legacy diagnosis --- such
+that each finite theorem has at least one check whose failure would
+falsify it in the implemented model.
+
+\section{The modality-composition verifier}
+\label{ch11:sec:composition}
+
+The second executable layer,
+\texttt{modality\_composition/verify\_modality\_composition.py}, is
+independent of the finite-site checker and targets Chapter~10 specifically:
+the explicit reflector formula, its unit, both flattening/regrouping maps,
+and --- crucially --- the identification of the joined topology. Its
+registered invocation is
+\texttt{python docs/working/project\_coherence/gate1/noetic\_topos2/}
+\texttt{modality\_composition/verify\_modality\_composition.py}, with a
+scoped unit-test discovery command over
+\texttt{tests/noetic\_topos2\_modality\_composition}.
+
+\subsection{Exact topology closure}
+\label{ch11:sec:closure}
+
+The verifier does not sample sieves and does not trust the pen-and-paper join
+argument. It computes both relevant topologies \emph{exactly}: it enumerates
+every sieve on every context, seeds the covering collection with the
+generated basis sieves of each presentation, and then saturates three
+closure rules --- maximality (J1), pullback stability (J2), and local
+character (J3) --- to a fixed point. The two presentations are computed
+independently: once seeded from the ACBE and RPM bases jointly (the join
+presentation), and once seeded from the singleton basis (the singleton
+presentation). The run then verifies that the two fixed points are
+\emph{equal} as sets of covering sieves, and checks the three Grothendieck
+axioms once more on each computed result, independently, so that agreement
+cannot be an artifact of a shared saturation bug reaching the same wrong
+fixed point from a shared seed.
+
+The enumeration sizes are worth deriving, because they are checkable by hand
+and pin the claim that the run is exhaustive rather than sampled.
+
+\begin{remark}[Deriving the registered counts]
+\label{ch11:rem:counts}
+A sieve on a context $V$ in the poset $L$ is a downward-closed set of
+subcontexts of $V$, i.e. a down-set in the Boolean lattice
+$\mathcal{P}(V)$. The number of down-sets of the Boolean lattice on $n$
+points is the Dedekind number $M(n)$, with $M(0) = 2$, $M(1) = 3$,
+$M(2) = 6$, $M(3) = 20$, $M(4) = 168$. Summing over the sixteen contexts by
+size:
+\[
+1 \cdot M(4) + 4 \cdot M(3) + 6 \cdot M(2) + 4 \cdot M(1) + 1 \cdot M(0)
+= 168 + 80 + 36 + 12 + 2 = 298
+\]
+sieves in all --- the registered total. For the joined (equivalently
+singleton) topology, a sieve on $V$ covers iff it contains every singleton
+of $V$ (Chapter~10, join corollary). Such sieves automatically contain
+$\varnothing$ and are determined by a down-set of the subcontexts of size at
+least two. Counting per context size: at $|V| = 0$ both sieves on
+$\varnothing$ cover (the null cover generates the empty sieve, and its
+supersieve is maximal), giving $2$; at $|V| = 1$ only the maximal sieve,
+giving $1$ each; at $|V| = 2$ the sieve of proper subcontexts and the
+maximal sieve, giving $2$ each; at $|V| = 3$ a free down-set choice over the
+three $2$-subsets and the top, giving $9$ each; at $|V| = 4$ a count over
+down-sets of the size-$\ge 2$ subsets of $\Omega$ gives $114$. The total is
+\[
+1 \cdot 2 + 4 \cdot 1 + 6 \cdot 2 + 4 \cdot 9 + 1 \cdot 114
+= 2 + 4 + 12 + 36 + 114 = 168
+\]
+covering sieves --- the registered count, reported identically for both
+presentations. The arrow count $81 = \sum_V 2^{|V|}$ was derived in
+Check~\ref{ch11:chk:cardinalities}. These derivations are corroboration
+arithmetic for this monograph; the registered numbers themselves come from
+the verifier's enumeration. Appendix~A tabulates the per-context values.
+\end{remark}
+
+\subsection{What the composition run checks}
+\label{ch11:sec:comprun}
+
+The deterministic run verifies, in order:
+
+\begin{enumerate}
+\item \textbf{Base combinatorics.} All $4$ atoms, $16$ contexts, and $81$
+inclusion arrows are constructed and counted.
+\item \textbf{The sieve universe.} All $298$ sieves across the sixteen
+contexts are enumerated.
+\item \textbf{Topology equality.} The join presentation and the singleton
+presentation saturate to the same $168$ covering sieves --- the executable
+content of the join lemma $J_A \vee J_R = J_{\mathrm{atom}}$.
+\item \textbf{Axioms on both results.} The Grothendieck axioms (J1)--(J3)
+are verified independently on each of the two computed topologies.
+\item \textbf{Composite decompositions.} At every context, both index-level
+decompositions of the nested product --- the ACBE-then-RPM expansion and the
+RPM-then-ACBE expansion --- are computed and compared with the atomic
+product, corroborating the objectwise computation in the composition
+theorem's proof.
+\item \textbf{Natural isomorphisms on an adversarial fixture.} Both
+canonical natural isomorphisms are checked on a constant two-section
+presheaf whose empty-context value is \emph{deliberately nonterminal}. This
+fixture exists to exercise the $(R_P F)(\varnothing) = \mathbf{1}$ clause:
+a wrong implementation that carried $F(\varnothing)$ through the reflector
+would satisfy most checks on well-behaved presheaves and fail exactly here,
+at the null cover and at every empty overlap.
+\item \textbf{Structured fixtures.} A bit-assignment presheaf (the witness
+shape) and all $16$ representables are run through the same comparisons.
+\item \textbf{The full battery.} Inverse laws for the flattening and
+regrouping maps, restriction naturality (naturality in $V$), commutation
+naturality (naturality in $F$ of the composed comparison), and unit
+compatibility are verified across $18$ executable fixtures and $3{,}012$
+restriction squares.
+\end{enumerate}
+
+Each item corroborates a specific labeled step of Chapter~10: items (3) and
+(4) the join lemma; item (5) the objectwise flattening computation; items
+(6)--(8) the naturality, inverse, and unit-compatibility paragraphs of the
+composition theorem and the well-definedness proposition of the reflector.
+
+\subsection{The fixture battery}
+\label{ch11:sec:fixtures}
+
+The $18$ executable fixtures decompose as $16 + 1 + 1$: the sixteen
+representable presheaves, the constant two-section presheaf with
+nonterminal empty-context value, and the bit-assignment presheaf. The
+three families are chosen to stress different failure surfaces, and it is
+worth recording why each earns its place.
+
+\emph{The representables} are the fixtures on which everything should be
+\emph{inert}: they are sheaves for both factor topologies
+(subcanonicity), so the units and both composites should act by
+isomorphisms, and any fixture-dependent bug that breaks canonicity ---
+an indexing error that permutes coordinates, say --- shows up as a
+non-isomorphism or a failed naturality square on some $yW$. Sixteen of
+them cover every shape of context, including the empty representable
+$y\varnothing$ (a singleton exactly at $\varnothing$), which probes the
+null-cover conventions from the sheaf side.
+
+\emph{The constant two-section presheaf} is the designed adversary for
+the empty-product clause, as discussed in Chapter~10: its empty-context
+value has two elements, so any implementation that carries
+$F(\varnothing)$ through the reflector, or that treats empty overlaps as
+imposing real constraints, fails on it and on nothing else so cheaply.
+It also exercises value \emph{shrinkage} at $\varnothing$ simultaneously
+with value \emph{growth} at $\Omega$ (the reflector value there is a
+product of two-element sets), so restriction squares crossing the empty
+context are genuinely two-sided.
+
+\emph{The bit-assignment presheaf} has the witnesses' shape: values of
+different cardinalities at different contexts, coordinate-forgetting
+restrictions, and sensitivity to which blocks are complete. On this
+fixture the composite decompositions are nondegenerate --- nested and
+flat products differ as concrete data structures --- so the flattening
+and regrouping maps are tested where they actually move something.
+
+Across the battery, the run verifies the inverse laws
+($\psi \circ \varphi = \id$ and $\varphi \circ \psi = \id$ objectwise),
+restriction naturality, commutation naturality, and unit compatibility,
+totaling $3{,}012$ restriction squares --- the registered count of
+commuting-square instances discharged; the per-fixture breakdown is an
+implementation detail of the verifier and the monograph cites only the
+registered total.
+
+\subsection{Rerunning the layer}
+\label{ch11:sec:rerun}
+
+The composition layer's registered commands are reproduced in the
+artifact and in Chapter~10's source document; the deterministic verifier
+is invoked as a single script with no arguments, and the scoped suite by
+standard unit-test discovery over
+\texttt{tests/noetic\_topos2\_modality\_composition}. A reviewer's
+workflow is: check out the bound commit, run both commands, and diff the
+verifier's report against the registered expectations. Any discrepancy
+is, by the fail-closed discipline, a finding about the artifact set ---
+either a regression or an environment sensitivity --- and not something
+to be waved through.
+
+\begin{finding}
+\label{ch11:fnd:compsuite}
+At the bound commit, the modality-composition suite comprises $6$ tests and
+passes in full, and the deterministic verifier run completes with every
+check above reporting success.
+\end{finding}
+
+\section{The Lean layer: scope and explicit non-scope}
+\label{ch11:sec:lean}
+
+The bounded proof-assistant layer is a pinned Lean Gate~1 verifier that
+passes at the bound commit. Its scope is deliberately narrow, and the
+narrowness is registered rather than incidental.
+
+\begin{checkclass}
+\label{ch11:chk:lean}
+\textbf{Formalized (in scope).} Four-atom exhaustiveness (the atoms
+enumerate $\Omega$); properness of the global cover pieces; the transverse
+refinement identity $A_i \cap R_j = \{(i, j)\}$; and the witness-map lemmas
+(the elementary combinatorial facts about complete-block containment that
+feed the witness constructions).
+\end{checkclass}
+
+\begin{boundary}
+\label{ch11:bnd:leannonscope}
+\textbf{Not formalized (explicit non-scope).} The Lean layer does
+\emph{not} formalize: the sixteen presheaves; any sheaf condition; topology
+generation or the saturation of (J1)--(J3); the subcanonicity theorem; the
+witness sheaf/non-sheaf verdicts; the reflector construction or its
+universal property; the join lemma; the composition theorem; the
+product-site comparison; or the legacy round trip. Any sentence of the form
+``the Noetic Topos 2.0 results are formally verified'' is therefore false.
+The accurate sentence is: a small set of finite combinatorial lemmas at the
+base of the construction is machine-checked in Lean; the sheaf-theoretic
+theory above them is informally proved and exhaustively executed, and its
+proof-assistant formalization is a registered open obligation
+(Chapter~12).
+\end{boundary}
+
+\section{The certificate's own claim boundary}
+\label{ch11:sec:boundary}
+
+The certificate closes with a claim boundary of its own, and it governs
+every number in this chapter. Quoting the registered artifact
+\texttt{FINITE\_MODEL\_CERTIFICATE\_v0.1.json} verbatim:
+
+\begin{quote}
+``This is exhaustive execution over one sixteen-object finite context site.
+It is not proof-assistant verification, external peer review, empirical
+validation, or a product-claim license.''
+\end{quote}
+
+\begin{boundary}
+\label{ch11:bnd:governing}
+Unpacking the four negations, each against the temptation it blocks:
+\begin{enumerate}
+\item \emph{Not proof-assistant verification.} The Python layers are
+ordinary programs; their correctness is not machine-checked, and the Lean
+scope above excludes the sheaf theory. Exhaustiveness over the model does
+not transfer trust to the model's formalization.
+\item \emph{Not external peer review.} No independent category theorist has
+reviewed the proofs or the code. The composition result in particular
+remains an \textsc{internal proof candidate / review required} artifact.
+\item \emph{Not empirical validation.} Nothing here measures anything. The
+ACBE and RPM coordinates are formal marks; no execution result bears on
+whether either coordinate detects any cognitive, causal, safety, or
+alignment property of any system.
+\item \emph{Not a product-claim license.} The certificate's passing state
+may not be cited, in any register of the program, as grounds for a
+capability, quality, compliance, or assessment claim about any product. The
+artifact set remains Ring~4 and \textsc{not licensed}.
+\end{enumerate}
+What the execution \emph{does} establish is narrower and still valuable:
+that the registered finite model, as implemented, satisfies every one of the
+enumerated properties without exception, over its entire state space; that
+the prose theorems and the executable model agree everywhere both speak;
+and that the negative expectations (the two \emph{false} sheaf verdicts,
+the rejection branches of the marked-record resolver, the two legacy
+collapse mechanisms) are checked as first-class results rather than assumed.
+\end{boundary}

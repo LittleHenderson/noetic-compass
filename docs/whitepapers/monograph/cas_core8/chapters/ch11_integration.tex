@@ -1,0 +1,219 @@
+\chapter{Integration Contracts with the Companion Candidates}\label{integ:chapter}
+
+\section{The dependency discipline}\label{integ:discipline}
+
+CAS Core 8 does not exist for its own sake. It is the shared substrate of the Gate-4 engineering lane, and four companion candidates --- CAS PCBA 8, CAS-Ohm 1.0, TKS v8.0, and Noetic Topos 2.0 --- were developed against it in the same review cycle. This chapter states, for each companion, the exact contracts it consumes; but before the per-companion treatment, the single structural rule governing all of them must be stated, because it is the rule that makes the kernel reviewable at all.
+
+\begin{invariant}[Strict dependency direction]\label{integ:inv:direction}
+Companions depend on Core's contracts. Core depends on no companion's semantics. There is no code path, type definition, canonical-encoding route, registry schema, or protocol step in CAS Core 8 whose correctness requires knowing what a printed-circuit board, an electrical quantity, a TKS fractal digit, or a topos-theoretic cover \emph{means}.
+\end{invariant}
+
+The word ``semantics'' in Invariant~\ref{integ:inv:direction} is doing precise work. Core does contain structures that companions populate --- the fractal bridge's typed-arrow catalog is the clearest case --- but in every such case Core's obligations are exhausted by structural conditions (types match, digests verify, composition is well-formed, boundaries are consistent), and the interpretation of the populated content lives entirely on the companion's side. Core is, deliberately, a system that manipulates identities, boundaries, encodings, receipts, and registries \emph{about} content it never interprets.
+
+\subsection{The reviewability argument}\label{integ:reviewability}
+
+Why insist on strict direction? The argument is the classic trusted-base argument from security engineering \cite{anderson}, applied to review rather than to runtime privilege.
+
+An independent reviewer asked to evaluate CAS Core 8 must read its specification, its implementation, and its test fixtures, and must convince themselves that the fail-closed properties hold. If Core depended on companion semantics, the reviewer's obligation would transitively include those semantics: one could not certify that the registry loader rejects malformed records without also understanding, say, the board model whose records it loads. The review surface would grow with every companion, and --- worse --- it would grow \emph{retroactively}: a change in a companion could invalidate a completed Core review. Under strict direction, the reviewer's obligation is closed. Core can be reviewed in isolation, once, against its own contracts; each companion can then be reviewed against Core's \emph{published contract surface} plus its own domain content, and a defect found in a companion never reaches back into Core's correctness argument.
+
+The direction rule also disciplines failure attribution. When an integrated run fails --- a PCBA evidence packet is rejected, a TKS composition faults --- the strict direction guarantees the failure is classifiable: either a companion supplied content violating a Core contract (companion defect, or honest fail-closed refusal), or Core misimplemented its own contract (Core defect, in scope for Core's own suite). There is no third category of ``emergent'' failure arising from mutual dependence, because there is no mutual dependence. In a research program whose historical incidents repeatedly involved ambiguity about \emph{which layer} had drifted, this classifiability is not a nicety; it is the integration design's principal deliverable.
+
+Finally, the direction rule protects the claim discipline. Every companion is itself a Ring-4 candidate: admission \textsc{open}, product \textsc{not licensed}, disclosure withheld. If Core consumed companion semantics, a companion's unreviewed content would sit inside the kernel that enforces claim boundaries --- the guard would depend on the guarded. Strict direction keeps the enforcement layer semantically empty, which is the only state in which ``the kernel cannot be talked into overclaiming'' is a credible property.
+
+\begin{remark}\label{integ:rem:notlayering}
+Strict direction is stronger than conventional layering. Layered systems routinely allow lower layers to define extension points whose behavior is shaped by upper-layer callbacks, which reintroduces upward dependence at runtime. Core's contracts admit no callbacks into companion code on any evidence-bearing path: companions call Core, receive values or fail-closed errors, and Core's execution never re-enters companion logic. The one apparent exception --- the caller-supplied arrow catalog of the fractal bridge --- is data, not behavior: the catalog is a finite set of typed values validated structurally on receipt, not a callback surface.
+\end{remark}
+
+\subsection{The contract surface}\label{integ:surface}
+
+What, exactly, may a companion depend on? The consumable surface of CAS Core 8 v0.1 consists of eight contracts, each specified in its own chapter of this monograph and each carried by exact types:
+
+\begin{enumerate}
+\item \emph{Semantic identity}: structural references over the seven disjoint namespaces, injective rendering, and typed cross-namespace links (\textsc{translation} / \textsc{alignment} / \textsc{hypothesis}) with no coercion to identity.
+\item \emph{Exact-type discipline}: identity-bearing values compare by exact runtime type and primitive fields; subclass instances are rejected at public interfaces.
+\item \emph{Research boundary}: the (admission, product, disclosure) triple with Ring-4 joint-consistency validation, derived and rechecked by every public operation.
+\item \emph{Canonical evidence encoding}: deterministic sorted-key UTF-8 JSON; rejection of unordered containers, binary floats, NaN, infinity; tagged exact decimals; one serialization route per public type; bounded, cycle-aware canonicalization.
+\item \emph{Byte identity}: separate raw and CRLF-to-LF comparison identities with unconflated newline counts.
+\item \emph{Compatibility receipts}: the deterministic-closure protocol's records, including worker runtime binding, failure taxonomy, and the replay requirement.
+\item \emph{Registry integrity}: byte-backed loading with the full rejection catalog, recursive immutability, and byte-bound record digests.
+\item \emph{Runtime decision model}: enum-typed action descriptions, the structural/claim-bearing distinction, and the constant-false authorization invariant.
+\end{enumerate}
+
+A companion may consume any subset. What no companion may do --- and what Core's exact-type and loader disciplines mechanically prevent --- is \emph{extend} a contract in place: subclass a reference type, add a serialization route, widen an enum, or construct registry records outside the loader. Extension happens by revision of Core under review, never by companion-side ingenuity.
+
+Table~\ref{integ:tab:matrix} summarizes consumption across the lane; the four sections that follow document each column in detail.
+
+\begin{table}[htbp]
+\centering
+\caption{Contract consumption matrix. Y = consumed on evidence-bearing paths; -- = not consumed in the companion's v0/v1 candidate.}
+\label{integ:tab:matrix}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Core contract & PCBA 8 & CAS-Ohm 1.0 & TKS v8.0 & Topos 2.0 \\
+\midrule
+1. Semantic identity and links & Y & Y & Y & Y \\
+2. Exact-type discipline & Y & Y & Y & Y \\
+3. Research boundary & Y & Y & Y & Y \\
+4. Canonical encoding & Y & Y & Y & Y \\
+5. Byte identity & Y & Y & -- & -- \\
+6. Compatibility receipts / bridge & -- & -- & Y & -- \\
+7. Registry integrity & Y & Y & Y & Y \\
+8. Decision model & Y & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Contracts 2, 3, 4, and 7 are consumed by all four companions; they are the lane's common law, and a change to any of them touches everything. Contracts 5, 6, and 8 are specialized: byte identity matters where artifacts cross platforms as files (boards, calibration profiles), the bridge exists for TKS content alone, and only PCBA currently routes operations through the runtime decision model (its DRC and trace operations are enum-described actions in Core's sense). The empty cells are as informative as the filled ones: they are commitments \emph{not} taken, and a companion that later needs an empty cell's contract must revise its candidate documentation to say so, because the matrix is part of what its reviewers reviewed.
+
+\subsection{Contract versioning and evolution}\label{integ:versioning}
+
+A contract surface frozen forever would eventually be abandoned; a contract surface revised casually would dissolve the reviewability argument. The lane's discipline for evolution has three rules.
+
+First, \emph{contracts are versioned as part of Core, not per companion}. There is one contract surface --- the v0.1 surface receipted at Gate 4 --- and companions pin it by depending on exact Core artifacts, hash-identified like everything else. A companion cannot depend on ``Core, latest''; its candidate documentation names the Core version, so a reviewer always knows which contract text governs.
+
+Second, \emph{widening is a review event, narrowing is a break}. Adding an accepted value type to the canonical encoder, a namespace to the identity layer, or an enum member to the decision model widens a contract: existing companion code remains valid, but the addition still requires Core-side review with a fresh collision or disjointness argument (the threat-model chapter's T4 discussion explains why silent domain growth is the encoder's chief long-term hazard). Removing or reinterpreting anything --- narrowing --- invalidates companion reviews by definition and therefore forces explicit migration in every consuming candidate. The strict dependency direction makes the blast radius of both operations computable: it is bounded by the consumption matrix, and the matrix is in this chapter precisely so that the bound is written down.
+
+Third, \emph{no compatibility shims inside Core}. When a contract changes, Core does not carry translation layers that make old companion artifacts appear valid under new rules; instead, old artifacts remain valid \emph{under their recorded Core version}, and cross-version comparison is performed --- if at all --- by explicit, reviewed migration tooling on the companion side. This mirrors the kernel's registry stance: bytes mean what they meant under the schema they were written against, and reinterpretation is a new act with a new record, never an in-place patch. The alternative --- versionless shimming --- is how evidence systems drift into a state where no one can say which rules an old artifact was checked under, which is the exact ambiguity this program's history counsels against.
+
+\begin{remark}\label{integ:rem:sunset}
+The evolution rules imply a sunset discipline: a Core revision that any companion declines to migrate to leaves that companion honestly pinned to the older surface, and the lane's coherence claim (Section~\ref{integ:coherence}) then holds per-version, not globally. This is accepted. A lane that is coherent in two explicit strata is reviewable; a lane forced into false unanimity by shims is not.
+\end{remark}
+
+\section{CAS PCBA 8}\label{integ:pcba}
+
+CAS PCBA 8 is the companion candidate that carries the program's electronics-engineering content: a board model, design-rule checks (DRC), and manufacturing-and-test traces. It is the heaviest consumer of the contract surface, touching contracts 1--5 and 7--8, and it is the companion whose workflows most resemble conventional engineering-artifact management --- which makes it the best illustration of what the kernel's discipline buys in an applied setting.
+
+\subsection{Semantic identity in the board model}\label{integ:pcba:identity}
+
+A board model is a dense graph of named things: parts, footprints, nets, layers, rule sets, revisions. The historical failure mode of such models is exactly the kernel's T1 threat at engineering scale: identifiers that collide across libraries, positional part correspondences (``the R5 on rev C corresponds to the R7 on rev D'') silently hardened into identity, and cross-library aliases with no recorded provenance. CAS PCBA 8 therefore represents every model element that participates in evidence as a Core semantic reference --- namespace-disjoint, version-carrying, with \texttt{definition\_sha256} binding the defining bytes of the element's source definition. Cross-revision and cross-library correspondences are represented as typed links, and the no-silent-identity rule applies with full force: a rev-C-to-rev-D part correspondence is a \textsc{translation} or \textsc{alignment} carrying its own source, never an identity.
+
+The consequence PCBA cares about is diff integrity. A board diff computed over structural references cannot conflate a renamed net with a rerouted one, because the reference tuples differ observably; and a diff crossing revisions must traverse explicit links, so the diff report itself records which correspondences it relied on and at what review state. The injective-rendering invariant matters operationally here: board tooling exports identifier strings into fabrication outputs and test fixtures, and delimiter-bearing component values (reference designators and net names are punctuation-rich in practice) must not alias under rendering.
+
+\subsection{Tagged values and canonical evidence in DRC}\label{integ:pcba:drc}
+
+Design-rule checking is numerically delicate in precisely the way the canonical-encoding contract anticipates. Clearances, trace widths, and impedance targets are exact engineering quantities; a DRC result serialized through binary floats acquires platform- and library-dependent bytes, and two honest runs of the same check on the same board can then disagree at the digest level --- destroying the reproducibility that makes a DRC result citable evidence. CAS PCBA 8 therefore expresses all rule thresholds and measured quantities as tagged exact decimals under contract 4: $\mathrm{Decimal}(\texttt{"0.15"})$ is encoded distinctly from the string \texttt{"0.15"} and from any integer, floats are rejected at the boundary rather than rounded, and every DRC result record has exactly one serialization route. A DRC run thus yields a canonical evidence record whose digest is stable across hosts, which is the property that lets a later run \emph{replay} the check and compare digests rather than re-adjudicating prose reports.
+
+DRC results are fail-closed packets in the Core sense: a record that cannot be canonically encoded --- because a value arrived as a float, a container was unordered, a graph exceeded bounds --- is not repaired into encodability; the check run fails with a boundary error naming the offending value. The design bet, inherited from Core, is that a loudly failed check is recoverable while a silently normalized one is not.
+
+\subsection{The research boundary in boards and traces}\label{integ:pcba:boundary}
+
+Every PCBA artifact --- board snapshot, DRC packet, trace record --- carries the Core research boundary, and PCBA operations derive and recheck it per contract 3. The point is easy to misread as bureaucratic, so it is worth stating what it blocks: a board that has passed every DRC and accumulated a complete trace is \emph{structurally} excellent and remains \textsc{not licensed}, and no accumulation of green packets changes the boundary, because no PCBA code path writes boundary fields --- they are validated at construction and rechecked at use. The trace chain (who ran what check on which board bytes, in what order) is provenance in the entity-activity-derivation sense \cite{prov}: each trace record names the input artifact digests and the producing operation, so the chain is reconstructible from records alone. What the chain never becomes is authority; the completeness of a trace is the PCBA-domain mirror of Core's central distinction, elaborated below for CAS-Ohm where it is sharpest.
+
+\begin{example}[A revision diff under the contracts]\label{integ:ex:pcba}
+Concretely, suppose rev C of a board renames net \texttt{VBUS\_5V} to \texttt{VBUS\_5V0} and separately reroutes net \texttt{SDA1}. A naive string-keyed diff reports either two disappearances and two appearances (useless) or, with fuzzy matching, silently pairs names by similarity (dangerous). Under the contracts: the rename is recorded as an \textsc{alignment} link between the rev-B and rev-C net references --- distinct tuples, since \texttt{local\_id} differs --- carrying the change-order document as its \texttt{source\_id}; the reroute preserves the reference tuple (same namespace, \texttt{local\_id}, version lineage) while the geometry payload's canonical encoding, and hence its digest, changes. The diff report then states machine-checkably: one identity-preserving content change (digest delta on an unchanged reference), one reviewed correspondence (link with source), zero unexplained appearances. A DRC packet for rev C cites the rev-C references; nothing in it can silently satisfy a rule using rev-B geometry, because the digests disagree. Every sentence in this paragraph is a Core-contract consequence; none required PCBA-specific trust.
+\end{example}
+
+\subsection{What PCBA does not consume}\label{integ:pcba:not}
+
+CAS PCBA 8 does not consume the fractal bridge (contract 6's arrow catalog) --- boards have no TKS digit content --- and does not consume the legacy compiler profile: PCBA sources are not CAS notation. Conversely, and per Invariant~\ref{integ:inv:direction}: Core contains no board types, no DRC vocabulary, and no trace schema. The registry schemas PCBA uses for its packet ledgers are Project Coherence record contracts consumed through Core's loader, with PCBA-domain content confined to fields the loader treats as opaque validated payload.
+
+\section{CAS-Ohm 1.0}\label{integ:ohm}
+
+CAS-Ohm 1.0 carries the program's measurement-and-instrumentation content: typed electrical quantities, calibration profiles for the instruments that produce them, and research packets bundling measurements with their provenance. It consumes contracts 3, 4, 5, and 7 directly, and it contributes to the lane the clearest \emph{conceptual} re-use of Core's design: the completeness-versus-eligibility axis.
+
+\subsection{Evidence discipline for typed quantities}\label{integ:ohm:quantities}
+
+A measured quantity in CAS-Ohm is a typed value: magnitude as tagged exact decimal, unit as an enum-typed dimension (never a bare string), instrument reference, and acquisition metadata. The canonical-encoding contract governs the whole structure. The rejection of binary floats is not pedantry in this domain --- it is the difference between a measurement record and a measurement anecdote. An instrument reading of \texttt{3.300} volts carries significance in its trailing zeros that $3.3$ as a float destroys; the tagged-decimal rule preserves the recorded precision exactly, and the type-pun protection ensures that the \emph{number} $3.3$, the \emph{string} \texttt{"3.3"}, and the \emph{quantity} $\mathrm{Decimal}(\texttt{"3.300"})$-with-unit are three distinct evidence objects with three distinct digests. Unordered containers are similarly non-hypothetical: a set of channel readings admits no canonical order of its own, and CAS-Ohm must (and does) declare an explicit ordering before encoding, because Core will reject the set outright.
+
+\subsection{Calibration profiles}\label{integ:ohm:calibration}
+
+A calibration profile binds an instrument identity to the correction data under which its readings are interpretable, with a validity interval. CAS-Ohm represents profiles as byte-identified artifacts under contract 5 --- raw digest and comparison digest recorded separately, since profiles are exported and re-imported across platforms where newline rewriting is routine --- and every measurement record names the exact profile digest it was acquired under. The Core discipline this re-uses is the compiler-identity pattern of the compatibility protocol, transposed: as a compatibility receipt is worthless without the exact compiler bytes it names, a measurement is uninterpretable without the exact calibration bytes it names, and in both cases the identity is hashed before use and recorded in the receipt rather than assumed. A measurement acquired under a profile whose digest does not verify fails closed --- there is no ``approximately calibrated'' state.
+
+\subsection{Fail-closed research packets and the completeness/eligibility mirror}\label{integ:ohm:packets}
+
+A CAS-Ohm research packet bundles measurements, profiles, environment records, and analysis outputs into a single registry-backed artifact. Packets are validated as a whole: a packet with a missing profile reference, an unencodable quantity, or an internally inconsistent boundary is rejected at construction, not marked with a warning.
+
+This is where CAS-Ohm mirrors Core's deepest split. Core distinguishes \emph{structural consistency} from \emph{authorization}: every field can verify and the answer to claim-bearing intent is still \emph{no}, because consistency and authority are different kinds of fact. CAS-Ohm needs exactly this distinction one level down, and names its instance \emph{completeness versus eligibility}. A packet is \emph{complete} when it is structurally whole --- every measurement typed and encodable, every profile digest verified, every provenance edge present. A packet is \emph{eligible} when it may be entered into some downstream evaluation --- a comparison campaign, a review, eventually a claim. Completeness is machine-checkable and CAS-Ohm checks it exhaustively; eligibility depends on facts no packet can contain about itself: whether the acquiring procedure was reviewed, whether the instrument class is admitted for the purpose, whether the campaign's criteria were fixed before the data existed.
+
+\begin{invariant}[Completeness never implies eligibility]\label{integ:inv:mirror}
+In CAS-Ohm 1.0, packet completeness is a structural predicate computed from packet content; eligibility is an external status that no operation derives from completeness. As with Core's \texttt{authorization\_granted}, v1.0 provides no code path that marks a packet eligible: the eligibility field of every packet record is constant \emph{false}, pending the same class of authenticated review infrastructure that Core's future-authorization constraints describe.
+\end{invariant}
+
+The mirror is deliberate and load-bearing for the lane's coherence. A reviewer who has understood Core's authorization split can audit CAS-Ohm's eligibility handling by isomorphism --- same shape, same failure modes (T7-style laundering of completeness into eligibility), same constant-false posture, same future-design constraints. The alternative --- each companion inventing its own ad hoc version of ``done but not approved'' --- is precisely the divergence the shared substrate exists to prevent.
+
+\begin{example}[A packet's lifecycle]\label{integ:ex:ohm}
+A resistance-measurement packet is assembled: forty readings, each a tagged $\mathrm{Decimal}$ with unit enum \textsc{ohm}, instrument reference, and timestamp; the calibration profile's raw and LF digests; ambient-condition records; and the Ring-4 boundary. Construction canonicalizes the whole structure --- at which point one reading, ingested from a vendor CSV through a careless converter, arrives as the float $99.97$. Core's encoder rejects it; the packet fails construction with an error naming the offending path; the converter is fixed to emit $\mathrm{Decimal}(\texttt{"99.97"})$; construction succeeds and yields a packet digest. The packet is now \emph{complete}. Its record enters the CAS-Ohm ledger through Core's loader, eligibility \emph{false}. Six months later the calibration profile's validity interval has lapsed; the packet remains complete --- completeness is a fact about its content, which has not changed --- and remains ineligible, now for two independent reasons, only one of which any field inside the packet could express. The example is mundane by intent: the contracts' value in this domain is that the mundane path and the audit path are the same path.
+\end{example}
+
+\section{TKS v8.0}\label{integ:tks}
+
+TKS v8.0 is the companion that carries the program's TKS-side formal content into the Gate-4 lane, and its integration with Core runs through the narrowest and most carefully bounded contract of the four: the fractal bridge.
+
+\subsection{The finite typed-arrow kernel}\label{integ:tks:kernel}
+
+Legacy CAS artifacts contain fractal digit sequences --- positional codes of the form $X.Y.Z$ whose digits index cognitive-structural content. The historical temptation, indulged more than once in the program's past, is to let tooling ``interpret'' such sequences by string manipulation: split on dots, map digits through a table, concatenate meanings. Every step of that pipeline is an unreviewed semantic decision hidden inside string code.
+
+The Core-side answer is a finite reference kernel that is deliberately semantics-free. A \texttt{FiniteArrow} is a typed value with an explicit source object, target object, and identity, drawn from finite object and arrow inventories; arrows are structural data under the exact-type discipline like every other kernel value. Composition is provided by \texttt{SemigroupoidPath}: a path is a nonempty finite sequence of arrows in which each consecutive pair is checked for source/target agreement --- the target object of arrow $i$ must equal, structurally, the source object of arrow $i+1$. The algebraic setting is a semigroupoid precisely because no identity arrows and no totality of composition are assumed: composition is defined exactly where typing permits and nowhere else, so the composite $\Hom$-structure never exceeds what the catalog licenses. A path with any mismatched pair is not a path; construction fails closed with the offending index.
+
+\subsection{The bridge contract}\label{integ:tks:bridge}
+
+The bridge from legacy digits to this kernel is governed by one rule, restated here as the contract TKS v8.0 consumes:
+
+\begin{ruleenv}[Fractal bridge contract]\label{integ:rule:bridge}
+Legacy fractal digit sequences are bridged to the typed-arrow kernel only through an explicit, caller-supplied catalog mapping digits to typed \texttt{FiniteArrow} values. Composition of the resulting arrows uses \texttt{SemigroupoidPath}. A digit absent from the catalog, and any source/target mismatch in the induced sequence, fails closed. The bridge proves type-correct composition in the finite reference kernel --- never the meaning of a legacy digit.
+\end{ruleenv}
+
+Every clause allocates responsibility across the dependency direction. \emph{Caller-supplied catalog}: the digit-to-arrow mapping is TKS v8.0's semantic content, versioned and reviewed on the TKS side, delivered to Core as data; Core validates the catalog structurally (exact types, finite, well-formed) and never ships a default catalog, because a default would be a semantic commitment inside the semantically empty kernel. \emph{Fail-closed on missing digits}: a legacy sequence containing a digit the catalog does not map is not partially bridged or skipped; the absence is an error naming the digit, because a silently dropped digit is a silently altered sequence. \emph{Fail-closed on mismatch}: if the catalog maps a digit sequence to arrows that do not compose, the bridge reports the mismatch rather than reordering or eliding --- a non-composing image under the catalog is a fact about the catalog or the sequence, and both are review-relevant facts to surface, not defects to smooth over. \emph{Proof scope}: what a successful bridge run establishes is exactly that the sequence's image under the supplied catalog is a well-typed path in the finite kernel. It establishes nothing about whether the catalog is the \emph{right} interpretation of the digits; that question is TKS-side semantics, Ring-4 and under review like everything else.
+
+\begin{remark}[Why this is worth having]\label{integ:tks:rem}
+The bridge's guarantee is thin by design, but it is not empty. Type-correct composition is a real invariant that string-manipulation pipelines silently lack: under the bridge, a corrupted digit, a truncated sequence, or an incoherent catalog revision surfaces as a structural fault at a named position instead of propagating as subtly wrong composite ``meaning.'' The bridge converts a class of silent semantic drift into loud type errors --- the kernel's signature move, applied at the exact seam where TKS legacy content enters the lane. It also gives the future v8 semantic work a fixed target: any eventual claim that a digit sequence \emph{means} something must come as a reviewed catalog plus TKS-side interpretation, both of which are inspectable artifacts, not code behavior.
+\end{remark}
+
+\begin{example}[Bridging a three-digit sequence]\label{integ:ex:tks}
+Let a legacy artifact contain the fractal sequence $4.7.2$, and let TKS v8.0 supply a catalog $K$ mapping digit $4$ to an arrow $a_4 : A \to B$, digit $7$ to $a_7 : B \to C$, and digit $2$ to $a_2 : C \to D$ (objects drawn from the finite inventory). The bridge maps the sequence through $K$ to the arrow list $(a_4, a_7, a_2)$, checks consecutive agreement --- target of $a_4$ equals source of $a_7$, target of $a_7$ equals source of $a_2$ --- and constructs the \texttt{SemigroupoidPath} witnessing a well-typed composite $A \to D$. Now perturb the case: catalog revision $K'$ remaps digit $7$ to $a_7' : E \to C$. The same sequence now fails at index 1 with a source/target mismatch ($B \neq E$), and the failure record names the sequence, the catalog identity, and the index. Nothing decided which catalog is \emph{correct}; what the bridge established is that the artifact's digit sequence and catalog $K'$ are jointly incoherent --- a reviewable fact about TKS-side content, surfaced by semantics-free structure. Under string-pipeline processing, the same revision would have silently produced a different composite ``meaning'' with no fault at all.
+\end{example}
+
+\subsection{Direction check}\label{integ:tks:direction}
+
+TKS v8.0 is the companion where the strict dependency direction is easiest to misstate, so we state it carefully. Core defines the arrow and path \emph{types} and the bridge's checking behavior; these are structural and TKS-free. TKS v8.0 supplies the catalogs and consumes the bridge; its semantics --- what Foundations, Worlds, and digit positions mean --- never enter Core. The phrase ``TKS v8.0 supplies the finite typed-arrow kernel'' used in the seed paper is thus shorthand for: TKS v8.0 is the companion for whose content the finite kernel exists, and the sole authority for populating it. The kernel's type definitions themselves live in, and are reviewed with, Core.
+
+\section{Noetic Topos 2.0}\label{integ:topos}
+
+Noetic Topos 2.0 carries the program's topos-theoretic formal layer, and its integration with Core is the most conceptual of the four: what it consumes is less a set of types than a \emph{distinction} that Core's evidence records are built to anticipate --- ambient versus resolved evidence.
+
+\subsection{Ambient versus resolved}\label{integ:topos:ambient}
+
+The topos-side picture, sketched in the vocabulary of sheaf theory without invoking its heavy machinery: raw evidence records --- receipts, measurements, registry snapshots --- are naturally \emph{presheaf-like} data. Each record is local: it is indexed by a context (a host, a profile, a time, a boundary) and asserts something about that context only. Write, informally, $\PSh(\cC)$ for this ambient layer over the category $\cC$ of evidence contexts. A \emph{resolved} statement --- one that holds across a family of contexts and can be consumed as if it were global --- corresponds to a section that glues: compatible local records over a cover of contexts, agreeing on overlaps under restriction, assembled into one section in $\Sh(\cC)$.
+
+The integration point is this: Core supplies the ambient layer and refuses to fake the resolved one. Every Core record is honest local data --- exact context fields (worker runtime, profile hashes, boundary, timestamps) with canonical encodings and digests --- which is precisely what a future gluing construction needs its local sections to be. But Core itself defines no restriction maps and no gluing: nothing in the kernel takes two receipts from different contexts and emits a ``combined'' receipt, because the compatibility conditions under which such combination is sound are exactly the topos-side content that remains open research. Records live in the ambient layer until restriction and gluing are defined, reviewed, and admitted --- on the Noetic Topos 2.0 side.
+
+\subsection{Marked covers prove no measurement true}\label{integ:topos:covers}
+
+Noetic Topos 2.0 contributes to the lane a discipline for \emph{declaring} intended gluing without performing it: the marked cover. A marked cover is a recorded assertion that a given family of contexts $\{U_i\}$ is intended to cover a context $U$ --- that resolved statements over $U$ ought, eventually, to be assembled from local evidence over the $U_i$. Marked covers are first-class artifacts: they are canonically encoded, digest-bound, boundary-carrying records like everything else in the lane.
+
+\begin{ruleenv}[Marked covers are declarations]\label{integ:rule:cover}
+A marked cover proves no measurement true. Marking $\{U_i\} \to U$ asserts an intended covering structure; it does not assert that local evidence over the $U_i$ exists, agrees on overlaps, or glues. No operation in Core or in Noetic Topos 2.0 v0.1 derives a resolved statement from a marked cover.
+\end{ruleenv}
+
+The rule is the topos-flavored instance of the lane's universal pattern, and it earns its place by blocking a specific, tempting inference: ``we have receipts on each $U_i$ and a marked cover, therefore the statement holds on $U$.'' That inference requires agreement on overlaps under defined restrictions --- the entire mathematical content of gluing --- and until that content exists in reviewed form, the inference is unlicensed. The marked cover's honest function meanwhile is organizational and forensic: it records \emph{which} resolved statements the program intends to earn, so that the gap between ambient evidence held and resolved statements intended is itself an inspectable, digest-bound artifact rather than an ambient assumption. In claim-discipline terms: a marked cover is to a resolved statement what a Ring-4 claim record is to a licensed claim --- a precise registration of something \emph{not yet} established.
+
+\begin{example}[A marked cover over worker contexts]\label{integ:ex:topos}
+The program holds compatibility receipts for a fixed source and compiler identity from three worker contexts: $U_1$ (Windows, interpreter build $x$), $U_2$ (Windows, interpreter build $y$), $U_3$ (POSIX, interpreter build $z$). Noetic Topos 2.0 registers a marked cover asserting that $\{U_1, U_2, U_3\}$ is the intended covering family for the context $U$ = ``supported v0.1 hosts'': the aspiration is a resolved statement that compilation of this source is stable across supported hosts. What the lane now contains: three ambient receipts (local sections, each true of its own context, digest-bound), one marked cover (a declaration, digest-bound), and \emph{no} resolved statement --- because no restriction maps have been defined that would let the receipts be compared on overlaps (what, even, is the overlap of $U_1$ and $U_3$? --- answering that is the open topos-side design work), and no gluing has been reviewed. If the three result digests happen to agree, that agreement is one more ambient fact, recordable as such. The marked cover's contribution is that the program's intention is now an artifact: a reviewer can enumerate every resolved statement the program wants, check each against the ambient evidence actually held, and find the gaps stated rather than assumed away.
+\end{example}
+
+\subsection{What flows in each direction}\label{integ:topos:direction}
+Noetic Topos 2.0 consumes contracts 1 (its objects and covers are namespace-disjoint semantic references --- \textsc{noetic-topos-object} is one of the seven namespaces of the identity chapter), 3, 4, and 7. Core consumes nothing from the topos side: the words ``ambient'' and ``resolved'' appear in Core's documentation as a description of what its records are \emph{suitable for}, not as types or code paths. The kernel would be unchanged byte-for-byte if the topos program were abandoned; the topos program, by contrast, gets its local sections' integrity --- stable digests, exact contexts, honest boundaries --- entirely from Core. That asymmetry is Invariant~\ref{integ:inv:direction} doing its work.
+
+\section{Companion conformance obligations}\label{integ:conformance}
+
+The consumption matrix states what each companion \emph{uses}; conformance is the separate question of whether it uses it correctly, and the strict dependency direction assigns that burden unambiguously to the companion. Core's Gate-4 suite establishes that Core's contracts behave as specified when exercised through Core's public surface; it cannot establish that a companion routes its evidence-bearing paths through that surface rather than around it. The lane therefore imposes a common conformance shape on companion candidates, stated here as the protocol each is expected to instantiate.
+
+\begin{protocol}[Companion conformance evidence]\label{integ:prot:conformance}
+A companion candidate claiming consumption of a Core contract provides, in its own receipted suite: (i) \emph{positive fixtures} exercising its evidence-bearing paths end-to-end through Core's public surface, with resulting digests recorded; (ii) \emph{mirrored negative fixtures} demonstrating that the Core rejection relevant to the contract propagates --- a float in a DRC threshold, a subclassed reference in a packet, an unmapped digit in a bridged sequence, an inconsistent boundary in a cover record --- each failing closed at the companion surface with the Core error preserved, not caught-and-defaulted; (iii) a \emph{bypass audit}: an enumeration, checkable by inspection or static search, showing no companion code path constructs registry records, serializes public types, or compares identity-bearing values other than through Core; and (iv) the pinned Core version and contract subset, matching its row obligations under Table~\ref{integ:tab:matrix}.
+\end{protocol}
+
+Clause (ii) deserves emphasis because it is where companion integrations rot in practice: a companion that wraps Core calls in broad exception handlers converts fail-closed refusals into silent defaults, reproducing at its own surface exactly the failure classes Core exists to eliminate. The mirrored-negative discipline makes that regression testable --- if Core's rejection does not surface in the companion's fixture, the wrapper is eating it. Clause (iii) is the conformance analog of the threat model's adoption residual: the kernel protects only what passes through it, so a companion's review must show that everything load-bearing does.
+
+At the bounded Gate-4 receipt, the state of this protocol is uneven and is reported honestly in each companion's own documentation: Core-side contract behavior is receipted; companion-side conformance suites exist at varying depth and are part of each candidate's open review criteria, not settled facts. No cross-companion conformance claim is made in this monograph.
+
+\section{Cross-companion coherence}\label{integ:coherence}
+
+Reading the four sections together, the integration design's claim is coherence without coupling. The four companions share, through Core: one identity discipline (no silent identity anywhere in the lane --- board correspondences, calibration lineages, digit interpretations, and cover declarations are all typed, linked, and review-carrying); one encoding (a DRC packet, a measurement, a bridged path, and a marked cover canonicalize under the same closed rule set and are compared by the same digest relation); one boundary object rechecked the same way at every surface; and one posture toward authority, instantiated three times --- Core's consistency-versus-authorization, CAS-Ohm's completeness-versus-eligibility, and Noetic Topos's ambient-versus-resolved. These are not three analogies but one design fact expressed at three layers: \emph{structural adequacy of an artifact never converts, inside the lane, into permission to treat the artifact as established}.
+
+What the lane does \emph{not} share is any semantic commitment: no companion consumes another companion's domain content, and all inter-companion relationships route through Core contracts. Companion-to-companion integration (a CAS-Ohm measurement cited in a PCBA trace, say) is expressible today only as Core-level references and links between their registry records --- which is exactly as much integration as unreviewed candidates ought to have.
+
+\begin{boundary}[Status of the integrated lane]\label{integ:bd:status}
+Every companion named in this chapter is a Ring-4 research candidate: admission \textsc{open}, product \textsc{not licensed}, disclosure withheld. The integration contracts described here are tested at the Core side within the bounded Gate-4 receipt; companion-side conformance to these contracts is each companion's own evidentiary burden, carried in its own candidate documentation, and is not certified by this chapter. Nothing in the lane's coherence promotes any claim: four consistent candidates are four candidates, not a product family.
+\end{boundary}
+
+The final chapter turns to the evidence itself: what the bounded Gate-4 receipt actually says, what the suite exercises, and the six obligations that remain open between this kernel and any status change.

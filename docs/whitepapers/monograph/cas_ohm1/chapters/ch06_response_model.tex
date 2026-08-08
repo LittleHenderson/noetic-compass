@@ -1,0 +1,427 @@
+\chapter{The Response Model and Anti-Circularity}\label{ch06:response}
+
+The center of CAS-Ohm 1.0 is one small equation and one large refusal. The
+equation is the candidate prediction
+\[
+\hat y \;=\; \frac{a}{r_{\mathrm{eff}}},
+\]
+a proposed local linear relation between an intervention dose and an
+observed response under a fixed calibration profile. The refusal is the
+anti-circularity rule: the candidate rejects, categorically and at the type
+level, the procedure that computes $r = a/y$ on a sample, computes
+$\hat y = a/r$ on the same sample, observes $\hat y = y$, and announces a
+validated law. This chapter develops both---the equation with its
+admissibility conditions, and the refusal with its statistical
+justification---then works through hypothetical numeric illustrations,
+distinguishes verification from validation in Sargent's sense
+\cite{sargent}, and closes by delimiting exactly what a validated response
+model would and would not license.
+
+The claim posture is stated once and holds throughout: everything here is
+\textsc{ring 4 / not licensed / held}. The response model is a registered
+hypothesis with an implemented guard apparatus, not an established law; no
+live calibration exists; every number in the worked examples is fabricated
+for exposition and is labeled as such where it appears.
+
+\section{The Candidate Prediction}\label{ch06:prediction}
+
+\begin{definition}[Candidate response prediction]\label{ch06:def:prediction}
+Fix a calibration profile $P$ (Chapter~\ref{ch05:profile}) and a registered
+test point $t$ of $P$. Let $a$ be an alpha dose (quantity kind
+\texttt{DRIVE\_INTERVENTION}, unit \texttt{ALPHA}) within $P$'s declared
+alpha range, and let $r_{\mathrm{eff}}$ be an effective resistance at $t$
+(quantity kind \texttt{EFFECTIVE\_RESISTANCE}, unit
+\texttt{ALPHA\_PER\_ACTIVATION}, strictly positive). The candidate
+prediction for the directional activation response is
+$\hat y = a / r_{\mathrm{eff}}$, a quantity in \texttt{ACTIVATION} units,
+asserted---as hypothesis, not fact---to approximate the observed response
+$y$ within $P$'s declared tolerances, for doses in $P$'s active region at
+$t$.
+\end{definition}
+
+Three features of the definition do quiet work. First, the \emph{units
+close}: alpha divided by alpha-per-activation yields activation, so the
+prediction is dimensionally coherent by construction
+\cite{buckingham}---which, after Conflict~\ref{ch04:conf:bridge}, is not a
+triviality but a repair. The sources' inherited
+$I_{\mathrm{pred}} = V/R_{\mathrm{total}}$ divided an intervention by a
+score and produced dimensional nonsense; the candidate's version is
+well-formed precisely because $r_{\mathrm{eff}}$ is required to be the
+calibrated bridge quantity and nothing else. A constraint score in the
+denominator is not a smaller error; it is a type error, rejected before
+arithmetic.
+
+Second, the \emph{strict positivity} of $r_{\mathrm{eff}}$ is a validation
+rule, not a hope. A zero resistance would make the prediction undefined; a
+negative one would smuggle a sign inversion into a quantity whose sign
+conventions live elsewhere (in the direction's recorded sign). The
+candidate's quantity validation rejects non-positive effective resistance
+outright, so the prediction's denominator is well-defined whenever the
+prediction is constructible at all.
+
+Third, the prediction is \emph{local three times over}: to the profile (no
+transfer across digests without a comparison rule), to the test point (no
+transfer across layers, positions, directions, or hooks), and to the active
+region (no claim at doses classified cutoff, saturated, breakdown,
+non-ohmic, or unstable). The equation's resemblance to a global physical
+law is the analogy the framework borrows; the typed reality is a patch of
+claimed linearity, fenced on all sides.
+
+\section{Admissibility Conditions}\label{ch06:admissibility}
+
+The prediction may be \emph{evaluated} whenever its operands exist; it may
+be \emph{admitted}---used as the reference against which residuals are
+computed, regions confirmed, or hypotheses scored---only under conditions
+that the implementation enforces as guards. Stated as a rule:
+
+\begin{ruleenv}[Admissibility of the response prediction]\label{ch06:rule:admissibility}
+A prediction $\hat y = a/r_{\mathrm{eff}}$ is admissible only if:
+\begin{enumerate}
+\item $r_{\mathrm{eff}}$ is strictly positive and carries an uncertainty
+record produced by the profile's declared uncertainty method;
+\item $r_{\mathrm{eff}}$ binds the profile's calibration and validation
+split references---the data it was fit on and the data it was scored
+on---as resolvable artifacts;
+\item $r_{\mathrm{eff}}$ was produced by the profile's declared fit method,
+with the fit receipt resolvable;
+\item $r_{\mathrm{eff}}$ holds the role \texttt{CALIBRATED\_HELD\_OUT}, or
+the role \texttt{NETWORK\_EQUIVALENT} with the separate validation that
+role requires;
+\item the dose $a$ lies within the profile's declared alpha range, and the
+operating classification at the test point is \texttt{ACTIVE} on the
+region axis;
+\item the operation context is admitted and current: profile
+\texttt{REVIEWED}, drift \texttt{CURRENT}, replay time within validity.
+\end{enumerate}
+\end{ruleenv}
+
+The role vocabulary in condition (4) is the load-bearing novelty. The
+candidate types every effective resistance with a \emph{resistance role},
+an enumeration of four values, and the roles are not interchangeable:
+
+\begin{description}
+\item[\texttt{CALIBRATED\_HELD\_OUT}.] Fit on the calibration split,
+scored on the disjoint validation split against the profile's tolerances.
+The only role, besides a validated network equivalent, that admits
+prediction. The role's constructor requirements enforce a held-out split
+reference: a resistance cannot even claim the role without binding the
+data that scored it.
+\item[\texttt{APPARENT\_SAME\_SAMPLE}.] Computed as $a/y$ from the very
+observations it would ``predict.'' The candidate allows this object to
+exist---it is a legitimate descriptive statistic, the observed dose-response
+ratio---but the role bars it from admission as a predictor. Its name is its
+warning label.
+\item[\texttt{NETWORK\_EQUIVALENT}.] Produced by a capability-gated
+structural composition (series or parallel aggregation,
+Chapter~\ref{ch09:networks} where present). Factory-constructed only: the
+implementation refuses hand-built instances, so a network equivalent
+carries its full derivation or does not exist. Admissible for prediction
+only under the separate validation its gating demands.
+\item[\texttt{DESIGN\_PROPOSAL}.] A declared value---someone's proposal for
+what the resistance ought to be, typed as design information. Never
+admissible for prediction; useful as a registered target that later
+calibration may confirm or refute.
+\end{description}
+
+The enumeration is the anti-circularity rule made structural. In an untyped
+system, the same floating-point number could serve as descriptive ratio,
+fitted parameter, composed aggregate, and design guess, with its history
+carried in comments if at all. Here the four histories are four types, the
+guards read the type, and the tautological one is stopped at the door by
+its name.
+
+\section{The Anti-Circularity Rule}\label{ch06:anticirc}
+
+\begin{ruleenv}[Anti-circularity]\label{ch06:rule:anticirc}
+The following procedure is rejected regardless of its numerical outcome:
+compute $r_{\mathrm{same}} = a/y$ on a sample of observations; compute
+$\hat y = a / r_{\mathrm{same}}$ on that same sample; report the agreement
+of $\hat y$ with $y$ as validation of the response model. A defensible test
+fits $r_{\mathrm{eff}}$ on a registered calibration split and evaluates its
+predictions on a disjoint held-out split, with uncertainty and discrepancy
+represented \cite{kennedyohagan}.
+\end{ruleenv}
+
+The rejection is not a stylistic preference; the rejected procedure is
+mathematically incapable of failing, and a test that cannot fail confirms
+nothing.
+
+\begin{proposition}[Same-sample identity is tautological]\label{ch06:prop:tautology}
+Let $(a, y)$ be any observation with $a \neq 0$ and $y > 0$. Define
+$r_{\mathrm{same}} = a / y$ and $\hat y = a / r_{\mathrm{same}}$. Then
+$\hat y = y$ identically, for every such observation, regardless of whether
+any linear (or any other) relation holds between dose and response.
+\end{proposition}
+
+\begin{proof}
+By substitution:
+$\hat y = a / r_{\mathrm{same}} = a / (a/y) = a \cdot (y/a) = y$. The
+computation uses only the field axioms; no property of the data
+enters. Hence the ``agreement'' $\hat y = y$ is an algebraic identity, true
+for observations drawn from a linear system, a saturating system, a random
+number generator, or a constant. Observing it carries zero bits of
+information about the dose-response relation.
+\end{proof}
+
+\begin{remark}\label{ch06:rem:pointwise}
+The multi-point version is only superficially better. Given $n$
+observations $(a_i, y_i)$, computing per-point ratios
+$r_i = a_i / y_i$ and ``predicting'' each $y_i$ from its own $r_i$ commits
+the identity $n$ times. Fitting a single $r$ to all $n$ points and scoring
+it on the same $n$ points breaks the exact identity but not the epistemic
+problem: the score now measures in-sample goodness of fit, which improves
+mechanically with every degree of freedom granted to the fit and says
+nothing about behavior on data the fit has not seen. The rejected procedure
+and its multi-point relatives sit on a continuum of self-scoring; the rule
+draws the admissibility line where the scoring data and the fitting data
+are disjoint by construction.
+\end{remark}
+
+\subsection{The statistical framing}\label{ch06:statistics}
+
+Why is disjointness the line? The statistical answer has three layers.
+
+\emph{Layer one: selection optimism.} A parameter chosen to minimize error
+on a sample is, by that very selection, tuned to the sample's noise as well
+as its signal. Its error on the selection sample is therefore biased
+low---optimistically---relative to its error on fresh data, and the bias
+grows with the flexibility of the fit relative to the data. This is the
+elementary overfitting phenomenon, and the one-parameter case at issue here
+is its minimal instance: even a single fitted slope captures some noise,
+and a same-sample score inherits that optimism. Held-out evaluation removes
+the bias by breaking the dependence between the noise the fit absorbed and
+the noise the score encounters.
+
+\emph{Layer two: the hypothesis is the shape, not the number.} What the
+response model actually asserts is not ``there exists a number $r$ such
+that $y \approx a/r$ on these points''---for any single point that is
+trivially true, and for $n$ points it is true whenever the data are roughly
+proportional---but ``the dose-response relation at this test point, in this
+region, is stably linear, such that a slope estimated yesterday predicts
+tomorrow.'' Stability under transfer from fitting data to fresh data is the
+entire content of the claim. A same-sample test does not weakly test this
+claim; it does not touch it. The train/test separation is thus not a
+methodological garnish but the operational definition of the thing being
+asserted.
+
+\emph{Layer three: discrepancy is not noise.} Even a held-out test can
+mislead if the model's error structure is misrepresented. The
+Kennedy--O'Hagan calibration framework makes a distinction the candidate
+adopts wholesale: parameter uncertainty (our estimate of
+$r_{\mathrm{eff}}$ is imprecise) is not model discrepancy (the true
+dose-response curve is not exactly linear, so even the best possible
+$r_{\mathrm{eff}}$ leaves a structured, dose-dependent residual)
+\cite{kennedyohagan}. A calibration that forces all misfit into parameter
+uncertainty will report a confidently wrong slope with honest-looking error
+bars; one that models discrepancy separately learns where the linear
+hypothesis degrades---which, for a framework whose region classifier must
+detect the edges of linearity, is not a nuisance term but the signal that
+draws the fence. The admissibility conditions therefore require the fit
+receipt to represent both, and the tolerance profile's linearity minimum is
+the declared threshold at which discrepancy evidence disqualifies the
+active-region claim itself.
+
+\begin{remark}[Relation to the audit]\label{ch06:rem:audit}
+Anti-circularity is the response model's local instance of the audit-wide
+pattern of Chapter~\ref{ch04:audit}: a numerically computable operation
+(divide, refit, compare) whose availability tempts users into an epistemic
+claim its computation cannot support. The residual conflict
+(Conflict~\ref{ch04:conf:residual}) documented the same pattern one step
+downstream---residuals promoted to causes---and the network conflict
+(Conflict~\ref{ch04:conf:networks}) one step up---compositions promoted to
+laws. In all three cases the candidate's answer is identical: keep the
+computation, type its output honestly, and gate the claim on evidence the
+computation itself cannot manufacture.
+\end{remark}
+
+\section{Worked Hypothetical Illustrations}\label{ch06:illustrations}
+
+The following examples use fabricated numbers chosen for arithmetic
+clarity. \emph{They are illustrations of logic, not measurements: no model
+was probed, no activation observed, and no value below describes any real
+system.} Units are the candidate's model units (alpha, activation,
+alpha-per-activation) and are as hypothetical as the numbers.
+
+\begin{example}[The circular procedure cannot fail]\label{ch06:ex:circular}
+\emph{(Hypothetical.)} Suppose a single sweep observation at dose
+$a = 2.0$ alpha yields response $y = 0.8$ activation. The circular analyst
+computes $r_{\mathrm{same}} = 2.0 / 0.8 = 2.5$ alpha-per-activation, then
+``predicts'' $\hat y = 2.0 / 2.5 = 0.8$ activation, matching observation
+exactly, and declares the relation validated.
+
+Now corrupt the data deliberately: replace the response with a value drawn
+from a table of random digits, say $y = 0.137$. The same procedure gives
+$r_{\mathrm{same}} = 2.0 / 0.137 \approx 14.599$ and
+$\hat y = 2.0 / 14.599 \approx 0.137$: perfect agreement again. The
+procedure certifies random digits as obeying the response law with the
+same confidence as any real signal---which is to say, its certification is
+worthless (Proposition~\ref{ch06:prop:tautology}). In the candidate's
+types, both computed ratios are constructible, but each is an
+\texttt{EFFECTIVE\_RESISTANCE} with role
+\texttt{APPARENT\_SAME\_SAMPLE}, and Rule~\ref{ch06:rule:admissibility}
+refuses them admission as predictors. The refusal costs nothing real: the
+descriptive ratio remains available as description.
+\end{example}
+
+\begin{example}[A held-out test that fails informatively]\label{ch06:ex:fail}
+\emph{(Hypothetical.)} Suppose a calibration split contains sweep
+observations at doses $(0.5, 1.0, 1.5)$ alpha with responses
+$(0.25, 0.50, 0.75)$ activation---exactly proportional, slope
+$0.5$ activation per alpha, so the declared fit method estimates
+$r_{\mathrm{eff}} = 2.0$ alpha-per-activation with (say) a bootstrap
+interval $[1.9, 2.1]$. In-sample agreement is perfect. The validation split
+probes the withheld doses $(2.0, 2.5)$ and observes responses
+$(0.82, 0.84)$ activation, whereas the model predicts
+$\hat y = 2.0/2.0 = 1.00$ and $2.5/2.0 = 1.25$. Against a hypothetical
+absolute tolerance of $0.05$ activation, both predictions miss badly
+(errors $0.18$ and $0.41$).
+
+The failure is informative in exactly the way the circular test could
+never be: the response flattens near $0.8$--$0.85$ activation while
+predictions keep climbing, the signature of entry into a saturation
+region. The correct disposition under the candidate's machinery is not
+``the model is refuted everywhere'' but ``the active region does not
+extend to these doses'': the region classifier should bound the
+active region below $2.0$ alpha, the resistance's claim contracts to the
+bounded region, and the saturated observations are censored from residual
+diagnostics per Conflict~\ref{ch04:conf:residual}'s rule. The held-out
+design converted disagreement into a map of where the linear hypothesis
+lives---precisely the discrepancy structure that Kennedy--O'Hagan-style
+calibration is built to expose \cite{kennedyohagan}.
+\end{example}
+
+\begin{example}[A held-out test that passes, and what it would
+license]\label{ch06:ex:pass}
+\emph{(Hypothetical.)} Suppose instead the validation observations at
+doses $(0.75, 1.25)$ alpha---interior to the calibrated range---are
+$(0.36, 0.64)$ activation against predictions $(0.375, 0.625)$: errors of
+$0.015$ within the hypothetical absolute tolerance $0.05$, with the
+linearity minimum met and off-target contamination below its ceiling.
+Then, and only then, may the fitted quantity hold role
+\texttt{CALIBRATED\_HELD\_OUT}, and predictions become admissible---under
+this profile, at this test point, for doses inside the calibrated range,
+in the active region, while the profile remains current.
+
+Note how little even the pass licenses. It does not extend one dose beyond
+the grid's endpoints (extrapolation was never scored). It does not
+transfer to the neighboring layer, a re-derived direction, or next month's
+checkpoint (different test point or profile). It does not assert that the
+intervention \emph{causes} the response in the interventionist sense
+without the causal-model apparatus that claim requires \cite{pearl}. And
+it is two hypothetical numbers agreeing with two other hypothetical
+numbers: in the real program, the pass threshold is a registered
+hypothesis with controls (zero-dose, random-direction, wrong-layer,
+label-shuffle, norm-matched) whose defeat is also required---agreement
+alone, without superiority over matched controls, is not evidence of a
+direction-specific response at all.
+\end{example}
+
+\section{Verification Versus Validation}\label{ch06:vandv}
+
+Sargent's classical decomposition distinguishes the questions a simulation
+or model effort must keep separate: conceptual model validation (is the
+model's theory a defensible account of the problem entity?), computerized
+model verification (does the implementation correctly implement the
+specification?), and operational validation (do the implemented model's
+outputs agree with the real system's behavior in the domain of intended
+use?) \cite{sargent}. The candidate maps onto the decomposition cleanly,
+and the mapping is the cleanest way to state what has and has not been
+done.
+
+\emph{Conceptual model validation}: partially addressed, negatively. The
+source audit (Chapter~\ref{ch04:audit}) establishes that the inherited
+conceptual model was not even internally univocal---eight conflicts---and
+the candidate's typed reconstruction restores internal coherence. Internal
+coherence is the precondition of conceptual validity, not its
+establishment; whether a local linear dose-response theory is a
+\emph{defensible account} of steered activations is exactly what the
+registered hypotheses will assess.
+
+\emph{Computerized model verification}: this is what the bounded software
+evidence actually is. The test suite at the Gate~4 receipt (65 passing test
+methods, 58 parameterized subtests) exercises the guards, the types, the
+canonical encoding, the split-distinctness rules, the exact quantization
+boundaries, the fail-closed behaviors---the implementation against its
+specification. Synthetic known-fault boards (linear, cutoff, saturating,
+nonlinear, parallel, confounded, bypass) verify that the classifier and
+guards respond to designed inputs as specified. All of this is
+verification in Sargent's sense: it establishes that the software does what
+the design says, on inputs the designers constructed. It establishes
+nothing about any real model's behavior.
+
+\emph{Operational validation}: not performed. No live system has been
+calibrated; no held-out prediction against a real activation has been
+scored; the registered hypotheses are open. The candidate's entire status
+vocabulary---\textsc{ring 4 / not licensed / held}, constant-false
+authenticated eligibility, roles that no real quantity yet holds---exists
+to keep this cell of the matrix visibly empty until the preregistered
+closure protocol fills it.
+
+\begin{remark}\label{ch06:rem:vandv}
+The distinction dissolves a misreading to which test counts invite
+themselves. ``65 tests pass'' is evidence about the correspondence between
+code and specification; it is categorically incapable of being evidence
+about the correspondence between specification and world. A perfectly
+verified implementation of a false theory passes all its tests. Conversely,
+operational validation without verification is uninterpretable---an
+agreement between a buggy implementation and reality confirms nothing about
+the theory. The program needs both, in order, and it currently has the
+first only.
+\end{remark}
+
+\section{What a Validated Response Model Would and Would Not
+License}\label{ch06:license}
+
+Suppose---counterfactually as of this writing---that the closure protocol
+ran to completion for some profile: preregistered claim, frozen
+environment, randomized held-out sweeps, all controls defeated, independent
+recomputation, replication on a held-out checkpoint under a prespecified
+comparison rule, independent review. What then?
+
+\emph{It would license}: interpolative prediction of directional activation
+response at the calibrated test points, within the calibrated dose range,
+in the active region, under the current profile, with stated uncertainty;
+the use of such predictions as reference curves for residual
+\emph{ranking} (never identification) per
+Conflict~\ref{ch04:conf:residual}; region classification with the
+confidence the validated fit supports; and---if the corresponding
+composition hypotheses also closed---the network equivalences within their
+own validated scope. It would, in short, license the framework's
+\emph{instrumental} uses: prediction, screening, prioritization, all
+profile-local.
+
+\emph{It would not license}: causal claims (``the dose causes the response
+via mechanism $M$'')---interventionist causal language requires an explicit
+causal model and identifiable interventions, which a fitted slope is not
+\cite{pearl}; physical claims of any kind---the units remain model units,
+and the forbidden-alias rule keeps volt/ampere/ohm out of reach
+permanently, validation or no; transfer---to other profiles, models,
+layers, directions, corpora, or dtypes---without separately admitted
+comparison rules; aggregate or league-table claims across systems;
+``measures attention'' or any construct-identification claim, which would
+require its own validity argument connecting the projection to the
+construct; safety verdicts, product capabilities, or marketing predicates,
+which are licensing acts reserved to authorities the candidate does not
+contain; and permanence---a validated profile drifts, expires, and returns
+to \texttt{UNASSESSED} obligations like any other.
+
+The asymmetry of the two lists is the chapter's summary. Validation, even
+at its best, buys a bounded instrument: a locally trustworthy slope with
+error bars, inside a fence. Everything outside the fence---cause, physics,
+transfer, safety, authority---requires evidence of a different kind, which
+no amount of dose-response agreement accumulates. The candidate's types
+are built so that the fence travels with every number; the purpose of this
+chapter has been to show that the fence is not caution appended to the
+science but the exact shape of what the science, done honestly, would have
+shown.
+
+\begin{boundary}\label{ch06:bound}
+This chapter defines a hypothesis and its admission conditions. The
+response model is unvalidated: no admissible \texttt{CALIBRATED\_HELD\_OUT}
+resistance exists for any live system, all worked numbers above are
+fabricated illustrations, and nothing here establishes empirical accuracy,
+causal interpretation, physical identification, or licensed use. The
+anti-circularity rule and admissibility guards are implemented and
+verification-tested; their scientific worth is exactly the worth of the
+experiments they are waiting for.
+\end{boundary}

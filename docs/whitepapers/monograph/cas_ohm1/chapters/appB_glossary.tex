@@ -1,0 +1,139 @@
+\chapter{Glossary}\label{gloss:chapter}
+
+This glossary defines the technical vocabulary of the monograph. Each entry gives the term, its definition as used in the CAS-Ohm 1.0 candidate, and a plain-text reference to the chapter or chapters where the term is developed. Enumeration members and implementation identifiers appear in typewriter face. Definitions here are convenience restatements; where a glossary entry and a chapter's normative text could be read differently, the chapter governs.
+
+\begin{description}
+
+\item[Activation response ($y$).] The observed value of the directional activation projection at a test point, carried in the unit \texttt{ACTIVATION}. The response coordinate of the CAS-Ohm model. (Chapters 3 and 6.)
+
+\item[Active region.] The dose-response region (\texttt{ACTIVE}) in which a profile is locally responsive and an admissible linear fit is possible. Most capabilities---prediction, residuals, network operations---require active-region status. (Chapter 7.)
+
+\item[Alpha dose ($a$).] The declared steering intervention coordinate, carried in the unit \texttt{ALPHA}. The dose coordinate of the CAS-Ohm model; deliberately never called voltage. (Chapters 1, 3, and 6.)
+
+\item[Anti-circularity rule.] The rule rejecting the procedure that computes $r = a/y$ on a sample, predicts $\hat y = a/r$ on the same sample, and reports agreement as validation. Calibration and evaluation must use disjoint splits. (Chapter 6.)
+
+\item[Apparent same-sample resistance.] The resistance role (\texttt{APPARENT\_SAME\_SAMPLE}) typing a ratio computed on the sample it would be evaluated on; refused wherever prediction requires calibration. (Chapters 5 and 6.)
+
+\item[Artifact reference.] A typed reference carrying artifact identifier, URI, SHA-256 digest, and media type. Completeness requires every reference to resolve to bytes matching its digest. (Chapters 3 and 11.)
+
+\item[ASOM.] The four-label display mnemonic (\texttt{STARVED}, \texttt{ALIGNED}, \texttt{OVERSATURATED}, \texttt{MISALIGNED}) derived from, and never replacing, the two independent classification axes. (Chapters 4 and 7; Appendix A.)
+
+\item[Authenticated-current.] The currency notion that would hold if replay-time currency were evaluated at a time attested by a trusted current-time receipt. Unoccupied in the current candidate. (Chapter 11.)
+
+\item[Authenticated Evidence-Packet eligibility.] The second axis of the packet design: whether independent authorities have admitted a packet into a trust regime. Constant false in the CAS-Ohm 1.0 candidate; requires six missing preconditions. (Chapter 11.)
+
+\item[Authority manifest.] The document declaring which parties, under which keys, may assert which classes of statement. Its digest is carried in operation bindings; no independently admitted manifest exists. (Chapter 11.)
+
+\item[Authorization state.] The typed statement of what an operation's trust mode establishes: \texttt{UNAUTHENTICATED\_STRUCTURAL} or \texttt{UNAUTHENTICATED\_INTEGRITY}. Both implemented states are explicitly unauthenticated. (Chapters 9 and 11.)
+
+\item[Breakdown region.] The source-retained dose-response region (\texttt{BREAKDOWN}) beyond saturation, kept in the implementation alongside the audit's five-region summary. (Chapter 7; Appendix A.)
+
+\item[Calibration profile.] The record binding the complete experimental context---model, code, runtime, test point, direction, corpus, seeds, alpha grid, full-scale method, fit and uncertainty methods, tolerances, region rules, controls, drift and expiry, review state---under one canonical digest. All quantities are profile-relative. (Chapter 5; Appendix A.)
+
+\item[Calibration split.] The registered data split on which a resistance or response curve is fit. Must be disjoint from the held-out split. (Chapters 5, 6, and 12.)
+
+\item[Canonical evidence encoding.] The exact-type-tagged, cycle-aware, unsafe-Unicode-rejecting, bounded encoding under which all records are hashed. Inherited from the CAS Core 8 contract. (Chapter 3.)
+
+\item[Capability gate.] The set of preconditions (coordinates, units, topology, region, profile, evidence) under which a network operation is permitted to run at all. (Chapter 9.)
+
+\item[Censoring.] The typed refusal to emit a quantity---with an explicit recorded reason---where it would be undefined or meaningless, as with residual ratios at zero-compatible predicted response. (Chapters 10 and 11.)
+
+\item[Claim identifier.] The stable ledger identifier of a registered claim, of the form \texttt{CLM-CAS-OHM-*}. (Chapter 12.)
+
+\item[Claim ledger.] The shared registry binding claim texts, status vectors, and their relation to the preregistration kernel. (Chapters 12 and 14.)
+
+\item[Control binding.] The typed binding of a control artifact to a test point together with the relevance method by which the control is claimed relevant. Bound controls and control references must agree exactly. (Chapter 11.)
+
+\item[Covariance limitation.] The declared limitation carried on every network aggregate: cross-input covariance is unavailable and a zero-covariance approximation is in use. (Chapters 9 and 12.)
+
+\item[Derivation parents.] The ordered, contiguous, duplicate-free references from a derived value to the records it was computed from. Required for every model-derived value. (Chapters 3 and 11.)
+
+\item[Direction provenance.] The typed record of how a test point's direction vector was derived: \texttt{PROBE\_DERIVED}, \texttt{JACOBIAN\_DERIVED}, or \texttt{DIFF\_DERIVED}. (Chapter 5; Appendix A.)
+
+\item[Dose-response region.] The first classification axis: where on its response curve a profile is operating (\texttt{UNASSESSED}, \texttt{CUTOFF}, \texttt{ACTIVE}, \texttt{SATURATION}, \texttt{BREAKDOWN}, \texttt{NON\_OHMIC}, \texttt{UNSTABLE}). Classified independently of semantic outcome. (Chapter 7.)
+
+\item[Effective resistance ($r_{\mathrm{eff}}$).] The fitted proportionality parameter of the CAS-Ohm model, strictly positive, in the unit \texttt{ALPHA\_PER\_ACTIVATION}, carrying uncertainty and a resistance role. A model parameter, never a physical resistance. (Chapters 5 and 6.)
+
+\item[Evidence Packet.] The authenticated packet class that the candidate does not produce: a packet whose claims have been admitted under independent authority, protected keys, trusted time, materialized dependencies, authenticated instruments, and reviewed policy. (Chapter 11.)
+
+\item[Fail-closed.] The design rule that any validation failure rejects the whole record with no partial admission, repair, or downgrade. (Chapters 3, 9, and 11.)
+
+\item[Fixture keys.] The deterministic Ed25519 keys committed to the repository for testing the attestation machinery. They provide integrity and replay checks only and can never satisfy the key-lifecycle precondition. (Chapter 11.)
+
+\item[Forbidden wording.] The list of product phrases excluded from every artifact, including physical telemetry, measures attention, electrical law, causal by construction, cross-model comparable, and proves hidden resistance. (Chapters 12 and 14.)
+
+\item[Full-scale activation ($I_{\mathrm{FS}}$).] The profile-specific normalization denominator for Q10 display values. Its three inherited methods are separately named and not interchangeable. (Chapter 8; Appendix A.)
+
+\item[Gain composition.] The structural network operation multiplying adjacent dimensionless local gains along a declared chain. Its empirical validity is the untested hypothesis \texttt{CLM-CAS-OHM-GAIN-COMPOSITION}. (Chapters 9 and 12.)
+
+\item[Gate-4 receipt.] The bound historical software evidence: 65 passing test methods under a canonical suite test-ID digest, 58 parameterized subtests, eight retained conflicts, zero authenticated eligibility paths. (Chapter 14.)
+
+\item[Gate-5 closure protocol.] The eight-step preregistered path---freeze, disjoint splits, six controls, non-erasure, independent recomputation and authenticated execution, held-out replication, raw-evidence retention, eligibility \texttt{NOT\_ESTABLISHED} pending independent review---under which any registered hypothesis could be tested. (Chapter 12.)
+
+\item[Held-out split.] The registered data split, disjoint from the calibration split, on which predictions are evaluated. (Chapters 5, 6, and 12.)
+
+\item[Instrumented field.] A value of measurement kind \texttt{INSTRUMENTED} satisfying the full obligations: instrument identity, test point, calibration binding, raw artifacts. At least one is necessary---and not sufficient---for packet completeness. (Chapters 3 and 11.)
+
+\item[Kind non-fungibility.] The rule that derivation never upgrades epistemic type: a derived value does not become instrumented because a parent was, and a score does not become telemetry by storage adjacency. (Chapter 3.)
+
+\item[Limiting vocabulary of status.] The four-coordinate status vector: \textsc{open} or \textsc{in review} (text under revision), \textsc{ring 4} (outermost admission ring), \textsc{not licensed} (no downstream reliance), \textsc{held} (undisclosed). (Chapters 1 and 12.)
+
+\item[Memristive-form profile.] The provisional nonphysical extension typing a state-dependent resistance $x_{t+1} = F_{\mathrm{profile}}(x_t,a_t,y_t,c_t;\theta)$, $r_{\mathrm{eff},t} = G_{\mathrm{profile}}(x_t;\theta)$, admissible only with a full model-state record and only past the evidentiary bar. Not implemented. (Chapter 13.)
+
+\item[Memristive system.] In the classical literature, an input-output system whose instantaneous response coefficient depends on an internal state with its own dynamics. Cited as motivating mathematics only. (Chapter 13.)
+
+\item[Memristor.] The postulated fourth circuit element relating charge and flux, whose resistance depends on integrated current history. Cited as motivating mathematics only; no electrical content is imported. (Chapter 13.)
+
+\item[Model-state record.] The seven-component record (initialization, update law, sampling interval, reset rule, drift model, uncertainty, provenance) that any stateful extension must carry. (Chapter 13.)
+
+\item[Operation binding.] The typed record attached to every network operation: authority-manifest digest, attestation digests, capability, trust mode, authorization state, replay time, optional clock receipt, runtime, covariance limitation, dependency-lock and code references. (Chapters 9 and 11.)
+
+\item[Overload ratio.] The retained pre-clipping ratio of raw response to full scale, kept separately from the clipped Q10 display value. (Chapter 8.)
+
+\item[Pinched hysteresis.] The classical behavioral signature of memristive systems: a dose-response loop through the origin that collapses with increasing input frequency. Adapted, in prespecified nonphysical form, as part of the evidentiary bar. (Chapter 13.)
+
+\item[Preregistration.] The practice of freezing hypotheses, designs, analyses, and permitted claim language before data collection. The Gate-5 protocol is the candidate's preregistration kernel. (Chapter 12.)
+
+\item[Profile digest.] The canonical SHA-256 identity of a calibration profile. Any mutation of a bound field changes the digest; an unverifiable digest fails the packet closed. (Chapters 5 and 11.)
+
+\item[Q4 quantization.] The exact half-open banding of Q10 display values at cut points 2.5, 5, and 7.5, computed on pre-rounding decimals so that display rounding can never move a value across a band. (Chapter 8.)
+
+\item[Q10 / Q100.] The two score scales of the sources, kept as distinct unit kinds with enforced ranges so that the inherited mixed-scale conflict is unrepresentable. (Chapters 3, 4, and 8.)
+
+\item[Registered hypothesis.] A falsifiable claim held in the claim ledger under a stable identifier and the uniform status \textsc{in review / ring 4 / not licensed / held}, with no admitted Evidence Packet. Five exist. (Chapter 12.)
+
+\item[Rejection classes.] The six fail-closed packet classes: score-only, zero-instrumentation, missing-provenance, mixed-scale, unknown-profile, tampered. (Chapter 11.)
+
+\item[Replay-as-of.] The caller-supplied time parameter (\texttt{replay\_as\_of}) against which all currency judgments are evaluated. An unauthenticated input by design. (Chapter 11.)
+
+\item[Replay-time-current.] Currency of a profile evaluated at the caller-supplied replay time. Entailed by, and never entailing, authenticated currency. (Chapter 11.)
+
+\item[Research packet.] The structural evidence bundle the candidate can assess for completeness: typed values, provenance, controls, uncertainty, profile binding, raw bytes. Distinct from an Evidence Packet. (Chapter 11.)
+
+\item[Residual ($\delta_y$).] The difference between observed and predicted response for an admitted active-region prediction, with propagated uncertainty. A non-identifying diagnostic: it may rank follow-up probes and never, by sign alone, identifies a hidden policy, bypass, or cause. (Chapter 10.)
+
+\item[Residual localization.] The registered hypothesis (\texttt{CLM-CAS-OHM-RESIDUAL-LOCALIZATION}) that blinded implanted faults are localized above shuffled and matched baselines, with causal language withdrawn on failure. (Chapters 10 and 12.)
+
+\item[Resistance role.] The mandatory typing of every effective resistance: \texttt{CALIBRATED\_HELD\_OUT}, \texttt{APPARENT\_SAME\_SAMPLE}, \texttt{NETWORK\_EQUIVALENT}, or \texttt{DESIGN\_PROPOSAL}. Prediction requires the calibrated or separately validated network-equivalent role. (Chapters 5, 6, and 9.)
+
+\item[Review state.] The typed review status of a profile or record: \texttt{UNASSESSED}, \texttt{IN\_REVIEW}, \texttt{REVIEWED}, \texttt{FLAG\_FOR\_HUMAN\_REVIEW}. (Chapters 5 and 11; Appendix A.)
+
+\item[Semantic outcome.] The second classification axis: whether the response was \texttt{INTENDED}, \texttt{OPPOSITE}, \texttt{OFF\_AXIS}, or \texttt{UNASSESSED}, classified independently of region. (Chapter 7.)
+
+\item[Series / parallel operations.] The structural network operations of chain addition and reciprocal branch aggregation over effective resistances, capability-gated and unauthenticated; their empirical validity is the subject of registered hypotheses. (Chapters 9 and 12.)
+
+\item[Structural completeness.] The first axis of the packet design: internal well-formedness of a research packet (exact model revision, valid profile digest, raw bytes, controls, uncertainty, lineage, nonstale reviewed profile at replay time, at least one instrumented field). Never authorization. (Chapter 11.)
+
+\item[Synthetic known-fault board.] A software-defined response surface with a constructed fault (linear, cutoff, saturation, nonlinear, parallel, confounded, bypass) used to validate the candidate's code against ground truth by fiat. Software-only evidence. (Chapter 14.)
+
+\item[Test point.] The typed site of measurement: model identity, layer, token positions, hook type, and direction vector with digest, unit norm, sign, and provenance. (Chapter 5.)
+
+\item[Trust mode.] The declared operating mode of a network operation: \texttt{STRUCTURAL\_RESEARCH\_ONLY} (no keys) or \texttt{INTEGRITY\_CONFIGURATION} (fixture-key attestation, verified and replayed, still unauthenticated). (Chapters 9 and 11.)
+
+\item[Trusted current-time receipt.] The missing precondition: a cryptographically bound statement from an accountable time authority that a moment had genuinely arrived. No channel for it exists in the candidate. (Chapter 11.)
+
+\item[Uncertainty record.] The typed uncertainty attached to numeric values: unit, standard uncertainty, interval bounds containing the value, confidence level strictly in $(0,1)$, and method identifier. (Chapters 3 and 11.)
+
+\item[Unit separation.] The rule keeping \texttt{ALPHA}, \texttt{ACTIVATION}, \texttt{ALPHA\_PER\_ACTIVATION}, score scales, fractions, and dimensionless ratios as distinct unit kinds, with physical volt, ampere, and ohm as forbidden aliases. (Chapter 3.)
+
+\end{description}

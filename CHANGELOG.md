@@ -4,6 +4,29 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-08 — Project Coherence monographs v0.3 (book-length, ~934 pp total)
+
+- Expanded the five v0.2 research papers into full `amsbook` monographs under
+  `docs/whitepapers/monograph/`, each 184-188 pages: Noetic Topos 2.0 (188pp,
+  12 chapters + 4 appendices), TKS v8.0 (184pp, 12ch + 3app), CAS Core 8
+  (187pp, 12ch + 2app), CAS PCBA 8 (188pp, 12ch + 3app), CAS-Ohm 1.0 (187pp,
+  14ch + 2app). PDFs in `pdf/MONOGRAPH_*_v0.3.pdf`.
+- Authored via a 20-agent parallel fleet writing body-only chapter sources
+  against a shared preamble/bibliography and a strict LaTeX + Ring-4 claim
+  contract; ~425,000 words delivered before the fleet hit the session limit,
+  with the 4 remaining appendix gaps (NT2 sieve census; PCBA catalogs, worked
+  board, glossary) written directly. All 76 chapter files pass the
+  `sanitize_chapters.py` ASCII/environment/balance checker.
+- Depth added over v0.2: tutorial preliminaries (category theory, sheaves,
+  finite-function/spectral math, metrology, dose-response, information
+  geometry, hardware-description and verification background); complete proofs
+  with the seed papers' ledger proof-statuses preserved; per-item treatment of
+  every diagnostic code, source conflict, threat, and registered hypothesis;
+  implementation documentation of the src modules; worked examples, exercises,
+  and reference appendices. Claim discipline unchanged: Ring 4 / NOT LICENSED
+  headers, conjectures labeled, bounded-receipt framing, full open-obligation
+  sets, and the 64/037,173 new-matter boundary.
+
 ## 2026-08-07 — Project Coherence research papers v0.2 (full-length)
 
 - Superseded the five v0.1 white-paper summaries with full-length amsart

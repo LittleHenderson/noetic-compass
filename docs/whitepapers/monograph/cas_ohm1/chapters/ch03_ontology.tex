@@ -1,0 +1,445 @@
+\chapter{The Quantity and Evidence Ontology}\label{ch03:ontology}
+
+\section{The no-bare-numbers principle}\label{ch03:principle}
+
+Every failure catalogued in the source audit shares a common enabling condition: somewhere, a number traveled without its identity. A threshold of $8.5$ moved between a 0--10 scale and a 0--1 scale because nothing traveled with it to say which scale it lived on. A score-valued constraint divided an alpha because nothing marked the quotient as dimensionally undefined. A residual's sign became a bypass accusation because nothing recorded that the prediction it deviated from was uncertain, same-sample, or saturated. The ontology developed in this chapter is the candidate's structural answer: it makes the identity of a value --- its kind, unit, provenance, uncertainty, and status --- part of the value itself, inseparable from it by construction.
+
+\begin{ruleenv}[No bare numbers]\label{ch03:rule:nobare}
+No bare binary float is admitted anywhere in the CAS-Ohm evidence layer. Every numeric record is a typed observed value carrying, at minimum: quantity kind; exact decimal value; unit identifier; measurement kind; method identifier; calibration-profile digest; estimate-or-observation status; uncertainty and confidence interval; sample size; raw-artifact and control references; derivation parents; and, where applicable, a missing-or-censored reason.
+\end{ruleenv}
+
+The rule has two halves, and both do work. The first half --- no \emph{bare} numbers --- means that a numeral without its record is not evidence: it cannot be stored, compared, aggregated, or cited within the candidate. The second half --- no bare \emph{binary floats} --- addresses precision: values are exact decimals, not IEEE floating-point approximations, because the candidate's quantization and boundary rules (developed in a later chapter) turn on exact comparison against decimal cut points, and a binary float that is ``close to'' $2.5$ is, for those purposes, simply not $2.5$. Exactness at the representation layer is what makes boundary behavior provable rather than platform-dependent.
+
+This chapter proceeds as follows. Section~\ref{ch03:record} presents the observed-value record field by field, with the rationale for each field --- what failure it prevents or what discipline it encodes. Section~\ref{ch03:realization} describes how the implementation realizes the record as a validated, frozen, canonically hashable structure. Section~\ref{ch03:quantities} defines all sixteen quantity kinds. Section~\ref{ch03:measurement} defines all six measurement kinds, with examples, and states the non-fungibility rules. Section~\ref{ch03:units} presents the unit ontology, including the forbidden electrical aliases and the disposition of the generic vocabulary member \texttt{Unit.VOLT}. Section~\ref{ch03:admissibility} tabulates the quantity-unit admissibility relation and the range and role constraints. Section~\ref{ch03:canonical} specifies the canonical evidence bounds. Section~\ref{ch03:invariants} collects the chapter's invariants.
+
+Throughout, the epistemic status of Chapter~\ref{ch01:intro} governs: this chapter describes a specification and its implementation. Bounded software evidence exists that the validators behave as specified on constructed inputs; no claim is made that any instrument populating these records is validated, and all CAS-Ohm claims remain \textsc{open / ring 4 / not licensed / held}.
+
+\section{The observed-value record, field by field}\label{ch03:record}
+
+\begin{definition}[Observed value]\label{ch03:def:observed}
+An \emph{observed value} is the atomic evidence record of the candidate. Its fields are: (1) quantity kind; (2) exact decimal value; (3) unit identifier; (4) measurement kind; (5) method identifier; (6) calibration-profile SHA-256 digest; (7) estimate-or-observation status; (8) uncertainty; (9) confidence interval; (10) sample size; (11) raw-artifact references; (12) control references; (13) derivation parents; and (14) missing-or-censored reason. Fields 1--5 are unconditionally required; the remainder are conditionally required by measurement kind, quantity kind, and role, under rules stated in this chapter, and are never silently defaulted.
+\end{definition}
+
+The following subsections take the fields in order. For each, the format is the same: what the field is, and why the record cannot do without it.
+
+\subsection{Quantity kind}\label{ch03:field:qkind}
+
+The quantity kind names \emph{what kind of thing} the value is a magnitude of, drawn from the closed sixteen-member enumeration of Section~\ref{ch03:quantities}. It is the record's first field because it governs everything downstream: which units are admissible, which range constraints apply, which roles are required, and which operations the value may participate in.
+
+\emph{Rationale.} The metrological grammar of Chapter~\ref{ch02:background} holds that quantities of different kinds are not comparable or combinable merely because both are numbers \cite{vim}. The audit's mixed-scale conflict is the lineage's own demonstration: a saturation threshold and a region fraction, numerically comparable, were compared --- and the comparison was meaningless. A closed enumeration (rather than a free-text label) makes kind-checking mechanical: an operation either has a rule for the kinds it receives or fails closed. The enumeration is deliberately fine-grained --- sixteen kinds where a physicist might expect four --- because the candidate's hazard is precisely the collapse of distinct score-like and measurement-like quantities into one another; distinctions that matter are promoted to kinds so that the type system, not authorial vigilance, enforces them.
+
+\subsection{Exact decimal value}\label{ch03:field:value}
+
+The value is an exact decimal number --- implemented as an arbitrary-precision decimal, never a binary float.
+
+\emph{Rationale.} Three reasons compound. First, boundary correctness: quantization bands and validation ranges are defined by decimal cut points, and exact decimal comparison is total and unambiguous where binary rounding is not. Second, digest stability: canonical bytes are computed over the exact value, so two records agree in digest exactly when they agree in value; a float's platform- and path-dependent representation would make digest equality an accident. Third, honesty about precision: a decimal carries exactly the digits that were asserted, no more; it cannot silently manufacture fifteen significant figures from an instrument that reported three.
+
+\subsection{Unit identifier}\label{ch03:field:unit}
+
+The unit identifier names the unit, drawn from the closed unit ontology of Section~\ref{ch03:units}, and must be admissible for the quantity kind under the relation of Section~\ref{ch03:admissibility}.
+
+\emph{Rationale.} A number and a kind still underdetermine a magnitude: a constraint score of $65$ on the 0--100 scale and one of $6.5$ on the 0--10 scale are the same assertion in different units, and only the unit field distinguishes them. Making the unit a validated field --- with a closed vocabulary and a per-kind admissibility set --- converts the audit's silent rescaling hazard into a hard error: a \texttt{Q10} value cannot be stored in a \texttt{Q100} slot, and no conversion exists unless a conversion method is invoked explicitly, producing a new record with its own lineage.
+
+\subsection{Measurement kind}\label{ch03:field:mkind}
+
+The measurement kind names \emph{how} the value came to be known, drawn from the six-member enumeration of Section~\ref{ch03:measurement}: declared by design, produced by an instrument chain, inferred from behavior, computed from other records, or scored by a human or a language model.
+
+\emph{Rationale.} Provenance of method is orthogonal to kind and unit: the same quantity kind in the same unit may be a design declaration or an instrumented observation, and the difference is the whole difference between a specification and a fact. The audit's score-as-telemetry hazard --- design scores and model-derived values drifting into presentation as measurements --- is blocked at exactly this field, together with the non-fungibility rules that prevent the field from being upgraded by association.
+
+\subsection{Method identifier}\label{ch03:field:method}
+
+The method identifier names the specific procedure --- fit method, projection method, scoring rubric, normalization rule --- by which the value was produced, as a stable identifier resolvable within the project's method registry.
+
+\emph{Rationale.} The Vocabulary's lesson that a measurand is procedure-dependent (Chapter~\ref{ch02:background}) means two values produced by different procedures are answers to different questions even when kind and unit agree. The audit's full-scale conflict is the canonical instance: board-declared, rail-and-floor, and corpus-percentile full-scale procedures yield incomparable normalizations, and the candidate's disposition --- separately named methods, never interchangeable --- is enforceable only because every record names its method. The method identifier is also what makes replication possible in principle: a record whose method cannot be named cannot be redone.
+
+\subsection{Calibration-profile digest}\label{ch03:field:profile}
+
+The calibration-profile field carries the SHA-256 digest of the calibration profile under which the value was produced --- the frozen bundle of model identity, test point, direction, corpus, grid, methods, tolerances, and review state described in a later chapter.
+
+\emph{Rationale.} Every CAS-Ohm quantity is profile-relative; nothing transfers across profiles without a stated comparison rule. Binding the profile by digest (rather than by name) means the binding is to the profile's exact content: any change to any profile field produces a different digest, and records produced under the changed profile are visibly foreign to the old one. This is the mechanism that turns the reproducibility cautions of the steering literature --- checkpoint sensitivity, convention sensitivity --- into bookkeeping rather than confusion: a record from a different checkpoint is not a conflicting measurement of the same thing; it is a measurement of a different thing, and its digest says so.
+
+\subsection{Estimate-or-observation status}\label{ch03:field:estobs}
+
+This field marks whether the value is an \emph{observation} (a recorded outcome of a measurement act) or an \emph{estimate} (a value inferred, fitted, or predicted from other records).
+
+\emph{Rationale.} The distinction is the record-level shadow of the anti-circularity rule: a fitted effective resistance and a predicted response are estimates, and the discipline that estimates be evaluated against observations they were not fitted to requires that the two be distinguishable at the record level. It also protects summary statistics: an average of observations and a model's fitted mean may be numerically close, but only one of them is data.
+
+\subsection{Uncertainty}\label{ch03:field:uncertainty}
+
+The uncertainty field carries the value's standard uncertainty, in the same unit as the value, together with the method identifier of the uncertainty evaluation.
+
+\emph{Rationale.} The Guide to uncertainty's central discipline --- every reported value is an estimate with quantified doubt \cite{gum} --- is here made structural: uncertainty is a field of the record, not a footnote, and derived records compute their uncertainty from their parents' rather than inventing it downstream. Where uncertainty has genuinely not been evaluated, the honest representation is not a zero (which asserts perfect knowledge) but an explicit absence with a stated reason, borne by the missing-or-censored field. The unit-agreement requirement (uncertainty in the unit of the value) prevents a subtle scale error the audit's lineage invites: an uncertainty computed on one scale silently attached to a value on another.
+
+\subsection{Confidence interval}\label{ch03:field:ci}
+
+The confidence-interval field carries a lower bound, an upper bound, and a confidence level strictly between zero and one; the value must lie within the interval, and both bounds must themselves satisfy the record's kind and unit constraints.
+
+\emph{Rationale.} A standard uncertainty alone presumes a distributional convention to be interpretable as coverage; the interval field makes coverage explicit. Requiring the bounds to satisfy the same validation as the value closes a loophole: an interval that strays outside the quantity's admissible range (a fraction with an upper bound above one, a strictly positive resistance with a lower bound at zero) is asserting probability mass on impossible values, and the validator rejects it rather than letting impossible coverage stand.
+
+\subsection{Sample size}\label{ch03:field:n}
+
+The sample-size field records the number of independent underlying observations, as a strictly positive integer, wherever the value summarizes repeated measurement.
+
+\emph{Rationale.} Dispersion-based uncertainty is meaningless without its $n$; a mean of three sweeps and a mean of three thousand carry the same units and possibly the same value, and everything about their evidential weight differs. Recording $n$ also enables downstream aggregation to be done correctly --- combined uncertainties depend on the sizes --- and enables reviewers to detect the specific pathology of grand claims resting on tiny samples.
+
+\subsection{Raw-artifact references}\label{ch03:field:raw}
+
+Raw-artifact references point, by identifier, URI, SHA-256 digest, and media type, to the raw evidence underlying the value: sweep logs, generation transcripts, projection dumps, rating forms.
+
+\emph{Rationale.} This field is the traceability chain's first link (Chapter~\ref{ch02:background}): a value that cannot point to raw bytes is testimony, not evidence. Digest-carrying references make the pointing tamper-evident --- the referenced artifact either hashes to the recorded digest or the chain is visibly broken --- and the per-measurement-kind requirements of Section~\ref{ch03:measurement} make raw references mandatory exactly where the value's authority depends on them: instrumented values and all three score-like kinds must carry them; a design declaration need not, because its authority is the declaring document, referenced as a source.
+
+\subsection{Control references}\label{ch03:field:controls}
+
+Control references point to the control conditions relevant to the value --- zero-intervention baselines, random-direction runs, wrong-layer applications, norm-matched comparisons --- and, in the implementation, each control is additionally bound to the test point it controls for and to the method by which its relevance is asserted.
+
+\emph{Rationale.} The steering literature's inventory of controls (Chapter~\ref{ch02:background}) is only worth having if control linkage survives into the record: an effect value whose controls are ``available somewhere'' is an effect value without controls. The relevance binding matters because a control is only a control \emph{for something}: a zero-intervention baseline at the wrong layer controls for nothing, and the binding forces the claim of relevance to be explicit and reviewable rather than implied by proximity.
+
+\subsection{Derivation parents}\label{ch03:field:parents}
+
+Derivation parents identify, in order and by role, the records from which a derived value was computed: each parent carries a role name, a position, an object type, and the parent's SHA-256 digest.
+
+\emph{Rationale.} This is the qualified-derivation discipline of the provenance model \cite{prov} in typed form. Ordered, role-tagged parents make derivations auditable (which record served as numerator, which as denominator), replayable (the derivation can be recomputed from the identified parents), and contamination-traceable (a defective parent's descendants are mechanically enumerable). The ordering and role constraints are validated --- positions contiguous from zero, roles distinct, parent identities distinct --- so that a derivation cannot silently duplicate a parent or leave its operand structure ambiguous.
+
+\subsection{Missing-or-censored reason}\label{ch03:field:missing}
+
+Where a field or a value is absent, censored, or undefined, this field records why, as declared text: below detection, saturated instrument, undefined ratio at zero response, not evaluated, withheld.
+
+\emph{Rationale.} The censoring discipline of Chapter~\ref{ch02:background} requires that absence be a stated fact, not a silent hole: a censored observation treated as zero, or an undefined ratio reported as a number, each inject known biases. The field is also where the candidate's residual discipline surfaces at the record level: at zero-compatible predicted response, the residual ratios are not small numbers --- they are censored, and this field carries the reason forward so that downstream consumers cannot mistake a censored record for a measured null.
+
+\subsection{The record as a whole}\label{ch03:field:whole}
+
+Assembled, the fourteen fields implement a single design intention: \emph{every question a skeptical reviewer would ask of a number has a slot whose emptiness is visible}. What kind of thing is this? (kind.) On what scale? (unit.) How was it obtained? (measurement kind, method.) Under what fixed conditions? (profile digest.) Is it data or inference? (estimate-or-observation.) How sure are you? (uncertainty, interval, sample size.) Where are the raw bytes? (raw references.) Against what was it controlled? (control references.) From what was it computed? (parents.) And if any answer is missing --- why? (missing-or-censored reason.) A record that cannot answer fails validation; a record that answers falsely is exposed by its digests. What no record can do is decline to be asked.
+
+\section{Implementation realization}\label{ch03:realization}
+
+The specification's observed-value record is realized in the implementation as a frozen, slotted measurement structure together with a provenance sub-structure, and the mapping deserves explicit statement because later chapters cite implementation behavior.
+
+The measurement structure --- \texttt{MeasurementValue} in the implementation --- carries the field name, quantity kind, exact decimal value, unit, measurement kind, provenance, optional uncertainty, optional sample size, optional resistance role, and optional missing-or-censored reason. The provenance sub-structure --- \texttt{FieldProvenance} --- carries the source references, method identifier, optional calibration-profile digest, optional instrument identity, optional test-point identity, raw-artifact references, control references and control bindings, optional dataset-split reference, derivation parents, and optional operation binding. The estimate-or-observation status of the specification is realized jointly by the measurement kind (scores and derivations are never observations of the measurand), the resistance role where applicable, and the dataset-split binding that distinguishes calibration-fitted estimates from held-out evaluations.
+
+Validation is constructor-time and total: a structure that violates any rule of this chapter cannot be instantiated, so no invalid record ever exists to be filtered later. Exact-type checks reject subclasses and look-alikes (a provenance must be exactly a \texttt{FieldProvenance}; a reference exactly an \texttt{ArtifactRef}), closing the class of bypasses in which a permissive subtype smuggles altered behavior under a valid type name. Records are immutable after construction, and each exposes canonical bytes and a SHA-256 digest over a canonical payload that embeds --- alongside the fields --- the candidate's four status constants, so that research status \texttt{OPEN}, admission ring \texttt{4}, license status \texttt{NOT LICENSED}, and disclosure status \texttt{HELD} are inside the digested content of every measurement.
+
+Two further realization details recur later. First, certain roles are \emph{factory-only}: a network-equivalent resistance cannot be constructed by ordinary client code at all --- its constructor demands a private factory token held by the network-operation module --- so the only path to such a record passes through the capability gates. Second, uncertainty is validated \emph{as a quantity}: its unit must be the measurement's unit, its interval must contain the value, and its bounds must independently satisfy the quantity's own range constraints, realizing the interval discipline of Section~\ref{ch03:field:ci}.
+
+\section{Supporting identity structures}\label{ch03:identities}
+
+The observed-value record does not stand alone: several of its fields refer to typed identity structures that are themselves validated, frozen, and canonically digestible. This section describes each, because the record's guarantees are only as strong as the identities it binds.
+
+\subsection{Artifact references}\label{ch03:id:artifact}
+
+An artifact reference --- \texttt{ArtifactRef} in the implementation --- is the atomic pointer of the evidence layer: an artifact identifier, a URI, a SHA-256 digest, and a media type, all mandatory. The digest is the reference's substance; the URI is a courtesy. A consumer resolving the reference is obligated to verify that the resolved bytes hash to the recorded digest, and a resolution that does not is a broken chain, not a soft mismatch. The media type is recorded so that raw evidence is interpreted as what it was --- a UTF-8 log, a JSON sweep record, a PDF page render --- rather than sniffed; content sniffing is a classic route to interpretation drift between producers and reviewers.
+
+Distinctness discipline applies wherever references are aggregated: within a record's source references, raw-artifact references, or control references, duplicate digests are rejected. Duplication in evidence lists is either an error or padding, and the validator treats both as failure rather than tolerating inflated evidence counts.
+
+\subsection{Control bindings}\label{ch03:id:controlbinding}
+
+A control binding --- \texttt{ControlBinding} --- joins an artifact reference to two further mandatory facts: the digest of the test point the control is relevant to, and the method identifier under which its relevance is asserted. The record-level rule (Section~\ref{ch03:field:controls}) that a control is only a control \emph{for something} is realized here: an unbound control artifact is inert, and the implementation additionally requires that a record's flat control-reference list agree exactly with the artifacts of its control bindings --- sorted by digest, with no extras and no omissions --- so that the reviewable list and the binding structure cannot drift apart. A control cited without a relevance method is unconstructible; a control bound to a foreign test point is visible as such by digest comparison.
+
+\subsection{Model identity}\label{ch03:id:model}
+
+A model identity --- \texttt{ModelIdentity} --- names the subject system exactly: a model identifier, a revision string, and three digests --- weights, configuration, and tokenizer. All five fields are mandatory, and the three-digest design is deliberate: the steering literature's reproducibility cautions (Chapter~\ref{ch02:background}) include effects that fail to survive checkpoint changes, configuration differences that alter hook semantics, and tokenizer differences that re-segment the very prompts a direction was derived from. A model named only by its marketing string is not an experimental subject; a model named by weights, configuration, and tokenizer digests is. Two records disagreeing about any of the three digests concern different subjects, whatever their identifiers say.
+
+\subsection{Instrument identity}\label{ch03:id:instrument}
+
+An instrument identity --- \texttt{InstrumentIdentity} --- names the measuring apparatus: an instrument identifier, a kind, a version, and the digest of the implementing code. In this candidate the instruments are software --- projection hooks, sweep harnesses, logging shims --- and the implementation digest is the field that makes ``the same instrument'' a checkable claim rather than a folk assertion. The metrological rule that an indication becomes a result only through an identified measuring system (Chapter~\ref{ch02:background}) is realized by making instrumented records unconstructible without this identity (Section~\ref{ch03:measurement:kinds}).
+
+\subsection{Test-point identity}\label{ch03:id:testpoint}
+
+A test-point identity --- \texttt{TestPointIdentity} --- is the most information-dense identity in the ontology, because it fixes \emph{where and how} the model was probed. It binds: the full model identity; the layer; a non-empty tuple of distinct, non-negative token positions; the direction identifier and the digest of the direction vector's bytes; the direction's provenance, from a closed three-member enumeration (\texttt{PROBE\_DERIVED}, \texttt{JACOBIAN\_DERIVED}, \texttt{DIFF\_DERIVED}); the direction norm, required to equal exactly the decimal one; the direction sign, from the closed enumeration (\texttt{POSITIVE}, \texttt{NEGATIVE}); and the hook type.
+
+Each requirement answers a specific hazard recorded in the background survey. The positions are a validated tuple because position conventions differ across codebases and off-by-one ambiguity is a real replication killer; distinctness is enforced because a duplicated position double-counts its contribution silently. The direction is bound by digest because ``the same direction'' must mean the same bytes, not the same name. Provenance is mandatory because probe-derived, Jacobian-derived, and difference-derived directions are different measurands (Chapter~\ref{ch02:background}); a record that omitted provenance would invite exactly the operationalization conflation the survey warns against. The unit-norm requirement --- the norm must equal exactly $1$ --- removes perturbation magnitude from the direction and locates it entirely in the alpha dose, so that dose values are comparable within a profile; a direction of norm $2$ would silently double every dose. And the sign is explicit because a direction and its negation are equally natural outputs of every derivation method, and cross-record comparison presupposes an orientation convention that must be recorded, not assumed.
+
+\subsection{Uncertainty structure}\label{ch03:id:uncertainty}
+
+The uncertainty structure --- \texttt{Uncertainty} --- realizes the uncertainty and confidence-interval fields jointly: a unit (which must equal the measurement's unit); a non-negative standard uncertainty; interval bounds with lower not exceeding upper; a confidence level strictly between zero and one; and the method identifier of the uncertainty evaluation. The containing record additionally requires that its value lie within the interval and that both bounds independently satisfy the quantity's own validation (Section~\ref{ch03:field:ci}). The mandatory method identifier deserves emphasis: an interval without its evaluation method --- Type~A dispersion, bootstrap, declared Type~B bound --- cannot be weighed, and the field forces the question ``uncertain according to what?'' to have a recorded answer \cite{gum}.
+
+\subsection{Parent references and operation bindings}\label{ch03:id:parents}
+
+A parent reference --- \texttt{ParentRef} --- carries a role, a position, an object type, and the parent's digest; the containing provenance validates that positions run contiguously from zero, that roles are distinct, and that no parent identity repeats (Section~\ref{ch03:field:parents}).
+
+An operation binding --- \texttt{OperationBinding} --- is the heavyweight lineage structure attached to records produced by gated operations. It binds: the authority-manifest digest; a canonically ordered, duplicate-free tuple of attestation digests (which may be empty); the capability under which the operation ran, from the closed capability enumeration; the trust mode and authorization state, from closed enumerations with a validated correspondence --- structural-research mode may claim only unauthenticated-structural status, and integrity-configuration mode only unauthenticated-integrity status, so that \emph{no combination of fields can express an authenticated state}; the caller-supplied replay time and optional clock-receipt digest; the runtime identifier; references to the dependency lockfile and the executing code, both digest-carrying; and the covariance limitation.
+
+The covariance limitation is a fixed declared constant --- stating that cross-input covariance is unavailable and a zero-covariance approximation is in use --- and the validator rejects any binding that omits or alters it. This is the candidate's implementation of the background rule that covariance treatment must be declared rather than assumed (Chapter~\ref{ch02:background}): the approximation is not hidden in a footnote but hashed into every gated result, so no aggregate can later claim its uncertainty accounted for dependence it never modeled.
+
+\section{The sixteen quantity kinds}\label{ch03:quantities}
+
+The quantity-kind enumeration has exactly sixteen members. Each is defined below with its admissible units (anticipating Section~\ref{ch03:admissibility}) and its role in the candidate. The member spellings are the implementation's, verbatim.
+
+\begin{definition}[\texttt{DRIVE\_INTERVENTION}]\label{ch03:qk:driveint}
+The declared intervention magnitude: the steering alpha applied along the profile's direction at the profile's test point. Unit: \texttt{ALPHA}. This is the dose coordinate $a$ of the response model --- the quantity the experimenter sets, not measures. Its records are typically design values (the grid point intended) or instrumented confirmations (the coefficient actually applied, as logged by the intervention harness).
+\end{definition}
+
+\begin{definition}[\texttt{DRIVE\_SCORE}]\label{ch03:qk:drivescore}
+A score-valued rating of drive on the ten-point scale. Unit: \texttt{Q10}. This kind exists to give the lineage's score-valued drive quantities a home that is \emph{not} the dose coordinate: a rated drive of $7.5$ is a score, participates in no dimensional arithmetic with activations, and cannot be substituted for an \texttt{ALPHA}-valued intervention.
+\end{definition}
+
+\begin{definition}[\texttt{SIGNED\_ACTIVATION}]\label{ch03:qk:signedact}
+A directional activation projection retaining its sign: the inner product of an activation with the declared unit direction. Unit: \texttt{ACTIVATION}. The sign carries orientation relative to the profile's declared direction sign; a negative value is a projection opposite the direction, not an error.
+\end{definition}
+
+\begin{definition}[\texttt{FLOW\_MAGNITUDE}]\label{ch03:qk:flowmag}
+The magnitude of a directional activation response --- the response coordinate $y$ in its unsigned form. Unit: \texttt{ACTIVATION}; constrained non-negative. Flow magnitude is the quantity the response model predicts; it is related to signed activation by an explicit magnitude derivation, recorded with parents, never by silent absolute-value-taking.
+\end{definition}
+
+\begin{definition}[\texttt{NORMALIZED\_FLOW}]\label{ch03:qk:normflow}
+A flow magnitude normalized by the profile's full-scale response and rescaled to the ten-point display scale. Unit: \texttt{Q10}. Normalized flow is profile-relative twice over --- through the measurement and through the full-scale method --- and its records must bind the profile digest for exactly that reason. It exists for display and quantization; the exact pre-clipping value and the overload ratio are separate kinds, preventing the normalization from destroying information.
+\end{definition}
+
+\begin{definition}[\texttt{CONSTRAINT\_SCORE}]\label{ch03:qk:constraint}
+A score-valued rating of constraint or damping intensity. Units: \texttt{Q10} or \texttt{Q100} --- the only kind with two admissible units, because the lineage's two constraint scales both required a typed home. The two units are not interconvertible without an explicit conversion method. A constraint score is never an effective resistance: the audit's dimensional-bridge disposition --- constraint scores never masquerade as resistance --- is enforced by this kind's unit set, which excludes \texttt{ALPHA\_PER\_ACTIVATION}.
+\end{definition}
+
+\begin{definition}[\texttt{EFFECTIVE\_RESISTANCE}]\label{ch03:qk:reff}
+The fitted proportionality parameter $r_{\mathrm{eff}}$ of the response model. Unit: \texttt{ALPHA\_PER\_ACTIVATION}; constrained strictly positive; requires an explicit resistance role (calibrated held-out, apparent same-sample, network equivalent, or design proposal) with role-specific validation described in Section~\ref{ch03:admissibility}. This is the only kind licensed to bridge the alpha and activation dimensions.
+\end{definition}
+
+\begin{definition}[\texttt{RESISTANCE\_DELTA}]\label{ch03:qk:rdelta}
+A difference of two effective resistances under one profile --- the paired-delta quantity by which the lineage's addendum proposed to infer contextual resistance changes. Unit: \texttt{ALPHA\_PER\_ACTIVATION}. As a difference it may be negative; it carries its two parent resistances as ordered derivation parents, and it inherits their split and role discipline through them.
+\end{definition}
+
+\begin{definition}[\texttt{CAPABILITY\_SCORE}]\label{ch03:qk:capscore}
+A score-valued rating of a capability or performance dimension on the ten-point scale. Unit: \texttt{Q10}. Like drive score, it exists to keep the lineage's rated quantities typed and quarantined from measurement arithmetic.
+\end{definition}
+
+\begin{definition}[\texttt{GAIN\_MAGNITUDE}]\label{ch03:qk:gain}
+A local gain: the magnitude of a derivative or ratio relating an effect coordinate to a cause coordinate between declared test points. Unit: \texttt{DIMENSIONLESS}; constrained non-negative. The audit's gain conflict --- Fisher--Rao displacement gain versus local Jacobian projection gain, distinct until a bridge exists --- lives at the method layer: both profiles of gain occupy this one kind, distinguished mandatorily by method identifier, so that any aggregation across the two methods is visible and rejectable.
+\end{definition}
+
+\begin{definition}[\texttt{EFFECT\_PROJECTION}]\label{ch03:qk:effectproj}
+The projection of a downstream effect onto a declared effect direction at a declared downstream test point --- the effect-side analogue of signed activation, kept as its own kind so that cause-side and effect-side projections cannot be conflated in gain derivations. Unit: \texttt{ACTIVATION}.
+\end{definition}
+
+\begin{definition}[\texttt{SATURATION\_FRACTION}]\label{ch03:qk:satfrac}
+The fraction of a sweep, grid, or operating envelope classified as saturated. Unit: \texttt{FRACTION}, on $[0,1]$. This kind is the typed repair of the audit's mixed-scale conflict: the lineage's $\mathrm{sat}=8.5$ was a fraction-kind assertion written on a score scale, and its corrected value $0.85$ is representable only here.
+\end{definition}
+
+\begin{definition}[\texttt{CUTOFF\_FRACTION}]\label{ch03:qk:cutfrac}
+The fraction of a sweep, grid, or operating envelope classified as cutoff --- below response threshold. Unit: \texttt{FRACTION}, on $[0,1]$. Kept distinct from saturation fraction because the flat-response ambiguity (Chapter~\ref{ch02:background}) makes the two ends of the curve evidentially different despite their shared flatness.
+\end{definition}
+
+\begin{definition}[\texttt{OVERLOAD\_RATIO}]\label{ch03:qk:overload}
+The ratio of a raw response to the profile's full-scale response, retained exactly and without clipping. Unit: \texttt{DIMENSIONLESS}; constrained non-negative; values above one are the point of the kind. Overload ratio is what preserves information the display normalization discards: a normalized flow clipped at ten records \emph{that} the scale was exceeded, the overload ratio records \emph{by how much}.
+\end{definition}
+
+\begin{definition}[\texttt{FLOW\_RESIDUAL}]\label{ch03:qk:residual}
+The signed difference between an observed and a predicted flow, $\delta_y = y_{\mathrm{obs}} - y_{\mathrm{pred}}$, under one profile with a registered prediction. Unit: \texttt{ACTIVATION}. A flow residual requires calibrated resistance and propagated uncertainty in its derivation, is censored at zero-compatible predicted response, and --- per the audit's residual disposition --- ranks follow-up probes without ever identifying a cause.
+\end{definition}
+
+\begin{definition}[\texttt{RELATIVE\_ERROR}]\label{ch03:qk:relerr}
+The magnitude of a residual relative to the magnitude of the prediction or observation it deviates from, under a declared convention named by the method identifier. Unit: \texttt{DIMENSIONLESS}; constrained non-negative; undefined --- and therefore censored, not computed --- where its denominator is zero or zero-compatible.
+\end{definition}
+
+Three observations about the enumeration as a whole. First, it is \emph{closed}: there is no other-kind escape hatch, and a quantity that fits no kind cannot be recorded until the ontology is revised --- deliberately, with a new digest for every profile that uses it. Second, it is \emph{partitioned by discipline}: four kinds are score-valued (\texttt{DRIVE\_SCORE}, \texttt{CONSTRAINT\_SCORE}, \texttt{CAPABILITY\_SCORE}, and the display-scale \texttt{NORMALIZED\_FLOW}), five are activation-dimensioned measurements (\texttt{SIGNED\_ACTIVATION}, \texttt{FLOW\_MAGNITUDE}, \texttt{EFFECT\_PROJECTION}, \texttt{FLOW\_RESIDUAL}, and the alpha-dimensioned \texttt{DRIVE\_INTERVENTION}), two are the resistance bridge (\texttt{EFFECTIVE\_RESISTANCE}, \texttt{RESISTANCE\_DELTA}), and the remainder are dimensionless diagnostics (\texttt{GAIN\_MAGNITUDE}, \texttt{OVERLOAD\_RATIO}, \texttt{RELATIVE\_ERROR}) and fractions (\texttt{SATURATION\_FRACTION}, \texttt{CUTOFF\_FRACTION}); no arithmetic crosses these families without an explicitly typed bridging kind. Third, it is \emph{audit-derived}: nearly every kind exists because some conflict in the lineage required the distinction it draws, and the enumeration should be read as the audit's dispositions compiled into types.
+
+\section{The six measurement kinds and non-fungibility}\label{ch03:measurement}
+
+\subsection{The six kinds}\label{ch03:measurement:kinds}
+
+The measurement-kind enumeration has exactly six members, spelled as in the implementation.
+
+\begin{definition}[\texttt{DESIGN\_VALUE}]\label{ch03:mk:design}
+A value declared by a board, profile, or specification --- intended, not observed. \emph{Example:} the alpha grid point $a = 2.0$ that a sweep protocol declares it will apply; a board's declared full-scale response under the declared-design full-scale method. A design value's authority is the declaring document; it requires source references but not raw measurement artifacts, and no accumulation of design values ever constitutes an observation.
+\end{definition}
+
+\begin{definition}[\texttt{INSTRUMENTED}]\label{ch03:mk:instrumented}
+A value produced by an identified instrument chain with calibration binding. \emph{Example:} a signed activation projection logged by the declared projection hook at the declared layer and positions, under a declared calibration profile, with the sweep log retained as a raw artifact. Instrumented records carry the heaviest obligations: instrument identity, test-point identity, calibration-profile digest, and raw-artifact references are all mandatory, and their absence is a constructor-time failure, not a warning.
+\end{definition}
+
+\begin{definition}[\texttt{BEHAVIORAL\_PROXY}]\label{ch03:mk:proxy}
+A value inferred from external behavior rather than internal measurement. \emph{Example:} a classifier's rate of target-property outputs over generated text at a given alpha, used as a proxy for the intervention's behavioral effect. Behavioral proxies require raw-artifact references (the transcripts and classifier outputs) and their proxy status is permanent: however well a proxy tracks an internal quantity, its records remain proxies.
+\end{definition}
+
+\begin{definition}[\texttt{MODEL\_DERIVED}]\label{ch03:mk:derived}
+A value computed from other records. \emph{Example:} an effective resistance fitted from calibration-split sweep records; a residual computed from an observation and a registered prediction; a normalized flow computed from a flow magnitude and a full-scale value. Model-derived records must carry derivation parents --- a derived value with no parents is unconstructible --- and their evidential weight is a function of their parents', never greater.
+\end{definition}
+
+\begin{definition}[\texttt{HUMAN\_SCORE}]\label{ch03:mk:human}
+A value rated by a person. \emph{Example:} a rater's 0--10 judgment of how strongly a generated passage expresses the steered property, with the rating form retained as a raw artifact. Human scores require raw-artifact references and are permanently score-kind: no aggregation, agreement statistic, or averaging converts rated judgment into telemetry.
+\end{definition}
+
+\begin{definition}[\texttt{LLM\_SCORE}]\label{ch03:mk:llm}
+A value rated by a language model. \emph{Example:} a judge model's 0--10 rating of the same passage, with the judging prompt and response retained as raw artifacts. LLM scores carry the same obligations and the same permanent score status as human scores, plus a caution recorded in Chapter~\ref{ch02:background}: judge-model failure modes may correlate with the interventions under study, so LLM-scored evidence is never sole support for an effect claim.
+\end{definition}
+
+\subsection{Non-fungibility}\label{ch03:measurement:nonfungible}
+
+\begin{ruleenv}[Kind non-fungibility]\label{ch03:rule:nonfungible}
+Measurement kinds do not convert, upgrade, or launder. In particular: (i) a derived value does not become instrumented because one of its parents --- or all of them --- was instrumented; (ii) a score does not become telemetry because it is stored, aggregated, or displayed alongside measurements; (iii) a behavioral proxy does not become an internal measurement because it correlates with one; (iv) a design value does not become an observation because the design was executed. Derivation preserves parent lineage; it does not inherit parent status.
+\end{ruleenv}
+
+The rule's rationale is that measurement kind encodes the \emph{worst-case question a reviewer must ask}, and that question never improves through composition. A resistance fitted from instrumented sweeps is exactly as good as the fit --- so it is \texttt{MODEL\_DERIVED}, and its parents say what it was fitted from. An average of ten instrumented projections is a derived summary of instrumented data --- reviewable as such, but not itself the output of an instrument, and the distinction bites precisely when the averaging method is wrong. In the other direction, the rule forbids the audit's score-as-telemetry slide at the level where it historically happened: not in any single dramatic act, but by drift --- scores stored in measurement tables, displayed on measurement dashboards, and eventually cited as measurements. Under the ontology, the kind travels inside the digested record, and no storage location, display context, or citation practice can alter it.
+
+The implementation enforces the rule both by validation (each kind's mandatory fields, per Section~\ref{ch03:realization}) and by construction discipline for the sensitive cases: the resistance roles that carry predictive authority are constructible only as \texttt{MODEL\_DERIVED}, so an ``instrumented resistance'' --- a category error, since resistance is a fitted parameter --- is unrepresentable outright.
+
+\subsection{Obligations by kind, in summary}\label{ch03:measurement:table}
+
+Table~\ref{ch03:tab:mkoblig} summarizes the mandatory provenance obligations attached to each measurement kind by the constructor-time validation, as implemented. The pattern is deliberate: obligations scale with the authority the kind could be mistaken for carrying. Instrumented records --- the only kind whose name suggests telemetry --- carry the heaviest load; design values --- whose authority is the declaring document --- the lightest.
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+Measurement kind & Mandatory beyond baseline & Rationale in brief \\
+\midrule
+\texttt{DESIGN\_VALUE} & --- (source refs, method) & authority is the declaration \\
+\texttt{INSTRUMENTED} & instrument, test point, & indication-to-result chain \\
+ & profile digest, raw artifacts & must be complete \\
+\texttt{BEHAVIORAL\_PROXY} & raw artifacts & proxy must expose its basis \\
+\texttt{MODEL\_DERIVED} & derivation parents & no computation without inputs \\
+\texttt{HUMAN\_SCORE} & raw artifacts & rating must expose its record \\
+\texttt{LLM\_SCORE} & raw artifacts & judging must expose prompt \\
+ & & and response \\
+\bottomrule
+\end{tabular}
+\caption{Mandatory provenance obligations by measurement kind. Baseline obligations (non-empty source references and a method identifier) apply to every record.}
+\label{ch03:tab:mkoblig}
+\end{table}
+
+\subsection{Design rationale: granularity and closure}\label{ch03:measurement:rationale}
+
+Two recurring design questions deserve answers on the record, because reviewers of earlier drafts asked both.
+
+\emph{Why sixteen quantity kinds and not four?} A minimal dimensional analysis would need only alpha-valued, activation-valued, ratio-valued, and dimensionless quantities. The finer grain exists because the candidate's threat model is not dimensional error alone but \emph{semantic} conflation within a dimension: signed activation, flow magnitude, effect projection, and flow residual all live in \texttt{ACTIVATION} units, yet substituting one for another in a derivation is always an error --- a residual is not an observation, an effect-side projection is not a cause-side one, a magnitude has discarded a sign that a gain derivation may need. Each such substitution the audit's lineage either committed or invited is blocked by a kind distinction. The cost of granularity is verbosity in producers; the benefit is that the reviewer's question ``which quantity, exactly?'' is answered by the record rather than by archaeology. The candidate pays the verbosity.
+
+\emph{Why closed enumerations rather than extensible registries?} Extensibility is the conventional virtue, and the candidate refuses it at every layer --- kinds, units, measurement kinds, roles, provenances, regions, outcomes are all closed. The reason is the digest discipline: profiles, records, and gates are compared by canonical bytes, and an open vocabulary makes two deployments' vocabularies silently diverge while their digests continue to compare. A closed enumeration changes only by revising the ontology itself, which changes the digests of everything downstream --- making evolution \emph{loud}, which is the property the candidate wants. Extension points do exist, but they are quarantined: the implementation provides a non-claim extension structure whose namespace must begin with \texttt{x-nonclaim-}, allowing auxiliary payloads to travel with records while being, by their very namespace, incapable of stating a claim. Anything that would state a claim must enter the closed vocabularies through revision and review.
+
+\section{The unit ontology}\label{ch03:units}
+
+\subsection{The seven units}\label{ch03:units:seven}
+
+The unit enumeration has exactly seven members, spelled as in the implementation: \texttt{ALPHA}, the unit of steering dose; \texttt{ACTIVATION}, the unit of directional projection magnitude; \texttt{ALPHA\_PER\_ACTIVATION}, the unit of effective resistance and resistance deltas; \texttt{DIMENSIONLESS}, for ratios and gains whose dimensions cancel; \texttt{FRACTION}, for proportions constrained to $[0,1]$; and the two score scales \texttt{Q10} (range $[0,10]$) and \texttt{Q100} (range $[0,100]$).
+
+Several deliberate features of this small ontology deserve statement. \emph{Alpha and activation are primitive and mutually irreducible:} neither is defined in terms of the other, and no dimensionless rescaling connects them; the only bridge is the ratio unit \texttt{ALPHA\_PER\_ACTIVATION}, reserved to the resistance kinds. \emph{Dimensionless and fraction are distinct:} both are pure numbers, but \texttt{FRACTION} carries the $[0,1]$ constraint as part of its meaning (a fraction of $1.2$ is a validation error), while \texttt{DIMENSIONLESS} does not (an overload ratio of $1.2$ is the point); collapsing them would force one constraint to be wrong. \emph{The score scales are units, not ranges:} \texttt{Q10} and \texttt{Q100} are treated as genuinely different units of score-kind quantities, so the lineage's two constraint scales coexist without ambiguity and without silent conversion --- a \texttt{Q100} record rescaled to \texttt{Q10} is a new derived record with a conversion method and a parent, or it is nothing.
+
+\subsection{Forbidden aliases}\label{ch03:units:forbidden}
+
+\begin{ruleenv}[Forbidden electrical aliases]\label{ch03:rule:forbidden}
+The physical unit labels \textsc{volt}, \textsc{ampere}, and \textsc{ohm} --- and by extension every SI electrical unit --- are forbidden aliases for CAS-Ohm model quantities. No CAS-Ohm record may carry them; no display, export, or documentation layer may attach them to CAS-Ohm values; and their absence from the unit enumeration is a contract clause, verified by golden rejection fixtures, not an oversight to be repaired.
+\end{ruleenv}
+
+The rule's form is unusual --- ontologies do not usually legislate about members they lack --- and Chapter~\ref{ch01:intro} gave the reason: an ontology that merely omitted the electrical units would invite a later extension to add them, whereas naming them as forbidden makes the refusal itself part of the specification, with tests that must be deliberately deleted before the refusal can erode. The forbidden-alias rule is the unit-layer enforcement of the monograph's first refusal (no physical law): it guarantees that the candidate cannot even \emph{state} a physical electrical claim in its own evidence layer.
+
+A hypothetical future physical profile --- an actual instrumented electrical measurement context, should the wider project ever have one --- would require separate explicit typing: its own unit members, its own quantity kinds, its own instrument and calibration machinery, admitted through the project's ordinary review discipline. Nothing in the current candidate anticipates, licenses, or partially implements such a profile.
+
+\subsection{The \texttt{Unit.VOLT} disposition}\label{ch03:units:unitvolt}
+
+One vocabulary fact requires explicit quarantine. The wider project's generic PCBA vocabulary --- the board-description layer from which the candidate's lineage borrows its engineering idiom --- contains a member \texttt{Unit.VOLT}, present there as part of a general-purpose unit vocabulary for describing printed-circuit-board artifacts.
+
+\begin{ruleenv}[\texttt{Unit.VOLT} licenses nothing]\label{ch03:rule:unitvolt}
+The existence of \texttt{Unit.VOLT} in the generic PCBA vocabulary licenses nothing for CAS-Ohm: it does not license physical CAS telemetry, does not create a CAS-Ohm unit, does not soften the forbidden-alias rule, and does not constitute partial implementation of a physical profile. The member belongs to a different vocabulary with a different subject matter; its import into any CAS-Ohm context is a validation error.
+\end{ruleenv}
+
+The disposition is recorded at this length because vocabulary adjacency is exactly the mechanism by which the historical sources drifted: an electrical idiom available nearby became an electrical semantics assumed everywhere. The candidate's defense is to name the adjacency and sever it explicitly.
+
+\section{Admissibility, ranges, and roles}\label{ch03:admissibility}
+
+The quantity-unit admissibility relation is total and closed: every quantity kind has a declared set of admissible units, every (kind, unit) pair outside the relation is rejected at construction, and the relation is reproduced in Table~\ref{ch03:tab:admiss} exactly as implemented.
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+Quantity kind & Admissible unit(s) & Range constraint \\
+\midrule
+\texttt{DRIVE\_INTERVENTION} & \texttt{ALPHA} & --- \\
+\texttt{DRIVE\_SCORE} & \texttt{Q10} & $[0,10]$ \\
+\texttt{SIGNED\_ACTIVATION} & \texttt{ACTIVATION} & --- \\
+\texttt{FLOW\_MAGNITUDE} & \texttt{ACTIVATION} & $\geq 0$ \\
+\texttt{NORMALIZED\_FLOW} & \texttt{Q10} & $[0,10]$ \\
+\texttt{CONSTRAINT\_SCORE} & \texttt{Q10}, \texttt{Q100} & $[0,10]$ / $[0,100]$ \\
+\texttt{EFFECTIVE\_RESISTANCE} & \texttt{ALPHA\_PER\_ACTIVATION} & $> 0$; role required \\
+\texttt{RESISTANCE\_DELTA} & \texttt{ALPHA\_PER\_ACTIVATION} & --- \\
+\texttt{CAPABILITY\_SCORE} & \texttt{Q10} & $[0,10]$ \\
+\texttt{GAIN\_MAGNITUDE} & \texttt{DIMENSIONLESS} & $\geq 0$ \\
+\texttt{EFFECT\_PROJECTION} & \texttt{ACTIVATION} & --- \\
+\texttt{SATURATION\_FRACTION} & \texttt{FRACTION} & $[0,1]$ \\
+\texttt{CUTOFF\_FRACTION} & \texttt{FRACTION} & $[0,1]$ \\
+\texttt{OVERLOAD\_RATIO} & \texttt{DIMENSIONLESS} & $\geq 0$ \\
+\texttt{FLOW\_RESIDUAL} & \texttt{ACTIVATION} & --- \\
+\texttt{RELATIVE\_ERROR} & \texttt{DIMENSIONLESS} & $\geq 0$ \\
+\bottomrule
+\end{tabular}
+\caption{The quantity-unit admissibility relation and range constraints, as implemented. Scale ranges attach to the unit (\texttt{Q10}, \texttt{Q100}, \texttt{FRACTION}); sign constraints attach to the kind; \texttt{EFFECTIVE\_RESISTANCE} additionally requires an explicit resistance role.}
+\label{ch03:tab:admiss}
+\end{table}
+
+The role discipline attached to effective resistance completes the admissibility layer. Every \texttt{EFFECTIVE\_RESISTANCE} record must declare exactly one role: \texttt{CALIBRATED\_HELD\_OUT}, the only role admissible for prediction, which additionally requires \texttt{MODEL\_DERIVED} measurement kind and a bound dataset-split reference identifying the held-out split; \texttt{APPARENT\_SAME\_SAMPLE}, the typed home of the circular quantity $r = a/y$, recordable so that same-sample fits can be documented and studied but barred from prediction; \texttt{NETWORK\_EQUIVALENT}, constructible only through the capability-gated network-operation factory (Section~\ref{ch03:realization}); and \texttt{DESIGN\_PROPOSAL}, a declared design-layer value with no predictive standing. A resistance role on any other quantity kind is a validation error, as is an effective resistance without one. This four-way role split is the record-level realization of the anti-circularity rule: the circular fit is not forbidden from existing --- forbidding it would merely drive it underground --- it is forbidden from \emph{mattering}, by a role that every consumer can see and every gate checks.
+
+\section{Canonical evidence bounds}\label{ch03:canonical}
+
+Every structure in the ontology exposes canonical bytes and a SHA-256 digest, and every downstream comparison in the candidate --- record identity, profile binding, parent linkage, tamper detection, attestation replay --- reduces to digest equality. The canonical encoding is therefore itself part of the trusted computing base, and it is governed by an inherited contract --- the wider project's canonical-encoding rules --- whose CAS-Ohm-relevant clauses are specified here.
+
+\begin{invariant}[Exact-type tagging]\label{ch03:inv:exacttype}
+Canonical encoding is exact-type driven: every encoded node carries its exact type, subclasses and duck-typed look-alikes are rejected rather than encoded as their nearest ancestor, and two structures of different exact types never share canonical bytes. Type confusion --- the classic route by which a permissive encoder lets a crafted object impersonate a valid one --- is thereby excluded at the byte layer.
+\end{invariant}
+
+\begin{invariant}[Cycle awareness]\label{ch03:inv:cycle}
+The encoder detects reference cycles and rejects cyclic structures rather than recursing to exhaustion. Evidence records are finite trees by specification; a cycle is not an exotic input but a malformed or adversarial one, and the defined behavior is a validation error, not a stack fault.
+\end{invariant}
+
+\begin{invariant}[Unsafe-Unicode rejection]\label{ch03:inv:unicode}
+Text admitted into canonical evidence is screened, and unsafe Unicode is rejected: control and format characters, direction-override and other visually deceptive code points, unpaired surrogates, and related hazard classes cannot enter a canonical record. The screen exists because digested text is displayed, compared, and reviewed by humans, and a code point that renders one way while hashing another is an attack on exactly the equality the digests are trusted to witness.
+\end{invariant}
+
+\begin{invariant}[Declared resource bounds]\label{ch03:inv:bounds}
+Canonical encoding operates under declared, validated limits on: nesting depth; total node count; per-container size; per-text length; total output size; and integer magnitude, the last bounded at 2{,}048 bits. Inputs exceeding any limit are rejected with the candidate's validation error. The bounds make encoding cost predictable and deny the class of resource-exhaustion inputs --- pathological nesting, enormous containers, unbounded numerals --- that unbounded encoders admit by default.
+\end{invariant}
+
+\begin{invariant}[Host-exception normalization]\label{ch03:inv:hostexc}
+Failures raised by the host runtime during encoding --- in particular, integer-conversion failures on magnitudes the platform cannot process --- are caught and normalized to the candidate's own validation error. No platform exception leaks through the canonical layer: the encoder's error surface is its own, closed, and identical across host environments.
+\end{invariant}
+
+Two remarks situate these bounds. First, they are \emph{inherited}, not invented: the candidate adopts the project's canonical-encoding contract, and the invariants above are that contract's clauses restated for this evidence layer; consistency with the wider project is itself part of the point, since cross-layer digest comparison presupposes one encoding. Second, they are \emph{load-bearing for everything else in this chapter}: the no-bare-numbers rule stores exact decimals whose digests must be stable (exact-type tagging); the provenance chains are trees whose finiteness must be enforced (cycle awareness); method identifiers and reasons are text that reviewers will read (Unicode screening); and adversarial or defective producers must be met with defined rejection, not undefined behavior (bounds and normalization). A record system with softer bytes would leave every rule stated earlier enforceable only in principle.
+
+\section{Worked constructions and rejections}\label{ch03:worked}
+
+The ontology's behavior is best fixed by examples: one construction that succeeds, and a series that fail. All values below are schematic --- they illustrate validation, and assert nothing empirical.
+
+\begin{example}[A valid instrumented observation]\label{ch03:ex:valid}
+Consider recording a single directional projection observed during a sweep. The record asserts: quantity kind \texttt{SIGNED\_ACTIVATION}; exact decimal value \texttt{-0.4375}; unit \texttt{ACTIVATION}; measurement kind \texttt{INSTRUMENTED}. Its provenance carries: a source reference to the sweep protocol document; the projection method identifier; the calibration-profile digest; an instrument identity naming the projection hook implementation by digest; a test-point identity binding the model (by weights, configuration, and tokenizer digests), the layer, the position tuple, the direction digest with \texttt{DIFF\_DERIVED} provenance, exact unit norm, and \texttt{POSITIVE} sign; a raw-artifact reference to the sweep log whose bytes hash to the recorded digest; and two control bindings --- a zero-intervention baseline and a norm-matched random direction --- each tied to the same test-point digest with a declared relevance method, with the flat control list agreeing exactly with the bindings. An uncertainty structure in \texttt{ACTIVATION} units carries the standard uncertainty from repeated passes, an interval containing the value, a confidence level of \texttt{0.95}, and the dispersion method identifier; the sample size records the number of passes. Construction succeeds, the record freezes, and its digest --- which internally binds \texttt{OPEN}, ring \texttt{4}, \texttt{NOT LICENSED}, \texttt{HELD} --- becomes its permanent identity.
+\end{example}
+
+\begin{example}[Rejected: mixed scale]\label{ch03:ex:rejmixed}
+A producer attempts to record a saturation fraction of \texttt{8.5} --- the lineage's own error. As \texttt{SATURATION\_FRACTION} with unit \texttt{FRACTION}, the value violates the $[0,1]$ range and is rejected. Retyping it as \texttt{DRIVE\_SCORE} in \texttt{Q10} would validate numerically --- but then it is a score, unusable where a fraction is demanded, and the admissibility relation blocks every downstream slot that expects \texttt{FRACTION}. There is no representation in which \texttt{8.5} functions as a region fraction; the corrected value \texttt{0.85} must be produced, as a new record with its own method and lineage.
+\end{example}
+
+\begin{example}[Rejected: dimensional bridge violation]\label{ch03:ex:rejbridge}
+A producer attempts to register an effective resistance whose value was obtained from a constraint score: quantity kind \texttt{EFFECTIVE\_RESISTANCE}, unit \texttt{Q100}. The admissibility relation rejects the pair outright --- resistance admits only \texttt{ALPHA\_PER\_ACTIVATION}. Re-labeling the unit without a genuine calibrated bridge fails differently: the record now demands a resistance role; role \texttt{CALIBRATED\_HELD\_OUT} demands \texttt{MODEL\_DERIVED} kind, derivation parents, and a held-out dataset-split reference, none of which a rescaled score possesses. The audit's disposition --- constraint scores never masquerade as resistance --- is thus not one check but a gauntlet, and every path through it fails closed.
+\end{example}
+
+\begin{example}[Rejected: laundered provenance]\label{ch03:ex:rejlaundered}
+A producer computes a mean of instrumented projections and records it with measurement kind \texttt{INSTRUMENTED}, reasoning that all parents were instrumented. The record fails: its provenance carries derivation parents but no instrument identity for the mean itself, and no instrument exists that measured the mean. Recorded correctly as \texttt{MODEL\_DERIVED}, it must carry its parents --- and the constructor rejects a model-derived record with an empty parent tuple, so the derivation cannot hide its inputs either. Non-fungibility (Rule~\ref{ch03:rule:nonfungible}) is enforced from both directions.
+\end{example}
+
+\begin{example}[Rejected: circular resistance in a predictive slot]\label{ch03:ex:rejcircular}
+A producer fits $r = a/y$ on a single sample and attempts to register it for prediction. As \texttt{APPARENT\_SAME\_SAMPLE}, the record constructs --- the circular quantity is documentable --- but every predictive gate requires \texttt{CALIBRATED\_HELD\_OUT}, and the role is inside the digest, unforgeable after the fact. Claiming \texttt{CALIBRATED\_HELD\_OUT} directly fails for want of a dataset-split reference; supplying a split reference whose artifact does not resolve to registered disjoint splits fails at review; and \texttt{NETWORK\_EQUIVALENT} is unreachable entirely, its constructor demanding the factory token that only the gated network module holds. The circularity rejection of Chapter~\ref{ch01:intro} is, at this layer, a property of reachable states.
+\end{example}
+
+\begin{example}[Rejected at the byte layer]\label{ch03:ex:rejbytes}
+Finally, three sub-record rejections. A method identifier containing a direction-override code point is rejected by the Unicode screen before any semantic validation runs. A derivation graph in which a record transitively references itself is rejected by cycle detection. An integer of $2{,}500$ bits --- however it arose --- is rejected by the integer bound, and if the host runtime itself fails first on the conversion, that failure surfaces as the candidate's validation error, not as a platform exception (Invariant~\ref{ch03:inv:hostexc}). The evidence layer's rejections are uniform all the way down.
+\end{example}
+
+These examples are the ontology's specification exercised end to end, and each corresponds to test methods in the pinned suite. Per the standing discipline (Chapter~\ref{ch02:background}): that correspondence establishes tested software behavior on constructed inputs --- verification --- and nothing else.
+
+\section{Summary invariants}\label{ch03:invariants}
+
+The chapter closes by collecting its content into the invariants that later chapters cite.
+
+\begin{invariant}[Typed evidence]\label{ch03:inv:typed}
+Every CAS-Ohm numeric record is an observed value per Definition~\ref{ch03:def:observed}: kind-typed from the closed sixteen-member enumeration, unit-typed from the closed seven-member ontology under the admissibility relation of Table~\ref{ch03:tab:admiss}, measurement-kinded from the closed six-member enumeration with kind-specific mandatory provenance, exact-decimal valued, profile-bound where its kind requires it, uncertainty-carrying or explicitly censored, lineage-complete, and canonically digestible under the bounds of Section~\ref{ch03:canonical}. Anything less does not exist in the evidence layer.
+\end{invariant}
+
+\begin{invariant}[Non-fungibility]\label{ch03:inv:nonfungible}
+Measurement kinds never convert: derived never becomes instrumented, scores never become telemetry, proxies never become internal measurements, designs never become observations (Rule~\ref{ch03:rule:nonfungible}).
+\end{invariant}
+
+\begin{invariant}[Dimensional closure]\label{ch03:inv:dimclosure}
+The only bridge between the \texttt{ALPHA} and \texttt{ACTIVATION} dimensions is the resistance family in \texttt{ALPHA\_PER\_ACTIVATION} units, with mandatory roles; score units bridge nothing; physical electrical units exist nowhere and are forbidden as aliases (Rules \ref{ch03:rule:forbidden} and \ref{ch03:rule:unitvolt}).
+\end{invariant}
+
+\begin{invariant}[Fail-closed validation]\label{ch03:inv:failclosed}
+All validation is constructor-time and rejecting: invalid records are never created, never flagged-but-stored, never repaired silently. The evidence layer's error surface is the candidate's own validation error, everywhere.
+\end{invariant}
+
+These invariants are specification, verified as software behavior at the pinned test receipt and nowhere validated as science. On that foundation --- typed quantities that cannot lose their identities, provenance that cannot be laundered, and bytes that cannot be confused --- the following chapters build the preserved source audit and the calibration and response machinery, without ever asking the reader to trust a number that cannot answer for itself.

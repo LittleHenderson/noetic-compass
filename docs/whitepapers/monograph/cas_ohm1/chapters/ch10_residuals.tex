@@ -1,0 +1,569 @@
+\chapter{Residual Diagnostics and Censoring}\label{ch10:residuals}
+
+\section{The residual, defined narrowly}\label{ch10:sec:definition}
+
+For an admitted active-region prediction, the residual is the signed
+difference between what was observed and what the calibrated model
+predicted:
+\[
+\delta_y \;=\; y_{\mathrm{obs}} - y_{\mathrm{pred}},
+\]
+where $y_{\mathrm{pred}} = a / r_{\mathrm{eff}}$ is the registered
+prediction from a declared alpha dose $a$ and a calibrated effective
+resistance $r_{\mathrm{eff}}$, and $y_{\mathrm{obs}}$ is an instrumented
+observation of the flow magnitude at the same test point. In the
+implementation the emitted quantity is named \texttt{delta\_I} (with the
+observation and prediction in \textsc{activation} units and the residual
+of quantity kind \texttt{FLOW\_RESIDUAL}); this chapter writes
+$\delta_y$ for continuity with the response-coordinate notation of the
+seed paper, and nothing turns on the letter. Alongside the residual, the
+implementation emits a relative error
+$\varepsilon = |\delta_y| / \max(y_{\mathrm{pred}}, \phi)$, where $\phi$
+is the profile's declared residual floor --- a strictly positive
+tolerance that prevents division by predictions compatible with zero ---
+and, in the uncensored case only, an apparent resistance
+$a / y_{\mathrm{obs}}$ (explicitly role-tagged
+\texttt{APPARENT\_SAME\_SAMPLE}, the role the prediction gate refuses as
+input) and a resistance delta against the calibrated value. Every one of
+these quantities carries propagated uncertainty; a residual without an
+uncertainty interval is unrepresentable, since the result type rejects
+construction when either the residual or the relative error lacks one.
+
+That is the entire positive content of the layer. The residual is a
+number with an interval, computed by subtraction, bound to its
+derivation. Everything else in this chapter concerns what the candidate
+refuses to let that number mean.
+
+\section{Admission requirements}\label{ch10:sec:admission}
+
+The diagnostic entry point is gated more heavily than any other
+operation in the candidate, because its output is the one most liable to
+overinterpretation (Section~\ref{ch10:sec:tensions}). The requirements,
+as implemented, are these.
+
+\begin{ruleenv}[Residual admission]\label{ch10:rule:admission}
+A residual is computed only when all of the following hold.
+\begin{enumerate}
+\item \emph{Instrumented, held-out observation.} The observed value is of
+quantity kind \texttt{FLOW\_MAGNITUDE} in \textsc{activation} units and
+of measurement kind \texttt{INSTRUMENTED} --- which itself requires an
+instrument identity, a test-point identity, a calibration-profile
+binding, and raw artifact references --- with uncertainty, a recorded
+sample size, linked controls, and a dataset-split reference equal to the
+profile's held-out validation split. A score, a behavioral proxy, or a
+model-derived value cannot occupy the observation slot, and a
+calibration-split observation cannot masquerade as held-out.
+\item \emph{Matching test points.} Drive, prediction, observation, and
+calibrated resistance must bind one common test-point identity; any
+disagreement, or any missing test point, is a validation error.
+\item \emph{Profile identity.} The operating assessment must bind the
+context's exact calibration-profile digest and a test point registered
+in that profile; the context itself must have admitted the profile as
+reviewed, drift-current, and valid at the caller-supplied replay time.
+\item \emph{Registered prediction.} The predicted value is not accepted
+as a number: the gate recomputes the prediction from the presented drive
+and calibrated resistance through the full prediction pathway --- with
+all of that pathway's own gates: design-value drive within the
+calibrated alpha range, calibrated-held-out or replayed
+network-equivalent resistance bound to the profile's fit method, fit
+receipt, source and control evidence --- and requires digest equality
+between the recomputation and the presented prediction. A prediction
+that did not come from the registered pathway cannot have a residual.
+\item \emph{Calibrated resistance.} The resistance carries positive
+uncertainty bounds, a sample size, and an admissible role; apparent
+same-sample resistance is rejected at the prediction gate, which
+forecloses the circular construction $r = a/y$, $\hat y = a/r$,
+$\delta_y = 0$, ``validated.''
+\item \emph{Active region, assessed outcome.} The operating assessment's
+region must be \texttt{ACTIVE} and its semantic outcome must not be
+\texttt{UNASSESSED}; numeric assessments are replayed against their
+bound sweep evidence before use. The no-diagnosis conditions of
+Chapter~\ref{ch07:classification} apply in full.
+\item \emph{Propagated uncertainty.} Prediction and observation must
+both carry uncertainty; the residual interval is computed by interval
+subtraction (observed lower minus predicted upper, observed upper minus
+predicted lower), the standard uncertainty in quadrature, and the
+confidence level as the minimum of the inputs. The relative error's
+denominators are floored at $\phi$ throughout.
+\end{enumerate}
+\end{ruleenv}
+
+The cumulative effect is that a residual exists only inside a fully
+reconstructed derivation: same profile, same test point, held-out data,
+registered prediction, calibrated parameter, replayable assessment. There
+is no API by which two bare numbers can be subtracted into a
+\texttt{FLOW\_RESIDUAL}.
+
+Requirement 4 deserves one further paragraph, because it is the
+admission rule with the longest reach. The gate does not compare the
+presented prediction to a recomputation \emph{of its value}; it compares
+canonical digests, which cover value, unit, uncertainty, sample size,
+provenance, and operation binding jointly. A presented prediction with
+the right value but the wrong derivation --- computed from a different
+resistance, under a different profile revision, or with its uncertainty
+altered --- fails the digest comparison exactly as a wrong value would.
+This is the anti-circularity rule of the seed paper made operational at
+the diagnostic layer: the same-sample construction ($r = a/y$ on a
+sample, then $\hat y = a/r$ on that sample, then $\delta_y = 0$,
+``validated'') cannot reach the residual gate, because the apparent
+same-sample resistance role is rejected upstream by the prediction
+pathway the gate replays, and no alternative pathway into the
+prediction slot exists. Verification of this closure --- that the
+circular route fails at every seam --- is part of the bounded software
+evidence; it is a property of the software, established by tests, in the
+verification sense rather than the validation sense \cite{sargent}.
+
+\begin{example}[Illustrative admitted residual]\label{ch10:ex:residual}
+All numbers illustrative. Under one admitted context: drive $a = 4.0$
+alpha (design value, inside the calibrated grid); calibrated resistance
+$r_{\mathrm{eff}} = 2.0$ alpha-per-activation, interval $[1.8, 2.2]$,
+standard uncertainty $0.1$, sample size $40$, role
+calibrated-held-out with the profile's fit receipt as sole derivation
+parent. The registered prediction is $y_{\mathrm{pred}} = 4.0 / 2.0 =
+2.0$ activation units, with interval
+$[\,4.0/2.2,\; 4.0/1.8\,] \approx [1.82, 2.22]$ and first-order standard
+uncertainty $\approx 0.10$. An instrumented held-out observation at the
+same test point reads $y_{\mathrm{obs}} = 2.6$ with interval
+$[2.3, 2.9]$ and standard uncertainty $0.15$. The residual is
+$\delta_y = 0.6$ with interval
+$[\,2.3 - 2.22,\; 2.9 - 1.82\,] \approx [0.08, 1.08]$ and standard
+uncertainty $\sqrt{0.15^2 + 0.10^2} \approx 0.18$; the relative error is
+$0.6 / 2.0 = 0.30$; the apparent resistance is $4.0 / 2.6 \approx 1.54$
+(role \texttt{APPARENT\_SAME\_SAMPLE}); the resistance delta is
+$\approx -0.46$ with its own propagated interval. The residual interval
+excludes zero, so the record is uncensored and carries all four
+quantities. What may be said: the calibrated account underpredicts this
+observation by $0.6$, more than its combined uncertainty. What may not
+be said: why. Every mechanism in the list of
+Section~\ref{ch10:sec:nonident} remains open, including the boring
+ones.
+\end{example}
+
+\begin{example}[Illustrative censored case]\label{ch10:ex:censored}
+All numbers illustrative. Same context and prediction, but the
+observation reads $y_{\mathrm{obs}} = 0.1$ with interval $[-0.05, 0.25]$
+(zero-compatible: the instrument cannot distinguish this reading from
+silence at the stated confidence). The residual $\delta_y = -1.9$ with
+interval $[\,-0.05 - 2.22,\; 0.25 - 1.82\,] \approx [-2.27, -1.57]$ is
+emitted --- it is informative, and its interval excludes zero --- but
+the apparent resistance $4.0 / 0.1 = 40$ is \emph{not} emitted, because
+the denominator's interval includes zero and the value $40$ is an
+artifact of where the point estimate fell: had the point estimate been
+$0.01$, the ``apparent resistance'' would have been $400$ from data the
+instrument cannot distinguish from the same silence. The result carries
+the censoring marker \texttt{OBSERVED\_INTERVAL\_INCLUDES\_ZERO} and its
+recorded reason, and the censored result type structurally cannot carry
+resistance estimates. The flat-response ambiguity of
+Chapter~\ref{ch07:classification} --- cutoff, saturation, wrong
+direction, insensitivity, measurement failure --- applies to this record
+in full, which is exactly why no ratio is allowed to lend it spurious
+precision.
+\end{example}
+
+\section{Censoring at zero-compatible response}\label{ch10:sec:censoring}
+
+\begin{definition}[Censoring rule]\label{ch10:def:censoring}
+If the observed value's uncertainty interval includes or touches zero
+(lower bound $\le 0$), the diagnostic emits the residual and relative
+error --- both remain well-defined differences --- but \emph{censors} the
+ratio quantities: no apparent resistance and no resistance delta are
+constructed, the result carries the censoring marker
+\texttt{OBSERVED\_INTERVAL\_INCLUDES\_ZERO} with a recorded reason, and
+the censored result type rejects any attempt to attach resistance
+estimates to it. Conversely an uncensored result must carry both ratio
+quantities and no reason; the two states are mutually exclusive by
+construction.
+\end{definition}
+
+The statistical rationale is elementary but worth stating carefully,
+because the source material violates it. The apparent resistance is the
+ratio $a / y_{\mathrm{obs}}$. A ratio whose denominator is compatible
+with zero has no finite moments and no usable interval: as the
+denominator's interval approaches zero from above, the ratio's upper
+bound diverges, and once the interval includes zero the ratio's sampling
+distribution places mass at arbitrarily large values of both signs. Any
+finite number reported in that situation is an artifact of where the
+point estimate happened to fall, not a summary of what the data support.
+The honest treatments are the standard ones for censored data: report
+the censoring event itself as the datum (the observation is
+indistinguishable from zero at the stated confidence), carry the bound
+rather than a point value, and refuse downstream arithmetic that would
+consume the undefined ratio. The candidate implements the refusal
+structurally --- the censored result type \emph{cannot} carry resistance
+estimates --- rather than advisorily.
+
+Prediction-side degeneracy is handled by the complementary mechanism:
+denominators involving the predicted value are floored at the profile's
+residual floor $\phi > 0$, so a prediction at or near zero yields a
+relative error computed against $\phi$ rather than an unbounded ratio,
+and the floor value itself is a declared, digested profile tolerance
+rather than a hidden constant. Between the censoring rule and the floor,
+there is no code path on which a division by a zero-compatible quantity
+produces a reported diagnostic.
+
+Note also what censoring does \emph{not} do: it does not suppress the
+residual. A zero-compatible observation against a nonzero prediction is
+informative --- it is the flat-response situation of
+Chapter~\ref{ch07:classification}, with its five-way causal ambiguity
+--- and the signed difference with its interval is retained. What is
+suppressed is exactly the derived quantity whose statistical meaning has
+evaporated.
+
+\section{Residuals are non-identifying}\label{ch10:sec:nonident}
+
+\subsection{The argument}
+
+The central claim of this chapter, and the one the source audit shows
+the source material itself half-knows, is that a residual --- however
+clean its derivation --- cannot identify its own cause. The argument
+deserves to be made in full rather than gestured at.
+
+A residual is a one-dimensional summary: a signed magnitude (with
+interval) of disagreement between one observation and one model
+prediction at one point. Consider the space of generating situations
+compatible with a given positive residual $\delta_y > 0$ (observed flow
+exceeding prediction; the negative case is symmetric). At minimum, the
+following mechanisms each produce it:
+
+\begin{enumerate}
+\item \emph{Hidden facilitation or policy.} Some mechanism not in the
+model assists the driven response --- the ``hidden bypass'' reading: the
+effective opposition is lower than calibrated.
+\item \emph{Bypass of a modeled constraint.} A constraint that the
+calibrated resistance implicitly includes is inoperative in this
+context, for reasons benign or otherwise.
+\item \emph{Opposition elsewhere.} A mechanism opposing a
+\emph{different} pathway redirects activation such that the measured
+projection increases; the causal action is not on the measured path at
+all.
+\item \emph{Measurement error.} The instrument chain --- hooks,
+projections, normalization, full-scale binding --- inflates the
+observation; nothing in the model is wrong.
+\item \emph{Model misspecification.} The true local response is
+nonlinear, and the linear prediction undershoots at this dose; the
+discrepancy is structural, not mechanistic \cite{kennedyohagan}.
+\item \emph{Calibration transfer failure.} The resistance was fit under
+conditions (corpus, seeds, drift state) that no longer obtain, and the
+parameter, not the mechanism, changed.
+\item \emph{Sampling fluctuation.} The residual's own interval, honestly
+computed, may include values consistent with all of the above at once.
+\end{enumerate}
+
+These mechanisms are observationally equivalent at the level of the
+single residual: the datum is one number, the hypothesis space is many-dimensional,
+and the map from mechanisms to residual sign is many-to-one in both
+directions (several mechanisms produce either sign, depending on
+parameters). Sign alone therefore cannot select among them --- not
+weakly, not suggestively, but as a matter of the arithmetic of
+identification.
+
+The point can be sharpened in the vocabulary of causal inference. Call
+two generating situations \emph{residual-equivalent} if they induce the
+same distribution over $(a, y_{\mathrm{obs}})$ at the observed test
+points. Mechanism attribution from residuals is well-posed only if the
+attribution target is constant on residual-equivalence classes --- that
+is, only if the observational distribution identifies the mechanism.
+The mechanism list above exhibits, constructively, residual-equivalent
+situations with different mechanisms: a hidden facilitation of the
+measured path and a measurement-chain gain error can be tuned to
+produce identical $(a, y_{\mathrm{obs}})$ distributions, as can a
+bypassed constraint and a miscalibrated $r_{\mathrm{eff}}$. Hence the
+attribution target is not constant on the equivalence classes, and no
+amount of statistical sophistication applied to the same observational
+data can recover it; what changes the situation is intervention. This
+is the standard identification requirement: causal quantities are
+defined relative to an explicit causal model and are computable from
+data only when the model plus the data identify them, typically via
+interventions or assumptions that break the observational ties
+\cite{pearl}. The candidate supplies no causal graph over the mechanism
+space, asserts no identifying assumptions, and admits no
+do-operations; its residuals are observational discrepancies, and it
+says so in their method identity. Distinguishing the mechanisms
+requires interventions that separate them: manipulating the suspected
+constraint while holding the dose fixed, ablating the suspected bypass,
+permuting the labels the instrument depends on, replicating under
+re-calibration --- each an experiment with its own controls, several of
+them present in the registered closure list. The conclusion is not that
+residual-based mechanism attribution is difficult; it is that, from the
+residual alone, it is undefined.
+
+There is also a model-side face of the same coin, familiar from the
+calibration literature: an observed discrepancy decomposes, in
+principle, into parameter error, structural model discrepancy,
+observation error, and numerical error, and the decomposition is itself
+unidentified without prior structure --- fitting the parameter to absorb
+the discrepancy simply relocates the problem \cite{kennedyohagan}.
+Mechanism 5 and mechanism 6 in the list are this decomposition's
+components wearing mechanistic clothes; the candidate's refusal to
+update $r_{\mathrm{eff}}$ from residuals (no feedback path exists from
+the diagnostic layer to the profile) is the structural form of refusing
+to let the parameter absorb what may be discrepancy.
+
+\begin{example}[One residual, three stories]\label{ch10:ex:stories}
+All numbers illustrative. Take the uncensored record of
+Example~\ref{ch10:ex:residual}: $\delta_y = +0.6$, interval
+$[0.08, 1.08]$. Story A (hidden facilitation): a mechanism outside the
+model contributes response along the measured direction; true
+opposition is lower than calibrated. Story B (measurement): the
+full-scale value bound at this test point was set from a corpus
+percentile that undersamples high-activation contexts, inflating the
+instrumented reading by a factor compatible with $+0.6$. Story C
+(misspecification): the true response is mildly convex in $a$ over the
+grid, the linear fit undershoots at $a = 4.0$, and the same board would
+show a \emph{negative} residual at $a = 1.0$. All three stories
+reproduce the record; the second and third involve no hidden mechanism
+at all; and the third makes a testable prediction (sign reversal at low
+dose) that the first two do not --- which is a statement about what to
+probe next, not about which story is true. This is the entire licensed
+use of the record.
+\end{example}
+
+\begin{ruleenv}[Non-identification]\label{ch10:rule:nonident}
+No implemented output of the residual layer asserts, encodes, or ranks a
+generating mechanism. The emitted quantities are the residual, the
+relative error, and (uncensored only) the apparent resistance and
+resistance delta --- each a descriptive statistic with propagated
+uncertainty, none a diagnosis. The method identity stamped on every
+residual's provenance names the contract:
+\texttt{CAS-OHM-V1-NONIDENTIFYING-RESIDUAL}.
+\end{ruleenv}
+
+\subsection{What residuals are good for}\label{ch10:sec:goodfor}
+
+Non-identification does not make residuals useless; it makes them
+\emph{ordinal evidence for allocation of further measurement}. A large
+residual (relative to its interval) at one test point, against a small
+one at another, is a defensible reason to spend the next intervention
+budget at the first point --- not because the residual says what is
+there, but because it says the calibrated model's account is worse
+there. Ranking follow-up probes is a decision about experiments, not a
+claim about mechanisms, and it is robust to the non-identification
+argument precisely because every mechanism on the list above, including
+boring measurement error, is something a follow-up probe can help
+separate. The resistance delta serves the same triage role in parameter
+space: a delta whose interval excludes zero flags the calibration, the
+transfer conditions, or the linearity assumption for re-examination,
+without saying which.
+
+The ranking criterion itself can be made precise without exceeding the
+license. For admitted, uncensored residual records $j = 1, \ldots, k$
+over one profile, a defensible ordering statistic is the
+uncertainty-scaled magnitude $|\delta_y^{(j)}| / s^{(j)}$, where
+$s^{(j)}$ is the record's propagated standard uncertainty --- large
+values mark points where the disagreement is large relative to what the
+error budget explains. The statistic inherits every caveat of its
+inputs: it compares only within one profile (cross-profile residuals
+are in incomparable coordinates), only among uncensored records
+(censored records enter the queue by their censoring event, not by a
+ratio), and only as a priority order, since the statistic's
+distribution under the no-mechanism null is exactly what the shuffled
+baselines of Section~\ref{ch10:sec:blinded} exist to estimate. A
+priority order is not a significance ranking, and the candidate emits
+no p-values here.
+
+This is a deliberately modest job description, and the candidate keeps
+it modest structurally: residual outputs feed no gate, trigger no
+label, and modify no profile. They are inputs to human research
+planning, Ring~4, and their provenance chains exist so that the human
+doing the planning can see exactly what stands behind each number.
+The asymmetry with the rest of the pipeline is intentional: everywhere
+else, outputs are consumed by further typed operations; here, the
+consumer is a person deciding where to measure next, and the type
+system's last act is to hand that person an honest record rather than
+a conclusion.
+
+\section{The blinded implanted-fault program}\label{ch10:sec:blinded}
+
+The registered residual-localization hypothesis
+(\textsc{clm-cas-ohm-residual-localization}) is the candidate's one
+sanctioned route by which residuals could ever earn more than the
+triage role --- and it is constructed so that failure is meaningful.
+The program, fixed in the preregistered closure protocol and the
+synthetic known-fault infrastructure, has the following shape.
+
+Faults with known ground truth are implanted into synthetic boards ---
+hidden constraints, bypasses, cutoffs, saturations, off-axis couplings,
+non-ohmic responses --- by a process separated from the analysis: the
+analyst receives sweeps and residual diagnostics without fault labels.
+The diagnostic pipeline ranks candidate fault locations from residual
+evidence alone. Performance is scored against the implantation record,
+and --- this is the load-bearing clause --- against two null references:
+\emph{matched controls} (boards identical in construction with no
+implanted fault, so that the false-positive behavior of the ranking is
+measured on truly clean substrate) and \emph{shuffled baselines}
+(residual-to-location assignments permuted, so that the information
+content of the actual assignment is measured against chance under the
+same marginals). Localization is claimed only if ranking performance
+exceeds both references at the preregistered margin; negative outcomes,
+exclusions, and instability are recorded without erasure, per the
+closure protocol's general terms.
+
+\begin{protocol}[Withdrawal clause]\label{ch10:prot:withdrawal}
+If the blinded program fails --- ranking not above shuffled baseline, or
+false-positive behavior on matched controls incompatible with the
+preregistered margin --- causal language about residuals is withdrawn,
+not weakened. The registered hypothesis is closed as refuted; the
+non-identifying contract of Rule~\ref{ch10:rule:nonident} remains the
+permanent ceiling on residual semantics; and no rephrasing (``suggests,''
+``indicates,'' ``is consistent with a bypass'') survives as licensed
+language, because each of those phrasings is precisely the mechanism
+attribution the failed test failed to earn.
+\end{protocol}
+
+The synthetic substrate for the program already exists in the bounded
+software evidence and is worth describing, because it fixes what
+``implanted fault'' means operationally. A synthetic board is a typed
+generator with a declared base resistance and a declared fault mode
+drawn from a closed enumeration --- none, hidden constraint (base
+opposition raised by a hidden component), bypass (base opposition
+reduced), cutoff (zero flow below a drive threshold), saturation (flow
+capped at a ceiling), off-axis (a declared fraction of flow diverted
+off the measured axis), and non-ohmic (flow quadratic in drive) ---
+each altering the board's dose-response law in a known, parameterized
+way. Sweeps over such boards produce observation tuples
+indistinguishable in type from any other sweep, which is the property
+the blinding leans on: the analysis pipeline runs the same typed path
+--- classification, prediction, residual --- that any admitted data
+would traverse, and the fault label exists only in the implantation
+record held outside the analysis. The known-fault suite currently
+serves as golden-fixture verification (the pipeline detects each
+implanted signature where detection is defined, and stays silent where
+silence is required); the blinded \emph{scoring} run, with its matched
+controls and shuffled baselines and preregistered margins, is the part
+that has not been executed, and it is the part on which any upgrade of
+residual semantics depends.
+
+The two null references discipline different failure modes, and both
+are necessary. Matched controls --- fault-free boards drawn from the
+same construction distribution --- estimate the ranking's false-positive
+behavior: a pipeline that finds ``faults'' in clean substrate at the
+same rate as in faulted substrate has a ranking that reflects its own
+noise, whatever its hit rate. Shuffled baselines --- true residuals
+permuted against locations --- estimate how much of the ranking's
+success is carried by the residual-to-location \emph{assignment} as
+opposed to the marginal distribution of residual magnitudes: a
+pipeline that scores no better than its own shuffle is exploiting
+magnitude statistics that any location would satisfy. Passing one
+reference and failing the other is a fail; the preregistered claim
+requires exceeding both at the stated margin, and the margin is fixed
+before the run, not after.
+
+Two boundaries on the program itself, so that this section cannot be
+overread. First, the synthetic boards validate \emph{software behavior}:
+they establish that the pipeline detects what it was built to detect on
+substrates where ground truth is available by construction. Success on
+synthetic faults licenses nothing about live models; it is a necessary
+precondition for the live experiment, which carries its own
+preregistration, controls, and independent recomputation requirements.
+Second, even a fully successful program would license localization
+claims of the preregistered form only --- ranking above baselines at
+stated margins --- not the unrestricted ``residual proves hidden
+resistance'' reading, which remains on the forbidden-wording list
+regardless of outcome.
+
+\section{The source's residual-overinterpretation tensions, recapped}\label{ch10:sec:tensions}
+
+The preserved residual conflict is the clearest instance in the source
+corpus of a document warning against a reading and performing it
+anyway, and the candidate's design is best understood as a mechanical
+enforcement of the sources' own warnings against the sources' own
+practice. The tensions, at evidence-record granularity:
+
+\emph{The Guide.} On the pages where residual analysis is introduced,
+residual sign is glossed as suggesting hidden opposition (negative) or
+extra amplification / hidden assistance (positive) --- mechanism
+vocabulary --- on the same page as the statement that the residual alone
+is insufficient to identify a cause. The warning and the violation
+share a page; nothing in the Guide's procedure operationalizes the
+warning.
+
+\emph{Appendix~I.} The quantity is renamed: what the Guide treats as a
+hidden resistance \emph{component} is called a residual, an explicit
+step toward the non-identifying posture --- and yet the same appendix
+treats a positive residual on a safety board as a bypass finding, which
+is mechanism attribution in its most consequential form. The appendix
+also states that saturated-stage residuals are meaningless, an
+observation the candidate promotes from remark to gate: the
+active-region admission requirement of
+Rule~\ref{ch10:rule:admission} makes the meaningless case uncomputable
+rather than inadvisable.
+
+\emph{The addendum.} The diagnostic walk places hidden content
+\emph{last} --- after dose, direction, calibration, saturation, and
+measurement checks --- and the falsification row for residuals requires
+independently identified causes above a shuffled-control baseline
+before residual-based claims are made. This is the source corpus at its
+most careful, and it is the position the candidate implements: the
+blinded program of Section~\ref{ch10:sec:blinded} is the addendum's
+falsification row, given hard edges.
+
+Table~\ref{ch10:tab:tensions} aligns each preserved tension with the
+design element that enforces the source's own warning against the
+source's own practice.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}p{0.44\textwidth}p{0.50\textwidth}@{}}
+\toprule
+Source tension & Enforcing design element \\
+\midrule
+Guide: residual sign glossed as hidden opposition or hidden
+assistance, on the page stating residual alone is insufficient &
+Non-identifying contract (Rule~\ref{ch10:rule:nonident}); no mechanism
+field exists in any residual output type \\
+\addlinespace
+Appendix~I: hidden resistance renamed a residual, yet positive
+residual on a safety board read as a bypass &
+Apparent resistance quarantined under the
+\texttt{APPARENT\_SAME\_SAMPLE} role, rejected by the prediction gate;
+no bypass vocabulary in any emitted quantity \\
+\addlinespace
+Appendix~I: saturated-stage residuals are meaningless &
+Active-region admission gate; residual computation is impossible, not
+inadvisable, outside \texttt{ACTIVE} \\
+\addlinespace
+Addendum: hidden content last in the diagnostic walk &
+Ranking-only license (Section~\ref{ch10:sec:goodfor}); residuals
+allocate probes, they do not name contents \\
+\addlinespace
+Addendum: residual validity requires independently identified causes
+above a shuffled-control baseline &
+Blinded implanted-fault program with matched controls, shuffled
+baselines, preregistered margins, and the withdrawal clause
+(Protocol~\ref{ch10:prot:withdrawal}) \\
+\addlinespace
+Both: ratios reported at negligible response &
+Censoring at zero-compatible observation
+(Definition~\ref{ch10:def:censoring}) and the residual floor on
+predicted denominators \\
+\bottomrule
+\end{tabular}
+\caption{Preserved residual-overinterpretation tensions and their
+mechanical enforcement in the candidate.}
+\label{ch10:tab:tensions}
+\end{table}
+
+The recapitulation matters because it locates the candidate's
+contribution precisely. The insight that residuals are non-identifying
+is \emph{in the sources}; what the sources lack is any mechanism that
+makes the insight binding on their own procedures. The candidate's
+residual layer is that mechanism: admission gates that exclude the
+meaningless cases, censoring that excludes the undefined ones, typed
+outputs that cannot carry mechanism labels, a method identity that
+names the contract, and a preregistered program with a withdrawal
+clause as the only path to anything more. Where the Guide says
+``insufficient'' and proceeds, the candidate says ``insufficient'' and
+stops.
+
+\begin{boundary}[Chapter boundary]\label{ch10:bound:residuals}
+No residual over live-model data has been admitted; every residual
+computed to date in the candidate's history is a synthetic-board or
+test-fixture artifact within the bounded software evidence. The residual
+layer's guarantees are structural: well-defined subtraction under full
+derivation binding, censoring at zero-compatible denominators,
+propagated uncertainty everywhere, and the impossibility --- at the type
+level --- of a residual that names its cause. Whether residual
+diagnostics can localize implanted faults above chance is a registered,
+open, falsifiable question, and this monograph asserts no answer to it.
+\end{boundary}

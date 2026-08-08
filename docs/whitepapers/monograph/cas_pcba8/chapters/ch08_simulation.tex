@@ -1,0 +1,321 @@
+\chapter{Deterministic Reference Simulation}\label{ch08:sim}
+
+The reference simulator is the candidate's only executable semantics, and it is deliberately narrow. It runs exactly one class of board---DRC-clean boards built entirely from the closed component catalog---under exactly one declared execution discipline: synchronous ticks, topological evaluation of the non-delay graph, and feedback broken only at declared unit delays. Its output is not a number or a plot but a single frozen \emph{result} artifact that binds the run to every identity that could have influenced it and that carries a complete, internally cross-validated record of everything that happened: every input sample, every component event, every test-point observation, every derived measurement with its full parentage. This chapter specifies the admission rules (Section~\ref{ch08:sec:admission}), the execution order and feedback discipline (Section~\ref{ch08:sec:order}), the canonical trace schema field by field (Section~\ref{ch08:sec:schema}), the validation obligations that every result must satisfy to exist at all (Section~\ref{ch08:sec:validation}), the status of locally asserted calibration (Section~\ref{ch08:sec:calibration}), the fail-closed treatment of unsupported behavior (Section~\ref{ch08:sec:failclosed}), the relationship of the record discipline to W3C PROV (Section~\ref{ch08:sec:prov}), and the interpretation rules that bound what any of this can ever mean (Sections~\ref{ch08:sec:green} and~\ref{ch08:sec:validationdist}).
+
+One sentence from the implementation's own preamble governs everything below: the equations are versioned design semantics, not measured model behavior. The simulator executes what the board declares; it observes nothing about any cognitive or physical system.
+
+\section{Admission rules}\label{ch08:sec:admission}
+
+Simulation is not a service the candidate offers to arbitrary inputs. A run is \emph{admitted} only when a conjunction of exact conditions holds, and every condition is checked before the first tick executes.
+
+\begin{ruleenv}[Admission]\label{ch08:rule:admission}
+A simulation call is admitted if and only if all of the following hold:
+\begin{enumerate}
+\item The board is an exact, revalidated \texttt{Board} value, and a fresh DRC run over it is clean. The simulator does not accept a caller-supplied report as proof of cleanliness; it recomputes the verdict itself, and on failure it raises an error quoting the complete list of diagnostic codes found.
+\item The tick count is a positive integer of exact type.
+\item The input mapping's key set equals, exactly, the set of \emph{connected} board input ports---board ports of input direction whose endpoints appear on some net. Missing inputs are rejected; surplus inputs are rejected; the error message quotes both the expected and the received sets.
+\item Every input value is a typed \texttt{InputSample} carrying a value, a measurement kind, and an optional calibration reference. A sample claiming \texttt{MODEL\_DERIVED} provenance is rejected at construction: board inputs come from outside the run and cannot claim to have been derived by it.
+\item Every component on the board is of a supported kind---which is guaranteed by DRC cleanliness, since unknown kinds fail \texttt{PCBA8-SEM-001}---and therefore has a contract declaring its ports (directions, signal kinds, units), its transfer rule, its clipping behavior, its statefulness, and its time semantics.
+\end{enumerate}
+\end{ruleenv}
+
+The fifth clause deserves expansion, because ``supported component profile'' is the load-bearing phrase of the whole chapter. Each of the eight catalog kinds carries a versioned semantic profile string (for example \texttt{pcba8.cjt.reference.v0}, \texttt{pcba8.unit-delay.v0}) and a fully declared behavior:
+
+\begin{itemize}
+\item \texttt{pass}: identity transfer from \texttt{input} to \texttt{output}; stateless; combinational.
+\item \texttt{scale}: output is $\min(\texttt{ceiling}, \max(0, \texttt{input} \cdot \texttt{factor}))$; the clipping to the declared ceiling and the floor at zero are part of the declared profile, not incidental; stateless; combinational.
+\item \texttt{cjt}: the piecewise junction rule. If the bias input is at or below \texttt{cutoff}, the effect is exactly zero (cutoff region); otherwise the effect is $\min(\texttt{saturation}, \max(0, \texttt{beta} \cdot \texttt{cause} \cdot \texttt{bias}))$, and the executed region---cutoff, active, or saturation---is recorded verbatim in the trace event's details; stateless; combinational.
+\item \texttt{decision\_threshold}: Boolean decision, true exactly when the input is at or above \texttt{threshold}; stateless; combinational.
+\item \texttt{mux}: selects \texttt{when\_true} or \texttt{when\_false} by the Boolean \texttt{select} input, recording which branch was taken; stateless; combinational.
+\item \texttt{fuse}: passes its input until the input first reaches \texttt{threshold}; from that tick on, if the action is \texttt{permanent\_block}, it emits exactly zero for the remainder of the run. The fuse is the one deliberately stateful non-delay element, and its state is \emph{run-local}: initialized at simulation entry, persistent only across the ticks of that one result, reset on every new call. This scope is itself a named, versioned string that enters the result identity.
+\item \texttt{finite\_transition}: applies its certified table to an exact finite input value; an input outside the certified source carrier is a hard error, not a default; stateless; combinational.
+\item \texttt{delay}: the unit delay. It is \emph{not} evaluated by the combinational rule at all---an attempt to evaluate it combinationally is an internal error---but by the synchronous state discipline of Section~\ref{ch08:sec:order}: at each tick it emits the value its input net carried at the previous tick, and at tick zero it emits its declared \texttt{initial} parameter.
+\end{itemize}
+
+This is the entire executable vocabulary. Statefulness is confined to exactly two places (the fuse latch and the delay register), both with declared, versioned time semantics; everything else is combinational and clipped or guarded exactly as written. There is no partial support, no best-effort mode, and no extension point: behavior outside this list does not degrade, it fails (Section~\ref{ch08:sec:failclosed}).
+
+\subsection{Typed input samples and canonical value text}\label{ch08:sub:samples}
+
+The input side of admission deserves its own treatment, because it is where the outside world touches the run and where the provenance vocabulary is fixed for everything downstream.
+
+\begin{definition}[Input sample]\label{ch08:def:sample}
+An \emph{input sample} is an exact typed value carrying: the value to inject; a \emph{measurement kind}, which for board inputs may be a design value (the default: a number the author chose) or an instrumented value (a number the author asserts came from an instrument, in which case the sample should name a calibration reference and the resulting root measurement will be validated against it); and an optional \emph{calibration reference} into the board's calibration records. The kind \texttt{MODEL\_DERIVED} is structurally excluded at sample construction: it is reserved for values the run itself computes, and a board input claiming it would be asserting an impossible provenance.
+\end{definition}
+
+Two consequences follow. First, the provenance partition of the whole artifact is fixed at the boundary: everything that enters is a root (design value or instrumented), everything computed inside is \texttt{MODEL\_DERIVED}, and the two vocabularies cannot be confused even by a hostile caller, because the types refuse the confusion. Second, the instrumented kind buys nothing epistemically at this layer---per Section~\ref{ch08:sec:calibration}, the resulting record is still structural and never packet-eligible---but it is preserved exactly, so that a future authentication process examining the artifact can distinguish which roots \emph{claimed} instrument provenance and which never did. The candidate records the claim without endorsing it.
+
+Values themselves travel as \emph{canonical value text}: a deterministic, type-tagged textual rendering of the typed value (a decimal renders with its exact digits under the immutable context, a Boolean renders distinctly from any string, a finite carrier element renders with its type tag). Canonicalization serves three masters at once. It makes every artifact byte-stable, so digests are meaningful; it makes every recorded value re-parsable without ambiguity, so the artifact is self-contained; and it extends the tagged-value discipline of the type system into the serialized world, so that integer $1$, Boolean true, and string \texttt{"true"} remain distinct \emph{as text}. A value that cannot be canonically rendered---a binary float, a NaN, an untagged composite---cannot enter a measurement record at all; the rendering failure is a hard error at the point of production (Section~\ref{ch08:sec:failclosed}).
+
+At each tick, every connected board input's sample value is validated against its port before use: the value must be well-typed for the port's signal kind (a decimal for activation, an exact Boolean for decision, a certified carrier element for finite-state signals) and the port's (kind, unit) pair must lie in the closed admissibility table. Validation happens per tick even though the sample is constant across ticks, because the invariant being protected is per-record: every measurement, including every root, must individually withstand the unit and value discipline of Section~\ref{ch08:sec:validation}.
+
+\begin{remark}[Why re-run the DRC at admission]\label{ch08:rem:rerun}
+Requiring a fresh DRC pass rather than trusting a presented report removes a time-of-check/time-of-use gap: a board could in principle be validated, mutated, and then simulated under a stale report. Because boards are immutable values and reports embed their board, the gap is already narrow; recomputation closes it entirely and costs only a deterministic recheck. The recomputed report is then embedded in the result, so the result's DRC linkage is to the verdict actually used, not to any earlier one.
+\end{remark}
+
+\section{Execution order and feedback breaking}\label{ch08:sec:order}
+
+\subsection{Topological ordering of the non-delay graph}
+
+The simulator evaluates each tick in a fixed component order computed once, before the first tick. The order is a topological sort of the \emph{non-delay} graph: the directed graph whose nodes are all components other than delays, with an edge from the driver of each net to every distinct non-delay component that loads the net, where edges originating from board inputs or from delay outputs are omitted. Omitting delay-driven edges is what makes the graph acyclic on a clean board: every cycle, by the feedback discipline of Chapter~7, contains exactly one delay, so cutting the delay's outgoing dependency cuts every cycle exactly once.
+
+\begin{construction}[Deterministic Kahn order]\label{ch08:con:kahn}
+The simulator computes indegrees over the non-delay graph and repeatedly removes the lexicographically least zero-indegree node, appending it to the order and decrementing successors, keeping the ready set sorted at every step. The result is the unique lexicographically-least topological order of the graph. Determinism here is essential rather than cosmetic: the evaluation order is observable through trace sequence numbers, and two runs over equal boards must produce byte-identical results.
+\end{construction}
+
+\begin{ruleenv}[Residual cycles are fatal]\label{ch08:rule:cycle}
+If the Kahn process terminates with fewer nodes ordered than exist---that is, if a combinational cycle survives delay removal---the simulator raises a hard error stating that a clean DRC still contains a combinational cycle. On a clean board this state should be unreachable, because the DRC's feedback family requires a unit delay in every cycle; the check exists anyway, as an independent guard on an invariant the simulator's soundness depends on. Defense in depth here is cheap and the alternative---evaluating a combinational cycle by some fixpoint or iteration scheme---would be new, undeclared semantics.
+\end{ruleenv}
+
+\subsection{Declared unit-delay feedback breaking}
+
+Each tick then executes in three phases, and the phase structure is the entire time semantics of the candidate:
+
+\begin{enumerate}
+\item \emph{Delay emission.} Every delay component, in sorted reference order, emits its held value: at tick $0$, the declared \texttt{initial} parameter; at tick $t > 0$, the value its input net's driver produced at tick $t-1$. Each emission is recorded as a trace event whose details note that the output is the unit-delay output from the prior tick, and as a measurement whose parentage points at the prior-tick driver measurement (empty parentage at tick $0$, where the value originates from the declared parameter rather than from any in-run producer).
+\item \emph{Combinational sweep.} The non-delay components execute in the fixed topological order. Each reads the current-tick values of its input nets---which are guaranteed present, because every net's driver is either a board input (sampled at tick start), a delay (phase 1), or an earlier component in the order---applies its declared transfer rule, and emits outputs, trace events, and measurements. If any input value has not been produced when a component needs it, the simulator raises an error stating that no value reached the port and that ordering is unresolved; like Rule~\ref{ch08:rule:cycle}, this is an internal-invariant guard that must be unreachable on admitted runs.
+\item \emph{State update.} After the sweep, every delay's register is loaded with the current-tick value of its input net (together with the identity of the measurement that produced it, for next-tick parentage), and the tick's board outputs and test-point observations are snapshotted. Fuse latch state carries forward implicitly in the run-local fuse map.
+\end{enumerate}
+
+The discipline is the classical synchronous one: feedback influences the future, never the present. A declared loop's value at tick $t$ depends on the loop's state at tick $t-1$ through exactly one register, and the DRC has already certified that the loop's declared round-trip gain is sub-unity under conservative bounds. The simulator adds no analysis of its own on top of that; it simply executes the declared semantics and records everything.
+
+\begin{algorithm}[The tick loop]\label{ch08:alg:tick}
+Given an admitted board, its fresh clean DRC report, the fixed topological order $O$ over non-delay components, the sorted delay list $D$, the run-local fuse map $F$ (empty at entry), and the delay register map $R$ (initialized from each delay's \texttt{initial} parameter with empty provenance):
+
+For each tick $t = 0, \ldots, T-1$:
+\begin{enumerate}
+\item For each connected board input port, in sorted order: validate the sample value against the port; mint the root measurement (kind and calibration from the sample, empty children); publish the value onto the input's net.
+\item For each delay reference $d \in D$, in order: emit the registered value of $R[d]$ onto $d$'s output net; mint the \texttt{MODEL\_DERIVED} measurement whose children are the registered provenance (empty at $t=0$, the prior-tick driver measurement otherwise); append the trace event with the prior-tick provenance detail.
+\item For each component $c \in O$, in order: gather current-tick values of $c$'s input nets (error if any is unpublished); apply $c$'s declared transfer rule, updating $F$ if $c$ is a fuse; for each output port, mint the \texttt{MODEL\_DERIVED} measurement whose children are the same-tick driver measurements of $c$'s input nets; append the trace event with the rule's declared details.
+\item For each test point, in sorted order: read the observed net's current value; mint the observation measurement (child: the net's driver measurement this tick; calibration: the point's declared reference; unit: the calibration's unit); append the observation trace event.
+\item For each delay reference $d \in D$: load $R[d]$ with the current-tick value and driver-measurement identity of $d$'s input net.
+\item Snapshot the connected board outputs as (reference, canonical value text) pairs in sorted order.
+\end{enumerate}
+After the last tick, assemble the result payload (Section~\ref{ch08:sec:schema}), compute the result digest, and construct the \texttt{SimulationResult}---whose constructor immediately runs the full validation of Section~\ref{ch08:sec:validation} against the artifact just built. The simulator does not exempt itself from its own audit.
+\end{algorithm}
+
+The final sentence of Algorithm~\ref{ch08:alg:tick} states a structural humility worth underlining. The validation invariants were designed as external obligations---what any presented result must satisfy---and the simulator's own output passes through them unprivileged. An implementation defect that produced an inconsistent artifact (a measurement missing, a linkage wrong, a digest stale) would therefore not ship a subtly corrupt result; it would fail to construct a result at all, loudly, at the source.
+
+\section{A worked illustrative run}\label{ch08:sec:worked}
+
+\begin{example}[Illustrative two-tick run]\label{ch08:ex:worked}
+Illustrative only; the board, values, and identities are constructed for exposition and correspond to no published artifact. Consider a minimal board \texttt{demo-jct} at version \texttt{0.1} with: board input ports \texttt{stim} and \texttt{ctx} (activation, dimensionless); one \texttt{cjt} component \texttt{j1} with \texttt{beta} \texttt{2}, \texttt{saturation} \texttt{0.8}, \texttt{cutoff} \texttt{0.05}, cause wired to \texttt{stim}, bias wired to \texttt{ctx}; one safety-critical \texttt{fuse} \texttt{f1} with \texttt{threshold} \texttt{0.75}, action \texttt{permanent\_block}, input wired to \texttt{j1}'s effect; a board output \texttt{out} on \texttt{f1}'s output net; a test point \texttt{tp1} on the effect net with a dimensionless calibration \texttt{cal1}; and the safety probe marking required by the \texttt{TP} family. Assume the DRC report is clean (in particular, the propagated bound on \texttt{f1}'s input is $\min(0.8, 2 \cdot 1 \cdot 1) = 0.8 \geq 0.75$, so \texttt{PCBA8-SAF-001} does not fire). The caller supplies design-value samples \texttt{stim} $= 0.5$, \texttt{ctx} $= 0.9$, and requests two ticks.
+
+\emph{Tick 0.} Phase 1 mints two root measurements: $(0, \texttt{board}, \texttt{stim})$ with value text for \texttt{0.5} and $(0, \texttt{board}, \texttt{ctx})$ with \texttt{0.9}, both design-value kind, both with empty children. There are no delays, so phase 2 is empty. Phase 3 evaluates \texttt{j1} first (it precedes \texttt{f1} in the unique topological order): bias \texttt{0.9} exceeds cutoff \texttt{0.05}, so the effect is $\min(0.8, \max(0, 2 \cdot 0.5 \cdot 0.9)) = \min(0.8, 0.9) = 0.8$---the saturation clamp binds, and the trace event for \texttt{j1} records \texttt{region=saturation} in its details, inputs \texttt{cause} $= 0.5$ and \texttt{bias} $= 0.9$, output \texttt{effect} $= 0.8$, and one linked measurement whose children are the two root measurement identifiers. Then \texttt{f1}: input \texttt{0.8} reaches threshold \texttt{0.75}, the run-local latch trips, and because the action is \texttt{permanent\_block} the output is \texttt{0}; the event records \texttt{tripped=true}, and its measurement's child is \texttt{j1}'s effect measurement. The test point \texttt{tp1} observes the effect net: its event carries the observation profile, input \texttt{net} $= 0.8$, output on the net's reference, and its measurement's child is \texttt{j1}'s effect measurement with calibration reference \texttt{cal1}. The tick-0 output snapshot records \texttt{out} $= 0$.
+
+\emph{Tick 1.} Fresh roots are minted for the same sample values (new measurement identifiers: the tick enters the payload, so tick-1 roots are distinct records). \texttt{j1} computes \texttt{0.8} again, with tick-1 parentage. \texttt{f1} now demonstrates the latch: its input is again \texttt{0.8}, but the run-local state already records the trip, so the output is \texttt{0} with \texttt{tripped=true}---and had the inputs instead dropped below threshold, the output would \emph{still} be \texttt{0}, which is precisely the plateau-versus-latch distinction the safety family enforces (a saturation clamp would have resumed passing; the latch does not). The observation and snapshot repeat with tick-1 identities.
+
+The resulting artifact contains: $2 \times 2 = 4$ root measurements, $2 \times 2 = 4$ component-output measurements, $2$ observation measurements, $2 \times 3 = 6$ trace events (two components and one test point per tick) numbered $0$ through $5$ in execution order, two output snapshots, the embedded clean report, and the full identity block. Calling \texttt{ancestry} on tick-1's \texttt{f1} output measurement returns exactly the chain: \texttt{j1}'s tick-1 effect measurement, then the two tick-1 roots---the complete and only provenance of the value \texttt{0} at \texttt{out}.
+
+What this example licenses is exactly Boundary~\ref{ch08:bd:green}: the software executed the declared clipped-product, latching semantics on these inputs and recorded these values. It does not show that any junction saturates, that any protective mechanism works, or that \texttt{0.8} measures anything.
+\end{example}
+
+\section{The canonical trace schema}\label{ch08:sec:schema}
+
+Every admitted run produces exactly one \texttt{SimulationResult}. The result is a frozen record whose fields we now specify one by one; every field participates in the canonical result payload whose SHA-256 digest is the result's identity, so nothing listed here is optional annotation---each is load-bearing for the artifact's meaning and its verifiability.
+
+\subsection{Board and component identities}
+
+\begin{description}
+\item[\texttt{board\_ref}, \texttt{board\_version}] The board's declared reference and version strings, revalidated as safe references. These are the human-facing coordinates of the run.
+\item[\texttt{board\_sha256}] The digest of the canonical board payload. Together with the embedded DRC report (next subsection), this pins the run to one exact board value: any structural edit to the board---one parameter, one net, one annotation---produces a different digest and therefore a different, non-interchangeable result lineage.
+\end{description}
+
+Component identities enter the schema indirectly but completely: the embedded DRC report embeds the exact board, which carries every component with its kind, semantic profile, parameters, and bindings; and every trace event names its subject component by reference with its exact semantic profile string. There is no summarized or abbreviated component view anywhere in the artifact.
+
+\subsection{DRC report identity}
+
+\begin{description}
+\item[\texttt{drc\_report\_sha256}] The report digest of the DRC report computed at admission.
+\item[\texttt{drc\_report}] The exact embedded \texttt{DrcReport} object itself---not a pointer, the report. Validation (Section~\ref{ch08:sec:validation}) requires it to be clean, to hash to the recorded digest, and to agree with the result on every shared identity: board reference, board digest, source, catalog, engine, and decimal-context digests, and board version.
+\item[\texttt{drc\_sha256}] The DRC profile digest---the digest over the checker's profile constant and the source, engine, catalog, and decimal-context digests---identifying \emph{which checker} produced the verdict, independently of which board it judged.
+\end{description}
+
+Embedding the full report is a deliberate redundancy. A result is meant to be citable in isolation; a reader holding only the result can inspect the exact diagnostics (none, since it is clean), the exact board, and the exact checker identity without resolving any external reference.
+
+\subsection{Catalog and decimal-context identities}
+
+\begin{description}
+\item[\texttt{source\_sha256}] The package source digest: a digest over the implementation's own source files. The result records not just what was run but the exact code that ran it.
+\item[\texttt{catalog\_sha256}] The digest of the closed component catalog---the port lists, parameter schemas, and semantic profiles of Section~\ref{ch08:sec:admission} in canonical form.
+\item[\texttt{engine\_sha256}] The engine digest derived from the source and catalog identities.
+\item[\texttt{decimal\_context\_sha256}] The digest of the one immutable decimal context under which every arithmetic operation of the run executed. Two results with different context digests are results of different arithmetic regimes and are never comparable as if they were replicates.
+\end{description}
+
+\subsection{Simulator profile and source baseline}
+
+\begin{description}
+\item[\texttt{simulator\_sha256}] The simulator profile digest, computed over the simulator's profile constant, the source, engine, and catalog digests, the decimal-context digest, the DRC profile digest, and the fuse-state scope string. This is the identity of the executable semantics as a whole.
+\item[\texttt{fuse\_state\_scope}] The versioned scope string declaring the run-local fuse discipline (initialized at entry, persistent across ticks within the result, reset on every call). Recording the scope makes the statefulness contract itself part of the artifact: a future revision of fuse state semantics would change the string, hence the digest, hence the lineage.
+\item[\texttt{measurement\_scope\_sha256}] The measurement scope digest, computed over the board digest, the source, engine, and catalog digests, the decimal-context digest, the DRC report digest, and the simulator digest. Every measurement in the result carries this scope; a measurement therefore cannot be detached from its run and grafted onto another without its scope betraying the move.
+\end{description}
+
+\subsection{Typed inputs and outputs}
+
+\begin{description}
+\item[\texttt{ticks}] The positive tick count.
+\item[\texttt{outputs}] A tuple with exactly one entry per tick, in tick order, each entry pairing the tick index with a tuple of (port reference, canonical value text) pairs covering exactly the connected board output ports, sorted by reference, with no duplicates. Values appear in canonical text form---the exact, type-tagged textual representation of the typed value---so that the artifact is self-contained and byte-stable without requiring the reader to re-execute anything.
+\end{description}
+
+Inputs appear in the schema as measurements rather than as a separate field: each connected board input, at each tick, yields a root measurement (next subsection) recording the sample's canonical value, unit, measurement kind, and optional calibration reference. The admission rule that the sample set equals the connected input set guarantees the input record is complete.
+
+\subsection{Component events and tick linkage}
+
+\begin{description}
+\item[\texttt{trace}] The tuple of trace events. Each \texttt{TraceEvent} carries:
+a \emph{sequence} number---the events are numbered $0, 1, 2, \ldots$ contiguously across the whole run, so the artifact records not only what happened at each tick but the exact total order in which the simulator did it;
+a \emph{tick} index;
+a \emph{subject reference}---a component reference, or a test-point subject of the form \texttt{test-point:\emph{ref}};
+the subject's exact \emph{semantic profile} string;
+\emph{inputs}: (reference, canonical value text) pairs for each input port read, in contract order, with unique references (empty for delays, whose inputs at the emitting tick are definitionally the prior tick's values);
+\emph{outputs}: (reference, canonical value text) pairs for each output port written, in contract order;
+\emph{output measurement identifiers}: exactly one measurement identifier per output pair, positionally aligned, linking each output value to its measurement record;
+and \emph{details}: an ordered tuple of strings recording declared execution facts---the \texttt{cjt} region taken (\texttt{region=cutoff}, \texttt{region=active}, or \texttt{region=saturation}), the \texttt{mux} branch selected, the fuse trip status (\texttt{tripped=true} or \texttt{tripped=false}), the delay's prior-tick provenance note.
+\end{description}
+
+Tick linkage is structural, not conventional: validation requires that every measurement referenced by an event was produced at the event's own tick by the event's own subject, so an event cannot cite a value from elsewhere in time or from another producer.
+
+\subsection{Test-point observations}
+
+Test points are executed as first-class producers. At every tick, each declared test point yields one trace event with subject \texttt{test-point:\emph{ref}} under the fixed semantic profile \texttt{pcba8.test-point-observation.v1}, whose single input is the observed net's current value and whose single output re-emits that value on the net's name, plus one measurement whose parent is the net's driver measurement at that tick and whose calibration reference is exactly the test point's declared calibration. An observation is thus never a copy of a number; it is a recorded derivation from an identified producer under an identified calibration record.
+
+\subsection{Measurements: identifiers, derivations, calibration references}
+
+\begin{description}
+\item[\texttt{measurements}] The tuple of measurement records. Each \texttt{MeasurementRecord} carries:
+a \emph{measurement identifier}, which is the SHA-256 digest of the record's own canonical payload---identity is content-derived, so equal records are the same record and any tampering changes the identifier;
+the \emph{measurement scope digest} tying the record to this run (see above);
+the \emph{tick};
+the \emph{producer reference}: the distinguished board endpoint for input roots, a component reference for component outputs, or a \texttt{test-point:} subject for observations;
+the \emph{port reference} (for test points, the observed net's reference);
+the \emph{canonical value text} and its \emph{value digest};
+the typed \emph{unit};
+the \emph{measurement kind}: board-input roots carry the sample's declared kind (design value or instrumented, never model-derived), while every simulated producer's record carries \texttt{MODEL\_DERIVED}---the kinds partition provenance into what entered the run and what the run computed;
+the optional \emph{calibration reference};
+the \emph{packet-eligibility flag}, which is always false (Section~\ref{ch08:sec:calibration});
+and the \emph{child measurement identifiers}: the exact tuple of parent-input measurements from which this value was derived---for a component output, the driver measurements of its input nets at the same tick; for a delay output at tick $t>0$, the driver measurement of its input net at tick $t-1$; for board-input roots, empty, because roots have no in-run ancestry.
+\end{description}
+
+The result exposes an \texttt{ancestry} operation that walks child links transitively, so any output value can be traced, measurement by measurement, back to the exact set of input roots that fed it. Derivation direction follows the convention that a record lists the records it was derived \emph{from}; the graph is acyclic by validation (Section~\ref{ch08:sec:validation}).
+
+\subsection{The fixed Ring-4 boundary}
+
+\begin{description}
+\item[\texttt{boundary}] Every result, every measurement, every trace event, and every embedded report carries the fixed research boundary object---the Ring-4, not-licensed research classification---and every public operation re-derives and rechecks it rather than trusting a stored copy. The boundary is inside the digest: an artifact stripped of its research classification is not a cleaned-up version of the artifact; it is a different byte string that fails identity verification.
+\item[\texttt{result\_sha256}] Finally, the result digest over the entire canonical payload: every field above, the full diagnostics-bearing report, every event, every measurement, the boundary. This is the identity by which the result is cited.
+\end{description}
+
+\section{Measurement and result validation}\label{ch08:sec:validation}
+
+A \texttt{SimulationResult} cannot exist in an invalid state: construction runs the full validation, and every subsequent public operation re-runs it. The validation is worth specifying in detail because it is the difference between a log (which records claims) and this artifact (which refuses to exist unless its claims are mutually consistent).
+
+\begin{invariant}[Digest form and identity]\label{ch08:inv:digest}
+Every digest-valued field---board, source, catalog, engine, decimal-context, DRC report, DRC profile, simulator, measurement scope, and result digests, every measurement identifier, every value digest---must be exactly 64 uppercase hexadecimal characters, and every content-derived digest must equal a fresh recomputation over the canonical payload it names. The result additionally requires that the recorded source, catalog, engine, decimal-context, and simulator identities equal the \emph{current} package identities: a result does not merely remember which engine produced it, it refuses to operate under a different one.
+\end{invariant}
+
+\begin{invariant}[Measurement uniqueness and coverage]\label{ch08:inv:coverage}
+Measurement identifiers are unique. Producer coordinates (tick, producer, port) are unique. And coverage is \emph{exact}: the coordinate set must equal, precisely, the set consisting of every connected board input at every tick, every component output port at every tick, and every test point at every tick---nothing missing, nothing extra. A result cannot quietly omit an inconvenient observation, and it cannot smuggle in a record no declared producer accounts for.
+\end{invariant}
+
+\begin{invariant}[Child existence, acyclicity, and tick monotonicity]\label{ch08:inv:acyclic}
+Every child identifier resolves to a measurement in the same result; no measurement is its own child; children are unique per record; a depth-first check certifies the derivation graph contains no cycle; and no record depends on a future tick---every child's tick is at most its parent's. Moreover, parentage is not free-form: for each record, the validator recomputes the \emph{expected} children from the embedded board's wiring (same-tick input-net drivers for combinational components, the prior-tick driver for delays, the same-tick net driver for test points, empty for roots) and requires exact equality. Provenance must match the board, edge for edge.
+\end{invariant}
+
+\begin{invariant}[Unit and value discipline]\label{ch08:inv:units}
+Every record's unit must equal the unit of the port or calibration it reports (board-input records carry the port's unit; test-point records carry their calibration's unit; component records carry the output port's unit), and every canonical value text must validate against the receiving port's signal kind and unit under the closed admissibility table. A Boolean cannot inhabit an activation record, and a unit-bearing value cannot inhabit a dimensionless one, anywhere in the artifact.
+\end{invariant}
+
+\begin{invariant}[Measurement-kind eligibility]\label{ch08:inv:kinds}
+Board-input records must not claim \texttt{MODEL\_DERIVED} and must have empty parentage---roots are roots. Every simulated producer's record must claim exactly \texttt{MODEL\_DERIVED}. A board-input record claiming instrumented provenance must name a calibration record, and any named calibration must exist on the board and agree with the record in unit and measurement kind. Test-point records must carry \texttt{MODEL\_DERIVED} with exactly their test point's declared calibration reference. Component-output records must carry no calibration reference at all: a simulated value is not an instrument reading, and the schema will not let it dress as one.
+\end{invariant}
+
+\begin{invariant}[Trace linkage]\label{ch08:inv:trace}
+Trace sequence numbers are exactly $0, 1, \ldots, n-1$. Every event's tick lies inside the run. Subjects are unique within each tick, and the subject set at every tick equals exactly the components plus test points of the embedded board---full producer coverage, every tick. Every event links exactly one measurement per output, positionally; linked measurements must match the event in tick, producer, port, and value text. Each measurement is linked by at most one event, and the set of trace-linked measurements equals exactly the set of \texttt{MODEL\_DERIVED} measurements: every computed value is explained by exactly one event, and no event explains a value that does not exist. Event input values must equal the value texts of the output record's children (for test points, of the observed driver), so the narrative told by events and the graph told by measurements are forced to agree. Finally, the per-tick output snapshots must list exactly the connected board outputs with values equal to their nets' driver records.
+\end{invariant}
+
+The cumulative effect of Invariants~\ref{ch08:inv:digest} through~\ref{ch08:inv:trace} is that the result artifact is closed under cross-examination: the identities agree with the payloads, the events agree with the measurements, the measurements agree with the wiring, the wiring agrees with the board, and the board agrees with the DRC report embedded beside it. There is no consistent way to alter one stratum of the artifact without the others convicting it.
+
+\section{Reading the artifact: three audit walkthroughs}\label{ch08:sec:audit}
+
+The schema and its invariants were specified from the producer's side; it is equally important that they support the \emph{reader's} side---the auditor who holds a result and wants to interrogate it. Three canonical walkthroughs show how the fields compose into audit procedures, and each is a pure read of the artifact: no re-execution, no external state.
+
+\emph{Walkthrough 1: from an output value to its causes.} Start from a tick's output snapshot entry, say \texttt{out} at tick $t$. Resolve the board output's net through the embedded board's wiring, take the net's driver coordinate $(t, \text{driver}, \text{port})$, and fetch that measurement. Its child identifiers give the same-tick (or, through a delay, prior-tick) parent measurements; iterating---or calling the result's \texttt{ancestry} operation, which performs exactly this walk---terminates at root measurements, whose kinds and calibration references state exactly what entered the run and under what claimed provenance. Every step is validated in advance by Invariant~\ref{ch08:inv:acyclic}: the walk cannot cycle, cannot dangle, and cannot cross ticks in the wrong direction. The auditor ends with a finite, exact causal set---in the software sense of causation: dataflow under the declared semantics---for the output value.
+
+\emph{Walkthrough 2: from a claim about behavior to the event that grounds it.} Suppose a report elsewhere asserts ``the junction saturated at tick 3.'' The artifact either grounds this or refutes it in two lookups: the trace event at tick 3 with the junction's subject reference (unique, by Invariant~\ref{ch08:inv:trace}) either contains \texttt{region=saturation} in its details or does not. Because details are inside the digested payload, the grounding is as tamper-evident as the result itself. The same pattern serves fuse trips (\texttt{tripped=true}), mux routing, and delay provenance: every discretionary branch the semantics took is a recorded, digested fact, not an inference the auditor must reconstruct from values.
+
+\emph{Walkthrough 3: from two results to a defensible comparison.} Given results $R_1$ and $R_2$, the identity block decides what comparison is even meaningful. Equal board, source, catalog, decimal-context, and simulator digests with different input roots: the comparison is between input conditions under one semantics, and per-tick outputs can be diffed value by value. Different board digests: the comparison is between designs, and the embedded boards themselves state the design delta. Different source or context digests: the results belong to different engines, and any numerical comparison must be labeled cross-engine, whatever the numbers look like. The artifact does not prevent an auditor from making a careless comparison, but it makes carefulness cheap and its absence visible: every published comparison can be checked against the identity blocks of its operands.
+
+These walkthroughs are the practical justification for the schema's apparent redundancy. Each field earns its place by shortening some audit from a reconstruction to a lookup---and the invariants of Section~\ref{ch08:sec:validation} are what entitle the auditor to trust the lookup.
+
+\section{Determinism and replayability}\label{ch08:sec:determinism}
+
+The chapter has asserted determinism repeatedly; it is worth collecting the argument in one place, both because the property is load-bearing for the artifact's evidential role and because its \emph{scope} needs stating as carefully as its content.
+
+\begin{proposition}[Replay determinism]\label{ch08:prop:determinism}
+Let two simulation calls be made with equal boards (equal canonical payloads), equal input samples (equal values, kinds, and calibration references per port), and equal tick counts, under the same package source, component catalog, and decimal context. Then the two calls either both fail with the same error class, or both produce results with equal canonical payloads and therefore equal result digests.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+Every source of nondeterminism is either excluded or canonicalized. The DRC verdict is a pure function of the board under the fixed catalog and decimal context (Chapter~7, deterministic ordering invariant). The evaluation order is the unique lexicographically-least topological order (Construction~\ref{ch08:con:kahn}); delay and test-point iteration is over sorted references; input publication is over sorted ports. Arithmetic runs under the one immutable decimal context, so every operation's rounding and exponent behavior is fixed. All values are rendered by canonical value text, which is a function of the typed value alone. Measurement identifiers and the result digest are content-derived SHA-256 over canonical JSON payloads with sorted keys and fixed separators, so equal content yields equal identity. No wall-clock time, randomness, environment variable, iteration-order-sensitive container, or caller-visible mutable state enters any payload. The fuse and delay states are initialized at entry from declared parameters and evolve only by the declared rules over already-determined values. Hence every intermediate and final datum is a function of the declared inputs, and the conclusion follows by induction over the tick loop's phases.
+\end{proof}
+
+\begin{remark}[Scope of the claim]\label{ch08:rem:determinismscope}
+Proposition~\ref{ch08:prop:determinism} is a design-level argument about the declared semantics, supported by the bounded regression suites---not a machine-checked theorem about the implementation, and not a statement that survives a change to any identity in its hypothesis. Two runs under different source digests are different experiments regardless of how similar their outputs look; the identity block exists precisely so that ``same result'' can never be judged by output resemblance alone. Formal verification of the determinism property, like the property-based campaign of Remark~\ref{ch08:rem:testing}, is open.
+\end{remark}
+
+Replayability is the practical payoff. Because a result names its complete identity set and its digest recomputes from content, an independent party holding the same sources can re-execute the fixture and compare digests---one string---instead of comparing artifacts field by field. Divergence localizes fast: a digest mismatch with equal board and input identities indicts the engine identities; equal engine identities indict the inputs; and the embedded report and measurement graph give the diff a structure to walk. This is the modest, checkable sense in which the candidate's results are reproducible, and the only sense claimed.
+
+\section{Locally asserted calibration is structural}\label{ch08:sec:calibration}
+
+\begin{ruleenv}[No self-attested eligibility]\label{ch08:rule:eligibility}
+Every measurement record in every simulation result carries a packet-eligibility flag that is \emph{always false}, and the record type rejects construction of any record claiming otherwise: self-attested PCBA measurements are never packet-eligible. Calibration references inside a result are structural, test-only metadata---they record which declared calibration profile a test point or input sample \emph{named}, and nothing more. They confer no authenticated measurement status, no uncertainty validation, no instrument-chain evidence, and no Evidence-Packet eligibility on anything.
+\end{ruleenv}
+
+This rule is the runtime continuation of the DRC-level Rule on locally asserted calibration (Chapter~7): the DRC rejects calibration records that claim eligibility for themselves, and the simulator refuses to mint measurement records that claim it either. The two together close the loop against a specific failure mode the candidate's source audit documents in another guise---artifacts that assert their own authority. A calibration profile whose digest, instrument identity, and protocol identity are all locally authored is a well-formed \emph{declaration of intent to measure}; turning it into evidence requires an authentication path that lies entirely outside this software and is, at the bound sources, an open obligation.
+
+\section{Unsupported behavior fails closed}\label{ch08:sec:failclosed}
+
+\begin{ruleenv}[Fail closed]\label{ch08:rule:failclosed}
+Every condition the simulator does not affirmatively support is a hard error: a component kind without reference semantics; a delay reached by the combinational evaluator; a finite-transition input outside the certified carrier; a value that cannot be rendered in canonical text; a port/value pairing outside the admissibility table; a non-positive or non-integer tick count; an input set differing from the connected inputs; a board that fails DRC; a residual combinational cycle; an unresolved evaluation order. None of these produces a partial result, a default value, a skipped component, or a warning-bearing artifact. The run raises, and no result exists.
+\end{ruleenv}
+
+The rationale is evidential rather than defensive. A partial result would be an artifact whose completeness invariants (Invariant~\ref{ch08:inv:coverage}, Invariant~\ref{ch08:inv:trace}) are false, and every consumer would need to reason about which guarantees survived the degradation. By making nonexistence the only failure mode, the candidate keeps the result class pure: \emph{every} result that exists satisfies \emph{every} invariant of Section~\ref{ch08:sec:validation}. There are no second-class results to audit around.
+
+\begin{remark}[Open testing obligations]\label{ch08:rem:testing}
+The invariants above are enforced by construction and exercised by the bounded regression suites recorded in the Gate~4 receipt; they are not proofs over all inputs. A property-based and random-generation campaign over the admission, ordering, and validation invariants---in the style of QuickCheck \cite{quickcheck}---remains an explicitly open obligation of the research program, as does independent reimplementation. Nothing in this chapter should be read as claiming the absence of defects; it claims the declared contract and its fail-closed enforcement discipline.
+\end{remark}
+
+\section{Relation to PROV, without a conformance claim}\label{ch08:sec:prov}
+
+Readers familiar with the W3C provenance model will recognize the shape of the record discipline: trace events resemble PROV activities, measurement records resemble entities, child-measurement links resemble derivation relations, and producers resemble agents associated with activities \cite{prov}. The resemblance is acknowledged and deliberate at the level of \emph{method}---the separation of the thing produced, the happening that produced it, and the lineage between things is the load-bearing idea, and the candidate independently converged on it because the idea is correct.
+
+\begin{boundary}\label{ch08:bd:prov}
+The candidate makes no PROV-O conformance claim. Its record types are not serialized in any PROV vocabulary, have not been checked against PROV constraints, and add obligations PROV does not impose (content-derived identifiers, exact-coverage requirements, digest-bound scopes, a mandatory research boundary) while omitting structure PROV provides (plans, delegation, alternate accounts). The comparison in this section is an orientation aid for the reader, not an interoperability statement, and no artifact of this chapter should be represented as PROV-conformant in any downstream use.
+\end{boundary}
+
+The distinction matters for the same reason the rest of the candidate's claim discipline matters: ``resembles a standard'' and ``conforms to a standard'' license very different reliance, and only the second is checkable. If PROV interoperability is ever wanted, it is a separately specified, separately tested export surface with its own construct-coverage matrix---the same rule the candidate applies to the CCDL grammar.
+
+The instructive divergences run in both directions. Where PROV is permissive, the candidate is strict: PROV allows an entity to exist without recorded derivation, whereas the coverage invariant forces every producible coordinate to be produced and every derived record to carry its exact wiring-derived parentage; PROV allows multiple accounts of the same happening, whereas the trace-link bijection forces exactly one event per derived measurement. Where PROV is expressive, the candidate is silent: it has no notion of a plan (the board plays that role, but as a hashed input, not a provenance node), no delegation between agents (there is one producer per record, period), and no revision or invalidation relations (artifacts are immutable; a corrected run is a new result with a new digest, not a revision edge). These are not defects of either side; they are the difference between a general interchange vocabulary and a closed evidential contract. The comparison earns its place in this chapter because a reviewer fluent in PROV can use it to find the candidate's load-bearing walls quickly---and because stating the non-conformance explicitly prevents the resemblance from ever being cited as compliance.
+
+\section{The green-fixture interpretation rule}\label{ch08:sec:green}
+
+The simulator's test fixtures execute boards and compare complete result artifacts---digests, traces, measurements, and all---against expected values. A passing fixture is colloquially ``green.'' Because green fixtures are the candidate's most frequently produced evidence artifact, their interpretation is fixed by rule rather than left to context:
+
+\begin{boundary}\label{ch08:bd:green}
+The correct interpretation of a green fixture is exactly this: \emph{the software performed the declared typed transition and produced the declared trace for the exact fixture inputs under the exact profile identities recorded}. It is never evidence that a cognitive mechanism exists or behaves as modeled; never evidence of a causal relation in any system outside the software; never evidence that a physical circuit law holds or that any CAS quantity is an electrical quantity; never evidence that a safety mechanism is effective, that a refusal path is robust, or that any deployment is safe; and never evidence of a product capability. A thousand green fixtures license exactly the same class of claim as one: tested software behavior on tested inputs.
+\end{boundary}
+
+The rule has a constructive reading as well as a restrictive one. Because a result binds its complete identity set, a green fixture is \emph{strong} evidence within its licensed class: it certifies byte-exact behavior of a named engine on a named board, replayable by anyone holding the same sources. The discipline is not modesty for its own sake; it is the exchange rate at which small, hard claims are preferred to large, soft ones.
+
+Two corollaries prevent the most common misuses. First, green fixtures do not aggregate upward: a suite of fixtures covering many boards licenses the conjunction of the per-fixture claims, not any generalization over boards, inputs, or behaviors not fixtured---coverage of the input space is a property the suite must argue separately (and the candidate's suites, being bounded regression suites, do not argue it; see Remark~\ref{ch08:rem:testing}). Second, \emph{red} fixtures are first-class evidence of the same kind. The known-fault Cognitive Safety Board fixture of Chapter~11 is deliberately kept failing---the checker must flag its unreachable threshold forever---and its value lies exactly in what a red fixture certifies: that the exact engine, on the exact adverse input, produced the exact refusal. A fixture suite that quietly converted expected failures into skipped tests would be discarding the candidate's most defensible negative evidence, and the suite discipline forbids it for the same reason the DRC forbids warnings decaying into passes.
+
+\section{Simulation is not validation}\label{ch08:sec:validationdist}
+
+The simulation literature has long distinguished \emph{verification}---does the implementation correctly execute the conceptual model?---from \emph{validation}---does the model adequately represent the system of interest for the intended purpose? \cite{sargent}. The candidate adopts the distinction and locates itself entirely on the verification side. The reference simulator, its fixtures, and its identity-bound results are machinery for verifying that the software faithfully executes the declared board semantics. They contain no mechanism whatsoever for validation: no calibrated correspondence between board quantities and observed quantities of any cognitive or model system, no held-out behavioral data, no experimental design, no error model, no uncertainty propagation from world to artifact.
+
+\begin{ruleenv}[Validation is out of scope and unclaimed]\label{ch08:rule:sargent}
+No output of the reference simulator constitutes operational validation of any board as a model of any system. Any future validation effort is a separate activity with its own preregistered design, calibration and uncertainty discipline, held-out data, and independent review---the dependency-ordered research program of the seed paper places it behind the grammar, profile, and testing obligations that precede it. Until such an effort exists and survives review, every board is a hypothesis expressed in a typed language, and every simulation is an execution of the hypothesis's declared consequences, not a test of its truth.
+\end{ruleenv}
+
+The temptation the rule guards against is specific and recurrent: verification artifacts \emph{look like} validation artifacts. A trace of a junction saturating looks like an observation of saturation; a fuse latching in a fixture looks like a demonstration of protection; a curve of outputs over ticks looks like data. The resemblance is not accidental---the schema was designed to record executions with the completeness one would want of experiments---but the referent differs categorically. An experiment's record binds observations to a system in the world through an instrument chain with authenticated calibration and quantified uncertainty; the simulator's record binds computed values to a hypothesis through a digest chain with declared, unauthenticated calibration references and no uncertainty at all. The two artifacts can and should share record discipline; they can never share evidential class, and every field of the schema that carries calibration or measurement-kind metadata exists to keep the classes distinguishable \emph{inside the artifact itself}, not merely in surrounding prose.
+
+That closing formulation is the chapter in one sentence. The simulator makes hypotheses \emph{exact} and their declared consequences \emph{replayable}; exactness and replayability are preconditions for honest validation, not substitutes for it. All artifacts of this chapter remain Ring~4, \textsc{not licensed}, and the interpretation rules of Sections~\ref{ch08:sec:green} and~\ref{ch08:sec:validationdist} are part of the artifact contract, not commentary on it.

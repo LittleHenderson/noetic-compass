@@ -1,0 +1,468 @@
+\chapter{The Formal Seed}\label{ch11:lean}
+
+Chapter~10 documented the executable evidence: bounded-exhaustive suites
+that tie the running Python to the proved mathematics wherever a finite
+check can reach. This chapter documents the artifact's second, independent
+evidence channel: a small body of machine-checked mathematics --- the
+\emph{formal seed} --- developed in Lean~4 under a pinned toolchain and
+audited by a dedicated verifier script. The seed is deliberately modest in
+scope and immodest in rigor: what it checks, it checks down to the proof
+kernel with a single standard axiom; what it does not check, this chapter
+itemizes without euphemism. The governing records are the manifest's
+\texttt{formal\_verification} block (status \textsc{partial / present}),
+the integrated Lean receipt \texttt{LEAN\_PROOF\_MANIFEST\_v0.1.json}, and
+the lift-functor subreceipt, all hash-bound alongside the code they
+describe.
+
+\section{Kernel-checking as a trust story}\label{ch11:sec:trust}
+
+\subsection{Why a proof assistant, and what its word is worth}
+
+An informal proof --- even a careful one, even one checked by several
+readers --- is a social artifact: its correctness claim rests on the
+attention of the humans who have read it. A proof developed in Lean~4
+\cite{lean4} rests on a different foundation. Lean is architected around a
+small trusted kernel: the elaborate machinery that makes proofs writable
+--- tactics, automation, syntax extensions, metaprogramming --- all runs
+\emph{outside} the trust boundary, producing proof terms that the kernel
+independently re-checks against the rules of the underlying dependent type
+theory. To trust a Lean-checked theorem one must trust the kernel's
+implementation of a well-studied type theory, the statement as written,
+and the axioms the proof depends on --- and nothing else. Not the tactics
+that found the proof, not the libraries that suggested it, not the human
+who wrote it.
+
+This architecture is the modern form of what the proof-assistant
+literature calls the de Bruijn criterion: the system's trustworthiness
+should rest on a small, independently auditable checker, with all
+proof-\emph{finding} machinery outside the trusted base. Lean~4
+satisfies the criterion by construction --- the kernel implements a
+typechecker for its dependent type theory and nothing else, and every
+theorem, however it was found, is ultimately a term the kernel has
+typechecked against its stated proposition. The practical consequence
+for this artifact is a sharp asymmetry of failure modes. If a tactic is
+buggy, the worst case is a proof that fails to build --- annoying,
+visible, safe. For a false statement to be \emph{accepted}, the defect
+must be in the kernel itself, in the type theory it implements, or in
+the statement of the theorem --- and the first two are shared,
+heavily exercised infrastructure whose failure would be a community
+event, not a private one. The third --- a theorem statement that does
+not say what its author believes it says --- is the one failure mode
+kernel-checking cannot address at all, and it is why the verifier
+discipline below insists on hash-bound sources and named theorem
+inventories: the statements themselves must be reviewable text, pinned
+to digests, so that what was checked is exactly identifiable.
+
+That last dependency --- the axioms --- is where formal verification
+claims most often quietly leak. Lean permits axiom declarations, and its
+standard library itself provides classical axioms; a development can also
+locally postulate whatever it likes, and a proof ``checked by Lean'' may
+silently rest on an unproved assumption three imports away. Similarly, the
+placeholder \texttt{sorry} lets a development compile with holes. A
+verification claim is therefore only as strong as its \emph{axiom audit}:
+an explicit accounting, per theorem, of exactly which axioms the checked
+proof term depends on, together with a policy on which axioms are
+admissible. The seed's verifier makes this audit mechanical, as
+Section~\ref{ch11:sec:verifier} details: the sole admissible standard
+axiom is \texttt{propext} --- propositional extensionality, the principle
+that logically equivalent propositions are equal, a standard and
+deliberately minimal extension of the core theory --- and any project
+axiom or \texttt{sorry} anywhere in the build fails the verification run
+outright.
+
+\subsection{Why \texttt{propext}, and why only \texttt{propext}}
+
+The single admitted axiom deserves its own paragraph, because the choice
+encodes a policy. Propositional extensionality states that two
+propositions which imply each other are equal as propositions --- an
+identification of logical equivalence with equality at the level of
+\texttt{Prop}. It is among the mildest of the standard classical
+extensions: it does not decide any proposition (it is not excluded
+middle), it does not choose witnesses (it is not choice), and it is
+validated by the standard proof-irrelevant semantics of \texttt{Prop}.
+Lean's own core library depends on it pervasively, which makes it the
+practical floor for any development that uses the standard library at
+all; a seed that admitted nothing would have to rebuild elementary
+logic from scratch for no gain in trust. The policy, then, is: admit
+the one axiom that the ecosystem's floor requires, and nothing above
+that floor. In particular the seed does not admit choice, quotient
+soundness beyond the kernel's built-in support, or classical excluded
+middle --- and because the verifier audits dependencies per theorem,
+the claim is not ``we tried to avoid stronger axioms'' but ``the
+compiled proof terms of the named theorems depend on \texttt{propext}
+and nothing else, mechanically checked.'' For the finite, discrete,
+computation-adjacent statements in the verified scope, this is also
+mathematically comfortable: nothing in typed identities,
+associativity, basis compositions, or two-state expansions has any
+classical content to hide.
+
+\subsection{The seed's place in the evidence architecture}
+
+The formal seed occupies a precise position between the other two evidence
+channels. Against the informal proofs of Chapters~4--8, it trades
+coverage for certainty: only a fraction of the monograph's mathematics is
+formalized, but that fraction is checked by a mechanism whose failure
+modes are qualitatively narrower than human review. Against the
+executable suites of Chapter~10, it trades concreteness for universality:
+the suites exercise the actual Python on bounded instances, while the
+seed proves \emph{universal} statements --- for all mappings, all
+carriers of the modeled form --- about a Lean model that is not the
+Python. Neither channel subsumes the other, and the artifact's claim
+discipline insists on reporting them separately: the manifest's
+formal-verification status is \textsc{partial / present}, its claim field
+stating that the seed ``kernel-checks only the exact modules and theorem
+dependencies named in the linked proof manifest,'' with everything else
+\textsc{open}.
+
+The three channels can be tabulated by what each quantifies over and
+what each trusts:
+
+\begin{center}
+\small
+\begin{tabular}{@{}lp{3.4cm}p{3.4cm}p{3.6cm}@{}}
+\toprule
+Channel & Quantifies over & Object of evidence & Trusted base \\
+\midrule
+Informal proof & all instances & the mathematics & human review of the argument \\
+Executable suite & bounded instances & the running Python & interpreter, test oracles, bound choice \\
+Lean seed & all instances (in scope) & a Lean model & Lean kernel, type theory, statement fidelity \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The table makes the complementarity mechanical. The suite is the only
+channel that touches the shipped implementation; the seed is the only
+channel whose checking is not human; the informal proofs are the only
+channel with full coverage. Any two channels overlapping on a statement
+--- as all three do on the noncontractivity fixture --- cross-check
+each other's distinct trusted bases, which is the strongest evidential
+configuration the artifact attains and the reason the fixture is
+maintained in all three forms.
+
+\section{The pinned toolchain}\label{ch11:sec:toolchain}
+
+Formal verification inherits the reproducibility obligations of any other
+evidence. A proof that checks under one compiler version and fails under
+another --- because of changed elaboration, moved library lemmas, or a
+revised axiom inventory --- is not a stable receipt. The seed therefore
+pins its entire toolchain, and the manifest's environment probe of
+2026-08-04 records the pin exactly:
+
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Component & Recorded state \\
+\midrule
+Lean & 4.32.1 / \texttt{f054605aea4b840552cca2e725580bffd1e1b704} / \textsc{present} \\
+Lake & 5 / \textsc{present} \\
+Python (verifier host) & 3.14.0 \\
+\texttt{coqc} & \textsc{unavailable} \\
+Agda & \textsc{unavailable} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The Lean entry pins not only the release number (4.32.1) but the exact
+toolchain commit hash, so ``the toolchain'' is an identified artifact
+rather than a version-string family. The build goes through Lake, Lean's
+standard build system, so module dependency resolution is itself
+declarative and replayable. The toolchain is furthermore \emph{isolated}
+--- pinned for this project rather than taken from whatever ambient
+Lean installation the host happens to carry --- so a developer machine
+with a different global Lean cannot silently substitute its own
+elaboration behavior into a verification run. The recorded
+\textsc{unavailable} entries for Coq and Agda are honesty about the
+probe environment, with a methodological implication worth noting: the
+seed is a single-prover development, and cross-prover corroboration ---
+re-checking the same statements in an independent system with an
+independent kernel --- is one of the things the artifact does not have.
+
+Enumerating the trusted computing base explicitly, in decreasing order
+of scrutiny received: the Lean kernel at the pinned commit; the type
+theory it implements; the Lake build tool's module resolution; the
+Python 3.14.0 interpreter running the verifier script; the verifier
+script itself --- which is why the script is kept small, its policy
+constants hardcoded rather than configurable, and its own bytes
+hash-bound in the artifact envelope; and the host operating system
+underneath all of it. The pin does not shrink this base; it makes the
+base \emph{identified}, which is what turns ``it verified'' from an
+anecdote about some machine into a replayable claim about a named
+configuration.
+
+\section{The verifier discipline}\label{ch11:sec:verifier}
+
+The script \texttt{scripts/verify\_psr8\_lean\_gate1.py} is to the formal
+seed what the Gate~1 verifier is to the executable suite: a single
+replayable command that either reproduces the full evidence or fails.
+Its checks, as recorded in the specification and the research paper,
+are these:
+
+\begin{protocol}[Lean seed verification]\label{ch11:proto:lean}
+The verifier, run as
+\texttt{python scripts/verify\_psr8\_lean\_gate1.py}:
+\begin{enumerate}
+\item \emph{hardcodes the sole allowed standard axiom},
+      \texttt{propext} --- the admissible-axiom set is not a
+      configuration option but a constant in the verifier source;
+\item \emph{rejects project axiom declarations} --- any
+      \texttt{axiom} introduced by the development itself fails the run,
+      so the seed cannot smuggle assumptions in as local postulates;
+\item \emph{rejects \texttt{sorry}} --- no proof hole anywhere in the
+      built modules is tolerated;
+\item \emph{checks source hashes} --- the Lean source files are compared
+      by digest against the proof manifest, so the theorems checked are
+      the theorems bound, not edited neighbors;
+\item \emph{builds through Lake} under the pinned toolchain of
+      Section~\ref{ch11:sec:toolchain}; and
+\item \emph{audits exact theorem dependency reports} --- for each named
+      theorem, the axioms its compiled proof term actually depends on are
+      extracted and compared against the expected inventory, so the audit
+      is per-theorem and mechanical, not a global grep.
+\end{enumerate}
+\end{protocol}
+
+The design mirrors, in the formal channel, the substitution-closure of the
+Gate~1 protocol: hash checks prevent verifying edited sources; the axiom
+and \texttt{sorry} rejections prevent weakening the logic; the dependency
+audit prevents an individually honest theorem from silently importing a
+dishonest helper. What survives all six checks is a set of named
+statements, in identified source files, proved to the kernel's
+satisfaction from \texttt{propext} alone under an identified compiler.
+
+\begin{remark}[Scope of the receipt]\label{ch11:rem:receipt}
+The integrated receipt \texttt{LEAN\_PROOF\_MANIFEST\_v0.1.json}
+(hash-bound in the prototype manifest, with the lift-functor subreceipt
+\texttt{LEAN\_DETERMINISTIC\_LIFT\_FUNCTOR\_MANIFEST\_v0.1.json} bound
+beside it) names the exact modules and theorem identifiers in scope. The
+prototype manifest's verification claim defers to that receipt ---
+``only the exact modules and theorem dependencies named in the linked
+proof manifest'' --- and this chapter's itemization follows the same
+inventory as summarized in the manifest's \texttt{verified\_scope} and
+\texttt{open\_scope} fields.
+\end{remark}
+
+\section{Verified scope}\label{ch11:sec:verified}
+
+The seed's kernel-checked content falls in seven items, quoted here from
+the manifest's verified-scope inventory and expanded with the
+mathematical identity of each.
+
+\begin{enumerate}
+\item \emph{Typed identities and associativity, with endomap-only
+      powers.} The Lean module \texttt{TypedCategory} models the kernel's
+      typed total-function discipline and proves the identity laws and
+      associativity of composition --- the formal counterpart of the
+      category laws of Chapter~4 --- together with the powering
+      discipline that admits powers only for endomaps, the formal
+      counterpart of the endomap/path separation of Chapters~5 and~6.
+      This is the seed's contribution to PO-TKS8-CORE-01, whose ledger
+      status \textsc{partial formal verification present} rests on
+      exactly these lemmas.
+\item \emph{The exact two-state constant-lift expansion.} For the
+      constant map on a two-point carrier --- the permanent
+      counterexample of Chapter~7, ledger record
+      \textsc{thm-lift-occupation-counterexample} --- the seed
+      kernel-checks the exact vector expansion of the lift's action and
+      its \emph{noncontractivity}: the checked statements exhibit the
+      concrete vector on which the constant lift strictly increases
+      norm, blocking forever the general claim that deterministic lifts
+      are contractive. The fixture thus exists in all three evidence
+      channels at once: informal proof, executable regression, and
+      kernel-checked lemma.
+\item \emph{Lift identity, entrywise and on basis vectors.} The
+      statements $A_{\id_X} = I$ are checked in two forms: entrywise
+      equality of the modeled matrix, and action on standard basis
+      vectors.
+\item \emph{Typed basis composition.} The composition half of the
+      functor law is checked at basis level:
+      $A_g(A_f e_x) = e_{g(f(x))} = A_{g\circ f} e_x$ for the modeled
+      typed maps --- the on-basis-vectors content of
+      Chapter~7's functoriality theorem.
+\item \emph{Relational-product support composition.} At the level of
+      supports --- which target coordinates can be nonzero --- the seed
+      checks that the support of a composite lift is the relational
+      product of the component supports, tying the matrix picture to the
+      underlying relation composition.
+\item \emph{Four-atom finite-context lemmas.} The seed includes the
+      exhaustiveness and witness-map lemmas for the four-atom ACBE/RPM
+      finite context used by the companion Noetic Topos development ---
+      finite case analyses whose value is precisely that a kernel, not a
+      human, confirmed the case split is total. Their presence in this
+      seed is an artifact of shared toolchain and shared verifier; their
+      mathematical home is the companion paper, and no TKS/CAS semantic
+      claim travels with them (the boundary of
+      Section~\ref{ch11:sec:nonverification} applies with full force).
+\end{enumerate}
+
+Together with the endomap-only power discipline these items constitute
+the entirety of PO-TKS8-CORE-07's \textsc{partial / present} status and
+the formal fraction of PO-TKS8-CORE-11 (\textsc{partial formal
+verification present / finite-sum matrix bridge open}).
+
+\section{Open scope}\label{ch11:sec:open}
+
+The seed's honesty is its itemized deficit. The following are
+\emph{not} formalized; each entry names the obligation it blocks or
+partially blocks.
+
+\begin{enumerate}
+\item \emph{The universal norm theorem.} The exact operator-norm formula
+      $\lVert A_f\rVert^2 = \max_y |f^{-1}(y)|$ (Chapter~7) is checked
+      in Lean only for the two-state constant expansion. The universal
+      statement --- all carriers, all mappings --- has an informal
+      fiber-block Gram proof and bounded-exhaustive structural evidence,
+      but no kernel-checked form. (PO-TKS8-CORE-05: \textsc{informal
+      proof present / universal formalization open}.)
+\item \emph{The generic matrix bridge.} The checked two-state lemmas
+      speak of a concrete expansion, not of the general definitions.
+      The bridge from the checked \texttt{constantTwoLift} object to
+      generic matrix, Gram, trace, and rank definitions --- the step
+      that would make the counterexample a corollary of a general
+      theory rather than a standalone computation --- is open.
+\item \emph{Finite-sum matrix multiplication.} The seed does not
+      formalize numerical matrix multiplication as a finite sum, which
+      is the missing link between the basis-level functor law it checks
+      and the entrywise matrix functor law the Python tests check.
+      This is the ``finite-sum matrix bridge'' of PO-TKS8-CORE-11.
+\item \emph{Arbitrary-vector linearity.} The checked lift laws act on
+      basis vectors; the linear extension to arbitrary vectors ---
+      routine on paper, but a genuine formalization step --- is open.
+\item \emph{The factorial idempotent-power theorem.} Theorem
+      $f^{|X|!} \circ f^{|X|!} = f^{|X|!}$ (Chapter~5) is a standard
+      result with a complete informal proof and a 289-case exhaustive
+      check, and no Lean form. (PO-TKS8-CORE-04.)
+\item \emph{Shortlex leastness.} The soundness of representative-first
+      pruning and the leastness of the computed normal forms
+      (Chapter~8) rest on the informal induction of the pruning lemma.
+      (PO-TKS8-CORE-06.)
+\item \emph{Presheaf, sheaf, topology-generation, and product-site
+      layers.} The full site-theoretic program of the companion Noetic
+      Topos development --- everything beyond the four-atom finite
+      context lemmas --- is unformalized.
+\end{enumerate}
+
+The pattern across the list is consistent: the seed formalizes
+\emph{discrete, finite, definition-adjacent} statements --- laws that
+are within short reach of the modeled definitions --- and leaves open
+everything requiring real analytic or combinatorial infrastructure
+(spectral bounds, factorials and cycle structure, well-founded
+minimization arguments, sheaf theory). This is a defensible frontier
+for a seed, and the word ``seed'' is doing exact work: the artifact
+claims a viable, pinned, audited starting point, not a formalized
+theory.
+
+\subsection{Formalization routes for the open items}
+
+Without promising schedules --- the ledger records obligations, not
+plans --- the open items admit an informed difficulty ordering, and
+recording it here serves whoever next extends the seed.
+
+The \emph{finite-sum matrix bridge} and \emph{arbitrary-vector
+linearity} are the mechanical end: both are finite summation
+arguments over Kronecker deltas, requiring only finite-sum
+manipulation lemmas (reindexing, splitting over a fiber
+decomposition), and both would immediately upgrade PO-01-adjacent and
+PO-11 evidence by connecting the checked basis-level laws to the
+entrywise matrix laws the Python suite tests. They are the natural
+first targets.
+
+The \emph{factorial power theorem} is middle difficulty: its proof
+needs a formalized functional-graph decomposition (every point's
+orbit is eventually periodic; tail length bounded by $|X| - 1$) and
+the divisibility fact $\ell \le |X| \Rightarrow \ell \mid |X|!$. Both
+components are within reach of standard library support for
+\texttt{Nat} arithmetic and finite iteration, and an orbit-based
+proof avoiding explicit graph theory --- iterate the pigeonhole
+argument on the sequence $x, f(x), f^2(x), \dots$ --- is likely the
+short path.
+
+The \emph{universal norm theorem} has two routes with sharply
+different formalization costs. The spectral route of the informal
+proof (Gram block decomposition, largest eigenvalue) imports spectral
+theory of symmetric matrices --- heavy machinery for a finite
+statement. The elementary route bounds
+$\lVert A_f v \rVert^2 = \sum_y \bigl|\sum_{x \in f^{-1}(y)} v_x\bigr|^2$
+by Cauchy--Schwarz within each fiber, obtaining
+$\le \max_y |f^{-1}(y)| \cdot \lVert v \rVert^2$, and exhibits the
+normalized indicator of a maximal fiber as the equality witness ---
+finite sums and one inequality, no spectra. The elementary route
+depends only on the linearity item above and is plainly the
+formalization-friendly path.
+
+\emph{Shortlex leastness} is the most program-like: it requires an
+abstract model of the closure exploration (a well-founded induction
+over shortlex order with the pruning invariant) and is best attacked
+as algorithm verification over an idealized queue rather than as a
+lemma about the Python. The \emph{presheaf and sheaf layers} are the
+far end --- genuine site theory --- and belong to the companion
+program's formalization lane rather than the kernel's.
+
+\section{What kernel-checking does not verify}\label{ch11:sec:nonverification}
+
+\begin{boundary}[Model theorems are not program verification]\label{ch11:bdy:model}
+Every theorem in the seed is a statement about \emph{Lean objects}: a
+Lean model of typed finite functions, a Lean expansion of a two-state
+lift. No theorem in the seed mentions, models, or constrains the Python
+source of \texttt{src/tks\_v8\_core}. The relationship between the Lean
+model and the running implementation is exactly the relationship the
+red-team methodology treats it as: an informal correspondence, argued
+by inspection --- the definitions were written to match --- and
+checked on bounded instances by the executable suite, but never itself
+proved. A reader who concludes ``the kernel is formally verified''
+has crossed a boundary that the artifact's own manifest refuses to
+cross: the manifest's claim records keep ``equivalence between the
+Python implementation and the Lean model'' explicitly \textsc{open}.
+\end{boundary}
+
+The gap is not pedantry; it decomposes into three concrete failure
+channels, none excluded by the seed. First, \emph{modeling error}: the
+Lean definitions could mismatch the Python semantics --- an off-by-one
+in the modeled indexing, a subtly different totality convention --- in
+which case the checked theorems are true of the model and silent about
+the code. Second, \emph{coverage error}: the Python contains behavior
+the model omits entirely (resource guards, error taxonomy, presentation
+naming, the closure engine), so even a perfect model of the composition
+core would verify a fraction of the artifact. Third, \emph{compilation
+and runtime error}: the Python executes on an interpreter whose own
+correctness is assumed, not proved --- the standard trusted-computing
+caveat that verified-compilation projects address and this artifact
+does not attempt. Programs proved correct in the strong sense require
+either verification-aware extraction (the program is generated from the
+checked development) or a verified semantics of the implementation
+language; the seed does neither, claims neither, and the monograph
+records the fact in the ledger rather than in a footnote.
+
+What the seed \emph{does} deliver, within these limits, is
+significant: the mathematical laws at the heart of the design --- the
+category laws, the power discipline, the counterexample that anchors
+the norm theory's claim boundary --- hold in at least one fully
+precise, kernel-audited model of the definitions, under a single
+standard axiom, reproducibly, on a pinned toolchain. Errors in the
+\emph{mathematics} of Chapters~4--7, if any survived informal review,
+would have had to survive the kernel too wherever the scopes overlap.
+The seed thus hardens the theory; it leaves the implementation's
+verification status exactly where Chapter~10 put it.
+
+\section{The PO-07 partial status}\label{ch11:sec:po07}
+
+Obligation PO-TKS8-CORE-07 --- ``independent theorem-prover
+formalization'' --- carries the ledger status \textsc{partial /
+present}, and this chapter is that status rendered in full. It is
+\textsc{present}: a pinned Lean~4.32.1 seed exists, builds through
+Lake, passes a hardcoded single-axiom audit with project axioms and
+\texttt{sorry} rejected, has its sources hash-bound, and checks the
+seven-item scope of Section~\ref{ch11:sec:verified}. It is
+\textsc{partial}: the seven-item open scope of
+Section~\ref{ch11:sec:open} remains, the Python-to-model equivalence
+is unproved, and no second prover corroborates the first. The word
+``independent'' in the obligation's title is also only partially
+honored in a further sense worth recording: the seed was developed
+within the project, so while the \emph{checking} is independent of
+human attention in the way only a kernel can be, the \emph{statement
+selection} is not independent of the authors --- a reviewer could ask
+whether the formalized statements are the load-bearing ones, and
+PO-TKS8-CORE-10 (independent specialist review, \textsc{open}) is
+where that question lives. Closing PO-07 outright would require, at
+minimum, discharging the open-scope items above; the ordering
+constraints among those items and the rest of the ledger are taken up
+in Chapter~12.

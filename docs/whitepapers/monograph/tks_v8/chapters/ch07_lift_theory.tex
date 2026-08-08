@@ -1,0 +1,1539 @@
+\chapter{The Deterministic Standard-Basis Lift}\label{ch07:chap}
+
+\section{Overview and evidential status}\label{ch07:sec:overview}
+
+The preceding chapters built the typed finite-function category: named objects
+with explicitly ordered carriers, total arrows with declared source and target,
+partial type-checked composition, and the hard separation between endomaps
+(which carry monoid powers) and semigroupoid paths (which deliberately do
+not). This chapter develops the kernel's one piece of genuine linear algebra:
+the \emph{deterministic standard-basis lift}, which assigns to every typed
+arrow $f:X\to Y$ a linear map $A_f$ between finite-dimensional Hilbert spaces,
+acting on basis vectors by
+\[
+A_f e_x = e_{f(x)} .
+\]
+The lift is deliberately elementary. It introduces no probability, no
+dynamics, and no physical interpretation. Its purpose inside the kernel is
+threefold. First, it provides an \emph{exactly analyzable} numerical shadow of
+every arrow: the matrix of $A_f$ is a $0/1$ matrix with exactly one $1$ per
+column, every spectral quantity of interest is an integer or the square root
+of an integer, and the implementation in
+\texttt{src/tks\_v8\_core/deterministic\_lift.py} computes all of them in exact
+integer arithmetic, converting to floating point only at the single property
+\texttt{operator\_norm}. Second, it supplies a family of \emph{permanent
+counterexamples} that block two tempting but false general claims about
+operator lifts of functions---claims that, if imported carelessly into
+downstream CAS reasoning, would license contractivity and projection
+arguments that are simply wrong. Third, its functoriality
+($A_{\id_X}=I$, $A_{g\circ f}=A_g A_f$) gives an independent, exactly
+checkable consistency test of the categorical composition of
+Chapter~\ref{ch04:main}: the executable suite verifies the functor laws by
+exact integer matrix equality on $1{,}678$ composition pairs.
+
+The evidential status of every claim in this chapter is stated where the claim
+is made, following the ledger discipline of the governing sources. In summary:
+
+\begin{itemize}
+\item The definition of the lift and its elementary structural facts
+  (Section~\ref{ch07:sec:lift}) are definitions and immediate computations.
+\item The exact operator-norm formula
+  $\lVert A_f\rVert^2=\max_{y\in Y}|f^{-1}(y)|$
+  (Theorem~\ref{ch07:thm:norm}, ledger record
+  \textsc{thm-lift-norm-fiber-formula}) carries an \emph{informal proof},
+  reproduced here in fully expanded form, together with bounded exhaustive
+  structural tests. Its universal formalization in a proof assistant is
+  \emph{open} (obligation PO-TKS8-CORE-05): the pinned Lean seed kernel-checks
+  only the exact two-state expansion of
+  Section~\ref{ch07:sec:counterexample}, not the general theorem.
+\item The corollaries (trace, rank, isometry) inherit the same status; they
+  are short consequences of the norm analysis and of the fiber decomposition.
+\item The permanent counterexample (ledger record
+  \textsc{thm-lift-occupation-counterexample}) is a finite, fully expanded
+  computation; the Lean seed kernel-checks this exact two-state expansion and
+  its noncontractivity.
+\item Functoriality (Theorem~\ref{ch07:thm:functor}, obligation
+  PO-TKS8-CORE-11) carries \emph{partial formal verification}: the Lean seed
+  kernel-checks the identity lift entrywise and on basis vectors, typed
+  composition on basis vectors, and relational-product support composition;
+  the finite-sum numerical matrix bridge and arbitrary-vector linearity
+  remain open.
+\item No stochastic, quantum-channel, contractivity, dynamical, or empirical
+  claim is made anywhere in this chapter; Section~\ref{ch07:sec:notclaims}
+  is devoted to stating these non-claims precisely.
+\end{itemize}
+
+This chapter, like the whole monograph, is a Ring~4 draft artifact: nothing
+here is peer-reviewed, nothing is licensed for semantic transfer onto
+canonical TKS/CAS constructs, and the drafting of the chapter promotes no
+claim beyond what the underlying Gate~1 sources already record.
+
+\section{Finite-dimensional preliminaries}\label{ch07:sec:prelim}
+
+We collect the small amount of linear algebra the chapter needs, in the exact
+form in which the proofs use it. Everything in this section is standard; the
+canonical reference for the spectral background is Horn and
+Johnson~\cite{horn}. We restate the facts with proofs where the proofs are
+short enough to keep the chapter self-contained, because the norm theorem
+below is a registered ledger item and we want its complete logical
+dependency chain visible on the page.
+
+\begin{notation}[Spaces and bases]\label{ch07:not:spaces}
+For a finite object $X$ with ordered carrier $(x_0,\dots,x_{|X|-1})$, let
+$H_X$ denote the complex inner-product space $\mathbb{C}^{|X|}$ with the
+standard Hermitian inner product
+$\langle u,v\rangle=\sum_{i} \overline{u_i}\,v_i$
+and with orthonormal basis $(e_{x_0},\dots,e_{x_{|X|-1}})$ indexed by the
+ordered carrier; $e_{x_i}$ is the $i$-th standard coordinate vector. The
+ordered-input discipline of Chapter 3 is what makes this
+indexing well defined: because the carrier is an explicitly ordered sequence,
+the correspondence between carrier elements and basis indices is a fixed,
+replayable bijection, not an artifact of interpreter hash order. When $X$ is
+empty, $H_X$ is the zero space.
+\end{notation}
+
+\begin{definition}[Adjoint]\label{ch07:def:adjoint}
+For a linear map $A:H_X\to H_Y$, the \emph{adjoint} $A^*:H_Y\to H_X$ is the
+unique linear map satisfying
+$\langle A^* w, u\rangle = \langle w, A u\rangle$
+for all $u\in H_X$, $w\in H_Y$. In matrix terms, $A^*$ is the conjugate
+transpose of $A$; for real (in particular $0/1$) matrices, the plain
+transpose.
+\end{definition}
+
+\begin{definition}[Operator norm]\label{ch07:def:opnorm}
+The \emph{operator norm} of $A:H_X\to H_Y$ is
+\[
+\lVert A\rVert
+=\sup\{\lVert A u\rVert : u\in H_X,\ \lVert u\rVert\le 1\}
+=\max\{\lVert A u\rVert : \lVert u\rVert = 1\}
+\]
+when $H_X$ is nonzero (the supremum is attained by compactness of the unit
+sphere in finite dimension), and $\lVert A\rVert=0$ when $H_X$ is the zero
+space. The second form is the one we use; the empty-domain convention matches
+the implementation, whose \texttt{max\_fiber\_size} takes
+\texttt{max(\ldots, default=0)}.
+\end{definition}
+
+\begin{lemma}[Norm via the Gram operator]\label{ch07:lem:gramreduction}
+For any linear $A:H_X\to H_Y$ with $H_X$ nonzero,
+$\lVert A\rVert^2=\lambda_{\max}(A^*A)$, the largest eigenvalue of the
+positive semidefinite Hermitian operator $A^*A$.
+\end{lemma}
+
+\begin{proof}
+For every unit vector $u$,
+$\lVert Au\rVert^2=\langle Au,Au\rangle=\langle A^*Au,u\rangle$, so
+$\lVert A\rVert^2=\max_{\lVert u\rVert=1}\langle A^*Au,u\rangle$. The
+operator $G=A^*A$ is Hermitian ($G^*=(A^*A)^*=A^*A=G$) and positive
+semidefinite ($\langle Gu,u\rangle=\lVert Au\rVert^2\ge 0$). By the spectral
+theorem for Hermitian matrices \cite{horn}, $H_X$ admits an orthonormal basis
+$(v_1,\dots,v_n)$ of eigenvectors of $G$ with real eigenvalues
+$\lambda_1\ge\dots\ge\lambda_n\ge 0$. Writing a unit vector as
+$u=\sum_k c_k v_k$ with $\sum_k |c_k|^2=1$,
+\[
+\langle Gu,u\rangle=\sum_k \lambda_k |c_k|^2
+\le \lambda_1 \sum_k |c_k|^2 = \lambda_1,
+\]
+with equality at $u=v_1$. Hence the maximum of the quadratic form on the unit
+sphere is exactly $\lambda_1=\lambda_{\max}(G)$.
+\end{proof}
+
+\begin{lemma}[Spectrum is a similarity invariant]\label{ch07:lem:similarity}
+If $P$ is a permutation matrix and $G$ any square matrix of matching size,
+then $PGP^{-1}$ has the same characteristic polynomial, hence the same
+eigenvalues with the same algebraic multiplicities, as $G$. Moreover, when
+$G$ is Hermitian, so is $PGP^{-1}$, because a real permutation matrix is
+unitary ($P^{-1}=P^{T}=P^{*}$).
+\end{lemma}
+
+\begin{proof}
+$\det(tI-PGP^{-1})=\det\bigl(P(tI-G)P^{-1}\bigr)
+=\det(P)\det(tI-G)\det(P^{-1})=\det(tI-G)$. For the Hermitian statement,
+$(PGP^{*})^{*}=PG^{*}P^{*}=PGP^{*}$.
+\end{proof}
+
+\begin{lemma}[Spectra of direct sums]\label{ch07:lem:directsum}
+If $G=\bigoplus_j G_j$ is block diagonal, the spectrum of $G$ is the
+multiset union of the spectra of the blocks $G_j$.
+\end{lemma}
+
+\begin{proof}
+The characteristic polynomial of a block-diagonal matrix factors as the
+product of the characteristic polynomials of the blocks:
+$\det(tI-G)=\prod_j\det(tI_j-G_j)$. Eigenvalues and algebraic multiplicities
+therefore add up across blocks.
+\end{proof}
+
+These three lemmas are the entire spectral toolkit the norm theorem needs.
+One further standard notion appears in the counterexample analysis:
+
+\begin{definition}[Projector, partial isometry]\label{ch07:def:projpi}
+A linear operator $Q$ on a Hilbert space is an \emph{orthogonal projector}
+when $Q^2=Q$ and $Q^*=Q$. A linear map $A:H_X\to H_Y$ is a \emph{partial
+isometry} when $A A^* A=A$; equivalently, when $A^*A$ is an orthogonal
+projector, equivalently when $A$ restricts to an isometry on the orthogonal
+complement of its kernel \cite{horn}. An \emph{isometry} is a map with
+$A^*A=I$, i.e.\ $\lVert Au\rVert=\lVert u\rVert$ for all $u$.
+\end{definition}
+
+Note the direction of the traps already visible here: idempotence ($Q^2=Q$)
+alone does \emph{not} make an orthogonal projector---self-adjointness is a
+separate condition---and having $0/1$ entries does not make a partial
+isometry. The counterexample of Section~\ref{ch07:sec:counterexample} lives
+exactly in this gap.
+
+\section{The lift: definition, matrix form, and running examples}\label{ch07:sec:lift}
+
+\subsection{Definition}
+
+\begin{definition}[Deterministic standard-basis lift]\label{ch07:def:lift}
+Let $f:X\to Y$ be an arrow of the typed finite-function category: a total map
+sending each standard index of the ordered carrier of $X$ to a standard index
+of the ordered carrier of $Y$. The \emph{deterministic standard-basis lift}
+of $f$ is the linear map
+\[
+A_f:H_X\longrightarrow H_Y,\qquad A_f e_x = e_{f(x)}
+\quad\text{for every carrier element } x \text{ of } X,
+\]
+extended to all of $H_X$ by linearity:
+$A_f\bigl(\textstyle\sum_x c_x e_x\bigr)=\sum_x c_x\, e_{f(x)}$.
+\end{definition}
+
+The definition is well posed for exactly the reasons the kernel's object
+discipline was designed to secure. Because $f$ is \emph{total}, every basis
+vector of $H_X$ has an image; because $f$ lands in the declared target's
+standard indices, that image is a basis vector of $H_Y$; because carriers are
+\emph{explicitly ordered}, the phrase ``the $i$-th basis vector'' has a fixed
+meaning independent of interpreter state; and because a linear map is
+determined by its values on a basis, $A_f$ is unique. Nothing else about $f$
+is used: in particular no injectivity, surjectivity, or endomorphism
+assumption. Every typed arrow lifts.
+
+\begin{proposition}[Matrix form]\label{ch07:prop:matrix}
+With respect to the standard bases, the matrix of $A_f$ is the
+$|Y|\times|X|$ matrix with entries
+\[
+(A_f)_{y x}=
+\begin{cases}
+1 & \text{if } f(x)=y,\\
+0 & \text{otherwise.}
+\end{cases}
+\]
+Each column contains exactly one $1$ (in the row indexed by the image of that
+column's carrier element) and each column therefore sums to $1$. Conversely,
+every $|Y|\times|X|$ matrix of $0$s and $1$s with exactly one $1$ per column
+is the lift matrix of exactly one arrow $f:X\to Y$.
+\end{proposition}
+
+\begin{proof}
+Column $x$ of the matrix of $A_f$ is the coordinate vector of $A_f e_x =
+e_{f(x)}$, which has a single $1$ in row $f(x)$. For the converse, given such
+a matrix $M$, define $f(x)$ to be the unique row index with $M_{f(x),x}=1$;
+this reads off a total map, and its lift matrix is $M$ by the first part. The
+correspondence $f\mapsto A_f$ is therefore a bijection between arrows
+$X\to Y$ and one-$1$-per-column $0/1$ matrices of shape $|Y|\times|X|$; in
+particular the lift is \emph{faithful}: distinct arrows with the same source
+and target have distinct lifts.
+\end{proof}
+
+The implementation realizes Definition~\ref{ch07:def:lift} as the frozen
+dataclass \texttt{DeterministicLift} wrapping a \texttt{FiniteArrow}; its
+method \texttt{matrix()} returns the tuple-of-tuples integer matrix of
+Proposition~\ref{ch07:prop:matrix}, its method \texttt{apply(vector)}
+computes $A_f$ on an explicit ordered coordinate sequence by accumulating
+$c_x$ into output slot $f(x)$, and \texttt{adjoint\_apply(vector)} computes
+$A_f^*$ on target coordinates by reading coordinate $f(x)$ back into slot
+$x$. Both methods enforce the ordered-input discipline: a set, mapping,
+string, or one-shot iterable in coordinate position raises
+\texttt{ValidationError}, for the same reason carriers do---coordinate order
+is basis order, and basis order is meaning.
+
+\begin{remark}[The adjoint as pullback]\label{ch07:rem:adjointpullback}
+The formula implemented by \texttt{adjoint\_apply} deserves a second look,
+because it identifies the adjoint with something combinatorially natural.
+On basis vectors,
+\[
+A_f^* e_y=\sum_{x\,:\,f(x)=y} e_x ,
+\]
+the indicator sum of the fiber $f^{-1}(y)$. Indeed
+$\langle A_f^* e_y, e_x\rangle = \langle e_y, A_f e_x\rangle
+=\langle e_y, e_{f(x)}\rangle$, which is $1$ iff $f(x)=y$. On general
+coordinates, $(A_f^* w)_x = w_{f(x)}$: the adjoint is precomposition with
+$f$, i.e.\ the \emph{pullback} of coordinate functions, while $A_f$ itself is
+the \emph{pushforward} of coordinates. The pushforward merges coordinates
+that share a fiber (adding them); the pullback duplicates a coordinate across
+its fiber. All four derived operators of Section~\ref{ch07:sec:derived} are
+compositions of one merge and one duplication in the two possible orders.
+\end{remark}
+
+\begin{example}[Coordinates through the lift, numerically]\label{ch07:ex:coords}
+To fix the mechanics of \texttt{apply} and \texttt{adjoint\_apply}, push one
+concrete vector each way through the arrow $f:X_4\to Y_3$ of the running
+quartet below ($f(p)=f(q)=a$, $f(r)=f(s)=b$). Take source coordinates
+$(2,\,3,\,5,\,7)$ in carrier order $(p,q,r,s)$. Then
+\[
+A_f(2,3,5,7)^{T}=(2+3,\ 5+7,\ 0)^{T}=(5,12,0)^{T}:
+\]
+the coordinates of $p$ and $q$ \emph{merge additively} into slot $a$, those
+of $r$ and $s$ into slot $b$, and slot $c$ --- an empty fiber --- receives
+nothing. In the other direction, take target coordinates $(10,20,30)$ in
+carrier order $(a,b,c)$. Then
+\[
+A_f^{*}(10,20,30)^{T}=(10,\,10,\,20,\,20)^{T}:
+\]
+each source slot \emph{reads back} the coordinate of its image, so the value
+at $a$ is duplicated across the fiber $\{p,q\}$ and the value at $c$ is
+simply never consulted. Merge-by-addition and duplicate-by-fiber are the two
+primitive motions; every operator in this chapter is a composite of them,
+and every collision cost the norm theorem quantifies is visible already in
+the first computation, where the input mass $2+3$ arrived at $a$
+constructively. (Replacing $(2,3)$ by $(1,1)/\sqrt2$ exhibits the extremal
+vector of the norm theorem for this fiber.)
+\end{example}
+
+\subsection{Running examples}\label{ch07:sec:running}
+
+Four arrows accompany us through the whole chapter. They are chosen to
+exhaust the qualitative possibilities: non-injective and non-surjective,
+injective and non-surjective, bijective, and maximally collapsing.
+
+\begin{example}[The running quartet]\label{ch07:ex:quartet}
+Fix three objects with the indicated ordered carriers:
+\[
+X_4=(\texttt{State4},\ (p,q,r,s)),\qquad
+X_2=(\texttt{Pair},\ (u,v)),\qquad
+Y_3=(\texttt{Obs3},\ (a,b,c)).
+\]
+Define four arrows:
+\begin{itemize}
+\item[(R1)] $f:X_4\to Y_3$ with $f(p)=a$, $f(q)=a$, $f(r)=b$, $f(s)=b$.
+  Fibers: $f^{-1}(a)=\{p,q\}$, $f^{-1}(b)=\{r,s\}$, $f^{-1}(c)=\emptyset$.
+  Neither injective nor surjective.
+\item[(R2)] $g:X_2\to Y_3$ with $g(u)=c$, $g(v)=a$. Injective, not
+  surjective.
+\item[(R3)] $\pi:X_3\to X_3$ on a three-element object
+  $X_3=(\texttt{Cycle3},(0,1,2))$ with $\pi(0)=1$, $\pi(1)=2$, $\pi(2)=0$.
+  Bijective (a $3$-cycle).
+\item[(R4)] $c_0:X_2'\to X_2'$ the constant map on a two-element object
+  $X_2'=(\texttt{Bit},(0,1))$ with $c_0(0)=c_0(1)=0$. Maximally collapsing;
+  this is the permanent counterexample of
+  Section~\ref{ch07:sec:counterexample}.
+\end{itemize}
+Their lift matrices, rows indexed by target carrier order and columns by
+source carrier order, are
+\[
+A_f=\begin{pmatrix}1&1&0&0\\0&0&1&1\\0&0&0&0\end{pmatrix},\qquad
+A_g=\begin{pmatrix}0&1\\0&0\\1&0\end{pmatrix},\qquad
+A_\pi=\begin{pmatrix}0&0&1\\1&0&0\\0&1&0\end{pmatrix},\qquad
+A_{c_0}=\begin{pmatrix}1&1\\0&0\end{pmatrix}.
+\]
+Each matrix has exactly one $1$ per column; the reader should check one entry
+of each against the defining rule $(A)_{yx}=1$ iff the arrow sends $x$ to
+$y$. Note how the empty fiber of $f$ at $c$ appears as an all-zero \emph{row}
+(rows are free to be zero; columns are not), and how the bijectivity of
+$\pi$ appears as ``exactly one $1$ per row'' \emph{in addition to} one per
+column---i.e.\ a permutation matrix.
+\end{example}
+
+\begin{remark}[What the lift forgets and what it keeps]\label{ch07:rem:forget}
+The lift keeps everything: by
+Proposition~\ref{ch07:prop:matrix} it is a bijection onto its matrix class,
+so $f$ is recoverable from $A_f$ by reading each column. What changes is the
+\emph{ambient theory}. As a function, $f$ supports composition, powers (if
+endo), and fiber counting. As a matrix, $A_f$ additionally supports addition,
+scalar action, adjoints, spectra, and norms---structure that has no preimage
+in the category of functions. The lift is thus an embedding of a small
+combinatorial world into a larger linear one, and every use the kernel makes
+of it takes the form: compute a linear invariant, then translate the answer
+back into fiber combinatorics. The norm theorem below is the paradigm case.
+\end{remark}
+
+\subsection{Degenerate shapes: empty carriers}\label{ch07:sec:degenerate}
+
+The kernel admits empty carriers, and the lift theory must therefore say
+something coherent about them rather than excluding them by fiat; the
+executable evidence deliberately includes empty carriers in its
+$1{,}678$ functor-law pairs, so the conventions here are load-bearing.
+
+\emph{Empty source, nonempty target.} If $|X|=0$ there is exactly one arrow
+$f:X\to Y$ for each $Y$ (the empty map: totality quantifies over an empty
+carrier and is vacuously satisfied). Its lift is the unique linear map from
+the zero space to $H_Y$, namely the zero map; its matrix has shape
+$|Y|\times 0$ --- $|Y|$ rows and no columns --- and the
+one-$1$-per-column rule is vacuously true. Every fiber is empty, the fiber
+maximum is $0$ under the stated convention, and
+$\lVert A_f\rVert=0$ consistently with Definition~\ref{ch07:def:opnorm}.
+The input Gram is the $0\times 0$ matrix; the output Gram and the support
+projector are the $|Y|\times|Y|$ zero matrix; the trace-Gram is
+$0=|X|$; the rank is $0=|\im f|$. Every corollary of this chapter holds
+degenerately, which is exactly why the convention was chosen as it was.
+
+\emph{Empty target.} An arrow into an empty object exists only when the
+source is also empty: a total map must send each of the $|X|$ carrier
+elements somewhere, and there is nowhere. The typed constructor enforces
+this (there is no index to map to), so the case $|Y|=0<|X|$ simply does not
+arise, and no convention is needed for it. The one arrow
+$\emptyset\to\emptyset$ lifts to the identity of the zero space, which is
+simultaneously the zero map --- the unique point where those two agree.
+
+\emph{Is the empty-source lift injective?} The implementation answers yes:
+\texttt{is\_injective} checks that all fiber sizes are at most $1$, which
+holds vacuously, and correspondingly \texttt{is\_isometry} reports true.
+This is the mathematically standard reading (the empty map is injective; a
+zero-space map preserves all norms there are), but it produces the one
+place where a slogan of this chapter needs a footnote: ``isometries have
+norm $1$'' holds only for nonempty sources, since the empty lift is an
+isometry of norm $0$. Corollary~\ref{ch07:cor:isometry} is stated with the
+nonemptiness hypothesis for precisely this reason. Degenerate cases do not
+threaten theorems; unexamined degenerate cases threaten slogans.
+
+\section{Three derived operators, kept distinct}\label{ch07:sec:derived}
+
+From $A_f$ the implementation derives three operators. Informal usage tends
+to conflate them---all three are ``the projection-like thing associated to
+$f$''---and part of the kernel's discipline is to keep them apart as three
+distinct methods with three distinct semantics. We define each, compute all
+of them on the running examples, and record exactly when any two coincide.
+
+\subsection{The input-collision Gram matrix}
+
+\begin{definition}[Input Gram]\label{ch07:def:inputgram}
+The \emph{input-collision Gram matrix} of $f$ is
+$G_f = A_f^* A_f : H_X\to H_X$.
+\end{definition}
+
+\begin{proposition}[Gram entries]\label{ch07:prop:gramentries}
+$(G_f)_{x x'} = 1$ if $f(x)=f(x')$ and $0$ otherwise. In particular every
+diagonal entry is $1$, and $G_f$ is the block-indicator matrix of the
+partition of the source carrier into fibers of $f$.
+\end{proposition}
+
+\begin{proof}
+$(G_f)_{xx'}=\langle e_x, A_f^*A_f e_{x'}\rangle
+=\langle A_f e_x, A_f e_{x'}\rangle
+=\langle e_{f(x)}, e_{f(x')}\rangle$,
+which is $1$ iff $f(x)=f(x')$ by orthonormality of the target basis.
+Diagonal entries take $x=x'$. The relation ``$f(x)=f(x')$'' is an
+equivalence relation on the source carrier whose classes are exactly the
+nonempty fibers, so $G_f$ is the $0/1$ indicator of that partition.
+\end{proof}
+
+The name is chosen with care: $G_f$ records \emph{input collisions}. It is an
+operator on the \emph{source} space, it sees only which inputs are merged,
+and it is insensitive to which target element they are merged into and to
+whether other target elements are hit at all. The implementation method is
+\texttt{input\_gram\_matrix()}.
+
+\begin{example}[Input Grams of the quartet]\label{ch07:ex:gramquartet}
+\[
+G_f=\begin{pmatrix}1&1&0&0\\1&1&0&0\\0&0&1&1\\0&0&1&1\end{pmatrix},\qquad
+G_g=\begin{pmatrix}1&0\\0&1\end{pmatrix},\qquad
+G_\pi=\begin{pmatrix}1&0&0\\0&1&0\\0&0&1\end{pmatrix},\qquad
+G_{c_0}=\begin{pmatrix}1&1\\1&1\end{pmatrix}.
+\]
+For $f$, the two $2\times 2$ all-ones blocks are the fibers $\{p,q\}$ and
+$\{r,s\}$; the carrier order happens to list each fiber contiguously, so the
+block structure is visible without reordering (in general it is not; the
+norm proof below handles the general case by an explicit permutation). For
+injective $g$ and bijective $\pi$ the Gram is the identity: no collisions.
+For the constant map the Gram is the all-ones matrix $J_2$: total collision.
+\end{example}
+
+\subsection{The output Gram: fiber sizes on the diagonal}
+
+\begin{definition}[Output Gram]\label{ch07:def:outputgram}
+The \emph{output Gram matrix} of $f$ is
+$\widehat{G}_f = A_f A_f^* : H_Y\to H_Y$.
+\end{definition}
+
+\begin{proposition}[Output Gram entries]\label{ch07:prop:outputgram}
+$\widehat{G}_f$ is diagonal, with
+$(\widehat{G}_f)_{yy}=|f^{-1}(y)|$, the size of the fiber over $y$.
+\end{proposition}
+
+\begin{proof}
+$(\widehat{G}_f)_{y y'}=\langle e_y, A_fA_f^* e_{y'}\rangle
+=\langle A_f^* e_y, A_f^* e_{y'}\rangle$. By
+Remark~\ref{ch07:rem:adjointpullback}, $A_f^*e_y$ is the indicator vector of
+the fiber $f^{-1}(y)$. Two distinct fibers are disjoint, so their indicator
+vectors are orthogonal, giving $0$ off the diagonal; and the inner product of
+a fiber indicator with itself is the fiber's cardinality.
+\end{proof}
+
+So $\widehat{G}_f$ lives on the \emph{target} space and counts \emph{how
+many} inputs land on each output. Its diagonal is exactly the tuple computed
+by the implementation property \texttt{fiber\_sizes} (an integer tuple of
+length $|Y|$, obtained by a single counting pass over the mapping), and the
+method \texttt{output\_gram\_matrix()} places those counts on a diagonal.
+
+\begin{example}[Output Grams of the quartet]\label{ch07:ex:outputquartet}
+\[
+\widehat{G}_f=\begin{pmatrix}2&0&0\\0&2&0\\0&0&0\end{pmatrix},\qquad
+\widehat{G}_g=\begin{pmatrix}1&0&0\\0&0&0\\0&0&1\end{pmatrix},\qquad
+\widehat{G}_\pi=I_3,\qquad
+\widehat{G}_{c_0}=\begin{pmatrix}2&0\\0&0\end{pmatrix}.
+\]
+The diagonals read off the fiber-size tuples $(2,2,0)$, $(1,0,1)$,
+$(1,1,1)$, and $(2,0)$ respectively.
+\end{example}
+
+\subsection{The codomain support projector}
+
+\begin{definition}[Support projector]\label{ch07:def:support}
+The \emph{codomain support projector} of $f$ is the diagonal $0/1$ matrix
+$S_f:H_Y\to H_Y$ with
+$(S_f)_{yy}=1$ if $f^{-1}(y)\neq\emptyset$ and $0$ otherwise.
+\end{definition}
+
+\begin{proposition}\label{ch07:prop:supportisproj}
+$S_f$ is an orthogonal projector, and its range is
+$\im A_f=\operatorname{span}\{e_y : y\in\im f\}$.
+\end{proposition}
+
+\begin{proof}
+A real diagonal matrix is self-adjoint, and a diagonal $0/1$ matrix squares
+to itself, so $S_f$ is an orthogonal projector. Its range is spanned by the
+basis vectors at which its diagonal is $1$, i.e.\ $\{e_y: y\in\im f\}$. The
+columns of $A_f$ are exactly the vectors $e_{f(x)}$, so $\im A_f$ is the span
+of $\{e_y : y \in \im f\}$ as well.
+\end{proof}
+
+The implementation method is \texttt{output\_support\_projector()}, computed
+by thresholding the fiber-size tuple at zero. Its docstring calls it ``the
+orthogonal projector onto $\im(A_f)$ in the codomain,'' which
+Proposition~\ref{ch07:prop:supportisproj} verifies.
+
+\begin{example}[Support projectors of the quartet]\label{ch07:ex:supportquartet}
+\[
+S_f=\begin{pmatrix}1&0&0\\0&1&0\\0&0&0\end{pmatrix},\qquad
+S_g=\begin{pmatrix}1&0&0\\0&0&0\\0&0&1\end{pmatrix},\qquad
+S_\pi=I_3,\qquad
+S_{c_0}=\begin{pmatrix}1&0\\0&0\end{pmatrix}.
+\]
+\end{example}
+
+\subsection{When the operators coincide, and why the distinction is load-bearing}
+
+Comparing Examples~\ref{ch07:ex:outputquartet}
+and~\ref{ch07:ex:supportquartet}: for $g$ and $\pi$ the output Gram and the
+support projector are \emph{equal}; for $f$ and $c_0$ they differ (the
+former has a $2$ where the latter has a $1$). This is the general pattern:
+
+\begin{proposition}[Coincidence criterion]\label{ch07:prop:coincide}
+$\widehat{G}_f=S_f$ if and only if every fiber of $f$ has size at most $1$,
+i.e.\ iff $f$ is injective. Likewise $G_f=I_{H_X}$ iff $f$ is injective, and
+$G_f$ is an orthogonal projector iff its all-ones fiber blocks all have size
+$1$, again iff $f$ is injective. For non-injective $f$, all three derived
+operators are pairwise distinct objects: $G_f$ is generally non-diagonal;
+$\widehat{G}_f$ is diagonal but not $0/1$; $S_f$ is diagonal and $0/1$.
+\end{proposition}
+
+\begin{proof}
+$\widehat{G}_f$ and $S_f$ are both diagonal; they agree exactly when
+$|f^{-1}(y)|=\mathbf{1}[f^{-1}(y)\neq\emptyset]$ for every $y$, i.e.\ when no
+fiber has two or more elements. $G_f=I$ iff there are no off-diagonal
+collisions, i.e.\ no two distinct inputs share a fiber. For the projector
+claim about $G_f$: $G_f$ is always self-adjoint (Proposition
+\ref{ch07:prop:gramentries} makes it a real symmetric matrix), and by the
+block description $G_f^2$ has $(x,x')$ entry equal to the size of the common
+fiber when $f(x)=f(x')$ and $0$ otherwise (this is a special case of the
+computation $J_m^2=mJ_m$ proved in Lemma~\ref{ch07:lem:allones} below); so
+$G_f^2=G_f$ iff every nonempty fiber has size $1$.
+\end{proof}
+
+\begin{boundary}[Why three methods, not one]\label{ch07:bd:threemethods}
+The conflation risk is concrete. In informal operator talk, all three of
+$G_f$, $\widehat{G}_f$, $S_f$ get called ``the projector associated with
+$f$,'' and for injective $f$ the talk is harmless because
+$G_f=I$ and $\widehat{G}_f=S_f$. The moment a single collision appears, the
+three objects diverge, only $S_f$ remains a projector, and any argument that
+silently substitutes one for another acquires a factor equal to a fiber size
+--- which is precisely the quantity the norm theorem says governs the
+operator norm. The implementation therefore exposes them as three separately
+named methods (\texttt{input\_gram\_matrix}, \texttt{output\_gram\_matrix},
+\texttt{output\_support\_projector}) and the test suite pins each to its own
+closed form. No claim of interchangeability is made or licensed anywhere in
+the kernel.
+\end{boundary}
+
+\section{The exact norm theorem}\label{ch07:sec:norm}
+
+We now prove the chapter's central result. Ledger status, restated for
+discipline: \textsc{thm-lift-norm-fiber-formula}; informal proof present
+(this section \emph{is} that proof, fully expanded); bounded exhaustive
+structural tests in the executable suite; universal formalization
+\emph{open} --- the pinned Lean seed kernel-checks only the two-state
+expansion of Section~\ref{ch07:sec:counterexample}, not this theorem.
+
+\begin{theorem}[Exact operator norm of a deterministic lift]\label{ch07:thm:norm}
+Let $f:X\to Y$ be a typed arrow with $X$ nonempty. Then
+\[
+\lVert A_f\rVert^2=\max_{y\in Y}\bigl|f^{-1}(y)\bigr|,
+\qquad\text{hence}\qquad
+\lVert A_f\rVert=\sqrt{\max_{y\in Y}\bigl|f^{-1}(y)\bigr|}.
+\]
+For empty $X$ the norm is $0$ by the convention of
+Definition~\ref{ch07:def:opnorm}, matching the formula if the empty maximum
+is read as $0$.
+\end{theorem}
+
+The proof proceeds in four steps, each isolated as a lemma so that its
+logical role is visible: (1) reduce the norm to the spectrum of the input
+Gram; (2) reorder the source basis by a permutation similarity that groups
+fibers into contiguous blocks; (3) analyze the all-ones block $J_m$ from
+scratch; (4) assemble the spectrum and take the maximum.
+
+\subsection{Step 1: reduction to the Gram spectrum}
+
+By Lemma~\ref{ch07:lem:gramreduction},
+$\lVert A_f\rVert^2=\lambda_{\max}(G_f)$ where $G_f=A_f^*A_f$ is the
+input-collision Gram matrix, whose entries
+Proposition~\ref{ch07:prop:gramentries} computed exactly:
+$(G_f)_{xx'}=\mathbf{1}[f(x)=f(x')]$. The problem is now purely spectral:
+find the largest eigenvalue of the $0/1$ indicator matrix of the fiber
+partition.
+
+\subsection{Step 2: permutation similarity groups the fibers}
+
+\begin{lemma}[Fiber-block form]\label{ch07:lem:fiberblock}
+Let the nonempty fibers of $f$ have sizes $m_1,\dots,m_r$ (so
+$r=|\im f|$ and $m_1+\dots+m_r=|X|$). There is a permutation matrix $P$ on
+$H_X$ such that
+\[
+P\,G_f\,P^{*}=J_{m_1}\oplus J_{m_2}\oplus\cdots\oplus J_{m_r},
+\]
+a block-diagonal direct sum of all-ones blocks, where $J_m$ denotes the
+$m\times m$ matrix every entry of which is $1$.
+\end{lemma}
+
+\begin{proof}
+Choose any enumeration of the source carrier that lists the elements of the
+first nonempty fiber first (in any order), then the second fiber, and so on;
+formally, a bijection $\sigma$ from $\{0,\dots,|X|-1\}$ to itself such that
+the $\sigma$-preimages of each fiber form a contiguous interval of indices.
+Let $P$ be the permutation matrix of $\sigma$, i.e.\ $Pe_{x_i}=e_{x_{\sigma(i)}}$
+reindexed appropriately; $P$ is real orthogonal, so $P^{*}=P^{-1}$. The
+$(i,j)$ entry of $P G_f P^{*}$ is the $(\sigma^{-1}(i),\sigma^{-1}(j))$ entry
+of $G_f$, which is $1$ iff the carrier elements at positions
+$\sigma^{-1}(i)$ and $\sigma^{-1}(j)$ share a fiber. Under the chosen
+enumeration, positions share a fiber iff they lie in the same contiguous
+interval. Hence the conjugated matrix is $1$ exactly on the $r$ diagonal
+square blocks whose sizes are the fiber sizes, and $0$ elsewhere: the stated
+direct sum.
+\end{proof}
+
+By Lemma~\ref{ch07:lem:similarity}, this conjugation changes neither the
+eigenvalues nor their multiplicities, so we may compute the spectrum of the
+direct sum instead of the spectrum of $G_f$.
+
+It is worth pausing on why an explicit permutation is needed at all, when
+Example~\ref{ch07:ex:gramquartet} already displayed a block-diagonal Gram.
+There, the declared carrier order happened to list each fiber contiguously.
+The kernel guarantees no such thing in general: carrier order is declared by
+the caller for identity and replay reasons (Chapter 3), not
+for the convenience of any particular arrow, and a single object is typically
+the source of many arrows whose fiber partitions are mutually incompatible
+with any one ordering. The permutation-similarity step is the precise
+bookkeeping that makes the ``group the fibers'' intuition into an argument
+valid for every arrow simultaneously, at the cost of one application of
+Lemma~\ref{ch07:lem:similarity}.
+
+\subsection{Step 3: the all-ones block, from scratch}
+
+\begin{lemma}[Spectral analysis of $J_m$]\label{ch07:lem:allones}
+For $m\ge 1$, the $m\times m$ all-ones matrix $J_m$ satisfies:
+\begin{enumerate}
+\item $J_m=\mathbf{1}\mathbf{1}^{*}$ where $\mathbf{1}=(1,\dots,1)^{T}$;
+  consequently $\rk J_m=1$.
+\item $J_m^2=mJ_m$.
+\item The spectrum of $J_m$ is: eigenvalue $m$ with multiplicity $1$
+  (eigenvector $\mathbf{1}$), and eigenvalue $0$ with multiplicity $m-1$
+  (eigenspace the hyperplane $\{v:\sum_i v_i=0\}$).
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(1) The outer product $\mathbf{1}\mathbf{1}^{*}$ has $(i,j)$ entry
+$1\cdot\overline{1}=1$, which is $J_m$. Every column of $J_m$ equals
+$\mathbf{1}$, so the column space is the line spanned by $\mathbf{1}$ and the
+rank is exactly $1$ (it is not $0$ since $J_m\neq 0$ for $m\geq 1$).
+
+(2) Using (1) and associativity,
+$J_m^2=\mathbf{1}(\mathbf{1}^{*}\mathbf{1})\mathbf{1}^{*}
+=\mathbf{1}\,(m)\,\mathbf{1}^{*}=mJ_m$,
+since $\mathbf{1}^{*}\mathbf{1}=\sum_{i=1}^m 1=m$. (Entrywise, the $(i,j)$
+entry of $J_m^2$ is $\sum_{k=1}^m 1\cdot 1=m$.)
+
+(3) First, $J_m\mathbf{1}$ has every entry $\sum_j 1=m$, so
+$J_m\mathbf{1}=m\mathbf{1}$: the all-ones vector is an eigenvector with
+eigenvalue $m$. Second, if $\sum_i v_i=0$ then every entry of $J_m v$ is
+$\sum_i v_i=0$, so the sum-zero hyperplane, which has dimension $m-1$, lies
+in the kernel: eigenvalue $0$ with geometric multiplicity at least $m-1$.
+These two eigenspaces are orthogonal
+($\langle\mathbf{1},v\rangle=\sum_i \overline{1}\, v_i=0$ for sum-zero $v$)
+and their dimensions add to $m$, so together they exhaust $\mathbb{C}^m$;
+since $J_m$ is Hermitian, algebraic and geometric multiplicities agree, and
+the spectrum is exactly $\{m\}\cup\{0\text{ with multiplicity } m-1\}$.
+Alternatively and purely algebraically: by (2), every eigenvalue $\lambda$
+satisfies $\lambda^2=m\lambda$, so $\lambda\in\{0,m\}$; the trace of $J_m$ is
+$m$, and the trace is the eigenvalue sum, so $m$ occurs exactly once and $0$
+fills the remaining $m-1$ slots.
+\end{proof}
+
+Note the two independent routes to the multiplicity count in part (3): the
+geometric route (explicit eigenvectors, orthogonal complement) and the
+algebraic route (minimal-polynomial constraint from $J_m^2=mJ_m$ plus a trace
+count). The redundancy is intentional. The lemma is the computational heart
+of a registered ledger theorem, and the monograph's policy for such
+load-bearing steps is to give two proofs whenever two short proofs exist.
+
+\subsection{Step 4: assembling the spectrum}
+
+\begin{proof}[Proof of Theorem~\textup{\ref{ch07:thm:norm}}]
+Let the nonempty fibers of $f$ have sizes $m_1,\dots,m_r$. By
+Lemma~\ref{ch07:lem:gramreduction},
+$\lVert A_f\rVert^2=\lambda_{\max}(G_f)$. By
+Lemma~\ref{ch07:lem:fiberblock} and Lemma~\ref{ch07:lem:similarity}, $G_f$
+has the same spectrum as $J_{m_1}\oplus\cdots\oplus J_{m_r}$. By
+Lemma~\ref{ch07:lem:directsum} and Lemma~\ref{ch07:lem:allones}, that
+spectrum is the multiset
+\[
+\{\,m_1,\dots,m_r\,\}\ \cup\ \{\,0 \text{ with multiplicity }
+\textstyle\sum_{j=1}^{r}(m_j-1)=|X|-r\,\}.
+\]
+Its maximum is $\max_j m_j=\max_{y\in Y}|f^{-1}(y)|$ (empty fibers contribute
+$0$ to the maximum on the right and nothing to the block decomposition, so
+including them changes nothing when some fiber is nonempty, which holds
+because $X$ is nonempty and $f$ total). Hence
+$\lVert A_f\rVert^2=\max_y|f^{-1}(y)|$, and taking square roots gives the
+norm itself. The empty-domain case: $H_X$ is the zero space, every $A_f u$
+with $u$ in the zero space is $0$, $\lVert A_f\rVert=0$ by convention, and
+the fiber maximum over an empty source is $0$ under the stated reading.
+\end{proof}
+
+\begin{remark}[Full singular-value data]\label{ch07:rem:singular}
+The proof delivers more than the norm: the complete singular-value multiset
+of $A_f$ is $\{\sqrt{m_1},\dots,\sqrt{m_r}\}$ together with $|X|-r$ zeros,
+since the singular values are the square roots of the Gram eigenvalues
+\cite{horn}. Every spectral invariant of $A_f$ that depends only on singular
+values is therefore an exact function of the fiber-size multiset. This is an
+expository consequence of the proof, not a separately registered ledger
+item; we state it because it explains \emph{why} the implementation exposes
+\texttt{fiber\_sizes} as the primitive property from which
+\texttt{max\_fiber\_size}, \texttt{operator\_norm\_squared}, \texttt{rank},
+and the injectivity tests are all derived: the fiber-size tuple \emph{is}
+the spectral data.
+\end{remark}
+
+\begin{example}[The theorem on the quartet]\label{ch07:ex:normquartet}
+For $f$ (fibers $2,2,0$): $\lVert A_f\rVert^2=2$, Gram spectrum
+$\{2,2,0,0\}$ --- and indeed $G_f$ in Example~\ref{ch07:ex:gramquartet} is
+$J_2\oplus J_2$ already in block form, each block contributing eigenvalues
+$\{2,0\}$. For $g$ (fibers $1,0,1$): $\lVert A_g\rVert^2=1$; $G_g=I_2$ with
+spectrum $\{1,1\}$; $g$ is an isometry, as
+Corollary~\ref{ch07:cor:isometry} will confirm from injectivity. For $\pi$:
+$\lVert A_\pi\rVert^2=1$; permutation matrices are unitary. For $c_0$
+(fibers $2,0$): $\lVert A_{c_0}\rVert^2=2$, so
+$\lVert A_{c_0}\rVert=\sqrt{2}>1$ --- the noncontractivity that
+Section~\ref{ch07:sec:counterexample} turns into a permanent fixture.
+\end{example}
+
+\subsection{A second proof, avoiding the spectral theorem}\label{ch07:sec:secondproof}
+
+The block-Gram proof above is the registered one, and its route through the
+spectral machinery is what makes the corollaries fall out for free. But the
+norm theorem itself admits a shorter, wholly elementary proof --- two
+inequalities, one application of Cauchy--Schwarz, one witness vector ---
+and recording it serves two purposes: it double-derives a load-bearing
+result, and it identifies the natural candidate route for the open Lean
+formalization, since it needs neither eigenvalues, nor permutation
+similarity, nor direct sums.
+
+\begin{proof}[Second proof of Theorem~\textup{\ref{ch07:thm:norm}}]
+Write $M=\max_{y}|f^{-1}(y)|$ and let $u=\sum_x c_xe_x$ be arbitrary.
+Grouping the image coordinates by fiber,
+\[
+\lVert A_fu\rVert^2
+=\sum_{y\in Y}\Bigl|\sum_{x\in f^{-1}(y)}c_x\Bigr|^2 .
+\]
+For each $y$ with fiber size $m_y$, Cauchy--Schwarz applied to the
+$m_y$-term sum against the all-ones weight gives
+$\bigl|\sum_{x\in f^{-1}(y)}c_x\bigr|^2
+\le m_y\sum_{x\in f^{-1}(y)}|c_x|^2$.
+Summing over $y$ and using $m_y\le M$ together with the disjointness of
+fibers,
+\[
+\lVert A_fu\rVert^2
+\le \sum_y m_y\!\!\sum_{x\in f^{-1}(y)}\!\!|c_x|^2
+\le M\sum_{x}|c_x|^2 = M\,\lVert u\rVert^2 ,
+\]
+so $\lVert A_f\rVert^2\le M$. For the reverse inequality, pick $y^\ast$
+with $|f^{-1}(y^\ast)|=M$ (possible since $X$ is nonempty and $f$ total)
+and let $u^\ast=\tfrac{1}{\sqrt M}\sum_{x\in f^{-1}(y^\ast)}e_x$, a unit
+vector. Then $A_fu^\ast=\tfrac{M}{\sqrt M}e_{y^\ast}=\sqrt M\,e_{y^\ast}$,
+of norm $\sqrt M$. Hence $\lVert A_f\rVert^2\ge M$, and equality holds.
+\end{proof}
+
+Note where the equality conditions live: Cauchy--Schwarz is tight exactly
+on constant coefficient patterns within a fiber, which is why the extremal
+vector is the uniform fiber indicator --- the same vector the spectral
+proof produces as the top eigenvector. The two proofs are not merely
+consistent; they locate the same extremal geometry by different means. A
+third, weaker route deserves a warning label: bounding
+$\lambda_{\max}(G_f)$ by the maximum row sum of $G_f$ (a Gershgorin-type
+bound) also yields $\le M$, since each row of $G_f$ contains exactly
+$m_{f(x)}$ ones --- but a row-sum bound alone proves only the upper half,
+and quoting it as the theorem silently drops the attainment argument. The
+counterexample culture of this kernel applies to proofs too: half a proof
+with a confident name attached is how false lemmas enter ledgers.
+
+\begin{example}[The spectral decomposition, made explicit]\label{ch07:ex:eigenvectors}
+For the running arrow $f$ it is worth writing the eigenvectors down rather
+than merely counting them, because they carry the fiber combinatorics on
+their sleeves. The Gram $G_f=J_2\oplus J_2$ (blocks on $\{p,q\}$ and
+$\{r,s\}$) has the orthogonal eigenbasis
+\[
+v_1=\tfrac{1}{\sqrt2}(1,1,0,0)^T,\quad
+v_2=\tfrac{1}{\sqrt2}(0,0,1,1)^T,\quad
+v_3=\tfrac{1}{\sqrt2}(1,-1,0,0)^T,\quad
+v_4=\tfrac{1}{\sqrt2}(0,0,1,-1)^T,
+\]
+with $G_fv_1=2v_1$, $G_fv_2=2v_2$, $G_fv_3=0$, $G_fv_4=0$. The
+eigenvalue-$2$ vectors are the \emph{normalized fiber indicators}: uniform
+mass across a fiber is what the pushforward amplifies maximally
+($A_fv_1=\tfrac{1}{\sqrt2}(e_a+e_a)=\tfrac{2}{\sqrt2}\,e_a
+=\sqrt{2}\,e_a$, of norm $\sqrt2$). The
+kernel vectors are the \emph{within-fiber differences}: mass patterns that
+cancel under merging ($A_fv_3=\tfrac{1}{\sqrt2}(e_a-e_a)=0$). The
+$|X|-r=2$ dimensions of cancellation are exactly the information the
+non-injective $f$ destroys, and the singular values $\sqrt2,\sqrt2$ on the
+surviving directions are exactly the amplification the norm theorem
+reports. Nothing about this picture is specific to $f$: for any arrow, the
+normalized indicator of each nonempty fiber is a singular vector with
+singular value the square root of the fiber size, and the orthogonal
+complement inside each fiber block is killed.
+\end{example}
+
+The implementation computes \texttt{operator\_norm\_squared} as
+\texttt{max\_fiber\_size} --- an exact integer, no linear algebra performed
+at runtime --- and this identification is \emph{justified} by
+Theorem~\ref{ch07:thm:norm}; the executable suite's structural tests check
+the integer pipeline (fibers, maximum, squared norm) and cross-check derived
+quantities on bounded exhaustive families, but the identification of
+``maximum fiber size'' with ``operator norm squared'' rests on the informal
+proof above until the open universal formalization closes it.
+
+\section{Corollaries with proofs}\label{ch07:sec:corollaries}
+
+Three consequences are implemented as first-class properties of
+\texttt{DeterministicLift} and registered as implemented consequences of the
+norm analysis. We prove each from the structure already established.
+
+\begin{corollary}[Trace of the input Gram]\label{ch07:cor:trace}
+$\trace(A_f^*A_f)=|X|$.
+\end{corollary}
+
+\begin{proof}
+Two proofs, agreeing as they must. \emph{Diagonal count:} by
+Proposition~\ref{ch07:prop:gramentries} every diagonal entry of $G_f$ is $1$
+(each input collides with itself), and there are $|X|$ of them.
+\emph{Spectral count:} by the proof of Theorem~\ref{ch07:thm:norm} the
+eigenvalues of $G_f$ are the fiber sizes $m_1,\dots,m_r$ and zeros, and the
+trace is their sum $\sum_j m_j$, which is $|X|$ because $f$ is total: the
+nonempty fibers partition the source.
+\end{proof}
+
+The implementation property \texttt{trace\_input\_gram} returns
+\texttt{len(arrow.source)} directly --- the corollary is what entitles it to
+do so without forming any matrix.
+
+\begin{corollary}[Rank]\label{ch07:cor:rank}
+$\rk(A_f)=|\im(f)|$, the number of nonempty fibers.
+\end{corollary}
+
+\begin{proof}
+The columns of $A_f$ are the vectors $e_{f(x)}$ for $x$ in the source
+carrier; the set of distinct columns is $\{e_y : y\in \im f\}$, which is
+orthonormal, hence linearly independent, and spans the column space. So the
+column space has dimension $|\im f|$. (Spectrally: the rank of $A_f$ equals
+the number of nonzero singular values, which by
+Remark~\ref{ch07:rem:singular} is the number $r$ of nonempty fibers, and
+$r=|\im f|$.)
+\end{proof}
+
+The implementation counts nonzero entries of \texttt{fiber\_sizes};
+Corollary~\ref{ch07:cor:rank} is the license for that shortcut.
+
+\begin{corollary}[Isometry criterion]\label{ch07:cor:isometry}
+$A_f$ is an isometry ($A_f^*A_f=I$) if and only if $f$ is injective.
+Consequently $\lVert A_f\rVert=1$ iff $f$ is injective (for nonempty $X$),
+and $\lVert A_f\rVert>1$ iff $f$ has a collision.
+\end{corollary}
+
+\begin{proof}
+By Proposition~\ref{ch07:prop:gramentries}, $G_f=I$ iff all off-diagonal
+entries vanish (diagonal entries are automatically $1$), iff no two distinct
+inputs share a fiber, iff $f$ is injective. For the norm statement: if $f$ is
+injective all fibers have size $\le 1$ and some fiber has size exactly $1$
+(nonempty source, total map), so the fiber maximum is $1$ and
+$\lVert A_f\rVert=1$ by Theorem~\ref{ch07:thm:norm}; if $f$ is not injective
+some fiber has size $\ge 2$ and $\lVert A_f\rVert\ge\sqrt{2}$.
+\end{proof}
+
+\begin{corollary}[No deterministic lift is a strict contraction]\label{ch07:cor:nocontraction}
+For nonempty $X$, $\lVert A_f\rVert\ge 1$ always, with equality iff $f$ is
+injective. There is no arrow whose lift has operator norm strictly below
+$1$.
+\end{corollary}
+
+\begin{proof}
+Immediate from Corollary~\ref{ch07:cor:isometry}: the fiber maximum of a
+total map on a nonempty source is at least $1$.
+\end{proof}
+
+\begin{corollary}[Partial-isometry criterion]\label{ch07:cor:partialisometry}
+$A_f$ is a partial isometry ($A_fA_f^*A_f=A_f$) if and only if $f$ is
+injective --- i.e., for total deterministic lifts, partial isometry and
+isometry coincide.
+\end{corollary}
+
+\begin{proof}
+Compute on basis vectors, using
+Remark~\ref{ch07:rem:adjointpullback} and
+Proposition~\ref{ch07:prop:outputgram}:
+\[
+A_fA_f^*A_f\,e_x
+= A_fA_f^*\,e_{f(x)}
+= A_f\!\!\sum_{x'\,:\,f(x')=f(x)}\!\! e_{x'}
+= \bigl|f^{-1}(f(x))\bigr|\; e_{f(x)} .
+\]
+This equals $A_fe_x=e_{f(x)}$ for all $x$ iff every \emph{inhabited} fiber
+has size exactly $1$, iff $f$ is injective. (Empty fibers impose no
+condition; but a total map's inhabited fibers cover the source.) The
+implementation's \texttt{is\_partial\_isometry} therefore returns the same
+Boolean as \texttt{is\_injective}, and its docstring says exactly this:
+``for a total standard lift, equivalently whether $f$ is injective.''
+\end{proof}
+
+\begin{corollary}[Frobenius comparison]\label{ch07:cor:frobenius}
+The Frobenius (Hilbert--Schmidt) norm of a lift satisfies
+$\lVert A_f\rVert_F^2=|X|$, and the chain
+\[
+\lVert A_f\rVert \;\le\; \lVert A_f\rVert_F \;\le\;
+\sqrt{\rk(A_f)}\;\lVert A_f\rVert
+\]
+holds with: left equality iff $f$ has exactly one nonempty fiber (i.e.\ $f$
+is constant, or $X$ is empty); right equality iff all nonempty fibers have
+equal size.
+\end{corollary}
+
+\begin{proof}
+$\lVert A_f\rVert_F^2$ is the sum of squared entries; the entries are $0$
+and $1$ with exactly one $1$ per column, so the sum is the number of
+columns, $|X|$. (Equivalently
+$\lVert A_f\rVert_F^2=\trace(A_f^*A_f)=|X|$ by
+Corollary~\ref{ch07:cor:trace}.) In fiber terms the chain reads
+\[
+\max_j m_j \;\le\; \sum_j m_j \;\le\; r\,\max_j m_j
+\]
+after squaring, with $m_1,\dots,m_r$ the nonempty fiber sizes: the middle
+quantity is $|X|$ and the outer ones are $\lVert A_f\rVert^2$ and
+$\rk(A_f)\lVert A_f\rVert^2$ by Theorem~\ref{ch07:thm:norm} and
+Corollary~\ref{ch07:cor:rank}. A maximum equals the sum of positive terms
+iff there is one term; the sum equals $r$ times the maximum iff all terms
+equal the maximum.
+\end{proof}
+
+The corollary is a useful sanity clamp in exact arithmetic: the integer
+identities $\lVert A_f\rVert_F^2=|X|$ and
+$\lVert A_f\rVert^2=\max_j m_j$ can be cross-checked against each other and
+against the rank without any floating point, and the equality cases are
+recognizable combinatorial conditions (constant map; equal-fiber map)
+rather than numerical coincidences.
+
+\begin{remark}[Why Corollary~\ref{ch07:cor:partialisometry} is not vacuous]
+For general matrices, ``partial isometry'' is strictly weaker than
+``isometry'' (any orthogonal projector is a partial isometry but not an
+isometry unless it is the identity). The corollary says the deterministic
+lift class is too rigid to see the difference: totality forces every input
+to occupy some fiber, so the only way $A_f^*A_f$ can be a projector is to be
+the identity. This collapse is a genuine fact about the lift class, not a
+definitional triviality, and the counterexample below shows the other side:
+an idempotent lift that fails to be a partial isometry at all.
+\end{remark}
+
+\section{Composition, fibers, and submultiplicativity}\label{ch07:sec:composition}
+
+The norm theorem concerns one arrow; this short section records how the
+norm interacts with composition, because the interaction is where the
+fiber picture earns its keep a second time. Everything here is an
+expository consequence of Theorem~\ref{ch07:thm:norm} and elementary fiber
+combinatorics; nothing is a separately registered ledger item.
+
+\begin{proposition}[Fibers of a composite]\label{ch07:prop:fibercomp}
+Let $f:X\to Y$ and $g:Y\to Z$ be composable typed arrows. For every $z$ in
+the carrier of $Z$,
+\[
+(g\circ f)^{-1}(z)\;=\;\bigsqcup_{y\in g^{-1}(z)} f^{-1}(y)
+\qquad\text{(a disjoint union), hence}\qquad
+\bigl|(g\circ f)^{-1}(z)\bigr|=\sum_{y\in g^{-1}(z)}\bigl|f^{-1}(y)\bigr| .
+\]
+Consequently
+\[
+\max_z\bigl|(g\circ f)^{-1}(z)\bigr|
+\;\le\;
+\Bigl(\max_y\bigl|f^{-1}(y)\bigr|\Bigr)\cdot
+\Bigl(\max_z\bigl|g^{-1}(z)\bigr|\Bigr).
+\]
+\end{proposition}
+
+\begin{proof}
+An input $x$ satisfies $g(f(x))=z$ iff $f(x)$ lies in $g^{-1}(z)$, which
+partitions the composite fiber by the intermediate value $f(x)$; the union
+is disjoint because $f$ is a function. For the inequality: each summand is
+at most $\max_y|f^{-1}(y)|$, and the number of summands is
+$|g^{-1}(z)|\le\max_z|g^{-1}(z)|$.
+\end{proof}
+
+\begin{corollary}[Submultiplicativity, with exact witnesses]\label{ch07:cor:submult}
+$\lVert A_{g\circ f}\rVert\le\lVert A_g\rVert\,\lVert A_f\rVert$.
+\end{corollary}
+
+\begin{proof}
+Combine Proposition~\ref{ch07:prop:fibercomp} with
+Theorem~\ref{ch07:thm:norm} on all three arrows; alternatively, apply the
+standard submultiplicativity of the operator norm \cite{horn} to
+$A_{g\circ f}=A_gA_f$ (Theorem~\ref{ch07:thm:functor}). That the two routes
+agree is itself a small consistency check between the combinatorial and the
+operator-theoretic sides of the chapter.
+\end{proof}
+
+\begin{example}[Strictness]\label{ch07:ex:strict}
+The inequality is frequently strict, and the fiber formula says exactly
+when: strictness occurs unless some single $z$ simultaneously has a
+maximum-size $g$-fiber \emph{all of whose} elements carry maximum-size
+$f$-fibers. Take $X_3'=(\texttt{Tri},(t_0,t_1,t_2))$, $X_2'=(\texttt{Bit},(0,1))$,
+$X_1=(\texttt{Pt},(\ast))$; let $f:X_3'\to X_2'$ send $t_0,t_1\mapsto 0$ and
+$t_2\mapsto 1$ (max fiber $2$), and let $g:X_2'\to X_1$ be the unique map
+(max fiber $2$). The composite is the unique map $X_3'\to X_1$ with one
+fiber of size $3$, and indeed
+\[
+\sqrt3=\lVert A_{g\circ f}\rVert<\lVert A_g\rVert\,\lVert A_f\rVert=\sqrt2\cdot\sqrt2=2 :
+\]
+the bound $2\cdot 2=4$ on the squared norm overcounts because $g$'s big
+fiber contains one small $f$-fiber ($|f^{-1}(1)|=1$), and the exact
+composite fiber size is the \emph{sum} $2+1=3$, not the product. The sum
+formula of Proposition~\ref{ch07:prop:fibercomp} is sharper than the
+product bound in every mixed case, and the implementation can afford the
+sharp value always: it simply computes the composite arrow and reads its
+fibers, never estimating.
+\end{example}
+
+\begin{proposition}[Normal lifts are exactly permutation lifts]\label{ch07:prop:normal}
+Let $f:X\to X$ be an endomap, so that $A_f$ is a square matrix and
+normality ($A_f^*A_f=A_fA_f^*$) is meaningful. Then $A_f$ is normal iff
+$f$ is a bijection, in which case $A_f$ is unitary.
+\end{proposition}
+
+\begin{proof}
+By Propositions~\ref{ch07:prop:gramentries} and~\ref{ch07:prop:outputgram},
+$A_f^*A_f$ has unit diagonal while $A_fA_f^*$ is diagonal with the fiber
+sizes. If the two agree then $A_f^*A_f$ is a diagonal matrix with unit
+diagonal, i.e.\ the identity, so $f$ is injective
+(Corollary~\ref{ch07:cor:isometry}); an injective endomap of a finite
+carrier is a bijection; and then $A_f$ is a permutation matrix, which is
+unitary, hence normal. The converse inclusion (unitary implies normal) is
+immediate.
+\end{proof}
+
+\begin{remark}[Spectral radius versus norm]\label{ch07:rem:spectralradius}
+For any square matrix the spectral radius satisfies
+$\rho(A)\le\lVert A\rVert$, with equality for normal matrices \cite{horn}.
+The lift class realizes the gap concretely: the counterexample operator
+$A_{c_0}$ of the next section is idempotent, so its eigenvalues lie in
+$\{0,1\}$ and $\rho(A_{c_0})=1$, while
+$\lVert A_{c_0}\rVert=\sqrt2$. By
+Proposition~\ref{ch07:prop:normal} this gap is the \emph{generic} situation
+for endomap lifts --- any collision destroys normality --- and it is one
+more reason no iteration-convergence story attaches to lifts: the
+``eigenvalues bounded by one'' fact that powers such stories controls
+$\rho$, not $\lVert\cdot\rVert$, and controls nothing about transient
+amplification, which is exactly what the norm measures and exactly what
+fiber collisions produce.
+\end{remark}
+
+\section{The permanent counterexample}\label{ch07:sec:counterexample}
+
+Ledger record \textsc{thm-lift-occupation-counterexample}. This is the single
+most quoted fixture in the kernel's test suite, and the Lean seed
+kernel-checks this exact two-state expansion and its noncontractivity. Its
+role is prophylactic: it permanently blocks two general claims that are
+individually plausible, jointly tempting, and both false.
+
+\subsection{The fixture, verified property by property}
+
+Take the running arrow (R4): the constant map $c_0$ on the two-element
+object $X_2'=(\texttt{Bit},(0,1))$, $c_0(0)=c_0(1)=0$. Write $A=A_{c_0}$:
+\[
+A=\begin{pmatrix}1&1\\0&0\end{pmatrix},
+\qquad
+A^{*}=\begin{pmatrix}1&0\\1&0\end{pmatrix}.
+\]
+We verify each claimed property by explicit computation.
+
+\emph{(a) $A$ is idempotent: $A^2=A$.}
+\[
+A^2=\begin{pmatrix}1&1\\0&0\end{pmatrix}\begin{pmatrix}1&1\\0&0\end{pmatrix}
+=\begin{pmatrix}1\cdot 1+1\cdot 0 & 1\cdot 1+1\cdot 0\\ 0&0\end{pmatrix}
+=\begin{pmatrix}1&1\\0&0\end{pmatrix}=A .
+\]
+Categorically this mirrors $c_0\circ c_0=c_0$: a constant map composed with
+itself is itself, and by functoriality
+(Theorem~\ref{ch07:thm:functor} below) $A^2=A_{c_0\circ c_0}=A_{c_0}=A$.
+The implementation's \texttt{is\_idempotent} checks the combinatorial form
+of this condition --- the arrow is an endomap and every image point is a
+fixed point (\texttt{mapping[image] == image} for each image) --- which is
+exactly $f\circ f=f$.
+
+\emph{(b) $\lVert A\rVert=\sqrt{2}$.} By Theorem~\ref{ch07:thm:norm}: the
+fiber sizes are $(2,0)$, the maximum is $2$, the norm is $\sqrt 2$.
+Directly, without the theorem: $A^*A=J_2$ (computed below), and
+$J_2$ has largest eigenvalue $2$ by Lemma~\ref{ch07:lem:allones}, so
+$\lVert A\rVert^2=2$ by Lemma~\ref{ch07:lem:gramreduction}. Still more
+directly: the unit vector $u=\tfrac{1}{\sqrt2}(1,1)^T$ has
+$Au=\tfrac{1}{\sqrt2}(2,0)^T$ with $\lVert Au\rVert=\sqrt2$, and no unit
+vector can do better because
+$\lVert A(u_1,u_2)^T\rVert=|u_1+u_2|\le\sqrt{2}\,\lVert u\rVert$ by
+Cauchy--Schwarz. Three routes, one answer.
+
+\emph{(c) $\trace(A^*A)=2$.}
+\[
+A^{*}A=\begin{pmatrix}1&0\\1&0\end{pmatrix}
+\begin{pmatrix}1&1\\0&0\end{pmatrix}
+=\begin{pmatrix}1&1\\1&1\end{pmatrix}=J_2,
+\qquad \trace(J_2)=2=|X_2'| ,
+\]
+confirming Corollary~\ref{ch07:cor:trace} on the fixture.
+
+\emph{(d) $\rk A=1$.} The two columns of $A$ are equal (both $e_0$), so the
+column space is the line through $e_0$: rank $1=|\im c_0|$, confirming
+Corollary~\ref{ch07:cor:rank}.
+
+\emph{(e) $A$ is not self-adjoint, hence not an orthogonal projector.}
+$A\neq A^{*}$ by inspection: the $(1,2)$ entry of $A$ is $1$ while the
+$(1,2)$ entry of $A^{*}$ is $0$. Since an orthogonal projector must satisfy
+\emph{both} $Q^2=Q$ and $Q^{*}=Q$ (Definition~\ref{ch07:def:projpi}), and
+$A$ satisfies the first but not the second, $A$ is idempotent without being
+a projector. (The implementation's \texttt{is\_orthogonal\_projector}
+returns true only for identity endomaps, which
+Proposition~\ref{ch07:prop:coincide} and this computation jointly justify:
+a total deterministic lift on one declared carrier that is both idempotent
+and self-adjoint must have symmetric $0/1$ matrix with one $1$ per column
+fixing all image points --- forcing the identity.)
+
+\emph{(f) $A$ is not a partial isometry.}
+\[
+AA^{*}=\begin{pmatrix}1&1\\0&0\end{pmatrix}\begin{pmatrix}1&0\\1&0\end{pmatrix}
+=\begin{pmatrix}2&0\\0&0\end{pmatrix},
+\qquad
+AA^{*}A=\begin{pmatrix}2&0\\0&0\end{pmatrix}
+\begin{pmatrix}1&1\\0&0\end{pmatrix}
+=\begin{pmatrix}2&2\\0&0\end{pmatrix}=2A\neq A .
+\]
+So $AA^*A=2A$, off by exactly the fiber size $2$, as
+Corollary~\ref{ch07:cor:partialisometry}'s basis computation predicts.
+Equivalently, $A^*A=J_2$ is not a projector ($J_2^2=2J_2\neq J_2$).
+
+For completeness, the three derived operators of
+Section~\ref{ch07:sec:derived} on the fixture: input Gram $G_{c_0}=J_2$;
+output Gram $\widehat{G}_{c_0}=\operatorname{diag}(2,0)$; support projector
+$S_{c_0}=\operatorname{diag}(1,0)$. All three are distinct, and only the
+third is a projector --- the fixture separates the trio maximally.
+
+\subsection{The two false general claims the fixture blocks}
+
+\begin{boundary}[Blocked claim 1: ``deterministic lifts are contractive'']\label{ch07:bd:contractive}
+The claim would assert $\lVert A_f\rVert\le 1$ for every arrow $f$. It is
+plausible because the matrix of $A_f$ is a $0/1$ matrix with unit column
+sums, and column-stochastic matrices are famously ``non-expanding'' in the
+folklore sense. It is false: $\lVert A_{c_0}\rVert=\sqrt2$, verified three
+ways in (b) above. The folklore intuition belongs to the $\ell^1$ geometry
+of probability vectors, not to the $\ell^2$ geometry of Hilbert space
+(Section~\ref{ch07:sec:notstochastic} dissects this precisely). Any
+downstream argument that needs $\lVert A_f\rVert\le 1$ must therefore prove
+injectivity of $f$ first (Corollary~\ref{ch07:cor:isometry}); by
+Corollary~\ref{ch07:cor:nocontraction} nothing better than equality with
+$1$ is ever available.
+\end{boundary}
+
+\begin{boundary}[Blocked claim 2: ``idempotent lifts are projectors'']\label{ch07:bd:projector}
+The claim would assert that $A_f^2=A_f$ implies $A_f$ is an orthogonal
+projector. It is plausible because in many familiar operator classes
+(self-adjoint operators, normal operators) idempotence does imply
+projectorhood. It is false for lifts: $A_{c_0}$ is idempotent, not
+self-adjoint, not a projector, and not even a partial isometry, by (a),
+(e), (f) above. Structurally: idempotent \emph{arrows} $f\circ f=f$
+abound (every constant map, every retraction onto a fixed-point set), and
+their lifts are idempotent by functoriality, but self-adjointness of a lift
+is an extremely rigid condition (symmetric $0/1$ matrix, one $1$ per
+column) that combinatorially forces the identity among endomaps. The
+implementation encodes the asymmetry as two distinct predicates ---
+\texttt{is\_idempotent} and \texttt{is\_orthogonal\_projector} --- whose
+truth values differ on this fixture, permanently, in the regression suite.
+\end{boundary}
+
+\begin{remark}[Why ``permanent fixture'' is the right category]
+The fixture is registered in the theorem ledger
+(\textsc{thm-lift-occupation-counterexample}) and kernel-checked in Lean,
+which is an unusual amount of ceremony for a $2\times 2$ computation. The
+ceremony is the point. The two blocked claims are exactly the kind of
+plausible-sounding lemma that gets silently assumed in the middle of a long
+argument about ``projection layers'' or ``contraction mappings'' in
+cognitive-architecture prose. A counterexample that is registered, hashed,
+tested on every run, and formally verified cannot be argued away, forgotten,
+or weakened in a refactor without tripping an alarm. It converts a
+mathematical fact into an engineering invariant.
+\end{remark}
+
+\section{Functoriality}\label{ch07:sec:functor}
+
+\subsection{The theorem}
+
+\begin{theorem}[Lift functor laws]\label{ch07:thm:functor}
+For every object $X$, $A_{\id_X}=I_{H_X}$; and whenever the composite
+$g\circ f$ is defined in the typed category (declared target of $f$ equals
+declared source of $g$, as objects with name and carrier),
+\[
+A_{g\circ f}=A_g\,A_f .
+\]
+Consequently $A_{(-)}$ is a functor from the typed finite-function category
+to the category of finite-dimensional Hilbert spaces and linear maps, in the
+sense of~\cite{maclanecwm}: it assigns $H_X$ to $X$ and $A_f$ to $f$,
+preserving identities and composition.
+\end{theorem}
+
+\begin{proof}
+On basis vectors: $A_{\id_X}e_x=e_{\id_X(x)}=e_x=I_{H_X}e_x$ for every
+carrier element $x$, and
+\[
+A_gA_f\,e_x = A_g\,e_{f(x)} = e_{g(f(x))} = e_{(g\circ f)(x)}
+= A_{g\circ f}\,e_x .
+\]
+Two linear maps that agree on a basis agree everywhere, by linearity; and
+both sides are linear by construction. The typing side condition matters:
+$A_ge_{f(x)}$ is only meaningful because $f(x)$ is a standard index of the
+object that is \emph{simultaneously} the declared target of $f$ and the
+declared source of $g$ --- the same object, with the same name and the same
+ordered carrier, hence the same basis indexed the same way. If the kernel
+permitted cardinality-only coercion between distinct objects of equal
+carrier size, the displayed computation would silently identify two
+different bases and the middle equality would be unjustified. Functor
+preservation of longer composites follows by induction from the binary case
+together with associativity (Chapter~\ref{ch04:main}).
+\end{proof}
+
+\begin{example}[Functoriality on the running examples]\label{ch07:ex:functorexample}
+Let $h:X_2\to X_4$ send $u\mapsto q$ and $v\mapsto s$ (injective), and
+recall $f:X_4\to Y_3$ from (R1). The composite $f\circ h:X_2\to Y_3$ sends
+$u\mapsto f(q)=a$ and $v\mapsto f(s)=b$. The three matrices:
+\[
+A_h=\begin{pmatrix}0&0\\1&0\\0&0\\0&1\end{pmatrix},\qquad
+A_f=\begin{pmatrix}1&1&0&0\\0&0&1&1\\0&0&0&0\end{pmatrix},\qquad
+A_{f\circ h}=\begin{pmatrix}1&0\\0&1\\0&0\end{pmatrix}.
+\]
+Multiplying: row $a$ of $A_f$ dotted with column $u$ of $A_h$ is
+$1{\cdot}0+1{\cdot}1+0{\cdot}0+0{\cdot}0=1$; with column $v$:
+$1{\cdot}0+1{\cdot}0+0{\cdot}0+0{\cdot}1=0$. Row $b$: with $u$, $0$; with
+$v$, $1$. Row $c$: zeros. So
+$A_fA_h=\left(\begin{smallmatrix}1&0\\0&1\\0&0\end{smallmatrix}\right)
+=A_{f\circ h}$, an exact integer identity --- the kind of identity the
+executable evidence checks wholesale.
+\end{example}
+
+\begin{remark}[Powers of endomaps]\label{ch07:rem:powers}
+For an endomap $f:X\to X$, functoriality gives $A_{f^n}=A_f^{\,n}$ for all
+$n\ge 0$ by induction ($A_{f^0}=A_{\id_X}=I$). In particular the
+factorial-power idempotence theorem of Chapter~\ref{ch05:main} transports:
+$A_f^{\,|X|!}$ is an idempotent matrix, being the lift of the idempotent
+endomap $f^{|X|!}$. Note carefully what does \emph{not} transport: by
+Boundary~\ref{ch07:bd:projector}, that idempotent matrix is generally not a
+projector, and no convergence, mixing, or dynamical statement accompanies
+it. Semigroupoid paths, having no power operation by type
+(Chapter 6), induce no power identity here either: the lift of
+a path composite is the product of the lifts, and that is all.
+\end{remark}
+
+\begin{remark}[Faithful, not full]\label{ch07:rem:faithfulnotfull}
+The lift functor is \emph{faithful} (Proposition~\ref{ch07:prop:matrix}:
+distinct parallel arrows have distinct matrices) but very far from
+\emph{full}: almost no linear map $H_X\to H_Y$ is a lift. Any matrix with an
+entry outside $\{0,1\}$ (say $2I$, or the averaging map
+$\tfrac12 J_2$), and any $0/1$ matrix with a zero column or a two-$1$
+column, lies outside the image. Fullness failure is a feature, not a
+defect: it is the formal statement that the linear world strictly extends
+the functional world, and it marks exactly where extension proposals ---
+stochastic columns, superposed columns --- would leave the licensed kernel
+and enter open research territory (Section~\ref{ch07:sec:notclaims}). In
+the terminology of~\cite{maclanecwm}, the kernel uses the lift as a
+faithful comparison functor and never claims an equivalence of categories;
+no downstream argument may pull a linear-algebraic construction back along
+$A_{(-)}$ unless the construction demonstrably lands in the
+one-$1$-per-column image.
+\end{remark}
+
+\subsection{Executable evidence: the 1{,}678 pairs}
+
+The functor laws are the most heavily instrumented claim in the lift module.
+The executable suite verifies them by \emph{exact matrix equality} --- integer
+entries, tuple-of-tuples comparison, no floating point anywhere --- for every
+valid typed-map pair on carriers through size three: $1{,}678$ composition
+pairs, including pairs involving empty carriers. Concretely, for each such
+pair $(f,g)$ with matching intermediate object, the suite forms the integer
+matrix product of \texttt{matrix()} outputs and compares it entrywise with
+the \texttt{matrix()} of the composed arrow; identity lifts are compared
+against exact identity matrices.
+
+\begin{boundary}[What the 1{,}678 pairs do and do not establish]\label{ch07:bd:pairs}
+Passing this family establishes the functor laws \emph{on the covered finite
+family, for the running implementation, on the run in question}. It is
+bounded exhaustive testing in the small-scope tradition~\cite{jackson}: within
+the size bound, no case is sampled away. It is not a proof of the universal
+statement, not proof-assistant verification of the Python code, and it
+closes no ledger obligation. The universal statement's formal status is
+recorded next.
+\end{boundary}
+
+\section{Formal verification scope: verified versus open}\label{ch07:sec:lean}
+
+The monograph's policy is to state Lean scope exactly, per claim, with the
+same care used for the claims themselves. The formal seed is a pinned,
+isolated Lean~4.32.1 toolchain~\cite{lean4} whose verifier hardcodes the
+sole allowed standard axiom (\texttt{propext}), rejects project axiom
+declarations and \texttt{sorry}, checks source hashes, and audits exact
+theorem dependency reports (Chapter 11 describes the harness).
+For the material of this chapter:
+
+\emph{Kernel-checked (verified scope).}
+\begin{itemize}
+\item The identity lift, \emph{entrywise}: the matrix of $A_{\id_X}$ equals
+  the identity matrix entry by entry, and $A_{\id_X}$ fixes every basis
+  vector.
+\item Typed composition \emph{on basis vectors}: for composable $f,g$ in the
+  Lean model, $A_gA_f$ and $A_{g\circ f}$ agree on every basis vector.
+\item Relational-product \emph{support composition}: the $0/1$ support
+  pattern of a composite behaves as the relational product of the supports.
+\item The exact two-state expansion of the permanent counterexample
+  (Section~\ref{ch07:sec:counterexample}) and its noncontractivity.
+\end{itemize}
+
+\emph{Open (not verified).}
+\begin{itemize}
+\item The universal norm theorem (Theorem~\ref{ch07:thm:norm}); obligation
+  PO-TKS8-CORE-05 remains \textsc{informal proof present / universal
+  formalization open}.
+\item The generic matrix bridge: the connection, in full generality, between
+  the basis-vector definition of the lift and the numerical matrix, Gram,
+  trace, and rank definitions --- including finite-sum numerical matrix
+  multiplication.
+\item Arbitrary-vector linearity: the extension of the verified basis-vector
+  identities to all vectors of the space, in the Lean model.
+\end{itemize}
+
+\begin{remark}[On the shape of the open norm formalization]\label{ch07:rem:leanroute}
+It is worth recording, as an engineering observation rather than a
+commitment, why the universal norm theorem is the hard item on the open
+list and what the path of least resistance looks like. The registered
+block-Gram proof consumes three pieces of nontrivial formal
+infrastructure: basis permutation as a similarity, spectra of direct sums,
+and the spectral theorem for Hermitian matrices --- each routine on paper,
+each a substantial formal dependency. The second proof of
+Section~\ref{ch07:sec:secondproof} consumes only finite sums,
+Cauchy--Schwarz, and one witness computation, all of which sit close to the
+finite-sum matrix bridge that is already an open item for the functor laws.
+A formalization that lands the bridge would therefore likely land the norm
+theorem by the two-inequality route in the same effort, while the spectral
+route would remain the source of the corollaries' \emph{spectral} phrasing
+only. None of this closes anything: PO-TKS8-CORE-05 remains open, and this
+remark is a map of the terrain, not a claim about it.
+\end{remark}
+
+Obligation PO-TKS8-CORE-11 (lift preserves identities and composition)
+therefore carries the compound status \textsc{partial formal verification
+present / finite-sum matrix bridge open}. Two remarks keep this scope honest.
+First, ``basis vectors plus linearity'' is a complete informal argument
+(Theorem~\ref{ch07:thm:functor}) but the linearity step is exactly what is
+not yet formalized, so the Lean artifact verifies a strictly weaker
+statement than the theorem. Second, the equivalence between the Lean model
+and the Python implementation is itself an open obligation; a kernel-checked
+Lean lemma constrains the Lean model, not the running code.
+
+\section{What the lift is not}\label{ch07:sec:notclaims}
+
+The lift's matrix shape invites three importations from neighboring theories
+--- Markov chains, quantum information, and dynamical systems. All three are
+declined, explicitly and permanently. This section explains each refusal
+with enough mathematical detail that the boundary can be checked rather than
+merely asserted.
+
+\subsection{Not stochastic matrices}\label{ch07:sec:notstochastic}
+
+Every lift matrix has nonnegative entries and unit column sums, so as a
+\emph{matrix} it satisfies the definition of a column-stochastic matrix ---
+in fact it is the extreme, deterministic kind, in which each column is a
+point mass. The refusal is therefore not about the matrix class; it is about
+which \emph{theory} of that matrix class is in force, and three separations
+do the work.
+
+\emph{Different norm, different geometry.} Stochastic-matrix theory lives on
+the probability simplex with the $\ell^1$ norm, where every column-stochastic
+matrix $M$ is nonexpanding on nonnegative vectors:
+$\lVert Mv\rVert_1=\sum_y|\sum_x M_{yx}v_x|=\sum_x v_x\sum_y M_{yx}
+=\lVert v\rVert_1$ for $v\ge 0$ --- mass is conserved. The lift theory of
+this chapter lives on Hilbert space with the $\ell^2$ norm, where
+Theorem~\ref{ch07:thm:norm} gives $\lVert A_f\rVert_2=\sqrt{\max_y m_y}$,
+which exceeds $1$ the moment any fiber has two elements. Both statements are
+true of the same matrix; they answer different questions. The blocked claim
+of Boundary~\ref{ch07:bd:contractive} is precisely the illegitimate
+transport of the first statement's conclusion into the second statement's
+setting.
+
+\emph{Different morphism class.} The deterministic lifts form a vanishingly
+thin subclass of stochastic matrices: a column such as
+$(\tfrac12,\tfrac12,0)^T$ is column-stochastic but is not $e_{f(x)}$ for any
+$f$, so no genuinely randomizing kernel is a lift. Conversely, the kernel's
+category has no arrows whose lift would need fractional entries. The functor
+$A_{(-)}$ lands in stochastic matrices but is not surjective onto them, and
+no completion of the image to general stochastic matrices is defined,
+admitted, or licensed here; ``stochastic kernels'' appear on the excluded
+list of the governing specification and remain \textsc{open}.
+
+\emph{No probabilistic semantics.} Even where the arithmetic coincides ---
+$A_f$ applied to a probability vector does compute the pushforward
+distribution of $f$ --- the kernel asserts no semantics of uncertainty,
+belief, frequency, or sampling. The coordinates that \texttt{apply} acts on
+are coordinates, full stop. Reading them as probabilities is a semantic
+transfer, and semantic transfers are exactly what the Ring~4 discipline
+gates behind separate review.
+
+\subsection{Not quantum channels}\label{ch07:sec:notquantum}
+
+A quantum channel is a completely positive, trace-preserving (CPTP) map on
+density operators. There is a standard way to try to manufacture one from
+$A_f$: the conjugation map $\Phi_f(\rho)=A_f\,\rho\,A_f^{*}$. The map
+$\Phi_f$ is completely positive (it has the single Kraus operator $A_f$),
+but it is trace-preserving only in the degenerate case:
+\[
+\trace\bigl(A_f\rho A_f^{*}\bigr)=\trace\bigl(\rho\,A_f^{*}A_f\bigr)
+=\trace(\rho\,G_f),
+\]
+which equals $\trace(\rho)$ for all $\rho$ iff $G_f=I$ iff $f$ is injective
+(Corollary~\ref{ch07:cor:isometry}). On the permanent fixture the failure is
+quantitative: with $\rho=\tfrac12 J_2$ (the density matrix of the uniform
+superposition state on two basis states),
+\[
+\trace(\rho\,G_{c_0})=\trace\bigl(\tfrac12 J_2\cdot J_2\bigr)
+=\tfrac12\trace(J_2^2)=\tfrac12\trace(2J_2)=\tfrac12\cdot 4=2\neq 1 .
+\]
+A ``channel'' that doubles the trace of a state is no channel. One could
+repair trace preservation by renormalizing or by adding Kraus operators, but
+any such repair is a new mathematical object with new semantics, not the
+lift, and constructing it is not undertaken here: quantum channels sit on
+the specification's excluded list alongside stochastic kernels, and the
+noncontractivity fixture exists partly to keep the ``lifts are like
+isometries, isometries are like channels'' slide from ever starting. The
+only honest statement is the narrow one: for \emph{injective} $f$, $A_f$ is
+an isometry and $\Phi_f$ is a legitimate isometric embedding of state
+spaces; for anything else, no channel reading exists without modification.
+
+\subsection{No dynamics}\label{ch07:sec:nodynamics}
+
+Nothing in this chapter has a time parameter. The lift assigns one linear
+map to one arrow; it does not assert that anything \emph{evolves} by
+repeated application of that map. Three specific non-claims:
+
+\emph{No trajectory semantics.} Iterating $A_f$ for an endomap $f$ computes
+lifts of iterates ($A_f^n=A_{f^n}$, Remark~\ref{ch07:rem:powers}); it does
+not model a system's state at time $n$, because no system, state, or clock
+has been defined. The factorial-power idempotence result is a statement
+about the monoid structure of finite endomaps, not about equilibration.
+
+\emph{No fixed-point or convergence claims.} Spectral radius arguments
+(``iterate and converge to the dominant eigenspace'') require normality or
+at least diagonalizability assumptions plus a semantics for convergence;
+the fixture $A_{c_0}$ already shows lifts can be non-normal
+($A^*A=J_2\neq \operatorname{diag}(2,0)=AA^{*}$), and no convergence
+semantics is defined.
+
+\emph{No cognitive-dynamics reading.} The governing sources are explicit
+that mapping canonical Noetic or CAS constructs onto kernel arrows is an
+open, unlicensed obligation (PO-TKS8-CORE-08). A fortiori, reading
+$A_f$-iteration as ``cognitive state evolution'' is doubly out of scope:
+it would require both the semantic mapping and a dynamical interpretation,
+neither of which exists. The lift is bookkeeping --- an exact,
+faithful, spectrally transparent ledger of which inputs an arrow merges and
+which outputs it reaches --- and the entire content of this chapter is what
+can be proved about that ledger.
+
+\section{Summary and status table}\label{ch07:sec:summary}
+
+The chapter's results, with their exact statuses:
+
+\begin{center}
+\begin{tabular}{@{}llp{5.2cm}@{}}
+\toprule
+Result & Where & Status \\
+\midrule
+Lift well-defined; matrix bijection & Prop.~\ref{ch07:prop:matrix} & definition-level; immediate \\
+Gram entries; fiber partition & Prop.~\ref{ch07:prop:gramentries} & immediate computation \\
+Output Gram diagonal, fiber sizes & Prop.~\ref{ch07:prop:outputgram} & immediate computation \\
+Support projector onto $\im A_f$ & Prop.~\ref{ch07:prop:supportisproj} & immediate computation \\
+Trio coincidence iff injective & Prop.~\ref{ch07:prop:coincide} & immediate computation \\
+Exact norm formula & Thm.~\ref{ch07:thm:norm} & informal proof present; universal formalization open (PO-05) \\
+Trace, rank, isometry corollaries & Cor.~\ref{ch07:cor:trace}--\ref{ch07:cor:isometry} & consequences of the norm analysis \\
+No strict contraction; partial-isometry collapse & Cor.~\ref{ch07:cor:nocontraction}, \ref{ch07:cor:partialisometry} & consequences; expository registration \\
+Permanent counterexample & Sec.~\ref{ch07:sec:counterexample} & finite computation; Lean kernel-checked (exact two-state expansion) \\
+Functor laws & Thm.~\ref{ch07:thm:functor} & partial formal verification; matrix bridge and linearity open (PO-11); $1{,}678$ exact-matrix pairs \\
+Non-claims (stochastic, quantum, dynamics) & Sec.~\ref{ch07:sec:notclaims} & permanent boundaries \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{exercise}\label{ch07:ex:exercise1}
+Let $h:X_5\to Y_2$ be the arrow from a five-element carrier to a two-element
+carrier with fibers of sizes $4$ and $1$. Without forming any matrix, write
+down: $\lVert A_h\rVert$; the full spectrum of $A_h^*A_h$ with
+multiplicities; $\trace(A_h^*A_h)$; $\rk(A_h)$; the diagonal of
+$A_hA_h^*$; the support projector; and the truth values of
+\texttt{is\_injective}, \texttt{is\_isometry},
+\texttt{is\_partial\_isometry}. Then check
+Corollary~\ref{ch07:cor:frobenius}'s chain numerically:
+$\sqrt{4}\le\sqrt{5}\le\sqrt{2}\cdot\sqrt{4}$, and identify which equality
+case fails and why.
+\end{exercise}
+
+\begin{exercise}\label{ch07:ex:exercise2}
+Prove that the matrix of $A_f$ is doubly stochastic (all row sums and all
+column sums equal to $1$) iff $f$ is a bijection between carriers of equal
+size, and conclude via Proposition~\ref{ch07:prop:normal} that within the
+lift class ``doubly stochastic,'' ``unitary,'' ``normal,'' and
+``permutation matrix'' all coincide --- a collapse of four generally
+distinct matrix classes into one, forced by the one-$1$-per-column shape.
+\end{exercise}
+
+\begin{exercise}\label{ch07:ex:exercise3}
+The counterexample $A_{c_0}$ satisfies $A_{c_0}A_{c_0}^*A_{c_0}=2A_{c_0}$.
+Show that in general, for an \emph{idempotent} arrow $f=f\circ f$ whose
+image points all have fiber size $k$, one has $A_fA_f^*A_f=kA_f$ on the
+image summand, and use the constant map on an $m$-element carrier to
+exhibit $\lVert A_f\rVert=\sqrt{m}$ growing without bound over idempotent
+lifts. (Moral: not only are idempotent lifts not projectors; they are not
+even uniformly bounded.)
+\end{exercise}
+
+Everything above is Ring~4, draft, not licensed, with independent specialist
+review open (PO-TKS8-CORE-10). The next chapter turns from the linear shadow
+of single arrows to the combinatorics of arrow \emph{words}: which
+compositions of a declared generator set produce which denotations, and how
+to name each denotation by a canonical representative that is stable,
+replayable, and honest about its resource limits.

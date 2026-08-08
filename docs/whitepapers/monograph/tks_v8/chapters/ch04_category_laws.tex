@@ -1,0 +1,1035 @@
+\chapter{Typed Composition and the Category Laws}
+\label{ch04:main}
+
+The previous chapter fixed the object layer: a named finite carrier with an
+explicitly ordered element sequence, whose identity is the pair of name and
+ordered carrier. This chapter builds the arrow layer on top of it and proves
+the central structural fact of the kernel: the objects and arrows form a
+category, with identities that are neutral and a composition that is
+associative wherever it is defined. The qualification ``wherever it is
+defined'' is not a formality. Composition in the kernel is a \emph{partial}
+operation, deliberately so, and the precise condition under which it is
+defined --- declared target equals declared source, as objects, meaning both
+name and ordered carrier --- is the single most consequential design decision
+in the entire system. Everything downstream, from the endomap/path separation
+of Chapters~\ref{ch05:main} and~\ref{ch06:main} to the lift functor and the
+normal-form machinery, inherits its soundness from the typing discipline
+established here.
+
+The chapter has four movements. First, we state the definitions of identity
+and composition exactly as the kernel implements them, and we spell out what
+the definedness condition does and does not permit
+(Section~\ref{ch04:sec:defs}). Second, we prove the category-laws theorem in
+full, pointwise, with no appeal to imported category-theoretic machinery
+(Section~\ref{ch04:sec:laws}); the proof is elementary, and its elementarity
+is part of the point, because an executable kernel should rest on arguments a
+reviewer can check by hand. Third, we state the mismatch-rejection contract
+--- the behavioral specification of what the implementation must do when the
+definedness condition fails --- and we catalog the negative tests that
+exercise it (Section~\ref{ch04:sec:contract}). Fourth, we give the
+verification story in depth (Sections~\ref{ch04:sec:evidence}
+and~\ref{ch04:sec:lean}): what the bounded exhaustive suites actually
+enumerate, including the exact counting behind the $19{,}683$ associativity
+triples and the $499$ typed maps; what bounded exhaustive testing does and
+does not establish, situated against the small-scope hypothesis of
+Jackson~\cite{jackson}; and what the pinned Lean formal seed kernel-checks,
+including the axiom-audit discipline and the honest statement of the open
+gap between the Python implementation and the Lean model.
+
+Throughout, claim status is stated inline. The category laws carry a complete
+informal proof (this chapter), bounded exhaustive executable evidence, and
+exact Lean lemmas for the Lean model of the definitions. None of that is
+proof-assistant verification of the running Python code; the equivalence of
+the two artifacts is an open obligation, recorded as such in the ledger of
+Appendix~B, and we will not blur that line.
+
+\section{Identity and Composition}
+\label{ch04:sec:defs}
+
+\subsection{Arrows recalled}
+
+We briefly recall the arrow definition from Chapter~\ref{ch03:main} in the
+form we need here, since every proof in this chapter manipulates it directly.
+
+\begin{definition}[Arrow judgment]
+\label{ch04:def:arrow}
+An \emph{arrow judgment} $f : X \to Y$ consists of three data: a declared
+source object $X$, a declared target object $Y$, and a total map on standard
+indices, represented as the tuple
+\[
+  \bigl(f(0), f(1), \dots, f(|X|-1)\bigr),
+\]
+where each $f(i)$ is a standard index of $Y$, that is, an integer with
+$0 \le f(i) < |Y|$. The tuple has exactly $|X|$ entries: one image for each
+source element, no more and no fewer. Totality is enforced at construction;
+there is no notion of a partially defined arrow in the kernel.
+\end{definition}
+
+\begin{definition}[Extensional arrow equality]
+\label{ch04:def:extensional}
+Two arrows are \emph{extensionally equal} if and only if their declared
+sources are equal as objects, their declared targets are equal as objects,
+and their mapping tuples are equal as tuples. The presentation name attached
+to an arrow for display and debugging purposes participates in neither
+equality nor hashing.
+\end{definition}
+
+In the implementation (\texttt{category.py}), extensional equality is
+realized by excluding the name field from the generated comparison of the
+frozen dataclass \texttt{FiniteArrow}; the triple of source, target, and
+mapping tuple is exposed as the arrow's \emph{denotation key}. We return to
+the consequences of name-exclusion in Chapter~\ref{ch05:main}, where
+presentation names for large powers are deliberately compressed; the
+compression is sound precisely because names are extensionally inert.
+
+\begin{notation}
+\label{ch04:not:hom}
+We write $\Hom(X, Y)$ for the set of arrow judgments from $X$ to $Y$. Since
+an arrow is determined by its mapping tuple once $X$ and $Y$ are fixed, and
+each of the $|X|$ tuple positions ranges over $|Y|$ values,
+\[
+  |\Hom(X, Y)| = |Y|^{|X|},
+\]
+with the convention $|Y|^{0} = 1$ (the unique empty map out of an empty
+source) and $0^{|X|} = 0$ for $|X| \ge 1$ (no total map from a nonempty
+source into an empty target). These conventions are not stylistic: the
+bounded enumeration counts of Section~\ref{ch04:sec:evidence} depend on
+them, and the executable suite includes the empty-carrier cases explicitly.
+\end{notation}
+
+\subsection{Identity}
+
+\begin{definition}[Identity arrow]
+\label{ch04:def:identity}
+For each object $X$, the \emph{identity arrow} $\id_X : X \to X$ is the
+arrow whose declared source and declared target are both $X$ and whose
+mapping tuple is $(0, 1, \dots, |X|-1)$, that is, $\id_X(i) = i$ for every
+standard index $i$.
+\end{definition}
+
+Note what the definition quantifies over: there is one identity per
+\emph{object}, not one identity per carrier. Two objects with the same
+ordered carrier but different names --- say
+$X = (\texttt{register\_a}, (0, 1))$ and
+$Y = (\texttt{register\_b}, (0, 1))$ --- have distinct identity arrows
+$\id_X$ and $\id_Y$, because the arrows' declared sources differ as objects.
+This is the arrow-level echo of name-inclusive object identity, and it is
+what makes the definedness condition below strict enough to be useful.
+
+\subsection{Composition and its definedness condition}
+
+\begin{definition}[Composition]
+\label{ch04:def:comp}
+Let $f : X \to Y$ and $g : Y' \to Z$ be arrows. The composite $g \circ f$ is
+\emph{defined if and only if $Y = Y'$ as objects} --- that is, the declared
+target of $f$ and the declared source of $g$ agree in both name and ordered
+carrier. When defined, $g \circ f : X \to Z$ is the arrow with declared
+source $X$, declared target $Z$, and mapping tuple
+\[
+  (g \circ f)(i) = g\bigl(f(i)\bigr)
+  \qquad \text{for every standard index } i \text{ of } X.
+\]
+When $Y \ne Y'$, the composite does not exist, and the implementation raises
+a typed error (Section~\ref{ch04:sec:contract}). No coercion of any kind is
+performed.
+\end{definition}
+
+The phrase ``no coercion of any kind'' compresses three distinct refusals,
+each of which blocks a distinct failure mode. It is worth separating them,
+because informal operator notations typically permit at least one of the
+three, and each permission reintroduces a bug class the kernel exists to
+exclude.
+
+\begin{ruleenv}[No cardinality coercion]
+\label{ch04:rule:card}
+If $|Y| = |Y'|$ but $Y \ne Y'$, the composite $g \circ f$ is undefined. Equal
+cardinality means only that a bijection \emph{exists} between the carriers;
+it does not select one, and any silent selection (by position, by element
+equality, or by hash order) would smuggle an unrecorded arrow into the
+composite. If the caller intends a particular bijection, the caller must
+construct it as an explicit arrow $b : Y \to Y'$ and write
+$g \circ b \circ f$, at which point the bijection is part of the auditable
+term.
+\end{ruleenv}
+
+\begin{ruleenv}[No carrier-only coercion]
+\label{ch04:rule:carrier}
+If $Y$ and $Y'$ have equal ordered carriers but different names, the
+composite is undefined. Carrier equality without name equality means the two
+objects are extensionally alike but were declared with distinct intent ---
+two registers that both carry $(0, 1)$, two stages of a workflow that both
+carry the same label set. Composing across them silently would erase the
+declared distinction, and the entire point of name-inclusive identity
+(Chapter~\ref{ch03:main}) is that declared distinctions are load-bearing. The
+sanctioned bridge is again explicit: a caller who asserts that the two
+objects should communicate constructs a named transport arrow between them
+and includes it in the term.
+\end{ruleenv}
+
+\begin{ruleenv}[No name-only matching]
+\label{ch04:rule:name}
+Symmetrically, if $Y$ and $Y'$ share a name but differ in carrier --- an
+error state that can arise when two modules independently declare an object
+called \texttt{state} with different element orders --- the composite is
+undefined. Object equality is the conjunction of name equality and carrier
+equality; neither conjunct alone suffices. This refusal is what prevents a
+renamed or reordered carrier from silently changing the meaning of every
+downstream index.
+\end{ruleenv}
+
+\begin{remark}[Partiality is the feature]
+\label{ch04:rem:partiality}
+It is tempting to regard partial composition as an inconvenience to be
+engineered away --- for instance, by embedding all carriers into one large
+universal carrier and making every composite defined. The kernel refuses
+this on principle. A total composition over a universal carrier is exactly
+the untyped setting whose failure modes motivated the system: every
+expression composes, including the meaningless ones, and mistypings surface
+(if at all) as wrong answers rather than as errors. Partiality localizes the
+failure to the construction site of the illegal term, with the two object
+identities in hand, which is the earliest and cheapest place to fail.
+\end{remark}
+
+\begin{example}[A composite that exists]
+\label{ch04:ex:good}
+Let $X = (\texttt{stage\_in}, (a, b, c))$,
+$Y = (\texttt{stage\_mid}, (u, v))$, and
+$Z = (\texttt{stage\_out}, (p, q, r))$. Take $f : X \to Y$ with mapping
+$(0, 0, 1)$ --- so $a \mapsto u$, $b \mapsto u$, $c \mapsto v$ --- and
+$g : Y \to Z$ with mapping $(2, 0)$ --- so $u \mapsto r$, $v \mapsto p$.
+The middle objects agree exactly, so $g \circ f : X \to Z$ is defined, and
+its mapping tuple is
+\[
+  \bigl(g(f(0)), g(f(1)), g(f(2))\bigr) = \bigl(g(0), g(0), g(1)\bigr)
+  = (2, 2, 0),
+\]
+that is, $a \mapsto r$, $b \mapsto r$, $c \mapsto p$.
+\end{example}
+
+\begin{example}[A composite that is refused]
+\label{ch04:ex:bad}
+With $X, Y, Z$ as above, let $Y'' = (\texttt{stage\_mid\_v2}, (u, v))$ ---
+same ordered carrier as $Y$, different name --- and let $g'' : Y'' \to Z$
+have the same mapping tuple $(2, 0)$ as $g$. The expression $g'' \circ f$ is
+undefined: $f$ declares target $Y$, $g''$ declares source $Y''$, and
+$Y \ne Y''$ because their names differ. The mapping tuples of $g$ and $g''$
+are identical; the refusal is purely a matter of declared type. This is
+Rule~\ref{ch04:rule:carrier} in action, and it is a genuine negative test in
+the executable suite, not a hypothetical.
+\end{example}
+
+\subsection{Implementation fidelity: the tuple formula}
+\label{ch04:sec:tuple}
+
+Definition~\ref{ch04:def:comp} is phrased in terms of the abstract function
+application $g(f(i))$. The implementation works with mapping tuples, and it
+is worth writing down --- and proving --- the tuple-level formula it
+computes, both because the executable tests compare tuples and because the
+Lean model's composition is stated at exactly this level.
+
+\begin{proposition}[Tuple form of composition]
+\label{ch04:prop:tuple}
+Let $f : X \to Y$ have mapping tuple $(a_0, \dots, a_{|X|-1})$ and let
+$g : Y \to Z$ have mapping tuple $(b_0, \dots, b_{|Y|-1})$. Then the
+composite $g \circ f$ of Definition~\ref{ch04:def:comp} has mapping tuple
+\[
+  \bigl(b_{a_0},\, b_{a_1},\, \dots,\, b_{a_{|X|-1}}\bigr),
+\]
+that is, the tuple obtained by indexing $g$'s tuple at each entry of $f$'s
+tuple, in order. Every index operation involved is in range.
+\end{proposition}
+
+\begin{proof}
+By Definition~\ref{ch04:def:arrow}, $f(i) = a_i$ and $g(j) = b_j$ for
+standard indices $i$ of $X$ and $j$ of $Y$. Hence
+$(g \circ f)(i) = g(f(i)) = g(a_i) = b_{a_i}$ for each $i$, which is the
+displayed tuple read entrywise. Well-formedness of $f$ gives
+$0 \le a_i < |Y|$, so $b_{a_i}$ is a legal lookup into a tuple of length
+$|Y|$; well-formedness of $g$ gives $0 \le b_{a_i} < |Z|$, so every entry
+of the result is a standard index of $Z$.
+\end{proof}
+
+The formula makes the computational cost visible --- composition is a
+single pass over the source tuple, $\Theta(|X|)$ time with no search and
+no allocation beyond the result --- and it makes the direction convention
+unambiguous: the \emph{outer} arrow's tuple is indexed by the \emph{inner}
+arrow's entries. Transposing the two tuples is the classic implementation
+bug for this operation; it happens to produce a well-formed arrow whenever
+$|X| = |Z|$ (so no validation catches it), and it is exactly the kind of
+defect the exhaustive associativity sweep of
+Section~\ref{ch04:sec:assoc-count} would expose, since the transposed
+formula is not associative against the correct one. A worked instance of
+the formula on Example~\ref{ch04:ex:good}: $f$'s tuple is $(0, 0, 1)$,
+$g$'s tuple is $(2, 0)$, and indexing $g$'s tuple at $0, 0, 1$ yields
+$(2, 2, 0)$, as computed there.
+
+\begin{remark}[Where the definedness check sits]
+\label{ch04:rem:checksite}
+In the implementation, the object-equality comparison between the declared
+target of the inner arrow and the declared source of the outer arrow is
+the first statement of the composition function, executed before the tuple
+of Proposition~\ref{ch04:prop:tuple} is built. The ordering matters for
+the error contract of Section~\ref{ch04:sec:contract}: the check must not
+be reachable only through some later validation failure (an out-of-range
+index, a length mismatch) that would report the wrong cause. Because
+carrier sizes can coincide while objects differ, a composition across
+mismatched middles could produce an \emph{apparently} well-formed tuple;
+only the up-front object comparison rejects it for the right reason.
+\end{remark}
+
+\section{The Category-Laws Theorem}
+\label{ch04:sec:laws}
+
+We now prove that the definitions of Section~\ref{ch04:sec:defs} satisfy the
+category axioms. The statement is deliberately phrased in terms of the
+concrete data --- declared sources, declared targets, mapping tuples ---
+rather than by invoking the abstract definition and checking it off, because
+the concrete phrasing is what the executable tests and the Lean lemmas
+actually verify, clause by clause.
+
+\begin{theorem}[Category laws]
+\label{ch04:thm:laws}
+Under Definitions~\ref{ch04:def:arrow}, \ref{ch04:def:identity},
+and~\ref{ch04:def:comp}:
+\begin{enumerate}
+\item \textup{(Typing of identities)} For every object $X$, $\id_X$ is an
+arrow from $X$ to $X$.
+\item \textup{(Typing of composites)} Whenever $f : X \to Y$ and
+$g : Y \to Z$, the composite $g \circ f$ is defined and is an arrow from $X$
+to $Z$.
+\item \textup{(Right neutrality)} For every $f : X \to Y$, the composite
+$f \circ \id_X$ is defined and $f \circ \id_X = f$.
+\item \textup{(Left neutrality)} For every $f : X \to Y$, the composite
+$\id_Y \circ f$ is defined and $\id_Y \circ f = f$.
+\item \textup{(Associativity)} Whenever $f : X \to Y$, $g : Y \to Z$, and
+$h : Z \to W$, all four composites $g \circ f$, $h \circ g$,
+$(h \circ g) \circ f$, and $h \circ (g \circ f)$ are defined, and
+\[
+  (h \circ g) \circ f = h \circ (g \circ f).
+\]
+\end{enumerate}
+Consequently the finite objects and arrow judgments form a category, which
+we denote $\cC$ in this chapter.
+
+\textup{Status: complete informal proof below; bounded exhaustive executable
+evidence (Section~\ref{ch04:sec:evidence}); exact Lean lemmas for the Lean
+model (Section~\ref{ch04:sec:lean}); Python-to-Lean equivalence open.}
+\end{theorem}
+
+\begin{proof}
+We verify each clause against the definitions, pointwise on standard
+indices. Recall that by Definition~\ref{ch04:def:extensional}, two arrows
+are equal exactly when their declared sources, declared targets, and mapping
+tuples agree; so each equality claim below reduces to three componentwise
+checks, of which the first two are bookkeeping and the third is the
+pointwise computation.
+
+\emph{Clause 1.} By Definition~\ref{ch04:def:identity}, $\id_X$ has declared
+source $X$, declared target $X$, and mapping tuple $(0, \dots, |X|-1)$.
+Every entry $i$ of the tuple satisfies $0 \le i < |X|$, so the tuple is a
+valid total map into the target $X$, and the tuple length equals $|X|$, the
+size of the source. Hence $\id_X$ is a well-formed arrow $X \to X$.
+
+\emph{Clause 2.} Suppose $f : X \to Y$ and $g : Y \to Z$; the definedness
+condition of Definition~\ref{ch04:def:comp} holds because the declared
+target of $f$ and the declared source of $g$ are literally the same object
+$Y$. We must check that the composite's mapping tuple is well-formed. Its
+length is $|X|$, one entry per standard index of $X$. For each such index
+$i$: $f(i)$ is a standard index of $Y$ because $f$ is a well-formed arrow
+into $Y$, so $0 \le f(i) < |Y|$; therefore $f(i)$ is a legal argument
+position for the mapping tuple of $g$, whose length is $|Y|$; and
+$g(f(i))$ is then a standard index of $Z$ because $g$ is a well-formed arrow
+into $Z$. Hence every entry of the composite tuple lies in
+$\{0, \dots, |Z|-1\}$, and $g \circ f$ is a well-formed arrow $X \to Z$.
+Note that this clause is where totality earns its keep: because $f$ is total
+and lands inside $Y$'s index range, and $g$ is total on exactly that range,
+the composite is total by construction, with no possibility of an
+out-of-range lookup.
+
+\emph{Clause 3.} The composite $f \circ \id_X$ is defined because the
+declared target of $\id_X$ is $X$, which equals the declared source of $f$.
+Its declared source is that of $\id_X$, namely $X$; its declared target is
+that of $f$, namely $Y$; both agree with the corresponding data of $f$. For
+the mapping tuple, fix any standard index $i$ of $X$:
+\[
+  (f \circ \id_X)(i) = f\bigl(\id_X(i)\bigr) = f(i),
+\]
+using $\id_X(i) = i$. Since $i$ was arbitrary, the mapping tuples agree
+entrywise, hence as tuples. All three components of extensional equality
+hold, so $f \circ \id_X = f$.
+
+\emph{Clause 4.} The composite $\id_Y \circ f$ is defined because the
+declared target of $f$ is $Y$, the declared source of $\id_Y$. Its declared
+source is $X$ and its declared target is $Y$, agreeing with $f$. Pointwise,
+for each standard index $i$ of $X$:
+\[
+  (\id_Y \circ f)(i) = \id_Y\bigl(f(i)\bigr) = f(i),
+\]
+using $\id_Y(j) = j$ at $j = f(i)$, which is legitimate because Clause~2's
+argument shows $f(i)$ is a standard index of $Y$. Hence
+$\id_Y \circ f = f$.
+
+\emph{Clause 5.} First, definedness of all four composites. $g \circ f$ is
+defined (target of $f$ is $Y$, source of $g$ is $Y$) and has type $X \to Z$
+by Clause~2. $h \circ g$ is defined (target of $g$ is $Z$, source of $h$ is
+$Z$) and has type $Y \to W$. Then $(h \circ g) \circ f$ is defined because
+the target of $f$ is $Y$ and the source of $h \circ g$ is $Y$; and
+$h \circ (g \circ f)$ is defined because the target of $g \circ f$ is $Z$
+and the source of $h$ is $Z$. Both outer composites have declared source $X$
+and declared target $W$, so the first two components of extensional
+equality agree.
+
+For the mapping tuples, fix a standard index $i$ of $X$. Unfolding
+Definition~\ref{ch04:def:comp} twice on each side:
+\[
+  \bigl((h \circ g) \circ f\bigr)(i)
+  = (h \circ g)\bigl(f(i)\bigr)
+  = h\Bigl(g\bigl(f(i)\bigr)\Bigr),
+\]
+\[
+  \bigl(h \circ (g \circ f)\bigr)(i)
+  = h\Bigl((g \circ f)(i)\Bigr)
+  = h\Bigl(g\bigl(f(i)\bigr)\Bigr).
+\]
+The two right-hand sides are the same expression --- three nested total
+lookups $h(g(f(i)))$ --- so the tuples agree at every index, hence as
+tuples. Therefore $(h \circ g) \circ f = h \circ (g \circ f)$.
+
+All five clauses hold, and the data $(\text{objects}, \Hom, \id, \circ)$
+satisfy the axioms of a category in the standard sense
+\cite{maclanecwm}.
+\end{proof}
+
+\begin{remark}[Why the proof is this short]
+\label{ch04:rem:short}
+The proof is five paragraphs of index-chasing, and a reader familiar with
+$\Set$ will recognize it as the standard argument that finite sets and total
+functions form a category, decorated with bookkeeping about declared names.
+That is exactly right, and it is worth being explicit about what the
+decoration buys. The mathematical content --- functions compose
+associatively, identities are neutral --- is classical and utterly standard
+\cite{maclanecwm}. The kernel's contribution is not the theorem but the
+\emph{definedness discipline} under which the theorem is stated: composition
+is partial, the partiality tracks declared intent (names) and not merely
+extension (carriers), and the associativity clause is proved only for
+triples that are composable under that strict discipline. The theorem's
+hypotheses are the contract; the proof is routine once the contract holds.
+The system's engineering claim is that the contract is enforced at
+construction time, every time, which is a statement about the
+implementation, verified by the evidence of
+Sections~\ref{ch04:sec:evidence} and~\ref{ch04:sec:lean} to the bounded
+extents stated there.
+\end{remark}
+
+\begin{corollary}[Uniqueness of identities]
+\label{ch04:cor:unique-id}
+For each object $X$, $\id_X$ is the unique arrow $e : X \to X$ such that
+$f \circ e = f$ for every $f$ with source $X$ and $e \circ g = g$ for every
+$g$ with target $X$.
+\end{corollary}
+
+\begin{proof}
+Existence is Theorem~\ref{ch04:thm:laws}, Clauses~3 and~4. For uniqueness,
+suppose $e : X \to X$ satisfies the right-neutrality property. Instantiate
+it at $f = \id_X$: then $\id_X \circ e = \id_X$. But by left neutrality of
+$\id_X$ (Clause~4 applied to $e$), $\id_X \circ e = e$. Hence
+$e = \id_X$.
+\end{proof}
+
+\begin{corollary}[Endomorphism monoids]
+\label{ch04:cor:monoid}
+For each object $X$, the set $\Hom(X, X)$ of endo-arrows on $X$ is a monoid
+under composition, with identity element $\id_X$, of cardinality
+$|X|^{|X|}$.
+\end{corollary}
+
+\begin{proof}
+Composition of two endo-arrows on $X$ is always defined (the middle object
+is $X$ on both sides) and yields an endo-arrow on $X$
+(Theorem~\ref{ch04:thm:laws}, Clause~2), so $\Hom(X, X)$ is closed under
+$\circ$. Associativity is Clause~5 restricted to endo-arrows; neutrality of
+$\id_X$ is Clauses~3 and~4. The cardinality is
+Notation~\ref{ch04:not:hom} with $Y = X$.
+\end{proof}
+
+Corollary~\ref{ch04:cor:monoid} is the doorway to
+Chapter~\ref{ch05:main}: the monoid structure on $\Hom(X, X)$ is what makes
+powers of a single endomap meaningful, and its \emph{absence} for arrows
+whose source and target differ is what makes powers of heterogeneous data
+meaningless. The kernel promotes this mathematical asymmetry into a type
+asymmetry, and Chapters~\ref{ch05:main} and~\ref{ch06:main} develop the two
+sides.
+
+\begin{remark}[What the category is not]
+\label{ch04:rem:notset}
+$\cC$ is not $\Set$, and not even the category of finite sets, in one
+substantive respect: its objects are \emph{named} carriers, so the same
+finite carrier appears as the underlying data of many non-isomorphic-by-fiat
+objects --- or more precisely, many distinct objects that happen to be
+isomorphic via the evident positional bijection but are not \emph{equal},
+and between which no arrow exists until one is explicitly constructed. The
+skeleton of $\cC$ is equivalent to the category of finite sets in the usual
+way, and nothing in this monograph depends on any exotic property; the
+naming layer is an engineering surface, not new mathematics. We flag this to
+preempt a possible over-reading: no claim is made that name-inclusive
+identity changes the categorical content. It changes which composites are
+\emph{writable}, which is a statement about the term language, not about the
+equivalence class of the category.
+\end{remark}
+
+\section{The Mismatch-Rejection Contract}
+\label{ch04:sec:contract}
+
+Theorem~\ref{ch04:thm:laws} governs the composites that exist. An executable
+kernel must be equally precise about the composites that do not, because in
+practice the value of a type discipline is measured at its boundary: what
+happens when a caller writes the illegal term. This section states the
+contract and catalogs the negative tests.
+
+\subsection{The contract}
+
+\begin{invariant}[Mismatch rejection]
+\label{ch04:inv:mismatch}
+For all arrows $f$ and $g$, the implementation of $g \circ f$ either
+\begin{enumerate}
+\item returns the arrow of Definition~\ref{ch04:def:comp}, in the case that
+the declared target of $f$ equals the declared source of $g$ as objects
+(name and carrier both); or
+\item raises the dedicated typed error \texttt{CompositionTypeError},
+carrying a message that names both offending arrows and their declared
+types, in every other case.
+\end{enumerate}
+There is no third behavior: no silent coercion, no warning-and-proceed, no
+best-effort composite over a common sub-carrier, no reordering of either
+carrier to force a match.
+\end{invariant}
+
+Three properties of the contract deserve comment.
+
+\emph{The error is typed.} \texttt{CompositionTypeError} is a distinct
+exception class (a subclass of the host language's \texttt{TypeError}), not
+a generic failure. Callers and test harnesses can therefore assert the
+\emph{reason} for a failure, not merely its occurrence. A negative test that
+catches a bare exception would pass even if the implementation failed for
+the wrong reason --- an off-by-one in tuple validation, say --- and such a
+test would be evidence of nothing. Every negative fixture in the suite
+asserts the specific exception class.
+
+\emph{The error is early.} The check runs before any part of the composite
+tuple is constructed. There is no partially built arrow to leak, and the
+failure site is the construction expression itself, with both declared types
+in the error message. In a system whose purpose is auditability, the
+distance between the mistake and its detection is a first-class quality
+metric, and here that distance is zero.
+
+\emph{The error is symmetric in the three refusals.}
+Rules~\ref{ch04:rule:card}, \ref{ch04:rule:carrier},
+and~\ref{ch04:rule:name} all funnel into the same check --- object equality
+of the middle objects --- because object equality is the conjunction of name
+and carrier equality. The implementation does not special-case ``close''
+mismatches; a near-miss (equal carriers, different names) and a gross
+mismatch (disjoint carriers of different sizes) are rejected by the same
+comparison at the same site. This uniformity is deliberate: any
+special-casing would be a coercion pathway waiting to be widened.
+
+\subsection{The negative-test catalog}
+
+The executable suite exercises the contract with a family of negative
+fixtures, each targeting one way the definedness condition can fail. We
+catalog them as checkclasses; Chapter~\ref{ch10:main} gives the mapping to
+concrete test names.
+
+\begin{checkclass}[Carrier-equal, name-distinct middle]
+\label{ch04:check:nameonly}
+Arrows $f : X \to Y$ and $g : Y'' \to Z$ with $Y$ and $Y''$ carrying equal
+ordered carriers under different names, as in Example~\ref{ch04:ex:bad}.
+Expected: \texttt{CompositionTypeError}. This is the sharpest fixture in the
+family, because every coercion-friendly design passes it wrongly: any
+implementation that compares carriers, cardinalities, or element sets ---
+anything short of full object identity --- will accept the composite. The
+fixture therefore discriminates the kernel's discipline from its most
+plausible near-neighbors.
+\end{checkclass}
+
+\begin{checkclass}[Cardinality-equal, carrier-distinct middle]
+\label{ch04:check:cardonly}
+Middle objects of equal size with different element sequences (different
+elements, or the same elements in a different order). Expected:
+\texttt{CompositionTypeError}. The reordered-carrier subcase is the
+determinism guard: two declarations of ``the same'' set in different orders
+are different objects, and composing across them would silently permute
+every downstream index.
+\end{checkclass}
+
+\begin{checkclass}[Gross type mismatch]
+\label{ch04:check:gross}
+Middle objects differing in both name and size. Expected:
+\texttt{CompositionTypeError}. This is the base case, included so that the
+family covers the full lattice of agreement patterns between name, carrier,
+and cardinality.
+\end{checkclass}
+
+\begin{checkclass}[Malformed arrow construction]
+\label{ch04:check:malformed}
+Not a composition test but a prerequisite for the others: attempts to
+construct arrows whose mapping tuple has the wrong length, contains an
+out-of-range index, contains a non-integer (including the host language's
+boolean values, which the implementation rejects explicitly even though the
+host treats them as integers), or is supplied as an unordered container.
+Expected: the construction-time \texttt{ValidationError}. These fixtures
+ensure that every arrow reaching a composition site is well-formed, which is
+the standing hypothesis of Theorem~\ref{ch04:thm:laws}.
+\end{checkclass}
+
+\begin{checkclass}[Path-adjacency mismatch]
+\label{ch04:check:path}
+The path constructor of Chapter~\ref{ch06:main} performs the same middle-object
+check between each adjacent pair of a sequence of arrows; fixtures supply
+sequences with one ill-typed adjacency and assert
+\texttt{CompositionTypeError} naming the offending segment. We list it here
+because it is the same contract, enforced at a second surface.
+\end{checkclass}
+
+\subsection{The agreement lattice}
+\label{ch04:sec:lattice}
+
+The negative fixtures are not an ad hoc list; they cover a small, complete
+lattice of ways the middle objects can agree or disagree, and completeness
+of the coverage is checkable by inspection of that lattice. The middle
+objects $Y$ (declared target of the inner arrow) and $Y'$ (declared source
+of the outer arrow) can agree or disagree in name and in ordered carrier;
+carrier agreement further refines by whether the carriers at least have
+equal cardinality. Since carrier equality implies cardinality equality,
+the meaningful combinations are five:
+
+\begin{center}
+\small
+\begin{tabular}{@{}lllll@{}}
+\toprule
+Names & Carriers & Cardinalities & Composite & Exercised by \\
+\midrule
+equal & equal & equal & \emph{defined} & positive suites
+(Sections~\ref{ch04:sec:assoc-count}, \ref{ch04:sec:typed-count}) \\
+distinct & equal & equal & refused & Checkclass~\ref{ch04:check:nameonly} \\
+equal & distinct & equal & refused & Checkclass~\ref{ch04:check:cardonly} \\
+distinct & distinct & equal & refused & Checkclass~\ref{ch04:check:cardonly} \\
+any & distinct & distinct & refused & Checkclass~\ref{ch04:check:gross} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Only the top row composes; the implementation reaches all five rows
+through the single object-equality comparison, and the fixture families
+place at least one test in each refused row. The third row --- equal
+names, distinct carriers --- deserves the extra emphasis given to it by
+Rule~\ref{ch04:rule:name}: it models the situation where two modules
+independently declare an object under the same name with different element
+orders, and it is the row where a name-keyed registry design (looking
+objects up by name and trusting the hit) would silently compose across
+genuinely different types. The kernel has no registry; objects are values,
+and equality is structural over the full pair.
+
+\begin{boundary}
+\label{ch04:bound:negative}
+The negative-test catalog establishes that the implementation rejects the
+enumerated fixture families. It does not establish that the implementation
+rejects \emph{every} ill-typed composite expressible in the host language:
+that universal statement is a property of the code paths, argued informally
+by inspection (there is exactly one composition function, and its first
+action is the middle-object equality check) and not verified by proof
+assistant. The distinction matters and is recorded in the ledger
+(PO-TKS8-CORE-02, status \textsc{executable validation}).
+\end{boundary}
+
+\section{The Verification Story I: Bounded Exhaustive Testing}
+\label{ch04:sec:evidence}
+
+The kernel's executable evidence for Theorem~\ref{ch04:thm:laws} consists of
+bounded exhaustive enumeration: not sampled property tests but complete
+sweeps of every instance within a stated finite scope. This section explains
+exactly what is enumerated, reproduces the counting arithmetic behind the
+recorded case counts, and then confronts the epistemological question of
+what such testing establishes.
+
+\subsection{The associativity sweep: counting the $19{,}683$ triples}
+\label{ch04:sec:assoc-count}
+
+Fix one three-element object $X_3$ --- a single named carrier of size three.
+By Corollary~\ref{ch04:cor:monoid}, the endo-arrows on $X_3$ form the full
+transformation monoid on three points, of cardinality
+\[
+  |{\Hom(X_3, X_3)}| = 3^{3} = 27:
+\]
+each of the three source indices independently maps to one of three target
+indices. Because every arrow in this family has source and target $X_3$,
+\emph{every ordered triple} $(f, g, h)$ of them is composable in both
+associations --- the definedness condition holds automatically at both
+middle objects --- and so the associativity clause can be tested on all
+triples without any composability filtering. The number of ordered triples
+is
+\[
+  27^{3} = \bigl(3^{3}\bigr)^{3} = 3^{9} = 19{,}683.
+\]
+The suite constructs, for each of the $19{,}683$ triples, both
+$(h \circ g) \circ f$ and $h \circ (g \circ f)$, and asserts their
+extensional equality --- source, target, and full mapping tuple. This is the
+recorded figure of $19{,}683$ associativity triples: it is the complete
+associativity table of the transformation monoid $T_3$, checked in extension.
+
+Two remarks on the choice of scope. First, why endo-arrows on one carrier:
+because that is the unique way to make every triple composable, which turns
+the sweep into a clean product count with no reachability analysis; the
+typed (multi-carrier) sweep below covers the heterogeneous cases. Second,
+why size three: size two gives only $4^{3} = 64$ triples, which is thin, and
+size four gives $256^{3} = 16{,}777{,}216$ triples, which is affordable but
+was not the recorded snapshot's scope; the recorded suite pinned
+$19{,}683$. The count is exact and the enumeration is complete within its
+scope; the scope is what it is, and Section~\ref{ch04:sec:smallscope}
+addresses what that means.
+
+\subsection{The typed sweep: counting the $499$ maps}
+\label{ch04:sec:typed-count}
+
+The second family exercises the typed discipline across \emph{distinct}
+carriers: identity neutrality, typed composition, and mismatch rejection for
+maps whose source and target sizes range through four, including the empty
+carrier. The recorded count is $499$ typed maps, and the arithmetic behind
+it is the complete enumeration of Notation~\ref{ch04:not:hom} over one
+representative source-and-target pair per size combination:
+\[
+  \sum_{m=0}^{4} \sum_{n=0}^{4} n^{m} = 499,
+\]
+with the conventions $n^{0} = 1$ (including $0^{0} = 1$: the empty map from
+the empty object to the empty object) and $0^{m} = 0$ for $m \ge 1$.
+The row-by-row expansion makes the conventions visible:
+\begin{center}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+Source size $m$ & $n{=}0$ & $n{=}1$ & $n{=}2$ & $n{=}3$ & $n{=}4$ & Row total \\
+\midrule
+$m = 0$ & $1$ & $1$ & $1$ & $1$ & $1$ & $5$ \\
+$m = 1$ & $0$ & $1$ & $2$ & $3$ & $4$ & $10$ \\
+$m = 2$ & $0$ & $1$ & $4$ & $9$ & $16$ & $30$ \\
+$m = 3$ & $0$ & $1$ & $8$ & $27$ & $64$ & $100$ \\
+$m = 4$ & $0$ & $1$ & $16$ & $81$ & $256$ & $354$ \\
+\midrule
+Total & & & & & & $499$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+The presence of the $m = 0$ row and the $n = 0$ column is not pedantry.
+Empty carriers are where off-by-one and vacuous-quantification bugs live:
+the unique arrow out of the empty object composes with everything
+typed-compatibly, its mapping tuple is empty, and an implementation that
+mishandles zero-length tuples would fail exactly here and nowhere else. The
+suite's inclusion of the degenerate sizes is part of its value, and the lift
+functor's own sweep (Chapter~\ref{ch07:main}) makes the same choice for the
+same reason.
+
+For every enumerated map the suite checks the identity laws
+($f \circ \id = f$ and $\id \circ f = f$, with the appropriate identities),
+and for composable pairs among the enumerated maps it checks the typed
+composition of Definition~\ref{ch04:def:comp}; the negative fixtures of
+Section~\ref{ch04:sec:contract} run against representatives of the
+mismatched combinations.
+
+\subsection{Design alternative: sampled property testing}
+\label{ch04:sec:sampled}
+
+A reviewer familiar with property-based testing frameworks will ask why
+the suite enumerates rather than samples: the standard tooling generates
+random arrows, checks the law, shrinks counterexamples, and scales to
+carriers of size fifty as easily as size four. The kernel's choice of
+bounded exhaustion over sampling is deliberate, and the reasoning is
+worth recording because it recurs in every later chapter's evidence
+design.
+
+First, coverage claims compose better than confidence claims. ``Every
+triple through the stated bound passes'' is a statement another artifact
+can cite and build on --- the Lean equivalence obligation, for instance,
+could discharge part of its burden by replaying exactly the enumerated
+family against a verified oracle. ``No counterexample found in $10^{5}$
+random triples'' supports no such composition; its evidentiary content
+depends on the generator's distribution, which is itself unverified code,
+and distributional subtleties in random generation of structured data are
+a classic source of vacuous test suites (generators that never produce
+empty carriers, or never produce equal-carrier-distinct-name pairs,
+silently test nothing about those cases).
+
+Second, the failure modes plausible for this code are small-instance
+failure modes. The composition path branches on nothing but tuple
+lengths and index values; a defect that manifests only above size four
+would need to be size-dependent in a way the code has no means to
+express. This is the small-scope hypothesis \cite{jackson} applied with
+knowledge of the implementation, which is the strongest form in which it
+can be applied.
+
+Third, determinism of the evidence artifact. The exhaustive suite is a
+pure function of the code under test: two runs, on two machines, in two
+decades, enumerate the identical case list in the identical order. A
+sampled suite is a function of the code and a seed, and its transcript is
+evidence only relative to that seed's provenance. In a system whose
+entire object-layer design exists to eliminate interpreter-state
+nondeterminism (Chapter~\ref{ch03:main}), reintroducing randomness in the
+verification layer would be a discordant note.
+
+None of this is an argument against sampling in general --- for spaces
+that explode combinatorially, later chapters accept different trade-offs
+--- but for the category laws the exhaustive design dominates: the space
+is small, the enumeration is cheap, and the resulting claim is exact.
+
+\subsection{What bounded exhaustive testing establishes}
+\label{ch04:sec:smallscope}
+
+We now state, carefully, the epistemic status of the numbers just derived.
+
+Bounded exhaustive testing occupies a specific point between random testing
+and proof. Unlike sampled property-based testing, it leaves no gaps
+\emph{within its scope}: every instance up to the bound is checked, so any
+counterexample of size at most the bound is found with certainty, not with
+probability. Unlike proof, it says nothing beyond the bound: a defect that
+first manifests on carriers of size five, or on a thirty-first arrow, or on
+a triple whose middle carrier is empty in a configuration the sweep did not
+include, is invisible to it.
+
+The methodological warrant for taking small scopes seriously is the
+\emph{small-scope hypothesis}, articulated by Jackson in the context of the
+Alloy analyzer \cite{jackson}: a large fraction of the defects in structural
+specifications can be exhibited by counterexamples of small size, so
+exhaustive checking within a small bound catches a disproportionate share of
+real bugs. For the properties at issue here the hypothesis is unusually
+plausible, because the properties are \emph{uniform in the carrier}: the
+associativity computation $h(g(f(i)))$ does not branch on carrier size, and
+an implementation error in index composition --- composing tuples in the
+wrong order, off-by-one in an index bound, mishandling the empty tuple ---
+would almost certainly manifest already at sizes zero through four. The
+sweeps are designed around exactly this: they saturate the small sizes
+completely rather than sampling large ones sparsely.
+
+But plausibility is not proof, and the hypothesis is a hypothesis. The
+honest statement is the following, and the monograph will repeat it wherever
+the numbers are cited:
+
+\begin{boundary}
+\label{ch04:bound:testing}
+The $19{,}683$-triple and $499$-map sweeps establish that the implementation
+satisfies the category laws and the typed-composition contract \emph{on
+every instance within their stated bounds}, and nothing more. They are not
+proof-assistant verification of the implementation; they are not evidence
+about carriers of size five or beyond except via the small-scope heuristic,
+which is an empirical regularity about bug distributions
+\cite{jackson}, not a theorem; and passing them closes no open obligation in
+the ledger. The mathematical theorem (Theorem~\ref{ch04:thm:laws}) is proved
+for all sizes by the pointwise argument; the \emph{testing} speaks only to
+whether the code implements the definitions, and only within scope.
+\end{boundary}
+
+It is worth dwelling on the division of labor in that boundary statement,
+because it is easy to garble in summary. There are three artifacts: the
+mathematical proof, the implementation, and the test suite. The proof is
+complete and covers all finite sizes, but it is about the
+\emph{definitions}, not the code. The tests connect the code to the
+definitions, but only within bounds. The missing third leg --- a machine-
+checked connection between code and definitions at all sizes --- is exactly
+what the Lean seed begins and does not finish, and it is to the seed that we
+now turn.
+
+\section{The Verification Story II: The Lean Formal Seed}
+\label{ch04:sec:lean}
+
+\subsection{What kernel-checking means}
+
+The kernel's formal artifact is a pinned Lean~4.32.1 development
+\cite{lean4} containing, among other modules, \texttt{TypedCategory}: a Lean
+model of the definitions of Section~\ref{ch04:sec:defs} together with
+machine-checked proofs of the identity and associativity lemmas for that
+model.
+
+``Machine-checked'' has a precise meaning that is stronger than ``a tool
+accepted the file,'' and the distinction is the entire value proposition.
+Lean is architected around a small trusted kernel: the elaborator, the
+tactic framework, and the standard automation are large and unverified, but
+every proof they produce is re-checked, term by term, by the kernel, which
+implements only the type theory's inference rules. A theorem ``kernel-checks''
+when the fully elaborated proof term passes this final validation. Trust in
+a kernel-checked theorem therefore reduces to trust in (i) the kernel
+implementation, a deliberately small and heavily scrutinized artifact,
+(ii) the consistency of the axioms the proof depends on, and (iii) the
+fidelity of the \emph{statement} --- whether the formalized proposition says
+what the informal one says. Points (i) and (ii) are standard and shared with
+every Lean development; point (iii) is where all the residual risk
+concentrates, and Section~\ref{ch04:sec:gap} takes it up.
+
+\subsection{The axiom audit}
+
+Lean proofs can depend on axioms: the standard classical trio
+(\texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}), or worse,
+project-declared axioms, which are simply unproved assumptions, and
+\texttt{sorry}, which is an explicit hole. A development that quietly
+depends on a project axiom proves nothing about anything; a development
+audit must therefore inspect the transitive axiom dependencies of every
+theorem it advertises.
+
+The verifier script for the formal seed
+(\texttt{scripts/verify\_psr8\_lean\_gate1.py}) mechanizes this audit. It
+pins the toolchain (Lean~4.32.1, exact commit), checks source hashes so the
+audited files are the shipped files, builds the development through Lake,
+and then extracts the exact axiom-dependency report of each exported
+theorem. The policy it enforces is maximally strict for this development:
+the \emph{sole} permitted axiom is \texttt{propext} --- propositional
+extensionality, the principle that logically equivalent propositions are
+equal, one of Lean's standard axioms and among the least controversial ---
+and the verifier \emph{rejects} any occurrence of a project-declared axiom
+and any occurrence of \texttt{sorry}. The \texttt{TypedCategory} identity
+and associativity lemmas pass under this policy: their proofs are
+constructive index-chasing of exactly the shape of the proof of
+Theorem~\ref{ch04:thm:laws}, and need nothing beyond \texttt{propext} (used,
+where at all, in the ambient library plumbing rather than the combinatorial
+core).
+
+\begin{finding}
+\label{ch04:find:lean}
+The Lean model of Definitions~\ref{ch04:def:arrow}--\ref{ch04:def:comp}
+satisfies the identity and associativity laws, as kernel-checked theorems
+depending on no axiom beyond \texttt{propext}, with project axioms and
+\texttt{sorry} mechanically excluded by the audit script, under the pinned
+Lean~4.32.1 toolchain. \textup{Status: verified within the stated scope;
+this finding is about the Lean model, not about the Python implementation.}
+\end{finding}
+
+\subsection{The open gap: Python-to-Lean equivalence}
+\label{ch04:sec:gap}
+
+The final clause of Finding~\ref{ch04:find:lean} is the load-bearing caveat
+of this chapter, and we state it as its own obligation rather than a
+footnote.
+
+The Lean development formalizes a \emph{model} of the kernel's definitions:
+Lean types for named finite objects and total index maps, a Lean composition
+operation with the same definedness condition, Lean statements of the laws.
+The Python implementation realizes the \emph{same definitions by intent} ---
+the informal specification and this monograph's prose are the bridge --- but
+no formal artifact connects the two. Nothing machine-checked establishes
+that \texttt{compose} in \texttt{category.py} and the composition of the
+Lean model compute the same function of their arguments, or that the
+validation predicates coincide, or even that the two data representations
+are in the evident bijection. The equivalence claim currently rests on
+side-by-side inspection of two short pieces of code by human readers.
+
+This is a familiar situation in verification practice --- it is the standard
+``verified model versus running artifact'' gap --- and there are standard
+ways to close it, each with costs: re-implement the kernel in Lean and
+extract or transpile executable code from the proved artifact; or state the
+Python semantics formally and prove refinement; or generate exhaustive
+conformance vectors from the Lean model and replay them against Python,
+which would still be testing, but testing against a verified oracle. None of
+these has been done. The ledger records the gap as open
+(PO-TKS8-CORE-01 carries \textsc{partial formal verification present}
+precisely because the Lean side alone is verified; PO-TKS8-CORE-07 records
+the formalization seed as partial and present), and no artifact of this
+monograph should be summarized as ``the kernel is formally verified.'' The
+kernel's category layer has: a complete informal proof about its
+definitions; bounded exhaustive tests of its implementation; and a
+kernel-checked formalization of its model under a one-axiom policy. Those
+are three genuinely strong legs. The fourth --- proved equivalence of
+implementation and model --- is open, and stating so precisely is a result
+of this chapter, not a deficiency in it.
+
+\section{Exercises}
+\label{ch04:sec:exercises}
+
+The following exercises are checkable entirely within the material of this
+chapter; the first two are computations, the rest are short proofs or
+design analyses. They exist because the chapter's claims are of the kind
+best internalized by attempting to break them.
+
+\begin{exercise}
+\label{ch04:ex:compute}
+Let $X$ carry four elements and let $f, g : X \to X$ have mapping tuples
+$(1, 2, 3, 0)$ and $(0, 0, 2, 2)$ respectively. Compute the tuples of
+$g \circ f$ and $f \circ g$ via Proposition~\ref{ch04:prop:tuple}, and
+confirm they differ --- endomorphism monoids are not commutative in
+general, which is why Corollary~\ref{ch05:cor:commute} (powers of a
+\emph{single} arrow commute) has content.
+\end{exercise}
+
+\begin{exercise}
+\label{ch04:ex:count5}
+Redo the counting of Section~\ref{ch04:sec:typed-count} with the bound
+raised from four to five and verify the total is
+$\sum_{m,n \le 5} n^{m} = 4{,}425$. (This is the size the typed sweep
+would have at scope five; the recorded suite pins scope four.)
+\end{exercise}
+
+\begin{exercise}
+\label{ch04:ex:transposed}
+Define the \emph{transposed} composition of tuples by indexing the inner
+tuple at the outer tuple's entries (the bug of
+Section~\ref{ch04:sec:tuple}). Exhibit three endo-arrows on a two-element
+carrier for which the transposed operation fails associativity against
+extensional equality, confirming that the $19{,}683$-triple sweep would
+catch the bug at size three or below.
+\end{exercise}
+
+\begin{exercise}
+\label{ch04:ex:uniqueid}
+Show that Corollary~\ref{ch04:cor:unique-id} still holds if the
+right-neutrality hypothesis is weakened to hold for the single arrow
+$f = \id_X$. Conclude that the identity is determined by its behavior
+against itself and one side of neutrality.
+\end{exercise}
+
+\begin{exercise}
+\label{ch04:ex:coercion}
+Suppose a hypothetical variant of the kernel added carrier-only coercion
+(Rule~\ref{ch04:rule:carrier} dropped): composition is accepted whenever
+the middle \emph{carriers} agree, names ignored. Show first that the
+variant still satisfies all five clauses of
+Theorem~\ref{ch04:thm:laws} --- tuple composition is associative and
+unital regardless of names --- so no law-level test, exhaustive or not,
+can distinguish the variant from the kernel. Then explain why the variant
+nevertheless fails Checkclass~\ref{ch04:check:nameonly}, and conclude that
+the negative fixtures, not the law sweeps, are the artifacts that pin the
+kernel's typing discipline. (This is the precise sense in which the
+mismatch-rejection contract is an independent specification rather than a
+consequence of the category laws.)
+\end{exercise}
+
+\section{Summary of Claims and Their Status}
+\label{ch04:sec:summary}
+
+\begin{center}
+\small
+\begin{tabular}{@{}p{5.2cm}p{7.6cm}@{}}
+\toprule
+Claim & Status \\
+\midrule
+Category laws for the definitions (Theorem~\ref{ch04:thm:laws}) &
+Complete informal pointwise proof, this chapter; standard mathematics
+\cite{maclanecwm}. \\
+Category laws in the implementation &
+Bounded exhaustive evidence: $19{,}683$ associativity triples
+($27^{3}$ over the $3^{3}$ endo-arrows on a three-carrier), $499$ typed maps
+($\sum_{m,n \le 4} n^{m}$, empty carriers included); not verification
+\cite{jackson}. \\
+Mismatch rejection (Invariant~\ref{ch04:inv:mismatch}) &
+Executable validation: typed error class, negative fixture families of
+Section~\ref{ch04:sec:contract}; universal rejection argued by code
+inspection only. \\
+Category laws in the Lean model &
+Kernel-checked under pinned Lean~4.32.1, \texttt{propext}-only axiom audit,
+\texttt{sorry} rejected \cite{lean4}. \\
+Python-to-Lean equivalence &
+\textsc{Open}. No machine-checked connection between implementation and
+model; recorded in the ledger. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The next two chapters put the category to work. Chapter~\ref{ch05:main}
+develops the one place where iteration is licensed --- the endomorphism
+monoid of Corollary~\ref{ch04:cor:monoid} --- through to the finite
+idempotence theorem and its verification. Chapter~\ref{ch06:main} develops
+the heterogeneous side --- semigroupoid paths --- and analyzes, in three
+extended case studies, the invalid inference that the separation between the
+two is engineered to make unwritable.

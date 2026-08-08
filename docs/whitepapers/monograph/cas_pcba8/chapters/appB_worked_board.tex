@@ -1,0 +1,106 @@
+\chapter{A Worked Illustrative Board}\label{appB:worked}
+
+\begin{boundary}\label{appB:illustrative}
+The board fragments in this appendix are \emph{entirely hypothetical} and are
+constructed only to exercise the design-rule checker of Chapter~7. They are not
+drawn from the source corpus, they name no real cognitive mechanism, and they
+carry no safety, causal, or product claim. Every diagnostic below is a software
+outcome on an invented input. The governing status remains \textsc{draft / open
+/ ring 4 / not licensed / held}.
+\end{boundary}
+
+Throughout, we write boards in an informal bracketed notation for readability;
+the actual candidate consumes typed Python objects, not this surface syntax. The
+notation is a presentation device for this appendix only and is not a claim about
+the CCDL grammar audited in Chapter~10.
+
+\section{A clean pass}\label{appB:clean}
+
+Consider an illustrative two-stage board with one input port, one internal node,
+and one output port, all typed with a single compatible signal kind and unit.
+Each net has exactly one driver; the single test point carries a versioned
+calibration reference; there is no declared feedback loop; and no safety fuse is
+present, so no reachability obligation arises.
+
+\begin{example}[Clean board]\label{appB:cleanex}
+\textit{Illustrative.} Board \texttt{DEMO-CLEAN}: input \texttt{in} (signal
+\texttt{activation}, unit \texttt{alpha}) drives node \texttt{n1} through
+component \texttt{stage\_a}; \texttt{n1} drives output \texttt{out} through
+\texttt{stage\_b}; test point \texttt{tp1} on \texttt{n1} references calibration
+\texttt{cal\_v1}. The design-rule checker resolves every endpoint, finds exactly
+one driver per net, matches signal kinds and units across each net, resolves the
+calibration reference, finds no undeclared cycle, and emits no diagnostic. The
+board passes; a subsequent deterministic simulation emits a canonical trace with
+the fields of Appendix~A.
+\end{example}
+
+\section{Representative failures}\label{appB:failures}
+
+Each of the following illustrative edits to \texttt{DEMO-CLEAN} triggers one
+representative diagnostic. In every case the board \emph{fails}: an error is not
+downgraded to a warning, and a warning is never treated as a clean result.
+
+\begin{example}[Two drivers on one net: \texttt{PCBA8-NET-003}]\label{appB:net003}
+\textit{Illustrative.} Add a second component \texttt{stage\_c} whose output also
+drives \texttt{n1}. The net \texttt{n1} now has two drivers. The typed-connectivity
+check requires exactly one typed driver per net and emits
+\texttt{PCBA8-NET-003} (invalid driver count). The board fails.
+\end{example}
+
+\begin{example}[Signal/unit mismatch: \texttt{PCBA8-NET-005} / \texttt{-006}]\label{appB:net056}
+\textit{Illustrative.} Retype \texttt{stage\_b}'s input port to signal kind
+\texttt{constraint} with unit \texttt{fraction} while \texttt{n1} carries
+\texttt{activation} in \texttt{alpha}. The driver and load disagree under the
+closed admissible signal-kind/unit table, so the checker emits
+\texttt{PCBA8-NET-005} (signal-kind mismatch) and, for the unit disagreement,
+\texttt{PCBA8-NET-006} (unit mismatch). The board fails.
+\end{example}
+
+\begin{example}[Unmarked safety probe: \texttt{PCBA8-TP-003}]\label{appB:tp003}
+\textit{Illustrative.} Declare a safety-critical path through \texttt{n1} but
+leave \texttt{tp1} without the safety-probe marking. The calibration-and-probe
+check requires safety-marked paths to carry marked probes and emits
+\texttt{PCBA8-TP-003} (safety test point not marked). Note the boundary from
+Chapter~7: even a \emph{present, marked} probe would not establish safety; the
+diagnostic only enforces the structural precondition.
+\end{example}
+
+\begin{example}[Undeclared cycle: \texttt{PCBA8-FBK-001}]\label{appB:fbk001}
+\textit{Illustrative.} Add a component whose output feeds back into \texttt{in}'s
+upstream node without a feedback declaration. The feedback analysis builds the
+directed component graph, finds a strongly connected component, and---absent an
+exact feedback declaration with a unit delay, a dimensionless calibration, and a
+sub-unity gain bound---emits \texttt{PCBA8-FBK-001} (undeclared feedback). Had a
+declaration been present but without a delay, the diagnostic would instead be
+\texttt{PCBA8-FBK-002}.
+\end{example}
+
+\begin{example}[Unreachable fuse: \texttt{PCBA8-SAF-001}]\label{appB:saf001}
+\textit{Illustrative, echoing the source known-fault board of Chapter~11.} Insert
+a red stage clamped at output $0.1$ upstream of a safety fuse with threshold
+$0.9$, with only monotone non-amplifying stages between them. The
+threshold-reachability check propagates the conservative upper bound $0.1$ along
+the path; since $0.1<0.9$, the fuse can never trip, and the checker emits
+\texttt{PCBA8-SAF-001} (unreachable safety threshold). This illustrative board
+reproduces, on invented parameters, the structural fault that Chapter~11 analyzes
+in the published Cognitive Safety Board.
+\end{example}
+
+\section{A simulation narrative}\label{appB:sim}
+
+\begin{example}[Deterministic trace]\label{appB:trace}
+\textit{Illustrative.} Running \texttt{DEMO-CLEAN} of Example~\ref{appB:cleanex}
+under the reference simulator: the non-delay graph is topologically ordered
+\texttt{in}, \texttt{stage\_a}, \texttt{n1}, \texttt{stage\_b}, \texttt{out}; a
+typed input sample enters \texttt{in}; \texttt{stage\_a} fires, emitting a
+component event and a tick; \texttt{n1} carries the intermediate value, observed
+at \texttt{tp1} against \texttt{cal\_v1}; \texttt{stage\_b} fires; \texttt{out}
+produces a typed output. The result binds the board and component identities, the
+design-rule report identity, the catalog and decimal-context identities, the
+simulator profile and source baseline, the typed input and output, the two
+component events with tick linkage, the one test-point observation, the
+measurement IDs with their derivations, and the fixed Ring-4 boundary. The
+correct reading is only that the software performed the declared transitions for
+this exact fixture under this exact profile---never that any cognitive mechanism,
+causal relation, or safety property was established.
+\end{example}

@@ -1,0 +1,417 @@
+\chapter{Marked Covers and the Provenance Calculus}\label{ch08:main}
+
+Chapter~5 proved a negative result: the legacy ACBE and RPM cover clauses generate only maximal sieves, so the topology they define collapses onto the jointly-surjective coverage and retains no trace of which clause admitted which family. Chapter~7 then built a finite context factor whose generating families escape that collapse---the new generators contain no identities and no split epimorphisms. But a second, subtler information loss survives the repair, and no choice of generators can remove it: a Grothendieck topology, \emph{by its nature}, forgets why a cover was admitted. Sieve generation is a closure operator; closure operators erase history. The successor candidate therefore does not ask the topology to remember provenance. It maintains provenance in a parallel data structure---the \emph{marked cover}---whose design, serialization, derivation calculus, verification algorithm, and failure discipline are the subject of this chapter.
+
+The chapter is deliberately positioned between the combinatorics of Chapter~7 and the theorems of Chapter~9. The marked-cover mechanism is not a theorem about topoi; it is an executable audit invariant that travels alongside the mathematics. Keeping that distinction sharp---in both directions---is itself one of the registered claim boundaries, and Section~\ref{ch08:sec-boundaries} states it in full.
+
+\begin{boundary}\label{ch08:boundary-standing}
+Everything in this chapter concerns the v0.1 executable reference schema, which is deliberately narrower than the ambient research construction of Chapter~12: it represents ACBE/RPM context-factor families and their joint refinement only. Typed observational covers in the legacy $\cC$ coordinate, general arrows of $\cC\times L$, full product-site covers, and their serialization remain \textsc{open}. The artifact status is \textsc{draft / gate 1 research candidate / ring 4 / not licensed}; the ACBE and RPM cover-kind labels are formal marks with no empirical interpretation.
+\end{boundary}
+
+\section{Why topologies forget provenance}\label{ch08:sec-forget}
+
+We recapitulate the loss mechanism precisely, because the design of the marked record is dictated point-for-point by what is lost.
+
+\subsection{Sieve generation is a closure operator}
+
+Fix a small category $\cC$ and an object $V$. The sieves on $V$ form a complete lattice under inclusion, and for any set $\mathcal{F}$ of arrows into $V$ there is a smallest sieve $\langle\mathcal{F}\rangle$ containing $\mathcal{F}$: the set of all arrows into $V$ that factor through some member of $\mathcal{F}$ \cite{maclane, johnstone}. The assignment $\mathcal{F}\mapsto\langle\mathcal{F}\rangle$ is a closure operator: extensive, monotone, idempotent. Three consequences matter here.
+
+First, \emph{many families generate one sieve}. The map $\mathcal{F}\mapsto\langle\mathcal{F}\rangle$ is far from injective: adding to $\mathcal{F}$ any arrow that already factors through a member changes nothing; deleting a member that factors through another member changes nothing; reindexing changes nothing, since a sieve is a bare set of arrows. Whatever distinguished two generating families---their indexing, their origin, their intended reading---is unrecoverable from the sieve.
+
+Second, \emph{a topology stores even less}. A Grothendieck topology $J$ assigns to each object a set $J(V)$ of covering sieves satisfying the maximality, stability, and transitivity axioms \cite{stacks00ZC}. The data structure is a subset of the sieve lattice at each object---nothing more. There is no slot in the definition where an annotation could live. If two different coverage clauses contribute the same sieve, the topology contains that sieve once, with no record of double parentage. And saturation under the axioms adds further covering sieves that no clause contributed directly, orphaned by construction.
+
+Third, \emph{the finite model realizes the loss concretely}. Proposition 7.\ref{ch07:prop-coincidence} (Chapter~7) computed the coincidence loci exactly: at each of the four singleton contexts, and at both diagonal doubletons, the unmarked ACBE family and the unmarked RPM family are literally the same set of arrows. At those seven contexts (including $\varnothing$, where both are the null family), no topology generated from these inputs can distinguish the ACBE contribution from the RPM contribution, because the inputs are indistinguishable before generation even begins.
+
+\begin{remark}[The legacy collapse was the extreme case]\label{ch08:rem-legacy-extreme}
+The Chapter~5 collapse can be re-read in this light. There, the ACBE clause contained an identity and the RPM clause a split epimorphism, so both clauses generated the \emph{maximal} sieve---the top of the sieve lattice, which belongs to every topology by axiom (J1). Provenance was not merely forgotten; the contributed content was indistinguishable from no contribution at all. The successor's proper generators (Chapter~7) repair the collapse: at the global context both generated sieves are nonmaximal and distinct. But the singleton coincidence shows the repaired construction still forgets provenance wherever the input families coincide, and the closure-operator argument shows that some forgetting is intrinsic. The design conclusion, registered in the governing specification: \emph{the ordinary Grothendieck topology intentionally forgets a tag after generation; the parallel provenance record must not.}
+\end{remark}
+
+\subsection{What governance needs that the topology cannot supply}
+
+The Project Coherence audit discipline requires, for every cover admitted into any registered construction: which kind of cover it is (its clause of origin); on whose authority it was admitted; under what assumptions; with what evidence or proof references; in what review state; and, for derived covers, from which parent covers it was derived, with tamper-evident linkage. None of these fields exists in a Grothendieck topology, and Section~\ref{ch08:sec-forget} shows none can be reconstructed from one. Hence the two-representation design.
+
+\section{The two-representation design}\label{ch08:sec-two-reps}
+
+\begin{construction}[Unmarked families and marked covers]\label{ch08:con-two-reps}
+The v0.1 reference model maintains, for each admitted cover, two representations with disjoint consumers:
+\begin{enumerate}
+\item the \emph{unmarked family}: the exact list of arrows consumed by topology generation---for the finite context factor, an indexed family $\{V\cap B\to V\}$ as computed in Chapter~7, or the null family at $\varnothing$;
+\item the \emph{marked cover}: an immutable record
+\[
+\bigl(\texttt{derivation\_kind},\ \texttt{target},\ \texttt{exact\_member\_arrows},\ \texttt{COVER\_MARK\_RECORD},\ \texttt{parent\_cover\_sha256s}\bigr)
+\]
+carrying the same arrows together with the provenance fields of Section~\ref{ch08:sec-schema}, serialized canonically and bound by a SHA-256 digest.
+\end{enumerate}
+\end{construction}
+
+\begin{invariant}[Consumer separation]\label{ch08:inv-consumers}
+The topology consumes the unmarked family and nothing else; audit, migration, and governance code consume the marked record and nothing else. No code path derives topological structure from mark fields, and no code path reconstructs mark fields from topological structure.
+\end{invariant}
+
+The invariant has a mathematical face and an engineering face. Mathematically, it guarantees that the theorems of Chapters~9 and~10 are theorems about ordinary sites: erasing every mark leaves the sites, sheaves, and modalities untouched, so no proof secretly depends on provenance data, and independent reviewers can check the mathematics against the standard literature \cite{maclane, stacks00ZC} without reference to the serialization layer. In the other direction, it guarantees that provenance claims never rest on topological reconstruction, which Section~\ref{ch08:sec-forget} showed to be impossible at the coincidence loci.
+
+\begin{remark}[Both representations name the same arrows]\label{ch08:rem-same-arrows}
+The marked record's \texttt{exact\_member\_arrows} field repeats, verbatim, the arrow list of the unmarked family---including retained empty pieces. This redundancy is deliberate: it is what allows the parent-resolution algorithm (Section~\ref{ch08:sec-resolution}) to \emph{recompute} a derived record's members from its parents and compare against the stored list, converting the mathematical determinism of pullback and refinement (Chapter~7, Sections~7.\ref{ch07:sec-pullback-stability}--7.\ref{ch07:sec-composition}) into an executable integrity check.
+\end{remark}
+
+\section{The marked-cover schema, field by field}\label{ch08:sec-schema}
+
+We now specify the record. The schema has two layers: the outer \texttt{MARKED\_COVER}, which fixes what the cover \emph{is} and where it came from derivationally, and the inner \texttt{COVER\_MARK\_RECORD}, which fixes its governance metadata. In the registered notation:
+
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\texttt{MARKED\_COVER} & \texttt{COVER\_MARK\_RECORD} \\
+\midrule
+\texttt{derivation\_kind} & \texttt{cover\_kind} \\
+\texttt{target} & \texttt{source\_authority\_ref} \\
+\texttt{exact\_member\_arrows} & \texttt{assumptions} \\
+\texttt{COVER\_MARK\_RECORD} & \texttt{evidence\_or\_proof\_refs} \\
+\texttt{parent\_cover\_sha256s} & \texttt{review\_state} \\
+ & \texttt{provenance\_chain} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{\texttt{derivation\_kind}}
+One of exactly three controlled values:
+\begin{itemize}
+\item \texttt{GENERATOR} --- the record describes a primitive generating cover: one of the families $K_{A}(V)$ or $K_{R}(V)$ of Chapter~7 (or the null cover), admitted directly from the registered specification rather than derived from other covers. Generator records have an empty parent set.
+\item \texttt{PULLBACK} --- the record was derived from a single parent cover by pulling back along an inclusion $U\to V$, in the sense of Proposition 7.\ref{ch07:prop-pullback-stability}. Exactly one parent digest is required.
+\item \texttt{COMMON\_REFINEMENT} --- the record was derived by the cross-partition refinement of Lemma 7.\ref{ch07:lem-cross-refinement}: refining an ACBE cover by RPM covers of its pieces (equivalently, and verified equivalently, the other order). Exactly two parent digests are required, one from each family, with the multiplicity rule of Section~\ref{ch08:sec-derivation}.
+\end{itemize}
+The derivation kind is not decoration: the parent-resolution algorithm branches on it, and each kind has its own recomputation obligation and its own rejection conditions.
+
+\subsection{\texttt{target}}
+The context $V\in L$ that the cover covers, serialized as its atom set. For a \texttt{PULLBACK} record the target is the subcontext $U$; for a \texttt{COMMON\_REFINEMENT} record it is the common target of both parents (the record is rejected if the parents' targets differ).
+
+\subsection{\texttt{exact\_member\_arrows}}
+The complete list of member arrows, each an ordered pair (domain, target), with empty pieces retained exactly as in Definition 7.\ref{ch07:def-generating}. ``Exact'' is normative: the list is neither normalized by dropping empty pieces nor deduplicated, because it must equal, arrow for arrow, what the corresponding unmarked family feeds to topology generation, and---for derived records---what recomputation from the parents produces.
+
+\subsection{\texttt{COVER\_MARK\_RECORD.cover\_kind}}
+The clause of origin: for the v0.1 context-factor schema, \texttt{ACBE} or \texttt{RPM} for generators and pullbacks, and the joint kind for common refinements. This is the field the topology cannot carry (Section~\ref{ch08:sec-forget}) and the reason the whole mechanism exists. The successor architecture reserves the kind \texttt{OBSERVATIONAL} for legacy-coordinate covers, but---per Boundary~\ref{ch08:boundary-standing}---observational cover records are \textsc{open} and not part of the executable v0.1 schema.
+
+\subsection{\texttt{COVER\_MARK\_RECORD.source\_authority\_ref}}
+A reference identifying the registered authority under which the cover was admitted: for the v0.1 generators, the governing specification section that defines $K_{A}$ and $K_{R}$; for derived records, the derivation rule invoked. The field makes ``who says this is a cover'' a first-class, digest-bound datum rather than an ambient assumption.
+
+\subsection{\texttt{COVER\_MARK\_RECORD.assumptions}}
+The explicit assumptions under which the admission is valid---for the context-factor generators, for instance, that arrows of $L$ are inclusions, that pullbacks are intersections, and that the empty family covers the empty context. Recording assumptions in the record itself means a future change of ambient convention cannot silently re-validate old covers under new rules: the old records name the old rules.
+
+\subsection{\texttt{COVER\_MARK\_RECORD.evidence\_or\_proof\_refs}}
+References to the proof artifacts and executable evidence backing the admission---for v0.1, the specification's theorem sections and the finite certificate. The field does not contain the evidence; it contains stable references. The distinction between the record and the raw evidence bytes is governed by the Evidence Packet boundary of Section~\ref{ch08:sec-boundaries}.
+
+\subsection{\texttt{COVER\_MARK\_RECORD.review\_state}}
+The record's position in the registered review lifecycle. The vocabulary is registry-controlled; values encountered in the ledger artifacts of this program include \texttt{IN\_REVIEW} and \texttt{UNASSESSED}. The deserializer rejects any record whose review state is not in the controlled vocabulary (Section~\ref{ch08:sec-rejection}); in particular, a record cannot claim a review state that the registry does not define, and---because the digest binds the field---cannot have its review state altered without changing its identity.
+
+\subsection{\texttt{COVER\_MARK\_RECORD.provenance\_chain}}
+The ordered chain of derivation steps that produced this record, each step naming its parent digest(s). For a generator the chain is empty; for a pullback it extends the parent's chain by one step naming the parent digest; for a common refinement it records both generating parents. The chain duplicates information recoverable from recursive parent resolution, and that duplication is intentional: it lets an auditor read a record's full history without resolving parents, while the resolver (Section~\ref{ch08:sec-resolution}) independently verifies that the chain and the parent graph agree.
+
+\subsection{\texttt{parent\_cover\_sha256s}}
+The set of SHA-256 digests of the immediate parent records, stored \emph{sorted}. Sorting matters for canonicalization: a set has no intrinsic order, so a deterministic serialization must impose one, and lexicographic order on the hex digests is the registered choice. \texttt{GENERATOR} records carry the empty set; \texttt{PULLBACK} records exactly one digest; \texttt{COMMON\_REFINEMENT} records exactly two.
+
+\section{Canonical JSON and the digest binding}\label{ch08:sec-digest}
+
+\begin{construction}[Canonical serialization and digest]\label{ch08:con-digest}
+Every marked cover is serialized to \emph{canonical JSON}: a deterministic byte encoding in which object keys appear in a fixed sorted order, primitive values have a single admissible encoding, and no insignificant whitespace or alternative escapings are permitted---so that equal records produce equal bytes and distinct records produce distinct bytes. The record's digest is the SHA-256 hash of its canonical bytes. The digest therefore binds, jointly and inseparably: the derivation kind, the target, the exact member arrows, every field of the mark record, and the sorted set of parent digests.
+\end{construction}
+
+\subsection{What canonicalization must guarantee}
+
+``Canonical'' is a load-bearing word, and the schema's rejection rules (Section~\ref{ch08:sec-rejection}) are partly consequences of it. The serialization must have four properties, each of which closes a specific integrity hole.
+
+\begin{enumerate}
+\item \textbf{Determinism.} Equal records yield byte-identical serializations, across implementations, platforms, and runs. Without determinism, a digest names an accident of serialization rather than a record, and the round-trip protocol below is unsatisfiable. Determinism is why object keys are emitted in a fixed sorted order and why the parent digest set is stored sorted: JSON objects and mathematical sets are unordered, and every unordered thing that enters the bytes must first receive a canonical order.
+\item \textbf{Injectivity on records.} Distinct records yield distinct byte strings. This holds when every field has exactly one admissible encoding---no optional whitespace, no alternative number formats, no equivalent escape sequences. Injectivity is what lets digest inequality certify record inequality in the singleton-coincidence argument of Section~\ref{ch08:sec-singleton}.
+\item \textbf{Unambiguous parseability.} The bytes parse back to exactly one record. Duplicate keys are the classical violation: JSON parsers disagree on whether the first or last duplicate wins, so a byte string with duplicate keys can denote different records to different consumers while carrying one digest. The schema does not adjudicate the ambiguity; it rejects the bytes (Table~\ref{ch08:tab-rejection}).
+\item \textbf{Schema closure.} The bytes contain nothing but the declared fields. Unknown keys are rejected rather than ignored because an ignored-but-digested field is a covert channel: two records could differ in a field no consumer reads yet carry different digests, or---worse under a sloppier digest scope---agree in digest while differing in content a future consumer might read.
+\end{enumerate}
+
+\begin{remark}[Digests as names]\label{ch08:rem-digest-names}
+Under these four properties, the digest is a \emph{name}: a fixed-length, location-independent, collision-resistant identifier that any party can recompute from the record itself. All cross-record references in the schema---parent sets, provenance chains---are by digest, never by file path, database key, or human-readable label. This is what makes the derivation DAG portable: a population of records can be scattered across stores and reassembled by any resolver, because the reference graph is intrinsic to the records.
+\end{remark}
+
+\begin{invariant}[Immutability]\label{ch08:inv-immutable}
+A marked cover is immutable: any change to any bound field yields a different canonical byte string and hence, up to SHA-256 collision, a different digest. There is no update operation on marked covers; there is only the creation of new records, which---if derived---name their parents by digest.
+\end{invariant}
+
+\begin{remark}[Hash chaining and tamper evidence]\label{ch08:rem-chain}
+Because the parent digests are themselves bound into the child's digest, the records form a hash-chained directed acyclic graph, with generators as sources: the same discipline that makes append-only logs tamper-evident. Altering any ancestor record changes its digest, which invalidates the stored parent reference in every descendant, which the parent-resolution algorithm detects as a missing or mismatched parent. Tampering anywhere in a derivation's past is thus visible at its present, provided resolution is actually run---which is why the schema makes resolution mandatory at deserialization time rather than optional at audit time.
+\end{remark}
+
+\begin{boundary}\label{ch08:boundary-digest-scope}
+The cover digest is the canonical \emph{semantic-record} digest only: it certifies the integrity of the marked cover's own fields and derivational ancestry. It does not certify raw ingress evidence. An enclosing Evidence Packet must separately bind the raw bytes of any external material referenced by \texttt{evidence\_or\_proof\_refs}; conflating the two digests would let a record vouch for bytes it never saw. This division is registered in the governing specification and restated in Section~\ref{ch08:sec-boundaries}.
+\end{boundary}
+
+\section{The derivation calculus}\label{ch08:sec-derivation}
+
+Derived records are not free-form: exactly two derivation rules exist in v0.1, mirroring the two combinatorial operations verified in Chapter~7. We state them as rules, with their preconditions and the content of their recomputation obligations.
+
+\begin{ruleenv}[Generator admission]\label{ch08:rule-generator}
+A \texttt{GENERATOR} record for partition $P\in\{A,R\}$ at nonempty context $V$ has target $V$, member arrows exactly $\{V\cap B\to V \mid B\in P\}$ with empty pieces retained (Definition 7.\ref{ch07:def-generating}), cover kind the partition's kind, empty parent set, and empty provenance chain. The null-cover record at $\varnothing$ is the degenerate generator with the empty member list. A generator record whose member list disagrees with the Table 7.\ref{ch07:tab-generating} computation for its declared target and kind is invalid.
+\end{ruleenv}
+
+\begin{ruleenv}[Pullback derivation]\label{ch08:rule-pullback}
+Given a valid record $c$ with target $V$ and an inclusion $U\subseteq V$, the pullback record $c|_{U}$ has: derivation kind \texttt{PULLBACK}; target $U$; member arrows obtained by intersecting each member domain with $U$ (Proposition 7.\ref{ch07:prop-pullback-stability}), retaining empties; mark record inheriting the parent's cover kind, with the provenance chain extended by a step naming the parent digest; and parent set $\{\,\mathrm{sha256}(c)\,\}$. By Chapter~7 the members of $c|_{U}$ are exactly the generating family $K_{P}(U)$ of the same partition---the executable checker verifies this as \texttt{marked\_pullbacks\_preserve\_topology\_family}---and the parent linkage as \texttt{marked\_pullbacks\_bind\_parent\_provenance}.
+\end{ruleenv}
+
+\begin{ruleenv}[Common refinement derivation]\label{ch08:rule-refinement}
+Given a valid ACBE generating record $a$ and a valid RPM generating record $r$ with the same target $V$, the common-refinement record $a\wedge r$ has: derivation kind \texttt{COMMON\_REFINEMENT}; target $V$; member arrows the pairwise intersections $\{V\cap A_{i}\cap R_{j}\to V\}$, which by transversality (Theorem 7.\ref{ch07:thm-transverse} and Lemma 7.\ref{ch07:lem-cross-refinement}) are exactly the singleton pieces $V\cap\{\omega_{ij}\}\to V$; a mark record carrying the joint kind with both parent digests in the provenance chain; and parent set $\{\mathrm{sha256}(a),\ \mathrm{sha256}(r)\}$, sorted. The rule's precondition is strict: \emph{exactly one} ACBE generating parent and \emph{exactly one} RPM generating parent. A putative join with two ACBE parents, two RPM parents, one parent, three parents, or parents of unde\-clared kind does not satisfy the rule and is rejected at resolution. At the global context the members are the four singletons with no empty pieces (Example 7.\ref{ch07:ex-composite-global}); the checker records this as \texttt{joint\_refinement\_is\_four\_singletons} and the double parentage as \texttt{joint\_refinement\_retains\_both\_parent\_digests}.
+\end{ruleenv}
+
+\begin{remark}[Why the parent multiset is load-bearing]\label{ch08:rem-multiset}
+The one-ACBE-plus-one-RPM precondition is not bureaucratic fussiness. The common refinement is the point where the two coordinate topologies interact---in Chapter~9 it computes the join $J_{A}\vee J_{R}$, and in Chapter~10 it underlies the composition theorem. A derivation record claiming joint status must therefore witness genuine two-sided parentage. Allowing, say, two ACBE parents would let a record assert jointness that the mathematics does not have (a same-partition refinement is absorbing, by Lemma 7.\ref{ch07:lem-same-refinement}, and yields no singletons); the rule makes such an assertion unserializable rather than merely discouraged.
+\end{remark}
+
+\begin{remark}[The derivation graph]\label{ch08:rem-dag}
+Under the three rules, any population of records forms a DAG whose sources are generators, whose unary edges are pullbacks, and whose binary joins are common refinements. Acyclicity is not an assumption but a checked property (Section~\ref{ch08:sec-resolution}): a cycle would require a record to be its own ancestor, hence its digest to depend on itself, which the resolver detects structurally rather than trusting cryptographic infeasibility alone.
+\end{remark}
+
+\section{Parent resolution at deserialization}\label{ch08:sec-resolution}
+
+Serialization is trivial; the discipline lives in \emph{de}serialization. A marked record arriving from storage or transit is untrusted bytes. The v0.1 rule: a derived record may not be accepted---not logged, not displayed, not counted as evidence---until a parent resolver has reconstructed and verified its entire derivation. The certificate check \texttt{marked\_derived\_records\_resolve} exercises exactly this path.
+
+\begin{algorithm}[Parent resolution]\label{ch08:alg-resolution}
+\emph{Input:} a candidate record $c$ and a resolver mapping digests to available records. \emph{Output:} acceptance of $c$, or rejection with a taxonomy code (Section~\ref{ch08:sec-rejection}).
+\begin{enumerate}
+\item \textbf{Syntactic validation.} Parse the canonical JSON. Reject on any unknown key, any duplicate key, any missing required field, or any field value outside its controlled vocabulary (including \texttt{derivation\_kind} and \texttt{review\_state}).
+\item \textbf{Digest check.} Recompute the canonical bytes of $c$ and their SHA-256; reject if the recomputed digest disagrees with any externally supplied identity for $c$.
+\item \textbf{Kind arity.} Check the parent set arity against the derivation kind: zero parents for \texttt{GENERATOR}, one for \texttt{PULLBACK}, two for \texttt{COMMON\_REFINEMENT}. Reject on mismatch.
+\item \textbf{Parent fetch and rehash.} For each digest $d$ in \texttt{parent\_cover\_sha256s}: obtain the parent record from the resolver; reject if absent (missing parent). Serialize the fetched parent canonically, rehash, and reject unless the hash equals $d$ (parent digest mismatch). \emph{Every} parent is rehashed; no digest is trusted on the resolver's say-so.
+\item \textbf{Recursive resolution and acyclicity.} Resolve each parent by recursive application of this algorithm, maintaining the set of digests on the current descent path; reject if a parent's digest already occurs on the path (cycle). Recursion terminates at \texttt{GENERATOR} records, which are validated against Rule~\ref{ch08:rule-generator}.
+\item \textbf{Recomputation.} Recompute what $c$ ought to contain from its verified parents: for a \texttt{PULLBACK}, apply Rule~\ref{ch08:rule-pullback} to the parent and the declared target; for a \texttt{COMMON\_REFINEMENT}, check the parents are exactly one ACBE and one RPM generating record with the common target, and apply Rule~\ref{ch08:rule-refinement}. Reject unless the recomputed member arrows equal the stored \texttt{exact\_member\_arrows} arrow-for-arrow and the recomputed mark (cover kind, provenance chain) equals the stored mark.
+\item \textbf{Accept.} Only a record surviving all six stages is treated as a marked cover.
+\end{enumerate}
+\end{algorithm}
+
+\begin{remark}[What recomputation buys]\label{ch08:rem-recompute}
+Stage 6 is the point where Chapter~7's determinism becomes a security property. Because pullback members are \emph{functions} of the parent and the target (intersection with $U$), and refinement members are \emph{functions} of the two parents (pairwise intersection, landing on singletons by transversality), a derived record contains no degrees of freedom beyond its parents and its declared operation. The resolver therefore does not check the stored members for plausibility; it checks them for \emph{equality} with an independent recomputation. A record that stored the right digest linkage but the wrong arrows---or the right arrows but a laundered cover kind---fails stage 6 even though every hash verifies.
+\end{remark}
+
+\begin{protocol}[Round-trip stability]\label{ch08:proto-roundtrip}
+For every record: serialize, deserialize, re-serialize; the two byte strings and the two digests must be identical, and the resolved record must be field-for-field equal to the original. The executable certificate registers this as \texttt{marked\_cover\_roundtrip\_stable}. Round-trip stability is what entitles later artifacts to treat a digest as a stable name for a record across process and storage boundaries.
+\end{protocol}
+
+\section{The fail-closed rejection taxonomy}\label{ch08:sec-rejection}
+
+The v0.1 integrity rules are \emph{fail-closed}: every anomaly is a rejection, and a rejected record contributes nothing---it is not evidence, not a warning-annotated cover, not a partially trusted object. The registered formulation is blunt: a join without exactly one ACBE and one RPM generating parent, or a pullback without its exact parent, is \emph{rejected rather than treated as evidence}. Table~\ref{ch08:tab-rejection} organizes the rejection classes; each row names the anomaly, the algorithm stage that detects it, and what accepting it would have corrupted.
+
+\begin{table}[htbp]
+\centering
+\caption{Fail-closed rejection taxonomy for marked-cover deserialization.}
+\label{ch08:tab-rejection}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Rejection class & Detected at & What acceptance would corrupt \\
+\midrule
+Unknown JSON key & stage 1 & schema closure; smuggled fields \\
+Duplicate JSON key & stage 1 & canonical-bytes uniqueness \\
+Missing required field & stage 1 & record completeness \\
+Uncontrolled \texttt{review\_state} & stage 1 & review-lifecycle integrity \\
+Uncontrolled \texttt{derivation\_kind} & stage 1 & derivation calculus closure \\
+Self-digest mismatch & stage 2 & record identity \\
+Parent arity mismatch & stage 3 & derivation-rule preconditions \\
+Missing parent & stage 4 & ancestry completeness \\
+Parent digest mismatch & stage 4 & hash-chain integrity \\
+Cycle in parent graph & stage 5 & well-foundedness of derivations \\
+Invalid generator members & stage 5 & anchoring in Table 7.\ref{ch07:tab-generating} \\
+Wrong parent kinds for join & stage 6 & one-ACBE-one-RPM rule \\
+Member recomputation mismatch & stage 6 & arrow-exactness \\
+Mark recomputation mismatch & stage 6 & provenance faithfulness \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{remark}[Why fail-closed, and why here]\label{ch08:rem-failclosed}
+The alternative---accept with a warning, quarantine, best-effort repair---reintroduces exactly the ambiguity the mechanism exists to remove. A provenance record that might be wrong is not a weaker provenance record; it is no provenance record, because the consumer of provenance is an audit trail whose value is its trustworthiness under adversarial review. Fail-closed rejection also composes: since acceptance requires full recursive resolution (stage 5), an anomaly anywhere in an ancestry poisons every descendant, which is the correct propagation for tamper evidence (Remark~\ref{ch08:rem-chain}). The cost is availability---a lost parent makes its descendants unusable---and the design accepts that cost explicitly: in this artifact class, silent degradation is the failure mode being engineered against, not an acceptable fallback.
+\end{remark}
+
+\subsection{Three rejection walkthroughs}\label{ch08:sec-walkthroughs}
+
+Abstract taxonomies invite the question of what a rejection actually looks like. Three miniature scenarios, each exercising a different stage of Algorithm~\ref{ch08:alg-resolution}.
+
+\begin{example}[A tampered ancestor]\label{ch08:ex-tamper}
+An auditor holds the three-generation ancestry of Example~\ref{ch08:ex-derived}: generators $g_{A}$, $g_{R}$, join $j$, pullback $p=j|_{T_{00}}$. Suppose the stored copy of $g_{R}$ is altered after the fact---say its \texttt{review\_state} is edited in place to a more favorable controlled value. The edit changes $g_{R}$'s canonical bytes, hence its digest. Resolving $p$: stage 4 fetches $j$'s parents by the digests stored \emph{in $j$}; the resolver returns the altered $g_{R}$; rehashing yields a digest different from the stored $d_{R}$; rejection (parent digest mismatch), propagating to $p$. Note what did \emph{not} help the tamperer: the altered field was within the controlled vocabulary (stage 1 passes) and the member arrows were untouched (stage 6 would pass); the hash chain alone catches the edit. Note also the fail-closed cost: the honest descendants $j$ and $p$ are now unusable until an untampered $g_{R}$ is restored---by design.
+\end{example}
+
+\begin{example}[A laundered join]\label{ch08:ex-launder}
+A record $j'$ claims \texttt{COMMON\_REFINEMENT} at $\Omega$ with parent set $\{d_{A},d_{A}'\}$, where both digests resolve to ACBE generator records (one for $K_{A}(\Omega)$, one---validly derived---for a pullback of it). Stage 3 passes: two parents. Stages 4--5 pass: both parents exist, rehash, and resolve. Stage 6 fails: the recomputation precondition requires exactly one ACBE and one RPM \emph{generating} parent, and the parent kinds are (ACBE, ACBE); rejection (wrong parent kinds for join). The mathematical backstop, per Remark~\ref{ch08:rem-multiset}: had the resolver instead recomputed members from these parents by same-partition refinement, Lemma 7.\ref{ch07:lem-same-refinement} says the result would be the original family plus empty pieces---not the four singletons the record stores---so the member-recomputation check would reject it independently. The arity-and-kind rule and the member recomputation are redundant defenses, and the schema keeps both.
+\end{example}
+
+\begin{example}[Duplicate-key bytes]\label{ch08:ex-dupkey}
+A byte string arrives containing the key \texttt{review\_state} twice, with values \texttt{IN\_REVIEW} and a second, more advanced state. A lenient parser would silently pick one---and different parsers pick differently, so the ``record'' denoted by the bytes depends on the consumer. Stage 1 rejects the bytes outright (duplicate JSON key) before any semantic field is examined. The scenario is the canonical argument for parse-level strictness: every later stage operates on a parsed record, so ambiguity at the byte layer would poison every downstream guarantee while leaving every downstream check formally satisfied.
+\end{example}
+
+\begin{threat}[What the mechanism defends against, and what it does not]\label{ch08:threat-model}
+Defended: post-hoc alteration of any field of any record (digest breaks); re-parenting a derivation (parent digests are bound); laundering a cover kind through a derived record (recomputation of the mark fails); asserting jointness without two-sided parentage (arity and kind checks); fabricating members not derivable from parents (member recomputation fails); circular self-justification (acyclicity). Not defended: compromise of the registry that defines the controlled vocabularies; collisions in SHA-256 (assumed infeasible, not proved); a fabricated \emph{generator} record that correctly imitates Rule~\ref{ch08:rule-generator} for a legitimate family---generators are anchored in the specification's tables, not in cryptography, so their trust derives from the source-verification artifacts, whose raw-byte binding is the Evidence Packet's job (Boundary~\ref{ch08:boundary-digest-scope}).
+\end{threat}
+
+\section{Operational lifecycle}\label{ch08:sec-lifecycle}
+
+The schema fixes what records are; a brief lifecycle account fixes when they come to exist and who touches them. Four phases, each with its protocol obligations.
+
+\begin{protocol}[Creation]\label{ch08:proto-creation}
+Generator records are created once, from the registered specification's definitions, at model-construction time---their member arrows computed from Table 7.\ref{ch07:tab-generating}, their mark fields populated from the specification's clauses, their digests computed and recorded. Derived records are created only by executing Rule~\ref{ch08:rule-pullback} or Rule~\ref{ch08:rule-refinement} against already-validated parents; a derived record is never authored by hand. Creation is the only write operation in the system; there is no update and no delete, only the growth of an append-only DAG.
+\end{protocol}
+
+\begin{protocol}[Storage and exchange]\label{ch08:proto-storage}
+Records are stored and transmitted as their canonical bytes. Because references are by digest (Remark~\ref{ch08:rem-digest-names}), storage layout is immaterial to integrity: records may be co-located, sharded, or duplicated freely, and duplication is idempotent---two copies of the same record have the same digest and are the same record. A store that loses a record loses, with it, the resolvability of all descendants (fail-closed), which is an argument for redundant storage of ancestries, not for weakening resolution.
+\end{protocol}
+
+\begin{protocol}[Consumption]\label{ch08:proto-consumption}
+Every read path begins with Algorithm~\ref{ch08:alg-resolution}; no consumer parses fields out of unresolved bytes. Two consumer classes exist. \emph{Audit} reads records to answer provenance queries---what kind, whose authority, which ancestry---and treats the resolved DAG as evidence about admissions. \emph{Migration} reads records to carry covers across schema or model versions, and must preserve digests of ancestors it re-embeds (a migrated derivation cites the same parents, or explicitly re-derives with new records; it never silently rewrites old ones). Per Invariant~\ref{ch08:inv-consumers}, no consumer feeds mark data into topology generation.
+\end{protocol}
+
+\begin{protocol}[Review-state evolution]\label{ch08:proto-review}
+Because records are immutable, a change of review state is a new record superseding an old one, not an edit. The v0.1 model's controlled-vocabulary check guarantees only that stored states are legal values; the workflow by which states advance (and which registry authority may advance them) is governed by the program's review process outside this schema, and nothing in this chapter asserts that any record's state has advanced beyond what the ledger of Chapter~9 reports.
+\end{protocol}
+
+\section{The singleton coincidence, in full}\label{ch08:sec-singleton}
+
+We now work the registered example end to end: the context where the topology's forgetting is total and the marked layer's remembering is exact.
+
+\begin{example}[Marked covers at a singleton context]\label{ch08:ex-singleton}
+Fix the singleton context $V=\{\omega_{00}\}$ (the other three singletons are identical up to the flip automorphisms of Proposition 7.\ref{ch07:prop-flips}).
+
+\emph{Step 1: the unmarked families coincide.} From the $\{\omega_{00}\}$ row of Table 7.\ref{ch07:tab-generating}:
+\[
+K_{A}(V)=\bigl\{\,V\cap A_{0}\to V,\ V\cap A_{1}\to V\,\bigr\}
+=\bigl\{\,\{\omega_{00}\}\to V,\ \varnothing\to V\,\bigr\},
+\]
+\[
+K_{R}(V)=\bigl\{\,V\cap R_{0}\to V,\ V\cap R_{1}\to V\,\bigr\}
+=\bigl\{\,\{\omega_{00}\}\to V,\ \varnothing\to V\,\bigr\}.
+\]
+As bare sets of arrows the two families are equal: one identity arrow and one empty-piece arrow.
+
+\emph{Step 2: the generated sieves are equal---and maximal.} Both families contain $\id_{V}$, so both generate the maximal sieve on $V$ (any arrow into $V$ factors through $\id_{V}$). This is not a defect: singleton contexts are where the partitions bottom out (each singleton lies inside a single block of each partition), and a cover of a context by itself is legitimately trivial. But it means the two topologies of Chapter~9, restricted to what they say at $V$, receive identical contributions from the two clauses. No downstream construction that sees only $J_{A}$ and $J_{R}$ can recover, at $V$, which clause contributed what.
+
+\emph{Step 3: the marked records differ.} The two generator records are
+\begin{align*}
+c_{A} &= \bigl(\texttt{GENERATOR},\ \{\omega_{00}\},\ [\,\{\omega_{00}\}\to V,\ \varnothing\to V\,],\ m_{A},\ \varnothing\bigr),\\
+c_{R} &= \bigl(\texttt{GENERATOR},\ \{\omega_{00}\},\ [\,\{\omega_{00}\}\to V,\ \varnothing\to V\,],\ m_{R},\ \varnothing\bigr),
+\end{align*}
+where the mark records $m_{A}$ and $m_{R}$ agree in review state and differ in \texttt{cover\_kind} (\texttt{ACBE} versus \texttt{RPM}) and in \texttt{source\_authority\_ref} (the ACBE-family clause versus the RPM-family clause of the specification). The records differ in a bound field, so their canonical byte strings differ, so---up to SHA-256 collision---their digests differ:
+\[
+\mathrm{sha256}(c_{A})\;\neq\;\mathrm{sha256}(c_{R}).
+\]
+Every downstream derivation that pulls back or refines these records inherits the distinction through its parent digests. Provenance survives exactly where the topology forgets.
+
+\emph{Step 4: the executable corroboration.} The finite certificate registers this configuration as a matched pair of checks, both passing: \texttt{singleton\_unmarked\_families\_coincide} (step 1--2) and \texttt{singleton\_marked\_covers\_distinct} (step 3). The pairing is the point: either check alone would be unremarkable; together they exhibit, on one concrete context, the separation of concerns that justifies the entire two-representation design.
+\end{example}
+
+Table~\ref{ch08:tab-singletons} extends the computation to all four singleton contexts at once; the pattern is uniform, with the full piece supplied by the atom's own blocks and the empty piece by the opposite blocks.
+
+\begin{table}[htbp]
+\centering
+\caption{The singleton coincidence at all four singleton contexts: unmarked members of $K_{A}$ and $K_{R}$ (equal as arrow sets in every row), and the mark fields on which the records differ.}
+\label{ch08:tab-singletons}
+\begin{tabular}{@{}llll@{}}
+\toprule
+$V$ & $K_{A}(V)$ members (from $A_{0},A_{1}$) & $K_{R}(V)$ members (from $R_{0},R_{1}$) & Records differ in \\
+\midrule
+$\{\omega_{00}\}$ & $V,\ \varnothing$ & $V,\ \varnothing$ & kind, authority, digest \\
+$\{\omega_{01}\}$ & $V,\ \varnothing$ & $\varnothing,\ V$ & kind, authority, digest \\
+$\{\omega_{10}\}$ & $\varnothing,\ V$ & $V,\ \varnothing$ & kind, authority, digest \\
+$\{\omega_{11}\}$ & $\varnothing,\ V$ & $\varnothing,\ V$ & kind, authority, digest \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{remark}[The diagonal coincidence]\label{ch08:rem-diagonal}
+Proposition 7.\ref{ch07:prop-coincidence}(3) showed the unmarked families also coincide at the two diagonal doubletons, where both partitions cut the context into its two atoms---there the common sieve is a genuinely proper cover, not the maximal sieve, which makes the forgetting arguably more consequential than at singletons. The marked records again differ in cover kind and digest, by the same argument as Example~\ref{ch08:ex-singleton}, step 3. The v0.1 certificate registers the singleton case; the diagonal case follows from the same field-inequality reasoning and the Chapter~7 tables, and we record it here as a derived observation, not as a separately certificated check.
+\end{remark}
+
+\begin{example}[A derived record with its ancestry]\label{ch08:ex-derived}
+To see the calculus operate end to end, derive the joint refinement at $\Omega$ and pull it back---or rather, observe the discipline that the schema imposes on that plan. Let $g_{A}$ and $g_{R}$ be the generator records for $K_{A}(\Omega)$ and $K_{R}(\Omega)$, with digests $d_{A}=\mathrm{sha256}(g_{A})$ and $d_{R}=\mathrm{sha256}(g_{R})$. Rule~\ref{ch08:rule-refinement} produces the record
+\[
+j \;=\; \bigl(\texttt{COMMON\_REFINEMENT},\ \Omega,\ [\,\{\omega_{00}\}\to\Omega,\ \{\omega_{01}\}\to\Omega,\ \{\omega_{10}\}\to\Omega,\ \{\omega_{11}\}\to\Omega\,],\ m_{j},\ \{d_{A},d_{R}\}\bigr),
+\]
+whose member list is forced by Example 7.\ref{ch07:ex-composite-global} and whose parent set is forced by the one-ACBE-one-RPM rule; the sorted order of $\{d_{A},d_{R}\}$ in the serialization is the lexicographic order of the two hex digests, whichever that turns out to be. A resolver receiving $j$ fetches both parents, rehashes both, validates both against Rule~\ref{ch08:rule-generator} (their member lists must match the $\Omega$ row of Table 7.\ref{ch07:tab-generating}), recomputes the pairwise intersections, and compares with the stored four singletons. Now pull $j$ back along $T_{00}\subseteq\Omega$: Rule~\ref{ch08:rule-pullback} yields a \texttt{PULLBACK} record with target $T_{00}$, parent set $\{\mathrm{sha256}(j)\}$, and members the intersections of the four singletons with $T_{00}$: three singletons and one empty piece, exactly the family of Example 7.\ref{ch07:ex-composite-triple}. Its resolution recursively re-verifies $j$, and through $j$, both generators: a three-generation ancestry, every link rehashed, every member list recomputed.
+\end{example}
+
+\section{Certificate check classes for the marked layer}\label{ch08:sec-checks}
+
+The finite certificate of Chapter~11 registers, among its checks, eight that exercise the marked layer specifically. We enumerate them here as check classes, each tied to the section of this chapter whose discipline it makes executable; all eight pass in the registered run, and per the certificate's claim boundary, passing is exhaustive execution on this one finite model, not proof-assistant verification or external review.
+
+\begin{checkclass}[\texttt{singleton\_unmarked\_families\_coincide}]\label{ch08:check-coincide}
+At each singleton context, the unmarked ACBE and RPM generating families are equal as arrow lists. This is Proposition 7.\ref{ch07:prop-coincidence}(2) made executable, and it establishes the \emph{premise} of the provenance problem: the check must pass for the marked layer to have anything to add (Section~\ref{ch08:sec-singleton}, steps 1--2).
+\end{checkclass}
+
+\begin{checkclass}[\texttt{singleton\_marked\_covers\_distinct}]\label{ch08:check-distinct}
+At each singleton context, the marked ACBE and RPM generator records differ---in cover kind and hence in digest. The conclusion of Section~\ref{ch08:sec-singleton}, step 3. Paired with Check Class~\ref{ch08:check-coincide}, it exhibits the two-representation separation on one context.
+\end{checkclass}
+
+\begin{checkclass}[\texttt{marked\_cover\_roundtrip\_stable}]\label{ch08:check-roundtrip}
+Serialize--deserialize--reserialize yields byte-identical output and digest-identical identity for every record class in the model. Protocol~\ref{ch08:proto-roundtrip}; the executable form of canonicalization determinism (Section~\ref{ch08:sec-digest}, property 1).
+\end{checkclass}
+
+\begin{checkclass}[\texttt{marked\_pullbacks\_bind\_parent\_provenance}]\label{ch08:check-bind}
+Every pullback record's parent set contains exactly the digest of the record it was derived from, and its provenance chain extends the parent's by the corresponding step. Rule~\ref{ch08:rule-pullback}'s linkage clause.
+\end{checkclass}
+
+\begin{checkclass}[\texttt{marked\_pullbacks\_preserve\_topology\_family}]\label{ch08:check-preserve}
+The member arrows of every pullback record equal the generating family of the same partition at the subcontext---the marked-layer echo of Proposition 7.\ref{ch07:prop-pullback-stability}. This check ties the serialization to the mathematics: a marked pullback is not merely well-linked but combinatorially correct.
+\end{checkclass}
+
+\begin{checkclass}[\texttt{joint\_refinement\_is\_four\_singletons}]\label{ch08:check-four}
+The common-refinement record at the global context stores exactly the four singleton member arrows, matching Example 7.\ref{ch07:ex-composite-global} and the transversality identity. Rule~\ref{ch08:rule-refinement}'s member clause.
+\end{checkclass}
+
+\begin{checkclass}[\texttt{joint\_refinement\_retains\_both\_parent\_digests}]\label{ch08:check-both}
+The join record's parent set contains both generating digests---one ACBE, one RPM---and nothing else. Rule~\ref{ch08:rule-refinement}'s arity-and-kind clause, whose adversarial face is Example~\ref{ch08:ex-launder}.
+\end{checkclass}
+
+\begin{checkclass}[\texttt{marked\_derived\_records\_resolve}]\label{ch08:check-resolve}
+Every derived record in the model passes the full parent-resolution algorithm: parents fetched, rehashed, recursively resolved, acyclicity confirmed, members and marks recomputed and matched. Algorithm~\ref{ch08:alg-resolution} end to end.
+\end{checkclass}
+
+\begin{remark}[Division of labor among the checks]\label{ch08:rem-check-division}
+The eight checks are not redundant restatements of one property. Checks \ref{ch08:check-coincide}--\ref{ch08:check-distinct} establish the problem and the solution's minimal claim; \ref{ch08:check-roundtrip} secures the byte layer; \ref{ch08:check-bind} and \ref{ch08:check-both} secure the reference graph; \ref{ch08:check-preserve} and \ref{ch08:check-four} secure the arithmetic content against the Chapter~7 tables; and \ref{ch08:check-resolve} secures the composition of all of the above under the resolver. A future change that broke exactly one layer---say, a canonicalization drift that preserved semantics but changed bytes---would fail exactly the corresponding check, which is what makes the list a usable regression surface rather than a ceremonial one.
+\end{remark}
+
+\section{Design alternatives, and why they were not taken}\label{ch08:sec-alternatives}
+
+The two-representation design is not the only conceivable response to provenance loss. Three alternatives present themselves naturally, and the registered design rejects each for stated reasons; recording the rejections guards against re-litigating them.
+
+\subsection{Alternative 1: enrich the topology itself}
+One could try to define a ``topology with remembered tags'': covering sieves paired with labels, with the axioms extended label-wise. The closure argument of Section~\ref{ch08:sec-forget} shows why this fails \emph{as a topology}: axiom (J3) saturation and superset closure manufacture covering sieves with no unique label ancestry---at the coincidence loci, the same sieve arises from differently-labeled inputs, so the label assignment is either non-functional (a sieve carries a set of labels, and the set degenerates as saturation proceeds) or arbitrary. Whatever such labeled structure is, it is not a Grothendieck topology, and every standard theorem this program relies on---the basis criterion, sheafification's existence and exactness, subcanonicity arguments \cite{maclane, stacks00ZC, stacks00W1}---would need re-proof for the enriched notion. The registered design refuses to pay that cost: the mathematics stays standard, the enrichment lives outside.
+
+\subsection{Alternative 2: never generate; work with indexed families forever}
+Since indexed families \emph{do} distinguish $K_{A}$ from $K_{R}$ at every context (the block indexing differs even where the arrow sets coincide), one could refuse to pass to sieves at all. But the sheaf condition, the reflector, and the topology join are sieve-level or saturation-level notions; a families-only development either re-derives the sieve theory under another name or forfeits the theorems of Chapters~9 and~10. Moreover the coincidence at $D_{\neq}$ (Proposition 7.\ref{ch07:prop-coincidence}(3)) shows indexed families are a fragile carrier: they distinguish the partitions only through index bookkeeping that ordinary mathematical operations (reindexing, set-image) silently destroy. Governance data deserves a governance carrier, not an indexing convention.
+
+\subsection{Alternative 3: internalize marks as topos objects}
+One could hope to represent marks \emph{inside} a topos---as objects of a slice, a glued topos, or a category of descent data---so that provenance becomes categorical structure. Perhaps something along these lines is possible; the registered position is precisely that no such construction has been carried out, reviewed, or compared against the colored-site and indexed-category literature, and that claiming it without doing the work would be exactly the kind of unlicensed structural claim the corrigendum culture of this program exists to prevent. Hence Boundary~\ref{ch08:boundary-external}: the mark record is \emph{external} audit data, full stop, with the internalization question left open and explicitly not claimed.
+
+\begin{remark}[The design in one sentence]\label{ch08:rem-design-sentence}
+Where Alternative 1 would change the mathematics and Alternative 3 would overclaim it, the registered design changes nothing and claims nothing mathematically: the topology is the standard one on unmarked families, and provenance is an engineering invariant with cryptographic integrity---auditable, falsifiable, and outside the theorems.
+\end{remark}
+
+\section{What the mechanism is, and is not}\label{ch08:sec-boundaries}
+
+The marked-cover layer sits at the boundary between mathematics and governance engineering, which makes precise boundary language unusually important. The following boundaries are registered in the governing specification and the corresponding paper; this section collects them.
+
+\begin{boundary}[External audit invariant, not internal structure]\label{ch08:boundary-external}
+The mark mechanism is an external serialization and audit invariant. It is not a proof that a marked cover is an internal object of any topos, nor a categorical semantics for evidence. The sites, topologies, sheaves, and modalities of Chapters~9 and~10 are constructed from the unmarked families alone; the marked records are audit data \emph{about} the construction, held outside it. In the packaging of Chapter~12, the provenance record enters the research object \(\mathrm{NoeSystem}_2\) explicitly as an \textsc{external mark record}---a component of a structured package, not an object or morphism of the candidate topos.
+\end{boundary}
+
+\begin{boundary}[No colored-site or novelty claim]\label{ch08:boundary-novelty}
+The literature contains constructions that enrich sites with additional data---colored or labeled covers, indexed categories, fibrations, stacks. The v0.1 marked-cover mechanism makes no claim of membership in, equivalence to, or improvement over any of them: its mathematical relationship to indexed categories and stacks has not received a dedicated novelty review, and the theorem-ledger records that touch the mechanism carry \texttt{NOVELTY\_UNASSESSED} without exception. Until a dedicated literature search is complete, the mechanism should be cited as a Project Coherence engineering artifact, not as a contribution to the theory of sites.
+\end{boundary}
+
+\begin{boundary}[The Evidence Packet binds raw bytes; the cover digest does not]\label{ch08:boundary-packet}
+The cover digest certifies the marked record's own canonical bytes---the \emph{semantic record}. It does not certify the raw ingress bytes of any external evidence the record references. That binding is the job of the enclosing Evidence Packet, which must separately hash raw inputs. A reviewer who finds a cover record citing, say, a source-verification artifact should expect two independent digests: the cover's semantic digest here, and the raw-byte digest in the packet. Neither substitutes for the other.
+\end{boundary}
+
+\begin{boundary}[A cover record is not a sheaf object]\label{ch08:boundary-sheafobject}
+The v0.1 schema serializes \emph{covers}. An application-level marked \emph{sheaf object} would additionally need at least a \texttt{sheaf\_object\_ref} and a \texttt{context\_atom\_or\_block} field; that separate schema is registered as \textsc{open} and is not part of v0.1. A cover record must not be presented as identifying a sheaf object, and no artifact of this monograph does so.
+\end{boundary}
+
+\begin{boundary}[Scope of the executable schema]\label{ch08:boundary-scope}
+Restating Boundary~\ref{ch08:boundary-standing} with the chapter's machinery in hand: the derivation calculus of Section~\ref{ch08:sec-derivation} covers ACBE and RPM context-factor generators, their pullbacks along inclusions of $L$, and their pairwise common refinement---nothing else. \texttt{OBSERVATIONAL} cover records for the legacy coordinate, records over general arrows of $\cC\times L$, and product-site cover records are \textsc{open} obligations (Chapter~12), and the fail-closed discipline applies to their absence too: a record claiming an unimplemented kind is rejected at stage 1 as outside the controlled vocabulary, not provisionally accepted as forward-compatible.
+\end{boundary}
+
+\section{Summary}\label{ch08:sec-summary}
+
+A Grothendieck topology cannot remember why a cover was admitted: sieve generation is a many-to-one closure, the topology's data structure has no annotation slot, and the finite model realizes the loss concretely at seven of its sixteen contexts, where the ACBE and RPM generating families are identical as arrow sets (Section~\ref{ch08:sec-forget}). The v0.1 response is architectural, not topological: every cover exists in two representations---the unmarked family consumed by topology generation and the immutable marked record consumed by governance---with consumer separation as a standing invariant (Section~\ref{ch08:sec-two-reps}). The marked record binds derivation kind, target, exact member arrows, the six-field mark record, and the sorted parent digests into a canonical-JSON SHA-256 identity (Sections~\ref{ch08:sec-schema}--\ref{ch08:sec-digest}); derivations are confined to a two-rule calculus whose outputs are recomputable functions of their parents (Section~\ref{ch08:sec-derivation}); deserialization runs a six-stage resolver that rehashes every ancestor, checks acyclicity, and recomputes members and marks (Section~\ref{ch08:sec-resolution}); and every anomaly, from an unknown JSON key to a recomputation mismatch, is a fail-closed rejection (Section~\ref{ch08:sec-rejection}). The singleton coincidence exhibits the whole design in one context: equal families, equal sieves, distinct records, distinct digests, with both facts executable and both passing (Section~\ref{ch08:sec-singleton}). Eight certificate check classes make each layer of the discipline separately falsifiable (Section~\ref{ch08:sec-checks}); the operational lifecycle confines writes to append-only creation and reads to post-resolution consumption (Section~\ref{ch08:sec-lifecycle}); and the rejected design alternatives---an enriched topology, indexed families forever, internalized marks---are recorded with their reasons so they are not silently revisited (Section~\ref{ch08:sec-alternatives}). What the mechanism is not---internal topos structure, a colored-site contribution, a raw-evidence binding, a sheaf-object identifier, or anything beyond the context factor---is registered with equal precision (Section~\ref{ch08:sec-boundaries}).
+
+Chapter~9 now returns to the mathematics: the four finite-context theorems generated from the unmarked families, each stated with full proof and each carrying its ledger record---including the theorem whose title the present chapter has already explained, that the \emph{marked} coverages generate ordinary, unmarked Grothendieck topologies.

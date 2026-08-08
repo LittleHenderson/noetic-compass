@@ -1,0 +1,662 @@
+\chapter{The Versioned Source Basis}\label{ch03:source}
+
+\section{Why a source chapter exists}\label{ch03:why}
+
+A monograph whose central discipline is that every claim must be traceable
+to an exact artifact owes its reader, early and in one place, a complete
+account of what its artifacts \emph{are}: which documents govern, how each
+is identified, what authority each does and does not carry, and where the
+read-only boundaries lie. This chapter is that account. Every later chapter
+that states a fact about the engineering baseline, the audit, the
+implementation, or the downstream formal kernels resolves its citation
+through the identities fixed here; and where the sources do not specify a
+fact --- a page count, a hash, a status --- the monograph's rule is to say
+``unspecified'' rather than to estimate. The chapter also develops, as
+methodology rather than housekeeping, the identification scheme itself:
+why the work identifies its principal source by a source ID plus a
+content hash instead of a public semantic version, and what a content
+hash does and does not attest.
+
+The reader should hold one asymmetry in mind throughout. The source basis
+described here is \emph{versioned} in the strong sense --- every
+controlling artifact is bound by a SHA-256 digest, and the publication
+delta is bound to an exact repository commit --- but it is not thereby
+\emph{validated} in any sense. Identity discipline establishes that all
+parties are talking about the same bytes. It establishes nothing about
+whether those bytes are correct, safe, complete, or authoritative; indeed,
+two of the monograph's central results are demonstrations that the
+principal source is internally defective at precisely identified
+locations. Fixing identity is what makes such demonstrations meaningful:
+an adverse finding against an unidentified document is an anecdote, while
+an adverse finding against
+\textsc{src-pcba-engineer-20260726} at a cited page anchor is a
+reproducible check.
+
+\section{The engineering baseline}\label{ch03:baseline}
+
+\subsection{The artifact}\label{ch03:baseline:artifact}
+
+The immediate engineering baseline of CAS PCBA 8 is a single large
+document: the owner-supplied CAS PCBA Engineer build,
+\texttt{CAS\_PCBA\_Engineer.pdf}, 743 pages, identified as
+
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Source ID & \textsc{src-pcba-engineer-20260726} \\
+SHA-256 & \texttt{294320B39FA521EAC086E99E2D9DB913E2B6CFF0754FF82DB1EF966424566274} \\
+Extent & 743 pages (PDF) \\
+Role & Engineering reference baseline \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The document is an engineering reference: it contains the CAS circuit
+description language (CCDL) exposition and its consolidated grammar, the
+five published reference boards, the component and validator prose, the
+appendix material, and the design narratives that the candidate
+implementation and the source audit take as their object. Two properties
+of the baseline shape everything downstream. First, it is \emph{large}:
+at 743 pages, no reader or reviewer holds it whole in mind, so
+page-anchored citation and mechanical audit are not conveniences but the
+only available rigor. Second, it is \emph{closed as supplied}: the
+candidate treats the build as a fixed input identified by its hash, and
+does not amend, patch, or re-render it. Where the audit finds the
+baseline internally inconsistent --- and it does --- the inconsistency
+is preserved and formalized against the fixed bytes, never repaired in
+place. A repaired design would be a new artifact with a new identity, a
+rule stated in the audit and honored throughout this monograph.
+
+\subsection{The dual-key identification}\label{ch03:baseline:dualkey}
+
+The baseline is identified by a \emph{pair}: a human-legible source ID,
+\textsc{src-pcba-engineer-20260726}, and a machine-checkable content
+hash. The two keys do different work. The source ID is a stable name for
+discourse --- it appears in claim records, review matrices, and prose,
+and it encodes the supply date of the build (2026-07-26) for human
+orientation. The hash is the actual identity: any party holding a file
+alleged to be the baseline can compute its SHA-256 and compare all
+sixty-four hex digits against the value above, and agreement identifies
+the bytes with overwhelming confidence while any disagreement ---
+substitution, truncation, re-rendering, silent edit --- is certain to
+change the digest. The source ID without the hash would be a label
+anyone could reuse for different bytes; the hash without the source ID
+would be unreadable in prose. The pair is the identification scheme, and
+the monograph never cites the baseline by either key alone in a
+load-bearing context.
+
+\subsection{The dual page-anchor convention}\label{ch03:baseline:anchors}
+
+Citations into the baseline use a dual anchor, and the convention is
+fixed here because every audit finding depends on it. The baseline, like
+most large typeset books, has two pagination systems: the \emph{PDF
+page}, counted from the first sheet of the file, and the \emph{book
+page}, the printed folio, which lags the PDF count by the extent of the
+front matter. The audit records both wherever both are meaningful ---
+for example, the reserved Part-IV statement leaders appear at PDF
+p.~578, book p.~562; the erratum language for missing appendix forms at
+PDF pp.~591--592, book pp.~575--576; the consolidated structural EBNF at
+PDF pp.~598--599, book pp.~582--583; the Chapter~18 safety-board listing
+at PDF p.~342, book p.~326; its Appendix-D repetition at PDF p.~608,
+book p.~592; and the Appendix-D note on the infinite-gain idealization
+at PDF p.~610, book p.~594. The monograph's own citations use the PDF
+anchor as primary --- it is the anchor a party holding the hashed file
+can check without interpreting folios --- and repeat the book anchor
+where the audit supplies it. Both anchors, again, are defined only
+against the hashed build: a revised edition would renumber both systems
+independently, which is one more reason the pin of
+Section~\ref{ch03:baseline:dualkey} precedes everything else.
+
+\section{Why not a semantic version}\label{ch03:version}
+
+\subsection{The internal-label problem}\label{ch03:version:label}
+
+The natural bureaucratic move for a 743-page evolving engineering book
+would be to assign it a public semantic version --- ``v8.1,'' ``2026.3''
+--- and cite that. The candidate deliberately refuses this move, for a
+reason recorded in the Gate~4 audit: \emph{the baseline's own latest
+internal changelog label predates the supplied 2026-07-26 build}. The
+document's self-description of its version history, in other words, does
+not extend to the state actually supplied; content exists in the build
+that postdates the last internally recorded version label. Under that
+condition, any public semantic version the candidate might attach would
+be an invention --- a version fact fabricated by the citing party and
+attributed, implicitly, to the source. There would then be two
+authorities for the baseline's version (its own changelog and the
+candidate's label), disagreeing silently, with the disagreement invisible
+to every downstream reader.
+
+The refusal generalizes into a rule the monograph applies to all source
+facts:
+
+\begin{ruleenv}[No invented source facts]\label{ch03:rule:noinvent}
+The candidate does not assert, about a source, version facts, page
+facts, count facts, or status facts that the source does not itself
+carry. Where a needed fact is absent or stale in the source --- as the
+version label is here --- the candidate substitutes an identification it
+can itself warrant (a supply-dated source ID plus a computed content
+hash) and discloses the substitution. Unspecified means unspecified.
+\end{ruleenv}
+
+\subsection{What is lost and what is gained}\label{ch03:version:tradeoff}
+
+The cost of refusing a semantic version is real and admitted: semantic
+versions carry ordering and compatibility conventions --- readers infer
+from ``8.1 versus 8.2'' a direction of change and a rough promise about
+its scope --- and a hash carries neither. Two hashes are merely
+different; nothing about
+\texttt{294320B3\ldots} orders it against any other build. The
+compensation is that everything a hash \emph{does} say is true and
+checkable, whereas the ordering a fabricated version would say is
+unwarranted. For a research discipline whose failure mode is precisely
+the silent promotion of unwarranted statements (Chapter~\ref{ch01:introduction}),
+the trade is not close. Ordering among builds, where the work needs it,
+is recovered honestly: by supply dates in source IDs (which claim only
+chronology of supply, a fact the candidate can warrant) and by the bound
+repository history, whose commits are themselves content-addressed and
+totally ordered by their ancestry.
+
+\section{Source-identity methodology: content addressing for large design documents}\label{ch03:methodology}
+
+\subsection{The general practice}\label{ch03:methodology:practice}
+
+Identifying an artifact by a cryptographic digest of its content ---
+\emph{content addressing} --- is established practice wherever
+computation must be accountable to exact inputs. Version-control systems
+address every stored object by content hash, so that a commit identifier
+fixes an entire tree of sources; package ecosystems pin dependencies by
+digest so that a build consumes exactly the audited bytes; and the
+reproducible-builds movement in software distribution (an effort across
+compiler, packaging, and distribution communities, named here inline as
+context rather than cited) pushed the discipline end to end, defining a
+build as reproducible precisely when independent parties, from identified
+inputs, produce bit-identical outputs --- with the comparison performed,
+of course, by hash. The common structure in all three practices is the
+one this chapter has already used: a digest converts ``the same
+artifact'' from a social claim into a computation, and thereby converts
+``I checked artifact X'' into a statement a third party can re-ground
+without trusting the checker.
+
+Applying the practice to a large \emph{design document} --- rather than
+to code --- is less common and worth a methodological remark, because
+documents are usually cited loosely (by title, edition, or version
+label) on the assumption that editions are stable and public. The
+baseline here is neither: it is a privately supplied, actively evolving
+build whose internal version labeling has already been shown to lag its
+content. In that setting the loose-citation assumption fails, and the
+document must be treated the way a build input is treated: pinned by
+digest, with every page-anchored citation in the audit and in this
+monograph implicitly indexed by that digest. A page anchor such as
+``PDF p.~342'' is meaningful \emph{only} against
+\texttt{294320B3\ldots}; against any other build of the book, the anchor
+is undefined. The audit's page anchors and the monograph's repetitions
+of them inherit their precision entirely from the pin.
+
+\subsection{Hash conservatism}\label{ch03:methodology:conservatism}
+
+Content addressing is deliberately \emph{over}-sensitive, and the
+over-sensitivity should be owned rather than hidden. A SHA-256 digest
+changes under any byte change whatsoever, including changes with no
+semantic content: re-rendering the same manuscript through a different
+PDF producer, updating an embedded timestamp, recompressing an image
+stream. Two files could, in principle, present identical pages to a
+reader and carry different digests, and the scheme would treat them as
+different artifacts. This is the right failure direction for the present
+purpose. The alternative --- any scheme that tries to hash ``the
+content'' rather than the bytes --- requires a canonicalization step
+whose own correctness then silently joins the trusted base, and for a
+743-page rendered document no such canonicalization is trustworthy. The
+scheme therefore accepts false distinctions (semantically identical
+builds counted as distinct) in exchange for excluding false
+identifications (distinct builds counted as identical), because for an
+audit trail the second error is fatal and the first is merely
+inconvenient: a party holding a semantically identical but
+differently-rendered build simply does not hold the audited artifact,
+and must obtain it before checking anchors. Conservatism here is a
+choice with a direction, and the direction is fail-closed.
+
+The same conservatism explains why the basis pins \emph{artifacts}
+rather than \emph{claims}: a digest over the audit document fixes every
+finding, anchor, and status literal in it at once, so the monograph
+never needs to enumerate which sentences of a source it relies on ---
+reliance on any of them is reliance on the digest, and a revised audit
+would be a visibly new artifact rather than a silently shifted
+authority.
+
+\subsection{What a hash attests --- and does not}\label{ch03:methodology:limits}
+
+\begin{boundary}[Limits of content addressing]\label{ch03:bnd:hash}
+A content hash attests identity of bytes and nothing else. Agreement
+with a published digest establishes that a party holds the same
+artifact; it does not establish that the artifact is correct, complete,
+internally consistent, safe, authorized, or authoritative, and it does
+not establish who authored it or with what review. In particular, no
+self-hash --- no digest computed by an artifact's own machinery over
+its own content --- confers evidence status, license status, or
+authority on that artifact; a hash-bearing receipt is exactly as
+authoritative as the process that produced it, which for locally
+generated receipts is not at all. This monograph's claim discipline
+(Section~\ref{ch01:discipline}) already quarantines authority-from-receipt
+inferences; this boundary restates the quarantine at the level of the
+identification scheme itself.
+\end{boundary}
+
+The point is not hypothetical hygiene. The project's history includes
+historical AI-authored, self-hashed ``licensing receipts,'' and the
+governing documents are explicit that these are not an authenticated
+reviewer or legal authority. The identification scheme of this chapter
+is therefore deliberately \emph{austere}: hashes bind discourse to
+bytes; all authority questions are answered elsewhere, by the authority
+matrix (Section~\ref{ch03:authority}) and the claim records, and the
+answer at the bound state is uniformly negative.
+
+\section{The baseline's own disclaimer and the Phase-0 authority matrix}\label{ch03:authority}
+
+Identification says what the baseline is; authority says what it may be
+used to support. On authority, three independent instruments agree, and
+their agreement is a fact of the source basis rather than an
+interpretation of this monograph.
+
+First, \emph{the book's own disclaimer}: the baseline presents itself
+as an engineering reference and disclaims, in its own front matter, the
+statuses a careless reader might project onto a confident 743-page
+technical book. Second, \emph{the Phase-0 authority matrix}: the
+project's authority-mapping instrument, which assigns to each artifact
+class the authorities it carries, denies to the baseline both
+\emph{safety certification} and \emph{physical telemetry} --- the book
+certifies no safety property of anything, and it reports no measurement
+of any physical system. Third, \emph{the candidate itself}: the Gate~4
+audit and specification, in constituting the baseline as their
+engineering input, restate both denials as conditions of use. The
+alignment is deliberate: the baseline is admitted \emph{as design
+text} --- as the object the grammar audit parses, the board listings
+quote, and the known-fault fixture is drawn from --- and under no
+instrument is it admitted as evidence of safety, measurement,
+certification, or empirical validity.
+
+It is worth pausing on why the denials must be \emph{institutional}
+rather than merely sincere. A 743-page book with circuit diagrams,
+validator prose, and a chapter titled around safety generates, by its
+sheer weight and genre, a presumption of authority in casual readers
+that no front-matter sentence reliably dispels; and the documented
+history of this project includes exactly the failure the matrix guards
+against --- generated artifacts (self-hashed receipts) whose form
+imitated authority their process never had. An authority matrix answers
+the genre problem structurally: authority becomes a typed property
+assigned per artifact class by an instrument outside the artifact, so
+the question ``may this document support a safety claim?'' has a
+lookup, not a vibe, for an answer. For the baseline the lookup answers
+no, twice --- no safety certification, no physical telemetry --- and
+the candidate's conditions of use repeat the answer so that no chain of
+citation, however long, can launder the book's confidence into a
+warrant it never carried.
+
+This three-way denial does load-bearing work later in the monograph.
+The Cognitive Safety Board finding (previewed in
+Section~\ref{ch01:sep:analogy} and developed in the audit chapters)
+would be impossible to state cleanly if the baseline carried safety
+authority: a certified design with an unreachable protective threshold
+would be a certification failure, a different and graver genre of
+result. Because the authority matrix already places the baseline
+outside safety authority, the finding is what it should be: an adverse
+\emph{source-quality} result about design text, preserved as a
+known-fault fixture, with no certified system anywhere in the blast
+radius --- and, equally, with no safety assurance anywhere in the
+candidate, since the same matrix denies that authority to the
+candidate's own artifacts.
+
+\section{The controlling repository artifacts}\label{ch03:artifacts}
+
+\subsection{The publication delta and its base commit}\label{ch03:artifacts:commit}
+
+The monograph describes a candidate whose executable and evidentiary
+content lives in a repository, and the publication lane is bound to an
+exact state of it: the Project Coherence Paper~6 delta at base commit
+\texttt{a1cd990109e7561dfd03949bf0e1653461c7ae44} (cited in short form
+as \texttt{a1cd9901}). ``Delta'' has a precise meaning here: the
+publication artifacts organize and cite the existing Gate~4 candidate;
+they do not modify the Gate~4 specifications, registries, or manifests.
+The implementation surface at the bound state is the
+\texttt{src/cas\_pcba\_v8/} package, comprising 14 modules; its tested
+behavior is summarized by the suite identities in the Gate~4 artifact
+manifest and reported later in the monograph.
+
+\subsection{The artifact set}\label{ch03:artifacts:set}
+
+Seven artifacts control the source basis beyond the baseline itself.
+Their identities and roles, as recorded in the governing seed and its
+underlying publication delta, are:
+
+\begin{longtable}{@{}p{5.2cm}p{7.6cm}@{}}
+\caption{Controlling repository artifacts at base commit \texttt{a1cd9901}.}\label{ch03:tab:artifacts}\\
+\toprule
+Artifact and role & SHA-256 \\
+\midrule
+\endfirsthead
+\toprule
+Artifact and role & SHA-256 \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\texttt{CAS\_CORE\_V8\_CANDIDATE\_SPEC\_v0.1.md} --- semantic identity,
+evidence, and research-boundary kernel &
+\texttt{5FE6F91D005C7268D32C3943C2851138B\newline
+30E2492C7D73877A04B30685CFCA1FC} \\[2pt]
+\texttt{CAS\_PCBA\_V8\_SOURCE\_AUDIT\_AND\_SPEC\_v0.1.md} --- normative
+Gate~4 engineering candidate: source audit, adverse findings, type
+system, DRC contract, simulation contract &
+\texttt{19707B9213040A3B55DB51132C30B90A6\newline
+004D15A611EC759906335F2E41450F0} \\[2pt]
+\texttt{PCBA\_CCDL\_CONSTRUCT\_COVERAGE\_v0.1.json} --- machine-readable
+grammar/corpus adverse evidence: construct coverage, four direct
+counterexamples, one bounded listing &
+\texttt{5BB797EC37CF289B4CBE8DF1256F07425\newline
+C3DA13AA8CF2DA03E47DFCE1CB46808} \\[2pt]
+\texttt{GATE4\_REVIEW\_MATRIX\_v0.1.json} --- implemented/open decision
+ledger: 53 review criteria with 20 open at the bound state &
+\texttt{44DD99A847DA742C3EBEBC06D64452A68\newline
+68421EE12129E789D1CC790DAE41B74} \\[2pt]
+\texttt{GATE4\_ARTIFACT\_MANIFEST\_v0.1.json} --- exact artifact and
+test-suite identities: 54 hash-bound files, three focused-suite test-ID
+digests &
+\texttt{49102F9BCBAA2345804F5EE3CA708FD6A\newline
+84E83F8CF5ABB51E6612893A090D57B} \\[2pt]
+TKS v8 core formal specification --- downstream finite-arrow boundary
+(read-only) &
+\texttt{F740BA05AB7ADB2DCDF55E271016D127E\newline
+45073B015497DE8982D44A49F0EA2C4} \\[2pt]
+Noetic Topos 2.0 specification --- downstream ambient/resolved evidence
+boundary (read-only) &
+\texttt{156A5D8C5320F36E81E3B46473BA8A038\newline
+B35672DCD28839A404D96A3DB1A763A} \\
+\end{longtable}
+
+\subsection{The Gate-4 receipt as a source fact}\label{ch03:artifacts:receipt}
+
+The artifact manifest's content is itself part of the source basis, and
+its headline quantities are cited so often in later chapters that they
+are fixed here once, with their status stated in the same breath. At the
+bound commit, the integrated Gate~4 receipt (dated 2026-08-04 in the
+underlying publication delta) records 54 hash-bound artifacts and three
+green focused suites, whose suite-level test-ID digests are:
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrl@{}}
+\toprule
+Suite & Methods & Suite test-ID SHA-256 \\
+\midrule
+CAS Core v8 & 61 & \texttt{E2AF5014DE28DD0702211EF32A2757B99B869A13FAFBB0B8D1B18A50A9F8FEF5} \\
+CAS PCBA v8 & 82 & \texttt{D5F776C5F15758CD390470B5A542CCA110784DC5EBB9807B6BE41B2C80453470} \\
+CAS-Ohm v1 & 65 & \texttt{2E81A685961286D944894A22EB93345B97211B4433B6C71EAF628D84CD8EB1EF} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The combined focused run comprises 208 test methods and 272
+parameterized subtests; the receipt further records 11 claim records,
+all Ring~4 and \textsc{not licensed}; 53 review criteria with 20 open;
+four direct EBNF counterexamples; eight CAS-Ohm source conflicts; and an
+integrated Gate~1 pass. One negative fact in the receipt is as
+controlling as the positive ones and is repeated wherever the suites
+are: the repository-wide collector was \emph{not} clean at the bound
+receipt --- it reported four pre-existing package-path namespace
+collisions after 1{,}200 collected items --- so the focused suites
+cannot support a repository-wide verification claim, and no chapter of
+this monograph makes one. All of these numbers are historical,
+source-bound software receipts consumed by this monograph as source
+facts; they are not experiments, and this publication lane adds no new
+runs to them.
+
+\subsection{A further read-only mathematical authority}\label{ch03:artifacts:paper3}
+
+One additional identity belongs in the basis because a later chapter's
+geometry discussion depends on knowing where its authority does
+\emph{not} lie. The projector-geometry theorem statements referenced by
+the candidate are governed solely by the Formal Mathematics Paper~3
+record at its own commit,
+\texttt{3c8491db6f5559cf090909d9de0efa03d924f53f}, with source-draft
+SHA-256
+\texttt{679E1119CB084D9A429F6FCC26374B18FF1FB6252D7374631975B4FF56BAEFC4}.
+The engineering artifacts of Table~\ref{ch03:tab:artifacts} carry
+read-only dependency summaries of that record, not the mathematics
+itself; in particular, the registered normalized Gram-kernel result
+requires common rank $d>0$, and the stronger CAS capacity transfer
+remains, at that record's own status, a proof gap in review at Ring~4.
+Nothing in this monograph re-derives, strengthens, or promotes any of
+it; the identity is recorded here so that the later citation is, like
+every other, a pointer to exact bytes.
+
+Three remarks on the set as a whole. First, the artifacts form a
+\emph{layered} basis: the Core~v8 specification supplies the semantic
+and boundary kernel that everything else presupposes; the PCBA audit and
+specification is the normative engineering document of the candidate
+itself; the coverage record is the machine-readable half of the
+grammar finding, deliberately separated from prose so that the adverse
+evidence is directly consumable by tools; and the review matrix and
+artifact manifest are the ledgers --- what was decided and what exists
+--- against which ``at the bound state'' statements resolve. Second,
+the set is \emph{closed for this monograph}: a claim that cannot be
+grounded in the baseline, these seven artifacts, the governing research
+paper, or the bound commit's receipts is not made. Third, the two
+downstream specifications appear in the same table as the candidate's
+own artifacts but with a different mode of use, developed next.
+
+\section{The publication lineage of this monograph}\label{ch03:lineage}
+
+The monograph itself has a documented lineage within the source basis,
+and stating it closes the loop of self-description. The governing seed is
+the research paper \emph{CAS PCBA 8: adaptive cognitive circuit
+engineering with typed, fail-closed design rules and a preserved adverse
+source audit}, version 0.2, dated 2026-08-07, which supersedes the white
+paper v0.1; beneath it sits the Project Coherence charter Paper~6
+engineering draft v0.1, source-bound to base commit
+\texttt{a1cd990109e7561dfd03949bf0e1653461c7ae44}. The monograph expands
+the seed to book length; it introduces no fact, hash, page anchor,
+count, or status not present in the seed, the Paper~6 draft, or the
+Gate~4 artifacts of Table~\ref{ch03:tab:artifacts}, and where the seed
+is silent the monograph is silent.
+
+The lineage's status fields are themselves source facts, recorded at
+the Paper~6 draft and unchanged by anything in this text: authorship is
+\textsc{open}, with no authorship or submission decision recorded;
+internal cross-review is \textsc{open}; external specialist review is
+\textsc{open}; and the submission state is \textsc{not ready for
+submission}. The Paper~6 draft additionally binds its assertion
+discipline to two machine-readable companions --- a claim-assertion
+matrix and an evidence map, with citation identifiers resolving through
+a citation ledger --- and declares that the publication lane modifies
+no Gate~4 specification, registry, or manifest. The monograph inherits
+all of it. In particular, the existence of this book-length treatment
+changes no status: a longer exposition of an unlicensed, unreviewed,
+Ring-4 candidate is a longer unlicensed, unreviewed, Ring-4 candidate.
+
+\section{The audit's method, disclosed at the source level}\label{ch03:auditmethod}
+
+The adverse findings that later chapters present rest on an audit whose
+method is bounded, and the bounds are source-basis facts because they
+determine what kind of evidence the findings are. As recorded in the
+seed: text extraction over the hashed PDF located candidate pages;
+every cited page was then rendered from the source PDF and visually
+inspected, so that no anchor rests on extraction alone; and the
+grammar comparison is between \emph{published surface syntax} and the
+\emph{consolidated EBNF} --- it is not a parser implementation and not
+a semantic-validation result. The machine-readable coverage record
+(\texttt{PCBA\_CCDL\_CONSTRUCT\_COVERAGE\_v0.1.json},
+Table~\ref{ch03:tab:artifacts}) fixes the outcome shape the method can
+support: four boards are direct syntactic counterexamples to the
+published grammar; one board is a bounded listing for which no direct
+syntactic counterexample was established; and the corpus-level
+conclusion is that the formal EBNF does not cover the published
+five-board corpus.
+
+Two consequences of the bounds are worth drawing here rather than in
+the audit chapters, because they are consequences about \emph{evidence
+class}. First, the method's verdicts are asymmetric in strength: a
+counterexample is strong (an observed surface form with no producing
+grammar alternative is a definite non-coverage witness at the cited
+anchor), while the single non-counterexample verdict is weak by
+construction (``no direct counterexample was established under a
+bounded audit'' is not ``this board conforms''), and the source
+documents are careful to claim only the weaker form --- the
+corpus-level conformance claim fails \emph{without} overstating the
+result for the one bounded listing. Second, the method's ceiling is
+syntactic: even a hypothetical five-for-five conformance result would
+have said nothing about semantic validity, and the audit accordingly
+never uses the word. The candidate's own obligations mirror the
+ceiling: what it demands of any future grammar --- an exact
+construct-coverage matrix, rejection of unsupported forms, canonical
+round-trips --- is precisely the machinery that would raise audits of
+this kind from bounded surface comparison to checked conformance.
+
+\section{Downstream read-only boundaries}\label{ch03:boundaries}
+
+Two formal frameworks sit downstream of the candidate, and the source
+basis fixes the candidate's relationship to each as strictly
+\emph{read-only}: the candidate consumes their published boundaries and
+conforms to them; it does not modify them, extend them, or acquire any
+theorem from them by adjacency.
+
+\subsection{TKS v8: the finite-arrow boundary}\label{ch03:boundaries:tks}
+
+The TKS v8 core formal specification (hash in
+Table~\ref{ch03:tab:artifacts}) defines the finite reference kernel
+into which, under narrow conditions, a PCBA component's behavior may be
+adapted. The boundary the candidate reads off that specification is the
+\emph{finite-arrow} discipline: only a certified total, finite,
+deterministic, stateless, non-stochastic component transition may be
+represented as a finite arrow of the kernel; typed sequences become
+semigroupoid paths; only an endomap has powers, so iterated feedback
+requires a certified endomap. Everything richer --- continuous simplex
+profiles, response curves, instrumented observations, stateful devices,
+stochastic kernels, memristive history variables --- remains outside
+the finite arrow and must be handled by distinct types and comparison
+maps rather than coercion. The adapter that enforces this boundary, and
+the immutable certificate it issues (binding the exact TKS kernel bytes
+and profile, the board, component, and transition identities, the
+tagged carrier, the semantic profile, and the fixed research boundary),
+are described in their own chapter; what belongs to the source basis is
+the direction of authority. The kernel's specification is an input the
+candidate must satisfy, and satisfaction buys exactly one thing:
+type-correct representation. The adapter carries no automatic CAS
+semantic theorem, and no property of the kernel --- its finiteness,
+its determinism, its formal pedigree --- transfers to the cognitive
+content of any adapted component.
+
+\subsection{Noetic Topos 2.0: the ambient/resolved evidence boundary}\label{ch03:boundaries:topos}
+
+The Noetic Topos 2.0 specification (hash in
+Table~\ref{ch03:tab:artifacts}) supplies the second read-only boundary,
+this one about evidence. The distinction the candidate inherits is
+between \emph{ambient} and \emph{resolved} standing for records: raw or
+partially resolved records may be treated as external evidence
+associated with the ambient construction, but a marked cover does not
+make a measurement true, and records do not enter resolved semantics
+until restriction and gluing under one calibration profile are defined
+and tested. For the source basis, the inherited discipline lands in one
+sentence: every observation-like record the candidate produces ---
+test-point observations, measurement chains, trace events --- is
+ambient-side material, and nothing in the candidate performs, or claims
+to perform, the restriction-and-gluing obligations that would move any
+record to resolved standing. The boundary is read off the downstream
+specification and honored; it is not implemented, extended, or
+discharged here.
+
+\section{The Gate-5 preregistration kernel as read-only context}\label{ch03:gate5}
+
+One further document sits in the source basis and requires the most
+careful statement of all, because its entire function is to \emph{not}
+be used yet. The Gate-5 preregistration specification is the project's
+control kernel for future preregistered experimentation --- the
+instrument through which, if the research program ever reaches
+empirical work, calibration and held-out validation would be registered
+in advance. Its status at the bound commit is:
+
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Instrument & Gate-5 preregistration specification \\
+Status at bound commit & \textsc{open / not\_started / ring 4 / not licensed / held / not frozen} \\
+Authority created & none (no live, scientific, canon, product, license, or disclosure authority) \\
+Relation to this monograph & read-only context; supplies no experiment \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{boundary}[Nothing here promotes Gate 5]\label{ch03:bnd:gate5}
+The Gate-5 specification supplies no experiment to this monograph, and
+this monograph performs no act with respect to it. Describing the
+kernel, citing its status literals, or scheduling future preregistered
+work through it in the research program does not start it, freeze it,
+license it, or advance any of its status fields. Each literal in its
+status line is load-bearing and is reproduced without softening:
+\textsc{open} (the gate is not passed), \textsc{not\_started} (no
+preregistered activity has begun), \textsc{ring 4} (outermost research
+ring), \textsc{not licensed} (no claim licensing exists),
+\textsc{held} (the artifact is held, not released), and
+\textsc{not frozen} (the specification itself is not yet fixed ---
+even the instrument's final form remains open). A reader who
+encounters, anywhere downstream of this monograph, a suggestion that
+Gate-5 work is underway or that its kernel validates anything in these
+chapters is encountering a claim this source basis contradicts.
+\end{boundary}
+
+The kernel nonetheless belongs in the source basis rather than in a
+footnote, for a structural reason. The research program with which the
+monograph closes is dependency-ordered, and its empirical steps route
+through Gate~5 by design: the candidate's position is that when
+calibration and held-out validation happen, they must happen
+preregistered, under a control instrument that existed --- with a known
+identity and an honest \textsc{not\_started} status --- long before any
+data did. Recording the kernel now, in its unstarted state, is what
+makes that future discipline checkable: the preregistration instrument
+is itself provenance-bound, and no later account can quietly backdate
+an experimental plan into it. Read-only context today is the
+commitment device for licensed evidence tomorrow; the asymmetry between
+those two dates is the entire point.
+
+\section{What the source basis excludes}\label{ch03:exclusions}
+
+The discipline of Rule~\ref{ch03:rule:noinvent} has a complement: it is
+equally a source-basis fact that certain things are \emph{not} in the
+basis, and later chapters lean on these exclusions as often as on the
+inclusions. Four exclusions bear listing.
+
+First, \emph{no physical artifact}: the basis contains no fabricated
+board, no instrument chain, no telemetry, and no physical measurement
+of any kind; the word ``board'' throughout refers to a typed software
+object or to a published design listing in the baseline. Second,
+\emph{no live model or empirical dataset}: no calibrated live system,
+no held-out evaluation data, and no experimental records exist in the
+admitted basis; the only quantitative receipts are software-test
+receipts bound in the Gate~4 manifest. Third, \emph{no external
+review}: the basis records internal cross-review as open and external
+specialist review (systems, safety, regulatory, clinical, formal) as
+open; no artifact in Table~\ref{ch03:tab:artifacts} has passed
+independent review, and the review matrix says so explicitly, with 20
+of its 53 criteria open at the bound state. Fourth, \emph{no
+authority}: as Sections~\ref{ch03:methodology:limits}
+and~\ref{ch03:authority} establish from two directions, nothing in the
+basis carries safety certification, measurement authority, claim
+license, canon status, or disclosure authorization, and every claim
+record at the bound state is Ring~4 and \textsc{not licensed}.
+
+\section{Summary}\label{ch03:summary}
+
+The source basis of this monograph is: one 743-page engineering
+baseline, pinned as \textsc{src-pcba-engineer-20260726} with SHA-256
+\texttt{294320B39FA521EAC086E99E2D9DB913E2B6CFF0754FF82DB1EF966424566274},
+admitted as design text under a three-way denial of safety and
+telemetry authority; seven controlling repository artifacts, each
+hash-bound, layering a semantic kernel, a normative engineering
+candidate, machine-readable adverse evidence, and two ledgers beneath
+two read-only downstream boundaries; a publication delta at base commit
+\texttt{a1cd9901} that organizes but does not modify the Gate~4 state;
+and one deliberately unstarted preregistration kernel recorded in its
+entirety of status literals precisely so that nothing can later be
+smuggled into it. The identification scheme is content addressing with
+disclosed limits: hashes make every citation in the chapters that
+follow a checkable act, and confer authority on none of them. The
+baseline is identified, not endorsed; the audit chapters will show, at
+page-anchored resolution, that the distinction was necessary.

@@ -1,0 +1,780 @@
+\chapter{Independent Classification Axes}\label{ch07:classification}
+
+\section{Why two axes, and why they are independent}\label{ch07:sec:why}
+
+Every classification decision in CAS-Ohm 1.0 descends from a single retained
+source conflict: the Quantification Guide's ASOM mnemonic
+(Starved/Aligned/Oversaturated/Misaligned) overlays semantic judgments onto
+dose-response regions, while the operationalization addendum states plainly
+that dose-response signatures and effect-axis outcomes are distinct and that a
+flat response has multiple causes. The candidate resolves this not by choosing
+one source over the other but by refusing the overlay as a matter of type
+discipline: the implementation classifies two independent axes and derives any
+mnemonic label afterward, as a display-only partial function that is permitted
+to return nothing.
+
+The first axis answers a question about the \emph{shape} of the local
+dose-response relation at a registered test point: as the declared alpha dose
+is varied over adjacent points of a sweep, does the observed flow magnitude
+respond linearly at the expected slope, not at all, only up to a ceiling, or
+in some other way? This is the question dose-response analysis has always
+asked, and the candidate deliberately inherits the vocabulary of that
+tradition rather than the vocabulary of circuit diagnosis: a region label is a
+statement about a fitted local curve under a declared design, in the sense of
+nonlinear dose-response regression \cite{ritz}, not a statement about what the
+underlying system \emph{is} or \emph{wants}.
+
+The second axis answers a question about the \emph{direction} of whatever
+response exists: did the activation move along the registered direction
+vector, against it, or somewhere else in activation space? This question is
+answerable, in principle, even when the magnitude question is degenerate, and
+unanswerable in practice in many situations where the magnitude question is
+crisp. The two questions have different evidence requirements, different
+failure modes, and different silence conditions. Collapsing them into one
+label is precisely the ASOM overload the source audit preserved as a conflict,
+and the whole architecture of this chapter is the refusal to perform that
+collapse.
+
+Throughout this chapter the enumerations are reproduced exactly as
+implemented in the candidate's typed ontology
+(\texttt{src/cas\_ohm\_v1/model.py}). The dose-response region enumeration has
+seven members; the semantic outcome enumeration has four. Nothing in this
+chapter asserts that any classification has been produced against a live
+model: the artifact status of the entire candidate remains
+\textsc{open / ring 4 / not licensed / held}, and every numeric example below
+is an illustrative construction over synthetic or hypothetical sweep data, not
+an empirical result.
+
+\begin{boundary}[Ring 4 status of every classification]\label{ch07:bound:ring4}
+A region label or outcome label emitted by the candidate is a statement about
+recorded sweep observations under one calibration profile, produced by tested
+software. It is not a scientific conclusion, a safety finding, a measurement
+of attention, or a causal diagnosis. No classification in this chapter is
+licensed for any representation beyond structural research use.
+\end{boundary}
+
+\section{The dose-response region axis as implemented}\label{ch07:sec:region}
+
+\begin{definition}[Dose-response region enumeration]\label{ch07:def:region}
+The implemented enumeration \texttt{DoseResponseRegion} has exactly seven
+members, in declaration order: \texttt{UNASSESSED}, \texttt{CUTOFF},
+\texttt{ACTIVE}, \texttt{SATURATION}, \texttt{BREAKDOWN},
+\texttt{NON\_OHMIC}, \texttt{UNSTABLE}. No other region label exists in the
+type system, and the classification container
+(\texttt{OperatingClassification}) rejects any value that is not an exact
+member of this enumeration.
+\end{definition}
+
+A structural fact about the implementation deserves emphasis before the
+region-by-region treatment, because it governs how several members must be
+read. The candidate distinguishes two classification modes. In
+\texttt{NUMERIC\_DERIVED} mode, a factory function derives the region from at
+least three sweep observations bracketing an interior index, using only the
+numeric neighbors, the profile's expected resistance, and the profile's
+tolerance thresholds; the factory then binds the exact observation tuple, its
+canonical digest, and the classification into one assessment object that
+replays deterministically. In \texttt{EXTERNAL\_UNVERIFIED} mode, a region
+label supplied from outside is carried as an explicitly unverified annotation
+and is forbidden from embedding any derived sweep claim. The numeric deriver,
+as implemented, emits only four of the seven members: \texttt{CUTOFF},
+\texttt{SATURATION}, \texttt{NON\_OHMIC}, and \texttt{ACTIVE}. The members
+\texttt{UNASSESSED}, \texttt{BREAKDOWN}, and \texttt{UNSTABLE} are reachable
+only as typed carriers of external or absent judgment. This asymmetry is not
+an oversight; it is the candidate's honesty about what its three-point local
+classifier can and cannot distinguish, and it is recorded here because a
+reader of the enumeration alone would not see it.
+
+\begin{invariant}[Numeric emission subset]\label{ch07:inv:numeric-subset}
+In \texttt{NUMERIC\_DERIVED} mode the implemented classifier emits a region
+in $\{\texttt{CUTOFF}, \texttt{SATURATION}, \texttt{NON\_OHMIC},
+\texttt{ACTIVE}\}$ and never emits \texttt{UNASSESSED}, \texttt{BREAKDOWN},
+or \texttt{UNSTABLE}. The latter three members are admissible only in
+\texttt{EXTERNAL\_UNVERIFIED} mode, where the assessment may not carry
+observations, an index, or an expected resistance.
+\end{invariant}
+
+The numeric derivation itself, for the record, proceeds as follows. Given
+strictly increasing drives at the predecessor, current, and successor
+observations, the classifier computes the backward slope, the forward slope,
+the expected slope $1/r_{\mathrm{eff}}$ from the supplied expected
+resistance, a slope floor equal to the expected slope times the profile's
+relative tolerance, and a relative slope error equal to the larger of the two
+slope deviations divided by the expected slope. Classification is then a
+short guarded cascade: flow at or below the absolute tolerance yields
+\texttt{CUTOFF}; a flat forward slope with a live backward slope yields
+\texttt{SATURATION}; a relative slope error above the relative tolerance
+yields \texttt{NON\_OHMIC}; otherwise \texttt{ACTIVE}. Every threshold in
+this cascade is a profile-bound tolerance, not a universal constant, and the
+same sweep classified under a different tolerance profile may land in a
+different region. Region labels are therefore profile-relative twice over:
+through the calibration identity that produced the observations and through
+the tolerance identity that partitioned them.
+
+\subsection{\texttt{UNASSESSED}}\label{ch07:sec:region-unassessed}
+
+\emph{Signature.} There is none. \texttt{UNASSESSED} is the typed absence of
+a region judgment: no sweep was classified, or an external annotation
+declined to commit. It is the region axis analogue of a missing value that
+has been made unignorable by being given a name.
+
+\emph{Causes.} A profile may have been constructed and reviewed without any
+sweep yet run; an external record may carry semantic information but no
+dose-response evidence; a pipeline may deliberately defer region
+classification until controls are in place. In all such cases the honest
+label is \texttt{UNASSESSED}, and the type system carries it forward rather
+than defaulting to anything.
+
+\emph{What it does not imply.} \texttt{UNASSESSED} does not imply
+\texttt{ACTIVE}-by-default, does not imply that the response is small, and
+does not imply that assessment failed. It implies only that no admissible
+classification event has occurred. Critically, an \texttt{UNASSESSED} region
+participates in the no-diagnosis conditions of
+Section~\ref{ch07:sec:nodiag}: since residual diagnosis requires the
+\texttt{ACTIVE} region and \texttt{UNASSESSED} is not \texttt{ACTIVE},
+nothing downstream fires.
+
+\subsection{\texttt{CUTOFF}}\label{ch07:sec:region-cutoff}
+
+\emph{Signature.} The observed flow magnitude at the classified point is at
+or below the profile's absolute tolerance (\texttt{delta\_abs}): within
+measurement resolution, nothing is flowing. In the implemented cascade this
+test fires first, so a point that is simultaneously flat and tiny is
+\texttt{CUTOFF}, not \texttt{SATURATION}.
+
+\emph{Causes.} The candidate deliberately does not enumerate causes inside
+the label, because the causes are many and the label identifies none of them.
+A dose below an activation threshold; a direction vector that fails to
+intersect the mechanism it was intended to probe; an intervention applied at
+a layer or token position where the target computation has not yet formed or
+has already been consumed; a hard upstream gate; an instrumentation fault
+that zeroes the projection; a full-scale or units error that shrinks the
+recorded value below tolerance. All produce the same signature.
+
+\emph{What it does not imply.} \texttt{CUTOFF} does not imply that the
+system is \emph{starved} of the driven content, that larger doses would
+produce response, that the mechanism is absent, or that the intervention is
+safe or ineffective in any behavioral sense. It is a statement that this
+sweep, at this point, under this profile, recorded no resolvable flow. The
+mnemonic reading (\textsc{starved}) is available only through the overlay of
+Section~\ref{ch07:sec:asom} and only when the semantic axis independently
+reads \texttt{INTENDED}, which is itself a subtle condition: a semantic
+judgment about a response that is below resolution inherits all the fragility
+of dividing by small numbers, which is why downstream ratio diagnostics are
+censored rather than computed (Chapter~\ref{ch10:residuals} of this
+monograph).
+
+\subsection{\texttt{ACTIVE}}\label{ch07:sec:region-active}
+
+\emph{Signature.} Flow is resolvable, both local slopes exist, and the
+relative slope error against the profile's expected resistance is within the
+relative tolerance. Informally: the local dose-response relation looks like
+the calibrated line, at the calibrated slope, within declared error.
+
+\emph{Causes.} An \texttt{ACTIVE} label is evidence-compatible with the
+candidate's central hypothesis --- a local linear response region --- but it
+is equally compatible with a locally linear stretch of a globally nonlinear
+curve, with a coincidental slope match at one interior point, or with
+compensating errors in the full-scale and direction conventions. Three
+points cannot distinguish these; the label does not pretend to.
+
+\emph{What it does not imply.} This is the region most exposed to
+overreading, so the negative space is listed at length. \texttt{ACTIVE} does
+not imply \texttt{INTENDED}: the magnitude of the projection can track the
+dose perfectly while the induced activation moves off the registered axis or
+against it (Section~\ref{ch07:sec:independence}). \texttt{ACTIVE} does not
+imply causal efficacy of the driven content on behavior; it is a statement
+about a projection coordinate, not about outputs. \texttt{ACTIVE} does not
+imply that the linearity extends beyond the bracketing points, that the
+region would survive a different seed or corpus, or that the fitted
+resistance transfers to any other test point, model revision, or profile.
+And \texttt{ACTIVE} at one interior index does not imply \texttt{ACTIVE}
+anywhere else on the same sweep: region labels are pointwise.
+
+\subsection{\texttt{SATURATION}}\label{ch07:sec:region-saturation}
+
+\emph{Signature.} The backward slope is alive (above the slope floor) while
+the forward slope is flat (at or below it): response grew on the way in and
+has stopped growing on the way out. The implemented test is deliberately
+one-sided and local; it detects a ceiling entered between the predecessor and
+successor, not the global supremum of the response.
+
+\emph{Causes.} Genuine ceilings in the projected activation; normalization
+ceilings (a full-scale chosen low, so that the instrument clips before the
+system does); representational ceilings such as norm growth limits at the
+hooked site; or a sweep whose upper drives simply left the calibrated alpha
+range's informative interior. The label does not distinguish a system that
+saturates from an instrument that clips, and the candidate's separation of
+the overload ratio from the clipped display value
+(Chapter~\ref{ch08:quantization}) exists exactly so that this ambiguity is
+carried in the record rather than erased by it.
+
+\emph{What it does not imply.} \texttt{SATURATION} does not imply
+\emph{oversaturation} in any semantic or safety sense; does not imply that
+the response at the ceiling is aligned with the intended direction; does not
+imply that dose reduction would restore linear response (hysteresis and state
+dependence are explicitly out of scope of the memoryless candidate); and does
+not imply that the ceiling is a property of the model rather than of the
+measurement chain. Saturated-stage residuals are, per the source audit
+itself, meaningless; the no-diagnosis machinery enforces this by refusing
+residual computation outside \texttt{ACTIVE}.
+
+\subsection{\texttt{BREAKDOWN}}\label{ch07:sec:region-breakdown}
+
+\emph{Signature.} None is implemented numerically. \texttt{BREAKDOWN} is
+retained in the enumeration from the source material --- the Guide's fifth
+region, in which response ceases to be governed by the modeled relation at
+all, by analogy with dielectric breakdown --- but the three-point classifier
+has no test that emits it, and the audit's five-region summary and the
+implementation's seven-member enumeration are both recorded in the seed paper
+for exactness. As implemented, a \texttt{BREAKDOWN} label can enter the
+system only as an \texttt{EXTERNAL\_UNVERIFIED} annotation.
+
+\emph{Causes.} Hypothetically: interventions large enough to destroy the
+local structure being measured --- degenerate outputs, representation
+collapse, drives far beyond the calibrated grid. The candidate takes no
+position on when this occurs, because it has no admitted evidence that it
+occurs, and the calibrated alpha range gate refuses predictions outside the
+grid in any case.
+
+\emph{What it does not imply.} An external \texttt{BREAKDOWN} label carries
+no numeric evidence by construction (the external mode forbids embedded
+sweeps), so it implies nothing quantitative whatsoever. It is a typed way of
+recording that some outside process asserted catastrophic non-response,
+pending verification that the candidate itself cannot supply. It does not
+imply damage, harm, jailbreak, or any behavioral state; the electrical
+connotation of the borrowed word licenses nothing.
+
+\subsection{\texttt{NON\_OHMIC}}\label{ch07:sec:region-nonohmic}
+
+\emph{Signature.} Flow is resolvable and the point is not saturated, but the
+relative slope error against the expected resistance exceeds the relative
+tolerance: the response is doing something, and that something is not the
+calibrated line. Convex, concave, kinked, and merely miscalibrated local
+shapes all land here.
+
+\emph{Causes.} Genuine nonlinearity of the projection in the swept range; a
+calibrated resistance that is simply wrong for this neighborhood (fit
+elsewhere, drifted, or fit on contaminated data); interference between the
+steering intervention and other active mechanisms; or tolerance
+misconfiguration. The label is a residual category in the taxonomic sense:
+it collects everything resolvable that neither matches the line nor exhibits
+the specific saturation signature.
+
+\emph{What it does not imply.} \texttt{NON\_OHMIC} does not imply
+\texttt{MISALIGNED}; this is one of the two implications the seed paper
+singles out for explicit denial. A response can be strongly nonlinear in
+magnitude while moving exactly along the intended axis, and the mnemonic
+overlay accordingly returns no label at all for an intended non-ohmic point.
+It also does not imply that the Ohmic model has been falsified in any global
+sense --- one point exceeding one tolerance under one profile is not a test
+of the registered hypotheses, whose closure protocol is preregistered and has
+not been run.
+
+\subsection{\texttt{UNSTABLE}}\label{ch07:sec:region-unstable}
+
+\emph{Signature.} None is implemented numerically; like \texttt{BREAKDOWN},
+\texttt{UNSTABLE} is reachable only as an external annotation. Its intended
+meaning, inherited from the sources, is non-reproducibility: the same dose at
+the same point under the same profile fails to yield a stable response
+distribution --- variance rather than shape is the pathology.
+
+\emph{Causes.} Seed sensitivity, sampling noise dominating the projection,
+context-dependent activation at the hooked site, or drift within a session.
+The three-point classifier, which sees a single sweep, is structurally
+incapable of assessing reproducibility, which is why it never emits this
+label; assessing it would require repeated sweeps under controlled
+randomization, which is exactly item eight of the closure experiment list
+(bootstrap uncertainty and cross-split reproducibility), an experiment that
+has not been admitted.
+
+\emph{What it does not imply.} \texttt{UNSTABLE} does not imply that the
+underlying system is stochastic in any interesting sense, that the direction
+is wrong, or that the profile is invalid; it implies only that a stable
+pointwise response summary was not obtainable by whatever external process
+asserted the label. It is also a no-diagnosis condition: unstable points
+emit nothing downstream.
+
+\section{A worked derivation, and what an assessment binds}\label{ch07:sec:worked}
+
+The region taxonomy is easiest to hold onto with the classifier's
+arithmetic run once in the open. All numbers below are illustrative
+constructions over a synthetic sweep; nothing is a measurement.
+
+\begin{example}[Illustrative three-point classification]\label{ch07:ex:sweep}
+Let the profile declare expected resistance $r_{\mathrm{eff}} = 2.0$
+alpha-per-activation, absolute tolerance $\texttt{delta\_abs} = 0.05$,
+relative tolerance $\texttt{delta\_relative} = 0.2$, off-target maximum
+$0.3$, and residual floor $0.01$. Consider the ordered sweep
+observations (drive, flow, off-axis): $(1.0,\, 0.50,\, 0.05)$,
+$(2.0,\, 1.00,\, 0.08)$, $(3.0,\, 1.48,\, 0.10)$, classified at the
+interior index. The expected slope is $1/2.0 = 0.5$. The backward slope
+is $(1.00 - 0.50)/(2.0 - 1.0) = 0.50$; the forward slope is
+$(1.48 - 1.00)/(3.0 - 2.0) = 0.48$; the relative slope error is
+$\max(|0.50 - 0.5|, |0.48 - 0.5|)/0.5 = 0.04$, well inside $0.2$. The
+current flow $1.00$ exceeds \texttt{delta\_abs}, so not \texttt{CUTOFF};
+the forward slope $0.48$ exceeds the slope floor
+$0.5 \times 0.2 = 0.1$, so not \texttt{SATURATION}; the relative slope
+error is inside tolerance, so not \texttt{NON\_OHMIC}: region
+\texttt{ACTIVE}. The semantic ratio is $0.08 / \max(1.00, 0.01) =
+0.08 \le 0.3$: outcome \texttt{INTENDED}. Overlay: \texttt{ALIGNED}.
+
+Now perturb the same sweep three ways. (a) Flows
+$(0.98,\, 1.00,\, 1.01)$: the backward slope collapses to $0.02$ and
+the forward to $0.01$, both under the slope floor --- but the
+saturation test requires a \emph{live} backward slope with a flat
+forward slope, and here both are flat while the flow is large, so the
+cascade falls through to the relative-slope-error test, which reads
+$\max(|0.02-0.5|,|0.01-0.5|)/0.5 = 0.98 > 0.2$: region
+\texttt{NON\_OHMIC} --- a uniformly flat plateau at high flow, entered
+before the observed window, is locally indistinguishable from a wrong
+slope, and the classifier says the modest thing rather than the
+narrative thing. (b) Flows $(0.50,\, 1.00,\, 1.02)$: backward slope
+$0.50$ (live), forward slope $0.02 \le 0.1$ (flat): region
+\texttt{SATURATION} --- the ceiling was entered \emph{inside} the
+window, which is what the one-sided signature detects. (c) Off-axis
+column $(0.30,\, 0.40,\, 0.45)$ with the original flows: the semantic
+ratio becomes $0.40$, exceeding $0.3$: outcome \texttt{OFF\_AXIS},
+region still \texttt{ACTIVE}, overlay \texttt{MISALIGNED} --- the
+independence principle in one line, since nothing about the magnitude
+cascade changed.
+\end{example}
+
+The example also shows the sense in which tolerances are
+\emph{classification parameters}, not implementation detail. Halving
+\texttt{delta\_relative} to $0.1$ reclassifies perturbation (a) no
+differently but tightens the \texttt{ACTIVE} verdict of the base case
+($0.04$ still passes); raising it to $1.0$ would absorb perturbation
+(a) into \texttt{ACTIVE}. Every region label is therefore implicitly
+subscripted by the tolerance profile that produced it, and the
+candidate makes the subscript explicit: the tolerance block is part of
+the calibration profile, the profile digest is bound into every
+assessment, and two assessments with different tolerance digests are
+formally incomparable even over identical observations.
+
+What the assessment object binds, beyond the two axis labels, completes
+the account. A numeric assessment is factory-only (direct construction
+is rejected by token) and carries: the classification pair; the mode
+(\texttt{NUMERIC\_DERIVED}); the profile's response-region method
+identity; the calibration-profile digest; the registered test-point
+digest; an evidence reference whose digest must equal the canonical
+digest of the embedded observation tuple (at least three points, with
+an interior index); the index and expected resistance; the profile's
+control bindings; and a full operation binding (Chapter~\ref{ch09:networks}'s
+Definition on aggregate binding enumerates the binding fields). At
+consumption time the assessment is not trusted but \emph{replayed}: the
+validator re-resolves the evidence artifact, requires byte equality
+with the embedded observations, re-derives the classification from the
+observations, index, expected resistance, and current profile
+tolerances, and requires the re-derived pair to equal the stored pair.
+A classification that cannot be reproduced from its own bound evidence
+does not validate --- which is the concrete meaning of the earlier
+statement that region labels fail loudly.
+
+By contrast, an \texttt{EXTERNAL\_UNVERIFIED} assessment must carry
+\emph{no} observations, no index, and no expected resistance --- the
+type rejects an external label that smuggles derived-looking numbers
+--- and consumers are required to treat it as an unverified annotation:
+the diagnostic layer, in particular, replays numeric assessments and
+refuses external ones outright. The two modes thus split exactly along
+the loud/silent failure line: numeric assessments carry their own
+disproof machinery; external ones carry a label and an explicit
+admission that no machinery stands behind it.
+
+\section{The semantic outcome axis as implemented}\label{ch07:sec:outcome}
+
+\begin{definition}[Semantic outcome enumeration]\label{ch07:def:outcome}
+The implemented enumeration \texttt{SemanticOutcome} has exactly four
+members: \texttt{UNASSESSED}, \texttt{INTENDED}, \texttt{OPPOSITE},
+\texttt{OFF\_AXIS}.
+\end{definition}
+
+The numeric deriver assesses the semantic axis from a single ratio: the
+off-axis activation magnitude at the current point divided by the flow
+magnitude (floored by the profile's residual floor to avoid division by
+values compatible with zero). If that ratio exceeds the profile's off-target
+maximum, the outcome is \texttt{OFF\_AXIS}; otherwise \texttt{INTENDED}. Two
+consequences follow and are recorded candidly. First, the numeric path never
+emits \texttt{OPPOSITE}: distinguishing anti-directional movement from
+off-axis movement requires signed projection evidence that the magnitude-only
+sweep observation does not carry, so \texttt{OPPOSITE} is, in the current
+implementation, an externally assessable outcome only. Second, the numeric
+path never emits \texttt{UNASSESSED}, because it refuses to run at all
+without the observations that make the ratio computable; \texttt{UNASSESSED}
+is what an assessment carries when the semantic question was not put to any
+evidence.
+
+\subsection{\texttt{UNASSESSED}}
+
+The typed absence of a directional judgment. A profile can classify region
+crisply and still have no admissible answer to ``did it move the intended
+way,'' most obviously when no behavioral or activation-space comparison
+against the registered direction has been performed. \texttt{UNASSESSED} on
+the semantic axis is a hard silence condition: the residual diagnostic
+explicitly rejects assessments whose semantic outcome is \texttt{UNASSESSED},
+on the principle that a residual against an intention nobody assessed is an
+invitation to invent the intention afterward.
+
+\subsection{\texttt{INTENDED}}
+
+The observed activation moved along the registered direction, with off-axis
+contamination below the profile's tolerance. \texttt{INTENDED} does not
+imply that the magnitude was appropriate (it combines with every region,
+including \texttt{CUTOFF} and \texttt{SATURATION}), does not imply that the
+behavioral consequence of the activation movement matches anyone's intention
+at the output level, and does not imply endorsement of the intervention. The
+word ``intended'' binds to the registered direction vector and to nothing
+else: change the registration and the same physical event reads differently.
+This is deliberate; intention lives in the profile, where it is frozen,
+digested, and auditable, not in the interpreter's retrospect.
+
+\subsection{\texttt{OPPOSITE}}
+
+The observed activation moved against the registered direction: a signed
+reversal, not merely leakage. As noted, the current numeric path cannot
+produce this label; it exists in the enumeration because the source material
+treats reversal as a first-class outcome (the inverted-response reading of a
+steering intervention) and because a future signed-evidence classifier must
+have somewhere typed to land. An \texttt{OPPOSITE} label, where externally
+asserted, does not imply psychological reactance, adversarial optimization,
+safety-training interference, or any mechanism at all; mechanism attribution
+from outcome labels is exactly the inferential step the independence
+principle below forbids.
+
+\subsection{\texttt{OFF\_AXIS}}
+
+The observed activation moved, but a supra-tolerance fraction of the
+movement lies outside the registered direction. This is the label the
+numeric path emits when the off-axis ratio exceeds the profile's
+off-target maximum. \texttt{OFF\_AXIS} does not imply that the off-axis
+component is harmful, meaningful, or even stable; a direction vector that
+captures its target imperfectly will manufacture off-axis readings from
+perfectly on-target mechanisms, and a poorly conditioned projection basis
+will do the same. The label records a geometric fact about one comparison
+under one registration; the temptation to read it as ``side effects'' is a
+semantic overlay the candidate declines.
+
+\section{The independence principle}\label{ch07:sec:independence}
+
+\begin{ruleenv}[Axis independence]\label{ch07:rule:independence}
+No dose-response region mechanically determines a semantic outcome, and no
+semantic outcome mechanically determines a region. Every pair in the product
+$\{$region$\} \times \{$outcome$\}$ is admissible to the type system, and the
+classification container stores the two axes as separate fields with no
+consistency coupling beyond enumeration membership.
+\end{ruleenv}
+
+The principle is worth developing at length, because it is the load-bearing
+wall between this chapter and the mnemonic it replaces.
+
+\emph{Active does not mean aligned.} The region axis sees the magnitude of a
+projection; the outcome axis sees its geometry. A dose that recruits a
+strong, beautifully linear response in the projection coordinate can be
+recruiting it off the intended axis --- the projection tracks whatever
+component of the induced activation lies along the measurement direction,
+and a diagonal movement has such a component. Conversely, an intervention
+can move activation precisely along the intended axis while the magnitude
+response is grossly nonlinear. In the crossed cases, the mnemonic has no
+word, and that lexical gap in ASOM is not an accident of vocabulary: it
+marks a real, observable class of events that a four-word overlay cannot
+name. An \texttt{ACTIVE}/\texttt{OFF\_AXIS} classification and an
+\texttt{ACTIVE}/\texttt{OPPOSITE} classification are the two canonical
+counterexamples to region-implies-outcome, and both are fully admissible
+records.
+
+\emph{Flat response is multi-causal.} The converse direction is subtler and
+more dangerous, because flatness invites narrative. A flat or negligible
+response at the classified point is evidence-compatible with at least five
+generating situations, which the candidate insists on keeping distinct:
+(i) \emph{cutoff} --- the dose is below whatever threshold governs
+resolvable response at this point; (ii) \emph{saturation} --- the response
+exhausted its range before the observed doses, so the local curve is flat at
+ceiling rather than at floor; (iii) \emph{wrong direction} --- the
+intervention moves activation vigorously, but orthogonally to the
+measurement direction, so the projection sees nothing; (iv)
+\emph{insensitivity} --- the system genuinely does not respond to this
+intervention at this site, at any dose; and (v) \emph{measurement failure}
+--- hooks misplaced, units mismatched, full-scale misdeclared, instrument
+silent. Of these five, the three-point classifier can discriminate only the
+first two, and only by their local slope signatures; the last three all
+present as \texttt{CUTOFF} or as low-magnitude \texttt{ACTIVE} noise, and
+distinguishing them requires controls --- random same-norm directions,
+wrong-layer placements, zero-intervention baselines --- that live in the
+preregistered closure protocol, not in the classifier. A flat point is
+therefore never, by itself, evidence of starvation, and the candidate's
+refusal to emit \textsc{starved} except through the explicitly decorative
+overlay is the operational form of that refusal.
+
+The independence principle also has an evidential asymmetry worth recording.
+Region classification is internally checkable: it replays from the
+observation tuple and the tolerance profile, and the factory binds the digest
+of the observations so that replay is exact. Outcome classification, by
+contrast, is only as good as the direction registration and the off-axis
+instrumentation, both of which are profile inputs that the classifier
+consumes on trust. The two axes therefore fail differently --- region labels
+fail loudly, by replay divergence, while outcome labels fail silently, by
+mis-registration --- and treating them as one axis would let the silent
+failure mode contaminate the loud one. Keeping them separate keeps their
+error budgets separate, in the same spirit in which model verification and
+model validation are kept separate activities \cite{sargent}.
+
+\section{ASOM as mnemonic overlay}\label{ch07:sec:asom}
+
+\begin{definition}[ASOM overlay]\label{ch07:def:asom}
+The implemented enumeration \texttt{AsomLabel} has four members:
+\texttt{STARVED}, \texttt{ALIGNED}, \texttt{OVERSATURATED},
+\texttt{MISALIGNED}. The overlay is the partial function
+\texttt{asom\_label()} on classifications, defined exactly as follows:
+if the semantic outcome is \texttt{OPPOSITE} or \texttt{OFF\_AXIS}, return
+\texttt{MISALIGNED}; otherwise, if the semantic outcome is not
+\texttt{INTENDED}, return nothing; otherwise return \texttt{STARVED} for
+region \texttt{CUTOFF}, \texttt{ALIGNED} for \texttt{ACTIVE},
+\texttt{OVERSATURATED} for \texttt{SATURATION}, and nothing for every other
+region.
+\end{definition}
+
+Three properties of this definition carry the argument. First, the overlay
+is \emph{derived}: it is computed from the two stored axes and stored
+nowhere, so no ASOM word can drift out of agreement with the axes that
+justify it, and no process can write an ASOM word directly. Second, the
+overlay is \emph{partial}: an \texttt{UNASSESSED} outcome yields no label at
+all, and an \texttt{INTENDED} outcome over \texttt{BREAKDOWN},
+\texttt{NON\_OHMIC}, \texttt{UNSTABLE}, or \texttt{UNASSESSED} regions
+likewise yields nothing --- the mnemonic simply has no word for most of the
+product space, and the implementation returns \texttt{None} rather than
+coining one. Third, the overlay is \emph{lossy in exactly one direction}:
+\texttt{MISALIGNED} merges \texttt{OPPOSITE} with \texttt{OFF\_AXIS} and
+discards the region entirely, so recovering the axes from the label is
+impossible. A four-word summary of a twenty-eight-cell product space cannot
+be information-preserving, and the candidate's position is that it should
+not try: the words exist for human pattern recognition in displays and
+prose, and every load-bearing consumer reads the axes.
+
+\begin{ruleenv}[No identity theorem]\label{ch07:rule:asom-no-identity}
+No inference, gate, capability, diagnostic, or claim in the candidate
+consumes an \texttt{AsomLabel}. The overlay never appears in canonical
+payloads of measurement values, never conditions residual admission, and
+never participates in packet completeness. Any external document that
+reasons from \textsc{starved}, \textsc{aligned}, \textsc{oversaturated}, or
+\textsc{misaligned} as if these were classification primitives is reasoning
+from a display artifact.
+\end{ruleenv}
+
+\section{The full region-by-outcome cross table}\label{ch07:sec:crosstable}
+
+Table~\ref{ch07:tab:cross} enumerates the product space. For compactness
+the outcome columns are abbreviated U (\texttt{UNASSESSED}),
+I (\texttt{INTENDED}), Op (\texttt{OPPOSITE}), Off (\texttt{OFF\_AXIS});
+each cell records the derived ASOM overlay, if any, with ``---'' for the
+overlay's silence.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Region & U & I & Op & Off \\
+\midrule
+\texttt{UNASSESSED} & --- & --- & \texttt{MISALIGNED} & \texttt{MISALIGNED} \\
+\texttt{CUTOFF} & --- & \texttt{STARVED} & \texttt{MISALIGNED} & \texttt{MISALIGNED} \\
+\texttt{ACTIVE} & --- & \texttt{ALIGNED} & \texttt{MISALIGNED} & \texttt{MISALIGNED} \\
+\texttt{SATURATION} & --- & \texttt{OVERSATURATED} & \texttt{MISALIGNED} & \texttt{MISALIGNED} \\
+\texttt{BREAKDOWN} & --- & --- & \texttt{MISALIGNED} & \texttt{MISALIGNED} \\
+\texttt{NON\_OHMIC} & --- & --- & \texttt{MISALIGNED} & \texttt{MISALIGNED} \\
+\texttt{UNSTABLE} & --- & --- & \texttt{MISALIGNED} & \texttt{MISALIGNED} \\
+\bottomrule
+\end{tabular}
+\caption{The $7 \times 4$ classification product and its derived ASOM
+overlay. The overlay names only six of the twenty-eight cells distinctly;
+fourteen cells share \texttt{MISALIGNED}, and eight cells have no name.}
+\label{ch07:tab:cross}
+\end{table}
+
+The remainder of this section walks the table row by row, reading each
+combination for what it can and cannot mean. Throughout, ``possible
+readings'' are enumerations of evidence-compatible situations, not
+diagnoses; selecting among them is exactly what classification alone cannot
+do.
+
+\emph{\texttt{UNASSESSED} region.} With outcome U, this is the null
+assessment: a typed placeholder, common for freshly registered test points.
+With outcome I, an external process asserted directional success without any
+region evidence --- admissible as a record, useless as a premise; the
+overlay pointedly has no word for it. With Op or Off, someone asserted
+directional failure with no dose-response context; the overlay says
+\texttt{MISALIGNED}, and the correct reading of that word here is ``an
+unverified external annotation exists,'' nothing stronger.
+
+\emph{\texttt{CUTOFF} region.} With U: no resolvable flow and no
+directional assessment --- the modal honest state for a dead point, since
+assessing direction of a sub-tolerance response is numerically fraught.
+With I: the overlay's \texttt{STARVED} cell; the response is below
+resolution and whatever trace exists is on-axis. Possible readings include
+genuine sub-threshold dosing, but equally a dead instrument whose noise
+floor happens to project on-axis; the cell does not separate them. With Op:
+below-resolution flow asserted to be reversed --- a nearly self-undermining
+combination that should prompt scrutiny of the asserting process rather than
+of the model. With Off: sub-tolerance magnitude, off-axis geometry; often
+the signature of measuring the wrong thing in the right place, and a natural
+trigger for the wrong-direction hypothesis of
+Section~\ref{ch07:sec:independence}, which only controls can confirm.
+
+\emph{\texttt{ACTIVE} region.} With U: a calibrated-looking response whose
+direction nobody has assessed; the diagnostic machinery refuses to run on
+it, precisely because an unassessed intention invites retrofitting. With I:
+the overlay's \texttt{ALIGNED} cell and the candidate's best case ---
+magnitude tracks dose at the calibrated slope, geometry tracks the
+registration; still a structural statement under one profile, not an
+endorsement, not transferable, not causal. With Op: linear-in-magnitude,
+reversed-in-direction; if externally asserted and later verified, this
+combination would be the single most alarming cell for a steering
+application, and the candidate's contribution is to make it representable
+rather than lexically impossible (ASOM has no word for a linear reversal
+other than the undifferentiated \texttt{MISALIGNED}). With Off: strong,
+lawful magnitude response leaking off-axis --- the canonical
+``active-but-off-axis'' counterexample; possible readings span imperfect
+direction registration, genuinely diffuse mechanisms, and superposed
+responses, and the cell selects none of them.
+
+\emph{\texttt{SATURATION} region.} With U: ceiling behavior, direction
+unassessed; residuals refuse to run, and per the sources saturated-stage
+residuals would be meaningless anyway. With I: the overlay's
+\texttt{OVERSATURATED} cell --- response climbed on-axis and hit a ceiling;
+readings include a genuine representational ceiling and a clipping
+instrument, which the overload ratio (kept separately from the clipped
+display, Chapter~\ref{ch08:quantization}) exists to help distinguish. With
+Op: ceiling-flat magnitude with asserted reversal --- coherent only if the
+reversal occurred below the ceiling or in a signed coordinate the sweep does
+not carry; treat as external assertion pending signed evidence. With Off:
+the ceiling is real but the content at ceiling is off-target; a reading
+consistent with saturating the wrong mechanism entirely.
+
+\emph{\texttt{BREAKDOWN} region.} All four cells are external-only, since
+the numeric path never emits the region. With U, the cell is a bare
+catastrophic-response assertion; with I, an internally tense one (broken
+response, yet on-axis?); with Op or Off, the overlay's undifferentiated
+\texttt{MISALIGNED} again. In every case the assessment carries no
+observations by construction, and the only defensible consumption of the
+row is as a flag for human review of the asserting process.
+
+\emph{\texttt{NON\_OHMIC} region.} With U: resolvable, non-linear
+magnitude response, direction unassessed --- an honest and common state for
+exploratory sweeps. With I: nonlinear but on-axis; the overlay has no word,
+and rightly so --- ``misaligned'' would be false and ``aligned'' would
+launder the nonlinearity. Readings include genuine supra-linear
+recruitment, miscalibrated expected resistance, and interference; the
+falsification program's gain-composition and inverse-slope experiments are
+the registered instruments for narrowing this set. With Op or Off: nonlinear
+magnitude and adverse geometry; the least constrained cells in the table,
+compatible with nearly any mechanism story and therefore probative of none.
+
+\emph{\texttt{UNSTABLE} region.} All cells are external-only. With U: an
+assertion of irreproducibility, unquantified. With I: ``unstable but
+on-average intended'' --- a reading that presupposes distributional evidence
+the record cannot carry, hence flagged, not consumed. With Op or Off: the
+overlay says \texttt{MISALIGNED}, but the honest reading is that neither
+axis is trustworthy at an unstable point, which is why instability is a
+no-diagnosis condition rather than a diagnosable state.
+
+\begin{remark}\label{ch07:rem:table-use}
+The table's practical function is negative. It exists so that no
+combination can be declared impossible by vocabulary, and so that every
+overlay word can be traced to the cells it covers and the cells it merges.
+Twenty-two of twenty-eight cells receive either no ASOM word or a shared
+one; any analysis pipeline that operates at ASOM granularity therefore
+discards most of the classification structure by construction.
+\end{remark}
+
+\section{No-diagnosis conditions}\label{ch07:sec:nodiag}
+
+The candidate's diagnostic layer (residual computation, and everything
+downstream of it) is guarded by a conjunction of admission conditions, each
+of which independently silences diagnosis. They are enumerated here as
+implemented, with the enforcing mechanism named for each.
+
+\begin{ruleenv}[Silence conditions]\label{ch07:rule:nodiag}
+No diagnostic is emitted when any of the following holds:
+\begin{enumerate}
+\item \emph{Region is not \texttt{ACTIVE}.} The residual entry point
+rejects any assessment whose region differs from \texttt{ACTIVE}; this
+covers \texttt{CUTOFF}, \texttt{SATURATION}, \texttt{BREAKDOWN},
+\texttt{NON\_OHMIC}, \texttt{UNSTABLE}, and \texttt{UNASSESSED} uniformly.
+Cutoff points have nothing to diagnose; saturated points have meaningless
+residuals; unstable points have untrustworthy ones.
+\item \emph{Semantic outcome is \texttt{UNASSESSED}.} A residual against an
+unassessed intention is refused outright.
+\item \emph{Profile is uncalibrated or not reviewed.} The operation context
+admits a calibration profile only in review state \texttt{REVIEWED}; any
+other review state fails the context, so no operation --- classification
+included --- can even begin.
+\item \emph{Profile drift state is not current.} A profile whose drift
+state differs from current is rejected at context admission.
+\item \emph{Replay time is stale.} The caller-supplied \texttt{replay\_as\_of}
+must satisfy $\texttt{valid\_from} \le \texttt{replay\_as\_of} <
+\texttt{expires\_at}$; outside that window the profile is ``stale or not yet
+valid'' and the context fails.
+\item \emph{Wrong model or wrong profile.} Every assessment binds the
+calibration profile digest and a registered test-point digest; an
+assessment presented against a context whose profile digest differs, or
+whose test point is unregistered, is rejected. Since the profile binds the
+exact model, configuration, tokenizer, and weights identities, a wrong-model
+presentation is a wrong-profile presentation and fails the same check.
+\end{enumerate}
+\end{ruleenv}
+
+Two design commitments underlie the list. The first is that silence is the
+default and diagnosis is the exception: every condition is checked
+fail-closed, and a missing precondition produces a typed rejection, never a
+degraded diagnostic. The second is that the conditions compose by
+conjunction with no override path --- there is no force flag, no
+administrative bypass, and no trust mode in which a stale profile or an
+unassessed outcome becomes diagnosable. The alternative --- emitting
+diagnostics with warnings attached --- was foreclosed by the source audit's
+observation that warned-against readings (the residual-as-bypass reading in
+particular) were made on the same page as the warnings.
+
+\section{Replay-time semantics: \texttt{replay\_as\_of}}\label{ch07:sec:replay}
+
+Every operation context carries a field \texttt{replay\_as\_of}: a
+caller-supplied timestamp, parsed and canonicalized at admission, snapshotted,
+and immutable thereafter (any change after admission is a validation error).
+Profile currency (Rule~\ref{ch07:rule:nodiag}, condition 5) is evaluated
+against this timestamp, and every operation binding embeds it, so that each
+result records the historical instant \emph{as of which} the profile was
+asserted current.
+
+\begin{ruleenv}[Replay time is not authenticated freshness]\label{ch07:rule:replay}
+\texttt{replay\_as\_of} is a replay coordinate, not a clock. It asserts that
+the computation is being evaluated as of a stated historical time; it does
+not assert that the stated time is now, that the caller's clock is honest,
+or that the profile is current in wall-clock reality. The context exposes
+this directly: its \texttt{authenticated\_current} property is constantly
+false, and the optional clock-receipt field, when present, is itself only a
+recorded artifact, not a trusted time source. A caller can therefore always
+choose a \texttt{replay\_as\_of} inside a profile's validity window and
+obtain classifications against that historical frame; nothing in the
+candidate prevents this, and nothing in the candidate represents the result
+as fresh.
+\end{ruleenv}
+
+The design is deliberate and mirrors the completeness-versus-eligibility
+split that governs the whole candidate: structural checks (the window
+inequality, the snapshot immutability, the binding of the timestamp into
+every result) are implemented and tested; authority checks (a trusted
+current-time receipt from an admitted external authority) are named,
+required for authenticated Evidence-Packet eligibility, and absent. The
+honest reading of any classification record is therefore always
+conditional: \emph{under profile $P$, replayed as of $t$, this sweep
+classified as such}. Removing the conditionality would require exactly the
+authenticated infrastructure the candidate declares it does not have.
+
+\begin{remark}[What this chapter establishes]\label{ch07:rem:close}
+The classification layer contributes no empirical claim. What it
+contributes is a shape for future claims: a seven-member region axis and a
+four-member outcome axis, independent by rule, with a decorative overlay
+that cannot be consumed, a product space in which no combination is
+unspeakable, and a silence discipline under which most states of the world
+produce no diagnosis at all. If the registered hypotheses eventually close
+against this scaffolding, their content will be expressible without
+renaming anything; if they fail, the failure will be recordable in the same
+vocabulary. That neutrality between success and failure is the property the
+chapter was built to secure.
+\end{remark}

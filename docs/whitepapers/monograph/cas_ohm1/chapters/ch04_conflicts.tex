@@ -1,0 +1,1208 @@
+\chapter{The Preserved Source Audit}\label{ch04:audit}
+
+The single most consequential decision in the CAS-Ohm 1.0 candidate is a
+negative one: the decision \emph{not} to harmonize its sources. Three primary
+documents---the Quantification Guide, the operationalization addendum, and
+PCBA Appendix~I---together with the PCBA engineering book's gain definitions,
+describe what is nominally one framework. Read side by side, they do not
+agree. They disagree about numeric scales, about how a full-scale reference is
+obtained, about what the symbols $V$, $I$, and $R$ denote, about what the gain
+$\beta$ is, about whether a mnemonic is a classification, about whether
+network arithmetic is established or conjectural, about what a residual can
+identify, and about where quantization band boundaries fall. A conventional
+specification effort would have resolved these disagreements editorially:
+pick the reading that seems most sensible, silently rewrite the others to
+match, and present the result as the framework's single inherited meaning.
+The CAS-Ohm audit refuses that move. Every disagreement found during source
+inspection is preserved as a first-class, machine-readable evidence record in
+\texttt{CAS\_OHM\_SOURCE\_CONFLICT\_EVIDENCE\_v0.1.json}
+(schema \texttt{project\_coherence.cas\_ohm\_source\_conflict\_evidence.v0.1},
+status \textsc{draft / open / not frozen}, as of 2026-08-04), and every
+downstream artifact---the typed ontology of
+Chapter~\ref{ch03:ontology} where present, the calibration profile of
+Chapter~\ref{ch05:profile}, the response model of
+Chapter~\ref{ch06:response}---is designed so that the conflict cannot be
+papered over by construction.
+
+This chapter reproduces that audit at evidence-record granularity. For each
+of the eight registered conflicts we give the evidence records
+verbatim-faithfully (source identifier, locator, and recorded fact), name the
+conflict kind under which the record classifies the disagreement, analyze at
+length why the disagreement matters to any downstream quantitative use, and
+state the binding disposition and candidate rule that the CAS-Ohm 1.0 type
+system enforces in response. We close with the record's own summary fields:
+the conflict count, the gate effect, and the claim boundary---and with an
+argument that the preservation itself, independent of any future empirical
+outcome, is an engineering result.
+
+A standing caution governs everything below. The audit record preserves
+\emph{conflicts about texts}. It does not adjudicate which text is right,
+because on the evidence available none of them is established: no source has
+an admitted empirical validation, and the candidate as a whole is
+\textsc{ring 4 / not licensed / held}. The dispositions quoted in this
+chapter are candidate rules---typed constraints a successor implementation
+enforces so that the ambiguity is representable and inert rather than
+invisible and active. They are not verdicts on the sources.
+
+\section{The four sources and their locator systems}\label{ch04:sources}
+
+The evidence record opens with a source manifest. Four sources are
+registered, each with a content digest, a declared locator system, and a
+declared inspection method. We reproduce the manifest faithfully before
+discussing why its structure matters.
+
+\begin{description}
+\item[\textsc{src-cas-ohm-guide-01}] (the Quantification Guide). SHA-256
+\texttt{89AE13C0A5D6208E328E9EDC55F816609BB172076CC13093DCCCCF418145CE64}.
+Locator system: \emph{PDF page number}. Inspection: relevant cited pages were
+rendered and visually inspected.
+\item[\textsc{src-cas-ohm-addendum-01}] (the operationalization addendum).
+SHA-256
+\texttt{0B62BBC66828A273E5458CC4D98EEE9B341554A474CCACB6387B209B5F0BE5E5}.
+Locator system: \emph{\texttt{python-docx} paragraph and table-row index}.
+Inspection: the OOXML content was inspected structurally. LibreOffice failed
+with a PNG writer error and Word export did not complete, so \emph{no
+page-number claim is made for this source}.
+\item[\textsc{src-cas-ohm-pcba-app-i}] (PCBA Appendix~I). SHA-256
+\texttt{9FFFAC3E16B43C6D809ECE913FD8C09E40C65F60F3B4BE693F45D35EC4E6AC45}.
+Locator system: \emph{UTF-8 Markdown line number}. Inspection: the cited line
+ranges were inspected directly from the source bytes.
+\item[\textsc{src-pcba-engineer-20260726}] (the PCBA engineering book, cited
+for its gain definitions). SHA-256
+\texttt{294320B39FA521EAC086E99E2D9DB913E2B6CFF0754FF82DB1EF966424566274}.
+Locator system: \emph{PDF page number and printed book page}. Inspection: the
+cited gain-definition pages were rendered and visually inspected.
+\end{description}
+
+\subsection{Why disclosed locator systems matter}\label{ch04:locators}
+
+A citation is a claim of the form ``at this position in that artifact, this
+fact appears.'' The claim has three parts---artifact identity, position, and
+fact---and each part can fail independently. The source manifest hardens all
+three. Artifact identity is fixed by a SHA-256 content digest, so ``the
+Guide'' is not a title that could silently drift across revisions but a
+specific byte sequence. The fact is recorded verbatim in the evidence record,
+as the following sections reproduce. The position, however, is the part most
+often left informal in technical writing, and it is the part the manifest is
+most careful about, because \emph{position is only meaningful relative to a
+rendering procedure}, and different artifact formats admit different
+renderings.
+
+Consider each system in turn.
+
+\emph{PDF pages, rendered and visually inspected.} A PDF fixes its own
+pagination, so ``PDF page 6'' is well defined given the artifact bytes---but
+only if someone actually rendered page 6 and looked at it. The inspection
+note records that this was done. The distinction matters: a page number
+harvested from a table of contents, a search index, or a prior citation is a
+transcription, not an observation. The manifest asserts observation.
+
+\emph{\texttt{python-docx} paragraph and table-row indices, with no page
+number asserted.} A DOCX file has no intrinsic pagination at all. Its page
+breaks are computed at render time by a layout engine, and different engines
+(or the same engine with different fonts, margins, or versions) paginate
+differently. The honest locator for a DOCX artifact inspected without a
+successful rendering is therefore a \emph{structural} coordinate: the index
+of a paragraph or a table row in the OOXML element sequence, which is a
+property of the bytes themselves. The manifest goes further and records
+\emph{why} no page number is asserted: both available page-rendering routes
+failed---LibreOffice with a PNG writer error, and Word export did not
+complete. This is a small but exemplary act of negative disclosure. The
+auditors could have guessed a page number, or cited one from memory, and no
+reader would likely have caught it. Instead the record states the failure and
+confines its claims to coordinates it can defend. Every addendum citation in
+this chapter therefore reads ``paragraph $n$'' or ``table row $k$,'' never
+``page $p$.''
+
+\emph{UTF-8 line numbers from exact bytes.} Appendix~I is a Markdown text
+file. Line numbers in a text file are exact byte-level coordinates: given the
+artifact digest, ``lines 20--31'' names a unique substring, checkable by
+anyone holding the bytes, with no rendering step in between. This is the
+strongest locator system of the four, and the record uses it wherever the
+source format permits.
+
+\emph{PDF and printed book pages together.} The PCBA engineering book exists
+both as a PDF and as a printed volume whose pagination differs (front matter,
+trim, and imposition shift the count). Citing both---``PDF page 56 (book page
+40)''---lets a reader verify against either physical form without a
+conversion table.
+
+\begin{remark}\label{ch04:rem:locators}
+The reason to belabor locator systems is that the entire audit inherits its
+credibility from them. A conflict record asserts that two sources say
+incompatible things. That assertion is only as strong as the reader's ability
+to open each source at the cited position and confirm the recorded fact. If
+locators were informal---``somewhere in the Guide''---the conflicts would be
+paraphrases, contestable and unfalsifiable. Because every locator is exact
+relative to a disclosed rendering procedure (or, for the addendum, exact
+relative to the bytes with the rendering honestly declared failed), each
+conflict record is an independently checkable claim. The audit practices on
+itself the evidential discipline the CAS-Ohm ontology imposes on
+measurements: no bare assertions, provenance always attached, and missing
+capabilities (here, DOCX pagination) recorded as missing rather than
+interpolated.
+\end{remark}
+
+\subsection{Anatomy of a conflict record}\label{ch04:anatomy}
+
+Each of the eight entries in the evidence record has the same shape, which
+this chapter mirrors section by section.
+
+\begin{definition}[Conflict record]\label{ch04:def:record}
+A conflict record consists of: (i) a stable identifier (for example
+\texttt{OHM-CONFLICT-SCALE-AND-SATURATION}); (ii) a \emph{kind}, drawn from a
+small vocabulary describing the failure mode
+(\texttt{DIRECT\_NUMERIC\_CONFLICT},
+\texttt{INCOMPATIBLE\_CALIBRATION\_METHODS},
+\texttt{UNIT\_UNDERSPECIFICATION},
+\texttt{DISTINCT\_MATHEMATICAL\_PROFILES}, \texttt{MNEMONIC\_OVERLOAD},
+\texttt{VALIDATION\_STATUS\_CONFLICT},
+\texttt{CAUSAL\_OVERINTERPRETATION\_RISK},
+\texttt{PRECISION\_UNDERSPECIFICATION}); (iii) an evidence list, each element
+binding a source identifier from the manifest, a locator in that source's
+declared locator system, and the recorded fact; (iv) a \emph{disposition},
+naming the strategy the candidate adopts
+(for example \texttt{PRESERVE\_AS\_PROFILE\_CONFLICT}); and (v) a
+\emph{candidate rule}, the typed constraint a successor implementation
+enforces.
+\end{definition}
+
+The kinds are worth a moment of attention because they are a taxonomy of how
+multi-document specifications fail. A \texttt{DIRECT\_NUMERIC\_CONFLICT} is
+the crudest failure: two sources assert incompatible numbers for the same
+named thing. \texttt{UNIT\_UNDERSPECIFICATION} and
+\texttt{PRECISION\_UNDERSPECIFICATION} are subtler: no single assertion is
+wrong, but jointly the sources fail to determine a quantity's dimension or a
+boundary's behavior. \texttt{INCOMPATIBLE\_CALIBRATION\_METHODS} and
+\texttt{DISTINCT\_MATHEMATICAL\_PROFILES} mark places where one name covers
+several genuinely different procedures or definitions.
+\texttt{MNEMONIC\_OVERLOAD} marks a teaching device promoted into a
+classification. \texttt{VALIDATION\_STATUS\_CONFLICT} marks disagreement not
+about content but about epistemic standing---is a rule established or
+conjectural? And \texttt{CAUSAL\_OVERINTERPRETATION\_RISK} marks language
+that invites causal conclusions its own source elsewhere disclaims. Most
+large specification corpora contain instances of most of these kinds; what is
+unusual here is only that they are indexed.
+
+Table~\ref{ch04:tab:overview} summarizes the eight records for orientation;
+the sections that follow reproduce and analyze each in full.
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+Conflict (short name) & Kind & Disposition \\
+\midrule
+Scale and saturation & \texttt{DIRECT\_NUMERIC\_CONFLICT} &
+\texttt{PRESERVE\_AS\_PROFILE\_CONFLICT} \\
+Full-scale profile & \texttt{INCOMPATIBLE\_CALIBRATION\_METHODS} &
+\texttt{SEPARATE\_NAMED\_PROFILES} \\
+Dimensional bridge & \texttt{UNIT\_UNDERSPECIFICATION} &
+\texttt{REQUIRE\_CALIBRATED\_UNIT\_BRIDGE} \\
+Gain definition & \texttt{DISTINCT\_MATHEMATICAL\_PROFILES} &
+\texttt{NO\_UNPROVED\_IDENTIFICATION} \\
+ASOM axes & \texttt{MNEMONIC\_OVERLOAD} &
+\texttt{SPLIT\_RESPONSE\_AND\_SEMANTIC\_AXES} \\
+Network rules & \texttt{VALIDATION\_STATUS\_CONFLICT} &
+\texttt{CAPABILITY\_GATE\_EACH\_OPERATION} \\
+Residual identification & \texttt{CAUSAL\_OVERINTERPRETATION\_RISK} &
+\texttt{NON\_IDENTIFYING\_DIAGNOSTIC\_ONLY} \\
+Q4 boundaries & \texttt{PRECISION\_UNDERSPECIFICATION} &
+\texttt{DEFINE\_EXACT\_HALF\_OPEN\_BINS} \\
+\bottomrule
+\end{tabular}
+\caption{The eight preserved conflicts of
+\texttt{CAS\_OHM\_SOURCE\_CONFLICT\_EVIDENCE\_v0.1.json}.}
+\label{ch04:tab:overview}
+\end{table}
+
+\subsection{Verbatim fidelity}\label{ch04:fidelity}
+
+One further discipline governs the presentation in this chapter. The
+``fact'' field of each evidence record is a fixed string in the JSON
+artifact, and this chapter reproduces those strings faithfully rather than
+paraphrasing them. The distinction is not pedantry. A paraphrase of a
+conflict is an interpretation, and interpretations of conflicting texts tend,
+by small increments, toward whichever resolution the paraphraser privately
+favors---which is exactly the harmonization pressure the audit exists to
+resist. If the record says Appendix~I identifies $\mathrm{sat}=8.5$ ``as a
+mixed-scale error whose component value is 0.85,'' then a restatement such
+as ``Appendix~I corrects the Guide's threshold'' would already have taken a
+side (that Appendix~I is the corrector rather than a second conflicting
+voice), and a restatement such as ``the sources disagree slightly about
+thresholds'' would have shrunk a category error to a rounding quibble.
+Analysis in this chapter is therefore kept structurally separate from
+evidence: the \emph{conflict} environments carry the recorded facts with
+their locators, and the analysis subsections argue about consequences
+without ever restating the facts in altered form. Readers auditing this
+monograph against the JSON record should find every fact string, every
+locator, every kind, every disposition, and every candidate rule matching
+the artifact---and should treat any divergence they find as an error in this
+text, not a permissible gloss.
+
+\section{Conflict 1: Scale and Saturation}\label{ch04:scale}
+
+\begin{conflict}[\texttt{OHM-CONFLICT-SCALE-AND-SATURATION}; kind
+\texttt{DIRECT\_NUMERIC\_CONFLICT}]\label{ch04:conf:scale}
+The evidence records are:
+\begin{itemize}
+\item \textsc{src-cas-ohm-guide-01}, PDF page 6: ``Drive is 0.0--10.0,
+constraint $R$ is 0.1--10.0, and raw attention is computed as $V/R$.''
+\item \textsc{src-cas-ohm-guide-01}, PDF page 12: ``The worked CJT uses
+$\mathrm{sat}=8.5$ as a component threshold.''
+\item \textsc{src-cas-ohm-pcba-app-i}, lines 20--31 and 51--59: ``Constraint
+$R$ is 0--100, saturation/cutoff/threshold are 0--1, and $\mathrm{sat}=8.5$
+is identified as a mixed-scale error whose component value is 0.85.''
+\end{itemize}
+Disposition: \texttt{PRESERVE\_AS\_PROFILE\_CONFLICT}.
+\end{conflict}
+
+\subsection{Analysis}
+
+This is the audit's cleanest conflict and its most instructive, because the
+disagreement is numeric and total. The Guide's page 6 places the constraint
+quantity $R$ on a $0.1$--$10.0$ scale. Appendix~I's lines 20--31 place the
+same-named quantity on a $0$--$100$ scale. These ranges are not related by a
+stated conversion; they simply coexist under one symbol. Worse, the Guide's
+worked example on page 12 uses $\mathrm{sat}=8.5$ as a component threshold,
+while Appendix~I---in the very lines that fix saturation, cutoff, and
+threshold quantities to the interval $0$--$1$---identifies that same $8.5$ as
+a \emph{mixed-scale error} whose intended component value is $0.85$. One
+source's worked pedagogy is another source's diagnosed bug.
+
+Why does this matter beyond tidiness? Because every quantitative operation
+downstream of these definitions is scale-sensitive. Consider the innocent
+formula on Guide page 6: raw attention is $V/R$. If $R$ is drawn from
+$0.1$--$10.0$, the quotient for a given $V$ differs by up to a factor of ten
+from the quotient computed with $R$ drawn from $0$--$100$---and at the low
+end of the Appendix~I scale, $R=0$ is admissible, making the quotient
+undefined where the Guide's floor of $0.1$ guaranteed it finite. A threshold
+comparison such as ``is saturation above $\mathrm{sat}$?'' flips its truth
+value depending on whether the comparand lives in $[0,1]$ or $[0,10]$: a
+fraction of $0.9$ is above a threshold of $0.85$ and far below a threshold of
+$8.5$. A system that ingests both sources without typing the scales will,
+with certainty rather than mere risk, compare quantities across scales and
+produce numbers that are wrong by an order of magnitude while looking
+perfectly well formed. Mixed-scale failure is silent: nothing about the
+floating-point value $8.5$ announces which scale it came from.
+
+The $\mathrm{sat}=8.5$ case deserves emphasis as a documented instance of the
+failure actually occurring \emph{inside the source corpus itself}. This is
+not a hypothetical about what a careless integrator might do; the Guide's own
+worked example, per Appendix~I's reading, already committed the mixed-scale
+error that the framework's downstream users would be warned against. When a
+specification's teaching material contains the bug its appendix diagnoses,
+the specification cannot be said to carry one coherent scale system, and any
+implementation claiming to inherit ``the'' scale system is choosing among
+contradictory parents without saying so.
+
+It is worth being precise about what the third evidence record does and does
+not assert. Appendix~I \emph{identifies} $\mathrm{sat}=8.5$ as a mixed-scale
+error and states that its component value is $0.85$. That is a reading by one
+source of another source's text---a diagnosis, with a proposed intended
+value---not a repair the audit endorses. The audit's posture is deliberately
+one level up: it records that the Guide asserts $8.5$, that Appendix~I calls
+$8.5$ an error with intended value $0.85$, and that these positions
+conflict. A harmonizing editor would have adopted Appendix~I's diagnosis,
+rewritten the Guide's example, and moved on; the audit instead preserves
+both, because adopting the diagnosis would presuppose exactly the
+scale-priority question (which source's scale system governs?) that the
+conflict exists to keep open. Unit-confusion failures are a storied genre in
+engineering practice generally, and their common anatomy is visible here in
+miniature: two communities of practice, each internally consistent, each
+producing artifacts that interoperate numerically while diverging
+semantically, with no type system standing between them. The lesson the
+broader engineering literature draws---encode the unit in the type, not in
+the documentation---is precisely the candidate rule's content.
+
+\subsection{Disposition and candidate rule}
+
+\begin{ruleenv}[Candidate rule for Conflict 1]\label{ch04:rule:scale}
+``Q10 score, Q100 constraint score, normalized fraction, alpha dose,
+activation projection, and effective resistance are distinct quantity types;
+no silent conversion is allowed.''
+\end{ruleenv}
+
+The disposition \texttt{PRESERVE\_AS\_PROFILE\_CONFLICT} means the candidate
+does not decide whether $R$ ``really'' lives on $0.1$--$10.0$ or $0$--$100$.
+Instead the type system makes the question unaskable in ambiguous form: a
+value carries \texttt{Q10} or \texttt{Q100} or \texttt{FRACTION} as its unit
+kind, the quantity kind constrains which unit kinds are admissible, range
+checks are enforced per unit ($[0,10]$ for \texttt{Q10}, $[0,100]$ for
+\texttt{Q100}, $[0,1]$ for \texttt{FRACTION}), and no arithmetic path
+converts between them without an explicit, provenance-carrying operation.
+Under this rule the historical $\mathrm{sat}=8.5$ is not silently repaired to
+$0.85$; it is \emph{unrepresentable} as a saturation fraction, because a
+fraction-typed field rejects $8.5$ at validation. The conflict is preserved
+in the record and neutralized in the types.
+
+\section{Conflict 2: The Full-Scale Profile}\label{ch04:ifs}
+
+\begin{conflict}[\texttt{OHM-CONFLICT-FULL-SCALE-PROFILE}; kind
+\texttt{INCOMPATIBLE\_CALIBRATION\_METHODS}]\label{ch04:conf:ifs}
+The evidence records are:
+\begin{itemize}
+\item \textsc{src-cas-ohm-guide-01}, PDF page 6: ``$I_{\mathrm{FS}}$ is a
+selected board-specific full-scale attention value.''
+\item \textsc{src-cas-ohm-addendum-01}, paragraph 30 and operationalization
+table row 13: ``$I_{\mathrm{FS}}$ is the per-test-point 95th percentile of
+absolute directional projection over a fixed hashed corpus.''
+\item \textsc{src-cas-ohm-pcba-app-i}, lines 40--49 and 263--267:
+``$I_{\mathrm{FS}}$ is measured once per path at drive rail and constraint
+floor and does not transfer.''
+\end{itemize}
+Disposition: \texttt{SEPARATE\_NAMED\_PROFILES}.
+\end{conflict}
+
+\subsection{Analysis}
+
+$I_{\mathrm{FS}}$ is the full-scale reference against which raw response is
+normalized; every Q10 display value and every Q4 band assignment
+(Conflict~\ref{ch04:conf:q4}) is a ratio with $I_{\mathrm{FS}}$ in the
+denominator. The three sources give three procedures for obtaining it, and
+the procedures differ in every property that matters for a denominator.
+
+The Guide's $I_{\mathrm{FS}}$ is \emph{declared}: a board-specific full-scale
+value that someone selected. It is a design decision, not a measurement; it
+has no sampling distribution, no uncertainty, and no dependence on any
+corpus. The addendum's $I_{\mathrm{FS}}$ is \emph{estimated}: the 95th
+percentile of the absolute directional projection, computed per test point,
+over a fixed hashed corpus. It is a statistic; it inherits sampling
+variability from the corpus, changes if the corpus changes, and is pinned
+down only because the corpus is content-addressed (``fixed hashed''). The
+Appendix~I $I_{\mathrm{FS}}$ is \emph{probed at an extreme operating point}:
+measured once per path with drive at its rail and constraint at its floor,
+and---the source says so explicitly---it does not transfer.
+
+These are not three descriptions of one number. In general, a declared design
+ceiling, an empirical 95th percentile over ordinary traffic, and a maximal
+excursion under rail/floor forcing will be three different magnitudes, and
+nothing in any source relates them. The consequences propagate through every
+normalized quantity. The same raw response yields different Q10 values under
+the three denominators, hence potentially different Q4 bands, hence different
+region classifications where thresholds are compared, hence different
+downstream diagnostics. Two reports both stating ``$I_Q = 7.8$'' agree on
+nothing unless they also agree on which full-scale procedure produced the
+denominator---and under the corpus-percentile method, on which corpus, at
+which percentile, and at which test point; and under the rail/floor method,
+on which path, since that source warns the value does not transfer even
+between paths.
+
+The transferability warning is the sharpest edge. A declared full-scale might
+plausibly be reused across a family of boards; a rail/floor probe is
+explicitly local. Averaging the three, or substituting one when another is
+unavailable, would produce a denominator with no defined meaning at all.
+
+The three methods also differ in their failure modes, which is the deeper
+reason they cannot be interchanged even ``approximately.'' A declared design
+full-scale fails by becoming stale: the board changes, the declaration does
+not, and nothing in the number signals the divergence---only a drift-check
+discipline external to the value can catch it. A corpus percentile fails by
+corpus shift and by tail sensitivity: the 95th percentile is an order
+statistic of the projection distribution's upper tail, exactly the part of a
+distribution most affected by a handful of outlying documents, so an
+apparently minor corpus revision can move the denominator while every
+individual document looks innocuous. A rail/floor probe fails by
+extrapolation: it characterizes the system at an extreme operating point
+that ordinary operation never visits, so its relevance to mid-range
+normalization is an assumption, not an observation. Three methods, three
+distinct threat models, three different maintenance obligations. A framework
+that let one number stand for all three would not merely blur magnitudes; it
+would blur which failure its operators needed to be watching for. Keeping
+the methods separately named keeps their maintenance disciplines separately
+owned.
+
+\subsection{Disposition and candidate rule}
+
+\begin{ruleenv}[Candidate rule for Conflict 2]\label{ch04:rule:ifs}
+``Board-selected, corpus-percentile, and rail/floor full-scale procedures
+remain different calibration methods with different profile digests.''
+\end{ruleenv}
+
+The disposition \texttt{SEPARATE\_NAMED\_PROFILES} is implemented as the
+\texttt{IFSMethod} enumeration in the candidate code
+(\texttt{RAIL\_AND\_FLOOR\_PER\_PATH},
+\texttt{CORPUS\_PERCENTILE\_PER\_TEST\_POINT},
+\texttt{DECLARED\_DESIGN\_FULL\_SCALE}), examined field by field in
+Chapter~\ref{ch05:profile}. Because the method is a field of the calibration
+profile and the profile's canonical digest covers it, two normalizations
+performed under different full-scale methods are performed under different
+profile digests, and the profile-relativity principle (nothing transfers
+across profiles without a stated comparison rule) blocks their naive
+comparison mechanically. No method is anointed correct; all three are
+representable; none is substitutable for another.
+
+\section{Conflict 3: The Dimensional Bridge}\label{ch04:bridge}
+
+\begin{conflict}[\texttt{OHM-CONFLICT-DIMENSIONAL-BRIDGE}; kind
+\texttt{UNIT\_UNDERSPECIFICATION}]\label{ch04:conf:bridge}
+The evidence records are:
+\begin{itemize}
+\item \textsc{src-cas-ohm-guide-01}, PDF pages 6, 10, and 18: ``$V$, $R$, and
+$I$ are design-scale quantities related by
+$I_{\mathrm{pred}}=V/R_{\mathrm{total}}$.''
+\item \textsc{src-cas-ohm-addendum-01}, operationalization table rows 1, 2,
+5, and 12: ``$V$ is steering alpha, $I$ is directional activation projection,
+contextual $R$ is inferred from a paired delta, and $I_{\mathrm{pred}}$ still
+uses $V/R_{\mathrm{total}}$.''
+\item \textsc{src-cas-ohm-pcba-app-i}, lines 90--108 and 326--339: ``The
+relation is presented as testable design/calibration arithmetic, not as
+physical voltage or a measured live-model law.''
+\end{itemize}
+Disposition: \texttt{REQUIRE\_CALIBRATED\_UNIT\_BRIDGE}.
+\end{conflict}
+
+\subsection{Analysis}
+
+Between the Guide and the addendum, the symbols keep their algebra and change
+their referents. On the Guide's pages, $V$, $R$, and $I$ are design-scale
+scores---abstract magnitudes on the score scales of
+Conflict~\ref{ch04:conf:scale}---and $I_{\mathrm{pred}}=V/R_{\mathrm{total}}$
+is arithmetic among scores. In the addendum's operationalization rows, $V$
+has become a steering alpha (an intervention magnitude applied to a model),
+$I$ has become a directional activation projection (an observed quantity in a
+model's representation space), and contextual $R$ is inferred from a paired
+delta. Yet the prediction equation is carried over unchanged:
+$I_{\mathrm{pred}}$ still uses $V/R_{\mathrm{total}}$.
+
+Dimensional analysis makes the gap precise. For
+$\hat I = V/R_{\mathrm{total}}$ to be dimensionally coherent with $V$ in
+alpha units and $I$ in activation units, $R_{\mathrm{total}}$ must carry
+units of alpha per activation \cite{buckingham}. But the $R$ components the
+sources supply are score-derived---dimensionless design-scale numbers from
+Conflict~\ref{ch04:conf:scale}'s (mutually conflicting) ranges. Dividing an
+alpha by a dimensionless score yields alpha, not activation: the formula, as
+inherited, predicts a quantity in the wrong dimension. Nothing in any source
+supplies the missing conversion---the calibrated bridge that would turn a
+score-derived resistance into a quantity with alpha-per-activation units.
+This is why the record's kind is \texttt{UNIT\_UNDERSPECIFICATION} rather
+than a direct conflict: no single source asserts a falsehood; jointly they
+fail to define the one constant that would make the central equation mean
+anything.
+
+Appendix~I's contribution is a guard on interpretation: the relation is
+testable design/calibration arithmetic, not physical voltage and not a
+measured live-model law. This matters in both directions. It blocks the
+physical reading (nothing here is electrically a volt, an ampere, or an ohm;
+the candidate's unit ontology makes those forbidden aliases), and it blocks
+the empirical reading (writing the equation does not make it a law of any
+live model; whether any $(a, y)$ pair from a real system satisfies a linear
+relation is exactly what the registered hypotheses of
+Chapter~\ref{ch12:hypotheses} where present leave to controlled experiments).
+
+The double negation in Appendix~I's framing---not physical, not yet
+empirical---leaves the equation in a precisely intermediate status that the
+candidate's vocabulary makes explicit: it is \emph{design arithmetic}, a
+relation among declared and calibrated quantities that is testable in
+principle once its units are fixed, and nothing more until tested. The
+physical exclusion is enforced in the unit ontology as a forbidden-alias
+rule: \textsc{volt}, \textsc{ampere}, and \textsc{ohm} are not merely absent
+from the unit enumeration but affirmatively barred as labels for model
+quantities, so that the analogical vocabulary of the sources ($V$, $I$, $R$)
+can never quietly reify into a claim of electrical measurement. The
+empirical exclusion is enforced by the response model's admissibility
+conditions (Chapter~\ref{ch06:response}): the equation may be evaluated only
+with a calibrated, uncertainty-carrying, held-out-validated effective
+resistance, which as of this writing does not exist for any live system.
+
+The practical stakes are high because $\hat I = V/R_{\mathrm{total}}$ is the
+framework's load-bearing equation: it is the prediction whose residuals drive
+the diagnostics of Conflict~\ref{ch04:conf:residual} and whose network
+compositions drive Conflict~\ref{ch04:conf:networks}. An equation with an
+undefined dimension in its denominator contaminates everything built on it.
+Any residual computed from such a prediction is a difference between an
+observed activation and a quantity of indeterminate dimension; any series sum
+of such resistances aggregates numbers whose common unit was never
+established.
+
+\subsection{Disposition and candidate rule}
+
+\begin{ruleenv}[Candidate rule for Conflict 3]\label{ch04:rule:bridge}
+``Effective resistance may be used only with an explicit alpha-unit per
+activation-unit calibration; constraint scores never masquerade as that
+quantity.''
+\end{ruleenv}
+
+Under \texttt{REQUIRE\_CALIBRATED\_UNIT\_BRIDGE}, the candidate splits the
+overloaded $R$ into types that cannot be confused: \texttt{CONSTRAINT\_SCORE}
+(unit \texttt{Q10} or \texttt{Q100}) for the score-scale quantity, and
+\texttt{EFFECTIVE\_RESISTANCE} (unit \texttt{ALPHA\_PER\_ACTIVATION},
+strictly positive) for the quantity admissible in the prediction
+$\hat y = a/r_{\mathrm{eff}}$. There is no constructor from one to the other.
+An effective resistance comes into existence only through a declared fit on a
+calibration split under a full calibration profile, carrying uncertainty and
+a role tag (Chapter~\ref{ch06:response}); a constraint score can never be
+passed where an effective resistance is required, because the unit kinds
+differ and unit checking is mandatory. The Guide's equation shape is thereby
+preserved as a \emph{hypothesis about a calibrated quantity} while the
+dimensional hole that made its inherited form unmeaning is closed by
+type-level refusal rather than by silent reinterpretation.
+
+\section{Conflict 4: The Gain Definition}\label{ch04:gain}
+
+\begin{conflict}[\texttt{OHM-CONFLICT-GAIN-DEFINITION}; kind
+\texttt{DISTINCT\_MATHEMATICAL\_PROFILES}]\label{ch04:conf:gain}
+The evidence records are:
+\begin{itemize}
+\item \textsc{src-pcba-engineer-20260726}, PDF page 56 (book page 40) and PDF
+page 153 (book page 137): ``CJT beta is defined by Fisher--Rao small- or
+large-signal displacement ratios on the open simplex.''
+\item \textsc{src-cas-ohm-addendum-01}, operationalization table row 6:
+``Beta is operationalized as a local Jacobian/projection derivative between
+cause and effect test points.''
+\item \textsc{src-cas-ohm-guide-01}, PDF page 13: ``Stage beta values
+multiply in cascades while attention flow is local at each stage.''
+\end{itemize}
+Disposition: \texttt{NO\_UNPROVED\_IDENTIFICATION}.
+\end{conflict}
+
+\subsection{Analysis}
+
+The symbol $\beta$ names a gain---an amplification factor between a cause
+stage and an effect stage. The PCBA engineering book defines it
+geometrically: a ratio of Fisher--Rao displacements on the open probability
+simplex, in small-signal or large-signal form. The addendum operationalizes
+it analytically: a local Jacobian/projection derivative between cause and
+effect test points---a directional sensitivity of one projection with respect
+to another in a model's representation space. The Guide, meanwhile, uses
+$\beta$ compositionally: stage values multiply along cascades, while
+attention flow remains local at each stage.
+
+The Fisher--Rao definition and the Jacobian/projection definition are
+different mathematical objects in almost every respect that could matter.
+They live on different spaces: the open simplex with its information
+geometry, versus activation space with a Euclidean projection structure. They
+have different invariance properties: Fisher--Rao displacement is invariant
+under the simplex's natural reparameterizations, while a projection
+derivative depends on the chosen direction vectors at both test points. They
+respond differently to signal size: the book itself distinguishes small- and
+large-signal forms, while a local derivative is by construction a
+small-signal object. There is no theorem in any of the sources---and the
+record is explicit that none is currently supplied---identifying the two, nor
+even a coordinate map under which such an identification could be stated.
+
+The Guide's cascade rule then quietly raises the stakes. Multiplying stage
+gains along a cascade is exactly the operation that is \emph{most} sensitive
+to which definition is in force, because composition of local derivatives
+follows a chain rule only when adjacent stages' coordinates match, and
+composition of Fisher--Rao displacement ratios has no chain rule at all
+without further structure. Under the multiplication rule, an error of
+identification does not stay local: it compounds geometrically with cascade
+depth. Three stages of a modest 30\% definitional discrepancy are a factor of
+$2.2$; the deeper the cascade, the worse. (Those numbers are illustrative
+arithmetic about error propagation, not measurements.)
+
+The general lesson is about symbol overloading across document genres. A
+definitional text (the book), an operationalization (the addendum), and a
+usage idiom (the Guide's cascades) each pulled $\beta$ toward their own
+needs. Each is internally reasonable. Jointly they leave ``the gain''
+denoting two unbridged mathematical profiles plus a composition rule that
+presupposes the bridge.
+
+\subsection{Disposition and candidate rule}
+
+\begin{ruleenv}[Candidate rule for Conflict 4]\label{ch04:rule:gain}
+``Fisher--Rao gain and local Jacobian/projection gain are separately named
+profiles until a theorem or experiment supplies a coordinate bridge.''
+\end{ruleenv}
+
+\texttt{NO\_UNPROVED\_IDENTIFICATION} is the mathematical analogue of
+Conflict~\ref{ch04:conf:ifs}'s disposition: one name, several referents,
+therefore several names. The candidate types gain magnitudes as dimensionless
+quantities bound to a declared method identity, so a Fisher--Rao displacement
+gain and a Jacobian/projection gain carry different method identifiers and
+cannot be pooled, averaged, or multiplied together by accident. The gain
+composition operation (Chapter~\ref{ch09:networks} where present) is
+capability-gated and requires adjacent coordinate agreement precisely so that
+the Guide's cascade multiplication can be \emph{tested} as the registered
+hypothesis \textsc{clm-cas-ohm-gain-composition} rather than assumed. If a
+future theorem or a controlled experiment supplies the bridge, the
+identification becomes a recorded, evidenced event; until then the two
+profiles remain separate by name and by type.
+
+\section{Conflict 5: ASOM Axis Overload}\label{ch04:asom}
+
+\begin{conflict}[\texttt{OHM-CONFLICT-ASOM-AXES}; kind
+\texttt{MNEMONIC\_OVERLOAD}]\label{ch04:conf:asom}
+The evidence records are:
+\begin{itemize}
+\item \textsc{src-cas-ohm-guide-01}, PDF page 11: ``ASOM is explicitly
+session-derived and overlays Starved/Aligned/Oversaturated/Misaligned onto
+cutoff/active/saturation/breakdown.''
+\item \textsc{src-cas-ohm-addendum-01}, paragraphs 14--15 and ASOM table rows
+1--4: ``The addendum uses dose-response signatures plus effect-axis outcomes
+and warns that flat response has multiple causes.''
+\end{itemize}
+Disposition: \texttt{SPLIT\_RESPONSE\_AND\_SEMANTIC\_AXES}.
+\end{conflict}
+
+\subsection{Analysis}
+
+ASOM---Starved, Aligned, Oversaturated, Misaligned---is, per the Guide's own
+page 11, session-derived: a mnemonic overlay mapping four evocative words
+onto the four dose-response regions cutoff, active, saturation, and
+breakdown. The overlay is pedagogically appealing because it compresses two
+questions into one word. But the two questions are different in kind.
+\emph{Where on the dose-response curve is the system operating?} is a
+question about response shape: is response flat at low dose (cutoff), rising
+(active), flat at high dose (saturation), anomalous (breakdown)?
+\emph{Is the effect the intended one?} is a question about semantic outcome:
+did the intervention move the targeted quantity in the targeted way, the
+opposite way, or off-axis? The mnemonic fuses them: ``Aligned'' answers the
+second question with the vocabulary slot of the first, and ``Misaligned''
+imports a semantic verdict into what is structurally a region label.
+
+The addendum resists the fusion. Its paragraphs 14--15 and ASOM table rows
+1--4 keep dose-response signatures and effect-axis outcomes as separate
+columns, and issue the warning that unravels the overlay: flat response has
+multiple causes. A flat dose-response curve is compatible with cutoff (dose
+below threshold), with saturation (dose beyond the linear region), with a
+wrong direction vector (the probe measures an axis the intervention does not
+move), with genuine insensitivity, and with instrument failure. A mnemonic
+that reads ``flat'' as ``Starved'' has silently chosen one cause out of five.
+Symmetrically, an active region says nothing about intent: a system can
+respond briskly and in exactly the wrong direction, which the fused
+vocabulary can only render as a paradox (``actively misaligned'') rather than
+as the ordinary factored state (region \textsc{active}, outcome
+\textsc{opposite}).
+
+There is also an honest-ignorance problem the mnemonic cannot express. Four
+words partition every observation into four verdicts; there is no ASOM cell
+for ``the response region is known but the semantic outcome has not been
+assessed,'' although that is the \emph{normal} state of a fresh measurement:
+region classification needs only the dose-response sweep, while outcome
+classification needs an independent determination of what the intervention
+was supposed to do and whether it did it. A vocabulary without an
+unassessed value forces premature verdicts by construction---every
+observation must land somewhere, so it lands in whichever verdict its shape
+most resembles. The two-axis scheme, by contrast, admits
+\texttt{UNASSESSED} on each axis independently, so a system can honestly
+report ``region \textsc{active}, outcome \textsc{unassessed}'' and
+downstream consumers can distinguish ``verified as intended'' from ``not
+yet examined''---a distinction on which, for a framework aimed at auditing,
+essentially everything depends.
+
+The failure kind, \texttt{MNEMONIC\_OVERLOAD}, names a pattern endemic to
+maturing frameworks: a teaching aid, introduced honestly as such
+(``session-derived''), hardens through repetition into an analytical
+category, and downstream text begins drawing inferences from the mnemonic's
+connotations rather than from the measurements the mnemonic was compressing.
+The cost is not hypothetical. A classifier emitting ``Misaligned'' as a
+single-axis verdict makes a semantic claim on the strength of a response
+shape; on a system under audit, that is precisely the kind of unearned
+conclusion the whole evidence discipline exists to prevent.
+
+\subsection{Disposition and candidate rule}
+
+\begin{ruleenv}[Candidate rule for Conflict 5]\label{ch04:rule:asom}
+``Dose-response region and semantic outcome are classified independently;
+active does not imply intended and non-ohmic does not imply misaligned.''
+\end{ruleenv}
+
+Under \texttt{SPLIT\_RESPONSE\_AND\_SEMANTIC\_AXES}, the candidate carries
+two enumerations: dose-response region (\texttt{UNASSESSED},
+\texttt{CUTOFF}, \texttt{ACTIVE}, \texttt{SATURATION}, \texttt{BREAKDOWN},
+\texttt{NON\_OHMIC}, \texttt{UNSTABLE}---the source's breakdown region
+retained) and semantic outcome (\texttt{UNASSESSED}, \texttt{INTENDED},
+\texttt{OPPOSITE}, \texttt{OFF\_AXIS}). Every classification is a pair; no
+region value mechanically determines an outcome value. ASOM survives---but
+demoted to what the Guide said it was: a derived display label computed from
+the pair after the fact, never an input, never an axis, and undefined
+whenever the pair does not fit its four cells. The mnemonic keeps its
+pedagogy and loses its authority.
+
+\section{Conflict 6: Network Rules}\label{ch04:networks}
+
+\begin{conflict}[\texttt{OHM-CONFLICT-NETWORK-RULES}; kind
+\texttt{VALIDATION\_STATUS\_CONFLICT}]\label{ch04:conf:networks}
+The evidence records are:
+\begin{itemize}
+\item \textsc{src-cas-ohm-guide-01}, PDF pages 13--14 and 18: ``Series
+addition, reciprocal parallel aggregation, and beta multiplication are
+presented as working network rules.''
+\item \textsc{src-cas-ohm-pcba-app-i}, lines 206--254: ``The same arithmetic
+is applied to paths, with a separate warning that co-present guardrails are
+not parallel routes and flow remains local.''
+\item \textsc{src-cas-ohm-addendum-01}, paragraphs 16--19 and falsification
+table rows P2--P3: ``Gain composition and parallel conductance are
+preregistered predictions whose rules must be dropped if the tests fail.''
+\end{itemize}
+Disposition: \texttt{CAPABILITY\_GATE\_EACH\_OPERATION}.
+\end{conflict}
+
+\subsection{Analysis}
+
+Here the three sources agree on the arithmetic and disagree on its standing.
+The rules in question are the circuit-theory triad: series resistances add;
+parallel resistances aggregate by reciprocals; stage gains multiply. The
+Guide presents them as \emph{working rules}---usable machinery. Appendix~I
+applies the same arithmetic to paths but attaches a structural warning:
+co-present guardrails are not parallel routes, and flow remains local. The
+addendum reclassifies the rules entirely: gain composition and parallel
+conductance are \emph{preregistered predictions}, indexed as falsification
+rows P2 and P3, whose rules must be dropped if the tests fail.
+
+A \texttt{VALIDATION\_STATUS\_CONFLICT} is in some ways more dangerous than a
+numeric conflict, because the disputed content circulates freely. A reader of
+the Guide alone will compute series equivalents and cascade gains as
+routinely as an electrical engineer computes them for resistor networks---for
+resistors, the rules are consequences of established physics. Here they are
+borrowed shape. Whether ablating one of two ``parallel'' safety mechanisms
+changes system response according to reciprocal aggregation is an empirical
+question about a particular system, and the addendum has the epistemically
+correct posture: state the prediction, register the test, and commit in
+advance to dropping the rule on failure.
+
+Appendix~I's warning identifies the specific modeling error most likely to
+produce false parallel structure. Two guardrails that are co-present---both
+active on the same trajectory---are not thereby alternative routes between
+the same endpoints. Parallel aggregation presupposes genuine alternatives:
+distinct branches with common endpoints such that flow divides among them.
+Co-presence is a weaker, easier-to-observe relation, and conflating it with
+parallelism imports an aggregation formula into a topology that does not
+support it. The further warning that ``flow remains local'' blocks the
+complementary error at the series end: chaining stage arithmetic into a
+claim about a global conserved flow through the chain, when nothing
+establishes a conservation law for attention flow across stages.
+
+The record therefore preserves a three-way disagreement about \emph{how much
+is known}: working rule (Guide), conditionally applicable arithmetic with
+topological caveats (Appendix~I), falsifiable conjecture (addendum). An
+implementation must choose a posture, and the choice is consequential: treat
+conjecture as machinery and every downstream aggregate silently inherits an
+unvalidated assumption; treat machinery as forbidden and legitimate
+structural exploration is blocked.
+
+The capability-gate disposition is best understood as a third posture that
+dominates both extremes. Against the permissive posture, it ensures that no
+aggregate can exist without a machine-checked record of the preconditions it
+satisfied and---equally important---of the epistemic label it carries:
+every network result in the candidate is stamped as an unauthenticated
+structural research calculation, bound to its trust mode, its authority
+manifest identity, and its declared covariance limitation, so the result
+cannot later be quoted shorn of its status. Against the prohibitive posture,
+it preserves the ability to \emph{compute} the structural quantities the
+registered hypotheses will need: testing whether parallel conductance
+predicts ablation response (hypothesis row P3) requires computing the
+reciprocal aggregate to have a prediction to test, and a framework that
+forbade the arithmetic outright could never run its own falsification
+program. The gate thus operationalizes the addendum's preregistration
+posture in code: the arithmetic runs, its outputs are labeled conjectural,
+and the label can only be removed by the registered experiments---never by
+repetition or lapse of memory.
+
+\subsection{Disposition and candidate rule}
+
+\begin{ruleenv}[Candidate rule for Conflict 6]\label{ch04:rule:networks}
+``No series, parallel, or gain composition is enabled without coordinate,
+unit, topology, active-region, and evidence compatibility under the exact
+profile.''
+\end{ruleenv}
+
+\texttt{CAPABILITY\_GATE\_EACH\_OPERATION} threads the needle. The
+operations exist in the candidate---but only as unauthenticated structural
+research calculations, each behind a gate that checks precisely the
+preconditions the sources' caveats identify: compatible coordinates (against
+the false-parallelism error), a single alpha-per-activation unit (against
+Conflict~\ref{ch04:conf:bridge}), genuine acyclic topology with distinct
+endpoints (against co-presence masquerading as parallelism), active-region
+components with adequate linearity (against composing outside the region
+where a linear rule could even be a candidate), and complete evidence under
+one exact profile. Every aggregate binds its child order, topology, and the
+declared covariance limitation, and duplicate or cyclic paths fail closed.
+The addendum's falsification posture is preserved intact: rows P2--P3
+correspond to registered hypotheses, and the gates ensure that structural
+results produced meanwhile are labeled as exactly that---structure, not
+validated network law.
+
+\section{Conflict 7: Residual Identification}\label{ch04:residual}
+
+\begin{conflict}[\texttt{OHM-CONFLICT-RESIDUAL-IDENTIFICATION}; kind
+\texttt{CAUSAL\_OVERINTERPRETATION\_RISK}]\label{ch04:conf:residual}
+The evidence records are:
+\begin{itemize}
+\item \textsc{src-cas-ohm-guide-01}, PDF pages 10 and 16: ``Residual sign is
+used to suggest hidden opposition, extra amplification, or hidden resistance,
+while the page also says residual alone is insufficient.''
+\item \textsc{src-cas-ohm-pcba-app-i}, lines 171--202 and 260--277:
+``$R_{\mathrm{hidden}}$ is called a residual rather than a component, but
+positive residual on a safety board is treated as a bypass and
+saturated-stage residuals are meaningless.''
+\item \textsc{src-cas-ohm-addendum-01}, paragraph 19 and falsification table
+row P4: ``Hidden content is last in the diagnostic walk and residual validity
+requires independently identified causes above a shuffled-control baseline.''
+\end{itemize}
+Disposition: \texttt{NON\_IDENTIFYING\_DIAGNOSTIC\_ONLY}.
+\end{conflict}
+
+\subsection{Analysis}
+
+A residual is a subtraction: observed response minus predicted response. The
+temptation the record documents is the promotion of that subtraction into an
+identification---reading the sign of $\delta$ as the presence of a named
+hidden mechanism. The Guide exhibits the temptation and its own antidote on
+the same pages: residual sign ``suggests'' hidden opposition, extra
+amplification, or hidden resistance, while the same page concedes that
+residual alone is insufficient. Appendix~I shows the slide completed in two
+steps: first terminological ($R_{\mathrm{hidden}}$ is ``called a residual
+rather than a component''---the name of a model-mismatch symptom is dressed
+as a circuit element), then inferential (a positive residual \emph{on a
+safety board} is treated as a bypass). It simultaneously notes a condition
+under which residuals carry no information at all: at a saturated stage,
+where predicted response is flat, residuals are meaningless.
+
+Why is the identification invalid? Because the residual is computed against a
+fitted model, and every deficiency of that model lands in the residual
+indistinguishably. A nonzero $\delta$ is compatible with: a genuine
+unmodeled mechanism; misfit of $r_{\mathrm{eff}}$ (wrong region, drifted
+calibration); a wrong or degraded direction vector; ordinary noise at the
+recorded uncertainty; a stale profile; or an error in the observation chain.
+Sign does not separate these. Inferring ``bypass'' from ``positive residual
+on a safety board'' is an inference to the most alarming member of an
+equivalence class the data cannot resolve---and its cost profile is
+asymmetric in the worst way, since a bypass claim about a safety mechanism
+triggers exactly the kind of downstream action that should require the
+\emph{most} evidence, on the strength of a statistic that here carries the
+least. The general point is Pearl's: causal identification requires an
+explicit causal model and identifiable interventions, not signs of
+differences from a curve fit \cite{pearl}.
+
+The addendum again supplies the disciplined posture, in two parts. Hidden
+content is \emph{last} in the diagnostic walk: before entertaining a hidden
+mechanism one must exhaust the identifiable causes---region, calibration,
+direction, noise, staleness. And residual validity is itself an empirical
+claim with a registered test (falsification row P4): residual diagnostics
+must localize independently identified causes above a shuffled-control
+baseline. If shuffled controls localize as well as real residuals, the
+diagnostic is noise and its causal vocabulary must be withdrawn.
+
+The ``diagnostic walk'' ordering deserves a further word, because it encodes
+a cost asymmetry that pure statistics does not capture. The identifiable
+causes ahead of hidden content in the walk---wrong region, stale
+calibration, degraded direction, noise---are all \emph{checkable} at bounded
+cost: each has an associated record in the profile or the observation chain
+that can be examined directly. ``Hidden mechanism,'' by contrast, is
+unbounded: it names the complement of everything modeled, so no finite check
+can confirm it and almost any anomaly can be retrofitted to it. Placing it
+last is therefore not a mere tidiness preference; it is the only ordering
+under which the diagnostic process terminates against checkable facts before
+reaching the unfalsifiable residue. Inverting the walk---reaching for the
+hidden mechanism first, as the ``bypass'' reading does---converts every
+calibration bug and every noisy run into apparent evidence of concealed
+behavior, which for a safety-relevant audit is the most corrosive possible
+failure: it manufactures alarming findings at exactly the rate of the
+auditor's own instrumentation defects.
+
+\subsection{Disposition and candidate rule}
+
+\begin{ruleenv}[Candidate rule for Conflict 7]\label{ch04:rule:residual}
+``Residuals retain propagated uncertainty and may rank follow-up probes; they
+never prove a hidden policy, bypass, or cause. Zero or zero-compatible
+observations are censored.''
+\end{ruleenv}
+
+\texttt{NON\_IDENTIFYING\_DIAGNOSTIC\_ONLY} assigns residuals their honest
+job. In the candidate, a residual exists only for an admitted active-region
+prediction, with instrumented held-out observations, matching test points and
+profile, calibrated resistance, and propagated uncertainty; at zero or
+zero-compatible predicted response---the saturated-stage case Appendix~I
+flags---no residual quantity is emitted at all (the observation is censored
+with a recorded reason rather than divided into a meaningless ratio). What a
+residual may do is \emph{rank follow-up probes}: allocate investigative
+attention. What it may never do is appear as the proof of a hidden policy,
+bypass, opposition, or cause. The registered hypothesis
+\textsc{clm-cas-ohm-residual-localization} keeps even the ranking use on
+probation: blinded implanted faults, matched controls, and withdrawal of
+causal language on failure.
+
+\section{Conflict 8: Q4 Boundaries}\label{ch04:q4}
+
+\begin{conflict}[\texttt{OHM-CONFLICT-Q4-BOUNDARIES}; kind
+\texttt{PRECISION\_UNDERSPECIFICATION}]\label{ch04:conf:q4}
+The evidence record is:
+\begin{itemize}
+\item \textsc{src-cas-ohm-guide-01}, PDF page 7: ``Q4 is displayed with
+two-decimal bands 0.00--2.49, 2.50--4.99, 5.00--7.49, and 7.50--10.00 without
+a rule for higher-precision boundary values.''
+\end{itemize}
+Disposition: \texttt{DEFINE\_EXACT\_HALF\_OPEN\_BINS}.
+\end{conflict}
+
+\subsection{Analysis}
+
+This is the audit's smallest conflict and the easiest to underestimate. The
+Guide's Q4 quantizer displays four bands with two-decimal endpoints:
+0.00--2.49, 2.50--4.99, 5.00--7.49, 7.50--10.00. As a display convention for
+two-decimal values this is complete. As a specification of a function on
+finer-grained inputs it is not, because the bands as written do not cover the
+line: the value $2.495$ falls between 2.49 and 2.50, in no band. What happens
+to it depends on an unstated rounding rule---and the two natural
+resolutions disagree. Round-then-bin sends $2.495$ to $2.50$ (round-half-up)
+and thence to the second band; bin-by-truncation keeps it under $2.50$ in the
+first. The specification gap is only two decimal places wide, but a
+classification function undefined on a set of inputs, with plausible readings
+that disagree on those inputs, is not one function; it is a family of
+functions wearing one name.
+
+The failure has an aggravating property the other conflicts lack: it sits
+exactly where decisions concentrate. Band boundaries are where a quantizer's
+output changes, so any downstream logic keyed to bands---reporting tiers,
+threshold alarms, comparisons across runs---changes behavior precisely at the
+values the specification leaves undefined. Systems accumulate values near
+their thresholds (thresholds are typically set where the interesting mass
+is), so the undefined set is visited in practice, not just in principle.
+Worse, an implementation that rounds before binning couples the
+classification to display precision: increase the displayed decimals and
+boundary values silently change bands, so the same measurement classifies
+differently depending on a formatting choice. A quantization band should be a
+fact about a value, not about its printout.
+
+\subsection{Disposition and candidate rule}
+
+\begin{ruleenv}[Candidate rule for Conflict 8]\label{ch04:rule:q4}
+``The successor uses exact unrounded comparison against 2.5, 5, and 7.5;
+normalization may not round a value across a band boundary.''
+\end{ruleenv}
+
+\texttt{DEFINE\_EXACT\_HALF\_OPEN\_BINS} completes the specification in the
+only way that composes cleanly: half-open intervals $[0,2.5)$, $[2.5,5)$,
+$[5,7.5)$, $[7.5,\infty)$ evaluated on the exact pre-rounding value, with
+boundary points assigned to the upper band by the half-open convention. The
+candidate implements the comparison over exact rational arithmetic on the
+retained pre-clipping ratio, so no representable input is ambiguous and
+display rounding, which happens afterward and never re-enters
+classification, cannot move a value across a boundary
+(Chapter~\ref{ch08:quantization} where present states this as a
+proposition). The Guide's two-decimal table remains exactly what it was---a
+correct display of the bands at two decimals---while the function it
+under-specified is now total.
+
+\section{Interactions Among the Conflicts}\label{ch04:interactions}
+
+The eight records are registered independently, but they are not independent
+in effect. Reading them as a system reveals a dependency structure that
+explains why the candidate's dispositions had to be typed constraints rather
+than local patches: several conflicts compound, and a resolution of one that
+ignored its neighbors would leak.
+
+\emph{Conflict 1 feeds Conflict 3.} The dimensional bridge problem is
+aggravated by the scale problem beneath it. Even if one resolved
+Conflict~\ref{ch04:conf:bridge} by fiat---declaring that $R_{\mathrm{total}}$
+shall carry alpha-per-activation units obtained from some conversion of
+constraint scores---the conversion would have to know which score scale it
+was converting \emph{from}, and Conflict~\ref{ch04:conf:scale} establishes
+that the sources disagree about exactly that. A bridge from an ambiguous
+abutment is ambiguous end to end: the same nominal constraint value of, say,
+$5$ would bridge to resistances differing by an order of magnitude depending
+on whether it was read on the $0.1$--$10.0$ or the $0$--$100$ scale. The
+candidate rule for Conflict 1 (distinct quantity types, no silent
+conversion) is therefore a load-bearing prerequisite for the candidate rule
+of Conflict 3 (explicit calibrated bridge only): the bridge requirement is
+meaningful because the scales it would bridge from are typed.
+
+\emph{Conflict 2 feeds Conflict 8.} Q4 band assignment is a comparison of a
+normalized ratio against fixed cut points, and the ratio's denominator is
+$I_{\mathrm{FS}}$. Conflict~\ref{ch04:conf:ifs} means the denominator is
+method-relative; Conflict~\ref{ch04:conf:q4} means the comparison was
+boundary-underspecified. The two compound multiplicatively: a value near a
+band boundary under one full-scale method may sit far from any boundary
+under another, so the boundary rule's importance is itself method-dependent,
+and no statement of the form ``this response is Q3'' is complete without
+both the exact bin convention (Conflict 8's disposition) and the full-scale
+method with its parameters (Conflict 2's disposition) attached. This is why
+the candidate binds the \texttt{IFSMethod} into the profile digest and
+computes bands from exact pre-rounding ratios: each disposition closes one
+half of a two-part ambiguity in every quantized report.
+
+\emph{Conflict 3 underlies Conflicts 6 and 7.} Series addition and
+reciprocal parallel aggregation are operations \emph{on resistances}; the
+residual is a difference between an observation and a prediction \emph{made
+with a resistance}. Until the dimensional bridge exists, the operands of
+Conflict~\ref{ch04:conf:networks}'s arithmetic and the predictions behind
+Conflict~\ref{ch04:conf:residual}'s diagnostics are quantities of undefined
+dimension. The capability gates on network operations therefore check unit
+kind before topology---an aggregate of score-typed pseudo-resistances is
+rejected at the unit check, before the question of whether its branches are
+genuinely parallel even arises. Likewise the residual pipeline requires a
+calibrated resistance with the correct unit as a precondition for emitting
+any residual at all. Had the audit ``resolved'' Conflict 3 by tolerating
+score-derived resistances, the gates of Conflicts 6 and 7 would be guarding
+operations whose operands were already meaningless.
+
+\emph{Conflict 4 arms Conflict 6.} The Guide's cascade rule multiplies stage
+gains; Conflict~\ref{ch04:conf:gain} shows ``gain'' has two unbridged
+definitions. The composition gate's requirement of adjacent coordinate
+agreement and a single declared gain method is what prevents a cascade from
+mixing Fisher--Rao displacement ratios with Jacobian derivatives---a mixture
+that would be numerically computable (both are dimensionless) and
+semantically void. This is the general pattern: dimensionless quantities are
+the most dangerous operands in the system, because unit checking alone
+cannot distinguish them, so method identity must travel with the value.
+
+\emph{Conflict 5 disciplines Conflict 7's vocabulary.} The residual
+temptation (``positive residual on a safety board is a bypass'') and the
+mnemonic temptation (``flat response is Starved'') are the same move at
+different altitudes: collapsing a measurement-shaped observation into a
+semantic verdict without the evidence that would distinguish the verdict
+from its alternatives. The split-axes disposition gives the system a place
+to put honest ignorance---semantic outcome \texttt{UNASSESSED}---and the
+residual disposition uses the same discipline: a residual may flag
+\emph{that} something is unexplained, never \emph{what} explains it. Both
+dispositions route the missing determination to the same destination:
+independent evidence under registered protocols, not connotation.
+
+\begin{finding}\label{ch04:find:web}
+The eight conflicts form a dependency web in which the scale and bridge
+conflicts (1 and 3) are upstream of nearly everything quantitative, the
+method-identity conflicts (2 and 4) are upstream of all cross-context
+comparison and composition, and the interpretation conflicts (5 and 7)
+govern what may be said about the results. No single conflict could have
+been resolved in isolation without either presupposing a resolution of its
+upstream neighbors or silently exporting its ambiguity downstream. This is
+the structural justification for the audit's uniform strategy: preserve
+every conflict, and encode every disposition at the type level, where the
+dependencies are enforced in composition order automatically.
+\end{finding}
+
+\section{The Record as a Whole}\label{ch04:close}
+
+The evidence record closes with summary fields that are as much a part of the
+audit as the conflicts themselves, and we reproduce them faithfully.
+
+\emph{Conflict count: 8.} The count is a completeness assertion with a
+precise scope: these eight records are what the inspection of the cited
+sources, at the cited locators, under the declared inspection methods,
+registered as conflicts or under-specifications. It is not an assertion that
+the sources contain exactly eight problems; it is an assertion that the audit
+found and preserved these eight, and that downstream artifacts claiming to
+rest on the audit inherit exactly this list---no silent additions, no silent
+deletions.
+
+\emph{Gate effect: \texttt{KEEP\_OPEN}.} The audit feeds a gated development
+process, and a source audit that discovered eight unresolved conflicts could
+not honestly close anything. \texttt{KEEP\_OPEN} records that the audit's
+effect on its gate is to hold it open: the conflicts are preserved, not
+resolved; the registered hypotheses that would resolve the resolvable ones
+(network rules, residual validity, gain composition) remain untested; and no
+downstream claim may cite the audit as if it had settled what it explicitly
+left unsettled.
+
+\emph{The claim boundary.} The record's own boundary statement reads: ``This
+record preserves source conflicts and under-specifications. It does not
+validate CAS-Ohm empirically, identify physical quantities, license a
+product claim, or authorize model intervention.'' The four exclusions are
+worth reading as the four ways an audit is most easily misused. An audit can
+be waved as empirical validation (``the sources were audited, so the model
+works''); the boundary denies it. It can be read as physical identification
+(``$V$ and $R$ were audited, so they measure something physical''); denied.
+It can be marketed (``audited'' as a product adjective); denied. And it can
+be treated as operational authorization (``the audit approves intervening on
+a model''); denied. The record also carries its status fields---admission
+ring 4, license status \textsc{not licensed}, disclosure status
+\textsc{held}---so that the boundary travels with the bytes.
+
+The status fields merit unpacking, since they recur on every artifact in the
+candidate's evidence chain and their meanings are load-bearing. Admission
+ring 4 places the record at the outermost ring of the project's admission
+scheme: material that may be worked on and cited internally but that has
+earned no promotion toward canonical status. \textsc{Not licensed} states
+that no use of the record grounds a product, marketing, or capability
+claim---the record can be true and complete and still license nothing,
+because licensing is a separate act by a separate authority that has not
+occurred. \textsc{Held} states that the record is not disclosed: its
+existence and content are internal, and nothing in this monograph's
+reproduction of it changes its disclosure posture, since the monograph
+inherits the same status labels (see the front matter). Finally, the
+record's document status---\textsc{draft / open / not frozen}, as of
+2026-08-04---means the record itself may still be amended by its owners; this
+chapter documents the record as of that date, and a reader holding a later
+revision should trust the artifact's own version fields over this text.
+
+\begin{boundary}\label{ch04:bound:record}
+Everything this chapter asserts is bounded by the record's own claim
+boundary. The chapter documents that eight conflicts were found, how they
+were evidenced, and what typed rules the candidate adopts in response. It
+establishes nothing about whether any CAS-Ohm prediction is empirically
+accurate, whether any audited quantity is physical, or whether any use of the
+framework is licensed. All of that remains \textsc{open / ring 4 / not
+licensed / held}.
+\end{boundary}
+
+\section{Why Preserving Conflicts Is an Engineering Result}\label{ch04:preservation}
+
+It may seem deflationary to end a chapter of conflicts with no resolutions.
+The claim of this section is the opposite: for a framework in CAS-Ohm's
+epistemic position, the preserved audit is worth more than any resolution
+currently available, for four reasons.
+
+\emph{First, harmonization without evidence is fabrication.} Every conflict
+above could have been ``resolved'' editorially: declare $R$ to be $0$--$100$,
+declare $I_{\mathrm{FS}}$ to be the corpus percentile, declare $\beta$ to be
+the Jacobian derivative, declare the network rules valid. Each declaration
+would have manufactured exactly the coherence the sources demonstrably lack,
+and every downstream artifact would then cite ``the framework'' for choices
+that were in fact one editor's unevidenced preference. The audit's refusal to
+harmonize is a refusal to launder editorial choice into inherited authority.
+Where a choice genuinely must be made to proceed (Q4 bins, the split
+classification axes), the record makes it as a \emph{named candidate rule}
+attached to a conflict---visible, attributable, and reversible---rather than
+as a silent rewrite of the sources.
+
+\emph{Second, preserved conflicts are executable.} Because each disposition
+is implemented as a type-level constraint---distinct quantity kinds with no
+silent conversion, an \texttt{IFSMethod} enumeration inside the profile
+digest, separate unit kinds for scores and resistances, separately named gain
+profiles, paired classification axes, capability gates on network arithmetic,
+censoring rules for residuals, exact half-open bins---the audit is not a
+document that future engineers must remember to consult. It is enforced at
+validation time. The historically observed failure modes (the mixed-scale
+$\mathrm{sat}=8.5$, the score-as-resistance division, the
+residual-as-bypass leap) are not merely warned against; they are
+unrepresentable or fail closed in the candidate's data model. An audit that
+compiles is a different artifact from an audit that admonishes.
+
+\emph{Third, the record converts ambiguity into falsifiable structure.}
+Several conflicts are not decidable by inspection because they are empirical
+questions in disguise: whether series and parallel rules hold, whether gains
+compose, whether residuals localize faults. The audit routes each to a
+registered hypothesis with a preregistered failure consequence (drop the
+rule, withdraw the causal language). This is the correct fate for
+conjectural machinery---neither adopted nor discarded, but staged for
+controlled testing with the decision criteria fixed in advance.
+
+\emph{Fourth, the audit is itself evidence about process.} Independent of
+CAS-Ohm's eventual fortunes, the record demonstrates a reusable method for
+inheriting a multi-document specification honestly: fix artifact identities
+by digest; disclose locator systems and inspection procedures, including
+failed ones; record disagreements verbatim with exact positions; classify the
+failure kinds; attach dispositions as typed, named rules; and bind the whole
+under an explicit claim boundary. Any successor framework, and any auditor of
+this one, can check the work. The alternative process---silent
+harmonization---leaves no residue to check.
+
+\emph{Fifth, preservation is what mature measurement practice does with
+unresolved definition.} Metrological convention distinguishes sharply
+between a quantity, the procedure that realizes it, and the uncertainty of
+its values \cite{vim,gum}; when two procedures realize different quantities
+under one name, the metrological response is not to average them but to
+name them separately and record the difference until a comparison experiment
+relates them. The audit's dispositions---separate named profiles for
+$I_{\mathrm{FS}}$ methods, separately named gain profiles, distinct quantity
+types for scales---are this convention applied to an inherited specification
+corpus. Nothing about the practice is novel; what would have been novel, and
+wrong, is exempting a machine-learning-adjacent framework from it on the
+grounds that its quantities are ``only scores.'' The audit treats score
+scales with the same definitional seriousness a standards laboratory would
+apply to a physical unit, precisely because the candidate's entire claim to
+discipline rests on refusing the score/measurement blur documented in the
+sources themselves.
+
+The chapters that follow build directly on the dispositions established
+here. Chapter~\ref{ch05:profile} develops the calibration profile whose
+fields exist largely because Conflicts 1, 2, and 3 demand them;
+Chapter~\ref{ch06:response} develops the response model and the
+anti-circularity rule that Conflict 3's calibrated bridge makes possible and
+that Conflict 7's discipline makes necessary. Throughout, the eight records
+of this chapter function as the monograph's negative space: the places where
+the sources do not speak with one voice, held open on purpose, so that
+nothing built above them can quietly pretend that they do.

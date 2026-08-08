@@ -1,0 +1,546 @@
+\chapter{Verification Methodology}\label{ch10:testing}
+
+A kernel whose entire purpose is to make invalid inferences unwritable must
+hold itself to a correspondingly explicit standard of evidence. This
+chapter documents how the TKS v8.0 prototype is tested: the
+bounded-exhaustive philosophy that governs the suite design, the four test
+modules and the exact coverage they achieve, the boundary regression that
+pins the artifact's claim discipline into the suite itself, the Gate~1
+verifier that binds hashes to test runs, and --- given equal weight
+throughout --- a precise statement of what a green suite does \emph{not}
+establish. The numbers in this chapter are the numbers of the validation
+snapshot of 2026-08-04 recorded in the prototype manifest: result
+\textsc{pass}, 20 tests run, with bounded exhaustive coverage of
+$19{,}683$ associativity triples, $289$ endomaps, $499$ typed maps, and
+$1{,}678$ lift-functor composition pairs. No number below is a projection
+or an extrapolation; each is either quoted from the manifest or derived
+arithmetically and marked as a derivation.
+
+\section{The bounded-exhaustive philosophy}\label{ch10:sec:philosophy}
+
+\subsection{Small scope as a working hypothesis}
+
+The suite's design principle is \emph{exhaustion within an explicit bound}:
+rather than sampling large instances at random, enumerate \emph{every}
+instance up to a small size and check the property on all of them. The
+methodological warrant is the small-scope hypothesis articulated by
+Jackson in the context of the Alloy analyzer: a high proportion of bugs in
+declarative models and structured code can be exhibited by counterexamples
+of small size, so exhaustively checking all small instances is a
+disproportionately effective use of finite checking budget
+\cite{jackson}. The hypothesis is empirical and defeasible --- it is a
+claim about where bugs tend to live, not a theorem about where they must
+--- and the suite treats it as exactly that: a rational allocation policy
+for executable evidence, never a substitute for proof.
+
+For this kernel the hypothesis has unusually strong purchase, for a
+structural reason worth spelling out. The properties under test ---
+associativity of index-chasing composition, neutrality of identities,
+idempotence of factorial powers, functoriality of the lift --- are
+\emph{uniform} in carrier size: the code that handles a three-element
+carrier is the same code, on the same control path, that handles a
+three-hundred-element carrier. There are no size-dependent branches, no
+buffering thresholds, no algorithmic mode switches anywhere in the three
+modules. A defect in the composition formula, the powering loop, or the
+matrix builder would therefore almost certainly manifest at the smallest
+size at which the relevant structure exists --- collisions need two
+colliding elements, associativity needs three composable arrows,
+nontrivial cycles need two points. Exhausting small scopes covers every
+\emph{shape} of instance even though it cannot cover every \emph{size},
+and for uniform code, shape is where the bugs are.
+
+\subsection{Contrast: sampled property-based testing}
+
+The natural alternative is property-based random testing in the QuickCheck
+tradition \cite{quickcheck}: state the law as an executable predicate,
+draw pseudorandom instances from a generator distribution, and shrink any
+failure to a minimal counterexample. The two disciplines share the crucial
+first step --- both force the specification into executable form --- and
+differ in their quantifier. A QuickCheck-style run establishes ``the
+property held on $n$ samples drawn from this distribution''; a
+bounded-exhaustive run establishes ``the property holds on \emph{all}
+instances within this bound.'' The former statement is probabilistic and
+distribution-relative: its evidential weight depends on how well the
+generator's measure covers the shapes where defects hide, and a generator
+that rarely produces, say, empty carriers or maximal-collision mappings
+can pass indefinitely against a defect it never exercises. The latter
+statement is categorical within its bound and requires no distributional
+argument at all --- but it is silent beyond the bound.
+
+The kernel's suite chooses exhaustion for three reasons. First,
+determinism: a random suite's failures depend on seeds, and this artifact's
+entire identity discipline is a war on interpreter-state dependence; a
+test suite whose coverage varied by seed would be tonally at odds with the
+code it checks, and a replayable suite is a precondition for the
+hash-bound verification protocol of Section~\ref{ch10:sec:gate1}. Second,
+countability: the instance spaces at small scope are so small (hundreds to
+tens of thousands, computed exactly below) that exhaustion is cheaper than
+any statistically meaningful sampling campaign --- when the whole space
+costs less than a second, sampling from it is strictly dominated. Third,
+auditability: ``all $1{,}678$ composable pairs through size three'' is a
+claim a reviewer can recount from first principles, as we do below,
+whereas a sampling claim can only be re-audited by rerunning the sampler.
+None of this is a criticism of the sampled discipline in its home
+territory --- vast or infinite instance spaces where exhaustion is
+impossible --- but that territory is precisely what the kernel's finite,
+small-scope design avoids.
+
+\begin{boundary}\label{ch10:bdy:scope}
+Exhaustive-within-bounds is still bounded. Every coverage claim in this
+chapter carries an explicit scope --- carriers through size three or four
+--- and establishes nothing, even empirically, about behavior beyond that
+scope. The bridge from bounded evidence to universal statements is
+mathematical proof (Chapters~4--8) and, where present, kernel-checked
+formalization (Chapter~11); the suite's role is to tie the running code to
+the proved mathematics on the bounded family, not to extend the
+mathematics.
+\end{boundary}
+
+\subsection{The oracle problem}
+
+Every test needs an oracle: an independent source of the expected answer.
+The suites resolve the oracle problem differently per family, and the
+differences are methodologically instructive.
+
+For the \emph{law families} --- associativity, identity neutrality,
+functoriality --- the oracle is internal to the law itself: the test
+computes both sides of an equation through the implementation and asserts
+their equality. This is the cheapest kind of oracle and also the weakest
+in one specific sense: a defect that breaks both sides \emph{identically}
+--- say, a composition routine that consistently reversed its arguments
+--- can satisfy an equational assertion while computing the wrong
+function. The suites compensate by anchoring the equations to
+independently constructed values at their edges: identities are built by
+an independent constructor (\texttt{identity}), not by composing anything,
+so the unit laws compare a computed composite against a value the
+composition code never touched; and the lift functor law compares a
+matrix \emph{product}, computed by explicit integer summation in the test,
+against a matrix built directly from the composed arrow --- two
+genuinely different computational routes to the same object.
+
+For the \emph{theorem families} --- factorial idempotence, the norm
+consequences --- the oracle is the informal proof: the test asserts the
+proved right-hand side (idempotence of $f^{|X|!}$; trace equal to $|X|$;
+rank equal to image size) against implementation output. Here the
+mathematics is the independent authority, and the test would catch either
+an implementation defect or --- more interestingly --- a misremembered
+theorem, since the asserted value is written into the test from the
+proof, not read from the code.
+
+For the \emph{fixture families} --- the two-state noncontractivity
+example, the hand-worked closure catalogs --- the oracle is hand
+computation, of exactly the kind Appendix~A performs in print. These are
+the strongest oracles in the suite (fully independent of both the
+implementation and any single theorem) and necessarily the narrowest.
+
+\subsection{Determinism of the suite itself}
+
+The suite contains no randomness: no seeds, no time-dependent values, no
+reliance on dictionary iteration order in any assertion. Enumeration of
+the exhaustive families is by nested iteration over mapping tuples in
+lexicographic order --- itself a replayable sequence --- so not only the
+verdict but the complete execution trace of the suite is identical on
+every conforming interpreter. This property is not merely aesthetic
+consistency with the kernel's determinism discipline. It is what makes
+the Gate~1 verifier's conjunction meaningful: ``these bytes pass these
+tests'' is a reproducible fact only if ``these tests'' denotes one fixed
+computation, and a suite with ambient nondeterminism would smuggle
+interpreter state back into the artifact's evidence base through the
+test channel after the implementation had so carefully evicted it.
+
+\section{The four suites}\label{ch10:sec:suites}
+
+The test tree \texttt{tests/tks\_v8\_core} contains four modules, each
+hash-bound in the manifest with a declared role
+(Chapter~9, Section on manifest binding): \texttt{test\_category.py}
+(category and power regressions, 5{,}588 bytes),
+\texttt{test\_deterministic\_lift.py} (lift structure and functor-law
+regressions, 9{,}142 bytes), \texttt{test\_normal\_forms.py} (normal-form
+correctness and resource regressions, 5{,}672 bytes), and
+\texttt{test\_manifest\_boundaries.py} (claim and integration boundary
+regression, 1{,}965 bytes). Together they comprise the 20 tests of the
+snapshot. The suites run under Python's standard \texttt{unittest}
+discovery --- \texttt{python -m unittest discover -s tests/tks\_v8\_core
+-v} with \texttt{src} on \texttt{PYTHONPATH} --- with no third-party test
+framework, no fixtures requiring network or filesystem state, and no
+randomness anywhere: every run of the suite is the same run.
+
+\subsection{Category and power regressions}\label{ch10:sec:cat-suite}
+
+The category suite carries the two largest exhaustive families.
+
+\emph{Associativity on a three-point carrier: $19{,}683$ triples.} Fix one
+three-element carrier $X$. The endo-arrows on $X$ are the total functions
+from a three-element set to itself, of which there are $3^3 = 27$; every
+ordered triple $(f, g, h)$ of them is composable in both associations, and
+there are $27^3 = (3^3)^3 = 19{,}683$ such triples. The suite composes
+each triple both ways --- $(h \circ g) \circ f$ and $h \circ (g \circ f)$
+--- and asserts extensional equality of the results. This family checks
+the associativity component of the category laws (Chapter~4) on every
+possible shape of collision, fixed point, and cycle structure that three
+points admit, which includes every way two composed collisions can
+interact. Identity neutrality is checked on typed families as well as
+endo families, so the unit laws are not confined to the single-carrier
+world.
+
+\emph{Endomaps through size four: $289$ maps.} For each carrier size
+$k \in \{0, 1, 2, 3, 4\}$ the endomaps on a $k$-element carrier number
+$k^k$ (with the empty case counting the one empty map, $0^0 = 1$):
+
+\[
+\sum_{k=0}^{4} k^k \;=\; 1 + 1 + 4 + 27 + 256 \;=\; 289 ,
+\]
+
+a derivation consistent with the manifest's recorded count. For every one
+of these $289$ endomaps the suite computes the factorial power
+$f^{|X|!}$ through the \texttt{Endomap.power} pathway --- exercising the
+binary powering loop, not a naive iteration --- and asserts idempotence of
+the result by extensional comparison, the executable face of the safe
+finite power theorem of Chapter~5. The family includes the degenerate
+sizes ($0! = 1! = 1$), all permutations (where $f^{|X|!} = \id$), all
+constants, and every mixed tail-and-cycle shape through four points.
+
+The choice of bound four is not arbitrary, and it is worth recording what
+size four buys that size three does not. The proof of the factorial
+theorem (Chapter~5) has two moving parts --- tail absorption and cycle
+divisibility --- and the interesting stress cases are those where the
+least idempotent exponent is governed by the \emph{least common multiple}
+of several cycle lengths rather than by any single cycle. On three points
+the possible cycle structures are limited (cycle lengths $1$, $2$, $3$,
+never two nontrivial cycles at once); on four points the double
+transposition appears --- two disjoint $2$-cycles --- along with the
+$4$-cycle, the $3$-cycle-plus-fixed-point, and every combination of a
+nontrivial cycle with a genuine tail. Size four is thus the first size at
+which the family contains maps whose cycle structure is plural, and
+$4! = 24$ is the first factorial that must simultaneously absorb a
+length-$3$ tail bound and divide out cycle lengths $1$ through $4$. The
+family also stresses the powering \emph{implementation} distinctly at
+each size: the exponents actually exercised are $1, 1, 2, 6, 24$, whose
+binary expansions ($1$, $10$, $110$, $11000$) drive different
+accumulate/square interleavings through the loop of Chapter~9.
+
+\emph{Typed maps through size four: $499$ maps.} Across ordered pairs of
+carrier sizes $(m, n)$ with $0 \le m, n \le 4$, the total maps from an
+$m$-element source to an $n$-element target number $n^m$ --- zero when
+$n = 0 < m$, one when $m = 0$. Summing:
+
+\[
+\sum_{m=0}^{4}\sum_{n=0}^{4} n^{m}
+\;=\; 5 + 10 + 30 + 100 + 354 \;=\; 499 ,
+\]
+
+again a derivation consistent with the recorded count (the five terms are
+the sums for $m = 0, 1, 2, 3, 4$ respectively). These typed families
+drive the constructor validation and the composition guard across
+\emph{distinct} carriers: identity neutrality with typed identities on
+both sides, and rejection behavior --- every source/target mismatch
+raising \texttt{CompositionTypeError} --- are checked here, where
+same-carrier coincidences cannot mask a name-blind or cardinality-blind
+comparison.
+
+The suite's regression (as opposed to exhaustive) component pins the
+powering machinery at scale: the exponents $2^{30}$ and $10^{5000}$
+exercise the bounded presentation-name construction of Chapter~9 ---
+the second exponent would overflow Python's decimal-conversion limit if
+names were built naively --- and the negative fixtures drive sets,
+mappings, generators, blank names, out-of-range indices, boolean indices,
+and negative exponents into their respective \texttt{ValidationError} and
+\texttt{CompositionTypeError} rejections, one assertion per taxon of the
+error taxonomy.
+
+\subsection{Lift structure and functor-law regressions}\label{ch10:sec:lift-suite}
+
+The lift suite is the largest test module by byte count, and its central
+family is the exact functoriality sweep.
+
+\emph{Lift-functor composition pairs through size three: $1{,}678$
+pairs.} Consider all composable typed pairs $f : X \to Y$, $g : Y \to Z$
+with $|X|, |Y|, |Z| \le 3$, including empty carriers. For fixed sizes
+$(a, b, c)$ there are $b^a \cdot c^b$ such pairs, and summing over the
+middle size first,
+
+\[
+\sum_{b=0}^{3}\Bigl(\sum_{a=0}^{3} b^{a}\Bigr)\Bigl(\sum_{c=0}^{3} c^{b}\Bigr)
+\;=\; 1\cdot 4 + 4\cdot 6 + 15\cdot 14 + 40\cdot 36
+\;=\; 4 + 24 + 210 + 1{,}440 \;=\; 1{,}678 ,
+\]
+
+a derivation consistent with the manifest count. For every pair the suite
+builds the three matrices $A_g$, $A_f$, and $A_{g \circ f}$ through
+\texttt{DeterministicLift.matrix()}, multiplies $A_g A_f$ in exact integer
+arithmetic, and asserts \emph{entrywise equality} --- tuples of tuples of
+\texttt{int}s compared with \texttt{==}, no tolerance, no floating point
+anywhere in the comparison. Identity preservation $A_{\id_X} = I$ is
+checked for every carrier in scope by the same exact comparison. This is
+the executable half of the lift functor laws (Chapter~7); the
+kernel-checked half, and the gap between them, is Chapter~11's subject.
+
+The structural regressions of the module tie the theorem-as-shortcut
+properties of \texttt{deterministic\_lift.py} back to matrix reality on
+the bounded family: fiber sizes against explicitly counted preimages, the
+squared norm against the maximum fiber size, the trace shortcut against
+the actual Gram diagonal sum, rank against the count of nonempty fibers,
+the input Gram matrix against a directly computed $A_f^{\mathsf T} A_f$,
+the output Gram against the diagonal of fiber sizes, and the support
+projector against the zero-one support pattern --- with fixtures where
+$A_f A_f^{*}$ and the support projector \emph{differ} (any fiber of size
+two or more), so the three-operator distinction of Chapter~9 is enforced
+by test, not just by method naming. The permanent noncontractivity fixture
+--- the constant map on two points with $A_f^2 = A_f$, norm $\sqrt 2$,
+Gram trace $2$, rank $1$, neither a partial isometry nor an orthogonal
+projector --- is asserted property by property, standing guard over the
+two tempting over-readings (``deterministic lifts are contractive,''
+``idempotent lifts are projectors'') that Chapter~7 identified and the
+theorem ledger records as \textsc{thm-lift-occupation-counterexample}.
+
+\subsection{Normal-form correctness and resource regressions}\label{ch10:sec:nf-suite}
+
+The normal-form suite verifies the closure engine of Chapter~9 on
+hand-checkable catalogs, in three bands. \emph{Correctness:} for small
+generator catalogs whose closures can be enumerated by hand (of the kind
+worked in full in Appendix~A), the suite asserts the exact denotation
+count, the exact representative word for each reachable denotation ---
+shortlex-least, verified against independent enumeration --- the identity
+of \texttt{normalize} on words with equal denotations, and the stability
+of the \texttt{normal\_forms} listing order. \emph{Rejection:}
+constructor-level negative fixtures cover duplicate generator labels,
+duplicate object names, generators referencing undeclared objects, unknown
+labels at evaluation, undeclared start objects, and unordered container
+inputs; \texttt{representative\_for} on an arrow outside the generated
+closure is asserted to raise \texttt{UnreachableDenotationError}
+specifically. \emph{Resource guards:} catalogs constructed with
+deliberately small \texttt{max\_arrows} or \texttt{max\_frontier} are
+asserted to raise \texttt{ClosureLimitExceeded} --- and, decisively, to
+leave \emph{no} accessible partial catalog: the exception propagates from
+the constructor, so there is no object on which a truncated table could
+be observed. The fail-closed policy is thereby a tested behavior, not a
+documentation promise.
+
+\subsection{The manifest-boundary regression}\label{ch10:sec:boundary-suite}
+
+The fourth module is small --- under two kilobytes --- and unusual in
+kind: it tests the \emph{claim discipline} rather than the code. It loads
+the prototype manifest and asserts the integration boundary fields on
+which every downstream reading of the artifact depends:
+
+\begin{itemize}
+\item \texttt{active\_cas\_compiler\_modified} is \texttt{false} --- the
+      kernel has not touched the production notation compiler;
+\item \texttt{production\_runtime\_dependency} is \texttt{false} --- no
+      production system depends on the kernel;
+\item \texttt{canonical\_tks\_v8\_status} is \textsc{open} --- the kernel
+      is not canonical TKS v8;
+\item \texttt{cas\_semantic\_transfer\_status} is
+      \textsc{open / not licensed} --- no CAS semantic content has been
+      mapped onto the kernel.
+\end{itemize}
+
+\begin{remark}[Why boundaries belong in the suite]\label{ch10:rem:boundary}
+A boundary that lives only in prose can drift silently: a manifest edit
+that flipped \texttt{cas\_semantic\_transfer\_status} to a permissive
+value would, without this module, leave the suite green while the
+artifact's most important commitment quietly inverted. Placing the
+assertions in the suite makes boundary drift a \emph{test failure}: the
+20-test green result certifies not only that the code behaves but that
+the artifact still claims exactly as little as it is licensed to claim.
+This is the same instinct as the permanent noncontractivity fixture ---
+encode the prohibition where the machinery will trip over it --- applied
+to the artifact's governance metadata.
+\end{remark}
+
+\section{Coverage summary}\label{ch10:sec:coverage}
+
+\begin{center}
+\begin{tabular}{@{}lrl@{}}
+\toprule
+Bounded exhaustive family & Cases & Law exercised \\
+\midrule
+Three-point associativity triples & $19{,}683$ & associativity (Ch.~4) \\
+Endomaps on carriers through size four & $289$ & factorial idempotence (Ch.~5) \\
+Typed maps, sizes through four & $499$ & typing, identity, rejection (Ch.~4) \\
+Lift composition pairs through size three & $1{,}678$ & functor laws, exact (Ch.~7) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+All four counts are recorded in the manifest's validation snapshot
+(\texttt{validated\_at} 2026-08-04, \texttt{result} \textsc{pass},
+\texttt{tests\_run} 20) and re-derived arithmetically above. The
+per-family scopes differ deliberately: associativity burns its budget on
+one carrier at depth three (the law is about composition structure, not
+carrier variety); the endomap and typed-map families spend theirs on
+carrier variety through size four (the laws are about map shapes); the
+functor sweep stops at size three because its cost is cubic in the three
+sizes jointly and the matrix shapes it must distinguish --- collision,
+non-surjectivity, empty domain and codomain --- all occur by then.
+
+Two structural remarks on the families' composition. First, the empty
+cases are inside the bounds, not excluded from them: the typed-map family
+includes the $m = 0$ column (one empty map into each target, including
+the empty map on the empty object) and the $n = 0 < m$ cells (no maps at
+all, which the enumerator must produce as an empty family rather than an
+error), and the lift sweep explicitly includes empty carriers ---
+zero-by-$n$ and $n$-by-zero matrices whose products are degenerate in
+ways that off-by-one code notoriously mishandles. The empty cases carry
+disproportionate defect-finding weight for exactly that reason. Second,
+the four families overlap by construction --- a three-point endomap
+appears in the associativity family, the endomap family, the typed-map
+family, and (lifted) in the functor sweep --- and the overlap is a
+feature: the same mathematical object is exercised through four
+different code paths (composition, powering, construction and typing,
+matrix building), so an inconsistency \emph{between} code paths, not
+just within one, has four chances to surface.
+
+A note on cost. The largest family runs $19{,}683$ triple compositions
+of three-element mappings; the functor sweep performs $1{,}678$ exact
+$3 \times 3$-bounded integer matrix multiplications; the whole
+20-test suite completes in seconds on commodity hardware. The
+bounded-exhaustive design's practical thesis is visible in these
+numbers: at kernel scale, exhaustion within the interesting scope is
+cheaper than the infrastructure of sampling would be. The suite spends
+its complexity budget on \emph{which} families to exhaust --- the
+design decisions recorded above --- and none on test-data machinery.
+
+\section{Trusting the tests}\label{ch10:sec:trust}
+
+A verification methodology that scrutinizes the code and exempts the
+tests has merely relocated its trust, not reduced it. Three mechanisms
+address the suite's own trustworthiness; none eliminates it, and the
+residue is stated at the end.
+
+\emph{First, the tests are bound.} All four test modules carry SHA-256
+bindings in the manifest with declared roles, and the Gate~1 verifier
+hashes them before running them (Section~\ref{ch10:sec:gate1}). A
+weakened assertion, a deleted family, or a broadened exception match is a
+digest change, detectable against the manifest exactly as an
+implementation edit would be. Test code is artifact, not scaffolding.
+
+\emph{Second, the coverage counts are externally derivable.} Each
+exhaustive family's cardinality is a closed-form combinatorial quantity
+--- $(3^3)^3$, $\sum_k k^k$, $\sum_{m,n} n^m$,
+$\sum_b (\sum_a b^a)(\sum_c c^b)$ --- recomputed independently in this
+chapter and checkable by any reviewer with a pencil. A suite that
+silently enumerated less than it claimed would disagree with arithmetic,
+not merely with its own comments. This is a modest but real defense: it
+pins the \emph{quantifier} of each exhaustive claim to something outside
+the code.
+
+\emph{Third, the assertion style is adversarial to weakening.} The
+negative fixtures assert specific exception types
+(\texttt{CompositionTypeError}, not bare \texttt{Exception}) so a
+refactor that degraded a typed rejection into a generic crash would
+fail the suite; the fixture tests assert exact values (norm squared
+\emph{equals} $2$), not inequalities; and the boundary regression
+asserts exact manifest field values, not field presence.
+
+The residue is honestly statable: the suite cannot certify its own
+\emph{sufficiency}. Nothing in the mechanisms above excludes the
+possibility that some behavior of the implementation is simply never
+exercised --- a code path outside every family and every fixture ---
+and no coverage measurement is recorded in the manifest snapshot.
+Sufficiency review is part of what independent specialist review
+(PO-TKS8-CORE-10) is for, and the suite's self-discipline is a floor
+under that review, not a substitute for it.
+
+\section{The Gate~1 verifier}\label{ch10:sec:gate1}
+
+\subsection{Protocol}
+
+The script \texttt{scripts/verify\_tks\_v8\_gate1.py} --- itself
+hash-bound in the manifest (4{,}230 bytes, role ``hash and executable test
+verifier'') --- composes the two evidence mechanisms into a single
+replayable check, invoked as
+\texttt{python scripts/verify\_tks\_v8\_gate1.py} from the repository
+root.
+
+\begin{protocol}[Gate~1 verification]\label{ch10:proto:gate1}
+The verifier performs, in order:
+\begin{enumerate}
+\item \emph{Hash check.} For every artifact binding in the prototype
+      manifest, recompute the SHA-256 digest of the file at the bound path
+      and compare it, together with the byte count, against the recorded
+      values. Any missing file or digest mismatch fails the run before
+      any test executes.
+\item \emph{Suite rerun.} Execute the four-module test suite and require
+      the full pass.
+\end{enumerate}
+A successful run therefore certifies a conjunction: \emph{these exact
+bytes} --- and not some edited neighbor of them --- \emph{pass these
+exact tests}.
+\end{protocol}
+
+The ordering matters. Running hashes first means a green verifier run can
+never be produced by testing modified code: the failure mode ``the tests
+pass because someone weakened them'' is caught at step one, since the test
+modules are themselves bound. Conversely, the failure mode ``the hashes
+match but the code is broken'' is caught at step two. The two steps are
+individually cheap and jointly close the obvious substitution attacks on
+either evidence type alone --- with the single documented exception, the
+manifest's own unbound digest, discussed in Chapter~9: until a reviewed
+commit binds the manifest hash, a consistent rewrite of manifest plus
+files together would pass. The verifier inherits that boundary; it does
+not resolve it.
+
+\subsection{Relation to the Lean verifier}
+
+A second verifier, \texttt{scripts/verify\_psr8\_lean\_gate1.py},
+reproduces the formal seed under the pinned Lean toolchain; it is the
+subject of Chapter~11 and is deliberately separate: executable evidence
+and kernel-checked evidence have different trust bases, different failure
+modes, and different scopes, and conflating them in one green light would
+blur exactly the distinctions this monograph exists to keep sharp. Gate~1
+reproduction means running both.
+
+\section{What a green suite does not establish}\label{ch10:sec:negative}
+
+This section is normative for every consumer of the artifact, and its
+content is quoted or directly derived from the manifest's own boundary
+field: ``A passing bounded executable suite is not proof-assistant
+verification or independent specialist review.''
+
+\begin{boundary}[Non-claims of the executable evidence]\label{ch10:bdy:negative}
+A full pass of the 20-test suite, including under the Gate~1 verifier,
+does \emph{not} establish any of the following.
+\begin{enumerate}
+\item \emph{Universal correctness.} The exhaustive families are bounded at
+      carrier sizes three and four. The suite proves nothing about size
+      five --- the universal statements are carried by the proofs of
+      Chapters~4--8, and their formalization status is the open ledger of
+      Chapter~12, not a consequence of testing.
+\item \emph{Proof-assistant verification of the Python.} The Lean seed of
+      Chapter~11 checks a Lean model of the definitions, not the Python
+      source; equivalence between the two is itself an open obligation.
+      A green suite plus a green Lean build still leaves the running code
+      unverified in the proof-assistant sense.
+\item \emph{Independent review.} All tests were authored within the
+      project. PO-TKS8-CORE-10 (independent specialist review) has no
+      receipt and remains \textsc{open}; nothing a self-authored suite
+      does can close it.
+\item \emph{Closure of any open obligation.} The ledger rows marked
+      \textsc{open} in Chapter~12 --- formalizations, compiler
+      integration, semantic reconciliation, review --- are untouched by
+      any number of green runs; the suite's role in the ledger is
+      confined to the rows explicitly marked \textsc{executable
+      validation}.
+\item \emph{Semantic adequacy for TKS/CAS.} The suite contains no Noetic,
+      Domain, Drive, or Register content --- necessarily, since the code
+      contains none. Green tests say nothing about whether the kernel's
+      types are the \emph{right} substrate for the canonical ontology;
+      that is PO-TKS8-CORE-08, \textsc{open / not licensed}.
+\item \emph{Empirical claims of any kind.} No cognitive-dynamics,
+      channel-contractivity, or CAS-efficacy claim follows from any test
+      in the suite, per the standing claim boundaries of the manifest.
+\end{enumerate}
+\end{boundary}
+
+\begin{remark}[The suite as a floor, not a ceiling]\label{ch10:rem:floor}
+The correct reading of the executable evidence is as a floor under the
+artifact: the definitions are implementable, the implementation agrees
+with the proved mathematics everywhere a bounded check can look, the
+rejection behavior matches the error taxonomy case by case, the
+fail-closed guards actually fail closed, and the claim boundaries are
+mechanically pinned. Everything above that floor --- universality,
+formal verification of the running code, review, semantic transfer ---
+is exactly as open as the ledger says it is. Keeping the floor and the
+ceiling distinct is the methodology.
+\end{remark}

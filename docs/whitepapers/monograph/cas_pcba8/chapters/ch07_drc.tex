@@ -1,0 +1,667 @@
+\chapter{The Design-Rule Checker}\label{ch07:drc}
+
+The design-rule checker (DRC) is the gatekeeper of the entire CAS PCBA 8 candidate. Nothing downstream of it---not the reference simulator, not the measurement and trace machinery, not the TKS~v8 adapter---will accept a board that the DRC has not passed, and nothing upstream of it can negotiate a pass. The checker's design goal is deliberately modest and deliberately rigid: given one typed board object, compute one deterministic diagnostic report under one closed catalog of diagnostic codes, and make the report itself an identity-bearing artifact that can be re-verified byte for byte. This chapter specifies that contract in full. We first present the architectural commitments (Section~\ref{ch07:sec:architecture}), then walk through every one of the thirty-five diagnostic codes in the implementation's catalog, one section per code family and one subsection per code, giving for each its purpose, its exact trigger condition, an illustrative scenario, the rationale for its severity, and its fail-closed behavior (Sections~\ref{ch07:sec:mdl}--\ref{ch07:sec:tks}). We close by regrouping the catalog into the five check classes that organize the checker's execution (Section~\ref{ch07:sec:classes}) and by restating the claim boundary that governs every interpretation of a DRC result (Section~\ref{ch07:sec:boundary}).
+
+Throughout this chapter, every diagnostic code is reproduced exactly as it appears in the implementation's catalog. The codes are stable strings of the form \texttt{PCBA8-\emph{CLASS}-\emph{NNN}}; they are part of the candidate's public contract, and any change to the catalog is by construction a change to the engine identity that enters every report digest. All scenarios below are \emph{illustrative}: they are constructed examples that show how a code fires, and they assert nothing about any published board, any cognitive system, or any physical circuit.
+
+\section{Architecture: one deterministic report}\label{ch07:sec:architecture}
+
+\subsection{The report as an artifact}
+
+The DRC entry point takes exactly one validated \texttt{Board} value and produces exactly one report object. The report is not a stream of console messages, not a mutable accumulator, and not a boolean; it is a frozen record that embeds the exact board it judged, the complete ordered tuple of diagnostics, and a family of SHA-256 identities binding the verdict to everything that could have influenced it: the canonical board payload, the package source digest, the closed component-catalog digest, the engine digest, the immutable decimal-context digest, a DRC-profile digest derived from all of the preceding, and finally a report digest computed over the whole canonical payload.
+
+\begin{definition}[Diagnostic]\label{ch07:def:diagnostic}
+A \emph{diagnostic} is a quadruple $(c, s, u, m)$ where $c$ is a code drawn from the closed catalog of Table~\ref{ch07:tab:catalog}, $s$ is a severity drawn from the closed set $\{\textsc{error}, \textsc{warning}, \textsc{info}\}$, $u$ is a nonempty printable canonical-ASCII subject string of at most 512 characters naming the board element under judgment, and $m$ is a nonempty message string free of control characters. Diagnostics are exact values: subclassing is rejected, the code and severity must use the exact enumeration types, and every accessor revalidates the value before use.
+\end{definition}
+
+\begin{definition}[DRC report]\label{ch07:def:report}
+A \emph{DRC report} is a frozen record containing: the exact embedded board; the board reference and board digest; the source, catalog, engine, decimal-context, and DRC-profile digests; the tuple of diagnostics in canonical sort order; the report digest; and the fixed Ring-4 research boundary. A report whose linkage is stale---whose embedded board no longer hashes to the recorded board digest, whose diagnostics differ from a fresh recomputation over the embedded board, or whose recorded digests differ from the current package identities---fails its own validity check and cannot be used.
+\end{definition}
+
+The last clause of Definition~\ref{ch07:def:report} deserves emphasis because it is unusual among diagnostic tools. The report's \texttt{verify\_identity} operation does not merely recheck a hash; it \emph{re-runs the checker} over the embedded board and compares the resulting diagnostics field by field against the stored tuple. A report is therefore not a cached opinion that might drift away from the code that produced it. It is a reproducible claim: ``this exact engine, at this exact source digest, over this exact board, produces exactly these diagnostics.'' If any of those identities has changed---a source file edited, the component catalog revised, the decimal context replaced---the old report refuses to answer questions rather than answering them under a silently different regime.
+
+\begin{invariant}[Deterministic ordering]\label{ch07:inv:order}
+The diagnostics tuple in every report is sorted by the total order (severity rank, code string, subject string, message string), with severity ranked \textsc{error} before \textsc{warning} before \textsc{info}. A report whose diagnostics are not in this order is invalid at construction. Consequently two runs of the checker over equal boards produce byte-identical reports, and a textual diff of two reports is a semantically meaningful diff of their verdicts.
+\end{invariant}
+
+Determinism here is not an optimization or a convenience; it is a load-bearing evidential property. The candidate's evidence discipline (Chapter~\ref{ch07:sec:boundary} restates the local form) treats a DRC report as a citable object. That is only coherent if the object is a pure function of its declared inputs. The checker therefore iterates all board collections in sorted order, uses no ambient randomness, no wall-clock values, no environment-dependent state, and performs all numeric comparisons under the one immutable decimal context whose identity enters the report.
+
+\subsection{The closed catalog}
+
+\begin{ruleenv}[Closed catalog]\label{ch07:rule:closed}
+The set of diagnostic codes is closed: it consists of exactly the thirty-five codes of Table~\ref{ch07:tab:catalog} and nothing else. The checker cannot mint a new code at runtime, a caller cannot register additional checks, and the component-contract catalog against which components are judged cannot be overridden by a caller-supplied substitute---an attempt to pass a different catalog is rejected before any checking begins.
+\end{ruleenv}
+
+Closure serves two audiences. For the implementer, it makes the checker's coverage auditable: the complete list of things the checker can say is finite, versioned, and hashed. For the reader of a report, it makes silence meaningful in a bounded way: if a board passes, then none of the thirty-five failure conditions was detected---no more, and importantly, no less. The checker's silence about conditions outside its catalog (for example, semantic adequacy of a state binding, or physical realizability of anything) is not a verdict, because those conditions were never in the catalog to begin with. Rule~\ref{ch07:rule:closed} is thus the structural companion of the claim boundary: a closed catalog is what allows ``DRC-clean'' to be a precise predicate rather than an open-ended endorsement.
+
+\begin{ruleenv}[Errors fail the board; warnings never become implicit clean]\label{ch07:rule:severity}
+A report is \emph{clean} if and only if it contains no diagnostic of severity \textsc{error}. Every error fails the board for all downstream purposes: simulation refuses the board, the adapter refuses the board, and no override path exists. Severities \textsc{warning} and \textsc{info} exist in the severity vocabulary and are preserved verbatim in the report and its digest; they never disappear, are never aggregated away, and never convert a flagged condition into an implicit pass. In the current engine every catalog check emits at severity \textsc{error}; the weaker severities are reserved vocabulary, and any future use of them must preserve this rule.
+\end{ruleenv}
+
+The second half of Rule~\ref{ch07:rule:severity} addresses a familiar failure mode of industrial linters, where warnings accumulate, are suppressed, and eventually rot into a de facto extension of the pass predicate. The candidate forecloses that path structurally: the clean predicate is defined only over errors, but the report digest covers all diagnostics of every severity, so a ``pass with warnings'' is a different artifact than a pass without them, and any consumer that wants to treat them identically must do so explicitly and visibly, against a report whose warnings are permanently on the record.
+
+\subsection{The catalog at a glance}
+
+Table~\ref{ch07:tab:catalog} lists the complete closed catalog. Each code is specified in detail in the sections that follow.
+
+\begin{center}
+\small
+\begin{longtable}{@{}lll@{}}
+\caption{The closed \texttt{PCBA8-*} diagnostic catalog (35 codes).}\label{ch07:tab:catalog}\\
+\toprule
+Code & Name & Class \\
+\midrule
+\endfirsthead
+\toprule
+Code & Name & Class \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\texttt{PCBA8-MDL-001} & invalid board metadata & Model \\
+\texttt{PCBA8-MDL-002} & duplicate reference & Model \\
+\texttt{PCBA8-SEM-001} & unknown component kind & Semantics \\
+\texttt{PCBA8-SEM-002} & unresolved semantics & Semantics \\
+\texttt{PCBA8-PAR-001} & unknown parameter & Parameters \\
+\texttt{PCBA8-PAR-002} & missing parameter & Parameters \\
+\texttt{PCBA8-PAR-003} & invalid parameter & Parameters \\
+\texttt{PCBA8-STATE-001} & unknown state binding & States \\
+\texttt{PCBA8-STATE-002} & missing state binding & States \\
+\texttt{PCBA8-STATE-003} & invalid state binding & States \\
+\texttt{PCBA8-BIAS-001} & bias incoherent & Bias \\
+\texttt{PCBA8-NET-001} & unknown endpoint owner & Nets \\
+\texttt{PCBA8-NET-002} & unknown port & Nets \\
+\texttt{PCBA8-NET-003} & invalid driver count & Nets \\
+\texttt{PCBA8-NET-004} & missing net load & Nets \\
+\texttt{PCBA8-NET-005} & signal kind mismatch & Nets \\
+\texttt{PCBA8-NET-006} & unit mismatch & Nets \\
+\texttt{PCBA8-NET-007} & port multiply connected & Nets \\
+\texttt{PCBA8-NET-008} & required port unconnected & Nets \\
+\texttt{PCBA8-NET-009} & invalid signal/unit pair & Nets \\
+\texttt{PCBA8-TP-001} & unknown test-point net & Test points \\
+\texttt{PCBA8-TP-002} & missing safety test point & Test points \\
+\texttt{PCBA8-TP-003} & safety test point not marked & Test points \\
+\texttt{PCBA8-CAL-001} & unknown calibration & Calibration \\
+\texttt{PCBA8-CAL-002} & invalid calibration & Calibration \\
+\texttt{PCBA8-CAL-003} & calibration unit mismatch & Calibration \\
+\texttt{PCBA8-CAL-004} & missing test-point calibration & Calibration \\
+\texttt{PCBA8-FBK-001} & undeclared feedback & Feedback \\
+\texttt{PCBA8-FBK-002} & feedback without delay & Feedback \\
+\texttt{PCBA8-FBK-003} & unsafe feedback gain & Feedback \\
+\texttt{PCBA8-FBK-004} & invalid feedback declaration & Feedback \\
+\texttt{PCBA8-SAF-001} & unreachable safety threshold & Safety \\
+\texttt{PCBA8-SAF-002} & unsafe fuse action & Safety \\
+\texttt{PCBA8-SAF-003} & unresolved safety analysis & Safety \\
+\texttt{PCBA8-TKS-001} & invalid finite transition & TKS adapter \\
+\end{longtable}
+\end{center}
+
+\section{Model integrity: the \texttt{MDL} family}\label{ch07:sec:mdl}
+
+The model family judges the board record itself, before any component semantics are consulted. Its two codes enforce the minimal preconditions for every later check: that the board is nameable and that its element references form usable keys.
+
+\subsection{\texttt{PCBA8-MDL-001}: invalid board metadata}\label{ch07:sub:mdl001}
+
+\paragraph{Purpose.} Every downstream artifact---the DRC report, the simulation result, the adapter certificate---identifies its board by reference and version and hashes the canonical board payload. A board whose own name or version is blank, or whose element collections contain blank or non-string references, cannot participate in that identity discipline; \texttt{PCBA8-MDL-001} exists to stop such a board at the door.
+
+\paragraph{Trigger condition.} The code fires when the board reference or the board version is empty after stripping whitespace, and it fires again, once per offending entry, when any element of the six reference groups---board ports, components, nets, test points, calibrations, feedback declarations---has a reference that is not a string or is blank after stripping. The subject string names either \texttt{board} itself or the offending group and index, so a report reader can locate the defect without parsing the message.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:mdl001}
+Illustrative only. A board is constructed programmatically from a spreadsheet export in which the version column of the header row was left empty. The board object carries \texttt{ref} \texttt{"demo-board"} and \texttt{version} \texttt{"~"} (a single space). The checker strips the version, finds it blank, and emits \texttt{PCBA8-MDL-001} with subject \texttt{board} and the message that board reference and version must be non-blank. No further meaning is assigned: the diagnostic asserts a defect of the record, not of any modeled system.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Identity is the precondition for every other guarantee the candidate offers; a board that cannot be exactly named cannot be exactly hashed, cited, or re-verified. Downgrading this condition would poison every digest downstream.
+
+\paragraph{Fail-closed behavior.} The board fails. Because the checker continues collecting diagnostics after this code fires, the report may contain further findings, but no consumer will act on them: the clean predicate is already false, simulation refuses the board, and the adapter refuses the board. There is no repair path inside the checker; the caller must construct a corrected board, which by construction has a different digest.
+
+\subsection{\texttt{PCBA8-MDL-002}: duplicate reference}\label{ch07:sub:mdl002}
+
+\paragraph{Purpose.} References are the keys of the whole board namespace: nets name their endpoints by component reference, test points name nets, feedback declarations name components and calibrations. If two elements of the same group share a reference, every such link becomes ambiguous, and any checker or simulator that ``resolves'' the link would be silently choosing one of two meanings. \texttt{PCBA8-MDL-002} makes the ambiguity a hard defect instead.
+
+\paragraph{Trigger condition.} For each of the six reference groups independently---board ports, components, nets, test points, calibrations, feedback declarations---the checker counts occurrences of each reference and emits one diagnostic per value that occurs more than once, with subject \texttt{\emph{group}:\emph{value}}. Duplication is judged within a group; the same string appearing once as a net reference and once as a calibration reference is not a duplicate, because the groups are disjoint namespaces.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:mdl002}
+Illustrative only. During a refactor, a component list is concatenated from two fragments and both fragments contain a component with reference \texttt{cjt\_main}. Nets in the merged board attach endpoints to \texttt{cjt\_main}. The checker emits \texttt{PCBA8-MDL-002} with subject \texttt{component:cjt\_main}. Note what the checker does \emph{not} do: it does not pick the first, the last, or the ``most compatible'' of the two components and continue; each duplicate is a standing error until the board is rebuilt.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Silent disambiguation is precisely the class of hidden repair the candidate's evidence discipline forbids. A duplicate key does not have a best reading; it has two readings, and any choice between them is new design intent that must come from the board author, not from the checker.
+
+\paragraph{Fail-closed behavior.} The board fails. Downstream resolution maps in the same run are built with first-occurrence semantics purely so that diagnostic collection can continue and report additional independent defects; those maps are never used to produce a clean verdict, because the error already blocks it.
+
+\section{Semantic resolution: the \texttt{SEM} family}\label{ch07:sec:sem}
+
+The semantics family connects each component instance to its contract in the closed component catalog. A contract fixes the component's port list (directions, signal kinds, units), its exact parameter schema, its required state bindings, and its semantic-profile string. The two \texttt{SEM} codes police the existence and the exactness of that connection.
+
+\subsection{\texttt{PCBA8-SEM-001}: unknown component kind}\label{ch07:sub:sem001}
+
+\paragraph{Purpose.} The candidate's component vocabulary is closed: the catalog declares the kinds \texttt{pass}, \texttt{scale}, \texttt{cjt}, \texttt{decision\_threshold}, \texttt{mux}, \texttt{fuse}, \texttt{delay}, and \texttt{finite\_transition}, each with a versioned semantic profile. A component whose kind is not in the catalog has no contract, hence no ports, no parameter schema, and no executable meaning. \texttt{PCBA8-SEM-001} rejects such components rather than guessing.
+
+\paragraph{Trigger condition.} For each component, sorted by reference and kind, the checker looks up the kind in the closed catalog. If the lookup fails, it emits \texttt{PCBA8-SEM-001} with subject \texttt{component:\emph{ref}} and a message quoting the unknown kind, and it \emph{skips all further component-level checks for that component}: no parameter, state-binding, or profile checks are attempted, because there is no contract to check against.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:sem001}
+Illustrative only. A board author, anticipating a future capacitor-like element, declares a component of kind \texttt{capacitor}. The kind is documented in prose in the source book but is not in the candidate's closed catalog (Chapter~\ref{ch07:sec:boundary}; the stateful-device gap is an explicitly open obligation). The checker emits \texttt{PCBA8-SEM-001} for the component. Every net endpoint that names one of the component's would-be ports will additionally fail in the net family, since no contract port can be resolved.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. An unknown kind is not a stylistic issue; it is a component with no semantics at all. Accepting it would make the board's meaning depend on whatever a future catalog might say, which inverts the direction of authority: boards must be judged against the catalog that exists, not against one that might.
+
+\paragraph{Fail-closed behavior.} The board fails, and the skip rule ensures the checker never fabricates a partial judgment of an unknown component. Absence from the catalog is treated as absence of meaning, never as permission.
+
+\subsection{\texttt{PCBA8-SEM-002}: unresolved semantics}\label{ch07:sub:sem002}
+
+\paragraph{Purpose.} Even when a kind is known, the component instance must claim \emph{exactly} the semantic profile its contract declares---for example \texttt{pcba8.cjt.reference.v0} for a \texttt{cjt}---so that every trace event and certificate downstream carries an unambiguous versioned statement of which semantics were executed. \texttt{PCBA8-SEM-002} fires when that claim is absent, wrong, or contradicted by extra semantic baggage.
+
+\paragraph{Trigger condition.} The code fires in two situations. First, when a component's semantic-profile string differs from the exact profile string in its contract; the message quotes both. Second, when a component that is \emph{not} of kind \texttt{finite\_transition} nevertheless carries an attached finite-transition table; a transition table on a non-finite component is semantic content the component's contract does not license.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:sem002}
+Illustrative only. A migration script upgrades boards to a hypothetical future profile and rewrites every profile string to \texttt{pcba8.cjt.reference.v1}. The engine's catalog still declares \texttt{pcba8.cjt.reference.v0}. Every \texttt{cjt} on the migrated board receives \texttt{PCBA8-SEM-002}. The defect is real even though the component parameters are untouched: a profile string is a versioned semantic commitment, and the candidate refuses to execute v0 semantics while labeling the results v1.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Profile strings enter trace events, measurement scopes, and adapter certificates; a mismatch here would let an artifact claim semantics that were never executed, which is a provenance corruption rather than a cosmetic defect.
+
+\paragraph{Fail-closed behavior.} The board fails. There is no ``closest profile'' resolution and no default: the profile either matches exactly or the component's semantics are unresolved.
+
+\section{Typed parameters: the \texttt{PAR} family}\label{ch07:sec:par}
+
+Each contract declares an exact parameter schema: a set of keys, each with a type (finite decimal or string), optional bounds or choice sets, and a required flag. The three \texttt{PAR} codes cover the three ways an instance can disagree with its schema: a key the schema does not know, a required key the instance lacks, and a value the schema rejects.
+
+\subsection{\texttt{PCBA8-PAR-001}: unknown parameter}\label{ch07:sub:par001}
+
+\paragraph{Purpose.} A parameter key outside the contract is unexecutable configuration: no transfer rule reads it, no bound propagation uses it, and no simulator honors it. Accepting it silently would let boards accumulate dead knobs that readers reasonably but wrongly believe have effect. \texttt{PCBA8-PAR-001} makes every such knob a defect.
+
+\paragraph{Trigger condition.} For each component with a resolved contract, the checker computes the set difference between the instance's parameter keys and the contract's declared keys, and emits one diagnostic per unknown key, in sorted order, with subject \texttt{component:\emph{ref}.parameter:\emph{key}}.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:par001}
+Illustrative only. A \texttt{scale} component is given parameters \texttt{factor}, \texttt{ceiling}, and \texttt{gain}. The contract declares only \texttt{factor} and \texttt{ceiling}; the author intended \texttt{gain} as a synonym for \texttt{factor}. The checker emits \texttt{PCBA8-PAR-001} for \texttt{gain}. It does not alias, coalesce, or warn-and-ignore: the author's intent is recoverable only by the author.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. The alternative---ignoring unknown keys---is exactly how configuration drift becomes invisible. A key that does nothing must not survive on a board whose purpose is to be an exact, replayable description.
+
+\paragraph{Fail-closed behavior.} The board fails. Unknown keys are never forwarded to simulation, so there is no state in which an unrecognized parameter influences or fails to influence an execution ambiguously.
+
+\subsection{\texttt{PCBA8-PAR-002}: missing parameter}\label{ch07:sub:par002}
+
+\paragraph{Purpose.} Required parameters are the ones the reference semantics read unconditionally: a \texttt{cjt} without \texttt{beta}, \texttt{saturation}, and \texttt{cutoff} has no defined transfer behavior, and a \texttt{fuse} without \texttt{threshold} and \texttt{action} has no defined trip rule. \texttt{PCBA8-PAR-002} guarantees that a clean board never reaches the simulator with a hole where a required value should be.
+
+\paragraph{Trigger condition.} For each contract-declared parameter with the required flag, in sorted key order, the checker emits the code if the key is absent from the instance's parameters. Optional keys are exempt; supplying them subjects them to \texttt{PCBA8-PAR-003} validation, and omitting them is legal.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:par002}
+Illustrative only. A board template instantiates a \texttt{delay} component but the templating layer fails to fill the \texttt{initial} parameter, which the contract requires because the unit delay must emit a defined value at tick zero. The checker emits \texttt{PCBA8-PAR-002} with subject \texttt{component:\emph{ref}.parameter:initial}. Without this check, the simulator would face an undefined tick-zero output; with it, the board never reaches the simulator.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. There are no engine-side defaults for required parameters, by design: a default is a design decision, and design decisions live on the board where they are hashed, not in the engine where they would be invisible.
+
+\paragraph{Fail-closed behavior.} The board fails; the missing value is never synthesized. This is the DRC-level face of the general rule that the candidate does not repair inputs.
+
+\subsection{\texttt{PCBA8-PAR-003}: invalid parameter}\label{ch07:sub:par003}
+
+\paragraph{Purpose.} A present parameter must satisfy its rule exactly. The candidate's arithmetic discipline is strict---finite decimals only, under one immutable decimal context---and the contract may impose bounds (a minimum, a maximum, possibly exclusive) or a closed choice set for strings. \texttt{PCBA8-PAR-003} is the single code for every value-level violation.
+
+\paragraph{Trigger condition.} For a decimal-typed rule, the code fires when the value is not a finite \texttt{Decimal}---binary floats are rejected outright, as are infinities and NaN---or when it lies below the declared minimum, or at or above an exclusive maximum, or above an inclusive maximum. For a string-typed rule, it fires when the value is not a nonempty string, or is outside the declared choice set. Additionally, on a \texttt{cjt} whose \texttt{saturation} and \texttt{cutoff} are both finite decimals, the code fires when \texttt{cutoff} is not strictly below \texttt{saturation}; this cross-parameter check guards the coherence of the piecewise transfer regions.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:par003}
+Illustrative only. An author encodes an idealized amplification stage by setting a \texttt{cjt} gain \texttt{beta} to positive infinity, mirroring an idealization that the audited source book itself uses and then disclaims. The value is not a finite decimal, so the checker emits \texttt{PCBA8-PAR-003} with the message that numeric parameters require a finite \texttt{Decimal} and that binary floats and non-finite values are rejected. The known-fault Cognitive Safety Board fixture of Chapter~11 exercises exactly this rejection; here it suffices to note that the rejection is unconditional.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Non-finite and float-typed values would silently change meaning under decimal arithmetic, and out-of-range values would make the conservative bound propagation of Section~\ref{ch07:sec:classes} unsound. Both are integrity failures, not stylistic ones.
+
+\paragraph{Fail-closed behavior.} The board fails. No clamping, rounding, or coercion is performed; the recorded value is judged exactly as written.
+
+\section{Typed state bindings: the \texttt{STATE} family}\label{ch07:sec:state}
+
+Components that carry CAS-semantic annotations do so through \emph{state bindings}: named slots (for a \texttt{cjt}, the slots \texttt{cause}, \texttt{bias}, and \texttt{effect}) that must be filled with exact typed \texttt{CasState} values drawn from the candidate's type system (Chapter~4). The \texttt{STATE} codes are the exact analogue of the \texttt{PAR} codes, transposed from configuration values to semantic annotations, and their existence enforces a central design commitment: semantic labels are typed data with a schema, not free-form tags.
+
+\subsection{\texttt{PCBA8-STATE-001}: unknown state binding}\label{ch07:sub:state001}
+
+\paragraph{Purpose.} A binding key the contract does not declare is a semantic annotation with no reader. Permitting it would create a shadow annotation layer---labels that look load-bearing but bind to nothing.
+
+\paragraph{Trigger condition.} For each component with a resolved contract, the checker computes the set difference between the instance's state-binding keys and the contract's required binding keys and emits one diagnostic per unknown key, sorted, with subject \texttt{component:\emph{ref}.state:\emph{key}}.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:state001}
+Illustrative only. An author adds a binding \texttt{mood} to a \texttt{pass} component to record an informal impression of the signal's affective tone. The \texttt{pass} contract declares no state bindings. The checker emits \texttt{PCBA8-STATE-001}. If the annotation matters, it belongs in a typed extension of the contract vocabulary, where it would be versioned and hashed; it does not belong in an unread side channel.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Untyped semantic residue is precisely the drift vector the candidate's typed model exists to eliminate.
+
+\paragraph{Fail-closed behavior.} The board fails; the binding is never interpreted.
+
+\subsection{\texttt{PCBA8-STATE-002}: missing state binding}\label{ch07:sub:state002}
+
+\paragraph{Purpose.} Where a contract requires a binding, the binding is part of the component's meaning: a \texttt{cjt} without a declared \texttt{cause} state is not a semantically annotated junction but a bare arithmetic gadget, and the candidate refuses to blur that distinction.
+
+\paragraph{Trigger condition.} For each key in the contract's required binding set, sorted, the code fires when the instance's bindings lack the key.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:state002}
+Illustrative only. A board is assembled by cloning a \texttt{cjt} from an example and deleting its bindings with the intent to fill them in later. The intent is forgotten. The checker emits \texttt{PCBA8-STATE-002} once per missing required key. The board cannot pass in the half-annotated state, so ``later'' cannot silently become ``never'' on a clean board.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Missing required semantics is a completeness failure of the board as a semantic document, independent of whether any simulation would numerically succeed.
+
+\paragraph{Fail-closed behavior.} The board fails; no default state is assumed, since a default semantic annotation would be an engine-authored semantic claim.
+
+\subsection{\texttt{PCBA8-STATE-003}: invalid state binding}\label{ch07:sub:state003}
+
+\paragraph{Purpose.} Bindings must be \emph{exact} typed values. The type system's tagged-value discipline (integer $1$, Boolean true, and string \texttt{"true"} are everywhere distinct) extends to states: a string that happens to spell a state's name is not a state.
+
+\paragraph{Trigger condition.} For each required binding key that is present, the code fires when the bound value is not of the exact \texttt{CasState} type---subclasses included; the check is on exact type identity, not on interface compatibility.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:state003}
+Illustrative only. A JSON import path deserializes state bindings as plain strings, so a \texttt{cjt}'s \texttt{cause} slot holds the string \texttt{"C8"} rather than a typed state value. The checker emits \texttt{PCBA8-STATE-003} with the message that the binding must be a typed \texttt{CasState}. The import path, not the checker, must be fixed: the deserializer has to reconstruct exact values, because nothing downstream will.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Accepting look-alike values would reintroduce the label/identity conflation that the semantic-identity discipline of Chapter~3 exists to prevent.
+
+\paragraph{Fail-closed behavior.} The board fails; there is no coercion from strings or tuples into states.
+
+\section{Bias coherence: \texttt{PCBA8-BIAS-001}}\label{ch07:sec:bias}
+
+\subsection{\texttt{PCBA8-BIAS-001}: bias incoherent}\label{ch07:sub:bias001}
+
+\paragraph{Purpose.} The candidate's domain system carries a structural precedence order over processing domains, and the \texttt{cjt} component's semantics distinguish a \emph{cause} input from a \emph{bias} input: the bias is the standing condition against which the cause fires. The modeling convention enforced here is that a bias must not come from a strictly lower-precedence domain than its cause. \texttt{PCBA8-BIAS-001} makes a violation of that convention a board defect rather than a silent oddity. The code checks a structural coherence property of the annotation pair; it does not assert that any cognitive system exhibits domain precedence.
+
+\paragraph{Trigger condition.} On each \texttt{cjt} whose \texttt{cause} and \texttt{bias} bindings are both present and exactly typed, the checker compares domain precedence ranks and fires when the bias domain's rank is strictly greater (lower precedence) than the cause domain's rank. The message quotes both domain values. The check is deliberately conditional on well-typed bindings: if either binding already failed the \texttt{STATE} family, no incoherence claim is stacked on top of it.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:bias001}
+Illustrative only. An author annotates a \texttt{cjt} with a cause in a Principled-tier domain and a bias in an Operational-tier domain, intending to model an operational habit modulating a principled trigger. Under the domain order this places the bias strictly below the cause, and the checker emits \texttt{PCBA8-BIAS-001}. Whether the author's modeling intuition is right is a research question outside the checker; what the checker enforces is that the board either respects the declared convention or is revised together with an explicit change to the convention---not quietly at odds with it.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. The precedence convention is part of the semantic contract the board claims by using \texttt{cjt} components with typed bindings; an incoherent pair is a self-contradiction inside the board's own declared vocabulary.
+
+\paragraph{Fail-closed behavior.} The board fails. The checker does not swap the bindings, reinterpret the domains, or downgrade the annotation; only the author can decide which of the two annotations was wrong.
+
+\section{Typed connectivity: the \texttt{NET} family}\label{ch07:sec:net}
+
+Nets are the board's wiring: each net is a set of endpoints, each endpoint naming an owner (a component reference or the distinguished board endpoint) and a port. The nine \texttt{NET} codes jointly enforce a single discipline: every net resolves to exactly one typed driver and at least one load, every endpoint is real and uniquely placed, and the types agree end to end. Driver-hood is directional: a component's \emph{output} port drives, a component's \emph{input} port loads, and---dually---a \emph{board input} port drives (it injects an external sample into the board) while a \emph{board output} port loads.
+
+\subsection{\texttt{PCBA8-NET-001}: unknown endpoint owner}\label{ch07:sub:net001}
+
+\paragraph{Purpose.} An endpoint that names a nonexistent component is a wire into nothing. The code exists so that dangling references are located precisely, at the net and endpoint where they occur.
+
+\paragraph{Trigger condition.} While resolving each endpoint of each net (nets sorted by reference), the checker fires this code when the endpoint's owner reference is neither the distinguished board endpoint nor a declared component, with subject \texttt{net:\emph{ref}.endpoint:\emph{owner}.\emph{port}}.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:net001}
+Illustrative only. A component \texttt{filter\_a} is deleted during cleanup, but one net still lists endpoint \texttt{filter\_a.output}. The checker emits \texttt{PCBA8-NET-001} at that endpoint. Because the endpoint cannot be resolved, it also cannot be counted as a driver; if it was the net's only driver, \texttt{PCBA8-NET-003} will additionally record the driverless state of the net.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. A dangling wire is a structural contradiction between the net list and the component list; there is no conservative reading of it.
+
+\paragraph{Fail-closed behavior.} The board fails; the unresolved endpoint contributes nothing to driver or load counting, so no phantom connectivity is created.
+
+\subsection{\texttt{PCBA8-NET-002}: unknown port}\label{ch07:sub:net002}
+
+\paragraph{Purpose.} Even with a real owner, the named port must exist: on the board side it must be a declared board port, and on the component side it must be a port of the component's contract. Port lists are part of the closed catalog, so this code is where wiring meets the catalog's authority.
+
+\paragraph{Trigger condition.} The code fires when an endpoint names the board endpoint with a port reference that is not a declared board port, or names an existing component whose contract has no port of that name; the message distinguishes the two cases and quotes the component kind in the latter.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:net002}
+Illustrative only. An author wires a net to \texttt{mux\_1.sel}, abbreviating the port name; the \texttt{mux} contract declares the port as \texttt{select}. The checker emits \texttt{PCBA8-NET-002} with the message that the component kind \texttt{mux} has no such port. No fuzzy matching is attempted---\texttt{sel} is not ``close enough,'' it is absent.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Port identity is the unit of typed connectivity; guessing a port would amount to the checker rewiring the board.
+
+\paragraph{Fail-closed behavior.} The board fails; the endpoint is excluded from resolution just as in \texttt{PCBA8-NET-001}, with the same secondary-diagnostic consequences.
+
+\subsection{\texttt{PCBA8-NET-003}: invalid driver count}\label{ch07:sub:net003}
+
+\paragraph{Purpose.} The candidate's execution semantics assume single-driver nets: each net's value at each tick is the value of its one driver. Zero drivers means the net has no source of value; two or more means contention with no resolution rule. Both are excluded at the DRC rather than ``resolved'' at runtime.
+
+\paragraph{Trigger condition.} After resolving a net's endpoints, the checker partitions them into drivers and loads by port direction (component outputs and board inputs drive). The code fires when the number of resolved drivers differs from exactly one; the message reports the count found.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:net003}
+Illustrative only. Two \texttt{scale} components' outputs are wired onto one net in an attempt to model additive superposition of two influences. The checker emits \texttt{PCBA8-NET-003} with a driver count of $2$. The candidate has no implicit summing junction; if superposition is intended, it must appear as an explicit component with declared semantics, not as a wiring pun.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Any runtime resolution of contention (last-writer-wins, summation, nondeterministic choice) would be an undeclared semantic rule---exactly the category of hidden behavior the candidate exists to eliminate.
+
+\paragraph{Fail-closed behavior.} The board fails. When the count is not one, the checker also skips the driver-relative type comparisons (\texttt{NET-005}, \texttt{NET-006}) for that net, since there is no unique driver type to compare against; the driver-count error stands on its own.
+
+\subsection{\texttt{PCBA8-NET-004}: missing net load}\label{ch07:sub:net004}
+
+\paragraph{Purpose.} A net with a driver but no load is a value computed and discarded---dead wiring. On an artifact whose purpose is exact accountability, dead wiring is not harmless decoration; it is either a mistake (a forgotten connection) or unexecutable intent, and both deserve a defect.
+
+\paragraph{Trigger condition.} The code fires when a net's resolved endpoints include no load---no component input port and no board output port.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:net004}
+Illustrative only. An author adds a probe-like net attached only to a \texttt{cjt}'s \texttt{effect} output, planning to attach a test point later, and forgets. The net has one driver and zero loads. The checker emits \texttt{PCBA8-NET-004} with the message that the net has no input load or board output. Notably, the correct repair here is often exactly what the author intended: attach a test point's net properly or route the value to a board output---either of which makes the value observable and accountable.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Tolerating unconsumed values would create a class of board content invisible to simulation coverage: values that exist in no trace and no measurement.
+
+\paragraph{Fail-closed behavior.} The board fails; the dangling computation never enters a trace where its absence of consumers would be undetectable.
+
+\subsection{\texttt{PCBA8-NET-005}: signal kind mismatch}\label{ch07:sub:net005}
+
+\paragraph{Purpose.} Ports carry a signal kind (for example activation, decision, or finite-state), and the type system treats these as disjoint carriers: a Boolean decision is not a small activation, and a finite state is not a number. \texttt{PCBA8-NET-005} enforces kind agreement between a net's driver and each of its loads.
+
+\paragraph{Trigger condition.} For each net with exactly one resolved driver, and for each resolved load on that net, the code fires when the load port's signal kind is not identical to the driver port's signal kind; the message names both kinds and the offending endpoint.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:net005}
+Illustrative only. An author wires a \texttt{decision\_threshold} component's \texttt{decision} output (signal kind decision, Boolean-valued) directly into a \texttt{scale} component's \texttt{input} port (signal kind activation, decimal-valued), intending ``true acts like one.'' The checker emits \texttt{PCBA8-NET-005}. The intended coercion is a semantic rule, and if wanted it must be a declared component (for example a \texttt{mux} selecting between explicit constants), not an implicit cast buried in a wire.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Implicit cross-kind coercion is a classic source of silent meaning change; the tagged-value discipline of the type system would be vacuous if wiring could launder kinds.
+
+\paragraph{Fail-closed behavior.} The board fails; no runtime conversion exists to reach anyway, since the simulator validates value-to-port kind agreement independently.
+
+\subsection{\texttt{PCBA8-NET-006}: unit mismatch}\label{ch07:sub:net006}
+
+\paragraph{Purpose.} Orthogonally to kind, ports carry units, and unit agreement is checked separately so that a mismatch is reported for what it is. A dimensionless activation and a unit-bearing activation must not be conflated even though both are decimal-valued.
+
+\paragraph{Trigger condition.} For each net with exactly one resolved driver, and each load, the code fires when the load port's unit is not identical to the driver's unit; driver and load units are both quoted.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:net006}
+Illustrative only. A board mixes two conventions: one subsystem expresses activations on a normalized dimensionless scale, another was drafted with a unit-bearing activation port. Wiring them directly produces \texttt{PCBA8-NET-006} at each crossing net. The defect is a genuine modeling decision surfaced early: either one subsystem is re-expressed, or an explicit conversion stage with declared semantics is inserted. The checker performs no unit conversion itself---conversion factors are design content, not checker content.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Silent unit mixing is among the most empirically damaging classes of engineering defect precisely because each side remains locally plausible; the whole point of carrying units in the type system is to make the crossing loud.
+
+\paragraph{Fail-closed behavior.} The board fails; values never flow across a unit-mismatched net in any execution because no clean report can be produced for the board.
+
+\subsection{\texttt{PCBA8-NET-007}: port multiply connected}\label{ch07:sub:net007}
+
+\paragraph{Purpose.} Each endpoint---each (owner, port) pair---may appear on at most one net. A port on two nets would make the port's value ambiguous (for an input) or create hidden fan-out identity (for an output) in a way the board text does not declare. Fan-out is expressed within one net (one driver, many loads), never by enrolling a port in several nets.
+
+\paragraph{Trigger condition.} The checker records, for every endpoint, the list of nets on which it appears. The code fires once per endpoint whose list has more than one entry, sorted by owner and port, quoting the net references involved.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:net007}
+Illustrative only. During a merge of two board fragments, the shared component \texttt{gate\_1} ends up with its \texttt{input} port listed on a net from each fragment. The checker emits \texttt{PCBA8-NET-007} with both net references. The two fragments each had a coherent local story about what feeds \texttt{gate\_1}; the merged board has two stories, and the checker declines to pick one.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. This is the wiring-level analogue of \texttt{PCBA8-MDL-002}: a key (the endpoint) bound twice, with no principled tie-break.
+
+\paragraph{Fail-closed behavior.} The board fails; endpoint-to-net resolution retains only a first occurrence for continued diagnostic collection, and that resolution never supports a clean verdict.
+
+\subsection{\texttt{PCBA8-NET-008}: required port unconnected}\label{ch07:sub:net008}
+
+\paragraph{Purpose.} Contracts and board declarations mark ports as required when the semantics cannot execute without them: a \texttt{cjt} with an unconnected \texttt{cause} has no defined effect, and a required board input with no net feeds nothing. \texttt{PCBA8-NET-008} guarantees that a clean board's execution never encounters a port with no value and no declared default.
+
+\paragraph{Trigger condition.} The code fires for each required board port whose endpoint appears on no net, and for each required component port (per the contract) whose endpoint appears on no net; subjects distinguish \texttt{board-port:\emph{ref}} from \texttt{component:\emph{ref}.port:\emph{ref}}.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:net008}
+Illustrative only. An author instantiates a \texttt{mux} and wires \texttt{when\_true} and \texttt{when\_false} but forgets the \texttt{select} port. The contract marks \texttt{select} required. The checker emits \texttt{PCBA8-NET-008} for the port. Had the code not fired, simulation would reach the \texttt{mux} with no selector value; instead the defect is caught while it is still a wiring omission rather than a runtime mystery.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. An unconnected required input is an execution hole. The candidate's rule that required inputs must connect \emph{or} have an executable default in the selected simulator profile is enforced conservatively: the current profile declares no such defaults, so connection is the only satisfying condition.
+
+\paragraph{Fail-closed behavior.} The board fails; the simulator additionally cross-checks at admission that its input-sample set equals the connected board inputs, so this condition is doubly guarded.
+
+\subsection{\texttt{PCBA8-NET-009}: invalid signal/unit pair}\label{ch07:sub:net009}
+
+\paragraph{Purpose.} Not every (signal kind, unit) combination is meaningful: the candidate maintains a closed admissibility table of canonical pairs (for example, decision signals are dimensionless; finite-state signals carry no numeric unit). \texttt{PCBA8-NET-009} rejects port declarations outside the table---including, defensively, any noncanonical pair that would ever appear in the component catalog itself.
+
+\paragraph{Trigger condition.} The code fires for each declared board port whose (signal kind, unit) pair is not in the closed admissibility table, and for each component-contract port, as instantiated on the board, whose pair is not in the table; the latter case is a self-audit clause whose message states that the closed catalog contains a noncanonical pair.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:net009}
+Illustrative only. A board declares an input port with signal kind decision and a non-dimensionless unit, the author having copied a unit field from an adjacent activation port. The pair is outside the admissibility table, and the checker emits \texttt{PCBA8-NET-009} for the board port. The defensive clause matters for a different audience: if a future catalog revision ever introduced an incoherent pair, every board using the affected component kind would fail loudly rather than executing under an incoherent type.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. The admissibility table is part of the type system's definition of what a port \emph{is}; a pair outside it is not a port with an unusual taste but a non-value of the port type.
+
+\paragraph{Fail-closed behavior.} The board fails. The self-audit clause means even a defect in the engine's own catalog surfaces as a board-failing diagnostic rather than as silently accepted typing.
+
+\section{Probe integrity: the \texttt{TP} family}\label{ch07:sec:tp}
+
+Test points are the board's declared observation sites: each names a net and (for executable use) a calibration reference, and each may be marked safety-critical. The three \texttt{TP} codes enforce that observation sites are real, that safety-relevant paths have them, and that safety marking is explicit. The recurring theme is that \emph{observability is declared, never assumed}: a probe's existence is a board fact with obligations, and a safety label is an explicit commitment, not an inference.
+
+\subsection{\texttt{PCBA8-TP-001}: unknown test-point net}\label{ch07:sub:tp001}
+
+\paragraph{Purpose.} A test point observing a nonexistent net observes nothing; worse, it \emph{appears} to add observability while adding none. The code keeps the board's observation claims honest.
+
+\paragraph{Trigger condition.} For each test point, sorted by reference, the code fires when the named net reference is not among the board's nets, with subject \texttt{test-point:\emph{ref}}. When it fires, the remaining calibration checks for that point are skipped, since they would be judgments about an observation site that does not exist.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:tp001}
+Illustrative only. A net is renamed from \texttt{net\_effect} to \texttt{net\_effect\_main} during a cleanup, and one test point retains the old name. The checker emits \texttt{PCBA8-TP-001} quoting the stale reference. If that test point was also the safety probe for a safety-critical path, the path is now uncovered, and \texttt{PCBA8-TP-002} will additionally fire on the affected net---the two diagnostics jointly describing both the broken pointer and its safety consequence.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Phantom observability is strictly worse than declared absence of observability, because it defeats the reader's audit.
+
+\paragraph{Fail-closed behavior.} The board fails; the phantom point contributes nothing to safety-coverage accounting.
+
+\subsection{\texttt{PCBA8-TP-002}: missing safety test point}\label{ch07:sub:tp002}
+
+\paragraph{Purpose.} Safety-critical paths must be observable. The candidate's rule is structural: every net that is declared safety-critical, and every net driven by an output port of a safety-critical component, requires at least one test point. A safety mechanism whose activity cannot be observed at a declared, calibrated site would be unauditable by construction.
+
+\paragraph{Trigger condition.} The checker computes the required-net set as the union of (i) nets marked safety-critical and (ii) nets attached to output ports of components marked safety-critical (resolved through the contract's port list). For each required net, sorted, the code fires when no test point names that net.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:tp002}
+Illustrative only. A board contains a safety-critical \texttt{fuse}; its \texttt{output} port drives a net that carries the possibly-blocked signal onward, but the author placed a probe only upstream of the fuse. The output net is in the required set and has no test point, so the checker emits \texttt{PCBA8-TP-002} for it. The placement matters: observing only the fuse's input would show what the fuse receives, never whether it blocked---precisely the observation the safety claim would need.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. This code encodes a governance stance, not merely hygiene: the candidate refuses to let a board describe a safety mechanism while omitting the instrumentation that could ever ground a claim about it. A probe's presence still establishes nothing about safety (see the boundary in Section~\ref{ch07:sec:boundary}); its \emph{absence}, however, forecloses even the possibility of evidence.
+
+\paragraph{Fail-closed behavior.} The board fails; there is no waiver mechanism, because an unobservable safety path is exactly the situation in which a waiver would be least defensible.
+
+\subsection{\texttt{PCBA8-TP-003}: safety test point not marked}\label{ch07:sub:tp003}
+
+\paragraph{Purpose.} Coverage of a safety-critical net must itself be explicit: at least one test point on such a net must carry the safety-critical mark. The mark is not decorative; it declares that this probe is load-bearing for the safety path, which future tooling and reviewers can rely on and which cannot be quietly withdrawn by deleting an ``ordinary'' probe.
+
+\paragraph{Trigger condition.} For each net in the required set of Section~\ref{ch07:sub:tp002} that \emph{does} have test points, the code fires when none of those points carries an explicit safety-critical mark of Boolean true; the message states that a safety-critical probe must explicitly carry the mark.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:tp003}
+Illustrative only. A safety-critical net has two probes, both created by a generic instrumentation script that leaves the safety flag at its default false. Coverage exists numerically, but no probe has accepted the safety role. The checker emits \texttt{PCBA8-TP-003} for the net. The repair is one explicit flag---small in the file, significant in the record: it converts incidental coverage into declared coverage.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Implicit safety coverage is fragile under maintenance; any refactor that removes a probe nobody marked as critical would silently strip a safety path of observation. The explicit mark moves that risk from silent to impossible.
+
+\paragraph{Fail-closed behavior.} The board fails until some probe on the net is explicitly marked. The checker never promotes a probe on its own initiative.
+
+\section{Calibration integrity: the \texttt{CAL} family}\label{ch07:sec:cal}
+
+Calibration records are the board's declared measurement metadata: versioned records carrying a profile digest, instrument and protocol identities, an uncertainty, a measurement kind, and a unit. The four \texttt{CAL} codes enforce their existence, well-formedness, unit compatibility, and attachment. One rule towers over the family and is restated here before the codes, because every code below is partly in its service:
+
+\begin{ruleenv}[Locally asserted calibration is structural]\label{ch07:rule:cal}
+A calibration record constructed on a board is structural, test-only metadata. It can make a board \emph{well-formed}; it cannot make any measurement \emph{authenticated}. In particular, no locally asserted calibration record can confer Evidence-Packet eligibility on anything, and a record that claims packet eligibility for itself is by that very claim invalid.
+\end{ruleenv}
+
+\subsection{\texttt{PCBA8-CAL-001}: unknown calibration}\label{ch07:sub:cal001}
+
+\paragraph{Purpose.} References to calibration records must resolve. This code covers both consumers of calibrations on a board: test points (which name a calibration for their observations) and feedback declarations (which must cite an existing \emph{dimensionless} calibration for their gain bound---a gain is a ratio, and a unit-bearing gain calibration is a category mistake).
+
+\paragraph{Trigger condition.} The code fires when a test point's named calibration reference does not resolve to any calibration on the board; and it fires on a feedback declaration when the declaration's calibration reference either does not resolve or resolves to a record whose unit is not the dimensionless unit, with the message that feedback gain requires an existing dimensionless calibration.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:cal001}
+Illustrative only. A calibration record \texttt{cal\_probe\_v2} is renamed \texttt{cal\_probe\_v3} while a test point still cites the old name. The checker emits \texttt{PCBA8-CAL-001} at the test point. Separately, a feedback declaration cites a calibration whose unit was copied from a signal-bearing probe; even though the record exists, the unit disqualifies it for gain duty and the same code fires with the dimensionless-calibration message.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. A dangling calibration reference converts a declared-instrumentation claim into an empty pointer; the feedback clause additionally protects the gain analysis of Section~\ref{ch07:sec:fbk} from resting on typed nonsense.
+
+\paragraph{Fail-closed behavior.} The board fails; no default or substitute calibration is ever selected.
+
+\subsection{\texttt{PCBA8-CAL-002}: invalid calibration}\label{ch07:sub:cal002}
+
+\paragraph{Purpose.} A calibration record that exists must be internally complete and well-typed. This code aggregates all record-level defects into one diagnostic per record, with a semicolon-joined message enumerating every problem found, so a defective record is reported once, fully.
+
+\paragraph{Trigger condition.} For each calibration record, the checker accumulates problems: blank reference or version; a profile digest that is not exactly 64 uppercase hexadecimal digits; an untyped measurement kind; an untyped unit; blank instrument or protocol identity; an uncertainty that is not a finite non-negative decimal; and---per Rule~\ref{ch07:rule:cal}---a packet-eligibility flag set true, with the message that self-attested calibration metadata is structural/test-only and cannot confer packet eligibility. If the problem list is nonempty, the code fires once with the joined list.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:cal002}
+Illustrative only. An author drafts a calibration record with instrument identity left as an empty string (``to fill in after the bench session'') and, misunderstanding the flag, sets packet eligibility true so that ``the data will count.'' The checker emits \texttt{PCBA8-CAL-002} listing both problems. The second is the important one: eligibility is precisely what a local record cannot self-assert. Authenticated eligibility, if it ever exists, is conferred by an external evidence process, not by a field on the board.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Each enumerated condition either breaks identity discipline (digest form, blank identities), breaks arithmetic discipline (uncertainty), or attempts privilege escalation (packet eligibility). None admits a lenient reading.
+
+\paragraph{Fail-closed behavior.} The board fails. The eligibility clause is the fail-closed form of Rule~\ref{ch07:rule:cal}: the flag is not ignored or reset; its very assertion is the defect.
+
+\subsection{\texttt{PCBA8-CAL-003}: calibration unit mismatch}\label{ch07:sub:cal003}
+
+\paragraph{Purpose.} A test point's calibration must speak the unit of the net it observes. A probe calibrated in one unit attached to a net carrying another would produce observations whose declared metadata contradicts their provenance.
+
+\paragraph{Trigger condition.} For each test point whose net exists, whose calibration reference resolves, and whose net has a resolved driver type, the code fires when the calibration record's unit is not identical to the net's unit (the unit of its driving port); both units are quoted.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:cal003}
+Illustrative only. A probe with a dimensionless calibration is moved from a normalized activation net to a unit-bearing net during a board revision. Nothing else changes; the calibration record is internally valid and the net is well-formed. Only the pairing is wrong, and \texttt{PCBA8-CAL-003} reports exactly that pairing. This separation of concerns is deliberate: record-level validity (\texttt{CAL-002}) and attachment-level compatibility (\texttt{CAL-003}) fail independently and are repaired independently.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Observations under mismatched units would be born self-contradictory; the simulator's measurement validation would also refuse them, but the defect belongs at design time, on the board, where the wrong attachment was made.
+
+\paragraph{Fail-closed behavior.} The board fails; no unit conversion is interposed (conversion is design content, as in \texttt{PCBA8-NET-006}).
+
+\subsection{\texttt{PCBA8-CAL-004}: missing test-point calibration}\label{ch07:sub:cal004}
+
+\paragraph{Purpose.} Every executable test point requires a versioned calibration reference. An uncalibrated probe would yield observations with no declared measurement metadata at all---no instrument identity, no protocol, no uncertainty---which the candidate's measurement schema cannot represent honestly.
+
+\paragraph{Trigger condition.} For each test point whose net exists, the code fires when the point's calibration reference is absent, with the message that every executable test point requires a versioned calibration reference. When it fires, the resolution and unit checks (\texttt{CAL-001}, \texttt{CAL-003}) are necessarily skipped for that point.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:cal004}
+Illustrative only. A board author sketches observation sites early, before deciding on calibration records, and leaves the calibration field empty on three points. All three receive \texttt{PCBA8-CAL-004}. The design pressure this creates is intentional: declaring \emph{where} to observe is inseparable, on a clean board, from declaring \emph{under what metadata} the observation would be made---even though, per Rule~\ref{ch07:rule:cal}, that metadata remains structural until authenticated evidence exists.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Metadata-free observation is the seed of untraceable data; the trace schema of Chapter~\ref{ch07:sec:boundary} (developed fully in the next chapter) has no slot for an observation of unstated provenance, and the DRC keeps it that way.
+
+\paragraph{Fail-closed behavior.} The board fails; simulation never runs, so no uncalibrated observation is ever emitted.
+
+\section{Feedback analysis: the \texttt{FBK} family}\label{ch07:sec:fbk}
+
+Feedback is where a wiring formalism either becomes disciplined or becomes dangerous. The candidate's stance is that \emph{every} cycle in the component graph must be declared, delayed, calibrated, and bounded---no exceptions, no inferred loops. The checker builds a directed graph over components (an edge from the driver of each net to every distinct component loading that net, with self-loops when a component drives itself), computes its strongly connected components with the classical linear-time algorithm \cite{tarjan}, and confronts the set of \emph{actual} cycles with the set of \emph{declared} feedback loops. Four codes partition the ways this confrontation can fail.
+
+\subsection{\texttt{PCBA8-FBK-001}: undeclared feedback}\label{ch07:sub:fbk001}
+
+\paragraph{Purpose.} A cycle that exists in the wiring but nowhere in the declarations is feedback the board author has not acknowledged---and therefore feedback with no declared delay, no gain bound, and no calibration. This is the single most important structural check in the family: it converts ``the author forgot about this loop'' from a latent runtime property into a named defect.
+
+\paragraph{Trigger condition.} After computing the cyclic strongly connected components (those with more than one member, or one member with a self-edge), the checker matches each against the component sets of the board's feedback declarations. The code fires for each cyclic component matched by no declaration, with a subject listing the cycle's sorted member references and the message that every graph cycle must have an exact, calibrated, sub-unity declaration.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:fbk001}
+Illustrative only. An author adds a ``context reinforcement'' path: the output of a downstream \texttt{scale} is routed back as the \texttt{bias} input of an upstream \texttt{cjt}. The wiring is locally reasonable; globally it closes a loop the author never thought of as feedback. The SCC computation finds the cycle $\{\texttt{cjt\_a}, \texttt{scale\_b}\}$; no declaration matches; \texttt{PCBA8-FBK-001} fires with subject \texttt{feedback-cycle:cjt\_a,scale\_b}. The board cannot pass until the author either removes the loop or declares it---with a delay element, a gain bound, and a calibration, per the remaining codes of this family.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Undeclared feedback is undeclared dynamics. Every guarantee the simulator offers (topological evaluation, unit-delay breaking) is conditioned on the loop inventory being complete; a single unacknowledged cycle voids the condition.
+
+\paragraph{Fail-closed behavior.} The board fails. The match required is \emph{exact} set equality between the declared component set and the SCC's member set---a declaration covering a subset or superset does not excuse the cycle (it instead fails its own checks below).
+
+\subsection{\texttt{PCBA8-FBK-002}: feedback without delay}\label{ch07:sub:fbk002}
+
+\paragraph{Purpose.} The reference simulator evaluates the non-delay portion of the graph in topological order and breaks cycles \emph{only} at declared unit-delay components. A declared loop must therefore contain exactly one delay component, and the declaration must name it: the delay is the point where the loop's present is severed from its past.
+
+\paragraph{Trigger condition.} For each feedback declaration, the code fires unless all of the following hold: the named delay component exists on the board; it is a member of the declared component set; its kind is \texttt{delay}; and it is the \emph{only} component of kind \texttt{delay} in the declared set. The message states that feedback requires exactly one declared unit-delay component inside the cycle.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:fbk002}
+Illustrative only. An author declares a loop over $\{\texttt{cjt\_a}, \texttt{scale\_b}\}$ with a gain bound and a calibration, but the loop's wiring is purely combinational---no delay element exists in it. The declaration names \texttt{scale\_b} as its delay component; \texttt{scale\_b} is not of kind \texttt{delay}, so \texttt{PCBA8-FBK-002} fires. Structurally, this scenario is a combinational cycle wearing a declaration as a costume; the code strips the costume. Conversely, a loop containing two delay elements also fails: the breaking point must be unique, or the loop's time semantics are ambiguous.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. A cycle without a unique declared delay has no well-defined synchronous semantics in the candidate's execution model; there is nothing conservative the simulator could do with it.
+
+\paragraph{Fail-closed behavior.} The board fails; the simulator independently treats a surviving combinational cycle as a hard error, but on a clean board that state is unreachable.
+
+\subsection{\texttt{PCBA8-FBK-003}: unsafe feedback gain}\label{ch07:sub:fbk003}
+
+\paragraph{Purpose.} Declared feedback must be contractive: the declared round-trip gain bound must be a finite decimal in $[0,1)$, and the \emph{derived} gain of every directed simple cycle through the declared component set---computed as the product of conservative per-component gain bounds---must both stay below one and stay within the declared bound. This is a conservative worst-case discipline, not a stability proof: it bounds what the declared parameters permit, and asserts nothing about any dynamical system beyond the software semantics.
+
+\paragraph{Trigger condition.} The code fires in two ways. First, at the declaration level, when the declared maximum round-trip gain is not a finite decimal, is negative, or is greater than or equal to one. Second, at the cycle level: for each directed simple cycle enumerated within the declared set, the checker multiplies per-component bounds---$1$ for \texttt{pass}, \texttt{delay}, \texttt{fuse}, and \texttt{mux}; the \texttt{factor} parameter for \texttt{scale}; the \texttt{beta} parameter for \texttt{cjt}---and fires when the product is at least one or exceeds the declared bound, quoting the cycle path and both numbers.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:fbk003}
+Illustrative only. A declared loop contains a \texttt{cjt} with \texttt{beta} of \texttt{1.6} and a \texttt{scale} with \texttt{factor} \texttt{0.5}, plus the delay; the author declares a bound of \texttt{0.9}. The derived product is $1.6 \times 0.5 \times 1 = 0.8$, within bounds---no diagnostic. A revision raises \texttt{beta} to \texttt{2.5}: the product becomes $1.25 \geq 1$ and \texttt{PCBA8-FBK-003} fires with the cycle path (for example \texttt{cjt\_a->scale\_b->delay\_c->cjt\_a}) and the numbers. Note the conservatism: the bound multiplies worst-case factors and ignores attenuating regions such as cutoff and saturation; a loop that would ``probably'' settle in practice still fails if its declared parameters permit expansion.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. A non-contractive declared loop makes every conservative bound downstream (notably threshold reachability) unsound; and a declaration claiming a bound its own parameters exceed is self-contradictory board text.
+
+\paragraph{Fail-closed behavior.} The board fails. Where a cycle's gain \emph{cannot be derived}---some member has no defined gain bound---the checker does not assume contractiveness; that case escalates to \texttt{PCBA8-SAF-003} (Section~\ref{ch07:sub:saf003}), never to a pass.
+
+\subsection{\texttt{PCBA8-FBK-004}: invalid feedback declaration}\label{ch07:sub:fbk004}
+
+\paragraph{Purpose.} The declaration itself must be exact: a nonempty duplicate-free component list, every member existing on the board, the declared set actually forming a graph cycle, and at most one declaration per cycle. This code collects the ways a declaration can be malformed or unmoored from the wiring it claims to describe.
+
+\paragraph{Trigger condition.} The code fires when a declaration's component list is empty or contains duplicates; when it names components that do not exist on the board; when the declaration is otherwise valid but its component set is \emph{not} an actual cyclic strongly connected component of the graph; and, dually, when a single graph cycle is matched by more than one declaration, in which case the diagnostic is issued against the cycle with the list of competing declaration references.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:fbk004}
+Illustrative only. After a rewiring that removed a feedback path, the author leaves the old declaration in place ``for documentation.'' The declared set no longer forms a cycle in the graph. The checker emits \texttt{PCBA8-FBK-004} with the message that the declared component set is not an actual graph cycle. The stance generalizes: declarations are not documentation, they are claims checked against the wiring, and a stale claim is a defect exactly like a missing one. In the dual scenario, two authors independently declare the same loop under different names; the cycle receives the code with both references quoted, because two declarations create two potentially divergent bounds for one dynamical structure.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. The feedback inventory must be a bijection between declared loops and actual cycles; every deviation from bijectivity---missing (FBK-001), malformed, unmoored, or duplicated (all FBK-004)---breaks the accounting on which the family's guarantees rest.
+
+\paragraph{Fail-closed behavior.} The board fails. A declaration that failed earlier structural checks is not additionally judged for cycle-existence (the checker avoids stacking a second complaint on a declaration already found malformed), but the earlier error already blocks cleanliness.
+
+\section{Safety analysis: the \texttt{SAF} family}\label{ch07:sec:saf}
+
+The safety family contains the checker's most consequential and most carefully bounded judgments. Its three codes share one epistemic rule, stated once here: \emph{unresolved is not safe}. Whenever the analysis cannot complete---a bound cannot be derived, an enumeration exceeds its resource budget---the outcome is an explicit unresolved-analysis error, never a silent pass. Everything in this family is a statement about the board's declared parameters under the candidate's conservative propagation semantics; nothing in it is a claim that any system is safe.
+
+\subsection{\texttt{PCBA8-SAF-001}: unreachable safety threshold}\label{ch07:sub:saf001}
+
+\paragraph{Purpose.} A protective threshold that the upstream signal can never reach is a safety mechanism in name only. This code exists to detect, at design time and from declared parameters alone, fuse thresholds that exceed the maximum value their input could ever attain. It is the checker-level formalization of the audited source's central known fault: a published safety board whose red-stage clamp of $0.1$ sits upstream of a fuse threshold of $0.9$ (Chapter~11 develops the finding; the seed paper proves the unreachability proposition).
+
+\paragraph{Trigger condition.} The checker first computes conservative upper bounds on every activation net (Check Class~\ref{ch07:cc:reach} gives the propagation rules: board activation inputs bound at $1$; \texttt{cjt} bounded by $0$ in the cutoff region and otherwise by $\min(\texttt{saturation}, \texttt{beta} \cdot \text{cause bound} \cdot \text{bias bound})$; \texttt{scale} by $\min(\texttt{ceiling}, \text{input bound} \cdot \texttt{factor})$; \texttt{mux} by the maximum of its branch bounds; \texttt{pass} and \texttt{fuse} transparent; \texttt{delay} bounded at $1$; iterated to a fixed point). Then, for each \texttt{fuse} component with a finite threshold whose input net has a resolved bound, the code fires when the bound is strictly below the threshold, with the message quoting both values and stating that the fuse cannot trip.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:saf001}
+Illustrative only, mirroring the known-fault fixture's structure. A red-stage \texttt{cjt} carries \texttt{saturation} \texttt{0.1}; its effect feeds, possibly through \texttt{pass} stages, a safety-critical \texttt{fuse} with \texttt{threshold} \texttt{0.9}. Propagation bounds the fuse input at $0.1$; since $0.1 < 0.9$, \texttt{PCBA8-SAF-001} fires with the message that the maximum upstream activation \texttt{0.1} is below the fuse threshold \texttt{0.9}. The unmodified published parameters are retained in the candidate's test suite as a permanent regression guard: the checker must flag this configuration forever.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. Among all defects in the catalog, this one carries the greatest potential for misplaced trust: a reader who sees a fuse on a board naturally credits the design with a protective crossing. The code ensures that credit can only attach to boards where the crossing is at least \emph{reachable} under conservative bounds---which is still, emphatically, not a claim that it is \emph{effective} (see Section~\ref{ch07:sec:boundary}).
+
+\paragraph{Fail-closed behavior.} The board fails. The dual danger---treating an \emph{unresolved} bound as reachable---is separately foreclosed by \texttt{PCBA8-SAF-003}: reachability is only ever concluded from a resolved bound at or above threshold.
+
+\subsection{\texttt{PCBA8-SAF-002}: unsafe fuse action}\label{ch07:sub:saf002}
+
+\paragraph{Purpose.} A fuse's post-trip behavior is its \texttt{action} parameter. For a safety-critical fuse the candidate admits exactly one action: \texttt{permanent\_block}, the latching behavior in which a tripped fuse emits zero for the remainder of the run. Any weaker action on a safety-critical fuse---in particular any transient or self-resetting behavior---is rejected, because a protective mechanism that quietly resumes passing signal after the hazardous condition recurs is not the mechanism the safety marking advertises.
+
+\paragraph{Trigger condition.} For each component of kind \texttt{fuse} that is marked safety-critical, the code fires when the \texttt{action} parameter is not exactly the string \texttt{permanent\_block}.
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:saf002}
+Illustrative only. An author marks a fuse safety-critical but selects a pass-through action so that downstream analysis can continue observing the signal after a trip during exploratory runs. The checker emits \texttt{PCBA8-SAF-002} with the message that a safety-critical fuse must use \texttt{action='permanent\_block'}. The exploratory intent has a legitimate expression: an ordinary, non-safety-critical fuse. What the code forbids is the combination---the safety marking with the non-latching behavior---because it is the marking that downstream tooling and reviewers rely on.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. This code addresses the plateau-versus-latch confusion documented in the source audit: saturation clamps are plateaus, not latches, and the audited book supplies no fail-closed latch state machine for its safety board. On the candidate's boards, the latch requirement is not optional prose; it is a checked parameter constraint.
+
+\paragraph{Fail-closed behavior.} The board fails. The simulator's fuse semantics implement the latch (a tripped safety fuse emits zero for the rest of the run, with run-local state that resets only at a new \texttt{simulate} call), so on clean boards the checked contract and the executed behavior coincide.
+
+\subsection{\texttt{PCBA8-SAF-003}: unresolved safety analysis}\label{ch07:sub:saf003}
+
+\paragraph{Purpose.} This is the family's epistemic keystone: the code that fires when the checker \emph{cannot decide}. Conservative analysis has boundaries---bounds that do not resolve, enumerations that exceed budgets---and the candidate's rule is that reaching such a boundary is itself an error on a safety-relevant path. The alternative, treating analysis failure as absence of findings, is the classic soundness hole of lint-style tools; the candidate closes it by construction.
+
+\paragraph{Trigger condition.} The code fires in three situations. First, when the directed-simple-cycle enumeration for a declared feedback set exceeds its conservative resource bound (the enumerator caps the cycle count and reports failure past the cap), with the message that enumeration exceeded the bound. Second, when a directed cycle's gain cannot be derived because some member component has no defined gain bound, quoting the cycle path. Third, when a safety-critical fuse's input-net bound cannot be resolved by the propagation of Section~\ref{ch07:sub:saf001}, with the message that the safety-critical fuse input bound cannot be resolved. (For a non-safety-critical fuse, an unresolved bound produces no reachability verdict at all---neither pass nor fail---because no safety reliance was declared.)
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:saf003}
+Illustrative only. A safety-critical fuse's input is driven, through a chain, by a \texttt{finite\_transition} component's output. Finite transitions carry no activation bound in the propagation rules, so the fuse input's bound never resolves. The checker emits \texttt{PCBA8-SAF-003} for the fuse. The author's remedies are all explicit: restructure the path so the bound derives, or remove the safety marking if no safety reliance is actually intended. What the author cannot do is leave the question open on a clean board.
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. ``The analysis did not finish'' and ``the analysis found nothing'' are different epistemic states, and only a tool that distinguishes them can be cited honestly. The code is the distinction, made mandatory.
+
+\paragraph{Fail-closed behavior.} The board fails. This is fail-closed in its purest form: the failure being closed against is the checker's own incompleteness.
+
+\section{The adapter boundary: \texttt{PCBA8-TKS-001}}\label{ch07:sec:tks}
+
+\subsection{\texttt{PCBA8-TKS-001}: invalid finite transition}\label{ch07:sub:tks001}
+
+\paragraph{Purpose.} The \texttt{finite\_transition} component kind is the only bridge between PCBA boards and the TKS v8 finite kernel (Chapter~\ref{ch07:sec:boundary} defers the full adapter treatment to the next chapters). The bridge is available only to transition tables that are certified total, deterministic, stateless, and non-stochastic over exact finite carriers, with a self-consistent certificate digest. \texttt{PCBA8-TKS-001} is the DRC-side enforcement of those certification conditions: it validates the table \emph{as board content}, before any adapter is invoked.
+
+\paragraph{Trigger condition.} For each component of kind \texttt{finite\_transition}, the checker accumulates problems and fires the code once with the joined list if any are found: the transition table is absent entirely (the message states that such components require an exact self-hashed transition table); the certificate's profile differs from the component's semantic profile; the source or target object name is blank; the source or target element lists fail exact finite-value identity or are not pairwise distinct; the mapping's length differs from the source carrier's (non-totality); a mapping entry is not an integer or indexes outside the target carrier; the certificate flags do not assert total and deterministic, or do assert stateful or stochastic; or the certificate digest is malformed (not 64 uppercase hexadecimal digits) or stale (differs from a fresh recomputation over the canonical payload).
+
+\begin{example}[Illustrative scenario]\label{ch07:ex:tks001}
+Illustrative only. An author edits one entry of a transition table by hand to fix a mapping and forgets to recompute the certificate digest. The stored digest no longer matches the recomputed one, and the checker emits \texttt{PCBA8-TKS-001} with the problem that the transition-table certificate digest is missing, malformed, or stale. In a second scenario, an author marks a table stochastic to represent a probabilistic transition; the code fires with the problem that stateful or stochastic transitions are outside the finite adapter. The second scenario is not a missing feature but a boundary: probabilistic kernels require their own types and are deliberately outside the finite arrow (Chapter~9).
+\end{example}
+
+\paragraph{Severity rationale.} \textsc{error}. The adapter downstream re-derives and re-checks all of these conditions and refuses non-clean boards outright; the DRC code exists so that the failure surfaces at design time, attached to the offending component, in the same report as every other defect---rather than later, as an adapter exception detached from the board's diagnostic record.
+
+\paragraph{Fail-closed behavior.} The board fails, and consequently no certificate can be minted for any of its components: the adapter's first act is to require a clean DRC report. The certification conditions are thus enforced twice on independent code paths, and the weaker path (the checker) is never the last line.
+
+\section{The five check classes}\label{ch07:sec:classes}
+
+The thirty-five codes are executed by a pipeline of check groups, and it is worth seeing the catalog the way the checker itself is organized: five classes, each with a characteristic algorithmic core, together covering the board from record integrity to safety reachability. The classes also serve as the reviewer's map: to audit the checker's coverage, one audits five bounded analyses rather than thirty-five scattered rules.
+
+\begin{checkclass}[Structural integrity]\label{ch07:cc:struct}
+Unique nonblank identities for components, ports, nets, test points, calibrations, and feedback declarations; component kinds and exact parameter keys from a closed catalog; typed state bindings; bias-domain coherence; missing or unknown semantics fail closed. Codes: the \texttt{MDL}, \texttt{SEM}, \texttt{PAR}, \texttt{STATE}, and \texttt{BIAS} families, and the component-level clauses of \texttt{SAF-002} and \texttt{TKS-001}. Algorithmic core: sorted iteration with set-difference and exact-type judgments; no graph reasoning.
+\end{checkclass}
+
+\begin{checkclass}[Typed connectivity]\label{ch07:cc:net}
+Every endpoint resolves to a declared owner and port; every net has exactly one typed driver and at least one load; driver and load signal kinds and units agree; endpoints are uniquely placed; required ports connect (the current simulator profile declares no executable input defaults, so connection is the only satisfying condition); and every port's signal/unit pair lies in the closed admissibility table. Codes: \texttt{NET-001} through \texttt{NET-009}. Algorithmic core: endpoint resolution and per-net driver/load partition, followed by pairwise type agreement against the unique driver.
+\end{checkclass}
+
+\begin{checkclass}[Calibration and probe integrity]\label{ch07:cc:cal}
+Executable test points require versioned calibration references with digest-shaped profiles, instrument and protocol identities, uncertainty, measurement kind, and net-unit compatibility; safety-relevant paths require explicitly marked probes; and locally constructed calibration records cannot make themselves Evidence-Packet eligible. A probe's presence never establishes safety. Codes: the \texttt{TP} and \texttt{CAL} families. Algorithmic core: reference resolution across the test-point/calibration/net tripartite structure, plus the safety-coverage set computation over safety-critical nets and safety-critical components' output nets.
+\end{checkclass}
+
+\begin{checkclass}[Feedback analysis]\label{ch07:cc:fbk}
+The checker builds the directed component graph and computes its strongly connected components with the classical depth-first algorithm \cite{tarjan}; each realizable cycle requires exactly one exact declaration carrying a unique in-cycle unit delay, an existing dimensionless calibration, and a declared sub-unity round-trip gain bound corroborated by conservative per-cycle gain products; enumeration is resource-bounded, and stateful or stochastic loop semantics are unsupported. Unsupported or resource-bounded analysis yields \texttt{SAF-003}, never a pass. Codes: \texttt{FBK-001} through \texttt{FBK-004}, with \texttt{CAL-001} and \texttt{SAF-003} clauses in support. Algorithmic core: Tarjan SCC computation, bounded directed-simple-cycle enumeration, and decimal gain-product bounding.
+\end{checkclass}
+
+\begin{checkclass}[Threshold reachability]\label{ch07:cc:reach}
+For supported activation paths, conservative upper bounds propagate to a fixed point through causes, bias and gain stages, clipping, and cutoffs, under the rules itemized in Section~\ref{ch07:sub:saf001}. A safety-critical fuse whose finite threshold exceeds its resolved upstream bound receives \texttt{SAF-001}; an unresolved bound on a safety-critical fuse receives \texttt{SAF-003} and is never treated as reachable. Codes: \texttt{SAF-001} and the reachability clause of \texttt{SAF-003}. Algorithmic core: monotone interval-style bound propagation over the net graph, iterated with a component-count-bounded fixed-point loop under the immutable decimal context.
+\end{checkclass}
+
+\begin{remark}[Conservatism is directional]\label{ch07:rem:conservative}
+The bound propagation of Check Class~\ref{ch07:cc:reach} over-approximates attainable values (it takes worst cases through every stage), which makes the \emph{unreachability} verdict sound within the software semantics: if even the over-approximation cannot reach the threshold, no admitted execution can. The same propagation says nothing in the other direction---a bound at or above threshold does not show the threshold is attained by any actual input, only that conservative analysis cannot exclude it. The checker uses the propagation exclusively in the sound direction.
+\end{remark}
+
+\section{Claim boundary}\label{ch07:sec:boundary}
+
+\begin{boundary}\label{ch07:bd:drc}
+A clean DRC report means exactly this: the exact engine at the recorded source, catalog, and decimal-context identities, executed over the exact recorded board, detected none of the thirty-five failure conditions of the closed catalog. It does not mean the board is a correct model of anything; it does not mean any simulated behavior corresponds to a cognitive or physical mechanism; it does not mean any safety mechanism on the board is effective, certified, or fit for reliance; and it confers no Evidence-Packet eligibility, disclosure authority, or license status on any artifact. All artifacts of this chapter are Ring~4 research materials, \textsc{not licensed}, and every safety-flavored diagnostic in the catalog is a statement about declared parameters under conservative software semantics---never about the world.
+\end{boundary}
+
+The checker's authority is exactly coextensive with its catalog, and the catalog is closed on purpose. What Chapter~8 adds on top of a clean report is narrow deterministic execution with full trace accountability; what Chapter~9 adds is a certified bridge into the TKS v8 finite kernel. Both begin where this chapter ends: with a board that has survived thirty-five ways of failing, and a report that will re-derive that survival, byte for byte, for as long as the identities hold.

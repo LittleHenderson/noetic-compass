@@ -1,0 +1,1051 @@
+\chapter{Semantic Identity}\label{ch03:identity}
+
+This chapter develops the first and most foundational of the kernel's
+five mechanisms: the semantic-identity layer. Its subject is the
+question that the introduction's first failure class showed the
+program cannot afford to leave implicit---\emph{when do two mentions
+name the same thing?}---and its method is to make the answer a matter
+of typed structure rather than of string coincidence or reader
+discipline. The chapter proceeds from the five-field structural
+reference and the rationale for each field
+(Section~\ref{ch03:fivefield}), through the definition-hash binding
+that detects definitional drift (Section~\ref{ch03:defhash}), the
+disjoint namespace catalog (Section~\ref{ch03:namespaces}), the
+link-kind system for cross-ontology correspondence and the historical
+incident that motivates its central refusal
+(Section~\ref{ch03:linkkinds}), the injective-rendering invariant
+(Section~\ref{ch03:injective}), and the exact-type equality rule
+(Section~\ref{ch03:exacttype}), to worked examples of legal and
+illegal usage (Section~\ref{ch03:worked}) and a closing statement of
+what the layer does not claim (Section~\ref{ch03:boundary}).
+
+Throughout, the exposition is grounded in the reference
+implementation: the module \texttt{src/cas\_core\_v8/semantics.py},
+which defines the reference type, the namespace enumeration, the
+crosswalk type, and the exact-match predicate, and the module
+\texttt{src/cas\_core\_v8/identity.py}, which supplies the
+validation primitives the reference type applies to its fields.
+Where the chapter states what the code does, it reports the code as
+read; where it states why, it reconstructs the design argument from
+the governing specification and paper; and where the sources are
+silent on a rationale, the chapter says so rather than supplying
+one.
+
+\section{The five-field structural reference}\label{ch03:fivefield}
+
+\begin{definition}[Semantic reference]\label{ch03:def-semref}
+A \emph{semantic reference} is the structural tuple
+\[
+(\text{namespace},\ \text{local\_id},\ \text{version},\
+\text{source\_id},\ \text{definition\_sha256}),
+\]
+where the namespace is drawn from the closed catalog of
+Section~\ref{ch03:namespaces}, \texttt{local\_id} and
+\texttt{source\_id} are validated ASCII machine identifiers,
+\texttt{version} is a non-blank canonical text, and
+\texttt{definition\_sha256} is the SHA-256 digest, in normalized
+uppercase hexadecimal, of the exact defining text of the identified
+element in the identified source. Identity of references is
+structural equality of the full tuple; no proper subset of the
+fields identifies.
+\end{definition}
+
+In the implementation, Definition~\ref{ch03:def-semref} is the
+frozen dataclass \texttt{SemanticRef} with exactly these five
+fields, declared with \texttt{frozen=True} and \texttt{slots=True}
+and validated exhaustively in \texttt{\_\_post\_init\_\_}: the
+namespace must be an exact \texttt{SemanticNamespace} member;
+\texttt{local\_id}, \texttt{version}, and \texttt{source\_id} must
+be non-blank, trimmed strings free of forbidden Unicode categories;
+\texttt{local\_id} and \texttt{source\_id} must additionally pass
+the ASCII-identifier profile; and \texttt{definition\_sha256} is
+normalized through the strict digest validator. A value that fails
+any check does not exist as a \texttt{SemanticRef}: construction
+raises \texttt{SemanticValidationError}. There is no partially
+valid reference, no reference with a pending or empty field, and no
+mutation path after construction. The docstring's one-line summary
+is accurate enough to quote in paraphrase: one versioned semantic
+object, bound to its defining source bytes.
+
+The remainder of this section walks the five fields individually,
+because each is there to kill a specific drift mechanism from the
+introduction's taxonomy, and the design is best understood
+field-by-threat.
+
+\subsection{Namespace: which family}\label{ch03:field-namespace}
+
+The namespace field answers the token-conflation problem directly.
+The string \texttt{"F5"} is not a reference; a reference says
+\emph{which family's} \texttt{F5}, as a typed enumeration member,
+not as a naming convention. Because the field is an enumeration and
+the constructor requires \texttt{type(namespace) is
+SemanticNamespace}, there is no way to hold a reference whose
+family is a guess: strings that merely spell a namespace's name do
+not pass, and neither do subclass or look-alike enum members. Two
+references with different namespaces are unequal regardless of
+every other field, which is the formal rendering of the canon fact
+that the families are disjoint. The deeper effect is on tooling:
+any join, index, or cache keyed on references inherits the
+namespace distinction for free, so the silent cross-family merge
+that untyped strings invite becomes structurally impossible at
+every downstream site, not just at disciplined ones.
+
+\subsection{Local identifier: which element}\label{ch03:field-localid}
+
+The \texttt{local\_id} names the element within its family. It is
+deliberately a \emph{machine} identifier, validated against the
+ASCII profile of Section~\ref{ch03:validation}: non-blank, trimmed,
+ASCII-only, NFKC-stable, and drawn from an explicit identifier
+alphabet. The profile exists because local identifiers are exactly
+the strings humans review in diffs, registries, and receipts, and
+the review channel is where invisible-character and confusable
+spoofing does its damage: an identifier containing a zero-width
+character or a bidirectional override renders identically to its
+honest twin while being byte-distinct. The profile excludes the
+entire class by construction---control, format, and surrogate
+categories are rejected, non-ASCII is rejected, and
+NFKC-instability is rejected---so that two local identifiers that
+look the same to a reviewer are the same bytes. Prose names, by
+contrast, are not local identifiers and do not belong in this
+field; the layer's contract is that unrestricted text lives in
+separate fields (such as the crosswalk note of
+Section~\ref{ch03:linkkinds}) and never participates in identity.
+
+\subsection{Version: which edition}\label{ch03:field-version}
+
+The version field carries the edition of the element's definition
+within its source---the answer to version drift. Its validation is
+lighter than the identifier profile: the implementation requires a
+non-blank, trimmed string free of forbidden Unicode categories, but
+does not force the ASCII identifier alphabet, so version
+designations follow the source's own versioning conventions. The
+governing sources do not further constrain the version field's
+format, and this chapter accordingly claims nothing about
+comparability, ordering, or interpretation of version strings: two
+references with different versions are simply different references.
+That refusal to interpret is itself the point. A version field with
+built-in ordering semantics would tempt tooling to treat
+``newer'' as ``interchangeable-with''; the structural rule that any
+version difference breaks identity forces every cross-version
+inference through an explicit, reviewable act instead.
+
+\subsection{Source identifier: which corpus}\label{ch03:field-sourceid}
+
+The \texttt{source\_id} names the corpus or document in which the
+defining text lives, under the same ASCII identifier profile as
+\texttt{local\_id}. Its role is provenance at the identity layer:
+the same element name, at the same version string, cited from two
+different sources, is two different references. This is the field
+that makes corroboration distinguishable from repetition---two
+analyses grounded in the same source are visibly so---and it is
+also the hook by which references connect to the program's
+content-addressed artifact discipline, since a source identifier
+can be resolved, in registries and receipts, to hash-bound source
+bytes. The sources governing this chapter do not fix a global
+catalog of source identifiers; the field's validity is syntactic,
+and the binding of identifiers to actual corpora is registry
+business outside this layer, a division of labor the chapter
+returns to in Section~\ref{ch03:boundary}.
+
+\subsection{Definition digest: which exact words}\label{ch03:field-defhash}
+
+The fifth field binds the reference to the SHA-256 digest of the
+exact defining text of the element in the identified source. It is
+validated as exactly sixty-four hexadecimal digits and normalized
+to uppercase, so that presentation-case differences cannot make
+equal digests unequal. Its rationale is important enough to carry
+its own section, next.
+
+\subsection{Why five fields, and not fewer or more}\label{ch03:whyfive}
+
+The tuple's arity is worth defending directly, because each of the
+obvious alternatives fails against a named drift mechanism from
+the introduction's taxonomy.
+
+\emph{One field (the bare name)} is the status quo ante and the
+proven failure: it answers none of the drift mechanisms and is the
+representation in which the program's incidents occurred.
+
+\emph{Two fields (namespace and name)} kill token conflation and
+nothing else: definitional, version, and source drift all remain
+invisible, and the flattened form remains collidable without a
+rendering discipline.
+
+\emph{An opaque surrogate (a UUID or database key)} is superficially
+attractive---globally unique, cheap to compare---but it identifies a
+\emph{row}, not a \emph{commitment}. Nothing in a surrogate is
+checkable against the world: two parties cannot verify, from the
+identifier alone, that they mean the same element as defined by the
+same bytes, and every question about family, edition, or source
+requires a resolution service that becomes a new trust dependency
+and a new drift locus. The five-field tuple is deliberately
+self-describing: every field is either directly meaningful or
+directly checkable by rehashing, with no resolver in the loop for
+the identity question itself.
+
+\emph{A single content hash of the definition} (dropping the naming
+fields) fails in the other direction: it commits to bytes but
+cannot say what the bytes are \emph{for}. Two sources quoting the
+same definitional sentence would collapse into one reference;
+elements whose defining texts coincide (short definitions do
+collide textually) would be conflated; and the reference would be
+unreadable in review without a reverse lookup. Names without hashes
+drift; hashes without names are mute; the tuple carries both
+because identity here must serve both machines and reviewers.
+
+\emph{More fields} were available---a digest of the whole source
+corpus, a canon-edition field, a human-readable gloss---and the
+governing sources do not record a rationale for each exclusion; the
+chapter notes only the structural pattern in what was included:
+every field present participates in identity and is validated by a
+named grade of the string discipline, whereas glosses and corpus
+digests belong to registries and provenance records, which already
+carry them. Widening identity widens every equality comparison in
+the system; the tuple is the minimal set that answers the taxonomy,
+and minimality here is a reviewability feature.
+
+\section{Definition-hash binding and definitional drift}\label{ch03:defhash}
+
+\subsection{Naming a concept as defined by particular bytes}\label{ch03:asbytes}
+
+The first four fields make a reference precise about family,
+element, edition, and corpus. The fifth makes it precise about
+something subtler: the actual words. A reference does not merely
+name a concept; it names a concept \emph{as defined by particular
+bytes}, and it carries a commitment to those bytes that any party
+can check by rehashing the defining text.
+
+To see why the first four fields are not enough, consider what
+they leave open. A version string is an assertion by the source's
+editors that a text is a particular edition; it is not a function
+of the text. Sources get re-released with silent corrections under
+unchanged version labels; working copies diverge from published
+copies; a definitional sentence is touched in one checkout and not
+another; a transcription introduces a variant that nobody flags as
+an edition. In each of these cases, two parties can hold
+references agreeing on all four leading fields while reading
+different defining texts---which is precisely the definitional
+drift of the introduction: identical names in good faith, divergent
+meanings in fact. The digest closes the gap because it is computed
+\emph{from} the text rather than asserted \emph{about} it. If the
+defining bytes differ anywhere, the digests differ, the references
+are unequal, and the drift that was invisible as a latent ambiguity
+becomes visible as a plain inequality between two records.
+
+\subsection{Staleness as a feature}\label{ch03:staleness}
+
+The binding has a consequence that looks like a cost and is
+actually the mechanism working: when a canon definition is
+corrected, every reference bound to the superseded text becomes
+\emph{stale}---its digest no longer matches what the current source
+says. Nothing breaks silently; rather, every artifact carrying a
+stale reference is now mechanically enumerable, which is exactly
+the recheck obligation that untyped representations make
+undiscoverable. The program's canon maintenance already imposes the
+obligation in prose (derived artifacts are to be rechecked when a
+governing definition changes); the digest field is what turns that
+prose obligation into a query. It is worth being precise about what
+staleness means and does not mean: a stale reference is not
+invalid---it truthfully names the element as defined by the old
+bytes, which is often exactly what a historical artifact should
+say---but it is visibly non-current, and any pipeline that requires
+currency can enforce it by comparing digests against the live
+source. The layer itself takes no position on whether stale
+references are acceptable in a given context; it only guarantees
+that the question is decidable.
+
+\subsection{What the digest does not do}\label{ch03:defhash-limits}
+
+Three non-claims, in the spirit of the monograph's discipline.
+First, the digest binds text, not meaning: two byte-identical
+definitions are one definition, but the layer has no opinion on
+whether two byte-different definitions are semantically equivalent
+paraphrases---that is canon governance, not bookkeeping. Second,
+the digest does not by itself prove that the named text is really
+the defining text of the named element in the named source; a
+reference constructed with a digest of the wrong passage is
+well-formed and wrong. Verifying the binding requires resolving the
+source and rehashing, which is registry and review business.
+Third, the field inherits the general limits of hashing from the
+background chapter: it is evidence about content, never about
+authority, and its strength is the strength of SHA-256's collision
+resistance, which the kernel consumes as standard background
+rather than re-arguing.
+
+\section{The namespace catalog}\label{ch03:namespaces}
+
+\subsection{The catalog and its disjointness}\label{ch03:catalog}
+
+The governing specification names seven disjoint namespace
+families: TKS Foundation, TKS World, CAS Drive, CAS Domain, CAS
+Register, CAS State, and Noetic Topos object. The implementation's
+enumeration, \texttt{SemanticNamespace}, declares nine members:
+
+\begin{itemize}
+\item \texttt{TKS\_FOUNDATION}, \texttt{TKS\_WORLD}, and
+\texttt{TKS\_NOETIC} on the TKS side;
+\item \texttt{CAS\_DRIVE}, \texttt{CAS\_DOMAIN},
+\texttt{CAS\_REGISTER}, \texttt{CAS\_NOETIC}, and
+\texttt{CAS\_STATE} on the CAS side; and
+\item \texttt{NOETIC\_TOPOS\_OBJECT} for the categorical
+formulation.
+\end{itemize}
+
+The two extra members relative to the specification's prose list,
+\texttt{TKS\_NOETIC} and \texttt{CAS\_NOETIC}, give the Noetic
+family \emph{separate namespaces on each side of the TKS/CAS
+divide}. The governing sources do not state the rationale in so
+many words, and the chapter reports the natural reading as a
+reading: the TKS Noetics and the CAS Noetics stand in exactly the
+kind of positional, historically loaded correspondence that the
+layer exists to keep honest, so folding them into one namespace
+would build the layer's own failure mode into its catalog. Under
+the nine-member enumeration, relating a TKS Noetic to its CAS
+counterpart requires a typed crosswalk like any other cross-family
+relation. Readers comparing specification and implementation
+should treat the enumeration as the operative catalog; the
+specification's seven-family list is not contradicted by it, since
+the specification's ``Noetic Topos object'' family remains its own
+namespace and the Noetic split refines rather than reshuffles the
+prose taxonomy.
+
+Table~\ref{ch03:tab-namespaces} records the operative catalog with
+the family each member carries. The descriptions are orientation,
+not definition: what each family's elements \emph{are} is fixed by
+the program's canon documents, outside this layer, and the table
+deliberately says only enough to keep the members apart.
+
+\begin{table}[htbp]
+\centering
+\caption{The operative namespace catalog
+(\texttt{SemanticNamespace}). Descriptions are orientational; the
+canon owns the definitions.}
+\label{ch03:tab-namespaces}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Member & Family carried \\
+\midrule
+\texttt{TKS\_FOUNDATION} & TKS Foundation positions \\
+\texttt{TKS\_WORLD} & TKS World axis elements \\
+\texttt{TKS\_NOETIC} & Noetic family, TKS side \\
+\texttt{CAS\_DRIVE} & CAS motivational Drives \\
+\texttt{CAS\_DOMAIN} & CAS processing Domains \\
+\texttt{CAS\_REGISTER} & CAS Register axis values \\
+\texttt{CAS\_NOETIC} & Noetic family, CAS side \\
+\texttt{CAS\_STATE} & CAS Cognitive States \\
+\texttt{NOETIC\_TOPOS\_OBJECT} & objects of the categorical
+formulation \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Disjointness needs no runtime machinery: it is a property of the
+type. An enumeration member belongs to exactly one enumeration,
+every reference carries exactly one member, and equality of
+references requires equality of members. There is no subtyping
+among namespaces, no namespace wildcard, and no reference that is
+``in'' two families. The catalog is also \emph{closed}: callers
+cannot mint namespaces at run time, because the enumeration is the
+type, and extending it is a source-level, review-visible change to
+the kernel. Closure is a deliberate cost. A research program
+discovers new families, and when it does, the kernel must change
+through its gate rather than accept an open-world namespace
+string---the design-inversion thesis applied to vocabulary.
+
+\subsection{Namespaces are not a hierarchy}\label{ch03:nohierarchy}
+
+One further negative deserves emphasis because the program's
+ontologies invite it: the catalog encodes no relations among
+namespaces. CAS States are, in the program's own canon, generated
+by crossing Noetics with Domains; nothing in the namespace layer
+represents that fact, and \texttt{CAS\_STATE} is not a composite,
+child, or product namespace of \texttt{CAS\_NOETIC} and
+\texttt{CAS\_DOMAIN} as far as identity is concerned. This is
+intentional flattening. Structural relations among families are
+semantic content, owned by the canon and representable---where
+needed---by explicit typed links or by future reviewed extensions;
+baking them into identity would make the identity layer a theory
+of the domain, which is exactly what it must not be. The layer's
+job is to keep names apart, not to explain them.
+
+\section{Link kinds: relating without identifying}\label{ch03:linkkinds}
+
+\subsection{The crosswalk object}\label{ch03:crosswalk}
+
+Disjoint namespaces solve conflation and immediately create a new
+need: the program's cross-family correspondences are real and
+analytically load-bearing, so the layer must offer a way to state
+them---one that makes stating them a deliberate, reviewable act.
+The implementation's carrier is the frozen dataclass
+\texttt{SemanticCrosswalk}, with fields: a validated ASCII
+\texttt{crosswalk\_id}; \texttt{source} and \texttt{target}, each
+an exact \texttt{SemanticRef}; a \texttt{relation} drawn from the
+enumeration \texttt{CrosswalkRelation}; a
+\texttt{source\_artifact\_sha256} digest identifying the artifact
+that grounds the asserted relation; a mandatory non-blank
+\texttt{note} of canonical text; and a research \texttt{boundary}
+that the constructor requires to be exactly the frozen Ring-4 open
+value---admission \textsc{open}, product \textsc{not licensed},
+disclosure false---via the exact-match predicate
+\texttt{is\_exact\_ring4\_open}.
+
+Three of these fields enforce, at construction time, that a
+crosswalk is an evidence-bearing assertion rather than a bare
+arrow. The digest field means every crosswalk names the bytes of
+the artifact on whose authority the correspondence is asserted:
+there is no crosswalk ``because everyone knows.'' The mandatory
+note means every crosswalk carries a human-readable justification;
+an empty or whitespace note is a construction error, so the class
+of undocumented links is empty by type. And the pinned Ring-4
+boundary means no crosswalk can present itself as licensed or
+disclosable: whatever a correspondence is, in this kernel it is
+research material, and the object says so in a machine-checkable
+field that the constructor refuses to let vary.
+
+\subsection{The relation kinds}\label{ch03:kinds}
+
+The enumeration \texttt{CrosswalkRelation} has four members:
+\texttt{IDENTITY}, \texttt{TRANSLATION}, \texttt{ALIGNMENT}, and
+\texttt{HYPOTHESIS}. The governing sources specify their intended
+use at the level that matters for safety: a positional or
+historical correspondence is represented as \textsc{translation},
+\textsc{alignment}, or \textsc{hypothesis}, and is \emph{never}
+silently represented as \textsc{identity}. The sources do not
+supply formal definitions distinguishing the three non-identity
+kinds from one another, and the chapter therefore offers only
+their natural readings, marked as exposition: a
+\emph{translation} link records a documented rendering of an
+element of one system in another system's terms; an
+\emph{alignment} records a structural or positional correspondence
+between systems without asserting that either renders the other;
+and a \emph{hypothesis} records a conjectured relation awaiting
+review. What the layer enforces is not this gloss but the
+machine-checkable part: the kind is a typed field, it is part of
+the record, and no kind is coercible into another or into
+identity. A consumer that treats a \texttt{HYPOTHESIS} link as if
+it were a \texttt{TRANSLATION} is misusing a visibly typed record
+---an auditable error, not a silent one.
+
+\begin{ruleenv}[No silent identity]\label{ch03:rule-noid}
+Cross-namespace identity is unrepresentable. The constructor of
+\texttt{SemanticCrosswalk} permits the relation
+\texttt{IDENTITY} only when the exact-match predicate
+\texttt{semantic\_refs\_match} holds between source and target---
+that is, only when the two endpoints are the very same versioned
+reference, field for field. Since references in different
+namespaces never match exactly, every cross-namespace crosswalk
+must carry a non-identity kind, and the strongest cross-family
+statement the type system can express is an explicitly typed,
+noted, source-backed, Ring-4 link.
+\end{ruleenv}
+
+The implementation's error message for a violation is worth
+reporting because it shows the historical failure written directly
+into the code's contract: an \texttt{IDENTITY} crosswalk whose
+endpoints differ raises a validation error stating that identity
+is permitted only for the exact same versioned reference, and
+naming the two canonical temptations---TKS Foundations related to
+CAS Drives, and TKS Worlds related to CAS Domains---as pairs that
+must use a non-identity relation. The degenerate self-link that
+remains legal (an \texttt{IDENTITY} crosswalk from a reference to
+itself) asserts nothing beyond what structural equality already
+gives, and its admission keeps the enumeration honest: identity
+exists as a kind, but the only thing it can ever relate is a
+thing to itself.
+
+\subsection{The crosswalk as a review artifact}\label{ch03:xw-review}
+
+It is worth reading the crosswalk against the provenance
+background of the survey chapter, because the object is best
+understood as a provenance record specialized to one assertion
+kind. In provenance vocabulary, a crosswalk is an entity asserting
+a relation between two other entities (the endpoint references),
+derived from a grounding entity (the artifact named by
+\texttt{source\_artifact\_sha256}), with the asserter's
+justification carried in the note. What the kernel adds to the
+generic pattern is fail-closed completeness: the generic
+anti-patterns---derivation without a grounding entity, assertion
+without justification, narrative provenance---are each excluded at
+construction rather than discouraged in guidance.
+
+This shape makes the crosswalk reviewable in a specific,
+checklist-like way, and spelling the checklist out shows what the
+type does and does not automate. A reviewer confronted with a
+crosswalk record can ask: (i) do the endpoint references resolve
+---do their sources exist and do their definition digests match
+the cited passages? (ii) does the grounding artifact, fetched by
+its digest, actually assert or evidence the claimed
+correspondence? (iii) is the relation kind the strongest the
+grounding artifact licenses, and in particular, would the
+grounding artifact license more than \texttt{HYPOTHESIS}?
+(iv) does the note fairly summarize the grounds? Questions (i)
+and the digest half of (ii) are mechanical; questions (iii) and
+(iv) are judgment. The type's contribution is that every judgment
+question arrives with its materials attached and its scope
+bounded---one relation, one grounds, one note---rather than
+diffused through a document. The layer does not review; it makes
+review tractable, which is the same division of labor the kernel
+draws everywhere between structural consistency and human
+authority.
+
+A related operational point: because crosswalks are immutable
+values, a correspondence that is later revised---upgraded from
+\texttt{HYPOTHESIS} to \texttt{TRANSLATION} after review, or
+withdrawn---is represented by a \emph{new} crosswalk (and, where
+registries track it, a status change at the registry layer), not
+by mutation of the old record. The old assertion remains what it
+was, permanently citable as what was once claimed on what grounds.
+The governing sources do not specify a crosswalk versioning or
+supersession scheme beyond this immutability, and the chapter
+accordingly leaves lifecycle policy to the registry chapters,
+noting only that immutability is what makes any such policy
+auditable.
+
+\begin{finding}[The motivating incident]\label{ch03:finding-incident}
+The rule's justification is historical before it is theoretical.
+A prior work product in the program conflated positionally
+corresponding Drive and Foundation names---treating the
+correspondence as paraphrase rather than as relabel---and was
+voided in review. The introduction analyzed why the artifacts of
+the time could not resist the error: the names were untyped
+strings, and no representation existed in which the correspondence
+could be stated \emph{without} being stated as identity. The
+crosswalk type is the direct answer. Under it, the same analytical
+move the incident attempted is expressible---as an
+\texttt{ALIGNMENT} or \texttt{TRANSLATION} with a note and a
+source artifact---and the move the incident actually made is not
+expressible at all.
+\end{finding}
+
+\begin{threat}[Namespace conflation]\label{ch03:threat-conflation}
+An agent or tool treats a positional correspondence between
+families as identity and propagates entailments across the
+boundary. \emph{Blocked by} Definition~\ref{ch03:def-semref} and
+Rule~\ref{ch03:rule-noid}: distinct namespaces make the endpoint
+references unequal, and the crosswalk constructor refuses the
+identity kind for unequal endpoints, so the conflation has no
+representation; the nearest representable statement is a typed
+non-identity link carrying its own note, source digest, and
+research boundary.
+\end{threat}
+
+\section{The injective-rendering invariant}\label{ch03:injective}
+
+\subsection{The problem with flattening}\label{ch03:flattening}
+
+Structured references must sometimes travel as strings: as keys in
+stores, as identifiers in logs and receipts, as line items in
+review documents. Flattening is where a structurally sound design
+can quietly reintroduce collision. The cautionary construction is
+the naive delimiter join: render the tuple as
+\texttt{namespace:local\_id:version:source\_id:digest} and two
+distinct tuples collide whenever a component contains the
+delimiter---the pair
+(\texttt{a}, \texttt{b:c}) and the pair (\texttt{a:b}, \texttt{c})
+flatten identically. An attacker who controls any component can
+manufacture such collisions deliberately, aliasing one reference's
+records to another's; an unlucky honest value can do it by
+accident. Either way, every property the tuple design earned is
+forfeited at the string boundary.
+
+\begin{invariant}[Injective rendering]\label{ch03:inv-injective}
+The rendered string form of a semantic reference is injective on
+structural tuples: two distinct tuples render to distinct strings,
+and delimiter-containing components cannot cause the rendering of
+one tuple to equal the rendering of another.
+\end{invariant}
+
+\subsection{The design argument}\label{ch03:design-argument}
+
+The implementation renders a reference through the property
+\texttt{qualified\_id}, which serializes the five components, in
+fixed order, as a JSON array with compact separators and
+non-ASCII preserved, and prefixes the result with the versioned
+scheme tag \texttt{semantic-ref.v1:}. The injectivity argument has
+three steps, each carried by a specific feature of this
+construction.
+
+\begin{proposition}[Injectivity of the rendering]\label{ch03:prop-injective}
+The map from valid \texttt{SemanticRef} tuples to their
+\texttt{qualified\_id} strings is injective.
+\end{proposition}
+
+\begin{proof}[Design argument]
+First, \emph{escaping}: JSON string encoding escapes every
+delimiter-significant character---quotation marks, backslashes,
+and the structural commas and brackets appear inside components
+only in escaped or quoted positions---so a component's content can
+never terminate its own string early or open a neighboring one.
+This is the length-prefixing role played generically: an encoding
+in which component boundaries are unforgeable from component
+content. Second, \emph{fixed arity and order}: the rendering is
+always a five-element array in declared field order, so no
+reading of the string can reassign bytes across field boundaries
+or between differently-shaped tuples. Third, \emph{unique
+parseability}: JSON array syntax parses unambiguously, so the
+composite admits exactly one decomposition into components; two
+tuples differing in any field therefore differ at the first
+divergent component of the unique parse, and their renderings
+differ as strings. The versioned prefix adds a fourth, forward-
+looking guarantee: any future rendering scheme carries a
+different tag, so strings from different schemes can never be
+confused as one another. The property is enforced by construction
+and is regression-tested with delimiter-bearing component
+fixtures---components containing quotation marks, backslashes,
+colons, commas, and bracket characters---whose pairwise renderings
+the suite checks for distinctness.
+\end{proof}
+
+\subsection{The design space: escaping, length-prefixing, hashing}\label{ch03:renderspace}
+
+Three standard techniques achieve injective flattening, and the
+choice among them is instructive. \emph{Length-prefixing} encodes
+each component as its byte length followed by its bytes; boundaries
+are unforgeable because they are computed, not delimited. It is the
+technique of canonical binary formats, maximally simple to prove
+correct, and minimally readable: a length-prefixed identifier is
+opaque to a human reviewer, which matters in a layer whose strings
+appear in diffs and review documents. \emph{Escaping} keeps the
+composite readable---components appear as themselves, delimiters
+are visible---at the price that correctness now depends on the
+escaping rules covering every delimiter-significant character, in
+every implementation that ever parses the form. Hand-rolled escape
+schemes are historically where this goes wrong; adopting a
+ubiquitous, rigorously specified escape discipline (here, JSON
+string encoding) buys the readability of escaping while
+outsourcing the hard part to a format with decades of
+cross-implementation hardening and existing conformance suites.
+\emph{Hashing the tuple} (rendering as a digest of a canonical
+encoding) is injective up to collision resistance and produces
+fixed-length names, but is doubly opaque---neither the fields nor
+their boundaries survive---and forces every consumer through a
+resolution step; it is the right shape for storage keys, not for
+review-facing identifiers.
+
+The implementation's choice---JSON-escaped, fixed-arity,
+version-prefixed---sits deliberately at the readable end: a
+\texttt{qualified\_id} can be eyeballed in a receipt, its fields
+recognized, its scheme tag checked, and, when needed, parsed back
+losslessly with a stock parser. The versioned prefix is the hedge
+that keeps the choice revisable: a future scheme (length-prefixed,
+hashed, or otherwise) would carry a different tag, and
+Proposition~\ref{ch03:prop-injective}'s cross-scheme clause keeps
+the generations from colliding. The governing sources do not
+record a comparison of alternatives; the analysis above is the
+chapter's reconstruction of the standard trade, offered so that a
+reviewer can check the choice against its space rather than take
+the space on faith.
+
+Two remarks temper the proposition properly. The argument is a
+design argument over the encoding, not a mechanized proof; the
+cited fixtures exercise the adversarial component classes the
+design anticipates, and the general claim inherits the usual
+fixture-bound limits stated in the introduction. And injectivity
+is claimed for the rendering of \emph{valid} references---the
+validation layer has already excluded control characters and
+unpaired surrogates from components, which removes the classes of
+input on which JSON string encoding across implementations is
+historically least uniform.
+
+\begin{threat}[Identifier collision]\label{ch03:threat-collision}
+Crafted components cause two distinct references to render to one
+identifier, aliasing one reference's records, receipts, or
+registry rows to another's. \emph{Blocked by}
+Invariant~\ref{ch03:inv-injective} via
+Proposition~\ref{ch03:prop-injective}: component content cannot
+forge component boundaries, so the aliasing string does not
+exist.
+\end{threat}
+
+\section{The exact-type equality rule}\label{ch03:exacttype}
+
+\subsection{Virtual equality as an attack surface}\label{ch03:virtualeq}
+
+In an object-oriented host language, equality is a method, and
+methods can be overridden. This ordinarily benign fact becomes an
+attack surface the moment equality carries security or evidence
+weight. Consider a subclass of the reference type that overrides
+equality and hashing: instances can report themselves equal to any
+honest reference---matching it in every comparison, colliding with
+it in every hash-keyed store---while carrying arbitrary divergent
+field values and arbitrary overridden behavior. Every downstream
+check that asks ``is this the reference I expected?'' through the
+virtual equality protocol receives the answer the impostor chooses.
+The same construction threatens boundary objects: a subclass of
+the research-boundary type whose accessors report \textsc{open}
+and \textsc{not licensed} while its stored state says otherwise
+would pass any check that trusts the protocol. Nothing about this
+requires exotic machinery; it is a dozen lines in any dynamic
+language, and it defeats naive structural checking completely.
+
+\begin{ruleenv}[Exact-type identity]\label{ch03:rule-exacttype}
+Equality-overriding subclasses are not admitted as identity-bearing
+values. Identity-bearing types reject subclass instances at
+construction, and every load-bearing comparison of identity or
+boundary values is performed by exact-type predicates that check
+concrete runtime types and primitive fields directly, without
+dispatching through overridable equality.
+\end{ruleenv}
+
+\subsection{Both halves in the implementation}\label{ch03:bothhalves}
+
+The rule has two halves, and the implementation carries both. The
+first half closes the front door: \texttt{SemanticRef},
+\texttt{SemanticCrosswalk}, and the research-boundary type each
+begin \texttt{\_\_post\_init\_\_} by checking
+\texttt{type(self)} against the exact class and raising if a
+subclass is being constructed; the artifact-identity type in
+\texttt{identity.py} does the same. One cannot obtain an instance
+of a subclass of any identity-bearing kernel type through its own
+constructor.
+
+The second half assumes the front door has failed---an impostor
+object arrived from somewhere---and makes comparisons immune
+anyway. The predicate \texttt{semantic\_refs\_match} compares two
+candidate references by checking, in order: that each operand's
+concrete type \texttt{is} exactly \texttt{SemanticRef}; that each
+namespace's concrete type is exactly the namespace enumeration,
+comparing their primitive values; and that each remaining field
+is exactly a \texttt{str} on both sides and equal as such. At no
+point does the predicate invoke \texttt{==} on the composite
+objects; it never dispatches through anything an impostor could
+override. The module applies the same pattern at its other
+identity boundary (\texttt{artifact\_identities\_match} for byte
+identities, field by field with type checks), and the crosswalk
+constructor uses the exact predicate---not virtual equality---when
+enforcing Rule~\ref{ch03:rule-noid}, so the no-silent-identity
+rule cannot be satisfied by an object that merely claims equality.
+
+\subsection{The discipline beyond references}\label{ch03:beyond}
+
+The exact-type discipline is not local to the semantic layer; it
+is the kernel's uniform equality posture, and seeing its second
+instantiation clarifies the pattern. The byte-identity type
+\texttt{ArtifactIdentity} in \texttt{identity.py}---the carrier of
+the raw-digest and normalized-digest pair that the background
+chapter's two-identity discipline requires---applies the same two
+halves: its constructor rejects subclass instances, and its
+comparison predicate, \texttt{artifact\_identities\_match}, walks
+every primitive field with an exact \texttt{type(...) is} check
+on both operands before comparing values, never invoking virtual
+equality. The predicate is verbose by design---seven fields, each
+with two type checks and one comparison---and the verbosity is
+the audit trail: a reviewer can confirm, line by line, that no
+comparison in the function dispatches anywhere overridable.
+
+The pattern generalizes to a rule of thumb the later chapters
+will keep instantiating: \emph{wherever a comparison gates
+anything, the comparison is a named, exact-type predicate owned by
+the kernel}. The alternatives each fail a review question.
+Virtual equality fails ``who controls this comparison?''---the
+answer is whichever operand's class got there first. Structural
+equality via serialization (compare the encodings) fails ``what
+does inequality mean?''---an encoding difference localizes poorly
+and imports the whole encoder into every equality question.
+Field-by-field comparison without type checks fails the impostor
+case. The named-predicate pattern answers all three: the kernel
+controls the comparison, inequality localizes to a field, and
+impostors fail at the type gate. Its cost, beyond verbosity, is
+that adding a field to an identity-bearing type requires touching
+its predicate---which the kernel's authors evidently accepted as a
+feature, since a field silently excluded from comparison is
+exactly the kind of drift the discipline exists to prevent; the
+constructor-side validation and the predicate enumerate the same
+field lists, and a divergence between them is the sort of defect
+the focused suites' fixtures are positioned to catch.
+
+\begin{threat}[Equality spoofing]\label{ch03:threat-spoofing}
+An adversarial or buggy subclass overrides equality and hashing to
+impersonate an honest reference or boundary object, passing
+downstream identity checks while carrying divergent state.
+\emph{Blocked by} Rule~\ref{ch03:rule-exacttype}: construction of
+the subclass through kernel constructors raises; and even a
+foreign-built impostor fails every load-bearing comparison, because
+the exact-type predicates check concrete types and primitive
+fields and never call the overridable protocol.
+\end{threat}
+
+\begin{remark}[Cost of the rule]\label{ch03:remark-cost}
+The rule spends real flexibility: well-behaved subclassing---a
+convenience wrapper, a memoizing variant---is rejected along with
+the malicious kind, and the exact-type predicates are verbose
+compared to \texttt{==}. The trade is the design inversion again:
+the kernel prefers a closed, verifiable equality discipline over
+an open, convenient one, because the open one's safety would rest
+on global knowledge that no subclass anywhere overrides equality
+dishonestly---an unreviewable premise in exactly the way the
+introduction's laundering premise was.
+\end{remark}
+
+\section{The validation pipeline}\label{ch03:validation}
+
+The reference type's guarantees bottom out in three validation
+primitives from \texttt{identity.py}, shared with the rest of the
+kernel; the layer is best understood with their exact contracts in
+view.
+
+\texttt{require\_canonical\_text} accepts only exact \texttt{str}
+values and rejects any character in Unicode categories
+\texttt{Cc} (controls), \texttt{Cf} (format characters, including
+zero-width and bidirectional controls), or \texttt{Cs}
+(surrogates). It is the floor under every textual field in the
+layer: even free-text fields like the crosswalk note, which accept
+arbitrary languages and scripts, exclude the invisible-character
+classes wholesale.
+
+\texttt{require\_ascii\_identifier} layers the machine-identifier
+profile on that floor: the value must be non-blank and equal to
+its own trim; ASCII-only; a fixed point of NFKC normalization
+(excluding compatibility characters that normalize to something
+else than themselves); and a full match of the identifier
+alphabet \texttt{[A-Za-z0-9][A-Za-z0-9.\_:/@+\textbackslash-]*}
+---an alphanumeric head followed by alphanumerics and a small
+punctuation set. This is the profile applied to
+\texttt{local\_id}, \texttt{source\_id}, and
+\texttt{crosswalk\_id}.
+
+\texttt{require\_sha256} accepts only exact \texttt{str} values
+matching sixty-four hexadecimal digits after uppercasing, and
+returns the uppercase normalization; the stored digest field is
+therefore case-canonical, and the presentation-discipline pitfall
+of the background chapter (case-mismatched hexadecimal comparing
+unequal) is closed at intake.
+
+The division of labor among the three primitives reflects the
+layer's string philosophy: three grades of string---digest,
+machine identifier, canonical prose---each with a named validator,
+each field of each type assigned exactly one grade, and no
+load-bearing comparison ever performed on a string of the prose
+grade.
+
+\section{How the layer composes with the rest of the kernel}\label{ch03:composition}
+
+Before the worked examples, a short tour of the layer's consumers,
+since several of its design choices only make full sense in
+composition.
+
+\emph{Canonical encoding.} References and crosswalks are evidence
+values, and both types expose the single declared serialization
+route the encoding chapter requires: a \texttt{to\_dict} view whose
+fields are exactly the validated primitives (plus, for references,
+the \texttt{qualified\_id} rendering). The namespace and relation
+enumerations pass through the encoder's enum tagging, so their
+encodings are type-distinct from the plain strings that spell
+their values---a reference whose namespace is the enumeration
+member and a hand-built map whose namespace is the string
+\texttt{"CAS\_DRIVE"} cannot hash equal. The validation grades of
+Section~\ref{ch03:validation} also pre-satisfy the encoder's text
+rules: by the time a reference exists, its strings already contain
+no control or format characters, so a valid reference is always
+encodable and the encoder never becomes a second, later point of
+identity failure.
+
+\emph{Receipts and registries.} Execution receipts and registry
+records carry references in their identity fields, which is where
+the layer's review-facing choices pay: a receipt naming its
+semantic profile by \texttt{qualified\_id} is auditable by eye and
+parseable by tooling, and a registry row keyed by rendered
+reference inherits Invariant~\ref{ch03:inv-injective} as a
+no-aliasing guarantee for its keying. Conversely, the layer leans
+on the registries for everything it deliberately does not do:
+resolving \texttt{source\_id} values to hash-bound corpora,
+tracking crosswalk supersession, and enumerating stale references
+after a canon change are registry operations over the immutable
+values this layer mints.
+
+\emph{Boundaries and the runtime gate.} Every crosswalk carries
+the exact Ring-4 boundary, and the runtime decision model treats
+identity-layer values as it treats all structural evidence:
+sufficient to support nonclaim comparisons, never sufficient to
+support claim-bearing intent. The layer thus supplies the
+vocabulary for the kernel's refusals as well as its assertions---
+when the gate denies a claim-bearing action, the record of the
+denial names, in this layer's terms, exactly which semantic
+objects were involved.
+
+\section{Worked examples}\label{ch03:worked}
+
+The following examples are expository constructions in the
+implementation's vocabulary; digests are abbreviated with ellipses
+for readability and would be full sixty-four-digit values in real
+records.
+
+\begin{example}[Legal: two references and a typed correspondence]\label{ch03:ex-legal}
+An analyst needs to relate the fifth TKS Foundation, as defined in
+a hash-bound edition of the TKS source corpus, to the CAS Drive
+F5, as defined in a hash-bound edition of the CAS corpus. Two
+references are constructed:
+
+\texttt{SemanticRef(namespace=TKS\_FOUNDATION, local\_id="F5",}
+\texttt{~~version="corpus-1.0", source\_id="tks-handbook",}
+\texttt{~~definition\_sha256="93A1...C4")}
+
+\texttt{SemanticRef(namespace=CAS\_DRIVE, local\_id="F5",}
+\texttt{~~version="v7.7", source\_id="cas-canon",}
+\texttt{~~definition\_sha256="0FE2...9B")}
+
+The equal \texttt{local\_id} strings are harmless: the references
+are unequal in namespace, source, and digest, and no kernel
+operation will merge them. The correspondence is then stated as:
+
+\texttt{SemanticCrosswalk(crosswalk\_id="xw-f5-drive5-0001",}
+\texttt{~~source=<the TKS ref>, target=<the CAS ref>,}
+\texttt{~~relation=ALIGNMENT,}
+\texttt{~~source\_artifact\_sha256="7D10...EA",}
+\texttt{~~note="Positional correspondence per the translation}
+\texttt{~~key; not a paraphrase.")}
+
+The crosswalk constructs successfully: endpoints are exact
+references, the kind is non-identity, the note is non-blank, the
+grounding artifact is named by digest, and the default boundary is
+the exact Ring-4 open value. The record asserts precisely what the
+canon licenses---a documented positional alignment---and nothing
+stronger.
+\end{example}
+
+\begin{example}[Illegal: the conflation, replayed]\label{ch03:ex-illegal}
+The same analyst---or an automated agent summarizing the
+analyst's work---attempts the historical error: the same two
+references with \texttt{relation=IDENTITY}. Construction raises
+\texttt{SemanticValidationError}; the message states that identity
+is permitted only for the exact same versioned reference and
+names the Foundation/Drive and World/Domain pairs as required
+non-identity cases. There is no flag to pass, no permissive mode,
+and no alternative constructor. The error is not a policy lookup
+that could be misconfigured; it is the type refusing to hold the
+value.
+\end{example}
+
+\begin{example}[Illegal: malformed fields]\label{ch03:ex-malformed}
+Each of the following constructions fails with a validation
+error naming the offending field: a namespace supplied as the
+plain string \texttt{"CAS\_DRIVE"} rather than the enumeration
+member (namespace must be a \texttt{SemanticNamespace}); a
+\texttt{local\_id} of \texttt{"~F5"} or \texttt{"F5~"}
+(surrounding whitespace), \texttt{""} (blank), or \texttt{"F\,5"}
+with a zero-width space between the characters (forbidden format
+category---the case that is invisible in review and exists
+precisely to be caught here); a \texttt{local\_id} containing
+non-ASCII letters or failing NFKC stability; a
+\texttt{definition\_sha256} of the wrong length, with non-hex
+characters, or absent. A lowercase but otherwise well-formed
+digest, by contrast, is \emph{accepted and normalized} to
+uppercase---case is presentation, not identity.
+\end{example}
+
+\begin{example}[Illegal: the impostor]\label{ch03:ex-impostor}
+A subclass \texttt{class LooksLikeRef(SemanticRef)} overriding
+\texttt{\_\_eq\_\_} to return true against any reference cannot be
+constructed: the base class's \texttt{\_\_post\_init\_\_} raises
+on the subclass type before any field is validated. An impostor
+built without the constructor still fails every kernel comparison,
+because \texttt{semantic\_refs\_match} tests
+\texttt{type(left) is SemanticRef} before touching any field. The
+spoof has no purchase at either surface.
+\end{example}
+
+\begin{example}[Legal but delimiter-bearing: rendering under stress]\label{ch03:ex-delimiter}
+A version string is prose-grade text and may lawfully contain
+JSON-significant characters---say
+\texttt{version='1.0 "corrected", second printing'}. The
+\texttt{qualified\_id} rendering escapes the quotation marks
+within the JSON string encoding, and no choice of other
+components in any other reference can produce the same rendered
+string: the delimiter fixtures of
+Proposition~\ref{ch03:prop-injective} exercise exactly this class.
+The naive colon-join of Section~\ref{ch03:flattening} would have
+been ambiguous here; the versioned JSON rendering is not.
+\end{example}
+
+\begin{example}[Definitional drift, detected end to end]\label{ch03:ex-drift}
+A final worked scenario exercises the digest field's purpose across
+time. In month one, an analyst binds a reference to a canon
+element: namespace \texttt{CAS\_DRIVE}, \texttt{local\_id}
+\texttt{"F2"}, version \texttt{"v7.7"}, source
+\texttt{"cas-canon"}, and the digest \texttt{"51BC...D3"} of the
+element's defining sentence as it stands in the analyst's
+hash-bound checkout. The reference enters a dozen analysis records
+and one crosswalk. In month three, the canon receives a
+corrected printing: the defining sentence of the same element is
+amended---one clause tightened---without a change to the version
+designation, an event the program's history shows is realistic.
+A colleague working from the corrected corpus constructs the
+``same'' reference and obtains digest \texttt{"E907...2A"}.
+
+Nothing fails, and that is the design: both references are valid,
+each truthfully names the element as defined by particular bytes,
+and they are \emph{unequal}. The inequality surfaces exactly where
+it should: a replay comparison between the analyst's records and
+the colleague's reports a reference mismatch localized to the
+digest field; a registry query for records bound to the old digest
+enumerates precisely the dozen artifacts owing a recheck; and the
+crosswalk, whose endpoint no longer matches the live source, is
+flagged stale by the same comparison. Under a four-field design,
+every one of these records would have continued to match while
+meaning different words; the month-three divergence would have
+been discovered, if ever, as a subtle analytical disagreement with
+no mechanical cause. The digest field converts it into bookkeeping
+---which is the entire thesis of the layer in one scenario.
+\end{example}
+
+\section{What the identity layer does not claim}\label{ch03:boundary}
+
+\begin{boundary}[Limits of semantic identity]\label{ch03:bd-limits}
+The layer guarantees, to the strength of its design arguments and
+its cited fixtures: that references are structural, disjointly
+namespaced, definition-bound, injectively renderable, and
+comparable only by exact type and field; and that cross-namespace
+identity is unrepresentable. It does not and cannot guarantee:
+that a reference's digest was computed over the correct defining
+passage (a registry and review obligation); that any crosswalk's
+asserted correspondence is true (the crosswalk records an
+assertion and its grounds, not a fact); that the namespace catalog
+is complete for the program's future needs (extension is a
+reviewed kernel change); or that any use of the layer confers
+semantic correctness, empirical validity, or authority of any
+kind. Every value the layer produces carries, or is governed by,
+the Ring-4 research boundary---admission \textsc{open}, product
+\textsc{not licensed}, disclosure withheld---and nothing in this
+chapter's mechanisms alters that boundary. The bounded receipts
+that exercise this layer (reference identity, rendering
+distinctness under delimiter fixtures, crosswalk rejection cases,
+exact-type rejections) are historical, fixture-bound software
+evidence in the sense fixed by the introduction, and support no
+claim beyond tested behavior under those fixtures.
+\end{boundary}
+
+\begin{remark}[The adversary model, stated plainly]\label{ch03:remark-adversary}
+A reader may reasonably ask who the adversary of this chapter's
+threat statements is supposed to be, since a research kernel is
+not an internet-facing service. The honest answer, consistent
+with the program's history, is threefold, in ascending order of
+intent. First, \emph{entropy}: honest tools and honest authors
+making locally reasonable choices---a different serializer, a
+convenient string join, a subclass for a quick experiment---whose
+composition produces conflation and aliasing with no adversary
+anywhere; most of the layer's rules earn their keep against this
+adversary alone. Second, \emph{the program's own generative
+tooling}: AI agents that produce code, records, and summaries at
+scale, whose failure mode is not malice but fluent overreach---
+constructing the plausible-looking link, the confident identity,
+the tidy rendering---faster than review can police; fail-closed
+construction converts this pressure into visible errors at the
+point of generation. Third, \emph{a deliberate adversary}: the
+spoofing and collision constructions of this chapter are written
+as attacks because design against the deliberate case covers the
+accidental ones, and because a kernel meant to underwrite future
+claims must assume its inputs will one day be crafted, not merely
+careless. The threat statements name the third adversary; the
+first two are the ones the program has actually met, and they are
+covered a fortiori.
+\end{remark}
+
+The layer's contribution to the kernel is therefore best stated in
+the design-inversion vocabulary: it does not detect conflation, it
+\emph{disarms} it, by making the conflating statement
+inexpressible and the honest statement cheap. Every mechanism in
+the chapters that follow---boundaries, encodings, compatibility
+receipts, registries---consumes references and crosswalks in the
+forms fixed here, which is why the layer comes first: it is the
+vocabulary in which the rest of the kernel is prevented from
+lying.

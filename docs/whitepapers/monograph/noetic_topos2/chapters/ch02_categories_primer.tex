@@ -1,0 +1,1367 @@
+\chapter{Categories, Functors, and Presheaves: A Primer}\label{ch02:chap}
+
+\section{Purpose and scope}\label{ch02:sec:purpose}
+
+This chapter develops, from nothing, the standard category theory used in
+the rest of the monograph: categories, functors, natural transformations,
+opposite categories, presheaves, representable presheaves, the Yoneda
+lemma, and limits with particular attention to pullbacks. Everything in
+this chapter is textbook material
+\cite{awodey,riehl,maclanecwm,maclane}, presented as such; none of it is a
+project contribution, and the chapter's only originality is in the choice
+and arrangement of examples. Readers fluent in the subject should skim for
+notation --- in particular the poset conventions of
+Section~\ref{ch02:sec:posets-as-cats} and the small posets introduced in
+Section~\ref{ch02:sec:laboratory}, which recur throughout Part~II --- and
+move on.
+
+The pedagogical strategy is dictated by the destination. The finite theory
+of Part~II lives entirely on a sixteen-element powerset lattice, viewed as
+a category; every presheaf that matters there is a functor out of a finite
+poset, every pullback that matters is an intersection of subsets, and
+every application of the Yoneda lemma is an application of its poset case.
+This chapter therefore works the poset case of everything in full, on
+posets small enough that all objects can be enumerated by hand: the
+two-element chain, the three-element chain, a three-element ``vee,'' and
+the four-element powerset lattice of a two-element set. The general
+definitions are always given --- the legacy category $\cC$ of Chapter~5 is
+not a poset, and the countermodel of Chapter~6 lives in a category of
+finite sets and injections --- but the general theory is cited rather than
+redeveloped where the poset case suffices for Part~II. A reader wanting a
+refresher on elementary proof technique before starting may consult
+Hammack \cite{bookofproof}; the proofs below use nothing beyond induction,
+case analysis, and careful bookkeeping with sets and functions.
+
+\section{Categories}\label{ch02:sec:categories}
+
+\begin{definition}[Category]\label{ch02:def:category}
+A \emph{category} $\cC$ consists of the following data:
+\begin{enumerate}
+\item a class $\Ob(\cC)$ of \emph{objects};
+\item for each ordered pair of objects $(A, B)$, a set
+$\Hom_{\cC}(A, B)$ of \emph{morphisms} from $A$ to $B$ (written
+$f : A \to B$; $A$ is the \emph{domain} of $f$ and $B$ its
+\emph{codomain});
+\item for each triple of objects $(A, B, C)$, a \emph{composition}
+operation
+\[
+\circ : \Hom_{\cC}(B, C) \times \Hom_{\cC}(A, B) \to \Hom_{\cC}(A, C),
+\qquad (g, f) \mapsto g \circ f ;
+\]
+\item for each object $A$, an \emph{identity} morphism
+$\id_A \in \Hom_{\cC}(A, A)$;
+\end{enumerate}
+subject to two axioms:
+\begin{enumerate}
+\item[(C1)] \emph{Associativity}: $h \circ (g \circ f) = (h \circ g)
+\circ f$ whenever the composites are defined;
+\item[(C2)] \emph{Unitality}: $\id_B \circ f = f = f \circ \id_A$ for
+every $f : A \to B$.
+\end{enumerate}
+\end{definition}
+
+We assume morphism sets with distinct domain-codomain pairs are disjoint,
+so that every morphism has a well-defined domain and codomain. A category
+is \emph{small} when $\Ob(\cC)$ is a set (not a proper class) and
+\emph{locally small} when each $\Hom_{\cC}(A,B)$ is a set, as
+Definition~\ref{ch02:def:category} already requires. Size issues play one
+role in this monograph: topos-existence statements require the site to be
+small in a chosen universe, and the finite lattice $L$ of Part~II is not
+merely small but finite, which is why exhaustive checking is possible at
+all.
+
+\begin{example}[The category of sets]\label{ch02:ex:set}
+$\Set$ has all sets (in a fixed universe) as objects and all functions as
+morphisms, with ordinary composition of functions and the ordinary
+identity functions. Axioms (C1) and (C2) are the familiar facts that
+composition of functions is associative and that identity functions are
+neutral. $\Set$ is locally small but not small.
+\end{example}
+
+\begin{example}[Finite sets]\label{ch02:ex:finset}
+$\mathbf{FinSet}$ has finite sets as objects and all functions between
+them as morphisms; it is a \emph{full subcategory} of $\Set$, meaning its
+morphism sets are exactly those of $\Set$ between the retained objects.
+Variants with restricted morphisms also matter later: the category of
+finite sets and \emph{injections} (same objects, only injective functions)
+is a category, because identities are injective and composites of
+injections are injections. Chapter~6's countermodel lives in the full
+subcategory of that category on sets of size at most two. Note that
+restricting morphisms can change categorical properties drastically ---
+which is the point of the countermodel.
+\end{example}
+
+\subsection{Posets as categories}\label{ch02:sec:posets-as-cats}
+
+\begin{definition}[Poset]\label{ch02:def:poset}
+A \emph{partially ordered set} (poset) is a set $P$ with a relation
+$\le$ that is reflexive ($U \le U$), transitive ($U \le V$ and $V \le W$
+imply $U \le W$), and antisymmetric ($U \le V$ and $V \le U$ imply
+$U = V$).
+\end{definition}
+
+\begin{proposition}[A poset is a category]\label{ch02:prop:poset-category}
+Let $(P, \le)$ be a poset. Define a category, also written $P$, with
+$\Ob(P) = P$ and
+\[
+\Hom_P(U, V) =
+\begin{cases}
+\{\, \iota_{U,V} \,\} & \text{if } U \le V, \\
+\varnothing & \text{otherwise,}
+\end{cases}
+\]
+where $\iota_{U,V}$ is a formal symbol (``the'' morphism from $U$ to
+$V$). Composition is $\iota_{V,W} \circ \iota_{U,V} = \iota_{U,W}$ and
+the identity on $U$ is $\iota_{U,U}$. Then $P$ is a category.
+\end{proposition}
+
+\begin{proof}
+Composition is well defined: if $U \le V$ and $V \le W$ then $U \le W$ by
+transitivity, so $\iota_{U,W}$ exists. Identities exist by reflexivity.
+Associativity (C1): both $h \circ (g \circ f)$ and $(h \circ g) \circ f$,
+when defined, are morphisms $U \to Z$ for the same pair $(U, Z)$, and
+$\Hom_P(U, Z)$ has at most one element, so they are equal. Unitality (C2)
+holds for the same reason: $\id_V \circ \iota_{U,V}$ and $\iota_{U,V}$
+are both elements of the at-most-one-element set $\Hom_P(U,V)$.
+\end{proof}
+
+The at-most-one-morphism property just used is worth isolating, because it
+is invoked silently on almost every page of Part~II.
+
+\begin{proposition}[All diagrams in a poset commute]\label{ch02:prop:poset-commute}
+In a poset regarded as a category, any two morphisms with the same domain
+and the same codomain are equal. Consequently every diagram of morphisms
+commutes: any two composites with the same source and target agree.
+\end{proposition}
+
+\begin{proof}
+Immediate from $|\Hom_P(U,V)| \le 1$: parallel morphisms lie in a common
+set with at most one element. A composite of morphisms $U \to \cdots \to
+V$ is a morphism $U \to V$, so any two such composites are parallel, hence
+equal.
+\end{proof}
+
+\begin{example}[The standard small posets]\label{ch02:ex:small-posets}
+Four posets recur throughout this monograph.
+\begin{enumerate}
+\item The \emph{two-element chain} $[2] = \{0, 1\}$ with $0 \le 1$. As a
+category it has two objects and three morphisms: $\id_0$, $\id_1$, and
+$f : 0 \to 1$.
+\item The \emph{three-element chain} $[3] = \{0, 1, 2\}$ with
+$0 \le 1 \le 2$. Six morphisms: three identities and the arrows
+$0 \to 1$, $1 \to 2$, $0 \to 2$, with $(1 \to 2) \circ (0 \to 1) =
+(0 \to 2)$ --- the only nontrivial composition, forced by
+Proposition~\ref{ch02:prop:poset-commute}.
+\item The \emph{vee} $\Lambda = \{x, y, t\}$ with $x \le t$, $y \le t$,
+and $x, y$ incomparable. Five morphisms: three identities, $x \to t$,
+$y \to t$. There is no morphism between $x$ and $y$ in either direction.
+\item The \emph{square} $B = \mathcal{P}(\{1, 2\})$, the powerset of a
+two-element set ordered by inclusion: objects $\varnothing$, $\{1\}$,
+$\{2\}$, $\{1,2\}$. Counting ordered pairs $U \subseteq V$:
+$\varnothing$ is below all four objects, $\{1\}$ below itself and
+$\{1,2\}$, $\{2\}$ likewise, and $\{1,2\}$ below itself only ---
+$4 + 2 + 2 + 1 = 9$ morphisms.
+\end{enumerate}
+\end{example}
+
+\begin{proposition}[Counting inclusions in a powerset]\label{ch02:prop:threepow}
+For a finite set $X$, the number of ordered pairs $(U, V)$ with
+$U \subseteq V \subseteq X$ --- that is, the number of morphisms of the
+category $\mathcal{P}(X)$ --- is $3^{|X|}$.
+\end{proposition}
+
+\begin{proof}
+A pair $U \subseteq V$ is determined by assigning to each element of $X$
+one of three mutually exclusive statuses: in $U$ (hence in $V$), in
+$V$ but not $U$, or outside $V$. Distinct assignments give distinct pairs
+and every pair arises, so the count is $3^{|X|}$.
+\end{proof}
+
+For $|X| = 2$ this gives the $9$ morphisms of $B$ just counted by hand;
+for $|X| = 4$ it gives $3^4 = 81$, which is the arrow count of the context
+lattice $L = \mathcal{P}(\{0,1\} \times \{0,1\})$ recorded by the finite
+certificate and used constantly in Part~II. The agreement between this
+one-line combinatorial argument and the certificate's exhaustive
+enumeration is a small instance of the corroboration discipline of
+Chapter~11.
+
+\subsection{Monoids as one-object categories}\label{ch02:sec:monoids}
+
+\begin{definition}[Monoid]\label{ch02:def:monoid}
+A \emph{monoid} is a set $M$ with an associative binary operation
+$(m, m') \mapsto m m'$ and a two-sided unit $e \in M$: $e m = m = m e$.
+\end{definition}
+
+\begin{proposition}[Monoids are one-object categories]\label{ch02:prop:monoid-category}
+For a monoid $M$, define a category $\mathbf{B}M$ with a single object
+$\ast$, $\Hom(\ast, \ast) = M$, composition $m' \circ m = m' m$
+(multiplication), and $\id_\ast = e$. Then $\mathbf{B}M$ is a category.
+Conversely, if $\cC$ is a category with exactly one object $\ast$, then
+$\Hom_{\cC}(\ast, \ast)$ with composition as multiplication and
+$\id_\ast$ as unit is a monoid, and the two constructions are mutually
+inverse.
+\end{proposition}
+
+\begin{proof}
+For $\mathbf{B}M$: all composites are defined (there is one object), and
+(C1), (C2) are exactly associativity and unitality of $M$. Conversely, in
+a one-object category the composition operation is a total binary
+operation on the single morphism set; (C1) makes it associative and (C2)
+makes $\id_\ast$ a two-sided unit. Applying the first construction to the
+monoid so obtained returns the original category, and applying the second
+to $\mathbf{B}M$ returns $M$.
+\end{proof}
+
+Posets and monoids are the two degenerate extremes of the notion of
+category: a poset has many objects but at most one morphism between any
+two, so all information is in \emph{which} morphisms exist; a monoid has
+one object and many morphisms, so all information is in \emph{how}
+morphisms compose. General categories mix both kinds of information. The
+finite theory of Part~II lives at the poset extreme; the legacy category
+$\cC$ of Chapter~5 does not, which is why the general definitions are
+needed at all.
+
+\subsection{Isomorphisms, monomorphisms, epimorphisms}\label{ch02:sec:special-morphisms}
+
+\begin{definition}\label{ch02:def:iso-mono-epi}
+Let $f : A \to B$ be a morphism in a category $\cC$.
+\begin{enumerate}
+\item $f$ is an \emph{isomorphism} if there exists $g : B \to A$ with
+$g \circ f = \id_A$ and $f \circ g = \id_B$; such $g$ is unique when it
+exists and is written $f^{-1}$.
+\item $f$ is a \emph{monomorphism} (mono) if for all parallel
+$h, k : Z \to A$, $f \circ h = f \circ k$ implies $h = k$.
+\item $f$ is an \emph{epimorphism} (epi) if for all parallel
+$h, k : B \to Z$, $h \circ f = k \circ f$ implies $h = k$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}[Monos and epis in $\Set$]\label{ch02:prop:set-mono-epi}
+In $\Set$, a function is a monomorphism if and only if it is injective,
+and an epimorphism if and only if it is surjective.
+\end{proposition}
+
+\begin{proof}
+\emph{Mono $\Leftrightarrow$ injective.} If $f : A \to B$ is injective
+and $f \circ h = f \circ k$ for $h, k : Z \to A$, then for each
+$z \in Z$, $f(h(z)) = f(k(z))$, so $h(z) = k(z)$; thus $h = k$.
+Conversely, suppose $f$ is a mono and $f(a) = f(a')$. Let
+$Z = \{\ast\}$ be a one-element set and define $h, k : Z \to A$ by
+$h(\ast) = a$, $k(\ast) = a'$. Then $f \circ h = f \circ k$, so
+$h = k$, so $a = a'$.
+
+\emph{Epi $\Leftrightarrow$ surjective.} If $f$ is surjective and
+$h \circ f = k \circ f$, then every $b \in B$ is $f(a)$ for some $a$, so
+$h(b) = h(f(a)) = k(f(a)) = k(b)$; thus $h = k$. Conversely, suppose $f$
+is not surjective; choose $b_0 \in B$ with $b_0 \notin \im f$. Define
+$h, k : B \to \{0, 1\}$ by $h$ constantly $0$, and $k(b) = 1$ if
+$b = b_0$, else $k(b) = 0$. Then $h \ne k$ but $h \circ f = k \circ f$,
+since $f$ never hits $b_0$. So $f$ is not an epi.
+\end{proof}
+
+\begin{proposition}[Isomorphisms in a poset are identities]\label{ch02:prop:poset-iso}
+In a poset regarded as a category, the only isomorphisms are the
+identity morphisms.
+\end{proposition}
+
+\begin{proof}
+Suppose $f : U \to V$ has an inverse $g : V \to U$. The existence of $f$
+and $g$ means $U \le V$ and $V \le U$, so $U = V$ by antisymmetry. Then
+$f \in \Hom_P(U, U) = \{\id_U\}$, so $f = \id_U$.
+\end{proof}
+
+This innocuous fact has a consequence used in
+Section~\ref{ch02:sec:yoneda}: in a poset, isomorphic representables have
+equal representing objects --- there is no ``isomorphism slack.''
+
+\subsection{Split epimorphisms and section-retraction pairs}\label{ch02:sec:split}
+
+The next definition is elementary, but it is the single most consequential
+definition of the chapter for this monograph's story: the legacy collapse
+of Chapter~5 turns on it.
+
+\begin{definition}[Section, retraction, split epi]\label{ch02:def:split}
+A morphism $\varepsilon : B \to A$ is a \emph{split epimorphism} if there
+exists $\eta : A \to B$ with $\varepsilon \circ \eta = \id_A$. One then
+calls $\eta$ a \emph{section} of $\varepsilon$, calls $\varepsilon$ a
+\emph{retraction} of $\eta$, and calls $(\eta, \varepsilon)$ a
+\emph{section-retraction pair}. Nothing is assumed about the other
+composite $\eta \circ \varepsilon : B \to B$, which in general is not
+$\id_B$.
+\end{definition}
+
+\begin{proposition}\label{ch02:prop:split-epi-is-epi}
+Every split epimorphism is an epimorphism, and every section is a
+monomorphism.
+\end{proposition}
+
+\begin{proof}
+Let $\varepsilon \circ \eta = \id_A$. If
+$h \circ \varepsilon = k \circ \varepsilon$, compose on the right with
+$\eta$: $h = h \circ \id_A = h \circ \varepsilon \circ \eta =
+k \circ \varepsilon \circ \eta = k$. Dually, if
+$\eta \circ h = \eta \circ k$, compose on the left with $\varepsilon$ to
+get $h = k$.
+\end{proof}
+
+\begin{example}\label{ch02:ex:split-in-set}
+In $\Set$, every surjection $\varepsilon : B \to A$ with $A$ nonempty (or
+$B = A = \varnothing$) is split: choose, for each $a \in A$, an element
+$\eta(a) \in \varepsilon^{-1}(a)$. The composite $\eta \circ \varepsilon$
+sends each $b$ to the chosen representative of its fiber --- generally
+not $b$ itself. This is the shape to keep in mind: passing from $B$ down
+to $A$ and back up loses exactly the within-fiber information. The
+registered RPM data of the legacy construction have this shape:
+$\eta_X : X \to R(X)$, $\varepsilon_X : R(X) \to X$,
+$\varepsilon_X \circ \eta_X = \id_X$, with the composite the other way
+explicitly \emph{not} required to be the identity --- a
+section-retraction pair, not an adjoint equivalence, encoding the
+program-wide rule that prerequisite satisfaction is one-directional.
+\end{example}
+
+\begin{remark}\label{ch02:rem:no-split-in-posets}
+In a poset, if $\varepsilon : V \to U$ is a split epimorphism with
+section $\eta : U \to V$, then $U \le V$ and $V \le U$, so $U = V$ and
+both maps are $\id_U$ (Proposition~\ref{ch02:prop:poset-iso}). Posets
+harbor no nontrivial section-retraction pairs --- one reason the
+successor's context factor, a poset, is structurally immune to the
+split-epi collapse mechanism of Chapter~5.
+\end{remark}
+
+\begin{exercise}\label{ch02:exr:poset-monoepi}
+Show that in a poset regarded as a category, \emph{every} morphism is
+both a monomorphism and an epimorphism. (Hint:
+Proposition~\ref{ch02:prop:poset-commute} makes the required implications
+vacuous.) Conclude that ``mono and epi'' does not imply ``iso'' in
+general categories.
+\end{exercise}
+
+\section{Functors}\label{ch02:sec:functors}
+
+\begin{definition}[Functor]\label{ch02:def:functor}
+Let $\cC$ and $\mathcal{D}$ be categories. A \emph{functor}
+$F : \cC \to \mathcal{D}$ assigns to each object $A \in \Ob(\cC)$ an
+object $F(A) \in \Ob(\mathcal{D})$ and to each morphism $f : A \to B$ a
+morphism $F(f) : F(A) \to F(B)$, such that
+\begin{enumerate}
+\item[(F1)] $F(g \circ f) = F(g) \circ F(f)$ whenever $g \circ f$ is
+defined, and
+\item[(F2)] $F(\id_A) = \id_{F(A)}$ for every object $A$.
+\end{enumerate}
+\end{definition}
+
+Functors compose in the evident way (apply one, then the other), and the
+identity assignment is a functor; small categories and functors between
+them themselves form a category \cite{maclanecwm}.
+
+\begin{example}\label{ch02:ex:functors-basic}
+(i) The inclusion $\mathbf{FinSet} \to \Set$ is a functor. (ii) For a
+fixed set $S$, the assignment $A \mapsto A \times S$,
+$f \mapsto f \times \id_S$ is a functor $\Set \to \Set$. (iii) For any
+object $C$ of a locally small category $\cC$, the \emph{covariant hom
+functor} $\Hom_{\cC}(C, -) : \cC \to \Set$ sends $B$ to
+$\Hom_{\cC}(C, B)$ and $g : B \to B'$ to the map ``postcompose with
+$g$.'' Functoriality is associativity and unitality of composition in
+$\cC$.
+\end{example}
+
+\begin{proposition}[Functors between posets are monotone maps]\label{ch02:prop:functor-monotone}
+Let $P$ and $Q$ be posets regarded as categories. A functor
+$F : P \to Q$ is exactly the same data as a monotone (order-preserving)
+function $F : P \to Q$: a function with $U \le V \Rightarrow
+F(U) \le F(V)$.
+\end{proposition}
+
+\begin{proof}
+Given a functor $F$, its object part is a function $P \to Q$. If
+$U \le V$, the morphism $\iota_{U,V}$ exists, and $F(\iota_{U,V})$ is a
+morphism $F(U) \to F(V)$ in $Q$, which by definition of $Q$ as a category
+means $F(U) \le F(V)$. So the object part is monotone. Conversely, a
+monotone function $F$ extends to morphisms in exactly one way (send
+$\iota_{U,V}$ to $\iota_{F(U), F(V)}$, which exists by monotonicity), and
+(F1), (F2) hold automatically by
+Proposition~\ref{ch02:prop:poset-commute} applied in $Q$: all the
+required equations are between parallel morphisms in a poset. The two
+constructions are mutually inverse.
+\end{proof}
+
+\begin{example}\label{ch02:ex:functors-two-chain}
+The functors $[2] \to [2]$ are the monotone self-maps of the two-element
+chain: the constant map at $0$, the constant map at $1$, and the
+identity. The non-monotone swap $0 \mapsto 1, 1 \mapsto 0$ is not a
+functor: it would have to send the morphism $0 \to 1$ to a morphism
+$1 \to 0$, and there is none.
+\end{example}
+
+\begin{proposition}[Functors between monoids are homomorphisms]\label{ch02:prop:functor-monoid}
+For monoids $M$ and $N$, functors $\mathbf{B}M \to \mathbf{B}N$
+correspond exactly to monoid homomorphisms $M \to N$ (functions
+preserving multiplication and unit).
+\end{proposition}
+
+\begin{proof}
+A functor sends $\ast$ to $\ast$ (no choice) and each morphism
+$m \in M$ to a morphism $F(m) \in N$; (F1) says
+$F(m' m) = F(m') F(m)$ and (F2) says $F(e_M) = e_N$ --- precisely the
+homomorphism conditions. Conversely any homomorphism defines a functor
+this way.
+\end{proof}
+
+\begin{definition}[Faithful, full]\label{ch02:def:faithful-full}
+A functor $F : \cC \to \mathcal{D}$ is \emph{faithful} if each map
+$\Hom_{\cC}(A, B) \to \Hom_{\mathcal{D}}(F A, F B)$ is injective,
+\emph{full} if each is surjective, and \emph{fully faithful} if both.
+\end{definition}
+
+\section{Natural transformations}\label{ch02:sec:nat}
+
+Functors compare categories; natural transformations compare functors.
+The definition is short, but its content is the commuting square, and the
+examples below are chosen to show that the square has real force.
+
+\begin{definition}[Natural transformation]\label{ch02:def:nat}
+Let $F, G : \cC \to \mathcal{D}$ be functors. A \emph{natural
+transformation} $\alpha : F \Rightarrow G$ assigns to each object
+$A \in \Ob(\cC)$ a morphism $\alpha_A : F(A) \to G(A)$ in $\mathcal{D}$
+(the \emph{component} at $A$) such that for every morphism
+$f : A \to B$ in $\cC$,
+\[
+G(f) \circ \alpha_A = \alpha_B \circ F(f)
+\qquad \text{(naturality at } f\text{)}.
+\]
+If every component is an isomorphism, $\alpha$ is a \emph{natural
+isomorphism}, and $F$ and $G$ are \emph{naturally isomorphic}, written
+$F \cong G$.
+\end{definition}
+
+Natural transformations compose componentwise
+($(\beta \circ \alpha)_A = \beta_A \circ \alpha_A$; naturality of the
+composite follows by pasting the two squares), and the identity
+transformation has components $\id_{F(A)}$. Hence:
+
+\begin{definition}[Functor category]\label{ch02:def:functor-category}
+For categories $\cC$ (small) and $\mathcal{D}$, the \emph{functor
+category} $[\cC, \mathcal{D}]$ has functors $\cC \to \mathcal{D}$ as
+objects and natural transformations as morphisms. Its isomorphisms are
+exactly the natural isomorphisms.
+\end{definition}
+
+\begin{example}[Natural transformations into a poset are pointwise
+inequalities]\label{ch02:ex:nat-poset}
+Let $\cC$ be any small category and $Q$ a poset. For functors
+$F, G : \cC \to Q$, a natural transformation $F \Rightarrow G$ exists if
+and only if $F(A) \le G(A)$ for every object $A$, and is then unique.
+Indeed, a component $\alpha_A$ is a morphism $F(A) \to G(A)$ in $Q$,
+which exists iff $F(A) \le G(A)$ and is then unique; the naturality
+squares hold automatically by
+Proposition~\ref{ch02:prop:poset-commute} applied in $Q$. So the functor
+category $[\cC, Q]$ is itself a poset: functors ordered pointwise. This
+is the first hint of a theme that recurs with presheaves: when the target
+or source collapses to a poset, natural-transformation data collapse to
+order data.
+\end{example}
+
+\begin{example}[Intertwiners between monoid homomorphisms]\label{ch02:ex:nat-monoid}
+Let $f, g : M \to N$ be monoid homomorphisms, regarded as functors
+$\mathbf{B}M \to \mathbf{B}N$
+(Proposition~\ref{ch02:prop:functor-monoid}). A natural transformation
+$f \Rightarrow g$ has a single component: an element
+$n \in N = \Hom(\ast, \ast)$. Naturality at $m \in M$ reads
+$g(m)\, n = n\, f(m)$ --- the element $n$ \emph{intertwines} the two
+homomorphisms. So natural transformations here are not automatic at all:
+they exist only when a genuine algebraic condition is solvable. For
+instance, with $M = N = (\mathbb{N}, +)$ and $f, g$ the homomorphisms
+``multiply by $2$'' and ``multiply by $3$,'' naturality demands
+$3m + n = n + 2m$ for all $m$, i.e.\ $m = 0$ for all $m$, which fails:
+there is no natural transformation from $f$ to $g$. The commuting square
+has teeth.
+\end{example}
+
+\begin{example}[Morphisms of presheaves on the two-element chain]\label{ch02:ex:nat-two-chain}
+Anticipating Section~\ref{ch02:sec:presheaves}: a contravariant
+$\Set$-valued functor on $[2]$ amounts to a function
+$r : S_1 \to S_0$ (Section~\ref{ch02:sec:presheaves} makes this precise),
+and a natural transformation between two such, $r : S_1 \to S_0$ and
+$r' : S_1' \to S_0'$, is a pair of functions
+$\alpha_1 : S_1 \to S_1'$, $\alpha_0 : S_0 \to S_0'$ with
+$r' \circ \alpha_1 = \alpha_0 \circ r$ --- a commuting square of sets.
+Everything in Part~II about maps of presheaves is this picture with more
+objects.
+\end{example}
+
+\section{Opposite categories and contravariance}\label{ch02:sec:opposite}
+
+\begin{definition}[Opposite category]\label{ch02:def:opposite}
+The \emph{opposite category} $\cC^{\mathrm{op}}$ of a category $\cC$ has
+the same objects, and
+$\Hom_{\cC^{\mathrm{op}}}(A, B) = \Hom_{\cC}(B, A)$, with composition
+inherited from $\cC$ in reversed order and the same identities. Clearly
+$(\cC^{\mathrm{op}})^{\mathrm{op}} = \cC$.
+\end{definition}
+
+\begin{example}\label{ch02:ex:opposite-poset}
+For a poset $(P, \le)$, the opposite category is the poset
+$(P, \ge)$: all arrows reverse. For the powerset lattice
+$\mathcal{P}(X)$ ordered by inclusion, the opposite is $\mathcal{P}(X)$
+ordered by reverse inclusion --- which is again a powerset lattice via
+complementation, though we never need that fact.
+\end{example}
+
+\begin{definition}[Contravariant functor]\label{ch02:def:contravariant}
+A \emph{contravariant functor} from $\cC$ to $\mathcal{D}$ is a functor
+$\cC^{\mathrm{op}} \to \mathcal{D}$. Concretely: it assigns to each
+object $A$ an object $F(A)$, and to each morphism $f : A \to B$ of $\cC$
+a morphism $F(f) : F(B) \to F(A)$ \emph{in the reverse direction}, with
+$F(g \circ f) = F(f) \circ F(g)$ and $F(\id_A) = \id_{F(A)}$.
+\end{definition}
+
+The duality principle --- every theorem about categories yields a dual
+theorem by applying it to opposite categories --- is used lightly in this
+monograph, mainly through the mono/epi and section/retraction dualities
+already visible in Proposition~\ref{ch02:prop:split-epi-is-epi}. What we
+need constantly is the contravariant direction itself: presheaves, the
+subject of the next section, are contravariant by definition, and the
+directional bookkeeping (restriction goes \emph{down}) must become
+second nature.
+
+\section{Presheaves}\label{ch02:sec:presheaves}
+
+\begin{definition}[Presheaf]\label{ch02:def:presheaf}
+Let $\cC$ be a small category. A \emph{presheaf} on $\cC$ is a functor
+$F : \cC^{\mathrm{op}} \to \Set$. Unwinding: $F$ assigns to each object
+$C$ a set $F(C)$ (the \emph{sections over} $C$) and to each morphism
+$f : D \to C$ a function $F(f) : F(C) \to F(D)$ (the \emph{restriction
+along} $f$), such that restriction along an identity is the identity and
+restriction along a composite is the composite of the restrictions in
+reverse order. The category of presheaves is
+$\PSh(\cC) = [\cC^{\mathrm{op}}, \Set]$, with natural transformations as
+morphisms.
+\end{definition}
+
+When $\cC$ is a poset and $U \le V$, we write the restriction of a
+section $s \in F(V)$ along the unique morphism $U \to V$ as
+$s|_U \in F(U)$. The functor laws then read: $s|_V = s$ for
+$s \in F(V)$, and $(s|_V)|_U = s|_U$ whenever $U \le V \le W$ and
+$s \in F(W)$ --- restriction is transitive and unital, exactly the
+algebra of ``forgetting part of the picture.''
+
+\begin{example}[Presheaves on the two-element chain]\label{ch02:ex:psh-two-chain}
+A presheaf $F$ on $[2]$ consists of two sets $F(1)$, $F(0)$ and one
+restriction function $F(1) \to F(0)$ (along $0 \le 1$); the functor laws
+add nothing further, since the only composites in $[2]$ involve
+identities. So $\PSh([2])$ is the category whose objects are functions
+between sets and whose morphisms are commuting squares
+(Example~\ref{ch02:ex:nat-two-chain}). This tiny observation is worth
+internalizing: a presheaf on a poset is a system of sets wired together
+by restriction functions along the order, one function per covering
+relation, with commutativity along paths for free in chains but a real
+condition once the poset has diamonds.
+\end{example}
+
+\begin{example}[Presheaves on the vee]\label{ch02:ex:psh-vee}
+A presheaf on $\Lambda$ ($x \le t \ge y$) is a \emph{span}: three sets
+and two functions $F(t) \to F(x)$, $F(t) \to F(y)$ with common domain.
+There are no composable nonidentity pairs, hence no commutativity
+conditions.
+\end{example}
+
+\begin{example}[Presheaves on the square]\label{ch02:ex:psh-square}
+A presheaf on $B = \mathcal{P}(\{1,2\})$ consists of four sets
+$F(\{1,2\})$, $F(\{1\})$, $F(\{2\})$, $F(\varnothing)$ and five
+restriction functions (one per nonidentity inclusion), subject to
+\emph{one} nontrivial commutativity condition: the two paths from
+$F(\{1,2\})$ to $F(\varnothing)$ --- via $F(\{1\})$ and via $F(\{2\})$
+--- must agree, because both equal restriction along
+$\varnothing \subseteq \{1,2\}$. This is
+Proposition~\ref{ch02:prop:poset-commute} biting for the first time: in
+the source poset the two paths are the same morphism, so the presheaf
+must send them to the same function.
+\end{example}
+
+\begin{example}[The bit presheaf]\label{ch02:ex:bit-presheaf}
+On $B$, define $G(V) = \{0,1\}^V$, the set of all functions
+$V \to \{0,1\}$, with restriction $s|_U$ the literal restriction of the
+function $s$ to the subset $U$. Then $G(\varnothing)$ is a singleton
+(the empty function), $|G(\{1\})| = |G(\{2\})| = 2$, and
+$|G(\{1,2\})| = 4$. Functoriality is immediate: restricting a function
+to $V$ then to $U \subseteq V$ is restricting it to $U$. This presheaf
+--- ``a bit written on each point in view'' --- is the germ of the
+witness presheaves of Chapter~9, and the reader met it informally in the
+vignette of Chapter~1.
+\end{example}
+
+\begin{example}[The constant-verdict presheaf]\label{ch02:ex:verdict-presheaf}
+On $B$, define $H(V) = \{\mathsf{p}, \mathsf{q}\}$ for all nonempty $V$
+and $H(\varnothing) = \{\ast\}$, with identity restrictions among
+nonempty contexts and the unique map to $H(\varnothing)$. Functoriality
+is a short check (all composites of identities and unique-to-singleton
+maps agree). This is the second presheaf of the Chapter~1 vignette; its
+failure to be a sheaf for the union cover of $\{1,2\}$ is worked in
+Chapter~4's terms once the sheaf condition is available.
+\end{example}
+
+\begin{example}[Constant, terminal, and initial presheaves]\label{ch02:ex:constant-presheaf}
+For any set $S$, the \emph{constant presheaf} $\Delta S$ assigns
+$S$ to every object and $\id_S$ to every morphism. Two special cases
+recur. The \emph{terminal presheaf} $\mathbf{1} = \Delta\{\ast\}$ has
+exactly one section everywhere; every presheaf admits exactly one
+morphism to it (each component must be the unique map to a
+singleton), so it is terminal in $\PSh(\cC)$. The \emph{initial
+presheaf} $\Delta\varnothing$ has no sections anywhere and admits
+exactly one morphism to every presheaf (all components empty
+functions). Beware a poset-specific subtlety used with force in
+Chapter~10: the terminal presheaf on $B$ has one section over
+$\varnothing$, but a general presheaf may have zero, two, or fifty
+sections over the bottom context --- $F(\varnothing)$ is data, not
+convention, and constructions that need a singleton there (as the
+explicit reflector of Chapter~10 does) must impose it explicitly
+rather than assume it.
+\end{example}
+
+\begin{example}[Presheaves on a discrete poset]\label{ch02:ex:psh-discrete}
+Let $P$ be the discrete two-element poset (two objects, no relation
+besides reflexivity). A presheaf on $P$ is just a pair of sets with
+no connecting data, and a morphism is a pair of functions:
+$\PSh(P) \cong \Set \times \Set$. Discreteness kills all interaction
+--- there are no restrictions to be compatible with. This degenerate
+case is worth one glance because it is the shape of the
+\emph{resolved} world of Part~II: after the joined topology
+discretizes the context factor, the resolved subcategory behaves like
+a product of independent copies, one per atom, with no remaining
+interaction --- the expressivity boundary discussed in Chapters~1
+and~12. Interaction lives in the order; flatten the order and only
+juxtaposition remains.
+\end{example}
+
+\begin{exercise}\label{ch02:exr:count-presheaves}
+Count the presheaves on $[2]$ whose section sets are subsets of a fixed
+two-element set $\{a, b\}$. (There are four choices for each of
+$F(1), F(0)$ from $\{\varnothing, \{a\}, \{b\}, \{a,b\}\}$ and then
+$|F(0)|^{|F(1)|}$ choices of restriction; summing gives the count.
+Carrying this out --- the answer is $\sum_{m,n} n^m$ over sizes with
+multiplicity --- is a useful five-minute drill in what a presheaf
+\emph{is}.)
+\end{exercise}
+
+\section{Representable presheaves}\label{ch02:sec:representables}
+
+\begin{definition}[Representable presheaf]\label{ch02:def:representable}
+For an object $C$ of a small category $\cC$, the \emph{representable
+presheaf} $yC$ is
+\[
+yC = \Hom_{\cC}(-, C) : \cC^{\mathrm{op}} \to \Set,
+\]
+sending $D \mapsto \Hom_{\cC}(D, C)$ and a morphism $h : D' \to D$ to
+the precomposition map $f \mapsto f \circ h$. A presheaf is
+\emph{representable} if it is naturally isomorphic to some $yC$. The
+assignment $C \mapsto yC$ extends to a functor
+$y : \cC \to \PSh(\cC)$ (the \emph{Yoneda embedding}): a morphism
+$g : C \to C'$ induces the natural transformation
+$yg : yC \Rightarrow yC'$ with components ``postcompose with $g$.''
+\end{definition}
+
+Functoriality of $yC$ is associativity of composition; naturality of
+$yg$ is associativity again. The representable $yC$ is the category's
+own record of ``all ways of mapping into $C$'' --- and sieves, the
+central objects of Chapter~3, will be exactly the subfunctors of
+representables.
+
+\begin{proposition}[Representables on a poset]\label{ch02:prop:representable-poset}
+Let $P$ be a poset and $W \in P$. Then for every $V \in P$,
+\[
+yW(V) =
+\begin{cases}
+\{\ast\} & \text{if } V \le W,\\
+\varnothing & \text{otherwise,}
+\end{cases}
+\]
+and all restriction maps are the unique possible functions. Thus $yW$ is
+the ``indicator presheaf'' of the principal down-set
+$\mathord{\downarrow} W = \{V : V \le W\}$: it has exactly one section
+over each context below $W$ and none elsewhere.
+\end{proposition}
+
+\begin{proof}
+$yW(V) = \Hom_P(V, W)$, which is a singleton if $V \le W$ and empty
+otherwise, by definition of the poset category. Restriction along
+$U \le V$ maps $\Hom_P(V, W) \to \Hom_P(U, W)$; when both are singletons
+it is the unique function between singletons, when the source is empty
+it is the empty function, and the case source-nonempty,
+target-empty cannot occur since $U \le V \le W$ implies $U \le W$.
+Functoriality holds because all diagrams of functions between sets with
+at most one element commute.
+\end{proof}
+
+\begin{example}\label{ch02:ex:representables-square}
+On $B = \mathcal{P}(\{1,2\})$, the four representables have section
+counts (over $\varnothing, \{1\}, \{2\}, \{1,2\}$ in that order):
+$y\varnothing : (1, 0, 0, 0)$; $y\{1\} : (1, 1, 0, 0)$;
+$y\{2\} : (1, 0, 1, 0)$; $y\{1,2\} : (1, 1, 1, 1)$. Each is the
+indicator of a down-set, as
+Proposition~\ref{ch02:prop:representable-poset} says. Note $y\{1,2\}$ is
+the \emph{terminal} presheaf on $B$ (one section everywhere) --- in
+general, on a poset with a top element, the representable of the top is
+terminal.
+\end{example}
+
+\section{Subpresheaves}\label{ch02:sec:subpresheaves}
+
+Chapter~3's central definition --- the sieve --- will be introduced twice:
+once elementarily, as a precomposition-closed set of morphisms, and once
+structurally, as a subfunctor of a representable. The structural half needs
+the notion of subpresheaf, which we set up now and practice on the small
+posets.
+
+\begin{definition}[Subpresheaf]\label{ch02:def:subpresheaf}
+Let $F$ be a presheaf on a small category $\cC$. A \emph{subpresheaf}
+(or \emph{subfunctor}) $S \subseteq F$ is a choice of subset
+$S(C) \subseteq F(C)$ for each object $C$ such that restrictions
+preserve membership: for every morphism $f : D \to C$ and every
+$s \in S(C)$, one has $F(f)(s) \in S(D)$. Equivalently, $S$ is itself a
+presheaf (with the restricted restriction maps) and the inclusions
+$S(C) \subseteq F(C)$ form a natural transformation with injective
+components.
+\end{definition}
+
+The closure condition is the whole content: a subpresheaf is not an
+arbitrary family of subsets but a family stable under restriction ---
+``once a section is in, all its shadows are in.'' On a poset the
+condition reads: if $s \in S(V)$ and $U \le V$ then $s|_U \in S(U)$.
+
+\begin{example}[Subpresheaves of a representable on the vee]\label{ch02:ex:subrep-vee}
+Work on $\Lambda$ ($x, y \le t$) and take $F = yt$, which has exactly
+one section over each of $x$, $y$, $t$
+(Section~\ref{ch02:sec:lab-vee}). A subpresheaf $S \subseteq yt$
+chooses, for each object, either the empty set or the full singleton,
+subject to restriction-stability. If $S(t) = \{\ast\}$, then
+restricting the section of $yt(t)$ along $x \le t$ and $y \le t$
+forces $S(x) = S(y) = \{\ast\}$: the only option is $S = yt$ itself.
+If $S(t) = \varnothing$, the choices at $x$ and $y$ are free and
+independent, since no nonidentity morphism has domain above $x$ or
+$y$. That gives four subpresheaves:
+$(\varnothing, \varnothing, \varnothing)$,
+$(\{\ast\}, \varnothing, \varnothing)$,
+$(\varnothing, \{\ast\}, \varnothing)$,
+$(\{\ast\}, \{\ast\}, \varnothing)$, writing values over
+$(x, y, t)$. Total: five subpresheaves of $yt$. Chapter~3 will
+recognize these five as exactly the five \emph{sieves} on the object
+$t$ of $\Lambda$, and the forcing argument just made --- ``a full top
+forces full shadows'' --- as the elementary statement that a sieve
+containing the identity is maximal.
+\end{example}
+
+\begin{example}[Subpresheaves of the bit presheaf]\label{ch02:ex:sub-bit}
+On $B$, let $G$ be the bit presheaf
+(Example~\ref{ch02:ex:bit-presheaf}) and define
+$S(V) \subseteq G(V)$ to consist of the \emph{constant} functions
+$V \to \{0,1\}$ (and the empty function over $\varnothing$). Then $S$
+is a subpresheaf: a restriction of a constant function is constant.
+Section counts: $(1, 2, 2, 2)$ over
+$(\varnothing, \{1\}, \{2\}, \{1,2\})$. By contrast, the family
+$T(V) = \{$functions summing to $1$ over $V\}$ (interpreting the sum
+of the empty function as $0$) is \emph{not} a subpresheaf: the
+function on $\{1,2\}$ with values $1, 0$ sums to $1$, but its
+restriction to $\{2\}$ is the zero function, which sums to $0$ and so
+fails membership. Checking restriction-stability is a real check, and
+Chapter~11's certificate performs precisely this kind of check ---
+mechanically, for every candidate --- under the name functoriality
+validation.
+\end{example}
+
+\begin{exercise}\label{ch02:exr:sub-two-chain}
+Enumerate all subpresheaves of $y1$ on the chain $[2]$. (There are
+three; compare them with the three sieves on the object $1$ found in
+Chapter~3.)
+\end{exercise}
+
+\section{The Yoneda lemma}\label{ch02:sec:yoneda}
+
+The Yoneda lemma says that mapping out of a representable is the same as
+evaluating: natural transformations $yC \Rightarrow F$ correspond to
+elements of $F(C)$. It is the fundamental bookkeeping theorem of
+presheaf categories, and in Part~II it is used chiefly in two ways:
+through the identification of sieves with subfunctors of representables
+(Chapter~3), and through the sheaf condition's formulation as a
+bijection $F(C) \cong \mathrm{Nat}(S, F)$ for covering sieves $S$
+(Chapter~4), which is a Yoneda-style statement with the sieve in place
+of the full representable.
+
+\begin{theorem}[Yoneda lemma; statement]\label{ch02:thm:yoneda}
+Let $\cC$ be a small category, $C \in \Ob(\cC)$, and
+$F \in \PSh(\cC)$. The map
+\[
+\Phi_{C,F} : \mathrm{Nat}(yC, F) \longrightarrow F(C),
+\qquad \alpha \longmapsto \alpha_C(\id_C),
+\]
+is a bijection, natural in both $C$ and $F$. In particular
+(taking $F = yC'$) the Yoneda embedding $y : \cC \to \PSh(\cC)$ is
+fully faithful. See \cite{riehl,awodey,maclanecwm} for the general
+proof.
+\end{theorem}
+
+We prove the poset case in complete detail; it is the case Part~II
+uses, and its proof displays the mechanism --- a natural family is
+determined by its value at the ``generic'' point --- without the
+notational overhead of the general case.
+
+\begin{theorem}[Yoneda lemma for posets; full proof]\label{ch02:thm:yoneda-poset}
+Let $P$ be a poset, $W \in P$, and $F \in \PSh(P)$. Then there is a
+bijection
+\[
+\mathrm{Nat}(yW, F) \;\cong\; F(W),
+\]
+given by evaluating at $W$; it is natural in $W$ and in $F$.
+\end{theorem}
+
+\begin{proof}
+Recall (Proposition~\ref{ch02:prop:representable-poset}) that $yW(V)$
+is a singleton $\{\ast\}$ for $V \le W$ and empty otherwise.
+
+\emph{The map.} Given a natural transformation
+$\alpha : yW \Rightarrow F$, its component at $W$ is a function
+$\alpha_W : yW(W) \to F(W)$ with $yW(W) = \{\ast\}$ (as $W \le W$);
+define $\Phi(\alpha) = \alpha_W(\ast) \in F(W)$.
+
+\emph{$\Phi$ is injective.} Suppose $\Phi(\alpha) = \Phi(\beta)$; we
+show $\alpha = \beta$ componentwise. At $V \not\le W$ both components
+are the unique (empty) function $\varnothing \to F(V)$. At $V \le W$,
+apply naturality of $\alpha$ to the morphism $V \to W$: the square
+\[
+F(V \le W)\bigl(\alpha_W(\ast)\bigr) = \alpha_V\bigl(\ast|_V\bigr)
+= \alpha_V(\ast)
+\]
+(the restriction map of $yW$ between the singletons $yW(W)$ and
+$yW(V)$ sends $\ast$ to $\ast$). Hence
+$\alpha_V(\ast) = \Phi(\alpha)|_V$ is determined by $\Phi(\alpha)$;
+the same computation for $\beta$ gives
+$\beta_V(\ast) = \Phi(\beta)|_V$. Since $\Phi(\alpha) = \Phi(\beta)$,
+all components agree, so $\alpha = \beta$.
+
+\emph{$\Phi$ is surjective.} Given $s \in F(W)$, define a candidate
+transformation $\alpha^s$ by
+\[
+\alpha^s_V(\ast) = s|_V \quad \text{for } V \le W,
+\]
+and the empty function at $V \not\le W$. Naturality must be checked at
+each morphism $U \le V$ of $P$. If $V \le W$ (hence $U \le W$): going
+one way around the square, $\ast \in yW(V)$ maps to
+$\alpha^s_V(\ast) = s|_V$ and then restricts to $(s|_V)|_U = s|_U$
+(functoriality of $F$); going the other way, $\ast$ restricts to
+$\ast \in yW(U)$ and then maps to $\alpha^s_U(\ast) = s|_U$. Equal. If
+$V \not\le W$, the source $yW(V)$ is empty and the square commutes
+vacuously. So $\alpha^s$ is natural, and
+$\Phi(\alpha^s) = s|_W = s$.
+
+\emph{Naturality in $F$.} Let $\tau : F \Rightarrow G$ be a morphism
+of presheaves. We must show that for every
+$\alpha \in \mathrm{Nat}(yW, F)$,
+$\Phi(\tau \circ \alpha) = \tau_W(\Phi(\alpha))$; and indeed
+$(\tau \circ \alpha)_W(\ast) = \tau_W(\alpha_W(\ast))$ by definition
+of composition of natural transformations.
+
+\emph{Naturality in $W$.} Let $W \le W'$, inducing
+$yW \Rightarrow yW'$ and, by precomposition, a map
+$\mathrm{Nat}(yW', F) \to \mathrm{Nat}(yW, F)$. Chasing the point:
+$\alpha' \in \mathrm{Nat}(yW', F)$ precomposes to the transformation
+whose value at $W$ on $\ast$ is $\alpha'_W(\ast)$, and the injectivity
+computation above (applied to $\alpha'$ and the morphism $W \le W'$)
+gives $\alpha'_W(\ast) = \alpha'_{W'}(\ast)|_W = \Phi(\alpha')|_W$.
+So the square comparing $\mathrm{Nat}(y(-), F)$ with $F(-)$ along
+$W \le W'$ commutes: both routes send $\alpha'$ to
+$\Phi(\alpha')|_W$.
+\end{proof}
+
+\begin{corollary}[Yoneda embedding on a poset]\label{ch02:cor:yoneda-poset}
+For a poset $P$ and $U, W \in P$:
+\[
+\mathrm{Nat}(yU, yW) \;\cong\; yW(U) \;=\;
+\begin{cases}
+\{\ast\} & U \le W,\\
+\varnothing & \text{otherwise.}
+\end{cases}
+\]
+Hence the Yoneda embedding $y : P \to \PSh(P)$ is fully faithful ---
+it is an order-embedding of $P$ into the presheaf category --- and
+$yU \cong yW$ implies $U = W$.
+\end{corollary}
+
+\begin{proof}
+The displayed bijection is Theorem~\ref{ch02:thm:yoneda-poset} with
+$F = yW$. Full faithfulness is the statement that
+$\Hom_P(U, W) \to \mathrm{Nat}(yU, yW)$ is a bijection, and both sides
+are singletons or both empty according to whether $U \le W$. If
+$yU \cong yW$, then in particular $\mathrm{Nat}(yU, yW)$ and
+$\mathrm{Nat}(yW, yU)$ are both nonempty, so $U \le W$ and $W \le U$,
+whence $U = W$ by antisymmetry.
+\end{proof}
+
+\begin{example}[Yoneda verified by hand on the two-element
+chain]\label{ch02:ex:yoneda-hand}
+Let $F$ be any presheaf on $[2]$, i.e.\ a function
+$r : F(1) \to F(0)$. Compute $\mathrm{Nat}(y0, F)$ directly: the
+representable $y0$ has $y0(0) = \{\ast\}$ and $y0(1) = \varnothing$. A
+natural transformation $y0 \Rightarrow F$ is a choice of
+$\alpha_0(\ast) \in F(0)$ and the empty function at $1$; the only
+naturality square (along $0 \le 1$) has empty upper-left corner, hence
+commutes. So $\mathrm{Nat}(y0, F) \cong F(0)$: one transformation per
+element of $F(0)$, as the lemma predicts. Now $\mathrm{Nat}(y1, F)$:
+$y1$ has a single section over each object. A transformation is a pair
+$\alpha_1(\ast) = s \in F(1)$, $\alpha_0(\ast) = u \in F(0)$, and the
+naturality square along $0 \le 1$ forces $u = r(s)$. So the data
+reduce to the free choice of $s \in F(1)$:
+$\mathrm{Nat}(y1, F) \cong F(1)$. Again as predicted --- and the
+mechanism is visible: the component at the representing object is
+free, and naturality propagates it downward.
+\end{example}
+
+\begin{exercise}\label{ch02:exr:yoneda-square}
+On $B$, take $F = G$ the bit presheaf of
+Example~\ref{ch02:ex:bit-presheaf}. Verify by direct enumeration that
+$\mathrm{Nat}(y\{1\}, G)$ has exactly two elements and that they
+correspond to the two elements of $G(\{1\}) = \{0,1\}^{\{1\}}$ as in
+Theorem~\ref{ch02:thm:yoneda-poset}.
+\end{exercise}
+
+\begin{example}[Counting all morphisms between two presheaves]\label{ch02:ex:count-nat}
+The Yoneda lemma computes $\mathrm{Nat}(yW, F)$ in one stroke; for
+non-representable sources one counts squares directly, and it is
+instructive to do so once. On $[2]$, let $F$ be the presheaf with
+$F(1) = \{s, s'\}$, $F(0) = \{u\}$ (restriction the constant map)
+and let $F'$ be the presheaf with $F'(1) = \{v\}$,
+$F'(0) = \{w, w'\}$, restriction $v \mapsto w$. A morphism
+$\alpha : F \Rightarrow F'$ is a pair of functions
+$\alpha_1 : \{s, s'\} \to \{v\}$ and
+$\alpha_0 : \{u\} \to \{w, w'\}$ making the square commute:
+$\alpha_0(u)$ must equal the restriction of $\alpha_1(s)$, which is
+$w$. So $\alpha_1$ is forced (constant at $v$), $\alpha_0$ is forced
+($u \mapsto w$), and $\mathrm{Nat}(F, F') $ has exactly one element
+--- even though there are $2$ functions $\{u\} \to \{w, w'\}$, the
+square eliminates one. In the other direction,
+$\mathrm{Nat}(F', F)$: $\alpha_1 : \{v\} \to \{s, s'\}$ is a free
+binary choice, and $\alpha_0 : \{w, w'\} \to \{u\}$ is forced; the
+square commutes either way (both routes land in the singleton
+$\{u\}$), so there are exactly $2$ morphisms. Naturality is a
+genuine constraint whose bite depends on direction --- a five-minute
+computation worth repeating on any pair of small presheaves the
+reader invents.
+\end{example}
+
+\begin{remark}[Covariant representables]\label{ch02:rem:covariant-yoneda}
+Everything in this section dualizes: the covariant functor
+$\Hom_{\cC}(C, -)$ is a ``co-presheaf,'' and the dual Yoneda lemma
+identifies $\mathrm{Nat}(\Hom_{\cC}(C, -), F) \cong F(C)$ for
+covariant $F$. This monograph works exclusively with the
+contravariant side --- evidence restricts downward --- and we will
+not use the dual statement, but the reader consulting
+\cite{maclanecwm} or \cite{riehl} should be aware that both
+conventions circulate and that translation is mechanical.
+\end{remark}
+
+\begin{remark}[On the general proof]\label{ch02:rem:yoneda-general}
+The general Yoneda proof is the same two-step dance with $\id_C$
+playing the role of the generic point $\ast$: injectivity because
+naturality forces $\alpha_D(f) = F(f)(\alpha_C(\id_C))$ for every
+$f : D \to C$, surjectivity because that formula, read as a
+definition, is natural. The poset proof above \emph{is} the general
+proof specialized; nothing was simplified away except the need to
+track which morphism one is restricting along, since in a poset there
+is never more than one. See \cite[Ch.~2]{riehl} or
+\cite[Ch.~8]{awodey}.
+\end{remark}
+
+\section{Limits and pullbacks}\label{ch02:sec:limits}
+
+Limits formalize ``the universal object mapping compatibly into a
+diagram.'' Part~II needs three instances --- terminal objects, products,
+and above all pullbacks --- plus the fact that in a poset all of them
+reduce to order-theoretic infima. We give the general definitions and
+then specialize.
+
+\begin{definition}[Diagram, cone, limit]\label{ch02:def:limit}
+Let $\mathcal{J}$ be a small category (the \emph{shape}) and
+$D : \mathcal{J} \to \cC$ a functor (a \emph{diagram} of shape
+$\mathcal{J}$ in $\cC$). A \emph{cone} over $D$ with vertex
+$Z \in \Ob(\cC)$ is a family of morphisms
+$(p_j : Z \to D(j))_{j \in \Ob(\mathcal{J})}$ such that for every
+morphism $u : j \to j'$ of $\mathcal{J}$,
+$D(u) \circ p_j = p_{j'}$. A \emph{limit} of $D$ is a cone
+$(\lim D, (\pi_j))$ with the universal property: for every cone
+$(Z, (p_j))$ there is a unique morphism $u : Z \to \lim D$ with
+$\pi_j \circ u = p_j$ for all $j$.
+\end{definition}
+
+\begin{proposition}[Limits are unique up to unique isomorphism]\label{ch02:prop:limit-unique}
+Any two limits of the same diagram are isomorphic by a unique
+isomorphism commuting with the cone maps.
+\end{proposition}
+
+\begin{proof}
+Let $(P, (\pi_j))$ and $(P', (\pi'_j))$ both be limits. The cone
+$(P', (\pi'_j))$ factors through $(P, (\pi_j))$ by a unique
+$u : P' \to P$, and symmetrically $(P, (\pi_j))$ factors by a unique
+$v : P \to P'$. The composite $u \circ v : P \to P$ is a factorization
+of the cone $(P, (\pi_j))$ through itself; but $\id_P$ is another such
+factorization, and uniqueness in the universal property forces
+$u \circ v = \id_P$. Symmetrically $v \circ u = \id_{P'}$.
+\end{proof}
+
+\begin{example}[Terminal object, product]\label{ch02:ex:terminal-product}
+The limit of the empty diagram is a \emph{terminal object} $1$: an
+object with exactly one morphism from every object. In $\Set$, any
+singleton is terminal. The limit of a discrete two-object diagram
+$(A, B)$ is the \emph{product} $A \times B$ with its projections; in
+$\Set$, the cartesian product. In a poset, a terminal object is a top
+element, and a product of $U, V$ is a \emph{meet} (greatest lower
+bound) $U \wedge V$: the universal property of the product says
+exactly ``$Z \le U$ and $Z \le V$ iff $Z \le U \wedge V$.''
+\end{example}
+
+\begin{definition}[Pullback]\label{ch02:def:pullback}
+A \emph{cospan} in $\cC$ is a diagram
+$A \xrightarrow{\,f\,} W \xleftarrow{\,g\,} B$. A \emph{pullback} of
+the cospan is a limit of it: an object $P$ with morphisms
+$p : P \to A$, $q : P \to B$ satisfying $f \circ p = g \circ q$, such
+that for any $Z$ with $a : Z \to A$, $b : Z \to B$ and
+$f \circ a = g \circ b$ there is a unique $u : Z \to P$ with
+$p \circ u = a$ and $q \circ u = b$. (The cone leg to $W$ is
+determined as $f \circ p$, so one omits it.) Notation:
+$P = A \times_W B$.
+\end{definition}
+
+\begin{proposition}[Pullbacks in $\Set$]\label{ch02:prop:pullback-set}
+In $\Set$, every cospan $A \xrightarrow{f} W \xleftarrow{g} B$ has a
+pullback:
+\[
+A \times_W B = \{(a, b) \in A \times B \mid f(a) = g(b)\},
+\]
+with the coordinate projections.
+\end{proposition}
+
+\begin{proof}
+The projections satisfy $f \circ p = g \circ q$ by definition of the
+set. Given a competing cone $(Z, a, b)$ with $f \circ a = g \circ b$,
+define $u : Z \to A \times_W B$ by $u(z) = (a(z), b(z))$; this lands
+in the pullback set precisely because $f(a(z)) = g(b(z))$, and it is
+the unique function whose postcompositions with the projections are
+$a$ and $b$, since a function into a subset of a product is determined
+by its coordinates.
+\end{proof}
+
+\begin{example}[Pullback of subset inclusions is intersection]\label{ch02:ex:pullback-subsets}
+Let $A, B \subseteq W$ be subsets with inclusion maps
+$A \hookrightarrow W \hookleftarrow B$. The pullback set of
+Proposition~\ref{ch02:prop:pullback-set} is
+$\{(a, b) \mid a = b \in A \cap B\}$, which the map
+$(a,b) \mapsto a$ bijects with $A \cap B$; under this bijection the
+projections become the inclusions of $A \cap B$ into $A$ and $B$. So
+in $\Set$, ``pullback of monos'' computes intersection --- the
+prototype of the next proposition, which is the version Part~II
+actually uses.
+\end{example}
+
+\begin{proposition}[Pullbacks in a poset are meets]\label{ch02:prop:pullback-poset}
+Let $P$ be a poset and $U \to W \leftarrow V$ a cospan in $P$ (i.e.\
+$U \le W$ and $V \le W$). A pullback of this cospan exists if and only
+if the meet $U \wedge V$ exists in $P$, and in that case the pullback
+is $U \wedge V$ with the unique morphisms to $U$ and $V$.
+\end{proposition}
+
+\begin{proof}
+A cone over the cospan with vertex $Z$ is a pair of morphisms
+$Z \to U$, $Z \to V$ whose composites to $W$ agree; the agreement is
+automatic (Proposition~\ref{ch02:prop:poset-commute}), so a cone is
+exactly an element $Z$ with $Z \le U$ and $Z \le V$ --- a lower bound
+of $\{U, V\}$. The universal property of the pullback says: $P^*$ is a
+lower bound such that every lower bound $Z$ admits a (unique,
+automatic) morphism $Z \to P^*$, i.e.\ every lower bound satisfies
+$Z \le P^*$. That is precisely the definition of the greatest lower
+bound. So pullbacks of the cospan and meets of $\{U, V\}$ are the same
+data. Uniqueness of morphisms is automatic throughout, again by
+Proposition~\ref{ch02:prop:poset-commute}.
+\end{proof}
+
+\begin{corollary}[Pullbacks in a powerset lattice are intersections]\label{ch02:cor:pullback-powerset}
+In $\mathcal{P}(X)$ ordered by inclusion, every cospan
+$U \subseteq W \supseteq V$ has a pullback, namely $U \cap V$.
+\end{corollary}
+
+\begin{proof}
+$\mathcal{P}(X)$ has all binary meets, and the meet of $U$ and $V$ is
+$U \cap V$: it is a lower bound ($U \cap V \subseteq U$,
+$U \cap V \subseteq V$), and any $Z$ with $Z \subseteq U$ and
+$Z \subseteq V$ satisfies $Z \subseteq U \cap V$. Apply
+Proposition~\ref{ch02:prop:pullback-poset}.
+\end{proof}
+
+This corollary is used on nearly every page of Part~II: the context
+lattice $L = \mathcal{P}(\Omega)$ has all pullbacks, they are
+intersections, and the pullback of a covering piece $V \cap B \to V$
+along $U \subseteq V$ is $(V \cap B) \cap U = U \cap B$ --- the
+one-line computation at the heart of the coverage-stability lemma of
+Chapter~9.
+
+\begin{example}[A poset without a pullback]\label{ch02:ex:no-pullback}
+In the vee $\Lambda$ ($x \le t \ge y$), the cospan
+$x \to t \leftarrow y$ has no pullback: a pullback would be a meet
+$x \wedge y$, i.e.\ a greatest lower bound of $\{x, y\}$, and
+$\{x, y\}$ has \emph{no} lower bound at all in $\Lambda$ (neither $x$
+nor $y$ is below the other, and $t$ is above both, not below).
+Existence of pullbacks is a genuine property of a poset, not a
+formality --- powerset lattices have it; arbitrary posets need not.
+The registered legacy category is required to have pullback closure by
+its axioms; the context lattice has pullbacks by
+Corollary~\ref{ch02:cor:pullback-powerset}; the vee shows the
+requirement is not vacuous.
+\end{example}
+
+\begin{exercise}\label{ch02:exr:pullback-square}
+In $B = \mathcal{P}(\{1,2\})$, compute the pullback of the cospan
+$\{1\} \to \{1,2\} \leftarrow \{2\}$ and verify explicitly that every
+lower bound of $\{\{1\}, \{2\}\}$ factors through it. (Answer:
+$\varnothing$; the only lower bound is $\varnothing$ itself.)
+\end{exercise}
+
+\subsection{Equalizers and general limits}\label{ch02:sec:equalizers}
+
+For completeness we record the remaining finite-limit shape and the
+standard reduction.
+
+\begin{definition}[Equalizer]\label{ch02:def:equalizer}
+Given parallel morphisms $f, g : A \to B$, an \emph{equalizer} is a
+morphism $e : E \to A$ with $f \circ e = g \circ e$, universal among
+such: any $h : Z \to A$ with $f \circ h = g \circ h$ factors uniquely
+through $e$. In $\Set$, $E = \{a \in A \mid f(a) = g(a)\}$ with the
+inclusion. In a poset, any parallel pair is equal
+(Proposition~\ref{ch02:prop:poset-commute}), so every equalizer is an
+identity --- equalizers are invisible in the poset world, which is
+one more simplification Part~II enjoys.
+\end{definition}
+
+\begin{remark}[Limits from products and equalizers]\label{ch02:rem:limits-reduction}
+A category with all small products and equalizers has all small
+limits, by the standard construction of a limit as an equalizer of two
+maps between products \cite[Ch.~V]{maclanecwm}; $\Set$ therefore has
+all small limits. We do not use the general construction --- every
+limit needed in this monograph is a terminal object, a binary product,
+or a pullback, built by hand --- but it is the reason one may speak of
+``the'' limit apparatus of $\Set$ without further inventory.
+\end{remark}
+
+\subsection{Limits of presheaves are computed pointwise}\label{ch02:sec:pointwise}
+
+One structural fact about presheaf categories is needed in Chapter~10,
+where an explicit reflector is built out of products of section sets:
+limits of presheaves are computed objectwise.
+
+\begin{proposition}[Pointwise limits]\label{ch02:prop:pointwise}
+Let $\cC$ be small and let $D : \mathcal{J} \to \PSh(\cC)$ be a finite
+(or small) diagram of presheaves. Define, for each object $C$ of
+$\cC$, $(\lim D)(C) = \lim_j \bigl(D(j)(C)\bigr)$, the limit in
+$\Set$ of the evaluated diagram, with restriction maps induced by the
+universal property. Then $\lim D$, so defined, is a presheaf and is a
+limit of $D$ in $\PSh(\cC)$.
+\end{proposition}
+
+\begin{proof}[Proof for binary products, which is the case used]
+Let $F, G$ be presheaves and define
+$(F \times G)(C) = F(C) \times G(C)$ with restriction
+$(s, t)|_f = (F(f)(s), G(f)(t))$ for $f : D \to C$. Functoriality is
+componentwise. The projections $\pi_F, \pi_G$ are natural
+transformations (their naturality squares are the definitions of the
+restriction just given). Given a presheaf $Z$ with natural
+transformations $\alpha : Z \Rightarrow F$, $\beta : Z \Rightarrow G$,
+define $u_C(z) = (\alpha_C(z), \beta_C(z))$; each $u_C$ is the unique
+function through which $\alpha_C, \beta_C$ factor
+(Proposition~\ref{ch02:prop:pullback-set}'s product analogue in
+$\Set$), and the family $(u_C)$ is natural because its components are
+built from natural components. Uniqueness of $u$ as a natural
+transformation follows from uniqueness of each component. The same
+argument, with the $\Set$-limit of the evaluated diagram replacing the
+cartesian product, proves the general statement; see
+\cite[Ch.~V]{maclanecwm} or \cite[Ch.~3]{riehl}.
+\end{proof}
+
+\begin{example}\label{ch02:ex:pointwise-square}
+On $B$, the product of the bit presheaf $G$
+(counts $(1,2,2,4)$) and the constant-verdict presheaf $H$ (counts
+$(1,2,2,2)$) has section counts $(1, 4, 4, 8)$, each restriction
+acting coordinatewise. No new phenomena: the product presheaf is just
+both records kept side by side --- which is exactly how Chapter~10's
+product-over-blocks reflector should be read, one factor per
+partition block.
+\end{example}
+
+\subsection{Equality versus natural isomorphism}\label{ch02:sec:eq-vs-iso}
+
+A final calibration, load-bearing for Chapter~10. Two functors can be
+naturally isomorphic without being equal, and the discipline of this
+monograph keeps the distinction visible. A representative example: on
+$B$, the presheaf $G \times H$ of
+Example~\ref{ch02:ex:pointwise-square} and the presheaf
+$H \times G$ are not literally the same functor --- their sections are
+ordered pairs with opposite component order --- but the swap maps
+$(s, t) \mapsto (t, s)$ assemble into a natural isomorphism between
+them. All structural claims in this monograph that identify two
+constructed functors are claims of natural isomorphism with named
+comparison maps, never claims of literal equality; the composition
+theorem of Chapter~10 states this explicitly for its nested-product
+flattenings, since a nested tuple $((a, b), (c, d))$ and a flat tuple
+indexed by four atoms are different set-theoretic objects that a
+chosen implementation must convert between. The certificate of
+Chapter~11 checks the conversion maps --- both directions, inverse
+laws, naturality --- rather than pretending the objects coincide. The
+habit of asking ``equal, or isomorphic via which map?'' is worth
+acquiring now, on examples this small, where the answer is always
+computable by hand.
+
+\section{The small-poset laboratory}\label{ch02:sec:laboratory}
+
+This closing section consolidates the running examples into a single
+reference, tabulating for each of the four standard posets the data
+that Chapters~3 and~9 will call on. Everything below is a restatement
+or short extension of computations already made; the point of
+gathering them is that Part~II's sixteen-object arguments are these
+arguments with a larger index set, and a reader who owns the small
+cases owns the method.
+
+\subsection{The two-element chain}\label{ch02:sec:lab-two-chain}
+
+Objects $0 \le 1$; morphisms $\id_0, \id_1, f : 0 \to 1$. (For an
+$n$-element chain the morphism count is the number of pairs
+$i \le j$, namely $n(n+1)/2$ --- here $3$; the $3^{|X|}$ formula of
+Proposition~\ref{ch02:prop:threepow} is specific to powerset
+lattices.) A presheaf is a function
+$F(1) \to F(0)$; a morphism of presheaves is a commuting square.
+Representables: $y0 = (1, 0)$ and $y1 = (1, 1)$, writing section
+counts over $(0, 1)$. Yoneda: verified by hand in
+Example~\ref{ch02:ex:yoneda-hand}. Pullbacks: every cospan in a chain
+has a pullback, since any two elements of a chain are comparable and
+the meet is the smaller; in particular
+$0 \to 1 \leftarrow 0$ pulls back to $0$.
+
+\subsection{The three-element chain}\label{ch02:sec:lab-three-chain}
+
+Objects $0 \le 1 \le 2$; six morphisms; the unique nontrivial
+composition $(1 \to 2) \circ (0 \to 1) = (0 \to 2)$. A presheaf is a
+composable pair of functions $F(2) \to F(1) \to F(0)$; the functor law
+adds the requirement that the composite equal the restriction along
+$0 \le 2$, which is a definition rather than a constraint (there is
+nothing else for it to be). Representables, section counts over
+$(0,1,2)$: $y0 = (1,0,0)$, $y1 = (1,1,0)$, $y2 = (1,1,1)$. The chain
+illustrates transitivity of restriction in its simplest nontrivial
+form and will reappear in Chapter~3 as the first example with a
+three-layer sieve structure.
+
+\subsection{The vee}\label{ch02:sec:lab-vee}
+
+Objects $x, y \le t$; five morphisms; no nontrivial compositions. A
+presheaf is a span $F(x) \leftarrow F(t) \to F(y)$. Representables,
+section counts over $(x, y, t)$: $yx = (1, 0, 0)$, $yy = (0, 1, 0)$,
+$yt = (1, 1, 1)$. No meet of $\{x, y\}$, hence no pullback of the
+cospan $x \to t \leftarrow y$
+(Example~\ref{ch02:ex:no-pullback}). The vee is the minimal
+illustration that ``the overlap of two views'' need not exist as an
+object --- in the powerset lattices of Part~II it always does, and the
+contrast is what the pullback-closure axioms are about.
+
+\subsection{The square}\label{ch02:sec:lab-square}
+
+$B = \mathcal{P}(\{1,2\})$: four objects, nine morphisms
+(Proposition~\ref{ch02:prop:threepow}), one nontrivial commutativity
+condition per presheaf (Example~\ref{ch02:ex:psh-square}).
+Representables tabulated in
+Example~\ref{ch02:ex:representables-square}; the top representable is
+terminal. All pullbacks exist and are intersections
+(Corollary~\ref{ch02:cor:pullback-powerset}); the generic instance
+$\{1\} \cap \{2\} = \varnothing$ is
+Exercise~\ref{ch02:exr:pullback-square}. Two working presheaves live
+here: the bit presheaf $G$ (Example~\ref{ch02:ex:bit-presheaf}), with
+section counts $(1, 2, 2, 4)$ over
+$(\varnothing, \{1\}, \{2\}, \{1,2\})$, and the constant-verdict
+presheaf $H$ (Example~\ref{ch02:ex:verdict-presheaf}), with counts
+$(1, 2, 2, 2)$. Chapter~4 shows: for the covering family
+$\{ \{1\}, \{2\} \}$ of $\{1,2\}$, the presheaf $G$ glues perfectly
+while $H$ does not, and the numbers $4$ versus $2 \times 2$ already
+hint at why.
+
+The square is the $|X| = 2$ member of the family
+$\mathcal{P}(X)$; the context lattice $L$ of Part~II is the
+$|X| = 4$ member, with $X = \Omega = \{0,1\} \times \{0,1\}$ carrying
+its two coordinates. Everything tabulated here scales: $16$ objects,
+$81$ morphisms, representables as down-set indicators, pullbacks as
+intersections, and presheaves as commuting cubes of restriction
+functions. The scaling adds bookkeeping, not ideas --- which is
+precisely why the finite certificate of Chapter~11 can check the
+scaled statements exhaustively, and why this chapter has spent its
+pages on the small cases where the ideas are visible.
+
+\subsection{Comparison table}\label{ch02:sec:lab-table}
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+ & $[2]$ & $[3]$ & $\Lambda$ & $B = \mathcal{P}(\{1,2\})$ \\
+\midrule
+Objects & 2 & 3 & 3 & 4 \\
+Morphisms & 3 & 6 & 5 & 9 \\
+Top element & yes & yes & yes & yes \\
+All binary meets & yes & yes & no & yes \\
+All pullbacks & yes & yes & no & yes \\
+Presheaf shape & function & pair & span & square \\
+Commutativity conditions & 0 & 0 & 0 & 1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The context lattice $L = \mathcal{P}(\Omega)$ of Part~II extends the
+last column: $16$ objects, $81$ morphisms
+(Proposition~\ref{ch02:prop:threepow}), top element $\Omega$, all
+meets as intersections, all pullbacks, and presheaves as commuting
+assemblies of restriction functions over the inclusion order.
+
+\subsection{Where each tool is used later}\label{ch02:sec:usage-map}
+
+For orientation, the primer's results map onto Part~II as follows.
+The poset dictionary and commutation
+(Propositions~\ref{ch02:prop:poset-category}
+and~\ref{ch02:prop:poset-commute}) underlie every diagram chase on
+$L$. The split-epi apparatus (Section~\ref{ch02:sec:split}) is
+consumed by the collapse theorem of Chapter~5; the poset immunity
+remark (Remark~\ref{ch02:rem:no-split-in-posets}) explains why the
+successor's site is out of its reach. Subpresheaves
+(Section~\ref{ch02:sec:subpresheaves}) become sieves in Chapter~3.
+Representables-as-indicators
+(Proposition~\ref{ch02:prop:representable-poset}) and the poset
+Yoneda lemma (Theorem~\ref{ch02:thm:yoneda-poset}) power the
+subcanonicity theorem of Chapter~9 and the sheaf condition's
+formulation in Chapter~4. Pullbacks-as-intersections
+(Corollary~\ref{ch02:cor:pullback-powerset}) is the engine of the
+coverage-stability lemma in Chapter~9. Pointwise limits
+(Proposition~\ref{ch02:prop:pointwise}) legitimize the
+product-over-blocks reflector of Chapter~10, and the
+equality-versus-isomorphism calibration
+(Section~\ref{ch02:sec:eq-vs-iso}) governs how that chapter's
+composition theorem may be stated. The injections category of
+Example~\ref{ch02:ex:finset} reappears as the countermodel of
+Chapter~6. Nothing in the primer is idle.
+
+\section{Summary}\label{ch02:sec:summary}
+
+The chapter's yield, in the order Part~II consumes it: categories and
+the poset dictionary (objects are contexts, morphisms are inclusions,
+all diagrams commute); functors and natural transformations, with the
+functor category $[\cC^{\mathrm{op}}, \Set]$ of presheaves as the
+ambient world; restriction algebra on posets; representables as
+down-set indicators (Proposition~\ref{ch02:prop:representable-poset});
+the Yoneda lemma with full proof in the poset case
+(Theorem~\ref{ch02:thm:yoneda-poset}) and its corollary that the
+Yoneda embedding of a poset is an order-embedding; limits, with
+pullbacks in posets identified as meets
+(Proposition~\ref{ch02:prop:pullback-poset}) and in powerset lattices
+as intersections (Corollary~\ref{ch02:cor:pullback-powerset}); and the
+two special morphism classes --- isomorphisms (none nontrivial in
+posets) and section-retraction pairs (none nontrivial in posets,
+ubiquitous in $\Set$) --- whose interaction with sieves opens
+Chapter~3. All of it is standard
+\cite{awodey,riehl,maclanecwm,maclane}; the next chapter begins to
+aim it.

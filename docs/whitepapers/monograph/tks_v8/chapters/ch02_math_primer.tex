@@ -1,0 +1,1392 @@
+\chapter{Mathematical Preliminaries}\label{ch02:chap}
+
+This chapter assembles, at tutorial depth, every piece of mathematics the
+kernel uses: finite sets and total functions; images, fibers, and the
+classification of maps, with the counting facts that make bounded exhaustive
+testing possible; the algebraic ladder from semigroups through monoids and
+semigroupoids to categories; the structure theory of functional graphs of
+endomaps, culminating in eventual periodicity and the factorial idempotent
+power; the linear algebra of finite-dimensional Hilbert spaces, adjoints,
+operator norms, and positive semidefinite matrices, including a complete
+spectral computation for the all-ones matrix; and shortlex orders on words,
+with the well-order property proved. All of it is standard. We cite it as
+background --- to Hammack for sets and functions \cite{bookofproof}, to
+Mac~Lane for category theory \cite{maclanecwm}, to Pin and to Howie for
+finite semigroups and transformation monoids \cite{pin, howie}, and to Horn
+and Johnson for matrix analysis \cite{horn} --- and we prove what we use, so
+that the monograph is self-contained and so that later chapters can point at
+exact statements rather than folklore. No novelty is claimed anywhere in
+this chapter.
+
+\section{Finite sets and total functions}\label{ch02:sec:finsets}
+
+\subsection{Finite sets}
+
+A set $X$ is \emph{finite} if it is empty or in bijection with
+$\{0, 1, \dots, n-1\}$ for some positive integer $n$; in either case the
+number $n \geq 0$ is unique and is written $|X|$, the \emph{cardinality} of
+$X$. We take the elementary theory of finite sets as given
+\cite{bookofproof} and record only the facts we lean on: a subset of a
+finite set is finite with $|A| \leq |X|$, and $|A| = |X|$ for
+$A \subseteq X$ forces $A = X$; a union of two finite sets is finite with
+$|A \cup B| = |A| + |B| - |A \cap B|$; and the product of finite sets is
+finite with $|X \times Y| = |X| \cdot |Y|$.
+
+Throughout the monograph, finite sets come to us with more structure than
+bare sethood: the kernel's objects carry an \emph{ordered} finite carrier, a
+sequence $(x_0, x_1, \dots, x_{n-1})$ of pairwise distinct elements. The
+order is data, not decoration --- Chapter~\ref{ch03:chap} is largely about
+why --- but for the purposes of the present chapter, whenever we say
+``finite set'' we permit ourselves to fix an enumeration and to identify the
+set with its index set $\{0, \dots, n-1\}$ when convenient. Every
+construction in this chapter is compatible with that identification, and the
+kernel performs it explicitly via standard indices.
+
+\subsection{Total functions}
+
+\begin{definition}[Total function]\label{ch02:def:function}
+A \emph{total function} $f : X \to Y$ between sets assigns to \emph{every}
+element $x \in X$ exactly one element $f(x) \in Y$. The set $X$ is the
+\emph{domain}, $Y$ the \emph{codomain}. Two total functions
+$f, g : X \to Y$ with the same domain and codomain are \emph{equal} iff
+$f(x) = g(x)$ for every $x \in X$; this is \emph{extensional} equality.
+\end{definition}
+
+Three points deserve emphasis, because each is load-bearing later.
+
+First, \emph{totality is part of the definition}. A partial assignment ---
+defined on some of $X$ --- is not a function $X \to Y$ in our usage. The
+kernel enforces totality syntactically: an arrow's mapping tuple must supply
+one target index for each of the $|X|$ source indices, and a tuple of the
+wrong length is rejected at construction.
+
+Second, \emph{the codomain is part of the data}. The same assignment rule
+with a larger codomain is a different function; surjectivity, for instance,
+is a property of the pair (rule, codomain), not of the rule alone. This
+foreshadows the kernel's stricter stance, where even the codomain's
+\emph{name} is part of an arrow's type.
+
+Third, \emph{equality is extensional}. Two functions given by wildly
+different descriptions --- one by a formula, one by a table, one as a
+composite of seventeen other functions --- are equal the moment they agree
+pointwise on a shared domain and codomain. The kernel mirrors this exactly:
+arrow equality is equality of source, target, and mapping tuple, and the
+presentation name attached to an arrow for diagnostics never participates
+(Chapter~\ref{ch03:chap}).
+
+For finite $X$ with a fixed enumeration $(x_0, \dots, x_{n-1})$ and finite
+$Y$ with enumeration $(y_0, \dots, y_{m-1})$, a total function
+$f : X \to Y$ is the same data as a tuple
+$(t_0, \dots, t_{n-1}) \in \{0, \dots, m-1\}^n$ via
+$f(x_i) = y_{t_i}$. This \emph{tuple representation} is the kernel's
+concrete representation of arrows and will be used freely in proofs.
+
+\subsection{Composition and identity}
+
+\begin{definition}[Composition]\label{ch02:def:composition}
+Given $f : X \to Y$ and $g : Y \to Z$, the \emph{composite}
+$g \circ f : X \to Z$ is the total function $(g \circ f)(x) = g(f(x))$.
+The \emph{identity} $\id_X : X \to X$ is the total function
+$\id_X(x) = x$.
+\end{definition}
+
+\begin{proposition}[Associativity and neutrality]\label{ch02:prop:assoc}
+For $f : X \to Y$, $g : Y \to Z$, $h : Z \to W$:
+\[
+h \circ (g \circ f) = (h \circ g) \circ f, \qquad
+f \circ \id_X = f, \qquad \id_Y \circ f = f.
+\]
+\end{proposition}
+
+\begin{proof}
+All four sides of the first equation are total functions $X \to W$; for
+each $x \in X$, both evaluate to $h(g(f(x)))$, so they are extensionally
+equal. Similarly $(f \circ \id_X)(x) = f(\id_X(x)) = f(x)$ and
+$(\id_Y \circ f)(x) = \id_Y(f(x)) = f(x)$ for all $x$.
+\end{proof}
+
+The proof is one line, and deliberately so: the entire content of the
+category laws for total functions is pointwise evaluation plus extensional
+equality. What the kernel adds in Chapter~4 is not mathematical depth but
+\emph{typing}: the requirement that the middle objects of a composite agree
+as declared objects, checked before the pointwise formula is ever consulted.
+
+\section{Images, fibers, and the classification of maps}\label{ch02:sec:fibers}
+
+\subsection{Image and fibers}
+
+\begin{definition}[Image, fiber]\label{ch02:def:image-fiber}
+For $f : X \to Y$: the \emph{image} is
+$\im(f) = \{\, f(x) \mid x \in X \,\} \subseteq Y$; for $y \in Y$, the
+\emph{fiber} over $y$ is $f^{-1}(y) = \{\, x \in X \mid f(x) = y \,\}
+\subseteq X$.
+\end{definition}
+
+Fibers may be empty --- $f^{-1}(y) = \emptyset$ iff $y \notin \im(f)$ ---
+and the notation $f^{-1}(y)$ does \emph{not} presuppose an inverse function.
+
+\begin{lemma}[Fiber partition]\label{ch02:lem:fiber-partition}
+The nonempty fibers of $f : X \to Y$ partition $X$: every $x \in X$ lies in
+exactly one fiber, namely $f^{-1}(f(x))$. Consequently, for finite $X$,
+\[
+\sum_{y \in Y} \bigl| f^{-1}(y) \bigr| = |X|.
+\]
+\end{lemma}
+
+\begin{proof}
+By totality every $x$ has an image $f(x)$, so $x \in f^{-1}(f(x))$ and every
+element lies in at least one fiber. If $x \in f^{-1}(y)$ and
+$x \in f^{-1}(y')$ then $y = f(x) = y'$, so fibers over distinct points are
+disjoint and every element lies in at most one. The counting identity is
+then the statement that a partition's block sizes sum to the size of the
+whole; empty fibers contribute zero and may be included in the sum harmlessly.
+\end{proof}
+
+This innocuous lemma does real work in Chapter~7: the trace identity
+$\trace(A_f^{*} A_f) = |X|$ for the lift is precisely
+Lemma~\ref{ch02:lem:fiber-partition} read off the diagonal of a Gram matrix,
+and the norm theorem is a statement about the \emph{largest} block of the
+fiber partition.
+
+\subsection{Injections, surjections, bijections}
+
+\begin{definition}\label{ch02:def:inj-surj}
+A total function $f : X \to Y$ is \emph{injective} if $f(x) = f(x')$
+implies $x = x'$; \emph{surjective} if $\im(f) = Y$; \emph{bijective} if it
+is both.
+\end{definition}
+
+The fiber language rephrases all three: $f$ is injective iff every fiber
+has at most one element; surjective iff every fiber is nonempty; bijective
+iff every fiber has exactly one element. The kernel's isometry criterion
+for lifts (Chapter~7) is the first of these in linear-algebraic clothing.
+
+\begin{proposition}[Finite endomap trichotomy collapses]\label{ch02:prop:endo-trichotomy}
+For a total function $f : X \to Y$ between finite sets with $|X| = |Y|$,
+the following are equivalent: (i) $f$ is injective; (ii) $f$ is surjective;
+(iii) $f$ is bijective.
+\end{proposition}
+
+\begin{proof}
+(i) $\Rightarrow$ (ii): if $f$ is injective the nonempty fibers are
+singletons, so by Lemma~\ref{ch02:lem:fiber-partition} the number of
+nonempty fibers is $|X| = |Y|$; hence all $|Y|$ fibers are nonempty and $f$
+is surjective. (ii) $\Rightarrow$ (i): if $f$ is surjective all $|Y|$
+fibers are nonempty; since the fiber sizes are positive integers summing to
+$|X| = |Y|$, each must equal $1$, so $f$ is injective. Either direction
+gives (iii), and (iii) trivially gives (i) and (ii).
+\end{proof}
+
+\begin{remark}\label{ch02:rem:pigeonhole}
+Proposition~\ref{ch02:prop:endo-trichotomy} is the pigeonhole principle in
+functional dress, and it fails instantly for infinite sets (the successor
+map on the natural numbers is injective, not surjective). Its relevance to
+the kernel is indirect but real: on a finite carrier, a non-bijective
+endomap must \emph{merge} somewhere and \emph{miss} somewhere, and repeated
+iteration therefore shrinks the image until it stabilizes --- the
+qualitative fact behind the eventual-periodicity theory of
+Section~\ref{ch02:sec:funcgraphs}.
+\end{remark}
+
+\subsection{Composites and cancellation}
+
+\begin{proposition}\label{ch02:prop:comp-inj-surj}
+Let $f : X \to Y$ and $g : Y \to Z$. (i) If $f$ and $g$ are injective, so is
+$g \circ f$; if both are surjective, so is $g \circ f$. (ii) If
+$g \circ f$ is injective, $f$ is injective. (iii) If $g \circ f$ is
+surjective, $g$ is surjective.
+\end{proposition}
+
+\begin{proof}
+(i) If $g(f(x)) = g(f(x'))$, injectivity of $g$ gives $f(x) = f(x')$ and
+injectivity of $f$ gives $x = x'$. For surjectivity, any $z \in Z$ is
+$g(y)$ for some $y$, and $y = f(x)$ for some $x$, so $z = g(f(x))$.
+(ii) If $f(x) = f(x')$ then $g(f(x)) = g(f(x'))$, so $x = x'$ by
+injectivity of the composite. (iii) Any $z \in Z$ is $(g \circ f)(x)$ for
+some $x$, hence $z = g(f(x)) \in \im(g)$.
+\end{proof}
+
+\subsection{Sections and retractions}
+
+Injectivity and surjectivity admit a second characterization --- by
+one-sided inverses --- that translates directly into the operator language
+of Chapter~7, where it becomes the isometry and coisometry structure of
+lifts.
+
+\begin{proposition}[One-sided inverses]\label{ch02:prop:sections}
+Let $f : X \to Y$ with $X$ nonempty and both sets finite.
+\begin{enumerate}
+\item $f$ is injective iff it has a \emph{retraction}: some
+$r : Y \to X$ with $r \circ f = \id_X$.
+\item $f$ is surjective iff it has a \emph{section}: some
+$s : Y \to X$ with $f \circ s = \id_Y$.
+\item $f$ is bijective iff it has a two-sided inverse, which is then
+unique and equals every retraction and every section of $f$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) If $r \circ f = \id_X$ then $f$ is injective by
+Proposition~\ref{ch02:prop:comp-inj-surj}(ii) applied to the injective
+composite $\id_X$. Conversely, if $f$ is injective, fix any
+$x_\ast \in X$ (here nonemptiness is used) and define $r(y) = x$ when
+$y = f(x)$ for the (unique, by injectivity) such $x$, and
+$r(y) = x_\ast$ when $y \notin \im(f)$. Then $r$ is total and
+$r(f(x)) = x$ for every $x$.
+
+(2) If $f \circ s = \id_Y$ then $f$ is surjective by
+Proposition~\ref{ch02:prop:comp-inj-surj}(iii). Conversely, if $f$ is
+surjective, every fiber $f^{-1}(y)$ is nonempty; choose for each $y$ an
+element $s(y) \in f^{-1}(y)$ (a finite sequence of choices, no choice
+axiom needed: pick the element of least standard index). Then
+$f(s(y)) = y$ for every $y$.
+
+(3) If $g$ satisfies $g \circ f = \id_X$ and $f \circ g = \id_Y$, then
+$f$ is bijective by (1) and (2). Conversely a bijection's inverse
+assignment $y \mapsto$ (the unique $x$ with $f(x) = y$) is a two-sided
+inverse. For uniqueness and the coincidence claim: if
+$r \circ f = \id_X$ and $f \circ s = \id_Y$, then
+$r = r \circ \id_Y = r \circ (f \circ s) = (r \circ f) \circ s =
+\id_X \circ s = s$; so any retraction equals any section, and in
+particular two two-sided inverses are equal.
+\end{proof}
+
+\begin{remark}[Choice of section is data]\label{ch02:rem:section-choice}
+The proof of (2) had to \emph{choose} an element of each fiber, and made
+the choice canonical by taking least standard indices. This is a small
+early instance of the chapter-spanning theme: where mathematics says
+``choose arbitrarily,'' a deterministic kernel must say \emph{which}, and
+the ordered carrier is what makes ``least index'' meaningful. An
+implementation whose carriers were unordered sets could not even state
+this canonical section.
+\end{remark}
+
+\section{Counting total maps}\label{ch02:sec:counting}
+
+Bounded exhaustive testing --- the kernel's principal executable evidence
+--- rests on knowing exactly how many objects of each shape exist, so that
+``all of them'' is a checkable claim. This section proves the counts.
+
+\begin{theorem}[Number of total maps]\label{ch02:thm:count-maps}
+For finite sets $X$ and $Y$, the number of total functions $X \to Y$ is
+$|Y|^{|X|}$, with the conventions $m^0 = 1$ (one empty function out of the
+empty set, for any $Y$, including $Y = \emptyset$) and $0^n = 0$ for
+$n \geq 1$ (no total function from a nonempty set into the empty set).
+\end{theorem}
+
+\begin{proof}
+Write $n = |X|$, $m = |Y|$, and fix an enumeration
+$x_0, \dots, x_{n-1}$ of $X$. We induct on $n$.
+
+\emph{Base case $n = 0$.} A total function must assign an image to every
+element of the domain; with no elements there is nothing to assign, and two
+such functions are extensionally equal vacuously. So there is exactly one
+function $\emptyset \to Y$ --- the empty function --- and $m^0 = 1$ counts
+it correctly, even when $m = 0$.
+
+\emph{Inductive step.} Suppose the count is $m^{n-1}$ for domains of size
+$n - 1$, and let $|X| = n \geq 1$. If $m = 0$ there is no possible image
+for $x_0$, hence no total function, and $0^n = 0$ is correct. If
+$m \geq 1$, a total function $f : X \to Y$ is uniquely determined by the
+pair (its restriction to $X \setminus \{x_0\}$, its value $f(x_0)$), and
+every such pair arises from exactly one $f$: given a function $g$ on
+$X \setminus \{x_0\}$ and a value $y \in Y$, define $f(x_0) = y$ and
+$f(x_i) = g(x_i)$ for $i \geq 1$; this $f$ is total, restricts to $g$, and
+takes the value $y$; and two distinct pairs yield extensionally distinct
+functions. The correspondence is therefore a bijection between functions
+$X \to Y$ and pairs, so the count is
+$m^{n-1} \cdot m = m^n$ by the induction hypothesis and the product rule.
+\end{proof}
+
+\begin{corollary}[Counts used by the test families]\label{ch02:cor:test-counts}
+(i) The number of endomaps of an $n$-element set is $n^n$; in particular
+there are $3^3 = 27$ endomaps of a three-element carrier and hence
+$27^3 = 19{,}683$ ordered triples of such endomaps --- the exhaustive
+associativity family of Chapter~10. (ii) Summing over carrier sizes zero
+through four, $\sum_{n=0}^{4} n^n = 1 + 1 + 4 + 27 + 256 = 289$ endomaps
+--- the exhaustive endomap family (here $0^0 = 1$ counts the empty
+function). (iii) The number of injective functions from an $n$-set to an
+$m$-set is the falling factorial $m (m-1) \cdots (m-n+1)$ for
+$n \leq m$ and $0$ otherwise; the number of bijections of an $n$-set with
+itself is $n!$.
+\end{corollary}
+
+\begin{proof}
+(i) and (ii) are immediate from Theorem~\ref{ch02:thm:count-maps}. For
+(iii): choose images for $x_0, x_1, \dots$ in order; injectivity means each
+choice must avoid the previously chosen images, leaving $m - i$ options at
+step $i$; the product rule gives the falling factorial, which is $0$ as
+soon as $n > m$ by pigeonhole
+(Proposition~\ref{ch02:prop:endo-trichotomy}); bijections are the case
+$n = m$.
+\end{proof}
+
+\begin{theorem}[Number of surjections]\label{ch02:thm:count-surj}
+For finite sets with $|X| = n$ and $|Y| = m$, the number of surjective
+total functions $X \to Y$ is
+\[
+\mathrm{Surj}(n, m) \;=\; \sum_{k=0}^{m} (-1)^{k} \binom{m}{k}
+(m - k)^{n}.
+\]
+\end{theorem}
+
+\begin{proof}
+For each $y \in Y$ let $B_y$ denote the set of total functions
+$X \to Y$ that \emph{miss} $y$, i.e.\ with $y \notin \im(f)$. The
+surjections are the functions in none of the $B_y$, so by
+inclusion-exclusion over the finite index set $Y$,
+\[
+\mathrm{Surj}(n, m)
+= \sum_{S \subseteq Y} (-1)^{|S|} \Bigl| \bigcap_{y \in S} B_y \Bigr|.
+\]
+The intersection $\bigcap_{y \in S} B_y$ consists of the total functions
+$X \to Y \setminus S$, of which there are $(m - |S|)^{n}$ by
+Theorem~\ref{ch02:thm:count-maps}. Grouping the $2^m$ subsets by size
+$k = |S|$, of which there are $\binom{m}{k}$ each, gives the stated sum.
+\end{proof}
+
+\begin{example}\label{ch02:ex:count-small}
+On a three-element carrier: $27$ endomaps in all
+(Theorem~\ref{ch02:thm:count-maps}); of these,
+$\mathrm{Surj}(3,3) = 27 - 3 \cdot 8 + 3 \cdot 1 - 0 = 6$ are surjective
+--- and indeed the surjective endomaps of a finite set are exactly its
+bijections (Proposition~\ref{ch02:prop:endo-trichotomy}), of which there
+are $3! = 6$; the two counts confirming each other is a useful sanity
+identity, $\mathrm{Surj}(n,n) = n!$. The remaining $21$ endomaps of the
+three-element carrier are the non-bijections, each of which merges at
+least two points and misses at least one.
+\end{example}
+
+\begin{remark}[Exhaustibility, and where it stops]\label{ch02:rem:exhaustibility}
+The counts explain the exact shape of the kernel's bounded exhaustive
+test families (Chapter~10). Endomap families grow as $n^n$: sizes
+$0$ through $4$ contribute $1 + 1 + 4 + 27 + 256 = 289$ cases ---
+trivially exhaustible --- while size $5$ alone would add $3{,}125$ and
+size $8$ would add $16{,}777{,}216$. Triples for associativity grow as
+$(n^n)^3$: on the three-element carrier this is $27^3 = 19{,}683$, run
+in milliseconds, while on a four-element carrier it would already be
+$256^3 = 16{,}777{,}216$. The chosen bounds are the largest at which
+\emph{complete} enumeration remains cheap enough to run on every test
+invocation; beyond them the suite would have to sample, and sampled
+evidence is a different, weaker kind of claim. Small-scope testing
+doctrine \cite{jackson} holds that most implementation defects are
+already expressible in small models; the kernel adopts that doctrine
+explicitly and records its bounds rather than hiding them.
+\end{remark}
+
+\begin{remark}[Finiteness of the normal-form closure]\label{ch02:rem:closure-finite}
+Theorem~\ref{ch02:thm:count-maps} is also the finiteness engine for
+Chapter~8: the denotations reachable from a finite generator catalog over a
+finite object set live inside the union of the sets of total maps between
+catalog objects, of which there are at most $|Y|^{|X|}$ for each ordered
+pair of objects, hence finitely many overall. The closure algorithm's
+termination is exactly this observation.
+\end{remark}
+
+\section{The algebraic ladder: semigroups to categories}\label{ch02:sec:ladder}
+
+The kernel's central type distinction --- endomaps have powers, paths do not
+--- is a distinction between positions on a small ladder of algebraic
+structures. We define each rung and prove the elementary facts; the reader
+is referred to Howie \cite{howie} and Pin \cite{pin} for semigroup theory
+and to Mac~Lane \cite{maclanecwm} for categories.
+
+\begin{definition}[Semigroup, monoid]\label{ch02:def:semigroup}
+A \emph{semigroup} is a set $S$ with an associative binary operation
+$(s, t) \mapsto st$. A \emph{monoid} is a semigroup with a two-sided
+identity element $1$: $1s = s1 = s$ for all $s$.
+\end{definition}
+
+\begin{proposition}[Uniqueness of identity; unambiguous powers]\label{ch02:prop:monoid-basics}
+(i) A monoid's identity is unique. (ii) In a semigroup, the power $s^n$
+($n \geq 1$), defined by $s^1 = s$ and $s^{n+1} = s^n s$, satisfies
+$s^{m+n} = s^m s^n$ and $(s^m)^n = s^{mn}$; in a monoid the same laws hold
+for all $m, n \geq 0$ with $s^0 = 1$.
+\end{proposition}
+
+\begin{proof}
+(i) If $1$ and $1'$ are both identities, $1 = 1 \cdot 1' = 1'$. (ii)
+$s^{m+n} = s^m s^n$ is induction on $n$: the case $n = 1$ is the
+definition, and $s^{m + (n+1)} = s^{(m+n)+1} = s^{m+n} s =
+(s^m s^n) s = s^m (s^n s) = s^m s^{n+1}$ using associativity. Then
+$(s^m)^n = s^{mn}$ is induction on $n$ using the first law. The monoid
+extension is immediate from $1 s = s$.
+\end{proof}
+
+The point of belaboring (ii): the expression $s^n$ is meaningful
+\emph{because} all ways of parenthesizing $n$ copies of $s$ agree
+(generalized associativity, itself a routine induction), and it presupposes
+that the $n$ factors are \emph{the same element} of \emph{one} semigroup.
+Both presuppositions fail for the generator sequences of
+Section~\ref{ch01:sec:power-scenario}, and the kernel's refusal to give
+paths a power operation is the refusal to notate a power whose defining
+laws have no ambient semigroup in which to hold.
+
+\begin{definition}[Category]\label{ch02:def:category}
+A \emph{category} $\cC$ consists of a collection of \emph{objects}
+$\Ob(\cC)$; for each ordered pair of objects $(X, Y)$ a set
+$\Hom(X, Y)$ of \emph{arrows}; for each object an identity arrow
+$\id_X \in \Hom(X, X)$; and a composition assigning to
+$f \in \Hom(X, Y)$ and $g \in \Hom(Y, Z)$ an arrow
+$g \circ f \in \Hom(X, Z)$, such that composition is associative wherever
+defined and identities are neutral: $f \circ \id_X = f = \id_Y \circ f$
+\cite{maclanecwm}.
+\end{definition}
+
+\begin{definition}[Semigroupoid]\label{ch02:def:semigroupoid}
+A \emph{semigroupoid} is defined as a category is, but \emph{without} the
+requirement of identity arrows: objects, hom-sets, and an associative
+partial composition. Every category is a semigroupoid; a semigroupoid with
+all identities is a category.
+\end{definition}
+
+\begin{proposition}[The ladder]\label{ch02:prop:ladder}
+(i) A monoid is exactly a category with one object: the elements are the
+arrows on that object, the operation is composition, the identity element
+is the identity arrow. (ii) A semigroup is exactly a semigroupoid with one
+object. (iii) In any category, each $\Hom(X, X)$ is a monoid under
+composition, called the \emph{endomorphism monoid} $\mathrm{End}(X)$; in
+any semigroupoid, each $\Hom(X, X)$ is a semigroup.
+\end{proposition}
+
+\begin{proof}
+(i) Given a monoid $M$, define a category with a single object $\star$,
+$\Hom(\star, \star) = M$, composition the monoid operation, and
+$\id_\star = 1$; the category axioms are precisely associativity and the
+identity laws. Conversely a one-object category's arrows form a monoid by
+the same reading. (ii) is the same argument without identities. (iii)
+Composition restricted to $\Hom(X, X)$ is total (source and target both
+$X$), associative because the ambient composition is, and has identity
+$\id_X$ (or, in a semigroupoid, is merely associative).
+\end{proof}
+
+\begin{remark}[Where powers live]\label{ch02:rem:where-powers-live}
+Proposition~\ref{ch02:prop:ladder} locates the power operation precisely:
+$f^n$ makes sense exactly when $f$ inhabits some $\Hom(X, X)$ --- a monoid
+--- and makes no sense for $f \in \Hom(X, Y)$ with $X \neq Y$, since
+already $f \circ f$ requires the target of the inner $f$ to be the source
+of the outer. A composable sequence
+$X_0 \to X_1 \to \cdots \to X_n$ of arrows in a category has a composite,
+by iterated use of the composition operation and associativity, but the
+sequence itself is an element of no single hom-set unless all the objects
+coincide, and even then the \emph{sequence} is not an \emph{element}: it
+composes to one, which is a different thing. The kernel's
+\texttt{Endomap} / \texttt{SemigroupoidPath} type distinction (Chapters~5
+and~6) is this remark made mechanical.
+\end{remark}
+
+\subsection{Generalized associativity}
+
+Both the power notation $s^n$ and the composite of a semigroupoid path
+rest on the same silent convention: an $n$-fold product may be written
+without parentheses. That convention is a theorem, and since the kernel's
+path composite (Chapter~6) is computed by one particular parenthesization
+--- left-to-right folding --- while the mathematics quantifies over all
+parenthesizations, we prove it.
+
+\begin{theorem}[Generalized associativity]\label{ch02:thm:gen-assoc}
+Let $a_1, a_2, \dots, a_n$ ($n \geq 1$) be a composable sequence in a
+semigroupoid (in particular: any sequence in a semigroup, or a typed
+path's arrow sequence). Then every way of fully parenthesizing the product
+$a_n \cdots a_2 a_1$ yields the same element, which may therefore be
+written without parentheses.
+\end{theorem}
+
+\begin{proof}
+Define the \emph{left-folded} product $L_k$ by $L_1 = a_1$ and
+$L_{k+1} = a_{k+1} L_k$. We show by strong induction on $n$ that every
+fully parenthesized product $P$ of $a_n, \dots, a_1$ (in this order)
+equals $L_n$. For $n = 1$, $P = a_1 = L_1$. For $n \geq 2$, the
+outermost multiplication of $P$ splits the sequence at some position
+$j$: $P = Q \cdot R$, where $R$ is a parenthesized product of
+$a_j, \dots, a_1$ and $Q$ one of $a_n, \dots, a_{j+1}$, with
+$1 \leq j \leq n - 1$. By induction $R = L_j$ and $Q = M$, where $M$ is
+the left-folded product of $a_n, \dots, a_{j+1}$. If $j = n - 1$ then
+$M = a_n$ and $P = a_n L_{n-1} = L_n$ directly. Otherwise write
+$M = a_n M'$ with $M'$ the left-folded product of
+$a_{n-1}, \dots, a_{j+1}$ (definition of left folding, since
+$n - j \geq 2$). Using binary associativity,
+\[
+P = (a_n M') L_j = a_n (M' L_j),
+\]
+and $M' L_j$ is a parenthesized product of $a_{n-1}, \dots, a_1$, hence
+equals $L_{n-1}$ by induction. So $P = a_n L_{n-1} = L_n$. (All
+composites appearing are defined: in a semigroupoid, definedness of a
+parenthesized product depends only on adjacent source-target matching of
+the underlying sequence, which is given.)
+\end{proof}
+
+\begin{remark}\label{ch02:rem:fold-order}
+Theorem~\ref{ch02:thm:gen-assoc} is what entitles the kernel to
+\emph{implement} the path composite as a left fold while \emph{claiming}
+the parenthesization-independent composite: the two coincide. It is also
+the induction behind Proposition~\ref{ch02:prop:monoid-basics}(ii), made
+explicit.
+\end{remark}
+
+\subsection{Structure-preserving maps: homomorphisms and functors}
+
+One more definition from the standard toolkit is needed --- not for the
+kernel's core, but for stating what Chapter~7 proves about the lift.
+
+\begin{definition}[Monoid homomorphism; functor]\label{ch02:def:functor}
+A \emph{monoid homomorphism} $\varphi : M \to N$ satisfies
+$\varphi(1_M) = 1_N$ and $\varphi(st) = \varphi(s)\varphi(t)$. More
+generally, a \emph{functor} $F : \cC \to \mathcal{D}$ between categories
+assigns to each object $X$ of $\cC$ an object $F(X)$ of $\mathcal{D}$ and
+to each arrow $f : X \to Y$ an arrow $F(f) : F(X) \to F(Y)$, such that
+$F(\id_X) = \id_{F(X)}$ and $F(g \circ f) = F(g) \circ F(f)$ whenever
+$g \circ f$ is defined \cite{maclanecwm}.
+\end{definition}
+
+By Proposition~\ref{ch02:prop:ladder}(i), a functor between one-object
+categories is exactly a monoid homomorphism; the two clauses of
+Definition~\ref{ch02:def:functor} are the two \emph{functor laws}.
+Chapter~7's deterministic lift is an assignment
+$X \mapsto H_X$, $f \mapsto A_f$ claimed to satisfy exactly these laws
+($A_{\id_X} = I$ and $A_{g \circ f} = A_g A_f$); the claim's executable
+verification --- exact matrix equality over all $1{,}678$ valid
+composition pairs on carriers through size three --- and its partially
+formalized status are detailed in Chapters~10 and~11. A functor
+restricted to one endomorphism monoid is a monoid homomorphism
+$\mathrm{End}(X) \to \mathrm{End}(H_X)$; in particular functors carry
+powers to powers, $F(f^n) = F(f)^n$, by induction from the composition
+law --- which is why the lift of an idempotent power is an idempotent
+operator, a fact Chapter~7's counterexample then sharpens (idempotent,
+yes; projector, no).
+
+\subsection{The full transformation monoid}
+
+\begin{definition}\label{ch02:def:full-transf}
+For a finite set $X$, the \emph{full transformation monoid} $T_X$ is the
+monoid of all total functions $X \to X$ under composition, with identity
+$\id_X$ \cite{howie}.
+\end{definition}
+
+By Theorem~\ref{ch02:thm:count-maps}, $|T_X| = |X|^{|X|}$. The
+invertible elements of $T_X$ are exactly the bijections
+(Proposition~\ref{ch02:prop:endo-trichotomy} shows one-sided inverses
+suffice in the finite case), forming the symmetric group of order $|X|!$.
+Everything the kernel proves about endomap powers is a statement about
+elements of $T_X$; the classical theory of finite transformation
+semigroups \cite{howie, pin} contains far more (Green's relations,
+ideal structure, generation), none of which the kernel needs or encodes.
+
+\section{Functional graphs of endomaps}\label{ch02:sec:funcgraphs}
+
+Fix a finite set $X$, $|X| = n \geq 1$, and an endomap $f : X \to X$. This
+section develops the combinatorial structure of iteration --- the
+\emph{functional graph} --- and proves the eventual-periodicity facts that
+Chapter~5 packages as the safe finite power. The material is classical
+\cite{pin, howie}.
+
+\subsection{The rho shape}
+
+\begin{definition}[Functional graph; orbit]\label{ch02:def:funcgraph}
+The \emph{functional graph} of $f$ is the directed graph with vertex set
+$X$ and one edge $x \to f(x)$ for each $x$; every vertex has out-degree
+exactly one (totality and single-valuedness). The \emph{orbit} of $x$ is
+the sequence $x, f(x), f^2(x), \dots$.
+\end{definition}
+
+\begin{definition}[Periodic and eventually periodic points]\label{ch02:def:periodic}
+A point $x$ is \emph{periodic} if $f^k(x) = x$ for some $k \geq 1$; the
+least such $k$ is its \emph{period}. A point is \emph{eventually periodic}
+if $f^i(x)$ is periodic for some $i \geq 0$; the least such $i$ is the
+\emph{tail length} (or index) of $x$.
+\end{definition}
+
+\begin{lemma}[Every orbit enters a cycle]\label{ch02:lem:rho}
+Let $|X| = n$ and $x \in X$. Then:
+\begin{enumerate}
+\item The orbit of $x$ repeats within $n$ steps: there exist
+$0 \leq i < j \leq n$ with $f^i(x) = f^j(x)$.
+\item $x$ is eventually periodic, with tail length $t(x) \leq n - 1$ and
+the period $\ell(x)$ of the periodic point it reaches satisfying
+$1 \leq \ell(x) \leq n$, and moreover $t(x) + \ell(x) \leq n$.
+\item For all $a \geq t(x)$ and all $b \geq 0$:
+$f^{a + b}(x) = f^a(x)$ if and only if $\ell(x) \mid b$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(1) The $n + 1$ points $x, f(x), \dots, f^n(x)$ lie in the $n$-element set
+$X$; by pigeonhole two coincide, say $f^i(x) = f^j(x)$ with
+$0 \leq i < j \leq n$.
+
+(2) Take $i < j$ as in (1) with $j$ minimal and, for that $j$, $i$
+minimal. Set $t = i$ and $\ell = j - i$. The point $y = f^t(x)$
+satisfies $f^\ell(y) = f^{j}(x) = f^{i}(x) = y$, so $y$ is periodic and
+$x$ is eventually periodic with tail length at most $t$. Minimality of the
+pair makes the points $x, f(x), \dots, f^{j-1}(x)$ pairwise distinct
+(a repeat among them would contradict minimality of $j$, or of $i$ for the
+given $j$); there are $t + \ell = j$ of these distinct points in an
+$n$-set, so $t + \ell \leq n$, which gives both $t \leq n - 1$ (since
+$\ell \geq 1$) and $\ell \leq n$ (since $t \geq 0$). Finally the period of
+$y$ divides $\ell$ and its tail is $0$, so the stated bounds hold for the
+true tail length and true period as well.
+
+(3) Let $y = f^{t(x)}(x)$, a periodic point of period $\ell = \ell(x)$,
+and let $a \geq t(x)$, say $a = t(x) + c$. Then $f^a(x) = f^c(y)$, and
+$f^{a+b}(x) = f^{c + b}(y)$. Since $y$ has period $\ell$, the points
+$y, f(y), \dots, f^{\ell - 1}(y)$ are pairwise distinct (a coincidence
+$f^u(y) = f^v(y)$ with $0 \leq u < v < \ell$ would give
+$f^{u + (\ell - v)}(y)= f^{\ell}(y) = y$ with
+$1 \le u + \ell - v < \ell$, contradicting minimality of the period), and
+$f^{m}(y) = f^{m'}(y)$ iff $m \equiv m' \pmod{\ell}$ for
+$m, m' \geq 0$: the ``if'' direction is $f^{\ell}(y) = y$ iterated, and
+the ``only if'' direction follows because both sides reduce to points of
+the distinct list. Applying this with $m = c + b$, $m' = c$ gives
+$f^{a+b}(x) = f^a(x)$ iff $\ell \mid b$.
+\end{proof}
+
+The picture painted by Lemma~\ref{ch02:lem:rho} is the classical
+\emph{rho} ($\rho$) shape: each orbit runs along a tail of at most
+$n - 1$ steps and then winds forever around a cycle of length at most $n$.
+Globally, the functional graph decomposes into weakly connected components,
+each consisting of exactly one directed cycle with rooted trees hanging off
+the cycle vertices, edges oriented toward the cycle; the periodic points
+are precisely the cycle vertices.
+
+\subsection{Index and period of the endomap}
+
+Iteration also acts on $f$ itself, inside the finite monoid $T_X$.
+
+\begin{theorem}[Eventual periodicity of powers; index and period]\label{ch02:thm:index-period}
+Let $f \in T_X$ with $|X| = n \geq 1$. There exist a least
+$t \geq 0$ (the \emph{index}) and a least $p \geq 1$ (the \emph{period})
+such that $f^{t + p} = f^{t}$; and then $f^{a} = f^{b}$ for
+$a, b \geq t$ iff $a \equiv b \pmod p$. Moreover $t \leq n - 1$ and $p$
+equals the least common multiple of the cycle lengths of the functional
+graph, so $p \leq \mathrm{lcm}(1, 2, \dots, n)$ and, crudely,
+$p \mid n!$.
+\end{theorem}
+
+\begin{proof}
+The powers $f^0, f^1, f^2, \dots$ live in the finite monoid $T_X$ of size
+$n^n$, so by pigeonhole some two coincide, $f^{i} = f^{j}$ with $i < j$;
+then $f^{a} = f^{a + (j - i)}$ for all $a \geq i$ (compose both sides of
+$f^i = f^j$ with $f^{a-i}$), so the sequence of powers is eventually
+periodic as a sequence in $T_X$; define $t$ as the least index from which
+some repetition recurs and $p$ as the least positive $b$ with
+$f^{t+b} = f^t$. The biconditional for $a, b \geq t$ follows exactly as in
+the proof of Lemma~\ref{ch02:lem:rho}(3), applied to the orbit of
+$\id_X$ under composition with $f$ in $T_X$.
+
+For the bound on $t$: by Lemma~\ref{ch02:lem:rho}(2) every point has tail
+length at most $n - 1$, so for every $x$ the value $f^{n-1}(x)$ is already
+periodic; hence for any $b$ that is a multiple of all point-periods,
+$f^{(n-1) + b} = f^{n-1}$ pointwise, showing the index is at most
+$n - 1$.
+
+For the identification of $p$: let $L$ be the least common multiple of the
+cycle lengths (equivalently, of the periods $\ell(x)$ over all $x$, since
+each $\ell(x)$ is the length of the cycle its orbit enters). If
+$a \geq t$ then in particular $a \geq t(x)$ for every $x$ (the pointwise
+tails are dominated by the index --- indeed $f^a(x)$ must be periodic for
+repetition of the map to occur at $a$), and
+Lemma~\ref{ch02:lem:rho}(3) gives: $f^{a + b} = f^{a}$ as maps iff
+$\ell(x) \mid b$ for every $x$, iff $L \mid b$. Hence $p = L$. Each cycle
+length is at most $n$, so $L$ divides $\mathrm{lcm}(1, \dots, n)$, which in
+turn divides $n!$ since every factor $1 \le k \le n$ divides $n!$.
+\end{proof}
+
+\subsection{The factorial idempotent power}
+
+\begin{theorem}[Factorial idempotent power]\label{ch02:thm:factorial-idempotent}
+For every finite set $X$ and every $f \in T_X$, the power $f^{|X|!}$ is
+idempotent:
+\[
+f^{|X|!} \circ f^{|X|!} = f^{|X|!}.
+\]
+\end{theorem}
+
+\begin{proof}
+Write $N = |X|$. For $N = 0$ the only endomap is the empty function, which
+is its own composite, and $f^{0!} = f^1 = f$; the claim holds. For
+$N = 1$ the only endomap is $\id_X$, idempotent. Assume $N \geq 2$; then
+$N! \geq N > N - 1$. Fix any $x \in X$. By Lemma~\ref{ch02:lem:rho}(2),
+the tail length of $x$ is at most $N - 1 < N!$, so $f^{N!}(x)$ is a
+periodic point; let $\ell \leq N$ be the length of its cycle. Since every
+integer from $1$ to $N$ divides $N!$, we have $\ell \mid N!$, and
+Lemma~\ref{ch02:lem:rho}(3) (with $a = N!$, $b = N!$) gives
+$f^{2 N!}(x) = f^{N!}(x)$. As $x$ was arbitrary, $f^{2N!} = f^{N!}$
+extensionally, which is the claim.
+\end{proof}
+
+\begin{remark}[Sharpness and cost]\label{ch02:rem:factorial-sharp}
+The exponent $N!$ is chosen for the simplicity of its correctness proof,
+not for minimality: Theorem~\ref{ch02:thm:index-period} shows the least
+idempotent power of $f$ is $f^{a}$ for the least $a \geq t$ divisible by
+$p$, which can be far smaller than $N!$. What $N!$ buys is
+\emph{uniformity} --- one exponent that works for every endomap of every
+$N$-element carrier, computable without inspecting the functional graph.
+The kernel computes $f^{N!}$ by binary powering, so the cost is
+$O(\log(N!)) = O(N \log N)$ compositions, each $O(N)$ array operations;
+Chapter~5 details the implementation and the bounded presentation-name
+scheme for such large exponents. The exhaustive verification of
+Theorem~\ref{ch02:thm:factorial-idempotent} over all $289$ endomaps on
+carriers of size at most four (Chapter~10) is possible precisely because
+Corollary~\ref{ch02:cor:test-counts} counts that family exactly.
+\end{remark}
+
+\begin{remark}[What the theorem does not say]\label{ch02:rem:factorial-scope}
+The theorem quantifies over single elements $f$ of the monoid $T_X$. It
+says nothing about products of \emph{distinct} endomaps --- the alternating
+scenario of Section~\ref{ch01:sec:power-scenario} satisfies the theorem for
+each generator and still refutes the stabilization conclusion for the
+sequence --- and nothing at all in the heterogeneous case, where no monoid
+contains the sequence. This is the exact boundary the kernel's type system
+draws.
+\end{remark}
+
+\subsection{Idempotents and the eventual image}
+
+\begin{proposition}[Characterization of idempotents]\label{ch02:prop:idempotent-char}
+For $e \in T_X$, the following are equivalent: (i) $e \circ e = e$;
+(ii) $e$ restricts to the identity on its image, i.e.\ $e(y) = y$ for
+every $y \in \im(e)$; (iii) $\im(e)$ is exactly the set of fixed points
+of $e$.
+\end{proposition}
+
+\begin{proof}
+(i) $\Rightarrow$ (ii): for $y \in \im(e)$ write $y = e(x)$; then
+$e(y) = e(e(x)) = e(x) = y$. (ii) $\Rightarrow$ (iii): every image point
+is fixed by (ii), and every fixed point $y = e(y)$ is an image point.
+(iii) $\Rightarrow$ (i): for any $x$, $e(x) \in \im(e)$ is a fixed
+point, so $e(e(x)) = e(x)$; extensionally $e \circ e = e$.
+\end{proof}
+
+\begin{proposition}[The eventual image]\label{ch02:prop:eventual-image}
+Let $f \in T_X$, $|X| = n \geq 1$. The images of the powers form a
+descending chain $\im(f) \supseteq \im(f^2) \supseteq \cdots$ that
+stabilizes at some $k \leq n - 1$ to the \emph{eventual image}
+$X_\infty = \im(f^{k}) = \im(f^{m})$ for all $m \geq k$. Moreover
+$X_\infty$ is exactly the set of periodic points of $f$, $f$ restricts to
+a bijection of $X_\infty$, and the idempotent $e = f^{n!}$ of
+Theorem~\ref{ch02:thm:factorial-idempotent} has $\im(e) = X_\infty$.
+\end{proposition}
+
+\begin{proof}
+$\im(f^{m+1}) = f(\im(f^m)) \subseteq \im(f^m)$ gives the chain. A
+strictly decreasing chain of nonempty subsets of an $n$-set has length at
+most $n$, and once two consecutive images coincide, all later ones do
+(apply $f$ to the equality); since $|\im(f)| \le n$ and each strict step
+drops the size by at least one, stabilization occurs by index $n - 1$ at
+the latest (if no strict drop ever occurs, $f$ is bijective and the chain
+is constant from the start).
+
+Periodic points lie in every $\im(f^m)$ (a point of period $\ell$ is
+$f^{m \ell}$ of itself), hence in $X_\infty$. Conversely, take
+$m \geq n - 1$ and $x \in X$: the tail of $x$ has length at most
+$n - 1 \leq m$ by Lemma~\ref{ch02:lem:rho}(2), so $f^{m}(x)$ lies on a
+cycle and is periodic. Hence $\im(f^{m})$ consists of periodic points
+for all such $m$, and $X_\infty$ is exactly the periodic set. On
+$X_\infty$, $f$ is injective: a merge
+$f(u) = f(v)$ with $u \neq v$ both periodic would give, for a common
+multiple $P$ of their periods with $P \ge 1$,
+$u = f^{P}(u)$ and $v = f^{P}(v)$, yet
+$f^{P}(u) = f^{P-1}(f(u)) = f^{P-1}(f(v)) = f^{P}(v)$, forcing
+$u = v$. An injective self-map of the finite set $X_\infty$
+(note $f(X_\infty) = X_\infty$ by stabilization) is a bijection of it
+(Proposition~\ref{ch02:prop:endo-trichotomy}). Finally
+$\im(f^{n!}) = X_\infty$ since $n! \geq n - 1$ puts $n!$ beyond the
+stabilization index.
+\end{proof}
+
+\begin{example}[A worked functional graph]\label{ch02:ex:funcgraph}
+Let $X$ have six elements with standard indices $0, \dots, 5$ and let
+$f$ have mapping tuple $(1, 2, 3, 1, 5, 5)$, i.e.
+\[
+0 \mapsto 1, \quad 1 \mapsto 2, \quad 2 \mapsto 3, \quad 3 \mapsto 1,
+\quad 4 \mapsto 5, \quad 5 \mapsto 5.
+\]
+The functional graph has two components. Component one contains the
+cycle $1 \to 2 \to 3 \to 1$ of length $3$, with the tail
+$0 \to 1$ hanging on it: point $0$ has tail length $1$, points
+$1, 2, 3$ are periodic of period $3$. Component two contains the fixed
+point $5$ (a cycle of length $1$) with the tail $4 \to 5$: point $4$
+has tail length $1$, point $5$ is periodic of period $1$.
+
+Reading off the theory: tail lengths are $1$, comfortably within the
+bound $n - 1 = 5$ of Lemma~\ref{ch02:lem:rho}; the cycle lengths are
+$3$ and $1$, so the period of $f$ is $p = \mathrm{lcm}(3, 1) = 3$
+(Theorem~\ref{ch02:thm:index-period}).
+
+Compute the powers as mapping tuples, each a mechanical fold of
+lookups:
+\[
+f = (1, 2, 3, 1, 5, 5), \qquad
+f^{2} = (2, 3, 1, 2, 5, 5), \qquad
+f^{3} = (3, 1, 2, 3, 5, 5), \qquad
+f^{4} = (1, 2, 3, 1, 5, 5).
+\]
+Thus $f^{4} = f^{1}$ while $f^{1}, f^{2}, f^{3}$ are pairwise distinct
+and none equals $f^{0} = \id_X$: the index of $f$ is $t = 1$ and the
+period is confirmed as $p = 3$, with $f^{a} = f^{b}$ for
+$a, b \geq 1$ iff $a \equiv b \pmod 3$.
+
+The least idempotent power is the least $a \geq t$ divisible by $p$,
+namely $a = 3$. Check directly against
+Proposition~\ref{ch02:prop:idempotent-char}: $f^{3}$ sends
+$0 \mapsto 3$, $1 \mapsto 1$, $2 \mapsto 2$, $3 \mapsto 3$,
+$4 \mapsto 5$, $5 \mapsto 5$; its image is $\{1, 2, 3, 5\}$, which it
+fixes pointwise --- an idempotent whose image is exactly the periodic
+set, as Proposition~\ref{ch02:prop:eventual-image} requires. The
+uniform exponent of Theorem~\ref{ch02:thm:factorial-idempotent} is
+$6! = 720$; since $720 \geq 1$ and $720 \equiv 0 \pmod 3$, we get
+$f^{720} = f^{3}$: the factorial power lands on the same idempotent, as
+it must, at the cost of a much larger exponent --- the price of
+uniformity noted in Remark~\ref{ch02:rem:factorial-sharp}.
+\end{example}
+
+The example also illustrates a methodological point the kernel takes
+seriously: powers are computed and compared as mapping tuples, never
+chased through orbits in prose. The tuple representation makes each
+power an auditable mechanical object, and the exhaustive suite of
+Chapter~10 compares exactly these tuples; informal orbit-chasing is
+precisely where a wrong entry survives review.
+
+\section{Finite-dimensional Hilbert spaces}\label{ch02:sec:hilbert}
+
+The kernel's lift (Chapter~7) sends finite functions to linear maps between
+finite-dimensional complex Hilbert spaces. We assemble the needed linear
+algebra; the standard reference for this material is Horn and Johnson
+\cite{horn}.
+
+\subsection{Inner products and orthonormal bases}
+
+\begin{definition}\label{ch02:def:hilbert}
+A \emph{finite-dimensional (complex) Hilbert space} is a finite-dimensional
+complex vector space $H$ with an inner product
+$\langle \cdot, \cdot \rangle : H \times H \to \mathbb{C}$, linear in the
+second argument, conjugate-linear in the first, conjugate-symmetric, and
+positive definite ($\langle v, v \rangle > 0$ for $v \neq 0$). The norm is
+$\lVert v \rVert = \sqrt{\langle v, v \rangle}$. A family
+$(e_1, \dots, e_d)$ is an \emph{orthonormal basis} (ONB) if
+$\langle e_i, e_j \rangle = \delta_{ij}$ and the family spans $H$.
+\end{definition}
+
+In finite dimension no completeness axiom is needed: every
+finite-dimensional inner-product space is complete, so ``Hilbert space''
+adds nothing beyond the inner product, and we use the term for continuity
+with the lift literature. Every such space has an ONB (Gram--Schmidt), and
+relative to an ONB every vector expands as
+$v = \sum_i \langle e_i, v \rangle e_i$ with
+$\lVert v \rVert^2 = \sum_i |\langle e_i, v \rangle|^2$ (Parseval; a
+two-line computation from orthonormality).
+
+\begin{proposition}[Cauchy--Schwarz]\label{ch02:prop:cauchy-schwarz}
+For all $v, w \in H$: $|\langle v, w \rangle| \leq \lVert v \rVert
+\lVert w \rVert$, with equality iff $v$ and $w$ are linearly dependent.
+\end{proposition}
+
+\begin{proof}
+If $w = 0$ both sides vanish and $w = 0 \cdot v$ gives dependence.
+Otherwise let $\lambda = \langle w, v \rangle / \lVert w \rVert^{2}$
+and expand, using sesquilinearity and conjugate-symmetry:
+\[
+0 \;\leq\; \lVert v - \lambda w \rVert^{2}
+\;=\; \lVert v \rVert^{2}
+\;-\; \overline{\lambda}\,\langle w, v \rangle
+\;-\; \lambda\,\overline{\langle w, v \rangle}
+\;+\; |\lambda|^{2}\,\lVert w \rVert^{2}
+\;=\; \lVert v \rVert^{2}
+\;-\; \frac{|\langle w, v \rangle|^{2}}{\lVert w \rVert^{2}},
+\]
+because each of the three subtracted-or-added terms evaluates to
+$\pm |\langle w, v \rangle|^{2} / \lVert w \rVert^{2}$ with signs
+$-, -, +$. Rearranging gives
+$|\langle w, v \rangle|^{2} \leq \lVert v \rVert^{2}
+\lVert w \rVert^{2}$, and $|\langle v, w \rangle| =
+|\langle w, v \rangle|$ by conjugate-symmetry. Equality holds iff
+$\lVert v - \lambda w \rVert = 0$, i.e.\ $v = \lambda w$; conversely
+dependence gives equality by direct substitution.
+\end{proof}
+
+Cauchy--Schwarz is used silently whenever the operator norm is
+manipulated (for instance, it makes
+$\lVert A \rVert = \max_{\lVert v \rVert = \lVert w \rVert = 1}
+|\langle w, A v \rangle|$ an equivalent definition); we record it once
+so that no later step is unproved.
+
+For the kernel the relevant spaces are concrete: for a finite object $X$
+with ordered carrier $(x_0, \dots, x_{n-1})$, the space $H_X$ is
+$\mathbb{C}^n$ with the standard inner product and the standard ONB
+$(e_{x_0}, \dots, e_{x_{n-1}})$, where the basis vector attached to a
+carrier element is determined by that element's \emph{standard index}. The
+order of the carrier is thereby welded to the geometry: permuting the
+carrier permutes the basis, changing every matrix below. This is one of
+the three places the ordered-input rule of Chapter~\ref{ch03:chap} is
+load-bearing.
+
+\subsection{Linear maps as matrices; adjoints}
+
+Fix ONBs $(e_1, \dots, e_n)$ of $H_1$ and $(f_1, \dots, f_m)$ of $H_2$. A
+linear map $A : H_1 \to H_2$ is determined by its values on the basis, and
+its \emph{matrix} has entries $A_{ji} = \langle f_j, A e_i \rangle$, so
+that $A e_i = \sum_j A_{ji} f_j$; composition of maps is multiplication of
+matrices. The \emph{adjoint} $A^{*} : H_2 \to H_1$ is the unique linear
+map with $\langle A^{*} w, v \rangle = \langle w, A v \rangle$ for all
+$v \in H_1$, $w \in H_2$; existence and uniqueness in finite dimension
+follow by defining $A^{*}$ on the basis via
+$(A^{*})_{ij} = \overline{A_{ji}}$ --- the conjugate transpose --- and
+checking the defining identity on basis pairs. The adjoint reverses
+composition, $(AB)^{*} = B^{*} A^{*}$, and $(A^{*})^{*} = A$.
+
+A map $U$ is an \emph{isometry} if $\lVert U v \rVert = \lVert v \rVert$
+for all $v$; polarizing, this is equivalent to
+$\langle Uv, Uw \rangle = \langle v, w \rangle$ for all $v, w$, and hence
+to $U^{*} U = I$.
+
+\subsection{Operator norm}
+
+\begin{definition}\label{ch02:def:opnorm}
+The \emph{operator norm} of a linear map $A : H_1 \to H_2$ between
+finite-dimensional Hilbert spaces is
+\[
+\lVert A \rVert \;=\; \max_{\lVert v \rVert = 1} \lVert A v \rVert,
+\]
+the maximum being attained because the unit sphere of a finite-dimensional
+space is compact and $v \mapsto \lVert A v \rVert$ is continuous.
+\end{definition}
+
+Immediately from the definition: $\lVert A v \rVert \leq \lVert A \rVert
+\lVert v \rVert$ for all $v$; $\lVert A B \rVert \leq \lVert A \rVert
+\lVert B \rVert$ (submultiplicativity); and $\lVert A \rVert = 0$ iff
+$A = 0$.
+
+\subsection{Positive semidefinite matrices and spectral facts}
+
+\begin{definition}\label{ch02:def:psd}
+A linear map $P : H \to H$ (equivalently its matrix in an ONB) is
+\emph{self-adjoint} if $P^{*} = P$, and \emph{positive semidefinite} (PSD)
+if it is self-adjoint and $\langle v, P v \rangle \geq 0$ for all $v$.
+\end{definition}
+
+For any $A : H_1 \to H_2$, the map $A^{*} A : H_1 \to H_1$ is PSD:
+$(A^{*}A)^{*} = A^{*} A^{**} = A^{*} A$ and
+$\langle v, A^{*} A v \rangle = \langle A v, A v \rangle =
+\lVert A v \rVert^2 \geq 0$.
+
+We use the spectral theorem for self-adjoint maps in the following form,
+cited as standard \cite{horn}: \emph{every self-adjoint map $P$ on a
+finite-dimensional Hilbert space has an ONB of eigenvectors with real
+eigenvalues; $P$ is PSD iff all eigenvalues are nonnegative.} From it we
+prove the two facts the lift theory consumes.
+
+\begin{proposition}[Norm squared is the top eigenvalue of the Gram map]\label{ch02:prop:norm-eig}
+For any linear $A : H_1 \to H_2$,
+\[
+\lVert A \rVert^{2} \;=\; \lambda_{\max}\bigl(A^{*} A\bigr),
+\]
+the largest eigenvalue of the PSD map $A^{*} A$.
+\end{proposition}
+
+\begin{proof}
+Let $(u_1, \dots, u_n)$ be an ONB of $H_1$ consisting of eigenvectors of
+$A^{*} A$, with eigenvalues $\lambda_1 \geq \cdots \geq \lambda_n \geq 0$.
+For a unit vector $v = \sum_i c_i u_i$ (so $\sum_i |c_i|^2 = 1$),
+\[
+\lVert A v \rVert^{2}
+= \langle A v, A v \rangle
+= \langle v, A^{*} A v \rangle
+= \Bigl\langle \sum_i c_i u_i, \sum_i c_i \lambda_i u_i \Bigr\rangle
+= \sum_i \lambda_i |c_i|^{2},
+\]
+a convex combination of the eigenvalues, hence at most $\lambda_1$; and
+the value $\lambda_1$ is attained at $v = u_1$. Taking the maximum over
+unit $v$ and then square roots gives the claim.
+\end{proof}
+
+\begin{proposition}[Spectrum of the all-ones matrix]\label{ch02:prop:allones}
+Let $J_m$ be the $m \times m$ matrix ($m \geq 1$) with every entry equal
+to $1$. Then $J_m$ is PSD, $\rk(J_m) = 1$, $J_m^2 = m J_m$, and the
+spectrum of $J_m$ is: eigenvalue $m$ with multiplicity $1$ (eigenvector
+the all-ones vector $\mathbf{1} = (1, \dots, 1)^{\mathsf{T}}$), and
+eigenvalue $0$ with multiplicity $m - 1$ (eigenspace the hyperplane
+$\{ v : \sum_i v_i = 0 \}$). Consequently $\trace(J_m) = m$ and
+$\lambda_{\max}(J_m) = m$.
+\end{proposition}
+
+\begin{proof}
+$J_m = \mathbf{1} \mathbf{1}^{\mathsf{T}}$, an outer product, so every
+column is a multiple of $\mathbf{1}$ and $\rk(J_m) = 1$; also
+$J_m^{*} = J_m$ (real symmetric) and $\langle v, J_m v \rangle =
+|\mathbf{1}^{\mathsf{T}} v|^{2} = \bigl| \sum_i v_i \bigr|^{2} \geq 0$, so
+$J_m$ is PSD. Compute
+$J_m \mathbf{1} = \mathbf{1} (\mathbf{1}^{\mathsf{T}} \mathbf{1}) =
+m \mathbf{1}$: eigenvalue $m$ on the line spanned by $\mathbf{1}$. For
+any $v$ with $\sum_i v_i = 0$,
+$J_m v = \mathbf{1} (\mathbf{1}^{\mathsf{T}} v) = 0$: eigenvalue $0$ on a
+hyperplane of dimension $m - 1$. The line and the hyperplane are
+orthogonal complements, so together they exhaust $\mathbb{C}^{m}$, and
+the listed spectrum is complete. Then
+$J_m^{2} = \mathbf{1} (\mathbf{1}^{\mathsf{T}} \mathbf{1})
+\mathbf{1}^{\mathsf{T}} = m J_m$, the trace is the eigenvalue sum
+$m + 0 \cdot (m-1) = m$, and the largest eigenvalue is $m$.
+\end{proof}
+
+Two further pieces of standard machinery are needed to \emph{assemble}
+spectra, because Chapter~7's Gram matrices arrive as block structures
+only after a basis reordering.
+
+\begin{lemma}[Unitary and permutation similarity preserve spectra]\label{ch02:lem:perm-similarity}
+Let $U$ be unitary ($U^{*} U = U U^{*} = I$) and $P = U^{*} Q U$. Then
+$P$ and $Q$ have the same eigenvalues with the same multiplicities, and
+$P$ is PSD iff $Q$ is. In particular this applies when $U$ is a
+\emph{permutation matrix} --- the matrix of a basis reordering, with
+entries $U_{ij} = 1$ if the reordering sends position $j$ to position
+$i$ and $0$ otherwise, which is unitary since its columns are distinct
+standard basis vectors.
+\end{lemma}
+
+\begin{proof}
+If $Q v = \mu v$ with $v \neq 0$, then
+$P (U^{*} v) = U^{*} Q U U^{*} v = U^{*} Q v = \mu (U^{*} v)$ and
+$U^{*} v \neq 0$ ($U^{*}$ is invertible), so $\mu$ is an eigenvalue of
+$P$; the map $v \mapsto U^{*} v$ is a linear bijection between the
+eigenspaces, preserving multiplicities, and the argument reverses via
+$Q = U P U^{*}$. For positivity:
+$\langle v, P v \rangle = \langle U v, Q\, U v \rangle$, and
+$v \mapsto U v$ ranges over all vectors, so the two quadratic forms
+are nonnegative together; self-adjointness transfers by
+$P^{*} = U^{*} Q^{*} U$.
+\end{proof}
+
+\begin{lemma}[Spectrum of a direct sum]\label{ch02:lem:direct-sum}
+Let $P = \bigoplus_{r=1}^{s} P_r$ be block-diagonal with square blocks
+$P_1, \dots, P_s$. Then the spectrum of $P$ is the multiset union of
+the spectra of the blocks, and $\lambda_{\max}(P) = \max_r
+\lambda_{\max}(P_r)$ when all blocks are self-adjoint.
+\end{lemma}
+
+\begin{proof}
+The ambient space decomposes as an orthogonal direct sum
+$H = \bigoplus_r H_r$ with $P$ mapping each $H_r$ to itself by $P_r$.
+A vector $v = (v_1, \dots, v_s)$ satisfies $P v = \mu v$ iff
+$P_r v_r = \mu v_r$ for every $r$; for $v \ne 0$ some $v_r \neq 0$, so
+every eigenvalue of $P$ is an eigenvalue of some block, and conversely a
+block eigenvector extends by zeros to an eigenvector of $P$. For
+multiplicities: the $\mu$-eigenspace of $P$ is the direct sum of the
+$\mu$-eigenspaces of the blocks, so dimensions add. The
+$\lambda_{\max}$ statement follows since the multiset union's maximum is
+the maximum of the blockwise maxima.
+\end{proof}
+
+\subsection{Projectors and partial isometries}
+
+Chapter~7's permanent counterexample --- an idempotent lift that is
+\emph{not} a projector --- needs the following standard vocabulary to be
+stated precisely.
+
+\begin{definition}\label{ch02:def:projector}
+A linear map $P : H \to H$ is an \emph{orthogonal projector} if
+$P^{2} = P$ and $P^{*} = P$. A linear map $A : H_1 \to H_2$ is a
+\emph{partial isometry} if $A^{*} A$ is an orthogonal projector.
+\end{definition}
+
+\begin{proposition}[Elementary projector facts]\label{ch02:prop:projector-facts}
+(i) An orthogonal projector satisfies $\lVert P \rVert \leq 1$, with
+$\lVert P \rVert = 1$ unless $P = 0$. (ii) An idempotent that is not
+self-adjoint can have norm strictly greater than $1$; idempotence alone
+bounds nothing. (iii) An isometry is a partial isometry
+($A^{*} A = I$ is a projector).
+\end{proposition}
+
+\begin{proof}
+(i) $P$ is self-adjoint, so by the spectral theorem it has an ONB of
+eigenvectors; $P^2 = P$ forces each eigenvalue $\mu$ to satisfy
+$\mu^{2} = \mu$, so $\mu \in \{0, 1\}$. By
+Proposition~\ref{ch02:prop:norm-eig} applied to
+$P^{*} P = P^{2} = P$, $\lVert P \rVert^{2} = \lambda_{\max}(P)
+\leq 1$, with equality iff the eigenvalue $1$ occurs, i.e.\ iff
+$P \neq 0$. (ii) is witnessed by any concrete example; the canonical
+one, the $2 \times 2$ matrix with rows $(1, 1)$ and $(0, 0)$, is
+exactly the lifted constant map of Chapter~7, where its norm is computed
+to be $\sqrt{2}$. (iii) is immediate from the definitions since $I$ is
+a projector.
+\end{proof}
+
+\begin{remark}[Why these two facts]\label{ch02:rem:why-these}
+Chapter~7 shows that for the lift $A_f$ of a finite function $f$, the Gram
+map $A_f^{*} A_f$ is, after grouping the input basis by fibers, a direct
+sum of blocks $J_{m_y}$ with $m_y = |f^{-1}(y)|$ the fiber sizes. The
+grouping is a basis reordering --- a permutation similarity, harmless to
+spectra by Lemma~\ref{ch02:lem:perm-similarity} --- and the direct sum's
+spectrum is the multiset union of the block spectra by
+Lemma~\ref{ch02:lem:direct-sum}. Feeding
+Proposition~\ref{ch02:prop:allones} through
+Proposition~\ref{ch02:prop:norm-eig} then yields the exact norm formula
+$\lVert A_f \rVert^{2} = \max_y |f^{-1}(y)|$ with no analysis beyond what
+this section contains. The trace identity
+$\trace(A_f^{*} A_f) = \sum_y m_y = |X|$ is
+Lemma~\ref{ch02:lem:fiber-partition}. The primer is arranged so that
+Chapter~7's proofs are assembly, not invention.
+\end{remark}
+
+\section{Words and the shortlex order}\label{ch02:sec:shortlex}
+
+The kernel's normal forms (Chapter~8) select, for each reachable
+denotation, the least word denoting it under the \emph{shortlex} order.
+For that selection to be well defined and stable, shortlex must be a total
+order with no infinite descent --- a well-order --- on the relevant word
+sets. This section defines the order and proves those properties.
+
+\subsection{Words over a ranked alphabet}
+
+\begin{definition}[Words]\label{ch02:def:words}
+Let $G$ be a finite set of \emph{letters} equipped with a fixed total
+order, presented as a \emph{ranking}: a bijection
+$\rho : G \to \{0, 1, \dots, |G| - 1\}$. A \emph{word} over $G$ is a
+finite (possibly empty) sequence $w = g_{1} g_{2} \cdots g_{k}$ of
+letters; $|w| = k$ is its \emph{length}, and $\varepsilon$ denotes the
+empty word. $G^{*}$ is the set of all words.
+\end{definition}
+
+In the kernel the letters are generator labels from a declared catalog,
+and the ranking is the catalog's declared order --- explicitly supplied,
+never inferred from container iteration (Chapter~\ref{ch03:chap}). Words
+are additionally \emph{typed} (their letters' arrows must compose in
+sequence from a declared start object), which restricts $G^{*}$ to a
+subset; every property proved below is inherited by subsets, so we work
+with $G^{*}$ and note the inheritance at the end.
+
+\begin{definition}[Shortlex]\label{ch02:def:shortlex}
+For words $u = u_1 \cdots u_k$ and $v = v_1 \cdots v_l$ over $(G, \rho)$,
+say $u <_{\mathrm{slex}} v$ iff either
+\begin{enumerate}
+\item $k < l$ (shorter words come first); or
+\item $k = l$ and there is a position $i \leq k$ with
+$\rho(u_j) = \rho(v_j)$ for all $j < i$ and $\rho(u_i) < \rho(v_i)$
+(equal lengths compare lexicographically by rank).
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}[Shortlex is a strict total order]\label{ch02:prop:slex-total}
+On $G^{*}$, the relation $<_{\mathrm{slex}}$ is irreflexive, transitive,
+and total: for distinct words $u \neq v$, exactly one of
+$u <_{\mathrm{slex}} v$, $v <_{\mathrm{slex}} u$ holds.
+\end{proposition}
+
+\begin{proof}
+\emph{Irreflexivity}: $u <_{\mathrm{slex}} u$ would require $|u| < |u|$ or
+a position where $\rho(u_i) < \rho(u_i)$; both are impossible.
+
+\emph{Totality}: let $u \neq v$. If $|u| \neq |v|$ the length clause
+orders them one way and (by irreflexivity of $<$ on integers) not the
+other. If $|u| = |v| = k$, then since $u \neq v$ there is a least
+position $i$ with $u_i \neq v_i$; all earlier positions agree, and since
+$\rho$ is injective, exactly one of $\rho(u_i) < \rho(v_i)$,
+$\rho(v_i) < \rho(u_i)$ holds, ordering the words one way and not the
+other.
+
+\emph{Transitivity}: suppose $u <_{\mathrm{slex}} v <_{\mathrm{slex}} w$.
+If $|u| < |v|$ or $|v| < |w|$ then $|u| < |w|$ (lengths are ordered
+integers and are nondecreasing along $<_{\mathrm{slex}}$), giving
+$u <_{\mathrm{slex}} w$ unless $|u| = |w|$, which can happen only when
+$|u| = |v| = |w|$. So assume all lengths equal $k$ and let $i$ (resp.\
+$j$) be the deciding position for $u$ against $v$ (resp.\ $v$ against
+$w$). Put $h = \min(i, j)$. For all positions $< h$, all three words
+agree. At position $h$: if $h = i < j$ then $u_h$ has smaller rank than
+$v_h = w_h$; if $h = j < i$ then $u_h = v_h$ has smaller rank than $w_h$;
+if $h = i = j$ then $\rho(u_h) < \rho(v_h) < \rho(w_h)$. In every case
+$h$ witnesses $u <_{\mathrm{slex}} w$.
+\end{proof}
+
+\subsection{The well-order property}
+
+\begin{theorem}[Shortlex is a well-order]\label{ch02:thm:slex-wellorder}
+Every nonempty subset $S \subseteq G^{*}$ has a
+$<_{\mathrm{slex}}$-least element. Equivalently, there is no infinite
+strictly $<_{\mathrm{slex}}$-descending sequence of words.
+\end{theorem}
+
+\begin{proof}
+The key counting observation: for each fixed length $k$ there are exactly
+$|G|^{k}$ words of length $k$ (Theorem~\ref{ch02:thm:count-maps}, reading
+a word as a function from positions to letters), a finite number; and
+every word of length $k$ precedes every word of length $k + 1$ in
+shortlex. Hence for any word $w$, the set
+$\{\, u \in G^{*} \mid u <_{\mathrm{slex}} w \,\}$ is contained in the
+words of length at most $|w|$, of which there are
+$\sum_{k=0}^{|w|} |G|^{k}$ --- finitely many. (For $|G| = 0$ the only word
+is $\varepsilon$ and everything below is trivial; assume $|G| \ge 1$.)
+
+Now let $S$ be nonempty and pick any $w_0 \in S$. The set
+$S' = \{\, u \in S \mid u \leq_{\mathrm{slex}} w_0 \,\}$ is nonempty
+(contains $w_0$) and finite (contained in the finite set of words at most
+$w_0$, plus $w_0$ itself). A nonempty finite subset of a strict total
+order has a least element --- induct on the size: remove any element; the
+remainder's least element (or, at size one, the sole element) compared
+with the removed one yields the least, using totality
+(Proposition~\ref{ch02:prop:slex-total}). Let $m$ be the least element of
+$S'$. For any $s \in S$: if $s \leq_{\mathrm{slex}} w_0$ then
+$s \in S'$ and $m \leq_{\mathrm{slex}} s$; otherwise
+$m \leq_{\mathrm{slex}} w_0 <_{\mathrm{slex}} s$ by transitivity. So $m$
+is least in $S$.
+
+For the equivalence with no infinite descent: an infinite strictly
+descending sequence would be a nonempty set with no least element (its
+every member is exceeded from below by a later member); conversely if some
+nonempty $S$ had no least element one could choose a strictly descending
+sequence by repeatedly picking a smaller member. We only use the first
+direction, which is constructive given the finiteness above.
+\end{proof}
+
+\begin{corollary}[Minimal representatives exist and are unique]\label{ch02:cor:min-rep}
+Let $W \subseteq G^{*}$ be any set of words and let $\sim$ be any
+equivalence on $W$ (in Chapter~8: ``denotes the same finite function'').
+Every nonempty equivalence class $C$ has a unique
+$<_{\mathrm{slex}}$-least element, which may serve as the canonical
+representative $\NF(C)$.
+\end{corollary}
+
+\begin{proof}
+Existence is Theorem~\ref{ch02:thm:slex-wellorder} applied to
+$C \subseteq G^{*}$. Uniqueness: two least elements are mutually
+$\leq_{\mathrm{slex}}$, and antisymmetry --- immediate from totality and
+irreflexivity of the strict order --- forces them equal.
+\end{proof}
+
+\subsection{Enumeration and the shortlex rank}
+
+Shortlex is not only a well-order; it is a computable enumeration, and
+the position of any word in that enumeration has a closed form. This
+matters operationally: Chapter~8's closure explores words in exactly this
+enumeration order, and the formula below is what makes ``explored in
+shortlex order'' an auditable claim rather than an implementation hope.
+
+\begin{proposition}[Shortlex rank formula]\label{ch02:prop:slex-rank}
+Let $|G| = g \geq 1$ and let $w = w_1 \cdots w_k$ be a word of length
+$k$. The number of words strictly $<_{\mathrm{slex}}$-below $w$ is
+\[
+\rk_{\mathrm{slex}}(w) \;=\; \sum_{j=0}^{k-1} g^{\,j}
+\;+\; \sum_{i=1}^{k} \rho(w_i)\, g^{\,k-i},
+\]
+the first sum counting all strictly shorter words and the second the
+length-$k$ words that are lexicographically smaller. The map
+$w \mapsto \rk_{\mathrm{slex}}(w)$ is the unique order-isomorphism from
+$(G^{*}, <_{\mathrm{slex}})$ onto $(\mathbb{N}, <)$.
+\end{proposition}
+
+\begin{proof}
+Words shorter than $w$: there are $g^{j}$ words of each length
+$j < k$ (Theorem~\ref{ch02:thm:count-maps}), all below $w$ by the
+length clause, giving the first sum. Words of length exactly $k$ below
+$w$: such a word $u$ agrees with $w$ on some (possibly empty) prefix of
+length $i - 1$ and has $\rho(u_i) < \rho(w_i)$ at the first
+disagreement $i$; for each choice of $i \in \{1, \dots, k\}$ there are
+$\rho(w_i)$ choices of the smaller letter and $g^{\,k-i}$ free choices
+for the remaining positions $i+1, \dots, k$, and these cases are
+disjoint (distinct first-disagreement positions) and exhaustive. Summing
+gives the second sum.
+
+For the order-isomorphism claim: $\rk_{\mathrm{slex}}$ is strictly
+monotone (if $u <_{\mathrm{slex}} w$ then every word below $u$ is below
+$w$ and $u$ itself is below $w$, so
+$\rk_{\mathrm{slex}}(u) < \rk_{\mathrm{slex}}(w)$), hence injective;
+and it is surjective onto $\mathbb{N}$ because the count of words below
+the $(n+1)$-st word of the enumeration is exactly $n$ (each natural
+number is achieved as one steps through the enumeration, which exists by
+Theorem~\ref{ch02:thm:slex-wellorder}: the least word has rank $0$, and
+the least word above any $w$ has rank $\rk_{\mathrm{slex}}(w) + 1$
+since finitely many words lie below any word). Uniqueness of an
+order-isomorphism between two linear orders with no greatest element in
+which every element has finitely many predecessors is standard: any two
+such isomorphisms agree by induction along the enumeration.
+\end{proof}
+
+\begin{example}[Shortlex over a two-letter catalog]\label{ch02:ex:slex-two}
+Let $G = \{ a, b \}$ with declared ranking $\rho(a) = 0$,
+$\rho(b) = 1$. The shortlex enumeration begins
+\[
+\varepsilon,\; a,\; b,\; aa,\; ab,\; ba,\; bb,\; aaa,\; aab,\; aba,\;
+abb,\; baa,\; \dots
+\]
+and, for instance, $\rk_{\mathrm{slex}}(ba) = (1 + 2) +
+(1 \cdot 2 + 0 \cdot 1) = 5$: three shorter words
+($\varepsilon, a, b$) plus two smaller words of length two
+($aa$, $ab$), in agreement with the listing. Reversing the declared
+ranking ($\rho(b) = 0$, $\rho(a) = 1$) reverses every lexicographic
+tiebreak: the enumeration becomes $\varepsilon, b, a, bb, ba, ab, aa,
+\dots$, and a denotation reachable by both $ab$ and $ba$ (should the
+generators commute on their carrier) changes its canonical
+representative from $ab$ to $ba$. Nothing mathematical broke ---
+both enumerations are lawful well-orders --- but the \emph{selection}
+changed, which is why the kernel treats the catalog order as declared,
+versioned data (Remark~\ref{ch02:rem:slex-typed} below).
+\end{example}
+
+\begin{remark}[Inheritance by typed words; dependence on the ranking]\label{ch02:rem:slex-typed}
+Both Proposition~\ref{ch02:prop:slex-total} and
+Theorem~\ref{ch02:thm:slex-wellorder} are statements about arbitrary
+subsets of $G^{*}$, so they hold verbatim for the kernel's typed words,
+which form such a subset once start objects are fixed (formally, one takes
+a disjoint union over start objects, ordering within each; Chapter~8 makes
+this precise). Note also what the results do \emph{not} give: canonicity
+is relative to the ranking $\rho$. Two catalogs with the same generators
+in different declared orders induce different shortlex orders and may
+select different representatives for the same denotation. This is a
+feature the kernel documents rather than a defect it hides ---
+representatives are canonical \emph{relative to a declared, versioned
+catalog}, and comparing normal forms across catalogs without a catalog
+identity is meaningless. The determinism discipline of
+Chapter~\ref{ch03:chap} exists precisely so that $\rho$ is always explicit
+data, never an accident of container iteration.
+\end{remark}
+
+\section{Summary of the toolkit}\label{ch02:sec:summary}
+
+For ease of later reference, the primer's yield is:
+
+\begin{itemize}
+\item \emph{Extensionality and the tuple representation}
+(Section~\ref{ch02:sec:finsets}): finite total functions are mapping
+tuples; equality is componentwise; composition and identity satisfy the
+category laws pointwise (Proposition~\ref{ch02:prop:assoc}).
+\item \emph{Fibers} (Section~\ref{ch02:sec:fibers}): nonempty fibers
+partition the domain (Lemma~\ref{ch02:lem:fiber-partition}); injectivity,
+surjectivity, and bijectivity are fiber-size conditions; on equal finite
+cardinalities the three notions coincide
+(Proposition~\ref{ch02:prop:endo-trichotomy}).
+\item \emph{Counting} (Section~\ref{ch02:sec:counting}): there are
+$|Y|^{|X|}$ total maps (Theorem~\ref{ch02:thm:count-maps}); the test
+families' cardinalities $19{,}683$, $289$, and the falling factorials are
+exact (Corollary~\ref{ch02:cor:test-counts}).
+\item \emph{The ladder} (Section~\ref{ch02:sec:ladder}): monoid = one-object
+category; semigroup = one-object semigroupoid; powers live in
+$\mathrm{End}(X)$ and nowhere else
+(Proposition~\ref{ch02:prop:ladder}, Remark~\ref{ch02:rem:where-powers-live});
+all parenthesizations of a composable sequence agree
+(Theorem~\ref{ch02:thm:gen-assoc}); functors preserve identities,
+composites, and powers (Definition~\ref{ch02:def:functor}).
+\item \emph{Functional graphs} (Section~\ref{ch02:sec:funcgraphs}): orbits
+are rho-shaped with tail $\leq n - 1$ and cycle $\leq n$
+(Lemma~\ref{ch02:lem:rho}); powers of $f$ have an index $\leq n - 1$ and a
+period equal to the lcm of cycle lengths, dividing $n!$
+(Theorem~\ref{ch02:thm:index-period}); $f^{n!}$ is idempotent
+(Theorem~\ref{ch02:thm:factorial-idempotent}).
+\item \emph{Hilbert spaces} (Section~\ref{ch02:sec:hilbert}): adjoints,
+operator norm, PSD Gram maps; $\lVert A \rVert^{2} =
+\lambda_{\max}(A^{*}A)$ (Proposition~\ref{ch02:prop:norm-eig}); the
+all-ones matrix $J_m$ has spectrum $\{ m, 0^{(m-1)} \}$
+(Proposition~\ref{ch02:prop:allones}); permutation similarity and direct
+sums assemble spectra
+(Lemmas~\ref{ch02:lem:perm-similarity}--\ref{ch02:lem:direct-sum});
+projectors have norm at most one, bare idempotents do not
+(Proposition~\ref{ch02:prop:projector-facts}).
+\item \emph{Shortlex} (Section~\ref{ch02:sec:shortlex}): a strict total
+well-order on words over a ranked alphabet
+(Proposition~\ref{ch02:prop:slex-total},
+Theorem~\ref{ch02:thm:slex-wellorder}); least representatives exist and
+are unique per class (Corollary~\ref{ch02:cor:min-rep}), relative to the
+declared ranking; the rank formula makes the enumeration computable and
+auditable (Proposition~\ref{ch02:prop:slex-rank}).
+\end{itemize}
+
+Every later chapter draws on this list and on nothing outside it. The
+mathematics being standard is the point: the kernel's claims are meant to
+be auditable by any reader with this chapter in hand, and the program's
+open formalization obligations (Chapter~11, Appendix~B) are obligations to
+mechanize precisely these statements, no more and no less.

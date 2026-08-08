@@ -1,0 +1,854 @@
+\chapter{The Research Boundary Object}\label{ch04:boundary}
+
+\section{The problem the boundary object answers}\label{ch04:problem}
+
+Chapter 1 identified unauthorized claim promotion as one of the two failure
+classes that motivate the kernel. The failure has a characteristic shape: an
+artifact that is merely \emph{consistent}---a green test run, a self-computed
+hash, a well-formed receipt, a ledger row containing the word
+\textsc{licensed}---is read by some downstream consumer as \emph{authorized},
+and a research candidate crosses into product territory without any reviewer,
+authority, or legal act having occurred. The program's own history contains the
+canonical instance: AI-authored, self-hashed ``licensing receipts'' that were
+structurally impeccable and epistemically worthless. Nothing in those artifacts
+was false in the narrow sense; the failure was that a status which can only be
+conferred by an external act was inferred from internal structure.
+
+The research boundary object is the kernel's answer to this failure class at
+the level of representation. Its design premise is that the status of an
+artifact---where it sits in the admission process, whether it may back a
+product claim, whether it may be publicly disclosed---must be (i) explicit
+machine-visible data rather than convention, (ii) constrained so that the
+historically observed contradictory combinations cannot be constructed at all,
+and (iii) rechecked at every point of use rather than trusted from any earlier
+point of construction. The present chapter develops each of these three
+commitments, then dwells at length on the distinction that makes the whole
+design coherent: the difference between \emph{tamper evidence} and
+\emph{authority}. The chapter closes with worked scenarios of boundary misuse
+and the exact mechanism that blocks each one.
+
+Throughout, the claim discipline of the monograph applies. Everything
+described here is a Ring-4 research candidate: admission \textsc{open}, product
+\textsc{not licensed}, disclosure withheld. The chapter describes what the
+v0.1 candidate's code enforces under its bounded test fixtures; it does not
+claim security against arbitrary in-process adversaries, does not claim that
+any boundary object confers or withholds legal status, and does not promote
+any artifact past the boundary it carries.
+
+\begin{boundary}[Scope of this chapter]\label{ch04:bd:scope}
+The boundary object is a representational and procedural discipline inside a
+single Python process. It is not an access-control system, not a signature
+scheme, and not a legal instrument. Statements of the form ``the kernel
+rejects $X$'' mean that the v0.1 candidate raises a typed validation error on
+the fixture family exercising $X$ in the bound Gate-4 suite; they are
+historical software receipts, not guarantees over untested inputs.
+\end{boundary}
+
+\section{The boundary triple and its carrier}\label{ch04:triple}
+
+\subsection{The triple}
+
+The governing specification defines the research boundary as a triple.
+
+\begin{definition}[Research boundary triple]\label{ch04:def:triple}
+A \emph{research boundary} is the triple
+\[
+(\text{admission state},\ \text{product state},\ \text{public disclosure}),
+\]
+where the admission state ranges over $\{\textsc{open}, \textsc{in-review},
+\textsc{accept}\}$, the product state over $\{\textsc{not licensed},
+\textsc{licensed}\}$, and public disclosure over $\{\mathrm{false},
+\mathrm{true}\}$.
+\end{definition}
+
+The three components answer three different questions, and the design treats
+the questions as genuinely independent axes that are then coupled by explicit
+consistency rules rather than being collapsed into a single status enum.
+
+The \emph{admission state} answers: where does this artifact sit in the
+review process? \textsc{open} means no review act has been recorded;
+\textsc{in-review} means a review is underway; \textsc{accept} means an
+admission decision has been recorded. Nothing about the admission state says
+what the artifact may be used for.
+
+The \emph{product state} answers: may this artifact back a product claim?
+The only value that permits it is \textsc{licensed}, and---as the consistency
+rules below make precise---that value is constructible only in a configuration
+the v0.1 kernel never occupies. \textsc{not licensed} is not a pejorative; it
+is the honest default of every research artifact.
+
+The \emph{public disclosure} flag answers: has disclosure of this artifact
+been authorized? The flag is deliberately boolean rather than an enum of
+disclosure channels: v0.1 needs only the distinction between ``no disclosure
+authorization exists'' and ``a disclosure authorization has been recorded,''
+and a richer disclosure model would require exactly the authenticated
+trust root that v0.1 deliberately lacks.
+
+\subsection{The carrier and the ring index}
+
+In the v0.1 implementation the triple is carried by a frozen record with four
+fields, because the consistency rules are indexed by a fourth datum: the
+admission ring.
+
+\begin{definition}[Boundary carrier]\label{ch04:def:carrier}
+The boundary carrier is the immutable record
+\[
+(\texttt{admission\_ring},\ \texttt{status},\ \texttt{license\_status},\
+\texttt{public\_disclosure\_authorized}),
+\]
+where \texttt{admission\_ring} is an integer in $\{1,2,3,4\}$,
+\texttt{status} is an admission-state enumeration value,
+\texttt{license\_status} is a product-state enumeration value, and
+\texttt{public\_disclosure\_authorized} is a boolean. Each field is validated
+for exact runtime type at construction: the ring must be exactly an integer
+(a boolean, though an integer subtype in the host language, is rejected by an
+exact-type check elsewhere in the kernel and by the enumeration checks here),
+the two states must be exactly members of their enumerations---not strings
+that happen to spell the same word---and the disclosure flag must be exactly
+a boolean.
+\end{definition}
+
+The ring is the program's admission-severity index inherited from the Project
+Coherence process: Ring 1 and Ring 2 are reserved for reviewed mathematical
+material, Ring 3 for artifacts that have passed an admission decision, and
+Ring 4 for open research candidates. The kernel itself assigns no meaning to
+the rings beyond the consistency constraints below; in particular, nothing in
+the kernel can move an artifact between rings, because the carrier is
+immutable and every v0.1 construction site requires the exact Ring-4
+configuration.
+
+Two further construction rules deserve emphasis before the consistency rules,
+because they recur throughout the kernel and were motivated in Chapter 3.
+
+\begin{ruleenv}[Exact carrier type]\label{ch04:rule:exacttype}
+A subclass of the boundary carrier is rejected at construction: the
+constructor checks that the runtime type of the object under construction is
+exactly the carrier type, not a derived type. Consequently no object with
+overridden equality, overridden field access, or additional behavior can pose
+as a boundary value at any kernel interface.
+\end{ruleenv}
+
+\begin{ruleenv}[Exact-field predicate]\label{ch04:rule:predicate}
+The kernel's boundary predicate---``is this the exact Ring-4 open
+boundary?''---does not call any overridable equality. It checks, field by
+field, that the value has exactly the carrier type, that the ring is exactly
+the integer 4, that the status is exactly the \textsc{open} enumeration
+member (by identity, not by string comparison), that the product state is
+exactly \textsc{not licensed}, and that the disclosure flag is exactly the
+boolean false.
+\end{ruleenv}
+
+Rule~\ref{ch04:rule:predicate} may look paranoid in isolation. Its point is
+architectural: every consumer of a boundary decides for itself, from
+primitive fields, what the boundary says. There is no delegation to a method
+the value itself supplies, because a value that answers questions about its
+own trustworthiness is exactly the anti-pattern the kernel exists to
+eliminate. This is the first appearance of a theme that
+Section~\ref{ch04:recheck} makes into an invariant.
+
+\section{Joint consistency and construction-time rejection}\label{ch04:consistency}
+
+\subsection{The three consistency rules}
+
+The four fields of the carrier are not independent. Three rules couple them,
+and the constructor enforces all three, so that a violating combination is
+never a value at all---it is a raised validation error.
+
+\begin{ruleenv}[Ring-4 closure]\label{ch04:rule:c1}
+If \texttt{admission\_ring} $=4$, then the status must be \textsc{open}, the
+product state must be \textsc{not licensed}, and the disclosure flag must be
+false. Equivalently: a Ring-4 artifact is open, unlicensed, and undisclosed,
+with no exceptions representable.
+\end{ruleenv}
+
+\begin{ruleenv}[License precondition]\label{ch04:rule:c2}
+If the product state is \textsc{licensed}, then \texttt{admission\_ring}
+$=3$ and the status is \textsc{accept}. Equivalently: a licensed product
+state is representable only for an artifact that has a recorded admission
+decision at Ring 3.
+\end{ruleenv}
+
+\begin{ruleenv}[Disclosure precondition]\label{ch04:rule:c3}
+If the disclosure flag is true, then the status is \textsc{accept}.
+Equivalently: no disclosure authorization is representable for an artifact
+that has not passed admission.
+\end{ruleenv}
+
+Each rule encodes one historically observed contradiction as an
+unrepresentable state. Rule~\ref{ch04:rule:c1} makes the phrase ``a licensed
+Ring-4 candidate'' a type error rather than a category the program has to
+argue about. Rule~\ref{ch04:rule:c2} makes ``licensed but never admitted''
+unrepresentable---this is precisely the shape of the historical self-issued
+licensing receipts, which asserted a product status with no admission act
+behind it. Rule~\ref{ch04:rule:c3} makes ``disclosed but still open''
+unrepresentable, which blocks the quieter failure in which a draft escapes
+into public circulation and the disclosure is then rationalized after the
+fact.
+
+It bears stating plainly what these rules do \emph{not} say.
+Rule~\ref{ch04:rule:c2} does not say that Ring 3 plus \textsc{accept}
+\emph{makes} an artifact licensed; it says only that outside that
+configuration a licensed product state cannot even be written down. Whether
+a Ring-3 accepted artifact is actually licensed is a question about acts in
+the world---reviewer identity, legal authority---about which the carrier
+carries no evidence whatsoever. The consistency rules are necessary-condition
+filters, never sufficient-condition grants. This asymmetry is the entire
+content of Section~\ref{ch04:tamper}, and it is why the kernel's runtime
+gate (Chapter 9) denies claim-bearing intent even when handed a
+structurally valid \textsc{licensed} boundary.
+
+\subsection{Enumerating the state space}
+
+Because the component sets are small, the effect of the three rules can be
+stated exactly.
+
+\begin{proposition}[Valid boundary count]\label{ch04:prop:count}
+The unconstrained carrier state space has $4 \times 3 \times 2 \times 2 = 48$
+combinations. Exactly $15$ of them satisfy
+Rules~\ref{ch04:rule:c1}--\ref{ch04:rule:c3}; the remaining $33$ are rejected
+at construction.
+\end{proposition}
+
+\begin{proof}[Case analysis]
+Consider each ring. For ring $4$, Rule~\ref{ch04:rule:c1} admits exactly one
+of the twelve combinations: (\textsc{open}, \textsc{not licensed}, false).
+For rings $1$ and $2$, Rule~\ref{ch04:rule:c2} excludes the product state
+\textsc{licensed} entirely (six combinations per ring); among the six
+remaining unlicensed combinations, Rule~\ref{ch04:rule:c3} excludes a true
+disclosure flag for \textsc{open} and \textsc{in-review} (two combinations
+per ring), leaving four per ring, hence eight. For ring $3$, the unlicensed
+half contributes the same four; the licensed half is admitted by
+Rule~\ref{ch04:rule:c2} only with status \textsc{accept}, for which
+Rule~\ref{ch04:rule:c3} permits either disclosure value, contributing two.
+Hence $1 + 8 + 6 = 15$.
+\end{proof}
+
+Table~\ref{ch04:tab:invalid} organizes the thirty-three rejected
+combinations into families by the rule that rejects them; a combination
+violating more than one rule is listed under the first rule that fires in
+the constructor's check order.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{llr}
+\toprule
+Family & Description & Count \\
+\midrule
+R4/status & ring 4 with status \textsc{in-review} or \textsc{accept} & 16 \\
+R4/license & ring 4, status \textsc{open}, product \textsc{licensed} & 2 \\
+R4/disclosure & ring 4, otherwise closed, disclosure true & 1 \\
+Lic/ring & \textsc{licensed} at ring 1 or 2 & 8 \\
+Lic/status & \textsc{licensed} at ring 3 without \textsc{accept} & 4 \\
+Disc/status & disclosure true without \textsc{accept} (rings 1--3, unlicensed) & 2 \\
+\bottomrule
+\end{tabular}
+\caption{The 33 invalid carrier combinations by rejecting family. Counts
+reflect the constructor's check order, which tests the Ring-4 closure first;
+the R4/status family therefore absorbs ring-4 combinations that also violate
+the license or disclosure preconditions.}
+\label{ch04:tab:invalid}
+\end{table}
+
+The counting exercise is not an ornament. It is the concrete meaning of the
+design slogan ``invalid states are unrepresentable'': the program's
+historically dangerous statuses correspond to identifiable cells of a finite
+table, and each such cell is a constructor exception, testable one fixture at
+a time. The Gate-4 suite exercises representatives of each family; the
+receipt for that suite is bounded software evidence in the sense of
+Chapter 12, no more.
+
+\subsection{The distinguished constructor}
+
+The kernel provides a single distinguished factory: the Ring-4 open boundary,
+producing the unique valid ring-4 carrier
+(\textsc{open}, \textsc{not licensed}, false). Every artifact type in the
+v0.1 kernel---semantic crosswalks, registry records, registries,
+compatibility receipts---defaults its boundary field to a \emph{fresh}
+instance from this factory. Two properties of this arrangement matter.
+
+First, freshness: the default is a factory invoked per construction, not a
+module-level shared instance. No two artifacts share a boundary object, so no
+single mutation---accidental or otherwise---can silently change the recorded
+status of a population of artifacts. Sharing a mutable status object across
+artifacts would create precisely the ``shared mutable trust'' that
+Invariant~\ref{ch04:inv:recheck} forbids.
+
+Second, bias: the distinguished factory is the \emph{most restrictive}
+boundary, and it is the only one with a privileged constructor. Constructing
+any other valid boundary---say, a Ring-3 accepted licensed one---requires
+spelling out every field explicitly. The kernel does not make the dangerous
+configurations impossible to write down when they are internally consistent
+(Rule~\ref{ch04:rule:c2} deliberately leaves the Ring-3 licensed shape
+representable, because a future reviewed design will need it); it makes them
+impossible to \emph{stumble into}, and---as the next section shows---
+impossible to \emph{use} anywhere in v0.1.
+
+\subsection{Formal summary}
+
+It is convenient to fix notation used in the rest of the chapter. Let
+\[
+\mathcal{B} \;=\; R \times S \times L \times D, \qquad
+R = \{1,2,3,4\},\ |S| = 3,\ |L| = 2,\ |D| = 2,
+\]
+be the unconstrained carrier space, and let
+$\mathcal{V} \subseteq \mathcal{B}$ be the subset satisfying
+Rules~\ref{ch04:rule:c1}--\ref{ch04:rule:c3}, so that
+$|\mathcal{B}| = 48$ and, by Proposition~\ref{ch04:prop:count},
+$|\mathcal{V}| = 15$. The constructor computes the characteristic
+function $\chi_{\mathcal{V}}$ and raises on the complement; the use-site
+predicate of Rule~\ref{ch04:rule:predicate} computes the characteristic
+function of a much smaller set---the singleton containing the Ring-4
+element---together with the exact-type conditions that
+$\chi_{\mathcal{V}}$ cannot express because they concern the carrier's
+runtime representation rather than its field values.
+
+\begin{corollary}[Uniqueness of the Ring-4 configuration]
+\label{ch04:cor:unique}
+The fiber of $\mathcal{V}$ over ring $4$ is a singleton:
+$\mathcal{V} \cap (\{4\} \times S \times L \times D) =
+\{(4, \text{\textsc{open}}, \text{\textsc{not licensed}},
+\mathrm{false})\}$.
+Consequently ``a valid Ring-4 boundary'' is a definite description: any
+two valid Ring-4 carriers agree on every field, and the use-site
+predicate needs no tolerance, range, or case analysis---it tests one
+point.
+\end{corollary}
+
+The corollary is why the v0.1 discipline is cheap enough to run
+everywhere. A predicate that tested membership in a fifteen-element set
+with exceptions would invite caching and shortcuts; a predicate that
+tests a single known point, field by field, costs a handful of
+comparisons and admits no interesting optimization, so there is no
+engineering pressure to skip it. Representational austerity purchases
+procedural discipline.
+
+\section{The recheck-not-trust invariant}\label{ch04:recheck}
+
+\subsection{Statement}
+
+\begin{invariant}[Recheck, do not trust]\label{ch04:inv:recheck}
+Every public operation of the kernel derives the boundary it enforces from
+its own inputs and rechecks that boundary at the point of use. No operation
+trusts a boundary because some earlier operation checked it; no operation
+consults a shared mutable object to learn a status; and no operation accepts
+a recomputable self-hash as evidence that a boundary is still what it was at
+construction.
+\end{invariant}
+
+The invariant has three clauses, and each is worth unpacking, because each
+closes a distinct loophole through which construction-time validation alone
+would leak.
+
+\subsection{Derive and recheck at use}
+
+Construction-time rejection (Section~\ref{ch04:consistency}) guarantees that
+no invalid combination is ever a value. It does not guarantee that a value
+checked yesterday is valid today, for two reasons. The first is mundane: the
+host language provides no in-process memory protection. The carrier is a
+frozen record, which resists \emph{accidental} mutation---ordinary attribute
+assignment raises---but a determined caller in the same process can bypass
+the freeze through the language's low-level attribute machinery. The kernel
+does not pretend otherwise. The second reason is architectural: values flow.
+A boundary object constructed in one component is embedded in an artifact,
+passed across an interface, stored, retrieved, and eventually consulted by a
+component that never saw its construction. If validity were checked only at
+construction, the checking component and the relying component would be
+different, and the reliance would be exactly the kind of unexamined trust
+the kernel is built to avoid.
+
+The v0.1 discipline is therefore that every use site re-runs the exact-field
+predicate of Rule~\ref{ch04:rule:predicate}. A crosswalk validates its
+boundary when constructed \emph{and} the registry validates the boundaries of
+its records when loaded \emph{and} the registry re-validates them when a
+record is resolved \emph{and} the record re-validates its own boundary inside
+every integrity check. The pattern is deliberately redundant. Redundant
+checking of cheap predicates is the kernel's substitute for the trusted
+intermediary it refuses to have: instead of one blessed component whose
+word is final, there are many unprivileged components each of which verifies
+what it relies on. The cost is a few field comparisons per operation; the
+benefit is that a corrupted boundary is caught at the first use after
+corruption, with a typed error naming the artifact, rather than persisting
+silently inside a structure that was ``already checked.''
+
+\begin{remark}
+The recheck discipline also changes what a successful attack would have to
+look like. Against a check-once design, an attacker mutates a value after
+its single validation and wins. Against a check-at-every-use design, the
+attacker must either mutate the value into another \emph{valid}
+configuration---but the only valid configurations reachable from Ring-4 open
+change ring, status, or license fields that every v0.1 use site pins to
+exact Ring-4 values, so the mutated object fails the very next predicate---
+or subvert the predicate itself, which is a plain function over primitive
+fields with no dispatch through the attacked value. The design cannot stop
+an adversary who can rewrite the kernel's own code in memory; no in-process
+scheme can. It arranges instead that anything short of that produces a loud,
+typed failure. This is a containment posture, not a security claim, and the
+Gate-4 receipts exercise only its fixture-level behavior.
+\end{remark}
+
+\subsection{No shared mutable trust}
+
+The second clause forbids a pattern so convenient that it must be named to be
+resisted: a module-level ``current status'' object that components consult,
+and that privileged code updates when status changes. Such an object is
+shared mutable trust. It has three defects. It is a single point of silent
+failure: one mutation, however caused, changes the effective status of every
+artifact that consults it. It inverts the evidence relation: artifacts no
+longer carry their status; they borrow it from ambient state, so the same
+artifact can be ``licensed'' at one moment and not at another with no change
+to the artifact itself, and no record of why. And it is unauditable: a
+consultation of ambient state leaves no trace in the artifact of what was
+consulted or when.
+
+The kernel's arrangement is the opposite on all three points. Status is a
+field of the artifact, immutable, validated at construction, and rechecked at
+use. Two artifacts never share a carrier. There is no ambient status to
+consult and therefore no ambient status to corrupt. When Chapter 6's
+registries serialize an artifact, the boundary goes with it, byte for byte,
+into the digested evidence---so the status an artifact claimed is part of
+what its digest commits to.
+
+\subsection{No recomputable self-hash as trust}
+
+The third clause addresses a subtler temptation, and it is the hinge to
+Section~\ref{ch04:tamper}. Suppose the carrier computed a digest of its own
+fields at construction and stored it alongside them, and suppose use sites
+verified the stored digest instead of re-running the field predicate. This
+looks like an integrity mechanism, and against \emph{accidental} corruption
+it is one: a stray mutation of a status field would, with overwhelming
+probability, disagree with the stored digest.
+
+Against an adversary it is nothing at all. The digest is a public function
+of the fields. Whoever can rewrite the fields can rerun the function and
+rewrite the digest in the same act. A stored self-digest therefore cannot
+distinguish ``unchanged since construction'' from ``changed by someone who
+also updated the digest''---which is to say, it detects exactly the
+adversaries who are not trying. The program has direct historical experience
+of the resulting failure mode: self-hashed receipts whose hashes were
+perfectly valid, because of course they were; the entity that fabricated the
+receipt computed them.
+
+The kernel accordingly assigns self-digests a strictly limited role. Where
+they appear (Chapter 5's canonical encodings give every evidence record a
+deterministic digest), they serve comparison and deduplication and the
+detection of accidental divergence between independently held copies. They
+are never consulted \emph{in place of} field-level revalidation, and they are
+never, anywhere, treated as evidence of authorization. What separates a
+digest that means something from a digest that does not is possession by a
+party the mutator cannot rewrite---an external pin, in the vocabulary of
+Chapter 6, where the registry loader receives its expected hashes from the
+caller precisely so that the loaded bytes cannot vouch for themselves.
+
+\section{Status change without mutation}\label{ch04:lifecycle}
+
+A natural question about an immutable status carrier is how status ever
+changes. An artifact that is \textsc{open} today may, one day, pass
+review; the disclosure of a held result may one day be authorized. If
+the carrier cannot be updated, where does the change live?
+
+The kernel's answer is that it does not live in the kernel at all, and
+this is a design position rather than a gap. The v0.1 kernel contains no
+transition function on boundaries: no operation takes a boundary and
+returns a successor boundary, no operation rewrites a boundary in place,
+and no artifact's boundary field is assignable after construction. A
+change of status, when the surrounding process one day produces one, is
+an \emph{act}---a review, an admission decision, a disclosure
+authorization---and acts are recorded the way the program records
+everything else: as new artifacts. The reviewed successor of a Ring-4
+candidate is a new artifact version carrying a new boundary, constructed
+under Rules~\ref{ch04:rule:c1}--\ref{ch04:rule:c3} like any other, with
+the admission act itself recorded as data in the ledgers of Chapter 6.
+The predecessor persists, unchanged, with the status it always had.
+
+Three properties fall out of this arrangement, each of which an in-place
+transition model would forfeit.
+
+\emph{History is retained by construction.} Because status change means
+new-artifact-with-new-boundary, the trajectory of an artifact through
+the admission process is a sequence of immutable records rather than the
+final state of an overwritten field. An auditor reconstructing ``when
+did this become reviewed, and what did it look like before?'' reads the
+sequence; nothing must be recovered from logs of destroyed states. This
+is the provenance instinct---keep the entity, the activity, and the
+derivation distinct and durable \cite{prov}---applied to status.
+
+\emph{No time-of-check races on status.} A mutable status field invites
+the classic race: one component checks the boundary, another mutates it,
+the first acts on stale information. With immutable carriers the checked
+value cannot change between check and act; what can happen is only that
+a \emph{newer artifact version} exists, which is a visible, queryable
+fact rather than a silent invalidation of a value in hand.
+
+\emph{No demotion laundering.} Transitions run both ways, and the
+dangerous direction is not always upward. A program that can promote a
+boundary in place can also quietly \emph{demote} one---or, more
+insidiously, revert a demotion---leaving no trace that the elevated
+status ever existed or was ever withdrawn. In the new-artifact model a
+withdrawal is itself an act producing a record; the demoted
+predecessor's history does not vanish because history is never stored
+in a mutable cell.
+
+\begin{remark}[The transitional states]\label{ch04:rem:transitional}
+The admission-state vocabulary includes \textsc{in-review}, and
+Proposition~\ref{ch04:prop:count} counts valid configurations containing
+it at rings 1 through 3. In v0.1 those configurations are representable
+but unconstructed: no kernel artifact carries them, because every v0.1
+construction site pins the exact Ring-4 configuration. Their presence in
+the vocabulary is forward provision, not dead code---a future admission
+process needs a representable ``review in progress'' that is distinct
+from both \textsc{open} and \textsc{accept}, and
+Rule~\ref{ch04:rule:c3} already couples it correctly (no disclosure
+during review). The kernel ships the vocabulary and the consistency
+rules now, so that the future process inherits its state space from a
+reviewed design instead of improvising one.
+\end{remark}
+
+\section{Tamper evidence versus authority}\label{ch04:tamper}
+
+\subsection{Two questions}
+
+The distinction this section develops is the load-bearing conceptual
+distinction of the entire kernel, and the boundary object is where it lives.
+It can be put as two questions that sound similar and share no evidence.
+
+\begin{definition}[Tamper evidence]\label{ch04:def:tamper}
+A mechanism provides \emph{tamper evidence} for an object if it answers the
+question: \emph{has this object changed since a reference point?} The answer
+is relative to a reference (a construction event, a pinned digest, a retained
+byte string) and is available to anyone holding the reference.
+\end{definition}
+
+\begin{definition}[Authority]\label{ch04:def:authority}
+A mechanism provides \emph{authority} for a status if it answers the
+question: \emph{who conferred this status, and were they entitled to?} The
+answer requires an authenticated link to a principal outside the object---a
+reviewer, an institution, a legal act---and is unavailable to any mechanism
+whose entire input is the object itself.
+\end{definition}
+
+The two questions are orthogonal in both directions. An object can be
+perfectly tamper-evident and wholly unauthorized: the historical self-issued
+receipts were bit-for-bit stable and hash-consistent from the moment of
+fabrication, and fabricated. An object can be authorized and
+tamper-corrupted: a genuinely reviewed record, later damaged in storage,
+still \emph{was} authorized; what has been lost is the ability to
+demonstrate which bits the authorization covered. Integrity mechanisms and
+authorization mechanisms are different technologies with different trust
+roots, and treating the first as the second is among the oldest failure
+patterns in security engineering \cite{anderson}.
+
+\subsection{What a self-digest answers}
+
+Applied to the boundary carrier, the distinction yields a precise account of
+what each mechanism in this chapter does and does not establish.
+
+The consistency rules of Section~\ref{ch04:consistency} establish
+\emph{coherence}: the recorded status is not self-contradictory. They answer
+neither question. A coherent status can be both changed and unauthorized.
+
+A digest of the carrier's canonical encoding, held by an external party or
+pinned in an external record, establishes \emph{tamper evidence} relative to
+that pin: if the object later hashes differently, it changed. It answers
+Definition~\ref{ch04:def:tamper}'s question exactly and
+Definition~\ref{ch04:def:authority}'s question not at all. Nothing in a hash
+says who was entitled to create the hashed bytes. Content addressing is a
+naming discipline, not an endorsement; the reproducible-builds literature is
+built on precisely this separation---bit-identical artifacts establish that
+a build was reproduced, while who ought to trust the build's inputs is a
+separate, socially anchored question \cite{reprobuilds}.
+
+A digest stored \emph{inside} the object itself establishes less: tamper
+evidence against accidental mutation only, for the reasons of
+Section~\ref{ch04:recheck}. The kernel's documentation is deliberately blunt
+on this point, and the monograph repeats it as an invariant because
+experience shows it is exactly the point that erodes.
+
+\begin{invariant}[A self-digest is not authority]\label{ch04:inv:selfdigest}
+A self-digest detects accidental or malicious mutation after construction
+relative to an externally held reference; a self-held digest detects
+accidental mutation only. In neither role is a digest a signature, a
+reviewer identity, or an authority grant. No kernel operation treats hash
+validity as authorization.
+\end{invariant}
+
+\subsection{What would answer the authority question}
+
+It is worth stating positively what \emph{would} answer
+Definition~\ref{ch04:def:authority}'s question, because the v0.1 kernel's
+refusal to fake an answer is a design decision, not an oversight. An
+authority mechanism requires a trust root: some principal whose statements
+are accepted axiomatically, plus an authenticated channel from that principal
+to the artifact---in practice a signature scheme with managed keys, an
+enrollment process binding keys to reviewer identities, and revocation. It
+further requires provenance structure: a record not merely that a status
+holds but of the acts and agents that produced it, in the sense in which
+provenance models distinguish an entity from the activity that generated it
+and the agent that bears responsibility \cite{prov}. The v0.1 kernel has
+none of this, on purpose. A half-built authority mechanism is worse than
+none, because it manufactures artifacts that look like answers to the
+authority question while answering only the tamper question. The kernel's
+stance---developed as the constant-false authorization invariant in
+Chapter 9---is that until a reviewed design supplies a real trust root,
+the authority question has a standing answer: \emph{no}.
+
+\begin{remark}
+The two-question analysis also explains a choice that otherwise looks
+strange: why the kernel bothers with elaborate integrity machinery at all if
+integrity confers no authority. The answer is that the authority question is
+answerable only \emph{about} specific bytes. A reviewer who one day signs a
+claim record signs particular content; if the content is not fixed---if
+parses can drift from bytes, encodings can vary by platform, statuses can
+mutate in place---then even a genuine authorization act fails to bind
+anything definite. Tamper evidence is not authority, but it is the substrate
+on which any future authority must stand. Chapters 5 and 6 build that
+substrate; this chapter's boundary object ensures that until authority
+exists, the substrate cannot be mistaken for it.
+\end{remark}
+
+\section{How boundaries thread through the kernel}\label{ch04:threading}
+
+The boundary object would be decoration if it were carried only by some
+artifacts, or carried but not enforced. The v0.1 design threads it through
+every public artifact type, with the same exact-field predicate at every
+seam. This section walks the seams; the companion chapters treat each
+artifact in depth.
+
+\subsection{Semantic crosswalks}
+
+A semantic crosswalk (Chapter 3) records a typed, non-identity relation
+between references in different namespaces. Every crosswalk carries a
+boundary, defaulted fresh to Ring-4 open, and the crosswalk constructor
+rejects any boundary that is not exactly Ring-4 open. The consequence is
+that no cross-namespace correspondence in v0.1 can so much as suggest a
+reviewed status: even a correspondence the program's authors consider
+obviously correct is constructible only as an open, unlicensed,
+undisclosed research object. The historical Drive--Foundation conflation
+could not have been laundered through a v0.1 crosswalk with an elevated
+status, because no elevated status is constructible on that artifact type.
+
+\subsection{Registry records and registries}
+
+Chapter 6's claim and theorem registries enforce the boundary twice over, at
+two different layers that must not be confused. The \emph{registry artifact}
+---the loaded, validated, in-memory view---carries a kernel boundary, pinned
+exactly to Ring-4 open like every other v0.1 artifact. The \emph{records
+inside the ledger}, by contrast, carry their own status fields as data:
+a claim record has a product-claim status that may spell \textsc{licensed},
+an admission ring that may be 3, a review state that may be \textsc{reviewed}.
+The loader validates these data fields against the record contracts---a
+\textsc{licensed} claim row lacking reviewers, evidence packets, or a review
+date is rejected as contractually malformed---but validation of the data is
+not adoption of the data. The registry view of an all-\textsc{licensed}
+ledger is still a Ring-4 open artifact. The kernel reads ledgers; it does
+not become what it reads. This layering is the metadata-is-not-authority
+invariant of Chapter 6, and it is the boundary object that makes the
+layering representable: without a kernel-level boundary distinct from
+record-level status fields, ``the registry says licensed'' and ``the kernel
+asserts licensed'' would be one statement instead of two.
+
+\subsection{Compatibility receipts}
+
+Every compatibility execution under the deterministic-closure protocol
+(Chapter 7) records the research boundary in its receipt, alongside the
+compiler identities, worker identities, and result digests. The boundary is
+recorded so that a receipt is self-describing about its claim status: a
+consumer holding only the receipt can see---inside the digested content, not
+in a detachable wrapper---that the execution it evidences was a Ring-4
+research act. A receipt cannot be re-presented as evidence of licensed
+behavior without altering its bytes, which the digest pin makes evident.
+This is tamper evidence in service of honest labeling: the receipt does not
+become more authoritative by carrying its boundary, but it becomes harder to
+relabel.
+
+\subsection{The runtime gate}
+
+Chapter 9's decision model consumes boundaries at the last seam: an action
+request carries typed intent, and the gate distinguishes nonclaim research
+evidence from claim-bearing intent. There the boundary discipline reaches
+its point. Structural validity of every artifact in the chain---references,
+crosswalks, encodings, receipts, registry records---feeds the gate; and the
+gate still answers \emph{no} to claim-bearing intent, constantly, because
+the authority question has no affirmative answer in v0.1. The boundary
+object is what lets the gate's refusal be principled rather than arbitrary:
+the gate can point to the exact field, on the exact artifact, that records
+the absence of authorization.
+
+\subsection{Direction of dependence}
+
+One structural property of the threading deserves note. The boundary type is
+defined in the kernel's semantic layer and consumed by every other layer;
+no layer above redefines or extends it (Rule~\ref{ch04:rule:exacttype}
+forecloses extension by subclassing). Companion candidates---the PCBA board
+model, the measurement stack, the topos layer---import the same carrier and
+the same predicate. Status vocabulary is therefore global and singular: there
+is exactly one way, program-wide, to say ``Ring-4 open,'' and it is checked
+the same way everywhere. Vocabulary fragmentation---each subsystem with its
+own status enum, related by convention---is how contradictory statuses
+arise between subsystems without any single subsystem being internally
+inconsistent.
+
+\section{Worked misuse scenarios}\label{ch04:scenarios}
+
+This section exercises the design against concrete misuse attempts. Each
+scenario names the actor's move and the mechanism that blocks it. The
+scenarios are fixture-shaped on purpose: each corresponds to a family of
+tests in the bound Gate-4 suite, and the blocked-by clauses are statements
+about tested constructor and predicate behavior, within the evidence bounds
+of Chapter 12.
+
+\begin{example}[Forged elevated status at construction]\label{ch04:ex:forge}
+An agent constructs a boundary with ring 4 and product state
+\textsc{licensed}, intending to attach it to a crosswalk so that downstream
+tooling displays the crosswalk as licensed. \emph{Blocked at the first
+step}: the carrier constructor raises on the R4/license family of
+Table~\ref{ch04:tab:invalid}; no such value exists to attach. If the agent
+instead constructs an internally consistent Ring-3 \textsc{accept}
+\textsc{licensed} boundary, the value exists---and the crosswalk constructor
+rejects it, because every v0.1 artifact constructor requires the exact
+Ring-4 open boundary. The forgery fails at whichever seam it first touches.
+\end{example}
+
+\begin{example}[Impersonation by subclass]\label{ch04:ex:subclass}
+An agent defines a subclass of the carrier that reports ring 4 and
+\textsc{open} through overridden attribute access while storing elevated
+values, or that overrides equality so that comparisons against the
+distinguished Ring-4 boundary succeed. \emph{Blocked by}
+Rule~\ref{ch04:rule:exacttype} at construction of the subclass instance
+itself, and independently by Rule~\ref{ch04:rule:predicate} at every use
+site, since the predicate's first conjunct tests exact runtime type and
+never dispatches through the candidate value's own methods.
+\end{example}
+
+\begin{example}[Post-construction mutation]\label{ch04:ex:mutation}
+An agent constructs a legitimate Ring-4 boundary, embeds it in an artifact,
+and then uses low-level attribute machinery to overwrite the product state
+in place, hoping the artifact's earlier validation carries forward.
+\emph{Blocked by} Invariant~\ref{ch04:inv:recheck}: the next operation that
+touches the artifact re-runs the exact-field predicate and raises a typed
+boundary error. The mutation is not prevented---no in-process scheme
+prevents it---but it cannot be \emph{used}: every path from the mutated
+object to an effect passes through a recheck. If the agent also updates a
+self-held digest to match, nothing improves for them:
+Invariant~\ref{ch04:inv:selfdigest} says no kernel path consults the
+self-digest in place of the field predicate.
+\end{example}
+
+\begin{example}[Ambient status injection]\label{ch04:ex:ambient}
+An agent arranges for a shared ``process status'' object---a module global,
+an environment flag, a configuration singleton---to indicate a licensed
+context, expecting kernel operations to consult it. \emph{Blocked by}
+absence of the seam: no kernel operation reads ambient status. The boundary
+enforced by an operation is derived from the operation's own inputs
+(Invariant~\ref{ch04:inv:recheck}, first clause). There is nothing to
+inject into.
+\end{example}
+
+\begin{example}[Receipt laundering]\label{ch04:ex:laundering}
+An agent presents a structurally valid artifact chain---green Gate-4 suite,
+hash-consistent receipts, a coherent boundary---to a human or downstream
+tool as evidence that the artifact is approved for product use, exploiting
+the reader's inference from consistency to authorization. \emph{Blocked
+within the kernel by} the constant-false authorization posture threaded
+through Section~\ref{ch04:threading}: no kernel output states an
+authorization, every receipt embeds its Ring-4 boundary in digested content,
+and the runtime gate denies claim-bearing intent regardless of the chain's
+structural quality. \emph{Not blocked outside the kernel}: a human reader
+can still be talked into the inference. The kernel's contribution is that
+every artifact the launderer can exhibit carries, in its own digested bytes,
+the statement that it is open, unlicensed research---so the laundering
+requires actively contradicting the artifact, not merely decorating it.
+\end{example}
+
+\begin{example}[Disclosure flip]\label{ch04:ex:disclosure}
+An agent flips the disclosure flag on an otherwise-open boundary to make an
+artifact appear publishable. \emph{Blocked by} Rule~\ref{ch04:rule:c3} at
+construction (disclosure requires \textsc{accept}) and, for the mutation
+variant, by the recheck discipline as in Example~\ref{ch04:ex:mutation}.
+The subtle point is that the flag's semantics are conjunctive with status:
+there is no representable state in which disclosure is authorized for an
+artifact that has not passed admission, so ``leak first, regularize later''
+has no target state to regularize into at Ring 4.
+\end{example}
+
+\begin{example}[Cross-artifact status borrowing]\label{ch04:ex:borrowing}
+An agent pairs a Ring-4 artifact with a genuinely elevated artifact (say, a
+Ring-3 record loaded from a ledger) and presents the pair so that the
+elevated status appears to cover both. \emph{Blocked by} per-artifact
+carriage: status is a field of each artifact, embedded in each artifact's
+digested encoding; no kernel operation aggregates boundaries across
+artifacts or computes a ``session status.'' The registry layering of
+Section~\ref{ch04:threading} is the systematic form of this defense: even
+the registry that \emph{contains} elevated records is itself Ring-4 open.
+\end{example}
+
+\begin{exercise}[Check-order absorption]\label{ch04:ex:absorption}
+Table~\ref{ch04:tab:invalid} attributes each invalid combination to the
+first rule that fires in the constructor's check order. Verify the
+counts by re-deriving the table under the opposite order (license
+precondition checked first, Ring-4 closure last), and identify the
+combinations that migrate between families. Conclude that the
+\emph{partition} of the 33 invalid combinations is an artifact of check
+order while the invalid \emph{set} is not---and explain why fixtures
+should therefore assert rejection, and may assert the error family only
+where the check order is itself part of the documented contract.
+\end{exercise}
+
+\begin{checkclass}[Boundary fixture families]\label{ch04:check:fixtures}
+The boundary behavior described in this chapter corresponds to the
+following fixture families in the bound Gate-4 suite: (i) construction-
+rejection fixtures covering representatives of each invalid family of
+Table~\ref{ch04:tab:invalid}; (ii) exact-type fixtures rejecting
+subclassed carriers and enumeration look-alikes (strings spelling
+enumeration words); (iii) predicate fixtures exercising each conjunct of
+the exact-field predicate independently; (iv) recheck fixtures mutating
+a constructed carrier and asserting typed failure at next use; and (v)
+seam fixtures asserting that each v0.1 artifact constructor (crosswalk,
+registry record, registry) rejects every valid non-Ring-4 boundary.
+Passing receipts for these families are historical software evidence
+under the bounds of Chapter 12; they license no claim beyond tested
+behavior on the fixtures.
+\end{checkclass}
+
+\begin{threat}[Residual: kernel-code subversion]\label{ch04:threat:residual}
+An adversary who can modify the kernel's own code or the interpreter in
+memory can disable the predicate, the constructors, and the gate together.
+No mechanism in this chapter addresses that adversary, and no claim is made
+otherwise. The design target is the historically observed failure class---
+honest components and agents drifting into overclaim through convenient
+representations---plus low-effort in-process tampering, not a hostile
+runtime.
+\end{threat}
+
+\section{What the boundary object does not do}\label{ch04:limits}
+
+The chapter closes by listing, without euphemism, the questions the boundary
+object leaves open; they are drawn into the obligation set of Chapter 12.
+
+First, it confers nothing. Fifteen valid configurations are representable;
+in v0.1 exactly one is constructible on kernel artifacts, and none is
+evidence of any status beyond the artifact's own assertion about itself.
+
+Second, it authenticates nothing. There is no reviewer identity, no
+signature, no trust root; the authority question of
+Definition~\ref{ch04:def:authority} has no affirmative answer anywhere in
+the kernel, and every mechanism that resembles an answer (digests, receipts,
+coherent statuses) has been shown to answer a different question.
+
+Third, it does not survive a hostile runtime
+(Threat~\ref{ch04:threat:residual}), and its tamper evidence is only as good
+as the external pins that hold the digests---pins whose discipline is the
+subject of Chapters 5 and 6.
+
+Fourth, its ring semantics are inherited, not defined: the kernel enforces
+the consistency rules over the ring index but does not define what review at
+each ring consists of. That definition lives in the Project Coherence
+process documents, outside the kernel, and a future authorization design
+(Chapter 9) must bind to it explicitly.
+
+What the boundary object does do is narrow: it makes status explicit,
+coherent, immutable-in-use, rechecked at every seam, and honest about the
+difference between ``unchanged'' and ``authorized.'' The remaining chapters
+build outward from that narrow guarantee: Chapter 5 fixes the bytes that
+boundaries and everything else are committed to; Chapter 6 fixes the
+ledgers that carry status vocabulary as data; and Chapter 9 shows the gate
+that turns the whole discipline into a standing, principled \emph{no}.

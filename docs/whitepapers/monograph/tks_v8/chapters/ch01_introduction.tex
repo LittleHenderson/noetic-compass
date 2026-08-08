@@ -1,0 +1,940 @@
+\chapter{Introduction}\label{ch01:chap}
+
+This monograph develops, in full and at reference depth, a deliberately small
+executable kernel for the typed-composition layer of the Tootra Knowledge
+System (TKS) and its secular derivative, the Cognitive Architecture System
+(CAS). The kernel --- TKS v8.0 --- supplies named finite objects with
+explicitly ordered carriers, total finite-function arrows with declared source
+and target, partial type-checked categorical composition, a hard type
+separation between one-carrier endomaps and heterogeneous semigroupoid paths, a
+deterministic standard-basis lift into finite-dimensional Hilbert spaces, and
+stable denotational normal forms computed by shortlex minimization over a
+completed finite closure. Everything the kernel does is either proved here,
+tested by bounded exhaustive enumeration, kernel-checked in a pinned proof
+assistant, or explicitly recorded as open. Nothing in this monograph is
+peer-reviewed; the artifact status of the entire program is \textsc{draft /
+gate 1 prototype / ring 4 / not licensed / not frozen}, and we will repeat that
+status wherever a reader might otherwise infer more.
+
+The present chapter explains why so small a kernel deserves so long a book.
+The short answer is that the kernel exists to make three specific reasoning
+failures \emph{impossible to write down}, and that the discipline required to
+achieve this --- in the mathematics, in the implementation, and in the evidence
+--- turns out to be instructive far beyond the kernel's size. The three
+failures are untyped composition, invalid power inference, and nondeterministic
+identity. Each is developed below with an extended worked scenario showing
+exactly how the failure produces a wrong conclusion from locally reasonable
+steps. Each scenario is then revisited at the end of the chapter to show which
+kernel rule makes the failing step a type error rather than a silent
+miscomputation.
+
+\section{The TKS/CAS formal program and its compiler}\label{ch01:sec:program}
+
+\subsection{The ontology in brief}
+
+The TKS/CAS formal program, in its v7.4 form and the v7.5 through v7.7
+extensions, defines a rich ontology for describing cognitive architecture: ten
+Noetic operators, four processing Domains, seven Core Drives, four
+Registers introduced in the later extensions, and a disciplined operation
+notation in which compound cognitive descriptions are written as expressions
+over these primitives. The ontology is served by a production notation
+compiler that parses, validates, and evaluates expressions of the notation.
+This monograph takes the ontology entirely as \emph{context}: the kernel
+developed here deliberately encodes none of it. The refusal is not modesty
+for its own sake; it is a gate. Mapping the canonical Noetics or any CAS
+construct onto kernel arrows is a separately tracked research obligation
+(PO-TKS8-CORE-08 in the ledger of Appendix~B), it has not been performed, and
+it is recorded as \textsc{open / not licensed}. Until that mapping is
+reviewed, every statement in this book is a statement about named finite sets
+and total functions --- no more.
+
+\subsection{Kinds in the production compiler}
+
+The production notation compiler enforces what we will call \emph{value
+kinds}. Each value flowing through an expression carries a tag drawn from a
+small fixed vocabulary --- state, drive, relation, program, and so on --- and
+the compiler rejects expressions that combine kinds in ways the grammar
+forbids. Kind checking is genuinely useful: it stops a drive value from being
+used where a relation is expected, and it catches a large class of
+transcription errors at parse time.
+
+What a kind system does not do --- cannot do, at this granularity --- is track
+\emph{categorical type}: the exact source object and exact target object of
+each operation. Two operations may both carry the kind ``relation'' while one
+of them is a map out of a seven-element carrier and the other is a map into a
+four-element carrier. The kind system sees two relations and permits the
+combination; the composition is nevertheless meaningless, because the
+intermediate objects disagree. In categorical language
+\cite{maclanecwm}: a kind system checks membership in a class of arrows,
+whereas composition legality is a statement about the \emph{objects} at the
+interface, and objects are precisely what kinds erase.
+
+\subsection{The artifact and its evidence infrastructure}
+
+Because later chapters constantly refer to the kernel's evidence
+apparatus, we fix the vocabulary here. The \emph{kernel} is the Python
+package \texttt{src/tks\_v8\_core}, comprising three modules:
+\texttt{category.py} (objects, arrows, composition, endomaps, paths),
+\texttt{deterministic\_lift.py} (the standard-basis lift and its derived
+operators), and \texttt{normal\_forms.py} (generator catalogs, typed
+words, the shortlex closure). A \emph{manifest} binds the exact bytes of
+these modules and their test suites by SHA-256 hash. The \emph{Gate~1
+verifier} (\texttt{scripts/verify\_tks\_v8\_gate1.py}) checks artifact
+hashes against the manifest and reruns the executable suite; the
+\emph{Lean verifier} (\texttt{scripts/verify\_psr8\_lean\_gate1.py})
+rebuilds a pinned, isolated Lean~4.32.1 formal seed \cite{lean4} under an
+audited axiom footprint. ``Gate~1'' names the project's first review
+gate: the kernel is a Gate~1 \emph{candidate} --- the manifest does not
+hash itself, no reviewed commit or acceptance receipt yet binds the
+manifest hash, and until one does, nothing here is a freeze receipt.
+The validation snapshot of 2026-08-04 records \textsc{pass} on all 20
+tests of the suite.
+
+Two terms of art recur. A claim's \emph{evidential status} is its entry
+in the proof-obligation ledger (Appendix~B), drawn from a fixed
+vocabulary explained in Remark~\ref{ch01:rem:status} below. The
+\emph{ring/license} annotations (\textsc{ring 4 / not licensed}) are the
+program's admission-control labels: they mark the entire artifact as an
+unreviewed research prototype whose claims may not be transferred into
+any production, marketing, or canonical-ontology context. This
+monograph inherits both disciplines wholesale and adds no claim beyond
+what the ledger registers.
+
+\subsection{Provenance of the failure analysis}
+
+The three failure modes below were identified by the Project Coherence
+mathematical red-team audit of the TKS/CAS formal layer. The audit's findings
+are inherited here as the kernel's requirements; we restate them in our own
+notation and expand each into a worked scenario. The scenarios are
+constructed for this monograph --- they are illustrative models of the failure
+classes, not transcripts of observed production incidents, and no claim about
+the behavior of any deployed system is made or implied.
+
+\begin{finding}[Audit finding, restated]\label{ch01:finding:audit}
+The production compiler's kind system does not enforce categorical source and
+target objects. Consequently three classes of invalid inference are
+expressible without error: (i) composition of operations whose intermediate
+objects disagree; (ii) application of single-operator iteration theorems to
+heterogeneous generator sequences; (iii) dependence of canonical
+representatives and digests on interpreter hash state. TKS v8.0 is the
+response: the smallest kernel in which each class is a type error.
+\end{finding}
+
+\section{Kinds are not types}\label{ch01:sec:kinds}
+
+Before the scenarios, it is worth being precise about the gap, because the gap
+is the entire motivation for the kernel.
+
+A \emph{kind}, as the production compiler uses the term, is a unary predicate
+on values: ``this value is a relation.'' A \emph{categorical type}, as the
+kernel uses the term, is a pair of objects: ``this arrow goes from $X$ to
+$Y$,'' written $f : X \to Y$. The difference matters at exactly one place:
+composition. Kind-level checking validates $g \circ f$ whenever $f$ and $g$
+have composable kinds. Type-level checking validates $g \circ f$ only when
+the declared target object of $f$ \emph{equals} the declared source object of
+$g$ --- equality of objects, not of kinds, not of cardinalities, not of
+element sets.
+
+Three progressively stricter equality tests could be imagined at the
+interface, and the kernel adopts the strictest:
+
+\begin{enumerate}
+\item \emph{Cardinality equality}: $|Y| = |Y'|$. This licenses the index
+coincidence failure of Scenario~I below and is rejected.
+\item \emph{Carrier equality}: the carriers of $Y$ and $Y'$ are equal as
+ordered sequences. This still coerces semantically distinct objects that
+happen to share elements --- two registers both carrying $(0,1)$ --- and is
+rejected.
+\item \emph{Name-and-carrier equality}: the declared names and the ordered
+carriers both agree. This is the kernel's rule
+(Chapter~\ref{ch03:chap}), and the anti-coercion argument for it is given at
+length in Section~\ref{ch03:sec:name-identity}.
+\end{enumerate}
+
+A natural question is why the response to the gap is a separate kernel
+rather than an extension of the production compiler's kind system into a
+full type system. The answer is procedural as much as technical. The
+production compiler is a live artifact with existing users and existing
+semantics; retrofitting object-level types into it would change the
+acceptance behavior of existing expressions, and doing so \emph{before}
+the categorical layer has been independently specified, proved, and
+reviewed would repeat the exact mistake the audit flagged --- semantics
+adopted by implementation accident rather than by reviewed decision. The
+kernel therefore stands beside the compiler, not inside it: a reference
+model whose small size makes complete specification and bounded
+exhaustive validation feasible, and whose integration with the compiler
+is deliberately held open as a separately gated obligation
+(PO-TKS8-CORE-09, \textsc{open}). If and when integration is designed,
+the kernel provides the semantics to integrate \emph{to}; until then it
+provides something almost as useful --- a precise statement of what the
+kind system does not check, with executable witnesses.
+
+The remainder of this chapter shows what goes wrong when the interface check
+is weaker than test (3), and, in the third scenario, what goes wrong when even
+test (3) is undermined by nondeterministic carrier order.
+
+\section{Failure mode I: untyped composition}\label{ch01:sec:untyped}
+
+\subsection{The failure class}
+
+Nothing in a kind system prevents composing operations whose intermediate
+objects disagree. The result is a well-formed expression --- it parses, it
+kind-checks, it may even execute --- with no denotation. The most dangerous
+member of this class is not the case where execution crashes; it is the case
+where a cardinality coincidence lets an index-based implementation run to
+completion and return a value. The value is then read as if it meant
+something, and a conclusion is drawn that no step of the computation ever
+licensed.
+
+\subsection{Worked scenario}\label{ch01:sec:untyped-scenario}
+
+We construct the scenario with kernel-style objects so that the reader can
+see exactly which datum the weak checker ignores. Take three finite objects:
+
+\begin{itemize}
+\item $D = (\texttt{DriveProfile}, (d_1, d_2, d_3, d_4, d_5, d_6, d_7))$, a
+seven-element carrier whose positions are read, in the surrounding analysis,
+as seven drive labels;
+\item $E = (\texttt{EvalSummary}, (e_0, e_1, e_2, e_3))$, a four-element
+carrier of evaluative summary labels;
+\item $Q = (\texttt{QuadState}, (q_0, q_1, q_2, q_3))$, a four-element
+carrier of unrelated quadrant labels used by a different analysis pipeline.
+\end{itemize}
+
+Two total maps are on hand, both carrying the kind ``relation'' in a
+kind-checked setting:
+
+\begin{itemize}
+\item $p : D \to E$, a summarization step; say $p$ has mapping tuple
+$(0, 0, 2, 2, 2, 1, 3)$, meaning $p(d_1) = e_0$, $p(d_2) = e_0$,
+$p(d_3) = e_2$, and so on.
+\item $r : Q \to D$, a reading step from the quadrant pipeline; say $r$ has
+mapping tuple $(4, 6, 5, 0)$, meaning $r(q_0) = d_5$, $r(q_1) = d_7$,
+$r(q_2) = d_6$, $r(q_3) = d_1$.
+\end{itemize}
+
+An analyst wants to chase a drive profile through summarization and back into
+drive space, and writes the composite $r \circ p$. The composite is ill-typed:
+the target of $p$ is $E$ and the source of $r$ is $Q$, and $E \neq Q$ ---
+different names, different carriers. But both carriers have four elements. An
+implementation that represents maps as bare index tuples, with no declared
+source and target, evaluates $r \circ p$ without complaint: it takes the
+output index of $p$ and uses it to index into the table of $r$.
+
+Run the numbers. Start from $d_3$. Then $p(d_3) = e_2$, held internally as
+index $2$. The untyped composition feeds index $2$ into the table of $r$,
+whose entry at position $2$ is $5$ --- but position $2$ of the table of $r$ is
+the row for $q_2$, not for $e_2$. The machine returns $d_6$. The analyst
+reads off: ``chasing $d_3$ through summarization and reading yields $d_6$,''
+and proceeds to build on the association between $d_3$ and $d_6$.
+
+The conclusion is wrong in the strongest possible sense: not incorrect by a
+computable error term, but \emph{underived}. No step of any analysis ever
+asserted what the reading map $r$ does to the evaluative label $e_2$, because
+$r$ is not defined on evaluative labels at all. The number $5$ that surfaced
+mid-computation is the image of $q_2$, an element of a carrier from an
+unrelated pipeline, smuggled in through nothing but the coincidence
+$|E| = |Q| = 4$. Had $|E|$ been $5$, the composition would have crashed on
+some inputs and the error would have been caught; the four-versus-four
+coincidence is exactly what makes the failure silent.
+
+Note carefully what each checking regime says about this composite:
+
+\begin{itemize}
+\item \emph{Kind checking}: $p$ and $r$ are both relations; relations compose;
+accepted.
+\item \emph{Cardinality checking}: $|E| = |Q| = 4$; accepted.
+\item \emph{Carrier checking}: $(e_0, e_1, e_2, e_3) \neq (q_0, q_1, q_2,
+q_3)$; rejected --- but only because the element sets happen to differ. Rename
+the quadrant labels to $e_0, \dots, e_3$ during a refactor and carrier
+checking silently accepts again.
+\item \emph{Kernel checking}: the target object of $p$ is
+$(\texttt{EvalSummary}, \dots)$ and the source object of $r$ is
+$(\texttt{QuadState}, \dots)$; the names differ; the composition raises a
+typed error naming both objects. No refactor of element spellings can
+reintroduce the silent acceptance without also merging the declared object
+identities, which is a visible, reviewable act.
+\end{itemize}
+
+\subsection{A taxonomy of the failure's presentations}
+
+It is worth separating the three ways an untyped composition can present,
+because they have very different detection profiles:
+
+\begin{enumerate}
+\item \emph{Loud}: the cardinalities disagree and some input's index
+falls outside the second table. The composition crashes --- on those
+inputs, in that run. Detection is likely but not certain: if the
+offending inputs never occur in testing, the crash ships.
+\item \emph{Silent-total}: the cardinalities agree, as in the worked
+scenario. Every input executes, every output is a well-formed element,
+and no observable signal distinguishes the underived result from a
+correct one. Detection requires semantic review of a computation that
+looks healthy.
+\item \emph{Silent-partial}: the cardinalities disagree but the
+observed inputs happen to land inside the smaller table. The pipeline
+runs clean for weeks and crashes on the first unusual input ---
+combining the worst of both: a latency-bombed crash \emph{and} a
+history of silently underived outputs before it.
+\end{enumerate}
+
+Only (1) is reliably caught by ordinary testing, and an adversarially
+unlucky data distribution converts (1) into (3). A type check at
+composition time collapses all three into a fourth presentation:
+\emph{immediate, deterministic, input-independent rejection at
+construction} --- the only presentation whose detection probability is
+$1$ and whose detection latency is zero.
+
+\subsection{The lesson}
+
+The failure is not exotic. Index-tuple representations of finite maps are the
+natural implementation choice, and cardinality coincidences among small
+carriers are the norm, not the exception --- the TKS/CAS ontology alone has a
+four-element Domain axis, a four-element Register axis, and numerous
+four-valued summaries. Any two of these will silently interchange under an
+untyped composition. The kernel's response (Chapter~\ref{ch03:chap} and
+Chapter~4) is that an arrow \emph{is} its judgment: source object, target
+object, and mapping tuple travel together, and composition is a partial
+operation defined only when the middle objects are equal as named, ordered
+objects.
+
+\section{Failure mode II: invalid power inference}\label{ch01:sec:power}
+
+\subsection{The failure class}
+
+Finite endomaps obey strong iteration theorems. The one this monograph
+proves as Theorem~5.1 (Chapter~5; the underlying mathematics is
+Theorem~\ref{ch02:thm:factorial-idempotent} of the primer) is the safe
+finite power: for any total $f : X \to X$ on a finite carrier, the power
+$f^{|X|!}$ is idempotent, $f^{|X|!} \circ f^{|X|!} = f^{|X|!}$. Results of
+this shape license fixed-point and stabilization conclusions: iterate long
+enough and the process reaches an idempotent regime.
+
+Every such theorem has a hypothesis that informal operator notation makes
+easy to lose: the iterated thing must be \emph{one} endomap --- a single
+element of the finite monoid $\mathrm{End}(X)$, applied repeatedly. A
+workflow that applies generators $g_1, g_2, g_3, \dots$ in temporal order is
+not, in general, iterating one endomap. If the $g_t$ differ from step to
+step, the composite $g_t \circ \cdots \circ g_1$ is an element of a
+\emph{path} through the category, and if the state spaces change over time it
+is not even an endomap. Writing the sequence as ``$g^t$'' is a notational
+pun, and importing an idempotence theorem through that pun produces
+conclusions that are false --- not approximately false, but exactly false,
+refutable on a three-element carrier.
+
+\subsection{Worked scenario}\label{ch01:sec:power-scenario}
+
+Let $X$ be a three-element carrier, positions $\{0, 1, 2\}$. A session
+applies two alternating generators, both honest endomaps of $X$:
+
+\begin{itemize}
+\item $a$, the cyclic rotation with mapping tuple $(1, 2, 0)$: it sends
+$0 \mapsto 1$, $1 \mapsto 2$, $2 \mapsto 0$;
+\item $b$, the swap with mapping tuple $(1, 0, 2)$: it exchanges $0$ and
+$1$ and fixes $2$.
+\end{itemize}
+
+The session trace is $a, b, a, b, a, b, \dots$: at odd steps apply $a$, at
+even steps apply $b$. Write $s_t$ for the composite state map after $t$
+steps, so $s_1 = a$, $s_2 = b \circ a$, $s_3 = a \circ b \circ a$, and in
+general $s_t$ is the left-to-right alternating product.
+
+An analyst models the session as ``the session operator applied $t$ times''
+--- a single $f$ with $s_t = f^t$ --- and invokes the safe finite power with
+$|X| = 3$, hence $|X|! = 6$: $f^6$ is idempotent, so
+$f^{12} = f^6 \circ f^6 = f^6$, and the analyst concludes that the state map
+after twelve steps equals the state map after six steps. \emph{The process
+has stabilized by step six}; monitoring beyond that point is declared
+redundant.
+
+Now compute what actually happens. The two-step round is
+\[
+h = b \circ a : \quad
+0 \xrightarrow{\;a\;} 1 \xrightarrow{\;b\;} 0, \qquad
+1 \xrightarrow{\;a\;} 2 \xrightarrow{\;b\;} 2, \qquad
+2 \xrightarrow{\;a\;} 0 \xrightarrow{\;b\;} 1,
+\]
+so $h$ has mapping tuple $(0, 2, 1)$: it fixes $0$ and swaps $1$ and $2$.
+Then $s_6 = h^3$ and $s_{12} = h^6$. Since $h$ is a transposition,
+$h^2 = \id_X$, hence
+\[
+s_6 = h^3 = h \neq \id_X = h^6 = s_{12}.
+\]
+The predicted equality $s_{12} = s_6$ is false: after six steps the state
+map swaps positions $1$ and $2$; after twelve it is the identity. Any
+downstream conclusion keyed to ``the stabilized map'' --- for instance, that
+position $1$ has permanently migrated to position $2$ --- is refuted six
+steps later by the process itself.
+
+The instructive point is that \emph{every hypothesis of the theorem holds for
+each generator separately}. Both $a$ and $b$ are single finite endomaps;
+$a^6 = \id_X$ and $b^6 = \id_X$, and the identity is idempotent, so the safe
+finite power theorem is true of $a$ and true of $b$. It fails for the session
+because the session is not a power of any single endomap: there is no
+$f : X \to X$ with $f^t = s_t$ for all $t$ (already $s_1 = a$ and
+$s_2 = b \circ a$ would force $f = a$ and $f^2 = b\circ a$, but
+$a^2 = (2,0,1) \neq (0,2,1)$). The pun ``$g^t$'' asserted the existence of
+such an $f$, silently, in the notation itself.
+
+The heterogeneous variant is even sharper. If the generators cross carriers
+--- $g_1 : X_0 \to X_1$, $g_2 : X_1 \to X_2$ with $X_0 \neq X_2$ --- then
+``the session operator squared'' is not merely a false claim but an ill-typed
+expression: the composite has type $X_0 \to X_2$, and composing it with
+itself requires $X_2 = X_0$. There is no monoid in which the power lives.
+
+\subsection{The lesson}
+
+The kernel's response (Chapters~5 and~6) is a type-level separation: the
+\texttt{Endomap} constructor is available only for arrows whose source and
+target are the \emph{same} object, and only \texttt{Endomap} carries a power
+operation. Heterogeneous or time-varying sequences are represented as
+\texttt{SemigroupoidPath} values, which have a typed composite and
+\emph{deliberately no power operation} --- the method is absent, and the
+runtime types are distinct, so a path cannot be passed where an endomap is
+required. The invalid inference of this scenario is not discouraged by
+documentation; it is unwritable. One cannot ask the kernel for $s^{6}$
+because the object $s$ on which one would ask it does not have the method,
+and constructing an \texttt{Endomap} from the session requires exhibiting the
+single arrow that the pun only pretended exists.
+
+\section{Failure mode III: nondeterministic identity}\label{ch01:sec:nondet}
+
+\subsection{The failure class}
+
+The first two failures are semantic. The third is evidential, and it
+undermines even a correctly typed system if left unaddressed. Everything in
+the kernel downstream of an object --- basis indices of the Hilbert-space
+lift, mapping tuples of arrows, shortlex ranks of words, canonical
+representatives of denotations, and every digest computed over any of these
+--- depends on the \emph{order} of the object's carrier. If that order is
+left to the iteration order of a hash-based container, it depends on
+interpreter state: in CPython, on the per-process string hash randomization
+controlled by \texttt{PYTHONHASHSEED}. Two runs of the same program on the
+same input may then disagree about which element sits at index $2$, and
+therefore about every downstream artifact, and therefore about every
+downstream digest. Replayability --- the ability of an auditor to rerun a
+computation and obtain bit-identical evidence --- dies at the first
+hash-ordered iteration.
+
+\subsection{Worked scenario}\label{ch01:sec:nondet-scenario}
+
+A well-meaning pipeline builds a carrier from a Python set literal:
+
+\begin{quote}
+\texttt{states = \{"calm", "alert", "overload"\}}\\
+\texttt{carrier = tuple(states)}
+\end{quote}
+
+The programmer reasons: the set has three fixed elements, so the tuple has
+three fixed elements; nothing here is random. The reasoning is wrong in one
+load-bearing detail: \texttt{tuple(states)} fixes the \emph{membership} but
+takes the \emph{order} from set iteration, and set iteration order for
+strings is a function of the process's hash seed.
+
+Run A of the pipeline, under one seed, obtains the carrier order
+$(\texttt{alert}, \texttt{calm}, \texttt{overload})$: the element
+\texttt{calm} has standard index $1$. An endomap $f$ intended to send every
+state to \texttt{calm} is then constructed by looking up indices, producing
+mapping tuple $(1, 1, 1)$. The pipeline serializes the object and arrow ---
+carrier order and mapping tuple --- into a canonical byte string and records
+its SHA-256 digest in an evidence log, alongside the conclusions drawn from
+the run.
+
+Run B, the auditor's replay on another day (a fresh process, hence a fresh
+seed), obtains carrier order
+$(\texttt{overload}, \texttt{alert}, \texttt{calm})$: now \texttt{calm} has
+standard index $2$, the same intended map serializes with mapping tuple
+$(2, 2, 2)$ and a permuted carrier sequence, and the recorded digest does not
+match. The auditor is left with exactly the wrong dichotomy: either the
+original evidence was corrupted, or the pipeline is nondeterministic --- and
+no local inspection of the code distinguishes the benign cause (hash-order
+iteration of a three-element set) from a malignant one (actual tampering or
+an actual semantic bug). The evidentiary value of the digest is zero, not
+reduced: a digest that honest replays fail to reproduce cannot certify
+anything.
+
+The failure generalizes beyond digests. If two subsystems each build ``the
+same'' carrier from set iteration within one process, they may agree by
+luck; across processes, machines, or language versions they will not.
+Basis-dependent quantities --- the matrix of the lift $A_f$, the shortlex
+rank of a word, the identity of the canonical representative selected by
+normal-form computation --- all inherit the nondeterminism. A ``canonical''
+form that varies by process is a contradiction in terms.
+
+Chapter~\ref{ch03:chap} develops this scenario mechanically ---
+what \texttt{PYTHONHASHSEED} actually controls, how randomization enters
+\texttt{set} and \texttt{dict} iteration, why the problem is a general
+software-evidence problem rather than a Python quirk --- and states the
+kernel's ordered-input rule: every order-sensitive constructor input rejects
+sets, mappings, and one-shot iterables outright, at construction time, with a
+typed error. The caller must supply a replayable ordered sequence, which
+makes the ordering decision explicit, reviewable, and versionable.
+
+\subsection{The lesson}
+
+Determinism is not an implementation nicety here; it is a precondition for
+the entire evidence discipline of the program. The kernel's artifacts are
+bound by SHA-256 hashes in a manifest, its test outcomes are recorded against
+those hashes, and its formal seed audits exact source hashes before building.
+All of that machinery presupposes that honest reruns reproduce bytes. A
+single hash-ordered iteration anywhere upstream of a digest silently voids
+the presupposition. The ordered-input rule is therefore enforced at the
+lowest level of the kernel --- inside the constructors --- rather than in
+documentation or review checklists, on the general principle that a property
+this load-bearing must be impossible to violate accidentally.
+
+\section{The scenarios replayed against the kernel}\label{ch01:sec:replay}
+
+Before stating the design philosophy in the abstract, it is worth
+replaying each scenario against the kernel's actual rules, because the
+three outcomes have a common shape: the failing step does not execute
+wrongly --- it does not execute at all, and the error it raises names the
+exact judgment that failed.
+
+\subsection{Scenario I under typed composition}
+
+In the kernel, the summarization and reading steps are arrow values
+carrying their full judgments:
+
+\begin{quote}
+\texttt{p : DriveProfile -> EvalSummary} \quad with mapping
+$(0, 0, 2, 2, 2, 1, 3)$\\
+\texttt{r : QuadState -> DriveProfile} \quad with mapping
+$(4, 6, 5, 0)$
+\end{quote}
+
+The composite request \texttt{compose(r, p)} is checked before any index
+is touched: the declared target object of \texttt{p} is
+$(\texttt{EvalSummary}, (e_0, e_1, e_2, e_3))$, the declared source
+object of \texttt{r} is $(\texttt{QuadState}, (q_0, q_1, q_2, q_3))$,
+and the two are unequal because their names differ. The kernel raises
+\texttt{CompositionTypeError} with a message of the form
+
+\begin{quote}
+\texttt{cannot compose p:DriveProfile->EvalSummary then}\\
+\texttt{r:QuadState->DriveProfile}
+\end{quote}
+
+The number $5$ --- the smuggled image of $q_2$ that the untyped
+implementation returned --- is never computed, because the guard runs
+before the pointwise formula. Note also what the fix looks like on the
+kernel's terms: if the analyst genuinely intends an identification of
+evaluative labels with quadrant labels, she must write it as an explicit
+arrow $\texttt{EvalSummary} \to \texttt{QuadState}$ and insert it into
+the composite. The identification then exists as a reviewable object
+with an author and a version --- exactly the audit record whose absence
+made the original failure silent
+(Remark~\ref{ch03:rem:cost} returns to this point).
+
+\subsection{Scenario II under the endomap/path separation}
+
+The alternating session is representable in the kernel in exactly one
+way: as a path value,
+
+\begin{quote}
+\texttt{session = SemigroupoidPath((a, b, a, b, a, b))}
+\end{quote}
+
+which validates (all six arrows are endo on the same object, so all
+adjacent pairs match) and offers \texttt{composite()} --- the honest
+six-step composite, which evaluates to the transposition
+$h^3 = h$ computed in Section~\ref{ch01:sec:power-scenario}. What the
+path does \emph{not} offer is any power operation: there is no
+\texttt{session.power(n)}, by design, and the runtime type
+\texttt{SemigroupoidPath} is not accepted where an \texttt{Endomap} is
+required. The analyst who wants to invoke the factorial idempotence
+theorem must first construct \texttt{Endomap(g)} for some single arrow
+\texttt{g} --- and for the alternating session no such single arrow
+exists with the session's semantics, a fact the analyst now confronts at
+the type level instead of discovering, twelve steps into production,
+through a falsified stabilization claim. If she constructs
+\texttt{Endomap(session.composite())} she gets a legitimate object ---
+the one-round map $h$ composed out to six steps --- and every theorem she
+then invokes is true \emph{of that map}, which is the point: the type
+system has forced the quantifier back over single endomaps, where the
+theorems actually hold.
+
+The cross-carrier variant fails even earlier: a path whose adjacent
+objects mismatch raises \texttt{CompositionTypeError} at construction,
+naming the offending segment, and a mismatched \texttt{Endomap}
+construction --- an arrow whose source and target are different objects
+--- likewise raises at construction with a message of the form
+\texttt{"g' has type X0->X2, so it is not an endomap"}.
+
+\subsection{Scenario III under the ordered-input rule}
+
+The pipeline's first line, transplanted into the kernel, is already
+illegal:
+
+\begin{quote}
+\texttt{FiniteObject(name="States", elements=\{"calm", "alert",
+"overload"\})}
+\end{quote}
+
+raises \texttt{ValidationError}: finite-object elements must be an
+ordered sequence; sets, mappings, and one-shot iterables are not
+accepted. The programmer is forced to write the order:
+
+\begin{quote}
+\texttt{FiniteObject(name="States", elements=("calm", "alert",
+"overload"))}
+\end{quote}
+
+and from this point Invariant~\ref{ch03:inv:replay} takes over: the
+constructed object, the arrow built over it, the serialization, and the
+digest are pure functions of the written program text. Run A and Run B
+now agree byte-for-byte, on any machine, under any
+\texttt{PYTHONHASHSEED}, because the hash seed no longer participates in
+any datum the kernel emits. The auditor's replay reproduces the digest,
+and the digest is evidence again. The cost --- one explicit ordering
+decision, visible in the diff --- is the entire price, and
+Section~\ref{ch03:sec:hash-order} argues it is the minimum price any
+solution can charge, since the ordering decision existed all along and
+was merely being made, invisibly and differently each run, by the hash
+table.
+
+\subsection{The common shape}
+
+In all three replays the kernel's contribution is the same: a judgment
+that informal notation left implicit --- the middle objects of a
+composite, the single-endomap hypothesis of an iteration theorem, the
+enumeration order of a carrier --- is reified as explicit, checkable
+data, and the check runs \emph{before} any computation that would depend
+on the judgment being true. The failures do not become error codes to
+handle; they become programs that cannot be written. This is what
+``make the failure a type error'' means concretely, and the remainder of
+the monograph is the systematic execution of that idea across the
+kernel's five capabilities.
+
+\section{Design philosophy of the kernel}\label{ch01:sec:philosophy}
+
+Four commitments shape everything that follows.
+
+\subsection{Smallest kernel, hardest boundary}
+
+TKS v8.0 is the \emph{smallest} kernel that turns each of the three failures
+into a type error. Smallness is a feature with teeth: the implementation is
+three modules (\texttt{category.py}, \texttt{deterministic\_lift.py},
+\texttt{normal\_forms.py}, totalling under 26 kilobytes of source), the
+mathematics is elementary and completely proved, and the bounded exhaustive
+test families can genuinely enumerate their domains ($19{,}683$
+associativity triples, $289$ endomaps, $499$ typed maps, $1{,}678$
+lift-composition pairs; Chapter~10). A larger kernel would dilute each of
+these properties. In particular the kernel is an \emph{independent reference
+model}: it does not modify, replace, or certify the active CAS notation
+compiler, it has no production runtime dependency, and a manifest-boundary
+regression test asserts exactly that.
+
+\subsection{Refusal to encode canon before review}
+
+The kernel deliberately encodes no Noetic, no Domain, no Drive, no Register,
+and no CAS construct of any sort. This is the program's most frequently
+misread decision, so we state its logic plainly. The mapping from the
+canonical ontology onto a categorical substrate is itself a research claim
+--- arguably the central one --- and admitting it by construction, as a side
+effect of writing the kernel, would launder an unreviewed claim into
+infrastructure. The mapping is instead held as an explicit open obligation
+(PO-TKS8-CORE-08, \textsc{open / not licensed}), to be performed, if at all,
+under separate review against the corrected v7.4 theorem records. Until
+then, an arrow in this book means a total function between named finite
+carriers, and nothing else.
+
+\begin{boundary}\label{ch01:boundary:no-canon}
+No result in this monograph is a claim about cognition, about the TKS/CAS
+ontology, about the production compiler's semantics, or about any empirical
+system. The kernel maps no canonical construct onto arrows. Where a scenario
+in this chapter uses ontology-flavored names (\texttt{DriveProfile},
+\texttt{EvalSummary}), the names are illustrative strings; the mathematics
+sees only carriers and index tuples.
+\end{boundary}
+
+\subsection{Fail closed}
+
+Wherever the kernel cannot deliver a complete, correct answer, it raises a
+typed error rather than returning a best effort. Composition with mismatched
+middle objects raises rather than coercing; constructors reject unordered
+inputs rather than guessing an order; the normal-form closure raises
+\texttt{ClosureLimitExceeded} rather than returning a partially explored
+table as ``canonical.'' The alternative --- silently truncated canonical
+forms, silently coerced compositions --- is precisely the raw material of the
+three failure modes.
+
+\subsection{Evidence as a first-class artifact}
+
+Every mathematical claim in the program carries a registered evidential
+status, and the statuses are heterogeneous on purpose: some claims have
+complete informal proofs plus bounded exhaustive tests; some have partial
+formal verification in a pinned Lean~4.32.1 seed \cite{lean4} whose verifier
+admits the single standard axiom \texttt{propext} and rejects project axioms
+and \texttt{sorry}; some are standard results cited to the literature with
+formalization open; some are open outright. The full ledger is reproduced in
+Appendix~B. The monograph never averages these statuses into an impression
+of overall verifiedness: bounded testing is not proof-assistant verification
+of the running code, the Lean seed's scope is exactly enumerated
+(Chapter~11), and the equivalence between the Python implementation and the
+Lean model is itself an open obligation. This stance follows the small-scope
+tradition in software modeling \cite{jackson}: exhaustive checking of a
+bounded model is a powerful falsifier and a weak verifier, and conflating the
+two is how disciplines rot.
+
+\section{Contributions and their evidential status}\label{ch01:sec:contributions}
+
+The kernel supplies five capabilities. For each we state the capability, the
+chapters that develop it, and the exact evidential status, quoted from the
+ledger.
+
+\begin{enumerate}
+\item \emph{Named finite objects with explicitly ordered carriers}
+(Chapter~\ref{ch03:chap}). Object identity is the pair of declared name and
+ordered carrier; all order-sensitive constructor inputs reject sets,
+mappings, and one-shot iterables. Status: executable validation ---
+constructor and negative-fixture tests; this is a design discipline, not a
+theorem.
+\item \emph{Total finite-function arrows with partial, type-checked
+composition satisfying the category laws} (Chapters~\ref{ch03:chap} and~4).
+Status: partial formal verification present --- pointwise proof, bounded
+exhaustive tests over $19{,}683$ associativity triples and $499$ typed maps,
+and exact Lean lemmas for the Lean model; Python-to-Lean equivalence open.
+\item \emph{Type separation of endomap powers from semigroupoid paths}
+(Chapters~5 and~6), with the safe finite power theorem
+$f^{|X|!} \circ f^{|X|!} = f^{|X|!}$. Status: the separation is executable
+validation (distinct runtime types, negative tests); the theorem is a
+standard finite-semigroup result \cite{pin, howie} verified exhaustively for
+all $289$ endomaps on carriers through size four, with formalization open.
+\item \emph{The deterministic standard-basis lift} $A_f e_x = e_{f(x)}$
+(Chapter~7), with the exact norm formula
+$\lVert A_f \rVert^2 = \max_{y} |f^{-1}(y)|$, its trace, rank, and isometry
+corollaries, functoriality, and a permanent noncontractivity counterexample.
+Status: informal proof present; bounded exhaustive structural tests
+($1{,}678$ exact-matrix composition pairs); Lean kernel-checks the exact
+two-state counterexample and the identity and basis-composition laws;
+universal formalization and the finite-sum matrix bridge open.
+\item \emph{Stable denotational normal forms} by shortlex minimization over a
+completed finite closure (Chapter~8), with soundness of representative-first
+pruning and fail-closed resource semantics. Status: informal correctness
+argument present; regression tests; formalization open.
+\end{enumerate}
+
+Chapters~9 through~11 document the implementation, the executable evidence
+(the validation snapshot of 2026-08-04 records \textsc{pass} on 20 tests),
+and the formal seed. Chapter~12 states the integration boundaries and the
+downstream program. Nothing in the list above is peer-reviewed
+(PO-TKS8-CORE-10, \textsc{open}); no empirical, cognitive-dynamics,
+channel-contractivity, or CAS-efficacy claim follows from any item; and the
+mathematical content is standard --- the contribution claimed is the
+\emph{engineering discipline} binding it together, not new theorems.
+
+The correspondence between capabilities, obligations, and statuses is
+summarized in Table~\ref{ch01:tab:status}; the authoritative record is
+the ledger itself (Appendix~B), and where this table and the ledger could
+ever disagree, the ledger governs.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}llll@{}}
+\toprule
+Capability & Chapters & Ledger items & Status (abbreviated) \\
+\midrule
+Objects, ordered carriers & 3 & PO-02 (part) & executable validation \\
+Typed composition, laws & 3, 4 & PO-01, PO-02 & partial formal verif. \\
+Endomap/path separation & 5, 6 & PO-03, PO-04 & exec.\ valid.; std.\ result \\
+Deterministic lift, norm & 7 & PO-05, PO-11 & informal proof; partial \\
+Shortlex normal forms & 8 & PO-06 & informal argument \\
+Lean formal seed & 11 & PO-07 & partial, present \\
+Semantic mapping to CAS & 12 & PO-08 & open / not licensed \\
+Compiler integration & 12 & PO-09 & open \\
+Specialist review & --- & PO-10 & open \\
+\bottomrule
+\end{tabular}
+\caption{Capabilities against ledger obligations (PO-TKS8-CORE numbers
+abbreviated). ``Partial formal verif.''\ always means: exact Lean lemmas
+about the Lean model, bounded exhaustive tests of the Python model, and
+an open bridge between the two.}
+\label{ch01:tab:status}
+\end{table}
+
+\section{Positioning among neighboring disciplines}\label{ch01:sec:positioning}
+
+The kernel's ideas are borrowed, individually, from well-established
+practice; the claimed contribution is their joint enforcement in one
+small, evidence-bound artifact. Situating each borrow both credits the
+sources and sharpens what the kernel does not attempt.
+
+\emph{Typed composition} is the oldest idea here: that the legality of
+combining two operations should be checked against declared interfaces
+rather than discovered at runtime is the founding insight of static type
+systems, and its categorical formulation --- composition as a partial
+operation governed by objects --- is textbook category theory
+\cite{maclanecwm}. The kernel adds only strictness choices: name-inclusive
+object identity and the refusal of every coercion.
+
+\emph{The endomap/path separation} is elementary semigroup theory
+\cite{howie, pin} read as a typing discipline: powers live in
+endomorphism monoids and nowhere else, so the type system should make
+``nowhere else'' unrepresentable. The mathematical content
+(Chapter~\ref{ch02:chap}) is classical; the engineering content is the
+decision to encode a quantifier's hypothesis as a runtime type.
+
+\emph{Determinism as an evidence requirement} is the reproducible-builds
+insight applied to mathematical artifacts: a digest certifies nothing
+unless honest replays reproduce it. The kernel's ordered-input rule is a
+library-level instance of that doctrine, and
+Chapter~\ref{ch03:chap} argues the general case.
+
+\emph{Bounded exhaustive testing} follows the small-scope tradition
+\cite{jackson}: enumerate \emph{all} instances of a small model rather
+than sampling a large one, on the hypothesis that most defects manifest
+at small scope. The kernel's test families are sized by exact counts
+(Chapter~\ref{ch02:chap}, Section~\ref{ch02:sec:counting}) so that
+``all'' is a theorem, not an aspiration.
+
+\emph{Kernel-checked formalization} follows standard proof-assistant
+practice \cite{lean4}: a small trusted checker, a pinned toolchain, an
+audited axiom footprint. The program's honesty rule --- the Lean model
+and the Python implementation are distinct artifacts whose equivalence
+is an open obligation --- is itself standard practice in careful
+verification work, and Chapter~11 maintains it without exception.
+
+What the kernel does not attempt, even within these disciplines: it is
+not a general-purpose proof assistant, not a rewriting engine, not a
+model checker, and not a type-system extension of any existing language
+--- it is a library whose constructors refuse, which is the smallest
+mechanism that suffices for the three failures.
+
+\subsection{Falsifiability of the kernel's claims}
+
+A reference kernel should say what would refute it. Each capability has
+a concrete falsifier: a composable triple of typed arrows on which the
+implementation's composition disagrees with pointwise evaluation; a
+constructible arrow accepted with mismatched middle objects; a
+\texttt{SemigroupoidPath} value on which any power-like operation
+succeeds; an endomap $f$ on a carrier of size at most four with
+$f^{|X|!} \circ f^{|X|!} \neq f^{|X|!}$; a typed pair $(f, g)$ with
+$A_{g \circ f} \neq A_g A_f$ as exact integer matrices; a catalog and
+denotation for which the closure returns a word that is not
+shortlex-least among well-typed representatives, or returns a partial
+table without raising; and any kernel output that differs between two
+runs with identical constructor arguments. The bounded exhaustive
+families of Chapter~10 are precisely systematic searches for the first
+five falsifiers within their bounds; none has been found, which is
+evidence within the bounds and silence beyond them
+(Remark~\ref{ch01:rem:status}).
+
+\section{Reading guide}\label{ch01:sec:guide}
+
+The monograph is organized so that a reader can enter at several depths.
+
+\emph{Part I: Foundations.} Chapter~\ref{ch02:chap} is a self-contained
+mathematical primer --- finite sets and total functions, counting, the
+semigroup-to-category ladder, functional graphs of endomaps,
+finite-dimensional Hilbert spaces, and shortlex orders --- cited throughout
+as standard background \cite{bookofproof, maclanecwm, pin, howie, horn}. A
+reader fluent in these topics may skim it for notation.
+Chapter~\ref{ch03:chap} defines objects and arrows and develops the
+determinism discipline at full depth.
+
+\emph{Part II: The kernel's mathematics.} Chapter~4 proves the category
+laws. Chapter~5 develops endomap theory and the safe finite power.
+Chapter~6 develops semigroupoid paths and the impossibility of path powers.
+Chapter~7 develops the lift: norm theorem, corollaries, functoriality, and
+the permanent counterexample. Chapter~8 develops normal forms: shortlex
+minimization, the representative-first closure algorithm, its soundness, and
+its resource semantics.
+
+\emph{Part III: Evidence.} Chapter~9 walks the implementation. Chapter~10
+specifies the bounded exhaustive test families and what they do and do not
+establish. Chapter~11 documents the pinned Lean seed, its axiom audit, and
+its exact verified and open scope.
+
+\emph{Part IV: Boundaries.} Chapter~12 states what is excluded, the three
+downstream boundary objects that consume the kernel strictly through its
+types, and the reproduction procedure.
+
+\emph{Appendices.} Appendix~A collects worked examples end to end.
+Appendix~B reproduces the complete proof-obligation ledger
+(PO-TKS8-CORE-01 through 11) with statuses. Appendix~C is a glossary.
+
+Readers primarily interested in \emph{why} the kernel exists should read this
+chapter and Chapter~12. Readers auditing the mathematics should read
+Chapters~\ref{ch02:chap} through~8. Readers replaying the evidence should
+read Chapters~9 through~11 and Appendix~B.
+
+\section{Notation and conventions}\label{ch01:sec:notation}
+
+\begin{notation}\label{ch01:not:conventions}
+Throughout the monograph:
+\begin{itemize}
+\item Finite objects are written $X, Y, Z$; $|X|$ is the carrier length;
+carrier positions are the \emph{standard indices} $0, \dots, |X|-1$.
+\item Arrows are written $f : X \to Y$; $\id_X$ is the identity;
+$g \circ f$ is composition, defined iff the target object of $f$ equals the
+source object of $g$; $\im(f)$ is the image; $f^{-1}(y)$ is the fiber over
+$y$.
+\item $\mathrm{End}(X)$ is the monoid of endomaps of $X$; $f^n$ is the
+$n$-th monoid power, $f^0 = \id_X$.
+\item $H_X$ is the complex Hilbert space with orthonormal basis
+$(e_x)_{x \in X}$ indexed by the ordered carrier; $A_f$ is the deterministic
+standard-basis lift of $f$; $A_f^{*}$ its adjoint; $\lVert \cdot \rVert$
+the operator norm; $\trace$ and $\rk$ the trace and rank.
+\item $\llbracket w \rrbracket$ is the denotation of a typed word $w$;
+$\NF_G(a)$ is the shortlex-least well-typed word denoting $a$ relative to
+the declared generator catalog $G$; $<_{\mathrm{slex}}$ is the shortlex
+order.
+\item Code identifiers appear in typewriter face
+(\texttt{FiniteObject}, \texttt{denotation\_key}); they name entities of the
+reference implementation in \texttt{src/tks\_v8\_core}.
+\item Claim-status words --- \textsc{open}, \textsc{not licensed},
+\textsc{partial formal verification present}, \textsc{executable
+validation}, \textsc{standard result} --- are quoted from the obligation
+ledger and are never paraphrased.
+\end{itemize}
+\end{notation}
+
+Table~\ref{ch01:tab:symbols} collects the recurring symbols with the
+location of their governing definitions.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}lll@{}}
+\toprule
+Symbol & Meaning & Defined \\
+\midrule
+$X = (\mathrm{name}, \mathrm{carrier})$ & finite object & Def.~\ref{ch03:def:object} \\
+$|X|$ & carrier length & Def.~\ref{ch03:def:object} \\
+$f : X \to Y$ & arrow judgment & Def.~\ref{ch03:def:arrow} \\
+$\id_X$, $g \circ f$ & identity, composition & Ch.~2, Ch.~4 \\
+$\im(f)$, $f^{-1}(y)$ & image, fiber & Def.~\ref{ch02:def:image-fiber} \\
+$\mathrm{End}(X)$, $f^{n}$ & endomorphism monoid, power & Prop.~\ref{ch02:prop:ladder} \\
+$T_X$ & full transformation monoid & Def.~\ref{ch02:def:full-transf} \\
+$H_X$, $(e_x)_{x \in X}$ & lift space, standard ONB & Ch.~2 Sec.~7, Ch.~7 \\
+$A_f$, $A_f^{*}$ & lift, adjoint & Ch.~7 \\
+$\lVert \cdot \rVert$, $\trace$, $\rk$ & operator norm, trace, rank & Def.~\ref{ch02:def:opnorm} \\
+$J_m$ & all-ones $m \times m$ matrix & Prop.~\ref{ch02:prop:allones} \\
+$\llbracket w \rrbracket$ & denotation of a typed word & Ch.~8 \\
+$<_{\mathrm{slex}}$, $\NF_G$ & shortlex order, normal form & Def.~\ref{ch02:def:shortlex}, Ch.~8 \\
+$\rk_{\mathrm{slex}}(w)$ & shortlex rank of a word & Prop.~\ref{ch02:prop:slex-rank} \\
+$\cC$, $\Ob$, $\Hom$ & category, objects, hom-sets & Def.~\ref{ch02:def:category} \\
+\bottomrule
+\end{tabular}
+\caption{Recurring symbols. References into Chapters 4--8 point at the
+governing definitions of Part II; primer references are exact.}
+\label{ch01:tab:symbols}
+\end{table}
+
+\begin{remark}[How to read the status vocabulary]\label{ch01:rem:status}
+\textsc{Executable validation} means: the property is enforced by
+constructors and demonstrated by tests, including negative fixtures; it is a
+statement about the finite executable model only. \textsc{Standard result}
+means: the mathematics is textbook material, cited as background and proved
+here for self-containment, with no novelty claimed. \textsc{Partial formal
+verification present} means: a pinned proof assistant kernel-checks stated
+lemmas about a Lean model of the definitions, under an audited axiom
+footprint, and the bridge from that model to the running Python is open.
+\textsc{Open} means open: no evidence is claimed. \textsc{Not licensed}
+means that even drafting an argument for the claim is out of scope for this
+lane until a separate review admits it.
+\end{remark}
+
+With the failures, the philosophy, and the notation in hand, we turn to the
+mathematics. Everything in the next chapter is standard; everything after it
+is discipline.

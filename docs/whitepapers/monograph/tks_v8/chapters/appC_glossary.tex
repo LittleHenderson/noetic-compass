@@ -1,0 +1,331 @@
+\chapter{Glossary and Notation Index}\label{appC:glossary}
+
+This appendix collects the technical vocabulary and symbols of the
+monograph. Each entry gives a self-contained definition and, in
+parentheses, the chapters where the notion is introduced or most fully
+developed (Chapters 1 through 12, Appendices A through C). Terms are
+alphabetical; symbols follow in a separate index; the status vocabulary
+of the artifact's claim discipline closes the appendix. Definitions
+here are summaries for reference --- where a glossary entry and a
+chapter's formal definition could be read differently, the chapter
+governs.
+
+\section{Terms}\label{appC:sec:terms}
+
+\textbf{Adjoint (of the lift).} The conjugate transpose $A_f^{*}$ of
+the lift matrix; implemented as coordinate gathering,
+$(A_f^{*} w)_x = w_{f(x)}$. (Chapters 7, 9; Appendix A.)
+
+\textbf{Arrow.} A total function between two declared finite objects,
+represented as a mapping tuple of target indices together with its
+source object, target object, and a presentation name excluded from
+equality. Implemented as \texttt{FiniteArrow}. (Chapters 3, 4, 9.)
+
+\textbf{Artifact binding.} A manifest record tying a file path to its
+SHA-256 digest, byte count, and declared role, enabling the hash-check
+half of Gate 1 verification. (Chapters 9, 10.)
+
+\textbf{Axiom audit.} The per-theorem extraction and checking of the
+axioms a kernel-checked proof term depends on; the seed's verifier
+admits only \texttt{propext} and rejects project axioms and
+\texttt{sorry}. (Chapter 11.)
+
+\textbf{Binary powering.} Computing $f^{n}$ by iterated squaring over
+the bits of $n$, in $O(\log n)$ compositions; the implementation of
+\texttt{Endomap.power}. (Chapters 5, 9; Appendix A.)
+
+\textbf{Bounded-exhaustive testing.} Checking a property on every
+instance up to an explicit size bound, as opposed to sampling;
+justified by the small-scope hypothesis. (Chapter 10.)
+
+\textbf{Carrier.} The finite, explicitly ordered sequence of distinct
+hashable elements of an object; its length is written $|X|$ and its
+positions are the standard indices. (Chapter 3.)
+
+\textbf{Catalog (generator catalog).} A finite ordered sequence of
+declared objects together with a finite ordered sequence of typed
+generators over them; the input to normal-form closure, whose declared
+orders fix all shortlex ranks. Implemented as
+\texttt{NormalFormCatalog}. (Chapters 8, 9; Appendix A.)
+
+\textbf{Category laws.} Left and right identity neutrality and
+associativity of composition, holding pointwise for total finite
+functions. (Chapter 4.)
+
+\textbf{Claim boundary.} A statement, carried alongside a result,
+delimiting what the result does not establish; rendered in this
+monograph by the boundary environment and in the manifest by boundary
+fields. (Chapters 1, 7, 8, 10, 11, 12.)
+
+\textbf{Closure (denotational).} The finite set of all typed
+denotations reachable by composing catalog generators from declared
+identities, computed to completion or refused; never returned
+partially. (Chapters 8, 9; Appendix A.)
+
+\textbf{Composition.} The partial operation $g \circ f$, defined iff
+the declared target object of $f$ equals the declared source object of
+$g$; realized by index chasing on mapping tuples. (Chapters 4, 9.)
+
+\textbf{Denotation.} The extensional finite function an arrow or a
+typed word stands for --- source, target, and mapping tuple,
+independent of presentation names. (Chapters 4, 8.)
+
+\textbf{Denotation key.} The triple (source, target, mapping) used as
+the dictionary identity of a denotation in the closure engine;
+implemented as \texttt{FiniteArrow.denotation\_key}. (Chapters 8, 9.)
+
+\textbf{Deterministic lift.} The linear map $A_f$ with
+$A_f e_x = e_{f(x)}$ on standard bases indexed by the ordered
+carriers; a column-selection zero-one matrix. Implemented as
+\texttt{DeterministicLift}. (Chapter 7; Chapters 9, 10; Appendix A.)
+
+\textbf{Endomap.} An arrow whose declared source and target are the
+same object, wrapped in the type that alone carries monoid powers.
+Implemented as \texttt{Endomap}. (Chapters 5, 9; Appendix A.)
+
+\textbf{Error taxonomy.} The four exception types of the package:
+\texttt{ValidationError} (malformed data),
+\texttt{CompositionTypeError} (categorical type mismatch),
+\texttt{ClosureLimitExceeded} (resource guard, fail closed), and
+\texttt{UnreachableDenotationError} (denotation outside the generated
+closure). (Chapter 9.)
+
+\textbf{Extensional equality.} Equality of arrows by source, target,
+and mapping tuple only, with presentation names excluded; the
+executable form is dataclass equality with the name field marked
+non-comparing. (Chapters 4, 9.)
+
+\textbf{Factorial power (safe finite power).} The power $f^{|X|!}$ of
+a finite endomap, always idempotent because every tail has entered its
+cycle and every cycle length divides $|X|!$. (Chapter 5; Appendix A.)
+
+\textbf{Fail-closed.} The policy of raising an exception rather than
+returning partial or degraded output; realized by the closure resource
+guards and the bridge designs of the downstream consumers.
+(Chapters 8, 9, 12.)
+
+\textbf{Fiber.} The preimage $f^{-1}(y)$ of a target element; fiber
+sizes determine the lift's Gram spectrum, norm, trace, and rank.
+(Chapter 7; Appendix A.)
+
+\textbf{Formal seed.} The pinned, axiom-audited Lean 4 development
+kernel-checking a bounded scope of the monograph's mathematics; a
+starting point, not a formalized theory. (Chapter 11.)
+
+\textbf{Functional graph.} The directed graph on a carrier with one
+edge $x \to f(x)$ per point; its components are trees hanging on
+unique cycles, the structure behind the factorial-power theorem.
+(Chapter 5; Appendix A.)
+
+\textbf{Functor laws (lift).} $A_{\id_X} = I$ and
+$A_{g \circ f} = A_g A_f$; checked exactly on the bounded family and
+at basis level in Lean. (Chapters 7, 10, 11.)
+
+\textbf{Gate 1.} The Project Coherence stage to which this prototype
+belongs; Gate 1 verification means hash checks against the manifest
+plus a full suite rerun. (Chapters 1, 9, 10.)
+
+\textbf{Generator.} A labeled typed arrow declared in a catalog; the
+alphabet unit of typed words. (Chapters 8, 9.)
+
+\textbf{Gram matrix (input).} $A_f^{*} A_f$, whose $(x, x')$ entry is
+one iff $f(x) = f(x')$; block-diagonalizes into all-ones fiber blocks.
+(Chapter 7; Appendix A.)
+
+\textbf{Gram matrix (output).} $A_f A_f^{*}$, diagonal with fiber
+sizes; distinct from the support projector whenever some fiber has
+size at least two. (Chapters 7, 9; Appendix A.)
+
+\textbf{Idempotent.} An arrow or operator equal to its own square;
+for a deterministic lift, equivalent to the underlying map fixing
+every point of its image. Idempotent lifts need not be projectors.
+(Chapters 5, 7, 9; Appendix A.)
+
+\textbf{Isometry.} An operator preserving inner products,
+$A^{*}A = I$; the lift $A_f$ is an isometry iff $f$ is injective.
+(Chapter 7.)
+
+\textbf{Kernel (proof kernel).} The small trusted core of Lean that
+re-checks every proof term; the basis of the formal seed's trust
+story. (Chapter 11.)
+
+\textbf{Kernel (TKS v8.0 kernel).} This artifact: the deliberately
+small executable reference model of typed finite-function semantics.
+The two senses of ``kernel'' are always disambiguated by context.
+(Chapters 1, 9.)
+
+\textbf{Manifest.} The JSON artifact
+(\textsc{tks-v8-typed-core-prototype} v0.1.0) recording status,
+provenance, integration boundary, formal-verification and validation
+snapshots, claims, and artifact bindings; it does not hash itself.
+(Chapters 9, 10, 12.)
+
+\textbf{Manifest-boundary regression.} The test module asserting the
+manifest's integration boundary fields, making claim drift a test
+failure. (Chapter 10.)
+
+\textbf{Noncontractivity fixture.} The constant map on two points,
+whose lift is idempotent with norm $\sqrt 2$ --- the permanent
+counterexample blocking ``lifts are contractive'' and ``idempotent
+lifts are projectors.'' (Chapters 7, 10, 11; Appendix A.)
+
+\textbf{Normal form.} The shortlex-least well-typed word denoting a
+reachable denotation, relative to a declared, versioned catalog.
+(Chapter 8; Appendix A.)
+
+\textbf{Object.} A named finite carrier; identity includes both the
+name and the ordered carrier. Implemented as \texttt{FiniteObject}.
+(Chapter 3.)
+
+\textbf{Ordered-input discipline.} The package-wide rejection, at
+construction, of sets, mappings, and one-shot iterables wherever
+order is semantic; the defense against hash-order nondeterminism.
+(Chapters 3, 9.)
+
+\textbf{Orthogonal projector.} A self-adjoint idempotent; among total
+deterministic lifts on one carrier, only the identity qualifies.
+(Chapters 7, 9.)
+
+\textbf{Partial isometry.} An operator isometric on the orthogonal
+complement of its null space; for total standard-basis lifts,
+equivalent to injectivity of the underlying map. (Chapters 7, 9.)
+
+\textbf{Path (semigroupoid path).} A nonempty sequence of arrows with
+matching adjacent objects, possibly across different carriers; has a
+typed composite and deliberately no power operation. Implemented as
+\texttt{SemigroupoidPath}. (Chapters 6, 9.)
+
+\textbf{Presentation name.} The human-facing label of an arrow,
+excluded from equality and hashing; bounded in construction cost by
+the compact integer label scheme. (Chapters 4, 9.)
+
+\textbf{Pruning soundness.} The lemma that expanding only the first
+representative of each denotation preserves all reachable denotations
+and all shortlex-least representatives. (Chapter 8; Appendix A.)
+
+\textbf{Representative-first closure.} The exploration algorithm:
+shortlex-ordered search that stores the first word reaching each
+denotation and never expands duplicates. (Chapters 8, 9; Appendix A.)
+
+\textbf{Resource guard.} Either of the two caps (accepted denotations;
+pending frontier) whose breach raises \texttt{ClosureLimitExceeded}
+from the catalog constructor. (Chapters 8, 9; Appendix A.)
+
+\textbf{Shortlex order.} Word order by length first, then
+lexicographically by generator rank sequence; extended in the
+implementation by a start-object rank tie-break. (Chapter 8;
+Appendix A.)
+
+\textbf{Small-scope hypothesis.} The empirical claim that most defects
+have small counterexamples, warranting exhaustive checking of small
+instances. (Chapter 10.)
+
+\textbf{Standard basis (standard indices).} The orthonormal basis
+$(e_x)$ of the Hilbert space attached to an object, indexed by carrier
+positions $0, \dots, |X|-1$ in declared order. (Chapters 3, 7.)
+
+\textbf{Support projector (codomain).} The diagonal zero-one matrix
+marking nonempty fibers --- the orthogonal projector onto
+$\im(A_f)$. (Chapters 7, 9; Appendix A.)
+
+\textbf{Typed word.} A start object together with a sequence of
+generator labels; syntax validated at construction, well-typedness
+certified by catalog evaluation; the empty word at $X$ denotes
+$\id_X$. (Chapters 8, 9; Appendix A.)
+
+\textbf{Validation snapshot.} The manifest record of the 2026-08-04
+suite run: result \textsc{pass}, 20 tests, with the four bounded
+exhaustive case counts. (Chapter 10.)
+
+\textbf{Verifier (Gate 1).} \texttt{scripts/verify\_tks\_v8\_gate1.py}:
+recompute and compare all artifact hashes, then rerun the executable
+suite. (Chapter 10.)
+
+\textbf{Verifier (Lean).} \texttt{scripts/verify\_psr8\_lean\_gate1.py}:
+pinned-toolchain Lake build with hardcoded single-axiom policy,
+\texttt{sorry} rejection, source-hash checks, and per-theorem
+dependency audit. (Chapter 11.)
+
+\section{Symbols}\label{appC:sec:symbols}
+
+\begin{longtable}{@{}lp{9.2cm}l@{}}
+\toprule
+Symbol & Meaning & Chapters \\
+\midrule
+\endhead
+$X, Y, Z$ & finite objects (named ordered carriers) & 3--8 \\
+$|X|$ & carrier length of $X$ & 3, 5, 7 \\
+$f : X \to Y$ & a total finite-function arrow with declared types & 3--8 \\
+$\id_X$ & the identity arrow on $X$ & 4 \\
+$g \circ f$ & typed composition, defined iff target of $f$ equals source of $g$ & 4 \\
+$f^{n}$ & monoid power of an endomap ($f^{0} = \id_X$) & 5, App.~A \\
+$f^{|X|!}$ & the safe finite (factorial) power, always idempotent & 5, App.~A \\
+$|X|!$ & factorial of the carrier size & 5 \\
+$f^{-1}(y)$ & the fiber of $f$ over $y$ & 7, App.~A \\
+$\im f$, $\im(A_f)$ & image of a map; range of a lift & 7 \\
+$H_X$ & the Hilbert space with standard basis indexed by $X$ & 7 \\
+$e_x$ & the standard basis vector at carrier position $x$ & 7 \\
+$A_f$ & the deterministic standard-basis lift of $f$ & 7, 9, App.~A \\
+$A_f^{*}$ & the adjoint (conjugate transpose) of $A_f$ & 7, App.~A \\
+$A_f^{*} A_f$ & the input-collision Gram matrix & 7, 9, App.~A \\
+$A_f A_f^{*}$ & the output Gram matrix, diagonal of fiber sizes & 7, 9, App.~A \\
+$\lVert A_f \rVert$ & the operator norm, $\sqrt{\max_y |f^{-1}(y)|}$ & 7, App.~A \\
+$\trace(\cdot)$ & matrix trace; $\trace(A_f^{*}A_f) = |X|$ & 7, App.~A \\
+$\rk(\cdot)$ & matrix rank; $\rk(A_f) = |\im f|$ & 7, App.~A \\
+$J_m$ & the $m \times m$ all-ones matrix, eigenvalues $m$ and $0$ & 7, App.~A \\
+$I$, $I_{H_X}$ & the identity matrix / operator & 7 \\
+$G = (g_0, \dots, g_{k-1})$ & a declared, ordered generator catalog & 8 \\
+$w$, $u$, $v$ & typed words over a catalog & 8, App.~A \\
+$\llbracket w \rrbracket$ & the denotation of a typed word & 8 \\
+$<_{\mathrm{slex}}$ & shortlex order on typed words & 8, App.~A \\
+$\NF_G(a)$ & the shortlex-least word denoting $a$ over catalog $G$ & 8, App.~A \\
+$\varepsilon_X$ & the empty word at object $X$, denoting $\id_X$ & 8, App.~A \\
+$|Y|^{|X|}$ & the count of total maps $X \to Y$; the finiteness bound & 8, 10 \\
+$\cC$ & the typed finite-function category of the kernel & 2--4 \\
+$\Ob$, $\Hom$ & objects and hom-sets of a category & 2 \\
+$\Set$ & the category of sets (mathematical background) & 2 \\
+$\PSh$, $\Sh$ & presheaf and sheaf constructions (open scope; companion program) & 2, 11, 12 \\
+\bottomrule
+\end{longtable}
+
+\section{Status vocabulary}\label{appC:sec:status}
+
+The artifact's claim discipline uses a fixed vocabulary, quoted from
+the specification and manifest; these words are load-bearing and are
+never paraphrased in this monograph.
+
+\textbf{Gate 1 prototype / in review / not frozen.} The artifact's
+document status: a candidate under review, whose content may change
+before any freeze. (Chapters 1, 9.)
+
+\textbf{Ring 4.} The admission ring of the artifact and of every
+research transfer touching it: the outermost ring, farthest from
+licensed canonical status. (Chapters 1, 12.)
+
+\textbf{Not licensed.} No permission exists to rely on the item as
+established or to transfer it downstream; distinct from ``false'' ---
+a true statement can be unlicensed. (Chapters 1, 12; Appendix B.)
+
+\textbf{Open.} The obligation or question has no closing evidence
+receipt; drafting documents does not close it. (Appendix B.)
+
+\textbf{Executable validation.} Evidence consisting of passing tests
+of the running implementation, bounded by their scopes. (Chapter 10;
+Appendix B.)
+
+\textbf{Partial formal verification present.} A pinned, axiom-audited
+proof-assistant development checks part --- and only the named part
+--- of the relevant scope. (Chapter 11; Appendix B.)
+
+\textbf{Informal proof present / informal correctness argument.} A
+complete human-checked mathematical argument exists without a
+kernel-checked counterpart. (Chapters 7, 8; Appendix B.)
+
+\textbf{Standard result.} The mathematics is classical and carries no
+novelty claim; the ledger records provenance, not discovery.
+(Chapters 5, 12; Appendix B.)
+
+\textbf{Pass (validation snapshot).} The recorded outcome of the
+2026-08-04 suite run --- 20 tests, four bounded exhaustive families
+--- certifying exactly the bounded behavior and nothing beyond it.
+(Chapter 10.)

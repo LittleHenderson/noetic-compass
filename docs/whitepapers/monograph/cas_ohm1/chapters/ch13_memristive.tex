@@ -1,0 +1,159 @@
+\chapter{The Memristive Extension Boundary}\label{mem:chapter}
+
+Every chapter to this point has treated the effective resistance $r_{\mathrm{eff}}$ as a fixed parameter of a calibration profile: fitted once on the calibration split, carried with uncertainty, and used---under guard---to predict held-out response. Real systems under repeated intervention rarely oblige such stationarity. A steered model revisited across a long session, a fine-tuned checkpoint drifting under continued training, an activation channel whose sensitivity depends on what was recently driven through it---all of these suggest that the response parameter might itself be a function of history. Classical circuit theory encountered the same structural question half a century ago and produced a precise mathematical answer: the memristor and, more generally, memristive systems \cite{chua71,chuakang76}. This chapter presents that theory as \emph{motivating mathematics only}; states the provisional, explicitly nonphysical extension that CAS-Ohm 1.0 reserves for history-dependent response; specifies the model-state record that any such extension must carry; erects the typing separations that keep the extension from collapsing into either a memoryless fit or an electrical claim; and fixes the evidentiary bar that the word ``memristive'' must clear before it is anything more than an analogy. The chapter's conclusion is its title: this is a \emph{boundary} chapter. Nothing stateful, material, or physical is admitted in the current candidate, and the extension described here is a typed placeholder for a hypothesis, not a feature.
+
+\section{Classical memristor theory as motivating mathematics}\label{mem:sec:classical}
+
+\subsection{The missing-element argument}\label{mem:sec:missing}
+
+Chua's 1971 argument \cite{chua71} is an argument from symmetry, and its form matters more to CAS-Ohm than its electrical content. Circuit theory before 1971 recognized four fundamental variables---voltage $v$, current $i$, charge $q$, and flux linkage $\varphi$---and three fundamental two-terminal elements, each defined by a constitutive relation between a pair of them: the resistor relating voltage and current, the capacitor relating charge and voltage, and the inductor relating flux and current. Two further pairings are definitional rather than elemental: charge is the time integral of current, and flux linkage is the time integral of voltage. Laying out the six pairings, Chua observed that exactly one relation had no element: the relation between charge and flux,
+\[
+\varphi = f(q) \quad \text{or} \quad q = g(\varphi).
+\]
+He therefore postulated, on grounds of completeness, a fourth element---the \emph{memristor}, for memory resistor---defined by such a constitutive relation. Differentiating the charge-flux relation with respect to time yields
+\[
+v(t) = M(q(t))\, i(t), \qquad M(q) = \frac{d\varphi}{dq},
+\]
+so the memristor behaves at each instant like a resistor whose resistance $M(q)$ depends on the entire history of current through it, since $q(t)=\int_{-\infty}^{t} i(\tau)\,d\tau$. The element is not a resistor with noise or drift; it is a different element, with a state variable (charge) that integrates its own port history.
+
+The argument's relevance here is methodological. Chua did not begin from an observed device; he began from a \emph{table of relations} and asked which cell was unoccupied. CAS-Ohm's quantity ontology (Chapter~3) is likewise a table---quantity kinds crossed with unit kinds under an admissibility map---and the question this chapter entertains is likewise a table question: the candidate occupies the cell ``response parameter, constant within profile,'' and the memristive literature demonstrates that the adjacent cell, ``response parameter, function of integrated history,'' is mathematically coherent and physically realized in at least one domain. Coherence and realization elsewhere are the full extent of the motivation. A cell being well-defined does not put anything in it.
+
+\subsection{Memristive systems: state-dependent constitutive relations}\label{mem:sec:systems}
+
+The 1976 generalization by Chua and Kang \cite{chuakang76} widened the class from the ideal charge-flux element to \emph{memristive systems}: input-output systems of the form
+\[
+\dot x = f(x, u, t), \qquad y = g(x, u, t)\, u,
+\]
+where $u$ is the input (current or voltage), $y$ the output (voltage or current), and $x$ an internal state vector evolving under its own dynamics. Two features define the class. First, the output relation is \emph{state-dependent but instantaneously linear in the input}: at frozen state $x$, the system is an ordinary linear resistance $g(x,u,t)$; all nonlinearity and all memory live in the state evolution. Second, the output is zero whenever the input is zero---$y = g(\cdot)\,u$ vanishes with $u$---which distinguishes memristive systems from systems with internal sources: they store history, not energy to be released at the port.
+
+This generalization is the mathematically honest ancestor of the CAS-Ohm extension, more so than the ideal memristor, because it makes no completeness claim and requires no conserved integral quantity. It says only: here is a typed decomposition in which a response coefficient is a function of a declared state, and the state has a declared update law. Everything the extension of Section~\ref{mem:sec:extension} does is transpose that decomposition into the candidate's nonphysical coordinates.
+
+\subsection{Pinched hysteresis as signature}\label{mem:sec:hysteresis}
+
+The memristive-systems paper also established the class's observable signature: under any bipolar periodic input, the input-output trajectory of a memristive system traces a \emph{pinched hysteresis loop}---a Lissajous figure through the origin. The loop is pinched because output vanishes with input (the zero-crossing property above), and it is a loop because the state, lagging the input, makes the response on the upstroke differ from the response on the downstroke. As input frequency increases, the state has less time to move within a cycle, the loop collapses toward a single-valued curve, and the system approaches an ordinary resistor.
+
+The signature matters to this chapter for one reason: it is a \emph{behavioral} criterion, statable without reference to the device's material or mechanism. A system is exhibiting memristive phenomenology when its dose-response trajectory is path-dependent in the pinched, frequency-collapsing way---whatever the system is made of. That is precisely the kind of criterion a nonphysical extension needs, and Section~\ref{mem:sec:bar} adopts its structure (though not its electrical variables) as the evidentiary bar: the CAS-Ohm question is whether alpha-response trajectories show held-out path dependence of this character beyond what any memoryless account reproduces. It must be said with equal clarity that the signature has been the site of the memristor literature's own overclaim disputes---which physical devices are ``really'' memristors is a contested question that this candidate has no stake in and imports no position on. The mathematics is borrowed; the controversies, and the devices, are not.
+
+\section{The provisional nonphysical extension}\label{mem:sec:extension}
+
+\begin{definition}[Provisional memristive-form extension]\label{mem:def:extension}
+A \emph{memristive-form response profile} is a calibration profile (Chapter~5) augmented with an explicit state variable $x_t$ and two profile-bound maps
+\[
+x_{t+1} = F_{\mathrm{profile}}(x_t, a_t, y_t, c_t;\, \theta), \qquad
+r_{\mathrm{eff},t} = G_{\mathrm{profile}}(x_t;\, \theta),
+\]
+where $a_t$ is the alpha dose at step $t$, $y_t$ the observed activation response, $c_t$ the declared context covariates, and $\theta$ the profile parameters. The instantaneous prediction remains $\hat y_t = a_t / r_{\mathrm{eff},t}$ under all the guards of Chapter~6, with $r_{\mathrm{eff},t}$ carrying the unit \textsc{alpha per activation} at every $t$. The extension is \emph{provisional} (no implementation is admitted) and \emph{nonphysical} ($a$, $y$, $r$, and $x$ carry model units only; no electrical quantity appears anywhere in the typing).
+\end{definition}
+
+The transposition from Section~\ref{mem:sec:systems} is exact and deliberately narrow. $F_{\mathrm{profile}}$ plays the role of the state evolution $f$; $G_{\mathrm{profile}}$ plays the role of the state-dependent coefficient $g$; and the instantaneous linearity of the memristive class is preserved in the form of the prediction, which at frozen $x_t$ is the ordinary profile prediction of Chapter~6. What is \emph{not} transposed is as important: there is no analog of charge (no claim that any integral of dose is conserved or physically meaningful), no zero-crossing axiom (whether the modeled response vanishes with dose is an empirical property of a profile, not an assumed one), and no port, device, or energy semantics of any kind.
+
+\subsection{The model-state record}\label{mem:sec:staterecord}
+
+A state variable that is not itself typed evidence would reintroduce, at the dynamics level, every bare-number pathology that Chapter~3 eliminated at the value level. The extension therefore requires that $x_t$ be carried by a \emph{model-state record} with seven mandatory components, each of which exists to close a specific hole.
+
+\emph{Initialization.} The record declares $x_0$ and the procedure that produced it---a fitted initial state, a declared rest state, or a burn-in protocol with its length and acceptance rule. Without a declared initialization, any trajectory can be retrofitted by choosing $x_0$ after seeing the data; the initial state is a parameter and must be frozen like one.
+
+\emph{Update law.} The record binds the exact $F_{\mathrm{profile}}$: functional form, parameter values $\theta$, and implementation digest. The update law is the extension's scientific content; an undocumented update law is an unfalsifiable one.
+
+\emph{Sampling interval.} The record declares the time base on which $t$ advances---per intervention, per token, per session, or per wall-clock unit---and the rule for events between samples. Memristive phenomenology is frequency-dependent (Section~\ref{mem:sec:hysteresis}); a state model without a declared sampling interval cannot even state the frequency-collapse prediction, let alone test it.
+
+\emph{Reset rule.} The record declares what returns the state to a reference value: session boundary, explicit reset intervention, decay to rest, or nothing. The reset rule is where the extension meets the profile-relativity discipline of Chapter~5---if state persists across sessions, then a session is no longer an exchangeable unit, and the split constructions of the closure protocol (Chapter~12) must partition at a coarser grain. Declaring the reset rule is declaring the exchangeability structure of the data.
+
+\emph{Drift model.} The record separates modeled state dynamics from unmodeled parameter drift: a declared drift model for $\theta$, with bounds, expiry, and the relationship to the profile's existing drift and staleness machinery (Chapter~11). Without this separation, slow drift is indistinguishable from slow state evolution, and the extension would absorb every calibration failure as ``memory.''
+
+\emph{Uncertainty.} The state estimate carries typed uncertainty, propagated through both $F$ and $G$ into $r_{\mathrm{eff},t}$ and thence into every prediction and residual. A point-estimated hidden state feeding a point-estimated resistance would violate the uncertainty obligations of Chapters~3 and~11 twice over, at one remove from visibility---which is exactly where such violations do the most damage.
+
+\emph{Provenance.} The state record carries full lineage: the observations that informed each update, ordered derivation parents, and the operation bindings of Chapter~11. A history-dependent parameter whose history is not itself evidence would be a rumor with a time constant.
+
+\begin{remark}[The record is the admission price]\label{mem:rem:price}
+The seven components are not documentation niceties; they are the conditions under which a stateful extension remains inside the candidate's evidence discipline at all. An implementation that produced $r_{\mathrm{eff},t}$ from an untyped internal buffer would fail the completeness predicate of Chapter~11 (missing provenance) regardless of its predictive merit. In this precise sense the extension is already governed before it exists: the type system was built first so that the dynamics, if ever admitted, arrive pre-constrained.
+\end{remark}
+
+\subsection{The refitting alternative}\label{mem:sec:refitting}
+
+Before any state model is entertained, an implementation must consider the cheaper alternative: if $r_{\mathrm{eff}}$ appears to change over time, refit it---new calibration session, new profile, new digest. Refitting stays entirely inside the existing machinery of Chapter~5 and asserts nothing about dynamics; it treats nonstationarity as a sequence of stationary profiles with declared validity intervals, which is exactly what the drift and expiry fields already support. The memristive-form extension is justified only where refitting demonstrably fails: where the parameter's movement is fast relative to any feasible calibration cadence, systematic in its dependence on the dose history, and \emph{predictable} from that history in the held-out sense of the bar. The order of preference is fixed: stationary profile, then refit schedule, then declared drift model, and only last a state model---each step adding machinery only when the previous step's residual misfit is documented. A state model adopted before the cheaper accounts were exhausted would be complexity acquired without evidence, and its apparent success would be uninterpretable against the unexplored alternatives.
+
+\section{Typing separation: neither a memoryless fit nor an electrical memristor}\label{mem:sec:typing}
+
+The memristive-form profile must be separated by type from the two things it most nearly resembles, and the separations guard against opposite failure modes.
+
+\subsection{Not a memoryless fit}\label{mem:sec:notmemoryless}
+
+A memristive-form profile with a degenerate update law ($F_{\mathrm{profile}}(x,a,y,c;\theta) = x$ for all inputs) is extensionally a constant-resistance profile, and a sufficiently flexible memoryless model---one whose $r_{\mathrm{eff}}$ depends on rich instantaneous covariates $c_t$---can mimic many trajectories that look history-dependent. The typing therefore refuses to let the two share a kind: a profile either declares state dynamics (and carries the full model-state record, and submits to the evidentiary bar of Section~\ref{mem:sec:bar}) or declares none (and is forbidden the vocabulary of memory, hysteresis, and path dependence in every derived artifact). The separation prevents the cheapest failure: a memoryless fit with extra parameters being \emph{described} as memory because the description is evocative. Under the candidate's discipline, ``the model remembers'' is a typed claim requiring a state record, not a figure of speech.
+
+\subsection{Not an electrical memristor}\label{mem:sec:notelectrical}
+
+In the other direction, the separation from physical memristance is total and inherited from the unit ontology. The state $x_t$ is not charge and integrates nothing physical; $r_{\mathrm{eff},t}$ is in \textsc{alpha per activation}, a unit whose physical aliases (volt, ampere, ohm) are forbidden (Chapter~3); no material device, physical circuit, or electrical measurement is referenced by any component of the model-state record. The classical theory of Section~\ref{mem:sec:classical} stands to this extension exactly as Ohm's law stands to the base model: as the \emph{shape} of a mathematical question, borrowed under explicit typing that prevents the shape from smuggling in the substance. A future physical claim of any kind would require the separate, explicitly typed and instrumented physical profile that the ontology names and the candidate does not contain---and it would additionally inherit the authentication preconditions of Chapter~11, since a physical measurement claim without authenticated instrument evidence would be doubly inadmissible.
+
+\begin{ruleenv}[Vocabulary gate for the word ``memristive'']\label{mem:rule:vocab}
+In candidate artifacts, ``memristive'' may be used only as (i) a citation to the classical literature, (ii) the name of the provisional extension type of Definition~\ref{mem:def:extension}, or (iii) a registered hypothesis about a specific profile, and in case (iii) only after the evidentiary bar of Section~\ref{mem:sec:bar} has been met for that profile. Unqualified uses---``the system is memristive,'' ``CAS-Ohm implements a memristor''---are forbidden wording in the same class as the physical-telemetry vocabulary of Chapter~12.
+\end{ruleenv}
+
+\section{Interaction with the existing machinery}\label{mem:sec:interaction}
+
+A stateful extension would touch nearly every structure built in the earlier chapters, and the touch points are worth enumerating now, because each is a place where an implementation could silently weaken an existing guarantee if the interaction were left implicit.
+
+\emph{Profiles and digests.} $F_{\mathrm{profile}}$, $G_{\mathrm{profile}}$, $\theta$, and all seven components of the model-state record become profile-bound content: they enter the canonical digest, so two profiles differing only in reset rule or sampling interval are different profiles, non-interchangeable without a stated bridge. This is Chapter~5's discipline extended to dynamics, and it forecloses the tempting shortcut of treating state-model variants as ``the same profile with options.''
+
+\emph{Splits and exchangeability.} The split constructions of Chapters~6 and~12 assume that the split's units are exchangeable. Under state, observations within a session are coupled through $x_t$, so the unit of splitting must be at least the maximal state-coupled span---the interval between resets. Held-out evaluation of a stateful profile therefore means held-out \emph{trajectories}, not held-out samples; a sample-level split of state-coupled data would leak history across the boundary and manufacture exactly the spurious ``memory'' the bar is designed to reject.
+
+\emph{Residuals.} The residual discipline of Chapter~10 acquires a second uncertainty source: $\hat y_t$ inherits variance from the state estimate as well as from $\theta$. Propagation through both $F$ and $G$ is mandatory (Section~\ref{mem:sec:staterecord}), which widens prediction intervals and thereby \emph{raises} the bar for calling any residual anomalous. This is the intended direction: a stateful model that narrowed its intervals by point-estimating its own hidden state would flag more anomalies while knowing less.
+
+\emph{Classification.} Under state, the dose-response region of Chapter~7 becomes time-indexed: a profile may be \textsc{active} at $t_1$ and \textsc{saturation} at $t_2$ under the same instantaneous dose because $x$ has moved. The no-diagnosis rules extend pointwise---no diagnostic from a region-excluded \emph{time}, not merely from a region-excluded profile---and the classification record must bind the state estimate it was computed against.
+
+\emph{Networks.} The structural operations of Chapter~9 assume component stationarity within the aggregation's scope; a state-dependent component resistance makes every series or parallel aggregate a function of the joint state trajectory. Until an admitted stateful profile exists this is moot, but the gate is stated now: network operations over memristive-form components are undefined in the candidate and would require their own capability, their own evidence, and their own registered hypotheses.
+
+\emph{The closure protocol.} A Gate~5 run on a stateful hypothesis freezes, in addition to everything in Chapter~12's step one, the state model itself: $F$, $G$, $\theta$'s fit procedure, initialization, reset schedule, and the path-dependence statistic. The six control types acquire stateful analogs---in particular, schedule-permuted controls (the same doses in a different order), which are the sharpest test of path dependence, since a memoryless model is order-invariant by construction and a stateful one is falsified by order-invariance of the data.
+
+\section{Failure modes of stateful modeling}\label{mem:sec:failures}
+
+The extension's guards are best understood through the failures they anticipate. Four are documented here as standing threats, so that a future implementation review can check each by name.
+
+\begin{threat}[State as overfitting sponge]\label{mem:threat:sponge}
+A state vector with enough dimensions can absorb any residual structure, including noise: the fitted trajectory of $x_t$ becomes a re-description of the training data rather than a model of the system. The bar's matched-parameter-budget clause and held-out-trajectory requirement are the countermeasures; the review question is always whether the memoryless baseline was given a genuinely equal budget and equally rich instantaneous covariates.
+\end{threat}
+
+\begin{threat}[Drift absorption]\label{mem:threat:drift}
+Slow parameter drift---the phenomenon the profile expiry machinery of Chapter~11 exists to catch---can be fitted as slow state evolution, converting a calibration failure into an apparent memory finding. The model-state record's drift-model component forces the separation: a profile must declare which slow changes are modeled state and which are staleness, and a reviewer must be able to ask whether the ``memory'' survives when the drift model is given first claim on the variance.
+\end{threat}
+
+\begin{threat}[Retrofitted initialization]\label{mem:threat:init}
+With $x_0$ free, a trajectory's early behavior can be fit after the fact by choosing the initial state that makes the model look prescient. The initialization component (declared $x_0$ or frozen burn-in protocol) removes the freedom; the review question is whether initialization was fixed before the evaluation data were seen.
+\end{threat}
+
+\begin{threat}[Narrative memory]\label{mem:threat:narrative}
+The subtlest failure is linguistic: describing covariate sensitivity, drift, or session-to-session variation as the system ``remembering,'' without any typed state model at all. Rule~\ref{mem:rule:vocab} exists for this case. The candidate's discipline is that memory claims are expensive---they cost a state record, a preregistered statistic, and a beaten baseline---and any memory talk that has not paid is forbidden wording.
+\end{threat}
+
+\begin{example}[A minimal hypothetical state model]\label{mem:ex:minimal}
+For concreteness only: a one-dimensional fatigue state $x_t \in [0,1]$ with linear relaxation dynamics
+\[
+x_{t+1} = (1-\lambda)\,x_t + \mu\,|a_t|, \qquad
+r_{\mathrm{eff},t} = r_0\,(1 + \kappa x_t),
+\]
+$\theta = (\lambda, \mu, r_0, \kappa)$, models a channel whose resistance rises with recent dosing and relaxes at rate $\lambda$. The model-state record would declare $x_0 = 0$ at session start (reset rule: session boundary), the per-intervention sampling interval, a drift model on $r_0$ distinct from the dynamics, and propagated uncertainty on $(x_t, \theta)$. The bar of Section~\ref{mem:sec:bar} would then demand: on held-out trajectories, this model's predictions of order effects (later doses in a burst meeting higher resistance) beat the best memoryless model given $(a_t, c_t)$ at matched budget, under a frozen comparison. The example is illustrative typing, not a proposal; no such profile is registered.
+\end{example}
+
+\section{The evidentiary bar}\label{mem:sec:bar}
+
+What would it take for a memristive-form profile to be more than notation? The bar is fixed now, in advance of any implementation, precisely so that it cannot be lowered to meet whatever an implementation happens to achieve.
+
+\begin{ruleenv}[Evidentiary bar for history dependence]\label{mem:rule:bar}
+A memristive-form profile earns its state variable only by predicting \emph{held-out} hysteresis or path dependence beyond a \emph{matched memoryless baseline}: on trajectories not used in fitting, the stateful model's predictions of path-dependent response (upstroke-downstroke asymmetry, sequence effects, frequency-dependent loop collapse, or another prespecified path-dependence statistic) must exceed the best memoryless model given the same instantaneous information $(a_t, c_t)$, the same parameter budget discipline, and the same uncertainty obligations, under a prespecified comparison rule.
+\end{ruleenv}
+
+Each clause of the bar closes a specific escape route. \emph{Held-out} closes the route by which a flexible state model memorizes its training trajectories---with enough state dimensions, any finite trajectory set can be reproduced, so in-sample loop-fitting is worth nothing. \emph{Matched memoryless baseline} closes the route by which memory is credited for work that covariates could do: the baseline must receive the same instantaneous inputs, so that only genuine dependence on the \emph{past} separates the models. Matching of parameter budgets closes the route by which the comparison rewards capacity rather than structure. And \emph{prespecified comparison} places the whole test inside the Gate~5 discipline of Chapter~12: frozen statistic, frozen tolerance, frozen verdict table, controls as applicable, negative outcomes retained without erasure. A test of this hypothesis would, like the five registered hypotheses, require the full preregistration kernel---and, like them, would leave scientific eligibility \texttt{NOT\_ESTABLISHED} pending independent audit, replication, and review.
+
+The pinched-hysteresis signature supplies the test's natural geometry but must be adapted honestly. The classical signature is stated for bipolar periodic inputs; an alpha-dose analog would be a prespecified cyclic dose schedule, with the loop statistic computed on the dose-response trajectory and the frequency-collapse prediction tested across declared sampling intervals (this is why the model-state record's sampling-interval component is mandatory). Where bipolar dosing is not meaningful for a profile, the prespecified path-dependence statistic must be defined on the schedules that are meaningful---and the choice, once made, is frozen.
+
+\begin{finding}[Status of the bar in the current candidate]\label{mem:find:status}
+No memristive-form profile exists in the CAS-Ohm 1.0 candidate. No state variable, update law, or stateful implementation is admitted; no hysteresis experiment has been designed beyond the level of this chapter, registered, or run; no calibrated history variable exists; and the evidentiary bar of Rule~\ref{mem:rule:bar} is therefore unmet vacuously---there is no candidate profile for it to judge. The bar's presence in this monograph is a precommitment, not a progress report.
+\end{finding}
+
+\section{The boundary restated}\label{mem:sec:boundary}
+
+Absent the evidence of Rule~\ref{mem:rule:bar}, ``memristive'' is an analogy and a research hypothesis---in that order, and nothing else. The analogy is legitimate: the memristive-systems decomposition is the correct mathematical form for the question ``what if the response parameter has memory,'' and borrowing a correct form is what Chapter~1 argued the whole CAS-Ohm program does. The hypothesis is registrable: a specific profile, a specific state model, and a specific path-dependence statistic could be frozen under Gate~5 tomorrow without any change to the candidate's type system, which is the practical meaning of the extension being \emph{provisional} rather than absent. But between analogy and admitted result lies everything this monograph has been about: typed state records, held-out prediction, matched baselines, preregistered comparison, retained negatives, independent recomputation, and review by parties the project does not control.
+
+\begin{boundary}[Chapter claim boundary]\label{mem:bound:chapter}
+This chapter admits nothing stateful, material, or physical. No stateful or memristive implementation, no calibrated history variable, no hysteresis or path-dependence experiment, no material device, no physical circuit, and no safety property is admitted in the current evidence. The classical theory cited \cite{chua71,chuakang76} is motivating mathematics only; its electrical content is not imported, and no position is taken on which physical devices realize it. The extension of Definition~\ref{mem:def:extension} is a typed proposal whose every use is governed by Rules~\ref{mem:rule:vocab} and~\ref{mem:rule:bar}. Artifact status \textsc{open / ring 4 / not licensed / held} governs.
+\end{boundary}

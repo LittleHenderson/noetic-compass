@@ -1,0 +1,1237 @@
+\chapter{Background: Integrity, Canonicalization, Provenance, and Authorization}\label{ch02:background}
+
+This chapter is a tutorial survey of the standard technical material on
+which the CAS Core 8 kernel builds: cryptographic hashing and content
+addressing, canonical serialization, reproducible builds and
+supply-chain integrity, provenance modeling, the
+integrity-versus-authorization distinction, threat-modeling method, and
+the distinction between process isolation and sandboxing. Everything in
+this chapter is established background from the security, systems, and
+standards literature. None of it is project novelty, and the chapter's
+framing is deliberately impersonal: the kernel appears only in forward
+pointers, as a consumer of these ideas, never as their source. The
+kernel's specific contribution---discussed in later chapters---is the
+composition of standard mechanisms into a fail-closed substrate for a
+particular research program, together with a particular design stance
+about authorization; the mechanisms themselves are the community's.
+
+\begin{remark}[How to read this chapter]\label{ch02:howtoread}
+Readers fluent in applied cryptography and security engineering can
+skim: the load-bearing artifacts are the canonicalization comparison
+axes of Section~\ref{ch02:canon-axes}, the isolation ladder of
+Section~\ref{ch02:isolation}, and the closing map from background
+concepts to kernel mechanisms in Section~\ref{ch02:synthesis}. Readers
+new to the material should read linearly; each section is written to be
+self-contained, defines its terms at first use, and states not only
+what each mechanism provides but---because the kernel's design turns on
+these negatives---what it conspicuously does not provide.
+\end{remark}
+
+\section{Cryptographic hashing and content addressing}\label{ch02:hashing}
+
+\subsection{Hash functions and their contract}\label{ch02:hashcontract}
+
+A cryptographic hash function is a deterministic function $H$ mapping
+arbitrary-length byte strings to fixed-length digests, engineered so
+that the mapping behaves, for all practical adversarial purposes, like
+a random function. Three properties make up the standard contract.
+\emph{Preimage resistance}: given a digest $d$, it is computationally
+infeasible to find any message $m$ with $H(m) = d$. \emph{Second-preimage
+resistance}: given a message $m_1$, it is infeasible to find a distinct
+$m_2$ with $H(m_1) = H(m_2)$. \emph{Collision resistance}: it is
+infeasible to find any pair $m_1 \neq m_2$ with $H(m_1) = H(m_2)$.
+Collision resistance is the strongest and most fragile of the three:
+by the birthday bound, a digest of $n$ bits offers at most on the order
+of $2^{n/2}$ work against collisions, and historical functions (MD5,
+SHA-1) fell to structural attacks far below even that bound. Current
+practice therefore standardizes on functions with comfortable margins;
+SHA-256, the function used throughout the kernel's sources, produces
+256-bit digests, giving a nominal $2^{128}$ birthday bound and, at the
+time of writing, no publicly known structural attacks that materially
+degrade it.
+
+Alongside the adversarial contract sits a humbler property that does
+much of the practical work: the \emph{avalanche} behavior by which any
+single-bit change to the input flips, in expectation, half the digest
+bits. Avalanche is what makes a digest useful as a fingerprint: near
+misses do not look near. Combined with determinism, this yields the
+basic evidence pattern of every integrity system: if two computations
+of $H$ over allegedly identical bytes disagree, the bytes differ,
+full stop; if they agree, the bytes are identical unless the
+adversary has broken the function.
+
+Two consequences of the contract deserve emphasis because they are
+routinely elided in casual use. First, a hash function is defined over
+\emph{bytes}, not over meanings. $H$ knows nothing about JSON, about
+Unicode, about numbers, about the intent of the producer. Two encodings
+of the same abstract value hash differently unless the encodings are
+byte-identical---which is the entire subject of
+Section~\ref{ch02:canonical}. Second, a digest carries no information
+about who computed it, why, or with what authority. Anyone can hash
+anything. A digest is a statement about content, never a statement
+about endorsement; the machinery that turns content statements into
+origin statements (signatures, authenticated channels, trust roots)
+is separate machinery, surveyed in Section~\ref{ch02:integrity-auth},
+and conflating the two is one of the classic errors of applied
+security engineering \cite{anderson}.
+
+\subsection{Function lifecycle and digest agility}\label{ch02:agility}
+
+Hash functions age. MD5 went from standard to broken-for-collisions
+within a decade of wide deployment; SHA-1 followed, first with
+theoretical attacks and then with demonstrated collisions; and
+systems that had woven either function into long-lived identifiers
+faced expensive migrations because a digest, once used as a name, is
+referenced everywhere and controlled nowhere. The standard
+engineering responses are worth recording as background because any
+system that persists digests inherits the problem. First,
+\emph{margin}: choose a function whose security comfortably exceeds
+present need, since migration cost dwarfs the marginal cost of a
+longer digest. Second, \emph{explicitness}: record which function
+produced each digest---in a field, a prefix, or a fixed system-wide
+declaration---so that a future migration can distinguish old names
+from new mechanically rather than by guesswork. Third,
+\emph{planned coexistence}: migrations happen by dual-hashing
+during a transition window, and schema designs that permit a second
+digest field beside the first migrate gracefully, while designs that
+hard-wire ``the'' digest do not. Fourth, a caution against
+overreach: \emph{agility} in the protocol-negotiation sense (letting
+peers choose among functions at run time) has its own failure
+modes---downgrade attacks, cross-function confusion where the same
+content has multiple live names---and evidence systems generally
+prefer a single fixed function per era with explicit migration
+events over continuous negotiation. The practical upshot for
+digest-bearing records: fix one function, name it, validate digest
+syntax strictly (length, alphabet, case convention) at every intake
+boundary, and treat any future function change as a schema-visible
+event rather than a silent substitution.
+
+\subsection{Digests as names: content addressing}\label{ch02:contentaddr}
+
+Once digests are cheap and collision-resistant, a powerful naming
+discipline becomes available: use $H(\text{content})$ \emph{as the
+name of the content}. A store keyed this way is called
+content-addressed. The discipline has properties that location-based
+naming (file paths, URLs, database keys) cannot offer:
+
+\begin{itemize}
+\item \emph{Self-verification.} Given a name and alleged content,
+anyone can check the binding by rehashing. Retrieval integrity needs
+no trusted server: a corrupt or malicious store can fail to produce
+the content, but cannot produce the wrong content undetected.
+\item \emph{Immutability of reference.} A content address names one
+byte string forever. There is no ``the file changed under the same
+name''; change produces a new name. Version history becomes a
+first-class object rather than an overwrite.
+\item \emph{Deduplication and convergence.} Identical content produced
+independently receives the same name, so replicas can be reconciled
+and duplicates collapsed without coordination.
+\item \emph{Composability via hash trees.} Structures whose nodes name
+their children by digest---Merkle trees and directed acyclic graphs---
+extend the discipline to aggregates: the root digest commits to the
+entire reachable structure, and any tampering anywhere invalidates
+the root. Version-control systems, transparency logs, and
+package-distribution systems are all elaborations of this one idea.
+\end{itemize}
+
+\subsection{Hash trees, logs, and the mechanics of aggregation}\label{ch02:merkle}
+
+The hash-tree idea deserves a slightly longer treatment, because the
+kernel's registry and receipt structures are degenerate cases of it
+and the general form explains the design pressure. In a Merkle tree,
+each leaf is the digest of a data block and each internal node is the
+digest of its children's digests; the root digest therefore commits
+to every leaf, and membership of any leaf can be proven with a
+logarithmic-size path of sibling digests. Three practical systems
+elaborate the idea in three directions. Version-control systems make
+the tree a DAG of commits, each naming its parents and its content
+tree by digest, so that a single commit identifier fixes an entire
+history; the append-only, tamper-evident character of such histories
+is a direct corollary of content addressing. Transparency logs make
+the tree an append-only sequence with signed tree heads, so that a
+log operator can prove both membership and append-only consistency
+to auditors, and equivocation---showing different histories to
+different observers---becomes detectable by gossip between observers.
+Package ecosystems make the tree a manifest: a release names its
+files by digest, a lockfile names its dependencies by digest, and
+installation verifies the closure.
+
+Two mechanical details recur in all three and matter for any system
+that records digests in evidence. First, \emph{domain separation}:
+when digests of digests are computed, leaf and node encodings must be
+distinguishable (by a prefix byte or a typed encoding), or an
+attacker can present an internal node as a leaf and forge
+memberships; the general lesson is that even hashing needs typing.
+Second, \emph{presentation discipline}: a 256-bit digest has many
+textual presentations---upper and lower hexadecimal, base64, prefixed
+and truncated forms---and systems that compare digests as strings
+must fix one presentation or normalize before comparison, since
+case-mismatched hexadecimal is byte-different while
+digest-identical. These are small points, but evidence systems live
+and die by small points; a registry that stores lowercase digests
+and receives uppercase ones will either fail closed (annoying,
+recoverable) or compare case-insensitively somewhere and exactly
+somewhere else (a latent inconsistency of exactly the kind canonical
+disciplines exist to forbid). Fixing a single normalized digest
+presentation at every interface is the standard remedy.
+
+The limits are the duals of the properties. Content addressing binds
+names to bytes, so it inherits byte-sensitivity: a semantically
+irrelevant byte change (a rewritten line ending, a reordered map key)
+produces a new name and severs every reference. Systems therefore face
+a standing temptation to normalize content before hashing---and every
+normalization is a decision about which distinctions are ``irrelevant,''
+a decision that itself needs to be explicit, deterministic, and
+recorded, or the cure reintroduces the disease. The kernel's
+two-identity discipline for line endings (raw digest and normalized
+comparison digest carried as separate, non-substitutable fields) is a
+forward pointer here: it is one project-specific answer to a
+completely standard tension.
+
+A second limit: content addressing authenticates content, not
+context. Knowing that bytes match a digest says nothing about whether
+those bytes are the \emph{right} bytes for a purpose---the current
+version, the reviewed version, the version this receipt was actually
+computed over. Binding digests to purposes is the job of provenance
+(Section~\ref{ch02:prov}) and of typed records that carry digests in
+named fields with declared roles.
+
+\section{Canonical serialization}\label{ch02:canonical}
+
+\subsection{The problem}\label{ch02:canon-problem}
+
+Digest-based evidence has a hidden premise: that equal abstract values
+produce equal bytes. Serialization formats violate this premise by
+default. The same logical map, list, or number admits many legal
+encodings, and any process that re-serializes---a different library, a
+different version, a different platform---may lawfully produce
+different bytes and hence a different digest. The result is the worst
+kind of failure for an evidence system: \emph{false negatives}
+(identical evidence appearing to differ, breaking replay comparisons
+and cache keys) and, more insidiously, \emph{false positives} via type
+punning (distinct values encoding to identical bytes, so that
+different evidence hashes equal). A canonical serialization is a
+function from abstract values to bytes that is total on a declared
+domain, deterministic, and injective on that domain: one value, one
+byte string; distinct values, distinct byte strings.
+
+\begin{definition}[Canonical encoding]\label{ch02:def-canonical}
+Let $V$ be a declared domain of abstract values. A \emph{canonical
+encoding} for $V$ is a function $c : V \to B$ into byte strings that
+is (i) total on $V$, (ii) deterministic across implementations,
+platforms, and runs, and (iii) injective: $c(v_1) = c(v_2)$ implies
+$v_1 = v_2$ under the domain's declared equality. A system adopting
+$c$ additionally declares its \emph{out-of-domain behavior}: what
+happens when a value outside $V$ is presented.
+\end{definition}
+
+Under Definition~\ref{ch02:def-canonical}, digest evidence acquires
+its intended meaning: for $v_1, v_2 \in V$, $H(c(v_1)) = H(c(v_2))$
+holds exactly when $v_1 = v_2$, up to hash collisions. The three
+clauses fail independently in practice, and each failure has its own
+signature: partiality surfaces as crashes or silent omissions on
+exotic values; nondeterminism surfaces as false difference; and
+non-injectivity surfaces as false identity, the quietest and most
+dangerous of the three. The subsections that follow survey the
+standard obstacles to each clause, because each obstacle corresponds
+to a real divergence observed across mainstream serializers.
+
+\subsubsection{Key order}\label{ch02:canon-keys}
+
+JSON objects and most map types are semantically unordered, but their
+serializations are sequences; some order must be chosen. Libraries
+default variously to insertion order, hash-iteration order (which can
+vary across runs, processes, and library versions, and in some
+languages is deliberately randomized), or sorted order under some
+collation. Any digest computed over an encoding with unspecified key
+order is nondeterministic in the fleet sense: it may be stable on one
+machine today and differ on another tomorrow. A canonical form must
+fix a total order on keys and say precisely over what it sorts---bytes
+of the UTF-8 encoding, UTF-16 code units, Unicode code points---since
+these orders differ once strings leave ASCII. A related trap is
+duplicate keys: JSON's grammar permits them, parsers disagree on
+whether the first or last wins, and an encoder that tolerates them has
+already lost injectivity at the parsing boundary. Strict systems
+reject duplicates outright.
+
+\subsubsection{Numbers}\label{ch02:canon-numbers}
+
+Numbers are the richest source of canonicalization failure. Binary
+floating point admits multiple decimal renderings of the same value
+(\texttt{1E2}, \texttt{100.0}, \texttt{1.0e+2}), and conversely,
+distinct values with renderings that careless formatting collapses.
+The modern remedy for rendering is the shortest-round-trip rule:
+render the fewest digits that parse back to the identical binary
+value. But even with rendering fixed, deeper puns remain. Is the
+integer $1$ the same value as the float $1.0$? Many serializations
+say yes by encoding both as \texttt{1}; many type systems say no. Is
+$-0$ the same as $0$? IEEE~754 distinguishes them; most decimal
+renderings do not. \texttt{NaN} and the infinities have no JSON
+representation at all, so libraries variously reject them, encode
+\texttt{null}, or emit non-standard tokens---three behaviors, three
+different digests, one input. Exact decimal quantities (the natural
+carrier for measured and monetary values) add a further layer: the
+decimal value $1.0$, the string \texttt{"1.0"}, and the integer $1$
+are three distinct typed values that naive encodings can collapse
+into one byte string. An evidence encoding must decide, explicitly,
+which numeric distinctions are real, and then either represent them
+distinguishably (for example by tagging exact decimals as typed
+objects) or exclude the ambiguous carriers from the domain entirely
+(for example by rejecting binary floats). Both are defensible; the
+indefensible option is the default one, silence.
+
+\subsubsection{Strings and Unicode}\label{ch02:canon-unicode}
+
+Unicode offers multiple byte sequences for perceptually and even
+canonically equivalent text: precomposed versus decomposed forms
+(NFC/NFD), compatibility variants (NFKC/NFKD), invisible format
+controls, bidirectional override characters, and unpaired surrogates
+that some decoders pass through and others reject. Escaping rules
+multiply encodings further: JSON permits \texttt{"/"} and
+\texttt{"\textbackslash/"}, permits any character to be
+\texttt{\textbackslash u}-escaped, and permits both short and long
+escape forms. A canonical form must pick one escaping policy and one
+normalization stance. There is also a security dimension: invisible
+and bidirectional characters enable identifiers that render
+identically but differ in bytes---a spoofing vector whenever humans
+review machine identifiers. The conservative response, standard in
+review-critical systems, is to split the string domain: machine
+identifiers are restricted to a declared ASCII profile (trimmed,
+normalized, drawn from an explicit alphabet), while unrestricted
+prose travels in separate fields that never participate in identifier
+comparison.
+
+\subsubsection{Aggregates, sharing, and cycles}\label{ch02:canon-cycles}
+
+Serialization formats describe trees; program values are graphs. Two
+structural questions follow. First, \emph{unordered containers}: a
+set has no traversal order, so any linearization imposes one; unless
+the element type carries a total order that the encoder applies, set
+encodings are nondeterministic, and strict systems simply reject sets
+from the evidence domain. Second, \emph{sharing and cycles}: a value
+reachable twice can be encoded twice (losing sharing) or by
+reference (requiring a reference scheme), and a cyclic value cannot
+be tree-encoded at all---a naive recursive encoder will not
+terminate. Robust canonicalizers are therefore explicitly bounded:
+they track visited nodes, fail on cycles, and enforce declared depth,
+node-count, and output-size limits, converting resource-exhaustion
+attacks into clean rejections. Boundedness is not a luxury; an
+encoder that can be driven to unbounded recursion or output by a
+crafted input is a denial-of-service primitive sitting in the middle
+of the evidence path.
+
+\subsubsection{Type identity}\label{ch02:canon-types}
+
+Finally, serialization erases types unless told otherwise. A tuple
+and a list, an enumeration member and its underlying value, a
+domain-specific wrapper and its payload---each pair collapses to the
+same encoding in most formats. Whether that collapse is acceptable
+depends entirely on whether the type distinction is load-bearing. In
+an evidence system where enumerated statuses are precisely the values
+that must not be forgeable by strings, the collapse is not
+acceptable, and the standard remedy is type tagging: the encoding of
+a typed value embeds a reserved marker naming its type, and the
+reserved marker is excluded from ordinary maps so that data cannot
+impersonate tags. Tagging trades a little verbosity for injectivity
+across type boundaries, and it must be paired with the exclusion
+rule---a tagging scheme whose tags can be spoofed from plain data
+has merely moved the pun.
+
+\subsubsection{A worked divergence}\label{ch02:canon-worked}
+
+To make the failure concrete, consider one modest abstract value: a
+record with a name field, a count, and a measured ratio---say the
+name \texttt{"caf\'e"}, the count one, and the ratio one-tenth. A
+survey of mainstream serializers, run naively, can lawfully produce
+all of the following encodings, each yielding a different SHA-256
+digest: keys in insertion order versus sorted order; the name with
+the accented character raw (in either NFC or NFD form) versus
+escaped (in short or long escape form); the count as \texttt{1}
+versus \texttt{1.0} (an integer widened by a numeric tower) versus
+\texttt{"1"} (stringified by a lossy channel); and the ratio as
+\texttt{0.1} versus \texttt{0.10000000000000001} (a formatter
+printing seventeen digits) versus \texttt{1E-1}. That is at least
+several dozen byte-distinct encodings of one value, produced by
+correct, widely deployed software making defensible local choices.
+An evidence pipeline in which any two components disagree on any one
+of these choices will report difference where there is identity.
+Worse, run the survey in reverse: the string \texttt{"1"} and the
+integer \texttt{1}, or a decimal one-tenth and a binary
+double one-tenth, can each arrive at the \emph{same} bytes through
+some component pair, reporting identity where there is difference.
+Every rule in a strict canonical encoding can be read off from this
+example: fix the key order, fix the string form and reject the
+invisible cases, split the numeric types and reject the ambiguous
+carrier, tag what remains, and refuse everything else.
+
+\subsubsection{Lessons from canonicalization history}\label{ch02:canon-history}
+
+The difficulty is also attested historically, and one episode is
+instructive enough to summarize as background. The XML signature
+stack of the early 2000s required canonicalization (C14N) so that
+signatures survived innocuous re-serialization, and the resulting
+specifications---canonical XML, exclusive canonicalization, and
+their interaction with signature transforms---became notorious for
+complexity: namespace inheritance, attribute ordering, whitespace in
+mixed content, and processing-instruction handling all demanded
+rules, and implementations diverged in the corners. The security
+literature subsequently documented signature-wrapping attacks in
+which the signed subtree and the processed subtree were different
+nodes of the same document---an exploitation not of the hash or the
+signature but of the gap between what was canonicalized and what
+was consumed. Two standard lessons are drawn from that experience.
+First, canonicalization complexity is attack surface: the more
+transformations sit between the value the producer meant and the
+bytes the verifier hashes, the more room for the two to diverge.
+Second, the safest designs canonicalize \emph{once}, at a single
+declared boundary, and consume exactly the bytes they verified,
+rather than re-deriving the value downstream. JSON-era designs,
+including JCS \cite{jcs} and the stricter evidence encoders
+surveyed below, are deliberately minimal in reaction: small value
+domains, few transformations, one route from value to bytes. The
+kernel's one-serialization-route-per-type rule (later chapters) is
+this lesson in project form.
+
+\subsection{RFC 8785: the JSON Canonicalization Scheme}\label{ch02:jcs}
+
+The reference point for JSON canonicalization is the JSON
+Canonicalization Scheme (JCS), published as RFC~8785 \cite{jcs}. JCS
+targets the interoperable subset of JSON (I-JSON): data that fits in
+UTF-8, with numbers representable as IEEE~754 double precision and no
+duplicate object keys. Within that subset, JCS fixes: object keys
+sorted by their UTF-16 code-unit sequences; number serialization per
+the ECMAScript shortest-round-trip algorithm; a minimal, fixed string
+escaping; no insignificant whitespace; and UTF-8 output. The design
+philosophy is deliberate reuse: by matching ECMAScript's own
+serialization behavior, JCS lets a large installed base produce
+canonical output with modest effort, and it achieves its goal of
+byte-stable digests for I-JSON data across conforming
+implementations.
+
+Two of the scheme's choices repay a closer look, since they
+illustrate how a canonicalization standard turns the obstacles of
+the preceding subsections into decisions. The key-ordering rule
+sorts object keys by comparing their UTF-16 code-unit sequences.
+For ASCII keys this coincides with byte order, but outside the
+basic multilingual plane the choice is visible: characters encoded
+with surrogate pairs in UTF-16 compare differently under
+code-unit order than under code-point or UTF-8 byte order, so the
+same object can sort differently under a plausible-but-wrong
+implementation and produce a plausible-but-wrong digest. The rule
+is a reminder that ``sorted keys'' is not yet a specification;
+\emph{sorted by what} is. The number rule adopts the ECMAScript
+serialization algorithm, which emits the shortest decimal string
+that round-trips to the same IEEE~754 double, with fixed rules for
+when exponent notation appears and with negative zero serialized
+as \texttt{0}. This buys cross-implementation byte stability for
+every representable double, at the declared price of the domain
+restriction: values needing more than double precision, and the
+non-finite values, are simply outside I-JSON and hence outside the
+scheme's promises. Systems whose evidence includes such values must
+carry them in strings or tagged structures by their own
+convention---which is precisely the pattern the strict encoder
+family adopts for exact decimals.
+
+Equally instructive is what JCS deliberately does not do. It does not
+extend the value domain: sets, cycles, and shared structure are
+outside JSON and hence outside JCS. It does not distinguish numeric
+types: within I-JSON, a number is a double, so the integer/decimal/
+float distinctions of Section~\ref{ch02:canon-numbers} are collapsed
+by the domain choice itself, and values outside double range or
+precision are simply not I-JSON. It does not normalize Unicode
+content: strings are canonicalized in escaping, not in normalization
+form, so NFC and NFD spellings of the same text remain distinct
+values. It does not tag types, bound resources, or take a stance on
+rejection versus coercion for out-of-domain values---those questions
+fall to the systems that adopt it. None of these are defects; they
+are scope decisions appropriate to JCS's interoperability goal. But
+they mean that JCS is a \emph{component} of an evidence discipline,
+not the discipline itself: a system whose evidence includes exact
+decimals, typed enumerations, or adversarial inputs must layer domain
+restrictions, tagging, and bounds on top of---or instead of---the
+interoperability-oriented core.
+
+\subsection{The rejection stance}\label{ch02:canon-rejection}
+
+The out-of-domain axis deserves a short argument of its own, because
+it is where evidence encoders and general-purpose serializers part
+company most sharply. A general-purpose serializer is judged by how
+much it can encode; faced with a set, it sorts or lists it; faced
+with a NaN, it emits a null or a token; faced with an unknown
+object, it calls a fallback hook. Every one of these accommodations
+is a silent semantic decision made on the producer's behalf, and in
+an evidence setting each becomes a pun generator: the sorted set is
+now indistinguishable from a sorted list; the null-for-NaN is
+indistinguishable from a genuine null; the fallback-encoded object
+is indistinguishable from a hand-built map that happens to match.
+The coercion that makes the serializer convenient makes the digest
+ambiguous, and digest ambiguity is unrecoverable downstream---no
+consumer of the digest can reconstruct which of the collapsed
+values was meant.
+
+The rejection stance inverts the judgment: an evidence encoder is
+judged by how little it encodes without instruction. Everything
+outside the declared domain fails closed, with an error naming the
+offending value and the rule it violates, at the moment and place
+where the producer---who alone knows what was meant---can fix it.
+The cost profile is the mirror image of coercion's: friction is
+paid up front, visibly, per producer, while the benefit (every
+digest in the system means exactly one thing) accrues silently,
+system-wide, forever. Which stance is right is not absolute but
+positional---the same organization may correctly run coercing
+serializers at its logging edges and a rejecting encoder at its
+evidence core---and the classic failure is stance drift: an
+evidence path that, under delivery pressure, imports the convenient
+serializer ``temporarily.'' The stance is therefore best enforced
+structurally (a single blessed encoder for the evidence domain, no
+alternative import path), which is the design shape later chapters
+describe for the kernel; the argument for it, as this section has
+tried to show, is entirely general.
+
+\subsection{Comparison axes for canonical encodings}\label{ch02:canon-axes}
+
+Surveying the design space, canonical encodings can be compared along
+seven axes, summarized in Table~\ref{ch02:tab-axes}.
+
+\begin{enumerate}
+\item \emph{Value domain}: which abstract values are encodable at
+all---full host-language values, a format's native model, or a
+deliberately restricted evidence domain.
+\item \emph{Number policy}: single numeric type versus distinguished
+integers, decimals, and floats; treatment of non-finite values.
+\item \emph{String policy}: escaping rules; Unicode normalization
+stance; identifier profiles versus free prose.
+\item \emph{Ordering}: what is sorted, and over what collation.
+\item \emph{Out-of-domain behavior}: coerce (make something
+encodable), best-effort (encode with caveats), or reject (fail
+closed). This axis, more than any other, separates interoperability
+formats from evidence formats: coercion maximizes the chance of
+producing output; rejection maximizes the meaning of the output that
+is produced.
+\item \emph{Type identity}: erased types versus tagged types, and
+whether tags are spoofable from data.
+\item \emph{Resource bounds}: unbounded recursion versus declared
+depth, node, and size limits with cycle detection.
+\end{enumerate}
+
+\begin{table}[htbp]
+\centering
+\caption{Comparison axes for canonical serialization designs. ``JCS''
+is RFC~8785 \cite{jcs}; ``strict evidence encoders'' names the family
+of reject-and-tag designs of which the kernel's encoder (later
+chapters) is one member.}
+\label{ch02:tab-axes}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Axis & JCS (RFC 8785) & Strict evidence encoders \\
+\midrule
+Value domain & I-JSON & declared, restricted \\
+Numbers & IEEE double only & int/decimal split; floats rejected \\
+Non-finite values & outside I-JSON & rejected explicitly \\
+Strings & escape canonicalization & profiles; controls rejected \\
+Ordering & UTF-16 code-unit key sort & sorted string keys \\
+Out-of-domain & out of scope & fail closed \\
+Type identity & erased & reserved-tag typed values \\
+Resource bounds & unspecified & depth/node/size bounds; cycle fail \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The table should be read as a contrast of goals, not of quality. JCS
+optimizes for the interoperability of independently implemented
+producers over benign data; strict evidence encoders optimize for the
+evidentiary meaning of a digest over potentially adversarial data.
+The first wants maximal producers; the second wants minimal surprise.
+A mature system frequently needs both, in different places---an
+interchange layer speaking a JCS-like dialect at its edges and a
+strict encoder at its evidentiary core---and confusing the two roles
+in either direction (strictness at the interoperability edge,
+tolerance at the evidence core) produces respectively friction and
+laundering.
+
+\section{Reproducible builds and supply-chain integrity}\label{ch02:repro}
+
+\subsection{The reproducibility contract}\label{ch02:repro-contract}
+
+A build is \emph{reproducible} when, given the same source, the same
+build instructions, and a declared environment, any party can produce
+bit-for-bit identical artifacts \cite{reprobuilds}. The motivation is
+a trust gap at the heart of software distribution: users run
+binaries, but review---when it happens at all---happens on sources.
+Nothing in a conventional build pipeline connects the two: the
+binary's contents are determined not only by the source but by the
+compiler, its version and flags, the build machine's state, and
+whatever compromised any of them. Reproducibility closes the gap by
+making the source-to-binary function deterministic, so that
+independent rebuilders can each compile the source and compare
+digests. Agreement among independent parties establishes---to the
+strength of the hash function and the independence of the
+rebuilders---that the distributed binary is what the reviewed source
+produces. A single malicious or compromised builder can no longer
+substitute a backdoored artifact without every honest rebuilder's
+digest disagreeing.
+
+Achieving bit-for-bit determinism is an exercise in hunting down
+incidental environment leakage, and the catalog of leaks doubles as
+a catalog of what ``environment'' even means: embedded timestamps
+and dates; absolute build paths baked into debug info; locale- and
+timezone-dependent formatting; filesystem readdir order and archive
+member order; parallelism-dependent link order; uninitialized memory
+serialized into outputs; randomized identifiers and, notably,
+randomized hash-iteration order in the build tooling itself. The
+remedies are correspondingly standardized: pinned toolchains,
+normalized metadata, forced stable orderings, and declared epochs
+for anything time-shaped. The parallel with
+Section~\ref{ch02:canonical} is exact and not coincidental:
+reproducible builds are canonical serialization applied to the
+compilation function, and both disciplines reduce to the same
+maxim---every source of nondeterminism is either eliminated,
+pinned and recorded, or it silently voids digest comparison.
+
+\subsection{Pinning, lockfiles, and the verification economy}\label{ch02:repro-pinning}
+
+Between the source and the build sits the dependency graph, and the
+reproducibility discipline extends to it through pinning: a
+dependency manifest that names not version \emph{ranges} but exact
+artifacts, each with its digest, so that resolution is a lookup
+rather than a negotiation. The lockfile pattern---a generated,
+committed file recording the fully resolved, hashed closure of the
+dependency graph---is the ecosystem-standard instantiation. Its
+evidentiary reading is the important one here: a lockfile converts
+``the build used library X'' from a claim about intentions into a
+claim about bytes, checkable by rehashing. Unpinned resolution, by
+contrast, makes every build a function of the repository state of
+third parties at build time, which is exactly the kind of
+unrecorded input that voids digest comparison; the supply-chain
+attack literature is largely a catalog of ways this openness is
+exploited (dependency confusion between internal and public names,
+typosquatted packages, maintainer-account compromise followed by a
+poisoned patch release), and pinning-plus-hashing is the standard
+first line against all of them.
+
+The verification side has its own economics, worth stating because
+they explain why reproducibility is a \emph{social} mechanism and
+not merely a technical one \cite{reprobuilds}. One reproducible
+build verified by nobody provides nothing; the security benefit
+scales with the number and independence of rebuilders who actually
+recompute and compare, because the attacker must now compromise all
+of them---or the comparison channel---rather than one build server.
+Independence is doing the work in that sentence: rebuilders sharing
+the same compromised toolchain image reproduce each other's
+compromise. The design consequences that generalize to any evidence
+system are two. Cheap verification is a feature to be engineered
+deliberately---the whole pipeline from source to comparable digest
+must be runnable by an outsider at tolerable cost, or independence
+stays theoretical. And comparison results are themselves evidence
+needing the full discipline of this chapter: a rebuild receipt has
+content, provenance, and (no) authority, exactly like any other
+receipt.
+
+\subsection{Limits and the supply-chain frame}\label{ch02:repro-limits}
+
+Reproducibility, like hashing, has sharply bounded semantics.
+Bit-for-bit agreement establishes that binary corresponds to source;
+it establishes nothing about whether the source is any good.
+Reproducibly built malware is still malware, reproducibly built bugs
+are still bugs, and a reproducible pipeline whose declared toolchain
+is itself compromised reproduces the compromise faithfully---the
+classic trusting-trust regress, answerable only by diversifying or
+bootstrapping the toolchain itself. Reproducibility is thus one link
+in a supply-chain integrity story that also needs source integrity
+(version control with content-addressed history), dependency
+integrity (pinned, hashed dependency manifests), and distribution
+integrity (signed, logged releases). The general supply-chain lesson
+for any evidence system is the one the kernel's compatibility
+profile takes as a premise: an execution result is only as
+meaningful as the identity of everything that participated in
+producing it, and each participant---source bytes, interpreter,
+environment, dependencies---must be either content-addressed and
+recorded, or honestly declared out of scope. Declaring the
+out-of-scope set is not an admission of failure; it is what makes
+the in-scope claims exact. The dishonest alternative is a receipt
+that is silent about what it did not pin.
+
+\section{Provenance: entities, activities, derivations}\label{ch02:prov}
+
+\subsection{The PROV model}\label{ch02:prov-model}
+
+Where hashing answers ``is this the same content?'' and
+reproducibility answers ``does this artifact correspond to that
+source?'', provenance answers ``where did this come from, and
+through what?'' The W3C PROV model \cite{prov} standardizes the
+vocabulary. Its core is a typed graph over three node kinds.
+\emph{Entities} are things with fixed aspects---documents, datasets,
+files, a particular version of a particular artifact.
+\emph{Activities} are occurrents---processes that happen over time
+and act on entities. \emph{Agents} are things bearing responsibility
+---people, organizations, or software to which activity is
+attributed. The core edge kinds connect them: an activity
+\emph{used} an entity; an entity \emph{was generated by} an
+activity; an entity \emph{was derived from} another entity; an
+entity \emph{was attributed to} an agent; an activity \emph{was
+associated with} an agent. Derivation is the load-bearing relation
+for evidence systems: it asserts that one entity's existence and
+content depend on another's, and chains of derivation compose into
+an auditable ancestry for any artifact.
+
+Two modeling disciplines in PROV repay attention. First,
+\emph{entities are versions, not names}: the model's ``fixed
+aspects'' requirement means that a mutable thing is represented as a
+sequence of entities, one per state---which harmonizes exactly with
+content addressing, where each state has its own digest and hence
+its own natural entity identifier. Second, \emph{activities are
+first-class}: the run that produced an artifact is itself a node,
+with its own attributes (start and end, parameters, environment),
+not an annotation squeezed into the artifact. An evidence record
+that identifies its generating activity---which suite, which
+profile, which interpreter, which date---is a PROV generation edge
+in typed-record form, and the kernel's execution receipts (later
+chapters) are readable as exactly that.
+
+\subsection{Granularity, bundles, and anti-patterns}\label{ch02:prov-granularity}
+
+Applying the model well is mostly a matter of granularity decisions,
+and the standard guidance can be compressed into three choices and
+three anti-patterns. The choices: \emph{entity grain} (is the entity
+the file, the record, or the field? finer grains support sharper
+invalidation when an ancestor changes, at higher recording cost);
+\emph{activity grain} (one activity per pipeline run, per stage, or
+per operation? the right grain is the one at which parameters and
+environment are actually uniform, since an activity's attributes
+should be true of all of it); and \emph{assertion bundling} (PROV
+allows provenance about provenance---who asserted this graph,
+when---which is the hook by which provenance records themselves
+enter the integrity-and-authority stack rather than floating above
+it).
+
+The anti-patterns are the ones audit experience keeps rediscovering.
+\emph{Provenance by narrative}: ancestry recorded as prose in a
+report rather than as typed edges over identified entities---
+unqueryable, unverifiable, and quietly divergent from the artifacts
+it describes. \emph{The mutable entity}: a provenance graph whose
+nodes name mutable locations (``the config file'') rather than fixed
+states, so that the graph's truth decays as the locations change;
+the remedy is the content-addressed entity identifier already
+discussed. \emph{The absent activity}: derivation edges recorded
+without the generating activity, so that \emph{what was run}---the
+question every serious audit asks first---is unanswerable; systems
+that generate receipts as a side effect of execution, rather than
+reconstructing them afterward, avoid this by construction. Each
+anti-pattern has appeared, in some form, in the wider research
+program's history, which is why its evidence tooling records typed,
+digest-anchored records generated at execution time; the background
+point is that these are the textbook remedies, not innovations.
+
+\subsection{What provenance is not}\label{ch02:prov-limits}
+
+Provenance is descriptive, not normative. A complete, honest
+provenance graph for a worthless artifact is perfectly possible; so
+is a beautiful ancestry terminating in a poisoned root. Provenance
+assertions are, moreover, themselves just data---anyone can claim
+that an entity was derived from another---so provenance without
+integrity (content-addressed endpoints) is unverifiable narrative,
+and provenance with integrity but without authorization (authenticated
+asserters) is verifiable narrative of unknown authority. The three
+layers stack: integrity fixes \emph{what} the nodes are, provenance
+fixes \emph{how} they relate, and authorization---the subject of the
+next section---fixes \emph{who stands behind} the assertions. Systems
+get into trouble precisely when a lower layer is dressed as a higher
+one: a derivation chain read as an endorsement chain, or a generation
+record read as a review record. Keeping the layers typed and separate
+is the design discipline; the vocabulary of \cite{prov} exists so
+that the separation has standard names.
+
+\section{Integrity versus authorization}\label{ch02:integrity-auth}
+
+\subsection{Two different questions}\label{ch02:twoquestions}
+
+Security engineering has long insisted on separating two questions
+that casual system design merges \cite{anderson}. \emph{Integrity}:
+is this artifact the artifact it claims to be---unmodified,
+matching its digest, consistent with its schema?
+\emph{Authorization}: is the action this artifact licenses actually
+permitted---has a principal with the authority to permit it done so?
+The questions have different verifiers, different failure modes, and
+different machinery. Integrity is verified by computation over
+content: rehash, recheck, reparse. Authorization is verified by
+reference to a \emph{trust root}: some principal or key whose
+authority is established outside the system under discussion---by
+legal arrangement, organizational decision, or physical control---
+and from which chains of delegation descend. A message
+authentication code or a bare hash provides integrity; only a
+construction bound to an authenticated principal---a signature
+verifiable against a key whose holder is known and whose authority
+over this action is established---begins to provide authorization,
+and even then only relative to the policy that gives that key its
+meaning.
+
+The distinction is sharpest in its failure cases, which security
+engineering catalogs at length \cite{anderson}. A system that
+checks integrity and concludes authorization is vulnerable to
+\emph{laundering}: any principal able to produce
+internally-consistent artifacts---which is every principal, since
+consistency is computable---can mint permissions. The archetype is
+the self-signed assertion consumed as if countersigned: a document
+that hashes correctly, validates against its schema, and says
+``approved,'' where every one of those three facts was produced by
+the same unaccountable process. Conversely, a system that checks
+authorization but not integrity is vulnerable to substitution: a
+genuinely authorized decision applied to swapped content. Sound
+designs therefore verify both, separately, and are explicit about
+which mechanism carries which burden. Policy names who may do what;
+mechanism enforces it; and the enforcement of a policy must never be
+inferable from properties that any party can self-supply.
+
+\subsection{The mechanism inventory}\label{ch02:auth-mechanisms}
+
+It is worth inventorying, still as background, the standard
+mechanisms that occupy the space between bare integrity and full
+authorization, because their differences are exactly the
+distinctions the kernel's records must not blur \cite{anderson}.
+
+A \emph{bare hash} binds nothing to nobody: anyone can compute it,
+so it provides integrity only relative to a trusted copy of the
+digest itself. A \emph{message authentication code} binds content to
+possession of a shared secret: it proves origin-or-tampering to the
+other holder of the secret, but---because both parties can compute
+it---provides no third-party-verifiable attribution and no
+non-repudiation. A \emph{digital signature} binds content to a
+private key: any holder of the public key can verify, and only the
+private-key holder can sign, which yields attribution and
+non-repudiation \emph{relative to the binding between key and
+principal}. That binding is itself the next problem up: a
+\emph{certificate} is a signed assertion by one key about the
+identity or attributes of another, chains of certificates reduce
+many bindings to few, and the chains terminate in roots distributed
+out of band and defended by procedure---key ceremonies, hardware
+custody, audit. Above all of this sits \emph{policy}: a valid
+signature by an authentic key still authorizes nothing unless the
+governing policy assigns that key authority over that action; the
+verifier's real question is never ``is this signed?'' but ``is this
+signed by a principal whom policy entitles to license this act?''
+
+Laid out this way, the inventory exposes the category error at the
+heart of the second failure class in the introduction: a self-hashed
+artifact sits on the \emph{bottom} rung of this ladder---below the
+MAC, since not even a shared secret is involved---while presenting
+visual credentials (long hexadecimal strings, ``verified''
+vocabulary) associated with the top. Nothing about the rungs is
+subtle to a security engineer; the failure mode is that systems
+without an explicit ladder let artifacts drift up it rhetorically.
+Typed records that say which rung they occupy---this is a digest,
+this is a signature, this key's authority derives from that
+policy---are the standard countermeasure.
+
+\subsection{Trust roots and the boundary of self-certification}\label{ch02:trustroots}
+
+The deep point beneath the distinction is that authorization cannot
+be bootstrapped from inside. Every authorization chain terminates in
+a root that the verifying system takes on grounds external to
+computation: a key ceremony, a legal identity, an organizational
+appointment. A system with no such root can compute forever without
+producing a single authorized bit; the most it can honestly produce
+is tamper-evident, well-formed, thoroughly-described \emph{candidate}
+material awaiting external review. This is not a defect to be
+engineered around; it is the definition of the boundary. The honest
+design consequence, where no trust root exists, is to make the
+absence structural: represent authorization as a type the system
+cannot inhabit, rather than as a flag the system could set. The
+kernel's constant-false authorization stance, described in the
+introduction and developed in the runtime chapter, is this standard
+consequence applied without exception; the background point here is
+that it is an application of textbook doctrine \cite{anderson}, not
+an invention.
+
+\section{Threat modeling}\label{ch02:threats}
+
+\subsection{Method}\label{ch02:threat-method}
+
+Threat modeling is the discipline of systematically asking what can
+go wrong, before and during design rather than after deployment
+\cite{shostack}. The method's canonical loop has four questions.
+\emph{What are we building?}---answered with a model of the system:
+its components, data flows, and, critically, its trust boundaries,
+the surfaces where data or control crosses between principals of
+different privilege or trustworthiness. \emph{What can go wrong?}---
+answered by structured enumeration over the model. \emph{What are we
+going to do about it?}---answered by mitigations: eliminate the
+threatened element, add a control, or explicitly accept and document
+the risk. \emph{Did we do a decent job?}---answered by validation:
+checking the model against the built system and the mitigations
+against the threats.
+
+The best-known enumeration structure is STRIDE, a mnemonic over six
+threat categories: \emph{Spoofing} (claiming an identity one does
+not have), \emph{Tampering} (modifying data or code),
+\emph{Repudiation} (denying an action absent evidence),
+\emph{Information disclosure} (exposing data to those not entitled
+to it), \emph{Denial of service} (degrading availability), and
+\emph{Elevation of privilege} (gaining capability beyond one's
+authorization) \cite{shostack}. Applied per element---each process,
+data store, and data flow in the model is examined against each
+applicable category---STRIDE converts the open question ``what can
+go wrong?'' into a checklist with known blind spots rather than an
+unbounded brainstorm. Its output is a set of \emph{threat
+statements}: concrete, reviewable sentences of the form ``an actor
+with access X performs Y, causing Z,'' each paired with a
+mitigation, an acceptance, or an open item.
+
+\subsection{Trust boundaries and model hygiene}\label{ch02:threat-boundaries}
+
+The modeling step deserves its own comment, because the quality of
+everything downstream is bounded by it. The standard modeling
+artifact is the data-flow diagram: external entities, processes,
+data stores, and the flows between them, with trust boundaries drawn
+wherever a flow crosses between principals that should not fully
+trust each other---user to service, service to database, parent
+process to spawned worker, checked-out repository to executing
+toolchain. Threat enumeration then concentrates on the crossings,
+because that is where assumptions change hands: data validated on
+one side is raw on the other; an identity authenticated in one zone
+is a plain string in the next. Two hygiene rules from practice
+\cite{shostack} transfer directly to evidence systems. First,
+\emph{model the system you have, not the one you intend}: a diagram
+omitting the debug endpoint, the cache, or the ``temporary'' shared
+mutable status object will produce a threat list omitting their
+threats, and audits repeatedly find that the omitted element is
+where the incident lived. Second, \emph{boundaries are claims to be
+enforced, not facts to be assumed}: drawing a line between worker
+and parent means something only if a mechanism (a process boundary,
+a sanitized channel, a validation gate) holds it, and every drawn
+boundary should be traceable to its mechanism. A complementary
+enumeration structure, attack trees---root goal decomposed into
+conjunctive and disjunctive subgoals---is often used alongside
+STRIDE when a single high-value failure (``an unauthorized claim is
+consumed as authorized'') needs its paths enumerated exhaustively;
+the two structures answer different questions (coverage per element
+versus depth per goal) and mature models use both.
+
+\subsection{Threats as review artifacts}\label{ch02:threat-artifacts}
+
+Two features of the method matter for how this monograph is written.
+First, threat statements are \emph{design inputs}, not post-hoc
+documentation: a mechanism justified by a threat statement can be
+reviewed for whether it actually blocks the stated threat, which is
+a much sharper question than whether it is ``secure.'' Second, the
+method treats \emph{explicit risk acceptance} as a first-class
+outcome: a threat that is out of scope is written down as out of
+scope, with the reasoning, rather than silently omitted---the
+threat-model analog of the supply-chain rule that unpinned inputs
+be declared. The later chapters of this monograph follow both
+practices: each kernel mechanism is presented with the named threats
+it answers (drawn from the program's actually-observed failure
+classes, which serve as the threat catalog's empirical core), and
+the non-goals---non-sandbox, non-hermetic, non-authoritative---are
+presented as accepted, documented boundaries in exactly the sense
+of \cite{shostack}. Where a STRIDE category maps cleanly onto a
+kernel concern, the mapping is the expected one: spoofing maps to
+identity and equality attacks, tampering to digest and registry
+substitution, repudiation to receipt exactness, elevation of
+privilege to claim promotion. The mapping is noted here once so
+that later chapters can use the program's own vocabulary without
+re-deriving it.
+
+\subsection{Validation: closing the loop}\label{ch02:threat-validation}
+
+The fourth question of the loop---did we do a decent job?---is the
+one most often skipped, and its standard content is worth a
+paragraph because the monograph's evidence chapters are, in effect,
+one project's answer to it \cite{shostack}. Validation has two
+halves. Model validation checks that the diagram still matches the
+system: every component present, every flow drawn, every boundary's
+enforcing mechanism still in place---a check that must recur,
+since systems drift and threat models rot quietly. Mitigation
+validation checks that each threat statement's mitigation actually
+engages: for a fail-closed rule, that a test presents the
+threatening input and observes the refusal; for an
+unrepresentability claim, that review of the types finds no
+constructor path; for an accepted risk, that the acceptance is
+still visible in the artifacts consumers see (the false capability
+field is present in the receipt, not merely in the design notes).
+The discipline of pairing each threat with its validation evidence
+---and of distinguishing ``mitigated by design,'' ``mitigated and
+tested,'' and ``accepted and documented'' as three different
+statuses---is what turns a threat model from a design-time essay
+into a maintained contract. Where later chapters tabulate the
+kernel's threats against its mechanisms and its receipts, they are
+following this template, and the same template says exactly what
+is missing when a validation cell is empty: an open obligation,
+to be listed as such.
+
+\section{Process isolation versus sandboxing}\label{ch02:isolation}
+
+\subsection{A ladder of containment}\label{ch02:ladder}
+
+``The code ran in isolation'' is among the most overloaded sentences
+in systems engineering, and unpacking it matters wherever execution
+receipts will be consumed as evidence. It is clarifying to arrange
+the common meanings as a ladder, each rung adding a boundary the
+previous rung lacks.
+
+\emph{Rung 1: in-process hygiene.} The code runs in the same
+process, with discipline: fresh module namespaces, controlled
+globals. The weakest rung: it shares the entire address space,
+interpreter state, and permissions of its host, and any misbehavior
+is total.
+
+\emph{Rung 2: process isolation.} The code runs in a separate
+operating-system process, with a fresh address space and explicit
+communication channels. For interpreted languages the rung includes
+interpreter hygiene: launching the fresh interpreter with flags
+that suppress inherited path injection, site customization, and
+stale bytecode, and with a sanitized environment rather than the
+parent's. Process isolation protects the \emph{parent's} state from
+the child and makes the child's inputs enumerable. It does
+\emph{not} constrain what the child may do to the world: the child
+holds the same user privileges as its parent---files, network,
+devices---and shares the host's native libraries and kernel.
+
+\emph{Rung 3: OS sandboxing.} The child's privileges themselves are
+reduced: system-call filtering, namespace and container isolation of
+filesystem and network views, mandatory access control, resource
+limits. A sandboxed child that misbehaves is constrained by the
+operating system, not merely observed by its parent. Sandboxing is a
+policy mechanism and is only as strong as the policy and the kernel
+attack surface beneath it.
+
+\emph{Rung 4: virtualization and hardware isolation.} The boundary
+moves below the operating system: virtual machines, and further
+down, separate physical hardware. Stronger again, with its own
+residual channels (hypervisor bugs, side channels).
+
+\emph{Orthogonal: hermeticity.} Cutting across the ladder is the
+question of Section~\ref{ch02:repro}: is everything that
+participates in the execution content-addressed? A hermetic
+execution pins and records the identity of the interpreter, native
+libraries, and OS surface, so that the receipt names its entire
+closure. Hermeticity is orthogonal to containment---a strongly
+sandboxed execution can be non-hermetic (unpinned toolchain inside
+a strong box) and a weakly contained one can be partially hermetic
+(pinned interpreter bytes, shared host).
+
+\subsection{Interpreter-level isolation in practice}\label{ch02:interp}
+
+Because the kernel's compatibility profile lives at rung 2, the
+interpreter-hygiene details of that rung are worth spelling out in
+their standard, non-project form; the discussion is phrased for
+Python, whose mechanisms are representative. A child interpreter
+launched naively inherits far more from its parent than the
+process boundary suggests: environment variables that inject code
+paths or site customizations; the working directory and script
+directory prepended to the module search path, so that a file
+named like a standard library module shadows it; user and system
+site-packages directories, whose contents vary by machine and
+time; startup files designated by environment variables; and stale
+compiled bytecode caches that can desynchronize from their
+sources. Each inheritance channel is a way for the execution's
+behavior to depend on unrecorded host state---precisely the
+supply-chain sin of Section~\ref{ch02:repro}---and each has a
+standard closure: isolated mode (\texttt{-I}) removes the
+script-directory and user-site injection and ignores the
+environment variables that alter interpreter behavior; suppressing
+site initialization (\texttt{-S}) removes machine-dependent path
+customization; disabling bytecode writing (\texttt{-B}) prevents
+cache pollution; and an explicitly constructed, minimal
+environment replaces the inherited one. What remains, and must be
+either recorded or declared unpinned, is the interpreter binary
+itself, its standard library, and every native library it loads---
+the recording of which is content addressing again, and the honest
+declaration of which (when not recorded) is the capability-honesty
+practice below.
+
+One further rung-2 practice appears wherever isolated workers share
+a host: concurrency discipline. Two workers serializing through a
+shared resource---a cache directory, a lock file, a device---need a
+mutual-exclusion mechanism, and \emph{advisory} locks (locks that
+constrain only cooperating processes that choose to check them) are
+the common tool. The standard honesty requirements transfer: an
+advisory lock's guarantees should be stated as bounded (acquisition
+timeouts, polling intervals) and unclaimed properties---fairness,
+protection against non-cooperating processes---should be stated as
+unclaimed. A receipt that says ``serialized via advisory lock,
+without fairness claims'' is a rung-2 receipt telling the truth
+about rung 2.
+
+\subsection{Why the rung must be stated}\label{ch02:rung-honesty}
+
+The engineering point of the ladder is not that higher is always
+better---each rung has real costs in complexity, portability, and
+performance, and the right rung depends on the threat model
+(Section~\ref{ch02:threats}). The evidentiary point, which is the
+one this monograph needs, is that \emph{a receipt must state its
+rung}. An execution receipt that says ``isolated'' without saying
+which boundary held invites the consumer to assume the strongest
+reading; over time, the strongest reading becomes the folklore, and
+the folklore becomes a false premise in someone's safety argument.
+This is claim promotion (in the introduction's sense) applied to
+containment. The standard remedy is capability honesty: receipts
+carry explicit fields for the boundaries they did \emph{not}
+establish---sandboxing absent, hermeticity absent---as first-class
+negative facts, machine-readable, so that no downstream consumer
+can honestly overread the rung. The kernel's compatibility receipts,
+which expose their non-sandbox and non-hermetic status as explicit
+false capability fields, instantiate this remedy; the remedy itself
+is simply Section~\ref{ch02:threat-artifacts}'s documented-acceptance
+practice transplanted to execution evidence.
+
+\section{Synthesis: from background to kernel}\label{ch02:synthesis}
+
+The seven bodies of material surveyed here compose into a single
+picture, and it is worth assembling it once before the mechanism
+chapters descend into detail.
+
+Hashing and content addressing (Section~\ref{ch02:hashing}) supply
+the primitive: bytes can be named by content, and equal names mean
+equal bytes. Canonical serialization (Section~\ref{ch02:canonical})
+makes the primitive apply to structured values: with a total,
+deterministic, injective encoding on a declared domain, equal
+digests mean equal values and distinct values mean distinct
+digests---provided the domain, number policy, string policy, type
+tagging, and bounds are all fixed, which is why the strict
+reject-and-tag family exists alongside interoperability-oriented
+designs like JCS \cite{jcs}. Reproducible-build discipline
+(Section~\ref{ch02:repro}) extends the same determinism from values
+to executions: pin or record every participant, and declare what is
+not pinned. Provenance (Section~\ref{ch02:prov}) supplies the
+vocabulary for relating the resulting artifacts---entities generated
+by activities, derived from entities, attributed to agents---without
+ever confusing ancestry with endorsement. The
+integrity-versus-authorization doctrine
+(Section~\ref{ch02:integrity-auth}) then draws the line that the
+whole stack must respect: everything so far is computable from
+content and therefore self-suppliable, so none of it, however
+elaborate, amounts to permission; permission requires a trust root
+that computation cannot conjure. Threat modeling
+(Section~\ref{ch02:threats}) provides the method by which a design
+argues, mechanism by named threat, that its boundaries hold and
+that its accepted risks are stated rather than hidden. And the
+isolation ladder (Section~\ref{ch02:isolation}) applies the same
+honesty to execution: say which boundary held, and carry the
+negative capabilities in the receipt.
+
+Table~\ref{ch02:tab-map} records the correspondence between this
+background and the kernel mechanisms that later chapters develop.
+The right-hand column is a map of forward pointers, not a claim
+list; in every row, the idea is standard and the kernel's role is
+adoption and composition under a fail-closed stance.
+
+\begin{table}[htbp]
+\centering
+\caption{Background concepts and the kernel mechanisms that adopt
+them.}
+\label{ch02:tab-map}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Background concept & Kernel adoption (later chapters) \\
+\midrule
+Content addressing & definition digests; hash-bound artifacts \\
+Canonical encoding (strict) & evidence encoder; tagged decimals \\
+Injectivity & injective reference rendering \\
+Reproducibility discipline & compiler-byte pinning; replay rule \\
+Provenance (generation/use) & execution receipts; registry digests \\
+Integrity vs.\ authorization & constant-false authorization \\
+Trust roots & stated future-authorization constraints \\
+Threat modeling & per-mechanism threat statements \\
+Isolation ladder honesty & false capability fields in receipts \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{On the choice of references}\label{ch02:refs-rationale}
+
+A brief note on why these five citations, and not fifty, anchor
+the survey. Each was chosen as the consensus entry point to its
+literature rather than as a research frontier. RFC~8785 \cite{jcs}
+is the operative standard for JSON canonicalization---short,
+normative, and implementable from its text, which makes it the
+right fixed point for comparing stricter designs against.
+The reproducible-builds literature is summarized through the
+practitioner survey of Lamb and Zacchiroli \cite{reprobuilds},
+which consolidates a decade of project experience---the failure
+catalog, the rebuild-and-compare verification model, and the
+deployment history---in citable form. The W3C PROV ontology
+\cite{prov} is the standardized vocabulary for provenance, and
+citing the standard rather than the surrounding research keeps the
+chapter's usage checkable against a fixed document. Anderson's
+\emph{Security Engineering} \cite{anderson} is the standard
+synthesis for the integrity/authentication/authorization
+architecture this chapter leans on; the doctrine predates the
+book, but the book is where it is assembled with the failure-case
+evidence that gives it teeth. Shostack \cite{shostack} plays the
+same role for threat modeling: the four-question frame and the
+per-element STRIDE practice as taught to working engineers.
+Topics for which the chapter cites nothing by name---hash-function
+internals, XML canonicalization history, container isolation
+mechanics---are treated at the level of common professional
+knowledge, and readers wanting depth should consult the standard
+texts of those areas; the chapter's obligations are to represent
+the consensus accurately and to claim none of it, and both are
+easier to audit when the reference list is short enough to
+actually read.
+
+\subsection{Composition pitfalls}\label{ch02:pitfalls}
+
+A final piece of background: the ways in which correct components
+of this stack compose incorrectly, since several kernel rules exist
+to block specific compositions rather than specific components.
+Four pitfalls recur in the literature and in audit experience.
+
+\emph{The normalization sandwich.} Content is canonicalized, hashed,
+then re-serialized by a downstream component with different rules,
+and the re-serialization is later re-hashed for comparison. Both
+serializers are individually deterministic; the composition is not.
+Remedy: hash once at a declared boundary and transport the hashed
+bytes, or re-canonicalize with the identical, versioned encoder---
+never with a different one.
+
+\emph{The identity switch.} One component compares raw digests,
+another compares normalized digests (line endings, Unicode form,
+case), and records flow between them. Each comparison is locally
+sound; jointly they partition the artifact space differently, and
+an artifact pair can be ``equal'' in one component and ``different''
+in the next---an inconsistency an adversary can steer. Remedy: carry
+each identity as its own named field, declare which field each
+comparison uses, and forbid substitution---the two-identity
+discipline noted in Section~\ref{ch02:contentaddr}.
+
+\emph{The authority creep.} An integrity artifact is consumed by a
+chain of components, each of which adds a small interpretive step,
+until the last consumer treats it as authorization---the promotion
+gradient of the introduction, restated as a composition failure.
+Remedy: type the rungs (Section~\ref{ch02:auth-mechanisms}) so that
+each component's input and output declare their rung, and any
+rung-raising step requires the explicit machinery (a signature, a
+policy check) rather than a paraphrase.
+
+\emph{The boundary mirage.} A containment or validation boundary is
+drawn in the design and assumed by downstream components, but the
+mechanism enforcing it was weakened or removed---the sandbox that
+became a process, the schema check that became a warning. Consumers
+inherit a false premise. Remedy: capability honesty
+(Section~\ref{ch02:rung-honesty}): receipts carry the enforced
+boundary explicitly, including its negative fields, so that a
+weakened boundary changes the receipts and the change is visible.
+
+The common shape of all four is that composition erases context---
+which encoder, which identity, which rung, which boundary---and the
+common remedy is to make the context travel with the artifact as
+typed fields that fail closed on mismatch. That sentence is, in
+compressed form, the design brief the kernel sets itself; the
+mechanisms of the following chapters are its elaboration.
+
+\begin{boundary}[Non-novelty of this chapter]\label{ch02:bd-nonovel}
+Nothing surveyed in this chapter is original to the CAS Core 8
+project. Cryptographic hashing, content addressing, canonical
+serialization and RFC~8785 \cite{jcs}, reproducible builds
+\cite{reprobuilds}, the PROV provenance model \cite{prov}, the
+integrity/authorization doctrine of security engineering
+\cite{anderson}, threat-modeling method \cite{shostack}, and the
+process-isolation/sandboxing distinction are community property,
+cited here as standard background. Where later chapters describe
+kernel mechanisms in this vocabulary, the reader should attribute
+the vocabulary and the underlying techniques to this literature,
+and to the kernel only the particular composition, the particular
+domain restrictions, and the particular refusals it makes---each of
+which remains, per the kernel's own boundary, an unreviewed Ring-4
+research candidate and not a licensed or authoritative artifact.
+\end{boundary}

@@ -1,0 +1,942 @@
+\chapter{Objects, Arrows, and the Determinism Discipline}\label{ch03:chap}
+
+This chapter defines the kernel's two ground-level notions --- objects and
+arrows --- and develops the discipline that makes everything built on them
+replayable. The mathematical content is thin by design: an object is a named,
+explicitly ordered finite carrier, and an arrow is a total function between
+two declared objects, equal to another arrow exactly when the declared data
+agree. The engineering content is thick, and it is the chapter's real
+subject. Three decisions do the work: object identity includes the declared
+name, so that semantically distinct objects can never be silently coerced;
+every order-sensitive constructor input must be a replayable ordered
+sequence, with sets, mappings, and one-shot iterables rejected at
+construction; and arrow equality is extensional over declared data only, with
+presentation names excluded from equality and hashing. Each decision is
+argued, not merely announced, and each is enforced in the constructors of the
+reference implementation (\texttt{category.py} in \texttt{src/tks\_v8\_core})
+and demonstrated by negative fixtures --- tests whose entire assertion is
+that a forbidden construction fails with the right typed error. The chapter
+closes with the deepest of the three arguments: a treatment of hash-order
+nondeterminism as a general software-evidence problem, of which the kernel's
+ordered-input rule is a local solution.
+
+Throughout, statements about what the implementation does are statements
+about the Gate~1 prototype sources hashed in the project manifest; their
+evidential status is \textsc{executable validation} (ledger items
+PO-TKS8-CORE-02 and PO-TKS8-CORE-03), which is a claim about the finite
+executable model and its test suite, not a proof about all executions of all
+Python interpreters.
+
+\section{Objects}\label{ch03:sec:objects}
+
+\subsection{Definition}
+
+\begin{definition}[Finite object]\label{ch03:def:object}
+An \emph{object} is a pair
+\[
+X = (\mathrm{name}_X,\ \mathrm{carrier}_X)
+\]
+where $\mathrm{name}_X$ is a non-blank string and $\mathrm{carrier}_X$ is a
+finite, explicitly ordered sequence $(x_0, x_1, \dots, x_{n-1})$ of pairwise
+distinct, hashable elements. We write $|X| = n$ for the carrier length. The
+position of an element in the carrier is its \emph{standard index}; standard
+indices run from $0$ to $|X| - 1$.
+
+Two objects are \emph{equal} iff their names are equal \emph{and} their
+carrier sequences are equal element-by-element in order.
+\end{definition}
+
+The implementation realizes Definition~\ref{ch03:def:object} as the frozen
+dataclass \texttt{FiniteObject} with fields \texttt{name} and
+\texttt{elements}. Construction validates all four conditions --- non-blank
+string name, ordered-sequence input (Section~\ref{ch03:sec:ordered-rule}),
+hashability, pairwise distinctness --- and raises the typed error
+\texttt{ValidationError} on any violation. The class exposes
+\texttt{index(element)}, returning the standard index of a carrier element
+and raising \texttt{ValidationError} for a non-element; this method is the
+single bridge between element-level talk and index-level talk, and
+everything numerical downstream (mapping tuples, basis vectors, matrix
+entries) lives on the index side.
+
+Three consequences of the definition deserve immediate notice.
+
+First, \emph{the carrier is a sequence, not a set}. The elements are
+required to be distinct, so the carrier determines an underlying set, but
+the object is strictly more data: the same three elements in two different
+orders yield two \emph{unequal} objects. This is deliberate. The standard
+indices are the coordinates against which arrows' mapping tuples, the
+Hilbert-space basis of Chapter~7, and the shortlex machinery of Chapter~8
+are all defined; an object that forgot its order would make all of them
+ill-defined (Section~\ref{ch03:sec:ordered-rule}).
+
+Second, \emph{hashability of elements is required but hash values are never
+consulted for order}. Elements must be hashable so that fiber computations,
+deduplication tables, and denotation keys can use them in dictionaries ---
+as keys whose \emph{lookup} is hash-based but whose \emph{enumeration} the
+kernel never performs. The distinction between using a hash table for
+membership and using it for iteration is exactly the line drawn in
+Section~\ref{ch03:sec:hash-order}.
+
+Third, \emph{the name is load-bearing}. It is not a comment. It
+participates in object equality, and through object equality in composition
+legality, endomap constructibility, path well-typedness, and every
+downstream judgment. The next section argues that this is the right choice.
+
+\section{Name-inclusive identity}\label{ch03:sec:name-identity}
+
+\subsection{The anti-coercion argument}
+
+Consider the alternative: \emph{carrier-only identity}, under which two
+objects are equal whenever their ordered carriers are equal. This is the
+natural default --- it is what ``a finite set with an enumeration'' means
+mathematically --- and it is wrong for a typed kernel, for one reason:
+composition legality must track \emph{intent}, and carriers systematically
+underdetermine intent.
+
+The failure pattern is silent coercion between semantically distinct objects
+of coincidentally equal carrier. Three escalating examples:
+
+\begin{example}[Two registers over the same alphabet]\label{ch03:ex:two-registers}
+A model has two binary registers, \texttt{GateA} and \texttt{GateB}, each
+carrying the ordered carrier $(0, 1)$. Under carrier-only identity the two
+objects are \emph{the same object}, and the kernel would accept the
+composite of an arrow into \texttt{GateA} with an arrow out of
+\texttt{GateB} --- a data-flow that the modeler never asserted exists.
+Under name-inclusive identity the two objects are distinct, the composite
+raises \texttt{CompositionTypeError}, and connecting the registers requires
+writing an explicit arrow $\texttt{GateA} \to \texttt{GateB}$ --- an
+auditable modeling decision, made once, in one reviewable place.
+\end{example}
+
+\begin{example}[Coincident carriers across pipelines]\label{ch03:ex:pipelines}
+The scenario of Section~\ref{ch01:sec:untyped-scenario} ended with a
+four-element evaluative carrier and a four-element quadrant carrier. Suppose
+a refactor renames the quadrant labels so that both carriers become
+literally $(e_0, e_1, e_2, e_3)$. Carrier-only identity now merges the two
+objects, and the underived composite of that scenario --- the one that
+smuggled a quadrant row into an evaluative conclusion --- becomes legal
+again, silently, as a side effect of a renaming that touched no arrow and no
+analysis. Name-inclusive identity is immune: \texttt{EvalSummary} and
+\texttt{QuadState} remain distinct however their elements are spelled, and
+the only way to re-enable the composite is to merge the declared object
+identities themselves --- a change no reviewer would mistake for cosmetic.
+\end{example}
+
+\begin{example}[Same mathematics, different units]\label{ch03:ex:units}
+Two objects carry $(0, 1, 2, 3)$: one is a count of retries, one an index
+into a rubric. Every mathematical property of the two carriers is
+identical. No inspection of elements, cardinalities, or even attached
+arrows need reveal the difference --- the difference \emph{is} the intent,
+and the name is the only place intent lives. Dimensional-analysis
+disciplines in physical computation make the same move for the same reason:
+quantities with identical numeric representations are kept apart by a
+nominal tag because the cost of silent unit coercion is unbounded.
+\end{example}
+
+\begin{ruleenv}[Name-inclusive identity]\label{ch03:rule:name-identity}
+Object equality is equality of the pair (declared name, ordered carrier).
+No operation of the kernel --- composition, endomap construction, path
+validation, lift construction, catalog registration --- ever identifies two
+objects with different names, or two objects with the same name and
+different carriers. There is no coercion path, implicit or explicit,
+between distinct objects; the only way to relate them is an arrow.
+\end{ruleenv}
+
+The second half of the rule --- same name, different carriers, still
+unequal --- closes the converse hole: a name is not a \emph{claim} that
+overrides data, it is one component of a pair. Two versions of ``the same''
+object with different carriers (an element added, an order changed) are
+different objects, and arrows attached to the old version do not type-check
+against the new. This is again deliberate: a carrier change alters standard
+indices, hence the meaning of every mapping tuple that references the
+object, and forcing the type mismatch to surface is strictly safer than
+letting stale arrows flow into new coordinates.
+
+\begin{remark}[Cost of the rule, and why it is paid]\label{ch03:rem:cost}
+Name-inclusive identity has a real cost: it refuses some identifications a
+mathematician would make without thought, and it obliges the modeler to
+write explicit conversion arrows (often identities-on-carrier with a new
+name) at boundaries where two vocabularies genuinely coincide. The kernel
+pays this cost knowingly. The conversion arrow is not bureaucracy; it is
+the audit record of the identification --- who asserted it, in which
+version, reviewable and revocable. Every silent coercion the rule forbids
+is a place where that record would otherwise not exist.
+\end{remark}
+
+\subsection{Carrier evolution and object versioning}
+
+The same-name-different-carrier clause has a practical corollary worth
+developing: it prescribes how models \emph{evolve}. Suppose an analysis
+adds a fourth state to a three-state carrier. The tempting move ---
+mutate ``the'' object in place --- is unavailable twice over: the
+implementation's objects are frozen values, and the discipline's objects
+are identity-carrying declarations. The correct move is to declare a new
+object (in practice with a versioned name, say
+\texttt{States\_v2}, though the kernel imposes no naming scheme) and to
+relate it to the old one by explicit arrows: an inclusion
+$\texttt{States} \to \texttt{States\_v2}$ embedding the old states, and,
+where meaningful, a retraction collapsing the new state onto an old one.
+Every existing arrow remains valid against the old object --- history
+does not retype --- and participates in the new regime only through the
+declared bridges, which are ordinary arrows subject to ordinary review.
+
+The alternative regimes are both worse in characteristic ways. Silent
+in-place mutation retypes history: mapping tuples written against the
+old indices are reinterpreted against the new carrier, which is
+Scenario~I of Chapter~\ref{ch01:chap} induced deliberately. And
+carrier-only identity with mutation tracking (``the object is whatever
+the carrier currently is'') makes object identity a function of time,
+destroying the replayability of any digest computed before the change.
+Name-inclusive identity with explicit versioning is the unique regime in
+which every artifact ever produced remains exactly reinterpretable ---
+its objects are immutable values that still mean what they meant. The
+cost, once again, is explicitness; the payment, once again, is an audit
+trail.
+
+\subsection{Relation to the categorical picture}
+
+Nothing in Rule~\ref{ch03:rule:name-identity} conflicts with the
+mathematics of Chapter~\ref{ch02:chap}; it refines it. The kernel's
+category (Chapter~4 proves it is one) simply has \emph{more objects} than
+the category of bare finite carriers: one object per declared (name,
+carrier) pair, with hom-sets empty between objects the modeler has not
+connected. Categorically, names implement a discrete indexing of otherwise
+isomorphic objects --- the standard device of working in a category where
+isomorphic objects are deliberately not identified, because the
+identification is exactly what must be controlled \cite{maclanecwm}. The
+mathematical content of any construction is unchanged by the extra tags;
+the \emph{legality} of compositions is what the tags govern.
+
+\section{The ordered-input rule}\label{ch03:sec:ordered-rule}
+
+\subsection{Statement and enforcement point}
+
+\begin{ruleenv}[Ordered input]\label{ch03:rule:ordered-input}
+Every constructor input whose order affects any downstream artifact must be
+supplied as a replayable ordered sequence. Sets, mappings, and one-shot
+iterables are rejected at construction time with \texttt{ValidationError}.
+The rule is enforced for exactly seven input positions:
+\begin{enumerate}
+\item carrier elements (of a \texttt{FiniteObject});
+\item arrow mappings (the image-index tuple of a \texttt{FiniteArrow});
+\item path arrows (the arrow sequence of a \texttt{SemigroupoidPath});
+\item word labels (the generator-label sequence of a typed word);
+\item catalog objects (the object sequence of a generator catalog);
+\item catalog generators (the generator sequence of a catalog, whose
+declared order is the shortlex ranking);
+\item lift coordinate vectors (coefficient sequences fed to the
+deterministic lift).
+\end{enumerate}
+\end{ruleenv}
+
+The enforcement point is a single shared validator,
+\texttt{\_ordered\_tuple}, called by every constructor listed. Its
+acceptance condition is deliberately conservative: the input must be a
+sequence in the collections sense --- indexable, re-iterable, with an
+order that is part of its contract --- and must not be one of the
+explicitly excluded types. Excluded are:
+
+\begin{itemize}
+\item \emph{sets} (any \texttt{Set} instance): iteration order is not part
+of the contract and, for hash-randomized element types, varies by process
+(Section~\ref{ch03:sec:hash-order});
+\item \emph{mappings} (any \texttt{Mapping} instance): even where a
+concrete mapping type happens to iterate deterministically, the abstract
+contract does not promise an order, and accepting mappings would invite
+callers to encode order-sensitive data in a container whose ordering
+guarantees vary by type, language version, and implementation;
+\item \emph{one-shot iterables} (generators, iterators, streams): a
+consumed iterator re-iterates as empty, so validation and storage would
+observe different data than a second traversal; nothing about the values
+is stable enough to constitute a declaration;
+\item \emph{strings and byte strings} (\texttt{str}, \texttt{bytes},
+\texttt{bytearray}): these \emph{are} ordered sequences, and they are
+rejected anyway, because a string supplied where a sequence of elements is
+expected almost always signals an error --- it would silently explode into
+a carrier of single characters, an object the caller never intended.
+Rejecting the container forces the caller to write the character sequence
+explicitly if that is truly what is meant.
+\end{itemize}
+
+What remains --- lists, tuples, and other genuine sequences --- is
+converted to an immutable tuple at the constructor boundary, so that the
+stored order can never drift after validation.
+
+\subsection{Why exactly these seven positions}
+
+The rule is not a blanket ban on unordered containers; the kernel freely
+uses sets and dictionaries \emph{internally} where order does not reach any
+output --- membership tests, duplicate detection, fiber grouping keyed by
+element. The seven positions of Rule~\ref{ch03:rule:ordered-input} are
+exactly the places where order is \emph{semantics}:
+
+\emph{Carrier elements} fix the standard indices, and standard indices are
+the coordinate system for everything: an arrow's mapping tuple is read
+against them (position $i$ of the tuple is the image of carrier element
+$i$), and the Hilbert space $H_X$ of Chapter~7 takes its orthonormal basis
+$(e_{x_0}, \dots, e_{x_{n-1}})$ in carrier order, so that permuting the
+carrier conjugates every lift matrix by a permutation. Two enumerations of
+the same element set yield different objects with different geometry ---
+correctly so, and only tolerably so if the enumeration was chosen by the
+caller rather than by a hash table.
+
+\emph{Arrow mappings} are the function itself: the tuple
+$(t_0, \dots, t_{n-1})$ \emph{is} the total function in the tuple
+representation of Section~\ref{ch02:sec:finsets}. An unordered or
+re-orderable source for this data is an unordered function --- a
+contradiction.
+
+\emph{Path arrows} fix which composite a path denotes; composition is not
+commutative, and a path delivered as a set of arrows would denote as many
+composites as orderings.
+
+\emph{Word labels} fix both the denotation of a typed word (the composite
+of its arrows in sequence) and its identity as a word --- the thing
+shortlex compares letter by letter.
+
+\emph{Catalog objects and catalog generators} fix the closure's universe
+and, critically, the \emph{ranking} $\rho$ of
+Definition~\ref{ch02:def:shortlex}: the declared generator order is the
+lexicographic tiebreak of shortlex, so the canonical representative of
+every denotation depends on it
+(Remark~\ref{ch02:rem:slex-typed}). A catalog fed from a set would have a
+per-process canonical form --- the contradiction in terms already noted in
+Section~\ref{ch01:sec:nondet-scenario}.
+
+\emph{Lift coordinate vectors} pair coefficients with basis vectors by
+position; an unordered coefficient container does not determine a vector.
+
+In every one of the seven, the downstream artifact is either an equality
+judgment, a digest, or a canonical form. That is the criterion. Order that
+reaches none of these may be, and is, left to internal convenience.
+
+\subsection{Order sensitivity made concrete: a two-element worked example}
+
+The abstract claim ``carrier order changes downstream artifacts'' can be
+made completely concrete at the smallest nontrivial size, and the
+exercise is worth a page because it shows the change reaching all three
+artifact classes --- equality, matrices, and canonical forms --- from a
+single transposition.
+
+Let the element set be $\{u, v\}$ and consider the two enumerations:
+$X = (\texttt{Pair}, (u, v))$ and $X' = (\texttt{Pair}, (v, u))$. These
+are unequal objects (same name, different carrier order), and the
+intended map ``send everything to $u$'' is a different tuple over each:
+over $X$ it is the arrow $c$ with mapping $(0, 0)$ (both positions to
+index $0$, which is $u$); over $X'$ it is the arrow $c'$ with mapping
+$(1, 1)$ (both positions to index $1$, which is $u$ there).
+
+\emph{Equality:} $c$ and $c'$ are extensionally unequal --- different
+sources, different tuples --- although both realize ``constantly $u$''
+on the same element set. Any digest over denotation keys distinguishes
+them; a system that conflated them would be conflating the coordinate
+systems in which every other arrow over these objects is written.
+
+\emph{Matrices:} the lift of $c$ over $X$ has matrix rows
+$(1, 1)$ and $(0, 0)$ --- column $j$ has its $1$ in row $0$ because
+both elements map to index $0$ --- while the lift of $c'$ over $X'$ has
+rows $(0, 0)$ and $(1, 1)$. The two matrices are permutation-conjugate
+(Lemma~\ref{ch02:lem:perm-similarity} territory: same spectrum-relevant
+structure, same norm $\sqrt{2}$), but they are \emph{different matrices},
+and any artifact that serializes matrix entries --- a test expectation, a
+digest, a Lean fixture --- sees the difference. Spectral invariants
+survive reordering; byte-level evidence does not.
+
+\emph{Canonical forms:} put both arrows in generator catalogs. Over
+$X$, a catalog declaring generators in the order
+$(c, \id_X)$ ranks $c$ as letter $0$; the same semantic content
+delivered in the other declared order ranks it as letter $1$, and every
+shortlex tiebreak between words of equal length can flip
+(Example~\ref{ch02:ex:slex-two} showed the flip at alphabet level).
+Carrier order and catalog order are thus two independent dials, each of
+which the kernel forces into explicit, versioned data.
+
+None of this is pathology; it is coordinates behaving as coordinates.
+The pathology would be letting a hash table set the dials.
+
+\begin{invariant}[Replayability of constructed values]\label{ch03:inv:replay}
+Every value constructible through the kernel's public constructors is a
+pure function of its constructor arguments read as ordered data. Two calls
+with equal ordered arguments, in any two processes on any two machines,
+construct equal values with equal serializations. No kernel output depends
+on hash seeds, iteration order of unordered containers, object identity
+(memory addresses), wall-clock time, or any other ambient interpreter
+state.
+\end{invariant}
+
+Invariant~\ref{ch03:inv:replay} is the chapter's central promise, and
+Rule~\ref{ch03:rule:ordered-input} is most of its enforcement. The
+remaining exposure --- the caller might \emph{produce} the ordered argument
+nondeterministically before the kernel ever sees it --- cannot be closed by
+a library and is addressed honestly: the kernel's constructors make the
+ordering decision the caller's explicit, visible act, which is the most a
+constructor can do. Section~\ref{ch03:sec:hash-order} explains why so much
+weight is placed here.
+
+\section{Hash-order nondeterminism as an evidence problem}\label{ch03:sec:hash-order}
+
+This section develops, at mechanism level, the failure that
+Rule~\ref{ch03:rule:ordered-input} exists to exclude. Although the concrete
+details are Python's, the problem is general, and we state it generally
+before and after the specifics.
+
+\subsection{The mechanism}
+
+Hash-based containers --- sets and hash maps --- store elements in an
+internal table at positions derived from the elements' hash values.
+Iteration walks the table, so iteration order is a function of (i) the hash
+values of the elements, (ii) the table's size history, which depends on
+insertion order and interim deletions, and (iii) implementation details of
+collision resolution. None of these is part of the container's semantic
+contract; the contract is membership.
+
+In CPython specifically, the hash of a string is additionally
+\emph{randomized per process}: since Python 3.3, string and bytes hashing
+incorporates a random key generated at interpreter startup, as a hardening
+measure against algorithmic-complexity denial-of-service attacks on hash
+tables (the modern implementations use keyed hashes of the SipHash
+family). The environment variable \texttt{PYTHONHASHSEED} controls the
+key: unset, the key is random per process; set to an integer, the key is
+that integer (fixed across processes); set to \texttt{0}, randomization is
+disabled entirely. Consequently:
+
+\begin{itemize}
+\item the set $\{ \texttt{"calm"}, \texttt{"alert"}, \texttt{"overload"}
+\}$ iterates in an order that varies from process to process under default
+settings;
+\item small integers hash to themselves, so sets of small integers
+typically iterate in a stable-looking order --- which makes int-keyed
+prototypes appear deterministic and lets the defect ship, to detonate later
+when the element type changes to strings, tuples, or enums;
+\item \texttt{dict} preserves insertion order as a language guarantee in
+modern Python, so a mapping built by deterministic insertions does iterate
+deterministically --- but a mapping built from set-derived data inherits
+the upstream nondeterminism, and the abstract \texttt{Mapping} contract
+promises nothing; the kernel rejects the whole class rather than
+adjudicating pedigrees it cannot see.
+\end{itemize}
+
+\subsection{How the nondeterminism reaches digests}
+
+The leak path is short and typical. Order-sensitive data is assembled by
+iterating a hash-ordered container --- \texttt{tuple(states)},
+\texttt{list(mapping)}, a comprehension over a set, a \texttt{join} over
+\texttt{dict.keys()} of a set-fed dict. The assembled sequence is then
+serialized --- into a JSON document, a repr string, a pickle, a canonical
+byte encoding --- and the serialization is digested with a cryptographic
+hash (in this project, SHA-256) whose output is recorded as evidence: in a
+manifest, a test log, a signed receipt, a changelog entry. Every step
+after the first is deterministic; the digest is nonetheless a random
+variable, because its input embedded an iteration order.
+
+The scenario of Section~\ref{ch01:sec:nondet-scenario} traced one such
+path end to end: a three-element set becomes a carrier, the carrier order
+fixes standard indices, an intended-constant endomap serializes as
+$(1,1,1)$ in one process and $(2,2,2)$ in another, and the recorded digest
+fails to reproduce under the auditor's replay. Note the exact epistemic
+damage: the digest does not become \emph{weaker} evidence --- it becomes
+\emph{no} evidence, because a verifier that fails on honest replays cannot
+distinguish honest divergence from tampering or corruption. And the
+failure is maximally confusing to diagnose, because every individual
+function in the pipeline is correct in isolation; the defect lives in a
+container choice that type-checks, lints clean, and passes every
+single-process test.
+
+\begin{threat}[Hash-order leakage]\label{ch03:threat:hash-order}
+\emph{Asset}: replayability of every digest, canonical form, and equality
+judgment produced by the kernel and recorded in its manifests.
+\emph{Vector}: any construction of order-sensitive data by iteration over
+a hash-ordered or otherwise contract-free container, anywhere upstream of
+a recorded artifact --- including in caller code, test fixtures, and data
+preparation scripts. \emph{Amplifiers}: element types whose hashes are
+process-seeded (strings, bytes, composites containing them);
+deterministic-looking prototypes over small integers; mappings of
+unverifiable pedigree; iterator consumption that silently yields different
+data to validation and storage. \emph{Kernel mitigation}:
+Rule~\ref{ch03:rule:ordered-input}, enforced at all seven order-sensitive
+constructor positions, converting the vector into an immediate typed
+error. \emph{Residual exposure}: nondeterministic assembly in caller code
+prior to the constructor boundary; addressed by making the ordering an
+explicit argument and by the manifest practice of digesting inputs as well
+as outputs, so a nondeterministic caller fails to reproduce its own inputs
+and is caught at the evidence layer.
+\end{threat}
+
+\subsection{A minimal reproduction experiment}
+
+The mechanism can be exhibited in two interpreter invocations, and we
+record the experiment in a form any reader can replay, because the
+failure's invisibility in source code is best dispelled by watching it
+happen. Run the same one-liner twice as separate processes:
+
+\begin{quote}
+\texttt{python -c "print(tuple(\{'calm', 'alert', 'overload'\}))"}
+\end{quote}
+
+Under default settings (hash randomization on), the two processes will,
+with high probability across a handful of repetitions, print the three
+strings in different orders --- same program text, same input data,
+different output. Fixing the seed makes the accident repeatable without
+making it principled:
+
+\begin{quote}
+\texttt{PYTHONHASHSEED=0 python -c "print(tuple(\{'calm', 'alert',
+'overload'\}))"}
+\end{quote}
+
+now prints the same order on every invocation --- \emph{some} order,
+chosen by the interpreter's hash function at that version, promised by
+nothing, and subject to change when the interpreter changes. Repeating
+the experiment with the integer set \texttt{\{1, 2, 3\}} typically
+prints \texttt{(1, 2, 3)} stably under any seed --- the deceptive
+stability of small-integer hashing noted above, and the reason
+prototypes over integers ship the defect. The corresponding kernel
+experiment is the negative fixture: constructing a \texttt{FiniteObject}
+from any of these set literals raises \texttt{ValidationError} under
+every seed, which is the only outcome of the four that is both
+deterministic and honest.
+
+For contrast, the deterministic path through the kernel:
+
+\begin{quote}
+\texttt{obj = FiniteObject(name="States", elements=("alert", "calm",
+"overload"))}\\
+\texttt{arrow = FiniteArrow(name="to-calm", source=obj, target=obj,
+mapping=(1, 1, 1))}
+\end{quote}
+
+constructs, in every process on every machine, an object whose element
+\texttt{"calm"} has standard index $1$ and an arrow whose serialized
+denotation key is byte-identical across runs --- the property the
+digest discipline below consumes.
+
+\subsection{Digest discipline at the evidence layer}
+
+The kernel's outputs become evidence when they are serialized and
+digested, so the discipline extends one level beyond the constructors.
+Three rules govern the project's digest practice; they are stated here
+because they complete the determinism story, though their enforcement
+lives in the manifest tooling rather than in \texttt{category.py}.
+
+\emph{Digest denotations, not presentations.} Semantic digests are
+computed over denotation keys --- source object (name and ordered
+carrier), target object, mapping tuple --- and never over presentation
+names, memory addresses, or repr strings of container types whose
+formatting is version-dependent. Two arrows that are extensionally
+equal must digest identically, or the digest would distinguish what the
+mathematics identifies.
+
+\emph{Serialize with a fixed, versioned encoding.} The byte encoding of
+a denotation key (field order, integer encoding, string encoding,
+delimiter convention) is itself part of the evidence contract: it is
+fixed, documented, and versioned, so that a digest names one byte
+string under one encoding version. An ``obvious'' serialization left to
+a library default is a hash-order problem one level up --- defaults
+change across library versions exactly as iteration orders change
+across interpreter versions.
+
+\emph{Digest inputs alongside outputs.} A manifest records digests of
+the inputs to a computation as well as its outputs, so that a
+nondeterministic producer upstream of the kernel is caught by failing to
+reproduce its own inputs, rather than remaining invisible behind a
+reproducible kernel. This is the residual-exposure mitigation named in
+Threat~\ref{ch03:threat:hash-order}: the kernel cannot make caller code
+deterministic, but the evidence layer can make caller nondeterminism
+\emph{visible}.
+
+\subsection{The general software-evidence problem}
+
+Nothing above is specific to Python, to this kernel, or even to hashing.
+The general form: \emph{a computation is offered as evidence exactly to the
+extent that an independent party can replay it to the same bytes; any
+dependence on ambient state --- hash seeds, iteration order, thread
+interleavings, locale, filesystem enumeration order, clock, address-space
+layout --- silently converts a replayable computation into an unreplayable
+one, and the conversion is invisible at the point of use.} The
+reproducible-builds discipline in software distribution fights precisely
+this class (embedded timestamps, archive member order, parallel link
+order); numerical computing fights its floating-point cousin (reduction
+order under parallelism); and every attestation scheme that hashes an
+artifact inherits every nondeterminism of the artifact's producer. The
+principled responses available to a system designer are three: (a)
+\emph{canonicalize at the boundary} --- sort, normalize, and fix an order
+before anything order-sensitive is derived; (b) \emph{refuse at the
+boundary} --- reject inputs whose order is not part of their contract, and
+force the caller to decide; (c) \emph{pin the ambient state} --- fix seeds
+and environments so that the accident is at least a repeatable accident.
+
+The kernel chooses (b), and it is worth recording why the two alternatives
+were declined. Canonicalization (a) requires a canonical order on
+arbitrary hashable elements, which does not exist in general (elements
+need not be mutually comparable) and, where it does exist, encodes a
+semantic choice --- \emph{which} order --- that belongs to the modeler, not
+the library; a silently sorted carrier is exactly the kind of unreviewed
+decision the kernel refuses to make. Pinning (c) --- running everything
+under a fixed \texttt{PYTHONHASHSEED} --- makes runs repeatable but leaves
+the semantics coupled to an environment variable: the ``canonical'' form
+becomes a function of a deployment setting, unreproducible by any party
+who does not know it, and fragile under interpreter upgrades that change
+hash functions. Refusal (b) is the only option under which the constructed
+value is a pure function of reviewable arguments
+(Invariant~\ref{ch03:inv:replay}); its cost --- callers must write
+\texttt{sorted(...)} or an explicit literal where they previously wrote a
+set --- is paid once, visibly, at the point where the decision belongs.
+
+\begin{boundary}\label{ch03:boundary:evidence}
+The kernel's determinism guarantees are claims about the kernel's own
+constructors and outputs (Invariant~\ref{ch03:inv:replay}), validated by
+the negative fixtures of Section~\ref{ch03:sec:negative-fixtures} on the
+tested platforms. They are not a claim that programs \emph{using} the
+kernel are deterministic, nor a general theorem about Python semantics,
+nor a certification of any digest produced outside the kernel's
+constructor discipline.
+\end{boundary}
+
+\section{Arrow judgments and extensional equality}\label{ch03:sec:arrows}
+
+\subsection{The arrow judgment}
+
+\begin{definition}[Arrow]\label{ch03:def:arrow}
+An \emph{arrow judgment} $f : X \to Y$ consists of a declared source
+object $X$, a declared target object $Y$, and a total map from the
+standard indices of $X$ to the standard indices of $Y$, represented as the
+\emph{mapping tuple} $(f(0), f(1), \dots, f(|X|-1))$ with each entry in
+$\{0, \dots, |Y|-1\}$.
+\end{definition}
+
+The implementation is the frozen dataclass \texttt{FiniteArrow} with
+fields \texttt{name}, \texttt{source}, \texttt{target}, and
+\texttt{mapping}. Construction validates: the name is a non-blank string;
+source and target are \texttt{FiniteObject} values; the mapping passes the
+ordered-input rule and has length exactly $|X|$ (totality is syntactic:
+one image per source index, no more, no fewer); and every entry is an
+integer within range for the target. Two validation details are easy to
+miss and are load-bearing:
+
+\emph{Booleans are rejected as indices.} In Python, \texttt{bool} is a
+subclass of \texttt{int}, so \texttt{True} would silently function as
+index $1$. The constructor tests for \texttt{bool} explicitly and rejects
+it: an index that arrived as a truth value is almost certainly a logic
+error upstream, and the coincidence \texttt{True} $= 1$ is exactly the
+kind of accidental meaning the kernel exists to refuse.
+
+\emph{Range checking is against the declared target, not against use.} An
+out-of-range entry fails at construction, not at first application; there
+is no constructible arrow whose application can index outside its target's
+carrier.
+
+Application is then defined elementwise: for a carrier element $x$ of $X$,
+the arrow returns the target carrier element at position
+$\mathrm{mapping}[\mathrm{index}(x)]$ --- element in, element out, with
+the index representation confined to the interior.
+
+\subsection{Element-level application and the index bridge}
+
+Application deserves a worked micro-example, because it is where the
+two vocabularies of the kernel --- elements, which callers care about,
+and indices, which the mathematics runs on --- meet, and because the
+meeting point is where a lesser design would leak coordinates to the
+caller or elements into the algebra.
+
+Take $X = (\texttt{Signal}, (\texttt{low}, \texttt{high}))$ and
+$Y = (\texttt{Action}, (\texttt{hold}, \texttt{raise},
+\texttt{drop}))$, and the arrow \texttt{policy} $: X \to Y$ with
+mapping $(1, 2)$. Applying \texttt{policy} to the element
+\texttt{"low"} proceeds in three steps, each total and each validated:
+the source's \texttt{index} method resolves \texttt{"low"} to standard
+index $0$ (raising \texttt{ValidationError} for any non-element, so
+application cannot be fed a stray value); the mapping tuple sends $0$
+to $1$; the target's carrier resolves index $1$ to the element
+\texttt{"raise"}, which is returned. Elements in, elements out; the
+integer $1$ existed only in the interior. The caller never handles
+indices, so no caller can develop a dependency on them; the algebra
+never handles elements, so no element's incidental properties (its
+hash, its string form, its comparability) can influence a computation.
+Every structure of Chapters~4 through~8 --- composition, powers, lifts,
+words --- operates purely on the index side, with
+\texttt{index} and carrier lookup as the only crossings, both owned by
+the object that defines the coordinates.
+
+The design also fixes where partiality is allowed to appear:
+\emph{application to a non-element} is a caller error and raises;
+\emph{application of a validated arrow to a carrier element} cannot
+fail, by the range validation at construction. There is no code path
+on which a constructed arrow returns an out-of-carrier value, and the
+test suite's positive families exercise exactly this closure property
+across every arrow they enumerate.
+
+\subsection{Extensional equality}
+
+\begin{definition}[Extensional equality of arrows]\label{ch03:def:ext-eq}
+Arrows $f$ and $g$ are \emph{extensionally equal}, written $f = g$, iff
+their sources are equal objects, their targets are equal objects, and
+their mapping tuples are equal. The triple
+$(\mathrm{source}, \mathrm{target}, \mathrm{mapping})$ is the arrow's
+\emph{denotation key}; extensional equality is equality of denotation
+keys.
+\end{definition}
+
+\begin{proposition}[Equality is a congruence]\label{ch03:prop:congruence}
+Extensional equality is an equivalence relation on arrows, and composition
+respects it: if $f = f'$ and $g = g'$ and $g \circ f$ is defined, then
+$g' \circ f'$ is defined and $g \circ f = g' \circ f'$. Likewise
+application respects it: $f = f'$ implies $f(x) = f'(x)$ for every
+carrier element $x$ of the common source.
+\end{proposition}
+
+\begin{proof}
+Equivalence is immediate: equality of triples of (name-inclusive) objects
+and tuples is reflexive, symmetric, and transitive componentwise.
+For the congruence: $f = f'$ gives equal targets and $g = g'$ equal
+sources, so definedness of $g \circ f$ --- target of $f$ equals source of
+$g$ as objects --- transfers to $g' \circ f'$. The composite's denotation
+key is determined by the operands' keys: source of $f$, target of $g$,
+and the tuple whose $i$-th entry is
+$\mathrm{mapping}_g[\mathrm{mapping}_f[i]]$; equal operand keys therefore
+force equal composite keys. Application reads only the source, mapping,
+and target, all fixed by the key.
+\end{proof}
+
+\begin{corollary}[Derived operations respect equality]\label{ch03:cor:derived-congruence}
+Extensional equality is respected by every derived operation of the
+kernel: if $f = f'$ then $f^{n} = f'^{\,n}$ for every $n \geq 0$ (when
+the endomap constructions are defined, which they are for both or
+neither); if two paths have componentwise equal arrow sequences, their
+composites are equal; and equal arrows produce equal lifts, equal
+closure-table entries, and equal normal-form assignments in
+Chapters~7 and~8.
+\end{corollary}
+
+\begin{proof}
+Powers: induction on $n$ from Proposition~\ref{ch03:prop:congruence},
+with base case $f^{0} = \id_X = f'^{\,0}$ (equal sources give equal
+identity arrows). Definedness transfers because \texttt{is\_endomap} is
+a predicate on the denotation key (source equals target as objects).
+Path composites: induction on path length using the congruence at each
+fold step. The lift and closure statements are established in their own
+chapters; each construction there reads only denotation keys, which is
+all the present corollary requires of them.
+\end{proof}
+
+Proposition~\ref{ch03:prop:congruence} and its corollary are short but
+foundational: they say that every construction of the kernel factors
+through denotation keys, so that reasoning may be conducted entirely on
+the extensional data. In the implementation, \texttt{denotation\_key} is
+exposed as a property precisely so that higher layers --- the
+deduplication table of the normal-form closure in Chapter~8 above all
+--- can key on the mathematical identity of an arrow rather than on any
+incidental attribute. Which brings us to the one incidental attribute an
+arrow carries.
+
+\section{Presentation names are not identity}\label{ch03:sec:presentation-names}
+
+Every arrow has a \texttt{name}: a non-blank string, required at
+construction, and used in every diagnostic the kernel emits ---
+composition mismatch errors print
+\texttt{f:X->Y} then \texttt{g:Z->W} in terms of these names, and the
+error messages of Chapters~5 through~8 do likewise. Names are also
+synthesized by the kernel itself: the identity constructor names its
+result \texttt{id[X]} after the object; composition names its result
+\texttt{(g o f)} after the operands; the power operation names
+$f^{n}$ with a compact exponent label; the path composite is named by its
+length. For very large exponents the synthesized name uses the exponent's
+bit length plus a short SHA-256 label rather than full decimal rendering,
+so that name construction is logarithmic in the exponent and immune to the
+host language's integer-to-decimal conversion limits (Chapter~5 details
+this; regression tests cover exponents $2^{30}$ and $10^{5000}$).
+
+\begin{ruleenv}[Presentation names never enter equality]\label{ch03:rule:names-out}
+The \texttt{name} field of an arrow is presentation data: it participates
+in no equality comparison, no hash, no denotation key, no digest of
+semantic content, and no decision of any kernel algorithm. Two arrows with
+equal denotation keys are equal whatever their names; two arrows with
+distinct keys are unequal whatever their names. In the implementation the
+field is declared \texttt{compare=False}, excluding it from the generated
+equality and hash of the frozen dataclass.
+\end{ruleenv}
+
+The rule resolves a tension that Section~\ref{ch03:sec:name-identity}
+created deliberately. \emph{Object} names are semantic --- they carry
+modeling intent that the carrier underdetermines, and so they participate
+in identity. \emph{Arrow} names are not --- an arrow's full semantic
+content is already present in its denotation key (source object including
+its name, target object including its name, mapping tuple), and a name
+over and above that content can only describe \emph{how the arrow was
+obtained}: as a composite, as a power, as somebody's labeled generator.
+History of construction is exactly what extensional mathematics discards
+--- $f^{6}$ computed by binary powering and the same map entered as a
+literal table are the same arrow --- and letting names into equality would
+make the kernel intensional: normal forms would distinguish denotations by
+their derivations, the closure's deduplication would fail to merge equal
+maps, and the count of ``distinct'' arrows would depend on the syntactic
+route taken to each. The two rules are therefore two sides of one
+principle: \emph{identity includes exactly the data that composition
+legality and denotation need --- all of it, and nothing else.} For
+objects that includes the name; for arrows it excludes it.
+
+One consequence is worth flagging for users: since names do not
+participate in equality, they are also not \emph{protected} by it ---
+nothing stops two extensionally different arrows from bearing the same
+name, and diagnostics that print names can therefore be ambiguous where
+keys are not. The kernel's diagnostics accept this, always printing
+source and target names alongside, and the evidence layer never relies on
+arrow names for anything.
+
+\section{Negative-fixture testing of the constructors}\label{ch03:sec:negative-fixtures}
+
+\subsection{Rejection behavior is specified behavior}
+
+A kernel whose safety story is ``invalid things are unwritable'' owes its
+users evidence that invalid things are, in fact, unwritable. Positive
+tests cannot supply this: a suite that only exercises valid constructions
+would pass unchanged against an implementation that accepted everything.
+The kernel's suite therefore treats \emph{rejection} as first-class
+specified behavior, tested by \emph{negative fixtures}: minimal invalid
+inputs, each asserted to raise the exact typed error ---
+\texttt{ValidationError} for malformed data,
+\texttt{CompositionTypeError} for type mismatches --- at the exact
+boundary, with no partial construction surviving. This is the executable
+content of ledger items PO-TKS8-CORE-02 (reject every source/target
+mismatch) and PO-TKS8-CORE-03 (keep one-carrier powers distinct from
+heterogeneous paths), both of status \textsc{executable validation}.
+
+\begin{checkclass}[Negative fixtures for object construction]\label{ch03:check:objects}
+Each of the following must raise \texttt{ValidationError}:
+a blank or non-string object name; carrier elements supplied as a
+\texttt{set}, a \texttt{dict}, a generator expression, or a string;
+carrier elements containing a duplicate; carrier elements containing an
+unhashable value (e.g.\ a list). Additionally, \texttt{index} on a
+non-element must raise \texttt{ValidationError} naming the object.
+\end{checkclass}
+
+\begin{checkclass}[Negative fixtures for arrow construction]\label{ch03:check:arrows}
+Each of the following must raise \texttt{ValidationError}:
+a blank arrow name; a source or target that is not a
+\texttt{FiniteObject}; a mapping supplied as a set, mapping, or one-shot
+iterable; a mapping tuple whose length differs from $|X|$ (both too short
+--- a partial function --- and too long); a mapping entry that is a
+\texttt{bool}; a mapping entry that is not an integer; a mapping entry
+outside $\{0, \dots, |Y|-1\}$ (both negative and $\geq |Y|$).
+\end{checkclass}
+
+\begin{checkclass}[Negative fixtures for typed operations]\label{ch03:check:ops}
+Each of the following must raise \texttt{CompositionTypeError}:
+composing $g \circ f$ where the target of $f$ and source of $g$ differ in
+name only (equal carriers); differ in carrier only (equal names); differ
+in carrier order only (equal names, equal element sets); constructing an
+\texttt{Endomap} from an arrow whose source and target are distinct
+objects --- including the same-carrier different-name case; constructing
+a \texttt{SemigroupoidPath} containing one adjacent mismatch of any of
+the above kinds. Each of the following must raise
+\texttt{ValidationError}: an empty path; a path containing a non-arrow;
+a negative or non-integer or boolean endomap exponent.
+\end{checkclass}
+
+The three same-carrier variants inside
+Checkclass~\ref{ch03:check:ops} are the anti-coercion argument of
+Section~\ref{ch03:sec:name-identity} turned into executable assertions:
+they pin exactly the coercions --- by name, by carrier, by order --- that
+a weaker identity discipline would silently perform, and they fail
+against any implementation that relaxes
+Rule~\ref{ch03:rule:name-identity} in any of the three directions.
+Similarly, the set-and-generator fixtures of
+Checkclasses~\ref{ch03:check:objects} and~\ref{ch03:check:arrows} pin
+Rule~\ref{ch03:rule:ordered-input} at every constructor that
+Section~\ref{ch03:sec:ordered-rule} enumerated, and the boolean-index
+fixture pins the subclass subtlety of Section~\ref{ch03:sec:arrows}.
+
+\subsection{The validation surface in one table}
+
+Table~\ref{ch03:tab:validation} summarizes the constructor validation
+surface that the fixtures pin: each order-sensitive or type-sensitive
+input position, what it rejects, and with which typed error. The table
+is descriptive of the Gate~1 prototype sources; the authoritative
+statement is the code bound by the manifest, and the fixtures are what
+tie the two together.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}llll@{}}
+\toprule
+Constructor & Input & Rejected forms & Error \\
+\midrule
+\texttt{FiniteObject} & \texttt{name} & blank, non-string & \texttt{ValidationError} \\
+\texttt{FiniteObject} & \texttt{elements} & set, mapping, iterator, string & \texttt{ValidationError} \\
+\texttt{FiniteObject} & \texttt{elements} & duplicates, unhashables & \texttt{ValidationError} \\
+\texttt{FiniteArrow} & \texttt{name} & blank, non-string & \texttt{ValidationError} \\
+\texttt{FiniteArrow} & \texttt{source}, \texttt{target} & non-objects & \texttt{ValidationError} \\
+\texttt{FiniteArrow} & \texttt{mapping} & unordered containers & \texttt{ValidationError} \\
+\texttt{FiniteArrow} & \texttt{mapping} & wrong length (totality) & \texttt{ValidationError} \\
+\texttt{FiniteArrow} & \texttt{mapping} & bool, non-int, out of range & \texttt{ValidationError} \\
+\texttt{compose} & middle objects & any object inequality & \texttt{CompositionTypeError} \\
+\texttt{Endomap} & \texttt{arrow} & source $\neq$ target & \texttt{CompositionTypeError} \\
+\texttt{Endomap.power} & exponent & negative, bool, non-int & \texttt{ValidationError} \\
+\texttt{SemigroupoidPath} & \texttt{arrows} & empty, non-arrows & \texttt{ValidationError} \\
+\texttt{SemigroupoidPath} & \texttt{arrows} & adjacent mismatch & \texttt{CompositionTypeError} \\
+\bottomrule
+\end{tabular}
+\caption{Constructor validation surface of \texttt{category.py}.
+``Object inequality'' includes all three coercion variants: name-only,
+carrier-only, and order-only differences.}
+\label{ch03:tab:validation}
+\end{table}
+
+\subsection{What negative fixtures establish, and what they do not}
+
+A negative fixture establishes that one representative of an invalid
+class is rejected on the tested platform. It does not establish that
+every member of the class is rejected --- that would require the
+exhaustive or formal treatment that positive properties receive in
+Chapters~10 and~11 --- and the suite's design acknowledges this by
+choosing representatives at the \emph{boundary} of each class (length off
+by exactly one; index exactly $|Y|$; the same-carrier coercion cases),
+where an implementation bug is most likely to live. The honest summary,
+maintained throughout the monograph's evidence chapters: positive
+behavior on the bounded families is checked exhaustively; rejection
+behavior is checked by boundary representatives; neither is
+proof-assistant verification of the implementation, and the Lean seed's
+verified scope (Chapter~11) covers the mathematical laws, not the Python
+constructors. Within those limits, the fixtures make the chapter's three
+rules --- name-inclusive identity, ordered input, names-out-of-equality
+--- into properties that cannot regress silently: any future edit that
+weakens a rule turns at least one fixture red.
+
+\section{Summary}\label{ch03:sec:summary}
+
+The chapter's content in one table of commitments:
+
+\begin{itemize}
+\item An object is a (name, ordered carrier) pair; equality includes both
+(Definition~\ref{ch03:def:object}, Rule~\ref{ch03:rule:name-identity});
+the argument is anti-coercion, with the register, refactor, and units
+examples (Examples~\ref{ch03:ex:two-registers}--\ref{ch03:ex:units}) as
+the canonical failure patterns.
+\item Order-sensitive constructor inputs --- seven positions, enumerated
+--- must be replayable ordered sequences; sets, mappings, one-shot
+iterables, and strings are rejected at construction
+(Rule~\ref{ch03:rule:ordered-input}); the constructed values are then
+pure functions of their arguments (Invariant~\ref{ch03:inv:replay}).
+\item Hash-order iteration is a general software-evidence threat
+(Threat~\ref{ch03:threat:hash-order}): it converts digests from evidence
+into noise, and the kernel's refusal-at-the-boundary is the only response
+that keeps canonical forms independent of ambient interpreter state.
+\item An arrow is its judgment --- declared source, declared target,
+mapping tuple; equality is extensional over exactly this data and is a
+congruence for composition and application
+(Definitions~\ref{ch03:def:arrow}--\ref{ch03:def:ext-eq},
+Proposition~\ref{ch03:prop:congruence}); presentation names are
+diagnostics only and never enter equality
+(Rule~\ref{ch03:rule:names-out}).
+\item Every rule above is pinned by negative fixtures asserting exact
+typed errors at exact boundaries
+(Checkclasses~\ref{ch03:check:objects}--\ref{ch03:check:ops}), with the
+evidential status \textsc{executable validation} and the limits of that
+status stated.
+\end{itemize}
+
+With objects and arrows fixed and the determinism discipline in force,
+Chapter~4 can state and prove the category laws for the kernel exactly as
+Chapter~\ref{ch02:chap} proved them for bare finite functions --- the
+typing adds hypotheses, never obstacles --- and Chapters~5 and~6 can
+erect the endomap/path separation on ground that no longer shifts.

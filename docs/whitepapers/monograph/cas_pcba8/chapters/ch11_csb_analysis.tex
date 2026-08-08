@@ -1,0 +1,290 @@
+\chapter{The Cognitive Safety Board: A Known-Fault Analysis}\label{ch11:main}
+
+\section{Introduction: a safety exemplar that cannot perform its function}\label{ch11:intro}
+
+Chapter~10 examined the source's flagship reference listings as syntax. This chapter examines the most consequential of them---the Cognitive Safety Board, CCB-1-CSB---as a specified mechanism, and reports the second preserved adverse finding of the monograph: \emph{under the source's own declared semantics and published parameter values, the board's protective fuse can never trip}. The red stage that feeds the fuse is clamped at a saturation value of $0.1$; the fuse's trip threshold is $0.9$; every declared stage between them is monotone and non-amplifying; and $0.1<0.9$. The protective crossing is unreachable not because of an implementation bug, an unlucky input, or a numerical edge case, but as a direct arithmetic consequence of the printed design values.
+
+The finding is developed here at full resolution: the published values with their page anchors (Section~\ref{ch11:values}), a formalization of the clamp semantics and a proof of unreachability (Section~\ref{ch11:unreach}), the distinct and subtler defect that saturation is a plateau rather than a latch and that the book defines no fail-closed state machine for the fuse (Section~\ref{ch11:plateau}), the candidate's disposition of the board as a permanently preserved known-fault fixture that the design-rule checker must flag (Section~\ref{ch11:disposition}), the negative-evidence philosophy that justifies preservation over repair (Section~\ref{ch11:philosophy}), the requirements that any repaired design must meet (Section~\ref{ch11:repair}), and the general lessons for safety-mechanism specification in cognitive-system engineering (Section~\ref{ch11:lessons}).
+
+One sentence of orientation before the evidence, because the subject matter invites misreading in both directions. This chapter does \emph{not} claim that any deployed system is unsafe: the CSB is a listing in an engineering reference, the ``refusal path'' it models is a specified software construct, and no physical or operational system is in evidence anywhere in this monograph. Equally, this chapter does not treat the defect as a curiosity: a safety mechanism specified so that it cannot actuate is the canonical failure mode of safety engineering, and the fact that it can arise---and survive review---in a carefully produced 743-page reference is precisely the kind of evidence a design-rule discipline exists to capture.
+
+\begin{boundary}[Scope of the chapter]\label{ch11:scope}
+Every claim in this chapter is about the internal consistency of one identified source document (source ID \textsc{src-pcba-engineer-20260726}, SHA-256 \texttt{294320B39FA521EAC086E99E2D9DB913E2B6CFF0754FF82DB1EF966424566274}): whether its published Cognitive Safety Board parameters permit its published protective function under its declared semantics. No claim is made about the safety, unsafety, or behavior of any cognitive system, model, product, or deployment. ``Refusal,'' ``fuse,'' and ``safety'' name constructs of the source's specification, not validated properties of any real system.
+\end{boundary}
+
+\section{The published values}\label{ch11:values}
+
+\subsection{The primary listing}
+
+The Cognitive Safety Board is presented in Chapter~18 of the source, with its listing giving the red-stage and fuse values at PDF page 342 (book page 326). Three published facts carry the whole analysis:
+
+\begin{enumerate}
+\item The \emph{red stage}---the final alarm stage of the board's escalation path, whose output represents the maximal-severity signal that feeds the protective element---is clamped at a saturation value of $\mathrm{sat}=0.1$.
+\item The \emph{fuse}---the protective element downstream of the red stage, whose actuation represents the board's terminal protective action---has trip threshold $0.9$.
+\item The red stage's gain parameter is published as $\beta=\infty$: a non-finite value, in a language whose grammar and validator rules elsewhere require finite parameters.
+\end{enumerate}
+
+\subsection{The Appendix D repetition}
+
+The same values are repeated in the source's own Appendix~D presentation of the board at PDF page 608 (book page 592)---the same pages examined for syntax in Chapter~10. The repetition matters evidentially: the value pair $(\mathrm{sat}=0.1,\ \mathrm{threshold}=0.9)$ appears in two independent places in the document, produced at two different points in its structure (a tutorial chapter and a reference appendix). This forecloses the most charitable reading, a one-off typographical slip: a typo does not reproduce itself across a book's chapter text and its consolidated appendix. Whatever process produced the values, it produced them consistently.
+
+\subsection{The Appendix D note: a partial repair that sharpens the fault}\label{ch11:note}
+
+At PDF page 610 (book page 594), an Appendix~D note addresses one of the three facts. It states that the infinite gain $\beta=\infty$ is an idealization that validators reject, and directs the implementer to substitute a large finite value. The note thereby concedes---in the source's own voice---that the listing as printed does not pass the source's own validation rules, and it supplies a repair for the finiteness violation.
+
+What the note does not do is the analytically decisive point. It retains the $\mathrm{sat}=0.1$ clamp, and it says nothing about the $0.9$ threshold. The note is therefore a \emph{partial} repair that leaves the load-bearing contradiction intact---indeed, it sharpens the contradiction's evidentiary status. Before the note, one could imagine that the entire parameter block was un-reviewed boilerplate. The note proves otherwise: this exact parameter block received editorial attention specific enough to catch the non-finite gain, and the attention nonetheless did not extend one line further to ask what a $0.1$ output clamp means for a $0.9$ downstream threshold. The clamp/threshold pair survived a targeted review of its own listing. Section~\ref{ch11:lessons} returns to why that pattern---review that catches type-level violations and misses function-level contradictions---is exactly what mechanical reachability checking is for.
+
+\begin{finding}[The published CSB values, with anchors]\label{ch11:find-values}
+The source publishes, for CCB-1-CSB: red-stage saturation clamp $\mathrm{sat}=0.1$ and fuse threshold $0.9$ at PDF page 342 (book page 326), repeated at PDF page 608 (book page 592); and red-stage gain $\beta=\infty$ despite finite grammar and validator rules. The Appendix~D note at PDF page 610 (book page 594) directs substitution of a large finite gain while retaining the $\mathrm{sat}=0.1$ clamp, and does not reconcile the clamp with the $0.9$ threshold.
+\end{finding}
+
+\section{Unreachability under the declared semantics}\label{ch11:unreach}
+
+\subsection{The declared semantics}
+
+The proof requires only three semantic commitments, all of which the source itself declares.
+
+\begin{definition}[Clamp semantics]\label{ch11:def-clamp}
+A stage with saturation clamp $\mathrm{sat}=c$ has output bounded above by $c$: for every input, the stage's output $u$ satisfies $u\le c$. Saturation is an \emph{output plateau}: the stage's transfer curve levels off at $c$ and remains there for all sufficiently large inputs. It is not declared to change the stage's state, to latch, or to trigger any side effect (Section~\ref{ch11:plateau} develops this point).
+\end{definition}
+
+\begin{definition}[Threshold semantics]\label{ch11:def-threshold}
+A fuse with threshold $t$ actuates only upon a threshold crossing: actuation requires the fuse's input to reach at least $t$.
+\end{definition}
+
+\begin{definition}[Monotone non-amplifying stage]\label{ch11:def-mono}
+A stage $s$ on the declared red-stage-to-fuse path is \emph{monotone non-amplifying} under the published parameters if for all admissible inputs $x\ge 0$, its output satisfies $s(x)\le x$, and $s$ is monotone non-decreasing in $x$. Clipping stages and cutoff stages have this property by construction (they can only reduce or pass a bound); the published path between the red-stage clamp and the fuse contains no amplifying stage.
+\end{definition}
+
+The third commitment---no amplifier between clamp and fuse---is a fact about the published listing read under its declared stage inventory, and it is the only place where the proof touches the listing's structure rather than its two headline numbers. Its role is made explicit in the proposition so that any future challenge knows exactly what to check: if a revised build inserted a declared gain stage after the clamp, the proposition's hypothesis, not its logic, would fail.
+
+\subsection{The proposition}
+
+\begin{lemma}[Bound propagation]\label{ch11:lem-prop}
+Let $u_0\le c$ and let $u_{i}=s_i(u_{i-1})$ for $i=1,\ldots,n$, where each $s_i$ is monotone non-amplifying in the sense of Definition~\ref{ch11:def-mono}. Then $u_n\le c$.
+\end{lemma}
+
+\begin{proof}
+By induction. The base case is the hypothesis $u_0\le c$. For the step, suppose $u_{i-1}\le c$. Then $u_i=s_i(u_{i-1})\le u_{i-1}\le c$, the first inequality by the non-amplifying property applied at $x=u_{i-1}$.
+\end{proof}
+
+\begin{proposition}[Unreachability of the CSB fuse threshold]\label{ch11:prop-unreach}
+Under the declared clamp semantics (Definition~\ref{ch11:def-clamp}), with the red stage clamped at $\mathrm{sat}=0.1$, with every declared stage on the red-stage-to-fuse path monotone non-amplifying under the published parameters (Definition~\ref{ch11:def-mono}), and with the fuse actuating only on a threshold crossing at $0.9$ (Definition~\ref{ch11:def-threshold}): the fuse input never exceeds $0.1$, and since $0.1<0.9$, the fuse never actuates. The protective crossing is unreachable for every input to the board.
+\end{proposition}
+
+\begin{proof}
+Let $u_0$ be the red-stage output. By the clamp, $u_0\le 0.1$ pointwise, for every board input and every internal condition, since the clamp bounds the stage's output unconditionally. The fuse input is $u_n$ for the declared path $s_1,\ldots,s_n$; by Lemma~\ref{ch11:lem-prop} with $c=0.1$, $u_n\le 0.1$. Actuation requires $u_n\ge 0.9$. Since $0.1<0.9$, no input produces actuation.
+\end{proof}
+
+\begin{corollary}[The finite-gain substitution does not repair reachability]\label{ch11:cor-note}
+The repair directed by the Appendix~D note---replacing $\beta=\infty$ with any large finite gain---does not affect Proposition~\ref{ch11:prop-unreach}. The gain $\beta$ acts upstream of or within the red stage, whose output the clamp bounds unconditionally at $0.1$ regardless of $\beta$; the proof uses only the clamp value and the downstream path. The note's repair addresses type-level validity (finiteness) and leaves functional validity (reachability) unchanged.
+\end{corollary}
+
+\begin{corollary}[The DRC necessarily flags the board]\label{ch11:cor-drc}
+The candidate DRC's threshold-reachability check propagates conservative upper bounds through causes, bias and gain stages, clipping, and cutoffs, and emits \texttt{PCBA8-SAF-001} (\textsc{unreachable safety threshold}) for any safety-critical fuse whose threshold exceeds the resolved upstream bound. On the CSB fixture the resolved bound at the fuse is $0.1$ and the threshold is $0.9$; the check therefore emits \texttt{PCBA8-SAF-001} deterministically. An unresolved bound, by the same check class, is reported as \texttt{PCBA8-SAF-003} (\textsc{unresolved safety analysis}) and never treated as reachable.
+\end{corollary}
+
+\subsection{On the strength and modesty of the argument}
+
+The proof is elementary---deliberately so, and the elementarity is the finding. No simulation, no numerical subtlety, no semantic depth is needed: the contradiction is decidable from two printed numbers and the printed path's monotonicity, by an argument a reviewer can verify in a minute. Three observations calibrate its strength.
+
+\emph{The result is semantic, not syntactic.} Chapter~10's findings concern derivability of text; this chapter's finding would survive any grammar repair. Even under a complete grammar in which the CSB listing parses, the parsed board still has a clamp at $0.1$ feeding a threshold at $0.9$.
+
+\emph{The result is conditional on the declared semantics.} If ``saturation'' meant something other than an output plateau---a latch, an alarm event, an escalation trigger---the proof's first line would fail. Section~\ref{ch11:plateau} shows the source declares no such alternative semantics, and that the absence of an alternative is itself the second defect.
+
+\emph{The result is total, not probabilistic.} The unreachability holds for \emph{every} input, not for typical inputs or with high probability. There is no operating regime, however extreme, in which the published mechanism performs its published function. In safety-engineering terms the protective function is not degraded; it is absent.
+
+\subsection{A worked illustration of bound propagation}\label{ch11:worked}
+
+\begin{example}[Illustrative bound propagation; not from the source]\label{ch11:ex-bounds}
+The following stage chain is \emph{entirely hypothetical and illustrative}: it is constructed for this example to show the arithmetic of Lemma~\ref{ch11:lem-prop} concretely, and it is not the published CSB path, whose exact stage inventory the proposition needs only qualitatively. Consider a clamped source followed by three monotone non-amplifying stages: a clipping stage $s_1(x)=\min(x,0.8)$, an attenuating filter stage $s_2(x)=0.7x$, and a cutoff stage $s_3(x)=x$ for $x\ge 0.05$ and $0$ otherwise. With the source clamped at $c=0.1$, the propagated bounds are:
+\[
+u_0\le 0.1,\qquad
+u_1\le\min(0.1,0.8)=0.1,\qquad
+u_2\le 0.07,\qquad
+u_3\le 0.07 .
+\]
+A fuse at threshold $0.9$ downstream of $s_3$ is unreachable by a margin of $0.83$; indeed even a threshold of $0.08$ would be unreachable in this illustration. Two features of the arithmetic generalize. First, the bound can only fall or stay flat through non-amplifying stages---the clamp is the ceiling for the entire downstream path, which is why the proof needs no knowledge of the stages beyond monotone non-amplification. Second, the conservative bound is cheap: each stage contributes one interval operation, so the DRC's reachability check is linear in path length and involves no simulation. The check that catches the fault costs less than the trace that would fail to exhibit it.
+\end{example}
+
+\subsection{How could the values arise? Genealogy hypotheses}\label{ch11:genealogy}
+
+The audit's claims do not depend on how the contradiction entered the source, and the record deliberately asserts nothing about genesis. But a known-fault analysis is more useful to future specification authors if it maps the processes that \emph{could} produce such a fault, because each process suggests a distinct guard. Four hypotheses are consistent with the printed evidence; all are offered strictly as hypotheses, none is asserted.
+
+\begin{hypothesis}[Normalization mismatch]\label{ch11:hyp-norm}
+The clamp and the threshold were authored against different implicit scales---for instance, a red stage specified on a per-stage normalized scale where $0.1$ is a large value, and a fuse specified on a global severity scale where $0.9$ is the top decile---and the two scales were never reconciled when the stages were composed. Guard: unit and scale declarations on every port, checked at every net, which is precisely the DRC's \texttt{NET-005}/\texttt{NET-006}/\texttt{NET-009} discipline; a signal-kind/unit table would have refused the clamp-to-fuse net or forced the scales into the open.
+\end{hypothesis}
+
+\begin{hypothesis}[Idealization drift]\label{ch11:hyp-ideal}
+The listing began as an idealized pedagogical sketch (consistent with $\beta=\infty$, an avowed idealization) in which the red stage's plateau was meant to represent ``fully saturated alarm'' symbolically rather than numerically, and later editorial passes concretized some values for validators (the finite-gain note) without re-deriving the ones that interact. Guard: Rule~\ref{ch11:rule-repair}(2)---no idealization notes; the design as printed is the design as checked---plus relational checks that re-run on every edit, so that concretizing one value cannot leave its partners stale.
+\end{hypothesis}
+
+\begin{hypothesis}[Template reuse]\label{ch11:hyp-template}
+The stage block was copied from another listing (a monitoring or filtering context where a $0.1$ clamp is innocuous) into the safety exemplar, carrying its parameters with it; the fuse block, authored separately with a conventional high threshold, was composed downstream without an end-to-end pass. Guard: exactly the end-to-end pass that the DRC mechanizes---reachability is a whole-path property, so it is the check that copy-composition cannot satisfy by accident.
+\end{hypothesis}
+
+\begin{hypothesis}[Transposition or decimal error]\label{ch11:hyp-typo}
+The clamp was intended as $1.0$ (no effective clamp) or the threshold as $0.09$, and a single-character error produced the pair. The Appendix~D repetition (Section~\ref{ch11:values}) makes an isolated typographical event less plausible---the error would have to precede both occurrences---but a single upstream master value propagated to both pages remains possible. Guard: known-answer traces for the trip path (Rule~\ref{ch11:rule-repair}(5)); any single-character corruption of either value fails the exhibited crossing trace immediately.
+\end{hypothesis}
+
+The four hypotheses converge on one observation worth stating plainly: \emph{every} candidate genesis is mundane. No exotic process is needed to put a function-defeating contradiction into a safety exemplar---scale drift, pedagogical residue, copy-paste, and typos suffice, and every one of them is a process that operates in ordinary, competent documentation work. That is the strongest argument that mechanical relational checking is not optional for safety-bearing specifications: the fault classes that defeat protective functions are the same fault classes that ordinary authorship produces daily.
+
+\section{Plateau, not latch: the missing fail-closed state machine}\label{ch11:plateau}
+
+The clamp/threshold contradiction is the loud defect. The quiet defect---likely to be missed even by a reader who catches the first---is a matter of \emph{kind} rather than of value: the CSB's terminal safety behavior is specified as continuous signal flow, when the function it is meant to perform requires a discrete, latching, fail-closed state machine. This section develops the distinction, and then the specific hazard that follows from its absence: the source never establishes that an open fuse \emph{preserves} the refusal path rather than \emph{suppressing} it.
+
+\subsection{Saturation is a plateau}
+
+Under Definition~\ref{ch11:def-clamp}, a saturated stage is simply a stage whose transfer curve has leveled off. Saturation has no memory: if the input recedes, the output recedes with it. It marks no event: nothing in the declared semantics distinguishes ``the red stage is at $0.09$'' from ``the red stage is pinned at its clamp'' except the value itself. And it is silent: no declared observer is notified that the plateau has been reached.
+
+Now consider what the red stage is \emph{for}. It is the maximal-severity terminus of an escalation path: reaching red is supposed to be the board's determination that the modeled condition warrants terminal protective action. Encoding that determination as a plateau has a perverse consequence quite apart from the threshold arithmetic: precisely at the moment of maximal severity, the stage \emph{stops conveying information}. Any severity beyond the clamp is projected onto the clamp; the downstream path cannot distinguish barely-red from catastrophically-red; and if the driving condition oscillates, the red signal oscillates with it, de-asserting the alarm whenever the input dips. The mechanism's most safety-critical state is its least expressive and least stable one.
+
+\subsection{What a latch would be}
+
+\begin{definition}[Latching protective element]\label{ch11:def-latch}
+A protective element is \emph{latching} if actuation is a transition into an absorbing state: once tripped, the element remains tripped regardless of subsequent input, until an explicitly specified, separately authorized reset transition occurs. A latching element therefore requires a state machine: a set of discrete states (at minimum \emph{armed} and \emph{tripped}; realistically also \emph{fault} and \emph{maintenance}), a transition relation naming which events move between them, and a specification of the element's effect on the protected path in every state.
+\end{definition}
+
+Physical fuses are the canonical latch: a blown fuse stays blown. The CSB borrows the fuse's name but not its defining property---nowhere does the source declare that the CSB fuse, once tripped, stays tripped, nor what resets it, nor what the board's outputs are while it is tripped. There is no state machine in the book for the fuse at all: no state set, no transition table, no reset authority, no fault state. The fuse exists in the listing solely as a threshold comparison embedded in continuous signal flow.
+
+\begin{finding}[No fail-closed latch state machine is defined]\label{ch11:find-nolatch}
+The source defines the CSB's protective behavior entirely as continuous stage flow with a threshold element. It does not define a latching state machine for the fuse: no absorbing tripped state, no reset transition or authority, no fault state, and no specification of the board's behavior conditional on fuse state. In particular, the source does not establish that an open (tripped) fuse preserves the refusal path rather than suppressing it.
+\end{finding}
+
+\subsection{The open-fuse ambiguity}\label{ch11:openfuse}
+
+Finding~\ref{ch11:find-nolatch}'s final sentence deserves its own subsection, because it identifies a hazard that would persist \emph{even if the threshold were reachable}---which is why this chapter treats it as an independent defect rather than a footnote to the arithmetic.
+
+In electrical practice, a fuse protects by \emph{interrupting} a path: actuation opens the circuit, and the design is arranged so that the opened circuit is the safe configuration. The safety of a fuse is therefore not a property of the fuse; it is a property of the \emph{polarity} of its placement---of which configuration, closed or open, the surrounding design makes safe. The same element that protects in one placement endangers in the mirrored placement.
+
+Translate this to the CSB's declared purpose. The board models a refusal mechanism: its protective action is meant to \emph{enforce} refusal when severity reaches red. Now ask the polarity question the source never asks: when the CSB fuse actuates and ``opens,'' what happens to the refusal signal? Two architectures share the listing's surface:
+
+\begin{enumerate}
+\item \emph{Fail-closed (safe) polarity.} The fuse interrupts the \emph{permission} path: actuation cuts off the output that permits continued operation, so an open fuse forces refusal. Fuse failure, spurious actuation, or a stuck-open fuse all err on the side of refusing.
+\item \emph{Fail-open (dangerous) polarity.} The fuse sits \emph{in} the refusal path: actuation interrupts the very signal that carries the refusal. An open fuse then \emph{suppresses} refusal---the protective action disables the protection---and the mechanism's terminal act is to remove itself.
+\end{enumerate}
+
+The published material does not determine which architecture the CSB instantiates. There is no fuse truth table (Section~\ref{ch11:repair}) mapping fuse state to path continuity, no statement of the board's outputs in the tripped state, and no hazard analysis of spurious or stuck actuation. A reader cannot prove the CSB is the dangerous polarity---but the burden in safety specification runs the other way: a protective element whose safe polarity is not established must be treated as unestablished, and an unestablished terminal element is a specification defect regardless of reachability. The candidate's DRC encodes exactly this burden allocation: an unresolved safety analysis is \texttt{PCBA8-SAF-003}, never a pass, and a fuse whose declared action cannot be shown safe is \texttt{PCBA8-SAF-002} (\textsc{unsafe fuse action}).
+
+\subsection{The plateau hazard, formalized}\label{ch11:plateau-formal}
+
+The claim that a plateau de-asserts under oscillation can be made exact with one small definition, which also fixes vocabulary for the hazard analysis that Rule~\ref{ch11:rule-repair}(6) requires.
+
+\begin{definition}[Assertion persistence]\label{ch11:def-persist}
+Let $r(t)$ be a stage's output over a discrete time index and let $A\subseteq\mathbb{R}$ be its assertion region (for the red stage, the clamp value or a neighborhood of it). The stage's assertion is \emph{persistent} if $r(t)\in A$ implies $r(t')\in A$ for all $t'\ge t$ absent an authorized reset; it is \emph{input-following} if $r(t)\in A$ holds only while the driving input keeps $r$ in $A$.
+\end{definition}
+
+\begin{remark}[The red stage is input-following]\label{ch11:rem-following}
+Under the declared clamp semantics the red stage is input-following: its membership in the assertion region at time $t$ carries no information about membership at $t+1$, because the clamp is a memoryless bound, not a state. Consequently, for any driving condition whose severity signal is non-monotone over time---the ordinary case for any measured or estimated quantity---the red assertion toggles with the signal. Every de-assertion interval is an interval in which the downstream protective path sees a sub-assertion value, and any downstream element that requires \emph{sustained} assertion (an integration window, a debounce, a confirmation delay, all common in protective paths) may never see its sustain condition met even when the underlying condition is continuously hazardous but noisily measured. Persistence, where it is wanted, must therefore be supplied by an explicit latch (Definition~\ref{ch11:def-latch}); it cannot be an emergent property of clamped continuous flow. This is the precise content of the slogan ``saturation is a plateau, not a latch'': the plateau bounds amplitude, while a latch bounds \emph{retreat}, and the two are orthogonal mechanisms.
+\end{remark}
+
+\subsection{The two defects compound}
+
+Note finally how the plateau defect and the polarity defect interact with the threshold defect. Because saturation is a plateau (no latch upstream), a reachable fuse would be armed by a signal that de-asserts under oscillation; because no fuse state machine exists (no latch downstream), even a tripped fuse has no specified persistence; and because the threshold is unreachable, none of this machinery is ever exercised, so no simulation of the published board would ever surface the downstream ambiguities. The unreachability defect \emph{masks} the latch and polarity defects: a test campaign against the published board exercises the trip path never, and would report the board ``safe'' in the emptiest possible sense---no unsafe actuation, because no actuation. This masking structure is why the candidate treats the CSB as a permanent fixture (Section~\ref{ch11:disposition}): it is a naturally occurring specimen of three defect classes---value contradiction, missing state machine, unestablished polarity---layered so that the first hides the other two.
+
+\section{Disposition: a known-fault fixture, permanently flagged}\label{ch11:disposition}
+
+\subsection{The disposition rule}
+
+\begin{ruleenv}[CSB disposition]\label{ch11:rule-disposition}
+The unmodified CSB parameters are retained in the candidate's test corpus as a \emph{known-fault fixture}. The design-rule checker must flag the fixture: a DRC run over the CSB fixture that does not emit \texttt{PCBA8-SAF-001} is itself a checker failure. The fixture is never repaired in place; any repaired design is a separately versioned artifact under Section~\ref{ch11:repair}. No test result over the fixture may be represented as evidence of any safety property of any board or system.
+\end{ruleenv}
+
+The rule inverts the usual polarity of a test oracle, and the inversion is worth spelling out. For ordinary fixtures, green means the software accepted a valid input; for the CSB fixture, green means the software \emph{rejected} an invalid one---the assertion is that \texttt{SAF-001} is present in the report, with the exact diagnostic identity, severity \textsc{error}, and deterministic position that the closed catalog assigns it. The fixture thereby guards three things at once: the reachability check's existence (deleting the check breaks the fixture), its sensitivity (weakening the bound propagation until $0.1$ resolves as reachable breaks the fixture), and its determinism (the diagnostic's stable identity is part of the report digest discipline of Chapter~7).
+
+\subsection{Why the flag is mandatory, not advisory}
+
+It might be objected that a reference listing from an authoritative source deserves at most a warning---that an \textsc{error}-severity flag against the source's own exemplar is presumptuous. The candidate's position is the opposite, for a reason the two preceding sections have earned: the contradiction is total (Proposition~\ref{ch11:prop-unreach} holds for every input), the masked defects behind it are of the highest severity class (terminal protective element with unestablished polarity), and the source's own partial repair demonstrates that the values were reviewed and retained (Section~\ref{ch11:note}). A checker that softens a proven protective-function impossibility to a warning because the design came from an authority has re-created precisely the deference that allowed the values to survive review in the first place. Deference to sources is a bibliographic virtue and an engineering vice; the DRC is built for the engineering side.
+
+\subsection{The CSB against the full check-class architecture}\label{ch11:checkarch}
+
+Rule~\ref{ch11:rule-disposition} names \texttt{PCBA8-SAF-001} because that is the diagnostic the headline fault deterministically produces. But the CSB fixture exercises the safety-relevant corner of the catalog more broadly, and mapping the board's defects onto the check classes of Chapter~7 shows how the architecture distributes the burden that the source's own validation carried in one undifferentiated pass.
+
+\begin{invariant}[Fixture diagnostic floor]\label{ch11:inv-fixture}
+Every DRC run over the unmodified CSB fixture emits \texttt{PCBA8-SAF-001} with severity \textsc{error}, at a deterministic position in the sorted report, contributing to a stable report digest. Removal, demotion, or repositioning of the diagnostic is a checker regression by definition.
+\end{invariant}
+
+Beyond the floor, three check classes bear on the board's quiet defects. The \emph{parameter class} (\texttt{PAR-003}) is where the $\beta=\infty$ violation lands: a non-finite value for a finite-typed parameter is an invalid parameter, independent of any note directing a substitution---the checker reads listings, not errata. The \emph{safety class}'s remaining codes frame the polarity and analysis gaps: a fuse whose declared action cannot be shown to preserve the protected function is \texttt{SAF-002} (\textsc{unsafe fuse action}), and a safety analysis the checker cannot complete---for instance, because the fixture declares no fuse state machine to analyze---is \texttt{SAF-003} (\textsc{unresolved safety analysis}), which is a failure, never a silent pass. The \emph{test-point and calibration classes} (\texttt{TP-002}, \texttt{TP-003}, \texttt{CAL-004}) encode the observability lesson: a safety-critical path without a marked, calibrated probe cannot even be argued about from traces, so unprobed safety paths are flagged before any question of their dynamics arises.
+
+The distribution matters architecturally. The source's validators, as evidenced by the Appendix~D note, enforced a single fault family (type-level finiteness) and were silent on the rest. The catalog carves the same territory into named, separately testable obligations---finiteness (\texttt{PAR}), reachability (\texttt{SAF-001}), action safety (\texttt{SAF-002}), analysis completeness (\texttt{SAF-003}), observability (\texttt{TP}/\texttt{CAL})---so that each obligation has its own fixture, its own regression surface, and its own place in a report. A defect class without a code is a defect class without a guard; the CSB contributed directly to the catalog's insistence that the safety corner have three codes rather than one.
+
+\subsection{Known-fault fixtures and engineering practice}\label{ch11:fixture-practice}
+
+The known-fault disposition has recognizable relatives in established practice, and locating it among them clarifies what is and is not novel. It is a \emph{negative control} in the laboratory sense: an input whose correct result is a detection, run to prove the instrument detects. It is kin to \emph{fault injection} and to mutation-style testing---disciplines that deliberately introduce defects to measure whether a test suite notices---with the notable difference that nothing was injected: the defect is naturally occurring, harvested from a real authority document, which gives it an ecological validity that synthesized mutants lack. And it plays the role that adversarial generation plays in property-based testing \cite{quickcheck}: it is the concrete witness that keeps a universal claim (``the checker flags unreachable thresholds'') honest. The research program's planned property campaign (Chapter~12) will generate randomized boards with clamp/threshold contradictions in varied positions precisely to generalize the single natural specimen into a family; the CSB fixture remains the anchor of that family because it alone certifies that the fault class occurs outside the generator.
+
+What \emph{is} unusual, relative to common practice, is permanence with provenance: the fixture is retained under the source's identity, page anchors, and hash, so that the regression guard doubles as an archival record of the authority document's reviewed state. Ordinary fault injection guards a checker; a preserved, provenance-bound known fault also guards the historiography---five years from now, the claim ``the published CSB could not trip'' remains verifiable against the exact bytes, whatever revisions intervene.
+
+\section{The negative-evidence philosophy}\label{ch11:philosophy}
+
+Why preserve a fault when repairing it would take one line? The candidate's answer, argued here, is that for a research architecture the preserved fault is worth strictly more than the repaired board, on four grounds.
+
+\emph{First: the fault is evidence about the source, and repair destroys evidence.} The monograph's relationship to its 743-page baseline is that of an implementation to an authority document whose reliability must itself be assessed. Finding~\ref{ch11:find-values} is a data point of the highest quality about that reliability: the source's flagship safety listing contains a function-defeating value contradiction that survived targeted editorial review. Silently repairing the listing in the implementation's corpus would leave future maintainers---and future reviewers assessing how much weight the source's other 700 pages can bear---without the specimen. An engineering record that patches its authority's faults away is laundering its authority.
+
+\emph{Second: the fixture is a permanent regression guard for the checker.} A reachability check with no failing fixture is a check that can be silently broken. The known-fault fixture is the only test that fails when the \texttt{SAF-001} path rots---and it is a \emph{realistic} failure, drawn from a professionally produced document rather than synthesized, which makes it evidence that the check class targets faults that actually occur in the wild rather than faults invented to be caught.
+
+\emph{Third: repair-in-place forges a provenance.} The repaired board would inevitably circulate under the CSB's name---``the CSB, fixed''---attaching the source's authority to parameter choices the source never made. Who chose the new clamp value? On what hazard analysis? With what review? Repair-in-place answers none of these while appearing to inherit the source's answers. The separately versioned repair of Section~\ref{ch11:repair} exists precisely to force those questions to be answered on the record, under the repairer's own name and hash.
+
+\emph{Fourth: negative results are the currency of the claim discipline.} The monograph's evidence program (Chapter~12) counts open criteria, counterexamples, and conflicts as first-class deliverables, on the view that an artifact's credibility is carried by what it admits against itself. A preserved, page-anchored, machine-checked fault in the source's safety exemplar is the strongest single exhibit that the discipline is real: it demonstrates, more convincingly than any green suite, that the project reports what it finds rather than what it hopes. The verification-not-validation lesson of the simulation literature \cite{sargent} applies with full force: a green run over a repaired board would verify the implementation against a fixture while validating nothing about safety---whereas the flagged fault verifies the checker against reality.
+
+\subsection{Objections and responses}\label{ch11:objections}
+
+Three objections to the preservation policy recur in discussion and deserve answers on the record.
+
+\emph{Objection: the fixture is unfair to the source, which marked the listing as pedagogical.} Response: the source's pedagogical framing is preserved along with the fault---the fixture's documentation records the Appendix~D note verbatim in substance, including its idealization language. But the note itself demonstrates that the listing was subject to validator discipline (it repairs a validator rejection), so the source's own frame treats the listing as a checkable artifact, not free prose. The audit checks it under exactly that frame. A listing exempt from checking would need to be marked exempt from checking; a listing marked ``fix this value so the validators accept it'' has waived the exemption.
+
+\emph{Objection: preserving a fault in the corpus risks someone executing the faulty board as if it were good.} Response: this risk is real and is engineered against three ways. The fixture fails DRC with an \textsc{error}-severity diagnostic, and the execution pipeline (Chapter~8) refuses simulation of boards whose reports contain errors---the faulty board is not executable within the candidate at all. The fixture's identity is bound into test assertions that expect the failure, so any pathway that made it pass would break the suite. And Rule~\ref{ch11:rule-disposition} prohibits representing fixture runs as safety evidence, closing the interpretive route. The residual risk---extraction of the listing from the source by parties outside the candidate's tooling---exists independently of the candidate's choices and is, if anything, reduced by publishing the analysis.
+
+\emph{Objection: the fault is so elementary that preserving and formalizing it is disproportionate ceremony.} Response: the elementarity is the phenomenon. The interesting fact about $0.1<0.9$ is not the arithmetic but its survival---through authorship, consolidation into an appendix, and a targeted editorial repair of the same parameter block. A fault class that survives that gauntlet in a safety exemplar has empirically demonstrated that informal review does not catch it; the proportionate response to such a demonstration is exactly a formal check, a permanent fixture, and a published analysis. Ceremony is what converts an embarrassing anecdote into a guard.
+
+\begin{remark}[Preservation is not endorsement]\label{ch11:rem-notendorse}
+Preserving the fixture asserts nothing in the fault's favor. The fixture ships flagged, its documentation names it a known fault, and Rule~\ref{ch11:rule-disposition} forbids representing any run over it as safety evidence. Preservation is the archival act of keeping the specimen; endorsement would be the semantic act of building on it. The candidate does the first and prohibits the second.
+\end{remark}
+
+\section{Requirements on any repaired design}\label{ch11:repair}
+
+A repair is not a value edit; it is a design activity with obligations. The candidate fixes those obligations now, in advance of any repair being attempted, so that the bar cannot be quietly lowered when a repair becomes convenient.
+
+\begin{ruleenv}[Repair requirements]\label{ch11:rule-repair}
+Any repaired Cognitive Safety Board is a separately versioned design, under its own identity and digest, never replacing the known-fault fixture. It must supply, at minimum:
+\begin{enumerate}
+\item \textbf{Threshold reachability.} A demonstration, by the DRC's conservative bound propagation and by at least one deterministic trace, that the protective threshold is reachable from admissible board inputs: the resolved upper bound at the fuse strictly exceeds the threshold, and a concrete input is exhibited whose trace crosses it.
+\item \textbf{Finite parameters.} Every parameter finite and validated, with no idealization notes: the design as printed is the design as checked. The $\beta=\infty$ pattern---an infinite value in the listing, a repair instruction in a note---is prohibited; whatever finite gain the design needs is the gain it declares.
+\item \textbf{Latch state transitions.} An explicit protective-element state machine per Definition~\ref{ch11:def-latch}: discrete states including an absorbing tripped state; a complete transition relation; an explicitly authorized reset transition; and defined behavior in every state, including fault states.
+\item \textbf{Fuse truth tables.} A complete tabulation, for every fuse state, of the continuity of every path through the protective element---resolving the polarity question of Section~\ref{ch11:openfuse} on the record. The table must establish fail-closed polarity: every failure mode of the fuse (spurious trip, failure to trip, stuck state) maps to a configuration in which the refusal function is preserved or strengthened, never suppressed.
+\item \textbf{Deterministic traces.} Canonical traces (Chapter~8) for the nominal path, the trip path, the reset path, and each declared failure mode, each binding the exact DRC report, profile, and source identities, so that the design's claimed behaviors are replayable rather than narrated.
+\item \textbf{Hazard analysis.} A systematic enumeration of the board's hazard set---at minimum: failure to actuate on demand, spurious actuation, actuation suppressed by upstream oscillation (the plateau hazard of Section~\ref{ch11:plateau}), reset abuse, and masked-defect interactions---with, for each hazard, the design feature that mitigates it and the check or trace that evidences the mitigation.
+\item \textbf{Independent safety review.} Review of the repaired design by parties independent of its authors, on the record, before any use of the design in any claim. Property-based and randomized adversarial testing of the state machine and truth tables \cite{quickcheck} is expected as an instrument of that review, not as a substitute for it.
+\end{enumerate}
+\end{ruleenv}
+
+The list is ordered by dependency, not importance: reachability is listed first because without it nothing downstream is exercised (the masking structure of Section~\ref{ch11:plateau}), but the truth-table requirement is the one that addresses the deepest defect. It is entirely possible to satisfy requirement (1) with a one-line clamp change and still ship the dangerous polarity of Section~\ref{ch11:openfuse}; requirements (3), (4), and (6) exist because the CSB's quiet defects demand them; requirement (7) exists because the CSB's loud defect survived non-independent review.
+
+\begin{remark}[No repair is scheduled]\label{ch11:rem-norepair}
+At the bound commit, no repaired CSB exists and none is scheduled ahead of the research program's earlier steps (Chapter~12). The requirements are published now so that they are commitments rather than retrospective rationalizations.
+\end{remark}
+
+\section{Lessons for safety-mechanism specification in cognitive-system engineering}\label{ch11:lessons}
+
+The chapter closes with the general lessons the CSB analysis supports. Per Boundary~\ref{ch11:scope}, these are lessons about \emph{specification discipline}---about how documents that specify protective mechanisms for cognitive systems should be written and checked---and carry no claim that any system is or is not safe.
+
+\emph{Reachability is a design-rule property, and should be checked like one.} The CSB's headline defect is decidable by interval arithmetic over declared parameters---the kind of property a mechanical checker verifies in microseconds and a human reviewer, reading a listing top to bottom, reliably misses because the clamp and the threshold are declared thirty lines apart and are each locally reasonable. The general rule: every protective threshold in a specification should be accompanied by a machine-checkable derivation that some admissible input reaches it. ``The alarm can go off'' is a theorem obligation, not an assumption.
+
+\emph{Type-level validation is not function-level validation.} The source's validators caught $\beta=\infty$ (a type-level fault: non-finite where finite is required) and missed $0.1<0.9$ (a function-level fault: parameters individually valid, jointly function-defeating). The pattern generalizes: schema conformance, type checking, and range validation operate per-value, while safety contradictions live in \emph{relations between} values. A checker suite whose most semantic check is per-parameter will systematically pass exactly the faults that matter most. The DRC's reachability, feedback-gain, and polarity check classes are relational by design, and the CSB fixture is the standing demonstration of why.
+
+\emph{Protective elements need state machines, not metaphors.} ``Fuse,'' ``breaker,'' ``interlock,'' and ``latch'' are load-bearing words in safety engineering because each names a specific discrete-state behavior with a specific failure discipline. A cognitive-system specification that borrows the vocabulary without the state machines---as the CSB borrows ``fuse'' for a threshold comparison in continuous flow---imports the connotation of safety while omitting its mechanism. The specification rule: any element described with protective vocabulary must be accompanied by its state set, transition relation, reset authority, and truth table, or the vocabulary must be surrendered.
+
+\emph{Polarity must be established, not presumed.} The open-fuse ambiguity of Section~\ref{ch11:openfuse} is invisible to any reader who assumes that actuating a safety element is inherently safe. It is not: safety is a property of what the surrounding design does with the actuation, and the fail-closed direction must be demonstrated for each failure mode. In cognitive-system engineering, where the protected function (a refusal, a constraint, an oversight signal) is itself a signal that can be interrupted, the presumption is especially treacherous---the same act that trips protection can sever it.
+
+\emph{Severity plateaus discard information exactly where information matters most.} Clamping a severity signal at its maximum makes the mechanism's most critical regime its least observable one. Escalation paths should preserve monotone information into their terminal stage---or, better, convert severity into discrete latched events whose persistence does not depend on the driving signal's continued cooperation.
+
+\emph{Unreachable mechanisms produce vacuous green.} The masking analysis of Section~\ref{ch11:plateau} is a general warning about test evidence for safety mechanisms: a mechanism that never actuates generates no unsafe-actuation findings, and an undisciplined test report will read that silence as cleanliness. Test campaigns over protective paths must therefore report \emph{coverage of the actuation event itself}---how many runs tripped the mechanism---and treat zero as a finding, not a pass. This is the dynamic counterpart of the static reachability rule, and either alone would have caught the CSB.
+
+\emph{Authority is not evidence.} The values survived because they arrived in an authoritative package: a polished reference, a consolidated appendix, an editorial note demonstrating that review had occurred. Every layer of that authority was real, and none of it bore on whether $0.1$ exceeds $0.9$. A checking discipline that weights provenance over derivation will pass this fault every time; the DRC therefore weighs nothing but the board in front of it (Section~\ref{ch11:disposition}). Causal disciplines make the same point in their own vocabulary---assumptions must be stated and checked, not inherited from the prestige of the model that carries them \cite{pearl}---and the monograph's evidence chapter builds the general case.
+
+\emph{Partial repairs are a distinct hazard class.} The Appendix~D note is, in miniature, a pattern every specification maintainer will recognize: a defect report arrives, the named defect is fixed, and the fix is verified against the named defect alone. The CSB shows the pattern's failure mode at its sharpest---the repair (finite gain) was correct, local, validated, and functionally irrelevant, and its very presence manufactures an impression that the block was reviewed and is sound. Guarding against it requires that repairs re-trigger \emph{relational} checks over everything the touched values interact with, not merely re-validation of the touched values; in DRC terms, any parameter edit re-runs the whole report, and the report digest changes if anything anywhere moved.
+
+\emph{Specifications should carry their own falsifiers.} The deepest lesson runs beyond checking to authorship. A protective mechanism's specification should state, alongside the mechanism, the concrete demonstration that would show it working: the input that trips it, the trace it produces, the truth table its failure modes obey. The CSB specifies a mechanism and no demonstration; had the source's own conventions required an exhibited trip trace per protective element, the contradiction could not have been written down, because the exhibit would have been impossible to produce. Requiring the falsifier at authorship time (Rule~\ref{ch11:rule-repair}(1) and (5)) moves the check from review---where it demonstrably failed---into the act of writing, where the fault cannot form. The same movement, generalized to every claim class, is the subject of the next chapter.
+
+\begin{boundary}[What this chapter licenses]\label{ch11:boundary-final}
+This chapter licenses exactly three claims, all Ring~4, \textsc{not licensed} for external assertion, disclosure \textsc{held}: (1) the identified source publishes the CSB values recorded in Finding~\ref{ch11:find-values} at the cited pages; (2) under the declared clamp semantics and the published parameters, the CSB fuse threshold is unreachable (Proposition~\ref{ch11:prop-unreach}), and the candidate DRC deterministically flags the fixture with \texttt{PCBA8-SAF-001} (Corollary~\ref{ch11:cor-drc}); (3) the source defines no fail-closed latch state machine for the fuse and does not establish open-fuse polarity (Finding~\ref{ch11:find-nolatch}). It licenses no claim that any system is safe or unsafe, no claim about repaired designs (none exist), and no claim about the source beyond the cited pages.
+\end{boundary}

@@ -1,0 +1,768 @@
+\chapter{The Context Lattice: Complete Combinatorics}\label{ch07:main}
+
+The two preceding chapters were destructive: Chapter~5 proved that the legacy ACBE and RPM cover clauses generate only maximal sieves, and Chapter~6 exhibited a model in which the surviving jointly-surjective topology fails subcanonicity. The repair announced in Chapter~1 begins here. The successor candidate does not attempt to re-engineer covers on the legacy category $\cC$ at all. Instead it introduces a second, separate, finite index of \emph{contexts}, arranges the ACBE and RPM marks as two transverse coordinate partitions of a four-element atom set, and generates coverage from proper partition pieces rather than from identity-containing clauses. Everything the later theorems use about that context factor---its objects, its arrows, its pullbacks, its two partitions, its generating families, their pullbacks and refinements, and its block-containment facts---is finite and exactly derivable from the definitions. This chapter derives all of it, exhaustively, before a single topology is generated.
+
+The division of labor with the following chapters is strict. This chapter is pure combinatorics: it proves no theorem about Grothendieck topologies, sheaves, or modalities, and it consumes no ledger record. Chapter~8 builds the provenance calculus on top of the same finite data. Chapter~9 then states and proves the finite-context theorems NT2-1 through NT2-4, each with its registered ledger status. The reason for this ordering is methodological: every case analysis in Chapter~9 terminates in a finite check against a table in this chapter, so the tables must exist first, and must be complete.
+
+\begin{boundary}\label{ch07:boundary-marks}
+Throughout this chapter the words ``ACBE'' and ``RPM'' are formal coordinate labels preserved for controlled migration vocabulary, exactly as registered in the governing specification. The first coordinate of an atom is the formal ACBE mark and the second is the formal RPM mark. These labels carry no empirical interpretation until a separate operationalization and validation record exists; no statement in this chapter, and no statement derived from this chapter later in the monograph, attaches meaning to them beyond their combinatorics. The entire monograph remains \textsc{draft / gate 1 research candidate / ring 4 / not licensed}.
+\end{boundary}
+
+\section{The atom set and the lattice}\label{ch07:sec-lattice}
+
+\begin{definition}[Atom set]\label{ch07:def-omega}
+The \emph{atom set} is the four-element product
+\[
+\Omega \;=\; \{0,1\}\times\{0,1\} \;=\; \{(0,0),\,(0,1),\,(1,0),\,(1,1)\}.
+\]
+We write $\omega_{ij}=(i,j)$ for the atom whose ACBE coordinate is $i$ and whose RPM coordinate is $j$, so that
+\[
+\Omega=\{\omega_{00},\omega_{01},\omega_{10},\omega_{11}\}.
+\]
+\end{definition}
+
+\begin{definition}[Context lattice]\label{ch07:def-lattice}
+The \emph{context lattice} is the powerset
+\[
+L \;=\; \mathcal{P}(\Omega),
+\]
+regarded as a poset ordered by inclusion, and hence as a category: for $U,V\in L$ there is an arrow $U\to V$ precisely when $U\subseteq V$, and at most one such arrow. Elements of $L$ are called \emph{contexts}. The bottom element is the empty context $\varnothing$; the top element is the global context $\Omega$.
+\end{definition}
+
+Three elementary observations should be made explicit at the outset, because they are used silently everywhere afterwards.
+
+First, $L$ is a category in the usual way a poset is: the identity arrow at $V$ is the inclusion $V\subseteq V$, and composition of $U\subseteq V$ with $V\subseteq W$ is $U\subseteq W$, which is again an arrow of $L$ by transitivity of inclusion. Associativity and the unit laws are automatic because each hom-set has at most one element; a poset category can never fail them. This triviality is a feature: every diagram in $L$ commutes, so the only content a diagram in $L$ can carry is \emph{which} objects and arrows it involves, never how they compose. All the combinatorial weight of this chapter therefore lies in counting and classifying, not in diagram chasing.
+
+Second, $L$ is a finite Boolean lattice. Meets are intersections, joins are unions, and every context $V$ has a complement $V^{c}=\Omega\setminus V$ with $V\cap V^{c}=\varnothing$ and $V\cup V^{c}=\Omega$. Complementation is an order-reversing involution of $L$; we will use it in Section~\ref{ch07:sec-sixteen} to pair off the sixteen contexts.
+
+Third, and most importantly for the topology to come, $L$ has pullbacks, and they are intersections.
+
+\begin{proposition}[Pullbacks are intersections]\label{ch07:prop-pullback}
+Let $U\to V$ and $W\to V$ be arrows of $L$, that is, $U\subseteq V$ and $W\subseteq V$. Then the pullback of $U\to V$ along $W\to V$ exists in $L$ and is $U\cap W$, with the two inclusion arrows $U\cap W\to U$ and $U\cap W\to W$.
+\end{proposition}
+
+\begin{proof}
+The square with vertices $U\cap W$, $U$, $W$, $V$ commutes because every diagram in a poset commutes. It remains to check the universal property. Let $Z\in L$ carry arrows $Z\to U$ and $Z\to W$, that is, $Z\subseteq U$ and $Z\subseteq W$. Then $Z\subseteq U\cap W$ by the definition of intersection, which is exactly an arrow $Z\to U\cap W$; it is compatible with the projections because compatibility is automatic, and it is unique because $L$ has at most one arrow between any two objects. Hence $U\cap W$ satisfies the universal property of the pullback \cite{maclane}.
+\end{proof}
+
+\begin{remark}\label{ch07:rem-complete}
+More is true: $L$ is a complete lattice, so as a category it has all small limits and colimits, computed as intersections and unions respectively. We isolate Proposition~\ref{ch07:prop-pullback} because pullback stability of covering families---axiom (J2) in the standard presentation of Grothendieck topologies \cite{stacks00ZC, johnstone}---is the axiom whose verification in Chapter~9 reduces entirely to a computation with intersections. The single most frequently used identity in this monograph is the associativity-with-absorption computation
+\[
+(V\cap B)\cap U \;=\; U\cap (V\cap B)\;=\; (U\cap V)\cap B \;=\; U\cap B
+\qquad\text{whenever } U\subseteq V,
+\]
+which says: intersecting a piece of $V$ down to $U$ is the same as taking the corresponding piece of $U$ directly. Section~\ref{ch07:sec-pullback-stability} verifies this identity case by case across all context classes; the one-line algebraic proof is the display above, since $U\subseteq V$ gives $U\cap V=U$.
+\end{remark}
+
+\begin{notation}\label{ch07:not-arrows}
+For $U\subseteq V$ we write the corresponding arrow of $L$ either as $U\to V$ or, when the ambient target matters, as $U\hookrightarrow V$. Since hom-sets are subsingletons, we freely identify an arrow with the ordered pair $(U,V)$ of its domain and codomain. A \emph{family at $V$} is a finite indexed set of arrows with common codomain $V$.
+\end{notation}
+
+\begin{proposition}[Boolean structure]\label{ch07:prop-boolean}
+$(L,\cap,\cup,(-)^{c},\varnothing,\Omega)$ is a Boolean algebra. In particular $L$ is a Heyting algebra with implication
+\[
+U\Rightarrow W \;=\; U^{c}\cup W ,
+\]
+characterized by the adjunction $Z\cap U\subseteq W \iff Z\subseteq U\Rightarrow W$, and negation $\lnot U=U\Rightarrow\varnothing=U^{c}$ satisfies $\lnot\lnot U=U$.
+\end{proposition}
+
+\begin{proof}
+The Boolean-algebra axioms for a powerset are the standard set identities (distributivity of intersection over union and conversely, De Morgan, complementation). For the adjunction: if $Z\cap U\subseteq W$, then any $z\in Z$ is either outside $U$ (so $z\in U^{c}$) or inside $U$, in which case $z\in Z\cap U\subseteq W$; either way $z\in U^{c}\cup W$. Conversely if $Z\subseteq U^{c}\cup W$ then $Z\cap U\subseteq (U^{c}\cup W)\cap U=(U^{c}\cap U)\cup(W\cap U)\subseteq W$. Taking $W=\varnothing$ gives $\lnot U=U^{c}$, and $(U^{c})^{c}=U$ is involutivity of complement.
+\end{proof}
+
+\begin{remark}[Why record the Heyting structure]\label{ch07:rem-heyting}
+Categorically, Proposition~\ref{ch07:prop-boolean} says the poset category $L$ is cartesian closed with exponentials $W^{U}=U\Rightarrow W$, and that its internal propositional logic is classical. This is worth one paragraph of care because the sheaf categories built on $L$ in Chapters~9 and~10 have their \emph{own} internal logic, which is in general intuitionistic and need not inherit Booleanness from the base; no artifact of this program asserts anything about the internal logic of the successor's sheaf categories, and this monograph derives none. The proposition is used below only in its combinatorial clothing: complements exist and behave (Remark~\ref{ch07:rem-complement}), and implication gives a compact notation for containment facts, e.g., the block-completeness predicate $A_{i}\subseteq V$ of Section~\ref{ch07:sec-blocks} is the statement $\Omega= A_{i}\Rightarrow V$.
+\end{remark}
+
+\section{The sixteen contexts}\label{ch07:sec-sixteen}
+
+Since $|\Omega|=4$, the lattice $L$ has $2^{4}=16$ objects. The binomial distribution of their sizes is
+\[
+\binom{4}{0}+\binom{4}{1}+\binom{4}{2}+\binom{4}{3}+\binom{4}{4}
+\;=\;1+4+6+4+1\;=\;16 .
+\]
+The five cardinality classes have unequal standing in the later theory, and the six doubletons split further into three structurally distinct kinds once the partitions of Section~\ref{ch07:sec-partitions} are in place. We fix names now.
+
+\begin{definition}[Context classes and standard names]\label{ch07:def-classes}
+The sixteen contexts are classified and named as follows.
+\begin{enumerate}
+\item \textbf{The empty context} $\varnothing$ (one context).
+\item \textbf{Singletons} $\{\omega_{ij}\}$ for $i,j\in\{0,1\}$ (four contexts).
+\item \textbf{Doubletons} (six contexts), subdivided into:
+  \begin{enumerate}
+  \item the two \emph{ACBE blocks} $A_{0}=\{\omega_{00},\omega_{01}\}$ and $A_{1}=\{\omega_{10},\omega_{11}\}$, the fibers of the first coordinate;
+  \item the two \emph{RPM blocks} $R_{0}=\{\omega_{00},\omega_{10}\}$ and $R_{1}=\{\omega_{01},\omega_{11}\}$, the fibers of the second coordinate;
+  \item the two \emph{diagonal doubletons} $D_{=}=\{\omega_{00},\omega_{11}\}$ and $D_{\neq}=\{\omega_{01},\omega_{10}\}$, which are fibers of neither coordinate.
+  \end{enumerate}
+\item \textbf{Triples} $T_{ij}=\Omega\setminus\{\omega_{ij}\}$ for $i,j\in\{0,1\}$ (four contexts), each the complement of a singleton.
+\item \textbf{The global context} $\Omega$ (one context).
+\end{enumerate}
+\end{definition}
+
+\begin{remark}[Why the doubletons split three ways]\label{ch07:rem-doubleton-split}
+A doubleton $\{\omega,\omega'\}$ with $\omega\neq\omega'$ either agrees in the first coordinate (then it is $A_{0}$ or $A_{1}$), agrees in the second coordinate (then it is $R_{0}$ or $R_{1}$), or agrees in neither (then it is $D_{=}$ or $D_{\neq}$). Two distinct atoms cannot agree in both coordinates, so the three cases are exclusive and exhaustive: $2+2+2=6$, as required. The diagonal doubletons admit a second description that explains their names: a subset of $\{0,1\}\times\{0,1\}$ meeting each vertical fiber exactly once is the graph of a function $\{0,1\}\to\{0,1\}$, and there are exactly two bijections: the identity, with graph $D_{=}$, and the swap, with graph $D_{\neq}$. The diagonals are thus the graphs of the two bijections of the coordinate set, a fact used again in Section~\ref{ch07:sec-symmetry}.
+\end{remark}
+
+\begin{remark}[Complementation pairing]\label{ch07:rem-complement}
+The order-reversing involution $V\mapsto V^{c}$ pairs the classes as follows: $\varnothing\leftrightarrow\Omega$; each singleton $\{\omega_{ij}\}\leftrightarrow$ the triple $T_{ij}$; and among doubletons, $A_{0}\leftrightarrow A_{1}$, $R_{0}\leftrightarrow R_{1}$, and $D_{=}\leftrightarrow D_{\neq}$. In particular each of the three doubleton kinds is closed under complementation---the complement of an ACBE block is the other ACBE block, and likewise for RPM blocks and diagonals. This is the first hint of the block structure developed in Section~\ref{ch07:sec-partitions}: the two ACBE blocks partition $\Omega$, as do the two RPM blocks.
+\end{remark}
+
+Table~\ref{ch07:tab-contexts} lists all sixteen contexts with their class, their atoms, and their complement. It is the master index for every case analysis in this and the next two chapters.
+
+\begin{table}[htbp]
+\centering
+\caption{The sixteen contexts of $L=\mathcal{P}(\Omega)$.}
+\label{ch07:tab-contexts}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Context & Class & Atoms & Complement \\
+\midrule
+$\varnothing$ & empty & --- & $\Omega$ \\
+$\{\omega_{00}\}$ & singleton & $\omega_{00}$ & $T_{00}$ \\
+$\{\omega_{01}\}$ & singleton & $\omega_{01}$ & $T_{01}$ \\
+$\{\omega_{10}\}$ & singleton & $\omega_{10}$ & $T_{10}$ \\
+$\{\omega_{11}\}$ & singleton & $\omega_{11}$ & $T_{11}$ \\
+$A_{0}$ & ACBE block & $\omega_{00},\omega_{01}$ & $A_{1}$ \\
+$A_{1}$ & ACBE block & $\omega_{10},\omega_{11}$ & $A_{0}$ \\
+$R_{0}$ & RPM block & $\omega_{00},\omega_{10}$ & $R_{1}$ \\
+$R_{1}$ & RPM block & $\omega_{01},\omega_{11}$ & $R_{0}$ \\
+$D_{=}$ & diagonal & $\omega_{00},\omega_{11}$ & $D_{\neq}$ \\
+$D_{\neq}$ & diagonal & $\omega_{01},\omega_{10}$ & $D_{=}$ \\
+$T_{00}$ & triple & $\omega_{01},\omega_{10},\omega_{11}$ & $\{\omega_{00}\}$ \\
+$T_{01}$ & triple & $\omega_{00},\omega_{10},\omega_{11}$ & $\{\omega_{01}\}$ \\
+$T_{10}$ & triple & $\omega_{00},\omega_{01},\omega_{11}$ & $\{\omega_{10}\}$ \\
+$T_{11}$ & triple & $\omega_{00},\omega_{01},\omega_{10}$ & $\{\omega_{11}\}$ \\
+$\Omega$ & global & all four & $\varnothing$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{The eighty-one arrows}\label{ch07:sec-arrows}
+
+The arrow count of $L$ is the first number the executable certificate of Chapter~11 checks, and it is worth proving twice: once by summation over targets, and once by the atomwise argument that generalizes.
+
+\begin{theorem}[Arrow count]\label{ch07:thm-81}
+The category $L$ has exactly $81=3^{4}$ arrows.
+\end{theorem}
+
+\begin{proof}[First proof: summation over targets]
+An arrow of $L$ is an ordered pair $(U,V)$ with $U\subseteq V$. Fixing $V$, the arrows with codomain $V$ correspond to the subsets of $V$, of which there are $2^{|V|}$. Summing over the sixteen contexts, grouped by cardinality class using Table~\ref{ch07:tab-contexts}:
+\[
+\underbrace{1\cdot 2^{0}}_{\varnothing}
+\;+\;\underbrace{4\cdot 2^{1}}_{\text{singletons}}
+\;+\;\underbrace{6\cdot 2^{2}}_{\text{doubletons}}
+\;+\;\underbrace{4\cdot 2^{3}}_{\text{triples}}
+\;+\;\underbrace{1\cdot 2^{4}}_{\Omega}
+\;=\;1+8+24+32+16\;=\;81 .
+\]
+\end{proof}
+
+\begin{proof}[Second proof: atomwise trichotomy]
+A pair $(U,V)$ with $U\subseteq V\subseteq\Omega$ is the same data as a function assigning to each atom $\omega\in\Omega$ one of exactly three states:
+\[
+\omega\notin V \quad(\text{``neither''}),\qquad
+\omega\in V\setminus U \quad(\text{``$V$ only''}),\qquad
+\omega\in U \quad(\text{``both''}).
+\]
+The constraint $U\subseteq V$ rules out precisely the fourth conceivable state ($\omega\in U\setminus V$), and imposes no coupling between distinct atoms: the state of each atom may be chosen freely and independently. Hence the arrows of $L$ are in bijection with the functions $\Omega\to\{\text{neither},\ \text{$V$ only},\ \text{both}\}$, of which there are $3^{|\Omega|}=3^{4}=81$.
+\end{proof}
+
+The atomwise proof has the advantage of computing more than a total. It exhibits the arrow set of $L$ as itself a product of four independent three-element factors, one per atom---a structure that recurs when we count composable pairs and chains.
+
+\begin{corollary}[Identity and proper arrows]\label{ch07:cor-proper}
+Of the $81$ arrows, exactly $16$ are identities (one per context) and exactly $65$ are proper inclusions $U\subsetneq V$.
+\end{corollary}
+
+\begin{proof}
+Identities correspond to pairs $(V,V)$, one per object. $81-16=65$.
+\end{proof}
+
+\begin{corollary}[Local arrow counts]\label{ch07:cor-degrees}
+For a context $V$ with $|V|=k$: the number of arrows \emph{into} $V$ (its in-degree, counting the identity) is $2^{k}$, and the number of arrows \emph{out of} $V$ (its out-degree, counting the identity) is $2^{4-k}$. The in-degree and out-degree of every context multiply to $2^{4}=16$, and both checksums
+\[
+\sum_{V\in L}2^{|V|}=81,
+\qquad
+\sum_{V\in L}2^{4-|V|}=81
+\]
+hold, the second because complementation $V\mapsto V^{c}$ is a bijection of $L$ exchanging the two counts.
+\end{corollary}
+
+Table~\ref{ch07:tab-degrees} records the degrees per class; the row sums re-derive Theorem~\ref{ch07:thm-81} in both directions at once.
+
+\begin{table}[htbp]
+\centering
+\caption{Arrow degrees by context class.}
+\label{ch07:tab-degrees}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Class & Count & In-degree each & Out-degree each & In-degree subtotal \\
+\midrule
+empty & 1 & 1 & 16 & 1 \\
+singleton & 4 & 2 & 8 & 8 \\
+doubleton & 6 & 4 & 4 & 24 \\
+triple & 4 & 8 & 2 & 32 \\
+global & 1 & 16 & 1 & 16 \\
+\midrule
+total & 16 & --- & --- & 81 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{proposition}[Chains]\label{ch07:prop-chains}
+The number of composable pairs of arrows in $L$---that is, chains $U\subseteq V\subseteq W$---is $4^{4}=256$. More generally, the number of chains $U_{1}\subseteq U_{2}\subseteq\cdots\subseteq U_{n}$ of length $n$ is $(n+1)^{4}$.
+\end{proposition}
+
+\begin{proof}
+By the same atomwise argument as in the second proof of Theorem~\ref{ch07:thm-81}: a chain of $n$ nested subsets assigns to each atom the (possibly empty) upper interval of chain positions at which it is present. Nestedness means the set of positions containing a given atom is upward closed in $\{1,\dots,n\}$, so it is determined by its least element or by being empty: $n+1$ states per atom, independently. For $n=2$ this gives $3^{4}=81$ (recovering the arrow count, an arrow being a $2$-chain), and for $n=3$, composable pairs, it gives $4^{4}=256$.
+\end{proof}
+
+\subsection{The arrow-class matrix}
+
+The atomwise proof localizes; the summation proof classifies. Combining them yields the complete matrix of arrow counts between cardinality classes, which the case analyses of Sections~\ref{ch07:sec-pullback-stability} and~\ref{ch07:sec-blocks} implicitly traverse and which we therefore record explicitly.
+
+\begin{proposition}[Arrows by source and target cardinality]\label{ch07:prop-matrix}
+For $0\le k\le n\le 4$, the number of arrows $U\to V$ with $|U|=k$ and $|V|=n$ is
+\[
+\binom{4}{n}\binom{n}{k},
+\]
+the first factor choosing the target among the contexts of its class and the second choosing the source among the subsets of the target. The full matrix is given in Table~\ref{ch07:tab-matrix}; its row sums are the out-degree totals $\binom{4}{k}2^{4-k}$, its column sums are the in-degree totals $\binom{4}{n}2^{n}$, and its grand total is $81$.
+\end{proposition}
+
+\begin{proof}
+The product formula is the two-step choice just described; independence of the two choices is immediate. Row sum for fixed $k$: $\sum_{n\ge k}\binom{4}{n}\binom{n}{k}=\binom{4}{k}\sum_{n\ge k}\binom{4-k}{n-k}=\binom{4}{k}2^{4-k}$ by the subset-of-a-subset identity $\binom{4}{n}\binom{n}{k}=\binom{4}{k}\binom{4-k}{n-k}$. Column sum for fixed $n$: $\sum_{k\le n}\binom{4}{n}\binom{n}{k}=\binom{4}{n}2^{n}$. Grand total: $\sum_{n}\binom{4}{n}2^{n}=(1+2)^{4}=81$ by the binomial theorem---a third proof of Theorem~\ref{ch07:thm-81}.
+\end{proof}
+
+\begin{table}[htbp]
+\centering
+\caption{The arrow-class matrix: entries count arrows from sources of size $k$ (rows) to targets of size $n$ (columns).}
+\label{ch07:tab-matrix}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+$k\backslash n$ & 0 & 1 & 2 & 3 & 4 & row sum \\
+\midrule
+0 & 1 & 4 & 6 & 4 & 1 & 16 \\
+1 & --- & 4 & 12 & 12 & 4 & 32 \\
+2 & --- & --- & 6 & 12 & 6 & 24 \\
+3 & --- & --- & --- & 4 & 4 & 8 \\
+4 & --- & --- & --- & --- & 1 & 1 \\
+\midrule
+column sum & 1 & 8 & 24 & 32 & 16 & 81 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{remark}[Reading the matrix]\label{ch07:rem-matrix}
+Several later case analyses are visible as rows and columns. The $k=1$ row says there are $32$ arrows out of singletons, of which $12$ land in doubletons---these are the arrows along which the singleton coincidence of Proposition~\ref{ch07:prop-coincidence} propagates by pullback in Chapter~8. The $n=4$ column says $16$ arrows enter the global context, one from each context; these index the pullbacks of the global generating covers, which the certificate checks exhaustively. The diagonal entries $1,4,6,4,1$ are the identities, refining Corollary~\ref{ch07:cor-proper}'s count of $16$.
+\end{remark}
+
+\begin{remark}[The general pattern]\label{ch07:rem-general}
+Nothing in these counts is special to four atoms: for $|\Omega|=m$ the lattice $\mathcal{P}(\Omega)$ has $2^{m}$ objects, $3^{m}$ arrows, and $(n+1)^{m}$ chains of length $n$. The registered model fixes $m=4$ because the two binary marks generate exactly four atoms; the counting technology is uniform. The certificate quantities ``$16$ contexts'' and ``$81$ inclusion arrows'' are instances of $2^{m}$ and $3^{m}$ at $m=4$.
+\end{remark}
+
+\section{The transverse partitions}\label{ch07:sec-partitions}
+
+The successor's escape from the legacy collapse lives in two partitions of the atom set, one per coordinate.
+
+\begin{definition}[Coordinate partitions]\label{ch07:def-partitions}
+The \emph{ACBE partition} $A$ and the \emph{RPM partition} $R$ of $\Omega$ are
+\[
+A=\{A_{0},A_{1}\},\qquad A_{i}=\{(i,0),(i,1)\}=\{\omega_{i0},\omega_{i1}\},
+\]
+\[
+R=\{R_{0},R_{1}\},\qquad R_{j}=\{(0,j),(1,j)\}=\{\omega_{0j},\omega_{1j}\}.
+\]
+That is, $A_{i}$ collects the atoms whose first (ACBE) coordinate is $i$, and $R_{j}$ collects the atoms whose second (RPM) coordinate is $j$. We also fix the \emph{singleton partition}
+\[
+Q=\bigl\{\{\omega_{00}\},\{\omega_{01}\},\{\omega_{10}\},\{\omega_{11}\}\bigr\},
+\]
+whose blocks are the four singletons.
+\end{definition}
+
+\begin{proposition}[Partition axioms, verified]\label{ch07:prop-partition-axioms}
+Each of $A$, $R$, $Q$ is a partition of $\Omega$: its blocks are nonempty, pairwise disjoint, and jointly exhaustive.
+\end{proposition}
+
+\begin{proof}
+For $A$: the blocks $A_{0}$ and $A_{1}$ are visibly nonempty (each lists two atoms). They are disjoint because an atom in both would have first coordinate equal to both $0$ and $1$. They are exhaustive because every atom has a first coordinate, which is $0$ or $1$. The argument for $R$ is identical with the second coordinate, and for $Q$ it is the statement that every atom is exactly one of the four atoms.
+\end{proof}
+
+\begin{theorem}[Transversality identity]\label{ch07:thm-transverse}
+For all $i,j\in\{0,1\}$,
+\[
+A_{i}\cap R_{j}=\{\omega_{ij}\}=\{(i,j)\}.
+\]
+Explicitly, the four cases are
+\[
+A_{0}\cap R_{0}=\{\omega_{00}\},\quad
+A_{0}\cap R_{1}=\{\omega_{01}\},\quad
+A_{1}\cap R_{0}=\{\omega_{10}\},\quad
+A_{1}\cap R_{1}=\{\omega_{11}\}.
+\]
+\end{theorem}
+
+\begin{proof}
+An atom lies in $A_{i}\cap R_{j}$ if and only if its first coordinate is $i$ and its second coordinate is $j$, if and only if it equals $(i,j)$. For the case-by-case confirmation: $A_{0}\cap R_{0}=\{\omega_{00},\omega_{01}\}\cap\{\omega_{00},\omega_{10}\}=\{\omega_{00}\}$; $A_{0}\cap R_{1}=\{\omega_{00},\omega_{01}\}\cap\{\omega_{01},\omega_{11}\}=\{\omega_{01}\}$; $A_{1}\cap R_{0}=\{\omega_{10},\omega_{11}\}\cap\{\omega_{00},\omega_{10}\}=\{\omega_{10}\}$; $A_{1}\cap R_{1}=\{\omega_{10},\omega_{11}\}\cap\{\omega_{01},\omega_{11}\}=\{\omega_{11}\}$.
+\end{proof}
+
+The transversality identity is the single most load-bearing fact in the finite theory. It powers the four-versus-one witness computation in Theorem NT2-3, the four-singleton common refinement in Theorem NT2-4, and the flattening isomorphism of the composition theorem in Chapter~10. We therefore record its immediate structural consequences in full.
+
+\begin{corollary}[No containments between blocks of different partitions]\label{ch07:cor-no-containment}
+No ACBE block is contained in an RPM block, and no RPM block is contained in an ACBE block: for all $i,j$,
+\[
+A_{i}\not\subseteq R_{j}
+\qquad\text{and}\qquad
+R_{j}\not\subseteq A_{i}.
+\]
+\end{corollary}
+
+\begin{proof}
+$|A_{i}|=|R_{j}|=2$, so a containment either way would force $A_{i}=R_{j}$ and hence $A_{i}\cap R_{j}$ to have two elements, contradicting Theorem~\ref{ch07:thm-transverse}, by which the intersection is a singleton.
+\end{proof}
+
+\begin{corollary}[Common refinement of the partitions]\label{ch07:cor-common-refinement}
+The common refinement of the partitions $A$ and $R$---the partition whose blocks are the nonempty intersections of an $A$-block with an $R$-block---is exactly the singleton partition $Q$.
+\end{corollary}
+
+\begin{proof}
+By Theorem~\ref{ch07:thm-transverse} every such intersection is a singleton $\{\omega_{ij}\}$, all four singletons arise, and none is empty.
+\end{proof}
+
+\begin{remark}[Transversality as a bijection statement]\label{ch07:rem-bijection}
+Theorem~\ref{ch07:thm-transverse} can be restated: the map sending an atom to the pair (index of its $A$-block, index of its $R$-block) is a bijection $\Omega\to\{0,1\}\times\{0,1\}$. Unwound, this is nothing but the definition of $\Omega$ as a product---which is precisely the point. The registered design places the two marks as the two coordinates of a product, and transversality is the combinatorial shadow of that design decision. Two partitions of a four-element set into two doubletons need \emph{not} be transverse: the pair $(A,A)$ has $A_{0}\cap A_{0}=A_{0}$ of size two and $A_{0}\cap A_{1}=\varnothing$. Transversality is a genuine, checkable property of the pair $(A,R)$, and it is what makes the two generated topologies of Chapter~9 interact the way they do rather than collapse onto each other or ignore each other.
+\end{remark}
+
+\section{Symmetries of the marked lattice}\label{ch07:sec-symmetry}
+
+Several arguments in Chapter~9 are stated for the ACBE side and concluded ``symmetrically'' for the RPM side. In a finite exhaustive development that phrase should be discharged by an actual symmetry, not by an appeal to analogy. We construct it.
+
+\begin{proposition}[The coordinate swap]\label{ch07:prop-swap}
+Let $s:\Omega\to\Omega$ be the coordinate swap $s(i,j)=(j,i)$. Then:
+\begin{enumerate}
+\item $s$ is an involutive bijection of $\Omega$, fixing $\omega_{00}$ and $\omega_{11}$ and exchanging $\omega_{01}\leftrightarrow\omega_{10}$;
+\item the direct-image map $S:L\to L$, $S(V)=\{s(\omega)\mid \omega\in V\}$, is an order-preserving involutive automorphism of the lattice $L$;
+\item $S$ exchanges the partitions: $S(A_{i})=R_{i}$ and $S(R_{j})=A_{j}$ for all $i,j$;
+\item $S$ fixes both diagonals setwise: $S(D_{=})=D_{=}$ and $S(D_{\neq})=D_{\neq}$;
+\item $S$ commutes with intersections and unions: $S(U\cap V)=S(U)\cap S(V)$ and $S(U\cup V)=S(U)\cup S(V)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) $s(s(i,j))=(i,j)$, and the fixed points of $s$ are the atoms with $i=j$. (2) Direct image along a bijection preserves and reflects inclusion, and $S\circ S=\id_{L}$ because $s\circ s=\id_\Omega$. (3) $S(A_{i})=\{s(i,0),s(i,1)\}=\{(0,i),(1,i)\}=R_{i}$, and applying $S$ again gives $S(R_{i})=A_{i}$. (4) $S(D_{=})=\{s(0,0),s(1,1)\}=\{(0,0),(1,1)\}=D_{=}$; $S(D_{\neq})=\{s(0,1),s(1,0)\}=\{(1,0),(0,1)\}=D_{\neq}$. (5) Direct image along any bijection preserves all Boolean operations.
+\end{proof}
+
+\begin{proposition}[Coordinate flips]\label{ch07:prop-flips}
+Let $f_{A}(i,j)=(1-i,j)$ and $f_{R}(i,j)=(i,1-j)$. Their direct-image automorphisms $F_{A}^{\flat},F_{R}^{\flat}$ of $L$ satisfy: $F_{A}^{\flat}$ exchanges $A_{0}\leftrightarrow A_{1}$ and fixes each $R_{j}$ setwise; $F_{R}^{\flat}$ exchanges $R_{0}\leftrightarrow R_{1}$ and fixes each $A_{i}$ setwise; both exchange $D_{=}\leftrightarrow D_{\neq}$. The group generated by $S$, $F_{A}^{\flat}$, $F_{R}^{\flat}$ has order eight and acts on the six doubletons preserving the three kinds $\{A\text{-blocks}\}$, $\{R\text{-blocks}\}$, $\{$diagonals$\}$ as a system of blocks, with $S$ exchanging the first two kinds.
+\end{proposition}
+
+\begin{proof}
+The block computations are direct: $f_{A}(A_{0})=\{(1,0),(1,1)\}=A_{1}$; $f_{A}(R_{j})=\{(1,j),(0,j)\}=R_{j}$; $f_{A}(D_{=})=\{(1,0),(0,1)\}=D_{\neq}$; and symmetrically for $f_{R}$. The three generators are involutions; $f_{A}$ and $f_{R}$ commute; conjugating $f_{A}$ by $s$ gives $f_{R}$. The group is therefore generated by the commuting pair $(f_{A},f_{R})$, giving a Klein four-group, extended by $s$ which swaps them: a group of order $4\cdot 2=8$, isomorphic to the dihedral group of the square. (Indeed the atoms form a four-cycle $\omega_{00},\omega_{01},\omega_{11},\omega_{10}$ on which these maps act as the symmetries of a square.) The action on doubleton kinds follows from the computations above.
+\end{proof}
+
+\begin{remark}[How the symmetry is used]\label{ch07:rem-symmetry-use}
+The swap $S$ transports every ACBE-side construction to its RPM-side mirror: it carries the generating family $K_{A}(V)$ of Section~\ref{ch07:sec-generating} to $K_{R}(S(V))$, and (in Chapter~9) the witness presheaf $F_{A}$ to $F_{R}$. Every ``symmetric argument'' in Chapter~9 is shorthand for conjugation by $S$, which is legitimate precisely because Proposition~\ref{ch07:prop-swap} makes $S$ an automorphism of all the structure in sight. No appeal to informal analogy is required anywhere in the finite theory.
+\end{remark}
+
+\section{The generating families}\label{ch07:sec-generating}
+
+We now define the covering data. Chapter~9 will feed these families into topology generation; here we compute them, in every context, exactly.
+
+\begin{definition}[Generating families and the null cover]\label{ch07:def-generating}
+Let $P\in\{A,R,Q\}$ be one of the three fixed partitions, with block set $P=\{B_{1},\dots,B_{r}\}$ ($r=2$ for $A$ and $R$; $r=4$ for $Q$). For a \emph{nonempty} context $V\in L$, the \emph{generating family} of $P$ at $V$ is the indexed family
+\[
+K_{P}(V)\;=\;\bigl\{\,V\cap B\longrightarrow V \;\bigm|\; B\in P \,\bigr\},
+\]
+indexed by the blocks of $P$, \emph{retaining an empty piece} $\varnothing\to V$ whenever $V\cap B=\varnothing$. At the empty context the generator is the \emph{null cover}: the empty family of arrows with codomain $\varnothing$, which is stipulated to cover $\varnothing$.
+\end{definition}
+
+Three points of the definition deserve emphasis before the tables.
+
+First, $K_{P}(V)$ is an \emph{indexed} family: its members are indexed by blocks, so $K_{A}(V)$ always has exactly two members (possibly with repeated or empty domains) and $K_{Q}(V)$ always has exactly four. When we later compare families ``as unmarked arrow lists'' we forget the indexing and keep only the set of arrows; the distinction matters at exactly the coincidence loci computed in Proposition~\ref{ch07:prop-coincidence}.
+
+Second, empty pieces are retained deliberately. Discarding them would make the family shape depend on the context, complicating both the pullback-stability bookkeeping of Section~\ref{ch07:sec-pullback-stability} and the serialization of Chapter~8, where the exact member arrows are digest-bound. Retention is harmless for the generated topology: an arrow $\varnothing\to V$ adds to the generated sieve only arrows that factor through $\varnothing$, namely $\varnothing\to V$ itself, and (as verified in Chapter~9) the empty context is covered by the null cover in any case.
+
+Third, the null cover at $\varnothing$ is a genuine stipulation, standard for sites built from partitions or unions \cite{johnstone}: the empty family has no members, every compatibility condition over it is vacuous, and the sheaf condition it induces forces sheaves to take singleton value at $\varnothing$---a fact that does real work in Chapters~9 and~10.
+
+Table~\ref{ch07:tab-generating} now computes $K_{A}$ and $K_{R}$ at every context: for each $V$ it lists the four intersections $V\cap A_{0}$, $V\cap A_{1}$, $V\cap R_{0}$, $V\cap R_{1}$. Every later ``by Table~\ref{ch07:tab-generating}'' resolves to one row of this table.
+
+\begin{table}[htbp]
+\centering
+\caption{The generating families at every context: $K_{A}(V)$ has members $V\cap A_{0}\to V$ and $V\cap A_{1}\to V$; $K_{R}(V)$ has members $V\cap R_{0}\to V$ and $V\cap R_{1}\to V$. At $V=\varnothing$ the generator is the null (empty) family.}
+\label{ch07:tab-generating}
+\begin{tabular}{@{}lllll@{}}
+\toprule
+$V$ & $V\cap A_{0}$ & $V\cap A_{1}$ & $V\cap R_{0}$ & $V\cap R_{1}$ \\
+\midrule
+$\varnothing$ & \multicolumn{4}{l}{(null cover: empty family)} \\
+$\{\omega_{00}\}$ & $\{\omega_{00}\}$ & $\varnothing$ & $\{\omega_{00}\}$ & $\varnothing$ \\
+$\{\omega_{01}\}$ & $\{\omega_{01}\}$ & $\varnothing$ & $\varnothing$ & $\{\omega_{01}\}$ \\
+$\{\omega_{10}\}$ & $\varnothing$ & $\{\omega_{10}\}$ & $\{\omega_{10}\}$ & $\varnothing$ \\
+$\{\omega_{11}\}$ & $\varnothing$ & $\{\omega_{11}\}$ & $\varnothing$ & $\{\omega_{11}\}$ \\
+$A_{0}$ & $A_{0}$ & $\varnothing$ & $\{\omega_{00}\}$ & $\{\omega_{01}\}$ \\
+$A_{1}$ & $\varnothing$ & $A_{1}$ & $\{\omega_{10}\}$ & $\{\omega_{11}\}$ \\
+$R_{0}$ & $\{\omega_{00}\}$ & $\{\omega_{10}\}$ & $R_{0}$ & $\varnothing$ \\
+$R_{1}$ & $\{\omega_{01}\}$ & $\{\omega_{11}\}$ & $\varnothing$ & $R_{1}$ \\
+$D_{=}$ & $\{\omega_{00}\}$ & $\{\omega_{11}\}$ & $\{\omega_{00}\}$ & $\{\omega_{11}\}$ \\
+$D_{\neq}$ & $\{\omega_{01}\}$ & $\{\omega_{10}\}$ & $\{\omega_{10}\}$ & $\{\omega_{01}\}$ \\
+$T_{00}$ & $\{\omega_{01}\}$ & $A_{1}$ & $\{\omega_{10}\}$ & $R_{1}$ \\
+$T_{01}$ & $\{\omega_{00}\}$ & $A_{1}$ & $R_{0}$ & $\{\omega_{11}\}$ \\
+$T_{10}$ & $A_{0}$ & $\{\omega_{11}\}$ & $\{\omega_{00}\}$ & $R_{1}$ \\
+$T_{11}$ & $A_{0}$ & $\{\omega_{10}\}$ & $R_{0}$ & $\{\omega_{01}\}$ \\
+$\Omega$ & $A_{0}$ & $A_{1}$ & $R_{0}$ & $R_{1}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+We extract the per-class shape of the families in words; each claim reads off the corresponding rows of Table~\ref{ch07:tab-generating}.
+
+\begin{proposition}[Shape of $K_{A}$ and $K_{R}$ by context class]\label{ch07:prop-shapes}
+\begin{enumerate}
+\item \textbf{Empty context.} The generator is the null family, for all three partitions.
+\item \textbf{Singletons.} At $V=\{\omega_{ij}\}$: $K_{A}(V)$ consists of the identity piece $V\to V$ (from block $A_{i}$) and one empty piece (from $A_{1-i}$); $K_{R}(V)$ likewise consists of $V\to V$ (from $R_{j}$) and one empty piece (from $R_{1-j}$).
+\item \textbf{ACBE blocks.} At $V=A_{i}$: $K_{A}(V)=\{A_{i}\to A_{i},\ \varnothing\to A_{i}\}$ contains the identity; $K_{R}(V)=\{\{\omega_{i0}\}\to A_{i},\ \{\omega_{i1}\}\to A_{i}\}$ consists of two \emph{proper} singleton pieces partitioning $V$.
+\item \textbf{RPM blocks.} At $V=R_{j}$, symmetrically: $K_{R}(V)$ contains the identity and an empty piece; $K_{A}(V)=\{\{\omega_{0j}\}\to R_{j},\ \{\omega_{1j}\}\to R_{j}\}$ consists of two proper singleton pieces.
+\item \textbf{Diagonals.} At $V=D_{=}$ or $V=D_{\neq}$: both $K_{A}(V)$ and $K_{R}(V)$ consist of the two singleton pieces $\{\omega\}\to V$, $\{\omega'\}\to V$ for the two atoms $\omega,\omega'$ of $V$---both partitions cut a diagonal into its two atoms.
+\item \textbf{Triples.} At $V=T_{ij}$: $K_{A}(V)$ has one singleton piece $\{\omega_{i,1-j}\}\to V$ and one complete-block piece $A_{1-i}\to V$; $K_{R}(V)$ has one singleton piece $\{\omega_{1-i,j}\}\to V$ and one complete-block piece $R_{1-j}\to V$. All pieces are proper and nonempty.
+\item \textbf{Global context.} $K_{A}(\Omega)=\{A_{0}\to\Omega,\ A_{1}\to\Omega\}$ and $K_{R}(\Omega)=\{R_{0}\to\Omega,\ R_{1}\to\Omega\}$: two proper, disjoint, jointly exhaustive doubleton pieces each.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Every clause is a row (or four rows) of Table~\ref{ch07:tab-generating}. For clause (6), instantiate: at $T_{00}=\{\omega_{01},\omega_{10},\omega_{11}\}$ the ACBE pieces are $T_{00}\cap A_{0}=\{\omega_{01}\}$ (the surviving atom of $A_{0}$ after removing $\omega_{00}$) and $T_{00}\cap A_{1}=A_{1}$ (untouched, since the removed atom lies in $A_{0}$); the RPM pieces are $\{\omega_{10}\}$ and $R_{1}$ by the same reasoning on the second coordinate. The other three triples follow by applying the flip automorphisms of Proposition~\ref{ch07:prop-flips}, or by direct reading of their rows.
+\end{proof}
+
+\begin{proposition}[Joint exhaustiveness]\label{ch07:prop-exhaustive}
+For every nonempty context $V$ and each partition $P\in\{A,R,Q\}$, the union of the domains of $K_{P}(V)$ is $V$:
+\[
+\bigcup_{B\in P}(V\cap B)\;=\;V\cap\bigcup_{B\in P}B\;=\;V\cap\Omega\;=\;V .
+\]
+\end{proposition}
+
+\begin{proof}
+Intersection distributes over union, and the blocks of a partition are jointly exhaustive by Proposition~\ref{ch07:prop-partition-axioms}.
+\end{proof}
+
+\begin{proposition}[Coincidence loci of the unmarked families]\label{ch07:prop-coincidence}
+Forget the block indexing and regard $K_{A}(V)$ and $K_{R}(V)$ as bare sets of arrows into $V$ (``unmarked families''). Then:
+\begin{enumerate}
+\item at the empty context, both generators are the null family (trivially equal);
+\item at each singleton $\{\omega_{ij}\}$, the unmarked families coincide:
+\[
+K_{A}(\{\omega_{ij}\})=\bigl\{\{\omega_{ij}\}\to\{\omega_{ij}\},\ \varnothing\to\{\omega_{ij}\}\bigr\}=K_{R}(\{\omega_{ij}\});
+\]
+\item at each diagonal doubleton, the unmarked families coincide: for $D\in\{D_{=},D_{\neq}\}$ with atoms $\omega,\omega'$,
+\[
+K_{A}(D)=\bigl\{\{\omega\}\to D,\ \{\omega'\}\to D\bigr\}=K_{R}(D),
+\]
+although for $D_{\neq}$ the block indexings differ ($A_{0}$ picks out $\omega_{01}$ where $R_{0}$ picks out $\omega_{10}$);
+\item at the ACBE blocks, RPM blocks, triples, and the global context, the unmarked families differ.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+All four clauses read off Table~\ref{ch07:tab-generating}. For (2): the row of $\{\omega_{ij}\}$ shows one full piece and one empty piece on each side; as sets of arrows both families are $\{\id,\ \varnothing\hookrightarrow\}$. For (3): the $D_{=}$ row shows ACBE pieces $\{\omega_{00}\},\{\omega_{11}\}$ and RPM pieces $\{\omega_{00}\},\{\omega_{11}\}$---equal as sets; the $D_{\neq}$ row shows ACBE pieces $\{\omega_{01}\},\{\omega_{10}\}$ and RPM pieces $\{\omega_{10}\},\{\omega_{01}\}$---equal as sets, crossed as indexed families. For (4): at $A_{0}$ the ACBE family contains the identity $A_{0}\to A_{0}$ while the RPM family contains only singleton pieces; at $T_{00}$ the ACBE family contains $A_{1}\to T_{00}$, which the RPM family (members $\{\omega_{10}\}$, $R_{1}$) does not; at $\Omega$ the families $\{A_{0},A_{1}\}$ and $\{R_{0},R_{1}\}$ share no member since no $A$-block equals an $R$-block (Corollary~\ref{ch07:cor-no-containment}).
+\end{proof}
+
+\begin{remark}[Forward pointer: why the coincidence loci matter]\label{ch07:rem-coincidence-forward}
+Proposition~\ref{ch07:prop-coincidence}(2) is the combinatorial core of the \emph{singleton coincidence}: at singleton contexts the topology generated from the ACBE family and the topology generated from the RPM family receive literally identical input, so no Grothendieck topology can remember, at those contexts, which partition a cover came from. Clause (3) shows the same phenomenon at the diagonals. This is exactly the information loss that Chapter~8's marked-cover records are designed to survive; the registered certificate checks the singleton case executably (\texttt{singleton\_unmarked\_families\_coincide} alongside \texttt{singleton\_marked\_covers\_distinct}). Clause (4) is equally important in the other direction: at $\Omega$ the two families are disjoint and both consist of proper pieces, which is where the generated topologies visibly diverge (Chapter~9, Theorems NT2-3).
+\end{remark}
+
+\section{Pullback stability, case by case}\label{ch07:sec-pullback-stability}
+
+Axiom (J2) of a Grothendieck topology demands stability of covers under pullback. For the generated topologies of Chapter~9 this reduces, via the standard basis criterion \cite{stacks00ZC}, to a statement about the generating families themselves, which we now verify exhaustively. The general identity is one line; the value of the case analysis is that it confirms the identity in every context class, exhibits the resulting families concretely, and isolates the two degenerate boundary cases (empty pullback pieces and the empty subcontext) that the executable checker exercises separately.
+
+\begin{proposition}[Pullback of generating families]\label{ch07:prop-pullback-stability}
+Let $P\in\{A,R,Q\}$, let $V$ be a nonempty context, and let $U\subseteq V$. Pulling back the family $K_{P}(V)$ along $U\to V$ (in the sense of Proposition~\ref{ch07:prop-pullback}: each member $V\cap B\to V$ pulls back to $(V\cap B)\cap U\to U$) yields:
+\begin{enumerate}
+\item if $U\neq\varnothing$: exactly the indexed family $K_{P}(U)$, block by block;
+\item if $U=\varnothing$: the family all of whose members are $\id_{\varnothing}$, and the null cover covers $\varnothing$ in any case.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+For each block $B\in P$, the pullback of $V\cap B\to V$ along $U\to V$ is $(V\cap B)\cap U$ by Proposition~\ref{ch07:prop-pullback}, and $(V\cap B)\cap U=U\cap B$ by the identity of Remark~\ref{ch07:rem-complete} (using $U\subseteq V$). If $U\neq\varnothing$ this says the pulled-back family is $\{U\cap B\to U\mid B\in P\}=K_{P}(U)$, with matching block indices. If $U=\varnothing$ then $U\cap B=\varnothing$ for every $B$, each pulled-back member is $\varnothing\to\varnothing=\id_{\varnothing}$, and the covering of $\varnothing$ is supplied by the registered null cover.
+\end{proof}
+
+The identity $(V\cap B)\cap U=U\cap B$ never mentions which class $V$ and $U$ belong to; nevertheless we now walk the classes, because the finite certificate does, and because the walk surfaces exactly where empty pieces appear and disappear. Throughout, ``pulling back to $U$'' means along the inclusion $U\subseteq V$, and we describe the ACBE case; the RPM case is its image under the swap automorphism $S$ of Proposition~\ref{ch07:prop-swap}.
+
+\subsection{Pullbacks to the empty context}
+For any nonempty $V$, every piece of $K_{A}(V)$ pulls back to $\varnothing\cap A_{i}=\varnothing$, giving the two-member family $\{\id_{\varnothing},\id_{\varnothing}\}$. This is not the null family (it has two members, both identities), and that is acceptable: the basis convention of Chapter~9 admits identity families at every context, and the null cover independently covers $\varnothing$. The executable checker verifies precisely this convention (pullback to the empty context yields identity arrows on the empty object).
+
+\subsection{Pullbacks to singletons}
+Let $U=\{\omega_{ij}\}\subseteq V$. Then $U\cap A_{i}=U$ and $U\cap A_{1-i}=\varnothing$, so the pulled-back family is $\{U\to U,\ \varnothing\to U\}$, which by Proposition~\ref{ch07:prop-shapes}(2) is exactly $K_{A}(U)$. Note what happened to the pieces of $K_{A}(V)$: whichever piece contained the atom $\omega_{ij}$ pulled back to the full piece $U$, and the other piece pulled back to $\varnothing$. For example, pulling $K_{A}(\Omega)=\{A_{0},A_{1}\}$ back to $\{\omega_{10}\}$: $A_{0}\cap\{\omega_{10}\}=\varnothing$ and $A_{1}\cap\{\omega_{10}\}=\{\omega_{10}\}$, matching the $\{\omega_{10}\}$ row of Table~\ref{ch07:tab-generating}.
+
+\subsection{Pullbacks to doubletons}
+There are three subcases, one per doubleton kind.
+\begin{enumerate}
+\item $U=A_{i}$ (an ACBE block; necessarily $V\supseteq A_{i}$, so $V\in\{A_{i}, T_{i',j'}\ (\text{with }\omega_{i'j'}\notin A_{i}),\ \Omega\}$). Pulling back $K_{A}(V)$: the piece from block $A_{i}$ pulls back to $A_{i}\cap A_{i}=A_{i}=U$ (the identity piece) and the piece from $A_{1-i}$ pulls back to $A_{i}\cap A_{1-i}=\varnothing$. Result: $\{U\to U,\ \varnothing\to U\}=K_{A}(A_{i})$, per Proposition~\ref{ch07:prop-shapes}(3). Concretely, from $V=\Omega$: $\{A_{0}\cap A_{i},\ A_{1}\cap A_{i}\}=\{A_{i},\varnothing\}$; from $V=T_{1-i,j}$ (a triple containing $A_{i}$): the complete-block piece $A_{i}\to T_{1-i,j}$ pulls back to $A_{i}$, the singleton piece to $\varnothing$.
+\item $U=R_{j}$ (an RPM block). Pulling back $K_{A}(V)$: block $A_{0}$ contributes $R_{j}\cap A_{0}=\{\omega_{0j}\}$ and block $A_{1}$ contributes $\{\omega_{1j}\}$ (Theorem~\ref{ch07:thm-transverse}). Result: the two-singleton family $K_{A}(R_{j})$ of Proposition~\ref{ch07:prop-shapes}(4). This is the transversality identity acting as a pullback computation.
+\item $U=D$ a diagonal. Each ACBE block meets $D$ in one atom, so the pulled-back family is the two-singleton family $K_{A}(D)$ of Proposition~\ref{ch07:prop-shapes}(5).
+\end{enumerate}
+
+\subsection{Pullbacks to triples}
+Let $U=T_{ij}\subseteq V$; since $|U|=3$, necessarily $V\in\{T_{ij},\Omega\}$. The identity case is trivial. From $V=\Omega$: $A_{0}\cap T_{ij}$ and $A_{1}\cap T_{ij}$ are, by the $T_{ij}$ row of Table~\ref{ch07:tab-generating}, one singleton and one complete block---exactly $K_{A}(T_{ij})$ as computed in Proposition~\ref{ch07:prop-shapes}(6). For instance, pulling $K_{A}(\Omega)$ back to $T_{00}$: $A_{0}\cap T_{00}=\{\omega_{01}\}$, $A_{1}\cap T_{00}=A_{1}$.
+
+\subsection{Pullback to the global context}
+Only $V=\Omega$, $U=\Omega$ qualifies, and the pullback along the identity is the family itself.
+
+\begin{remark}[Summary of the case walk]\label{ch07:rem-pullback-summary}
+In every case the pulled-back indexed family is $K_{P}(U)$ on the nose---not merely a family generating the same sieve. Empty pieces enter exactly when $U$ misses a block that $V$ met, and leave exactly when $U$ is contained in a single block, in which case the other block's piece is empty. The stability statement is therefore as strong as it could possibly be at the level of raw families, which is what makes the serialization story of Chapter~8 clean: a pullback record can name its parent and its exact member arrows, and the recomputation check of the parent-resolution algorithm can literally recompute the child members from the parent by intersection.
+\end{remark}
+
+\section{Cover composition and refinement}\label{ch07:sec-composition}
+
+The second basis axiom needed in Chapter~9 is stability under composition: refining each member of a generating family by generating families of its own must land inside the sieve machinery correctly. Here we work the underlying combinatorics: same-partition refinement is absorbing, and cross-partition refinement produces singletons. Both computations are pure intersection algebra.
+
+\begin{lemma}[Same-partition refinement is absorbing]\label{ch07:lem-same-refinement}
+Let $P\in\{A,R\}$, let $V$ be a nonempty context, and refine the member $V\cap B\to V$ of $K_{P}(V)$ by the family $K_{P}(V\cap B)$ (or by the null cover if $V\cap B=\varnothing$). The composite family, over all members, is
+\[
+\bigl\{\,V\cap B\cap B'\to V \;\bigm|\; B,B'\in P\,\bigr\}
+\;=\;
+\bigl\{\,V\cap B\to V \;\bigm|\; B\in P\,\bigr\}\;\cup\;\bigl\{\,\varnothing\to V\,\bigr\},
+\]
+because block disjointness gives $B\cap B'=\varnothing$ for $B\neq B'$ and $B\cap B=B$. As a set of arrows, the composite is the original family together with (at most) the empty piece it already contained or a redundant empty piece.
+\end{lemma}
+
+\begin{proof}
+$V\cap B\cap B'=V\cap(B\cap B')$. If $B'=B$ this is $V\cap B$, reproducing the original member; if $B'\neq B$ it is $V\cap\varnothing=\varnothing$. The displayed identity follows. Since the arrow $\varnothing\to V$ contributes to any generated sieve only the arrows factoring through $\varnothing$---that is, itself---the composite generates the same sieve as the original family; this last sentence anticipates the sieve language of Chapter~9 but is recorded here because it is finite set algebra.
+\end{proof}
+
+\begin{lemma}[Cross-partition refinement produces singletons]\label{ch07:lem-cross-refinement}
+Let $V$ be a nonempty context. Refining each member $V\cap A_{i}\to V$ of $K_{A}(V)$ by the family $K_{R}(V\cap A_{i})$ (null cover on empty pieces) yields the composite family with nonempty members
+\[
+\bigl\{\,V\cap A_{i}\cap R_{j}\to V \;\bigm|\; i,j\in\{0,1\}\,\bigr\}
+\;=\;
+\bigl\{\,V\cap\{\omega_{ij}\}\to V \;\bigm|\; i,j\in\{0,1\}\,\bigr\},
+\]
+that is, exactly the singleton subsets $\{\omega\}\to V$ for $\omega\in V$ (together with empty pieces for the atoms outside $V$). The same holds with the roles of $A$ and $R$ exchanged.
+\end{lemma}
+
+\begin{proof}
+$V\cap A_{i}\cap R_{j}=V\cap(A_{i}\cap R_{j})=V\cap\{\omega_{ij}\}$ by Theorem~\ref{ch07:thm-transverse}. As $(i,j)$ ranges over all four pairs, $V\cap\{\omega_{ij}\}$ is $\{\omega_{ij}\}$ when $\omega_{ij}\in V$ and $\varnothing$ otherwise. The exchanged statement follows by the swap automorphism (Proposition~\ref{ch07:prop-swap}) or by redoing the two lines with $R_{j}\cap A_{i}$.
+\end{proof}
+
+\begin{example}[Worked composite at the global context]\label{ch07:ex-composite-global}
+Start with $K_{A}(\Omega)=\{A_{0}\to\Omega,\ A_{1}\to\Omega\}$. Refine $A_{0}$ by $K_{R}(A_{0})=\{\{\omega_{00}\}\to A_{0},\ \{\omega_{01}\}\to A_{0}\}$ and $A_{1}$ by $K_{R}(A_{1})=\{\{\omega_{10}\}\to A_{1},\ \{\omega_{11}\}\to A_{1}\}$ (rows $A_{0}$, $A_{1}$ of Table~\ref{ch07:tab-generating}). The composite family at $\Omega$ is
+\[
+\bigl\{\{\omega_{00}\}\to\Omega,\ \{\omega_{01}\}\to\Omega,\ \{\omega_{10}\}\to\Omega,\ \{\omega_{11}\}\to\Omega\bigr\}
+=K_{Q}(\Omega):
+\]
+the four-singleton family, with no empty pieces since every atom lies in $\Omega$. This is the \emph{transverse refinement} at the global context, the combinatorial heart of Theorem NT2-4 in Chapter~9 and of the joint-refinement derivation records of Chapter~8.
+\end{example}
+
+\begin{example}[Worked composite at a triple]\label{ch07:ex-composite-triple}
+Start with $K_{A}(T_{00})=\{\{\omega_{01}\}\to T_{00},\ A_{1}\to T_{00}\}$. Refine the singleton piece by $K_{R}(\{\omega_{01}\})=\{\{\omega_{01}\}\to\{\omega_{01}\},\ \varnothing\to\{\omega_{01}\}\}$ and the block piece by $K_{R}(A_{1})=\{\{\omega_{10}\}\to A_{1},\ \{\omega_{11}\}\to A_{1}\}$. The composite family at $T_{00}$ has members
+\[
+\{\omega_{01}\}\to T_{00},\quad \varnothing\to T_{00},\quad \{\omega_{10}\}\to T_{00},\quad \{\omega_{11}\}\to T_{00}:
+\]
+the three singletons of $T_{00}$ plus one empty piece contributed by the atom $\omega_{00}\notin T_{00}$. Again this matches Lemma~\ref{ch07:lem-cross-refinement} exactly: the nonempty members are the singletons of $V$, and the empty members count the atoms of $\Omega\setminus V$.
+\end{example}
+
+\begin{example}[Worked absorbing composite]\label{ch07:ex-composite-same}
+Start with $K_{A}(\Omega)$ and refine each piece by its \emph{own} ACBE family: $K_{A}(A_{0})=\{A_{0}\to A_{0},\ \varnothing\to A_{0}\}$ and $K_{A}(A_{1})=\{\varnothing\to A_{1},\ A_{1}\to A_{1}\}$. The composite family at $\Omega$ is $\{A_{0}\to\Omega,\ \varnothing\to\Omega,\ A_{1}\to\Omega\}$: the original two pieces plus a redundant empty piece, exactly as Lemma~\ref{ch07:lem-same-refinement} predicts. Nothing new is produced; same-partition refinement is idempotent up to empty pieces.
+\end{example}
+
+\begin{remark}[What these computations will become]\label{ch07:rem-composition-forward}
+In Chapter~9, Lemma~\ref{ch07:lem-same-refinement} discharges the cover-composition axiom of the coverage basis (refining by the same partition regenerates the same sieve), and Lemma~\ref{ch07:lem-cross-refinement} supplies both the four-singleton common refinement of Theorem NT2-4 and the lower bound $J_{\mathrm{atom}}\le J_{A}\vee J_{R}$ in the join computation. In Chapter~10 the same transversality algebra, applied inside a product over blocks, produces the flattening isomorphism of the composition theorem. In Chapter~8, the cross-partition composite is the mathematical content of a \texttt{COMMON\_REFINEMENT} derivation record, which is required to carry exactly one ACBE and one RPM generating parent---one for each family entering Lemma~\ref{ch07:lem-cross-refinement}.
+\end{remark}
+
+\section{Block completeness}\label{ch07:sec-blocks}
+
+The witness presheaves of Chapter~9 assign to a context the set of bit-functions on the \emph{complete} blocks it contains. The relevant combinatorics is: which contexts contain which complete blocks? The answer is a small table with large consequences.
+
+\begin{definition}[Complete blocks in a context]\label{ch07:def-complete}
+Let $V\in L$. An ACBE block $A_{i}$ is \emph{complete in} $V$ when $A_{i}\subseteq V$; likewise an RPM block $R_{j}$ is complete in $V$ when $R_{j}\subseteq V$. Write
+\[
+\alpha(V)=\#\{\,i\in\{0,1\} \mid A_{i}\subseteq V\,\},
+\qquad
+\rho(V)=\#\{\,j\in\{0,1\} \mid R_{j}\subseteq V\,\}
+\]
+for the number of complete ACBE and RPM blocks in $V$.
+\end{definition}
+
+\begin{theorem}[Block-completeness census]\label{ch07:thm-blocks}
+The values of $\alpha$ and $\rho$ on the sixteen contexts are exactly as in Table~\ref{ch07:tab-blocks}. In summary, by class:
+\begin{enumerate}
+\item $\alpha(\varnothing)=\rho(\varnothing)=0$;
+\item $\alpha=\rho=0$ on all singletons;
+\item on doubletons: $\alpha(A_{i})=1$, $\rho(A_{i})=0$; $\alpha(R_{j})=0$, $\rho(R_{j})=1$; $\alpha(D)=\rho(D)=0$ for both diagonals;
+\item on triples: $\alpha(T_{ij})=\rho(T_{ij})=1$; specifically $A_{1-i}\subseteq T_{ij}$ and $R_{1-j}\subseteq T_{ij}$, and no other block is complete;
+\item $\alpha(\Omega)=\rho(\Omega)=2$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+A block has two atoms, so $A_{i}\subseteq V$ if and only if both $\omega_{i0}\in V$ and $\omega_{i1}\in V$. We verify each class.
+
+(1) The empty context contains no atoms, hence no complete blocks.
+
+(2) A singleton has one atom and a block needs two: no complete blocks.
+
+(3) $A_{i}\subseteq A_{i}$ trivially, and $A_{1-i}\cap A_{i}=\varnothing$ shows $A_{1-i}\not\subseteq A_{i}$; also $R_{j}\not\subseteq A_{i}$ by Corollary~\ref{ch07:cor-no-containment}: $\alpha(A_{i})=1$, $\rho(A_{i})=0$. Symmetrically for $R_{j}$ (or apply the swap $S$). A diagonal contains one atom from each ACBE block and one atom from each RPM block (its two atoms differ in both coordinates), so it contains no block completely: at $D_{=}$, for instance, $A_{0}\not\subseteq D_{=}$ because $\omega_{01}\notin D_{=}$, and $R_{0}\not\subseteq D_{=}$ because $\omega_{10}\notin D_{=}$; the other three checks are identical.
+
+(4) $T_{ij}=\Omega\setminus\{\omega_{ij}\}$. The removed atom $\omega_{ij}$ lies in $A_{i}$ and in $R_{j}$, so $A_{i}\not\subseteq T_{ij}$ and $R_{j}\not\subseteq T_{ij}$; the untouched blocks $A_{1-i}$ and $R_{1-j}$ remain complete. Hence exactly one complete block of each kind.
+
+(5) $\Omega$ contains everything: both ACBE blocks and both RPM blocks are complete.
+\end{proof}
+
+\begin{table}[htbp]
+\centering
+\caption{Block completeness: for each context $V$, the complete ACBE blocks, the complete RPM blocks, and the counts $\alpha(V)$, $\rho(V)$. The last two columns anticipate Chapter~9: the witness presheaves there satisfy $|F_{A}(V)|=2^{\alpha(V)}$ and $|F_{R}(V)|=2^{\rho(V)}$.}
+\label{ch07:tab-blocks}
+\begin{tabular}{@{}lllrrrr@{}}
+\toprule
+$V$ & Complete $A$-blocks & Complete $R$-blocks & $\alpha$ & $\rho$ & $2^{\alpha}$ & $2^{\rho}$ \\
+\midrule
+$\varnothing$ & none & none & 0 & 0 & 1 & 1 \\
+$\{\omega_{00}\}$ & none & none & 0 & 0 & 1 & 1 \\
+$\{\omega_{01}\}$ & none & none & 0 & 0 & 1 & 1 \\
+$\{\omega_{10}\}$ & none & none & 0 & 0 & 1 & 1 \\
+$\{\omega_{11}\}$ & none & none & 0 & 0 & 1 & 1 \\
+$A_{0}$ & $A_{0}$ & none & 1 & 0 & 2 & 1 \\
+$A_{1}$ & $A_{1}$ & none & 1 & 0 & 2 & 1 \\
+$R_{0}$ & none & $R_{0}$ & 0 & 1 & 1 & 2 \\
+$R_{1}$ & none & $R_{1}$ & 0 & 1 & 1 & 2 \\
+$D_{=}$ & none & none & 0 & 0 & 1 & 1 \\
+$D_{\neq}$ & none & none & 0 & 0 & 1 & 1 \\
+$T_{00}$ & $A_{1}$ & $R_{1}$ & 1 & 1 & 2 & 2 \\
+$T_{01}$ & $A_{1}$ & $R_{0}$ & 1 & 1 & 2 & 2 \\
+$T_{10}$ & $A_{0}$ & $R_{1}$ & 1 & 1 & 2 & 2 \\
+$T_{11}$ & $A_{0}$ & $R_{0}$ & 1 & 1 & 2 & 2 \\
+$\Omega$ & $A_{0},A_{1}$ & $R_{0},R_{1}$ & 2 & 2 & 4 & 4 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Two consequences of the census are worth isolating now, because Chapter~9 leans on them at its two decisive moments.
+
+\begin{corollary}[Blocks never survive crossing]\label{ch07:cor-blocks-cross}
+No RPM block contains a complete ACBE block, and no ACBE block contains a complete RPM block: $\alpha(R_{j})=0$ and $\rho(A_{i})=0$ for all $i,j$.
+\end{corollary}
+
+\begin{proof}
+Rows $R_{0}$, $R_{1}$, $A_{0}$, $A_{1}$ of Table~\ref{ch07:tab-blocks}; structurally this is Corollary~\ref{ch07:cor-no-containment} again, since a complete block inside a doubleton would be the whole doubleton.
+\end{proof}
+
+This is the fact that will make the ACBE witness presheaf collapse to a single section on each RPM half of $\Omega$, producing the four-versus-one gluing failure of Theorem NT2-3: the global context supports $2^{\alpha(\Omega)}=4$ sections while each RPM block supports $2^{\alpha(R_{j})}=1$.
+
+\begin{corollary}[Monotonicity and locality of completeness]\label{ch07:cor-blocks-monotone}
+If $U\subseteq V$ then every block complete in $U$ is complete in $V$; that is, $\alpha$ and $\rho$ are monotone along inclusions. Moreover, completeness localizes to same-partition pieces: for any $V$ and any $i$,
+\[
+A_{k}\subseteq V\cap A_{i}
+\iff
+k=i \ \text{and}\ A_{i}\subseteq V,
+\]
+so each complete ACBE block of $V$ is complete in exactly one piece of $K_{A}(V)$, and no complete ACBE block of $V$ is complete in any piece of the form $V\cap A_{i'}$ with $i'\neq i$.
+\end{corollary}
+
+\begin{proof}
+Monotonicity: $A_{k}\subseteq U\subseteq V$. Locality: $V\cap A_{i}\subseteq A_{i}$, so a block contained in it is contained in $A_{i}$, forcing $k=i$ by block disjointness ($A_{k}\cap A_{i}=\varnothing$ for $k\neq i$ and blocks are nonempty); conversely if $A_{i}\subseteq V$ then $A_{i}=V\cap A_{i}$.
+\end{proof}
+
+Corollary~\ref{ch07:cor-blocks-monotone} is the combinatorial engine of ACBE gluing for the witness presheaf in Chapter~9: sections over the pieces of $K_{A}(V)$ are bit-functions on complementary index sets, which assemble uniquely over $V$.
+
+\section{The sieve census}\label{ch07:sec-sieves}
+
+Although topology generation belongs to Chapter~9, the raw material it operates on---sieves on the objects of $L$---is pure order combinatorics, and the executable certificate's headline count of $298$ sieves is exactly derivable here. We include the derivation both for completeness and because it gives independent meaning to a number that would otherwise be an opaque implementation output. (The per-context census tables appear in Appendix~B; this section proves the totals.)
+
+\begin{definition}[Sieves on a poset object]\label{ch07:def-sieve-poset}
+A sieve on $V\in L$ is a set $\sigma$ of arrows with codomain $V$ closed under precomposition \cite{maclane, johnstone}. Since arrows into $V$ correspond to subsets of $V$, a sieve on $V$ is the same thing as a \emph{down-closed} family $\sigma\subseteq\mathcal{P}(V)$: if $S\in\sigma$ and $T\subseteq S$ then $T\in\sigma$. In particular the collection of sieves on $V$ depends only on $|V|$.
+\end{definition}
+
+\begin{lemma}[Down-set counts for small Boolean lattices]\label{ch07:lem-downsets}
+Write $\delta(k)$ for the number of down-closed families in $\mathcal{P}(X)$ with $|X|=k$. Then
+\[
+\delta(0)=2,\qquad \delta(1)=3,\qquad \delta(2)=6,\qquad \delta(3)=20,\qquad \delta(4)=168 .
+\]
+\end{lemma}
+
+\begin{proof}
+$\delta(0)$: the families in $\mathcal{P}(\varnothing)=\{\varnothing\}$ are $\{\}$ and $\{\varnothing\}$; both are down-closed: $2$.
+
+$\delta(1)$: subsets of $\{a\}$ are $\varnothing,\{a\}$; down-closed families: $\{\}$, $\{\varnothing\}$, $\{\varnothing,\{a\}\}$: $3$.
+
+$\delta(2)$: a down-closed family in $\mathcal{P}(\{a,b\})$ either is empty, or contains $\varnothing$; if it contains the top $\{a,b\}$ it is everything (down-closure). The families: $\{\}$; $\{\varnothing\}$; $\{\varnothing,\{a\}\}$; $\{\varnothing,\{b\}\}$; $\{\varnothing,\{a\},\{b\}\}$; all of $\mathcal{P}(\{a,b\})$: $6$.
+
+$\delta(3)$: split by the top $\{a,b,c\}$. If present, the family is all of $\mathcal{P}$: $1$ family. If the family is empty: $1$. Otherwise it contains $\varnothing$ and is determined by its two-element members $X_{2}$ (any subfamily of the three doubletons) and its one-element members $X_{1}$, which must contain every singleton inside a chosen doubleton and may freely contain the rest. Writing $u=|\bigcup X_{2}|$, the free singletons number $3-u$, giving $\sum_{X_{2}}2^{\,3-u}$: for $X_{2}=\varnothing$, $2^{3}=8$; for the three one-doubleton choices, $u=2$, $2^{1}=2$ each, total $6$; for the three two-doubleton choices, $u=3$, $2^{0}=1$ each, total $3$; for all three doubletons, $1$. Sum $8+6+3+1=18$. Total $\delta(3)=1+1+18=20$.
+
+$\delta(4)$: split by the top $\Omega'=\{a,b,c,d\}$. Top present: $1$ (everything). Family empty: $1$. Otherwise the family contains $\varnothing$, excludes the top, and is determined by down-closed choices at levels $3$, $2$, $1$: a set $X_{3}$ of triples, a set $X_{2}$ of doubletons containing every doubleton inside a chosen triple, and a set $X_{1}$ of singletons containing every singleton inside a chosen doubleton, the rest free. We sum over $X_{3}$, then over the free part of $X_{2}$, weighting by $2^{\,\#\text{free singletons}}$.
+
+\emph{Case $X_{3}=\varnothing$.} $X_{2}$ is an arbitrary set of doubletons---equivalently a graph $G$ on the four vertices $\{a,b,c,d\}$ with the doubletons as edges---and the forced singletons are the non-isolated vertices of $G$. Grouping the $2^{6}=64$ graphs by their number $k$ of non-isolated vertices: $k=0$: the empty graph, $1$ graph, weight $2^{4}=16$. $k=2$: a single edge, $6$ graphs, weight $2^{2}=4$, subtotal $24$. $k=3$: choose the three vertices ($4$ ways) and a graph on them with no isolated vertex; of the $8$ subgraphs of a triangle, those covering all three vertices are the three two-edge paths and the full triangle, $4$ each, so $16$ graphs, weight $2$, subtotal $32$. $k=4$: the remaining $64-1-6-16=41$ graphs, weight $1$, subtotal $41$. Case total $16+24+32+41=113$.
+
+\emph{Case $|X_{3}|=1$} ($4$ choices): the chosen triple forces its three doubletons and its three singletons; the free doubletons are the three containing the fourth vertex $d$, and $d$ becomes forced exactly when at least one of them is chosen. Sum over the $2^{3}$ subsets: the empty choice leaves $d$ free ($2^{1}=2$); each of the $7$ nonempty choices forces $d$ ($2^{0}=1$): $2+7=9$ per triple, subtotal $36$.
+
+\emph{Case $|X_{3}|=2$} ($6$ choices): two triples share two vertices and force $3+3-1=5$ doubletons and all four singletons; one doubleton is free: $2$ per choice, subtotal $12$.
+
+\emph{Case $|X_{3}|=3$} ($4$ choices): the union of doubletons inside three triples is all six; everything forced: $1$ each, subtotal $4$.
+
+\emph{Case $|X_{3}|=4$}: everything forced, $1$.
+
+Total without the top and nonempty: $113+36+12+4+1=166$; adding the empty family and the full family, $\delta(4)=166+2=168$.
+\end{proof}
+
+\begin{theorem}[The 298-sieve census]\label{ch07:thm-298}
+The total number of sieves over all sixteen objects of $L$ is
+\[
+\sum_{V\in L}\delta(|V|)
+=1\cdot\delta(0)+4\cdot\delta(1)+6\cdot\delta(2)+4\cdot\delta(3)+1\cdot\delta(4)
+=2+12+36+80+168
+=298 .
+\]
+\end{theorem}
+
+\begin{proof}
+Combine Definition~\ref{ch07:def-sieve-poset} (sieves on $V$ are down-closed families in $\mathcal{P}(V)$, so their number is $\delta(|V|)$), the class sizes of Section~\ref{ch07:sec-sixteen}, and Lemma~\ref{ch07:lem-downsets}.
+\end{proof}
+
+\begin{remark}[Reconciliation with the certificate, and a numerical coincidence]\label{ch07:rem-298}
+The exact-topology verifier of Chapter~11 reports precisely $298$ sieves enumerated over the sixteen contexts, matching Theorem~\ref{ch07:thm-298}; the derivation here shows the number is forced by the order structure alone. One caution for readers checking figures: the number $168$ occurs twice in the registered artifacts with two different meanings. Here, $\delta(4)=168$ is the number of sieves on the single object $\Omega$. Separately, the certificate reports $168$ \emph{covering} sieves summed over all sixteen contexts for the joined topology---a count that belongs to Chapter~9 (where it is derived after Theorem NT2-4) and involves a different computation that happens to land on the same value. The two $168$s are unrelated; conflating them would misread both artifacts.
+\end{remark}
+
+\section{Catalog of degenerate and boundary cases}\label{ch07:sec-degenerate}
+
+Finite exhaustive verification lives or dies on its boundary cases: the configurations where a general formula degenerates and an implementation is most likely to be wrong. The combinatorics above surfaced all of them, and it is worth cataloging them in one place, both because Chapter~9's proofs must handle each explicitly and because Chapter~11's certificate checks are organized around exactly these configurations.
+
+\begin{enumerate}
+\item \textbf{The empty context as target.} The generator at $\varnothing$ is the null family (Definition~\ref{ch07:def-generating}), not the formula family $\{\varnothing\cap B\to\varnothing\}$---the formula would produce a two-member family of identity arrows, which generates the maximal sieve, whereas the registered convention is the empty family. The two conventions differ, and the difference is semantically loaded: under the null-cover convention, sheaves are forced to take singleton value at $\varnothing$ (Chapter~9), which drives the witness computations and the reflector formula of Chapter~10. An implementation that "simplifies" the empty case to the formula family changes the sheaf category.
+\item \textbf{The empty context as pullback result.} Pulling any generating family back along $\varnothing\subseteq V$ produces identity arrows on $\varnothing$ (Proposition~\ref{ch07:prop-pullback-stability}(2)); the basis nevertheless covers $\varnothing$ by the null family. Both facts hold simultaneously and neither replaces the other.
+\item \textbf{Empty pieces inside nonempty covers.} At every singleton context, and at the block contexts of the opposite partition, one piece of the generating family is empty (Table~\ref{ch07:tab-generating}). Empty pieces are retained in the family, contribute only the arrow $\varnothing\to V$ to generated sieves, and are preserved verbatim by the serialization of Chapter~8.
+\item \textbf{Identity pieces inside generating covers.} At singletons and at own-partition blocks, one piece equals the whole context (rows $\{\omega_{ij}\}$, $A_{i}$, $R_{j}$), so the generated sieve is maximal there. Propriety of the generators is a fact about the \emph{global} context (and, more broadly, about the nine contexts meeting both blocks of the relevant partition), not about all sixteen; Chapter~9 is precise about this quantification.
+\item \textbf{Coincidence loci.} At $\varnothing$, the four singletons, and the two diagonals, the unmarked ACBE and RPM families are equal as arrow sets (Proposition~\ref{ch07:prop-coincidence}); at $D_{\neq}$ they are equal as sets but crossed as indexed families. Any code that compares families must specify whether it compares indexed families or arrow sets, and the two answers differ exactly at $D_{\neq}$.
+\item \textbf{Blocks of the two partitions never coincide.} $A_{i}\neq R_{j}$ always (Corollary~\ref{ch07:cor-no-containment}), so cover-kind information can never be recovered from the block sets at block contexts---only the marked layer carries it.
+\item \textbf{The two meanings of $168$.} The count of all sieves on $\Omega$ and the count of covering sieves for the joined topology across all contexts coincide numerically (Remark~\ref{ch07:rem-298}); any reconciliation of certificate figures must keep them apart.
+\end{enumerate}
+
+\begin{remark}[Degeneracy is where the discipline pays]\label{ch07:rem-degenerate}
+None of the seven items is deep, and that is the point: each is a place where an informal argument would wave and a checker cannot. The registered proofs in Chapter~9 cite this catalog at the corresponding steps (null cover in the subcanonicity and witness proofs; empty pieces in the basis lemma; maximality loci in the propriety proposition; coincidence loci in the marked-cover chapter). The catalog is also the right reading order for the certificate's check list: most checks are one catalog item made executable.
+\end{remark}
+
+\section{Summary, and what has deliberately not been done}\label{ch07:sec-summary}
+
+The chapter's yield, in one place:
+
+\begin{enumerate}
+\item $L=\mathcal{P}(\Omega)$ with $\Omega=\{0,1\}\times\{0,1\}$ is a sixteen-object poset category with all pullbacks, computed as intersections (Proposition~\ref{ch07:prop-pullback}).
+\item The sixteen contexts fall into five cardinality classes---$1+4+6+4+1$---with the six doubletons splitting into two ACBE blocks, two RPM blocks, and two diagonals (Definition~\ref{ch07:def-classes}, Table~\ref{ch07:tab-contexts}).
+\item There are exactly $81=3^{4}$ arrows, by summation and by the atomwise neither/$V$-only/both trichotomy (Theorem~\ref{ch07:thm-81}); $16$ identities, $65$ proper inclusions, $256$ composable pairs.
+\item The coordinate partitions $A$ and $R$ are transverse: $A_{i}\cap R_{j}=\{\omega_{ij}\}$, verified in all four cases (Theorem~\ref{ch07:thm-transverse}); their common refinement is the singleton partition (Corollary~\ref{ch07:cor-common-refinement}); an explicit order-$8$ symmetry group exchanges and preserves the structure, with the coordinate swap interchanging the ACBE and RPM sides (Section~\ref{ch07:sec-symmetry}).
+\item The generating families $K_{A}(V)$, $K_{R}(V)$ are computed at every context (Table~\ref{ch07:tab-generating}), with per-class shapes (Proposition~\ref{ch07:prop-shapes}), joint exhaustiveness (Proposition~\ref{ch07:prop-exhaustive}), and exact coincidence loci of the unmarked families: the empty context, the four singletons, and the two diagonals (Proposition~\ref{ch07:prop-coincidence}).
+\item Pulling a generating family back along any inclusion yields the generating family of the subcontext, block by block, in every context class, with the empty-context degeneration handled by identity arrows and the null cover (Proposition~\ref{ch07:prop-pullback-stability} and the case walk of Section~\ref{ch07:sec-pullback-stability}).
+\item Same-partition refinement is absorbing; cross-partition refinement produces exactly the singletons of the context, worked at the global context and at a triple (Section~\ref{ch07:sec-composition}).
+\item The block-completeness census: $\alpha$ and $\rho$ vanish on the empty context, singletons, and diagonals; equal $1$ on own-blocks and on every triple; equal $2$ at $\Omega$; and cross-partition blocks never contain complete blocks (Theorem~\ref{ch07:thm-blocks}, Table~\ref{ch07:tab-blocks}).
+\item The sieve census: $298$ sieves in total across the lattice, derived from first principles (Theorem~\ref{ch07:thm-298}).
+\end{enumerate}
+
+\begin{boundary}\label{ch07:boundary-scope}
+Nothing in this chapter constructs a Grothendieck topology, proves a sheaf condition, or licenses any statement about modalities: those results are Chapter~9's, where each carries its registered ledger status (\texttt{INFORMAL\_PROOF\_PRESENT}, \texttt{IN\_REVIEW}, \texttt{NOVELTY\_UNASSESSED}, Ring~4). Equally, nothing here interprets the ACBE or RPM coordinate empirically; the marks are formal (Boundary~\ref{ch07:boundary-marks}). The chapter's claims are finite set-theoretic identities and counts, each derived above and each independently corroborated by the executable finite certificate discussed in Chapter~11---and, per the certificate's own claim boundary, exhaustive execution over one sixteen-object site is not proof-assistant verification, external peer review, empirical validation, or a product-claim license.
+\end{boundary}
+
+\begin{exercise}\label{ch07:ex-1}
+Show that for $|\Omega|=m$ with two transverse partitions into blocks of sizes $p$ and $q$ (so $m=pq$ and each pair of cross-blocks meets in one atom), the analogue of Corollary~\ref{ch07:cor-no-containment} holds whenever $p,q\ge 2$, and fails when $p=1$ or $q=1$. Conclude that the four-atom model is the smallest in which both partitions have only proper blocks---the property Chapter~9 turns into nonmaximality of the generated sieves.
+\end{exercise}
+
+\begin{exercise}\label{ch07:ex-2}
+Verify from Table~\ref{ch07:tab-generating} that the unmarked families $K_{A}(V)$ and $K_{R}(V)$ coincide exactly on the seven contexts $\varnothing$, the four singletons, and the two diagonals, and use the block-completeness census to show these are exactly the contexts $V$ with $\alpha(V)=\rho(V)=0$. (This equivalence is special to the $2\times 2$ model; formulating the right general statement is part of the exercise.)
+\end{exercise}
+
+\begin{exercise}\label{ch07:ex-3}
+Show that a nonempty sieve (in the down-set reading) on any context necessarily contains the bottom arrow $\varnothing\to V$, and hence that the sieves \emph{not} containing it are exactly the sixteen empty sieves, one per context. Using Theorem~\ref{ch07:thm-298}, conclude that exactly $298-16=282$ of the sieves contain their bottom arrow. Then explain why, of the sixteen empty sieves, only the one at the empty context is ever \emph{covering} for the topologies of Chapter~9 (via the null cover), while the other fifteen never are.
+\end{exercise}

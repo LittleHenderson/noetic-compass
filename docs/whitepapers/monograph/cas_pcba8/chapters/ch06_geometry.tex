@@ -1,0 +1,844 @@
+\chapter{Geometry Profiles}\label{ch06:chapter}
+
+\section{Why geometry, and under what discipline}\label{ch06:sec:intro}
+
+Chapters~\ref{ch04:chapter} and~\ref{ch05:chapter} built a world of exact
+identities: tagged values, canonical payloads, digests that separate
+everything distinct. This chapter introduces the candidate's two
+\emph{geometric} vocabularies --- the mixed-simplex Fisher--Rao baseline
+and the optional projector research profile --- and, with equal care, the
+disciplines that keep geometric numbers from being mistaken for exact
+identities or for empirical findings.
+
+The motivating need is real. A simplex address
+(Definition~\ref{ch04:def:simplex}) is a strictly positive normalized
+profile over the forty canonical ND-cells; analyses over such profiles
+want a notion of \emph{closeness}: how far did a profile drift between
+two ticks, how dissimilar are two declared design profiles, is this
+fixture's output profile nearer to one reference than another. A
+digest cannot answer these questions --- it separates everything and
+grades nothing. A metric can. Information geometry supplies the
+canonical candidate metric on the open simplex, with a mathematical
+pedigree \cite{fisher,rao,amari,ay} that Section~\ref{ch06:sec:primer}
+reviews.
+
+But the candidate's evidence discipline requires that every geometric
+capability arrive with its limits attached, and this chapter is
+structured around three of them, stated here in advance:
+
+\begin{enumerate}
+\item The implemented Fisher--Rao distance is a \emph{binary64 numerical
+pseudometric at its resolution}. It is disclosed as such, profiled as
+such, and it is \emph{not} a proof that all distinct profiles are
+separated (Section~\ref{ch06:sec:pseudometric}).
+\item The projector profile is a \emph{separate, optional research
+profile}, never a canonical PCBA address; its Gram-kernel overlap result
+requires common rank $d > 0$ and establishes an algebraic relation
+between declared artifacts, \emph{not} latent cognitive capacity
+(Sections~\ref{ch06:sec:projector}--\ref{ch06:sec:gram}).
+\item The CAS capacity transfer retains a \emph{proof gap} governed
+solely by the formal-mathematics Paper~3 record; every engineering-side
+statement about it, including everything in this chapter, is a read-only
+dependency summary with no authority to narrow, close, or reinterpret
+the gap (Section~\ref{ch06:sec:proofgap}).
+\end{enumerate}
+
+And over all of it stands the boundary restated in
+Section~\ref{ch06:sec:boundary}: geometry profiles do not identify
+learned model states with CAS states.
+
+\section{Primer: information geometry on the open simplex}
+\label{ch06:sec:primer}
+
+\subsection{The open simplex as a statistical manifold}
+
+Identify a simplex address $p \in \Delta_{39}^{\circ}$ with the
+categorical probability distribution it defines over the forty canonical
+cells: cell $k$ receives probability $p_k > 0$. The open simplex is then
+the interior of the parameter space of the categorical family --- a
+smooth manifold of dimension $39$, with global coordinates given by any
+thirty-nine of the forty weights. Its tangent space at $p$ is the set of
+zero-sum vectors,
+\[
+T_p \Delta_{39}^{\circ}
+ = \Bigl\{\, u \in \mathbb{R}^{40} : \textstyle\sum_k u_k = 0 \,\Bigr\},
+\]
+reflecting that perturbations must preserve normalization.
+
+Statistical manifolds carry a distinguished Riemannian metric, obtained
+by Fisher's information quantity \cite{fisher} read as a quadratic form
+on parameter perturbations; Rao's foundational observation \cite{rao}
+was that this form defines a Riemannian geometry on the parameter space,
+whose geodesic distance measures the intrinsic distinguishability of
+nearby distributions. On the categorical family the construction is
+completely explicit, and it is worth carrying it out once, because the
+result is exactly the quadratic form the candidate uses.
+
+Let $X$ be a categorical random variable over the forty cells with
+distribution $p$, and perturb $p$ along a zero-sum direction $u$:
+$p(t) = p + t u$, which stays in the open simplex for small $t$. The
+log-likelihood of outcome $k$ is $\log p_k(t)$, its $t$-derivative at
+$t = 0$ is $u_k / p_k$, and the Fisher information of the
+one-parameter family at $t = 0$ is the variance of that score:
+\[
+I(0)
+ = \sum_{k=1}^{40} p_k \Bigl( \frac{u_k}{p_k} \Bigr)^{\!2}
+ - \Bigl( \sum_{k=1}^{40} p_k \frac{u_k}{p_k} \Bigr)^{\!2}
+ = \sum_{k=1}^{40} \frac{u_k^2}{p_k},
+\]
+the cross term vanishing because $\sum_k u_k = 0$. Polarizing the
+quadratic form gives the metric.
+
+\begin{definition}[Fisher--Rao metric on the open simplex]
+\label{ch06:def:frmetric}
+For $p \in \Delta_{39}^{\circ}$ and
+$u, v \in T_p \Delta_{39}^{\circ}$,
+\[
+g^{\mathrm{FR}}_p(u, v) = \sum_{k=1}^{40} \frac{u_k\, v_k}{p_k}.
+\]
+\end{definition}
+
+The reasons information geometry --- rather than an arbitrary embedding
+metric --- is the right setting are threefold, and each matters to how
+the candidate is allowed to talk about its numbers.
+
+\emph{Invariance.} The Fisher--Rao metric is, up to an overall scale,
+the unique Riemannian metric on families of distributions invariant
+under the natural statistical maps (sufficient statistics, refinement
+and coarsening of outcomes); this characterization and its history are
+developed in the standard treatments \cite{amari,ay}. Invariance means
+the geometry measures properties of the \emph{distributions}, not of an
+arbitrary coordinate choice --- exactly the property one wants if
+profile comparisons are ever to be more than numerology.
+
+\emph{Degeneracy at the boundary.} The metric coefficients $1/p_k$
+diverge as $p_k \to 0$: the closed simplex is not a Riemannian manifold
+under $g^{\mathrm{FR}}$. This is the geometric face of the strict
+positivity rule of Chapter~\ref{ch04:chapter},
+Section~\ref{ch04:sec:positivity}: the type system admits exactly the
+points where the geometry is defined.
+
+\emph{Distinguishability semantics.} Locally, the squared Fisher--Rao
+length of a perturbation measures how statistically distinguishable the
+perturbed distribution is from the original --- large distance means
+easy to tell apart from samples, small distance means hard. This gives
+distance values an operational reading \emph{as statements about
+distributions}. It gives them no reading whatsoever as statements about
+cognition; the distributions here are declared software profiles.
+
+\subsection{The sphere embedding and the geodesic distance}
+
+The categorical Fisher--Rao geometry admits a classical closed form.
+
+\begin{proposition}[Sphere embedding]\label{ch06:prop:sphere}
+The map $\varphi(p) = 2\sqrt{p} = (2\sqrt{p_1}, \ldots, 2\sqrt{p_{40}})$
+is a diffeomorphism from $\Delta_{39}^{\circ}$ onto the open positive
+orthant of the sphere of radius $2$ in $\mathbb{R}^{40}$, and it is an
+isometry between $g^{\mathrm{FR}}$ and the metric induced on that sphere
+by the Euclidean ambient metric.
+\end{proposition}
+
+\begin{proof}
+If $x = \varphi(p)$, then $\sum_k x_k^2 = 4 \sum_k p_k = 4$, so the
+image lies on the radius-$2$ sphere, with all coordinates positive; the
+inverse $p_k = x_k^2 / 4$ is smooth on the open orthant. For the
+isometry, differentiate: $dx_k = dp_k / \sqrt{p_k}$, hence
+$\sum_k dx_k^2 = \sum_k dp_k^2 / p_k = g^{\mathrm{FR}}_p(dp, dp)$.
+\end{proof}
+
+\begin{corollary}[Geodesic distance]\label{ch06:cor:distance}
+For $p, q \in \Delta_{39}^{\circ}$,
+\[
+d_{\mathrm{FR}}(p, q)
+ = 2 \arccos\!\Bigl( \sum_{k=1}^{40} \sqrt{p_k\, q_k} \Bigr),
+\]
+the great-circle distance between $\varphi(p)$ and $\varphi(q)$ on the
+radius-$2$ sphere. The argument of the arccosine --- the Bhattacharyya
+coefficient of $p$ and $q$ --- lies in $(0, 1]$ on the open simplex, so
+$d_{\mathrm{FR}}(p, q) \in [0, \pi)$, with $0$ attained exactly at
+$p = q$.
+\end{corollary}
+
+\begin{proof}
+The image of the open simplex is a geodesically convex subset of the
+open positive orthant of the sphere (any two points of the open orthant
+are joined by a unique minor great-circle arc lying in the orthant), so
+the induced intrinsic distance is the ambient great-circle distance:
+radius times the angle, and the angle between unit directions
+$\varphi(p)/2$ and $\varphi(q)/2$ has cosine
+$\sum_k \sqrt{p_k}\sqrt{q_k}$. By Cauchy--Schwarz this coefficient is at
+most $1$ with equality iff $\sqrt{p}$ and $\sqrt{q}$ are proportional,
+which under normalization forces $p = q$; positivity of all coordinates
+makes the coefficient strictly positive, bounding the distance strictly
+below $\pi$.
+\end{proof}
+
+\begin{remark}[Geodesic paths]\label{ch06:rem:geodesic}
+The embedding also yields the geodesic itself, not only its length. For
+$p \ne q$ with angle
+$\alpha = \arccos\bigl(\sum_k \sqrt{p_k q_k}\bigr)$, the unit-speed
+great-circle arc between $\varphi(p)$ and $\varphi(q)$ pulls back to
+\[
+\gamma(t)_k
+ = \Bigl(
+ \frac{\sin\bigl((1 - t)\,\alpha\bigr)}{\sin \alpha} \sqrt{p_k}
+ + \frac{\sin(t\,\alpha)}{\sin \alpha} \sqrt{q_k}
+ \Bigr)^{\!2},
+ \qquad t \in [0, 1],
+\]
+which remains in the open simplex throughout (both coefficients are
+positive for $t \in (0,1)$, and squares of positive combinations of
+positive coordinates are positive; normalization follows from the arc
+lying on the sphere). Interpolation between profiles, where an analysis
+wants it, therefore has a canonical form --- and it is \emph{not}
+the straight-line mixture $(1-t)p + tq$, which is a geodesic of a
+different (flat) geometry. The candidate registers no interpolation
+operation in v0.1; the formula is recorded so that any future one has
+its exact target stated in advance.
+\end{remark}
+
+\begin{remark}[Neighboring distances and local behavior]
+\label{ch06:rem:local}
+Writing $H^2(p, q) = 1 - \sum_k \sqrt{p_k q_k}$ for the squared
+Hellinger distance, the exact relation
+$\cos\bigl(d_{\mathrm{FR}}(p,q)/2\bigr) = 1 - H^2(p,q)$ holds, and for
+close profiles the expansion $\arccos(1 - x) = \sqrt{2x}\,(1 + O(x))$
+gives
+\[
+d_{\mathrm{FR}}(p, q) = 2\sqrt{2}\, H(p, q)\,\bigl(1 + O(H^2)\bigr),
+\qquad
+d_{\mathrm{FR}}(p, p + u)^2
+ = \sum_k \frac{u_k^2}{p_k} + O(\lVert u \rVert^3),
+\]
+the latter being the infinitesimal form one expects from
+Definition~\ref{ch06:def:frmetric}: to second order, squared geodesic
+distance is the chi-square-like quadratic form of the perturbation.
+These classical relations \cite{amari,ay} matter operationally in
+Section~\ref{ch06:sec:resolution}, where the square-root behavior of
+$\arccos$ near $1$ is exactly what amplifies floating-point error for
+nearby profiles.
+\end{remark}
+
+\begin{example}[A worked exact distance]\label{ch06:ex:worked}
+Illustrative computation, exact mathematics only. Let $p$ be the
+uniform address ($p_k = 1/40$ for all $k$) and let $q$ move mass
+$0.005$ from cell \texttt{P0} to cell \texttt{P1}:
+$q_1 = 0.02$, $q_2 = 0.03$, $q_k = 0.025$ otherwise. Then
+\[
+\sum_k \sqrt{p_k q_k}
+ = 38 \cdot 0.025 + \sqrt{0.025 \cdot 0.02} + \sqrt{0.025 \cdot 0.03}
+ \approx 0.95 + 0.022361 + 0.027386 = 0.999747,
+\]
+so $d_{\mathrm{FR}}(p, q) = 2 \arccos(0.999747) \approx 0.0450$, while
+the Hellinger approximation of Remark~\ref{ch06:rem:local} gives
+$2\sqrt{2}\, H \approx 2\sqrt{2} \cdot 0.015912 \approx 0.0450$ ---
+agreement to the displayed precision, as expected at this scale. The
+computed magnitude has, as always, no cognitive reading; it is a
+distance between two declared profiles.
+\end{example}
+
+\begin{remark}[Exact-mathematics status]\label{ch06:rem:exact}
+Definition~\ref{ch06:def:frmetric} through
+Corollary~\ref{ch06:cor:distance} are classical mathematics
+\cite{rao,amari,ay}, stated over the reals, and at that level
+$d_{\mathrm{FR}}$ is a genuine metric on $\Delta_{39}^{\circ}$:
+symmetric, positive on distinct pairs, and satisfying the triangle
+inequality (as a geodesic distance). \emph{None of this transfers
+automatically to the implementation.} The candidate's discipline is to
+keep three layers separate: the exact mathematics above; the exact
+Decimal data of Chapter~\ref{ch04:chapter}; and the binary64 numerical
+procedure of the next section, which is where the metric properties are
+partially lost and where the disclosure lives.
+\end{remark}
+
+\section{The implemented baseline: a disclosed numerical pseudometric}
+\label{ch06:sec:pseudometric}
+
+\subsection{What the implementation does}
+
+The implemented baseline, under the versioned profile name
+\texttt{cas-pcba-v8.binary64-fisher-rao-pseudometric.v1}, accepts two
+exact mixed-simplex addresses and proceeds as follows: both operands are
+revalidated; each exact Decimal weight is converted to binary64; the
+Bhattacharyya coefficient is accumulated by compensated floating
+summation of the terms $\sqrt{a_k b_k}$; the accumulated coefficient is
+clamped into $[0, 1]$; the distance is computed as
+$2 \arccos(\cdot)$ in binary64; results of magnitude below $10^{-15}$
+are flushed to exactly zero; and the result is returned as a Decimal
+constructed from the binary64 value's decimal representation. The
+function object itself carries two disclosure attributes: its profile
+name, and the flag \texttt{is\_exact\_metric = False}.
+
+Every step of that pipeline is deliberate. Revalidation keeps the
+garbage-in case out. The clamp exists because accumulated rounding can
+push the coefficient marginally above $1$, where the arccosine is
+undefined; clamping resolves the exception in the conservative
+direction (distance $0$ rather than a domain error). The flush-to-zero
+acknowledges that distances at the $10^{-15}$ scale are numerical noise
+at binary64 resolution and refuses to report them as structure. And the
+Decimal return type does \emph{not} launder the number into exactness:
+it is an exact representation \emph{of the binary64 result}, tagged by
+the profile that produced it.
+
+\subsection{The disclosure, stated precisely}
+
+\begin{definition}[Numerical pseudometric at resolution]
+\label{ch06:def:pseudometric}
+Call the implemented map
+$\widehat{d} : \Delta \times \Delta \to \mathbb{D}$ (where $\Delta$ is
+the set of valid mixed-simplex addresses and $\mathbb{D}$ the finite
+decimals) a \emph{numerical pseudometric at binary64 resolution},
+meaning: $\widehat{d}$ is symmetric and nonnegative by construction;
+$\widehat{d}(p, p) = 0$ for every $p$; but $\widehat{d}(p, q) = 0$ does
+\emph{not} imply $p = q$, and the triangle inequality is inherited from
+the exact mathematics only up to the accumulated floating-point and
+flush errors of the pipeline, for which no certified bound is currently
+registered.
+\end{definition}
+
+\begin{finding}[Separation fails below resolution]
+\label{ch06:find:separation}
+There exist pairs of \emph{distinct} valid addresses --- distinct as
+exact Decimal profiles, with distinct canonical identity digests ---
+whose implemented distance is exactly $0$. Two mechanisms suffice:
+(i)~two distinct sixty-digit Decimal weight profiles can round to the
+same forty binary64 values, collapsing the computation entirely; and
+(ii)~profiles distinct even after rounding can yield distances below
+the $10^{-15}$ flush threshold, which the implementation reports as
+zero by design. The implementation's own documentation states the
+consequence: distinct profiles below binary64 resolution can have
+distance zero, and the function ``is not an exact metric, proof of
+identity, or projector bridge.''
+\end{finding}
+
+It must be stressed that Finding~\ref{ch06:find:separation} is a
+\emph{disclosure}, not a defect report: the behavior is documented,
+versioned into the profile name itself (\texttt{binary64}, \texttt{pseudometric}),
+and guarded by the claim discipline below. The alternative --- exact
+Decimal transcendental evaluation with certified rounding --- is a
+legitimate open engineering item, and until it exists the candidate
+prefers a disclosed pseudometric to an undisclosed pretension of
+exactness. This is the same posture the seed specification takes:
+the binary64 implementation ``is a numerical pseudometric at its
+resolution --- not a proof that all distinct profiles are separated.''
+
+\subsection{Resolution arithmetic}\label{ch06:sec:resolution}
+
+How large are the effects the disclosure discloses? No certified error
+bound is registered, and this subsection does not create one; what it
+offers is a first-order \emph{heuristic} sizing, clearly labeled as
+such, so that readers of reported distances can calibrate their
+skepticism quantitatively rather than vaguely.
+
+Binary64 arithmetic resolves relative differences of order
+$\varepsilon \approx 2.2 \times 10^{-16}$ (the unit roundoff). Three
+stages of the pipeline interact with this floor differently.
+
+\emph{Conversion.} Each sixty-digit Decimal weight is rounded to
+binary64, a relative perturbation of order $\varepsilon$ per weight.
+Profiles differing only beyond the seventeenth significant digit of
+every weight become \emph{identical} after conversion --- the first
+mechanism of Finding~\ref{ch06:find:separation}.
+
+\emph{Accumulation.} The Bhattacharyya coefficient is a sum of forty
+terms of typical magnitude $1/40$; compensated summation keeps the
+accumulated error near a few units of $\varepsilon$, so the computed
+coefficient carries an absolute uncertainty on the order of
+$10^{-16}$ to $10^{-15}$.
+
+\emph{Amplification by the arccosine.} Near coincidence the coefficient
+approaches $1$, where $\arccos$ has unbounded derivative: by
+Remark~\ref{ch06:rem:local}, a coefficient error of magnitude $e$ near
+$1$ moves the distance by roughly $2\sqrt{2e}$. Taking
+$e \approx 10^{-16}$ gives a distance uncertainty of order
+$2\sqrt{2 \times 10^{-16}} \approx 3 \times 10^{-8}$.
+
+The heuristic conclusion --- and it is a heuristic, pending the
+independent numerical audit of
+Threat~\ref{ch06:threat:numeric} --- is that computed distances for
+\emph{nearly coincident} profiles are noise-dominated below roughly the
+$10^{-8}$ scale, even though the implementation only flushes below
+$10^{-15}$: the flush targets exact-coincidence roundoff residue, not
+the amplified noise floor near coincidence. A reported distance of,
+say, $3 \times 10^{-9}$ under profile v1 should therefore be read as
+``indistinguishable from zero at resolution,'' and
+Rule~\ref{ch06:rule:zero}'s discipline applies to it in spirit even
+though its printed value is positive. Far from coincidence the
+arccosine's derivative is moderate and the same heuristic assigns
+reported distances an absolute uncertainty many orders of magnitude
+below their values; the discipline of
+Rule~\ref{ch06:rule:positive} --- report the number, its profile, and
+no exactness pretension --- covers both regimes uniformly.
+
+\begin{example}[A binary64 collision pair]\label{ch06:ex:collision}
+Illustrative construction of the first mechanism of
+Finding~\ref{ch06:find:separation}. Let $p$ be the uniform address with
+every weight \texttt{Decimal("0.025")}. Build $q$ from $p$ by
+transferring mass $10^{-30}$ from cell \texttt{P0} to cell \texttt{P1}
+at the exact-Decimal layer, keeping the exact sum at
+\texttt{Decimal("1")}. Then $p$ and $q$ are distinct values with
+distinct canonical identity digests --- the digest layer separates them
+--- but each perturbed weight rounds to the \emph{same} binary64 number
+as $0.025$, since the relative perturbation, $4 \times 10^{-29}$, is
+far below the unit roundoff. The implemented pipeline computes from
+identical forty-tuples of doubles, obtains a coefficient that clamps to
+$1$, and reports distance exactly $0$. Both layers behaved exactly as
+specified; the example is why the specification insists they never be
+conflated.
+\end{example}
+
+\subsection{What this means for evidence claims}
+\label{ch06:sec:evidenceclaims}
+
+The pseudometric disclosure induces a small calculus of which claims a
+Fisher--Rao number can and cannot support. The candidate states it as
+rules, because the failure mode --- quietly upgrading a numerical zero
+into an identity claim --- is exactly the kind of drift the audit
+discipline exists to catch.
+
+\begin{ruleenv}[Zero distance licenses nothing about identity]
+\label{ch06:rule:zero}
+A computed $\widehat{d}(p, q) = 0$ supports only: \emph{the implemented
+pipeline could not distinguish $p$ and $q$ at binary64 resolution under
+profile v1}. Identity of addresses is claimed, if at all, by canonical
+digest equality (Chapter~\ref{ch04:chapter},
+Rule~\ref{ch04:rule:identity}) --- the exact layer, where separation
+holds by construction. Any artifact that records a zero distance and
+needs an identity conclusion must record the digest comparison
+alongside it.
+\end{ruleenv}
+
+\begin{ruleenv}[Positive distance carries its resolution]
+\label{ch06:rule:positive}
+A computed $\widehat{d}(p, q) = \delta > 0$ supports:
+\emph{the profiles are distinguishable by the implemented pipeline, with
+reported magnitude $\delta$ under profile v1}. Reported magnitudes are
+comparable with one another under the same profile; they are not
+certified approximations of the exact $d_{\mathrm{FR}}$ to any stated
+error bound, because no such bound is currently registered. Downstream
+text must therefore not present $\delta$ as the exact Fisher--Rao
+distance, and must not chain triangle-inequality arguments through
+$\widehat{d}$ as if certified.
+\end{ruleenv}
+
+\begin{ruleenv}[Profile identity travels with the number]
+\label{ch06:rule:profiletravel}
+Every reported distance carries the profile name
+\texttt{cas-pcba-v8.binary64-fisher-rao-pseudometric.v1}; the operand
+identities (their profile digests, which embed the decimal-context
+digest); and, where the number enters a trace, the standard trace
+bindings of Chapter~8. A distance whose provenance cannot be replayed
+is not evidence of anything.
+\end{ruleenv}
+
+\begin{protocol}[Reporting template for baseline distances]
+\label{ch06:proto:report}
+Any artifact of this research program that reports a Fisher--Rao
+baseline value records, together: (1)~the value as returned (a Decimal
+transcription of the binary64 result); (2)~the profile name
+\texttt{cas-pcba-v8.binary64-fisher-rao-pseudometric.v1} and its
+\texttt{is\_exact\_metric = false} disclosure; (3)~the operand profile
+digests; (4)~the decimal-context digest (already embedded in the
+operand identities); (5)~where applicable, the trace and result
+identities binding the computation to a run
+(Chapter~\ref{ch05:chapter}, Protocol~\ref{ch05:proto:chain}); and
+(6)~for values below the heuristic noise scale of
+Section~\ref{ch06:sec:resolution}, an explicit
+``indistinguishable at resolution'' qualifier in any prose summary.
+Conclusions of profile \emph{identity} additionally record the digest
+comparison of Rule~\ref{ch06:rule:zero}; conclusions of profile
+\emph{difference} rest on digest inequality, with the distance
+supplying magnitude only.
+\end{protocol}
+
+\begin{threat}[Numerical-validity residual]\label{ch06:threat:numeric}
+Independent numerical audit of the baseline --- certified error bounds
+for the conversion, summation, clamp, arccosine, and flush stages;
+tolerance analysis; and adversarial search for worst-case separation
+failures beyond the constructive mechanisms of
+Finding~\ref{ch06:find:separation} --- remains open, as the threats
+chapter of the seed paper records. Until closed, the pseudometric
+framing is not a conservative courtesy; it is the strongest claim the
+evidence admits.
+\end{threat}
+
+\section{Projector geometry: a separate optional research profile}
+\label{ch06:sec:projector}
+
+The second geometric vocabulary is deliberately quarantined from the
+first. A \emph{projector profile} is an optional research artifact for
+frontier analyses that want to reason about linear subspaces --- for
+example, comparing declared feature subspaces across declared bases. It
+is not part of the board baseline, no component port carries one except
+under the explicit \textsc{projector\_profile} signal kind, and the type
+itself enforces that it can never be mistaken for an address: the
+discriminator field \texttt{canonical\_pcba\_address} is pinned to false
+and construction rejects any other value.
+
+\begin{definition}[Projector profile]\label{ch06:def:projector}
+A \texttt{ProjectorProfile} binds: a profile identifier, basis
+identifier, and source identifier (all safe references); a nonempty
+square matrix of finite Decimals; a declared integer rank $r$ with
+$1 \le r \le n$ (where $n$ is the dimension); a tolerance --- a finite
+nonnegative Decimal capped by the versioned bound
+$10^{-12}$; the fixed validation-profile name
+\texttt{cas-pcba-v8.projector-validation.v1} and profile-kind
+discriminator; the fixed research boundary; three \emph{recorded
+validation residuals} computed at construction (symmetry residual
+$\max_{i,j} \lvert M_{ij} - M_{ji} \rvert$, idempotence residual
+$\max_{i,j} \lvert (M^2 - M)_{ij} \rvert$ with the square computed by
+exact-sum Decimal arithmetic, and trace residual
+$\lvert \trace M - r \rvert$); and two digests --- a matrix digest over
+the canonical matrix payload, and a profile digest over the complete
+identity payload.
+\end{definition}
+
+\begin{ruleenv}[Capped, versioned tolerance; recorded residuals]
+\label{ch06:rule:tolerance}
+Construction fails unless all three residuals are within the declared
+tolerance, and the tolerance itself cannot exceed the versioned cap.
+The residuals are not transient checks: they are \emph{recorded into
+the identity payload}, so the profile digest commits to exactly how
+close to an orthogonal projector of the declared rank the matrix was
+found to be, under which tolerance, at validation time. Revalidation
+recomputes the residuals and fails on any discrepancy with the recorded
+values --- staleness and tampering are both detected --- and re-checks
+the tolerance cap, so a profile cannot quietly loosen its own
+acceptance criterion after the fact.
+\end{ruleenv}
+
+\begin{ruleenv}[One digest binds the whole geometry]
+\label{ch06:rule:onedigest}
+The profile digest is computed over a payload containing, together and
+inseparably: the canonical matrix digest, the basis identifier and
+source identifier, the dimension, the declared rank, the tolerance, the
+three recorded residuals, the decimal-context digest, and the research
+boundary. Consequently no constituent can be swapped independently ---
+a re-based matrix, a re-declared rank, a retuned tolerance, or a
+re-attributed source each produce a different profile identity. ``The
+projector'' in any downstream artifact is always \emph{this matrix, in
+this basis, at this dimension and rank, validated to this tolerance,
+under this arithmetic} --- one digest, one object.
+\end{ruleenv}
+
+The design mirrors, in miniature, the board-identity argument of
+Chapter~\ref{ch05:chapter} (Proposition~\ref{ch05:prop:digest}), and
+for the same evidentiary reason: subspace claims are only as auditable
+as the binding between the numbers and their declared interpretation
+frame. The basis identifier is the frame; the digest makes frame
+substitution detectable.
+
+\begin{example}[A minimal validated projector, and a rejected one]
+\label{ch06:ex:projector}
+Illustrative. The $2 \times 2$ matrix
+$\mathrm{diag}(\texttt{Decimal("1")}, \texttt{Decimal("0")})$ with
+declared rank $1$ validates exactly: all three residuals are the
+Decimal zero, within any admissible tolerance. The matrix
+$\mathrm{diag}(\texttt{Decimal("0.5")}, \texttt{Decimal("0.5")})$ with
+declared rank $1$ has trace residual zero but idempotence residual
+$0.25$ --- twelve orders of magnitude above the tolerance cap --- and
+is rejected: an ``average of two projectors'' is not a projector, and
+the type refuses to launder one into subspace vocabulary. A declared
+rank of $0$ or $3$ is rejected before any residual is computed; a
+tolerance of $10^{-6}$ is rejected by the versioned cap, so no author
+can admit a sloppy matrix by relaxing the acceptance criterion.
+For validated $P = \mathrm{diag}(1, 0)$ and $Q = P$ under a shared
+basis identifier, $\omega(P, Q) = 1$; for $Q' = \mathrm{diag}(0, 1)$,
+$\omega(P, Q') = 0$ --- the two endpoints of
+Lemma~\ref{ch06:lem:overlap}, realized at the smallest possible
+dimension.
+\end{example}
+
+\section{The Gram-kernel overlap result and its limits}
+\label{ch06:sec:gram}
+
+The one registered computation over projector profiles is the
+normalized overlap.
+
+\begin{definition}[Projector overlap]\label{ch06:def:overlap}
+For validated profiles $P$ and $Q$ with common dimension $n$, common
+declared rank $r$, and \emph{identical declared basis identifier}, the
+overlap is
+\[
+\omega(P, Q) = \frac{\trace(PQ)}{r},
+\]
+computed in exact Decimal arithmetic (exact-sum matrix products) after
+revalidating both operands. The operation raises --- it does not
+degrade --- on dimension mismatch, rank mismatch, or basis mismatch.
+\end{definition}
+
+The common-rank requirement is not bureaucratic: the normalization
+divides by $r$, and the type system already excludes $r = 0$ (rank is
+constrained to $[1, n]$ at construction), so the registered result is
+available exactly when common rank $d > 0$ holds --- the condition the
+seed specification states. What the number means, at the level of exact
+linear algebra, is bounded by the following.
+
+\begin{lemma}[Overlap bounds]\label{ch06:lem:overlap}
+Let $P$ and $Q$ be exact orthogonal projectors on $\mathbb{R}^n$ of
+common rank $d > 0$. Then
+$0 \le \trace(PQ) \le d$, hence $\omega(P,Q) \in [0,1]$; moreover
+$\omega(P,Q) = 1$ if and only if $\im P = \im Q$, and
+$\omega(P,Q) = 0$ if and only if $\im P \perp \im Q$.
+\end{lemma}
+
+\begin{proof}
+Using symmetry and idempotence,
+$\trace(PQ) = \trace(PQQP) = \trace\bigl((QP)^{\top} (QP)\bigr)
+ = \lVert QP \rVert_F^2 \ge 0$,
+with equality iff $QP = 0$, i.e.\ $\im P \subseteq \ker Q$, i.e.\ the
+ranges are orthogonal. For the upper bound, write
+$\trace(PQ) = \trace(PQP)$ and note $0 \preceq PQP \preceq P$ in the
+Loewner order, so $\trace(PQP) \le \trace(P) = d$; equality forces
+$PQP = P$, hence for every unit $x \in \im P$,
+$x^{\top} Q x = 1$, which for a projector means $x \in \im Q$; thus
+$\im P \subseteq \im Q$, and equal finite rank upgrades inclusion to
+equality.
+\end{proof}
+
+\begin{ruleenv}[What an overlap value may claim]
+\label{ch06:rule:overlapclaims}
+An overlap $\omega(P, Q)$ computed by the candidate supports exactly:
+\emph{an exact-arithmetic algebraic relation between two validated
+matrices that were declared to share a basis frame, each within its
+recorded residuals of an orthogonal projector of the declared rank}.
+Lemma~\ref{ch06:lem:overlap} then gives the value its geometric
+reading --- subspace alignment --- \emph{up to} the residual tolerances,
+whose propagation into an error bar on $\omega$ is an open numerical
+item. What the value does \emph{not} support, under any magnitude: that
+either subspace corresponds to a capability, feature, concept, or
+state of any learned model or cognitive system. The overlap is a
+statement about declared artifacts, and the registered result is
+explicitly recorded as \emph{not} establishing latent cognitive
+capacity.
+\end{ruleenv}
+
+The last sentence deserves its own paragraph, because it is where a
+plausible-sounding inference chain must be cut. The tempting chain
+runs: a projector was derived from model activations (elsewhere, under
+some analysis); two such projectors overlap strongly; therefore the
+model has a shared latent structure; therefore a cognitive capacity is
+present. Every link after the first imports assumptions the candidate
+does not admit: that the derivation basis is meaningful, that overlap
+of declared artifacts measures overlap of whatever produced them, and
+that subspace structure is capacity. The projector profile's fields are
+designed to keep the first link honest (source and basis identifiers,
+recorded residuals) precisely so that the later links can be seen to be
+\emph{missing} rather than implied. The Gram-kernel result is
+mathematics about matrices; capacity claims are empirical claims about
+systems; the candidate registers the former and quarantines the latter.
+
+\section{The capacity-transfer proof gap}\label{ch06:sec:proofgap}
+
+Beyond the overlap result lies a stronger statement that the research
+program cares about: a transfer principle by which structure validated
+in one representation would carry CAS-semantic weight in another.
+This monograph's obligation is to record its status exactly.
+
+\begin{hypothesis}[CAS capacity transfer --- status: open, not licensed]
+\label{ch06:hyp:transfer}
+The proposed transfer from projector-level structure to CAS capacity
+claims is a hypothesis. It retains a \emph{proof gap}: no admitted
+derivation closes the distance between algebraic subspace relations
+(Lemma~\ref{ch06:lem:overlap} and its registered computational form)
+and any statement about cognitive or model capacity.
+\end{hypothesis}
+
+\begin{ruleenv}[Governance of the gap]\label{ch06:rule:papergov}
+The proof gap is governed \emph{solely} by the formal-mathematics
+Paper~3 record, at that record's own commit. Engineering records ---
+the implementation, its tests, the seed research paper, and this
+monograph --- are \emph{read-only dependency summaries} with respect to
+that record: they may restate its status, as this section does, and
+they must track it; they have no authority to close, narrow, extend, or
+reinterpret it. In particular, no accumulation of green software tests,
+no overlap computation of any magnitude, and no prose in an engineering
+artifact changes the status of Hypothesis~\ref{ch06:hyp:transfer}. If
+the Paper~3 record changes, engineering summaries update to match ---
+never the reverse.
+\end{ruleenv}
+
+This governance rule is an instance of the candidate's general
+authority discipline (the same one that keeps locally constructed
+calibration records out of Evidence Packets and self-hashed receipts out
+of licensing): the artifact that \emph{could} benefit from a claim is
+never the artifact that adjudicates it. A geometry module that could
+declare its own mathematics sufficient would be exactly the kind of
+self-certifying loop the architecture exists to prevent.
+
+\section{Two arithmetic regimes, and why they differ}
+\label{ch06:sec:regimes}
+
+A reader tracking the candidate's arithmetic discipline
+(Chapter~\ref{ch04:chapter}, Section~\ref{ch04:sec:decimal}) will have
+noticed an asymmetry in this chapter that deserves to be made explicit,
+because it looks like an inconsistency and is in fact a design rule.
+
+The \emph{projector} path is exact end to end. Residual computation
+multiplies matrices with exact aligned-integer Decimal summation;
+overlap traces are exact sums of exact products; the tolerance
+comparison is exact Decimal comparison. Nothing in the projector path
+introduces a rounding step beyond the fixed sixty-digit context's
+governance of individual multiplications, and the recorded residuals
+are reproducible to the digit on any conforming interpreter.
+
+The \emph{simplex distance} path is not. It leaves the exact world at
+the conversion step and returns only a transcription of a binary64
+result, with the pseudometric disclosure attached.
+
+The difference is not carelessness on one side; it is the difference
+between polynomial and transcendental computation. Residuals, traces,
+and overlaps are polynomial in the matrix entries: finitely many exact
+multiplications and exact additions, closed under Decimal arithmetic.
+The Fisher--Rao distance requires square roots and an arccosine ---
+transcendental functions whose exact values are not decimals at all, so
+\emph{some} approximation contract is mandatory. The candidate's v0.1
+choice is the weakest honest one: use the platform's binary64
+transcendentals, and disclose the resulting object as a pseudometric at
+that resolution rather than dress it in exactness it does not have. A
+future profile could tighten the contract --- correctly rounded
+sixty-digit square roots exist in the Decimal context, and
+arbitrary-precision arccosine with certified error is implementable ---
+but that would be a \emph{new versioned profile} with its own name and
+its own disclosure, not a quiet upgrade of v1
+(Rule~\ref{ch06:rule:profiletravel} makes the version part of every
+reported number precisely so that such an upgrade would be visible in
+the evidence).
+
+The same asymmetry explains an operational rule that might otherwise
+puzzle: digest-bearing identity payloads embed \emph{weights}, never
+\emph{distances}. A simplex address's identity contains its forty exact
+Decimals; a projector's identity contains its exact matrix and exact
+residuals; no identity anywhere contains a Fisher--Rao value. Exact
+objects are identity material; approximate objects are reportable
+results. Keeping the two segregated is what lets the candidate promise
+that identities are deterministic across conforming platforms while
+transcendental libraries vary.
+
+\section{Geometry values in the wiring and the trace}
+\label{ch06:sec:wiring}
+
+Both geometry types are first-class citizens of the board vocabulary,
+and their integration points are worth enumerating because each is also
+a containment point.
+
+\emph{Signal kinds and units.} A net can carry a simplex address only
+under the \textsc{mixed\_simplex\_address} signal kind with unit
+\textsc{probability}, and a projector profile only under
+\textsc{projector\_profile} with unit \textsc{none}
+(Chapter~\ref{ch04:chapter}, Table~\ref{ch04:tab:sigunit}). The closed
+admissibility table means geometry values cannot ride generic scalar
+wiring, and scalars cannot pose as geometry.
+
+\emph{Port validation on canonical bytes.} When a geometry value
+crosses a port, validation happens against its serialized canonical
+identity: a mixed-simplex port requires a payload of mixed-simplex
+type whose embedded identity revalidates (canonical cell labels, forty
+tagged positive weights, exact sum one, matching decimal-context
+digest); a projector port likewise requires a full projector identity
+whose recorded residuals, tolerance cap, rank bounds, and boundary
+block all re-check, and whose matrix-digest linkage is intact. A
+tampered geometry payload does not reach a component; it fails the
+port.
+
+\emph{Measurements.} A geometry value observed at a test point enters
+the trace as a measurement record whose value text is the canonical
+identity payload --- so the full forty weights, or the full projector
+identity, are in the evidence verbatim, under the value digest. Any
+distance later computed \emph{from} traced addresses is a derived
+result governed by Protocol~\ref{ch06:proto:report}; the trace holds
+the exact operands, so the derivation is replayable by any auditor
+with a conforming implementation.
+
+\emph{The adapter boundary.} Neither geometry type is
+finite-adapter-eligible, and the TKS adapter rejects both by type:
+continuous profiles are exactly the objects the finite-arrow boundary
+exists to keep out (Chapter~\ref{ch04:chapter},
+Rule~\ref{ch04:rule:nottks}). The geometry chapter therefore ends
+where the adapter chapter begins: with two vocabularies that touch at
+zero points, by construction.
+
+\section{Separations between the two profiles}\label{ch06:sec:separation}
+
+It is worth closing the technical development with the separations the
+two geometry profiles maintain, since their coexistence in one chapter
+could otherwise suggest a unity the candidate does not claim.
+
+\begin{invariant}[Profile separations]\label{ch06:inv:separation}
+(i) A mixed-simplex address is never a projector profile, and neither
+is ever coerced to the other; they occupy distinct signal kinds
+(\textsc{mixed\_simplex\_address} versus \textsc{projector\_profile})
+with distinct admissible units, so no net can deliver one where the
+other is expected.
+(ii) The Fisher--Rao baseline consumes addresses only; the overlap
+consumes projector profiles only; each raises on the other's type. The
+baseline's own documentation disclaims being a ``projector bridge.''
+(iii) The baseline is part of the candidate's named geometry
+(\texttt{cas-pcba-v8.mixed-simplex.v1} addresses;
+\texttt{cas-pcba-v8.binary64-fisher-rao-pseudometric.v1} distance);
+the projector profile is optional research apparatus
+(\texttt{cas-pcba-v8.projector-validation.v1}) that no baseline
+artifact depends on.
+(iv) Both profiles bind the decimal-context digest and the fixed
+research boundary into their identities; neither can be constructed in
+an ``accepted'' or ``licensed'' state.
+\end{invariant}
+
+\begin{exercise}[Boundary behavior of the distance]
+\label{ch06:ex:boundaryexercise}
+Show that on the \emph{open} simplex the supremum $\pi$ of
+$d_{\mathrm{FR}}$ is not attained: for any two valid addresses the
+Bhattacharyya coefficient is strictly positive, while sequences of
+addresses concentrating on disjoint cells drive it to $0$. Conclude
+that ``maximally distant profiles'' is not a well-posed superlative in
+the candidate's vocabulary, and relate this to the exclusion of one-hot
+addresses (Chapter~\ref{ch04:chapter}, Rule~\ref{ch04:rule:notonehot}).
+\end{exercise}
+
+\begin{exercise}[Geodesic midpoint]\label{ch06:ex:midpointexercise}
+Using Remark~\ref{ch06:rem:geodesic}, derive the closed form of the
+geodesic midpoint of two addresses $p, q$ and verify it lies in the
+open simplex; then explain why the arithmetic mixture $(p + q)/2$
+generally differs from it, and compute both for the pair of
+Example~\ref{ch06:ex:worked}.
+\end{exercise}
+
+\begin{remark}[Why the quarantine is architecture, not caution]
+The two vocabularies answer different questions with different
+mathematics: distances between normalized profiles (a Riemannian
+question on a statistical manifold) versus alignment between declared
+subspaces (a linear-algebra question in a declared frame). Merging them
+--- for example, defining an ad hoc ``distance'' between an address and
+a projector --- would require exactly the identification of profile
+space with representation space that the boundary below prohibits.
+The type-level quarantine makes the prohibited identification not
+merely unclaimed but unrepresentable in the candidate's vocabulary,
+which is the strongest form of claim discipline software can provide.
+\end{remark}
+
+\section{Claim boundary}\label{ch06:sec:boundary}
+
+\begin{boundary}\label{ch06:bnd:main}
+This chapter presents mathematics and software contracts of the CAS
+PCBA~8 v0.1 research candidate, at Ring~4, \textsc{not licensed}. The
+exact Fisher--Rao results
+(Definition~\ref{ch06:def:frmetric}--Corollary~\ref{ch06:cor:distance})
+are classical statements about probability distributions
+\cite{fisher,rao,amari,ay}; their subjects here are declared software
+profiles, not measured states of any system. The implemented distance
+is a disclosed binary64 numerical pseudometric at its resolution and is
+not a proof that all distinct profiles are separated
+(Finding~\ref{ch06:find:separation}); every claim built on its values
+is bounded by Rules~\ref{ch06:rule:zero}--\ref{ch06:rule:profiletravel}.
+The projector Gram-kernel result requires common rank $d > 0$ and
+establishes algebraic relations between declared, validated artifacts
+only; it does not establish latent cognitive capacity
+(Rule~\ref{ch06:rule:overlapclaims}). The CAS capacity transfer retains
+a proof gap governed solely by the formal-mathematics Paper~3 record,
+with respect to which all engineering records, including this chapter,
+are read-only dependency summaries
+(Hypothesis~\ref{ch06:hyp:transfer}, Rule~\ref{ch06:rule:papergov}).
+Geometry profiles do not identify learned model states with CAS states;
+no physical, causal, safety, clinical, regulatory, or product claim is
+made or licensed by anything in this chapter.
+\end{boundary}

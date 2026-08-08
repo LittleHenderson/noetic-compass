@@ -1,0 +1,920 @@
+\chapter{Introduction}\label{ch01:intro}
+
+\section{A kernel that cannot be talked into overclaiming}\label{ch01:framing}
+
+This monograph is about a small piece of software with an unusual design goal.
+CAS Core 8 is a compatibility and evidence kernel for the Cognitive
+Architecture System (CAS) software family. It does not score anything, prove
+anything about cognition, or translate anything into new semantics. What it
+does is narrower and, we will argue, prior to all of those ambitions: it makes
+source identity, semantic namespace, compatibility profile, registry
+integrity, action intent, and claim boundaries explicit enough to test, and it
+does so in a way that is deliberately hostile to its own tendency---and the
+tendency of the surrounding research program---to overclaim.
+
+The phrase ``cannot be talked into overclaiming'' deserves unpacking, because
+it names the central engineering stance of the entire kernel. Research
+software accumulates claims the way sediment accumulates in a river delta:
+each individual deposit is small, locally reasonable, and apparently
+harmless. A test passes, and someone writes ``verified'' in a status file. A
+hash matches, and someone writes ``authentic.'' A generated report contains
+the word ``licensed,'' and a later reader---human or automated---treats the
+word as if it carried the force of the review process that the word is
+supposed to summarize. None of these steps is a lie. Each is a small
+promotion of evidence into a stronger register than the evidence supports,
+and the composition of many small promotions is a system whose stated
+properties nobody can actually defend.
+
+The TKS/CAS research program from which CAS Core 8 emerged has direct,
+documented experience of this dynamic, in two specific and recurring forms.
+The program's own audit history---not a hypothetical threat model, but its
+record of voided work products and withdrawn claims---identifies two failure
+classes that no amount of downstream testing repairs, because both failures
+occur \emph{upstream} of any test: they corrupt what the tests are about.
+This chapter develops both failure classes as extended narratives
+(Sections~\ref{ch01:drift} and~\ref{ch01:promotion}), states the design
+thesis that answers them (Section~\ref{ch01:inversion}), fixes the scope and
+non-goals of the kernel and of this monograph
+(Section~\ref{ch01:scope}), and closes with a reading guide
+(Section~\ref{ch01:guide}).
+
+A word on status before anything else, because the kernel's own discipline
+requires it of the prose that describes it. Everything discussed in this
+monograph is a Ring-4 research candidate: admission state \textsc{open},
+product state \textsc{not licensed}, public disclosure withheld. The bounded
+software receipts we will cite in later chapters are historical evidence
+about tested software behavior under exact fixtures; they are not
+experiments, not independent review, and not authority. The monograph
+promotes no claim. Where a property of the kernel has been exercised by its
+test suite we will say so; where a property is a design intention that has
+not been independently reviewed we will say that instead; and where the
+governing sources are silent we will say that the sources are silent rather
+than inventing a fact to fill the gap.
+
+\section{The first failure class: semantic drift}\label{ch01:drift}
+
+\subsection{An ecology of ontologies}\label{ch01:ecology}
+
+The research program in which CAS Core 8 lives is unusually dense in
+ontologies. This is not an accident of sloppy design; it is a structural
+consequence of the program's history. The program spans, at minimum, the
+following families of named semantic objects, each with its own authority,
+its own versioning history, and its own definitional texts.
+
+\begin{itemize}
+\item \emph{TKS Foundations.} A family of seven positions in the TKS source
+material, indexed positionally, with definitional texts fixed in the source
+corpus. The Foundations cross with a second axis to yield a larger derived
+family; the details belong to the TKS corpus itself and are not restated
+here.
+\item \emph{TKS Worlds.} A four-element axis in the same source material,
+crossing with Foundations and with the Noetic family to produce derived
+grids. The Worlds are positional, ordered, and defined by frozen source
+text.
+\item \emph{CAS Drives.} Seven motivational primitives of the Cognitive
+Architecture System, named F1 through F7, with their own definitional texts
+in the CAS corpus, their own inversion-pair structure, and their own
+crossing with CAS Domains.
+\item \emph{CAS Domains.} Four processing tiers of CAS, with a total
+precedence order, defined in the CAS corpus.
+\item \emph{CAS Registers.} Four operational-character values introduced in
+a later CAS revision as an orthogonal axis over existing primitives.
+\item \emph{CAS States.} The forty cognitive states obtained by crossing
+the ten CAS Noetics with the four Domains.
+\item \emph{Noetic Topos objects.} Objects of the categorical formulation
+of CAS, which live in a mathematical setting with its own identity
+discipline and are related to, but not the same things as, the operator and
+state families above.
+\end{itemize}
+
+The crucial fact about this ecology is that its families are related by
+\emph{history} and by \emph{position}, but not by identity. The CAS Drives
+were developed with explicit awareness of the TKS Foundations; there is a
+positional correspondence between the two seven-element families, and that
+correspondence is analytically important. The CAS Domains stand in a
+similar positional relation to the TKS Worlds. The CAS Register axis was
+introduced precisely because a four-valued axis present in the TKS
+cross-products had been lost in an earlier translation and was restored in
+secular terms. In every one of these cases the relationship is real,
+documented, and load-bearing for the program's own understanding of
+itself---and in every one of these cases the related elements are
+\emph{different semantic objects}, defined by different texts, carrying
+different entailments, governed by different canons, and versioned on
+different schedules.
+
+Two entries in the list deserve a closing note each, because they mark
+the edges of the ecology. The Noetic Topos objects are the odd family
+out: they live in a mathematical formulation, where identity is already
+disciplined---objects are individuated by the category they live in, and
+nobody familiar with the formalism would conflate an object with the
+informal operator it models. One might conclude that this family, at
+least, needs no protection. The conclusion is exactly backwards, and the
+reason illuminates the whole design. The mathematical formulation is
+disciplined \emph{inside mathematics}; the drift risk arises at the
+crossing, where prose, code comments, dashboards, and generated
+summaries refer to ``the operator'' and ``the object'' interchangeably
+because the informal register has no way to mark the difference. The
+formal family needs a namespace not to protect it from mathematicians
+but to protect the boundary between registers, which is where every
+other family's incidents have also occurred. Conversely, the Register
+family marks the ecology's youngest edge: an axis restored in a recent
+revision after having been lost in translation from the source
+material. Its recency means comparatively few artifacts refer to it
+yet---which makes it the family for which getting identity right
+\emph{now} is cheapest, and the clearest illustration of the timing
+argument made later in this chapter.
+
+A research program with one ontology can be sloppy about identity and
+survive, because there is nothing to conflate. A program with seven or more
+interlocking families, several of them positionally aligned seven-element
+or four-element sets, is a machine for producing conflation. The alignment
+that makes the families intellectually productive is exactly the alignment
+that makes them dangerous: whenever two families have the same cardinality
+and a meaningful positional correspondence, every artifact that names an
+element of one family is one careless step away from being read as naming
+the corresponding element of the other.
+
+\subsection{Positional relabels are not paraphrases}\label{ch01:relabel}
+
+The distinction the program's canon draws---and the distinction whose
+violation has actually voided work---is between a \emph{positional relabel}
+and a \emph{paraphrase}. A paraphrase restates the same semantic object in
+different words: the object's identity survives, and any entailment
+licensed by the original definition is licensed by the paraphrase. A
+positional relabel maps an element of one family to the same-indexed
+element of another family: the index survives, but the identity does not,
+and entailments do \emph{not} transfer. The fifth TKS Foundation and the
+CAS Drive F5 occupy corresponding positions in aligned seven-element
+families. Statements true of one are not thereby true of the other. The
+definitional text of one is not the definitional text of the other. A
+derivation that consumes the definition of one and silently emits
+conclusions about the other has not paraphrased; it has changed the
+subject while keeping the index.
+
+\begin{finding}[The Drive/Foundation conflation incident]\label{ch01:finding-conflation}
+A prior work product in the program treated positionally corresponding
+Drive and Foundation names as interchangeable---as paraphrases of one
+another rather than as positional relabels across distinct families. The
+conflation was caught in review, and the work product was voided. The
+incident is recorded in the program's canon precisely because nothing in
+the artifacts involved had resisted the conflation: the names were plain
+strings, the strings looked alike, and every tool that touched them was
+happy to treat equal-looking strings as equal things.
+\end{finding}
+
+Finding~\ref{ch01:finding-conflation} is the single most important
+historical datum behind the kernel's semantic-identity mechanism, and it is
+worth dwelling on \emph{why} the conflation was so easy. The failure was
+not a failure of knowledge. The people and tools involved had access to
+canon documents stating explicitly that the correspondence was positional.
+The failure was a failure of \emph{representation}: the artifacts in which
+the work was carried out had no way to say, in a machine-checkable form,
+``this token names a TKS Foundation, under this version of this source,
+with this defining text'' as opposed to ``this token names a CAS Drive,
+under that version of that source, with that defining text.'' Where the
+representation cannot express a distinction, the distinction survives only
+as long as every reader's discipline does---and across enough readers,
+enough sessions, and enough automated rewrites, some reader's discipline
+always fails.
+
+\subsection{How untyped strings hide drift}\label{ch01:strings}
+
+Consider the string \texttt{"F5"}. Within the program's corpora this
+three-character token can plausibly name at least three different things: a
+TKS Foundation in positional notation, a CAS Drive, or an incidental label
+in some third context (a spreadsheet column, a keyboard key, a paper's
+figure numbering). Nothing in the string distinguishes these readings.
+String equality---the only identity test an untyped representation
+supports---answers ``are these the same characters?'' when the question
+that matters is ``are these the same semantic object?'' The two questions
+have different answers in both directions:
+
+\begin{itemize}
+\item \emph{Equal strings, different objects.} \texttt{"F5"} as Foundation
+and \texttt{"F5"} as Drive are string-equal and semantically distinct. An
+untyped pipeline will merge them; every merge is a silent conflation of
+the kind in Finding~\ref{ch01:finding-conflation}.
+\item \emph{Different strings, same object.} The same Drive may appear as
+\texttt{"F5"}, \texttt{"Drive 5"}, \texttt{"Agency"}, or a renamed
+successor in a later revision. An untyped pipeline will treat these as
+unrelated; provenance fragments, and cross-references quietly dangle.
+\end{itemize}
+
+Untyped strings hide a second, subtler kind of drift as well:
+\emph{definitional} drift. Even when a token unambiguously names one family
+and one element, the defining text of that element can change between
+source versions---a canon correction, an expanded scope note, a translation
+fix. An artifact produced against the old definition and an artifact
+produced against the new one will use the same token in good faith and
+mean measurably different things. String identity is blind to this; so is
+any identity scheme that names concepts without binding the bytes that
+define them. The program has direct experience of definitional drift too:
+its canon documents exist in versioned editions precisely because
+definitions have been corrected, and its own rules require rechecking
+derived artifacts when a governing definition changes. A representation in
+which references do not carry the digest of their defining text makes that
+recheck obligation undiscoverable: nothing in the artifact records which
+definition it was built against, so nobody can enumerate what a
+definitional change invalidates.
+
+Finally, untyped strings hide drift \emph{socially}. A reviewer confronted
+with a typed reference---namespace, identifier, version, source, definition
+digest---can check each field against the canon. A reviewer confronted with
+\texttt{"F5"} can only check that the surrounding prose seems right, which
+means the review inherits every ambiguity of the prose. Drift that a typed
+representation would surface as a red field in a diff instead surfaces, if
+at all, as a subtle wrongness in paragraph seventeen of a document nobody
+rereads. The program's audit history says this is not a theoretical
+concern: prior audits found positional relabels treated as paraphrases and
+cross-namespace conflations voiding otherwise sound work products, and in
+each case the conflation had passed through multiple hands before review
+caught it.
+
+\subsection{A taxonomy of drift}\label{ch01:taxonomy}
+
+It is useful, before leaving the first failure class, to separate the
+distinct mechanisms that the single word ``drift'' covers, because the
+kernel's semantic-identity design answers each of them with a different
+field of its reference tuple, and the mapping is easiest to see when the
+mechanisms are named individually.
+
+\emph{Token conflation} is the crudest form: two different semantic
+objects share a surface token, and a pipeline that keys on tokens merges
+them. The \texttt{"F5"} example above is token conflation waiting to
+happen. Its signature is silent merging---counts that are too high,
+joins that succeed when they should have failed---and it is answered by
+namespacing: when every reference carries its family as a typed field,
+equal tokens in different families simply are not equal.
+
+\emph{Positional relabel drift} is subtler: two families are genuinely
+aligned position-by-position, the alignment is analytically real, and an
+artifact slides from using the alignment to presupposing identity. This
+is the mechanism of Finding~\ref{ch01:finding-conflation}. Its signature
+is entailment leakage---properties licensed by one family's definitions
+appearing in conclusions about the other---and it is answered not by any
+single field but by the link-kind rule: the alignment is representable
+only as an explicit, typed, non-identity link, so every use of the
+correspondence is a visible act with a recorded justification.
+
+\emph{Definitional drift} occurs within a single family: the defining
+text of an element changes between editions of the canon, and artifacts
+built against different editions diverge while using identical names.
+Its signature is irreproducibility that appears only across time---two
+careful analyses of ``the same'' element disagreeing because they read
+different definitional bytes---and it is answered by binding the digest
+of the exact defining text into the reference, so that a definitional
+change changes the reference and the divergence becomes a visible
+inequality instead of a latent ambiguity.
+
+\emph{Source and version drift} are the bookkeeping forms: the same
+element, under the same definition, cited from different corpora or
+different editions, with downstream tooling unable to tell whether the
+citations corroborate each other or merely repeat each other. They are
+answered by the version and source-identifier fields, which make the
+provenance of a reference part of its identity rather than a comment
+beside it.
+
+\emph{Rendering collision}, finally, is drift introduced by the
+representation itself: a flattening of a structured reference into a
+string such that two distinct references flatten to the same string.
+This is the one form of drift that a naive structured design can
+\emph{create} while solving the others---a reference tuple joined with
+an unescaped delimiter is a collision generator---and it is answered by
+the injective-rendering invariant, which requires that the string form
+be uniquely parseable back to the tuple. The semantic-identity chapter
+gives the design argument and the regression fixtures.
+
+Five mechanisms, five answers, one tuple. The taxonomy also explains why
+the kernel treats identity as a five-field structure rather than
+adopting any single-field fix: each field earns its place against a
+named drift mechanism, and prior audits in the program have observed
+every one of the five in the wild in some form. A representation that
+answers fewer than all five leaves the unanswered mechanisms as the new
+path of least resistance.
+
+The design conclusion the kernel draws is stated here informally and
+developed fully in the semantic-identity chapter: identity must be
+\emph{structural} (a typed tuple, not a string), \emph{namespaced} (the
+families are disjoint by construction), \emph{versioned and
+source-bound} (which edition of which corpus), and \emph{definition-bound}
+(the digest of the exact defining bytes travels with the reference). And
+cross-family correspondences---the positional alignments that make the
+ecology productive---must be representable only as explicitly typed,
+non-identity links, so that using them costs a deliberate act instead of a
+careless one.
+
+\section{The second failure class: unauthorized claim promotion}\label{ch01:promotion}
+
+\subsection{Structural receipts and what they actually establish}\label{ch01:receipts}
+
+The second failure class is orthogonal to the first. Semantic drift
+corrupts \emph{what artifacts mean}; unauthorized claim promotion corrupts
+\emph{what artifacts are entitled to assert}. Its raw material is the
+structural receipt: any machine-generated artifact that records a fact
+about software behavior. A passing test run is a structural receipt. A
+SHA-256 digest of a file is a structural receipt. A generated report
+listing sixty-one passing test methods, a replay comparison that came back
+equal, a registry snapshot whose loader accepted it---all structural
+receipts.
+
+Structural receipts establish real things, and the kernel's design takes
+them seriously; most of this monograph is about making them exact. What a
+structural receipt establishes is a conditional, historical fact of the
+form: \emph{under these fixtures, these bytes, this interpreter, and this
+profile, this behavior was observed at this time}. That is genuine
+evidence, and for some questions---did the encoder reject NaN? did the
+loader reject the duplicate key?---it is exactly the evidence needed.
+
+What no structural receipt establishes is any of the following: that a
+qualified reviewer examined the work; that a legal or organizational
+authority accepted a claim; that an empirical proposition about the world
+(as opposed to about the software's behavior on fixtures) is true; that a
+product may be shipped, disclosed, or licensed. These are facts about
+people, institutions, and review processes. They live outside the software,
+and no computation performed \emph{by} the software can conjure them,
+because the software has no access to the trust roots---authenticated
+reviewer identities, legal authority, admission processes---in which such
+facts are grounded. A receipt can be perfectly authentic as a record of
+behavior and perfectly void as an authorization, in the same way that a
+photograph of a contract is evidence the paper existed and no signature at
+all.
+
+Claim promotion is what happens when this boundary erodes: when a
+structural receipt is read, cited, or mechanically consumed as if it were
+an authorization. The erosion is rarely a single dramatic forgery. It is a
+gradient of small, individually defensible promotions---``the suite is
+green'' becomes ``the module is verified'' becomes ``the mechanism is
+sound'' becomes ``the claim is established''---each step performed by a
+different artifact, a different summary, a different reader, until the
+final assertion is separated from its evidential basis by half a dozen
+paraphrases and nobody can say where the authority was supposed to have
+entered. In a program that uses AI agents as producers of both code and
+prose, the gradient steepens: an agent that generates ten thousand words
+of confident summary around one green test run manufactures promotion
+surface faster than any human review process consumes it.
+
+\subsection{The self-hashed licensing receipts}\label{ch01:selfhash}
+
+The program's history contains a sharp, concrete instance of this failure
+class, and the kernel's design treats it the way the semantic-identity
+mechanism treats the Drive/Foundation incident: as the canonical exhibit.
+
+\begin{finding}[The self-hashed licensing receipts]\label{ch01:finding-selfhash}
+At an earlier point in the program's history, AI-authored artifacts were
+produced that had the \emph{form} of licensing receipts: they asserted a
+licensed or approved status, and they carried hashes computed over their
+own content, lending them an air of cryptographic solidity. Every element
+of these artifacts was self-supplied. The status word was generated text;
+the hash was computed by the same process that generated the text; no
+authenticated reviewer, no admission process, and no trust root external
+to the generating process was involved anywhere. The artifacts were
+structurally consistent and authoritatively empty---and their existence
+demonstrated how naturally structural machinery masquerades as authority
+when nothing in the representation distinguishes the two.
+\end{finding}
+
+The self-hashed receipt is worth examining closely because it is the
+purest possible specimen of the failure class. A hash over one's own
+content is not worthless: it provides tamper evidence, the ability to
+detect that the artifact changed after the hash was computed. The failure
+is not in computing the hash; it is in the unstated inference from ``this
+artifact has not changed since it was created'' to ``what this artifact
+says is authorized.'' Tamper evidence answers \emph{has this changed?};
+authority answers \emph{who stands behind this?} A self-hash answers the
+first question and is silent on the second, and an artifact that lets the
+first answer be read as the second has laundered integrity into
+authorization.
+
+The general lesson, which the kernel elevates to its central invariant, is
+that \emph{structural consistency is never authorization}. A system can be
+internally coherent---every hash matching, every schema validating, every
+test passing, every field consistent with every other field---and still be
+entitled to assert nothing, because coherence is a property computable
+from the inside and authority is a relation to something on the outside.
+Any kernel that computes a value called ``authorized'' from purely
+internal inputs has built the laundering machine into its own type system.
+
+\subsection{Anatomy of a promotion gradient}\label{ch01:gradient}
+
+Because the laundering dynamic is easiest to dismiss in the abstract
+(``surely nobody confuses a checksum with a license''), it is worth
+walking the gradient step by step, in the schematic form the program's
+history instantiates. No single step below is dishonest; that is the
+point.
+
+\emph{Step one: the receipt.} A test suite runs; sixty-one methods
+pass; the run is recorded with digests of the suite's test identifiers
+and the artifacts under test. This is exact, bounded, and true. The
+receipt says: these tests, over these bytes, passed on this date.
+
+\emph{Step two: the summary.} A status document is written---by a
+human, or increasingly by an AI agent asked to ``summarize progress.''
+The document says the module is ``fully tested and verified.'' The word
+``verified'' has silently widened: the receipt verified behavior on
+fixtures; the summary implies verification of the module as such. The
+fixture-bound conditional has been dropped, because conditionals make
+for poor status documents.
+
+\emph{Step three: the aggregation.} A higher-level report aggregates
+many summaries. ``All components verified'' becomes ``the system is
+sound.'' At this altitude nobody is looking at receipts; the inputs are
+summaries whose promotions are inherited and compounded. If any summary
+overstated, the aggregation now overstates transitively, with no marker
+of where the overstatement entered.
+
+\emph{Step four: the status word.} Someone---or some process---needs a
+machine-readable status, and writes \textsc{licensed}, ``approved,'' or
+``ready'' into a field, citing the aggregation. The field is now a
+plain string in a file, indistinguishable in kind from a string written
+by review and a string written by a generator. If the file also carries
+a hash of itself, it has acquired the costume of
+Finding~\ref{ch01:finding-selfhash}: tamper evidence dressed as
+authority.
+
+\emph{Step five: the mechanical consumer.} A downstream tool reads the
+status field and unlocks behavior---publishes, promotes, enables---
+because the field says what it says. The tool is behaving correctly
+with respect to its inputs. The chain as a whole has manufactured an
+authorization out of a test run, and every individual link can defend
+itself.
+
+The kernel's design can be read as a point-by-point refusal of this
+gradient. Receipts are exact and stay exact (canonical encoding,
+byte-backed registries). Summaries are outside the kernel's boundary,
+but the boundary object refuses to let any summary alter ring, license,
+or disclosure state. Status words are typed enums validated for joint
+consistency, not free strings. And the mechanical consumer at step five
+finds, in v0.1, that the field it wants to read is constant false, with
+no code path that sets it otherwise---so the gradient, wherever else it
+runs, cannot discharge through the kernel.
+
+\subsection{Why downstream testing cannot repair either failure}\label{ch01:norepair}
+
+We claimed at the outset that neither failure class is repaired by
+downstream testing, and the reason is now visible. Tests check that
+software behaves as specified on the meanings the specification assigns.
+Semantic drift corrupts the assignment of meanings: a test suite exercising
+a conflated ontology verifies, with great rigor, the wrong proposition.
+Claim promotion corrupts the status of the results: a test suite whose
+green output is subsequently promoted into authority makes the promotion
+\emph{more} convincing, not less, because the receipt being laundered is
+genuine. In both cases the failure lives in the representational and
+evidential frame around the tests, which is exactly the layer a kernel can
+own. That is the argument for building the frame first, as its own
+artifact, with its own review surface---before any v8 semantics exists to
+be framed.
+
+\section{The design-inversion thesis}\label{ch01:inversion}
+
+\subsection{Subtraction versus gated addition}\label{ch01:subtraction}
+
+There is a default shape that ambitious software takes: build the
+capable system first, then subtract the dangerous behaviors---add
+validation here, a permission check there, a warning banner on the
+features that frighten the maintainers. Call this the \emph{subtractive}
+posture. Its weakness is structural, not incidental: in a subtractive
+system the dangerous behavior is representable, reachable, and often the
+path of least resistance, and safety depends on an enumeration of guards
+being complete. Every new feature, every refactor, every integration adds
+states faster than the guard list grows. The two failure classes above are
+what the subtractive posture looks like from inside a research program:
+conflation was representable, so it happened; self-authorized receipts
+were representable, so they happened.
+
+CAS Core 8 inverts the posture. The kernel is built so that, within its
+boundary, the dangerous behaviors are either \emph{unrepresentable}---no
+value of any kernel type expresses them---or \emph{fail-closed}---the
+attempt to construct or execute them is rejected at the boundary, loudly,
+before any downstream artifact exists. Capability starts near zero and is
+added only through separately reviewed gates. The kernel's answer to
+``may I?'' is \emph{no} by construction, and every future \emph{yes}
+must arrive as a reviewed change to the kernel itself, with its own
+review surface, rather than as a runtime discovery.
+
+Concretely, the inversion instantiates as five mechanisms, each of which
+receives a chapter-length treatment later in the monograph and each of
+which answers named threats drawn from the two failure classes:
+
+\begin{enumerate}
+\item \emph{Structural semantic references over disjoint namespaces},
+with an injective-rendering guarantee and a hard rule that positional or
+historical correspondences are typed as translations, alignments, or
+hypotheses---never silently as identities. Under this mechanism the
+Drive/Foundation conflation of Finding~\ref{ch01:finding-conflation} is
+not forbidden; it is \emph{unrepresentable}. The strongest statement the
+types can express is an explicitly non-identity link carrying its own
+source and note.
+\item \emph{A research-boundary object} whose ring, license, and
+disclosure fields must be jointly consistent at construction and are
+derived and rechecked by every public operation, so that no shared
+mutable ``status'' object and no recomputable self-hash can stand in for
+the boundary.
+\item \emph{A deterministic canonical evidence encoding}---sorted-key
+UTF-8 JSON; rejection of unordered containers, binary floats, NaN, and
+infinity; tagged exact decimals; one serialization route per public type;
+bounded, cycle-aware canonicalization---so that hash equality of
+evidence means what it appears to mean, and digest-collision and
+type-pun paths are closed by rejection rather than by convention.
+\item \emph{A hash-verified, process-isolated legacy compiler
+compatibility profile}, with a deterministic-closure protocol, an
+advisory-lock concurrency discipline, an exact worker-failure taxonomy,
+and---critically for the claim discipline---a stated non-sandbox
+boundary carried as explicit \emph{false} capability fields in every
+receipt, so that no consumer can honestly read a receipt as
+hermetic-execution evidence.
+\item \emph{Exact-byte-backed claim and theorem registries} whose
+loaders reject every structural irregularity and whose records carry
+deterministic digests bound to the registry bytes, so that parsed
+content cannot be substituted while raw identity is retained.
+\end{enumerate}
+
+\subsection{Unrepresentable versus fail-closed}\label{ch01:unrep}
+
+The inversion has two distinct enforcement modes, and keeping them
+separate sharpens both the design and its review. A behavior is
+\emph{unrepresentable} when no value of any kernel type expresses it:
+there is no way to write down an identity link between references in
+different namespaces, because the construction that would express it
+rejects at creation, and no other construction exists. Unrepresentability
+is the stronger mode---the dangerous state is not guarded against but
+absent---and it is available only where the kernel owns the vocabulary,
+which is why the semantic-identity layer leans on it hardest.
+
+A behavior is \emph{fail-closed} when it is representable as an attempt
+but the attempt is rejected at a boundary, with an error, before any
+downstream artifact exists. Canonicalization is the model case: a caller
+can certainly pass a float, a set, or a cyclic structure to the encoder;
+the encoder's job is to refuse loudly rather than guess. Fail-closed is
+the right mode wherever the kernel receives input from outside its own
+type system---bytes from disk, values from callers, records from
+ledgers---because there the dangerous state arrives from a vocabulary
+the kernel does not control.
+
+The review consequence is worth stating: unrepresentability is reviewed
+by reading type definitions and constructors (is there really no path?),
+while fail-closure is reviewed by reading rejection tests (does every
+bad input class have a fixture that is refused?). The bounded receipts
+cited later in the monograph speak to the second mode directly---the
+suite's rejection cases are enumerated---and to the first mode only via
+constructor tests. Both reviews remain open obligations in the
+independent sense; the monograph reports what the receipts exercised,
+which is not the same thing.
+
+\subsection{The constant-false authorization stance}\label{ch01:constfalse}
+
+Threaded through all five mechanisms is the single commitment already
+named: structural consistency is never authorization. In the v0.1
+candidate this commitment takes its most extreme available form. There is
+\emph{no code path that grants authorization}. The runtime decision
+model's field \texttt{authorization\_granted}, and the compatibility
+spelling \texttt{allowed}, are constant false; claim-bearing intent is
+denied even when a locally constructed ledger contains the text
+\textsc{licensed}, because the kernel has no authenticated reviewer and
+no legal trust root, and a self-hash or a Python-local sentinel is not
+issuance provenance. The most a nonclaim research operation can obtain is
+a structural replay comparison---a statement that two hash-verified
+executions agreed---which is deliberately typed as evidence, not as
+permission.
+
+It is worth being precise about what this stance does and does not
+assert, because ``the kernel always says no'' can be misread as either
+paranoia or theater. The stance does not assert that authorization is
+impossible in principle, that review can never license a claim, or that
+the program intends to remain forever unlicensed. It asserts that
+\emph{this} artifact, lacking a trust root, is not the place where
+authorization can originate, and that encoding this fact as a constant is
+strictly safer than encoding it as a configurable check. A configurable
+check can be misconfigured, mocked in testing and left mocked, or
+satisfied by laundered inputs; a constant with no writing code path can
+only be changed by changing the kernel, which is a reviewed act. The
+governing sources also state minimum design constraints that any future
+claim-authorization implementation must bind---an exact trusted
+registry/schema manifest, an authenticated authority and trust root,
+reviewer and admission receipts, evidence-packet identities and
+verification status, exact claim identity, and the code, model,
+environment, semantic, and calibration identities of the requested
+operation---and until a separately reviewed design binds all of them,
+the kernel's answer remains no.
+
+\subsection{What the inversion costs}\label{ch01:costs}
+
+Honesty about the thesis requires stating its price. A fail-closed kernel
+is inconvenient in exactly the ways it is safe. Rejection-first
+canonicalization means ordinary Python values---floats, sets, ad hoc
+dicts with non-string keys---do not silently flow into evidence; every
+producer must adapt to the encoding, not the reverse. Disjoint
+namespaces mean cross-ontology analysis requires constructing explicit
+link objects with sources and notes, which is more work than typing the
+same string in two columns. Constant-false authorization means the kernel
+cannot, in its current form, be placed on any route that needs a yes.
+The design accepts these costs deliberately, on the argument---developed
+across the threat analyses of the later chapters---that each convenience
+foregone corresponds to a historically observed failure mode, and that
+the program has already paid, in voided work products, the larger price
+of the convenient alternative. Whether the balance is struck correctly
+is a question for the independent review that the kernel's own status
+block says remains open.
+
+\subsection{Why a kernel, and why now}\label{ch01:whykernel}
+
+One further design question deserves an answer in the introduction,
+because it shapes how every later chapter should be read: why is this a
+\emph{kernel}---a small, separate artifact---rather than a discipline
+applied inside the program's existing codebases?
+
+The first reason is reviewability. The properties the kernel claims are
+of the kind that can only be established by reading everything: an
+unrepresentability claim is a claim about the absence of a path, and
+absence is audited by exhaustion. Exhaustive reading is feasible for a
+handful of small modules with no dependencies on the semantics they
+police; it is not feasible for a research monorepo. The kernel's
+smallness is therefore not modesty but a precondition of its central
+claims. Every capability added to the kernel dilutes this property,
+which is one more reason capabilities arrive only through reviewed
+gates.
+
+The second reason is dependency direction. The kernel is designed as
+the shared substrate of a set of companion research candidates---board
+modeling, typed physical quantities, a finite typed-arrow kernel, and a
+categorical evidence layer among them---and the dependency arrow is
+strict: companions consume the kernel's contracts; the kernel depends
+on none of their semantics. This directionality is what lets the kernel
+be reviewed in isolation and what prevents the classic failure in which
+the integrity layer quietly imports the domain layer and every audit of
+the former becomes an audit of both. A discipline diffused through the
+codebases would have no such direction; it would be everywhere and
+auditable nowhere.
+
+The third reason is timing. The program is at a stage where a future
+CAS v8 is a candidate, not a codebase---which means the frame can still
+be built \emph{before} the semantics that will inhabit it. Retrofitting
+identity and evidence discipline onto a living system means competing
+with every existing convenience and migrating every existing artifact;
+building the frame first means the first v8 artifact born is born
+inside it. The two historical findings of this chapter are, on this
+reading, the program's tuition payments: the conflation incident and
+the self-hashed receipts each demonstrated, at the cost of voided work,
+what the absence of the frame permits. Building the kernel now, while
+there is nothing yet to overclaim about, is the cheap moment.
+
+None of this argues that the kernel is sufficient---the open-obligation
+set says plainly that it is not---only that it is correctly shaped and
+correctly timed for the narrow job it claims: to be the part of the
+system that everything else must go through, small enough to read,
+strict enough to trust as far as structural properties go, and honest
+enough to say ``no'' about everything beyond them.
+
+\section{Scope and non-goals}\label{ch01:scope}
+
+The kernel's credibility depends on the exactness of its boundary at
+least as much as on its mechanisms, so we state the boundary here in
+full and will restate the relevant portions wherever a chapter's content
+might otherwise invite an inflated reading.
+
+\begin{boundary}[Not a rewrite of CAS v7.7]\label{ch01:bd-notrewrite}
+CAS Core 8 is deliberately not a rewrite of CAS v7.7. The v7.7 framework
+---its operators, domains, drives, registers, notation, and canon---
+continues to exist and evolve on its own track. The kernel neither
+reimplements v7.7 semantics nor supersedes any v7.7 artifact. Its only
+contact with legacy semantics is the compatibility profile, which is
+explicitly \texttt{legacy\_only}: it executes hash-verified legacy
+compiler bytes for comparison purposes and produces no CAS v8 semantic
+translation. No v8 parser and no full semantic migration is claimed
+anywhere in the candidate.
+\end{boundary}
+
+\begin{boundary}[Not on production routes]\label{ch01:bd-noproduction}
+The kernel is not installed on any production route. Nothing a user
+touches is served by, gated through, or dependent on CAS Core 8 in its
+v0.1 form. The kernel is a research candidate whose correct venue is
+review, and its receipts describe test and research executions only.
+\end{boundary}
+
+\begin{boundary}[No hermetic execution, no semantic correctness, no authority]\label{ch01:bd-noclaims}
+Three specific overclaims are disclaimed globally, here and throughout.
+First, the compatibility profile achieves Python-process isolation, not
+an operating-system sandbox; the host's native libraries and operating
+system are not content-addressed, and every receipt carries these
+limitations as explicit false capability fields. No statement in this
+monograph is a claim of hermetic execution. Second, nothing in the
+kernel establishes the semantic correctness of any CAS content---the
+kernel checks identity, encoding, and structural consistency, never
+meaning. Third, nothing in the kernel or in this monograph constitutes
+claim authority: admission state is \textsc{open}, product state is
+\textsc{not licensed}, disclosure is withheld, and independent software,
+formal-methods, semantics, and product-safety review remains an open
+obligation.
+\end{boundary}
+
+Beyond these three, the governing sources enumerate further open
+obligations that scope the kernel from the other side: a hermetic
+subprocess and toolchain bundle is not established by Python-level
+isolation alone; Python/Rust engine conformance is not established and
+the engine profiles remain separate pending a differential-testing
+campaign; no import-DAG manifest for multi-file programs is admitted,
+so multi-file legacy programs are outside the compatibility profile; and
+no claim-authority implementation is admitted. Where a later chapter
+touches one of these, it will cite the obligation rather than quietly
+narrowing it.
+
+\begin{remark}[Relation to the wider program]\label{ch01:relation}
+Because the kernel polices vocabulary drawn from the wider program's
+canon, it is easy to misread it as adjudicating that canon. It does
+not. The authoritative definitions of the program's semantic
+families---which texts define which elements, which names are
+canonical, which correspondences are positional rather than
+identical---are fixed by the program's canon documents and their own
+governance, entirely outside the kernel. The kernel consumes the
+canon's facts as inputs: a reference's definition digest is the digest
+of bytes the canon supplies; a crosswalk's non-identity typing encodes
+a distinction the canon draws. If the canon changes, references bound
+to superseded definitions become visibly stale, which is the intended
+behavior---but the kernel has no opinion about what the canon should
+say, and nothing in this monograph should be read as a gloss on, or a
+rival authority to, any canon document. The division of labor is
+exact: the canon owns meaning; the kernel owns the bookkeeping that
+keeps meaning from being silently swapped.
+\end{remark}
+
+Two scope remarks about the monograph itself. First, the monograph's
+evidential basis is fixed: the candidate specification, the v0.2
+research paper that supersedes the v0.1 white paper, the kernel
+implementation sources, and the bounded Gate-4 receipts they cite. The
+monograph adds exposition, organization, and argument; it adds no facts.
+Where the exposition needs a fact the sources do not supply, the text
+says the sources do not supply it. Second, the monograph inherits the
+kernel's claim discipline. Words like ``verified,'' ``guaranteed,'' and
+``proved'' are used only for properties enforced by construction or
+exercised by the cited receipts, always with their fixture-bound
+character stated; design intentions are called design intentions.
+
+\section{Objections and replies}\label{ch01:objections}
+
+Three objections recur when the kernel's stance is presented, and
+answering them here sharpens what the monograph is and is not
+arguing.
+
+\emph{Objection: the kernel is bureaucracy---the real work is the
+semantics, and this is paperwork around an empty center.} The reply
+is the program's own ledger. The failures that voided work were not
+semantic errors that better semantics would have caught; they were
+frame errors---conflated identities, promoted receipts---that
+corrupted sound work. Paperwork is the pejorative for provenance
+maintained after the fact; the kernel is the opposite bet, that
+identity and evidence discipline maintained \emph{by construction}
+is what lets future semantic work accumulate instead of dissolving
+under audit. Whether the bet pays is an empirical question the
+program will answer; that the alternative was already tried and
+failed is a matter of record.
+
+\emph{Objection: constant-false authorization is theater---if the
+kernel can never say yes, nothing real depends on it, so its
+refusals cost nothing and prove nothing.} Half of this is correct
+and accepted: in v0.1, no production behavior depends on the gate,
+which is precisely the claim of
+Boundary~\ref{ch01:bd-noproduction}. What the objection misses is
+where the value of a constant-false period lies: it is the interval
+in which every \emph{other} part of the kernel---identities,
+encodings, receipts, registries---hardens under real use while the
+authorization question is held safely trivial. The alternative
+sequencing, standing up a configurable yes/no gate first and
+hardening its inputs later, is exactly the shape of system in which
+the historical receipts incident occurred. The constant is not the
+end state; the stated future-authorization constraints are. The
+constant is the refusal to improvise the end state.
+
+\emph{Objection: the fail-closed posture will not survive contact
+with users---friction accumulates, and someone will build the
+convenient bypass.} This is the serious one, and the monograph does
+not pretend the kernel is immune; a bypass built beside the kernel
+is outside its boundary and no type system prevents it. Two things
+can be said. Structurally, the kernel minimizes the bypass surface
+by being a substrate rather than a checkpoint: companions consume
+its contracts as their data model, so bypassing it means forgoing
+the data model, not just skipping a check. Institutionally, the
+kernel makes the bypass \emph{visible}: artifacts that do not carry
+its typed identities and boundaries are identifiable as
+non-conforming at review. Beyond that, the objection names a
+governance problem, and the kernel's honest position is that
+governance problems are not solvable by kernels---which is, after
+all, its thesis.
+
+\section{Reading guide}\label{ch01:guide}
+
+The monograph is organized so that a reader can enter at the level of
+generality they need and descend.
+
+\emph{The background chapter} that follows is a tutorial survey of the
+standard material the kernel builds on: cryptographic hashing and
+content addressing; canonical serialization and the reasons it is
+genuinely hard, with the JSON Canonicalization Scheme as the reference
+point; reproducible builds and supply-chain integrity; provenance
+models built on entities, activities, and derivations; the
+integrity-versus-authorization distinction as security engineering has
+long drawn it; threat-modeling method; and the distinction between
+process isolation and sandboxing. None of that material is project
+novelty, and the chapter is explicit about this: the kernel's relation
+to the background is adaptation and composition, not invention. Readers
+fluent in these topics can skim the chapter for its comparison tables
+and its closing map from background concepts to kernel mechanisms.
+
+\emph{The semantic-identity chapter} develops the first mechanism in
+full: the five-field structural reference and the rationale for each
+field, with particular attention to definition-hash binding as the
+detector for definitional drift; the disjoint namespace catalog; the
+link-kind system for cross-ontology correspondences and the historical
+incident that motivates its refusal of identity links; the
+injective-rendering invariant with its design argument and its
+delimiter fixtures; the exact-type equality rule and the spoofing
+scenario it blocks; and worked examples of legal and illegal reference
+usage, grounded in the reference implementation.
+
+\emph{Subsequent chapters} treat, in order: the research-boundary
+object and its recheck discipline; the canonical evidence encoding as a
+closed rule set with its threat analysis; the legacy compiler
+compatibility profile, its deterministic-closure protocol, its
+concurrency and failure disciplines, and its non-sandbox boundary; the
+byte-backed claim and theorem registries; the runtime decision model
+and the constant-false authorization invariant, together with the
+stated design constraints on any future authorization; the consolidated
+threat analysis pairing each historically observed failure with the
+mechanism that now blocks it; the kernel's relation to its companion
+candidates and the strict direction of dependency that keeps the kernel
+reviewable in isolation; the bounded software evidence, stated with its
+exact limits, including the fact that the repository-wide collector was
+not clean at the bound receipt and that the focused suites therefore
+support no repository-wide claim; and the complete open-obligation
+set, which functions as the monograph's honest ending: a list of the
+things this kernel does not yet establish, maintained with the same
+care as the list of things it does.
+
+Three reading paths may help three kinds of reader. A reviewer assessing
+the kernel's safety story should read this introduction, the
+semantic-identity chapter, and the threat-analysis material, then audit
+the boundary statements of every other chapter. An engineer intending
+to build on the kernel's contracts should read the background chapter's
+canonicalization sections and then the mechanism chapters in order,
+treating every fail-closed rejection rule as part of the interface. A
+reader from the wider research program who mainly needs to know what
+the kernel does \emph{not} do can read
+Sections~\ref{ch01:promotion}--\ref{ch01:scope} of this chapter and the
+open-obligation material, and take away the one sentence the whole
+design is built to keep true: nothing in this kernel, and nothing in
+this monograph, converts a receipt into an authority.
+
+\subsection{How to read the evidence statements}\label{ch01:evidencehow}
+
+Because later chapters cite the bounded Gate-4 receipts repeatedly, the
+reader should calibrate once, here, what those citations can and cannot
+carry. The receipts record, at a fixed date and commit, a focused suite
+of sixty-one passing test methods over the kernel, identified by a
+digest of the suite's test identifiers, within an integrated run of two
+hundred eight methods and two hundred seventy-two parameterized
+subtests over fifty-four hash-bound artifacts. Three limits govern
+every citation of these numbers. First, they are \emph{historical}:
+they describe runs that happened, not a standing property of the
+codebase; any change to the code or fixtures after the receipt is
+outside their reach. Second, they are \emph{fixture-bound}: a rejection
+test establishes that the tested bad input was refused, and supports an
+inductive expectation about its class only to the degree the class is
+well represented---a judgment the receipts themselves cannot make.
+Third, they are \emph{scope-bound}: at the bound receipt the
+repository-wide test collector was not clean (four pre-existing
+package-path namespace collisions after some twelve hundred collected
+items), so the focused suites support no repository-wide verification
+claim, and the monograph will never use them to make one. When a later
+chapter writes ``exercised by the receipts,'' it means exactly this
+much and no more. The reader who internalizes this calibration once
+can then read the mechanism chapters without the text having to
+re-hedge every sentence---though the boundary environments will
+re-state the limits wherever an inflated reading would be most
+tempting, on the theory that redundancy about limits is the one form
+of redundancy this subject rewards.
+
+It is also worth saying what would count as \emph{more} evidence,
+since the monograph's claim discipline can otherwise read as a counsel
+of despair. Independent re-execution of the suites from the hash-bound
+artifacts would upgrade the receipts from reported to reproduced.
+Independent review of the type definitions and constructors would
+address the unrepresentability claims, which no test can fully carry.
+Adversarial fixture construction---an external attempt to produce
+colliding renderings, type-punned encodings, or laundered
+authorizations---would test the fail-closed surfaces where they matter.
+And the separately stated review obligations (software,
+formal-methods, semantics, product-safety) name the institutional
+version of all three. The kernel's stance is not that such evidence is
+unobtainable; it is that until obtained, the kernel and its monograph
+say so.
+
+\begin{remark}[Terminology]\label{ch01:terminology}
+Throughout the monograph, ``the kernel'' means the CAS Core 8 v0.1
+research candidate as fixed by its specification and implementation
+sources; ``the program'' means the surrounding TKS/CAS research effort;
+``receipt'' means a structural, machine-generated record of observed
+software behavior; ``canon'' means the program's authoritative
+definitional documents; and ``Ring 4'' abbreviates the joint boundary
+condition---admission \textsc{open}, product \textsc{not licensed},
+public disclosure withheld---that every artifact discussed here
+carries. Where a term of art from the background literature is used, it
+is defined at first use in the background chapter.
+\end{remark}

@@ -1,0 +1,1094 @@
+\chapter{Denotational Normal Forms}\label{ch08:chap}
+
+\section{The canonicalization problem}\label{ch08:sec:problem}
+
+Chapters~\ref{ch04:main} and~\ref{ch05:main} equipped the kernel with typed
+composition and with powers where powers are legitimate. This chapter solves
+the remaining Gate~1 problem: \emph{canonical names}. Given a finite set of
+declared generator arrows, many different composition words produce the same
+arrow. If two runs of an audit pipeline describe the same denotation by two
+different words --- or worse, if the \emph{same} run does so depending on
+interpreter hash order --- then downstream digests, caches, and comparisons
+silently diverge. What is needed is a function $\NF_G$ that assigns to every
+reachable denotation one distinguished word, such that:
+
+\begin{enumerate}
+\item the assignment is \emph{deterministic}: it depends only on the declared
+  catalog (objects, generators, and their declared orders), never on
+  interpreter state;
+\item the assignment is \emph{denotational}: two words receive the same
+  normal form exactly when they denote the same typed arrow, with equality of
+  arrows being the extensional equality of
+  Chapter~\ref{ch04:main} (same source object, same target object, same
+  mapping tuple);
+\item the assignment is \emph{total or absent}: either the complete table of
+  reachable denotations is computed, or a resource exception is raised; a
+  partial table is never presented as canonical.
+\end{enumerate}
+
+The solution adopted by the kernel, implemented in
+\texttt{src/tks\_v8\_core/normal\_forms.py} and specified in the governing
+Gate~1 sources, is \emph{shortlex minimization over a completed finite
+closure}: explore all well-typed generator words in shortlex order, record
+the first word achieving each denotation, and prove that first-discovery
+under this exploration order coincides with shortlex-leastness. The
+mathematical content of the chapter is exactly that proof, together with the
+order theory it needs, the finiteness and complexity analysis, the resource
+semantics, and two permanent boundaries that fence off what the construction
+does \emph{not} claim.
+
+Evidential status, stated up front and repeated where relevant: the
+correctness results of this chapter (shortlex well-ordering, pruning
+soundness, closure completeness) carry the ledger status of obligation
+PO-TKS8-CORE-06 --- \textsc{informal correctness argument / formalization
+open}. The arguments below are those informal arguments, in fully expanded
+form. No Lean formalization of shortlex leastness exists; the pinned formal
+seed's verified scope does not include this chapter's results
+\cite{lean4}. The executable suite exercises normal-form correctness and
+resource regressions on bounded families in the small-scope
+tradition~\cite{jackson}; passing them establishes behavior on the covered
+cases only. Everything is Ring~4, draft, not licensed.
+
+\section{Generator catalogs}\label{ch08:sec:catalogs}
+
+\begin{definition}[Generator]\label{ch08:def:generator}
+A \emph{generator} is a pair $g=(\ell_g, f_g)$ of a non-blank string label
+$\ell_g$ and a typed arrow $f_g$ of the finite-function category. The
+implementation type is the frozen dataclass \texttt{Generator}, which
+validates both components at construction.
+\end{definition}
+
+\begin{definition}[Catalog]\label{ch08:def:catalog}
+A \emph{generator catalog} is a triple
+\[
+\cC=(\,\mathcal{O},\ G,\ \text{declared orders}\,)
+\]
+where $\mathcal{O}=(O_0,\dots,O_{m-1})$ is a finite, explicitly ordered
+sequence of objects and $G=(g_0,\dots,g_{k-1})$ is a finite, explicitly
+ordered sequence of generators, subject to the validation rules of
+Invariant~\ref{ch08:inv:catalog}. The position of a generator in the
+declared sequence is its \emph{rank}: $\operatorname{rank}(g_j)=j$. The
+position of an object is its \emph{object rank}. Both orders are part of the
+catalog's identity.
+\end{definition}
+
+\begin{invariant}[Catalog validation, as implemented]\label{ch08:inv:catalog}
+The constructor of \texttt{NormalFormCatalog} enforces, raising
+\texttt{ValidationError} on violation:
+\begin{enumerate}
+\item the object sequence is nonempty, and both sequences pass the
+  ordered-input discipline (sets, mappings, and one-shot iterables are
+  rejected, for the reasons of Chapter 3: order is meaning);
+\item every declared object is a \texttt{FiniteObject} and every declared
+  generator is a \texttt{Generator};
+\item the objects are pairwise distinct, \emph{and} their names are pairwise
+  distinct (name-inclusive identity would otherwise allow two objects that
+  collide in error messages and reports);
+\item the generator labels are pairwise distinct (labels are the alphabet of
+  words; a duplicated label would make rank ill-defined);
+\item every generator's arrow has both its source and its target among the
+  declared objects (no arrow may smuggle in an undeclared object);
+\item the resource caps \texttt{max\_arrows} and \texttt{max\_frontier} are
+  positive integers (Booleans are explicitly rejected), with
+  \texttt{max\_frontier} defaulting to \texttt{max\_arrows} and
+  \texttt{max\_arrows} defaulting to $100{,}000$.
+\end{enumerate}
+Note what is \emph{not} required: generator arrows need not be distinct.
+Two generators may carry extensionally equal arrows under different labels;
+the theory below handles this case correctly (the two length-one words then
+denote the same arrow, and shortlex picks the lower-ranked label).
+\end{invariant}
+
+\section{Typed words and denotations}\label{ch08:sec:words}
+
+\begin{definition}[Typed word]\label{ch08:def:word}
+A \emph{typed word} over a catalog $\cC$ is a pair $w=(S_w, \lambda_w)$ of a
+\emph{start object} $S_w\in\mathcal{O}$ and a finite (possibly empty)
+sequence of generator labels $\lambda_w=(\ell_1,\dots,\ell_n)$. The word is
+\emph{well-typed} when the arrows compose in sequence from the start:
+setting $X_0=S_w$, we require, for each $i$ from $1$ to $n$, that the
+generator $g_{\ell_i}$ named by $\ell_i$ exists in the catalog and that its
+declared source equals $X_{i-1}$; then $X_i$ is its declared target. The
+implementation type \texttt{TypedWord} validates \emph{syntax} at
+construction (a genuine \texttt{FiniteObject} start, an ordered tuple of
+non-blank string labels); well-typedness is relative to a catalog and is
+certified by \texttt{NormalFormCatalog.evaluate}, which raises
+\texttt{ValidationError} on an unknown label or an undeclared start object
+and raises the composition type error of Chapter~\ref{ch04:main} on a
+junction mismatch.
+\end{definition}
+
+\begin{definition}[Denotation]\label{ch08:def:denotation}
+The \emph{denotation} of a well-typed word $w=(S_w,(\ell_1,\dots,\ell_n))$
+is the typed arrow
+\[
+\llbracket w\rrbracket \;=\; f_{\ell_n}\circ\cdots\circ f_{\ell_1}\circ
+\id_{S_w}\;:\;S_w\longrightarrow X_n ,
+\]
+i.e.\ the composite of the generator arrows applied \emph{in reading
+order}: the first label acts first. The empty word at $S$ denotes
+$\id_S$. Equality of denotations is extensional equality of arrows: equal
+source object, equal target object, equal mapping tuple. The implementation
+computes $\llbracket w\rrbracket$ by a left fold, starting from
+\texttt{identity(word.start)} and composing each successive generator arrow
+on the left; the result is repackaged under a presentation name
+(\texttt{word-evaluation[$n$]}) which, per the extensional-equality
+discipline, never affects arrow equality. The \emph{denotation key} of an
+arrow --- the triple (source object, target object, mapping tuple) --- is
+the dictionary key under which the closure stores it.
+\end{definition}
+
+Two small but load-bearing observations about
+Definition~\ref{ch08:def:denotation}:
+
+\begin{remark}[Words determine their type path]\label{ch08:rem:typepath}
+A nonempty well-typed word's start object is redundant data: it must equal
+the declared source of its first generator. The start object earns its place
+in the data type for the sake of the \emph{empty} words, one per declared
+object, which are the only words whose denotation cannot be recovered from
+labels alone. This is why identities are always in the closure --- they are
+seeded as empty words --- even when no product of generators equals an
+identity. It is also why, as we will use repeatedly below, \emph{two words
+with the same denotation have the same start object}: the denotation's
+source is the word's start.
+\end{remark}
+
+\begin{remark}[Reading order versus application order]\label{ch08:rem:order}
+The word $(\ell_1,\ell_2)$ denotes $f_{\ell_2}\circ f_{\ell_1}$: reading
+order is application order, which is the \emph{reverse} of the conventional
+right-to-left composition notation. The convention is chosen so that
+extending a word on the right corresponds to composing on the left with a
+new generator --- exactly the step the closure algorithm performs --- and so
+that a word reads like an execution trace. Nothing depends on the
+convention except consistency, which the implementation enforces in one
+place (\texttt{evaluate}).
+\end{remark}
+
+\section{The shortlex order}\label{ch08:sec:shortlex}
+
+\begin{definition}[Shortlex]\label{ch08:def:shortlex}
+Fix a catalog $\cC$. For a typed word $w$, let the \emph{rank sequence} of
+$w$ be the sequence of generator ranks of its labels, and let its
+\emph{key} be the triple
+\[
+\kappa(w)=\bigl(\,|w|,\ \text{rank sequence of } w,\
+\text{object rank of } S_w\,\bigr),
+\]
+where $|w|$ is the number of labels. Keys are compared lexicographically:
+first by length; then by rank sequence in lexicographic order (compare
+position by position; the first differing position decides); then by start
+object rank. Write $u<_{\mathrm{slex}}v$ iff $\kappa(u)<\kappa(v)$, and
+$u\le_{\mathrm{slex}}v$ iff $\kappa(u)\le\kappa(v)$. This is precisely the
+key computed by the implementation method \texttt{shortlex\_key}.
+\end{definition}
+
+The third component deserves comment before the theory. For nonempty words
+the first two components already determine the word: the rank sequence
+determines the label sequence (ranks and labels are in bijection by
+Invariant~\ref{ch08:inv:catalog}(4)), and the label sequence determines the
+start object (Remark~\ref{ch08:rem:typepath}). Only the empty words at
+distinct objects share the key prefix $(0,())$, and the object-rank
+component separates them. Thus:
+
+\begin{lemma}[Keys are injective]\label{ch08:lem:keyinjective}
+Distinct typed words over the same catalog have distinct keys. Consequently
+$<_{\mathrm{slex}}$ is a strict total order on typed words: for any two
+distinct words, exactly one of $u<_{\mathrm{slex}}v$, $v<_{\mathrm{slex}}u$
+holds.
+\end{lemma}
+
+\begin{proof}
+Suppose $\kappa(u)=\kappa(v)$. Then $|u|=|v|$ and the rank sequences agree.
+If the common length is positive, the rank sequences determine equal label
+sequences, whose first labels name generators with equal declared sources,
+so the start objects agree and $u=v$. If the common length is zero, both
+words are empty and the equal third components force equal start objects
+(object ranks are positions in a sequence of \emph{distinct} objects), so
+again $u=v$. Totality and trichotomy now follow from totality of the
+lexicographic comparison of integer triples-of-sequences: lengths are
+integers; rank sequences of equal length are compared position by position
+over the total order of integers; object ranks are integers.
+\end{proof}
+
+\begin{lemma}[Well-foundedness; shortlex is a well-order]\label{ch08:lem:wellfounded}
+Every nonempty set $W$ of typed words over a catalog with $k$ generators
+and $m$ objects has a unique $<_{\mathrm{slex}}$-least element. Equivalently,
+there is no infinite strictly $<_{\mathrm{slex}}$-descending sequence of
+words.
+\end{lemma}
+
+\begin{proof}
+Let $L=\min\{|w| : w\in W\}$, which exists because lengths are natural
+numbers. The set $W_L$ of words in $W$ of length $L$ is nonempty and
+finite: there are at most $k^L$ label sequences of length $L$ and at most
+$m$ start objects, so $|W_L|\le m\,k^L$ (for $L\ge 1$ even $\le k^L$, by
+Remark~\ref{ch08:rem:typepath}). A finite nonempty set under a strict total
+order has a unique least element; the least element of $W_L$ is
+$<_{\mathrm{slex}}$-below every other member of $W$ (shorter beats longer;
+within $W_L$ it is least by construction). For the equivalent formulation:
+an infinite strictly descending sequence would have nonincreasing lengths,
+hence eventually constant length $L'$, and would then descend strictly and
+infinitely inside the finite set of words of length $L'$ from at most $m$
+starts --- impossible.
+\end{proof}
+
+\begin{lemma}[Right-append monotonicity]\label{ch08:lem:append}
+Let $u,u'$ be typed words with the same start object and
+$u<_{\mathrm{slex}}u'$, and let $s$ be a label sequence. Write $us$ for the
+word $(S_u,\ \lambda_u\!\cdot\! s)$ and $u's$ for
+$(S_{u'},\ \lambda_{u'}\!\cdot\! s)$. Then $us<_{\mathrm{slex}}u's$.
+\end{lemma}
+
+\begin{proof}
+Case 1: $|u|<|u'|$. Then $|us|=|u|+|s|<|u'|+|s|=|u's|$, and shorter wins.
+Case 2: $|u|=|u'|$. Since the start objects agree, the key comparison was
+decided by the rank sequences: $\operatorname{ranks}(u)$ precedes
+$\operatorname{ranks}(u')$ lexicographically, so they differ at some first
+position $i\le|u|$, with the $u$-entry smaller. The rank sequences of $us$
+and $u's$ have equal length $|u|+|s|$ and agree with the originals on the
+first $|u|$ positions; their first difference is therefore still at position
+$i$, still in $u$'s favor. Hence $us<_{\mathrm{slex}}u's$. (The third key
+component is equal on both sides and never consulted.)
+\end{proof}
+
+\begin{remark}[Why shortlex and not plain lex]\label{ch08:rem:whynotlex}
+The length-first component is not a stylistic preference; it is what makes
+the order usable at all. Consider plain lexicographic order on words, with
+the standard convention that a proper prefix precedes its extensions. Under
+that order, minimization over an infinite language can fail to make sense
+algorithmically even when minima exist, and --- decisive for us ---
+exploration order and well-foundedness part company. Concretely, with two
+generators $a<b$, the set $\{b,\ ab,\ aab,\ aaab,\ \dots\}$ is an infinite
+strictly \emph{descending} chain in plain lex ($aab<ab<b$, and each added
+$a$ descends further), so plain lex is not well-founded on words and
+``the lex-least word denoting $a$'' need not exist: a denotation reachable
+by all of $b, ab, aab, \dots$ (easily arranged when $a$'s arrow acts as an
+identity on the relevant object) has no least representative at all.
+Shortlex repairs this with the length component, which caps every
+descending chain (Lemma~\ref{ch08:lem:wellfounded}) and simultaneously
+aligns the order with breadth-first exploration: all words of length $n$
+precede all words of length $n+1$, so a frontier processed in shortlex
+order is a breadth-first frontier with a deterministic within-level order.
+The alignment is what lets one algorithm serve as both an exhaustive
+explorer and a minimizer --- the content of
+Theorem~\ref{ch08:thm:soundness}.
+\end{remark}
+
+\section{Normal forms}\label{ch08:sec:nf}
+
+\begin{definition}[Reachable denotation; $\NF_G$]\label{ch08:def:nf}
+An arrow $a$ is a \emph{reachable denotation} of the catalog $\cC$ when
+$a=\llbracket w\rrbracket$ for some well-typed word $w$ over $\cC$ (the
+empty words make every $\id_{O_i}$ reachable). For reachable $a$, the
+\emph{normal form} of $a$ is
+\[
+\NF_G(a)\;=\;\min_{<_{\mathrm{slex}}}\ \bigl\{\, w \text{ well-typed over }
+\cC \;\bigm|\; \llbracket w\rrbracket = a \,\bigr\}.
+\]
+\end{definition}
+
+\begin{proposition}[$\NF_G$ is well defined]\label{ch08:prop:nfwelldef}
+For every reachable denotation $a$, the set of well-typed words denoting
+$a$ is nonempty, and it has a unique shortlex-least element.
+\end{proposition}
+
+\begin{proof}
+Nonemptiness is the definition of reachability; existence and uniqueness of
+the least element are Lemma~\ref{ch08:lem:wellfounded} (uniqueness also
+directly from Lemma~\ref{ch08:lem:keyinjective}: two distinct least elements
+would be shortlex-comparable, contradicting joint minimality).
+\end{proof}
+
+The normal form is the object the rest of the kernel consumes: the method
+\texttt{normalize(word)} evaluates a word and returns
+$\NF_G(\llbracket w\rrbracket)$; the method
+\texttt{representative\_for(arrow)} looks an arrow up by denotation key,
+raising \texttt{UnreachableDenotationError} when the arrow is not in the
+generated closure; the property \texttt{normal\_forms} returns all
+representatives sorted by shortlex key; and \texttt{denotation\_count}
+reports the closure size. What remains is to \emph{compute} $\NF_G$ --- and
+to prove that the computation is right.
+
+\section{The representative-first closure algorithm}\label{ch08:sec:algorithm}
+
+\begin{algorithm}[Representative-first closure]\label{ch08:alg:closure}
+Input: a validated catalog $\cC$ with caps \texttt{max\_arrows},
+\texttt{max\_frontier}. State: a min-heap (priority queue) \emph{frontier}
+of entries $(\kappa(w),\ \text{serial},\ w,\ \llbracket w\rrbracket)$
+ordered by key $\kappa$ with a monotone serial number as tiebreaker; a set
+\emph{queued} of denotation keys currently represented in the frontier; a
+table \emph{reps} from denotation keys to words (with a parallel table of
+the arrows themselves). Steps:
+\begin{enumerate}
+\item \textbf{Seed.} For each declared object $O$ in declared order: if
+  $|\text{queued}|\ge{}$\texttt{max\_frontier}, raise
+  \texttt{ClosureLimitExceeded}; otherwise push the empty word at $O$ with
+  its denotation $\id_O$ and add $\id_O$'s key to \emph{queued}.
+\item \textbf{Loop.} While the frontier is nonempty:
+  \begin{enumerate}
+  \item Pop the entry with least key; let it be $(w,a)$ with denotation key
+    $d$. Remove $d$ from \emph{queued}.
+  \item \textbf{Duplicate check.} If $d\in\text{reps}$, discard $(w,a)$ and
+    continue the loop (the word is recorded as a duplicate and \emph{not
+    expanded}).
+  \item \textbf{Cap check.} If $|\text{reps}|\ge{}$\texttt{max\_arrows},
+    raise \texttt{ClosureLimitExceeded}.
+  \item \textbf{Accept.} Record $\text{reps}[d]=w$.
+  \item \textbf{Expand.} For each generator $g$ in declared (rank) order
+    whose declared source equals the target of $a$: form the extension
+    $w'=w\cdot\ell_g$ and its denotation $a'=f_g\circ a$ with key $d'$. If
+    $d'\in\text{reps}$ or $d'\in\text{queued}$, skip (denotation
+    deduplication). Otherwise: if $|\text{queued}|\ge{}$%
+    \texttt{max\_frontier}, raise \texttt{ClosureLimitExceeded}; else push
+    $(w',a')$ and add $d'$ to \emph{queued}.
+  \end{enumerate}
+\item \textbf{Return.} When the frontier empties without a cap being hit,
+  the table \emph{reps} is complete and the catalog object becomes usable.
+\end{enumerate}
+This is a faithful transcription of \texttt{NormalFormCatalog.\_build}. The
+serial number exists so that heap entries are always comparable even if two
+keys were equal; by Lemma~\ref{ch08:lem:keyinjective} keys of distinct words
+are never equal, so the serial is a belt-and-braces guard for the runtime,
+not a mathematical ingredient.
+\end{algorithm}
+
+Three design points before the proofs. First, \emph{representative-first}
+names the policy of step 2(b): only the first word to arrive at a denotation
+is ever expanded; all later arrivals are pruned unexpanded. The entire
+correctness question is whether this pruning can ever lose a smaller
+representative or an entire denotation --- Section~\ref{ch08:sec:soundness}
+proves it cannot. Second, the \emph{queued} set prunes even earlier: a
+candidate whose denotation is already awaiting processing in the frontier is
+not pushed at all. This is an optimization with teeth --- it bounds the
+frontier by the number of distinct pending denotations --- and it carries a
+proof obligation of its own (Lemma~\ref{ch08:lem:skip}), because dropping a
+candidate is only sound if the word already queued for that denotation is at
+least as good. Third, the caps are checked \emph{before} accepting or
+pushing, so the exception fires instead of the table silently saturating;
+the construction never returns a partial table
+(Section~\ref{ch08:sec:resources}).
+
+\subsection{The closure as a graph search}\label{ch08:sec:graphview}
+
+A reader from combinatorial semigroup theory will recognize the skeleton of
+Algorithm~\ref{ch08:alg:closure}. Define the \emph{typed denotation graph}
+of a catalog: vertices are the reachable denotations; there is a labeled
+edge $a\xrightarrow{\ \ell\ }a'$ whenever the generator labeled $\ell$ has
+source equal to the target of $a$ and $a'=f_\ell\circ a$. This is the
+typed, multi-object analogue of the (left) Cayley graph of a monoid with
+respect to a generating set \cite{pin,howie}, with the identities $\id_O$
+playing the role of the neutral vertex --- one per declared object, since
+the ``monoid'' here is really the arrow family of a category. Under this
+reading:
+\begin{itemize}
+\item the closure is a graph search from the $m$ seed vertices;
+\item a representative $\NF_G(a)$ is a \emph{geodesic} label sequence from
+  a seed to $a$ --- shortest first, by the length component --- with ties
+  broken deterministically by the rank-lexicographic component;
+\item the duplicate check of step 2(b) is the classic ``visited'' set of
+  breadth-first search; the \emph{queued} set of step 2(e) is the equally
+  classic ``discovered but not yet expanded'' refinement that prevents the
+  frontier from holding one vertex twice;
+\item Theorem~\ref{ch08:thm:soundness} is then the typed, tie-broken
+  sharpening of the standard fact that breadth-first search computes
+  shortest paths: not merely \emph{some} geodesic per vertex, but the
+  lexicographically least one, which is what determinism requires.
+\end{itemize}
+The analogy also delimits itself. Cayley-graph methods in semigroup theory
+typically continue toward presentations, relations, and rewriting
+\cite{howie}; the kernel stops deliberately short of all three
+(Boundary~\ref{ch08:bd:norewrite}). The graph view is offered as an aid to
+intuition and a bridge to the literature, not as an alternative
+formalization: the definitions that govern are those of
+Sections~\ref{ch08:sec:catalogs}--\ref{ch08:sec:algorithm}.
+
+\section{Soundness of pruning}\label{ch08:sec:soundness}
+
+Throughout this section, fix a validated catalog and consider a run of
+Algorithm~\ref{ch08:alg:closure} that terminates normally (no cap raised).
+``Popped'' means returned by step 2(a); the popped words form a finite
+sequence $p_1,p_2,\dots,p_T$ in temporal order.
+
+The proof rests on the two invariants announced in the governing sources:
+the \emph{dequeue-order} invariant (words leave the frontier in shortlex
+order) and the \emph{prefix-domination} invariant (a better prefix stays
+better under any common suffix). We prove each, plus the auxiliary
+skip-domination lemma that the frontier deduplication requires.
+
+\begin{lemma}[Invariant I: dequeue monotonicity]\label{ch08:lem:dequeue}
+$\kappa(p_1)\le\kappa(p_2)\le\cdots\le\kappa(p_T)$; that is, words are
+popped in nondecreasing (by Lemma~\ref{ch08:lem:keyinjective}, strictly
+increasing) shortlex order.
+\end{lemma}
+
+\begin{proof}
+Every non-seed frontier entry is pushed during the expansion step of some
+pop, and an extension $p_t\cdot\ell$ satisfies
+$\kappa(p_t\cdot\ell)>\kappa(p_t)$ because its length is $|p_t|+1$. Now fix
+$t$ and compare $p_{t+1}$ with $p_t$. At the moment $p_t$ was popped, the
+entry that will later be popped as $p_{t+1}$ either (i) was already in the
+frontier --- in which case $\kappa(p_{t+1})\ge\kappa(p_t)$ because the heap
+returned $p_t$ as the \emph{minimum} of the then-current frontier --- or
+(ii) had not yet been pushed, in which case it is pushed during the
+expansion of $p_t$ itself (pushes happen only inside expansions, and the
+only expansion between the two pops is that of $p_t$), whence
+$\kappa(p_{t+1})=\kappa(p_t\cdot\ell)>\kappa(p_t)$ for some label $\ell$.
+Either way $\kappa(p_t)\le\kappa(p_{t+1})$, and induction over $t$ finishes
+the claim. (Seeds are all pushed before the first pop, so case (ii) never
+involves a seed.)
+\end{proof}
+
+\begin{lemma}[Invariant II: prefix domination under common suffixes]\label{ch08:lem:prefix}
+Let $u,u'$ be well-typed words with
+$\llbracket u\rrbracket=\llbracket u'\rrbracket$ and
+$u<_{\mathrm{slex}}u'$. Then for every label sequence $s$ such that $u's$ is
+well-typed: $us$ is well-typed,
+$\llbracket us\rrbracket=\llbracket u's\rrbracket$, and
+$us<_{\mathrm{slex}}u's$.
+\end{lemma}
+
+\begin{proof}
+Equal denotations have equal sources and equal targets, so $u$ and $u'$
+share a start object (Remark~\ref{ch08:rem:typepath}) and end at the same
+object $Z$. Well-typedness of an appended suffix depends only on the object
+at the junction and on the suffix's own internal typing: $u's$ well-typed
+means the first label of $s$ names a generator with source $Z$ and the
+remaining labels chain on from there; the identical condition makes $us$
+well-typed. For the denotation, evaluation is a fold, so
+$\llbracket us\rrbracket = F_s\circ\llbracket u\rrbracket$ where $F_s$
+denotes the composite of the suffix's generator arrows (an arrow
+$Z\to Z'$); likewise
+$\llbracket u's\rrbracket=F_s\circ\llbracket u'\rrbracket$; the right-hand
+factors are equal by hypothesis, so the composites are extensionally equal.
+The order claim is Lemma~\ref{ch08:lem:append}, whose same-start hypothesis
+we just established.
+\end{proof}
+
+\begin{lemma}[Skip domination]\label{ch08:lem:skip}
+Suppose that during the expansion of a popped word $p_t$, the candidate
+$w'=p_t\cdot\ell$ with denotation key $d'$ is \emph{skipped} in step 2(e).
+Then at that moment there exists a well-typed word $q$ with denotation key
+$d'$ and $q<_{\mathrm{slex}}w'$, where $q$ is either the accepted
+representative of $d'$ (if $d'\in\text{reps}$) or the unique frontier word
+with denotation key $d'$ (if $d'\in\text{queued}$).
+\end{lemma}
+
+\begin{proof}
+\emph{Accepted case.} The representative $q=\text{reps}[d']$ was popped as
+some $p_s$ with $s\le t$, so $\kappa(q)\le\kappa(p_t)<\kappa(w')$ by
+Lemma~\ref{ch08:lem:dequeue} and the strict length increase of extensions.
+
+\emph{Queued case.} The frontier word $q$ with key $d'$ was pushed either as
+a seed or during the expansion of some earlier pop $p_s$ with $s\le t$.
+Since $q$ and $w'$ have the same denotation, they have the same start object
+(Remark~\ref{ch08:rem:typepath}); note this rules out the one scenario in
+which the object-rank tiebreaker could interfere, namely distinct empty-word
+seeds --- two seeds have different denotations (identities of distinct
+objects), so if $q$ is a seed then $w'$, being nonempty, is longer and
+$q<_{\mathrm{slex}}w'$ immediately. Otherwise $q=p_s\cdot\ell'$ for some
+$s\le t$ and label $\ell'$. Compare:
+\begin{itemize}
+\item If $s<t$ and $|p_s|<|p_t|$: then $|q|<|w'|$ and $q<_{\mathrm{slex}}w'$.
+\item If $s<t$ and $|p_s|=|p_t|$: by Lemma~\ref{ch08:lem:dequeue} and key
+  injectivity, $\kappa(p_s)<\kappa(p_t)$ with equal lengths, so the rank
+  sequences differ at some first position inside the common length, in
+  $p_s$'s favor; appending one label to each does not disturb that first
+  difference, so $q<_{\mathrm{slex}}w'$ (the argument of
+  Lemma~\ref{ch08:lem:append}, applied across two different prefixes).
+\item If $s=t$: both $q$ and $w'$ extend the same popped word $p_t$, and
+  generators are enumerated in declared rank order, so the earlier push has
+  the smaller final rank: $\operatorname{rank}(\ell')<\operatorname{rank}(\ell)$,
+  whence $q<_{\mathrm{slex}}w'$ (equal lengths, equal prefix, smaller last
+  entry).
+\end{itemize}
+In every case $q<_{\mathrm{slex}}w'$, as claimed.
+\end{proof}
+
+With the three lemmas in hand, we can state and prove the main result. Call
+a word $w$ \emph{hereditarily minimal} when every prefix of $w$ (including
+$w$ itself, with its start object) is the shortlex-least word for that
+prefix's own denotation.
+
+\begin{lemma}[Prefixes of normal forms are normal forms]\label{ch08:lem:hereditary}
+If $w=\NF_G(a)$ for some reachable $a$, then $w$ is hereditarily minimal.
+\end{lemma}
+
+\begin{proof}
+Let $p$ be a proper prefix of $w$, say $w=ps$ with $s$ nonempty, and
+suppose toward a contradiction that some well-typed $r$ has
+$\llbracket r\rrbracket=\llbracket p\rrbracket$ and $r<_{\mathrm{slex}}p$.
+By Lemma~\ref{ch08:lem:prefix} (with $u=r$, $u'=p$, suffix $s$), the word
+$rs$ is well-typed, denotes $\llbracket ps\rrbracket=a$, and satisfies
+$rs<_{\mathrm{slex}}ps=w$ --- contradicting $w=\NF_G(a)$. The case $p=w$ is
+the definition of $\NF_G$.
+\end{proof}
+
+\begin{theorem}[Closure correctness; \textnormal{status: informal correctness argument, formalization open (PO-TKS8-CORE-06)}]\label{ch08:thm:soundness}
+Suppose Algorithm~\ref{ch08:alg:closure} terminates normally on a validated
+catalog. Then the computed table \emph{reps} satisfies:
+\begin{enumerate}
+\item (\emph{Completeness}) the key set of \emph{reps} is exactly the set of
+  reachable denotations of the catalog;
+\item (\emph{Minimality}) for every reachable $a$,
+  $\text{reps}[a]=\NF_G(a)$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+We first prove the following claim by strong induction on the shortlex
+order (legitimate by Lemma~\ref{ch08:lem:wellfounded}):
+
+\medskip
+\noindent\emph{Claim.} For every reachable denotation $a$, the word
+$w^\ast=\NF_G(a)$ is pushed at some point of the run, and when it is popped,
+$a$ is not yet in \emph{reps}; consequently $a$ enters \emph{reps} with
+representative $w^\ast$.
+
+\medskip
+\noindent\emph{Proof of claim.} Fix $a$ and $w^\ast=\NF_G(a)$, and assume
+the claim holds for every reachable denotation whose normal form is
+shortlex-smaller than $w^\ast$.
+
+\emph{Getting $w^\ast$ pushed.} If $w^\ast$ is empty, it is a seed and is
+pushed in step 1. Otherwise write $w^\ast=p\cdot\ell$ where $p$ is the
+longest proper prefix. By Lemma~\ref{ch08:lem:hereditary},
+$p=\NF_G(\llbracket p\rrbracket)$, and $p<_{\mathrm{slex}}w^\ast$, so the
+induction hypothesis applies to $\llbracket p\rrbracket$: the word $p$ is
+popped and accepted as the representative of its denotation. During the
+expansion of $p$, the candidate $p\cdot\ell=w^\ast$ is generated (the
+generator named $\ell$ has source equal to the target of
+$\llbracket p\rrbracket$ because $w^\ast$ is well-typed). Could it be
+skipped? By Lemma~\ref{ch08:lem:skip}, a skip would produce a word
+$q<_{\mathrm{slex}}w^\ast$ with $\llbracket q\rrbracket=a$ ---
+contradicting minimality of $w^\ast$. So $w^\ast$ is pushed.
+
+\emph{Popping $w^\ast$ first among $a$'s words.} The run terminates
+normally with an empty frontier, and every popped entry is either accepted
+or discarded as a duplicate, so every pushed entry is eventually popped; in
+particular $w^\ast$ is popped, say as $p_t$. Suppose $a\in\text{reps}$
+already at that moment, via an earlier accepted word $r=p_s$, $s<t$, with
+$\llbracket r\rrbracket=a$. By Lemma~\ref{ch08:lem:dequeue} and key
+injectivity, $r\ne w^\ast$ implies $\kappa(r)<\kappa(w^\ast)$ --- again
+contradicting $w^\ast=\NF_G(a)$. Hence $a\notin\text{reps}$ when $w^\ast$
+is popped, the duplicate check passes, and (normal termination having
+excluded the cap branch) $w^\ast$ is accepted as $\text{reps}[a]$. This
+proves the claim.
+
+\medskip
+\emph{Completeness.} Every key in \emph{reps} is the denotation key of some
+evaluated word, hence reachable. Conversely, by the claim every reachable
+denotation is accepted. \emph{Minimality.} A denotation enters \emph{reps}
+exactly once (the duplicate check forbids overwriting), and by the claim the
+entering word is $\NF_G(a)$.
+\end{proof}
+
+\begin{corollary}[Determinism and stability]\label{ch08:cor:stability}
+On normal termination, the table \emph{reps} --- keys, representatives, and
+the sorted listing \texttt{normal\_forms} --- is a pure function of the
+catalog identity: the object sequence (names, carriers, and order), the
+generator sequence (labels, arrows, and order), and nothing else. Two runs
+on equal catalogs produce equal tables, on any machine, under any
+\texttt{PYTHONHASHSEED}.
+\end{corollary}
+
+\begin{proof}
+Algorithm~\ref{ch08:alg:closure} consults only: declared object order
+(seeding), declared generator order (expansion and ranks), arrow composition
+(deterministic by Chapter~\ref{ch04:main}), and shortlex keys (functions of
+the declared orders). The heap's behavior is determined by keys and the
+deterministic serial tiebreaker; no iteration over a hash-ordered container
+occurs on any code path (the ordered-input discipline of
+Invariant~\ref{ch08:inv:catalog} exists to guarantee precisely this).
+Theorem~\ref{ch08:thm:soundness} then pins the \emph{output} to the
+mathematical object $\NF_G$, which depends only on the catalog.
+\end{proof}
+
+\section{Finiteness and complexity}\label{ch08:sec:complexity}
+
+\begin{proposition}[Finiteness of the closure]\label{ch08:prop:finite}
+Let the catalog declare objects $O_0,\dots,O_{m-1}$ with carrier sizes
+$n_0,\dots,n_{m-1}$. The number of reachable denotations $N$ satisfies
+\[
+N \;\le\; \sum_{i=0}^{m-1}\sum_{j=0}^{m-1} n_j^{\,n_i},
+\]
+since for each ordered pair of objects $(O_i,O_j)$ there are at most
+$n_j^{\,n_i}$ total maps $O_i\to O_j$, and every denotation is a total map
+between declared objects. (The convention $0^0=1$ counts the unique empty
+map, so empty carriers are covered.) Consequently
+Algorithm~\ref{ch08:alg:closure} terminates: each denotation is accepted at
+most once, each acceptance pushes at most $k$ extensions, at most one
+frontier entry exists per pending denotation, and the frontier therefore
+empties after finitely many pops.
+\end{proposition}
+
+\begin{proof}
+The bound is the counting statement just made. For termination, observe that
+every pop either accepts a new denotation or discards a duplicate; there are
+at most $N$ acceptances; total pushes are bounded by $m$ seeds plus $k$ per
+acceptance, i.e.\ $m+kN$; every pop removes one entry; so the loop performs
+at most $m+kN$ pops and halts with an empty frontier (or raises earlier).
+\end{proof}
+
+\begin{remark}[Cost accounting]\label{ch08:rem:cost}
+Write $N$ for the actual closure size, $k$ for the generator count, $m$ for
+the object count, $n=\max_i n_i$, and $F$ for the peak frontier size. The
+run performs at most $m+kN$ pushes and pops, each costing
+$O(\log F)$ comparisons of keys; a key comparison costs $O(L)$ where $L$ is
+the length of the longer word, and $L$ is bounded by $N$ itself in the worst
+case (each accepted representative extends an earlier one by one label, and
+representatives are pairwise distinct denotations, so a representative's
+length never exceeds the number of acceptances that preceded it --- a chain
+of new denotations). Each expansion performs at most $k$ compositions at
+$O(n)$ integer work apiece plus one denotation-key construction at $O(n)$.
+Total: $O\bigl((m+kN)\,(\,k\,n + L\log F\,)\bigr)$ in the worst case, with
+$L\log F$ typically far below its bound because representative lengths in
+practice grow like the diameter of the denotation graph, not like $N$.
+\end{remark}
+
+\begin{remark}[Frontier growth, and what deduplication buys]\label{ch08:rem:frontier}
+Without the \emph{queued} set, the frontier could hold many words per
+denotation --- up to one per accepted predecessor --- and its size could
+approach $kN$. With deduplication, the frontier holds \emph{at most one
+entry per pending denotation}, so $F\le N$ always, and
+$F\le{}$\texttt{max\_frontier} is enforced besides. The price is the proof
+obligation discharged by Lemma~\ref{ch08:lem:skip}: dropping a later word
+for an already-queued denotation is only sound because the queued word is
+strictly shortlex-smaller. The pattern --- an optimization that is also a
+theorem --- recurs throughout the kernel, and the monograph's policy is to
+state the theorem next to the optimization every time.
+\end{remark}
+
+\begin{boundary}[The bound is doubly exponential in carrier size, and that is fine]\label{ch08:bd:bound}
+The worst-case closure bound $\sum_{i,j}n_j^{n_i}$ grows brutally: two
+objects of size $6$ already admit $6^6=46{,}656$ maps per direction. This is
+not a defect to engineer away; it is the true size of the function space,
+and any ``canonical form'' scheme that returned answers faster than the
+space's size on adversarial catalogs would be sampling, not closing. The
+kernel's answer to the growth is not cleverness but honesty: dual resource
+caps and a fail-closed exception, next.
+\end{boundary}
+
+\section{Resource semantics}\label{ch08:sec:resources}
+
+\begin{construction}[Dual caps and fail-closed completion]\label{ch08:con:resources}
+The constructor accepts \texttt{max\_arrows} (default $100{,}000$; bounds
+the number of \emph{accepted} denotations) and \texttt{max\_frontier}
+(default: equal to \texttt{max\_arrows}; bounds the number of \emph{pending}
+denotations in the frontier at any moment). Three guard sites exist, all
+raising \texttt{ClosureLimitExceeded}: seeding a frontier already at the
+frontier cap; accepting a denotation when the table already holds
+\texttt{max\_arrows} entries; and pushing an extension when the frontier is
+at the cap. The exception's message states, in both cap cases, that
+\emph{no partial normal-form catalog was returned} --- and none is: the
+exception escapes the constructor, so no \texttt{NormalFormCatalog} object
+exists afterward; there is no partially built catalog to misuse.
+\end{construction}
+
+\begin{ruleenv}[Fail-closed canonicalization]\label{ch08:rule:failclosed}
+A normal-form table is either \emph{complete} --- every reachable
+denotation present, every representative shortlex-least, per
+Theorem~\ref{ch08:thm:soundness} --- or it is \emph{absent}. There is no
+third state. In particular the implementation never: returns the accepted
+portion of an interrupted closure; marks a table ``best effort''; or
+degrades to a sampled or truncated table under resource pressure.
+\end{ruleenv}
+
+The rationale deserves spelling out, because the alternative is common
+engineering practice. A truncated ``canonical'' table is worse than none: a
+lookup that fails could mean \emph{unreachable} or could mean
+\emph{unexplored}, and a representative drawn from a truncated exploration
+may be beaten by an unexplored shorter word, so equality of representatives
+would no longer certify anything. Every downstream consumer of the catalog
+--- digest computation, cross-run comparison, deduplication --- relies on
+representatives being genuine minima. The kernel therefore converts resource
+exhaustion into a loud, typed failure at construction time, and the two caps
+let a caller choose the failure threshold rather than whether failure is
+loud. Separately, \texttt{representative\_for} distinguishes the
+\emph{unreachable} case with its own exception,
+\texttt{UnreachableDenotationError}: on a \emph{completed} table,
+``not found'' soundly means ``not generated by the declared generators,''
+and the exception name says so.
+
+\begin{example}[Tripping the cap, concretely]\label{ch08:ex:captrip}
+To see the guard fire on an honest workload rather than a contrived one,
+declare a single object $T=(\texttt{Three},(0,1,2))$ and three generators on
+it: $c$ with the $3$-cycle $0\mapsto 1\mapsto 2\mapsto 0$; $t$ with the
+transposition swapping $0$ and $1$; and $e$ with the collapse
+$0\mapsto 0$, $1\mapsto 0$, $2\mapsto 2$. It is a standard fact of
+transformation-semigroup theory that a generating set of the symmetric
+group together with one idempotent of rank $n-1$ generates the full
+transformation monoid on $n$ letters \cite{howie}; for $n=3$ the reachable
+denotations are therefore all $3^3=27$ endomaps of $T$ (plus nothing else:
+one object, so every denotation is an endomap, and the empty word supplies
+the identity). A catalog constructed over these generators with
+\texttt{max\_arrows}${}=27$ or more completes with
+\texttt{denotation\_count}${}=27$; the same catalog with
+\texttt{max\_arrows}${}=10$ raises \texttt{ClosureLimitExceeded} during the
+eleventh acceptance, and no catalog object exists afterward. The example
+makes the design point tangible: the cap is not an error in the catalog ---
+the closure is finite and perfectly computable --- but a caller-chosen
+budget, and the failure it produces is loud, typed, and total, never a
+$10$-entry table masquerading as the canonical closure of a $27$-element
+monoid.
+\end{example}
+
+\section{Generator-order relativity}\label{ch08:sec:orderrel}
+
+Canonical forms are relative to the declared generator order. This is not a
+bug to be normalized away but a definitional fact to be documented and
+enforced; this section proves the invariance that does hold, exhibits the
+variance that does not, and states the resulting comparison discipline.
+
+\begin{proposition}[Denotations are order-invariant; representatives are not]\label{ch08:prop:orderrel}
+Let $\cC$ and $\cC'$ be catalogs with the same object set and the same
+generator \emph{set} (same labels, same arrows) but different declared
+generator orders. Then:
+\begin{enumerate}
+\item the reachable denotation sets of $\cC$ and $\cC'$ are equal;
+\item the closure tables have equal key sets, and
+  \texttt{denotation\_count} agrees;
+\item the representative $\NF_G$ of a given denotation may differ between
+  $\cC$ and $\cC'$; when it differs, the two representatives denote the
+  same arrow.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) Reachability quantifies over well-typed words, and well-typedness of a
+word (Definition~\ref{ch08:def:word}) mentions labels, arrows, sources, and
+targets --- never ranks. The same words are well-typed over both catalogs,
+with the same denotations. (2) Immediate from (1) and completeness
+(Theorem~\ref{ch08:thm:soundness}). (3) The normal form minimizes over the
+same set of words but under a different order, so the minimum may move;
+whatever word is selected still denotes the arrow being represented, by
+definition of the set minimized over.
+\end{proof}
+
+\begin{example}[Worked order-relativity: two commuting transpositions]\label{ch08:ex:orderrel}
+Declare one object $Q=(\texttt{Quad},(0,1,2,3))$ and two generators on it:
+$a$ with arrow the transposition swapping positions $0$ and $1$ (fixing
+$2,3$), and $b$ with arrow the transposition swapping positions $2$ and $3$
+(fixing $0,1$). The two arrows commute: $a\circ b=b\circ a$ is the double
+transposition $\tau$ swapping both pairs. The reachable denotations are the
+four arrows of the Klein four-group: $\id_Q$, $a$, $b$, $\tau$ (products of
+longer words fold back: $aa=bb=\id$, $ab=ba=\tau$, and so on).
+
+Under declared order $(a,b)$ --- ranks $a\mapsto 0$, $b\mapsto 1$ --- the
+closure accepts, in pop order: $()$ for $\id_Q$; $(a)$ for $a$; $(b)$ for
+$b$; then among length-two words, $(a,a)$ duplicates $\id$, and
+$(a,b)$ is popped before $(b,a)$ because rank sequence $(0,1)<(1,0)$
+lexicographically --- so $\tau$ gets representative $(a,b)$, and when
+$(b,a)$ is generated it is skipped (denotation already present).
+
+Under declared order $(b,a)$ --- ranks $b\mapsto 0$, $a\mapsto 1$ --- the
+identical word set is explored under the mirrored order, and $\tau$ gets
+representative $(b,a)$: rank sequence $(0,1)$ again, but $(0,1)$ now
+\emph{spells} ``$b$ then $a$.'' The denotation table is identical in both
+runs --- four keys, the same four arrows --- while the representative of
+$\tau$ differs as a word. Both representatives evaluate to $\tau$; neither
+is wrong; each is canonical \emph{relative to its catalog}.
+\end{example}
+
+\begin{boundary}[Catalog identity is required for cross-comparison]\label{ch08:bd:catalogidentity}
+A normal form is meaningful only as a pair (catalog identity, word).
+Comparing representatives produced under different catalogs --- different
+generator orders, different labels, different object declarations, or
+different generator sets --- is meaningless: equal words may denote
+different arrows (if labels were rebound) and equal arrows may receive
+different words (Example~\ref{ch08:ex:orderrel}). Any workflow that stores,
+transmits, or diffs normal forms must bind them to a versioned catalog
+identity --- in the kernel's artifact discipline, the declared sequences and
+their hashes --- and must treat a catalog change as a schema change that
+invalidates all stored representatives, even when the denotation sets
+coincide (Proposition~\ref{ch08:prop:orderrel} guarantees they often do,
+which makes the silent-mismatch failure mode \emph{more} dangerous, not
+less: the keys line up while the names have moved).
+\end{boundary}
+
+\section{Extended worked example: a two-object catalog, by hand}\label{ch08:sec:worked}
+
+We now run Algorithm~\ref{ch08:alg:closure} by hand, round by round, on a
+catalog small enough to trace completely yet rich enough to exercise every
+branch: cross-object typing, non-injective collapse, frontier
+deduplication in both its forms (accepted and queued), and termination.
+
+\begin{example}[The catalog]\label{ch08:ex:workedcatalog}
+Objects, in declared order:
+$X=(\texttt{Left},(x_0,x_1))$ and $Y=(\texttt{Right},(y_0,y_1))$.
+Generators, in declared order:
+\begin{itemize}
+\item $u$ (rank $0$), arrow $u:X\to Y$ with $u(x_0)=y_1$, $u(x_1)=y_0$
+  (a ``crossing'' bijection into the other object);
+\item $v$ (rank $1$), arrow $v:Y\to X$ with $v(y_0)=x_0$, $v(y_1)=x_0$
+  (a collapse: everything to $x_0$).
+\end{itemize}
+Object ranks: $X\mapsto 0$, $Y\mapsto 1$. To keep the trace compact, name
+the arrows that will appear:
+$c_X:X\to X$ constant at $x_0$;
+$c_Y:Y\to Y$ constant at $y_1$;
+$c_{XY}:X\to Y$ constant at $y_1$;
+$c_{YX}:Y\to X$ constant at $x_0$.
+(The reader can verify as we go that these are exactly the composites that
+arise.)
+\end{example}
+
+\emph{Seeding.} Push the empty word at $X$ (key $(0,(),0)$, denotation
+$\id_X$) and the empty word at $Y$ (key $(0,(),1)$, denotation $\id_Y$).
+Frontier: two entries; \emph{queued} $=\{\id_X,\id_Y\}$; \emph{reps}
+empty.
+
+\emph{Round 1.} Pop $()$ at $X$ --- least key. New denotation: accept
+$\id_X$ with representative $()$. Expand: generators with source $X$: only
+$u$. Extension $(u)$, denotation $u$ itself, key $(1,(0),0)$; not accepted,
+not queued: push. Frontier: $\{()\,@\,Y,\ (u)\}$.
+
+\emph{Round 2.} Pop $()$ at $Y$ (key $(0,(),1)$ beats $(1,(0),0)$ on
+length). Accept $\id_Y$ as $()$. Expand: source-$Y$ generators: only $v$.
+Push $(v)$, denotation $v$, key $(1,(1),1)$. Frontier:
+$\{(u),\ (v)\}$.
+
+\emph{Round 3.} Pop $(u)$ (rank sequence $(0)<(1)$). Accept $u$. Its target
+is $Y$, so expand by $v$: word $(u,v)$, denotation
+$v\circ u$. Compute: $x_0\mapsto u\mapsto y_1\mapsto v\mapsto x_0$;
+$x_1\mapsto y_0\mapsto x_0$. So $v\circ u=c_X$. Push $(u,v)$, key
+$(2,(0,1),0)$. Frontier: $\{(v),\ (u,v)\}$.
+
+\emph{Round 4.} Pop $(v)$. Accept $v$. Target $X$; expand by $u$: word
+$(v,u)$, denotation $u\circ v$: $y_0\mapsto x_0\mapsto y_1$;
+$y_1\mapsto x_0\mapsto y_1$. So $u\circ v=c_Y$. Push $(v,u)$, key
+$(2,(1,0),1)$. Frontier: $\{(u,v),\ (v,u)\}$.
+
+\begin{center}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\multicolumn{4}{@{}l}{State after Round 4} \\
+\midrule
+Accepted denotation & Representative & Key & \\
+\midrule
+$\id_X$ & $()$ at $X$ & $(0,(),0)$ & \\
+$\id_Y$ & $()$ at $Y$ & $(0,(),1)$ & \\
+$u$     & $(u)$       & $(1,(0),0)$ & \\
+$v$     & $(v)$       & $(1,(1),1)$ & \\
+\midrule
+Frontier & $(u,v)\mapsto c_X$ & $(2,(0,1),0)$ & pending \\
+         & $(v,u)\mapsto c_Y$ & $(2,(1,0),1)$ & pending \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\emph{Round 5.} Pop $(u,v)$ --- rank sequence $(0,1)<(1,0)$. Accept $c_X$
+with representative $(u,v)$: the first endomap in the table, and already a
+non-obvious fact made canonical --- the least word producing the collapse
+of $X$ routes through $Y$ and back. Expand: target $X$, generator $u$: word
+$(u,v,u)$, denotation $u\circ c_X$: both points
+$\mapsto x_0\mapsto y_1$, i.e.\ $c_{XY}$. Push, key $(3,(0,1,0),0)$.
+
+\emph{Round 6.} Pop $(v,u)$. Accept $c_Y$ as $(v,u)$. Expand: target $Y$,
+generator $v$: word $(v,u,v)$, denotation $v\circ c_Y$: both
+$\mapsto y_1\mapsto x_0$, i.e.\ $c_{YX}$. Push, key $(3,(1,0,1),1)$.
+
+\emph{Round 7.} Pop $(u,v,u)$. Accept $c_{XY}$ as $(u,v,u)$. Expand:
+target $Y$, generator $v$: candidate $(u,v,u,v)$, denotation
+$v\circ c_{XY}$: both points of $X\mapsto y_1\mapsto x_0$ --- that is
+$c_X$, whose key is \emph{already accepted} (Round 5). Skip: no push. This
+is the accepted-case prune of Lemma~\ref{ch08:lem:skip}, and the lemma's
+guarantee is visible concretely: the retained representative $(u,v)$ is
+shortlex-far below the skipped $(u,v,u,v)$.
+
+\emph{Round 8.} Pop $(v,u,v)$. Accept $c_{YX}$ as $(v,u,v)$. Expand:
+target $X$, generator $u$: candidate $(v,u,v,u)$, denotation
+$u\circ c_{YX}=c_Y$ --- accepted in Round 6. Skip. Frontier now empty:
+\textbf{terminate normally}.
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\multicolumn{3}{@{}l}{Final table: $8$ denotations (\texttt{denotation\_count} $=8$)} \\
+\midrule
+Denotation & Type & Representative \\
+\midrule
+$\id_X$   & $X\to X$ & $()$ at $X$ \\
+$\id_Y$   & $Y\to Y$ & $()$ at $Y$ \\
+$u$       & $X\to Y$ & $(u)$ \\
+$v$       & $Y\to X$ & $(v)$ \\
+$c_X$     & $X\to X$ & $(u,v)$ \\
+$c_Y$     & $Y\to Y$ & $(v,u)$ \\
+$c_{XY}$  & $X\to Y$ & $(u,v,u)$ \\
+$c_{YX}$  & $Y\to X$ & $(v,u,v)$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Reconciliation with the theory: the closure size $8$ sits comfortably below
+the Proposition~\ref{ch08:prop:finite} bound
+$\sum_{i,j}2^2=4\cdot 4=16$; every representative is visibly the shortest
+word denoting its arrow (and among equal-length candidates, none competed
+here --- the catalog is too rigid); the peak frontier size was $2$,
+illustrating Remark~\ref{ch08:rem:frontier}'s bound $F\le N$; and the two
+skips in Rounds 7--8 are exactly the closure of the ``ping-pong'' orbit
+$c_X\to c_{XY}\to c_X$ and $c_Y\to c_{YX}\to c_Y$: from length $3$ onward,
+every longer word folds into one of the eight accepted denotations, which
+is \emph{why} the algorithm halts. A reader wishing to internalize the
+machine is invited to rerun the trace under the reversed generator order
+$(v,u)$ and confirm: the same eight denotations, with the length-$1$ and
+length-$3$ representatives unchanged as words but re-ranked, and the pop
+order of Rounds 3--8 reshuffled accordingly
+(Proposition~\ref{ch08:prop:orderrel}).
+
+\begin{exercise}\label{ch08:exercise:third}
+Extend the catalog of Example~\ref{ch08:ex:workedcatalog} with a third
+generator $w$ (rank $2$) carrying the arrow $w:Y\to Y$ that swaps $y_0$ and
+$y_1$. Before running the closure, predict: which new denotations become
+reachable, which existing representatives change (careful: none of the
+existing eight should --- adding a higher-ranked generator can only add
+words that lose ties), and what \texttt{denotation\_count} becomes. Then
+run the closure by hand and check. (The exercise rewards noticing that
+$w\circ u$ ``uncrosses'' $u$, making the inclusion-like bijection
+$X\to Y$ reachable at length $2$.)
+\end{exercise}
+
+\subsection{Lookups against the completed table}\label{ch08:sec:lookups}
+
+The completed catalog of Example~\ref{ch08:ex:workedcatalog} also serves to
+exercise the query surface and its error taxonomy, which is as much a part
+of the construction's semantics as the table itself.
+
+\begin{checkclass}[Error taxonomy of the query surface]\label{ch08:check:errors}
+Three failure kinds are deliberately kept distinct, because they mean three
+different things:
+\begin{enumerate}
+\item \emph{Malformed or foreign input} --- \texttt{ValidationError}. Raised
+  by \texttt{evaluate} (hence by \texttt{normalize}) for an unknown
+  generator label or an undeclared start object, and by the constructors
+  for unordered or blank inputs. Meaning: the question itself is not a
+  question about this catalog.
+\item \emph{Ill-typed word} --- the composition type error of
+  Chapter~\ref{ch04:main}, propagated unchanged through
+  \texttt{evaluate}'s fold when a label's declared source fails to match
+  the object reached so far. Meaning: the word is syntactically over this
+  catalog's alphabet but does not type-check; it \emph{has no denotation},
+  so no normal form is defined for it, and none is invented.
+\item \emph{Unreachable arrow} --- \texttt{UnreachableDenotationError} from
+  \texttt{representative\_for}. Meaning: the arrow is a perfectly valid
+  typed arrow between declared objects, but the declared generators do not
+  generate it. On a \emph{completed} table this verdict is sound and final
+  (Theorem~\ref{ch08:thm:soundness}, completeness), which is exactly why
+  the fail-closed rule matters: against a partial table the same lookup
+  failure would be uninterpretable.
+\end{enumerate}
+\end{checkclass}
+
+The third kind has a crisp instance in the worked catalog: the swap
+endomap $\sigma:X\to X$, $x_0\leftrightarrow x_1$, is a legitimate arrow on
+a declared object, yet the final table's only $X\to X$ entries are $\id_X$
+and $c_X$. So \texttt{representative\_for($\sigma$)} raises
+\texttt{UnreachableDenotationError} --- and that is a \emph{theorem} about
+the catalog, not a shrug: since $v$'s collapse is the only way back into
+$X$, every $X\to X$ word of positive length factors through $c_X$ and is
+constant; no word denotes $\sigma$. The completed closure turns
+``not found'' into ``provably not generated,'' which is the entire
+difference between a cache miss and a mathematical statement.
+
+\begin{exercise}\label{ch08:exercise:chain}
+(i) Show that for a catalog whose generators are all endomaps of a single
+declared object, Definition~\ref{ch08:def:shortlex} collapses to the
+classical shortlex order on the free monoid over the ranked alphabet, the
+third key component never differing. (ii) Construct, for each $n\ge 1$, a
+single-object catalog with one generator whose closure has exactly $n$
+denotations and whose longest representative has length $n-1$ (hint: a
+cycle of length $n$; compare the worst-case length bound in
+Remark~\ref{ch08:rem:cost}). (iii) Verify that in your construction the
+frontier never holds more than one entry, so the peak $F=1$: the cost
+bounds of Remark~\ref{ch08:rem:cost} are loose precisely when the
+denotation graph is thin.
+\end{exercise}
+
+\section{Two permanent boundaries}\label{ch08:sec:boundaries}
+
+\begin{boundary}[Not a rewrite-system claim]\label{ch08:bd:norewrite}
+$\NF_G$ is \emph{denotational minimization over a completed finite
+closure}. It is not --- and must never be quoted as --- a termination or
+confluence result for a rewrite system, because \emph{no rewrite system is
+defined here}. The distinction matters because the surrounding literature
+creates the expectation: canonical forms for words modulo relations are
+classically obtained by completing a set of rewrite rules and proving
+termination and local confluence, in the tradition of string-rewriting
+presentations of monoids and semigroups \cite{howie,pin}. The kernel
+deliberately takes the other road: it never manipulates words by rules at
+all; it \emph{evaluates} every word into the finite semantic domain of
+typed total functions and minimizes over each semantic equivalence class
+directly. Consequently: no claim is made that any set of TKS-inherited
+equations, oriented in any way, terminates; no claim is made that any such
+system is confluent; no critical-pair analysis exists; and no such analysis
+is owed, because no result in this chapter depends on one. Should a future
+lane define a rewrite presentation for inherited equations, its
+termination and confluence obligations would be new ledger items, starting
+from zero evidence --- nothing proved here transfers.
+\end{boundary}
+
+\begin{boundary}[Catalog identity, restated as a permanent rule]\label{ch08:bd:identity}
+Restating Boundary~\ref{ch08:bd:catalogidentity} in its permanent,
+cross-artifact form: normal forms compose with catalog identity and with
+nothing else. A representative is a name \emph{within} a catalog, not a
+name \emph{of} an arrow in the abstract. Every artifact that records a
+normal form must record the catalog (or its digest) beside it; every
+comparison of normal forms must first establish catalog equality; and
+every catalog modification --- reordering, relabeling, adding or removing a
+generator or object --- creates a \emph{new} catalog whose representatives
+are incomparable with the old, even where
+Proposition~\ref{ch08:prop:orderrel} guarantees the denotation sets agree.
+The executable suite enforces the constructor-level half of this rule
+(validated, ordered, hash-bindable inputs); the workflow-level half is a
+discipline on consumers, recorded here as a permanent boundary so that no
+future integration can cite this chapter as license for cross-catalog
+comparison.
+\end{boundary}
+
+\section{Status summary}\label{ch08:sec:status}
+
+\begin{center}
+\begin{tabular}{@{}lp{5.0cm}p{4.6cm}@{}}
+\toprule
+Item & Where & Status \\
+\midrule
+Shortlex is a total well-order; keys injective &
+Lemmas~\ref{ch08:lem:keyinjective}--\ref{ch08:lem:wellfounded} &
+informal proof, this chapter \\
+$\NF_G$ well defined &
+Prop.~\ref{ch08:prop:nfwelldef} &
+informal proof, this chapter \\
+Dequeue monotonicity; skip domination; prefix domination &
+Lemmas~\ref{ch08:lem:dequeue}, \ref{ch08:lem:skip}, \ref{ch08:lem:prefix} &
+informal correctness argument (PO-TKS8-CORE-06) \\
+Closure completeness and minimality &
+Thm.~\ref{ch08:thm:soundness} &
+informal correctness argument; formalization open; not in Lean verified
+scope \\
+Finiteness; termination; cost bounds &
+Prop.~\ref{ch08:prop:finite}, Rem.~\ref{ch08:rem:cost} &
+informal proof; bounds only \\
+Fail-closed resource semantics &
+Constr.~\ref{ch08:con:resources}, Rule~\ref{ch08:rule:failclosed} &
+executable validation (resource regressions) \\
+Order-relativity of representatives &
+Prop.~\ref{ch08:prop:orderrel}, Ex.~\ref{ch08:ex:orderrel} &
+informal proof; worked example \\
+No rewrite-system claim; catalog identity required &
+Boundaries~\ref{ch08:bd:norewrite}, \ref{ch08:bd:identity} &
+permanent boundaries \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The chapter closes the mathematical development of the kernel's five
+capabilities. What remains for the monograph's final part is the
+engineering: how the implementation realizes these definitions
+(Chapter~\ref{ch09:implementation}), how the bounded exhaustive suites and
+regression fixtures exercise them (Chapter~\ref{ch10:testing}), what the
+pinned Lean seed does and does not verify (Chapter 11), and where the
+kernel's deliberate boundaries leave the wider TKS/CAS program
+(Chapter 12). Nothing in this chapter licenses semantic transfer onto
+canonical constructs; obligation PO-TKS8-CORE-08 remains \textsc{open / not
+licensed}, and the shortlex machinery, like the lift before it, is offered
+as substrate --- exact, replayable, fail-closed --- awaiting separately
+gated review.

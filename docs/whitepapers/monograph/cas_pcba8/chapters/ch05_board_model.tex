@@ -1,0 +1,949 @@
+\chapter{The Board Model}\label{ch05:chapter}
+
+\section{The board as an evidence object}\label{ch05:sec:intro}
+
+A \emph{board} is the candidate's unit of design: the complete, immutable,
+identity-bearing description of one circuit-shaped cognitive-system model.
+Everything the candidate can do --- check, simulate, trace, adapt, audit
+--- it does \emph{to a board}, and everything it reports, it reports
+\emph{about a board identified by digest}. This chapter walks through
+every record type that a board contains, field by field, and then through
+the two disciplines that make the walk worthwhile: the immutability
+discipline, which guarantees that a board cannot change between the moment
+it was checked and the moment its check report is relied upon; and the
+identity discipline, which guarantees that any structural edit --- any
+edit at all --- produces a detectably different board.
+
+The design target is worth stating before the field lists. In an
+evidence-bearing research program, the dangerous artifacts are not the
+wrong ones but the \emph{ambiguous} ones: a design whose parameters might
+have been edited after review, a netlist whose meaning depends on element
+order, a ``safety'' annotation that might have been added by a later hand.
+The board model removes ambiguity by construction. A board is a value, not
+an object with a lifecycle; its identity is a deterministic function of
+its complete structure; and its research boundary is rederived --- not
+stored, not trusted, not inherited --- by every public operation that
+touches it.
+
+As everywhere in this monograph, the boundary comes first: a board is a
+model description. Nothing in this chapter asserts that any board
+describes a real cognitive system, a deployed model, or a physical
+circuit. Section~\ref{ch05:sec:boundary} closes the chapter with the
+formal statement.
+
+\section{The immutability discipline}\label{ch05:sec:immutability}
+
+Every record in the board model obeys the same five mechanical rules,
+inherited from the type layer of Chapter~\ref{ch04:chapter} and worth
+restating here because the board is where they compound.
+
+\begin{ruleenv}[Frozen records]\label{ch05:rule:frozen}
+Every board-model record is a frozen dataclass with slots: fields are
+assigned once, at construction, and attribute assignment thereafter raises.
+There are no setters, no builders that return partially initialized
+values, and no mutable default fields.
+\end{ruleenv}
+
+\begin{ruleenv}[Exact types, no subclasses]\label{ch05:rule:exact}
+Construction and every revalidation check the exact runtime type of the
+record itself and of every typed field. A subclass of \texttt{Net},
+\texttt{ComponentInstance}, or \texttt{Board} --- however
+faithful-looking --- is rejected. This closes the classic loophole in
+which a subclass overrides equality, hashing, or a property to lie about
+its contents while passing type checks.
+\end{ruleenv}
+
+\begin{ruleenv}[Recursive freezing of open-ended containers]
+\label{ch05:rule:freeze}
+The two open-ended containers a component carries --- its parameter
+mapping and its state-binding mapping --- are recursively frozen at
+construction: mappings become immutable mapping proxies over detached
+copies, sequences become tuples, sets become frozen sets, and every leaf
+must be one of the canonically encodable value types
+(Section~\ref{ch05:sec:parameters}). A metadata value that cannot be
+frozen canonically is a construction error, not a tolerated opaque blob.
+Detachment matters as much as freezing: the frozen copy shares no
+structure with the caller's original, so a caller who retains and mutates
+the dictionary it passed in mutates only its own copy.
+\end{ruleenv}
+
+\begin{ruleenv}[Revalidation on touch]\label{ch05:rule:revalidate}
+Every record exposes a revalidation method that re-checks the full
+well-formedness of the record and, transitively, of every child record.
+Public operations call it on entry. Immutability makes revalidation
+\emph{normally} redundant --- that is the point --- but the candidate does
+not rely on the language to enforce what it can cheaply re-verify:
+low-level attribute forcing, pickling round-trips, and hostile or buggy
+callers are all caught by the re-check rather than trusted away.
+\end{ruleenv}
+
+\begin{ruleenv}[Safe references everywhere]\label{ch05:rule:refs}
+Every identifier field in every record --- board, component, port, net,
+test point, calibration, feedback loop --- must satisfy the versioned
+safe-reference profile (ASCII, leading alphanumeric, at most 128
+characters of alphanumerics and \texttt{.\ \_ : -}), with the single
+audited exception of the \texttt{\$board} endpoint sentinel. Identifiers
+appear in audit reports and evidence packets; the profile exists so that
+no identifier can visually impersonate another under human review.
+\end{ruleenv}
+
+\section{Components}\label{ch05:sec:components}
+
+\begin{definition}[Component instance]\label{ch05:def:component}
+A \texttt{ComponentInstance} consists of seven fields:
+\texttt{ref}, \texttt{kind}, \texttt{semantic\_profile},
+\texttt{parameters}, \texttt{state\_bindings}, \texttt{safety\_critical},
+and \texttt{finite\_transition}.
+\end{definition}
+
+\emph{\texttt{ref}} is the component's board-unique identifier, a safe
+reference. Uniqueness is not enforced by the record --- a lone component
+cannot know its siblings --- but by the design-rule checker, which fails
+a board with duplicated references under its model-class diagnostics.
+The division of labor is deliberate: records enforce everything locally
+checkable; the DRC enforces everything relational.
+
+\emph{\texttt{kind}} names the component's contract in the closed catalog
+of Chapter~\ref{ch04:chapter} (in v0.1: \texttt{pass}, \texttt{scale},
+\texttt{cjt}, \texttt{decision\_threshold}, \texttt{mux}, \texttt{fuse},
+\texttt{delay}, \texttt{finite\_transition}). The record stores the name,
+not the contract: resolution happens at check time against the exact
+catalog whose digest is bound into the board identity, so a board checked
+under one catalog cannot silently be re-interpreted under another.
+An unknown kind is a semantics-class diagnostic, never a guess.
+
+\emph{\texttt{semantic\_profile}} is the versioned name of the component's
+declared meaning (for example \texttt{pcba8.cjt.reference.v0}). It exists
+so that a later revision of a component's transfer semantics is a
+\emph{different profile string} --- visible in every payload --- rather
+than a silent behavioral change under an unchanged name. The DRC checks
+that the instance's profile matches the catalog contract's profile for
+its kind; a mismatch means the board was authored against a different
+semantics than the engine implements, and that is an error, not a
+warning.
+
+\emph{\texttt{parameters}} is the recursively frozen mapping of
+Section~\ref{ch05:sec:parameters}. The record freezes and detaches it;
+the DRC later checks it against the kind's typed parameter contract ---
+exact key set, value types, bounds, and choice sets.
+
+\emph{\texttt{state\_bindings}} is a frozen mapping from binding names to
+exact \texttt{CasState} literals (Chapter~\ref{ch04:chapter}). Bindings
+are the board's semantic annotations: a junction may declare which CAS
+states its cause, bias, and effect roles are intended to model. The
+record validates that every bound value is an exact revalidated state
+literal; the DRC validates the relational part --- that required binding
+names for the kind are present, that no unknown binding names appear, and
+that the bias-domain coherence rule holds where the kind demands it.
+
+\emph{\texttt{safety\_critical}} is an exact boolean marking the component
+as participating in a safety-relevant path. The flag has consequences
+downstream --- safety-marked paths require marked test points and
+calibration references, and unreachable-threshold analysis attaches to
+them --- but the flag itself is a \emph{declaration}. The candidate's
+standing rule applies: marking a component safety-critical creates
+obligations, never credit. A board with safety markings and without the
+corresponding probes and calibrations fails; a board with them merely has
+its declarations checked for internal consistency. No configuration of
+flags constitutes evidence that anything is safe.
+
+\emph{\texttt{finite\_transition}} is either absent or an exact
+\texttt{FiniteTransitionSemantics} record, described next. Only
+components whose kind is adapter-eligible meaningfully carry one; the
+TKS adapter of Chapter~9 refuses everything else.
+
+\subsection{Finite transition semantics}\label{ch05:sec:finite}
+
+\begin{definition}[Finite transition certificate]\label{ch05:def:finite}
+A \texttt{FiniteTransitionSemantics} record binds: a versioned profile
+string; a named source carrier (name plus tuple of tagged finite
+elements); a named target carrier (likewise); a total mapping, given as a
+tuple of integer indices into the target carrier, one per source element;
+a \texttt{certificate\_sha256} over the canonical payload of all of the
+above; and four booleans fixing the declared character of the transition
+--- \texttt{total}, \texttt{deterministic}, \texttt{stateful},
+\texttt{stochastic} --- of which the first two default true and the last
+two default false.
+\end{definition}
+
+Field-level points. The carrier elements are \emph{tagged} finite values,
+so a source carrier $\{0, 1\}$ and a source carrier
+$\{\mathit{false}, \mathit{true}\}$ are distinct carriers with distinct
+certificates (Chapter~\ref{ch04:chapter},
+Rule~\ref{ch04:rule:typepun}); the mapping is by index, so the
+transition table is meaningful only relative to the exact element order
+serialized into the certificate; and the certificate is computed by the
+same canonical-JSON-then-SHA-256 discipline as every other identity in
+the candidate.
+
+The record's docstring states its own limit, and the audit language of
+this monograph adopts it verbatim in substance: the digest establishes
+\emph{exact transition-table identity only}. It is not an external
+review, not a safety license, and not a claim that the carrier labels
+have CAS meaning. A certificate answers one question --- ``is this
+exactly the table that was certified?'' --- and no other.
+
+One method deserves special mention because it is a piece of honest test
+infrastructure: the record offers a \texttt{with\_mapping} operation
+that returns a \emph{deliberately uncertified} mutation --- the mapping
+changes, the certificate does not --- documented as ``useful for negative
+tests.'' Its existence lets the test suite verify that every downstream
+consumer actually recomputes and rejects a stale certificate, rather than
+trusting the stored digest. A discipline that cannot exhibit its own
+forgeries cannot test its forgery detection.
+
+\subsection{The catalog viewed from the board}\label{ch05:sec:catalog}
+
+Because every component field ultimately answers to a catalog contract,
+the closed v0.1 catalog deserves a board's-eye reference here;
+Table~\ref{ch05:tab:catalog} summarizes it. The catalog is published
+under the versioned profile
+\texttt{cas-pcba-v8.closed-component-catalog.v1}, and its pinned digest
+is itself revalidated: the catalog payload constructor re-checks, on
+every computation, that the catalog container has not been substituted,
+that every entry is an exact contract, and that each catalog key equals
+its contract's declared kind. A substituted or diverged catalog is a
+runtime error, not a silently different engine.
+
+\begin{longtable}{@{}lp{4.2cm}p{5.3cm}l@{}}
+\caption{The closed v0.1 component catalog, as consumed by boards. All
+activation ports carry signal kind \textsc{activation} with unit
+\textsc{activation\_0\_1}; decision ports carry \textsc{decision} with
+\textsc{boolean}; finite-state ports carry \textsc{finite\_state} with
+\textsc{none}. ``S'' marks stateful kinds; \texttt{finite\_transition}
+is the sole TKS-adapter-eligible kind.}
+\label{ch05:tab:catalog}\\
+\toprule
+Kind & Ports (in $\to$ out) & Parameters & Flags \\
+\midrule
+\endfirsthead
+\toprule
+Kind & Ports (in $\to$ out) & Parameters & Flags \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\texttt{pass} & \texttt{input} $\to$ \texttt{output} & (none) & \\
+\texttt{scale} & \texttt{input} $\to$ \texttt{output} &
+\texttt{factor} (decimal $\ge 0$); \texttt{ceiling} (decimal in
+$[0,1]$) & \\
+\texttt{cjt} & \texttt{cause}, \texttt{bias} $\to$ \texttt{effect} &
+\texttt{beta} (decimal $\ge 0$); \texttt{saturation}, \texttt{cutoff}
+(decimal in $[0,1]$); required state bindings \texttt{cause},
+\texttt{bias}, \texttt{effect} & \\
+\texttt{decision\_threshold} & \texttt{input} $\to$ \texttt{decision}
+(boolean) & \texttt{threshold} (decimal in $[0,1]$) & \\
+\texttt{mux} & \texttt{when\_false}, \texttt{when\_true},
+\texttt{select} (boolean) $\to$ \texttt{output} & (none) & \\
+\texttt{fuse} & \texttt{input} $\to$ \texttt{output} &
+\texttt{threshold} (decimal in $[0,1]$); \texttt{action} (string in
+\{\texttt{permanent\_block}, \texttt{warn}\}) & S \\
+\texttt{delay} & \texttt{input} $\to$ \texttt{output} &
+\texttt{initial} (decimal in $[0,1]$) & S \\
+\texttt{finite\_transition} & \texttt{source} $\to$ \texttt{target}
+(finite state) & (none) & TKS \\
+\end{longtable}
+
+Reading the table board-side yields several observations that recur in
+the audit chapters. The junction's required state bindings are the only
+place the catalog \emph{demands} CAS annotation --- a board may not
+declare a \texttt{cjt} without saying which states its three roles are
+intended to model, which is what makes the bias-domain coherence check
+well-posed. The two stateful kinds are exactly the two whose semantics
+involve memory: the unit delay (one tick of activation history, seeded
+by \texttt{initial}) and the fuse (run-local open/closed state under
+\texttt{permanent\_block}); statefulness is declared in the contract so
+that the DRC's feedback analysis and the simulator's scheduling can
+refuse configurations they do not support rather than mis-simulate
+them. And the finite-transition kind is the single, narrow doorway to
+the TKS adapter --- eligibility is a catalog flag, not a property a
+board can assert about an arbitrary component.
+
+\section{Typed ports}\label{ch05:sec:ports}
+
+A board carries a tuple of \texttt{PortSpec} records
+(Chapter~\ref{ch04:chapter}, Definition~\ref{ch04:def:portspec}) as its
+external surface: the points at which fixtures inject inputs and observe
+outputs. Each port declares its direction, signal kind, unit, and
+required flag; board ports are addressed by nets through the
+\texttt{\$board} endpoint sentinel, so ``the board's own port \texttt{x}''
+and ``component \texttt{c}'s port \texttt{x}'' are structurally different
+endpoints and can never be conflated by a name collision.
+
+Two board-level remarks. First, the \texttt{required} flag on an input
+port is the hook for the DRC's connectivity rule: a required input must
+be either connected to a driving net or covered by an executable default
+in the selected simulator profile; an unconnected required input with no
+default is a net-class error. Second, board ports are the \emph{only}
+sanctioned crossing of the board's evidential boundary. Fixtures deliver
+typed, canonically serialized input samples at input ports, and every
+observation in a trace is attributed either to a declared port or to a
+declared test point --- there is no side channel by which a value can
+enter or leave a simulation unrecorded.
+
+\section{Parameters and finite-state annotations}
+\label{ch05:sec:parameters}
+
+The parameter and state-binding mappings are where board authors have the
+most freedom, so they are where the model is most careful. Freedom of
+\emph{content} is preserved: a parameter mapping may nest mappings,
+sequences, and sets, and may carry decimals, integers, booleans, strings,
+state literals, enumeration members, floats, and explicit nulls. Freedom
+of \emph{form} is not: every leaf must be one of the canonically
+encodable types, and the encoding is injective and type-tagged.
+
+\begin{construction}[Canonical value encoding]\label{ch05:con:encoding}
+The canonical encoding maps: null to a tagged none; booleans to a tagged
+boolean; integers to a tagged exact decimal string; floats to a tagged
+binary64 encoding by exact hexadecimal representation, with explicit
+markers for \texttt{NaN} and signed infinities; decimals to a tagged
+canonical string; state literals to a tagged record of all four factor
+fields with explicit nulls for absent Drive and Register; enumeration
+members to a tagged record of their class path and encoded value;
+strings to a tagged string; mappings to a tagged, key-sorted item list
+(string keys only); sequences to a tagged item list preserving order;
+and sets to a tagged item list sorted by each item's canonical JSON text,
+so that set encoding is independent of iteration order. Any other type
+raises a board-identity error naming the offending type.
+\end{construction}
+
+Three properties of this encoding do real work. \emph{Injectivity across
+types}: the tags separate integer \texttt{1} from boolean \emph{true}
+from string \texttt{"1"} from decimal \texttt{Decimal("1")} from binary64
+\texttt{1.0} --- five different tagged payloads, five different digests
+(Chapter~\ref{ch04:chapter},
+Proposition~\ref{ch04:prop:injective}). \emph{Order discipline}: mapping
+items are sorted by key and set items by canonical text, so authoring
+order cannot leak into identity, while sequence order --- which is
+semantically meaningful --- is preserved exactly. \emph{Totality by
+refusal}: the encoding is total on the declared value universe and
+undefined --- loudly --- outside it, so no board can carry an
+unserializable payload whose identity would then depend on ambient
+object state.
+
+State bindings ride the same machinery with one addition: every bound
+\texttt{CasState} is revalidated during freezing and again during
+canonical encoding, so a binding that was somehow corrupted after
+construction cannot reach the identity computation intact.
+
+The phrase \emph{finite-state annotations} in the chapter contract
+deserves a precise gloss. Bindings and parameters are
+\emph{annotations}: declared, structural, design-value metadata in the
+sense of the measurement-kind taxonomy
+(Chapter~\ref{ch04:chapter}, Section~\ref{ch04:sec:measkinds}). They
+assert what the author \emph{intends} a component to model, and the DRC
+checks their internal and relational coherence. They are not
+observations, they carry no measurement kind other than design value,
+and no accumulation of annotations upgrades itself into evidence about
+any system outside the board.
+
+\section{Nets and endpoints}\label{ch05:sec:nets}
+
+\begin{definition}[Net]\label{ch05:def:net}
+A \texttt{Net} consists of a safe reference \texttt{ref}, a tuple of
+\texttt{Endpoint} records, and an exact boolean
+\texttt{safety\_critical}. An \texttt{Endpoint} is an
+(\texttt{owner\_ref}, \texttt{port\_ref}) pair, where
+\texttt{owner\_ref} is either a component reference or the board
+sentinel \texttt{\$board}.
+\end{definition}
+
+The record level enforces locality: endpoints are exact typed pairs, the
+tuple is frozen, and every reference is profile-checked. Everything
+relational belongs to the DRC's net-class diagnostics, and the board
+model is designed so that each such rule is decidable from the frozen
+structure alone: every endpoint must resolve to an existing owner and an
+existing port on that owner; every net must have exactly one driving
+(output-direction) endpoint; every net must have at least one load; the
+driver's signal kind and unit must agree with every consumer's under the
+closed admissibility table; no port may appear on two nets; and the
+signal-kind/unit pair itself must be admissible. None of these checks
+consults anything outside the board and the versioned catalog --- which
+is what makes the check report a durable artifact rather than a
+statement about a moment.
+
+The \texttt{safety\_critical} flag on a net mirrors the component flag:
+it marks the net as part of a declared safety path, obligating a marked
+test point on that net (a test-point-class diagnostic if absent) and
+enrolling the net's path in threshold-reachability analysis. As with
+components, the flag is obligation, not credit.
+
+\section{Test points and calibration references}\label{ch05:sec:tp}
+
+\begin{definition}[Test point, restated at board level]
+\label{ch05:def:testpoint}
+A \texttt{TestPoint} binds a safe reference, the reference of the net it
+observes, an optional calibration reference, and an exact boolean
+\texttt{safety\_critical}.
+\end{definition}
+
+A test point is a \emph{declared observation site}: a commitment, made in
+the design, that a particular net is observable and that observations of
+it will be attributed to this named point. During simulation, test-point
+observations enter the trace as measurement records attributed to a
+producer reference derived from the test point, so the provenance of
+every observed value includes \emph{where in the design} it was observed,
+not merely what its value was.
+
+The attribution vocabulary is itself typed. A measurement's producer
+reference admits exactly three forms: a component reference (a safe
+reference naming a declared component); the board sentinel
+\texttt{\$board} (for values entering or leaving the board surface); or
+a prefixed test-point form, \texttt{test-point:}\emph{ref}, whose
+suffix must itself be a safe reference naming a declared test point.
+Any other producer string is rejected when the measurement is
+constructed or revalidated. The three forms partition the possible
+origins of a value in a run --- a component computed it, the fixture
+supplied it at the surface, or a probe observed it --- and the
+partition is machine-checkable, so an audit can classify every number
+in a trace by origin without heuristics. Nothing else can produce a
+value; in particular, there is no ``anonymous'' or ``synthetic''
+producer form, which is another face of the no-side-channel rule of
+Section~\ref{ch05:sec:ports}.
+
+\begin{definition}[Calibration reference, restated at board level]
+\label{ch05:def:calref}
+A \texttt{CalibrationRef} binds: a safe reference and a version string;
+a \texttt{profile\_sha256} (exact uppercase 64-hex); a typed measurement
+kind; a typed unit; instrument and protocol identity strings; a finite
+decimal uncertainty; and a boolean \texttt{packet\_eligible} that
+defaults to --- and in every locally constructed record remains ---
+false.
+\end{definition}
+
+The field set is the candidate's answer to a specific failure mode:
+calibration claims that are vague enough to be unfalsifiable. Here a
+calibration reference must say \emph{which} profile (by digest),
+\emph{which} instrument identity, \emph{which} protocol identity,
+\emph{what} uncertainty, and \emph{what kind} of measurement it purports
+to describe --- or it cannot be constructed at all. The DRC then enforces
+the relational rules: an executable test point on a checked board needs a
+calibration reference that exists, is well-formed, and is unit-compatible
+with the observed net; safety-marked paths need their probes; and a
+missing or mismatched calibration is a distinct diagnostic, never a
+silent downgrade.
+
+The \texttt{packet\_eligible} flag encodes the non-self-certification
+rule at the type level: a board author can declare calibration metadata,
+and the declaration is useful --- it makes the design checkable and the
+fixture executable --- but nothing the author writes can mark the record
+as eligible for an authenticated Evidence Packet. Eligibility is granted,
+if ever, by an authentication process outside the board, against the
+digest the record already carries.
+
+\section{Declared feedback loops}\label{ch05:sec:feedback}
+
+\begin{definition}[Feedback declaration]\label{ch05:def:feedback}
+A \texttt{FeedbackLoop} binds: a safe reference; a tuple of component
+references constituting the declared cycle; the reference of the delay
+component that breaks the cycle; a finite decimal
+\texttt{max\_round\_trip\_gain}; and a calibration reference for the
+gain bound.
+\end{definition}
+
+The board model treats feedback the way it treats safety: as something
+that must be \emph{declared to exist at all}. The DRC computes the
+strongly connected components of the board's directed component graph;
+every realizable cycle must be covered by an exact feedback declaration
+naming its components; the declared delay component must be of the
+stateful unit-delay kind and must lie on the cycle; the declared gain
+bound must be conservative and sub-unity (with explicit declared
+exceptions where the source discipline admits them); and the bound must
+carry a dimensionless calibration reference. An undeclared cycle, a
+cycle without delay, an unsafe gain, and a malformed declaration are four
+distinct feedback-class diagnostics.
+
+Field-level notes. The gain is a \emph{finite} decimal by type: the
+idealized infinite gain that the published source uses in its safety
+board (Chapter~11) is unrepresentable in a feedback declaration, exactly
+as it is unrepresentable in the junction parameter contract. The
+calibration reference means that even the \emph{bound} --- a design
+value --- must name what kind of quantity it is and with what
+uncertainty it is asserted, keeping the gain bound inside the same
+measurement-kind taxonomy as every other number. And the declaration is
+by component references, not by object pointers: the declared cycle is
+checkable against the frozen structure, and the declaration survives
+serialization unchanged.
+
+The limits are as important as the checks, and Chapter~7 states them in
+full: stateful-beyond-unit-delay loops and stochastic loops are
+unsupported, and unsupported or resource-bounded analysis yields an
+\emph{unresolved} safety diagnostic --- never a pass. A feedback
+declaration is a claim the checker can test, not a permission slip.
+
+\section{Source and research-boundary metadata}\label{ch05:sec:metadata}
+
+A board's canonical payload does not begin with its components; it begins
+with \emph{who is speaking}. Four blocks of metadata bind every board
+identity to the exact software and arithmetic that produced and would
+interpret it.
+
+\emph{Source identity.} The versioned source-bundle digest --- a SHA-256
+over the candidate package's own Python sources under the profile
+\texttt{cas-pcba-v8.python-source-bundle.v1} --- enters the payload. Two
+boards authored identically under different implementations have
+different identities, because ``the same board'' under different
+interpreting code is not evidentially the same object.
+
+\emph{Engine identity.} The engine payload (profile
+\texttt{cas-pcba-v8.reference-engine.v1}) nests the source identity, the
+component-catalog digest, and the complete decimal-context payload with
+its digest. The catalog digest is computed over every contract in the
+closed catalog --- kinds, ports, parameter rules, bounds, choice sets,
+flags --- so a catalog edit anywhere is an engine-identity change
+everywhere.
+
+\emph{Decimal context.} The full context payload (precision, rounding,
+exponent range, clamp, capitals, trap list) and its digest appear
+directly in the board payload as well, per
+Chapter~\ref{ch04:chapter}, Rule~\ref{ch04:rule:context}: an artifact
+must be interpretable without consulting any ambient arithmetic state.
+
+\emph{Research boundary.} The fixed Ring-4 boundary travels inside the
+evidence-bearing records that reference boards (measurement records,
+projector identities, simulation results). The board payload itself does
+not need a boundary field to be safe, because of the operational rule of
+the next section --- but every artifact \emph{derived} from a board
+carries the boundary explicitly, revalidated at construction.
+
+\begin{ruleenv}[Boundary rederivation]\label{ch05:rule:boundary}
+Public operations never accept a caller-supplied authority object and
+never trust a stored one. Wherever a research boundary is needed, it is
+derived fresh from the boundary type's fixed constructor and revalidated;
+wherever one is received (inside a record), it is revalidated against the
+fixed posture before use. Because the boundary type has no instance
+storage (Chapter~\ref{ch04:chapter}, Definition~\ref{ch04:def:boundary}),
+there is no mutable object whose corruption could propagate: the check is
+against constants, every time.
+\end{ruleenv}
+
+This rule is the board model's answer to a subtle attack surface: shared
+mutable ``status'' singletons. A design that stored its boundary in a
+shared object would make every artifact's claim posture only as strong as
+the weakest code path that could reach that object. The candidate's
+design makes the posture a mathematical constant.
+
+\section{Deterministic identity material}\label{ch05:sec:identity}
+
+\begin{construction}[Canonical board payload]\label{ch05:con:payload}
+The canonical payload of a board, under the versioned identity schema
+\texttt{cas-pcba-v8.board-identity.v2}, consists of: the identity schema
+name; the source identity; the engine identity; the catalog digest; the
+complete decimal-context payload and digest; the board's \texttt{ref} and
+\texttt{version}; its ports, sorted by reference, each with direction,
+signal kind, unit, and required flag canonically encoded; its components,
+sorted by reference, each as a complete canonical component payload
+(itself under the versioned schema
+\texttt{cas-pcba-v8.component-identity.v1}, including parameters, state
+bindings, safety flag, finite-transition payload, and the decimal-context
+digest); its nets, sorted by reference, with endpoints sorted by owner
+then port; its test points, calibrations, and feedback loops, each sorted
+by reference with all fields canonically encoded (feedback component
+lists sorted for order-insensitivity of the declared set). The board
+digest is the uppercase SHA-256 of the canonical JSON serialization of
+this payload; a component digest is defined analogously over its own
+payload.
+\end{construction}
+
+\begin{proposition}[Structural edits change the digest]
+\label{ch05:prop:digest}
+Let $B$ and $B'$ be boards accepted by the model. If $B$ and $B'$ differ
+in any structural respect --- any field of any port, component,
+parameter, state binding, net, endpoint, test point, calibration, or
+feedback declaration; the board reference or version; or the interpreting
+source, catalog, or decimal-context identity --- then their canonical
+payloads differ, and hence their digests differ up to SHA-256 collision.
+Conversely, if $B$ and $B'$ differ only in authoring order of ports,
+components, nets, test points, calibrations, feedback declarations,
+endpoint lists, mapping insertion order, or set iteration order, their
+payloads are identical and they receive the same digest.
+\end{proposition}
+
+\begin{proof}
+For the forward direction: the canonical payload embeds every structural
+field through the injective tagged encoding of
+Construction~\ref{ch05:con:encoding} (injectivity per
+Chapter~\ref{ch04:chapter}, Proposition~\ref{ch04:prop:injective},
+extended structurally to the composite encodings, whose tags separate the
+container types and whose item lists preserve or canonically sort
+content), so distinct structures serialize to distinct canonical texts;
+SHA-256 then separates them absent collision. For the converse: every
+collection in Construction~\ref{ch05:con:payload} is either sorted by a
+key that the sort leaves invariant under reordering, or is a genuine
+sequence whose order is itself structural (and thus out of scope of the
+converse). Canonical JSON fixes key order and separators, so equal
+payload objects yield byte-equal texts and equal digests.
+\end{proof}
+
+\begin{remark}[Evidence consequences]\label{ch05:rem:evidence}
+Proposition~\ref{ch05:prop:digest} is the board model's contribution to
+the audit trail. Every DRC report binds the digest of the exact board it
+checked; every simulation result binds the exact DRC report identity and
+board identity; every measurement's identity scope chains back to them.
+Consequently: a post-review parameter tweak, a quietly added endpoint, a
+relaxed gain bound, a re-pointed calibration --- each produces a board
+whose digest matches no existing report, and every artifact that claimed
+to be ``about'' the reviewed board is visibly about something else. The
+converse direction is equally practical: because authoring order does not
+enter identity, two independent transcriptions of the same design ---
+or a serialization round trip --- agree on digest, so digest agreement is
+usable as a transcription check. Both directions rest on the disclosed
+external assumption of SHA-256 collision resistance
+(Chapter~\ref{ch04:chapter}, Corollary~\ref{ch04:cor:digest}).
+\end{remark}
+
+\begin{remark}[What identity does not claim]
+A digest identifies structure; it does not validate it. A board whose
+digest is stable is not thereby checked (that is the DRC's report), let
+alone correct, safe, or meaningful. Identity answers ``which board?'' ---
+exactly and only that question --- so that every other question can be
+asked \emph{of the right board}.
+\end{remark}
+
+\subsection{The digest chain}\label{ch05:sec:chain}
+
+The board digest is the root of a chain that runs through every
+downstream artifact. It is worth laying the chain out end to end,
+because its integrity argument is compositional: each link binds the
+identity of the previous link into its own canonical payload, so
+tampering anywhere breaks verification everywhere downstream.
+
+\begin{protocol}[Board-rooted evidence chain]\label{ch05:proto:chain}
+\begin{enumerate}
+\item \emph{Arithmetic and engine.} The decimal-context digest is a
+constant of the interpreting software; the catalog digest and
+source-bundle digest combine with it into the engine identity
+(Section~\ref{ch05:sec:metadata}).
+\item \emph{Board.} The canonical board payload embeds the engine
+identity and the complete structure; the board digest identifies both
+at once (Construction~\ref{ch05:con:payload}).
+\item \emph{Check report.} The DRC report's identity is computed over
+the exact board digest it checked, the DRC profile version, and the
+complete ordered diagnostic list; ``this board passed'' is never
+separable from \emph{which} board and \emph{which} checker.
+\item \emph{Simulation result.} A result binds the board digest, the
+exact DRC report identity, the simulator profile, the component
+catalog and decimal-context digests, the source baseline, and the fixed
+research boundary; its identity scope digest seeds every measurement.
+\item \emph{Measurements and trace events.} Each measurement identity
+is a digest over its identity scope, tick, producer, port, canonical
+value text and value digest, unit, kind, calibration reference, and
+child-measurement identities; trace events link measurements to ticks
+under their own versioned profile.
+\end{enumerate}
+Verification replays the chain: recompute each canonical payload from
+its stored fields, recompute each digest, and compare. A single edited
+parameter at step 2 invalidates steps 3--5 wholesale; an edited
+measurement value at step 5 invalidates exactly that record and every
+record naming it as a child ancestor.
+\end{protocol}
+
+\begin{example}[Digest agreement as a transcription check]
+\label{ch05:ex:transcription}
+Illustrative: two collaborators independently transcribe the same
+published reference design into board records --- one authoring
+components alphabetically, the other in schematic order; one building
+nets from a netlist file, the other by hand; one inserting parameters
+in declaration order, the other sorted. If both transcriptions are
+faithful, Proposition~\ref{ch05:prop:digest}'s converse direction says
+their board digests agree, because none of those orderings enters the
+canonical payload. If the digests \emph{disagree}, at least one
+transcription differs structurally --- a parameter value, a missing
+endpoint, a flag --- and the canonical payloads can be diffed
+field-by-field to locate it. The digest thus doubles as a cheap,
+deterministic cross-transcription audit, which the five-board corpus
+program of Chapter~12 exploits.
+\end{example}
+
+\section{Boards as values}\label{ch05:sec:values}
+
+It is instructive to contrast the board model with the mutable
+document model that mainstream design tools --- electronic CAD suites,
+diagram editors, notebook environments --- share. In the mutable model,
+a design is an object with a lifecycle: it is opened, edited in place,
+saved, and versioned (if at all) by timestamps or by an external
+version-control system whose snapshots are taken at operator-chosen
+moments. Analyses run against ``the current state,'' and the binding
+between an analysis report and the design state it analyzed is
+maintained by workflow discipline: the operator is trusted not to edit
+between analysis and use.
+
+The board model replaces every element of that picture. A board is a
+\emph{value}: it does not open, it is constructed; it does not change,
+it is superseded by a different value; it is not saved into an ambient
+current state, it is referenced by digest. The binding between a report
+and its subject is not workflow discipline but arithmetic
+(Protocol~\ref{ch05:proto:chain}). ``Editing'' is the pure-functional
+idiom: construct a new board sharing whatever substructure is unchanged
+--- shared safely, because everything is immutable --- and receive a
+new identity for the new whole.
+
+Three practical consequences follow. \emph{Concurrency is free}: any
+number of checks, simulations, and audits can run against the same
+board value without locks, because nothing can mutate under them.
+\emph{Caching is sound}: a DRC report keyed by board digest can be
+reused for as long as the digest matches, with no invalidation
+protocol beyond digest comparison --- and the report itself records the
+checker version, so an engine upgrade naturally misses the cache.
+\emph{History is cheap and honest}: an archive of board values is an
+archive of every design state that ever mattered, each
+self-identifying, none overwritable. The candidate's known-fault
+fixtures --- boards that must fail specific checks forever
+(Chapter~11) --- are simply archived values whose failing reports are
+regression-tested against their unchanging digests.
+
+The cost, equally practical, is that authoring convenience must be
+rebuilt above the model: builders that accumulate records before the
+single validating construction, and diff tools that compare canonical
+payloads rather than object graphs. The candidate accepts the cost
+deliberately. Authoring convenience above a sound core is engineering;
+evidential soundness above a convenient core is, on the record of the
+source audit this monograph preserves, how grammars come to not cover
+their corpora and safety fuses come to not trip.
+
+\section{Worked example fragments}\label{ch05:sec:worked}
+
+Everything in this section is \emph{illustrative only}: fragments are
+schematic, elide imports and full argument lists, and are chosen to make
+the model's acceptance boundary concrete. They are not normative source
+code, and no fragment asserts anything about any system outside the
+candidate.
+
+\subsection{A legal minimal board}\label{ch05:sec:legalboard}
+
+\begin{example}[Pass-through board]\label{ch05:ex:legal}
+The smallest interesting legal board wires one \texttt{pass} component
+between the board surface's input and output:
+
+\begin{itemize}
+\item Board ports: \texttt{stimulus\_in} (\textsc{input},
+\textsc{activation}, \textsc{activation\_0\_1}) and
+\texttt{response\_out} (\textsc{output}, \textsc{activation},
+\textsc{activation\_0\_1}).
+\item Component: \texttt{u1} of kind \texttt{pass}, semantic profile
+\texttt{pcba8.pass.v0}, empty parameters, empty state bindings.
+\item Nets: \texttt{n\_in} with endpoints
+(\texttt{\$board}, \texttt{stimulus\_in}) and (\texttt{u1},
+\texttt{input}); \texttt{n\_out} with endpoints (\texttt{u1},
+\texttt{output}) and (\texttt{\$board}, \texttt{response\_out}).
+\end{itemize}
+
+Construction succeeds; the board has a stable digest; and the DRC
+accepts it: every endpoint resolves, each net has exactly one driver
+(the board's input surface drives \texttt{n\_in}; \texttt{u1}'s output
+drives \texttt{n\_out}), kinds and units agree, and no safety, feedback,
+or calibration obligations are triggered because none are declared.
+\end{example}
+
+\begin{example}[Legal annotated junction]\label{ch05:ex:cjt}
+A more representative fragment declares a junction with semantic
+annotations: component \texttt{j1} of kind \texttt{cjt}, with a finite
+decimal parameter \texttt{beta} of \texttt{Decimal("4")}, and state
+bindings mapping \texttt{cause}, \texttt{bias}, and \texttt{effect}
+binding names to exact \texttt{CasState} literals --- say
+$({\wedge}8, C, \bot, \bot)$, $({\wedge}2, E, \bot, \bot)$, and
+$({\wedge}9, C, \bot, \bot)$. The record freezes both mappings; the DRC
+checks \texttt{beta} against the kind's nonnegative-decimal rule, checks
+the binding names against the kind's required set, and applies the
+bias-domain coherence rule to the bound literals. Note what has and has
+not happened: the board now \emph{says} something in CAS vocabulary, and
+the checker has verified that what it says is well-typed and coherent
+--- and nothing has been evidenced about any actual cognitive process.
+\end{example}
+
+\begin{example}[Annotated safety path, declared correctly]
+\label{ch05:ex:safety}
+Illustrative: a fragment that declares a monitored refusal-shaped path
+--- the shape whose published source version Chapter~11 dissects ---
+with every obligation the model imposes made explicit:
+
+\begin{itemize}
+\item Components: \texttt{stage} of kind \texttt{cjt}
+(\texttt{beta} $=$ \texttt{Decimal("4")}, \texttt{saturation} $=$
+\texttt{Decimal("0.95")}, \texttt{cutoff} $=$ \texttt{Decimal("0.05")},
+bindings on all three roles); \texttt{guard} of kind \texttt{fuse}
+(\texttt{threshold} $=$ \texttt{Decimal("0.9")}, \texttt{action} $=$
+\texttt{"permanent\_block"}), marked \texttt{safety\_critical}.
+\item Net \texttt{n\_guard} from \texttt{stage.effect} to
+\texttt{guard.input}, marked \texttt{safety\_critical}.
+\item Test point \texttt{tp\_guard} on \texttt{n\_guard}, marked
+\texttt{safety\_critical}, with calibration reference
+\texttt{cal\_act\_v1}.
+\item Calibration \texttt{cal\_act\_v1}: version, profile digest,
+measurement kind \textsc{design\_value}, unit
+\textsc{activation\_0\_1}, instrument and protocol identities, finite
+uncertainty --- and \texttt{packet\_eligible} false, as always for a
+locally declared record.
+\end{itemize}
+
+The board is record-legal, and --- with the remaining wiring in place
+--- passes the test-point and calibration classes of the DRC. Whether
+it passes \emph{threshold reachability} depends on the numbers: with
+\texttt{saturation} $=$ \texttt{0.95} above \texttt{threshold} $=$
+\texttt{0.9}, the conservative bound propagation can resolve the
+crossing as reachable; had \texttt{saturation} been
+\texttt{Decimal("0.1")} --- the published source's own configuration
+--- the checker must flag the unreachable threshold. The example is the
+board model doing its job: the difference between a checkable safety
+declaration and an uncheckable safety \emph{story} is exactly the
+difference between these typed fields and prose. No outcome of the
+check, in either direction, is evidence that any real refusal
+mechanism exists or works; it is evidence about the declared design.
+\end{example}
+
+\subsection{Reading a canonical payload}\label{ch05:sec:reading}
+
+Auditors meet boards mostly as canonical payloads, so a reading guide
+belongs in this chapter. A canonical board payload is a JSON object
+with sorted keys and fixed separators; its top level always contains,
+in the model's v2 schema: \texttt{identity\_schema} (the constant
+\texttt{cas-pcba-v8.board-identity.v2}); \texttt{source} and
+\texttt{engine} (the interpreting-software identities of
+Section~\ref{ch05:sec:metadata}); \texttt{catalog\_sha256};
+\texttt{decimal\_context} and \texttt{decimal\_context\_sha256};
+\texttt{ref} and \texttt{version}; and the six sorted collections
+(\texttt{ports}, \texttt{components}, \texttt{nets},
+\texttt{test\_points}, \texttt{calibrations},
+\texttt{feedback\_loops}).
+
+Practical audit heuristics follow directly from the schema. To confirm
+two payloads describe the same design under different engines, strip
+the \texttt{source}, \texttt{engine}, \texttt{catalog\_sha256}, and
+decimal-context members and diff the remainder --- the model
+deliberately makes ``same structure, different interpreter'' a
+well-defined, mechanically checkable relation, while the full digests
+remain distinct (Proposition~\ref{ch05:prop:digest}). To locate a
+structural difference flagged by digest mismatch, diff the sorted
+collections pairwise by \texttt{ref}; because every element is
+reference-sorted and canonically encoded, the first differing byte
+lies inside the first genuinely differing field. And to audit a
+parameter's exact type --- the difference between \texttt{1},
+\texttt{true}, \texttt{"1"}, and \texttt{Decimal("1")} --- read its
+tag: the payload preserves the type tags of
+Construction~\ref{ch05:con:encoding} verbatim, so type puns that would
+be invisible in a pretty-printed value listing are explicit in the
+canonical form.
+
+\subsection{Illegal constructions at the record layer}
+\label{ch05:sec:illegalrecord}
+
+\begin{example}[Rejected at construction]\label{ch05:ex:construct}
+Each fragment below raises a typed error before any board exists:
+
+\begin{itemize}
+\item \emph{Subclassed record.} \texttt{class SneakyNet(Net): ...} ---
+any instance is rejected by the exact-type check
+(Rule~\ref{ch05:rule:exact}), regardless of field content.
+\item \emph{Unsafe reference.} A component with
+\texttt{ref="u1\textbackslash u202e"} (a bidirectional control
+character) or \texttt{ref="\_hidden"} (leading non-alphanumeric) fails
+the safe-reference profile.
+\item \emph{Untyped gain.} A feedback declaration with
+\texttt{max\_round\_trip\_gain=0.8} (binary64 float) is rejected: the
+field requires an exact finite \texttt{Decimal}. So is
+\texttt{Decimal("Infinity")} --- finiteness is checked, which is
+precisely what makes the source's idealized infinite gain
+unrepresentable.
+\item \emph{Unfreezable metadata.} A parameter mapping containing a live
+object --- a file handle, a lambda, an arbitrary class instance --- is
+rejected by the canonical freeze
+(Rule~\ref{ch05:rule:freeze}): the value has no canonical encoding, so
+it may not enter a board.
+\item \emph{Type-punned parameter.} A \texttt{fuse} authored with
+\texttt{action=True} fails the string-typed choice rule; authored with
+\texttt{action="permanent\_block"} it passes; authored with
+\texttt{action="Permanent\_Block"} it fails the closed choice set ---
+case is content.
+\item \emph{Mutation attempt.} Given a constructed net \texttt{n},
+the assignment \texttt{n.safety\_critical = True} raises: frozen
+records have no assignment path
+(Rule~\ref{ch05:rule:frozen}). The only way to ``edit'' a board is to
+construct a new one --- which, by
+Proposition~\ref{ch05:prop:digest}, has a new identity.
+\end{itemize}
+\end{example}
+
+\subsection{Illegal boards at the check layer}\label{ch05:sec:illegaldrc}
+
+\begin{example}[Type-legal, check-illegal]\label{ch05:ex:drc}
+The record layer accepts each of the following boards --- every record is
+locally well-formed --- and the DRC then fails each with a distinct
+diagnostic, illustrating the division of labor of
+Section~\ref{ch05:sec:components}:
+
+\begin{itemize}
+\item Two components both named \texttt{u1}: duplicate-reference, a
+model-class error.
+\item A component of kind \texttt{transistor} (not in the closed
+catalog): unknown kind, a semantics-class error --- not an attempt at
+nearest-match resolution.
+\item A net whose endpoint names port \texttt{inptu} on \texttt{u1}:
+unknown port, a net-class error; typos are errors, not warnings.
+\item A net driven by two outputs: invalid driver count. A net driven by
+none, or loading no input: likewise distinct net-class errors.
+\item A decision output wired to an activation input: signal-kind
+mismatch under the closed admissibility table; no coercion from boolean
+to $[0,1]$ exists anywhere in the candidate.
+\item A safety-critical net with no marked test point, or a test point
+whose calibration reference names a nonexistent calibration: distinct
+test-point-class and calibration-class errors.
+\item A cycle of components with no feedback declaration: undeclared
+feedback. With a declaration but no delay component on the cycle:
+feedback without delay. With a declared gain of \texttt{Decimal("1.3")}:
+unsafe feedback gain.
+\end{itemize}
+
+In every case the board \emph{exists} and has a digest --- one can refer
+to it, archive it, and regression-test against it --- but it is failed,
+and a failed report is bound to that digest permanently. The candidate's
+known-fault fixtures (Chapter~11) rely on exactly this: a board that
+must fail, kept, with its failure guarded by tests.
+\end{example}
+
+\section{Invariants and boundary}\label{ch05:sec:invariants}
+
+\begin{invariant}[Board-model invariants]\label{ch05:inv:summary}
+For every board accepted by the model:
+(i) the board and every contained record are frozen, exact-typed, and
+revalidatable, and all open-ended metadata is recursively frozen and
+detached;
+(ii) every identifier satisfies the safe-reference profile, with
+\texttt{\$board} admitted only as an endpoint owner;
+(iii) every numeric field that enters semantics is a finite
+\texttt{Decimal}, and no non-finite value is representable in any
+parameter, gain, uncertainty, or weight;
+(iv) the canonical payload embeds the complete structure together with
+source, engine, catalog, and decimal-context identities, and the board
+digest is a deterministic function of exactly that payload;
+(v) authoring order never affects identity; structural content always
+does;
+(vi) calibration records constructed locally are never packet-eligible,
+and no board-resident flag can grant evidentiary authority; and
+(vii) every public operation rederives and revalidates the fixed
+research boundary rather than trusting any stored or supplied authority
+object.
+\end{invariant}
+
+\begin{threat}[Residual limits]\label{ch05:threat:limits}
+The invariants above are enforced by tested, not proved, code; the
+bounded-evidence posture of Chapter~12 applies. Identity rests on the
+disclosed SHA-256 collision-resistance assumption. Revalidation defends
+against corruption it can observe at the record surface; it cannot
+detect a hostile interpreter or a modified source bundle except insofar
+as the source digest exposes them. And nothing in the model prevents an
+author from writing a board that is well-formed, checkable, and
+meaningless --- well-formedness is the floor of the discipline, not its
+ceiling.
+\end{threat}
+
+\begin{boundary}\label{ch05:bnd:main}
+This chapter specifies the board model of the CAS PCBA~8 v0.1 research
+candidate, at Ring~4, \textsc{not licensed}. A board is a typed model
+description; its digests identify software structures only. No board,
+binding, flag, calibration reference, feedback declaration, or worked
+example in this chapter constitutes evidence about any cognitive system,
+deployed model, or physical circuit; no safety, causal, physical,
+clinical, regulatory, or product claim is made or licensed; and all
+example fragments are illustrative, non-normative, and assert nothing
+beyond the acceptance behavior of the declared software contracts.
+\end{boundary}

@@ -1,0 +1,870 @@
+\chapter{Semigroupoid Paths and the Invalid-Inference Analysis}
+\label{ch06:main}
+
+Chapter~\ref{ch05:main} developed the licensed side of iteration: a single
+endomap on a single object, living in a genuine monoid, with powers and a
+finite idempotence theorem. This chapter develops its deliberately
+crippled sibling. A \emph{semigroupoid path} is a nonempty sequence of
+arrows whose adjacent objects match; it has a typed composite --- the
+category laws guarantee that composing along the sequence is well defined
+and association-independent --- and it has, by construction, \emph{no power
+operation}. There is no $p^{2}$, no $p^{n}$, no ``run the path again.'' The
+omission is not an unimplemented feature; it is the central design
+statement of the kernel, and the reason the two constructions exist as
+distinct runtime types rather than as one type with a flag.
+
+Why spend a chapter on an absence? Because the absence encodes a theorem-
+shaped mistake that recurs, in the wild, wherever operator formalisms meet
+informal reasoning about repetition. The mistake has a fixed anatomy: take
+a \emph{sequence} of operations --- typed, heterogeneous, possibly
+time-varying --- and reason about it as if it were the \emph{iteration of
+one} operation, thereby importing conclusions (fixed points, idempotence,
+convergence, periodicity) that are theorems only about single elements of
+finite monoids. Chapter~\ref{ch05:main} proved those theorems in their
+legitimate habitat; this chapter shows, in three extended case studies,
+exactly how each step of the illegitimate transfer fails in the kernel ---
+not rhetorically but mechanically, with the precise construction site at
+which a typed error is raised, or the precise operation that does not
+exist in the API.
+
+The chapter also situates the path construction against its standard
+mathematical background --- the free category on a directed graph, in the
+sense of Mac Lane \cite{maclanecwm} --- and closes with the boundary
+statement that paths carry no dynamics and no semantics: a path is a
+bookkeeping object for typed composition, and nothing about workflows,
+processes, or cognition follows from one.
+
+\section{The Path Construction}
+\label{ch06:sec:construction}
+
+\subsection{Definition}
+
+\begin{definition}[Semigroupoid path]
+\label{ch06:def:path}
+A \emph{semigroupoid path} is a nonempty finite sequence of arrows
+\[
+  X_0 \xrightarrow{\;f_1\;} X_1 \xrightarrow{\;f_2\;} X_2
+  \longrightarrow \cdots \xrightarrow{\;f_n\;} X_n ,
+  \qquad n \ge 1,
+\]
+such that for each adjacent pair, the declared target of $f_k$ equals the
+declared source of $f_{k+1}$ \emph{as objects} --- name and ordered carrier
+both, exactly the definedness condition of
+Definition~\ref{ch04:def:comp}. The path's \emph{source} is $X_0$ and its
+\emph{target} is $X_n$; the objects $X_1, \dots, X_{n-1}$ are its
+\emph{intermediate objects}. The constructor validates every adjacency at
+construction time and raises the typed composition error, naming the
+offending segment, if any adjacency fails; it also rejects the empty
+sequence and any unordered or one-shot container of arrows, per the
+ordered-input discipline of Chapter~\ref{ch03:main}.
+\end{definition}
+
+\begin{definition}[Path composite]
+\label{ch06:def:composite}
+The \emph{composite} of the path in Definition~\ref{ch06:def:path} is the
+arrow
+\[
+  f_n \circ f_{n-1} \circ \cdots \circ f_1 \;:\; X_0 \to X_n ,
+\]
+computed by left-to-right folding of the kernel's composition. By the
+associativity clause of Theorem~\ref{ch04:thm:laws}, every bracketing of
+the fold yields the same arrow, so the composite is well defined
+independently of evaluation order.
+\end{definition}
+
+\begin{ruleenv}[No power operation]
+\label{ch06:rule:nopower}
+The path type exposes construction, source, target, the composite, and
+appending a type-compatible arrow. It exposes no exponentiation of any
+kind: no operation takes a path and a natural number and returns
+``the path repeated.'' This is an API absence enforced by the type system
+of the host language: the power operation is defined only on the endomap
+wrapper (Definition~\ref{ch05:def:endomap}), the path type is not that
+type and is not convertible to it, and the endomap constructor accepts only
+a single arrow whose source and target are equal as objects.
+\end{ruleenv}
+
+\begin{remark}[Why ``semigroupoid'']
+\label{ch06:rem:semigroupoid}
+The name records the algebraic habitat precisely. A semigroupoid (also
+called a semicategory) has objects and typed composition, associative
+where defined, but is not required to have identities at each object, and
+its composable sequences do not form monoids unless source and target
+coincide. The kernel's ambient structure $\cC$ is a full category ---
+identities exist --- but a \emph{path} is an element of the free
+composable-sequence structure over $\cC$'s arrows, and the operations the
+kernel grants to paths are exactly the semigroupoid operations: composition
+along matching types, and nothing that presupposes an enclosing monoid.
+Powers presuppose an enclosing monoid. Hence their absence.
+\end{remark}
+
+\subsection{Relation to free categories on graphs}
+\label{ch06:sec:free}
+
+The path construction is a disciplined instance of a completely standard
+object. Given a directed graph $G$ --- vertices, edges, each edge with a
+source and target vertex --- the \emph{free category} $\mathcal{F}(G)$ on
+$G$ has the vertices as objects and, as morphisms, the finite composable
+strings of edges, including one empty string at each vertex serving as its
+identity; composition is concatenation \cite{maclanecwm}. The
+construction is left adjoint to the forgetful functor from small
+categories to directed graphs, and its universal property is the
+practical content of that adjunction: for any category $\mathcal{D}$ and
+any graph morphism $\phi$ from $G$ into the underlying graph of
+$\mathcal{D}$ --- an assignment of objects to vertices and morphisms to
+edges, respecting sources and targets --- there is a \emph{unique}
+functor $\hat{\phi} : \mathcal{F}(G) \to \mathcal{D}$ extending $\phi$,
+namely the one sending each composable edge string to the composite of
+its images,
+\[
+  \hat{\phi}\bigl(e_1 e_2 \cdots e_n\bigr)
+  = \phi(e_n) \circ \cdots \circ \phi(e_2) \circ \phi(e_1),
+\]
+and the empty string at a vertex $v$ to $\id_{\phi(v)}$. Freeness means
+the strings satisfy no equations beyond associativity and identity
+bookkeeping: distinct strings remain distinct morphisms of
+$\mathcal{F}(G)$ even when their images under some $\hat{\phi}$
+coincide --- which is the categorical statement of the forgetting
+phenomenon exhibited concretely in Example~\ref{ch06:ex:forgetting}.
+
+Two comparisons locate the kernel's paths in this picture.
+
+First: the kernel's paths are, up to the excluded empty string, the
+morphisms of the free category on the underlying graph of $\cC$ (vertices:
+the finite objects; edges: the arrows). The adjacency condition of
+Definition~\ref{ch06:def:path} is exactly composability of edge strings.
+The kernel excludes the empty path deliberately: an empty path would need
+a distinguished object to serve as its source and target --- data not
+derivable from an empty arrow sequence --- and the identity arrows of
+$\cC$ already serve every legitimate use of ``do nothing at $X$.''
+Nonemptiness keeps the path type's source and target total functions of
+its data, with no special case.
+
+Second, and more importantly: the kernel's path is a \emph{formal string
+that remembers its factorization}, whereas its composite is a single arrow
+that forgets it. The evaluation functor from the free category to $\cC$
+--- the unique functor extending the identity assignment on vertices and
+edges, per the universal property \cite{maclanecwm} --- is exactly the
+kernel's \texttt{composite} operation. Distinct paths can have equal
+composites (the fold collapses the string), and the kernel keeps both
+artifacts available because they answer different questions: the path
+answers ``what steps, in what order, through what intermediate types,''
+which is the auditability question; the composite answers ``what total
+function resulted,'' which is the denotational question. Nothing is ever
+inferred about the path from properties of its composite --- that
+direction of inference is precisely where the invalid inferences of
+Section~\ref{ch06:sec:cases} live.
+
+\begin{notation}
+\label{ch06:not:path}
+For a path $p$ with arrows $f_1, \dots, f_n$ we write $\llbracket p
+\rrbracket = f_n \circ \cdots \circ f_1$ for its composite, mirroring the
+denotation brackets used for typed words in the normal-form chapter; both
+are evaluation maps from syntax-remembering objects to arrows.
+\end{notation}
+
+\section{Path Algebra}
+\label{ch06:sec:algebra}
+
+Although paths have no powers, they are not algebraically inert: they
+concatenate, they extend one arrow at a time, and their evaluation
+respects both operations. This section proves the three small facts the
+rest of the monograph uses, and exhibits the forgetting phenomenon ---
+distinct paths with equal composites --- that motivates keeping paths and
+composites as separate artifacts.
+
+\subsection{Concatenation}
+
+\begin{definition}[Concatenation]
+\label{ch06:def:concat}
+Let $p$ be a path with arrows $f_1, \dots, f_m$ from $X_0$ to $X_m$, and
+$q$ a path with arrows $g_1, \dots, g_n$ from $Y_0$ to $Y_n$. The
+\emph{concatenation} $p \cdot q$ is defined if and only if $X_m = Y_0$ as
+objects, in which case it is the path with arrows
+$f_1, \dots, f_m, g_1, \dots, g_n$ from $X_0$ to $Y_n$.
+\end{definition}
+
+Definedness of the concatenation is a single adjacency check --- the same
+comparison as arrow composition, at the junction --- and the result is
+well formed because all its other adjacencies are inherited from $p$ and
+$q$. In the implementation, concatenation is available as iterated
+\texttt{append}; the definition above is its batch form.
+
+\begin{proposition}[Paths form a semigroupoid]
+\label{ch06:prop:semicat}
+Concatenation is associative wherever defined: if $p \cdot q$ and
+$q \cdot r$ are defined, then so are $(p \cdot q) \cdot r$ and
+$p \cdot (q \cdot r)$, and they are equal.
+\end{proposition}
+
+\begin{proof}
+Definedness: the junctions of $(p \cdot q) \cdot r$ are those of
+$p \cdot q$ (the $p$/$q$ junction) and the $q$/$r$ junction, since
+concatenation changes neither the source nor the target of the $q$
+segment; symmetrically for the other association. Equality: both
+associations have the same underlying arrow sequence --- concatenation of
+sequences is associative --- and a path is determined by its arrow
+sequence (the objects are read off the arrows). Hence the two paths are
+equal as values.
+\end{proof}
+
+\begin{proposition}[Evaluation respects concatenation]
+\label{ch06:prop:evalconcat}
+If $p \cdot q$ is defined, then
+$\llbracket p \cdot q \rrbracket = \llbracket q \rrbracket \circ
+\llbracket p \rrbracket$.
+\end{proposition}
+
+\begin{proof}
+Write the arrows as in Definition~\ref{ch06:def:concat}. Both sides are
+composites of the sequence $f_1, \dots, f_m, g_1, \dots, g_n$ in order:
+the left side by the fold of Definition~\ref{ch06:def:composite} over the
+whole sequence, the right side by folding each half and then composing the
+results. By the associativity clause of Theorem~\ref{ch04:thm:laws},
+every bracketing of a fixed composable sequence yields the same arrow
+(formally: by induction on $n$, moving one arrow at a time across the
+central composition using associativity), so the two sides agree. All
+intermediate composites are defined because every adjacency in the
+combined sequence holds.
+\end{proof}
+
+\begin{lemma}[Append form]
+\label{ch06:lem:append}
+For a path $p$ and an arrow $g$ with source equal to $p$'s target,
+$\llbracket p \cdot g \rrbracket = g \circ \llbracket p \rrbracket$,
+where $p \cdot g$ abbreviates appending $g$ to $p$.
+\end{lemma}
+
+\begin{proof}
+The case $n = 1$ of Proposition~\ref{ch06:prop:evalconcat}, with $q$ the
+one-arrow path $(g)$, whose composite is $g$ itself.
+\end{proof}
+
+In categorical language, Propositions~\ref{ch06:prop:semicat}
+and~\ref{ch06:prop:evalconcat} say that nonempty paths form a
+semicategory (identities excluded by the nonemptiness convention of
+Section~\ref{ch06:sec:free}) and that evaluation
+$p \mapsto \llbracket p \rrbracket$ is a semifunctor into $\cC$ --- the
+restriction to nonempty strings of the evaluation functor from the free
+category \cite{maclanecwm}. Nothing deeper is claimed; the propositions
+exist so that downstream code may reassociate path-building operations
+freely, knowing the denotation cannot shift.
+
+\subsection{Forgetting: distinct paths, equal composites}
+
+\begin{example}[Two factorizations of one function]
+\label{ch06:ex:forgetting}
+Let $X = (\texttt{pair}, (0, 1))$ and let
+$Y = (\texttt{triple}, (a, b, c))$ and
+$Z = (\texttt{single}, (\ast))$ be auxiliary objects. Consider two paths
+from $X$ to $X$:
+\begin{enumerate}
+\item $p_1$: through $Y$, with $u_1 : X \to Y$ mapping $(0, 0)$ and
+$d_1 : Y \to X$ mapping $(1, 0, 0)$; composite
+$\llbracket p_1 \rrbracket$ has tuple
+$\bigl(d_1(0), d_1(0)\bigr) = (1, 1)$.
+\item $p_2$: through $Z$, with $u_2 : X \to Z$ mapping $(0, 0)$ and
+$d_2 : Z \to X$ mapping $(1)$; composite $\llbracket p_2 \rrbracket$ has
+tuple $(1, 1)$.
+\end{enumerate}
+The two paths are unequal as paths --- different lengths would already
+suffice, but here even the lengths agree and the arrow sequences differ
+--- while their composites are extensionally equal: both denote the
+constant map at index $1$. Every question about ``what happened along the
+way'' (which intermediate object, what fan-out at the middle stage)
+distinguishes $p_1$ from $p_2$; no question about the resulting total
+function does.
+\end{example}
+
+The example is elementary, but its consequence for system design is not:
+any pipeline audit that stores only composites has irreversibly discarded
+the factorization, and any tool that needs the factorization --- tracing,
+staging analysis, per-step attribution --- must consume paths. The kernel
+therefore treats ``compute the composite'' as a lossy, explicit,
+caller-initiated operation, never an implicit normalization. This is the
+same design posture as the name-inclusive object identity of
+Chapter~\ref{ch03:main}: information declared by the caller is never
+silently collapsed, and every collapse is an auditable call site.
+
+\begin{remark}[Paths and the normal-form machinery]
+\label{ch06:rem:nfpreview}
+The typed words of the normal-form chapter are close cousins of paths ---
+sequences of generator labels with matching types --- and the closure
+algorithm there is, in these terms, a systematic exploration of all paths
+over a declared generator catalog, quotiented by extensional equality of
+composites and represented by shortlex-least witnesses. The forgetting
+phenomenon of Example~\ref{ch06:ex:forgetting} is exactly what the
+closure's denotation table records: many words, one denotation, one
+canonical representative. The present chapter's machinery is the
+untabulated substrate of that construction.
+\end{remark}
+
+\section{The Invalid Inference}
+\label{ch06:sec:invalid}
+
+We now name the mistake the separation exists to block, in its general
+form, before dissecting three concrete instances.
+
+\begin{finding}[The sequence-to-power fallacy]
+\label{ch06:find:fallacy}
+Let $g_1, g_2, \dots, g_n$ be a sequence of operations applied in temporal
+order. The \emph{sequence-to-power fallacy} is any inference of the form:
+``the system after $n$ steps is $g^{n}$ for some single operation $g$;
+therefore conclusions about powers of a single finite endomap ---
+eventual periodicity, the factorial idempotence of
+Theorem~\ref{ch05:thm:factorial}, existence of a unique idempotent in the
+generated subsemigroup (Proposition~\ref{ch05:prop:monogenic}) --- apply
+to the $n$-step system.'' The inference requires, and the informal
+notation silently assumes, three separate facts: (i) all $g_t$ act on one
+and the same object; (ii) all $g_t$ are equal to a single $g$; and
+(iii) that $g$ is an endomap. Each can fail independently, and the kernel
+is engineered so that whichever one fails first does so as a construction-
+time type error or as an operation that does not exist, rather than as a
+false theorem silently applied.
+\end{finding}
+
+The taxonomy is worth fixing in tabular form before the case studies,
+because the three conditions fail at three different kernel surfaces, and
+keeping the correspondence straight is what makes the studies
+transferable to new instances:
+
+\begin{center}
+\small
+\begin{tabular}{@{}llll@{}}
+\toprule
+Condition assumed & Fails in study & Kernel surface that objects &
+Failure form \\
+\midrule
+(i) one object throughout & (a) & composition / endomap certification &
+typed error \\
+(ii) one generator repeated & (b) & no root-extraction operation exists &
+API absence \\
+(iii) a certified endomap & (c) & endomap constructor; no path power &
+typed error / absence \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Note the two distinct failure forms. Conditions that assert a false
+\emph{equality of objects} fail loudly, as typed errors at a
+construction site --- there is a place in the program where the
+identification is attempted, and that place raises. The condition that
+asserts a false \emph{existence} (of a single generator $g$ with the
+right power) fails silently in a stronger sense: the kernel simply
+provides no operation whose use would presuppose it, so the assumption
+has nowhere to be written down. Both forms serve the same audit goal by
+different means, and the case studies illustrate the difference in
+texture.
+
+The three case studies below realize the three failure points in order:
+(a) fails condition (i) --- the state spaces change over time; (b) fails
+condition (ii) --- the objects agree and the composite is even an endomap,
+but no single generator reproduces it; (c) attempts to import
+Theorem~\ref{ch05:thm:factorial} wholesale into a pathful setting and
+founders on (iii) at the endomap certification boundary. In each study we
+give the setup, the tempting informal claim, and then --- the load-bearing
+part --- the exact kernel step at which the formalization of the claim
+becomes unwritable, with the specific error and the specific construction
+that raises it.
+
+\section{Three Case Studies}
+\label{ch06:sec:cases}
+
+\subsection{Case study (a): a time-varying workflow across changing state
+spaces}
+\label{ch06:sec:case-a}
+
+\begin{example}[Setup]
+\label{ch06:ex:case-a}
+A three-stage pipeline processes items whose representation changes at each
+stage. Declare three objects:
+\begin{align*}
+  S_0 &= (\texttt{intake}, (\texttt{raw\_a}, \texttt{raw\_b},
+          \texttt{raw\_c})), \\
+  S_1 &= (\texttt{screened}, (\texttt{keep}, \texttt{drop})), \\
+  S_2 &= (\texttt{archived}, (\texttt{bin\_0}, \texttt{bin\_1},
+          \texttt{bin\_2})),
+\end{align*}
+and two processing arrows: $g_1 : S_0 \to S_1$ with mapping $(0, 0, 1)$
+(items \texttt{raw\_a} and \texttt{raw\_b} are kept, \texttt{raw\_c}
+dropped), and $g_2 : S_1 \to S_2$ with mapping $(2, 0)$ (kept items to
+\texttt{bin\_2}, dropped items to \texttt{bin\_0}). The path
+$p = (g_1, g_2)$ is well formed --- the single adjacency check compares
+$S_1$ against $S_1$ and passes --- and its composite is
+$\llbracket p \rrbracket = g_2 \circ g_1 : S_0 \to S_2$ with mapping
+$(2, 2, 0)$.
+\end{example}
+
+\emph{The tempting claim.} In an untyped operator notation, one writes the
+pipeline as a single operator $T$ and reasons: ``running the pipeline
+repeatedly, the system must stabilize; indeed $T^{k}$ is eventually
+idempotent by finiteness'' --- an appeal to exactly the mathematics of
+Chapter~\ref{ch05:main}, with $T$ playing the role of $f$.
+
+\emph{Where the kernel stops it.} The formalization must produce the object
+on which $T$ iterates, and there is none. Concretely, each of the three
+available moves fails at a stated site:
+
+\begin{enumerate}
+\item \emph{Iterate the path.} The expression ``$p^{2}$'' does not
+typecheck against any operation: the path type has no power
+(Rule~\ref{ch06:rule:nopower}). This failure is an absence, not an
+exception --- the program cannot be written.
+\item \emph{Certify the composite as an endomap.} The expression
+$\mathrm{Endomap}(\llbracket p \rrbracket)$ raises the typed composition
+error at the certification check of Definition~\ref{ch05:def:endomap}:
+the composite has declared source $S_0 = \texttt{intake}$ and declared
+target $S_2 = \texttt{archived}$, which are unequal as objects (they differ
+in name \emph{and} carrier --- sizes $3$ and $3$, but different element
+sequences; and even equal carriers would not save it, by
+Rule~\ref{ch05:rule:samecarrier}). The error message carries both declared
+types, so the audit trail shows exactly which identification the informal
+argument assumed and never justified.
+\item \emph{Compose the pipeline with itself.} The expression
+$\llbracket p \rrbracket \circ \llbracket p \rrbracket$ --- or
+equivalently, appending $g_1$ to the path $p$ to begin a second lap ---
+raises the composition error of Invariant~\ref{ch04:inv:mismatch}: the
+would-be middle objects are $S_2$ (target of the first lap) and $S_0$
+(source of the second), and $S_2 \ne S_0$. The failed adjacency is the
+precise formal location of the informal argument's gap: ``run it again''
+presupposes an arrow $S_2 \to S_0$ returning archived items to the intake
+representation, and no such arrow was ever declared.
+\end{enumerate}
+
+\emph{The repair, if intended.} If the modeler genuinely intends re-intake,
+the kernel does not forbid it --- it demands that the intent be an artifact.
+Declare a re-intake arrow $r : S_2 \to S_0$ (choosing, and thereby
+documenting, what each bin becomes on re-entry); then
+$r \circ \llbracket p \rrbracket$ is an endomap on $S_0$,
+$\mathrm{Endomap}(r \circ \llbracket p \rrbracket)$ certifies, and
+Theorem~\ref{ch05:thm:factorial} applies to \emph{that} arrow, with the
+conclusion depending --- as it must --- on the declared content of $r$.
+The fallacy was never ``iteration is impossible''; it was ``iteration for
+free, with the return map left implicit and unexamined.''
+
+\subsection{Case study (b): a heterogeneous composite that happens to be
+endo, confused with a generator's power}
+\label{ch06:sec:case-b}
+
+The second failure point is subtler: the types all line up, the composite
+genuinely is an endomap, and the fallacy is the identification of that
+composite with a \emph{power of a single generator} --- an equality claim
+between arrows, false in general, whose falsity the kernel makes checkable
+rather than assumable.
+
+\begin{example}[Setup]
+\label{ch06:ex:case-b}
+Declare $X = (\texttt{register}, (0, 1))$ and
+$Y = (\texttt{buffer}, (\texttt{lo}, \texttt{mid}, \texttt{hi}))$, with
+arrows $h_1 : X \to Y$, mapping $(2, 0)$ (register $0$ to \texttt{hi},
+register $1$ to \texttt{lo}), and $h_2 : Y \to X$, mapping $(0, 1, 1)$
+(\texttt{lo} to register $0$; \texttt{mid} and \texttt{hi} to register
+$1$). The path $q = (h_1, h_2)$ is well formed, and its composite
+$c = \llbracket q \rrbracket = h_2 \circ h_1 : X \to X$ computes to
+\[
+  c(0) = h_2\bigl(h_1(0)\bigr) = h_2(2) = 1,
+  \qquad
+  c(1) = h_2\bigl(h_1(1)\bigr) = h_2(0) = 0 :
+\]
+the composite is the \emph{transposition} $\tau : X \to X$ with mapping
+$(1, 0)$. Since source and target are both $X$,
+$\mathrm{Endomap}(\tau)$ certifies without complaint. Everything so far
+is legitimate.
+\end{example}
+
+\emph{The tempting claim.} ``The round trip through the buffer is a
+two-step process; so the system state after the round trip is $g^{2}$ for
+the underlying step operation $g$, and therefore'' --- here the fallacy
+cashes out --- ``it inherits the structural properties of squares: for
+instance, its cycle structure is constrained to that of a square of an
+endomap on two points.''
+
+\emph{Why the claim is false, concretely.} On the two-point carrier there
+are exactly $2^{2} = 4$ endomaps: the identity $\id$ (mapping $(0,1)$),
+the transposition $\tau$ (mapping $(1,0)$), and the two constants $c_0$
+(mapping $(0,0)$) and $c_1$ (mapping $(1,1)$). Their squares are
+\[
+  \id^{2} = \id, \qquad
+  \tau^{2} = \id, \qquad
+  c_0^{2} = c_0, \qquad
+  c_1^{2} = c_1 .
+\]
+The set of squares is therefore $\{\id, c_0, c_1\}$, and $\tau$ --- the
+actual round-trip composite of Example~\ref{ch06:ex:case-b} --- \emph{is
+not the square of any endomap on $X$}. The two-step round trip through a
+three-point buffer realizes a map that no doubled one-step endo-process on
+the register can realize. The informal claim is not merely unproved; it is
+refuted by a four-case enumeration.
+
+\emph{Where the kernel stops it.} The fallacy here is an arrow equality
+--- $c = g^{2}$ for some endomap $g$ --- and equalities between arrows are
+exactly what the kernel makes decidable and cheap: arrow equality is
+extensional tuple comparison (Definition~\ref{ch04:def:extensional}). The
+claim ``$c$ is a square'' becomes a finite search over the $|X|^{|X|}$
+candidate generators, each tested by one composition and one comparison,
+and it returns false. What the kernel refuses to supply is any construct
+that would let the claim be \emph{assumed}: the path $q$ is not an endomap
+and has no power; the certified endomap $\mathrm{Endomap}(c)$ has powers,
+but its powers are powers \emph{of $c$}, the audited composite --- the
+API affords $c^{2}$, and nothing affords ``the $g$ such that
+$g^{2} = c$'' because no such $g$ need exist. In the type-theoretic
+reading: the kernel provides introduction forms for powers (build a
+certified endomap, then exponentiate) but no elimination form that
+extracts roots, since root extraction is a nontrivial, often unsatisfiable
+search problem, not a structural operation.
+
+\emph{The general lesson.} A factorization through foreign objects can
+realize endomaps unreachable as powers of any single same-object
+generator. The composite operation deliberately \emph{loses} the
+factorization (Section~\ref{ch06:sec:free}); the path retains it; and no
+kernel operation manufactures a fictitious single-generator history for a
+composite. When downstream analysis needs the history, it must consume the
+path, which is the artifact that actually has one.
+
+\subsection{Case study (c): importing the idempotence theorem into a
+pathful setting}
+\label{ch06:sec:case-c}
+
+The third study takes the fallacy at its most seductive: a direct citation
+of Theorem~\ref{ch05:thm:factorial} against a pipeline, with the carrier
+sizes even agreeing, so that every cardinality-based sanity check passes
+and only the typed discipline objects.
+
+\begin{example}[Setup]
+\label{ch06:ex:case-c}
+A processing loop alternates between two representations of a
+three-element state space that are, by design, carried by \emph{equal}
+ordered carriers under different declared names:
+\begin{align*}
+  W   &= (\texttt{working}, (s_0, s_1, s_2)), \\
+  W'  &= (\texttt{checkpoint}, (s_0, s_1, s_2)),
+\end{align*}
+with a checkpoint arrow $u : W \to W'$, mapping $(0, 2, 2)$, and a resume
+arrow $v : W' \to W$, mapping $(1, 1, 0)$. The four-arrow path
+$m = (u, v, u, v)$ is well formed (adjacencies alternate $W'$ against
+$W'$ and $W$ against $W$), and its composite
+$\llbracket m \rrbracket : W \to W$ is a certified endomap after wrapping.
+So far, again, everything is legitimate --- and note that this loop, unlike
+case (a), \emph{does} close.
+\end{example}
+
+\emph{The tempting claim.} ``Each pass of the loop is one step; by the
+factorial idempotence theorem, after $3! = 6$ steps the process is
+idempotent --- so the six-step behavior is a stable projection, and we may
+reason about `the eventual state' of the pipeline.'' The citation then
+gets applied not to $\llbracket m \rrbracket$ but to the \emph{stepwise}
+description: the reasoner takes ``one step'' to mean ``one arrow of the
+path'' and computes with $u$ and $v$ as if each were an iterate of a
+single $f$.
+
+\emph{Where the kernel stops it --- three distinct sites.} Formalizing the
+claim forces a choice of which arrow the theorem is about, and every
+choice that matches the informal wording fails at a typed boundary:
+
+\begin{enumerate}
+\item \emph{The theorem applied to $u$.} $\mathrm{Endomap}(u)$ raises the
+typed error: $u$ has declared source \texttt{working} and declared target
+\texttt{checkpoint}, unequal as objects \emph{despite equal ordered
+carriers} --- this is Rule~\ref{ch05:rule:samecarrier}, and it is the
+exact refusal that a carrier-only or cardinality-only identity discipline
+would have waved through. Under such a laxer discipline, $u$ would certify
+as an ``endomap'' on the shared carrier, $u^{6}$ would compute, and the
+resulting arrow would be an artifact of an identification nobody declared:
+the checkpoint-indexed values would be silently re-read as working-indexed
+values on every second application. The kernel's name-inclusive identity
+makes this precise failure unconstructible. The same applies
+symmetrically to $v$.
+\item \emph{The theorem applied to the path.} ``After six steps'' invites
+$m^{?}$ or a six-arrow truncation reasoning; the path has no power
+(Rule~\ref{ch06:rule:nopower}), and building the six-step object
+explicitly means writing the six arrows down, at which point the
+alternation --- $u, v, u, v, u, v$ --- is visible and the question ``six
+steps of \emph{what single map}?'' answers itself: of none.
+\item \emph{The theorem applied to the composite.} This is the one
+legitimate reading, and the kernel supports it exactly:
+$e = \mathrm{Endomap}(\llbracket m \rrbracket)$ certifies (the composite
+is $W \to W$), the safe power $e^{3!} = e^{6}$ computes, and
+Theorem~\ref{ch05:thm:factorial} guarantees its idempotence. But now the
+claim has changed meaning, and the change is the entire point: the theorem
+speaks about iterating \emph{the whole closed loop} $\llbracket m
+\rrbracket$, i.e.\ about the $24$-arrow process ``four-arrow loop, six
+times,'' not about six arrows of the original path, and not about any
+property of $u$ or $v$ singly. The idempotence exponent is governed by the
+carrier of the \emph{composite's} object ($|W| = 3$, so $3! = 6$ loop
+iterations), a quantity with no relation to the path's length. The kernel
+forces the reasoner to land on this reading because it is the only one
+that constructs.
+\end{enumerate}
+
+\emph{The residue.} What survives formalization is a true, precise, and
+noticeably weaker statement than the informal one: the closed loop's
+composite, iterated $6$ times, is idempotent as a map on \texttt{working}.
+What died in formalization is everything the informal statement smuggled:
+that individual passes are iterates of one operation, that the number
+``six steps'' refers to path arrows, and that stabilization happens
+\emph{within} a single traversal. The kernel's contribution is that the
+smuggling has to clear customs: each assumption either becomes a declared
+arrow and a certified endomap, or it becomes a typed error with a named
+construction site.
+
+\section{Type-Level Enforcement}
+\label{ch06:sec:enforcement}
+
+The case studies leaned on two enforcement mechanisms; this section states
+them as contracts, parallel to the mismatch-rejection contract of
+Chapter~\ref{ch04:main}.
+
+\begin{invariant}[Distinct runtime types, no coercion]
+\label{ch06:inv:distinct}
+The endomap wrapper and the path are distinct runtime types with disjoint
+capabilities: the endomap type carries \texttt{power} and the idempotence
+predicate and wraps exactly one arrow with certified equal source and
+target; the path type carries adjacency-checked construction,
+\texttt{composite}, and \texttt{append}, and wraps a nonempty arrow
+sequence. Neither type is a subtype of the other; no implicit conversion
+exists in either direction; and each constructor validates its own
+invariant and raises on violation:
+\begin{enumerate}
+\item passing a path (or any non-arrow value) to the endomap constructor
+fails its arrow-type validation;
+\item passing an arrow with unequal declared source and target to the
+endomap constructor raises the typed composition error naming the arrow
+and its declared types;
+\item passing an arrow sequence with any failed adjacency to the path
+constructor raises the typed composition error naming the offending
+segment;
+\item the sanctioned bridge between the types is explicit and one-way:
+take the path's \texttt{composite} (an ordinary arrow), then certify it
+with the endomap constructor, which re-checks source-target equality from
+scratch. There is no bridge that bypasses the check.
+\end{enumerate}
+\end{invariant}
+
+\begin{checkclass}[Negative fixtures for the separation]
+\label{ch06:check:separation}
+The executable suite pins each clause of
+Invariant~\ref{ch06:inv:distinct}: construction of an endomap from a
+non-endo arrow (expected: typed composition error); construction of an
+endomap from a source-target pair with equal carriers and distinct names
+(expected: typed composition error --- the case-study (c) fixture);
+construction of a path with one broken adjacency (expected: typed
+composition error identifying the segment); construction of a path from an
+empty sequence and from unordered containers (expected: validation error);
+and the positive control, certifying a closed path's composite and taking
+its factorial power (expected: success, with the idempotence assertion of
+Chapter~\ref{ch05:main} holding). The positive control matters: a
+separation that blocked the legitimate bridge as well as the illegitimate
+shortcuts would be mere obstruction, and the suite demonstrates that the
+sanctioned route stays open.
+\end{checkclass}
+
+\begin{remark}[Why not one type with a flag]
+\label{ch06:rem:noflag}
+A recurring design alternative deserves an explicit rejection note: a
+single ``process'' type carrying a sequence of arrows and a boolean
+\texttt{is\_closed}, with \texttt{power} raising at runtime when the flag
+is false. This is behaviorally similar and structurally worse. The flagged
+design makes ``path with a power method that sometimes works'' the
+ambient shape, so every call site inherits a latent partiality, and the
+error surfaces at the \emph{use} site (possibly deep in a computation,
+possibly only on certain inputs) rather than at the \emph{construction}
+site where the modeling decision was made. The two-type design moves the
+failure to the earliest possible moment, makes the capability difference
+legible in signatures --- a function that requires iterability asks for an
+endomap in its type, and cannot be handed a path at all --- and lets the
+host language's checker do statically what the flag design defers to
+runtime. The kernel consistently prefers unrepresentable states to
+checked-at-use states, and this is the flagship instance.
+\end{remark}
+
+\subsection{Stronger and weaker enforcement points on the design spectrum}
+\label{ch06:sec:spectrum}
+
+The two-type design sits at a particular point on a spectrum of
+enforcement strength, and honesty about the spectrum clarifies both what
+the kernel achieves and what it delegates.
+
+\emph{Stronger: statically indexed types.} In a host language with
+dependent or parametrically indexed types, the arrow type itself can carry
+its source and target as type indices --- an arrow is a value of type
+$\mathrm{Arrow}\,X\,Y$ --- so that an ill-typed composition or an endomap
+claim about a non-endo arrow is rejected \emph{at compile time}, before
+any program runs. The Lean model of the kernel lives at exactly this
+strength: its composition operation demands a definitional match of the
+middle object, and the invalid inferences of
+Section~\ref{ch06:sec:cases} are not runtime errors there but terms that
+fail to elaborate. The Python implementation cannot reach this point ---
+the host's type system does not track value-level indices --- so it
+realizes the discipline at the next point down.
+
+\emph{The kernel's point: certified wrappers with construction-time
+checks.} Every constructor validates its invariant once, eagerly, and the
+resulting value is immutable, so possession of a value of the type is
+possession of a checked certificate. The residual gap versus static
+indexing is timing (violations surface when the offending construction
+executes, not when it is written) --- the gap is not soundness: no
+sequence of kernel API calls yields an uncertified endomap or an
+unvalidated path, because the constructors are the only way in and the
+values are frozen.
+
+\emph{Weaker, rejected: conventions and documentation.} One step further
+down, the discipline lives in docstrings (``callers should not iterate
+heterogeneous pipelines'') and code review. The failure data motivating
+this kernel --- the red-team findings summarized in
+Chapter~\ref{ch01:main} --- came from systems at this level, where the
+sequence-to-power fallacy is not blocked but merely deprecated. The
+kernel's position is that a discipline worth stating is worth enforcing
+at the strongest point the host allows, and that the distance between
+``deprecated'' and ``unconstructible'' is where silent wrongness lives.
+
+The ledger records the enforcement claim at its actual strength:
+obligation PO-TKS8-CORE-03 (``keep one-carrier powers distinct from
+heterogeneous paths'') carries status \textsc{executable validation} ---
+separate runtime types plus the negative fixtures of
+Checkclass~\ref{ch06:check:separation} --- not a formal-verification
+status, because the statement ``no API sequence defeats the separation''
+is an informal argument about the module's construction surface, checked
+by inspection and by tests, not by proof. The Lean model's static
+enforcement is verified in Lean's terms, but transferring that assurance
+to the Python artifact is part of the open equivalence obligation
+discussed in Chapter~\ref{ch04:main}.
+
+\section{Boundary: What Paths Do Not Claim}
+\label{ch06:sec:boundary}
+
+\begin{boundary}
+\label{ch06:bound:nodynamics}
+A semigroupoid path is a bookkeeping object: a validated, ordered record of
+typed arrows with a computable composite. It carries \emph{no} dynamics
+claim --- nothing about time, causation, convergence, stability, or the
+behavior of any process the path might be used to describe --- and
+\emph{no} semantics claim: the kernel assigns no CAS, Noetic, cognitive,
+or workflow meaning to any object, arrow, or path, and the ``workflow''
+and ``pipeline'' vocabulary of this chapter's case studies is expository
+narration about hypothetical modelers, not an asserted interpretation.
+Mapping any canonical TKS/CAS construct onto kernel arrows or paths
+remains an open, unlicensed obligation (ledger PO-TKS8-CORE-08,
+\textsc{open / not licensed}); nothing in this chapter advances it. What
+this chapter establishes is strictly structural: which compositions exist,
+which iterations are licensed, and precisely where the unlicensed
+inferences fail to construct.
+\end{boundary}
+
+\begin{boundary}
+\label{ch06:bound:negative-scope}
+The case-study analysis establishes that the three formalization attempts
+fail at the stated kernel boundaries, as pinned by the negative fixtures of
+Checkclass~\ref{ch06:check:separation}. It does not establish that the
+kernel blocks every conceivable encoding of the sequence-to-power fallacy:
+a determined user can always model around a type system --- for example,
+by coercing everything into one giant declared object, at which point the
+kernel's theorems apply honestly to that declared model and the modeling
+choice itself is the auditable artifact. The claim is not that fallacies
+are impossible; it is that this fallacy cannot be committed \emph{silently}
+within the kernel's term language: every route to it requires constructing
+an explicit identification (a return arrow, a declared shared object) that
+then appears in the audit trail.
+\end{boundary}
+
+\section{Exercises}
+\label{ch06:sec:exercises}
+
+\begin{exercise}
+\label{ch06:ex:adjacency}
+For a path of $n$ arrows over objects of size at most $s$, count the
+object-equality comparisons the constructor performs and the tuple
+operations the composite performs, and conclude that path validation is
+$O(n)$ object comparisons and evaluation is $O(n s)$ index operations.
+Explain why validation cannot be deferred to evaluation time without
+weakening the error contract (hint: a path may be constructed, stored, and
+audited without ever being evaluated).
+\end{exercise}
+
+\begin{exercise}
+\label{ch06:ex:closedcount}
+Call a path \emph{closed} if its source equals its target. Over the
+single object $X$ with $|X| = 2$ and the full arrow set
+$\Hom(X, X)$ as available arrows, count the closed paths of length
+exactly $3$ and the distinct composites they denote, and verify that the
+denotation count is bounded by $|X|^{|X|} = 4$ while the path count is
+$4^{3} = 64$ --- the forgetting ratio of
+Example~\ref{ch06:ex:forgetting} made quantitative.
+\end{exercise}
+
+\begin{exercise}
+\label{ch06:ex:square-roots}
+Complete the enumeration sketched in Section~\ref{ch06:sec:case-b}:
+for $|X| = 2$, verify by the four-case table that the squares in
+$\Hom(X, X)$ are exactly $\{\id, c_0, c_1\}$, and then show that
+\emph{every} endomap on two points arises as the composite of some
+two-arrow path through a three-point object. Conclude that on two points,
+factorization through a larger foreign object is strictly more expressive
+than squaring, which is the mathematical core of case study (b).
+\end{exercise}
+
+\begin{exercise}
+\label{ch06:ex:repair}
+In case study (a), suppose the modeler declares the re-intake arrow
+$r : S_2 \to S_0$ with mapping $(0, 1, 2)$ --- bins map back to raw items
+positionally. Compute the endomap
+$e = r \circ \llbracket p \rrbracket$ on $S_0$, analyze its functional
+graph (tails, cycles, index, period) using the tools of
+Chapter~\ref{ch05:main}, and find its minimal idempotent power. Then
+change $r$'s mapping to $(2, 2, 2)$ and observe how the conclusion
+changes --- demonstrating concretely that the iterated behavior depends
+on the declared content of the return map, which is exactly the datum the
+informal argument left implicit.
+\end{exercise}
+
+\begin{exercise}
+\label{ch06:ex:emptypath}
+The kernel excludes empty paths; the free category $\mathcal{F}(G)$
+includes an empty path at each vertex \cite{maclanecwm}. Design the API
+of an empty-path-admitting variant: what extra datum must the constructor
+take, which operations change type, and where does
+Proposition~\ref{ch06:prop:evalconcat} pick up side conditions? Weigh the
+gained uniformity (paths form a category, not a semicategory) against the
+cost (a partial function \texttt{source} becomes entangled with the extra
+datum), and compare your conclusion with the kernel's choice in
+Section~\ref{ch06:sec:free}.
+\end{exercise}
+
+\section{Summary}
+\label{ch06:sec:summary}
+
+\begin{center}
+\small
+\begin{tabular}{@{}p{5.6cm}p{7.2cm}@{}}
+\toprule
+Item & Status \\
+\midrule
+Path construction and composite
+(Definitions~\ref{ch06:def:path}, \ref{ch06:def:composite}) &
+Well-definedness from the category laws
+(Theorem~\ref{ch04:thm:laws}); constructor-validated adjacencies;
+executable validation. \\
+Relation to free categories \cite{maclanecwm} &
+Standard background; paths are the nonempty morphisms of the free category
+on $\cC$'s underlying graph; composite is the evaluation functor. \\
+Absence of path powers (Rule~\ref{ch06:rule:nopower}) &
+API absence, enforced by distinct runtime types
+(Invariant~\ref{ch06:inv:distinct}); negative fixtures
+(Checkclass~\ref{ch06:check:separation}); ledger PO-TKS8-CORE-03,
+\textsc{executable validation}. \\
+Case studies (a)--(c)
+(Sections~\ref{ch06:sec:case-a}--\ref{ch06:sec:case-c}) &
+Each ill-typed step identified with its exact kernel error site; the
+two-point square enumeration in (b) is a complete four-case check. \\
+Dynamics and semantics &
+None claimed (Boundary~\ref{ch06:bound:nodynamics}); semantic transfer
+remains \textsc{open / not licensed} (PO-TKS8-CORE-08). \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+With the composition layer (Chapter~\ref{ch04:main}), the licensed
+iteration theory (Chapter~\ref{ch05:main}), and the unlicensed side's
+enforcement (this chapter) in place, the kernel's finite-function core is
+complete. The next chapter changes register entirely: it embeds the arrows
+into finite-dimensional Hilbert spaces via the deterministic standard-basis
+lift and proves exact operator-norm structure for the result.

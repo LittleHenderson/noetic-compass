@@ -1,0 +1,286 @@
+\chapter{Evidence, Threats to Validity, and the Research Program}\label{ch12:main}
+
+\section{The role of this chapter}\label{ch12:role}
+
+The preceding eleven chapters specified an architecture and preserved two adverse findings. This chapter completes the monograph's evidential accounting: it states exactly what software evidence exists at the bound commit (Section~\ref{ch12:receipt}), interprets that evidence at its correct strength (Section~\ref{ch12:interpret}), catalogs the threats to validity that bound every claim made anywhere in this book (Section~\ref{ch12:threats}), lays out the dependency-ordered research program that would discharge the open obligations (Section~\ref{ch12:program}), lists the claims quarantined until then (Section~\ref{ch12:quarantine}), situates the work relative to the methodological literature it leans on (Section~\ref{ch12:related}), and concludes (Section~\ref{ch12:conclusion}).
+
+The chapter's governing conviction is that an evidence section should be written with the same type discipline as the software it describes. ``Evidence'' is not one type. A green test suite, a hash-bound artifact manifest, a preserved counterexample, an open review criterion, and a claim record are five different types with five different licensing strengths, and treating them interchangeably---most commonly, treating green suites as if they licensed system claims---is the evidential analogue of the unit-mismatch faults the DRC exists to catch. Every number in this chapter is therefore presented with its type.
+
+\begin{boundary}[Standing status]\label{ch12:standing}
+Everything in this monograph is \textsc{draft / open / ring 4 / not licensed / held}. The evidence recorded below consists of historical, source-bound software receipts, not experiments in this publication lane. Nothing in this chapter promotes any claim record, alters any status label, or asserts readiness of any kind.
+\end{boundary}
+
+\section{An evidence type system}\label{ch12:types}
+
+Before the receipt, the typing claim of Section~\ref{ch12:role} is made explicit, because the rest of the chapter uses it as load-bearing structure rather than as metaphor.
+
+\begin{definition}[Evidence types]\label{ch12:def-evtypes}
+The project's admitted evidence divides into five disjoint types:
+\begin{enumerate}
+\item \textbf{Behavioral receipts}: green test outcomes over exact fixtures under exact profiles---suite runs, subtest results.
+\item \textbf{Identity bindings}: cryptographic digests fixing which bytes an assertion is about---artifact hashes, suite test-ID hashes, report digests.
+\item \textbf{Preserved negatives}: adverse findings held as first-class artifacts---counterexamples, source conflicts, known-fault fixtures.
+\item \textbf{Status registers}: recorded positions in a governance process---claim records with rings and license states, review criteria with open/closed states, gate passes.
+\item \textbf{Self-limits}: the record's own statements of its boundaries---method disclosures, claim boundaries, collector caveats.
+\end{enumerate}
+\end{definition}
+
+\begin{invariant}[Licensing strengths do not commute]\label{ch12:inv-strength}
+Each evidence type licenses only its own claim form: behavioral receipts license ``this software did this on this input''; identity bindings license ``this assertion is about these bytes''; preserved negatives license ``this defect exists in this source''; status registers license ``this claim holds this status''; self-limits license ``this record extends no further than this.'' No combination of instances of one type produces a claim of another type's form. In particular, no accumulation of behavioral receipts produces a system claim, a safety claim, or a licensing event.
+\end{invariant}
+
+The invariant sounds austere but is simply the observed failure mode of evidence sections, negated. The common degradation path runs: many green tests (type 1) are summarized as ``verified'' (a status word, type 4), which is paraphrased as ``works'' (a system claim, no type), which is marketed as ``safe'' (a claim the record never contained). Each step is a type error. The receipt below is presented type by type so that every number's licensing strength is visible at the point of statement, and the threats of Section~\ref{ch12:threats} can be read as the formal statement of what each type cannot do.
+
+\section{The Gate-4 receipt}\label{ch12:receipt}
+
+At the bound commit, the integrated Gate~4 receipt records the following, and exactly the following, as the project's admitted software evidence.
+
+\subsection{Artifacts and suites}
+
+The receipt binds \textbf{54 hash-bound artifacts}: specifications, audit records, claim records, review matrices, and implementation sources, each identified by SHA-256, so that the receipt's statements attach to exact bytes rather than to filenames or descriptions. Among these artifacts are the two that Chapters~10 and~11 rendered in prose---the construct-coverage record and the source-audit specification---under the hashes recorded in the front matter.
+
+Three focused test suites are green at the receipt:
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrl@{}}
+\toprule
+Suite & Methods & Suite test-ID SHA-256 \\
+\midrule
+CAS Core v8 & 61 & \texttt{E2AF5014DE28DD0702211EF32A2757B99B869A13FAFBB0B8D1B18A50A9F8FEF5} \\
+CAS PCBA v8 & 82 & \texttt{D5F776C5F15758CD390470B5A542CCA110784DC5EBB9807B6BE41B2C80453470} \\
+CAS-Ohm v1 & 65 & \texttt{2E81A685961286D944894A22EB93345B97211B4433B6C71EAF628D84CD8EB1EF} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The combined focused run comprises \textbf{208 test methods} and \textbf{272 parameterized subtests}. The suite test-ID hashes are digests over the ordered test identifier lists, so the receipt pins not only that ``the tests passed'' but \emph{which} tests existed: a silently deleted test changes the suite hash and invalidates the receipt. The 82 CAS PCBA v8 methods are the suite exercising the type system, board model, DRC catalog, simulator, trace identity, and adapter certificates of Chapters~4--9, including the known-fault fixture assertions of Chapter~11.
+
+The three suites partition the evidence by specification, not by convenience. The CAS Core v8 suite (61 methods) exercises the semantic reference layer of Chapter~4: namespace disjointness, reference-tuple validation, definition-digest binding, and the refusal of cross-namespace identity. The CAS PCBA v8 suite (82 methods) exercises the board layer end to end: exact-type construction and revalidation of boards, components, ports, nets, test points, calibrations, and feedback declarations; the deterministic diagnostic catalog, including sort-order canonicality and report-digest stability; the fail-closed behaviors (subclass rejection, stale-linkage rejection, tampered-identity rejection); simulator trace identity and child-measurement acyclicity; adapter certificate binding and ambient-substitution rejection; and the CSB fixture's mandatory \texttt{PCBA8-SAF-001}. The CAS-Ohm v1 suite (65 methods) exercises the parallel CAS-Ohm contract, whose eight preserved source conflicts enter the receipt separately. The partition means a regression localizes: a red method names its specification layer before any debugging begins.
+
+Two structural properties of the suites deserve note because they are themselves tested. First, \emph{determinism}: report and trace tests assert byte-identical digests across repeated runs, so any nondeterminism in ordering, serialization, or arithmetic surfaces as a suite failure rather than as flakiness to be shrugged at. Second, \emph{fail-closed coverage}: a substantial fraction of the methods are negative tests---assertions that malformed, tampered, subclassed, or stale inputs are \emph{rejected} with the exact typed error. Under Definition~\ref{ch12:def-evtypes} these negative tests are behavioral receipts about the rejection paths, and they are the reason the candidate's ``fail-closed'' language is a tested property rather than a design intention.
+
+\subsection{Claim records, criteria, and preserved negatives}
+
+The receipt further records: \textbf{11 claim records}, all at admission Ring~4 and all \textsc{not licensed}---that is, every claim the project has articulated is registered, ringed, and unlicensed, with none promoted; \textbf{53 review criteria} of which \textbf{20 remain open}---the review matrix's accounting of what independent scrutiny would need to close, with more than a third explicitly outstanding; \textbf{4 direct EBNF counterexamples}---the Chapter~10 findings, counted from the machine-readable coverage record; and \textbf{8 CAS-Ohm source conflicts}---preserved contradictions between the CAS-Ohm v1 source material and its implementation contract, held as conflicts rather than silently resolved, in the same discipline that Chapters~10 and~11 applied to the PCBA source. The receipt also records an integrated \textbf{Gate~1 pass} for the project's foundational ceremony; Gate~1's scope is the project's own earlier gate definition and is inherited here as a historical receipt, not re-litigated.
+
+\subsection{The collector caveat}
+
+Finally, and importantly, the receipt records its own limit: the \textbf{repository-wide test collector was not clean} at the bound receipt. Collection across the full repository encountered \textbf{4 pre-existing package-path namespace collisions after 1{,}200 collected items}. The three focused suites ran and passed in isolation, but a repository-wide ``all tests green'' claim is not available and is not made: the collector defect means the universe of collectible tests is not even well-defined repository-wide at that commit. The caveat is preserved in the receipt precisely so that the focused-suite evidence cannot be quietly widened into a repository claim by later paraphrase.
+
+\subsection{Recomputing the receipt}
+
+The receipt's numbers are designed to be recomputed by a party holding only the bound commit, and the recomputation path for each class is worth stating because it defines what ``auditable'' means concretely here. The 54 artifact hashes are recomputed by hashing the named files; a mismatch on any one identifies the exact artifact that drifted. The suite test-ID hashes are recomputed by collecting each focused suite and hashing its ordered test identifier list; this detects test addition, deletion, and renaming without running anything. The 208/272 method and subtest counts are recomputed by the same collection. The suite outcomes are recomputed by running the suites in the pinned environment---the only step requiring execution. The counterexample count is recomputed by reading the coverage record's per-board Booleans (Chapter~10); the conflict count by reading the CAS-Ohm conflict records; the claim, ring, license, and criteria counts by reading the claim records and review matrix. The collector caveat is recomputed by attempting repository-wide collection and observing the four collisions. Nothing in the receipt requires trusting the project's assertion of it: every number is either a hash, a count over hashed inputs, or an execution result under a hashed configuration. This recomputability, not any signature, is the receipt's whole claim to being evidence rather than narration---and it is also its ceiling, per Threat~\ref{ch12:threat-safety}: recomputable is not the same as authorized.
+
+\begin{remark}[Relation to the gate structure]\label{ch12:rem-gates}
+Two gate references appear in the receipt and their asymmetry is intentional. The integrated Gate~1 pass is a \emph{historical} receipt: the project's foundational ceremony completed under its own recorded definition, inherited here as a status register, not re-argued. Gate~5, by contrast, appears in this monograph only as a \emph{future} control kernel for preregistration (program step~6), and at the bound commit its own record stands \textsc{open / not started / ring 4 / not licensed / held / not frozen}. Citing a gate as a control mechanism promotes nothing about the gate itself; the monograph uses Gate~5's kernel the way a protocol cites a registry---as infrastructure whose status travels with it.
+\end{remark}
+
+\begin{finding}[The receipt, in one statement]\label{ch12:find-receipt}
+At the bound commit: 54 hash-bound artifacts; three green focused suites (61, 82, and 65 methods; suite test-ID hashes as tabulated) totaling 208 methods and 272 subtests; 11 claim records, all Ring~4, all \textsc{not licensed}; 53 review criteria with 20 open; 4 direct EBNF counterexamples; 8 preserved CAS-Ohm source conflicts; an integrated Gate~1 pass; and a repository-wide collector that is \emph{not} clean (4 namespace collisions after 1{,}200 items), so the focused suites support no repository-wide verification claim.
+\end{finding}
+
+\section{Interpreting the receipt}\label{ch12:interpret}
+
+Each class of number in Finding~\ref{ch12:find-receipt} has a distinct licensing strength, and the differences do the real work.
+
+\emph{Green suites license behavioral claims about exact fixtures.} The 272 green subtests establish: the software under test, at the exact hashed sources, performed the asserted transitions on the asserted fixtures under the asserted profiles. They establish nothing about inputs outside the fixture set, nothing about the correspondence between the software's types and any cognitive reality, and nothing about safety. The correct reading of every green test is the Claim Boundary of Chapter~8: the software did the declared thing on the declared input. This is verification in the simulation-methodology sense---checking the implementation against its own specification---and is categorically distinct from validation against an intended external reality \cite{sargent}, of which the receipt contains none.
+
+\emph{Hash bindings license identity claims.} The 54 artifact hashes and three suite test-ID hashes establish which bytes the receipt speaks about. They convert the receipt's statements from descriptions (fragile under drift) into references (checkable forever). They license no quality claim whatsoever---a hash binds garbage as faithfully as gold---but they make every other claim auditable, which is their entire job. The discipline follows the provenance literature's separation of the artifact, the activity that produced it, and the derivation chain between them \cite{prov}, implemented with digests rather than ontology conformance.
+
+\emph{Preserved negatives license adverse claims at full strength.} The 4 counterexamples and 8 conflicts are the receipt's strongest entries, in the precise sense developed in Chapter~10: adverse surface findings are robust under refinement, whereas favorable findings are bounded by instrument resolution. The project's evidence posture---negatives preserved, positives bounded---is visible in the receipt's own arithmetic: it counts its counterexamples with the same care as its passes.
+
+\emph{Open criteria and unlicensed claims license nothing, on purpose.} The 20 open criteria and the uniform \textsc{not licensed} status of all 11 claim records are the receipt's statement of what has \emph{not} happened: no independent review closure, no claim promotion. Their evidential value is honesty about position, and their practical value is that promotion, when and if it occurs, will be a visible status transition on a registered record rather than an ambient drift of language.
+
+\emph{The collector caveat bounds the universe.} The not-clean collector is the receipt's own threat-to-validity entry: it marks the exact boundary between what was tested (three focused suites) and what was not even enumerable (the repository-wide collection). Section~\ref{ch12:threats} folds it into the internal-validity threat where it belongs.
+
+\section{Threats to validity}\label{ch12:threats}
+
+The threats are organized in six classes. Each is stated as a formal threat with its consequences and, where applicable, the program step (Section~\ref{ch12:program}) that addresses it. None is hypothetical politeness; each names a live limit on what this monograph's contents can support.
+
+\subsection{Construct validity}\label{ch12:threats-construct}
+
+\begin{threat}[The types may not measure cognition]\label{ch12:threat-construct}
+No experiment in the admitted evidence establishes that the selected CAS types---Noetics, Domains, Drives, Registers, ND-cells, simplex addresses---correspond to cognitive mechanisms in humans, to latent structure in machine-learned models, or to any natural kind. The circuit-shaped organization may deliver its engineering benefits (explicitness, type safety, replayability, falsifiability of the software) while being, as an ontology of cognition, wrong, partial, or unfalsified.
+\end{threat}
+
+The threat's consequence is architectural, not rhetorical: it is why every semantic identity in the candidate is a versioned reference into a source rather than an assertion about the world (Chapter~4), why the adapter carries no automatic semantic theorem (Chapter~9), and why the claim quarantine (Section~\ref{ch12:quarantine}) holds every cognition-facing claim without exception. The construct threat cannot be discharged by more software testing---no quantity of green suites bears on it---which is why program steps~6 and~7 route it to preregistered calibration and held-out validation, the only instrument class that can touch it.
+
+It is worth stating what discharge would even look like, because construct validity is the threat most often waved at rather than operationalized. A discharge program would require: (i) an operationalization---for each CAS type, a declared measurement procedure mapping observable behavior (human, model, or biological) to the type's values, with the procedure's own reliability characterized; (ii) discriminant evidence---demonstrations that the types are not merely relabelings of existing constructs, i.e., that the forty-cell structure captures variance that coarser or alternative structures do not; and (iii) failed falsification---preregistered predictions from typed board models that held out of sample where rival untyped models did not. Each of the three is a study family, not a test run; none exists at the bound commit; and the honest summary is that the construct threat is currently \emph{unaddressed rather than mitigated}, which is exactly what a threat section is for.
+
+\subsection{Internal validity}\label{ch12:threats-internal}
+
+\begin{threat}[Bounded suites are not proofs]\label{ch12:threat-internal}
+The DRC and simulator are evidenced by bounded regression suites---272 subtests over authored fixtures---not by proofs over all paths, exhaustive enumeration, or adversarial generation. The full CCDL parser does not exist (Chapter~10), so no evidence flows from the published listings through parsing into the checked object model. And the repository-wide collector was not clean at the receipt (4 namespace collisions after 1{,}200 items), so even the enumerability of the full test universe is compromised outside the focused suites.
+\end{threat}
+
+Authored fixtures share their authors' blind spots: the faults represented are the faults the authors thought of, and the CSB specimen (Chapter~11) is a standing demonstration that professionally reviewed artifacts contain faults their authors did not think of. Property-based and randomized generation \cite{quickcheck} is the standard escalation---generating boards, parameter sets, and edit sequences far outside the authored distribution and asserting invariants (report determinism, digest stability, fail-closed rejection) over the generated family---and is program step~4, together with a separately sourced mutation campaign to measure the suites' fault-detection power rather than assume it. Independent reimplementation (step~5) addresses the residual risk that specification and implementation share a common author's misreading.
+
+The collector caveat deserves its own accounting within this threat, because its implications are easily under- and over-read. Under-read: ``four collisions after 1{,}200 items'' sounds like a 0.3\% blemish, but a collection failure is not a test failure---it means an unknown set of tests beyond the 1{,}200th collected item was never enumerated, so the denominator of any repository-wide claim is unknown, which is qualitatively worse than a known failure count. Over-read: the collisions are package-path namespace collisions---an import-layout defect---not evidence of failing tests or defective product code, and they do not contaminate the three focused suites, whose collection is independent and whose test-ID hashes pin their contents exactly. The correct reading is scoped: the focused-suite evidence stands at full (bounded) strength; the repository-wide claim is unavailable; and the remediation (deduplicating package paths, then producing a clean full collection with its own hash) is ordinary engineering that belongs to housekeeping before step~5's hermetic reproduction, which would fail on the collision anyway. The receipt's refusal to average these two readings into a single reassuring sentence is Definition~\ref{ch12:def-evtypes}'s type-5 discipline in action.
+
+\subsection{External validity}\label{ch12:threats-external}
+
+\begin{threat}[Nothing external is in evidence]\label{ch12:threat-external}
+The admitted evidence contains no live calibrated model, no physical board, no instrument chain, no held-out replication, and no multi-model evaluation. Every result is internal to the candidate's own software and fixtures. Cross-model generalization, cross-context generalization, and any correspondence to deployed systems are entirely open.
+\end{threat}
+
+The threat is stated baldly because its most dangerous form is partial: a reader who accepts that no \emph{safety} claim is licensed may still assume that, surely, some behavioral generalization is. None is. The candidate has never been connected to a live system in the admitted evidence lane; the calibration and test-point machinery of Chapter~7 is contract scaffolding whose \emph{live} counterpart (instruments, uncertainty, drift, environmental validity) is program step~6's subject. Until then, external validity is not weak---it is absent by construction, and labeled so.
+
+The design choice implicit in ``absent by construction'' should be defended, since a critic could ask why three years-equivalent of contract work preceded any external contact. The answer is the CSB masking lesson generalized: external evidence gathered through an unverified instrument is worse than no evidence, because it arrives bearing the instrument's faults invisibly. A calibration study run before the DRC's unit discipline existed could not distinguish a cognitive result from a unit mismatch; a model-probing result gathered before trace determinism was tested could not be replayed to check itself. The contract-first ordering is a bet---explicitly revisable at step~6---that the cheapest path to \emph{trustworthy} external evidence runs through verified instruments, even at the cost of a long interval during which the external column of the evidence table is honestly empty.
+
+\subsection{Numerical validity}\label{ch12:threats-numerical}
+
+\begin{threat}[Disclosed numerical limits]\label{ch12:threat-numerical}
+The fixed decimal context controls the candidate's own arithmetic, but the binary64 Fisher--Rao implementation is a disclosed numerical pseudometric at its resolution: it is not proven that all distinct profiles are separated, and tolerance behavior near the simplex boundary is characterized only by the profile's own validation residuals. Independent numerical audit, condition analysis, and tolerance-stack analysis remain open.
+\end{threat}
+
+The mitigations already in place are containment, not resolution: one immutable decimal context whose identity enters every report (so numerical environment drift is detectable), capped and versioned projector tolerances, and residual recording (Chapter~6). What is missing is adversarial numerics---inputs constructed to stress cancellation, near-boundary positivity, and digest-affecting rounding---which folds into program step~4's generation campaign and step~7's executor/auditor agreement requirement, under which two independent computations must agree numerically before a result is admitted.
+
+The pseudometric disclosure merits one further sentence of interpretation, because it interacts with the identity discipline that the rest of the architecture leans on. The candidate's structural identities are exact (digests over canonical bytes), but its \emph{geometric} statements are resolution-bounded: two simplex addresses that the binary64 Fisher--Rao implementation reports as distance zero are not thereby proven identical, and no uniqueness or separation argument anywhere in the candidate is permitted to route through the numerical metric. Where separation matters---for instance, in any future clustering or nearest-profile claim---the claim must either carry an explicit tolerance statement bounding what ``distinct'' means at binary64 resolution, or be computed in exact arithmetic under the decimal context. The threat, in other words, is contained by a routing rule: exact questions go to exact machinery, and the metric answers only metric questions at its stated resolution.
+
+\subsection{Causal validity}\label{ch12:threats-causal}
+
+\begin{threat}[No causal claims are supported]\label{ch12:threat-causal}
+Graph connectivity, gain composition, bound propagation, prediction, and residual localization---everything the DRC and simulator compute---are structural and behavioral facts about declared models. None establishes causation in any target system. Causal claims require explicit causal models, identification assumptions, and interventions \cite{pearl}; none is admitted at the bound commit.
+\end{threat}
+
+The threat deserves emphasis because the candidate's vocabulary invites the slide: the ontology contains ``Cause'' and ``Effect'' state names, boards have directed paths, and Chapter~11 proves a reachability result that sounds causal. All of it is model-internal: Proposition~\ref{ch11:prop-unreach} is a theorem about a specification, exactly as a type error is a theorem about a program, and neither says anything about what any external system would do. If a future program phase proposes causal claims about cognitive systems, those claims will need the full causal apparatus---models, assumptions, interventions---stated in their own records; the current architecture merely ensures that when that day comes, the structural substrate (which path feeds which) is explicit rather than folkloric.
+
+There is nonetheless a genuine, bounded contribution the architecture makes toward eventual causal work, and stating it precisely avoids both over- and under-selling. A declared board is, structurally, a candidate causal diagram: nodes, directed edges, and typed mechanisms, with the DRC enforcing that the diagram is complete (no unresolved endpoints), typed (no unit-incoherent edges), and honest about cycles (no undeclared feedback). What the architecture supplies is thus the \emph{syntactic hygiene} that causal analysis presupposes---an unambiguous graph over declared variables. What it cannot supply is everything that makes such a diagram causal rather than notational: the identification of board variables with measurable quantities, the defensibility of the missing-edge assumptions, and the interventional access needed to test them \cite{pearl}. The boundary between the two contributions is exactly the boundary between steps~1--5 and steps~6--7 of the program.
+
+\subsection{Safety and governance validity}\label{ch12:threats-safety}
+
+\begin{threat}[No safety inference; no authority]\label{ch12:threat-safety}
+The preserved CSB finding (Chapter~11) blocks any safety-effectiveness inference from the source's safety exemplar, and the candidate makes none of its own. Hazard analysis, independent safety engineering, regulatory review, clinical review, authenticated claim authority, canon admission, disclosure approval, and product acceptance are all open. Historical AI-authored, self-hashed licensing receipts within the project record are not an authenticated reviewer or a legal authority, and nothing in this monograph treats them as one.
+\end{threat}
+
+The last sentence is a governance point the project applies to itself. A receipt whose author and whose attestation mechanism are the same system that produced the work has the evidential status of a lab notebook: invaluable as record, worthless as authority. The receipt discipline of Section~\ref{ch12:receipt} is therefore deliberately \emph{modest}: hashes and counts, which any party can recompute, rather than judgments, which the project cannot self-supply. Authority enters, if it ever does, at program step~8, from outside.
+
+Two further governance exposures are named for completeness. \emph{Vocabulary leakage}: the candidate's lexicon---``safety board,'' ``fuse,'' ``refusal path,'' ``certification levels''---is drawn from domains where the words carry regulatory and assurance weight, and every use of them in a specification context risks being quoted out of context as an assurance statement. The mitigation is mechanical where possible (claim-language review is a named discipline at step~8; the quarantine names the prohibited inferences) and repetitive where not: this book's boundary environments exist to be quoted \emph{with} their findings. \emph{Status drift under summarization}: each layer of summary---receipt to chapter, chapter to abstract, abstract to citation---compresses toward capability language, because capability is what summaries are for. The countermeasure adopted here is that every summary layer carries the status string \textsc{draft / open / ring 4 / not licensed / held} verbatim, so that at minimum the drift must delete something visible rather than merely fail to repeat something.
+
+\section{The dependency-ordered research program}\label{ch12:program}
+
+The program is eight steps. The ordering is a dependency order, not a priority order: each step consumes artifacts that earlier steps produce, and running a later step early would produce results that the missing prerequisites would immediately invalidate. The dependency structure at a glance:
+
+\begin{center}
+\small
+\begin{tabular}{@{}clll@{}}
+\toprule
+Step & Activity & Consumes & Produces \\
+\midrule
+1 & Complete grammar + golden corpus & Ch.~10 audit record & grammar, coverage matrix \\
+2 & Round-trip parser, fail-closed & step 1 & canonical textual boards \\
+3 & State/time profiles & steps 1--2 & executable full corpus \\
+4 & Property + mutation campaigns & steps 1--3 & hardened invariants \\
+5 & Hermetic reproduction & steps 1--4 stable & second-party checkability \\
+6 & Preregistered calibration/validation & steps 1--5 & first external evidence \\
+7 & Agreement, falsifiers, replication & steps 5--6 & admitted empirical results \\
+8 & Internal then external review & everything & closed criteria; authority \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The table's ``consumes'' column is the argument for the ordering; the prose below develops it step by step: what each step is, why it sits where it sits, and what it unblocks.
+
+\begin{protocol}[Step 1: Complete versioned CCDL grammar and golden corpus]\label{ch12:step1}
+Specify a complete, versioned CCDL grammar covering every construct family evidenced in Chapter~10---the reserved Part-IV statement leaders, the memory and power-management registers, and the expression forms including replication fan-out---together with a golden five-board corpus fixed under exact digests.
+\end{protocol}
+
+This is first because Chapter~10 showed the published grammar covers a minority register of its own corpus: every downstream activity that touches listings (parsing, round-tripping, conformance, corpus-driven testing) is undefined until a grammar exists whose coverage is stated. The step's deliverable is as much the \emph{coverage matrix} (Rule~\ref{ch10:rule-candidate}) as the grammar itself: a grammar without a corpus-verified matrix would recreate the source's defect at one remove. It unblocks step~2 directly and step~4's grammar-aware generation.
+
+\begin{protocol}[Step 2: Canonical parse/serialize round trips, fail-closed]\label{ch12:step2}
+Implement parsing and serialization such that parse-then-serialize is the identity on canonical form, every admitted board round-trips with a stable digest, and every unsupported form is rejected fail-closed with a coded diagnostic.
+\end{protocol}
+
+Second because it operationalizes step~1's grammar into checkable software and extends the hash-identity discipline (Chapter~5) to textual boards. The round-trip property is the cheap total test of parser/serializer agreement; fail-closed rejection converts the coverage boundary into an error surface rather than a silent subtraction. Unblocks: corpus-scale DRC evidence (published listings finally flow into the checked object model), and step~4's use of round-trips as a universal invariant.
+
+\begin{protocol}[Step 3: State and time profiles]\label{ch12:step3}
+Define separate, versioned execution profiles for the construct families the current simulator excludes: capacitor and charge dynamics, PLL and lock dynamics, memory discipline (the \texttt{charge}/\texttt{discharge}/\texttt{refresh}/\texttt{scan}/\texttt{select} family), power sequencing, stateful and stochastic feedback, and memristive history---each with declared state spaces, time semantics, and trace extensions.
+\end{protocol}
+
+Third because Chapter~10 showed the unformalized grammar registers are precisely the stateful/temporal ones: parsing them (step~2) without executable semantics would admit boards the simulator must then refuse. Profiles are \emph{separate} by design---each is opt-in, versioned, and named in traces---so that the deterministic core's evidence is never diluted by a profile's immaturity. Unblocks: faithful execution of the full golden corpus, and meaningful simulation-level testing in step~4.
+
+\begin{protocol}[Step 4: Property-based campaign; sourced mutation testing]\label{ch12:step4}
+Run a property-based and randomized-generation campaign \cite{quickcheck} over DRC and simulation invariants---report determinism, digest stability, sort-order canonicality, fail-closed rejection, round-trip identity, bound-propagation soundness, clamp/threshold contradiction detection in generated positions---and separately specify and source a mutation-testing campaign measuring the suites' fault-detection power.
+\end{protocol}
+
+Fourth because generation needs the grammar (step~1), the round trip (step~2), and the profiles (step~3) to define its input space and its invariants; run earlier, it could only exercise the programmatic fragment already covered by authored fixtures. This step is the direct answer to Threat~\ref{ch12:threat-internal} and the generalization of the CSB specimen into a fault family (Section~\ref{ch11:fixture-practice}). Mutation testing is listed separately and ``sourced'' deliberately: it measures the tests rather than the code, and its tooling and scope need their own record so its results cannot be confused with the property campaign's.
+
+\begin{protocol}[Step 5: Hermetic independent reproduction]\label{ch12:step5}
+Independently reproduce the exact source and test bundle in a hermetic toolchain: pinned dependencies, isolated environment, bit-identical artifact hashes, and suite results reproduced from the receipt's inputs by a party other than the original executor.
+\end{protocol}
+
+Fifth because reproduction is only meaningful once the thing to reproduce is stable: steps~1--4 will have churned the corpus, grammar, and suites, and reproducing a moving target wastes the independence it spends. Hermetic reproduction converts the receipt's hash bindings from self-consistency into external checkability, and it is the first step in the program that a second party performs. Unblocks: the executor/auditor discipline of step~7, for which two independent computation paths must exist.
+
+\begin{protocol}[Step 6: Preregistered calibration and held-out validation]\label{ch12:step6}
+Preregister, through the Gate~5 control kernel and without promoting Gate~5's own status, the first calibration and held-out validation studies: declared instruments, uncertainty budgets, environmental validity ranges, drift handling, hypotheses, falsifiers, and analysis plans fixed before data.
+\end{protocol}
+
+Sixth because this is the program's crossing from verification into validation \cite{sargent}, and everything before it exists to make the crossing honest: the grammar and profiles define what a board claims, the campaigns establish that the software does what it says, and reproduction establishes that a second party can check it. Preregistration is the instrument against the failure mode that bounded internal evidence invites---post hoc selection of favorable external results. This step is where Threat~\ref{ch12:threat-construct} and Threat~\ref{ch12:threat-external} first become addressable at all.
+
+\begin{protocol}[Step 7: Agreement, falsifiers, negatives, replication]\label{ch12:step7}
+Require, for any admitted empirical result: independent executor and auditor numerical agreement; a stated falsifier for every hypothesis; publication of negative outcomes in the same records as positive ones; and independent replication before any result graduates from single-study status.
+\end{protocol}
+
+Seventh because it governs the studies that step~6 creates. The four requirements are the evidence discipline of this monograph---bounded claims, preserved negatives, checkable identities---transposed from software receipts to empirical results. Executor/auditor agreement extends the two-party structure of step~5 into the numerical domain (answering Threat~\ref{ch12:threat-numerical}); mandatory falsifiers extend the ``specifications carry their own falsifiers'' lesson of Chapter~11 to hypotheses; negative-outcome publication extends the preserved-conflict discipline; replication extends the reproduction discipline.
+
+\begin{protocol}[Step 8: Internal cross-review, then commissioned external review]\label{ch12:step8}
+Complete internal cross-review of all artifacts against stable hashes---closing or explicitly waiving each of the open review criteria---then commission external formal, systems, experimental, safety, and claim-language review before any submission, disclosure, or use claim.
+\end{protocol}
+
+Last because review consumes everything: reviewing artifacts that steps~1--7 will change is review spent twice, and external reviewers' scarce attention should land on the stable, reproduced, campaign-hardened state. The five named review disciplines map onto the threat classes: formal review to construct and internal threats, systems review to internal and numerical, experimental review to external and causal, safety review to the safety threat and the Chapter~11 requirements, and claim-language review to governance---the audit of whether every public sentence carries its boundary. Only after step~8 could any status label in this book change, and this book does not predict the outcome.
+
+\begin{remark}[The ordering under failure]\label{ch12:rem-order}
+Dependency ordering also fixes what happens when a step \emph{fails}. A failed property campaign (step~4) returns the program to steps~1--3 with counterexamples in hand; a failed reproduction (step~5) invalidates the receipt discipline and halts the program until repaired; a falsified hypothesis at step~6--7 is a \emph{successful} program outcome---a preserved negative at the empirical level, published under step~7's own rule. The program is ordered so that failures land early, cheaply, and on the record.
+\end{remark}
+
+\section{The claim quarantine}\label{ch12:quarantine}
+
+The following claims are quarantined: they appear in source material, project history, or plausible readings of this work, and none may be asserted, implied, or marketed on the basis of anything in this monograph. Each is held as hypothesis or prohibited inference pending the program.
+
+\begin{enumerate}
+\item \emph{Exact thought/transistor isomorphism, in any strength.} The candidate's mathematics contains projections and adapters, each explicitly non-invertible or non-semantic (Chapters~4 and~9); no isomorphism is constructed anywhere, and the analogy's utility never rested on one.
+\item \emph{Shared four-region identity between transistor operating regions and cognitive regimes.} A four-way partition on each side is a counting coincidence until a structure-preserving correspondence with behavioral consequences is demonstrated; none is in evidence.
+\item \emph{Overload-induced semantic involution as a validated dynamical phenomenon.} The claim is dynamical and empirical; the admitted evidence contains no dynamics beyond declared deterministic profiles and no empirical observations at all.
+\item \emph{Fisher--Rao causal gain: any causal reading of metric quantities.} Metric quantities are descriptive geometry over declared profiles; Threat~\ref{ch12:threat-causal} states the missing apparatus.
+\item \emph{Physical electrical identity for CAS quantities.} Voltage, current, resistance, charge, flux, and power as SI quantities of cognition would require a separately typed, instrumented physical profile that has never been proposed, let alone validated; the candidate's unit system deliberately types its quantities as its own.
+\item \emph{Semantic correctness inferred from a response-region label.} A region label is a classification within a declared scheme; correctness of content is a different predicate with no admitted bridge from the first.
+\item \emph{Safety effectiveness of any board, mechanism, or refusal path.} Blocked twice over: no safety evidence class exists in the receipt, and the source's own safety exemplar is a preserved counterexample (Chapter~11).
+\item \emph{Certification, regulatory compliance, or clinical usability.} No certifying, regulatory, or clinical body appears anywhere in the evidence chain; the source's own disclaimer denies certification, and the candidate repeats the denial.
+\item \emph{Complete CCDL compiler conformance.} Blocked outright by Chapter~10 until program steps~1--2 produce a grammar with a corpus-verified coverage matrix; at the bound commit conformance is not merely unproven but undefined.
+\item \emph{Production readiness of any component of the candidate.} Twenty open review criteria, an absent parser, and unexercised state/time profiles are individually disqualifying; jointly they place the candidate's maturity where its status labels place it.
+\item \emph{Disclosure or license authority derived from self-hashes or generated receipts.} Authority is a relation to an external authorizer; a self-computed digest can prove integrity, never authorization (Threat~\ref{ch12:threat-safety}).
+\item \emph{Repository-wide verification.} Blocked by the collector caveat: the claim's denominator is unenumerated at the bound commit.
+\end{enumerate}
+
+The quarantine is enforceable rather than aspirational because each item is tied to a mechanism: items~1--6 are unlicensed claim records (Ring~4, \textsc{not licensed}); items~7--8 are blocked by the Chapter~11 findings and the absence of any safety evidence class; items~9--12 are blocked by the specific receipt facts of Section~\ref{ch12:receipt}. A reader who finds any of these asserted anywhere under this project's name has found a defect, and is invited to treat it exactly as this book treats the CSB.
+
+\section{Related methodological work}\label{ch12:related}
+
+The monograph's debts are methodological; none of the cited work validates CAS content, and the citations are confined to the methods actually borrowed.
+
+From \emph{simulation methodology}, the verification/validation distinction \cite{sargent}: verification checks the model implementation against its specification, validation checks the model against its intended reality, and the two require different evidence classes and different reviewers. The entire structure of Section~\ref{ch12:interpret}---green suites as verification, steps~6--7 as the sole route to validation---is that distinction, applied without modification.
+
+From \emph{provenance research}, the entity/activity/derivation factoring of W3C PROV \cite{prov}: every artifact in the receipt is an entity with derivations from identified activities, implemented as digest chains rather than ontology instances. The monograph claims no PROV conformance; it claims the factoring, which is what makes the receipt recomputable by outsiders.
+
+From \emph{graph algorithms}, the classical strongly-connected-components machinery \cite{tarjan} that the DRC's feedback analysis builds on (Chapter~7): cycle detection and condensation are the substrate on which the feedback declarations, delay requirements, and gain bounds are checked. The debt is algorithmic, and the algorithm's correctness is assumed from the literature, not re-proven here.
+
+From \emph{property-based testing}, the random-generation-against-invariants paradigm of QuickCheck \cite{quickcheck}: the planned step-4 campaign is a direct application, and the monograph's insistence that authored fixtures under-sample fault space (Threat~\ref{ch12:threat-internal}) is that literature's founding observation.
+
+From \emph{causal inference}, the requirement that causal claims rest on explicit models, identification assumptions, and interventions \cite{pearl}: adopted here in its purely negative form---as the reason no causal claim is admitted---and reserved in its positive form for any future phase that proposes one.
+
+A note on citation policy: this chapter cites only the five methodological anchors above, and the restraint is deliberate rather than parsimonious. The monograph's claims are about one source document, one implementation, and one receipt; a broad related-work survey---hardware description languages, statechart formalisms, information geometry, cognitive architectures, AI-safety assurance frameworks---would surround narrow claims with wide company and invite exactly the associative strengthening that the claim discipline forbids (``the work builds on X'' drifts to ``the work is of X's kind'' drifts to ``the work inherits X's validation''). Earlier and companion papers in this project's series carry the wider bibliography where it is load-bearing; here, each citation marks a method actually executed or actually scheduled, and the absence of a citation for a field marks the absence of a claim on that field.
+
+What the monograph adds to these borrowed methods is not any single technique but a composition: source-bound adverse findings (Chapters~10--11) preserved as first-class, hash-anchored artifacts inside the same receipt that carries the green suites, under a claim-record regime in which every articulated claim is registered and none is licensed. The authors are not aware of a practice standard for cognitive-system engineering documents that requires corpus-verified grammar coverage matrices, known-fault safety fixtures, and typed evidence accounting together; this book is offered as a worked example of that composition, at Ring~4, for review.
+
+The composition's nearest relatives, described without citation to avoid the drift just named, are: safety-case practice (structured argument with evidence nodes---but safety cases argue \emph{for} adequacy, while this record chiefly preserves argument \emph{against} its source); reproducibility artifacts in software research (hash-pinned environments and artifact evaluation---adopted here wholesale at the receipt layer); and registered-report publishing (preregistration with outcome-independent publication---the template for steps~6--7). The delta from each relative is the same in all three cases: the adverse findings are not appendix material but the record's center of gravity, on the thesis---argued throughout and tested by this book's own structure---that for early-stage research architectures, credibility per page is highest in the pages that count against the author.
+
+\section{Conclusion}\label{ch12:conclusion}
+
+This monograph set out to answer an engineering question: whether a circuit-shaped modeling language can make cognitive-system hypotheses more explicit, type-safe, replayable, and falsifiable without converting an analogy into a physical, causal, safety, or product claim. The answer defended across twelve chapters is a qualified yes at the software-contract level, and the qualification is the contribution.
+
+The affirmative half is the architecture: a type system in which semantic identity is referential and versioned; a board model whose identity is its canonical digest; a design-rule checker with a closed 35-code catalog, fail-closed severities, and relational checks that catch what per-value validation misses; a narrow deterministic simulator whose every run binds its full provenance; geometry profiles that disclose their numerical limits; and an adapter that grants type-correct representation and nothing more.
+
+The qualifying half is the evidence discipline, and it is best summarized by what this book chose to feature. Its two longest analytical chapters are devoted to faults in its own source of authority: a grammar that does not cover its own corpus, and a safety exemplar whose fuse cannot trip. Its evidence chapter leads with hash-bound counts and a collector caveat rather than a capability narrative. Its claim chapter is a quarantine. Its program defers external validation to the sixth of eight steps and external authority to the eighth. Nothing about this composition is accidental: an architecture whose purpose is to make hypotheses falsifiable must demonstrate the falsification machinery on itself first, and the preserved findings are that demonstration.
+
+What remains is stated in the program and will not be restated as promise. At the bound commit there are 54 artifacts, 272 green subtests, four counterexamples, eight conflicts, twenty open criteria, eleven unlicensed claims, and one collector defect; there is no parser, no live system, no external review, and no licensed claim. That is the whole of it, and the monograph ends where its discipline requires: with the boundary stated as plainly as the work.

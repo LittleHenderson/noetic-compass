@@ -1,0 +1,90 @@
+\chapter{Glossary}\label{appC:glossary}
+
+This glossary defines the technical terms and identifiers used in the monograph.
+Chapter references are given as plain text. Every definition is scoped to this
+Ring-4 research candidate; no term carries a safety, causal, physical, or product
+claim beyond what the cited chapter states.
+
+\begin{description}
+
+\item[Adapter certificate] The immutable record binding the exact TKS~v8 kernel
+bytes, board/component/transition identities, tagged carrier, semantic profile,
+and research boundary when a certified transition is adapted to a finite arrow.
+Attests type-correct representation only (Chapter~9).
+
+\item[Board] The typed, immutable, identity-bearing record of components, ports,
+nets, test points, calibrations, feedback declarations, and provenance metadata
+that constitutes a modeled circuit. Board identity includes the complete
+canonical structure (Chapter~5).
+
+\item[CCDL] The Cognitive Circuit Description Language of the 743-page source
+baseline. Chapter~10 audits the mismatch between its consolidated EBNF and its
+own five-board reference corpus.
+
+\item[Check class] One of the five organizing views of the design-rule checker:
+structural integrity, typed connectivity, calibration and probe integrity,
+feedback analysis, and threshold reachability (Chapter~7).
+
+\item[CJT] A component form appearing in the source boards (Chapter~10). Its
+gain parameter is defined in the source by Fisher--Rao displacement ratios;
+Chapter~6 and the companion CAS-Ohm treatment keep that definition distinct from
+a local Jacobian gain.
+
+\item[Cognitive Safety Board (CSB)] The published safety board whose red-stage
+clamp of $0.1$ sits upstream of a fuse threshold of $0.9$, rendering the
+protective crossing unreachable under the declared clamp semantics
+(Chapter~11).
+
+\item[Decimal context] The single immutable, versioned arithmetic context,
+created from primitive constants, under which all decimal operations run; its
+identity enters reports and results (Chapter~4).
+
+\item[Design-rule checker (DRC)] The deterministic checker that computes one
+diagnostic report from the \texttt{PCBA8-*} catalog; errors fail the board and
+warnings never become an implicit clean result (Chapter~7).
+
+\item[Fisher--Rao metric] The information-geometric metric on the open
+probability simplex used by the mixed-simplex geometry profile; its binary64
+implementation is a disclosed numerical pseudometric at its resolution
+(Chapters~2 and~6).
+
+\item[NDCell] A Noetic-times-Domain pair; the target of the many-to-one
+projection from a state literal that forgets Drive and Register (Chapter~4).
+
+\item[Known-fault fixture] A source artifact retained unmodified as negative
+evidence and a regression guard, rather than silently repaired; the CSB is the
+principal example (Chapter~11).
+
+\item[Ring 4] The admission ring denoting a research candidate that is
+\textsc{open}, \textsc{not licensed}, and not publicly disclosed. All artifacts
+in this monograph are Ring~4 (throughout).
+
+\item[Semigroupoid path] A typed sequence of finite arrows with matching adjacent
+objects and a typed composite but no power operation; the form to which component
+chains are adapted (Chapter~9).
+
+\item[SimplexAddress40] A strictly positive normalized profile over the forty
+canonical ND-cells; neither a one-hot cell nor an element of the finite TKS
+kernel (Chapter~4).
+
+\item[State literal] A Noetic-times-Domain-times-optional-Drive-times-optional-Register
+tuple; the richest state type, projecting many-to-one onto an NDCell
+(Chapter~4).
+
+\item[Tagged exact value] A value carrying its exact type identity, so that
+integer $1$, Boolean \emph{true}, and string \texttt{"true"} remain distinct
+throughout checking, execution, traces, and adapters (Chapter~4).
+
+\item[Threshold reachability] The check that propagates conservative upper bounds
+along an activation path and flags a safety fuse whose threshold exceeds the
+resolved upstream bound (\texttt{PCBA8-SAF-001}) (Chapter~7).
+
+\item[TKS v8 finite arrow] The certified total, finite, deterministic, stateless,
+non-stochastic transition admitted to the companion TKS kernel; the only
+component transitions eligible for adaptation (Chapter~9).
+
+\item[Trace] The canonical, provenance-rich record emitted by an admitted
+deterministic simulation, binding source, analysis, context, signal, event,
+observation, lineage, and boundary fields (Chapter~8; fields in Appendix~A).
+
+\end{description}
