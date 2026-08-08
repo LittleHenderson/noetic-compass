@@ -27,9 +27,11 @@ The decision remains `OPEN / KEEP_OPEN`, while engineering has reached
 has been satisfied by a live admitted experiment. No result in this review
 creates `ACCEPT`, `LICENSED`, live-execution authority, a public route, a product
 route, disclosure authority, scientific authority, or canon authority.
-One CPU-only non-scientific engineering preflight canary occurred; it was not an
-authorized or admitted experiment and created no GPU run, Evidence Packet, or
-scientific result. Experimental execution remains `NOT_STARTED`.
+After the earlier CPU-only preflight, a six-arm local GPU canary and a bounded
+one-invocation joined local successor exercised retained engineering mechanics.
+They used non-admitted, single-host, non-WORM routes; created no Evidence Packet;
+and established neither prompt-injection detection nor steering efficacy.
+Experimental execution remains `NOT_STARTED`.
 
 ## Exact review surface
 
@@ -51,6 +53,9 @@ This review is bounded to the following current surfaces:
 - the additive raw build/security receipt
   `GATE5_RAW_BUILD_AND_SECURITY_EVIDENCE_RECEIPT_v0.1.json` and its ten retained
   payloads;
+- the engineering chronology receipt
+  `GATE5_ENGINEERING_EXECUTION_RECONCILIATION_v0.1.json`, the retained local GPU
+  canary artifacts, and the joined v0.1/v0.2 predecessor-successor artifacts;
 - the local runner lock `GATE5_LOCAL_WINDOWS_TEST_RUNNER_LOCK_v0.1.json`, the
   same-process pytest runner, and both deterministic builders;
 - the exact historical V1-V4 recovery inventory and its independent verifier;
@@ -157,9 +162,9 @@ SHA-256 and byte length, and freshly replays them against the current
 pre-outcome chain before public reads. This is process-local tamper detection,
 not WORM authority.
 
-The clean focused receipt is **150 passed tests plus 99 subtests** under Python
+The clean focused receipt is **155 passed tests plus 106 subtests** under Python
 3.14 with startup site processing and bytecode/cache output disabled. It
-contains 94 active-kernel tests, 30 strict worker-protocol tests, 4
+contains 94 active-kernel tests, 35 strict worker-protocol tests, 4
 historical-recovery tests, and 22 Gate 5 verifier red-team tests. The retained
 attacks cover hardlink/symlink aliasing,
 same-byte inode replacement, a synthetic reparse attribute, duplicate or
@@ -172,7 +177,12 @@ object substitution while structural ancestor replacement remains detected.
 The receipt is limited to
 `tests/cas_harness_v2`; it is not a repository-wide or production receipt.
 Its same-process executed-node SHA-256 is
-`6BF70F5569C4BCA5B7D896382A099FC966E9C0622B3A3694BE0B330B66048756`.
+`CF033F2E7F519AAD6738D596A694728FD4173CFA12DD8A8FE094823215D4CF8A`.
+
+The prior 150-test/99-subtest receipt was stale relative to the five strict
+terminal-receipt builder tests and seven subtests already committed at
+`0781bab8`; the reconciliation refreshed the receipt without adding, deleting,
+or weakening tests.
 
 ## Worker-protocol adversarial chronology
 
@@ -211,9 +221,9 @@ produced artifacts carry
 `QUARANTINED_PARTIAL_NEGATIVE_EVIDENCE_ONLY`. A failed run therefore retains
 negative evidence without minting a scientific result.
 
-The strict worker subset passes **30 tests plus 38 subtests**, with canonical
+The strict worker subset passes **35 tests plus 45 subtests**, with canonical
 node-ID SHA-256
-`534CF4550FF56F3EA5F4235680CDB89A91784D1CEE0B7CB7ABDF9DE1C7B3E7FF`.
+`73C14349373376F49C380A84E8629C82167B5BF0F73415A45F197D99DE97F807`.
 These are local structural regressions. Loader provenance remains an explicit
 unresolved deployment trust boundary. The packaged adapter is admitted only as
 a bounded local candidate; it has no provider-backed production startup,
@@ -390,11 +400,17 @@ The current bounded local receipts are **17/17** for the worker-terminal bridge
 (`fa6c985cd6caa734034e006bb4baf6be9d02269d7312bee7355e9c3833759c51`),
 **38/38** for the callback/Object-Lock seam
 (`d3eaf533fedb5b03168200aa399ac53a6e2a6f22874ebabeaecefb227400778d`),
-**130/130** for the prospective lifecycle/SQLite/default-dark route suite
-(`0ca9217040958125285bfa0f6a7c6d517808b4ac4f4078c152620190767b6bb0`),
-and **90/90** for packaging, snapshot, envelope, context, admitted-adapter,
+**134/134** for the prospective lifecycle/SQLite/default-dark route suite
+(`67f7507579749e11e27714e8513f6909e26a503a8dd18112cc402207d9735940`),
+and **98/98** for packaging, snapshot, envelope, context, admitted-adapter,
 and bounded-reconciliation tests
-(`761038779e00511179d4fc5aa3522829d9bdefb37c231061d04fb3aad541f733`).
+(`65352b8b59cb654e449ba4a1ce8459d7109cc5b21e33f64aeab6e2ea6eeb3c19`).
+The 134- and 98-test counts supersede the stale 130/90 receipts that predated
+the already-committed terminal-disposition and joined-execution test tranches;
+no test was added or relaxed during this reconciliation.
+The retained local GPU/joined evidence suite passes **27/27** without model
+execution, with node-ID digest
+`dc0c0ed22e0f158f014277b9d3cd26ad21d6a8fcdfbe1e76a67d09406975c952`.
 They are `LOCAL_UNATTESTED_HOST_REGRESSION`, not live or scientific evidence.
 
 ## Live-worker adverse evidence and bounded repairs
@@ -466,13 +482,19 @@ The test
 `test_validated_public_receipt_cannot_be_mutated_into_retired_attestation`
 subsequently reproduced a post-validation assignment bypass. The retained
 repair freezes the public receipt and its nested carriers and revalidates
-copy-with-update. The successor candidate retains the **32/32 focused numeric**
-receipt and confirms **364/364 complete worker**. Their verifier-canonical
+copy-with-update. The current working-tree successor retains the **32/32 focused
+numeric** receipt and confirms **391/391 complete worker**. Their verifier-canonical
 test-ID-set
 SHA-256 values are, respectively,
 `12602041756f20d1afd402fa56968660839e5eb1098438ba84c69bff8de7050b`
 and
-`94566203b3e0ff79b3224c1c5a073698ca99d3c08bc1119a9082e42af4b178bd`.
+`fd8367b867cb6589cc50424d7a1cecabc56bf85331bb4fd87b844e7fd3004580`.
+The 27-test increase is exactly the already-committed finite no-JIT BF16,
+strict protocol-client, and live request/response worker tranches. The
+time-indexed v0.2 OCI candidate separately preserves its 364/364 issuance
+receipt and digest
+`94566203b3e0ff79b3224c1c5a073698ca99d3c08bc1119a9082e42af4b178bd`;
+it is not rewritten against the later working-tree bytes.
 These are not raw pytest transcript digests. One pytest process must report
 identical duplicate-free collected, started, and finished sequences, exact
 setup/call/teardown PASS outcomes, and separately passing subtests. The parent
@@ -509,6 +531,13 @@ comparability, and production-hardware determinism also remain untested external
 boundaries.
 
 ### Manifest and verifier red team
+
+The Gate 4 dependency verifier deliberately runs `compileall`. Earlier joined
+replays therefore left generated `__pycache__` directories in the worktree and
+failed Gate 5's executable-shadow preflight despite no source defect. The
+integrated verifier now routes that bytecode into a verifier-owned temporary
+prefix and still rejects any cache/native/archive shadow found on the bound
+repository surface.
 
 The integrated verifier red team first reproduced and retained five
 fail-closed defect classes before the manifest was admitted:
@@ -598,8 +627,9 @@ identifies that version as affected by current advisories, including
 `CVE-2026-4372` / `GHSA-29pf-2h5f-8g72`, with the cited fixed line at `5.3.0`.
 That record remains unchanged adverse evidence.
 
-The time-indexed successor v0.2 receipt binds its repository source/build controls to source
-commit `4bff437dbcf6d0d38046e63d2aee823e8f316711`, records a 73-distribution
+The time-indexed successor v0.2 receipt binds its repository source/build
+controls to source commit `4bff437dbcf6d0d38046e63d2aee823e8f316711`,
+records a 73-distribution
 hash-bound lock with `transformers==5.14.1`, and records locally observed exact
 Ubuntu/Python base-image and OCI index identifiers:
 `sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c`,
@@ -607,15 +637,20 @@ linux/amd64 manifest
 `sha256:60bf92b327ebec84887c659313a97a6369a24fd5d8eb00a012544fcafd26ba27`,
 image config, BuildKit SPDX SBOM, and SLSA provenance identifiers. At issuance,
 the raw build history, SPDX payload, SLSA payload, and Scout report were not
-retained or repository replayable. That historical statement remains unchanged,
-and those external-tool facts are `SELF_REPORTED_LOCAL_OBSERVATION_ONLY`. The exact five-file Pythia
-artifact set was locally hashed before and after load. One CPU-only,
-non-scientific engineering preflight loaded it and ran the offline
+retained or repository replayable. The verifier now resolves the candidate
+build inputs from the exact source-commit Git blobs. The working-tree Dockerfile
+was later hardened at commit
+`6f66eb2b3c37d87aaddfb091a10bdd4737e6e430`; its current bytes are manifest-bound
+separately and are not silently reinterpreted as the v0.2 OCI image. That
+historical non-retention statement remains unchanged, and those external-tool
+facts are `SELF_REPORTED_LOCAL_OBSERVATION_ONLY`. The exact five-file Pythia
+artifact set was locally hashed before and after load. At issuance, one
+CPU-only, non-scientific engineering preflight loaded it and ran the offline
 geometry/numerics canary; a 385-object native closure with only the declared
 host `libcuda.so.1` seam, no-network/read-only runtime preflight, and fail-closed
-no-token and no-CUDA startup probes were also locally observed. This did not
-authorize or admit an experiment and created no GPU run, Evidence Packet, or
-scientific result; experimental execution remains `NOT_STARTED`.
+no-token and no-CUDA startup probes were also locally observed. Later local GPU
+mechanics are reconciled separately below. Neither chronology authorizes or
+admits a scientific experiment; experimental execution remains `NOT_STARTED`.
 
 The later additive raw-evidence receipt retains ten exact payloads: the OCI
 index/config/manifests, BuildKit history bundle, original SPDX and SLSA
@@ -634,11 +669,69 @@ raw report. The current direct Scout 1.21 scan is retained and reports
 classifies six as vulnerable or fix-deferred and one as a scanner/vendor
 conflict because the exact scanned `dpkg` version is vendor-fixed. The scanner
 database identity and complete process transcript are not retained. No scan
-PASS, real GPU forward, independent clean build, independent provenance trust
-root, or independent security receipt exists.
+PASS, independently reproduced forward on the exact security candidate,
+independent clean build, independent provenance trust root, or independent
+security receipt exists.
 `G5-ENGINEERING-003` therefore remains `OPEN_SECURITY`,
 `live_execution_authorized=false`, and all live or hosted Gate 5 execution
 remains `HELD`.
+
+## Retained local GPU and joined mechanics review
+
+The canonical reconciliation preserves both failures and both bounded
+successors:
+
+- GPU canary v0.1, run
+  `gate5-pythia-canary-20260807T032759Z-bd28ae7e5a85`, is
+  `ENGINEERING GPU CANARY TERMINAL / FAIL_CLOSED`.
+- GPU canary v0.2, run
+  `gate5-pythia-canary-20260807T035947Z-9f81c34de1b6`, completed six BF16
+  Pythia-160M arms on the local RTX 4070. It established model-load,
+  activation-capture, hook, activation-change, ablation/control, and receipt
+  mechanics only. The clean/adversarial heuristic difference was `0.0`;
+  intervention receipts were `structurally_valid=false`; output deltas were
+  unattributed; ablation selectivity was false.
+- Joined v0.1, run `gate5-joined-20260807T061801Z-dae9471700c1`, failed closed
+  in the pre-model network-none verifier with zero model invocations.
+- Joined v0.2, run `gate5-joined-20260807T063024Z-5f22d298b5db`, traversed
+  local authorization, one model invocation, output retention, terminal
+  recording, outcome access, explicit nonreporting, and reconciliation. Its
+  status is `SUCCESS_NO_PACKET_RECORDED`; Packet status is `NOT CREATED`; and
+  scientific efficacy is `NOT ESTABLISHED`.
+
+This chronology repairs stale narrative claims that no GPU or joined mechanics
+run had occurred. It does not repair the scientific gates. There is still no
+validated prompt-injection detector, behaviorally effective steering result,
+Evidence Packet v2, authenticated executor/auditor separation, trusted time,
+independent WORM ordering, provider-backed admitted route, independent
+replication, product authority, or claim license.
+
+### Instruction-integrity scanner and historical capability negatives
+
+The current deterministic instruction-integrity scanner is admitted only as a
+shadow fixture regression. At reconciled source commit
+`75898e8efde0564587f8b9f114eac2f96f256a6a`, the development suite is 15/15
+and the held-out suite is 12/12; each small frozen suite reports injected recall
+`1.0` and benign false-positive rate `0.0`. The scanner remains
+`mode=shadow`, `verdict_effect=none_shadow_only`, and its only positive
+disposition is `FLAG_FOR_HUMAN_REVIEW`. Any mutation that converts that flag to
+blocking, removal, suppression, routing, or `ACCEPT` would be a claim and policy
+promotion unsupported by this evidence.
+
+The source-bound capability inventory also retains two unsuccessful model
+studies. Qwen V6 never reached its default confirmatory W0 run because both risk
+classes had seven groups, below the frozen 10-per-class floor. Its exploratory layer-28
+hidden and text balanced accuracies were both `0.809091`, the incremental delta
+was `0`, and 0/29 layers passed. Pythia-160M steering V6 independently audited
+to `FAIL_CLOSED`: common-readout balanced accuracy `0.5`, target Spearman rho
+`-1.0`, and off-target/random/wrong-axis ratios all showed nonspecific effects.
+It remains `NON_REUSABLE / NO RETRY`.
+
+Accordingly, neither perfect frozen-fixture scanner performance nor a recorded
+activation/output change is admitted as validated prompt-injection detection,
+selective steering, combined defense, safety, science, or product capability.
+The negative studies are controls against outcome shopping, not invitations to
+repeat a frozen failed protocol until it passes.
 
 ## Historical V1-V4 review
 
@@ -742,10 +835,10 @@ labels, code, outcomes, receipts, and review artifacts still need independent
 semantic inspection. Byte-different semantic clones or relabeling across
 packets are not resolved by the same-host lifecycle registry.
 
-One CPU-only engineering preflight canary occurred outside the admitted
+Local GPU and joined engineering mechanics occurred outside the admitted
 experimental protocol. No authorized or admitted live exact-revision experiment
-has run through v2, and no GPU run, Evidence Packet, or scientific result was
-created. No module has satisfied the charter's full combination of clean nulls,
+has run through v2, and no Evidence Packet or scientific result was created. No
+module has satisfied the charter's full combination of clean nulls,
 matched-taxonomy and wrong-layer controls, falsifiers, independent numerical
 agreement, held-out replication, and claim-language review. Causal
 interpretation, generalization, utility, safety, and claim scope remain open.
@@ -770,11 +863,12 @@ remain `NONE`; the claim remains `NOT LICENSED`; and disclosure remains `HELD`.
 
 The minimum defensible order is:
 
-1. preserve the verifier-native 150-test/99-subtest Harness-v2,
+1. preserve the verifier-native 155-test/106-subtest Harness-v2,
    30-test/38-subtest worker-protocol, 17/17 dark-bridge, 38/38
-   callback/Object-Lock seam, 130/130 prospective lifecycle/SQLite/dark-route,
-   90/90 admitted-adapter/configured-reconciliation,
-   32/32 focused numeric, 364/364 complete-worker, and 78/78
+   callback/Object-Lock seam, 134/134 prospective lifecycle/SQLite/dark-route,
+   98/98 admitted-adapter/configured-reconciliation, 27/27 retained local
+   GPU/joined evidence,
+   32/32 focused numeric, 391/391 complete-worker, and 78/78
    API/launcher/fleet/state receipts, the earlier 290/290 checkpoint, and every
    counterexample, including the current ephemeral same-process and retained
    raw-evidence validations;
@@ -812,5 +906,5 @@ license/disclosure/canon `NOT LICENSED / HELD / NOT FROZEN`; and live/product
 route `UNAVAILABLE / NOT AUTHORIZED`.
 
 The `$107.00` RunPod balance is user-reported. No provider billing ledger or
-balance receipt was inspected, no RunPod/GPU/paid job was launched, and known
-spend for this tranche is `$0.00`.
+balance receipt was inspected, no RunPod or paid job was launched, retained
+local GPU provider calls were zero, and known spend for this tranche is `$0.00`.

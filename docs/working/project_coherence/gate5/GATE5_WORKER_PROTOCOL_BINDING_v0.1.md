@@ -16,10 +16,13 @@ Authority boundary: `PRIVATE RESEARCH ENGINEERING CANDIDATE ONLY`
 
 This document specifies a bounded, fail-closed mapping between the current CAS
 fleet-worker surfaces and the isolated Harness-v2 control kernel. It does not
-authorize or report a RunPod job, GPU execution, experiment, scientific result,
-canon change, product route, license decision, public disclosure, or Gate 5
-closure. The fixed Gate 5 status above is not changed by a passing local test,
-an authenticated HTTP callback, a content hash, an Object-Lock receipt, or this
+authorize or report a RunPod job, admitted scientific GPU execution, experiment,
+scientific result, canon change, product route, license decision, public
+disclosure, or Gate 5 closure. Retained local GPU and joined mechanics are bound
+by `GATE5_ENGINEERING_EXECUTION_RECONCILIATION_v0.1.json`; they do not change
+this protocol's normative schema or authority. The fixed Gate 5 status above is
+not changed by a passing local test, an authenticated HTTP callback, a content
+hash, an Object-Lock receipt, or this
 document.
 
 ## 1. Purpose and source boundary
@@ -869,7 +872,7 @@ local scope:
 |---|---|---|
 | `tests/cas_harness_v2/test_research_control_kernel.py` | strict preregistration/chain/outcome-access/packet structure, exact-byte artifact identities, failure-preserving criteria, and fixed Ring-4 governance | live worker integration, durable trust, authenticated execution, external review, or science |
 | `tests/cas_harness_v2/test_gate5_verifier_redteam.py` | adversarial loader/carrier/mutation boundaries admitted by the Gate 5 verifier | a trusted host, independent attestation, or live execution |
-| `tests/cas_harness_v2/test_worker_protocol.py` | 30 focused tests plus 38 subtests cover exact authorization/terminal loading, current FleetJob-shaped mapping, lease model/preregistration equality, ordered output accounting, rejection of transport-nonce fields, structural run-nonce caveat, application-time bounds, completed/unassessed and failed/quarantined-partial effects, exact sealed-outcome replay constraints, fresh replay, collisions, prospective authorization construction, and immutable governance | launcher authorship, independently authenticated durable run consumption, trusted time, callback identity, Object Lock, live execution, or science |
+| `tests/cas_harness_v2/test_worker_protocol.py` | 35 focused tests plus 45 subtests cover exact authorization/terminal loading, current FleetJob-shaped mapping, lease model/preregistration equality, ordered output accounting, rejection of transport-nonce fields, structural run-nonce caveat, application-time bounds, completed/unassessed and failed/quarantined-partial effects, exact sealed-outcome replay constraints, fresh replay, collisions, prospective authorization construction, strict completed/failed terminal-receipt building and replay rejection, and immutable governance | launcher authorship, independently authenticated durable run consumption, trusted time, callback identity, Object Lock, live execution, or science |
 | `noetic-compass-scaffold/noetic-compass/tests/test_fleet_service_auth.py::test_nonce_replay_and_concurrent_duplicates_have_exactly_one_winner` | one callback nonce has one successful durable compare-and-set consumer under local test storage | one-use research-run authorization or host-loss behavior |
 | `noetic-compass-scaffold/noetic-compass/tests/test_fleet_service_auth.py::test_expiry_revocation_and_consumed_nonce_survive_sqlite_restart` | credential/revocation/callback-nonce state remains after closing and reopening a local SQLite file | process-crash, OS-restart, power-loss, shared-host loss, trusted time, or experiment-registry completeness |
 | `noetic-compass-scaffold/noetic-compass/tests/test_fleet_service_auth.py::test_authenticated_callback_exposes_exact_durable_nonce_receipt_after_restart` | safe callback receipt re-read after close/reopen binds nonce row schema, ID, credential, uppercase digest, byte length, parent/trace scope, and local-file persistence | crash/OS-restart/power-loss durability, run-nonce issuance/consumption, trusted time, or execution attestation |
@@ -976,8 +979,9 @@ truth of documentation or data, validate scientific interpretation, or turn a
 structurally complete Packet into established science.
 
 The `$107.00` RunPod balance is user-reported; no provider billing ledger or
-balance receipt was inspected, no RunPod/GPU/paid job was launched, and known
-spend for this tranche is `$0.00`. No RunPod execution or funding action is
-required to author or locally verify this protocol candidate. An eventual GPU job remains prohibited until the
-pre-execution engineering, security, trust, protocol-freeze, budget, and
-explicit-authorization gates are satisfied.
+balance receipt was inspected, no RunPod or paid job was launched, retained
+local GPU provider calls were zero, and known spend for this tranche is `$0.00`.
+No RunPod execution or funding action is required to author or locally verify
+this protocol candidate. Any admitted scientific GPU job remains prohibited
+until the pre-execution engineering, security, trust, protocol-freeze, budget,
+and explicit-authorization gates are satisfied.

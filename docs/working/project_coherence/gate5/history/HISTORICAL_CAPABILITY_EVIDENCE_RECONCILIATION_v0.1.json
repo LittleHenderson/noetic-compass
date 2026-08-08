@@ -1,0 +1,279 @@
+{
+  "schema_version": "project_coherence.gate5_historical_capability_evidence_reconciliation.v0.1",
+  "document_status": "DRAFT / OPEN / NOT FROZEN",
+  "gate5_status": "OPEN",
+  "gate_decision": "KEEP_OPEN",
+  "experimental_execution_status": "NOT_STARTED",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "public_disclosure_authorized": false,
+  "product_route_authorized": false,
+  "canon_effect": "NONE",
+  "product_claim_effect": "NONE",
+  "classification": "COMPACT SOURCE-BOUND HISTORICAL CAPABILITY INVENTORY / NEGATIVE AND SHADOW EVIDENCE / NOT SCIENTIFIC ADMISSION",
+  "purpose": "Bind the recovered instruction-integrity shadow scanner and the retained Qwen prompt-injection and Pythia steering negative results to exact Git objects without promoting any scientific, capability, product, license, or rerun claim.",
+  "source_verification": {
+    "method": [
+      "git rev-parse <commit>^{commit}",
+      "git rev-parse <commit>:<path>",
+      "git cat-file -s <blob_oid>"
+    ],
+    "all_listed_commits_resolved": true,
+    "all_listed_blob_oids_and_byte_counts_resolved": true,
+    "large_historical_blobs_copied_into_gate5": false,
+    "binding_style": "COMMIT + PATH + GIT BLOB OID + BLOB BYTE COUNT"
+  },
+  "instruction_integrity_shadow_scanner": {
+    "evidence_class": "DETERMINISTIC SHADOW FIXTURE EVIDENCE ONLY",
+    "origin_commit": "63f598d14bb4f7201d6dff6f72a5ab59ba93c6c7",
+    "origin_commit_subject": "feat: add shadow instruction integrity evidence",
+    "reconciled_commit": "75898e8efde0564587f8b9f114eac2f96f256a6a",
+    "reconciled_commit_subject": "feat(harness): reconcile shadow instruction integrity",
+    "artifacts": [
+      {
+        "path": "docs/working/cas_harness_instruction_integrity_spec.md",
+        "git_blob_oid": "9dd800f4dcccdb95568590761fa309c6e3b0e7e9",
+        "blob_byte_count": 3532
+      },
+      {
+        "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_instruction_integrity.py",
+        "git_blob_oid": "aba3c590adbecea471d692194cf7b05b1ea2e981",
+        "blob_byte_count": 14432
+      },
+      {
+        "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_instruction_integrity_benchmark.py",
+        "git_blob_oid": "a5eae6e856e0c7206c1dc73efa852f4f09346e2c",
+        "blob_byte_count": 10806
+      },
+      {
+        "path": "noetic-compass-scaffold/noetic-compass/scenarios/instruction_integrity_benchmark_v0.json",
+        "git_blob_oid": "5c37b9cf1da0feaaf6410681dde0efe44d16bd1b",
+        "blob_byte_count": 6905
+      },
+      {
+        "path": "noetic-compass-scaffold/noetic-compass/scenarios/instruction_integrity_heldout_v0.json",
+        "git_blob_oid": "70aa22e236bbf8da40516a481e81da0878d9ca16",
+        "blob_byte_count": 4232
+      },
+      {
+        "path": "noetic-compass-scaffold/noetic-compass/scripts/run_instruction_integrity_benchmark.py",
+        "git_blob_oid": "b58a122c70d1290f4fd3eef3221a832cca167ccd",
+        "blob_byte_count": 1184
+      },
+      {
+        "path": "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_instruction_integrity.py",
+        "git_blob_oid": "2db080015d0124a8a40f9bfbc6d01aa5fd442775",
+        "blob_byte_count": 5340
+      },
+      {
+        "path": "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_instruction_integrity_benchmark.py",
+        "git_blob_oid": "42609aabf449d464d6f1ea91b8a21432bcbc4345",
+        "blob_byte_count": 3690
+      }
+    ],
+    "development_benchmark": {
+      "suite_id": "instruction_integrity_shadow_v0_20260610",
+      "evaluation_role": "development_benchmark",
+      "suite_sha256": "3a7dbb45b723fc9acd46c51dbc618db8a6c247d0f864f75efcd7ae56b3e13fb1",
+      "cases_run": 15,
+      "passed": 15,
+      "failed": 0,
+      "case_counts_by_lane": {
+        "clean": 4,
+        "control": 5,
+        "injected": 6
+      },
+      "passed_by_lane": {
+        "clean": 4,
+        "control": 5,
+        "injected": 6
+      },
+      "injected_recall": 1.0,
+      "benign_false_positive_rate": 0.0,
+      "overall_pass": true
+    },
+    "heldout_evaluation": {
+      "suite_id": "instruction_integrity_heldout_shadow_v0_20260729",
+      "evaluation_role": "held_out_evaluation",
+      "suite_sha256": "7d5df4cf55254353f03cdc042372182777a19c1fa06fd6bfbf0f03311a8c1819",
+      "cases_run": 12,
+      "passed": 12,
+      "failed": 0,
+      "case_counts_by_lane": {
+        "clean": 2,
+        "control": 5,
+        "injected": 5
+      },
+      "passed_by_lane": {
+        "clean": 2,
+        "control": 5,
+        "injected": 5
+      },
+      "injected_recall": 1.0,
+      "benign_false_positive_rate": 0.0,
+      "overall_pass": true,
+      "training_data": false
+    },
+    "operating_invariants": {
+      "mode": "shadow",
+      "verdict_effect": "none_shadow_only",
+      "automatic_action": "none",
+      "live_blocking": false,
+      "auto_removal": false,
+      "automatic_accept": false,
+      "flag_meaning": "FLAG_FOR_HUMAN_REVIEW IS REVIEW-ROUTING METADATA, NOT ACCEPT OR A FINAL VERDICT"
+    },
+    "observed_scope": "The exact deterministic scanner revision passed the exact 15-case development fixture and separately identified 12-case held-out fixture.",
+    "limitations": [
+      "Fixture performance is evidence only for the exact frozen cases and exact scanner revision.",
+      "The scanner is a small declared-pattern screen, not a general model-internal prompt-injection detector.",
+      "The held-out scaffold is small and is not independent external validation.",
+      "No provider, network, model, paid, live-worker, blocking, rewriting, suppression, removal, or acceptance path is exercised.",
+      "The results do not establish generalization, production defense, prevention, safety, readiness, or prompt-injection detection efficacy on a model."
+    ],
+    "capability_status": "SHADOW FIXTURE SCREEN PRESENT / GENERAL PROMPT-INJECTION DETECTION NOT ESTABLISHED"
+  },
+  "qwen_prompt_injection_v6_negative": {
+    "evidence_class": "RETAINED MATCHED-PROMPT W0 NEGATIVE RESULT",
+    "evidence_commit": "6a35633a4ed58402edf1c6558ec1f00258a9ee44",
+    "model_id": "Qwen/Qwen2.5-1.5B-Instruct",
+    "runtime_dtype": "float16",
+    "artifacts": [
+      {
+        "role": "result_summary",
+        "path": "noetic-compass-scaffold/noetic-compass/docs/working/qwen_v6_matched_prespeech_w0_result_20260615.md",
+        "git_blob_oid": "edfc10baa507cae615e3ae42b2755c07432fedb2",
+        "blob_byte_count": 4357
+      },
+      {
+        "role": "best_full_control_layer_report",
+        "path": "noetic-compass-scaffold/noetic-compass/docs/working/qwen_v6_matched_prespeech_eval_seed00_47_v2_20260615/layer_28_exploratory_threshold_low0125_high030_full.json",
+        "git_blob_oid": "a4e1f65f651cc47a405936e4053c280507297b5f",
+        "blob_byte_count": 4517
+      },
+      {
+        "role": "combined_data_gate_manifest",
+        "path": "noetic-compass-scaffold/noetic-compass/docs/working/qwen_v6_matched_chain_break_combined_gate_seed00_47_v2_20260615/combined_gate_manifest.json",
+        "git_blob_oid": "5ae0ba84996604b0adc52c75485a6dd435d5abc0",
+        "blob_byte_count": 3531
+      },
+      {
+        "role": "combined_data_screen_report",
+        "path": "noetic-compass-scaffold/noetic-compass/docs/working/qwen_v6_matched_chain_break_combined_gate_seed00_47_v2_20260615/combined_matched_screen_report.json",
+        "git_blob_oid": "0c0e31a931fd21d6088530a35112e7e2c2c8b8f4",
+        "blob_byte_count": 3663
+      }
+    ],
+    "data_readiness_gate": {
+      "status": "READY_FOR_W0_CAPTURE",
+      "row_count": 1312,
+      "chain_status_distribution": {
+        "BROKEN": 306,
+        "INTACT": 1006
+      },
+      "payload_classes": 5,
+      "mixed_exact_prompt_groups": 40,
+      "meaning": "DATA READINESS ONLY / NOT A DETECTION OR PRODUCT CLAIM"
+    },
+    "default_w0_gate": {
+      "status": "BLOCKED",
+      "high_break_risk_groups": 7,
+      "low_break_risk_groups": 7,
+      "required_groups_per_risk_class": 10,
+      "floor_result": "7 / 7 OBSERVED VS 10 / 10 REQUIRED"
+    },
+    "exploratory_valid_sized_risk_split": {
+      "layers_scanned": 29,
+      "layers_passed": 0,
+      "best_full_control_layer": 28,
+      "status": "FAIL",
+      "risk_hidden_balanced_accuracy": 0.809091,
+      "risk_text_hash_balanced_accuracy": 0.809091,
+      "hidden_minus_text_balanced_accuracy": 0.0,
+      "within_payload_permutation_p": 0.008991
+    },
+    "claim_status": "OPEN / NOT LICENSED",
+    "scientific_disposition": "NEGATIVE RESULT / INTERNAL W0 PROMPT-INJECTION DETECTOR NOT ESTABLISHED",
+    "limitations": [
+      "The READY_FOR_W0_CAPTURE data gate authorizes capture only; it licenses no detector, prevention, removal, reversal, interception, or causal claim.",
+      "Repeated exact prompts share a deterministic W0 vector in ordinary inference, so mixed outcomes do not establish sample-specific stochastic branch prediction.",
+      "The best valid-sized layer tied the text control and failed the frozen gates.",
+      "No layer passed the all-layer exploratory scan.",
+      "Do not run or infer causal steering or ablation from this W0 result."
+    ],
+    "reuse_policy": "NEGATIVE CONTROL EVIDENCE ONLY / DO NOT PROMOTE / DO NOT USE AS A STEERING TARGET / NO RERUN AUTHORIZED OR IMPLIED"
+  },
+  "pythia_steering_v6_negative": {
+    "evidence_class": "RETAINED LAYER-SPECIFICITY STEERING NEGATIVE RESULT",
+    "evidence_commit": "0d1d7aa94afd04cbb88681f905f9a9618c3cb621",
+    "execution_source_commit": "acfed1a32fc197fd88b62df96c97abf07a59ecca",
+    "run_id": "pythia160m-riv6-20260729173650e26e483ed6fae22ba30a",
+    "request_count": 1536,
+    "artifacts": [
+      {
+        "role": "execution_result",
+        "path": "docs/working/research_intervention_pythia160m_v6_execution/runs/pythia160m-riv6-20260729173650e26e483ed6fae22ba30a/result.json",
+        "git_blob_oid": "0bf792ab4855fe6df9b9735b8d78d3bb94ab9f9f",
+        "blob_byte_count": 2539956
+      },
+      {
+        "role": "independent_audit",
+        "path": "docs/working/research_intervention_pythia160m_v6_execution/runs/pythia160m-riv6-20260729173650e26e483ed6fae22ba30a/independent_audit.json",
+        "git_blob_oid": "b0b061ea0ec0c70d130229baeeaa9d529a13279c",
+        "blob_byte_count": 2611
+      },
+      {
+        "role": "terminal_evidence_manifest",
+        "path": "docs/working/research_intervention_pythia160m_v6_execution/runs/pythia160m-riv6-20260729173650e26e483ed6fae22ba30a/TERMINAL_EVIDENCE_MANIFEST.json",
+        "git_blob_oid": "0ff9d017b6346f56dfbaa3e1cca862d4447018d8",
+        "blob_byte_count": 4769
+      }
+    ],
+    "terminal_status": "FAIL_CLOSED / SCIENTIFIC_AND_CONTROL_GATES_FAILED / NON_REUSABLE / NO RETRY",
+    "audit_status": "FAIL_CLOSED",
+    "audit_numeric_contract_exact_agreement": true,
+    "scientific_readout": {
+      "common_readout_balanced_accuracy": 0.5,
+      "target_layer_spearman_rho": -1.0,
+      "off_target_to_target_point_ratio_by_sign": {
+        "-0.5": 4.232726531704558,
+        "0.5": 6.304563809268991
+      },
+      "same_norm_random_direction_ratio_by_sign": {
+        "-0.5": 2.5700177404408064,
+        "0.5": 3.9739944811979195
+      },
+      "wrong_axis_ratio_by_sign": {
+        "-0.5": 2.587795696333962,
+        "0.5": 3.9048408945255755
+      }
+    },
+    "failed_scientific_and_control_gates": [
+      "common_readout_validity",
+      "target_layer_dose_response",
+      "layer_specificity",
+      "non_layer_controls"
+    ],
+    "claim_status": "RESEARCH_ONLY / NO DECISION AUTHORITY",
+    "scientific_disposition": "NEGATIVE RESULT / STEERING CAPABILITY NOT ESTABLISHED",
+    "limitations": [
+      "Exact executor-auditor numeric agreement validates the retained calculation and artifact path, not the scientific hypothesis.",
+      "The common readout was at chance and the target-layer dose response ran in the wrong direction.",
+      "Off-target layers, same-norm random directions, and wrong-axis controls were too large.",
+      "The run establishes no live steering, safety steering, prompt-injection detection, blocking, removal, prevention, or product capability.",
+      "The terminal evidence is NON_REUSABLE / NO RETRY and cannot be converted into a positive claim by reinterpretation."
+    ],
+    "reuse_policy": "NON_REUSABLE / NO RETRY / NEGATIVE CONTROL EVIDENCE ONLY / NO RERUN AUTHORIZED OR IMPLIED"
+  },
+  "promotion_and_rerun_policy": {
+    "scientific_promotion": "PROHIBITED",
+    "capability_promotion": "PROHIBITED",
+    "product_promotion": "PROHIBITED",
+    "license_promotion": "PROHIBITED",
+    "gate_promotion": "PROHIBITED",
+    "rerun_inference": "PROHIBITED",
+    "binding_rule": "No item in this inventory authorizes, requests, predicts, or implies a rerun. Any future experiment requires a separately frozen protocol, explicit authorization, matched controls, new execution evidence, and independent review. A future run must not rewrite or reinterpret these retained negative results."
+  },
+  "claim_boundary": "HISTORICAL SHADOW AND NEGATIVE EVIDENCE ONLY / NO GENERAL PROMPT-INJECTION DETECTION CLAIM / NO STEERING CAPABILITY CLAIM / NO PREVENTION OR REMOVAL CLAIM / NO SCIENTIFIC ADMISSION / NO PRODUCT VALIDATION / NO ACCEPT / GATE 5 OPEN / RING 4 / EXPERIMENT NOT_STARTED / NOT LICENSED / HELD / NOT FROZEN / NO RERUN AUTHORIZED OR IMPLIED"
+}

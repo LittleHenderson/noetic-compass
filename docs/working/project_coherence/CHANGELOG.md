@@ -2,6 +2,49 @@
 
 All dates use the repository's working timezone. This changelog records control-package changes, not product releases.
 
+## 2026-08-07 - Gate 5 retained-evidence reconciliation
+
+### Added
+
+- `gate5/GATE5_ENGINEERING_EXECUTION_RECONCILIATION_v0.1.json` canonically
+  binds the retained local engineering chronology: GPU canary v0.1
+  fail-closed startup, GPU canary v0.2 six-arm mechanical pass, joined v0.1
+  pre-model fail-closed run, and joined v0.2 one-invocation
+  `SUCCESS_NO_PACKET_RECORDED` run. It records zero provider calls, `$0.00`
+  known spend, and the explicit absence of detector, steering, Packet-v2,
+  authenticated-science, replication, product, and disclosure claims.
+- `gate5/history/HISTORICAL_CAPABILITY_EVIDENCE_RECONCILIATION_v0.1.json`
+  binds the recovered deterministic instruction-integrity shadow scanner
+  (development fixture 15/15, held-out fixture 12/12, `mode=shadow`,
+  positive disposition `FLAG_FOR_HUMAN_REVIEW` only) and the retained
+  Qwen V6 prompt-injection and Pythia-160M steering negative studies to
+  exact Git commits and blob OIDs. Promotion and rerun inference are
+  prohibited; the negatives remain controls against outcome shopping.
+
+### Corrected
+
+- Refreshed stale suite receipts to the already-committed test surface:
+  Harness v2 `155` tests + `106` subtests, strict worker-protocol `35` + `45`,
+  complete worker `391/391`, prospective lifecycle `134/134`, admitted
+  adapter/reconciliation `98/98`, and the retained-evidence suite `27/27`.
+  No test was added or relaxed; the historical v0.2 OCI candidate keeps its
+  own `364/364` issuance receipt unrewritten.
+- The Gate 5 verifier now redirects the integrated Gate 4 `compileall`
+  bytecode into a verifier-owned temporary directory so a dependency check
+  cannot leave `__pycache__` mutations inside the postflight-hashed surface,
+  and verifies the historical container receipt against its exact
+  source-commit blobs instead of current worker bytes.
+- The raw-text status guard accepts the phrase `Gate 5 closed` only inside
+  the explicit forbidden-wording list and continues to reject it everywhere
+  else.
+
+### Boundaries
+
+Gate 5 remains `OPEN / KEEP_OPEN`; engineering remains `RING 4`; the
+scientific experiment remains `NOT_STARTED`; license/disclosure/canon remain
+`NOT LICENSED / HELD / NOT FROZEN`. This tranche reconciles retained evidence
+only; it creates no new execution, claim, or authority.
+
 ## 2026-08-06 - Gate 5 explicit controller-continuation successor
 
 ### Added

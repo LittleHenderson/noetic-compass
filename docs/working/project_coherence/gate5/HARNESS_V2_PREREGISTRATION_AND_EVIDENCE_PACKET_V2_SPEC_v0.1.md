@@ -254,11 +254,11 @@ outcome access, exact completion binding, bypass-mutated outcome-event replay,
 retained-byte registry mutation, audit contradictions, normalized cross-role
 aliases, and all four repository-known v1 labels.
 
-Current focused validation: `150 passed, 99 subtests passed` under Python 3.14
+Current focused validation: `155 passed, 106 subtests passed` under Python 3.14
 with site startup and bytecode generation disabled. It comprises 94 active
-kernel tests, 30 strict worker-protocol tests, four historical-recovery tests,
+kernel tests, 35 strict worker-protocol tests, four historical-recovery tests,
 and 22 Gate 5 verifier red-team tests. Its same-process executed-node digest is
-`6BF70F5569C4BCA5B7D896382A099FC966E9C0622B3A3694BE0B330B66048756`.
+`CF033F2E7F519AAD6738D596A694728FD4173CFA12DD8A8FE094823215D4CF8A`.
 This ephemeral local receipt is checked inside the verifier but is not retained
 under trusted time or WORM authority. It proves repository-local controls only;
 it is not live execution, independent reproduction, scientific evidence, or
@@ -288,12 +288,15 @@ BuildKit, SPDX, SLSA, and current Scout 1.21 payloads. The current direct scan i
 fix-deferred and one `dpkg` record remains a scanner/vendor conflict. The SARIF
 does not embed the candidate invocation, scanner database/process transcripts
 are absent, and linked Ubuntu vendor pages were not snapshotted. No independent
-trust root or complete tool-execution replay exists. One CPU-only,
-non-scientific engineering preflight
-loaded the exact Pythia artifacts and ran the offline canary. It was not an
-authorized or admitted experiment and created no GPU run, Evidence Packet, or
-scientific result; experimental execution remains `NOT_STARTED` and
-`G5-ENGINEERING-003` remains `OPEN_SECURITY`.
+trust root or complete tool-execution replay exists. At that candidate
+checkpoint, one CPU-only non-scientific preflight had loaded the exact Pythia
+artifacts and run the offline canary. Later retained local engineering runs
+completed a six-arm GPU mechanics canary and one joined controller-worker model
+invocation on non-admitted, single-host, non-WORM routes. They created no
+Evidence Packet and established neither prompt-injection detection nor steering
+efficacy. Experimental execution remains `NOT_STARTED` and
+`G5-ENGINEERING-003` remains `OPEN_SECURITY`. The normative Packet-v2 schema and
+admission rules in this specification are unchanged by those diagnostics.
 
 The broad active LF rules in `.gitattributes` are followed by later `-text`
 exceptions for `api/services/cas_harness_pythia160m_*.py`,

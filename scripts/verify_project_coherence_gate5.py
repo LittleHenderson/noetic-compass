@@ -71,6 +71,13 @@ CANDIDATE_RECEIPT_PATH = (
 RAW_BUILD_SECURITY_RECEIPT_PATH = (
     GATE5_DIR / "GATE5_RAW_BUILD_AND_SECURITY_EVIDENCE_RECEIPT_v0.1.json"
 )
+ENGINEERING_EXECUTION_RECONCILIATION_PATH = (
+    GATE5_DIR / "GATE5_ENGINEERING_EXECUTION_RECONCILIATION_v0.1.json"
+)
+HISTORICAL_CAPABILITY_RECONCILIATION_PATH = (
+    GATE5_DIR / "history" / "HISTORICAL_CAPABILITY_EVIDENCE_RECONCILIATION_v0.1.json"
+)
+SHADOW_SCANNER_SOURCE_COMMIT = "75898e8efde0564587f8b9f114eac2f96f256a6a"
 RAW_EVIDENCE_DIR = (
     GATE5_DIR / "evidence" / "raw" / "candidate_v0.2_20260805"
 )
@@ -143,6 +150,8 @@ REQUIRED_CONTROL_ARTIFACTS = {
     "docs/working/project_coherence/gate5/GATE5_MODEL_AND_DEPENDENCY_BINDING_v0.1.json",
     "docs/working/project_coherence/gate5/GATE5_DEPENDENCY_AND_CONTAINER_CANDIDATE_RECEIPT_v0.2.json",
     "docs/working/project_coherence/gate5/GATE5_RAW_BUILD_AND_SECURITY_EVIDENCE_RECEIPT_v0.1.json",
+    "docs/working/project_coherence/gate5/GATE5_ENGINEERING_EXECUTION_RECONCILIATION_v0.1.json",
+    "docs/working/project_coherence/gate5/history/HISTORICAL_CAPABILITY_EVIDENCE_RECONCILIATION_v0.1.json",
     "docs/working/project_coherence/gate5/GATE5_LOCAL_WINDOWS_TEST_RUNNER_LOCK_v0.1.json",
     "docs/working/project_coherence/gate5/history/HISTORICAL_HARNESS_V1_V4_CURRENT_TREE_SHA256.json",
     "docs/working/project_coherence/gate5/history/HISTORICAL_HARNESS_V1_V4_RECOVERY_INVENTORY.md",
@@ -150,6 +159,21 @@ REQUIRED_CONTROL_ARTIFACTS = {
     "scripts/build_project_coherence_gate5_manifest.py",
     "scripts/build_project_coherence_gate5_runner_lock.py",
     "scripts/run_project_coherence_gate5_pytest.py",
+    "scripts/run_project_coherence_gate5_local_gpu_canary.py",
+    "scripts/run_project_coherence_gate5_joined_local_gpu_smoke.py",
+    "tests/model_smoke/test_gate5_local_gpu_canary.py",
+    "tests/model_smoke/test_gate5_joined_local_gpu_smoke.py",
+    "docs/working/cas_harness_instruction_integrity_spec.md",
+    "docs/working/cas_harness_research_only_steering_plan.md",
+    f"{API_ROOT_REL}/api/routes/evidence.py",
+    f"{API_ROOT_REL}/api/services/cas_harness_instruction_integrity.py",
+    f"{API_ROOT_REL}/api/services/cas_harness_instruction_integrity_benchmark.py",
+    f"{API_ROOT_REL}/scenarios/instruction_integrity_benchmark_v0.json",
+    f"{API_ROOT_REL}/scenarios/instruction_integrity_heldout_v0.json",
+    f"{API_ROOT_REL}/scripts/run_instruction_integrity_benchmark.py",
+    f"{API_ROOT_REL}/tests/test_cas_harness_instruction_integrity.py",
+    f"{API_ROOT_REL}/tests/test_cas_harness_instruction_integrity_benchmark.py",
+    f"{API_ROOT_REL}/tests/test_evidence_routes.py",
     f"{WORKER_ROOT_REL}/Dockerfile",
     f"{WORKER_ROOT_REL}/.dockerignore",
     f"{WORKER_ROOT_REL}/requirements.in",
@@ -164,6 +188,7 @@ REQUIRED_CONTROL_ARTIFACTS = {
 # or configuration file cannot appear outside the manifest.
 EXACT_ALL_FILE_SURFACE_DIRS = (
     "src/cas_harness_v2",
+    "src/cas_core_v8",
     "tests/cas_harness_v2",
     f"{API_ROOT_REL}/cas_harness_v2",
     f"{WORKER_ROOT_REL}/app",
@@ -341,10 +366,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "targets": ["tests/cas_harness_v2"],
         "pytest_plugins": [],
         "repo_import_roots": ["src", "tests/cas_harness_v2"],
-        "expected_tests": 150,
-        "expected_subtests": 99,
+        "expected_tests": 155,
+        "expected_subtests": 106,
         "expected_test_ids_sha256": (
-            "6BF70F5569C4BCA5B7D896382A099FC966E9C0622B3A3694BE0B330B66048756"
+            "CF033F2E7F519AAD6738D596A694728FD4173CFA12DD8A8FE094823215D4CF8A"
         ),
     },
     "Live trace worker complete": {
@@ -352,10 +377,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "targets": ["tests"],
         "pytest_plugins": ["pytest_asyncio.plugin"],
         "repo_import_roots": [f"{WORKER_ROOT_REL}/scripts", API_ROOT_REL],
-        "expected_tests": 364,
+        "expected_tests": 391,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "94566203B3E0FF79B3224C1C5A073698CA99D3C08BC1119A9082E42AF4B178BD"
+            "FD8367B867CB6589CC50424D7A1CECABC56BF85331BB4FD87B844E7FD3004580"
         ),
     },
     "Live trace worker numeric red team": {
@@ -425,10 +450,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
             "tests/cas_harness_v2",
             f"{API_ROOT_REL}/tests",
         ],
-        "expected_tests": 130,
+        "expected_tests": 134,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "0CA9217040958125285BFA0F6A7C6D517808B4AC4F4078C152620190767B6BB0"
+            "67F7507579749E11E27714E8513F6909E26A503A8DD18112CC402207D9735940"
         ),
     },
     "Harness v2 admitted adapter and bounded reconciliation": {
@@ -447,10 +472,38 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
             "tests/cas_harness_v2",
             f"{API_ROOT_REL}/tests",
         ],
-        "expected_tests": 90,
+        "expected_tests": 98,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "761038779E00511179D4FC5AA3522829D9BDEFB37C231061D04FB3AAD541F733"
+            "65352B8B59CB654E449BA4A1CE8459D7109CC5B21E33F64AEAB6E2EA6EEB3C19"
+        ),
+    },
+    "Gate 5 retained local GPU and joined evidence": {
+        "working_directory": ".",
+        "targets": [
+            "tests/model_smoke/test_gate5_local_gpu_canary.py",
+            "tests/model_smoke/test_gate5_joined_local_gpu_smoke.py",
+        ],
+        "pytest_plugins": [],
+        "repo_import_roots": ["src", API_ROOT_REL],
+        "expected_tests": 27,
+        "expected_subtests": 0,
+        "expected_test_ids_sha256": (
+            "DC0C0ED22E0F158F014277B9D3CD26AD21D6A8FCDFBE1E76A67D09406975C952"
+        ),
+    },
+    "Instruction-integrity shadow scanner": {
+        "working_directory": API_ROOT_REL,
+        "targets": [
+            "tests/test_cas_harness_instruction_integrity.py",
+            "tests/test_cas_harness_instruction_integrity_benchmark.py",
+        ],
+        "pytest_plugins": [],
+        "repo_import_roots": [],
+        "expected_tests": 12,
+        "expected_subtests": 0,
+        "expected_test_ids_sha256": (
+            "822FD7113370AC9BB6C2DAFAF0BC33507A199860FA8F47F7C1DE35E880ABEDEE"
         ),
     },
 }
@@ -547,10 +600,10 @@ REQUIRED_SUBSUITE_DIGESTS = {
     "worker protocol kernel": {
         "targets": ["tests/cas_harness_v2/test_worker_protocol.py"],
         "pytest_plugins": [],
-        "expected_tests": 30,
-        "expected_subtests": 38,
+        "expected_tests": 35,
+        "expected_subtests": 45,
         "expected_test_ids_sha256": (
-            "534CF4550FF56F3EA5F4235680CDB89A91784D1CEE0B7CB7ABDF9DE1C7B3E7FF"
+            "73C14349373376F49C380A84E8629C82167B5BF0F73415A45F197D99DE97F807"
         ),
     },
 }
@@ -1132,6 +1185,8 @@ def artifact_role(path: str) -> str:
         return "gate5_api_runtime_dependency"
     if path.startswith("src/cas_harness_v2/"):
         return "gate5_control_kernel_source"
+    if path.startswith("src/cas_core_v8/"):
+        return "gate5_bound_cas_core_dependency"
     if path.startswith(f"{API_ROOT_REL}/cas_harness_v2/"):
         return "gate5_packaged_control_kernel_mirror"
     if path.startswith("tests/cas_harness_v2/"):
@@ -1467,11 +1522,18 @@ def verify_gate4_dependency(
         "Gate 4 and Gate 5 bind different claim-ledger bytes",
     )
 
-    stdout, _ = run_command(
-        [sys.executable, "-B", "scripts/verify_project_coherence_gate4.py"],
-        cwd=ROOT,
-        timeout=480,
-    )
+    # Gate 4 deliberately runs compileall. Redirect those generated bytecode
+    # files to a verifier-owned temporary tree so dependency verification cannot
+    # mutate the Gate 5 source/evidence surface that is rehashed postflight.
+    with tempfile.TemporaryDirectory(prefix="gate5-gate4-pycache-") as raw_temp:
+        pycache_prefix = Path(raw_temp) / "pycache"
+        pycache_prefix.mkdir()
+        stdout, _ = run_command(
+            [sys.executable, "-B", "scripts/verify_project_coherence_gate4.py"],
+            cwd=ROOT,
+            timeout=480,
+            extra_env={"PYTHONPYCACHEPREFIX": str(pycache_prefix)},
+        )
     require(
         "Project Coherence integrated Gate 4 verification: PASS" in stdout,
         "integrated Gate 4 dependency receipt is missing",
@@ -1931,6 +1993,792 @@ def verify_history() -> tuple[int, int, str]:
     return len(files), total_bytes, inventory_digest
 
 
+def verify_engineering_execution_reconciliation(
+    manifest_artifacts: dict[str, dict[str, Any]],
+) -> None:
+    receipt = load_json(ENGINEERING_EXECUTION_RECONCILIATION_PATH)
+    require(isinstance(receipt, dict), "engineering-execution reconciliation is missing")
+    require_exact_keys(
+        receipt,
+        {
+            "schema_version",
+            "document_status",
+            "gate5_status",
+            "gate_decision",
+            "experimental_execution_status",
+            "admission_ring",
+            "license_status",
+            "disclosure_status",
+            "public_disclosure_authorized",
+            "product_route_authorized",
+            "canon_effect",
+            "product_claim_effect",
+            "classification",
+            "local_gpu_canary",
+            "joined_controller_worker",
+            "provider_accounting",
+            "claim_boundary",
+        },
+        label="engineering-execution reconciliation",
+    )
+    require(
+        receipt.get("schema_version")
+        == "project_coherence.gate5_engineering_execution_reconciliation.v0.1",
+        "unexpected engineering-execution reconciliation schema",
+    )
+    verify_governance_header(receipt, label="engineering-execution reconciliation")
+    require(
+        receipt.get("product_route_authorized") is False,
+        "engineering-execution reconciliation authorizes a product route",
+    )
+    require(
+        receipt.get("classification")
+        == "CANONICAL INGESTION OF RETAINED LOCAL ENGINEERING EVIDENCE / NOT SCIENTIFIC ADMISSION",
+        "engineering-execution reconciliation promotes retained mechanics",
+    )
+
+    def _verify_bound_runtime_receipt(
+        record: Any,
+        *,
+        label: str,
+        expected_keys: set[str],
+        expected_values: dict[str, Any],
+    ) -> dict[str, Any]:
+        require(isinstance(record, dict), f"{label} binding is missing")
+        require_exact_keys(record, expected_keys, label=f"{label} binding")
+        for field, expected in expected_values.items():
+            require(record.get(field) == expected, f"{label} field {field!r} drifted")
+        raw_path = canonical_repo_path(record.get("runtime_receipt"), label=label)
+        require(raw_path in manifest_artifacts, f"{label} is not hash-bound by Gate 5")
+        path = ROOT / Path(*PurePosixPath(raw_path).parts)
+        observation = observe_regular_file(path, anchor=FILESYSTEM_ANCHOR)
+        require(
+            observation.sha256.lower() == record.get("runtime_receipt_sha256")
+            and observation.byte_count == record.get("runtime_receipt_bytes"),
+            f"{label} byte binding drifted",
+        )
+        payload = load_json(path)
+        require(isinstance(payload, dict), f"{label} payload is not an object")
+        require(
+            payload.get("run_id") == record.get("run_id")
+            and payload.get("status") == record.get("status"),
+            f"{label} payload identity/status drifted",
+        )
+        return payload
+
+    local = receipt.get("local_gpu_canary")
+    require(isinstance(local, dict), "local GPU canary reconciliation is missing")
+    require_exact_keys(local, {"predecessor", "successor"}, label="local GPU canary")
+    local_predecessor = _verify_bound_runtime_receipt(
+        local.get("predecessor"),
+        label="local GPU predecessor",
+        expected_keys={
+            "run_id",
+            "runtime_receipt",
+            "runtime_receipt_sha256",
+            "runtime_receipt_bytes",
+            "status",
+            "classification",
+        },
+        expected_values={
+            "run_id": "gate5-pythia-canary-20260807T032759Z-bd28ae7e5a85",
+            "runtime_receipt_sha256": "476b509b74af27049099611c4b1a6f4d31e64c5f000cb5119e0befb893e673b6",
+            "runtime_receipt_bytes": 5057,
+            "status": "ENGINEERING GPU CANARY TERMINAL / FAIL_CLOSED",
+            "classification": "RETAINED INFRASTRUCTURE STARTUP FAILURE",
+        },
+    )
+    require(
+        local_predecessor.get("experiment_status_effect")
+        == "LOCAL_CANARY_EXECUTED / GATE5 SCIENTIFIC EXPERIMENT REMAINS NOT_STARTED",
+        "local GPU predecessor promotes scientific execution",
+    )
+    local_successor = _verify_bound_runtime_receipt(
+        local.get("successor"),
+        label="local GPU successor",
+        expected_keys={
+            "run_id",
+            "runtime_receipt",
+            "runtime_receipt_sha256",
+            "runtime_receipt_bytes",
+            "status",
+            "arms_completed",
+            "model_id",
+            "model_revision",
+            "runtime_dtype",
+            "hardware",
+            "mechanics_observed",
+            "prompt_injection_detector_status",
+            "steering_efficacy_status",
+            "replication_status",
+        },
+        expected_values={
+            "run_id": "gate5-pythia-canary-20260807T035947Z-9f81c34de1b6",
+            "runtime_receipt_sha256": "a31064b998dd63366c00501afffb32e4fae044f79449f25d6719feb1a293f8ac",
+            "runtime_receipt_bytes": 50746,
+            "status": "ENGINEERING GPU CANARY COMPLETE / MECHANICAL PASS",
+            "arms_completed": 6,
+            "model_id": "EleutherAI/pythia-160m",
+            "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+            "runtime_dtype": "torch.bfloat16",
+            "hardware": "NVIDIA GeForce RTX 4070 Laptop GPU",
+            "prompt_injection_detector_status": "NOT VALIDATED / OBSERVED HEURISTIC DISCRIMINATION 0.0",
+            "steering_efficacy_status": "NOT ESTABLISHED / STRUCTURALLY_VALID FALSE / OUTPUT DELTA UNATTRIBUTED",
+            "replication_status": "POST-FAILURE ADAPTED / NOT INDEPENDENTLY REPLICATED",
+        },
+    )
+    require(
+        local.get("successor", {}).get("mechanics_observed")
+        == [
+            "REAL MODEL LOAD",
+            "ACTIVATION CAPTURE",
+            "HOOK FIRING",
+            "ACTIVATION CHANGE",
+            "ABLATION AND MATCHED-CONTROL EXECUTION",
+            "HASH-BOUND TERMINAL RECEIPT",
+        ]
+        and len(local_successor.get("arm_summaries", [])) == 6
+        and local_successor.get("mechanical_assessment", {}).get("status") == "PASS"
+        and local_successor.get("experiment_status_effect")
+        == "LOCAL_CANARY_EXECUTED / GATE5 SCIENTIFIC EXPERIMENT REMAINS NOT_STARTED",
+        "local GPU successor mechanics receipt drifted or promotes efficacy",
+    )
+
+    joined = receipt.get("joined_controller_worker")
+    require(isinstance(joined, dict), "joined execution reconciliation is missing")
+    require_exact_keys(joined, {"predecessor", "successor"}, label="joined execution")
+    joined_predecessor = _verify_bound_runtime_receipt(
+        joined.get("predecessor"),
+        label="joined predecessor",
+        expected_keys={
+            "run_id",
+            "runtime_receipt",
+            "runtime_receipt_sha256",
+            "runtime_receipt_bytes",
+            "status",
+            "failure_phase",
+            "model_invocation_count",
+        },
+        expected_values={
+            "run_id": "gate5-joined-20260807T061801Z-dae9471700c1",
+            "runtime_receipt_sha256": "67f69744a6a89a7cd30c6769e2d2cdf1d840e7bb79002fdc8450ce99675b29f9",
+            "runtime_receipt_bytes": 2258,
+            "status": "FAIL_CLOSED",
+            "failure_phase": "PRE-MODEL NETWORK-NONE VERIFIER",
+            "model_invocation_count": 0,
+        },
+    )
+    require(
+        joined_predecessor.get("model_invocation_count") == 0
+        and joined_predecessor.get("packet_status") == "NOT CREATED",
+        "joined predecessor negative evidence drifted",
+    )
+    joined_successor = _verify_bound_runtime_receipt(
+        joined.get("successor"),
+        label="joined successor",
+        expected_keys={
+            "run_id",
+            "runtime_receipt",
+            "runtime_receipt_sha256",
+            "runtime_receipt_bytes",
+            "status",
+            "model_invocation_count",
+            "reconciled",
+            "packet_status",
+            "scientific_efficacy",
+            "transport",
+            "storage_authority",
+            "route_status",
+        },
+        expected_values={
+            "run_id": "gate5-joined-20260807T063024Z-5f22d298b5db",
+            "runtime_receipt_sha256": "e926723814539814b981978aa013f28cadd46f635fab57f43eab5b0488648bbd",
+            "runtime_receipt_bytes": 3607,
+            "status": "SUCCESS_NO_PACKET_RECORDED",
+            "model_invocation_count": 1,
+            "reconciled": True,
+            "packet_status": "NOT CREATED",
+            "scientific_efficacy": "NOT ESTABLISHED",
+            "transport": "DOCKER_EXEC_LOOPBACK / NETWORK_NONE / LOCAL_ONLY",
+            "storage_authority": "LOCAL SINGLE-HOST / NOT WORM / NON-PRODUCTION",
+            "route_status": "NON-ADMITTED LOCAL ENGINEERING ROUTE",
+        },
+    )
+    joined_result = joined_successor.get("joined_result")
+    require(
+        joined_successor.get("model_invocation_count") == 1
+        and joined_successor.get("packet_status") == "NOT CREATED"
+        and joined_successor.get("scientific_efficacy") == "NOT ESTABLISHED"
+        and isinstance(joined_result, dict)
+        and joined_result.get("reconciled") is True
+        and joined_result.get("status") == "SUCCESS_NO_PACKET_RECORDED",
+        "joined successor mechanics receipt drifted or promotes science",
+    )
+
+    accounting = receipt.get("provider_accounting")
+    require(
+        accounting
+        == {
+            "runpod_used": False,
+            "provider_calls": 0,
+            "known_spend_usd": "0.00",
+            "reported_available_balance_usd": "107.00",
+            "balance_evidence_class": "USER REPORTED / PROVIDER LEDGER NOT INSPECTED",
+        },
+        "engineering-execution provider accounting drifted",
+    )
+    boundary = receipt.get("claim_boundary")
+    require(
+        isinstance(boundary, str)
+        and "NO PROMPT-INJECTION DETECTION CLAIM" in boundary
+        and "NO STEERING EFFICACY CLAIM" in boundary
+        and "NO EVIDENCE PACKET" in boundary
+        and "EXPERIMENT NOT_STARTED" in boundary
+        and "GATE 5 OPEN" in boundary
+        and "NOT LICENSED" in boundary
+        and "HELD" in boundary,
+        "engineering-execution claim boundary is incomplete",
+    )
+
+
+def verify_historical_capability_reconciliation(
+    manifest_artifacts: dict[str, dict[str, Any]],
+) -> None:
+    inventory = load_json(HISTORICAL_CAPABILITY_RECONCILIATION_PATH)
+    require(isinstance(inventory, dict), "historical capability inventory is missing")
+    require_exact_keys(
+        inventory,
+        {
+            "schema_version",
+            "document_status",
+            "gate5_status",
+            "gate_decision",
+            "experimental_execution_status",
+            "admission_ring",
+            "license_status",
+            "disclosure_status",
+            "public_disclosure_authorized",
+            "product_route_authorized",
+            "canon_effect",
+            "product_claim_effect",
+            "classification",
+            "purpose",
+            "source_verification",
+            "instruction_integrity_shadow_scanner",
+            "qwen_prompt_injection_v6_negative",
+            "pythia_steering_v6_negative",
+            "promotion_and_rerun_policy",
+            "claim_boundary",
+        },
+        label="historical capability inventory",
+    )
+    require(
+        inventory.get("schema_version")
+        == "project_coherence.gate5_historical_capability_evidence_reconciliation.v0.1",
+        "historical capability inventory schema drifted",
+    )
+    verify_governance_header(inventory, label="historical capability inventory")
+    require(
+        inventory.get("classification")
+        == "COMPACT SOURCE-BOUND HISTORICAL CAPABILITY INVENTORY / NEGATIVE AND SHADOW EVIDENCE / NOT SCIENTIFIC ADMISSION",
+        "historical capability inventory classification promotes evidence",
+    )
+    require(
+        inventory.get("product_route_authorized") is False
+        and inventory.get("purpose")
+        == "Bind the recovered instruction-integrity shadow scanner and the retained Qwen prompt-injection and Pythia steering negative results to exact Git objects without promoting any scientific, capability, product, license, or rerun claim.",
+        "historical capability inventory authorizes a product route or changes purpose",
+    )
+    inventory_path = HISTORICAL_CAPABILITY_RECONCILIATION_PATH.relative_to(ROOT).as_posix()
+    require(
+        inventory_path in manifest_artifacts,
+        "historical capability inventory is not bound by the Gate 5 manifest",
+    )
+    source_verification = inventory.get("source_verification")
+    require(
+        source_verification
+        == {
+            "method": [
+                "git rev-parse <commit>^{commit}",
+                "git rev-parse <commit>:<path>",
+                "git cat-file -s <blob_oid>",
+            ],
+            "all_listed_commits_resolved": True,
+            "all_listed_blob_oids_and_byte_counts_resolved": True,
+            "large_historical_blobs_copied_into_gate5": False,
+            "binding_style": "COMMIT + PATH + GIT BLOB OID + BLOB BYTE COUNT",
+        },
+        "historical capability source-verification contract drifted",
+    )
+
+    def _git_stdout(arguments: list[str], *, label: str) -> str:
+        completed = subprocess.run(
+            ["git", *arguments],
+            cwd=ROOT,
+            env=_subprocess_environment(),
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            capture_output=True,
+            check=False,
+        )
+        require(
+            completed.returncode == 0,
+            f"{label} is unavailable: {completed.stderr.strip()}",
+        )
+        return completed.stdout.strip()
+
+    def _verify_commit(commit: Any, *, expected: str, label: str) -> str:
+        require(commit == expected, f"{label} commit identity drifted")
+        resolved = _git_stdout(
+            ["rev-parse", "--verify", f"{expected}^{{commit}}"],
+            label=f"{label} commit",
+        )
+        require(resolved == expected, f"{label} commit does not resolve exactly")
+        return expected
+
+    def _verify_artifacts(
+        artifacts: Any,
+        *,
+        commit: str,
+        expected: dict[str, dict[str, Any]],
+        label: str,
+    ) -> None:
+        require(isinstance(artifacts, list), f"{label} artifacts are missing")
+        require(len(artifacts) == len(expected), f"{label} artifact count drifted")
+        observed: dict[str, dict[str, Any]] = {}
+        for index, artifact in enumerate(artifacts):
+            require(isinstance(artifact, dict), f"{label} artifact {index} is malformed")
+            expected_keys = {"path", "git_blob_oid", "blob_byte_count"}
+            if "role" in expected[next(iter(expected))]:
+                expected_keys.add("role")
+            require_exact_keys(
+                artifact,
+                expected_keys,
+                label=f"{label} artifact {index}",
+            )
+            path = artifact.get("path")
+            require(isinstance(path, str) and path in expected, f"{label} path drifted")
+            require(path not in observed, f"{label} duplicates artifact path {path!r}")
+            expected_record = expected[path]
+            require(
+                artifact.get("git_blob_oid") == expected_record["git_blob_oid"]
+                and artifact.get("blob_byte_count") == expected_record["blob_byte_count"],
+                f"{label} declared blob binding drifted for {path}",
+            )
+            if "role" in expected_record:
+                require(artifact.get("role") == expected_record["role"], f"{label} role drifted")
+            resolved_blob = _git_stdout(
+                ["rev-parse", f"{commit}:{path}"],
+                label=f"{label} blob {path}",
+            )
+            require(
+                resolved_blob == expected_record["git_blob_oid"],
+                f"{label} Git blob OID drifted for {path}",
+            )
+            resolved_bytes = _git_stdout(
+                ["cat-file", "-s", resolved_blob],
+                label=f"{label} byte count {path}",
+            )
+            require(
+                resolved_bytes == str(expected_record["blob_byte_count"]),
+                f"{label} Git blob byte count drifted for {path}",
+            )
+            observed[path] = artifact
+        require(set(observed) == set(expected), f"{label} artifact set drifted")
+
+    scanner = inventory.get("instruction_integrity_shadow_scanner")
+    require(isinstance(scanner, dict), "historical shadow-scanner evidence is missing")
+    require_exact_keys(
+        scanner,
+        {
+            "evidence_class",
+            "origin_commit",
+            "origin_commit_subject",
+            "reconciled_commit",
+            "reconciled_commit_subject",
+            "artifacts",
+            "development_benchmark",
+            "heldout_evaluation",
+            "operating_invariants",
+            "observed_scope",
+            "limitations",
+            "capability_status",
+        },
+        label="historical shadow-scanner evidence",
+    )
+    _verify_commit(
+        scanner.get("origin_commit"),
+        expected="63f598d14bb4f7201d6dff6f72a5ab59ba93c6c7",
+        label="shadow-scanner origin",
+    )
+    scanner_commit = _verify_commit(
+        scanner.get("reconciled_commit"),
+        expected=SHADOW_SCANNER_SOURCE_COMMIT,
+        label="shadow-scanner reconciliation",
+    )
+    require(
+        scanner.get("evidence_class")
+        == "DETERMINISTIC SHADOW FIXTURE EVIDENCE ONLY"
+        and scanner.get("origin_commit_subject")
+        == "feat: add shadow instruction integrity evidence"
+        and scanner.get("reconciled_commit_subject")
+        == "feat(harness): reconcile shadow instruction integrity"
+        and scanner.get("observed_scope")
+        == "The exact deterministic scanner revision passed the exact 15-case development fixture and separately identified 12-case held-out fixture."
+        and scanner.get("limitations")
+        == [
+            "Fixture performance is evidence only for the exact frozen cases and exact scanner revision.",
+            "The scanner is a small declared-pattern screen, not a general model-internal prompt-injection detector.",
+            "The held-out scaffold is small and is not independent external validation.",
+            "No provider, network, model, paid, live-worker, blocking, rewriting, suppression, removal, or acceptance path is exercised.",
+            "The results do not establish generalization, production defense, prevention, safety, readiness, or prompt-injection detection efficacy on a model.",
+        ],
+        "shadow-scanner evidence wording drifted or promotes capability",
+    )
+    scanner_artifacts = {
+        "docs/working/cas_harness_instruction_integrity_spec.md": {
+            "git_blob_oid": "9dd800f4dcccdb95568590761fa309c6e3b0e7e9",
+            "blob_byte_count": 3532,
+        },
+        f"{API_ROOT_REL}/api/services/cas_harness_instruction_integrity.py": {
+            "git_blob_oid": "aba3c590adbecea471d692194cf7b05b1ea2e981",
+            "blob_byte_count": 14432,
+        },
+        f"{API_ROOT_REL}/api/services/cas_harness_instruction_integrity_benchmark.py": {
+            "git_blob_oid": "a5eae6e856e0c7206c1dc73efa852f4f09346e2c",
+            "blob_byte_count": 10806,
+        },
+        f"{API_ROOT_REL}/scenarios/instruction_integrity_benchmark_v0.json": {
+            "git_blob_oid": "5c37b9cf1da0feaaf6410681dde0efe44d16bd1b",
+            "blob_byte_count": 6905,
+        },
+        f"{API_ROOT_REL}/scenarios/instruction_integrity_heldout_v0.json": {
+            "git_blob_oid": "70aa22e236bbf8da40516a481e81da0878d9ca16",
+            "blob_byte_count": 4232,
+        },
+        f"{API_ROOT_REL}/scripts/run_instruction_integrity_benchmark.py": {
+            "git_blob_oid": "b58a122c70d1290f4fd3eef3221a832cca167ccd",
+            "blob_byte_count": 1184,
+        },
+        f"{API_ROOT_REL}/tests/test_cas_harness_instruction_integrity.py": {
+            "git_blob_oid": "2db080015d0124a8a40f9bfbc6d01aa5fd442775",
+            "blob_byte_count": 5340,
+        },
+        f"{API_ROOT_REL}/tests/test_cas_harness_instruction_integrity_benchmark.py": {
+            "git_blob_oid": "42609aabf449d464d6f1ea91b8a21432bcbc4345",
+            "blob_byte_count": 3690,
+        },
+    }
+    _verify_artifacts(
+        scanner.get("artifacts"),
+        commit=scanner_commit,
+        expected=scanner_artifacts,
+        label="shadow-scanner",
+    )
+    scanner_comparison = subprocess.run(
+        ["git", "diff", "--quiet", scanner_commit, "--", *scanner_artifacts],
+        cwd=ROOT,
+        env=_subprocess_environment(),
+        capture_output=True,
+        check=False,
+    )
+    require(
+        scanner_comparison.returncode == 0,
+        "current shadow-scanner files differ from their reconciled source commit",
+    )
+    require(
+        scanner.get("development_benchmark")
+        == {
+            "suite_id": "instruction_integrity_shadow_v0_20260610",
+            "evaluation_role": "development_benchmark",
+            "suite_sha256": "3a7dbb45b723fc9acd46c51dbc618db8a6c247d0f864f75efcd7ae56b3e13fb1",
+            "cases_run": 15,
+            "passed": 15,
+            "failed": 0,
+            "case_counts_by_lane": {"clean": 4, "control": 5, "injected": 6},
+            "passed_by_lane": {"clean": 4, "control": 5, "injected": 6},
+            "injected_recall": 1.0,
+            "benign_false_positive_rate": 0.0,
+            "overall_pass": True,
+        }
+        and scanner.get("heldout_evaluation")
+        == {
+            "suite_id": "instruction_integrity_heldout_shadow_v0_20260729",
+            "evaluation_role": "held_out_evaluation",
+            "suite_sha256": "7d5df4cf55254353f03cdc042372182777a19c1fa06fd6bfbf0f03311a8c1819",
+            "cases_run": 12,
+            "passed": 12,
+            "failed": 0,
+            "case_counts_by_lane": {"clean": 2, "control": 5, "injected": 5},
+            "passed_by_lane": {"clean": 2, "control": 5, "injected": 5},
+            "injected_recall": 1.0,
+            "benign_false_positive_rate": 0.0,
+            "overall_pass": True,
+            "training_data": False,
+        },
+        "shadow-scanner benchmark evidence drifted",
+    )
+    require(
+        scanner.get("operating_invariants")
+        == {
+            "mode": "shadow",
+            "verdict_effect": "none_shadow_only",
+            "automatic_action": "none",
+            "live_blocking": False,
+            "auto_removal": False,
+            "automatic_accept": False,
+            "flag_meaning": "FLAG_FOR_HUMAN_REVIEW IS REVIEW-ROUTING METADATA, NOT ACCEPT OR A FINAL VERDICT",
+        }
+        and scanner.get("capability_status")
+        == "SHADOW FIXTURE SCREEN PRESENT / GENERAL PROMPT-INJECTION DETECTION NOT ESTABLISHED",
+        "shadow-scanner operating boundary drifted",
+    )
+
+    qwen = inventory.get("qwen_prompt_injection_v6_negative")
+    require(isinstance(qwen, dict), "historical Qwen V6 evidence is missing")
+    require_exact_keys(
+        qwen,
+        {
+            "evidence_class",
+            "evidence_commit",
+            "model_id",
+            "runtime_dtype",
+            "artifacts",
+            "data_readiness_gate",
+            "default_w0_gate",
+            "exploratory_valid_sized_risk_split",
+            "claim_status",
+            "scientific_disposition",
+            "limitations",
+            "reuse_policy",
+        },
+        label="historical Qwen V6 evidence",
+    )
+    qwen_commit = _verify_commit(
+        qwen.get("evidence_commit"),
+        expected="6a35633a4ed58402edf1c6558ec1f00258a9ee44",
+        label="Qwen V6 evidence",
+    )
+    require(
+        qwen.get("evidence_class") == "RETAINED MATCHED-PROMPT W0 NEGATIVE RESULT"
+        and qwen.get("limitations")
+        == [
+            "The READY_FOR_W0_CAPTURE data gate authorizes capture only; it licenses no detector, prevention, removal, reversal, interception, or causal claim.",
+            "Repeated exact prompts share a deterministic W0 vector in ordinary inference, so mixed outcomes do not establish sample-specific stochastic branch prediction.",
+            "The best valid-sized layer tied the text control and failed the frozen gates.",
+            "No layer passed the all-layer exploratory scan.",
+            "Do not run or infer causal steering or ablation from this W0 result.",
+        ],
+        "historical Qwen V6 boundary wording drifted",
+    )
+    qwen_artifacts = {
+        f"{API_ROOT_REL}/docs/working/qwen_v6_matched_prespeech_w0_result_20260615.md": {
+            "role": "result_summary",
+            "git_blob_oid": "edfc10baa507cae615e3ae42b2755c07432fedb2",
+            "blob_byte_count": 4357,
+        },
+        f"{API_ROOT_REL}/docs/working/qwen_v6_matched_prespeech_eval_seed00_47_v2_20260615/layer_28_exploratory_threshold_low0125_high030_full.json": {
+            "role": "best_full_control_layer_report",
+            "git_blob_oid": "a4e1f65f651cc47a405936e4053c280507297b5f",
+            "blob_byte_count": 4517,
+        },
+        f"{API_ROOT_REL}/docs/working/qwen_v6_matched_chain_break_combined_gate_seed00_47_v2_20260615/combined_gate_manifest.json": {
+            "role": "combined_data_gate_manifest",
+            "git_blob_oid": "5ae0ba84996604b0adc52c75485a6dd435d5abc0",
+            "blob_byte_count": 3531,
+        },
+        f"{API_ROOT_REL}/docs/working/qwen_v6_matched_chain_break_combined_gate_seed00_47_v2_20260615/combined_matched_screen_report.json": {
+            "role": "combined_data_screen_report",
+            "git_blob_oid": "0c0e31a931fd21d6088530a35112e7e2c2c8b8f4",
+            "blob_byte_count": 3663,
+        },
+    }
+    _verify_artifacts(
+        qwen.get("artifacts"), commit=qwen_commit, expected=qwen_artifacts, label="Qwen V6"
+    )
+    require(
+        qwen.get("model_id") == "Qwen/Qwen2.5-1.5B-Instruct"
+        and qwen.get("runtime_dtype") == "float16"
+        and qwen.get("data_readiness_gate")
+        == {
+            "status": "READY_FOR_W0_CAPTURE",
+            "row_count": 1312,
+            "chain_status_distribution": {"BROKEN": 306, "INTACT": 1006},
+            "payload_classes": 5,
+            "mixed_exact_prompt_groups": 40,
+            "meaning": "DATA READINESS ONLY / NOT A DETECTION OR PRODUCT CLAIM",
+        }
+        and qwen.get("default_w0_gate")
+        == {
+            "status": "BLOCKED",
+            "high_break_risk_groups": 7,
+            "low_break_risk_groups": 7,
+            "required_groups_per_risk_class": 10,
+            "floor_result": "7 / 7 OBSERVED VS 10 / 10 REQUIRED",
+        }
+        and qwen.get("exploratory_valid_sized_risk_split")
+        == {
+            "layers_scanned": 29,
+            "layers_passed": 0,
+            "best_full_control_layer": 28,
+            "status": "FAIL",
+            "risk_hidden_balanced_accuracy": 0.809091,
+            "risk_text_hash_balanced_accuracy": 0.809091,
+            "hidden_minus_text_balanced_accuracy": 0.0,
+            "within_payload_permutation_p": 0.008991,
+        }
+        and qwen.get("claim_status") == "OPEN / NOT LICENSED"
+        and qwen.get("scientific_disposition")
+        == "NEGATIVE RESULT / INTERNAL W0 PROMPT-INJECTION DETECTOR NOT ESTABLISHED"
+        and qwen.get("reuse_policy")
+        == "NEGATIVE CONTROL EVIDENCE ONLY / DO NOT PROMOTE / DO NOT USE AS A STEERING TARGET / NO RERUN AUTHORIZED OR IMPLIED",
+        "historical Qwen V6 negative result drifted or was promoted",
+    )
+
+    pythia = inventory.get("pythia_steering_v6_negative")
+    require(isinstance(pythia, dict), "historical Pythia V6 evidence is missing")
+    require_exact_keys(
+        pythia,
+        {
+            "evidence_class",
+            "evidence_commit",
+            "execution_source_commit",
+            "run_id",
+            "request_count",
+            "artifacts",
+            "terminal_status",
+            "audit_status",
+            "audit_numeric_contract_exact_agreement",
+            "scientific_readout",
+            "failed_scientific_and_control_gates",
+            "claim_status",
+            "scientific_disposition",
+            "limitations",
+            "reuse_policy",
+        },
+        label="historical Pythia V6 evidence",
+    )
+    pythia_commit = _verify_commit(
+        pythia.get("evidence_commit"),
+        expected="0d1d7aa94afd04cbb88681f905f9a9618c3cb621",
+        label="Pythia V6 evidence",
+    )
+    require(
+        pythia.get("evidence_class")
+        == "RETAINED LAYER-SPECIFICITY STEERING NEGATIVE RESULT"
+        and pythia.get("claim_status") == "RESEARCH_ONLY / NO DECISION AUTHORITY"
+        and pythia.get("limitations")
+        == [
+            "Exact executor-auditor numeric agreement validates the retained calculation and artifact path, not the scientific hypothesis.",
+            "The common readout was at chance and the target-layer dose response ran in the wrong direction.",
+            "Off-target layers, same-norm random directions, and wrong-axis controls were too large.",
+            "The run establishes no live steering, safety steering, prompt-injection detection, blocking, removal, prevention, or product capability.",
+            "The terminal evidence is NON_REUSABLE / NO RETRY and cannot be converted into a positive claim by reinterpretation.",
+        ],
+        "historical Pythia V6 boundary wording drifted or promotes authority",
+    )
+    _verify_commit(
+        pythia.get("execution_source_commit"),
+        expected="acfed1a32fc197fd88b62df96c97abf07a59ecca",
+        label="Pythia V6 execution source",
+    )
+    pythia_base = (
+        "docs/working/research_intervention_pythia160m_v6_execution/runs/"
+        "pythia160m-riv6-20260729173650e26e483ed6fae22ba30a"
+    )
+    pythia_artifacts = {
+        f"{pythia_base}/result.json": {
+            "role": "execution_result",
+            "git_blob_oid": "0bf792ab4855fe6df9b9735b8d78d3bb94ab9f9f",
+            "blob_byte_count": 2539956,
+        },
+        f"{pythia_base}/independent_audit.json": {
+            "role": "independent_audit",
+            "git_blob_oid": "b0b061ea0ec0c70d130229baeeaa9d529a13279c",
+            "blob_byte_count": 2611,
+        },
+        f"{pythia_base}/TERMINAL_EVIDENCE_MANIFEST.json": {
+            "role": "terminal_evidence_manifest",
+            "git_blob_oid": "0ff9d017b6346f56dfbaa3e1cca862d4447018d8",
+            "blob_byte_count": 4769,
+        },
+    }
+    _verify_artifacts(
+        pythia.get("artifacts"),
+        commit=pythia_commit,
+        expected=pythia_artifacts,
+        label="Pythia V6",
+    )
+    require(
+        pythia.get("run_id") == "pythia160m-riv6-20260729173650e26e483ed6fae22ba30a"
+        and pythia.get("request_count") == 1536
+        and pythia.get("terminal_status")
+        == "FAIL_CLOSED / SCIENTIFIC_AND_CONTROL_GATES_FAILED / NON_REUSABLE / NO RETRY"
+        and pythia.get("audit_status") == "FAIL_CLOSED"
+        and pythia.get("audit_numeric_contract_exact_agreement") is True
+        and pythia.get("scientific_readout")
+        == {
+            "common_readout_balanced_accuracy": 0.5,
+            "target_layer_spearman_rho": -1.0,
+            "off_target_to_target_point_ratio_by_sign": {
+                "-0.5": 4.232726531704558,
+                "0.5": 6.304563809268991,
+            },
+            "same_norm_random_direction_ratio_by_sign": {
+                "-0.5": 2.5700177404408064,
+                "0.5": 3.9739944811979195,
+            },
+            "wrong_axis_ratio_by_sign": {
+                "-0.5": 2.587795696333962,
+                "0.5": 3.9048408945255755,
+            },
+        }
+        and pythia.get("failed_scientific_and_control_gates")
+        == [
+            "common_readout_validity",
+            "target_layer_dose_response",
+            "layer_specificity",
+            "non_layer_controls",
+        ]
+        and pythia.get("scientific_disposition")
+        == "NEGATIVE RESULT / STEERING CAPABILITY NOT ESTABLISHED"
+        and pythia.get("reuse_policy")
+        == "NON_REUSABLE / NO RETRY / NEGATIVE CONTROL EVIDENCE ONLY / NO RERUN AUTHORIZED OR IMPLIED",
+        "historical Pythia V6 negative result drifted or was promoted",
+    )
+
+    require(
+        inventory.get("promotion_and_rerun_policy")
+        == {
+            "scientific_promotion": "PROHIBITED",
+            "capability_promotion": "PROHIBITED",
+            "product_promotion": "PROHIBITED",
+            "license_promotion": "PROHIBITED",
+            "gate_promotion": "PROHIBITED",
+            "rerun_inference": "PROHIBITED",
+            "binding_rule": (
+                "No item in this inventory authorizes, requests, predicts, or implies a rerun. "
+                "Any future experiment requires a separately frozen protocol, explicit authorization, "
+                "matched controls, new execution evidence, and independent review. A future run must "
+                "not rewrite or reinterpret these retained negative results."
+            ),
+        },
+        "historical capability promotion/rerun policy drifted",
+    )
+    boundary = inventory.get("claim_boundary")
+    require(
+        isinstance(boundary, str)
+        and "NO GENERAL PROMPT-INJECTION DETECTION CLAIM" in boundary
+        and "NO STEERING CAPABILITY CLAIM" in boundary
+        and "NO PRODUCT VALIDATION" in boundary
+        and "NO ACCEPT" in boundary
+        and "EXPERIMENT NOT_STARTED" in boundary
+        and "NO RERUN AUTHORIZED OR IMPLIED" in boundary,
+        "historical capability claim boundary is incomplete",
+    )
+
+
 def verify_review_matrix(
     manifest_artifacts: dict[str, dict[str, Any]],
 ) -> tuple[int, int]:
@@ -2227,6 +3075,8 @@ def verify_review_matrix(
             "worker_protocol_bridge_and_durable_seams",
             "prospective_lifecycle_sqlite_dark_route",
             "admitted_adapter_and_bounded_reconciliation",
+            "local_gpu_and_joined_engineering",
+            "instruction_integrity_shadow_scanner",
             "worker_checkpoints",
             "api_launcher_fleet_state",
             "successor_dependency_container_candidate",
@@ -2318,9 +3168,9 @@ def verify_review_matrix(
         "weights_identity_complete_tests": 257,
         "latest_numeric_redteam_passed": 32,
         "latest_numeric_redteam_failed": 0,
-        "current_complete_passed": 364,
+        "current_complete_passed": 391,
         "current_complete_failed": 0,
-        "current_complete_total": 364,
+        "current_complete_total": 391,
         "prior_independently_confirmed_complete_passed": 290,
     }.items():
         require(
@@ -2525,6 +3375,143 @@ def verify_review_matrix(
         and "provider-backed durability" in adapter_scope.lower()
         and "live execution" in adapter_scope.lower(),
         "review-matrix admitted-adapter/reconciliation receipt drifted or promotes authority",
+    )
+    engineering_execution_receipt = receipts.get("local_gpu_and_joined_engineering")
+    require(
+        isinstance(engineering_execution_receipt, dict),
+        "review-matrix local GPU/joined engineering receipt is missing",
+    )
+    require_exact_keys(
+        engineering_execution_receipt,
+        {
+            "receipt",
+            "retained_evidence_tests",
+            "test_ids_sha256",
+            "local_gpu_predecessor_status",
+            "local_gpu_successor_status",
+            "local_gpu_arms_completed",
+            "joined_predecessor_status",
+            "joined_predecessor_model_invocations",
+            "joined_successor_status",
+            "joined_successor_model_invocations",
+            "joined_successor_reconciled",
+            "packet_status",
+            "scientific_efficacy",
+            "independently_reproduced",
+            "runpod_used",
+            "known_spend_usd",
+            "scope",
+        },
+        label="review-matrix local GPU/joined engineering receipt",
+    )
+    execution_scope = engineering_execution_receipt.get("scope")
+    require(
+        engineering_execution_receipt
+        == {
+            "receipt": ENGINEERING_EXECUTION_RECONCILIATION_PATH.relative_to(ROOT).as_posix(),
+            "retained_evidence_tests": REQUIRED_TEST_SUITES[
+                "Gate 5 retained local GPU and joined evidence"
+            ]["expected_tests"],
+            "test_ids_sha256": REQUIRED_TEST_SUITES[
+                "Gate 5 retained local GPU and joined evidence"
+            ]["expected_test_ids_sha256"].lower(),
+            "local_gpu_predecessor_status": "ENGINEERING GPU CANARY TERMINAL / FAIL_CLOSED",
+            "local_gpu_successor_status": "ENGINEERING GPU CANARY COMPLETE / MECHANICAL PASS",
+            "local_gpu_arms_completed": 6,
+            "joined_predecessor_status": "FAIL_CLOSED",
+            "joined_predecessor_model_invocations": 0,
+            "joined_successor_status": "SUCCESS_NO_PACKET_RECORDED",
+            "joined_successor_model_invocations": 1,
+            "joined_successor_reconciled": True,
+            "packet_status": "NOT CREATED",
+            "scientific_efficacy": "NOT ESTABLISHED",
+            "independently_reproduced": False,
+            "runpod_used": False,
+            "known_spend_usd": "0.00",
+            "scope": execution_scope,
+        }
+        and isinstance(execution_scope, str)
+        and "LOCAL_UNATTESTED_ENGINEERING_EXECUTION" in execution_scope
+        and "no validated prompt-injection detector" in execution_scope
+        and "no steering efficacy" in execution_scope
+        and "no Evidence Packet" in execution_scope
+        and "no authenticated scientific execution" in execution_scope,
+        "review-matrix local GPU/joined receipt drifted or promotes efficacy",
+    )
+    shadow_scanner_receipt = receipts.get("instruction_integrity_shadow_scanner")
+    require(
+        isinstance(shadow_scanner_receipt, dict),
+        "review-matrix instruction-integrity shadow-scanner receipt is missing",
+    )
+    require_exact_keys(
+        shadow_scanner_receipt,
+        {
+            "source_commit",
+            "mode",
+            "verdict_effect",
+            "positive_disposition",
+            "development_cases",
+            "development_lane_counts",
+            "development_injected_recall",
+            "development_benign_false_positive_rate",
+            "development_suite_sha256",
+            "heldout_cases",
+            "heldout_lane_counts",
+            "heldout_injected_recall",
+            "heldout_benign_false_positive_rate",
+            "heldout_suite_sha256",
+            "regression_tests",
+            "test_ids_sha256",
+            "independently_reproduced",
+            "scope",
+        },
+        label="review-matrix instruction-integrity shadow-scanner receipt",
+    )
+    shadow_scope = shadow_scanner_receipt.get("scope")
+    require(
+        shadow_scanner_receipt
+        == {
+            "source_commit": SHADOW_SCANNER_SOURCE_COMMIT,
+            "mode": "shadow",
+            "verdict_effect": "none_shadow_only",
+            "positive_disposition": "FLAG_FOR_HUMAN_REVIEW",
+            "development_cases": 15,
+            "development_lane_counts": {
+                "clean": 4,
+                "control": 5,
+                "injected": 6,
+            },
+            "development_injected_recall": "1.0",
+            "development_benign_false_positive_rate": "0.0",
+            "development_suite_sha256": (
+                "3a7dbb45b723fc9acd46c51dbc618db8a6c247d0f864f75efcd7ae56b3e13fb1"
+            ),
+            "heldout_cases": 12,
+            "heldout_lane_counts": {
+                "clean": 2,
+                "control": 5,
+                "injected": 5,
+            },
+            "heldout_injected_recall": "1.0",
+            "heldout_benign_false_positive_rate": "0.0",
+            "heldout_suite_sha256": (
+                "7d5df4cf55254353f03cdc042372182777a19c1fa06fd6bfbf0f03311a8c1819"
+            ),
+            "regression_tests": REQUIRED_TEST_SUITES[
+                "Instruction-integrity shadow scanner"
+            ]["expected_tests"],
+            "test_ids_sha256": REQUIRED_TEST_SUITES[
+                "Instruction-integrity shadow scanner"
+            ]["expected_test_ids_sha256"].lower(),
+            "independently_reproduced": False,
+            "scope": shadow_scope,
+        }
+        and isinstance(shadow_scope, str)
+        and "SHADOW-ONLY" in shadow_scope
+        and "FLAG_FOR_HUMAN_REVIEW" in shadow_scope
+        and "no blocking" in shadow_scope
+        and "do not establish real-world prompt-injection detection" in shadow_scope,
+        "review-matrix shadow-scanner receipt drifted or promotes capability",
     )
     candidate_receipt = receipts.get("successor_dependency_container_candidate")
     require(isinstance(candidate_receipt, dict), "review-matrix successor candidate receipt is missing")
@@ -2767,26 +3754,37 @@ def verify_adversarial_review() -> None:
         "stream abort after every attempted intervention",
         "public-schema forgery of the retired causal-success state",
         "32/32 focused",
-        "364/364 complete worker",
+        "391/391 complete worker",
+        "155 passed tests plus 106 subtests",
+        "CF033F2E7F519AAD6738D596A694728FD4173CFA12DD8A8FE094823215D4CF8A",
+        "35 tests plus 45 subtests",
+        "73C14349373376F49C380A84E8629C82167B5BF0F73415A45F197D99DE97F807",
+        "0781bab8",
         "confirmed 290/290 receipt",
         "12602041756f20d1afd402fa56968660839e5eb1098438ba84c69bff8de7050b",
         "94566203b3e0ff79b3224c1c5a073698ca99d3c08bc1119a9082e42af4b178bd",
+        "fd8367b867cb6589cc50424d7a1cecabc56bf85331bb4fd87b844e7fd3004580",
         "78/78",
         "603debf7df9ac7b5a69543c3736f4cd38692d3330690a7559a6f9de6f0e2af77",
         "17/17",
         "fa6c985cd6caa734034e006bb4baf6be9d02269d7312bee7355e9c3833759c51",
         "38/38",
         "d3eaf533fedb5b03168200aa399ac53a6e2a6f22874ebabeaecefb227400778d",
-        "130/130",
-        "0ca9217040958125285bfa0f6a7c6d517808b4ac4f4078c152620190767b6bb0",
-        "90/90",
-        "761038779e00511179d4fc5aa3522829d9bdefb37c231061d04fb3aad541f733",
+        "134/134",
+        "67f7507579749e11e27714e8513f6909e26a503a8dd18112cc402207d9735940",
+        "98/98",
+        "65352b8b59cb654e449ba4a1ce8459d7109cc5b21e33f64aeab6e2ea6eeb3c19",
+        "supersede the stale 130/90 receipts",
+        "27/27",
+        "dc0c0ed22e0f158f014277b9d3cd26ad21d6a8fcdfbe1e76a67d09406975c952",
         "Both reservation entry",
         "points now enter that repair/full-verification loop",
         "retained tenant and event kind",
         "COMPLETED_WITH_FINDINGS",
         "critical, 0 high, 3 medium, and 4 low findings",
         "SARIF does not embed the candidate identity",
+        "source-commit Git blobs",
+        "6f66eb2b3c37d87aaddfb091a10bdd4737e6e430",
         "508 exact file records",
         "surviving `sys.modules`",
         "lock-byte replacement before parsing",
@@ -2857,12 +3855,40 @@ def verify_no_status_promotion_text(
         r"\blive_execution_authorized\s*[:=]\s*true\b",
         r"\bdecision\s*:\s*(?:close|accept)\b",
     )
+    negative_context_exemptions = {
+        "docs/working/project_coherence/gate5/joined_model_smoke/preregistration.json",
+        "docs/working/project_coherence/gate5/joined_model_smoke_v0.2/preregistration.json",
+    }
+    exact_forbidden_wording = [
+        "prompt-injection detection validated",
+        "steering efficacy validated",
+        "Gate 5 closed",
+        "production ready",
+        "Evidence Packet created",
+    ]
     for raw_path in sorted(manifest_artifacts):
         if not raw_path.startswith("docs/working/project_coherence/gate5/"):
             continue
         if not raw_path.endswith((".md", ".json")):
             continue
-        text = read_stable_text(ROOT / Path(*PurePosixPath(raw_path).parts))
+        path = ROOT / Path(*PurePosixPath(raw_path).parts)
+        text = read_stable_text(path)
+        if raw_path in negative_context_exemptions:
+            payload = load_json(path)
+            require(isinstance(payload, dict), f"{raw_path}: preregistration is malformed")
+            permitted_wording = payload.get("permitted_wording")
+            require(
+                isinstance(permitted_wording, dict)
+                and set(permitted_wording) == {"allowed", "claim_ceiling", "forbidden"}
+                and permitted_wording.get("claim_ceiling") == "DIAGNOSTIC_ONLY"
+                and permitted_wording.get("forbidden") == exact_forbidden_wording,
+                f"{raw_path}: negative wording context drifted",
+            )
+            sanitized_payload = dict(payload)
+            sanitized_wording = dict(permitted_wording)
+            sanitized_wording["forbidden"] = []
+            sanitized_payload["permitted_wording"] = sanitized_wording
+            text = json.dumps(sanitized_payload, ensure_ascii=False, sort_keys=True)
         for pattern in forbidden_patterns:
             require(
                 re.search(pattern, text, flags=re.IGNORECASE) is None,
@@ -3126,6 +4152,45 @@ def _require_oci_digest(value: Any, *, label: str) -> None:
     )
 
 
+def _candidate_source_blob_bytes(raw_path: str, *, label: str) -> bytes:
+    """Read an exact regular-file blob from the time-indexed candidate commit."""
+    canonical_repo_path(raw_path, label=label)
+    entry = subprocess.run(
+        ["git", "ls-tree", CANDIDATE_SOURCE_COMMIT, "--", raw_path],
+        cwd=ROOT,
+        env=_subprocess_environment(),
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True,
+        check=False,
+    )
+    require(
+        entry.returncode == 0 and entry.stdout.strip(),
+        f"{label}: source-commit tree entry is unavailable",
+    )
+    metadata, separator, listed_path = entry.stdout.strip().partition("\t")
+    parts = metadata.split()
+    require(
+        separator == "\t"
+        and listed_path == raw_path
+        and len(parts) == 3
+        and parts[0] in {"100644", "100755"}
+        and parts[1] == "blob"
+        and re.fullmatch(r"[a-f0-9]{40}", parts[2]) is not None,
+        f"{label}: source-commit entry is not an exact regular blob",
+    )
+    completed = subprocess.run(
+        ["git", "cat-file", "blob", parts[2]],
+        cwd=ROOT,
+        env=_subprocess_environment(),
+        capture_output=True,
+        check=False,
+    )
+    require(completed.returncode == 0, f"{label}: source blob is unavailable")
+    return completed.stdout
+
+
 def _require_candidate_file_record(
     key: str, record: Any, *, include_package_fields: bool = False
 ) -> None:
@@ -3134,10 +4199,7 @@ def _require_candidate_file_record(
     require_exact_keys(record, set(expected), label=f"candidate {key} record")
     require(record == expected, f"candidate {key} identity drifted")
     raw_path = canonical_repo_path(record.get("path"), label=f"candidate {key}")
-    path = ROOT / Path(*PurePosixPath(raw_path).parts)
-    require(path.is_file(), f"candidate {key} file is missing")
-    require(not path.is_symlink(), f"candidate {key} file may not be a symlink")
-    data = read_stable_bytes(path, anchor=FILESYSTEM_ANCHOR)
+    data = _candidate_source_blob_bytes(raw_path, label=f"candidate {key}")
     require(
         isinstance(record.get("sha256"), str)
         and SHA256_UPPER_RE.fullmatch(record["sha256"]) is not None
@@ -3172,23 +4234,49 @@ def _require_candidate_file_record(
 
 
 def _candidate_application_tree_record() -> dict[str, Any]:
-    app_root = WORKER_ROOT / "app"
-    require(app_root.is_dir(), "candidate application tree is missing")
-    files = sorted(
-        (
-            path
-            for path in app_root.rglob("*")
-            if path.is_file() and "__pycache__" not in path.parts
-        ),
-        key=lambda path: path.relative_to(WORKER_ROOT).as_posix(),
+    app_root = f"{WORKER_ROOT_REL}/app"
+    listing = subprocess.run(
+        [
+            "git",
+            "ls-tree",
+            "-r",
+            "-z",
+            "--full-tree",
+            CANDIDATE_SOURCE_COMMIT,
+            "--",
+            app_root,
+        ],
+        cwd=ROOT,
+        env=_subprocess_environment(),
+        capture_output=True,
+        check=False,
     )
-    require(files, "candidate application tree is empty")
+    require(listing.returncode == 0, "candidate application source tree is unavailable")
+    files: list[str] = []
+    for raw_entry in listing.stdout.split(b"\0"):
+        if not raw_entry:
+            continue
+        metadata, separator, raw_path = raw_entry.partition(b"\t")
+        parts = metadata.decode("ascii", errors="strict").split()
+        path = raw_path.decode("utf-8", errors="strict")
+        require(
+            separator == b"\t"
+            and len(parts) == 3
+            and parts[0] in {"100644", "100755"}
+            and parts[1] == "blob"
+            and re.fullmatch(r"[a-f0-9]{40}", parts[2]) is not None
+            and path.startswith(app_root + "/"),
+            "candidate application source tree contains a non-regular entry",
+        )
+        require("/__pycache__/" not in path, "candidate source tree contains bytecode cache")
+        files.append(path)
+    files.sort(key=lambda path: PurePosixPath(path).relative_to(WORKER_ROOT_REL).as_posix())
+    require(files, "candidate application source tree is empty")
     payload = bytearray()
     total_bytes = 0
-    for path in files:
-        require(not path.is_symlink(), f"candidate application file may not be a symlink: {path}")
-        data = read_stable_bytes(path, anchor=FILESYSTEM_ANCHOR)
-        relative = path.relative_to(WORKER_ROOT).as_posix()
+    for raw_path in files:
+        data = _candidate_source_blob_bytes(raw_path, label="candidate application file")
+        relative = PurePosixPath(raw_path).relative_to(WORKER_ROOT_REL).as_posix()
         total_bytes += len(data)
         payload.extend(relative.encode("utf-8"))
         payload.extend(b"\0")
@@ -3226,24 +4314,10 @@ def _verify_candidate_source_commit_tree() -> None:
         and revision.stdout.strip() == CANDIDATE_SOURCE_COMMIT,
         "candidate source commit is unavailable or not exact",
     )
-    build_paths = [
-        f"{WORKER_ROOT_REL}/Dockerfile",
-        f"{WORKER_ROOT_REL}/.dockerignore",
-        f"{WORKER_ROOT_REL}/requirements.txt",
-        f"{WORKER_ROOT_REL}/requirements.in",
-        f"{WORKER_ROOT_REL}/app",
-    ]
-    comparison = subprocess.run(
-        ["git", "diff", "--quiet", CANDIDATE_SOURCE_COMMIT, "--", *build_paths],
-        cwd=ROOT,
-        env=_subprocess_environment(),
-        capture_output=True,
-        check=False,
-    )
-    require(
-        comparison.returncode == 0,
-        "current worker build context differs from the source commit bound into the OCI image",
-    )
+    # The OCI receipt is deliberately time-indexed. Current worker bytes may
+    # evolve and are bound separately by the Gate 5 manifest; the receipt must
+    # continue to verify against its exact source commit rather than silently
+    # being reinterpreted as a build of the current tree.
 
 
 def verify_dependency_and_container_candidate_receipt() -> dict[str, Any]:
@@ -3400,7 +4474,13 @@ def verify_dependency_and_container_candidate_receipt() -> dict[str, Any]:
         },
         "candidate base-image identities drifted",
     )
-    dockerfile = read_stable_text(WORKER_ROOT / "Dockerfile")
+    try:
+        dockerfile = _candidate_source_blob_bytes(
+            f"{WORKER_ROOT_REL}/Dockerfile",
+            label="candidate Dockerfile",
+        ).decode("utf-8")
+    except UnicodeError as exc:
+        raise VerificationError(f"candidate Dockerfile is not UTF-8: {exc}") from exc
     for base in bases.values():
         _require_oci_digest(base.get("digest"), label="candidate base image")
         require(
@@ -5872,6 +6952,8 @@ def main() -> int:
     gate4_artifact_count, gate4_manifest_sha = verify_gate4_dependency(artifacts)
     claim_count = verify_claim_ledger()
     history_count, history_bytes, history_digest = verify_history()
+    verify_engineering_execution_reconciliation(artifacts)
+    verify_historical_capability_reconciliation(artifacts)
     criterion_count, open_count = verify_review_matrix(artifacts)
     verify_adversarial_review()
     verify_no_status_promotion_text(artifacts)
