@@ -1,0 +1,96 @@
+# Research-only Stage B overlay: add a pinned instruction-tuned model.
+#
+# This overlay is strictly ADDITIVE. It does not rebuild or reacquire the
+# operating system, the Python/CUDA closure, the application code, or the
+# existing pythia-160m cache, and it removes nothing. It adds one frozen
+# Qwen2.5-0.5B-Instruct cache tree so a joined Stage B run can invoke a model
+# that actually follows instructions, which pythia-160m cannot.
+#
+# Adding a model does not create a detection, steering, scientific, product,
+# licensing, or disclosure claim. Gate 5 remains OPEN / KEEP_OPEN and the
+# formal experiment remains NOT_STARTED.
+
+ARG PARENT_IMAGE=atlas-live-trace-worker:gate5-local-joined-bf16-v0.1
+FROM ${PARENT_IMAGE}
+
+USER 0:0
+ARG OVERLAY_SOURCE_COMMIT=UNBOUND
+
+# The parent froze /worker read-only. Reopen only the cache directory, add the
+# new model tree, then restore the frozen root-owned read-only contract.
+COPY --chown=0:0 hf_cache/hub/models--Qwen--Qwen2.5-0.5B-Instruct \
+     /worker/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct
+
+RUN test "${#OVERLAY_SOURCE_COMMIT}" -eq 40 \
+    && case "$OVERLAY_SOURCE_COMMIT" in *[!0-9a-f]*) exit 1 ;; *) exit 0 ;; esac
+
+# Verify the added bytes in-image before freezing them. A mismatch fails the
+# build rather than shipping an unverified model.
+RUN python - <<'PY'
+import hashlib, sys
+from pathlib import Path
+
+REVISION = "7ae557604adf67be50417f59c2c2f167def9a775"
+BASE = Path("/worker/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct")
+SNAP = BASE / "snapshots" / REVISION
+EXPECTED = {
+    "config.json": (659, "18e18afcaccafade98daf13a54092927904649e1dd4eba8299ab717d5d94ff45"),
+    "generation_config.json": (242, "e558847a8b4402616f1273797b015104dc266fe4b520056fca88823ba8f8ebe6"),
+    "merges.txt": (1671839, "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3"),
+    "model.safetensors": (988097824, "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe"),
+    "tokenizer.json": (7031645, "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539"),
+    "tokenizer_config.json": (7305, "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583"),
+    "vocab.json": (2776833, "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"),
+}
+bad = []
+for name, (size, digest) in sorted(EXPECTED.items()):
+    path = SNAP / name
+    if path.is_symlink():
+        bad.append(f"{name}: is a symlink")
+        continue
+    if not path.is_file():
+        bad.append(f"{name}: missing")
+        continue
+    actual_size = path.stat().st_size
+    h = hashlib.sha256()
+    with open(path, "rb") as handle:
+        for chunk in iter(lambda: handle.read(1 << 20), b""):
+            h.update(chunk)
+    if actual_size != size:
+        bad.append(f"{name}: size {actual_size} != {size}")
+    elif h.hexdigest() != digest:
+        bad.append(f"{name}: sha256 {h.hexdigest()} != {digest}")
+    else:
+        print(f"verified {name} {actual_size}")
+if bad:
+    print("QWEN CACHE VERIFICATION FAILED:")
+    for line in bad:
+        print("  " + line)
+    sys.exit(1)
+print("QWEN CACHE VERIFIED IN IMAGE")
+PY
+
+# Confirm the pinned pythia cache is still present and untouched by this
+# overlay, so the addition cannot be mistaken for a replacement.
+RUN test -f /worker/.cache/huggingface/hub/models--EleutherAI--pythia-160m/snapshots/50f5173d932e8e61f858120bcb800b97af589f46/model.safetensors
+
+RUN find /worker/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct -type d -exec chmod 0555 '{}' + \
+    && find /worker/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct -type f -exec chmod 0444 '{}' +
+
+LABEL org.opencontainers.image.revision="${OVERLAY_SOURCE_COMMIT}" \
+      org.opencontainers.image.version="gate5-stageb-qwen05b-instruct-v0.1" \
+      io.cas-harness.claim-status="RESEARCH_ONLY_LOCAL_STAGE_B" \
+      io.cas-harness.overlay.source="${OVERLAY_SOURCE_COMMIT}" \
+      io.cas-harness.overlay.kind="ADDITIVE_MODEL_CACHE_ONLY" \
+      io.cas-harness.stageb.model-id="Qwen/Qwen2.5-0.5B-Instruct" \
+      io.cas-harness.stageb.model-revision="7ae557604adf67be50417f59c2c2f167def9a775" \
+      io.cas-harness.stageb.weights-sha256="fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe" \
+      io.cas-harness.stageb.weights-bytes="988097824" \
+      io.cas-harness.pythia.retained="true" \
+      io.cas-harness.gate5-status="OPEN" \
+      io.cas-harness.experiment-status="NOT_STARTED" \
+      io.cas-harness.license-status="NOT_LICENSED" \
+      io.cas-harness.disclosure-status="HELD"
+
+USER 10001:10001
+RUN test ! -w /worker/.cache/huggingface

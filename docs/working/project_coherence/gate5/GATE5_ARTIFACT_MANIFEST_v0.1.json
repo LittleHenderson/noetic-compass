@@ -12,7 +12,7 @@
   "product_claim_effect": "NONE",
   "manifest_self_hash": null,
   "generated_by": "scripts/build_project_coherence_gate5_manifest.py",
-  "artifact_count": 492,
+  "artifact_count": 493,
   "artifacts": [
     {
       "path": ".gitattributes",
@@ -732,6 +732,12 @@
       "path": "docs/working/project_coherence/gate5/model_smoke/runs/gate5-pythia-canary-20260807T035947Z-9f81c34de1b6/runtime_receipt.json",
       "sha256": "A31064B998DD63366C00501AFFFB32E4FAE044F79449F25D6719FEB1A293F8AC",
       "bytes": 50746,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stage_b/GATE5_STAGEB_MODEL_AND_IMAGE_BINDING_v0.1.json",
+      "sha256": "743C76204010F0AAE19E6C65430A9445D4E11F2F441A5DFD2336507C4237B298",
+      "bytes": 6377,
       "role": "gate5_control_artifact"
     },
     {
