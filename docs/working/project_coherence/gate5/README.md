@@ -178,17 +178,20 @@ trusted time, and independently controlled storage remain unfinished.
 
 ## Current bounded receipts
 
-The stable Harness v2 suite contains 155 pytest node IDs and passes 155 tests
-plus 106 subtests: 94 active control-kernel tests, 35 strict worker-protocol
-tests, 4 historical-recovery tests, and 22 retained Gate 5 verifier red-team
-regressions. Its canonical node-ID
+The stable Harness v2 suite contains 180 pytest node IDs and passes 180 tests
+plus 110 subtests: 94 active control-kernel tests, 35 strict worker-protocol
+tests, 4 historical-recovery tests, 22 retained Gate 5 verifier red-team
+regressions, and 25 Stage B Packet-builder/file-retention tests with 4
+subtests. Its canonical node-ID
 digest is:
 
-`CF033F2E7F519AAD6738D596A694728FD4173CFA12DD8A8FE094823215D4CF8A`
+`3814236D1EABAF7C676DE76CBDF8805DA1B889304250CB52C141F45A76CC0490`
 
-This supersedes the stale 150-test/99-subtest receipt that predated the five
-strict terminal-receipt builder tests and seven subtests already committed at
-`0781bab8`. No test was added or relaxed during this reconciliation.
+This preserves the five strict terminal-receipt builder tests and seven
+subtests committed at `0781bab8`, then adds 25 Packet-construction and
+file-backed-evidence tests with four subtests. These additions are local
+control tests; they do not record a model invocation or promote a scientific
+or capability claim.
 
 The four-test historical subset digest is:
 
@@ -209,17 +212,33 @@ when the outcome-access event binds the same terminal receipt and completion
 time, and quarantines partial failure artifacts as negative evidence. These
 are structural controls, not authenticated execution or a scientific result.
 
-The current working-tree worker receipt is 400/400. Its
+The current working-tree worker receipt is 414/414. Its
 canonical node-ID digest is:
 
-`B0AEB3CE2DAB1D505622AD2EE856BC0BEFBAEB9D4F605C121BC82DA07A9C3CCF`
+`14BA076A9FC1B9A58BC2875EB04EF63BA5C94BEF08BDEB19902E8BC27F1DC165`
 
-The 27-test increase is entirely from the already-committed finite no-JIT BF16,
-strict protocol-client, and live request/response worker tranches. The
-time-indexed v0.2 OCI candidate separately retains its 364/364 issuance receipt
-and digest
+The earlier 27-test increase came from the finite no-JIT BF16, strict
+protocol-client, and live request/response worker tranches. The latest 14 tests
+bind additive Qwen model selection, probe-adapter geometry/refusal, health
+identity, and container-preflight behavior without executing a Stage B model
+run. The time-indexed v0.2 OCI candidate separately retains its 364/364
+issuance receipt and digest
 `94566203B3E0FF79B3224C1C5A073698CA99D3C08BC1119A9082E42AF4B178BD`;
 that historical receipt is not rewritten against current worker bytes.
+
+Two narrower Stage B source-level receipts are also green:
+
+- joined executor: 34/34, node-ID digest
+  `C2B5EF68B2491A19BD09345DED44704CA37A57AB21E07E09FFA928E25ABA4570`;
+- runner preparation: 17/17, node-ID digest
+  `40FBF9298CB6DF939C5502D5B8C1E2ADBFA79011167E14E25252E663C114B8E6`.
+
+They are `LOCAL_UNATTESTED_HOST_REGRESSION / ENGINEERING-ONLY` receipts. They
+record zero actual model invocations. The runtime image has not been built and
+the Stage B joined model run remains `NOT_STARTED`; the frozen design authorizes
+no separate pre-amendment model canary. No Stage B Evidence Packet exists, and
+there is no prompt-injection detection, steering-efficacy, scientific, product,
+license, or disclosure claim.
 
 The companion API/launcher/fleet/state suite passes 78/78. Its canonical
 node-ID digest is:

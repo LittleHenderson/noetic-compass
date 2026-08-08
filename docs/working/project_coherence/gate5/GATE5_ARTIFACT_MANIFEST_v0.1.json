@@ -12,7 +12,7 @@
   "product_claim_effect": "NONE",
   "manifest_self_hash": null,
   "generated_by": "scripts/build_project_coherence_gate5_manifest.py",
-  "artifact_count": 494,
+  "artifact_count": 522,
   "artifacts": [
     {
       "path": ".gitattributes",
@@ -64,8 +64,8 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
-      "sha256": "0B6C53250C5F41FD6DB26751E4E3D2ACAF21688D5EAA6DAC9E6DA7B70CEFFC50",
-      "bytes": 52515,
+      "sha256": "B84837D9114D20B49A6D86BEF9F50156247CB4558CBE257FEA16822A5A3F8CA6",
+      "bytes": 53809,
       "role": "gate5_control_artifact"
     },
     {
@@ -100,8 +100,8 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_REVIEW_MATRIX_v0.1.json",
-      "sha256": "32FCED070E4CF617E5BADF6A3ACC34AE48968C0186BB8D177BDFF9865BC85446",
-      "bytes": 96070,
+      "sha256": "4594B463F8471D3BA7B54248BC98CCDA46F37E8AB01B05907E8C4145D565896F",
+      "bytes": 99933,
       "role": "gate5_control_artifact"
     },
     {
@@ -112,14 +112,14 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md",
-      "sha256": "0C963B8AC9A56F34506D1DD859E19016D73E1310AED00BDD122FBC7D139EB3FB",
-      "bytes": 19348,
+      "sha256": "6806C0ACD26127623A8654D32300BF93C4ECDE0BA7F6445B5F056F434FC059FB",
+      "bytes": 20301,
       "role": "gate5_control_artifact"
     },
     {
       "path": "docs/working/project_coherence/gate5/README.md",
-      "sha256": "BCDBB926007E135B90E0262BF3DCE62263957B0D4F1DE145691551ABC74161B3",
-      "bytes": 36215,
+      "sha256": "1D7904AB4177361EA3F1D264B6F60D17F136EEA7AD02A1FA22A174882137D1B4",
+      "bytes": 37243,
       "role": "gate5_control_artifact"
     },
     {
@@ -738,6 +738,114 @@
       "path": "docs/working/project_coherence/gate5/stage_b/GATE5_STAGEB_MODEL_AND_IMAGE_BINDING_v0.1.json",
       "sha256": "743C76204010F0AAE19E6C65430A9445D4E11F2F441A5DFD2336507C4237B298",
       "bytes": 6377,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/GATE5_STAGEB_QWEN_JOINED_ENGINEERING_PROTOCOL_v0.1.json",
+      "sha256": "7DD9F543059692B292F08FBC510817F8BF181615468911DAD8CA773B7D5F6A11",
+      "bytes": 10970,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/VALIDATION_RECEIPT_v0.1.json",
+      "sha256": "546EA75548249109643D18636DCC43AF2C98068C9E58BD77C3BE772AFF2534B5",
+      "bytes": 3075,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/analysis_manifest.json",
+      "sha256": "690E1C9D6124CAAE99CD95A9C17C83AF6FDA79B8B827DD861ED12D30B2AB16D1",
+      "bytes": 3180,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/claim_ledger.noncanonical.json",
+      "sha256": "CCF8C5F879F802C009A90E07EF5CC2C26BA65E297E165B2F1E807B817FEB0230",
+      "bytes": 3180,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/control_plan.json",
+      "sha256": "2B9953C6E3A9C517CA848F57A8A537786E2DAEDFF181D44E5F0378B50292AB1F",
+      "bytes": 1926,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/dependency_lock.json",
+      "sha256": "24BB8C5D31498DE573487376EB808986B52CB0504BA0F63B2E7B76D73E649780",
+      "bytes": 1230,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/evidence_packet_plan.json",
+      "sha256": "A035C5DCB352AB8E795833D1334DE00DA3F4D8E0FE8C058F82F0EB0D67582331",
+      "bytes": 7076,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/execution_identity_amendment_plan.json",
+      "sha256": "1601031D2C9CAD02DE8CFB9323AB603C135BC9BA2F7A53170C7E107299193FF2",
+      "bytes": 2101,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/fixed_sample_plan.json",
+      "sha256": "C199C3D16F9C21EE7A6794253316D0D5CE3ECC672598F2DBC404F9A18CE5725E",
+      "bytes": 495,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/model_artifact_manifest.json",
+      "sha256": "805616F0A563CBD5D2874506BCB660C41F46929A8CDC2561536DD57E47D6FA47",
+      "bytes": 1323,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/output_contract.json",
+      "sha256": "3D2720B094D4944EF9B3C84AFB1A8188FE7F96816BAB397FA781529325F6FE92",
+      "bytes": 1249,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/preregistration.json",
+      "sha256": "4F7D32A9364FC5A470B0FEE575D53C15D027D52CB013AB3EDBBD059A3CCED57D",
+      "bytes": 11762,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/provider_budget.json",
+      "sha256": "F41949E7F96FA9566541F9B6149F5DF627325F31A48ACF2FDE68E40B0D96E6F5",
+      "bytes": 630,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/request.json",
+      "sha256": "D4127311457CF48F474D5D262D69910DE934FEE2D1B47150764992C0FBC3C6D3",
+      "bytes": 507,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/source_manifest.json",
+      "sha256": "D27E226EA44E065C17FF053DA0A39FD96B38A85773D97DD469D5E4F587A32BF2",
+      "bytes": 4104,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/split_confirmatory.json",
+      "sha256": "7297A610841BA059527966EB841CB725676F844ECB8A98433DF33398AD78BF16",
+      "bytes": 347,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/split_held_out.json",
+      "sha256": "A2E6164D6F0820C82443A77227BD94617B9D399667C5D746FB5B4277B33DFFBC",
+      "bytes": 572,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/tokenizer_identity.json",
+      "sha256": "31662B7B72A660967C5C88483E04996274CCB3F85EAFA62DF5FB030F07FE65A8",
+      "bytes": 796,
       "role": "gate5_control_artifact"
     },
     {
@@ -1576,8 +1684,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_joined_executor.py",
-      "sha256": "431A75FABDA059192140BB98FD0D349D7BF1B12C15F59F006F614255502B2549",
-      "bytes": 39947,
+      "sha256": "679A7F26AB813892354E3A05C8BB31D722BCF5EBF261C49CC698F6E28CA62E4A",
+      "bytes": 48700,
       "role": "gate5_api_runtime_dependency"
     },
     {
@@ -1600,8 +1708,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_packaging.py",
-      "sha256": "77CA43A7813FF94827006EFE8023E4DEF23F1F3E6402EE5CE9B83930B09DAFE6",
-      "bytes": 5379,
+      "sha256": "3FF4A017D3885AF39C4FB9F66B3A7043B8904B7EDFFC5594180D9C1798E2DAB3",
+      "bytes": 5417,
       "role": "gate5_api_runtime_dependency"
     },
     {
@@ -2002,14 +2110,14 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/PACKAGING_PROVENANCE.json",
-      "sha256": "74565BA1FDC48F8CD5F017C5A13CFBF93194C19D07D7951E02946183B55FB93C",
-      "bytes": 1479,
+      "sha256": "7207BACC96C3326A34F538FE02487905B62148BE0F7AAB42122D05BDD0E519CA",
+      "bytes": 1633,
       "role": "gate5_packaged_control_kernel_mirror"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/__init__.py",
-      "sha256": "0929FDD02BBA1234D9EF803FC92EB1597DF42589DCFF65FF6F779FDEA6847F45",
-      "bytes": 2376,
+      "sha256": "F2FBBAA4C3685DA95CBE936F8CBF0A5C726763F41DC02AC621D5DB65A69758A6",
+      "bytes": 3049,
       "role": "gate5_packaged_control_kernel_mirror"
     },
     {
@@ -2026,14 +2134,20 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/artifacts.py",
-      "sha256": "A6161525BDA0A289B69F5A4820700AD0F10D5AE5C7C6B08FCF154B4C379253C3",
-      "bytes": 3571,
+      "sha256": "C58150D72E8B60D4229206C41E177F556E431921488319430E66A0F5307DA625",
+      "bytes": 18568,
       "role": "gate5_packaged_control_kernel_mirror"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/evidence_packet.py",
       "sha256": "925EC4E994063352ED2CF4D58A185D7D336910C2E9C453927D49AB041B6F28FD",
       "bytes": 29934,
+      "role": "gate5_packaged_control_kernel_mirror"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/cas_harness_v2/evidence_packet_builder.py",
+      "sha256": "791A45C3A0CB997B2892AAC9C1C7F1DDE3D41A6E3D514BD02A8D164D74FBAF2B",
+      "bytes": 32342,
       "role": "gate5_packaged_control_kernel_mirror"
     },
     {
@@ -2067,6 +2181,18 @@
       "role": "gate5_environment_control"
     },
     {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile.qwen-instruct-overlay",
+      "sha256": "A598D39D59B095C604B1ED0F12C326FE2A6AACEA32DF5EA8630943DD559B6E93",
+      "bytes": 4598,
+      "role": "gate5_environment_control"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile.qwen-stageb-runtime-overlay",
+      "sha256": "1584F0F48E30C7F0E17148B18E4D43E7C94681D994DCC86C20716CC588412D28",
+      "bytes": 3931,
+      "role": "gate5_environment_control"
+    },
+    {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/__init__.py",
       "sha256": "66EF7C2A001C4298CC3CECE7C1D0B92BA306E06456C8468179EEACC5A45DE554",
       "bytes": 39,
@@ -2092,8 +2218,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/routes/health.py",
-      "sha256": "EBE9D4180AC515878BE41D1BEEABE1C9757D6F52EB0AD7E34A0667D526F6BE80",
-      "bytes": 2675,
+      "sha256": "3A607FAE2D86B4A875F835E36DB650E5B2EC63093B11B5C1C3E54BF5744A0951",
+      "bytes": 3430,
       "role": "gate5_worker_source"
     },
     {
@@ -2152,20 +2278,20 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/model_loader.py",
-      "sha256": "A0B1FAEF05C9D9D5CBA442D796F2E61E87DE26102871106270202CB26C1990DB",
-      "bytes": 29875,
+      "sha256": "91B4213DA2029231159548595B80D5555E0CE4E2B364D0C5F0B971D584640C99",
+      "bytes": 36562,
       "role": "gate5_worker_source"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/probe_runner.py",
-      "sha256": "1EE1443F180EF997C721B647A5266C638B69E0B7E879EC2102086086EFEED1EE",
-      "bytes": 41934,
+      "sha256": "79295B7A79A05F55827DC8CF210CA8D974D07895FC0D9CADC6634116D3DF5164",
+      "bytes": 43541,
       "role": "gate5_worker_source"
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/pythia_runner.py",
-      "sha256": "81AE9531E8FA4CE2FD68A31EA174372B95C0819B27F22E4D343DCAF847F309BB",
-      "bytes": 15405,
+      "sha256": "707AA0954AEA73C0274C8A0A8B00363EF79C060F04BC0885B04077167A76EE77",
+      "bytes": 16459,
       "role": "gate5_worker_source"
     },
     {
@@ -2446,8 +2572,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_container_preflight.py",
-      "sha256": "939D0C893EF16C285C7981BF80B8A543925272CFCBAD5856E8D5169286C655C8",
-      "bytes": 14097,
+      "sha256": "8B01CD97C657B042AAA01315E93FB2B1794E84E722C658D06A65AE6C96D70D05",
+      "bytes": 14273,
       "role": "gate5_worker_test"
     },
     {
@@ -2494,8 +2620,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_health.py",
-      "sha256": "7CB4B2AAE939C9FD695AA89F561904AF2EF4BC563F4042D693707FD7B707C003",
-      "bytes": 5300,
+      "sha256": "8822AFDC1874348FC37972C9544E1B5F645FB5B48DC7BB565B1AE1779BDA08AA",
+      "bytes": 9970,
       "role": "gate5_worker_test"
     },
     {
@@ -2574,6 +2700,12 @@
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_probe_summarise.py",
       "sha256": "4F5F397687159FF1F140CF0174D7ED647F89C71DA3C3F5C039150FE8E493590A",
       "bytes": 3474,
+      "role": "gate5_worker_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_qwen_probe_adapter.py",
+      "sha256": "AA070228B8C393806C4D84FB8D75D74BC4DA262E473C292E7BE0268D9899910D",
+      "bytes": 11477,
       "role": "gate5_worker_test"
     },
     {
@@ -2727,9 +2859,21 @@
       "role": "gate5_api_launcher_test"
     },
     {
+      "path": "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_joined_executor.py",
+      "sha256": "80E5B4074FAE35C1B584E73218058A37F597535EDD918754A96883FF2F4EA838",
+      "bytes": 33456,
+      "role": "gate5_api_launcher_test"
+    },
+    {
       "path": "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_lifecycle_service.py",
       "sha256": "71E3D682EC2639292B14CBB10F1C4968ECB5DB80317F140F842569B03380DE21",
       "bytes": 44070,
+      "role": "gate5_api_launcher_test"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_live_worker_join.py",
+      "sha256": "6B82514D39839399242D4B9BAD1ED07CD542BC2E826757F4133F1A8FE9D48851",
+      "bytes": 45615,
       "role": "gate5_api_launcher_test"
     },
     {
@@ -2847,9 +2991,15 @@
       "role": "gate5_verification_control"
     },
     {
+      "path": "scripts/run_project_coherence_gate5_stageb_qwen_smoke.py",
+      "sha256": "FE6464BDF9DD0E76B4C6C055C17AD3727057E29ADF28958CC577EAAB09F0FD9B",
+      "bytes": 120147,
+      "role": "gate5_verification_control"
+    },
+    {
       "path": "scripts/verify_project_coherence_gate5.py",
-      "sha256": "EC661E4E4011DFA70ED4B72F8896FABD873FE43AAAD4980B6B66BFE85C0CB956",
-      "bytes": 292406,
+      "sha256": "B26AA5987ED5E32852716812034ADC01B8CD3C32054EE3CBD2CDEA0859778D8A",
+      "bytes": 310906,
       "role": "gate5_verification_control"
     },
     {
@@ -2896,8 +3046,8 @@
     },
     {
       "path": "src/cas_harness_v2/__init__.py",
-      "sha256": "0929FDD02BBA1234D9EF803FC92EB1597DF42589DCFF65FF6F779FDEA6847F45",
-      "bytes": 2376,
+      "sha256": "F2FBBAA4C3685DA95CBE936F8CBF0A5C726763F41DC02AC621D5DB65A69758A6",
+      "bytes": 3049,
       "role": "gate5_control_kernel_source"
     },
     {
@@ -2914,14 +3064,20 @@
     },
     {
       "path": "src/cas_harness_v2/artifacts.py",
-      "sha256": "A6161525BDA0A289B69F5A4820700AD0F10D5AE5C7C6B08FCF154B4C379253C3",
-      "bytes": 3571,
+      "sha256": "C58150D72E8B60D4229206C41E177F556E431921488319430E66A0F5307DA625",
+      "bytes": 18568,
       "role": "gate5_control_kernel_source"
     },
     {
       "path": "src/cas_harness_v2/evidence_packet.py",
       "sha256": "925EC4E994063352ED2CF4D58A185D7D336910C2E9C453927D49AB041B6F28FD",
       "bytes": 29934,
+      "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "src/cas_harness_v2/evidence_packet_builder.py",
+      "sha256": "791A45C3A0CB997B2892AAC9C1C7F1DDE3D41A6E3D514BD02A8D164D74FBAF2B",
+      "bytes": 32342,
       "role": "gate5_control_kernel_source"
     },
     {
@@ -2935,6 +3091,12 @@
       "sha256": "80E04B35072660CC26A0380974723AA2C5AAB5FA29F9A31A82844248E8DF7733",
       "bytes": 37515,
       "role": "gate5_control_kernel_source"
+    },
+    {
+      "path": "tests/cas_harness_v2/test_evidence_packet_builder.py",
+      "sha256": "614C47C45CBB106E08DC38D33C8FF56F60C1EA9647EF0758A5ED50B1A199B25F",
+      "bytes": 29614,
+      "role": "gate5_control_kernel_test"
     },
     {
       "path": "tests/cas_harness_v2/test_gate5_verifier_redteam.py",
@@ -2976,6 +3138,12 @@
       "path": "tests/model_smoke/test_gate5_local_gpu_canary.py",
       "sha256": "5873A7520056BCC2F10F5B2CABA6DA8AE87B1D4C98BB294958FE50E83B7CD304",
       "bytes": 17872,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "tests/model_smoke/test_gate5_stageb_qwen_smoke.py",
+      "sha256": "8B87129F40301DB96A2C56313108F13E9A432CE1E790F8476BADFCA63787C4CC",
+      "bytes": 26460,
       "role": "gate5_control_artifact"
     }
   ],
@@ -3053,9 +3221,9 @@
         "src",
         "tests/cas_harness_v2"
       ],
-      "expected_tests": 155,
-      "expected_subtests": 106,
-      "expected_test_ids_sha256": "CF033F2E7F519AAD6738D596A694728FD4173CFA12DD8A8FE094823215D4CF8A",
+      "expected_tests": 180,
+      "expected_subtests": 110,
+      "expected_test_ids_sha256": "3814236D1EABAF7C676DE76CBDF8805DA1B889304250CB52C141F45A76CC0490",
       "test_id_canonicalization": "SAME-PROCESS EXECUTED-NODE SHA-256 over ordinal-sorted unique pytest node IDs normalized only to POSIX slashes, encoded UTF-8 as one ID plus LF per line; collection, start, finish, and all-pass outcomes are bound in one local subprocess receipt"
     },
     {
@@ -3071,9 +3239,9 @@
         "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts",
         "noetic-compass-scaffold/noetic-compass"
       ],
-      "expected_tests": 400,
+      "expected_tests": 414,
       "expected_subtests": 0,
-      "expected_test_ids_sha256": "B0AEB3CE2DAB1D505622AD2EE856BC0BEFBAEB9D4F605C121BC82DA07A9C3CCF",
+      "expected_test_ids_sha256": "14BA076A9FC1B9A58BC2875EB04EF63BA5C94BEF08BDEB19902E8BC27F1DC165",
       "test_id_canonicalization": "SAME-PROCESS EXECUTED-NODE SHA-256 over ordinal-sorted unique pytest node IDs normalized only to POSIX slashes, encoded UTF-8 as one ID plus LF per line; collection, start, finish, and all-pass outcomes are bound in one local subprocess receipt"
     },
     {
@@ -3186,6 +3354,42 @@
       "expected_tests": 98,
       "expected_subtests": 0,
       "expected_test_ids_sha256": "65352B8B59CB654E449BA4A1CE8459D7109CC5B21E33F64AEAB6E2EA6EEB3C19",
+      "test_id_canonicalization": "SAME-PROCESS EXECUTED-NODE SHA-256 over ordinal-sorted unique pytest node IDs normalized only to POSIX slashes, encoded UTF-8 as one ID plus LF per line; collection, start, finish, and all-pass outcomes are bound in one local subprocess receipt"
+    },
+    {
+      "name": "Harness v2 Stage B joined executor",
+      "working_directory": "noetic-compass-scaffold/noetic-compass",
+      "targets": [
+        "tests/test_cas_harness_v2_joined_executor.py"
+      ],
+      "pytest_plugins": [
+        "pytest_asyncio.plugin"
+      ],
+      "repo_import_roots": [
+        "src",
+        "tests/cas_harness_v2",
+        "noetic-compass-scaffold/noetic-compass/tests"
+      ],
+      "expected_tests": 34,
+      "expected_subtests": 0,
+      "expected_test_ids_sha256": "C2B5EF68B2491A19BD09345DED44704CA37A57AB21E07E09FFA928E25ABA4570",
+      "test_id_canonicalization": "SAME-PROCESS EXECUTED-NODE SHA-256 over ordinal-sorted unique pytest node IDs normalized only to POSIX slashes, encoded UTF-8 as one ID plus LF per line; collection, start, finish, and all-pass outcomes are bound in one local subprocess receipt"
+    },
+    {
+      "name": "Gate 5 Stage B runner preparation",
+      "working_directory": ".",
+      "targets": [
+        "tests/model_smoke/test_gate5_stageb_qwen_smoke.py"
+      ],
+      "pytest_plugins": [],
+      "repo_import_roots": [
+        "src",
+        "noetic-compass-scaffold/noetic-compass",
+        "scripts"
+      ],
+      "expected_tests": 17,
+      "expected_subtests": 0,
+      "expected_test_ids_sha256": "40FBF9298CB6DF939C5502D5B8C1E2ADBFA79011167E14E25252E663C114B8E6",
       "test_id_canonicalization": "SAME-PROCESS EXECUTED-NODE SHA-256 over ordinal-sorted unique pytest node IDs normalized only to POSIX slashes, encoded UTF-8 as one ID plus LF per line; collection, start, finish, and all-pass outcomes are bound in one local subprocess receipt"
     },
     {

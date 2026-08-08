@@ -148,6 +148,17 @@ class ModelBinding:
     artifacts: Mapping[str, tuple[str, int]]
     arch: ModelArch
     worker_version: str
+    probe_layer_stack_path: tuple[str, ...]
+    probe_projection_path: tuple[str, ...]
+    stage27f_intervention_supported: bool
+
+    @property
+    def probe_layer_stack_attr(self) -> str:
+        return ".".join(self.probe_layer_stack_path)
+
+    @property
+    def probe_projection_attr(self) -> str:
+        return ".".join(self.probe_projection_path)
 
 
 PYTHIA_160M_BINDING_KEY = "pythia-160m"
@@ -172,6 +183,9 @@ def _pythia_binding() -> ModelBinding:
         artifacts=MappingProxyType(dict(PYTHIA_160M_ARTIFACTS)),
         arch=_PYTHIA_ARCH,
         worker_version="m2-real-pythia",
+        probe_layer_stack_path=("gpt_neox", "layers"),
+        probe_projection_path=("mlp", "dense_4h_to_h"),
+        stage27f_intervention_supported=True,
     )
 
 
@@ -186,6 +200,9 @@ def _qwen_05b_instruct_binding() -> ModelBinding:
         artifacts=MappingProxyType(dict(QWEN_05B_INSTRUCT_ARTIFACTS)),
         arch=_QWEN_05B_INSTRUCT_ARCH,
         worker_version="stageb-real-qwen2.5-0.5b-instruct",
+        probe_layer_stack_path=("model", "layers"),
+        probe_projection_path=("mlp", "down_proj"),
+        stage27f_intervention_supported=False,
     )
 
 
@@ -216,6 +233,147 @@ def active_model_binding() -> ModelBinding:
             f"expected one of {sorted(_BINDING_BUILDERS)}"
         )
     return builder()
+
+
+def probe_hook_module_path(binding: ModelBinding, layer: int) -> str:
+    """Return the exact selected-binding projection path for one layer."""
+
+    return (
+        f"{binding.probe_layer_stack_attr}[{layer}]."
+        f"{binding.probe_projection_attr}"
+    )
+
+
+def resolve_probe_layer_stack(
+    model: Any,
+    binding: ModelBinding,
+    *,
+    expected_layers: int,
+    require_exact_count: bool = False,
+) -> Any:
+    """Resolve only the stack declared by the selected pinned binding.
+
+    No cross-family fallback is permitted here. A Qwen-selected worker must not
+    silently probe a coincidental ``gpt_neox.layers`` attribute, and the
+    historical Pythia binding continues to resolve only ``gpt_neox.layers``.
+    """
+
+    value = model
+    for attribute in binding.probe_layer_stack_path:
+        value = getattr(value, attribute, None)
+        if value is None:
+            raise RuntimeError(
+                "selected model probe stack is unavailable: expected "
+                f"{binding.probe_layer_stack_attr} for {binding.key}"
+            )
+    try:
+        observed_layers = len(value)
+    except Exception as exc:
+        raise RuntimeError(
+            "selected model probe stack does not expose an exact layer count"
+        ) from exc
+    if type(expected_layers) is not int or expected_layers < 1:
+        raise RuntimeError("selected model probe layer count must be a positive integer")
+    if observed_layers < expected_layers or (
+        require_exact_count and observed_layers != expected_layers
+    ):
+        comparison = "exactly" if require_exact_count else "at least"
+        raise RuntimeError(
+            f"selected model probe stack must expose {comparison} {expected_layers} "
+            f"layers; observed {observed_layers}"
+        )
+    return value
+
+
+def resolve_probe_projection(
+    layer: Any,
+    binding: ModelBinding,
+    *,
+    layer_index: int,
+) -> Any:
+    """Resolve and validate the selected layer's activated-MLP projection."""
+
+    value = layer
+    for attribute in binding.probe_projection_path:
+        value = getattr(value, attribute, None)
+        if value is None:
+            raise RuntimeError(
+                "selected model probe projection is unavailable: expected "
+                f"{probe_hook_module_path(binding, layer_index)}"
+            )
+    if not hasattr(value, "register_forward_pre_hook"):
+        raise RuntimeError(
+            "selected model probe projection cannot register a forward pre-hook: "
+            f"{probe_hook_module_path(binding, layer_index)}"
+        )
+    observed_input = getattr(value, "in_features", None)
+    observed_output = getattr(value, "out_features", None)
+    if (
+        type(observed_input) is not int
+        or observed_input != binding.arch.mlp_intermediate_dim
+    ):
+        raise RuntimeError(
+            "selected model probe projection input width mismatch at "
+            f"{probe_hook_module_path(binding, layer_index)}: expected "
+            f"{binding.arch.mlp_intermediate_dim}, observed {observed_input!r}"
+        )
+    if (
+        type(observed_output) is not int
+        or observed_output != binding.arch.hidden_size
+    ):
+        raise RuntimeError(
+            "selected model probe projection output width mismatch at "
+            f"{probe_hook_module_path(binding, layer_index)}: expected "
+            f"{binding.arch.hidden_size}, observed {observed_output!r}"
+        )
+    return value
+
+
+def encode_runtime_prompt(
+    tokenizer: Any,
+    prompt: str,
+    *,
+    binding: ModelBinding,
+) -> dict[str, Any]:
+    """Encode one runtime prompt under the selected pinned tokenizer contract.
+
+    Pythia retains its historical raw-tokenization call. The Qwen Instruct
+    binding must use the chat template carried by the already hash-verified
+    pinned ``tokenizer_config.json``; a missing template or unusable result is
+    a startup/runtime error rather than a raw-prompt fallback.
+    """
+
+    if binding.key == PYTHIA_160M_BINDING_KEY:
+        encoded = tokenizer(prompt, return_tensors="pt")
+    elif binding.key == QWEN_05B_INSTRUCT_BINDING_KEY:
+        chat_template = getattr(tokenizer, "chat_template", None)
+        apply_chat_template = getattr(tokenizer, "apply_chat_template", None)
+        if not isinstance(chat_template, str) or not chat_template.strip():
+            raise RuntimeError("pinned Qwen tokenizer exposes no chat template")
+        if not callable(apply_chat_template):
+            raise RuntimeError("pinned Qwen tokenizer cannot apply its chat template")
+        encoded = apply_chat_template(
+            [{"role": "user", "content": prompt}],
+            tokenize=True,
+            add_generation_prompt=True,
+            return_tensors="pt",
+            return_dict=True,
+        )
+    else:  # defensive: active_model_binding already rejects unknown keys
+        raise RuntimeError(f"no runtime prompt encoder for binding {binding.key!r}")
+
+    if isinstance(encoded, Mapping):
+        inputs = dict(encoded)
+    else:
+        input_ids = getattr(encoded, "input_ids", None)
+        if input_ids is None and hasattr(encoded, "shape"):
+            input_ids = encoded
+        inputs = {"input_ids": input_ids}
+    input_ids = inputs.get("input_ids")
+    shape = getattr(input_ids, "shape", None)
+    if shape is None or len(shape) != 2 or int(shape[0]) != 1 or int(shape[1]) < 1:
+        raise RuntimeError("runtime prompt encoder returned invalid input_ids geometry")
+    return inputs
 
 
 _COMMIT_SHA_RE = re.compile(r"^[0-9a-f]{40}$")
@@ -565,23 +723,40 @@ def _validate_runtime_canary(
 ) -> None:
     """Execute the attention/hook/numerics contract before real status."""
 
-    architecture = PYTHIA_160M_MANIFEST.model_arch
-    projection = model.gpt_neox.layers[0].mlp.dense_4h_to_h
+    binding = active_model_binding()
+    architecture = binding.arch
+    canary_label = (
+        "Pythia"
+        if binding.key == PYTHIA_160M_BINDING_KEY
+        else "Qwen"
+    )
+    layers = resolve_probe_layer_stack(
+        model,
+        binding,
+        expected_layers=architecture.n_layers,
+        require_exact_count=True,
+    )
+    projection = resolve_probe_projection(layers[0], binding, layer_index=0)
     observed_hook_widths: list[int] = []
 
     def _projection_pre_hook(_module: Any, args: tuple[Any, ...]) -> None:
         if not args or not hasattr(args[0], "shape"):
-            raise RuntimeError("Pythia runtime canary hook did not receive a tensor")
+            raise RuntimeError(
+                f"{canary_label} runtime canary hook did not receive a tensor"
+            )
         activation = args[0]
         observed_hook_widths.append(int(activation.shape[-1]))
         if not bool(torch.isfinite(activation).all().item()):
-            raise RuntimeError("Pythia runtime canary hook received nonfinite values")
+            raise RuntimeError(
+                f"{canary_label} runtime canary hook received nonfinite values"
+            )
 
     handle = projection.register_forward_pre_hook(_projection_pre_hook)
     try:
-        encoded = tokenizer(
+        encoded = encode_runtime_prompt(
+            tokenizer,
             "Project Coherence Gate 5 runtime canary.",
-            return_tensors="pt",
+            binding=binding,
         )
         inputs = {
             key: value.to(device) if hasattr(value, "to") else value
@@ -603,7 +778,9 @@ def _validate_runtime_canary(
 
     attentions = tuple(outputs.attentions or ())
     if len(attentions) != architecture.n_layers:
-        raise RuntimeError("Pythia runtime canary returned the wrong attention layer count")
+        raise RuntimeError(
+            f"{canary_label} runtime canary returned the wrong attention layer count"
+        )
     expected_shape = (
         1,
         architecture.n_heads,
@@ -611,13 +788,19 @@ def _validate_runtime_canary(
         sequence_length,
     )
     if any(tuple(attention.shape) != expected_shape for attention in attentions):
-        raise RuntimeError("Pythia runtime canary returned incompatible attention geometry")
+        raise RuntimeError(
+            f"{canary_label} runtime canary returned incompatible attention geometry"
+        )
     if observed_hook_widths != [architecture.mlp_intermediate_dim]:
-        raise RuntimeError("Pythia runtime canary returned incompatible hook geometry")
+        raise RuntimeError(
+            f"{canary_label} runtime canary returned incompatible hook geometry"
+        )
     if not bool(torch.isfinite(outputs.logits).all().item()):
-        raise RuntimeError("Pythia runtime canary produced nonfinite logits")
+        raise RuntimeError(f"{canary_label} runtime canary produced nonfinite logits")
     if any(not bool(torch.isfinite(attention).all().item()) for attention in attentions):
-        raise RuntimeError("Pythia runtime canary produced nonfinite attention")
+        raise RuntimeError(
+            f"{canary_label} runtime canary produced nonfinite attention"
+        )
 
 
 def warm_load() -> LoadedModel:

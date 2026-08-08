@@ -1,0 +1,17 @@
+{
+  "schema_version": "cas_harness_gate5_stageb_dependency_lock.v0.1",
+  "preparation_baseline_commit": "648e92cbe3f84e2c4e47f803748c6fcf08909025",
+  "model_binding_commit": "ea1996a4bf5026afec5918d7b19d5e47a59b6a81",
+  "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+  "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "weights_sha256": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+  "weights_bytes": 988097824,
+  "runtime_image_reference": "atlas-live-trace-worker:gate5-stageb-qwen05b-instruct-v0.1",
+  "runtime_image_id": "sha256:373ac33e26c4e3e82ac34690c08e7af58b4b925fe0410e6a0a175b10b9fd2139",
+  "runtime_image_config_sha256": "sha256:ef60af891b0392e20a0d3a56dea801eab4c59d8bd65d4fc05dd1e48f1c622710",
+  "runtime_image_size_bytes": 5949186374,
+  "parent_image_reference": "atlas-live-trace-worker:gate5-local-joined-bf16-v0.1",
+  "overlay_dockerfile": "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile.qwen-instruct-overlay",
+  "runtime_policy": "LOCAL CUDA BF16 / HF OFFLINE / NETWORK NONE / READ-ONLY ROOT / NO INTERVENTION / NO PROVIDER FALLBACK",
+  "execution_code_identity": "PENDING EXACTLY ONE EXECUTION_IDENTITY_ADDITION AMENDMENT / RUN UNAUTHORIZED UNTIL BOUND"
+}

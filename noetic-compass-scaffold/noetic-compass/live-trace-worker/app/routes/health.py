@@ -15,6 +15,22 @@ router = APIRouter()
 
 REALMODE_PASS = "REAL_PYTHIA_WEIGHTS_LOADED"
 REALMODE_FAIL = "NOT_REAL_PYTHIA_WEIGHTS"
+QWEN_REALMODE_PASS = "REAL_QWEN2_5_0_5B_INSTRUCT_WEIGHTS_LOADED"
+QWEN_REALMODE_FAIL = "NOT_REAL_QWEN2_5_0_5B_INSTRUCT_WEIGHTS"
+
+
+def _realmode_verdict(
+    binding: model_loader.ModelBinding,
+    *,
+    is_real_model: bool,
+) -> str:
+    """Return a model-specific verdict without changing Pythia's contract."""
+
+    if binding.key == model_loader.PYTHIA_160M_BINDING_KEY:
+        return REALMODE_PASS if is_real_model else REALMODE_FAIL
+    if binding.key == model_loader.QWEN_05B_INSTRUCT_BINDING_KEY:
+        return QWEN_REALMODE_PASS if is_real_model else QWEN_REALMODE_FAIL
+    raise RuntimeError(f"no real-mode health verdict for binding {binding.key!r}")
 
 
 @router.get("/health")
@@ -26,15 +42,20 @@ def health() -> dict:
 
 @router.get("/health/realmode")
 def health_realmode() -> dict:
-    """Cheap proof surface for whether real Pythia weights are live now.
+    """Cheap proof surface for whether the selected pinned weights are live.
 
-    This intentionally does not call get_loaded_model() or warm_load().
-    A cold worker must report NOT_REAL_PYTHIA_WEIGHTS until startup has
+    This intentionally does not call get_loaded_model() or warm_load(). A cold
+    worker reports the selected model's negative verdict until startup has
     actually loaded the model singleton.
     """
+    binding = model_loader.active_model_binding()
     fake_runtime_env = model_loader._is_demo_mode_forced()
     loaded = model_loader._LOADED
-    manifest = loaded.manifest if loaded is not None else model_loader.PYTHIA_160M_MANIFEST
+    manifest = (
+        loaded.manifest
+        if loaded is not None
+        else model_loader.bootstrap_manifest(binding)
+    )
     manifest_is_real_model = bool(manifest.is_real_model)
     revision_verified = bool(manifest.revision_verified)
     model_loaded = bool(
@@ -48,7 +69,7 @@ def health_realmode() -> dict:
     is_real_model = bool(
         not fake_runtime_env and loaded is not None and loaded.is_real
     )
-    verdict = REALMODE_PASS if is_real_model else REALMODE_FAIL
+    verdict = _realmode_verdict(binding, is_real_model=is_real_model)
 
     return {
         "verdict": verdict,
@@ -57,7 +78,7 @@ def health_realmode() -> dict:
         "model_loaded": model_loaded,
         "load_error": "MODEL_LOAD_FAILED" if load_error else None,
         "manifest_is_real_model": manifest_is_real_model,
-        "model_id": model_loader.PYTHIA_160M_MODEL_ID,
+        "model_id": manifest.model_id,
         "requested_revision": manifest.requested_revision,
         "resolved_revision": manifest.resolved_revision,
         "revision_verified": revision_verified,

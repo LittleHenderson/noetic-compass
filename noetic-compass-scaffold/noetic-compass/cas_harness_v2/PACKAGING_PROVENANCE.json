@@ -5,8 +5,8 @@
   "copy_policy": "BYTE_FOR_BYTE_SOURCE_MIRROR",
   "source_files": {
     "__init__.py": {
-      "sha256": "0929fdd02bba1234d9ef803fc92eb1597df42589dcff65ff6f779fdea6847f45",
-      "size_bytes": 2376
+      "sha256": "f2fbbaa4c3685da95cbe936f8cbf0a5c726763f41dc02ac621d5db65a69758a6",
+      "size_bytes": 3049
     },
     "_strict_json.py": {
       "sha256": "032efd78a48a60c2ac0f3cc3b92274a346c5b044b8f22423722fdf55501c9bdc",
@@ -17,12 +17,16 @@
       "size_bytes": 7678
     },
     "artifacts.py": {
-      "sha256": "a6161525bda0a289b69f5a4820700ad0f10d5ae5c7c6b08fcf154b4c379253c3",
-      "size_bytes": 3571
+      "sha256": "c58150d72e8b60d4229206c41e177f556e431921488319430e66a0f5307da625",
+      "size_bytes": 18568
     },
     "evidence_packet.py": {
       "sha256": "925ec4e994063352ed2cf4d58a185d7d336910c2e9c453927d49ab041b6f28fd",
       "size_bytes": 29934
+    },
+    "evidence_packet_builder.py": {
+      "sha256": "791a45c3a0cb997b2892aac9c1c7f1dde3d41a6e3d514bd02a8d164d74fbaf2b",
+      "size_bytes": 32342
     },
     "preregistration.py": {
       "sha256": "c44d56adda2f05897346156d1c9352b035fabe7d02b2a309cca17eb18fd20055",

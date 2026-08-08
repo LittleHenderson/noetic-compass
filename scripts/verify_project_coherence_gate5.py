@@ -104,6 +104,57 @@ TEST_ID_CANONICALIZATION = (
 WORKER_ROOT_REL = "noetic-compass-scaffold/noetic-compass/live-trace-worker"
 WORKER_ROOT = ROOT / WORKER_ROOT_REL
 API_ROOT_REL = "noetic-compass-scaffold/noetic-compass"
+STAGEB_PACKAGE_REL = (
+    "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1"
+)
+STAGEB_REQUIRED_ARTIFACTS = {
+    f"{STAGEB_PACKAGE_REL}/{name}"
+    for name in (
+        "analysis_manifest.json",
+        "claim_ledger.noncanonical.json",
+        "control_plan.json",
+        "dependency_lock.json",
+        "evidence_packet_plan.json",
+        "execution_identity_amendment_plan.json",
+        "fixed_sample_plan.json",
+        "GATE5_STAGEB_QWEN_JOINED_ENGINEERING_PROTOCOL_v0.1.json",
+        "model_artifact_manifest.json",
+        "output_contract.json",
+        "preregistration.json",
+        "provider_budget.json",
+        "request.json",
+        "source_manifest.json",
+        "split_confirmatory.json",
+        "split_held_out.json",
+        "tokenizer_identity.json",
+        "VALIDATION_RECEIPT_v0.1.json",
+    )
+}
+STAGEB_PROTOCOL_PATH = (
+    ROOT
+    / STAGEB_PACKAGE_REL
+    / "GATE5_STAGEB_QWEN_JOINED_ENGINEERING_PROTOCOL_v0.1.json"
+)
+STAGEB_PROTOCOL_SHA256 = (
+    "7DD9F543059692B292F08FBC510817F8BF181615468911DAD8CA773B7D5F6A11"
+)
+STAGEB_REQUEST_SHA256 = (
+    "D4127311457CF48F474D5D262D69910DE934FEE2D1B47150764992C0FBC3C6D3"
+)
+STAGEB_QWEN_BINDING = MappingProxyType(
+    {
+        "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+        "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+        "weights_filename": "model.safetensors",
+        "weights_sha256": (
+            "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe"
+        ),
+        "weights_bytes": 988_097_824,
+        "image_id": (
+            "sha256:373ac33e26c4e3e82ac34690c08e7af58b4b925fe0410e6a0a175b10b9fd2139"
+        ),
+    }
+)
 
 # These are the exact launcher/API entrypoints and tests for the cross-process
 # identity receipt.  Their complete in-repository API runtime dependency and
@@ -132,6 +183,8 @@ EXACT_API_LAUNCHER_SURFACE = {
     f"{API_ROOT_REL}/tests/test_state_ledger_operational_enable.py",
     f"{API_ROOT_REL}/tests/test_state_substrate_sqlite.py",
     f"{API_ROOT_REL}/tests/test_state_substrate_live_migration.py",
+    f"{API_ROOT_REL}/tests/test_cas_harness_v2_joined_executor.py",
+    f"{API_ROOT_REL}/tests/test_cas_harness_v2_live_worker_join.py",
 }
 API_RUNTIME_SURFACE_DIR = f"{API_ROOT_REL}/api"
 
@@ -161,8 +214,10 @@ REQUIRED_CONTROL_ARTIFACTS = {
     "scripts/run_project_coherence_gate5_pytest.py",
     "scripts/run_project_coherence_gate5_local_gpu_canary.py",
     "scripts/run_project_coherence_gate5_joined_local_gpu_smoke.py",
+    "scripts/run_project_coherence_gate5_stageb_qwen_smoke.py",
     "tests/model_smoke/test_gate5_local_gpu_canary.py",
     "tests/model_smoke/test_gate5_joined_local_gpu_smoke.py",
+    "tests/model_smoke/test_gate5_stageb_qwen_smoke.py",
     "docs/working/cas_harness_instruction_integrity_spec.md",
     "docs/working/cas_harness_research_only_steering_plan.md",
     f"{API_ROOT_REL}/api/routes/evidence.py",
@@ -175,11 +230,14 @@ REQUIRED_CONTROL_ARTIFACTS = {
     f"{API_ROOT_REL}/tests/test_cas_harness_instruction_integrity_benchmark.py",
     f"{API_ROOT_REL}/tests/test_evidence_routes.py",
     f"{WORKER_ROOT_REL}/Dockerfile",
+    f"{WORKER_ROOT_REL}/Dockerfile.qwen-instruct-overlay",
+    f"{WORKER_ROOT_REL}/Dockerfile.qwen-stageb-runtime-overlay",
     f"{WORKER_ROOT_REL}/.dockerignore",
     f"{WORKER_ROOT_REL}/requirements.in",
     f"{WORKER_ROOT_REL}/requirements.txt",
     f"{API_ROOT_REL}/Dockerfile.api",
     "noetic-compass-scaffold/noetic-compass/pyproject.toml",
+    *STAGEB_REQUIRED_ARTIFACTS,
 }
 
 # Every regular file under these admitted roots can affect the verified
@@ -366,10 +424,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "targets": ["tests/cas_harness_v2"],
         "pytest_plugins": [],
         "repo_import_roots": ["src", "tests/cas_harness_v2"],
-        "expected_tests": 155,
-        "expected_subtests": 106,
+        "expected_tests": 180,
+        "expected_subtests": 110,
         "expected_test_ids_sha256": (
-            "CF033F2E7F519AAD6738D596A694728FD4173CFA12DD8A8FE094823215D4CF8A"
+            "3814236D1EABAF7C676DE76CBDF8805DA1B889304250CB52C141F45A76CC0490"
         ),
     },
     "Live trace worker complete": {
@@ -377,10 +435,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "targets": ["tests"],
         "pytest_plugins": ["pytest_asyncio.plugin"],
         "repo_import_roots": [f"{WORKER_ROOT_REL}/scripts", API_ROOT_REL],
-        "expected_tests": 400,
+        "expected_tests": 414,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "B0AEB3CE2DAB1D505622AD2EE856BC0BEFBAEB9D4F605C121BC82DA07A9C3CCF"
+            "14BA076A9FC1B9A58BC2875EB04EF63BA5C94BEF08BDEB19902E8BC27F1DC165"
         ),
     },
     "Live trace worker numeric red team": {
@@ -476,6 +534,32 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
             "65352B8B59CB654E449BA4A1CE8459D7109CC5B21E33F64AEAB6E2EA6EEB3C19"
+        ),
+    },
+    "Harness v2 Stage B joined executor": {
+        "working_directory": API_ROOT_REL,
+        "targets": ["tests/test_cas_harness_v2_joined_executor.py"],
+        "pytest_plugins": ["pytest_asyncio.plugin"],
+        "repo_import_roots": [
+            "src",
+            "tests/cas_harness_v2",
+            f"{API_ROOT_REL}/tests",
+        ],
+        "expected_tests": 34,
+        "expected_subtests": 0,
+        "expected_test_ids_sha256": (
+            "C2B5EF68B2491A19BD09345DED44704CA37A57AB21E07E09FFA928E25ABA4570"
+        ),
+    },
+    "Gate 5 Stage B runner preparation": {
+        "working_directory": ".",
+        "targets": ["tests/model_smoke/test_gate5_stageb_qwen_smoke.py"],
+        "pytest_plugins": [],
+        "repo_import_roots": ["src", API_ROOT_REL, "scripts"],
+        "expected_tests": 17,
+        "expected_subtests": 0,
+        "expected_test_ids_sha256": (
+            "40FBF9298CB6DF939C5502D5B8C1E2ADBFA79011167E14E25252E663C114B8E6"
         ),
     },
     "Gate 5 retained local GPU and joined evidence": {
@@ -1199,15 +1283,17 @@ def artifact_role(path: str) -> str:
         return "gate5_worker_support"
     if "/live-trace-worker/scenarios/" in path:
         return "gate5_worker_fixture"
-    if path.endswith(
-        (
-            "Dockerfile",
-            "Dockerfile.api",
+    filename = PurePosixPath(path).name
+    if (
+        filename == "Dockerfile"
+        or filename.startswith("Dockerfile.")
+        or filename
+        in {
             ".dockerignore",
             "requirements.in",
             "requirements.txt",
             "pyproject.toml",
-        )
+        }
     ):
         return "gate5_environment_control"
     if path.endswith(".py") and path.startswith("scripts/"):
@@ -3071,6 +3157,8 @@ def verify_review_matrix(
         receipts,
         {
             "kernel_focused",
+            "stageb_joined_executor",
+            "stageb_runner_preparation",
             "worker_protocol_kernel",
             "worker_protocol_bridge_and_durable_seams",
             "prospective_lifecycle_sqlite_dark_route",
@@ -3102,6 +3190,70 @@ def verify_review_matrix(
         == REQUIRED_TEST_SUITES["Harness v2 kernel and history"]["expected_subtests"],
         "review-matrix Harness v2 receipt drifted",
     )
+    for receipt_name, suite_name, required_scope_marker in (
+        (
+            "stageb_joined_executor",
+            "Harness v2 Stage B joined executor",
+            "ENGINEERING-ONLY SOURCE-LEVEL TEST RECEIPT",
+        ),
+        (
+            "stageb_runner_preparation",
+            "Gate 5 Stage B runner preparation",
+            "ENGINEERING-ONLY PREPARATION RECEIPT",
+        ),
+    ):
+        stageb_receipt = receipts.get(receipt_name)
+        require(
+            isinstance(stageb_receipt, dict),
+            f"review-matrix {receipt_name} receipt is missing",
+        )
+        require_exact_keys(
+            stageb_receipt,
+            {
+                "passed",
+                "failed",
+                "total",
+                "passed_subtests",
+                "test_ids_sha256",
+                "actual_model_invocations",
+                "stageb_joined_run_status",
+                "evidence_packet_status",
+                "capability_claim_effect",
+                "experimental_execution_status",
+                "independently_reproduced",
+                "scope",
+            },
+            label=f"review-matrix {receipt_name} receipt",
+        )
+        stageb_suite = REQUIRED_TEST_SUITES[suite_name]
+        stageb_scope = stageb_receipt.get("scope")
+        require(
+            stageb_receipt
+            == {
+                "passed": stageb_suite["expected_tests"],
+                "failed": 0,
+                "total": stageb_suite["expected_tests"],
+                "passed_subtests": stageb_suite["expected_subtests"],
+                "test_ids_sha256": stageb_suite[
+                    "expected_test_ids_sha256"
+                ].lower(),
+                "actual_model_invocations": 0,
+                "stageb_joined_run_status": "NOT_STARTED",
+                "evidence_packet_status": "NOT CREATED",
+                "capability_claim_effect": "NONE",
+                "experimental_execution_status": "NOT_STARTED",
+                "independently_reproduced": False,
+                "scope": stageb_scope,
+            }
+            and isinstance(stageb_scope, str)
+            and "LOCAL_UNATTESTED_HOST_REGRESSION" in stageb_scope
+            and required_scope_marker in stageb_scope
+            and "model invocation" in stageb_scope
+            and "No Stage B Evidence Packet" in stageb_scope
+            and "establishes no prompt-injection detection" in stageb_scope
+            and "steering efficacy" in stageb_scope,
+            f"review-matrix {receipt_name} receipt drifted or promotes execution/capability",
+        )
     protocol_receipt = receipts.get("worker_protocol_kernel")
     require(
         isinstance(protocol_receipt, dict),
@@ -3168,9 +3320,13 @@ def verify_review_matrix(
         "weights_identity_complete_tests": 257,
         "latest_numeric_redteam_passed": 32,
         "latest_numeric_redteam_failed": 0,
-        "current_complete_passed": 391,
+        "current_complete_passed": REQUIRED_TEST_SUITES["Live trace worker complete"][
+            "expected_tests"
+        ],
         "current_complete_failed": 0,
-        "current_complete_total": 391,
+        "current_complete_total": REQUIRED_TEST_SUITES["Live trace worker complete"][
+            "expected_tests"
+        ],
         "prior_independently_confirmed_complete_passed": 290,
     }.items():
         require(
@@ -3754,16 +3910,20 @@ def verify_adversarial_review() -> None:
         "stream abort after every attempted intervention",
         "public-schema forgery of the retired causal-success state",
         "32/32 focused",
-        "400/400 complete worker",
-        "155 passed tests plus 106 subtests",
-        "CF033F2E7F519AAD6738D596A694728FD4173CFA12DD8A8FE094823215D4CF8A",
+        "414/414 complete worker",
+        "180 passed tests plus 110 subtests",
+        "3814236D1EABAF7C676DE76CBDF8805DA1B889304250CB52C141F45A76CC0490",
+        "34/34",
+        "C2B5EF68B2491A19BD09345DED44704CA37A57AB21E07E09FFA928E25ABA4570",
+        "17/17",
+        "40FBF9298CB6DF939C5502D5B8C1E2ADBFA79011167E14E25252E663C114B8E6",
         "35 tests plus 45 subtests",
         "73C14349373376F49C380A84E8629C82167B5BF0F73415A45F197D99DE97F807",
         "0781bab8",
         "confirmed 290/290 receipt",
         "12602041756f20d1afd402fa56968660839e5eb1098438ba84c69bff8de7050b",
         "94566203b3e0ff79b3224c1c5a073698ca99d3c08bc1119a9082e42af4b178bd",
-        "b0aeb3ce2dab1d505622ad2ee856bc0befbaeb9d4f605c121bc82da07a9c3ccf",
+        "14ba076a9fc1b9a58bc2875eb04ef63ba5c94bef08bdeb19902e8bc27f1dc165",
         "78/78",
         "603debf7df9ac7b5a69543c3736f4cd38692d3330690a7559a6f9de6f0e2af77",
         "17/17",
@@ -3855,17 +4015,45 @@ def verify_no_status_promotion_text(
         r"\blive_execution_authorized\s*[:=]\s*true\b",
         r"\bdecision\s*:\s*(?:close|accept)\b",
     )
-    negative_context_exemptions = {
-        "docs/working/project_coherence/gate5/joined_model_smoke/preregistration.json",
-        "docs/working/project_coherence/gate5/joined_model_smoke_v0.2/preregistration.json",
-    }
-    exact_forbidden_wording = [
+    joined_exact_forbidden_wording = [
         "prompt-injection detection validated",
         "steering efficacy validated",
         "Gate 5 closed",
         "production ready",
         "Evidence Packet created",
     ]
+    stageb_exact_forbidden_wording = [
+        "prompt-injection detection validated",
+        "prompt-injection prevention validated",
+        "activation steering validated",
+        "steering efficacy validated",
+        "instruction-following capability established",
+        "scientifically eligible",
+        "Gate 5 closed",
+        "production ready",
+        "licensed",
+        "public release authorized",
+    ]
+    negative_context_preregistrations = {
+        "docs/working/project_coherence/gate5/joined_model_smoke/preregistration.json": (
+            joined_exact_forbidden_wording
+        ),
+        "docs/working/project_coherence/gate5/joined_model_smoke_v0.2/preregistration.json": (
+            joined_exact_forbidden_wording
+        ),
+        "docs/working/project_coherence/gate5/"
+        "stageb_qwen_model_smoke_v0.1/preregistration.json": (
+            stageb_exact_forbidden_wording
+        ),
+    }
+    exact_preregistration_governance = {
+        "admission_ring": 4,
+        "product_claim_status": "NOT LICENSED",
+        "disclosure_status": "HELD",
+        "public_release": False,
+        "product_route": False,
+        "license_decision": "NONE",
+    }
     for raw_path in sorted(manifest_artifacts):
         if not raw_path.startswith("docs/working/project_coherence/gate5/"):
             continue
@@ -3873,7 +4061,8 @@ def verify_no_status_promotion_text(
             continue
         path = ROOT / Path(*PurePosixPath(raw_path).parts)
         text = read_stable_text(path)
-        if raw_path in negative_context_exemptions:
+        exact_forbidden_wording = negative_context_preregistrations.get(raw_path)
+        if exact_forbidden_wording is not None:
             payload = load_json(path)
             require(isinstance(payload, dict), f"{raw_path}: preregistration is malformed")
             permitted_wording = payload.get("permitted_wording")
@@ -3883,6 +4072,10 @@ def verify_no_status_promotion_text(
                 and permitted_wording.get("claim_ceiling") == "DIAGNOSTIC_ONLY"
                 and permitted_wording.get("forbidden") == exact_forbidden_wording,
                 f"{raw_path}: negative wording context drifted",
+            )
+            require(
+                payload.get("governance") == exact_preregistration_governance,
+                f"{raw_path}: negative wording governance drifted",
             )
             sanitized_payload = dict(payload)
             sanitized_wording = dict(permitted_wording)
@@ -4143,6 +4336,250 @@ def verify_model_and_security_bindings() -> None:
         f"PYTHIA_160M_REVISION={MODEL_BINDING['revision']}" in dockerfile,
         "Dockerfile Pythia revision differs from the exact model binding",
     )
+
+    verify_stageb_qwen_prospective_binding()
+
+
+def verify_stageb_qwen_prospective_binding() -> None:
+    """Verify the additive, still-prospective Stage B Qwen control package."""
+
+    require(
+        sha256_file(STAGEB_PROTOCOL_PATH) == STAGEB_PROTOCOL_SHA256,
+        "Stage B Qwen protocol bytes drifted",
+    )
+    protocol = load_json(STAGEB_PROTOCOL_PATH)
+    require(isinstance(protocol, dict), "Stage B Qwen protocol root is not an object")
+    require(
+        protocol.get("schema_version")
+        == "cas_harness_gate5_stageb_qwen_joined_engineering_protocol.v0.1",
+        "unexpected Stage B Qwen protocol schema",
+    )
+    require(
+        protocol.get("protocol_freeze_status") == "FROZEN PROSPECTIVE DESIGN"
+        and protocol.get("project_document_status") == "DRAFT / OPEN / NOT FROZEN"
+        and protocol.get("gate5_status") == "OPEN"
+        and protocol.get("gate_decision") == "KEEP_OPEN"
+        and protocol.get("experimental_execution_status") == "NOT_STARTED"
+        and protocol.get("license_status") == "NOT LICENSED"
+        and protocol.get("disclosure_status") == "HELD"
+        and protocol.get("canon_status") == "NOT FROZEN"
+        and protocol.get("public_release_authorized") is False
+        and protocol.get("product_route_authorized") is False,
+        "Stage B Qwen protocol promoted an OPEN/HELD/prospective boundary",
+    )
+
+    model_and_image = protocol.get("model_and_image")
+    require(isinstance(model_and_image, dict), "Stage B model/image binding is missing")
+    require(
+        model_and_image.get("model_id") == STAGEB_QWEN_BINDING["model_id"]
+        and model_and_image.get("model_revision")
+        == STAGEB_QWEN_BINDING["revision"]
+        and model_and_image.get("weights_filename")
+        == STAGEB_QWEN_BINDING["weights_filename"]
+        and model_and_image.get("weights_sha256")
+        == STAGEB_QWEN_BINDING["weights_sha256"]
+        and type(model_and_image.get("weights_bytes")) is int
+        and model_and_image["weights_bytes"] == STAGEB_QWEN_BINDING["weights_bytes"]
+        and model_and_image.get("image_id") == STAGEB_QWEN_BINDING["image_id"],
+        "Stage B Qwen model, weights, or parent-image identity drifted",
+    )
+    require(
+        model_and_image.get("architecture")
+        == {
+            "family": "llama_like",
+            "layers": 24,
+            "hidden_size": 896,
+            "intermediate_size": 4864,
+            "probe_path_required": "model.layers[*].mlp.down_proj",
+        },
+        "Stage B Qwen architecture/probe binding drifted",
+    )
+
+    authorization = protocol.get("authorization")
+    require(isinstance(authorization, dict), "Stage B authorization boundary is missing")
+    require(
+        authorization.get("current_state")
+        == "INACTIVE / EXECUTION UNAUTHORIZED / NOT_STARTED"
+        and authorization.get("maximum_amendments_before_execution") == 1
+        and authorization.get("maximum_jobs") == 1
+        and authorization.get("maximum_run_attempts") == 1
+        and authorization.get("maximum_model_invocations") == 1
+        and authorization.get("maximum_evidence_packets") == 1
+        and authorization.get("automatic_retry") is False
+        and authorization.get("resume") is False
+        and authorization.get("replacement_run") is False
+        and authorization.get("provider_fallback") is False
+        and authorization.get("intervention_authorized") is False
+        and authorization.get("prompt_injection_study_authorized") is False
+        and authorization.get("steering_study_authorized") is False,
+        "Stage B one-shot/non-intervention authorization boundary drifted",
+    )
+    packet_ceiling = protocol.get("packet_ceiling")
+    require(isinstance(packet_ceiling, dict), "Stage B Packet ceiling is missing")
+    require(
+        packet_ceiling.get("current_packet_status") == "NOT CREATED"
+        and packet_ceiling.get("maximum_packet_count") == 1
+        and packet_ceiling.get("preregistered_criteria_ceiling")
+        == "REPORTED_CRITERIA_NOT_MET"
+        and packet_ceiling.get("scientific_eligibility_ceiling") == "INELIGIBLE"
+        and packet_ceiling.get("admission_ring") == 4
+        and packet_ceiling.get("product_claim_status") == "NOT LICENSED"
+        and packet_ceiling.get("disclosure_status") == "HELD"
+        and packet_ceiling.get("public_release_allowed") is False
+        and packet_ceiling.get("product_route_allowed") is False
+        and packet_ceiling.get("self_hash_is_authority") is False,
+        "Stage B Packet status or claim ceiling drifted",
+    )
+    require(
+        protocol.get("control_floor")
+        == {
+            "MATCHED_TAXONOMY": (
+                "REPORT_ONLY IN PREREGISTRATION / INVALID IN PACKET / NOT PERFORMED"
+            ),
+            "WRONG_LAYER": (
+                "REPORT_ONLY IN PREREGISTRATION / INVALID IN PACKET / NOT PERFORMED"
+            ),
+            "CLEAN_NULL": (
+                "REPORT_ONLY IN PREREGISTRATION / INVALID IN PACKET / NOT PERFORMED"
+            ),
+            "required_packet_assessment": "REPORTED_CRITERIA_NOT_MET / INELIGIBLE",
+        },
+        "Stage B invalid-control floor drifted",
+    )
+    provider = protocol.get("provider_accounting")
+    require(isinstance(provider, dict), "Stage B provider accounting is missing")
+    require(
+        provider.get("runpod_expected") is False
+        and provider.get("runpod_calls_ceiling") == 0
+        and provider.get("external_provider_calls_ceiling") == 0
+        and provider.get("known_spend_usd_ceiling") == "0.00"
+        and provider.get("network_during_execution") == "NONE",
+        "Stage B protocol silently enabled provider, network, or paid execution",
+    )
+
+    binding_rows = protocol.get("artifact_bindings")
+    require(isinstance(binding_rows, list), "Stage B artifact bindings are missing")
+    expected_names = {
+        PurePosixPath(raw_path).name for raw_path in STAGEB_REQUIRED_ARTIFACTS
+    } - {STAGEB_PROTOCOL_PATH.name}
+    observed_names: set[str] = set()
+    for index, row in enumerate(binding_rows):
+        require(isinstance(row, dict), f"Stage B binding row {index} is not an object")
+        require_exact_keys(
+            row,
+            {"path", "sha256", "byte_length"},
+            label=f"Stage B binding row {index}",
+        )
+        raw_name = row.get("path")
+        require(
+            isinstance(raw_name, str)
+            and raw_name == PurePosixPath(raw_name).name
+            and "/" not in raw_name
+            and "\\" not in raw_name
+            and raw_name not in {".", ".."}
+            and raw_name not in observed_names,
+            f"Stage B binding row {index} has an invalid or duplicate path",
+        )
+        observed_names.add(raw_name)
+        artifact_path = STAGEB_PROTOCOL_PATH.parent / raw_name
+        observation = observe_regular_file(artifact_path, anchor=ROOT)
+        require(
+            isinstance(row.get("sha256"), str)
+            and SHA256_LOWER_RE.fullmatch(row["sha256"]) is not None
+            and observation.sha256 == row["sha256"].upper()
+            and type(row.get("byte_length")) is int
+            and observation.byte_count == row["byte_length"],
+            f"Stage B binding row {index} does not match exact repository bytes",
+        )
+    require(
+        observed_names == expected_names,
+        "Stage B protocol does not bind exactly every required package artifact: "
+        f"missing={sorted(expected_names - observed_names)} "
+        f"extra={sorted(observed_names - expected_names)}",
+    )
+
+    request_path = STAGEB_PROTOCOL_PATH.parent / "request.json"
+    request_observation = observe_regular_file(request_path, anchor=ROOT)
+    require(
+        request_observation.sha256 == STAGEB_REQUEST_SHA256
+        and request_observation.byte_count == 507,
+        "Stage B exact request bytes drifted",
+    )
+    request = load_json(request_path)
+    require(isinstance(request, dict), "Stage B request root is not an object")
+    require(
+        request.get("model_id") == STAGEB_QWEN_BINDING["model_id"]
+        and request.get("max_new_tokens") == 2
+        and request.get("temperature") == 0.0
+        and request.get("seed") == 1729
+        and request.get("probes") == ["active_trace", "confidence_margin"]
+        and request.get("method_config")
+        == {
+            "enabled_methods": ["foundation_probe"],
+            "knobs": {"foundation_probe": {"layer_range": [0, 23], "top_k": 8}},
+        },
+        "Stage B request method, layer, or generation controls drifted",
+    )
+
+    model_manifest = load_json(STAGEB_PROTOCOL_PATH.parent / "model_artifact_manifest.json")
+    require(isinstance(model_manifest, dict), "Stage B model manifest is missing")
+    require(
+        model_manifest.get("model_id") == STAGEB_QWEN_BINDING["model_id"]
+        and model_manifest.get("model_revision") == STAGEB_QWEN_BINDING["revision"],
+        "Stage B model artifact manifest identity drifted",
+    )
+    model_artifacts = model_manifest.get("artifacts")
+    require(isinstance(model_artifacts, list), "Stage B model artifact list is missing")
+    weight_rows = [
+        row
+        for row in model_artifacts
+        if isinstance(row, dict) and row.get("path") == STAGEB_QWEN_BINDING["weights_filename"]
+    ]
+    require(
+        len(model_artifacts) == 7
+        and weight_rows
+        == [
+            {
+                "path": STAGEB_QWEN_BINDING["weights_filename"],
+                "sha256": STAGEB_QWEN_BINDING["weights_sha256"],
+                "byte_count": STAGEB_QWEN_BINDING["weights_bytes"],
+            }
+        ],
+        "Stage B Qwen model artifact-set or weights record drifted",
+    )
+
+    model_loader = read_stable_text(WORKER_ROOT / "app" / "runtime" / "model_loader.py")
+    probe_runner = read_stable_text(WORKER_ROOT / "app" / "runtime" / "probe_runner.py")
+    qwen_overlay = read_stable_text(WORKER_ROOT / "Dockerfile.qwen-instruct-overlay")
+    runtime_overlay = read_stable_text(
+        WORKER_ROOT / "Dockerfile.qwen-stageb-runtime-overlay"
+    )
+    for marker in (
+        STAGEB_QWEN_BINDING["model_id"],
+        STAGEB_QWEN_BINDING["revision"],
+        STAGEB_QWEN_BINDING["weights_sha256"],
+        "QWEN_05B_INSTRUCT_WEIGHTS_BYTES = 988_097_824",
+        'probe_layer_stack_path=("model", "layers")',
+        'probe_projection_path=("mlp", "down_proj")',
+        "stage27f_intervention_supported=False",
+        "apply_chat_template",
+    ):
+        require(marker in model_loader, f"Stage B model loader omits marker {marker!r}")
+    for marker in (
+        "model.model.layers[i].mlp.down_proj",
+        "selected model binding has no Stage-27F coordinate adapter",
+        "intervention refused",
+    ):
+        require(marker in probe_runner, f"Stage B probe runner omits marker {marker!r}")
+    for text, label in (
+        (qwen_overlay, "Qwen model-cache overlay"),
+        (runtime_overlay, "Qwen runtime-source overlay"),
+    ):
+        require(
+            STAGEB_QWEN_BINDING["model_id"] in text
+            and STAGEB_QWEN_BINDING["revision"] in text,
+            f"{label} omits the exact Stage B model identity",
+        )
 
 
 def _require_oci_digest(value: Any, *, label: str) -> None:

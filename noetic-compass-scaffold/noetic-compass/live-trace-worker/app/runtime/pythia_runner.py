@@ -31,6 +31,7 @@ from .knob_resolution import (
     enabled_methods as _resolve_enabled_methods,
     resolve_knobs,
 )
+from .model_loader import ModelBinding, active_model_binding, encode_runtime_prompt
 from .probe_runner import (
     EraserIntervention,
     assess_baseline_stability,
@@ -86,8 +87,14 @@ async def run_pythia(
     """
     import torch
 
+    binding = active_model_binding()
     device = next(model.parameters()).device
-    input_ids = tokenizer(req.prompt, return_tensors="pt").input_ids.to(device)
+    encoded_prompt = encode_runtime_prompt(
+        tokenizer,
+        req.prompt,
+        binding=binding,
+    )
+    input_ids = encoded_prompt["input_ids"].to(device)
     prompt_len = int(input_ids.shape[1])
 
     # Apply seed for the (optional) sampling path.
@@ -109,6 +116,7 @@ async def run_pythia(
         execution_kind="real_model_weights",
         expected_coordinate_width=int(model.config.intermediate_size),
         expected_projected_output_width=int(model.config.hidden_size),
+        model_binding=binding,
     )
 
     with torch.no_grad():
@@ -116,7 +124,11 @@ async def run_pythia(
             intervention_result = None
             abort_after_rejected_intervention = False
             if intervention is None:
-                with capture_probes(model, n_layers) as state:
+                with capture_probes(
+                    model,
+                    n_layers,
+                    probe_binding=binding,
+                ) as state:
                     outputs = model(
                         input_ids,
                         output_hidden_states=False,
@@ -127,7 +139,11 @@ async def run_pythia(
                 # geometry, hook-cardinality, and Torch-RNG stability. Only a
                 # stable baseline is eligible for the intervention attempt.
                 baseline_rng_before = snapshot_torch_rng_state()
-                with capture_probes(model, n_layers) as baseline_state:
+                with capture_probes(
+                    model,
+                    n_layers,
+                    probe_binding=binding,
+                ) as baseline_state:
                     baseline_outputs_live = model(
                         input_ids,
                         output_hidden_states=False,
@@ -137,7 +153,11 @@ async def run_pythia(
                 baseline_rng_after = snapshot_torch_rng_state()
 
                 restore_torch_rng_state(baseline_rng_before)
-                with capture_probes(model, n_layers) as stability_control_state:
+                with capture_probes(
+                    model,
+                    n_layers,
+                    probe_binding=binding,
+                ) as stability_control_state:
                     stability_control_outputs_live = model(
                         input_ids,
                         output_hidden_states=False,
@@ -172,6 +192,7 @@ async def run_pythia(
                             n_layers,
                             intervention=intervention,
                             reference_geometry=baseline_state.tensor_geometry,
+                            probe_binding=binding,
                         ) as state:
                             outputs = model(
                                 input_ids,
@@ -186,6 +207,7 @@ async def run_pythia(
                             n_layers,
                             intervention=intervention,
                             reference_geometry=baseline_state.tensor_geometry,
+                            probe_binding=binding,
                         ) as state:
                             mark_unstable_baseline_without_attempt(state)
                         outputs = baseline_outputs
@@ -298,6 +320,7 @@ def _eraser_intervention(
     execution_kind: ModelExecutionKind = "typed_test_fixture",
     expected_coordinate_width: int = 3072,
     expected_projected_output_width: int = 768,
+    model_binding: ModelBinding | None = None,
 ) -> EraserIntervention | None:
     """Build a typed activated-intermediate suppression request.
 
@@ -307,6 +330,15 @@ def _eraser_intervention(
     """
     if "drive_local_eraser" not in _resolve_enabled_methods(req):
         return None
+    if (
+        execution_kind == "real_model_weights"
+        and model_binding is not None
+        and not model_binding.stage27f_intervention_supported
+    ):
+        raise RuntimeError(
+            "drive_local_eraser coordinates are calibrated only for the pinned "
+            f"Pythia binding; intervention refused for {model_binding.key}"
+        )
     eraser_resolved = resolve_knobs(req)["drive_local_eraser"]
     drive = str(eraser_resolved["drive"])
     gain = float(eraser_resolved["gain"])

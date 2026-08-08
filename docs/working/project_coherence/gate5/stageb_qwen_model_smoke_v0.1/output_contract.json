@@ -1,0 +1,22 @@
+{
+  "schema_version": "cas_harness_gate5_stageb_output_contract.v0.1",
+  "output_name": "stageb_qwen_joined_worker_dump",
+  "output_artifact_id": "stageb-qwen-joined-worker-dump-001",
+  "media_type": "application/json",
+  "maximum_worker_response_bytes": 2000000,
+  "maximum_generated_tokens": 2,
+  "retention": {
+    "raw_worker_response_required": true,
+    "raw_output_bytes_required": true,
+    "sha256_and_byte_length_required": true,
+    "terminal_receipt_required": true,
+    "post_packet_lifecycle_reconciliation_required": true,
+    "secret_scan_required": true
+  },
+  "semantic_scoring": "NONE",
+  "expected_text_for_context_only": "Blue",
+  "expected_text_decision_effect": "REPORT_ONLY / NOT A PASS CRITERION",
+  "empty_or_nonconforming_completion_effect": "RETAIN EXACT OUTPUT AS NEGATIVE ENGINEERING EVIDENCE; DO NOT RETRY; DO NOT INFER MODEL CAPABILITY",
+  "ordering_rule": "Packet bytes are built, reserved, and recorded after terminal completion and outcome access but before final lifecycle reconciliation; reconciliation is retained in the later runtime receipt and cannot alter the Packet.",
+  "boundary": "OUTPUT CAPTURE MECHANICS ONLY / NO GENERAL INSTRUCTION-FOLLOWING CLAIM / NO PROMPT-INJECTION CLAIM / NO STEERING CLAIM"
+}

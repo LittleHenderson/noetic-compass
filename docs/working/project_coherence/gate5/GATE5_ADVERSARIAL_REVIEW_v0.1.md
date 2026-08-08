@@ -162,27 +162,43 @@ SHA-256 and byte length, and freshly replays them against the current
 pre-outcome chain before public reads. This is process-local tamper detection,
 not WORM authority.
 
-The clean focused receipt is **155 passed tests plus 106 subtests** under Python
+The clean focused receipt is **180 passed tests plus 110 subtests** under Python
 3.14 with startup site processing and bytecode/cache output disabled. It
 contains 94 active-kernel tests, 35 strict worker-protocol tests, 4
-historical-recovery tests, and 22 Gate 5 verifier red-team tests. The retained
-attacks cover hardlink/symlink aliasing,
+historical-recovery tests, 22 Gate 5 verifier red-team tests, and 25 Stage B
+Packet-builder/file-retention tests with four subtests. The retained attacks
+cover hardlink/symlink aliasing,
 same-byte inode replacement, a synthetic reparse attribute, duplicate or
 noncanonical node IDs, raw-evidence security promotion, erasure of the
 scanner/vendor conflict, duplicate normalized runner distributions, unbound
 code inside a locked runner namespace, Python-root import shadowing, and
-lock-byte replacement before parsing. The stable-observer regression also
+lock-byte replacement before parsing. Stage B Packet-builder attacks also cover
+retained-file aliasing, hardlinking, replacement, and mutation. The
+stable-observer regression also
 confirms that metadata-only ancestor timestamp churn is not misclassified as
 object substitution while structural ancestor replacement remains detected.
 The receipt is limited to
 `tests/cas_harness_v2`; it is not a repository-wide or production receipt.
 Its same-process executed-node SHA-256 is
-`CF033F2E7F519AAD6738D596A694728FD4173CFA12DD8A8FE094823215D4CF8A`.
+`3814236D1EABAF7C676DE76CBDF8805DA1B889304250CB52C141F45A76CC0490`.
 
-The prior 150-test/99-subtest receipt was stale relative to the five strict
-terminal-receipt builder tests and seven subtests already committed at
-`0781bab8`; the reconciliation refreshed the receipt without adding, deleting,
-or weakening tests.
+The earlier five strict terminal-receipt builder tests and seven subtests
+committed at `0781bab8` remain preserved. The current 25-test/four-subtest
+increase covers Packet construction and file-backed evidence. These are local
+control regressions only: no actual model invocation, Stage B joined run, or
+scientific/capability promotion follows from them.
+
+The Stage B joined-executor source-level suite separately passes **34/34** with
+same-process executed-node SHA-256
+`C2B5EF68B2491A19BD09345DED44704CA37A57AB21E07E09FFA928E25ABA4570`.
+The Stage B runner-preparation suite passes **17/17** with digest
+`40FBF9298CB6DF939C5502D5B8C1E2ADBFA79011167E14E25252E663C114B8E6`.
+Both are `LOCAL_UNATTESTED_HOST_REGRESSION / ENGINEERING-ONLY` receipts with
+zero actual model invocations. The runtime image has not been built and the
+joined model run remains `NOT_STARTED`; the frozen design authorizes no separate
+pre-amendment model canary. No Stage B Evidence Packet exists, and neither
+receipt establishes prompt-injection detection, steering efficacy, scientific
+validity, product validation, license, or disclosure authority.
 
 ## Worker-protocol adversarial chronology
 
@@ -483,15 +499,18 @@ The test
 subsequently reproduced a post-validation assignment bypass. The retained
 repair freezes the public receipt and its nested carriers and revalidates
 copy-with-update. The current working-tree successor retains the **32/32 focused
-numeric** receipt and confirms **400/400 complete worker**. Their verifier-canonical
+numeric** receipt and confirms **414/414 complete worker**. Their verifier-canonical
 test-ID-set
 SHA-256 values are, respectively,
 `12602041756f20d1afd402fa56968660839e5eb1098438ba84c69bff8de7050b`
 and
-`b0aeb3ce2dab1d505622ad2ee856bc0befbaeb9d4f605c121bc82da07a9c3ccf`.
-The 27-test increase is exactly the already-committed finite no-JIT BF16,
-strict protocol-client, and live request/response worker tranches. The
-time-indexed v0.2 OCI candidate separately preserves its 364/364 issuance
+`14ba076a9fc1b9a58bc2875eb04ef63ba5c94bef08bdeb19902e8bc27f1dc165`.
+The earlier 27-test increase came from the finite no-JIT BF16, strict
+protocol-client, and live request/response worker tranches. The latest 14-test
+increase binds additive Qwen model selection, probe-adapter geometry/refusal,
+health identity, and container-preflight behavior without executing a Stage B
+model run. The time-indexed v0.2 OCI candidate separately preserves its 364/364
+issuance
 receipt and digest
 `94566203b3e0ff79b3224c1c5a073698ca99d3c08bc1119a9082e42af4b178bd`;
 it is not rewritten against the later working-tree bytes.
@@ -863,12 +882,13 @@ remain `NONE`; the claim remains `NOT LICENSED`; and disclosure remains `HELD`.
 
 The minimum defensible order is:
 
-1. preserve the verifier-native 155-test/106-subtest Harness-v2,
-   30-test/38-subtest worker-protocol, 17/17 dark-bridge, 38/38
+1. preserve the verifier-native 180-test/110-subtest Harness-v2,
+   35-test/45-subtest worker-protocol, 17/17 dark-bridge, 38/38
    callback/Object-Lock seam, 134/134 prospective lifecycle/SQLite/dark-route,
    98/98 admitted-adapter/configured-reconciliation, 27/27 retained local
    GPU/joined evidence,
-   32/32 focused numeric, 400/400 complete-worker, and 78/78
+   32/32 focused numeric, 414/414 complete-worker, 34/34 Stage B joined-executor,
+   17/17 Stage B runner-preparation, and 78/78
    API/launcher/fleet/state receipts, the earlier 290/290 checkpoint, and every
    counterexample, including the current ephemeral same-process and retained
    raw-evidence validations;

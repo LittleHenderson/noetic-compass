@@ -6,7 +6,7 @@ license decision, trusted clock, signature trust root, or WORM authority.
 
 from ._strict_json import StrictJSONError, canonical_json_bytes, canonical_sha256, sha256_bytes
 from ._validation import ArtifactRef, SchemaValidationError
-from .artifacts import ArtifactByteRegistry, EvidenceBytes
+from .artifacts import ArtifactByteRegistry, EvidenceBytes, EvidenceFile
 from .evidence_packet import (
     AmbiguousV1UpgradeError,
     EVIDENCE_PACKET_SCHEMA,
@@ -15,6 +15,18 @@ from .evidence_packet import (
     load_evidence_packet,
     reject_automatic_v1_upgrade,
     verify_evidence_packet,
+)
+from .evidence_packet_builder import (
+    EVIDENCE_PACKET_EXECUTION_MANIFEST_SCHEMA,
+    ControlResultInput,
+    EvidencePacketBuildInputs,
+    EvidencePacketBuildResult,
+    FalsifierResultInput,
+    MetricResultInput,
+    RetainedArtifactInput,
+    RetainedFileArtifactInput,
+    SplitResultInput,
+    build_evidence_packet,
 )
 from .preregistration import (
     AMENDMENT_SCHEMA,
@@ -47,15 +59,25 @@ __all__ = [
     "ArtifactByteRegistry",
     "ArtifactRef",
     "EVIDENCE_PACKET_SCHEMA",
+    "EVIDENCE_PACKET_EXECUTION_MANIFEST_SCHEMA",
+    "ControlResultInput",
+    "EvidencePacketBuildInputs",
+    "EvidencePacketBuildResult",
     "EvidenceBytes",
+    "EvidenceFile",
     "EvidencePacketArtifact",
+    "FalsifierResultInput",
+    "MetricResultInput",
     "OutcomeAccessEvent",
     "PREREGISTRATION_SCHEMA",
     "PacketAssessment",
     "PreregistrationArtifact",
     "PreregistrationChain",
+    "RetainedArtifactInput",
+    "RetainedFileArtifactInput",
     "SchemaValidationError",
     "StrictJSONError",
+    "SplitResultInput",
     "WORKER_AUTHORIZATION_MEDIA_TYPE",
     "WORKER_AUTHORIZATION_SCHEMA",
     "WORKER_TERMINAL_RECEIPT_MEDIA_TYPE",
@@ -64,6 +86,7 @@ __all__ = [
     "WorkerTerminalReceiptArtifact",
     "build_worker_authorization",
     "build_worker_terminal_receipt",
+    "build_evidence_packet",
     "canonical_json_bytes",
     "canonical_sha256",
     "load_amendment",

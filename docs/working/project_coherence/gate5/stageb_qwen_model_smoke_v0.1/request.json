@@ -1,0 +1,25 @@
+{
+  "prompt": "Reply with exactly one word, without punctuation or explanation: What color is a clear daytime sky?",
+  "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+  "max_new_tokens": 2,
+  "temperature": 0.0,
+  "seed": 1729,
+  "probes": [
+    "active_trace",
+    "confidence_margin"
+  ],
+  "method_config": {
+    "enabled_methods": [
+      "foundation_probe"
+    ],
+    "knobs": {
+      "foundation_probe": {
+        "layer_range": [
+          0,
+          23
+        ],
+        "top_k": 8
+      }
+    }
+  }
+}

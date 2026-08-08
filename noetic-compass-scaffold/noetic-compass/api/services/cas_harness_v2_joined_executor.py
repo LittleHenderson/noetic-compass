@@ -1,9 +1,12 @@
 """Default-dark coordinator for one bounded Harness-v2 joined execution.
 
 The coordinator composes already-strict boundaries.  It does not authenticate
-execution, establish a scientific result, license a product claim, disclose
-held material, or create/attach an Evidence Packet.  A successful mechanical
-join therefore terminates as ``SUCCESS_NO_PACKET_RECORDED``.
+execution, establish a scientific result, license a product claim, or disclose
+held material.  Its historical/default path creates no Evidence Packet and
+therefore terminates as ``SUCCESS_NO_PACKET_RECORDED``.  A caller may instead
+supply the explicit packet-reporting port added for Stage B.  That port runs
+only after outcome access and must return an exact packet-artifact binding;
+using it changes no scientific, product, licensing, or disclosure authority.
 
 The live-model port is invoke-once.  Once its transport boundary may have been
 entered, this module never calls it again; uncertainty is terminally recorded
@@ -53,6 +56,7 @@ _MODEL_ARTIFACT_MANIFEST_SCHEMA = "cas_harness_open_weight_artifact_manifest.v1"
 _MAX_MODEL_ARTIFACTS = 10_000
 
 SUCCESS_NO_PACKET_RECORDED = "SUCCESS_NO_PACKET_RECORDED"
+SUCCESS_PACKET_RECORDED = "SUCCESS_PACKET_RECORDED"
 PREFLIGHT_REJECTED = "PREFLIGHT_REJECTED"
 DUPLICATE_EXECUTION_REJECTED = "DUPLICATE_EXECUTION_REJECTED"
 CONSUMPTION_UNRESOLVED = "CONSUMPTION_UNRESOLVED"
@@ -93,6 +97,8 @@ class JoinedGate5RunPlan:
     terminal_receipt_id: str
     invocation_id: str
     allow_billing_receipt: bool = False
+    expected_packet_id: str | None = None
+    expected_packet_artifact_id: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -137,6 +143,18 @@ class NonreportingAcceptance:
 
 
 @dataclass(frozen=True, slots=True)
+class PacketRecordingAcceptance:
+    """Exact identity returned after a packet is durably recorded by a port."""
+
+    packet_id: str
+    packet_sha256: str
+    packet_byte_length: int
+    packet_media_type: str
+    packet_artifact_id: str | None = None
+    status: Literal["PACKET_RECORDED"] = "PACKET_RECORDED"
+
+
+@dataclass(frozen=True, slots=True)
 class TerminalDispositionAcceptance:
     terminal_status: Literal["INDETERMINATE"] = "INDETERMINATE"
     reason_code: Literal["EXECUTION_COMPLETION_UNRESOLVED"] = (
@@ -148,6 +166,12 @@ class TerminalDispositionAcceptance:
 @dataclass(frozen=True, slots=True)
 class ReconciliationAcceptance:
     run_id: str
+    lifecycle_state: str | None = None
+    packet_id: str | None = None
+    packet_artifact_id: str | None = None
+    packet_sha256: str | None = None
+    packet_byte_length: int | None = None
+    packet_media_type: str | None = None
     status: Literal["RECONCILED"] = "RECONCILED"
 
 
@@ -171,7 +195,12 @@ class JoinedGate5RunResult:
     terminal_receipt_sha256: str | None
     terminal_disposition_recorded: bool
     reconciled: bool
-    packet_status: Literal["NOT_CREATED"] = "NOT_CREATED"
+    packet_status: Literal["NOT_CREATED", "CREATED", "UNKNOWN"] = "NOT_CREATED"
+    packet_id: str | None = None
+    packet_artifact_id: str | None = None
+    packet_sha256: str | None = None
+    packet_byte_length: int | None = None
+    packet_media_type: str | None = None
     gate_status: Literal["OPEN"] = "OPEN"
     scientific_status: Literal["NOT_ESTABLISHED"] = "NOT_ESTABLISHED"
     product_status: Literal["RESEARCH_ONLY"] = "RESEARCH_ONLY"
@@ -247,6 +276,19 @@ class ControllerContinuationPort(Protocol):
     ) -> ReconciliationAcceptance: ...
 
 
+class PacketContinuationPort(Protocol):
+    async def record_packet(
+        self,
+        *,
+        authorization: WorkerAuthorizationArtifact,
+        job_snapshot: FleetJobSnapshot,
+        terminal_receipt: WorkerTerminalReceiptArtifact,
+        output_name: str,
+        output_artifact: ArtifactRef,
+        output_body: bytes,
+    ) -> PacketRecordingAcceptance: ...
+
+
 class TerminalDispositionPort(Protocol):
     async def record_terminal_disposition(
         self,
@@ -274,7 +316,11 @@ class _ConsumptionReplayError(ValueError):
 
 
 class JoinedGate5Executor:
-    """Compose one exact joined run without any model retry or Packet path."""
+    """Compose one exact joined run without any model retry.
+
+    ``packet_reporting`` is deliberately opt-in.  Omitting it preserves the
+    historical nonreporting path and result bytes.
+    """
 
     def __init__(
         self,
@@ -284,12 +330,14 @@ class JoinedGate5Executor:
         clock: TerminalObservationClockPort,
         controller: ControllerContinuationPort,
         terminal_disposition: TerminalDispositionPort,
+        packet_reporting: PacketContinuationPort | None = None,
     ) -> None:
         self._worker_protocol = worker_protocol
         self._live_dump = live_dump
         self._clock = clock
         self._controller = controller
         self._terminal_disposition = terminal_disposition
+        self._packet_reporting = packet_reporting
         self._identity_lock = asyncio.Lock()
         self._attempted_authorizations: set[tuple[str, str]] = set()
 
@@ -298,6 +346,14 @@ class JoinedGate5Executor:
 
         try:
             facts = _preflight(plan)
+            packet_identity_present = (
+                plan.expected_packet_id is not None
+                and plan.expected_packet_artifact_id is not None
+            )
+            if (self._packet_reporting is not None) != packet_identity_present:
+                raise _PreflightError(
+                    "packet continuation and expected packet identity must be configured together"
+                )
         except Exception:
             return _result(
                 plan,
@@ -452,6 +508,8 @@ class JoinedGate5Executor:
 
         terminal_at: str | None = None
         terminal_receipt: WorkerTerminalReceiptArtifact | None = None
+        packet_attempted = False
+        packet_acceptance: PacketRecordingAcceptance | None = None
         try:
             terminal_at = await self._clock.observe_terminal_at()
             terminal_observed_at = _parse_canonical_timestamp(
@@ -518,15 +576,31 @@ class JoinedGate5Executor:
                 terminal_receipt=terminal_receipt,
             )
             _validate_outcome_acceptance(outcome, terminal_receipt)
-            nonreporting = await self._controller.record_nonreporting(
-                authorization=facts.authorization,
-                job_snapshot=plan.job_snapshot,
-                terminal_receipt=terminal_receipt,
-                reason_code=SUCCESS_NO_PACKET_RECORDED,
-            )
-            _validate_nonreporting(nonreporting)
+            if self._packet_reporting is None:
+                nonreporting = await self._controller.record_nonreporting(
+                    authorization=facts.authorization,
+                    job_snapshot=plan.job_snapshot,
+                    terminal_receipt=terminal_receipt,
+                    reason_code=SUCCESS_NO_PACKET_RECORDED,
+                )
+                _validate_nonreporting(nonreporting)
+            else:
+                packet_attempted = True
+                packet = await self._packet_reporting.record_packet(
+                    authorization=facts.authorization,
+                    job_snapshot=plan.job_snapshot,
+                    terminal_receipt=terminal_receipt,
+                    output_name=plan.output_name,
+                    output_artifact=output_artifact,
+                    output_body=binding.response_raw,
+                )
+                _validate_packet_recording(packet, plan=plan)
+                packet_acceptance = packet
         except asyncio.CancelledError:
-            reconciled = await self._best_effort_reconcile(plan, facts)
+            reconciliation = await self._best_effort_reconcile_receipt(plan, facts)
+            packet_acceptance = packet_acceptance or _packet_from_reconciliation(
+                plan, reconciliation
+            )
             return _result(
                 plan,
                 facts=facts,
@@ -538,10 +612,19 @@ class JoinedGate5Executor:
                 worker_started_at=consumption.worker_started_at,
                 terminal_at=terminal_at,
                 terminal_receipt=terminal_receipt,
-                reconciled=reconciled,
+                packet_status=(
+                    "CREATED"
+                    if packet_acceptance is not None
+                    else "UNKNOWN" if packet_attempted else "NOT_CREATED"
+                ),
+                packet_acceptance=packet_acceptance,
+                reconciled=reconciliation is not None,
             )
         except Exception:
-            reconciled = await self._best_effort_reconcile(plan, facts)
+            reconciliation = await self._best_effort_reconcile_receipt(plan, facts)
+            packet_acceptance = packet_acceptance or _packet_from_reconciliation(
+                plan, reconciliation
+            )
             return _result(
                 plan,
                 facts=facts,
@@ -553,11 +636,20 @@ class JoinedGate5Executor:
                 worker_started_at=consumption.worker_started_at,
                 terminal_at=terminal_at,
                 terminal_receipt=terminal_receipt,
-                reconciled=reconciled,
+                packet_status=(
+                    "CREATED"
+                    if packet_acceptance is not None
+                    else "UNKNOWN" if packet_attempted else "NOT_CREATED"
+                ),
+                packet_acceptance=packet_acceptance,
+                reconciled=reconciliation is not None,
             )
 
-        reconciled = await self._best_effort_reconcile(plan, facts)
-        if not reconciled:
+        reconciliation = await self._best_effort_reconcile_receipt(plan, facts)
+        packet_acceptance = packet_acceptance or _packet_from_reconciliation(
+            plan, reconciliation
+        )
+        if reconciliation is None:
             return _result(
                 plan,
                 facts=facts,
@@ -569,19 +661,31 @@ class JoinedGate5Executor:
                 worker_started_at=consumption.worker_started_at,
                 terminal_at=terminal_at,
                 terminal_receipt=terminal_receipt,
+                packet_status=(
+                    "CREATED"
+                    if packet_acceptance is not None
+                    else "UNKNOWN" if packet_attempted else "NOT_CREATED"
+                ),
+                packet_acceptance=packet_acceptance,
                 reconciled=False,
             )
         return _result(
             plan,
             facts=facts,
             binding=binding,
-            status=SUCCESS_NO_PACKET_RECORDED,
+            status=(
+                SUCCESS_PACKET_RECORDED
+                if packet_acceptance is not None
+                else SUCCESS_NO_PACKET_RECORDED
+            ),
             failure_phase=None,
             error_code=None,
             model_invocation_count=1,
             worker_started_at=consumption.worker_started_at,
             terminal_at=terminal_at,
             terminal_receipt=terminal_receipt,
+            packet_status="CREATED" if packet_acceptance is not None else "NOT_CREATED",
+            packet_acceptance=packet_acceptance,
             reconciled=True,
         )
 
@@ -590,19 +694,30 @@ class JoinedGate5Executor:
         plan: JoinedGate5RunPlan,
         facts: _PreflightFacts,
     ) -> bool:
+        return (
+            await self._best_effort_reconcile_receipt(plan, facts)
+        ) is not None
+
+    async def _best_effort_reconcile_receipt(
+        self,
+        plan: JoinedGate5RunPlan,
+        facts: _PreflightFacts,
+    ) -> ReconciliationAcceptance | None:
         try:
             receipt = await self._controller.reconcile(
                 authorization=facts.authorization,
                 job_snapshot=plan.job_snapshot,
             )
             if type(receipt) is not ReconciliationAcceptance:
-                return False
-            return (
+                return None
+            if not (
                 receipt.status == "RECONCILED"
                 and receipt.run_id == facts.joined_identity.prospective_run_id
-            )
+            ):
+                return None
+            return receipt
         except (asyncio.CancelledError, Exception):
-            return False
+            return None
 
     async def _indeterminate_and_reconcile(
         self,
@@ -664,6 +779,18 @@ def _preflight(plan: JoinedGate5RunPlan) -> _PreflightFacts:
     ):
         if type(value) is not str or _MACHINE_ID_RE.fullmatch(value) is None:
             raise _PreflightError(f"{field} is not a canonical identifier")
+    packet_identity_values = (
+        plan.expected_packet_id,
+        plan.expected_packet_artifact_id,
+    )
+    if any(value is not None for value in packet_identity_values):
+        if not all(
+            type(value) is str and _MACHINE_ID_RE.fullmatch(value) is not None
+            for value in packet_identity_values
+        ):
+            raise _PreflightError(
+                "expected packet ID and storage artifact ID must be canonical together"
+            )
     existing_artifact_ids = {
         replayed.authorization_id,
         *(reference.artifact_id for reference in replayed.artifact_refs),
@@ -672,6 +799,15 @@ def _preflight(plan: JoinedGate5RunPlan) -> _PreflightFacts:
         plan.output_artifact_id in existing_artifact_ids
         or plan.terminal_receipt_id in existing_artifact_ids
         or plan.output_artifact_id == plan.terminal_receipt_id
+        or any(value in existing_artifact_ids for value in packet_identity_values)
+        or any(
+            value in {plan.output_artifact_id, plan.terminal_receipt_id}
+            for value in packet_identity_values
+        )
+        or (
+            plan.expected_packet_id is not None
+            and plan.expected_packet_id == plan.expected_packet_artifact_id
+        )
     ):
         raise _PreflightError("joined artifact identifiers must be distinct")
     if (
@@ -946,6 +1082,57 @@ def _validate_nonreporting(value: NonreportingAcceptance) -> None:
         raise SchemaValidationError("nonreporting acceptance binding differs")
 
 
+def _validate_packet_recording(
+    value: PacketRecordingAcceptance,
+    *,
+    plan: JoinedGate5RunPlan,
+) -> None:
+    if type(value) is not PacketRecordingAcceptance:
+        raise SchemaValidationError("packet recording acceptance has the wrong type")
+    if value.status != "PACKET_RECORDED":
+        raise SchemaValidationError("packet recording acceptance status differs")
+    if (
+        _MACHINE_ID_RE.fullmatch(value.packet_id or "") is None
+        or _MACHINE_ID_RE.fullmatch(value.packet_artifact_id or "") is None
+        or value.packet_id != plan.expected_packet_id
+        or value.packet_artifact_id != plan.expected_packet_artifact_id
+    ):
+        raise SchemaValidationError("packet recording acceptance identity differs")
+    if _UPPER_SHA256_RE.fullmatch(value.packet_sha256 or "") is None:
+        raise SchemaValidationError("packet recording acceptance digest is invalid")
+    if (
+        type(value.packet_byte_length) is not int
+        or not 1 <= value.packet_byte_length <= 20_000_000
+    ):
+        raise SchemaValidationError("packet recording acceptance byte length is invalid")
+    if value.packet_media_type != "application/json":
+        raise SchemaValidationError("packet recording acceptance media type differs")
+
+
+def _packet_from_reconciliation(
+    plan: JoinedGate5RunPlan,
+    reconciliation: ReconciliationAcceptance | None,
+) -> PacketRecordingAcceptance | None:
+    if reconciliation is None or reconciliation.lifecycle_state != "PACKET_RECORDED":
+        return None
+    try:
+        acceptance = PacketRecordingAcceptance(
+            packet_id=reconciliation.packet_id or "",
+            packet_artifact_id=reconciliation.packet_artifact_id,
+            packet_sha256=reconciliation.packet_sha256 or "",
+            packet_byte_length=(
+                reconciliation.packet_byte_length
+                if type(reconciliation.packet_byte_length) is int
+                else -1
+            ),
+            packet_media_type=reconciliation.packet_media_type or "",
+        )
+        _validate_packet_recording(acceptance, plan=plan)
+    except Exception:
+        return None
+    return acceptance
+
+
 def _parse_canonical_timestamp(value: Any, field: str) -> datetime:
     if type(value) is not str:
         raise SchemaValidationError(f"{field} must be a canonical UTC timestamp")
@@ -977,6 +1164,8 @@ def _result(
     terminal_at: str | None = None,
     terminal_receipt: WorkerTerminalReceiptArtifact | None = None,
     terminal_disposition_recorded: bool = False,
+    packet_status: Literal["NOT_CREATED", "CREATED", "UNKNOWN"] = "NOT_CREATED",
+    packet_acceptance: PacketRecordingAcceptance | None = None,
     reconciled: bool = False,
 ) -> JoinedGate5RunResult:
     authorization_sha256 = None
@@ -1017,6 +1206,28 @@ def _result(
             None if terminal_receipt is None else terminal_receipt.sha256
         ),
         terminal_disposition_recorded=terminal_disposition_recorded,
+        packet_status=packet_status,
+        packet_id=(
+            None if packet_acceptance is None else packet_acceptance.packet_id
+        ),
+        packet_artifact_id=(
+            None
+            if packet_acceptance is None
+            else packet_acceptance.packet_artifact_id
+        ),
+        packet_sha256=(
+            None if packet_acceptance is None else packet_acceptance.packet_sha256
+        ),
+        packet_byte_length=(
+            None
+            if packet_acceptance is None
+            else packet_acceptance.packet_byte_length
+        ),
+        packet_media_type=(
+            None
+            if packet_acceptance is None
+            else packet_acceptance.packet_media_type
+        ),
         reconciled=reconciled,
     )
 
@@ -1038,10 +1249,13 @@ __all__ = [
     "NonreportingAcceptance",
     "OutcomeSealAcceptance",
     "OutputRetentionAcceptance",
+    "PacketContinuationPort",
+    "PacketRecordingAcceptance",
     "POST_SEND_EXECUTION_AMBIGUOUS",
     "PREFLIGHT_REJECTED",
     "ReconciliationAcceptance",
     "SUCCESS_NO_PACKET_RECORDED",
+    "SUCCESS_PACKET_RECORDED",
     "TerminalAcceptance",
     "TerminalDispositionAcceptance",
     "TerminalDispositionPort",

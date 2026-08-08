@@ -1,8 +1,9 @@
 """Probe runner — real forward-hook capture for Pythia-160M.
 
 Captures, per emitted token:
-  * the activated MLP intermediate at every layer (3,072 wide for Pythia-160M)
-    immediately before dense_4h_to_h projects to the 768-wide residual space
+  * the activated MLP intermediate immediately before the selected binding's
+    MLP down-projection (3,072 -> 768 at dense_4h_to_h for Pythia-160M;
+    4,864 -> 896 at down_proj for pinned Qwen2.5-0.5B-Instruct)
   * attention patterns (for Mode 7 attribution: edges from earlier tokens
     to the current one, weighted by attention)
   * lm_head logits (for the softmax-margin confidence)
@@ -28,6 +29,14 @@ from ..schemas.events import (
 )
 from ..schemas.manifest import ModelExecutionKind
 from .cover_library import MLP_INTERMEDIATE_POST_ACTIVATION
+from .model_loader import (
+    ModelBinding,
+    PYTHIA_160M_BINDING_KEY,
+    active_model_binding,
+    probe_hook_module_path,
+    resolve_probe_layer_stack,
+    resolve_probe_projection,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -272,18 +281,27 @@ def capture_probes(
     intervention: EraserIntervention | None = None,
     *,
     reference_geometry: dict[int, InterventionTensorGeometry] | None = None,
+    probe_binding: ModelBinding | None = None,
 ) -> Iterator[CaptureState]:
     """Register forward hooks on the model, yield a CaptureState, clean up.
 
-    Hooks attach only to ``model.gpt_neox.layers[i].mlp.dense_4h_to_h``
-    input[0] via a forward pre-hook: the 4h-wide post-activation,
-    pre-projection tensor. Attention data is read separately from the model's
-    ``output_attentions=True`` return value.
+    Hooks attach to the exact selected binding's down-projection input[0] via a
+    forward pre-hook: the activated intermediate, pre-projection tensor.
+    Pythia remains ``model.gpt_neox.layers[i].mlp.dense_4h_to_h``; the pinned
+    Qwen binding uses ``model.model.layers[i].mlp.down_proj``. Attention data
+    is read separately from the model's ``output_attentions=True`` return.
 
     Important: we DO NOT hold tensor references after the hook fires. The
     hook converts to Python lists immediately so that when the
     ``capture_probes`` block exits, no GPU memory is retained.
     """
+    binding = probe_binding or active_model_binding()
+    if intervention is not None and not binding.stage27f_intervention_supported:
+        raise RuntimeError(
+            "selected model binding has no Stage-27F coordinate adapter; "
+            f"intervention refused for {binding.key}"
+        )
+
     handles: list[Any] = []
     rng_snapshot = snapshot_torch_rng_state()
     state = CaptureState(rng_state_sha256=torch_rng_state_sha256(rng_snapshot))
@@ -294,39 +312,60 @@ def capture_probes(
         )
 
     try:
-        # Pythia (gpt-neox arch in transformers) lays the blocks out at
-        # model.gpt_neox.layers — defensive lookup so a future arch change
-        # doesn't crash the worker.
-        layers = _get_pythia_layers(model)
-        if layers is None:
-            logger.warning(
-                "capture_probes: could not locate gpt_neox.layers; "
-                "MLP-post capture will be empty"
-            )
+        if binding.key == PYTHIA_160M_BINDING_KEY:
+            # Preserve the historical Pythia lookup, partial-stack test-fixture
+            # behavior, and fail-closed intervention receipts byte-for-byte.
+            layers = _get_pythia_layers(model)
+            layer_projections: list[tuple[int, Any]] = []
+            if layers is None:
+                logger.warning(
+                    "capture_probes: could not locate gpt_neox.layers; "
+                    "MLP-post capture will be empty"
+                )
+            else:
+                for layer_idx in range(min(n_layers, len(layers))):
+                    mlp = getattr(layers[layer_idx], "mlp", None)
+                    projection = getattr(mlp, "dense_4h_to_h", None)
+                    if projection is None or not hasattr(
+                        projection, "register_forward_pre_hook"
+                    ):
+                        continue
+                    layer_projections.append((layer_idx, projection))
         else:
-            for layer_idx in range(min(n_layers, len(layers))):
-                layer = layers[layer_idx]
-                mlp = getattr(layer, "mlp", None)
-                projection = getattr(mlp, "dense_4h_to_h", None)
-                if projection is None or not hasattr(
-                    projection, "register_forward_pre_hook"
-                ):
-                    continue
-                # The projection input is gelu(dense_h_to_4h(...)): the
-                # 4h-wide activated intermediate tensor used by Stage-27F.
-                handle = projection.register_forward_pre_hook(
-                    _make_intermediate_pre_hook(
-                        state,
-                        layer_idx,
-                        projection,
-                        observation_phase=(
-                            "intervention_attempt"
-                            if intervention is not None
-                            else "unmodified_forward"
-                        ),
+            # The additive Qwen path is strict: selected architecture, exact
+            # down-projection, and declared 4,864 -> 896 geometry only.
+            layers = resolve_probe_layer_stack(
+                model,
+                binding,
+                expected_layers=n_layers,
+            )
+            layer_projections = [
+                (
+                    layer_idx,
+                    resolve_probe_projection(
+                        layers[layer_idx],
+                        binding,
+                        layer_index=layer_idx,
                     ),
                 )
-                handles.append(handle)
+                for layer_idx in range(n_layers)
+            ]
+
+        for layer_idx, projection in layer_projections:
+            handle = projection.register_forward_pre_hook(
+                _make_intermediate_pre_hook(
+                    state,
+                    layer_idx,
+                    projection,
+                    observation_phase=(
+                        "intervention_attempt"
+                        if intervention is not None
+                        else "unmodified_forward"
+                    ),
+                    hook_module_path=probe_hook_module_path(binding, layer_idx),
+                ),
+            )
+            handles.append(handle)
         yield state
     finally:
         _seal_rng_geometry(state)
@@ -507,6 +546,7 @@ def _observed_geometry(
     *,
     rng_state_sha256: str,
     hook_call_count: int,
+    hook_module_path: str,
 ) -> InterventionTensorGeometry:
     shape = [int(value) for value in activation.shape]
     if len(shape) != 3 or min(shape) < 1:
@@ -527,7 +567,7 @@ def _observed_geometry(
         width=shape[-1],
         projected_output_width=_projection_output_width(projection),
         observation_phase=observation_phase,
-        hook_module_path=_expected_hook_path(layer_idx),
+        hook_module_path=hook_module_path,
         dtype=str(activation.dtype),
         device=str(activation.device),
         all_finite=all_finite,
@@ -571,6 +611,8 @@ def _make_intermediate_pre_hook(
     layer_idx: int,
     projection: Any,
     observation_phase: Literal["unmodified_forward", "intervention_attempt"],
+    *,
+    hook_module_path: str,
 ) -> Any:
     """Capture and, only after global preflight, alter the 4h activation."""
 
@@ -589,6 +631,7 @@ def _make_intermediate_pre_hook(
                 observation_phase,
                 rng_state_sha256=state.rng_state_sha256,
                 hook_call_count=hook_call_count,
+                hook_module_path=hook_module_path,
             )
             state.tensor_geometry[layer_idx] = geometry
 

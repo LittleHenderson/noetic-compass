@@ -36,10 +36,12 @@ from api.services.cas_harness_v2_joined_executor import (  # noqa: E402
     NonreportingAcceptance,
     OutcomeSealAcceptance,
     OutputRetentionAcceptance,
+    PacketRecordingAcceptance,
     POST_SEND_EXECUTION_AMBIGUOUS,
     PREFLIGHT_REJECTED,
     ReconciliationAcceptance,
     SUCCESS_NO_PACKET_RECORDED,
+    SUCCESS_PACKET_RECORDED,
     TerminalAcceptance,
     TerminalDispositionAcceptance,
 )
@@ -56,6 +58,8 @@ OUTPUT_NAME = "raw-outcomes"
 OUTPUT_ID = "joined-worker-output-001"
 OUTPUT_MEDIA_TYPE = "application/json"
 TERMINAL_ID = "joined-worker-terminal-001"
+PACKET_ID = "packet-stageb-001"
+PACKET_ARTIFACT_ID = "packet-stageb-artifact-001"
 
 
 def _encode(value: object) -> bytes:
@@ -243,6 +247,16 @@ class _Ports:
         self.output_artifact = None
         self.terminal_receipt = None
         self.live_arguments: dict[str, object] | None = None
+        self.packet_arguments: dict[str, object] | None = None
+        self.packet_acceptance = PacketRecordingAcceptance(
+            packet_id=PACKET_ID,
+            packet_sha256="A" * 64,
+            packet_byte_length=1024,
+            packet_media_type="application/json",
+            packet_artifact_id=PACKET_ARTIFACT_ID,
+        )
+        self.packet_durable = False
+        self.fail_packet_after_durable = False
 
     def _fail(self, phase: str) -> None:
         if self.cancel_phase == phase:
@@ -345,6 +359,30 @@ class _Ports:
         self._fail("nonreporting")
         return NonreportingAcceptance(reason_code=reason_code)
 
+    async def record_packet(
+        self,
+        *,
+        authorization,
+        job_snapshot,
+        terminal_receipt,
+        output_name,
+        output_artifact,
+        output_body,
+    ):
+        del authorization, job_snapshot
+        self.calls.append("packet")
+        self.packet_arguments = {
+            "terminal_receipt": terminal_receipt,
+            "output_name": output_name,
+            "output_artifact": output_artifact,
+            "output_body": output_body,
+        }
+        self._fail("packet")
+        self.packet_durable = True
+        if self.fail_packet_after_durable:
+            raise RuntimeError("injected post-durable packet failure")
+        return self.packet_acceptance
+
     async def record_terminal_disposition(
         self,
         *,
@@ -365,18 +403,37 @@ class _Ports:
         del authorization
         self.calls.append("reconcile")
         self._fail("reconcile")
-        return ReconciliationAcceptance(
-            run_id=prospective_run_id(job_snapshot.job_id)
-        )
+        if self.packet_durable:
+            return ReconciliationAcceptance(
+                run_id=prospective_run_id(job_snapshot.job_id),
+                lifecycle_state="PACKET_RECORDED",
+                packet_id=self.packet_acceptance.packet_id,
+                packet_artifact_id=self.packet_acceptance.packet_artifact_id,
+                packet_sha256=self.packet_acceptance.packet_sha256,
+                packet_byte_length=self.packet_acceptance.packet_byte_length,
+                packet_media_type=self.packet_acceptance.packet_media_type,
+            )
+        return ReconciliationAcceptance(run_id=prospective_run_id(job_snapshot.job_id))
 
 
-def _executor(ports: _Ports) -> JoinedGate5Executor:
+def _with_packet_identity(plan: JoinedGate5RunPlan) -> JoinedGate5RunPlan:
+    return replace(
+        plan,
+        expected_packet_id=PACKET_ID,
+        expected_packet_artifact_id=PACKET_ARTIFACT_ID,
+    )
+
+
+def _executor(
+    ports: _Ports, *, packet_reporting: bool = False
+) -> JoinedGate5Executor:
     return JoinedGate5Executor(
         worker_protocol=ports,
         live_dump=ports,
         clock=ports,
         controller=ports,
         terminal_disposition=ports,
+        packet_reporting=ports if packet_reporting else None,
     )
 
 
@@ -438,6 +495,114 @@ async def test_success_joins_exact_bytes_once_and_ends_without_packet() -> None:
     assert not hasattr(ports, "attach_evidence_packet")
     with pytest.raises(FrozenInstanceError):
         result.packet_status = "CREATED"  # type: ignore[misc]
+
+
+@pytest.mark.asyncio
+async def test_opt_in_packet_path_records_after_outcome_without_nonreporting() -> None:
+    plan, response_raw = _fixture()
+    plan = _with_packet_identity(plan)
+    ports = _Ports(response_raw)
+
+    result = await _executor(ports, packet_reporting=True).execute(plan)
+
+    assert result.status == SUCCESS_PACKET_RECORDED
+    assert result.packet_status == "CREATED"
+    assert result.packet_id == PACKET_ID
+    assert result.packet_artifact_id == PACKET_ARTIFACT_ID
+    assert result.packet_sha256 == "A" * 64
+    assert result.packet_byte_length == 1024
+    assert result.packet_media_type == "application/json"
+    assert result.model_invocation_count == 1
+    assert result.reconciled is True
+    assert ports.calls == [
+        "consume",
+        "invoke",
+        "clock",
+        "output",
+        "terminal",
+        "outcome",
+        "packet",
+        "reconcile",
+    ]
+    assert ports.live_calls == 1
+    assert ports.packet_arguments == {
+        "terminal_receipt": ports.terminal_receipt,
+        "output_name": OUTPUT_NAME,
+        "output_artifact": ports.output_artifact,
+        "output_body": response_raw,
+    }
+
+
+@pytest.mark.asyncio
+async def test_invalid_packet_acceptance_fails_closed_without_model_retry() -> None:
+    plan, response_raw = _fixture()
+    plan = _with_packet_identity(plan)
+    ports = _Ports(response_raw)
+    ports.packet_acceptance = replace(
+        ports.packet_acceptance,
+        packet_sha256="a" * 64,
+    )
+
+    result = await _executor(ports, packet_reporting=True).execute(plan)
+
+    assert result.status == CONTINUATION_UNRESOLVED
+    assert result.error_code == "POST_EXECUTION_CONTINUATION_UNRESOLVED"
+    assert result.packet_status == "UNKNOWN"
+    assert result.model_invocation_count == 1
+    assert result.reconciled is True
+    assert ports.calls[-2:] == ["packet", "reconcile"]
+    assert "nonreporting" not in ports.calls
+    assert ports.live_calls == 1
+
+
+@pytest.mark.asyncio
+async def test_packet_port_without_expected_identity_is_rejected_before_side_effects() -> None:
+    plan, response_raw = _fixture()
+    ports = _Ports(response_raw)
+
+    result = await _executor(ports, packet_reporting=True).execute(plan)
+
+    assert result.status == PREFLIGHT_REJECTED
+    assert result.packet_status == "NOT_CREATED"
+    assert result.model_invocation_count == 0
+    assert ports.calls == []
+
+
+@pytest.mark.asyncio
+async def test_wrong_packet_storage_identity_is_unknown_not_created() -> None:
+    plan, response_raw = _fixture()
+    plan = _with_packet_identity(plan)
+    ports = _Ports(response_raw)
+    ports.packet_acceptance = replace(
+        ports.packet_acceptance,
+        packet_artifact_id="wrong-packet-artifact-001",
+    )
+
+    result = await _executor(ports, packet_reporting=True).execute(plan)
+
+    assert result.status == CONTINUATION_UNRESOLVED
+    assert result.packet_status == "UNKNOWN"
+    assert result.packet_id is None
+    assert result.model_invocation_count == 1
+    assert ports.live_calls == 1
+
+
+@pytest.mark.asyncio
+async def test_reconciliation_recovers_exact_packet_after_post_durable_port_failure() -> None:
+    plan, response_raw = _fixture()
+    plan = _with_packet_identity(plan)
+    ports = _Ports(response_raw)
+    ports.fail_packet_after_durable = True
+
+    result = await _executor(ports, packet_reporting=True).execute(plan)
+
+    assert result.status == CONTINUATION_UNRESOLVED
+    assert result.packet_status == "CREATED"
+    assert result.packet_id == PACKET_ID
+    assert result.packet_artifact_id == PACKET_ARTIFACT_ID
+    assert result.packet_sha256 == "A" * 64
+    assert result.reconciled is True
+    assert ports.live_calls == 1
 
 
 @pytest.mark.asyncio

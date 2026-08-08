@@ -1,0 +1,17 @@
+{
+  "schema_version": "cas_harness_gate5_stageb_split.v0.1",
+  "split_id": "stageb-schema-held-out",
+  "rows": [
+    "schema-required-held-out-row-not-executed-001"
+  ],
+  "scientific_use": "NONE / NOT A REPLICATION",
+  "exclusion_reason": "Stage B authorizes exactly one joined engineering invocation and no replication.",
+  "packet_accounting_plan": {
+    "groups": 0,
+    "enrolled_rows": 1,
+    "analyzed_rows": 0,
+    "missing_rows": 0,
+    "excluded_rows": 1
+  },
+  "required_assessment_effect": "FIXED-SAMPLE AND GROUP-FLOOR BLOCKERS / REPORTED_CRITERIA_NOT_MET"
+}

@@ -1,0 +1,226 @@
+{
+  "schema_version": "cas_harness_gate5_stageb_qwen_joined_engineering_protocol.v0.1",
+  "protocol_id": "gate5-stageb-qwen-joined-engineering-v0.1",
+  "created_at": "2026-08-08T20:50:40.361330Z",
+  "protocol_freeze_status": "FROZEN PROSPECTIVE DESIGN",
+  "project_document_status": "DRAFT / OPEN / NOT FROZEN",
+  "gate5_status": "OPEN",
+  "gate_decision": "KEEP_OPEN",
+  "engineering_status": "RING 4 / BOUNDED SOFTWARE CANDIDATE TESTED",
+  "experimental_execution_status": "NOT_STARTED",
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "canon_status": "NOT FROZEN",
+  "public_release_authorized": false,
+  "product_route_authorized": false,
+  "purpose": "Authorize, only after one exact execution-identity amendment activates the design, one bounded local instruction-tuned joined engineering run and at most one Evidence Packet v2. The run exercises model loading, one clean instruction carrier, activation capture, output retention, terminal lifecycle, outcome access, Packet construction, verification, and reconciliation. It performs no intervention science and creates no prompt-injection, steering, safety, scientific, product, license, disclosure, or canon authority.",
+  "preparation_baseline": {
+    "commit": "648e92cbe3f84e2c4e47f803748c6fcf08909025",
+    "role": "MODEL BINDING AND PREPARATION BASELINE ONLY / NOT EXECUTABLE IDENTITY",
+    "known_gaps": [
+      "Qwen model.layers and mlp.down_proj probe walking is absent at the baseline.",
+      "The joined path has no Evidence Packet v2 builder at the baseline."
+    ]
+  },
+  "model_and_image": {
+    "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+    "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "weights_filename": "model.safetensors",
+    "weights_sha256": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+    "weights_bytes": 988097824,
+    "architecture": {
+      "family": "llama_like",
+      "layers": 24,
+      "hidden_size": 896,
+      "intermediate_size": 4864,
+      "probe_path_required": "model.layers[*].mlp.down_proj"
+    },
+    "image_reference": "atlas-live-trace-worker:gate5-stageb-qwen05b-instruct-v0.1",
+    "image_id": "sha256:373ac33e26c4e3e82ac34690c08e7af58b4b925fe0410e6a0a175b10b9fd2139",
+    "image_config_sha256": "sha256:ef60af891b0392e20a0d3a56dea801eab4c59d8bd65d4fc05dd1e48f1c622710",
+    "image_size_bytes": 5949186374,
+    "hardware_profile": "NVIDIA GeForce RTX 4070 Laptop GPU / one local host / exact execution identity retained"
+  },
+  "authorization": {
+    "authorization_kind": "ONE BOUNDED LOCAL JOINED ENGINEERING RUN AND ONE EVIDENCE PACKET V2 MAXIMUM",
+    "current_state": "INACTIVE / EXECUTION UNAUTHORIZED / NOT_STARTED",
+    "activation_precondition": "Append exactly one valid cas_harness_v2.preregistration_amendment.v1 carrier with change_class EXECUTION_IDENTITY_ADDITION that binds the final clean executable commit and every required exact artifact in execution_identity_amendment_plan.json.",
+    "maximum_amendments_before_execution": 1,
+    "maximum_jobs": 1,
+    "maximum_run_attempts": 1,
+    "maximum_model_invocations": 1,
+    "maximum_evidence_packets": 1,
+    "automatic_retry": false,
+    "resume": false,
+    "replacement_run": false,
+    "provider_fallback": false,
+    "intervention_authorized": false,
+    "prompt_injection_study_authorized": false,
+    "steering_study_authorized": false
+  },
+  "frozen_request": {
+    "artifact_id": "stageb-qwen-request-plan",
+    "sha256": "d4127311457cf48f474d5d262d69910de934fee2d1b47150764992c0fbc3c6d3",
+    "byte_length": 507,
+    "prompt": "Reply with exactly one word, without punctuation or explanation: What color is a clear daytime sky?",
+    "chat_template_application": "WORKER APPLIES THE PINNED TOKENIZER CHAT TEMPLATE EXACTLY ONCE / RAW CHAT TOKENS FORBIDDEN",
+    "max_new_tokens": 2,
+    "temperature": "0.0",
+    "seed": 1729,
+    "probes": [
+      "active_trace",
+      "confidence_margin"
+    ],
+    "enabled_methods": [
+      "foundation_probe"
+    ],
+    "layer_range": [
+      0,
+      23
+    ],
+    "top_k": 8,
+    "ablation_target": "ABSENT",
+    "drive_local_eraser": "ABSENT"
+  },
+  "frozen_output": {
+    "output_artifact_id": "stageb-qwen-joined-worker-dump-001",
+    "maximum_generated_tokens": 2,
+    "maximum_worker_response_bytes": 2000000,
+    "expected_text_for_context_only": "Blue",
+    "expected_text_decision_effect": "REPORT_ONLY / NOT A PASS CRITERION",
+    "packet_time_required_retention": "EXACT RAW REQUEST, RESPONSE, OUTPUT, SHA-256, BYTE LENGTH, TERMINAL COMPLETION RECEIPT, AND SECRET SCAN",
+    "post_packet_runtime_receipt_requirement": "FINAL LIFECYCLE RECONCILIATION OCCURS ONLY AFTER PACKET BYTES ARE BUILT, RESERVED, AND RECORDED; IT CANNOT BE A PACKET FALSIFIER OR ALTER THE PACKET",
+    "semantic_scoring": "NONE"
+  },
+  "control_floor": {
+    "MATCHED_TAXONOMY": "REPORT_ONLY IN PREREGISTRATION / INVALID IN PACKET / NOT PERFORMED",
+    "WRONG_LAYER": "REPORT_ONLY IN PREREGISTRATION / INVALID IN PACKET / NOT PERFORMED",
+    "CLEAN_NULL": "REPORT_ONLY IN PREREGISTRATION / INVALID IN PACKET / NOT PERFORMED",
+    "required_packet_assessment": "REPORTED_CRITERIA_NOT_MET / INELIGIBLE"
+  },
+  "packet_ceiling": {
+    "packet_schema": "cas_harness_v2.evidence_packet.v2",
+    "future_packet_id": "epv2-stageb-qwen-joined-001",
+    "current_packet_status": "NOT CREATED",
+    "maximum_packet_count": 1,
+    "structural_completeness_ceiling": "COMPLETE IF EVERY EXACT ARTIFACT IS PRESENT AND VERIFIED",
+    "authenticated_execution_ceiling": "UNAVAILABLE OR PRESENT_UNAUTHENTICATED",
+    "preregistered_criteria_ceiling": "REPORTED_CRITERIA_NOT_MET",
+    "scientific_eligibility_ceiling": "INELIGIBLE",
+    "admission_ring": 4,
+    "product_claim_status": "NOT LICENSED",
+    "disclosure_status": "HELD",
+    "public_release_allowed": false,
+    "product_route_allowed": false,
+    "self_hash_is_authority": false
+  },
+  "failure_rules": [
+    "Missing or invalid execution-identity amendment: fail before authorization consumption and model invocation.",
+    "Dirty final execution worktree or any source, model, tokenizer, image, request, or dependency mismatch: fail closed before model invocation.",
+    "Any raw chat-template token in the request or any request drift: fail closed before model invocation.",
+    "Any activation steering, ablation, causal_ablation, drive_local_eraser, prompt-injection scoring, or undeclared method: fail closed before model invocation.",
+    "Any network route, RunPod call, external provider call, or paid spend: fail closed and do not fall back.",
+    "The first run attempt is terminal; no retry, resume, replacement, top-up, second invocation, or second Packet is permitted.",
+    "Outcome access before terminal execution completion is forbidden.",
+    "Packet creation is permitted exactly once only after terminal completion and outcome access; if construction fails, retain one packet-construction failure receipt and do not retry.",
+    "After Packet bytes are built, reserved, recorded, and verified, final lifecycle reconciliation and its runtime receipt are mandatory; reconciliation failure is terminal but cannot rewrite the Packet or retroactively change its falsifier report.",
+    "Any Packet reporting a required control PASS, REPORTED_CRITERIA_MET, scientific eligibility other than INELIGIBLE, or elevated product/license/disclosure status violates this protocol and must be retained as invalid evidence without promotion."
+  ],
+  "provider_accounting": {
+    "runpod_expected": false,
+    "runpod_calls_ceiling": 0,
+    "external_provider_calls_ceiling": 0,
+    "known_spend_usd_ceiling": "0.00",
+    "network_during_execution": "NONE",
+    "user_reported_runpod_balance_usd": "107.00",
+    "balance_status": "USER REPORTED / UNINSPECTED / NOT AUTHORITY TO SPEND"
+  },
+  "artifact_bindings": [
+    {
+      "path": "analysis_manifest.json",
+      "sha256": "690e1c9d6124caae99cd95a9c17c83af6fda79b8b827dd861ed12d30b2ab16d1",
+      "byte_length": 3180
+    },
+    {
+      "path": "claim_ledger.noncanonical.json",
+      "sha256": "ccf8c5f879f802c009a90e07ef5cc2c26ba65e297e165b2f1e807b817feb0230",
+      "byte_length": 3180
+    },
+    {
+      "path": "control_plan.json",
+      "sha256": "2b9953c6e3a9c517ca848f57a8a537786e2daedff181d44e5f0378b50292ab1f",
+      "byte_length": 1926
+    },
+    {
+      "path": "dependency_lock.json",
+      "sha256": "24bb8c5d31498de573487376eb808986b52cb0504ba0f63b2e7b76d73e649780",
+      "byte_length": 1230
+    },
+    {
+      "path": "evidence_packet_plan.json",
+      "sha256": "a035c5dcb352ab8e795833d1334de00da3f4d8e0fe8c058f82f0eb0d67582331",
+      "byte_length": 7076
+    },
+    {
+      "path": "execution_identity_amendment_plan.json",
+      "sha256": "1601031d2c9cad02de8cfb9323ab603c135bc9ba2f7a53170c7e107299193ff2",
+      "byte_length": 2101
+    },
+    {
+      "path": "fixed_sample_plan.json",
+      "sha256": "c199c3d16f9c21ee7a6794253316d0d5ce3ecc672598f2dbc404f9a18ce5725e",
+      "byte_length": 495
+    },
+    {
+      "path": "model_artifact_manifest.json",
+      "sha256": "805616f0a563cbd5d2874506bcb660c41f46929a8cdc2561536dd57e47d6fa47",
+      "byte_length": 1323
+    },
+    {
+      "path": "output_contract.json",
+      "sha256": "3d2720b094d4944ef9b3c84afb1a8188fe7f96816bab397fa781529325f6fe92",
+      "byte_length": 1249
+    },
+    {
+      "path": "preregistration.json",
+      "sha256": "4f7d32a9364fc5a470b0fee575d53c15d027d52cb013ab3edbbd059a3cced57d",
+      "byte_length": 11762
+    },
+    {
+      "path": "provider_budget.json",
+      "sha256": "f41949e7f96fa9566541f9b6149f5df627325f31a48acf2fde68e40b0d96e6f5",
+      "byte_length": 630
+    },
+    {
+      "path": "request.json",
+      "sha256": "d4127311457cf48f474d5d262d69910de934fee2d1b47150764992c0fbc3c6d3",
+      "byte_length": 507
+    },
+    {
+      "path": "source_manifest.json",
+      "sha256": "d27e226ea44e065c17ff053da0a39fd96b38a85773d97dd469d5e4f587a32bf2",
+      "byte_length": 4104
+    },
+    {
+      "path": "split_confirmatory.json",
+      "sha256": "7297a610841ba059527966eb841cb725676f844ecb8a98433df33398ad78bf16",
+      "byte_length": 347
+    },
+    {
+      "path": "split_held_out.json",
+      "sha256": "a2e6164d6f0820c82443a77227bd94617b9d399667c5d746fb5b4277b33dffbc",
+      "byte_length": 572
+    },
+    {
+      "path": "tokenizer_identity.json",
+      "sha256": "31662b7b72a660967c5c88483e04996274ccb3f85eafa62df5fb030f07fe65a8",
+      "byte_length": 796
+    },
+    {
+      "path": "VALIDATION_RECEIPT_v0.1.json",
+      "sha256": "546ea75548249109643d18636dcc43af2c98068c9e58bd77c3be772aff2534b5",
+      "byte_length": 3075
+    }
+  ],
+  "claim_boundary": "ONE LOCAL JOINED ENGINEERING RUN AND ONE PACKET MAXIMUM / EXECUTION INACTIVE UNTIL EXACT IDENTITY AMENDMENT / NO INTERVENTION SCIENCE / NO PROMPT-INJECTION DETECTION CLAIM / NO STEERING EFFICACY CLAIM / REPORTED_CRITERIA_NOT_MET / INELIGIBLE / EXPERIMENT NOT_STARTED / GATE 5 OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN"
+}

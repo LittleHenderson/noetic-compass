@@ -254,18 +254,32 @@ outcome access, exact completion binding, bypass-mutated outcome-event replay,
 retained-byte registry mutation, audit contradictions, normalized cross-role
 aliases, and all four repository-known v1 labels.
 
-Current focused validation: `155 passed, 106 subtests passed` under Python 3.14
+Current focused validation: `180 passed, 110 subtests passed` under Python 3.14
 with site startup and bytecode generation disabled. It comprises 94 active
 kernel tests, 35 strict worker-protocol tests, four historical-recovery tests,
-and 22 Gate 5 verifier red-team tests. Its same-process executed-node digest is
-`CF033F2E7F519AAD6738D596A694728FD4173CFA12DD8A8FE094823215D4CF8A`.
+22 Gate 5 verifier red-team tests, and 25 Stage B Packet-builder/file-retention
+tests with four subtests. Its same-process executed-node digest is
+`3814236D1EABAF7C676DE76CBDF8805DA1B889304250CB52C141F45A76CC0490`.
 This ephemeral local receipt is checked inside the verifier but is not retained
 under trusted time or WORM authority. It proves repository-local controls only;
 it is not live execution, independent reproduction, scientific evidence, or
 product authority.
 
-The companion 364-test worker and 78-test API/launcher/fleet/state suites are
-`LOCAL_UNATTESTED_HOST_REGRESSION` observations. One pytest process binds each
+The narrower Stage B joined-executor and runner-preparation suites pass 34/34
+and 17/17 with same-process executed-node digests
+`C2B5EF68B2491A19BD09345DED44704CA37A57AB21E07E09FFA928E25ABA4570`
+and
+`40FBF9298CB6DF939C5502D5B8C1E2ADBFA79011167E14E25252E663C114B8E6`.
+They are source-level, engineering-only receipts with zero actual model
+invocations. The runtime image has not been built and the Stage B joined model
+run remains `NOT_STARTED`; the frozen design authorizes no separate
+pre-amendment model canary. No Stage B Evidence Packet exists, and neither
+receipt establishes prompt-injection detection, steering efficacy, scientific
+validity, product validation, license, or disclosure authority.
+
+The companion current 414-test worker and 78-test API/launcher/fleet/state
+suites are `LOCAL_UNATTESTED_HOST_REGRESSION` observations. One pytest process
+binds each
 suite's duplicate-free collected/started/finished node IDs and exact
 setup/call/teardown outcomes. The child starts with `-I -S -B`, imports only
 locally locked pytest/plugin code before prepending exact repository roots, and
@@ -279,6 +293,10 @@ imports, unresolved/deleted origins, native-loader dependencies, or child
 processes. The standard library, distribution files absent from upstream
 `RECORD`, complete test/native/descendant closure, kernel/filesystem trust, and
 independent attestation remain outside the lock.
+
+The time-indexed v0.2 worker/container checkpoint separately retains its
+historical 364/364 issuance receipt; it is not rewritten against the current
+414-test worker bytes.
 
 The time-indexed v0.2 container receipt records BuildKit SPDX/SLSA and Docker
 Scout facts as `SELF_REPORTED_LOCAL_OBSERVATION_ONLY`; at issuance, its raw

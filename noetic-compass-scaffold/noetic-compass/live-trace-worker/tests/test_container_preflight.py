@@ -256,6 +256,8 @@ def test_model_cache_preflight_executes_target_contract(monkeypatch) -> None:
     class _Projection:
         def __init__(self) -> None:
             self.hook = None
+            self.in_features = architecture.mlp_intermediate_dim
+            self.out_features = architecture.hidden_size
 
         def register_forward_pre_hook(self, hook):
             self.hook = hook
@@ -269,6 +271,7 @@ def test_model_cache_preflight_executes_target_contract(monkeypatch) -> None:
         gpt_neox = SimpleNamespace(
             layers=[
                 SimpleNamespace(mlp=SimpleNamespace(dense_4h_to_h=projection))
+                for _ in range(architecture.n_layers)
             ]
         )
 

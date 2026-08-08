@@ -1,0 +1,44 @@
+{
+  "schema_version": "cas_harness_gate5_stageb_control_plan.v0.1",
+  "science_authorized": false,
+  "intervention_authorized": false,
+  "controls": [
+    {
+      "control_id": "stageb-matched-taxonomy-not-performed",
+      "kind": "MATCHED_TAXONOMY",
+      "procedure": "No adversarial, taxonomic, clean-versus-injected, or matched-treatment comparison is executed in Stage B.",
+      "preregistration_failure_effect": "REPORT_ONLY",
+      "required_packet_outcome": "INVALID",
+      "reason_non_pass": "NOT PERFORMED / NO DETECTION STUDY"
+    },
+    {
+      "control_id": "stageb-wrong-layer-not-performed",
+      "kind": "WRONG_LAYER",
+      "procedure": "No activation intervention, steering vector, ablation, or wrong-layer comparator is executed in Stage B.",
+      "preregistration_failure_effect": "REPORT_ONLY",
+      "required_packet_outcome": "INVALID",
+      "reason_non_pass": "NOT PERFORMED / INTERVENTION FORBIDDEN"
+    },
+    {
+      "control_id": "stageb-clean-null-not-performed",
+      "kind": "CLEAN_NULL",
+      "procedure": "The one clean instruction request is an engineering carrier, not a paired null condition and not a scientific comparison.",
+      "preregistration_failure_effect": "REPORT_ONLY",
+      "required_packet_outcome": "INVALID",
+      "reason_non_pass": "NOT PERFORMED AS A CONTROL / SINGLE CARRIER ONLY"
+    }
+  ],
+  "schema_constraint": "Evidence Packet v2 permits only PASS, FAIL, or INVALID control outcomes. It has no neutral REPORT_ONLY outcome. Every non-PASS outcome is a preregistered-criteria blocker.",
+  "required_assessment": {
+    "preregistered_criteria": "REPORTED_CRITERIA_NOT_MET",
+    "scientific_eligibility": "INELIGIBLE"
+  },
+  "forbidden_interpretations": [
+    "MATCHED_TAXONOMY passed",
+    "WRONG_LAYER passed",
+    "CLEAN_NULL passed",
+    "prompt-injection detection established",
+    "steering efficacy established",
+    "safety control established"
+  ]
+}
