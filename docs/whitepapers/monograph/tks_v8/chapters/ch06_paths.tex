@@ -56,7 +56,7 @@ Definition~\ref{ch04:def:comp}. The path's \emph{source} is $X_0$ and its
 construction time and raises the typed composition error, naming the
 offending segment, if any adjacency fails; it also rejects the empty
 sequence and any unordered or one-shot container of arrows, per the
-ordered-input discipline of Chapter~\ref{ch03:main}.
+ordered-input discipline of Chapter~\ref{ch03:chap}.
 \end{definition}
 
 \begin{definition}[Path composite]
@@ -283,7 +283,7 @@ staging analysis, per-step attribution --- must consume paths. The kernel
 therefore treats ``compute the composite'' as a lossy, explicit,
 caller-initiated operation, never an implicit normalization. This is the
 same design posture as the name-inclusive object identity of
-Chapter~\ref{ch03:main}: information declared by the caller is never
+Chapter~\ref{ch03:chap}: information declared by the caller is never
 silently collapsed, and every collapse is an auditable call site.
 
 \begin{remark}[Paths and the normal-form machinery]
@@ -711,7 +711,7 @@ values are frozen.
 down, the discipline lives in docstrings (``callers should not iterate
 heterogeneous pipelines'') and code review. The failure data motivating
 this kernel --- the red-team findings summarized in
-Chapter~\ref{ch01:main} --- came from systems at this level, where the
+Chapter~\ref{ch01:chap} --- came from systems at this level, where the
 sequence-to-power fallacy is not blocked but merely deprecated. The
 kernel's position is that a discipline worth stating is worth enforcing
 at the strongest point the host allows, and that the distance between

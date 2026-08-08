@@ -4,6 +4,19 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-08 — Monograph cross-reference repair (tks_v8, cas_pcba8, cas_ohm1)
+
+- Fixed all 14 pre-existing undefined `\ref` targets that rendered as "??"
+  in three volumes: tks_v8 used a `chNN:main` label convention that was
+  never defined (`ch01/ch03/ch07:main` → `chNN:chap`, `ch10:main` →
+  `ch10:testing`; 9 sites in ch04/ch05/ch06); cas_pcba8's ch05 intro
+  pointed at a nonexistent `ch05:sec:boundary` (→ `ch05:sec:invariants`,
+  the "Invariants and boundary" closing section); cas_ohm1 referenced
+  `ch12:hypotheses`/`ch11:eligibility` where the chapters are labeled
+  `hyp:chapter`/`elig:chapter` (4 sites in ch04/ch05).
+- All five volumes now build with zero undefined-reference and zero
+  undefined-citation warnings; PDFs in `docs/whitepapers/pdf/` refreshed.
+
 ## 2026-08-08 — CAS Core 8 monograph: 17-failure-mode audit + corrections (11-agent workflow)
 
 - Ran an 11-agent audit workflow over `docs/whitepapers/monograph/cas_core8/`

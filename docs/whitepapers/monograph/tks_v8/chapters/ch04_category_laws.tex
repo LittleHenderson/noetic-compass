@@ -48,7 +48,7 @@ Appendix~B, and we will not blur that line.
 
 \subsection{Arrows recalled}
 
-We briefly recall the arrow definition from Chapter~\ref{ch03:main} in the
+We briefly recall the arrow definition from Chapter~\ref{ch03:chap} in the
 form we need here, since every proof in this chapter manipulates it directly.
 
 \begin{definition}[Arrow judgment]
@@ -160,7 +160,7 @@ objects are extensionally alike but were declared with distinct intent ---
 two registers that both carry $(0, 1)$, two stages of a workflow that both
 carry the same label set. Composing across them silently would erase the
 declared distinction, and the entire point of name-inclusive identity
-(Chapter~\ref{ch03:main}) is that declared distinctions are load-bearing. The
+(Chapter~\ref{ch03:chap}) is that declared distinctions are load-bearing. The
 sanctioned bridge is again explicit: a caller who asserts that the two
 objects should communicate constructs a named transport arrow between them
 and includes it in the term.
@@ -536,7 +536,7 @@ special-casing would be a coercion pathway waiting to be widened.
 
 The executable suite exercises the contract with a family of negative
 fixtures, each targeting one way the definedness condition can fail. We
-catalog them as checkclasses; Chapter~\ref{ch10:main} gives the mapping to
+catalog them as checkclasses; Chapter~\ref{ch10:testing} gives the mapping to
 concrete test names.
 
 \begin{checkclass}[Carrier-equal, name-distinct middle]
@@ -723,7 +723,7 @@ the unique arrow out of the empty object composes with everything
 typed-compatibly, its mapping tuple is empty, and an implementation that
 mishandles zero-length tuples would fail exactly here and nowhere else. The
 suite's inclusion of the degenerate sizes is part of its value, and the lift
-functor's own sweep (Chapter~\ref{ch07:main}) makes the same choice for the
+functor's own sweep (Chapter~\ref{ch07:chap}) makes the same choice for the
 same reason.
 
 For every enumerated map the suite checks the identity laws
@@ -770,7 +770,7 @@ decades, enumerate the identical case list in the identical order. A
 sampled suite is a function of the code and a seed, and its transcript is
 evidence only relative to that seed's provenance. In a system whose
 entire object-layer design exists to eliminate interpreter-state
-nondeterminism (Chapter~\ref{ch03:main}), reintroducing randomness in the
+nondeterminism (Chapter~\ref{ch03:chap}), reintroducing randomness in the
 verification layer would be a discordant note.
 
 None of this is an argument against sampling in general --- for spaces
