@@ -23,8 +23,8 @@ calibration reference; there is no declared feedback loop; and no safety fuse is
 present, so no reachability obligation arises.
 
 \begin{example}[Clean board]\label{appB:cleanex}
-\textit{Illustrative.} Board \texttt{DEMO-CLEAN}: input \texttt{in} (signal
-\texttt{activation}, unit \texttt{alpha}) drives node \texttt{n1} through
+\textit{Illustrative.} Board \texttt{DEMO-CLEAN}: input \texttt{in} (signal kind
+\textsc{activation}, unit \textsc{activation\_0\_1}) drives node \texttt{n1} through
 component \texttt{stage\_a}; \texttt{n1} drives output \texttt{out} through
 \texttt{stage\_b}; test point \texttt{tp1} on \texttt{n1} references calibration
 \texttt{cal\_v1}. The design-rule checker resolves every endpoint, finds exactly
@@ -49,9 +49,9 @@ check requires exactly one typed driver per net and emits
 
 \begin{example}[Signal/unit mismatch: \texttt{PCBA8-NET-005} / \texttt{-006}]\label{appB:net056}
 \textit{Illustrative.} Retype \texttt{stage\_b}'s input port to signal kind
-\texttt{constraint} with unit \texttt{fraction} while \texttt{n1} carries
-\texttt{activation} in \texttt{alpha}. The driver and load disagree under the
-closed admissible signal-kind/unit table, so the checker emits
+\textsc{decision} with unit \textsc{boolean} while \texttt{n1} carries
+\textsc{activation} in \textsc{activation\_0\_1}. Both pairs are individually
+admissible, but the driver and load disagree, so the checker emits
 \texttt{PCBA8-NET-005} (signal-kind mismatch) and, for the unit disagreement,
 \texttt{PCBA8-NET-006} (unit mismatch). The board fails.
 \end{example}
@@ -69,8 +69,8 @@ diagnostic only enforces the structural precondition.
 \textit{Illustrative.} Add a component whose output feeds back into \texttt{in}'s
 upstream node without a feedback declaration. The feedback analysis builds the
 directed component graph, finds a strongly connected component, and---absent an
-exact feedback declaration with a unit delay, a dimensionless calibration, and a
-sub-unity gain bound---emits \texttt{PCBA8-FBK-001} (undeclared feedback). Had a
+exact feedback declaration with a unit delay, a calibration of unit \textsc{none},
+and a sub-unity gain bound---emits \texttt{PCBA8-FBK-001} (undeclared feedback). Had a
 declaration been present but without a delay, the diagnostic would instead be
 \texttt{PCBA8-FBK-002}.
 \end{example}
@@ -90,9 +90,9 @@ in the published Cognitive Safety Board.
 
 \begin{example}[Deterministic trace]\label{appB:trace}
 \textit{Illustrative.} Running \texttt{DEMO-CLEAN} of Example~\ref{appB:cleanex}
-under the reference simulator: the non-delay graph is topologically ordered
-\texttt{in}, \texttt{stage\_a}, \texttt{n1}, \texttt{stage\_b}, \texttt{out}; a
-typed input sample enters \texttt{in}; \texttt{stage\_a} fires, emitting a
+under the reference simulator: the non-delay \emph{component} graph is
+topologically ordered \texttt{stage\_a}, \texttt{stage\_b} (board ports and nets
+are not nodes of that graph); a typed input sample enters board port \texttt{in}; \texttt{stage\_a} fires, emitting a
 component event and a tick; \texttt{n1} carries the intermediate value, observed
 at \texttt{tp1} against \texttt{cal\_v1}; \texttt{stage\_b} fires; \texttt{out}
 produces a typed output. The result binds the board and component identities, the

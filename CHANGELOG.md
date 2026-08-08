@@ -4,6 +4,66 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-08 — CAS PCBA 8 monograph: 17-failure-mode audit + corrections (11-agent workflow)
+
+- Same audit protocol as the two sibling volumes, run over
+  docs/whitepapers/monograph/cas_pcba8/ (15 files). 117 raw findings,
+  ~100 corrections applied.
+- Fabricated specificity caught and corrected against the actual source PDF:
+  ch11 claimed the CSB's clamp and fuse threshold are "declared thirty lines
+  apart" — in the hash-verified book they are on ADJACENT lines (verified on
+  PDF pp. 342/608); the unreachability proof's no-amplifier premise is now
+  anchored to that fact. ch10's "sixteen reference-listing pages" corrected
+  to the fourteen its own page ranges sum to.
+- Worked examples reconciled with the volume's own closed enumerations:
+  Appendix B's "clean pass" board used units (alpha, fraction) and a signal
+  kind (constraint) that do not exist in ch04's closed vocabulary — its clean
+  pass would actually fail DRC; ch08's worked run used an illegal
+  (activation, dimensionless) pair; ch05's "legal junction" example
+  deterministically fires PCBA8-BIAS-001 (E-rank bias under C-rank cause);
+  ch04's simplex-rejection example used weights summing to exactly 1 (vacuous);
+  ch07's NET-006 scenario was unrealizable under the admissibility table.
+- Appendix/glossary reconciliation: appA's check-class table invented a sixth
+  class and misassigned BIAS-001/SAF-002/TKS-001 vs ch07's normative five;
+  adapter-certificate and trace tables gained their omitted citation-identity
+  digest fields; appC's CJT entry imported CAS-Ohm content ch06 never delivers;
+  glossary alphabetization fixed; doubled \bottomrule in four longtables.
+- Math/notation: "no section of pi exists" corrected (the proposition proves
+  no LEFT inverse; sections exist and its own proof exhibits one); machine
+  epsilon vs unit roundoff distinguished; 0.25/1e-12 is eleven orders not
+  twelve; omega definition unified on d; four "Chapter~\ref{section}" broken
+  cross-references fixed; ch10's 28-vs-7 out-of-grammar arithmetic corrected
+  to the taxonomy-consistent 19+9+1 accounting.
+- Citations: Rao-1945 "was the first" priority claim corrected (Hotelling 1930
+  anticipated both ideas); shrinking no longer implicitly attributed to the
+  QuickCheck 2000 paper (\cite{claessen} added); "adversarial generation"
+  de-attributed from QuickCheck; IEEE 754 flag list completed (division-by-zero);
+  PROV-O glosses and Harel's statechart formula properly quoted; targeted/
+  coverage-guided PBT (FuzzChick, Hypothesis) added to the stale PBT survey;
+  Merkle cited for the hash-chain construction; Mars Climate Orbiter report
+  cited for the unit-mixing claim; per-volume 17-entry bibliography replaces
+  the padded 46-entry shared list.
+- Substance: three sources-silent gaps marked as open documentation items
+  (Phase-0 authority matrix digest, Gate-5 spec digest, TKS kernel approved
+  constant, SAF-003 cycle cap, the 20 open review criteria's identities);
+  ch12's "pinned environment" recomputation step now states the environment
+  is NOT bound (hermetic reproduction is open obligation 5); baseline
+  disclaimer anchored to its actual copyright-page text (verified in the book
+  PDF); warn-fuse post-trip semantics gap declared; gain-bound "declared
+  exceptions" phantom mechanism removed (FBK-003 has no exception path);
+  conservative-direction misstatements fixed (ch05 reachable-resolution,
+  ch06 clamp under-reporting); rival host formalisms (Statecharts, block
+  diagrams, Petri nets) named with rejection reasons; F1-F7 drive names
+  glossed; SARIF prior art acknowledged for the record format.
+- Scholarly practice: AI-assistance disclosure added to \thanks; two QED
+  tombstones on design arguments (ch08 determinism, ch05 digest) converted
+  to the shared designargument environment.
+- Style: ~45 fixes — fivefold "deserve(s) emphasis" cluster, sixfold "deserves
+  its own X" template, the worth/deserves family (~48 occurrences), three
+  "Every ... of this monograph" openers varied. Classic AI vocabulary clean.
+- All five volumes rebuild with zero undefined references/citations; corrected
+  PDF copied to docs/whitepapers/pdf/ and Downloads.
+
 ## 2026-08-08 — CAS-Ohm 1.0 monograph: 17-failure-mode audit + corrections (11-agent workflow)
 
 - Same audit protocol as CAS Core 8, run over docs/whitepapers/monograph/cas_ohm1/

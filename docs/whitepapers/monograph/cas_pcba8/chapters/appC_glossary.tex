@@ -25,10 +25,12 @@ own five-board reference corpus.
 structural integrity, typed connectivity, calibration and probe integrity,
 feedback analysis, and threshold reachability (Chapter~7).
 
-\item[CJT] A component form appearing in the source boards (Chapter~10). Its
-gain parameter is defined in the source by Fisher--Rao displacement ratios;
-Chapter~6 and the companion CAS-Ohm treatment keep that definition distinct from
-a local Jacobian gain.
+\item[CJT] The cognitive-junction reference component kind: two activation
+inputs (\texttt{cause}, \texttt{bias}), one activation output (\texttt{effect}),
+with finite nonnegative decimal gain \texttt{beta} and activation-level
+\texttt{saturation} and \texttt{cutoff} parameters (Chapters~4, 5, and~8). The
+source's idealized infinite gain is unrepresentable in the candidate's types
+(Chapter~11).
 
 \item[Cognitive Safety Board (CSB)] The published safety board whose red-stage
 clamp of $0.1$ sits upstream of a fuse threshold of $0.9$, rendering the
@@ -48,12 +50,12 @@ probability simplex used by the mixed-simplex geometry profile; its binary64
 implementation is a disclosed numerical pseudometric at its resolution
 (Chapters~2 and~6).
 
-\item[NDCell] A Noetic-times-Domain pair; the target of the many-to-one
-projection from a state literal that forgets Drive and Register (Chapter~4).
-
 \item[Known-fault fixture] A source artifact retained unmodified as negative
 evidence and a regression guard, rather than silently repaired; the CSB is the
 principal example (Chapter~11).
+
+\item[NDCell] A Noetic-times-Domain pair; the target of the many-to-one
+projection from a state literal that forgets Drive and Register (Chapter~4).
 
 \item[Ring 4] The admission ring denoting a research candidate that is
 \textsc{open}, \textsc{not licensed}, and not publicly disclosed. All artifacts

@@ -133,8 +133,10 @@ machinery that consumes it, the gap between what can be \emph{written}
 and what is actually \emph{supported} must be explicit, versioned, and
 checked, or it becomes a source of silent divergence. This lesson bears
 directly on the monograph's central adverse finding: the source
-baseline's published grammar covers only a fraction of the constructs its
-own reference designs use, an unmanaged written/supported gap of exactly
+baseline's published grammar fails to cover its own five-board reference
+corpus --- four of the five published boards are direct syntactic
+counterexamples (Chapter~\ref{ch03:source}; developed in the grammar-audit
+chapter), an unmanaged written/supported gap of exactly
 the kind synthesis history warns about. The candidate's response ---
 declare the supported surface exactly, fail closed outside it, and demand
 that any future grammar publish a construct-coverage matrix --- is the
@@ -152,8 +154,8 @@ the whiteboard version is not.
 
 \subsection{Description versus realization}\label{ch02:hdl:realization}
 
-One further HDL lesson deserves its own subsection because it prefigures
-the monograph's first load-bearing separation. An HDL description that
+One further HDL lesson prefigures the monograph's first load-bearing
+separation. An HDL description that
 simulates correctly is not thereby a working chip. Between description and
 silicon lie synthesis, technology mapping, layout, parasitics, process
 variation, and physical verification, and hardware culture maintains a
@@ -161,7 +163,8 @@ strict vocabulary boundary between what simulation shows (the description's
 behavior under a model) and what characterization of fabricated parts shows
 (the artifact's behavior in the world). The industry learned, sometimes
 expensively, that eliding this boundary --- treating simulation sign-off as
-silicon sign-off --- is a category error with recall-sized consequences.
+silicon sign-off --- is a category error the industry's separate
+characterization and qualification stages exist to prevent.
 The model-versus-world separation of
 Section~\ref{ch01:sep:modelworld} is this hardware lesson, imported whole.
 
@@ -191,8 +194,8 @@ AND-composition of independent regions, so the diagram represents a product
 of $n$ regions in size proportional to their sum, taming the exponential
 blowup syntactically. \emph{Broadcast communication}: events raised in one
 region are visible to others, giving a defined mechanism for coupling
-concurrent parts. Harel's summary formula --- statecharts = state-diagrams
-+ depth + orthogonality + broadcast-communication --- names precisely the
+concurrent parts. Harel's summary formula --- ``statecharts = state-diagrams
++ depth + orthogonality + broadcast-communication'' --- names precisely the
 three additions.
 
 The deeper lesson of the Statecharts program, however, is not any single
@@ -358,8 +361,7 @@ than a silent tolerance.
 
 \subsection{Fail-closed as a cultural achievement}\label{ch02:eda:failclosed}
 
-One aspect of EDA practice deserves separate emphasis because it is a
-culture, not an algorithm. Mature checking tools treat \emph{inability to
+One aspect of EDA practice is a culture, not an algorithm. Mature checking tools treat \emph{inability to
 check} as failure: a rule the tool cannot evaluate on a given structure
 produces an error or an explicit unresolved status, never a silent pass.
 The alternative --- treating unevaluated as clean --- is seductive
@@ -401,7 +403,7 @@ than one (together with trivial SCCs bearing self-loops) enumerate the
 regions of a design where feedback exists, and the acyclic condensation
 orders everything else for straight-line evaluation.
 
-The algorithm itself repays a paragraph of description, both because its
+The algorithm itself is described here, both because its
 economy is instructive and because the monograph's checker relies on its
 completeness. A depth-first search from each unvisited vertex assigns
 every vertex a discovery index and maintains a stack of vertices whose
@@ -430,7 +432,7 @@ no engineering pressure to sample or skip. CAS PCBA 8's feedback check
 class builds the directed component graph, computes SCCs by the classical
 method \cite{tarjan}, and then applies its own conservative policy to
 each realizable declared cycle: an exact feedback declaration, a declared
-unit delay, an existing dimensionless calibration, and a sub-unity gain
+unit delay, an existing calibration of the dimensionless unit, and a sub-unity gain
 bound, with explicit declared exceptions and with stateful or stochastic
 loops unsupported and failing closed. The graph theory is classical; the
 policy layered on it is the candidate's own contract, and its
@@ -539,7 +541,9 @@ and reports the first counterexample. Two further ideas complete the
 method. \emph{Generators} are first-class: the author controls the
 distribution of random inputs, composing generators for structured data
 so that random boards, random expressions, or random traces are
-constructible. \emph{Shrinking} makes counterexamples usable: on
+constructible. \emph{Shrinking} --- sketched only in passing in the original paper and
+developed in the library's later versions \cite{claessen} --- makes
+counterexamples usable: on
 failure, the framework searches for a smaller input that still fails,
 typically presenting a near-minimal witness rather than the sprawling
 random structure that first triggered the fault.
@@ -574,7 +578,15 @@ The lesson comes with an honest converse: property testing samples the
 input space and therefore establishes confidence, not proof; a passed
 property is evidence proportional to the generator's coverage of the
 space, and a biased generator can starve the very region where the
-defect lives.
+defect lives. Later practice developed direct mitigations of this
+converse: \emph{targeted} property-based testing steers generation by an
+explicit search objective, and \emph{coverage-guided} property-based
+testing retains and mutates inputs that expand observed code coverage,
+both now available in mainstream frameworks \cite{fuzzchick,hypothesis};
+these refine generator coverage without repealing the confidence-not-proof
+status of a passed property, and any property-testing campaign the
+research program schedules is to be designed against this current practice
+rather than against the original random-generation baseline alone.
 
 \subsection{Role in this work}\label{ch02:pbt:role}
 
@@ -600,9 +612,10 @@ When computational results feed decisions, the question ``where did this
 number come from?'' needs a machine-readable answer. The W3C PROV family
 of specifications, with PROV-O as its ontology realization \cite{prov},
 standardizes a small core vocabulary for exactly this: \emph{entities}
-(things with fixed state --- documents, datasets, results),
-\emph{activities} (processes that occur over time and act on entities),
-and \emph{agents} (things bearing responsibility), connected by typed
+(in the ontology's words, things ``with some fixed aspects'' ---
+documents, datasets, results), \emph{activities} (each ``occurs over a
+period of time and acts upon or with entities''), and \emph{agents} (each
+``bears some form of responsibility''), connected by typed
 relations --- an entity \emph{was generated by} an activity, an activity
 \emph{used} entities, an entity \emph{was derived from} another entity,
 an entity or activity \emph{was attributed to} or \emph{associated with}
@@ -664,7 +677,7 @@ floating-point arithmetic specifiable: it defines the binary formats
 (binary64 being the ubiquitous double precision), the rounding-direction
 attributes, the required correctly rounded basic operations, exceptional
 values and their propagation, and the status flags that record inexact,
-overflow, underflow, and invalid events. The standard's achievement is
+overflow, underflow, division-by-zero, and invalid events. The standard's achievement is
 frequently misstated, and the accurate statement matters here: IEEE 754
 makes each \emph{individual operation} exactly specified, but a
 \emph{computation} composed of many operations remains sensitive to
@@ -751,10 +764,11 @@ g^{\mathrm{FR}}_p(u,v)\;=\;\sum_{k=1}^{n}\frac{u_k\,v_k}{p_k},
 for tangent vectors $u,v$ at $p$. The $1/p_k$ weighting encodes the
 statistical intuition exactly: reweighting a rare category is a longer
 move, per unit of mass, than reweighting a common one. Rao's 1945 paper
-\cite{rao} was the first to treat this induced Riemannian structure as a
-geometry on the space of distributions and to propose its geodesic
-distance as a measure of dissimilarity between populations --- the
-founding act of the field now called information geometry
+\cite{rao} developed this induced Riemannian structure as a geometry on
+the space of distributions and proposed its geodesic distance as a
+measure of dissimilarity between populations --- independently
+anticipated in a 1930 abstract of Hotelling, and now regarded as a
+founding act of the field called information geometry
 \cite{amari,ay}.
 
 A two-category example makes the weighting tangible. On

@@ -14,7 +14,7 @@ it was checked and the moment its check report is relied upon; and the
 identity discipline, which guarantees that any structural edit --- any
 edit at all --- produces a detectably different board.
 
-The design target is worth stating before the field lists. In an
+The design target comes before the field lists. In an
 evidence-bearing research program, the dangerous artifacts are not the
 wrong ones but the \emph{ambiguous} ones: a design whose parameters might
 have been edited after review, a netlist whose meaning depends on element
@@ -183,7 +183,7 @@ review, not a safety license, and not a claim that the carrier labels
 have CAS meaning. A certificate answers one question --- ``is this
 exactly the table that was certified?'' --- and no other.
 
-One method deserves special mention because it is a piece of honest test
+One method is a piece of honest test
 infrastructure: the record offers a \texttt{with\_mapping} operation
 that returns a \emph{deliberately uncertified} mutation --- the mapping
 changes, the certificate does not --- documented as ``useful for negative
@@ -195,7 +195,7 @@ forgeries cannot test its forgery detection.
 \subsection{The catalog viewed from the board}\label{ch05:sec:catalog}
 
 Because every component field ultimately answers to a catalog contract,
-the closed v0.1 catalog deserves a board's-eye reference here;
+the closed v0.1 catalog is given a board's-eye reference here;
 Table~\ref{ch05:tab:catalog} summarizes it. The catalog is published
 under the versioned profile
 \texttt{cas-pcba-v8.closed-component-catalog.v1}, and its pinned digest
@@ -327,7 +327,7 @@ canonical encoding, so a binding that was somehow corrupted after
 construction cannot reach the identity computation intact.
 
 The phrase \emph{finite-state annotations} in the chapter contract
-deserves a precise gloss. Bindings and parameters are
+needs a precise gloss. Bindings and parameters are
 \emph{annotations}: declared, structural, design-value metadata in the
 sense of the measurement-kind taxonomy
 (Chapter~\ref{ch04:chapter}, Section~\ref{ch04:sec:measkinds}). They
@@ -447,9 +447,11 @@ strongly connected components of the board's directed component graph;
 every realizable cycle must be covered by an exact feedback declaration
 naming its components; the declared delay component must be of the
 stateful unit-delay kind and must lie on the cycle; the declared gain
-bound must be conservative and sub-unity (with explicit declared
-exceptions where the source discipline admits them); and the bound must
-carry a dimensionless calibration reference. An undeclared cycle, a
+bound must be a finite decimal in $[0,1)$ --- there is no exception
+path; the source's idealized infinite gain is unrepresentable by type
+(Chapter~\ref{ch07:drc}, \texttt{PCBA8-FBK-003}); and the bound must
+carry a calibration reference of unit \textsc{none} (the vocabulary's
+dimensionless unit). An undeclared cycle, a
 cycle without delay, an unsafe gain, and a malformed declaration are four
 distinct feedback-class diagnostics.
 
@@ -559,7 +561,7 @@ endpoint lists, mapping insertion order, or set iteration order, their
 payloads are identical and they receive the same digest.
 \end{proposition}
 
-\begin{proof}
+\begin{designargument}
 For the forward direction: the canonical payload embeds every structural
 field through the injective tagged encoding of
 Construction~\ref{ch05:con:encoding} (injectivity per
@@ -573,7 +575,7 @@ key that the sort leaves invariant under reordering, or is a genuine
 sequence whose order is itself structural (and thus out of scope of the
 converse). Canonical JSON fixes key order and separators, so equal
 payload objects yield byte-equal texts and equal digests.
-\end{proof}
+\end{designargument}
 
 \begin{remark}[Evidence consequences]\label{ch05:rem:evidence}
 Proposition~\ref{ch05:prop:digest} is the board model's contribution to
@@ -602,9 +604,14 @@ asked \emph{of the right board}.
 
 \subsection{The digest chain}\label{ch05:sec:chain}
 
+The chain below is an instance of the standard content-addressed
+hash-chain construction \cite{merkle}; the candidate's contribution is
+confined to what the links bind (engine, catalog, and decimal-context
+identities inside every payload), not the chaining idea itself.
+
 The board digest is the root of a chain that runs through every
-downstream artifact. It is worth laying the chain out end to end,
-because its integrity argument is compositional: each link binds the
+downstream artifact. Laid out end to end, the chain's integrity
+argument is compositional: each link binds the
 identity of the previous link into its own canonical payload, so
 tampering anywhere breaks verification everywhere downstream.
 
@@ -741,7 +748,7 @@ annotations: component \texttt{j1} of kind \texttt{cjt}, with a finite
 decimal parameter \texttt{beta} of \texttt{Decimal("4")}, and state
 bindings mapping \texttt{cause}, \texttt{bias}, and \texttt{effect}
 binding names to exact \texttt{CasState} literals --- say
-$({\wedge}8, C, \bot, \bot)$, $({\wedge}2, E, \bot, \bot)$, and
+$({\wedge}8, C, \bot, \bot)$, $({\wedge}2, P, \bot, \bot)$, and
 $({\wedge}9, C, \bot, \bot)$. The record freezes both mappings; the DRC
 checks \texttt{beta} against the kind's nonnegative-decimal rule, checks
 the binding names against the kind's required set, and applies the
@@ -780,8 +787,10 @@ The board is record-legal, and --- with the remaining wiring in place
 --- passes the test-point and calibration classes of the DRC. Whether
 it passes \emph{threshold reachability} depends on the numbers: with
 \texttt{saturation} $=$ \texttt{0.95} above \texttt{threshold} $=$
-\texttt{0.9}, the conservative bound propagation can resolve the
-crossing as reachable; had \texttt{saturation} been
+\texttt{0.9}, the conservative bound propagation cannot exclude the crossing, so
+\texttt{PCBA8-SAF-001} does not fire (which is not a finding that the
+threshold is attained --- Chapter~\ref{ch07:drc}, remark on directional
+conservatism); had \texttt{saturation} been
 \texttt{Decimal("0.1")} --- the published source's own configuration
 --- the checker must flag the unreachable threshold. The example is the
 board model doing its job: the difference between a checkable safety

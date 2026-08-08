@@ -60,7 +60,6 @@ Code & Class & Condition \\
 \texttt{PCBA8-SAF-002} & Safety & unsafe fuse action \\
 \texttt{PCBA8-SAF-003} & Safety & unresolved safety analysis \\
 \texttt{PCBA8-TKS-001} & TKS adapter & invalid finite transition \\
-\bottomrule
 \end{longtable}
 
 \section{Check class to code mapping}\label{appA:classmap}
@@ -77,13 +76,11 @@ Check class & Codes \\
 \endhead
 \bottomrule
 \endfoot
-Structural integrity & \texttt{MDL-001/002}, \texttt{SEM-001/002}, \texttt{PAR-001/002/003}, \texttt{STATE-001/002/003} \\
+Structural integrity & \texttt{MDL-001/002}, \texttt{SEM-001/002}, \texttt{PAR-001/002/003}, \texttt{STATE-001/002/003}, \texttt{BIAS-001}; component-level clauses of \texttt{SAF-002} and \texttt{TKS-001} \\
 Typed connectivity & \texttt{NET-001} through \texttt{NET-009} \\
-Calibration and probe integrity & \texttt{TP-001/002/003}, \texttt{CAL-001/002/003/004}, \texttt{BIAS-001} \\
-Feedback analysis & \texttt{FBK-001/002/003/004} \\
-Threshold reachability & \texttt{SAF-001/002/003} \\
-Adapter boundary & \texttt{TKS-001} \\
-\bottomrule
+Calibration and probe integrity & \texttt{TP-001/002/003}, \texttt{CAL-001/002/003/004} \\
+Feedback analysis & \texttt{FBK-001/002/003/004}, with \texttt{CAL-001} and \texttt{SAF-003} clauses in support \\
+Threshold reachability & \texttt{SAF-001} and the reachability clause of \texttt{SAF-003} \\
 \end{longtable}
 
 \section{Canonical trace schema}\label{appA:trace}
@@ -108,7 +105,7 @@ Event record & component events; tick linkage \\
 Observation record & test-point observations \\
 Measurement lineage & measurement IDs; parent/child derivations; calibration references \\
 Boundary & fixed Ring-4 research boundary \\
-\bottomrule
+Result digest & SHA-256 over the entire canonical payload; the citation identity \\
 \end{longtable}
 
 \section{Adapter certificate fields}\label{appA:adapter}
@@ -128,7 +125,7 @@ Field & Role \\
 TKS kernel bytes / profile & exact identity of the finite kernel used \\
 Board / component / transition identities & the PCBA object adapted \\
 Tagged carrier & the exact-type tagged finite carrier \\
-Semantic profile & the declared semantic profile \\
+Semantic profile and names & the declared semantic profile, component reference, and object names \\
 Fixed boundary & the Ring-4 research boundary \\
-\bottomrule
+Adapter digest & SHA-256 of the certificate's own canonical payload; the identity under which the adaptation is cited \\
 \end{longtable}

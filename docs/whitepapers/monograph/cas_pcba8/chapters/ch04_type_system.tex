@@ -2,9 +2,9 @@
 
 \section{Design stance}\label{ch04:sec:stance}
 
-Every later chapter of this monograph --- the board model, the design-rule
+The later chapters of this monograph --- the board model, the design-rule
 checker, the simulator, the geometry profiles, the TKS adapter, and the
-adverse source audit --- rests on a single decision made at the lowest layer
+adverse source audit --- all rest on a single decision made at the lowest layer
 of the candidate: \emph{semantic distinctions are enforced by types, not by
 convention}. The CAS PCBA~8 type system is the place where that decision is
 made concrete. It fixes, once, which values may exist at all; everything
@@ -85,16 +85,18 @@ checker; the type layer itself attaches no descent semantics to the rank.
 
 \begin{definition}[Drive factor]\label{ch04:def:drive}
 $\mathrm{Drive}$ is a seven-element enumeration carried on the strings
-\texttt{F1} through \texttt{F7}.
+\texttt{F1} through \texttt{F7} (F1 Unity, F2 Wisdom, F3 Vitality,
+F4 Connection, F5 Agency, F6 Structure, F7 Purpose, per the CAS canon).
 \end{definition}
 
 \begin{definition}[Register factor]\label{ch04:def:register}
 $\mathrm{Register}$ is a four-element enumeration carried on the strings
 \texttt{T} (Transcendent), \texttt{A} (Analytical), \texttt{f} (Affective),
 and \texttt{E} (Embodied). The lowercase \texttt{f} is deliberate and
-canonical; it prevents a case-folding collision with the Embodied register
-\texttt{E} and with the Evaluative domain \texttt{E}, which lives in a
-different enumeration entirely.
+canonical; the lowercase \texttt{f} is the framework's own register
+notation (T/A/f/E), and it avoids confusion with the uppercase \texttt{F}
+prefix of the Drive carrier strings \texttt{F1}--\texttt{F7}, which live
+in a different enumeration entirely.
 \end{definition}
 
 \begin{remark}[Domain \texttt{E} versus Register \texttt{E}]
@@ -291,8 +293,10 @@ identity-level evidence never passes through the projection; only an
 analysis that explicitly chose cell resolution can conflate the two, and
 that choice is then legible in the analysis, not buried in the types.
 
-\emph{Third hazard: the inverse direction invites fabrication.} Since no
-section of $\pi$ exists (Proposition~\ref{ch04:prop:manytoone}), any
+\emph{Third hazard: the inverse direction invites fabrication.} Since
+$\pi$ has no left inverse (Proposition~\ref{ch04:prop:manytoone}) ---
+sections $s$ with $\pi \circ s = \id$ exist, but each must \emph{choose}
+Drive and Register coordinates the cell does not determine --- any
 procedure that produces a full literal from cell-resolution data has
 \emph{added} information --- a Drive attribution and a Register attribution
 --- that the data did not contain. In an evidence-bearing pipeline that
@@ -572,7 +576,7 @@ engine identity and hence every board identity
 (Chapter~\ref{ch05:chapter}); adding a kind, changing a bound, or widening
 a choice set is a visible engineering event, not a quiet edit.
 
-Two consequences deserve emphasis. The \texttt{beta} parameter of the
+Two consequences follow. The \texttt{beta} parameter of the
 reference junction is typed as a \emph{finite} nonnegative decimal: the
 source book's idealized infinite gain (the $\beta = \infty$ of the
 published Cognitive Safety Board, Chapter~11) is
@@ -1007,8 +1011,9 @@ The uniform profile with all forty weights \texttt{Decimal("0.025")} is a
 legal address: weights are strictly positive and their exact sum is
 \texttt{Decimal("1")}. The ``one-hot'' tuple with weight \texttt{1} on
 \texttt{P0} and \texttt{0} elsewhere is rejected (zero coordinates); the
-tuple of forty weights \texttt{0.02} and \texttt{0.03} alternating is
-rejected if its exact sum differs from one; a tuple of thirty-nine
+tuple of forty weights \texttt{0.02} and \texttt{0.04} alternating is
+rejected because its exact sum, \texttt{Decimal("1.2")}, differs from
+one; a tuple of thirty-nine
 weights is rejected on arity; and a tuple containing
 \texttt{float 0.025} rather than \texttt{Decimal("0.025")} is rejected on
 value type, because binary64 atoms have no place in an exact address.

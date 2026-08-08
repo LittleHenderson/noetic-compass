@@ -119,8 +119,8 @@ explicit, type-safe, replayable, and falsifiable without converting an analogy
 into a physical, causal, safety, or product claim?
 \end{quote}
 
-Each adjective in the question carries weight, and it is worth unpacking them
-before anything else is asserted.
+Each adjective in the question carries weight; we unpack them before anything
+else is asserted.
 
 \emph{Explicit} means that every element of a hypothesis that the modeler
 relies on --- the components, their interfaces, the values they may carry, the
@@ -240,6 +240,18 @@ Chapter~\ref{ch02:background} supports this transfer at the level of
 explicit state semantics \cite{harel}, verification as distinct from
 validation \cite{sargent} --- while validating nothing about CAS itself.
 
+Rival host organizations were considered and are named here with the reasons
+they were not chosen. Statecharts (Section~\ref{ch02:statecharts}) supply
+executable state and concurrency semantics but carry no netlist identity
+discipline, no calibration ledger, and no DRC/sign-off culture;
+block-diagram simulation languages supply typed signal flow but weak
+artifact identity and no fail-closed rule-deck practice; Petri nets
+formalize concurrency and reachability but none of the measurement or
+sign-off heritage. Circuit practice is the only surveyed organization that
+offers interface, connectivity, rule, trace, calibration, and sign-off
+discipline \emph{jointly}, and it is that conjunction, not any single
+mechanism, that motivated the choice.
+
 \section{Three load-bearing separations}\label{ch01:separations}
 
 The architecture's claim discipline rests on three separations. They are
@@ -283,10 +295,9 @@ architecture has become evidence about cognition. Not one of the
 restatements was flagged as a new claim; each merely dropped a
 qualifier. The end state is a world-claim resting entirely on a software
 fixture that was never designed, powered, or entitled to support it. The
-history of simulation-based fields shows this slope is not hypothetical:
-wherever simulation output is cheap and empirical access is expensive, the
-simulated column bleeds into the empirical column unless the medium itself
-resists.
+slope is structural: wherever simulation output is cheap and empirical
+access is expensive, the simulated column tends to bleed into the empirical
+column unless the medium itself resists.
 
 A second example shows the same failure in the opposite emotional
 register --- not enthusiasm but reassurance. Suppose a board's design-rule
@@ -510,8 +521,8 @@ with every claim record at the bound state classified Ring~4 and
 
 Two remarks about this list. First, none of the six is an empirical result
 about cognition; the list is deliberately and entirely architectural.
-Second, the fifth contribution deserves emphasis because it is the one most
-often absent from projects of this kind: the architecture treats the
+Second, the fifth contribution is the one most often absent from projects of
+this kind: the architecture treats the
 discovery that its own source material is defective --- syntactically
 incomplete in its grammar, self-contradictory in its flagship safety design
 --- as a result to be formalized and guarded, not an embarrassment to be

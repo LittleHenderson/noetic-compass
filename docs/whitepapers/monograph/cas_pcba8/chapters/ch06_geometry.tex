@@ -272,8 +272,11 @@ name, and the flag \texttt{is\_exact\_metric = False}.
 Every step of that pipeline is deliberate. Revalidation keeps the
 garbage-in case out. The clamp exists because accumulated rounding can
 push the coefficient marginally above $1$, where the arccosine is
-undefined; clamping resolves the exception in the conservative
-direction (distance $0$ rather than a domain error). The flush-to-zero
+undefined; clamping resolves the exception by under-reporting: distance $0$
+rather than a domain error --- conservative for claims of profile
+\emph{difference} (Rule~\ref{ch06:rule:positive}), lenient for any
+consumer monitoring drift, and prevented from being read as identity by
+Rule~\ref{ch06:rule:zero}. The flush-to-zero
 acknowledges that distances at the $10^{-15}$ scale are numerical noise
 at binary64 resolution and refuses to report them as structure. And the
 Decimal return type does \emph{not} launder the number into exactness:
@@ -331,7 +334,8 @@ such, so that readers of reported distances can calibrate their
 skepticism quantitatively rather than vaguely.
 
 Binary64 arithmetic resolves relative differences of order
-$\varepsilon \approx 2.2 \times 10^{-16}$ (the unit roundoff). Three
+$\varepsilon \approx 2.2 \times 10^{-16}$ (the binary64 machine
+epsilon $2^{-52}$; the unit roundoff is half this). Three
 stages of the pipeline interact with this floor differently.
 
 \emph{Conversion.} Each sixty-digit Decimal weight is rounded to
@@ -380,7 +384,7 @@ at the exact-Decimal layer, keeping the exact sum at
 distinct canonical identity digests --- the digest layer separates them
 --- but each perturbed weight rounds to the \emph{same} binary64 number
 as $0.025$, since the relative perturbation, $4 \times 10^{-29}$, is
-far below the unit roundoff. The implemented pipeline computes from
+far below the machine epsilon. The implemented pipeline computes from
 identical forty-tuples of doubles, obtains a coefficient that clamps to
 $1$, and reports distance exactly $0$. Both layers behaved exactly as
 specified; the example is why the specification insists they never be
@@ -536,7 +540,7 @@ declared rank $1$ validates exactly: all three residuals are the
 Decimal zero, within any admissible tolerance. The matrix
 $\mathrm{diag}(\texttt{Decimal("0.5")}, \texttt{Decimal("0.5")})$ with
 declared rank $1$ has trace residual zero but idempotence residual
-$0.25$ --- twelve orders of magnitude above the tolerance cap --- and
+$0.25$ --- more than eleven orders of magnitude above the tolerance cap --- and
 is rejected: an ``average of two projectors'' is not a projector, and
 the type refuses to launder one into subspace vocabulary. A declared
 rank of $0$ or $3$ is rejected before any residual is computed; a
@@ -557,10 +561,10 @@ normalized overlap.
 
 \begin{definition}[Projector overlap]\label{ch06:def:overlap}
 For validated profiles $P$ and $Q$ with common dimension $n$, common
-declared rank $r$, and \emph{identical declared basis identifier}, the
+declared rank $d$, and \emph{identical declared basis identifier}, the
 overlap is
 \[
-\omega(P, Q) = \frac{\trace(PQ)}{r},
+\omega(P, Q) = \frac{\trace(PQ)}{d},
 \]
 computed in exact Decimal arithmetic (exact-sum matrix products) after
 revalidating both operands. The operation raises --- it does not
@@ -568,7 +572,7 @@ degrade --- on dimension mismatch, rank mismatch, or basis mismatch.
 \end{definition}
 
 The common-rank requirement is not bureaucratic: the normalization
-divides by $r$, and the type system already excludes $r = 0$ (rank is
+divides by $d$, and the type system already excludes $d = 0$ (rank is
 constrained to $[1, n]$ at construction), so the registered result is
 available exactly when common rank $d > 0$ holds --- the condition the
 seed specification states. What the number means, at the level of exact
@@ -613,8 +617,8 @@ explicitly recorded as \emph{not} establishing latent cognitive
 capacity.
 \end{ruleenv}
 
-The last sentence deserves its own paragraph, because it is where a
-plausible-sounding inference chain must be cut. The tempting chain
+The last sentence is where a plausible-sounding inference chain must
+be cut. The tempting chain
 runs: a projector was derived from model activations (elsewhere, under
 some analysis); two such projectors overlap strongly; therefore the
 model has a shared latent structure; therefore a cognitive capacity is
@@ -671,8 +675,8 @@ self-certifying loop the architecture exists to prevent.
 
 A reader tracking the candidate's arithmetic discipline
 (Chapter~\ref{ch04:chapter}, Section~\ref{ch04:sec:decimal}) will have
-noticed an asymmetry in this chapter that deserves to be made explicit,
-because it looks like an inconsistency and is in fact a design rule.
+noticed an asymmetry in this chapter that looks like an inconsistency
+and is in fact a design rule.
 
 The \emph{projector} path is exact end to end. Residual computation
 multiplies matrices with exact aligned-integer Decimal summation;
