@@ -30,10 +30,12 @@ import hashlib
 import importlib.util
 import io
 import json
+import math
 import os
 from pathlib import Path, PurePosixPath
 import re
 import secrets
+import sqlite3
 import stat
 import subprocess
 import tarfile
@@ -153,6 +155,122 @@ STAGEB_QWEN_BINDING = MappingProxyType(
         "image_id": (
             "sha256:373ac33e26c4e3e82ac34690c08e7af58b4b925fe0410e6a0a175b10b9fd2139"
         ),
+    }
+)
+STAGEB_COMPLETED_RUN_ID = "gate5-stageb-qwen-20260808T225631Z-3d71101d69ab"
+STAGEB_COMPLETED_RUN_DIR = (
+    ROOT / STAGEB_PACKAGE_REL / "runs" / STAGEB_COMPLETED_RUN_ID
+)
+STAGEB_PROSPECTIVE_RUN_ID = (
+    "h2run_05408f4dfae27586e5b0e94a4d732b3881ae96f70c1bf750463e4288caa43fa6"
+)
+STAGEB_COMPLETED_BOUNDARY = (
+    "LOCAL SINGLE-HOST / NOT WORM / NON-PRODUCTION / RESEARCH ONLY / "
+    "ONE MODEL INVOCATION / ONE PACKET MAXIMUM / NO INTERVENTION / "
+    "REPORTED_CRITERIA_NOT_MET / INELIGIBLE / GATE 5 OPEN / RING 4 / "
+    "NOT LICENSED / HELD"
+)
+STAGEB_COMPLETED_FILE_BINDINGS = MappingProxyType(
+    {
+        "execution_claim.json": (
+            "E98BEBE8C8A72D7678109AF77ABB6E6B7270817DC0425B88D8E8844468C611F6",
+            2083,
+        ),
+        "runtime_receipt.json": (
+            "A42732C7027C8E851C1F800D7EC379DF08AFF9DD069BD7819349C5EF552072B2",
+            5570,
+        ),
+        "pre_receipt_artifact_manifest.json": (
+            "252442DC71BA74344422B2ED293EAB9992E15A23AFE9963D13C0401ABEA054A6",
+            7946,
+        ),
+        "authorization.json": (
+            "5CE9ED8F3C4BD30F2959D99D58BE0DAAB8C589F96AA65D8BC7DA000008527951",
+            3400,
+        ),
+        "evidence_packet.v2.json": (
+            "FCF7674B14A34E3C33252B09B7A20E5E55FB6BC3751AC0F2B1C0EFB109578EAC",
+            6898,
+        ),
+        "output.json": (
+            "D991601CB8DFDA3A8057D49D2F201A4CF55A2019F7CC897020498EB944E44791",
+            4592,
+        ),
+        "worker_response.raw.json": (
+            "D991601CB8DFDA3A8057D49D2F201A4CF55A2019F7CC897020498EB944E44791",
+            4592,
+        ),
+        "terminal_receipt.json": (
+            "93264E4BB8C01D76C03C1A55394682828754A7D8BFADD7FFD40FC69D39222DCC",
+            4038,
+        ),
+        "lifecycle.sqlite3": (
+            "62B71E288486C11C772F634E2303F6EB97AFCFF13C47DC2BCBCDD3D7FA723D5A",
+            65536,
+        ),
+        "realmode_health.json": (
+            "641BAC119AA40ED54D7194902AE3E1080D4F1C2AB59555B481663501B2C59265",
+            979,
+        ),
+        "evidence_packet_assessment.json": (
+            "EC3A33A9EFC2A90AED20EBDA39AE8AB33611BD1F5190D27EBA646F15DF45722A",
+            1112,
+        ),
+        "evidence_packet_registry_index.json": (
+            "BEF91EAB155DA9747C0C2D29870D59A4217CEF69ED360460D3C9336F1DB09726",
+            8191,
+        ),
+        "evidence_packet_execution_manifest.json": (
+            "3E998729DFB654249DF27B85716DAB6B043EF607F50458BF7620821E89D428CB",
+            1774,
+        ),
+        "cleanup_proof.json": (
+            "C8D8DC986FA7BADCC0ECA30C5346E85623496C604C045735ACA689B737972584",
+            185,
+        ),
+        "secret_scan.json": (
+            "54476FF4FF8DC7FBA3A74D19C1B59A6A18B6E151761C5F847F4602DAB84960C3",
+            55,
+        ),
+        "reconciliation.json": (
+            "6BF8FD692EAB2B817EAF7A646F301807AB8D54787A36518E99C33B5708BE51EA",
+            1069,
+        ),
+        "joined_result.json": (
+            "8E3FB3A90C4D7A76C80B46F33A15E5CD4060FA471C5BF1BE720FFC8B9D3EA361",
+            1299,
+        ),
+        "request.json": (STAGEB_REQUEST_SHA256, 507),
+        "protocol.json": (STAGEB_PROTOCOL_SHA256, 10970),
+        "preregistration.json": (
+            "4F7D32A9364FC5A470B0FEE575D53C15D027D52CB013AB3EDBBD059A3CCED57D",
+            11762,
+        ),
+        "weight_artifact_pointer.json": (
+            "1574EAA702A936651F7A655EDC2F9975C407E313477F5AA1132774FF80B7FAC3",
+            1194,
+        ),
+    }
+)
+STAGEB_SOURCE_TO_EXECUTION_CHANGED_PATHS = (
+    "docs/working/project_coherence/gate5/GATE5_ARTIFACT_MANIFEST_v0.1.json",
+    f"{STAGEB_PACKAGE_REL}/evidence_packet_builder_test_receipt.json",
+    f"{STAGEB_PACKAGE_REL}/execution_activation_receipt.json",
+    f"{STAGEB_PACKAGE_REL}/execution_identity_amendment.json",
+    f"{STAGEB_PACKAGE_REL}/final_executable_code_identity.json",
+    f"{STAGEB_PACKAGE_REL}/final_executable_source_manifest.json",
+    f"{STAGEB_PACKAGE_REL}/final_runtime_image_identity.json",
+    f"{STAGEB_PACKAGE_REL}/qwen_probe_adapter_test_receipt.json",
+)
+STAGEB_LEGACY_PYTHIA_INTERVENTION_HOOK_CONTRACT = MappingProxyType(
+    {
+        "contract_version": "harness_v2.mlp_intermediate_eraser.v2",
+        "coordinate_space": "mlp_intermediate_post_activation",
+        "module_path_template": "gpt_neox.layers[{layer}].mlp.dense_4h_to_h",
+        "tensor_role": "forward_pre_hook.input[0]",
+        "token_selection": "batch_0_last_sequence_position",
+        "expected_width_source": "model_arch.mlp_intermediate_dim",
+        "failure_policy": "fail_closed",
     }
 )
 
@@ -3159,6 +3277,7 @@ def verify_review_matrix(
             "kernel_focused",
             "stageb_joined_executor",
             "stageb_runner_preparation",
+            "stageb_qwen_engineering_execution",
             "worker_protocol_kernel",
             "worker_protocol_bridge_and_durable_seams",
             "prospective_lifecycle_sqlite_dark_route",
@@ -3249,11 +3368,131 @@ def verify_review_matrix(
             and "LOCAL_UNATTESTED_HOST_REGRESSION" in stageb_scope
             and required_scope_marker in stageb_scope
             and "model invocation" in stageb_scope
-            and "No Stage B Evidence Packet" in stageb_scope
+            and "source-level receipt itself contains no" in stageb_scope
+            and "later bounded engineering execution is recorded separately"
+            in stageb_scope
             and "establishes no prompt-injection detection" in stageb_scope
             and "steering efficacy" in stageb_scope,
             f"review-matrix {receipt_name} receipt drifted or promotes execution/capability",
         )
+    stageb_completed_receipt = receipts.get("stageb_qwen_engineering_execution")
+    require(
+        isinstance(stageb_completed_receipt, dict),
+        "review-matrix completed Stage B Qwen receipt is missing",
+    )
+    require_exact_keys(
+        stageb_completed_receipt,
+        {
+            "receipt",
+            "run_id",
+            "status",
+            "runtime_receipt_sha256",
+            "model_id",
+            "model_revision",
+            "weights_sha256",
+            "weights_byte_length",
+            "runtime_receipt_model_invocation_count",
+            "counted_external_joined_requests",
+            "startup_canary_forward_passes",
+            "packet_status",
+            "packet_id",
+            "packet_sha256",
+            "packet_byte_length",
+            "structural_completeness",
+            "preregistered_criteria",
+            "scientific_eligibility",
+            "required_controls",
+            "prompt_injection_study",
+            "steering_study",
+            "intervention_count",
+            "experimental_execution_status",
+            "capability_claim_effect",
+            "independently_reproduced",
+            "runpod_used",
+            "provider_calls",
+            "known_spend_usd",
+            "qwen_intervention_contract_status",
+            "runtime_warm_load_preparation",
+            "execution_claim_binding",
+            "external_weight_retention",
+            "scope",
+        },
+        label="review-matrix completed Stage B Qwen receipt",
+    )
+    stageb_completed_scope = stageb_completed_receipt.get("scope")
+    require(
+        stageb_completed_receipt
+        == {
+            "receipt": (
+                f"{STAGEB_PACKAGE_REL}/runs/{STAGEB_COMPLETED_RUN_ID}/"
+                "runtime_receipt.json"
+            ),
+            "run_id": STAGEB_COMPLETED_RUN_ID,
+            "status": "SUCCESS_PACKET_RECORDED",
+            "runtime_receipt_sha256": STAGEB_COMPLETED_FILE_BINDINGS[
+                "runtime_receipt.json"
+            ][0].lower(),
+            "model_id": STAGEB_QWEN_BINDING["model_id"],
+            "model_revision": STAGEB_QWEN_BINDING["revision"],
+            "weights_sha256": STAGEB_QWEN_BINDING["weights_sha256"],
+            "weights_byte_length": STAGEB_QWEN_BINDING["weights_bytes"],
+            "runtime_receipt_model_invocation_count": 1,
+            "counted_external_joined_requests": 1,
+            "startup_canary_forward_passes": 1,
+            "packet_status": "CREATED",
+            "packet_id": "epv2-stageb-qwen-joined-001",
+            "packet_sha256": STAGEB_COMPLETED_FILE_BINDINGS[
+                "evidence_packet.v2.json"
+            ][0].lower(),
+            "packet_byte_length": STAGEB_COMPLETED_FILE_BINDINGS[
+                "evidence_packet.v2.json"
+            ][1],
+            "structural_completeness": "COMPLETE",
+            "preregistered_criteria": "REPORTED_CRITERIA_NOT_MET",
+            "scientific_eligibility": "INELIGIBLE",
+            "required_controls": "INVALID / NOT PERFORMED",
+            "prompt_injection_study": "NOT PERFORMED",
+            "steering_study": "NOT PERFORMED",
+            "intervention_count": 0,
+            "experimental_execution_status": "NOT_STARTED",
+            "capability_claim_effect": "NONE",
+            "independently_reproduced": False,
+            "runpod_used": False,
+            "provider_calls": 0,
+            "known_spend_usd": "0.00",
+            "qwen_intervention_contract_status": (
+                "OPEN / PYTHIA MODULE TEMPLATE RETAINED / QWEN STEERING BLOCKED"
+            ),
+            "runtime_warm_load_preparation": (
+                "SEPARATE PRE-CLAIM IMAGE CANARY DEFERRED / AUTHORIZED WORKER "
+                "STARTUP BUILT-IN ONE-FORWARD CANARY NOT SEPARATELY COUNTED OR "
+                "RECEIPTED"
+            ),
+            "execution_claim_binding": (
+                "TOP-LEVEL CLAIM OUTSIDE RUN / FINAL REPOSITORY MANIFEST AND "
+                "SEMANTIC VERIFIER REQUIRED"
+            ),
+            "external_weight_retention": (
+                "HOST-LOCAL EXTERNAL CONTENT-ADDRESSED BLOB / REQUIRED FOR FULL "
+                "PACKET REGISTRY VERIFICATION / NOT GIT-PORTABLE"
+            ),
+            "scope": stageb_completed_scope,
+        }
+        and isinstance(stageb_completed_scope, str)
+        and "LOCAL SINGLE-HOST / NOT WORM / NON-PRODUCTION / ENGINEERING-ONLY"
+        in stageb_completed_scope
+        and "one counted external joined request" in stageb_completed_scope
+        and "built-in one-forward runtime canary" in stageb_completed_scope
+        and "structurally complete but scientifically ineligible"
+        in stageb_completed_scope
+        and "prompt-injection and steering studies were not performed"
+        in stageb_completed_scope
+        and "not a Qwen steering contract" in stageb_completed_scope
+        and "run directory alone does not bind" in stageb_completed_scope
+        and "No scientific, product, license, disclosure, ACCEPT, or canon authority"
+        in stageb_completed_scope,
+        "review-matrix completed Stage B Qwen receipt drifted or promotes capability",
+    )
     protocol_receipt = receipts.get("worker_protocol_kernel")
     require(
         isinstance(protocol_receipt, dict),
@@ -3897,7 +4136,7 @@ def verify_adversarial_review() -> None:
         "hermetic",
         "semantic",
         "CVE-2026-4372",
-        "No authorized or admitted live exact-revision experiment",
+        "No authorized or admitted live exact-revision scientific",
         "GPU, autocast/mixed-precision, compiled-module",
         "independent numerical",
         "replication",
@@ -3963,6 +4202,18 @@ def verify_adversarial_review() -> None:
         "CompatibleZeroNetworkGuard",
         "43 passed, 4 failed",
         "31 failed",
+        "stageb_qwen_model_smoke_v0.1/",
+        STAGEB_COMPLETED_RUN_ID,
+        "epv2-stageb-qwen-joined-001",
+        STAGEB_COMPLETED_FILE_BINDINGS["runtime_receipt.json"][0],
+        STAGEB_COMPLETED_FILE_BINDINGS["evidence_packet.v2.json"][0],
+        "REPORTED_CRITERIA_NOT_MET",
+        "scientific eligibility `INELIGIBLE`",
+        STAGEB_LEGACY_PYTHIA_INTERVENTION_HOOK_CONTRACT["module_path_template"],
+        STAGEB_COMPLETED_FILE_BINDINGS["execution_claim.json"][0],
+        "host-local external blob",
+        "loader's built-in runtime",
+        "canary performed one internal forward",
     ):
         require(marker in text, f"adversarial review omits required marker {marker!r}")
 
@@ -4043,6 +4294,9 @@ def verify_no_status_promotion_text(
         ),
         "docs/working/project_coherence/gate5/"
         "stageb_qwen_model_smoke_v0.1/preregistration.json": (
+            stageb_exact_forbidden_wording
+        ),
+        f"{STAGEB_PACKAGE_REL}/runs/{STAGEB_COMPLETED_RUN_ID}/preregistration.json": (
             stageb_exact_forbidden_wording
         ),
     }
@@ -4338,6 +4592,7 @@ def verify_model_and_security_bindings() -> None:
     )
 
     verify_stageb_qwen_prospective_binding()
+    verify_stageb_qwen_completed_run()
 
 
 def verify_stageb_qwen_prospective_binding() -> None:
@@ -4580,6 +4835,2248 @@ def verify_stageb_qwen_prospective_binding() -> None:
             and STAGEB_QWEN_BINDING["revision"] in text,
             f"{label} omits the exact Stage B model identity",
         )
+
+
+def _canonical_json_bytes(value: Any, *, label: str) -> bytes:
+    try:
+        return json.dumps(
+            value,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=False,
+            allow_nan=False,
+        ).encode("utf-8")
+    except (TypeError, ValueError) as exc:
+        raise VerificationError(f"{label}: value is not canonical JSON") from exc
+
+
+def _load_json_value(raw: str, *, label: str) -> Any:
+    try:
+        return json.loads(raw, object_pairs_hook=_unique_object)
+    except VerificationError:
+        raise
+    except json.JSONDecodeError as exc:
+        raise VerificationError(f"{label}: invalid JSON: {exc}") from exc
+
+
+def _stageb_relative_path(raw_path: Any, *, label: str) -> str:
+    require(isinstance(raw_path, str) and raw_path, f"{label}: path is missing")
+    require("\\" not in raw_path, f"{label}: path must use POSIX separators")
+    require(
+        WINDOWS_ABSOLUTE_RE.match(raw_path) is None,
+        f"{label}: run-store path may not be absolute",
+    )
+    pure = PurePosixPath(raw_path)
+    require(
+        not pure.is_absolute()
+        and pure.as_posix() == raw_path
+        and "." not in pure.parts
+        and ".." not in pure.parts,
+        f"{label}: run-store path is not canonical",
+    )
+    return raw_path
+
+
+def _stageb_directory_inventory(run_dir: Path) -> tuple[set[str], set[str]]:
+    """Inventory the retained run without following a symlink or reparse directory."""
+
+    files: set[str] = set()
+    directories: set[str] = set()
+    pending = [run_dir]
+    while pending:
+        current = pending.pop()
+        try:
+            with os.scandir(current) as iterator:
+                entries = list(iterator)
+        except OSError as exc:
+            raise VerificationError(
+                f"cannot enumerate retained Stage B run directory {current}: {exc}"
+            ) from exc
+        for entry in entries:
+            path = Path(entry.path)
+            try:
+                identity = _path_identity(path.lstat())
+            except OSError as exc:
+                raise VerificationError(
+                    f"cannot lstat retained Stage B path {path}: {exc}"
+                ) from exc
+            relative = path.relative_to(run_dir).as_posix()
+            require(
+                not path.is_symlink() and not _is_reparse(identity),
+                f"retained Stage B run contains a symlink/reparse path: {relative}",
+            )
+            if identity.mode_type == stat.S_IFDIR:
+                directories.add(relative)
+                pending.append(path)
+            elif identity.mode_type == stat.S_IFREG:
+                require(
+                    identity.link_count == 1,
+                    f"retained Stage B run file has aliases: {relative}",
+                )
+                files.add(relative)
+            else:
+                raise VerificationError(
+                    f"retained Stage B run contains a non-file/non-directory: {relative}"
+                )
+    return files, directories
+
+
+def _verify_stageb_completed_run_inventory() -> dict[str, FileObservation]:
+    package_dir = STAGEB_PROTOCOL_PATH.parent
+    claim_path = package_dir / "execution_claim.json"
+    claim_observation = observe_regular_file(claim_path, anchor=FILESYSTEM_ANCHOR)
+    require(
+        (claim_observation.sha256, claim_observation.byte_count)
+        == STAGEB_COMPLETED_FILE_BINDINGS["execution_claim.json"],
+        "Stage B completed-run execution claim bytes drifted",
+    )
+
+    runs_dir = package_dir / "runs"
+    try:
+        runs_identity = _path_identity(runs_dir.lstat())
+        run_entries = list(os.scandir(runs_dir))
+    except OSError as exc:
+        raise VerificationError(f"cannot enumerate Stage B completed runs: {exc}") from exc
+    require(
+        runs_identity.mode_type == stat.S_IFDIR
+        and not runs_dir.is_symlink()
+        and not _is_reparse(runs_identity),
+        "Stage B runs root is not a plain directory",
+    )
+    require(
+        [entry.name for entry in run_entries] == [STAGEB_COMPLETED_RUN_ID],
+        "Stage B retained run inventory is not exactly the one claimed run",
+    )
+    run_identity = _path_identity(STAGEB_COMPLETED_RUN_DIR.lstat())
+    require(
+        run_identity.mode_type == stat.S_IFDIR
+        and not STAGEB_COMPLETED_RUN_DIR.is_symlink()
+        and not _is_reparse(run_identity),
+        "Stage B claimed run is not a plain directory",
+    )
+
+    actual_files, actual_directories = _stageb_directory_inventory(
+        STAGEB_COMPLETED_RUN_DIR
+    )
+    require(
+        actual_directories == {"chain_artifacts", "packet_evidence"},
+        "Stage B retained run directory inventory drifted: "
+        f"observed={sorted(actual_directories)}",
+    )
+    require(
+        "lifecycle.sqlite3-wal" not in actual_files
+        and "lifecycle.sqlite3-shm" not in actual_files,
+        "Stage B retained lifecycle store has mutable SQLite sidecars",
+    )
+
+    manifest_path = STAGEB_COMPLETED_RUN_DIR / "pre_receipt_artifact_manifest.json"
+    manifest_observation = observe_regular_file(
+        manifest_path, anchor=STAGEB_COMPLETED_RUN_DIR
+    )
+    require(
+        (manifest_observation.sha256, manifest_observation.byte_count)
+        == STAGEB_COMPLETED_FILE_BINDINGS["pre_receipt_artifact_manifest.json"],
+        "Stage B pre-receipt artifact manifest bytes drifted",
+    )
+    manifest = load_json(manifest_path, anchor=STAGEB_COMPLETED_RUN_DIR)
+    require(isinstance(manifest, dict), "Stage B pre-receipt manifest is not an object")
+    require_exact_keys(
+        manifest,
+        {"schema_version", "scope", "entries"},
+        label="Stage B pre-receipt manifest",
+    )
+    require(
+        manifest["schema_version"]
+        == "cas_harness_gate5_stageb_pre_receipt_manifest.v0.1"
+        and manifest["scope"]
+        == "ALL RUN-STORE FILES PRESENT BEFORE THIS MANIFEST AND THE FINAL RUNTIME RECEIPT"
+        and isinstance(manifest["entries"], list)
+        and len(manifest["entries"]) == 53,
+        "Stage B pre-receipt manifest schema, scope, or entry count drifted",
+    )
+
+    observations: dict[str, FileObservation] = {
+        "pre_receipt_artifact_manifest.json": manifest_observation
+    }
+    manifested_paths: set[str] = set()
+    for index, row in enumerate(manifest["entries"]):
+        require(isinstance(row, dict), f"Stage B manifest entry {index} is malformed")
+        require_exact_keys(
+            row,
+            {"path", "sha256", "byte_length"},
+            label=f"Stage B manifest entry {index}",
+        )
+        raw_path = _stageb_relative_path(
+            row["path"], label=f"Stage B manifest entry {index}"
+        )
+        require(
+            raw_path not in manifested_paths,
+            f"Stage B manifest repeats run-store path {raw_path!r}",
+        )
+        manifested_paths.add(raw_path)
+        require(
+            isinstance(row["sha256"], str)
+            and SHA256_LOWER_RE.fullmatch(row["sha256"]) is not None
+            and type(row["byte_length"]) is int
+            and row["byte_length"] >= 0,
+            f"Stage B manifest entry {index} has a noncanonical digest/length",
+        )
+        observation = observe_regular_file(
+            STAGEB_COMPLETED_RUN_DIR / Path(*PurePosixPath(raw_path).parts),
+            anchor=STAGEB_COMPLETED_RUN_DIR,
+        )
+        require(
+            observation.sha256 == row["sha256"].upper()
+            and observation.byte_count == row["byte_length"],
+            f"Stage B retained artifact bytes drifted: {raw_path}",
+        )
+        observations[raw_path] = observation
+
+    expected_actual_files = manifested_paths | {
+        "pre_receipt_artifact_manifest.json",
+        "runtime_receipt.json",
+    }
+    require(
+        actual_files == expected_actual_files,
+        "Stage B retained run file inventory differs from the sealed manifest plus "
+        "its two declared exclusions: "
+        f"missing={sorted(expected_actual_files - actual_files)} "
+        f"extra={sorted(actual_files - expected_actual_files)}",
+    )
+    runtime_observation = observe_regular_file(
+        STAGEB_COMPLETED_RUN_DIR / "runtime_receipt.json",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    observations["runtime_receipt.json"] = runtime_observation
+
+    for raw_path, expected in STAGEB_COMPLETED_FILE_BINDINGS.items():
+        if raw_path == "execution_claim.json":
+            observation = claim_observation
+        else:
+            observation = observations.get(raw_path)
+        require(
+            observation is not None
+            and (observation.sha256, observation.byte_count) == expected,
+            f"Stage B completed-run critical binding drifted: {raw_path}",
+        )
+    return observations
+
+
+def _verify_stageb_execution_claim(claim: Any) -> dict[str, Any]:
+    require(isinstance(claim, dict), "Stage B execution claim is not an object")
+    require_exact_keys(
+        claim,
+        {
+            "schema_version",
+            "run_id",
+            "claimed_at",
+            "source_commit",
+            "clean_execution_commit",
+            "source_to_execution_changed_paths",
+            "protocol_sha256",
+            "preregistration_chain_sha256",
+            "maximum_run_attempts",
+            "maximum_model_invocations",
+            "maximum_packets",
+            "automatic_retry",
+            "provider_calls",
+            "provider_spend_usd",
+            "preclaim_weight_artifact",
+            "boundary",
+        },
+        label="Stage B execution claim",
+    )
+    require(
+        claim["schema_version"] == "cas_harness_gate5_stageb_execution_claim.v0.1"
+        and claim["run_id"] == STAGEB_COMPLETED_RUN_ID
+        and claim["claimed_at"] == "2026-08-08T22:56:47.597519Z"
+        and claim["source_commit"] == "0ac9f43828566b937b349d8a70da62238580a71c"
+        and claim["clean_execution_commit"]
+        == "540a2259eca07010abd33dc6c16ab936b16a6432"
+        and claim["source_to_execution_changed_paths"]
+        == list(STAGEB_SOURCE_TO_EXECUTION_CHANGED_PATHS)
+        and claim["protocol_sha256"] == STAGEB_PROTOCOL_SHA256
+        and claim["preregistration_chain_sha256"]
+        == "3C6B3936EDD6C8A11C9603E19242D0D85C1FBE288A86A7DBD315222FF76ED639"
+        and claim["maximum_run_attempts"] == 1
+        and claim["maximum_model_invocations"] == 1
+        and claim["maximum_packets"] == 1
+        and claim["automatic_retry"] is False
+        and claim["provider_calls"] == 0
+        and claim["provider_spend_usd"] == "0.00"
+        and claim["boundary"] == STAGEB_COMPLETED_BOUNDARY,
+        "Stage B execution claim identity, ceiling, accounting, or boundary drifted",
+    )
+    expected_weight = {
+        "artifact_id": "qwen25-05b-instruct-model-safetensors",
+        "byte_length": STAGEB_QWEN_BINDING["weights_bytes"],
+        "path": (
+            "D:/tksCAS-archive/project_coherence_stageb_retained_blobs/"
+            "sha256-fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe.model.safetensors"
+        ),
+        "sha256": STAGEB_QWEN_BINDING["weights_sha256"].upper(),
+        "storage_scope": "EXTERNAL_CONTENT_ADDRESSED_ARCHIVE",
+    }
+    require(
+        claim["preclaim_weight_artifact"] == expected_weight,
+        "Stage B execution claim retained-weight binding drifted",
+    )
+    return expected_weight
+
+
+def _verify_stageb_external_weight(
+    expected_weight: dict[str, Any], pointer: Any
+) -> FileObservation:
+    require(isinstance(pointer, dict), "Stage B weight pointer is not an object")
+    retained_path = expected_weight["path"]
+    require(
+        pointer
+        == {
+            "artifact_id": expected_weight["artifact_id"],
+            "byte_length": expected_weight["byte_length"],
+            "file_attribute_read_only": True,
+            "helper_container_absence_verified": True,
+            "helper_container_id": (
+                "3eaa35eefc7733ff7d192795f8c90cf7af0b9f64aaffc93a959d4c7fd25017dc"
+            ),
+            "helper_container_started": False,
+            "helper_network": "NONE",
+            "mode_octal": "0444",
+            "mode_read_only": True,
+            "model_execution": "NOT STARTED",
+            "provider_calls": 0,
+            "provider_spend_usd": "0.00",
+            "regular_file": True,
+            "retained_path": retained_path,
+            "reused_existing": False,
+            "schema_version": (
+                "cas_harness_gate5_stageb_weight_materialization.v0.1"
+            ),
+            "sha256": STAGEB_QWEN_BINDING["weights_sha256"],
+            "source_container_path": (
+                "/worker/.cache/huggingface/hub/models--Qwen--Qwen2.5-0.5B-Instruct/"
+                "snapshots/7ae557604adf67be50417f59c2c2f167def9a775/model.safetensors"
+            ),
+            "source_image_id": STAGEB_QWEN_BINDING["image_id"],
+            "st_nlink": 1,
+            "storage_scope": (
+                "EXTERNAL CONTENT-ADDRESSED ARCHIVE / OUTSIDE PACKAGE_ROOT"
+            ),
+            "symlink_or_reparse": False,
+            "transport": "DOCKER CP TAR STDOUT / STREAMED",
+        },
+        "Stage B retained-weight materialization record drifted",
+    )
+    weight_path = Path(retained_path)
+    require(
+        weight_path.is_absolute()
+        and WINDOWS_ABSOLUTE_RE.match(retained_path) is not None,
+        "Stage B retained-weight path is not an absolute file path",
+    )
+    expected_filename = (
+        f"sha256-{STAGEB_QWEN_BINDING['weights_sha256']}.model.safetensors"
+    )
+    require(
+        weight_path.name == expected_filename,
+        "Stage B retained-weight filename is not content-addressed by its digest",
+    )
+    try:
+        archive_entries = list(os.scandir(weight_path.parent))
+    except OSError as exc:
+        raise VerificationError(
+            f"cannot enumerate Stage B retained-weight archive: {exc}"
+        ) from exc
+    require(
+        [entry.name for entry in archive_entries] == [expected_filename],
+        "Stage B retained-weight archive is not the exact one-file structure",
+    )
+    observation = observe_regular_file(weight_path, anchor=Path(weight_path.anchor))
+    require(
+        observation.sha256 == expected_weight["sha256"]
+        and observation.byte_count == expected_weight["byte_length"]
+        and observation.identity.link_count == 1,
+        "Stage B external retained weights do not match exact hash/size/identity",
+    )
+    mode = stat.S_IMODE(weight_path.lstat().st_mode)
+    require(
+        mode & 0o222 == 0,
+        "Stage B external retained weights are currently writable by mode bits",
+    )
+    if os.name == "nt":
+        readonly_attribute = getattr(stat, "FILE_ATTRIBUTE_READONLY", 0x1)
+        require(
+            observation.identity.file_attributes is not None
+            and observation.identity.file_attributes & readonly_attribute,
+            "Stage B external retained weights lost the Windows read-only attribute",
+        )
+    return observation
+
+
+def _verify_stageb_qwen_health(health: Any) -> dict[str, Any]:
+    runtime_execution = {
+        "cuda_bfloat16_supported": True,
+        "cuda_device_capability": "8.9",
+        "cuda_device_name": "NVIDIA GeForce RTX 4070 Laptop GPU",
+        "cuda_driver_version": 13020,
+        "cuda_runtime_version": "12.6",
+        "device": "cuda",
+        "dtype": "torch.bfloat16",
+        "profile": "production",
+        "torch_native_jit_disabled": True,
+        "torch_version": "2.13.0+cu126",
+    }
+    require(
+        health
+        == {
+            "fake_runtime_env": False,
+            "is_real_model": True,
+            "load_error": None,
+            "manifest_is_real_model": True,
+            "model_id": STAGEB_QWEN_BINDING["model_id"],
+            "model_identity_status": "PINNED_REVISION_AND_WEIGHTS_SHA256",
+            "model_loaded": True,
+            "requested_revision": STAGEB_QWEN_BINDING["revision"],
+            "resolved_revision": STAGEB_QWEN_BINDING["revision"],
+            "revision_verified": True,
+            "runtime_execution": runtime_execution,
+            "verdict": "REAL_QWEN2_5_0_5B_INSTRUCT_WEIGHTS_LOADED",
+            "weights_bytes": STAGEB_QWEN_BINDING["weights_bytes"],
+            "weights_filename": STAGEB_QWEN_BINDING["weights_filename"],
+            "weights_hash_verified": True,
+            "weights_sha256": STAGEB_QWEN_BINDING["weights_sha256"],
+            "worker_version": "stageb-real-qwen2.5-0.5b-instruct",
+        },
+        "Stage B Qwen health/model/runtime identity drifted",
+    )
+    return runtime_execution
+
+
+def _verify_stageb_legacy_pythia_intervention_blocker(
+    contract: Any,
+) -> None:
+    """Recognize, but never accept, the retained Pythia hook as Qwen steering."""
+
+    require(
+        contract == dict(STAGEB_LEGACY_PYTHIA_INTERVENTION_HOOK_CONTRACT),
+        "Stage B retained output legacy Pythia intervention hook changed",
+    )
+    module_path = contract["module_path_template"]
+    qwen_probe_path = "model.layers[*].mlp.down_proj"
+    require(
+        module_path.startswith("gpt_neox.layers[")
+        and "dense_4h_to_h" in module_path
+        and module_path != qwen_probe_path
+        and "model.layers" not in module_path,
+        "legacy Pythia intervention hook was incorrectly accepted as a Qwen contract",
+    )
+    # This mismatch is an expected retained limitation.  It is a fail-closed
+    # blocker for any future Qwen steering claim, not evidence that steering ran.
+
+
+def _verify_stageb_qwen_output(output: Any, runtime_execution: dict[str, Any]) -> None:
+    require(isinstance(output, dict), "Stage B Qwen output is not an object")
+    require_exact_keys(
+        output,
+        {"events", "joined_execution_binding"},
+        label="Stage B Qwen output",
+    )
+    events = output["events"]
+    require(
+        isinstance(events, list) and len(events) == 7,
+        "Stage B Qwen output must contain exactly seven events",
+    )
+    require(
+        [event.get("type") if isinstance(event, dict) else None for event in events]
+        == [
+            "manifest",
+            "knob_resolution",
+            "neuron_covers",
+            "token",
+            "token",
+            "word_spans",
+            "complete",
+        ],
+        "Stage B Qwen output event sequence drifted",
+    )
+    require(
+        all(
+            not isinstance(event, dict)
+            or "intervention" not in str(event.get("type", "")).casefold()
+            for event in events
+        ),
+        "Stage B Qwen output contains an intervention event",
+    )
+
+    manifest_event = events[0]
+    require_exact_keys(
+        manifest_event,
+        {"type", "manifest"},
+        label="Stage B Qwen manifest event",
+    )
+    manifest = manifest_event["manifest"]
+    require(isinstance(manifest, dict), "Stage B worker manifest is not an object")
+    require_exact_keys(
+        manifest,
+        {
+            "model_id",
+            "worker_version",
+            "tokenizer_id",
+            "supported_hooks",
+            "model_arch",
+            "intervention_hook_contract",
+            "execution_kind",
+            "is_real_model",
+            "model_identity_status",
+            "requested_revision",
+            "resolved_revision",
+            "revision_verified",
+            "weights_filename",
+            "weights_sha256",
+            "weights_bytes",
+            "weights_hash_verified",
+            "runtime_execution",
+        },
+        label="Stage B worker manifest",
+    )
+    require(
+        manifest["model_id"] == STAGEB_QWEN_BINDING["model_id"]
+        and manifest["tokenizer_id"] == STAGEB_QWEN_BINDING["model_id"]
+        and manifest["worker_version"] == "stageb-real-qwen2.5-0.5b-instruct"
+        and manifest["supported_hooks"]
+        == [
+            "residual_stream",
+            "mlp_intermediate_post_activation",
+            "attention_pattern",
+            "logits",
+        ]
+        and manifest["model_arch"]
+        == {
+            "family": "qwen2",
+            "hidden_size": 896,
+            "mlp_intermediate_dim": 4864,
+            "n_heads": 14,
+            "n_layers": 24,
+            "total_params": 494032768,
+            "validated": True,
+        }
+        and manifest["execution_kind"] == "real_model_weights"
+        and manifest["is_real_model"] is True
+        and manifest["model_identity_status"]
+        == "PINNED_REVISION_AND_WEIGHTS_SHA256"
+        and manifest["requested_revision"] == STAGEB_QWEN_BINDING["revision"]
+        and manifest["resolved_revision"] == STAGEB_QWEN_BINDING["revision"]
+        and manifest["revision_verified"] is True
+        and manifest["weights_filename"] == STAGEB_QWEN_BINDING["weights_filename"]
+        and manifest["weights_sha256"] == STAGEB_QWEN_BINDING["weights_sha256"]
+        and manifest["weights_bytes"] == STAGEB_QWEN_BINDING["weights_bytes"]
+        and manifest["weights_hash_verified"] is True
+        and manifest["runtime_execution"] == runtime_execution,
+        "Stage B Qwen worker manifest identity or activation geometry drifted",
+    )
+    _verify_stageb_legacy_pythia_intervention_blocker(
+        manifest["intervention_hook_contract"]
+    )
+
+    require(
+        events[1]
+        == {
+            "type": "knob_resolution",
+            "resolved_knobs": {
+                "blindspot_detection": {
+                    "cover_available": True,
+                    "drive": "F1",
+                    "scope": "F1",
+                },
+                "drive_local_eraser": {
+                    "active": False,
+                    "cover_available": True,
+                    "drive": "F1",
+                    "gain": 1.0,
+                },
+                "foundation_probe": {
+                    "layer_range": list(range(24)),
+                    "top_k": 8,
+                },
+                "inversion_scan": {
+                    "active": False,
+                    "severity_threshold": 0.0,
+                },
+                "rpm_gate_check": {"strictness_threshold": 0.0},
+            },
+        }
+        and events[2] == {"type": "neuron_covers", "per_class_neuron_covers": {}},
+        "Stage B Qwen probe knobs or empty neuron covers drifted",
+    )
+
+    expected_tokens = (("Blue", 0, 0.25), ("<|im_end|>", 1, 0.406))
+    null_fields = {
+        "eraser_intervention_result",
+        "inversion_risk",
+        "verification_invalid_mode",
+        "verification_mode",
+        "verification_score",
+        "verification_score_source",
+        "verification_threshold",
+        "verification_verdict",
+    }
+    for event, (token, token_index, confidence) in zip(events[3:5], expected_tokens):
+        require_exact_keys(
+            event,
+            {
+                "type",
+                "token",
+                "token_index",
+                "confidence",
+                "top_activated_neurons",
+                "eraser_intervention_result",
+                "inversion_risk",
+                "mode7_attribution",
+                "verification_invalid_mode",
+                "verification_mode",
+                "verification_score",
+                "verification_score_source",
+                "verification_threshold",
+                "verification_verdict",
+            },
+            label=f"Stage B token event {token_index}",
+        )
+        require(
+            event["token"] == token
+            and event["token_index"] == token_index
+            and event["confidence"] == confidence
+            and event["mode7_attribution"] == []
+            and all(event[field] is None for field in null_fields),
+            f"Stage B token event {token_index} reports intervention/scoring or drift",
+        )
+        neurons = event["top_activated_neurons"]
+        require(
+            isinstance(neurons, list) and len(neurons) == 8,
+            f"Stage B token event {token_index} top-k activation count drifted",
+        )
+        for neuron_index, neuron in enumerate(neurons):
+            require(
+                isinstance(neuron, dict)
+                and set(neuron) == {"activation", "index", "layer"}
+                and type(neuron["layer"]) is int
+                and 0 <= neuron["layer"] < 24
+                and type(neuron["index"]) is int
+                and 0 <= neuron["index"] < 4864
+                and type(neuron["activation"]) in {int, float}
+                and math.isfinite(float(neuron["activation"])),
+                f"Stage B token {token_index} activation {neuron_index} is out of geometry",
+            )
+    require(
+        events[5]
+        == {
+            "type": "word_spans",
+            "spans": [
+                {
+                    "word": "Blue<|im_end|>",
+                    "token_indices": [0, 1],
+                    "char_start": 0,
+                    "char_end": 14,
+                }
+            ],
+            "structural_token_indices": [],
+            "total_tokens_covered": 2,
+        }
+        and events[6] == {"type": "complete", "total_tokens": 2},
+        "Stage B Qwen word-span or completion accounting drifted",
+    )
+
+    events_bytes = _canonical_json_bytes(events, label="Stage B Qwen events")
+    binding = output["joined_execution_binding"]
+    require(
+        binding
+        == {
+            "authority": "WORKER_PROCESS_OBSERVATION_ONLY",
+            "authorization_sha256": (
+                "5CE9ED8F3C4BD30F2959D99D58BE0DAAB8C589F96AA65D8BC7DA000008527951"
+            ),
+            "binding_scope": "EXACT_REQUEST_BYTES_AND_CANONICAL_EVENTS_MEMBER_ONLY",
+            "digest_profile": "UTF8_SORTED_KEYS_COMPACT_JSON_ENSURE_ASCII_FALSE_V1",
+            "events_byte_length": len(events_bytes),
+            "events_sha256": sha256_bytes(events_bytes),
+            "invocation_id_sha256": (
+                "AAE2C6AE584F11566D245BF007089DAD2E9DD1881E3D871304DA1A2BE99D0408"
+            ),
+            "nonclaim": "NOT_A_SIGNATURE_OR_TRUSTED_EXECUTION_ATTESTATION",
+            "prospective_run_id": STAGEB_PROSPECTIVE_RUN_ID,
+            "request_byte_length": 507,
+            "request_sha256": STAGEB_REQUEST_SHA256,
+            "schema_version": "cas_harness_live_worker.joined_execution_binding.v1",
+            "status": "OBSERVED_REQUEST_AND_EVENTS_BOUND",
+        }
+        and len(events_bytes) == 3693
+        and sha256_bytes(events_bytes)
+        == "0A643F52DF4532A85179B367F26CA6F2570557F5CA86192FEA3CEC1ABA1B1128",
+        "Stage B Qwen joined request/events binding does not recompute exactly",
+    )
+
+
+def _verify_stageb_artifact_ref(
+    artifact: Any,
+    registry: dict[str, dict[str, Any]],
+    *,
+    label: str,
+) -> None:
+    require(isinstance(artifact, dict), f"{label}: artifact reference is malformed")
+    require(
+        {"artifact_id", "byte_length", "sha256"} <= set(artifact),
+        f"{label}: artifact reference omits identity fields",
+    )
+    artifact_id = artifact["artifact_id"]
+    require(
+        isinstance(artifact_id, str) and artifact_id in registry,
+        f"{label}: artifact is absent from the retained registry",
+    )
+    row = registry[artifact_id]
+    require(
+        type(artifact["byte_length"]) is int
+        and artifact["byte_length"] == row["byte_length"]
+        and isinstance(artifact["sha256"], str)
+        and artifact["sha256"].upper() == row["sha256"],
+        f"{label}: artifact reference differs from retained bytes",
+    )
+
+
+def _verify_stageb_registered_refs(
+    value: Any,
+    registry: dict[str, dict[str, Any]],
+    *,
+    label: str,
+) -> int:
+    count = 0
+    if isinstance(value, dict):
+        if {"artifact_id", "byte_length", "sha256"} <= set(value):
+            _verify_stageb_artifact_ref(value, registry, label=label)
+            count += 1
+        for key, child in value.items():
+            count += _verify_stageb_registered_refs(
+                child, registry, label=f"{label}.{key}"
+            )
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            count += _verify_stageb_registered_refs(
+                child, registry, label=f"{label}[{index}]"
+            )
+    return count
+
+
+def _verify_stageb_packet_registry(
+    rows: Any,
+    observations: dict[str, FileObservation],
+    expected_weight: dict[str, Any],
+    weight_observation: FileObservation,
+) -> dict[str, dict[str, Any]]:
+    expected_ids = {
+        "qwen25-05b-instruct-model-safetensors",
+        "qwen25-05b-instruct-tokenizer-identity",
+        "stageb-analysis-manifest",
+        "stageb-dependency-lock",
+        "stageb-engineering-confirmatory-split",
+        "stageb-evidence-packet-builder-test-receipt",
+        "stageb-final-executable-code-identity",
+        "stageb-final-executable-source-manifest",
+        "stageb-final-runtime-image-identity",
+        "stageb-fixed-sample-plan",
+        "stageb-preparation-source-manifest",
+        "stageb-qwen-confirmatory-accounting-001",
+        "stageb-qwen-control-clean-null-invalid-001",
+        "stageb-qwen-control-matched-taxonomy-invalid-001",
+        "stageb-qwen-control-wrong-layer-invalid-001",
+        "stageb-qwen-execution-manifest-001",
+        "stageb-qwen-falsifier-report-001",
+        "stageb-qwen-heldout-exclusion-001",
+        "stageb-qwen-joined-job-001",
+        "stageb-qwen-joined-worker-dump-001",
+        "stageb-qwen-metric-intervention-count-001",
+        "stageb-qwen-metric-output-byte-count-001",
+        "stageb-qwen-metric-packet-count-001",
+        "stageb-qwen-metric-provider-call-count-001",
+        "stageb-qwen-metric-provider-spend-usd-001",
+        "stageb-qwen-metric-run-count-001",
+        "stageb-qwen-noncanonical-claim-ledger",
+        "stageb-qwen-probe-adapter-test-receipt",
+        "stageb-qwen-result-summary-001",
+        "stageb-qwen-terminal-receipt-001",
+        "stageb-qwen-uncertainty-report-001",
+        "stageb-qwen-worker-response-001",
+        "stageb-schema-heldout-split",
+    }
+    require(
+        isinstance(rows, list) and len(rows) == len(expected_ids) == 33,
+        "Stage B packet registry must contain exactly 33 retained artifacts",
+    )
+    registry: dict[str, dict[str, Any]] = {}
+    local_paths: set[str] = set()
+    for index, row in enumerate(rows):
+        require(isinstance(row, dict), f"Stage B registry row {index} is malformed")
+        require_exact_keys(
+            row,
+            {"artifact_id", "byte_length", "sha256", "path", "storage_scope"},
+            label=f"Stage B registry row {index}",
+        )
+        artifact_id = row["artifact_id"]
+        require(
+            isinstance(artifact_id, str)
+            and artifact_id
+            and artifact_id not in registry
+            and type(row["byte_length"]) is int
+            and row["byte_length"] >= 0
+            and isinstance(row["sha256"], str)
+            and SHA256_UPPER_RE.fullmatch(row["sha256"]) is not None,
+            f"Stage B registry row {index} has duplicate/noncanonical identity",
+        )
+        registry[artifact_id] = row
+        if row["storage_scope"] == "LOCAL_RUN_STORE":
+            raw_path = _stageb_relative_path(
+                row["path"], label=f"Stage B registry row {index}"
+            )
+            require(
+                raw_path not in local_paths and raw_path in observations,
+                f"Stage B registry row {index} repeats or omits a local file",
+            )
+            local_paths.add(raw_path)
+            observation = observations[raw_path]
+            require(
+                observation.sha256 == row["sha256"]
+                and observation.byte_count == row["byte_length"],
+                f"Stage B registry row {index} differs from retained local bytes",
+            )
+        else:
+            require(
+                artifact_id == expected_weight["artifact_id"]
+                and row == expected_weight
+                and weight_observation.sha256 == row["sha256"]
+                and weight_observation.byte_count == row["byte_length"],
+                "Stage B registry has an unexpected or drifted external artifact",
+            )
+    require(
+        set(registry) == expected_ids,
+        "Stage B packet registry artifact-id inventory drifted: "
+        f"missing={sorted(expected_ids - set(registry))} "
+        f"extra={sorted(set(registry) - expected_ids)}",
+    )
+    return registry
+
+
+def _verify_stageb_packet(
+    packet: Any,
+    assessment: Any,
+    execution_manifest: Any,
+    registry: dict[str, dict[str, Any]],
+) -> None:
+    require(isinstance(packet, dict), "Stage B Evidence Packet is not an object")
+    require_exact_keys(
+        packet,
+        {
+            "schema_version",
+            "packet_id",
+            "created_at",
+            "claim_binding",
+            "execution",
+            "outcome_artifacts",
+            "scientific_evidence",
+            "independent_numerical_audit",
+            "replication",
+            "claim_language_review",
+            "governance",
+        },
+        label="Stage B Evidence Packet",
+    )
+    require(
+        packet["schema_version"] == "cas_harness_v2.evidence_packet.v2"
+        and packet["packet_id"] == "epv2-stageb-qwen-joined-001"
+        and packet["created_at"] == "2026-08-08T22:57:15.605128Z"
+        and packet["claim_binding"]
+        == {
+            "claim_id": "CLM-GATE5-STAGEB-QWEN-JOINED-PACKET-MECHANICS",
+            "claim_record_sha256": (
+                "4981775206E3724D8B241C75ED15EBB052669948463B8BB5968040F492CDA3C5"
+            ),
+            "preregistration_chain_sha256": (
+                "9A0A6FF2FF5125B3479A3575D6F8CF5EAD3E465729A39C5E6EB3454894972437"
+            ),
+            "preregistration_sha256": (
+                "4F7D32A9364FC5A470B0FEE575D53C15D027D52CB013AB3EDBBD059A3CCED57D"
+            ),
+            "protected_design_sha256": (
+                "41ECD9E07637F457ED4A4832ED436A8A425675DD2B24C6A15EC1033B5E90D59F"
+            ),
+        },
+        "Stage B Packet identity or claim-chain binding drifted",
+    )
+    require(
+        packet["governance"]
+        == {
+            "admission_ring": 4,
+            "disclosure_status": "HELD",
+            "license_decision": "NONE",
+            "product_claim_status": "NOT LICENSED",
+            "product_route": False,
+            "public_release": False,
+        },
+        "Stage B Packet promoted its Ring-4/HELD/non-product governance",
+    )
+    for field in (
+        "independent_numerical_audit",
+        "replication",
+        "claim_language_review",
+    ):
+        value = packet[field]
+        require(
+            isinstance(value, dict)
+            and value.get("availability") == "UNAVAILABLE"
+            and isinstance(value.get("reason"), str)
+            and value["reason"],
+            f"Stage B Packet {field} was promoted or lost its limitation",
+        )
+    require(
+        packet["execution"]
+        == {
+            "authentication": {
+                "availability": "UNAVAILABLE",
+                "reason": (
+                    "Exact authorization and terminal-receipt bytes are structurally "
+                    "replayed, but no external execution-authentication trust root is "
+                    "available to this Ring-4 kernel."
+                ),
+            },
+            "completed_at": "2026-08-08T22:57:14.532616Z",
+            "execution_manifest": {
+                "artifact_id": "stageb-qwen-execution-manifest-001",
+                "byte_length": 1774,
+                "media_type": (
+                    "application/vnd.cas-harness.evidence-packet-execution-manifest+json"
+                ),
+                "sha256": (
+                    "3E998729DFB654249DF27B85716DAB6B043EF607F50458BF7620821E89D428CB"
+                ),
+            },
+            "executor_identity": "worker-stageb-local-gpu-001",
+            "run_id": "stageb-qwen-joined-job-001",
+            "started_at": "2026-08-08T22:57:13.762247Z",
+        }
+        and packet["outcome_artifacts"]
+        == [
+            {
+                "artifact_id": "stageb-qwen-joined-worker-dump-001",
+                "byte_length": 4592,
+                "media_type": "application/json",
+                "sha256": (
+                    "D991601CB8DFDA3A8057D49D2F201A4CF55A2019F7CC897020498EB944E44791"
+                ),
+            }
+        ],
+        "Stage B Packet execution/output binding drifted",
+    )
+    require(
+        _verify_stageb_registered_refs(packet, registry, label="Stage B Packet") == 17,
+        "Stage B Packet artifact-reference inventory drifted",
+    )
+
+    science = packet["scientific_evidence"]
+    require(isinstance(science, dict), "Stage B Packet scientific evidence is malformed")
+    require_exact_keys(
+        science,
+        {
+            "controls",
+            "falsifiers",
+            "limitations",
+            "metrics",
+            "result_summary",
+            "split_results",
+            "uncertainty_artifact",
+        },
+        label="Stage B Packet scientific evidence",
+    )
+    require(
+        [
+            (row.get("control_id"), row.get("outcome"))
+            for row in science["controls"]
+            if isinstance(row, dict)
+        ]
+        == [
+            ("stageb-matched-taxonomy-not-performed", "INVALID"),
+            ("stageb-wrong-layer-not-performed", "INVALID"),
+            ("stageb-clean-null-not-performed", "INVALID"),
+        ]
+        and len(science["controls"]) == 3,
+        "Stage B Packet controls are not exactly three INVALID/not-performed controls",
+    )
+    require(
+        isinstance(science["falsifiers"], list)
+        and len(science["falsifiers"]) == 1
+        and science["falsifiers"][0].get("falsifier_id")
+        == "stageb-bounded-path-violation"
+        and science["falsifiers"][0].get("triggered") is False,
+        "Stage B Packet falsifier report drifted",
+    )
+    metric_projection = {
+        row.get("measure_id"): (
+            row.get("value"),
+            row.get("unit"),
+            row.get("threshold_id"),
+        )
+        for row in science["metrics"]
+        if isinstance(row, dict)
+    }
+    require(
+        len(science["metrics"]) == len(metric_projection) == 7
+        and metric_projection
+        == {
+            "stageb-run-count": ("1", "count", "stageb-exactly-one-run"),
+            "stageb-model-invocation-count": (
+                "1",
+                "count",
+                "stageb-exactly-one-model-invocation",
+            ),
+            "stageb-packet-count": ("1", "count", "stageb-exactly-one-packet"),
+            "stageb-intervention-count": (
+                "0",
+                "count",
+                "stageb-zero-interventions",
+            ),
+            "stageb-provider-call-count": (
+                "0",
+                "count",
+                "stageb-zero-provider-calls",
+            ),
+            "stageb-provider-spend-usd": (
+                "0.00",
+                "USD",
+                "stageb-zero-provider-spend",
+            ),
+            "stageb-output-byte-count": (
+                "4592",
+                "bytes",
+                "stageb-output-bytes-reported",
+            ),
+        },
+        "Stage B Packet metric values/units/thresholds drifted",
+    )
+    split_projection = [
+        (
+            row.get("split_id"),
+            row.get("enrolled_rows"),
+            row.get("analyzed_rows"),
+            row.get("excluded_rows"),
+            row.get("missing_rows"),
+            row.get("groups"),
+        )
+        for row in science["split_results"]
+        if isinstance(row, dict)
+    ]
+    require(
+        len(science["split_results"]) == 2
+        and split_projection
+        == [
+            ("stageb-engineering-confirmatory", 1, 1, 0, 0, 1),
+            ("stageb-schema-held-out", 1, 0, 1, 0, 0),
+        ]
+        and any(
+            limitation == (
+                "The generated text is report-only and is not a semantic pass criterion."
+            )
+            for limitation in science["limitations"]
+        ),
+        "Stage B Packet split accounting or generated-text limitation drifted",
+    )
+
+    expected_assessment = {
+        "admission_ring": 4,
+        "authenticated_execution": "UNAVAILABLE",
+        "blockers": [
+            "authenticated_execution_not_established",
+            "claim_language_review_not_authenticated",
+            "control_invalid:stageb-clean-null-not-performed",
+            "control_invalid:stageb-matched-taxonomy-not-performed",
+            "control_invalid:stageb-wrong-layer-not-performed",
+            "external_scientific_review_not_established",
+            "fixed_sample_analyzed_rows_deviation:stageb-schema-held-out",
+            "fixed_sample_groups_deviation:stageb-schema-held-out",
+            "independent_numerical_audit_not_authenticated",
+            "replication_not_authenticated",
+            "split_group_floor_not_met:stageb-schema-held-out",
+        ],
+        "claim_language_review": "UNAVAILABLE",
+        "disclosure_status": "HELD",
+        "independent_numerical_audit": "UNAVAILABLE",
+        "license_decision": "NONE",
+        "packet_sha256": STAGEB_COMPLETED_FILE_BINDINGS[
+            "evidence_packet.v2.json"
+        ][0],
+        "preregistered_criteria": "REPORTED_CRITERIA_NOT_MET",
+        "product_claim_status": "NOT LICENSED",
+        "product_route_allowed": False,
+        "public_release_allowed": False,
+        "replication": "UNAVAILABLE",
+        "scientific_eligibility": "INELIGIBLE",
+        "self_hash_is_authority": False,
+        "structural_completeness": "COMPLETE",
+    }
+    require(
+        assessment == expected_assessment
+        and assessment["blockers"] == sorted(assessment["blockers"]),
+        "Stage B Packet assessment or fail-closed blocker inventory drifted",
+    )
+
+    require(
+        isinstance(execution_manifest, dict)
+        and execution_manifest.get("schema_version")
+        == "cas_harness_v2.evidence_packet_execution_manifest.v1"
+        and execution_manifest.get("manifest_id")
+        == "stageb-qwen-execution-manifest-001"
+        and execution_manifest.get("packet_id") == packet["packet_id"]
+        and execution_manifest.get("created_at") == packet["created_at"]
+        and execution_manifest.get("claim_binding")
+        == {
+            key: packet["claim_binding"][key]
+            for key in (
+                "claim_id",
+                "preregistration_chain_sha256",
+                "preregistration_sha256",
+            )
+        }
+        and execution_manifest.get("run")
+        == {
+            "completed_at": "2026-08-08T22:57:14.532616Z",
+            "executor_identity": "worker-stageb-local-gpu-001",
+            "run_id": "stageb-qwen-joined-job-001",
+            "started_at": "2026-08-08T22:57:13.762247Z",
+            "terminal_status": "COMPLETED",
+        }
+        and execution_manifest.get("governance") == packet["governance"]
+        and execution_manifest.get("outcome_artifacts") == packet["outcome_artifacts"]
+        and execution_manifest.get("assurance")
+        == {
+            "authenticated_execution": "NOT_ESTABLISHED",
+            "disclosure": "HELD",
+            "independent_review": "NOT_ESTABLISHED",
+            "license": "NOT_GRANTED",
+            "product_route": "NOT_AUTHORIZED",
+            "scientific_conclusion": "NOT_ESTABLISHED",
+            "scope": "STRUCTURAL_BINDING_ONLY",
+        },
+        "Stage B Packet execution manifest relations or limitations drifted",
+    )
+    require(
+        _verify_stageb_registered_refs(
+            execution_manifest, registry, label="Stage B execution manifest"
+        )
+        == 3,
+        "Stage B execution manifest artifact-reference inventory drifted",
+    )
+
+
+def _verify_stageb_execution_relations(
+    *,
+    claim: dict[str, Any],
+    runtime_receipt: Any,
+    authorization: Any,
+    terminal_receipt: Any,
+    consumption: Any,
+    outcome_access: Any,
+    joined_result: Any,
+    packet: dict[str, Any],
+    assessment: dict[str, Any],
+    cleanup: Any,
+    secret_scan: Any,
+    registry: dict[str, dict[str, Any]],
+) -> None:
+    require(
+        isinstance(authorization, dict)
+        and authorization.get("schema_version")
+        == "cas_harness_v2.worker_authorization.v1"
+        and authorization.get("authorization_id") == "stageb-qwen-joined-job-001",
+        "Stage B worker authorization identity drifted",
+    )
+    expected_governance = {
+        "admission_ring": 4,
+        "disclosure_status": "HELD",
+        "license_decision": "NONE",
+        "product_claim_status": "NOT LICENSED",
+        "product_route": False,
+        "public_release": False,
+    }
+    expected_authority = {
+        "authentication": "NOT_PROVIDED",
+        "disclosure": "HELD",
+        "durable_one_use": "NOT_PROVIDED",
+        "license": "NOT_GRANTED",
+        "product": "NOT_AUTHORIZED",
+        "scientific_conclusion": "NOT_ESTABLISHED",
+        "scope": "STRUCTURE_ONLY",
+        "trusted_time": "NOT_PROVIDED",
+        "worm": "NOT_PROVIDED",
+    }
+    mapping = authorization.get("execution_mapping")
+    require(
+        authorization.get("governance") == expected_governance
+        and authorization.get("authority") == expected_authority
+        and isinstance(mapping, dict)
+        and mapping.get("assigned_methods") == ["foundation_probe"]
+        and mapping.get("assigned_worker_id") == "worker-stageb-local-gpu-001"
+        and mapping.get("job_id") == "stageb-qwen-joined-job-001"
+        and mapping.get("layer_start") == 0
+        and mapping.get("layer_end") == 23
+        and isinstance(mapping.get("lease_model"), dict)
+        and mapping["lease_model"].get("execution_mode") == "external_probe_command"
+        and mapping["lease_model"].get("model_id")
+        == STAGEB_QWEN_BINDING["model_id"]
+        and mapping["lease_model"].get("model_revision")
+        == STAGEB_QWEN_BINDING["revision"],
+        "Stage B authorization method/model/governance boundary drifted",
+    )
+    preregistration_binding = authorization.get("preregistration_binding")
+    require(
+        isinstance(preregistration_binding, dict)
+        and preregistration_binding.get("pre_outcome_chain_sha256")
+        == claim["preregistration_chain_sha256"]
+        and preregistration_binding.get("base_artifact")
+        == {
+            "artifact_id": "prereg-gate5-stageb-qwen-joined-packet-001",
+            "byte_length": 11762,
+            "media_type": "application/vnd.cas-harness.preregistration+json",
+            "sha256": STAGEB_COMPLETED_FILE_BINDINGS["preregistration.json"][0],
+        }
+        and preregistration_binding.get("claim_id")
+        == packet["claim_binding"]["claim_id"]
+        and preregistration_binding.get("claim_record_sha256")
+        == packet["claim_binding"]["claim_record_sha256"]
+        and preregistration_binding.get("protected_design_sha256")
+        == packet["claim_binding"]["protected_design_sha256"],
+        "Stage B authorization/preregistration claim chain drifted",
+    )
+
+    require(
+        isinstance(terminal_receipt, dict)
+        and terminal_receipt.get("schema_version")
+        == "cas_harness_v2.worker_terminal_receipt.v1"
+        and terminal_receipt.get("receipt_id") == "stageb-qwen-terminal-receipt-001"
+        and terminal_receipt.get("authority") == authorization.get("authority")
+        and terminal_receipt.get("execution_mapping")
+        == authorization.get("execution_mapping")
+        and terminal_receipt.get("governance") == authorization.get("governance")
+        and terminal_receipt.get("identity_binding")
+        == authorization.get("identity_binding")
+        and terminal_receipt.get("nonce_binding") == authorization.get("nonce_binding")
+        and terminal_receipt.get("preregistration_binding")
+        == authorization.get("preregistration_binding")
+        and terminal_receipt.get("required_design")
+        == authorization.get("required_design")
+        and terminal_receipt.get("freshness")
+        == {
+            "semantic": "FRESHNESS_ONLY",
+            "terminal_at": "2026-08-08T22:57:14.532616Z",
+            "trust": "NOT_TRUSTED",
+            "worker_started_at": "2026-08-08T22:57:13.762247Z",
+        },
+        "Stage B authorization-to-terminal identity relations drifted",
+    )
+    _verify_stageb_artifact_ref(
+        terminal_receipt["authorization"],
+        registry,
+        label="Stage B terminal authorization",
+    )
+    terminal = terminal_receipt.get("terminal")
+    require(
+        isinstance(terminal, dict)
+        and terminal.get("status") == "COMPLETED"
+        and terminal.get("error") is None
+        and terminal.get("missing_outputs") == []
+        and terminal.get("produced_output_effect")
+        == "DECLARED_OUTPUTS_NOT_SCIENTIFICALLY_ASSESSED"
+        and isinstance(terminal.get("produced_outputs"), list)
+        and len(terminal["produced_outputs"]) == 1
+        and terminal["produced_outputs"][0].get("output_name")
+        == "stageb_qwen_joined_worker_dump",
+        "Stage B terminal result/status/output accounting drifted",
+    )
+    _verify_stageb_artifact_ref(
+        terminal["produced_outputs"][0]["artifact"],
+        registry,
+        label="Stage B terminal output",
+    )
+
+    require(
+        consumption
+        == {
+            "authority": "LOCAL SINGLE-HOST / NOT WORM / NON-PRODUCTION",
+            "authorization_sha256": STAGEB_COMPLETED_FILE_BINDINGS[
+                "authorization.json"
+            ][0],
+            "job_id": "stageb-qwen-joined-job-001",
+            "schema_version": "cas_harness_gate5_local_consumption.v1",
+            "started_at": "2026-08-08T22:57:13.762247Z",
+            "worker_id": "worker-stageb-local-gpu-001",
+        },
+        "Stage B authorization consumption relation drifted",
+    )
+    require(
+        outcome_access
+        == {
+            "accessed_at": "2026-08-08T22:57:14.590349Z",
+            "execution_completed_at": "2026-08-08T22:57:14.532616Z",
+            "receipt": {
+                "artifact_id": "stageb-qwen-terminal-receipt-001",
+                "byte_length": 4038,
+                "media_type": (
+                    "application/vnd.cas-harness.worker-terminal-receipt+json"
+                ),
+                "sha256": STAGEB_COMPLETED_FILE_BINDINGS["terminal_receipt.json"][0],
+            },
+            "schema_version": "cas_harness_v2.outcome_access_event.v1",
+            "sealed_pre_outcome_chain_sha256": (
+                "419A9745143642C14EB1188DE59FD756FA4FF6A633928803BF595A6549FF8781"
+            ),
+        },
+        "Stage B outcome-access/terminal relation drifted",
+    )
+    _verify_stageb_artifact_ref(
+        outcome_access["receipt"], registry, label="Stage B outcome terminal receipt"
+    )
+
+    require(isinstance(runtime_receipt, dict), "Stage B runtime receipt is not an object")
+    require_exact_keys(
+        runtime_receipt,
+        {
+            "schema_version",
+            "status",
+            "error",
+            "run_id",
+            "source_commit",
+            "clean_execution_commit",
+            "source_to_execution_changed_paths",
+            "runtime_image_id",
+            "network",
+            "transport",
+            "model_invocation_count",
+            "intervention_count",
+            "packet_status",
+            "provider_calls",
+            "provider_spend_usd",
+            "runpod_used",
+            "cleanup",
+            "secret_scan",
+            "output_observation",
+            "joined_result",
+            "packet",
+            "pre_receipt_artifact_manifest",
+            "gate5_status",
+            "gate_decision",
+            "scientific_status",
+            "prompt_injection_study",
+            "steering_study",
+            "admission_ring",
+            "product_claim_status",
+            "disclosure_status",
+            "public_release_authorized",
+            "product_route_authorized",
+            "authenticated_execution",
+            "independent_numerical_audit",
+            "replication",
+            "claim_language_review",
+            "local_storage_authority",
+            "boundary",
+        },
+        label="Stage B runtime receipt",
+    )
+    require(
+        runtime_receipt["schema_version"]
+        == "cas_harness_gate5_stageb_qwen_local_smoke_receipt.v0.1"
+        and runtime_receipt["status"] == "SUCCESS_PACKET_RECORDED"
+        and runtime_receipt["error"] is None
+        and runtime_receipt["run_id"] == STAGEB_COMPLETED_RUN_ID
+        and runtime_receipt["source_commit"] == claim["source_commit"]
+        and runtime_receipt["clean_execution_commit"]
+        == claim["clean_execution_commit"]
+        and runtime_receipt["source_to_execution_changed_paths"]
+        == claim["source_to_execution_changed_paths"]
+        and runtime_receipt["runtime_image_id"]
+        == "sha256:332f1ee95bbbcfe14b223ed56cffed011f24f83b52848e83d3475cafed7e75d6"
+        and runtime_receipt["network"] == "NONE"
+        and runtime_receipt["transport"]
+        == "DOCKER_EXEC_LOOPBACK / NETWORK_NONE / LOCAL_ONLY"
+        and runtime_receipt["model_invocation_count"] == 1
+        and runtime_receipt["intervention_count"] == 0
+        and runtime_receipt["packet_status"] == "CREATED"
+        and runtime_receipt["provider_calls"] == 0
+        and runtime_receipt["provider_spend_usd"] == "0.00"
+        and runtime_receipt["runpod_used"] is False
+        and runtime_receipt["boundary"] == STAGEB_COMPLETED_BOUNDARY,
+        "Stage B runtime execution/accounting identity drifted",
+    )
+    require(
+        runtime_receipt["gate5_status"] == "OPEN"
+        and runtime_receipt["gate_decision"] == "KEEP_OPEN"
+        and runtime_receipt["scientific_status"] == "INELIGIBLE"
+        and runtime_receipt["prompt_injection_study"] == "NOT PERFORMED"
+        and runtime_receipt["steering_study"] == "NOT PERFORMED"
+        and runtime_receipt["admission_ring"] == 4
+        and runtime_receipt["product_claim_status"] == "NOT LICENSED"
+        and runtime_receipt["disclosure_status"] == "HELD"
+        and runtime_receipt["public_release_authorized"] is False
+        and runtime_receipt["product_route_authorized"] is False
+        and runtime_receipt["authenticated_execution"] == "UNAVAILABLE"
+        and runtime_receipt["independent_numerical_audit"] == "UNAVAILABLE"
+        and runtime_receipt["replication"] == "UNAVAILABLE"
+        and runtime_receipt["claim_language_review"] == "UNAVAILABLE"
+        and runtime_receipt["local_storage_authority"]
+        == "LOCAL SINGLE-HOST / NOT WORM / NON-PRODUCTION",
+        "Stage B runtime receipt promoted an OPEN/Ring-4/HELD scientific boundary",
+    )
+    require(
+        runtime_receipt["output_observation"]
+        == {
+            "activation_summary_present": True,
+            "event_count": 7,
+            "generated_text": "Blue<|im_end|>",
+            "generated_text_role": "REPORT_ONLY / NOT A SEMANTIC PASS CRITERION",
+            "intervention_event_count": 0,
+            "model_id": STAGEB_QWEN_BINDING["model_id"],
+            "revision": STAGEB_QWEN_BINDING["revision"],
+            "token_event_count": 2,
+        }
+        and runtime_receipt["pre_receipt_artifact_manifest"]
+        == {
+            "artifact_id": "stageb-qwen-pre-receipt-artifact-manifest-001",
+            "byte_length": 7946,
+            "media_type": "application/json",
+            "sha256": STAGEB_COMPLETED_FILE_BINDINGS[
+                "pre_receipt_artifact_manifest.json"
+            ][0],
+        },
+        "Stage B runtime output/manifest observation drifted",
+    )
+    require(
+        cleanup
+        == {
+            "container_absence_specifically_verified": True,
+            "container_remove_command_succeeded": True,
+            "ephemeral_env_file_removed_after_context": True,
+            "network_none_reverified_before_removal": True,
+        }
+        and runtime_receipt["cleanup"] == cleanup,
+        "Stage B cleanup proof or runtime relation drifted",
+    )
+    require(
+        secret_scan == {"ephemeral_worker_token_found": False, "status": "PASS"}
+        and runtime_receipt["secret_scan"] == "PASS",
+        "Stage B retained secret-scan result drifted",
+    )
+    require(
+        runtime_receipt["packet"]
+        == {
+            "assessment": assessment,
+            "byte_length": STAGEB_COMPLETED_FILE_BINDINGS[
+                "evidence_packet.v2.json"
+            ][1],
+            "packet_id": packet["packet_id"],
+            "sha256": STAGEB_COMPLETED_FILE_BINDINGS[
+                "evidence_packet.v2.json"
+            ][0],
+        },
+        "Stage B runtime Packet/assessment relation drifted",
+    )
+    require(
+        isinstance(joined_result, dict)
+        and runtime_receipt["joined_result"] == joined_result
+        and joined_result
+        == {
+            "authorization_sha256": STAGEB_COMPLETED_FILE_BINDINGS[
+                "authorization.json"
+            ][0],
+            "disclosure_status": "HELD",
+            "error_code": None,
+            "failure_phase": None,
+            "gate_status": "OPEN",
+            "license_status": "NOT LICENSED",
+            "model_invocation_count": 1,
+            "output_artifact_id": "stageb-qwen-joined-worker-dump-001",
+            "output_artifact_sha256": STAGEB_COMPLETED_FILE_BINDINGS["output.json"][0],
+            "packet_artifact_id": "stageb-qwen-evidence-packet-001",
+            "packet_byte_length": 6898,
+            "packet_id": "epv2-stageb-qwen-joined-001",
+            "packet_media_type": "application/json",
+            "packet_sha256": STAGEB_COMPLETED_FILE_BINDINGS[
+                "evidence_packet.v2.json"
+            ][0],
+            "packet_status": "CREATED",
+            "product_status": "RESEARCH_ONLY",
+            "prospective_run_id": STAGEB_PROSPECTIVE_RUN_ID,
+            "reconciled": True,
+            "request_sha256": STAGEB_REQUEST_SHA256,
+            "response_byte_length": 4592,
+            "response_sha256": STAGEB_COMPLETED_FILE_BINDINGS["output.json"][0],
+            "scientific_status": "NOT_ESTABLISHED",
+            "status": "SUCCESS_PACKET_RECORDED",
+            "terminal_at": "2026-08-08T22:57:14.532616Z",
+            "terminal_disposition_recorded": False,
+            "terminal_receipt_sha256": STAGEB_COMPLETED_FILE_BINDINGS[
+                "terminal_receipt.json"
+            ][0],
+            "worker_started_at": "2026-08-08T22:57:13.762247Z",
+        },
+        "Stage B joined-result hash/status/reconciliation relation drifted",
+    )
+
+
+def _verify_stageb_container_observation(container_inspect: Any) -> None:
+    require(
+        isinstance(container_inspect, list) and len(container_inspect) == 1,
+        "Stage B retained container inspection must contain exactly one container",
+    )
+    container = container_inspect[0]
+    require(isinstance(container, dict), "Stage B container inspection is malformed")
+    host = container.get("HostConfig")
+    config = container.get("Config")
+    networks = container.get("NetworkSettings", {}).get("Networks")
+    require(
+        isinstance(host, dict)
+        and host.get("NetworkMode") == "none"
+        and host.get("ReadonlyRootfs") is True
+        and host.get("Privileged") is False
+        and host.get("CapDrop") == ["ALL"]
+        and host.get("SecurityOpt") == ["no-new-privileges:true"]
+        and host.get("RestartPolicy") == {"MaximumRetryCount": 0, "Name": "no"}
+        and host.get("PortBindings") == {}
+        and host.get("PublishAllPorts") is False
+        and host.get("Binds") is None
+        and host.get("Tmpfs") == {"/tmp": "rw,noexec,nosuid,nodev,size=64m"}
+        and host.get("Memory") == 6_442_450_944
+        and host.get("MemorySwap") == 6_442_450_944
+        and host.get("PidsLimit") == 512
+        and host.get("Runtime") == "runc"
+        and container.get("Image")
+        == "sha256:332f1ee95bbbcfe14b223ed56cffed011f24f83b52848e83d3475cafed7e75d6"
+        and container.get("Mounts") == []
+        and isinstance(networks, dict)
+        and set(networks) == {"none"}
+        and networks["none"].get("IPAddress") == ""
+        and container.get("RestartCount") == 0,
+        "Stage B retained container lost network-none/read-only/least-privilege binding",
+    )
+    require(isinstance(config, dict), "Stage B retained container config is malformed")
+    labels = config.get("Labels")
+    require(
+        config.get("User") == "10001:10001"
+        and config.get("WorkingDir") == "/worker/stageb_source"
+        and config.get("ExposedPorts") == {"8080/tcp": {}}
+        and isinstance(config.get("Env"), list)
+        and "ATLAS_LIVE_WORKER_TOKEN=REDACTED_EPHEMERAL_WORKER_TOKEN"
+        in config["Env"]
+        and "HF_HUB_OFFLINE=1" in config["Env"]
+        and "TRANSFORMERS_OFFLINE=1" in config["Env"]
+        and isinstance(labels, dict)
+        and labels.get("io.cas-harness.gate5-status") == "OPEN"
+        and labels.get("io.cas-harness.experiment-status") == "NOT_STARTED"
+        and labels.get("io.cas-harness.scientific-status") == "NOT_ESTABLISHED"
+        and labels.get("io.cas-harness.license-status") == "NOT_LICENSED"
+        and labels.get("io.cas-harness.disclosure-status") == "HELD"
+        and labels.get("io.cas-harness.stageb.model-id")
+        == STAGEB_QWEN_BINDING["model_id"]
+        and labels.get("io.cas-harness.stageb.model-revision")
+        == STAGEB_QWEN_BINDING["revision"]
+        and labels.get("io.cas-harness.stageb.weights-sha256")
+        == STAGEB_QWEN_BINDING["weights_sha256"]
+        and labels.get("io.cas-harness.stageb.weights-bytes")
+        == str(STAGEB_QWEN_BINDING["weights_bytes"]),
+        "Stage B container model/offline/OPEN-scientific label binding drifted",
+    )
+
+
+def _verify_stageb_reconciliation(reconciliation: Any) -> None:
+    require(
+        reconciliation
+        == {
+            "all_runs_reporting_disposed": True,
+            "authorization_finalization_count": 1,
+            "backend_durability_profile": {
+                "atomic_compare_and_swap_scope": "SAME_HOST_SQLITE_DATABASE_FILE",
+                "host_loss_survival": "UNAVAILABLE",
+                "independent_attestation": "NOT_ESTABLISHED",
+                "multi_host": "UNAVAILABLE",
+                "profile": "SQLITE_SINGLE_HOST_DURABLE_NOT_REPLICATED",
+                "same_host_restart": "PRESENT_BY_BACKEND_CONTRACT",
+            },
+            "criteria_status": "OPEN",
+            "disclosure_status": "HELD",
+            "event_count": 5,
+            "execution_authentication": "NOT_ESTABLISHED",
+            "has_registered_runs": True,
+            "independent_authority": "NOT_ESTABLISHED",
+            "issue_count": 0,
+            "issues": [],
+            "license_status": "NOT LICENSED",
+            "lifecycle_count": 1,
+            "nonce_reservation_count": 1,
+            "outcome_access_reservation_count": 1,
+            "registry_sha256": (
+                "42c6f812c4d90307cd5d105227c61ef7888843a4179725a0a593fb0b78910282"
+            ),
+            "reporting_disposition_reservation_count": 1,
+            "scientific_status": "NOT_ESTABLISHED",
+            "state_counts": {"PACKET_RECORDED": 1},
+            "structurally_valid": True,
+            "subject_reservation_count": 1,
+            "tenant_id": "tenant-local-stageb",
+            "trusted_time": "NOT_ESTABLISHED",
+            "worm_authority": "NOT_ESTABLISHED",
+        },
+        "Stage B reconciliation counts, issues, or OPEN/HELD authority drifted",
+    )
+
+
+def _verify_stageb_lifecycle_sqlite(
+    observations: dict[str, FileObservation], reconciliation: dict[str, Any]
+) -> None:
+    database_path = STAGEB_COMPLETED_RUN_DIR / "lifecycle.sqlite3"
+    sidecars = (
+        Path(f"{database_path}-wal"),
+        Path(f"{database_path}-shm"),
+        Path(f"{database_path}-journal"),
+    )
+    require(
+        all(not os.path.lexists(sidecar) for sidecar in sidecars),
+        "Stage B lifecycle database has a mutable SQLite sidecar before inspection",
+    )
+    before = observe_regular_file(database_path, anchor=STAGEB_COMPLETED_RUN_DIR)
+    require(
+        before == observations["lifecycle.sqlite3"],
+        "Stage B lifecycle database changed before immutable inspection",
+    )
+
+    uri = f"file:{database_path.resolve().as_posix()}?mode=ro&immutable=1"
+    try:
+        connection = sqlite3.connect(uri, uri=True)
+    except sqlite3.Error as exc:
+        raise VerificationError(
+            f"cannot open Stage B lifecycle database read-only/immutable: {exc}"
+        ) from exc
+    try:
+        connection.execute("PRAGMA query_only = ON")
+        require(
+            connection.execute("PRAGMA query_only").fetchone() == (1,),
+            "Stage B lifecycle SQLite connection is not query-only",
+        )
+        require(
+            connection.execute("PRAGMA integrity_check").fetchall() == [("ok",)],
+            "Stage B lifecycle SQLite integrity check failed",
+        )
+        objects = connection.execute(
+            "SELECT type, name, tbl_name, sql FROM sqlite_master "
+            "ORDER BY type, name"
+        ).fetchall()
+        require(
+            {(row[0], row[1], row[2]) for row in objects}
+            == {
+                ("index", "leases_token_idx", "leases"),
+                ("index", "sqlite_autoindex_leases_1", "leases"),
+                ("index", "sqlite_autoindex_records_1", "records"),
+                ("table", "leases", "leases"),
+                ("table", "records", "records"),
+            }
+            and len(objects) == 5,
+            "Stage B lifecycle SQLite schema-object inventory drifted",
+        )
+        require(
+            connection.execute("PRAGMA table_info(records)").fetchall()
+            == [
+                (0, "tenant_id", "TEXT", 1, None, 1),
+                (1, "kind", "TEXT", 1, None, 2),
+                (2, "record_id", "TEXT", 1, None, 3),
+                (3, "version", "INTEGER", 1, None, 0),
+                (4, "created_at", "TEXT", 1, None, 0),
+                (5, "updated_at", "TEXT", 1, None, 0),
+                (6, "payload", "TEXT", 1, None, 0),
+                (7, "parent_ids", "TEXT", 1, None, 0),
+                (8, "source", "TEXT", 1, None, 0),
+                (9, "trace_id", "TEXT", 0, None, 0),
+            ]
+            and connection.execute("PRAGMA table_info(leases)").fetchall()
+            == [
+                (0, "tenant_id", "TEXT", 1, None, 1),
+                (1, "resource_id", "TEXT", 1, None, 2),
+                (2, "holder", "TEXT", 1, None, 0),
+                (3, "token", "TEXT", 1, None, 0),
+                (4, "acquired_at", "TEXT", 1, None, 0),
+                (5, "expires_at", "TEXT", 1, None, 0),
+            ]
+            and connection.execute("SELECT * FROM leases").fetchall() == [],
+            "Stage B lifecycle SQLite table/lease structure drifted",
+        )
+        raw_records = connection.execute(
+            "SELECT tenant_id, kind, record_id, version, created_at, updated_at, "
+            "payload, parent_ids, source, trace_id FROM records "
+            "ORDER BY kind, record_id"
+        ).fetchall()
+    except sqlite3.Error as exc:
+        raise VerificationError(
+            f"cannot inspect Stage B lifecycle database immutably: {exc}"
+        ) from exc
+    finally:
+        connection.close()
+
+    require(
+        len(raw_records) == 11,
+        "Stage B lifecycle SQLite must contain exactly eleven retained records",
+    )
+    records: dict[tuple[str, str], dict[str, Any]] = {}
+    kind_counts: dict[str, int] = {}
+    for index, row in enumerate(raw_records):
+        (
+            tenant_id,
+            kind,
+            record_id,
+            version,
+            created_at,
+            updated_at,
+            payload_raw,
+            parents_raw,
+            source,
+            trace_id,
+        ) = row
+        require(
+            tenant_id == "tenant-local-stageb"
+            and isinstance(kind, str)
+            and isinstance(record_id, str)
+            and isinstance(created_at, str)
+            and isinstance(updated_at, str)
+            and trace_id == STAGEB_PROSPECTIVE_RUN_ID,
+            f"Stage B lifecycle record {index} tenant/trace/time identity drifted",
+        )
+        payload = _load_json_value(payload_raw, label=f"Stage B lifecycle payload {index}")
+        parents = _load_json_value(parents_raw, label=f"Stage B lifecycle parents {index}")
+        require(
+            isinstance(payload, dict)
+            and isinstance(parents, list)
+            and all(isinstance(parent, str) and parent for parent in parents)
+            and len(parents) == len(set(parents)),
+            f"Stage B lifecycle record {index} payload/parent schema drifted",
+        )
+        key = (kind, record_id)
+        require(key not in records, f"Stage B lifecycle record repeats key {key!r}")
+        records[key] = {
+            "kind": kind,
+            "record_id": record_id,
+            "version": version,
+            "payload": payload,
+            "parents": parents,
+            "source": source,
+        }
+        kind_counts[kind] = kind_counts.get(kind, 0) + 1
+
+    event_kind = "cas_harness_v2_prospective_run_event"
+    lifecycle_kind = "cas_harness_v2_prospective_run_lifecycle"
+    subject_kind = "cas_harness_v2_run_subject_reservation"
+    nonce_kind = "cas_harness_v2_run_nonce_reservation"
+    auth_kind = "cas_harness_v2_authorization_finalization"
+    outcome_kind = "cas_harness_v2_outcome_access_reservation"
+    reporting_kind = "cas_harness_v2_reporting_disposition_reservation"
+    require(
+        kind_counts
+        == {
+            auth_kind: 1,
+            outcome_kind: 1,
+            event_kind: 5,
+            lifecycle_kind: 1,
+            reporting_kind: 1,
+            nonce_kind: 1,
+            subject_kind: 1,
+        },
+        "Stage B lifecycle record-kind inventory drifted",
+    )
+    run_suffix = STAGEB_PROSPECTIVE_RUN_ID.removeprefix("h2run_")
+    subject_id = f"h2subject_{run_suffix}"
+    nonce_id = (
+        "h2nonce_eecbb9133f8800faec6a69437656590a905b0ca9f74912d779c9975826018536"
+    )
+    auth_id = f"h2authfinal_{run_suffix}"
+    outcome_id = f"h2outcome_{run_suffix}"
+    reporting_id = f"h2reporting_{run_suffix}"
+    expected_sources = {
+        subject_kind: "cas_harness_v2_run_lifecycle.issue_with_builder",
+        nonce_kind: "cas_harness_v2_run_lifecycle.issue_with_builder",
+        auth_kind: "cas_harness_v2_run_lifecycle.authorization_finalization",
+        event_kind: "cas_harness_v2_run_lifecycle.event",
+        lifecycle_kind: "cas_harness_v2_run_lifecycle.index",
+        outcome_kind: "cas_harness_v2_run_lifecycle.outcome_access_reservation",
+        reporting_kind: (
+            "cas_harness_v2_run_lifecycle.reporting_disposition_reservation"
+        ),
+    }
+    for record in records.values():
+        require(
+            record["source"] == expected_sources[record["kind"]]
+            and record["version"]
+            == (5 if record["kind"] == lifecycle_kind else 1),
+            f"Stage B lifecycle source/version drifted: {record['record_id']}",
+        )
+
+    authority = {
+        "criteria_status": "OPEN",
+        "disclosure_status": "HELD",
+        "execution_authentication": "NOT_ESTABLISHED",
+        "independent_authority": "NOT_ESTABLISHED",
+        "license_status": "NOT LICENSED",
+        "product_status": "NOT_ESTABLISHED",
+        "scientific_status": "NOT_ESTABLISHED",
+        "trusted_time": "NOT_ESTABLISHED",
+        "worm_authority": "NOT_ESTABLISHED",
+    }
+    durability = {
+        "atomic_compare_and_swap_scope": "SAME_HOST_SQLITE_DATABASE_FILE",
+        "host_loss_survival": "UNAVAILABLE",
+        "independent_attestation": "NOT_ESTABLISHED",
+        "multi_host": "UNAVAILABLE",
+        "profile": "SQLITE_SINGLE_HOST_DURABLE_NOT_REPLICATED",
+        "same_host_restart": "PRESENT_BY_BACKEND_CONTRACT",
+    }
+    for record in records.values():
+        require(
+            record["payload"].get("authority") == authority,
+            f"Stage B lifecycle authority boundary drifted: {record['record_id']}",
+        )
+        if "backend_durability_profile" in record["payload"]:
+            require(
+                record["payload"]["backend_durability_profile"] == durability,
+                f"Stage B lifecycle durability boundary drifted: {record['record_id']}",
+            )
+
+    subject = records[(subject_kind, subject_id)]
+    nonce = records[(nonce_kind, nonce_id)]
+    auth_final = records[(auth_kind, auth_id)]
+    outcome = records[(outcome_kind, outcome_id)]
+    reporting = records[(reporting_kind, reporting_id)]
+    lifecycle = records[(lifecycle_kind, STAGEB_PROSPECTIVE_RUN_ID)]
+    require(
+        subject["parents"] == []
+        and nonce["parents"] == [subject_id]
+        and auth_final["parents"] == [subject_id, nonce_id]
+        and lifecycle["parents"] == [subject_id, nonce_id, auth_id]
+        and outcome["parents"]
+        == [STAGEB_PROSPECTIVE_RUN_ID, f"h2event_{run_suffix}_00000002"]
+        and reporting["parents"] == [STAGEB_PROSPECTIVE_RUN_ID],
+        "Stage B lifecycle reservation/index parent graph drifted",
+    )
+    for record in (subject, nonce, auth_final, outcome, reporting, lifecycle):
+        require(
+            record["payload"].get("run_id") == STAGEB_PROSPECTIVE_RUN_ID
+            and record["payload"].get("subject_id") == "stageb-qwen-joined-job-001",
+            f"Stage B lifecycle reservation run/subject drifted: {record['record_id']}",
+        )
+    require(
+        auth_final["payload"].get("authorization_artifact")
+        == {
+            "artifact_id": "stageb-qwen-joined-job-001",
+            "byte_length": 3400,
+            "media_type": "application/vnd.cas-harness.worker-authorization+json",
+            "sha256": STAGEB_COMPLETED_FILE_BINDINGS["authorization.json"][0].lower(),
+        }
+        and outcome["payload"].get("terminal_artifact")
+        == {
+            "artifact_id": "stageb-qwen-terminal-receipt-001",
+            "byte_length": 4038,
+            "media_type": "application/vnd.cas-harness.worker-terminal-receipt+json",
+            "sha256": STAGEB_COMPLETED_FILE_BINDINGS[
+                "terminal_receipt.json"
+            ][0].lower(),
+        }
+        and outcome["payload"].get("terminal_sequence") == 2
+        and outcome["payload"].get("terminal_state") == "SUCCESS"
+        and reporting["payload"].get("disposition") == "PACKET"
+        and reporting["payload"].get("planned_artifact")
+        == {
+            "artifact_id": "stageb-qwen-evidence-packet-001",
+            "byte_length": 6898,
+            "media_type": "application/json",
+            "sha256": STAGEB_COMPLETED_FILE_BINDINGS[
+                "evidence_packet.v2.json"
+            ][0].lower(),
+        }
+        and reporting["payload"].get("reason_code") is None,
+        "Stage B lifecycle authorization/outcome/reporting artifact relation drifted",
+    )
+
+    events = [records[(event_kind, f"h2event_{run_suffix}_{index:08d}")] for index in range(5)]
+    expected_sequence = [
+        ("AUTHORIZED", None, "AUTHORIZED"),
+        ("RUNNING", "AUTHORIZED", "RUNNING"),
+        ("TERMINAL_RECORDED", "RUNNING", "SUCCESS"),
+        ("OUTCOME_ACCESSED", "SUCCESS", "OUTCOME_ACCESSED"),
+        ("PACKET_RECORDED", "OUTCOME_ACCESSED", "PACKET_RECORDED"),
+    ]
+    expected_hashes = [
+        "f76e1693097e08aa9a650ec414c2757114ed5a3255f660b18637b617a42e4497",
+        "1d0f6f993da3e733aab18968288b6f5ab45a88f07020e3ebc60d6f92c761b820",
+        "0b9e0f254d1420863337162f98635035e928e8f157c76d9a2080cbb00b27d636",
+        "59a8ec1536d6b1760c1a99db2c7da202b374c6bbad0c6874224e251ffd54a3f4",
+        "a79b0208f194ce7c647e47c350bd1cc15837fec59fbdac0df8307b463c4feb6a",
+    ]
+    previous_hash = "0" * 64
+    for index, (record, expected_state, expected_hash) in enumerate(
+        zip(events, expected_sequence, expected_hashes)
+    ):
+        payload = record["payload"]
+        event_without_hash = dict(payload)
+        recorded_hash = event_without_hash.pop("event_sha256", None)
+        recomputed = sha256_bytes(
+            _canonical_json_bytes(
+                event_without_hash, label=f"Stage B lifecycle event {index}"
+            )
+        ).lower()
+        require(
+            record["parents"]
+            == (
+                [subject_id, nonce_id, auth_id]
+                if index == 0
+                else [STAGEB_PROSPECTIVE_RUN_ID]
+            )
+            and payload.get("schema") == "cas_harness_v2.prospective_run_event.v1"
+            and payload.get("record_profile") == "CREATE_ONLY_HASH_CHAIN_EVENT"
+            and payload.get("run_id") == STAGEB_PROSPECTIVE_RUN_ID
+            and payload.get("subject_id") == "stageb-qwen-joined-job-001"
+            and payload.get("time_assurance") == "CALLER_OR_PROCESS_TIME_NOT_TRUSTED"
+            and payload.get("sequence") == index
+            and (
+                payload.get("event_type"),
+                payload.get("state_before"),
+                payload.get("state_after"),
+            )
+            == expected_state
+            and payload.get("previous_event_sha256") == previous_hash
+            and recorded_hash == recomputed == expected_hash,
+            f"Stage B lifecycle event {index} sequence/hash/state chain drifted",
+        )
+        previous_hash = recorded_hash
+
+    require(
+        events[0]["payload"].get("details", {}).get("authorization_artifact")
+        == auth_final["payload"]["authorization_artifact"]
+        and events[1]["payload"].get("details", {}).get("consumption_artifact")
+        == {
+            "artifact_id": "joined-consumption-001",
+            "byte_length": observations["consumption.json"].byte_count,
+            "media_type": "application/json",
+            "sha256": observations["consumption.json"].sha256.lower(),
+        }
+        and events[2]["payload"].get("details", {}).get("terminal_artifact")
+        == outcome["payload"]["terminal_artifact"]
+        and events[2]["payload"].get("details", {}).get("terminal_status")
+        == "SUCCESS"
+        and events[3]["payload"].get("details", {}).get("outcome_access_artifact")
+        == {
+            "artifact_id": "joined-outcome-access-001",
+            "byte_length": observations["outcome_access.json"].byte_count,
+            "media_type": "application/json",
+            "sha256": observations["outcome_access.json"].sha256.lower(),
+        }
+        and events[4]["payload"].get("details", {}).get("packet_artifact")
+        == reporting["payload"]["planned_artifact"],
+        "Stage B lifecycle event artifact relations drifted",
+    )
+
+    lifecycle_payload = lifecycle["payload"]
+    require(
+        lifecycle_payload.get("schema")
+        == "cas_harness_v2.prospective_run_lifecycle.v1"
+        and lifecycle_payload.get("append_only_profile")
+        == "STATESTORE_CREATE_ONLY_EVENTS_HASH_CHAINED_NO_EXTERNAL_WORM"
+        and lifecycle_payload.get("registry_profile")
+        == "DARK_RESEARCH_ONLY_PROSPECTIVE"
+        and lifecycle_payload.get("current_state") == "PACKET_RECORDED"
+        and lifecycle_payload.get("event_count") == 5
+        and lifecycle_payload.get("genesis_event_sha256") == expected_hashes[0]
+        and lifecycle_payload.get("head_event_sha256") == expected_hashes[-1]
+        and lifecycle_payload.get("authorization_artifact")
+        == auth_final["payload"]["authorization_artifact"]
+        and lifecycle_payload.get("authorization_finalization_record_id") == auth_id,
+        "Stage B lifecycle index state/head/genesis binding drifted",
+    )
+
+    registry_rows = [
+        {
+            "kind": record["kind"],
+            "record_id": record["record_id"],
+            "version": record["version"],
+            "payload": record["payload"],
+        }
+        for record in records.values()
+    ]
+    registry_rows.sort(key=lambda row: (str(row["kind"]), str(row["record_id"])))
+    registry_sha256 = sha256_bytes(
+        _canonical_json_bytes(registry_rows, label="Stage B lifecycle registry")
+    ).lower()
+    require(
+        registry_sha256 == reconciliation["registry_sha256"],
+        "Stage B lifecycle SQLite registry does not recompute to reconciliation",
+    )
+
+    after = observe_regular_file(database_path, anchor=STAGEB_COMPLETED_RUN_DIR)
+    require(
+        after == before
+        and all(not os.path.lexists(sidecar) for sidecar in sidecars),
+        "Stage B lifecycle SQLite changed or emitted a sidecar during immutable inspection",
+    )
+
+
+def _verify_stageb_external_join_count_and_startup_canary(
+    source_commit: str,
+) -> None:
+    """Keep external joined-request accounting distinct from model forwards.
+
+    The retained count of one is the one external joined ``/sessions/dump``
+    request.  Startup ``warm_load()`` also executes its built-in one-forward
+    geometry/numerics canary.  Neither the verifier nor the receipt may
+    reinterpret the external request count as a count of all forward passes.
+    """
+
+    log_text = read_stable_text(
+        STAGEB_COMPLETED_RUN_DIR / "container.log",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    require(
+        log_text.count('"POST /sessions/dump HTTP/1.1" 200 OK') == 1
+        and log_text.count('"GET /health/realmode HTTP/1.1" 200 OK') == 1
+        and "Loading weights:" in log_text
+        and log_text.index("Loading weights:")
+        < log_text.index("Application startup complete."),
+        "Stage B retained log does not show exactly one external joined request "
+        "after startup weight loading",
+    )
+
+    source_manifest = load_json(
+        STAGEB_COMPLETED_RUN_DIR
+        / "chain_artifacts"
+        / "stageb-final-executable-source-manifest.bin",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    require(
+        isinstance(source_manifest, dict)
+        and source_manifest.get("schema_version")
+        == "cas_harness_gate5_stageb_final_source_manifest.v0.1"
+        and source_manifest.get("source_commit") == source_commit
+        and source_manifest.get("dirty_source_paths") is False
+        and source_manifest.get("boundary") == STAGEB_COMPLETED_BOUNDARY
+        and isinstance(source_manifest.get("files"), list),
+        "Stage B final executable source manifest identity drifted",
+    )
+    model_loader_path = (
+        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+        "app/runtime/model_loader.py"
+    )
+    loader_rows = [
+        row
+        for row in source_manifest["files"]
+        if isinstance(row, dict) and row.get("path") == model_loader_path
+    ]
+    require(
+        loader_rows
+        == [
+            {
+                "path": model_loader_path,
+                "sha256": (
+                    "91b4213da2029231159548595b80d5555e0ce4e2b364d0c5f0b971d584640c99"
+                ),
+                "byte_length": 36562,
+            }
+        ],
+        "Stage B run-bound model-loader source identity drifted",
+    )
+    result = subprocess.run(
+        ["git", "show", f"{source_commit}:{model_loader_path}"],
+        cwd=ROOT,
+        env=_subprocess_environment(),
+        capture_output=True,
+        check=False,
+    )
+    require(
+        result.returncode == 0
+        and len(result.stdout) == loader_rows[0]["byte_length"]
+        and sha256_bytes(result.stdout).lower() == loader_rows[0]["sha256"],
+        "Stage B run-bound model-loader Git blob is unavailable or drifted",
+    )
+    try:
+        loader_tree = ast.parse(result.stdout, filename=model_loader_path)
+    except SyntaxError as exc:
+        raise VerificationError(
+            f"Stage B run-bound model loader is not parseable: {exc}"
+        ) from exc
+    warm_load_functions = [
+        node
+        for node in loader_tree.body
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        and node.name == "warm_load"
+    ]
+    require(
+        len(warm_load_functions) == 1
+        and any(
+            isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Name)
+            and node.func.id == "_validate_runtime_canary"
+            for node in ast.walk(warm_load_functions[0])
+        ),
+        "Stage B run-bound warm_load no longer exposes its startup runtime canary",
+    )
+
+
+def verify_stageb_qwen_completed_run() -> None:
+    """Verify the one completed Stage B engineering smoke without executing it."""
+
+    observations = _verify_stageb_completed_run_inventory()
+    package_dir = STAGEB_PROTOCOL_PATH.parent
+    execution_claim = load_json(package_dir / "execution_claim.json")
+    expected_weight = _verify_stageb_execution_claim(execution_claim)
+
+    # The retained run copied the exact frozen protocol and request bytes; the
+    # prospective protocol itself remains NOT_STARTED for scientific studies.
+    require(
+        read_stable_bytes(
+            STAGEB_COMPLETED_RUN_DIR / "protocol.json",
+            anchor=STAGEB_COMPLETED_RUN_DIR,
+        )
+        == read_stable_bytes(STAGEB_PROTOCOL_PATH, anchor=FILESYSTEM_ANCHOR)
+        and read_stable_bytes(
+            STAGEB_COMPLETED_RUN_DIR / "request.json",
+            anchor=STAGEB_COMPLETED_RUN_DIR,
+        )
+        == read_stable_bytes(
+            package_dir / "request.json", anchor=FILESYSTEM_ANCHOR
+        ),
+        "Stage B completed run does not retain the exact frozen protocol/request",
+    )
+
+    pointer = load_json(
+        STAGEB_COMPLETED_RUN_DIR / "weight_artifact_pointer.json",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    weight_observation = _verify_stageb_external_weight(expected_weight, pointer)
+    health = load_json(
+        STAGEB_COMPLETED_RUN_DIR / "realmode_health.json",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    runtime_execution = _verify_stageb_qwen_health(health)
+
+    output = load_json(
+        STAGEB_COMPLETED_RUN_DIR / "output.json",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    worker_raw = load_json(
+        STAGEB_COMPLETED_RUN_DIR / "worker_response.raw.json",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    require(
+        output == worker_raw,
+        "Stage B worker raw response and registered output bytes differ",
+    )
+    _verify_stageb_qwen_output(output, runtime_execution)
+
+    registry_rows = load_json(
+        STAGEB_COMPLETED_RUN_DIR / "evidence_packet_registry_index.json",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    registry = _verify_stageb_packet_registry(
+        registry_rows, observations, expected_weight, weight_observation
+    )
+    packet = load_json(
+        STAGEB_COMPLETED_RUN_DIR / "evidence_packet.v2.json",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    assessment = load_json(
+        STAGEB_COMPLETED_RUN_DIR / "evidence_packet_assessment.json",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    execution_manifest = load_json(
+        STAGEB_COMPLETED_RUN_DIR / "evidence_packet_execution_manifest.json",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    _verify_stageb_packet(packet, assessment, execution_manifest, registry)
+
+    runtime_receipt = load_json(
+        STAGEB_COMPLETED_RUN_DIR / "runtime_receipt.json",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    authorization = load_json(
+        STAGEB_COMPLETED_RUN_DIR / "authorization.json",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    terminal_receipt = load_json(
+        STAGEB_COMPLETED_RUN_DIR / "terminal_receipt.json",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    consumption = load_json(
+        STAGEB_COMPLETED_RUN_DIR / "consumption.json",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    outcome_access = load_json(
+        STAGEB_COMPLETED_RUN_DIR / "outcome_access.json",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    joined_result = load_json(
+        STAGEB_COMPLETED_RUN_DIR / "joined_result.json",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    cleanup = load_json(
+        STAGEB_COMPLETED_RUN_DIR / "cleanup_proof.json",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    secret_scan = load_json(
+        STAGEB_COMPLETED_RUN_DIR / "secret_scan.json",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    _verify_stageb_execution_relations(
+        claim=execution_claim,
+        runtime_receipt=runtime_receipt,
+        authorization=authorization,
+        terminal_receipt=terminal_receipt,
+        consumption=consumption,
+        outcome_access=outcome_access,
+        joined_result=joined_result,
+        packet=packet,
+        assessment=assessment,
+        cleanup=cleanup,
+        secret_scan=secret_scan,
+        registry=registry,
+    )
+    _verify_stageb_container_observation(
+        load_json(
+            STAGEB_COMPLETED_RUN_DIR / "container_inspect.redacted.json",
+            anchor=STAGEB_COMPLETED_RUN_DIR,
+        )
+    )
+    _verify_stageb_external_join_count_and_startup_canary(
+        runtime_receipt["source_commit"]
+    )
+
+    reconciliation = load_json(
+        STAGEB_COMPLETED_RUN_DIR / "reconciliation.json",
+        anchor=STAGEB_COMPLETED_RUN_DIR,
+    )
+    _verify_stageb_reconciliation(reconciliation)
+    _verify_stageb_lifecycle_sqlite(observations, reconciliation)
+
+    # Full postflight prevents an in-process/concurrent replacement from
+    # yielding PASS after semantic checks read a different retained object.
+    for raw_path, before in observations.items():
+        require(
+            observe_regular_file(
+                STAGEB_COMPLETED_RUN_DIR / Path(*PurePosixPath(raw_path).parts),
+                anchor=STAGEB_COMPLETED_RUN_DIR,
+            )
+            == before,
+            f"Stage B retained artifact changed during verification: {raw_path}",
+        )
+    require(
+        observe_regular_file(
+            package_dir / "execution_claim.json", anchor=FILESYSTEM_ANCHOR
+        ).sha256
+        == STAGEB_COMPLETED_FILE_BINDINGS["execution_claim.json"][0]
+        and _verify_stageb_external_weight(expected_weight, pointer)
+        == weight_observation,
+        "Stage B execution claim or external weights changed during verification",
+    )
 
 
 def _require_oci_digest(value: Any, *, label: str) -> None:
@@ -7494,6 +9991,13 @@ def main() -> int:
         "COMPLETED_WITH_FINDINGS: 0 critical / 0 high / 3 medium / 4 low; "
         "Ubuntu currently confirms six vulnerable/deferred records and marks the "
         "exact dpkg version fixed, leaving one scanner/vendor conflict)"
+    )
+    print(
+        "  Stage B Qwen engineering: SUCCESS_PACKET_RECORDED / one counted "
+        "external joined request / startup internal one-forward canary not "
+        "separately counted or receipted / Packet COMPLETE / "
+        "REPORTED_CRITERIA_NOT_MET / INELIGIBLE / prompt-injection and steering "
+        "studies NOT PERFORMED / RunPod unused / spend $0.00"
     )
     print("  experimental execution: NOT_STARTED")
     print("  Gate 5 status: OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN")

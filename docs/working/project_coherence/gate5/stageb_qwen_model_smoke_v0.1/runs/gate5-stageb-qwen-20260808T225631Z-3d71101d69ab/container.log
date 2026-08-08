@@ -1,0 +1,8 @@
+INFO:     Started server process [7]
+INFO:     Waiting for application startup.
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  70%|██████▉   | 202/290 [00:00<00:00, 1986.91it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1950.88it/s]
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+INFO:     127.0.0.1:39120 - "GET /health/realmode HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39128 - "POST /sessions/dump HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39142 - "GET /health HTTP/1.1" 200 OK

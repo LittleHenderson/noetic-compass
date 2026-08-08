@@ -55,6 +55,11 @@ authority.
   It preserves both fail-closed predecessors, the mechanical successors, zero
   provider spend, and the explicit absence of detector, steering, Packet-v2,
   authenticated-science, replication, product, or disclosure claims.
+- `stageb_qwen_model_smoke_v0.1/` binds the later bounded Qwen Stage B
+  engineering execution: its prospective package, one execution-identity
+  amendment, one consumed local run, one Evidence Packet v2, and the exact
+  retained lifecycle and cleanup evidence. That Packet is structurally complete
+  but reports criteria not met and scientific eligibility `INELIGIBLE`.
 - `GATE5_LOCAL_WINDOWS_TEST_RUNNER_LOCK_v0.1.json` records the local Python and
   pytest content lock. Its exact scope is `LOCAL_CONTENT_LOCK /
   SELF-OBSERVED / NOT HERMETIC / NOT INDEPENDENTLY ATTESTED`.
@@ -233,12 +238,15 @@ Two narrower Stage B source-level receipts are also green:
 - runner preparation: 17/17, node-ID digest
   `40FBF9298CB6DF939C5502D5B8C1E2ADBFA79011167E14E25252E663C114B8E6`.
 
-They are `LOCAL_UNATTESTED_HOST_REGRESSION / ENGINEERING-ONLY` receipts. They
-record zero actual model invocations. The runtime image has not been built and
-the Stage B joined model run remains `NOT_STARTED`; the frozen design authorizes
-no separate pre-amendment model canary. No Stage B Evidence Packet exists, and
-there is no prompt-injection detection, steering-efficacy, scientific, product,
-license, or disclosure claim.
+They are `LOCAL_UNATTESTED_HOST_REGRESSION / ENGINEERING-ONLY` source-level
+receipts and each records zero actual model invocations. The frozen design
+authorized no separate pre-amendment model canary. After these tests passed, the
+additive runtime image was built without a model invocation and exactly one
+amended local Stage B execution consumed its one-run authority. That later run
+and its Evidence Packet are recorded below. Neither the source-level tests nor
+the completed engineering run establish prompt-injection detection,
+steering efficacy, a scientific result, product validation, a license, or
+disclosure authority.
 
 The companion API/launcher/fleet/state suite passes 78/78. Its canonical
 node-ID digest is:
@@ -499,6 +507,72 @@ Both successors used local, non-admitted, single-host, non-WORM engineering
 routes. They establish no trusted time, authenticated executor, provider-backed
 durability, independent replication, claim license, product route, or disclosure
 authority. The current Gate 5 manifest directly hash-binds their retained bytes.
+
+## Bounded Qwen Stage B engineering execution
+
+The later Stage B package completed exactly one local joined run on
+`Qwen/Qwen2.5-0.5B-Instruct` at revision
+`7ae557604adf67be50417f59c2c2f167def9a775`. The run ID is
+`gate5-stageb-qwen-20260808T225631Z-3d71101d69ab`. It used the exact
+`model.safetensors` artifact at 988,097,824 bytes with SHA-256
+`FDF756FA7FCBE7404D5C60E26BFF1A0C8B8AA1F72CED49E7DD0210FE288FB7FE`
+and the additive runtime image
+`sha256:332f1ee95bbbcfe14b223ed56cffed011f24f83b52848e83d3475cafed7e75d6`.
+
+The one-shot local execution traversed authorization, one counted external CUDA
+BF16 joined request (`model_invocation_count=1`), output and per-token top-eight
+activation-summary retention, terminal recording, outcome
+access, Packet recording, reconciliation, secret scanning, and container
+cleanup. Its runtime receipt SHA-256 is
+`A42732C7027C8E851C1F800D7EC379DF08AFF9DD069BD7819349C5EF552072B2`.
+The exact 4,592-byte output SHA-256 is
+`D991601CB8DFDA3A8057D49D2F201A4CF55A2019F7CC897020498EB944E44791`;
+it contains seven ordered events, two generated-token observations, top-eight
+activation observations, a resolved requested layer range of 0-23, and zero
+intervention events.
+
+Evidence Packet `epv2-stageb-qwen-joined-001` was created at 6,898 bytes with
+SHA-256
+`FCF7674B14A34E3C33252B09B7A20E5E55FB6BC3751AC0F2B1C0EFB109578EAC`.
+Its structural-completeness axis is `COMPLETE`, while its preregistered-criteria
+axis is `REPORTED_CRITERIA_NOT_MET` and scientific eligibility is `INELIGIBLE`.
+The matched-taxonomy, wrong-layer, and clean-null controls are each retained as
+`INVALID / NOT PERFORMED`; authenticated execution, independent numerical
+audit, replication, claim-language review, and external scientific review are
+`UNAVAILABLE` or not established. The run therefore proves the bounded
+model-to-capture-to-lifecycle-to-Packet engineering path, not detector or
+steering efficacy.
+
+The run used no RunPod or other provider calls and recorded spend `$0.00`.
+Prompt-injection and steering studies were explicitly `NOT PERFORMED`. One
+worker manifest field still carries the Pythia-specific intervention module
+template `gpt_neox.layers[{layer}].mlp.dense_4h_to_h`; it was inert in this
+zero-intervention run, but it is an explicit blocker before any Qwen steering
+tranche. A successor must bind the Qwen intervention contract separately rather
+than treating the captured activation geometry as steering authority.
+
+Three evidence-portability limits also remain explicit. The runtime-image identity
+records pre-activation warm-load assurance as deferred because the frozen
+one-shot protocol did not authorize a separate pre-claim image-validation
+container. During the authorized worker startup, the loader's built-in runtime
+canary performed one internal forward before serving the counted external joined
+request; that startup forward is not separately counted in
+`model_invocation_count` and has no separate receipt. A successor protocol must
+prospectively authorize and bind any distinct preparation canary. The top-level 2,083-byte
+`execution_claim.json`, SHA-256
+`E98BEBE8C8A72D7678109AF77ABB6E6B7270817DC0425B88D8E8844468C611F6`,
+precedes the container and agrees with the runtime receipt, but is outside the
+run directory and is not included in that receipt. The final repository manifest
+and completed-run verifier therefore cross-bind both paths; the run directory by
+itself is not a portable proof of the pre-container claim.
+
+The Packet's 988,097,824-byte weights evidence is retained outside Git at the
+content-addressed host path recorded by `weight_artifact_pointer.json`. The
+in-repository pointer, hash, length, and structural observation do not contain
+the model bytes; full registry replay on another host requires the exact external
+blob or a future controlled content-addressed resolver. The authoritative local
+verifier therefore fails closed when that host-local file is unavailable or
+drifts.
 
 ## Instruction-integrity and intervention evidence boundary
 

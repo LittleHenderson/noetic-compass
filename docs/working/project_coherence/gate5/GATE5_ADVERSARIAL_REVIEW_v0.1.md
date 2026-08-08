@@ -29,9 +29,12 @@ creates `ACCEPT`, `LICENSED`, live-execution authority, a public route, a produc
 route, disclosure authority, scientific authority, or canon authority.
 After the earlier CPU-only preflight, a six-arm local GPU canary and a bounded
 one-invocation joined local successor exercised retained engineering mechanics.
-They used non-admitted, single-host, non-WORM routes; created no Evidence Packet;
-and established neither prompt-injection detection nor steering efficacy.
-Experimental execution remains `NOT_STARTED`.
+They used non-admitted, single-host, non-WORM routes and created no Evidence
+Packet. A later bounded Qwen Stage B engineering run did create one structurally
+complete Evidence Packet, but its three scientific controls were not performed,
+its criteria status is `REPORTED_CRITERIA_NOT_MET`, and its scientific
+eligibility is `INELIGIBLE`. None of these runs established prompt-injection
+detection or steering efficacy. Experimental execution remains `NOT_STARTED`.
 
 ## Exact review surface
 
@@ -56,6 +59,9 @@ This review is bounded to the following current surfaces:
 - the engineering chronology receipt
   `GATE5_ENGINEERING_EXECUTION_RECONCILIATION_v0.1.json`, the retained local GPU
   canary artifacts, and the joined v0.1/v0.2 predecessor-successor artifacts;
+- the complete prospective and retained execution package under
+  `stageb_qwen_model_smoke_v0.1/`, including the top-level execution claim, the
+  one completed Qwen run, its Packet v2, lifecycle database, and cleanup proof;
 - the local runner lock `GATE5_LOCAL_WINDOWS_TEST_RUNNER_LOCK_v0.1.json`, the
   same-process pytest runner, and both deterministic builders;
 - the exact historical V1-V4 recovery inventory and its independent verifier;
@@ -194,11 +200,12 @@ same-process executed-node SHA-256
 The Stage B runner-preparation suite passes **17/17** with digest
 `40FBF9298CB6DF939C5502D5B8C1E2ADBFA79011167E14E25252E663C114B8E6`.
 Both are `LOCAL_UNATTESTED_HOST_REGRESSION / ENGINEERING-ONLY` receipts with
-zero actual model invocations. The runtime image has not been built and the
-joined model run remains `NOT_STARTED`; the frozen design authorizes no separate
-pre-amendment model canary. No Stage B Evidence Packet exists, and neither
-receipt establishes prompt-injection detection, steering efficacy, scientific
-validity, product validation, license, or disclosure authority.
+zero actual model invocations. The frozen design authorized no separate
+pre-amendment model canary. After the receipts were frozen, the additive runtime
+image was built without invoking the model and exactly one amended Stage B run
+consumed its one-run authority. The completed run and Packet are reviewed below;
+neither source receipt establishes prompt-injection detection, steering efficacy,
+scientific validity, product validation, license, or disclosure authority.
 
 ## Worker-protocol adversarial chronology
 
@@ -719,11 +726,65 @@ successors:
   scientific efficacy is `NOT ESTABLISHED`.
 
 This chronology repairs stale narrative claims that no GPU or joined mechanics
-run had occurred. It does not repair the scientific gates. There is still no
-validated prompt-injection detector, behaviorally effective steering result,
-Evidence Packet v2, authenticated executor/auditor separation, trusted time,
-independent WORM ordering, provider-backed admitted route, independent
-replication, product authority, or claim license.
+run had occurred. It does not repair the scientific gates.
+
+### Bounded Qwen Stage B engineering review
+
+The successor Stage B package then consumed exactly one local execution for
+`Qwen/Qwen2.5-0.5B-Instruct` revision
+`7ae557604adf67be50417f59c2c2f167def9a775`. Run
+`gate5-stageb-qwen-20260808T225631Z-3d71101d69ab` loaded the exact 988,097,824-byte
+weights artifact, served one counted external joined request under CUDA BF16,
+recorded seven ordered worker events and two token-level top-eight activation observations, retained
+the output and terminal receipt, recorded outcome access, created one Packet,
+reconciled the five lifecycle events, passed the secret scan, and proved named
+container cleanup. Runtime receipt SHA-256 is
+`A42732C7027C8E851C1F800D7EC379DF08AFF9DD069BD7819349C5EF552072B2`.
+
+Packet `epv2-stageb-qwen-joined-001` is 6,898 bytes with SHA-256
+`FCF7674B14A34E3C33252B09B7A20E5E55FB6BC3751AC0F2B1C0EFB109578EAC`.
+The isolated kernel assesses it as structural completeness `COMPLETE`, criteria
+`REPORTED_CRITERIA_NOT_MET`, and scientific eligibility `INELIGIBLE`. The
+matched-taxonomy, wrong-layer, and clean-null controls are each `INVALID / NOT
+PERFORMED`; authentication, independent audit, replication, claim-language
+review, and external review remain unavailable or not established. The run
+explicitly records prompt-injection and steering studies as `NOT PERFORMED`,
+with intervention count zero, RunPod/provider calls zero, and spend `$0.00`.
+
+Adversarial review also preserves a Qwen steering blocker: the runtime manifest
+still advertises the Pythia module template
+`gpt_neox.layers[{layer}].mlp.dense_4h_to_h`. It was inert during the
+zero-intervention capture run, but it cannot be accepted as a Qwen intervention
+contract. A separate, prospectively bound Qwen steering tranche must repair and
+test that seam before any intervention attempt.
+
+The retained runtime-image identity also says the separate pre-claim image
+warm-load assurance was deferred: the frozen design prohibited an extra
+pre-amendment model container, and the preparation test enforces that
+prohibition. During the authorized worker startup, the loader's built-in runtime
+canary performed one internal forward before the one counted external joined
+request. That startup forward is not separately represented in
+`model_invocation_count` and has no separate receipt. This does not invalidate
+the run, but a successor must explicitly authorize and account for any distinct
+preparation canary.
+The top-level execution claim SHA-256
+`E98BEBE8C8A72D7678109AF77ABB6E6B7270817DC0425B88D8E8844468C611F6`
+precedes container creation and agrees with the receipt, but it sits outside the
+run directory and is not hash-bound by that runtime receipt. Final repository
+verification must cross-bind the claim and run; the run directory alone is not
+a portable replay of the pre-container claim.
+
+The 988,097,824-byte weights evidence is also a host-local external blob, not a
+Git object. `weight_artifact_pointer.json` retains its exact content-addressed
+path, SHA-256, length, and structural observation, and current verification
+rehashes that external file. A repository clone without the exact blob cannot
+fully replay the Packet registry; independent portability requires controlled
+transfer or a future content-addressed resolver.
+
+Accordingly there is still no validated prompt-injection detector,
+behaviorally effective steering result, authenticated executor/auditor
+separation, trusted time, independent WORM ordering, provider-backed admitted
+route, independent replication, product authority, or claim license.
 
 ### Instruction-integrity scanner and historical capability negatives
 
@@ -855,9 +916,10 @@ semantic inspection. Byte-different semantic clones or relabeling across
 packets are not resolved by the same-host lifecycle registry.
 
 Local GPU and joined engineering mechanics occurred outside the admitted
-experimental protocol. No authorized or admitted live exact-revision experiment
-has run through v2, and no Evidence Packet or scientific result was created. No
-module has satisfied the charter's full combination of clean nulls,
+experimental protocol. One bounded Qwen engineering run created a structurally
+complete Evidence Packet v2. No authorized or admitted live exact-revision scientific
+experiment or scientific result was created. No module has satisfied
+the charter's full combination of clean nulls,
 matched-taxonomy and wrong-layer controls, falsifiers, independent numerical
 agreement, held-out replication, and claim-language review. Causal
 interpretation, generalization, utility, safety, and claim scope remain open.

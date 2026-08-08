@@ -1,0 +1,198 @@
+{
+  "schema_version": "cas_harness_gate5_stageb_runtime_image_identity.v0.1",
+  "created_at": "2026-08-08T22:48:18.386365Z",
+  "source_commit": "0ac9f43828566b937b349d8a70da62238580a71c",
+  "worker_app_tree_sha256": "036edf0ecace59d76c89c5d6c4d17ba099bfb4e5a6ff227db0e8b9e0e1b7e237",
+  "worker_app_file_count": 24,
+  "worker_app_files": [
+    {
+      "path": "app/__init__.py",
+      "sha256": "66ef7c2a001c4298cc3cece7c1d0b92ba306e06456c8468179eeacc5a45de554",
+      "byte_length": 39
+    },
+    {
+      "path": "app/auth.py",
+      "sha256": "994510be467483797d4e7d178cd4f03b9ee52ebf4152af360841cd0b21559009",
+      "byte_length": 3508
+    },
+    {
+      "path": "app/main.py",
+      "sha256": "234023f34dcae4d6a43d2cc08e768c4ddb1aa2b9acbe95396806817c41690994",
+      "byte_length": 2902
+    },
+    {
+      "path": "app/routes/__init__.py",
+      "sha256": "c70973ab35ce04fb1e941c6a02730ce5800d750bd2372bc71ca2df5c424c4d06",
+      "byte_length": 89
+    },
+    {
+      "path": "app/routes/health.py",
+      "sha256": "3a607fae2d86b4a875f835e36db650e5b2ec63093b11b5c1c3e54bf5744a0951",
+      "byte_length": 3430
+    },
+    {
+      "path": "app/routes/live_trace.py",
+      "sha256": "f2c63dbdfffb1ed33ee8c61b490d43b670b951eb79687e2be36f5cd794adaa7a",
+      "byte_length": 11222
+    },
+    {
+      "path": "app/runtime/__init__.py",
+      "sha256": "a773b5d895b460516caf6e62842f9c6fea9f08c29c6e20301a029c5ee81303b3",
+      "byte_length": 1075
+    },
+    {
+      "path": "app/runtime/ablation_probe.py",
+      "sha256": "a7232334a4cf567dfadeecf504c4945da4097b0b17893b6e435515c184b943fb",
+      "byte_length": 17092
+    },
+    {
+      "path": "app/runtime/billing_receipt.py",
+      "sha256": "e2a24c69dd8795914f079d805f3d3fdd055ecb4f83359131e609eb70e1136638",
+      "byte_length": 7078
+    },
+    {
+      "path": "app/runtime/container_preflight.py",
+      "sha256": "61c5c6e6617671907e0e0175cefba983a1aab821a0016723f1eb1201f19d4be1",
+      "byte_length": 15787
+    },
+    {
+      "path": "app/runtime/cover_library.py",
+      "sha256": "89de471f0628debcbe309844d7b1d3f683a0d04583e39c7a65cdb17f76be9e99",
+      "byte_length": 8425
+    },
+    {
+      "path": "app/runtime/event_stream.py",
+      "sha256": "5cee637a576853cfb4374ae74b9151a6a1e86af8f1851976378b60b1910c6a37",
+      "byte_length": 13056
+    },
+    {
+      "path": "app/runtime/fleet_worker.py",
+      "sha256": "11d6c5c76a0871f2c671145235324ff41dc29c901929a9382ec2b3c062437dc0",
+      "byte_length": 54471
+    },
+    {
+      "path": "app/runtime/knob_resolution.py",
+      "sha256": "68f9e9249d63abe6f9510204da0644f081e95b2d815c68805dcf6089eac5d246",
+      "byte_length": 7108
+    },
+    {
+      "path": "app/runtime/model_loader.py",
+      "sha256": "91b4213da2029231159548595b80d5555e0ce4e2b364d0c5f0b971d584640c99",
+      "byte_length": 36562
+    },
+    {
+      "path": "app/runtime/probe_runner.py",
+      "sha256": "79295b7a79a05f55827dc8cf210ca8d974d07895fc0d9cadc6634116d3df5164",
+      "byte_length": 43541
+    },
+    {
+      "path": "app/runtime/pythia_runner.py",
+      "sha256": "707aa0954aea73c0274c8a0a8b00363ef79c060f04bc0885b04077167a76ee77",
+      "byte_length": 16459
+    },
+    {
+      "path": "app/runtime/verification_mode.py",
+      "sha256": "7e52c7292ee34b634a0f5949b4f99dfe63deec16cab3c62c8193679269727a08",
+      "byte_length": 4378
+    },
+    {
+      "path": "app/runtime/word_spans.py",
+      "sha256": "9ddc42e3645247ce42ab14ca00130088c1ce23d951f884496883c8fe9e9a0467",
+      "byte_length": 7330
+    },
+    {
+      "path": "app/schemas/__init__.py",
+      "sha256": "27284a83eaef0397734e6e1dfed5864b0d5d4f9e28c1ae54c2df3a91af36b968",
+      "byte_length": 1306
+    },
+    {
+      "path": "app/schemas/distributed.py",
+      "sha256": "dbdca4f06944ff1a8c82144992d1627eb3b1758b8e7e48535777a5ca549fa682",
+      "byte_length": 9667
+    },
+    {
+      "path": "app/schemas/events.py",
+      "sha256": "5178e04a15ec79ef7dd8ecbd4a8076409099e54c721d1fdaf112074f363ee52f",
+      "byte_length": 35317
+    },
+    {
+      "path": "app/schemas/manifest.py",
+      "sha256": "8c168389cb07b28c13237d3dd74195c319ef05f467e7a381c16c7bee160011f2",
+      "byte_length": 10534
+    },
+    {
+      "path": "app/schemas/requests.py",
+      "sha256": "b417783b2f09fc6212566d66317e93951d4a9e10e841ad99730ea0d916bb7ea7",
+      "byte_length": 4604
+    }
+  ],
+  "image": {
+    "reference": "atlas-live-trace-worker:gate5-stageb-qwen05b-runtime-v0.1",
+    "image_id": "sha256:332f1ee95bbbcfe14b223ed56cffed011f24f83b52848e83d3475cafed7e75d6",
+    "config_digest": "sha256:332f1ee95bbbcfe14b223ed56cffed011f24f83b52848e83d3475cafed7e75d6",
+    "config_digest_note": "Docker local image ID is the SHA-256 of the image configuration JSON.",
+    "size_bytes": 5949357193,
+    "parent_reference": "atlas-live-trace-worker:gate5-stageb-qwen05b-instruct-v0.1",
+    "parent_image_id": "sha256:373ac33e26c4e3e82ac34690c08e7af58b4b925fe0410e6a0a175b10b9fd2139",
+    "parent_layer_count": 28,
+    "total_layer_count": 33,
+    "added_layer_count": 5,
+    "parent_rootfs_is_exact_prefix": true,
+    "labels": {
+      "io.cas-harness.claim-status": "RESEARCH_ONLY_LOCAL_STAGE_B",
+      "io.cas-harness.disclosure-status": "HELD",
+      "io.cas-harness.experiment-status": "NOT_STARTED",
+      "io.cas-harness.gate5-status": "OPEN",
+      "io.cas-harness.joined-binding.authority": "WORKER_PROCESS_OBSERVATION_ONLY",
+      "io.cas-harness.license-status": "NOT_LICENSED",
+      "io.cas-harness.overlay.kind": "ADDITIVE_MODEL_CACHE_ONLY",
+      "io.cas-harness.overlay.source": "bff8d6821aa76076fd6d431c926eaa7a5f5a6395",
+      "io.cas-harness.parent.local-image-id": "sha256:33805740641bad585a25d1e8a614b264e5daa97b588d26bf01762a0278f14c7d",
+      "io.cas-harness.parent.repo-digest": "sha256:3d747b379938a5148e4a028ff8ba2f242847b17e8842f19f0d2c204b3fe9a95c",
+      "io.cas-harness.parent.worker-source": "4bff437dbcf6d0d38046e63d2aee823e8f316711",
+      "io.cas-harness.pythia.retained": "true",
+      "io.cas-harness.runtime-overlay.app-file-count": "24",
+      "io.cas-harness.runtime-overlay.app-tree-sha256": "036edf0ecace59d76c89c5d6c4d17ba099bfb4e5a6ff227db0e8b9e0e1b7e237",
+      "io.cas-harness.runtime-overlay.kind": "ADDITIVE_SEPARATE_APP_TREE",
+      "io.cas-harness.runtime-overlay.source": "0ac9f43828566b937b349d8a70da62238580a71c",
+      "io.cas-harness.runtime.dtype": "torch.bfloat16",
+      "io.cas-harness.runtime.native-jit": "disabled",
+      "io.cas-harness.scientific-status": "NOT_ESTABLISHED",
+      "io.cas-harness.stageb.model-id": "Qwen/Qwen2.5-0.5B-Instruct",
+      "io.cas-harness.stageb.model-revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+      "io.cas-harness.stageb.weights-bytes": "988097824",
+      "io.cas-harness.stageb.weights-sha256": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+      "org.opencontainers.image.base.digest": "sha256:019e8eb29a85e74d64925745884f2ec79aa27e3feab36353d24656f4d6b89467",
+      "org.opencontainers.image.base.name": "ubuntu:24.04",
+      "org.opencontainers.image.description": "Private FastAPI worker: Pythia-160M + probe pipeline, SSE trace stream, behind the noetic-compass-api proxy.",
+      "org.opencontainers.image.python.digest": "sha256:6e13e65c55e33adf203d77ee371cf8bf5d81bd4902ef07565721f46bf44917af",
+      "org.opencontainers.image.revision": "0ac9f43828566b937b349d8a70da62238580a71c",
+      "org.opencontainers.image.run.auth": "ATLAS_LIVE_WORKER_TOKEN required",
+      "org.opencontainers.image.run.readonly-rootfs": "required",
+      "org.opencontainers.image.run.tmpfs": "/tmp:rw,noexec,nosuid,nodev,size=64m",
+      "org.opencontainers.image.source": "https://github.com/LittleHenderson/noetic-compass",
+      "org.opencontainers.image.title": "atlas-live-trace-worker",
+      "org.opencontainers.image.ubuntu.snapshot": "20260805T000000Z",
+      "org.opencontainers.image.version": "gate5-stageb-qwen05b-runtime-v0.1"
+    },
+    "authority": "LOCAL DOCKER IMAGE INSPECTION / NOT A SIGNED REGISTRY ATTESTATION"
+  },
+  "model": {
+    "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+    "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "weights_filename": "model.safetensors",
+    "weights_sha256": "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe",
+    "weights_bytes": 988097824
+  },
+  "provider_calls": 0,
+  "provider_spend_usd": "0.00",
+  "model_invocations": 0,
+  "joined_request_invocations": 0,
+  "runtime_validation": "DEFERRED TO THE AUTHORIZED JOINED EXECUTION",
+  "execution_status": "NOT_STARTED",
+  "gate5_status": "OPEN",
+  "admission_ring": 4,
+  "license_status": "NOT LICENSED",
+  "disclosure_status": "HELD",
+  "boundary": "LOCAL SINGLE-HOST / NOT WORM / NON-PRODUCTION / RESEARCH ONLY / ONE MODEL INVOCATION / ONE PACKET MAXIMUM / NO INTERVENTION / REPORTED_CRITERIA_NOT_MET / INELIGIBLE / GATE 5 OPEN / RING 4 / NOT LICENSED / HELD"
+}

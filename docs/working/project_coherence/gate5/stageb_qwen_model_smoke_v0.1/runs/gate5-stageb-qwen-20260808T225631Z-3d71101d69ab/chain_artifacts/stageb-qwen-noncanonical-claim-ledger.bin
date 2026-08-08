@@ -1,0 +1,55 @@
+{
+  "schema_version": "project_coherence_claim_ledger.v0.1",
+  "document_status": "RUN-PROSPECTIVE / NONCANONICAL / OPEN / NOT FROZEN",
+  "as_of": "2026-08-08",
+  "completeness": "ONE BOUNDED ENGINEERING CLAIM / NO SCIENTIFIC CLAIM",
+  "record_schema": "CLAIM_RECORD.schema.json",
+  "records": [
+    {
+      "id": "CLM-GATE5-STAGEB-QWEN-JOINED-PACKET-MECHANICS",
+      "version": "0.1",
+      "title": "Bounded Stage B Qwen joined run and Packet mechanics",
+      "claim_text": "One bounded Stage B joined engineering run can bind the exact Qwen/Qwen2.5-0.5B-Instruct model and local image, consume one clean instruction request, perform at most one model invocation, retain the exact output and terminal lifecycle evidence, and create at most one Evidence Packet v2; the required intervention-science controls are not performed and the Packet is scientifically ineligible.",
+      "statement_kind": "EMPIRICAL_HYPOTHESIS",
+      "scope": {
+        "population": "Exactly one local joined engineering run and one clean instruction carrier",
+        "models": [
+          "Qwen/Qwen2.5-0.5B-Instruct"
+        ],
+        "architectures": [
+          "Qwen2 / llama_like"
+        ],
+        "contexts": [
+          "Joined controller-worker and Evidence Packet mechanics only; no intervention science"
+        ],
+        "time_window": "One prospectively frozen execution after the required identity amendment"
+      },
+      "controls": [
+        "Exact request, model, image, code, lifecycle, output, and Packet binding",
+        "MATCHED_TAXONOMY report-only and INVALID because not performed",
+        "WRONG_LAYER report-only and INVALID because no intervention is authorized",
+        "CLEAN_NULL report-only and INVALID because no paired scientific comparison is authorized",
+        "No retry, no second invocation, and no second Packet"
+      ],
+      "falsifier": "Any identity drift, prompt drift, intervention, provider use, paid spend, second job, second model invocation, second Packet reservation or creation, premature outcome access, missing terminal completion, or claim elevation observable by Packet-construction time invalidates the bounded engineering observation.",
+      "uncertainty": "A single local run cannot establish prompt-injection detection, steering efficacy, general instruction following, scientific validity, independent replication, trusted execution, production readiness, or product safety.",
+      "admission_ring": 4,
+      "product_claim_status": "NOT LICENSED",
+      "disclosure_status": "HELD",
+      "review_state": "UNASSESSED",
+      "reviewers": [],
+      "last_reviewed_at": null,
+      "source_refs": [
+        "GATE5-STAGEB-QWEN-JOINED-ENGINEERING-PROTOCOL-V0.1"
+      ],
+      "theorem_refs": [],
+      "evidence_packets": [],
+      "notes": [
+        "Prospective and noncanonical.",
+        "Execution is unauthorized until one EXECUTION_IDENTITY_ADDITION amendment binds the final clean executable commit and exact supporting artifacts.",
+        "The Evidence Packet v2 ceiling is REPORTED_CRITERIA_NOT_MET / INELIGIBLE.",
+        "No prompt-injection or activation-steering efficacy claim is permitted."
+      ]
+    }
+  ]
+}

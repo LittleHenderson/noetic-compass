@@ -271,11 +271,21 @@ and 17/17 with same-process executed-node digests
 and
 `40FBF9298CB6DF939C5502D5B8C1E2ADBFA79011167E14E25252E663C114B8E6`.
 They are source-level, engineering-only receipts with zero actual model
-invocations. The runtime image has not been built and the Stage B joined model
-run remains `NOT_STARTED`; the frozen design authorizes no separate
-pre-amendment model canary. No Stage B Evidence Packet exists, and neither
-receipt establishes prompt-injection detection, steering efficacy, scientific
-validity, product validation, license, or disclosure authority.
+invocations. The frozen design authorized no separate pre-amendment model
+canary. After those receipts passed, the additive runtime image was built
+without a model invocation and exactly one amended local Qwen Stage B run
+consumed its one-run authority. Run
+`gate5-stageb-qwen-20260808T225631Z-3d71101d69ab` created Packet
+`epv2-stageb-qwen-joined-001`, SHA-256
+`FCF7674B14A34E3C33252B09B7A20E5E55FB6BC3751AC0F2B1C0EFB109578EAC`.
+The kernel assesses that Packet as structural completeness `COMPLETE`, criteria
+`REPORTED_CRITERIA_NOT_MET`, and scientific eligibility `INELIGIBLE`. Its three
+mandatory controls are `INVALID / NOT PERFORMED`, and authentication,
+independent audit, replication, claim-language review, and external review do
+not advance. This concrete negative Packet demonstrates preservation of a
+complete engineering record without promoting prompt-injection detection,
+steering efficacy, scientific validity, product validation, license, or
+disclosure authority.
 
 The companion current 414-test worker and 78-test API/launcher/fleet/state
 suites are `LOCAL_UNATTESTED_HOST_REGRESSION` observations. One pytest process
@@ -308,11 +318,13 @@ does not embed the candidate invocation, scanner database/process transcripts
 are absent, and linked Ubuntu vendor pages were not snapshotted. No independent
 trust root or complete tool-execution replay exists. At that candidate
 checkpoint, one CPU-only non-scientific preflight had loaded the exact Pythia
-artifacts and run the offline canary. Later retained local engineering runs
-completed a six-arm GPU mechanics canary and one joined controller-worker model
-invocation on non-admitted, single-host, non-WORM routes. They created no
-Evidence Packet and established neither prompt-injection detection nor steering
-efficacy. Experimental execution remains `NOT_STARTED` and
+artifacts and run the offline canary. The pre-Stage-B Pythia GPU canary and
+joined-v0.2 diagnostics later completed a six-arm mechanics canary and one joined
+controller-worker model invocation on non-admitted, single-host, non-WORM
+routes. Those two diagnostics created no Evidence Packet and established neither
+prompt-injection detection nor steering efficacy. The later Qwen Stage B Packet
+is described above and does not change that scientific boundary. Experimental
+execution remains `NOT_STARTED` and
 `G5-ENGINEERING-003` remains `OPEN_SECURITY`. The normative Packet-v2 schema and
 admission rules in this specification are unchanged by those diagnostics.
 

@@ -12,7 +12,7 @@
   "product_claim_effect": "NONE",
   "manifest_self_hash": null,
   "generated_by": "scripts/build_project_coherence_gate5_manifest.py",
-  "artifact_count": 529,
+  "artifact_count": 585,
   "artifacts": [
     {
       "path": ".gitattributes",
@@ -64,8 +64,8 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
-      "sha256": "B84837D9114D20B49A6D86BEF9F50156247CB4558CBE257FEA16822A5A3F8CA6",
-      "bytes": 53809,
+      "sha256": "F9A564870829E3696EEB3FC9F6894658CA26BC61A5488657CA565865D1C0C830",
+      "bytes": 57701,
       "role": "gate5_control_artifact"
     },
     {
@@ -100,8 +100,8 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_REVIEW_MATRIX_v0.1.json",
-      "sha256": "4594B463F8471D3BA7B54248BC98CCDA46F37E8AB01B05907E8C4145D565896F",
-      "bytes": 99933,
+      "sha256": "CFB9928DEA6248AB76E835A34EFDB757FF2E2616FB0AB243A28CB5BA6CAC8413",
+      "bytes": 107375,
       "role": "gate5_control_artifact"
     },
     {
@@ -112,14 +112,14 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md",
-      "sha256": "6806C0ACD26127623A8654D32300BF93C4ECDE0BA7F6445B5F056F434FC059FB",
-      "bytes": 20301,
+      "sha256": "20A0EECA4DF7A534A84B8C111B27D8BFDDA3055050276F25C5EBD18563EADAC3",
+      "bytes": 21055,
       "role": "gate5_control_artifact"
     },
     {
       "path": "docs/working/project_coherence/gate5/README.md",
-      "sha256": "1D7904AB4177361EA3F1D264B6F60D17F136EEA7AD02A1FA22A174882137D1B4",
-      "bytes": 37243,
+      "sha256": "B4B26F8185C7A55F929DAA515473BF591047BCE37F937A44887A6E3321B2C83E",
+      "bytes": 41765,
       "role": "gate5_control_artifact"
     },
     {
@@ -795,6 +795,12 @@
       "role": "gate5_control_artifact"
     },
     {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/execution_claim.json",
+      "sha256": "E98BEBE8C8A72D7678109AF77ABB6E6B7270817DC0425B88D8E8844468C611F6",
+      "bytes": 2083,
+      "role": "gate5_control_artifact"
+    },
+    {
       "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/execution_identity_amendment.json",
       "sha256": "46F648232E29D5E9021A3EFFE08B236E6988FB21FFD3181BCB7A79ACA6F36841",
       "bytes": 1533,
@@ -864,6 +870,336 @@
       "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/request.json",
       "sha256": "D4127311457CF48F474D5D262D69910DE934FEE2D1B47150764992C0FBC3C6D3",
       "bytes": 507,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/authorization.json",
+      "sha256": "5CE9ED8F3C4BD30F2959D99D58BE0DAAB8C589F96AA65D8BC7DA000008527951",
+      "bytes": 3400,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/chain_artifacts/qwen25-05b-instruct-tokenizer-identity.bin",
+      "sha256": "31662B7B72A660967C5C88483E04996274CCB3F85EAFA62DF5FB030F07FE65A8",
+      "bytes": 796,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/chain_artifacts/stageb-analysis-manifest.bin",
+      "sha256": "690E1C9D6124CAAE99CD95A9C17C83AF6FDA79B8B827DD861ED12D30B2AB16D1",
+      "bytes": 3180,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/chain_artifacts/stageb-dependency-lock.bin",
+      "sha256": "24BB8C5D31498DE573487376EB808986B52CB0504BA0F63B2E7B76D73E649780",
+      "bytes": 1230,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/chain_artifacts/stageb-engineering-confirmatory-split.bin",
+      "sha256": "7297A610841BA059527966EB841CB725676F844ECB8A98433DF33398AD78BF16",
+      "bytes": 347,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/chain_artifacts/stageb-evidence-packet-builder-test-receipt.bin",
+      "sha256": "670DC44DB21F29A66DD9D7A8E1589D3FD507B099FCB9836DD15A3B93BD970D07",
+      "bytes": 2944,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/chain_artifacts/stageb-final-executable-code-identity.bin",
+      "sha256": "15B370788BE38AC8AEFA245A4931EE23687C88102D5998D5D8D819CA9AA27C2E",
+      "bytes": 2102,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/chain_artifacts/stageb-final-executable-source-manifest.bin",
+      "sha256": "0A063ACCBCF6A52B4C6E22A56AC685970F6E77FDC5522ACABE0CD805042A4B31",
+      "bytes": 5467,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/chain_artifacts/stageb-final-runtime-image-identity.bin",
+      "sha256": "D8A42CC8DEFD6D3CB38E75984E6F52E0D08ADD15654CBEE6E3DC1E7FB148E7BC",
+      "bytes": 8837,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/chain_artifacts/stageb-fixed-sample-plan.bin",
+      "sha256": "C199C3D16F9C21EE7A6794253316D0D5CE3ECC672598F2DBC404F9A18CE5725E",
+      "bytes": 495,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/chain_artifacts/stageb-preparation-source-manifest.bin",
+      "sha256": "D27E226EA44E065C17FF053DA0A39FD96B38A85773D97DD469D5E4F587A32BF2",
+      "bytes": 4104,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/chain_artifacts/stageb-qwen-noncanonical-claim-ledger.bin",
+      "sha256": "CCF8C5F879F802C009A90E07EF5CC2C26BA65E297E165B2F1E807B817FEB0230",
+      "bytes": 3180,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/chain_artifacts/stageb-qwen-probe-adapter-test-receipt.bin",
+      "sha256": "A0A097771D3B74080F71F6138CC7A59C79455D757BB9404E910480521FFB6F51",
+      "bytes": 1697,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/chain_artifacts/stageb-schema-heldout-split.bin",
+      "sha256": "A2E6164D6F0820C82443A77227BD94617B9D399667C5D746FB5B4277B33DFFBC",
+      "bytes": 572,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/claim_ledger.noncanonical.json",
+      "sha256": "CCF8C5F879F802C009A90E07EF5CC2C26BA65E297E165B2F1E807B817FEB0230",
+      "bytes": 3180,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/cleanup_proof.json",
+      "sha256": "C8D8DC986FA7BADCC0ECA30C5346E85623496C604C045735ACA689B737972584",
+      "bytes": 185,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/consumption.json",
+      "sha256": "8AF83A5CECD70EA0C675DF33CB120C16DA2DE8A4B0E5582958A1B9E3F627DB63",
+      "bytes": 333,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/container.log",
+      "sha256": "9D3E4E0F524B8EF86D8D6774CCD88B59C4795CF6F1A2E118FB1FF5D6C0BD5599",
+      "bytes": 613,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/container_inspect.redacted.json",
+      "sha256": "BA4E6C95C2DA25F6EA8622C97B269A6E5EBAAFB4C46BC23A9F98F331ED7AEA3B",
+      "bytes": 7716,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/evidence_packet.v2.json",
+      "sha256": "FCF7674B14A34E3C33252B09B7A20E5E55FB6BC3751AC0F2B1C0EFB109578EAC",
+      "bytes": 6898,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/evidence_packet_assessment.json",
+      "sha256": "EC3A33A9EFC2A90AED20EBDA39AE8AB33611BD1F5190D27EBA646F15DF45722A",
+      "bytes": 1112,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/evidence_packet_execution_manifest.json",
+      "sha256": "3E998729DFB654249DF27B85716DAB6B043EF607F50458BF7620821E89D428CB",
+      "bytes": 1774,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/evidence_packet_registry_index.json",
+      "sha256": "BEF91EAB155DA9747C0C2D29870D59A4217CEF69ED360460D3C9336F1DB09726",
+      "bytes": 8191,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/execution_identity_amendment.json",
+      "sha256": "46F648232E29D5E9021A3EFFE08B236E6988FB21FFD3181BCB7A79ACA6F36841",
+      "bytes": 1533,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/joined_result.json",
+      "sha256": "8E3FB3A90C4D7A76C80B46F33A15E5CD4060FA471C5BF1BE720FFC8B9D3EA361",
+      "bytes": 1299,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/lifecycle.sqlite3",
+      "sha256": "62B71E288486C11C772F634E2303F6EB97AFCFF13C47DC2BCBCDD3D7FA723D5A",
+      "bytes": 65536,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/model_artifact_manifest.json",
+      "sha256": "805616F0A563CBD5D2874506BCB660C41F46929A8CDC2561536DD57E47D6FA47",
+      "bytes": 1323,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/outcome_access.json",
+      "sha256": "983DADCF81552D097B1FA34CB709A770E454B987B2CBDD5D3CE4B9A11B66FB32",
+      "bytes": 487,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/output.json",
+      "sha256": "D991601CB8DFDA3A8057D49D2F201A4CF55A2019F7CC897020498EB944E44791",
+      "bytes": 4592,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/packet_evidence/stageb-qwen-confirmatory-accounting-001.json",
+      "sha256": "6C3B2BF6207C03FACDF259887FEA34B2B32F9BEAE3F69B116B750F6F33E3ABB7",
+      "bytes": 238,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/packet_evidence/stageb-qwen-control-clean-null-invalid-001.json",
+      "sha256": "3E30100FD3B21FEA2ED6EDEBD01C7EEF71C11C8E46B0B97341A1E02184D5EE00",
+      "bytes": 392,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/packet_evidence/stageb-qwen-control-matched-taxonomy-invalid-001.json",
+      "sha256": "0E3869BC0DB1D620DDB67CEAC0662C2D10E51E6DD289C7E5B2BA71EB42A78907",
+      "bytes": 404,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/packet_evidence/stageb-qwen-control-wrong-layer-invalid-001.json",
+      "sha256": "901D27E1BE1EDDECC6D15D8967B811C339438F6F42AB57E9669372975423DFD1",
+      "bytes": 394,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/packet_evidence/stageb-qwen-falsifier-report-001.json",
+      "sha256": "D055BB5D8CBF3CC2642E4C3840F555175E535A98384FDD2BF976D55E334206D8",
+      "bytes": 713,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/packet_evidence/stageb-qwen-heldout-exclusion-001.json",
+      "sha256": "8EEBFF74A26B7428EED36EB84D1451A9955075F5A44846912022716A269C71B5",
+      "bytes": 246,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/packet_evidence/stageb-qwen-metric-intervention-count-001.json",
+      "sha256": "BF684E068219FA754D27187D3B6EC9355944E13B0089BCDB01A549AD24CDA4FC",
+      "bytes": 471,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/packet_evidence/stageb-qwen-metric-output-byte-count-001.json",
+      "sha256": "D1B55D645DE11CCE33D0AE8590EF1A718B433E80823235AB84A1A90FF7CB6961",
+      "bytes": 476,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/packet_evidence/stageb-qwen-metric-packet-count-001.json",
+      "sha256": "26F0455D4219F53002316D7935219A417EF8DB46FBC1CBE653FD62E57E962D4E",
+      "bytes": 465,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/packet_evidence/stageb-qwen-metric-provider-call-count-001.json",
+      "sha256": "A2C105C64FC6B657D089161329BAA4ED80F6AF53C8E752B63817E9008DD2DC99",
+      "bytes": 473,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/packet_evidence/stageb-qwen-metric-provider-spend-usd-001.json",
+      "sha256": "629367A878A0881D239F29C496E1533DB10A612E0955ED6E1E1D7B1804D5EDA6",
+      "bytes": 473,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/packet_evidence/stageb-qwen-metric-run-count-001.json",
+      "sha256": "54DB355A3C61973E9EF2808E71B4E3E29C952965B97B6C788D9F90A1F4C9F33D",
+      "bytes": 459,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/packet_evidence/stageb-qwen-result-summary-001.json",
+      "sha256": "C5B3C0BD5BCDCEF7E3A303828227E3278B1D98D1C8E1889C0BFA638E4404B02B",
+      "bytes": 896,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/packet_evidence/stageb-qwen-uncertainty-report-001.json",
+      "sha256": "852D6F1C0927BDD6A5AC306C0DA3D95DD675588F76B4CA196358BDB9A5A94EC8",
+      "bytes": 358,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/packet_evidence/stageb-qwen-worker-response-001.json",
+      "sha256": "7F8D7E6318E439F9EDFE182450065901F7A777104E235791E76E2FD41773985F",
+      "bytes": 485,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/pre_receipt_artifact_manifest.json",
+      "sha256": "252442DC71BA74344422B2ED293EAB9992E15A23AFE9963D13C0401ABEA054A6",
+      "bytes": 7946,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/preregistration.json",
+      "sha256": "4F7D32A9364FC5A470B0FEE575D53C15D027D52CB013AB3EDBBD059A3CCED57D",
+      "bytes": 11762,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/protocol.json",
+      "sha256": "7DD9F543059692B292F08FBC510817F8BF181615468911DAD8CA773B7D5F6A11",
+      "bytes": 10970,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/realmode_health.json",
+      "sha256": "641BAC119AA40ED54D7194902AE3E1080D4F1C2AB59555B481663501B2C59265",
+      "bytes": 979,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/reconciliation.json",
+      "sha256": "6BF8FD692EAB2B817EAF7A646F301807AB8D54787A36518E99C33B5708BE51EA",
+      "bytes": 1069,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/request.json",
+      "sha256": "D4127311457CF48F474D5D262D69910DE934FEE2D1B47150764992C0FBC3C6D3",
+      "bytes": 507,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/runtime_receipt.json",
+      "sha256": "A42732C7027C8E851C1F800D7EC379DF08AFF9DD069BD7819349C5EF552072B2",
+      "bytes": 5570,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/secret_scan.json",
+      "sha256": "54476FF4FF8DC7FBA3A74D19C1B59A6A18B6E151761C5F847F4602DAB84960C3",
+      "bytes": 55,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/terminal_receipt.json",
+      "sha256": "93264E4BB8C01D76C03C1A55394682828754A7D8BFADD7FFD40FC69D39222DCC",
+      "bytes": 4038,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/weight_artifact_pointer.json",
+      "sha256": "1574EAA702A936651F7A655EDC2F9975C407E313477F5AA1132774FF80B7FAC3",
+      "bytes": 1194,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/runs/gate5-stageb-qwen-20260808T225631Z-3d71101d69ab/worker_response.raw.json",
+      "sha256": "D991601CB8DFDA3A8057D49D2F201A4CF55A2019F7CC897020498EB944E44791",
+      "bytes": 4592,
       "role": "gate5_control_artifact"
     },
     {
@@ -3040,8 +3376,8 @@
     },
     {
       "path": "scripts/verify_project_coherence_gate5.py",
-      "sha256": "B26AA5987ED5E32852716812034ADC01B8CD3C32054EE3CBD2CDEA0859778D8A",
-      "bytes": 310906,
+      "sha256": "C6B56946A9887B6C1AD83946D8296A0AC291B08411E2FD6CC44063FD7C14A154",
+      "bytes": 411519,
       "role": "gate5_verification_control"
     },
     {
