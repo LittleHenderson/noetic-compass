@@ -4,6 +4,22 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-07 — Project Coherence white paper series v0.1 drafted
+
+- Drafted five academic-rigor white papers into `docs/whitepapers/` from the
+  Project Coherence Gate 1 / Gate 4 sources in the 2026-08-05 Codex snapshot
+  (`project_coherence_model_smoke`): TKS v8.0 (typed finite-function kernel),
+  Noetic Topos 2.0 (marked/modal successor site), CAS Core 8 (compatibility and
+  evidence kernel), CAS PCBA 8 (adaptive cognitive circuit engineering), and
+  CAS-Ohm 1.0 (profile-specific experimental response and calibration model).
+- Every paper preserves its source's governing status
+  (`DRAFT / OPEN / Ring 4 / NOT LICENSED`), exact SHA-256 source identities,
+  bounded-evidence receipts (test/exhaustive-case counts, Lean scope), adverse
+  findings (legacy topology collapse, CCDL grammar gap, CSB unreachable fuse,
+  eight CAS-Ohm source conflicts), and full open-obligation ledgers. Drafting
+  promotes no claim; papers note the 64/037,173 new-matter boundary.
+- Index with shared conventions at `docs/whitepapers/README.md`.
+
 ## 2026-07-28 — Cognitive Circuit Grimoire accepted digital master
 
 - Built and accepted the canonical 6 × 9 inch, 908-page
