@@ -209,10 +209,10 @@ when the outcome-access event binds the same terminal receipt and completion
 time, and quarantines partial failure artifacts as negative evidence. These
 are structural controls, not authenticated execution or a scientific result.
 
-The current working-tree worker receipt is 391/391. Its
+The current working-tree worker receipt is 400/400. Its
 canonical node-ID digest is:
 
-`FD8367B867CB6589CC50424D7A1CECABC56BF85331BB4FD87B844E7FD3004580`
+`B0AEB3CE2DAB1D505622AD2EE856BC0BEFBAEB9D4F605C121BC82DA07A9C3CCF`
 
 The 27-test increase is entirely from the already-committed finite no-JIT BF16,
 strict protocol-client, and live request/response worker tranches. The

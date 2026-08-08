@@ -15,8 +15,10 @@ import hashlib
 import os
 import re
 import threading
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
+from types import MappingProxyType
 from typing import Any
 
 from ..schemas.manifest import ModelArch, ModelManifest, RuntimeExecutionEvidence
@@ -71,6 +73,151 @@ PYTHIA_160M_ARTIFACTS: dict[str, tuple[str, int]] = {
         396,
     ),
 }
+# --- Stage B additive second pinned model ------------------------------
+#
+# pythia-160m is a base model and does not reliably follow instructions, so a
+# joined Stage B run cannot exercise a realistic instruction request with it.
+# The binding below ADDS a pinned instruction-tuned model. It does not replace,
+# relax, or retire the pythia pin: every PYTHIA_160M_* constant above remains
+# the exact default, and a worker that sets no environment variable behaves
+# identically to before this addition.
+#
+# Selecting a model creates no detection, steering, scientific, product,
+# licensing, or disclosure claim.
+
+QWEN_05B_INSTRUCT_MODEL_ID = "Qwen/Qwen2.5-0.5B-Instruct"
+QWEN_05B_INSTRUCT_REVISION = "7ae557604adf67be50417f59c2c2f167def9a775"
+QWEN_05B_INSTRUCT_WEIGHTS_FILENAME = "model.safetensors"
+QWEN_05B_INSTRUCT_WEIGHTS_SHA256 = (
+    "fdf756fa7fcbe7404d5c60e26bff1a0c8b8aa1f72ced49e7dd0210fe288fb7fe"
+)
+QWEN_05B_INSTRUCT_WEIGHTS_BYTES = 988_097_824
+QWEN_05B_INSTRUCT_ARTIFACTS: dict[str, tuple[str, int]] = {
+    "config.json": (
+        "18e18afcaccafade98daf13a54092927904649e1dd4eba8299ab717d5d94ff45",
+        659,
+    ),
+    "generation_config.json": (
+        "e558847a8b4402616f1273797b015104dc266fe4b520056fca88823ba8f8ebe6",
+        242,
+    ),
+    "merges.txt": (
+        "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3",
+        1_671_839,
+    ),
+    QWEN_05B_INSTRUCT_WEIGHTS_FILENAME: (
+        QWEN_05B_INSTRUCT_WEIGHTS_SHA256,
+        QWEN_05B_INSTRUCT_WEIGHTS_BYTES,
+    ),
+    "tokenizer.json": (
+        "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+        7_031_645,
+    ),
+    "tokenizer_config.json": (
+        "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583",
+        7_305,
+    ),
+    "vocab.json": (
+        "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+        2_776_833,
+    ),
+}
+# Geometry read from the pinned config.json; total_params measured by summing
+# parameter element counts on the loaded model inside the frozen image.
+_QWEN_05B_INSTRUCT_ARCH = ModelArch(
+    family="qwen2",
+    n_layers=24,
+    hidden_size=896,
+    mlp_intermediate_dim=4864,
+    n_heads=14,
+    total_params=494_032_768,
+    validated=True,
+)
+
+
+@dataclass(frozen=True)
+class ModelBinding:
+    """One exactly pinned model identity plus its declared architecture."""
+
+    key: str
+    model_id: str
+    revision: str
+    weights_filename: str
+    weights_sha256: str
+    weights_bytes: int
+    artifacts: Mapping[str, tuple[str, int]]
+    arch: ModelArch
+    worker_version: str
+
+
+PYTHIA_160M_BINDING_KEY = "pythia-160m"
+QWEN_05B_INSTRUCT_BINDING_KEY = "qwen2.5-0.5b-instruct"
+MODEL_BINDING_KEYS = (PYTHIA_160M_BINDING_KEY, QWEN_05B_INSTRUCT_BINDING_KEY)
+ACTIVE_MODEL_ENV = "ATLAS_WORKER_MODEL"
+DEFAULT_MODEL_KEY = PYTHIA_160M_BINDING_KEY
+
+
+# Bindings are built per call, never snapshotted at import. The pinned
+# constants above are the single source of truth, and the fail-closed identity
+# tests substitute them at runtime; an import-time snapshot would silently
+# ignore that substitution and make those tests assert nothing.
+def _pythia_binding() -> ModelBinding:
+    return ModelBinding(
+        key=PYTHIA_160M_BINDING_KEY,
+        model_id=PYTHIA_160M_MODEL_ID,
+        revision=PYTHIA_160M_REVISION,
+        weights_filename=PYTHIA_160M_WEIGHTS_FILENAME,
+        weights_sha256=PYTHIA_160M_WEIGHTS_SHA256,
+        weights_bytes=PYTHIA_160M_WEIGHTS_BYTES,
+        artifacts=MappingProxyType(dict(PYTHIA_160M_ARTIFACTS)),
+        arch=_PYTHIA_ARCH,
+        worker_version="m2-real-pythia",
+    )
+
+
+def _qwen_05b_instruct_binding() -> ModelBinding:
+    return ModelBinding(
+        key=QWEN_05B_INSTRUCT_BINDING_KEY,
+        model_id=QWEN_05B_INSTRUCT_MODEL_ID,
+        revision=QWEN_05B_INSTRUCT_REVISION,
+        weights_filename=QWEN_05B_INSTRUCT_WEIGHTS_FILENAME,
+        weights_sha256=QWEN_05B_INSTRUCT_WEIGHTS_SHA256,
+        weights_bytes=QWEN_05B_INSTRUCT_WEIGHTS_BYTES,
+        artifacts=MappingProxyType(dict(QWEN_05B_INSTRUCT_ARTIFACTS)),
+        arch=_QWEN_05B_INSTRUCT_ARCH,
+        worker_version="stageb-real-qwen2.5-0.5b-instruct",
+    )
+
+
+_BINDING_BUILDERS: Mapping[str, Any] = MappingProxyType(
+    {
+        PYTHIA_160M_BINDING_KEY: _pythia_binding,
+        QWEN_05B_INSTRUCT_BINDING_KEY: _qwen_05b_instruct_binding,
+    }
+)
+
+
+def active_model_binding() -> ModelBinding:
+    """Return the selected pinned binding, defaulting to the pythia pin.
+
+    An unset or empty environment variable selects pythia, so existing callers
+    and receipts are unchanged. An unrecognized value fails closed rather than
+    silently falling back, because a wrong model would silently invalidate every
+    identity assertion the loader makes.
+    """
+
+    raw = os.environ.get(ACTIVE_MODEL_ENV, "").strip().lower()
+    if not raw:
+        return _BINDING_BUILDERS[DEFAULT_MODEL_KEY]()
+    builder = _BINDING_BUILDERS.get(raw)
+    if builder is None:
+        raise RuntimeError(
+            f"{ACTIVE_MODEL_ENV}={raw!r} is not a pinned model binding; "
+            f"expected one of {sorted(_BINDING_BUILDERS)}"
+        )
+    return builder()
+
+
 _COMMIT_SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 WORKER_PROFILE_ENV = "ATLAS_WORKER_PROFILE"
 TORCH_NATIVE_JIT_DISABLE_ENV = "TORCH_DISABLE_NATIVE_JIT"
@@ -105,6 +252,28 @@ PYTHIA_160M_MANIFEST = ModelManifest(
 )
 
 
+def bootstrap_manifest(binding: ModelBinding | None = None) -> ModelManifest:
+    """Return the unloaded bootstrap manifest for a pinned binding.
+
+    The pythia binding returns the historical ``PYTHIA_160M_MANIFEST`` object
+    unchanged so existing receipts and comparisons are byte-identical.
+    """
+
+    binding = binding or active_model_binding()
+    if binding.key == PYTHIA_160M_BINDING_KEY:
+        return PYTHIA_160M_MANIFEST
+    return ModelManifest.model_validate(
+        {
+            **PYTHIA_160M_MANIFEST.model_dump(),
+            "model_id": binding.model_id,
+            "tokenizer_id": binding.model_id,
+            "model_arch": binding.arch.model_dump(),
+            "worker_version": binding.worker_version,
+            "requested_revision": binding.revision,
+        },
+    )
+
+
 # --- loaded-model state -------------------------------------------------
 
 
@@ -125,15 +294,16 @@ class LoadedModel:
 
     @property
     def is_real(self) -> bool:
+        binding = active_model_binding()
         return bool(
             self.manifest.is_real_model
             and self.manifest.execution_kind == "real_model_weights"
             and self.manifest.revision_verified
-            and self.manifest.resolved_revision == PYTHIA_160M_REVISION
+            and self.manifest.resolved_revision == binding.revision
             and self.manifest.weights_hash_verified
-            and self.manifest.weights_filename == PYTHIA_160M_WEIGHTS_FILENAME
-            and self.manifest.weights_sha256 == PYTHIA_160M_WEIGHTS_SHA256
-            and self.manifest.weights_bytes == PYTHIA_160M_WEIGHTS_BYTES
+            and self.manifest.weights_filename == binding.weights_filename
+            and self.manifest.weights_sha256 == binding.weights_sha256
+            and self.manifest.weights_bytes == binding.weights_bytes
             and self.manifest.model_identity_status
             == "PINNED_REVISION_AND_WEIGHTS_SHA256"
             and isinstance(
@@ -199,7 +369,8 @@ def _validated_resolved_revision(model: Any) -> str:
     This is revision attestation only; it is not a full weights digest.
     """
 
-    requested = PYTHIA_160M_REVISION
+    binding = active_model_binding()
+    requested = binding.revision
     if not _COMMIT_SHA_RE.fullmatch(requested):
         raise RuntimeError("configured Pythia revision is not a full lowercase commit SHA")
     config = getattr(model, "config", None)
@@ -210,10 +381,10 @@ def _validated_resolved_revision(model: Any) -> str:
         raise RuntimeError("loaded model revision does not match the pinned requested revision")
 
     expected = {
-        "hidden_size": _PYTHIA_ARCH.hidden_size,
-        "intermediate_size": _PYTHIA_ARCH.mlp_intermediate_dim,
-        "num_hidden_layers": _PYTHIA_ARCH.n_layers,
-        "num_attention_heads": _PYTHIA_ARCH.n_heads,
+        "hidden_size": binding.arch.hidden_size,
+        "intermediate_size": binding.arch.mlp_intermediate_dim,
+        "num_hidden_layers": binding.arch.n_layers,
+        "num_attention_heads": binding.arch.n_heads,
     }
     for field_name, expected_value in expected.items():
         observed = getattr(config, field_name, None)
@@ -254,19 +425,20 @@ def _validated_model_artifacts(
     or a scientific-result attestation.
     """
 
+    binding = active_model_binding()
     expected_artifacts = {
-        **PYTHIA_160M_ARTIFACTS,
-        PYTHIA_160M_WEIGHTS_FILENAME: (
-            PYTHIA_160M_WEIGHTS_SHA256,
-            PYTHIA_160M_WEIGHTS_BYTES,
+        **binding.artifacts,
+        binding.weights_filename: (
+            binding.weights_sha256,
+            binding.weights_bytes,
         ),
     }
     observed: dict[str, tuple[str, int]] = {}
     for filename, (expected_digest, expected_bytes) in expected_artifacts.items():
         raw_path = hf_hub_download(
-            repo_id=PYTHIA_160M_MODEL_ID,
+            repo_id=binding.model_id,
             filename=filename,
-            revision=PYTHIA_160M_REVISION,
+            revision=binding.revision,
             local_files_only=True,
         )
         if not isinstance(raw_path, (str, os.PathLike)):
@@ -289,8 +461,9 @@ def _validated_weights_artifact(hf_hub_download: Any) -> tuple[str, str, int]:
     """Compatibility wrapper returning the verified weights identity tuple."""
 
     observed = _validated_model_artifacts(hf_hub_download)
-    digest, byte_count = observed[PYTHIA_160M_WEIGHTS_FILENAME]
-    return PYTHIA_160M_WEIGHTS_FILENAME, digest, byte_count
+    weights_filename = active_model_binding().weights_filename
+    digest, byte_count = observed[weights_filename]
+    return weights_filename, digest, byte_count
 
 
 def _validate_model_execution_layout(
@@ -482,10 +655,11 @@ def warm_load() -> LoadedModel:
             from transformers import AutoModelForCausalLM, AutoTokenizer
             from huggingface_hub import hf_hub_download
 
+            binding = active_model_binding()
             logger.info(
                 "warm_load: loading %s at pinned revision %s",
-                PYTHIA_160M_MODEL_ID,
-                PYTHIA_160M_REVISION,
+                binding.model_id,
+                binding.revision,
             )
             cuda_available = bool(torch.cuda.is_available())
             if profile == PRODUCTION_PROFILE and not cuda_available:
@@ -494,8 +668,8 @@ def warm_load() -> LoadedModel:
                 )
             artifact_observations = _validated_model_artifacts(hf_hub_download)
             tokenizer = AutoTokenizer.from_pretrained(
-                PYTHIA_160M_MODEL_ID,
-                revision=PYTHIA_160M_REVISION,
+                binding.model_id,
+                revision=binding.revision,
                 local_files_only=True,
             )
             load_dtype, execution_dtype = _resolve_model_dtype(
@@ -503,8 +677,8 @@ def warm_load() -> LoadedModel:
                 cuda_available=cuda_available,
             )
             model = AutoModelForCausalLM.from_pretrained(
-                PYTHIA_160M_MODEL_ID,
-                revision=PYTHIA_160M_REVISION,
+                binding.model_id,
+                revision=binding.revision,
                 use_safetensors=True,
                 dtype=load_dtype,
                 attn_implementation="eager",
@@ -513,9 +687,9 @@ def warm_load() -> LoadedModel:
             model.eval()
             resolved_revision = _validated_resolved_revision(model)
             weights_sha256, weights_bytes = artifact_observations[
-                PYTHIA_160M_WEIGHTS_FILENAME
+                binding.weights_filename
             ]
-            weights_filename = PYTHIA_160M_WEIGHTS_FILENAME
+            weights_filename = binding.weights_filename
             # Development may run the bounded CPU canary. Production requires
             # CUDA; the resolved finite dtype is preserved across the move.
             if cuda_available:
@@ -552,7 +726,7 @@ def warm_load() -> LoadedModel:
 
             real_manifest = ModelManifest.model_validate(
                 {
-                    **PYTHIA_160M_MANIFEST.model_dump(),
+                    **bootstrap_manifest(binding).model_dump(),
                     "is_real_model": True,
                     "execution_kind": "real_model_weights",
                     "resolved_revision": resolved_revision,
@@ -608,10 +782,11 @@ def get_manifest(model_id: str) -> ModelManifest:
     M2: prefers the LIVE manifest (with is_real_model from warm_load)
     over the static demo manifest if a load has happened.
     """
-    if model_id != PYTHIA_160M_MODEL_ID:
+    active = active_model_binding()
+    if model_id != active.model_id:
         raise ValueError(
             f"model_id={model_id!r} not supported at v0.1. "
-            f"Only {PYTHIA_160M_MODEL_ID} is wired."
+            f"Only {active.model_id} is wired."
         )
     loaded = get_loaded_model()
     return loaded.manifest

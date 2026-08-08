@@ -483,12 +483,12 @@ The test
 subsequently reproduced a post-validation assignment bypass. The retained
 repair freezes the public receipt and its nested carriers and revalidates
 copy-with-update. The current working-tree successor retains the **32/32 focused
-numeric** receipt and confirms **391/391 complete worker**. Their verifier-canonical
+numeric** receipt and confirms **400/400 complete worker**. Their verifier-canonical
 test-ID-set
 SHA-256 values are, respectively,
 `12602041756f20d1afd402fa56968660839e5eb1098438ba84c69bff8de7050b`
 and
-`fd8367b867cb6589cc50424d7a1cecabc56bf85331bb4fd87b844e7fd3004580`.
+`b0aeb3ce2dab1d505622ad2ee856bc0befbaeb9d4f605c121bc82da07a9c3ccf`.
 The 27-test increase is exactly the already-committed finite no-JIT BF16,
 strict protocol-client, and live request/response worker tranches. The
 time-indexed v0.2 OCI candidate separately preserves its 364/364 issuance
@@ -868,7 +868,7 @@ The minimum defensible order is:
    callback/Object-Lock seam, 134/134 prospective lifecycle/SQLite/dark-route,
    98/98 admitted-adapter/configured-reconciliation, 27/27 retained local
    GPU/joined evidence,
-   32/32 focused numeric, 391/391 complete-worker, and 78/78
+   32/32 focused numeric, 400/400 complete-worker, and 78/78
    API/launcher/fleet/state receipts, the earlier 290/290 checkpoint, and every
    counterexample, including the current ephemeral same-process and retained
    raw-evidence validations;

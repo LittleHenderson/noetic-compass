@@ -377,10 +377,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "targets": ["tests"],
         "pytest_plugins": ["pytest_asyncio.plugin"],
         "repo_import_roots": [f"{WORKER_ROOT_REL}/scripts", API_ROOT_REL],
-        "expected_tests": 391,
+        "expected_tests": 400,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "FD8367B867CB6589CC50424D7A1CECABC56BF85331BB4FD87B844E7FD3004580"
+            "B0AEB3CE2DAB1D505622AD2EE856BC0BEFBAEB9D4F605C121BC82DA07A9C3CCF"
         ),
     },
     "Live trace worker numeric red team": {
@@ -3754,7 +3754,7 @@ def verify_adversarial_review() -> None:
         "stream abort after every attempted intervention",
         "public-schema forgery of the retired causal-success state",
         "32/32 focused",
-        "391/391 complete worker",
+        "400/400 complete worker",
         "155 passed tests plus 106 subtests",
         "CF033F2E7F519AAD6738D596A694728FD4173CFA12DD8A8FE094823215D4CF8A",
         "35 tests plus 45 subtests",
@@ -3763,7 +3763,7 @@ def verify_adversarial_review() -> None:
         "confirmed 290/290 receipt",
         "12602041756f20d1afd402fa56968660839e5eb1098438ba84c69bff8de7050b",
         "94566203b3e0ff79b3224c1c5a073698ca99d3c08bc1119a9082e42af4b178bd",
-        "fd8367b867cb6589cc50424d7a1cecabc56bf85331bb4fd87b844e7fd3004580",
+        "b0aeb3ce2dab1d505622ad2ee856bc0befbaeb9d4f605c121bc82da07a9c3ccf",
         "78/78",
         "603debf7df9ac7b5a69543c3736f4cd38692d3330690a7559a6f9de6f0e2af77",
         "17/17",

@@ -12,7 +12,7 @@
   "product_claim_effect": "NONE",
   "manifest_self_hash": null,
   "generated_by": "scripts/build_project_coherence_gate5_manifest.py",
-  "artifact_count": 493,
+  "artifact_count": 494,
   "artifacts": [
     {
       "path": ".gitattributes",
@@ -64,7 +64,7 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_ADVERSARIAL_REVIEW_v0.1.md",
-      "sha256": "68C22D419CA356BC4E8DB755AA01F80471741C38C2A066ECCE64E529222F0A18",
+      "sha256": "0B6C53250C5F41FD6DB26751E4E3D2ACAF21688D5EAA6DAC9E6DA7B70CEFFC50",
       "bytes": 52515,
       "role": "gate5_control_artifact"
     },
@@ -100,7 +100,7 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/GATE5_REVIEW_MATRIX_v0.1.json",
-      "sha256": "4642569AE315DC3AAA53275BA315B89AFA80750E72CD97FEA8170216EC7066A8",
+      "sha256": "32FCED070E4CF617E5BADF6A3ACC34AE48968C0186BB8D177BDFF9865BC85446",
       "bytes": 96070,
       "role": "gate5_control_artifact"
     },
@@ -118,7 +118,7 @@
     },
     {
       "path": "docs/working/project_coherence/gate5/README.md",
-      "sha256": "F52129E0485CEE0B734EC26DC819B14FA556A69CDA02E7FADEB67A1F5CA4A04A",
+      "sha256": "BCDBB926007E135B90E0262BF3DCE62263957B0D4F1DE145691551ABC74161B3",
       "bytes": 36215,
       "role": "gate5_control_artifact"
     },
@@ -2152,8 +2152,8 @@
     },
     {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/model_loader.py",
-      "sha256": "AEA57890A3E18850E496E358BBAC12DDA03A62C65AC76219A14C4A32CE07510A",
-      "bytes": 23699,
+      "sha256": "A0B1FAEF05C9D9D5CBA442D796F2E61E87DE26102871106270202CB26C1990DB",
+      "bytes": 29875,
       "role": "gate5_worker_source"
     },
     {
@@ -2517,6 +2517,12 @@
       "role": "gate5_worker_test"
     },
     {
+      "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_model_binding_selection.py",
+      "sha256": "82942840E293623E851B997947BC3C496367A4FB8304B11F488F33C321EA4463",
+      "bytes": 4308,
+      "role": "gate5_worker_test"
+    },
+    {
       "path": "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_model_identity.py",
       "sha256": "25971B24D67E726BFF1D12686A8157FE67513730D065B8E5084E4C493F10BACC",
       "bytes": 19511,
@@ -2842,7 +2848,7 @@
     },
     {
       "path": "scripts/verify_project_coherence_gate5.py",
-      "sha256": "90A9BC1F9A09EAD59EEADB7E65730A5F71D54010C43E4E90F664115B781E82E2",
+      "sha256": "EC661E4E4011DFA70ED4B72F8896FABD873FE43AAAD4980B6B66BFE85C0CB956",
       "bytes": 292406,
       "role": "gate5_verification_control"
     },
@@ -3065,9 +3071,9 @@
         "noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts",
         "noetic-compass-scaffold/noetic-compass"
       ],
-      "expected_tests": 391,
+      "expected_tests": 400,
       "expected_subtests": 0,
-      "expected_test_ids_sha256": "FD8367B867CB6589CC50424D7A1CECABC56BF85331BB4FD87B844E7FD3004580",
+      "expected_test_ids_sha256": "B0AEB3CE2DAB1D505622AD2EE856BC0BEFBAEB9D4F605C121BC82DA07A9C3CCF",
       "test_id_canonicalization": "SAME-PROCESS EXECUTED-NODE SHA-256 over ordinal-sorted unique pytest node IDs normalized only to POSIX slashes, encoded UTF-8 as one ID plus LF per line; collection, start, finish, and all-pass outcomes are bound in one local subprocess receipt"
     },
     {
