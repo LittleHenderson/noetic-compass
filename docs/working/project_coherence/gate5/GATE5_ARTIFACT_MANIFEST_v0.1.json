@@ -12,7 +12,7 @@
   "product_claim_effect": "NONE",
   "manifest_self_hash": null,
   "generated_by": "scripts/build_project_coherence_gate5_manifest.py",
-  "artifact_count": 522,
+  "artifact_count": 529,
   "artifacts": [
     {
       "path": ".gitattributes",
@@ -777,15 +777,51 @@
       "role": "gate5_control_artifact"
     },
     {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/evidence_packet_builder_test_receipt.json",
+      "sha256": "670DC44DB21F29A66DD9D7A8E1589D3FD507B099FCB9836DD15A3B93BD970D07",
+      "bytes": 2944,
+      "role": "gate5_control_artifact"
+    },
+    {
       "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/evidence_packet_plan.json",
       "sha256": "A035C5DCB352AB8E795833D1334DE00DA3F4D8E0FE8C058F82F0EB0D67582331",
       "bytes": 7076,
       "role": "gate5_control_artifact"
     },
     {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/execution_activation_receipt.json",
+      "sha256": "155B1490473E7503790ADFA61CBA605D478D3C5E3F07FB699EE5C0A0F51FF53C",
+      "bytes": 1129,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/execution_identity_amendment.json",
+      "sha256": "46F648232E29D5E9021A3EFFE08B236E6988FB21FFD3181BCB7A79ACA6F36841",
+      "bytes": 1533,
+      "role": "gate5_control_artifact"
+    },
+    {
       "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/execution_identity_amendment_plan.json",
       "sha256": "1601031D2C9CAD02DE8CFB9323AB603C135BC9BA2F7A53170C7E107299193FF2",
       "bytes": 2101,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/final_executable_code_identity.json",
+      "sha256": "15B370788BE38AC8AEFA245A4931EE23687C88102D5998D5D8D819CA9AA27C2E",
+      "bytes": 2102,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/final_executable_source_manifest.json",
+      "sha256": "0A063ACCBCF6A52B4C6E22A56AC685970F6E77FDC5522ACABE0CD805042A4B31",
+      "bytes": 5467,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/final_runtime_image_identity.json",
+      "sha256": "D8A42CC8DEFD6D3CB38E75984E6F52E0D08ADD15654CBEE6E3DC1E7FB148E7BC",
+      "bytes": 8837,
       "role": "gate5_control_artifact"
     },
     {
@@ -816,6 +852,12 @@
       "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/provider_budget.json",
       "sha256": "F41949E7F96FA9566541F9B6149F5DF627325F31A48ACF2FDE68E40B0D96E6F5",
       "bytes": 630,
+      "role": "gate5_control_artifact"
+    },
+    {
+      "path": "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1/qwen_probe_adapter_test_receipt.json",
+      "sha256": "A0A097771D3B74080F71F6138CC7A59C79455D757BB9404E910480521FFB6F51",
+      "bytes": 1697,
       "role": "gate5_control_artifact"
     },
     {
