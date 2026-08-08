@@ -1,0 +1,236 @@
+\documentclass[11pt]{amsart}
+\usepackage[margin=1.25in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{axiom}[theorem]{Axiom}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{convention}[theorem]{Convention}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{obligation}[theorem]{Open Obligation}
+
+\providecommand{\llbracket}{[\![}
+\providecommand{\rrbracket}{]\!]}
+\newcommand{\NF}{\mathrm{NF}}
+\newcommand{\id}{\mathrm{id}}
+\newcommand{\im}{\mathrm{im}}
+\newcommand{\rank}{\mathrm{rank}}
+\newcommand{\tr}{\mathrm{tr}}
+
+\begin{document}
+
+\title[TKS v8.0: A typed finite-function kernel]{TKS v8.0: A typed finite-function kernel for cognitive-architecture semantics}
+\author{Little Henderson}
+\thanks{White paper v0.1, 2026-08-07. Artifact status: \textsc{draft / gate 1 prototype / ring 4 / not licensed / not frozen}. Drafting this paper promotes no claim. Source basis: \texttt{TKS\_V8\_CORE\_FORMAL\_SPEC\_AND\_PROOF\_OBLIGATIONS\_v0.1.md} (SHA-256 \texttt{F740BA05\ldots}), prototype manifest v0.1.0, implementation \texttt{src/tks\_v8\_core/}.}
+\date{August 7, 2026}
+
+\begin{abstract}
+We present a deliberately small, executable reference kernel for the typed-composition layer of the Tootra Knowledge System (TKS) and its secular derivative, the Cognitive Architecture System (CAS). The kernel supplies named finite objects with explicitly ordered carriers; total finite-function arrows with declared source and target and partial, type-checked categorical composition; a hard separation between one-carrier endomaps, which admit monoid powers, and heterogeneous semigroupoid paths, which do not; a deterministic standard-basis lift into finite-dimensional linear operators with an exact operator-norm theorem; and stable denotational normal forms defined by declared generator order and shortlex minimization over a completed finite closure. The kernel is an independent reference model: it does not modify, replace, or certify the active CAS notation compiler, maps no canonical Noetic or CAS construct onto kernel arrows, and makes no empirical cognitive claim. Evidence is precisely bounded: pointwise proofs and bounded exhaustive executable tests ($19{,}683$ associativity triples, $289$ endomaps through carrier size four, $1{,}678$ lift-functor composition pairs), plus a pinned Lean~4.32.1 formal seed that kernel-checks a named subset of the results under a single standard axiom dependency. Universal formalizations, semantic transfer to CAS, compiler integration, and independent specialist review remain open and are enumerated as explicit proof obligations.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+
+Prior TKS/CAS formal artifacts (through v7.4 and the v7.5--v7.7 extensions) define a rich ontology---ten Noetics, four Domains, seven Drives, four Registers, and a generative-operation notation governed by the v7.7 operator discipline---but the production notation compiler enforces value \emph{kinds} (state, drive, relation, program) rather than categorical \emph{source and target objects}. Three failure modes follow, each observed during the Project Coherence mathematical red-team audit:
+
+\begin{enumerate}
+\item \textbf{Untyped composition.} Nothing in a kind system prevents composing two operations whose intermediate objects disagree, silently producing an expression with no denotation.
+\item \textbf{Invalid power inference.} A sequence of heterogeneous, time-varying generators is not an element of one finite semigroup; treating an arbitrary generator sequence as one operator iterated $n$ times licenses false fixed-point and idempotence conclusions.
+\item \textbf{Nondeterministic identity.} When carrier order is left to hash order, basis indices, denotations, and canonical representatives silently depend on interpreter state, which destroys replayability.
+\end{enumerate}
+
+TKS v8.0 answers these with the smallest kernel that makes each failure a type error, while explicitly refusing to over-claim: the kernel is a semantic substrate that \emph{future} TKS/CAS constructs may be mapped onto after review, not a formalization of the existing canon.
+
+\section{The typed finite-function category}
+
+\begin{definition}[Objects]\label{def:object}
+An object is a pair $X=(\mathrm{name}_X,\mathrm{carrier}_X)$ where $\mathrm{carrier}_X$ is a finite, explicitly ordered sequence of distinct hashable elements. Object identity includes the declared name as well as the carrier.
+\end{definition}
+
+Including the name in identity prevents accidental coercion between semantically distinct objects that happen to have equal cardinality or equal elements. All order-sensitive inputs (carrier elements, arrow mappings, path arrows, word labels, catalog generators, lift coordinate vectors) reject sets, mappings, and one-shot iterables: callers must provide a replayable ordered sequence, because order changes basis indices, denotations, and shortlex rank.
+
+\begin{definition}[Arrows]\label{def:arrow}
+An arrow judgment $f : X \to Y$ is a total map from every standard source index of $X$ to one standard target index of $Y$. Two arrows are extensionally equal when source, target, and the full mapping tuple agree; presentation names do not affect equality.
+\end{definition}
+
+\begin{definition}[Identity and composition]\label{def:comp}
+For each object $X$, $\id_X(i)=i$. Given $f : X \to Y$ and $g : Y \to Z$,
+\[
+(g \circ f)(i) = g(f(i)) : X \to Z .
+\]
+The implementation rejects $g \circ f$ unless the declared target of $f$ \emph{equals} the declared source of $g$; no cardinality-only or carrier-only coercion is performed.
+\end{definition}
+
+\begin{proposition}[Category laws]\label{prop:laws}
+Left identity, right identity, and associativity hold for typed total finite functions under Definition~\textup{\ref{def:comp}}.
+\end{proposition}
+
+\begin{proof}
+Pointwise: $(f \circ \id_X)(i) = f(i)$, $(\id_Y \circ f)(i) = f(i)$, and $((h \circ g) \circ f)(i) = h(g(f(i))) = (h \circ (g \circ f))(i)$ for all standard indices $i$.
+\end{proof}
+
+\begin{remark}
+The executable suite exercises these laws exhaustively on a bounded family ($19{,}683$ three-point associativity triples), and a pinned Lean module kernel-checks the identity and associativity lemmas exactly. Bounded exhaustive testing is not proof-assistant verification of the Python implementation; the Python-to-Lean equivalence remains open.
+\end{remark}
+
+\subsection{Endomaps versus semigroupoid paths}
+
+The kernel's central discipline separates two constructions that informal notation tends to conflate.
+
+\begin{definition}[Endomap]
+$\mathrm{Endomap}(f)$ is constructible only when $f : X \to X$. It admits the monoid power $f^n$ for $n \ge 0$, with $f^0 = \id_X$.
+\end{definition}
+
+\begin{definition}[Semigroupoid path]
+A semigroupoid path is a nonempty sequence
+\[
+X_0 \xrightarrow{f_1} X_1 \xrightarrow{f_2} \cdots \xrightarrow{f_n} X_n
+\]
+whose adjacent object types match. It may cross carriers and has a typed composite, but it \emph{intentionally has no power operation}.
+\end{definition}
+
+The missing power operation is the point: it blocks the invalid inference from arbitrary typed or time-varying generator sequences to one finite semigroup element.
+
+\begin{theorem}[Safe finite power]\label{thm:factorial}
+For a finite endomap $f : X \to X$, the power $f^{\,|X|!}$ is idempotent.
+\end{theorem}
+
+\begin{proof}
+For $|X| \ge 2$: after $|X|!$ iterations every point of the functional graph of $f$ has entered its cycle, and every possible cycle length $\ell \le |X|$ divides $|X|!$; a further $|X|!$ iterations therefore leaves every value unchanged, so $f^{\,|X|!} \circ f^{\,|X|!} = f^{\,|X|!}$. The empty and one-point cases are immediate.
+\end{proof}
+
+\begin{remark}
+This is a standard finite-semigroup result; the kernel contributes an implementation tested exhaustively for carriers through size four ($289$ endomaps). Its Lean formalization remains open (Obligation~PO-04). Exponentiation by squaring uses bounded internal presentation names (bit length plus a short SHA-256 label for large exponents), so name construction cannot exceed the exponent's bit length; regression tests cover $2^{30}$ and $10^{5000}$.
+\end{remark}
+
+\section{The deterministic standard-basis lift}
+
+\begin{definition}[Lift]
+For $f : X \to Y$, let $H_X$ and $H_Y$ be the finite-dimensional Hilbert spaces with orthonormal bases indexed by $X$ and $Y$. The lift is the linear map
+\[
+A_f : H_X \to H_Y, \qquad A_f\, e_x = e_{f(x)} .
+\]
+\end{definition}
+
+\begin{theorem}[Exact operator norm]\label{thm:norm}
+For nonempty $X$, with the empty-domain value defined as zero,
+\[
+\lVert A_f \rVert^2 \;=\; \max_{y \in Y}\, \bigl|f^{-1}(y)\bigr| .
+\]
+\end{theorem}
+
+\begin{proof}
+The $(x,x')$ entry of $A_f^{*} A_f$ equals $1$ exactly when $f(x)=f(x')$. Grouping the input basis by fibers, this Gram matrix is a direct sum of all-ones blocks $J_m$, one per nonempty fiber. The eigenvalues of $J_m$ are $m$ (once) and $0$ (multiplicity $m-1$). Hence the largest eigenvalue of $A_f^{*}A_f$ is the maximum fiber size, which is $\lVert A_f\rVert^2$.
+\end{proof}
+
+\begin{proposition}[Implemented consequences]\label{prop:conseq}
+$\tr(A_f^{*}A_f) = |X|$; $\rank(A_f) = |\im(f)|$; and $A_f$ is an isometry if and only if $f$ is injective.
+\end{proposition}
+
+The kernel keeps three operators distinct: $A_f^{*}A_f$ is the input-collision Gram matrix; $A_f A_f^{*}$ is diagonal with fiber sizes; and the codomain support projector is the separate diagonal $0/1$ matrix marking nonempty fibers.
+
+\begin{remark}[Permanent counterexample fixture]\label{rem:constant}
+For the constant map on two points,
+\[
+A_f = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix},
+\]
+the lift is idempotent yet has norm $\sqrt{2}$, trace-Gram $2$, rank $1$, and is neither a partial isometry nor an orthogonal projector. This fixture permanently blocks the tempting but false general claims ``deterministic lifts are contractive'' and ``idempotent lifts are projectors.''
+\end{remark}
+
+\begin{proposition}[Functoriality]\label{prop:functor}
+The lift satisfies $A_{\id_X} = I_{H_X}$ and $A_{g \circ f} = A_g A_f$.
+\end{proposition}
+
+\begin{remark}
+Functoriality is checked by exact matrix equality for every valid typed-map pair on carriers through size three ($1{,}678$ composition pairs, including empty carriers). The Lean seed additionally kernel-checks identity entrywise and on basis vectors, typed composition on basis vectors, and relational-product support composition. Finite-sum numerical matrix multiplication and arbitrary-vector linearity remain open.
+\end{remark}
+
+\section{Stable denotational normal forms}
+
+\begin{definition}[Shortlex normal form]\label{def:nf}
+Let $G = (g_0,\ldots,g_{k-1})$ be a finite, explicitly ordered set of typed generators. A typed word carries a start object, and its labels must compose in sequence. Shortlex compares word length first, then the declared generator rank sequence. For a reachable finite-function denotation $a$,
+\[
+\NF_G(a) \;=\; \text{the shortlex-least well-typed word } w \text{ with } \llbracket w \rrbracket = a .
+\]
+The empty word at each object denotes its identity.
+\end{definition}
+
+\begin{proposition}[Soundness of pruning; finiteness]\label{prop:closure}
+The closure algorithm that explores words in shortlex order and expands only the first representative of each extensional denotation computes $\NF_G$ on the completed closure, which is finite.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+If two prefixes have the same typed denotation, appending the same well-typed suffix preserves both denotational equality and the shortlex advantage of the earlier prefix; pruning the later prefix therefore never removes a least representative. Finiteness holds because for finite objects $X,Y$ there are at most $|Y|^{|X|}$ total maps $X \to Y$ and the object set is finite.
+\end{proof}
+
+\begin{remark}[Boundaries]
+The implementation returns only after closure completion, deduplicates queued candidates by typed denotation, and raises a resource error rather than ever returning a partial table as canonical. Two boundaries are explicit: (i) this is denotational minimization over a completed finite closure, \emph{not} a claim that any inherited TKS rewrite system terminates or is confluent; (ii) changing the declared generator order may change the selected representative without changing its denotation.
+\end{remark}
+
+\section{Formal verification status}
+
+A pinned, isolated Lean~4.32.1 toolchain kernel-checks a named subset of the results. The verifier hardcodes the sole allowed standard axiom (\texttt{propext}), rejects project axiom declarations and \texttt{sorry}, checks source hashes, builds through Lake, and audits exact theorem dependency reports.
+
+\emph{Verified scope}: typed total-function identities and associativity; endomap-only powers; the exact two-state constant-lift expansion and noncontractivity counterexample (Remark~\ref{rem:constant}); deterministic-lift identity entrywise and on basis vectors; typed basis composition; relational-product support composition.
+
+\emph{Open scope}: the universal lift-norm theorem (Theorem~\ref{thm:norm}); the generic bridge from the two-state fixture to matrix, Gram, trace, and rank definitions; finite-sum numerical matrix multiplication; arbitrary-vector linear extension; Theorem~\ref{thm:factorial}; shortlex leastness; any presheaf, sheaf, or product-site formalization.
+
+\section{Proof and integration ledger}
+
+\begin{center}
+\small
+\begin{tabular}{@{}llp{5.2cm}@{}}
+\toprule
+ID & Obligation & Status \\
+\midrule
+PO-01 & Identity/associativity of composition & partial formal verification present \\
+PO-02 & Reject every source/target mismatch & executable validation \\
+PO-03 & Powers only for endomaps & executable validation \\
+PO-04 & Theorem~\ref{thm:factorial} formalization & standard result; formalization open \\
+PO-05 & Universal norm formula (Thm.~\ref{thm:norm}) & informal proof present; formalization open \\
+PO-06 & Shortlex soundness and leastness & informal argument; formalization open \\
+PO-07 & Independent theorem-prover formalization & partial, present \\
+PO-08 & Reconcile kernel types with corrected v7.4 records & open; not licensed \\
+PO-09 & Integrate with the active notation compiler & open \\
+PO-10 & Independent specialist review & open \\
+PO-11 & Lift functor laws (Prop.~\ref{prop:functor}) & partial formal verification; matrix bridge open \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Relation to the wider program}
+
+The kernel is the finite-arrow boundary object for three downstream candidates described in companion papers. \emph{Noetic Topos 2.0} builds its marked context-factor site over a legacy category whose future reconciliation with kernel objects is Obligation~PO-08. \emph{CAS PCBA 8} may adapt only a certified total, finite, deterministic, stateless component transition to a kernel arrow; chains become semigroupoid paths, and feedback powers require a certified endomap. \emph{CAS Core 8} uses the kernel for legacy fractal-digit composition checks with an explicit caller-supplied catalog of typed arrows, failing closed on missing digits or source/target mismatches. In each case the kernel supplies type-correct composition only; no adapter carries an automatic CAS semantic theorem, and mapping the ten canonical Noetics or any CAS construct onto kernel arrows remains ring-4 and not licensed pending review.
+
+\section{What TKS v8.0 does not claim}
+
+Excluded and still open: parsing or evaluating TKS v7.4/v8 surface syntax; mapping canonical Noetics or CAS constructs to kernel arrows; RPM monad data or laws; a rewrite system for inherited TKS equations; Noetic Topos~2.0 coverage and modalities; stochastic kernels, quantum channels, or empirical dynamics; and any transfer from the Ten Advances manuscript. No empirical, cognitive-dynamics, channel-contractivity, or CAS-efficacy claim follows from any result above.
+
+\section{Reproduction}
+
+From the repository root with \texttt{src} on \texttt{PYTHONPATH}:
+\begin{center}
+\texttt{python -m unittest discover -s tests/tks\_v8\_core -v}\\
+\texttt{python scripts/verify\_tks\_v8\_gate1.py}
+\end{center}
+The 2026-08-04 validation snapshot records \textsc{pass} on 20 tests with the bounded exhaustive case counts cited in the abstract. Passing establishes only the behavior covered by this finite executable model; it does not close the open formalization, integration, semantic-transfer, or review obligations.
+
+\section{Conclusion}
+
+TKS v8.0 contributes a disciplined foundation rather than a sweeping theory: typed composition that cannot silently mistype, powers that exist only where a monoid exists, a lift whose exact norm is proved rather than assumed, and canonical forms that are deterministic because their inputs are ordered. The kernel's refusal to encode the TKS/CAS ontology before review is deliberate: the mapping of canon onto substrate is itself a gated research obligation, and preserving that boundary is part of the result.
+
+\begin{thebibliography}{9}
+\bibitem{redteam} Project Coherence, \emph{Mathematical Red-Team Report}, v0.1.
+\bibitem{ledger} Project Coherence, \emph{Theorem Ledger}, v0.1: records \textsc{thm-lift-norm-fiber-formula}, \textsc{thm-lift-occupation-counterexample}, \textsc{thm-finite-idempotent-power}.
+\bibitem{lean} \emph{Lean Proof Manifest}, v0.1: exact scope of the pinned Lean~4.32.1 seed.
+\bibitem{maclane} S.~Mac Lane, \emph{Categories for the Working Mathematician}, 2nd ed., Springer, 1998. Background for the categorical laws exercised; no novelty claimed.
+\end{thebibliography}
+
+\end{document}
