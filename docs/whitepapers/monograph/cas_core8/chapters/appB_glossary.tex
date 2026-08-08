@@ -4,9 +4,9 @@ Terms are listed alphabetically. Each entry gives the v0.1 meaning as used in th
 
 \begin{description}
 
-\item[Advisory lock.] The profile-bound lock through which cooperating compatibility workers serialize execution: 90-second acquisition bound, 10-millisecond poll interval, 10-millisecond post-release scheduler yield, no retry of a failed worker, no fairness claim. Binds only processes that cooperate. (Chapters: Concurrency and Failure Discipline; Threat Model, lock-based denial.)
+\item[Advisory lock.] The profile-bound lock through which cooperating compatibility workers serialize execution: 90-second acquisition bound, 10-millisecond poll interval, 10-millisecond post-release scheduler yield, no retry of a failed worker, no fairness claim. Binds only processes that cooperate. (Chapters: Concurrency and the Failure Taxonomy; Threat Model, lock-based denial.)
 
-\item[Alignment link.] One of the three link kinds; asserts a reviewed structural correspondence between references in different namespaces, weaker than identity and stronger than a hypothesis. Carries its own source and review state. (Chapters: Semantic Identity; Integration Contracts.)
+\item[Alignment link.] One of the three non-identity link kinds; records a documented structural correspondence between references in different namespaces, weaker than identity and stronger than a hypothesis. Carries its own grounding-artifact digest and mandatory note. (Chapters: Semantic Identity; Integration Contracts.)
 
 \item[Ambient evidence.] Evidence in its local, context-bound form: a record true of the host, profile, time, and boundary it names, with no cross-context force. All Core records are ambient; resolution is future topos-side work. (Chapter: Integration Contracts, Noetic Topos section.)
 
@@ -54,13 +54,13 @@ Terms are listed alphabetically. Each entry gives the v0.1 meaning as used in th
 
 \item[Dependency direction (strict).] The integration invariant: companions depend on Core contracts; Core depends on no companion semantics. Grounds the reviewability of the kernel in isolation. (Chapter: Integration Contracts.)
 
-\item[Dependency profile.] The hashed description of a worker's effective environment (module inventory, search paths, platform inputs) used to detect divergence between workers. (Chapters: Concurrency and Failure Discipline; Threat Model, divergence.)
+\item[Dependency profile.] The hashed description of a worker's effective environment (module inventory, search paths, platform inputs) used to detect divergence between workers. (Chapters: Concurrency and the Failure Taxonomy; Threat Model, divergence.)
 
-\item[Deterministic closure.] The eight-step compatibility protocol: verify source hash; hash compiler bytes before execution; force engine profile and frozen policy; reject \texttt{use} imports; execute in a fresh sanitized worker; bind worker runtime pre-execution; serialize via the advisory lock; record identities and boundary; require fresh replay before structural decisions. (Chapter: Worker Protocol.)
+\item[Deterministic closure.] The eight-step compatibility protocol: verify the source hash and hash the compiler bytes before execution; force engine profile and frozen policy; reject \texttt{use} imports; execute in a fresh sanitized worker; bind worker runtime pre-execution; serialize via the advisory lock; record identities and boundary; require fresh replay before structural decisions. (Chapter: Worker Protocol.)
 
 \item[Digest.] A SHA-256 hash over canonical or raw bytes, used as identity for comparison. Digest equality is treated as byte equality under the stated cryptographic assumption. (Chapter: Canonical Evidence Encoding.)
 
-\item[Divergence record.] The bounded error produced when two successful workers disagree on dependency profiles: both profile hashes, at most 32 keyed difference paths, environment values and paths represented only by hashes. (Chapter: Concurrency and Failure Discipline.)
+\item[Divergence record.] The bounded error produced when two successful workers disagree on dependency profiles: both profile hashes, at most 32 keyed difference paths, environment values and paths represented only by hashes. (Chapter: Concurrency and the Failure Taxonomy.)
 
 \item[Effect class.] Decision-model enum separating nonclaim research evidence from claim-bearing effect; the model's load-bearing distinction. (Chapter: Runtime Decision Model.)
 
@@ -90,11 +90,11 @@ Terms are listed alphabetically. Each entry gives the v0.1 meaning as used in th
 
 \item[\texttt{legacy\_only}.] The explicit marker of the sole admitted compatibility profile: verified legacy compiler execution for comparison purposes, no CAS v8 semantic translation. (Chapter: Worker Protocol.)
 
-\item[Link kind.] The enum over cross-namespace links: \textsc{translation}, \textsc{alignment}, \textsc{hypothesis}. Deliberately excludes \textsc{identity}; no coercion path from any kind to identity exists. (Chapter: Semantic Identity.)
+\item[Link kind.] The enum over crosswalk relations: \textsc{identity}, \textsc{translation}, \textsc{alignment}, \textsc{hypothesis}. \textsc{identity} is constructible only as a degenerate self-link (the exact same versioned reference at both ends), so every cross-namespace link carries a non-identity kind; no coercion path from any other kind to identity exists. (Chapter: Semantic Identity.)
 
 \item[Marked cover.] A Noetic Topos 2.0 artifact declaring an intended covering family of contexts for a target context. A declaration only: it proves no measurement true, and no operation derives a resolved statement from it. (Chapter: Integration Contracts.)
 
-\item[Namespace.] One of the seven disjoint ontological families of the identity layer: TKS Foundation, TKS World, CAS Drive, CAS Domain, CAS Register, CAS State, Noetic Topos object. Disjointness makes cross-family conflation structurally false. (Chapter: Semantic Identity.)
+\item[Namespace.] One of the disjoint ontological families of the identity layer. The specification names seven families (TKS Foundation, TKS World, CAS Drive, CAS Domain, CAS Register, CAS State, Noetic Topos object); the operative enumeration has nine members, the Noetic family carrying separate namespaces on the TKS and CAS sides. Disjointness makes cross-family conflation structurally false. (Chapter: Semantic Identity.)
 
 \item[Namespace collision (package-path).] The distinct, repository-level failure that bounded the Gate-4 receipt: four pre-existing collisions among package paths in the wider monorepo surfaced by the repository-wide collector after 1{,}200 items, precluding any repository-wide claim. (Chapter: Evidence, Obligations, and Program.)
 

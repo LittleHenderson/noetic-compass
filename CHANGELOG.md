@@ -4,6 +4,52 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-08 — CAS Core 8 monograph: 17-failure-mode audit + corrections (11-agent workflow)
+
+- Ran an 11-agent audit workflow over `docs/whitepapers/monograph/cas_core8/`
+  covering the 17 standard AI-writing failure modes (hallucinated citations,
+  citation-claim mismatch, data fabrication/reconciliation, stale literature,
+  substance, long-range consistency, style tells, scholarly practice,
+  figure/equation defects). 98 raw findings; ~60 distinct corrections applied.
+- Critical fix: ch04 invalid-boundary table had three arithmetically impossible
+  family counts (16/8/2 corrected to 8/12/6; wrong values coincidentally summed
+  to the correct 33, masking the error — verified by exhaustive enumeration).
+- Appendix A + glossary reconciled to the normative chapters: namespace enum
+  7→9 members, link-kind enum 3→4 (IDENTITY exists, guarded to self-links —
+  "omission is the mechanism" was factually wrong), digest case lowercase→
+  uppercase, phantom "review state" link field replaced with the real
+  crosswalk fields (crosswalk_id, source_artifact_sha256, note, boundary),
+  decision-model enums replaced with the actual three-member sets, glossary
+  "eight-step" list fixed to eight items, wrong chapter title corrected.
+- Citation integrity: ch12 claim that RFC 8785 handles "the full JSON value
+  space" corrected to I-JSON (contradicted the RFC and the monograph's own
+  ch02); per-volume bibliography created (the shared 46-entry list printed 41
+  never-cited references against ch02's own "why these five citations"
+  argument); bibitem keys `turnertrojans`→`zourepe` and `opre`→`vaswani`
+  fixed in the shared bibliography (+ 8 cite updates in cas_ohm1); Buckingham
+  title completed; three decorative/misattributed cites fixed or removed.
+- Stale literature: in-toto / SLSA / Sigstore added to ch02's supply-chain
+  survey and ch12's "against supply-chain attestation practice" contrast —
+  the one materially stale area (2021-2025 attestation standardization).
+- Substance: ch09's property-based-testing overclaim corrected to match
+  ch12's own "no fuzzing campaign" account; ch01 "all five drift mechanisms
+  observed" overclaim corrected to the two documented ones; ch11 "(and does)"
+  uncertified companion assertion re-scoped; ch12 rejection-coverage claim now
+  names its silent third family; ch05 declares uppercase digests, the JCS
+  sort-order rationale (as reconstruction), and the bounds' underived status.
+- Scholarly practice: AI-assistance disclosure added to the \thanks block;
+  Reproducible Builds definition and PROV-O glosses now properly quoted;
+  PROV model/ontology conflation fixed; five "Design argument" blocks moved
+  off the amsthm proof environment (no more QED tombstone on non-proofs) via
+  a new additive `designargument` environment in the shared preamble.
+- Style: 19 fixes — the "it is worth X-ing / deserves" metadiscourse tic
+  (66 corpus occurrences, worst cluster in ch09) reduced at its 16 worst
+  sites; two identical chapter-opening and chapter-closing templates varied.
+  Signature-vocabulary scan otherwise clean (delve/tapestry/pivotal etc. = 0).
+- All five monograph PDFs rebuilt (shared preamble/bibliography changed);
+  corrected `MONOGRAPH_CAS_CORE_8_v0.3.pdf` copied to `docs/whitepapers/pdf/`
+  and the user's Downloads copy.
+
 ## 2026-08-08 — Project Coherence monographs v0.3 (book-length, ~934 pp total)
 
 - Expanded the five v0.2 research papers into full `amsbook` monographs under

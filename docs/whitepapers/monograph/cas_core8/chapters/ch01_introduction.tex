@@ -163,8 +163,8 @@ happy to treat equal-looking strings as equal things.
 \end{finding}
 
 Finding~\ref{ch01:finding-conflation} is the single most important
-historical datum behind the kernel's semantic-identity mechanism, and it is
-worth dwelling on \emph{why} the conflation was so easy. The failure was
+historical datum behind the kernel's semantic-identity mechanism, and \emph{why}
+the conflation was so easy is the instructive question. The failure was
 not a failure of knowledge. The people and tools involved had access to
 canon documents stating explicitly that the correspondence was positional.
 The failure was a failure of \emph{representation}: the artifacts in which
@@ -287,8 +287,15 @@ gives the design argument and the regression fixtures.
 Five mechanisms, five answers, one tuple. The taxonomy also explains why
 the kernel treats identity as a five-field structure rather than
 adopting any single-field fix: each field earns its place against a
-named drift mechanism, and prior audits in the program have observed
-every one of the five in the wild in some form. A representation that
+named drift mechanism. Two of the five are documented in the program's
+audit record---token conflation and positional-relabel drift, jointly
+instantiated by Finding~\ref{ch01:finding-conflation}---and definitional
+drift is attested by the canon's own corrected editions. Source and
+version drift and rendering collision are, on the record the sources
+supply, anticipated rather than observed: the first is the bookkeeping
+exposure those corrections create, and the second cannot yet have
+occurred, since the program's prior artifacts were untyped strings with
+no structured rendering to collide. A representation that
 answers fewer than all five leaves the unanswered mechanisms as the new
 path of least resistance.
 
@@ -373,8 +380,8 @@ demonstrated how naturally structural machinery masquerades as authority
 when nothing in the representation distinguishes the two.
 \end{finding}
 
-The self-hashed receipt is worth examining closely because it is the
-purest possible specimen of the failure class. A hash over one's own
+The self-hashed receipt is the purest possible specimen of the
+failure class. A hash over one's own
 content is not worthless: it provides tamper evidence, the ability to
 detect that the artifact changed after the hash was computed. The failure
 is not in computing the hash; it is in the unstated inference from ``this

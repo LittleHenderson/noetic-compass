@@ -198,7 +198,7 @@ the registry type that exist are those whose views are recomputed-and-
 matched parses of their own retained, pinned bytes.
 \end{proposition}
 
-\begin{proof}[Design argument]
+\begin{designargument}
 The initializer receives bytes and parsed components as separate inputs
 and derives the comparison itself; there is no constructor parameter that
 suppresses the check, and the copy machinery cannot bypass the
@@ -211,7 +211,7 @@ value: every consuming operation reruns the reconstruction
 (Rule~\ref{ch06:rule:reconstruct}), so the mutated value fails at first
 use. As always, an adversary who rewrites the kernel's own code is out of
 scope (Chapter 4).
-\end{proof}
+\end{designargument}
 
 The corollary for reviewers is a pleasant inversion of the usual audit
 burden: to check what a v0.1 registry value says, it suffices to check

@@ -46,8 +46,8 @@ input into a latent comparison bug, whereas an encoder that rejects them
 converts the same inputs into visible errors at the moment of encoding, when
 the context needed to fix them still exists.
 
-The design follows the same instinct as content-addressed artifact naming in
-the reproducible-builds discipline \cite{reprobuilds}: identity is a function
+The design follows the same instinct as the reproducible-builds
+discipline \cite{reprobuilds}: identity is a function
 of bytes, so byte production must be an engineered, specified, testable
 process rather than an incidental property of whatever serializer was handy.
 And, per the standing distinction of Chapter 4, none of this confers
@@ -142,7 +142,7 @@ if and only if they present the same canonical content under their
 declared serialization routes.
 \end{proposition}
 
-\begin{proof}[Design argument]
+\begin{designargument}
 Determinism: every source of environmental variation is either
 eliminated (sorted keys remove ordering dependence; minimal separators
 remove formatting dependence; UTF-8 with direct non-ASCII emission
@@ -158,7 +158,7 @@ derivations. The argument is a design argument, checked by the
 acceptance, rejection, and determinism fixture families of the bound
 suite (Section~\ref{ch05:testing}); it is not a machine-checked proof,
 and the open obligation to formalize it is recorded in Chapter 12.
-\end{proof}
+\end{designargument}
 
 Each clause now gets its own section, with the rationale, the worked
 encodings, and the specific incident or attack it answers.
@@ -247,10 +247,11 @@ in an evidence record has exactly one possible derivation.
 Digest \emph{values}, when they appear as fields in payloads and
 records, are governed by the identifier discipline of
 Section~\ref{ch05:identifiers} in its strictest form: exactly sixty-four
-hexadecimal digits, carried in a single declared letter case, with
-case normalization applied at the field boundary so that a digest
-arriving in the other case is normalized on intake rather than stored
-in mixed conventions. The alternative---tolerant, case-insensitive
+hexadecimal digits, carried in uppercase---the profile's declared case,
+matching the reference layer's digest normalization
+(Chapter~\ref{ch03:identity})---with case normalization applied at the
+field boundary so that a digest arriving in lowercase is normalized on
+intake rather than stored in mixed conventions. The alternative---tolerant, case-insensitive
 digest comparison scattered across consumers---is a standing invitation
 for one consumer to forget the tolerance, at which point the same
 digest exists as two unequal strings on two sides of a comparison.
@@ -627,6 +628,14 @@ value referenced twice in different branches) is legal and encodes by
 value at each occurrence, which is the correct evidence semantics---the
 payload commits to content, not to in-memory object graph shape.
 
+The four values themselves are engineering margins, not measured
+quantities: the governing sources record no payload census from which
+they were derived. The honest statement is that each bound sits far
+above every payload the bound suites exercise while remaining cheap to
+enforce, and that a legitimate payload ever approaching a bound is, by
+Remark~\ref{ch05:rem:limits}, a forced profile-version event rather
+than a quiet tuning change.
+
 \begin{remark}[Limits are part of the profile]\label{ch05:rem:limits}
 The four numeric limits are declared constants of the profile, not tuning
 parameters: two implementations of the encoding agree only if they enforce
@@ -756,10 +765,10 @@ normal, rejecting anything that normalization would change. The kernel
 thus never rewrites an identifier; it only refuses non-canonical ones---
 the same reject-don't-repair stance as Section~\ref{ch05:json}, applied
 one tier up. Hash-valued fields get a stricter micro-profile still: exactly
-sixty-four hexadecimal digits, normalized to a single declared letter case
-at the boundary, so that digest comparison is byte comparison everywhere
-downstream and a mixed-case digest can never split into two apparently
-different values.
+sixty-four hexadecimal digits, normalized to uppercase, the declared
+case, at the boundary, so that digest comparison is byte comparison
+everywhere downstream and a mixed-case digest can never split into two
+apparently different values.
 
 \section{Comparison with RFC 8785 (JCS)}\label{ch05:jcs}
 
@@ -809,7 +818,15 @@ differently than code points. The kernel documents this as a divergence
 rather than hiding it: its encoded bytes for such keys are \emph{not}
 JCS bytes. The practical exposure is narrow (non-ASCII keys are rare in
 kernel payloads and forbidden in identifier positions), but narrow is not
-zero, and the profile says so.
+zero, and the profile says so. The governing sources do not record why
+code-point order was preferred over adopting JCS's code-unit sort
+outright; the natural reading, offered as reconstruction rather than
+record, is that code-point comparison is the host language's native
+string order, so the canonical sort needs no hand-written UTF-16
+transcoding step---one fewer transformation in exactly the place where
+this chapter counts transformations as attack surface---and
+byte-for-byte JCS compatibility was already forfeited by the terminator
+and the tagged extension.
 
 \emph{Type discrimination.} JCS canonicalizes JSON's data model and
 therefore cannot distinguish what JSON cannot: it has no tuples, no
@@ -1042,7 +1059,7 @@ exactly the kind of detail it exists to catch.
 
 \section{Placement in the evidence pipeline}\label{ch05:pipeline}
 
-Before the testing discipline, it is worth walking the encoder's actual
+Before the testing discipline, this section walks the encoder's actual
 consumers, because the profile's rules were each motivated by a threat
 in the abstract and each lands somewhere concrete in the kernel.
 
@@ -1113,7 +1130,7 @@ at least a definite, citable, refutable one.
 
 The encoding profile is only as credible as the fixtures that pin it
 down, and the bound Gate-4 suite organizes them into families that
-mirror the rule set. It is worth recording the families explicitly,
+mirror the rule set. The families are recorded explicitly here,
 both because they are the concrete referent of every ``blocked by''
 clause above and because their structure is itself a design artifact:
 each family tests one clause in isolation, so a future regression names

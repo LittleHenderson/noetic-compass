@@ -16,22 +16,22 @@ Table~\ref{tables:tab:semref} lists the five fields of the semantic-reference tu
 \toprule
 Field & Type & Rationale \\
 \midrule
-\texttt{namespace} & enum (7 values) & Places the referent in exactly one ontological family; makes cross-family equality structurally false, blocking conflation (threat T1) at the type level rather than by convention. \\
+\texttt{namespace} & enum (9 values) & Places the referent in exactly one ontological family; makes cross-family equality structurally false, blocking conflation (threat T1) at the type level rather than by convention. \\
 \addlinespace
 \texttt{local\_id} & string (identifier profile) & The referent's name within its namespace. Confined to the declared normalized/ASCII identifier profile so that comparison never depends on Unicode equivalence classes; prose names live elsewhere. \\
 \addlinespace
-\texttt{version} & string (identifier profile) & Distinguishes revisions of the same-named referent. Unversioned reference is unrepresentable; ``the current one'' is not an identity. \\
+\texttt{version} & string (canonical text) & Distinguishes revisions of the same-named referent; follows the source's own versioning conventions and is not confined to the identifier profile. Unversioned reference is unrepresentable; ``the current one'' is not an identity. \\
 \addlinespace
 \texttt{source\_id} & string (identifier profile) & Names the defining source document or corpus. Binds the reference to a provenance context, so two definitions of one name in different sources are two references. \\
 \addlinespace
-\texttt{definition\_sha256} & string (64 lowercase hex) & Digest of the exact defining bytes in the identified source. Makes definitional drift observable at the identity layer: if the defining text changes, the reference changes. \\
+\texttt{definition\_sha256} & string (64 hex, normalized uppercase) & Digest of the exact defining bytes in the identified source. Makes definitional drift observable at the identity layer: if the defining text changes, the reference changes. \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The \texttt{namespace} enumeration, exhaustively: \textsc{tks-foundation}, \textsc{tks-world}, \textsc{cas-drive}, \textsc{cas-domain}, \textsc{cas-register}, \textsc{cas-state}, \textsc{noetic-topos-object}. The families are pairwise disjoint by declaration; no namespace is a subset, alias, or refinement of another, and no coercion between namespaces exists.
+The \texttt{namespace} enumeration, exhaustively: \textsc{tks-foundation}, \textsc{tks-world}, \textsc{tks-noetic}, \textsc{cas-drive}, \textsc{cas-domain}, \textsc{cas-register}, \textsc{cas-noetic}, \textsc{cas-state}, \textsc{noetic-topos-object}. The specification's prose names seven families; the operative enumeration refines the Noetic family into TKS-side and CAS-side namespaces (Chapter~\ref{ch03:identity}). The families are pairwise disjoint by declaration; no namespace is a subset, alias, or refinement of another, and no coercion between namespaces exists.
 
-Cross-namespace links carry exactly one \texttt{kind} from the enumeration \textsc{translation}, \textsc{alignment}, \textsc{hypothesis}, plus their own \texttt{source\_id} and review-state field. There is no \textsc{identity} member of the link-kind enumeration --- the omission is the mechanism. Table~\ref{tables:tab:links} inventories the link fields for completeness.
+Cross-namespace links carry exactly one \texttt{relation} from the enumeration \textsc{identity}, \textsc{translation}, \textsc{alignment}, \textsc{hypothesis}, plus their own grounding-artifact digest and mandatory note. The constructor permits \textsc{identity} only when source and target are the exact same versioned reference, so every cross-namespace link carries a non-identity kind --- the exact-match guard is the mechanism. Table~\ref{tables:tab:links} inventories the link fields for completeness.
 
 \begin{table}[htbp]
 \centering
@@ -41,15 +41,19 @@ Cross-namespace links carry exactly one \texttt{kind} from the enumeration \text
 \toprule
 Field & Type & Rationale \\
 \midrule
-\texttt{kind} & enum (3 values) & Grades the strength of the asserted correspondence; the maximum representable strength is \textsc{translation}, which is still not identity. \\
+\texttt{relation} & enum (4 values) & Grades the strength of the asserted correspondence; \textsc{identity} is constructible only as a degenerate self-link, so the maximum representable cross-namespace strength is \textsc{translation}, which is still not identity. \\
 \addlinespace
 source reference & semantic reference & The link's domain endpoint, as a full structural tuple. \\
 \addlinespace
 target reference & semantic reference & The link's codomain endpoint. Endpoints in the same namespace are a construction error: links exist for crossings. \\
 \addlinespace
-\texttt{source\_id} & string (identifier profile) & Names the document asserting the correspondence, so every link is traceable to a citable origin rather than to tooling convenience. \\
+\texttt{crosswalk\_id} & string (identifier profile) & Names the link record itself, so every asserted correspondence is citable as an artifact. \\
 \addlinespace
-review state & enum & Records the correspondence's standing in review; a link is data about a relationship, and its trustworthiness is a separate, recorded fact. \\
+\texttt{source\_artifact\_sha256} & string (64 hex, normalized uppercase) & Names, by digest, the artifact on whose authority the correspondence is asserted, so every link is traceable to a citable origin rather than to tooling convenience. \\
+\addlinespace
+\texttt{note} & canonical text (mandatory, non-blank) & Human-readable justification of the asserted correspondence; an undocumented link is a construction error. \\
+\addlinespace
+boundary & Ring-4 triple (exact) & Pinned at construction to admission \textsc{open}, product \textsc{not licensed}, disclosure false; a crosswalk cannot present itself as licensed or disclosable. Review standing is tracked at the registry layer, not on the link. \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -88,7 +92,7 @@ Admission & Product & Disclosure & Verdict at construction \\
 \textsc{open} & \textsc{not licensed} & false & valid (the Ring-4 triple) \\
 \textsc{open} & licensed value & any & invalid: contradiction \\
 \textsc{open} & \textsc{not licensed} & true & invalid: disclosure in Ring 4 \\
-non-\textsc{open} & any & any & invalid in v0.1: no such ring is constructible \\
+non-\textsc{open} & any & any & invalid for Ring-4 material: Ring-4 closure requires \textsc{open} (non-Ring-4 carriers are constructible values but are rejected by every v0.1 artifact constructor) \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -218,11 +222,11 @@ Table~\ref{tables:tab:decision} collects the runtime decision model's enumerated
 \toprule
 Dimension & Values and notes \\
 \midrule
-Action operation & Enum of the kernel's admitted operations (compatibility execution, registry load, record selection, replay comparison, \ldots); closed set, widened only by Core revision. \\
+Action operation & Closed enum of exactly three members: \texttt{LEGACY\_COMPATIBILITY\_EVALUATION}, \texttt{MODEL\_INFERENCE}, \texttt{PUBLISH\_CLAIM}; only the first can appear in a passing v0.1 decision, and the set widens only by Core revision. \\
 \addlinespace
-Action target & Enum of target artifact classes (source, compiler, ledger, receipt, \ldots). \\
+Action target & Closed enum of exactly three members: \texttt{LOCAL\_RING4\_RESEARCH\_ARTIFACT}, \texttt{EXTERNAL\_SYSTEM}, \texttt{PUBLIC\_CLAIM\_SURFACE}; only the first is admissible in a passing v0.1 decision. \\
 \addlinespace
-Effect class & Enum separating \emph{nonclaim research evidence} from \emph{claim-bearing} effect; the load-bearing distinction of the model. \\
+Effect class & Closed enum of exactly three members: \texttt{PURE\_LOCAL\_COMPUTE}, \texttt{CLAIM\_BEARING}, \texttt{EXTERNAL\_SIDE\_EFFECT}; the nonclaim/claim-bearing separation is the load-bearing distinction of the model. \\
 \addlinespace
 Structural verdict & A nonclaim replay comparison may pass structurally when every exact compatibility field and digest validates under fresh replay; otherwise fail. \\
 \addlinespace

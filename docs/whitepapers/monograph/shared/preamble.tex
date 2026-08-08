@@ -31,6 +31,9 @@
 \newtheorem{threat}[theorem]{Threat}
 \newtheorem{notation}[theorem]{Notation}
 
+% Design arguments are not mathematical proofs; typeset without the QED tombstone.
+\newenvironment{designargument}{\par\medskip\noindent\emph{Design argument.}\enspace\ignorespaces}{\par\medskip}
+
 % Shared macros.
 \providecommand{\llbracket}{[\![}
 \providecommand{\rrbracket}{]\!]}

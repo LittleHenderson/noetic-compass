@@ -455,8 +455,8 @@ thing to itself.
 
 \subsection{The crosswalk as a review artifact}\label{ch03:xw-review}
 
-It is worth reading the crosswalk against the provenance
-background of the survey chapter, because the object is best
+Read the crosswalk against the provenance
+background of the survey chapter: the object is best
 understood as a provenance record specialized to one assertion
 kind. In provenance vocabulary, a crosswalk is an entity asserting
 a relation between two other entities (the endpoint references),
@@ -570,7 +570,7 @@ The map from valid \texttt{SemanticRef} tuples to their
 \texttt{qualified\_id} strings is injective.
 \end{proposition}
 
-\begin{proof}[Design argument]
+\begin{designargument}
 First, \emph{escaping}: JSON string encoding escapes every
 delimiter-significant character---quotation marks, backslashes,
 and the structural commas and brackets appear inside components
@@ -594,7 +594,7 @@ and is regression-tested with delimiter-bearing component
 fixtures---components containing quotation marks, backslashes,
 colons, commas, and bracket characters---whose pairwise renderings
 the suite checks for distinctness.
-\end{proof}
+\end{designargument}
 
 \subsection{The design space: escaping, length-prefixing, hashing}\label{ch03:renderspace}
 
