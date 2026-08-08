@@ -4,6 +4,29 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-07 — Project Coherence research papers v0.2 (full-length)
+
+- Superseded the five v0.1 white-paper summaries with full-length amsart
+  research papers (`docs/whitepapers/tex/RESEARCH_PAPER_*_v0.2.tex`, builds in
+  `pdf/`): TKS v8.0 (10pp), Noetic Topos 2.0 (14pp), CAS Core 8 (8pp),
+  CAS PCBA 8 (9pp), CAS-Ohm 1.0 (9pp).
+- Depth added from the deep sources: NT2 now carries the complete finite-context
+  theory — legacy collapse and subcanonicity countermodel proofs, coverage-basis
+  lemma, NT2-1..4 with full proofs, explicit reflector construction with the
+  universal-property proof, the commuting modality-composition theorem
+  (Lemmas 3.1/3.2/4.1, Theorem 5.1 of the registered proof), and the 23-check
+  finite certificate (298 sieves / 168 covering / 3,012 restriction squares).
+  TKS v8.0 adds full proofs (norm theorem via fiber-block Gram decomposition,
+  factorial idempotence, shortlex pruning soundness) and the 11-row obligation
+  ledger. PCBA 8 reproduces the per-board EBNF counterexample table with page
+  anchors and formalizes CSB fuse unreachability. CAS-Ohm reproduces all eight
+  conflicts at evidence-record granularity with source locators and the
+  implemented enum catalogs. Core 8 adds a threat-by-threat analysis mapping
+  each historical failure class to its blocking mechanism.
+- Claim discipline retained everywhere: ledger proof statuses on theorems,
+  conjectures labeled as conjectures, Ring 4 / NOT LICENSED headers,
+  bounded-receipt framing, and full open-obligation sets.
+
 ## 2026-08-07 — Project Coherence white paper series v0.1 drafted
 
 - Drafted five academic-rigor white papers into `docs/whitepapers/` from the

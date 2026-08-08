@@ -1,0 +1,244 @@
+\documentclass[11pt]{amsart}
+\usepackage[margin=1.2in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs,array}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{invariant}[theorem]{Invariant}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{ruleenv}[theorem]{Rule}
+\newtheorem{protocol}[theorem]{Protocol}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{boundary}[theorem]{Claim Boundary}
+\newtheorem{threat}[theorem]{Threat}
+
+\begin{document}
+
+\title[CAS Core 8: a compatibility and evidence kernel]{CAS Core 8: a compatibility and evidence kernel for auditable cognitive-architecture software}
+\author{Little Henderson}
+\thanks{Research paper v0.2, 2026-08-07 (supersedes white paper v0.1). Artifact status: \textsc{draft / open / ring 4 / not licensed / held}. Source basis: \texttt{CAS\_CORE\_V8\_CANDIDATE\_SPEC\_v0.1.md} (SHA-256 \texttt{5FE6F91D005C7268D32C3943C2851138B30E2492C7D73877A04B30685CFCA1FC}); implementation \texttt{src/cas\_core\_v8/} (\texttt{identity.py}, \texttt{registry.py}, \texttt{runtime\_gate.py}, \texttt{semantics.py}, \texttt{compatibility.py}, \texttt{\_compiler\_worker.py}); Gate~4 receipt: 61 test methods, suite test-ID SHA-256 \texttt{E2AF5014DE28DD0702211EF32A2757B99B869A13FAFBB0B8D1B18A50A9F8FEF5}, within an integrated 208-method, 272-subtest run over 54 hash-bound artifacts. Drafting this paper promotes no claim; independent software, formal-methods, semantics, and product-safety review remains open.}
+\date{August 7, 2026}
+
+\begin{abstract}
+CAS Core 8 is a small, auditable compatibility and evidence kernel for the Cognitive Architecture System (CAS) software family. It is deliberately not a rewrite of CAS v7.7 and is not installed on any production route. Its thesis is that trustworthy cognitive-architecture software begins with a kernel that cannot be talked into overclaiming: before any v8 semantics can be trusted, source identity, semantic namespace, compatibility profile, registry integrity, action intent, and claim boundaries must be explicit enough to test.
+
+This paper develops the kernel's five mechanisms in full: (1) structural semantic references over disjoint namespaces, with an injective-rendering guarantee and a hard rule that positional or historical correspondences are typed as translations, alignments, or hypotheses---never silently as identities; (2) a research-boundary object whose ring, license, and disclosure fields must be jointly consistent and are derived and rechecked by every public operation; (3) a deterministic canonical evidence encoding---sorted-key UTF-8 JSON; rejection of unordered containers, binary floats, NaN, and infinity; tagged exact decimals; one serialization route per public type; bounded, cycle-aware canonicalization---justified by an explicit threat analysis of digest-collision and type-pun attacks; (4) a hash-verified, process-isolated legacy compiler compatibility profile with an eight-step deterministic-closure protocol, an advisory-lock concurrency discipline, an exact worker-failure taxonomy, and a stated non-sandbox boundary; and (5) exact-byte-backed claim and theorem registries whose loaders reject every structural irregularity and whose records carry deterministic digests bound to the registry bytes. A single design commitment runs through all five: \emph{structural consistency is never authorization}. In v0.1 there is no code path that grants authorization; claim-bearing intent is denied even when a locally constructed ledger says ``licensed,'' because the kernel has no authenticated reviewer or legal trust root. We state the future claim-authorization design constraints, the relation to the four companion candidates, the bounded software evidence, and the complete open-obligation set.
+\end{abstract}
+
+\maketitle
+\tableofcontents
+
+\section{Introduction}\label{sec:intro}
+
+\subsection{Two failure classes}
+Long-lived research software in the TKS/CAS program has repeatedly exhibited two failure classes that no amount of downstream testing repairs.
+
+\emph{Semantic drift.} The program spans multiple ontologies---TKS Foundations and Worlds; CAS Drives, Domains, Registers, and States; Noetic Topos objects---whose elements are related by history and position but are not interchangeable. Prior audits found positional relabels treated as paraphrases and cross-namespace conflations voiding otherwise sound work products. Untyped string identifiers make such drift invisible: nothing in \texttt{"F5"} says whether it names a TKS Foundation, a CAS Drive, or a coincidence.
+
+\emph{Unauthorized claim promotion.} A green test, a self-computed hash, or a generated receipt is structural evidence about software behavior. Nothing in such an artifact establishes reviewer identity, legal authority, or empirical validity. Historical AI-authored, self-hashed ``licensing receipts'' in the program's own past demonstrated how easily structural artifacts masquerade as authority. A kernel that cannot distinguish \emph{consistent} from \emph{authorized} will eventually launder one into the other.
+
+\subsection{Design inversion}
+CAS Core 8 addresses both classes by inversion: instead of building a permissive system and subtracting dangerous behavior, it builds a kernel in which the dangerous behaviors are unrepresentable or fail closed, and everything a future CAS v8 wants to assert---semantics, conformance, claims---must be \emph{added} through separately reviewed gates. Sections~\ref{sec:identity}--\ref{sec:runtime} develop the five mechanisms; Section~\ref{sec:threats} gives the threat analysis each mechanism answers; Section~\ref{sec:companions} places the kernel among its companion candidates; Sections~\ref{sec:evidence}--\ref{sec:obligations} state the evidence and the open obligations exactly.
+
+\subsection{Status}
+Everything here is a Ring-4 research candidate: admission \textsc{open}, product \textsc{not licensed}, disclosure withheld. The bounded Gate-4 receipts are historical software evidence, not experiments, review, or authority.
+
+\section{Semantic identity}\label{sec:identity}
+
+\begin{definition}[Semantic reference]\label{def:semref}
+A \emph{semantic reference} is the structural tuple
+\[
+(\text{namespace},\ \text{local\_id},\ \text{version},\ \text{source\_id},\ \text{definition\_sha256}),
+\]
+where the namespace ranges over the disjoint families \textsc{tks-foundation}, \textsc{tks-world}, \textsc{cas-drive}, \textsc{cas-domain}, \textsc{cas-register}, \textsc{cas-state}, and \textsc{noetic-topos-object}, and \texttt{definition\_sha256} is the digest of the exact defining text in the identified source.
+\end{definition}
+
+Identity is structural equality of the full tuple. Binding the defining text's hash means that a reference does not merely name a concept; it names a concept \emph{as defined by particular bytes}, so silent definitional drift between sources is detectable at the identity layer.
+
+\begin{ruleenv}[No silent identity]\label{rule:noid}
+A positional or historical correspondence between references in different namespaces is represented as a typed link with kind \textsc{translation}, \textsc{alignment}, or \textsc{hypothesis}. It is never represented as \textsc{identity}. There is no coercion path from any link kind to identity.
+\end{ruleenv}
+
+Rule~\ref{rule:noid} encodes at the type level the canon rule that positional relabels---for example, between TKS Foundation positions and CAS Drive names---are not paraphrases. The historical incident motivating it: a prior work product conflated positionally corresponding Drive and Foundation names and was voided in review. Under this kernel that conflation is unrepresentable: the strongest representable statement is a \textsc{translation} link carrying its own source and review state.
+
+\begin{invariant}[Injective rendering]\label{inv:injective}
+The rendered string form of a semantic reference is injective on structural tuples: delimiter-containing components cannot render to the same identifier as a different tuple.
+\end{invariant}
+
+\begin{proof}[Design argument]
+Rendering escapes or length-prefixes every component before joining, so the concatenation is uniquely parseable; two distinct tuples therefore differ at the first divergent component in any parse. The property is enforced by construction and regression-tested with delimiter-bearing component fixtures.
+\end{proof}
+
+\begin{ruleenv}[Exact-type identity]\label{rule:exacttype}
+Equality-overriding subclasses are not admitted as identity-bearing public values: exact runtime types and primitive fields determine every boundary and semantic identity check.
+\end{ruleenv}
+
+Without Rule~\ref{rule:exacttype}, a subclass overriding equality could impersonate a reference or boundary object and defeat every downstream check while remaining ``equal'' to the honest value. The kernel compares types exactly and rejects subclass instances at its public interfaces.
+
+\section{The research boundary object}\label{sec:boundary}
+
+\begin{definition}[Research boundary]\label{def:boundary}
+A \emph{research boundary} is the triple (admission state, product state, public disclosure). Ring~4 requires jointly: admission \textsc{open}; product \textsc{not licensed}; disclosure \emph{false}. Any contradictory combination---for example, \textsc{open} admission with a licensed product state, or disclosure \emph{true} in Ring 4---is invalid at construction.
+\end{definition}
+
+\begin{invariant}[Recheck, do not trust]\label{inv:recheck}
+Every public operation derives and rechecks the boundary from its inputs rather than trusting a shared mutable object or a recomputable self-hash. A structural receipt or green test does not alter a boundary. A self-digest detects accidental or malicious mutation after construction, but is not a signature, reviewer identity, or authority grant.
+\end{invariant}
+
+The distinction in Invariant~\ref{inv:recheck} between \emph{tamper evidence} and \emph{authority} is load-bearing for the whole kernel: a self-digest answers ``has this object changed since construction?''; it cannot answer ``who authorized this object?''---the latter requires an authenticated trust root that v0.1 deliberately lacks (Section~\ref{sec:runtime}).
+
+\section{Canonical evidence encoding}\label{sec:encoding}
+
+Evidence digests are load-bearing: every registry record, compatibility receipt, and replay comparison reduces to hash equality of canonical encodings. Any nondeterminism or type pun in the encoder silently invalidates every downstream comparison. The encoding is therefore specified as a closed rule set.
+
+\begin{ruleenv}[Canonical encoding]\label{rule:encoding}
+The evidence encoding: (i) is deterministic UTF-8 JSON with sorted string keys; (ii) rejects unordered containers (sets), binary floats, NaN, and infinity; (iii) tags exact decimals so that $\mathrm{Decimal}(\texttt{"1.0"})$, the string \texttt{"1.0"}, and the integer $1$ have pairwise distinct encodings; (iv) gives each public type exactly one declared serialization route; and (v) is bounded and cycle-aware, failing closed on graphs exceeding declared depth or node limits and on any cycle.
+\end{ruleenv}
+
+\begin{ruleenv}[Byte identity vs.\ comparison identity]\label{rule:crlf}
+Raw bytes and the declared CRLF-to-LF comparison identity are recorded separately. Lone-CR, CRLF, and lone-LF counts are never conflated: a file's raw digest and its newline-normalized comparison digest are distinct fields with distinct roles, and neither substitutes for the other.
+\end{ruleenv}
+
+Rule~\ref{rule:crlf} answers a failure the program has already experienced: cross-platform newline rewriting changing raw digests while leaving semantic content intact, and conversely, normalization masking a real byte-level difference. Recording both identities makes each failure visible instead of silent.
+
+\begin{ruleenv}[Identifier profiles]\label{rule:unicode}
+Review-visible machine identifiers use declared normalized/ASCII profiles; unrestricted prose Unicode is carried in separate fields and never participates in identifier comparison.
+\end{ruleenv}
+
+\section{Legacy compiler compatibility profile}\label{sec:compat}
+
+The only admitted legacy profile in v0.1 binds the exact active Python CAS-notation-compiler bytes listed in the Gate~4 record. The profile is explicitly \texttt{legacy\_only}: it executes the verified legacy compiler for comparison purposes and produces \emph{no} CAS v8 semantic translation.
+
+\begin{protocol}[Deterministic closure]\label{prot:closure}
+A compatibility execution proceeds:
+\begin{enumerate}
+\item verify the requested source hash; read and hash the compiler bytes \emph{before} execution;
+\item force the Python-only engine profile and an exact frozen policy (a separately hash-bound native engine profile may be introduced later, but is not);
+\item reject \texttt{use} imports---no import-DAG manifest is yet admitted, so multi-file programs are outside the profile;
+\item execute the verified compiler bytes in a fresh \texttt{python -I -S -B} worker with a sanitized environment, rather than inheriting the parent's module state;
+\item sample and bind the worker runtime before compiler code executes: interpreter fields, \texttt{sys.platform}/POSIX \texttt{os.uname}, and the profile-bound Windows architecture inputs, without WMI or subprocess probing;
+\item serialize cooperating worker executions through a profile-bound advisory lock with a 90-second acquisition bound, 10-millisecond poll interval, and 10-millisecond post-release scheduler yield, without retrying a failed worker and without claiming lock fairness;
+\item record raw and LF compiler identities, interpreter and worker bytes, import search paths, loaded-module inventory, exact syntax/semantic/engine profiles, result digest, diagnostics, and the research boundary; and
+\item require fresh replay against the same source and compiler identity before any structural decision can pass.
+\end{enumerate}
+\end{protocol}
+
+\begin{ruleenv}[Failure taxonomy]\label{rule:failures}
+Worker transport failures record only exit code, stdout/stderr byte counts, and their SHA-256 digests. An empty or malformed response fails closed and is never retried. If two successful workers disagree on their dependency profiles, the error records both profile hashes and at most 32 keyed difference paths; environment values and dependency paths are represented only by hashes.
+\end{ruleenv}
+
+The retry prohibition is deliberate: retrying a nondeterministic failure converts flakiness into silent selection bias over receipts. The bounded difference-path list keeps disagreement diagnosable without exfiltrating environment contents into evidence records.
+
+\begin{boundary}[Isolation is not a sandbox]\label{bd:sandbox}
+Protocol~\ref{prot:closure} achieves Python-process isolation, \emph{not} an operating-system sandbox. Host native libraries and the operating system are not content-addressed. Every receipt exposes both limitations as \emph{false} capability fields, so no downstream consumer can honestly read a receipt as hermetic-execution evidence.
+\end{boundary}
+
+\begin{ruleenv}[Fractal bridge]\label{rule:fractal}
+Legacy fractal digit sequences are bridged to the TKS v8 kernel only through an explicit caller-supplied catalog of typed finite arrows; composition uses semigroupoid paths; missing digits or source/target mismatches fail closed. The bridge proves type-correct composition in the finite reference kernel---never the meaning of a legacy digit.
+\end{ruleenv}
+
+\section{Registry integrity}\label{sec:registry}
+
+The claim and theorem registries are exact-byte-backed snapshots validated against the Project Coherence record contracts.
+
+\begin{ruleenv}[Byte-backed loading]\label{rule:registry}
+Parsed headers, schemas, and records are reconstructed from and rechecked against the retained raw ledger and schema bytes. A direct constructor or dataclass copy cannot preserve an old raw identity while substituting parsed content: the loader recomputes the parse from bytes and compares. The loader rejects duplicate JSON keys, unknown root or record fields, wrong enums or shapes, invalid identifiers, ambiguous versions, and missing required metadata. Loaded values are recursively immutable, and each selected record carries a deterministic digest bound to the registry bytes.
+\end{ruleenv}
+
+\begin{invariant}[Metadata is not authority]\label{inv:metadata}
+The text \textsc{licensed} inside a record is necessary metadata, not sufficient authority. The v0.1 candidate has no authenticated reviewer or legal trust root and therefore cannot authorize any claim-bearing action, regardless of registry content.
+\end{invariant}
+
+\section{Runtime decision model}\label{sec:runtime}
+
+Action operation, target, and effect class are explicit enums; there is no stringly-typed action path. The decision procedure distinguishes \emph{nonclaim research evidence}---which may pass a structural replay comparison when every exact compatibility field and digest validates under Protocol~\ref{prot:closure}---from \emph{claim-bearing intent}, which is always denied.
+
+\begin{invariant}[No authorization path]\label{inv:noauth}
+In v0.1, the field \texttt{authorization\_granted} and the compatibility spelling \texttt{allowed} are constant \emph{false}; there is no code path that sets either true. Claim-bearing intent is denied even if a locally constructed ledger says \textsc{licensed}. A self-hash or Python-local sentinel is not issuance provenance.
+\end{invariant}
+
+\begin{ruleenv}[Future authorization constraints]\label{rule:futureauth}
+Any future claim-authorization implementation requires a separately reviewed design binding, at minimum: an exact trusted registry/schema manifest; an authenticated authority and trust root; reviewer and admission receipts; Evidence Packet identities and verification status; the claim ID and exact version; and the code, model, environment, semantic, and calibration identities of the requested operation. Absent all of these, the kernel's answer remains \emph{no}.
+\end{ruleenv}
+
+\section{Threat analysis}\label{sec:threats}
+
+Each mechanism above answers specific threats. We state the principal ones and the blocking mechanism.
+
+\begin{threat}[Namespace conflation]
+An agent or tool treats a positional correspondence as identity and propagates conclusions across ontologies. \emph{Blocked by} Definition~\ref{def:semref} and Rule~\ref{rule:noid}: the conflation is unrepresentable; the strongest representable statement carries link kind and review state.
+\end{threat}
+
+\begin{threat}[Identifier collision]
+Crafted components render two distinct references to one identifier, aliasing records. \emph{Blocked by} Invariant~\ref{inv:injective}.
+\end{threat}
+
+\begin{threat}[Equality spoofing]
+A subclass overrides equality to impersonate a boundary or reference. \emph{Blocked by} Rule~\ref{rule:exacttype}.
+\end{threat}
+
+\begin{threat}[Digest instability and type puns]
+Hash-order iteration, float formatting, or $\mathrm{Decimal}/\text{string}$ collisions make equal-looking evidence hash differently, or different evidence hash equal. \emph{Blocked by} Rule~\ref{rule:encoding}; newline rewriting specifically by Rule~\ref{rule:crlf}.
+\end{threat}
+
+\begin{threat}[Compiler-identity drift]
+A compatibility receipt is produced against different compiler bytes than claimed, or under inherited interpreter state. \emph{Blocked by} Protocol~\ref{prot:closure} steps (1), (4), (5), and the replay requirement (8).
+\end{threat}
+
+\begin{threat}[Receipt laundering]
+A structural receipt, self-hash, or generated ``license'' is presented as authority. \emph{Blocked by} Invariants~\ref{inv:recheck}, \ref{inv:metadata}, and \ref{inv:noauth}: there is no representable authorization in v0.1 to launder into.
+\end{threat}
+
+\begin{threat}[Registry substitution]
+Parsed registry content is swapped while raw identity is retained. \emph{Blocked by} Rule~\ref{rule:registry}: parses are recomputed from bytes and compared; constructor-path substitution cannot preserve the byte-bound digest.
+\end{threat}
+
+\section{Relation to companion candidates}\label{sec:companions}
+
+CAS Core 8 is the shared substrate of the Gate~4 engineering lane. \emph{CAS PCBA 8} consumes the semantic-identity, tagged-value, canonical-evidence, and research-boundary contracts for its board model, design-rule checks, and traces. \emph{CAS-Ohm 1.0} consumes the same evidence discipline for typed quantities, calibration profiles, and fail-closed research packets, and mirrors the authorization split as its ``structural completeness vs.\ authenticated eligibility'' axis. \emph{TKS v8.0} supplies the finite typed-arrow kernel referenced by Rule~\ref{rule:fractal}. \emph{Noetic Topos 2.0} supplies the ambient-versus-resolved evidence distinction the kernel's records anticipate: a marked cover proves no measurement true, and raw records live in the ambient layer until restriction and gluing are defined.
+
+The dependency direction is strict: companions depend on Core's contracts; Core depends on none of their semantics. This keeps the kernel reviewable in isolation.
+
+\section{Bounded software evidence}\label{sec:evidence}
+
+At the bound Gate~4 receipt (2026-08-04, commit \texttt{a1cd9901}): the focused CAS Core v8 suite records 61 passing test methods with suite test-ID SHA-256 \texttt{E2AF5014\ldots}, within an integrated three-suite run of 208 methods and 272 parameterized subtests over 54 hash-bound artifacts; 11 claim records all Ring~4 and \textsc{not licensed}; and 53 review criteria with 20 open. The repository-wide collector was \emph{not} clean at that receipt (four pre-existing package-path namespace collisions after 1{,}200 collected items), so the focused suites cannot support a repository-wide verification claim.
+
+The suite exercises: reference identity and injective rendering (including delimiter fixtures); boundary consistency and recheck behavior; canonical-encoding acceptance and rejection cases (sets, floats, NaN, infinity, decimal tagging, cycles, depth bounds); compatibility-protocol hash verification, worker sanitization, lock behavior, failure taxonomy, and replay requirement; registry loader rejection cases; and the constant-false authorization invariants.
+
+\begin{boundary}
+These numbers are historical, source-bound software receipts. They establish tested software behavior under the exact fixtures and profiles only---not hermetic execution, semantic correctness of CAS content, empirical validity, claim authority, or review.
+\end{boundary}
+
+\section{Open obligations}\label{sec:obligations}
+
+\begin{enumerate}
+\item A hermetic subprocess and toolchain bundle is not established by Python-level isolation alone (Boundary~\ref{bd:sandbox}); content-addressing the interpreter, native libraries, and OS surface remains open.
+\item Python/Rust conformance is not established; engine profiles remain separate until a cross-implementation differential-testing campaign exists.
+\item No v8 parser or full semantic migration is claimed; the profile is \texttt{legacy\_only}.
+\item No claim-authority implementation is admitted; Rule~\ref{rule:futureauth} states its minimum design constraints.
+\item An import-DAG manifest for multi-file programs is not admitted (Protocol~\ref{prot:closure} step 3).
+\item Independent software, formal-methods, semantics, and product-safety review is required before any status change.
+\end{enumerate}
+
+\section{Related work}\label{sec:related}
+
+The mechanisms adapt established practice to the CAS setting rather than claiming novelty: canonical JSON encodings for stable digests (cf.\ RFC~8785 \cite{jcs}); content-addressed artifact identity and reproducible-build discipline \cite{reprobuilds}; provenance separation of entity, activity, and derivation \cite{prov}; and the principle that authorization requires an authenticated trust root distinct from integrity checking \cite{anderson}. The kernel's specific contribution is the composition of these into a fail-closed substrate for a research program with documented drift and overclaim incidents, together with the constant-false authorization invariant as a design stance.
+
+\section{Conclusion}
+
+CAS Core 8 makes a narrow, testable promise: identities are structural, boundaries are rechecked, encodings are deterministic, legacy execution is hash-verified and replayed, registries are byte-backed, and there is no path to ``authorized'' anywhere in the kernel. The threat analysis of Section~\ref{sec:threats} is the paper's real argument: each historically observed failure class corresponds to a representable-state restriction or a fail-closed rule, so the failure now surfaces as a type error, a rejection, or a constant-false field instead of a plausible artifact. Everything a future CAS v8 wants to assert must be added through reviewed gates. That inversion---subtraction replaced by gated addition---is the contribution.
+
+\begin{thebibliography}{9}
+\bibitem{jcs} A.~Rundgren, B.~Jordan, and S.~Erdtman, ``JSON Canonicalization Scheme (JCS),'' RFC~8785, 2020.
+\bibitem{reprobuilds} C.~Lamb and S.~Zacchiroli, ``Reproducible builds: increasing the integrity of software supply chains,'' \emph{IEEE Software} 39(2), 2022.
+\bibitem{prov} W3C, \emph{PROV-O: The PROV Ontology}, 2013.
+\bibitem{anderson} R.~Anderson, \emph{Security Engineering}, 3rd ed., Wiley, 2020.
+\bibitem{gate4} Project Coherence, Gate~4 record, review matrix v0.1, and artifact manifest v0.1.
+\bibitem{contracts} Project Coherence record contracts (claim and theorem registry schemas).
+\end{thebibliography}
+
+\end{document}

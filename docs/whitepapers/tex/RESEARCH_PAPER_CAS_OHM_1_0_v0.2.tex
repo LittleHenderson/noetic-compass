@@ -1,0 +1,271 @@
+\documentclass[11pt]{amsart}
+\usepackage[margin=1.2in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs,array}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{hypothesis}[theorem]{Registered Hypothesis}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{ruleenv}[theorem]{Rule}
+\newtheorem{conflict}[theorem]{Preserved Conflict}
+\newtheorem{protocol}[theorem]{Protocol}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{boundary}[theorem]{Claim Boundary}
+
+\begin{document}
+
+\title[CAS-Ohm 1.0: a profile-specific response model]{CAS-Ohm 1.0: a profile-specific experimental response and calibration model, with a preserved eight-conflict source audit}
+\author{Little Henderson}
+\thanks{Research paper v0.2, 2026-08-07 (supersedes white paper v0.1). Artifact status: \textsc{draft / open / ring 4 / not licensed / held}. Preferred description: profile-specific experimental response model and calibration proposal. Source basis: \texttt{CAS\_OHM\_V1\_SOURCE\_AUDIT\_AND\_SPEC\_v0.1.md} (SHA-256 \texttt{5E59C340\ldots}); \texttt{CAS\_OHM\_SOURCE\_CONFLICT\_EVIDENCE\_v0.1.json} (SHA-256 \texttt{F24BD64A\ldots}); direct sources \textsc{src-cas-ohm-guide-01} (SHA-256 \texttt{89AE13C0\ldots}), \textsc{src-cas-ohm-addendum-01} (SHA-256 \texttt{0B62BBC6\ldots}), \textsc{src-cas-ohm-pcba-app-i} (SHA-256 \texttt{9FFFAC3E\ldots}), read against \textsc{src-pcba-engineer-20260726}; provisional technical report at base commit \texttt{a1cd9901}; implementation \texttt{src/cas\_ohm\_v1/} (9 modules). Drafting this paper promotes no claim; internal cross-review and independent external review remain open. Not a charter-approved standalone paper.}
+\date{August 7, 2026}
+
+\begin{abstract}
+CAS-Ohm 1.0 is a typed proposal for modeling a local, profile-specific response between a declared intervention coordinate (steering alpha) and an observed activation coordinate (directional activation projection) in a neural system under audit. It is \emph{not} physical Ohm's law, an electrical implementation, a measure of attention, or a causal law. Its candidate prediction $\hat y=a/r_{\mathrm{eff}}$ is admissible only when the effective resistance $r_{\mathrm{eff}}$ carries model-specific units of alpha per activation, was fit on a registered calibration split, carries uncertainty, and is evaluated on a disjoint held-out split; the same-sample identity $r=a/y$, $\hat y=a/r$, ``validated,'' is rejected as circular.
+
+This paper develops the model at full resolution. We give the complete quantity-and-evidence ontology: sixteen quantity kinds, six measurement kinds, a unit ontology in which physical volt/ampere/ohm are forbidden aliases, and a canonical evidence encoding that is exact-type tagged, cycle-aware, and bounded. We reproduce the source audit at evidence-record granularity: eight conflicts or under-specifications across the Quantification Guide, the operationalization addendum, and PCBA Appendix~I---each with source locators, the conflicting facts, and its binding candidate rule---covering mixed scales, incompatible full-scale methods, the missing dimensional bridge, distinct gain definitions, ASOM axis overload, unvalidated network rules, non-identifying residuals, and quantization boundaries. We then specify the calibration-profile contract; the two independent classification axes (dose-response region and semantic outcome, with the source's fifth \textsc{breakdown} region retained); exact Q4 quantization with a boundary-preservation proposition; the capability-gated structural network operations; residual censoring; the split between structural research-packet completeness and authenticated Evidence-Packet eligibility (constant false in this candidate); the five registered falsifiable hypotheses and their preregistered closure protocol; and the memristive extension boundary. Bounded software evidence (65 test methods, 58 subtests at the Gate~4 receipt) establishes tested software behavior only.
+\end{abstract}
+
+\maketitle
+\tableofcontents
+
+\section{Scope, terminology, and authority boundary}\label{sec:scope}
+
+CAS-Ohm borrows the \emph{shape} of Ohm's law---a dose coordinate, a response coordinate, and a fitted proportionality parameter---as an experimental hypothesis about local linear response regions in steered model activations, in the tradition of dose-response modeling rather than circuit physics. The borrowed shape licenses nothing by itself: dimensional consistency is necessary for a meaningful model relation \cite{buckingham} but not sufficient for empirical or causal validity.
+
+Terminologically, the sources use $V$, $I$, $R$ by analogy; this paper and the candidate use \emph{alpha dose} $a$, \emph{activation response} $y$, and \emph{effective resistance} $r_{\mathrm{eff}}$, reserving volt/ampere/ohm for physical profiles that do not exist in the current ontology. This paper establishes no live execution, scientific conclusion, physical measurement, causal effect, safety or clinical conclusion, product capability, license, canon admission, or disclosure. The Project Coherence charter lists seven planned papers and no standalone CAS-Ohm paper; until a charter amendment exists, this document is a provisional technical report and may not be represented as an eighth charter paper.
+
+\section{The quantity and evidence ontology}\label{sec:ontology}
+
+\subsection{No bare numbers}
+
+\begin{definition}[Observed value]\label{def:observed}
+Every numeric record carries at least: quantity kind; exact decimal value; unit identifier; measurement kind; method identifier; calibration-profile digest; estimate/observation status; uncertainty and confidence interval; sample size; raw-artifact and control references; derivation parents; and missing/censored reason. No bare binary float is admitted anywhere in the evidence layer.
+\end{definition}
+
+This is basic metrological discipline---the identity of a quantity, its measurement procedure, and its uncertainty cannot be collapsed into one displayed number \cite{vim,gum}---without any claim that CAS-Ohm \emph{is} metrology or that its instruments are validated.
+
+\subsection{Quantity, measurement, and unit kinds}
+The implemented ontology enumerates sixteen quantity kinds (drive intervention, drive score, signed activation, flow magnitude, normalized flow, constraint score, effective resistance, resistance delta, capability score, gain magnitude, effect projection, saturation fraction, cutoff fraction, overload ratio, flow residual, relative error) and six measurement kinds:
+
+\begin{center}
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+Measurement kind & Meaning \\
+\midrule
+\textsc{design value} & declared by a board or profile, not measured \\
+\textsc{instrumented} & produced by an identified instrument chain with calibration binding \\
+\textsc{behavioral proxy} & inferred from external behavior \\
+\textsc{model derived} & computed from other records \\
+\textsc{human score} & rated by a person \\
+\textsc{llm score} & rated by a language model \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{ruleenv}[Kind non-fungibility]\label{rule:kinds}
+A derived value does not become instrumented because one parent was instrumented; a score does not become telemetry because it is stored next to a measurement. Instrumented records require instrument identity, method, calibration-profile binding, raw evidence, uncertainty, and sample information. Derivation preserves parent lineage.
+\end{ruleenv}
+
+\begin{ruleenv}[Unit separation]\label{rule:units}
+The unit ontology separates \textsc{alpha} (steering dose), \textsc{activation} (projection magnitude), \textsc{alpha per activation} (effective resistance), \textsc{dimensionless}, and \textsc{fraction}, alongside Q10/Q100 score scales. Physical \textsc{volt}, \textsc{ampere}, and \textsc{ohm} labels are forbidden aliases for model quantities; the generic CAS PCBA vocabulary member \texttt{Unit.VOLT} neither licenses physical CAS telemetry nor creates a CAS-Ohm unit. A physical profile would require separate explicit typing and instrumentation.
+\end{ruleenv}
+
+\subsection{Canonical evidence}
+Canonical evidence encoding is exact-type tagged, cycle-aware, unsafe-Unicode rejecting, and bounded by declared depth, node, container, text, output, and 2{,}048-bit integer limits; a host-runtime integer-conversion failure is normalized to the candidate's validation error rather than leaking a platform exception. These rules inherit the CAS Core 8 canonical-encoding contract and exist because every downstream comparison reduces to digest equality.
+
+\section{The preserved source audit}\label{sec:audit}
+
+The machine-readable record \texttt{CAS\_OHM\_SOURCE\_CONFLICT\_EVIDENCE\_v0.1.json} registers eight conflicts or under-specifications; none is silently harmonized. Locator systems are disclosed per source: PDF page numbers for the Guide (rendered and visually inspected); \texttt{python-docx} paragraph and table-row indices for the addendum (both page-rendering routes failed, so no page number is asserted for it); UTF-8 line numbers for Appendix~I; and PDF/book pages for the PCBA gain definitions. Preserving this record is itself an engineering result: downstream code cannot claim one coherent inherited scale or gain law where the sources do not provide one.
+
+\begin{conflict}[Scale and saturation; \textnormal{\textsc{direct numeric conflict}}]\label{conf:scale}
+Guide p.~6: drive is $0.0$--$10.0$, constraint $R$ is $0.1$--$10.0$, raw attention is $V/R$. Guide p.~12: the worked CJT uses $\mathrm{sat}=8.5$ as a component threshold. Appendix~I lines 20--31 and 51--59: constraint $R$ is $0$--$100$; saturation, cutoff, and threshold are $0$--$1$; and $\mathrm{sat}=8.5$ is identified as a mixed-scale error whose component value is $0.85$. \emph{Disposition:} Q10 score, Q100 constraint score, normalized fraction, alpha dose, activation projection, and effective resistance are distinct quantity types; no silent conversion is allowed.
+\end{conflict}
+
+\begin{conflict}[Full-scale profile; \textnormal{\textsc{incompatible calibration methods}}]\label{conf:ifs}
+Guide p.~6: $I_{\mathrm{FS}}$ is a selected board-specific full-scale value. Addendum paragraph 30 and operationalization table row 13: $I_{\mathrm{FS}}$ is the per-test-point 95th percentile of absolute directional projection over a fixed hashed corpus. Appendix~I lines 40--49 and 263--267: $I_{\mathrm{FS}}$ is measured once per path at drive rail and constraint floor and does not transfer. \emph{Disposition:} board-selected, corpus-percentile, and rail/floor procedures remain separately named calibration methods with different profile digests (implemented as the \texttt{IFSMethod} enumeration); they are not interchangeable.
+\end{conflict}
+
+\begin{conflict}[Dimensional bridge; \textnormal{\textsc{unit underspecification}}]\label{conf:bridge}
+Guide pp.~6, 10, 18: $V$, $R$, $I$ are design-scale quantities related by $I_{\mathrm{pred}}=V/R_{\mathrm{total}}$. Addendum operationalization rows 1, 2, 5, 12: $V$ is steering alpha, $I$ is directional activation projection, contextual $R$ is inferred from a paired delta---yet $I_{\mathrm{pred}}$ still uses $V/R_{\mathrm{total}}$. Appendix~I lines 90--108 and 326--339 frame the relation as testable design/calibration arithmetic, not physical voltage or a measured live-model law. \emph{Disposition:} effective resistance may be used only with an explicit calibrated alpha-per-activation bridge; constraint scores never masquerade as that quantity.
+\end{conflict}
+
+\begin{conflict}[Gain definition; \textnormal{\textsc{distinct mathematical profiles}}]\label{conf:gain}
+PCBA book, PDF p.~56 (book p.~40) and PDF p.~153 (book p.~137): CJT $\beta$ is defined by Fisher--Rao small- or large-signal displacement ratios on the open simplex. Addendum row 6: $\beta$ is operationalized as a local Jacobian/projection derivative between cause and effect test points. Guide p.~13: stage $\beta$ values multiply in cascades while attention flow is local at each stage. \emph{Disposition:} Fisher--Rao gain and local Jacobian/projection gain are separately named profiles until a theorem or experiment supplies a coordinate bridge; no identification is licensed.
+\end{conflict}
+
+\begin{conflict}[ASOM axes; \textnormal{\textsc{mnemonic overload}}]\label{conf:asom}
+Guide p.~11: ASOM (Starved/Aligned/Oversaturated/Misaligned) is session-derived and overlays semantic labels onto cutoff/active/saturation/breakdown regions. Addendum paragraphs 14--15 and ASOM rows 1--4: dose-response signatures and effect-axis outcomes are distinct, and flat response has multiple causes. \emph{Disposition:} dose-response region and semantic outcome are classified independently (Section~\ref{sec:class}); \textsc{active} does not imply \textsc{intended}, and \textsc{non-ohmic} does not imply \textsc{misaligned}.
+\end{conflict}
+
+\begin{conflict}[Network rules; \textnormal{\textsc{validation-status conflict}}]\label{conf:networks}
+Guide pp.~13--14, 18: series addition, reciprocal parallel aggregation, and $\beta$ multiplication are presented as working network rules. Appendix~I lines 206--254 apply the same arithmetic to paths while warning that co-present guardrails are not parallel routes and that flow remains local. Addendum paragraphs 16--19 and falsification rows P2--P3: gain composition and parallel conductance are preregistered predictions whose rules must be dropped if the tests fail. \emph{Disposition:} every operation is capability-gated by coordinates, units, topology, active region, and evidence under the exact profile (Section~\ref{sec:netops}).
+\end{conflict}
+
+\begin{conflict}[Residual identification; \textnormal{\textsc{causal overinterpretation risk}}]\label{conf:residual}
+Guide pp.~10, 16: residual sign is used to suggest hidden opposition, extra amplification, or hidden resistance---on the same page that says residual alone is insufficient. Appendix~I lines 171--202 and 260--277: $R_{\mathrm{hidden}}$ is called a residual rather than a component, yet positive residual on a safety board is treated as a bypass, and saturated-stage residuals are meaningless. Addendum paragraph 19 and falsification row P4: hidden content is last in the diagnostic walk, and residual validity requires independently identified causes above a shuffled-control baseline. \emph{Disposition:} residuals retain propagated uncertainty and may rank follow-up probes; they never prove a hidden policy, bypass, or cause; zero or zero-compatible observations are censored (Section~\ref{sec:residuals}).
+\end{conflict}
+
+\begin{conflict}[Q4 boundaries; \textnormal{\textsc{precision underspecification}}]\label{conf:q4}
+Guide p.~7 displays two-decimal bands $0.00$--$2.49$, $2.50$--$4.99$, $5.00$--$7.49$, $7.50$--$10.00$ with no rule for higher-precision boundary values. \emph{Disposition:} exact unrounded half-open bins at $2.5$, $5$, $7.5$; normalization may not round a value across a band boundary (Section~\ref{sec:q4}).
+\end{conflict}
+
+\section{The calibration profile and response model}\label{sec:model}
+
+\begin{definition}[Calibration profile]\label{def:profile}
+A calibration profile binds: exact model, configuration, tokenizer, and weights identities; code revision; runtime and dtype; test-point identity; direction-vector identity, norm, sign, and provenance (\textsc{probe-}, \textsc{jacobian-}, or \textsc{diff-derived}); corpus manifest and rights; seeds and randomization; the alpha grid; the $I_{\mathrm{FS}}$ method (Conflict~\ref{conf:ifs}); fit and uncertainty methods; tolerances; response-region rules; controls; drift and expiry; review state; and a canonical digest. All CAS-Ohm quantities are profile-relative; nothing transfers across profiles without a stated comparison rule.
+\end{definition}
+
+Within one profile, with $a$ in \textsc{alpha}, $y$ in \textsc{activation}, and $r_{\mathrm{eff}}>0$ in \textsc{alpha per activation}, the candidate prediction is
+\[
+\hat y=\frac{a}{r_{\mathrm{eff}}},
+\]
+admissible only when $r_{\mathrm{eff}}$ carries uncertainty, binds the profile's calibration and validation splits, uses the declared fit method, and holds the role \textsc{calibrated held-out} or a separately validated network-equivalent role.
+
+\begin{ruleenv}[Anti-circularity]\label{rule:circular}
+The following is rejected: compute $r_{\mathrm{same}}=a/y$ on a sample; compute $\hat y=a/r_{\mathrm{same}}$ on that same sample; report $\hat y=y$ as validation. A defensible test fits on a registered calibration split and evaluates on a disjoint held-out split; calibration must also represent parameter uncertainty and model discrepancy rather than treating the best fit as truth \cite{kennedyohagan}. Verification of the software and operational validation of the response model remain distinct activities \cite{sargent}.
+\end{ruleenv}
+
+\section{Independent classification axes}\label{sec:class}
+
+Following Conflict~\ref{conf:asom}, two axes are classified independently.
+
+\emph{Dose-response region} (implemented enumeration): \textsc{unassessed}, \textsc{cutoff}, \textsc{active}, \textsc{saturation}, \textsc{breakdown}, \textsc{non-ohmic}, \textsc{unstable}. The source's breakdown region is retained in the implementation alongside the audit's five-region summary; both are recorded here for exactness.
+
+\emph{Semantic outcome}: \textsc{unassessed}, \textsc{intended}, \textsc{opposite}, \textsc{off-axis}.
+
+No region mechanically determines an outcome: an active response may be off-axis or opposite; a flat response may reflect cutoff, saturation, a wrong direction, insensitivity, or measurement failure. ASOM is retained only as a mnemonic overlay (\textsc{starved}/\textsc{aligned}/\textsc{oversaturated}/\textsc{misaligned}), never as an identity theorem. No diagnostic is emitted from a cutoff, saturated, unstable, uncalibrated, replay-time-stale, wrong-model, or semantically unassessed profile; replay-time status is evaluated against a caller-supplied \texttt{replay\_as\_of} and is not an authenticated live-freshness assertion.
+
+\section{Exact normalization and Q4 quantization}\label{sec:q4}
+
+For a profile-specific full-scale activation $I_{\mathrm{FS}}$, the classifier computes the exact pre-clipping value and retains overload separately:
+\[
+q_{10}^{\mathrm{exact}}=10\cdot\frac{\mathrm{raw}}{I_{\mathrm{FS}}},\qquad
+\mathrm{overload}=\frac{\mathrm{raw}}{I_{\mathrm{FS}}},\qquad
+q_{10}^{\mathrm{disp}}=\min(q_{10}^{\mathrm{exact}},10).
+\]
+Exact-input bands are half-open:
+\[
+[0,2.5)\mapsto Q1,\qquad [2.5,5)\mapsto Q2,\qquad [5,7.5)\mapsto Q3,\qquad [7.5,\infty)\mapsto Q4 .
+\]
+
+\begin{proposition}[Boundary preservation]\label{prop:boundary}
+Band assignment is computed from $q_{10}^{\mathrm{exact}}$ by exact decimal comparison against $2.5$, $5$, and $7.5$; display rounding of $q_{10}^{\mathrm{disp}}$ cannot move a value across a band boundary.
+\end{proposition}
+
+\begin{proof}
+The classifier's band function reads only the exact pre-rounding decimal; the displayed value is derived afterward and never re-enters classification. Exact decimal comparison at the three cut points is total and unambiguous for every representable input, including values equal to a cut point, which the half-open convention assigns to the upper band. Hence the composite display map cannot alter the band.
+\end{proof}
+
+Worked example: $\mathrm{raw}/I_{\mathrm{FS}}=1.2$ gives $q_{10}^{\mathrm{exact}}=12$, displayed $q_{10}=10$, overload ratio $1.2$, band $Q4$. Trend tags require an explicit axis, interval, minimum effect, and uncertainty rule.
+
+\section{Structural network operations}\label{sec:netops}
+
+Following Conflict~\ref{conf:networks}, series, parallel, and gain-product operations exist only as \emph{unauthenticated structural research calculations}, each capability-gated.
+
+\begin{ruleenv}[Series]\label{rule:series}
+Series addition requires a simple acyclic directed chain, compatible coordinates, one \textsc{alpha-per-activation} unit, active-region components, adequate linearity, one profile, and complete ordered child provenance.
+\end{ruleenv}
+
+\begin{ruleenv}[Parallel]\label{rule:parallel}
+Reciprocal aggregation requires genuine alternative directed branches with the same endpoints and compatible coordinates. Co-present guardrails are not automatically parallel paths; interaction, dependence, and covariance remain declared limitations on every result.
+\end{ruleenv}
+
+\begin{ruleenv}[Gain composition]\label{rule:gain}
+Gain multiplication requires adjacent input/output coordinate agreement, dimensionless local gains, active-region status, minimum linearity, and one profile. Per Conflict~\ref{conf:gain}, Fisher--Rao displacement gain is not automatically the local Jacobian/projection derivative; the candidate supplies no bridge.
+\end{ruleenv}
+
+Every aggregate binds exact child order, topology, profile identity, source and control evidence, capability label, authority-manifest identity, attestation identities (which may be empty), trust mode, historical replay time, runtime/code/dependency identities, and the declared covariance limitation; duplicate or cyclic paths fail closed. Optional Ed25519 fixture-key attestations, when the integrity-configuration mode is used, are verified and replayed---but they are integrity/replay checks only, never independent reviewer, legal, product, or Evidence-Packet authority. No authenticated capability path is implemented.
+
+\section{Residuals are non-identifying}\label{sec:residuals}
+
+For an admitted active-region prediction, the residual $\delta_y=y_{\mathrm{obs}}-y_{\mathrm{pred}}$ requires instrumented held-out observations, matching test points, profile identity, a registered prediction, calibrated resistance, and propagated uncertainty. At zero or zero-compatible predicted response the relevant ratios are censored or undefined, and no residual quantity is emitted.
+
+A residual can rank follow-up probes. It cannot, by sign alone, identify a hidden policy, bypass, opposition, cause, or safety failure: causal interpretation requires an explicit causal model and identifiable interventions \cite{pearl}. Per Conflict~\ref{conf:residual}, the registered residual-localization claim requires blinded implanted faults with matched controls; if that test fails, causal language is withdrawn.
+
+\section{Completeness versus authenticated eligibility}\label{sec:eligibility}
+
+\begin{ruleenv}[Structural completeness]\label{rule:completeness}
+Structural research-packet completeness requires: an exact model revision; a valid profile digest; raw artifact bytes and resolvable references; relevant controls; uncertainty and per-field lineage and status; a nonstale reviewed calibration profile, replay-time-current at the caller-supplied \texttt{replay\_as\_of}; and at least one genuinely instrumented field (necessary but not sufficient). Score-only, zero-instrumentation, missing-provenance, mixed-scale, unknown-profile, or tampered records fail closed.
+\end{ruleenv}
+
+\begin{ruleenv}[Authenticated eligibility]\label{rule:eligibility}
+Authenticated Evidence-Packet eligibility is a separate field and is \emph{always false} in this candidate. It cannot become true until an independently admitted authority manifest, protected key lifecycle and revocation policy, trusted current-time receipt, materialized model/code/runtime dependency identities, authenticated instrument evidence, and a reviewed packet policy are all present. Deterministic in-repository fixture keys and caller-supplied replay time never satisfy those conditions. Replay-time-current does not mean authenticated-current; provenance structure alone is not truth or authority \cite{prov}.
+\end{ruleenv}
+
+This split mirrors the CAS Core 8 invariant that structural consistency is never authorization; CAS-Ohm implements it as two independent axes so that no packet can drift from ``complete'' to ``authoritative'' by accumulation.
+
+\section{Bounded software evidence and registered hypotheses}\label{sec:evidence}
+
+At the bound Gate~4 receipt: 65 passing CAS-Ohm test methods (suite test-ID SHA-256 \texttt{2E81A685961286D944894A22EB93345B97211B4433B6C71EAF628D84CD8EB1EF}); 58 passing parameterized subtests in the combined focused receipt; eight retained source conflicts; zero authenticated Evidence-Packet eligibility paths. The suite exercises quantity/unit rejection, canonical evidence limits, calibration identity, split separation, exact Q4 boundaries, structural network constraints, residual censoring, uncertainty, lineage, and fail-closed capability behavior. Synthetic known-fault boards---linear, cutoff, saturation, nonlinear, parallel, confounded, bypass---validate software behavior only; they are not experiments on a live model and cannot establish causal or empirical validity.
+
+The shared claim ledger registers five falsifiable hypotheses, all \textsc{in review / ring 4 / not licensed / held}, none with an admitted Evidence Packet:
+
+\begin{hypothesis}[\textsc{clm-cas-ohm-local-response}]
+Within one calibration profile, held-out local response to randomized alpha exceeds matched controls.
+\end{hypothesis}
+\begin{hypothesis}[\textsc{clm-cas-ohm-effective-resistance}]
+A calibrated $r_{\mathrm{eff}}$ predicts held-out response, and independent non-safety constraint manipulation moves response with the predicted inverse slope.
+\end{hypothesis}
+\begin{hypothesis}[\textsc{clm-cas-ohm-gain-composition}]
+Local derivative gains compose to end-to-end gain in the active region within stated tolerance.
+\end{hypothesis}
+\begin{hypothesis}[\textsc{clm-cas-ohm-redundancy}]
+Ablation of genuine alternative branches produces the specific response predicted by reciprocal aggregation, above matched random-head controls.
+\end{hypothesis}
+\begin{hypothesis}[\textsc{clm-cas-ohm-residual-localization}]
+Blinded implanted faults are localized by residual diagnostics above shuffled and matched-control baselines; failure withdraws causal language.
+\end{hypothesis}
+
+The ledger additionally records \textsc{clm-cas-ohm-physical-telemetry} as a \textsc{not licensed} product claim; current evidence contradicts any blanket representation of design scores, behavioral proxies, or model-derived values as physical telemetry.
+
+\section{Preregistered closure protocol}\label{sec:prereg}
+
+\begin{protocol}[Gate-5 closure path]\label{prot:gate5}
+No experiment is admitted in this paper. A future run must use the Gate~5 per-claim preregistration and Evidence-Packet v2 control kernel, preserving Gate~5's own status until its separate gates close. At minimum:
+\begin{enumerate}
+\item freeze exact claim text; model, checkpoint, tokenizer, and weights; code and environment; test point and direction; corpus, splits, and seeds; alpha grid; fit and uncertainty methods; controls; falsifiers; and permitted claim language;
+\item keep calibration and validation splits disjoint;
+\item include zero-intervention, random same-norm direction, wrong-layer, wrong-token, label-shuffle, and norm-matched controls as applicable;
+\item record cutoff, saturation, instability, drift, missingness, exclusions, and negative outcomes without erasure;
+\item require independent numerical recomputation and authenticated execution evidence;
+\item replicate on a held-out checkpoint or model under a prespecified comparison rule;
+\item retain the full raw evidence and amendment/outcome-access chain; and
+\item keep scientific eligibility \textsc{not established} until independent audit, replication, claim review, and external scientific review exist.
+\end{enumerate}
+\end{protocol}
+
+\section{Memristive and stateful extension boundary}\label{sec:memristive}
+
+Classical memristor and memristive-system theory describes electrical systems whose constitutive behavior depends on integrated history or internal state \cite{chua71,chuakang76}. That literature motivates a mathematical question---whether a CAS response parameter should depend on a versioned history state---without authorizing any physical mapping. A provisional nonphysical extension would declare
+\[
+x_{t+1}=F_{\mathrm{profile}}(x_t,a_t,y_t,c_t;\theta),\qquad
+r_{\mathrm{eff},t}=G_{\mathrm{profile}}(x_t;\theta),
+\]
+with $x_t$ an explicit model-state record carrying initialization, update law, sampling interval, reset rule, drift model, uncertainty, and provenance---typed separately from both a memoryless fit and an electrical memristor---and required to predict held-out hysteresis or path dependence beyond a matched memoryless baseline. Absent that evidence, ``memristive'' remains an analogy and research hypothesis. No stateful implementation, calibrated history variable, hysteresis experiment, material device, physical circuit, or safety property is admitted in the current evidence.
+
+\section{Limitations}\label{sec:limits}
+
+Inherited scale conflicts are preserved, not resolved (Section~\ref{sec:audit}). There is no admitted live calibration, held-out estimate, drift-threshold validation, or inter-rater reliability result. The implemented prediction is a guarded software contract, not a validated law. Network rules are structural-only and lack external validation of interactions and covariance. Gain, redundancy, and residuals remain noncausal. History-dependent dynamics remain open. No CAS quantity is a physical voltage, current, resistance, charge, flux, or device property. No safety, clinical, regulatory, product, canon, license, or disclosure authority exists. Internal cross-review and independent external review have not occurred.
+
+\section{Conclusion}
+
+CAS-Ohm 1.0 is viable as a profile-specific experimental response and calibration proposal precisely because its type system makes the Ohm analogy \emph{testable and rejectable}. The paper's substance is threefold. First, an ontology in which the historically observed failure modes---the mixed-scale $\mathrm{sat}=8.5$, the dimensionally unmoored $V/R$, the score-as-telemetry slide, the residual-as-cause leap---are unrepresentable or fail closed. Second, a source audit preserved at evidence-record granularity, so that no downstream artifact can claim an inherited coherence the three sources demonstrably lack. Third, a falsification program: five registered hypotheses with a preregistered closure protocol whose controls, falsifiers, and negative-outcome retention are fixed before any run. Whether the model predicts anything is exactly the question that program leaves to controlled, independently audited experiments---and nothing in this paper preempts their answer.
+
+\begin{thebibliography}{9}
+\bibitem{buckingham} E.~Buckingham, ``On physically similar systems: illustrations of the use of dimensional equations,'' \emph{Phys.\ Rev.}\ 4 (1914), 345--376.
+\bibitem{vim} JCGM 200:2012, \emph{International Vocabulary of Metrology---Basic and General Concepts and Associated Terms}, 3rd ed.
+\bibitem{gum} JCGM 100:2008, \emph{Evaluation of Measurement Data---Guide to the Expression of Uncertainty in Measurement}.
+\bibitem{sargent} R.~G. Sargent, ``Verification and validation of simulation models,'' \emph{J.\ Simulation} 7 (2013), 12--24.
+\bibitem{pearl} J.~Pearl, \emph{Causality: Models, Reasoning, and Inference}, 2nd ed., Cambridge University Press, 2009.
+\bibitem{prov} W3C, \emph{PROV-O: The PROV Ontology}, 2013.
+\bibitem{chua71} L.~O. Chua, ``Memristor---the missing circuit element,'' \emph{IEEE Trans.\ Circuit Theory} 18 (1971), 507--519.
+\bibitem{chuakang76} L.~O. Chua and S.~M. Kang, ``Memristive devices and systems,'' \emph{Proc.\ IEEE} 64 (1976), 209--223.
+\bibitem{kennedyohagan} M.~C. Kennedy and A.~O'Hagan, ``Bayesian calibration of computer models,'' \emph{J.\ R.\ Stat.\ Soc.\ Ser.~B} 63 (2001), 425--464.
+\end{thebibliography}
+
+\end{document}

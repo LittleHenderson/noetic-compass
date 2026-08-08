@@ -1,0 +1,269 @@
+\documentclass[11pt]{amsart}
+\usepackage[margin=1.2in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs,array,longtable}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{finding}[theorem]{Adverse Finding}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{ruleenv}[theorem]{Rule}
+\newtheorem{checkclass}[theorem]{Check Class}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{boundary}[theorem]{Claim Boundary}
+
+\begin{document}
+
+\title[CAS PCBA 8: adaptive cognitive circuit engineering]{CAS PCBA 8: adaptive cognitive circuit engineering with typed, fail-closed design rules and a preserved adverse source audit}
+\author{Little Henderson}
+\thanks{Research paper v0.2, 2026-08-07 (supersedes white paper v0.1). Artifact status: \textsc{draft / open / ring 4 / not licensed / held}. Engineering baseline: \texttt{CAS\_PCBA\_Engineer.pdf}, 743~pp., source ID \textsc{src-pcba-engineer-20260726}, SHA-256 \texttt{294320B39FA521EAC086E99E2D9DB913E2B6CFF0754FF82DB1EF966424566274}. Controlling artifacts: \texttt{CAS\_PCBA\_V8\_SOURCE\_AUDIT\_AND\_SPEC\_v0.1.md} (SHA-256 \texttt{19707B92\ldots}); \texttt{PCBA\_CCDL\_CONSTRUCT\_COVERAGE\_v0.1.json} (SHA-256 \texttt{5BB797EC\ldots}); Gate~4 review matrix and artifact manifest v0.1; publication delta Paper~6 at base commit \texttt{a1cd9901}. Implementation \texttt{src/cas\_pcba\_v8/} (14 modules). Drafting this paper promotes no claim; independent systems, safety, regulatory, clinical, and formal review remains open.}
+\date{August 7, 2026}
+
+\begin{abstract}
+CAS PCBA 8 is a typed, provenance-bearing research architecture for describing and checking circuit-shaped cognitive-system models. ``Circuit'' names an engineering organization---typed components, ports, nets, state annotations, calibration references, deterministic traces---and does not assert a physical electrical implementation or identify model quantities with voltage, current, or resistance. The research question is whether a circuit-shaped modeling language can make cognitive-system hypotheses more explicit, type-safe, replayable, and falsifiable \emph{without} converting an analogy into a physical, causal, safety, or product claim.
+
+This paper develops the affirmative software-contract answer in full. We specify the type system (state literals, ND-cells, strictly positive simplex addresses, tagged exact values, one immutable decimal context); the deterministic design-rule checker with its closed 35-code \texttt{PCBA8-*} diagnostic catalog across model, semantics, parameters, states, bias, nets, test points, calibration, feedback, safety, and TKS-adapter classes; the narrow deterministic simulator and its canonical trace bindings; the Fisher--Rao and projector geometry profiles with their disclosed numerical limits; and the certified-transition adapter into the TKS~v8 finite kernel. We then present the adverse source audit at full evidential resolution: the consolidated CCDL grammar admits only seven \texttt{circuit\_item} alternatives and a two-alternative board body, while the five published reference boards use dozens of reserved statement leaders absent from the grammar---four boards are direct syntactic counterexamples, itemized here with page anchors and observed forms---and the published Cognitive Safety Board clamps its red stage at $0.1$ upstream of a $0.9$ fuse threshold, making the protective crossing unreachable under the declared clamp semantics; we formalize that unreachability argument. Bounded software evidence (82 CAS PCBA v8 test methods within an integrated 208-method, 272-subtest, 54-artifact Gate~4 receipt) establishes tested software behavior only. Threats to validity, the claim quarantine, and a dependency-ordered research program complete the paper.
+\end{abstract}
+
+\maketitle
+\tableofcontents
+
+\section{Introduction}\label{sec:intro}
+
+\subsection{The research question}
+The engineering question is not whether cognition \emph{is} electronics. It is:
+
+\begin{quote}
+Can a circuit-shaped modeling language make cognitive-system hypotheses more explicit, type-safe, replayable, and falsifiable without converting an analogy into a physical, causal, safety, or product claim?
+\end{quote}
+
+The current candidate supports a qualified affirmative at the software-contract level. Its contributions are: (1) a typed board model separating semantic state, geometry, signal kind, unit, component contract, calibration metadata, and evidence provenance; (2) a deterministic design-rule checker (DRC) with fail-closed diagnostics; (3) a narrow trace-emitting reference simulator for declared deterministic component profiles; (4) a source- and profile-bound adapter from certified finite component tables to the TKS v8 finite reference kernel; (5) a source audit that preserves, rather than silently repairs, the incomplete CCDL grammar and the CSB threshold contradiction; and (6) an evidence discipline distinguishing green software tests from experiments, measurement validation, safety evidence, and authority.
+
+\subsection{Three load-bearing separations}
+\begin{enumerate}
+\item \textbf{Model versus world.} A simulated transfer rule is behavior of the declared software profile, not evidence that a cognitive or physical system obeys it.
+\item \textbf{Design value versus measurement.} A locally supplied parameter or calibration label remains structural metadata until authenticated measurement evidence and uncertainty are supplied.
+\item \textbf{Analogy versus identity.} Names borrowed from circuits do not make CAS quantities SI electrical quantities; physical voltage, current, resistance, charge, flux, and power are outside the candidate unless a separately typed, instrumented physical profile is proposed and validated.
+\end{enumerate}
+
+The engineering literature supports this discipline at the level of \emph{method}, not CAS validity: VHDL demonstrates the value of machine- and human-readable formal hardware description \cite{vhdl}; Statecharts demonstrate the need for explicit state, hierarchy, concurrency, and communication semantics \cite{harel}; and simulation verification is a distinct activity from operational validation \cite{sargent}. None of these sources validates the CAS ontology or its cognitive interpretation.
+
+\section{Versioned source basis}\label{sec:sources}
+
+The immediate engineering baseline is the 743-page owner-supplied CAS PCBA Engineer build, source ID \textsc{src-pcba-engineer-20260726}. Its internal changelog label predates the supplied build, so the candidate uses the source ID plus exact hash and does not invent a public semantic version. The book is an engineering reference; its own disclaimer, the Phase-0 authority matrix, and this candidate all deny safety certification and physical telemetry.
+
+Downstream read-only context: the TKS v8 core formal specification (finite-arrow boundary) and the Noetic Topos 2.0 specification (ambient/resolved evidence boundary). The Gate~5 preregistration specification supplies no experiment to this paper; at the bound commit it is \textsc{open / not started / ring 4 / not licensed / held / not frozen}, and nothing here promotes it.
+
+\section{Typed semantic and board model}\label{sec:types}
+
+\subsection{Semantic identity}
+CAS Core 8 supplies the structural reference tuple $(\text{namespace},\text{local\_id},\text{version},\text{source\_id},\text{definition\_sha256})$, with TKS Foundations, TKS Worlds, CAS Drives, Domains, Registers, States, and Noetic Topos objects in disjoint namespaces and no silent identity across them. This prevents a board adapter from manufacturing a semantic theorem because two objects share a label or position.
+
+\subsection{State types}
+
+\begin{definition}[State literals and cells]\label{def:states}
+\[
+\mathrm{StateLiteral}=\mathrm{Noetic}\times\mathrm{Domain}\times\mathrm{Drive}_{\mathrm{opt}}\times\mathrm{Register}_{\mathrm{opt}},
+\qquad
+\mathrm{NDCell}=\mathrm{Noetic}\times\mathrm{Domain}.
+\]
+The projection $\mathrm{StateLiteral}\to\mathrm{NDCell}$ forgets Drive and Register; it is explicitly many-to-one and is not an isomorphism.
+\end{definition}
+
+\begin{definition}[Simplex address]\label{def:simplex}
+A $\mathrm{SimplexAddress}_{40}$ is a strictly positive normalized profile over the forty canonical ND-cells: $p\in\mathbb{R}^{40}$ with $p_k>0$ for all $k$ and $\sum_kp_k=1$. It is neither a one-hot cell nor an element of the finite TKS kernel; positivity is validated strictly.
+\end{definition}
+
+\subsection{Values and arithmetic}
+
+\begin{ruleenv}[Tagged exact values]\label{rule:tagged}
+Finite carrier values use tagged exact type-plus-value identity: integer $1$, Boolean \emph{true}, and string \texttt{"true"} are distinct throughout DRC, execution, traces, and adapters.
+\end{ruleenv}
+
+\begin{ruleenv}[One decimal context]\label{rule:decimal}
+All decimal operations run under one immutable, versioned context created from primitive constants for each operation; ambient caller precision is irrelevant, and the context identity enters reports and results. IEEE~754 \cite{ieee754} is an external reference for explicit arithmetic control; the candidate's decimal profile remains its own software contract.
+\end{ruleenv}
+
+\subsection{Board structure}
+A board contains immutable, identity-bearing records for: components and declared kinds; typed ports (direction, signal kind, unit); typed parameters and finite-state annotations; nets and endpoints; test points and calibration references; declared feedback loops; source and research-boundary metadata; and deterministic identity material. Board identity includes the complete canonical structure, so any structural edit changes the board's digest. Public operations derive and recheck the fixed research boundary rather than trusting a shared mutable object.
+
+\subsection{Geometry profiles}
+The mixed-simplex baseline retains a named Fisher--Rao profile; information geometry supplies the mathematical setting for probability-simplex metrics \cite{amari} but does not identify a learned model state with a CAS state. The disclosed binary64 implementation is a numerical pseudometric at its resolution---not a proof that all distinct profiles are separated. Projector geometry is a separate, optional research profile: it caps and versions its tolerance, records validation residuals, and binds the canonical matrix, basis/source, dimension, rank, and tolerance in one digest. The registered projector Gram-kernel result requires common rank $d>0$ and does not establish latent cognitive capacity; the stronger CAS capacity transfer retains a proof gap and is governed solely by the formal-mathematics Paper~3 record at its own commit.
+
+\section{The design-rule checker}\label{sec:drc}
+
+The DRC computes one deterministic diagnostic report under the closed \texttt{PCBA8-*} catalog. Errors fail the board; warnings never become an implicit clean result. The complete catalog:
+
+\begin{center}
+\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+Class & Codes & Diagnostics \\
+\midrule
+Model & \texttt{MDL-001/002} & invalid board metadata; duplicate reference \\
+Semantics & \texttt{SEM-001/002} & unknown component kind; unresolved semantics \\
+Parameters & \texttt{PAR-001/002/003} & unknown; missing; invalid parameter \\
+States & \texttt{STATE-001/002/003} & unknown; missing; invalid state binding \\
+Bias & \texttt{BIAS-001} & bias-domain incoherence \\
+Nets & \texttt{NET-001}--\texttt{009} & unknown endpoint owner; unknown port; invalid driver count; missing net load; signal-kind mismatch; unit mismatch; port multiply connected; required port unconnected; invalid signal/unit pair \\
+Test points & \texttt{TP-001/002/003} & unknown test-point net; missing safety test point; safety test point not marked \\
+Calibration & \texttt{CAL-001}--\texttt{004} & unknown; invalid; unit-mismatched; missing test-point calibration \\
+Feedback & \texttt{FBK-001}--\texttt{004} & undeclared feedback; feedback without delay; unsafe feedback gain; invalid feedback declaration \\
+Safety & \texttt{SAF-001/002/003} & unreachable safety threshold; unsafe fuse action; unresolved safety analysis \\
+TKS adapter & \texttt{TKS-001} & invalid finite transition \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{checkclass}[Structural integrity]
+Unique nonblank identities for components, ports, nets, test points, calibrations, and feedback declarations; component kinds and exact parameter keys from a closed catalog; missing or unknown semantics fail closed (\texttt{MDL}, \texttt{SEM}, \texttt{PAR}, \texttt{STATE} classes).
+\end{checkclass}
+
+\begin{checkclass}[Typed connectivity]
+Every endpoint resolves to a declared owner and port; every net has exactly one typed driver; driver and load signal kinds and units agree under a closed admissible signal-kind/unit table; required inputs connect or have an executable default in the selected simulator profile; multiple drivers, missing loads, multiply-connected ports, and unsupported signal/unit pairs receive distinct \texttt{NET} diagnostics.
+\end{checkclass}
+
+\begin{checkclass}[Calibration and probe integrity]
+Executable test points require versioned calibration references with profile-digest shape, instrument and protocol identity fields, uncertainty, measurement kind, and net-unit compatibility. A locally constructed calibration record cannot make itself Evidence-Packet eligible. Safety-marked paths require explicitly marked probes; a probe's presence does not establish safety (\texttt{TP}, \texttt{CAL} classes).
+\end{checkclass}
+
+\begin{checkclass}[Feedback analysis]
+The checker builds a directed component graph and computes strongly connected components (classical algorithms \cite{tarjan}). Each realizable declared cycle requires an exact feedback declaration, a declared unit delay, an existing dimensionless calibration, and a conservative sub-unity gain bound; explicit low-gain exceptions are declared, and stateful or stochastic loops are unsupported. Unsupported or resource-bounded analysis yields \texttt{SAF-003} (unresolved), never a pass (\texttt{FBK} class).
+\end{checkclass}
+
+\begin{checkclass}[Threshold reachability]\label{cc:reach}
+For supported activation paths, conservative upper bounds propagate through causes, bias/gain stages, clipping, and cutoffs. A safety-critical fuse whose threshold exceeds the resolved upstream bound receives \texttt{SAF-001} (\textsc{unreachable safety threshold}); an unresolved bound is not treated as reachable.
+\end{checkclass}
+
+\section{Narrow deterministic simulation}\label{sec:sim}
+
+Simulation is admitted only for supported component profiles with declared ports, transfer rules, clipping, statefulness, and time semantics. The current profile topologically orders the non-delay graph, uses declared unit-delay behavior to break admitted feedback, and emits a canonical trace binding: board and component identities; the exact DRC report identity; component catalog and decimal-context identities; simulator profile and source baseline; typed input samples and outputs; component events and tick linkage; test-point observations; measurement IDs with parent/child derivations and calibration references; and the fixed Ring-4 research boundary.
+
+Measurement and result construction validates digest form, unique IDs, child existence and derivation acyclicity, tick/trace linkage, units, and measurement-kind eligibility. Locally asserted calibration metadata is structural/test-only and cannot create authenticated Evidence-Packet eligibility. Unsupported behavior fails closed. The record discipline resembles the entity/activity/derivation separation of W3C PROV \cite{prov} without claiming PROV-O conformance.
+
+\begin{boundary}
+The correct interpretation of a green fixture is: \emph{the software performed the declared typed transition and produced the declared trace for the exact fixture under the exact profile}. It is never: the fixture proves a cognitive mechanism, a causal relation, a physical circuit law, a safe refusal mechanism, or a product capability. Simulation validates the implementation against declared fixtures; it does not establish that a cognitive or model system follows the simulated law.
+\end{boundary}
+
+\section{The adverse source audit}\label{sec:audit}
+
+The audit's method is bounded and disclosed: text extraction located candidate pages; every cited page was rendered from the source PDF and visually inspected; the comparison is between published surface syntax and the consolidated EBNF---it is not a parser implementation or a semantic-validation result.
+
+\subsection{CCDL grammar coverage}
+
+\begin{finding}[The formal grammar does not cover its own corpus]\label{find:grammar}
+The language reference reserves many Part-IV statement leaders (PDF p.~578; book p.~562), including \texttt{rail}, \texttt{dial}, \texttt{spec}, \texttt{constraint}, \texttt{sequence}, \texttt{route}, \texttt{derate}, \texttt{monitor}, \texttt{alert}, \texttt{hold}, \texttt{use}, \texttt{force\_state}, \texttt{on}, \texttt{charge}, \texttt{discharge}, \texttt{refresh}, \texttt{scan}, and \texttt{select}; prose tables describe \texttt{select}, \texttt{scan}, \texttt{interrupt}, and a verification sublanguage, and expressly say a form missing from the appendix should be treated as an erratum (PDF pp.~591--592). Yet the consolidated structural EBNF (PDF pp.~598--599) limits \texttt{circuit\_item} to seven alternatives---\texttt{io\_decl}, \texttt{node\_decl}, \texttt{cjt\_decl}, \texttt{component\_decl}, \texttt{feedback\_decl}, \texttt{probe\_decl}, \texttt{let\_decl}---and a \texttt{board\_block} body to \texttt{layer\_decl} or \texttt{via\_decl} only. Against the five published reference boards, the machine-readable coverage record concludes \textsc{formal ebnf does not cover published five-board corpus}, with four direct counterexamples and one bounded non-counterexample:
+\begin{center}
+\small
+\begin{tabular}{@{}llp{5.6cm}l@{}}
+\toprule
+Board & Pages (PDF) & Observed forms outside the grammar & Verdict \\
+\midrule
+CCB-1-CSB & 606--608 & board body contains \texttt{input}, \texttt{output}, \texttt{node}, \texttt{cjt}, \texttt{diff}, \texttt{mux}, \texttt{filter}, \texttt{feedback}, \texttt{probe} --- not \texttt{layer}/\texttt{via} & counterexample \\
+CCB-2-COB & 613--614 & leaders fit published circuit-item/component prefixes & no direct counterexample (bounded audit) \\
+CCB-3-CDAB & 618--619 & \texttt{mirror bias\_mirror: replicate(shared\_bias) -> [cjt\_l, cjt\_r]} is not a \texttt{type\_name<arg\_list>} component expression & counterexample \\
+CCB-4-CMB & 623--624 & \texttt{charge}, \texttt{select}, \texttt{discharge}, \texttt{refresh}, \texttt{scan} have no \texttt{circuit\_item} alternative & counterexample \\
+CCB-5-CPMB & 628--632 & \texttt{rail}, \texttt{use}, \texttt{spec}, \texttt{dial}, \texttt{constraint}, \texttt{monitor}, \texttt{on}, \texttt{derate}, \texttt{route}, \texttt{alert}, \texttt{hold}, \texttt{sequence}, \texttt{gate}, \texttt{force\_state} have no alternative & counterexample \\
+\bottomrule
+\end{tabular}
+\end{center}
+The corpus-level conformance claim therefore fails, without overstating the result for the one bounded listing.
+\end{finding}
+
+\begin{ruleenv}[Candidate grammar rule]
+The v0.1 implementation declares only its programmatic Python object model and does not claim to parse the complete CCDL book language. Any later grammar must publish an exact construct-coverage matrix, reject unsupported forms, and round-trip every admitted board canonically.
+\end{ruleenv}
+
+\subsection{The CSB known-fault board}
+
+\begin{finding}[The published safety fuse cannot trip]\label{find:csb}
+The Chapter~18 Cognitive Safety Board listing gives a red-stage saturation clamp $\mathrm{sat}=0.1$ and a downstream fuse threshold $0.9$ (PDF p.~342; repeated in Appendix~D at PDF p.~608). The same listing uses non-finite gain $\beta=\infty$ despite finite grammar and validator rules. The Appendix-D note (PDF p.~610) says the infinite gain is an idealization rejected by validators and directs the implementer to a large finite value---while retaining the $\mathrm{sat}=0.1$ clamp and without reconciling it with the $0.9$ threshold. The book supplies no fail-closed latch state machine showing that an open fuse preserves rather than suppresses the refusal path.
+\end{finding}
+
+\begin{proposition}[Unreachability under the declared semantics]\label{prop:unreach}
+Under the stated clamp semantics---saturation as an output plateau bounding the red stage above by $0.1$---and with every downstream stage on the declared path monotone and non-amplifying under the published parameters, the fuse input never exceeds $0.1$; since $0.1<0.9$, the threshold crossing is unreachable, and the DRC's conservative bound propagation (Check Class~\textup{\ref{cc:reach}}) necessarily flags \texttt{SAF-001}.
+\end{proposition}
+
+\begin{proof}
+Let $u$ denote the red-stage output; the clamp gives $u\le 0.1$ pointwise. Each declared downstream stage $s$ satisfies $s(x)\le x$ for $x\ge 0$ under the published parameters (clipping and cutoff stages are non-increasing in bound; the published path contains no amplifying stage between clamp and fuse). By induction along the path, the fuse input is bounded by $0.1$. A threshold event requires input $\ge 0.9$.
+\end{proof}
+
+\begin{remark}[Disposition]
+Saturation is a plateau, not a latch. The unmodified parameters are retained as a known-fault fixture that the DRC must flag---valuable negative evidence about the source and a permanent regression guard for the checker, not a validation of the board's safety function. Any repair is a separately versioned design requiring threshold reachability, finite parameters, latch state transitions, fuse truth tables, deterministic traces, hazard analysis, and independent safety review.
+\end{remark}
+
+\subsection{Claim quarantine}
+The following remain hypotheses or prohibited product inferences: exact thought/transistor isomorphism; shared four-region identity; overload-induced semantic involution; Fisher--Rao causal gain; physical electrical identity for CAS quantities; semantic correctness inferred from a response-region label; safety effectiveness, certification, regulatory compliance, or clinical use; complete compiler conformance; production readiness; and disclosure or license authority from a self-hash or generated receipt. Historical AI-authored, self-hashed licensing receipts are not an authenticated reviewer or legal authority.
+
+\section{TKS v8 and Noetic Topos 2 boundaries}\label{sec:tks}
+
+Only a certified total, finite, deterministic, stateless, non-stochastic component transition may be adapted to a TKS v8 finite arrow. A typed sequence becomes a semigroupoid path; only an endomap has powers, so feedback powers require a certified endomap. The adapter returns an immutable certificate binding the exact TKS kernel bytes and profile, the PCBA board, component, and transition identities, the tagged carrier, the semantic profile, and the fixed boundary; ambient module substitution is rejected, and violations raise \texttt{TKS-001}. The adapter proves at most type-correct representation in the finite reference kernel; it carries no automatic CAS semantic theorem. Continuous simplex profiles, response curves, instrumented observations, stateful devices, stochastic kernels, and memristive history variables remain outside the finite arrow and require distinct types and comparison maps rather than coercion.
+
+From Noetic Topos 2.0 the candidate inherits the ambient-versus-resolved evidence distinction: raw or partially resolved records may be treated as external evidence associated with the ambient construction, but a marked cover does not make a measurement true, and records do not enter resolved semantics until restriction and gluing under one calibration profile are defined and tested.
+
+\section{Bounded software evidence}\label{sec:evidence}
+
+At the bound commit, the integrated Gate~4 receipt records 54 hash-bound artifacts and three green focused suites:
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrl@{}}
+\toprule
+Suite & Methods & Suite test-ID SHA-256 \\
+\midrule
+CAS Core v8 & 61 & \texttt{E2AF5014DE28DD0702211EF32A2757B99B869A13FAFBB0B8D1B18A50A9F8FEF5} \\
+CAS PCBA v8 & 82 & \texttt{D5F776C5F15758CD390470B5A542CCA110784DC5EBB9807B6BE41B2C80453470} \\
+CAS-Ohm v1 & 65 & \texttt{2E81A685961286D944894A22EB93345B97211B4433B6C71EAF628D84CD8EB1EF} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The combined focused run comprises 208 test methods and 272 parameterized subtests; 11 claim records all Ring~4 and \textsc{not licensed}; 53 review criteria with 20 open; four direct EBNF counterexamples; eight CAS-Ohm source conflicts; and an integrated Gate~1 pass. The repository-wide collector was \emph{not} clean at the bound receipt---four pre-existing package-path namespace collisions after 1{,}200 collected items---so the focused suites cannot support a repository-wide verification claim. These numbers are historical, source-bound software receipts, not experiments in this publication lane.
+
+\section{Threats to validity}\label{sec:threats}
+
+\emph{Construct validity.} No experiment establishes that the selected CAS types correspond to cognitive mechanisms or latent model structure; the circuit organization may aid design and audit without being an ontology of cognition.
+
+\emph{Internal validity.} The DRC and simulator have bounded regression suites, not proofs of all paths. Property-based/random generation \cite{quickcheck}, fuzz testing, independent implementations, and a separately sourced mutation-testing campaign remain open. The full CCDL parser does not exist.
+
+\emph{External validity.} There is no live calibrated model, physical board, instrument chain, held-out replication, or multi-model evaluation in the admitted evidence; cross-model and cross-context generalization are open.
+
+\emph{Numerical validity.} The fixed decimal profile controls candidate arithmetic; the disclosed binary64 Fisher--Rao implementation is a numerical pseudometric at its resolution. Independent numerical audit and tolerance analysis remain open.
+
+\emph{Causal validity.} Graph connectivity, gain composition, prediction, and residual localization do not establish causation; causal claims require explicit models, identification assumptions, and interventions \cite{pearl}. None is admitted.
+
+\emph{Safety and governance.} Finding~\ref{find:csb} blocks any safety-effectiveness inference. Hazard analysis, independent safety engineering, regulatory and clinical review, authenticated claim authority, canon admission, disclosure approval, and product acceptance are all open.
+
+\section{Dependency-ordered research program}\label{sec:program}
+
+\begin{enumerate}
+\item Specify a complete versioned CCDL grammar and a golden five-board corpus.
+\item Implement canonical parse/serialize round trips with fail-closed unsupported syntax.
+\item Define separate capacitor, PLL, memory, power, feedback, stochastic, and memristive state/time profiles.
+\item Run a property-based/random-generation campaign over DRC and simulation invariants \cite{quickcheck}; separately specify and source any mutation-testing campaign.
+\item Independently reproduce the exact source and test bundle in a hermetic toolchain.
+\item Preregister calibration and held-out validation through the Gate~5 control kernel, without promoting Gate~5 status.
+\item Require executor/auditor numerical agreement, falsifiers, negative outcomes, and independent replication.
+\item Complete internal cross-review against stable hashes; then commission external formal, systems, experimental, safety, and claim-language review before any submission or use claim.
+\end{enumerate}
+
+\section{Conclusion}
+
+CAS PCBA 8's value is not that it proves cognition is electrical---it does not and cannot at this stage. Its value is architectural and evidential: informal pathway diagrams become typed, inspectable, versioned software objects; every executable claim is bound to a profile, source, calibration record, and trace; and negative evidence is preserved as first-class findings with page-anchored evidence rather than patched away. A grammar that does not cover its own corpus (Finding~\ref{find:grammar}) and a safety board whose fuse cannot trip (Finding~\ref{find:csb}, Proposition~\ref{prop:unreach}) are recorded, formalized, and guarded by the checker. The framework makes whole categories of error observable earlier---scale and unit substitution, ambiguous crosswalks, incomplete grammar claims, multiple-driver and unresolved-port defects, unreachable threshold paths, undisciplined feedback, fabricated measurement lineage, and software receipts misrepresented as authority. That is a legitimate engineering contribution exactly as long as its boundary remains as explicit as its checks.
+
+\begin{thebibliography}{9}
+\bibitem{vhdl} IEEE Std 1076-2019, \emph{VHDL Language Reference Manual}.
+\bibitem{harel} D.~Harel, ``Statecharts: a visual formalism for complex systems,'' \emph{Sci.\ Comput.\ Program.}\ 8 (1987), 231--274.
+\bibitem{tarjan} R.~Tarjan, ``Depth-first search and linear graph algorithms,'' \emph{SIAM J.\ Comput.}\ 1 (1972), 146--160.
+\bibitem{ieee754} IEEE Std 754-2019, \emph{Floating-Point Arithmetic}.
+\bibitem{prov} W3C, \emph{PROV-O: The PROV Ontology}, 2013.
+\bibitem{sargent} R.~G. Sargent, ``Verification and validation of simulation models,'' \emph{J.\ Simulation} 7 (2013), 12--24.
+\bibitem{quickcheck} K.~Claessen and J.~Hughes, ``QuickCheck: a lightweight tool for random testing of Haskell programs,'' \emph{ICFP} (2000).
+\bibitem{amari} S.-i.~Amari, \emph{Information Geometry and Its Applications}, Springer, 2016.
+\bibitem{pearl} J.~Pearl, \emph{Causality: Models, Reasoning, and Inference}, 2nd ed., Cambridge University Press, 2009.
+\end{thebibliography}
+
+\end{document}
