@@ -1,5 +1,177 @@
 # CAS Harness Production TODO
 
+2026-08-08T02:04:22Z Project Coherence Gate 5 retained-evidence reconciliation: the interrupted 2026-08-07 reconciliation session was completed, verified, and committed as `bff8d6821aa76076fd6d431c926eaa7a5f5a6395` on `codex/project-coherence-model-smoke` (predecessor HEAD `75898e8efde0564587f8b9f114eac2f96f256a6a`; pushed to origin; worktree clean). Two canonical records were added. `GATE5_ENGINEERING_EXECUTION_RECONCILIATION_v0.1.json` binds the retained engineering chronology: GPU canary v0.1 `gate5-pythia-canary-20260807T032759Z-bd28ae7e5a85` `FAIL_CLOSED` at startup; GPU canary v0.2 `gate5-pythia-canary-20260807T035947Z-9f81c34de1b6` six-arm `ENGINEERING GPU CANARY COMPLETE / MECHANICAL PASS`; joined v0.1 `gate5-joined-20260807T061801Z-dae9471700c1` `FAIL_CLOSED` with exactly `0` model invocations; joined v0.2 `gate5-joined-20260807T063024Z-5f22d298b5db` `SUCCESS_NO_PACKET_RECORDED` with exactly `1` invocation, `reconciled=true`, Packet `NOT CREATED`. `history/HISTORICAL_CAPABILITY_EVIDENCE_RECONCILIATION_v0.1.json` binds the deterministic instruction-integrity shadow scanner (development fixture `15/15`, held-out fixture `12/12`, `mode=shadow`, positive disposition `FLAG_FOR_HUMAN_REVIEW` only) plus the retained Qwen V6 prompt-injection negative (7/7 groups vs 10/10 floor; best layer tied the text control at `0.809091`; 0/29 layers passed) and the Pythia-160M steering V6 negative (`FAIL_CLOSED`, balanced accuracy `0.5`, rho `-1.0`, `NON_REUSABLE / NO RETRY`) to exact commits and blob OIDs, with promotion and rerun inference prohibited. Stale receipts were refreshed to the already-committed test surface with no test added or relaxed: Harness v2 `155` tests + `106` subtests (`CF033F2E7F519AAD6738D596A694728FD4173CFA12DD8A8FE094823215D4CF8A`), strict worker-protocol `35` + `45` (`73C14349373376F49C380A84E8629C82167B5BF0F73415A45F197D99DE97F807`), complete worker `391/391` (`FD8367B867CB6589CC50424D7A1CECABC56BF85331BB4FD87B844E7FD3004580`), prospective lifecycle `134/134` (`67F7507579749E11E27714E8513F6909E26A503A8DD18112CC402207D9735940`, four tests from the committed terminal-disposition tranche `7e16cb38`), admitted adapter/reconciliation `98/98` (`65352B8B59CB654E449BA4A1CE8459D7109CC5B21E33F64AEAB6E2EA6EEB3C19`, eight tests from the committed joined-execution tranches; the executed node-ID canonicalization renders an embedded-newline parameter as `/n`, so collect-only console output differs), and retained-evidence `27/27` (`DC0C0ED22E0F158F014277B9D3CD26AD21D6A8FCDFBE1E76A67D09406975C952`); the historical v0.2 OCI candidate keeps its `364/364` issuance receipt unrewritten. Verifier repairs: integrated Gate 4 `compileall` bytecode redirects into a verifier-owned temporary directory; the historical container receipt verifies against its exact source-commit blobs rather than current worker bytes; the raw-text guard accepts `Gate 5 closed` only inside the explicit forbidden-wording list. Stray `src/*/__pycache__` trees were moved to a recoverable session scratchpad, not deleted. The full authoritative Gate 5 replay passed at this state: 492 hash-bound artifacts, 352 syntax-checked Python artifacts, 2102 shadow paths, integrated Gate 4 PASS (54 artifacts), 11 claim records all Ring 4 / `NOT LICENSED`, 50 review criteria with 22 required OPEN boundaries, and 1064 postflight-rechecked files. The publication-program crosswalk remains deliberately bound to the gate5-successor snapshot (`a3236dace93839cd283f1bc8c875340790bb2442` / receipt `1c8374223ab84ff71db78cefa3971e930e3240d5`); rebinding it to this branch is a separate future tranche, not implied by this PASS. Boundaries are unchanged: Gate 5 `OPEN / KEEP_OPEN`; engineering `RING 4 / BOUNDED SOFTWARE CANDIDATE TESTED`; scientific experiment `NOT_STARTED`; license/disclosure/canon `NOT LICENSED / HELD / NOT FROZEN`; RunPod/provider calls and paid spend `0 / $0.00`; the `$107.00` balance remains user-reported and uninspected. Owner-plan Stage A (clean worktree + executed canary + preserved receipts) is complete at this commit; Stage B remains open because no Evidence Packet v2 has been produced and no instruction-tuned model has been invoked. Next: freeze the instruction-tuned-model study (clean/adversarial prompt families, calibration split separated from held-out evaluation, no-op/sham/wrong-layer/matched controls, collateral-capability metrics) and produce the first Evidence Packet v2 or explicit nonreporting through the admitted path; the experiment status changes to `STARTED` only when that frozen invocation begins.
+
+2026-08-07T06:52:20.0235483Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD, six pinned raw controls, canonical gate hash, schema/arithmetic/prohibited flags, and independent structural audit (`AUTORUN_PREPARATION_AUDIT_PASS`, exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` B (0.470 GiB) vs `8,589,934,592`; current free RAM `2,548,699,136` B (2.374 GiB), margin `-6,041,235,456`; CPU `24`, disk `138,414,301,184`. Invocation count exactly `0`: no receipt/run ID, nonce/consumed marker, PID, invocation-start/report/run/RunOnce, model/framework/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex true; all 11 owner Run values/two shortcuts restored. One coordinator report send was initiated then bounded/terminated without retry. `AUTORUN_TERMINAL_NO_RETRY`; rollback complete; `work_continuing=false`. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-07T06:46:03.8021868Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD, six pinned raw controls, canonical gate hash, schema/arithmetic/prohibited flags, and independent structural audit (`AUTORUN_PREPARATION_AUDIT_PASS`, exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` B (0.470 GiB) vs `8,589,934,592`; current free RAM `2,906,288,128` B (2.707 GiB), margin `-5,683,646,464`; CPU `24`, disk `138,487,853,056`. Invocation count exactly `0`: no receipt/run ID, nonce/consumed marker, PID, invocation-start/report/run/RunOnce, or model/framework/provider/GPU/paid/RunPod activity; Phase 1.5/Phase 2 remain unauthorized. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex launch true, and all 11 owner Run values/two shortcuts restored with OneDrive preserved. Coordinator report was initiated once then bounded/terminated without retry. `AUTORUN_TERMINAL_NO_RETRY`/`work_continuing=false` remain binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-07T06:42:39Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD, six pinned raw controls, canonical-LF gate hash, retained schema/invariants/prohibited flags, and independent structural audit (`AUTORUN_PREPARATION_AUDIT_PASS`, exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` B (0.470 GiB) vs `8,589,934,592`; current free RAM `605,384,704` B (0.564 GiB), margin `-7,984,549,888`; CPU `24`, disk `134,915,461,120`. Invocation count exactly `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, run directory, or RunOnce. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values/two shortcuts restored. One concise coordinator report was initiated then bounded/terminated without retry. `AUTORUN_TERMINAL_NO_RETRY`/`work_continuing=false` remains binding; no RunPod/provider/GPU/paid action occurred. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-07T06:34:48Z Project Coherence Gate 5 joined local-GPU smoke v0.2: the exact controller/authorization/lifecycle/live-worker/output/terminal-receipt/reconciliation path completed one real CUDA BF16 invocation of `EleutherAI/pythia-160m` revision `50f5173d932e8e61f858120bcb800b97af589f46` (weights SHA-256 `29d2e457a664e41c12c735f20a36dc0956a665f614a54ce5db21a32e75965270`, 374,998,696 bytes) on the local NVIDIA GeForce RTX 4070 Laptop GPU with native JIT disabled. Successor run `gate5-joined-20260807T063024Z-5f22d298b5db` is `SUCCESS_NO_PACKET_RECORDED`, invocation count exactly `1`, reconciled `true`, cleanup all true, secret scan PASS, and receipt SHA-256 `e926723814539814b981978aa013f28cadd46f635fab57f43eab5b0488648bbd` (3,607 bytes). Request SHA-256 `6f52c4070b2b81cb47f3b85947299109152419db98d9294fa2ec60cd2be4e115`; byte-identical response/output SHA-256 `307e0799fc8cca9be7244d65cb467a68b9649f66d53166af3d8245c514110cee`; authorization SHA-256 `1f724096e99937bde648265081d2abe66792ee45769444b512d7746d052b8d1f`; terminal-receipt SHA-256 `38bc0c8471665ef62f006e52d0ac7178b759194cfec19d44177fed0524ccdf18`. The retained v0.1 predecessor `gate5-joined-20260807T061801Z-dae9471700c1` failed closed before model invocation (`0`) because the verifier rejected Docker's non-routable `none` identity IDs; its receipt SHA-256 is `67f69744a6a89a7cd30c6769e2d2cdf1d840e7bb79002fdc8450ce99675b29f9`. v0.2 exact-byte binds that failure and adapts only the verified addressless/network-route-free `none` shape; it does not reuse or rewrite v0.1. Retained/pushed commits are `05ab6f79bba9f4cda40553f53c4ebb39f6a06bdb`, `e083e2f85c20bcb28666701f975cefa94928a246`, `c92aaa3491a6f7a001c0c3cf5ffd572fa3769f2d`, `e7e69f4f58c16eabb1d3fd911d054766948e876e`, `ed6e5caf4eca6dbfc5b92ff090a21909d34ea234`, and result commit `40de8d3d877ae8544fb43d5fce3c7e8edc5dde57`. Two independent read-only audits found no defect; targeted verification passed 254 tests plus 45 subtests, including the 18-test focused runner suite. This proves joined engineering mechanics: real-model activation capture, layer hooks, measured activation change, typed intervention/ablation events, exact byte/hash binding, terminal lifecycle reconciliation, retained evidence, and verified disposal. It does **not** establish prompt-injection detection or steering efficacy: the intervention remains `APPLIED_ACTIVATION_CHANGE_OUTPUT_DELTA_UNATTRIBUTED` with `structurally_valid=false`; the layer-0/unit-0 ablation delta was `0.0`, the top token was unchanged, and selectivity failed (target `0` vs control max `4`). No Evidence Packet was created; trusted execution attestation, admitted production route, Postgres, WORM anchoring, and scientific efficacy remain `NOT ESTABLISHED`. Gate 5 remains `OPEN / KEEP_OPEN`; engineering remains `RING 4`; the formal scientific experiment remains `NOT_STARTED`; Stage 27F BF16 remains `UNVERIFIED`; and license/disclosure/canon remain `NOT LICENSED / HELD / NOT FROZEN`. RunPod/provider calls and paid spend remained `0 / $0.00`; the user-reported `$107.00` balance remains untouched. Next: freeze and invoke a separate controlled capability study on a suitable instruction-tuned open model using clean/adversarial prompts, no-op/sham/wrong-layer/matched controls, calibrated false-positive/recall measures, collateral-behavior metrics, and held-out replication. Change the scientific experiment to `STARTED` only when that frozen invocation begins.
+
+2026-08-07T06:01:00Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD, all six pinned raw controls, canonical gate hash, retained schema/invariants/prohibited flags, and independent structural audit (`AUTORUN_PREPARATION_AUDIT_PASS`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` B (0.470 GiB) vs `8,589,934,592`; current free RAM `1,248,972,800` B (1.163 GiB), margin `-7,340,961,792`; CPU `24`, disk `138,607,398,912`, current boot observed. Invocation count exactly `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, run directory, or RunOnce. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values/two shortcuts restored. Existing exactly-one coordinator dispatch/no-retry boundary remains binding; no duplicate report was sent. `AUTORUN_TERMINAL_NO_RETRY`/`work_continuing=false`; no RunPod/provider/GPU/paid action occurred. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-07T05:56:45.9922789Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD, all six pinned raw controls, canonical-LF gate hash, retained schema/invariants/prohibited flags, and independent structural audit (`AUTORUN_PREPARATION_AUDIT_PASS`, exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` B (0.470 GiB) vs `8,589,934,592`; current free RAM `2,080,301,056` B (1.937 GiB), margin `-6,509,633,536`; CPU `24`, disk `138,648,182,784`. Invocation count exactly `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, run directory, or RunOnce. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values/two shortcuts restored. One coordinator report send was initiated then bounded/terminated without retry. `AUTORUN_TERMINAL_NO_RETRY`/`work_continuing=false` remains binding; no RunPod/provider/GPU/paid action occurred. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T22:16:24.4941017-07:00 post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD, all six pinned raw controls, canonical-LF gate hash, retained schema/invariants/prohibited flags, and independent structural audit (`AUTORUN_PREPARATION_AUDIT_PASS`, exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` B (0.470 GiB) vs `8,589,934,592`; current free RAM `1,837,277,184` B (1.711 GiB), margin `-6,752,657,408`; CPU `24`, disk `138,499,379,200`. Invocation count exactly `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, run directory, or RunOnce. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values/two shortcuts restored. One coordinator send was initiated then bounded/terminated without retry. `AUTORUN_TERMINAL_NO_RETRY`/`work_continuing=false` remains binding; no RunPod/provider/GPU/paid action occurred. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-07T04:51:56.1798190Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD, six pinned raw controls, canonical-LF gate hash, retained schema/invariants/prohibited flags, and independent structural audit (`AUTORUN_PREPARATION_AUDIT_PASS`, exit `0`) validate. Durable POST_RESTART_MINIMAL_SESSION is MINIMAL_SESSION_PREFLIGHT_FAIL: recorded RAM 504,197,120 B (0.470 GiB) vs 8,589,934,592; current free RAM 1,840,902,144 B (1.715 GiB), margin -6,749,032,448; CPU 24, disk 123,702,444,032. Invocation count exactly 0: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, run directory, or RunOnce. Launcher schema-valid: exit 252, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values/two shortcuts restored. One coordinator send was initiated then bounded/terminated without retry. AUTORUN_TERMINAL_NO_RETRY/work_continuing=false remains binding; no RunPod/provider/GPU/paid action occurred. Evidence SHA256: preflight d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29; launcher 5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e.
+
+2026-08-07T04:06:20.8233816Z Project Coherence Gate 5 local GPU mechanics canary v0.2: the single post-failure BF16/no-JIT run `gate5-pythia-canary-20260807T035947Z-9f81c34de1b6` completed `ENGINEERING GPU CANARY COMPLETE / MECHANICAL PASS` in 59.153517 seconds on the local NVIDIA GeForce RTX 4070 Laptop GPU. Frozen protocol `gate5-local-gpu-canary-20260806-v0.2` SHA-256 `410226b9686860de4ca0eedc2eceefe142a7b250f0dffb0ef2eadef2056f28c1`, pre-execution driver HEAD `973259482f89c8417d7344fb983ff36ee31d1a24`, successor image `sha256:33805740641bad585a25d1e8a614b264e5daa97b588d26bf01762a0278f14c7d`, exact Pythia-160M revision/weights, native BF16 CUDA health, effective no-JIT/no-compiler policy, all six arms, all per-arm checks, baseline/zero-gain equality, artifact hashes, secret scan, and container cleanup passed independent audit. Receipt SHA-256 is `a31064b998dd63366c00501afffb32e4fae044f79449f25d6719feb1a293f8ac` (50,746 bytes). The result summary and exact 17-file run tree are retention-committed and remote-bound on `codex/project-coherence-model-smoke` at `4fd93d1d510796584404645cec92eac8ee567e53`. This proves bounded real-model worker mechanics only: activation capture, hook execution, measured selected-activation changes, typed intervention events, ablation/control probes, and a terminal mechanics receipt. It does not validate prompt-injection detection or steering efficacy: all token verdicts were `SUPPRESS`; the clean-vs-adversarial mean inversion-risk delta was `0.0`; single-unit selectivity did not pass; target receipts remained `structurally_valid=false` with unattributed paired output deltas; generated one-token outputs were unchanged; and Stage 27F BF16 calibration remains `UNVERIFIED`. Gate 5 remains `OPEN / KEEP_OPEN`; engineering remains `RING 4`; the scientific experiment remains `NOT_STARTED`; joined Gate 5 controller/authorization/lifecycle/output/terminal-receipt/Packet-v2/reconciliation execution remains `NOT_EXECUTED`; route remains default-dark/unavailable; and license/disclosure/canon remain `NOT LICENSED / HELD / NOT FROZEN`. This is `POST-FAILURE ADAPTED / NOT INDEPENDENT REPLICATION / NOT PRODUCT VALIDATION` and supports no prompt-injection-defense or steering-efficacy claim. Local GPU was used; RunPod/provider calls/paid spend remained `0 / $0.00`. Next: preregister and execute a separate exact joined controller-to-worker Evidence-Packet smoke, then use an instruction-tuned open model for calibrated clean/adversarial detection and behaviorally measured intervention controls; do not change the scientific experiment to `STARTED` until that invocation begins, and do not reuse this adapted mechanics pass as scientific validation.
+
+2026-08-07T03:26:38.3770032Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD, six pinned raw controls, canonical-LF gate hash, retained schema/invariants/prohibited flags, and independent structural audit (`AUTORUN_PREPARATION_AUDIT_PASS`, exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) vs `8,589,934,592`; current free RAM `2,343,878,656` bytes (2.183 GiB), margin `-6,246,055,936`; CPU `24`, disk `124,554,428,416`. Invocation count is exactly `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, run directory, or RunOnce. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values and two shortcuts match restored state, with OneDrive/AnyDesk/Tailscale preserved. One coordinator send was initiated then bounded/terminated without retry. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding; no RunPod/provider/GPU/paid action occurred. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-07T02:57:45.5274361Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD, six pinned raw controls, canonical-LF gate hash, retained schema/invariants/prohibited flags, and independent structural audit (`AUTORUN_PREPARATION_AUDIT_PASS`, exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) vs `8,589,934,592`; current free RAM `3,153,113,088` bytes (2.937 GiB), margin `-5,436,821,504`; CPU `24`, disk `125,461,286,912`, current boot observed. Invocation count is exactly `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, run directory, or RunOnce. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values and two shortcuts match restored state. Coordinator send was initiated then bounded/terminated without retry. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding; no RunPod/provider/GPU/paid action occurred. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-07T02:34:14.7781697Z Project Coherence Gate 5 controller-continuation successor: the existing Project Coherence program was resumed rather than recreated. Branch `codex/project-coherence-gate5-successor` now has corrective candidate `a3236dace93839cd283f1bc8c875340790bb2442` and separate publication receipt `1c8374223ab84ff71db78cefa3971e930e3240d5`; GitHub remote verification resolved the branch to that exact receipt SHA. Candidate evidence: 377 hash-bound Gate 5 artifacts; authoritative Gate 5 replay PASS in 227.3 seconds; prospective lifecycle/SQLite/default-dark route 130/130 with node-ID digest `0CA9217040958125285BFA0F6A7C6D517808B4AC4F4078C152620190767B6BB0`; admitted adapter/configured-reconciliation 90/90 with digest `761038779E00511179D4FC5AA3522829D9BDEFB37C231061D04FB3AAD541F733`; and changed route/lifecycle/service/adapter/authentication/bridge surfaces 187/187. The receipt preserves the exact b015 successor snapshot and archives its prior ordered replay. A clean detached replay at receipt commit `1c8374223ab84ff71db78cefa3971e930e3240d5` passed in strict order: Gate 5 285.1 seconds, publication program 2.9 seconds, Gate 1 14.8 seconds, and Gate 4 90.7 seconds. Independent scope review found all 24 prior lifecycle tests retained, 17 focused regressions added, no duplicate tests, and no unrelated API rewrite. Bound repairs cover exact event/lifecycle/dependency envelopes and cross-bindings, canonical event discovery, stale-read/post-CAS convergence, simultaneous retry/pending repair, reservation replay behind common full verification, and tenant/kind metadata validation. Boundaries remain unchanged: Gate 5 `OPEN / KEEP_OPEN`, engineering `RING 4 / BOUNDED SOFTWARE CANDIDATE TESTED`, experiment `NOT_STARTED`, route default-dark and unavailable/not authorized for live/product use, and license/disclosure/canon `NOT LICENSED / HELD / NOT FROZEN`. Still OPEN: lower outcome planned-final-artifact intent, distinct output-retention response replay, controller routes for `INDETERMINATE / REJECTED / EXPIRED`, provider-backed enabled startup and joined execution, trusted time/WORM/multi-host/host-loss/off-registry completeness, independent external review/replication/scientific validity, and product/license/disclosure authority. No RunPod, provider, GPU, or paid job was launched; known tranche spend is `$0.00`. The account balance remains user-reported `$107.00` and was not independently inspected. Next model-bound work is a bounded small-model capture/intervention/measurement/Evidence-Packet smoke test under `RESEARCH ONLY / EXPERIMENT STARTED / NOT YET REPLICATED / NOT PRODUCT VALIDATION`, after selecting the exact joined-run target and controls; do not start a large H100 run first.
+
+2026-08-07T02:26:37.4609109Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD, all six pinned raw controls, canonical-LF gate hash, retained schema/invariants/prohibited flags, and independent structural audit (`AUTORUN_PREPARATION_AUDIT_PASS`, exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) vs `8,589,934,592`; current free RAM `2,182,361,088` bytes (2.032 GiB), margin `-6,407,573,504`; CPU `24`, disk `126,330,515,456`, boot `2026-08-05T18:03:29.500Z`. Invocation count is exactly `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, run directory, or RunOnce. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values and both shortcuts match restored state, with OneDrive/AnyDesk/Tailscale preserved. Existing exactly-one coordinator dispatch/no-retry boundary remains binding; no duplicate report was sent. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false`; no RunPod/provider/GPU/paid action occurred. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-07T02:12:00Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD, six pinned raw controls, canonical-LF gate hash, retained schema/invariants/prohibited flags, and independent structural audit under `py -3 -I -B -S` (`AUTORUN_PREPARATION_AUDIT_PASS`, exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) vs `8,589,934,592`; current free RAM `2,322,911,232` bytes (2.164 GiB), margin `-6,267,023,360`; CPU `24`, disk `129,081,315,328`. Invocation count is exactly `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, run directory, or RunOnce. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values and both shortcuts match restored state. A single coordinator send was attempted then bounded and terminated without retry. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding; no RunPod/provider/GPU/paid action occurred. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-07T01:57:24.6702700Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD, six pinned raw controls, canonical-LF gate hash, retained schema/invariants/prohibited flags, and independent structural audit under `py -3 -I -B -S` (exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) vs `8,589,934,592`; current free RAM `2,651,607,040` bytes (2.469 GiB), margin `-5,938,327,552`; CPU `24`, disk `129,291,022,336`, boot `2026-08-05T18:03:29.500Z`. Invocation count is `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, run directory, or RunOnce. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values and both shortcuts match restored state. One coordinator report dispatch was attempted then bounded and terminated without retry. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-07T01:47:06.9683138Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD, six pinned raw controls, canonical-LF gate hash, schema/invariants/prohibited flags, and independent structural audit under `py -3 -I -B -S` (exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) vs `8,589,934,592`; current free RAM `2,626,424,832` bytes (2.446 GiB), margin `-5,963,509,760`; CPU `24`, disk `129,286,660,096`, boot `2026-08-05T18:03:29.500Z`. Invocation count is `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, or run directory. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values and both shortcuts match restored state, with OneDrive preserved. One coordinator report dispatch was bounded and terminated without retry. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-07T01:42:48.5618211Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD, six pinned raw controls, canonical-LF gate hash, retained schema/invariants/prohibited flags, and independent structural audit under `py -3 -I -B -S` (exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) vs `8,589,934,592`; current free RAM `1,888,825,344` bytes (1.759 GiB), margin `-6,701,109,248`; CPU `24`, disk `128,807,325,696`, boot `2026-08-05T18:03:29.500Z`. Invocation count is `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, run directory, or RunOnce. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values and both shortcuts match. One coordinator report dispatch was bounded and terminated without retry. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-07T01:37:53.2982888Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD, six pinned raw controls, canonical-LF gate hash, retained schema/invariants/prohibited flags, and independent structural audit under `py -3 -I -B -S` (exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) vs `8,589,934,592`; current free RAM `2,753,241,088` bytes (2.564 GiB), margin `-5,836,693,504`; CPU `24`, disk `129,586,880,512`, boot `2026-08-05T18:03:29.500Z`. Invocation count is `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, run directory, or RunOnce. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values and both shortcuts match and OneDrive/AnyDesk/Tailscale are preserved. One coordinator report dispatch was attempted and bounded without retry. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T18:12:19-07:00 post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD, six pinned raw controls, canonical-LF gate hash, retained schema/invariants/prohibited flags, and independent structural audit (exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) vs `8,589,934,592`; live free RAM `2,010,144,768` bytes (1.872 GiB), margin `-6,579,789,824`; CPU `24`, disk `129,753,559,040`, current boot observed. Invocation count is `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, run directory, or RunOnce. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values and both shortcuts match and OneDrive/AnyDesk/Tailscale are preserved. A single coordinator report dispatch was initiated and bounded without retry. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-07T00:52:05Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD, six pinned raw controls, canonical-LF gate hash, retained schema/invariants/prohibited flags, and independent structural audit under `py -3 -I -B -S` (exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) vs `8,589,934,592`; postboot free RAM `2,362,773,504` bytes (2.200 GiB), margin `-6,227,161,088`; CPU `24`, disk `130,149,593,088`, boot `2026-08-05T18:03:29.500Z`. Invocation count is `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, run directory, or RunOnce. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values and both shortcuts match and OneDrive is preserved. One coordinator report was attempted and bounded without retry. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-07T00:10:55Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, six pinned raw controls, canonical-LF gate hash, retained schema/invariants/prohibited flags, and independent structural audit under `py -3 -I -B -S` (exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) vs `8,589,934,592`, shortfall `8,085,737,472`; live free RAM `2,317,008,896` bytes (2.158 GiB), margin `-6,272,925,696`; CPU `24`, disk `130,898,735,104`, current boot `2026-08-05T18:03:29.500Z`. Invocation count is `0`: no authorization/receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, run directory, or RunOnce. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values and both shortcuts match, OneDrive preserved. Existing exactly-one coordinator dispatch/no-retry boundary retained; no duplicate was sent. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-07T00:06:23.5846293Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, six pinned raw controls, canonical-LF gate hash, schema/invariants/prohibited flags, and independent structural audit under `py -3 -I -B -S` (exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) vs `8,589,934,592`, shortfall `8,085,737,472`; live free RAM `2,606,112,768` bytes (2.427 GiB), margin `-5,983,821,824`; CPU `24`, disk `130,840,354,816`, current boot `2026-08-05T18:03:29.500Z` (the recorded preflight boot is stale). Invocation count is `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, run directory, or RunOnce. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values and both shortcuts restored, OneDrive preserved. Existing exactly-one coordinator dispatch/no-retry boundary retained; no duplicate was sent. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T23:48:03.1800918Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, six pinned raw controls, canonical-LF gate hash, schema/invariants/prohibited flags, and independent structural audit (exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) vs `8,589,934,592`; live free RAM `2,177,982,464` bytes (2.029 GiB), margin `-6,411,952,128`; CPU `24`, disk `131,185,557,504`, and current boot differs from stale recorded preflight boot. Invocation count is `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, run directory, or RunOnce. Launcher schema-valid: exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values and two shortcuts restored, OneDrive/AnyDesk/Tailscale present. Coordinator-report dispatch was bounded and not retried. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T23:36:36.0760570Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, canonical-LF gate hash, preflight schema/invariants/prohibited flags, and independent structural audit (exit `0`) validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) versus `8,589,934,592`; current free RAM `2,130,972,672` bytes (1.985 GiB), margin `-6,458,961,920`; CPU `24`, disk `131,245,629,440`, and current boot validate. Invocation count is `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, or run directory. Schema-valid launcher status has exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values and both shortcuts match restored state. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T23:07:27.1761031Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, canonical-LF gate hash, preflight schema/invariants/prohibited flags, and independent structural audit validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) versus `8,589,934,592`; current free RAM `2,726,895,616` bytes (2.539 GiB), margin `-5,863,038,976`; CPU `24`, disk `131,720,527,872`, and current boot validate. Invocation count is `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, or run directory. Schema-valid launcher status has exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values and both shortcuts match restored state. One coordinator dispatch was attempted then bounded/terminated without retry. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T23:01:42Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, and canonical-LF gate hash validate. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) versus `8,589,934,592`; current free RAM `1,721,016,320` bytes (1.603 GiB), margin `-6,868,918,272`; CPU `24`, disk `130,094,514,176`, and current boot validate. Invocation count is `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, or run directory. Schema-valid launcher status has exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values and both shortcuts match restored state. One coordinator report was submitted then bounded/terminated without retry. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T22:48:00Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, canonical-LF gate hash, preflight schema/invariants/prohibited flags, and structural audit validate. Durable `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) versus `8,589,934,592`, shortfall `8,085,737,472`; current free RAM `2,137,456,640` bytes (1.991 GiB), margin `-6,452,477,952`; CPU `24`, disk `130,185,678,848`, and current boot validate. Invocation count is `0`: no receipt/run ID, nonce, consumed marker, PID, invocation-start, terminal report, RunOnce, or completed run directory. Launcher terminal surface is schema-valid with exit `252`, controller false, restoration PASS, Codex launch true, Phase 1.5/Phase 2 false; all 11 owner Run values and both shortcuts match restored state. One coordinator dispatch was initiated then terminated after bounded waits, with no retry. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T21:41:09.0274513Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, optional-startup binding, canonical-LF gate hash, and structural audit hash validate. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes versus `8,589,934,592`; current free RAM `1,663,975,424` bytes (1.550 GiB), margin `-6,925,959,168` bytes, CPU `24`, disk `130,697,453,568` bytes, and current boot validate. Invocation count is `0`: no receipt, nonce, consumed marker, invocation-start, terminal report, RunOnce value, or run directory; no model/framework/provider/GPU/paid/RunPod activity; Phase 1.5/Phase 2 remain unauthorized. Schema-valid launcher status has exit `252`, controller false, restoration PASS, and Codex launch recorded. All 11 owner Run values, OneDrive, and both startup shortcuts match restoration. A single coordinator-report dispatch was initiated and was not retried after bounded waiting. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T21:26:00-07:00 post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, optional-startup binding, canonical-LF gate hash, and independent structural audit validate. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes versus `8,589,934,592`; current free RAM `2,063,265,792` bytes (1.922 GiB), margin `-6,526,668,800` bytes, CPU `24`, disk `130,652,069,888` bytes, and current boot validate. Invocation count is `0`: no receipt, nonce, consumed marker, PID, invocation-start, terminal report, or run directory; no model/framework/provider/GPU/paid/RunPod activity; Phase 1.5/Phase 2 remain unauthorized. RunOnce is empty; schema-valid launcher status has exit `252`, controller false, restoration PASS, and Codex launch recorded. All 11 owner Run values, OneDrive value, and both startup shortcuts match restoration; AnyDesk/Tailscale are running. Existing exactly-one coordinator-report/no-retry boundary remains binding, so no duplicate message was sent. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T21:22:00-07:00 post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, optional-startup binding, canonical-LF gate hash, and independent structural audit validate. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes versus `8,589,934,592`; current free RAM `1,229,094,912` bytes (1.145 GiB), margin `-7,360,839,680` bytes, CPU `24`, disk `130,725,904,384` bytes, and current boot validate. Invocation count remains `0`: no receipt, nonce, consumed marker, PID, invocation-start, terminal report, or completed run directory; no model/framework/provider/GPU/paid/RunPod activity; Phase 1.5/Phase 2 remain unauthorized. RunOnce is absent; schema-valid launcher status has exit `252`, controller false, restoration PASS, and Codex launch recorded. All 11 owner Run values and both startup shortcuts match restoration; OneDrive is preserved and AnyDesk/Tailscale services remain present. Existing exactly-one coordinator-report/no-retry boundary remains binding, so no duplicate message was sent. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T20:56:46.0034957Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Isolated worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, optional-startup binding, and canonical-LF gate hash validate. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes versus `8,589,934,592`; current free RAM `2,191,060,992` bytes (2.041 GiB), margin `-6,398,873,600` bytes, CPU `24`, disk `131,395,698,688` bytes, boot `2026-08-05T18:03:29.500Z`. Invocation count remains `0`: no receipt, nonce, consumed marker, PID, invocation-start, terminal report, or completed run directory; no model/framework/provider/GPU/paid/RunPod activity; Phase 1.5/Phase 2 remain unauthorized. RunOnce is absent; schema-valid launcher status has exit `252`, controller false, restoration PASS, and Codex launch recorded. All 11 owner Run values and both startup shortcuts match restoration; OneDrive, AnyDesk, and Tailscale remain preserved. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T20:36:24.1636664Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw control hashes, optional-startup binding, and canonical-LF gate hash validate. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes versus `8,589,934,592`; current free RAM `2,672,427,008` bytes (2.489 GiB), margin `-5,917,507,584` bytes, CPU `24`, disk `131,540,287,488` bytes, boot `2026-08-05T18:03:29.500Z`. Invocation count remains `0`: no receipt, nonce, consumed marker, PID, invocation-start, terminal report, run directory, model/framework/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority. RunOnce is absent; launcher status is schema-valid with exit `252`, controller false, restoration PASS, and Codex launch recorded. All 11 owner Run values and both startup shortcuts match restoration; OneDrive matches its preserved value. Existing exactly-one coordinator-report/no-retry boundary retained; no duplicate message sent. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T20:32:43.1499430Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, optional-startup binding, and canonical-LF gate hash validate. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes versus `8,589,934,592`; current free RAM `2,896,347,136` bytes (2.697 GiB), margin `-5,693,587,456` bytes, CPU `24`, disk `131,483,217,920` bytes, boot `2026-08-05T18:03:29.500Z`. Invocation count remains `0`: no receipt, nonce, consumed marker, invocation-start, terminal report, run, model/framework/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority. RunOnce is absent; launcher status is schema-valid with exit `252`, controller false, restoration PASS, and Codex launch recorded. All 11 owner Run values and both startup shortcuts match restoration; OneDrive, AnyDesk, and Tailscale remain preserved. Existing exactly-one coordinator-report boundary retained; no duplicate message sent. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T13:26:33.6054950-07:00 post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six pinned raw control hashes validate. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes versus `8,589,934,592`; current free RAM `2,610,356,224` bytes (2.431 GiB), margin `-5,979,578,368` bytes, CPU `24`, disk `131,548,336,128` bytes, boot `2026-08-05T18:03:29.500Z`. Invocation count remains `0`: no receipt, nonce, consumed marker, invocation-start, PID, terminal report, run, model/framework/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority. RunOnce is absent; schema-valid launcher status has exit `252`, controller false, restoration PASS, and Codex launch recorded. All 11 owner Run values and both startup shortcuts match restoration; OneDrive, AnyDesk, and Tailscale remain preserved. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Existing exactly-one coordinator-report boundary retained; no duplicate message sent. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T12:47:06.1450103-07:00 post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, optional-startup binding, and canonical-LF gate hash validate. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes versus `8,589,934,592`; current free RAM `2,266,566,656` bytes (2.111 GiB), margin `-6,323,367,936` bytes, CPU `24`, disk `131,912,077,312` bytes, boot `2026-08-05T18:03:29.500Z`. Invocation count remains `0`: no receipt, nonce, consumed marker, PID, invocation-start, terminal report, run, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority. RunOnce is absent; launcher status is schema-valid with exit `252`, controller false, restoration PASS, and Codex launch recorded. All 11 owner Run values and both shortcuts are restored; the pre-restart state attests OneDrive plus AnyDesk/Tailscale preservation. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Exactly one coordinator report was initiated; completion did not return before the bounded wait and was not retried. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T19:37:55.2602885Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, optional-startup binding, and canonical-LF gate hash validate. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes versus `8,589,934,592`; current free RAM `2,043,240,448` bytes (1.903 GiB), margin `-6,546,694,144` bytes, CPU `24`, disk `132,149,444,608` bytes, boot `2026-08-05T18:03:29.500Z`. Invocation count remains `0`: no receipt, nonce, consumed marker, PID, invocation-start, terminal report, run, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority. RunOnce is absent; launcher status is schema-valid with exit `252`, controller false, restoration PASS, and Codex launch recorded. All 11 owner Run values and both shortcuts are restored; OneDrive plus AnyDesk/Tailscale are preserved. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Exactly one coordinator report was initiated; completion did not return before bounded wait and was not retried. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T19:32:07.9247735Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, optional-startup binding, and canonical-LF gate hash validate. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes versus `8,589,934,592`; current free RAM `2,465,685,504` bytes (2.296 GiB), margin `-6,124,249,088` bytes, CPU `24`, disk `132,182,073,344` bytes, boot `2026-08-05T18:03:29.500Z`. Invocation count remains `0`: no receipt, nonce, consumed marker, PID, invocation-start, terminal report, run, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority. RunOnce is absent; launcher status is schema-valid with exit `252`, controller false, restoration PASS, and Codex launch recorded. All 11 owner Run values and both shortcuts are restored; OneDrive is preserved. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. One coordinator report was submitted; completion did not return before bounded wait and was not retried. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T19:11:00Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no gate action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, optional-startup binding, and canonical-LF gate hash validate. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes versus `8,589,934,592`; current free RAM `1,834,749,952` bytes (1.709 GiB), margin `-6,755,184,640` bytes, CPU `24`, disk `132,312,739,840` bytes, boot `2026-08-05T18:03:29.500Z`. Invocation count remains `0`: no receipt, nonce, consumed marker, PID, invocation-start, terminal report, run, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority. RunOnce is absent; launcher status is schema-valid with exit `252`, controller false, restoration PASS, and Codex launch recorded. All 11 owner Run values and both shortcuts are restored; OneDrive is preserved. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. One coordinator report was submitted; delivery did not return before timeout and was not retried. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T19:01:28.6092611Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, optional-startup binding, and canonical-LF gate hash validate. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) versus `8,589,934,592`, shortfall `8,085,737,472`; current free RAM `1,816,690,688` bytes (1.692 GiB), margin `-6,773,243,904` bytes. Current boot is `2026-08-05T18:03:29.500Z`; CPU `24`, disk, arithmetic, and prohibited flags validate. Invocation count remains zero: no receipt, nonce, consumed marker, PID, invocation-start, terminal report, run, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority. RunOnce is absent; V2 launcher is schema-valid with exit `252`, controller false, restoration PASS, and Codex launch recorded. All 11 owner Run values and both startup shortcuts match restoration; OneDrive is preserved. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T18:31:59.9878823Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls (including controller `bf28fd1148b9cd079abc46f6fbed023b9746d9f0197ad4b67ddd4916f648b7b7`), optional-startup binding, and gate canonical-LF hash validate. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) versus `8,589,934,592`, shortfall `8,085,737,472`; current free RAM `2,059,587,584` bytes (1.918 GiB), margin `-6,530,347,008` bytes. Current boot is `2026-08-05T18:03:29.500Z`; CPU `24`, disk, arithmetic/invariants, and prohibited flags validate. Invocation count remains zero: no receipt, nonce, consumed marker, PID, invocation-start, terminal report, run, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority. RunOnce is absent; V2 launcher is schema-valid with exit `252`, controller false, restoration PASS, and Codex launch recorded. All 11 owner Run values and both startup shortcuts match restoration; OneDrive is preserved. Existing exactly-one coordinator-report/no-retry boundary retained; no duplicate message was sent. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T18:06:41Z Project Coherence Gate 5 prospective-lifecycle successor tranche completed, exact-replayed, and pushed: `origin/codex/project-coherence-gate5-successor` resolves exactly to receipt commit `c1f06f4459f41fb7d1736b2a2a8d0c14fed52da9` (immutable Gate 5 candidate `e0405bf58dfe2a132476fa2672f288dcc097cd77`). Existing TKS v8.0, Noetic Topos 2.0, CAS Core v8, CAS PCBA 8, CAS-Ohm 1.0, CAS Harness 2, ACBE, publication lanes, and the 325/340/348-artifact historical snapshots were preserved rather than recreated. The exact detached receipt-commit replay passed in required order: Gate 5 PASS in 319.7 seconds (`355` hash-bound artifacts, `312` Python artifacts, `1,937` shadow paths, `150` Harness tests + `99` subtests, `364` worker tests, `32` numeric red-team tests, `78` API/fleet/launcher tests, `35` durable callback/Object-Lock seam tests, `8` worker-terminal bridge tests, and `48` lifecycle/SQLite/default-dark-route tests; `47` review criteria and `22` required OPEN boundaries), publication program PASS (`59` JSON files, `11` manifests, `71` bound publication artifacts), Gate 1 PASS (`23` artifacts), and Gate 4 PASS (`54` artifacts / `208` candidate tests). Implemented scope now includes prospective server-authored authorization and one-use lifecycle transitions, event-chain/reconciliation evidence, same-file SQLite close/reopen persistence and independent-connection compare-and-swap arbitration, and private OpenAPI-hidden routes that remain default-dark because no packaged or admitted adapter is wired. Gate 5 remains `OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN`; dependency security remains `OPEN_SECURITY / HELD`; experimental execution remains `NOT_STARTED`; `G5-ENGINEERING-001` and `G5-TRUST-002/003/004` remain OPEN. Closure still requires a packaged/admitted route adapter, `job_id == subject_id == authorization_id` binding, transitive request-bound intake-receipt carriage, active-lease fencing and trusted time, all terminal-state paths and exact redacted DTOs, exhaustive orphan/loser/pending/off-registry reconciliation, live inner-byte WORM, multi-host/host-loss authority, authenticated execution, independent replay/reproduction, live experiments, scientific validation, and separately governed product/license/canon/disclosure authority. The RunPod balance is user-reported as `$107.00`; known tranche spend is `$0.00`, no provider balance or billing-ledger receipt was inspected, and no RunPod/GPU/paid job was launched. No top-up is needed for this local tranche. Next bounded move is the packaged authenticated lifecycle adapter and end-to-end identity/receipt/lease integration, followed by adversarial reconciliation and independent replay before any explicitly authorized bounded compute experiment.
+
+2026-08-06T17:41:00Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, optional-startup binding, canonical-LF gate hash, and isolated independent structural audit `0` / `AUTORUN_PREPARATION_AUDIT_PASS` validate. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) versus `8,589,934,592`, shortfall `8,085,737,472`; current free RAM `2,104,168,448` bytes (1.960 GiB), margin `-6,485,766,144`, boot `2026-08-05T18:03:29.500Z`. Disk, CPU `24`, arithmetic/invariants, and prohibited flags validate. Invocation count remains zero: no receipt, nonce, consumed marker, PID, invocation-start, terminal report, run, model/framework/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority. RunOnce is absent; schema-valid launcher exit is `252`, controller false, restoration PASS, Codex launch recorded; all 11 owner Run values and both startup shortcuts match restoration, with OneDrive preserved. The existing exactly-one coordinator-report/no-retry boundary remains binding; no duplicate message was sent. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false`. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T17:36:27Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, optional-startup binding, canonical-LF gate hash, and isolated independent structural audit `0` / `AUTORUN_PREPARATION_AUDIT_PASS` validate. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) versus `8,589,934,592`, shortfall `8,085,737,472`; current free RAM `2,249,297,920` bytes (2.095 GiB), margin `-6,340,636,672`, boot `2026-08-05T18:03:29.500Z`. Disk, CPU `24`, arithmetic/invariants, and prohibited flags validate. Invocation count remains zero: no receipt, nonce, consumed marker, PID, invocation-start, terminal report, run, model/framework/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority. RunOnce is absent; schema-valid launcher exit is `252`, controller false, restoration PASS, Codex launch recorded; all 11 owner Run values and both startup shortcuts match restoration, with OneDrive preserved. The existing exactly-one coordinator-report/no-retry boundary remains binding; no duplicate message was sent. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false`. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T17:16:38Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, optional-startup binding, and canonical-LF gate hash validate; independent structural audit returned `0` / `AUTORUN_PREPARATION_AUDIT_PASS`. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) versus `8,589,934,592`, shortfall `8,085,737,472`; current free RAM `1,812,307,968` bytes (1.688 GiB), margin `-6,777,626,624`, boot `2026-08-05T18:03:29.500Z`. Disk, CPU `24`, arithmetic/invariants, and prohibited flags validate. Invocation count remains zero: no receipt, nonce, consumed marker, PID, invocation-start, terminal report, run, model/framework/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority. RunOnce is absent; schema-valid launcher exit is `252`, controller false, restoration PASS, Codex launch recorded; all 11 owner Run values and both startup shortcuts match restoration, with OneDrive preserved. The existing exactly-one coordinator-report/no-retry boundary remains binding; no duplicate message was sent. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false`. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T17:02:08Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, optional-startup binding, and canonical-LF gate hash validate; the independent structural auditor returned `0` / `AUTORUN_PREPARATION_AUDIT_PASS`. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: boot-recorded RAM `504,197,120` bytes (0.470 GiB) versus `8,589,934,592`, shortfall `8,085,737,472`; current free RAM `1,293,438,976` bytes (1.205 GiB), margin `-7,296,505,616`, current boot `2026-08-05T18:03:29.500Z`. Disk, CPU `24`, arithmetic/invariants, and prohibited flags validate. Invocation count remains zero: no receipt, nonce, consumed marker, PID, invocation-start, terminal report, run, model/framework/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority. RunOnce is absent; schema-valid launcher exit is `252`, controller false, restoration PASS, Codex launch recorded; all 11 owner Run values and both startup shortcuts match restoration, with OneDrive preserved. The existing exactly-one coordinator-report/no-retry boundary remains binding; no duplicate message was sent. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false`. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T16:51:18Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no action was invoked or retried. Exact isolated-worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, optional-startup binding, raw/canonical-LF gate hash, and retained schema fields match. `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: boot-recorded RAM `504,197,120` bytes (0.470 GiB) versus `8,589,934,592`, shortfall `8,085,737,472`; current free RAM `2,632,265,728` bytes (2.451 GiB), margin `-5,957,668,864`, with current boot `2026-08-05T18:03:29.500Z`. Disk, CPU `24`, arithmetic/invariants, and prohibited flags validate. Invocation count remains zero: no receipt, nonce, consumed marker, PID, invocation-start, terminal report, run, model/framework/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority. RunOnce is absent; schema-valid launcher exit is `252`, controller false, restoration PASS, Codex launch recorded; all 11 owner Run values and both startup shortcut hashes match, with OneDrive preserved. Existing exactly-one coordinator-report/no-retry boundary retained; no duplicate report was sent. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T15:05:20Z Project Coherence Gate 5 worker-terminal protocol successor tranche completed, exact-replayed, and pushed: `origin/codex/project-coherence-gate5-successor` resolves exactly to receipt commit `729e2d772ea2a3ef78b39d1cf5afb674ed3bcb99` (protocol candidate `d24721afe18e05442f3c691f02dcf1608244f0e9`). Existing TKS v8.0, Noetic Topos 2.0, CAS Core v8, CAS PCBA 8, CAS-Ohm 1.0, CAS Harness 2, ACBE, and publication-lane artifacts were preserved rather than recreated. Gate 5 now hash-binds 348 artifacts and its exact receipt-commit replay passed in the declared order: Gate 5 PASS (`146` Harness-v2 tests + `96` subtests, `364` worker tests, `32` numeric red-team tests, `76` API/fleet/launcher tests, `34` durable callback/Object-Lock seam tests, `7` worker-terminal bridge tests), publication program PASS (`59` JSON files, `11` manifests, `71` bound publication artifacts, `191` claim/control records), Gate 1 PASS (`23` artifacts), and Gate 4 PASS (`54` artifacts / `208` candidate tests). The publication crosswalk preserves the historical 325- and 340-artifact snapshots and points current integration at the separate 348-artifact successor. Implemented scope is exact `FleetJob` authorization mapping, immutable completed/failed terminal receipts, retry-stable terminal storage separated from fresh transport-nonce acceptance receipts, and a dark pre-outcome-only bridge with injected-loader provenance explicitly unattested. Gate 5 remains `OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN`; dependency security remains `OPEN_SECURITY / HELD`; experimental execution remains `NOT_STARTED`; `G5-ENGINEERING-001` and `G5-TRUST-002/003/004` remain OPEN because no live route/provider execution, run-nonce lifecycle, trusted time/WORM, full outcome/Evidence Packet v2 sealing, post-seal bridge reconciliation, independent attestation, or scientific validation exists. No RunPod/GPU/paid job was launched; the reported `$57` balance remains untouched and no top-up is justified for the current local tranche. Next bounded move is the live authenticated route plus complete outcome/Evidence Packet path and exhaustive run registry; only after preregistration, retention/stop rules, and explicit run authorization should a bounded model/GPU experiment spend any credit.
+
+2026-08-06T14:27:00Z post-restart GPT-2 Medium Phase 1 V2 monitor: fail-closed terminal state retained; no action was invoked. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, six pinned raw controls, optional-startup binding, canonical-LF gate hash, and independent structural audit (return 0) match. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: boot-recorded RAM `504,197,120` bytes (0.470 GiB) vs. `8,589,934,592`, shortfall `8,085,737,472`; current free RAM `2,936,627,200` bytes (2.735 GiB), margin `-5,653,307,392`. Its recorded boot (`2026-07-30T05:44:12.887Z`) differs from the current boot (`2026-08-05T18:03:29.500Z`), so it cannot reopen the terminal decision. CPU 24, disk, arithmetic/invariants, and prohibited flags validate. Invocation count remains zero: no receipt, nonce, consumed marker, PID, invocation-start, terminal report, run, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority. RunOnce is absent; schema-valid launcher exit is `252`, controller false, restoration PASS, Codex launch recorded; all 11 owner Run values and both startup shortcut hashes match restoration, with OneDrive preserved. Existing exactly-one coordinator-report/no-retry boundary retained; no duplicate report, retry, restore, launch, or authorization was made. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T14:16:11Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no action was invoked. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, optional-startup binding, and canonical-LF gate hash match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: boot-recorded RAM `504,197,120` bytes (0.470 GiB) vs. `8,589,934,592`, shortfall `8,085,737,472`; current free RAM `1,355,485,184` bytes (1.262 GiB), margin `-7,234,449,408`. CPU `24`, disk `134,223,810,560`, current boot, arithmetic/invariants, and prohibited flags validate. Invocation count remains zero: no receipt, nonce, consumed marker, PID, invocation-start, terminal report, run, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority. RunOnce is absent; schema-valid launcher exit is `252`, controller false, restoration PASS, Codex launch recorded; all 11 owner Run values and both startup shortcut hashes match restoration, with OneDrive preserved. The existing exactly-one coordinator-report/no-retry boundary was retained; no duplicate report, retry, restore, launch, or authorization was made. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remains binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T06:36:17-07:00 post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed; no action was invoked. Exact worktree HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw controls, and gate hash match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) vs. `8,589,934,592`, shortfall `8,085,737,472`; current free RAM `2,656,866,304` bytes (2.474 GiB), margin `-5,933,068,288`. CPU 24, disk, boot/invariants, and prohibited flags validate. Invocation count is zero: no receipt, nonce, consumed marker, PID, invocation-start, terminal report, run, gate/audit/scientific output, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority. Independent structural audit passed (return 0). RunOnce is absent; schema-valid launcher exit is `252`, controller false, restoration PASS, Codex launch recorded; all 11 owner Run values and both startup shortcuts match, with OneDrive preserved (AnyDesk/Tailscale absent). `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remain binding. The already-recorded exactly-one coordinator report boundary was retained; no duplicate report, retry, invocation, startup launch, or restore action was taken. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T04:46:04.9729090-07:00 post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six raw controls, and gate hash match. Retained schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), against `8,589,934,592`, shortfall `8,085,737,472`; current free RAM `1,995,489,280` bytes (1.858 GiB), margin `-6,594,445,312`. CPU 24 and disk pass; prohibited flags validate. Invocation count remains zero: no receipt/nonce/consumed marker/PID/run/gate/audit/scientific/model/provider/GPU/paid/RunPod activity or Phase 1.5/2 authority. Isolated structural audit passed (`python -I -B -S`, return 0). RunOnce is absent; schema-valid launcher exit `252`, controller false, restoration PASS, Codex launch recorded; all 11 owner Run values and both shortcuts restored, OneDrive preserved. The existing exactly-one coordinator report/no-retry boundary was retained; no duplicate report, retry, invocation, or startup action was taken. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T10:12:00Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six raw control hashes, and the gate hash match. Retained schema-valid `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: boot-recorded RAM remains `504,197,120` bytes (0.470 GiB), against `8,589,934,592`, shortfall `8,085,737,472`; current free RAM is `2,371,784,704` bytes (2.209 GiB), margin `-6,218,149,888`. CPU 24 and disk floor pass; arithmetic/invariants, boot boundary, and prohibited flags validate. No receipt, nonce, consumed marker, PID, invocation-start, terminal/gate/audit/scientific run, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count remains zero. Isolated structural audit passed (return 0). RunOnce is absent; the schema-valid V2 launcher terminal exit is `252`, controller false, restoration PASS, and Codex launch recorded. All 11 owner Run values and both shortcuts are restored, OneDrive is preserved, and `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remain binding. The existing exactly-one coordinator report/no-retry boundary was retained; no duplicate report or retry was made. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T09:34:00Z post-restart GPT-2 Medium Phase 1 V2 monitor: retained terminal evidence is still fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, six raw control hashes, and gate hash all match. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472`; current free RAM `2,047,926,272` bytes (1.907 GiB), margin `-6,542,008,320`. CPU 24 and disk floor pass; arithmetic/invariants/prohibited flags validate. No receipt, nonce, consumed marker, run ID, PID, invocation, gate/audit/scientific run, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. Isolated structural audit passed (return 0). RunOnce remains absent; V2 launcher terminal exit is `252`, controller false, restoration PASS, and Codex launch recorded. All 11 owner Run values and both shortcuts are restored, OneDrive is preserved, and `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remain binding. Exactly one concise coordinator report was submitted for this monitor; no retry is authorized. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T09:26:06Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw control hashes, startup binding, and canonical-LF gate hash match. Retained schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472`; current free RAM is `2,303,844,352` bytes (2.146 GiB), margin `-6,286,090,240`. CPU 24, disk `133,707,227,136`, arithmetic/invariants, boot boundary, and prohibited flags validate. No receipt, nonce, consumed marker, run ID, PID, invocation-start, terminal/gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. Isolated independent structural audit passed (return 0). RunOnce is absent; launcher V2 is schema-valid with terminal exit `252`, controller false, restoration PASS, and Codex launch recorded. All 11 owner Run values and both shortcuts match restoration, OneDrive is preserved, and `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remain binding. Existing exactly-one coordinator report/no-retry boundary retained; no duplicate sent. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T09:05:00Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, six pinned raw control hashes, startup binding, and canonical-LF gate hash match. Retained schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472`; current free RAM `2,458,488,832` bytes (2.290 GiB), margin `-6,131,445,760`. CPU 24, disk `133,612,941,312`, arithmetic/invariants, and prohibition flags validate. No receipt, nonce, consumed marker, run ID, PID, invocation-start, terminal/gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. Independent structural audit passed (return 0). RunOnce is absent; launcher V2 is schema-valid with terminal exit `252`, controller false, restoration PASS, and Codex launch recorded. All 11 owner Run values and both shortcuts restore exactly, OneDrive is preserved, and `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remain binding. Existing exactly-one coordinator report/no-retry boundary retained; no duplicate sent. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T01:56:32-07:00 post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw control hashes, startup binding, and canonical-LF gate hash match. Retained schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472`; current free RAM `2,263,736,320` bytes (2.108 GiB), margin `-6,326,198,272`. CPU 24, 100 GiB disk floor, arithmetic/invariants, historical boot, and prohibition flags validate. No receipt, nonce, consumed marker, run ID, PID, invocation-start, terminal/gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. Independent structural audit passed (return 0). RunOnce is absent; launcher V2 is schema-valid with exit `252`, controller false, restoration PASS, and Codex launch recorded. All 11 owner Run values and both shortcuts remain restored, OneDrive is preserved (AnyDesk/Tailscale are absent rather than altered), and `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remain binding. The existing exactly-one coordinator report/no-retry boundary remains retained; no duplicate sent. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T01:51:34-07:00 post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, six pinned raw control hashes, startup binding, and canonical-LF gate hash match. Retained schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472`; current free RAM `2,866,606,080` bytes (2.670 GiB), margin `-5,723,328,512`. CPU 24, recorded disk 253,847,126,016, boot/invariants, and prohibited flags validate. No receipt, nonce, consumed marker, run ID, PID, invocation-start, terminal/gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. Independent structural audit passed (return 0). RunOnce is absent; launcher schema is valid with terminal exit `252` and controller false; all 11 owner Run values and both startup shortcuts restore exactly, OneDrive/AnyDesk/Tailscale are preserved, Codex is running, rollback PASS, and `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remain binding. Existing exactly-one coordinator report/no-retry boundary retained; no duplicate sent. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T08:31:37.3250861Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw control hashes, startup binding, and canonical-LF gate hash match. Retained schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472`; current free RAM is `2,358,235,136` bytes (2.196 GiB), margin `-6,231,699,456`. CPU 24, disk `253,847,126,016`, boot/invariants, and prohibited flags validate. No receipt, nonce, consumed marker, run ID, PID, invocation-start, terminal/gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. Independent structural audit passed (return 0). RunOnce is absent; launcher schema is valid with terminal exit `252` and controller false; all 11 owner Run values and both startup shortcuts restore exactly, OneDrive/AnyDesk/Tailscale are preserved, Codex is running, rollback PASS, and `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remain binding. Existing exactly-one coordinator report/no-retry boundary retained; no duplicate sent. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T01:11:31-07:00 post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw control hashes, and canonical-LF gate hash match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472`; current free RAM is `1,761,918,976` bytes (1.641 GiB), margin `-6,827,015,616`. CPU is 24 and recorded disk floor passes. No receipt, nonce, consumed marker, run ID, PID, invocation-start, gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher schema is valid with terminal exit `252` and controller false; all 11 owner Run values and both startup shortcuts restore exactly, OneDrive is preserved, Codex is running, rollback PASS, and `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remain binding. Existing exactly-one coordinator report/no-retry boundary retained; no duplicate sent. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998F0B124E3C29088340B2C2DB43C3B56E29`; launcher `5C42D575B10B1982C02F024C3134D8C87F3350EE362C684787DCC66DA8C8DC9E`.
+
+2026-08-06T08:01:34.6665222Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw control hashes, and canonical-LF gate hash matched. Retained schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472`; current free RAM is `1,568,854,016` bytes (1.461 GiB), margin `-7,021,080,576`. No receipt, nonce, consumed marker, run ID, PID, invocation-start, terminal/gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher status schema is valid with terminal exit `252` and controller false; all 11 owner Run values and both startup shortcuts restore exactly, Codex launch is recorded, rollback PASS, and `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remain binding. Existing exactly-one coordinator report/no-retry boundary retained; no duplicate sent. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T07:58:35.9793627Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw control hashes, and canonical-LF gate hash match. The retained schema-valid `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472`; current free RAM is `1,868,152,832` bytes (1.740 GiB), margin `-6,721,781,760`. No receipt, nonce, consumed marker, run ID, PID, invocation-start, gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. Independent structural audit passed with return 0. RunOnce is absent; launcher is schema-valid terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts restore exactly, Codex launch is recorded, rollback PASS, and `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remain binding. One coordinator report was sent; no retry is authorized. Unrelated untracked presignin files now make the source worktree dirty, but cannot reopen the retained preflight.
+
+2026-08-06T05:04:00Z Project Coherence dependency-ordered publication program completed and pushed: `origin/codex/project-coherence-publication-integration` resolves exactly to `fde98f557d620070987406e83ed82e5e3185ef98`. Existing TKS v8.0, Noetic Topos 2.0, CAS-Ohm 1.0, CAS PCBA 8, CAS Harness 2, ACBE, and Gate 5 artifacts were preserved and integrated rather than recreated. The lead package now binds 59 publication JSON files, 11 non-self-hashing manifests, 71 artifacts, 191 local claim/control records across six lanes, 53 canonical notation/type records, eight publication tracks, ten obligation clusters, 13/13 accepted formal/category text corrections, and a 50-record memristive supplemental lane with 16 evidence anchors and all 42 obligations still open. Independent lead re-audit passed after reconciling the historical `56c43caca7e61aea03254ffdc5484ecdf35bcdbe` and active `e4ccfe309d4f8519fccd8cd4c3a5fd52de02a0a4` Wave 1 engineering snapshots, dual CRLF-checkout/Git-blob identities for S25-S27, all matrix/evidence links, exact arXiv v5 E11 metadata, finite-moment assumptions, normalized-loop domain rules, and scoped compute wording. The exact final commit passed a clean detached-checkout Gate-5-first replay: Gate 5 PASS in 210.4 seconds (340 artifacts, 298 Python syntax checks, Harness 119 + 61 subtests, worker 364, numeric red team 32, API/fleet/launcher 76), publication verifier PASS in 2.3 seconds, Gate 1 PASS in 14.8 seconds, and Gate 4 PASS in 96.4 seconds; the remote SHA was then verified exact. This is bounded structural/publication evidence only: Gate 5 remains `OPEN / NOT_STARTED / Ring 4 / NOT LICENSED / HELD / NOT FROZEN`; dependency security remains `OPEN_SECURITY / HELD`; the upstream Gate 1 ambient-witness repair, all external specialist/independent review, joined execution, trusted time/WORM, scientific validation, licensing, canon, product, authorship, submission, and disclosure authority remain open. No project experimental target-model run, user-funded RunPod job, or separately provisioned project GPU workload was launched; project experimental spend was `$0`, the reported `$57` RunPod balance remains untouched, and no top-up is justified until model/hardware/runtime, preregistration, stop rules, retention, and explicit run authority are frozen.
+
+2026-08-06T02:16:13.4765499Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw control hashes, and canonical-LF gate hash match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472`; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, original boot, and prohibited flags validate. Current free RAM is `2,009,350,144` bytes (1.871 GiB), margin `-6,580,584,448`; it cannot reopen or retry the completed preflight. No receipt, nonce, consumed marker, run ID, PID, invocation-start, gate/audit/scientific result, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher is schema-valid terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts restore exactly, OneDrive is preserved, Codex launch is recorded, rollback PASS, and `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remain binding. No model/provider/GPU/paid/RunPod activity occurred. Existing coordinator-send/no-retry boundary retained; no duplicate was sent. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T02:01:55.5374906Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw control hashes, and the canonical-LF gate hash match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472`; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. Current free RAM is `1,994,190,848` bytes (1.857 GiB), margin `-6,595,743,744`; it cannot reopen or retry the completed preflight. No receipt, nonce, consumed marker, run ID, PID, invocation-start, terminal/gate/audit/scientific result, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher is schema-valid terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts restore exactly, OneDrive is preserved, Codex launch is recorded, rollback PASS, and `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remain binding. No model/provider/GPU/paid/RunPod activity occurred. One coordinator report submission was attempted and not retried. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-05T18:47:38-07:00 Project Coherence Gate 5 same-run hardening and publication-program initiation: branch `codex/project-coherence-cas-core` commit `fbac9909a2b600ac8bc9f1217c073e4a3269beea` was pushed to `origin` after the exact commit passed a clean detached-checkout integrated verifier run in 250.3 seconds. The non-self-hashing manifest binds 340 artifacts and 298 syntax-checked Python files; same-process receipts passed Harness v2 119 tests + 61 subtests, worker 364, numeric red team 32, and API/launcher/fleet/state 76, with zero warnings and postflight identity/byte rechecks over 919 integrated Gate 5/Gate 4/history files. Ten retained OCI/BuildKit/SPDX/SLSA/Scout payloads verify locally (199 original SPDX packages; 233 direct packages; seven scanner findings; six vendor-confirmed open/deferred; one scanner/vendor conflict). The local Windows runner lock binds three interpreter files and 508 exact files from seven pytest-support distributions. Historical v0.1 and v0.2 receipts remain byte-unchanged at SHA-256 `A24F27AE6678A8EAAECA5E516805F94F394B416054AB5BCDAA68B687B0B79E2B` and `99F4DA7F58C2BA38C62D6E4D04040416DB57628B2D8E3373DCD989D622299DA9`. This is bounded repository-local engineering evidence only: Gate 5 remains `OPEN / NOT_STARTED / Ring 4 / NOT LICENSED / HELD / NOT FROZEN`; `G5-ENGINEERING-002 = OPEN_ENGINEERING` and `G5-ENGINEERING-003 = OPEN_SECURITY`. Transient/exact executed-bytecode history, complete standard-library/native/child closure, immutable independently attested execution, independent reproduction, trusted time/WORM, real GPU experiments, scientific validation, licensing, product authority, and disclosure authority remain open. Publication Wave 1 is isolated and locally committed but unpushed: formal-math `3c8491db6f5559cf090909d9de0efa03d924f53f`, category/sheaf theory `643169e9bd8de6d4bd0cc2cbc3cde4e640f1671c`, and engineering `c8635270ca6ba7c65504b4fda43cb42a89623015`; independent formal/category cross-reviews and the CAS Harness 2 Wave 2 delta are active in separate worktrees, while ACBE and the memristive context/lacunarity/injection/steering delta remain pending dependency-ordered assignments. No RunPod, paid GPU, model invocation, or experimental run occurred; no additional RunPod funding is required for this tranche.
+
+2026-08-06T01:02:11.9204477Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six pinned raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472`; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. Current free RAM is `1,893,212,160` bytes (1.763 GiB), margin `-6,696,722,432`; it cannot reopen the completed preflight. No receipt, nonce, consumed marker, run ID, PID, invocation-start, gate/audit/scientific result, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher is schema-valid terminal exit 252/no controller; exact 11 owner Run values and both startup shortcuts restore, OneDrive is preserved, Codex launch is recorded, rollback PASS, and `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remain binding. No model/provider/GPU/paid/RunPod activity occurred. The existing coordinator-send/no-retry boundary was retained; no duplicate was sent. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T00:11:03.8619858Z post-restart GPT-2 Medium Phase 1 V2 monitor: retained terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six pinned raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472`; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. Its recorded boot predates the current boot (`2026-08-05T18:03:29.5000000Z`), so no phase may reopen or retry. Current free RAM is `3,694,948,352` bytes (3.441 GiB), margin `-4,894,986,240`; no receipt, nonce, consumed marker, run ID, PID, invocation-start, gate/audit/scientific result, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher is schema-valid terminal exit 252/no controller; registry and startup-shortcut restoration PASS, Codex launch is recorded, and `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remain binding. No model/provider/GPU/paid/RunPod activity occurred. Existing coordinator-send/no-retry boundary retained; no duplicate sent. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-06T00:01:18.9129545Z post-restart GPT-2 Medium Phase 1 V2 monitor: retained terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six pinned raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472`; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. Its recorded boot predates the current boot (`2026-08-05T18:03:29.500Z`), so no phase may reopen or retry. Current free RAM is `2,881,003,520` bytes (2.683 GiB), margin `-5,708,931,072`; current worktree dirtiness does not alter the retained terminal preflight. No receipt, nonce, consumed marker, run ID, PID, invocation-start, gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher is schema-valid terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts restore exactly, OneDrive is preserved, Codex launch is recorded, rollback PASS, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`. Existing coordinator-send/no-retry boundary retained; no duplicate sent.
+
+2026-08-05T23:51:11.6686511Z post-restart GPT-2 Medium Phase 1 V2 monitor: retained terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six pinned raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472` bytes; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. Its recorded boot (`2026-07-30T05:44:12.887Z`) predates the current boot (`2026-08-05T18:03:29.500Z`), so it cannot be reused to reopen, invoke, or retry any phase. Current free RAM is `2,278,096,896` bytes (2.122 GiB), margin `-6,311,837,696`. No receipt, nonce, consumed marker, run ID, PID, invocation-start, gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher is schema-valid terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts are restored, OneDrive is preserved, Codex launch is recorded, rollback PASS, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`. Existing coordinator-send/no-retry boundary retained; no duplicate sent.
+
+2026-08-05T23:46:27.6670144Z post-restart GPT-2 Medium Phase 1 V2 monitor: retained terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six pinned raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472` bytes; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, original boot, and prohibited flags validate. Current same-boot free RAM is `1,999,876,096` bytes (1.863 GiB), margin `-6,590,058,496`; it cannot reopen the completed preflight. No receipt, nonce, consumed marker, run ID, PID, invocation-start, gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher is schema-valid terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts are restored, OneDrive is preserved, Codex launch is recorded, rollback PASS, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`. The existing coordinator-send/no-retry boundary was retained; no duplicate was sent.
+
+2026-08-05T23:36:35.4832422Z post-restart GPT-2 Medium Phase 1 V2 monitor: retained terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six pinned raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472` bytes; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, original boot, and prohibited flags validate. Current same-boot free RAM is `1,808,392,192` bytes (1.684 GiB), margin `-6,781,542,400`; it cannot reopen the completed preflight. No receipt, nonce, consumed marker, run ID, PID, invocation-start, gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher is schema-valid terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts are restored, OneDrive is preserved, Codex launch is recorded, rollback PASS, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`. The existing coordinator-send/no-retry boundary was retained; no duplicate was sent.
+
+2026-08-05T16:22:04-07:00 Project Coherence Gate 5 successor hardening: branch `codex/project-coherence-cas-core` commit `a1cd990109e7561dfd03949bf0e1653461c7ae44` clean-checkout integrated verification PASS in 170.1 seconds. The verifier bound 325 Gate 5 artifacts, syntax-checked 296 Python files, scanned 1,898 repository paths for executable shadows before child tests, composed the still-OPEN 54-artifact Gate 4 dependency, rehashed 11 Ring-4/`NOT LICENSED` claim records and the exact 537-file historical recovery, and passed Harness v2 113 tests + 61 subtests, worker 364, numeric red team 32, and API/launcher/fleet/state 76 before postflight rehash. This is repository-local structural and regression evidence only. Worker/API receipts remain `LOCAL_UNATTESTED_HOST_REGRESSION`; their node-ID hashes are collect-only and do not receipt the actual executed-node set. BuildKit SPDX/SLSA and Docker Scout facts remain `SELF_REPORTED_LOCAL_OBSERVATION_ONLY`: raw payloads were not retained or made repository replayable and no independent trust root exists. The package scan remains `COMPLETED_WITH_FINDINGS` (0 critical, 0 high, 3 medium, 4 low; all seven unfixed), the direct filesystem scan remains `INCOMPLETE / PENDING`, and the one CPU-only engineering canary was not an admitted experiment, GPU run, Evidence Packet, or scientific result. Gate 5 remains `OPEN / NOT_STARTED / Ring 4 / NOT LICENSED / HELD / NOT FROZEN`; `G5-ENGINEERING-003 = OPEN_SECURITY`. Mutable host-runner identity, same-run executed-node receipts, raw external-evidence retention, hardlink/reparse/ABA resistance, independent reproduction, real GPU execution, worker-to-kernel integration, WORM/trusted ordering, scientific validation, licensing, product authority, and disclosure authority remain open. Next executable Gate 5 closure work is to retain/hash-bind raw build/SBOM/SLSA/scanner payloads, resolve or explicitly disposition all seven findings, complete the direct-filesystem scan, and independently reproduce the exact candidate in a locked read-only runner before any separately authorized GPU protocol run.
+
+2026-08-05T23:00:00-07:00 post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six mandated raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472` bytes; the exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, current boot, and prohibited flags validate. Current boot `2026-08-05T18:03:29.5000000Z` free RAM is `3,110,486,016` bytes (2.897 GiB), margin `-5,479,448,576` bytes; this later resource snapshot cannot reopen the completed preflight. No receipt, nonce, consumed marker, run ID, PID, invocation-start, gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher is schema-valid terminal exit 252/no controller; all 11 owner Run values and both shortcuts are restored, OneDrive is preserved, Codex launch is recorded, rollback PASS, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`. The prior coordinator-send was not duplicated because no-retry is binding.
+
+2026-08-05T22:31:38.3609408-07:00 post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six pinned raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472` bytes; gate hash, floors, CPU 24, arithmetic/invariants, and prohibited flags validate. Current boot `2026-08-05T18:03:29.5000000Z` free RAM is `3,649,798,144` bytes (3.399 GiB), margin `-4,940,136,448` bytes. No receipt, nonce, run ID, PID, invocation-start, gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher is schema-valid terminal exit 252/no controller; the independent structural audit passed with return 0; all 11 owner Run values and both shortcuts are restored, OneDrive is preserved, Codex launch is recorded, rollback PASS, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`. The previous coordinator-send was not duplicated because no-retry is binding.
+
+2026-08-05T22:26:19.7264011Z post-restart GPT-2 Medium Phase 1 V2 monitor: retained terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six pinned raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472` bytes; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, current-boot mismatch, and prohibited flags validate. Current boot is `2026-08-05T18:03:29.5000000Z`; current read-only RAM is `4,674,215,936` bytes (4.353 GiB), margin `-3,915,718,656` bytes. No receipt, nonce, consumed marker, run ID, PID, invocation-start, terminal/gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher is schema-valid terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts are restored, OneDrive is preserved, and Codex launch is recorded. Rollback PASS; `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`. The prior coordinator-send attempt was not duplicated because no-retry is binding.
+
+2026-08-05T22:15:00Z post-restart GPT-2 Medium Phase 1 V2 monitor: retained terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six pinned raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472` bytes; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. Current boot is `2026-08-05T18:03:29.5000000Z`; current read-only RAM is `2,486,677,504` bytes (2.316 GiB), margin `-6,103,257,088` bytes. No receipt, nonce, consumed marker, run ID, PID, invocation-start, terminal/gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher is schema-valid terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts are restored, OneDrive is preserved, and Codex launch is recorded. Rollback PASS; `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`. The prior coordinator-send attempt was not duplicated because no-retry is binding.
+
+2026-08-05T22:11:00Z post-restart GPT-2 Medium Phase 1 V2 monitor: retained terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six pinned raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472` bytes; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. Current boot is `2026-08-05T18:03:29.5000000Z`; current read-only RAM is `563,118,080` bytes (0.524 GiB), margin `-8,026,816,512` bytes. No receipt, nonce, consumed marker, run ID, PID, invocation-start, terminal/gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher is schema-valid terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts are restored, OneDrive is preserved, and Codex launch is recorded. Rollback PASS; `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`. The prior coordinator-send attempt was not duplicated because no-retry is binding.
+
+2026-08-05T22:00:00Z post-restart GPT-2 Medium Phase 1 V2 monitor: retained terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six pinned raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472` bytes; gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. Current boot is `2026-08-05T18:03:29.5000000Z`; current read-only RAM is `16,866,705,408` bytes (15.708 GiB), margin `8,276,770,816` bytes (7.708 GiB), and disk is `129,314,045,952` bytes. This later resource snapshot cannot reopen the completed post-restart preflight. No receipt, nonce, consumed marker, run ID, PID, invocation-start, terminal/gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher is schema-valid terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts are restored, OneDrive is preserved, and Codex launch is recorded. Rollback PASS; `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`. The prior coordinator-send attempt was not duplicated because no-retry is binding.
+
+2026-08-05T21:51:00.9140268Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472` bytes; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. Current boot is `2026-08-05T18:03:29.5000000Z`; current read-only RAM is `1,188,610,048` bytes (1.107 GiB), margin `-7,401,324,544` bytes. No receipt, nonce, consumed marker, run ID, PID, invocation-start, terminal/gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher is schema-valid terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts are restored, OneDrive is preserved, and pre-restart evidence records AnyDesk/Tailscale preservation. Rollback PASS; `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`. The prior coordinator-send attempt was not duplicated because no-retry is binding.
+
+2026-08-05T21:46:59.4687789Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472` bytes; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. Current boot is `2026-08-05T18:03:29.5000000Z`; current read-only RAM is `2,339,483,648` bytes (2.179 GiB), margin `-6,250,450,944` bytes. No receipt, nonce, consumed marker, run ID, PID, invocation-start, terminal/gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher is schema-valid terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts are restored, OneDrive is preserved, and pre-restart evidence records AnyDesk/Tailscale preservation. Rollback PASS; `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`. The previously attempted coordinator report was not duplicated because no-retry is binding.
+
+2026-08-05T21:36:01.9833462Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472` bytes; gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. Current read-only RAM is `3,119,546,368` bytes (2.905 GiB), margin `-5,470,388,224` bytes. No receipt, nonce, consumed marker, run ID, PID, invocation, terminal/gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher is schema-valid terminal exit 252/no controller, all 11 owner Run values and both shortcuts are restored, OneDrive is preserved, rollback PASS, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`. The previously attempted coordinator report was not duplicated.
+
+2026-08-05T21:31:32.5897912Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472` bytes; gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. Current read-only RAM is `2,613,899,264` bytes (2.434 GiB), margin `-5,976,035,328` bytes. No receipt, nonce, consumed marker, run ID, PID, invocation, terminal/gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. Independent structural audit passed (return 0). RunOnce is absent; launcher is schema-valid terminal exit 252/no controller, all 11 owner Run values and both shortcuts are restored, OneDrive is preserved, Codex launch is recorded, rollback PASS, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`. The previously attempted coordinator report was not duplicated.
+
+2026-08-05T21:05:54Z post-restart GPT-2 Medium Phase 1 V2 monitor: retained terminal evidence remains fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six mandated raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), margin `-8,085,737,472` bytes; gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, current boot, and prohibited flags validate. Current read-only RAM is `2,177,671,168` bytes (2.028 GiB), margin `-6,412,263,424` bytes. No receipt, nonce, run ID, PID, invocation-start, terminal/gate/audit/scientific result, model/provider/GPU/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. Independent structural audit passed with return 0. RunOnce is absent; schema-valid launcher terminal state is exit 252/no controller, all 11 owner Run values and both shortcuts are restored, OneDrive is preserved, Codex launch is recorded, rollback PASS, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`.
+
+2026-08-05 post-restart GPT-2 Medium Phase 1 V2 monitor: retained terminal evidence remains fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six mandated raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor; gate hash, 100 GiB disk floor, CPU 24, boot, arithmetic/invariants, and prohibited flags validate. Current-boot available RAM is `1,844,801,536` bytes (1.718 GiB), still `6,745,133,056` bytes below floor. No receipt, nonce, run ID, PID, invocation-start, terminal report, gate/audit/scientific result, model/provider/GPU/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. Independent structural audit passed (return 0). RunOnce is absent; launcher is terminal exit 252/no controller, all 11 owner Run values and both shortcuts are restored, OneDrive is preserved, Codex is running, rollback PASS, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`. One coordinator-send request was issued without retry.
+
+2026-08-05 post-restart GPT-2 Medium Phase 1 V2 monitor: terminal fail-closed state remains unchanged. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` preflight recorded `504,197,120` free-RAM bytes (0.470 GiB), below the immutable `8,589,934,592`-byte floor by `8,085,737,472` bytes; the current postboot check is `827,027,456` bytes (0.770 GiB), margin `-7,762,907,136` bytes. No receipt, nonce, run ID, or Phase 1 invocation was created (count `0`); Phase 1.5 and Phase 2 remain unauthorized, and no model/provider/GPU/RunPod activity occurred. The launcher terminal state is exit `252` / no controller, with all 11 owner Run values and two shortcuts restored, OneDrive preserved, RunOnce absent, Codex running, and `AUTORUN_TERMINAL_NO_RETRY`. This is a fail-closed resource result, not Phase 1 evidence or a production-readiness claim.
+
 Canonical file:
 `C:\Users\wakil\OneDrive\Desktop\tksCAS\docs\working\cas_harness_production_todo.md`
 
@@ -21,6 +193,2194 @@ For any CAS Harness project work, future AI agents and LLMs must:
 Plain-English mandate: this file is the project dashboard. Check the dashboard before talking, and update the dashboard before leaving.
 
 ## Current Plain-English State
+
+2026-08-05 post-restart monitor: V2 remains terminal and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The schema-valid retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, boot, and prohibited flags validate. Current free RAM is `311,562,240` bytes (0.290 GiB), still `8,278,372,352` bytes below floor. No receipt, nonce, run ID, PID, invocation-start, terminal/gate/audit/scientific run, model/provider/GPU/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. Independent structural audit passed (return 0). RunOnce is absent; launcher is schema-valid terminal exit 252/no controller, all 11 owner Run values and both shortcuts are restored, OneDrive is preserved, Codex launch is recorded, rollback PASS, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`. One coordinator report was attempted without retry.
+
+2026-08-05 post-restart monitor: retained GPT-2 Medium Phase 1 V2 evidence remains terminal and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six mandated raw control hashes match. The schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor; its exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. Current-boot free RAM is `2,412,163,072` bytes (2.247 GiB), still `6,177,771,520` bytes below floor. No receipt, nonce, run ID, PID, invocation-start, terminal/gate/audit/scientific run, model/provider/GPU/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. Independent structural audit passed (return 0). RunOnce is absent; launcher is schema-valid terminal exit 252/no controller, all 11 owner Run values and both shortcuts are restored, OneDrive is preserved, Codex launch is recorded, rollback PASS, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`. One coordinator report was attempted without retry.
+
+2026-08-05 post-restart monitor: retained GPT-2 Medium Phase 1 V2 evidence remains terminal and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The retained schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. Its measurement predates current boot `2026-08-05T18:03:29.500Z`; a current read-only sample found `2,845,188,096` bytes (2.650 GiB) free, still `5,744,746,496` bytes below floor. No receipt, nonce, run ID, controller PID, invocation-start, terminal/gate/audit/scientific run, or model/provider/GPU/RunPod activity exists; invocation count is zero. Independent structural audit passed (return 0). RunOnce is absent; launcher is schema-valid terminal exit 252/no controller, all 11 owner Run values and both shortcuts are restored, OneDrive is preserved, Codex launch is recorded, rollback PASS, Phase 1.5/Phase 2 remain unauthorized, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`. One coordinator report is being sent without retry.
+
+2026-08-05 continuation monitor: retained GPT-2 Medium Phase 1 V2 evidence remains terminal and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw controls match. The schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. Current boot `2026-08-05T01:04:44.500Z` free RAM is `2,111,336,448` bytes (1.967 GiB), still `6,478,598,144` bytes below floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts are restored, OneDrive is preserved, RunOnce is absent, and Codex launch is recorded. `AUTORUN_TERMINAL_NO_RETRY`; rollback PASS; `work_continuing=false`. One coordinator-send request was issued without retry.
+
+2026-08-05 continuation monitor: retained GPT-2 Medium Phase 1 V2 evidence remains terminal and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw controls match. The schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. Current boot `2026-08-05T01:04:44.500Z` free RAM is `2,279,124,992` bytes (2.123 GiB), still `6,310,809,600` bytes below floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains exit 252/no controller; all 11 owner Run values and both startup shortcuts are restored, OneDrive is preserved, RunOnce is absent, and Codex launch is recorded. `AUTORUN_TERMINAL_NO_RETRY`; rollback PASS; `work_continuing=false`. One coordinator-send request was issued without retry.
+
+2026-08-05 continuation monitor: V2 remains terminal and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The retained schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. A current boot read-only sample found `1,186,131,968` bytes (1.105 GiB) free, still `7,403,802,624` bytes below the floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts are restored, OneDrive is retained, RunOnce is absent, and Codex launch was attempted. `AUTORUN_TERMINAL_NO_RETRY`; rollback PASS; `work_continuing=false`. Exactly one coordinator-send request was issued without retry.
+
+2026-08-05 terminal monitor integrity blocker: the V2 artifact remains fail-closed with no receipt, nonce, invocation, model/provider/GPU/RunPod activity, Phase 1.5 authorization, or Phase 2 authorization; invocation count is zero. The retained `POST_RESTART_MINIMAL_SESSION` records `MINIMAL_SESSION_PREFLIGHT_FAIL` at `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor. Current free RAM is `1,972,187,136` bytes (1.837 GiB), still `6,617,747,456` bytes below floor. Source HEAD and five required hashes match, but the live wrapper SHA-256 is `090b9b7a47a0a78702545e5ec2a4a608f0bf7e80fc3c85c8f4716c13104d53a8`, not the monitor-requested `090b9a7a47a0a78702545e5ec2a4a608f0bf7e80fc3c85c8f4716c13104d53a8`; its binding names the live value. Treat this as `OPEN` integrity reconciliation, never as authority to rerun. RunOnce is terminal exit 252/no controller; all 11 owner Run values and both shortcuts are restored, rollback PASS, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`.
+
+2026-08-05 post-restart monitor: V2 remains terminal and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The retained schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor; gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, current boot, and prohibited flags validate. A current read-only sample found `4,197,896,192` bytes (3.910 GiB) available, still `4,392,038,400` bytes below floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts are restored, OneDrive is preserved, RunOnce is absent, and Codex is running. `AUTORUN_TERMINAL_NO_RETRY`; rollback PASS; `work_continuing=false`. One coordinator-send request was issued and left pending for 60 seconds without retry.
+
+2026-08-05 post-restart monitor: terminal V2 evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The retained schema-valid `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. A current read-only sample found `1,240,055,808` bytes (1.155 GiB) available, still `7,349,878,784` bytes below floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts are restored, OneDrive is preserved, RunOnce is absent, and Codex launch is recorded. `AUTORUN_TERMINAL_NO_RETRY`; rollback PASS; `work_continuing=false`. One coordinator-send request was issued and terminated without retry.
+
+2026-08-05 post-restart monitor: terminal V2 evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The retained schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` records `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. A current read-only sample found `2,722,492,416` bytes (2.536 GiB) available, still `5,867,442,176` bytes below floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts are restored, OneDrive is preserved, RunOnce is absent, and Codex launch is recorded. `AUTORUN_TERMINAL_NO_RETRY`; rollback PASS; `work_continuing=false`.
+
+2026-08-05 post-restart monitor: terminal V2 evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The retained schema-valid `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor; exact gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. A current read-only sample found `1,503,543,296` bytes (1.400 GiB) available, still `7,086,391,296` bytes below floor. No V2 receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts are restored, OneDrive is preserved, RunOnce is absent, and Codex launch is recorded. `AUTORUN_TERMINAL_NO_RETRY`; rollback PASS; `work_continuing=false`.
+
+2026-08-05 post-restart monitor: terminal V2 evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The retained schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` records `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor; gate hash, disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. A current read-only sample found `1,210,638,336` bytes (1.127 GiB), still `7,379,296,256` bytes below floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains exit 252/no controller, all 11 owner Run values and two startup shortcuts are restored, OneDrive is preserved, RunOnce is absent, and Codex launch is recorded. `AUTORUN_TERMINAL_NO_RETRY`; rollback PASS; `work_continuing=false`. One coordinator-send request was issued and terminated without retry.
+
+2026-08-05 post-restart monitor: terminal evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The retained schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` remains `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor; gate hash, disk floor, CPU 24, arithmetic/invariants, and prohibited flags validate. Current boot free RAM is `369,315,840` bytes (0.344 GiB), still `8,220,618,752` bytes below floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains exit 252/no controller, all 11 owner Run values and two startup shortcuts are restored, RunOnce is absent, and Codex launch is recorded. `AUTORUN_TERMINAL_NO_RETRY`; rollback PASS; `work_continuing=false`. One coordinator-send request was issued and terminated without retry.
+
+2026-08-05 post-restart monitor: retained V2 terminal evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The schema-valid retained `MINIMAL_SESSION_PREFLIGHT_FAIL` remains `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor; its gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags are valid. A current read-only sample found `2,139,086,848` bytes (1.992 GiB) available, still `6,450,847,744` bytes below floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains exit 252/no controller, all 11 owner Run values and both startup shortcuts are restored, its RunOnce value is absent, and Codex is running. `AUTORUN_TERMINAL_NO_RETRY`; rollback PASS; `work_continuing=false`.
+
+2026-08-05 post-restart monitor: the retained V2 terminal surface remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The schema-valid retained `MINIMAL_SESSION_PREFLIGHT_FAIL` is `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor; gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags are valid. Current boot `2026-08-05T01:04:44.5000000Z` available RAM is `2,560,651,264` bytes (2.385 GiB), `6,029,283,328` bytes below floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains exit 252/no controller, all 11 owner Run values and both startup shortcuts are restored, the RunOnce value is absent, and Codex launch is recorded. `AUTORUN_TERMINAL_NO_RETRY`; rollback PASS; `work_continuing=false`. One coordinator-send request was issued and terminated after 44 seconds without retry.
+
+2026-08-05 post-restart monitor: retained V2 terminal evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The schema-valid retained `MINIMAL_SESSION_PREFLIGHT_FAIL` is `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor; gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags are valid. A current read-only sample found `1,908,695,040` bytes (1.778 GiB), still `6,681,239,552` bytes below the floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains exit 252 with all 11 owner Run values and both startup shortcuts restored, its bound RunOnce value absent, and Codex launch attempted. `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`.
+
+2026-08-05 post-restart monitor: retained V2 terminal evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The schema-valid retained `MINIMAL_SESSION_PREFLIGHT_FAIL` is 504,197,120 bytes (0.470 GiB), 8,085,737,472 bytes below the immutable 8 GiB floor; its gate hash, 100 GiB disk floor, CPU 24, arithmetic/invariants, and prohibited flags are valid. A read-only sample from current boot `2026-08-05T01:04:44.500Z` found 2,251,198,464 bytes (2.097 GiB) available, still 6,338,736,128 bytes below floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains exit 252 with all 11 owner Run values and both startup shortcuts restored, its bound RunOnce value absent, and Codex launch recorded. `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`.
+
+2026-08-04 continuation monitor: retained V2 terminal evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` remains 504,197,120 bytes (0.470 GiB), 8,085,737,472 bytes below the immutable 8 GiB floor. A fresh read-only sample found 2,246,832,128 bytes (2.092 GiB), still 6,343,102,464 bytes below floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains exit 252 with all 11 owner Run values and both startup shortcuts restored, its bound RunOnce value absent, and Codex launch recorded. `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`.
+
+2026-08-05 continuation monitor: retained V2 terminal evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` remains 504,197,120 bytes (0.470 GiB), 8,085,737,472 bytes below the immutable 8 GiB floor. A fresh read-only sample found 2,324,201,472 bytes (2.165 GiB), still 6,265,733,120 bytes below floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains exit 252 with all 11 owner Run values and both startup shortcuts restored, its bound RunOnce value absent, and Codex launch recorded. `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`.
+
+2026-08-05 continuation monitor: retained V2 terminal evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` remains 504,197,120 bytes (0.470 GiB), 8,085,737,472 bytes below the immutable 8 GiB floor. A fresh read-only sample found 2,025,754,624 bytes (1.887 GiB), still 6,564,179,968 bytes below floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains exit 252 with all 11 owner Run values and both startup shortcuts restored, its bound RunOnce value absent, and Codex launch recorded. `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`.
+
+2026-08-05 continuation monitor: retained V2 terminal evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The retained schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` remains 504,197,120 bytes (0.470 GiB), 8,085,737,472 bytes below the immutable 8 GiB floor. A fresh read-only sample found 2,064,392,192 bytes (1.923 GiB) available, still 6,525,542,400 bytes below floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains exit 252 with all 11 owner Run values and both startup shortcuts restored, its bound RunOnce value absent, and Codex present. `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`.
+
+2026-08-05 continuation monitor: retained V2 terminal evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The retained schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` remains 504,197,120 bytes (0.470 GiB), 8,085,737,472 bytes below the immutable 8 GiB floor. A fresh read-only sample found 1,934,684,160 bytes (1.802 GiB) available, still 6,655,250,432 bytes below floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains exit 252 with all 11 owner Run values and both startup shortcuts restored, its bound RunOnce value absent, and Codex present. `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`.
+
+2026-08-05 continuation monitor: retained V2 terminal evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The retained schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` remains 504,197,120 bytes (0.470 GiB), 8,085,737,472 bytes below the immutable 8 GiB floor. A fresh read-only sample found 1,727,102,976 bytes (1.609 GiB) available, still 6,862,831,616 bytes below floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains exit 252 with all 11 owner Run values and both startup shortcuts restored, its bound RunOnce value absent, and Codex launch recorded. `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`.
+
+2026-08-05 continuation monitor: retained V2 terminal evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The retained schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` remains 504,197,120 bytes (0.470 GiB), 8,085,737,472 bytes below the immutable 8 GiB floor. A fresh read-only sample found 2,021,326,848 bytes (1.883 GiB) available, still 6,568,607,744 bytes below the floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains exit 252 with all 11 owner Run values and both startup shortcuts restored, its bound RunOnce value absent, and Codex present. `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`.
+
+2026-08-05 continuation monitor: the retained V2 terminal surface remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The schema-valid retained `MINIMAL_SESSION_PREFLIGHT_FAIL` remains 504,197,120 bytes (0.470 GiB), 8,085,737,472 bytes below the immutable 8 GiB floor; a fresh read-only sample found 2,545,315,840 bytes (2.371 GiB), still 6,044,618,752 bytes below floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists; invocation count is zero. RunOnce remains exit 252, all 11 owner Run values and both startup shortcuts are restored, its RunOnce value is absent, and Codex is present. `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`. One coordinator-send request was issued and did not complete within 60 seconds; it was not retried.
+
+2026-08-05 continuation monitor: retained V2 terminal evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` remains 504,197,120 bytes (0.470 GiB), 8,085,737,472 bytes below the immutable 8 GiB floor. A fresh read-only sample found 2,653,147,136 bytes (2.471 GiB), still 5,936,787,456 bytes below the floor. Receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod, Phase 1.5 authorization, and Phase 2 authorization remain absent; invocation count is zero. RunOnce remains exit 252 with all 11 owner Run values and both startup shortcuts restored, its bound RunOnce value absent, and Codex present. `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`.
+
+2026-08-05 continuation monitor: terminal V2 evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The retained schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` remains 504,197,120 bytes (0.470 GiB), 8,085,737,472 bytes below the immutable 8 GiB floor. A fresh read-only sample found 2,510,635,008 bytes (2.338 GiB), still 6,079,299,584 bytes below the floor. Receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod, Phase 1.5 authorization, and Phase 2 authorization remain absent; invocation count is zero. RunOnce remains exit 252 with all 11 owner Run values and both startup shortcuts restored, its bound RunOnce value absent, and Codex present. `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`.
+
+2026-08-05 continuation monitor: terminal V2 evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The retained schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` remains 504,197,120 bytes (0.470 GiB), 8,085,737,472 bytes below the immutable 8 GiB floor. A fresh read-only sample found 2,464,546,816 bytes (2.295 GiB), still 6,125,387,776 bytes below the floor. Receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod, Phase 1.5 authorization, and Phase 2 authorization remain absent; invocation count is zero. RunOnce remains exit 252 with all 11 owner Run values and both startup shortcuts restored, its bound RunOnce value absent, and Codex present. `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`. One coordinator report request was issued and did not complete within 60 seconds; it was not retried.
+
+2026-08-05 continuation monitor: terminal evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The retained schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` remains 504,197,120 bytes (0.470 GiB), 8,085,737,472 bytes below the immutable 8 GiB floor. A fresh read-only sample found 2,871,795,712 bytes (2.675 GiB), still 5,718,138,880 bytes below the floor. Receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod, Phase 1.5 authorization, and Phase 2 authorization remain absent; invocation count is zero. RunOnce remains exit 252 with all 11 owner Run values and both startup shortcuts restored, its bound RunOnce value absent, and Codex present. `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`. One coordinator report request was issued and did not complete within 71 seconds; it was not retried.
+
+2026-08-05 continuation monitor: terminal evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The retained schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` remains 504,197,120 bytes (0.470 GiB), 8,085,737,472 bytes below the immutable 8 GiB floor. A fresh read-only sample found 2,988,294,144 bytes (2.783 GiB), still 5,601,640,448 bytes below the floor. Receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod, Phase 1.5 authorization, and Phase 2 authorization remain absent; invocation count is zero. RunOnce remains exit 252 with all 11 owner Run values and both startup shortcuts restored, its bound RunOnce value absent, and Codex present. `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`. One coordinator report request was issued and did not complete within 60 seconds; it was not retried.
+
+2026-08-05 continuation monitor: retained V2 terminal evidence remains exact and fail-closed. Source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac` and all six required raw control hashes match. The schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` remains 504,197,120 bytes (0.470 GiB), 8,085,737,472 bytes below the immutable 8 GiB floor. Current read-only available RAM is 2,384,056,320 bytes (2.220 GiB), still 6,205,878,272 bytes below the floor. Receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, and Phase 2 authorization remain absent; invocation count is zero. RunOnce remains exit 252 with all 11 owner Run values and both startup shortcuts restored, its RunOnce value absent, and Codex present. `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`. One coordinator report was issued and remained pending; it was not retried.
+
+2026-08-05 continuation monitor: the V2 terminal surface remains exact and fail-closed. Source HEAD is `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`; all six required raw control hashes match. The retained schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` remains 504,197,120 bytes (0.470 GiB), 8,085,737,472 bytes below the immutable 8 GiB floor. A fresh read-only sample found 2,629,107,712 bytes (2.448 GiB) available, still 5,960,826,880 bytes below the floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists. The RunOnce terminal status remains exit 252; all 11 owner Run values and both startup shortcuts are restored, its RunOnce value is absent, and Codex is present. `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`. One coordinator-send request was issued and remained pending after 60 seconds; it was not retried.
+
+2026-08-05 continuation monitor: the retained V2 terminal surface remains exact and fail-closed. Source HEAD is `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`; all six required raw control hashes match. The schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` is unchanged at 504,197,120 bytes (0.470 GiB), 8,085,737,472 bytes below the immutable 8 GiB floor. A fresh read-only sample found 2,054,328,320 bytes (1.914 GiB) available, still 6,535,606,272 bytes below the floor. No receipt, nonce, run ID, invocation, gate/audit/scientific result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists. The RunOnce terminal status remains exit 252, all 11 owner Run values and both shortcuts are restored, RunOnce is absent, and Codex is present. `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`.
+
+2026-08-05 post-restart monitor: the retained V2 terminal surface still verifies exactly. Source HEAD is `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`; all six immutable control-file hashes match; the retained schema-valid `MINIMAL_SESSION_PREFLIGHT_FAIL` remains 504,197,120 bytes (0.47 GiB), 8,085,737,472 bytes below the immutable 8 GiB floor. The current boot began at `2026-08-05T01:04:44.500Z` and its read-only available RAM is 765,763,584 bytes (0.713 GiB), still 7,824,171,008 bytes below the floor. No receipt, nonce, run ID, model load, invocation, audit result, RunPod use, Phase 1.5 authorization, or Phase 2 authorization exists. The RunOnce terminal status remains exit 252; all 11 owner Run values and both startup shortcuts are restored, its RunOnce value is absent, and Codex is present. This remains `AUTORUN_TERMINAL_NO_RETRY`; `work_continuing=false`.
+
+2026-08-02 monitor reaffirmation: the retained V2 post-restart preflight remains `MINIMAL_SESSION_PREFLIGHT_FAIL` and `AUTORUN_TERMINAL_NO_RETRY`; no receipt, nonce, run ID, model load, Phase 1 invocation, Phase 1.5 authorization, or Phase 2 authorization exists. Current free RAM is also below the immutable 8 GiB floor, so this monitor creates no authority and requires no retry.
+
+### Current 2026-07-29 READABILITY_FIRST_ETA_EPSILON_DISAMBIGUATION_V1 Phase 1 preparation
+
+Controlling status:
+
+`MODEL_SPECIFIC_PHASE1_SUCCESSOR_V2_PREPARATION_LOCAL_PASS / SEALED_ISOLATED_RUNTIME_CLOSURE_VALID / FINAL_LIVE_MEMORY_PREFLIGHT_FAIL / MINIMAL_SESSION_RESTART_GATES_PASS / POSTBOOT_MINIMAL_SESSION_PREFLIGHT_FAIL / POSTBOOT_MEMORY_ROOT_CAUSE_DIAGNOSED_RUNONCE_AFTER_STARTUP / AUTORUN_TERMINAL_NO_RETRY / EXACTLY_ONE_RUN_AUTHORITY_UNCONSUMED / RECEIPT_NOT_CREATED / RUN_ID_NOT_CREATED / NONCE_NOT_CREATED / MODEL_NOT_LOADED / PHASE1_NOT_STARTED / PHASE15_NOT_AUTHORIZED / NO_PHASE_2`
+
+On 2026-07-30, the post-restart minimal-session preflight terminated
+fail-closed before receipt/nonce creation: 504,197,120 bytes (0.47 GiB) RAM
+were available, 8,085,737,472 bytes (7.53 GiB) below the 8,589,934,592-byte
+floor. The launcher restored all 11 owner Run values and both held startup
+shortcuts, removed its RunOnce entry, attempted to launch Codex, and returned
+terminal exit code 252. No controller or gate invocation occurred; Phase 1.5
+and Phase 2 remain unauthorized. This is a durable no-retry terminal boundary
+for this autorun; any future execution requires a separately authorized new
+preflight/receipt path.
+
+The authorized read-only diagnosis on 2026-07-30 found a scheduling defect in
+the minimal-session mechanism, not a GPT-2 process or a failed pagefile. The
+current boot began at `2026-07-30T05:44:13.500Z`, the owner profile completed
+logon at `05:46:08Z`, Shell-Core recorded `ResumeAppRestore` at `05:46:14Z`,
+and the owner `RunOnce` wrapper did not launch until `05:51:55Z`. Its exact
+memory measurement occurred at `05:51:57Z`, approximately 464 seconds after
+boot and 349 seconds after logon. Shell-Core shows that normal startup work ran
+first: system-wide SecurityHealth, Realtek, MSI True Color, SteelSeries,
+Nearby Share, and Logitech commands; OneDrive and the exact Chrome
+`--no-startup-window /prefetch:5` command; and startup tasks for Killer/Intel
+utilities, ChatGPT Classic, Spotify, CrossDevice/Phone, Teams, Microsoft 365
+Copilot, and WSHelper. Chrome's root process began at `05:46:30Z`, before its
+later Run command, supporting app/session restoration or another cached launch
+path as the reason HKCU-only suppression did not create a minimal session.
+Codex/ChatGPT launched only after the failed measurement, beginning at
+`05:51:59Z`, so it did not cause the recorded 504,197,120-byte result.
+
+The retained preflight artifact has SHA-256
+`d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`;
+the launcher status has SHA-256
+`5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+Their timestamps, arithmetic, source/hash/clean-tree checks, and terminal
+status reconcile exactly. No authorization directory, run directory, attempt
+latch, invocation marker, controller/gate log, receipt, run ID, nonce, model
+load, Phase 1 invocation, Phase 1.5 action, Phase 2 action, network/provider,
+paid, GPU, or RunPod activity exists. The wrapper restored all eleven owner
+Run values and both held shortcuts after measurement, and the non-`!` RunOnce
+entry was consumed. This autorun cannot be retried or repurposed.
+
+The same boot also gives direct evidence that the unchanged local 8 GiB floor
+is feasible only before the owner startup storm. The independently verified
+`SYSTEM` `AtStartup` evidence was refreshed 35.890 seconds after this boot and
+has SHA-256
+`7efcbfe61aee6bb6d015ea79eae096f9ddf6d95a620f5ab82a752873f8c0dd0e`.
+It measured `11,987,054,592` available bytes, exceeding the
+`8,589,934,592`-byte floor by `3,397,120,000` bytes, with no forbidden
+framework import, receipt, model load, or Phase 1 action. This old task binds
+the historical V1 read-only memory function and therefore proves early-boot
+capacity only; it is not a V2 execution gate or authority.
+
+Later read-only samples show a 16,866,705,408-byte physical-memory host with
+only about 1.1-1.7 GiB available. At `2026-07-30T06:39:39Z`, committed memory
+was `25,363,218,432` of `46,931,476,480` bytes and the 28,672 MiB pagefile used
+about 1,641 MiB, so commit backing was healthy. Paged plus nonpaged kernel
+pools were approximately 2.23 GiB. A direct read-only pool-tag query found the
+largest later tags at about 337 MB (`ismc`), 238 MB (`ConT`), and 181 MB
+nonpaged (`EtwB`); the prior pre-restart `Inte` allocation had fallen from
+about 1.03 GiB to about 12.6 MB. The restart therefore cleared the earlier
+`Inte`/kernel-pool pressure; it was not retained as the cause of this
+post-login collapse. Exact driver ownership of the unmapped raw tags remains
+unproven and must not be inferred from their names.
+
+Current working sets are evidence of scale, not fabricated historical
+per-process measurements: Chrome alone fluctuated around 3.2-3.6 GiB;
+optional user apps present before the preflight total about 5.9 GiB; and the
+later Codex/ChatGPT tree uses about 2.6 GiB. No Python, PyTorch, Ollama, GPT-2,
+capture, scoring, or model-server process is running. Active paging and
+repeated low-availability samples show that waiting will not naturally restore
+8 GiB.
+
+Smallest safe next correction: if separately authorized, prepare and
+independently audit a new V2-specific, one-use `SYSTEM` pre-sign-in execution
+path that binds the immutable V2 runtime/gate, verifies exact ACL/path access
+and all receipt/nonce surfaces before consumption, runs a fresh early-memory
+check plus the gate's late check, permits one invocation only, and restores the
+owner session only after terminal independent audit. Do not reuse the consumed
+RunOnce wrapper or the V1 boot task. A less deterministic alternative is a
+saved-state current-session closure of Chrome, Spotify/Phone and other
+optional apps, with Codex closed last and an external exact live gate; its
+recovery is only an estimate until measured. Any future startup suppression
+must cover `ResumeAppRestore`, packaged startup tasks, HKLM Run, and alternate
+Chrome launch paths rather than only HKCU Run. Until the owner selects and
+authorizes a new path, make no startup/service/process changes, do not lower
+the floor, do not create a receipt, and do not invoke Phase 1. Phase 1.5
+remains separate and unauthorized even if Phase 1 later passes.
+
+The historical V1 execution packet at
+`b71cf6bda72e043e7a030c1d5a3e64858597fcbe`, tree
+`b6bce60bb158ef95cfa19298dbc081eb26b69030`, remains byte-unchanged and
+invalid for execution. Its runtime-reachability defect is superseded only by
+an additive V2 successor; it was not repaired in place. The authoritative
+runtime-corrected GPT-2 Medium successor is committed on branch
+`codex/gpt2-medium-phase1-runtime-v2` at
+`75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, with preparation commit
+`ac04ac9518714c39db668e125f199c226af6e714`, preparation packet tree
+`8d1d86ed8bc22fc1e15c5b6e32bbcbc10b1d4ff9`, and final packet tree
+`fc0b5da7f6b50e28e48dd4d61afd0bf3c12b7949`. It preserves all 19
+scientific bindings object-exact, the Phase 1 lock SHA-256
+`8fb5ab2897bbff25174a6bab1e9677077360acda3144aaf40ddf648d0c18435f`,
+the V6 tree `0cbf1844da9bd74db1107f1b95a82a8f0748e0d7`, and the prospective
+Phase 1.5 tree `fc4a50ac7cfdd4d95a357b1202738bc0e7ccdcfa`. The 22 of 26
+cross-partition `rf_id` templates still prohibit unseen-template or
+cross-template-generalization claims.
+
+V2 binds `C:\Python314\python.exe -I -B -S` and the dedicated ignored runtime
+`.cas_runtime\gpt2m-phase1-v2`: 39 exact distributions, 49 active dependency
+edges, all 802 `Requires-Dist` decisions, and 21,826 allowed files totaling
+727,066,139 bytes. The environment manifest canonical-LF SHA-256 is
+`1083af7a98a677233db8ead852a05f15cde49bacc0879f7af4379102d950fe88`;
+its closure semantic digest is
+`6e5e6d2995dda0d3eae590363f6aea59fe8a25bff10319b0f66bc80341c152ba`.
+The V2 successor lock canonical-LF SHA-256 is
+`94c97ab5b72d9d0abdce1204f5a3903f631d29e61005d540790fba3833a7be4a`,
+and the V2 preparation manifest canonical-LF SHA-256 is
+`784f5e6a04f165c0cee4b85429140720e27a77111aedc6200050e54ef4accbeb`.
+The gate validates exact wheel, ABI, origin, spec, and native-loader closure
+and rejects extra paths or files before nonce consumption.
+
+Model-free validation passed `37/37` tests. The full gate returned
+`GPT2_MEDIUM_PHASE1_SUCCESSOR_V2_PREPARATION_VALID`; the separate
+standard-library auditor returned `PREPARATION_AUDIT_PASS`; the solo builder
+replay and an independent Packaging-25 dependency simulation both passed.
+No framework was imported; no receipt, nonce, run ID, output, model/tokenizer
+load, Phase 1 invocation, Phase 1.5 action, or Phase 2 action occurred.
+
+The owner authorized a wholly new prospective readout-qualification lane
+based on the independent Usora diagnosis and the corrected Noetic Topos/V7.4
+review. It is not a Pythia-160M V6 successor and does not reinterpret that
+negative result. V6 and every prior artifact remain unchanged, non-reusable,
+and outside this lane. The `ETA_EPSILON` name is an engineering analogy only;
+no functor from transformer states into Noetica has been established and the
+formal section-retraction identity does not prove transformer readability or
+steerability.
+
+Phase 1 is frozen at
+`docs/working/readability_first_eta_epsilon_v1/READABILITY_FIRST_PHASE1_LOCK_V1.json`,
+canonical-LF SHA-256
+`8fb5ab2897bbff25174a6bab1e9677077360acda3144aaf40ddf648d0c18435f`.
+The preparation manifest SHA-256 is
+`82170024e3fc7810448dee6d17e82c7baeee3f330b763c98752c6f989df5ba72`.
+The final scoped Phase 1 state is committed at
+`2bce307cd2849185de69496d539c607b20e5c54a` on branch
+`codex/readability-first-eta-epsilon-phase1`.
+It binds the independently audited Foundation-28 TKS_672_V8 corpus,
+canonical-LF SHA-256
+`2527426dfb5a3ed5e3072715785787b0562da0ce8d8e66609639d35fe9185b2e`,
+the ontology file and embedded authority hashes, and a new
+sibling-preserving 224-family split. Per class, the first four deterministically
+ordered plan families are train, the next two development, and the last two
+sealed test; all three siblings remain together.
+
+The model-specific execution successor is now frozen at commit
+`b71cf6bda72e043e7a030c1d5a3e64858597fcbe` on the same branch, with
+successor directory Git tree
+`b6bce60bb158ef95cfa19298dbc081eb26b69030`. It selects the complete local
+`gpt2-medium` snapshot at revision
+`6dcaa7a952f72f9298047fd5137cd6e4f05f41da`, binds every model/tokenizer
+blob, the exact GPT2Model 24-block layer map, CPython and 13 complete wheel
+RECORD inventories, CPU/resource caps, a model-specific producer, a separate
+standard-library auditor, and an exact one-use receipt contract. The successor
+preparation manifest canonical-LF SHA-256 is
+`61dc80e00a814c69a3a50886feaa2875ec375a48dafd56828185764800b5f98a`;
+the successor lock canonical-LF SHA-256 is
+`6c5f76b5aa3625593247f0a357622c6cf189ffebc3b9518850c71f5cc1065acb`.
+The frozen Phase 1 lock and every V6 artifact remain byte-unchanged.
+
+The frozen plan uses last-non-padding-token states from every transformer block,
+a diagnostic-only embedding state, train-only standardized multinomial
+logistic readouts over `C=[0.001,0.01,0.1,1.0,10.0]`, development-only
+layer/hyperparameter selection, family-probability aggregation, character
+3–5-gram and word 1–2-gram TF-IDF baselines, 1,999 full-pipeline
+family-grouped permutations, `[BODY_REMOVED]`, a shuffled-label control, a
+non-gating embedding diagnostic, majority/chance references, and a
+10,000-replicate paired class-stratified family-cluster bootstrap. The
+bootstrap recomputes `max(character, word)` inside every replicate and uses a
+frozen SHA-256-bit draw rule plus exact nearest-rank order statistics.
+
+All criteria are jointly required: family-level 28-way balanced accuracy at
+least `0.50`; hidden minus best lexical at least `0.10`; clustered 95% margin
+CI strictly above zero; permutation `p <= 0.01`; and shuffled and body-removed
+controls inside their frozen null envelopes. The embedding layer is reported
+against the envelope but has no decision authority. Any failure yields exactly
+`STOP_READOUT_NOT_QUALIFIED / NO_PHASE_2`. A pass yields only
+`READOUT_QUALIFIED_FOR_SEPARATE_PHASE_2_DECISION`; it does not prepare or
+authorize Phase 2. Test-set layer or hyperparameter search, class merging,
+correct-only conditioning, and model escalation under the same lock are
+prohibited.
+
+The standard-library independent auditor rechecks corpus and ontology hashes,
+the exact deterministic split roles and complete coverage, sibling grouping,
+development-only selection, all retained sibling probabilities, family
+aggregation, balanced accuracies, best-lexical margin, paired clustered
+interval, 1,999-value permutation distribution, control envelopes, thresholds,
+and strict claims without importing producer scoring code. Synthetic-result
+local validation reports `22 passed`, including the realizable `28/56` versus
+`27/56` BA boundary, `6/56` versus `5/56` margin boundary, permutation
+exceedance `k=19` versus `k=20`, rehashed role-swap rejection, duplicate-key
+rejection, metric/null/CI tamper rejection, extra-claim rejection, and
+fresh-interpreter run/receipt/Phase-2 denial before framework import or output
+creation. No model/tokenizer was loaded; no
+capture/scoring, receipt, GPU, network, provider, paid, or RunPod action
+occurred; and Phase 2 was neither prepared nor executed.
+
+The model-specific successor reports `26/26` synthetic tests passing. A full
+preflight rehashed the 1.52 GB selected weight blob and every hash-bearing file
+declared by all 13 bound wheel RECORDs. A second independent preparation audit
+passed the snapshot, 25-state map, split, 22/26 template limitation, and claim
+boundary. The prepared executor uses hooks on `drop` and `h.0` through `h.23`
+because bound Transformers 5.8.1 does not return intermediate GPT2Model hidden
+states. It freezes right padding, EOS padding alias 50,256, no truncation,
+maximum-mask-index last-token extraction, CPU-only execution, 8 GB minimum
+free RAM, 100 GiB minimum free disk, a 21-day wall cap, and exactly 242,260
+classifier fits. No framework was imported and no model/tokenizer was loaded
+during validation.
+
+An independent final execution-readiness audit on 2026-07-29 found a hard
+fail-closed defect that the `26/26` model-free suite did not cover. The frozen
+gate requires `C:\Python314\python.exe -I -B`, while the manifest places every
+bound framework under
+`C:\Users\wakil\AppData\Roaming\Python\Python314\site-packages`. Exact
+standard-library checks under the required flags report `isolated=1`,
+`no_user_site=1`, omit that user-site path from `sys.path`, and return no
+module spec for `numpy`, `scipy`, `sklearn`, `torch`, `transformers`,
+`tokenizers`, or `safetensors`. The current gate consumes the one-use nonce
+before the executor imports those frameworks, so executing this packet would
+irreversibly consume the authority and then fail before model load or output.
+The 13-distribution manifest also does not freeze the complete runtime
+dependency closure: its own bound metadata declares required packages outside
+the set, including `typing-extensions`, `setuptools`, `sympy`, `networkx`,
+`jinja2`, `fsspec`, `pyyaml`, `typer`, `tqdm`, `hf-xet`, and `httpx`.
+Therefore the earlier full preflight proves only the enumerated files, not an
+import-reachable or closed immutable execution environment. Do not inject an
+unbound path, drop `-I`, copy/install packages, create a receipt, or launch the
+current gate. The Phase 1 scientific lock, V6, and the existing successor
+packet remain byte-unchanged as historical prospective artifacts.
+
+Residual risks remain intentionally open: GPT-2 Medium has no exact prior
+672-item all-layer capture, current run-time duration is unmeasured and may be
+substantial, at least 8 GiB must be free before a one-use run, and a consumed
+nonce makes an interrupted run non-resumable. The sealed test has only two
+plan-family clusters per class, so the preregistered interval remains
+conservative and fixture-specific. Lexical baselines may beat the hidden
+readout; that is a valid stop, not permission to weaken thresholds or escalate
+the model under this lock. Additionally, 22 of 26 `rf_id` templates cross
+partitions. The split is valid only at the frozen `plan_family_id` group unit
+and cannot support an unseen-template or cross-template generalization claim.
+
+Current execution is blocked independently by both the invalid frozen
+environment binding above and insufficient live RAM. A read-only live Windows investigation on
+2026-07-29 ended with an exact gate-native reading of `1,156,911,104`
+available physical-memory bytes, below the frozen `8,589,934,592`-byte
+minimum by `7,433,023,488` bytes. Repeated samples remained near
+`0.96-1.44 GiB`; no Python, PyTorch, Ollama, llama, WSL VM, Docker, GPT-2,
+Pythia, capture, scoring, or model-server process was present, so waiting for
+another model job cannot close the gap. The host instead showed approximately
+`2.80 GiB` nonpaged and `1.53 GiB` paged kernel-pool allocation; the largest
+read-only observed tag, unmapped `Inte`, held approximately `1.03 GiB`.
+Ordinary optional user-app closures cannot recover the approximately
+`6.92 GiB` shortfall while preserving active CAS/Codex, Chrome's Codex
+extension, OneDrive, unrelated work, and monitoring.
+
+The owner then authorized a controlled normal Windows restart plus post-boot
+read-only memory preflight, but the restart was not initiated. Pre-restart
+verification found the scoped worktree clean at
+`cae9f7c0b3369d8ef215600eec11e1ffda44118b`, tree
+`87eb90063caed850ed3eab683c0ab929e2da952c`; the authoritative Phase 1 commit
+`b71cf6bda72e043e7a030c1d5a3e64858597fcbe` is its direct ancestor and all
+required objects verify locally. The canonical OneDrive checkout contains
+extensive unrelated saved state (`291` tracked modifications and `1,088`
+untracked entries) and must not be cleaned, reset, mass-staged, or otherwise
+disturbed. Visible unrelated application state also includes Claude, two
+Chrome windows (including `Thinking in Cognitive Architecture`), Microsoft
+365 Copilot, and multiple Sticky Notes. Windows process metadata cannot prove
+that browser forms or Claude/Copilot drafts are saved; the user must explicitly
+confirm or save those states before restart. The future restart must remain
+non-forcing so any application with a registered shutdown veto can block it,
+but that veto alone is not evidence that every web draft is durable.
+
+The owner personally approved the visible UAC prompt at
+`2026-07-29T22:09:20Z`. The elevated registration script, SHA-256
+`596c9678b19fb77312576febc3d152f90ff2c838368e27cfcecd2b97c249d60b`,
+wrote evidence that Windows returned a `Ready`, priority-`0`, `AtStartup`
+task named
+`CAS_GPT2_MEDIUM_PHASE1_POST_BOOT_RAM_PREFLIGHT_20260729`, running as
+`SYSTEM` / `ServiceAccount` / `Highest`. The evidence binds the exact
+standard-library gate source SHA-256
+`25a26c7008b1111b88ad3a7a296dd5c38e2812c0bf8ec4d1463623339f9bdc1b`,
+CPython `C:\Python314\python.exe`, and the frozen `8,589,934,592`-byte floor.
+Registration evidence SHA-256 is
+`fda5baf80c735bda2ca2dd5e3349d99b0739bd8e27d18925acc98cb62f5f0dec`.
+
+The earlier verifier-launch timeout is superseded. After fresh owner
+authorization, the visible elevation completed and the exact prepared verifier,
+SHA-256
+`258dea30b70305d3a1a3c4c4ca4ee5624a5e0991025042819a1f038bcee79f54`,
+returned
+`ELEVATED_TASK_AND_SYSTEM_SELF_TEST_VALID`. It independently exported the
+registered task to `registered_task.xml`, SHA-256
+`20e9fb902888436eb864585ba1826a7034b72e03e6e461b3147d575647238b1d`;
+verified the one action, one boot trigger, exact executable, arguments and
+decoded source, gate and Python hashes, working directory, `SYSTEM` /
+`ServiceAccount` / `Highest` principal, priority `0`, and path access; and ran
+the exact task once under `SYSTEM`. The resulting
+`pre_restart_self_test.json`, SHA-256
+`da06c9b7d8cccbd2bed47e5f089f2fb4303aa8c0d0d4a68137775db950fbbc3d`,
+records the expected `MEMORY_PREFLIGHT_FAIL` at `887,435,264` available bytes
+against the frozen `8,589,934,592`-byte floor, with zero forbidden framework
+imports and all receipt/model/Phase 1/Phase 1.5 flags false. The elevated
+verification record itself has SHA-256
+`6877f402d2538b04b200e8efd7d438e101bd7dea63b9bcfe57a64c4170572cad`.
+The current unelevated token still receives `Access is denied` when querying
+the administrator-ACL task; that is consistent with the independently exported
+and elevated-verified definition, not evidence that the task was removed.
+
+The OneDrive error/no-upstream durability blocker is mitigated for this scoped
+restart by a verified local backup outside OneDrive at
+`C:\Users\wakil\CAS_Restart_Backups\readability-first-gpt2-medium-phase1-20260729T223000Z`.
+Its standalone complete-history Git bundle is `521,300,663` bytes, SHA-256
+`fb6d014367139d81af421a84eb8e113ff2c727d6e828b5fb6a0bae078b80cb27`;
+`git bundle verify` and `list-heads` bind the exact
+`cae9f7c0b3369d8ef215600eec11e1ffda44118b` branch ref. A separate exact
+32-blob archive has SHA-256
+`a74c70960f01ad12925fa0f054d0ae220c6aad0d0d7972250937b28ce2020b6f`,
+and every entry independently matched its Git blob size and SHA-256. The
+scoped worktree remains clean at tree
+`87eb90063caed850ed3eab683c0ab929e2da952c`.
+
+Post-boot continuation is bound to active local Codex automation
+`resume-gpt-2-ram-preflight-after-restart`, which checks every five minutes and
+is restricted to independently validating and reporting the one
+`post_boot_preflight.json` artifact before pausing itself. Its read-back
+configuration SHA-256 is
+`ae3ef096efa2d848fdbe84a080f29112db555f71813c358cf3220272901f69d7`.
+A one-use current-user `RunOnce` binding,
+`CASResumeGPT2RamPreflight20260729`, resolves the installed Codex application
+ID `OpenAI.Codex_2p2nqsd0c76g0!App` so the monitor can resume after sign-in.
+The exact RAM measurement remains the already verified `SYSTEM` `AtStartup`
+task and therefore occurs before this user-session wake or optional apps.
+
+The authorized non-forcing soft restart completed. The verified `SYSTEM`
+`AtStartup` task wrote `post_boot_preflight.json` 28.984 seconds after boot.
+The 1,143-byte artifact has SHA-256
+`ad1e2192a2fb06025c17035a0928b7c81a3987c5ad95e5e13bab447a80cc5593`
+and reports `MEMORY_PREFLIGHT_PASS`: `11,879,292,928` available bytes against
+the frozen `8,589,934,592`-byte floor, a `3,289,358,336`-byte surplus. Two
+independent standard-library/read-only audits recomputed the artifact, exact
+gate, registered-task XML, task-arguments, decoded-source, and Python hashes;
+reconciled boot epoch, uptime, timestamp, floor arithmetic, and status; and
+found no mismatch. The evidence directory contains exactly the seven expected
+registration/verifier/self-test/post-boot files. The artifact and filesystem
+checks show zero forbidden framework imports, no receipt or nonce, no consumed
+marker, no run directory or output, no model load, no Phase 1 start, and no
+Phase 1.5 authorization.
+
+Post-restart terminal evidence status:
+`POST_BOOT_MEMORY_PREFLIGHT_PASS / 11879292928_AVAILABLE_BYTES / 8589934592_BYTE_FLOOR_PASS / NO RECEIPT / NO NONCE / NO MODEL LOAD / PHASE1_NOT_STARTED / PHASE15_NOT_AUTHORIZED / NO_PHASE_2`.
+This closes the controlled-restart evidence task but does not itself authorize
+or start a model run.
+
+The owner then supplied verbatim conditional authority: “I authorize one
+offline GPT-2 Medium Phase 1 run after the final safety check passes.” This
+permits at most one fresh one-use offline CPU-only GPT-2 Medium Phase 1
+capture/score/independent-audit run under the authoritative frozen successor;
+it prohibits retry, resume, repair, model escalation, Phase 1.5, Phase 2, GPU,
+network, provider, paid, and RunPod activity. The authority has not been
+materialized into a receipt, run ID, or nonce because the required final live
+safety check failed closed after optional applications reopened. The exact
+gate-native check observed only `1,330,257,920` available bytes, short of the
+frozen floor by `7,259,676,672` bytes. Disk passed at `260,220,649,472` free
+bytes against `107,374,182,400`, logical CPU count passed at `24`, and the
+gate source remained exact at SHA-256
+`25a26c7008b1111b88ad3a7a296dd5c38e2812c0bf8ec4d1463623339f9bdc1b`.
+
+Current execution status:
+`MODEL_SPECIFIC_PHASE1_SUCCESSOR_V2_PREPARATION_LOCAL_PASS / FINAL_LIVE_MEMORY_PREFLIGHT_FAIL / MINIMAL_SESSION_RESTART_GATES_PASS / POSTBOOT_EXACTLY_ONE_PHASE1_AUTORUN_ARMED / NON_FORCING_RESTART_PENDING / CONDITIONAL_EXACTLY_ONE_RUN_AUTHORITY_UNCONSUMED / RECEIPT_NOT_CREATED / RUN_ID_NOT_CREATED / NONCE_NOT_CREATED / MODEL_NOT_LOADED / PHASE1_NOT_STARTED / PHASE15_NOT_AUTHORIZED / NO_PHASE_2`.
+The latest exact V2 gate-native self-test reports
+`MINIMAL_SESSION_PREFLIGHT_FAIL`: `1,937,375,232` available bytes against the
+unchanged `8,589,934,592`-byte floor, a `6,652,559,360`-byte shortfall. Disk
+passed at `254,960,910,336` free bytes against `107,374,182,400`, logical CPU
+count passed at `24`, source commit and gate hashes remained exact, the worktree
+was clean, and every receipt/nonce/run/framework/model/Phase 1/Phase 1.5/Phase 2
+flag remained absent or false.
+
+The reversible minimal-start sequence is now applied and independently
+verified under owner SID
+`S-1-5-21-1813644431-1139806005-1704868466-1001`. It preserves OneDrive,
+CAS/Codex state, security, remote-access, network, audio, AnyDesk, Tailscale,
+and system services; delays exactly 11 optional owner-startup registry values
+plus the optional Ollama and Send-to-OneNote startup shortcuts; and binds one
+non-retrying owner `RunOnce` value,
+`CASGPT2MV2MinimalSessionPreflight75d761e6`. That continuation measures RAM
+before optional apps or Codex reopen. On any preflight failure it creates no
+receipt and restores the session. Only on an exact fresh PASS does the
+standard-library controller, raw SHA-256
+`bf28fd1148b9cd079abc46f6fbed023b9746d9f0197ad4b67ddd4916f648b7b7`,
+atomically create the exact two-file authorization surface, latch one
+invocation attempt, and start the frozen V2 gate once. It never loops or
+retries. After the sole gate process and separate retained-evidence audit are
+terminal, or after any fail-closed exception, the wrapper restores every
+delayed value and shortcut under the owner profile, records rollback status,
+and relaunches Codex for independent evidence review.
+
+Six synthetic controller tests pass the receipt/claim binding, full-PASS
+requirement, one-byte-below-RAM rejection, preflight-failure denial, atomic
+materialization, second-attempt denial, and one static gate-launch site. A
+separate standard-library structural audit returns
+`AUTORUN_PREPARATION_AUDIT_PASS`. Wrapper raw SHA-256 is
+`090b9b7a47a0a78702545e5ec2a4a608f0bf7e80fc3c85c8f4716c13104d53a8`;
+startup binding raw SHA-256 is
+`90d7ec7e0f0b6f1a514ea20c68720c93477223a8ab078984cbfa0923d5b43dbd`.
+The active terminal monitor configuration SHA-256 is
+`f138bb439023509e9a5e232e9dfbfc604fc1ea01f860fd5a9d840b864bbb0537`.
+
+The scoped restart backup is independently verified outside OneDrive at
+`C:\Users\wakil\CAS_Restart_Backups\readability-first-gpt2-medium-phase1-v2-75d761e6-20260730T045444Z`.
+Its complete-history Git bundle is 354,808,036 bytes with SHA-256
+`5588dfb94deaccfcd37f74028e55b4c1ceb21a476f47b635da4c4ac60675a7a0`.
+Its runtime archive is 744,724,992 bytes with SHA-256
+`14dd01987fb9e2550ee17e560e1764cef215d83814b66fdcb94e84f32050bcf4`;
+an independent streaming comparison matched all 21,826 files and 727,066,139
+file bytes with zero path, type, size, or content errors. Backup manifest
+SHA-256 is
+`5ed03e87c402ae04c08460881594ce2a94f1f231797a3b81d4f3b92e406f426d`.
+The backup protects against restart, OneDrive, and worktree loss but remains on
+the same physical disk and is not evidence against disk failure.
+
+A premature registry suppression was detected before the backup and
+continuation gates were complete and was immediately rolled back to all exact
+owner values. The final suppression occurred only after the durable backup,
+rollback, owner-identity, exact source/runtime, and continuation gates passed.
+No app was individually terminated, no receipt/run ID/nonce was created, no
+framework or model was loaded, and no research invocation occurred. Exact next
+action is the already-authorized non-forcing soft restart. The post-boot
+preflight remains read-only and creates no authority. Only if its fresh
+RAM/disk/CPU, source, runtime, receipt-surface, and prohibited-activity gates
+all pass may the controller materialize the owner's existing authority and
+invoke Phase 1 exactly once. Any preflight failure stops without a receipt; any
+gate, controller, or audit failure is terminal with no retry, resume, repair,
+or second invocation.
+
+The owner's standing conditional authority applies to exactly one fresh
+offline CPU-only V2 Phase 1 invocation after every frozen final safety check
+passes and only when the receipt binds final commit
+`75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, the V2 lock, exact sealed
+runtime, run ID, and nonce. It authorizes no retry, resume, repair, model
+escalation, second invocation, GPU, network, provider, paid or RunPod activity,
+Phase 1.5, or Phase 2. After that invocation's independent audit, Phase 1 is
+terminal regardless of PASS or STOP. This is the last run in Phase 1, not
+necessarily the final research stage. A failure yields
+`STOP_READOUT_NOT_QUALIFIED / NO_PHASE_2`; a pass yields only
+`READOUT_QUALIFIED_FOR_SEPARATE_PHASE_2_DECISION / FIXTURE_SPECIFIC_OFFLINE_READOUT_ONLY`.
+
+Concurrent-successor audit note: branch
+`codex/readability-first-phase1-model-successor` contains a separately
+validated Pythia-160M alternative at
+`e1c6609c3537c6ba48d3edb6ff9a487e9a91a964`, prepared directly from the
+earlier `f4a5cc89` state. Its model-free suite passed `25/25` twice and its
+post-commit source gate passed, but it is not the canonical selected successor,
+must not be merged alongside the GPT-2 Medium package, and carries no receipt
+or run authority. Using it would require an explicit owner model/lineage
+decision and reconciliation with the strengthened `2bce307c` preparation;
+until then it is a non-authoritative research alternative only.
+
+Permanent claim boundary:
+`RESEARCH_ONLY / OFFLINE_OPEN_WEIGHT_MODEL / FIXTURE_SPECIFIC / NO_UNSEEN_TEMPLATE_OR_CROSS_TEMPLATE_GENERALIZATION_CLAIM / NO_ACTIVATION_STEERING_CLAIM / NO_PROMPT_INJECTION_CLAIM / NO_SAFETY_CONTROL_CLAIM / NO_PRODUCTION_CLAIM`.
+
+Owner: `CAS Harness research engineering`, with any one-use Phase 1 execution
+authorization, Phase 1.5 activation, Phase 2, and all claim authority retained
+by the project owner.
+
+### Current 2026-07-29 conditional Neuralese Phase 1.5 preparation
+
+Controlling status:
+
+`NEURALESE_PHASE15_PROSPECTIVE_PREPARATION_LOCAL_PASS / V1_B71_BOUND / INACTIVE_PENDING_ACTUAL_PHASE1_PASS / V2_RESULT_INCOMPATIBLE_WITHOUT_SEPARATE_ADDITIVE_SUCCESSOR / NON_EXECUTABLE / RUN_NOT_AUTHORIZED / NO RECEIPT / NO OUTPUT / RESEARCH_ONLY / NO_PHASE_2`
+
+The owner authorized a separate prospective Phase 1.5 triangulation gate
+without changing or delaying the authoritative GPT-2 Medium Phase 1 package.
+The Phase 1.5 scaffold's original Phase 1 predecessor remains byte-exact at
+`b71cf6bda72e043e7a030c1d5a3e64858597fcbe`, tree
+`b6bce60bb158ef95cfa19298dbc081eb26b69030`. The Phase 1.5 preparation is
+separately committed at
+`cae9f7c0b3369d8ef215600eec11e1ffda44118b`, tree
+`87eb90063caed850ed3eab683c0ab929e2da952c`, on branch
+`codex/readability-first-eta-epsilon-phase1`. The authoritative lock is
+`docs/working/readability_first_eta_epsilon_v1/neuralese_phase1_5_v1/NEURALESE_PHASE15_LOCK_V1.json`,
+canonical-LF SHA-256
+`d65bd7d1374613993bf086c58484e0c57b559ec5cd37fff267b24ebbd8a45318`.
+The preparation manifest canonical-LF SHA-256 is
+`bf761a603559cff805bde14a526d0bd44f15d878ef173d88cb3c13aa14f6a3c5`.
+
+Phase 1.5 remains unchanged, separate, prospective, and unauthorized. The
+existing scaffold is V1/b71-bound and cannot consume a V2 receipt or result.
+An audited V2 Phase 1 PASS makes Phase 1.5 merely eligible for a new owner
+decision; it does not activate it. Any executable V2-compatible Phase 1.5
+successor, runtime/resource binding, receipt, or run requires separate additive
+preparation and separate authorization.
+
+Phase 1.5 cannot activate unless the exact GPT-2 Medium Phase 1 result
+independently passes all five frozen Phase 1 criteria. Phase 1 PASS is only a
+prerequisite and does not authorize Phase 1.5. A future activation attestation
+must rehash the actual Phase 1 result, evidence manifest, owner receipt, and
+saved independent audit; independently reconstruct every receipt
+authorization field and the exact receipt ID/run-directory binding; require
+the original nonce to be absent and its exact consumed marker to remain
+present; and rerun the bound Phase 1 auditor byte-for-byte. Synthetic
+activation fixtures can never activate the lane.
+
+The scientific gate is conjunctive: the same development-selected
+representation must be (1) decodable by the exact audited Phase 1 family
+predictions, (2) readable through a separately frozen multi-token Bank A
+output-Jacobian/template lens, and (3) causally used under both the registered
+coordinate swap and required removal corroboration on a disjoint Bank B
+output-likelihood endpoint. A probe, template association, or perturbation
+alone cannot pass. Primary analysis always retains all 168 sealed siblings
+and 56 families. A development-loading-qualified subset is secondary only and
+cannot filter, rescue, reweight, or replace the primary result.
+
+The lock freezes GPT-2 Medium from the same immutable revision, future
+`GPT2LMHeadModel` identity checks, train-only Jacobian coordinates, exact
+multi-token templates, source-target pairs, development-only layer/token and
+loading selection, scalar layer-RMS normalization, removal and swap doses
+`[0,0.25,0.5,1]`, no-op reconstruction, inverse mapping, shuffled mapping,
+same-norm random and orthogonal spans, wrong layer, wrong token, an exact
+ontology-authority-lexeme semantically-unrelated control, all 26 off-target
+classes, and a separate 28-item/14-family collateral fixture. The unrelated
+control changes both registered factors, has zero normalized authority-lexeme
+overlap under its exact stoplist, uses its own train-only coordinate and
+target reference, matches the primary intervention norm, and is scored only
+on the original primary endpoint. This is a fixture control, not a general
+human semantic-distance or theoretical-relation claim.
+
+Bank B source, target, and off-target class scores share the same exact
+presealed per-class/per-frame token masks and reducers. The off-target margin
+compares `(target change - source change)` with the maximum absolute
+`(other-class change - source change)`, so pure source suppression cannot
+qualify target specificity. All primary, off-target, and six-control
+statistics use the same paired within-class family resamples; maximum controls
+are recomputed inside each of 10,000 replicates. Lens BA and agreement are
+restricted to the exact `1/56` grid, permutation p-values to `1/10000`, and
+collateral forced-choice losses to `1/28`; impossible observed margins and
+interval orderings fail closed.
+
+The support canary is exact for all 336 pair-side/bank/frame cases. It uses
+the float64 L2 norm of each individual appended-token log-probability gradient
+with respect to the normalized anchor, requires
+`norm >= 0.05 * template_maximum`, and stops unless the maximum is finite and
+strictly positive.
+World- and drive-class-bearing roles are jointly required. Raw token norms,
+roles, masks, denominators, decisions, all 28 autodiff vectors, all complete
+central-difference vectors, and raw contrast evaluations are mandatory future
+evidence so the standard-library auditor can reconstruct the gate without
+trusting producer booleans.
+
+Local model-free validation passes `43/43` synthetic tests. The separate
+fail-closed gate reports `PHASE15_PREPARATION_GATE_VALID`; the independent
+auditor reports `PHASE15_PREPARATION_AUDIT_PASS`. The tests cover prerequisite
+activation and exact receipt consumption, primary/secondary separation,
+template and pair tamper, support and derivative evidence, discrete pass/fail
+boundaries, like-for-like off-target specificity, paired primary and
+collateral bootstrap reducer order, claims, and every unauthorized execution
+CLI before framework import, receipt, nonce, or output. No model/tokenizer was
+loaded; no derivative, capture, scoring, intervention, receipt, GPU, network,
+provider, paid, or RunPod action occurred; no run output exists; and Phase 2
+was neither prepared nor executed.
+
+Phase 1.5 CPU feasibility remains `OPEN`. The conservative frozen logical
+ceiling is 6,720 sealed condition/dose/item requests, 1,008 coordinate VJPs,
+344,064 support-token gradient VJPs, 57,344 vector-integrity
+central-difference contrasts, and 1,273,216 total template sequence terms.
+This derivative workload may be prohibitive on CPU. A future executable
+successor must benchmark and separately freeze CPU wall time, RAM/disk floors,
+output-byte cap, model/tokenizer load caps, and non-resumable one-use behavior
+before any receipt. Additional stop risks are unresolved token IDs and
+cross-bank overlap masks, tied `lm_head`/`wte` runtime identity, inadequate
+multi-token support at the Phase 1-selected layer, unretained Phase 1
+classifier coefficients, engineering-authored templates, the narrow
+collateral fixture, only two sealed family clusters per class, and 22 of 26
+`rf_id` templates crossing partitions.
+
+Exact next sequence:
+
+1. `COMPLETE`: the corrected GPT-2 Medium Phase 1 V2 successor and complete
+   isolated runtime closure are committed and model-free validated while the
+   Phase 1 scientific lock, V6, V1 successor, and Phase 1.5 scaffold remain
+   byte-unchanged.
+2. `READY`: restart into the reversible minimal session and rerun every exact
+   V2 live preflight under clean commit
+   `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`; a failure restores the
+   delayed startup state and creates no receipt.
+3. Only if every gate passes, the bound controller automatically materializes
+   the owner's existing conditional authority into exactly one V2 Phase 1
+   receipt, run ID, and nonce; invokes Phase 1 once; and independently audits
+   it. No retry, resume, repair, or second invocation is authorized. After the
+   audit, Phase 1 is terminal.
+   Any failed Phase 1 criterion yields
+   `STOP_READOUT_NOT_QUALIFIED / NO_PHASE_2` and keeps Phase 1.5 inactive.
+4. Only after an actual audited Phase 1 PASS may the owner separately
+   authorize preparation of a model-specific executable Phase 1.5 successor,
+   runtime token/mask bindings, CPU benchmark/resource manifest, and a new
+   one-use Phase 1.5 receipt. No such authorization exists now.
+
+The Pythia alternative at
+`e1c6609c3537c6ba48d3edb6ff9a487e9a91a964` remains an unmerged,
+non-authoritative fallback and is not incorporated into this lineage.
+
+Permanent claim boundary:
+`RESEARCH_ONLY / OFFLINE_OPEN_WEIGHT_MODEL / FIXTURE_SPECIFIC / NO_UNSEEN_TEMPLATE_OR_CROSS_TEMPLATE_GENERALIZATION_CLAIM / NO_GENERAL_NEURALESE_CLAIM / NO_NOETIC_TOPOS_REALIZATION_CLAIM / NO_CAS_NATIVE_COGNITION_CLAIM / NO_CROSS_MODEL_STEERING_CLAIM / NO_ACTIVATION_STEERING_CLAIM / NO_PROMPT_INJECTION_CLAIM / NO_SAFETY_CONTROL_CLAIM / NO_PRODUCTION_CLAIM`.
+
+Owner: `CAS Harness research engineering`, with all Phase 1 execution,
+Phase 1.5 successor/execution, Phase 2, and claim authority retained by the
+project owner.
+
+### Current 2026-07-29 Instruction Integrity shadow increment
+
+Controlling status:
+
+`SHADOW_INCREMENT_LOCAL_PASS / none_shadow_only / NO LIVE ENFORCEMENT / NO PRODUCTION DEFENSE CLAIM / Gate 2 OPEN at 0.38`
+
+The first safe prompt-injection development increment is implemented and
+committed at `63f598d1` on branch
+`codex/tks-672-v8-condition-f-reconciliation`. It brings the previously
+verified branch-only deterministic Instruction Integrity scanner into the
+current CAS Harness path, persists its report in `EvidencePacket`, adds an
+explicit review-routing data model, retains the 15-case
+clean/injected/control development benchmark, and adds a separately identified
+12-case held-out adversarial/benign scaffold.
+
+Every scanner report is constrained to `mode: shadow` and
+`verdict_effect: none_shadow_only`. Review routing has
+`automatic_action: none`, `live_blocking: false`, `auto_removal: false`, and
+`automatic_accept: false`. `FLAG_FOR_HUMAN_REVIEW` is routing metadata only;
+it is not a final CAS Harness verdict. The increment does not change prompts
+or outputs, block execution, remove spans, create `ACCEPT`, enable a live
+worker, load a model, contact a provider, use network/paid compute, or alter
+the live V5 scoring/readout.
+
+Local focused validation reports `34 passed, 2 skipped`. The development
+benchmark passed 15/15 exact fixture cases with injected recall `1.0` and
+benign false-positive rate `0.0`; canonical suite SHA-256:
+`3a7dbb45b723fc9acd46c51dbc618db8a6c247d0f864f75efcd7ae56b3e13fb1`.
+The separately identified held-out scaffold passed 12/12 exact fixture cases
+with injected recall `1.0` and benign false-positive rate `0.0`; canonical
+suite SHA-256:
+`7d5df4cf55254353f03cdc042372182777a19c1fa06fd6bfbf0f03311a8c1819`.
+These are narrow fixture results for the exact scanner revision, not evidence
+of general prompt-injection detection or prevention and not a production
+defense claim.
+
+The specification is
+`docs/working/cas_harness_instruction_integrity_spec.md`. A later steering
+capability is documented separately at
+`docs/working/cas_harness_research_only_steering_plan.md` as research-only,
+not implemented, and disabled by default. No steering or activation
+intervention is enabled.
+
+Exact next owner decision: authorize or defer a second shadow-only increment
+that exposes these persisted reports through the audit-ready Evidence Packet
+presentation and a non-enforcing review queue/disposition trail, while also
+expanding independent adversarial/benign evaluation. Live blocking,
+auto-removal, steering, and any production-defense claim remain separate
+future decisions and are not authorized by this checkpoint.
+
+### Current 2026-07-29 Pythia-160M V6 one-shot terminal checkpoint
+
+Controlling status:
+
+`PYTHIA160M_V6_FAIL_CLOSED / SCIENTIFIC_AND_CONTROL_GATES_FAILED / NON_REUSABLE / NO RETRY / RESEARCH_ONLY / OPEN / NOT_LICENSED / NO ACCEPT / NO PRODUCTION EFFECT`
+
+The owner authorized exactly one fresh offline CPU-only V6 research run from
+preparation commit `acfed1a32fc197fd88b62df96c97abf07a59ecca` on branch
+`codex/tks-672-v8-condition-f-reconciliation`. Preflight revalidated the exact
+source commit, all 25 frozen or preserved artifacts, five immutable local
+model blobs, exact interpreter and package entrypoints, startup/zero-network
+guard, prompt split, intervention/control matrix, seeds, compute cap, and
+numeric contract before any receipt or model/framework load. The controlling
+successor lock remained
+`docs/working/research_intervention_pythia160m_v6_execution/PYTHIA160M_EXECUTION_SUCCESSOR_LOCK_V6.json`,
+13,514 bytes, SHA-256
+`47d61279ff6a4fce8aec4cf15b13b3da1b797a3db4123e78abc1de51486039ce`.
+The exact deterministic numeric contract remained
+`docs/working/research_intervention_pythia160m_v6_execution/PYTHIA160M_NUMERIC_CONTRACT_V6.json`,
+3,360 bytes, SHA-256
+`f850ea290f9a77acab8a6cccda87795027d1ca85c1f694f4470983ad0ef10d2f`.
+
+Exactly one fresh receipt and nonce were created for run
+`pythia160m-riv6-20260729173650e26e483ed6fae22ba30a`. Receipt SHA-256 is
+`d47b4c8d4d090a6c638910439b9678a196a1083fffc256c356a36ffab6102cb8`.
+The executor completed exactly 1,536 forward passes and retained 1,536 raw
+logit artifacts, 1,536 raw final-layer states, 38 raw baseline layer-3 states,
+the common readout, exact receipt and lock, and an append-only 1,536-line
+journal. No executor failure packet was created. No retry, resume, repair,
+top-up, backfill, scope expansion, network/provider/paid/RunPod/GPU action, or
+live product change occurred. The complete V5 packet remains unchanged,
+failed closed, non-reusable, and was neither rerun nor re-audited.
+
+The V6 numeric correction succeeded narrowly: the separate standard-library
+auditor independently reconstructed the common readout byte-exactly and
+matched every frozen-order binary64 margin and delta exactly at zero
+tolerance. Artifact integrity, exact request matrix, no-op equivalence,
+collateral floor, and full-state patch-back gates passed. The retained
+independent audit is 2,611 bytes, SHA-256
+`b0bfd75d067d4abe1dfdfdf88cfb25992223b04700884d76bb534792538ea50e`;
+result SHA-256 is
+`0da3e349057472bed70feac59b093602fec253ed923274e9c002b63d4500461d`.
+One wrapper call used positional arguments against the auditor's keyword-only
+signature and raised `TypeError` before the audit function entered or wrote
+output; the corrected invocation performed the sole audit computation. This
+invocation issue did not rerun or alter the model experiment.
+
+The scientific result is nevertheless terminal `FAIL_CLOSED`.
+Common-readout balanced accuracy was `0.5`; target-layer dose response ran in
+the wrong direction (`Spearman rho = -1.0`); off-target-to-target point ratios
+were `4.2327` and `6.3046`; and same-norm-random-direction plus wrong-axis
+controls exceeded their ceilings. The common-readout validity, target-dose,
+layer-specificity, and non-layer-control gates therefore failed. The
+transport diagnostic remains `ADJACENT_TRANSPORT_UNRESOLVED` with decision
+authority `NONE`.
+
+Plain-English meaning: V6 fixed the bookkeeping problem, so executor and
+auditor now agree exactly. The intervention still did not behave like a
+specific, controlled steering mechanism: the readout was at chance, the
+target moved opposite the intended dose direction, other layers moved more,
+and two controls were too strong. This run is negative research evidence,
+non-reusable, and will not be retried.
+
+Exact next decision: do not authorize another Pythia run from V6. Research
+engineering must first decide whether to stop this small-model lane or prepare
+a genuinely new, prospective hypothesis that fixes the chance-level readout
+and demonstrates target specificity in model-free/retained-data analysis.
+Any successor would require a new lock, independently justified thresholds
+and controls without weakening this failure, and separate explicit one-use
+authorization. Independent second-architecture replication remains required
+before any broader claim.
+
+Claim boundary remains research-only. This terminal packet does not establish
+live steering, safety steering, prompt-injection detection,
+blocking/removal/prevention, Gate 2, `ACCEPT`, `LICENSED`, production
+readiness, or a production result.
+
+Owner: `CAS Harness research engineering`, with any successor hypothesis/run
+authority and final claim authority retained by the project owner.
+
+### Prior 2026-07-29 Pythia-160M V5 one-shot terminal checkpoint
+
+Controlling status:
+
+`PYTHIA160M_V5_FAIL_CLOSED / AUDIT_MISMATCH / NON_REUSABLE / NO RETRY / RESEARCH_ONLY / OPEN / NOT_LICENSED / NO ACCEPT / NO PRODUCTION EFFECT`
+
+The owner authorized the prospective V5 guard correction and one conditional
+fresh run. V5 replaced only the broken `ZeroNetworkGuard` reference with the
+exact bound `CompatibleZeroNetworkGuard`; every scientific setting, model,
+prompt split, intervention/control matrix, endpoint, threshold, seed, and
+compute cap remained unchanged. The preparation is committed at
+`f2beec48865d1b7c796980492c77de0c8350373f`. The successor lock is
+`docs/working/research_intervention_pythia160m_v5_execution/PYTHIA160M_EXECUTION_SUCCESSOR_LOCK_V5.json`,
+10,676 bytes, SHA-256
+`391264108a4e1b5228f0d0385622fa771cc86e5c27c6a34037bb6f24335d4d54`.
+
+Post-commit local validation passed: `17 passed` focused tests, exact
+`C:\Python314\python.exe -I -B` model-free startup validation, and a fresh
+isolated guard-construction fixture that blocked one socket attempt, restored
+the guard, imported no framework, loaded no model, created no receipt, and
+wrote no output. All 18 lock bindings, five local model blobs, the exact
+interpreter, and four framework package entrypoints matched their frozen byte
+counts and SHA-256 values. The conditional run authority therefore activated.
+
+Exactly one receipt and nonce were created for run
+`pythia160m-riv5-20260729171330cba653c3c8ab30413f86`. The offline CPU-only
+executor completed exactly 1,536 forward passes and retained 1,536 raw-logit
+artifacts, 1,536 raw final-layer states, 38 raw baseline layer-3 states, the
+common readout, receipt, lock, and append-only 1,536-line journal. No executor
+failure packet was created. No retry, resume, repair, top-up, backfill, scope
+expansion, network/provider/paid/RunPod/GPU action, or live product change
+occurred.
+
+The independent standard-library auditor then failed closed on its first and
+only attempt with `Readout delta drift`. The first mismatch was request 64:
+independent delta `0.007275154649079241` versus recorded delta
+`0.00726318359375`, absolute difference
+`0.000011971055329240698`, above the frozen `0.00001` tolerance. Read-only
+failure localization found a maximum difference
+`0.000017689535809495283` at request 662. The run output therefore remains
+`TERMINAL_UNAUDITED_RESEARCH_ONLY` and cannot be interpreted as a passing
+research result.
+
+The retained terminal manifest is
+`docs/working/research_intervention_pythia160m_v5_execution/runs/pythia160m-riv5-20260729171330cba653c3c8ab30413f86/TERMINAL_EVIDENCE_MANIFEST.json`.
+V3 and V4 evidence remain unchanged; V4 remains non-reusable; the unrelated
+TKS scoring V5 artifacts were untouched.
+
+Plain-English meaning: the corrected safety switch worked and the full
+experiment finished, but the independent accountant recomputed small numeric
+deltas that exceeded the preregistered reconciliation tolerance. Under the
+frozen rules, the entire packet must stay failed closed even though the
+difference is numerically small.
+
+The exact next owner decision is to authorize or defer a prospective
+Pythia-160M V6 preparation increment only. If authorized, it must preserve the
+complete V5 packet unchanged and non-reusable, diagnose the float32 executor
+versus independent double-precision recomputation contract read-only, freeze
+one exact shared arithmetic/serialization rule or prospectively justified
+tolerance before any receipt, add boundary fixtures around the first V5
+mismatch and the maximum mismatch, and produce a new successor lock. Any
+future run requires a separate fresh lock-specific one-use authorization; V5
+must not be retried, repaired, topped up, backfilled, or re-audited.
+
+Claim boundary remains research-only. This is not live steering, safety
+steering, prompt-injection blocking/removal/prevention, Gate 2, `ACCEPT`,
+`LICENSED`, production readiness, or a production result. A separate
+second-architecture replication remains required before any broader claim.
+
+Owner: `CAS Harness research engineering`, with prospective corrective
+authorization, any future run authorization, and final claim authority
+retained by the project owner.
+
+### Prior 2026-07-29 Pythia-160M V4 authorized-run preflight checkpoint
+
+Controlling status:
+
+`PYTHIA160M_V4_FAIL_CLOSED_PRE_RECEIPT / NO RECEIPT / NO NONCE / RUN_NOT_STARTED / RESEARCH_ONLY / OPEN / NOT_LICENSED / NO ACCEPT / NO PRODUCTION EFFECT`
+
+The owner explicitly authorized one fresh one-use offline CPU-only V4 run
+under the exact V4 execution successor lock. The required pre-receipt
+preflight verified source commit
+`d9c1879762233855cd5974676b8179b1e4e75d16`, execution-lock SHA-256
+`ea455981f89c1f418ae13e2c06ac8022e8b9b6508a55f85ae8d12788b4362dd1`,
+and all 16 frozen or preserved file byte counts and SHA-256 bindings with zero
+mismatches.
+
+The preflight then found a concrete startup-contract defect in the exact
+frozen executor. At line 443,
+`cas_harness_pythia160m_layer_specificity_executor_v4.py` calls
+`base.ZeroNetworkGuard()`, but the hash-bound immutable delegate defines only
+`CompatibleZeroNetworkGuard` at line 77. Executing the exact lock would
+therefore raise `AttributeError` before the zero-network guard is installed
+and before `torch` or `transformers` import.
+
+The run failed closed before credential creation. No receipt, run ID, nonce,
+nonce marker, authorization directory, run directory, framework import,
+model/tokenizer load, forward pass, output, network/provider call, GPU query,
+paid/RunPod action, retry, resume, repair, top-up, or backfill occurred. Prior
+V3/V4 evidence remains unchanged and non-reusable as previously classified;
+the unrelated V5 process and artifacts were untouched. The retained
+preflight report is
+`docs/working/research_intervention_pythia160m_v4_execution/AUTHORIZED_RUN_PREFLIGHT_FAILURE_V4.json`.
+
+The exact next owner decision is to authorize or defer a prospective
+Pythia-160M V5 corrective preparation increment only. If authorized, it must
+replace the incompatible guard reference with the exact available
+`CompatibleZeroNetworkGuard`, add a fresh-interpreter fixture that exercises
+guard construction on the real pre-framework execution path, preserve every
+scientific setting and prior artifact unchanged, validate locally, and freeze
+a new successor lock. The V4-specific run authorization cannot be rebound to
+that changed lock. A later model run would require a separate fresh,
+lock-specific one-use authorization after the successor is committed and
+verified.
+
+Claim boundary remains research-only. This preflight failure is not a model
+result and is not live steering, safety steering, prompt-injection
+blocking/removal/prevention, Gate 2, `ACCEPT`, `LICENSED`, production
+readiness, or a production result.
+
+Owner: `CAS Harness research engineering`, with corrective-preparation
+authorization, future run authorization, and final claim authority retained
+by the project owner.
+
+### Prior 2026-07-29 Pythia-160M V4 receipt-gated execution preparation checkpoint
+
+Controlling status:
+
+`PYTHIA160M_V4_EXECUTION_LOCK_LOCAL_PASS / RUN_NOT_AUTHORIZED / RESEARCH_ONLY / OPEN / NOT_LICENSED / NO ACCEPT / NO PRODUCTION EFFECT`
+
+The owner-authorized receipt-gated real-model V4 executor and independent
+artifact auditor are implemented and committed at
+`d9c1879762233855cd5974676b8179b1e4e75d16` on branch
+`codex/tks-672-v8-condition-f-reconciliation`. The controlling execution lock
+is
+`docs/working/research_intervention_pythia160m_v4_execution/PYTHIA160M_EXECUTION_SUCCESSOR_LOCK_V4.json`,
+9,909 bytes, SHA-256
+`ea455981f89c1f418ae13e2c06ac8022e8b9b6508a55f85ae8d12788b4362dd1`.
+It hash-binds the prior V4 diagnostic lock/plan/validation, the V3 terminal
+manifest, exact model/tokenizer inventory, prompt split, intervention/control
+map, startup contract, environment and compute manifests, model-free
+controller, immutable zero-network delegate, executor, auditor, bootstrap,
+and validation tests. No prior V3 or V4 evidence was modified.
+
+The all-12-layer common-readout method remains the appropriate next
+falsification test. In plain English, V3 compared measurements made with two
+different rulers; V4 applies one final-layer ruler to every transformer layer.
+It therefore directly tests whether layer 3 is uniquely stronger without
+discarding the existing no-op, same-norm-random, wrong-token, wrong-axis,
+bidirectional-dose, collateral, projection-patch-back, or full-state
+patch-back controls.
+
+The executor has standard-library-only top-level imports and remains disabled
+by default. Its enforced order is: exact isolated interpreter/startup and
+hash validation; feature/live-flag validation; fresh receipt and every
+commit/lock/code/model/split/control/environment/compute/seed binding;
+run-ID/nonce/expiry/absent-output/stale-nonce checks; create-once nonce
+consumption; offline environment and compatible zero-network guard; only then
+framework imports; only then exact local tokenizer/model load on CPU; and
+only after successful model load may the isolated output root be created.
+Any later failure retains a `FAIL_CLOSED / NON_REUSABLE / NO RETRY` packet.
+
+The exact future execution remains 1,536 forward passes: 16 calibration
+baselines plus 40 requests for each of 38 held-out prompts. The maximum is
+exactly 1,536 and zero-based request index 1,536 is the first prohibited
+request. Generation is zero. The executor retains 1,536 raw next-token-logit
+artifacts, 1,536 raw final-layer states, 38 raw same-prompt baseline layer-3
+states, the reconstructed common readout, append-only journal, exact
+receipt/lock copies, and terminal result. Retry, resume, repair, top-up,
+backfill, GPU, network, provider, paid, RunPod, live-worker, product-decision,
+and Evidence Packet `ACCEPT` paths remain prohibited.
+
+The independent standard-library auditor does not import the executor or any
+framework. It independently rehashes the lock, receipt, prior evidence,
+journal, result, all raw logits/states, and the common readout; reconstructs
+the readout from raw calibration states; recomputes every held-out margin,
+logit delta, top-1 preservation result, all-layer point and fixed-bootstrap
+ratios, transport and full-state patch-backs, collateral floors, artifact
+caps, and claim boundary; and fails closed on any mismatch.
+
+Focused plus supporting model-free validation reports `38 passed`.
+Post-commit V4-focused validation reports `20 passed`. The exact
+`C:\Python314\python.exe -I -B` bootstrap validates with zero framework
+imports, model loads, receipts, or outputs. An exact isolated missing-receipt
+invocation returns exit code `2`,
+`Fresh one-use V4 owner authorization receipt is missing`, and
+`FAIL_CLOSED / RUN_NOT_STARTED`, with zero framework imports, model loads, or
+output creation. Fixtures also prove drifted lock, executor, model inventory,
+prompt split, intervention/control map, receipt binding, pre-existing output,
+and the first prohibited request all fail before framework import or model
+load.
+
+No V4 authorization directory, nonce ledger, run directory, receipt, model or
+tokenizer load, framework import, model experiment, GPU query, network or
+provider call, paid or RunPod action, or live product change occurred. The
+unrelated live V5 artifacts and process were not changed.
+
+The exact remaining owner authorization is one separate, explicit approval
+for one fresh, one-use, offline CPU-only Pythia-160M V4 layer-specificity run
+under this exact execution lock. Only after that approval may engineering
+create a receipt bound to commit
+`d9c1879762233855cd5974676b8179b1e4e75d16`, execution-lock SHA-256
+`ea455981f89c1f418ae13e2c06ac8022e8b9b6508a55f85ae8d12788b4362dd1`,
+every frozen and preserved hash, canonical compute cap and seed schedule, a
+new `riv4` run ID, a new lowercase 64-hex nonce, expiry no longer than 86,400
+seconds, and an absent isolated output root. Any authorized invocation would
+be one-shot and non-reusable whether it passes, fails, stalls, or leaves
+partial evidence.
+
+Claim boundary remains research-only. Readiness to execute is not a research
+result. This is not live steering, safety steering, prompt-injection
+blocking/removal/prevention, Gate 2, `ACCEPT`, `LICENSED`, production
+readiness, or a production result. A separate second-architecture replication
+remains required before any broader claim.
+
+Owner: `CAS Harness research engineering`, with one-use run authorization and
+final claim authority retained by the project owner.
+
+### Prior 2026-07-29 Pythia-160M V4 layer-specificity preparation checkpoint
+
+Controlling status:
+
+`PYTHIA160M_V4_DIAGNOSTIC_LOCK_MODEL_FREE_PASS / RUN_NOT_AUTHORIZED / RESEARCH_ONLY / OPEN / NOT_LICENSED / NO ACCEPT / NO PRODUCTION EFFECT`
+
+The owner-authorized prospective V4 diagnostic/control preparation is
+implemented and committed at
+`af8cd99cecb0e12b5128125720a079f0e4309018` on branch
+`codex/tks-672-v8-condition-f-reconciliation`. The controlling lock is
+`docs/working/research_intervention_pythia160m_v4/PYTHIA160M_RESEARCH_SUCCESSOR_LOCK_V4.json`,
+12,333 bytes, SHA-256
+`d4e1c09f87c1da8ddea92f1646879a9cf932af18930eae30aaf9b4667af91d02`.
+It hash-binds the complete V3 successor lock, consumed receipt, consumed nonce
+marker, terminal result, independent audit, and terminal evidence manifest.
+V3 remains `FAIL_CLOSED`, unchanged, non-reusable, and not reinterpreted as
+success.
+
+The prospective diagnosis addresses a measurement mismatch exposed by V3:
+the wrong-layer condition injected at layer 2 and measured the target
+projection after it propagated to layer 3, while the target-layer condition
+measured immediately after layer-3 injection. V4 therefore freezes a common
+endpoint for every layer: a final-layer linear-readout margin derived only
+from the sealed 8-vs-8 calibration baselines, then evaluated on the unchanged
+32 target/contrast plus 6 collateral held-out prompts. The layer comparison
+covers all 12 Pythia transformer layers at both `-0.5` and `+0.5`, retains
+the target-layer intermediate doses `-0.25` and `+0.25`, and preserves the
+same frozen V2 sparse intervention direction.
+
+Layer specificity is prospective and strict: layer 3 must be the unique
+largest signed median effect at both signs; every off-target layer's median
+absolute effect must be at most `0.5` of the target-layer effect; and a fixed
+2,048-resample, seed-`160409` bootstrap 95-percent upper bound must also be at
+most `0.5`. The common readout must reach held-out balanced accuracy at least
+`0.65` before any localization conclusion is valid. The existing no-op,
+same-norm-random, wrong-token, wrong-axis, dose-response, utility, fluency,
+and collateral controls remain.
+
+V4 adds paired transport diagnostics without weakening the V3 failure. A
+layer-2 projection patch-back removes only propagated change along the frozen
+direction at layer 3; an `80%` median effect reduction at both signs may be
+classified only as
+`ADJACENT_TARGET_PROJECTION_MEDIATION_SUPPORTED_RESEARCH_ONLY`. It has no
+decision authority and cannot satisfy layer specificity. Separate layer-2 and
+target-layer full-state patch-backs must restore downstream logits within
+`1e-5` or fail closed.
+
+The exact future matrix is 16 calibration baselines plus 40 requests for
+each of 38 held-out prompts: `1,536` CPU forward passes, with the maximum
+forward-pass ceiling equal to exactly `1,536`. Expected evidence includes
+1,536 raw next-token-logit artifacts, 1,536 raw final-layer states, 38
+same-prompt baseline layer-3 states, the derived readout and construction
+inputs, append-only lineage, and an independent standard-library audit.
+Generation remains zero; retry, resume, repair, top-up, backfill, GPU,
+network, provider, paid, RunPod, live-worker, product-decision, and
+Evidence Packet `ACCEPT` paths are prohibited.
+
+The model-free controller is disabled by default and contains no model-load
+or run path. Focused validation reports `6 passed`; supporting V1/V2
+regressions report `18 passed`. Synthetic localized evidence passes only with
+the bounded research label, while a synthetic packet using V3's exact
+`0.6146572083234787` wrong-layer ratio fails closed. Direct post-commit
+validation reports 1,536 exact planned requests, zero framework imports, zero
+model loads, zero receipt creations, and zero output writes. No diagnostic or
+model experiment ran, and the unrelated live V5 process and artifacts were
+not changed.
+
+The exact next owner decision is to authorize or defer a separate preparation
+increment for a receipt-bound real-model V4 executor and independent artifact
+auditor. If authorized, that increment must implement this exact baseline
+capture, readout construction, 12-layer paired-sign sweep, projection and
+full-state patch-backs, raw retention, timeout, fail-closed cleanup, exact
+1,536-pass boundary fixtures, and pre-import receipt/drift gates; it must then
+freeze a further execution lock. This checkpoint does not authorize that
+implementation, creation of a receipt, model loading, or a V4 run. Only after
+that further preparation passes and is committed could the owner separately
+authorize one fresh one-use run.
+
+Claim boundary remains research-only. This is not live steering, safety
+steering, prompt-injection blocking/removal/prevention, Gate 2, `ACCEPT`,
+`LICENSED`, production readiness, or a production result. A separate
+second-architecture replication remains required before any broader claim.
+
+Owner: `CAS Harness research engineering`, with future executor/auditor
+preparation, run authorization, and final claim authority retained by the
+project owner.
+
+### Prior 2026-07-29 Pythia-160M V3 one-shot terminal checkpoint
+
+Controlling status:
+
+`PYTHIA160M_V3_FAIL_CLOSED / CONTROL_EFFECT_CEILING_FAIL:wrong_layer / NON_REUSABLE / NO RETRY / RESEARCH_ONLY / OPEN / NOT_LICENSED / NO ACCEPT / NO PRODUCTION EFFECT`
+
+The one explicitly authorized fresh, one-use, offline CPU-only V3 research
+run is terminal and committed at
+`c638df99a799e79afcb9739478bcc52a197b91d1` on branch
+`codex/tks-672-v8-condition-f-reconciliation`. The run ID is
+`pythia160m-riv3-20260729161708aa2f7f3eb5b9c6cdfacd`. Its receipt, bound to
+source commit `b18384ce8373a4e04648d64c8c42ecc1ba24e4c3` and the exact V3 lock,
+startup contract/bootstrap, executor, auditor, model/tokenizer snapshot,
+split, intervention map, environment, compute cap, and seeds, has SHA-256
+`fe681e1b6805b59a476d14e86d15c257d240eef188a8c849aa594b8f2e0bc1b2`.
+The one-use nonce was consumed exactly once; its marker has SHA-256
+`cc9b6ddf423ba765306125e2e8b6c2cb2270bc334342314a3253e0e84bd85eb7`.
+The receipt, run ID, and nonce are non-reusable.
+
+The sole execution completed without a runtime failure and retained all 472
+expected raw-logit artifacts, totaling 94,973,952 bytes. Revalidation rehashed
+all 472 artifacts and every terminal packet component. The terminal evidence
+manifest has SHA-256
+`83f9e34bd7d51bcce6d0d32f48708a1a1f2f3586784f310d8021c30e1ab1340a`.
+The packet records 22,756 prompt tokens, maximum prompt length 94, finite
+logits, zero generated tokens, zero network attempts, and no GPU,
+provider, paid, or RunPod activity. No retry, repair, backfill, scope
+expansion, or live product change occurred. V2 remains unchanged,
+quarantined, and non-reusable.
+
+The independent standard-library-only auditor returned `FAIL_CLOSED` with
+exactly one finding: `CONTROL_EFFECT_CEILING_FAIL:wrong_layer`. The target
+effect had a clean bidirectional dose response with median effects
+`-0.5, -0.25, 0, 0.25, 0.5` and Spearman rho `1.0`. However, the frozen
+wrong-layer control produced median effect `0.30732860416173935`, or
+`0.6146572083234787` of the target effect at dose `+0.5`, exceeding the
+preregistered maximum ratio `0.5` (equivalent wrong-layer maximum `0.25`).
+Exact request-matrix, no-op equivalence, bidirectional dose response,
+wrong-sign reversal, utility, fluency, safety-collateral, patch-back,
+compute-cap, and claim-boundary gates all passed. Same-norm-random,
+wrong-token, and wrong-axis control ratios were each `0.0`.
+
+Plain-English meaning: the intended intervention moved the chosen projection
+cleanly, but applying that direction at a deliberately wrong layer also moved
+it too much. Under the frozen rules, the effect is not sufficiently
+layer-specific, so this packet cannot support a steering claim.
+
+The exact next owner decision is to authorize or defer a prospective V4
+diagnostic/corrective preparation increment only. If authorized, it must
+preserve the complete V3 terminal packet unchanged, use it read-only to
+diagnose whether the wrong-layer result reflects expected cross-layer
+propagation or insufficient layer specificity, and prospectively freeze a
+new layer-specificity test/control before any new receipt or run. V3 must not
+be retried, repaired, topped up, backfilled, or reused. No V4 preparation,
+receipt, or run is authorized by this checkpoint.
+
+Claim boundary remains research-only. This is not live steering, safety
+steering, prompt-injection blocking/removal/prevention, Gate 2, `ACCEPT`,
+`LICENSED`, production readiness, or a production result. A separate
+second-architecture replication remains required before any broader claim.
+
+Owner: `CAS Harness research engineering`, with prospective corrective
+authorization and final claim authority retained by the project owner.
+
+### Prior 2026-07-29 Pythia-160M V3 startup successor checkpoint
+
+Controlling status:
+
+`PYTHIA160M_V3_SUCCESSOR_LOCK_LOCAL_PASS / RUN_NOT_AUTHORIZED / RESEARCH_ONLY / OPEN / NOT_LICENSED / NO ACCEPT / NO PRODUCTION EFFECT`
+
+The owner-authorized V3 corrective preparation is implemented and committed
+at `b18384ce8373a4e04648d64c8c42ecc1ba24e4c3` on branch
+`codex/tks-672-v8-condition-f-reconciliation`. It corrects only the V2
+isolated-interpreter package-path failure. The controlling successor lock is
+`docs/working/research_intervention_pythia160m_v3/PYTHIA160M_RESEARCH_SUCCESSOR_LOCK_V3.json`,
+10,047 bytes, SHA-256
+`37f854fe082cc3923508bb2b3c41e622fb89575270110a35ffe79d24cce17db5`.
+Post-commit standard-library bootstrap and independent auditor validation
+both pass with `RUN_NOT_AUTHORIZED`.
+
+The exact startup contract is
+`docs/working/research_intervention_pythia160m_v3/PYTHIA160M_STARTUP_CONTRACT_V3.json`,
+4,744 bytes, SHA-256
+`5478dbd7ad54a3cf813c32477fc88827721d774a554b85717cd348f417678cdc`.
+It freezes `C:\Python314\python.exe` at SHA-256
+`467014615a5255aca450ae88100dd2caf887da87657f00e3c2171ec44a685aec`,
+requires direct `-I -B` invocation with no shell and ignored `PYTHONPATH`,
+then explicitly inserts the validated package root
+`C:\Users\wakil\AppData\Roaming\Python\Python314\site-packages`. Missing or
+drifted interpreter path/hash, package root, package entrypoint, bootstrap,
+executor, auditor, or preserved V2 evidence fails before framework import.
+
+The exact fresh-interpreter compatibility fixture passed under isolated
+CPython with `isolated=1`, `no_user_site=1`, and `dont_write_bytecode=1`.
+It installed the same immutable V2 compatible zero-network guard used by the
+future executor, blocked one socket construction attempt, and imported
+`torch 2.11.0+cpu` plus `transformers 5.8.1` from the frozen package root.
+It loaded zero models and zero tokenizers, queried zero GPUs, created no
+receipt or research output, and made zero network/provider/paid/RunPod calls.
+
+Focused V3 validation reports `9 passed`; integrated V0/V1/V2/V3 validation
+reports `61 passed`. Fixtures prove fail-closed behavior for a missing package
+root, drifted package root, missing interpreter, drifted interpreter hash,
+and future execution with a missing receipt. The missing-receipt path reaches
+`Fresh one-use owner authorization receipt is missing` with zero framework
+imports and no output.
+
+The V3 lock hash-binds the V2 lock, consumed receipt, consumed nonce marker,
+and terminal evidence manifest byte-exact. V2 remains
+`FAIL_CLOSED_STARTUP / NON_REUSABLE / NO RETRY`; its receipt, run ID, and
+nonce cannot be reused. All scientific settings remain unchanged: exact
+model/tokenizer revision, prompt split, intervention map, seeds, CPU compute
+cap, controls, endpoints, thresholds, harm floors, patch-back, and
+independent-audit rules.
+
+No V3 receipt, run ID, nonce, model/tokenizer load, intervention, capture, or
+research output exists. The exact next owner authorization is one separate,
+explicit approval for one fresh, one-use, offline CPU-only Pythia-160M V3
+research run. Only after that approval may engineering create a receipt bound
+to commit `b18384ce8373a4e04648d64c8c42ecc1ba24e4c3`, the exact V3 lock, startup
+contract/bootstrap, executor, independent auditor, model/tokenizer, split,
+intervention map, environment, compute cap, seeds, a new `riv3` run ID, a new
+lowercase 64-hex nonce, expiry, and an absent isolated V3 output root.
+
+Plain-English meaning: V2 had a locked toolbox but isolated Python could not
+see it. V3 keeps the isolation, verifies the toolbox and its shelf, then adds
+that exact shelf to Python's search path. The startup route now works; the
+experiment itself has not run.
+
+Claim boundary remains research-only. This is not live steering, safety
+steering, prompt-injection blocking/removal/prevention, Gate 2, `ACCEPT`,
+`LICENSED`, production readiness, or a production result. A future passing
+Pythia result would remain bounded to this exact snapshot, direction, prompts,
+controls, and endpoints; GPT-2 remains a later, separately locked
+second-architecture comparison required before any broader claim.
+
+Owner: `CAS Harness research engineering`, with run authorization and final
+claim authority retained by the project owner.
+
+### Prior 2026-07-29 Pythia-160M V2 one-shot terminal checkpoint
+
+Controlling status:
+
+`PYTHIA160M_V2_FAIL_CLOSED_STARTUP / NON_REUSABLE / NO RETRY / NO MODEL LOAD / NO RESULT / RESEARCH_ONLY / OPEN / NOT_LICENSED / NO ACCEPT / NO PRODUCTION EFFECT`
+
+The owner-authorized preparation increment is implemented and committed at
+`44481f45797f1e32888ebfe66afb85a38b19f617` on branch
+`codex/tks-672-v8-condition-f-reconciliation`. It preserves the complete V1
+lock/evidence and adds the Pythia-family executor, an independent auditor,
+numerically complete wrong-axis control, exact environment/compute manifests,
+and the V2 successor lock. The controlling successor lock is
+`docs/working/research_intervention_pythia160m_v2/PYTHIA160M_RESEARCH_SUCCESSOR_LOCK_V2.json`,
+7,763 bytes, SHA-256
+`af37bb8d01be55bae0b8b630c1afe7890b0fc7ba50f4a99d1e25b3c59edec70d`.
+Status is
+`SUCCESSOR_LOCK_MODEL_FREE_PASS / RUN_NOT_AUTHORIZED`.
+
+The owner subsequently authorized exactly one fresh offline CPU-only V2 run.
+The bound source commit remained
+`44481f45797f1e32888ebfe66afb85a38b19f617`; the fresh valid receipt was
+SHA-256
+`d7a5ef61cfa89f3cf28f1d0646d868367082ec18906de9f1ed869cb80b6d0b58`
+for run
+`pythia160m-riv2-202607291541257354f19fefe6a7bb`. Its one-use nonce marker
+is SHA-256
+`2b4633795c0cb0feb2a7dbf0e0c1e69867551cec6796f9935c12061f44cf6771`.
+Receipt/lock preflight passed and the nonce was consumed. The sole process
+then failed closed at its first framework import:
+`ModuleNotFoundError: No module named 'torch'`.
+
+The verified cause is an invocation/environment-path mismatch. The launcher
+used Python isolated mode (`-I`), which sets `no_user_site=1`; the frozen
+`torch 2.11.0` installation exists only under the Python 3.14 user-site
+directory. Isolated inspection found no `torch` module spec, while ordinary
+non-import inspection resolved the expected user-site module path. No
+framework successfully imported, no model or tokenizer loaded, no
+intervention/capture request or token generation occurred, no GPU was
+queried, and no network/provider/paid/RunPod action occurred. The executor
+did not create its output root or a result packet, so no scientific,
+control-effect, collateral-harm, or patch-back result exists.
+
+The retained terminal packet is under
+`docs/working/research_intervention_pythia160m_v2/failures/pythia160m-riv2-202607291541257354f19fefe6a7bb/`.
+Its independent standard-library audit revalidated the exact lock, receipt
+payload, consumed nonce marker, launcher, and raw stdout/stderr evidence and
+recorded
+`FAIL_CLOSED_STARTUP / NON_REUSABLE / NO_RETRY`. An earlier malformed
+receipt failed run-ID validation before execution and is separately retained
+as `VOID / INVALID_RUN_ID / NON_REUSABLE / NO RUN STARTED`; it consumed no
+nonce and was only a pre-run paperwork correction.
+
+The executor is
+`noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_research_executor.py`,
+36,221 bytes, SHA-256
+`b5f51f854f1ae0b3241bf57e617c439ef0871f76eb06eefc6677ff410619e78e`.
+It has standard-library-only top-level imports and starts disabled unless
+`CAS_PYTHIA160M_RESEARCH_ENABLED` is explicitly true.
+`CAS_PYTHIA160M_RESEARCH_LIVE=true` always fails closed. The only dynamic
+`torch`/`transformers` path occurs after exact successor-lock/file validation,
+a future fresh one-use receipt, current-commit/run-ID/nonce/expiry/output
+validation, create-once nonce consumption, offline environment setup, and
+installation of the compatible zero-network guard. Exact local snapshot and
+tokenizer load comes after framework import; isolated output creation comes
+after successful model load. Missing or invalid authority therefore cannot
+load a model or create output. No retry, resume, repair, top-up, backfill,
+alternative model, GPU, network, provider, paid, or RunPod path exists.
+
+The future exact request plan is bounded at 472 CPU forward passes: 16
+calibration baselines plus 12 fixed conditions for each of 38 held-out
+target/contrast/collateral prompts. The executor retains the receipt and lock,
+raw float32 logits with per-file hashes, a per-request hash journal, exact
+projection/control metadata, and a fail-closed/non-reusable terminal failure
+record if an authorized run fails after output creation. It does not generate
+tokens and cannot integrate with a live worker, product decision, enforcement
+path, or Evidence Packet `ACCEPT`.
+
+The independent auditor is
+`noetic-compass-scaffold/noetic-compass/api/services/cas_harness_pythia160m_research_auditor.py`,
+22,774 bytes, SHA-256
+`0d632894fca5c57fdf77f0bb44766bf7a20ae97be6c622ae75c8cfcbd5f10d02`.
+It does not import the executor or any framework. It independently verifies
+the successor lock, receipt/commit lineage, exact prompt/request/seed matrix,
+raw artifact and journal hashes, no-op equivalence, signed dose response,
+same-norm random/wrong-layer/wrong-token/wrong-axis ceilings, wrong-sign
+reversal, utility/fluency/collateral-safety floors, patch-back restoration,
+compute cap, and claim boundary.
+
+Model-free focused validation reports `13 passed`; integrated V0/V1/V2
+research-worker/auditor validation reports `52 passed`. The complete
+synthetic packet audits `AUDIT_PASS_RESEARCH_ONLY`; induced control drift
+fails closed. The compatible guard blocked its static socket attempt and
+restored the socket class. V1 now correctly rejects the presence of an
+executor by itself, while V2 accepts only the exact hash-bound
+executor/auditor. Post-commit validation re-hashed all five snapshot/tokenizer
+files and every lock input and passed independently. No framework was
+imported, no model/tokenizer loaded, no capture/intervention ran, no GPU was
+queried, no network/provider/paid/RunPod action occurred, no one-use receipt
+or research output was created, and V5 plus the Instruction Integrity shadow
+increment remained untouched.
+
+The exact next owner decision is to authorize or defer a new prospective V3
+corrective preparation increment. If authorized, that increment must preserve
+the V2 failure packet unchanged and non-reusable; must not reuse its receipt,
+run ID, or nonce; must freeze the exact launcher/invocation and Python package
+search-path contract; and must add a no-model-load startup fixture that proves
+the exact offline framework-import path before a successor lock can be
+frozen. Corrective implementation, a new receipt, and another run are not
+authorized by this checkpoint.
+
+Plain-English meaning: the experiment never reached the model because the
+isolated launcher hid its installed numerical framework. This is evidence of
+a startup-path defect, not evidence for or against Pythia steering.
+
+Claim boundary remains research-only. This is not live steering, safety
+steering, prompt-injection blocking/removal/prevention, Gate 2, `ACCEPT`,
+`LICENSED`, production readiness, or a production result. Even a future V2
+pass would be bounded to this exact Pythia snapshot, direction, prompts,
+controls, and endpoints; GPT-2 remains a later, separately locked
+second-architecture comparison required before any broader claim.
+
+Owner: `CAS Harness research engineering`, with run authorization and final
+claim authority retained by the project owner.
+
+### Prior 2026-07-29 Pythia-160M research intervention V1 prospective-lock checkpoint
+
+Controlling status:
+
+`PYTHIA160M_RESEARCH_LOCK_V1_LOCAL_MODEL_FREE_PASS / FAMILY_EXECUTOR_NOT_IMPLEMENTED / RUN_NOT_AUTHORIZED / RESEARCH_ONLY / OPEN / NOT_LICENSED / NO ACCEPT / NO PRODUCTION EFFECT`
+
+The owner selected `EleutherAI/pythia-160m` as the first offline,
+research-only architecture and directed that GPT-2 remain a separate later
+comparison. The family-specific preparation is committed at
+`8263a3fc1846fe551bcf41e1c184ae1d3df09fa1` on branch
+`codex/tks-672-v8-condition-f-reconciliation`. The controlling prospective
+lock is
+`docs/working/research_intervention_pythia160m_v1/PYTHIA160M_RESEARCH_LOCK_V1.json`,
+7,564 bytes, SHA-256
+`ed071defbab6915ba0d155b5865170b0bc7dc6d477f392285799f1d1ecdb9d7d`.
+It does not authorize execution.
+
+The lock binds exact model and tokenizer revision
+`50f5173d932e8e61f858120bcb800b97af589f46`; all five locally present
+snapshot blobs and their byte counts/hashes; the 12-layer, 768-wide
+`GPTNeoXForCausalLM` architecture; a sealed Stage 9 source artifact; 16
+calibration rows from its existing validation split; 32 target/contrast
+held-out rows from its existing test split; six separate collateral held-out
+prompts; and four frozen seeds. Calibration and held-out IDs are disjoint, and
+held-out outcomes are prohibited from direction or dose selection.
+
+The bounded intervention is one sparse unit-L2 `^0|C` direction over eight
+frozen coordinates at `gpt_neox.layers[3]`, prompt-final non-padding token. Its
+source is the archived candidate cover and matched activation-level ablation
+at `D:\tksCAS-archive\pythia160m_gate1_reproduction_20260531\` and
+`D:\tksCAS-archive\pythia160m_activation_cover_ablation_20260603\`. The source
+limit remains controlling: that prior ablation was post-hoc captured-vector
+evidence, not a live forward-pass intervention. Signed doses are fixed at
+`[-0.5, -0.25, 0, 0.25, 0.5]`. Baseline/no-op, same-norm random,
+wrong-layer, wrong-token, wrong-sign, wrong-axis, and patch-back controls are
+frozen, along with bidirectional response, utility/fluency/collateral-safety,
+control-effect ceiling, and restoration stop rules. The mechanical primary
+readout is explicitly construction-linked and cannot alone license semantic
+steering.
+
+The compute ceiling is local offline CPU only: eight threads, at most 128
+prompt tokens, 512 forward passes, 65,536 total prompt tokens, zero generated
+tokens, and 2,700 seconds. Network, providers, paid compute, RunPod, GPU query
+or use, retry, resume, repair, top-up, and backfill are denied. GPT-2 is not
+part of this lock and requires its own later prospective lock, adapter,
+receipt, and result.
+
+The standard-library validator re-hashed all snapshot/tokenizer/source
+artifacts, reconstructed the sealed prompt memberships, verified split
+disjointness, recovered the exact intervention coordinates/source values,
+checked unit norms, controls, thresholds, and prohibitions, and passed
+post-commit with status
+`LOCAL_MODEL_FREE_VALIDATION_PASS / RUN_NOT_AUTHORIZED`. Dedicated negative
+tests fail closed on GPT-2 substitution, live-receipt state, false executor
+readiness, network drift, missing patch-back, prompt overlap, and direction
+norm drift. Focused family validation reports `5 passed`; integrated
+research-worker/auditor/family-lock validation reports `39 passed`. No
+framework was imported, no model/tokenizer was loaded, no GPU was queried, no
+network/provider/paid/RunPod call occurred, no receipt or scoring output was
+created, and V5 remained untouched.
+
+This V1 next-decision note is superseded by the V2 executor/auditor successor
+checkpoint above. The executor, independent auditor, model-free validation,
+and successor lock now exist. The remaining authority is the separate,
+one-use V2 run authorization described above.
+
+Claim boundary remains research-only. This checkpoint is not live steering,
+not a live-worker or product change, not safety steering, not prompt-injection
+blocking/removal/prevention, and not Gate 2, `ACCEPT`, `LICENSED`, production
+readiness, or production evidence. A future Pythia pass would remain bounded
+to this exact snapshot, direction, prompts, controls, and endpoints; a
+genuinely different second architecture is required before any broader claim.
+
+Owner: `CAS Harness research engineering`, with final run authorization and
+claim authority retained by the project owner.
+
+### Prior 2026-07-29 research intervention worker V0 foundation checkpoint
+
+Controlling status:
+
+`RESEARCH_INTERVENTION_V0_LOCAL_STATIC_PASS / DISABLED_BY_DEFAULT / REAL_MODEL_RUN_NOT_AUTHORIZED / OPEN / NOT_LICENSED / NO ACCEPT / NO PRODUCTION EFFECT`
+
+The first safe research-only intervention worker increment is implemented and
+committed at `e0b2d233033c1723c332dbaf697417a772d012c1` on branch
+`codex/tks-672-v8-condition-f-reconciliation`. The worker has no real-model,
+framework, GPU, provider, network, paid-compute, RunPod, live-worker, product
+decision, or enforcement adapter. It accepts only committed data explicitly
+marked `STATIC_SYNTHETIC_FAKE_DATA`, requires an in-memory
+`STATIC_TEST_FIXTURE_ONLY` authorization bound to the exact plan hash and a
+lowercase 64-hex nonce, starts disabled when
+`CAS_RESEARCH_STEERING_ENABLED` is absent/false, and always fails closed if
+`CAS_RESEARCH_STEERING_LIVE=true`.
+
+The frozen static plan binds exact synthetic model revision and tokenizer
+hashes, prompt split, intervention map, four seeds, CPU-only 44-request /
+30-second compute cap, isolated research output namespace, and deny policies
+for network, providers, paid compute, live worker, and product decisions. Its
+control matrix includes baseline/no-op, same-norm random direction,
+wrong-layer, wrong-token, wrong-sign, four signed non-zero doses,
+utility/fluency/safety floors, and patch-back. Frozen collateral-harm rules
+mark any floor violation, control-effect ceiling violation, patch-back
+tolerance violation, or missing raw artifact `FAIL_CLOSED`.
+
+The isolated packet at
+`docs/working/research_intervention_v0/LOCAL_STATIC_VALIDATION.json` is 58,925
+bytes with SHA-256
+`ebe0e565d495714e1126796f2b67e6fe6f6130bf32662a902fbce01c36c65801`.
+It retains 44 request/measurement artifacts for four held-out prompt IDs,
+including eight raw baseline/no-op artifacts and hashes. No-op maximum absolute
+delta across target, utility, fluency, and safety metrics is `0.0`.
+Producer status is `LOCAL_SYNTHETIC_VALIDATION_PASS`; the separate auditor
+recomputed bindings, artifact hashes, controls, floors, dose response,
+patch-back, isolation, and claim boundaries with status
+`LOCAL_SYNTHETIC_AUDIT_PASS`. Focused integrated validation reports
+`68 passed, 2 skipped`; the two skips are pre-existing Evidence Packet
+environment-dependent cases.
+
+This checkpoint proves only disabled/fail-closed orchestration and arithmetic
+against static fake data. It is not evidence that activations were captured or
+steered, that model behavior or safety changed, or that prompt injection was
+prevented. No model was loaded, no framework/model import occurred on the
+worker path, no external compute was used, and the Instruction Integrity
+`shadow` / `none_shadow_only` increment and V5 scoring evidence were untouched.
+Activation steering, safety steering, prompt-injection removal/reversal,
+production intervention, `ACCEPT`, and `LICENSED` remain `OPEN / NOT_LICENSED`.
+
+Closure evidence remains: a separately frozen and authorized offline
+first-architecture run; exact immutable model/tokenizer/environment/source
+bindings; complete raw no-op/intervention/control/patch-back artifacts;
+independent audit; all harm/control/compute gates passing without retry or
+repair; then a separately authorized and independently audited replication on
+a genuinely different architecture/family before any broader claim. Even both
+runs passing would not enable a live worker or production claim.
+
+Owner: `CAS Harness research engineering`, with final authorization and claim
+authority retained by the project owner.
+
+This V0 next-decision note is superseded by the Pythia-160M V1 prospective-lock
+checkpoint above. The model family and immutable snapshot are now selected and
+the family lock is frozen; the remaining decision is the separately bounded
+executor/auditor implementation increment described above.
+
+### Current 2026-07-28 Track B `TKS_672_V3` fail-closed authoring checkpoint
+
+Controlling status:
+
+`VOID_FROZEN_DESIGN_OUTPUT_ENVELOPE / NOT LOCKED / NOT SCORED / Gate 2 OPEN at 0.38`
+
+The authorized full-cohort authoring run was frozen before execution at commit
+`40635afc3f73fc8b85108dc1a19ecca6b2329b0a` and retained at result commit
+`32173e0585f54cf5aafb75bbc98db2a251476b0b` on branch
+`codex/tks-672-v3-corpus-lock`. It ran the complete design: 28 canonical cells,
+13 plans per cell, eight candidates per plan, 364 calls, and 2,912 candidate
+slots. The mechanical counter reported 364 complete plans, 53 primary
+direct-World-label leaks (`0.018201`), and a nominal 672-item first-eight /
+first-three selection.
+
+The independent post-run audit failed the corpus closed. Nine successful calls
+echoed the prompt's literal JSON example (`scenario 1` through `scenario 8`)
+instead of authoring motive-bearing vignettes. That produced 72 placeholder
+candidate slots and put 18 placeholders into the nominal selection across
+`2b`, `2c`, `2d`, `3b`, `6c`, and `7d`. Exact response count and direct-label
+leakage therefore were insufficient validators; the mechanical `PASS` and its
+manifest are retained as `SUPERSEDED`, not accepted.
+
+All prompts, raw responses, retry attempts, normalized candidates, dispositions,
+the nominal void selection, stdout, and empty stderr are preserved under
+`docs/working/track_b_tks_672/`. Controlling audit:
+`TKS_672_V3_FAIL_CLOSED.json`. Calls SHA-256:
+`a7b6ecdb1184bb6dc8aee6e33a6aaccee57792ae16228b3537ae38d0e48a96c5`;
+all-candidate records SHA-256:
+`97e1f14602471423e3e3d4f020fad8262dd6d14fc3771fb793d28a6c8b33e1b3`.
+No V3 placeholder plan may be repaired, replaced, topped up, or backfilled.
+No June surface admission, independent recoverability test, small-model
+readout, Gate 2 decision, production-readiness claim, `ACCEPT`, or `LICENSED`
+claim exists from this run.
+
+The prospective successor safeguards were implemented at commit
+`a3bd86643bf4e7d3185c42046db09caec31da4bd`, then the authorization gate was
+split at commit `85e5e057d6c28fa4fe038fa05163590750041445` so a canary-only
+receipt cannot unlock the full cohort. The owner receipt was retained at
+commit `765d5ca7ea1d0579067659503fd12837741f1524` on branch
+`codex/tks-672-v3-corpus-lock`. Prospective config
+`frozen_config_v4_prospective.json` is 6,084 bytes with SHA-256
+`9c1ba2a7678923dd2125904b6c9d1da16daa196c6c4dbca982bed6b971d72b11`.
+Local validation `LOCAL_VALIDATION_V4.json` is 4,611 bytes with SHA-256
+`424a712d8e0960e5664d086154f869bec59cd64355d33d4d378780f0b4bd84c3`
+and reports `PASS` with zero external API calls, including two cross-scope
+authorization-receipt rejection tests.
+
+The owner-authorized four-plan live canary is now complete with status
+`LIVE_CANARY_FAIL_CLOSED / FULL RUN NOT AUTHORIZED`. Run ID
+`tks672-v4-canary-04137b66-f642-4437-ae0a-23b8635a645b` retained exactly
+`1a/p00`, `2b/p00`, `7c/p00`, and `6d/p00`. All four invocations terminated
+once as `NON_RETRYABLE_PROVIDER_ERROR`; there were zero provider responses,
+zero transport retries, zero content/envelope retries, zero repairs, zero
+top-ups, and zero backfills. Local reproduction against installed
+`google-generativeai 0.8.5` identifies the exact pre-network error:
+`ValueError: Unknown field for Schema: additionalProperties`. The SDK raises
+while converting `response_schema` in `_prepare_request`, before
+`_client.generate_content`; therefore there were zero network API requests,
+zero paid API calls, and no call beyond the four approved plan invocations.
+
+All four call records are quarantined with reuse `PROHIBITED`. The 32-row
+candidate ledger contains zero present candidates and zero selected records,
+all candidate rows are excluded, no selected-corpus artifact exists, and
+`v4_full_cohort/` does not exist. Calls SHA-256:
+`5b050cd647060f1c8be7b384e5676c025f996208bf68e0ce1d4133d89d180b7c`.
+The frozen embedded auditor reports a narrow structural `PASS` for four
+retained calls, retry lineage, and empty selected-set equality, but that cannot
+satisfy the canary pass rule because there is no raw provider response to
+re-parse. Independent post-run verification therefore reports `FAIL_CLOSED`
+with four `NO_PROVIDER_RESPONSE` findings, `ZERO_CANDIDATE_SLOTS`, and
+`PRODUCER_ENVELOPES_INVALID`; it also records a prospective auditor gap because
+the embedded auditor itself did not fail on missing responses.
+`POSTRUN_VERIFICATION.json` is 2,882 bytes with SHA-256
+`10bc467f5e8c68d91563efa8a28d02f544f55e6bd1f525d7f3a5f8f4988b2b1a`.
+
+The corrective `TKS_672_V5_PROSPECTIVE` canary lock is now implemented at
+commit `e4a8dadb1034309fa8bd2805a3a03e56a51e91d2` on branch
+`codex/tks-672-v3-corpus-lock`. Pre-run implementation status was
+`CORRECTIVE_SUCCESSOR_LOCAL_PASS / LIVE CANARY NOT AUTHORIZED / FULL RUN NOT AUTHORIZED`.
+`frozen_config_v5_prospective.json` is 5,055 bytes with SHA-256
+`02ce9a29d80168b5f3893adea40d50cffe691f8ef23830e4364a2edf1d262849`.
+The V5 provider schema uses only fields accepted by installed
+`google-generativeai 0.8.5`: object/array/integer/string types, `required`,
+`properties`, `items`, `min_items`, and `max_items`. The exact local SDK
+conversion path constructs a `Schema` successfully without creating a client
+or making a network call. The prompt remains byte-bound with no literal
+candidate example. Strict producer and independent parsers continue to enforce
+exact keys, ordinal sequence, count, length, placeholder, control, and
+exact/normalized duplicate rules that the SDK schema cannot express.
+
+The V5 independent live-canary audit now explicitly fails on missing required
+calls or provider responses, invalid producer envelopes, zero candidate slots,
+slot shortfall, ledger-size mismatch, and cross-call normalized duplicates.
+The exact V4 missing-response shape produces `NO_PROVIDER_RESPONSE`,
+`INVALID_PRODUCER_ENVELOPE`, `ZERO_CANDIDATE_SLOTS`, and
+`CANDIDATE_SLOT_SHORTFALL`, so empty selected-set equality can no longer yield
+a narrow pass. `LOCAL_VALIDATION_V5.json` is 4,135 bytes with SHA-256
+`3b6f6a87949cdf6f7f9df5af411ea4c1f9211edd6100adab657a50c2bd5bbb56`
+and reports `PASS` with zero external API calls. A valid synthetic four-call /
+32-slot canary passed; cross-call duplicate, missing-response, invalid-envelope,
+zero-slot, shortfall, wrong-scope authorization, and content-retry fixtures
+failed closed as expected. Unauthorized `--live-canary` and `--full-cohort`
+commands exit `2` without creating V5 output directories.
+
+The owner-authorized V5 bounded canary is now complete with status
+`LIVE_CANARY_FAIL_CLOSED / FULL RUN NOT AUTHORIZED`. Lock commit
+`13eb0590330a775174529c765a7c6ea4e19f3b72`, run ID
+`tks672-v5-canary-4b587ab6-b0fc-42c1-a66d-3ad280f8faf3`. Exactly
+`1a/p00`, `2b/p00`, `7c/p00`, and `6d/p00` ran. Each made one network/API
+request and retained one raw response: four total network/API calls, zero
+transport retries, zero content/envelope retries, zero repair/top-up/backfill,
+and no call beyond the approved four. Calls SHA-256:
+`ac874f02c84750490b906316309f8dc77c6f8f080f1aa08eb34d3311e25d3af0`.
+
+Producer validation accepted all eight `1a/p00` candidates. It rejected
+`2b/p00`, `7c/p00`, and `6d/p00` because eight candidates were below the
+frozen 80-word minimum. The ledger therefore has 32 rows but only eight
+present candidates. The independent audit is `FAIL_CLOSED` with
+`CANDIDATE_SLOT_SHORTFALL:8/32` and three
+`INVALID_PRODUCER_ENVELOPE` findings. All four raw responses and all 32 ledger
+rows are quarantined and reuse `PROHIBITED`; no selected corpus exists and
+`v5_full_cohort/` does not exist. After the four raw calls were appended, the
+runner retained a local post-call `NameError` (`PROHIBITED` was not imported
+into its audit-policy helper). No call was rerun. A hash-bound,
+network-disabled finalizer derived the producer records, independent audit,
+result, and post-run verification from the exact calls and made zero API
+calls.
+
+The prospective `TKS_672_V6_PROSPECTIVE` reliability successor is now
+implemented and committed at
+`7eff76bf79aedf6a98b2243ff6719e8ebf6f5828` on branch
+`codex/tks-672-v3-corpus-lock`. Status:
+`RELIABILITY_SUCCESSOR_LOCAL_PASS / LIVE CANARY NOT AUTHORIZED / FULL RUN NOT AUTHORIZED`.
+`frozen_config_v6_prospective.json` has SHA-256
+`e9c8010fab903914038515f74dbfb49190f3fe00446fda0e9785c83bd6f898d4`;
+`LOCAL_VALIDATION_V6.json` is 1,874 bytes with SHA-256
+`2f20e4901b77537b4fb13f3019e0bef751849de60b70839c9e4bac6d9e00a1a6`
+and reports `PASS` with zero external API calls.
+
+The V5 underlength pattern was eight failures confined to array positions 5–8
+across four complete eight-item JSON responses. Retained size and the
+8,192-token setting support late-array compression under a low-salience length
+instruction rather than a positive truncation finding; truncation cannot be
+excluded because V5 did not retain finish/usage metadata. V6 repeats a
+110–140-word per-item target in the SDK-compatible schema descriptions and at
+the end of the prompt, preserves the hard 80–160-word local gate, lowers
+prospective sampling to temperature `0.7` / top-p `0.9`, and retains finish
+reasons plus usage metadata. It imports the primary detector on the exact
+runner/finalizer path, rejects any primary-label hit, and retains
+`ATTEMPT_STARTED`, raw response, metadata, and terminal attempt evidence before
+parsing/finalization. Only exact-prompt transport retries remain; content
+retry, repair, top-up, backfill, and prior-canary reuse remain prohibited.
+
+The independent V6 auditor re-parses raw responses, verifies frozen
+prompt/request/lock/commit/run/model/authorization bindings, reconstructs the
+full candidate ledger, and requires producer/auditor ledger and empty selected-
+set equality. Deterministic fixtures cover every candidate position at the
+length boundary plus blank, placeholder, control, duplicate, malformed,
+missing-response, non-`STOP`, prohibited-label, incomplete-journal, tampered-
+ledger, authorization, and preexisting-output failures. A synthetic four-call
+/ 32-slot exact runner/finalizer passed and retained finalization was
+idempotent. Post-commit `--validate-lock` and local tests exit `0`;
+unauthorized `--live-canary`, `--full-cohort`, and finalization without retained
+evidence each exit `2`, and no V6 live or full-cohort output directory exists.
+No network or paid call occurred.
+
+The owner-authorized V6 bounded canary is now complete at evidence commit
+`a7c1d8b0ccc9ad01aeead7defd2b5c94c4f86180` with status
+`LIVE_CANARY_FAIL_CLOSED / FULL RUN NOT AUTHORIZED`. Run ID
+`tks672-v6-canary-3e33d85e-f54c-4d4d-b38f-c92e13428bba` executed exactly the
+four preregistered logical calls `1a/p00`, `2b/p00`, `7c/p00`, and `6d/p00`.
+There were exactly four provider/network attempts, one per logical call; all
+four raw responses were retained before parsing, all finish reasons were
+`STOP`, and all usage metadata was retained. There were zero transport retries,
+content/envelope retries, repairs, top-ups, backfills, calls beyond the frozen
+allowance, or calls beyond the approved canary.
+
+Producer validation accepted `1a/p00`, `7c/p00`, and `6d/p00` but rejected the
+entire `2b/p00` envelope because candidate 1 contained the frozen primary label
+`physical` (`ITEM_1_PRIMARY_LABEL_LEAK`). The independent auditor separately
+confirmed `PRIMARY_LABEL_LEAK:2b/p00:c01`,
+`INVALID_PRODUCER_ENVELOPE:2b/p00`,
+`PER_PLAN_SELECTION_SHORTFALL:2b/p00:0/3`, and
+`CANDIDATE_SLOT_SHORTFALL:24/32`; audit status is `FAIL_CLOSED`. It re-parsed
+all four responses, verified finish metadata, and found its reconstructed full
+ledger exactly equal to the producer ledger.
+
+All 32 raw candidate slots are retained as 32 rows; 24 are accepted/present and
+the eight invalid `2b/p00` rows remain observed. Every row is quarantined,
+excluded from the full cohort, reuse `PROHIBITED`, and not selected. No
+full-cohort artifact exists. Calls SHA-256:
+`fc7d453cc96b3609dede4786ab8b977823452fc409ca546c97d779d57db4fbe2`;
+attempt-journal SHA-256:
+`5ecdd1903bdfcb6c4fe796718ffca61553deb3f55b44b955ecf4a87fd93d598a`.
+`POSTRUN_VERIFICATION.json` records exact hashes/counts and passes its local
+evidence checks; offline re-finalization made zero provider/network calls and
+preserved the fail-closed evidence.
+
+The prospective `TKS_672_V7_PROSPECTIVE` lexical successor is implemented at
+commit `becfbef2e698eb4d101911df461f6c1ba2d846c2`. Status:
+`CORRECTIVE_SUCCESSOR_LOCAL_PASS / LIVE CANARY NOT AUTHORIZED / FULL RUN NOT AUTHORIZED`.
+The V6 interaction is now explicit: its prompt printed all forbidden tokens
+literally, its SDK schema could not express regex exclusion, and the model used
+one listed token in the ordinary compound “physical model.” V7 removes every
+contiguous denied token from all 364 rendered prompts, represents the four
+bases only as separated-character L-codes, explicitly prohibits reconstruction
+and compound use, and reinforces the L-code check in supported schema
+descriptions.
+
+Producer and independent auditor separately apply NFKC normalization,
+casefolding, and exact Unicode word boundaries to all four base labels and
+their adverb forms. `LOCAL_VALIDATION_V7.json` is 708 bytes with SHA-256
+`10817d3736c7e58ff55dcd7d136723a7ee28da675b94887642c50575fa71615b`
+and reports `PASS` with zero external calls. It scanned all 364 prompts with
+zero contiguous denied tokens; rejected all four labels in every candidate
+position (32 fixtures); covered base/adverb, uppercase, fullwidth NFKC,
+hyphenated exact-token, and longer-word boundary cases; and confirmed
+producer/independent agreement and zero content retries. Frozen config SHA-256
+is `7e3b15a127192bbea398c827c93cea2c51949489cd259d698c5fbe3416e9ef07`.
+Post-commit lock validation and local tests exit `0`; unauthorized live/full
+modes exit `2` without output directories. No provider client, network/paid
+call, live canary, or full cohort occurred.
+
+The owner-authorized V7 bounded canary is complete at evidence commit
+`130168b3bd215e2975c8eb88776ed2be3b1c2227` with disposition
+`LIVE_CANARY_PASS / FULL RUN NOT AUTHORIZED`. Run ID
+`tks672-v7-canary-de2d3455-fad9-4e3c-b34d-166451332ad6` executed exactly
+`1a/p00`, `2b/p00`, `7c/p00`, and `6d/p00`: four logical calls and four actual
+provider/network attempts, one each. There were zero transport retries,
+content/envelope retries, repairs, top-ups, backfills, calls beyond the frozen
+allowance, or calls beyond the approved canary. All four raw responses were
+retained before parsing; all finish reasons were `STOP`; usage metadata was
+retained for every response.
+
+Producer validation accepted all four envelopes and all 32 candidates. The
+independent auditor re-parsed all four responses and reports `PASS` with zero
+errors, 32/32 complete slots, zero primary-label hits, unique raw responses and
+candidate texts, producer-ledger equality, and verified empty selected-set
+lineage. All 32 rows remain quarantined, excluded, reuse `PROHIBITED`, and
+unselected. No full-cohort output exists. Calls SHA-256:
+`72c5fac98d259baad486da8e00cac9bd521f8dcd596ae0badcf1ee9dd103fa8e`;
+attempt-journal SHA-256:
+`5823fba16d30a7bbbc448d7adfb1e4c443432b17d274518e87664e34c12fc7fa`;
+post-run verification SHA-256:
+`56882fe669d0f557bcfc3501ac6f8def00da622908292a08b6311424bc26edda`.
+
+The owner-authorized `TKS_672_V8_FULL_COHORT_PROSPECTIVE` run is complete.
+Status:
+`FULL_COHORT_AUTHORING_PASS / CORPUS FROZEN / NOT SCORED`.
+Controlling status remains:
+`VOID_FROZEN_DESIGN_OUTPUT_ENVELOPE / NOT LOCKED / NOT SCORED / Gate 2 OPEN at 0.38`.
+
+Run ID `tks672-v8-full-8b583678-4e7e-4fa7-9371-8fc4adddb72c` executed under
+canonical-LF lock SHA-256
+`63cd8156458c84589170cce90f897e23a838005ff14c55819aff167b3df68a79`,
+source commit `51bf41f53c4e3941dc1e10f37f5041e0ba101254`, and owner-receipt SHA-256
+`bab587ed88a61e91cad783ae6cafbb6d6d4ace5845c9852b7103329dd67d85a7`.
+It retained exactly 364 logical calls and all 2,912 candidate rows. It made
+exactly 364 Gemini provider attempts, one per logical call, with zero
+transport retries. There were zero content/envelope retries, repairs, top-ups,
+backfills, resumes, or prior-canary inputs.
+
+The pre-call/retention journal has exactly 1,092 ordered events: 364 each of
+`ATTEMPT_STARTED`, `PROVIDER_RESPONSE_RETAINED`, and `ATTEMPT_COMPLETED`.
+All 364 raw responses, `STOP` finish reasons, and usage-metadata objects were
+retained before parsing. Producer validation accepted 315 complete eight-item
+envelopes and rejected 49; the ledger has 2,520 present candidate slots from
+valid envelopes. No invalid envelope was retried, repaired, or replaced.
+
+Every canonical cell retained at least eight complete plans. The frozen rule
+therefore selected the first eight complete plans per cell and first three
+eligible candidates per selected plan, yielding exactly 672 items. The
+independent auditor re-parsed all 364 raw responses, reconstructed all 2,912
+rows, and reports `PASS` with zero errors. Producer/auditor ledger equality,
+ordered selection equality, selection lineage, response uniqueness,
+candidate-text uniqueness, and the V5–V7 canary denyset exclusion all pass.
+
+The 672-item corpus is frozen at canonical-LF SHA-256
+`2527426dfb5a3ed5e3072715785787b0562da0ce8d8e66609639d35fe9185b2e`;
+the ordered candidate-ID list SHA-256 is
+`51546f614135123117e5c336bd03686a60cbe86d71c3ee7ba477978721b85c67`.
+Offline re-finalization exited `0`, made zero provider/network calls, and
+changed zero retained artifact hashes. V3–V7 evidence remains unchanged; all
+prior canary outputs remain quarantined, excluded, unselected, and reuse
+`PROHIBITED`.
+
+The separate prospective scoring/readout lock is now frozen at commit
+`bec4b8555e03b0e60db48aa1590e2e50700194d9` on branch
+`codex/tks-672-v8-scoring-readout-lock`. Status:
+`SCORING_READOUT_LOCK_LOCAL_ONLY / RUN NOT AUTHORIZED / NOT SCORED / Gate 2 OPEN at 0.38`.
+It binds the exact evidence commit
+`4fc2bce29e4f6fb68b4ffb28e2f48fecfe72ef73`, corpus canonical-LF SHA-256
+`2527426dfb5a3ed5e3072715785787b0562da0ce8d8e66609639d35fe9185b2e`,
+and ordered candidate-ID SHA-256
+`51546f614135123117e5c336bd03686a60cbe86d71c3ee7ba477978721b85c67`.
+The exact evidence commit is an ancestor of the lock branch, so it is retained
+even though it was initially detached/unreferenced.
+
+The lock preserves an explicit 109-file V3–V8 allowlist with per-file Git blob,
+canonical-LF byte-count, and SHA-256 checks. Its aggregate manifest digest is
+`a8a0e5c21a33333add2de820f5d594ea2b931b6f2e0170e10c369c9c70321f43`.
+The frozen split SHA-256 is
+`d9df3c4a300edb8e4308782194d02eb3334354ec0baa689c03a7bbf4bff6201a`:
+four explicit realization-family-disjoint folds over all 672 items, with
+zero RF or plan-family overlap and every test fold containing all 28 cells,
+all seven drives, and all four Worlds. The inherited authoring held-out flag
+is explicitly inadmissible for scoring because only 3/672 selected rows are
+true. The primary effective sample size is 26 RF groups, not 672 siblings.
+
+The closed offline ladder is exact-revision
+`EleutherAI/pythia-160m@50f5173d932e8e61f858120bcb800b97af589f46`
+followed by `gpt2@607a30d783dfa663caf39e06633721c8d4cfcd7e`.
+It freezes layer-6 content-token mean pooling, classifier/hyperparameters,
+drive and RF-admissible World endpoints, identical-fold char 3–5-gram,
+word 1–2-gram, combined lexical and metadata baselines, RF-cluster
+bootstrap/permutation uncertainty, constant-body, layer-0, first-token, and
+surface controls, a blind capture/sealed-label boundary, exact required
+artifacts, independent recomputation, and fail-closed audit behavior.
+
+Local validation is `PASS`: 12 deterministic tests passed, all 109 preservation
+entries rehashed, all corpus/split/admission checks passed, and unauthorized
+run mode exited `2` before output creation or model import. Local-validation
+canonical-LF SHA-256 is
+`b47639534b9981fcefaf321fa41e45ade3611a83d9e141172a0708366c754b35`.
+There were zero model loads, scoring operations, GPU queries, network,
+provider, paid, or RunPod calls.
+
+Blocker / closure experiment: substantive scoring/readout and Gate 2 remain
+`OPEN`. Owner: Little Henderson. Next executable decision: authorize or decline
+one scoring/readout run bound to the exact lock source commit, executor,
+model/environment inventories, split, run ID, one-use nonce, zero-network
+policy, and compute receipt. Prior V4–V8 canary/authoring receipts cannot unlock
+it. The preparation commit remains intentionally inert until that future
+owner-controlled receipt binds an executor-enabled commit; a plain local JSON
+receipt is not sufficient owner provenance.
+
+The owner formally reconciled the older Condition F wording before scoring at
+commit `7b122c6d68b7547b4363908d84e1d6498cd328be` on branch
+`codex/tks-672-v8-condition-f-reconciliation`. Status remains:
+`SCORING_READOUT_LOCK_LOCAL_ONLY / RUN NOT AUTHORIZED / NOT SCORED / Gate 2 OPEN at 0.38`.
+The historical line is preserved verbatim in the unchanged closure contract
+and in versioned addendum
+`CONDITION_F_RECONCILIATION_TKS_672_V8_V1.md`, canonical-LF SHA-256
+`e8bc9fba3671ff4d26a2e2c3b66ad0dcb43034f6a9d9d7002afc36bed9383834`.
+The conflict is classified as a `GOVERNANCE_LABEL_DISCREPANCY`, and the
+independently audited frozen `TKS_672_V8` corpus remains controlling for
+scoring/readout at canonical-LF SHA-256
+`2527426dfb5a3ed5e3072715785787b0562da0ce8d8e66609639d35fe9185b2e`.
+The addendum binds independent-audit SHA-256
+`de804bc12f3a521d41629e91954e4f05a09204ceca6c7f38ce92eb0281d9ad1f`
+and prohibits changes to corpus, membership, labels, splits, models, endpoints,
+thresholds, baselines, uncertainty, controls, or failure rules.
+
+Corrected lock config SHA-256:
+`af053fcb981728eeb9cfad494b6fa5447ad342b6620415b6878b4e416536d18a`.
+Local validation SHA-256:
+`abe6e6e5c4730b40c007c764d66d8428992f2103bba7ffe1443f3bba5b2bc7c9`;
+it reports `PASS`, `13 passed`, all 109 V3–V8 preservation entries exact,
+zero model imports or loads, zero scoring, and zero external API, network,
+provider, paid, or RunPod calls. No scoring authorization receipt was requested
+or created. The exact remaining owner decision is whether to authorize or
+decline one scoring/readout run bound to the corrected exact lock and future
+executor/model/environment/compute manifests, run ID, and one-use nonce.
+After any completed run and independent audit, the Gate 2 decision remains a
+separate owner action. No score, Gate 2 decision, production-readiness claim,
+`ACCEPT`, or `LICENSED` claim exists from the V8 authoring run, lock
+preparation, or this paperwork reconciliation.
+
+The owner then authorized one scoring/readout run, but the 2026-07-29 local
+preflight failed closed before receipt creation or output-directory creation.
+Status remains:
+`SCORING_READOUT_LOCK_LOCAL_ONLY / RUN NOT AUTHORIZED / NOT SCORED / Gate 2 OPEN at 0.38`.
+No exact scoring executor exists in the prepared lock: repository inspection
+found only `run_672_scoring_readout_v1.py`, whose committed execution path is
+intentionally inert and terminates `FAIL_CLOSED` even after otherwise-valid
+receipt and executor checks. The pinned Pythia and GPT-2 snapshot directories
+exist at the registered revisions, but their symlinked blob inventories and
+loadability were not fully verified.
+
+One environment-version probe invoked `import torch, transformers, sklearn,
+numpy, scipy` before a receipt and timed out after about 34 seconds without
+version output. That violates the frozen precondition order requiring receipt
+validation before model-framework import, so model-import activity cannot be
+claimed zero. No model snapshot was loaded, no GPU was queried, and no scoring,
+output directory, authorization receipt, compute manifest, external API,
+network, provider, paid, or RunPod action occurred. The probe is not part of an
+authorized run and reuse is `PROHIBITED`. Exact closure requirement: prepare
+and separately review an executor-enabled prospective commit, fully hash and
+prove the exact model/environment inventories without violating precondition
+order, then obtain a new one-use owner receipt bound to those exact artifacts.
+
+The corrective `TKS_672_V8_SCORING_READOUT_CORRECTIVE_PROSPECTIVE_V2`
+successor is now ready at implementation commit
+`db3d1bf01d12eb25ba9c670c7a3ca5795250b4e8` and readiness commit
+`c6ba53fb403c6b2b0fc9323e92b5e320e11c94d4` on branch
+`codex/tks-672-v8-condition-f-reconciliation`. Status:
+`CORRECTIVE_SUCCESSOR_LOCAL_PASS / LIVE RECEIPT NOT CREATED / RUN NOT AUTHORIZED / NOT SCORED / Gate 2 OPEN at 0.38`.
+The V1 failed preflight is frozen as `VOID / REUSE PROHIBITED / NOT A
+SCORING RUN`; its artifact SHA-256 is
+`f2edc2c3b1364f0cf1499aa2b12a5e04a5fc160aaeb62d5d5148539d0c031c90`.
+
+V2 changes execution machinery only and hash-binds every scientific section
+from V1. Corpus SHA-256 remains
+`2527426dfb5a3ed5e3072715785787b0562da0ce8d8e66609639d35fe9185b2e`;
+split SHA-256 remains
+`d9df3c4a300edb8e4308782194d02eb3334354ec0baa689c03a7bbf4bff6201a`.
+The runner validates a fresh V2 receipt, exact Git objects, executor, auditor,
+snapshot blobs, environment, CPU compute manifest, corpus/split/preservation
+bindings, run ID, nonce, and zero-network/provider/cost policy before
+dynamically importing the executor. Framework/model/scoring imports exist only
+inside the post-authorization executor, and unauthorized or stale-receipt modes
+create no output.
+
+The standard-library-only inventory resolved and hashed `928,073,207` bytes of
+exact pinned snapshot blobs without framework import, GPU query, model load, or
+network use. Model inventory SHA-256:
+`083872922dcc793b1ceadaf47e6d0c63434acefecb5f9278a86c65361e842a33`;
+environment SHA-256:
+`9fcbffcb38be7630637df98ee3a29f20e7fc3e14d3f8732d1a6d668709b2a1d4`;
+CPU compute SHA-256:
+`1b8a9d0c16e416bbe2c1fc09890b7061da3fb204d11a87785659f2e952bc9e8d`.
+Runtime model loadability remains deliberately untested until a future receipt
+passes every precondition.
+
+Local validation SHA-256:
+`77739371bf708dad821d0457b77976fb2b0f68c370cac1590e52296b436ed847`;
+`12 passed`; post-commit validation exits `0`; unauthorized run exits `2` with
+no output directory; stale V1 and drifted-manifest fixtures fail before
+executor import/output; all 109 V3–V8 preservation entries remain exact. V2
+preparation made zero framework imports, model loads, GPU queries, scoring,
+network/provider/paid/RunPod calls, or scoring output directories. No live V2
+receipt exists. Exact next owner decision: after separate review, authorize or
+decline one fresh
+`TKS_672_V8_SCORING_READOUT_OWNER_AUTHORIZATION_V2` receipt bound to exact
+commit `c6ba53fb403c6b2b0fc9323e92b5e320e11c94d4`, every lock file and manifest,
+executor, auditor, evidence commit, corpus, split, owner-chosen run ID, and
+64-hex one-use nonce. No scoring/readout result, Gate 2 decision,
+production-readiness claim, `ACCEPT`, or `LICENSED` claim exists.
+
+The owner then authorized exactly one V2 invocation. One-use run ID
+`tks672-v8-score-v2-f39180bd-4e2c-4376-b28b-6542fab71b30` and nonce
+`c169b8d20a7554d366eb33ad0482de437f5d44840193b41945bc231f19b8fdc2`
+were bound by receipt commit
+`5095cb79e86018ca82deaabaddc9fe5ae3647fca` (receipt canonical-LF
+SHA-256
+`a66977adce971fa9d1d91db3d970083f0f3abb59db23db672061971158f8c2b5`).
+The sole invocation terminated:
+`SCORING_READOUT_FAIL_CLOSED / PARTIAL OUTPUT QUARANTINED / REUSE PROHIBITED / Gate 2 OPEN at 0.38`.
+Receipt and frozen-manifest validation completed before executor/framework
+import, but the executor's replacement of the `socket.socket` class with a
+function caused Python `ssl` import to raise
+`TypeError: function() argument 'code' must be code, not str` during
+`import torch`. No model load started, no GPU was queried, the corpus and
+sealed labels were not read, and no activation, scoring, or independent audit
+occurred. Network attempts, provider calls, paid calls, and RunPod calls were
+all zero. There was one invocation and zero retries, resumes, repairs, top-ups,
+backfills, replacements, or output reuse.
+
+The immutable failure packet is commit
+`751c6428bf3880a8031cd00fe15e45313970f4e7`. Its two raw files are
+`capture_journal.jsonl` (262 bytes; SHA-256
+`ed9d71b7c9ebe2607b5108cdfc992167b6cafa95550e33674bd16c8ff195f690`)
+and `FAIL_CLOSED.json` (3,683 bytes; SHA-256
+`0f1a312e275acff809f78b2f581c0aaf7b580c68d7d4725161625b56a990174b`);
+aggregate manifest SHA-256
+`5243b5a236bdf360d8e5a10a9a8b17a0da5c7566d723420b760bccfe20f86614`.
+All V2 output, its receipt, run ID, and nonce are quarantined and non-reusable;
+V2 must not be rerun. The owner has now authorized prospective V3 corrective
+preparation only: replace the import-breaking socket-class monkeypatch with an
+import-compatible zero-network guard, preserve all scientific settings and
+evidence bindings unchanged, and validate the exact SSL/framework startup path
+under a synthetic pre-authorization fixture. No live V3 receipt, model load,
+GPU query, scoring/readout, network/provider/paid/RunPod call, Gate 2 decision,
+production-readiness result, `ACCEPT`, or `LICENSED` claim is authorized.
+
+V3 corrective preparation passed at commit
+`18879f850a5b14be247fa39f99b8871c2aed5961`: `7 passed`, including the
+fresh-interpreter `torch -> asyncio -> ssl` path under an import-compatible
+socket-subclass guard with zero network attempts and no model load, GPU query,
+scoring, or output. The owner then rebound exactly one run to V3 receipt commit
+`d2f0392e00ce82ea545d6337b87e94e95715e1c9`, run ID
+`tks672-v8-score-v3-6be0e63f-2117-4561-b5bf-aa94ef389b43`, and nonce
+`e3baed3133ac29f7adbf2d4addde52312ba8e8a20d799d5d357116121804ffaf`.
+The socket repair worked: both pinned models loaded and completed all 672 blind
+captures, the blind capture closed with network attempts `0`, and only then
+were the sealed labels opened.
+
+V3 nevertheless reached the one-hour controller timeout during scoring. Its
+child survived the controller and continued consuming CPU, so the
+owner-authorized stall procedure verified the exact V3 process, terminated it,
+and confirmed it absent. Last durable event: `SEALED_LABELS_OPENED`. No
+predictions, metrics, bootstrap/permutation distributions, endpoint result,
+independent audit, or finalization artifact exists. Diagnosis: the
+preregistered permutation block requires
+`2 models x 2 co-primary axes x 10,000 permutations x 4 folds = 160,000`
+dense logistic-regression fits, but V3 had no wall-clock deadline and buffered
+progress in memory until the entire block finished. The 26-file, 17,879,955
+byte partial packet is quarantined/non-reusable at commit
+`13c71796ac46db08cc00ec163a612b796384ac28`; aggregate manifest SHA-256
+`f1160801a3b9659ca9754826fd6ba080d7f265182c92539a02e45f1f058985c3`.
+V3 must not be rerun.
+
+Bounded V4 successor commit
+`b0ebfb09bc1aa71e341538dd953ba617132e105f` preserves every scientific
+setting and all 160,132 expected fits while adding a 43,200-second wall-clock
+deadline, eight-thread cap, 30-second supervisor heartbeat, first/every-100th
+fit executor heartbeat, exact fit ceiling, forced child termination, and
+post-termination partial-output hash/quarantine audit. Local result:
+`9 passed, 1 warning in 16.73s`; the warning is only scikit-learn's deprecation
+notice for the frozen `penalty='l2'` argument. Lock digest:
+`e82de8b931d69776bdaa64700b63a5311ac0d6fbd58c3f94a6e9d7dcfaf44475`.
+
+The owner's automatic one-run direction is now rebound to V4 receipt commit
+`2f39fc9ebc4d8423422bedeedb7fab722fd9621d`, run ID
+`tks672-v8-score-v4-70250d73-dd8b-42f2-9f04-b5f9b499fe1a`, nonce
+`838b2b23d77ac4a56f99408cfdc5e6d33c350618b6e2f53eba3b3839732efc1f`,
+and receipt canonical-LF SHA-256
+`d7f814785dd5a2b2afccfe0784b3a1cf66c833d81ce9de14f97511527acdd7e9`.
+The single bounded V4 invocation terminated fail-closed after 8,405.708
+seconds with return code `2` when the V4 wrapper attempted counter 160,133
+against the registered ceiling 160,132. Both 672-item captures completed,
+blind capture closed, sealed labels opened, and network attempts remained
+zero; no predictions, metrics, endpoint result, independent audit, or
+finalization exists. Diagnosis: the registered budget is 36 TF-IDF lexical
+fits + 96 representation fits + 160,000 permutation refits = 160,132, while
+the unchanged plan additionally requires 12 four-fold `length_punctuation`
+baseline fits. V4 incorrectly charged those 12 mandatory fits against the
+registered ceiling. The complete 34-file, 85,329,680-byte V4 packet is
+committed at `dc7cc36b2e9e7ea0c135e26b13ca90202a317e25`; aggregate-manifest
+SHA-256
+`5d8dc4b28ec8c9feb4120c8fcde7d07440b0fa72c88a160b3cd6e7172bff28f3`.
+The entire V4 lineage remains quarantined and non-reusable.
+
+Prospective V5 corrective readiness is commit
+`081d8bad885ba703be24cc660d2debd7c9476b76`. V5 preserves all scientific
+settings and separately requires exactly 160,132 registered fits plus 12
+mandatory `length_punctuation` fits, or 160,144 physical fits total. All 10
+local fixtures pass, including final-allowed registered fit 160,132,
+first-prohibited fit 160,133, the 12/13 mandatory-fit boundary, complete
+160,144-fit synthetic finalization under the exact supervisor, timeout
+preservation/quarantine, and the fresh SSL/framework startup path with zero
+network attempts. Post-commit validation passes; V5 lock digest:
+`1d86b7147a592eb68045d28c1385c4e71710e4c0cd150d259289e2f67d726302`.
+
+The owner's standing automatic-run direction is rebound to exactly one V5
+receipt committed at `d088a059`, run ID
+`tks672-v8-score-v5-56390d6a-b0cf-4713-b3c8-4b162578fe71`, nonce
+`808855fdaa2983ac805e731c39fcdb92b6ddd1645ea1e51b1aa8884be5c5ed62`,
+and receipt canonical-LF SHA-256
+`d20920ebc082288ea7bfe01aa098ead145b7457160a05a48cccd069e19ff773e`.
+The sole offline V5 invocation is live under the frozen bounded supervisor;
+executor-start and supervisor heartbeats are durable. No retry, resume,
+repair, top-up, backfill, replacement, prior-output reuse, network/provider/
+paid/RunPod activity, or scope expansion is authorized.
+
+The retained V4 captures and sealed labels were separately rehashed and are
+sufficient for observed out-of-fold predictions and descriptive metrics.
+A distinct post-hoc diagnostic plan is committed at
+`01989eed4283b52de964cba87d82e0e57b95f321`, and its one-use diagnostic
+authorization is commit `39698f8ece1e4cdb0ee4b3a120b80131df8f9ca2`. It is
+strictly labeled
+`POST_HOC_DIAGNOSTIC_ONLY / NOT PREREGISTERED / NOT GATE_2_EVIDENCE / NO DECISION AUTHORITY`,
+keeps V4 quarantined, is excluded from V5, performs no bootstrap,
+permutation, threshold, endpoint pass/fail, or Gate 2 decision, and will not
+condition the prospective run. The owner subsequently authorized an isolated
+concurrent launch. The sole diagnostic invocation completed at Windows
+`Idle` priority with one-thread caps: 144 observed fits, zero network/provider/
+paid/RunPod calls, no V4-source mutation, and audit `PASS`. The retained
+seven-file, 13,050,123-byte diagnostic packet is commit
+`40198720edef3e20a8c660ab617102552fd378a2`; aggregate-manifest SHA-256
+`66c81a743b6afb0388c14e1800b6ad5481b9a22ef8e22c3049a4c4616435a66a`.
+During the 117-second overlap, V5 advanced from registered fit 900 to 2,000;
+the maximum observed supervisor heartbeat gap was `30.019s`, with no missed
+heartbeat, child failure, or prohibited attempt. Sampled V5 registered-fit
+throughput was `11.51/s` before, `9.53/s` during, and `13.11/s` after the
+diagnostic; this is an observed short-window difference, not a causal
+attribution. The diagnostic results remain inadmissible for V5 or Gate 2. No
+Gate 2 decision, production-readiness claim, `ACCEPT`, or `LICENSED` claim
+exists.
+
+Owner-delegated V5 continuation decision (2026-07-29): **CONTINUE V5
+UNTOUCHED TO ITS TERMINAL STATE**. At the decision checkpoint, both 672-item
+captures were complete, the blind capture was closed before labels were
+opened, all 12 mandatory `length_punctuation` fits were separately admitted,
+registered fit progress had reached 7,100 of 160,132, physical fits had
+reached 7,112 of 160,144, prohibited attempts were zero, the child remained
+alive, and 30-second supervisor heartbeats remained current. The recent
+registered-fit rate projects completion inside the frozen 43,200-second
+deadline; no runtime or integrity blocker is present.
+
+The committed post-hoc diagnostic makes an unfavorable V5 outcome likely:
+for Drive, registered balanced accuracy is `0.9033` primary / `0.9182`
+replication versus best lexical `0.9390`; for World it is `0.5327` /
+`0.5208` versus best lexical `0.5818`. Thus the frozen common bar
+`registered_hidden_minus_best_lexical_minimum = 0.10` cannot be met by those
+observed point estimates. Nevertheless, the diagnostic is explicitly
+`NOT GATE_2_EVIDENCE` and omits the frozen bootstrap, permutation,
+endpoint/failure readout, and independent audit. Stopping because an
+unofficial preview looks unfavorable would leave no complete preregistered
+record and would resemble outcome-driven optional stopping. A complete,
+independently audited negative result remains methodologically useful, so the
+V5 process, files, authorization, and protocol must remain untouched.
+
+Concrete next-stage plan:
+
+1. Monitor only the frozen supervisor, executor heartbeat, fit counters,
+   process liveness, timeout, and fail-closed records; do not tune or interact
+   with the child.
+2. Allow V5 to terminate normally unless its existing locked supervisor
+   triggers fail-closed handling. Do not manually stop it for an unfavorable
+   metric preview.
+3. At terminal state, preserve and hash the complete raw V5 output,
+   supervisor/launcher evidence, one-use receipt lineage, exact fit counters,
+   network-attempt record, finalization record, and independent audit. No
+   retry, repair, top-up, backfill, replacement, or reuse is permitted.
+4. Report the independently audited evidence to the owner without
+   automatically deciding Gate 2 or claiming `ACCEPT`, `LICENSED`, or
+   production readiness.
+5. If the audited endpoint is fail-closed as the diagnostic predicts, treat
+   V5 as a completed negative experiment. Diagnose the lexical-margin and
+   control failures in a separate post-hoc packet, then preregister any new
+   corpus, representation, or scientific protocol as a wholly new successor;
+   do not alter or recycle V5.
+
+Owner priority decision (2026-07-29): Gate 2 is reclassified as a
+**non-blocking, deferred research gate** for product development. Gate 2
+remains `OPEN` at `0.38`; this reclassification is a roadmap decision, not a
+scientific result, and it licenses no Gate 2, `ACCEPT`, `LICENSED`, or
+production-readiness claim. The sole V5 run continues untouched to its normal
+terminal state under its frozen supervisor and remains research evidence only.
+Its completion, failure, or later interpretation must not block the next
+product-development stage.
+
+Owner clarification (2026-07-29): no human review team exists now. Amazon is
+only a possible future external reviewer after the product is fully
+developed. A current human-evaluation workflow is therefore **not** the next
+load-bearing stage and must not be built or prioritized. No Amazon contact,
+external reviewer enrollment, reviewer workflow, customer-data processing, or
+reviewer-backed claim is authorized.
+
+The next actual solo-development load-bearing stage is the demonstrable CAS
+Harness product foundation, in this order:
+
+1. durable run/worker lifecycle and explicit state machine;
+2. Evidence Packet creation at decision time plus honest local retention and
+   verification;
+3. durable queue, idempotent dispatch, lease recovery, and safe resume;
+4. operator observability for run, worker, queue, evidence, and failure state;
+5. audit-ready presentation surfaces that expose claims, artifacts, hashes,
+   caveats, and verification without overstating WORM or production status.
+
+This is a planning priority only until the owner authorizes implementation.
+The recommended first build is a durable run/worker lifecycle vertical slice:
+one persisted run state machine, one worker lease/heartbeat contract, one
+idempotent queued job, one decision-time sealed Evidence Packet sidecar, one
+restart/recovery test, and one read-only audit projection. Gate 2 remains
+`OPEN`, deferred, and non-blocking throughout.
 
 ### Current 2026-07-28 Cognitive Circuit Grimoire digital-master checkpoint
 
@@ -17936,6 +20296,28 @@ Clean public story to earn:
 
 ## Update Log
 
+- 2026-08-06 Project Coherence Gate 5 admitted-adapter/reconciliation successor checkpoint (private research; separate from the global CAS Harness production gate): candidate `b015da8b46a225168ba3e578d24b9bd0af4c7fe7` and receipt commit `1a1f501fa4e87642a971cbd0f86ef06450df5f44` preserve the existing TKS v8 / Noetic Topos 2 / CAS evidence spine and add a byte-verified packaged Harness-v2 kernel, exact default-dark admitted adapter, joint job/subject/authorization/context binding, request-bound intake-receipt transitivity, active-lease fencing, terminal-safe replay, and fail-closed configured-scope reconciliation. The final clean receipt-commit sequence passed Gate 5 (377 hash-bound artifacts; 332 Python files; 1,961 executable-shadow paths; suites 150+99 subtests, 364, 32, 78, 38, 17, 76, and 80), the publication program (59 JSON files / 11 manifests / 71 bound artifacts), Gate 1 (23 artifacts), and Gate 4 (54 artifacts / 208 candidate tests). The private route remains disabled and excluded from OpenAPI; experimental execution is `NOT_STARTED`; Gate 5 remains `OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN`. This does not establish provider-backed startup, Evidence Packet attachment, explicit nonreporting or outcome-seal HTTP envelopes, trusted time, independent WORM, multi-host/host-loss authority, authenticated execution, exhaustive off-registry reconciliation, independent replay, scientific validation, or product readiness. The user-reported RunPod balance is `$107.00`; this tranche spent `$0.00`, launched no provider/GPU job, and needs no top-up. Next actions are provider-backed startup and packet/nonreport/outcome dependency envelopes, followed by trusted-time/WORM/multi-host and independent replay controls; any new prompt-injection/steering experiment must reuse the existing canonical detector, Pythia/Qwen, joined-canary, and legacy packet assets and must not rerun the closed contaminated banks.
+
+- 2026-08-05 Project Coherence Gate 5 clean-checkout closure checkpoint (private research; no experiment, canon, licensing, product-readiness, or disclosure change): committed the reproducible CAS Harness v2 candidate as `93abed224977806a7dcdea98e7b8e630ad4f84bf` and independently reran the integrated verifier from a new detached worktree containing only that commit. The clean-checkout run passed with `116` exact hash-bound artifacts (including the repository checkout policy), `95` syntax-checked Python artifacts, all `54` transitive Gate 4 artifacts, all `537` exact historical files, Harness v2 kernel/history/verifier red team `108 passed + 50 subtests`, complete live worker `290/290`, and focused numeric/state/schema red team `32/32`; final postflight rehash remained green and the temporary verifier worktree stayed clean. This supersedes the immediately following pre-checkout `115`-artifact checkpoint count. Gate 5 remains intentionally `OPEN / NOT_STARTED / Ring 4 / NOT LICENSED / HELD / NOT FROZEN`: the vulnerable `transformers==4.46.3` dependency, unbound patched container/runtime, absent authenticated experiment, causal/semantic validation, WORM authority, independent audit, replication, peer review, claim review, product readiness, and disclosure approval all remain explicit blockers.
+
+- 2026-08-05 Project Coherence Gate 5 integrated CAS Harness v2 candidate checkpoint (private research; no experiment, canon, licensing, product-readiness, or disclosure change): the deterministic non-self-hashing Gate 5 manifest now binds exactly `115` active artifacts and `95` Python files, transitively rehashes all `54` Gate 4 artifacts while requiring Gate 4 to remain `OPEN`, replays all `11` claims as Ring 4 / `NOT LICENSED` / Gate-5 `HELD`, and independently rehashes the exact `537`-file / `95,945,579`-byte historical recovery at inventory SHA-256 `361f8867a1b8983c383b4f4fe6d8d485e5dbbc80ee4f75e4b5d08b4e5f144f5f`. Root and independent no-edit integrated runs both PASS on the same stable bytes: Harness v2 kernel/history/verifier red team `108 passed + 50 subtests` (94 active kernel, 4 historical, 10 retained verifier attacks; node-ID SHA-256 `22979CE12CC23254D693E5902F2697BB3E113F835A4A3BE2FEE0680AAB5DA341`), complete live-worker `290/290` (node-ID SHA-256 `1C8DB623FC6507DB0B4CE218C3FD60833D514503122CD68FA79644A61DB6C635`), and focused numeric/state/schema red team `32/32` (node-ID SHA-256 `12602041756F20D1AFD402FA56968660839E5EB1098438BA84C69BFF8DE7050B`). The 47-criterion matrix retains 22 mandatory OPEN boundary classes. Red-team chronology removed every runtime/schema path to causal attestation: exact activation/output change is only `APPLIED_ACTIVATION_CHANGE_OUTPUT_DELTA_UNATTRIBUTED` with `structurally_valid=false`, baseline fallback, and stream abort; assignment, nested mutation, copy/update, construct, dump-aliasing, RNG/state drift, geometry/dtype/shape/nonfinite, and mutable-model-state forgeries are retained regressions. The exact Pythia weights-file identity remains `EleutherAI/pythia-160m@50f5173d932e8e61f858120bcb800b97af589f46`, `model.safetensors`, `374,998,696` bytes, SHA-256 `29d2e457a664e41c12c735f20a36dc0956a665f614a54ce5db21a32e75965270`; this is not in-memory tensor identity or execution. Verifier red teams also reproduced and closed extra-status/schema ambiguity, integer-to-float substitution, unbound pytest ancestor/plugin/environment inputs, explicit contradictory Markdown status, and missing post-subprocess rehash. A deliberately concurrent manifest rebuild caused an independent run to exit 1 with `Gate 5 manifest changed during verification`; the subsequent unchanged independent run passed, proving final-tree drift now fails closed. The worker still pins vulnerable `transformers==4.46.3` under `CVE-2026-4372` / `GHSA-29pf-2h5f-8g72`, the installed test/runtime environment and container are not digest-bound, and trusted time/WORM/nonces/one-use/selective-reporting/authenticated execution/real identity/hermeticity/semantic validation/GPU numerics/matched controls/independent numerical audit/replication/peer review/claim review/downstream authority/product readiness/disclosure all remain OPEN. Gate 5 remains `OPEN / NOT_STARTED / Ring 4 / NOT LICENSED / HELD / NOT FROZEN`; no model execution, network/provider call, paid compute, experiment, receipt/nonce, `ACCEPT`, `LICENSED`, customer, hosted, or public state was created. Next action is a separately reviewed worker-to-kernel protocol plus patched digest-bound hermetic executor, trust/WORM/auth controls, and independent semantic/power/data review before any separately authorized private experiment.
+
+- 2026-08-05 Project Coherence Gate 5 historical V1-V4 supplemental recovery checkpoint (private research; no execution or product-claim/readiness change): restored the exact frozen V1 static-fixture worker and its exact historical test from source revision `d9c1879762233855cd5974676b8179b1e4e75d16`, preserving raw Git blobs `d8ef2f0ebea33076f2b2868a9166a3df680f400b` and `b0d99a0babd183d995abf46175da00dbac264644`. The historical inventory now covers `537` exact-source files totaling `95,945,579` bytes with canonical digest `361f8867a1b8983c383b4f4fe6d8d485e5dbbc80ee4f75e4b5d08b4e5f144f5f`; the independent recovery verifier passes `4/4` and requires exact reproduction of the V3 LF/CRLF terminal-binding inconsistency and the preserved V4 `ZeroNetworkGuard`/`CompatibleZeroNetworkGuard` startup defect. The prior five-module model-free suite remains honestly red at `43 passed, 4 failed`: the worker restoration advances the first failure to the next out-of-scope frozen V1 dependency, `cas_harness_research_intervention_auditor.py`; the other failures remain the stale post-run V3 assertion and two LF/CRLF bindings. The separately restored worker test remains `31 failed` because its plan and synthetic-fixture JSON dependencies are outside this bounded supplement. No model, tokenizer, network, provider, live worker, paid compute, receipt, nonce, experiment, claim promotion, `ACCEPT`, or `LICENSED` state was created. Gate 5 remains `OPEN / NOT STARTED`; historical defects stay preserved as negative evidence, and any broader V1 recovery must be a separately enumerated exact-source action while functional repairs belong only in the Harness v2 successor namespace.
+
+- 2026-08-05 Harness v2 exact Pythia weights-identity checkpoint and dependency-security hold (private research; no live execution or product-claim/readiness change): strengthened the live-worker identity boundary so `is_real_model` now requires the exact Pythia repository commit `50f5173d932e8e61f858120bcb800b97af589f46`, forced safetensors loading, and a fresh streaming recomputation of the single `model.safetensors` artifact identity (`374,998,696` bytes; SHA-256 `29d2e457a664e41c12c735f20a36dc0956a665f614a54ce5db21a32e75965270`). The manifest and both health surfaces expose the filename, digest, byte count, verification flag, and typed `PINNED_REVISION_AND_WEIGHTS_SHA256` status; revision-only or forged Pydantic copies cannot satisfy the runtime `is_real` predicate. The actual local cached artifact matched without network access or model execution, and the expanded complete `live-trace-worker` suite passed `257/257`. This is weights-file identity evidence, not an in-memory tensor digest, trust-root signature, authenticated execution receipt, or scientific result. A separate current dependency audit found that the Docker requirements still pin `transformers==4.46.3`, which the current PyPI/OSV vulnerability record lists as affected by multiple advisories including critical `CVE-2026-4372` / `GHSA-29pf-2h5f-8g72` (fixed in `5.3.0`). Therefore all live/hosted Harness v2 execution remains `HELD` until a patched Transformers/container dependency set is pinned by exact artifact digest, the Pythia loader/hook contract is revalidated on that environment, and the container itself is digest-bound. Gate 5 remains `OPEN / NOT STARTED`; no `ACCEPT`, `LICENSED`, WORM, deployment, or public state changed.
+
+- 2026-08-05 Harness v2 MLP-coordinate execution-integrity repair checkpoint (private research; no CAS Harness product-claim/readiness change): corrected the documented Stage-27F mismatch by binding cover coordinates explicitly to `mlp_intermediate_post_activation` and moving the eraser from the full 768-wide post-projection MLP output to `gpt_neox.layers[{layer}].mlp.dense_4h_to_h` `forward_pre_hook.input[0]`, the 3,072-wide activated intermediate tensor. The model manifest now types that hook contract, token position, fail-closed policy, and execution provenance (`real_model_weights`, `demo_schema_only`, or `typed_test_fixture`). Each requested intervention now emits a schema-validated per-token structural receipt covering requested/valid/invalid/applied coordinates, preflight-versus-attempt tensor geometry, all-required-hook firing, effective gain, exact activation change, and paired baseline-versus-intervention last-token-logit change. Wrong-space, all-invalid, partially invalid, missing-cover, missing/legacy-hook, non-firing-hook, zero-gain/unchanged-activation, unchanged-output, and demo paths remain structurally invalid; partially failed attempts fall back atomically to the paired unmodified forward output and activation summary. Verification used no model weights, network, provider, or live worker: the dedicated adversarial matrix passed `13/13`, the focused worker integration surface passed `76/76`, the complete local `live-trace-worker` suite passed `255/255`, touched Python compilation passed, and `git diff --check` passed. This closes one source-level execution-integrity defect only. It does not establish a real Pythia intervention result, semantic correctness of the Stage-27F cover, matched-control selectivity, safety, utility, causal interpretation, Evidence Packet v2 completeness, WORM anchoring, peer review, production readiness, `ACCEPT`, or `LICENSED`; those remain `OPEN` / `NOT LICENSED`. Gate 5 experimental execution remains `OPEN / NOT STARTED`. Next action: bind this receipt to immutable Harness v2 preregistration/model-adapter identity and Evidence Packet v2 replay, independently red-team the numeric/output comparison, then run a separately authorized exact-revision offline small-model closure experiment before any claim change.
+
+- 2026-08-05 Project Coherence Gate 5 preregistration / Evidence Packet v2 control-kernel checkpoint (private research; no CAS Harness product-claim/readiness change): added the isolated repository-root `src/cas_harness_v2` namespace, focused `tests/cas_harness_v2`, and the scoped Gate 5 research-control specification. The strict schemas bind one exact claim-ledger record to immutable preregistration bytes and explicit hypotheses, units, confirmatory/replication splits, thresholds, controls, falsifiers, uncertainty, model/code/environment identities, and permitted wording. The protected fixed-sample plan now requires exact per-split target groups/enrolled/analyzed rows, maximum disjoint missing/excluded rows, `FIXED_SAMPLE` stopping, interim outcome access `FORBIDDEN`, explicit exclusion/missing-data rules, a fail-closed `SCIENTIFICALLY_INELIGIBLE` deviation effect, and an exact power-analysis artifact. Append-only amendments are exact-byte/hash-linked, have no path to alter protected design fields, require monotone identities/timestamps, freshly replay exact base/predecessor carriers, reject cycles and skipped links, enforce one prospective execution window, cap the complete governance chain at 128 links, and seal the pre-outcome chain digest plus declared execution-completion time at process-local outcome access; access cannot precede completion, packets must match the sealed completion exactly, the canonical exact-byte outcome-event carrier is freshly replayed to reject field-only bypass mutation, and public state reads fail closed after bypass mutation. Evidence Packet v2 freshly replays its raw carrier, requires exact disjoint enrolled = analyzed + missing + excluded row accounting, and separately reports structural completeness, authenticated execution, reported preregistered criteria, scientific eligibility, independent numerical audit, replication, claim-language review, and governance; coherent underpowered/attrition-deviating packets remain preserved negative evidence but compute `INELIGIBLE`, while self-hashes remain integrity checks only. The isolated verifier has no path to `AUTHENTICATED`, `LICENSED`, public release, or a product route: current governance is fixed at Ring 4 / `NOT LICENSED` / `HELD`, a reported criteria pass remains scientific eligibility `NOT_ESTABLISHED`, audit-match/discrepancy contradictions fail closed, and case-normalized aliases cannot satisfy role independence. Automatic Evidence Packet v1 upgrade rejects all four repository-known labels as ambiguous rather than backfilling missing prospective facts. Clean focused verification passes `98/98` pytest tests plus `50` subtests, including strict JSON boundaries, raw/payload/retained-byte mutation, non-string-key coercion collisions, direct carrier forgery and fresh replay, predecessor self-cycles/skips and the exact 128/129-link boundary, fixed-sample field deletion/forgery, invalid targets/maxima, power-analysis identity/protection, row-accounting contradictions, preserved underpower/attrition deviations, interim outcome access/exact completion binding, bypass-mutated outcome-event replay, short/mutable model revisions, malformed container digests, unit drift, wording overlap, wrong or cloned hashes, role self-collisions, forged statuses/governance, retrospective/post-seal amendments, execution-window ordering, failed thresholds/controls/falsifiers/split floors, orthogonal missing-auth/review blockers, and v1 ambiguity. This is a tested control-kernel candidate; no experiment, live-worker authentication, independent audit, replication, peer review, WORM authority, provider/CI/deployment/billing/compliance/customer/public state, `ACCEPT`, or `LICENSED` result was created. Real identity/affiliation independence, cross-packet semantic artifact equivalence, one-use run consumption/selective-reporting control, durable authority, and downstream non-authority enforcement remain explicit open gates. Gate 5 experimental execution remains `OPEN / NOT STARTED`; next engineering action is explicit live-worker/executor-auditor protocol mapping with a materialized non-caller-selected trust root, durable append-only ordering, hermetic execution, and independent external review before any authorized experiment.
+
+- 2026-08-04 Project Coherence Gate 4 bounded-candidate verification / Harness v2 inventory checkpoint (private research; no CAS Harness product-claim/readiness change): the integrated Gate 4 verifier now passes against 54 exact hash-bound artifacts and the integrated Gate 1 dependency chain. The isolated receipts are CAS Core v8 `61`, CAS PCBA v8 `82`, and CAS-Ohm v1 `65` unittest methods (`208` total exact test IDs); the combined focused pytest run also passes `208` methods plus `272` parameterized subtests. The 11 claim records remain entirely Ring 4 / `NOT LICENSED`; the review matrix retains 53 criteria with 20 explicitly open; the PCBA source audit retains four direct formal-EBNF counterexamples across five boards; and the CAS-Ohm audit retains eight source conflicts/under-specifications. Independent red teams forced exact-byte registry replay, fixed PCBA arithmetic/provenance/DRC boundaries, structural-versus-authenticated Ohm separation, and a Core worker v0.2 repair after reproduced launch-pressure failure (`95/96` raw launches succeeded; one exited with no output) and Windows WMI/fallback dependency-profile drift. The repaired Core uses no worker retry, profile-bound cross-process serialization, direct bound runtime labels without WMI/subprocess probing, and bounded hash/path-only failure diagnostics; OS sandboxing and host-native closure remain false. Gate 4 therefore remains `OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN`; this is bounded software/identity evidence, not canon admission, empirical validation, safety certification, peer review, product readiness, or disclosure approval. A read-only Harness v2 inventory also found a blocking causal-integrity defect: `cover_library.py` declares MLP coordinates up to approximately `3041`, while `probe_runner.py` hooks a post-projection tensor of width `768` and silently drops out-of-range coordinates, so some declared erasures can be no-ops; the bounded live-worker suite still passes `38/38` because it does not attest hook firing, tensor geometry, activation change, or output change. Gate 5 remains `OPEN / NOT STARTED`. No current CAS Harness readiness, `ACCEPT`, `LICENSED`, WORM, provider, CI, deployment, billing, compliance, customer, or public-disclosure status changed. Next action: preserve this private Gate 4 receipt, then recover the V3/V4 research architecture into an isolated Harness v2 namespace, create immutable per-claim preregistration, repair coordinate-space/hook-fire fail-closed behavior, and define Evidence Packet v2 plus independent numerical replay before any new causal experiment.
+
+- 2026-08-04 Project Coherence Gate 0 correction / Gate 4 implementation checkpoint (private research; no CAS Harness product-claim/readiness change): source re-audit corrected the CAS-Ohm ASOM expansion and added 17 omitted CJT-Q lineage/unit/uncertainty fields, so the verified bounded census is now 24 starter entries / 49 groups / 712 members across 22 source hashes. Five newly evidenced source conflicts are preserved rather than normalized away: CAS-Ohm scale/units, gain/network profiles, ASOM response-versus-semantic axes, PCBA grammar coverage, and the CSB `sat=0.1` / fuse `threshold=0.9` safety contradiction. Gate 0 now structurally verifies 25 source records, 28 migration records, 19 conflict dispositions, and remains `OPEN / NOT FROZEN`; the integrated 23-artifact Gate 1 chain still passes and remains Ring 4 / `NOT LICENSED`. Isolated CAS Core v8, PCBA v8, and CAS-Ohm v1 candidates are in implementation/red-team review only. The first CAS Core red team reproduced forgeable structural receipts, mutable claim records, and unbound `use`/native-engine dependencies; no runtime or claim-authority gate may be treated as authoritative until those regressions close. Historical AI/self-hash PCBA `LICENSED` receipts are quarantined for Project Coherence successor work; current Ring 4 / `NOT LICENSED` controls. No current CAS Harness readiness, `ACCEPT`, `LICENSED`, provider, CI, deployment, billing, compliance, customer, or public-disclosure status changed. Next action: complete the isolated Gate 4 packages, tests, deterministic manifests, and independent red-team review; do not route them into production or customer claims.
+
+- 2026-08-04 Project Coherence Gate 0/Gate 1 research checkpoint (private; no CAS Harness product-claim/readiness change): the candidate on `codex/project-coherence-gate1`, based on private Phase 0 commit `5a7fdb63`, now has fail-closed Gate 0/Gate 1 verification. Gate 0 evidence includes 25 Phase 0 source records and a load-bearing-term census of 24 starter entries expanded into 49 groups / 695 members across 22 source hashes, with 14 source conflicts preserved rather than normalized away; Gate 0 remains `OPEN` / `NOT FROZEN` pending owner-reviewed registry amendments or accepted exclusions, Integration Board acceptance, and the eventual canonical freeze. The bounded v7.4 adjudication inventories 1,258 declaration headings and adjudicates 29 high-risk declarations as 9 `OPEN`, 17 retracted, and 3 verified; all unlisted declarations default to `OPEN`. Typed TKS v8 has 20 passing tests, deterministic ordered/replayable input contracts, exact small-category lift identity/composition coverage, and hash-bound implementation/spec/formal artifacts; it remains Ring 4 / `NOT_LICENSED`. The isolated Lean 4.32.1 kernel lane checks 16 theorem-dependency audits without `sorry` or project axioms (14 axiom-free; 2 using only standard `propext`), while universal-norm, generic matrix/Gram/trace/rank, finite-sum matrix multiplication, arbitrary-vector linearity, factorial, shortlex, and full site/product results remain `OPEN`. The Noetic Topos 2 finite candidate covers 16 contexts, 8 schema-valid theorem records plus 1 separate proof obligation, strict canonical marked-cover provenance with revalidated acyclic derivation DAGs, and a scoped finite-context modality-composition certificate over 298 sieves with 6 passing tests; product-site comparison, legacy roundtrip, observational interaction, semantics richer than four independent channels, full formalization, and independent category review remain `OPEN`. The portable content-addressed frozen-PDF bundle is also `OPEN`. No current CAS Harness readiness, `ACCEPT`, `LICENSED`, provider, CI, deployment, billing, compliance, or customer status changed. Next action is to seal this private Gate 1 candidate, retain every `OPEN` / `NOT_LICENSED` boundary, and proceed into typed CAS Core v8, PCBA v8, and CAS-Ohm v1 integration with closure experiments and reproducible evidence.
+
+- 2026-08-04 Project Coherence Phase 0 governance checkpoint (research-only; no CAS Harness product-claim change): created private branch `codex/project-coherence-phase0` and commit `5a7fdb63` with the draft `PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md`, exact source-authority and symbol registries, 23-item migration matrix, theorem/claim schemas, 9 initial theorem records, 4 initial claim records, mathematical red-team and primary-literature reports, a 10-chapter quarantine for the OpenAI-hosted *Ten Advances in Mathematics and Theoretical Computer Science* manuscript, an open-vs-held draft, and a fail-closed verifier. Structural verification is `PASS`: 25 source records, 24 static hashes verified plus the deliberately mutable live TODO, 24 symbol records, 23 migration records, 9 theorem records, 4 claim records all `NOT LICENSED`, and 10 manuscript chapters in Ring 4 with admission `OPEN`; this is not proof, peer review, empirical validation, production acceptance, or disclosure approval. Gate 0 remains `OPEN` / charter `NOT FROZEN`; Gate 1 is `OPEN / IN PROGRESS`. The original Ten Advances PDF is now `present`, but each new result remains a manuscript claim pending independent proof/novelty review. Critical internal findings now block inheritance: ACBE/RPM cover clauses add no nonmaximal covers under the current axioms; the proposed projector-capacity transfer omitted its required isometry/intertwiner; the deterministic-lift norm and occupation/projector cluster fail a two-state counterexample; current axioms do not imply subcanonicity; and several spectral/MVR, stochastic, and gluing statements need correction or stronger hypotheses. Source-integrity blockers remain `OPEN` or `FLAG_FOR_HUMAN_REVIEW`: twelve conflicts retained by the owner-signed semantic registry, substantive current-compiler drift from its registered hash, the PCBA build's internal version-label ambiguity, incomplete term coverage, Integration Board acceptance, and owner/counsel review of the held/public boundary. No current CAS Harness readiness, `ACCEPT`, `LICENSED`, provider, CI, deployment, billing, compliance, or customer status was changed. Next action is owner review/revision of the charter and boundary, explicit ownership/closure paths for those blockers, independent specialist proof review, and an explicit freeze decision before successor rewrites.
+
 - 2026-07-15 CAS Forex broker-shortlist red-team checkpoint: the signed-in Forex Fury members screenshot is internally inconsistent, calling Coinexx `Current #1` in the body while presenting an affiliate-style `#1 Choice: RisenFX` button beside an embedded Risen registration form whose checkbox includes an Introducing Broker Agreement. Treat this as commercial referral placement, not independent broker-readiness evidence. Forex Fury's public page currently names AAAFx, Fyntura, and Coinexx; its FAQ says members-area broker examples are for convenience rather than endorsements. Current official broker facts materially narrow the list: AAAFx and Coinexx expressly exclude United States residents; Hugo's Way says its site/services are not aimed at U.S. citizens or residents; Hugo currently supports PRO4/PRO5 EAs/bots, scalping, hedging, news trading, 0.01 lots, and charges a stated $5 per lot with floating spreads. CAS has stronger direct execution evidence on `Hugosway-Demo` than on any other candidate, including reconciled entry, close/history, scale-in, and breakeven management, and the owner's mailbox shows an existing Hugo client relationship and historical live-account issuance. However, historical owner withdrawal emails include closed-loop/tier-status rejection evidence, Hugo's current withdrawal path is crypto-oriented, and no supported autonomous withdrawal API is proven. Near-term technical preference is therefore a controlled Hugo PRO5 live pilot only after jurisdiction/eligibility, current login, funding, and a small round-trip withdrawal test are proven; Risen remains secondary until a real MT5 account is issued. No broker selection, deposit, withdrawal, live order, or funds movement was performed by this review.
 
 - 2026-07-15 CAS Forex RisenFX account-platform correction, superseding the two earlier `101321`-as-MT5 entries below: authoritative Risen account-created emails identify `101321` as a **TradeLocker** trading account on login server `RisenFX`, and `174282` as a wallet account. The later password-change receipt applies to the **Risen Client Area**, not an MT5 trading credential. No broker-issued MT5 account or MT5 credential email was found. Direct Risen MT5 login attempts using `101321` on `Risen-Trade` were rejected three times as `Invalid account`, corroborated by the terminal log at `C:\Users\wakil\AppData\Roaming\MetaQuotes\Terminal\2B732F168B4F4E24AB7A2585462798DB\logs\20260715.log`. CAS now keeps RisenFX selected and retains the verified Risen terminal path, but clears `CAS_FOREX_MT5_LOGIN` and `CAS_FOREX_MT5_SERVER` until Risen issues a separate MT5 account. `runtime/broker-reality-review.json`, the Risen broker profile, and the offline broker fixture now state this exact distinction. The fail-closed handoff remains valid and no broker order or funds movement occurred. Remaining external gate: create or obtain a Risen **MetaTrader 5** account and its broker-issued login/server, then prove fresh exact-account broker truth before any live dispatch.
@@ -18078,3 +20460,19 @@ item text; both are real builds and the choice is the owner's. Evidence:
 `docs/working/gate2_closure/`, esp. `LEXICAL_OVERLAP_DIAGNOSIS.md`.
 
 Gate 2 remains OPEN at `0.38`.
+
+2026-08-05 post-restart monitor: terminal V2 evidence remains fail-closed. Required source HEAD and six control hashes match; retained `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL` at `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes under the immutable 8 GiB floor. Current boot free RAM is `1,946,202,112` bytes (1.813 GiB), still `6,643,732,480` bytes below floor. No receipt, nonce, run ID, PID, invocation, model/provider/GPU/RunPod, gate/audit/scientific result, or Phase 1.5/Phase 2 authority exists; invocation count is zero. Independent structural audit PASS (rc 0). RunOnce remains terminal exit 252/no controller; all 11 owner Run values and both shortcuts are restored, OneDrive preserved, RunOnce absent, Codex launch attempted, rollback PASS, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`. Exactly one coordinator report was sent; no retry.
+
+2026-08-05 post-restart monitor: GPT-2 Medium Phase 1 V2 remains terminal and fail-closed. Source HEAD and six pinned control hashes match; the retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL` at `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor. Current boot free RAM is `2,111,430,656` bytes (1.966 GiB), still `6,478,503,936` bytes below floor. No receipt, nonce, run ID, PID, invocation, model/provider/GPU/RunPod activity, gate/audit/scientific result, or Phase 1.5/Phase 2 authority exists; invocation count is zero. Independent structural audit PASS (rc 0). RunOnce is absent; launcher is terminal exit 252/no controller; all 11 owner Run values and both shortcuts are restored, OneDrive is preserved, Codex launch is recorded, rollback PASS, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`. One coordinator report was attempted and not retried.
+
+2026-08-05 post-restart monitor: GPT-2 Medium Phase 1 V2 remains terminal and fail-closed. Source HEAD and all six raw control hashes match. The retained `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL` at `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the immutable 8 GiB floor; current boot free RAM is `1,417,932,800` bytes (1.321 GiB), still `7,172,001,792` bytes below floor. No receipt, nonce, consumed marker, run ID, PID, invocation, terminal/gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce is absent; launcher is terminal exit 252/no controller; all 11 owner Run values and both startup shortcuts are restored, OneDrive is preserved, pre-restart evidence records AnyDesk/Tailscale preservation, Codex launch is recorded, rollback PASS, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`. No duplicate coordinator send was made because the prior single attempt may not be retried.
+
+2026-08-05T15:57:31-07:00 post-restart monitor: V2 remains terminal and fail-closed. Source HEAD and all six required raw controls match; retained `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL` at `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the 8 GiB floor. Current-boot RAM is `4,000,284,672` bytes (3.726 GiB), margin `-4,589,649,920` bytes; this later sample cannot reopen the completed preflight. No receipt, nonce, consumed marker, run ID, PID, invocation, gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce absent; launcher is schema-valid terminal exit 252/no controller; all 11 owner Run values and both shortcuts match restoration hashes, OneDrive preserved, Codex launch recorded, rollback PASS, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`. The earlier single coordinator-send was not duplicated.
+2026-08-05T19:38:43.7951482-07:00 post-restart monitor: V2 remains terminal and fail-closed. Source HEAD and all six required raw controls, the startup binding, and the canonical-LF gate hash match. Retained `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL` at `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes below the 8 GiB floor; current-boot RAM is `1,509,634,048` bytes (1.406 GiB), margin `-7,080,300,544`, which cannot reopen the run. No receipt, nonce, consumed marker, run ID, PID, invocation, gate/audit/scientific result, model/provider/GPU/paid/RunPod activity, or Phase 1.5/Phase 2 authority exists; invocation count is zero. RunOnce absent; launcher V2 is terminal exit 252/no controller; 11 Run values and two shortcuts are restored, OneDrive is preserved, Codex launch/rollback PASS, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false`. A single coordinator-send was dispatched but acknowledgment did not return before termination; no retry was attempted.
+2026-08-06T09:10:00Z post-restart monitor: V2 terminal evidence remains fail-closed. Exact HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, six raw controls, startup binding, and canonical-LF gate hash match. Retained schema-valid `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), `8,085,737,472` bytes under floor; current boot free RAM `2,577,461,248` bytes (2.400 GiB), margin `-6,012,473,344`, which cannot reopen it. CPU 24, disk, arithmetic/invariants, and prohibitions validate. No receipt/nonce/run ID/PID/invocation/gate/audit/scientific result or model/provider/GPU/paid/RunPod activity; invocation count zero. Independent isolated structural audit PASS (rc 0). RunOnce absent; launcher V2 terminal exit 252/controller false/restoration PASS/Codex launch recorded; Phase 1.5/2 false, `AUTORUN_TERMINAL_NO_RETRY`, and `work_continuing=false` bind. The prior exactly-one coordinator report remains the terminal report; no duplicate/retry.
+2026-08-06T12:31:01.4025691Z post-restart GPT-2 Medium Phase 1 V2 monitor: retained terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six pinned raw-control hashes, and gate hash `0c76939deb9903a21074cf24a04c849dceb7f28b74e42e25e9b4c20435e5c593` match. Schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) versus the `8,589,934,592` floor; current free RAM `1,896,087,552` bytes (1.766 GiB), margin `-6,693,847,040`; CPU 24 and disk floor pass. Invariants/prohibited flags remain valid; the isolated structural audit passed (return 0). No V2 receipt/nonce/consumed marker/PID/invocation/report/run/gate/audit/scientific artifact exists; invocation count is zero, no RunPod/provider/GPU/paid activity, and Phase 1.5/2 are unauthorized. RunOnce is absent; launcher V2 exit is `252`, controller false, Codex launch recorded, restoration PASS. All 11 owner Run values and both shortcuts restore exactly; OneDrive is preserved. Existing exactly-one coordinator no-retry report retained (no duplicate sent); `AUTORUN_TERMINAL_NO_RETRY` and `work_continuing=false` remain binding. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+2026-08-06T05:45:49-07:00 post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, six raw controls, startup binding, and gate hash match. Retained schema-valid `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: boot RAM `504,197,120` bytes (0.470 GiB), floor `8,589,934,592`, margin `-8,085,737,472`; current free RAM `2,104,532,992` bytes (1.960 GiB), margin `-6,485,401,600`. CPU 24/disk pass; arithmetic/invariants, historical boot boundary, and prohibited flags validate. Invocation count stays zero: no receipt/nonce/consumed marker/PID/run/invocation/gate/audit/scientific/provider/GPU/paid/RunPod activity or Phase 1.5/2 authority. Independent structural audit remains PASS (0). RunOnce absent; V2 launcher exit `252`, controller false, restoration PASS and Codex launch recorded; 11 owner Run values/two shortcuts restored, OneDrive preserved. `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` remain binding. One coordinator report sent; no retry, invocation, or startup action.
+
+2026-08-06T23:11:37.5327846Z post-restart GPT-2 Medium Phase 1 V2 monitor: terminal evidence remains fail-closed. Exact source HEAD `75d761e61cd522b5fd70d9a21c02897ae4ff54ac`, all six raw controls, startup binding, and gate hash `0c76939deb9903a21074cf24a04c849dceb7f28b74e42e25e9b4c20435e5c593` match. Retained schema-valid `POST_RESTART_MINIMAL_SESSION` is `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB), `8,085,737,472` below the `8,589,934,592` floor; current free RAM `2,833,915,904` bytes (2.639 GiB), margin `-5,756,018,688`. CPU 24/disk pass; arithmetic/invariants and prohibited flags validate. Invocation count is zero: no receipt/nonce/consumed marker/PID/invocation/report/run/gate/audit/scientific artifact or model/provider/GPU/paid/RunPod activity, and Phase 1.5/2 remain unauthorized. RunOnce absent; schema-valid launcher exit `252`, controller false, restoration PASS, Codex launch true. The exactly-one coordinator no-retry report remains binding and no duplicate was sent; `AUTORUN_TERMINAL_NO_RETRY` / `work_continuing=false` persist. Evidence SHA256: preflight `d77003fc520b39f05af9831798dc998f0b124e3c29088340b2c2db43c3b56e29`; launcher `5c42d575b10b1982c02f024c3134d8c87f3350ee362c684787dcc66da8c8dc9e`.
+
+2026-08-07T03:50:00Z post-restart GPT-2 Medium Phase 1 V2 monitor: retained terminal evidence remains fail-closed. Exact HEAD, all six pinned raw-control hashes, and canonical gate hash validate; independent structural audit is PASS (0). The schema-valid `POST_RESTART_MINIMAL_SESSION` remains `MINIMAL_SESSION_PREFLIGHT_FAIL`: recorded RAM `504,197,120` bytes (0.470 GiB) versus `8,589,934,592`; current free RAM `2,495,934,464` bytes (2.324 GiB), margin `-6,094,000,128`. Invocation count exactly zero: no receipt/nonce/PID/start/report/run/RunOnce, no provider/GPU/paid/RunPod activity, and Phase 1.5/2 remain unauthorized. Launcher exit `252`, controller false, restoration PASS, Codex launch true; all 11 Run values and both shortcuts are restored. `AUTORUN_TERMINAL_NO_RETRY` and `work_continuing=false` remain binding; coordinator dispatch was bounded with no retry.
