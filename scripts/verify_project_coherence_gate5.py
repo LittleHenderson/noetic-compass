@@ -41,7 +41,7 @@ import subprocess
 import tarfile
 import tempfile
 from types import MappingProxyType
-from typing import Any, Iterable
+from typing import Any, Callable, Iterable
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -54,6 +54,94 @@ ADVERSARIAL_REVIEW_PATH = GATE5_DIR / "GATE5_ADVERSARIAL_REVIEW_v0.1.md"
 CLAIM_LEDGER_PATH = PROJECT_COHERENCE_DIR / "CLAIM_LEDGER_v0.1.json"
 GATE4_MANIFEST_PATH = (
     PROJECT_COHERENCE_DIR / "gate4" / "GATE4_ARTIFACT_MANIFEST_v0.1.json"
+)
+GATE4_AUTHORITY_MATRIX_PATH = (
+    PROJECT_COHERENCE_DIR / "CANONICAL_SOURCE_AUTHORITY_MATRIX_v0.1.json"
+)
+GATE4_VERIFIER_PATH = ROOT / "scripts" / "verify_project_coherence_gate4.py"
+GATE4_RETAINED_SOURCE_CHILD_FLAG = "--gate4-retained-source-child"
+GATE4_RETAINED_SOURCE_ROOT_ENV = "GATE5_GATE4_RETAINED_SOURCE_ROOT"
+GATE4_RETAINED_SOURCE_PARENT_PID_ENV = (
+    "GATE5_GATE4_RETAINED_SOURCE_PARENT_PID"
+)
+GATE4_NESTED_PATH_SHIM_TOKEN_ENV = "GATE5_GATE4_NESTED_PATH_SHIM_TOKEN"
+GATE4_NESTED_PATH_SHIM_RECEIPT_ENV = (
+    "GATE5_GATE4_NESTED_PATH_SHIM_RECEIPT"
+)
+GATE4_RETAINED_SOURCE_BOUNDARY = (
+    "RETAINED GIT BLOB / LIVE REGISTERED PATH DRIFTED / LOCAL NONPORTABLE / "
+    "NO CURRENT-SOURCE EQUIVALENCE"
+)
+GATE4_RETAINED_GIT_REPOSITORY = Path(
+    r"C:\Users\wakil\OneDrive\Desktop\tksCAS"
+)
+GATE4_RETAINED_GIT_EXECUTABLE = Path(r"C:\Program Files\Git\cmd\git.exe")
+GATE4_RETAINED_GIT_COMMIT = "130168b3bd215e2975c8eb88776ed2be3b1c2227"
+GATE4_NESTED_USER_SITE_PACKAGES = Path(
+    r"C:\Users\wakil\AppData\Roaming\Python\Python314\site-packages"
+)
+GATE4_NESTED_PYPDF_INIT = GATE4_NESTED_USER_SITE_PACKAGES / "pypdf" / "__init__.py"
+GATE4_ONEDRIVE_REPARSE_SOURCE_IDS = frozenset(
+    {
+        "SRC-ACTIVE-COMPILER-CURRENT",
+        "SRC-PCBA-ENGINEER-20260726",
+        "SRC-CAS-OHM-PCBA-APP-I",
+    }
+)
+GATE4_RETAINED_SOURCE_SPECS = MappingProxyType(
+    {
+        "SRC-PCBA-ENGINEER-20260726": MappingProxyType(
+            {
+                "registered_path": (
+                    r"C:\Users\wakil\OneDrive\Desktop\tksCAS\book\CAS_PCBA_Engineer\CAS_PCBA_Engineer.pdf"
+                ),
+                "frozen_sha256": (
+                    "294320B39FA521EAC086E99E2D9DB913E2B6CFF0754FF82DB1EF966424566274"
+                ),
+                "frozen_bytes": 1_973_407,
+                "observed_live_sha256": (
+                    "F31584E628689115AFBA08C4686A1D07A28BBC2BFAF9103D3505F5177937372A"
+                ),
+                "observed_live_bytes": 2_070_194,
+                "git_path": "book/CAS_PCBA_Engineer/CAS_PCBA_Engineer.pdf",
+                "blob_oid": "af187b5d85f3ebbf90a802dcfc68b81924ff57ce",
+                "blob_sha256": (
+                    "294320B39FA521EAC086E99E2D9DB913E2B6CFF0754FF82DB1EF966424566274"
+                ),
+                "blob_bytes": 1_973_407,
+                "materialization": "RAW_BLOB_IDENTITY",
+                "temp_filename": "SRC-PCBA-ENGINEER-20260726.bin",
+            }
+        ),
+        "SRC-CAS-OHM-PCBA-APP-I": MappingProxyType(
+            {
+                "registered_path": (
+                    r"C:\Users\wakil\OneDrive\Desktop\tksCAS\book\CAS_PCBA_Engineer\Appendix_I_CAS_Ohm_Measurement_and_Calibration.md"
+                ),
+                "frozen_sha256": (
+                    "9FFFAC3E16B43C6D809ECE913FD8C09E40C65F60F3B4BE693F45D35EC4E6AC45"
+                ),
+                "frozen_bytes": 14_998,
+                "observed_live_sha256": (
+                    "5BE5667EB9B37460A7B7C2F9C21CA664582445F54136C0CB0A87CEC6DD98DE60"
+                ),
+                "observed_live_bytes": 21_618,
+                "git_path": (
+                    "book/CAS_PCBA_Engineer/"
+                    "Appendix_I_CAS_Ohm_Measurement_and_Calibration.md"
+                ),
+                "blob_oid": "fab6c93ba24ebdd13feb396a22d122def3ad3cc1",
+                "blob_sha256": (
+                    "880ED91B164D6A3ECA0C8A47A408F3702FBACBB5AFD750E6E963D7DD5129264C"
+                ),
+                "blob_bytes": 14_655,
+                "blob_lf_count": 343,
+                "blob_cr_count": 0,
+                "materialization": "EXACT_LF_TO_CRLF_343",
+                "temp_filename": "SRC-CAS-OHM-PCBA-APP-I.bin",
+            }
+        ),
+    }
 )
 HISTORY_MANIFEST_PATH = (
     GATE5_DIR / "history" / "HISTORICAL_HARNESS_V1_V4_CURRENT_TREE_SHA256.json"
@@ -126,10 +214,267 @@ PACKAGED_HARNESS_V2_PROVENANCE_REL = (
     f"{PACKAGED_HARNESS_V2_REL}/PACKAGING_PROVENANCE.json"
 )
 PACKAGED_HARNESS_V2_PROVENANCE_SHA256 = (
-    "F81997F30A163C88E9C5F02676E88DFF0742230FF1915356448E175A2CABDC46"
+    "C87A1AA638E89FD76E1CDA5F854832E29C6BC8491D14DE81F20E7363E5F086AC"
 )
-PACKAGED_HARNESS_V2_FILE_COUNT = 12
-PACKAGED_HARNESS_V2_EXPORT_COUNT = 132
+PACKAGED_HARNESS_V2_FILE_COUNT = 17
+PACKAGED_HARNESS_V2_EXPORT_COUNT = 300
+PACKAGED_HARNESS_V2_TOTAL_BYTES = 1_072_549
+SAME_RUN_PYTEST_TIMEOUT_SECONDS = 2_400
+
+DIAGNOSTIC_RUNTIME_FILE_BINDINGS = MappingProxyType(
+    {
+        "src/cas_harness_v2/diagnostic_execution_protocol.py": (
+            "7C16F098046E533176A1FC37B1F3D303C028B9750CD4132DECE1768858E3623F",
+            101_460,
+        ),
+        "tests/cas_harness_v2/test_diagnostic_execution_protocol.py": (
+            "C4A592645136E2FAE4D215E85E0427EB52C7CCEE6DB6E800EF8D372C5FBC5199",
+            30_571,
+        ),
+        "src/cas_harness_v2/diagnostic_lifecycle.py": (
+            "F4FA2A4290F093A6305E7D428294D33ACBEECF8231A8E9A4B14A705170F5A8A6",
+            160_487,
+        ),
+        "tests/cas_harness_v2/test_diagnostic_lifecycle.py": (
+            "09B20960AC9CE828D8415FB652B10F1BDB2E847298979F3C9D7ECCAC4413A64E",
+            37_372,
+        ),
+        "src/cas_harness_v2/diagnostic_phase_coordinator.py": (
+            "B21B857A5D94EA48CB8B78890D58039E9D8D876CBC14491F6FDE94FB6FA7AFF7",
+            195_762,
+        ),
+        "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py": (
+            "5A5C4BF5A34B48A2870F5412419F005D0D20F4B60C0B61FCB51B742895824BC5",
+            50_872,
+        ),
+        "src/cas_harness_v2/diagnostic_calibration_fit.py": (
+            "4E0A196F3DEF71A29C3EB1425FC777727377154BF010580570ACB2115F6B21DF",
+            99_655,
+        ),
+        "tests/cas_harness_v2/test_diagnostic_calibration_fit.py": (
+            "1418C49D72FD9893ACCFDF264F9D5D9BFB9B85D0699BA8EF6729444A26102021",
+            24_636,
+        ),
+        "src/cas_harness_v2/diagnostic_calibration_disposition.py": (
+            "161EF93030FD42632D03B0ABD5CBBA3ECA084F7198B7E889C96D6FD10A6C9196",
+            98_014,
+        ),
+        "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py": (
+            "CDB3218AA9CA8A3796062764D45A946408C9915BFD0BB134C0A981BA3C66BF95",
+            19_126,
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/"
+            "runtime/stagec_diagnostic_archive_admission.py"
+        ): (
+            "169AEE6754EB44ECBBF9B636505B4EBD2D7D1C031D9736FBCA37A8044613D305",
+            56_583,
+        ),
+        (
+            "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/"
+            "test_stagec_diagnostic_archive_admission.py"
+        ): (
+            "4D236BCC19096CF186A2CBCC67DF80B59CE7AB7D9BC29E1D261CA568F7BB110B",
+            28_541,
+        ),
+    }
+)
+
+DIAGNOSTIC_RUNTIME_LITERAL_CONSTANTS = MappingProxyType(
+    {
+        "src/cas_harness_v2/diagnostic_execution_protocol.py": MappingProxyType(
+            {
+                "DIAGNOSTIC_STAGEC_EXECUTION_CONTRACT_SCHEMA": (
+                    "cas_harness_v2.diagnostic_stagec_execution_contract.v2"
+                ),
+                "DIAGNOSTIC_CHILD_EXECUTION_BINDING_SCHEMA": (
+                    "cas_harness_v2.diagnostic_child_execution_binding.v2"
+                ),
+                "DIAGNOSTIC_WORKER_AUTHORIZATION_V2_SCHEMA": (
+                    "cas_harness_v2.diagnostic_worker_authorization.v2"
+                ),
+                "DIAGNOSTIC_CHILD_TERMINAL_RECEIPT_V2_SCHEMA": (
+                    "cas_harness_v2.diagnostic_child_terminal_receipt.v2"
+                ),
+                "DIAGNOSTIC_STAGEC_ARCHIVE_ADMISSION_SCHEMA": (
+                    "cas_harness_v2.diagnostic_stagec_archive_admission.v2"
+                ),
+                "DIAGNOSTIC_STAGEC_CHILD_OUTPUT_SCHEMA": (
+                    "cas_harness_v2.diagnostic_stagec_child_output.v2"
+                ),
+                "DIAGNOSTIC_STAGEC_EXECUTION_CONTRACT_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "diagnostic-stagec-execution-contract-v2+json"
+                ),
+                "DIAGNOSTIC_CHILD_EXECUTION_BINDING_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "diagnostic-child-execution-binding-v2+json"
+                ),
+                "DIAGNOSTIC_WORKER_AUTHORIZATION_V2_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "diagnostic-worker-authorization-v2+json"
+                ),
+                "DIAGNOSTIC_CHILD_TERMINAL_RECEIPT_V2_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "diagnostic-child-terminal-receipt-v2+json"
+                ),
+                "DIAGNOSTIC_STAGEC_ARCHIVE_ADMISSION_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "diagnostic-stagec-archive-admission-v2+json"
+                ),
+                "DIAGNOSTIC_STAGEC_CHILD_OUTPUT_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "diagnostic-stagec-child-output-v2+json"
+                ),
+            }
+        ),
+        "src/cas_harness_v2/diagnostic_lifecycle.py": MappingProxyType(
+            {
+                "DIAGNOSTIC_ATTEMPT_LIFECYCLE_SCHEMA": (
+                    "cas_harness_v2.diagnostic_attempt_lifecycle.v1"
+                ),
+                "DIAGNOSTIC_ATTEMPT_EVENT_SCHEMA": (
+                    "cas_harness_v2.diagnostic_attempt_event.v1"
+                ),
+            }
+        ),
+        "src/cas_harness_v2/diagnostic_phase_coordinator.py": MappingProxyType(
+            {
+                "DIAGNOSTIC_PHASE_REGISTRATION_SCHEMA": (
+                    "cas_harness_v2.diagnostic_phase_registration.v1"
+                ),
+                "DIAGNOSTIC_PHASE_STORE_BINDING_SCHEMA": (
+                    "cas_harness_v2.diagnostic_phase_store_binding.v1"
+                ),
+                "DIAGNOSTIC_PHASE_RECONCILIATION_SCHEMA": (
+                    "cas_harness_v2.diagnostic_phase_reconciliation.v1"
+                ),
+                "DIAGNOSTIC_PHASE_OUTCOME_ACCESS_SCHEMA": (
+                    "cas_harness_v2.diagnostic_phase_outcome_access.v1"
+                ),
+                "DIAGNOSTIC_PHASE_ACTIVATION_ADMISSION_SCHEMA": (
+                    "cas_harness_v2.diagnostic_phase_activation_admission.v1"
+                ),
+                "DIAGNOSTIC_PHASE_REGISTRATION_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.diagnostic-phase-registration+json"
+                ),
+                "DIAGNOSTIC_PHASE_STORE_BINDING_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.diagnostic-phase-store-binding+json"
+                ),
+                "DIAGNOSTIC_PHASE_RECONCILIATION_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.diagnostic-phase-reconciliation+json"
+                ),
+                "DIAGNOSTIC_PHASE_OUTCOME_ACCESS_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.diagnostic-phase-outcome-access+json"
+                ),
+                "DIAGNOSTIC_PHASE_ACTIVATION_ADMISSION_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "diagnostic-phase-activation-admission+json"
+                ),
+                "DIAGNOSTIC_CALIBRATION_RULE_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.diagnostic-calibration-rule+json"
+                ),
+            }
+        ),
+        "src/cas_harness_v2/diagnostic_calibration_fit.py": MappingProxyType(
+            {
+                "DIAGNOSTIC_CALIBRATION_RULE_SCHEMA": (
+                    "cas_harness_v2.diagnostic_calibration_rule.v1"
+                ),
+                "DIAGNOSTIC_CALIBRATION_ACTIVATION_DATASET_SCHEMA": (
+                    "cas_harness_v2.diagnostic_calibration_activation_dataset.v1"
+                ),
+                "DIAGNOSTIC_CALIBRATION_FIT_TRANSCRIPT_SCHEMA": (
+                    "cas_harness_v2.diagnostic_calibration_fit_transcript.v1"
+                ),
+                "DIAGNOSTIC_CALIBRATION_ACTIVATION_DATASET_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "diagnostic-calibration-activation-dataset+json"
+                ),
+                "DIAGNOSTIC_CALIBRATION_FIT_TRANSCRIPT_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "diagnostic-calibration-fit-transcript+json"
+                ),
+            }
+        ),
+        "src/cas_harness_v2/diagnostic_calibration_disposition.py": MappingProxyType(
+            {
+                "DIAGNOSTIC_CALIBRATION_ANALYSIS_SCHEMA": (
+                    "cas_harness_v2.diagnostic_calibration_analysis.v2"
+                ),
+                "DIAGNOSTIC_CALIBRATION_DETECTOR_BUNDLE_SCHEMA": (
+                    "cas_harness_v2.diagnostic_calibration_detector_bundle.v2"
+                ),
+                "DIAGNOSTIC_CALIBRATION_DISPOSITION_SCHEMA": (
+                    "cas_harness_v2.diagnostic_calibration_disposition.v2"
+                ),
+                "DIAGNOSTIC_CALIBRATION_ANALYSIS_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.diagnostic-calibration-analysis+json"
+                ),
+                "DIAGNOSTIC_CALIBRATION_DETECTOR_BUNDLE_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "diagnostic-calibration-detector-bundle+json"
+                ),
+                "DIAGNOSTIC_CALIBRATION_DISPOSITION_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "diagnostic-calibration-disposition+json"
+                ),
+            }
+        ),
+    }
+)
+DIAGNOSTIC_RUNTIME_SCHEMA_VALUES = tuple(
+    value
+    for constants in DIAGNOSTIC_RUNTIME_LITERAL_CONSTANTS.values()
+    for name, value in constants.items()
+    if name.endswith("_SCHEMA")
+)
+DIAGNOSTIC_RUNTIME_MEDIA_TYPE_VALUES = tuple(
+    value
+    for constants in DIAGNOSTIC_RUNTIME_LITERAL_CONSTANTS.values()
+    for name, value in constants.items()
+    if name.endswith("_MEDIA_TYPE")
+)
+DIAGNOSTIC_WORKER_ADMISSION_LITERAL_CONSTANTS = MappingProxyType(
+    {
+        "DIAGNOSTIC_WORKER_AUTHORIZATION_V2_SCHEMA": (
+            "cas_harness_v2.diagnostic_worker_authorization.v2"
+        ),
+        "DIAGNOSTIC_WORKER_AUTHORIZATION_V2_MEDIA_TYPE": (
+            "application/vnd.cas-harness.diagnostic-worker-authorization-v2+json"
+        ),
+        "DIAGNOSTIC_STAGEC_ARCHIVE_ADMISSION_SCHEMA": (
+            "cas_harness_v2.diagnostic_stagec_archive_admission.v2"
+        ),
+        "DIAGNOSTIC_STAGEC_ARCHIVE_ADMISSION_MEDIA_TYPE": (
+            "application/vnd.cas-harness.diagnostic-stagec-archive-admission-v2+json"
+        ),
+        "DIAGNOSTIC_CHILD_EXECUTION_BINDING_MEDIA_TYPE": (
+            "application/vnd.cas-harness.diagnostic-child-execution-binding-v2+json"
+        ),
+        "DIAGNOSTIC_STAGEC_EXECUTION_CONTRACT_MEDIA_TYPE": (
+            "application/vnd.cas-harness.diagnostic-stagec-execution-contract-v2+json"
+        ),
+        "DIAGNOSTIC_STUDY_PLAN_MEDIA_TYPE": (
+            "application/vnd.cas-harness.diagnostic-study-plan+json"
+        ),
+        "DIAGNOSTIC_STUDY_REQUEST_MEDIA_TYPE": (
+            "application/vnd.cas-harness.diagnostic-study-request+json"
+        ),
+        "DIAGNOSTIC_CHILD_TERMINAL_RECEIPT_V2_SCHEMA": (
+            "cas_harness_v2.diagnostic_child_terminal_receipt.v2"
+        ),
+        "DIAGNOSTIC_CHILD_TERMINAL_RECEIPT_V2_MEDIA_TYPE": (
+            "application/vnd.cas-harness.diagnostic-child-terminal-receipt-v2+json"
+        ),
+        "DIAGNOSTIC_STAGEC_CHILD_OUTPUT_SCHEMA": (
+            "cas_harness_v2.diagnostic_stagec_child_output.v2"
+        ),
+        "DIAGNOSTIC_STAGEC_CHILD_OUTPUT_MEDIA_TYPE": (
+            "application/vnd.cas-harness.diagnostic-stagec-child-output-v2+json"
+        ),
+    }
+)
 STAGEC_REQUIRED_ARTIFACTS = {
     f"{STAGEC_PACKAGE_REL}/{name}"
     for name in (
@@ -572,21 +917,47 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "targets": ["tests/cas_harness_v2"],
         "pytest_plugins": [],
         "repo_import_roots": ["src", "tests/cas_harness_v2"],
-        "expected_tests": 306,
-        "expected_subtests": 151,
+        "expected_tests": 437,
+        "expected_subtests": 163,
         "expected_test_ids_sha256": (
-            "49BD9090B3CF8990A213BF91CB95E154792444221CC0015F1BCA7D2E77C5D293"
+            "85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8"
         ),
+        "expected_setup_skipped_nodeids": [
+            (
+                "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::"
+                "test_exact_locked_runtime_two_independent_fits"
+            ),
+            (
+                "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::"
+                "test_arbitrary_coefficient_rejected_by_full_refit_binding"
+            ),
+            (
+                "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::"
+                "test_altered_candidate_set_or_prediction_is_rejected_without_refit"
+            ),
+            (
+                "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::"
+                "test_exact_locked_fit_freezes_only_dual_layer18_layer0_nonreporting"
+            ),
+            (
+                "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::"
+                "test_exact_locked_projection_guards_cover_analysis_bundle_and_terminal"
+            ),
+            (
+                "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::"
+                "test_clean_phase_cannot_take_early_rejection_or_null_bundle_path"
+            ),
+        ],
     },
     "Live trace worker complete": {
         "working_directory": WORKER_ROOT_REL,
         "targets": ["tests"],
         "pytest_plugins": ["pytest_asyncio.plugin"],
         "repo_import_roots": [f"{WORKER_ROOT_REL}/scripts", API_ROOT_REL],
-        "expected_tests": 576,
+        "expected_tests": 594,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "F454C598E8E38AF1B6C813BA124EB943E155EB3B927FACB28F4B47C758804C9F"
+            "B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B"
         ),
     },
     "Live trace worker numeric red team": {
@@ -740,6 +1111,9 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
     },
 }
 
+for _suite in REQUIRED_TEST_SUITES.values():
+    _suite.setdefault("expected_setup_skipped_nodeids", [])
+
 # This receipt predates later Gate 5 test-suite expansion.  Keep it immutable
 # and self-contained so editing today's REQUIRED_TEST_SUITES cannot rewrite or
 # invalidate evidence already issued for the dependency/container candidate.
@@ -877,6 +1251,68 @@ REQUIRED_SUBSUITE_DIGESTS = {
             "83752F3D1507673E399FEDC93D346688A5BA2F802385598E7057822A6C09C0BB"
         ),
     },
+    "diagnostic execution v2": {
+        "targets": [
+            "tests/cas_harness_v2/test_diagnostic_execution_protocol.py"
+        ],
+        "pytest_plugins": [],
+        "expected_tests": 47,
+        "expected_test_ids_sha256": (
+            "EF4D693708750865576478656691A5AEEC582BF097B3C3C056BD555E29207AFC"
+        ),
+    },
+    "diagnostic per-attempt lifecycle": {
+        "targets": ["tests/cas_harness_v2/test_diagnostic_lifecycle.py"],
+        "pytest_plugins": [],
+        "expected_tests": 55,
+        "expected_test_ids_sha256": (
+            "E7A41F97CE946682BFF93D5C9048C07B1B1B9CF0D717727989105D9EE231C46B"
+        ),
+    },
+    "diagnostic phase coordinator": {
+        "targets": [
+            "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py"
+        ],
+        "pytest_plugins": [],
+        "expected_tests": 8,
+        "expected_test_ids_sha256": (
+            "77CC215E81CBD5D56D85E38A79CA25822D5BB2F80E9A649ACC09F7028885A392"
+        ),
+    },
+    "diagnostic calibration fit": {
+        "targets": [
+            "tests/cas_harness_v2/test_diagnostic_calibration_fit.py"
+        ],
+        "pytest_plugins": [],
+        "expected_tests": 10,
+        "expected_test_ids_sha256": (
+            "53402EFE42F8A26B1C4DB1CDD03F2BA84D34208327CCDBA040A4D32F816D27BB"
+        ),
+    },
+    "diagnostic calibration disposition": {
+        "targets": [
+            "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py"
+        ],
+        "pytest_plugins": [],
+        "expected_tests": 11,
+        "expected_test_ids_sha256": (
+            "82E549ADBCBFE131D9C24FED0DBBD70A2D358F01AA823B75362287401F84177B"
+        ),
+    },
+    "diagnostic runtime structure-only tranche": {
+        "targets": [
+            "tests/cas_harness_v2/test_diagnostic_execution_protocol.py",
+            "tests/cas_harness_v2/test_diagnostic_lifecycle.py",
+            "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py",
+            "tests/cas_harness_v2/test_diagnostic_calibration_fit.py",
+            "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py",
+        ],
+        "pytest_plugins": [],
+        "expected_tests": 131,
+        "expected_test_ids_sha256": (
+            "E0E171A220BA0E4D8A8D518C702D606A26E88C9CBE6C2E105ECE436836A9422F"
+        ),
+    },
 }
 
 REQUIRED_WORKER_SUBSUITE_DIGESTS = {
@@ -892,6 +1328,15 @@ REQUIRED_WORKER_SUBSUITE_DIGESTS = {
         "expected_tests": 32,
         "expected_test_ids_sha256": (
             "1306211016B398F44EB57FC855B87BAB2A8AFB75C32B4A4516C53FA77570395F"
+        ),
+    },
+    "Stage C diagnostic archive admission": {
+        "targets": [
+            "live-trace-worker/tests/test_stagec_diagnostic_archive_admission.py"
+        ],
+        "expected_tests": 18,
+        "expected_test_ids_sha256": (
+            "5140569712ACB09B7A1FA3C68341234B34D03F0ECFF2C6DB5AFD42D0E68262D5"
         ),
     },
 }
@@ -1092,6 +1537,22 @@ class FileObservation:
     component_identities: tuple[tuple[str, StructuralPathIdentity], ...]
 
 
+@dataclass(frozen=True)
+class ExternalSourceObservation:
+    """Stable leaf/handle identity for one frozen external registered path.
+
+    Exact OneDrive-registered paths may legitimately carry a Cloud Files
+    reparse attribute. They are drift observations only, never the retained
+    authority bytes, so this narrower observer permits that exact registered
+    leaf while still rejecting symlinks, aliases, non-files, or substitution
+    during the read.
+    """
+
+    sha256: str
+    byte_count: int
+    identity: PathIdentity
+
+
 def _path_identity(value: os.stat_result) -> PathIdentity:
     return PathIdentity(
         device=int(value.st_dev),
@@ -1281,6 +1742,112 @@ def read_stable_bytes(path: Path, *, anchor: Path | None = None) -> bytes:
     _, payload = _observe_regular_file(path, anchor=anchor, collect_bytes=True)
     require(payload is not None, f"stable read did not retain bytes: {path}")
     return payload
+
+
+def _observe_registered_gate4_live_source(
+    source_id: str, raw_path: str
+) -> ExternalSourceObservation:
+    absolute_path = Path(os.path.abspath(raw_path))
+    require(
+        source_id
+        and WINDOWS_ABSOLUTE_RE.match(raw_path) is not None
+        and absolute_path == Path(raw_path),
+        f"{source_id}: external source observation path is not exact/absolute",
+    )
+    try:
+        before = _path_identity(absolute_path.lstat())
+    except OSError as exc:
+        raise VerificationError(
+            f"{source_id}: cannot lstat registered live source: {exc}"
+        ) from exc
+    require(
+        not absolute_path.is_symlink()
+        and before.mode_type == stat.S_IFREG
+        and before.link_count == 1,
+        f"{source_id}: registered live source is not a unique regular file",
+    )
+    if _is_reparse(before):
+        one_drive_root = Path(r"C:\Users\wakil\OneDrive")
+        require(
+            source_id in GATE4_ONEDRIVE_REPARSE_SOURCE_IDS
+            and absolute_path.is_relative_to(one_drive_root),
+            f"{source_id}: unapproved registered live-source reparse path",
+        )
+    flags = os.O_RDONLY | getattr(os, "O_BINARY", 0) | getattr(os, "O_CLOEXEC", 0)
+    flags |= getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(absolute_path, flags)
+    except OSError as exc:
+        raise VerificationError(
+            f"{source_id}: cannot open registered live source: {exc}"
+        ) from exc
+    digest = hashlib.sha256()
+    byte_count = 0
+    try:
+        opened_before = _path_identity(os.fstat(descriptor))
+        require(
+            opened_before.mode_type == stat.S_IFREG
+            and opened_before.link_count == 1,
+            f"{source_id}: opened live-source handle is not a unique file",
+        )
+        while True:
+            block = os.read(descriptor, 1024 * 1024)
+            if not block:
+                break
+            digest.update(block)
+            byte_count += len(block)
+        opened_after = _path_identity(os.fstat(descriptor))
+    finally:
+        os.close(descriptor)
+    try:
+        after = _path_identity(absolute_path.lstat())
+    except OSError as exc:
+        raise VerificationError(
+            f"{source_id}: cannot re-lstat registered live source: {exc}"
+        ) from exc
+    # Ignore only Windows reparse/change-time representation. Device/file ID,
+    # type, link count, size, mtime, and the opened handle must stay invariant.
+    stable_fields_before = (
+        before.device,
+        before.inode,
+        before.mode_type,
+        before.link_count,
+        before.byte_count,
+        before.mtime_ns,
+    )
+    stable_fields_after = (
+        after.device,
+        after.inode,
+        after.mode_type,
+        after.link_count,
+        after.byte_count,
+        after.mtime_ns,
+    )
+    stable_fields_opened = (
+        opened_after.device,
+        opened_after.inode,
+        opened_after.mode_type,
+        opened_after.link_count,
+        opened_after.byte_count,
+        opened_after.mtime_ns,
+    )
+    require(
+        opened_after == opened_before
+        and stable_fields_before == stable_fields_after == stable_fields_opened
+        and byte_count == opened_after.byte_count
+        and not absolute_path.is_symlink(),
+        f"{source_id}: registered live source changed while being observed",
+    )
+    if _is_reparse(after):
+        require(
+            source_id in GATE4_ONEDRIVE_REPARSE_SOURCE_IDS,
+            f"{source_id}: registered live source gained an unapproved reparse tag",
+        )
+    return ExternalSourceObservation(
+        sha256=digest.hexdigest().upper(),
+        byte_count=byte_count,
+        identity=after,
+    )
 
 
 def read_stable_text(
@@ -1739,6 +2306,7 @@ def verify_manifest(manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
         "expected_tests",
         "expected_subtests",
         "expected_test_ids_sha256",
+        "expected_setup_skipped_nodeids",
         "test_id_canonicalization",
     }
     require(
@@ -1751,6 +2319,800 @@ def verify_manifest(manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
         "manifest test-suite names or order differ from the required Gate 5 suites",
     )
     return records
+
+
+def _load_gate4_external_source_records() -> dict[str, dict[str, Any]]:
+    gate4 = load_json(GATE4_MANIFEST_PATH)
+    authority = load_json(GATE4_AUTHORITY_MATRIX_PATH)
+    gate4_sources = (
+        gate4.get("external_source_bindings")
+        if isinstance(gate4, dict)
+        else None
+    )
+    authority_sources = (
+        authority.get("sources") if isinstance(authority, dict) else None
+    )
+    require(
+        isinstance(gate4_sources, list) and len(gate4_sources) == 5,
+        "Gate 4 retained-source preflight requires five frozen source records",
+    )
+    require(
+        isinstance(authority_sources, list),
+        "Gate 4 retained-source preflight cannot read the authority matrix",
+    )
+    gate4_by_id: dict[str, dict[str, Any]] = {}
+    for index, record in enumerate(gate4_sources):
+        require(
+            isinstance(record, dict),
+            f"Gate 4 retained-source record {index} is malformed",
+        )
+        require_exact_keys(
+            record,
+            {"source_id", "path", "sha256", "bytes"},
+            label=f"Gate 4 retained-source record {index}",
+        )
+        source_id = record.get("source_id")
+        require(
+            isinstance(source_id, str)
+            and source_id
+            and source_id not in gate4_by_id,
+            "Gate 4 retained-source records have a missing or duplicate source ID",
+        )
+        gate4_by_id[source_id] = record
+    authority_by_id = {
+        record.get("id"): record
+        for record in authority_sources
+        if isinstance(record, dict) and isinstance(record.get("id"), str)
+    }
+    require(
+        set(GATE4_RETAINED_SOURCE_SPECS) <= set(gate4_by_id),
+        "Gate 4 retained-source records omit the exact two-source fallback set",
+    )
+    for source_id, record in gate4_by_id.items():
+        authority_record = authority_by_id.get(source_id)
+        require(
+            isinstance(authority_record, dict)
+            and record["path"] == authority_record.get("path")
+            and record["sha256"] == authority_record.get("sha256")
+            and record["bytes"] == authority_record.get("bytes"),
+            f"{source_id}: Gate 4 manifest and authority source records differ",
+        )
+    for source_id, spec in GATE4_RETAINED_SOURCE_SPECS.items():
+        require(
+            gate4_by_id[source_id]
+            == {
+                "source_id": source_id,
+                "path": spec["registered_path"],
+                "sha256": spec["frozen_sha256"],
+                "bytes": spec["frozen_bytes"],
+            },
+            f"{source_id}: frozen Gate 4 source identity differs from the closed fallback",
+        )
+    return gate4_by_id
+
+
+def _observe_gate4_external_sources(
+    records: dict[str, dict[str, Any]],
+) -> dict[str, ExternalSourceObservation]:
+    observations: dict[str, ExternalSourceObservation] = {}
+    drifted: set[str] = set()
+    for source_id, record in records.items():
+        raw_path = record["path"]
+        require(
+            isinstance(raw_path, str) and WINDOWS_ABSOLUTE_RE.match(raw_path),
+            f"{source_id}: Gate 4 source path is not the frozen absolute path",
+        )
+        observation = _observe_registered_gate4_live_source(
+            source_id, raw_path
+        )
+        observations[source_id] = observation
+        if (
+            observation.sha256 != record["sha256"]
+            or observation.byte_count != record["bytes"]
+        ):
+            drifted.add(source_id)
+    require(
+        drifted == set(GATE4_RETAINED_SOURCE_SPECS),
+        "Gate 4 live-source drift set is not exactly the closed two-source fallback: "
+        f"observed={sorted(drifted)}",
+    )
+    for source_id, spec in GATE4_RETAINED_SOURCE_SPECS.items():
+        observation = observations[source_id]
+        require(
+            observation.sha256 == spec["observed_live_sha256"]
+            and observation.byte_count == spec["observed_live_bytes"],
+            f"{source_id}: live registered path drift changed again",
+        )
+    return observations
+
+
+def _run_retained_gate4_git(
+    arguments: list[str], *, label: str, timeout: int = 30
+) -> bytes:
+    require(
+        GATE4_RETAINED_GIT_EXECUTABLE.is_file()
+        and not GATE4_RETAINED_GIT_EXECUTABLE.is_symlink(),
+        "retained Gate 4 Git executable is missing or aliased",
+    )
+    require(
+        GATE4_RETAINED_GIT_REPOSITORY.is_dir()
+        and not GATE4_RETAINED_GIT_REPOSITORY.is_symlink()
+        and (GATE4_RETAINED_GIT_REPOSITORY / ".git").is_dir()
+        and not (GATE4_RETAINED_GIT_REPOSITORY / ".git").is_symlink(),
+        "retained Gate 4 Git object repository is unavailable",
+    )
+    git_environment = _subprocess_environment(
+        extra_env={
+            "GIT_ALLOW_PROTOCOL": "file",
+            "GIT_CONFIG_COUNT": "1",
+            "GIT_CONFIG_GLOBAL": "NUL",
+            "GIT_CONFIG_KEY_0": "safe.directory",
+            "GIT_CONFIG_NOSYSTEM": "1",
+            "GIT_CONFIG_VALUE_0": GATE4_RETAINED_GIT_REPOSITORY.as_posix(),
+            "GIT_NO_LAZY_FETCH": "1",
+            "GIT_NO_REPLACE_OBJECTS": "1",
+            "GIT_OPTIONAL_LOCKS": "0",
+            "GIT_PROTOCOL_FROM_USER": "0",
+            "GIT_TERMINAL_PROMPT": "0",
+        }
+    )
+    completed = subprocess.run(
+        [
+            str(GATE4_RETAINED_GIT_EXECUTABLE),
+            "--no-replace-objects",
+            "-C",
+            str(GATE4_RETAINED_GIT_REPOSITORY),
+            *arguments,
+        ],
+        cwd=ROOT,
+        env=git_environment,
+        capture_output=True,
+        check=False,
+        timeout=timeout,
+    )
+    require(
+        completed.returncode == 0,
+        f"retained Gate 4 Git {label} failed ({completed.returncode}): "
+        f"{completed.stderr.decode('utf-8', errors='replace')}",
+    )
+    require(
+        completed.stderr == b"",
+        f"retained Gate 4 Git {label} emitted unexpected stderr",
+    )
+    return completed.stdout
+
+
+def _read_retained_gate4_git_payloads() -> dict[str, bytes]:
+    require(
+        _run_retained_gate4_git(
+            ["for-each-ref", "--format=%(refname)", "refs/replace"],
+            label="replacement-ref preflight",
+        )
+        == b"",
+        "retained Gate 4 Git repository has replacement refs",
+    )
+    require(
+        _run_retained_gate4_git(
+            ["rev-parse", "--show-object-format"],
+            label="object-format preflight",
+        ).strip()
+        == b"sha1",
+        "retained Gate 4 Git repository does not use the frozen SHA-1 object IDs",
+    )
+    require(
+        _run_retained_gate4_git(
+            [
+                "rev-parse",
+                "--verify",
+                f"{GATE4_RETAINED_GIT_COMMIT}^{{commit}}",
+            ],
+            label="commit resolution",
+        ).strip()
+        == GATE4_RETAINED_GIT_COMMIT.encode("ascii"),
+        "retained Gate 4 Git commit identity drifted",
+    )
+    payloads: dict[str, bytes] = {}
+    for source_id, spec in GATE4_RETAINED_SOURCE_SPECS.items():
+        blob_oid = spec["blob_oid"]
+        git_path = spec["git_path"]
+        require(
+            _run_retained_gate4_git(
+                [
+                    "rev-parse",
+                    "--verify",
+                    f"{GATE4_RETAINED_GIT_COMMIT}:{git_path}",
+                ],
+                label=f"{source_id} commit:path resolution",
+            ).strip()
+            == blob_oid.encode("ascii"),
+            f"{source_id}: retained commit:path does not resolve to the frozen blob",
+        )
+        require(
+            _run_retained_gate4_git(
+                ["ls-tree", "-z", GATE4_RETAINED_GIT_COMMIT, "--", git_path],
+                label=f"{source_id} tree binding",
+            )
+            == f"100644 blob {blob_oid}\t{git_path}\0".encode("utf-8"),
+            f"{source_id}: retained tree entry drifted",
+        )
+        require(
+            _run_retained_gate4_git(
+                ["cat-file", "-t", blob_oid],
+                label=f"{source_id} object type",
+            ).strip()
+            == b"blob",
+            f"{source_id}: retained object is not a Git blob",
+        )
+        require(
+            _run_retained_gate4_git(
+                ["cat-file", "-s", blob_oid],
+                label=f"{source_id} object size",
+            ).strip()
+            == str(spec["blob_bytes"]).encode("ascii"),
+            f"{source_id}: retained blob byte count drifted",
+        )
+        payload = _run_retained_gate4_git(
+            ["cat-file", "blob", blob_oid],
+            label=f"{source_id} blob read",
+        )
+        require(
+            len(payload) == spec["blob_bytes"]
+            and sha256_bytes(payload) == spec["blob_sha256"],
+            f"{source_id}: retained blob bytes drifted",
+        )
+        payloads[source_id] = payload
+    return payloads
+
+
+def _retained_gate4_materialized_payload(
+    source_id: str, payload: bytes
+) -> bytes:
+    spec = GATE4_RETAINED_SOURCE_SPECS[source_id]
+    if spec["materialization"] == "RAW_BLOB_IDENTITY":
+        materialized = payload
+    else:
+        require(
+            spec["materialization"] == "EXACT_LF_TO_CRLF_343"
+            and payload.count(b"\n") == spec["blob_lf_count"]
+            and payload.count(b"\r") == spec["blob_cr_count"] == 0,
+            f"{source_id}: retained text blob is not the exact LF source",
+        )
+        materialized = payload.replace(b"\n", b"\r\n")
+    require(
+        len(materialized) == spec["frozen_bytes"]
+        and sha256_bytes(materialized) == spec["frozen_sha256"],
+        f"{source_id}: retained materialization does not match Gate 4",
+    )
+    return materialized
+
+
+def _materialize_retained_gate4_sources(
+    temporary_root: Path, payloads: dict[str, bytes]
+) -> tuple[dict[str, Path], dict[str, FileObservation]]:
+    source_root = temporary_root / "retained-gate4-sources"
+    source_root.mkdir()
+    replacements: dict[str, Path] = {}
+    observations: dict[str, FileObservation] = {}
+    for source_id, spec in GATE4_RETAINED_SOURCE_SPECS.items():
+        materialized = _retained_gate4_materialized_payload(
+            source_id, payloads[source_id]
+        )
+        path = source_root / spec["temp_filename"]
+        descriptor = os.open(
+            path,
+            os.O_WRONLY
+            | os.O_CREAT
+            | os.O_EXCL
+            | getattr(os, "O_BINARY", 0)
+            | getattr(os, "O_CLOEXEC", 0),
+            0o600,
+        )
+        try:
+            offset = 0
+            while offset < len(materialized):
+                written = os.write(descriptor, materialized[offset:])
+                require(written > 0, f"{source_id}: cannot write retained materialization")
+                offset += written
+            os.fsync(descriptor)
+        finally:
+            os.close(descriptor)
+        observation = observe_regular_file(path, anchor=temporary_root)
+        require(
+            observation.sha256 == spec["frozen_sha256"]
+            and observation.byte_count == spec["frozen_bytes"],
+            f"{source_id}: temporary retained materialization drifted",
+        )
+        replacements[spec["registered_path"]] = path
+        observations[source_id] = observation
+    require(
+        {
+            path.relative_to(source_root).as_posix()
+            for path in source_root.rglob("*")
+            if path.is_file()
+        }
+        == {
+            spec["temp_filename"]
+            for spec in GATE4_RETAINED_SOURCE_SPECS.values()
+        },
+        "temporary Gate 4 retained-source directory is not exactly two files",
+    )
+    return replacements, observations
+
+
+def _require_retained_gate4_negative(
+    operation: Callable[[], object], *, label: str
+) -> None:
+    try:
+        operation()
+    except VerificationError:
+        return
+    raise VerificationError(
+        f"retained Gate 4 negative contract accepted {label}"
+    )
+
+
+def _verify_retained_gate4_negative_contract(
+    payloads: dict[str, bytes], replacements: dict[str, Path], token: str
+) -> None:
+    require(
+        set(payloads) == set(GATE4_RETAINED_SOURCE_SPECS)
+        and set(replacements)
+        == {
+            spec["registered_path"]
+            for spec in GATE4_RETAINED_SOURCE_SPECS.values()
+        },
+        "retained Gate 4 negative checks received a broadened surface",
+    )
+    hostile_git_environment = {
+        "FILTER_BRANCH_SQUELCH_WARNING",
+        "GIT_ALTERNATE_OBJECT_DIRECTORIES",
+        "GIT_ASKPASS",
+        "GIT_CEILING_DIRECTORIES",
+        "GIT_COMMON_DIR",
+        "GIT_CONFIG_PARAMETERS",
+        "GIT_CONFIG_SYSTEM",
+        "GIT_DIR",
+        "GIT_EXEC_PATH",
+        "GIT_EXTERNAL_DIFF",
+        "GIT_INDEX_FILE",
+        "GIT_OBJECT_DIRECTORY",
+        "GIT_PROXY_COMMAND",
+        "GIT_REPLACE_REF_BASE",
+        "GIT_SHALLOW_FILE",
+        "GIT_SSH",
+        "GIT_SSH_COMMAND",
+        "GIT_WORK_TREE",
+    }
+    sanitized_environment = _subprocess_environment()
+    require(
+        hostile_git_environment.isdisjoint(SUBPROCESS_ENV_ALLOWLIST)
+        and hostile_git_environment.isdisjoint(
+            {name.upper() for name in sanitized_environment}
+        )
+        and "PYTHONPATH" not in SUBPROCESS_ENV_ALLOWLIST
+        and "PYTHONHOME" not in SUBPROCESS_ENV_ALLOWLIST,
+        "retained Gate 4 subprocess environment admits caller-selected controls",
+    )
+    for source_id, payload in payloads.items():
+        require(payload, f"{source_id}: retained negative check lacks payload")
+        mutated = payload[:-1] + bytes((payload[-1] ^ 1,))
+        _require_retained_gate4_negative(
+            lambda source_id=source_id, mutated=mutated: (
+                _retained_gate4_materialized_payload(source_id, mutated)
+            ),
+            label=f"mutated {source_id} blob",
+        )
+    appendix_id = "SRC-CAS-OHM-PCBA-APP-I"
+    appendix_payload = payloads[appendix_id]
+    _require_retained_gate4_negative(
+        lambda: _retained_gate4_materialized_payload(
+            appendix_id, appendix_payload.replace(b"\n", b"\r\n", 1)
+        ),
+        label="pre-normalized Appendix CRLF input",
+    )
+    one_path_missing = dict(replacements)
+    one_path_missing.pop(next(iter(one_path_missing)))
+    _require_retained_gate4_negative(
+        lambda: _gate4_nested_path_shim_bytes(one_path_missing, token),
+        label="one-path nested resolver",
+    )
+    broadened = dict(replacements)
+    broadened[r"C:\retained-source-generic-override"] = next(
+        iter(replacements.values())
+    )
+    _require_retained_gate4_negative(
+        lambda: _gate4_nested_path_shim_bytes(broadened, token),
+        label="generic third-path resolver",
+    )
+    _require_retained_gate4_negative(
+        lambda: _gate4_nested_path_shim_bytes(replacements, "0" * 63),
+        label="wrong nested-shim token",
+    )
+
+
+def _gate4_nested_path_shim_bytes(
+    replacements: dict[str, Path], token: str
+) -> bytes:
+    require(
+        set(replacements)
+        == {
+            spec["registered_path"]
+            for spec in GATE4_RETAINED_SOURCE_SPECS.values()
+        }
+        and isinstance(token, str)
+        and re.fullmatch(r"[0-9a-f]{64}", token) is not None,
+        "nested Gate 4 path shim input is not the closed two-source contract",
+    )
+    literal_replacements = {
+        raw_path: str(replacements[raw_path].resolve(strict=True))
+        for raw_path in sorted(replacements)
+    }
+    source = f'''"""Verifier-owned exact two-path shim for nested Gate 4 dependencies."""
+import importlib.util
+import os
+import pathlib
+import stat
+import sys
+
+_TOKEN_ENV = {GATE4_NESTED_PATH_SHIM_TOKEN_ENV!r}
+_RECEIPT_ENV = {GATE4_NESTED_PATH_SHIM_RECEIPT_ENV!r}
+_EXPECTED_TOKEN = {token!r}
+_REPLACEMENTS = {literal_replacements!r}
+_USER_SITE = pathlib.Path({str(GATE4_NESTED_USER_SITE_PACKAGES)!r})
+_EXPECTED_PYPDF = pathlib.Path({str(GATE4_NESTED_PYPDF_INIT)!r})
+
+if os.environ.get(_TOKEN_ENV) != _EXPECTED_TOKEN:
+    raise RuntimeError("Gate 4 retained-source nested shim token mismatch")
+
+_user_site_identity = _USER_SITE.lstat()
+_reparse_attribute = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+if (
+    not _USER_SITE.is_dir()
+    or _USER_SITE.is_symlink()
+    or bool(getattr(_user_site_identity, "st_file_attributes", 0) & _reparse_attribute)
+    or getattr(_user_site_identity, "st_reparse_tag", 0) not in (None, 0)
+    or str(_USER_SITE) in sys.path
+):
+    raise RuntimeError("Gate 4 retained-source exact user package path is unsafe")
+# Append, never prepend or addsitedir: stdlib remains authoritative and .pth
+# startup code is not evaluated. PYTHONNOUSERSITE separately blocks usercustomize.
+sys.path.append(str(_USER_SITE))
+_pypdf_spec = importlib.util.find_spec("pypdf")
+_pypdf_parent_identity = _EXPECTED_PYPDF.parent.lstat()
+_pypdf_identity = _EXPECTED_PYPDF.lstat()
+if (
+    _pypdf_spec is None
+    or _pypdf_spec.origin is None
+    or pathlib.Path(_pypdf_spec.origin) != _EXPECTED_PYPDF
+    or not _EXPECTED_PYPDF.is_file()
+    or _EXPECTED_PYPDF.is_symlink()
+    or _EXPECTED_PYPDF.parent.is_symlink()
+    or bool(getattr(_pypdf_parent_identity, "st_file_attributes", 0) & _reparse_attribute)
+    or getattr(_pypdf_parent_identity, "st_reparse_tag", 0) not in (None, 0)
+    or bool(getattr(_pypdf_identity, "st_file_attributes", 0) & _reparse_attribute)
+    or getattr(_pypdf_identity, "st_reparse_tag", 0) not in (None, 0)
+):
+    raise RuntimeError("Gate 4 retained-source pypdf origin drifted")
+
+_ORIGINAL_PATH_INIT = pathlib.Path.__init__
+
+def _exact_two_path_init(self, *arguments, **keywords):
+    if len(arguments) == 1:
+        try:
+            candidate = os.fspath(arguments[0])
+        except TypeError:
+            candidate = None
+        replacement = _REPLACEMENTS.get(candidate)
+        if replacement is not None:
+            receipt_path = os.environ.get(_RECEIPT_ENV)
+            if not receipt_path:
+                raise RuntimeError("Gate 4 retained-source shim receipt is missing")
+            descriptor = os.open(
+                receipt_path,
+                os.O_WRONLY | os.O_CREAT | os.O_APPEND | getattr(os, "O_BINARY", 0),
+                0o600,
+            )
+            try:
+                payload = (str(os.getpid()) + "\\t" + candidate + "\\n").encode("utf-8")
+                offset = 0
+                while offset < len(payload):
+                    written = os.write(descriptor, payload[offset:])
+                    if written <= 0:
+                        raise RuntimeError("Gate 4 retained-source shim receipt write failed")
+                    offset += written
+                os.fsync(descriptor)
+            finally:
+                os.close(descriptor)
+            arguments = (replacement,)
+    _ORIGINAL_PATH_INIT(self, *arguments, **keywords)
+
+pathlib.Path.__init__ = _exact_two_path_init
+'''
+    payload = source.encode("utf-8")
+    ast.parse(payload, filename="retained-gate4-sitecustomize.py")
+    return payload
+
+
+def _materialize_gate4_nested_path_shim(
+    temporary_root: Path,
+    replacements: dict[str, Path],
+    token: str,
+) -> tuple[Path, Path, FileObservation]:
+    shim_root = temporary_root / "nested-path-shim"
+    shim_root.mkdir()
+    shim_path = shim_root / "sitecustomize.py"
+    receipt_path = shim_root / "resolution-receipt.tsv"
+    payload = _gate4_nested_path_shim_bytes(replacements, token)
+    descriptor = os.open(
+        shim_path,
+        os.O_WRONLY
+        | os.O_CREAT
+        | os.O_EXCL
+        | getattr(os, "O_BINARY", 0)
+        | getattr(os, "O_CLOEXEC", 0),
+        0o600,
+    )
+    try:
+        offset = 0
+        while offset < len(payload):
+            written = os.write(descriptor, payload[offset:])
+            require(written > 0, "cannot write nested Gate 4 path shim")
+            offset += written
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+    observation = observe_regular_file(shim_path, anchor=temporary_root)
+    require(
+        observation.sha256 == sha256_bytes(payload)
+        and observation.byte_count == len(payload)
+        and not receipt_path.exists(),
+        "nested Gate 4 path shim materialization drifted",
+    )
+    return shim_root, receipt_path, observation
+
+
+def _validate_gate4_nested_resolution_receipt(
+    receipt_lines: list[str], replacements: dict[str, Path], child_pid: int
+) -> tuple[dict[str, int], set[int]]:
+    expected_paths = {
+        spec["registered_path"]
+        for spec in GATE4_RETAINED_SOURCE_SPECS.values()
+    }
+    require(
+        set(replacements) == expected_paths
+        and type(child_pid) is int
+        and child_pid > 0
+        and isinstance(receipt_lines, list)
+        and all(isinstance(line, str) for line in receipt_lines),
+        "Gate 4 nested resolution receipt input is not the closed contract",
+    )
+    nested_counts = {raw_path: 0 for raw_path in replacements}
+    nested_pids: set[int] = set()
+    nested_paths_by_pid: dict[int, list[str]] = {}
+    for line in receipt_lines:
+        parts = line.split("\t")
+        require(
+            len(parts) == 2
+            and parts[0].isascii()
+            and parts[0].isdecimal()
+            and int(parts[0]) > 0
+            and int(parts[0]) != child_pid
+            and parts[1] in nested_counts,
+            f"Gate 4 nested retained-source receipt broadened: {line!r}",
+        )
+        nested_pid = int(parts[0])
+        nested_pids.add(nested_pid)
+        nested_paths_by_pid.setdefault(nested_pid, []).append(parts[1])
+        nested_counts[parts[1]] += 1
+    require(
+        len(receipt_lines) == 6
+        and set(nested_counts.values()) == {3}
+        and len(nested_pids) == 3
+        and all(
+            len(paths) == 2 and set(paths) == expected_paths
+            for paths in nested_paths_by_pid.values()
+        ),
+        "Gate 4 nested dependency resolution surface differs from the exact "
+        f"three-process/six-resolution contract: {nested_counts}",
+    )
+    return nested_counts, nested_pids
+
+
+def _run_gate4_retained_source_child() -> int:
+    raw_root = os.environ.pop(GATE4_RETAINED_SOURCE_ROOT_ENV, None)
+    raw_parent_pid = os.environ.pop(
+        GATE4_RETAINED_SOURCE_PARENT_PID_ENV, None
+    )
+    require(
+        isinstance(raw_root, str)
+        and raw_root
+        and isinstance(raw_parent_pid, str)
+        and raw_parent_pid.isascii()
+        and raw_parent_pid.isdecimal()
+        and int(raw_parent_pid) == os.getppid(),
+        "retained Gate 4 child lacks its exact parent-bound temporary root",
+    )
+    temporary_root = Path(raw_root).resolve(strict=True)
+    system_temp = Path(tempfile.gettempdir()).resolve(strict=True)
+    require(
+        temporary_root.parent == system_temp
+        and temporary_root.name.startswith("gate5-gate4-retained-")
+        and temporary_root.is_dir()
+        and not temporary_root.is_symlink(),
+        "retained Gate 4 child root is not a verifier-owned temporary directory",
+    )
+    records = _load_gate4_external_source_records()
+    raw_shim_token = os.environ.get(GATE4_NESTED_PATH_SHIM_TOKEN_ENV)
+    raw_shim_receipt = os.environ.get(GATE4_NESTED_PATH_SHIM_RECEIPT_ENV)
+    shim_root = temporary_root / "nested-path-shim"
+    shim_path = shim_root / "sitecustomize.py"
+    shim_receipt_path = shim_root / "resolution-receipt.tsv"
+    require(
+        isinstance(raw_shim_token, str)
+        and re.fullmatch(r"[0-9a-f]{64}", raw_shim_token) is not None
+        and isinstance(raw_shim_receipt, str)
+        and Path(raw_shim_receipt) == shim_receipt_path.resolve(strict=False)
+        and shim_root.is_dir()
+        and not shim_root.is_symlink()
+        and not shim_receipt_path.exists(),
+        "retained Gate 4 child lacks its exact nested-shim contract",
+    )
+    replacements: dict[str, Path] = {}
+    before: dict[str, FileObservation] = {}
+    source_root = temporary_root / "retained-gate4-sources"
+    require(
+        source_root.is_dir() and not source_root.is_symlink(),
+        "retained Gate 4 child source directory is missing",
+    )
+    for source_id, spec in GATE4_RETAINED_SOURCE_SPECS.items():
+        path = source_root / spec["temp_filename"]
+        observation = observe_regular_file(path, anchor=temporary_root)
+        require(
+            observation.sha256 == records[source_id]["sha256"]
+            == spec["frozen_sha256"]
+            and observation.byte_count == records[source_id]["bytes"]
+            == spec["frozen_bytes"],
+            f"{source_id}: child retained-source bytes do not match Gate 4",
+        )
+        replacements[records[source_id]["path"]] = path
+        before[source_id] = observation
+    require(
+        set(replacements)
+        == {
+            spec["registered_path"]
+            for spec in GATE4_RETAINED_SOURCE_SPECS.values()
+        },
+        "retained Gate 4 child replacement surface is not exactly two paths",
+    )
+    shim_before = observe_regular_file(shim_path, anchor=temporary_root)
+    expected_shim = _gate4_nested_path_shim_bytes(replacements, raw_shim_token)
+    require(
+        shim_before.sha256 == sha256_bytes(expected_shim)
+        and shim_before.byte_count == len(expected_shim)
+        and read_stable_bytes(shim_path, anchor=temporary_root) == expected_shim,
+        "retained Gate 4 child nested path shim bytes drifted",
+    )
+
+    # The special child does not trust the parent's provenance claim. Re-read
+    # the fixed local commit:path bindings itself, then require the materialized
+    # bytes to be exactly derived from those blobs before Gate 4 is invoked.
+    child_git_before = _read_retained_gate4_git_payloads()
+    for source_id, spec in GATE4_RETAINED_SOURCE_SPECS.items():
+        path = source_root / spec["temp_filename"]
+        require(
+            read_stable_bytes(path, anchor=temporary_root)
+            == _retained_gate4_materialized_payload(
+                source_id, child_git_before[source_id]
+            ),
+            f"{source_id}: child materialization is not derived from retained Git",
+        )
+
+    spec = importlib.util.spec_from_file_location(
+        "gate5_exact_gate4_retained_source_child", GATE4_VERIFIER_PATH
+    )
+    require(
+        spec is not None and spec.loader is not None,
+        "cannot load the exact Gate 4 verifier for retained-source validation",
+    )
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    original_resolve = module.resolve
+    resolution_counts = {raw_path: 0 for raw_path in replacements}
+
+    def exact_two_source_resolve(raw_path: str) -> Path:
+        replacement = replacements.get(raw_path)
+        if replacement is None:
+            return original_resolve(raw_path)
+        resolution_counts[raw_path] += 1
+        return replacement
+
+    # Negative self-check: every non-retained source and repository-relative
+    # artifact must continue through Gate 4's unchanged resolver.
+    for source_id, record in records.items():
+        if source_id not in GATE4_RETAINED_SOURCE_SPECS:
+            require(
+                exact_two_source_resolve(record["path"])
+                == original_resolve(record["path"]),
+                f"{source_id}: closed retained-source resolver broadened",
+            )
+    sentinel = "docs/working/project_coherence/CLAIM_LEDGER_v0.1.json"
+    require(
+        exact_two_source_resolve(sentinel) == original_resolve(sentinel)
+        and all(count == 0 for count in resolution_counts.values()),
+        "closed retained-source resolver failed its non-target negative check",
+    )
+    module.resolve = exact_two_source_resolve
+    prior_pythonpath = os.environ.get("PYTHONPATH")
+    prior_no_user_site = os.environ.get("PYTHONNOUSERSITE")
+    require(
+        prior_pythonpath in (None, "") and prior_no_user_site in (None, ""),
+        "retained Gate 4 child inherited an untrusted Python import setting",
+    )
+    os.environ["PYTHONPATH"] = str(shim_root.resolve(strict=True))
+    os.environ["PYTHONNOUSERSITE"] = "1"
+    try:
+        try:
+            result = module.main()
+        except module.VerificationError as exc:
+            raise VerificationError(
+                f"retained-source Gate 4 dependency failed: {exc}"
+            ) from exc
+    finally:
+        os.environ.pop("PYTHONPATH", None)
+        os.environ.pop("PYTHONNOUSERSITE", None)
+        os.environ.pop(GATE4_NESTED_PATH_SHIM_TOKEN_ENV, None)
+        os.environ.pop(GATE4_NESTED_PATH_SHIM_RECEIPT_ENV, None)
+    require(result == 0, "retained-source Gate 4 child returned a nonzero status")
+    require(
+        set(resolution_counts.values()) == {1},
+        "Gate 4 did not resolve each retained source exactly once: "
+        f"{resolution_counts}",
+    )
+    require(
+        shim_receipt_path.is_file()
+        and not shim_receipt_path.is_symlink(),
+        "Gate 4 nested dependencies emitted no retained-source resolution receipt",
+    )
+    try:
+        receipt_lines = read_stable_bytes(
+            shim_receipt_path, anchor=temporary_root
+        ).decode("utf-8", errors="strict").splitlines()
+    except UnicodeError as exc:
+        raise VerificationError(
+            "Gate 4 nested retained-source receipt is not strict UTF-8"
+        ) from exc
+    nested_counts, nested_pids = _validate_gate4_nested_resolution_receipt(
+        receipt_lines, replacements, os.getpid()
+    )
+    require(
+        observe_regular_file(shim_path, anchor=temporary_root) == shim_before,
+        "Gate 4 nested retained-source path shim changed during execution",
+    )
+    child_git_after = _read_retained_gate4_git_payloads()
+    require(
+        child_git_after == child_git_before,
+        "retained Gate 4 Git payloads changed during child verification",
+    )
+    for source_id, spec in GATE4_RETAINED_SOURCE_SPECS.items():
+        path = source_root / spec["temp_filename"]
+        require(
+            observe_regular_file(path, anchor=temporary_root)
+            == before[source_id],
+            f"{source_id}: temporary retained-source bytes changed in Gate 4",
+        )
+        print(
+            "Gate 4 retained source: "
+            f"{source_id}; commit={GATE4_RETAINED_GIT_COMMIT}; "
+            f"blob={spec['blob_oid']}; frozen_bytes={spec['frozen_bytes']}; "
+            f"frozen_sha256={spec['frozen_sha256']}"
+        )
+    print(
+        "Gate 4 nested retained-source resolutions: "
+        f"records={len(receipt_lines)}; child_processes={len(nested_pids)}"
+    )
+    print(f"Gate 4 retained-source boundary: {GATE4_RETAINED_SOURCE_BOUNDARY}")
+    return 0
 
 
 def verify_gate4_dependency(
@@ -1812,18 +3174,77 @@ def verify_gate4_dependency(
         "Gate 4 and Gate 5 bind different claim-ledger bytes",
     )
 
-    # Gate 4 deliberately runs compileall. Redirect those generated bytecode
-    # files to a verifier-owned temporary tree so dependency verification cannot
-    # mutate the Gate 5 source/evidence surface that is rehashed postflight.
-    with tempfile.TemporaryDirectory(prefix="gate5-gate4-pycache-") as raw_temp:
-        pycache_prefix = Path(raw_temp) / "pycache"
+    source_records = _load_gate4_external_source_records()
+    live_before = _observe_gate4_external_sources(source_records)
+    retained_payloads_before = _read_retained_gate4_git_payloads()
+
+    # Gate 4 deliberately runs compileall. Keep its bytecode and the two exact
+    # historical dependency materializations inside one verifier-owned temp
+    # tree. The child receives no caller-selected mapping: only this root and a
+    # flag select a frozen two-source resolver compiled into this verifier.
+    with tempfile.TemporaryDirectory(
+        prefix="gate5-gate4-retained-"
+    ) as raw_temp:
+        temporary_root = Path(raw_temp)
+        pycache_prefix = temporary_root / "pycache"
         pycache_prefix.mkdir()
-        stdout, _ = run_command(
-            [sys.executable, "-B", "scripts/verify_project_coherence_gate4.py"],
+        replacements, retained_before = _materialize_retained_gate4_sources(
+            temporary_root, retained_payloads_before
+        )
+        shim_token = secrets.token_hex(32)
+        shim_root, shim_receipt_path, shim_before = (
+            _materialize_gate4_nested_path_shim(
+                temporary_root, replacements, shim_token
+            )
+        )
+        _verify_retained_gate4_negative_contract(
+            retained_payloads_before, replacements, shim_token
+        )
+        stdout, stderr = run_command(
+            [
+                sys.executable,
+                "-I",
+                "-B",
+                str(Path(__file__).resolve()),
+                GATE4_RETAINED_SOURCE_CHILD_FLAG,
+            ],
             cwd=ROOT,
             timeout=480,
-            extra_env={"PYTHONPYCACHEPREFIX": str(pycache_prefix)},
+            extra_env={
+                "PYTHONPYCACHEPREFIX": str(pycache_prefix),
+                GATE4_RETAINED_SOURCE_ROOT_ENV: str(temporary_root.resolve()),
+                GATE4_RETAINED_SOURCE_PARENT_PID_ENV: str(os.getpid()),
+                GATE4_NESTED_PATH_SHIM_TOKEN_ENV: shim_token,
+                GATE4_NESTED_PATH_SHIM_RECEIPT_ENV: str(
+                    shim_receipt_path.resolve()
+                ),
+            },
         )
+        require(stderr == "", "retained-source Gate 4 child emitted stderr")
+        require(
+            set(temporary_root.iterdir())
+            == {
+                pycache_prefix,
+                temporary_root / "retained-gate4-sources",
+                shim_root,
+            },
+            "retained-source Gate 4 child wrote outside its three temp surfaces",
+        )
+        require(
+            observe_regular_file(
+                shim_root / "sitecustomize.py", anchor=temporary_root
+            )
+            == shim_before
+            and shim_receipt_path.is_file(),
+            "retained-source Gate 4 nested path shim changed or lacked a receipt",
+        )
+        for source_id, spec in GATE4_RETAINED_SOURCE_SPECS.items():
+            path = replacements[spec["registered_path"]]
+            require(
+                observe_regular_file(path, anchor=temporary_root)
+                == retained_before[source_id],
+                f"{source_id}: parent retained-source materialization changed",
+            )
     require(
         "Project Coherence integrated Gate 4 verification: PASS" in stdout,
         "integrated Gate 4 dependency receipt is missing",
@@ -1833,7 +3254,62 @@ def verify_gate4_dependency(
         in stdout,
         "Gate 4 PASS omitted its non-promotion boundary",
     )
+    require(
+        stdout.count(
+            f"Gate 4 retained-source boundary: {GATE4_RETAINED_SOURCE_BOUNDARY}"
+        )
+        == 1,
+        "Gate 4 retained-source child omitted or duplicated its boundary",
+    )
+    require(
+        stdout.count(
+            "Gate 4 nested retained-source resolutions: records=6; "
+            "child_processes=3"
+        )
+        == 1,
+        "Gate 4 retained-source child nested-resolution receipt drifted",
+    )
+    for source_id, spec in GATE4_RETAINED_SOURCE_SPECS.items():
+        expected_line = (
+            "Gate 4 retained source: "
+            f"{source_id}; commit={GATE4_RETAINED_GIT_COMMIT}; "
+            f"blob={spec['blob_oid']}; frozen_bytes={spec['frozen_bytes']}; "
+            f"frozen_sha256={spec['frozen_sha256']}"
+        )
+        require(
+            stdout.count(expected_line) == 1,
+            f"{source_id}: Gate 4 retained-source child receipt drifted",
+        )
+    require(
+        _observe_gate4_external_sources(source_records) == live_before,
+        "Gate 4 live external-source identities changed during dependency verification",
+    )
+    require(
+        _read_retained_gate4_git_payloads() == retained_payloads_before,
+        "retained Gate 4 Git payloads changed during dependency verification",
+    )
     return len(gate4_artifacts), sha256_file(GATE4_MANIFEST_PATH)
+
+
+def verify_gate4_retained_source_postflight() -> int:
+    """Recheck the nonportable historical dependency immediately before PASS."""
+    source_records = _load_gate4_external_source_records()
+    observations = _observe_gate4_external_sources(source_records)
+    payloads = _read_retained_gate4_git_payloads()
+    require(
+        set(observations) == set(source_records)
+        and set(payloads) == set(GATE4_RETAINED_SOURCE_SPECS),
+        "Gate 4 retained-source postflight surface drifted",
+    )
+    for source_id, payload in payloads.items():
+        materialized = _retained_gate4_materialized_payload(source_id, payload)
+        spec = GATE4_RETAINED_SOURCE_SPECS[source_id]
+        require(
+            len(materialized) == spec["frozen_bytes"]
+            and sha256_bytes(materialized) == spec["frozen_sha256"],
+            f"{source_id}: retained-source postflight materialization drifted",
+        )
+    return len(payloads)
 
 
 def verify_gate4_artifact_bytes() -> int:
@@ -3086,6 +4562,12 @@ def verify_packaged_harness_v2_surface() -> None:
     require(
         isinstance(source_files, dict)
         and len(source_files) == PACKAGED_HARNESS_V2_FILE_COUNT
+        and sum(
+            record.get("size_bytes", -1)
+            for record in source_files.values()
+            if isinstance(record, dict)
+        )
+        == PACKAGED_HARNESS_V2_TOTAL_BYTES
         and provenance.get("canonical_source_path") == "src/cas_harness_v2"
         and provenance.get("packaged_destination_path") == PACKAGED_HARNESS_V2_REL
         and provenance.get("copy_policy") == "BYTE_FOR_BYTE_SOURCE_MIRROR",
@@ -3135,7 +4617,83 @@ def verify_packaged_harness_v2_surface() -> None:
         and len(all_values[0]) == PACKAGED_HARNESS_V2_EXPORT_COUNT
         and len(set(all_values[0])) == PACKAGED_HARNESS_V2_EXPORT_COUNT
         and all(isinstance(name, str) and name for name in all_values[0]),
-        "Harness v2 public export inventory is not exactly 132 unique names",
+        "Harness v2 public export inventory does not match the exact configured count",
+    )
+
+
+def _literal_module_assignments(raw_path: str) -> dict[str, Any]:
+    path = ROOT / Path(*PurePosixPath(raw_path).parts)
+    tree = ast.parse(read_stable_text(path), filename=raw_path)
+    assignments: dict[str, Any] = {}
+    for node in tree.body:
+        if (
+            isinstance(node, ast.Assign)
+            and len(node.targets) == 1
+            and isinstance(node.targets[0], ast.Name)
+        ):
+            name = node.targets[0].id
+            try:
+                value = ast.literal_eval(node.value)
+            except (ValueError, TypeError):
+                continue
+            require(name not in assignments, f"duplicate literal assignment: {raw_path}:{name}")
+            assignments[name] = value
+    return assignments
+
+
+def verify_diagnostic_runtime_structure_only_surface() -> None:
+    """Bind the diagnostic-v2 carrier bytes and their schema/media vocabulary."""
+
+    require(
+        len(DIAGNOSTIC_RUNTIME_SCHEMA_VALUES)
+        == len(set(DIAGNOSTIC_RUNTIME_SCHEMA_VALUES))
+        == 19,
+        "diagnostic runtime schema inventory is not exactly 19 unique values",
+    )
+    require(
+        len(DIAGNOSTIC_RUNTIME_MEDIA_TYPE_VALUES)
+        == len(set(DIAGNOSTIC_RUNTIME_MEDIA_TYPE_VALUES))
+        == 17,
+        "diagnostic runtime media-type inventory is not exactly 17 unique values",
+    )
+    for raw_path, (expected_sha256, expected_bytes) in (
+        DIAGNOSTIC_RUNTIME_FILE_BINDINGS.items()
+    ):
+        path = ROOT / Path(*PurePosixPath(raw_path).parts)
+        payload = read_stable_bytes(path)
+        require(
+            len(payload) == expected_bytes
+            and hashlib.sha256(payload).hexdigest().upper() == expected_sha256,
+            f"diagnostic runtime source/test identity drifted: {raw_path}",
+        )
+    for raw_path, expected_constants in (
+        DIAGNOSTIC_RUNTIME_LITERAL_CONSTANTS.items()
+    ):
+        assignments = _literal_module_assignments(raw_path)
+        observed_constants = {
+            name: value
+            for name, value in assignments.items()
+            if name.endswith(("_SCHEMA", "_MEDIA_TYPE"))
+        }
+        require(
+            observed_constants == dict(expected_constants),
+            f"diagnostic runtime schema/media constants drifted: {raw_path}",
+        )
+
+    worker_path = (
+        "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/"
+        "stagec_diagnostic_archive_admission.py"
+    )
+    worker_assignments = _literal_module_assignments(worker_path)
+    observed_worker_constants = {
+        name: value
+        for name, value in worker_assignments.items()
+        if name.endswith(("_SCHEMA", "_MEDIA_TYPE"))
+    }
+    require(
+        observed_worker_constants
+        == dict(DIAGNOSTIC_WORKER_ADMISSION_LITERAL_CONSTANTS),
+        "worker diagnostic archive-admission schema/media constants drifted",
     )
 
 
@@ -3143,6 +4701,7 @@ def verify_stagec_design_package() -> dict[str, int]:
     """Verify the prospective Stage C carrier without granting run authority."""
 
     verify_packaged_harness_v2_surface()
+    verify_diagnostic_runtime_structure_only_surface()
     design = load_json(STAGEC_DESIGN_PATH)
     require(isinstance(design, dict), "Stage C design root is not an object")
     require_exact_keys(
@@ -3207,8 +4766,40 @@ def verify_stagec_design_package() -> dict[str, int]:
         },
         "Stage C status drifted or promotes execution/product authority",
     )
+    validation_receipts = design.get("current_validation_receipts")
+    require_exact_keys(
+        validation_receipts,
+        {
+            "full_suite_receipt_boundary",
+            "worker_authoritative",
+            "worker_focused",
+            "harness_v2_authoritative",
+            "harness_v2_focused",
+            "diagnostic_runtime_focused",
+            "packaged_kernel",
+        },
+        label="Stage C current validation receipts",
+    )
     require(
-        design.get("current_validation_receipts")
+        {
+            "worker_authoritative": validation_receipts.get("worker_authoritative"),
+            "worker_focused": validation_receipts.get("worker_focused"),
+            "harness_v2_authoritative": validation_receipts.get(
+                "harness_v2_authoritative"
+            ),
+            "harness_v2_focused": validation_receipts.get("harness_v2_focused"),
+            "packaged_kernel": {
+                "byte_mirrored_files": validation_receipts.get(
+                    "packaged_kernel", {}
+                ).get("byte_mirrored_files"),
+                "unique_exports": validation_receipts.get(
+                    "packaged_kernel", {}
+                ).get("unique_exports"),
+                "packaging_provenance_sha256": validation_receipts.get(
+                    "packaged_kernel", {}
+                ).get("packaging_provenance_sha256"),
+            },
+        }
         == {
             "worker_authoritative": {
                 "status": "PASS",
@@ -3294,6 +4885,264 @@ def verify_stagec_design_package() -> dict[str, int]:
         },
         "Stage C current validation receipts drifted or promote unsupported evidence",
     )
+    require(
+        validation_receipts.get("full_suite_receipt_boundary")
+        == (
+            "THE 576-WORKER AND 306-HARNESS RECEIPTS BELOW REMAIN THE EXACT "
+            "LAST-COMMITTED b96c2c12 CHECKPOINT RECEIPTS. THE NEW DIAGNOSTIC "
+            "RUNTIME TRANCHE NOW HAS SEPARATE AUTHORITATIVE SAME-PROCESS "
+            "RECEIPTS. HARNESS COLLECTED, STARTED, AND FINISHED 437 NODES: 431 "
+            "HAD EXACT ALL-PHASE PASS AND THE SIX EXACT NAMED FIT/DISPOSITION "
+            "NODES SETUP-SKIPPED AS RUNTIME-LOCK MISMATCH EVIDENCE, NOT PASS; "
+            "IT EMITTED 1305 ORDINARY REPORTS AND 163 PASSING SUBTESTS, RECORDED "
+            "ZERO COLLECTION OR INTERNAL ERRORS OR DESELECTIONS, LEFT THE "
+            "ISOLATED PYCACHE EMPTY, EXITED PYTEST 0, AND BOUND NODE-ID SHA-256 "
+            "85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8. "
+            "WORKER COLLECTED, STARTED, FINISHED, AND PASSED 594/594 NODES, "
+            "EMITTED 1782 ORDINARY REPORTS AND ZERO SUBTESTS, WARNINGS, ERRORS, "
+            "OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, EXITED PYTEST 0, "
+            "AND BOUND NODE-ID SHA-256 "
+            "B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B. "
+            "POSITIVE EXACT NUMERICAL EVIDENCE REMAINS THE SEPARATE PYTHON-3.12 "
+            "LOCKED FIT 10/10 AND ELIGIBLE DISPOSITION 3/3 RECEIPTS. ALL OF "
+            "THESE LOCAL RECEIPTS REMAIN STRUCTURE_ONLY / NON_AUTHORITY"
+        ),
+        "Stage C authoritative full-suite receipt boundary drifted",
+    )
+    diagnostic_focused = validation_receipts.get("diagnostic_runtime_focused")
+    require_exact_keys(
+        diagnostic_focused,
+        {
+            "status",
+            "authoritative_standard_harness_receipt",
+            "authoritative_worker_full_suite_receipt",
+            "execution_v2",
+            "per_attempt_lifecycle",
+            "phase_coordinator",
+            "calibration_fit",
+            "calibration_disposition",
+            "worker_archive_admission",
+        },
+        label="Stage C diagnostic runtime focused receipts",
+    )
+    require(
+        diagnostic_focused.get("status")
+        == (
+            "BOUNDED STRUCTURE_ONLY / NON_AUTHORITY RECEIPTS / AUTHORITATIVE "
+            "FULL-SUITE RECEIPTS ESTABLISHED"
+        )
+        and diagnostic_focused.get("authoritative_standard_harness_receipt")
+        == {
+            "status": (
+                "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / "
+                "SKIPS ARE MISMATCH EVIDENCE, NOT PASS"
+            ),
+            "python": "3.14",
+            "collected": 437,
+            "started": 437,
+            "finished": 437,
+            "all_phase_passed": 431,
+            "setup_skipped": 6,
+            "ordinary_reports": 1305,
+            "passed_subtests": 163,
+            "collection_errors": 0,
+            "internal_errors": 0,
+            "deselections": 0,
+            "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+            "pytest_exit_status": 0,
+            "python_ordinal_node_id_sha256": (
+                "85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8"
+            ),
+            "standard_runtime_versions": {
+                "numpy": "2.3.5",
+                "scipy": "1.17.1",
+                "scikit-learn": "1.8.0",
+            },
+            "required_fit_runtime_versions": {
+                "numpy": "2.5.1",
+                "scipy": "1.18.0",
+                "scikit-learn": "1.9.0",
+            },
+            "exact_setup_skipped_node_ids": REQUIRED_TEST_SUITES[
+                "Harness v2 kernel and history"
+            ]["expected_setup_skipped_nodeids"],
+            "positive_exact_lock_receipts": (
+                "SEPARATE PYTHON-3.12 FIT 10/10 AND ELIGIBLE DISPOSITION 3/3"
+            ),
+        }
+        and diagnostic_focused.get("authoritative_worker_full_suite_receipt")
+        == {
+            "status": (
+                "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY"
+            ),
+            "collected": 594,
+            "started": 594,
+            "finished": 594,
+            "passed": 594,
+            "total": 594,
+            "ordinary_reports": 1782,
+            "passed_subtests": 0,
+            "warning_count": 0,
+            "errors": 0,
+            "deselections": 0,
+            "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+            "pytest_exit_status": 0,
+            "python_ordinal_node_id_sha256": (
+                "B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B"
+            ),
+        },
+        "Stage C authoritative Harness/worker receipt profile drifted",
+    )
+    require(
+        diagnostic_focused.get("execution_v2")
+        == {
+            "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "src/cas_harness_v2/diagnostic_execution_protocol.py"
+            ][0],
+            "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "tests/cas_harness_v2/test_diagnostic_execution_protocol.py"
+            ][0],
+            "passed": 47,
+            "total": 47,
+            "status": "PASS",
+        }
+        and diagnostic_focused.get("per_attempt_lifecycle")
+        == {
+            "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "src/cas_harness_v2/diagnostic_lifecycle.py"
+            ][0],
+            "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "tests/cas_harness_v2/test_diagnostic_lifecycle.py"
+            ][0],
+            "passed": 55,
+            "total": 55,
+            "elapsed_seconds": "29.86",
+            "status": "PASS",
+        }
+        and diagnostic_focused.get("phase_coordinator")
+        == {
+            "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "src/cas_harness_v2/diagnostic_phase_coordinator.py"
+            ][0],
+            "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py"
+            ][0],
+            "collected_nodes": 8,
+            "split_receipts": [
+                {
+                    "scope": (
+                        "nonheavy registration, store binding, admission, "
+                        "contention, and inventory"
+                    ),
+                    "passed": 5,
+                    "total": 5,
+                    "elapsed_seconds": "50.70",
+                },
+                {
+                    "scope": (
+                        "exact 480-row rejected phase plus closed nonreporting payload"
+                    ),
+                    "passed": 2,
+                    "total": 2,
+                    "elapsed_seconds": "80.32",
+                },
+                {
+                    "scope": (
+                        "exact clean 480-row reconciliation and aggregate outcome access"
+                    ),
+                    "passed": 1,
+                    "total": 1,
+                    "elapsed_seconds": "238.10",
+                },
+            ],
+            "status": "ALL 8 NODES PASS IN BOUNDED SPLIT RECEIPTS",
+        },
+        "Stage C execution/lifecycle/phase focused receipts drifted",
+    )
+    require(
+        diagnostic_focused.get("calibration_fit")
+        == {
+            "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "src/cas_harness_v2/diagnostic_calibration_fit.py"
+            ][0],
+            "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "tests/cas_harness_v2/test_diagnostic_calibration_fit.py"
+            ][0],
+            "passed": 10,
+            "total": 10,
+            "elapsed_seconds": "356.75",
+            "status": "EXACT LOCKED PASS",
+        }
+        and diagnostic_focused.get("calibration_disposition")
+        == {
+            "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "src/cas_harness_v2/diagnostic_calibration_disposition.py"
+            ][0],
+            "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py"
+            ][0],
+            "collected_nodes": 11,
+            "status": (
+                "ALL 11 CURRENT-BYTE NODES PASS ACROSS TWO BOUNDED SPLIT "
+                "RECEIPTS / NOT A SINGLE-PROCESS AUTHORITATIVE FULL-SUITE RECEIPT"
+            ),
+            "split_receipts": [
+                {
+                    "scope": (
+                        "final current-byte early rejection, SQLite, public API, "
+                        "and reason-shape selector"
+                    ),
+                    "passed": 8,
+                    "total": 8,
+                    "deselected": 3,
+                    "elapsed_seconds": "210.72",
+                },
+                {
+                    "scope": "final current-byte eligible exact-lock freeze path",
+                    "passed": 3,
+                    "total": 3,
+                    "deselected": 8,
+                    "elapsed_seconds": "870.18",
+                },
+            ],
+            "unexecuted_positive_branch": "POST_ACCESS_NO_ELIGIBLE_THRESHOLD",
+        }
+        and diagnostic_focused.get("worker_archive_admission")
+        == {
+            "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                (
+                    "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/"
+                    "runtime/stagec_diagnostic_archive_admission.py"
+                )
+            ][0],
+            "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                (
+                    "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/"
+                    "test_stagec_diagnostic_archive_admission.py"
+                )
+            ][0],
+            "passed": 18,
+            "total": 18,
+            "status": "PASS / WORKER-LOCAL ONLY",
+        },
+        "Stage C fit/disposition/worker-admission receipts drifted",
+    )
+    require(
+        validation_receipts.get("packaged_kernel")
+        == {
+            "byte_mirrored_files": PACKAGED_HARNESS_V2_FILE_COUNT,
+            "unique_exports": PACKAGED_HARNESS_V2_EXPORT_COUNT,
+            "packaging_provenance_sha256": PACKAGED_HARNESS_V2_PROVENANCE_SHA256,
+            "canonical_and_mirror_init_sha256": (
+                "115852A181C19839110E2E5E14A6814991087C0299ABFDF42CEB8EC744C0355A"
+            ),
+            "packaging_allowlist_source_sha256": (
+                "4582E2A8DDED2330CD8557608FBAFBD5FF37D6AC2E51259D862702A3562E89D4"
+            ),
+            "focused_mirror_tests_passed": 12,
+        },
+        "Stage C packaged-kernel validation receipt drifted",
+    )
     non_authority = design.get("non_authority")
     require(
         isinstance(non_authority, list)
@@ -3361,6 +5210,11 @@ def verify_stagec_design_package() -> dict[str, int]:
     )
     supporting_candidates = (
         capture.get("repaired_supporting_structure_only_candidates")
+        if isinstance(capture, dict)
+        else None
+    )
+    completed_diagnostic_candidates = (
+        capture.get("completed_diagnostic_runtime_structure_only_candidates")
         if isinstance(capture, dict)
         else None
     )
@@ -3446,7 +5300,10 @@ def verify_stagec_design_package() -> dict[str, int]:
         and isinstance(capture_blockers, list)
         and len(capture_blockers) >= 5
         and all(isinstance(row, str) for row in capture_blockers)
-        and any("durable" in row.lower() for row in capture_blockers)
+        and any(
+            "durable" in row.lower() or "worm" in row.lower()
+            for row in capture_blockers
+        )
         and any("external anchor" in row.lower() for row in capture_blockers)
         and any(
             "model/tokenizer file" in row.lower()
@@ -3454,7 +5311,16 @@ def verify_stagec_design_package() -> dict[str, int]:
             for row in capture_blockers
         )
         and any("diagnostic Study" in row for row in capture_blockers)
-        and any("terminal-receipt v2" in row for row in capture_blockers),
+        and (
+            "authorized HTTP and container wiring for the diagnostic "
+            "coordinator and worker-local archive admission path"
+        )
+        in capture_blockers
+        and (
+            "positive POST_ACCESS_NO_ELIGIBLE_THRESHOLD branch under the "
+            "separate exact Python-3.12 runtime"
+        )
+        in capture_blockers,
         "Stage C repaired capture boundary drifted or claims durable/runtime authority",
     )
     require_exact_keys(
@@ -3518,8 +5384,15 @@ def verify_stagec_design_package() -> dict[str, int]:
                 "CAPTURE REQUEST / SCHEMA, MEDIA-TYPE, BYTE, AND IDENTITY "
                 "COERCION FORBIDDEN"
             ),
-            "execution_order": "NOT_ATTESTED",
-            "retry_evidence": "NOT_ATTESTED / NO DURABLE ATTEMPT REGISTRY",
+            "execution_order": (
+                "NOT_ATTESTED BY THE PLAN CARRIER / ADDITIVE SAME-HOST PHASE "
+                "COORDINATOR BINDS EXACT PLAN ORDER"
+            ),
+            "retry_evidence": (
+                "NOT_ATTESTED BY THE PLAN CARRIER / ADDITIVE LIFECYCLE AND "
+                "PHASE STORE ENFORCE ONE LOCAL ATTEMPT PER SUBJECT / "
+                "OUT-OF-BAND PREVENTION OPEN"
+            ),
         }
         and local_archive
         == {
@@ -3564,15 +5437,203 @@ def verify_stagec_design_package() -> dict[str, int]:
                 "CAPTURE ARCHIVE -> WORKER OUTPUT -> TERMINAL RECEIPT -> OUTCOME INDEX"
             ),
             "accepted_terminal_rows": "COMPLETED ONLY",
-            "execution_order": "NOT_ATTESTED",
-            "retry_count": "NOT_ATTESTED",
-            "failed_row_coordinator": "OPEN / NOT PROVIDED",
+            "execution_order": (
+                "ADDITIVE SAME-HOST SQLITE PHASE COORDINATOR BINDS EXACT PLAN "
+                "ORDER / TRUSTED EXECUTION AND TRUSTED TIME NOT ESTABLISHED"
+            ),
+            "retry_count": (
+                "ADDITIVE LIFECYCLE AND PHASE COORDINATOR ENFORCE ONE ATTEMPT "
+                "PER SUBJECT INSIDE THEIR SELECTED LOCAL STORE / OUT-OF-BAND "
+                "PREVENTION NOT ESTABLISHED"
+            ),
+            "failed_row_coordinator": (
+                "STRUCTURE_ONLY CANDIDATE PROVIDED / RECONCILED_REJECTED "
+                "CLOSES NONREPORTING WITHOUT REPLACEMENT"
+            ),
             "worker_archive_admission": (
-                "OPEN / EXACT REF-AND-BYTES PROJECTION EXISTS BUT STRICT ADAPTER "
-                "FROM LOADED WORKER ARCHIVE OBJECT IS NOT PROVIDED"
+                "WORKER-LOCAL FACTORY PROVIDED / HTTP AND CONTAINER WIRING OPEN"
             ),
         },
         "Stage C supporting STRUCTURE_ONLY candidate boundary drifted",
+    )
+    require_exact_keys(
+        completed_diagnostic_candidates,
+        {
+            "scope",
+            "execution_v2",
+            "per_attempt_lifecycle",
+            "phase_coordinator",
+            "worker_archive_admission",
+            "calibration_fit",
+            "calibration_disposition",
+        },
+        label="Stage C completed diagnostic-runtime STRUCTURE_ONLY candidates",
+    )
+    require(
+        completed_diagnostic_candidates
+        == {
+            "scope": (
+                "STRUCTURE_ONLY / NON_AUTHORITY / NO MODEL OR PROVIDER "
+                "EXECUTION / NO PACKET, EVALUATION, SCIENTIFIC, PRODUCT, "
+                "LICENSE, OR DISCLOSURE AUTHORITY"
+            ),
+            "execution_v2": {
+                "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "src/cas_harness_v2/diagnostic_execution_protocol.py"
+                ][0],
+                "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "tests/cas_harness_v2/test_diagnostic_execution_protocol.py"
+                ][0],
+                "schemas": [
+                    "cas_harness_v2.diagnostic_stagec_execution_contract.v2",
+                    "cas_harness_v2.diagnostic_child_execution_binding.v2",
+                    "cas_harness_v2.diagnostic_worker_authorization.v2",
+                    "cas_harness_v2.diagnostic_child_terminal_receipt.v2",
+                ],
+                "terminal_statuses": [
+                    "COMPLETED",
+                    "FAILED",
+                    "INDETERMINATE",
+                    "REJECTED",
+                    "EXPIRED",
+                ],
+                "boundary": (
+                    "EXACT PROSPECTIVE CARRIERS ONLY / NOT AUTHENTICATION OR "
+                    "EXECUTION"
+                ),
+            },
+            "per_attempt_lifecycle": {
+                "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "src/cas_harness_v2/diagnostic_lifecycle.py"
+                ][0],
+                "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "tests/cas_harness_v2/test_diagnostic_lifecycle.py"
+                ][0],
+                "profile": (
+                    "ONE ATTEMPT / CREATE-ONLY / IN-MEMORY PROCESS LOCK OR "
+                    "SAME-HOST SQLITE FILE"
+                ),
+                "terminal_statuses": [
+                    "COMPLETED",
+                    "FAILED",
+                    "INDETERMINATE",
+                    "REJECTED",
+                    "EXPIRED",
+                ],
+                "durability_boundary": (
+                    "NO REPLICATION, HOST-LOSS AUTHORITY, TRUSTED TIME, WORM, "
+                    "OR OUT-OF-BAND EXECUTION PREVENTION"
+                ),
+            },
+            "phase_coordinator": {
+                "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "src/cas_harness_v2/diagnostic_phase_coordinator.py"
+                ][0],
+                "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py"
+                ][0],
+                "roster": (
+                    "EXACT PLAN-ORDERED 480 CASES / 160 GROUPS / ONE ATTEMPT "
+                    "PER SUBJECT"
+                ),
+                "states": [
+                    "OPEN",
+                    "RECONCILED_CLEAN",
+                    "RECONCILED_REJECTED",
+                    "OUTCOME_ACCESSED",
+                ],
+                "clean_access_rule": (
+                    "ONE AGGREGATE OUTCOME ACCESS ONLY AFTER EXACT CLEAN "
+                    "480-ROW RECONCILIATION"
+                ),
+                "rejected_rule": (
+                    "ANY TERMINAL REJECTION CLOSES NONREPORTING WITHOUT "
+                    "REPLACEMENT OR OUTCOME ACCESS"
+                ),
+                "store_boundary": (
+                    "SAME-HOST SQLITE IDENTITY BINDING / NOT REPLICATED OR WORM"
+                ),
+            },
+            "worker_archive_admission": {
+                "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "app/runtime/stagec_diagnostic_archive_admission.py"
+                    )
+                ][0],
+                "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    (
+                        "noetic-compass-scaffold/noetic-compass/live-trace-worker/"
+                        "tests/test_stagec_diagnostic_archive_admission.py"
+                    )
+                ][0],
+                "rule": (
+                    "FRESHLY LOAD AND SEMANTICALLY REPLAY THE EXACT SEVEN-MEMBER "
+                    "LOCAL ARCHIVE, THEN BIND ONE DIAGNOSTIC-V2 ADMISSION DOCUMENT"
+                ),
+                "boundary": (
+                    "WORKER-LOCAL FACTORY ONLY / CASE ORDINAL DECLARED BY "
+                    "AUTHORIZATION AND REQUIRES CONTROLLER REPLAY / NO HTTP OR "
+                    "CONTAINER WIRING"
+                ),
+            },
+            "calibration_fit": {
+                "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "src/cas_harness_v2/diagnostic_calibration_fit.py"
+                ][0],
+                "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "tests/cas_harness_v2/test_diagnostic_calibration_fit.py"
+                ][0],
+                "runtime_lock": {
+                    "numpy": "2.5.1",
+                    "scikit-learn": "1.9.0",
+                    "scipy": "1.18.0",
+                },
+                "algorithm": (
+                    "INDEPENDENT STANDARD-SCALER PLUS CLASS-BALANCED L2 "
+                    "LOGISTIC-REGRESSION FITS FOR LAYER 18 AND LAYER 0 / LBFGS / "
+                    "C 0.25 / MAX_ITER 1000 / RANDOM_STATE 42"
+                ),
+                "threshold_rule": (
+                    "EXACT BINARY64 CANDIDATE DERIVATION / BOTH CLEAN "
+                    "SPECIFICITIES AT LEAST 0.90 / MAXIMIZE BALANCED ACCURACY / "
+                    "TIE HIGHER THRESHOLD"
+                ),
+                "boundary": (
+                    "POST-ACCESS DETERMINISTIC STRUCTURAL FIT / SCIENTIFIC "
+                    "CORRECTNESS NOT ESTABLISHED"
+                ),
+            },
+            "calibration_disposition": {
+                "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "src/cas_harness_v2/diagnostic_calibration_disposition.py"
+                ][0],
+                "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py"
+                ][0],
+                "outcomes": [
+                    "CALIBRATION_FROZEN_NONREPORTING",
+                    "CALIBRATION_REJECTED_NONREPORTING",
+                ],
+                "slot": (
+                    "EXACTLY ONE CREATE-ONLY SAME-FILE SQLITE DISPOSITION PER "
+                    "PHASE SUBJECT"
+                ),
+                "permanent_prohibitions": (
+                    "REPORTING, PACKET V2, EVALUATION AUTHORITY, CLAIM "
+                    "PROMOTION, PRODUCT ROUTE, PUBLIC RELEASE, AND LICENSE GRANT"
+                ),
+                "receipt_boundary": (
+                    "ALL 11 CURRENT-BYTE NODES PASS ACROSS TWO BOUNDED SPLIT "
+                    "RECEIPTS; THOSE SPLITS ARE NOT THE SEPARATE AUTHORITATIVE "
+                    "FULL-SUITE RECEIPT, WHOSE STANDARD RUNTIME SETUP-SKIPPED "
+                    "THE SIX EXACT LOCK-MISMATCH NODES AS MISMATCH EVIDENCE "
+                    "RATHER THAN PASS; THE POSITIVE "
+                    "POST_ACCESS_NO_ELIGIBLE_THRESHOLD BRANCH REMAINS PENDING"
+                ),
+            },
+        },
+        "Stage C completed diagnostic-runtime STRUCTURE_ONLY candidates drifted",
     )
     for raw_path, expected_sha256 in (
         (
@@ -3976,7 +6037,7 @@ def verify_stagec_design_package() -> dict[str, int]:
         and all(
             isinstance(row, dict)
             and isinstance(row.get("status"), str)
-            and row["status"].startswith("OPEN")
+            and "OPEN" in row["status"]
             for row in obligations
         ),
         "Stage C implementation blockers were removed or malformed",
@@ -3986,30 +6047,41 @@ def verify_stagec_design_package() -> dict[str, int]:
         isinstance(schema_blockers, list)
         and any(
             row.get("blocker_id")
-            == "diagnostic-family-is-structural-and-not-worker-authorized"
-            and "DIAGNOSTIC_CALIBRATION" in row.get("fact", "")
-            and "typed v2 carriers" in row.get("fact", "")
-            for row in schema_blockers
-            if isinstance(row, dict)
-        )
-        and any(
-            row.get("blocker_id") == "local-archive-is-not-durable-authority"
-            and "not WORM" in row.get("fact", "")
-            and "external anchor" in row.get("fact", "")
-            for row in schema_blockers
-            if isinstance(row, dict)
-        )
-        and any(
-            row.get("blocker_id") == "post-terminal-order-and-retry-not-attested"
-            and "NOT_ATTESTED" in row.get("fact", "")
-            and "failed rows" in row.get("fact", "")
+            == "gate4-retained-external-source-is-local-nonportable"
+            and GATE4_RETAINED_GIT_COMMIT in row.get("fact", "")
+            and GATE4_RETAINED_SOURCE_BOUNDARY in row.get("fact", "")
+            and "not current-source validation" in row.get("fact", "")
             for row in schema_blockers
             if isinstance(row, dict)
         )
         and any(
             row.get("blocker_id")
-            == "diagnostic-freeze-or-reject-disposition-not-enforced"
-            and "does not require" in row.get("fact", "")
+            == "diagnostic-family-is-structural-and-not-runtime-authorized"
+            and "typed execution-v2 carriers" in row.get("fact", "")
+            and "HTTP/container runtime" in row.get("fact", "")
+            for row in schema_blockers
+            if isinstance(row, dict)
+        )
+        and any(
+            row.get("blocker_id") == "local-archive-is-not-durable-authority"
+            and "WORM" in row.get("fact", "")
+            and "external anchor" in row.get("fact", "")
+            for row in schema_blockers
+            if isinstance(row, dict)
+        )
+        and any(
+            row.get("blocker_id")
+            == "local-phase-order-is-not-trusted-execution-authority"
+            and "same-host SQLite coordination" in row.get("fact", "")
+            and "not trusted" in row.get("fact", "")
+            for row in schema_blockers
+            if isinstance(row, dict)
+        )
+        and any(
+            row.get("blocker_id")
+            == "diagnostic-freeze-or-reject-is-structural-only"
+            and "authoritative full-suite replay" in row.get("fact", "")
+            and "POST_ACCESS_NO_ELIGIBLE_THRESHOLD" in row.get("fact", "")
             for row in schema_blockers
             if isinstance(row, dict)
         ),
@@ -4147,12 +6219,15 @@ def verify_stagec_design_package() -> dict[str, int]:
         isinstance(activation, dict)
         and set(activation) == {"stagec-calibration", "stagec-evaluation"}
         and activation["stagec-calibration"].startswith("FORBIDDEN UNTIL")
-        and "STRUCTURAL DIAGNOSTIC C-CAL FAMILY"
+        and "COMPLETED STRUCTURE_ONLY EXECUTION-V2"
         in activation["stagec-calibration"]
-        and "TYPED AUTHORIZATION/TERMINAL-V2 CARRIERS"
+        and "AUTHORIZED HTTP/CONTAINER RUNTIME"
         in activation["stagec-calibration"]
-        and "STRICT WORKER-ARCHIVE ADMISSION" in activation["stagec-calibration"]
-        and "MANDATORY FREEZE-OR-REJECT DISPOSITION"
+        and "WORKER-LOCAL ARCHIVE ADMISSION" in activation["stagec-calibration"]
+        and "LOCKED FIT" in activation["stagec-calibration"]
+        and "FREEZE-OR-REJECT CANDIDATES"
+        in activation["stagec-calibration"]
+        and "AUTHORITATIVE FULL-SUITE INTEGRATION RECEIPT"
         in activation["stagec-calibration"]
         and activation["stagec-evaluation"].startswith("FORBIDDEN UNTIL C-CAL")
         and "DIAGNOSTIC NONREPORTING DISPOSITION"
@@ -4274,7 +6349,8 @@ def verify_stagec_design_package() -> dict[str, int]:
         "320 independent",
         "`preregistration.json`, execution amendment",
         "General detection, prevention, blocking, removal, steering",
-        "independently fit and freeze one layer-18 detector and one layer-0",
+        "locked fitting candidate independently derives one layer-18",
+        "one layer-0 detector in a single nonreporting bundle",
         "inside every matched triplet",
         "no-truncation",
         "surface bundle",
@@ -4283,8 +6359,9 @@ def verify_stagec_design_package() -> dict[str, int]:
         "PCG64DXSM",
         "hash cycle",
         "Generator.integers",
-        "C-Cal rows are terminal",
-        "C-Cal creates no Evidence Packet v2",
+        "aggregate access only after all 480 clean rows are terminal",
+        "reconcile C-Cal; C-Cal creates no",
+        "Evidence Packet v2.",
     ):
         require(marker in readme, f"Stage C README omits {marker!r}")
     return {
@@ -4324,6 +6401,7 @@ def verify_review_matrix(
             "open_criterion_count",
             "disposition_counts",
             "kernel_schemas",
+            "kernel_media_types",
             "review_basis",
             "receipts",
             "criteria",
@@ -4389,15 +6467,39 @@ def verify_review_matrix(
             "cas_harness.stagec.local_capture_archive.v1",
             "cas_harness_v2.stagec_worker_output.v1",
             "cas_harness_v2.stagec_post_terminal_study_outcome_index.v1",
+            *DIAGNOSTIC_RUNTIME_SCHEMA_VALUES,
             "cas_harness_v2.evidence_packet.v2",
         ],
         "Gate 5 review matrix kernel-schema list drifted",
+    )
+    require(
+        matrix.get("kernel_media_types")
+        == list(DIAGNOSTIC_RUNTIME_MEDIA_TYPE_VALUES),
+        "Gate 5 review matrix diagnostic media-type list drifted",
     )
     require(
         isinstance(matrix.get("review_basis"), str)
         and "No criterion creates ACCEPT, LICENSED, an enabled public route, or a product route."
         in matrix["review_basis"],
         "Gate 5 review basis omits its non-promotion boundary",
+    )
+    require(
+        "The new diagnostic-runtime tranche now has separate authoritative same-process receipts."
+        in matrix["review_basis"]
+        and "431 had exact all-phase PASS" in matrix["review_basis"]
+        and "six named numerical exact-lock nodes" in matrix["review_basis"]
+        and "mismatch evidence rather than PASS" in matrix["review_basis"]
+        and "163 passing subtests" in matrix["review_basis"]
+        and "passed 594/594 nodes" in matrix["review_basis"]
+        and "1,782 ordinary reports" in matrix["review_basis"]
+        and "isolated pycache remained empty" in matrix["review_basis"]
+        and "17 byte-identical Python files" in matrix["review_basis"]
+        and "300 unique exports" in matrix["review_basis"]
+        and "1,072,549 bytes" in matrix["review_basis"]
+        and GATE4_RETAINED_GIT_COMMIT in matrix["review_basis"]
+        and GATE4_RETAINED_SOURCE_BOUNDARY in matrix["review_basis"]
+        and "external-source portability remains OPEN" in matrix["review_basis"],
+        "Gate 5 review basis omits the diagnostic-runtime receipt/lock boundary",
     )
     criteria = matrix.get("criteria")
     require(
@@ -4506,6 +6608,24 @@ def verify_review_matrix(
                     f"{criterion_id}: implemented scope boundary does not cite an OPEN criterion",
                 )
                 implemented_remaining_refs[criterion_id] = referenced_ids
+    gate4_structural = criteria_by_id.get("G5-INTEGRATION-001")
+    gate4_open = criteria_by_id.get("G5-INTEGRATION-002")
+    require(
+        isinstance(gate4_structural, dict)
+        and GATE4_RETAINED_GIT_COMMIT
+        in gate4_structural.get("observed_result", "")
+        and GATE4_RETAINED_SOURCE_BOUNDARY
+        in gate4_structural.get("observed_result", "")
+        and "portable authorized exact external-source dependency"
+        in gate4_structural.get("remaining_obligation", "")
+        and isinstance(gate4_open, dict)
+        and "LOCAL NONPORTABLE" in gate4_open.get("observed_result", "")
+        and "NO CURRENT-SOURCE EQUIVALENCE"
+        in gate4_open.get("observed_result", "")
+        and "external-source portability/current-source-equivalence blocker"
+        in gate4_open.get("remaining_obligation", ""),
+        "Gate 4 review criteria omit the retained-source portability boundary",
+    )
     require(
         len(criterion_ids) == len(set(criterion_ids)),
         "review matrix has duplicate criterion IDs",
@@ -4606,6 +6726,7 @@ def verify_review_matrix(
             "stageb_runner_preparation",
             "stageb_qwen_engineering_execution",
             "stagec_qwen_prompt_injection_design",
+            "diagnostic_runtime_structure_only",
             "worker_protocol_kernel",
             "worker_protocol_bridge_and_durable_seams",
             "prospective_lifecycle_sqlite_dark_route",
@@ -4614,12 +6735,53 @@ def verify_review_matrix(
             "instruction_integrity_shadow_scanner",
             "worker_checkpoints",
             "api_launcher_fleet_state",
+            "gate4_retained_source_dependency",
             "successor_dependency_container_candidate",
             "local_test_runner",
             "raw_build_and_security_evidence",
             "historical_recovery",
         },
         label="review matrix receipts",
+    )
+    retained_gate4_receipt = receipts.get("gate4_retained_source_dependency")
+    require(
+        retained_gate4_receipt
+        == {
+            "status": "HISTORICAL RETAINED DEPENDENCY ONLY",
+            "gate4_status": "OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN",
+            "local_repository": str(GATE4_RETAINED_GIT_REPOSITORY),
+            "commit": GATE4_RETAINED_GIT_COMMIT,
+            "live_registered_path_drifted": True,
+            "local_nonportable": True,
+            "current_source_equivalence": False,
+            "network_fetch_authorized": False,
+            "replacement_objects_authorized": False,
+            "lazy_fetch_authorized": False,
+            "retained_source_count": 2,
+            "nested_resolution_processes": 3,
+            "nested_resolution_records": 6,
+            "boundary": GATE4_RETAINED_SOURCE_BOUNDARY,
+            "sources": [
+                {
+                    "source_id": source_id,
+                    "registered_path": spec["registered_path"],
+                    "frozen_sha256": spec["frozen_sha256"].lower(),
+                    "frozen_bytes": spec["frozen_bytes"],
+                    "observed_live_sha256": spec[
+                        "observed_live_sha256"
+                    ].lower(),
+                    "observed_live_bytes": spec["observed_live_bytes"],
+                    "git_path": spec["git_path"],
+                    "git_mode": "100644",
+                    "blob_oid": spec["blob_oid"],
+                    "blob_sha256": spec["blob_sha256"].lower(),
+                    "blob_bytes": spec["blob_bytes"],
+                    "materialization": spec["materialization"],
+                }
+                for source_id, spec in GATE4_RETAINED_SOURCE_SPECS.items()
+            ],
+        },
+        "review-matrix retained Gate 4 dependency receipt drifted",
     )
     kernel_receipt = receipts.get("kernel_focused")
     require(isinstance(kernel_receipt, dict), "kernel receipt is missing")
@@ -4645,14 +6807,10 @@ def verify_review_matrix(
     )
     require(
         type(kernel_receipt.get("collected_tests")) is int
-        and kernel_receipt["collected_tests"]
-        == REQUIRED_TEST_SUITES["Harness v2 kernel and history"]["expected_tests"]
-        and kernel_receipt.get("started_tests")
-        == REQUIRED_TEST_SUITES["Harness v2 kernel and history"]["expected_tests"]
-        and kernel_receipt.get("finished_tests")
-        == REQUIRED_TEST_SUITES["Harness v2 kernel and history"]["expected_tests"]
-        and kernel_receipt.get("passed_subtests")
-        == REQUIRED_TEST_SUITES["Harness v2 kernel and history"]["expected_subtests"]
+        and kernel_receipt["collected_tests"] == 306
+        and kernel_receipt.get("started_tests") == 306
+        and kernel_receipt.get("finished_tests") == 306
+        and kernel_receipt.get("passed_subtests") == 151
         and kernel_receipt.get("ordinary_reports") == 918
         and kernel_receipt.get("warning_count") == 0
         and kernel_receipt.get("collection_errors") == 0
@@ -4661,12 +6819,13 @@ def verify_review_matrix(
         and kernel_receipt.get("pycache_status") == "EMPTY AFTER AUTHORITATIVE REPLAY"
         and kernel_receipt.get("pytest_exit_status") == 0
         and kernel_receipt.get("executed_test_ids_sha256")
-        == REQUIRED_TEST_SUITES["Harness v2 kernel and history"][
-            "expected_test_ids_sha256"
-        ].lower()
-        and "authoritative same-process PASS receipt" in kernel_receipt.get("scope", "")
+        == "49bd9090b3cf8990a213bf91cb95e154792444221cc0015f1bca7d2e77c5d293"
+        and "LAST COMMITTED b96c2c12 CHECKPOINT RECEIPT"
+        in kernel_receipt.get("scope", "")
+        and "separate new 437-node authoritative receipt is recorded"
+        in kernel_receipt.get("scope", "")
         and "not hermetic or independently attested" in kernel_receipt.get("scope", ""),
-        "review-matrix Harness v2 receipt drifted",
+        "review-matrix retained Harness v2 checkpoint receipt drifted",
     )
     for receipt_name, suite_name, required_scope_marker in (
         (
@@ -4882,7 +7041,16 @@ def verify_review_matrix(
             "diagnostic_study_focused_tests",
             "post_terminal_outcome_focused_tests",
             "local_capture_archive_focused_tests",
+            "diagnostic_execution_v2_focused_tests",
+            "diagnostic_lifecycle_focused_tests",
+            "diagnostic_phase_coordinator_focused_tests",
+            "diagnostic_calibration_fit_focused_tests",
+            "diagnostic_calibration_disposition_focused_tests",
+            "diagnostic_runtime_union_focused_tests",
+            "worker_archive_admission_focused_tests",
+            "new_full_suite_authoritative_replay_status",
             "packaged_mirror_files",
+            "packaged_mirror_bytes",
             "package_exported_names",
             "package_unique_exported_names",
             "packaging_provenance_sha256",
@@ -4922,7 +7090,19 @@ def verify_review_matrix(
             "diagnostic_study_focused_tests": 46,
             "post_terminal_outcome_focused_tests": 29,
             "local_capture_archive_focused_tests": 32,
+            "diagnostic_execution_v2_focused_tests": 47,
+            "diagnostic_lifecycle_focused_tests": 55,
+            "diagnostic_phase_coordinator_focused_tests": 8,
+            "diagnostic_calibration_fit_focused_tests": 10,
+            "diagnostic_calibration_disposition_focused_tests": 11,
+            "diagnostic_runtime_union_focused_tests": 131,
+            "worker_archive_admission_focused_tests": 18,
+            "new_full_suite_authoritative_replay_status": (
+                "AUTHORITATIVE SAME-PROCESS RECEIPTS ESTABLISHED / "
+                "STRUCTURE_ONLY / NON_AUTHORITY"
+            ),
             "packaged_mirror_files": PACKAGED_HARNESS_V2_FILE_COUNT,
+            "packaged_mirror_bytes": PACKAGED_HARNESS_V2_TOTAL_BYTES,
             "package_exported_names": PACKAGED_HARNESS_V2_EXPORT_COUNT,
             "package_unique_exported_names": PACKAGED_HARNESS_V2_EXPORT_COUNT,
             "packaging_provenance_sha256": (
@@ -4952,24 +7132,285 @@ def verify_review_matrix(
         and "160-group/480-case diagnostic Study plan" in stagec_scope
         and "create-only host-local seven-member archive" in stagec_scope
         and "acyclic completed-row post-terminal outcome carrier" in stagec_scope
-        and "12 byte-identical files" in stagec_scope
-        and "132 unique public exports" in stagec_scope
+        and "17 byte-identical Python files" in stagec_scope
+        and "1,072,549 bytes" in stagec_scope
+        and "300 unique public exports" in stagec_scope
         and PACKAGED_HARNESS_V2_PROVENANCE_SHA256.lower() in stagec_scope
         and "IN_MEMORY / NOT_DURABLY_RETAINED" in stagec_scope
         and "index and four raw arrays" in stagec_scope
         and "process-local" in stagec_scope
         and "capture-time model/tokenizer file revalidation" in stagec_scope
-        and "typed diagnostic worker authorization and terminal carriers"
-        in stagec_scope
-        and "strict admission adapter" in stagec_scope
+        and "exact diagnostic execution-v2 carriers" in stagec_scope
+        and "one-attempt create-only lifecycle state" in stagec_scope
+        and "exact 480-row phase reconciliation" in stagec_scope
+        and "deterministic locked calibration fit" in stagec_scope
+        and "freeze-or-reject nonreporting disposition" in stagec_scope
+        and "worker-local archive admission" in stagec_scope
+        and "without HTTP or container wiring" in stagec_scope
         and "WORM retention" in stagec_scope
         and "trusted external anchor" in stagec_scope
-        and "failed-row coordination" in stagec_scope
+        and "six exact setup skips are mismatch evidence rather than PASS"
+        in stagec_scope
+        and "new authoritative same-process Harness and worker receipts are established"
+        in stagec_scope
         and "no p0/p1 inside the declared structure_only / non_authority scope"
         in stagec_scope_lower
         and "Execution remains blocked" in stagec_scope,
         "review-matrix Stage C design receipt drifted or promotes capability",
     )
+    diagnostic_receipt = receipts.get("diagnostic_runtime_structure_only")
+    require(
+        isinstance(diagnostic_receipt, dict),
+        "review-matrix diagnostic runtime receipt is missing",
+    )
+    require_exact_keys(
+        diagnostic_receipt,
+        {
+            "status",
+            "same_process_timeout_seconds",
+            "timeout_claim_effect",
+            "authoritative_harness_full_suite",
+            "authoritative_worker_full_suite",
+            "focused_harness",
+            "worker_archive_admission",
+            "packaged_kernel",
+            "model_runs",
+            "provider_calls",
+            "runpod_used",
+            "known_spend_usd",
+            "independently_reproduced",
+            "scope",
+        },
+        label="review-matrix diagnostic runtime receipt",
+    )
+    harness_suite = REQUIRED_TEST_SUITES["Harness v2 kernel and history"]
+    worker_suite = REQUIRED_TEST_SUITES["Live trace worker complete"]
+    require(
+        diagnostic_receipt.get("status")
+        == (
+            "STRUCTURE_ONLY / NON_AUTHORITY / AUTHORITATIVE FULL-SUITE "
+            "RECEIPTS ESTABLISHED"
+        )
+        and diagnostic_receipt.get("same_process_timeout_seconds")
+        == SAME_RUN_PYTEST_TIMEOUT_SECONDS
+        and diagnostic_receipt.get("timeout_claim_effect")
+        == "BOUNDED PROCESS CEILING ONLY / NO PERFORMANCE AUTHORITY"
+        and diagnostic_receipt.get("authoritative_harness_full_suite")
+        == {
+            "collected_nodes": harness_suite["expected_tests"],
+            "started_nodes": harness_suite["expected_tests"],
+            "finished_nodes": harness_suite["expected_tests"],
+            "all_phase_pass_nodes": 431,
+            "setup_skipped_nodes": 6,
+            "ordinary_reports": 1305,
+            "passed_subtests": harness_suite["expected_subtests"],
+            "collection_errors": 0,
+            "internal_errors": 0,
+            "deselections": 0,
+            "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+            "pytest_exit_status": 0,
+            "node_ids_sha256": harness_suite["expected_test_ids_sha256"].lower(),
+            "setup_skipped_nodeids": harness_suite[
+                "expected_setup_skipped_nodeids"
+            ],
+            "standard_locked_runtime": {
+                "numpy": "2.3.5",
+                "scikit-learn": "1.8.0",
+                "scipy": "1.17.1",
+            },
+            "receipt_status": (
+                "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / "
+                "SKIPS ARE MISMATCH EVIDENCE, NOT PASS"
+            ),
+        }
+        and diagnostic_receipt.get("authoritative_worker_full_suite")
+        == {
+            "collected_nodes": worker_suite["expected_tests"],
+            "started_nodes": worker_suite["expected_tests"],
+            "finished_nodes": worker_suite["expected_tests"],
+            "all_phase_pass_nodes": worker_suite["expected_tests"],
+            "setup_skipped_nodes": 0,
+            "ordinary_reports": 1782,
+            "passed_subtests": worker_suite["expected_subtests"],
+            "warning_count": 0,
+            "errors": 0,
+            "deselections": 0,
+            "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+            "pytest_exit_status": 0,
+            "node_ids_sha256": worker_suite["expected_test_ids_sha256"].lower(),
+            "receipt_status": (
+                "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY"
+            ),
+        },
+        "review-matrix authoritative diagnostic full-suite receipt drifted",
+    )
+    focused_harness = diagnostic_receipt.get("focused_harness")
+    require_exact_keys(
+        focused_harness,
+        {
+            "execution_v2",
+            "per_attempt_lifecycle",
+            "phase_coordinator",
+            "calibration_fit",
+            "calibration_disposition",
+            "five_file_union",
+        },
+        label="review-matrix diagnostic focused Harness receipt",
+    )
+    require(
+        focused_harness.get("execution_v2")
+        == {
+            "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "src/cas_harness_v2/diagnostic_execution_protocol.py"
+            ][0].lower(),
+            "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "tests/cas_harness_v2/test_diagnostic_execution_protocol.py"
+            ][0].lower(),
+            "collected_nodes": 47,
+            "node_ids_sha256": REQUIRED_SUBSUITE_DIGESTS[
+                "diagnostic execution v2"
+            ]["expected_test_ids_sha256"].lower(),
+            "focused_receipt": "47 / 47 PASS",
+        }
+        and focused_harness.get("per_attempt_lifecycle")
+        == {
+            "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "src/cas_harness_v2/diagnostic_lifecycle.py"
+            ][0].lower(),
+            "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "tests/cas_harness_v2/test_diagnostic_lifecycle.py"
+            ][0].lower(),
+            "collected_nodes": 55,
+            "node_ids_sha256": REQUIRED_SUBSUITE_DIGESTS[
+                "diagnostic per-attempt lifecycle"
+            ]["expected_test_ids_sha256"].lower(),
+            "focused_receipt": "55 / 55 PASS",
+        }
+        and focused_harness.get("phase_coordinator")
+        == {
+            "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "src/cas_harness_v2/diagnostic_phase_coordinator.py"
+            ][0].lower(),
+            "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "tests/cas_harness_v2/test_diagnostic_phase_coordinator.py"
+            ][0].lower(),
+            "collected_nodes": 8,
+            "node_ids_sha256": REQUIRED_SUBSUITE_DIGESTS[
+                "diagnostic phase coordinator"
+            ]["expected_test_ids_sha256"].lower(),
+            "split_passed_nodes": [5, 2, 1],
+            "split_elapsed_seconds": ["50.70", "80.32", "238.10"],
+        }
+        and focused_harness.get("calibration_fit")
+        == {
+            "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "src/cas_harness_v2/diagnostic_calibration_fit.py"
+            ][0].lower(),
+            "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "tests/cas_harness_v2/test_diagnostic_calibration_fit.py"
+            ][0].lower(),
+            "collected_nodes": 10,
+            "node_ids_sha256": REQUIRED_SUBSUITE_DIGESTS[
+                "diagnostic calibration fit"
+            ]["expected_test_ids_sha256"].lower(),
+            "exact_locked_runtime": {
+                "python": "3.12.10",
+                "numpy": "2.5.1",
+                "scikit-learn": "1.9.0",
+                "scipy": "1.18.0",
+                "pytest": "9.0.2",
+            },
+            "exact_locked_receipt": "10 / 10 PASS IN 356.75 SECONDS",
+        }
+        and focused_harness.get("calibration_disposition")
+        == {
+            "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "src/cas_harness_v2/diagnostic_calibration_disposition.py"
+            ][0].lower(),
+            "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py"
+            ][0].lower(),
+            "collected_nodes": 11,
+            "node_ids_sha256": REQUIRED_SUBSUITE_DIGESTS[
+                "diagnostic calibration disposition"
+            ]["expected_test_ids_sha256"].lower(),
+            "split_receipts": [
+                "8 PASS / 3 DESELECTED IN 210.72 SECONDS",
+                "3 PASS / 8 DESELECTED IN 870.18 SECONDS",
+            ],
+            "single_process_full_file_receipt": "NOT CREATED",
+            "unexecuted_positive_branch": "POST_ACCESS_NO_ELIGIBLE_THRESHOLD",
+        }
+        and focused_harness.get("five_file_union")
+        == {
+            "collected_nodes": 131,
+            "node_ids_sha256": REQUIRED_SUBSUITE_DIGESTS[
+                "diagnostic runtime structure-only tranche"
+            ]["expected_test_ids_sha256"].lower(),
+        },
+        "review-matrix diagnostic focused Harness receipts drifted",
+    )
+    worker_admission = diagnostic_receipt.get("worker_archive_admission")
+    require(
+        worker_admission
+        == {
+            "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                (
+                    "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/"
+                    "runtime/stagec_diagnostic_archive_admission.py"
+                )
+            ][0].lower(),
+            "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                (
+                    "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/"
+                    "test_stagec_diagnostic_archive_admission.py"
+                )
+            ][0].lower(),
+            "collected_nodes": 18,
+            "node_ids_sha256": REQUIRED_WORKER_SUBSUITE_DIGESTS[
+                "Stage C diagnostic archive admission"
+            ]["expected_test_ids_sha256"].lower(),
+            "focused_receipt": "18 / 18 PASS / WORKER-LOCAL ONLY",
+        },
+        "review-matrix worker archive-admission receipt drifted",
+    )
+    require(
+        diagnostic_receipt.get("packaged_kernel")
+        == {
+            "byte_mirrored_python_files": PACKAGED_HARNESS_V2_FILE_COUNT,
+            "total_python_bytes": PACKAGED_HARNESS_V2_TOTAL_BYTES,
+            "unique_exports": PACKAGED_HARNESS_V2_EXPORT_COUNT,
+            "packaging_provenance_sha256": (
+                PACKAGED_HARNESS_V2_PROVENANCE_SHA256.lower()
+            ),
+            "canonical_and_mirror_init_sha256": (
+                "115852a181c19839110e2e5e14a6814991087c0299abfdf42ceb8ec744c0355a"
+            ),
+            "packaging_allowlist_source_sha256": (
+                "4582e2a8dded2330cd8557608fbafbd5ff37d6ac2e51259d862702a3562e89d4"
+            ),
+            "focused_mirror_tests": "12 / 12 PASS",
+        }
+        and diagnostic_receipt.get("model_runs") == 0
+        and diagnostic_receipt.get("provider_calls") == 0
+        and diagnostic_receipt.get("runpod_used") is False
+        and diagnostic_receipt.get("known_spend_usd") == "0.00"
+        and diagnostic_receipt.get("independently_reproduced") is False,
+        "review-matrix diagnostic packaging/non-authority receipt drifted",
+    )
+    diagnostic_scope = diagnostic_receipt.get("scope")
+    require(
+        isinstance(diagnostic_scope, str)
+        and "LOCAL STRUCTURAL ENGINEERING RECEIPTS ONLY" in diagnostic_scope
+        and "authoritative same-process full-suite" in diagnostic_scope
+        and "six exact setup skips rather than relabeled PASS" in diagnostic_scope
+        and "separate exact Python 3.12 lock" in diagnostic_scope
+        and "no performance claim" in diagnostic_scope
+        and "No model, provider, Docker, RunPod" in diagnostic_scope
+        and "Gate 5 closure" in diagnostic_scope,
+        "review-matrix diagnostic receipt omits its non-authority boundary",
+    )
+
     protocol_receipt = receipts.get("worker_protocol_kernel")
     require(
         isinstance(protocol_receipt, dict),
@@ -5054,17 +7495,11 @@ def verify_review_matrix(
         "weights_identity_complete_tests": 257,
         "latest_numeric_redteam_passed": 32,
         "latest_numeric_redteam_failed": 0,
-        "current_complete_passed": REQUIRED_TEST_SUITES["Live trace worker complete"][
-            "expected_tests"
-        ],
+        "current_complete_passed": 576,
         "current_complete_failed": 0,
-        "current_complete_total": REQUIRED_TEST_SUITES["Live trace worker complete"][
-            "expected_tests"
-        ],
+        "current_complete_total": 576,
         "current_complete_ordinary_phase_passes": 1728,
-        "current_complete_passed_subtests": REQUIRED_TEST_SUITES[
-            "Live trace worker complete"
-        ]["expected_subtests"],
+        "current_complete_passed_subtests": 0,
         "stagec_capture_focused_passed": 119,
         "stagec_capture_focused_failed": 0,
         "stagec_capture_focused_total": 119,
@@ -5097,9 +7532,7 @@ def verify_review_matrix(
             "expected_test_ids_sha256"
         ].lower()
         and worker_receipt.get("complete_test_ids_sha256")
-        == REQUIRED_TEST_SUITES["Live trace worker complete"][
-            "expected_test_ids_sha256"
-        ].lower()
+        == "f454c598e8e38af1b6c813ba124eb943e155eb3b927facb28f4b47c758804c9f"
         and worker_receipt.get("stagec_capture_focused_test_ids_sha256")
         == REQUIRED_WORKER_SUBSUITE_DIGESTS["Stage C structural capture"][
             "expected_test_ids_sha256"
@@ -5125,9 +7558,13 @@ def verify_review_matrix(
         and "576/576 complete worker tests" in worker_scope
         and "1,728 ordinary setup/call/teardown reports" in worker_scope
         and "zero subtests" in worker_scope
-        and REQUIRED_TEST_SUITES["Live trace worker complete"][
-            "expected_test_ids_sha256"
-        ].lower()
+        and "f454c598e8e38af1b6c813ba124eb943e155eb3b927facb28f4b47c758804c9f"
+        in worker_scope
+        and "last-committed b96c2c12 receipt" in worker_scope
+        and "separate new diagnostic-runtime receipt" in worker_scope
+        and "passed 594/594 nodes" in worker_scope
+        and "1,782 ordinary reports" in worker_scope
+        and "b822d8efc57c45712fd960bc14e2fb271fdd72c91cf29d665ebab7ed27ae0d9b"
         in worker_scope
         and "119/119 with zero subtests" in worker_scope
         and "32/32 with zero subtests" in worker_scope
@@ -5138,8 +7575,8 @@ def verify_review_matrix(
         and "make the archive WORM or externally anchored" in worker_scope
         and "program-wide forward/generation/intervention/startup-canary totals"
         in worker_scope
-        and "typed diagnostic authorization/terminal carriers" in worker_scope
-        and "durable order/retry evidence" in worker_scope
+        and "typed diagnostic authorization/terminal transport" in worker_scope
+        and "replicated durable order/retry authority" in worker_scope
         and "not hermetic execution" in worker_scope
         and "not" in worker_scope
         and "a scientific result" in worker_scope,
@@ -5701,7 +8138,7 @@ def verify_adversarial_review() -> None:
         "1,728 ordinary setup/call/teardown",
         "zero subtests",
         "warnings, errors, or deselections",
-        "authoritative same-process PASS",
+        "same-process PASS receipt.",
         "306 node IDs",
         "151 passing subtests",
         "zero warnings, collection or internal errors, or deselections",
@@ -5793,9 +8230,34 @@ def verify_adversarial_review() -> None:
         "prospective execution ceiling is prefill-only",
         "only after activation",
         "C-Cal and C-Eval require separate activation receipts",
-        "12 byte-mirrored files",
-        "132 unique exports",
-        "F81997F30A163C88E9C5F02676E88DFF0742230FF1915356448E175A2CABDC46",
+        "17 byte-mirrored files",
+        "300 unique exports",
+        "C87A1AA638E89FD76E1CDA5F854832E29C6BC8491D14DE81F20E7363E5F086AC",
+        "newer diagnostic runtime tranche",
+        "7C16F098046E533176A1FC37B1F3D303C028B9750CD4132DECE1768858E3623F",
+        "C4A592645136E2FAE4D215E85E0427EB52C7CCEE6DB6E800EF8D372C5FBC5199",
+        "F4FA2A4290F093A6305E7D428294D33ACBEECF8231A8E9A4B14A705170F5A8A6",
+        "09B20960AC9CE828D8415FB652B10F1BDB2E847298979F3C9D7ECCAC4413A64E",
+        "B21B857A5D94EA48CB8B78890D58039E9D8D876CBC14491F6FDE94FB6FA7AFF7",
+        "5A5C4BF5A34B48A2870F5412419F005D0D20F4B60C0B61FCB51B742895824BC5",
+        "4E0A196F3DEF71A29C3EB1425FC777727377154BF010580570ACB2115F6B21DF",
+        "1418C49D72FD9893ACCFDF264F9D5D9BFB9B85D0699BA8EF6729444A26102021",
+        "161EF93030FD42632D03B0ABD5CBBA3ECA084F7198B7E889C96D6FD10A6C9196",
+        "CDB3218AA9CA8A3796062764D45A946408C9915BFD0BB134C0A981BA3C66BF95",
+        "169AEE6754EB44ECBBF9B636505B4EBD2D7D1C031D9736FBCA37A8044613D305",
+        "4D236BCC19096CF186A2CBCC67DF80B59CE7AB7D9BC29E1D261CA568F7BB110B",
+        "authoritative same-process standard Python-3.14 Harness receipt collected",
+        "431 had all setup/call/teardown phases",
+        "mismatch evidence, not PASS results",
+        "1,305 ordinary reports and 163 passing subtests",
+        "85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8",
+        "numpy==2.3.5",
+        "numpy==2.5.1",
+        "authoritative same-process worker receipt collected, started, finished",
+        "passed 594/594 nodes",
+        "1,782 ordinary reports and zero subtests",
+        "B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B",
+        "NO_ELIGIBLE_THRESHOLD",
         "repaired Stage C capture seam",
         "focused capture receipt is 119/119",
         "no P0/P1 within its declared",
@@ -5813,9 +8275,9 @@ def verify_adversarial_review() -> None:
         "6D7B3440CEDD02BD6E351CCA6D1E5494F4D3FBC58D0A9470D681FEF65FBBB472",
         "D28908786C38DCAD63B39B51A82B51FAEF888CCA9DA9552CC00BE37785777D3A",
         "9564623A3001440AAA0E2CA51667CED9AF23127051BF57776CBD5ED289130624",
-        "strict worker-archive admission adapter",
-        "failed-row coordinator",
-        "freeze-or-reject nonreporting disposition",
+        "worker-local factory now supplies the strict fresh-archive admission",
+        "coordinator now bind one attempt per exact plan-ordered subject",
+        "same-file disposition slot's 11 final-byte nodes",
     ):
         require(marker in text, f"adversarial review omits required marker {marker!r}")
 
@@ -11024,6 +13486,7 @@ def run_pytest_same_process_receipt(
     targets = suite["targets"]
     plugins = suite["pytest_plugins"]
     raw_repo_import_roots = suite["repo_import_roots"]
+    expected_setup_skipped_nodeids = suite["expected_setup_skipped_nodeids"]
     require(
         isinstance(targets, list)
         and targets
@@ -11040,6 +13503,19 @@ def run_pytest_same_process_receipt(
         and len(raw_repo_import_roots) == len(set(raw_repo_import_roots))
         and all(isinstance(path, str) and path for path in raw_repo_import_roots),
         f"{name}: repository import-root list is malformed",
+    )
+    require(
+        isinstance(expected_setup_skipped_nodeids, list)
+        and len(expected_setup_skipped_nodeids)
+        == len(set(expected_setup_skipped_nodeids))
+        and all(
+            isinstance(nodeid, str)
+            and nodeid
+            and "\\" not in nodeid
+            and not any(marker in nodeid for marker in ("\x00", "\r", "\n"))
+            for nodeid in expected_setup_skipped_nodeids
+        ),
+        f"{name}: expected setup-skip ledger is malformed",
     )
     repo_import_roots = [
         ROOT / canonical_repo_path(path, label=f"{name} repository import root")
@@ -11098,7 +13574,7 @@ def run_pytest_same_process_receipt(
                 ),
                 capture_output=True,
                 check=False,
-                timeout=600,
+                timeout=SAME_RUN_PYTEST_TIMEOUT_SECONDS,
             )
         except subprocess.TimeoutExpired as exc:
             raise VerificationError(f"{name}: same-run pytest process timed out") from exc
@@ -11208,6 +13684,10 @@ def run_pytest_same_process_receipt(
             len(collected) == suite["expected_tests"],
             f"{name}: executed {len(collected)} tests, expected {suite['expected_tests']}",
         )
+        require(
+            set(expected_setup_skipped_nodeids) <= set(collected),
+            f"{name}: an expected setup-skip node was not collected",
+        )
         executed_digest = test_id_digest(collected)
         require(
             executed_digest == suite["expected_test_ids_sha256"],
@@ -11233,12 +13713,22 @@ def run_pytest_same_process_receipt(
             phases[report["nodeid"]].append(report)
         for nodeid in collected:
             reports = phases[nodeid]
-            require(
-                [report["when"] for report in reports] == ["setup", "call", "teardown"]
-                and all(report["outcome"] == "passed" for report in reports)
-                and all(report["wasxfail"] is False for report in reports),
-                f"{name}: {nodeid} lacks an exact setup/call/teardown all-pass outcome",
-            )
+            if nodeid in expected_setup_skipped_nodeids:
+                require(
+                    [report["when"] for report in reports] == ["setup", "teardown"]
+                    and [report["outcome"] for report in reports]
+                    == ["skipped", "passed"]
+                    and all(report["wasxfail"] is False for report in reports),
+                    f"{name}: {nodeid} lacks the exact expected setup-skip outcome",
+                )
+            else:
+                require(
+                    [report["when"] for report in reports]
+                    == ["setup", "call", "teardown"]
+                    and all(report["outcome"] == "passed" for report in reports)
+                    and all(report["wasxfail"] is False for report in reports),
+                    f"{name}: {nodeid} lacks an exact setup/call/teardown all-pass outcome",
+                )
         subtests = receipt.get("subtest_reports")
         require(isinstance(subtests, list), f"{name}: subtest outcome ledger is missing")
         require(
@@ -11361,6 +13851,7 @@ def run_pytest_same_process_receipt(
             ),
             "loaded_code_sha256": _canonical_json_digest(loaded_files),
             "warnings": receipt["warning_count"],
+            "expected_setup_skipped_nodeids": expected_setup_skipped_nodeids,
             "collected_nodeids": collected,
             "subtest_reports": subtests,
         }
@@ -11369,6 +13860,14 @@ def run_pytest_same_process_receipt(
 def verify_test_suites(
     manifest: dict[str, Any], lock: dict[str, Any]
 ) -> list[dict[str, Any]]:
+    require(
+        sum(
+            suite["expected_tests"]
+            for suite in REQUIRED_TEST_SUITES.values()
+        )
+        == 1_518,
+        "configured Gate 5 test-suite node total drifted from 1,518",
+    )
     suites = manifest.get("test_suites")
     require(isinstance(suites, list), "manifest test_suites is not a list")
     by_name = {
@@ -11388,6 +13887,16 @@ def verify_test_suites(
             and isinstance(required["expected_test_ids_sha256"], str),
             f"{name}: verifier receipt is PENDING_NUMERIC_GREEN_FREEZE",
         )
+        require(
+            isinstance(required["expected_setup_skipped_nodeids"], list)
+            and len(required["expected_setup_skipped_nodeids"])
+            == len(set(required["expected_setup_skipped_nodeids"]))
+            and all(
+                isinstance(nodeid, str) and nodeid
+                for nodeid in required["expected_setup_skipped_nodeids"]
+            ),
+            f"{name}: verifier setup-skip contract is malformed",
+        )
         suite = by_name.get(name)
         require(isinstance(suite, dict), f"missing test suite {name!r}")
         for field in (
@@ -11398,6 +13907,7 @@ def verify_test_suites(
             "expected_tests",
             "expected_subtests",
             "expected_test_ids_sha256",
+            "expected_setup_skipped_nodeids",
         ):
             require(
                 suite.get(field) == required[field],
@@ -11586,6 +14096,7 @@ def main() -> int:
         verify_gate4_artifact_bytes() == gate4_artifact_count,
         "Gate 4 artifact surface changed during Gate 5 verification",
     )
+    retained_gate4_source_count = verify_gate4_retained_source_postflight()
 
     print("Project Coherence integrated Gate 5 verification: PASS")
     print(f"  hash-bound Gate 5 artifacts: {len(artifacts)}")
@@ -11595,8 +14106,16 @@ def main() -> int:
         f"{shadow_surface_count}"
     )
     print(
-        "  Gate 4 dependency: integrated PASS while still OPEN; "
+        "  Gate 4 historical dependency: integrated PASS only over frozen Gate 4 "
+        "records using exact retained local Git materializations; Gate 4 status="
+        "OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN; "
         f"artifacts={gate4_artifact_count}; manifest_sha256={gate4_manifest_sha}"
+    )
+    print(
+        "  Gate 4 retained-source dependency: "
+        f"sources={retained_gate4_source_count}; "
+        f"commit={GATE4_RETAINED_GIT_COMMIT}; "
+        f"{GATE4_RETAINED_SOURCE_BOUNDARY}"
     )
     print(
         f"  claim records: {claim_count} (all Ring 4 / NOT LICENSED; "
@@ -11614,6 +14133,7 @@ def main() -> int:
         print(
             f"    {result['name']}: tests={result['tests']}; "
             f"subtests={result['subtests']}; "
+            f"expected_setup_skips={len(result['expected_setup_skipped_nodeids'])}; "
             f"executed_nodes={result['executed_node_ids_sha256']}; "
             f"ordinary_outcomes={result['ordinary_outcomes_sha256']}; "
             f"subtest_outcomes={result['subtest_outcomes_sha256']}; "
@@ -11672,6 +14192,10 @@ def main() -> int:
 
 if __name__ == "__main__":
     try:
+        arguments = sys.argv[1:]
+        if arguments == [GATE4_RETAINED_SOURCE_CHILD_FLAG]:
+            raise SystemExit(_run_gate4_retained_source_child())
+        require(not arguments, f"unexpected Gate 5 verifier arguments: {arguments!r}")
         raise SystemExit(main())
     except VerificationError as exc:
         print(f"Project Coherence Gate 5 verification: FAIL: {exc}", file=sys.stderr)

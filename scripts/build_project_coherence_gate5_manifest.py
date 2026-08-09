@@ -97,6 +97,7 @@ def build_manifest() -> dict[str, object]:
             type(receipt["expected_tests"]) is not int
             or type(receipt["expected_subtests"]) is not int
             or not isinstance(receipt["expected_test_ids_sha256"], str)
+            or not isinstance(receipt["expected_setup_skipped_nodeids"], list)
             or not isinstance(receipt["pytest_plugins"], list)
             or not isinstance(receipt["repo_import_roots"], list)
             or not all(
@@ -106,6 +107,12 @@ def build_manifest() -> dict[str, object]:
             or not all(
                 isinstance(path, str) and path
                 for path in receipt["repo_import_roots"]
+            )
+            or len(receipt["expected_setup_skipped_nodeids"])
+            != len(set(receipt["expected_setup_skipped_nodeids"]))
+            or not all(
+                isinstance(nodeid, str) and nodeid
+                for nodeid in receipt["expected_setup_skipped_nodeids"]
             )
         ):
             raise RuntimeError(f"test receipt is not frozen: {name}")
@@ -120,6 +127,9 @@ def build_manifest() -> dict[str, object]:
                 "expected_subtests": receipt["expected_subtests"],
                 "expected_test_ids_sha256": receipt[
                     "expected_test_ids_sha256"
+                ],
+                "expected_setup_skipped_nodeids": receipt[
+                    "expected_setup_skipped_nodeids"
                 ],
                 "test_id_canonicalization": TEST_ID_CANONICALIZATION,
             }

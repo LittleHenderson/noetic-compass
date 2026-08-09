@@ -625,6 +625,184 @@ class Gate5VerifierRedTeamTests(unittest.TestCase):
         )
         self.assertNotIn("GIT_CONFIG_KEY_1", controlled_environment)
         self.assertNotIn("GIT_CONFIG_VALUE_1", controlled_environment)
+
+        expected_retained_specs = {
+            "SRC-PCBA-ENGINEER-20260726": {
+                "registered_path": r"C:\Users\wakil\OneDrive\Desktop\tksCAS\book\CAS_PCBA_Engineer\CAS_PCBA_Engineer.pdf",
+                "frozen_sha256": "294320B39FA521EAC086E99E2D9DB913E2B6CFF0754FF82DB1EF966424566274",
+                "frozen_bytes": 1_973_407,
+                "observed_live_sha256": "F31584E628689115AFBA08C4686A1D07A28BBC2BFAF9103D3505F5177937372A",
+                "observed_live_bytes": 2_070_194,
+                "git_path": "book/CAS_PCBA_Engineer/CAS_PCBA_Engineer.pdf",
+                "blob_oid": "af187b5d85f3ebbf90a802dcfc68b81924ff57ce",
+                "blob_sha256": "294320B39FA521EAC086E99E2D9DB913E2B6CFF0754FF82DB1EF966424566274",
+                "blob_bytes": 1_973_407,
+                "materialization": "RAW_BLOB_IDENTITY",
+                "temp_filename": "SRC-PCBA-ENGINEER-20260726.bin",
+            },
+            "SRC-CAS-OHM-PCBA-APP-I": {
+                "registered_path": r"C:\Users\wakil\OneDrive\Desktop\tksCAS\book\CAS_PCBA_Engineer\Appendix_I_CAS_Ohm_Measurement_and_Calibration.md",
+                "frozen_sha256": "9FFFAC3E16B43C6D809ECE913FD8C09E40C65F60F3B4BE693F45D35EC4E6AC45",
+                "frozen_bytes": 14_998,
+                "observed_live_sha256": "5BE5667EB9B37460A7B7C2F9C21CA664582445F54136C0CB0A87CEC6DD98DE60",
+                "observed_live_bytes": 21_618,
+                "git_path": (
+                    "book/CAS_PCBA_Engineer/"
+                    "Appendix_I_CAS_Ohm_Measurement_and_Calibration.md"
+                ),
+                "blob_oid": "fab6c93ba24ebdd13feb396a22d122def3ad3cc1",
+                "blob_sha256": "880ED91B164D6A3ECA0C8A47A408F3702FBACBB5AFD750E6E963D7DD5129264C",
+                "blob_bytes": 14_655,
+                "blob_lf_count": 343,
+                "blob_cr_count": 0,
+                "materialization": "EXACT_LF_TO_CRLF_343",
+                "temp_filename": "SRC-CAS-OHM-PCBA-APP-I.bin",
+            },
+        }
+        self.assertEqual(
+            {
+                source_id: dict(source_spec)
+                for source_id, source_spec in (
+                    self.verifier.GATE4_RETAINED_SOURCE_SPECS.items()
+                )
+            },
+            expected_retained_specs,
+        )
+        self.assertEqual(
+            self.verifier.GATE4_RETAINED_GIT_COMMIT,
+            "130168b3bd215e2975c8eb88776ed2be3b1c2227",
+        )
+        self.assertEqual(
+            self.verifier.GATE4_RETAINED_SOURCE_BOUNDARY,
+            "RETAINED GIT BLOB / LIVE REGISTERED PATH DRIFTED / "
+            "LOCAL NONPORTABLE / NO CURRENT-SOURCE EQUIVALENCE",
+        )
+
+        hostile_git_environment = {
+            "GIT_DIR": r"C:\attacker\objects",
+            "GIT_WORK_TREE": r"C:\attacker\tree",
+            "GIT_OBJECT_DIRECTORY": r"C:\attacker\objects",
+            "GIT_ALTERNATE_OBJECT_DIRECTORIES": r"C:\attacker\alternate",
+            "GIT_REPLACE_REF_BASE": "refs/attacker",
+            "GIT_CONFIG_PARAMETERS": "'alias.cat-file=!false'",
+            "GIT_CONFIG_SYSTEM": r"C:\attacker\system.gitconfig",
+            "GIT_CONFIG_GLOBAL": r"C:\attacker\global.gitconfig",
+            "GIT_CONFIG_COUNT": "2",
+            "GIT_CONFIG_KEY_0": "alias.cat-file",
+            "GIT_CONFIG_VALUE_0": "!false",
+            "GIT_CONFIG_KEY_1": "safe.directory",
+            "GIT_CONFIG_VALUE_1": "*",
+        }
+        with patch.dict(os.environ, hostile_git_environment), patch.object(
+            self.verifier.subprocess,
+            "run",
+            return_value=SimpleNamespace(
+                returncode=0, stdout=b"blob\n", stderr=b""
+            ),
+        ) as retained_git_run:
+            self.assertEqual(
+                self.verifier._run_retained_gate4_git(
+                    ["cat-file", "-t", "0" * 40], label="red-team probe"
+                ),
+                b"blob\n",
+            )
+        retained_command = retained_git_run.call_args.args[0]
+        retained_environment = retained_git_run.call_args.kwargs["env"]
+        self.assertEqual(
+            retained_command,
+            [
+                str(self.verifier.GATE4_RETAINED_GIT_EXECUTABLE),
+                "--no-replace-objects",
+                "-C",
+                str(self.verifier.GATE4_RETAINED_GIT_REPOSITORY),
+                "cat-file",
+                "-t",
+                "0" * 40,
+            ],
+        )
+        for hostile_name in (
+            "GIT_DIR",
+            "GIT_WORK_TREE",
+            "GIT_OBJECT_DIRECTORY",
+            "GIT_ALTERNATE_OBJECT_DIRECTORIES",
+            "GIT_REPLACE_REF_BASE",
+            "GIT_CONFIG_PARAMETERS",
+            "GIT_CONFIG_SYSTEM",
+        ):
+            with self.subTest(hostile_name=hostile_name):
+                self.assertNotIn(hostile_name, retained_environment)
+        self.assertEqual(retained_environment["GIT_CONFIG_COUNT"], "1")
+        self.assertEqual(retained_environment["GIT_CONFIG_KEY_0"], "safe.directory")
+        self.assertEqual(
+            retained_environment["GIT_CONFIG_VALUE_0"],
+            self.verifier.GATE4_RETAINED_GIT_REPOSITORY.as_posix(),
+        )
+        self.assertEqual(retained_environment["GIT_CONFIG_GLOBAL"], "NUL")
+        self.assertEqual(retained_environment["GIT_CONFIG_NOSYSTEM"], "1")
+        self.assertEqual(retained_environment["GIT_NO_LAZY_FETCH"], "1")
+        self.assertEqual(retained_environment["GIT_NO_REPLACE_OBJECTS"], "1")
+        self.assertEqual(retained_environment["GIT_ALLOW_PROTOCOL"], "file")
+
+        retained_payloads = self.verifier._read_retained_gate4_git_payloads()
+        pdf_id = "SRC-PCBA-ENGINEER-20260726"
+        appendix_id = "SRC-CAS-OHM-PCBA-APP-I"
+        self.assertEqual(
+            self.verifier._retained_gate4_materialized_payload(
+                pdf_id, retained_payloads[pdf_id]
+            ),
+            retained_payloads[pdf_id],
+        )
+        appendix_raw = retained_payloads[appendix_id]
+        appendix_materialized = self.verifier._retained_gate4_materialized_payload(
+            appendix_id, appendix_raw
+        )
+        self.assertEqual((appendix_raw.count(b"\n"), appendix_raw.count(b"\r")), (343, 0))
+        self.assertEqual(appendix_materialized, appendix_raw.replace(b"\n", b"\r\n"))
+        for source_id, payload in retained_payloads.items():
+            mutated = payload[:-1] + bytes((payload[-1] ^ 1,))
+            with self.subTest(mutated_source_id=source_id):
+                with self.assertRaises(self.verifier.VerificationError):
+                    self.verifier._retained_gate4_materialized_payload(
+                        source_id, mutated
+                    )
+        with self.assertRaises(self.verifier.VerificationError):
+            self.verifier._retained_gate4_materialized_payload(
+                appendix_id, appendix_raw.replace(b"\n", b"\r\n", 1)
+            )
+
+        replacements = {
+            source_spec["registered_path"]: Path(source_spec["temp_filename"])
+            for source_spec in expected_retained_specs.values()
+        }
+        nested_pids = (1001, 1002, 1003)
+        nested_lines = [
+            f"{nested_pid}\t{registered_path}"
+            for nested_pid in nested_pids
+            for registered_path in replacements
+        ]
+        nested_counts, observed_nested_pids = (
+            self.verifier._validate_gate4_nested_resolution_receipt(
+                nested_lines, replacements, child_pid=999
+            )
+        )
+        self.assertEqual(set(nested_counts.values()), {3})
+        self.assertEqual(observed_nested_pids, set(nested_pids))
+        malformed_nested_receipts = (
+            nested_lines[:-1],
+            [*nested_lines[:-1], nested_lines[0]],
+            [*nested_lines[:-1], "1003\tC:\\generic-override"],
+        )
+        for malformed_receipt in malformed_nested_receipts:
+            with self.subTest(malformed_receipt=malformed_receipt):
+                with self.assertRaises(self.verifier.VerificationError):
+                    self.verifier._validate_gate4_nested_resolution_receipt(
+                        malformed_receipt, replacements, child_pid=999
+                    )
+        with self.assertRaises(self.verifier.VerificationError):
+            self.verifier._validate_gate4_nested_resolution_receipt(
+                nested_lines, replacements, child_pid=nested_pids[0]
+            )
+
         stdout, _ = self.verifier.run_command(
             [
                 sys.executable,

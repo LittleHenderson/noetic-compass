@@ -254,8 +254,8 @@ outcome access, exact completion binding, bypass-mutated outcome-event replay,
 retained-byte registry mutation, audit contradictions, normalized cross-role
 aliases, and all four repository-known v1 labels.
 
-The current Harness-v2 collection has an authoritative same-process PASS
-receipt. It observed collected, started, and finished sequences of 306 node
+The last committed `b96c2c12` Harness-v2 collection has an authoritative
+same-process PASS receipt. It observed collected, started, and finished sequences of 306 node
 IDs, 918 ordinary setup/call/teardown reports, and 151 passing subtests, with
 zero warnings, collection or internal errors, or deselections, an empty
 isolated pycache, and pytest exit status 0. Its exact Python-ordinal
@@ -278,9 +278,13 @@ The former 204-test/110-subtest receipt is historical pre-expansion evidence.
 All of these are repository-local controls, not live execution, independent
 reproduction, scientific evidence, or product authority.
 
-The current packaged kernel has 12 byte-mirrored files and 132 unique exports.
+The current packaged kernel has 17 byte-mirrored files and 300 unique exports.
 Its packaging-provenance SHA-256 is
-`F81997F30A163C88E9C5F02676E88DFF0742230FF1915356448E175A2CABDC46`.
+`C87A1AA638E89FD76E1CDA5F854832E29C6BC8491D14DE81F20E7363E5F086AC`;
+12 focused mirror tests pass. Canonical/mirror `__init__.py` SHA-256 is
+`115852A181C19839110E2E5E14A6814991087C0299ABFDF42CEB8EC744C0355A`,
+and the packaging allowlist source SHA-256 is
+`4582E2A8DDED2330CD8557608FBAFBD5FF37D6AC2E51259D862702A3562E89D4`.
 
 The narrower Stage B joined-executor and runner-preparation suites pass 34/34
 and 17/17 with same-process executed-node digests
@@ -411,14 +415,16 @@ Study request. The diagnostic Study request and Stage C capture request retain
 different schemas, media types, bytes, and identities: the former references
 the latter, and media coercion is forbidden.
 
-These additions remain `STRUCTURE_ONLY / NON_AUTHORITY`. The execution window
-contains declared timestamps, not trusted time. There is no worker
-authorization/terminal-v2 path for the diagnostic request, durable attempt or
-one-use registry, authenticated runtime ordering/counter evidence, failed-row
-coordinator, or mandatory freeze-or-reject disposition artifact. No activated
-Stage C preregistration, authorization, model run, provider call, outcome, or
-Packet exists. Stage C remains `DESIGN ONLY / EXECUTION UNAUTHORIZED /
-EXPERIMENT NOT_STARTED / OPEN / RING 4 / NOT LICENSED / HELD`.
+These additions remain `STRUCTURE_ONLY / NON_AUTHORITY`. The newer frozen
+diagnostic tranche now supplies typed authorization/terminal-v2 carriers, a
+same-host one-attempt lifecycle, exact 480-row phase coordination, worker-local
+archive admission, locked fitting, and one create-once freeze-or-reject
+disposition. Those shapes still do not supply authenticated runtime execution,
+trusted time, WORM/external anchoring, out-of-band execution/read prevention, or
+HTTP/container wiring. No activated Stage C preregistration or authorization,
+real-Qwen model run, provider call, outcome, or Packet exists. Stage C remains
+`DESIGN ONLY / EXECUTION UNAUTHORIZED / EXPERIMENT NOT_STARTED / OPEN / RING 4 /
+NOT LICENSED / HELD`.
 
 ## Additive Stage C full-vector capture structural candidate
 
@@ -445,7 +451,8 @@ and test SHA-256
 `B0DC77EEE955DE8424B11AD02CF5AD5D67C0D4F5BE5DC57A6E285A9B8AC60D30`.
 The focused local-archive receipt is 32/32 with node-ID digest
 `1306211016B398F44EB57FC855B87BAB2A8AFB75C32B4A4516C53FA77570395F`.
-The authoritative locked full-worker same-process receipt is **PASS 576/576**
+The last committed `b96c2c12` authoritative locked full-worker same-process
+receipt is **PASS 576/576**
 with 1,728 ordinary setup/call/teardown reports, zero subtests, warnings,
 errors, or deselections, and exact Python-ordinal node-ID digest
 `F454C598E8E38AF1B6C813BA124EB943E155EB3B927FACB28F4B47C758804C9F`.
@@ -471,10 +478,72 @@ The worker-output/post-terminal source and test SHA-256 values are
 and
 `9564623A3001440AAA0E2CA51667CED9AF23127051BF57776CBD5ED289130624`.
 They exact-replay the acyclic `capture archive -> worker output -> terminal
-receipt -> outcome index` association for completed rows. They do not attest
-execution order or retry count, do not coordinate failed rows, and do not
-strictly admit the worker archive loader's exact object; that adapter remains an
-external requirement.
+receipt -> outcome index` association for completed rows. That legacy carrier
+alone does not attest execution order or retry count, coordinate failed rows, or
+strictly admit the worker archive loader's exact object. The additive local
+lifecycle, phase coordinator, and worker admission factory below close those
+bounded structural shapes without changing this carrier into authority.
+
+## Additive diagnostic execution, coordination, fit, and disposition candidates
+
+The exact source/test pairs and bounded receipts are:
+
+| Component | Source / test SHA-256 | Receipt |
+|---|---|---|
+| execution-v2 contract, child binding, authorization, and terminal union | `7C16F098046E533176A1FC37B1F3D303C028B9750CD4132DECE1768858E3623F` / `C4A592645136E2FAE4D215E85E0427EB52C7CCEE6DB6E800EF8D372C5FBC5199` | 47/47 PASS |
+| per-attempt lifecycle | `F4FA2A4290F093A6305E7D428294D33ACBEECF8231A8E9A4B14A705170F5A8A6` / `09B20960AC9CE828D8415FB652B10F1BDB2E847298979F3C9D7ECCAC4413A64E` | 55/55 PASS, 29.86s |
+| phase coordinator | `B21B857A5D94EA48CB8B78890D58039E9D8D876CBC14491F6FDE94FB6FA7AFF7` / `5A5C4BF5A34B48A2870F5412419F005D0D20F4B60C0B61FCB51B742895824BC5` | 5/5 nonheavy, 2/2 rejected-480/payload, and 1/1 clean-480/access PASS |
+| exact locked calibration fit | `4E0A196F3DEF71A29C3EB1425FC777727377154BF010580570ACB2115F6B21DF` / `1418C49D72FD9893ACCFDF264F9D5D9BFB9B85D0699BA8EF6729444A26102021` | 10/10 exact locked PASS, 356.75s |
+| one calibration disposition | `161EF93030FD42632D03B0ABD5CBBA3ECA084F7198B7E889C96D6FD10A6C9196` / `CDB3218AA9CA8A3796062764D45A946408C9915BFD0BB134C0A981BA3C66BF95` | 11/11 final-byte nodes PASS across two bounded split runs |
+| worker-local archive admission | `169AEE6754EB44ECBBF9B636505B4EBD2D7D1C031D9736FBCA37A8044613D305` / `4D236BCC19096CF186A2CBCC67DF80B59CE7AB7D9BC29E1D261CA568F7BB110B` | 18/18 PASS; local-only |
+
+The execution union admits exactly `COMPLETED`, `FAILED`, `INDETERMINATE`,
+`REJECTED`, and `EXPIRED`. The local lifecycle and phase store permit one
+attempt per exact subject, preserve all five terminal branches, reject a 481st
+or late issuance, close any rejected batch without replacement, and permit one
+aggregate access only after exact clean 480-row reconciliation. The worker
+factory freshly reloads and semantically replays all seven archive members; its
+case ordinal remains authorization-declared and requires canonical controller
+replay.
+
+The fit carrier accepts only the exact aggregate-access dataset and independently
+derives the layer-18 and layer-0 models under `numpy==2.5.1`,
+`scikit-learn==1.9.0`, and `scipy==1.18.0`. It fixes `StandardScaler` and
+class-balanced L2 `LogisticRegression` with `lbfgs`, `C=0.25`,
+`max_iter=1000`, and `random_state=42`, plus the exact binary64 threshold
+candidate and higher-threshold tie rule. The same-file disposition slot permits
+one `CALIBRATION_FROZEN_NONREPORTING` or
+`CALIBRATION_REJECTED_NONREPORTING` result. Packet creation, evaluation
+authority, reporting, claim/product/public promotion, and license grant are
+forbidden.
+
+The phase receipt timings were 50.70s, 80.32s, and 238.10s. The disposition
+split timings were 210.72s for 8 passed/3 deselected and 870.18s for 3
+passed/8 deselected. This is complete final-byte focused coverage across two
+runs, not themselves a single-process authoritative full-suite receipt. The
+last committed 306-Harness/576-worker receipts remain bound to `b96c2c12`, and
+the new diagnostic tranche now has the separate authoritative full-suite
+receipts below. The positive post-access `NO_ELIGIBLE_THRESHOLD` rejection
+branch has not been executed.
+
+The authoritative same-process standard Python-3.14 Harness receipt collected,
+started, and finished 437 nodes. Exactly 431 had all phases pass; the six exact
+named fit/disposition nodes setup-skipped because `numpy==2.3.5`,
+`scipy==1.17.1`, and `scikit-learn==1.8.0` do not satisfy the frozen
+2.5.1/1.18.0/1.9.0 runtime lock. Those skips are mismatch evidence, not PASS
+results. The run emitted 1,305 ordinary reports and 163 passing subtests,
+recorded no collection or internal errors or deselections, left the isolated
+pycache empty, exited pytest 0, and bound exact node-ID digest
+`85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8`.
+Positive exact numerical evidence remains separate under Python 3.12: fit 10/10
+and eligible disposition 3/3.
+
+The authoritative same-process worker receipt collected, started, finished,
+and passed 594/594 nodes, emitted 1,782 ordinary reports and zero subtests,
+warnings, errors, or deselections, left the isolated pycache empty, exited
+pytest 0, and bound exact node-ID digest
+`B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B`.
+Both receipts are local `STRUCTURE_ONLY / NON_AUTHORITY` evidence only.
 
 These seams remain non-authorizing. Artifact replay has no trusted external
 anchor; capture and diagnostic-chain seals are process-local; model files are
@@ -488,6 +557,20 @@ RunPod job exists; known spend for this tranche remains `$0.00`.
 
 Still open outside this isolated kernel:
 
+- a portable authorized Gate 4 external-source dependency: two registered live
+  paths drifted, and the historical structural rerun now depends on local
+  `tksCAS` commit `130168b3bd215e2975c8eb88776ed2be3b1c2227`, blobs
+  `af187b5d85f3ebbf90a802dcfc68b81924ff57ce` and
+  `fab6c93ba24ebdd13feb396a22d122def3ad3cc1`, under the exact boundary
+  `RETAINED GIT BLOB / LIVE REGISTERED PATH DRIFTED / LOCAL NONPORTABLE / NO CURRENT-SOURCE EQUIVALENCE`; this provides neither current-source validation
+  nor experiment authority;
+- authorized HTTP/container coordinator wiring and worker-route admission;
+- one real pinned-Qwen Stage C/C-Cal run plus exact capture-time model/tokenizer
+  revalidation;
+- positive execution of the post-access `NO_ELIGIBLE_THRESHOLD` rejection
+  branch and one authoritative integrated Harness/worker replay of this tranche;
+- prevention and independent discovery of out-of-band execution or outcome
+  access;
 - durable append-only storage and trusted outcome-access ordering;
 - materialized, non-caller-selected trust roots and signature verification;
 - trusted time, nonce/replay control, one-use run consumption, and protection
@@ -509,6 +592,8 @@ Still open outside this isolated kernel:
 - external peer review and claim-language sign-off;
 - downstream enforcement that `PacketAssessment` is evidence data and never an
   authority, authorization, or capability token;
+- every C-Eval, Packet, authenticated/scientific result, product, public,
+  license, and disclosure authority;
 - Gate 5 control matrix, manifest, verifier, and gate decision; and
 - every production, licensing, compliance, disclosure, and public-route gate.
 

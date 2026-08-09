@@ -42,6 +42,11 @@ The current source surfaces are:
 | Preregistration, amendments, and outcome-access seal | `src/cas_harness_v2/preregistration.py` | `PreregistrationArtifact`, `PreregistrationChain`, `OutcomeAccessEvent` |
 | Evidence Packet v2 | `src/cas_harness_v2/evidence_packet.py` | `EvidencePacketArtifact`, `load_evidence_packet`, `verify_evidence_packet` |
 | Worker-protocol carriers | `src/cas_harness_v2/worker_protocol.py` | `WorkerAuthorizationArtifact`, `WorkerTerminalReceiptArtifact`, `load_worker_authorization`, `load_worker_terminal_receipt` |
+| Diagnostic Stage C execution-v2 carriers | `src/cas_harness_v2/diagnostic_execution_protocol.py` | `DiagnosticStageCExecutionContractArtifact`, `DiagnosticChildExecutionBindingArtifact`, `DiagnosticWorkerAuthorizationV2Artifact`, `DiagnosticChildTerminalReceiptV2Artifact` |
+| Diagnostic per-attempt lifecycle | `src/cas_harness_v2/diagnostic_lifecycle.py` | one-attempt memory/same-host-SQLite state, all five terminal branches, exact reconciliation |
+| Diagnostic 480-row phase coordinator | `src/cas_harness_v2/diagnostic_phase_coordinator.py` | exact roster/store binding, activation admission, rejected/clean reconciliation, aggregate access |
+| Diagnostic calibration fit and terminal disposition | `src/cas_harness_v2/diagnostic_calibration_fit.py`, `src/cas_harness_v2/diagnostic_calibration_disposition.py` | exact locked target/wrong-layer fit and one same-file freeze-or-reject nonreporting slot |
+| Worker-local diagnostic archive admission | `noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/stagec_diagnostic_archive_admission.py` | fresh seven-member archive replay and small diagnostic-v2 admission document; not HTTP/container wired |
 | Tenant/audit/fleet/worker callback identity | `noetic-compass-scaffold/noetic-compass/api/services/fleet_service_auth.py` | `FleetServicePrincipal`, `FleetServiceBoundIntakeReceipt`, `FleetServiceAuthStore.authenticate_with_bound_intake_receipt`, `verify_authenticated_callback` |
 | Fleet lease and receipt state | `noetic-compass-scaffold/noetic-compass/api/services/cas_harness_fleet_executor.py` | `FleetJobRecord`, `ActiveFleetJobLease`, `validate_active_fleet_job_lease`, `lease_next_job`, `submit_job_receipt` |
 | API bridge into the exact protocol | `noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_worker_bridge.py` | typed principal/job/nonce-to-carrier bridge functions admitted by this candidate |
@@ -431,6 +436,93 @@ The bridge does not calculate scientific metrics, choose threshold outcomes,
 declare controls passed, or manufacture independent audit, replication, or
 claim-review records. Those artifacts must come from their own admitted
 implementations and identities.
+
+### 3.6 Separate diagnostic Stage C execution-v2 mapping
+
+Stage C-Cal does not widen the v1 worker carrier. Its additive execution-v2
+family exact-replays one phase contract, one child execution binding, one
+prospective child authorization, and one terminal receipt drawn from exactly
+five statuses: `COMPLETED`, `FAILED`, `INDETERMINATE`, `REJECTED`, or `EXPIRED`.
+The source/test SHA-256 values are
+`7C16F098046E533176A1FC37B1F3D303C028B9750CD4132DECE1768858E3623F`
+and
+`C4A592645136E2FAE4D215E85E0427EB52C7CCEE6DB6E800EF8D372C5FBC5199`;
+47/47 focused tests pass. These bytes represent a prospective mapping only;
+they do not authenticate a worker or authorize execution.
+
+The matching one-attempt lifecycle source/test hashes are
+`F4FA2A4290F093A6305E7D428294D33ACBEECF8231A8E9A4B14A705170F5A8A6`
+and
+`09B20960AC9CE828D8415FB652B10F1BDB2E847298979F3C9D7ECCAC4413A64E`;
+55/55 focused tests pass in 29.86s. Its atomic ceiling is one process lock or
+one SQLite file on one host. The phase coordinator then binds one exact
+plan-ordered roster of 480 subjects, permits one local attempt per subject,
+rejects a 481st or late issuance, terminalizes a rejected batch without
+replacement, and releases aggregate outcome access once only after a clean
+480-row reconciliation. Its source/test hashes are
+`B21B857A5D94EA48CB8B78890D58039E9D8D876CBC14491F6FDE94FB6FA7AFF7`
+and
+`5A5C4BF5A34B48A2870F5412419F005D0D20F4B60C0B61FCB51B742895824BC5`.
+All eight nodes pass in bounded splits: 5/5 nonheavy in 50.70s, 2/2
+rejected-480/payload in 80.32s, and 1/1 clean-480/access in 238.10s.
+
+The worker-local archive admission factory freshly reloads and semantically
+replays all seven capture members, exact-binds the diagnostic-v2 authorization,
+and emits the small admission document accepted by the terminal protocol. Its
+source/test hashes are
+`169AEE6754EB44ECBBF9B636505B4EBD2D7D1C031D9736FBCA37A8044613D305`
+and
+`4D236BCC19096CF186A2CBCC67DF80B59CE7AB7D9BC29E1D261CA568F7BB110B`;
+18/18 tests pass. This is factory-only worker-local admission. The case ordinal
+is authorization-declared and range-bound, not archive-derived; controller-side
+canonical replay remains mandatory. No HTTP or container wiring exists.
+
+Post-access fitting is independently exact-bound. Source/test hashes
+`4E0A196F3DEF71A29C3EB1425FC777727377154BF010580570ACB2115F6B21DF`
+and
+`1418C49D72FD9893ACCFDF264F9D5D9BFB9B85D0699BA8EF6729444A26102021`
+pass 10/10 exact locked tests in 356.75s. The lock is `numpy==2.5.1`,
+`scikit-learn==1.9.0`, and `scipy==1.18.0`, with independent layer-18/layer-0
+`StandardScaler` plus class-balanced L2 `LogisticRegression` fits using
+`lbfgs`, `C=0.25`, `max_iter=1000`, and `random_state=42`. Candidate thresholds
+are derived as exact binary64 values, both clean specificities must be at least
+0.90, balanced accuracy is maximized, and ties choose the higher threshold.
+
+The same-file disposition candidate at source/test hashes
+`161EF93030FD42632D03B0ABD5CBBA3ECA084F7198B7E889C96D6FD10A6C9196`
+and
+`CDB3218AA9CA8A3796062764D45A946408C9915BFD0BB134C0A981BA3C66BF95`
+permits one `CALIBRATION_FROZEN_NONREPORTING` or
+`CALIBRATION_REJECTED_NONREPORTING` result per phase subject. All 11 final-byte
+nodes pass across two bounded split runs: 8 passed/3 deselected in 210.72s and 3
+passed/8 deselected in 870.18s. This is not one authoritative single-process
+full-suite receipt. The positive post-access `NO_ELIGIBLE_THRESHOLD` rejection
+branch remains unexecuted.
+
+The authoritative same-process standard Python-3.14 Harness receipt collected,
+started, and finished 437 nodes. Exactly 431 had all phases pass, while the six
+exact named fit/disposition nodes setup-skipped because the site's
+`numpy==2.3.5`, `scipy==1.17.1`, and `scikit-learn==1.8.0` versions do not
+match the frozen 2.5.1/1.18.0/1.9.0 fit lock. Those skips are mismatch evidence,
+not PASS results. The run emitted 1,305 ordinary reports and 163 passing
+subtests, recorded no collection or internal errors or deselections, left the
+isolated pycache empty, exited pytest 0, and bound exact node-ID digest
+`85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8`.
+The separate Python-3.12 exact-lock receipts remain the positive fit 10/10 and
+eligible-disposition 3/3 evidence.
+
+The authoritative same-process worker receipt collected, started, finished,
+and passed 594/594 nodes, emitted 1,782 ordinary reports and zero subtests,
+warnings, errors, or deselections, left the isolated pycache empty, exited
+pytest 0, and bound exact node-ID digest
+`B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B`.
+Both receipts remain local `STRUCTURE_ONLY / NON_AUTHORITY` evidence.
+
+None of these diagnostic candidates supplies trusted execution or time,
+replication/host-loss authority, WORM/external anchoring, out-of-band
+execution/read prevention, a real-Qwen Stage C run, Packet or C-Eval authority,
+scientific correctness, product/public authority, or a license. Stage C remains
+`DESIGN ONLY / UNAUTHORIZED / NOT_STARTED`.
 
 ## 4. State machine
 
@@ -890,6 +982,12 @@ local scope:
 | `noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_lifecycle_service.py` | exact wrapper reload, server-built consumption/nonreporting envelopes, retained output bodies, active-lease validation, sealed-safe terminal replay, outcome reservation, pre-write strict Packet-v2/transitive-artifact verification, event-bound local reconciliation, and preserved bridge failure classes | atomic multi-object Packet storage, absence of postvalidation orphan wrappers, wrapper-independent Object-Lock authority, trusted time, provider-backed execution, or science |
 | `noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_worker_protocol_routes.py` | default-dark/OpenAPI-hidden routing, exact request-bound callback nonce rows, opaque-body media/size limits, no JWT fallback, and fail-start without an admitted service | provider-backed startup, reachable live execution, authenticated model execution, or product/public authority |
 | `noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_worker_protocol_adapter.py`, `test_cas_harness_v2_reconciliation_report.py`, `test_cas_harness_v2_fleet_snapshot_loader.py`, and `test_cas_harness_v2_packaged_mirror.py` | exact packaged-adapter admission, issuance/current Fleet snapshot separation, joint identity, active-lease and terminal-intake binding, lifecycle replay, controller reconciliation reports, and byte-identical packaged kernel provenance within local tests | a joined provider-backed application startup, trusted time, independent WORM authority, live experiment, license, disclosure, canon, or product route |
+| `tests/cas_harness_v2/test_diagnostic_execution_protocol.py` | 47/47 exact execution-contract, child-binding, authorization, five-way terminal, mutation, collision, and v1-isolation controls | authentication, one-use consumption, real execution, trusted time, or science |
+| `tests/cas_harness_v2/test_diagnostic_lifecycle.py` | 55/55 one-attempt issue/consume/terminal/reconciliation, same-host SQLite arbitration/reopen, rollback, tamper, shared-plan, and bounded 480-row cost controls | replication, host-loss authority, trusted time, WORM, or out-of-band execution absence |
+| `tests/cas_harness_v2/test_diagnostic_phase_coordinator.py` | all eight nodes pass in three bounded splits covering exact 480 registration, archive/body admission, 481st/late rejection, rejected closure, and clean aggregate access | HTTP/container wiring, trusted execution, or a real model |
+| `tests/cas_harness_v2/test_diagnostic_calibration_fit.py` | 10/10 exact runtime lock, post-access dataset, independent target/wrong-layer refits, binary64 candidates, forgery, and role-swap controls | scientific validity, independent numerical review, or C-Eval authority |
+| `tests/cas_harness_v2/test_diagnostic_calibration_disposition.py` | all 11 final-byte nodes pass across two bounded split runs for create-once reject/freeze, cross-instance contention, projection replay, and permanent nonauthority locks | a positively executed `NO_ELIGIBLE_THRESHOLD` branch, reporting, Packet, evaluation, product, public, or license authority |
+| `noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_stagec_diagnostic_archive_admission.py` | 18/18 fresh seven-member replay, exact authorization/archive binding, identifier collisions, canonical path, ordinal boundary, forgery, and import-closure controls | HTTP/container integration, canonical controller execution history, WORM, trusted time, or a real Qwen run |
 
 Candidate-specific worker-protocol and bridge tests must additionally prove:
 
@@ -922,6 +1020,16 @@ host-loss-resistant run authority, trusted time, independent WORM binding,
 proof that reconciliation covers every execution, live execution, and all
 scientific/governance obligations remain separate.
 
+The upstream dependency receipt is also historical-only. Two Gate 4 registered
+live paths have drifted, so the unchanged Gate 4 verifier can currently be
+replayed only through the closed two-source materialization from local `tksCAS`
+commit `130168b3bd215e2975c8eb88776ed2be3b1c2227` (blobs
+`af187b5d85f3ebbf90a802dcfc68b81924ff57ce` and
+`fab6c93ba24ebdd13feb396a22d122def3ad3cc1`, with only the latter's exact
+343-LF-to-CRLF conversion). Its boundary is `RETAINED GIT BLOB / LIVE REGISTERED PATH DRIFTED / LOCAL NONPORTABLE / NO CURRENT-SOURCE EQUIVALENCE`.
+This neither validates the current sources nor supplies a portable dependency,
+and it creates no worker or execution authority.
+
 ## 11. Complete remaining Gate 5 OPEN obligations
 
 This list is source-bound to the 25 open criteria in
@@ -936,7 +1044,7 @@ or imply closure of any item without criterion-specific evidence and review.
 | `G5-TRUST-004` | `OPEN_ENGINEERING` | Prove the tenant-visible lifecycle registry is complete against every authorized and executed run, amendment, failure, indeterminate outcome, packet, and nonreporting event across hosts; add independent anti-selective-reporting reconciliation. |
 | `G5-TRUST-005` | `OPEN_GOVERNANCE` | Admit and independently audit a non-caller-selected execution trust root, signing policy, key custody, scope, rotation, revocation, and exact receipt verification. |
 | `G5-TRUST-006` | `OPEN_GOVERNANCE` | Independently verify person, affiliation, conflict, qualification, organizational independence, authorization, and signing controls for executor, auditor, replication, and reviewer roles. |
-| `G5-INTEGRATION-002` | `OPEN_ENGINEERING` | Close Gate 4 through its own semantic, scientific, independent-review, governance, and disclosure authorities, then bind an authorized successor without retroactively promoting this candidate. |
+| `G5-INTEGRATION-002` | `OPEN_ENGINEERING` | First close the retained external-source portability/current-source-equivalence blocker, then close Gate 4 through its own semantic, scientific, independent-review, governance, and disclosure authorities and bind an authorized successor without retroactively promoting this candidate. The local retained-Git replay is historical evidence only. |
 | `G5-ENGINEERING-001` | `OPEN_ENGINEERING` | Independently reproduce and provider-start the packaged root-kernel/lifecycle adapter, connect the admitted outcome/Packet/nonreporting tranche plus the remaining terminal-disposition and outcome-finalization-intent paths to an authorized live worker lane, then independently red-team the exact message, artifact, error, nonce, time, identity, persistence, and retry mappings. The tested default-dark adapter is a bounded software candidate, not closure. |
 | `G5-ENGINEERING-002` | `OPEN_ENGINEERING` | Bind transient/dynamic import history and executed bytes; complete standard-library/test/native/descendant closure; cover files absent from distribution records; create an independently verified immutable snapshot; address privileged ABA and loader-alias races; independently reproduce and attest the candidate; compare admitted GPU outputs. |
 | `G5-ENGINEERING-003` | `OPEN_SECURITY` | Remediate or explicitly disposition six vendor-confirmed/fix-deferred findings; reconcile the `dpkg` scanner/vendor conflict; retain scanner database/process evidence; independently rebuild/reproduce; run the admitted exact GPU loader/hook contract; obtain an independent security receipt. |
@@ -972,6 +1080,15 @@ establish independently authenticated or host-loss-resistant one-use research
 execution, trusted time, WORM ordering, registry completeness beyond the
 configured local store, authenticated science, external validation, license,
 product readiness, canon, or disclosure authority.
+
+For Stage C specifically, the diagnostic coordinator and worker-local admission
+factory are not HTTP/container wired; no pinned-Qwen Stage C model run exists;
+trusted execution/time, independent WORM/external anchoring, and out-of-band
+execution/read prevention remain OPEN; and the positive
+`NO_ELIGIBLE_THRESHOLD` rejection branch remains unexecuted. The worker factory
+is local-only. No Packet, C-Eval, scientific, product, public, or license
+authority follows from its 18/18 receipt or from the focused diagnostic split
+receipts.
 
 The Gate 5 structural verifier can bind exact bytes, schemas, required status
 language, and local regression outcomes. It cannot authenticate the substantive

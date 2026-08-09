@@ -168,7 +168,8 @@ SHA-256 and byte length, and freshly replays them against the current
 pre-outcome chain before public reads. This is process-local tamper detection,
 not WORM authority.
 
-The current Harness-v2 surface has an authoritative same-process PASS receipt.
+The last committed `b96c2c12` Harness-v2 surface has an authoritative
+same-process PASS receipt.
 It covered 306 node IDs with identical collected, started, and finished
 sequences of 306 and emitted 918 ordinary setup/call/teardown reports.
 The receipt includes 151 passing subtests.
@@ -200,6 +201,62 @@ and portable historical negative-state verification at 2 tests, digest
 The former 204-test/110-subtest receipt is explicitly historical
 pre-expansion evidence. These receipts are limited to `tests/cas_harness_v2`;
 they are not repository-wide or production receipts.
+
+The newer diagnostic runtime tranche has separate bounded focused receipts in
+addition to the authoritative full-suite receipts recorded below:
+
+- execution-v2 source/test
+  `7C16F098046E533176A1FC37B1F3D303C028B9750CD4132DECE1768858E3623F` /
+  `C4A592645136E2FAE4D215E85E0427EB52C7CCEE6DB6E800EF8D372C5FBC5199`:
+  47/47 PASS;
+- per-attempt lifecycle
+  `F4FA2A4290F093A6305E7D428294D33ACBEECF8231A8E9A4B14A705170F5A8A6` /
+  `09B20960AC9CE828D8415FB652B10F1BDB2E847298979F3C9D7ECCAC4413A64E`:
+  55/55 PASS in 29.86s;
+- phase coordinator
+  `B21B857A5D94EA48CB8B78890D58039E9D8D876CBC14491F6FDE94FB6FA7AFF7` /
+  `5A5C4BF5A34B48A2870F5412419F005D0D20F4B60C0B61FCB51B742895824BC5`:
+  5/5 nonheavy in 50.70s, 2/2 rejected-480/payload in 80.32s, and
+  1/1 clean-480/access in 238.10s;
+- exact locked calibration fit
+  `4E0A196F3DEF71A29C3EB1425FC777727377154BF010580570ACB2115F6B21DF` /
+  `1418C49D72FD9893ACCFDF264F9D5D9BFB9B85D0699BA8EF6729444A26102021`:
+  10/10 PASS in 356.75s;
+- freeze-or-reject disposition
+  `161EF93030FD42632D03B0ABD5CBBA3ECA084F7198B7E889C96D6FD10A6C9196` /
+  `CDB3218AA9CA8A3796062764D45A946408C9915BFD0BB134C0A981BA3C66BF95`:
+  all 11 final-byte nodes PASS across two splits, 8 passed/3 deselected in
+  210.72s and 3 passed/8 deselected in 870.18s; and
+- worker-local archive admission
+  `169AEE6754EB44ECBBF9B636505B4EBD2D7D1C031D9736FBCA37A8044613D305` /
+  `4D236BCC19096CF186A2CBCC67DF80B59CE7AB7D9BC29E1D261CA568F7BB110B`:
+  18/18 PASS.
+
+The disposition split covers all current nodes but is not one authoritative
+single-process full-suite receipt. Its positive post-access
+`NO_ELIGIBLE_THRESHOLD` rejection branch remains unexecuted.
+
+The authoritative same-process standard Python-3.14 Harness receipt collected,
+started, and finished 437 nodes. Exactly 431 had all setup/call/teardown phases
+pass, and the six exact named fit/disposition nodes setup-skipped because the
+site (`numpy==2.3.5`, `scipy==1.17.1`, `scikit-learn==1.8.0`) does not satisfy
+the frozen 2.5.1/1.18.0/1.9.0 fit lock.
+Those skips are mismatch evidence, not PASS results.
+The run emitted 1,305 ordinary reports and 163 passing subtests,
+recorded no collection or internal errors or deselections, left the isolated
+pycache empty, exited pytest 0, and bound exact node-ID digest
+`85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8`.
+Positive exact numerical evidence remains in the separate Python-3.12 fit
+10/10 and eligible-disposition 3/3 receipts.
+
+The authoritative same-process worker receipt collected, started, finished,
+and passed 594/594 nodes, emitted 1,782 ordinary reports and zero subtests,
+warnings, errors, or deselections, left the isolated pycache empty, exited
+pytest 0, and bound exact node-ID digest
+`B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B`.
+Both new receipts remain local `STRUCTURE_ONLY / NON_AUTHORITY` evidence and do
+not alter any experimental, scientific, product, licensing, or disclosure
+status.
 
 The earlier five strict terminal-receipt builder tests and seven subtests
 committed at `0781bab8` remain preserved. The current 25-test/four-subtest
@@ -441,9 +498,13 @@ The current bounded local receipts are **17/17** for the worker-terminal bridge
 The **98/98** packaging/admitted-adapter receipt
 (`65352b8b59cb654e449ba4a1ce8459d7109cc5b21e33f64aeab6e2ea6eeb3c19`)
 is explicitly historical pre-expansion evidence. The current package inventory
-contains 12 byte-mirrored files, 132 unique exports, and packaging-provenance
+contains 17 byte-mirrored files, 300 unique exports, and packaging-provenance
 SHA-256
-`F81997F30A163C88E9C5F02676E88DFF0742230FF1915356448E175A2CABDC46`.
+`C87A1AA638E89FD76E1CDA5F854832E29C6BC8491D14DE81F20E7363E5F086AC`;
+12 focused mirror tests pass. Canonical/mirror `__init__.py` SHA-256 is
+`115852A181C19839110E2E5E14A6814991087C0299ABFDF42CEB8EC744C0355A`,
+and the packaging allowlist source SHA-256 is
+`4582E2A8DDED2330CD8557608FBAFBD5FF37D6AC2E51259D862702A3562E89D4`.
 The retained local GPU/joined evidence suite passes **27/27** without model
 execution, with node-ID digest
 `dc0c0ed22e0f158f014277b9d3cd26ad21d6a8fcdfbe1e76a67d09406975c952`.
@@ -518,8 +579,8 @@ The test
 `test_validated_public_receipt_cannot_be_mutated_into_retired_attestation`
 subsequently reproduced a post-validation assignment bypass. The retained
 repair freezes the public receipt and its nested carriers and revalidates
-copy-with-update. The current working-tree successor retains the **32/32 focused
-numeric** receipt and confirms an authoritative locked same-process **PASS
+copy-with-update. The last committed `b96c2c12` successor retains the **32/32
+focused numeric** receipt and an authoritative locked same-process **PASS
 576/576 complete-worker** receipt with 1,728 ordinary setup/call/teardown
 reports and zero subtests, warnings, errors, or deselections. Their
 verifier-canonical test-ID-set SHA-256 values are, respectively,
@@ -591,6 +652,29 @@ failed Gate 5's executable-shadow preflight despite no source defect. The
 integrated verifier now routes that bytecode into a verifier-owned temporary
 prefix and still rejects any cache/native/archive shadow found on the bound
 repository surface.
+
+The dependency red team also found that two registered Gate 4 live sources no
+longer equal the frozen records. The PCBA Engineer PDF moved from the frozen
+1,973,407-byte SHA-256
+`294320B39FA521EAC086E99E2D9DB913E2B6CFF0754FF82DB1EF966424566274` to
+2,070,194 bytes /
+`F31584E628689115AFBA08C4686A1D07A28BBC2BFAF9103D3505F5177937372A`;
+Appendix I moved from the frozen 14,998-byte SHA-256
+`9FFFAC3E16B43C6D809ECE913FD8C09E40C65F60F3B4BE693F45D35EC4E6AC45`
+to 21,618 bytes /
+`5BE5667EB9B37460A7B7C2F9C21CA664582445F54136C0CB0A87CEC6DD98DE60`.
+No Gate 4 record or owner file was rewritten. Gate 5 instead closes its
+resolver to those two IDs and fixed local Git commit
+`130168b3bd215e2975c8eb88776ed2be3b1c2227`, binding PDF blob
+`af187b5d85f3ebbf90a802dcfc68b81924ff57ce` and Appendix blob
+`fab6c93ba24ebdd13feb396a22d122def3ad3cc1`; only the Appendix's exact
+343-LF-to-CRLF conversion is permitted. Parent and child independently verify
+commit:path, mode, blob, byte, and hash facts with replacement objects, lazy
+fetch, and network disabled. Six exact nested resolutions across three child
+processes are receipt-counted, and every non-target path retains the unchanged
+resolver. The resulting structural receipt is `RETAINED GIT BLOB / LIVE REGISTERED PATH DRIFTED / LOCAL NONPORTABLE / NO CURRENT-SOURCE EQUIVALENCE`.
+It preserves historical verification only; portable external-source recovery
+and current-source equivalence remain open.
 
 The integrated verifier red team first reproduced and retained five
 fail-closed defect classes before the manifest was admitted:
@@ -916,7 +1000,8 @@ The focused 119/119 receipt has digest
 `E81D7234171B311720A356A36A0B6CEE06B9C564E7FF91386CAFDEA21B503144`;
 the local archive's 32/32 receipt has digest
 `1306211016B398F44EB57FC855B87BAB2A8AFB75C32B4A4516C53FA77570395F`;
-and the authoritative full-worker receipt is 576/576. Independent neutral QA
+and the last committed `b96c2c12` authoritative full-worker receipt is 576/576.
+Independent neutral QA
 found no P0/P1 within the declared `STRUCTURE_ONLY` scope.
 
 The separate create-only local archive at source SHA-256
@@ -934,22 +1019,55 @@ The worker-output/post-terminal repair at source SHA-256
 and test SHA-256
 `9564623A3001440AAA0E2CA51667CED9AF23127051BF57776CBD5ED289130624`
 enforces the acyclic association `capture archive -> worker output -> terminal
-receipt -> outcome index` for completed rows. Plan order and retry count remain
-`NOT_ATTESTED`; no complete attempt ledger exists. It does not coordinate failed
-rows and currently accepts an exact archive ref/byte projection rather than a
-strict adapter from the worker archive loader's exact object.
+receipt -> outcome index` for completed rows. That legacy carrier alone marks
+plan order and retry count `NOT_ATTESTED`; the additive lifecycle and phase
+coordinator now bind one attempt per exact plan-ordered subject inside one local
+store. The worker-local factory now supplies the strict fresh-archive admission
+shape, but remains local-only and requires controller-side canonical replay.
 
 Independent adversarial review found no P0/P1 across these repaired candidates
 inside their declared `STRUCTURE_ONLY` scope. That result does not extend to an
-authorized runtime. The remaining blockers are typed diagnostic worker
-authorization and terminal-v2 carriers, a durable attempt/one-use registry, the
-strict worker-archive admission adapter, a failed-row coordinator, an enforced
-freeze-or-reject nonreporting disposition, WORM/external anchoring/trusted time,
-and a real model-bound run. Model files are not rehashed at capture;
-rendered-prompt, activation, and logits provenance is not independently
-recomputable; hook use is serialized. Packet v2 also cannot independently
-recompute the case ledger. No detector, steering result, Packet, or Stage C
-scientific result exists.
+authorized runtime.
+
+The separate execution-v2 family now exact-binds the phase contract, child
+binding, authorization, and exactly five terminal statuses: `COMPLETED`,
+`FAILED`, `INDETERMINATE`, `REJECTED`, and `EXPIRED`. Its 47/47 mutation and
+cross-binding tests close the bounded carrier shape, not authentication. The
+55/55 lifecycle tests cover one-attempt issuance/consumption, all terminal
+branches, tamper detection, rollback, and same-host SQLite arbitration. The
+phase coordinator's eight split-pass nodes cover exact 480-row registration,
+481st/late refusal, archive/body admission, rejected nonreplacement closure, and
+one clean aggregate access. None proves that off-registry execution was absent.
+
+The archive-admission seam's 18/18 tests cover fresh seven-member replay,
+authorization/archive cross-binding, identifier collisions, canonical path
+shape, ordinal range, and factory-only construction. The ordinal remains
+authorization-declared rather than archive-derived. No HTTP/container route
+connects this factory to the coordinator.
+
+The 10/10 exact locked fit receipt prevents caller-selected coefficients,
+scores, thresholds, candidates, predictions, or swapped target/wrong-layer
+roles. It fixes independent `StandardScaler` plus class-balanced L2
+`LogisticRegression` fits under `numpy==2.5.1`, `scikit-learn==1.9.0`, and
+`scipy==1.18.0`, with `lbfgs`, `C=0.25`, `max_iter=1000`, and seed 42. The
+same-file disposition slot's 11 final-byte nodes pass across two bounded split
+runs and permit only frozen-nonreporting or rejected-nonreporting. They
+permanently forbid reporting, Packet v2, evaluation authority, claim/product/
+public promotion, and license grant. The positive post-access
+`NO_ELIGIBLE_THRESHOLD` rejection branch remains unexecuted.
+
+The remaining blockers are admitted HTTP/container coordinator wiring; a real
+pinned-Qwen Stage C/C-Cal run; independently trusted execution/time,
+WORM/external anchoring, replication/host-loss authority, and out-of-band
+execution/read prevention; capture-time model-file revalidation; corpus,
+surface, power, and final identity freeze. The authoritative local full-suite
+receipts above close only the integration-test item. Model files are not rehashed at capture; rendered-prompt,
+activation, and logits provenance is not independently recomputable; hook use is
+serialized. Packet v2 also cannot independently recompute the case ledger. No
+detector result, steering result, Packet, C-Eval authority, scientific result,
+product/public route, or license authority exists.
+Stage C remains `DESIGN ONLY / UNAUTHORIZED / NOT_STARTED`; Gate 5 remains
+`OPEN / RING 4 / NOT LICENSED / HELD`.
 
 ## Historical V1-V4 review
 
@@ -1029,12 +1147,17 @@ independent trust root. The SARIF does not embed the candidate identity or its
 invocation, and the linked Ubuntu vendor pages were not snapshotted. It does not
 provide a scan PASS, real GPU execution, a separately controlled clean
 reproduction, or an independently verified environment attestation.
-The Gate 5 matrix, manifest, builder, and executable verifier now bind and
-rerun the exact Gate 4 manifest/verifier while preserving Gate 4's controlling
-`OPEN / RING 4 / NOT LICENSED / HELD` boundary. This closes only a structural
-dependency check; a Gate 4 structural PASS cannot be reinterpreted as semantic,
-scientific, product, or disclosure acceptance. Authenticated execution remains
-outside this receipt. The bounded lock and runtime-isolation receipts do not
+The Gate 5 matrix, manifest, builder, and executable verifier bind the exact
+Gate 4 manifest/verifier but rerun it against the two exact historical retained
+Git materializations described above because both registered live paths
+drifted. The local commit is
+`130168b3bd215e2975c8eb88776ed2be3b1c2227`; the receipt boundary is `RETAINED GIT BLOB / LIVE REGISTERED PATH DRIFTED / LOCAL NONPORTABLE / NO CURRENT-SOURCE EQUIVALENCE`;
+and Gate 4 remains `OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN`. This
+closes only a local historical structural dependency check; it
+does not validate either current source, establish portable recovery, or turn a
+Gate 4 structural PASS into semantic, scientific, product, or disclosure
+acceptance. Authenticated execution remains outside this receipt. The bounded
+lock and runtime-isolation receipts do not
 establish independent hermeticity. The local same-process receipt, runner lock,
 and descriptor observer bind a stronger repository-local surface, but the
 same-run JSON is ephemeral and not WORM-retained. The controls do not bind the
@@ -1085,7 +1208,7 @@ The minimum defensible order is:
 1. preserve the authoritative 306-test/151-subtest Harness-v2 receipt and its
    four focused slice
    receipts, the authoritative 576/576 complete-worker receipt, the 119/119
-   capture and 32/32 archive receipts, the 12-file/132-export package inventory,
+   capture and 32/32 archive receipts, the 17-file/300-export package inventory,
    35-test/45-subtest worker-protocol, 17/17 dark-bridge, 38/38
    callback/Object-Lock seam, 134/134 prospective lifecycle/SQLite/dark-route,
    historical 98/98 admitted-adapter/configured-reconciliation, 27/27 retained local

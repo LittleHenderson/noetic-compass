@@ -20,6 +20,7 @@
     "evidence_packet_status": "NOT CREATED"
   },
   "current_validation_receipts": {
+    "full_suite_receipt_boundary": "THE 576-WORKER AND 306-HARNESS RECEIPTS BELOW REMAIN THE EXACT LAST-COMMITTED b96c2c12 CHECKPOINT RECEIPTS. THE NEW DIAGNOSTIC RUNTIME TRANCHE NOW HAS SEPARATE AUTHORITATIVE SAME-PROCESS RECEIPTS. HARNESS COLLECTED, STARTED, AND FINISHED 437 NODES: 431 HAD EXACT ALL-PHASE PASS AND THE SIX EXACT NAMED FIT/DISPOSITION NODES SETUP-SKIPPED AS RUNTIME-LOCK MISMATCH EVIDENCE, NOT PASS; IT EMITTED 1305 ORDINARY REPORTS AND 163 PASSING SUBTESTS, RECORDED ZERO COLLECTION OR INTERNAL ERRORS OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, EXITED PYTEST 0, AND BOUND NODE-ID SHA-256 85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8. WORKER COLLECTED, STARTED, FINISHED, AND PASSED 594/594 NODES, EMITTED 1782 ORDINARY REPORTS AND ZERO SUBTESTS, WARNINGS, ERRORS, OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, EXITED PYTEST 0, AND BOUND NODE-ID SHA-256 B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B. POSITIVE EXACT NUMERICAL EVIDENCE REMAINS THE SEPARATE PYTHON-3.12 LOCKED FIT 10/10 AND ELIGIBLE DISPOSITION 3/3 RECEIPTS. ALL OF THESE LOCAL RECEIPTS REMAIN STRUCTURE_ONLY / NON_AUTHORITY",
     "worker_authoritative": {
       "status": "PASS",
       "passed": 576,
@@ -78,15 +79,152 @@
         "python_ordinal_node_id_sha256": "FFC9ED8632A175E576526C84B2E989FDDD39DE443D842DFCDABC3AC12C248570"
       }
     },
+    "diagnostic_runtime_focused": {
+      "status": "BOUNDED STRUCTURE_ONLY / NON_AUTHORITY RECEIPTS / AUTHORITATIVE FULL-SUITE RECEIPTS ESTABLISHED",
+      "authoritative_standard_harness_receipt": {
+        "status": "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH EVIDENCE, NOT PASS",
+        "python": "3.14",
+        "collected": 437,
+        "started": 437,
+        "finished": 437,
+        "all_phase_passed": 431,
+        "setup_skipped": 6,
+        "ordinary_reports": 1305,
+        "passed_subtests": 163,
+        "collection_errors": 0,
+        "internal_errors": 0,
+        "deselections": 0,
+        "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+        "pytest_exit_status": 0,
+        "python_ordinal_node_id_sha256": "85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8",
+        "standard_runtime_versions": {
+          "numpy": "2.3.5",
+          "scipy": "1.17.1",
+          "scikit-learn": "1.8.0"
+        },
+        "required_fit_runtime_versions": {
+          "numpy": "2.5.1",
+          "scipy": "1.18.0",
+          "scikit-learn": "1.9.0"
+        },
+        "exact_setup_skipped_node_ids": [
+          "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_exact_locked_runtime_two_independent_fits",
+          "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_arbitrary_coefficient_rejected_by_full_refit_binding",
+          "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_altered_candidate_set_or_prediction_is_rejected_without_refit",
+          "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_exact_locked_fit_freezes_only_dual_layer18_layer0_nonreporting",
+          "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_exact_locked_projection_guards_cover_analysis_bundle_and_terminal",
+          "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_clean_phase_cannot_take_early_rejection_or_null_bundle_path"
+        ],
+        "positive_exact_lock_receipts": "SEPARATE PYTHON-3.12 FIT 10/10 AND ELIGIBLE DISPOSITION 3/3"
+      },
+      "authoritative_worker_full_suite_receipt": {
+        "status": "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+        "collected": 594,
+        "started": 594,
+        "finished": 594,
+        "passed": 594,
+        "total": 594,
+        "ordinary_reports": 1782,
+        "passed_subtests": 0,
+        "warning_count": 0,
+        "errors": 0,
+        "deselections": 0,
+        "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+        "pytest_exit_status": 0,
+        "python_ordinal_node_id_sha256": "B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B"
+      },
+      "execution_v2": {
+        "source_sha256": "7C16F098046E533176A1FC37B1F3D303C028B9750CD4132DECE1768858E3623F",
+        "test_source_sha256": "C4A592645136E2FAE4D215E85E0427EB52C7CCEE6DB6E800EF8D372C5FBC5199",
+        "passed": 47,
+        "total": 47,
+        "status": "PASS"
+      },
+      "per_attempt_lifecycle": {
+        "source_sha256": "F4FA2A4290F093A6305E7D428294D33ACBEECF8231A8E9A4B14A705170F5A8A6",
+        "test_source_sha256": "09B20960AC9CE828D8415FB652B10F1BDB2E847298979F3C9D7ECCAC4413A64E",
+        "passed": 55,
+        "total": 55,
+        "elapsed_seconds": "29.86",
+        "status": "PASS"
+      },
+      "phase_coordinator": {
+        "source_sha256": "B21B857A5D94EA48CB8B78890D58039E9D8D876CBC14491F6FDE94FB6FA7AFF7",
+        "test_source_sha256": "5A5C4BF5A34B48A2870F5412419F005D0D20F4B60C0B61FCB51B742895824BC5",
+        "collected_nodes": 8,
+        "split_receipts": [
+          {
+            "scope": "nonheavy registration, store binding, admission, contention, and inventory",
+            "passed": 5,
+            "total": 5,
+            "elapsed_seconds": "50.70"
+          },
+          {
+            "scope": "exact 480-row rejected phase plus closed nonreporting payload",
+            "passed": 2,
+            "total": 2,
+            "elapsed_seconds": "80.32"
+          },
+          {
+            "scope": "exact clean 480-row reconciliation and aggregate outcome access",
+            "passed": 1,
+            "total": 1,
+            "elapsed_seconds": "238.10"
+          }
+        ],
+        "status": "ALL 8 NODES PASS IN BOUNDED SPLIT RECEIPTS"
+      },
+      "calibration_fit": {
+        "source_sha256": "4E0A196F3DEF71A29C3EB1425FC777727377154BF010580570ACB2115F6B21DF",
+        "test_source_sha256": "1418C49D72FD9893ACCFDF264F9D5D9BFB9B85D0699BA8EF6729444A26102021",
+        "passed": 10,
+        "total": 10,
+        "elapsed_seconds": "356.75",
+        "status": "EXACT LOCKED PASS"
+      },
+      "calibration_disposition": {
+        "source_sha256": "161EF93030FD42632D03B0ABD5CBBA3ECA084F7198B7E889C96D6FD10A6C9196",
+        "test_source_sha256": "CDB3218AA9CA8A3796062764D45A946408C9915BFD0BB134C0A981BA3C66BF95",
+        "collected_nodes": 11,
+        "status": "ALL 11 CURRENT-BYTE NODES PASS ACROSS TWO BOUNDED SPLIT RECEIPTS / NOT A SINGLE-PROCESS AUTHORITATIVE FULL-SUITE RECEIPT",
+        "split_receipts": [
+          {
+            "scope": "final current-byte early rejection, SQLite, public API, and reason-shape selector",
+            "passed": 8,
+            "total": 8,
+            "deselected": 3,
+            "elapsed_seconds": "210.72"
+          },
+          {
+            "scope": "final current-byte eligible exact-lock freeze path",
+            "passed": 3,
+            "total": 3,
+            "deselected": 8,
+            "elapsed_seconds": "870.18"
+          }
+        ],
+        "unexecuted_positive_branch": "POST_ACCESS_NO_ELIGIBLE_THRESHOLD"
+      },
+      "worker_archive_admission": {
+        "source_sha256": "169AEE6754EB44ECBBF9B636505B4EBD2D7D1C031D9736FBCA37A8044613D305",
+        "test_source_sha256": "4D236BCC19096CF186A2CBCC67DF80B59CE7AB7D9BC29E1D261CA568F7BB110B",
+        "passed": 18,
+        "total": 18,
+        "status": "PASS / WORKER-LOCAL ONLY"
+      }
+    },
     "packaged_kernel": {
-      "byte_mirrored_files": 12,
-      "unique_exports": 132,
-      "packaging_provenance_sha256": "F81997F30A163C88E9C5F02676E88DFF0742230FF1915356448E175A2CABDC46"
+      "byte_mirrored_files": 17,
+      "unique_exports": 300,
+      "packaging_provenance_sha256": "C87A1AA638E89FD76E1CDA5F854832E29C6BC8491D14DE81F20E7363E5F086AC",
+      "canonical_and_mirror_init_sha256": "115852A181C19839110E2E5E14A6814991087C0299ABFDF42CEB8EC744C0355A",
+      "packaging_allowlist_source_sha256": "4582E2A8DDED2330CD8557608FBAFBD5FF37D6AC2E51259D862702A3562E89D4",
+      "focused_mirror_tests_passed": 12
     }
   },
   "non_authority": [
     "This carrier is not cas_harness_v2.preregistration.v1.",
-    "This carrier cannot be used to build or consume a worker authorization.",
+    "This design artifact does not activate or consume any worker authorization.",
     "No prompt, model, Docker, provider, or RunPod execution is authorized.",
     "No detector, threshold, result, replication, or scientific conclusion exists.",
     "No steering, ablation, suppression, blocking, rewriting, or detect-then-intervene policy is in scope."
@@ -173,14 +311,12 @@
       },
       "independent_neutral_qa": "NO P0 / NO P1 WITHIN DECLARED STRUCTURE_ONLY SCOPE",
       "execution_blockers": [
-        "typed diagnostic worker authorization and terminal-receipt v2 path",
-        "durable attempt and one-use registry",
-        "strict worker-archive admission adapter from the exact loaded archive object",
-        "failed-row coordinator",
-        "mandatory freeze-or-reject diagnostic nonreporting disposition",
-        "WORM retention, trusted time, and a non-caller-selected external anchor",
+        "authorized HTTP and container wiring for the diagnostic coordinator and worker-local archive admission path",
+        "trusted execution, trusted time, WORM retention, and a non-caller-selected external anchor",
+        "protection against out-of-band activation or outcome access",
         "capture-time model and tokenizer file revalidation",
-        "authorized diagnostic Study runtime wiring"
+        "authorized real-Qwen diagnostic Study runtime wiring and execution",
+        "positive POST_ACCESS_NO_ELIGIBLE_THRESHOLD branch under the separate exact Python-3.12 runtime"
       ]
     },
     "repaired_supporting_structure_only_candidates": {
@@ -204,8 +340,8 @@
         "plan_dependency_closure_ref_count": 488,
         "per_case_study_request_closure_ref_count": 489,
         "request_identity_rule": "DIAGNOSTIC STUDY REQUEST REFERENCES THE DISTINCT STAGE C CAPTURE REQUEST / SCHEMA, MEDIA-TYPE, BYTE, AND IDENTITY COERCION FORBIDDEN",
-        "execution_order": "NOT_ATTESTED",
-        "retry_evidence": "NOT_ATTESTED / NO DURABLE ATTEMPT REGISTRY"
+        "execution_order": "NOT_ATTESTED BY THE PLAN CARRIER / ADDITIVE SAME-HOST PHASE COORDINATOR BINDS EXACT PLAN ORDER",
+        "retry_evidence": "NOT_ATTESTED BY THE PLAN CARRIER / ADDITIVE LIFECYCLE AND PHASE STORE ENFORCE ONE LOCAL ATTEMPT PER SUBJECT / OUT-OF-BAND PREVENTION OPEN"
       },
       "local_capture_archive": {
         "source_sha256": "52E444142F5C3D8FC7F0AFC983DE060EFCACCC8975C61F97B48D5BDA52226055",
@@ -226,10 +362,87 @@
         "test_source_sha256": "9564623A3001440AAA0E2CA51667CED9AF23127051BF57776CBD5ED289130624",
         "acyclic_creation_order": "CAPTURE ARCHIVE -> WORKER OUTPUT -> TERMINAL RECEIPT -> OUTCOME INDEX",
         "accepted_terminal_rows": "COMPLETED ONLY",
-        "execution_order": "NOT_ATTESTED",
-        "retry_count": "NOT_ATTESTED",
-        "failed_row_coordinator": "OPEN / NOT PROVIDED",
-        "worker_archive_admission": "OPEN / EXACT REF-AND-BYTES PROJECTION EXISTS BUT STRICT ADAPTER FROM LOADED WORKER ARCHIVE OBJECT IS NOT PROVIDED"
+        "execution_order": "ADDITIVE SAME-HOST SQLITE PHASE COORDINATOR BINDS EXACT PLAN ORDER / TRUSTED EXECUTION AND TRUSTED TIME NOT ESTABLISHED",
+        "retry_count": "ADDITIVE LIFECYCLE AND PHASE COORDINATOR ENFORCE ONE ATTEMPT PER SUBJECT INSIDE THEIR SELECTED LOCAL STORE / OUT-OF-BAND PREVENTION NOT ESTABLISHED",
+        "failed_row_coordinator": "STRUCTURE_ONLY CANDIDATE PROVIDED / RECONCILED_REJECTED CLOSES NONREPORTING WITHOUT REPLACEMENT",
+        "worker_archive_admission": "WORKER-LOCAL FACTORY PROVIDED / HTTP AND CONTAINER WIRING OPEN"
+      }
+    },
+    "completed_diagnostic_runtime_structure_only_candidates": {
+      "scope": "STRUCTURE_ONLY / NON_AUTHORITY / NO MODEL OR PROVIDER EXECUTION / NO PACKET, EVALUATION, SCIENTIFIC, PRODUCT, LICENSE, OR DISCLOSURE AUTHORITY",
+      "execution_v2": {
+        "source_sha256": "7C16F098046E533176A1FC37B1F3D303C028B9750CD4132DECE1768858E3623F",
+        "test_source_sha256": "C4A592645136E2FAE4D215E85E0427EB52C7CCEE6DB6E800EF8D372C5FBC5199",
+        "schemas": [
+          "cas_harness_v2.diagnostic_stagec_execution_contract.v2",
+          "cas_harness_v2.diagnostic_child_execution_binding.v2",
+          "cas_harness_v2.diagnostic_worker_authorization.v2",
+          "cas_harness_v2.diagnostic_child_terminal_receipt.v2"
+        ],
+        "terminal_statuses": [
+          "COMPLETED",
+          "FAILED",
+          "INDETERMINATE",
+          "REJECTED",
+          "EXPIRED"
+        ],
+        "boundary": "EXACT PROSPECTIVE CARRIERS ONLY / NOT AUTHENTICATION OR EXECUTION"
+      },
+      "per_attempt_lifecycle": {
+        "source_sha256": "F4FA2A4290F093A6305E7D428294D33ACBEECF8231A8E9A4B14A705170F5A8A6",
+        "test_source_sha256": "09B20960AC9CE828D8415FB652B10F1BDB2E847298979F3C9D7ECCAC4413A64E",
+        "profile": "ONE ATTEMPT / CREATE-ONLY / IN-MEMORY PROCESS LOCK OR SAME-HOST SQLITE FILE",
+        "terminal_statuses": [
+          "COMPLETED",
+          "FAILED",
+          "INDETERMINATE",
+          "REJECTED",
+          "EXPIRED"
+        ],
+        "durability_boundary": "NO REPLICATION, HOST-LOSS AUTHORITY, TRUSTED TIME, WORM, OR OUT-OF-BAND EXECUTION PREVENTION"
+      },
+      "phase_coordinator": {
+        "source_sha256": "B21B857A5D94EA48CB8B78890D58039E9D8D876CBC14491F6FDE94FB6FA7AFF7",
+        "test_source_sha256": "5A5C4BF5A34B48A2870F5412419F005D0D20F4B60C0B61FCB51B742895824BC5",
+        "roster": "EXACT PLAN-ORDERED 480 CASES / 160 GROUPS / ONE ATTEMPT PER SUBJECT",
+        "states": [
+          "OPEN",
+          "RECONCILED_CLEAN",
+          "RECONCILED_REJECTED",
+          "OUTCOME_ACCESSED"
+        ],
+        "clean_access_rule": "ONE AGGREGATE OUTCOME ACCESS ONLY AFTER EXACT CLEAN 480-ROW RECONCILIATION",
+        "rejected_rule": "ANY TERMINAL REJECTION CLOSES NONREPORTING WITHOUT REPLACEMENT OR OUTCOME ACCESS",
+        "store_boundary": "SAME-HOST SQLITE IDENTITY BINDING / NOT REPLICATED OR WORM"
+      },
+      "worker_archive_admission": {
+        "source_sha256": "169AEE6754EB44ECBBF9B636505B4EBD2D7D1C031D9736FBCA37A8044613D305",
+        "test_source_sha256": "4D236BCC19096CF186A2CBCC67DF80B59CE7AB7D9BC29E1D261CA568F7BB110B",
+        "rule": "FRESHLY LOAD AND SEMANTICALLY REPLAY THE EXACT SEVEN-MEMBER LOCAL ARCHIVE, THEN BIND ONE DIAGNOSTIC-V2 ADMISSION DOCUMENT",
+        "boundary": "WORKER-LOCAL FACTORY ONLY / CASE ORDINAL DECLARED BY AUTHORIZATION AND REQUIRES CONTROLLER REPLAY / NO HTTP OR CONTAINER WIRING"
+      },
+      "calibration_fit": {
+        "source_sha256": "4E0A196F3DEF71A29C3EB1425FC777727377154BF010580570ACB2115F6B21DF",
+        "test_source_sha256": "1418C49D72FD9893ACCFDF264F9D5D9BFB9B85D0699BA8EF6729444A26102021",
+        "runtime_lock": {
+          "numpy": "2.5.1",
+          "scikit-learn": "1.9.0",
+          "scipy": "1.18.0"
+        },
+        "algorithm": "INDEPENDENT STANDARD-SCALER PLUS CLASS-BALANCED L2 LOGISTIC-REGRESSION FITS FOR LAYER 18 AND LAYER 0 / LBFGS / C 0.25 / MAX_ITER 1000 / RANDOM_STATE 42",
+        "threshold_rule": "EXACT BINARY64 CANDIDATE DERIVATION / BOTH CLEAN SPECIFICITIES AT LEAST 0.90 / MAXIMIZE BALANCED ACCURACY / TIE HIGHER THRESHOLD",
+        "boundary": "POST-ACCESS DETERMINISTIC STRUCTURAL FIT / SCIENTIFIC CORRECTNESS NOT ESTABLISHED"
+      },
+      "calibration_disposition": {
+        "source_sha256": "161EF93030FD42632D03B0ABD5CBBA3ECA084F7198B7E889C96D6FD10A6C9196",
+        "test_source_sha256": "CDB3218AA9CA8A3796062764D45A946408C9915BFD0BB134C0A981BA3C66BF95",
+        "outcomes": [
+          "CALIBRATION_FROZEN_NONREPORTING",
+          "CALIBRATION_REJECTED_NONREPORTING"
+        ],
+        "slot": "EXACTLY ONE CREATE-ONLY SAME-FILE SQLITE DISPOSITION PER PHASE SUBJECT",
+        "permanent_prohibitions": "REPORTING, PACKET V2, EVALUATION AUTHORITY, CLAIM PROMOTION, PRODUCT ROUTE, PUBLIC RELEASE, AND LICENSE GRANT",
+        "receipt_boundary": "ALL 11 CURRENT-BYTE NODES PASS ACROSS TWO BOUNDED SPLIT RECEIPTS; THOSE SPLITS ARE NOT THE SEPARATE AUTHORITATIVE FULL-SUITE RECEIPT, WHOSE STANDARD RUNTIME SETUP-SKIPPED THE SIX EXACT LOCK-MISMATCH NODES AS MISMATCH EVIDENCE RATHER THAN PASS; THE POSITIVE POST_ACCESS_NO_ELIGIBLE_THRESHOLD BRANCH REMAINS PENDING"
       }
     },
     "future_runnable_requirements_status": "PREFILL-ONLY / ZERO GENERATION / ZERO INTERVENTION REQUIREMENTS REMAIN PROSPECTIVE AND ARE NOT PROGRAM-LEVEL EXECUTION ATTESTATIONS FROM THE STRUCTURE_ONLY CANDIDATE",
@@ -756,23 +969,23 @@
   "implementation_obligations": [
     {
       "obligation_id": "stagec-obligation-study-v1",
-      "status": "OPEN / DIAGNOSTIC PREREGISTRATION AND STUDY STRUCTURAL CANDIDATES REPAIRED / AUTHORIZED DURABLE EXECUTION MAPPING STILL BLOCKS ACTIVATION",
-      "requirement": "The separate process-local diagnostic preregistration family and Diagnostic Study plan now bind DIAGNOSTIC_CALIBRATION, exactly 160 three-row groups and 480 ordered cases, one declared execution window, a 488-reference plan closure, and a 489-reference per-case Study-request closure. The diagnostic Study request references but is not interchangeable with the Stage C capture request. Before activation, add typed worker authorization and terminal-receipt v2 carriers, a durable cross-process attempt/one-use registry, trusted runtime ordering and counter attestation, a failed-row coordinator, and execution mapping that proves the model consumed the exact bound request bytes."
+      "status": "STRUCTURE_ONLY CANDIDATE COMPLETE / AUTHORIZED HTTP-CONTAINER EXECUTION STILL OPEN",
+      "requirement": "The diagnostic preregistration and Study plan now join exact typed execution-v2 carriers, one-attempt same-host lifecycle state, and an exact 480-row phase coordinator. This closes the bounded carrier and local coordination shape only. Before activation, wire the coordinator and worker-local archive admission through an authorized HTTP/container runtime, prove exact model consumption, add trusted execution/time and independent WORM/external anchoring, prevent out-of-band execution and outcome access, and freeze a final prospective execution identity."
     },
     {
       "obligation_id": "stagec-obligation-batch-lifecycle",
-      "status": "OPEN / BLOCKS EXECUTION",
-      "requirement": "Authorize and reconcile exactly 480 evaluation prompt evaluations without pretending they are one model forward or creating one run-scoped Packet per row."
+      "status": "STRUCTURE_ONLY SAME-HOST CANDIDATE COMPLETE / LIVE AUTHORIZATION AND TRUST OPEN",
+      "requirement": "The phase coordinator registers exactly 480 ordered subjects, permits one local attempt per subject, rejects a 481st or late attempt, closes rejected batches without replacement, and opens aggregate access once only for a clean 480-row reconciliation. This remains same-host SQLite evidence, not a live authorized batch, trusted clock, replicated registry, WORM record, or proof that no out-of-band execution occurred."
     },
     {
       "obligation_id": "stagec-obligation-full-vector-capture",
-      "status": "OPEN / STRUCTURAL REPAIR REGRESSION-TESTED AND INDEPENDENTLY RE-AUDITED / BLOCKS EXECUTION",
-      "requirement": "The repaired isolated STRUCTURE_ONLY candidate now derives prompt and association data from exact canonical capture-request bytes, accepts only an exact non-authorizing authorization projection, requires the loader-produced LoadedModel carrier, emits a canonical exact-byte capture index plus four raw arrays that semantically replay in process, records one direct capture-model call and zero direct generate-API calls while marking program-wide model-forward, generation, intervention, and startup-canary totals NOT_ATTESTED, and exactly restores local and global forward-hook registries. The local archive and post-terminal candidates now preserve an exact host-local copy and acyclic association, and independent review found no P0 or P1 within the declared STRUCTURE_ONLY scope. Before execution, add the strict adapter from the loaded worker archive, wire typed diagnostic authorization/terminal carriers, revalidate model/tokenizer files, add WORM/external anchoring/trusted time, and attest execution order and retry state through a durable attempt registry."
+      "status": "STRUCTURE_ONLY CAPTURE, ARCHIVE ADMISSION, AND COORDINATION CANDIDATES COMPLETE / REAL RUNTIME OPEN",
+      "requirement": "The repaired capture seam and worker-local admission factory exact-replay the canonical request, authorization, seven-member archive, both vectors, and the small diagnostic-v2 admission document. The phase coordinator binds those admitted bodies to plan-ordered completed rows. Before execution, wire the worker factory and coordinator through the real HTTP/container path, revalidate model/tokenizer files at capture, add trusted execution/time and independent WORM/external anchoring, and run the exact pinned Qwen path."
     },
     {
       "obligation_id": "stagec-obligation-file-backed-worker-output",
-      "status": "OPEN / HOST-LOCAL CREATE-ONLY ARCHIVE STRUCTURE REPAIRED / EXTERNAL DURABILITY AND ADMISSION STILL BLOCK EXECUTION",
-      "requirement": "The worker-local archive retains exact copies of all seven capture members under a reread-verified manifest, but is nonrelocatable, manifest-listed rather than closed-world, and not WORM, trusted-time, or externally anchored evidence. Add the strict loaded-archive admission adapter and controlled external content-addressed/WORM registry while returning only a small exact index through the 2 MB JSON carrier."
+      "status": "WORKER-LOCAL ADMISSION CANDIDATE COMPLETE / HTTP, CONTAINER, AND EXTERNAL DURABILITY OPEN",
+      "requirement": "The worker-local factory now requires a fresh exact seven-member archive replay and emits the small diagnostic-v2 admission document. It remains local-only and not HTTP/container wired. The archive is nonrelocatable, manifest-listed rather than closed-world, and not WORM, trusted-time, externally anchored, or protected against out-of-band reads. Add the controlled external content-addressed/WORM registry while retaining the small index through the 2 MB JSON carrier."
     },
     {
       "obligation_id": "stagec-obligation-split-access",
@@ -791,8 +1004,8 @@
     },
     {
       "obligation_id": "stagec-obligation-calibration",
-      "status": "OPEN / BLOCKS EVALUATION PREREGISTRATION",
-      "requirement": "Run C-Cal separately; after all 480 rows have a coordinated terminal disposition, bind the aggregate outcome index and record a mandatory exact freeze-or-reject diagnostic nonreporting disposition before evaluation prompts are accessed."
+      "status": "STRUCTURE_ONLY FIT AND FREEZE-OR-REJECT CANDIDATES COMPLETE / AUTHORITATIVE FULL-SUITE RECEIPTS ESTABLISHED / REAL C-CAL RUN OPEN",
+      "requirement": "The locked post-access fitter deterministically derives separate layer-18 and layer-0 detector candidates from the exact 480-row aggregate-access dataset, and the same-file SQLite disposition registry permits one frozen-nonreporting or rejected-nonreporting result only. All 11 disposition nodes pass on final bytes across two bounded split runs, but that is not a single-process authoritative full-suite receipt. No real C-Cal rows have run. A positive POST_ACCESS_NO_ELIGIBLE_THRESHOLD rejection execution remains pending, and no C-Eval preregistration or authority may follow until an authorized real C-Cal run is terminal and reconciled."
     },
     {
       "obligation_id": "stagec-obligation-analysis",
@@ -817,6 +1030,11 @@
   ],
   "schema_and_lifecycle_blockers": [
     {
+      "blocker_id": "gate4-retained-external-source-is-local-nonportable",
+      "source": "docs/working/project_coherence/gate4/GATE4_ARTIFACT_MANIFEST_v0.1.json and scripts/verify_project_coherence_gate5.py",
+      "fact": "Two Gate 4 registered live paths drifted. The enclosing Gate 5 verifier can rerun the frozen dependency only from exact local tksCAS Git commit 130168b3bd215e2975c8eb88776ed2be3b1c2227 under RETAINED GIT BLOB / LIVE REGISTERED PATH DRIFTED / LOCAL NONPORTABLE / NO CURRENT-SOURCE EQUIVALENCE. This is historical retained-byte verification, not current-source validation, a portable external-source dependency, Stage C execution authority, or scientific evidence."
+    },
+    {
       "blocker_id": "single-invocation-joined-plan",
       "source": "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_joined_executor.py",
       "fact": "JoinedGate5RunPlan and JoinedGate5Executor are one invocation, one prompt, one output, and one run-scoped Packet."
@@ -832,24 +1050,24 @@
       "fact": "One outcome-access event seals the preregistration chain; there is no split-scoped analytical release."
     },
     {
-      "blocker_id": "diagnostic-family-is-structural-and-not-worker-authorized",
-      "source": "src/cas_harness_v2/diagnostic_preregistration.py and src/cas_harness_v2/diagnostic_study_protocol.py",
-      "fact": "The separate diagnostic family now truthfully represents DIAGNOSTIC_CALIBRATION without widening preregistration v1, but remains process-local STRUCTURE_ONLY. Worker authorization/terminal v1 does not type its distinct Study request; typed v2 carriers and durable one-use execution mapping remain required."
+      "blocker_id": "diagnostic-family-is-structural-and-not-runtime-authorized",
+      "source": "src/cas_harness_v2/diagnostic_preregistration.py, diagnostic_study_protocol.py, diagnostic_execution_protocol.py, diagnostic_lifecycle.py, and diagnostic_phase_coordinator.py",
+      "fact": "The separate diagnostic family now has typed execution-v2 carriers, a same-host one-attempt lifecycle, and exact 480-row coordination without widening preregistration v1. Those are STRUCTURE_ONLY candidates: no admitted HTTP/container runtime consumes them, no independent execution trust root exists, and out-of-band execution absence is not established."
     },
     {
       "blocker_id": "local-archive-is-not-durable-authority",
-      "source": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/stagec_archive.py",
-      "fact": "The create-only archive is host-local, nonrelocatable, same-path/file-identity bound, and limited to manifest-listed members. It is not WORM, trusted time, capture provenance, a closed-world directory proof, or an external anchor."
+      "source": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/stagec_archive.py and stagec_diagnostic_archive_admission.py",
+      "fact": "The create-only archive and fresh replay admission factory are worker-local, nonrelocatable, same-path/file-identity bound, and limited to manifest-listed members. The admission path is not HTTP/container wired. Neither component supplies WORM, trusted time, capture provenance, a closed-world directory proof, out-of-band read prevention, or an external anchor."
     },
     {
-      "blocker_id": "post-terminal-order-and-retry-not-attested",
-      "source": "src/cas_harness_v2/stagec_outcome.py",
-      "fact": "The acyclic completed-row outcome carrier binds archive, worker output, terminal receipt, and outcome index, but plan order and retry count remain NOT_ATTESTED, failed rows have no coordinator, and no strict adapter requires admission from the worker archive loader's exact object."
+      "blocker_id": "local-phase-order-is-not-trusted-execution-authority",
+      "source": "src/cas_harness_v2/stagec_outcome.py, diagnostic_lifecycle.py, and diagnostic_phase_coordinator.py",
+      "fact": "The additive lifecycle and phase coordinator now bind one local attempt per exact plan-ordered subject, close rejected batches, and open one aggregate access only after a clean 480-row reconciliation. This is same-host SQLite coordination, not trusted or out-of-band-complete execution, trusted time, replication, WORM, host-loss authority, or an admitted runtime."
     },
     {
-      "blocker_id": "diagnostic-freeze-or-reject-disposition-not-enforced",
-      "source": "src/cas_harness_v2/diagnostic_preregistration.py",
-      "fact": "The diagnostic policy forbids Packet and claim promotion and permits only freeze-or-reject downstream use, but the current chain does not require a separately retained terminal freeze-or-reject nonreporting disposition artifact."
+      "blocker_id": "diagnostic-freeze-or-reject-is-structural-only",
+      "source": "src/cas_harness_v2/diagnostic_calibration_fit.py and diagnostic_calibration_disposition.py",
+      "fact": "The deterministic exact-runtime fit candidate and create-once same-file SQLite disposition now enforce frozen-nonreporting or rejected-nonreporting only, with Packet, reporting, evaluation, claim, product, public, and license promotion forbidden. All 11 final-byte disposition nodes pass across two bounded split runs, not one authoritative full-suite replay. No real Qwen C-Cal run exists, and a positive POST_ACCESS_NO_ELIGIBLE_THRESHOLD rejection execution remains pending."
     },
     {
       "blocker_id": "mandatory-heldout-role-does-not-establish-independence",
@@ -1006,7 +1224,7 @@
     "methodological_negative_prior": "Mandatory character-level surface baseline and surface-indistinguishable corpus design."
   },
   "execution_activation_precondition": {
-    "stagec-calibration": "FORBIDDEN UNTIL THE C-CAL BLOCKING OBLIGATIONS ARE CLOSED, THE CORPUS AND SURFACE BUNDLE ARE FROZEN, THE STRUCTURAL DIAGNOSTIC C-CAL FAMILY IS INTEGRATED WITH TYPED AUTHORIZATION/TERMINAL-V2 CARRIERS, A DURABLE ATTEMPT REGISTRY, STRICT WORKER-ARCHIVE ADMISSION, FAILED-ROW COORDINATION, WORM/EXTERNAL ANCHORING/TRUSTED TIME, AND MANDATORY FREEZE-OR-REJECT DISPOSITION, ITS FINAL EXECUTION IDENTITY IS ADDED PROSPECTIVELY, AND A SEPARATE C-CAL ACTIVATION RECEIPT IS VALID.",
+    "stagec-calibration": "FORBIDDEN UNTIL THE C-CAL BLOCKING OBLIGATIONS ARE CLOSED, THE CORPUS AND SURFACE BUNDLE ARE FROZEN, THE COMPLETED STRUCTURE_ONLY EXECUTION-V2, SAME-HOST LIFECYCLE, 480-ROW COORDINATOR, WORKER-LOCAL ARCHIVE ADMISSION, LOCKED FIT, AND FREEZE-OR-REJECT CANDIDATES ARE WIRED THROUGH AN AUTHORIZED HTTP/CONTAINER RUNTIME, TRUSTED EXECUTION/TIME AND INDEPENDENT WORM/EXTERNAL ANCHORING PLUS OUT-OF-BAND PREVENTION ARE ESTABLISHED, AN AUTHORITATIVE FULL-SUITE INTEGRATION RECEIPT IS GREEN, ITS FINAL EXECUTION IDENTITY IS ADDED PROSPECTIVELY, AND A SEPARATE C-CAL ACTIVATION RECEIPT IS VALID.",
     "stagec-evaluation": "FORBIDDEN UNTIL C-CAL IS TERMINAL AND RECONCILED, ITS DIAGNOSTIC NONREPORTING DISPOSITION AND ELIGIBLE FROZEN DETECTOR BUNDLE ARE RETAINED, A NEW EXACT C-EVAL PREREGISTRATION BINDS THOSE ARTIFACTS, ITS FINAL EXECUTION IDENTITY IS ADDED PROSPECTIVELY, AND A SEPARATE C-EVAL ACTIVATION RECEIPT IS VALID."
   }
 }
