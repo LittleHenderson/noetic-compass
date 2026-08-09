@@ -311,6 +311,30 @@ def test_real_ablation_mean_mode_runs_and_is_real():
     assert math.isfinite(event.logit_delta)
 
 
+@pytest.mark.parametrize(
+    "target",
+    [
+        AblationTargetRequest(layer=5, unit=0, mode="zero"),
+        AblationTargetRequest(layer=0, unit=99, mode="zero"),
+    ],
+)
+def test_real_ablation_effect_refuses_unavailable_target_without_real_claim(
+    target: AblationTargetRequest,
+):
+    model = _build_fake_pythia()
+    tokenizer = _FakeTokenizer()
+    req = CreateSessionRequest(prompt="anything", max_new_tokens=1)
+
+    with pytest.raises(RuntimeError, match="refusing a no-op causal claim"):
+        run_real_ablation_effect(
+            req,
+            model,
+            tokenizer,
+            n_layers=1,
+            target=target,
+        )
+
+
 def test_real_stream_emits_real_ablation_event(monkeypatch: pytest.MonkeyPatch):
     """End-to-end through stream_real_trace: with a real-flagged loaded model
     and a stubbed token runner, requesting a causal ablation must yield a real
@@ -425,6 +449,26 @@ def test_real_ablation_control_out_of_range_layer_is_demo_flagged():
 
     event = run_real_ablation_control(
         req, model, tokenizer, n_layers=1, target=target
+    )
+
+    assert event.type == "ablation_control_effect"
+    assert event.is_real_model is False
+    assert event.target_abs_logit_delta is None
+    assert event.selectivity_passed is None
+
+
+def test_real_ablation_control_out_of_range_unit_is_demo_flagged():
+    model = _build_fake_pythia()
+    tokenizer = _FakeTokenizer()
+    target = AblationTargetRequest(layer=0, unit=99, mode="zero")
+    req = CreateSessionRequest(prompt="anything", max_new_tokens=1)
+
+    event = run_real_ablation_control(
+        req,
+        model,
+        tokenizer,
+        n_layers=1,
+        target=target,
     )
 
     assert event.type == "ablation_control_effect"

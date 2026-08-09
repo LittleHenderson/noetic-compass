@@ -340,7 +340,10 @@ _RUNTIME_KEYS = frozenset(
         "cuda_device_capability",
     }
 )
-_HOOK_CONTRACT = {
+PYTHIA_STAGE27F_HOOK_PROFILE = "PYTHIA_STAGE27F_ERASER_V2"
+QWEN_OBSERVATION_ONLY_HOOK_PROFILE = "QWEN2_MLP_OBSERVATION_ONLY_V1"
+
+_PYTHIA_HOOK_CONTRACT = {
     "contract_version": "harness_v2.mlp_intermediate_eraser.v2",
     "coordinate_space": "mlp_intermediate_post_activation",
     "module_path_template": "gpt_neox.layers[{layer}].mlp.dense_4h_to_h",
@@ -349,6 +352,46 @@ _HOOK_CONTRACT = {
     "expected_width_source": "model_arch.mlp_intermediate_dim",
     "failure_policy": "fail_closed",
 }
+_QWEN_OBSERVATION_ONLY_HOOK_CONTRACT = {
+    "contract_version": "harness_v2.qwen2_mlp_intermediate_observation_only.v1",
+    "capability_status": (
+        "OBSERVATION_ONLY_INTERVENTION_UNAVAILABLE_UNCALIBRATED"
+    ),
+    "coordinate_space": "mlp_intermediate_post_activation",
+    "module_path_template": "model.layers[{layer}].mlp.down_proj",
+    "tensor_role": "forward_pre_hook.input[0]",
+    "token_selection": "batch_0_last_sequence_position",
+    "expected_width_source": "model_arch.mlp_intermediate_dim",
+    "failure_policy": "fail_closed",
+    "unavailable_reason": "NO_QWEN_CALIBRATED_COORDINATE_ADAPTER",
+}
+_HOOK_CONTRACTS = MappingProxyType(
+    {
+        PYTHIA_STAGE27F_HOOK_PROFILE: _PYTHIA_HOOK_CONTRACT,
+        QWEN_OBSERVATION_ONLY_HOOK_PROFILE: (
+            _QWEN_OBSERVATION_ONLY_HOOK_CONTRACT
+        ),
+    }
+)
+_QWEN_OBSERVATION_ONLY_MODEL_ID = "Qwen/Qwen2.5-0.5B-Instruct"
+_QWEN_OBSERVATION_ONLY_TOKENIZER_ID = _QWEN_OBSERVATION_ONLY_MODEL_ID
+_QWEN_OBSERVATION_ONLY_ARCH = MappingProxyType(
+    {
+        "family": "qwen2",
+        "n_layers": 24,
+        "hidden_size": 896,
+        "mlp_intermediate_dim": 4864,
+        "n_heads": 14,
+        "total_params": 494_032_768,
+        "validated": True,
+    }
+)
+_QWEN_OBSERVATION_ONLY_SUPPORTED_HOOKS = (
+    "residual_stream",
+    "mlp_intermediate_post_activation",
+    "attention_pattern",
+    "logits",
+)
 
 
 class RealWorkerJoinError(RuntimeError):
@@ -385,6 +428,7 @@ class ExpectedRealWorkerManifest:
     weights_filename: str
     weights_sha256: str
     weights_bytes: int
+    hook_contract_profile: str = PYTHIA_STAGE27F_HOOK_PROFILE
 
     def __post_init__(self) -> None:
         if not _bounded_text(self.model_id, maximum=512):
@@ -397,6 +441,21 @@ class ExpectedRealWorkerManifest:
             raise ValueError("expected weights_sha256 must be lowercase SHA-256")
         if type(self.weights_bytes) is not int or self.weights_bytes <= 0:
             raise ValueError("expected weights_bytes must be a positive integer")
+        if (
+            type(self.hook_contract_profile) is not str
+            or self.hook_contract_profile not in _HOOK_CONTRACTS
+        ):
+            raise ValueError("expected hook_contract_profile is not supported")
+        if (
+            self.hook_contract_profile == QWEN_OBSERVATION_ONLY_HOOK_PROFILE
+            and self.model_id != _QWEN_OBSERVATION_ONLY_MODEL_ID
+        ) or (
+            self.model_id == _QWEN_OBSERVATION_ONLY_MODEL_ID
+            and self.hook_contract_profile != QWEN_OBSERVATION_ONLY_HOOK_PROFILE
+        ):
+            raise ValueError(
+                "expected model_id does not match hook_contract_profile"
+            )
 
 
 @dataclass(frozen=True, slots=True)
@@ -434,6 +493,9 @@ class RealWorkerManifestFacts:
     hidden_size: int
     mlp_intermediate_dim: int
     n_heads: int
+    hook_contract_profile: str
+    intervention_available: bool
+    legacy_cover_library_available: bool
 
 
 @dataclass(frozen=True, slots=True)
@@ -458,6 +520,7 @@ class StrictRealWorkerRequestBinding:
     request_byte_length: int
     request_payload: Mapping[str, Any]
     model_id: str
+    hook_contract_profile: str
     causal_ablation_requested: bool
     ablation_target: tuple[int, int]
     ablation_mode: str
@@ -529,6 +592,7 @@ def validate_real_worker_dump_request(
         request_byte_length=len(request_snapshot),
         request_payload=_freeze_json(request),
         model_id=request["model_id"],
+        hook_contract_profile=expected_manifest.hook_contract_profile,
         causal_ablation_requested=causal_requested,
         ablation_target=target,
         ablation_mode=mode,
@@ -851,6 +915,28 @@ def _validate_request(
         raise RealWorkerDumpValidationError("request method_config must be an object")
     _validate_method_config(request["method_config"])
 
+    enabled_methods = request["method_config"].get("enabled_methods") or []
+    observation_only = (
+        expected_manifest.hook_contract_profile
+        == QWEN_OBSERVATION_ONLY_HOOK_PROFILE
+    )
+    if observation_only and "drive_local_eraser" in enabled_methods:
+        raise RealWorkerDumpValidationError(
+            "observation-only Qwen binding forbids drive_local_eraser"
+        )
+    if observation_only and "blindspot_detection" in enabled_methods:
+        raise RealWorkerDumpValidationError(
+            "observation-only Qwen binding forbids the legacy cover library"
+        )
+    if observation_only and not probes:
+        raise RealWorkerDumpValidationError(
+            "observation-only Qwen binding requires explicit probes"
+        )
+    if observation_only and {"blindspot_covers", "blindspots_f1"} & set(probes):
+        raise RealWorkerDumpValidationError(
+            "observation-only Qwen binding forbids Pythia cover probes"
+        )
+
     target = request.get("ablation_target")
     if target is not None:
         if type(target) is not dict or set(target) != {"layer", "unit", "mode"}:
@@ -865,6 +951,12 @@ def _validate_request(
             or target["mode"] not in {"zero", "mean"}
         ):
             raise RealWorkerDumpValidationError("request ablation_target is invalid")
+    if observation_only and (
+        "causal_ablation" in probes or target is not None
+    ):
+        raise RealWorkerDumpValidationError(
+            "observation-only Qwen binding forbids causal ablation"
+        )
 
     billing = request.get("billing_measurement_context")
     if billing is not None:
@@ -1037,7 +1129,13 @@ def _validate_events(
         expected=expected_manifest,
         causal_requested=causal_requested,
     )
-    _validate_knob_resolution(events[1], request_payload=request_payload)
+    _validate_knob_resolution(
+        events[1],
+        request_payload=request_payload,
+        legacy_cover_library_available=(
+            manifest_facts.legacy_cover_library_available
+        ),
+    )
     _validate_neuron_covers(
         events[2],
         request_payload=request_payload,
@@ -1143,6 +1241,16 @@ def _validate_manifest(
     ):
         raise RealWorkerDumpValidationError("manifest model_arch dimensions are invalid")
 
+    if expected.hook_contract_profile == QWEN_OBSERVATION_ONLY_HOOK_PROFILE:
+        if manifest["tokenizer_id"] != _QWEN_OBSERVATION_ONLY_TOKENIZER_ID:
+            raise RealWorkerDumpValidationError(
+                "Qwen observation manifest tokenizer identity drifted"
+            )
+        if arch != dict(_QWEN_OBSERVATION_ONLY_ARCH):
+            raise RealWorkerDumpValidationError(
+                "Qwen observation manifest architecture drifted"
+            )
+
     hooks = manifest["supported_hooks"]
     if (
         type(hooks) is not list
@@ -1150,6 +1258,13 @@ def _validate_manifest(
         or len(set(hooks)) != len(hooks)
     ):
         raise RealWorkerDumpValidationError("manifest supported_hooks are invalid")
+    if (
+        expected.hook_contract_profile == QWEN_OBSERVATION_ONLY_HOOK_PROFILE
+        and hooks != list(_QWEN_OBSERVATION_ONLY_SUPPORTED_HOOKS)
+    ):
+        raise RealWorkerDumpValidationError(
+            "Qwen observation manifest supported hooks drifted"
+        )
     if causal_requested and not {
         "mlp_intermediate_post_activation",
         "logits",
@@ -1158,7 +1273,8 @@ def _validate_manifest(
             "manifest lacks hooks required by the requested causal ablation"
         )
     hook_contract = manifest["intervention_hook_contract"]
-    if type(hook_contract) is not dict or hook_contract != _HOOK_CONTRACT:
+    expected_hook_contract = _HOOK_CONTRACTS[expected.hook_contract_profile]
+    if type(hook_contract) is not dict or hook_contract != expected_hook_contract:
         raise RealWorkerDumpValidationError("manifest intervention hook contract drifted")
 
     runtime = manifest["runtime_execution"]
@@ -1198,14 +1314,27 @@ def _validate_manifest(
         hidden_size=arch["hidden_size"],
         mlp_intermediate_dim=arch["mlp_intermediate_dim"],
         n_heads=arch["n_heads"],
+        hook_contract_profile=expected.hook_contract_profile,
+        intervention_available=(
+            expected.hook_contract_profile == PYTHIA_STAGE27F_HOOK_PROFILE
+        ),
+        legacy_cover_library_available=(
+            expected.hook_contract_profile == PYTHIA_STAGE27F_HOOK_PROFILE
+        ),
     )
 
 
 def _validate_knob_resolution(
-    event: Mapping[str, Any], *, request_payload: Mapping[str, Any]
+    event: Mapping[str, Any],
+    *,
+    request_payload: Mapping[str, Any],
+    legacy_cover_library_available: bool,
 ) -> None:
     resolved = event["resolved_knobs"]
-    expected = _expected_resolved_knobs(request_payload)
+    expected = _expected_resolved_knobs(
+        request_payload,
+        legacy_cover_library_available=legacy_cover_library_available,
+    )
     if type(resolved) is not dict or not _exact_json_equal(resolved, expected):
         raise RealWorkerDumpValidationError(
             "knob_resolution differs from the request's exact worker resolution"
@@ -1214,6 +1343,8 @@ def _validate_knob_resolution(
 
 def _expected_resolved_knobs(
     request_payload: Mapping[str, Any],
+    *,
+    legacy_cover_library_available: bool = True,
 ) -> dict[str, dict[str, Any]]:
     config = request_payload["method_config"]
     knobs_value = config.get("knobs", {}) if isinstance(config, Mapping) else {}
@@ -1233,14 +1364,17 @@ def _expected_resolved_knobs(
         blindspot_result = {
             "scope": "all_7",
             "drive": "all_7",
-            "cover_available": True,
+            "cover_available": legacy_cover_library_available,
         }
     else:
         blindspot_drive = _resolved_drive(blindspot_raw)
         blindspot_result = {
             "scope": blindspot_drive,
             "drive": blindspot_drive,
-            "cover_available": blindspot_drive in _KNOWN_DRIVES,
+            "cover_available": (
+                legacy_cover_library_available
+                and blindspot_drive in _KNOWN_DRIVES
+            ),
         }
     return {
         "foundation_probe": {
@@ -1261,7 +1395,9 @@ def _expected_resolved_knobs(
         "drive_local_eraser": {
             "drive": drive,
             "gain": _resolved_nonnegative_float(eraser.get("gain"), default=1.0),
-            "cover_available": drive in _KNOWN_DRIVES,
+            "cover_available": (
+                legacy_cover_library_available and drive in _KNOWN_DRIVES
+            ),
             "active": "drive_local_eraser" in enabled,
         },
         "blindspot_detection": blindspot_result,
@@ -1346,6 +1482,12 @@ def _validate_neuron_covers(
     if type(covers) is not dict:
         raise RealWorkerDumpValidationError("neuron_covers payload must be an object")
     probes = _resolved_probes(request_payload)
+    if not manifest.legacy_cover_library_available:
+        if covers:
+            raise RealWorkerDumpValidationError(
+                "observation-only model emitted legacy Pythia neuron covers"
+            )
+        return
     if "blindspot_covers" not in probes:
         if covers:
             raise RealWorkerDumpValidationError(
@@ -2284,6 +2426,8 @@ __all__ = [
     "ExpectedRealWorkerManifest",
     "JoinedExecutionBindingFacts",
     "MAX_CARRIER_BYTES",
+    "PYTHIA_STAGE27F_HOOK_PROFILE",
+    "QWEN_OBSERVATION_ONLY_HOOK_PROFILE",
     "RealWorkerDumpValidationError",
     "RealWorkerJoinError",
     "RealWorkerManifestFacts",

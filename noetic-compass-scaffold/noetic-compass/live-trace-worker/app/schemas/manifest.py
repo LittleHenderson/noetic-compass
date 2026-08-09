@@ -30,6 +30,17 @@ ModelExecutionKind = Literal[
 ]
 
 
+_QWEN_OBSERVATION_MODEL_ID = "Qwen/Qwen2.5-0.5B-Instruct"
+_QWEN_OBSERVATION_ARCH = {
+    "family": "qwen2",
+    "n_layers": 24,
+    "hidden_size": 896,
+    "mlp_intermediate_dim": 4864,
+    "n_heads": 14,
+    "total_params": 494_032_768,
+}
+
+
 class InterventionHookContract(BaseModel):
     """Exact tensor semantics for Stage-27F coordinate interventions."""
 
@@ -50,6 +61,39 @@ class InterventionHookContract(BaseModel):
         "model_arch.mlp_intermediate_dim"
     )
     failure_policy: Literal["fail_closed"] = "fail_closed"
+
+
+class ObservationOnlyHookContract(BaseModel):
+    """Exact Qwen probe geometry with intervention support withheld.
+
+    The selected Qwen binding can observe the activated MLP intermediate at
+    ``down_proj``. It has no calibrated Qwen coordinate adapter, so this
+    carrier must never be interpreted as an available steering contract.
+    """
+
+    contract_version: Literal[
+        "harness_v2.qwen2_mlp_intermediate_observation_only.v1"
+    ] = "harness_v2.qwen2_mlp_intermediate_observation_only.v1"
+    capability_status: Literal[
+        "OBSERVATION_ONLY_INTERVENTION_UNAVAILABLE_UNCALIBRATED"
+    ] = "OBSERVATION_ONLY_INTERVENTION_UNAVAILABLE_UNCALIBRATED"
+    coordinate_space: Literal["mlp_intermediate_post_activation"] = (
+        "mlp_intermediate_post_activation"
+    )
+    module_path_template: Literal[
+        "model.layers[{layer}].mlp.down_proj"
+    ] = "model.layers[{layer}].mlp.down_proj"
+    tensor_role: Literal["forward_pre_hook.input[0]"] = "forward_pre_hook.input[0]"
+    token_selection: Literal["batch_0_last_sequence_position"] = (
+        "batch_0_last_sequence_position"
+    )
+    expected_width_source: Literal["model_arch.mlp_intermediate_dim"] = (
+        "model_arch.mlp_intermediate_dim"
+    )
+    failure_policy: Literal["fail_closed"] = "fail_closed"
+    unavailable_reason: Literal[
+        "NO_QWEN_CALIBRATED_COORDINATE_ADAPTER"
+    ] = "NO_QWEN_CALIBRATED_COORDINATE_ADAPTER"
 
 ModelIdentityStatus = Literal[
     "DEMO_OR_UNLOADED",
@@ -138,7 +182,9 @@ class ModelManifest(BaseModel):
             "from execution on loaded model weights."
         ),
     )
-    intervention_hook_contract: InterventionHookContract = Field(
+    intervention_hook_contract: (
+        InterventionHookContract | ObservationOnlyHookContract
+    ) = Field(
         default_factory=InterventionHookContract,
     )
     worker_version: str = Field(default="m1-scaffold", description="Worker code version tag.")
@@ -199,6 +245,32 @@ class ModelManifest(BaseModel):
 
     @model_validator(mode="after")
     def _real_model_requires_revision_attestation(self) -> "ModelManifest":
+        qwen_contract = isinstance(
+            self.intervention_hook_contract,
+            ObservationOnlyHookContract,
+        )
+        qwen_identity = (
+            self.model_id == _QWEN_OBSERVATION_MODEL_ID
+            or self.model_arch.family == "qwen2"
+        )
+        if qwen_contract or qwen_identity:
+            observed_arch = {
+                field: getattr(self.model_arch, field)
+                for field in _QWEN_OBSERVATION_ARCH
+            }
+            if not (
+                qwen_contract
+                and self.model_id == _QWEN_OBSERVATION_MODEL_ID
+                and self.tokenizer_id == _QWEN_OBSERVATION_MODEL_ID
+                and observed_arch == _QWEN_OBSERVATION_ARCH
+                and self.model_arch.validated is True
+                and "mlp_intermediate_post_activation" in self.supported_hooks
+            ):
+                raise ValueError(
+                    "Qwen observation contract requires the exact model, tokenizer, "
+                    "architecture, validated MLP observation hook, and observation-only "
+                    "contract"
+                )
         requested = self.requested_revision
         resolved = self.resolved_revision
         exact_match = (

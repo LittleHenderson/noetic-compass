@@ -19,6 +19,7 @@ PACKAGED_KERNEL_FILES = frozenset(
         "evidence_packet.py",
         "evidence_packet_builder.py",
         "preregistration.py",
+        "study_protocol.py",
         "worker_protocol.py",
     }
 )

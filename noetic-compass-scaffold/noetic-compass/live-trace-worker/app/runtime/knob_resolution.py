@@ -27,6 +27,7 @@ from typing import Any
 
 from ..schemas.requests import CreateSessionRequest
 from .cover_library import COVER_LIBRARY
+from .model_loader import active_model_binding
 
 
 # -- defaults (post-coercion values the worker reaches for) ----------------
@@ -150,6 +151,9 @@ def resolve_knobs(req: CreateSessionRequest) -> dict[str, dict[str, Any]]:
     """
     raw = raw_knobs(req)
     methods = enabled_methods(req)
+    cover_library_supported = (
+        active_model_binding().stage27f_cover_library_supported
+    )
 
     out: dict[str, dict[str, Any]] = {}
 
@@ -184,7 +188,7 @@ def resolve_knobs(req: CreateSessionRequest) -> dict[str, dict[str, Any]]:
     out["drive_local_eraser"] = {
         "drive": drive,
         "gain": resolve_eraser_gain(eraser.get("gain")),
-        "cover_available": drive in COVER_LIBRARY,
+        "cover_available": cover_library_supported and drive in COVER_LIBRARY,
         "active": "drive_local_eraser" in methods,
     }
 
@@ -195,14 +199,16 @@ def resolve_knobs(req: CreateSessionRequest) -> dict[str, dict[str, Any]]:
         out["blindspot_detection"] = {
             "scope": "all_7",
             "drive": "all_7",
-            "cover_available": True,
+            "cover_available": cover_library_supported,
         }
         return out
     bs_resolved = resolve_drive(bs_drive)
     out["blindspot_detection"] = {
         "scope": bs_resolved,
         "drive": bs_resolved,
-        "cover_available": bs_resolved in COVER_LIBRARY,
+        "cover_available": (
+            cover_library_supported and bs_resolved in COVER_LIBRARY
+        ),
     }
 
     return out

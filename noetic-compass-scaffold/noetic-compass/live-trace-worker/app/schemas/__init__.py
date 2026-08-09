@@ -24,6 +24,7 @@ from .manifest import (
     ModelArch,
     ModelExecutionKind,
     ModelManifest,
+    ObservationOnlyHookContract,
     RuntimeExecutionEvidence,
     SupportedHook,
 )
@@ -45,6 +46,7 @@ __all__ = [
     "ModelArch",
     "ModelExecutionKind",
     "ModelManifest",
+    "ObservationOnlyHookContract",
     "RuntimeExecutionEvidence",
     "Mode7Edge",
     "NeuronActivation",

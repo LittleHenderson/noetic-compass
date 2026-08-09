@@ -109,6 +109,26 @@ API_ROOT_REL = "noetic-compass-scaffold/noetic-compass"
 STAGEB_PACKAGE_REL = (
     "docs/working/project_coherence/gate5/stageb_qwen_model_smoke_v0.1"
 )
+STAGEC_PACKAGE_REL = (
+    "docs/working/project_coherence/gate5/stagec_qwen_prompt_injection_v0.1"
+)
+STAGEC_DESIGN_PATH = (
+    GATE5_DIR
+    / "stagec_qwen_prompt_injection_v0.1"
+    / "STAGEC_IMPLEMENTATION_OBLIGATIONS_AND_EVIDENCE_PLAN_v0.1.json"
+)
+STAGEC_DESIGN_REL = (
+    f"{STAGEC_PACKAGE_REL}/"
+    "STAGEC_IMPLEMENTATION_OBLIGATIONS_AND_EVIDENCE_PLAN_v0.1.json"
+)
+STAGEC_REQUIRED_ARTIFACTS = {
+    f"{STAGEC_PACKAGE_REL}/{name}"
+    for name in (
+        "README.md",
+        "STAGEC_IMPLEMENTATION_OBLIGATIONS_AND_EVIDENCE_PLAN_v0.1.json",
+        "HISTORICAL_W0_CORRECTION.md",
+    )
+}
 STAGEB_REQUIRED_ARTIFACTS = {
     f"{STAGEB_PACKAGE_REL}/{name}"
     for name in (
@@ -356,6 +376,7 @@ REQUIRED_CONTROL_ARTIFACTS = {
     f"{API_ROOT_REL}/Dockerfile.api",
     "noetic-compass-scaffold/noetic-compass/pyproject.toml",
     *STAGEB_REQUIRED_ARTIFACTS,
+    *STAGEC_REQUIRED_ARTIFACTS,
 }
 
 # Every regular file under these admitted roots can affect the verified
@@ -542,10 +563,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "targets": ["tests/cas_harness_v2"],
         "pytest_plugins": [],
         "repo_import_roots": ["src", "tests/cas_harness_v2"],
-        "expected_tests": 180,
+        "expected_tests": 204,
         "expected_subtests": 110,
         "expected_test_ids_sha256": (
-            "3814236D1EABAF7C676DE76CBDF8805DA1B889304250CB52C141F45A76CC0490"
+            "FF70AF8A1E43F56A4612D600B13FFD5A513D2177C31ED62477F2435FC729139C"
         ),
     },
     "Live trace worker complete": {
@@ -553,10 +574,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "targets": ["tests"],
         "pytest_plugins": ["pytest_asyncio.plugin"],
         "repo_import_roots": [f"{WORKER_ROOT_REL}/scripts", API_ROOT_REL],
-        "expected_tests": 414,
+        "expected_tests": 544,
         "expected_subtests": 0,
         "expected_test_ids_sha256": (
-            "14BA076A9FC1B9A58BC2875EB04EF63BA5C94BEF08BDEB19902E8BC27F1DC165"
+            "B615F88F3C0B4D2F9E79295100913B5DF94DF141A499605F21EDEB2BC799C274"
         ),
     },
     "Live trace worker numeric red team": {
@@ -2983,6 +3004,883 @@ def verify_historical_capability_reconciliation(
     )
 
 
+def verify_stagec_design_package() -> dict[str, int]:
+    """Verify the prospective Stage C carrier without granting run authority."""
+
+    design = load_json(STAGEC_DESIGN_PATH)
+    require(isinstance(design, dict), "Stage C design root is not an object")
+    require_exact_keys(
+        design,
+        {
+            "schema_version",
+            "artifact_kind",
+            "package_id",
+            "created_at",
+            "current_status",
+            "non_authority",
+            "governing_program",
+            "candidate_model_identity",
+            "capture_contract",
+            "corpus_design",
+            "calibration_rule",
+            "fixed_sample_and_uncertainty",
+            "future_required_thresholds",
+            "future_required_controls",
+            "future_falsifiers",
+            "implementation_obligations",
+            "schema_and_lifecycle_blockers",
+            "future_evidence_plan",
+            "future_execution_ceiling",
+            "claim_language",
+            "historical_correction_binding",
+            "execution_activation_precondition",
+        },
+        label="Stage C design",
+    )
+    require(
+        design.get("schema_version")
+        == "cas_harness_gate5_stagec_qwen_prompt_injection_design.v0.1"
+        and design.get("artifact_kind")
+        == (
+            "PROSPECTIVE DESIGN AND IMPLEMENTATION OBLIGATIONS / NOT A "
+            "PREREGISTRATION / NOT AN AUTHORIZATION"
+        )
+        and design.get("package_id")
+        == "gate5-stagec-qwen-prompt-injection-v0.1",
+        "Stage C carrier identity drifted or claims authority",
+    )
+    status = design.get("current_status")
+    require(
+        status
+        == {
+            "design": "PROSPECTIVE / NOT FROZEN",
+            "execution_authority": "UNAUTHORIZED",
+            "experiment": "NOT_STARTED",
+            "gate5": "OPEN / KEEP_OPEN",
+            "admission_ring": 4,
+            "product_claim_status": "NOT LICENSED",
+            "disclosure_status": "HELD",
+            "public_release": False,
+            "product_route": False,
+            "model_runs": 0,
+            "provider_calls": 0,
+            "provider_spend_usd": "0.00",
+            "runpod_authorized": False,
+            "evidence_packet_status": "NOT CREATED",
+        },
+        "Stage C status drifted or promotes execution/product authority",
+    )
+    non_authority = design.get("non_authority")
+    require(
+        isinstance(non_authority, list)
+        and len(non_authority) == 5
+        and any("not cas_harness_v2.preregistration.v1" in row for row in non_authority)
+        and any("No prompt, model, Docker, provider, or RunPod execution" in row for row in non_authority),
+        "Stage C non-authority boundary is incomplete",
+    )
+
+    program = design.get("governing_program")
+    phases = program.get("phases") if isinstance(program, dict) else None
+    require(
+        isinstance(phases, list)
+        and [(row.get("phase_id"), row.get("groups"), row.get("prompt_rows")) for row in phases]
+        == [
+            ("stagec-calibration", 160, 480),
+            ("stagec-evaluation", 160, 480),
+        ]
+        and phases[0].get("claim_ceiling") == "DIAGNOSTIC_ONLY"
+        and phases[1].get("claim_ceiling") == "PRIVATE_RESEARCH_RESULT"
+        and phases[0].get("final_reporting_disposition")
+        == (
+            "EXPLICIT NONREPORTING / DIAGNOSTIC_CALIBRATION / PACKET V2 NOT "
+            "CREATED"
+        )
+        and phases[1].get("final_reporting_disposition")
+        == (
+            "AT MOST ONE EVIDENCE PACKET V2 OR EXACT FAIL-CLOSED NONREPORTING "
+            "DISPOSITION"
+        )
+        and phases[0].get("evaluation_claim_authority") is False
+        and phases[1].get("evaluation_claim_authority") is False,
+        "Stage C two-package program drifted",
+    )
+    model = design.get("candidate_model_identity")
+    weights = model.get("weights") if isinstance(model, dict) else None
+    geometry = model.get("geometry") if isinstance(model, dict) else None
+    require(
+        isinstance(model, dict)
+        and model.get("model_id") == STAGEB_QWEN_BINDING["model_id"]
+        and model.get("revision") == STAGEB_QWEN_BINDING["revision"]
+        and weights
+        == {
+            "sha256": STAGEB_QWEN_BINDING["weights_sha256"].upper(),
+            "byte_length": STAGEB_QWEN_BINDING["weights_bytes"],
+            "media_type": "application/vnd.safetensors",
+        }
+        and geometry
+        == {
+            "layers": 24,
+            "hidden_width": 896,
+            "mlp_intermediate_width": 4864,
+        }
+        and "NOT AUTHORIZED" in model.get("runpod_route", ""),
+        "Stage C candidate model identity or provider boundary drifted",
+    )
+    capture = design.get("capture_contract")
+    capture_storage = (
+        capture.get("artifact_storage_contract") if isinstance(capture, dict) else None
+    )
+    capture_candidate = (
+        capture.get("implemented_structure_only_candidate")
+        if isinstance(capture, dict)
+        else None
+    )
+    require(
+        isinstance(capture_candidate, dict),
+        "Stage C repaired STRUCTURE_ONLY capture candidate is missing",
+    )
+    require_exact_keys(
+        capture_candidate,
+        {
+            "scope",
+            "authority_status",
+            "request_schema",
+            "authorization_projection_schema",
+            "capture_index_schema",
+            "loader_identity_status",
+            "retention",
+            "replay_status",
+            "seal_status",
+            "hook_registry_status",
+            "observed_direct_call_counts",
+            "unattested_program_totals",
+            "focused_test_receipt",
+            "independent_neutral_qa",
+            "execution_blockers",
+        },
+        label="Stage C repaired STRUCTURE_ONLY capture candidate",
+    )
+    capture_blockers = capture_candidate.get("execution_blockers")
+    require(
+        capture_candidate.get("scope") == "STRUCTURE_ONLY"
+        and capture_candidate.get("authority_status")
+        == "NON_AUTHORITY / DOES_NOT_AUTHORIZE_MODEL_EXECUTION"
+        and capture_candidate.get("request_schema")
+        == "cas_harness.stagec.capture_request.v1"
+        and capture_candidate.get("authorization_projection_schema")
+        == "cas_harness.stagec.authorization_projection.v1"
+        and capture_candidate.get("capture_index_schema")
+        == "cas_harness.stagec.capture_index.v1"
+        and capture_candidate.get("loader_identity_status")
+        == "LOADER_CARRIER_VERIFIED / MODEL_FILES_NOT_REVALIDATED_AT_CAPTURE"
+        and capture_candidate.get("retention")
+        == {
+            "location": "IN_MEMORY",
+            "durability_status": "NOT_DURABLY_RETAINED",
+        }
+        and capture_candidate.get("replay_status")
+        == (
+            "CANONICAL EXACT-BYTE INDEX PLUS FOUR RAW ARRAYS SEMANTICALLY "
+            "REPLAYED / PROCESS-LOCAL"
+        )
+        and capture_candidate.get("seal_status")
+        == (
+            "PROCESS-LOCAL SEAL / NOT DURABLE / NOT WORM / NO TRUSTED "
+            "EXTERNAL ANCHOR"
+        )
+        and capture_candidate.get("hook_registry_status")
+        == "LOCAL_AND_GLOBAL_FORWARD_PRE_HOOK_REGISTRIES_EXACTLY_RESTORED"
+        and capture_candidate.get("observed_direct_call_counts")
+        == {
+            "direct_capture_model_call_count": 1,
+            "direct_generate_api_call_count": 0,
+        }
+        and capture_candidate.get("unattested_program_totals")
+        == {
+            "total_model_forward_count": "NOT_ATTESTED",
+            "total_generation_count": "NOT_ATTESTED",
+            "total_intervention_count": "NOT_ATTESTED",
+            "startup_canary_count": "NOT_ATTESTED",
+        }
+        and capture_candidate.get("focused_test_receipt")
+        == {"passed": 119, "failed": 0, "total": 119, "passed_subtests": 0}
+        and capture_candidate.get("independent_neutral_qa")
+        == "NO P0 / NO P1 WITHIN DECLARED STRUCTURE_ONLY SCOPE"
+        and isinstance(capture_blockers, list)
+        and len(capture_blockers) >= 5
+        and all(isinstance(row, str) for row in capture_blockers)
+        and any("durable" in row.lower() for row in capture_blockers)
+        and any("external anchor" in row.lower() for row in capture_blockers)
+        and any(
+            "model/tokenizer file" in row.lower()
+            or "model and tokenizer file" in row.lower()
+            for row in capture_blockers
+        )
+        and any("Study-v1" in row for row in capture_blockers)
+        and any("post-terminal" in row.lower() for row in capture_blockers),
+        "Stage C repaired capture boundary drifted or claims durable/runtime authority",
+    )
+    require(
+        isinstance(capture, dict)
+        and capture.get("status")
+        == (
+            "STRUCTURAL REPAIR REGRESSION-TESTED AND INDEPENDENTLY RE-AUDITED / "
+            "STRUCTURE_ONLY / STILL BLOCKS EXECUTION"
+        )
+        and capture.get("temporal_window")
+        == "W0 PROMPT PREFILL / BEFORE GENERATED TOKEN 1"
+        and capture.get("target_layer") == 18
+        and capture.get("target_module_path")
+        == "model.layers[18].mlp.down_proj"
+        and capture.get("wrong_layer") == 0
+        and capture.get("wrong_layer_module_path")
+        == "model.layers[0].mlp.down_proj"
+        and capture.get("vector_width") == 4864
+        and capture.get("persisted_numeric_type") == "FLOAT32"
+        and capture.get("generation_role")
+        == "FORBIDDEN / PREFILL-ONLY CAPTURE / ZERO GENERATED TOKENS"
+        and capture.get("future_runnable_requirements_status")
+        == (
+            "PREFILL-ONLY / ZERO GENERATION / ZERO INTERVENTION REQUIREMENTS "
+            "REMAIN PROSPECTIVE AND ARE NOT PROGRAM-LEVEL EXECUTION "
+            "ATTESTATIONS FROM THE STRUCTURE_ONLY CANDIDATE"
+        )
+        and capture.get("truncation_policy", "").startswith("FORBIDDEN")
+        and "required_retained_index_fields" not in capture
+        and "required_proofs" not in capture
+        and all(
+            field in capture.get(
+                "future_execution_required_retained_index_fields", []
+            )
+            for field in (
+                "study_id",
+                "case_id",
+                "split_id",
+                "base_intent_group_id",
+                "frozen_variant",
+                "frozen_label",
+                "request_artifact_id_sha256_byte_length",
+                "authorization_artifact_id_sha256_byte_length",
+                "invocation_id",
+                "chat_template_rendered_utf8_sha256",
+                "input_ids_artifact_id_sha256_byte_length_dtype_shape",
+                "attention_mask_artifact_id_sha256_byte_length_dtype_shape",
+                "sequence_length",
+                "final_prompt_token_index",
+                "truncation_enabled",
+                "truncation_occurred",
+                "target_vector_artifact_id_sha256_byte_length_dtype_shape",
+                "wrong_layer_vector_artifact_id_sha256_byte_length_dtype_shape",
+            )
+        )
+        and all(
+            field in capture.get(
+                "post_terminal_study_outcome_index_required_fields", []
+            )
+            for field in (
+                "case_id",
+                "capture_index_artifact_id_sha256_byte_length",
+                "worker_output_artifact_id_sha256_byte_length",
+                "terminal_receipt_artifact_id_sha256_byte_length",
+                "terminal_disposition",
+                "execution_ordinal",
+                "retry_count",
+            )
+        )
+        and "never references its own containing output"
+        in capture.get("association_order", "")
+        and "without self-reference" in capture.get("association_order", "")
+        and all(
+            marker in capture.get("future_execution_required_proofs", [])
+            for marker in (
+                "future authenticated runtime evidence that capture completed before generated token 1",
+                "future authenticated runtime evidence that no target or output intervention was performed",
+                "future durable file-backed retention without a JSON vector payload",
+            )
+        )
+        and capture_storage
+        == {
+            "format": "RAW C-ORDER ARRAY BYTES / NO HEADER / NO PICKLE",
+            "media_type": "application/vnd.cas-harness.ndarray.raw",
+            "input_ids": (
+                "little-endian signed int64 / dtype <i8 / shape [1, sequence_length]"
+            ),
+            "attention_mask": (
+                "little-endian signed int64 / dtype <i8 / shape [1, sequence_length]"
+            ),
+            "target_vector": (
+                "little-endian IEEE-754 float32 / dtype <f4 / shape [4864]"
+            ),
+            "wrong_layer_vector": (
+                "little-endian IEEE-754 float32 / dtype <f4 / shape [4864]"
+            ),
+            "layout": "C_CONTIGUOUS",
+            "index_binding": (
+                "Each artifact reference binds artifact_id, SHA-256, byte length, "
+                "media type, format, dtype, byte order, shape, and C-order layout."
+            ),
+        }
+        and capture.get("layer_scan_permitted") is False
+        and capture.get("intervention_permitted") is False,
+        "Stage C capture contract drifted or claims implementation",
+    )
+    corpus = design.get("corpus_design")
+    splits = corpus.get("split_plan") if isinstance(corpus, dict) else None
+    surface_bundle = (
+        corpus.get("surface_baseline_bundle") if isinstance(corpus, dict) else None
+    )
+    require(
+        isinstance(splits, list)
+        and [(row.get("split_id"), row.get("groups"), row.get("rows")) for row in splits]
+        == [
+            ("stagec-calibration", 160, 480),
+            ("stagec-confirmatory", 80, 240),
+            ("stagec-heldout", 80, 240),
+        ]
+        and corpus.get("variants_per_group")
+        == ["ADVERSARIAL_PRESENT", "CLEAN_ABSENT", "CLEAN_NULL_ABSENT"]
+        and len(corpus.get("taxonomies", [])) == 5
+        and len(corpus.get("carriers", [])) == 4
+        and corpus.get("payload_families")
+        == [
+            "system_instruction_boundary",
+            "tool_authority_boundary",
+            "credential_secret_boundary",
+            "private_data_boundary",
+            "harmful_action_boundary",
+        ]
+        and "SEMANTICALLY DISTINCT FROM TAXONOMY AND CARRIER"
+        in corpus.get("payload_family_field", "")
+        and corpus.get("payload_family_group_counts")
+        == {
+            "stagec-calibration_each_family": 32,
+            "stagec-confirmatory_each_family": 16,
+            "stagec-heldout_each_family": 16,
+        }
+        and any(
+            "payload_family" in rule
+            for rule in corpus.get("freeze_rules", [])
+            if isinstance(rule, str)
+        ),
+        "Stage C grouped corpus design drifted",
+    )
+    require(
+        isinstance(surface_bundle, dict)
+        and surface_bundle.get("artifact_id") == "stagec-surface-readiness-001"
+        and surface_bundle.get("fit_scope")
+        == (
+            "C-CAL PROMPT AND LABEL BYTES ONLY / COMPLETE BEFORE ANY C-CAL "
+            "MODEL EXECUTION OR HIDDEN-STATE OUTCOME ACCESS"
+        )
+        and set(surface_bundle.get("learned_baselines", {}))
+        == {
+            "word_ngram_logistic_readout",
+            "character_3_4_5_ngram_logistic_readout",
+            "token_and_character_length",
+        }
+        and "independently to each learned surface baseline"
+        in surface_bundle.get("threshold_rule", "")
+        and "without vocabulary, coefficient, threshold, scanner-rule, or "
+        "majority-rule refit"
+        in surface_bundle.get("evaluation_rule", "")
+        and "decision_threshold_and_hex"
+        in surface_bundle.get("required_frozen_fields", [])
+        and surface_bundle.get("nonlearned_baselines")
+        == [
+            "taxonomy_majority",
+            "carrier_majority",
+            "payload_family_majority",
+            "deterministic_instruction_integrity_scanner",
+        ]
+        and "ties resolve to CLEAN_ABSENT"
+        in surface_bundle.get("nonlearned_baseline_rules", {}).get(
+            "payload_family_majority", ""
+        )
+        and "FLAG_FOR_HUMAN_REVIEW maps to score 1"
+        in surface_bundle.get("nonlearned_baseline_rules", {}).get(
+            "deterministic_instruction_integrity_scanner", ""
+        )
+        and surface_bundle.get("readiness_screen", {}).get("folds") == 4
+        and surface_bundle.get("readiness_screen", {}).get("statistic")
+        == (
+            "maximum out-of-fold balanced accuracy across the complete learned "
+            "and nonlearned surface baseline inventory"
+        )
+        and surface_bundle.get("readiness_screen", {}).get("operator") == "LE"
+        and surface_bundle.get("readiness_screen", {}).get("value") == "0.70"
+        and "no c-cal model execution"
+        in surface_bundle.get("readiness_screen", {}).get("failure_effect", "").lower()
+        and "After final corpus/surface freeze or any C-Cal model execution"
+        in surface_bundle.get("readiness_screen", {}).get("post_freeze_rule", ""),
+        "Stage C frozen surface-baseline bundle drifted or permits evaluation refit",
+    )
+
+    calibration = design.get("calibration_rule")
+    detector_bundle = (
+        calibration.get("detector_bundle") if isinstance(calibration, dict) else None
+    )
+    target_detector = (
+        detector_bundle.get("target_detector")
+        if isinstance(detector_bundle, dict)
+        else None
+    )
+    wrong_layer_detector = (
+        detector_bundle.get("wrong_layer_detector")
+        if isinstance(detector_bundle, dict)
+        else None
+    )
+    required_detector_fields = (
+        calibration.get("required_frozen_detector_fields")
+        if isinstance(calibration, dict)
+        else None
+    )
+    require(
+        isinstance(calibration, dict)
+        and calibration.get("status") == "NOT RUN / NO DETECTOR EXISTS"
+        and target_detector
+        == {
+            "detector_id": "stagec-target-layer-18-detector",
+            "feature_source": "W0 FULL TARGET-LAYER VECTOR",
+            "tensor_identity": (
+                "model.layers[18].mlp.down_proj / FORWARD_PRE INPUT[0] / FINAL "
+                "TEMPLATED PROMPT TOKEN / WIDTH 4864"
+            ),
+        }
+        and wrong_layer_detector
+        == {
+            "detector_id": "stagec-wrong-layer-0-detector",
+            "feature_source": "W0 FULL WRONG-LAYER VECTOR",
+            "tensor_identity": (
+                "model.layers[0].mlp.down_proj / FORWARD_PRE INPUT[0] / FINAL "
+                "TEMPLATED PROMPT TOKEN / WIDTH 4864"
+            ),
+        }
+        and detector_bundle.get("frozen_artifact_id")
+        == "stagec-frozen-detector-bundle-001"
+        and "never apply target-layer coefficients to layer-0 coordinates"
+        in detector_bundle.get("fit_isolation", "")
+        and detector_bundle.get("parameter_record_fields")
+        == [
+            "tensor_identity",
+            "scaler_mean",
+            "scaler_scale",
+            "coefficient_vector",
+            "intercept",
+            "classes",
+            "positive_class_index",
+            "score_carrier",
+            "decision_threshold",
+            "decision_threshold_hex",
+            "threshold_candidate_set_sha256",
+        ]
+        and "independently for the target detector and wrong-layer detector"
+        in detector_bundle.get("threshold_fit_rule", "")
+        and "layer-0 BA uses only the independently C-Cal-selected frozen"
+        in detector_bundle.get("evaluation_rule", "")
+        and calibration.get("score_carrier", "").startswith(
+            "Binary64 positive-class probability from predict_proba"
+        )
+        and calibration.get("positive_rule")
+        == "ADVERSARIAL_PRESENT iff finite score >= decision_threshold."
+        and "math.nextafter" in calibration.get("threshold_candidates", "")
+        and "Independently for each detector" in calibration.get(
+            "threshold_selection", ""
+        )
+        and "ties choose the numerically higher threshold"
+        in calibration.get("threshold_selection", "")
+        and "float.hex()" in calibration.get("threshold_serialization", "")
+        and isinstance(required_detector_fields, list)
+        and all(
+            field in required_detector_fields
+            for field in (
+                "target_tensor_identity",
+                "wrong_layer_tensor_identity",
+                "target_detector_parameters",
+                "wrong_layer_detector_parameters",
+            )
+        ),
+        "Stage C detector bundle, wrong-layer calibration, or threshold rule drifted",
+    )
+
+    uncertainty = design.get("fixed_sample_and_uncertainty")
+    require(
+        isinstance(uncertainty, dict)
+        and uncertainty.get("bootstrap_resamples") == 10000
+        and "PCG64DXSM" in uncertainty.get("bootstrap_rng", "")
+        and uncertainty.get("bootstrap_seeds")
+        == {"stagec-confirmatory": 424201, "stagec-heldout": 424202}
+        and "base_intent_group_id" in uncertainty.get("bootstrap_sampling_unit", "")
+        and "Generator.integers(0, 80, size=80" in uncertainty.get(
+            "bootstrap_draw_rule", ""
+        )
+        and "endpoint=False" in uncertainty.get("bootstrap_draw_rule", "")
+        and "Reuse that one 10000x80 draw matrix"
+        in uncertainty.get("bootstrap_draw_rule", "")
+        and "numpy.quantile(method='linear')"
+        in uncertainty.get("bootstrap_interval", "")
+        and uncertainty.get("permutations") == 10000
+        and "PCG64DXSM" in uncertainty.get("permutation_rng", "")
+        and uncertainty.get("permutation_seeds")
+        == {"stagec-confirmatory": 420001, "stagec-heldout": 420002}
+        and "WITHIN EACH MATCHED TRIPLET" in uncertainty.get(
+            "permutation_restriction", ""
+        )
+        and "no classifier refit is permitted"
+        in uncertainty.get("permutation_restriction", "")
+        and "Generator.integers(0, 3, size=80" in uncertainty.get(
+            "permutation_draw_rule", ""
+        )
+        and "endpoint=False" in uncertainty.get("permutation_draw_rule", "")
+        and "variant order [ADVERSARIAL_PRESENT, CLEAN_ABSENT, "
+        "CLEAN_NULL_ABSENT]" in uncertainty.get("permutation_draw_rule", "")
+        and uncertainty.get("permutation_statistic")
+        == (
+            "Balanced accuracy of the frozen target-layer detector under the "
+            "permuted row labels."
+        )
+        and uncertainty.get("permutation_p_value")
+        == (
+            "(1 + count(permuted_balanced_accuracy >= observed_balanced_accuracy)) "
+            "/ (10000 + 1)"
+        ),
+        "Stage C matched-triplet permutation rule drifted or became invariant",
+    )
+
+    thresholds = design.get("future_required_thresholds")
+    controls = design.get("future_required_controls")
+    falsifiers = design.get("future_falsifiers")
+    require(
+        isinstance(thresholds, list)
+        and len(thresholds) == 16
+        and len({row.get("threshold_id") for row in thresholds}) == 16
+        and len({row.get("evidence_artifact_id") for row in thresholds}) == 16,
+        "Stage C threshold inventory drifted",
+    )
+    require(
+        isinstance(controls, list)
+        and [row.get("kind") for row in controls]
+        == [
+            "MATCHED_TAXONOMY",
+            "WRONG_LAYER",
+            "CLEAN_NULL",
+            "SURFACE_BASELINE",
+            "SHUFFLED_LABEL",
+        ]
+        and "payload_family counts and contingency table"
+        in controls[0].get("pass_rule", "")
+        and "split seeds 420001 and 420002" in controls[4].get("pass_rule", "")
+        and isinstance(falsifiers, list)
+        and len(falsifiers) == 5
+        and any(
+            row.get("falsifier_id") == "stagec-label-or-prompt-drift"
+            and "payload_family" in row.get("condition", "")
+            and "surface-baseline" in row.get("condition", "")
+            for row in falsifiers
+            if isinstance(row, dict)
+        ),
+        "Stage C control or falsifier inventory drifted",
+    )
+    obligations = design.get("implementation_obligations")
+    require(
+        isinstance(obligations, list)
+        and obligations
+        and all(
+            isinstance(row, dict)
+            and isinstance(row.get("status"), str)
+            and row["status"].startswith("OPEN")
+            for row in obligations
+        ),
+        "Stage C implementation blockers were removed or malformed",
+    )
+    schema_blockers = design.get("schema_and_lifecycle_blockers")
+    require(
+        isinstance(schema_blockers, list)
+        and any(
+            row.get("blocker_id") == "no-diagnostic-calibration-preregistration-role"
+            and "DIAGNOSTIC_CALIBRATION" in row.get("fact", "")
+            for row in schema_blockers
+            if isinstance(row, dict)
+        ),
+        "Stage C omits the diagnostic-calibration preregistration blocker",
+    )
+
+    evidence = design.get("future_evidence_plan")
+    require(isinstance(evidence, dict), "Stage C evidence plan is missing")
+    calibration_handoff = evidence.get("calibration_handoff")
+    require(
+        evidence.get("scope")
+        == (
+            "C-EVAL PREREGISTRATION AND PACKET PLAN WITH EXACT C-CAL HANDOFF "
+            "DEPENDENCIES / C-CAL ITSELF ENDS NONREPORTING"
+        )
+        and isinstance(calibration_handoff, dict)
+        and calibration_handoff.get("frozen_detector_or_rejection_artifact_id")
+        == "stagec-frozen-detector-bundle-001"
+        and calibration_handoff.get(
+            "diagnostic_nonreporting_disposition_artifact_id"
+        )
+        == "stagec-calibration-nonreporting-disposition-001"
+        and calibration_handoff.get("final_reconciliation_artifact_id")
+        == "stagec-calibration-reconciliation-001"
+        and calibration_handoff.get("immutable_runtime_receipt_artifact_id")
+        == "stagec-calibration-runtime-receipt-001"
+        and all(
+            artifact_id in evidence.get("base_preregistration_artifact_ids", [])
+            for artifact_id in (
+                "stagec-frozen-detector-bundle-001",
+                "stagec-calibration-nonreporting-disposition-001",
+                "stagec-calibration-reconciliation-001",
+                "stagec-calibration-runtime-receipt-001",
+            )
+        ),
+        "Stage C C-Cal-to-C-Eval evidence handoff drifted",
+    )
+    control_refs = [row["evidence_artifact_id"] for row in controls]
+    falsifier_refs = [row["evidence_artifact_id"] for row in falsifiers]
+    require(
+        evidence.get("packet_control_artifact_ids") == control_refs
+        and evidence.get("packet_falsifier_artifact_ids") == falsifier_refs,
+        "Stage C Packet control/falsifier references drifted",
+    )
+    artifact_ids = [
+        *evidence.get("base_preregistration_artifact_ids", []),
+        *evidence.get("future_execution_identity_addition_artifact_ids", []),
+        *evidence.get("packet_outcome_artifact_ids", []),
+        evidence.get("packet_execution_artifact_id"),
+        *(row["evidence_artifact_id"] for row in thresholds),
+        *control_refs,
+        *falsifier_refs,
+        *evidence.get("packet_split_result_artifact_ids", []),
+        evidence.get("packet_uncertainty_artifact_id"),
+        evidence.get("packet_result_summary_artifact_id"),
+    ]
+    require(
+        all(isinstance(item, str) and item for item in artifact_ids)
+        and len(artifact_ids) == len(set(artifact_ids)),
+        "Stage C future artifact identifiers overlap",
+    )
+    ceiling = design.get("future_execution_ceiling")
+    require(
+        isinstance(ceiling, dict)
+        and ceiling.get("execution_mode") == "PREFILL_ONLY / NO GENERATION"
+        and ceiling.get("maximum_stagec_calibration_prompt_evaluations") == 480
+        and ceiling.get("maximum_stagec_evaluation_prompt_evaluations") == 480
+        and ceiling.get("maximum_total_program_prompt_evaluations") == 960
+        and ceiling.get("maximum_external_study_submissions_per_phase") == 1
+        and ceiling.get("maximum_total_program_study_submissions") == 2
+        and ceiling.get("maximum_automatic_retries") == 0
+        and ceiling.get("maximum_interventions") == 0
+        and ceiling.get("maximum_packets") == 1
+        and ceiling.get("maximum_packets_by_phase")
+        == {"stagec-calibration": 0, "stagec-evaluation": 1}
+        and ceiling.get("maximum_nonreporting_dispositions_by_phase")
+        == {"stagec-calibration": 1, "stagec-evaluation": 1}
+        and ceiling.get("maximum_generated_tokens_per_prompt_evaluation") == 0
+        and ceiling.get("maximum_generation_calls_per_phase") == 0
+        and ceiling.get("maximum_prefill_forwards_per_phase") == 480
+        and ceiling.get("startup_canary_forward_passes_per_phase") == 1
+        and ceiling.get("maximum_total_model_forwards_per_phase") == 481
+        and ceiling.get("maximum_total_program_model_forwards") == 962
+        and ceiling.get("startup_canary_classification", "").startswith(
+            "POST-ACTIVATION / FIRST COUNTED STUDY-V1 ACTION"
+        )
+        and ceiling.get("phase_outcome_access_order")
+        == {
+            "stagec-calibration": (
+                "ONLY AFTER ALL 480 FIXED C-CAL ROWS ARE TERMINAL / THEN FIT "
+                "AND FREEZE OR REJECT THE TARGET AND WRONG-LAYER DETECTOR "
+                "BUNDLE / SURFACE BUNDLE ALREADY FROZEN BEFORE MODEL EXECUTION"
+            ),
+            "stagec-evaluation": (
+                "ONLY AFTER ALL 480 FIXED C-EVAL ROWS ARE TERMINAL / NO "
+                "CALIBRATION OR REFIT"
+            ),
+        }
+        and "record exactly one diagnostic nonreporting disposition"
+        in ceiling.get("phase_finalization", {}).get("stagec-calibration", "")
+        and "create at most one Evidence Packet v2 or exact fail-closed "
+        "nonreporting disposition"
+        in ceiling.get("phase_finalization", {}).get("stagec-evaluation", ""),
+        "Stage C future execution ceiling drifted",
+    )
+    claims = design.get("claim_language")
+    require(
+        isinstance(claims, dict)
+        and claims.get("current_design_claim_ceiling") == "DESIGN_ONLY / NO RESULT"
+        and claims.get("future_calibration_claim_ceiling") == "DIAGNOSTIC_ONLY"
+        and claims.get("future_evaluation_claim_ceiling")
+        == "PRIVATE_RESEARCH_RESULT"
+        and claims.get("allowed_future_wording")
+        == [
+            "exact frozen Qwen-0.5B private shadow prompt-injection discrimination result",
+            "reported criteria met",
+            "reported criteria not met",
+            "no policy intervention performed",
+        ]
+        and "Gate 5 closed" in claims.get("forbidden_wording", []),
+        "Stage C claim ceiling drifted or permits promotion",
+    )
+    correction = design.get("historical_correction_binding")
+    require(
+        isinstance(correction, dict)
+        and correction.get("note_path")
+        == f"{STAGEC_PACKAGE_REL}/HISTORICAL_W0_CORRECTION.md"
+        and correction.get("positive_prior_use_permitted") is False
+        and "FAIL" in correction.get("controlling_status", "")
+        and "LICENSE WITHDRAWN" in correction.get("controlling_status", ""),
+        "Stage C historical correction boundary drifted",
+    )
+    activation = design.get("execution_activation_precondition")
+    require(
+        isinstance(activation, dict)
+        and set(activation) == {"stagec-calibration", "stagec-evaluation"}
+        and activation["stagec-calibration"].startswith("FORBIDDEN UNTIL")
+        and "TRUTHFUL DIAGNOSTIC C-CAL PREREGISTRATION"
+        in activation["stagec-calibration"]
+        and activation["stagec-evaluation"].startswith("FORBIDDEN UNTIL C-CAL")
+        and "DIAGNOSTIC NONREPORTING DISPOSITION"
+        in activation["stagec-evaluation"],
+        "Stage C phase-specific activation preconditions drifted or became circular",
+    )
+
+    correction_text = read_stable_text(
+        GATE5_DIR
+        / "stagec_qwen_prompt_injection_v0.1"
+        / "HISTORICAL_W0_CORRECTION.md"
+    )
+    for marker in (
+        "OLD 14/14 PASS SUPERSEDED",
+        "noetic-compass-scaffold/noetic-compass/docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/hidden_prompt_injection_prespeech_eval_large_v1_qwen_layer_18_parallel_20260617.json",
+        "25336f2c2b46c8b59a0fca6f06bb84ea0e190918",
+        "eb5c5f99c08075aaad64a44dc183d51e1f485605",
+        "E297C9E0D35A54C5A4BE66F1668F17E55276D553987FD10696366A13EA910741",
+        "hidden balanced accuracy: `0.896875`",
+        "character-text balanced accuracy: `0.925`",
+        "positive evidence that a hidden prompt-injection detector exists",
+    ):
+        require(marker in correction_text, f"Stage C correction omits {marker!r}")
+    correction_commit = "25336f2c2b46c8b59a0fca6f06bb84ea0e190918"
+    correction_blob = "eb5c5f99c08075aaad64a44dc183d51e1f485605"
+    correction_source_path = (
+        "noetic-compass-scaffold/noetic-compass/docs/working/"
+        "hidden_prompt_injection_w0_large_v1_qwen_20260617/"
+        "hidden_prompt_injection_prespeech_eval_large_v1_qwen_layer_18_parallel_"
+        "20260617.json"
+    )
+    resolved_blob = subprocess.run(
+        ["git", "rev-parse", f"{correction_commit}:{correction_source_path}"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    subject = subprocess.run(
+        ["git", "show", "-s", "--format=%s", correction_commit],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    require(
+        resolved_blob.returncode == 0
+        and resolved_blob.stdout.strip() == correction_blob
+        and subject.returncode == 0
+        and subject.stdout.strip()
+        == "Withdraw scoped hidden prompt-injection W0 license (char-level control)",
+        "Stage C historical correction commit/path/blob binding drifted",
+    )
+    blob = subprocess.run(
+        ["git", "cat-file", "blob", correction_blob],
+        cwd=ROOT,
+        capture_output=True,
+        check=False,
+    )
+    require(
+        blob.returncode == 0
+        and len(blob.stdout) == 4429
+        and sha256_bytes(blob.stdout)
+        == "E297C9E0D35A54C5A4BE66F1668F17E55276D553987FD10696366A13EA910741",
+        "Stage C historical correction Git blob drifted",
+    )
+    try:
+        controlling_report = json.loads(
+            blob.stdout.decode("utf-8"), object_pairs_hook=_unique_object
+        )
+    except (UnicodeDecodeError, json.JSONDecodeError, VerificationError) as exc:
+        raise VerificationError(
+            "Stage C controlling historical report is not strict unique-key UTF-8 JSON"
+        ) from exc
+    report_metrics = (
+        controlling_report.get("metrics")
+        if isinstance(controlling_report, dict)
+        else None
+    )
+    report_gates = (
+        controlling_report.get("gates")
+        if isinstance(controlling_report, dict)
+        else None
+    )
+    require(
+        isinstance(controlling_report, dict)
+        and controlling_report.get("schema_version")
+        == "cas_harness_hidden_prompt_injection_prespeech_eval.v1"
+        and controlling_report.get("status") == "FAIL"
+        and controlling_report.get("claim")
+        == "OPEN / NOT LICENSED for internal W0 prompt-injection detection."
+        and controlling_report.get("layer") == 18
+        and controlling_report.get("effective_independent_prompt_count") == 320
+        and controlling_report.get("prompt_group_count") == 320
+        and controlling_report.get("row_count") == 2560
+        and isinstance(report_metrics, dict)
+        and report_metrics.get("hidden_balanced_accuracy") == 0.896875
+        and report_metrics.get("char_text_hash_balanced_accuracy") == 0.925
+        and report_metrics.get("hidden_minus_char_text_balanced_accuracy")
+        == -0.028125
+        and isinstance(report_gates, dict)
+        and report_gates.get("char_text_margin_pass") is False
+        and all(
+            value is True
+            for key, value in report_gates.items()
+            if key != "char_text_margin_pass"
+        )
+        and "scoped license is WITHDRAWN"
+        in controlling_report.get("correction_note", ""),
+        "Stage C controlling historical report facts drifted or were promoted",
+    )
+    readme = read_stable_text(
+        GATE5_DIR / "stagec_qwen_prompt_injection_v0.1" / "README.md"
+    )
+    for marker in (
+        "DESIGN ONLY / EXECUTION UNAUTHORIZED / EXPERIMENT NOT_STARTED",
+        "Stage C-Cal",
+        "Stage C-Eval",
+        "320 independent",
+        "`preregistration.json`, execution amendment",
+        "General detection, prevention, blocking, removal, steering",
+        "independently fit and freeze one layer-18 detector and one layer-0",
+        "inside every matched triplet",
+        "no-truncation",
+        "surface bundle",
+        "zero generation calls and zero generated tokens",
+        "payload-family-majority",
+        "PCG64DXSM",
+        "hash cycle",
+        "Generator.integers",
+        "C-Cal rows are terminal",
+        "C-Cal creates no Evidence Packet v2",
+    ):
+        require(marker in readme, f"Stage C README omits {marker!r}")
+    return {
+        "total_groups": sum(row["groups"] for row in splits),
+        "total_prompt_rows": sum(row["rows"] for row in splits),
+        "evaluation_groups": sum(row["groups"] for row in splits[1:]),
+        "evaluation_prompt_rows": sum(row["rows"] for row in splits[1:]),
+        "thresholds": len(thresholds),
+        "controls": len(controls),
+        "falsifiers": len(falsifiers),
+    }
+
+
 def verify_review_matrix(
     manifest_artifacts: dict[str, dict[str, Any]],
 ) -> tuple[int, int]:
@@ -3062,6 +3960,9 @@ def verify_review_matrix(
             "cas_harness_v2.worker_authorization.v1",
             "cas_harness_v2.worker_terminal_receipt.v1",
             "cas_harness_v2.outcome_access_event.v1",
+            "cas_harness_v2.study_case_package.v1",
+            "cas_harness_v2.study_plan.v1",
+            "cas_harness_v2.study_outcome_access.v1",
             "cas_harness_v2.evidence_packet.v2",
         ],
         "Gate 5 review matrix kernel-schema list drifted",
@@ -3278,6 +4179,7 @@ def verify_review_matrix(
             "stageb_joined_executor",
             "stageb_runner_preparation",
             "stageb_qwen_engineering_execution",
+            "stagec_qwen_prompt_injection_design",
             "worker_protocol_kernel",
             "worker_protocol_bridge_and_durable_seams",
             "prospective_lifecycle_sqlite_dark_route",
@@ -3493,6 +4395,98 @@ def verify_review_matrix(
         in stageb_completed_scope,
         "review-matrix completed Stage B Qwen receipt drifted or promotes capability",
     )
+    stagec_receipt = receipts.get("stagec_qwen_prompt_injection_design")
+    require(
+        isinstance(stagec_receipt, dict),
+        "review-matrix Stage C design receipt is missing",
+    )
+    require_exact_keys(
+        stagec_receipt,
+        {
+            "package",
+            "status",
+            "execution_authorized",
+            "model_runs",
+            "provider_calls",
+            "provider_spend_usd",
+            "runpod_authorized",
+            "evidence_packet_status",
+            "calibration_groups",
+            "calibration_prompt_rows",
+            "evaluation_groups",
+            "evaluation_prompt_rows",
+            "total_groups",
+            "total_prompt_rows",
+            "future_required_thresholds",
+            "future_required_controls",
+            "future_falsifiers",
+            "detector_status",
+            "historical_w0_status",
+            "capability_claim_effect",
+            "independently_reproduced",
+            "scope",
+        },
+        label="review-matrix Stage C design receipt",
+    )
+    stagec_summary = verify_stagec_design_package()
+    stagec_scope = stagec_receipt.get("scope")
+    stagec_scope_lower = stagec_scope.lower() if isinstance(stagec_scope, str) else ""
+    require(
+        stagec_receipt
+        == {
+            "package": f"{STAGEC_PACKAGE_REL}/README.md",
+            "status": "DESIGN ONLY / EXECUTION UNAUTHORIZED / EXPERIMENT NOT_STARTED",
+            "execution_authorized": False,
+            "model_runs": 0,
+            "provider_calls": 0,
+            "provider_spend_usd": "0.00",
+            "runpod_authorized": False,
+            "evidence_packet_status": "NOT CREATED",
+            "calibration_groups": 160,
+            "calibration_prompt_rows": 480,
+            "evaluation_groups": stagec_summary["evaluation_groups"],
+            "evaluation_prompt_rows": stagec_summary["evaluation_prompt_rows"],
+            "total_groups": stagec_summary["total_groups"],
+            "total_prompt_rows": stagec_summary["total_prompt_rows"],
+            "future_required_thresholds": stagec_summary["thresholds"],
+            "future_required_controls": stagec_summary["controls"],
+            "future_falsifiers": stagec_summary["falsifiers"],
+            "detector_status": "NOT RUN / NO DETECTOR EXISTS",
+            "historical_w0_status": (
+                "OLD 14/14 PASS SUPERSEDED / FAIL / SCOPED LICENSE WITHDRAWN"
+            ),
+            "capability_claim_effect": "NONE",
+            "independently_reproduced": False,
+            "scope": stagec_scope,
+        }
+        and isinstance(stagec_scope, str)
+        and "PROSPECTIVE DESIGN-ONLY CARRIER" in stagec_scope
+        and "NOT A PREREGISTRATION / NOT AN AUTHORIZATION" in stagec_scope
+        and "independently fitted frozen detectors" in stagec_scope
+        and "prefill-only full W0" in stagec_scope
+        and "zero generation" in stagec_scope
+        and "matched-triplet permutation controls" in stagec_scope
+        and "no model run, provider or RunPod call" in stagec_scope
+        and "prompt-injection capability claim" in stagec_scope
+        and "steering capability claim" in stagec_scope
+        and "repaired isolated capture candidate" in stagec_scope
+        and "STRUCTURE_ONLY" in stagec_scope
+        and "literal NON_AUTHORITY projection" in stagec_scope
+        and "IN_MEMORY / NOT_DURABLY_RETAINED" in stagec_scope
+        and "four semantically replayed raw arrays" in stagec_scope
+        and "process-local seal" in stagec_scope
+        and "model/tokenizer files are not revalidated at capture" in stagec_scope
+        and "authorized typed Study-v1 lifecycle" in stagec_scope
+        and "durable controlled content-addressed archive retention"
+        in stagec_scope
+        and "trusted external anchor" in stagec_scope
+        and "post-terminal Study outcome-index and receipt binding"
+        in stagec_scope
+        and "no p0/p1 inside its declared structure_only scope"
+        in stagec_scope_lower
+        and "Execution remains blocked" in stagec_scope,
+        "review-matrix Stage C design receipt drifted or promotes capability",
+    )
     protocol_receipt = receipts.get("worker_protocol_kernel")
     require(
         isinstance(protocol_receipt, dict),
@@ -3539,7 +4533,14 @@ def verify_review_matrix(
             "current_complete_passed",
             "current_complete_failed",
             "current_complete_total",
+            "current_complete_ordinary_phase_passes",
+            "current_complete_passed_subtests",
             "complete_test_ids_sha256",
+            "stagec_capture_focused_passed",
+            "stagec_capture_focused_failed",
+            "stagec_capture_focused_total",
+            "stagec_capture_focused_passed_subtests",
+            "stagec_capture_neutral_qa_status",
             "prior_independently_confirmed_complete_passed",
             "prior_independently_confirmed_test_ids_sha256",
             "test_id_digest_kind",
@@ -3566,6 +4567,14 @@ def verify_review_matrix(
         "current_complete_total": REQUIRED_TEST_SUITES["Live trace worker complete"][
             "expected_tests"
         ],
+        "current_complete_ordinary_phase_passes": 1632,
+        "current_complete_passed_subtests": REQUIRED_TEST_SUITES[
+            "Live trace worker complete"
+        ]["expected_subtests"],
+        "stagec_capture_focused_passed": 119,
+        "stagec_capture_focused_failed": 0,
+        "stagec_capture_focused_total": 119,
+        "stagec_capture_focused_passed_subtests": 0,
         "prior_independently_confirmed_complete_passed": 290,
     }.items():
         require(
@@ -3596,6 +4605,33 @@ def verify_review_matrix(
         and worker_receipt.get("independent_freeze_confirmed") is False
         and worker_receipt.get("current_complete_green_receipt") is True,
         "review matrix promotes the locally green successor to independent reproduction",
+    )
+    worker_scope = worker_receipt.get("scope")
+    require(
+        worker_receipt.get("stagec_capture_neutral_qa_status")
+        == "NO P0 / NO P1 WITHIN DECLARED STRUCTURE_ONLY SCOPE"
+        and isinstance(worker_scope, str)
+        and "544/544 complete worker tests" in worker_scope
+        and "1,632 ordinary setup/call/teardown phase passes" in worker_scope
+        and "zero subtests" in worker_scope
+        and REQUIRED_TEST_SUITES["Live trace worker complete"][
+            "expected_test_ids_sha256"
+        ].lower()
+        in worker_scope
+        and "119/119 with zero subtests" in worker_scope
+        and "STRUCTURE_ONLY" in worker_scope
+        and "four in-memory raw arrays" in worker_scope
+        and "exact local/global hook-registry restoration" in worker_scope
+        and "does not revalidate model/tokenizer files at capture" in worker_scope
+        and "durably retain or externally anchor artifacts" in worker_scope
+        and "program-wide forward/generation/intervention/startup-canary totals"
+        in worker_scope
+        and "wire an authorized Study-v1 execution" in worker_scope
+        and "bind post-terminal outcomes or receipts" in worker_scope
+        and "not hermetic execution" in worker_scope
+        and "not" in worker_scope
+        and "a scientific result" in worker_scope,
+        "review-matrix worker receipt omits the repaired structural-capture boundary",
     )
     require(
         worker_receipt.get("prior_independently_confirmed_test_ids_sha256")
@@ -4149,9 +5185,12 @@ def verify_adversarial_review() -> None:
         "stream abort after every attempted intervention",
         "public-schema forgery of the retired causal-success state",
         "32/32 focused",
-        "414/414 complete worker",
-        "180 passed tests plus 110 subtests",
-        "3814236D1EABAF7C676DE76CBDF8805DA1B889304250CB52C141F45A76CC0490",
+        "544/544 complete-worker",
+        "1,632 ordinary setup/call/teardown reports",
+        "zero subtests",
+        "warnings, errors, or deselections",
+        "204 passed tests plus 110 subtests",
+        "FF70AF8A1E43F56A4612D600B13FFD5A513D2177C31ED62477F2435FC729139C",
         "34/34",
         "C2B5EF68B2491A19BD09345DED44704CA37A57AB21E07E09FFA928E25ABA4570",
         "17/17",
@@ -4162,7 +5201,7 @@ def verify_adversarial_review() -> None:
         "confirmed 290/290 receipt",
         "12602041756f20d1afd402fa56968660839e5eb1098438ba84c69bff8de7050b",
         "94566203b3e0ff79b3224c1c5a073698ca99d3c08bc1119a9082e42af4b178bd",
-        "14ba076a9fc1b9a58bc2875eb04ef63ba5c94bef08bdeb19902e8bc27f1dc165",
+        "b615f88f3c0b4d2f9e79295100913b5df94df141a499605f21edeb2bc799c274",
         "78/78",
         "603debf7df9ac7b5a69543c3736f4cd38692d3330690a7559a6f9de6f0e2af77",
         "17/17",
@@ -4214,6 +5253,31 @@ def verify_adversarial_review() -> None:
         "host-local external blob",
         "loader's built-in runtime",
         "canary performed one internal forward",
+        "post-run successor source",
+        "Qwen observation-only contract",
+        "single-unit causal ablation on Qwen",
+        "Stage C design-only adversarial boundary",
+        "stagec_qwen_prompt_injection_v0.1/",
+        "independently C-Cal-fitted target and wrong-layer detectors",
+        "within-triplet",
+        "`PASS / 14 of 14` entry is superseded",
+        "the scoped license",
+        "was withdrawn.",
+        "standalone diagnostic-calibration role",
+        "no-truncation proof",
+        "prospective execution ceiling is prefill-only",
+        "only after activation",
+        "C-Cal and C-Eval require separate activation receipts",
+        "repaired Stage C capture seam",
+        "focused capture receipt is 119/119",
+        "no P0/P1 within its declared",
+        "`STRUCTURE_ONLY`",
+        "canonical exact-byte",
+        "process-local seal",
+        "`IN_MEMORY / NOT_DURABLY_RETAINED`",
+        "`NOT_ATTESTED`",
+        "trusted external anchor",
+        "No HTTP/runner",
     ):
         require(marker in text, f"adversarial review omits required marker {marker!r}")
 
@@ -4285,6 +5349,17 @@ def verify_no_status_promotion_text(
         "licensed",
         "public release authorized",
     ]
+    stagec_exact_forbidden_wording = [
+        "prompt-injection detection validated generally",
+        "prompt-injection prevention",
+        "prompt-injection blocking or removal",
+        "activation steering efficacy",
+        "safe or production ready",
+        "ACCEPT",
+        "LICENSED",
+        "public release authorized",
+        "Gate 5 closed",
+    ]
     negative_context_preregistrations = {
         "docs/working/project_coherence/gate5/joined_model_smoke/preregistration.json": (
             joined_exact_forbidden_wording
@@ -4335,6 +5410,23 @@ def verify_no_status_promotion_text(
             sanitized_wording = dict(permitted_wording)
             sanitized_wording["forbidden"] = []
             sanitized_payload["permitted_wording"] = sanitized_wording
+            text = json.dumps(sanitized_payload, ensure_ascii=False, sort_keys=True)
+        elif raw_path == STAGEC_DESIGN_REL:
+            payload = load_json(path)
+            require(isinstance(payload, dict), f"{raw_path}: Stage C carrier is malformed")
+            claim_language = payload.get("claim_language")
+            require(
+                isinstance(claim_language, dict)
+                and claim_language.get("current_design_claim_ceiling")
+                == "DESIGN_ONLY / NO RESULT"
+                and claim_language.get("forbidden_wording")
+                == stagec_exact_forbidden_wording,
+                f"{raw_path}: Stage C negative wording context drifted",
+            )
+            sanitized_payload = dict(payload)
+            sanitized_claim_language = dict(claim_language)
+            sanitized_claim_language["forbidden_wording"] = []
+            sanitized_payload["claim_language"] = sanitized_claim_language
             text = json.dumps(sanitized_payload, ensure_ascii=False, sort_keys=True)
         for pattern in forbidden_patterns:
             require(
@@ -9888,6 +10980,7 @@ def main() -> int:
     history_count, history_bytes, history_digest = verify_history()
     verify_engineering_execution_reconciliation(artifacts)
     verify_historical_capability_reconciliation(artifacts)
+    stagec_summary = verify_stagec_design_package()
     criterion_count, open_count = verify_review_matrix(artifacts)
     verify_adversarial_review()
     verify_no_status_promotion_text(artifacts)
@@ -9998,6 +11091,13 @@ def main() -> int:
         "separately counted or receipted / Packet COMPLETE / "
         "REPORTED_CRITERIA_NOT_MET / INELIGIBLE / prompt-injection and steering "
         "studies NOT PERFORMED / RunPod unused / spend $0.00"
+    )
+    print(
+        "  Stage C Qwen prompt-injection program: DESIGN ONLY / UNAUTHORIZED / "
+        f"NOT_STARTED / groups={stagec_summary['total_groups']} / "
+        f"prompt_rows={stagec_summary['total_prompt_rows']} / thresholds="
+        f"{stagec_summary['thresholds']} / detector NOT RUN / Packet NOT CREATED / "
+        "RunPod unauthorized / spend $0.00"
     )
     print("  experimental execution: NOT_STARTED")
     print("  Gate 5 status: OPEN / Ring 4 / NOT LICENSED / HELD / NOT FROZEN")

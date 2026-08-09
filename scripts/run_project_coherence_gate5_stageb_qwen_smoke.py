@@ -66,6 +66,7 @@ from api.services.cas_harness_v2_joined_executor import (  # noqa: E402
 )
 from api.services.cas_harness_v2_live_worker_join import (  # noqa: E402
     ExpectedRealWorkerManifest,
+    QWEN_OBSERVATION_ONLY_HOOK_PROFILE,
     validate_real_worker_dump_request,
 )
 from api.services.cas_harness_v2_run_lifecycle import (  # noqa: E402
@@ -186,6 +187,11 @@ SOURCE_PATHS = (
     "noetic-compass-scaffold/noetic-compass/api/services/cas_harness_v2_run_lifecycle.py",
     "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/routes/health.py",
     "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/routes/live_trace.py",
+    "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/schemas/__init__.py",
+    "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/schemas/manifest.py",
+    "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/event_stream.py",
+    "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/ablation_probe.py",
+    "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/knob_resolution.py",
     "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/model_loader.py",
     "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/probe_runner.py",
     "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/pythia_runner.py",
@@ -193,6 +199,7 @@ SOURCE_PATHS = (
     "noetic-compass-scaffold/noetic-compass/live-trace-worker/Dockerfile.qwen-stageb-runtime-overlay",
     "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_container_preflight.py",
     "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_qwen_probe_adapter.py",
+    "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_ablation_probe.py",
     "noetic-compass-scaffold/noetic-compass/live-trace-worker/tests/test_health.py",
     "tests/cas_harness_v2/test_evidence_packet_builder.py",
     "noetic-compass-scaffold/noetic-compass/tests/test_cas_harness_v2_joined_executor.py",
@@ -1473,6 +1480,7 @@ def _load_prepared_execution() -> PreparedExecution:
         weights_filename=WEIGHTS_FILENAME,
         weights_sha256=WEIGHTS_SHA256,
         weights_bytes=WEIGHTS_BYTES,
+        hook_contract_profile=QWEN_OBSERVATION_ONLY_HOOK_PROFILE,
     )
     validate_real_worker_dump_request(
         request_raw=request_raw,

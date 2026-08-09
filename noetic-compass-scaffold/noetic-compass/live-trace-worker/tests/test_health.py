@@ -1,3 +1,5 @@
+import hashlib
+
 from app.runtime import model_loader
 
 
@@ -120,6 +122,43 @@ def test_health_realmode_fake_mode_fails_even_with_loaded_model(client, monkeypa
     assert body["model_loaded"] is True
     assert body["load_error"] is None
     assert body["manifest_is_real_model"] is True
+
+
+def test_demo_warm_load_preserves_selected_qwen_manifest(client, monkeypatch):
+    monkeypatch.setenv(
+        model_loader.ACTIVE_MODEL_ENV,
+        model_loader.QWEN_05B_INSTRUCT_BINDING_KEY,
+    )
+    monkeypatch.setenv("LIVE_TRACE_DEMO_MODE", "1")
+    monkeypatch.setattr(model_loader, "_LOADED", None)
+
+    loaded = model_loader.warm_load()
+    response = client.get("/health/realmode")
+
+    assert loaded.manifest.model_id == model_loader.QWEN_05B_INSTRUCT_MODEL_ID
+    assert loaded.manifest.model_arch.family == "qwen2"
+    assert loaded.manifest.model_arch.n_layers == 24
+    assert response.status_code == 200
+    body = response.json()
+    assert body["verdict"] == "NOT_REAL_QWEN2_5_0_5B_INSTRUCT_WEIGHTS"
+    assert body["model_id"] == model_loader.QWEN_05B_INSTRUCT_MODEL_ID
+    assert body["requested_revision"] == model_loader.QWEN_05B_INSTRUCT_REVISION
+    assert body["worker_version"] == "stageb-real-qwen2.5-0.5b-instruct"
+
+
+def test_demo_warm_load_keeps_historical_pythia_manifest_bytes(monkeypatch):
+    monkeypatch.delenv(model_loader.ACTIVE_MODEL_ENV, raising=False)
+    monkeypatch.setenv("LIVE_TRACE_DEMO_MODE", "1")
+    monkeypatch.setattr(model_loader, "_LOADED", None)
+
+    loaded = model_loader.warm_load()
+    raw = loaded.manifest.model_dump_json().encode("utf-8")
+
+    assert loaded.manifest is model_loader.PYTHIA_160M_MANIFEST
+    assert len(raw) == 1093
+    assert hashlib.sha256(raw).hexdigest() == (
+        "3957cd051d1a7de53f49f791b0de5c409506625bf6ed0e94b684ba57c2aa1b37"
+    )
 
 
 def test_health_realmode_unloaded_model_fails_without_triggering_load(client, monkeypatch):

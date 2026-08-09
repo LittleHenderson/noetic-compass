@@ -41,7 +41,7 @@ from .knob_resolution import (
     enabled_methods as _resolve_enabled_methods,
     resolve_knobs,
 )
-from .model_loader import get_loaded_model
+from .model_loader import active_model_binding, get_loaded_model
 from .probe_runner import demo_intervention_result, resolve_probes
 from .word_spans import build_word_spans
 
@@ -64,7 +64,10 @@ def _selected_scope(req: CreateSessionRequest) -> str:
 
 def _cover_event(req: CreateSessionRequest) -> NeuronCoversEvent:
     probes = _requested_probes(req)
-    if "blindspot_covers" not in probes:
+    if (
+        "blindspot_covers" not in probes
+        or not active_model_binding().stage27f_cover_library_supported
+    ):
         return NeuronCoversEvent(per_class_neuron_covers={})
     return NeuronCoversEvent(
         per_class_neuron_covers=cover_members_for_scope(_selected_scope(req)),
@@ -269,6 +272,17 @@ async def stream_real_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
         )
         return
 
+    binding = active_model_binding()
+    if ablation_requested(req) and not binding.single_unit_causal_ablation_supported:
+        yield ErrorEvent(
+            message=(
+                "Single-unit causal ablation is unavailable for the selected "
+                f"model binding {binding.key!r}; no model forward was executed."
+            ),
+            retryable=False,
+        )
+        return
+
     yield ManifestEvent(manifest=loaded.manifest)
     yield _knob_resolution_event(req)
     yield _cover_event(req)
@@ -300,7 +314,12 @@ async def stream_real_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
             from .ablation_probe import run_real_ablation_effect
 
             yield run_real_ablation_effect(
-                req, loaded.model, loaded.tokenizer, n_layers, target
+                req,
+                loaded.model,
+                loaded.tokenizer,
+                n_layers,
+                target,
+                model_binding=binding,
             )
         except Exception:  # pragma: no cover — measurement-time failures
             # A failed measurement is NOT a real causal proof. Degrade to a
@@ -316,7 +335,12 @@ async def stream_real_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
             from .ablation_probe import run_real_ablation_control
 
             yield run_real_ablation_control(
-                req, loaded.model, loaded.tokenizer, n_layers, target
+                req,
+                loaded.model,
+                loaded.tokenizer,
+                n_layers,
+                target,
+                model_binding=binding,
             )
         except Exception:  # pragma: no cover — measurement-time failures
             # A failed control measurement is NOT a real control proof. Degrade

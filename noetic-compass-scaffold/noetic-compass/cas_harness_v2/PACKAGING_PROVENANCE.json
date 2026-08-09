@@ -5,8 +5,8 @@
   "copy_policy": "BYTE_FOR_BYTE_SOURCE_MIRROR",
   "source_files": {
     "__init__.py": {
-      "sha256": "f2fbbaa4c3685da95cbe936f8cbf0a5c726763f41dc02ac621d5db65a69758a6",
-      "size_bytes": 3049
+      "sha256": "14e2ed180d6d8150fe8597c961444d6f70e2e78aa2749e73dbbb2bf27823cfb7",
+      "size_bytes": 4089
     },
     "_strict_json.py": {
       "sha256": "032efd78a48a60c2ac0f3cc3b92274a346c5b044b8f22423722fdf55501c9bdc",
@@ -31,6 +31,10 @@
     "preregistration.py": {
       "sha256": "c44d56adda2f05897346156d1c9352b035fabe7d02b2a309cca17eb18fd20055",
       "size_bytes": 44598
+    },
+    "study_protocol.py": {
+      "sha256": "01a4ef7bb1481c753b6d7e25f6ff5748e4d750c67dd3f30893f70e81a8e57c04",
+      "size_bytes": 52473
     },
     "worker_protocol.py": {
       "sha256": "80e04b35072660cc26a0380974723aa2c5aab5fa29f9a31a82844248e8df7733",

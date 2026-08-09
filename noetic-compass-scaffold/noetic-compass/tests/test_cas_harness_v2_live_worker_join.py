@@ -11,6 +11,7 @@ from api.services.cas_harness_v2_live_worker_join import (
     ExpectedJoinedExecutionIdentity,
     ExpectedRealWorkerManifest,
     MAX_CARRIER_BYTES,
+    QWEN_OBSERVATION_ONLY_HOOK_PROFILE,
     RealWorkerDumpValidationError,
     RealWorkerJoinError,
     RealWorkerPostSendAmbiguousError,
@@ -38,6 +39,64 @@ def _expected_manifest() -> ExpectedRealWorkerManifest:
         weights_sha256=WEIGHTS_SHA256,
         weights_bytes=WEIGHTS_BYTES,
     )
+
+
+def _qwen_expected_manifest() -> ExpectedRealWorkerManifest:
+    return ExpectedRealWorkerManifest(
+        model_id="Qwen/Qwen2.5-0.5B-Instruct",
+        revision="2" * 40,
+        weights_filename=WEIGHTS_FILENAME,
+        weights_sha256="b" * 64,
+        weights_bytes=988_097_824,
+        hook_contract_profile=QWEN_OBSERVATION_ONLY_HOOK_PROFILE,
+    )
+
+
+def _qwen_observation_case() -> tuple[dict[str, object], dict[str, object]]:
+    expected = _qwen_expected_manifest()
+    request = _request(causal=False)
+    request["model_id"] = expected.model_id
+    response = _response(causal=False)
+    manifest = _event(response, "manifest")["manifest"]
+    manifest.update(  # type: ignore[union-attr]
+        {
+            "model_id": expected.model_id,
+            "tokenizer_id": expected.model_id,
+            "worker_version": "stagec-real-qwen2.5-0.5b-instruct",
+            "requested_revision": expected.revision,
+            "resolved_revision": expected.revision,
+            "weights_sha256": expected.weights_sha256,
+            "weights_bytes": expected.weights_bytes,
+            "intervention_hook_contract": {
+                "contract_version": (
+                    "harness_v2.qwen2_mlp_intermediate_observation_only.v1"
+                ),
+                "capability_status": (
+                    "OBSERVATION_ONLY_INTERVENTION_UNAVAILABLE_UNCALIBRATED"
+                ),
+                "coordinate_space": "mlp_intermediate_post_activation",
+                "module_path_template": "model.layers[{layer}].mlp.down_proj",
+                "tensor_role": "forward_pre_hook.input[0]",
+                "token_selection": "batch_0_last_sequence_position",
+                "expected_width_source": "model_arch.mlp_intermediate_dim",
+                "failure_policy": "fail_closed",
+                "unavailable_reason": "NO_QWEN_CALIBRATED_COORDINATE_ADAPTER",
+            },
+        }
+    )
+    manifest["model_arch"] = {  # type: ignore[index]
+        "family": "qwen2",
+        "n_layers": 24,
+        "hidden_size": 896,
+        "mlp_intermediate_dim": 4864,
+        "n_heads": 14,
+        "total_params": 494_032_768,
+        "validated": True,
+    }
+    resolved = _event(response, "knob_resolution")["resolved_knobs"]
+    resolved["drive_local_eraser"]["cover_available"] = False  # type: ignore[index]
+    resolved["blindspot_detection"]["cover_available"] = False  # type: ignore[index]
+    return request, response
 
 
 def _request(*, causal: bool = True) -> dict[str, object]:
@@ -729,6 +788,203 @@ def test_success_binds_exact_snapshots_and_freezes_all_exposed_json() -> None:
         result.request_payload["method_config"]["top_k"] = 99  # type: ignore[index]
     with pytest.raises(TypeError):
         result.events[0]["type"] = "tampered"  # type: ignore[index]
+
+
+def test_qwen_observation_only_manifest_is_exact_and_nonintervening() -> None:
+    request, response = _qwen_observation_case()
+    result = bind_successful_real_worker_dump(
+        request_raw=_encode(request),
+        response_raw=_encode(response),
+        expected_manifest=_qwen_expected_manifest(),
+    )
+
+    assert result.causal_ablation_requested is False
+    assert result.manifest.model_id == "Qwen/Qwen2.5-0.5B-Instruct"
+    assert (
+        result.manifest.hook_contract_profile
+        == QWEN_OBSERVATION_ONLY_HOOK_PROFILE
+    )
+    assert result.manifest.intervention_available is False
+
+
+@pytest.mark.parametrize(
+    ("field", "drifted_value"),
+    [
+        ("family", "pythia"),
+        ("n_layers", 12),
+        ("hidden_size", 768),
+        ("mlp_intermediate_dim", 3072),
+        ("n_heads", 12),
+        ("total_params", 162_322_944),
+        ("validated", False),
+    ],
+)
+def test_qwen_observation_manifest_rejects_every_architecture_drift(
+    field: str,
+    drifted_value: object,
+) -> None:
+    request, response = _qwen_observation_case()
+    arch = _event(response, "manifest")["manifest"]["model_arch"]  # type: ignore[index]
+    arch[field] = drifted_value  # type: ignore[index]
+
+    with pytest.raises(RealWorkerDumpValidationError):
+        bind_successful_real_worker_dump(
+            request_raw=_encode(request),
+            response_raw=_encode(response),
+            expected_manifest=_qwen_expected_manifest(),
+        )
+
+
+def test_qwen_observation_manifest_rejects_tokenizer_and_hook_drift() -> None:
+    request, response = _qwen_observation_case()
+    manifest = _event(response, "manifest")["manifest"]  # type: ignore[index]
+    manifest["tokenizer_id"] = MODEL_ID  # type: ignore[index]
+    with pytest.raises(
+        RealWorkerDumpValidationError,
+        match="tokenizer identity drifted",
+    ):
+        bind_successful_real_worker_dump(
+            request_raw=_encode(request),
+            response_raw=_encode(response),
+            expected_manifest=_qwen_expected_manifest(),
+        )
+
+    for hooks in ([], ["logits"], ["residual_stream"]):
+        request, response = _qwen_observation_case()
+        manifest = _event(response, "manifest")["manifest"]  # type: ignore[index]
+        manifest["supported_hooks"] = hooks  # type: ignore[index]
+        with pytest.raises(
+            RealWorkerDumpValidationError,
+            match="supported hooks drifted",
+        ):
+            bind_successful_real_worker_dump(
+                request_raw=_encode(request),
+                response_raw=_encode(response),
+                expected_manifest=_qwen_expected_manifest(),
+            )
+
+
+def test_qwen_observation_only_request_rejects_interventions_before_send() -> None:
+    request, _response_value = _qwen_observation_case()
+    request["method_config"] = {
+        "enabled_methods": ["drive_local_eraser"],
+        "knobs": {"drive_local_eraser": {"drive": "F5", "gain": 1.0}},
+    }
+    with pytest.raises(
+        RealWorkerDumpValidationError,
+        match="forbids drive_local_eraser",
+    ):
+        validate_real_worker_dump_request(
+            request_raw=_encode(request),
+            expected_manifest=_qwen_expected_manifest(),
+        )
+
+    request, _response_value = _qwen_observation_case()
+    request["method_config"] = {"enabled_methods": None}
+    result = validate_real_worker_dump_request(
+        request_raw=_encode(request),
+        expected_manifest=_qwen_expected_manifest(),
+    )
+    assert result.hook_contract_profile == QWEN_OBSERVATION_ONLY_HOOK_PROFILE
+
+    request, _response_value = _qwen_observation_case()
+    request["probes"] = []
+    with pytest.raises(
+        RealWorkerDumpValidationError,
+        match="requires explicit probes",
+    ):
+        validate_real_worker_dump_request(
+            request_raw=_encode(request),
+            expected_manifest=_qwen_expected_manifest(),
+        )
+
+    for cover_probe in ("blindspot_covers", "blindspots_f1"):
+        request, _response_value = _qwen_observation_case()
+        request["probes"] = [cover_probe]
+        with pytest.raises(
+            RealWorkerDumpValidationError,
+            match="forbids Pythia cover probes",
+        ):
+            validate_real_worker_dump_request(
+                request_raw=_encode(request),
+                expected_manifest=_qwen_expected_manifest(),
+            )
+
+    request, _response_value = _qwen_observation_case()
+    request["method_config"] = {
+        "enabled_methods": ["blindspot_detection"],
+    }
+    with pytest.raises(
+        RealWorkerDumpValidationError,
+        match="forbids the legacy cover library",
+    ):
+        validate_real_worker_dump_request(
+            request_raw=_encode(request),
+            expected_manifest=_qwen_expected_manifest(),
+        )
+
+    request, _response_value = _qwen_observation_case()
+    request["probes"] = ["active_trace", "causal_ablation"]
+    request["ablation_target"] = {"layer": 2, "unit": 17, "mode": "zero"}
+    with pytest.raises(
+        RealWorkerDumpValidationError,
+        match="forbids causal ablation",
+    ):
+        validate_real_worker_dump_request(
+            request_raw=_encode(request),
+            expected_manifest=_qwen_expected_manifest(),
+        )
+
+
+def test_qwen_observation_contract_cannot_drift_or_use_pythia_profile() -> None:
+    request, response = _qwen_observation_case()
+    contract = _event(response, "manifest")["manifest"][  # type: ignore[index]
+        "intervention_hook_contract"
+    ]
+    contract["module_path_template"] = (  # type: ignore[index]
+        "gpt_neox.layers[{layer}].mlp.dense_4h_to_h"
+    )
+    with pytest.raises(RealWorkerDumpValidationError):
+        bind_successful_real_worker_dump(
+            request_raw=_encode(request),
+            response_raw=_encode(response),
+            expected_manifest=_qwen_expected_manifest(),
+        )
+
+    with pytest.raises(
+        ValueError,
+        match="model_id does not match hook_contract_profile",
+    ):
+        ExpectedRealWorkerManifest(
+            model_id=_qwen_expected_manifest().model_id,
+            revision=_qwen_expected_manifest().revision,
+            weights_filename=WEIGHTS_FILENAME,
+            weights_sha256=_qwen_expected_manifest().weights_sha256,
+            weights_bytes=_qwen_expected_manifest().weights_bytes,
+        )
+
+
+def test_qwen_observation_output_cannot_smuggle_pythia_covers() -> None:
+    request, response = _qwen_observation_case()
+    _event(response, "neuron_covers")["per_class_neuron_covers"] = {
+        "F1A": [
+            {
+                "label": "L5N2648",
+                "confidence": 0.8,
+                "confidence_band": "high",
+                "evidence_sources": ["Stage27F cover"],
+            }
+        ]
+    }
+    with pytest.raises(
+        RealWorkerDumpValidationError,
+        match="emitted legacy Pythia neuron covers",
+    ):
+        bind_successful_real_worker_dump(
+            request_raw=_encode(request),
+            response_raw=_encode(response),
+            expected_manifest=_qwen_expected_manifest(),
+        )
 
 
 def test_optional_billing_receipt_requires_explicit_allowance_and_is_frozen() -> None:

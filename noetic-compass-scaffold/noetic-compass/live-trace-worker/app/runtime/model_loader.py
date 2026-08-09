@@ -21,7 +21,12 @@ from pathlib import Path
 from types import MappingProxyType
 from typing import Any
 
-from ..schemas.manifest import ModelArch, ModelManifest, RuntimeExecutionEvidence
+from ..schemas.manifest import (
+    ModelArch,
+    ModelManifest,
+    ObservationOnlyHookContract,
+    RuntimeExecutionEvidence,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -151,6 +156,8 @@ class ModelBinding:
     probe_layer_stack_path: tuple[str, ...]
     probe_projection_path: tuple[str, ...]
     stage27f_intervention_supported: bool
+    stage27f_cover_library_supported: bool
+    single_unit_causal_ablation_supported: bool
 
     @property
     def probe_layer_stack_attr(self) -> str:
@@ -186,6 +193,8 @@ def _pythia_binding() -> ModelBinding:
         probe_layer_stack_path=("gpt_neox", "layers"),
         probe_projection_path=("mlp", "dense_4h_to_h"),
         stage27f_intervention_supported=True,
+        stage27f_cover_library_supported=True,
+        single_unit_causal_ablation_supported=True,
     )
 
 
@@ -203,6 +212,8 @@ def _qwen_05b_instruct_binding() -> ModelBinding:
         probe_layer_stack_path=("model", "layers"),
         probe_projection_path=("mlp", "down_proj"),
         stage27f_intervention_supported=False,
+        stage27f_cover_library_supported=False,
+        single_unit_causal_ablation_supported=False,
     )
 
 
@@ -409,6 +420,8 @@ PYTHIA_160M_MANIFEST = ModelManifest(
     is_real_model=False,
 )
 
+QWEN_05B_OBSERVATION_ONLY_HOOK_CONTRACT = ObservationOnlyHookContract()
+
 
 def bootstrap_manifest(binding: ModelBinding | None = None) -> ModelManifest:
     """Return the unloaded bootstrap manifest for a pinned binding.
@@ -426,6 +439,9 @@ def bootstrap_manifest(binding: ModelBinding | None = None) -> ModelManifest:
             "model_id": binding.model_id,
             "tokenizer_id": binding.model_id,
             "model_arch": binding.arch.model_dump(),
+            "intervention_hook_contract": (
+                QWEN_05B_OBSERVATION_ONLY_HOOK_CONTRACT.model_dump()
+            ),
             "worker_version": binding.worker_version,
             "requested_revision": binding.revision,
         },
@@ -453,9 +469,18 @@ class LoadedModel:
     @property
     def is_real(self) -> bool:
         binding = active_model_binding()
+        expected = bootstrap_manifest(binding)
         return bool(
             self.manifest.is_real_model
             and self.manifest.execution_kind == "real_model_weights"
+            and self.manifest.model_id == expected.model_id
+            and self.manifest.tokenizer_id == expected.tokenizer_id
+            and self.manifest.model_arch == expected.model_arch
+            and self.manifest.supported_hooks == expected.supported_hooks
+            and self.manifest.intervention_hook_contract
+            == expected.intervention_hook_contract
+            and self.manifest.worker_version == expected.worker_version
+            and self.manifest.requested_revision == binding.revision
             and self.manifest.revision_verified
             and self.manifest.resolved_revision == binding.revision
             and self.manifest.weights_hash_verified
@@ -821,7 +846,9 @@ def warm_load() -> LoadedModel:
             if profile == PRODUCTION_PROFILE:
                 raise RuntimeError("production worker profile forbids demo mode")
             logger.info("warm_load: LIVE_TRACE_DEMO_MODE=1 — staying in demo mode")
-            _LOADED = LoadedModel(manifest=PYTHIA_160M_MANIFEST)
+            _LOADED = LoadedModel(
+                manifest=bootstrap_manifest(active_model_binding())
+            )
             return _LOADED
         if profile == PRODUCTION_PROFILE:
             _validate_production_model_cache()

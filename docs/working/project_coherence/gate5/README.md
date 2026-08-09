@@ -183,20 +183,20 @@ trusted time, and independently controlled storage remain unfinished.
 
 ## Current bounded receipts
 
-The stable Harness v2 suite contains 180 pytest node IDs and passes 180 tests
+The stable Harness v2 suite contains 204 pytest node IDs and passes 204 tests
 plus 110 subtests: 94 active control-kernel tests, 35 strict worker-protocol
 tests, 4 historical-recovery tests, 22 retained Gate 5 verifier red-team
-regressions, and 25 Stage B Packet-builder/file-retention tests with 4
-subtests. Its canonical node-ID
+regressions, 25 Stage B Packet-builder/file-retention tests with 4 subtests,
+and 24 Study-v1 structural tests. Its canonical node-ID
 digest is:
 
-`3814236D1EABAF7C676DE76CBDF8805DA1B889304250CB52C141F45A76CC0490`
+`FF70AF8A1E43F56A4612D600B13FFD5A513D2177C31ED62477F2435FC729139C`
 
 This preserves the five strict terminal-receipt builder tests and seven
 subtests committed at `0781bab8`, then adds 25 Packet-construction and
-file-backed-evidence tests with four subtests. These additions are local
-control tests; they do not record a model invocation or promote a scientific
-or capability claim.
+file-backed-evidence tests with four subtests plus 24 Study-v1 structural
+tests. These additions are local control tests; they do not record a model
+invocation or promote a scientific or capability claim.
 
 The four-test historical subset digest is:
 
@@ -217,16 +217,27 @@ when the outcome-access event binds the same terminal receipt and completion
 time, and quarantines partial failure artifacts as negative evidence. These
 are structural controls, not authenticated execution or a scientific result.
 
-The current working-tree worker receipt is 414/414. Its
-canonical node-ID digest is:
+The locked same-process full-worker receipt is 544/544, with 1,632 ordinary
+setup/call/teardown phase reports and zero subtests, warnings, errors, or
+deselections. Its exact Python-ordinal node-ID digest is:
 
-`14BA076A9FC1B9A58BC2875EB04EF63BA5C94BEF08BDEB19902E8BC27F1DC165`
+`B615F88F3C0B4D2F9E79295100913B5DF94DF141A499605F21EDEB2BC799C274`
 
 The earlier 27-test increase came from the finite no-JIT BF16, strict
 protocol-client, and live request/response worker tranches. The latest 14 tests
 bind additive Qwen model selection, probe-adapter geometry/refusal, health
 identity, and container-preflight behavior without executing a Stage B model
-run. The time-indexed v0.2 OCI candidate separately retains its 364/364
+run. The post-Stage-B successor then adds 11 Qwen observation-contract and
+unsupported-intervention fail-closed regressions, followed by 119 Stage C
+full-vector capture tests. The focused capture receipt is 119/119; its source
+and test SHA-256 values are
+`4EA4C57FD412BA811993895AE37E82BEFC13B7AA220C63CAF871CB49D88500F1`
+and
+`B0DC77EEE955DE8424B11AD02CF5AD5D67C0D4F5BE5DC57A6E285A9B8AC60D30`.
+Independent neutral QA found no P0/P1 within the declared `STRUCTURE_ONLY`
+scope. Those capture tests execute only fake/tiny local tensors; they do not
+run the pinned model or establish detection. The
+time-indexed v0.2 OCI candidate separately retains its 364/364
 issuance receipt and digest
 `94566203B3E0FF79B3224C1C5A073698CA99D3C08BC1119A9082E42AF4B178BD`;
 that historical receipt is not rewritten against current worker bytes.
@@ -551,6 +562,19 @@ zero-intervention run, but it is an explicit blocker before any Qwen steering
 tranche. A successor must bind the Qwen intervention contract separately rather
 than treating the captured activation geometry as steering authority.
 
+Post-run successor source now repairs the runtime description without rewriting
+those retained Stage B bytes. The selected Qwen binding emits an exact
+`model.layers[{layer}].mlp.down_proj` **observation-only** contract, cross-binds
+the exact Qwen model, tokenizer, 24-layer/4,864-wide geometry, hook inventory,
+and worker identity, and reports intervention unavailable because no calibrated
+Qwen coordinate adapter exists. Joined and direct-worker paths refuse the
+Pythia eraser, legacy neuron covers, and single-unit causal ablation on Qwen
+before an intervention or ablation forward. This is an honesty and isolation
+repair only: it establishes Qwen observation mechanics, not prompt-injection
+detection or steering efficacy. A future steering study still requires a
+separate typed intervention adapter, calibration artifact, receipt contract,
+prospective authorization, matched controls, and independent review.
+
 Three evidence-portability limits also remain explicit. The runtime-image identity
 records pre-activation warm-load assurance as deferred because the frozen
 one-shot protocol did not authorize a separate pre-claim image-validation
@@ -593,6 +617,12 @@ different evidence classes separate:
   hidden-minus-text delta of `0`, and 0/29 layers passed. The detector remains
   `OPEN / NOT LICENSED`, and this result authorizes no steering or ablation
   conclusion.
+- A separate older Qwen-1.5B W0 entry that stated `PASS / 14 of 14` is
+  superseded by its later exact correction. The controlling report is `FAIL`:
+  hidden balanced accuracy was `0.896875`, the character-text baseline was
+  `0.925`, the hidden-minus-character margin was negative, and the scoped
+  license was withdrawn. It is usable only as a methodological warning that a
+  hidden-state detector must beat strong surface controls.
 - The historical Pythia-160M steering V6 audit is also negative evidence. Its
   common-readout balanced accuracy was `0.5`, target Spearman rho was `-1.0`,
   and off-target, random-direction, and wrong-axis effects exceeded the target
@@ -603,6 +633,73 @@ These records prevent an engineering fixture pass or observable activation
 change from being rewritten as a validated detection, steering, combined-policy,
 scientific, safety, or product capability. They are historical controls and
 must not be rerun merely to search for a favorable outcome.
+
+## Prospective Stage C detection-only design
+
+`stagec_qwen_prompt_injection_v0.1/` now records the dependency-ordered Stage C
+design as `DESIGN ONLY / EXECUTION UNAUTHORIZED / NOT_STARTED`. It deliberately
+contains no preregistration, authorization, model request, outcome, Packet, or
+runner. The program is split into a diagnostic calibration package and a later
+untouched evaluation package because the current one-shot chain cannot expose a
+calibration outcome and then continue prospectively on held-out data.
+
+The design freezes 320 matched intent groups and 960 total prompts across the
+two packages. Each group contains adversarial, matched-clean, and
+injection-like benign-null variants. The prospective model-bound read is the
+full 4,864-wide prompt-end `W0` input to Qwen layer 18, with layer 0 as the
+wrong-layer control; Stage B top-eight summaries are not sufficient. Strong
+word/character/length/taxonomy/carrier and deterministic-scanner baselines are
+mandatory, and the superseded historical `14/14 PASS` cannot be used as a
+positive prior.
+
+C-Cal prompt/label bytes fit and freeze every learned surface baseline before
+any C-Cal model execution. After all C-Cal rows are terminal, C-Cal independently
+fits and freezes the layer-18 detector and layer-0 wrong-layer detector before
+any C-Eval prompt is accessed. The capture index must retain the exact rendered chat
+template, input IDs, attention mask, final prompt-token index, no-truncation
+proof, and both full vectors. The shuffled-label control uses fixed detector
+scores and 10,000 within-triplet positive-designation rotations; it does not
+perform the mathematically invariant operation of shuffling identical
+three-label groups, and it never refits a classifier on evaluation data.
+Stage C is prefill-only: generation calls and generated tokens are both capped
+at zero. Any one-forward runtime canary occurs only after activation as the
+first counted Study-v1 action and before corpus or outcome access.
+C-Cal has its own activation boundary and ends with an explicit diagnostic
+nonreporting disposition, not a Packet. Only a later C-Eval preregistration may
+bind that retained calibration result and authorize at most one Packet.
+
+An additive process-local Study-v1 source candidate is now implemented and
+regression-tested. It binds the fixed case/package inventory, exact child
+requests, three-variant group structure, per-case counter contracts, no-retry
+failure state, and delayed study-wide outcome access. That does not yet make
+Stage C executable: the v1 preregistration schema still cannot represent a
+standalone diagnostic C-Cal chain, and the candidate has no durable
+cross-process one-use/WORM state, trusted runtime telemetry, or proof that the
+model consumed the exact bound request bytes.
+
+The repaired isolated Stage C capture candidate now binds canonical exact-byte
+request, non-authorizing projection, and capture-index artifacts; obtains and
+postchecks the model-loader singleton carrier; semantically replays input IDs,
+attention masks, and both full activation arrays; process-locally seals the
+result; exactly restores local and global hook registries; and scopes its direct
+call evidence to one capture call and zero direct generation calls. Broader
+runtime totals remain explicitly `NOT_ATTESTED`, while every carrier reports
+`IN_MEMORY / NOT_DURABLY_RETAINED`. Its 119/119 focused receipt and the locked
+544/544 full-worker receipt passed, and independent neutral QA found no P0/P1
+within the declared `STRUCTURE_ONLY` scope.
+
+That structural result is not runtime authority. Artifact replay still needs a
+trusted external anchor; the result seal is process-local; model files are not
+rehashed at capture; rendered-prompt, activation, and logits provenance is not
+independently recomputable; hook use is serialized; and no HTTP, Study-v1,
+durable archive, or post-terminal binding is wired. The tests remain fake-only,
+and the candidate has not run the real Qwen model. Execution therefore remains
+blocked on those integrations, split-aware semantic metric recomputation, and a
+clean prospective identity freeze. Steering, ablation,
+blocking, suppression, rewriting, and detect-then-intervene policy are outside
+Stage C. Even a future passing evaluation would remain a private exact-design
+result at Ring 4 / `NOT LICENSED / HELD`, not a general detection or product
+claim.
 
 ## Preserved negative evidence
 

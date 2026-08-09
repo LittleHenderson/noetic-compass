@@ -168,7 +168,7 @@ SHA-256 and byte length, and freshly replays them against the current
 pre-outcome chain before public reads. This is process-local tamper detection,
 not WORM authority.
 
-The clean focused receipt is **180 passed tests plus 110 subtests** under Python
+The clean focused receipt is **204 passed tests plus 110 subtests** under Python
 3.14 with startup site processing and bytecode/cache output disabled. It
 contains 94 active-kernel tests, 35 strict worker-protocol tests, 4
 historical-recovery tests, 22 Gate 5 verifier red-team tests, and 25 Stage B
@@ -186,7 +186,7 @@ object substitution while structural ancestor replacement remains detected.
 The receipt is limited to
 `tests/cas_harness_v2`; it is not a repository-wide or production receipt.
 Its same-process executed-node SHA-256 is
-`3814236D1EABAF7C676DE76CBDF8805DA1B889304250CB52C141F45A76CC0490`.
+`FF70AF8A1E43F56A4612D600B13FFD5A513D2177C31ED62477F2435FC729139C`.
 
 The earlier five strict terminal-receipt builder tests and seven subtests
 committed at `0781bab8` remain preserved. The current 25-test/four-subtest
@@ -506,17 +506,26 @@ The test
 subsequently reproduced a post-validation assignment bypass. The retained
 repair freezes the public receipt and its nested carriers and revalidates
 copy-with-update. The current working-tree successor retains the **32/32 focused
-numeric** receipt and confirms **414/414 complete worker**. Their verifier-canonical
-test-ID-set
-SHA-256 values are, respectively,
+numeric** receipt and confirms a locked same-process **544/544 complete-worker**
+receipt with 1,632 ordinary setup/call/teardown reports and zero subtests,
+warnings, errors, or deselections. Their verifier-canonical test-ID-set SHA-256
+values are, respectively,
 `12602041756f20d1afd402fa56968660839e5eb1098438ba84c69bff8de7050b`
 and
-`14ba076a9fc1b9a58bc2875eb04ef63ba5c94bef08bdeb19902e8bc27f1dc165`.
+`b615f88f3c0b4d2f9e79295100913b5df94df141a499605f21edeb2bc799c274`.
 The earlier 27-test increase came from the finite no-JIT BF16, strict
 protocol-client, and live request/response worker tranches. The latest 14-test
 increase binds additive Qwen model selection, probe-adapter geometry/refusal,
 health identity, and container-preflight behavior without executing a Stage B
-model run. The time-indexed v0.2 OCI candidate separately preserves its 364/364
+model run. The post-Stage-B successor adds 11 observation-contract and
+unsupported-intervention fail-closed tests; the repaired Stage C capture seam
+adds 119 fake/tiny-tensor tests without a real model or provider call. The
+focused capture receipt is 119/119, with source SHA-256
+`4ea4c57fd412ba811993895ae37e82befc13b7aa220c63caf871cb49d88500f1`
+and test SHA-256
+`b0dc77eee955de8424b11ad02cf5ad5d67c0d4f5be5dc57a6e285a9b8ac60d30`.
+Independent neutral QA found no P0/P1 within its declared `STRUCTURE_ONLY`
+scope. The time-indexed v0.2 OCI candidate separately preserves its 364/364
 issuance
 receipt and digest
 `94566203b3e0ff79b3224c1c5a073698ca99d3c08bc1119a9082e42af4b178bd`;
@@ -758,6 +767,17 @@ zero-intervention capture run, but it cannot be accepted as a Qwen intervention
 contract. A separate, prospectively bound Qwen steering tranche must repair and
 test that seam before any intervention attempt.
 
+The post-run successor source does not rewrite that historical output. It now
+emits a typed Qwen observation-only contract for
+`model.layers[{layer}].mlp.down_proj`, binds the exact Qwen tokenizer and
+24-layer/4,864-wide architecture, and marks intervention unavailable without a
+calibrated Qwen adapter. It also refuses Pythia Stage-27F erasure, legacy cover
+coordinates, and single-unit causal ablation on Qwen before an intervention or
+ablation forward. Adversarial regressions cover cross-family manifest/profile
+swaps, tokenizer/architecture/hook drift, direct-runtime cover leakage, and
+no-op causal claims. These are fail-closed successor controls, not evidence of
+prompt-injection detection or steering.
+
 The retained runtime-image identity also says the separate pre-claim image
 warm-load assurance was deferred: the frozen design prohibited an extra
 pre-amendment model container, and the preparation test enforces that
@@ -807,11 +827,73 @@ to `FAIL_CLOSED`: common-readout balanced accuracy `0.5`, target Spearman rho
 `-1.0`, and off-target/random/wrong-axis ratios all showed nonspecific effects.
 It remains `NON_REUSABLE / NO RETRY`.
 
+The prospective Stage C package separately records that an older Qwen-1.5B W0
+`PASS / 14 of 14` entry is superseded. Its controlling corrected report is
+`FAIL`: hidden balanced accuracy `0.896875` was below the character-text
+baseline `0.925`, the character-margin control failed, and the scoped license
+was withdrawn. It cannot supply a detector, layer, threshold, expected effect,
+or license for Stage C.
+
 Accordingly, neither perfect frozen-fixture scanner performance nor a recorded
 activation/output change is admitted as validated prompt-injection detection,
 selective steering, combined defense, safety, science, or product capability.
 The negative studies are controls against outcome shopping, not invitations to
 repeat a frozen failed protocol until it passes.
+
+### Stage C design-only adversarial boundary
+
+`stagec_qwen_prompt_injection_v0.1/` is a prospective design carrier only. It
+freezes separate calibration and untouched evaluation phases, 320 matched
+three-variant groups/960 total prompts, full prompt-end layer-18 and layer-0
+vectors, independently C-Cal-fitted target and wrong-layer detectors, strong
+C-Cal prompt/label-only surface baselines frozen before model execution,
+fixed-sample power, five required
+controls, and a one-Packet ceiling. Exact capture evidence must include the
+rendered chat template, input IDs, attention mask, final prompt-token index,
+and no-truncation proof. The label null is 10,000 fixed-score within-triplet
+positive-designation rotations with no classifier refit, not an invariant
+shuffle of identical three-label groups. It creates no executable preregistration,
+authorization, request, outcome, Packet, provider call, or model execution.
+The prospective execution ceiling is prefill-only: zero generation calls and
+zero generated tokens. A runtime canary is allowed only after activation, as
+the first counted Study-v1 action with zero corpus or outcome access.
+C-Cal and C-Eval require separate activation receipts. C-Cal must end in one
+diagnostic nonreporting disposition and cannot create a Packet; C-Eval may bind
+that retained calibration state and create at most one Packet or fail-closed
+nonreporting disposition.
+
+The new isolated Study-v1 source candidate now supplies a process-local fixed
+child inventory, three-variant group checks, exact request/package bindings,
+per-case counter contracts, no-retry failure state, and delayed study-wide
+outcome access. Its independent audit found no remaining critical defect
+inside that deliberately structural scope. It does not close execution: the
+current preregistration still lacks a standalone diagnostic-calibration role,
+the current counter and one-use controls are not authenticated durable runtime
+telemetry, and the model-consumed request bytes are not attested.
+
+The repaired isolated Stage C worker candidate binds canonical exact-byte
+request, non-authorizing authorization-projection, and capture-index artifacts;
+acquires and postchecks the exact model-loader singleton carrier; semantically
+replays input IDs, attention masks, and both full activation arrays; protects
+the returned bundle with a process-local seal; and verifies exact restoration
+of local and global hook registries. Its telemetry truthfully scopes one direct
+capture model call and zero direct generation API calls, while broader forward,
+generation, intervention, and startup-canary totals remain `NOT_ATTESTED`.
+Every retained carrier is explicitly `IN_MEMORY / NOT_DURABLY_RETAINED`.
+The focused 119/119 receipt and locked 544/544 full-worker receipt are green;
+independent neutral QA found no P0/P1 within the declared `STRUCTURE_ONLY`
+scope.
+
+That QA result does not extend beyond the structural seam. Artifact replay lacks
+a trusted external anchor, the seal is process-local, model files are not
+rehashed at capture, and rendered-prompt, activation, and logits provenance is
+not independently recomputable. Hook use is serialized. No HTTP/runner,
+Study-v1, durable archive, or post-terminal outcome binding exists; all tests
+are fake/tiny-tensor only, and the real Qwen model has not been executed.
+Packet v2 also cannot independently recompute the case ledger. A future run
+must close those boundaries, freeze all
+corpus/detector/execution identities, and keep steering outside the detection
+study. No Stage C result exists in this candidate.
 
 ## Historical V1-V4 review
 
@@ -944,12 +1026,12 @@ remain `NONE`; the claim remains `NOT LICENSED`; and disclosure remains `HELD`.
 
 The minimum defensible order is:
 
-1. preserve the verifier-native 180-test/110-subtest Harness-v2,
+1. preserve the verifier-native 204-test/110-subtest Harness-v2,
    35-test/45-subtest worker-protocol, 17/17 dark-bridge, 38/38
    callback/Object-Lock seam, 134/134 prospective lifecycle/SQLite/dark-route,
    98/98 admitted-adapter/configured-reconciliation, 27/27 retained local
    GPU/joined evidence,
-   32/32 focused numeric, 414/414 complete-worker, 34/34 Stage B joined-executor,
+   32/32 focused numeric, 544/544 complete-worker, 34/34 Stage B joined-executor,
    17/17 Stage B runner-preparation, and 78/78
    API/launcher/fleet/state receipts, the earlier 290/290 checkpoint, and every
    counterexample, including the current ephemeral same-process and retained

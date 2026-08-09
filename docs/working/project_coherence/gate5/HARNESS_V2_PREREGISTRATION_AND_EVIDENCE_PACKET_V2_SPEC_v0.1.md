@@ -254,12 +254,13 @@ outcome access, exact completion binding, bypass-mutated outcome-event replay,
 retained-byte registry mutation, audit contradictions, normalized cross-role
 aliases, and all four repository-known v1 labels.
 
-Current focused validation: `180 passed, 110 subtests passed` under Python 3.14
+Current focused validation: `204 passed, 110 subtests passed` under Python 3.14
 with site startup and bytecode generation disabled. It comprises 94 active
 kernel tests, 35 strict worker-protocol tests, four historical-recovery tests,
 22 Gate 5 verifier red-team tests, and 25 Stage B Packet-builder/file-retention
-tests with four subtests. Its same-process executed-node digest is
-`3814236D1EABAF7C676DE76CBDF8805DA1B889304250CB52C141F45A76CC0490`.
+tests with four subtests plus 24 Study-v1 structural tests. Its same-process
+executed-node digest is
+`FF70AF8A1E43F56A4612D600B13FFD5A513D2177C31ED62477F2435FC729139C`.
 This ephemeral local receipt is checked inside the verifier but is not retained
 under trusted time or WORM authority. It proves repository-local controls only;
 it is not live execution, independent reproduction, scientific evidence, or
@@ -336,6 +337,85 @@ exceptions for `api/services/cas_harness_pythia160m_*.py`,
 exceptions preserve the already-LF historical worker source blobs as original
 Git bytes while Gate 5's direct-or-transitive hash closure continues to bind
 them.
+
+## Additive fixed-sample Study-v1 structural candidate
+
+`cas_harness_v2.study_plan.v1` and
+`cas_harness_v2.study_outcome_access.v1` are additive, process-local research
+schemas for a fixed multi-prompt study. They do not replace or weaken the v1
+preregistration chain, worker authorization, worker terminal receipt, or
+Packet-v2 schemas.
+
+The bounded source candidate is implemented in
+`src/cas_harness_v2/study_protocol.py` and adversarially exercised by
+`tests/cas_harness_v2/test_study_protocol.py`. Those files are an isolated
+structural seam, not a live runner or authority.
+
+The candidate binds one exact parent plan, content-addressed ordered case
+packages, request bytes, case/group/variant identities, pre-outcome
+preregistration-chain bytes including amendments, exact per-case counters, and
+one terminal receipt per fixed case. It supports two distinct study phases:
+
+- `DIAGNOSTIC_CALIBRATION` requires one diagnostic package with exactly 160
+  groups and the exact three Stage C variants per group; it cannot masquerade
+  as confirmatory or replication evidence.
+- `CONFIRMATORY_EVALUATION` requires ordered confirmatory and internally
+  held-out packages bound to the preregistered split artifacts, with disjoint
+  exact inventories. The internal held-out role does not establish independent
+  replication.
+
+The first definite child failure terminalizes the process-local study with no
+retry. Successful registration requires nonnegative, per-case exact counters
+whose digests travel through authorization and receipt, and outcome access is
+strictly after the chronologically latest terminal. These are structural
+controls only. The implementation has no durable cross-process one-use state,
+trusted time, WORM authority, provider attestation, model-consumption proof,
+Packet creation, scientific conclusion, license, product permission, or
+disclosure authority.
+
+The current `cas_harness_v2.preregistration.v1` schema still requires
+confirmatory plus held-out roles and cannot honestly represent a standalone
+C-Cal diagnostic preregistration. A future additive preregistration role and
+durable execution mapping must close that gap before Stage C-Cal activation.
+No Stage C preregistration, authorization, model run, provider call, outcome,
+or Packet exists in this candidate.
+
+## Additive Stage C full-vector capture structural candidate
+
+The repaired isolated worker seam in
+`live-trace-worker/app/runtime/stagec_capture.py` consumes canonical exact-byte
+`cas_harness.stagec.capture_request.v1` and non-authorizing
+`cas_harness.stagec.authorization_projection.v1` artifacts and emits a
+canonical exact-byte `cas_harness.stagec.capture_index.v1` artifact. It obtains
+the exact `model_loader.LoadedModel` singleton and postchecks that carrier after
+the call. Strict replay validates the index and semantically decodes the input
+IDs, attention mask, layer-0 vector, and layer-18 vector from the four bound raw
+array artifacts. A process-local result seal detects later in-process mutation,
+and local and global forward-hook registries must be restored exactly.
+
+The seam reports only call counts it directly scopes: one direct capture model
+call and zero direct generation API calls. Broader model-forward, generation,
+intervention, and startup-canary totals remain `NOT_ATTESTED`. Its artifact
+location and durability fields remain `IN_MEMORY / NOT_DURABLY_RETAINED`.
+Focused regression evidence is 119/119, with source SHA-256
+`4EA4C57FD412BA811993895AE37E82BEFC13B7AA220C63CAF871CB49D88500F1`
+and test SHA-256
+`B0DC77EEE955DE8424B11AD02CF5AD5D67C0D4F5BE5DC57A6E285A9B8AC60D30`.
+The locked full-worker same-process receipt is 544/544 with 1,632 ordinary
+setup/call/teardown reports, zero subtests, warnings, errors, or deselections,
+and exact Python-ordinal node-ID digest
+`B615F88F3C0B4D2F9E79295100913B5DF94DF141A499605F21EDEB2BC799C274`.
+Independent neutral QA found no P0/P1 within the declared `STRUCTURE_ONLY`
+scope; that finding is not independent external replication.
+
+This seam remains non-authorizing. Its artifact replay has no trusted external
+anchor; its result seal is process-local; model files are not rehashed at
+capture; and the rendered-prompt, activation, and logits provenance is not
+independently recomputable. Hook use is serialized. There is no HTTP or Study-v1
+wiring, durable archive, or post-terminal outcome binding, and the tests use
+only fake/tiny local tensors rather than the real pinned Qwen model. No
+prompt-injection detection or steering result exists. No provider or RunPod job
+was launched and known spend for this tranche remains `$0.00`.
 
 Still open outside this isolated kernel:
 
