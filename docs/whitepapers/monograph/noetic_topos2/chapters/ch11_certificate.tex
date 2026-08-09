@@ -58,8 +58,8 @@ generation with a seed: a run either passes identically every time at a
 given commit or fails identically every time. This is what allows the
 certificate to be a \emph{record} rather than a statistic --- the
 expected-result block asserts exact values, not distributions, and a
-reviewer who reruns the registered command either reproduces the block
-bit-for-bit or has found a discrepancy to file.
+reviewer who reruns a verifier at the bound commit either reproduces the
+block bit-for-bit or has found a discrepancy to file.
 
 \emph{Dependency-freedom.} The finite-site checker is deliberately free
 of third-party dependencies: contexts are frozen sets, presheaves are
@@ -92,10 +92,17 @@ degenerately too strong (maximal everywhere).
 \section{The finite-site checker and its twenty-three checks}
 \label{ch11:sec:finitesite}
 
-The finite-site layer is the module \texttt{src/noetic\_topos2/finite\_site.py}
-with test suite \texttt{tests/noetic\_topos2/test\_finite\_site.py}. Its
+The finite-site layer is the module and test suite
+\begin{center}
+\texttt{src/noetic\_topos2/finite\_site.py}\\
+\texttt{tests/noetic\_topos2/test\_finite\_site.py}
+\end{center}
+Its
 certificate declares schema version
-\texttt{noetic\_topos2.finite\_model\_certificate.v0.1}, document status
+\begin{center}
+\texttt{noetic\_topos2.finite\_model\_certificate.v0.1},
+\end{center}
+document status
 \textsc{internal finite check complete / independent proof review open}, and
 model identifier
 \begin{center}
@@ -111,7 +118,19 @@ commit
 \begin{center}
 \texttt{a1cd990109e7561dfd03949bf0e1653461c7ae44}
 \end{center}
-(the base commit registered in Chapter~1). We take them in order, stating
+(the base commit registered in Chapter~1).
+
+One gap in this layer's audit surface belongs here rather than in a footnote
+to it: the monograph reproduces no invocation for the finite-site checker.
+The module and suite paths above are the only locators supplied, and
+Section~\ref{ch11:sec:rerun} registers commands for the composition layer
+alone, so --- as with the Lean layer of Section~\ref{ch11:sec:lean} --- this
+layer cannot be rerun from the monograph by itself. What the checks below
+report is accordingly a reading of the certificate's expected-result block;
+a reviewer who wants to reproduce that block must take the invocation from
+the registered artifact set rather than from these pages.
+
+We take the checks in order, stating
 for each what is computed and which result of the monograph it
 corroborates.
 
@@ -206,10 +225,10 @@ an object before being scored as evidence.
 \begin{checkclass}
 \label{ch11:chk:verdicts}
 \textbf{The four sheaf/non-sheaf verdicts:
-\texttt{acbe\_witness\_is\_acbe\_sheaf} (true),
-\texttt{acbe\_witness\_is\_rpm\_sheaf} (false),
-\texttt{rpm\_witness\_is\_rpm\_sheaf} (true),
-\texttt{rpm\_witness\_is\_acbe\_sheaf} (false).} The checker computes, for
+\texttt{acbe\_\allowbreak witness\_\allowbreak is\_\allowbreak acbe\_\allowbreak sheaf} (true),
+\texttt{acbe\_\allowbreak witness\_\allowbreak is\_\allowbreak rpm\_\allowbreak sheaf} (false),
+\texttt{rpm\_\allowbreak witness\_\allowbreak is\_\allowbreak rpm\_\allowbreak sheaf} (true),
+\texttt{rpm\_\allowbreak witness\_\allowbreak is\_\allowbreak acbe\_\allowbreak sheaf} (false).} The checker computes, for
 each witness and each topology, the matching-family set of every generating
 cover at every context and compares it with the value set. The registered
 expectations are asymmetric on purpose: two verdicts are expected
@@ -242,8 +261,12 @@ Chapter~10's Theorem on modality composition.
 
 \begin{checkclass}
 \label{ch11:chk:singleton}
-\textbf{\texttt{singleton\_unmarked\_families\_coincide},
-\texttt{singleton\_marked\_covers\_distinct}.} At each singleton context
+\begin{center}
+\ttfamily
+singleton\_unmarked\_families\_coincide,\\
+singleton\_marked\_covers\_distinct.
+\end{center}
+\noindent At each singleton context
 $\{(i, j)\}$, the checker verifies two facts in deliberate tension. First,
 the bare arrow families coincide:
 $K_A(\{(i,j)\})$ and $K_R(\{(i,j)\})$ are the same unmarked list (the
@@ -273,8 +296,8 @@ that did not survive its own serialization could not chain.
 
 \begin{checkclass}
 \label{ch11:chk:pullbackprov}
-\textbf{\texttt{marked\_pullbacks\_bind\_parent\_provenance},
-\texttt{marked\_pullbacks\_preserve\_topology\_family}.} Pulling a marked
+\textbf{\texttt{marked\_\allowbreak pullbacks\_\allowbreak bind\_\allowbreak parent\_\allowbreak provenance},
+\texttt{marked\_\allowbreak pullbacks\_\allowbreak preserve\_\allowbreak topology\_\allowbreak family}.} Pulling a marked
 cover back along an inclusion creates a new record of derivation kind
 \textsc{pullback}; the first check verifies the child's provenance chain
 contains its exact parent digest, so derived records are cryptographically
@@ -288,8 +311,12 @@ Check~\ref{ch11:chk:pullback}, now at the serialization level.
 
 \begin{checkclass}
 \label{ch11:chk:joint}
-\textbf{\texttt{joint\_refinement\_is\_four\_singletons},
-\texttt{joint\_refinement\_retains\_both\_parent\_digests}.} The ACBE/RPM
+\begin{center}
+\ttfamily
+joint\_refinement\_is\_four\_singletons,\\
+joint\_refinement\_retains\_both\_parent\_digests.
+\end{center}
+\noindent The ACBE/RPM
 common refinement at $\Omega$ is built as a derived record of kind
 \textsc{common refinement}. The first check verifies its members are exactly
 the four singleton covers --- the marked-layer image of the transversality
@@ -321,8 +348,12 @@ usable as audit data at all.
 
 \begin{checkclass}
 \label{ch11:chk:legacycollapse}
-\textbf{\texttt{legacy\_acbe\_identity\_forces\_maximal\_sieve},
-\texttt{legacy\_rpm\_split\_epi\_forces\_identity}.} The checker builds small
+\begin{center}
+\ttfamily
+legacy\_acbe\_identity\_forces\_maximal\_sieve,\\
+legacy\_rpm\_split\_epi\_forces\_identity.
+\end{center}
+\noindent The checker builds small
 executable models of the two legacy failure mechanisms and confirms each.
 For the ACBE clause: a sieve containing an identity is closed under
 precomposition, hence contains every arrow into its target and is maximal.
@@ -410,15 +441,22 @@ falsify it in the implemented model.
 \label{ch11:sec:composition}
 
 The second executable layer,
-\texttt{modality\_composition/verify\_modality\_composition.py}, is
+\texttt{verify\_modality\_composition.py}, is
 independent of the finite-site checker and targets Chapter~10 specifically:
 the explicit reflector formula, its unit, both flattening/regrouping maps,
 and --- crucially --- the identification of the joined topology. Its
 registered invocation is
-\texttt{python docs/working/project\_coherence/gate1/noetic\_topos2/}
-\texttt{modality\_composition/verify\_modality\_composition.py}, with a
-scoped unit-test discovery command over
+\begin{center}
+\texttt{python docs/working/project\_coherence/gate1/}\\
+\texttt{noetic\_topos2/modality\_composition/}\\
+\texttt{verify\_modality\_composition.py}
+\end{center}
+\noindent and its scoped unit-test discovery command runs over the suite
+\begin{center}
 \texttt{tests/noetic\_topos2\_modality\_composition}.
+\end{center}
+\noindent Both are reproduced as copy-pasteable displays in
+Section~\ref{ch11:sec:rerun}.
 
 \subsection{Exact topology closure}
 \label{ch11:sec:closure}

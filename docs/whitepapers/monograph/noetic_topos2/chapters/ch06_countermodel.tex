@@ -14,9 +14,10 @@ fails to be provable, that identification is illegitimate, and a repair with
 its own discipline is required.
 
 This chapter shows that subcanonicity is \emph{not derivable} from the
-registered axioms, by exhibiting a complete, finite, elementary
-countermodel: the category of sets of size at most two with injections,
-carrying its jointly-surjective coverage. In that model the representable of
+registered axioms, by exhibiting a complete, elementary countermodel with
+three objects up to isomorphism: the category of sets of size at most two
+with injections, carrying its jointly-surjective coverage. In that model the
+representable of
 a one-element set fails the sheaf condition against the two-point cover of a
 two-element set, by a computation short enough to display in full and
 instructive enough to reward the display: the matching-family set is a
@@ -352,11 +353,12 @@ axioms: there exists a model of the axioms
 not subcanonical (Theorem~\ref{ch06:thm:notsheaf}). Hence every artifact
 that treated a bare legacy representable as a sheaf was relying on an
 unproved assumption, and the v7.4 corrigendum's retraction of that usage
-(Section~\ref{ch05:sec:corrigendum}) is mandatory, not precautionary.
+(Chapter~5, Section~5.\ref{ch05:sec:corrigendum}) is mandatory, not
+precautionary.
 \end{corollary}
 
 \begin{remark}[How little was needed]\label{ch06:rem:minimal}
-Tally the ingredients: the economy of the
+Tally the ingredients, because the economy of the
 countermodel is itself methodologically instructive
 (Section~\ref{ch06:sec:methodology}). The argument used: one cover with two
 pieces whose overlap carries no data; one target object small enough that
@@ -649,8 +651,9 @@ pigeonhole first bites; no smaller cap yields a countermodel, which is
 itself worth verifying as an exercise (Exercise~\ref{ch06:exr:minimality}).
 
 \emph{A countermodel is a permanent regression test.} Because the model is
-finite and concrete, its failing computation can be executed, not merely
-believed: enumerate the sieve (Lemma~\ref{ch06:lem:sieve}), count the
+concrete and finite up to isomorphism, its failing computation can be
+executed, not merely believed: enumerate the sieve in the three-object
+skeleton $0=\varnothing$, $1$, $2$ (Lemma~\ref{ch06:lem:sieve}), count the
 matching families (one), count the sections (zero), compare. The program's
 practice of registering such computations alongside certificates---as it
 does for the collapse mechanisms of Chapter~\ref{ch05:main}---turns each

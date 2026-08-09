@@ -403,8 +403,9 @@ exactly the maximal sieves on each object is already a Grothendieck topology
 (axiom (J1) holds by construction; pullback of a maximal sieve along $g$
 contains $\id$, hence is maximal, giving (J2); and (J3) adds nothing new,
 since if $T$ has $f^{*}T$ maximal for all $f$ in a maximal sieve, take
-$f=\id$ to get $T$ maximal). Being the smallest topology whatever, it is the
-generated one. Proposition~\ref{ch04:prop:trivial} then gives triviality of
+$f=\id$ to get $T$ maximal). Being the smallest Grothendieck topology on
+$\cC$, it is therefore the generated one.
+Proposition~\ref{ch04:prop:trivial} then gives triviality of
 both modalities, and trivial modalities are naturally isomorphic to the
 identity, hence to each other. The final statement is
 Theorem~\ref{ch05:thm:collapse}(3): equal topologies have identical sheaf
@@ -755,7 +756,11 @@ must obey.
 
 \begin{table}[ht]
 \centering
-\begin{tabular}{llll}
+{\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.21\textwidth}
+>{\raggedright\arraybackslash}p{0.15\textwidth}
+>{\raggedright\arraybackslash}p{0.27\textwidth}
+>{\raggedright\arraybackslash}p{0.20\textwidth}@{}}
 \toprule
 Repair & Formalization & Mechanism of failure & Verdict \\
 \midrule
@@ -770,7 +775,7 @@ absolute under embedding & changes nothing \\
 New objects, new covers & Rem.~\ref{ch05:rem:repair3} & --- & not a repair;
 successor route \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \caption{The tempting repairs and their fates. Every route that keeps the
 registered generators yields maximal sieves or leaves the topology
 untouched; the only escape changes the generators, which is the successor

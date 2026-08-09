@@ -206,7 +206,7 @@ the successor construction lives, and the covering pattern---partition the
 top into its atoms, null-cover the bottom---is the miniature of the partition
 coverages there.
 
-One point before any example: the null cover at
+Before any example we fix one point. The null cover at
 $\varnothing$ is a genuine covering sieve (the empty sieve), and the sheaf
 condition for it reads: $F(\varnothing)\to\mathrm{Match}(\varnothing\text{-sieve},F)$
 is a bijection. A matching family for the empty sieve is a function defined on
@@ -214,7 +214,7 @@ no arrows; there is exactly one such function. Hence:
 
 \begin{lemma}[The null cover forces a singleton]\label{ch04:lem:null}
 If the empty sieve covers an object $Z$, then every sheaf $F$ has
-$F(Z)$ a one-element set. (Standard; see \cite{stacks00ZC}.)
+$F(Z)$ a one-element set. (Standard; the two-line proof is self-contained.)
 \end{lemma}
 
 \begin{proof}
@@ -370,9 +370,10 @@ Definition~\ref{ch04:def:sheaf} quantifies over all covering sieves of a
 topology, which even on the sixteen-object successor lattice means every
 covering sieve of the topology in question---$168$ of them for the joined
 topology $J_A\vee J_R$ (Corollary~\ref{ch09:cor-census}), and a strictly
-smaller but still unmanageable collection for each of the coarser $J_A$ and
-$J_R$. In practice one never checks them all directly; one checks a
-\emph{generating} family of covers and appeals to the basis criterion. This
+smaller collection for each of the coarser $J_A$ and $J_R$, not separately
+enumerated in this monograph. In practice one never checks them all
+directly; one checks a \emph{generating} family of covers and appeals to the
+basis criterion. This
 section states the criterion, proves it in the finite-poset generality used
 throughout the monograph, and cites the general statement.
 
@@ -532,8 +533,8 @@ $(W,W^{*}T)$ supplies the rest. This completes the induction.
 The practical import: to certify sheafhood on the successor lattice one checks
 each presheaf against the generating partition families only---two families
 per nonempty context plus the null cover---rather than against every covering
-sieve of the topology concerned ($168$ for the join $J_A\vee J_R$, fewer but
-still many for each of $J_A$ and $J_R$). The finite certificate does exactly
+sieve of the topology concerned ($168$ for the join $J_A\vee J_R$, fewer for
+each of $J_A$ and $J_R$). The finite certificate does exactly
 this for the sixteen representables and the two witness presheaves, and
 Theorem~\ref{ch04:thm:basis} is the license. Conversely, when
 \emph{refuting} sheafhood (as for the witness presheaves against the

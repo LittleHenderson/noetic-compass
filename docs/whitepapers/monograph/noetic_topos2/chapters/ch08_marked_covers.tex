@@ -126,7 +126,7 @@ Every marked cover is serialized to \emph{canonical JSON}: a deterministic byte 
 \item \textbf{Schema closure.} The bytes contain nothing but the declared fields. Unknown keys are rejected rather than ignored because an ignored-but-digested field is a covert channel: two records could differ in a field no consumer reads yet carry different digests, or---worse under a sloppier digest scope---agree in digest while differing in content a future consumer might read.
 \end{enumerate}
 
-These four properties are the normative content of the JSON Canonicalization Scheme (RFC~8785) \cite{jcs}, which the v0.1 serializer follows; nothing in this section is claimed as new. The schema adds only the domain-specific field set of Section~\ref{ch08:sec-schema} and the sorted-digest rule for parent sets.
+Properties 1--3 above are the normative content of the JSON Canonicalization Scheme (RFC~8785) \cite{jcs}, which the v0.1 serializer follows; nothing in those three is claimed as new. Property 4 is not supplied by RFC~8785, which is schema-agnostic and delegates content validation to the consuming ecosystem: schema closure is a Project Coherence schema rule, added here together with the domain-specific field set of Section~\ref{ch08:sec-schema} and the sorted-digest rule for parent sets.
 
 \begin{remark}[Digests as names]\label{ch08:rem-digest-names}
 Under these four properties, the digest is a \emph{name}: a fixed-length, location-independent, collision-resistant identifier that any party can recompute from the record itself. All cross-record references in the schema---parent sets, provenance chains---are by digest, never by file path, database key, or human-readable label. This is what makes the derivation DAG portable: a population of records can be scattered across stores and reassembled by any resolver, because the reference graph is intrinsic to the records.
@@ -146,7 +146,7 @@ The cover digest is the canonical \emph{semantic-record} digest only: it certifi
 
 \section{The derivation calculus}\label{ch08:sec-derivation}
 
-Derived records are not free-form: exactly two derivation rules exist in v0.1, mirroring the two combinatorial operations verified in Chapter~7. We state them as rules, with their preconditions and the content of their recomputation obligations.
+Derived records are not free-form: exactly two derivation rules exist in v0.1, mirroring the two combinatorial operations verified in Chapter~7. We state them below, preceded by the generator-admission rule they build on---three rules in all---each with its preconditions and the content of its recomputation obligations.
 
 \begin{ruleenv}[Generator admission]\label{ch08:rule-generator}
 A \texttt{GENERATOR} record for partition $P\in\{A,R\}$ at nonempty context $V$ has target $V$, member arrows exactly $\{V\cap B\to V \mid B\in P\}$ with empty pieces retained (Definition~\ref{ch07:def-generating}), cover kind the partition's kind, empty parent set, and empty provenance chain. The null-cover record at $\varnothing$ is the degenerate generator with the empty member list. A generator record whose member list disagrees with the computation of Table~\ref{ch07:tab-generating} of Chapter~7 for its declared target and kind is invalid.

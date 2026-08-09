@@ -96,7 +96,11 @@ class of inclusions; all others are composites or have singleton source
 or target value sets (where the map is the unique one). Bits are named
 as in the value table.
 
-\begin{longtable}{@{}llll@{}}
+\begingroup\small
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30\textwidth}
+  >{\raggedright\arraybackslash}p{0.14\textwidth}
+  >{\raggedright\arraybackslash}p{0.22\textwidth}
+  >{\raggedright\arraybackslash}p{0.24\textwidth}@{}}
 \toprule
 Inclusion class & Surviving $A$-blocks & $F_A$ restriction map &
 Character \\
@@ -118,9 +122,10 @@ $T_{ij} \supseteq$ any $U$ with $A_{1-i} \not\subseteq U$ & none &
 $(b) \mapsto ()$ & constant; two-to-one \\
 $A_i \supseteq$ proper $U$ & none &
 $(b) \mapsto ()$ & constant; two-to-one \\
-source with $k_A = 0$ & none & $() \mapsto ()$ & identity of a
+source $U$ with $\alpha(U) = 0$ & none & $() \mapsto ()$ & identity of a
 singleton \\
 \end{longtable}
+\endgroup
 
 Functoriality is visible in the table: a composite of inclusions
 survives a bit exactly when both steps do, and on surviving bits every
@@ -142,7 +147,12 @@ one-element value $\{()\}$, compatibility is automatic and the
 matching-family set is the plain product of the piece values. The four
 computations, tabulated:
 
-\begin{longtable}{@{}llccl@{}}
+\begingroup\small
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.15\textwidth}
+  >{\raggedright\arraybackslash}p{0.265\textwidth}
+  >{\centering\arraybackslash}p{0.11\textwidth}
+  >{\centering\arraybackslash}p{0.075\textwidth}
+  >{\raggedright\arraybackslash}p{0.28\textwidth}@{}}
 \toprule
 Witness / cover & Piece values & Matching families & Value at $\Omega$ &
 Gluing map and verdict \\
@@ -156,7 +166,7 @@ $(b_0, b_1) \mapsto ((b_0), (b_1))$: bijection --- sheaf condition
 holds \\
 $F_A$ over $K_R(\Omega)$ & $F_A(R_0) = \{()\}$, $F_A(R_1) = \{()\}$ &
 $1 \times 1 = 1$ & 4 &
-all four of $(0,0), (0,1), (1,0), (1,1) \mapsto ((),())$: not
+all four of $(0,0)$, $(0,1)$, $(1,0)$, $(1,1) \mapsto ((),())$: not
 injective --- fails \\
 $F_R$ over $K_R(\Omega)$ & $F_R(R_0) = \{(0),(1)\}$,
 $F_R(R_1) = \{(0),(1)\}$ & $2 \times 2 = 4$ & 4 &
@@ -166,6 +176,7 @@ $F_R$ over $K_A(\Omega)$ & $F_R(A_0) = \{()\}$, $F_R(A_1) = \{()\}$ &
 $1 \times 1 = 1$ & 4 &
 four-to-one onto $((),())$: not injective --- fails \\
 \end{longtable}
+\endgroup
 
 Derivations. Row 1: a matching family for $K_A(\Omega)$ is a free pair
 (one section over each $A_i$; the overlap $A_0 \cap A_1 = \varnothing$
@@ -191,7 +202,12 @@ the factor $1$); for the cross cover it is identically $1$ by
 Finding~\ref{appC:fnd:novaluecrossing}. At $\varnothing$ the null
 cover has exactly one matching family.
 
-\begin{longtable}{@{}lcccc@{}}
+\begingroup\small
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.16\textwidth}
+  >{\centering\arraybackslash}p{0.10\textwidth}
+  >{\centering\arraybackslash}p{0.155\textwidth}
+  >{\centering\arraybackslash}p{0.155\textwidth}
+  >{\raggedright\arraybackslash}p{0.29\textwidth}@{}}
 \toprule
 Context $V$ & $|F_A(V)|$ & Matching for $K_A(V)$ & Matching for
 $K_R(V)$ & Verdicts for $F_A$ (own / cross) \\
@@ -213,6 +229,7 @@ $T_{10}$ & 2 & $2 \cdot 1 = 2$ & 1 & holds / fails ($2 \to 1$) \\
 $T_{11}$ & 2 & $2 \cdot 1 = 2$ & 1 & holds / fails ($2 \to 1$) \\
 $\Omega$ & 4 & $2 \cdot 2 = 4$ & 1 & holds / fails ($4 \to 1$) \\
 \end{longtable}
+\endgroup
 
 Reading the table: in the own-partition column the matching count
 equals the value count at every context, and inspection of the

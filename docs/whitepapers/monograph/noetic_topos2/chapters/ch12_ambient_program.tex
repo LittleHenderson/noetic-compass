@@ -40,10 +40,11 @@ J_{\mathrm{res}} = J_{\mathrm{obs}} \vee J_A \vee J_R,
 \]
 The underlying topos candidate and the full research object are
 \[
-\mathrm{NoeTop}_2 := \Eamb,
-\qquad
+\begin{gathered}
+\mathrm{NoeTop}_2 := \Eamb,\\
 \mathrm{NoeSystem}_2 = \bigl( \mathrm{NoeTop}_2,\; M_{\mathrm{obs}},\;
 M_A,\; M_R,\; \Eres,\; \textsc{external mark record} \bigr).
+\end{gathered}
 \]
 $\mathrm{NoeSystem}_2$ is a structured package --- a tuple of a topos, three
 modalities, a subtopos, and an external audit layer. It is \emph{not} itself
@@ -406,7 +407,15 @@ rich final semantics for contextual cognition.
 
 The registered proof-obligation ledger carries this as a first-class
 record, and its content is reproduced here in full because it, rather than
-any theorem, determines the shape of the next stage of the program.
+any theorem, determines the shape of the next stage of the program. The
+\emph{ledger} is not, and the distinction matters to a reader auditing
+completeness: what follows is one obligation record, not the register. How many records the ledger holds in total is not among the
+figures registered in the source artifacts of Chapter~1,
+Section~1.\ref{ch01:sec:sources}, so under Rule~\ref{ch01:rule:claims}(iv)
+that count is declared unspecified here rather than guessed; the register
+itself lives in the proof-obligation ledger v0.1, cited there with its
+digest. What this chapter does reproduce whole is the ten admission gates
+of Section~\ref{ch12:sec:gates}.
 
 \begin{invariant}[Obligation \textsc{obl-nt2-cross-context-semantics},
 v0.1]

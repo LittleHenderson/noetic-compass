@@ -251,8 +251,8 @@ $\nabla$. At these contexts the generated sieves are equal and the
 topology retains no trace of which partition produced the cover; only the
 marked records (different cover kinds, different digests) distinguish
 them. At the remaining nine contexts the arrow sets differ and the
-topology itself separates the covers. Three refinements of this statement
-follow. (i) The
+topology itself separates the covers. Three refinements sharpen this
+statement. (i) The
 singleton case is the one registered as a certificate check
 (\texttt{singleton\_unmarked\_families\_coincide}, with its partner
 \texttt{singleton\_marked\_covers\_distinct}); the empty-context and
@@ -329,7 +329,12 @@ covering for $J_A \vee J_R = J_{\mathrm{atom}}$ iff it contains every
 singleton of $V$ (Theorem NT2-4, Chapter~9; re-derived in
 reflector-facing form in Chapter~10).
 
-\begin{longtable}{@{}lcccc@{}}
+\begingroup\small
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.17\textwidth}
+  >{\centering\arraybackslash}p{0.155\textwidth}
+  >{\centering\arraybackslash}p{0.16\textwidth}
+  >{\centering\arraybackslash}p{0.17\textwidth}
+  >{\centering\arraybackslash}p{0.21\textwidth}@{}}
 \toprule
 Context class & Count of contexts & Sieves on each & Covering (join) on
 each & Subtotals (sieves / covering) \\
@@ -345,6 +350,7 @@ $|V| = 4$ & 1 & $M(4) = 168$ & 114 & 168 / 114 \\
 \midrule
 Totals & 16 & --- & --- & 298 / 168 \\
 \end{longtable}
+\endgroup
 
 Derivation notes for the covering column. At $\varnothing$ both sieves
 cover: the null cover generates the empty sieve, and its unique supersieve
