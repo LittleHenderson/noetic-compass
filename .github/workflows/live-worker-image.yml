@@ -121,9 +121,16 @@ jobs:
 
           docker exec --interactive "$container" python - <<'PY'
           import json
+          import os
           import urllib.request
 
-          with urllib.request.urlopen("http://127.0.0.1:8080/health/realmode", timeout=5) as response:
+          request = urllib.request.Request(
+              "http://127.0.0.1:8080/health/realmode",
+              headers={
+                  "X-Atlas-Worker-Token": os.environ["ATLAS_LIVE_WORKER_TOKEN"],
+              },
+          )
+          with urllib.request.urlopen(request, timeout=5) as response:
               health = json.load(response)
           assert response.status == 200
           assert health["verdict"] == "NOT_REAL_PYTHIA_WEIGHTS"
