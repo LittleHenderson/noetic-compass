@@ -19,6 +19,71 @@
     "runpod_authorized": false,
     "evidence_packet_status": "NOT CREATED"
   },
+  "current_validation_receipts": {
+    "worker_authoritative": {
+      "status": "PASS",
+      "passed": 576,
+      "total": 576,
+      "ordinary_setup_call_teardown_reports": 1728,
+      "passed_subtests": 0,
+      "warnings": 0,
+      "errors": 0,
+      "deselections": 0,
+      "python_ordinal_node_id_sha256": "F454C598E8E38AF1B6C813BA124EB943E155EB3B927FACB28F4B47C758804C9F",
+      "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY"
+    },
+    "worker_focused": {
+      "stagec_capture": {
+        "passed": 119,
+        "total": 119,
+        "python_ordinal_node_id_sha256": "E81D7234171B311720A356A36A0B6CEE06B9C564E7FF91386CAFDEA21B503144"
+      },
+      "stagec_local_archive": {
+        "passed": 32,
+        "total": 32,
+        "python_ordinal_node_id_sha256": "1306211016B398F44EB57FC855B87BAB2A8AFB75C32B4A4516C53FA77570395F"
+      }
+    },
+    "harness_v2_authoritative": {
+      "status": "AUTHORITATIVE SAME-PROCESS PASS",
+      "collected": 306,
+      "started": 306,
+      "finished": 306,
+      "ordinary_setup_call_teardown_reports": 918,
+      "passed_subtests": 151,
+      "warning_count": 0,
+      "collection_errors": 0,
+      "internal_errors": 0,
+      "deselections": 0,
+      "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+      "pytest_exit_status": 0,
+      "python_ordinal_node_id_sha256": "49BD9090B3CF8990A213BF91CB95E154792444221CC0015F1BCA7D2E77C5D293"
+    },
+    "harness_v2_focused": {
+      "diagnostic_preregistration": {
+        "passed": 25,
+        "passed_subtests": 41,
+        "python_ordinal_node_id_sha256": "0D3A5514DD15CB6F5334C5D54DF1CBF1344B488C99A18E70DB4E10CE2C90308D"
+      },
+      "post_terminal_outcome": {
+        "passed": 29,
+        "python_ordinal_node_id_sha256": "777093FE2A924455178007A326E927A18252C591A329AEF1F336E8D539E679F1"
+      },
+      "diagnostic_study": {
+        "passed": 46,
+        "python_ordinal_node_id_sha256": "83752F3D1507673E399FEDC93D346688A5BA2F802385598E7057822A6C09C0BB"
+      },
+      "portable_historical_negative_state": {
+        "passed": 2,
+        "python_ordinal_node_id_sha256": "FFC9ED8632A175E576526C84B2E989FDDD39DE443D842DFCDABC3AC12C248570"
+      }
+    },
+    "packaged_kernel": {
+      "byte_mirrored_files": 12,
+      "unique_exports": 132,
+      "packaging_provenance_sha256": "F81997F30A163C88E9C5F02676E88DFF0742230FF1915356448E175A2CABDC46"
+    }
+  },
   "non_authority": [
     "This carrier is not cas_harness_v2.preregistration.v1.",
     "This carrier cannot be used to build or consume a worker authorization.",
@@ -103,16 +168,69 @@
         "passed": 119,
         "failed": 0,
         "total": 119,
-        "passed_subtests": 0
+        "passed_subtests": 0,
+        "python_ordinal_node_id_sha256": "E81D7234171B311720A356A36A0B6CEE06B9C564E7FF91386CAFDEA21B503144"
       },
       "independent_neutral_qa": "NO P0 / NO P1 WITHIN DECLARED STRUCTURE_ONLY SCOPE",
       "execution_blockers": [
-        "durable controlled content-addressed archive for request, authorization projection, capture index, and four raw arrays",
-        "trusted external anchor",
+        "typed diagnostic worker authorization and terminal-receipt v2 path",
+        "durable attempt and one-use registry",
+        "strict worker-archive admission adapter from the exact loaded archive object",
+        "failed-row coordinator",
+        "mandatory freeze-or-reject diagnostic nonreporting disposition",
+        "WORM retention, trusted time, and a non-caller-selected external anchor",
         "capture-time model and tokenizer file revalidation",
-        "authorized Study-v1 runtime wiring",
-        "post-terminal Study outcome-index and terminal-receipt binding"
+        "authorized diagnostic Study runtime wiring"
       ]
+    },
+    "repaired_supporting_structure_only_candidates": {
+      "scope": "STRUCTURE_ONLY / NON_AUTHORITY / INDEPENDENT ADVERSARIAL REVIEW FOUND NO P0 OR P1 WITHIN THIS DECLARED SCOPE",
+      "diagnostic_preregistration": {
+        "source_sha256": "BB8876C31AEAFA6F195F1F6F35F517943BC986D62F0606ECBF2D06B35E837CC2",
+        "test_source_sha256": "B2A095B3009A12746BF6FFB8B0AAC6442BD22D1B89D8124115352D9C6439F57C",
+        "schema": "cas_harness_v2.diagnostic_preregistration.v1",
+        "study_phase": "DIAGNOSTIC_CALIBRATION",
+        "claim_ceiling": "DIAGNOSTIC_ONLY",
+        "packet_v2": "FORBIDDEN",
+        "chain": "PROCESS_LOCAL EXACT-BYTE PRE-OUTCOME CHAIN / RAW AGGREGATE OUTCOME INDEX BOUND / SEALED AT OUTCOME ACCESS",
+        "execution_window": "EXACTLY ONE PROSPECTIVE DECLARED UTC WINDOW / NOT TRUSTED TIME",
+        "v1_conversion": "FORBIDDEN / SEPARATE FAMILY"
+      },
+      "diagnostic_study_plan": {
+        "source_sha256": "20EFE11D953D6F6831BA3CF404292328B3A955DD3CA0DE250D18D66204D517C8",
+        "test_source_sha256": "9DA80335E4C6A554A890C98DF296635DADCF2EDFD63BC3ED65890A8960770696",
+        "group_count": 160,
+        "case_count": 480,
+        "plan_dependency_closure_ref_count": 488,
+        "per_case_study_request_closure_ref_count": 489,
+        "request_identity_rule": "DIAGNOSTIC STUDY REQUEST REFERENCES THE DISTINCT STAGE C CAPTURE REQUEST / SCHEMA, MEDIA-TYPE, BYTE, AND IDENTITY COERCION FORBIDDEN",
+        "execution_order": "NOT_ATTESTED",
+        "retry_evidence": "NOT_ATTESTED / NO DURABLE ATTEMPT REGISTRY"
+      },
+      "local_capture_archive": {
+        "source_sha256": "52E444142F5C3D8FC7F0AFC983DE060EFCACCC8975C61F97B48D5BDA52226055",
+        "test_source_sha256": "6D7B3440CEDD02BD6E351CCA6D1E5494F4D3FBC58D0A9470D681FEF65FBBB472",
+        "member_count": 7,
+        "copy_status": "LOCAL FILE COPY RETAINED AND REVALIDATED / CAPTURE-TIME IN_MEMORY AND NOT_DURABLY_RETAINED LABELS PRESERVED",
+        "relocatability": "SAME ABSOLUTE PATH AND FILE IDENTITIES ONLY",
+        "membership": "MANIFEST-LISTED MEMBERS ONLY / CLOSED-WORLD DIRECTORY CONTENT NOT ESTABLISHED",
+        "durability_boundary": "CREATE-ONLY PLUS FILE FSYNC, READ-ONLY PERMISSION BITS, AND REREAD VERIFICATION / NOT WORM / NO TRUSTED TIME / NO EXTERNAL ANCHOR / NO CAPTURE PROVENANCE",
+        "focused_test_receipt": {
+          "passed": 32,
+          "total": 32,
+          "python_ordinal_node_id_sha256": "1306211016B398F44EB57FC855B87BAB2A8AFB75C32B4A4516C53FA77570395F"
+        }
+      },
+      "post_terminal_outcome": {
+        "source_sha256": "D28908786C38DCAD63B39B51A82B51FAEF888CCA9DA9552CC00BE37785777D3A",
+        "test_source_sha256": "9564623A3001440AAA0E2CA51667CED9AF23127051BF57776CBD5ED289130624",
+        "acyclic_creation_order": "CAPTURE ARCHIVE -> WORKER OUTPUT -> TERMINAL RECEIPT -> OUTCOME INDEX",
+        "accepted_terminal_rows": "COMPLETED ONLY",
+        "execution_order": "NOT_ATTESTED",
+        "retry_count": "NOT_ATTESTED",
+        "failed_row_coordinator": "OPEN / NOT PROVIDED",
+        "worker_archive_admission": "OPEN / EXACT REF-AND-BYTES PROJECTION EXISTS BUT STRICT ADAPTER FROM LOADED WORKER ARCHIVE OBJECT IS NOT PROVIDED"
+      }
     },
     "future_runnable_requirements_status": "PREFILL-ONLY / ZERO GENERATION / ZERO INTERVENTION REQUIREMENTS REMAIN PROSPECTIVE AND ARE NOT PROGRAM-LEVEL EXECUTION ATTESTATIONS FROM THE STRUCTURE_ONLY CANDIDATE",
     "temporal_window": "W0 PROMPT PREFILL / BEFORE GENERATED TOKEN 1",
@@ -638,8 +756,8 @@
   "implementation_obligations": [
     {
       "obligation_id": "stagec-obligation-study-v1",
-      "status": "OPEN / SOURCE CANDIDATE REGRESSION-TESTED / DURABLE PREREGISTRATION AND EXECUTION MAPPING STILL BLOCK PREREGISTRATION",
-      "requirement": "The process-local Study-v1 source candidate now binds exact child cases, three-row groups, splits, identities, no-retry terminal semantics, counters, and a DIAGNOSTIC_CALIBRATION C-Cal role that cannot be mislabeled as confirmatory or independent replication. Before preregistration, add a standalone diagnostic preregistration role, durable cross-process one-use and WORM controls, trusted runtime counter attestation, and an execution mapping that proves the model consumed the exact bound request bytes."
+      "status": "OPEN / DIAGNOSTIC PREREGISTRATION AND STUDY STRUCTURAL CANDIDATES REPAIRED / AUTHORIZED DURABLE EXECUTION MAPPING STILL BLOCKS ACTIVATION",
+      "requirement": "The separate process-local diagnostic preregistration family and Diagnostic Study plan now bind DIAGNOSTIC_CALIBRATION, exactly 160 three-row groups and 480 ordered cases, one declared execution window, a 488-reference plan closure, and a 489-reference per-case Study-request closure. The diagnostic Study request references but is not interchangeable with the Stage C capture request. Before activation, add typed worker authorization and terminal-receipt v2 carriers, a durable cross-process attempt/one-use registry, trusted runtime ordering and counter attestation, a failed-row coordinator, and execution mapping that proves the model consumed the exact bound request bytes."
     },
     {
       "obligation_id": "stagec-obligation-batch-lifecycle",
@@ -649,12 +767,12 @@
     {
       "obligation_id": "stagec-obligation-full-vector-capture",
       "status": "OPEN / STRUCTURAL REPAIR REGRESSION-TESTED AND INDEPENDENTLY RE-AUDITED / BLOCKS EXECUTION",
-      "requirement": "The repaired isolated STRUCTURE_ONLY candidate now derives prompt and association data from exact canonical capture-request bytes, accepts only an exact non-authorizing authorization projection, requires the loader-produced LoadedModel carrier, emits a canonical exact-byte capture index plus four raw arrays that semantically replay in process, records one direct capture-model call and zero direct generate-API calls while marking program-wide model-forward, generation, intervention, and startup-canary totals NOT_ATTESTED, and exactly restores local and global forward-hook registries. Independent neutral QA found no P0 or P1 within that declared scope. Before execution, wire the candidate through the authorized Study-v1 runtime, revalidate retained model and tokenizer files at capture, persist the request, authorization projection, capture index, and all four raw payloads in the controlled content-addressed archive with a trusted external anchor, and bind the post-terminal Study outcome index and terminal receipt."
+      "requirement": "The repaired isolated STRUCTURE_ONLY candidate now derives prompt and association data from exact canonical capture-request bytes, accepts only an exact non-authorizing authorization projection, requires the loader-produced LoadedModel carrier, emits a canonical exact-byte capture index plus four raw arrays that semantically replay in process, records one direct capture-model call and zero direct generate-API calls while marking program-wide model-forward, generation, intervention, and startup-canary totals NOT_ATTESTED, and exactly restores local and global forward-hook registries. The local archive and post-terminal candidates now preserve an exact host-local copy and acyclic association, and independent review found no P0 or P1 within the declared STRUCTURE_ONLY scope. Before execution, add the strict adapter from the loaded worker archive, wire typed diagnostic authorization/terminal carriers, revalidate model/tokenizer files, add WORM/external anchoring/trusted time, and attest execution order and retry state through a durable attempt registry."
     },
     {
       "obligation_id": "stagec-obligation-file-backed-worker-output",
-      "status": "OPEN / BLOCKS EXECUTION",
-      "requirement": "Write large activation shards to a controlled external content-addressed archive and return only a small exact index through the 2 MB JSON carrier."
+      "status": "OPEN / HOST-LOCAL CREATE-ONLY ARCHIVE STRUCTURE REPAIRED / EXTERNAL DURABILITY AND ADMISSION STILL BLOCK EXECUTION",
+      "requirement": "The worker-local archive retains exact copies of all seven capture members under a reread-verified manifest, but is nonrelocatable, manifest-listed rather than closed-world, and not WORM, trusted-time, or externally anchored evidence. Add the strict loaded-archive admission adapter and controlled external content-addressed/WORM registry while returning only a small exact index through the 2 MB JSON carrier."
     },
     {
       "obligation_id": "stagec-obligation-split-access",
@@ -674,7 +792,7 @@
     {
       "obligation_id": "stagec-obligation-calibration",
       "status": "OPEN / BLOCKS EVALUATION PREREGISTRATION",
-      "requirement": "Run C-Cal separately and freeze or reject the exact detector before evaluation prompts are accessed."
+      "requirement": "Run C-Cal separately; after all 480 rows have a coordinated terminal disposition, bind the aggregate outcome index and record a mandatory exact freeze-or-reject diagnostic nonreporting disposition before evaluation prompts are accessed."
     },
     {
       "obligation_id": "stagec-obligation-analysis",
@@ -689,7 +807,7 @@
     {
       "obligation_id": "stagec-obligation-runtime-binding",
       "status": "OPEN / BLOCKS ACTIVATION",
-      "requirement": "Bind a final clean executable commit, complete source manifest, tests, exact runtime image, local hardware profile, and archive registry before activation; after a valid activation receipt, execute the one-forward runtime canary as the first counted Study-v1 action with zero corpus or outcome access."
+      "requirement": "Bind a final clean executable commit, complete source manifest, tests, exact runtime image, local hardware profile, and archive registry before activation; after a valid activation receipt, execute the one-forward runtime canary as the first counted diagnostic Study action with zero corpus or outcome access."
     },
     {
       "obligation_id": "stagec-obligation-verifier",
@@ -714,9 +832,24 @@
       "fact": "One outcome-access event seals the preregistration chain; there is no split-scoped analytical release."
     },
     {
-      "blocker_id": "no-diagnostic-calibration-preregistration-role",
-      "source": "src/cas_harness_v2/preregistration.py",
-      "fact": "The current preregistration schema admits only SCREENING, CONFIRMATORY, and mandatory HELD_OUT_REPLICATION roles. The process-local Study-v1 candidate types DIAGNOSTIC_CALIBRATION at its parent layer, but a standalone C-Cal preregistration chain still cannot represent that role without fabricating confirmatory and replication splits."
+      "blocker_id": "diagnostic-family-is-structural-and-not-worker-authorized",
+      "source": "src/cas_harness_v2/diagnostic_preregistration.py and src/cas_harness_v2/diagnostic_study_protocol.py",
+      "fact": "The separate diagnostic family now truthfully represents DIAGNOSTIC_CALIBRATION without widening preregistration v1, but remains process-local STRUCTURE_ONLY. Worker authorization/terminal v1 does not type its distinct Study request; typed v2 carriers and durable one-use execution mapping remain required."
+    },
+    {
+      "blocker_id": "local-archive-is-not-durable-authority",
+      "source": "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/stagec_archive.py",
+      "fact": "The create-only archive is host-local, nonrelocatable, same-path/file-identity bound, and limited to manifest-listed members. It is not WORM, trusted time, capture provenance, a closed-world directory proof, or an external anchor."
+    },
+    {
+      "blocker_id": "post-terminal-order-and-retry-not-attested",
+      "source": "src/cas_harness_v2/stagec_outcome.py",
+      "fact": "The acyclic completed-row outcome carrier binds archive, worker output, terminal receipt, and outcome index, but plan order and retry count remain NOT_ATTESTED, failed rows have no coordinator, and no strict adapter requires admission from the worker archive loader's exact object."
+    },
+    {
+      "blocker_id": "diagnostic-freeze-or-reject-disposition-not-enforced",
+      "source": "src/cas_harness_v2/diagnostic_preregistration.py",
+      "fact": "The diagnostic policy forbids Packet and claim promotion and permits only freeze-or-reject downstream use, but the current chain does not require a separately retained terminal freeze-or-reject nonreporting disposition artifact."
     },
     {
       "blocker_id": "mandatory-heldout-role-does-not-establish-independence",
@@ -873,7 +1006,7 @@
     "methodological_negative_prior": "Mandatory character-level surface baseline and surface-indistinguishable corpus design."
   },
   "execution_activation_precondition": {
-    "stagec-calibration": "FORBIDDEN UNTIL THE C-CAL BLOCKING OBLIGATIONS ARE CLOSED, THE CORPUS AND SURFACE BUNDLE ARE FROZEN, A TRUTHFUL DIAGNOSTIC C-CAL PREREGISTRATION EXISTS, ITS FINAL EXECUTION IDENTITY IS ADDED PROSPECTIVELY, AND A SEPARATE C-CAL ACTIVATION RECEIPT IS VALID.",
+    "stagec-calibration": "FORBIDDEN UNTIL THE C-CAL BLOCKING OBLIGATIONS ARE CLOSED, THE CORPUS AND SURFACE BUNDLE ARE FROZEN, THE STRUCTURAL DIAGNOSTIC C-CAL FAMILY IS INTEGRATED WITH TYPED AUTHORIZATION/TERMINAL-V2 CARRIERS, A DURABLE ATTEMPT REGISTRY, STRICT WORKER-ARCHIVE ADMISSION, FAILED-ROW COORDINATION, WORM/EXTERNAL ANCHORING/TRUSTED TIME, AND MANDATORY FREEZE-OR-REJECT DISPOSITION, ITS FINAL EXECUTION IDENTITY IS ADDED PROSPECTIVELY, AND A SEPARATE C-CAL ACTIVATION RECEIPT IS VALID.",
     "stagec-evaluation": "FORBIDDEN UNTIL C-CAL IS TERMINAL AND RECONCILED, ITS DIAGNOSTIC NONREPORTING DISPOSITION AND ELIGIBLE FROZEN DETECTOR BUNDLE ARE RETAINED, A NEW EXACT C-EVAL PREREGISTRATION BINDS THOSE ARTIFACTS, ITS FINAL EXECUTION IDENTITY IS ADDED PROSPECTIVELY, AND A SEPARATE C-EVAL ACTIVATION RECEIPT IS VALID."
   }
 }

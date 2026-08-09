@@ -104,4 +104,3 @@ def test_portable_boundary_preserves_negative_status_and_missing_dependencies() 
     )
     for relative_path in absent:
         assert not (ROOT / relative_path).exists()
-

@@ -16,9 +16,12 @@ PACKAGED_KERNEL_FILES = frozenset(
         "_strict_json.py",
         "_validation.py",
         "artifacts.py",
+        "diagnostic_preregistration.py",
+        "diagnostic_study_protocol.py",
         "evidence_packet.py",
         "evidence_packet_builder.py",
         "preregistration.py",
+        "stagec_outcome.py",
         "study_protocol.py",
         "worker_protocol.py",
     }

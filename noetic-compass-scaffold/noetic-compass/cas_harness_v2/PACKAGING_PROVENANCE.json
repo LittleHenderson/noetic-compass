@@ -5,8 +5,8 @@
   "copy_policy": "BYTE_FOR_BYTE_SOURCE_MIRROR",
   "source_files": {
     "__init__.py": {
-      "sha256": "14e2ed180d6d8150fe8597c961444d6f70e2e78aa2749e73dbbb2bf27823cfb7",
-      "size_bytes": 4089
+      "sha256": "10a9cda155c94029d3cc57c7dff1d2e361773911eefc7cd71f351dde927c5396",
+      "size_bytes": 9303
     },
     "_strict_json.py": {
       "sha256": "032efd78a48a60c2ac0f3cc3b92274a346c5b044b8f22423722fdf55501c9bdc",
@@ -20,6 +20,14 @@
       "sha256": "c58150d72e8b60d4229206c41e177f556e431921488319430e66a0f5307da625",
       "size_bytes": 18568
     },
+    "diagnostic_preregistration.py": {
+      "sha256": "bb8876c31aeafa6f195f1f6f35f517943bc986d62f0606ecbf2d06b35e837cc2",
+      "size_bytes": 48667
+    },
+    "diagnostic_study_protocol.py": {
+      "sha256": "20efe11d953d6f6831ba3cf404292328b3a955dd3ca0de250d18d66204d517c8",
+      "size_bytes": 45930
+    },
     "evidence_packet.py": {
       "sha256": "925ec4e994063352ed2cf4d58a185d7d336910c2e9c453927d49ab041b6f28fd",
       "size_bytes": 29934
@@ -31,6 +39,10 @@
     "preregistration.py": {
       "sha256": "c44d56adda2f05897346156d1c9352b035fabe7d02b2a309cca17eb18fd20055",
       "size_bytes": 44598
+    },
+    "stagec_outcome.py": {
+      "sha256": "d28908786c38dcad63b39b51a82b51faef888cca9da9552cc00be37785777d3a",
+      "size_bytes": 69842
     },
     "study_protocol.py": {
       "sha256": "01a4ef7bb1481c753b6d7e25f6ff5748e4d750c67dd3f30893f70e81a8e57c04",

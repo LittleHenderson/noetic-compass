@@ -168,12 +168,17 @@ SHA-256 and byte length, and freshly replays them against the current
 pre-outcome chain before public reads. This is process-local tamper detection,
 not WORM authority.
 
-The clean focused receipt is **204 passed tests plus 110 subtests** under Python
-3.14 with startup site processing and bytecode/cache output disabled. It
-contains 94 active-kernel tests, 35 strict worker-protocol tests, 4
-historical-recovery tests, 22 Gate 5 verifier red-team tests, and 25 Stage B
-Packet-builder/file-retention tests with four subtests. The retained attacks
-cover hardlink/symlink aliasing,
+The current Harness-v2 surface has an authoritative same-process PASS receipt.
+It covered 306 node IDs with identical collected, started, and finished
+sequences of 306 and emitted 918 ordinary setup/call/teardown reports.
+The receipt includes 151 passing subtests.
+It recorded zero warnings, collection or internal errors, or deselections.
+It left an empty isolated pycache and returned pytest exit status 0.
+Its exact Python-ordinal node-ID digest is
+`49BD9090B3CF8990A213BF91CB95E154792444221CC0015F1BCA7D2E77C5D293`.
+This authoritative local regression remains non-hermetic and independently
+unattested and creates no model, detector, steering, product, licensing, or
+disclosure result. The retained attacks cover hardlink/symlink aliasing,
 same-byte inode replacement, a synthetic reparse attribute, duplicate or
 noncanonical node IDs, raw-evidence security promotion, erasure of the
 scanner/vendor conflict, duplicate normalized runner distributions, unbound
@@ -183,10 +188,18 @@ retained-file aliasing, hardlinking, replacement, and mutation. The
 stable-observer regression also
 confirms that metadata-only ancestor timestamp churn is not misclassified as
 object substitution while structural ancestor replacement remains detected.
-The receipt is limited to
-`tests/cas_harness_v2`; it is not a repository-wide or production receipt.
-Its same-process executed-node SHA-256 is
-`FF70AF8A1E43F56A4612D600B13FFD5A513D2177C31ED62477F2435FC729139C`.
+Focused green slices are diagnostic preregistration at 25 tests plus 41
+subtests, digest
+`0D3A5514DD15CB6F5334C5D54DF1CBF1344B488C99A18E70DB4E10CE2C90308D`;
+post-terminal outcome at 29 tests, digest
+`777093FE2A924455178007A326E927A18252C591A329AEF1F336E8D539E679F1`;
+diagnostic Study at 46 tests, digest
+`83752F3D1507673E399FEDC93D346688A5BA2F802385598E7057822A6C09C0BB`;
+and portable historical negative-state verification at 2 tests, digest
+`FFC9ED8632A175E576526C84B2E989FDDD39DE443D842DFCDABC3AC12C248570`.
+The former 204-test/110-subtest receipt is explicitly historical
+pre-expansion evidence. These receipts are limited to `tests/cas_harness_v2`;
+they are not repository-wide or production receipts.
 
 The earlier five strict terminal-receipt builder tests and seven subtests
 committed at `0781bab8` remain preserved. The current 25-test/four-subtest
@@ -424,13 +437,13 @@ The current bounded local receipts are **17/17** for the worker-terminal bridge
 **38/38** for the callback/Object-Lock seam
 (`d3eaf533fedb5b03168200aa399ac53a6e2a6f22874ebabeaecefb227400778d`),
 **134/134** for the prospective lifecycle/SQLite/default-dark route suite
-(`67f7507579749e11e27714e8513f6909e26a503a8dd18112cc402207d9735940`),
-and **98/98** for packaging, snapshot, envelope, context, admitted-adapter,
-and bounded-reconciliation tests
-(`65352b8b59cb654e449ba4a1ce8459d7109cc5b21e33f64aeab6e2ea6eeb3c19`).
-The 134- and 98-test counts supersede the stale 130/90 receipts that predated
-the already-committed terminal-disposition and joined-execution test tranches;
-no test was added or relaxed during this reconciliation.
+(`67f7507579749e11e27714e8513f6909e26a503a8dd18112cc402207d9735940`).
+The **98/98** packaging/admitted-adapter receipt
+(`65352b8b59cb654e449ba4a1ce8459d7109cc5b21e33f64aeab6e2ea6eeb3c19`)
+is explicitly historical pre-expansion evidence. The current package inventory
+contains 12 byte-mirrored files, 132 unique exports, and packaging-provenance
+SHA-256
+`F81997F30A163C88E9C5F02676E88DFF0742230FF1915356448E175A2CABDC46`.
 The retained local GPU/joined evidence suite passes **27/27** without model
 execution, with node-ID digest
 `dc0c0ed22e0f158f014277b9d3cd26ad21d6a8fcdfbe1e76a67d09406975c952`.
@@ -506,13 +519,14 @@ The test
 subsequently reproduced a post-validation assignment bypass. The retained
 repair freezes the public receipt and its nested carriers and revalidates
 copy-with-update. The current working-tree successor retains the **32/32 focused
-numeric** receipt and confirms a locked same-process **544/544 complete-worker**
-receipt with 1,632 ordinary setup/call/teardown reports and zero subtests,
-warnings, errors, or deselections. Their verifier-canonical test-ID-set SHA-256
-values are, respectively,
+numeric** receipt and confirms an authoritative locked same-process **PASS
+576/576 complete-worker** receipt with 1,728 ordinary setup/call/teardown
+reports and zero subtests, warnings, errors, or deselections. Their
+verifier-canonical test-ID-set SHA-256 values are, respectively,
 `12602041756f20d1afd402fa56968660839e5eb1098438ba84c69bff8de7050b`
 and
-`b615f88f3c0b4d2f9e79295100913b5df94df141a499605f21edeb2bc799c274`.
+`F454C598E8E38AF1B6C813BA124EB943E155EB3B927FACB28F4B47C758804C9F`.
+The worker tree was `__pycache__`-empty after the authoritative replay.
 The earlier 27-test increase came from the finite no-JIT BF16, strict
 protocol-client, and live request/response worker tranches. The latest 14-test
 increase binds additive Qwen model selection, probe-adapter geometry/refusal,
@@ -520,10 +534,14 @@ health identity, and container-preflight behavior without executing a Stage B
 model run. The post-Stage-B successor adds 11 observation-contract and
 unsupported-intervention fail-closed tests; the repaired Stage C capture seam
 adds 119 fake/tiny-tensor tests without a real model or provider call. The
-focused capture receipt is 119/119, with source SHA-256
+focused capture receipt is 119/119, with node-ID digest
+`e81d7234171b311720a356a36a0b6cee06b9c564e7ff91386cafdea21b503144`,
+source SHA-256
 `4ea4c57fd412ba811993895ae37e82befc13b7aa220c63caf871cb49d88500f1`
 and test SHA-256
 `b0dc77eee955de8424b11ad02cf5ad5d67c0d4f5be5dc57a6e285a9b8ac60d30`.
+The focused local-archive receipt is 32/32, with node-ID digest
+`1306211016b398f44eb57fc855b87bab2a8afb75c32b4a4516c53fa77570395f`.
 Independent neutral QA found no P0/P1 within its declared `STRUCTURE_ONLY`
 scope. The time-indexed v0.2 OCI candidate separately preserves its 364/364
 issuance
@@ -852,24 +870,38 @@ controls, and a one-Packet ceiling. Exact capture evidence must include the
 rendered chat template, input IDs, attention mask, final prompt-token index,
 and no-truncation proof. The label null is 10,000 fixed-score within-triplet
 positive-designation rotations with no classifier refit, not an invariant
-shuffle of identical three-label groups. It creates no executable preregistration,
-authorization, request, outcome, Packet, provider call, or model execution.
+shuffle of identical three-label groups. It creates no activated
+preregistration, worker authorization, terminal outcome, Packet, provider call,
+or model execution.
 The prospective execution ceiling is prefill-only: zero generation calls and
 zero generated tokens. A runtime canary is allowed only after activation, as
-the first counted Study-v1 action with zero corpus or outcome access.
+the first counted diagnostic Study action with zero corpus or outcome access.
 C-Cal and C-Eval require separate activation receipts. C-Cal must end in one
 diagnostic nonreporting disposition and cannot create a Packet; C-Eval may bind
 that retained calibration state and create at most one Packet or fail-closed
 nonreporting disposition.
 
-The new isolated Study-v1 source candidate now supplies a process-local fixed
-child inventory, three-variant group checks, exact request/package bindings,
-per-case counter contracts, no-retry failure state, and delayed study-wide
-outcome access. Its independent audit found no remaining critical defect
-inside that deliberately structural scope. It does not close execution: the
-current preregistration still lacks a standalone diagnostic-calibration role,
-the current counter and one-use controls are not authenticated durable runtime
-telemetry, and the model-consumed request bytes are not attested.
+The standalone diagnostic preregistration repair at source SHA-256
+`BB8876C31AEAFA6F195F1F6F35F517943BC986D62F0606ECBF2D06B35E837CC2`
+and test SHA-256
+`B2A095B3009A12746BF6FFB8B0AAC6442BD22D1B89D8124115352D9C6439F57C`
+types only `DIAGNOSTIC_CALIBRATION / DIAGNOSTIC_ONLY`, forbids Packet v2 and
+claim/evaluation promotion, exact-replays prospective amendments and one
+declared execution window, binds a raw aggregate outcome index, and seals its
+process-local chain at outcome access. It does not widen or convert
+`cas_harness_v2.preregistration.v1`. The window timestamps are declared data,
+not trusted time, and the chain supplies no authorization or durable one-use
+enforcement.
+
+The repaired diagnostic Study plan at source SHA-256
+`20EFE11D953D6F6831BA3CF404292328B3A955DD3CA0DE250D18D66204D517C8`
+and test SHA-256
+`9DA80335E4C6A554A890C98DF296635DADCF2EDFD63BC3ED65890A8960770696`
+freezes 160 groups/480 cases, a 488-reference plan closure, and a 489-reference
+per-case Study-request closure. Its diagnostic Study request references the
+separate Stage C capture request; schema/media/byte coercion is forbidden. The
+fixed inventory, three-variant checks, and exact-byte closure do not attest
+request consumption, execution order, counters, or retry history.
 
 The repaired isolated Stage C worker candidate binds canonical exact-byte
 request, non-authorizing authorization-projection, and capture-index artifacts;
@@ -879,21 +911,45 @@ the returned bundle with a process-local seal; and verifies exact restoration
 of local and global hook registries. Its telemetry truthfully scopes one direct
 capture model call and zero direct generation API calls, while broader forward,
 generation, intervention, and startup-canary totals remain `NOT_ATTESTED`.
-Every retained carrier is explicitly `IN_MEMORY / NOT_DURABLY_RETAINED`.
-The focused 119/119 receipt and locked 544/544 full-worker receipt are green;
-independent neutral QA found no P0/P1 within the declared `STRUCTURE_ONLY`
-scope.
+Every capture-time carrier is explicitly `IN_MEMORY / NOT_DURABLY_RETAINED`.
+The focused 119/119 receipt has digest
+`E81D7234171B311720A356A36A0B6CEE06B9C564E7FF91386CAFDEA21B503144`;
+the local archive's 32/32 receipt has digest
+`1306211016B398F44EB57FC855B87BAB2A8AFB75C32B4A4516C53FA77570395F`;
+and the authoritative full-worker receipt is 576/576. Independent neutral QA
+found no P0/P1 within the declared `STRUCTURE_ONLY` scope.
 
-That QA result does not extend beyond the structural seam. Artifact replay lacks
-a trusted external anchor, the seal is process-local, model files are not
-rehashed at capture, and rendered-prompt, activation, and logits provenance is
-not independently recomputable. Hook use is serialized. No HTTP/runner,
-Study-v1, durable archive, or post-terminal outcome binding exists; all tests
-are fake/tiny-tensor only, and the real Qwen model has not been executed.
-Packet v2 also cannot independently recompute the case ledger. A future run
-must close those boundaries, freeze all
-corpus/detector/execution identities, and keep steering outside the detection
-study. No Stage C result exists in this candidate.
+The separate create-only local archive at source SHA-256
+`52E444142F5C3D8FC7F0AFC983DE060EFCACCC8975C61F97B48D5BDA52226055`
+and test SHA-256
+`6D7B3440CEDD02BD6E351CCA6D1E5494F4D3FBC58D0A9470D681FEF65FBBB472`
+retains all seven exact capture members under a reread-verified manifest. The
+archive is host-local, nonrelocatable, same-path/file-identity bound, and proves
+only manifest-listed membership. Read-only bits, file `fsync`, and reread are
+not WORM, trusted time, capture provenance, a closed-world directory proof, or
+an independent external anchor. The original in-memory labels remain truthful.
+
+The worker-output/post-terminal repair at source SHA-256
+`D28908786C38DCAD63B39B51A82B51FAEF888CCA9DA9552CC00BE37785777D3A`
+and test SHA-256
+`9564623A3001440AAA0E2CA51667CED9AF23127051BF57776CBD5ED289130624`
+enforces the acyclic association `capture archive -> worker output -> terminal
+receipt -> outcome index` for completed rows. Plan order and retry count remain
+`NOT_ATTESTED`; no complete attempt ledger exists. It does not coordinate failed
+rows and currently accepts an exact archive ref/byte projection rather than a
+strict adapter from the worker archive loader's exact object.
+
+Independent adversarial review found no P0/P1 across these repaired candidates
+inside their declared `STRUCTURE_ONLY` scope. That result does not extend to an
+authorized runtime. The remaining blockers are typed diagnostic worker
+authorization and terminal-v2 carriers, a durable attempt/one-use registry, the
+strict worker-archive admission adapter, a failed-row coordinator, an enforced
+freeze-or-reject nonreporting disposition, WORM/external anchoring/trusted time,
+and a real model-bound run. Model files are not rehashed at capture;
+rendered-prompt, activation, and logits provenance is not independently
+recomputable; hook use is serialized. Packet v2 also cannot independently
+recompute the case ledger. No detector, steering result, Packet, or Stage C
+scientific result exists.
 
 ## Historical V1-V4 review
 
@@ -1026,12 +1082,15 @@ remain `NONE`; the claim remains `NOT LICENSED`; and disclosure remains `HELD`.
 
 The minimum defensible order is:
 
-1. preserve the verifier-native 204-test/110-subtest Harness-v2,
+1. preserve the authoritative 306-test/151-subtest Harness-v2 receipt and its
+   four focused slice
+   receipts, the authoritative 576/576 complete-worker receipt, the 119/119
+   capture and 32/32 archive receipts, the 12-file/132-export package inventory,
    35-test/45-subtest worker-protocol, 17/17 dark-bridge, 38/38
    callback/Object-Lock seam, 134/134 prospective lifecycle/SQLite/dark-route,
-   98/98 admitted-adapter/configured-reconciliation, 27/27 retained local
+   historical 98/98 admitted-adapter/configured-reconciliation, 27/27 retained local
    GPU/joined evidence,
-   32/32 focused numeric, 544/544 complete-worker, 34/34 Stage B joined-executor,
+   32/32 focused numeric, 34/34 Stage B joined-executor,
    17/17 Stage B runner-preparation, and 78/78
    API/launcher/fleet/state receipts, the earlier 290/290 checkpoint, and every
    counterexample, including the current ephemeral same-process and retained

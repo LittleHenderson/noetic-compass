@@ -254,17 +254,33 @@ outcome access, exact completion binding, bypass-mutated outcome-event replay,
 retained-byte registry mutation, audit contradictions, normalized cross-role
 aliases, and all four repository-known v1 labels.
 
-Current focused validation: `204 passed, 110 subtests passed` under Python 3.14
-with site startup and bytecode generation disabled. It comprises 94 active
-kernel tests, 35 strict worker-protocol tests, four historical-recovery tests,
-22 Gate 5 verifier red-team tests, and 25 Stage B Packet-builder/file-retention
-tests with four subtests plus 24 Study-v1 structural tests. Its same-process
+The current Harness-v2 collection has an authoritative same-process PASS
+receipt. It observed collected, started, and finished sequences of 306 node
+IDs, 918 ordinary setup/call/teardown reports, and 151 passing subtests, with
+zero warnings, collection or internal errors, or deselections, an empty
+isolated pycache, and pytest exit status 0. Its exact Python-ordinal
 executed-node digest is
-`FF70AF8A1E43F56A4612D600B13FFD5A513D2177C31ED62477F2435FC729139C`.
-This ephemeral local receipt is checked inside the verifier but is not retained
-under trusted time or WORM authority. It proves repository-local controls only;
-it is not live execution, independent reproduction, scientific evidence, or
-product authority.
+`49BD9090B3CF8990A213BF91CB95E154792444221CC0015F1BCA7D2E77C5D293`.
+This authoritative local regression is not hermetic or independently attested
+and establishes no model, detector, steering, product, licensing, or disclosure
+result.
+
+Focused green slices are diagnostic preregistration at 25 tests plus 41
+subtests, digest
+`0D3A5514DD15CB6F5334C5D54DF1CBF1344B488C99A18E70DB4E10CE2C90308D`;
+post-terminal outcome at 29 tests, digest
+`777093FE2A924455178007A326E927A18252C591A329AEF1F336E8D539E679F1`;
+diagnostic Study at 46 tests, digest
+`83752F3D1507673E399FEDC93D346688A5BA2F802385598E7057822A6C09C0BB`;
+and portable historical negative-state verification at 2 tests, digest
+`FFC9ED8632A175E576526C84B2E989FDDD39DE443D842DFCDABC3AC12C248570`.
+The former 204-test/110-subtest receipt is historical pre-expansion evidence.
+All of these are repository-local controls, not live execution, independent
+reproduction, scientific evidence, or product authority.
+
+The current packaged kernel has 12 byte-mirrored files and 132 unique exports.
+Its packaging-provenance SHA-256 is
+`F81997F30A163C88E9C5F02676E88DFF0742230FF1915356448E175A2CABDC46`.
 
 The narrower Stage B joined-executor and runner-preparation suites pass 34/34
 and 17/17 with same-process executed-node digests
@@ -373,12 +389,36 @@ trusted time, WORM authority, provider attestation, model-consumption proof,
 Packet creation, scientific conclusion, license, product permission, or
 disclosure authority.
 
-The current `cas_harness_v2.preregistration.v1` schema still requires
-confirmatory plus held-out roles and cannot honestly represent a standalone
-C-Cal diagnostic preregistration. A future additive preregistration role and
-durable execution mapping must close that gap before Stage C-Cal activation.
-No Stage C preregistration, authorization, model run, provider call, outcome,
-or Packet exists in this candidate.
+`cas_harness_v2.preregistration.v1` still requires confirmatory plus held-out
+roles and cannot honestly represent C-Cal. The additive
+`cas_harness_v2.diagnostic_preregistration.v1` family now closes that structural
+typing gap without widening v1 or providing a conversion path. It admits only
+`DIAGNOSTIC_CALIBRATION / DIAGNOSTIC_ONLY`, forbids Packet v2, evaluation and
+claim promotion, binds prospective amendments and exactly one declared
+execution window, exact-replays a raw aggregate outcome index, and seals its
+process-local chain at outcome access. Its source SHA-256 is
+`BB8876C31AEAFA6F195F1F6F35F517943BC986D62F0606ECBF2D06B35E837CC2`.
+Its test source SHA-256 is
+`B2A095B3009A12746BF6FFB8B0AAC6442BD22D1B89D8124115352D9C6439F57C`.
+
+The companion `cas_harness_v2.diagnostic_study_plan.v1` source SHA-256 is
+`20EFE11D953D6F6831BA3CF404292328B3A955DD3CA0DE250D18D66204D517C8`;
+its test source SHA-256 is
+`9DA80335E4C6A554A890C98DF296635DADCF2EDFD63BC3ED65890A8960770696`.
+It freezes exactly 160 groups and 480 ordered cases, a 488-reference plan
+dependency closure, and a 489-reference closure for each per-case diagnostic
+Study request. The diagnostic Study request and Stage C capture request retain
+different schemas, media types, bytes, and identities: the former references
+the latter, and media coercion is forbidden.
+
+These additions remain `STRUCTURE_ONLY / NON_AUTHORITY`. The execution window
+contains declared timestamps, not trusted time. There is no worker
+authorization/terminal-v2 path for the diagnostic request, durable attempt or
+one-use registry, authenticated runtime ordering/counter evidence, failed-row
+coordinator, or mandatory freeze-or-reject disposition artifact. No activated
+Stage C preregistration, authorization, model run, provider call, outcome, or
+Packet exists. Stage C remains `DESIGN ONLY / EXECUTION UNAUTHORIZED /
+EXPERIMENT NOT_STARTED / OPEN / RING 4 / NOT LICENSED / HELD`.
 
 ## Additive Stage C full-vector capture structural candidate
 
@@ -397,25 +437,54 @@ The seam reports only call counts it directly scopes: one direct capture model
 call and zero direct generation API calls. Broader model-forward, generation,
 intervention, and startup-canary totals remain `NOT_ATTESTED`. Its artifact
 location and durability fields remain `IN_MEMORY / NOT_DURABLY_RETAINED`.
-Focused regression evidence is 119/119, with source SHA-256
+Focused regression evidence is 119/119, with node-ID digest
+`E81D7234171B311720A356A36A0B6CEE06B9C564E7FF91386CAFDEA21B503144`,
+source SHA-256
 `4EA4C57FD412BA811993895AE37E82BEFC13B7AA220C63CAF871CB49D88500F1`
 and test SHA-256
 `B0DC77EEE955DE8424B11AD02CF5AD5D67C0D4F5BE5DC57A6E285A9B8AC60D30`.
-The locked full-worker same-process receipt is 544/544 with 1,632 ordinary
-setup/call/teardown reports, zero subtests, warnings, errors, or deselections,
-and exact Python-ordinal node-ID digest
-`B615F88F3C0B4D2F9E79295100913B5DF94DF141A499605F21EDEB2BC799C274`.
+The focused local-archive receipt is 32/32 with node-ID digest
+`1306211016B398F44EB57FC855B87BAB2A8AFB75C32B4A4516C53FA77570395F`.
+The authoritative locked full-worker same-process receipt is **PASS 576/576**
+with 1,728 ordinary setup/call/teardown reports, zero subtests, warnings,
+errors, or deselections, and exact Python-ordinal node-ID digest
+`F454C598E8E38AF1B6C813BA124EB943E155EB3B927FACB28F4B47C758804C9F`.
+The worker tree was `__pycache__`-empty after this replay.
 Independent neutral QA found no P0/P1 within the declared `STRUCTURE_ONLY`
 scope; that finding is not independent external replication.
 
-This seam remains non-authorizing. Its artifact replay has no trusted external
-anchor; its result seal is process-local; model files are not rehashed at
-capture; and the rendered-prompt, activation, and logits provenance is not
-independently recomputable. Hook use is serialized. There is no HTTP or Study-v1
-wiring, durable archive, or post-terminal outcome binding, and the tests use
-only fake/tiny local tensors rather than the real pinned Qwen model. No
-prompt-injection detection or steering result exists. No provider or RunPod job
-was launched and known spend for this tranche remains `$0.00`.
+The separate worker-local archive source and test SHA-256 values are
+`52E444142F5C3D8FC7F0AFC983DE060EFCACCC8975C61F97B48D5BDA52226055`
+and
+`6D7B3440CEDD02BD6E351CCA6D1E5494F4D3FBC58D0A9470D681FEF65FBBB472`.
+It create-only retains the request, authorization projection, capture index, and
+four raw arrays, then publishes a reread-verified manifest. It is host-local,
+nonrelocatable, same-absolute-path/file-identity bound, and covers only
+manifest-listed members. Read-only permission bits, file `fsync`, and immediate
+reread do not establish WORM retention, trusted time, a closed-world directory,
+capture provenance, or a non-caller-selected external anchor. It retains a
+separate local copy; it does not rewrite the capture-time
+`IN_MEMORY / NOT_DURABLY_RETAINED` statements.
+
+The worker-output/post-terminal source and test SHA-256 values are
+`D28908786C38DCAD63B39B51A82B51FAEF888CCA9DA9552CC00BE37785777D3A`
+and
+`9564623A3001440AAA0E2CA51667CED9AF23127051BF57776CBD5ED289130624`.
+They exact-replay the acyclic `capture archive -> worker output -> terminal
+receipt -> outcome index` association for completed rows. They do not attest
+execution order or retry count, do not coordinate failed rows, and do not
+strictly admit the worker archive loader's exact object; that adapter remains an
+external requirement.
+
+These seams remain non-authorizing. Artifact replay has no trusted external
+anchor; capture and diagnostic-chain seals are process-local; model files are
+not rehashed at capture; and rendered-prompt, activation, and logits provenance
+is not independently recomputable. Hook use is serialized. There is no
+authorized HTTP/diagnostic Study runner, and the tests use only fake/tiny local
+tensors rather than the real pinned Qwen model. Independent adversarial review
+found no P0/P1 within the declared `STRUCTURE_ONLY` scope, not outside it. No
+prompt-injection detector, steering result, Evidence Packet, provider, or
+RunPod job exists; known spend for this tranche remains `$0.00`.
 
 Still open outside this isolated kernel:
 

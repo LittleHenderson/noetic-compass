@@ -4,8 +4,11 @@ Status: **DESIGN ONLY / EXECUTION UNAUTHORIZED / EXPERIMENT NOT_STARTED /
 GATE 5 OPEN / RING 4 / NOT LICENSED / HELD / NOT FROZEN**
 
 This package defines the prospective Stage C prompt-injection **detection-only**
-program that follows the completed Stage B Qwen engineering smoke. It creates
-no executable preregistration, authorization, outcome, Evidence Packet, model
+program that follows the completed Stage B Qwen engineering smoke. The source
+tree now contains repaired `STRUCTURE_ONLY / NON_AUTHORITY` carriers for a
+diagnostic preregistration, its fixed diagnostic Study, local capture retention,
+and post-terminal association. This design package still creates no activated
+preregistration, worker authorization, terminal result, Evidence Packet, model
 run, provider call, steering study, or product claim.
 
 ## Decision
@@ -19,19 +22,59 @@ packages rather than one adaptive experiment:
    already-frozen detector before running confirmatory and internally held-out
    prompt groups and creating at most one Evidence Packet v2.
 
-This separation is mandatory because the current preregistration chain has one
-study-wide outcome-access event and seals after that event. It cannot expose a
-screening split, tune a detector, and then continue executing untouched splits.
+This separation is mandatory because each current preregistration family has
+one study-wide outcome-access event and seals after that event. The new
+diagnostic chain can expose C-Cal only; it cannot expose a calibration result,
+tune a detector, and then continue executing untouched C-Eval splits on that
+same chain.
 
 ## Viable first runnable scope
 
-The first future runnable tranche is **Stage C-Cal only**. The isolated
-Study-v1 source candidate is regression-tested. The repaired isolated
-full-vector capture candidate is also regression-tested at 119/119 and passed
-independent neutral QA with no P0/P1 inside its declared `STRUCTURE_ONLY`
-scope. Neither candidate is a durable authorized runner. Stage C-Cal remains
-`DIAGNOSTIC_ONLY` and may only freeze or reject a candidate detector. It cannot
-establish prompt-injection detection efficacy.
+The first future runnable tranche is **Stage C-Cal only**. Four repaired source
+candidates now describe its structural path:
+
+- the separate diagnostic preregistration family at source SHA-256
+  `BB8876C31AEAFA6F195F1F6F35F517943BC986D62F0606ECBF2D06B35E837CC2`
+  and test SHA-256
+  `B2A095B3009A12746BF6FFB8B0AAC6442BD22D1B89D8124115352D9C6439F57C`;
+- the 160-group/480-case diagnostic Study plan and per-case envelope at source
+  SHA-256
+  `20EFE11D953D6F6831BA3CF404292328B3A955DD3CA0DE250D18D66204D517C8`
+  and test SHA-256
+  `9DA80335E4C6A554A890C98DF296635DADCF2EDFD63BC3ED65890A8960770696`;
+- the worker-local capture archive at source SHA-256
+  `52E444142F5C3D8FC7F0AFC983DE060EFCACCC8975C61F97B48D5BDA52226055`
+  and test SHA-256
+  `6D7B3440CEDD02BD6E351CCA6D1E5494F4D3FBC58D0A9470D681FEF65FBBB472`;
+- the worker-output and post-terminal outcome-index carriers at source SHA-256
+  `D28908786C38DCAD63B39B51A82B51FAEF888CCA9DA9552CC00BE37785777D3A`
+  and test SHA-256
+  `9564623A3001440AAA0E2CA51667CED9AF23127051BF57776CBD5ED289130624`.
+
+Independent adversarial review found no P0/P1 within their declared
+`STRUCTURE_ONLY` scope. They are not a durable authorized runner. Stage C-Cal
+remains `DIAGNOSTIC_ONLY` and may only freeze or reject a candidate detector.
+It cannot establish prompt-injection detection efficacy.
+
+Current structural receipts are green in focused slices: diagnostic
+preregistration 25 tests plus 41 subtests
+(`0D3A5514DD15CB6F5334C5D54DF1CBF1344B488C99A18E70DB4E10CE2C90308D`),
+post-terminal outcome 29 tests
+(`777093FE2A924455178007A326E927A18252C591A329AEF1F336E8D539E679F1`),
+diagnostic Study 46 tests
+(`83752F3D1507673E399FEDC93D346688A5BA2F802385598E7057822A6C09C0BB`),
+and portable historical negative-state verification 2 tests
+(`FFC9ED8632A175E576526C84B2E989FDDD39DE443D842DFCDABC3AC12C248570`).
+The authoritative same-process Harness PASS receipt observed
+collected/started/finished 306, 918 ordinary reports, 151 passing subtests, zero
+warnings, collection or internal errors, or deselections, an empty isolated
+pycache, pytest exit status 0, and digest
+`49BD9090B3CF8990A213BF91CB95E154792444221CC0015F1BCA7D2E77C5D293`.
+It is local regression evidence, not hermetic or independently attested and not
+a model, detector, steering, product, licensing, or disclosure result. The
+packaged kernel has 12 byte-mirrored
+files, 132 unique exports, and packaging-provenance SHA-256
+`F81997F30A163C88E9C5F02676E88DFF0742230FF1915356448E175A2CABDC46`.
 
 Stage C-Eval is eligible to be preregistered only after C-Cal produces an exact
 detector artifact and all evaluation prompts remain untouched. Its maximum
@@ -74,30 +117,45 @@ The detector target is an exact pre-output hidden read:
 - prefill-only execution with zero generation calls and zero generated tokens.
 
 The Stage B top-eight activation summaries cannot supply these tensors. The
-repaired isolated worker seam now binds canonical exact-byte request,
+repaired isolated worker seam now binds canonical exact-byte capture request,
 non-authorizing projection, and capture-index artifacts; obtains and postchecks
 the model-loader singleton carrier; semantically replays input IDs, attention
 mask, and both full activation arrays; process-locally seals the result; and
 exactly restores local and global hook registries. It scopes one direct capture
 model call and zero direct generation calls, while broader runtime totals remain
-`NOT_ATTESTED`; all carriers remain `IN_MEMORY / NOT_DURABLY_RETAINED`.
+`NOT_ATTESTED`. The capture-time carriers preserve their truthful
+`IN_MEMORY / NOT_DURABLY_RETAINED` labels. A separate create-only local archive
+can retain exact copies of the request, authorization projection, capture index,
+input IDs, attention mask, layer-18 vector, and layer-0 vector under one
+reread-verified manifest.
 
-The focused receipt is 119/119. Source and test SHA-256 values are
+The focused capture receipt is 119/119 with node-ID digest
+`E81D7234171B311720A356A36A0B6CEE06B9C564E7FF91386CAFDEA21B503144`.
+Source and test SHA-256 values are
 `4EA4C57FD412BA811993895AE37E82BEFC13B7AA220C63CAF871CB49D88500F1`
 and
 `B0DC77EEE955DE8424B11AD02CF5AD5D67C0D4F5BE5DC57A6E285A9B8AC60D30`.
-The locked full-worker same-process receipt is 544/544 with 1,632 ordinary
-phase reports, zero subtests, warnings, errors, or deselections, and exact
-Python-ordinal node-ID digest
-`B615F88F3C0B4D2F9E79295100913B5DF94DF141A499605F21EDEB2BC799C274`.
+The focused local-archive receipt is 32/32 with node-ID digest
+`1306211016B398F44EB57FC855B87BAB2A8AFB75C32B4A4516C53FA77570395F`.
+The authoritative locked full-worker same-process receipt is **PASS 576/576**
+with 1,728 ordinary phase reports, zero subtests, warnings, errors, or
+deselections, and exact Python-ordinal node-ID digest
+`F454C598E8E38AF1B6C813BA124EB943E155EB3B927FACB28F4B47C758804C9F`.
+The worker tree was `__pycache__`-empty after the authoritative replay.
 Independent neutral QA found no P0/P1 within the declared `STRUCTURE_ONLY`
 scope.
 
 The boundary remains structural: artifact replay needs a trusted external
 anchor; the seal is process-local; model files are not rehashed at capture;
 rendered-prompt, activation, and logits provenance is not independently
-recomputable; and hook use is serialized. The seam is not wired to HTTP,
-Study-v1, a durable archive, or post-terminal outcome binding, and its tests use
+recomputable; and hook use is serialized. The new archive is host-local,
+nonrelocatable, and limited to manifest-listed members; read-only permission
+bits, file `fsync`, and reread verification are not WORM storage, trusted time,
+closed-world membership, or an independent anchor. The outcome carrier fixes
+the acyclic `archive -> worker output -> terminal receipt -> outcome index`
+association, but records plan order and retry state as `NOT_ATTESTED`. Neither
+candidate is wired into the diagnostic Study runtime, and the strict admission
+adapter from the worker's loaded archive object is still missing. Tests use
 fake/tiny tensors rather than the real pinned Qwen model. A controlled durable
 full-vector execution path is therefore still a prerequisite. C-Cal
 must independently fit and freeze one layer-18 detector and one layer-0
@@ -108,11 +166,19 @@ becomes accessible.
 For every row, the worker-emitted capture index must bind the exact rendered
 chat-template digest/length, input IDs, attention mask, sequence length, final
 prompt-token index and ID, tokenizer/config identity, explicit no-truncation
-state, Study-v1 case/group/split/variant/label identity, request and
-authorization references, and invocation ID. A separate post-terminal Study
+state, diagnostic Study case/group/split/variant/label identity, the distinct
+capture-request and authorization references, and invocation ID. A separate
+post-terminal Study
 outcome index must then bind that capture index to the worker output and
 terminal receipt. A prompt hash and a statement that the template ran once are
 not enough to reproduce which case and token produced the recorded vectors.
+
+The diagnostic Study request and Stage C capture request are different exact
+artifacts with different schemas and media types. The former references the
+latter; coercing one into the other is forbidden. The frozen diagnostic plan
+binds 160 groups, 480 cases, a 488-reference predecessor closure, and a
+489-reference per-case Study-request closure. Those are dependency closures,
+not execution counts or proof that the worker consumed either request.
 
 Input IDs, masks, and vectors use canonical raw C-order array bytes with no
 header or pickle, media type `application/vnd.cas-harness.ndarray.raw`, exact
@@ -262,17 +328,20 @@ detect-then-intervene policy is part of Stage C.
 
 1. Retain the historical W0 correction in this package; the withdrawn PASS is
    not positive prior evidence.
-2. Integrate the regression-tested process-local Study-v1 candidate with a
-   standalone diagnostic preregistration role and durable one-use lifecycle.
+2. Preserve the repaired standalone diagnostic preregistration and diagnostic
+   Study candidates, then add typed worker authorization and terminal-receipt
+   v2 carriers plus a durable attempt registry.
 3. Preserve the repaired and independently QA-reviewed W0 target/wrong-layer
-   `STRUCTURE_ONLY` seam, then integrate it with the authorized runner,
-   controlled durable archive, and post-terminal outcome binding.
+   `STRUCTURE_ONLY` seam, host-local archive, and post-terminal carriers; add a
+   strict worker-archive admission adapter and integrate the resulting chain
+   with the authorized diagnostic runner.
 4. Implement sealed split handling or retain the required two-package C-Cal / C-Eval boundary.
 5. Author, adjudicate, surface-screen, and freeze the corpus and split bytes.
-6. Run C-Cal under its own future diagnostic authorization; only after all 480
-   C-Cal rows are terminal, access calibration outcomes and freeze or reject
-   the target/wrong-layer detector bundle. The surface bundle was already
-   frozen before model execution. Record exactly one diagnostic nonreporting
+6. Run C-Cal under its own future diagnostic authorization; a failed-row
+   coordinator must terminalize the phase without replacement. Only after all
+   480 C-Cal rows are terminal may the aggregate outcome index be accessed and
+   the target/wrong-layer detector bundle frozen or rejected. The surface
+   bundle was already frozen before model execution. Record exactly one diagnostic nonreporting
    disposition and reconcile C-Cal; C-Cal creates no Evidence Packet v2.
 7. Create the C-Eval base preregistration only after it binds the retained C-Cal
    nonreporting disposition and eligible frozen detector bundle.
@@ -292,16 +361,28 @@ detect-then-intervene policy is part of Stage C.
 - The live request/response JSON carrier is capped at 2 MB and cannot retain
   the full activation matrix.
 - The admitted Qwen event surface still retains top-K summaries. The repaired
-  full-vector candidate remains `STRUCTURE_ONLY`, `IN_MEMORY`, and
-  `NOT_DURABLY_RETAINED`; it is not admitted, HTTP/Study-v1 runner-wired,
-  post-terminally bound, or exercised on the real pinned model.
-- Capture artifacts still need a trusted external anchor. The result seal is
-  process-local, model files are not rehashed at capture, rendered-prompt,
-  activation, and logits provenance is not independently recomputable, and
-  hook use is serialized.
+  full-vector capture-time carriers remain `STRUCTURE_ONLY`, `IN_MEMORY`, and
+  `NOT_DURABLY_RETAINED`; the separate host-local archive does not rewrite
+  those source labels and neither path is admitted, HTTP/diagnostic-runner
+  wired, or exercised on the real pinned model.
+- The local archive is create-only, same-absolute-path/file-identity bound, and
+  limited to manifest-listed members. It still needs WORM retention, trusted
+  time, and a non-caller-selected external anchor.
+- No strict admission adapter yet requires the controller outcome path to start
+  from the worker archive loader's exact `StageCArchivedCapture` object.
+- Worker authorization and terminal receipt v1 do not type the separate
+  diagnostic Study request. A typed authorization/terminal v2 path is required.
+- The current post-terminal carrier handles exact completed rows only. It has
+  no failed-row coordinator, and execution order plus retry state remain
+  `NOT_ATTESTED` without a durable attempt registry.
+- The diagnostic raw-index chain enforces exact pre-outcome-chain sealing and
+  declared execution-window ordering, but the timestamps are not trusted and
+  outcome access is process-local.
+- C-Cal still needs a mandatory, separately retained freeze-or-reject
+  nonreporting disposition before any C-Eval preregistration can exist.
 - Preregistration has no split-scoped outcome-access state.
-- Preregistration v1 has no truthful diagnostic-calibration-only role and would
-  force C-Cal to fabricate confirmatory/replication splits.
+- The separate diagnostic preregistration family truthfully types C-Cal, but it
+  has no conversion into preregistration v1 and cannot authorize C-Eval.
 - Packet v2 requires `HELD_OUT_REPLICATION`, but an internal held-out split is
   not independent replication; the Packet replication block must remain
   `UNAVAILABLE`.
@@ -311,9 +392,9 @@ detect-then-intervene policy is part of Stage C.
 - Every metric, control, falsifier, and split requires a distinct evidence
   artifact identity.
 
-Because these durable integrations remain missing, this package deliberately contains no
-`preregistration.json`, execution amendment, activation receipt, request,
-authorization, or runner.
+Because these durable integrations remain missing, this design package
+deliberately contains no activated `preregistration.json`, execution amendment,
+activation receipt, authorized request, model result, or runner.
 
 ## Claim ceiling
 
