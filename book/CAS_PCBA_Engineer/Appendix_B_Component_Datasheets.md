@@ -56,7 +56,7 @@ let cjt_x = CJT< ^8^C_{F2}|A | ^5^P_{F7}|T => ^9^C_{F2}|A > [β=2.0];
 | **Saturation** | effect at `sat` plateau | effect maxed; more cause produces no further change |
 | **Breakdown** | overload past safe limits | effect flips to its involution pair (`^2`→`^3`) — the controlled state inverts |
 
-**Gain, formally.** Small-signal `β = ‖∂E/∂C‖_FR` at constant bias; large-signal `β = d_FR(E_after, E_before) / d_FR(C_after, C_before)`, where `d_FR(p,q) = 2·arccos(Σ√(pₖqₖ))` is the Fisher-Rao geodesic distance on the open simplex Δ39°. (Derived once in Chapter 4; cited, not re-derived, elsewhere.)
+**Gain, formally.** Small-signal `β = ‖∂E/∂C‖_FR` at constant bias; large-signal `β = d_FR(E_after, E_before) / d_FR(C_after, C_before)`, where `d_FR(p,q) = 2·arccos(Σ√(pₖqₖ))` is the Fisher-Rao geodesic distance on the open simplex Δ39°. (Stated in Chapter 3 and restated in Chapter 9; cited, not re-derived, here.) **Before you write a measured β on a test report, read the gain-definition section of Appendix I** — a second, different definition of `β` is in circulation in instrumentation tooling, and the two are not known to be the same quantity.
 
 **Cognitive function.** A CJT is one cognitive state transition with a controllable strength. The Cause is what arrives, the Bias is the accumulated experience and configuration that shapes the response, and the Effect is what is produced. Gain `β` is set by the Bias: a high-β CJT lets a small framing change drive a large shift in output; a low-β CJT is steady and hard to move. `gm` and `rπ` are the two faces of that sensitivity — `gm` high means easily reframed, `rπ` high means resistant to bias change.
 
@@ -228,6 +228,8 @@ Zener< ^3^P, breakdown=0.8 >   // reverse-conducts (the aversion fires) only abo
 
 **Cognitive function.** A controlled threshold with a clamp. Below `breakdown`, the state is held back; above it, the state conducts and is pinned at `clamp`. A `^3` Negative behind a Zener stays dormant under mild stimulus and fires hard — but no harder than the clamp — once a genuine line is crossed. This is a tripwire with a built-in ceiling.
 
+Two relations have to hold or the part does not work at all. First, `breakdown` is a threshold like any other, so the reachability rule under **Fuse** applies unchanged: put it above the lowest saturation or clamp ceiling upstream and the Zener can never conduct. Second, `clamp` must sit at or above `breakdown` — pin the state *below* the level that made it conduct and it drops out, rises, conducts again, and you have built a chattering comparator instead of a clamp.
+
 **Typical use.** Reference voltages (a stable setpoint for a regulator), over-activation clamps, and threshold guards where a state should be silent until a real limit is reached.
 
 **Failure modes.**
@@ -235,6 +237,8 @@ Zener< ^3^P, breakdown=0.8 >   // reverse-conducts (the aversion fires) only abo
 | Failure | Symptom |
 |---|---|
 | Breakdown set too low | the guard fires on normal input; constant tripping |
+| `breakdown` above the lowest ceiling upstream | the guard can never conduct — the unreachable-threshold trap; see **Fuse** |
+| `clamp` below `breakdown` | conducting pulls the state back under the breakdown point; the guard chatters instead of holding |
 | No clamp | once it conducts, the state runs away past the intended ceiling |
 
 ---
@@ -489,6 +493,18 @@ CircuitBreaker< ^3^C_{F2}|A, threshold=0.7, action=trip_reset >
 | `action` | `permanent_block` \| `trip_reset` | fuse (one-shot) vs. breaker (resettable) |
 | `latency` | ≥0 | response delay; for safety cutoffs, design for 0 |
 
+**Reachability — the rule that makes a threshold real.** A fuse protects nothing unless its `threshold` is a level the input path can actually reach. Every upstream stage that saturates or clamps puts a ceiling on what arrives at the fuse, and the threshold has to sit *below the lowest of those ceilings*:
+
+```
+threshold  <  min( sat, clamp, … )   over every upstream stage on the input path
+```
+
+The arithmetic is the whole argument. A refusal stage clamped at `sat=0.1` feeding a fuse at `threshold=0.9` delivers at most 0.1 to a cutoff that is waiting for 0.9 — `0.1 < 0.9`, so the crossing never happens and the path is never cut. Gain does not rescue it: `sat` bounds the stage output *after* β, so a `β=10` stage clamped at 0.1 still delivers 0.1.
+
+The other end of the window is the familiar one — set the threshold *below* the path's normal operating band and the fuse trips on benign traffic (the Zener datasheet's "breakdown set too low" is the same mistake on a different part). A workable threshold lives in the headroom between the two: comfortably above the highest activation you expect in normal service, strictly below the lowest ceiling on the path. The same arithmetic runs in mirror image on a CJT's `cutoff` — a bias floor set above whatever the bias path can deliver leaves the stage permanently silent, which is what `E-CJT-003 CjtCutoff` is for.
+
+> **Bench Note — nothing in the toolchain will catch this for you.** `sat=0.1` is a legal saturation. `threshold=0.9` is a legal threshold. Each passes its own range check, because each is individually fine; it is the *relation between them* that is wrong, and the validator checks values, not relations. And the failure hides itself in the worst possible direction: a fuse that can never trip also never fails a test, so the board reports clean while the protection it advertises has never once been exercised — and every other defect sitting behind that fuse (the latch behaviour, the polarity, what happens on reset) stays hidden too, because nothing reaches them. Do the subtraction by hand before you build. It takes ten seconds.
+
 **Cognitive function.** Absolute "this does not pass." When a state's activation crosses `threshold`, the path is cut — permanently for the worst categories, resettably for recoverable ones. Not a gentle restoration like the regulator; a severance.
 
 **Typical use.** The CSB uses both — breakers on the rails (recoverable overloads) and a permanent fuse on the hardest-fail category.
@@ -499,6 +515,7 @@ CircuitBreaker< ^3^C_{F2}|A, threshold=0.7, action=trip_reset >
 |---|---|
 | `permanent_block` on a recoverable category | a single false positive bricks the pathway for good |
 | `threshold` too high | dangerous state passes before the cutoff fires |
+| `threshold` above the lowest ceiling upstream | the fuse can *never* trip; every test reports the board vacuously safe |
 | Non-zero `latency` on a hard cutoff | the breach propagates before the cut takes effect |
 
 > **Regulator-facing callout.** A `permanent_block` fuse is the strongest claim a cognitive circuit can make — this pathway is severed and cannot be restored without redesign. Reserve it for categories where any breach is unacceptable; prefer `trip_reset` for everything recoverable.
@@ -536,6 +553,7 @@ SchmittTrigger< input=ambiguous_stimulus,
 | Failure | Symptom |
 |---|---|
 | Thresholds equal (`on == off`) | no hysteresis; reverts to a plain comparator; chatter returns |
+| `on_threshold` above the lowest ceiling upstream | the trigger can never commit to the high state — the unreachable-threshold trap; see **Fuse** |
 | Dead-band too narrow | noise still flips the output |
 | Dead-band too wide | slow to respond when the input genuinely changes |
 

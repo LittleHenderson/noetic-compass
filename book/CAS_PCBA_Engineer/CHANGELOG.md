@@ -1,5 +1,153 @@
 # CAS PCBA Engineer — Changelog
 
+## 2026-08-08 — v0.8 (external-audit corrections: the CSB safety chain, the CCDL grammar)
+
+An external audit — the five-volume *Project Coherence* monograph set, working from the
+published build `src-pcba-engineer-20260726` — found real defects in this book, most of
+them on the Cognitive Safety Board, the one artifact built across the whole volume. They
+are fixed here. Findings, verdicts, and page anchors:
+`docs/reference/PCBA_BOOK_DEFECTS_FROM_MONOGRAPHS.md`.
+
+**The CSB safety chain (Ch 18 and Appendix D, plus the tables and prose that quote them).**
+- **The red fuse could not trip.** The red output stage carries `sat = 0.1`, which bounds
+  its output unconditionally, and nothing on the clamp-to-fuse path amplifies — yet the
+  fuse in series with it was published at `threshold = 0.9`. The protective crossing was
+  unreachable on every possible input. The threshold moves to **0.05**, below the clamp,
+  so a saturated red path actually crosses it. The contradictory pair was printed twice —
+  chapter listing and reference appendix — so the typo defence was never available; both
+  listings are corrected, along with the Ch 18 walk-through prose, the BOM table, the
+  verification step, the board datasheet summary, and the matching Appendix D table and
+  footnotes.
+- **`beta = infinity` becomes `beta = 10`.** A non-finite parameter in a language whose
+  validator requires finite ones. The comparator idealization that the infinite-gain limit
+  was teaching is kept — it is the right way to think about a hard-decision stage — but the
+  listing is now buildable. The value is the book's own: the Ch 18 red-path Bench Note
+  already observed that with `sat = 0.1`, anything above about β = 10 is indistinguishable.
+  Appendix D no longer asks the reader to repair the listing before using it.
+- **The fuse now has a fail-closed latch specification.** The book asserted a latch and
+  defined no state machine for one — no states, no transitions, no behaviour on a retry or
+  on an unreadable input. Specified now, and specified fail-closed.
+- **Fuse polarity is stated.** The book never said which way the fuse cuts. Tripping severs
+  the *output* path; it must never sever the refusal path it exists to protect.
+- **Saturation does not latch — corrected.** The red stage's saturation clamp is a
+  memoryless plateau: it holds while the input holds and releases when the input drops, so
+  a maximal alarm can de-assert under oscillation. The latch is the fuse, and only the fuse.
+  Sentences that credited saturation with latching the decision are rewritten.
+
+The last three are independent of the arithmetic — they were defects at any threshold — and
+the unreachable fuse was hiding all of them. A board whose fuse never fires tests
+*vacuously* safe.
+
+**CCDL (Appendix C).**
+- **Nineteen statement leaders had no production anywhere in the published grammar**, while
+  the book's own five-board reference corpus used all of them: the CSB body items, the
+  CMB's `charge` / `select` / `discharge` / `refresh` / `scan`, and the CPMB's fourteen
+  power-management forms. The corpus was using more statement vocabulary outside the printed
+  EBNF than inside it. All nineteen now have productions.
+- **The `board` / `circuit` fork is decided, and recorded as a decision.** The audit was
+  right that the book had never settled whether a `board` block may carry circuit content or
+  whether the CSB listing should have said `circuit` — two repairs that produce *different
+  languages*, which is why no implementer should have been left to choose. Settled in favour
+  of the corpus: the board-level statements are `circuit_item`s, because that is how the
+  book's own boards are written.
+- **The mirror expression syntax is grammatical.** `mirror bias_mirror:
+  replicate(shared_bias) -> [cjt_l, cjt_r]` failed three ways at once against an RHS that
+  had to be `type_name<arg_list>`: call-shaped syntax, an arrow, and a bracketed target
+  list. The expression grammar now produces all three.
+- **A construct coverage matrix is published**, mapping every construct the reference boards
+  use to the production that produces it. This is the artifact whose absence let the
+  divergence ship: the appendix and the corpus had evolved on different schedules, and
+  nothing was checking them against each other. Its claim is deliberately narrow — surface
+  syntax only. It says each printed construct is produced by the printed grammar. It says
+  nothing about semantic validity, and it is not a substitute for the compiler.
+
+**Components (Appendix B).**
+- **The `Fuse` datasheet gains a design rule: *Reachability*.** A trip threshold means
+  nothing on its own; it is meaningful only against what drives it. `threshold < min(sat,
+  clamp, …)` over every upstream stage on the input path — otherwise the fuse is decoration.
+  Gain does not rescue it, because `sat` bounds the stage output *after* β. The Zener
+  datasheet now carries the same rule for `breakdown`. This is what would have caught the CSB
+  defect at design time, and the reason nothing did is worth naming: the validators check
+  values one at a time, so a 0.1 clamp and a 0.9 threshold each pass on their own, and the
+  contradiction between them is invisible to a per-value check.
+
+**Gain: two definitions, unbridged (Appendix I).** This book defines β as a ratio of
+Fisher-Rao displacements (Ch 3, Ch 9); the CAS-Ohm operationalization addendum computes gain
+as a Jacobian. They are not two notations for one quantity — no chain rule composes the
+Fisher-Rao ratios along a cascade, and identifying them requires assumptions nobody has
+stated. Rather than quietly pick one, Appendix I now sets the two profiles side by side,
+lists what a bridge between them would have to assume, and requires any reported β to name
+the method that produced it. Until that bridge exists, figures computed under the two
+definitions are not comparable. Registered as `OHM-CONFLICT-GAIN-DEFINITION`, still open.
+
+**Front matter.** New section, *What This Book Is — and What It Is Not*, closing the Preface
+and standing before *How to Use This Book*. It states positively what the book is (a design
+text and a teaching reference), what it is not (a certification, a measurement authority, a
+validated safety standard), and — the part that matters at the bench — that the worked
+listings are pedagogical examples a real build must validate, not drop-in designs. The
+unreachable fuse is cited there by name. A book that has just found a dead protective element
+in its own flagship listing has the strongest possible argument for checking listings, and a
+weaker one for any disclaimer. The copyright block points forward to it, and the conventions
+list in *How to Use This Book* points back.
+
+Two build-side follow-ups, neither of them content: the build slices front prose from
+`## Preface` onward, so this is the earliest position from which the section reaches the
+printed page without a build change — promoting it to a front-matter chapter of its own,
+which it deserves, is one line in `build/build_book.py` beside the two promotions already
+there. And the typeset copyright page lives in `build/frontmatter_pcba.tex`, which still
+wants the same forward pointer the source copyright block now carries.
+
+**Changelog hygiene.** The audit also recorded that this file's most recent label predated
+the build it shipped with: the audited PDF carried v0.6 / 2026-06-18 as its latest entry
+while itself dating from 2026-07-26. That revision now has the entry below, reconstructed
+from the repository history. The audited build is identified as:
+
+    src-pcba-engineer-20260726 — 743 pp, 6×9
+    SHA-256 294320B39FA521EAC086E99E2D9DB913E2B6CFF0754FF82DB1EF966424566274
+
+recorded here so that external page anchors resolve against the right bytes. Hashing the
+book identifies it; it does not endorse it.
+
+Source revision only — **rebuild the PDF and EPUB from `build/` before redistribution.** The
+shipped artifacts predate every correction above.
+
+## 2026-07-26 — v0.7 (published build — entry written retroactively)
+
+*This revision shipped with no changelog entry, which is itself one of the audit findings.
+Reconstructed from the repository history (`8f1c8309`, `99044f60`, `29eafed7`, `0923146b`)
+rather than from notes taken at the time, so it is a summary and not a full record.*
+
+Defects surfaced by a four-eval run over the manuscript and a reference-board eval:
+- **Ch 21 / Appendix D** — the `nearest()` example published a ranking no reader could
+  reproduce: under one-cell-per-state addressing every pairwise Fisher-Rao distance is
+  identical, which the book's own open-simplex constraint (`p_k > 0`) already implies.
+  Replaced with computed values from a worked composition, plus a Bench Note on why
+  similarity reads as proximity only when addresses are full distributions.
+- **Ch 22 / Appendix D** — two of four regulators dropped out on the wrong rail (`e_reg`
+  targeting F6 on an F5 spec, `o_reg` targeting F5 on an F3 spec), against the rule Ch 22
+  itself states. Duplicated verbatim in the appendix, so not a typo. All four now agree.
+- **Ch 14 / Ch 22** — the brownout thresholds did not survive the conversion between the
+  normalized presentation and the +12 V one. Ch 22 moved to 4.2 V / 5.4 V so the
+  multiplication is reproducible on the page.
+- **Appendix E** — the Ex 22.2 answer key gave a flat sequencer gate where Ch 22 uses
+  per-domain tolerances. An answer key that disagrees with its chapter teaches the wrong
+  thing.
+- **Appendix C** — 53 of the 64 statement keywords the book uses were undocumented, and
+  `comp_kind` was referenced in the EBNF but never enumerated. Keyword coverage brought to
+  64/64. (That closed the *keyword* gap; the *grammar* gap it left behind is A1 above, fixed
+  in v0.8.)
+- **Ch 18** — the red-path `beta=infinity` was flagged as a comparator idealization with a
+  Bench Note directing a large finite gain, and the unconstrained `Fuse` action (a board
+  with `action=warn` compiles clean and still calls itself a CSB) was written up as a manual
+  verification step. Both are partial repairs; v0.8 finishes them.
+- **`build/check_invariants.py`** — 32 mechanical checks added across the three titles, each
+  one corresponding to a defect that was actually present in a manuscript. Cheap
+  string-and-arithmetic checking, no substitute for reading the book, but the specific
+  mistakes already made cannot come back unnoticed.
+
+Interior rebuilt: 743 pp, 6×9, fonts embedded, zero missing glyphs; cover spine and EPUB
+rebuilt to match.
+
 ## 2026-06-18 — v0.6 (recipe coverage complete: CMB + CPMB)
 
 Added the final two board recipe views, so all five reference boards now carry a

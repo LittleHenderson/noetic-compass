@@ -30,7 +30,8 @@ handbook.
 
 Nothing in this book is a safety certification, a guarantee of model behavior, or legal/medical advice. A
 Cognitive Circuit Board is an engineering artifact: it does what its schematic, parameters, and test report say
-it does — no more, and no less.
+it does — no more, and no less. The scope of the book — what it is for, and what it must not be asked to
+carry — is set out in full in the note that closes the Preface.
 
 ---
 
@@ -77,6 +78,36 @@ Welcome to the workbench.
 
 ---
 
+## What This Book Is — and What It Is Not {-}
+
+**It is a design text and a teaching reference.** It teaches a discipline: decompose a cognitive architecture
+into components, give every component a datasheet, wire them onto a board, and write the claim down in a form
+someone else can check. Read it the way you would read a good analog-design text — for the method, the worked
+examples, and the judgment — and then go build something and measure it.
+
+**It is not a certification, a measurement authority, or a validated safety standard.** No board in these pages
+has been through a qualification program. No number in these pages was read off an instrument; there is no
+telemetry in this book, and it claims none. Every parameter is a design choice, picked to make a structural
+point visible.
+
+**And the worked listings are pedagogical examples, not drop-in designs.** That is the sentence I most want you
+to carry to the bench. A listing here is written to make one idea legible on one page. Before any of it governs
+anything real, you validate it yourself: check the arithmetic first, then drive every protective element to its
+trip point and confirm that it actually fires.
+
+I have a concrete reason to insist on that, and it comes from this very book. This revision corrects defects
+found by an external audit in the flagship listing — the Cognitive Safety Board, the board built across the
+whole volume. Two of its published parameters contradicted each other: the red stage was clamped at 0.1, and the
+fuse guarding that path was set to trip at 0.9, so the fuse could not trip on any input at all. The pair was
+printed twice, once in the chapter and once again in the reference appendix, and it survived drafting, review,
+and the first printing. Nothing in the typesetting distinguished it from a fact.
+
+That is the honest argument for checking what you read here, and it is a better one than any disclaimer I could
+write. A long technical book set in a serious typeface projects an authority it has to earn one page at a time.
+Take the method. Verify the numbers.
+
+---
+
 ## How to Use This Book
 
 **You need no prior knowledge.** Not of electronics, not of CAS, not of programming. Every electronic concept
@@ -118,7 +149,8 @@ reports ready. These are engineering claims — verifiable by anyone holding the
 - **Bench Notes** — practical, learned-the-hard-way asides — appear as indented callouts.
 - Parameter values in worked examples (β, saturation, resistance) are *design choices*, chosen to illustrate.
   Where a number would imply a measured result from a real model, the text says so explicitly, or does not
-  claim it.
+  claim it. Listings teach; they do not ship — check a listing's arithmetic before you build on it (see *What
+  This Book Is — and What It Is Not*).
 
 Turn the page. Pick up the soldering iron.
 

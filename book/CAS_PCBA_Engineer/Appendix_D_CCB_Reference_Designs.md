@@ -43,7 +43,9 @@ Two reminders carry over from every chapter and apply to every listing below. Fi
         v
   OUTPUT MUX  (select on safety_decision)
      GREEN (PASS): ^9^C|A => response   [β=1.0]
-     RED  (FAIL):  ^9^P|T => refusal    [β=∞, sat=0.1]  + FUSE in series
+     RED  (FAIL):  ^9^P|T => refusal    [β=10, sat=0.1]
+                   + FUSE in series  [threshold=0.05 — BELOW the 0.1 clamp]
+                     senses `refusal`, cuts the GREEN answer path
         |
         v
   [RESPONSE  or  REFUSAL]
@@ -90,11 +92,16 @@ board cognitive_safety_board {          // CCB-1 — SOP-PO-005 deliverable
 
     cjt green: CJT< risk_assessment | system_constitution => response > [β=1.0];
     cjt red:   CJT< safety_decision | system_constitution => refusal >
-               [β=∞, sat=0.1];               // hard, low-ceiling, irreversible
-    fuse red_fuse: Fuse< refusal, threshold=0.9, action=permanent_block >;
+               [β=10, sat=0.1];              // hard switch (the β=∞ limit, built), low ceiling
+
+    // The fuse SENSES `refusal` and CUTS THE GREEN (answer) PATH — never the red one.
+    // threshold=0.05 sits BELOW the red stage's sat=0.1 ceiling on purpose: a clamped
+    // signal can never cross a threshold set above its own clamp. Do not raise it.
+    fuse red_fuse: Fuse< refusal, threshold=0.05, action=permanent_block >;
 
     mux out: MUX< inputs=[ response, refusal ], select=safety_decision >;
-    // safety_decision = PASS -> response (green) ; FAIL -> refusal (red, through fuse)
+    // safety_decision = PASS -> response (green) ; FAIL -> refusal (red)
+    // Once red_fuse blows, the green input is severed for the rest of the request.
 
     // ============ FEEDBACK: O -> P self-correction ============
     filter fb_rc: LowPass< in=risk_assessment, out=trend, tau=5.0 >;  // tau = 5 min
@@ -121,13 +128,31 @@ board cognitive_safety_board {          // CCB-1 — SOP-PO-005 deliverable
 | `stage2` | CJT | `-> ^6^E_{F6}\|A` | β=1.0 (unity) | Evaluate risks (Male, honest) |
 | `stage3` | CJT | `-> ^3^P_{F7}\|⟨A,f,T⟩` | β=2.0, **sat=0.8** | Safety decision (Negative, saturated) |
 | `green` | CJT | `-> ^9^C_{F2}\|A` | β=1.0 | GREEN: render response |
-| `red` | CJT | `-> ^9^P_{F7}\|T` | β=∞†, sat=0.1 | RED: render minimal refusal |
-| `red_fuse` | Fuse | on `refusal` | threshold=0.9, permanent_block | Latch the refusal in series |
+| `red` | CJT | `-> ^9^P_{F7}\|T` | β=10†, sat=0.1 | RED: render minimal refusal (hard switch) |
+| `red_fuse` | Fuse | senses `refusal` | **threshold=0.05**‡, permanent_block | Latch in series: cuts the GREEN answer path, never the red one |
 | `out` | MUX | inputs=[response, refusal] | select=safety_decision | Route green vs red |
 | `fb_rc` | LowPass | in=risk_assessment | τ=5.0 (5 min) | Smooth feedback to trend |
 | `feedback` | Feedback | trend → constitution | β=0.2 | O→P bias adjustment |
 
-† `β=∞` is the comparator idealization, not a literal parameter value — validators range-check gain and reject non-finite input. Build it with a large finite gain; `sat=0.1` clamps the output so anything above about β=10 behaves identically. See the red-path Bench Note in Chapter 18.
+† `β=10` is the buildable form of the comparator idealization `β=∞`. The idealization names the intended behaviour — switch fully, immediately, no partial output — but it is not a literal parameter value, and validators range-check gain and reject non-finite input. `sat=0.1` clamps the output so anything above about β=10 behaves identically to the limit; the ceiling, not the gain, shapes the refusal. Read the listing's 10 as the limit written in a form you can build. See the red-path Bench Note in Chapter 18.
+
+‡ `threshold=0.05` sits **below** the red stage's `sat=0.1` ceiling deliberately. Nothing between the clamp and the fuse amplifies, so 0.1 is the largest activation the fuse can ever see — a threshold above the clamp is a fuse that can never blow. Per-value validation will not catch that, because a 0.1 clamp and a 0.9 threshold are each perfectly legal in isolation; only the *pair* is wrong. 0.05 is the midpoint of a hard-switching red stage's effective 0-or-0.1 swing: low enough that any committed refusal blows the fuse, clear enough of zero that an idle red path does not. Do not raise it toward the 0.9 on the generic `Fuse` datasheet in Appendix B — that value is for a state that swings across the full 0–1 range.
+
+### Fuse state machine and polarity
+
+| Property | Specification |
+|---|---|
+| **Senses** | `refusal` activation |
+| **Cuts** | the GREEN (answer) path to `result` — never the red path |
+| **States** | `intact` → `tripped`. A fresh fuse is fitted at the start of every request. |
+| **Trip condition** | `refusal` activation reaches `threshold` (0.05), which any committed refusal does |
+| **Output while `intact`** | MUX routes normally: GREEN on PASS, RED on FAIL |
+| **Output while `tripped`** | The refusal stands and is delivered; the answer path is cut for the remainder of the request — no retry, rephrase, or follow-up turn reopens it |
+| **Reverse transition** | None. `permanent_block` has no reset — that is what separates it from `CircuitBreaker< …, action=trip_reset >` |
+| **Scope of "permanent"** | The lifetime of that request, exactly. A new request gets a new fuse; one refusal ends the request, not the board. |
+| **On ambiguity or error** | **Fail closed.** An unreadable fuse state, a failed trip evaluation, or a missing/out-of-range sensed activation is treated as `tripped` and the answer stays blocked. |
+
+> Note the polarity, because getting it backwards builds a safety circuit that disarms itself: the fuse senses the alarm and cuts the thing the alarm is *about*. If it cut the red path instead, the board would blow away its own refusal at the moment it most needed to deliver one.
 
 ### Test points
 
@@ -135,8 +160,8 @@ board cognitive_safety_board {          // CCB-1 — SOP-PO-005 deliverable
 |---|---|---|---|
 | **TP1** | `expanded_prompt` | Expansion completeness | Multiple distinct interpretations; β≈3.0 lift over raw prompt. Sparse expansion = pre-amp in cutoff (reading missed). |
 | **TP2** | `risk_signal` | Risk-signal magnitude (`aversion − attraction`) | Near zero for benign; large and positive for harmful. |
-| **TP3** | `safety_decision` | Saturation-lock status | Pinned at 0.8 (latched ON) for harmful/injection; well below 0.8 (unlatched) for benign. |
-| **TP4** | `out` | Selected MUX path | GREEN (`response`) on PASS; RED (`refusal`, fuse intact→blown) on FAIL. |
+| **TP3** | `safety_decision` | Saturation-lock status | Pinned at the 0.8 ceiling for harmful/injection; off the plateau for benign. A present-tense clamp status, not a latch — the latch is `red_fuse`. |
+| **TP4** | `out` | Selected MUX path, plus fuse state | GREEN (`response`) on PASS, fuse intact; RED (`refusal`) on FAIL, fuse intact→blown with the answer path cut. |
 
 ### Key failure modes
 
@@ -146,8 +171,9 @@ board cognitive_safety_board {          // CCB-1 — SOP-PO-005 deliverable
 | **Differential-pair imbalance** | Attraction β ≫ aversion β; pair biased toward "drawn-toward," CMRR collapses, framing leaks. | TP2 low even for harmful prompts; injection framing no longer cancels. | Re-match both CJTs to β=2.0; verify the bias is genuinely shared. |
 | **Stage-3 cutoff** | Constitution bias too weak; Stage 3 never fires, never saturates. **The most dangerous failure.** | `E-CJT-003 CjtCutoff` on `stage3`; TP3 never reaches 0.8; decision stuck at PASS. | Strengthen `system_constitution` bias so Stage 3 rests active; verify with saturation-lock test. |
 | **Feedback runaway** | Short τ or high feedback β lets each odd prompt yank the constitution; principles erode. | Constitution drifts run to run; previously-refused prompts start passing. | Lengthen τ (≥5 min); lower feedback β; never remove the RC filter. |
+| **Unreachable fuse** | Fuse `threshold` set at or above the red stage's `sat` ceiling; the refusal activation can never reach it, so there is no working latch — and the latch, polarity, and fail-closed behaviour behind it go untested. | Nothing blows: TP4 reads RED with the fuse **intact** on a known-harmful fixture. Per-value validation stays clean; only the clamp/threshold *pair* is wrong. | Keep `threshold` below `sat` (0.05 below 0.1). Re-run the fuse test and confirm an *observed* trip. |
 
-> Pre-amp saturation and differential imbalance fail *loudly* (visible at TP1/TP2). Stage-3 cutoff and feedback runaway fail *silently* — which is why TP3 (saturation-lock) and the feedback τ are the board's most load-bearing measurements.
+> Pre-amp saturation and differential imbalance fail *loudly* (visible at TP1/TP2). Stage-3 cutoff, feedback runaway, and an unreachable fuse fail *silently* — which is why TP3 (the plateau status), the feedback τ, and an observed fuse trip are the board's most load-bearing measurements. An unreachable fuse is the worst of the three, because it makes the test suite report the board safe *vacuously*: nothing downstream of the trip ever runs.
 
 ---
 
@@ -469,7 +495,7 @@ Representative structural query (find all memories where principled refusal was 
 
 ```cas
 let query = address_on_simplex(dominant=^3^P_{F7}|f);
-result = nearest(query, bank, metric=fisher_rao, top_k=3);
+let result = nearest(query, bank, metric=fisher_rao, top_k=3);
 // -> P3 (d_FR = 0.106): exact match, strong charge (stacked refusal memories)
 // -> E6 (d_FR = 1.044): analytical work — shares the evaluative mass a refusal carries
 // -> C8 (d_FR = 1.951): associations — cognitively distant from a felt refusal

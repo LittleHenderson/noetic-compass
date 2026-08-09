@@ -26,7 +26,7 @@ from the symbols.
 |---|---|---|---|
 | Constraint (resistance) | `R` | 0–100 | Opposition to cognitive flow. Higher = more constrained. |
 | Activation, saturation, cutoff, threshold | `sat`, `cutoff` | 0–1 | Fraction of the path's ceiling. Safety CJTs are saturated deliberately low — 0.8 and up — so the lock cannot be pushed back down. |
-| Stage gain | `β` | unbounded, typically 0.5–5 | Δeffect per unit Δcause. |
+| Stage gain | `β` | unbounded, typically 0.5–5 | Δeffect per unit Δcause, as a Fisher-Rao displacement ratio. Two different definitions of `β` are in circulation — see "Which β you measured" below. Never report a bare `β`. |
 | Dial setting | `Dial(^n)` | **integer** 3–9 | A hard-stopped operator setting, not a measurement. |
 | Board supply rail | `F1…F7` | 3.3–12 V | Board specification in the electrical analog. |
 
@@ -251,7 +251,115 @@ about redundant versus fused safety architecture.
 `β_total = Π β_k`. Gain compounds along the chain. Flow does not: each stage's
 `I` is set by *that stage's* local drive and resistance. A late stage starved by
 its own high `R` will not be rescued by a high-gain stage upstream — it will
-saturate the upstream stage instead and clip.
+saturate the upstream stage instead and clip. That product is a rule for
+*sizing* a cascade at design time; what it does and does not license you to do
+with *measured* stage gains is the subject of the next section.
+
+---
+
+## Which β you measured — one symbol, two definitions
+
+`β` sits in the units table at the top of this appendix under the gloss
+"Δeffect per unit Δcause," and that phrase hides a problem. Two different
+mathematical objects circulate under the single symbol `β`. A test report that
+does not say which one it used is not reproducible, and two reports that used
+different ones are not comparable — even though both numbers are dimensionless
+and both look perfectly at home in the same column.
+
+**The book's definition — a Fisher-Rao displacement ratio.** Stated in Chapter
+3, restated in Chapter 9, and the definition every β printed in these pages is
+written under:
+
+```
+small-signal   β = ‖∂E/∂C‖_FR  at constant bias
+large-signal   β = d_FR(E_after, E_before) / d_FR(C_after, C_before)
+               d_FR(p,q) = 2·arccos(Σ√(pₖqₖ))
+```
+
+`d_FR` is the Fisher-Rao geodesic distance on the open simplex Δ39°. Gain,
+under this definition, is a ratio of *distances travelled on the simplex*,
+measured in the simplex's own information geometry.
+
+**The operational definition — a Jacobian / projection derivative.**
+Instrumentation hooked to a running model does not have the simplex; it has
+activation vectors. The natural gain there is a local derivative: pick a cause
+test point and an effect test point, take the derivative of effect with respect
+to cause, project onto chosen directions, report the magnitude. This is what a
+measurement harness hands you when you ask it for a gain, and it is a perfectly
+reasonable quantity in its own right.
+
+**They are not known to be the same quantity.**
+
+| Property | Fisher-Rao displacement ratio (this book) | Jacobian / projection derivative (instrumentation) |
+|---|---|---|
+| Lives on | the open simplex Δ39°, in its information geometry | activation space, under a chosen projection |
+| Invariance | invariant under the simplex's natural reparameterizations | depends on the direction vectors picked at both test points |
+| Signal size | has a small-signal *and* a large-signal form | small-signal by construction — it is a local derivative |
+| Dimensionless | yes | yes — but by a different normalization |
+
+Both are dimensionless, and that is the hazard rather than the reassurance it
+looks like: a unit check cannot tell them apart. Two figures that read
+identically on a report can be the outputs of two different measurements of two
+different things, and nothing in the arithmetic will complain.
+
+**What would have to be true for the two to be comparable.** Not "roughly
+similar" — *comparable*, in the sense that you could put a number produced one
+way where a number produced the other way belongs. Four things would have to be
+established and written down:
+
+1. **A coordinate map.** An explicit map between the activation coordinates the
+   derivative is taken in and the simplex coordinates the distance is measured
+   on — and it would have to be a local diffeomorphism over the region you
+   actually measured in, or "the same point" means nothing.
+2. **Metric compatibility.** The projection structure used to take the
+   derivative would have to agree, under that map, with the Fisher-Rao metric.
+   A derivative and a distance line up only when the derivative is taken in the
+   metric the distance is measured with.
+3. **A matched signal regime.** A Jacobian is a small-signal object by
+   construction. Only the book's *small-signal* form is even a candidate for
+   comparison; a large-signal displacement ratio has no local derivative to be
+   compared to.
+4. **A shared normalization.** Both quantities are rendered dimensionless, but
+   by different normalizations. Those would have to be shown to be the same
+   one, or the ratio between them stated.
+
+None of the four is established in this book, and none is established in any
+source this book draws on. No theorem here derives one quantity from the other;
+no experiment here measures both on the same path and compares them. Do not
+read the identification as a technicality someone has surely worked out
+offstage. It is open, and it is worth saying so plainly on a page that is
+otherwise about how to get a number you can defend.
+
+**So which one governs?** In this book's terms, **the Fisher-Rao displacement
+ratio governs.** Every β in these pages — the CJT datasheet's `β=2.4`, the
+CSB's stage gains, Chapter 11's cascade figures — is written under that
+definition, and a gain reported "in this book's terms" means that one. A
+Jacobian gain out of a harness is not wrong; it is a *different measurement*,
+and it belongs on the report under its own name, never silently in a field
+labelled `β`.
+
+**Write the method beside the number.** Never let a bare `β` off the bench.
+Write `β(FR)` or `β(Jac)`, or spell the method out on the line above it. A gain
+figure without its method identity is not a measurement; it is a number.
+
+> **Bench Note — composition is where this bites.** Chapter 11's
+> `β_total = Π β_k` is how you *size* a cascade: pick stage gains whose product
+> is the amplification the design needs. As a design rule it does its job. It
+> is not, on the strength of anything in this book, a licence to multiply
+> *measured* stage figures together and call the product a measured cascade
+> gain. Composition of local derivatives follows a chain rule only when
+> adjacent stages' coordinates agree; composition of Fisher-Rao displacement
+> ratios has no chain rule at all without further structure, and this book
+> supplies none. And a cascade that mixes the two — one stage's derivative
+> times the next stage's displacement ratio — computes cleanly and means
+> nothing, because both factors are dimensionless and nothing stops the
+> multiplication.
+>
+> The error does not stay local, either; it compounds with depth. Three stages
+> at a 30% definitional discrepancy is a factor of about 2.2 — illustrative
+> arithmetic about how error propagates, not a measurement of anything. Report
+> per-stage gains, each tagged with its method, and let the reader see the
+> chain instead of a product that hides what went into it.
 
 ---
 
@@ -293,6 +401,8 @@ INSTALLED CONSTRAINT
 PREDICTED           I_pred = V / R_known  ______
 OBSERVED  run 1 ______  run 2 ______  run 3 ______
 NORMALIZED          I_Q ______
+
+GAIN (if reported)  β ______   method:  FR-displacement / Jacobian
 
 RESIDUAL            ΔI ______   R_hidden ______
 REGION              cutoff / active / saturation / breakdown

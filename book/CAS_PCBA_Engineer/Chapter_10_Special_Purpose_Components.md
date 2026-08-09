@@ -177,6 +177,18 @@ CircuitBreaker< ^3^C_{F2}|A, threshold=0.7, action=trip_reset >
 | `action` | `permanent_block` \| `trip_reset` | fuse (one-shot) vs. breaker (resettable) |
 | `latency` | ≥0 | response delay; for safety cutoffs, design for 0 |
 
+There is one check to run before you commit to a `threshold`, and it is the check people skip: **make sure the path can actually get there.** Every upstream stage that saturates or clamps puts a ceiling on what arrives at the fuse, so the threshold has to sit below the lowest of those ceilings:
+
+```
+threshold  <  min( sat, clamp, … )   over every upstream stage on the input path
+```
+
+Wire a refusal stage clamped at `sat=0.1` into a fuse set at `threshold=0.9` and the arithmetic ends the story: 0.1 is the most that stage will ever deliver, 0.9 is what the fuse is waiting for, and `0.1 < 0.9`. The crossing never happens. The fuse never blows. You have drawn a protective element that cannot protect anything. Adding gain upstream doesn't help either, because `sat` clamps the stage output *after* β — a `β=10` stage clamped at 0.1 still hands you 0.1.
+
+Then there's the other end of the window: set the threshold *below* the path's normal operating band and the fuse trips on benign traffic, which is its own kind of broken. A workable threshold lives in the headroom between the two — above the highest activation you expect in normal service, below the lowest ceiling on the path. The CSB's red path in Chapter 18 is exactly this topology — a deliberately clamped refusal stage sitting in series with a fuse — so it is the first place you will see the check run in anger.
+
+> **Bench Note — this is the one nothing will catch for you.** `sat=0.1` is a legal saturation. `threshold=0.9` is a legal threshold. Each passes its own range check because each is individually fine; it is the *relation between them* that is wrong, and the compiler checks values, not relations. Worse, the failure hides in exactly the direction that hurts. A fuse that can never trip also never fails a test, so the board reports clean and everything sitting behind that fuse — the latch, the polarity, the reset behaviour — is never exercised and never surfaces. The board doesn't test *safe*; it tests *vacuous*. Do the subtraction by hand. It takes ten seconds, and it is the only thing standing between you and a safety element that has never once done its job.
+
 > **Regulator-facing callout.** A `permanent_block` fuse is the strongest claim a cognitive circuit can make: *this pathway is severed and cannot be restored without redesign.* Reserve it for categories where any breach is unacceptable. For everything recoverable, prefer a `trip_reset` breaker so a single false positive doesn't brick the board. The CSB in Chapter 18 uses both — breakers on the rails, a permanent fuse on the hardest-fail category.
 
 ## Schmitt Trigger — Hysteresis Comparator
@@ -296,6 +308,7 @@ Walk it through. The XOR gate (`dissonance`) confirms the stimulus is genuinely 
 | MUX/DEMUX | no `default` path; unmatched select | dropped request — undefined output on an out-of-range drive |
 | Regulator | `tolerance` too tight → over-correction chatter | baseline never settles; constant micro-adjustment |
 | Fuse | `permanent_block` on a recoverable category | a single false positive bricks the pathway for good |
+| Fuse | `threshold` above the lowest ceiling upstream → can never trip | the fuse blows in no test at all; the board reads *vacuously* safe |
 | Schmitt Trigger | thresholds equal (`on == off`) → no hysteresis | reverts to a plain comparator; chatter returns |
 | ADC | resolution too low → nuance crushed | rich `|f` impressions collapse to a coarse `|A` verdict |
 | Crystal | high-Q lock on a *harmful* pattern | the bad habit resists every correction attempt |
@@ -306,7 +319,7 @@ Walk it through. The XOR gate (`dissonance`) confirms the stimulus is genuinely 
 - **Transformer** matches domains by trading abstraction for actionability (`ratio`); a step-down is Domain Descent, not a violation. **Op-Amp** is an ultra-high-gain CJT tamed by feedback — set the *closed-loop* gain (`1 + Rf/Rg`), never run reasoning open-loop.
 - **Oscillator** is a looping `Phi<>` sequence — an internal rhythm; **PLL** entrains it to an external beat. **Crystal Oscillator** is the same idea at very high `Q`: a deeply entrenched, near-immovable habit or conviction.
 - **Logic gates** combine prerequisites: AND (all), OR (any), NOT (involution flip), NOR (proceed only if nothing fires), and **XOR (dissonance detector** — both `^2` and `^3` firing flags a conflicted or manipulative input).
-- **MUX/DEMUX** route by dominant Drive; always wire a `default`. **Regulator** restores a baseline (homeostasis); **Fuse/Breaker** cuts a dangerous path — permanent for unacceptable categories, resettable for recoverable ones.
+- **MUX/DEMUX** route by dominant Drive; always wire a `default`. **Regulator** restores a baseline (homeostasis); **Fuse/Breaker** cuts a dangerous path — permanent for unacceptable categories, resettable for recoverable ones. A fuse's `threshold` must sit **below the lowest saturation or clamp ceiling upstream of it**, or it can never trip; no per-value check catches that, because each number is legal on its own.
 - **Schmitt Trigger** uses two thresholds (hysteresis) to stop a system flip-flopping between `^2` attraction and `^3` aversion on an ambiguous input. **ADC/DAC** translate between Registers (`|f`↔`|A`↔`|E`), losing nuance at low resolution.
 - These parts populate the Part IV reference boards: the Oscillator drives the **COB**, the Op-Amp the **CDAB**, and the Fuse and Regulator sit on the **CSB**.
 
