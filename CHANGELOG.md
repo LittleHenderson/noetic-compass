@@ -4,6 +4,60 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-08-08 — Noetic Topos 2.0 monograph: audit + corrections + adversarial verification (final volume)
+
+Completes the five-volume audit campaign. 11 auditors → 128 findings (11 critical,
+60 major, 57 minor); corrections applied by 4 parallel agents; then a 3-agent
+ADVERSARIAL VERIFICATION pass over the corrections themselves, which found 19
+residual defects, repaired by 3 further agents. 21 agents total on this volume.
+
+Critical mathematical corrections (all independently recomputed in Python before
+applying, and again during verification):
+
+- **ch09 RPM-gluing failure count — wrong, found by 5 independent auditors.**
+  Remark ch09:rem-other-failures claimed the ACBE witness presheaf separates the
+  two topologies at "three of the sixteen contexts", citing a "direct check" that
+  "both sides count 2" at triples. Both false. Because no RPM piece of any context
+  contains a complete ACBE block, the matching-family set is a SINGLETON at all 16
+  contexts; gluing fails wherever alpha(V) >= 1, i.e. at SEVEN contexts (A_0, A_1,
+  the four triples at 2-to-1, and Omega at 4-to-1). The volume's own Appendix C
+  already stated the correct seven-context result — the book contradicted itself.
+- **appB block-completeness table — all four triple rows wrong.** Listed "none" as
+  the complete RPM block of every triple; each triple contains exactly one
+  (alpha = rho = 1). Contradicted ch07 Table 7.5, Appendix A, and Appendix C.
+- **ch04 drafting artifact shipped in the PDF.** Example ch04:ex:bounded contained a
+  visible mid-sentence self-correction ("...is not constantly 1? No: s *is*
+  constantly 1...") attached to an unretracted false claim that a non-presheaf was
+  "separated". Replaced with a correct, verified example.
+- **ch05 impossible exercise.** Asked the reader to exhibit a counterexample to an
+  invariant the same chapter proves, with a self-contradicting hint. Replaced.
+
+Citation and scholarship: Cech cohomological-obstruction machinery re-attributed
+from Abramsky-Brandenburger 2011 (which contains none) to Abramsky-Mansfield-Barbosa
+2012, plus the CSL 2015 paradox paper and the 2017 contextual-fraction measure;
+Mac Lane-Moerdijk pinpoint corrected (Ch. VII has no associated-sheaf theorem —
+it is Ch. III sec. 5-6); canonical topology corrected to *universally*
+effective-epimorphic sieves; sieve-axioms definition re-pointed from Stacks Tag
+00ZC to 00Z4; per-volume bibliography created (17 cited entries, replacing a
+46-entry shared list of which 34 were never cited); AI-assistance disclosure added
+to the \thanks block, matching the four sibling volumes.
+
+Defects the verification pass caught in the corrections themselves:
+
+- appD glossary longtable went 85pt -> 433pt overfull, pushing the entire "Where"
+  column (the chapter attributions ~30 fixes were correcting) off the printed page.
+  Non-wrapping `lll` spec replaced with wrapping `p{}` columns; 433pt -> 0pt,
+  confirmed by rendering the page. Same fix applied to ch11's table (420pt -> 0pt).
+- 26 double-numbered cross-references left in ch09 ("Theorem 7.\ref{...}" renders
+  "Theorem 7.7.12") after a sibling agent normalized the identical pattern in ch08.
+  Produces no LaTeX warning, so a clean build does not catch it. Now zero volume-wide.
+- Two corrections that introduced new errors: ch05 called the countermodel "finite"
+  while ch06 (same pass) says it is infinite; appA's "ten -> nine contexts" change
+  fixed a count to match a list that was itself incomplete. Both reverted correctly.
+
+All five volumes rebuild with zero undefined-reference and zero undefined-citation
+warnings. PDFs in docs/whitepapers/pdf/ refreshed.
+
 ## 2026-08-08 — CAS PCBA 8 monograph: 17-failure-mode audit + corrections (11-agent workflow)
 
 - Same audit protocol as the two sibling volumes, run over

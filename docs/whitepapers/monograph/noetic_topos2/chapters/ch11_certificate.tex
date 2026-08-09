@@ -48,8 +48,8 @@ licensed to substitute for independent review.
 \section{Methodology of exhaustive checking}
 \label{ch11:sec:methodology}
 
-Before walking the checks, four methodological commitments deserve
-statement, because they distinguish this executable layer from ordinary
+Before walking the checks, we state four methodological
+commitments, because they distinguish this executable layer from ordinary
 software testing and because each is auditable in its own right.
 
 \emph{Determinism.} Both verifiers are deterministic programs over fixed
@@ -59,7 +59,7 @@ given commit or fails identically every time. This is what allows the
 certificate to be a \emph{record} rather than a statistic --- the
 expected-result block asserts exact values, not distributions, and a
 reviewer who reruns the registered command either reproduces the block
-bit-for-bit or has found a discrepancy worth filing.
+bit-for-bit or has found a discrepancy to file.
 
 \emph{Dependency-freedom.} The finite-site checker is deliberately free
 of third-party dependencies: contexts are frozen sets, presheaves are
@@ -67,8 +67,8 @@ dictionaries, sieves are sets of subsets, and every categorical notion is
 implemented from its definition rather than imported from a library. The
 cost is verbosity; the benefit is that the trusted computing base for the
 certificate is the checker file itself plus the language runtime, and a
-reviewer auditing the formalization has one file to read against
-Chapter~10's definitions.
+reviewer auditing the formalization has one file to read against the
+definitions of Chapters~7--9.
 
 \emph{Exhaustive quantification.} Every ``for all'' in the checked
 properties is discharged by enumeration over its entire domain: all
@@ -107,8 +107,13 @@ certificate's expected-result block registers two cardinality checks and
 twenty-one named verdicts (counting each paired ACBE/RPM verdict as a single
 named check), twenty-three registered checks in all, together with an
 aggregate flag \texttt{all\_required\_checks\_pass}. All pass at the bound
-commit. We take them in order, stating for each what is computed and which
-result of the monograph it corroborates.
+commit
+\begin{center}
+\texttt{a1cd990109e7561dfd03949bf0e1653461c7ae44}
+\end{center}
+(the base commit registered in Chapter~1). We take them in order, stating
+for each what is computed and which result of the monograph it
+corroborates.
 
 \subsection{Cardinalities and cover geometry}
 \label{ch11:sec:geometry}
@@ -173,7 +178,7 @@ bijection at every context against every generating cover of both
 topologies, including the null cover at the empty context. This is the full
 finite content of Theorem NT2-2 (ledger
 \textsc{thm-nt2-subcanonical-context-factor}): both $J_A$ and $J_R$ are
-subcanonical on $L$. It is worth noting what a failure here would mean: a
+subcanonical on $L$. Note what a failure here would mean: a
 representable failing the sheaf condition would put the finite site in the
 same position as the legacy site, whose jointly-surjective coverage is
 provably not derivably subcanonical; the check certifies that the repair
@@ -225,7 +230,7 @@ $4 \to 1$ fails injectivity --- is tabulated in full in Appendix~C.
 \begin{checkclass}
 \label{ch11:chk:transverse}
 \textbf{\texttt{transverse\_refinement\_is\_singletons}.} Computes all
-sixteen intersections $A_i \cap R_j$ over the four index pairs and verifies
+four intersections $A_i \cap R_j$, one per index pair, and verifies
 each equals the singleton $\{(i, j)\}$; contextwise, verifies that the
 common refinement of $K_A(V)$ and $K_R(V)$ has as nonempty members exactly
 the singletons of $V$. This is the transversality identity, the one equation
@@ -356,7 +361,7 @@ site constants: $16$ contexts, $81$ inclusion arrows, $2$ partitions with
 $2$ members each, $16$ representables, $2$ witnesses, $4$ singleton
 contexts.
 
-\begin{longtable}{@{}lll@{}}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.22\textwidth} >{\raggedright\arraybackslash}p{0.42\textwidth} >{\raggedright\arraybackslash}p{0.30\textwidth}@{}}
 \toprule
 Check group & Domain exhausted & A failure would falsify \\
 \midrule
@@ -374,8 +379,9 @@ members & basis axiom (J2); Theorem NT2-1 \\
 representables are sheaves & $16$ representables $\times$ $2$ topologies
 $\times$ all generating covers at all $16$ contexts &
 Theorem NT2-2 (subcanonicity) \\
-witness functoriality & $2$ witnesses $\times$ $81$ arrows (identities
-and all composable pairs) & well-definedness of the witnesses \\
+witness functoriality & $2$ witnesses $\times$ ($81$ restriction maps
+$+$ $256$ composable pairs) &
+well-definedness of the witnesses \\
 four sheaf verdicts & $2$ witnesses $\times$ $2$ topologies $\times$ all
 generating covers at all contexts & Theorem NT2-3 (distinctness), in
 either direction \\
@@ -431,8 +437,8 @@ axioms once more on each computed result, independently, so that agreement
 cannot be an artifact of a shared saturation bug reaching the same wrong
 fixed point from a shared seed.
 
-The enumeration sizes are worth deriving, because they are checkable by hand
-and pin the claim that the run is exhaustive rather than sampled.
+The enumeration sizes are derived below; they are checkable by hand and pin
+the claim that the run is exhaustive rather than sampled.
 
 \begin{remark}[Deriving the registered counts]
 \label{ch11:rem:counts}
@@ -508,6 +514,12 @@ Each item corroborates a specific labeled step of Chapter~10: items (3) and
 (4) the join lemma; item (5) the objectwise flattening computation; items
 (6)--(8) the naturality, inverse, and unit-compatibility paragraphs of the
 composition theorem and the well-definedness proposition of the reflector.
+Two steps of Chapter~10 have no counterpart here: the universal property of
+the reflector and the sheafhood of $R_P F$ carry no registered check in
+either executable layer. The covering claim of
+Section~\ref{ch11:sec:domains} is accordingly scoped to the finite theorems
+listed there and does not extend to those two lemmas, whose machine
+verification is admission gate~2.
 
 \subsection{The fixture battery}
 \label{ch11:sec:fixtures}
@@ -515,8 +527,8 @@ composition theorem and the well-definedness proposition of the reflector.
 The $18$ executable fixtures decompose as $16 + 1 + 1$: the sixteen
 representable presheaves, the constant two-section presheaf with
 nonterminal empty-context value, and the bit-assignment presheaf. The
-three families are chosen to stress different failure surfaces, and it is
-worth recording why each earns its place.
+three families are chosen to stress different failure surfaces; each earns
+its place as follows.
 
 \emph{The representables} are the fixtures on which everything should be
 \emph{inert}: they are sheaves for both factor topologies
@@ -561,8 +573,27 @@ artifact and in Chapter~10's source document; the deterministic verifier
 is invoked as a single script with no arguments, and the scoped suite by
 standard unit-test discovery over
 \texttt{tests/noetic\_topos2\_modality\_composition}. A reviewer's
-workflow is: check out the bound commit, run both commands, and diff the
-verifier's report against the registered expectations. Any discrepancy
+workflow is: check out commit
+\texttt{a1cd990109e7561dfd03949bf0e1653461c7ae44} (the base commit
+registered in Chapter~1); run the two registered commands
+
+\begin{quote}
+\ttfamily\small
+python docs/working/project\_coherence/gate1/\\
+\hspace*{1em}noetic\_topos2/modality\_composition/\\
+\hspace*{1em}verify\_modality\_composition.py
+
+python -m unittest discover\\
+\hspace*{1em}-s tests/noetic\_topos2\_modality\_composition\\
+\hspace*{1em}-p "test\_*.py" -v
+\end{quote}
+
+\noindent and diff the verifier's report against the
+\texttt{expected\_execution\_summary} block of
+\begin{center}
+\texttt{MODALITY\_COMPOSITION\_CERTIFICATE\_v0.1.json}.
+\end{center}
+Any discrepancy
 is, by the fail-closed discipline, a finding about the artifact set ---
 either a regression or an environment sensitivity --- and not something
 to be waved through.
@@ -577,8 +608,10 @@ check above reporting success.
 \section{The Lean layer: scope and explicit non-scope}
 \label{ch11:sec:lean}
 
-The bounded proof-assistant layer is a pinned Lean Gate~1 verifier that
-passes at the bound commit. Its scope is deliberately narrow, and the
+The bounded proof-assistant layer is a Lean Gate~1 verifier reported as
+passing at the bound commit; v0.1 registers no Lean project path, toolchain
+pin, or build command, so this layer alone is not independently rerunnable
+from this monograph. Its scope is deliberately narrow, and the
 narrowness is registered rather than incidental.
 
 \begin{checkclass}

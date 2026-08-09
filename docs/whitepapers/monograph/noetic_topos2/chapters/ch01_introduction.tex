@@ -196,7 +196,7 @@ identity.
 \subsection{A miniature vignette}\label{ch01:sec:vignette}
 
 Because the sheaf condition is the load-bearing idea of the entire
-monograph, it is worth seeing it once, informally, on a structure small
+monograph, we first see it informally, on a structure small
 enough to hold in the head --- a two-point miniature of the sixteen-context
 lattice of Part~II. Let the ``contexts'' be the subsets of a two-element
 set $\{1, 2\}$: the empty context $\varnothing$, the two singleton contexts
@@ -279,8 +279,8 @@ deliberately \emph{not} an adjunction, in keeping with the program-wide
 correction that prerequisite satisfaction is one-directional.
 \end{enumerate}
 
-Each clause encodes a defensible bookkeeping intuition, and it is worth
-recording the intuitions, because the successor preserves them even as it
+Each clause encodes a defensible bookkeeping intuition, and we record
+the intuitions, because the successor preserves them even as it
 discards their legacy formalization. Clause (O) says that a family of
 observation channels which jointly exhausts a target is entitled to speak
 for the target as a whole --- the ordinary local-to-global entitlement.
@@ -372,7 +372,7 @@ $a_{\mathrm{legacy}}(yX)$, never by silently treating $yX$ as a sheaf
 \subsection{Why a topology cannot remember: closure and
 provenance}\label{ch01:sec:closure}
 
-It is worth dwelling for a moment on the mechanism behind the collapse,
+We dwell for a moment on the mechanism behind the collapse,
 because it explains the shape of the entire successor design and not merely
 the failure of one construction. Passing from a generating family of
 morphisms to the sieve it generates, and from a collection of generating
@@ -449,10 +449,18 @@ A_i = \{(i,0),(i,1)\}, \qquad R_j = \{(0,j),(1,j)\}, \qquad i,j \in \{0,1\},
 generate two coverages: at a nonempty context $V$, the ACBE generating
 family is $\{V \cap A_0 \to V,\ V \cap A_1 \to V\}$ and the RPM generating
 family is the analogue with the $R_j$; the empty context is covered by the
-null (empty) family. The decisive structural point is that the pieces of the
-global covers are \emph{proper} subsets of $\Omega$: the new generators
-contain no identity and no split epimorphism onto their target, so the
-collapse mechanism has nothing to grip. The transversality identity
+null (empty) family. The decisive structural point is local to the global
+context: at $\Omega$ the pieces of both generating families are
+\emph{proper} subsets ($A_0, A_1 \subsetneq \Omega$ and
+$R_0, R_1 \subsetneq \Omega$), so neither global family contains an
+identity, and --- a poset having no nontrivial split epimorphisms
+(Remark~\ref{ch02:rem:no-split-in-posets}) --- neither contains a split
+epimorphism onto its target. The collapse mechanism therefore has nothing
+to grip where it mattered. At a context $V$ contained in a single block the
+corresponding family degenerates to $\{V \to V,\ \varnothing \to V\}$ and
+does generate the maximal sieve; that degeneracy is harmless for the escape
+theorem, and it is exactly what makes the external mark record necessary at
+singleton contexts (Section~\ref{ch01:sec:move2}). The transversality identity
 $A_i \cap R_j = \{(i,j)\}$ --- each ACBE block meets each RPM block in
 exactly one atom --- powers essentially every theorem of the finite theory.
 Chapter~7 develops the lattice, and Chapter~9 proves that the generated
@@ -572,7 +580,7 @@ to the identity on the resolved subcategory --- the formal content of
 Move~3.
 \end{enumerate}
 
-One consequence deserves its own statement, because it corrects a live
+One consequence is stated on its own, because it corrects a live
 narrative risk rather than fulfilling a hope.
 
 \begin{finding}[Distinct but commuting]\label{ch01:finding:commuting}

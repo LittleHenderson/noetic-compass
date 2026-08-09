@@ -17,8 +17,9 @@ text (for example ``Chapter 10'') rather than as links.
 formal label preserved for controlled migration vocabulary from the
 legacy construction. It carries no empirical interpretation until a
 separate operationalization and validation record exists; no theorem in
-the monograph attaches meaning to it beyond its combinatorics. Standing
-data in Chapter 10; provenance role in Chapter 11.
+the monograph attaches meaning to it beyond its combinatorics.
+Chapter 7; restated as standing data in Chapter 10; provenance role in
+Chapter 8, with executable checks in Chapter 11.
 
 \textbf{Admission gates.} The ten conjunctive conditions --- independent
 review, formalization, typed product-site covers, the product-site
@@ -41,12 +42,13 @@ definition sets $\mathrm{NoeTop}_2 := \Eamb$. Chapter 12.
 \textbf{Associated sheaf (sheafification).} The universal sheaf
 receiving a map from a given presheaf: the left adjoint to the
 inclusion of sheaves into presheaves. On the finite context factor it
-is realized exactly by the one-partition reflector. Chapter 10; general
-background in the cited Stacks Project material.
+is realized exactly by the one-partition reflector. Chapter 4;
+realized explicitly in Chapter 10; general background in the cited
+Stacks Project material.
 
 \textbf{Atom.} One of the four elements
 $\omega_{ij} = (i, j)$ of $\Omega$, carrying a formal ACBE mark $i$
-and RPM mark $j$. Chapter 10; tabulated in Appendix A.
+and RPM mark $j$. Chapter 7; tabulated in Appendix A.
 
 \textbf{Backward-compatibility conjecture.} The unproved comparison
 $\Eres \simeq \Eleg^4$ together with the neutral-channel embedding
@@ -58,11 +60,12 @@ serialization) are required and neither is complete. Chapter 12.
 \textbf{Bit-assignment presheaf.} The value shape of the witness
 presheaves: functions from a set of complete blocks to $\{0, 1\}$,
 restriction forgetting coordinates. Also the name of an executable
-fixture in the composition verifier. Appendix C; Chapter 11.
+fixture in the composition verifier. Chapter 9; Appendix C; fixture in
+Chapter 11.
 
 \textbf{Block.} A member of one of the partitions of $\Omega$: an
 ACBE block $A_i$, an RPM block $R_j$, or a singleton block of $Q$.
-Chapter 10; Appendix A.
+Chapter 7; Appendix A.
 
 \textbf{Certificate (finite model).} The registered artifact
 \texttt{FINITE\_MODEL\_CERTIFICATE\_v0.1.json}: the expected-result
@@ -81,17 +84,20 @@ appendices each carry their own.
 $K_A(V)$ and $K_R(V)$ can be equal as bare arrow sets --- at the empty
 context, the four singletons, and the two diagonals --- so that the
 topology retains no trace of which partition produced the cover, while
-the marked records remain distinct. Derived in Appendix A; singleton
-cases registered in the certificate, Chapter 11.
+the marked records remain distinct. Proved in Chapter 7; re-derived
+tabularly in Appendix A; singleton cases registered in the
+certificate, Chapter 11.
 
 \textbf{Common refinement.} The family of pairwise intersections of
 two covers. For the two global covers it is the four-singleton cover,
 by transversality; as a marked record it is a derivation node carrying
-both parent digests. Chapters 10 and 11.
+both parent digests. Chapter 7; marked-record form in Chapter 8;
+checks in Chapter 11.
 
 \textbf{Complete block.} A block $B$ with $B \subseteq V$ for the
 context $V$ at hand; the witness presheaves assign bits only to
-complete blocks. Appendix A tabulates completeness at every context.
+complete blocks; the counts are written $\alpha(V)$ and $\rho(V)$.
+Chapter 7; Appendix A tabulates completeness at every context.
 
 \textbf{Composition theorem.} The chapter-10 result
 $M_A M_R \cong M_{\mathrm{atom}} \cong M_R M_A$, unit-compatibly and
@@ -101,37 +107,38 @@ review required. Chapter 10; executable corroboration in Chapter 11.
 
 \textbf{Context (context lattice).} An element of
 $L = \mathcal{P}(\Omega)$, ordered by inclusion; the sixteen-object
-poset carrying the finite theory. Chapter 10; enumerated in Appendix
+poset carrying the finite theory. Chapter 7; enumerated in Appendix
 A.
 
 \textbf{Covering sieve.} A sieve belonging to the topology at its
 object; the sheaf condition quantifies over covering sieves. Chapter
-10; counted exactly in Chapter 11 and Appendix A.
+3; counted exactly in Chapters 9 and 11 and in Appendix A.
 
 \textbf{Cover kind.} The field of a mark record naming the admitting
 clause (\textsc{observational}, \textsc{acbe}, or \textsc{rpm});
 distinct cover kinds at coinciding unmarked families are what the
-marked layer preserves. Chapter 11.
+marked layer preserves. Chapter 8; executable checks in Chapter 11.
 
 \textbf{Dedekind number.} The number $M(n)$ of down-sets of the
 Boolean lattice on $n$ points ($2, 3, 6, 20, 168$ for
 $n = 0, \ldots, 4$); used to derive the registered total of $298$
-sieves. Chapter 11; per-context table in Appendix A.
+sieves. Derived in Chapter 7 (written $\delta$ there); reported in
+Chapter 11; per-context table in Appendix A.
 
 \textbf{Derivation kind.} The field of a marked cover declaring how it
 arose: \textsc{generator}, \textsc{pullback}, or
 \textsc{common refinement}; derived kinds require parent resolution.
-Chapter 11.
+Chapter 8; executable checks in Chapter 11.
 
 \textbf{Digest.} The SHA-256 hash of a marked cover's canonical JSON,
 binding target, members, mark, and sorted parent digests; the unit of
-provenance chaining. Chapter 11.
+provenance chaining. Chapter 8; executable checks in Chapter 11.
 
 \textbf{Distinctness theorem.} Theorem NT2-3: $F_A$ is a $J_A$-sheaf
 but not a $J_R$-sheaf and symmetrically, so the two sheaf
 subcategories differ and neither modality is trivial; scoped to
-$\PSh(L, \Set)$. Witness tables in Appendix C; verdict checks in
-Chapter 11.
+$\PSh(L, \Set)$. Proved in Chapter 9; witness tables in Appendix C;
+verdict checks in Chapter 11.
 
 \textbf{Empty-product convention.} The clause
 $(R_P F)(\varnothing) = \mathbf{1}$: the reflector's value at the
@@ -153,7 +160,8 @@ semantics. Chapter 12.
 \textbf{Fail-closed.} The integrity posture of the marked layer:
 unknown or duplicate JSON keys, uncontrolled review states, and
 derived records with wrong or unresolvable parents are rejected
-rather than treated as evidence. Chapter 11.
+rather than treated as evidence. Chapter 8; executable checks in
+Chapter 11.
 
 \textbf{Flattening and regrouping.} The mutually inverse bijections
 $\varphi$ and $\psi$ between the nested product
@@ -164,17 +172,18 @@ Chapter 10.
 \textbf{Gluing (matching family).} A matching family for a cover
 assigns a compatible local section to each member; the sheaf
 condition asks that the canonical map from global sections to
-matching families be a bijection. Chapter 10; computed for the
+matching families be a bijection. Chapters 3 and 4; computed for the
 witnesses in Appendix C.
 
 \textbf{Grothendieck topology.} An assignment of covering sieves to
 objects satisfying maximality (J1), pullback stability (J2), and
-local character (J3). Chapter 10; computed exactly by saturation in
+local character (J3). Chapter 3; computed exactly by saturation in
 Chapter 11.
 
 \textbf{Join (of topologies).} The least topology containing two
 given topologies. The monograph's central join identification is
-$J_A \vee J_R = J_{\mathrm{atom}}$. Chapter 10.
+$J_A \vee J_R = J_{\mathrm{atom}}$ (Theorem NT2-4, Chapter 9;
+re-derived in reflector-facing form in Chapter 10).
 
 \textbf{Lean layer.} The bounded proof-assistant scope: four-atom
 exhaustiveness, proper global pieces, the transverse refinement
@@ -185,13 +194,13 @@ theory is explicitly outside it. Chapter 11.
 cover clauses generate only maximal sieves (identity via reflexivity;
 identity via split-epi closure), so the legacy topology reduces to
 its jointly-surjective clause and retains no modal provenance.
-Executable checks in Chapter 11; motivating result of the baseline
-chapters.
+Chapter 5; executable checks in Chapter 11.
 
 \textbf{Legacy site.} The registered category
 $\cC = \mathrm{Noetica}$ with its jointly-surjective topology
 $J_{\mathrm{legacy}}$ (also written $J_{\mathrm{obs}}$ in the ambient
-package) and sheaf topos $\Eleg$. Chapter 12.
+package) and sheaf topos $\Eleg$. Chapter 5; ambient package in
+Chapter 12.
 
 \textbf{LP feasibility certificate.} The second probabilistic gate:
 existence of a global joint distribution over a fixed finite cover
@@ -207,22 +216,25 @@ literature.
 \textbf{Marked cover.} The immutable record (derivation kind, target,
 exact member arrows, mark record, parent digests) that travels in
 parallel with the unmarked family; the topology consumes the family,
-governance consumes the record. Chapter 11.
+governance consumes the record. Chapter 8; executable checks in
+Chapter 11.
 
 \textbf{Mark record.} The provenance component of a marked cover:
 cover kind, source authority reference, assumptions, evidence
-references, review state, provenance chain. Chapter 11.
+references, review state, provenance chain. Chapter 8; executable
+checks in Chapter 11.
 
 \textbf{Maximal sieve.} The sieve of all arrows into an object;
 covering in every topology. A sieve containing an identity, or a
 split epimorphism with its section, is maximal --- the two collapse
-mechanisms. Chapters 10 and 11.
+mechanisms. Chapter 3; the collapse mechanisms in Chapter 5; checks in
+Chapter 11.
 
 \textbf{Modality.} A left-exact idempotent monad on a presheaf topos;
 here, sheafification-followed-by-inclusion for a topology refinement
 ($M_A$, $M_R$, $M_{\mathrm{atom}}$, $M_{\mathrm{obs}}$). Trivial
-means naturally isomorphic to the identity. Chapter 10; ambient roles
-in Chapter 12.
+means naturally isomorphic to the identity. Chapter 4; explicit
+formulas in Chapter 10; ambient roles in Chapter 12.
 
 \textbf{Modality-composition verifier.} The second executable layer:
 implements the explicit reflector, its unit, and both comparison
@@ -255,7 +267,8 @@ in the scholarly sense. Chapter 12.
 
 \textbf{Null cover.} The empty family at the empty context, which
 covers it in all three bases; forces every sheaf to have a
-one-element value at $\varnothing$. Chapter 10.
+one-element value at $\varnothing$. Chapter 7; used throughout
+Chapters 9 and 10.
 
 \textbf{Obligation (cross-context semantics).} The registered record
 \textsc{obl-nt2-cross-context-semantics}: choose and formalize either
@@ -271,28 +284,31 @@ reflector for $J_P$. Chapter 10.
 
 \textbf{Presheaf.} A functor $L^{\mathrm{op}} \to \Set$ (more
 generally $\cC^{\mathrm{op}} \to \Set$): sets of sections with
-compatible restriction maps. Chapter 10.
+compatible restriction maps. Chapter 2; on $L$, Chapter 10.
 
 \textbf{Proof-obligation ledger.} The registered artifact recording
 open design-and-proof obligations with statements, dependencies,
 acceptance criteria, and claim boundaries. Chapter 12.
 
 \textbf{Provenance chain.} The parent-digest lineage of a marked
-cover, checked acyclically and recomputed on resolution. Chapter 11.
+cover, checked acyclically and recomputed on resolution. Chapter 8;
+executable checks in Chapter 11.
 
 \textbf{Pullback sieve; pullback stability.} The pullback of a sieve
 along an arrow ($g^{*}S$); axiom (J2) requires covering sieves to
 pull back to covering sieves, and the bases satisfy it at the family
-level (in $L$, pullback is intersection). Chapters 10 and 11.
+level (in $L$, pullback is intersection). Chapter 3; computed on $L$
+in Chapter 7; checks in Chapter 11.
 
 \textbf{Reflector.} A left adjoint to the inclusion of a reflective
 subcategory; here always the associated-sheaf functor for one of the
-topologies, realized explicitly by $R_P$. Chapter 10.
+topologies, realized explicitly by $R_P$. Chapter 4 (general notion);
+explicit construction in Chapter 10.
 
 \textbf{Representable presheaf.} $yW = \Hom_L(-, W)$: a singleton at
 $V \subseteq W$, empty otherwise. All sixteen are sheaves for both
-factor topologies (subcanonicity). Chapter 10 usage; check in
-Chapter 11.
+factor topologies (subcanonicity). Chapter 2 (definition); Chapter 9
+(subcanonicity); usage in Chapter 10; check in Chapter 11.
 
 \textbf{Resolved subtopos.} $\Eres = \Sh(\cC \times L,
 J_{\mathrm{res}})$, the sheaf subcategory for the fully joined
@@ -304,39 +320,42 @@ $U \subseteq V$, written $x \mapsto x|_U$; for the witnesses,
 coordinate forgetting (Appendix C).
 
 \textbf{RPM mark.} The second coordinate of an atom; formal label
-only, as for the ACBE mark. Chapter 10.
+only, as for the ACBE mark. Chapter 7; tabulated in Appendix A.
 
 \textbf{Section-retraction.} A pair
 $\eta : X \to R(X)$, $\varepsilon : R(X) \to X$ with
 $\varepsilon \circ \eta = \id$; the legacy RPM data. Its split
-epimorphism is one of the two collapse mechanisms. Chapter 11.
+epimorphism is one of the two collapse mechanisms. Chapter 2 (split
+epimorphisms); Chapter 5 (the legacy RPM data and the collapse).
 
 \textbf{Separatedness.} The injectivity half of the sheaf condition:
-sections agreeing on a cover are equal. Used repeatedly in the
-universal-property proof. Chapter 10.
+sections agreeing on a cover are equal. Chapter 4; used repeatedly in
+the universal-property proof of Chapter 10.
 
 \textbf{Sheaf.} A presheaf whose gluing map is a bijection for every
 covering sieve; equivalently, for a coverage basis, for every basis
-family. Chapter 10.
+family. Chapter 4; explicit reflector in Chapter 10.
 
 \textbf{Sieve.} A precomposition-closed set of arrows into a fixed
-object; in the poset $L$, a down-set of subcontexts. Chapter 10;
-counted in Chapter 11 and Appendix A.
+object; in the poset $L$, a down-set of subcontexts. Chapter 3;
+counted in Chapter 7, in Chapter 11, and in Appendix A.
 
 \textbf{Singleton-factor bijection.} The canonical identification
 $(R_P F)(W) = F(W)$ at a nonempty context $W$ contained in a single
 block; the engine of the uniqueness half of the universal property.
 Chapter 10.
 
-\textbf{Site.} A category with a Grothendieck topology. Chapter 10.
+\textbf{Site.} A category with a Grothendieck topology. Chapter 3.
 
 \textbf{Split epimorphism.} An arrow with a section; a sieve
-containing one is maximal. Chapters 10 and 11.
+containing one is maximal. Chapter 2 (definition), Chapter 3
+(maximality lemma), Chapter 5 (the legacy collapse).
 
 \textbf{Subcanonical.} A topology for which every representable
 presheaf is a sheaf; both factor topologies are subcanonical, while
-legacy subcanonicity is not derivable. Chapter 10 usage; Chapter 12
-consequences.
+legacy subcanonicity is not derivable. Chapter 3 (definition);
+Theorem NT2-2, Chapter 9; used in Chapter 10; consequences in
+Chapter 12.
 
 \textbf{Theorem ledger.} The registered record set assigning each
 theorem its proof status; drafting prose promotes nothing recorded
@@ -345,7 +364,8 @@ there. Status recaps in Chapters 10 and 12.
 \textbf{Transverse partitions.} The two partitions
 $\{A_0, A_1\}$ and $\{R_0, R_1\}$ of $\Omega$ with
 $A_i \cap R_j = \{(i, j)\}$; transversality is the single identity
-powering the join and composition results. Chapter 10.
+powering the join and composition results. Chapter 7; used in
+Chapters 9 and 10.
 
 \textbf{Unit.} The natural transformation $\eta_P : \id \Rightarrow
 R_P$ (restrictions to pieces), universal among maps to sheaves;
@@ -357,41 +377,42 @@ variables, exhibiting $R_P$ as THE associated-sheaf reflector.
 Chapter 10.
 
 \textbf{Witness presheaf.} $F_A$ or $F_R$: the explicit bit-assignment
-presheaves separating the two sheaf subcategories. Appendix C
-tabulates them in full.
+presheaves separating the two sheaf subcategories. Defined and used in
+Chapter 9; Appendix C tabulates them in full.
 
 \section{Symbols}
 \label{appD:sec:symbols}
 
-\begin{longtable}{@{}lll@{}}
+\begin{longtable}{@{}l >{\raggedright\arraybackslash}p{0.34\textwidth} >{\raggedright\arraybackslash}p{0.30\textwidth}@{}}
 \toprule
 Symbol & Meaning & Where \\
 \midrule
 \endhead
 \bottomrule
 \endfoot
-$\Omega$ & the four-atom set $\{0,1\} \times \{0,1\}$ & Chapter 10 \\
+$\Omega$ & the four-atom set $\{0,1\} \times \{0,1\}$ & Chapter 7 \\
 $\omega_{ij}$ & the atom $(i, j)$; $\omega_{00}$ is the neutral atom &
-Chapter 10, 12 \\
-$L$ & the context lattice $\mathcal{P}(\Omega)$ & Chapter 10 \\
-$A_i$, $R_j$ & ACBE and RPM blocks & Chapter 10, Appendix A \\
-$Q$ & the singleton partition of $\Omega$ & Chapter 10 \\
-$\Delta$, $\nabla$ & the diagonal contexts
-$\{\omega_{00}, \omega_{11}\}$, $\{\omega_{01}, \omega_{10}\}$ &
-Appendix A \\
+Chapter 7; neutral-channel role in Chapter 12 \\
+$L$ & the context lattice $\mathcal{P}(\Omega)$ & Chapter 7 \\
+$A_i$, $R_j$ & ACBE and RPM blocks & Chapter 7, Appendix A \\
+$Q$ & the singleton partition of $\Omega$ & Chapter 7 \\
+$D_{=}$ ($\Delta$), $D_{\neq}$ ($\nabla$) & the diagonal contexts
+$\{\omega_{00}, \omega_{11}\}$, $\{\omega_{01}, \omega_{10}\}$ (not the
+constant presheaf $\Delta S$ of Chapter 2) & Chapter 7; Appendix A \\
 $T_{ij}$ & the triple $\Omega \setminus \{\omega_{ij}\}$ &
+Chapter 7; Appendix A \\
+$K_P(V)$ & generating family of partition $P$ at $V$ & Chapter 7;
 Appendix A \\
-$K_P(V)$ & generating family of partition $P$ at $V$ & Chapter 10 \\
-$J_A$, $J_R$ & the two factor topologies & Chapter 10 \\
+$J_A$, $J_R$ & the two factor topologies & Chapter 9 \\
 $J_{\mathrm{atom}}$ & the singleton-generated topology; preferred
-name $J_{\mathrm{singleton}}$ & Chapter 10 \\
+name $J_{\mathrm{singleton}}$ & Chapter 9 \\
 $J_{\mathrm{obs}}$, $J_{\mathrm{legacy}}$ & the legacy
 jointly-surjective topology & Chapter 12 \\
 $J_{\mathrm{res}}$ & the fully joined refinement
 $J_{\mathrm{obs}} \vee J_A \vee J_R$ & Chapter 12 \\
-$\vee$ & join of topologies (least upper bound) & Chapter 10 \\
+$\vee$ & join of topologies (least upper bound) & Chapter 9 \\
 $\le$ & comparison of topologies (containment of covering sieves) &
-Chapter 10 \\
+Chapter 9 \\
 $I_P(V)$ & blocks of $P$ meeting $V$ & Chapter 10 \\
 $R_P$ & the one-partition reflector for $P$ & Chapter 10 \\
 $\eta_P$ & the unit of $R_P$ & Chapter 10 \\
@@ -399,8 +420,11 @@ $\varphi$, $\psi$ & flattening and regrouping bijections &
 Chapter 10 \\
 $M_A$, $M_R$, $M_{\mathrm{atom}}$, $M_{\mathrm{obs}}$ &
 sheafification-then-inclusion modalities & Chapters 10, 12 \\
-$F_A$, $F_R$ & the witness presheaves & Appendix C \\
-$yW$ & the representable presheaf of $W$ & Chapters 10, 11 \\
+$F_A$, $F_R$ & the witness presheaves & Chapter 9; Appendix C \\
+$\alpha(V)$, $\rho(V)$ & counts of complete ACBE and RPM blocks in $V$ &
+Chapter 7; Appendices A, B, C \\
+$yW$ & the representable presheaf of $W$ & Chapter 2 (definition);
+Chapter 9 (subcanonicity); Chapters 10, 11 \\
 $\mathbf{1}$ & a one-element set; the empty product & Chapter 10 \\
 $\PSh$, $\Sh$ & presheaf and sheaf categories & throughout \\
 $\Set$ & the category of small sets & throughout \\
@@ -412,10 +436,10 @@ $\mathrm{NoeTop}_2$, $\mathrm{NoeSystem}_2$ & topos candidate and
 full package & Chapter 12 \\
 $\iota$, $\mathrm{ev}_{00}$ & conjectural neutral-channel embedding
 and evaluation & Chapter 12 \\
-$M(n)$ & the Dedekind number (down-sets of the $n$-cube) &
-Chapter 11, Appendix A \\
-$m_C$ & the maximal sieve on $C$ & Chapter 10 \\
-$g^{*}S$ & the pullback sieve of $S$ along $g$ & Chapter 10 \\
+$M(n)$ & the Dedekind number (down-sets of the $n$-cube); written
+$\delta(n)$ in Chapter 7 & Chapter 7; Chapter 11, Appendix A \\
+$m_C$ & the maximal sieve on $C$ & Chapter 3 \\
+$g^{*}S$ & the pullback sieve of $S$ along $g$ & Chapter 3 \\
 $\id$, $\Hom$, $\Ob$ & identity, hom-sets, objects & throughout \\
 \end{longtable}
 

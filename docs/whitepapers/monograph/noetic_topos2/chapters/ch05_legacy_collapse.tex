@@ -158,7 +158,7 @@ epimorphism there. Those two shapes decide everything.
 
 \subsection{Why the clauses were seductive}\label{ch05:sub:seductive}
 
-Before refuting the construction it is worth explaining why competent
+Before refuting the construction we explain why competent
 drafting produced it, because the error has a recognizable genealogy and
 naming it inoculates against repetition. Both offending provisions are
 natural---indeed mandatory---in \emph{adjacent} formalisms, and the legacy
@@ -235,7 +235,7 @@ $g\circ g^{-1}=\id_X\in S$.)
 \end{proof}
 
 \begin{remark}\label{ch05:rem:whyblind}
-It is worth pausing on \emph{why} these lemmas are inescapable. A sieve is by
+Pause on \emph{why} these lemmas are inescapable. A sieve is by
 definition a precomposition-closed class: the definition is what makes the
 sheaf condition well posed (Definition~\ref{ch04:def:matching} quantifies
 over precompositions) and what makes pullback of covers
@@ -321,7 +321,7 @@ modality, the internal logic---is therefore blind to whether clauses (A) and
 (R) were ever stated.
 \end{proof}
 
-The presheaf-level restatement is worth having in full, because it shows the
+The presheaf-level restatement is given in full because it shows the
 collapse operating not as an abstract maximality fact but as a concrete
 gluing computation: \emph{every} presheaf satisfies the ACBE and RPM sheaf
 conditions automatically, with the RPM section itself manufacturing the
@@ -626,12 +626,18 @@ $\id_X$ and yields $m_X$ again.
 \item If instead the clause is weakened to designate a family omitting
 $\varepsilon_X$ (respectively, omitting the reflexive ACBE map at every
 context where it appears), then at every object where the omission leaves
-the empty family or a family of arrows all factoring through covers already
-admitted by clause (O), the clause contributes no covering sieve beyond
-$J_{\mathrm{js}}$: the modification changes nothing.
+the clause with \emph{no designation at all}, or leaves a family whose
+generated sieve already lies in $J_{\mathrm{js}}$, the clause contributes
+no covering sieve beyond $J_{\mathrm{js}}$: the modification changes
+nothing. The remaining reading---retaining the clause but declaring the
+\emph{empty family} covering at a nonempty $X$---is not a weakening at all:
+the empty sieve is then covering, the hypothesis of (J3) is vacuous over
+it, so every sieve on $X$ becomes covering and every sheaf $F$ is forced to
+$|F(X)|=1$.
 \end{enumerate}
 Consequently every variant of the proposal either regenerates maximal
-sieves or reduces the clause to a vacuous appendix of clause (O).
+sieves, trivializes the topology at $X$, or reduces the clause to a vacuous
+appendix of clause (O).
 \end{proposition}
 
 \begin{proof}
@@ -655,13 +661,18 @@ Within the registered clause data, no such family is specified; the
 registered content of clauses (A) and (R) beyond their identity and counit
 members is exactly the designation recorded in the source, and the source
 attaches the reflexivity and counit provisions to it. Deleting those
-provisions deletes the clause's registered content.
+provisions deletes the clause's registered content. The one remaining
+reading is disposed of directly: if the clause is retained but designates
+the empty family at a nonempty $X$, the empty sieve is covering, so the
+hypothesis of (J3) is vacuous over it and every sieve on $X$ becomes
+covering, while the sheaf condition against the empty sieve forces
+$|F(X)|=1$ for every sheaf $F$.
 \end{proof}
 
 \begin{remark}[The pretopology variant]\label{ch05:rem:pretop}
 A more sophisticated version of the proposal keeps families, not sieves, as
 the covering data---``use $\{\varepsilon_X\}$ as a pretopology cover and
-never close it.'' This changes nothing either, for a reason worth isolating:
+never close it.'' This changes nothing either, and the reason is structural:
 the \emph{sheaf condition} for a family is equivalent to the sheaf condition
 for the sieve it generates (matching families biject, as used in
 Proposition~\ref{ch05:prop:autoglue}), so even a formalism that never
@@ -921,7 +932,8 @@ is whether the legacy topology, collapsed though it is, at least treats the
 legacy objects themselves well---whether representables are sheaves, so
 that legacy objects pass into the topos unmodified. Chapter
 \ref{ch06:main} answers no: subcanonicity is not derivable from the
-registered axioms, by an explicit two-object countermodel, and the standard
+registered axioms, by an explicit small countermodel with three objects up
+to isomorphism, and the standard
 repair routes every legacy object through its associated sheaf. The second
 is whether proper generators supporting genuinely distinct, nontrivial,
 well-understood modalities can be exhibited at all within the program's
@@ -937,11 +949,16 @@ $\cC'\supseteq\cC$ need \emph{not} be maximal in $\cC$, and explain exactly
 which step of Lemma~\ref{ch05:lem:splitepi} fails; conclude that the
 collapse depends on the section being an arrow of the site itself, and
 verify that Axiom~\ref{ch05:ax:R} does place $\eta_X$ in $\cC$.
-(ii) Exhibit a poset example showing that a generating family of proper
-subobjects can nonetheless generate a maximal sieve if their join is
-attained by a member (hint: include the top as a ``proper-looking''
-redundant member), and reconcile this with
-Invariant~\ref{ch05:inv:designrule}.
+(ii) Show that on a poset the converse of
+Invariant~\ref{ch05:inv:designrule} also holds: a generating family every
+member of which is a \emph{proper} subobject of $X$ can never generate the
+maximal sieve on $X$, because the generated sieve is
+$\bigcup_i\mathord{\downarrow}U_i$ and $X\notin\mathord{\downarrow}U_i$
+whenever $U_i\subsetneq X$. Then exhibit a \emph{non}-poset
+example---a category carrying a split epimorphism $\varepsilon:E\to X$ that
+is not an isomorphism---in which a generating family of non-identity,
+non-isomorphism arrows nonetheless generates $m_X$, and identify which
+hypothesis of the poset argument fails.
 \end{exercise}
 
 \begin{exercise}\label{ch05:exr:closurecount}

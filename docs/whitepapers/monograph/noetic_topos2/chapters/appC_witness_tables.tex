@@ -5,7 +5,8 @@ This appendix tabulates the two witness presheaves $F_A$ and $F_R$ in
 full: their value sets at all sixteen contexts, as counts and as explicit
 bit-assignment sets; their restriction maps; and the gluing computations
 at the global context $\Omega$ for both topologies, which are the
-registered core of the distinctness theorem (Theorem NT2-3) and of the
+registered core of the distinctness theorem (Theorem NT2-3, Chapter~9)
+and of the
 certificate verdicts
 \texttt{acbe\_witness\_is\_acbe\_sheaf} /
 \texttt{acbe\_witness\_is\_rpm\_sheaf} and their RPM mirrors
@@ -31,11 +32,12 @@ and $(1)$; at a context with no complete block the unique section is the
 empty assignment, written $()$.
 \end{notation}
 
-The counting rule is immediate: $|F_A(V)| = 2^{k_A(V)}$ where $k_A(V)$
-is the number of complete $A$-blocks contained in $V$, and likewise
-$|F_R(V)| = 2^{k_R(V)}$. The containment table of Appendix~A gives
-$k_A(V)$ and $k_R(V)$ at every context, and the two facts that drive
-every verdict below are worth isolating before the tables:
+The counting rule is immediate: $|F_A(V)| = 2^{\alpha(V)}$ where
+$\alpha(V)$ is the number of complete $A$-blocks contained in $V$
+(Definition of complete blocks, Chapter~7), and likewise
+$|F_R(V)| = 2^{\rho(V)}$. The containment table of Appendix~A gives
+$\alpha(V)$ and $\rho(V)$ at every context. Two facts drive every verdict
+below:
 
 \begin{finding}
 \label{appC:fnd:novaluecrossing}
@@ -232,7 +234,7 @@ the two $R$-blocks, the four triples, and $\Omega$.
 \label{appC:sec:reflectorvalues}
 
 For completeness we tabulate what the three reflectors of Chapter~10 do
-to the witnesses, since these values are quoted in the body (the
+to the witnesses of Chapter~9, since these values are quoted in the body (the
 annihilation example and the both-routes example). Each entry is
 computed from the reflector formula
 $(R_P F)(V) = \prod_{B \in I_P(V)} F(V \cap B)$ together with
@@ -286,7 +288,8 @@ context-by-context.
 \label{appC:bnd:scope}
 These tables establish combinatorial facts about two specific finite
 presheaves on $L$ and nothing more. They corroborate the distinctness
-theorem's witnesses (Theorem NT2-3, scoped to $\PSh(L, \Set)$); they
+theorem's witnesses (Theorem NT2-3, Chapter~9, scoped to
+$\PSh(L, \Set)$); they
 attach no interpretation to the ACBE and RPM marks, and they license
 no ambient, probabilistic, empirical, or product statement.
 \end{boundary}

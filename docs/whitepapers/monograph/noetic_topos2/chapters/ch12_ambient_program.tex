@@ -4,7 +4,7 @@
 \section{From the finite factor to the ambient package}
 \label{ch12:sec:ambient}
 
-The finite-context theory of Chapters~10 and~11 is complete on its own
+The finite-context theory of Chapters~7, 9 and~10 is complete on its own
 terms, but it is a theory of the context factor $L$ alone. The Noetic Topos
 2.0 candidate is a construction over the \emph{product} of the registered
 legacy category with that factor, and the way the candidate is packaged is
@@ -148,7 +148,8 @@ constrain all future work. First, the carrier of modal structure is ambient:
 any future theorem about modal dynamics must be stated on $\Eamb$, and any
 statement on $\Eres$ must be about resolved, modally inert objects. Second,
 provenance is external: the marks travel beside the topology, in
-hash-chained records with fail-closed resolution (Chapter~11), because the
+hash-chained records with fail-closed resolution (Chapter~8; executable
+checks in Chapter~11), because the
 topology provably cannot carry them. Third, the package is honest about its
 own type: $\mathrm{NoeSystem}_2$ is a tuple, and calling it a topos would
 overclaim structure that only its first component has.
@@ -201,7 +202,7 @@ $\{XY, YZ, XZ\}$ is cyclic, so gate 1 does not apply; the gate-2 linear
 program for this instance is infeasible, with the counting argument
 just given convertible into a Farkas witness; and the family has a
 nonvanishing obstruction in the sense of the contextuality literature
-\cite{abramskybrandenburger}. Any evidence-aggregation design over the
+\cite{abramskycohomology,abramskyparadox}. Any evidence-aggregation design over the
 Noetic context factor that reports probabilistic summaries per cover
 piece must therefore treat joint consistency as a per-instance
 obligation, not a structural gift of the site.
@@ -231,14 +232,17 @@ per-instance: it licenses the instance, not the method.
 \item \textbf{Obstruction calculation with stated coefficients.} Compute a
 cohomological obstruction to extending the compatible family, in the style
 of the sheaf-theoretic contextuality literature
-\cite{abramskybrandenburger}, with the coefficient system stated
+\cite{abramskycohomology}, with the coefficient system stated
 explicitly. Vanishing of the obstruction in the stated coefficients is the
 licensed claim --- no more; such obstructions can be one-directional, and
 the direction proved must be the direction cited.
 \item \textbf{Quantitative relaxation.} Where exact extension fails or is
 not decided, a quantitative claim is permitted only with the relaxation
 stated (e.g. nearest extendable family in a named metric), the residual
-reported, and the uncertainty of the residual reported.
+reported, and the uncertainty of the residual reported. The
+sheaf-theoretic literature standardizes one such relaxation: the
+contextual fraction of \cite{abramskyfraction}, computed by the same
+linear program as gate~2.
 \end{enumerate}
 No passing $\Set$-valued sheaf test licenses a probabilistic consistency
 claim; only a gate artifact of one of these four kinds does.
@@ -358,8 +362,8 @@ has been serialized into the new context factor.
 
 \begin{remark}[What full faithfulness would and would not buy]
 \label{ch12:rem:fullfaithful}
-It is worth spelling out the operational content the conjecture would
-have if proved, because that content is the reason the conjecture is
+We spell out the operational content the conjecture would have if
+proved, because that content is the reason the conjecture is
 registered at all. Full faithfulness of $\iota$ would say that legacy
 objects and \emph{all their morphisms} survive the move into the
 neutral channel without collapse or spurious identification: maps
@@ -477,7 +481,8 @@ Against that background, the candidate's specific contributions are three:
 the collapse diagnosis as applied to the registered legacy ACBE/RPM
 clauses; the transverse two-partition finite context factor with its exact
 reflector calculus (Chapter~10); and the parallel hash-chained provenance
-layer with fail-closed resolution (Chapter~11). Their status must be
+layer with fail-closed resolution (Chapter~8, corroborated in
+Chapter~11). Their status must be
 stated exactly: all theorem-ledger records carry
 \textsc{novelty unassessed}. No dedicated literature search has been
 performed for the relationship of the marked-cover construction to colored

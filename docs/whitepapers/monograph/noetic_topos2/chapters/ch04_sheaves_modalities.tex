@@ -138,7 +138,7 @@ Under the identification of Remark~\ref{ch04:rem:nat}, the gluing map is
 composition with the inclusion $S\hookrightarrow yC$ followed by the Yoneda
 identification $\Hom_{\PSh}(yC,F)\cong F(C)$; the sheaf condition says exactly
 that the inclusion of every covering sieve into its representable becomes
-invisible to $F$. This one-line reformulation is worth internalizing: it is the
+invisible to $F$. This one-line reformulation is the
 source of both the triviality criterion of
 Proposition~\ref{ch04:prop:trivial} and the collapse diagnosis of
 Chapter~\ref{ch05:main}.
@@ -166,6 +166,7 @@ satisfying
 \[
 x_i|_{U_i\wedge U_j} \;=\; x_j|_{U_i\wedge U_j}\qquad\text{for all } i,j\in I.
 \]
+(Standard; see \cite[Chap.~III]{maclane}.)
 \end{lemma}
 
 \begin{proof}
@@ -205,7 +206,7 @@ the successor construction lives, and the covering pattern---partition the
 top into its atoms, null-cover the bottom---is the miniature of the partition
 coverages there.
 
-One point deserves emphasis before any example: the null cover at
+One point before any example: the null cover at
 $\varnothing$ is a genuine covering sieve (the empty sieve), and the sheaf
 condition for it reads: $F(\varnothing)\to\mathrm{Match}(\varnothing\text{-sieve},F)$
 is a bijection. A matching family for the empty sieve is a function defined on
@@ -213,7 +214,7 @@ no arrows; there is exactly one such function. Hence:
 
 \begin{lemma}[The null cover forces a singleton]\label{ch04:lem:null}
 If the empty sieve covers an object $Z$, then every sheaf $F$ has
-$F(Z)$ a one-element set.
+$F(Z)$ a one-element set. (Standard; see \cite{stacks00ZC}.)
 \end{lemma}
 
 \begin{proof}
@@ -261,21 +262,22 @@ Chapter~\ref{ch06:main}, where a jointly-surjective coverage on a category
 with \emph{too few} morphisms fails subcanonicity.
 \end{example}
 
-\begin{example}[Sheaves of bounded functions; a mild variation]\label{ch04:ex:bounded}
-Let $X=\{0,1\}$ and let $G(V)\subseteq\Set(V,X)$ consist of those functions
-that are \emph{not} constantly $1$, with $G(\varnothing)$ the singleton empty
-function. Then $G$ is separated (it is a subpresheaf of a sheaf, and
-injectivity of gluing is inherited by subpresheaves) but not a sheaf: the pair
-$(s,t)$ with $s(a)=1$, $t(b)=1$ is a matching family---each piece separately
-is not constantly $1$? No: $s$ \emph{is} constantly $1$ on $\{a\}$, so $s\notin
-G(\{a\})$. Take instead the subpresheaf $G'$ of functions that are not
-constantly $1$ \emph{when the domain is the top}, with no condition on smaller
-domains. Then $s(a)=1$ and $t(b)=1$ are both allowed locally, they match
-vacuously, but any amalgamation would be the constant function $1$ on
-$\{a,b\}$, which $G'$ excludes. So $G'$ is separated but not a sheaf: a
-compatible family with no gluing. This is the standard failure mode of
-``global side conditions'': a property imposed at the top but not stable under
-gluing from pieces destroys sheafhood without harming separation.
+\begin{example}[A top-only side condition: separated but not a sheaf]\label{ch04:ex:bounded}
+Let $X=\{0,1\}$ and let $G'(V)\subseteq\Set(V,X)$ consist of all functions
+when $V\neq\{a,b\}$, and of those functions that are \emph{not} constantly
+$1$ when $V=\{a,b\}$. Restriction preserves membership, since no condition is
+imposed below the top, so $G'$ is a subpresheaf of the sheaf $\Set(-,X)$ of
+Example~\ref{ch04:ex:functions} and is therefore separated (injectivity of
+gluing is inherited by subpresheaves). It is not a sheaf: $s(a)=1$ and
+$t(b)=1$ are both allowed locally, they match vacuously over
+$\{a\}\cap\{b\}=\varnothing$, but any amalgamation would be the constant
+function $1$ on $\{a,b\}$, which $G'$ excludes. This is the standard failure
+mode of ``global side conditions'': a property imposed at the top but not
+stable under gluing from pieces destroys sheafhood without harming
+separation. Imposing the same condition at \emph{every} context would not
+even define a presheaf---the restriction to $\{a\}$ of the function with
+values $1,0$ on $\{a,b\}$ is constantly $1$---which is a reminder that
+restriction-stability is the first thing to check.
 \end{example}
 
 \section{Non-examples, and what each failure teaches}\label{ch04:sec:nonexamples}
@@ -365,8 +367,11 @@ sixteen-context lattice.
 \section{The basis criterion}\label{ch04:sec:basis}
 
 Definition~\ref{ch04:def:sheaf} quantifies over all covering sieves of a
-topology, which even on the sixteen-object successor lattice means $168$
-covering sieves. In practice one never checks them all directly; one checks a
+topology, which even on the sixteen-object successor lattice means every
+covering sieve of the topology in question---$168$ of them for the joined
+topology $J_A\vee J_R$ (Corollary~\ref{ch09:cor-census}), and a strictly
+smaller but still unmanageable collection for each of the coarser $J_A$ and
+$J_R$. In practice one never checks them all directly; one checks a
 \emph{generating} family of covers and appeals to the basis criterion. This
 section states the criterion, proves it in the finite-poset generality used
 throughout the monograph, and cites the general statement.
@@ -380,11 +385,19 @@ object $C$ a set $K(C)$ of families of arrows with codomain $C$, such that:
 $g:D\to C$, there is a family $\{h_j:D_j\to D\}\in K(D)$ such that every
 composite $g\circ h_j$ factors through some $f_i$;
 \item (Composition) if $\{f_i:C_i\to C\}\in K(C)$ and for each $i$ a family
-$\{g_{ik}:C_{ik}\to C_i\}\in K(C_i)$ is given, then some family in $K(C)$
-refines the composite family $\{f_i\circ g_{ik}\}$---in the strong form used
-here, the composite family itself generates a sieve containing a member of
-$K(C)$'s generated sieves.
+$\{g_{ik}:C_{ik}\to C_i\}\in K(C_i)$ is given, then the sieve generated by
+the composite family $\{f_i\circ g_{ik}\}_{i,k}$ contains the sieve generated
+by some family in $K(C)$.
 \end{enumerate}
+This is the coverage (refinement) form of the axioms;
+Definition~\ref{ch03:def:pretopology} gave the stricter pretopology form,
+which presupposes pullbacks and states stability as literal pullback of
+families. The successor's partition families satisfy both forms; the $J_2$
+data of Section~\ref{ch04:sec:examples} satisfy the coverage form only, since
+the pullback $\{\{a\},\varnothing\}$ of the atom family is not itself a
+declared generating family at $\{a\}$. The arguments below use only the
+coverage form.
+
 The \emph{generated topology} $J_K$ is the smallest Grothendieck topology in
 which, for every $C$ and every family in $K(C)$, the sieve generated by that
 family is covering. Smallest makes sense because the collection of topologies
@@ -394,11 +407,20 @@ provenance-erasure argument. See \cite{stacks00ZC} and
 \cite[Chap.~III]{maclane} for the standard treatment.
 \end{definition}
 
-\begin{theorem}[Basis criterion]\label{ch04:thm:basis}
+\begin{theorem}[Basis criterion; general case cited, finite-poset case proved
+here]\label{ch04:thm:basis}
 Let $K$ be a coverage basis on $\cC$ and $J_K$ the generated topology. A
 presheaf $F$ is a $J_K$-sheaf if and only if for every object $C$ and every
 generating family $\{f_i:C_i\to C\}\in K(C)$, the gluing map from $F(C)$ to
-matching families for the sieve generated by $\{f_i\}$ is a bijection.
+matching families for the sieve generated by $\{f_i\}$ is a bijection. The
+general statement, for an arbitrary small category with a coverage basis, is
+standard background \cite{stacks00ZC,maclane} and is not reproved here. The
+proof below establishes the case of finite posets with meets in which $K$ is
+moreover \emph{strongly pullback-stable}: for every
+$\{f_i:C_i\to C\}\in K(C)$ and every $U\le C$, the pulled-back family
+generates a sieve on $U$ that is itself basis-generated or maximal. That is
+the only case used in this monograph, and the hypothesis has to be verified
+per basis rather than assumed.
 \end{theorem}
 
 The forward implication is trivial (generated sieves are covering). The
@@ -449,19 +471,39 @@ computation.
 \begin{proof}[Proof of Theorem~\ref{ch04:thm:basis} for finite posets with meets]
 Suppose $F$ glues bijectively along every basis-generated sieve; we show $F$
 glues bijectively along every $S\in J_K(V)$, by induction over the stages of
-Algorithm~\ref{ch04:alg:saturation}. Stage $0$: basis-generated sieves hold by
-hypothesis; maximal sieves hold by Example~\ref{ch04:ex:maximal}.
+Algorithm~\ref{ch04:alg:saturation}. The induction hypothesis is carried in
+pullback-closed form: what is proved for a pair $(V,S)$ is that $F$ glues
+bijectively along $U^{*}S$ for \emph{every} $U\le V$, the case $U=V$
+included. The strengthening is what discharges the pullback step, and it is
+needed, because the strong stability hypothesis is a hypothesis about
+generating families only: a sieve that enters at the local-character step
+need not contain any basis-generated sieve, so that hypothesis says nothing
+about its pullbacks. Stage $0$: basis-generated sieves hold by hypothesis;
+maximal sieves hold by Example~\ref{ch04:ex:maximal}.
 
-Pullback step: suppose the claim holds for $(V,S)$ and let $U\le V$. On a
-poset, $U^{*}S=\{W\le U\mid W\in S\}$. We must show $F(U)\to
-\mathrm{Match}(U^{*}S,F)$ is bijective. By basis stability (Definition
-\ref{ch04:def:basis}(2)) the pullback of a basis family is refined by a basis
-family at $U$; in the poset setting used here---and in every concrete basis in
-this monograph---the pullback of a generating family \emph{is} a generating
-family at $U$ (intersection with $U$ carries blocks to blocks), so
-$U^{*}S$ is again basis-generated or maximal and the hypothesis applies
-directly. (This is the point where a general-category proof needs more care;
-the general statement is \cite{stacks00ZC}.)
+Stage $0$ in pullback-closed form: let $S$ be generated by a family
+$\{V_{i}\to V\}\in K(V)$ and let $U\le V$. On a poset,
+$U^{*}S=\{W\le U\mid W\in S\}$, and on a poset with meets this is precisely
+the sieve generated by the pulled-back family $\{U\wedge V_{i}\to U\}$. By
+the strong stability hypothesis of Theorem~\ref{ch04:thm:basis} that family
+generates a basis-generated or maximal sieve at $U$, so $U^{*}S$ is again
+basis-generated or maximal and the base case applies to it directly; and if
+$S=m_{V}$ then $U^{*}S=m_{U}$.
+That hypothesis must be checked per basis, not assumed of ``the poset
+setting'': for the successor's partition bases it is
+Lemma~\ref{ch09:lem-basis} (intersection with $U$ carries blocks to blocks);
+for the $J_2$ basis of Section~\ref{ch04:sec:examples} the pullback of the
+atom family along $\{a\}\subseteq\{a,b\}$ is $\{\{a\},\varnothing\}$, which
+is \emph{not} a declared generating family at $\{a\}$, but it generates
+$m_{\{a\}}$, so the hypothesis holds there as well. (This is also the point
+where a general-category proof needs more care; the general statement is
+\cite{stacks00ZC}.)
+
+Pullback step: a pair $(U,U^{*}S)$ added at step (2) from $(V,S)$ needs no
+argument of its own, since $U'^{*}(U^{*}S)=U'^{*}S$ for every $U'\le U$: the
+pullback-closed statement for $(V,S)$ already contains the pullback-closed
+statement for $(U,U^{*}S)$. This is the step at which the unstrengthened
+induction would appeal to strong stability outside its scope.
 
 Local-character step: suppose $T$ is a sieve on $V$, $S\in J_K(V)$ satisfies
 the bijective-gluing conclusion (inductively, together with all its
@@ -478,15 +520,21 @@ forces them equal. Gluing along $S$ yields $z\in F(V)$; one checks
 $z|_{W}=x_{W}$ for $W\in T$ by comparing both sides on the covering sieve
 $W^{*}S$ of $W$ and using injectivity there (each $W''\in W^{*}S$ lies in both
 $S$-land and $T$-land, where the values agree by construction). Hence gluing
-along $T$ is bijective, completing the induction.
+along $T$ is bijective. The pullback-closed form for $(V,T)$ follows by
+rerunning the same argument at each $U\le V$ with $U^{*}S$ in place of $S$:
+gluing along $U^{*}S$ and along all of its pullbacks is available from the
+pullback-closed hypothesis for $(V,S)$, and each $W\in U^{*}S$ lies in $S$
+with $W^{*}(U^{*}T)=W^{*}T$, so the pullback-closed hypothesis for
+$(W,W^{*}T)$ supplies the rest. This completes the induction.
 \end{proof}
 
 \begin{remark}\label{ch04:rem:basispractice}
 The practical import: to certify sheafhood on the successor lattice one checks
 each presheaf against the generating partition families only---two families
-per nonempty context plus the null cover---rather than against all $168$
-covering sieves. The finite certificate does exactly this for the sixteen
-representables and the two witness presheaves, and
+per nonempty context plus the null cover---rather than against every covering
+sieve of the topology concerned ($168$ for the join $J_A\vee J_R$, fewer but
+still many for each of $J_A$ and $J_R$). The finite certificate does exactly
+this for the sixteen representables and the two witness presheaves, and
 Theorem~\ref{ch04:thm:basis} is the license. Conversely, when
 \emph{refuting} sheafhood (as for the witness presheaves against the
 transverse topology, or for the representable in the countermodel of
@@ -587,8 +635,9 @@ irreversibly lossy by design.
 
 \begin{remark}[The canonical topology]\label{ch04:rem:canonical}
 For every small category $\cC$ there is a largest subcanonical topology, the
-\emph{canonical topology}, whose covering sieves are those along which every
-representable glues uniquely (the universally effective-epimorphic sieves)
+\emph{canonical topology}, whose covering sieves are the \emph{universally
+effective-epimorphic} sieves: those $S$ on $C$ such that every representable
+glues uniquely along $S$ and along every pullback $g^{*}S$, $g:D\to C$
 \cite{maclane,johnstone}. Subcanonicity of a given topology $J$ is exactly
 the containment of $J$ in the canonical topology. This gives the right frame
 for two later results: the successor's partition topologies on the context
@@ -642,7 +691,7 @@ $\PSh(\cC)$ whose reflector preserves finite limits, and $\Sh(\cC,J)$ is a
 Grothendieck topos.
 \end{theorem}
 
-This is textbook material \cite[Chap.~III and VII]{maclane},
+This is textbook material \cite[Chap.~III, \S\S5--6 and Chap.~V, \S3]{maclane},
 \cite{stacks00W1}, \cite{johnstone}; we present the construction in the next
 section both because the monograph's finite computations imitate it and
 because seeing it makes the left-exactness statement believable rather than
@@ -720,7 +769,8 @@ finite settings]\label{ch04:rem:direct}
 On a finite site the plus construction is entirely computable, as
 Example~\ref{ch04:ex:plusworked} shows, but it is rarely the best way to
 \emph{certify} a sheafification, for three reasons. First, bookkeeping: the
-colimit ranges over all covering sieves ($168$ of them on the successor
+colimit ranges over all covering sieves of the topology in question ($168$ of
+them for the joined topology on the successor
 lattice), and although the minimum-sieve collapse tames this, an implementation
 still owes a proof that the collapse is legitimate on the exact site at hand.
 Second, the one-pass question: whether $F^{+}$ is already a sheaf depends on
@@ -747,10 +797,15 @@ spaces.
 \end{remark}
 
 \begin{exercise}\label{ch04:exr:plus}
-Compute $\Delta_X^{+}$ and $\Delta_X^{++}$ on $(L_2,J_2)$ for $|X|=2$ and
-verify that the result is the function presheaf $\Set(-,X)$'s subsheaf of
-constant-on-atoms families---that is, identify exactly which sections the
-null-cover normalization creates and which the top cover creates.
+Compute $\Delta_X^{+}$ and $\Delta_X^{++}$ on $(L_2,J_2)$ for $|X|=2$. Check
+that $\Delta_X^{+}$ has one section over $\varnothing$, $X$ over each atom,
+and only $X$ over the top---the matching condition through
+$\Delta_X(\varnothing)$ forces the two atom values to agree---so that
+$\Delta_X^{+}$ is separated but not yet a sheaf; then check that the second
+pass enlarges the top to $X\times X$, so that
+$a\Delta_X=\Delta_X^{++}\cong\Set(-,X)$, the function presheaf of
+Example~\ref{ch04:ex:functions}. Say which pass deletes sections and which
+creates them, and where each happens.
 \end{exercise}
 
 \section{Reflective subcategories and idempotent monads}\label{ch04:sec:reflective}
@@ -864,6 +919,10 @@ equivalent:
 \item every presheaf on $\cC$ is a $J$-sheaf;
 \item every covering sieve of $J$ is maximal: $J(C)=\{m_C\}$ for all $C$.
 \end{enumerate}
+This equivalence is standard; see \cite[Chap.~V]{maclane} and
+\cite{johnstone}. The proof is given in full because
+Chapter~\ref{ch05:main} applies the criterion directly to the legacy cover
+clauses.
 \end{proposition}
 
 \begin{proof}
@@ -892,7 +951,7 @@ isomorphic to a sheaf and hence a sheaf, a contradiction.
 \end{proof}
 
 \begin{remark}\label{ch04:rem:trivialreading}
-The proof of (1)$\Rightarrow$(3) deserves a second look, because it is the
+Return to the proof of (1)$\Rightarrow$(3), because it is the
 cleanest possible statement of what a nonmaximal cover \emph{does}: it forces
 the presheaf of sieves to carry unsupported global distinctions (many sieves
 over $C$ restrict to the maximal sieve everywhere on the cover), and
@@ -912,7 +971,7 @@ problem is to manufacture covers that are honestly nonmaximal.
 
 The subobject classifier $\Omega$ of $\PSh(\cC)$, which appeared as the
 witness in Proposition~\ref{ch04:prop:trivial}, supports a second description
-of modalities that is worth having even though the monograph's proofs never
+of modalities, recorded here even though the monograph's proofs never
 depend on it. Given a topology $J$, call a sieve $T$ on $C$
 \emph{$J$-closed} if every arrow that lies in $T$ locally already lies in
 $T$: whenever $f:D\to C$ has $f^{*}T\in J(D)$, then $f\in T$. Closing a sieve
@@ -949,7 +1008,10 @@ dependency.
 \begin{exercise}\label{ch04:exr:closed}
 On $(L_2,J_2)$, compute the closure of each of the six sieves on the top
 object and verify: (i) the closed sieves on the top are exactly the maximal
-sieve and the sieves generated by $\{a\}$, by $\{b\}$, and by nothing;
+sieve and the sieves generated by $\{a\}$, by $\{b\}$, and by the bottom
+arrow $\varnothing\to\{a,b\}$ (note the \emph{empty} sieve is not closed,
+since the null cover makes $\varnothing$ covered and so forces $\varnothing$
+into every closure);
 (ii) the covering sieves are exactly those whose closure is maximal;
 (iii) $\Omega_j$ at the top has exactly four elements, matching the sheaf
 condition's verdict on Exercise~\ref{ch04:exr:omega}.

@@ -125,7 +125,7 @@ holds for the same reason: $\id_V \circ \iota_{U,V}$ and $\iota_{U,V}$
 are both elements of the at-most-one-element set $\Hom_P(U,V)$.
 \end{proof}
 
-The at-most-one-morphism property just used is worth isolating, because it
+We isolate the at-most-one-morphism property just used, because it
 is invoked silently on almost every page of Part~II.
 
 \begin{proposition}[All diagrams in a poset commute]\label{ch02:prop:poset-commute}
@@ -551,8 +551,8 @@ restriction function $F(1) \to F(0)$ (along $0 \le 1$); the functor laws
 add nothing further, since the only composites in $[2]$ involve
 identities. So $\PSh([2])$ is the category whose objects are functions
 between sets and whose morphisms are commuting squares
-(Example~\ref{ch02:ex:nat-two-chain}). This tiny observation is worth
-internalizing: a presheaf on a poset is a system of sets wired together
+(Example~\ref{ch02:ex:nat-two-chain}). This tiny observation generalizes: a
+presheaf on a poset is a system of sets wired together
 by restriction functions along the order, one function per covering
 relation, with commutativity along paths for free in chains but a real
 condition once the poset has diamonds.
@@ -624,7 +624,7 @@ besides reflexivity). A presheaf on $P$ is just a pair of sets with
 no connecting data, and a morphism is a pair of functions:
 $\PSh(P) \cong \Set \times \Set$. Discreteness kills all interaction
 --- there are no restrictions to be compatible with. This degenerate
-case is worth one glance because it is the shape of the
+case is the shape of the
 \emph{resolved} world of Part~II: after the joined topology
 discretizes the context factor, the resolved subcategory behaves like
 a product of independent copies, one per atom, with no remaining
@@ -637,10 +637,11 @@ juxtaposition remains.
 Count the presheaves on $[2]$ whose section sets are subsets of a fixed
 two-element set $\{a, b\}$. (There are four choices for each of
 $F(1), F(0)$ from $\{\varnothing, \{a\}, \{b\}, \{a,b\}\}$ and then
-$|F(0)|^{|F(1)|}$ choices of restriction; summing gives the count.
-Carrying this out --- the answer is $\sum_{m,n} n^m$ over sizes with
-multiplicity --- is a useful five-minute drill in what a presheaf
-\emph{is}.)
+$|F(0)|^{|F(1)|}$ choices of restriction; summing over the sixteen
+pairs, with the convention that there is exactly one function
+$\varnothing \to \varnothing$, gives $4 + 2 \cdot 4 + 6 = 18$.
+Carrying the sum out by hand --- rather than reading the total off
+--- is a useful five-minute drill in what a presheaf \emph{is}.)
 \end{exercise}
 
 \section{Representable presheaves}\label{ch02:sec:representables}
@@ -1209,10 +1210,10 @@ flattenings, since a nested tuple $((a, b), (c, d))$ and a flat tuple
 indexed by four atoms are different set-theoretic objects that a
 chosen implementation must convert between. The certificate of
 Chapter~11 checks the conversion maps --- both directions, inverse
-laws, naturality --- rather than pretending the objects coincide. The
-habit of asking ``equal, or isomorphic via which map?'' is worth
-acquiring now, on examples this small, where the answer is always
-computable by hand.
+laws, naturality --- rather than pretending the objects coincide.
+Acquire the habit of asking ``equal, or isomorphic via which map?''
+now, on examples this small, where the answer is always computable by
+hand.
 
 \section{The small-poset laboratory}\label{ch02:sec:laboratory}
 

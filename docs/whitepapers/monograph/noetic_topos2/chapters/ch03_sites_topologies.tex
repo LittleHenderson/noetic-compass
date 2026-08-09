@@ -152,9 +152,11 @@ $\varnothing$: two. Total: $6 + 3 + 3 + 2 = 14$.
 \end{enumerate}
 The same computation scales to the sixteen-element context lattice
 $L = \mathcal{P}(\Omega)$ of Part~II; the total there is $298$
-sieves over the sixteen contexts, a count this monograph attributes
-to the exhaustive enumeration in the registered certificate (and
-tabulates in Appendix~B) rather than deriving in closed form here.
+sieves over the sixteen contexts, a count derived in closed form in
+Chapter~7 (Lemma~\ref{ch07:lem-downsets} and
+Theorem~\ref{ch07:thm-298}), tabulated in Appendix~B, and
+independently corroborated by the exhaustive enumeration in the
+registered certificate.
 \end{example}
 
 \begin{exercise}\label{ch03:exr:sieve-count-chain}
@@ -282,7 +284,7 @@ $f^* T \in J(D)$ for every $f : D \to C$ in $S$, then
 $T \in J(C)$.
 \end{enumerate}
 A \emph{site} is a pair $(\cC, J)$ of a category and a topology on
-it. See \cite[Ch.~III]{maclane} and \cite{stacks00ZC}.
+it. See \cite[Ch.~III]{maclane} and \cite{stacks00Z4}.
 \end{definition}
 
 Each axiom encodes one piece of covering common sense, and it is
@@ -509,7 +511,11 @@ presheaf is a sheaf for the generated topology $J_K$ if and only if
 it satisfies the gluing condition for the basis families themselves
 \cite{stacks00ZC,maclane}. This is what allows Chapter~9 to verify
 subcanonicity and sheafhood by checking only the two-piece
-partition families rather than all $168$ covering sieves; the
+partition families rather than every covering sieve of $J_A$ and of
+$J_R$ separately (the figure $168$ quoted in
+Remark~\ref{ch03:rem:ch9-preview} counts the covering sieves of the
+\emph{join} $J_A \vee J_R$; each factor is strictly coarser and has
+strictly fewer); the
 certificate of Chapter~11, by contrast, computes the full
 topologies and rechecks the equivalence exhaustively --- a
 deliberate redundancy between basis-level proof and
@@ -944,7 +950,7 @@ subcanonicity
 (Propositions~\ref{ch03:prop:union-pretopology}--\ref{ch03:prop:union-characterization},
 Theorem~\ref{ch03:thm:union-subcanonical}), the standard fact of
 which the successor's join theorem is the marked, two-coordinate
-instance. All of it is textbook material
+instance. The whole toolkit is textbook material
 \cite{maclane,stacks00ZC,stacks00W1,stacks00WO,johnstone};
 Chapter~4 completes the standard background with sheaves and
 sheafification, and Chapter~5 begins the project-specific story.

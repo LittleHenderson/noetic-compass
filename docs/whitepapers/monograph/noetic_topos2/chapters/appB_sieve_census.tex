@@ -102,8 +102,9 @@ same set of covering sieves, not merely isomorphic ones.
 
 Table~\ref{appB:blocktable} records, for each context, which complete ACBE and
 RPM blocks it contains. This is the data that drives the witness presheaves of
-Chapter~9: $F_A(V)$ has $2^{a(V)}$ sections where $a(V)$ is the number of
-complete ACBE blocks in $V$, and symmetrically for $F_R$.
+Chapter~9: $F_A(V)$ has $2^{\alpha(V)}$ sections, where $\alpha(V)$ is the
+number of complete ACBE blocks in $V$ (Definition of complete blocks,
+Chapter~7), and symmetrically $|F_R(V)| = 2^{\rho(V)}$.
 
 \begin{longtable}{@{}lll@{}}
 \caption{Complete blocks contained in each context.}\label{appB:blocktable}\\
@@ -125,19 +126,22 @@ $00\,10$ ($R_0$) & none & $R_0$ \\
 $01\,11$ ($R_1$) & none & $R_1$ \\
 $00\,11$ & none & none \\
 $01\,10$ & none & none \\
-$00\,01\,10$ & $A_0$ & none \\
-$00\,01\,11$ & $A_0$ & none \\
-$00\,10\,11$ & $A_1$ & none \\
-$01\,10\,11$ & $A_1$ & none \\
+$00\,01\,10$ & $A_0$ & $R_0$ \\
+$00\,01\,11$ & $A_0$ & $R_1$ \\
+$00\,10\,11$ & $A_1$ & $R_0$ \\
+$01\,10\,11$ & $A_1$ & $R_1$ \\
 $\Omega$ & $A_0$, $A_1$ & $R_0$, $R_1$ \\
 \bottomrule
 \end{longtable}
 
 \begin{remark}\label{appB:whyfour}
 Only $\Omega$ contains both complete ACBE blocks, so only there does $F_A$ take
-its full four sections; and only $\Omega$ contains both complete RPM blocks, so
-only there does the RPM matching-family set collapse to one element for $F_A$.
-This is exactly why the distinctness computation of Chapter~9 is carried out at
-$\Omega$: it is the unique context where the four-versus-one separation between
-the ACBE and RPM gluing conditions is visible.
+its full four sections. By transversality no RPM piece $V\cap R_j$ of any
+context contains a complete ACBE block, so the RPM matching-family set for
+$F_A$ is a one-element set at \emph{every} context (Appendix~C,
+Finding~\ref{appC:fnd:novaluecrossing}); the gluing map therefore fails
+injectivity wherever $|F_A(V)|\ge 2$, that is at the two ACBE blocks, the four
+triples, and $\Omega$. The distinctness computation of Chapter~9 is carried out
+at $\Omega$ because that is the context with the widest gap --- four sections
+against one matching family --- not because it is the only failure.
 \end{remark}

@@ -42,11 +42,11 @@ Let $U\to V$ and $W\to V$ be arrows of $L$, that is, $U\subseteq V$ and $W\subse
 \end{proposition}
 
 \begin{proof}
-The square with vertices $U\cap W$, $U$, $W$, $V$ commutes because every diagram in a poset commutes. It remains to check the universal property. Let $Z\in L$ carry arrows $Z\to U$ and $Z\to W$, that is, $Z\subseteq U$ and $Z\subseteq W$. Then $Z\subseteq U\cap W$ by the definition of intersection, which is exactly an arrow $Z\to U\cap W$; it is compatible with the projections because compatibility is automatic, and it is unique because $L$ has at most one arrow between any two objects. Hence $U\cap W$ satisfies the universal property of the pullback \cite{maclane}.
+The square with vertices $U\cap W$, $U$, $W$, $V$ commutes because every diagram in a poset commutes. It remains to check the universal property. Let $Z\in L$ carry arrows $Z\to U$ and $Z\to W$, that is, $Z\subseteq U$ and $Z\subseteq W$. Then $Z\subseteq U\cap W$ by the definition of intersection, which is exactly an arrow $Z\to U\cap W$; it is compatible with the projections because compatibility is automatic, and it is unique because $L$ has at most one arrow between any two objects. Hence $U\cap W$ satisfies the universal property of the pullback; this is the powerset instance of Proposition~\ref{ch02:prop:pullback-poset} (Corollary~\ref{ch02:cor:pullback-powerset}).
 \end{proof}
 
 \begin{remark}\label{ch07:rem-complete}
-More is true: $L$ is a complete lattice, so as a category it has all small limits and colimits, computed as intersections and unions respectively. We isolate Proposition~\ref{ch07:prop-pullback} because pullback stability of covering families---axiom (J2) in the standard presentation of Grothendieck topologies \cite{stacks00ZC, johnstone}---is the axiom whose verification in Chapter~9 reduces entirely to a computation with intersections. The single most frequently used identity in this monograph is the associativity-with-absorption computation
+More is true: $L$ is a complete lattice, so as a category it has all small limits and colimits, computed as intersections and unions respectively. We isolate Proposition~\ref{ch07:prop-pullback} because pullback stability of covering families---axiom (J2) in the standard presentation of Grothendieck topologies \cite{stacks00Z4, johnstone}---is the axiom whose verification in Chapter~9 reduces entirely to a computation with intersections. The single most frequently used identity in this monograph is the associativity-with-absorption computation
 \[
 (V\cap B)\cap U \;=\; U\cap (V\cap B)\;=\; (U\cap V)\cap B \;=\; U\cap B
 \qquad\text{whenever } U\subseteq V,
@@ -71,7 +71,7 @@ The Boolean-algebra axioms for a powerset are the standard set identities (distr
 \end{proof}
 
 \begin{remark}[Why record the Heyting structure]\label{ch07:rem-heyting}
-Categorically, Proposition~\ref{ch07:prop-boolean} says the poset category $L$ is cartesian closed with exponentials $W^{U}=U\Rightarrow W$, and that its internal propositional logic is classical. This is worth one paragraph of care because the sheaf categories built on $L$ in Chapters~9 and~10 have their \emph{own} internal logic, which is in general intuitionistic and need not inherit Booleanness from the base; no artifact of this program asserts anything about the internal logic of the successor's sheaf categories, and this monograph derives none. The proposition is used below only in its combinatorial clothing: complements exist and behave (Remark~\ref{ch07:rem-complement}), and implication gives a compact notation for containment facts, e.g., the block-completeness predicate $A_{i}\subseteq V$ of Section~\ref{ch07:sec-blocks} is the statement $\Omega= A_{i}\Rightarrow V$.
+Categorically, Proposition~\ref{ch07:prop-boolean} says the poset category $L$ is cartesian closed with exponentials $W^{U}=U\Rightarrow W$, and that its internal propositional logic is classical. This needs one paragraph of care, because the sheaf categories built on $L$ in Chapters~9 and~10 have their \emph{own} internal logic, which is in general intuitionistic and need not inherit Booleanness from the base; no artifact of this program asserts anything about the internal logic of the successor's sheaf categories, and this monograph derives none. The proposition is used below only in its combinatorial clothing: complements exist and behave (Remark~\ref{ch07:rem-complement}), and implication gives a compact notation for containment facts, e.g., the block-completeness predicate $A_{i}\subseteq V$ of Section~\ref{ch07:sec-blocks} is the statement $\Omega= A_{i}\Rightarrow V$.
 \end{remark}
 
 \section{The sixteen contexts}\label{ch07:sec-sixteen}
@@ -139,7 +139,7 @@ $\Omega$ & global & all four & $\varnothing$ \\
 
 \section{The eighty-one arrows}\label{ch07:sec-arrows}
 
-The arrow count of $L$ is the first number the executable certificate of Chapter~11 checks, and it is worth proving twice: once by summation over targets, and once by the atomwise argument that generalizes.
+The arrow count of $L$ is the first number the executable certificate of Chapter~11 checks. We prove it twice: once by summation over targets, and once by the atomwise argument that generalizes.
 
 \begin{theorem}[Arrow count]\label{ch07:thm-81}
 The category $L$ has exactly $81=3^{4}$ arrows.
@@ -328,7 +328,7 @@ By Theorem~\ref{ch07:thm-transverse} every such intersection is a singleton $\{\
 \end{proof}
 
 \begin{remark}[Transversality as a bijection statement]\label{ch07:rem-bijection}
-Theorem~\ref{ch07:thm-transverse} can be restated: the map sending an atom to the pair (index of its $A$-block, index of its $R$-block) is a bijection $\Omega\to\{0,1\}\times\{0,1\}$. Unwound, this is nothing but the definition of $\Omega$ as a product---which is precisely the point. The registered design places the two marks as the two coordinates of a product, and transversality is the combinatorial shadow of that design decision. Two partitions of a four-element set into two doubletons need \emph{not} be transverse: the pair $(A,A)$ has $A_{0}\cap A_{0}=A_{0}$ of size two and $A_{0}\cap A_{1}=\varnothing$. Transversality is a genuine, checkable property of the pair $(A,R)$, and it is what makes the two generated topologies of Chapter~9 interact the way they do rather than collapse onto each other or ignore each other.
+Theorem~\ref{ch07:thm-transverse} can be restated: the map sending an atom to the pair (index of its $A$-block, index of its $R$-block) is a bijection $\Omega\to\{0,1\}\times\{0,1\}$. Unwound, this is nothing but the definition of $\Omega$ as a product---which is precisely the point. Transversality is a genuine constraint in general: for partitions into blocks of sizes $p$ and $q$ it forces $|\Omega|=pq$ and each cross-intersection to be a single atom. At $|\Omega|=4$ with two blocks on each side, however, it is nearly automatic---there are only three partitions of a four-element set into two doubletons, and any two \emph{distinct} ones already meet in singletons, so the sole non-transverse pair is the degenerate $A=R$. The content of the registered design decision is therefore not that transversality was achieved at four atoms, but that the two marks were placed as the two coordinates of a product, which is what makes transversality persist when the mark alphabets grow (Exercise~\ref{ch07:ex-1}). It is that identity, and not its four-atom instance, that makes the two generated topologies of Chapter~9 interact the way they do rather than collapse onto each other or ignore each other.
 \end{remark}
 
 \section{Symmetries of the marked lattice}\label{ch07:sec-symmetry}
@@ -374,7 +374,7 @@ K_{P}(V)\;=\;\bigl\{\,V\cap B\longrightarrow V \;\bigm|\; B\in P \,\bigr\},
 indexed by the blocks of $P$, \emph{retaining an empty piece} $\varnothing\to V$ whenever $V\cap B=\varnothing$. At the empty context the generator is the \emph{null cover}: the empty family of arrows with codomain $\varnothing$, which is stipulated to cover $\varnothing$.
 \end{definition}
 
-Three points of the definition deserve emphasis before the tables.
+Three points of the definition require comment before the tables.
 
 First, $K_{P}(V)$ is an \emph{indexed} family: its members are indexed by blocks, so $K_{A}(V)$ always has exactly two members (possibly with repeated or empty domains) and $K_{Q}(V)$ always has exactly four. When we later compare families ``as unmarked arrow lists'' we forget the indexing and keep only the set of arrows; the distinction matters at exactly the coincidence loci computed in Proposition~\ref{ch07:prop-coincidence}.
 
@@ -632,7 +632,7 @@ $\Omega$ & $A_{0},A_{1}$ & $R_{0},R_{1}$ & 2 & 2 & 4 & 4 \\
 \end{tabular}
 \end{table}
 
-Two consequences of the census are worth isolating now, because Chapter~9 leans on them at its two decisive moments.
+Chapter~9 leans on two consequences of the census at its two decisive moments; we isolate them now.
 
 \begin{corollary}[Blocks never survive crossing]\label{ch07:cor-blocks-cross}
 No RPM block contains a complete ACBE block, and no ACBE block contains a complete RPM block: $\alpha(R_{j})=0$ and $\rho(A_{i})=0$ for all $i,j$.
@@ -662,7 +662,7 @@ Corollary~\ref{ch07:cor-blocks-monotone} is the combinatorial engine of ACBE glu
 
 \section{The sieve census}\label{ch07:sec-sieves}
 
-Although topology generation belongs to Chapter~9, the raw material it operates on---sieves on the objects of $L$---is pure order combinatorics, and the executable certificate's headline count of $298$ sieves is exactly derivable here. We include the derivation both for completeness and because it gives independent meaning to a number that would otherwise be an opaque implementation output. (The per-context census tables appear in Appendix~B; this section proves the totals.)
+Although topology generation belongs to Chapter~9, the raw material it operates on---sieves on the objects of $L$---is pure order combinatorics, and the executable certificate's headline count of $298$ sieves is exactly derivable here. We include the derivation both for completeness and because it gives independent meaning to a number that would otherwise be an opaque implementation output. (The per-context sieve and covering-sieve counts appear in Appendix~A; the registered aggregate totals are reproduced in Appendix~B. This section proves the totals.)
 
 \begin{definition}[Sieves on a poset object]\label{ch07:def-sieve-poset}
 A sieve on $V\in L$ is a set $\sigma$ of arrows with codomain $V$ closed under precomposition \cite{maclane, johnstone}. Since arrows into $V$ correspond to subsets of $V$, a sieve on $V$ is the same thing as a \emph{down-closed} family $\sigma\subseteq\mathcal{P}(V)$: if $S\in\sigma$ and $T\subseteq S$ then $T\in\sigma$. In particular the collection of sieves on $V$ depends only on $|V|$.
@@ -673,6 +673,7 @@ Write $\delta(k)$ for the number of down-closed families in $\mathcal{P}(X)$ wit
 \[
 \delta(0)=2,\qquad \delta(1)=3,\qquad \delta(2)=6,\qquad \delta(3)=20,\qquad \delta(4)=168 .
 \]
+These are the Dedekind numbers; Chapter~11 and the appendices write $M(n)$ for $\delta(n)$.
 \end{lemma}
 
 \begin{proof}
@@ -719,7 +720,7 @@ The exact-topology verifier of Chapter~11 reports precisely $298$ sieves enumera
 
 \section{Catalog of degenerate and boundary cases}\label{ch07:sec-degenerate}
 
-Finite exhaustive verification lives or dies on its boundary cases: the configurations where a general formula degenerates and an implementation is most likely to be wrong. The combinatorics above surfaced all of them, and it is worth cataloging them in one place, both because Chapter~9's proofs must handle each explicitly and because Chapter~11's certificate checks are organized around exactly these configurations.
+Finite exhaustive verification lives or dies on its boundary cases: the configurations where a general formula degenerates and an implementation is most likely to be wrong. The combinatorics above surfaced all of them, and we catalog them in one place, both because Chapter~9's proofs must handle each explicitly and because Chapter~11's certificate checks are organized around exactly these configurations.
 
 \begin{enumerate}
 \item \textbf{The empty context as target.} The generator at $\varnothing$ is the null family (Definition~\ref{ch07:def-generating}), not the formula family $\{\varnothing\cap B\to\varnothing\}$---the formula would produce a two-member family of identity arrows, which generates the maximal sieve, whereas the registered convention is the empty family. The two conventions differ, and the difference is semantically loaded: under the null-cover convention, sheaves are forced to take singleton value at $\varnothing$ (Chapter~9), which drives the witness computations and the reflector formula of Chapter~10. An implementation that "simplifies" the empty case to the formula family changes the sheaf category.
