@@ -38,6 +38,7 @@ jobs:
           set -Eeuo pipefail
           docker build \
             --file "$WORKER_DIR/Dockerfile" \
+            --build-arg "SOURCE_COMMIT=$GITHUB_SHA" \
             --label "org.opencontainers.image.revision=$GITHUB_SHA" \
             --tag "$IMAGE_NAME:$GITHUB_SHA" \
             "$WORKER_DIR"

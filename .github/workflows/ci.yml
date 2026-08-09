@@ -174,9 +174,21 @@ jobs:
             'maturin>=1,<2'
           python -m pip install ./cas-engine
 
-      - name: Run the authoritative API and validation suite
+      - name: Run the portable API and validation suite
         working-directory: noetic-compass-scaffold/noetic-compass
-        run: python -m pytest -q
+        run: >-
+          python -m pytest -q
+          --ignore=tests/test_cas_harness_pythia160m_layer_specificity_v4.py
+          --ignore=tests/test_cas_harness_pythia160m_research_executor.py
+          --ignore=tests/test_cas_harness_pythia160m_research_lock.py
+          --ignore=tests/test_cas_harness_pythia160m_v3_startup.py
+          --ignore=tests/test_cas_harness_research_intervention_worker.py
+
+      - name: Verify the excluded host-local historical evidence boundary
+        working-directory: noetic-compass-scaffold/noetic-compass
+        run: >-
+          python -m pytest -q
+          ../../tests/cas_harness_v2/test_historical_v1_v4_recovery.py
 
       - name: Run the acceptance-authority alignment tests
         run: >-
@@ -198,15 +210,14 @@ jobs:
 
       - uses: actions/setup-python@v6
         with:
-          python-version: '3.11'
+          python-version: '3.12'
           cache: pip
           cache-dependency-path: noetic-compass-scaffold/noetic-compass/live-trace-worker/requirements.txt
 
-      - name: Install CPU worker dependencies
+      - name: Install the exact worker dependency lock
         working-directory: noetic-compass-scaffold/noetic-compass/live-trace-worker
         run: |
           python -m pip install --upgrade pip
-          python -m pip install --index-url https://download.pytorch.org/whl/cpu 'torch==2.4.0'
           python -m pip install \
             -r requirements.txt \
             'pytest>=8,<10' \
