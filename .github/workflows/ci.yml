@@ -142,8 +142,6 @@ jobs:
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
 
       - uses: actions/setup-python@v6
         with:
@@ -186,11 +184,13 @@ jobs:
           --ignore=tests/test_cas_harness_pythia160m_v3_startup.py
           --ignore=tests/test_cas_harness_research_intervention_worker.py
 
-      - name: Verify the excluded host-local historical evidence boundary
+      - name: Verify the portable historical negative-state boundary
         working-directory: noetic-compass-scaffold/noetic-compass
         run: >-
           python -m pytest -q
-          ../../tests/cas_harness_v2/test_historical_v1_v4_recovery.py
+          ../../tests/cas_harness_v2/test_historical_v1_v4_portable_ci.py
+          ../../tests/cas_harness_v2/test_historical_v1_v4_recovery.py::test_known_v3_lf_crlf_binding_inconsistency_is_reproduced_exactly
+          ../../tests/cas_harness_v2/test_historical_v1_v4_recovery.py::test_known_v4_guard_name_defect_remains_fail_closed_and_unrepaired
 
       - name: Run the acceptance-authority alignment tests
         run: >-
