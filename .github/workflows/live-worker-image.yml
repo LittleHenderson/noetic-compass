@@ -61,10 +61,23 @@ jobs:
           }
           trap cleanup EXIT
 
+          [[ "$(
+            docker image inspect \
+              --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}' \
+              "$IMAGE_NAME:$GITHUB_SHA"
+          )" == "$GITHUB_SHA" ]]
+          docker image inspect \
+            --format '{{range .Config.Env}}{{println .}}{{end}}' \
+            "$IMAGE_NAME:$GITHUB_SHA" \
+            | grep --fixed-strings --line-regexp 'ATLAS_WORKER_PROFILE=production'
+
           docker run --detach \
             --name "$container" \
             --publish 127.0.0.1:18080:8080 \
+            --read-only \
+            --tmpfs /tmp:rw,noexec,nosuid,nodev,size=64m \
             --env PORT=8080 \
+            --env ATLAS_WORKER_PROFILE=development \
             --env LIVE_TRACE_DEMO_MODE=1 \
             --env ATLAS_LIVE_WORKER_TOKEN="$token" \
             "$IMAGE_NAME:$GITHUB_SHA"
