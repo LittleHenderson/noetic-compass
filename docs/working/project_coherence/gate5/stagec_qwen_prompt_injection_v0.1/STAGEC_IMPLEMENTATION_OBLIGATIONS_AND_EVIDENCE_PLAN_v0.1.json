@@ -20,7 +20,7 @@
     "evidence_packet_status": "NOT CREATED"
   },
   "current_validation_receipts": {
-    "full_suite_receipt_boundary": "THE 576-WORKER AND 306-HARNESS RECEIPTS BELOW REMAIN THE EXACT LAST-COMMITTED b96c2c12 CHECKPOINT RECEIPTS. THE DIAGNOSTIC RUNTIME TRANCHE HAS SEPARATE AUTHORITATIVE SAME-PROCESS RECEIPTS. THE PRESERVED HISTORICAL HARNESS REPLAY COLLECTED, STARTED, AND FINISHED 437 NODES: 431 HAD EXACT ALL-PHASE PASS AND THE SIX EXACT NAMED FIT/DISPOSITION NODES SETUP-SKIPPED AS RUNTIME-LOCK MISMATCH EVIDENCE, NOT PASS; IT EMITTED 1305 ORDINARY REPORTS AND 163 PASSING SUBTESTS, RECORDED ZERO COLLECTION OR INTERNAL ERRORS OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, EXITED PYTEST 0, AND BOUND NODE-ID SHA-256 85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8. WORKER COLLECTED, STARTED, FINISHED, AND PASSED 594/594 NODES, EMITTED 1782 ORDINARY REPORTS AND ZERO SUBTESTS, WARNINGS, ERRORS, OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, EXITED PYTEST 0, AND BOUND NODE-ID SHA-256 B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B. THE ADDITIVE AUDIT-ONLY PROMPT-CONTEXT PROVENANCE AND EXACT-480-ROW INVENTORY FOCUSED SURFACES PASS 30/30 AND 22/22, WITH EXACT COMBINED 52-NODE DIGEST DDEC58BA0B12A8699BDCB7BEB43B6D8656AD96D9E95347B37FAEA22ED3A572C0. THE 489-NODE PROMPT-CONTEXT CHECKPOINT IS PRESERVED HISTORICALLY AT NODE-ID SHA-256 A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225: 483 HAD EXACT ALL-PHASE PASS; THE SIX UNCHANGED FIT/DISPOSITION NODES SETUP-SKIPPED AS RUNTIME-LOCK MISMATCH EVIDENCE, NOT PASS; IT EMITTED 1461 ORDINARY REPORTS AND 163 PASSING SUBTESTS, RECORDED ZERO WARNINGS, COLLECTION OR INTERNAL ERRORS, OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, AND EXITED PYTEST 0. THE CURRENT AUTHORITATIVE LOCKED SAME-PROCESS HARNESS REPLAY COLLECTED, STARTED, AND FINISHED 508 NODES WITH NODE-ID SHA-256 8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2: 502 HAD EXACT ALL-PHASE PASS; THE SAME SIX EXACT NODES SETUP-SKIPPED AS RUNTIME-LOCK MISMATCH EVIDENCE, NOT PASS; IT EMITTED 1518 ORDINARY REPORTS AND 163 PASSING SUBTESTS, RECORDED ZERO WARNINGS, COLLECTION OR INTERNAL ERRORS, OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, AND EXITED PYTEST 0. POSITIVE EXACT NUMERICAL EVIDENCE REMAINS THE SEPARATE PYTHON-3.12 LOCKED FIT 10/10 AND ELIGIBLE DISPOSITION 3/3 RECEIPTS. ALL OF THESE LOCAL RECEIPTS REMAIN STRUCTURE_ONLY / NON_AUTHORITY",
+    "full_suite_receipt_boundary": "THE 576-WORKER AND 306-HARNESS RECEIPTS BELOW REMAIN THE EXACT LAST-COMMITTED b96c2c12 CHECKPOINT RECEIPTS. THE DIAGNOSTIC RUNTIME TRANCHE HAS SEPARATE AUTHORITATIVE SAME-PROCESS RECEIPTS. THE 437-NODE AND 489-NODE HARNESS REPLAYS REMAIN PRESERVED HISTORICAL CHECKPOINTS. THE 508-NODE PREREQUISITE-INTAKE CHECKPOINT IS ALSO PRESERVED HISTORICALLY AT NODE-ID SHA-256 8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2: 502 HAD EXACT ALL-PHASE PASS; THE SAME SIX EXACT NODES SETUP-SKIPPED AS RUNTIME-LOCK MISMATCH EVIDENCE, NOT PASS; IT EMITTED 1518 ORDINARY REPORTS AND 163 PASSING SUBTESTS, RECORDED ZERO WARNINGS, COLLECTION OR INTERNAL ERRORS, OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, AND EXITED PYTEST 0. THE CURRENT AUTHORITATIVE LOCKED SAME-PROCESS HARNESS REPLAY COLLECTED, STARTED, AND FINISHED 537 NODES IN 1680.3 SECONDS AT NODE-ID SHA-256 3AA22AE520FD2604AB8E8B1EAA6ED4A955DDDEB4BEBEF95F8B750A163AA5FB19: 531 HAD EXACT ALL-PHASE PASS; THE SAME SIX EXACT NODES SETUP-SKIPPED AS RUNTIME-LOCK MISMATCH EVIDENCE, NOT PASS; IT EMITTED 1605 ORDINARY REPORTS AND 163 PASSING SUBTESTS, RECORDED ZERO WARNINGS, ERRORS, COLLECTION OR INTERNAL ERRORS, OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, AND EXITED PYTEST AND THE VERIFIER PROCESS 0. ITS ORDINARY-OUTCOME, SUBTEST-OUTCOME, LOCKED-IMPORT, PRE-TEST-LOADED-CODE, AND LOADED-CODE SHA-256 VALUES ARE 423154C5C83DF299F844E87D289CBB98E331B302CE1ABA8AEA7075A12B1C0EFF, 6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109, 3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A, 0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98, AND C186ACEBF8165A195A4D66AF968A58E323B4C5943E84191DAA2CEF72FBD2B473. THE INTEGRATED VERIFIER PASS COVERED 637 ARTIFACTS, 409 SYNTAX-CHECKED PYTHON FILES, AND 2255 EXECUTABLE-SHADOW PATHS. WORKER COLLECTED, STARTED, FINISHED, AND PASSED 594/594 NODES AT NODE-ID SHA-256 B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B. POSITIVE EXACT NUMERICAL EVIDENCE REMAINS THE SEPARATE PYTHON-3.12 LOCKED FIT 10/10 AND ELIGIBLE DISPOSITION 3/3 RECEIPTS. ALL OF THESE LOCAL RECEIPTS REMAIN STRUCTURE_ONLY / NON_AUTHORITY",
     "worker_authoritative": {
       "status": "PASS",
       "passed": 576,
@@ -160,6 +160,41 @@
       },
       "authoritative_current_harness_receipt": {
         "status": "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+        "coverage_boundary": "CURRENT 537-NODE FULL-HARNESS RECEIPT / BINDS THE 21-FILE EXTERNAL-INTAKE PACKAGE / DOES NOT ESTABLISH EXTERNAL TRUST OR RUNTIME AUTHORITY",
+        "collected": 537,
+        "started": 537,
+        "finished": 537,
+        "all_phase_passed": 531,
+        "setup_skipped": 6,
+        "ordinary_reports": 1605,
+        "passed_subtests": 163,
+        "warning_count": 0,
+        "error_count": 0,
+        "collection_errors": 0,
+        "internal_errors": 0,
+        "deselections": 0,
+        "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+        "pytest_exit_status": 0,
+        "process_exit_status": 0,
+        "elapsed_seconds": "1680.3",
+        "python_ordinal_node_id_sha256": "3AA22AE520FD2604AB8E8B1EAA6ED4A955DDDEB4BEBEF95F8B750A163AA5FB19",
+        "ordinary_outcomes_sha256": "423154C5C83DF299F844E87D289CBB98E331B302CE1ABA8AEA7075A12B1C0EFF",
+        "subtest_outcomes_sha256": "6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109",
+        "locked_import_origins_sha256": "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A",
+        "pre_test_loaded_code_sha256": "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98",
+        "loaded_code_sha256": "C186ACEBF8165A195A4D66AF968A58E323B4C5943E84191DAA2CEF72FBD2B473",
+        "exact_setup_skipped_node_ids": [
+          "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_exact_locked_runtime_two_independent_fits",
+          "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_arbitrary_coefficient_rejected_by_full_refit_binding",
+          "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_altered_candidate_set_or_prediction_is_rejected_without_refit",
+          "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_exact_locked_fit_freezes_only_dual_layer18_layer0_nonreporting",
+          "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_exact_locked_projection_guards_cover_analysis_bundle_and_terminal",
+          "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_clean_phase_cannot_take_early_rejection_or_null_bundle_path"
+        ]
+      },
+      "historical_harness_508_receipt": {
+        "status": "HISTORICAL AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+        "coverage_boundary": "HISTORICAL 508-NODE PREREQUISITE-INTAKE CHECKPOINT / PREDATES THE EXTERNAL-INTAKE MODULE AND 21-FILE PACKAGE",
         "collected": 508,
         "started": 508,
         "finished": 508,
@@ -307,6 +342,41 @@
         "status": "OWNER_ASSERTED_CANDIDATE_STRUCTURAL_REPLAY_ONLY / NON_AUTHORITY",
         "authoritative_full_harness_replay": {
           "status": "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+          "coverage_boundary": "CURRENT 537-NODE FULL-HARNESS RECEIPT / BINDS THE 21-FILE EXTERNAL-INTAKE PACKAGE / DOES NOT ESTABLISH EXTERNAL TRUST OR RUNTIME AUTHORITY",
+          "collected": 537,
+          "started": 537,
+          "finished": 537,
+          "all_phase_passed": 531,
+          "setup_skipped": 6,
+          "ordinary_reports": 1605,
+          "passed_subtests": 163,
+          "warning_count": 0,
+          "error_count": 0,
+          "collection_errors": 0,
+          "internal_errors": 0,
+          "deselections": 0,
+          "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+          "pytest_exit_status": 0,
+          "process_exit_status": 0,
+          "elapsed_seconds": "1680.3",
+          "python_ordinal_node_id_sha256": "3AA22AE520FD2604AB8E8B1EAA6ED4A955DDDEB4BEBEF95F8B750A163AA5FB19",
+          "ordinary_outcomes_sha256": "423154C5C83DF299F844E87D289CBB98E331B302CE1ABA8AEA7075A12B1C0EFF",
+          "subtest_outcomes_sha256": "6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109",
+          "locked_import_origins_sha256": "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A",
+          "pre_test_loaded_code_sha256": "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98",
+          "loaded_code_sha256": "C186ACEBF8165A195A4D66AF968A58E323B4C5943E84191DAA2CEF72FBD2B473",
+          "exact_setup_skipped_node_ids": [
+            "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_exact_locked_runtime_two_independent_fits",
+            "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_arbitrary_coefficient_rejected_by_full_refit_binding",
+            "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_altered_candidate_set_or_prediction_is_rejected_without_refit",
+            "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_exact_locked_fit_freezes_only_dual_layer18_layer0_nonreporting",
+            "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_exact_locked_projection_guards_cover_analysis_bundle_and_terminal",
+            "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_clean_phase_cannot_take_early_rejection_or_null_bundle_path"
+          ]
+        },
+        "historical_harness_508_receipt": {
+          "status": "HISTORICAL AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+          "coverage_boundary": "HISTORICAL 508-NODE PREREQUISITE-INTAKE CHECKPOINT / PREDATES THE EXTERNAL-INTAKE MODULE AND 21-FILE PACKAGE",
           "collected": 508,
           "started": 508,
           "finished": 508,
@@ -335,14 +405,111 @@
             "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_clean_phase_cannot_take_early_rejection_or_null_bundle_path"
           ]
         }
+      },
+      "stagec_external_prerequisite_intake": {
+        "status": "PASS / READ_ONLY LOCAL-FILESYSTEM STRUCTURAL IMPORT TOOLING / NON_AUTHORITY / REAL 4-PLUS-12 INTAKE NOT PERFORMED",
+        "library": {
+          "source_path": "src/cas_harness_v2/diagnostic_stagec_prerequisite_external_intake.py",
+          "source_sha256": "865707DBBE5BE1560FFD1F065378C505BE89E48156F853166BC0E6CDA5896BB4",
+          "source_byte_length": 38821,
+          "test_path": "tests/cas_harness_v2/test_diagnostic_stagec_prerequisite_external_intake.py",
+          "test_source_sha256": "8E82DA357BE1DB0649BE069AC307C2AD1C1F380E9730B43240A4E26ABDBD7B5D",
+          "test_source_byte_length": 18129,
+          "schema_media_pairs": 3,
+          "public_exports": 20,
+          "fixed_roles": 16
+        },
+        "cli": {
+          "source_path": "scripts/import_project_coherence_stagec_prerequisites.py",
+          "source_sha256": "24DDDB2D357DE5D9737DE325BF405C28F05467DBF5182BAA410BE08E25A9F1B5",
+          "source_byte_length": 31668,
+          "test_path": "tests/cas_harness_v2/test_diagnostic_stagec_prerequisite_external_intake_cli.py",
+          "test_source_sha256": "E3014790E97872F825AA30865C0E3C4912B747C0DE7BC5F8B030C9C45508AA0B",
+          "test_source_byte_length": 14844,
+          "schema_media_pairs": 2,
+          "runtime": "PYTHON ISOLATED READ-ONLY / -I -B REQUIRED"
+        },
+        "evidence_file_helper": {
+          "source_path": "src/cas_harness_v2/artifacts.py",
+          "source_sha256": "969586F5FE5ED93C86F12F455D961E5EDFED62E023910F590772A9DD479BBC29",
+          "source_byte_length": 24247
+        },
+        "wire_pairs": {
+          "library": [
+            "cas_harness_v2.stagec_prerequisite_external_locator_manifest.v1 / application/vnd.cas-harness.stagec-prerequisite-external-locator-manifest+json",
+            "cas_harness_v2.stagec_prerequisite_external_intake_report.v1 / application/vnd.cas-harness.stagec-prerequisite-external-intake-report+json",
+            "cas_harness_v2.stagec_prerequisite_external_binding_report.v1 / application/vnd.cas-harness.stagec-prerequisite-external-binding-report+json"
+          ],
+          "cli": [
+            "cas_harness_v2.stagec_prerequisite_context_locator.v1 / application/vnd.cas-harness.stagec-prerequisite-context-locator+json",
+            "cas_harness_v2.stagec_prerequisite_external_cli_report.v1 / application/vnd.cas-harness.stagec-prerequisite-external-cli-report+json"
+          ]
+        },
+        "input_boundary": "EXPLICIT CANONICAL LOCATOR MANIFEST / EXACTLY 16 ROLE ENTRIES / STABLE ABSOLUTE LOCAL FILESYSTEM SNAPSHOTS ONLY / NO UNC, DEVICE, MAPPED-NETWORK, AMBIENT-CWD, OR FILENAME-INFERRED ROLE ASSIGNMENT",
+        "report_boundary": "CANONICAL STDOUT REPORTS CONTAIN ARTIFACT IDENTITIES AND PATH-CLOSURE DIGESTS BUT NO SOURCE PATHS; FAILURES ARE REDACTED",
+        "side_effect_boundary": "READ ONLY / ZERO FILE WRITES / ZERO NETWORK REQUESTS / ZERO PROVIDER ACTIONS / ZERO NONCE CREATION OR CONSUMPTION",
+        "current_focused_receipt": {
+          "library_nodes": 19,
+          "cli_nodes": 10,
+          "passed": 29,
+          "total": 29,
+          "elapsed_seconds": "47.72",
+          "passed_subtests": 0,
+          "pytest_exit_status": 0,
+          "python_ordinal_node_id_sha256": "A2D250135113EDD038C37040C94E11EE6E8B6208E14D53270F318FF48F06AD80"
+        },
+        "independent_prefinal_audit_receipt": {
+          "status": "PASS / PRE-FINAL CURRENT-SOURCE P0-P1 AUDIT CLEAN / SUPERSEDED AS CURRENT COUNT BY THE FINAL 29-NODE FOCUSED RUN",
+          "passed": 28,
+          "total": 28,
+          "elapsed_seconds": "47.93",
+          "pytest_exit_status": 0
+        },
+        "full_harness_replay": {
+          "status": "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+          "collected": 537,
+          "started": 537,
+          "finished": 537,
+          "all_phase_passed": 531,
+          "setup_skipped": 6,
+          "ordinary_reports": 1605,
+          "passed_subtests": 163,
+          "warning_count": 0,
+          "error_count": 0,
+          "collection_errors": 0,
+          "internal_errors": 0,
+          "deselections": 0,
+          "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+          "pytest_exit_status": 0,
+          "process_exit_status": 0,
+          "elapsed_seconds": "1680.3",
+          "python_ordinal_node_id_sha256": "3AA22AE520FD2604AB8E8B1EAA6ED4A955DDDEB4BEBEF95F8B750A163AA5FB19",
+          "ordinary_outcomes_sha256": "423154C5C83DF299F844E87D289CBB98E331B302CE1ABA8AEA7075A12B1C0EFF",
+          "subtest_outcomes_sha256": "6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109",
+          "locked_import_origins_sha256": "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A",
+          "pre_test_loaded_code_sha256": "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98",
+          "loaded_code_sha256": "C186ACEBF8165A195A4D66AF968A58E323B4C5943E84191DAA2CEF72FBD2B473",
+          "exact_setup_skipped_node_ids": [
+            "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_exact_locked_runtime_two_independent_fits",
+            "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_arbitrary_coefficient_rejected_by_full_refit_binding",
+            "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_altered_candidate_set_or_prediction_is_rejected_without_refit",
+            "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_exact_locked_fit_freezes_only_dual_layer18_layer0_nonreporting",
+            "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_exact_locked_projection_guards_cover_analysis_bundle_and_terminal",
+            "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_clean_phase_cannot_take_early_rejection_or_null_bundle_path"
+          ],
+          "historical_508_checkpoint": "508 COLLECTED / 502 ALL-PHASE PASS PLUS SIX EXACT SETUP SKIPS / 1518 ORDINARY REPORTS / 163 PASSING SUBTESTS / SHA-256 8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2 / HISTORICAL"
+        },
+        "packaging_status": "PACKAGING HANDOFF FROZEN / INCLUDED IN THE 21-FILE, 425-EXPORT, 1283080-BYTE MIRROR",
+        "authority_boundary": "THE IMPORTER DOES NOT AUTHENTICATE EXTERNAL TRUST, FREEZE A CORPUS, GRANT OR CONSUME RUNTIME AUTHORIZATION, WRITE EVIDENCE, CONTACT A NETWORK OR PROVIDER, OR EXECUTE A MODEL"
       }
     },
     "packaged_kernel": {
-      "byte_mirrored_files": 20,
-      "unique_exports": 405,
-      "packaging_provenance_sha256": "BC1DB23BD6132CB7AF9011292B7191038187D1BE7E40FC6684C5F66C8F0B9C37",
-      "canonical_and_mirror_init_sha256": "9DBC74D91E2787F436B1DBC192DE6BF876414A9FB3B7B2EB79B5C45E20AD7CF9",
-      "packaging_allowlist_source_sha256": "FDD2182E22BDA65C941974B4D358650DFE326BBDD806D11B373B9E273A2B473C",
+      "byte_mirrored_files": 21,
+      "unique_exports": 425,
+      "byte_mirrored_bytes": 1283080,
+      "packaging_provenance_sha256": "613A3E15748DC8F8CA49BB373BF3087F980E6A5762E709BC0E8ABFEB81A2957A",
+      "canonical_and_mirror_init_sha256": "F6EDF1A49FFD81AEB11F952344AF697DC43B03C5AC7FD6630D0FF2AC02FF9E59",
+      "packaging_allowlist_source_sha256": "752BC6F0081FDFBCA7EA58115897D545F5C3A75D322192533C58F41F37E33C91",
       "focused_mirror_tests_passed": 13
     }
   },
@@ -629,7 +796,17 @@
         "owner_assertion": "OWNER_ASSERTS_PRESENT / INTAKE ACTION NOT_PERFORMED_BY_INTAKE",
         "admission_decision": "ADMITTED_FOR_PROSPECTIVE_PREREGISTRATION_ONLY",
         "base_binding_rule": "A FUTURE IMMUTABLE DIAGNOSTIC BASE MUST CONTAIN THE EXACT PROMPT INVENTORY, FOUR CANDIDATES, ALL TWELVE CANDIDATE DEPENDENCIES, OWNER INTAKE, AND ADMISSION; AMENDMENT-ONLY BINDING IS FORBIDDEN",
-        "boundary": "STRUCTURAL REPLAY ONLY / SERIALIZED CANDIDATES ARE NOT AN EXTERNAL TRUST ROOT / NO ACTUAL DRC RUN, CORPUS FREEZE, PROVIDER AUTHENTICATION, WORM AUTHENTICITY, NONCE CONSUMPTION, RUNTIME INTEGRATION, EXECUTION, PACKET, CLAIM, LICENSE, DISCLOSURE, OR PRODUCT AUTHORITY"
+        "boundary": "STRUCTURAL REPLAY ONLY / SERIALIZED CANDIDATES ARE NOT AN EXTERNAL TRUST ROOT / NO ACTUAL DRC RUN, CORPUS FREEZE, PROVIDER AUTHENTICATION, WORM AUTHENTICITY, NONCE CONSUMPTION, RUNTIME INTEGRATION, EXECUTION, PACKET, CLAIM, LICENSE, DISCLOSURE, OR PRODUCT AUTHORITY",
+        "external_intake_tooling": {
+          "status": "READ-ONLY EXPLICIT-MANIFEST IMPORTER AND CLI IMPLEMENTED / REAL EXTERNAL INTAKE NOT PERFORMED",
+          "library_wire_pairs": 3,
+          "cli_wire_pairs": 2,
+          "library_public_exports": 20,
+          "fixed_external_roles": 16,
+          "source_rule": "STABLE ABSOLUTE LOCAL FILESYSTEM SNAPSHOTS ONLY / EXPLICIT MANIFEST ROLE ASSIGNMENT / NO FILENAME INFERENCE",
+          "report_rule": "NO SOURCE PATHS / CANONICAL ARTIFACT IDENTITIES AND PATH-CLOSURE DIGESTS ONLY",
+          "authority": "NON_AUTHORITY"
+        }
       }
     },
     "future_runnable_requirements_status": "PREFILL-ONLY / ZERO GENERATION / ZERO INTERVENTION REQUIREMENTS REMAIN PROSPECTIVE AND ARE NOT PROGRAM-LEVEL EXECUTION ATTESTATIONS FROM THE STRUCTURE_ONLY CANDIDATE",
@@ -1186,8 +1363,8 @@
     },
     {
       "obligation_id": "stagec-obligation-prerequisite-intake",
-      "status": "STRUCTURE_ONLY EXACT INTAKE AND PROSPECTIVE ADMISSION CONTRACT COMPLETE / REAL EXTERNAL INTAKE, PROVIDER TRUST, AND RUNTIME ENFORCEMENT OPEN",
-      "requirement": "Use the six typed candidate/intake/admission carriers and twelve typed dependency bodies to ingest, canonicalize, hash, full-replay, and role-check the owner-asserted detector DRC, 320-group/960-row corpus bundle, storage receipt set, and Stage C authorization candidate. Derive the prospective subject before authorization, bind all four candidates in the owner intake, and permit only ADMITTED_FOR_PROSPECTIVE_PREREGISTRATION_ONLY. Then create a new immutable diagnostic base containing the exact prompt inventory, candidate/dependency, intake, and admission refs before its execution window. The current 19/19 receipt uses structural fixtures; no external/provider authenticity, actual DRC run, actual corpus freeze, WORM/readback/trusted-time truth, authoritative runtime nonce issuance or consumption, or execution is established."
+      "status": "STRUCTURE_ONLY EXACT INTAKE, PROSPECTIVE ADMISSION, AND READ-ONLY EXTERNAL IMPORT TOOLING COMPLETE / REAL EXTERNAL INTAKE, PROVIDER TRUST, AND RUNTIME ENFORCEMENT OPEN",
+      "requirement": "Use the canonical context locator and fixed stagec_prerequisite_locator_manifest.v1.json to identify, snapshot, hash, full-replay, and role-check exactly four candidate carriers plus twelve dependency bodies from stable absolute local filesystem sources; filename inference is forbidden; the manifest role set and mapping-mode members must be exact, while unrelated directory files are outside the admitted closure and ignored. Then caller-supply the exact owner intake and admission and create a new immutable diagnostic base containing the exact prompt inventory, candidate/dependency, intake, and admission refs before its execution window. The library 19-node and CLI 10-node surfaces pass as one 29/29 focused receipt; the current authoritative full-Harness replay collected 537 nodes, passed 531 all phases, retained the same six setup skips as mismatch evidence rather than PASS, emitted 1605 ordinary reports and 163 passing subtests, and preserves the 508-node replay as a historical checkpoint. No external/provider authenticity, actual DRC run, actual corpus freeze, WORM/readback/trusted-time truth, authoritative runtime nonce issuance or consumption, or execution is established."
     },
     {
       "obligation_id": "stagec-obligation-corpus",
@@ -1273,8 +1450,8 @@
     },
     {
       "blocker_id": "stagec-owner-asserted-candidates-are-not-external-trust-or-runtime-authority",
-      "source": "src/cas_harness_v2/diagnostic_stagec_prerequisite_admission.py",
-      "fact": "The owner assertion records four candidate roles as OWNER_ASSERTS_PRESENT, and the additive contract can canonicalize and full-replay exact Stage C-shaped candidate/dependency bytes before admitting them for prospective preregistration only. Its 19/19 tests use structural fixtures. Serialized candidate claims cannot authenticate a DRC execution, prove that the real 960-row corpus was externally frozen, authenticate Object Lock/readback/trusted-time provider facts, issue or consume a runtime nonce, prove out-of-band prevention, or execute Stage C. External/provider trust and runtime enforcement remain NOT_ESTABLISHED / NOT_PERFORMED."
+      "source": "src/cas_harness_v2/diagnostic_stagec_prerequisite_admission.py, diagnostic_stagec_prerequisite_external_intake.py, and scripts/import_project_coherence_stagec_prerequisites.py",
+      "fact": "The owner assertion records four candidate roles as OWNER_ASSERTS_PRESENT. The exact admission contract can canonicalize and full-replay Stage C-shaped bytes, and the read-only external importer can now collect exactly 16 explicitly manifested carrier/dependency roles from stable local filesystem snapshots with no filename inference or path disclosure. The 19 library plus 10 CLI nodes pass, but no real 4-plus-12 evidence set has been supplied to this path. Serialized candidate claims and successful local import mechanics cannot authenticate a DRC execution, prove that the real 960-row corpus was externally frozen, authenticate Object Lock/readback/trusted-time provider facts, issue or consume a runtime nonce, prove out-of-band prevention, or execute Stage C. External/provider trust and runtime enforcement remain NOT_ESTABLISHED / NOT_PERFORMED."
     },
     {
       "blocker_id": "mandatory-heldout-role-does-not-establish-independence",
@@ -1304,7 +1481,7 @@
     "carrier_limit_bytes": 2000000,
     "large_artifact_policy": "EXTERNAL CONTENT-ADDRESSED FILE-BACKED REGISTRY / NO LARGE BLOBS UNDER THE GIT-BOUND GATE 5 PACKAGE",
     "prerequisite_intake_binding_rule": "OWNER ASSERTS FOUR CANDIDATES PRESENT; AN ACTUAL FUTURE C-CAL BASE MUST HASH/LENGTH/MEDIA BIND THE EXACT PROMPT INVENTORY, DRC RECEIPT PLUS THREE DEPENDENCIES, CORPUS BUNDLE PLUS FOUR DEPENDENCIES, STORAGE RECEIPT PLUS FOUR DEPENDENCIES, AUTHORIZATION CANDIDATE PLUS ITS INSTRUMENT, OWNER INTAKE, AND PROSPECTIVE-ONLY ADMISSION. STRUCTURAL TEST FIXTURES AND SERIALIZED CLAIMS DO NOT ESTABLISH EXTERNAL TRUST OR RUNTIME AUTHORITY.",
-    "current_prerequisite_instance_status": "CONTRACT IMPLEMENTED AND FOCUSED 19/19 PASS / REAL EXTERNAL 4-OF-4 INTAKE NOT PERFORMED / NO ACTUAL BASE PREREGISTRATION / NO RUNTIME CONSUMPTION",
+    "current_prerequisite_instance_status": "CONTRACT PLUS READ-ONLY EXPLICIT-MANIFEST IMPORTER IMPLEMENTED AND FOCUSED 19-LIBRARY-PLUS-10-CLI PASS / REAL EXTERNAL 4-PLUS-12 INTAKE NOT PERFORMED / NO ACTUAL BASE PREREGISTRATION / NO RUNTIME CONSUMPTION",
     "base_preregistration_artifact_ids": [
       "stagec-claim-ledger-001",
       "stagec-corpus-manifest-001",

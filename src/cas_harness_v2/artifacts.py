@@ -87,7 +87,15 @@ def _normalize_file_path(value: object) -> Path:
         raise SchemaValidationError("artifact file path must be path-like") from exc
     if type(raw) is not str or not raw or "\x00" in raw:
         raise SchemaValidationError("artifact file path must be non-empty text")
-    return Path(os.path.abspath(raw))
+    normalized = Path(os.path.abspath(raw))
+    if os.name == "nt":
+        rendered = str(normalized)
+        drive = normalized.drive
+        if ":" in rendered[len(drive) :]:
+            raise SchemaValidationError(
+                "artifact file path must not select an NTFS alternate data stream"
+            )
+    return normalized
 
 
 def _is_reparse(value: _StableFileIdentity) -> bool:
@@ -204,6 +212,7 @@ def _open_file_no_follow(path: Path) -> int:
 def _hash_stable_file(
     path: Path,
     *,
+    maximum_byte_count: int | None = None,
     expected_path_identity: _StableFileIdentity | None = None,
     expected_handle_identity: _StableFileIdentity | None = None,
     expected_components: tuple[
@@ -222,6 +231,11 @@ def _hash_stable_file(
 
     components_before = _component_identities(path)
     path_identity_before = _lstat_regular_file(path)
+    if (
+        maximum_byte_count is not None
+        and path_identity_before.byte_count > maximum_byte_count
+    ):
+        raise SchemaValidationError("artifact file exceeds the capture byte bound")
     if (
         expected_components is not None
         and components_before != expected_components
@@ -304,6 +318,95 @@ def _hash_stable_file(
     )
 
 
+def _snapshot_stable_file_bytes(
+    path: Path,
+    *,
+    maximum_byte_count: int,
+    expected_path_identity: _StableFileIdentity,
+    expected_handle_identity: _StableFileIdentity,
+    expected_components: tuple[
+        tuple[str, _StructuralPathIdentity],
+        ...,
+    ],
+) -> tuple[bytes, str]:
+    """Copy one bounded file from the same handle whose identity is verified."""
+
+    components_before = _component_identities(path)
+    path_identity_before = _lstat_regular_file(path)
+    if components_before != expected_components:
+        raise SchemaValidationError("artifact file path or ancestor identity changed")
+    if path_identity_before != expected_path_identity:
+        raise SchemaValidationError("artifact file identity or metadata changed")
+    if path_identity_before.byte_count > maximum_byte_count:
+        raise SchemaValidationError("artifact file exceeds the snapshot byte bound")
+
+    descriptor = _open_file_no_follow(path)
+    try:
+        handle_identity_before = _StableFileIdentity.from_stat(os.fstat(descriptor))
+        _validate_unique_regular_file(handle_identity_before)
+        if handle_identity_before != expected_handle_identity:
+            raise SchemaValidationError("artifact file handle identity changed")
+        if not _same_open_file(path_identity_before, handle_identity_before):
+            raise SchemaValidationError(
+                "artifact file changed between path inspection and open"
+            )
+
+        chunks: list[bytes] = []
+        digest = hashlib.sha256()
+        byte_length = 0
+        maximum_read = min(
+            handle_identity_before.byte_count + 1,
+            maximum_byte_count + 1,
+        )
+        while byte_length < maximum_read:
+            chunk = os.read(
+                descriptor,
+                min(_FILE_HASH_CHUNK_SIZE, maximum_read - byte_length),
+            )
+            if not chunk:
+                break
+            chunks.append(chunk)
+            digest.update(chunk)
+            byte_length += len(chunk)
+        if byte_length > maximum_byte_count:
+            raise SchemaValidationError("artifact file exceeds the snapshot byte bound")
+        if byte_length > handle_identity_before.byte_count:
+            raise SchemaValidationError("artifact file grew while it was copied")
+
+        handle_identity_after = _StableFileIdentity.from_stat(os.fstat(descriptor))
+        _validate_unique_regular_file(handle_identity_after)
+        if handle_identity_after != handle_identity_before:
+            raise SchemaValidationError("artifact file changed while it was copied")
+        if byte_length != handle_identity_after.byte_count:
+            raise SchemaValidationError(
+                "artifact file byte count changed while it was copied"
+            )
+    except OSError as exc:
+        raise SchemaValidationError("artifact file could not be copied safely") from exc
+    finally:
+        try:
+            os.close(descriptor)
+        except OSError as exc:
+            raise SchemaValidationError(
+                "artifact file handle could not be closed safely"
+            ) from exc
+
+    components_after = _component_identities(path)
+    path_identity_after = _lstat_regular_file(path)
+    if components_after != components_before:
+        raise SchemaValidationError(
+            "artifact file path or ancestor changed while it was copied"
+        )
+    if path_identity_after != path_identity_before or not _same_open_file(
+        path_identity_after,
+        handle_identity_after,
+    ):
+        raise SchemaValidationError("artifact file path changed while it was copied")
+    if byte_length < 1:
+        raise SchemaValidationError("artifact file must not be empty")
+    return b"".join(chunks), digest.hexdigest().upper()
+
+
 @dataclass(frozen=True, slots=True)
 class EvidenceBytes:
     artifact_id: str
@@ -371,10 +474,22 @@ class EvidenceFile:
             )
 
     @classmethod
-    def from_path(cls, artifact_id: str, path: object) -> EvidenceFile:
+    def from_path(
+        cls,
+        artifact_id: str,
+        path: object,
+        *,
+        maximum_byte_count: int | None = None,
+    ) -> EvidenceFile:
         """Capture a regular non-link file without materializing it in memory."""
 
         expect_machine_id(artifact_id, "EvidenceFile.artifact_id")
+        if maximum_byte_count is not None:
+            expect_int(
+                maximum_byte_count,
+                "EvidenceFile.from_path.maximum_byte_count",
+                minimum=1,
+            )
         normalized = _normalize_file_path(path)
         (
             digest,
@@ -382,7 +497,10 @@ class EvidenceFile:
             path_identity,
             handle_identity,
             component_identities,
-        ) = _hash_stable_file(normalized)
+        ) = _hash_stable_file(
+            normalized,
+            maximum_byte_count=maximum_byte_count,
+        )
         return cls(
             artifact_id=artifact_id,
             path=normalized,
@@ -417,6 +535,32 @@ class EvidenceFile:
             and component_identities == self._component_identities
             and digest == self.sha256
             and byte_length == self.byte_length
+        )
+
+    def snapshot_bytes(self, *, maximum_byte_count: int) -> EvidenceBytes:
+        """Return a bounded detached copy from one identity-checked open handle."""
+
+        expect_int(
+            maximum_byte_count,
+            "EvidenceFile.snapshot_bytes.maximum_byte_count",
+            minimum=1,
+        )
+        raw_bytes, digest = _snapshot_stable_file_bytes(
+            self.path,
+            maximum_byte_count=maximum_byte_count,
+            expected_path_identity=self._path_identity,
+            expected_handle_identity=self._handle_identity,
+            expected_components=self._component_identities,
+        )
+        if digest != self.sha256 or len(raw_bytes) != self.byte_length:
+            raise SchemaValidationError(
+                "artifact file bytes do not match the captured identity"
+            )
+        return EvidenceBytes(
+            artifact_id=self.artifact_id,
+            raw_bytes=raw_bytes,
+            sha256=digest,
+            byte_length=len(raw_bytes),
         )
 
 

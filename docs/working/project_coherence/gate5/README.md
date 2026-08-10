@@ -42,8 +42,8 @@ checkpoint is preserved historically at 489 collected/started/finished nodes
 mismatch evidence rather than PASS, and it emitted 1,461 ordinary reports and
 163 passing subtests. It recorded zero warnings, errors, or deselections, left
 the isolated pycache empty, and exited pytest 0. The packaged
-surface is 20 files, 405 exports, and 1,236,504 bytes under provenance SHA-256
-`BC1DB23BD6132CB7AF9011292B7191038187D1BE7E40FC6684C5F66C8F0B9C37`.
+surface is 21 files, 425 exports, and 1,283,080 bytes under provenance SHA-256
+`613A3E15748DC8F8CA49BB373BF3087F980E6A5762E709BC0E8ABFEB81A2957A`.
 Gate 5 remains `OPEN / KEEP_OPEN`; Stage C remains `DESIGN_ONLY /
 UNAUTHORIZED / NOT_STARTED`; claims remain `NOT LICENSED / HELD / NOT FROZEN`.
 
@@ -73,15 +73,25 @@ test SHA-256
 and node-ID SHA-256
 `3785ADB97900ABAB40242DFD6DF1D0665B9996BAE94EC2697672A8506DCBE863`.
 The current authoritative locked same-process Harness replay collected,
-started, and finished 508 nodes. Exactly 502 had exact all-phase PASS; the same
-six exact nodes setup-skipped as runtime-lock mismatch evidence, not PASS. It
-emitted 1,518 ordinary reports and 163 passing subtests, recorded zero warnings,
-collection or internal errors, or deselections, left the isolated pycache
-empty, exited pytest 0, and bound node-ID SHA-256
-`8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
+started, and finished 537 nodes in 1,680.3 seconds. Exactly 531 had exact
+all-phase PASS; the same six exact nodes setup-skipped as runtime-lock mismatch
+evidence, not PASS. It emitted 1,605 ordinary reports/outcomes and 163 passing
+subtests, recorded zero warnings, errors, collection or internal errors, or
+deselections, left the isolated pycache empty; pytest and the verifier process
+each exited 0. It bound node-ID SHA-256
+`3AA22AE520FD2604AB8E8B1EAA6ED4A955DDDEB4BEBEF95F8B750A163AA5FB19`.
 Its ordinary- and subtest-outcome digests are
-`4A9D6F31D341F51BBC7D339750BDCB69B444827CF58B08439BF05BC3A86DD766`
+`423154C5C83DF299F844E87D289CBB98E331B302CE1ABA8AEA7075A12B1C0EFF`
 and `6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109`.
+Locked-import, pre-test-loaded-code, and loaded-code digests are
+`3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A`,
+`0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98`,
+and `C186ACEBF8165A195A4D66AF968A58E323B4C5943E84191DAA2CEF72FBD2B473`.
+The integrated verifier PASS covered 637 artifacts, 409 syntax-checked Python
+files, and 2,255 executable-shadow paths. The preceding 508-node receipt is
+preserved as a historical checkpoint: 502 all-phase passes plus the same six
+exact setup skips, 1,518 ordinary reports, 163 passing subtests, and node-ID
+SHA-256 `8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
 
 This is `OWNER_ASSERTED_CANDIDATE_STRUCTURAL_REPLAY_ONLY / NON_AUTHORITY`.
 The focused fixtures do not authenticate an external DRC run, freeze the real
@@ -89,6 +99,45 @@ The focused fixtures do not authenticate an external DRC run, freeze the real
 issue or consume a runtime nonce, wire the controller/worker path, or execute a
 model. Those facts remain `NOT ESTABLISHED / NOT PERFORMED`; all Gate 5,
 Stage C, license, disclosure, and corpus statuses above remain unchanged.
+
+## Stage C external-intake library and CLI
+
+The new read-only external-intake library closes the deterministic local
+handoff shape without closing the evidence gate. It exposes 20 public exports
+and three wire pairs (fixed external locator manifest, intake report, and
+binding report). The isolated CLI adds two wire pairs (context locator and CLI
+report). A canonical locator must explicitly enumerate the exact 16 external
+roles: four candidate carriers and 12 dependencies. There is no filename
+inference, directory guessing, or missing-role synthesis.
+
+The input boundary is stable, absolute local-filesystem snapshots only;
+ambient-CWD, UNC/device, and mapped-network paths are rejected. Reports omit
+source paths and retain only artifact identities, counts, and closure digests.
+The path performs zero writes, network requests, provider actions, nonce
+creation/consumption, and model execution. It does not authenticate an external
+trust root or turn a serialized authorization into runtime authority.
+
+| Surface | SHA-256 | Bytes |
+|---|---|---:|
+| External-intake library | `865707DBBE5BE1560FFD1F065378C505BE89E48156F853166BC0E6CDA5896BB4` | 38,821 |
+| Library tests | `8E82DA357BE1DB0649BE069AC307C2AD1C1F380E9730B43240A4E26ABDBD7B5D` | 18,129 |
+| Read-only CLI | `24DDDB2D357DE5D9737DE325BF405C28F05467DBF5182BAA410BE08E25A9F1B5` | 31,668 |
+| CLI tests | `E3014790E97872F825AA30865C0E3C4912B747C0DE7BC5F8B030C9C45508AA0B` | 14,844 |
+| Stable evidence-file helper | `969586F5FE5ED93C86F12F455D961E5EDFED62E023910F590772A9DD479BBC29` | 24,247 |
+
+The 19 library plus 10 CLI nodes pass 29/29 in 47.72 seconds with zero
+subtests, pytest exit 0, and digest
+`A2D250135113EDD038C37040C94E11EE6E8B6208E14D53270F318FF48F06AD80`.
+The independent pre-final audit passed 28/28 in 47.93 seconds and found no
+current-source P0/P1 issue; the final 29-node receipt supersedes it as the
+current focused count. The current 537-node authoritative full-Harness receipt
+is the integrated replay recorded above. The 508-node replay remains preserved
+as historical evidence and is no longer current.
+
+The next obligation remains a real exact 4+12 intake, followed by post-plan
+runtime activation. Gate 5 remains `OPEN / KEEP_OPEN`; Stage C remains
+`DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`; `NOT LICENSED / HELD / NOT FROZEN`
+is unchanged.
 
 ## Control artifacts
 
@@ -381,17 +430,17 @@ receipt with digest
 `DB5F9FD886A1714D4E9FE2CE4A2F2336DA3B0A414D5115D1B86B5A885EECDC39`.
 It emitted 297 ordinary reports, zero subtests, one warning, and zero errors or
 deselections, left the isolated pycache empty, and exited pytest 0. The current package
-inventory contains 20 byte-mirrored kernel files, 405 unique exports, and
-1,236,504 bytes. Its packaging-provenance SHA-256 is
-`BC1DB23BD6132CB7AF9011292B7191038187D1BE7E40FC6684C5F66C8F0B9C37`;
+inventory contains 21 byte-mirrored kernel files, 425 unique exports, and
+1,283,080 bytes. Its packaging-provenance SHA-256 is
+`613A3E15748DC8F8CA49BB373BF3087F980E6A5762E709BC0E8ABFEB81A2957A`;
 13 focused mirror tests pass. Canonical/mirror `__init__.py` SHA-256 is
-`9DBC74D91E2787F436B1DBC192DE6BF876414A9FB3B7B2EB79B5C45E20AD7CF9`,
+`F6EDF1A49FFD81AEB11F952344AF697DC43B03C5AC7FD6630D0FF2AC02FF9E59`,
 and the packaging allowlist source SHA-256 is
-`FDD2182E22BDA65C941974B4D358650DFE326BBDD806D11B373B9E273A2B473C`.
-The historical 437- and 489-node Harness receipts below predate this expanded
-package; the current authoritative 508-node Harness and 99-node adapter
-receipts bind the expanded surface. Every nonauthority boundary remains
-binding.
+`752BC6F0081FDFBCA7EA58115897D545F5C3A75D322192533C58F41F37E33C91`.
+The historical 437-, 489-, and 508-node Harness receipts below predate this
+expanded package. The current 537-node authoritative Harness replay binds the
+new 21-file surface; the 99-node adapter receipt remains a historical integrated
+checkpoint. Every nonauthority boundary remains binding.
 
 The retained local GPU-canary and joined-mechanics evidence suite passes 27/27
 without rerunning a model. Its canonical node-ID digest is:
@@ -897,11 +946,14 @@ isolated pycache empty, exited pytest 0, and bound exact node-ID digest
 `A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`.
 
 The current authoritative locked same-process Harness replay collected,
-started, and finished 508 nodes. Exactly 502 had exact all-phase PASS; the same
+started, and finished 537 nodes. Exactly 531 had exact all-phase PASS; the same
 six exact fit/disposition nodes setup-skipped as runtime-lock mismatch evidence,
-not PASS. It emitted 1,518 ordinary reports and 163 passing subtests, recorded
-zero warnings, collection or internal errors, or deselections, left the
-isolated pycache empty, exited pytest 0, and bound exact node-ID digest
+not PASS. It emitted 1,605 ordinary reports/outcomes and 163 passing subtests,
+recorded zero warnings, errors, collection or internal errors, or deselections,
+left the isolated pycache empty, recorded pytest and verifier process exits 0, and
+bound exact node-ID digest
+`3AA22AE520FD2604AB8E8B1EAA6ED4A955DDDEB4BEBEF95F8B750A163AA5FB19`.
+The 508-node receipt is retained as a historical checkpoint at
 `8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
 
 The authoritative same-process worker receipt collected, started, finished,

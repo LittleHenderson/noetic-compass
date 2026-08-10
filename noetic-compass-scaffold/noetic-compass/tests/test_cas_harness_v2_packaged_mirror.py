@@ -157,11 +157,15 @@ def test_packaged_mirror_import_resolves_inside_the_docker_context() -> None:
     assert completed.returncode == 0, completed.stderr
 
 
-def test_packaged_prompt_context_modules_are_exported_exactly() -> None:
+def test_packaged_prompt_context_modules_are_exported_exactly(tmp_path: Path) -> None:
+    snapshot_payload = b'{"external":"candidate-snapshot"}\n'
+    snapshot_path = tmp_path / "candidate.json"
+    snapshot_path.write_bytes(snapshot_payload)
     probe = "\n".join(
         (
             "import importlib",
             "import sys",
+            "from pathlib import Path",
             f"sys.path.insert(0, {str(APP_ROOT)!r})",
             "package = importlib.import_module('cas_harness_v2')",
             "provenance = importlib.import_module(",
@@ -173,18 +177,37 @@ def test_packaged_prompt_context_modules_are_exported_exactly() -> None:
             "prerequisite = importlib.import_module(",
             "    'cas_harness_v2.diagnostic_stagec_prerequisite_admission'",
             ")",
+            "external = importlib.import_module(",
+            "    'cas_harness_v2.diagnostic_stagec_prerequisite_external_intake'",
+            ")",
+            "artifacts = importlib.import_module('cas_harness_v2.artifacts')",
             "assert len(provenance.__all__) == len(set(provenance.__all__)) == 32",
             "assert len(inventory.__all__) == len(set(inventory.__all__)) == 11",
             "assert len(prerequisite.__all__) == len(set(prerequisite.__all__)) == 62",
-            "assert len(package.__all__) == len(set(package.__all__)) == 405",
+            "assert len(external.__all__) == len(set(external.__all__)) == 20",
+            "assert len(package.__all__) == len(set(package.__all__)) == 425",
             "assert len([name for name in prerequisite.__all__ if name.endswith('_SCHEMA')]) == 18",
             "assert len([name for name in prerequisite.__all__ if name.endswith('_MEDIA_TYPE')]) == 18",
-            "for module in (provenance, inventory, prerequisite):",
+            "assert len([name for name in external.__all__ if name.endswith('_SCHEMA')]) == 3",
+            "assert len([name for name in external.__all__ if name.endswith('_MEDIA_TYPE')]) == 3",
+            "for module in (provenance, inventory, prerequisite, external):",
             "    assert set(module.__all__) <= set(package.__all__)",
             "    assert all(",
             "        getattr(package, name) is getattr(module, name)",
             "        for name in module.__all__",
             "    )",
+            f"payload = {snapshot_payload!r}",
+            f"source = Path({str(snapshot_path)!r})",
+            "evidence_file = artifacts.EvidenceFile.from_path(",
+            "    'packaged-external-candidate-snapshot',",
+            "    source,",
+            "    maximum_byte_count=len(payload),",
+            ")",
+            "snapshot = evidence_file.snapshot_bytes(maximum_byte_count=len(payload))",
+            "assert snapshot.raw_bytes == payload",
+            "assert snapshot.sha256 == evidence_file.sha256",
+            "assert snapshot.byte_length == evidence_file.byte_length == len(payload)",
+            "assert package.EvidenceFile is artifacts.EvidenceFile",
         )
     )
     completed = subprocess.run(

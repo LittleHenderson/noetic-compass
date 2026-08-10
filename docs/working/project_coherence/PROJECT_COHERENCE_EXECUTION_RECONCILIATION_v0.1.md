@@ -47,6 +47,14 @@ dependency bindings have not been authenticated by this tranche. Owner intent
 and structural fixtures are not substitutes for provider evidence, runtime
 nonce consumption, or an executed protocol artifact.
 
+The additive read-only external-intake library and isolated CLI now define how
+those supplied bytes can enter structural replay: one explicit context locator,
+one fixed manifest with exactly 16 roles (four carriers plus 12 dependencies),
+stable absolute local-file snapshots, no filename inference, and path-redacted
+canonical reports. This closes an importer shape only. It does not authenticate
+the source, freeze the corpus, grant or consume runtime authorization, write evidence,
+contact a provider, or execute a model.
+
 ## 2. Commit and review evidence
 
 At the published baseline snapshot, local and remote branch heads matched. Draft PR 209
@@ -70,7 +78,7 @@ review, scientific validity, safety, licensing, or disclosure approval.
 | Category and Sheaf Theory | Finite transverse model, provenance-bearing covers, bounded modality results, and context lemmas | Product/observational lift, backward comparison, richer cross-context semantics, full formalization, and independent review |
 | Dynamics and Geometry | Typed finite-function kernel, deterministic lifts, and bounded normal-form implementation | Exact/approximate calculus, universal proof obligations, capacity transfer, v7.4 semantic mapping, and independent review |
 | PCBA and Systems Engineering | Typed bounded Core/PCBA/Ohm candidates, DRC traces, and retained known-fault fixtures | Complete CCDL/stateful semantics, Python/Rust conformance, live calibration, safety validation, source-conflict decisions, and external review |
-| Harness Experimental Science | Preregistration/Packet kernels; Stage C diagnostic execution, lifecycle, phase, fit, and nonreporting-disposition candidates; per-request prompt-context provenance; exact split-order 480-row provenance inventory; and a strict four-role prerequisite intake/prospective-base binding contract | Actual external four-candidate intake and authentication, a new immutable base, runtime enforcement, real deterministic DRC execution, trusted runner/time, independent WORM anchor, real corpus/power freeze, authorized experiments, controls, numerical agreement, replication, falsifiers, and eligible Packets |
+| Harness Experimental Science | Preregistration/Packet kernels; Stage C diagnostic execution, lifecycle, phase, fit, and nonreporting-disposition candidates; per-request prompt-context provenance; exact split-order 480-row provenance inventory; a strict four-role prerequisite intake/prospective-base binding contract; and a read-only explicit-manifest external importer | Actual exact 4+12 external intake and authentication, a new immutable base, runtime enforcement, real deterministic DRC execution, trusted runner/time, independent WORM anchor, real corpus/power freeze, authorized experiments, controls, numerical agreement, replication, falsifiers, and eligible Packets |
 | Verification, Publication, and IP | Internal manifests, adversarial verification, and seven source-bound paper drafts | Independent reviewers, authorship/novelty decisions, legal/patent/disclosure review, submission decisions, and release authority |
 
 Every cell remains partial. No cell may promote its own work.
@@ -84,7 +92,7 @@ Every cell remains partial. No cell may promote its own work.
 | Gate 2 | Bounded typed-composition kernel, deterministic lifts, shortlex finite-catalog normal forms, mismatch rejection | Exact/approximate calculus, compatibility parser, complete v7.4 mapping, universal proofs, independent review | `OPEN / CANDIDATE IMPLEMENTATION IN REVIEW` |
 | Gate 3 | Precise finite-factor information-loss account, nontrivial finite model, marked-cover records, bounded modal results | Observational/product-site provenance, product-site modality lift, backward comparison, richer semantics, complete proof and review | `OPEN / FINITE REFERENCE CANDIDATE IN REVIEW` |
 | Gate 4 | Bounded Core/PCBA/Ohm candidates and 208 focused methods with preserved negative evidence | Hermetic compiler closure, Python/Rust conformance, complete grammar/state, authenticated calibration, empirical/safety validation, canon and disclosure decisions | `OPEN / RING 4 BOUNDED SOFTWARE CANDIDATES TESTED` |
-| Gate 5 | Hash-bound structural kernel, worker archive admission, diagnostic-v2 carriers, one-attempt lifecycle, exact 480-row reconciliation, deterministic calibration fit, immutable nonreporting disposition, typed prompt-context DAGs, exact-480 provenance inventory, and strict Stage C four-role intake/prospective-base binding contract | Actual externally authenticated four-candidate intake, an immutable C-Cal base, runtime enforcement, authorized HTTP/container runner, trusted execution/time, independent WORM/external anchor, out-of-band prevention, real frozen corpus/power/surface artifacts, real C-Cal/C-Eval, controls, replication, Packet, claim review | `OPEN / KEEP_OPEN`; experiment `NOT_STARTED` |
+| Gate 5 | Hash-bound structural kernel, worker archive admission, diagnostic-v2 carriers, one-attempt lifecycle, exact 480-row reconciliation, deterministic calibration fit, immutable nonreporting disposition, typed prompt-context DAGs, exact-480 provenance inventory, strict Stage C four-role intake/prospective-base binding, and read-only explicit-manifest external intake | Actual externally authenticated exact 4+12 intake, an immutable C-Cal base, runtime enforcement, authorized HTTP/container runner, trusted execution/time, independent WORM/external anchor, out-of-band prevention, real frozen corpus/power/surface artifacts, real C-Cal/C-Eval, controls, replication, Packet, claim review | `OPEN / KEEP_OPEN`; experiment `NOT_STARTED` |
 
 The authoritative Gate 5 snapshot verified 622 artifacts. The Harness receipt
 covered 437 configured nodes: 431 all-phase passes plus exactly six expected
@@ -94,9 +102,9 @@ software receipts only.
 
 The additive prompt-context candidate subsequently passed 30 per-request
 provenance tests, 22 aggregate-inventory tests, and a 98-test combined replay
-with the diagnostic Study protocol. The application mirror now contains 20
-byte-identical Python files and 405 unique exports. The prior prompt-context
-Harness checkpoint is preserved historically at 489 collected/started/finished
+with the diagnostic Study protocol. The application mirror now contains 21
+byte-identical Python files, 425 unique exports, and 1,283,080 bytes. The prior
+prompt-context Harness checkpoint is preserved historically at 489 collected/started/finished
 nodes: 483
 had exact all-phase PASS, the six declared numerical-runtime nodes retained
 their exact setup-skip shape, 1,461 ordinary reports and 163 passing subtests
@@ -117,23 +125,49 @@ and node-ID SHA-256 is
 `3785ADB97900ABAB40242DFD6DF1D0665B9996BAE94EC2697672A8506DCBE863`.
 It exposes 18 schema/media-type pairs and 62 public exports. The resulting
 current authoritative locked same-process Harness replay collected, started,
-and finished 508 nodes. Exactly 502 had exact all-phase PASS; the same six exact
-nodes setup-skipped as runtime-lock mismatch evidence, not PASS. It emitted
-1,518 ordinary reports and 163 passing subtests, recorded zero warnings,
-collection or internal errors, or deselections, left the isolated pycache
-empty, exited pytest 0, and bound node-ID SHA-256
-`8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
+and finished 537 nodes in 1,680.3 seconds. Exactly 531 had exact all-phase PASS;
+the same six exact nodes setup-skipped as runtime-lock mismatch evidence, not
+PASS. It emitted 1,605 ordinary reports/outcomes and 163 passing subtests,
+recorded zero warnings, errors, collection or internal errors, or deselections,
+left the isolated pycache empty; pytest and the verifier process each exited 0.
+It bound node-ID SHA-256
+`3AA22AE520FD2604AB8E8B1EAA6ED4A955DDDEB4BEBEF95F8B750A163AA5FB19`.
 The ordinary-outcome, subtest-outcome, locked-import, pre-test-loaded-code, and
 loaded-code SHA-256 values are, respectively,
-`4A9D6F31D341F51BBC7D339750BDCB69B444827CF58B08439BF05BC3A86DD766`,
+`423154C5C83DF299F844E87D289CBB98E331B302CE1ABA8AEA7075A12B1C0EFF`,
 `6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109`,
 `3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A`,
 `0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98`,
-and `61B3498CA938329FAD5BA181199F658DB5BF53712D890D3A9095711074E91846`.
+and `C186ACEBF8165A195A4D66AF968A58E323B4C5943E84191DAA2CEF72FBD2B473`.
+The integrated verifier PASS covered 637 artifacts, 409 syntax-checked Python
+files, and 2,255 executable-shadow paths. The preceding 508-node receipt is
+preserved explicitly as a historical checkpoint: 502 all-phase passes plus the
+same six exact setup skips, 1,518 ordinary reports, 163 passing subtests, and
+node-ID SHA-256
+`8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
 The focused receipt uses structural fixtures and establishes neither external
 provider trust nor an actual DRC run, real 960-row corpus freeze,
 WORM/readback/trusted-time authenticity, authoritative runtime authorization or
 nonce consumption, runtime enforcement, or execution.
+
+The read-only external-intake addition is frozen at these source/test/CLI/
+CLI-test/helper SHA-256 values and byte lengths:
+`865707DBBE5BE1560FFD1F065378C505BE89E48156F853166BC0E6CDA5896BB4` /
+38,821; `8E82DA357BE1DB0649BE069AC307C2AD1C1F380E9730B43240A4E26ABDBD7B5D` /
+18,129; `24DDDB2D357DE5D9737DE325BF405C28F05467DBF5182BAA410BE08E25A9F1B5` /
+31,668; `E3014790E97872F825AA30865C0E3C4912B747C0DE7BC5F8B030C9C45508AA0B` /
+14,844; and `969586F5FE5ED93C86F12F455D961E5EDFED62E023910F590772A9DD479BBC29` /
+24,247. The library has three wire pairs, 20 exports, and 16 roles; the CLI
+adds two locator/report pairs. Sources are stable local files only, role
+assignment is explicit-manifest-only, and reports expose no source paths.
+
+Its 19 library plus 10 CLI nodes pass 29/29 in 47.72 seconds with zero
+subtests, exit 0, and digest
+`A2D250135113EDD038C37040C94E11EE6E8B6208E14D53270F318FF48F06AD80`.
+The independent pre-final audit passed 28/28 in 47.93 seconds with a clean P0/P1
+verdict. The current 537-node authoritative receipt is the integrated replay
+recorded above; the 508-node replay remains preserved as historical evidence
+and is no longer the current full-Harness checkpoint.
 
 ## 5. Planned schedule versus evidence
 

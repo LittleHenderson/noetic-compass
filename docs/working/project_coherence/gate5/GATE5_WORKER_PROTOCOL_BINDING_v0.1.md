@@ -79,18 +79,67 @@ test SHA-256
 and node-ID SHA-256
 `3785ADB97900ABAB40242DFD6DF1D0665B9996BAE94EC2697672A8506DCBE863`.
 The current authoritative locked same-process Harness replay collected,
-started, and finished 508 nodes. Exactly 502 had exact all-phase PASS; the same
-six exact nodes setup-skipped as runtime-lock mismatch evidence, not PASS. It
-emitted 1,518 ordinary reports and 163 passing subtests, recorded zero warnings,
-collection or internal errors, or deselections, left the isolated pycache
-empty, exited pytest 0, and bound node-ID SHA-256
-`8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
+started, and finished 537 nodes in 1,680.3 seconds. Exactly 531 had exact
+all-phase PASS; the same six exact nodes setup-skipped as runtime-lock mismatch
+evidence, not PASS. It emitted 1,605 ordinary reports/outcomes and 163 passing
+subtests, recorded zero warnings, errors, collection or internal errors, or
+deselections, left the isolated pycache empty; pytest and the verifier process
+each exited 0. Node-ID, ordinary-outcome, subtest-outcome, locked-import,
+pre-test-loaded-code, and loaded-code SHA-256 values are, respectively,
+`3AA22AE520FD2604AB8E8B1EAA6ED4A955DDDEB4BEBEF95F8B750A163AA5FB19`,
+`423154C5C83DF299F844E87D289CBB98E331B302CE1ABA8AEA7075A12B1C0EFF`,
+`6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109`,
+`3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A`,
+`0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98`,
+and `C186ACEBF8165A195A4D66AF968A58E323B4C5943E84191DAA2CEF72FBD2B473`.
+The integrated verifier PASS covered 637 artifacts, 409 syntax-checked Python
+files, and 2,255 executable-shadow paths. The preceding 508-node receipt is
+preserved as a historical checkpoint: 502 all-phase passes plus the same six
+exact setup skips, 1,518 ordinary reports, 163 passing subtests, and node-ID
+SHA-256 `8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
 
 The fixtures do not establish an actual DRC run, the real 960-row freeze,
 Object Lock/readback/trusted-time authenticity, external/provider trust,
 authoritative nonce issuance or consumption, or execution. Gate 5 remains
 `OPEN / KEEP_OPEN`; Stage C remains `DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`;
 `NOT LICENSED / HELD / NOT FROZEN` is unchanged.
+
+## Read-only external-intake boundary
+
+`diagnostic_stagec_prerequisite_external_intake.py` and the isolated
+`import_project_coherence_stagec_prerequisites.py` command make the local
+pre-worker handoff deterministic. The library has three exact schema/media
+pairs and 20 exports. The CLI has two locator/report pairs. The nested fixed
+manifest must explicitly name all 16 external roles; no filename inference or
+directory heuristic is allowed.
+
+The importer accepts stable absolute local-filesystem snapshots only and
+rejects ambient-CWD, UNC/device, and mapped-network sources. Its reports expose
+artifact identities and closure digests but no source paths. It does not write
+an output file, contact a network or provider, create or consume a nonce,
+authenticate external trust, or execute a model. Caller-supplied owner-intake
+and admission bodies may be replayed, but the command cannot mint them.
+
+The exact library/test/CLI/CLI-test/artifact-helper SHA-256 values are
+`865707DBBE5BE1560FFD1F065378C505BE89E48156F853166BC0E6CDA5896BB4`,
+`8E82DA357BE1DB0649BE069AC307C2AD1C1F380E9730B43240A4E26ABDBD7B5D`,
+`24DDDB2D357DE5D9737DE325BF405C28F05467DBF5182BAA410BE08E25A9F1B5`,
+`E3014790E97872F825AA30865C0E3C4912B747C0DE7BC5F8B030C9C45508AA0B`,
+and `969586F5FE5ED93C86F12F455D961E5EDFED62E023910F590772A9DD479BBC29`;
+their lengths are 38,821, 18,129, 31,668, 14,844, and 24,247 bytes.
+
+Focused verification is 19 library plus 10 CLI nodes: 29/29 PASS in 47.72
+seconds, zero subtests, exit 0, digest
+`A2D250135113EDD038C37040C94E11EE6E8B6208E14D53270F318FF48F06AD80`.
+The independent pre-final audit passed 28/28 in 47.93 seconds with a clean P0/P1
+verdict. The current 537-node authoritative full-suite receipt is the integrated
+replay recorded above. The 508-node checkpoint remains historical evidence and
+is no longer current.
+
+This path is upstream input preparation, not worker activation. The worker,
+controller, lifecycle, and archive admission still must require the exact real
+4+12 import and an independently authenticated, atomically consumed runtime
+authorization after the final execution plan is frozen.
 
 ## 1. Purpose and source boundary
 
@@ -114,6 +163,7 @@ The current source surfaces are:
 | Diagnostic 480-row phase coordinator | `src/cas_harness_v2/diagnostic_phase_coordinator.py` | exact roster/store binding, activation admission, rejected/clean reconciliation, aggregate access |
 | Diagnostic calibration fit and terminal disposition | `src/cas_harness_v2/diagnostic_calibration_fit.py`, `src/cas_harness_v2/diagnostic_calibration_disposition.py` | exact locked target/wrong-layer fit and one same-file freeze-or-reject nonreporting slot |
 | Stage C prerequisite intake/admission | `src/cas_harness_v2/diagnostic_stagec_prerequisite_admission.py` | exact four-role structural replay, owner intake, prospective-only admission, and immutable diagnostic-base binding; not external trust or runtime authority |
+| Stage C read-only external intake | `src/cas_harness_v2/diagnostic_stagec_prerequisite_external_intake.py`, `scripts/import_project_coherence_stagec_prerequisites.py` | explicit 16-role local locator replay and path-redacted structural reports; not external authentication, corpus freeze, nonce consumption, or runtime activation |
 | Worker-local diagnostic archive admission | `noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/stagec_diagnostic_archive_admission.py` | fresh seven-member archive replay and small diagnostic-v2 admission document; not HTTP/container wired |
 | Tenant/audit/fleet/worker callback identity | `noetic-compass-scaffold/noetic-compass/api/services/fleet_service_auth.py` | `FleetServicePrincipal`, `FleetServiceBoundIntakeReceipt`, `FleetServiceAuthStore.authenticate_with_bound_intake_receipt`, `verify_authenticated_callback` |
 | Fleet lease and receipt state | `noetic-compass-scaffold/noetic-compass/api/services/cas_harness_fleet_executor.py` | `FleetJobRecord`, `ActiveFleetJobLease`, `validate_active_fleet_job_lease`, `lease_next_job`, `submit_job_receipt` |
@@ -589,11 +639,14 @@ empty, exited pytest 0, and bound exact node-ID digest
 `A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`.
 
 The current authoritative locked same-process Harness replay collected,
-started, and finished 508 nodes. Exactly 502 had exact all-phase PASS; the same
+started, and finished 537 nodes. Exactly 531 had exact all-phase PASS; the same
 six exact fit/disposition nodes setup-skipped as runtime-lock mismatch evidence,
-not PASS. It emitted 1,518 ordinary reports and 163 passing subtests, recorded
-zero warnings, collection or internal errors, or deselections, left the
-isolated pycache empty, exited pytest 0, and bound exact node-ID digest
+not PASS. It emitted 1,605 ordinary reports/outcomes and 163 passing subtests,
+recorded zero warnings, errors, collection or internal errors, or deselections,
+left the isolated pycache empty, recorded pytest and verifier process exits 0, and
+bound exact node-ID digest
+`3AA22AE520FD2604AB8E8B1EAA6ED4A955DDDEB4BEBEF95F8B750A163AA5FB19`.
+The 508-node receipt is retained as a historical checkpoint at
 `8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
 
 The authoritative same-process worker receipt collected, started, finished,

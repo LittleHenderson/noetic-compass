@@ -80,21 +80,27 @@ test SHA-256
 and node-ID SHA-256
 `3785ADB97900ABAB40242DFD6DF1D0665B9996BAE94EC2697672A8506DCBE863`.
 The current authoritative locked same-process Harness replay collected,
-started, and finished 508 nodes. Exactly 502 had exact all-phase PASS; the same
-six exact nodes setup-skipped as runtime-lock mismatch evidence, not PASS. It
-emitted 1,518 ordinary reports and 163 passing subtests, recorded zero warnings,
-collection or internal errors, or deselections, left the isolated pycache
-empty, and exited pytest 0. Its node-ID SHA-256 is
-`8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
+started, and finished 537 nodes in 1,680.3 seconds. Exactly 531 had exact
+all-phase PASS; the same six exact nodes setup-skipped as runtime-lock mismatch
+evidence, not PASS. It emitted 1,605 ordinary reports/outcomes and 163 passing
+subtests, recorded zero warnings, errors, collection or internal errors, or
+deselections, left the isolated pycache empty; pytest and the verifier process
+each exited 0. Its node-ID SHA-256 is
+`3AA22AE520FD2604AB8E8B1EAA6ED4A955DDDEB4BEBEF95F8B750A163AA5FB19`.
 Outcome SHA-256 values are ordinary
-`4A9D6F31D341F51BBC7D339750BDCB69B444827CF58B08439BF05BC3A86DD766`
+`423154C5C83DF299F844E87D289CBB98E331B302CE1ABA8AEA7075A12B1C0EFF`
 and subtests
 `6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109`;
 the locked-import, pre-test-loaded-code, and loaded-code digests are,
 respectively,
 `3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A`,
 `0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98`,
-and `61B3498CA938329FAD5BA181199F658DB5BF53712D890D3A9095711074E91846`.
+and `C186ACEBF8165A195A4D66AF968A58E323B4C5943E84191DAA2CEF72FBD2B473`.
+The integrated verifier PASS covered 637 artifacts, 409 syntax-checked Python
+files, and 2,255 executable-shadow paths. The preceding 508-node receipt is
+preserved as a historical checkpoint: 502 all-phase passes plus the same six
+exact setup skips, 1,518 ordinary reports, 163 passing subtests, and node-ID
+SHA-256 `8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
 
 Those tests use structural fixtures. External/provider trust, an actual DRC
 run, the actual 960-row corpus freeze, Object Lock/readback/trusted-time
@@ -103,6 +109,55 @@ consumption, HTTP/container enforcement, and execution remain
 `NOT ESTABLISHED / NOT PERFORMED`. Gate 5 remains `OPEN / KEEP_OPEN`; Stage C
 remains `DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`; claims remain
 `NOT LICENSED / HELD / NOT FROZEN`.
+
+## Read-only external prerequisite importer
+
+The additive
+`diagnostic_stagec_prerequisite_external_intake.py` library and
+`import_project_coherence_stagec_prerequisites.py` command now provide the
+deterministic handoff from an owner-supplied local evidence folder into the
+existing prerequisite loaders. The library has 20 public exports and three
+exact wire pairs: external locator manifest, structural intake report, and
+caller-supplied binding report. The command adds two exact wire pairs: the
+outer context locator and its redacted CLI report.
+
+The fixed `stagec_prerequisite_locator_manifest.v1.json` must explicitly map
+all 16 roles (four candidate carriers plus 12 dependencies) to exact artifact
+references and canonical relative paths. Role assignment is manifest-only;
+filenames are never interpreted as evidence roles. Inputs must be stable,
+absolute local-filesystem snapshots. Ambient-CWD, UNC/device, and mapped-network
+sources fail closed. Success and failure reports contain artifact identities,
+counts, and path-closure digests but no source paths. The command runs under
+isolated, no-bytecode Python and writes no files, makes no network or provider
+request, creates or consumes no nonce, and executes no model. Optional owner
+intake and admission bytes remain caller-supplied; the importer never mints
+them.
+
+| Frozen implementation surface | SHA-256 | Bytes |
+|---|---|---:|
+| `src/cas_harness_v2/diagnostic_stagec_prerequisite_external_intake.py` | `865707DBBE5BE1560FFD1F065378C505BE89E48156F853166BC0E6CDA5896BB4` | 38,821 |
+| `tests/cas_harness_v2/test_diagnostic_stagec_prerequisite_external_intake.py` | `8E82DA357BE1DB0649BE069AC307C2AD1C1F380E9730B43240A4E26ABDBD7B5D` | 18,129 |
+| `scripts/import_project_coherence_stagec_prerequisites.py` | `24DDDB2D357DE5D9737DE325BF405C28F05467DBF5182BAA410BE08E25A9F1B5` | 31,668 |
+| `tests/cas_harness_v2/test_diagnostic_stagec_prerequisite_external_intake_cli.py` | `E3014790E97872F825AA30865C0E3C4912B747C0DE7BC5F8B030C9C45508AA0B` | 14,844 |
+| `src/cas_harness_v2/artifacts.py` stable-snapshot helper | `969586F5FE5ED93C86F12F455D961E5EDFED62E023910F590772A9DD479BBC29` | 24,247 |
+
+The library contributes 19 focused nodes and the CLI contributes 10. Their
+current frozen combined receipt is 29/29 PASS in 47.72 seconds, zero subtests,
+pytest exit 0, and node-ID SHA-256
+`A2D250135113EDD038C37040C94E11EE6E8B6208E14D53270F318FF48F06AD80`.
+An independent pre-final audit passed 28/28 in 47.93 seconds and returned a
+clean current-source P0/P1 verdict; it is retained as a pre-final checkpoint,
+not substituted for the final 29-node count.
+
+The expanded 537-node Harness configuration is now the current authoritative
+full-Harness receipt recorded above. The 508-node/502-pass-plus-six-skip receipt
+remains preserved as historical evidence and is no longer current.
+
+This tooling is `STRUCTURAL REPLAY ONLY / NON_AUTHORITY`. It does not
+authenticate external trust, establish the real corpus freeze, grant or consume
+runtime authorization, or activate the worker. The next evidence obligation is
+one real, exact 4+12 intake through these locators, followed by separate
+post-plan runtime activation and one-use authorization enforcement.
 
 ## Decision
 
@@ -166,13 +221,13 @@ pycache, pytest exit status 0, and digest
 `49BD9090B3CF8990A213BF91CB95E154792444221CC0015F1BCA7D2E77C5D293`.
 It is local regression evidence, not hermetic or independently attested and not
 a model, detector, steering, product, licensing, or disclosure result. The
-packaged kernel now has 20 byte-mirrored files, 405 unique exports, and
-1,236,504 bytes. Its packaging-provenance SHA-256 is
-`BC1DB23BD6132CB7AF9011292B7191038187D1BE7E40FC6684C5F66C8F0B9C37`;
+packaged kernel now has 21 byte-mirrored files, 425 unique exports, and
+1,283,080 bytes. Its packaging-provenance SHA-256 is
+`613A3E15748DC8F8CA49BB373BF3087F980E6A5762E709BC0E8ABFEB81A2957A`;
 13 focused mirror tests pass. Canonical/mirror `__init__.py` SHA-256 is
-`9DBC74D91E2787F436B1DBC192DE6BF876414A9FB3B7B2EB79B5C45E20AD7CF9`
+`F6EDF1A49FFD81AEB11F952344AF697DC43B03C5AC7FD6630D0FF2AC02FF9E59`
 and the packaging allowlist source SHA-256 is
-`FDD2182E22BDA65C941974B4D358650DFE326BBDD806D11B373B9E273A2B473C`.
+`752BC6F0081FDFBCA7EA58115897D545F5C3A75D322192533C58F41F37E33C91`.
 Those retained 306-Harness/576-worker receipts predate the six-file diagnostic
 runtime tranche below and remain exact. The tranche now has a separate
 authoritative same-process standard Python-3.14 Harness receipt that collected,
@@ -196,10 +251,14 @@ deselections, left the isolated pycache empty, exited pytest 0, and bound
 node-ID digest
 `A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`.
 
-The current authoritative locked same-process receipt is the 508-node replay:
-502 exact all-phase passes, the same six exact setup skips retained as mismatch
-evidence rather than PASS, 1,518 ordinary reports, 163 passing subtests, zero
-warnings/errors/deselections, empty isolated pycache, pytest exit 0, and digest
+The current authoritative locked same-process receipt is the 537-node replay:
+531 exact all-phase passes, the same six exact setup skips retained as mismatch
+evidence rather than PASS, 1,605 ordinary reports/outcomes, 163 passing
+subtests, zero warnings/errors/collection or internal errors/deselections,
+empty isolated pycache, pytest and verifier process exits 0, and digest
+`3AA22AE520FD2604AB8E8B1EAA6ED4A955DDDEB4BEBEF95F8B750A163AA5FB19`.
+The 508-node/502-pass-plus-six-skip receipt is retained as a historical
+checkpoint at
 `8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
 
 The authoritative same-process worker receipt collected, started, finished,

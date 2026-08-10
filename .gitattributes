@@ -8,6 +8,7 @@ formal/lean/** text eol=lf
 scripts/verify_project_coherence*.py text eol=lf
 scripts/build_project_coherence_gate5_manifest.py text eol=lf
 scripts/build_project_coherence_gate5_runner_lock.py text eol=lf
+scripts/import_project_coherence_stagec_prerequisites.py text eol=lf
 scripts/run_project_coherence_gate5_pytest.py text eol=lf
 scripts/verify_noetic_topos2_gate1.py text eol=lf
 scripts/verify_psr8_lean_gate1.py text eol=lf
