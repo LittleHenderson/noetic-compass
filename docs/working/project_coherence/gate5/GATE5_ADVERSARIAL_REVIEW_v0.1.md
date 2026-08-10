@@ -48,11 +48,12 @@ line-ending drift, source-ref substitution, projection mutation, and a
 only `SOURCE` plus ordered `UTF8_CONCAT`.
 
 The residual is intentionally `OPEN`: source bytes remain external, declared
-origins do not establish chat roles, corpus freeze is `NOT_ESTABLISHED`, and
-the aggregate ref is not yet required by preregistration
-`design.input_artifacts`, a deterministic pre-run DRC, or an admitted runtime.
-The current authoritative Harness replay collected, started, and finished 489
-nodes with digest
+origins do not establish chat roles, and corpus freeze is `NOT_ESTABLISHED`.
+The additive prerequisite helper now requires the aggregate ref in any future
+immutable diagnostic base `design.input_artifacts`, but no actual base,
+deterministic pre-run DRC execution, or admitted runtime consumes that helper.
+The prior prompt-context Harness checkpoint is preserved historically at 489
+collected/started/finished nodes with digest
 `A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`:
 483 had all phases pass, the six unchanged runtime-lock nodes setup-skipped as
 mismatch evidence rather than PASS, and it emitted 1,461 ordinary reports and
@@ -62,11 +63,59 @@ tests establish structural replay only, not prompt-injection detection, causal
 specificity, execution authority, trusted time, WORM authority, an Evidence
 Packet, licensing, or product safety.
 
+## Stage C prerequisite-intake adversarial disposition
+
+The owner assertion now has an exact typed destination without being promoted
+to evidence. The six primary candidate/intake/admission carriers and 12 typed
+dependency bodies cover 18 schema/media-type pairs. They bind the exact C-Cal
+split, 480-row prompt inventory and full dependency closure, model/capture
+identities, DRC profile/rules/known faults, 320-group/960-row corpus records,
+storage records, authorization instrument, prospective subject, four-role
+owner intake, and one prospective-only admission.
+
+The 19 focused nodes reject duplicate-key/BOM inputs, PCBA domain/media and
+Python-body relabeling, the 672-row TKS corpus, stale other-subject or
+historical Markdown storage receipts, trusted-time chronology drift, Gate 0 and
+Stage B authorization substitution, incomplete 3-of-4 sets, role swaps,
+owner-intake mismatch, duplicate IDs and content clones, prompt-closure
+collisions, mutable projections, dataclass replacement, consumed or malformed
+nonces, window/scope drift, authority/boundary mutation, prompt-inventory
+forgery, second create-once admissions, preregistration omission, and
+nonprospective chronology. Exact replay is idempotent; favorable relabeling is
+not.
+
+The focused receipt is 19/19 PASS with source SHA-256
+`AD46AA964240C98D5C12070872C60B26E2310B35A88DD6FA50F68C10C62F09B3`,
+test SHA-256
+`56A9BCE442405EE57BFF95A735F5D80724A0F72B06136A8B4AEEC36A41F336A3`,
+and node-ID SHA-256
+`3785ADB97900ABAB40242DFD6DF1D0665B9996BAE94EC2697672A8506DCBE863`.
+The current authoritative locked same-process Harness replay collected,
+started, and finished 508 nodes. Exactly 502 had exact all-phase PASS; the same
+six exact nodes setup-skipped as runtime-lock mismatch evidence, not PASS. It
+emitted 1,518 ordinary reports and 163 passing subtests, recorded zero warnings,
+collection or internal errors, or deselections, left the isolated pycache
+empty, exited pytest 0, and bound node-ID SHA-256
+`8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
+
+The residual remains decisive. The positive test path uses structural fixtures,
+and serialized candidate bodies are not an external trust root. No provider
+authenticated an actual DRC run, real corpus freeze, Object Lock/readback/
+trusted-time record, or runtime authorization; no nonce was authoritatively
+issued or consumed; no HTTP/container enforcement or model execution occurred.
+The only decision is `ADMITTED_FOR_PROSPECTIVE_PREREGISTRATION_ONLY`, not live
+prerequisite PASS. Gate 5 therefore remains `OPEN / KEEP_OPEN`; Stage C remains
+`DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`; `NOT LICENSED / HELD / NOT FROZEN`
+is unchanged.
+
 ## Exact review surface
 
 This review is bounded to the following current surfaces:
 
 - the isolated control kernel under `src/cas_harness_v2/`;
+- the additive Stage C prerequisite intake/admission contract in
+  `src/cas_harness_v2/diagnostic_stagec_prerequisite_admission.py` and its
+  exact focused adversarial tests;
 - the nominal and independent adversarial tests under `tests/cas_harness_v2/`;
 - `HARNESS_V2_PREREGISTRATION_AND_EVIDENCE_PACKET_V2_SPEC_v0.1.md`;
 - the research-only worker protocol candidate
@@ -275,21 +324,30 @@ pycache empty, exited pytest 0, and bound exact node-ID digest
 Positive exact numerical evidence remains in the separate Python-3.12 fit
 10/10 and eligible-disposition 3/3 receipts.
 
-That 437-node receipt is preserved historical evidence. The current
-authoritative same-process Harness replay collected, started, and finished 489
-nodes. Exactly 483 had all phases pass; the same six exact fit/disposition nodes
+That 437-node receipt is preserved historical evidence. The later 489-node
+prompt-context checkpoint is also preserved historical evidence. Exactly 483
+had all phases pass; the same six exact fit/disposition nodes
 setup-skipped as runtime-lock mismatch evidence rather than PASS. It emitted
 1,461 ordinary reports and 163 passing subtests, recorded zero warnings,
 collection or internal errors, or deselections, left the isolated pycache
 empty, exited pytest 0, and bound exact node-ID digest
 `A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`.
 
+The current authoritative locked same-process Harness replay collected,
+started, and finished 508 nodes. Exactly 502 had exact all-phase PASS; the same
+six exact fit/disposition nodes setup-skipped as runtime-lock mismatch evidence,
+not PASS. It emitted 1,518 ordinary reports and 163 passing subtests, recorded
+zero warnings, collection or internal errors, or deselections, left the
+isolated pycache empty, exited pytest 0, and bound exact node-ID digest
+`8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
+
 The authoritative same-process worker receipt collected, started, finished,
 and passed 594/594 nodes, emitted 1,782 ordinary reports and zero subtests,
 warnings, errors, or deselections, left the isolated pycache empty, exited
 pytest 0, and bound exact node-ID digest
 `B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B`.
-Both new receipts remain local `STRUCTURE_ONLY / NON_AUTHORITY` evidence and do
+Both current Harness and worker receipts remain local
+`STRUCTURE_ONLY / NON_AUTHORITY` evidence and do
 not alter any experimental, scientific, product, licensing, or disclosure
 status.
 
@@ -537,14 +595,14 @@ has an authoritative same-process 99/99 PASS receipt under digest
 `DB5F9FD886A1714D4E9FE2CE4A2F2336DA3B0A414D5115D1B86B5A885EECDC39`.
 It emitted 297 ordinary reports, zero subtests, one warning, and zero errors or
 deselections, left the isolated pycache empty, and exited pytest 0. The current package
-inventory contains 19 byte-mirrored files, 343 unique exports, 1,148,019 bytes,
+inventory contains 20 byte-mirrored files, 405 unique exports, 1,236,504 bytes,
 and packaging-provenance
 SHA-256
-`66D567C3C4E31C2FE1925AF0F9E0CAD89DAF91A87C59591C469C7017B13087B2`;
+`BC1DB23BD6132CB7AF9011292B7191038187D1BE7E40FC6684C5F66C8F0B9C37`;
 13 focused mirror tests pass. Canonical/mirror `__init__.py` SHA-256 is
-`332D59841596D6AAEC091FDD63924E8F25DCB0E2B4F52BB6D27947340BA101B5`,
+`9DBC74D91E2787F436B1DBC192DE6BF876414A9FB3B7B2EB79B5C45E20AD7CF9`,
 and the packaging allowlist source SHA-256 is
-`B13A5A5D7CF2656C55BE313FA2A20F252935744A23334B9C6E2ECA48CEC9BBCE`.
+`FDD2182E22BDA65C941974B4D358650DFE326BBDD806D11B373B9E273A2B473C`.
 The retained local GPU/joined evidence suite passes **27/27** without model
 execution, with node-ID digest
 `dc0c0ed22e0f158f014277b9d3cd26ad21d6a8fcdfbe1e76a67d09406975c952`.
@@ -1248,7 +1306,7 @@ The minimum defensible order is:
 1. preserve the authoritative 306-test/151-subtest Harness-v2 receipt and its
    four focused slice
    receipts, the authoritative 576/576 complete-worker receipt, the 119/119
-   capture and 32/32 archive receipts, the 19-file/343-export package inventory,
+   capture and 32/32 archive receipts, the 20-file/405-export package inventory,
    35-test/45-subtest worker-protocol, 17/17 dark-bridge, 38/38
    callback/Object-Lock seam, 134/134 prospective lifecycle/SQLite/dark-route,
    historical 98/98 admitted-adapter/configured-reconciliation, 27/27 retained local

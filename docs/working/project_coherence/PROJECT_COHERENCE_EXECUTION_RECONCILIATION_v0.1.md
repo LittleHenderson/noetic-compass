@@ -5,10 +5,11 @@ Document status: `DRAFT / OPEN / NOT FROZEN`
 - Controlling charter: `PROJECT_COHERENCE_MASTER_CHARTER_v0.1.md`
 - Published baseline snapshot: Git commit
   `14af9d28e172aa78c7ab543143d79a7aa562e569`
-- Additive evidence surface: the successor Gate 5 prompt-context, packaging,
-  verifier, manifest, and reconciliation tranche bound by the enclosing Git
-  commit and Gate 5 artifact manifest; its commit identity is deliberately not
-  embedded in its own bytes
+- Additive evidence surface: the successor Gate 5 prompt-context,
+  Stage C prerequisite-intake, packaging, verifier, manifest, and
+  reconciliation tranche bound by the enclosing Git commit and Gate 5
+  artifact manifest; its commit identity is deliberately not embedded in its
+  own bytes
 - Review surface: draft PR `LittleHenderson/noetic-compass#209`
 - Reconciliation date: 2026-08-09
 - Promotion effect: `NONE`
@@ -36,12 +37,15 @@ not an empirical result or product license.
 The owner reports that the Stage C detector DRC, frozen corpus, trusted
 storage, and execution authorization already exist outside the currently
 admitted repository evidence. This reconciliation treats them as supplied
-candidate inputs rather than assuming they must be recreated. Their exact
-bytes or immutable provider identities, schemas/media types, hashes and
-lengths, retention/authorization receipts, and Stage C dependency bindings
-must nevertheless be ingested and freshly replayed before the corresponding
-`OPEN`, `NOT_STARTED`, or `NOT FROZEN` states can change. Owner intent is not a
-substitute for a protocol artifact.
+candidate inputs rather than assuming they must be recreated. The additive
+kernel now provides their exact four-role intake/adaptation, full structural
+replay, owner-intake, prospective-only admission, and immutable diagnostic-base
+binding contract. That is an implemented contract, not an executed intake.
+The actual external bytes or immutable provider identities, schemas/media
+types, hashes and lengths, retention/authorization receipts, and Stage C
+dependency bindings have not been authenticated by this tranche. Owner intent
+and structural fixtures are not substitutes for provider evidence, runtime
+nonce consumption, or an executed protocol artifact.
 
 ## 2. Commit and review evidence
 
@@ -66,7 +70,7 @@ review, scientific validity, safety, licensing, or disclosure approval.
 | Category and Sheaf Theory | Finite transverse model, provenance-bearing covers, bounded modality results, and context lemmas | Product/observational lift, backward comparison, richer cross-context semantics, full formalization, and independent review |
 | Dynamics and Geometry | Typed finite-function kernel, deterministic lifts, and bounded normal-form implementation | Exact/approximate calculus, universal proof obligations, capacity transfer, v7.4 semantic mapping, and independent review |
 | PCBA and Systems Engineering | Typed bounded Core/PCBA/Ohm candidates, DRC traces, and retained known-fault fixtures | Complete CCDL/stateful semantics, Python/Rust conformance, live calibration, safety validation, source-conflict decisions, and external review |
-| Harness Experimental Science | Preregistration/Packet kernels; Stage C diagnostic execution, lifecycle, phase, fit, and nonreporting-disposition candidates; per-request prompt-context provenance; and an exact split-order 480-row provenance inventory | Prospective preregistration/runtime binding of the inventory, deterministic DRC, trusted runner/time, independent WORM anchor, corpus/power freeze, authorized experiments, controls, numerical agreement, replication, falsifiers, and eligible Packets |
+| Harness Experimental Science | Preregistration/Packet kernels; Stage C diagnostic execution, lifecycle, phase, fit, and nonreporting-disposition candidates; per-request prompt-context provenance; exact split-order 480-row provenance inventory; and a strict four-role prerequisite intake/prospective-base binding contract | Actual external four-candidate intake and authentication, a new immutable base, runtime enforcement, real deterministic DRC execution, trusted runner/time, independent WORM anchor, real corpus/power freeze, authorized experiments, controls, numerical agreement, replication, falsifiers, and eligible Packets |
 | Verification, Publication, and IP | Internal manifests, adversarial verification, and seven source-bound paper drafts | Independent reviewers, authorship/novelty decisions, legal/patent/disclosure review, submission decisions, and release authority |
 
 Every cell remains partial. No cell may promote its own work.
@@ -80,7 +84,7 @@ Every cell remains partial. No cell may promote its own work.
 | Gate 2 | Bounded typed-composition kernel, deterministic lifts, shortlex finite-catalog normal forms, mismatch rejection | Exact/approximate calculus, compatibility parser, complete v7.4 mapping, universal proofs, independent review | `OPEN / CANDIDATE IMPLEMENTATION IN REVIEW` |
 | Gate 3 | Precise finite-factor information-loss account, nontrivial finite model, marked-cover records, bounded modal results | Observational/product-site provenance, product-site modality lift, backward comparison, richer semantics, complete proof and review | `OPEN / FINITE REFERENCE CANDIDATE IN REVIEW` |
 | Gate 4 | Bounded Core/PCBA/Ohm candidates and 208 focused methods with preserved negative evidence | Hermetic compiler closure, Python/Rust conformance, complete grammar/state, authenticated calibration, empirical/safety validation, canon and disclosure decisions | `OPEN / RING 4 BOUNDED SOFTWARE CANDIDATES TESTED` |
-| Gate 5 | Hash-bound structural kernel, worker archive admission, diagnostic-v2 carriers, one-attempt lifecycle, exact 480-row reconciliation, deterministic calibration fit, immutable nonreporting disposition, typed prompt-context DAGs, and an exact-480 provenance inventory | Preregistration/DRC/runtime admission binding of that inventory, authorized HTTP/container runner, trusted execution/time, independent WORM/external anchor, out-of-band prevention, frozen corpus/power/surface artifacts, real C-Cal/C-Eval, controls, replication, Packet, claim review | `OPEN / KEEP_OPEN`; experiment `NOT_STARTED` |
+| Gate 5 | Hash-bound structural kernel, worker archive admission, diagnostic-v2 carriers, one-attempt lifecycle, exact 480-row reconciliation, deterministic calibration fit, immutable nonreporting disposition, typed prompt-context DAGs, exact-480 provenance inventory, and strict Stage C four-role intake/prospective-base binding contract | Actual externally authenticated four-candidate intake, an immutable C-Cal base, runtime enforcement, authorized HTTP/container runner, trusted execution/time, independent WORM/external anchor, out-of-band prevention, real frozen corpus/power/surface artifacts, real C-Cal/C-Eval, controls, replication, Packet, claim review | `OPEN / KEEP_OPEN`; experiment `NOT_STARTED` |
 
 The authoritative Gate 5 snapshot verified 622 artifacts. The Harness receipt
 covered 437 configured nodes: 431 all-phase passes plus exactly six expected
@@ -90,9 +94,10 @@ software receipts only.
 
 The additive prompt-context candidate subsequently passed 30 per-request
 provenance tests, 22 aggregate-inventory tests, and a 98-test combined replay
-with the diagnostic Study protocol. The application mirror now contains 19
-byte-identical Python files and 343 unique exports. The expanded authoritative
-same-process Harness receipt collected, started, and finished 489 nodes: 483
+with the diagnostic Study protocol. The application mirror now contains 20
+byte-identical Python files and 405 unique exports. The prior prompt-context
+Harness checkpoint is preserved historically at 489 collected/started/finished
+nodes: 483
 had exact all-phase PASS, the six declared numerical-runtime nodes retained
 their exact setup-skip shape, 1,461 ordinary reports and 163 passing subtests
 were emitted, warnings/errors/deselections were zero, the isolated bytecode
@@ -102,6 +107,33 @@ The expanded adapter/reconciliation receipt passed 99/99 nodes with one
 warning, no subtests/errors/deselections, and digest
 `DB5F9FD886A1714D4E9FE2CE4A2F2336DA3B0A414D5115D1B86B5A885EECDC39`.
 These remain local structural receipts, not scientific or production evidence.
+
+The prerequisite-intake surface separately passed 19/19 focused structural
+nodes. Its source SHA-256 is
+`AD46AA964240C98D5C12070872C60B26E2310B35A88DD6FA50F68C10C62F09B3`,
+test SHA-256 is
+`56A9BCE442405EE57BFF95A735F5D80724A0F72B06136A8B4AEEC36A41F336A3`,
+and node-ID SHA-256 is
+`3785ADB97900ABAB40242DFD6DF1D0665B9996BAE94EC2697672A8506DCBE863`.
+It exposes 18 schema/media-type pairs and 62 public exports. The resulting
+current authoritative locked same-process Harness replay collected, started,
+and finished 508 nodes. Exactly 502 had exact all-phase PASS; the same six exact
+nodes setup-skipped as runtime-lock mismatch evidence, not PASS. It emitted
+1,518 ordinary reports and 163 passing subtests, recorded zero warnings,
+collection or internal errors, or deselections, left the isolated pycache
+empty, exited pytest 0, and bound node-ID SHA-256
+`8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
+The ordinary-outcome, subtest-outcome, locked-import, pre-test-loaded-code, and
+loaded-code SHA-256 values are, respectively,
+`4A9D6F31D341F51BBC7D339750BDCB69B444827CF58B08439BF05BC3A86DD766`,
+`6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109`,
+`3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A`,
+`0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98`,
+and `61B3498CA938329FAD5BA181199F658DB5BF53712D890D3A9095711074E91846`.
+The focused receipt uses structural fixtures and establishes neither external
+provider trust nor an actual DRC run, real 960-row corpus freeze,
+WORM/readback/trusted-time authenticity, authoritative runtime authorization or
+nonce consumption, runtime enforcement, or execution.
 
 ## 5. Planned schedule versus evidence
 
@@ -167,34 +199,37 @@ The next research-engineering sequence is additive and non-promotional:
    one-user-message rendering boundary, one replayable companion per request,
    and one exact split-order 480-row aggregate. Declared origins remain audit
    labels, not proof of real chat roles.
-2. Prospectively bind the aggregate reference into diagnostic preregistration
-   `design.input_artifacts`, then require fresh replay at the future DRC and
-   runtime-admission boundaries. Do not retrofit existing exact-key carriers.
-3. Ingest the owner-supplied detector DRC if its exact implementation, profile,
-   report schema, rule catalog, and retained known-fault receipt are provided;
-   otherwise implement that missing surface. Require it to consume the
-   provenance carrier and other typed prerequisites. Findings must use a
-   closed catalog and distinguish `DECLARED` from `OBSERVED` evidence.
-4. Derive a versioned detector measurement profile from exact C-Cal artifacts
+2. Retain the completed structural prerequisite contract. Its six primary and
+   12 dependency carrier families exact-replay the owner-asserted DRC, corpus,
+   storage, and authorization roles and permit only prospective-preregistration
+   admission. Do not treat its synthetic focused fixtures as the asserted
+   external artifacts.
+3. Perform the real 4-of-4 intake with the owner-supplied exact bytes or
+   immutable provider identities. Authenticate the DRC execution/profile/
+   rules/known-fault receipt; 320-group/960-row manifest, adjudication, split,
+   surface and content identities; Object Lock version, readback, retention,
+   trusted time and verifier; and Stage C authorization issuer, window,
+   subject, scope and unconsumed nonce. Adjacent PCBA/TKS, historical storage,
+   Gate 0, or Stage B artifacts remain invalid substitutes.
+4. Create a new immutable diagnostic base that contains the exact prompt
+   inventory, four candidates, 12 dependencies, owner intake, and admission in
+   `design.input_artifacts`, then fresh-replay that closure. Do not retrofit an
+   amendment or an existing exact-key carrier.
+5. Wire the same admission and authenticated authorization through the exact
+   HTTP/container controller, coordinator, lifecycle, archive, and worker path.
+   Prove one-use runtime nonce consumption, trusted execution/time, independent
+   WORM ordering/retention, and the out-of-band execution/read boundary.
+6. Derive a versioned detector measurement profile from exact C-Cal artifacts
    before any C-Eval request; do not accept caller-authored duplicate truth.
-5. Bind the owner-supplied Stage C authorization and trusted-storage receipts,
-   if provided, to the diagnostic coordinator and worker admission through the
-   exact HTTP/container runtime. The binding must cover trusted execution/time,
-   independent WORM object version and retention, and the declared
-   out-of-band execution/read boundary; unrelated or historical receipts do
-   not satisfy it.
-6. Ingest the owner-supplied frozen corpus if its exact 960-row manifest,
-   adjudication, surface-screen, power, split, and content identities are
-   provided; otherwise complete those still-missing artifacts. Fresh replay
-   must prove all prerequisite bytes and exact row ordering before admission.
 7. Run a separately authorized C-Cal only after its activation gate closes.
 8. Create C-Eval only from an eligible retained C-Cal disposition, and keep any
    steering/dose-response experiment in a later separate protocol.
 
-The prompt-provenance carrier and aggregate inventory do not themselves close
-the corpus obligation or authorize the DRC, model execution, detector fitting,
-C-Eval, steering, Evidence Packet emission, product routing, licensing, or
-disclosure.
+The prompt-provenance carriers, aggregate inventory, owner assertion, and
+structural intake/admission contract do not themselves close the corpus or
+external-trust obligations or authorize the DRC, model execution, detector
+fitting, C-Eval, steering, Evidence Packet emission, product routing,
+licensing, or disclosure.
 
 ## 9. Preserved final boundary
 

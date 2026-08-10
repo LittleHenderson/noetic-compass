@@ -214,11 +214,11 @@ PACKAGED_HARNESS_V2_PROVENANCE_REL = (
     f"{PACKAGED_HARNESS_V2_REL}/PACKAGING_PROVENANCE.json"
 )
 PACKAGED_HARNESS_V2_PROVENANCE_SHA256 = (
-    "66D567C3C4E31C2FE1925AF0F9E0CAD89DAF91A87C59591C469C7017B13087B2"
+    "BC1DB23BD6132CB7AF9011292B7191038187D1BE7E40FC6684C5F66C8F0B9C37"
 )
-PACKAGED_HARNESS_V2_FILE_COUNT = 19
-PACKAGED_HARNESS_V2_EXPORT_COUNT = 343
-PACKAGED_HARNESS_V2_TOTAL_BYTES = 1_148_019
+PACKAGED_HARNESS_V2_FILE_COUNT = 20
+PACKAGED_HARNESS_V2_EXPORT_COUNT = 405
+PACKAGED_HARNESS_V2_TOTAL_BYTES = 1_236_504
 SAME_RUN_PYTEST_TIMEOUT_SECONDS = 2_400
 
 DIAGNOSTIC_RUNTIME_FILE_BINDINGS = MappingProxyType(
@@ -278,6 +278,14 @@ DIAGNOSTIC_RUNTIME_FILE_BINDINGS = MappingProxyType(
         "tests/cas_harness_v2/test_diagnostic_prompt_context_inventory.py": (
             "E1A3E86E45B9E4CA0EB42EA5857CD79AEC25EC79913EFF0D56C490FDCF8D23CF",
             19_494,
+        ),
+        "src/cas_harness_v2/diagnostic_stagec_prerequisite_admission.py": (
+            "AD46AA964240C98D5C12070872C60B26E2310B35A88DD6FA50F68C10C62F09B3",
+            83_199,
+        ),
+        "tests/cas_harness_v2/test_diagnostic_stagec_prerequisite_admission.py": (
+            "56A9BCE442405EE57BFF95A735F5D80724A0F72B06136A8B4AEEC36A41F336A3",
+            51_530,
         ),
         (
             "noetic-compass-scaffold/noetic-compass/live-trace-worker/app/"
@@ -463,6 +471,119 @@ DIAGNOSTIC_RUNTIME_LITERAL_CONSTANTS = MappingProxyType(
                 "STAGEC_PROMPT_CONTEXT_INVENTORY_MEDIA_TYPE": (
                     "application/vnd.cas-harness."
                     "stagec-prompt-context-inventory+json"
+                ),
+            }
+        ),
+        "src/cas_harness_v2/diagnostic_stagec_prerequisite_admission.py": MappingProxyType(
+            {
+                "STAGEC_DETECTOR_DRC_RECEIPT_SCHEMA": (
+                    "cas_harness_v2.stagec_detector_drc_receipt.v1"
+                ),
+                "STAGEC_FROZEN_CORPUS_BUNDLE_SCHEMA": (
+                    "cas_harness_v2.stagec_frozen_corpus_bundle.v1"
+                ),
+                "STAGEC_TRUSTED_STORAGE_RECEIPT_SCHEMA": (
+                    "cas_harness_v2.stagec_trusted_storage_receipt.v1"
+                ),
+                "STAGEC_EXECUTION_AUTHORIZATION_SCHEMA": (
+                    "cas_harness_v2.stagec_execution_authorization_candidate.v1"
+                ),
+                "STAGEC_PREREQUISITE_INTAKE_SCHEMA": (
+                    "cas_harness_v2.stagec_prerequisite_owner_intake.v1"
+                ),
+                "STAGEC_PREREQUISITE_ADMISSION_SCHEMA": (
+                    "cas_harness_v2.stagec_prerequisite_admission.v1"
+                ),
+                "STAGEC_DETECTOR_DRC_PROFILE_SCHEMA": (
+                    "cas_harness_v2.stagec_detector_drc_profile.v1"
+                ),
+                "STAGEC_DETECTOR_RULESET_SCHEMA": (
+                    "cas_harness_v2.stagec_detector_ruleset.v1"
+                ),
+                "STAGEC_DETECTOR_KNOWN_FAULT_FIXTURE_SCHEMA": (
+                    "cas_harness_v2.stagec_known_fault_fixture.v1"
+                ),
+                "STAGEC_CORPUS_ROWS_MANIFEST_SCHEMA": (
+                    "cas_harness_v2.stagec_corpus_rows_manifest.v1"
+                ),
+                "STAGEC_CORPUS_ADJUDICATION_SCHEMA": (
+                    "cas_harness_v2.stagec_corpus_adjudication.v1"
+                ),
+                "STAGEC_CORPUS_SPLIT_ASSIGNMENT_SCHEMA": (
+                    "cas_harness_v2.stagec_corpus_split_assignment.v1"
+                ),
+                "STAGEC_CORPUS_SURFACE_BUNDLE_SCHEMA": (
+                    "cas_harness_v2.stagec_corpus_surface_bundle.v1"
+                ),
+                "STAGEC_OBJECT_LOCK_RECEIPT_SCHEMA": (
+                    "cas_harness_v2.stagec_object_lock_receipt.v1"
+                ),
+                "STAGEC_OBJECT_READBACK_RECEIPT_SCHEMA": (
+                    "cas_harness_v2.stagec_object_readback_receipt.v1"
+                ),
+                "STAGEC_TRUSTED_TIME_RECEIPT_SCHEMA": (
+                    "cas_harness_v2.stagec_trusted_time_receipt.v1"
+                ),
+                "STAGEC_STORAGE_VERIFIER_IDENTITY_SCHEMA": (
+                    "cas_harness_v2.stagec_storage_verifier_identity.v1"
+                ),
+                "STAGEC_AUTHORIZATION_INSTRUMENT_SCHEMA": (
+                    "cas_harness_v2.stagec_authorization_instrument.v1"
+                ),
+                "STAGEC_DETECTOR_DRC_RECEIPT_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.stagec-detector-drc-receipt+json"
+                ),
+                "STAGEC_FROZEN_CORPUS_BUNDLE_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.stagec-frozen-corpus-bundle+json"
+                ),
+                "STAGEC_TRUSTED_STORAGE_RECEIPT_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.stagec-trusted-storage-receipt+json"
+                ),
+                "STAGEC_EXECUTION_AUTHORIZATION_MEDIA_TYPE": (
+                    "application/vnd.cas-harness."
+                    "stagec-execution-authorization-candidate+json"
+                ),
+                "STAGEC_PREREQUISITE_INTAKE_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.stagec-prerequisite-owner-intake+json"
+                ),
+                "STAGEC_PREREQUISITE_ADMISSION_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.stagec-prerequisite-admission+json"
+                ),
+                "DETECTOR_DRC_PROFILE_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.stagec-detector-drc-profile+json"
+                ),
+                "DETECTOR_RULESET_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.stagec-detector-ruleset+json"
+                ),
+                "DETECTOR_KNOWN_FAULT_FIXTURE_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.stagec-known-fault-fixture+json"
+                ),
+                "CORPUS_ROWS_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.stagec-corpus-rows-manifest+json"
+                ),
+                "CORPUS_ADJUDICATION_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.stagec-corpus-adjudication+json"
+                ),
+                "CORPUS_SPLIT_ASSIGNMENT_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.stagec-corpus-split-assignment+json"
+                ),
+                "CORPUS_SURFACE_BUNDLE_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.stagec-corpus-surface-bundle+json"
+                ),
+                "OBJECT_LOCK_RECEIPT_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.stagec-object-lock-receipt+json"
+                ),
+                "OBJECT_READBACK_RECEIPT_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.stagec-object-readback-receipt+json"
+                ),
+                "TRUSTED_TIME_RECEIPT_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.stagec-trusted-time-receipt+json"
+                ),
+                "STORAGE_VERIFIER_IDENTITY_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.stagec-storage-verifier-identity+json"
+                ),
+                "AUTHORIZATION_INSTRUMENT_MEDIA_TYPE": (
+                    "application/vnd.cas-harness.stagec-authorization-instrument+json"
                 ),
             }
         ),
@@ -964,10 +1085,10 @@ REQUIRED_TEST_SUITES: dict[str, dict[str, Any]] = {
         "targets": ["tests/cas_harness_v2"],
         "pytest_plugins": [],
         "repo_import_roots": ["src", "tests/cas_harness_v2"],
-        "expected_tests": 489,
+        "expected_tests": 508,
         "expected_subtests": 163,
         "expected_test_ids_sha256": (
-            "A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225"
+            "8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2"
         ),
         "expected_setup_skipped_nodeids": [
             (
@@ -1387,6 +1508,16 @@ REQUIRED_SUBSUITE_DIGESTS = {
         "expected_tests": 98,
         "expected_test_ids_sha256": (
             "C573CE9C70496C9FE0D1E7A3516E07F8454CF4F7085A26BDC5364342CA7A085E"
+        ),
+    },
+    "Stage C prerequisite intake and prospective admission": {
+        "targets": [
+            "tests/cas_harness_v2/test_diagnostic_stagec_prerequisite_admission.py"
+        ],
+        "pytest_plugins": [],
+        "expected_tests": 19,
+        "expected_test_ids_sha256": (
+            "3785ADB97900ABAB40242DFD6DF1D0665B9996BAE94EC2697672A8506DCBE863"
         ),
     },
     "diagnostic runtime structure-only tranche": {
@@ -4759,14 +4890,14 @@ def verify_diagnostic_runtime_structure_only_surface() -> None:
     require(
         len(DIAGNOSTIC_RUNTIME_SCHEMA_VALUES)
         == len(set(DIAGNOSTIC_RUNTIME_SCHEMA_VALUES))
-        == 22,
-        "diagnostic runtime schema inventory is not exactly 22 unique values",
+        == 40,
+        "diagnostic runtime schema inventory is not exactly 40 unique values",
     )
     require(
         len(DIAGNOSTIC_RUNTIME_MEDIA_TYPE_VALUES)
         == len(set(DIAGNOSTIC_RUNTIME_MEDIA_TYPE_VALUES))
-        == 21,
-        "diagnostic runtime media-type inventory is not exactly 21 unique values",
+        == 39,
+        "diagnostic runtime media-type inventory is not exactly 39 unique values",
     )
     for raw_path, (expected_sha256, expected_bytes) in (
         DIAGNOSTIC_RUNTIME_FILE_BINDINGS.items()
@@ -4798,6 +4929,66 @@ def verify_diagnostic_runtime_structure_only_surface() -> None:
         )
         == STAGEC_PROMPT_CONTEXT_OPERATIONS,
         "Stage C prompt-context operation catalog is not exactly SOURCE then UTF8_CONCAT",
+    )
+
+    prerequisite_path = (
+        "src/cas_harness_v2/diagnostic_stagec_prerequisite_admission.py"
+    )
+    prerequisite_assignments = _literal_module_assignments(prerequisite_path)
+    prerequisite_exports = prerequisite_assignments.get("__all__")
+    require(
+        isinstance(prerequisite_exports, list)
+        and len(prerequisite_exports) == 62
+        and len(set(prerequisite_exports)) == 62
+        and all(isinstance(name, str) and name for name in prerequisite_exports),
+        "Stage C prerequisite intake/admission public export inventory is not exactly 62 unique names",
+    )
+    require(
+        prerequisite_assignments.get(
+            "OWNER_ASSERTED_CANDIDATE_STRUCTURAL_REPLAY_ONLY"
+        )
+        == "OWNER_ASSERTED_CANDIDATE_STRUCTURAL_REPLAY_ONLY"
+        and prerequisite_assignments.get(
+            "ADMITTED_FOR_PROSPECTIVE_PREREGISTRATION_ONLY"
+        )
+        == "ADMITTED_FOR_PROSPECTIVE_PREREGISTRATION_ONLY"
+        and prerequisite_assignments.get("_AUTHORITY")
+        == {
+            "gate_5": "OPEN",
+            "gate_5_disposition": "KEEP_OPEN",
+            "stage_c": "DESIGN_ONLY",
+            "execution_authority": "UNAUTHORIZED",
+            "experiment": "NOT_STARTED",
+            "license": "NOT LICENSED",
+            "disclosure": "HELD",
+            "corpus_status": "NOT FROZEN",
+            "runtime_integration": "NOT_INTEGRATED",
+            "runtime_authorization": "NOT_GRANTED",
+            "external_trust_authentication": (
+                "NOT_ESTABLISHED_BY_SERIALIZED_CANDIDATES"
+            ),
+            "candidate_profiles": "STRUCTURAL_REPLAY_ONLY",
+            "evidence_packet_v2": "NOT_CREATED",
+            "scientific_conclusion": "NOT_ESTABLISHED",
+            "product": "NOT_AUTHORIZED",
+        }
+        and prerequisite_assignments.get("_BOUNDARY")
+        == {
+            "existing_schemas": "UNCHANGED_ADDITIVE_COMPANION_ONLY",
+            "admission_scope": "PROSPECTIVE_PREREGISTRATION_INPUT_ONLY",
+            "runtime_consumption": "FORBIDDEN_NOT_INTEGRATED",
+            "execution": "NOT_PERFORMED",
+            "packet_creation": "FORBIDDEN",
+            "claim_promotion": "FORBIDDEN",
+            "serialized_candidate_bodies": "NOT_AN_EXTERNAL_TRUST_ROOT",
+            "decision_semantics": (
+                "STRUCTURAL_REPLAY_ONLY_NOT_LIVE_PREREQUISITE_PASS"
+            ),
+            "model_capture_execution_identity_comparison": (
+                "DEFERRED_TO_POST_PLAN_ACTIVATION"
+            ),
+        },
+        "Stage C prerequisite intake/admission authority boundary drifted or promotes candidate evidence",
     )
 
     worker_path = (
@@ -5018,12 +5209,18 @@ def verify_stagec_design_package() -> dict[str, int]:
         and "COMBINED 52-NODE DIGEST "
         "DDEC58BA0B12A8699BDCB7BEB43B6D8656AD96D9E95347B37FAEA22ED3A572C0"
         in full_suite_boundary
-        and "CURRENT AUTHORITATIVE HARNESS REPLAY COLLECTED, STARTED, AND FINISHED 489 NODES"
+        and "THE 489-NODE PROMPT-CONTEXT CHECKPOINT IS PRESERVED HISTORICALLY"
         in full_suite_boundary
         and "A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225"
         in full_suite_boundary
         and "483 HAD EXACT ALL-PHASE PASS" in full_suite_boundary
         and "1461 ORDINARY REPORTS" in full_suite_boundary
+        and "CURRENT AUTHORITATIVE LOCKED SAME-PROCESS HARNESS REPLAY COLLECTED, STARTED, AND FINISHED 508 NODES"
+        in full_suite_boundary
+        and "502 HAD EXACT ALL-PHASE PASS" in full_suite_boundary
+        and "1518 ORDINARY REPORTS" in full_suite_boundary
+        and "8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2"
+        in full_suite_boundary
         and "ZERO WARNINGS, COLLECTION OR INTERNAL ERRORS, OR DESELECTIONS"
         in full_suite_boundary
         and "EXITED PYTEST 0" in full_suite_boundary
@@ -5037,6 +5234,7 @@ def verify_stagec_design_package() -> dict[str, int]:
             "status",
             "authoritative_standard_harness_receipt",
             "authoritative_worker_full_suite_receipt",
+            "historical_prompt_context_harness_receipt",
             "authoritative_current_harness_receipt",
             "execution_v2",
             "per_attempt_lifecycle",
@@ -5048,6 +5246,7 @@ def verify_stagec_design_package() -> dict[str, int]:
             "prompt_context_inventory",
             "prompt_context_union",
             "prompt_context_with_diagnostic_study",
+            "stagec_prerequisite_intake",
         },
         label="Stage C diagnostic runtime focused receipts",
     )
@@ -5117,10 +5316,11 @@ def verify_stagec_design_package() -> dict[str, int]:
                 "B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B"
             ),
         }
-        and diagnostic_focused.get("authoritative_current_harness_receipt")
+        and diagnostic_focused.get("historical_prompt_context_harness_receipt")
         == {
             "status": (
-                "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / "
+                "PRESERVED HISTORICAL AUTHORITATIVE SAME-PROCESS PASS WITH "
+                "SIX EXACT SETUP SKIPS / "
                 "SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / "
                 "NON_AUTHORITY"
             ),
@@ -5139,6 +5339,48 @@ def verify_stagec_design_package() -> dict[str, int]:
             "pytest_exit_status": 0,
             "python_ordinal_node_id_sha256": (
                 "A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225"
+            ),
+            "exact_setup_skipped_node_ids": REQUIRED_TEST_SUITES[
+                "Harness v2 kernel and history"
+            ]["expected_setup_skipped_nodeids"],
+        }
+        and diagnostic_focused.get("authoritative_current_harness_receipt")
+        == {
+            "status": (
+                "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / "
+                "SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / "
+                "NON_AUTHORITY"
+            ),
+            "collected": 508,
+            "started": 508,
+            "finished": 508,
+            "all_phase_passed": 502,
+            "setup_skipped": 6,
+            "ordinary_reports": 1518,
+            "passed_subtests": 163,
+            "warning_count": 0,
+            "collection_errors": 0,
+            "internal_errors": 0,
+            "deselections": 0,
+            "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+            "pytest_exit_status": 0,
+            "python_ordinal_node_id_sha256": REQUIRED_TEST_SUITES[
+                "Harness v2 kernel and history"
+            ]["expected_test_ids_sha256"],
+            "ordinary_outcomes_sha256": (
+                "4A9D6F31D341F51BBC7D339750BDCB69B444827CF58B08439BF05BC3A86DD766"
+            ),
+            "subtest_outcomes_sha256": (
+                "6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109"
+            ),
+            "locked_import_origins_sha256": (
+                "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A"
+            ),
+            "pre_test_loaded_code_sha256": (
+                "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98"
+            ),
+            "loaded_code_sha256": (
+                "61B3498CA938329FAD5BA181199F658DB5BF53712D890D3A9095711074E91846"
             ),
             "exact_setup_skipped_node_ids": REQUIRED_TEST_SUITES[
                 "Harness v2 kernel and history"
@@ -5328,8 +5570,68 @@ def verify_stagec_design_package() -> dict[str, int]:
             "status": (
                 "AUTHORITATIVE FOCUSED PASS / STRUCTURE_ONLY / NON_AUTHORITY"
             ),
+        }
+        and diagnostic_focused.get("stagec_prerequisite_intake")
+        == {
+            "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "src/cas_harness_v2/diagnostic_stagec_prerequisite_admission.py"
+            ][0],
+            "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "tests/cas_harness_v2/test_diagnostic_stagec_prerequisite_admission.py"
+            ][0],
+            "passed": 19,
+            "total": 19,
+            "python_ordinal_node_id_sha256": REQUIRED_SUBSUITE_DIGESTS[
+                "Stage C prerequisite intake and prospective admission"
+            ]["expected_test_ids_sha256"],
+            "schema_media_pairs": 18,
+            "public_exports": 62,
+            "status": (
+                "OWNER_ASSERTED_CANDIDATE_STRUCTURAL_REPLAY_ONLY / NON_AUTHORITY"
+            ),
+            "authoritative_full_harness_replay": {
+                "status": (
+                    "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / "
+                    "SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / "
+                    "NON_AUTHORITY"
+                ),
+                "collected": 508,
+                "started": 508,
+                "finished": 508,
+                "all_phase_passed": 502,
+                "setup_skipped": 6,
+                "ordinary_reports": 1518,
+                "passed_subtests": 163,
+                "warning_count": 0,
+                "collection_errors": 0,
+                "internal_errors": 0,
+                "deselections": 0,
+                "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+                "pytest_exit_status": 0,
+                "python_ordinal_node_id_sha256": REQUIRED_TEST_SUITES[
+                    "Harness v2 kernel and history"
+                ]["expected_test_ids_sha256"],
+                "ordinary_outcomes_sha256": (
+                    "4A9D6F31D341F51BBC7D339750BDCB69B444827CF58B08439BF05BC3A86DD766"
+                ),
+                "subtest_outcomes_sha256": (
+                    "6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109"
+                ),
+                "locked_import_origins_sha256": (
+                    "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A"
+                ),
+                "pre_test_loaded_code_sha256": (
+                    "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98"
+                ),
+                "loaded_code_sha256": (
+                    "61B3498CA938329FAD5BA181199F658DB5BF53712D890D3A9095711074E91846"
+                ),
+                "exact_setup_skipped_node_ids": REQUIRED_TEST_SUITES[
+                    "Harness v2 kernel and history"
+                ]["expected_setup_skipped_nodeids"],
+            },
         },
-        "Stage C fit/disposition/admission/prompt-context receipts drifted",
+        "Stage C fit/disposition/admission/prompt-context/prerequisite receipts drifted",
     )
     require(
         validation_receipts.get("packaged_kernel")
@@ -5338,10 +5640,10 @@ def verify_stagec_design_package() -> dict[str, int]:
             "unique_exports": PACKAGED_HARNESS_V2_EXPORT_COUNT,
             "packaging_provenance_sha256": PACKAGED_HARNESS_V2_PROVENANCE_SHA256,
             "canonical_and_mirror_init_sha256": (
-                "332D59841596D6AAEC091FDD63924E8F25DCB0E2B4F52BB6D27947340BA101B5"
+                "9DBC74D91E2787F436B1DBC192DE6BF876414A9FB3B7B2EB79B5C45E20AD7CF9"
             ),
             "packaging_allowlist_source_sha256": (
-                "B13A5A5D7CF2656C55BE313FA2A20F252935744A23334B9C6E2ECA48CEC9BBCE"
+                "FDD2182E22BDA65C941974B4D358650DFE326BBDD806D11B373B9E273A2B473C"
             ),
             "focused_mirror_tests_passed": 13,
         },
@@ -5350,8 +5652,13 @@ def verify_stagec_design_package() -> dict[str, int]:
     non_authority = design.get("non_authority")
     require(
         isinstance(non_authority, list)
-        and len(non_authority) == 5
+        and len(non_authority) == 6
         and any("not cas_harness_v2.preregistration.v1" in row for row in non_authority)
+        and any(
+            "do not authenticate an external DRC run, corpus freeze, storage provider, trusted clock, or runtime authorization"
+            in row
+            for row in non_authority
+        )
         and any("No prompt, model, Docker, provider, or RunPod execution" in row for row in non_authority),
         "Stage C non-authority boundary is incomplete",
     )
@@ -5672,6 +5979,7 @@ def verify_stagec_design_package() -> dict[str, int]:
             "calibration_disposition",
             "prompt_context_provenance",
             "prompt_context_inventory",
+            "stagec_prerequisite_intake",
         },
         label="Stage C completed diagnostic-runtime STRUCTURE_ONLY candidates",
     )
@@ -5897,6 +6205,62 @@ def verify_stagec_design_package() -> dict[str, int]:
                     "CORPUS FREEZE NOT ESTABLISHED / SOURCE BYTES REMAIN "
                     "EXTERNAL / NO EXECUTION, PACKET, CLAIM, LICENSE, OR PRODUCT "
                     "AUTHORITY"
+                ),
+            },
+            "stagec_prerequisite_intake": {
+                "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "src/cas_harness_v2/diagnostic_stagec_prerequisite_admission.py"
+                ][0],
+                "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                    "tests/cas_harness_v2/test_diagnostic_stagec_prerequisite_admission.py"
+                ][0],
+                "schema_media_pairs": 18,
+                "public_exports": 62,
+                "primary_carrier_schemas": [
+                    "cas_harness_v2.stagec_detector_drc_receipt.v1",
+                    "cas_harness_v2.stagec_frozen_corpus_bundle.v1",
+                    "cas_harness_v2.stagec_trusted_storage_receipt.v1",
+                    "cas_harness_v2.stagec_execution_authorization_candidate.v1",
+                    "cas_harness_v2.stagec_prerequisite_owner_intake.v1",
+                    "cas_harness_v2.stagec_prerequisite_admission.v1",
+                ],
+                "dependency_roles": [
+                    "drc_profile",
+                    "detector_ruleset",
+                    "known_fault_fixture",
+                    "corpus_rows",
+                    "adjudication",
+                    "split_assignment",
+                    "surface_bundle",
+                    "object_lock_receipt",
+                    "readback_receipt",
+                    "trusted_time_receipt",
+                    "verifier_identity",
+                    "authorization_instrument",
+                ],
+                "target_binding": (
+                    "EXACT C-CAL SPLIT AND 480-ROW PROMPT-CONTEXT INVENTORY PLUS "
+                    "MODEL, CAPTURE-PROFILE, CAPTURE-REQUEST, AND PROMPT-DEPENDENCY "
+                    "IDENTITIES"
+                ),
+                "owner_assertion": (
+                    "OWNER_ASSERTS_PRESENT / INTAKE ACTION NOT_PERFORMED_BY_INTAKE"
+                ),
+                "admission_decision": (
+                    "ADMITTED_FOR_PROSPECTIVE_PREREGISTRATION_ONLY"
+                ),
+                "base_binding_rule": (
+                    "A FUTURE IMMUTABLE DIAGNOSTIC BASE MUST CONTAIN THE EXACT "
+                    "PROMPT INVENTORY, FOUR CANDIDATES, ALL TWELVE CANDIDATE "
+                    "DEPENDENCIES, OWNER INTAKE, AND ADMISSION; AMENDMENT-ONLY "
+                    "BINDING IS FORBIDDEN"
+                ),
+                "boundary": (
+                    "STRUCTURAL REPLAY ONLY / SERIALIZED CANDIDATES ARE NOT AN "
+                    "EXTERNAL TRUST ROOT / NO ACTUAL DRC RUN, CORPUS FREEZE, "
+                    "PROVIDER AUTHENTICATION, WORM AUTHENTICITY, NONCE "
+                    "CONSUMPTION, RUNTIME INTEGRATION, EXECUTION, PACKET, CLAIM, "
+                    "LICENSE, DISCLOSURE, OR PRODUCT AUTHORITY"
                 ),
             },
         },
@@ -6304,7 +6668,18 @@ def verify_stagec_design_package() -> dict[str, int]:
         and all(
             isinstance(row, dict)
             and isinstance(row.get("status"), str)
-            and "OPEN" in row["status"]
+            and (
+                "OPEN" in row["status"]
+                or (
+                    row.get("obligation_id") == "stagec-obligation-corpus"
+                    and row["status"]
+                    == (
+                        "OWNER ASSERTS PRESENT / STRUCTURAL INTAKE CONTRACT "
+                        "COMPLETE / ACTUAL 960-ROW EXTERNAL FREEZE NOT "
+                        "ESTABLISHED / BLOCKS CALIBRATION"
+                    )
+                )
+            )
             for row in obligations
         ),
         "Stage C implementation blockers were removed or malformed",
@@ -6313,14 +6688,33 @@ def verify_stagec_design_package() -> dict[str, int]:
         any(
             row.get("obligation_id")
             == "stagec-obligation-prompt-context-provenance"
-            and "design.input_artifacts" in row.get("requirement", "")
-            and "future deterministic DRC" in row.get("requirement", "")
+            and "future immutable diagnostic base" in row.get("requirement", "")
+            and "deterministic DRC" in row.get("requirement", "")
             and "admitted runtime" in row.get("requirement", "")
             and "corpus freeze" in row.get("requirement", "")
             for row in obligations
             if isinstance(row, dict)
         ),
         "Stage C prompt-context preregistration/DRC/runtime obligation is missing",
+    )
+    require(
+        any(
+            row.get("obligation_id") == "stagec-obligation-prerequisite-intake"
+            and row.get("status")
+            == (
+                "STRUCTURE_ONLY EXACT INTAKE AND PROSPECTIVE ADMISSION CONTRACT "
+                "COMPLETE / REAL EXTERNAL INTAKE, PROVIDER TRUST, AND RUNTIME "
+                "ENFORCEMENT OPEN"
+            )
+            and "ADMITTED_FOR_PROSPECTIVE_PREREGISTRATION_ONLY"
+            in row.get("requirement", "")
+            and "current 19/19 receipt uses structural fixtures"
+            in row.get("requirement", "")
+            and "no external/provider authenticity" in row.get("requirement", "")
+            for row in obligations
+            if isinstance(row, dict)
+        ),
+        "Stage C owner-asserted prerequisite intake obligation is missing or promotes authority",
     )
     schema_blockers = design.get("schema_and_lifecycle_blockers")
     require(
@@ -6370,8 +6764,22 @@ def verify_stagec_design_package() -> dict[str, int]:
             == "prompt-context-companions-are-not-yet-preregistered-or-runtime-required"
             and "SOURCE plus ordered UTF8_CONCAT" in row.get("fact", "")
             and "Corpus freeze remains NOT_ESTABLISHED" in row.get("fact", "")
-            and "design.input_artifacts" in row.get("fact", "")
+            and "future diagnostic base" in row.get("fact", "")
             and "deterministic DRC" in row.get("fact", "")
+            for row in schema_blockers
+            if isinstance(row, dict)
+        )
+        and any(
+            row.get("blocker_id")
+            == (
+                "stagec-owner-asserted-candidates-are-not-external-trust-or-"
+                "runtime-authority"
+            )
+            and "OWNER_ASSERTS_PRESENT" in row.get("fact", "")
+            and "prospective preregistration only" in row.get("fact", "")
+            and "cannot authenticate" in row.get("fact", "")
+            and "runtime enforcement remain NOT_ESTABLISHED / NOT_PERFORMED"
+            in row.get("fact", "")
             for row in schema_blockers
             if isinstance(row, dict)
         ),
@@ -6518,7 +6926,13 @@ def verify_stagec_design_package() -> dict[str, int]:
         and "LOCKED FIT" in activation["stagec-calibration"]
         and "FREEZE-OR-REJECT CANDIDATES"
         in activation["stagec-calibration"]
-        and "AUTHORITATIVE FULL-SUITE INTEGRATION RECEIPT"
+        and "OWNER-ASSERTED FOUR CANDIDATES AND THEIR TWELVE DEPENDENCIES"
+        in activation["stagec-calibration"]
+        and "ACTUALLY INGESTED AND EXTERNALLY AUTHENTICATED"
+        in activation["stagec-calibration"]
+        and "PROSPECTIVE-ONLY ADMISSION"
+        in activation["stagec-calibration"]
+        and "AUTHORITATIVE 508-NODE OR LATER FULL-SUITE INTEGRATION RECEIPT"
         in activation["stagec-calibration"]
         and activation["stagec-evaluation"].startswith("FORBIDDEN UNTIL C-CAL")
         and "DIAGNOSTIC NONREPORTING DISPOSITION"
@@ -6653,10 +7067,21 @@ def verify_stagec_design_package() -> dict[str, int]:
         "aggregate access only after all 480 clean rows are terminal",
         "reconcile C-Cal; C-Cal creates no",
         "Evidence Packet v2.",
-        "same-process Harness replay collected, started, and finished 489 nodes",
+        "prior prompt-context checkpoint is preserved as a historical authoritative",
+        "489 nodes with digest",
         "1,461 ordinary",
         "163 passing subtests",
         "A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225",
+        "current authoritative locked same-process Harness replay collected",
+        "started, and finished 508 nodes",
+        "Exactly 502 had exact all-phase PASS",
+        "1,518 ordinary reports and 163 passing subtests",
+        "8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2",
+        "4A9D6F31D341F51BBC7D339750BDCB69B444827CF58B08439BF05BC3A86DD766",
+        "6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109",
+        "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A",
+        "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98",
+        "61B3498CA938329FAD5BA181199F658DB5BF53712D890D3A9095711074E91846",
     ):
         require(marker in readme, f"Stage C README omits {marker!r}")
     return {
@@ -6796,7 +7221,21 @@ def verify_review_matrix(
         and "SOURCE and ordered UTF8_CONCAT" in matrix["review_basis"]
         and "design.input_artifacts" in matrix["review_basis"]
         and "corpus freeze remains NOT_ESTABLISHED" in matrix["review_basis"]
-        and "current authoritative Harness replay collected, started, and finished 489 nodes"
+        and "prerequisite intake/admission contract passes 19/19 focused nodes"
+        in matrix["review_basis"]
+        and "18 schema/media pairs and 62 public exports" in matrix["review_basis"]
+        and "OWNER_ASSERTED_CANDIDATE_STRUCTURAL_REPLAY_ONLY"
+        in matrix["review_basis"]
+        and "not an external trust root" in matrix["review_basis"]
+        and "grant no runtime authority" in matrix["review_basis"]
+        and "current authoritative Harness replay collected, started, and finished 508 nodes"
+        in matrix["review_basis"]
+        and "502 had exact all-phase PASS" in matrix["review_basis"]
+        and "1,518 ordinary reports" in matrix["review_basis"]
+        and "zero warnings, collection or internal errors, or deselections occurred"
+        in matrix["review_basis"]
+        and "Exact current-receipt digests bind ordinary outcomes" in matrix["review_basis"]
+        and "historical prompt-context Harness replay remains preserved separately"
         in matrix["review_basis"]
         and "483 had exact all-phase PASS" in matrix["review_basis"]
         and "1,461 ordinary reports and 163 passing subtests"
@@ -6804,9 +7243,9 @@ def verify_review_matrix(
         and "current adapter replay also passed 99/99 nodes"
         in matrix["review_basis"]
         and "one warning" in matrix["review_basis"]
-        and "19 byte-identical Python files" in matrix["review_basis"]
-        and "343 unique exports" in matrix["review_basis"]
-        and "1,148,019 bytes" in matrix["review_basis"]
+        and "20 byte-identical Python files" in matrix["review_basis"]
+        and "405 unique exports" in matrix["review_basis"]
+        and "1,236,504 bytes" in matrix["review_basis"]
         and GATE4_RETAINED_GIT_COMMIT in matrix["review_basis"]
         and GATE4_RETAINED_SOURCE_BOUNDARY in matrix["review_basis"]
         and "external-source portability remains OPEN" in matrix["review_basis"],
@@ -6937,11 +7376,13 @@ def verify_review_matrix(
         in gate4_open.get("remaining_obligation", ""),
         "Gate 4 review criteria omit the retained-source portability boundary",
     )
-    prompt_context_refs = {
+    diagnostic_intake_refs = {
         "src/cas_harness_v2/diagnostic_prompt_context_provenance.py",
         "src/cas_harness_v2/diagnostic_prompt_context_inventory.py",
         "tests/cas_harness_v2/test_diagnostic_prompt_context_provenance.py",
         "tests/cas_harness_v2/test_diagnostic_prompt_context_inventory.py",
+        "src/cas_harness_v2/diagnostic_stagec_prerequisite_admission.py",
+        "tests/cas_harness_v2/test_diagnostic_stagec_prerequisite_admission.py",
     }
     for criterion_id in (
         "G5-KERNEL-015",
@@ -6956,18 +7397,19 @@ def verify_review_matrix(
             else set()
         )
         require(
-            "19" in observed
-            and "343" in observed
-            and prompt_context_refs <= evidence_refs,
-            f"{criterion_id}: current package/prompt-context criterion evidence drifted",
+            str(PACKAGED_HARNESS_V2_FILE_COUNT) in observed
+            and str(PACKAGED_HARNESS_V2_EXPORT_COUNT) in observed
+            and "OWNER_ASSERTED_CANDIDATE_STRUCTURAL_REPLAY_ONLY" in observed
+            and diagnostic_intake_refs <= evidence_refs,
+            f"{criterion_id}: current package/prompt-context/prerequisite criterion evidence drifted",
         )
     packaged_criterion = criteria_by_id["G5-ENGINEERING-007"]["observed_result"]
     require(
-        "1,148,019 bytes" in packaged_criterion
+        "1,236,504 bytes" in packaged_criterion
         and PACKAGED_HARNESS_V2_PROVENANCE_SHA256 in packaged_criterion
-        and "332D59841596D6AAEC091FDD63924E8F25DCB0E2B4F52BB6D27947340BA101B5"
+        and "9DBC74D91E2787F436B1DBC192DE6BF876414A9FB3B7B2EB79B5C45E20AD7CF9"
         in packaged_criterion
-        and "B13A5A5D7CF2656C55BE313FA2A20F252935744A23334B9C6E2ECA48CEC9BBCE"
+        and "FDD2182E22BDA65C941974B4D358650DFE326BBDD806D11B373B9E273A2B473C"
         in packaged_criterion
         and "13/13" in packaged_criterion,
         "G5-ENGINEERING-007: current packaged mirror identity/receipt drifted",
@@ -7169,6 +7611,10 @@ def verify_review_matrix(
         and "LAST COMMITTED b96c2c12 CHECKPOINT RECEIPT"
         in kernel_receipt.get("scope", "")
         and "separate preserved historical 437-node authoritative receipt is recorded"
+        in kernel_receipt.get("scope", "")
+        and "preserved historical prompt-context receipt is recorded separately at 489 nodes"
+        in kernel_receipt.get("scope", "")
+        and "current authoritative receipt is recorded separately at 508 nodes"
         in kernel_receipt.get("scope", "")
         and "not hermetic or independently attested" in kernel_receipt.get("scope", ""),
         "review-matrix retained Harness v2 checkpoint receipt drifted",
@@ -7397,6 +7843,13 @@ def verify_review_matrix(
             "prompt_context_inventory_focused_tests",
             "prompt_context_union_focused_tests",
             "prompt_context_with_diagnostic_study_focused_tests",
+            "stagec_prerequisite_intake_focused_tests",
+            "stagec_prerequisite_intake_schema_media_pairs",
+            "stagec_prerequisite_intake_public_exports",
+            "stagec_prerequisite_intake_status",
+            "expanded_harness_configured_nodes",
+            "expanded_harness_configured_node_ids_sha256",
+            "expanded_harness_authoritative_execution_status",
             "worker_archive_admission_focused_tests",
             "new_full_suite_authoritative_replay_status",
             "packaged_mirror_files",
@@ -7450,9 +7903,25 @@ def verify_review_matrix(
             "prompt_context_inventory_focused_tests": 22,
             "prompt_context_union_focused_tests": 52,
             "prompt_context_with_diagnostic_study_focused_tests": 98,
+            "stagec_prerequisite_intake_focused_tests": 19,
+            "stagec_prerequisite_intake_schema_media_pairs": 18,
+            "stagec_prerequisite_intake_public_exports": 62,
+            "stagec_prerequisite_intake_status": (
+                "OWNER_ASSERTED_CANDIDATE_STRUCTURAL_REPLAY_ONLY / NON_AUTHORITY"
+            ),
+            "expanded_harness_configured_nodes": 508,
+            "expanded_harness_configured_node_ids_sha256": REQUIRED_TEST_SUITES[
+                "Harness v2 kernel and history"
+            ]["expected_test_ids_sha256"].lower(),
+            "expanded_harness_authoritative_execution_status": (
+                "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / "
+                "SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / "
+                "NON_AUTHORITY"
+            ),
             "worker_archive_admission_focused_tests": 18,
             "new_full_suite_authoritative_replay_status": (
-                "AUTHORITATIVE SAME-PROCESS RECEIPTS ESTABLISHED / "
+                "CURRENT AUTHORITATIVE SAME-PROCESS RECEIPT 508 NODES / "
+                "HISTORICAL PROMPT-CONTEXT 489-NODE RECEIPT PRESERVED / "
                 "STRUCTURE_ONLY / NON_AUTHORITY"
             ),
             "packaged_mirror_files": PACKAGED_HARNESS_V2_FILE_COUNT,
@@ -7486,9 +7955,9 @@ def verify_review_matrix(
         and "160-group/480-case diagnostic Study plan" in stagec_scope
         and "create-only host-local seven-member archive" in stagec_scope
         and "acyclic completed-row post-terminal outcome carrier" in stagec_scope
-        and "19 byte-identical Python files" in stagec_scope
-        and "1,148,019 bytes" in stagec_scope
-        and "343 unique public exports" in stagec_scope
+        and "20 byte-identical Python files" in stagec_scope
+        and "1,236,504 bytes" in stagec_scope
+        and "405 unique public exports" in stagec_scope
         and PACKAGED_HARNESS_V2_PROVENANCE_SHA256.lower() in stagec_scope
         and "IN_MEMORY / NOT_DURABLY_RETAINED" in stagec_scope
         and "index and four raw arrays" in stagec_scope
@@ -7502,24 +7971,38 @@ def verify_review_matrix(
         and "worker-local archive admission" in stagec_scope
         and "audit-only typed prompt-context lineage" in stagec_scope
         and "exact split-order 480-row provenance inventory" in stagec_scope
+        and "additive exact Stage C prerequisite intake/prospective admission contract"
+        in stagec_scope
+        and "18 schema/media pairs" in stagec_scope
+        and "62 public exports" in stagec_scope
+        and "OWNER_ASSERTED_CANDIDATE_STRUCTURAL_REPLAY_ONLY / NON_AUTHORITY"
+        in stagec_scope
+        and "not an external trust root" in stagec_scope
+        and "grant no runtime authority" in stagec_scope
         and "30 provenance, 22 inventory, and 52 union tests" in stagec_scope
         and "98/98 in 33.77 seconds" in stagec_scope
         and "SOURCE and ordered UTF8_CONCAT" in stagec_scope
         and "source bytes remain external" in stagec_scope
         and "design.input_artifacts" in stagec_scope
-        and "future DRC and runtime admission must require it" in stagec_scope
-        and "corpus freeze remains NOT_ESTABLISHED" in stagec_scope
+        and "runtime identity comparison and consumption remain unintegrated"
+        in stagec_scope
         and "without HTTP or container wiring" in stagec_scope
         and "WORM retention" in stagec_scope
-        and "trusted external anchor" in stagec_scope
+        and "authenticated WORM retention and trusted time" in stagec_scope
         and "six exact setup skips retained as mismatch evidence rather than PASS"
         in stagec_scope
         and "Historical authoritative Harness and worker receipts remain preserved"
         in stagec_scope
-        and "current 489-node Harness replay is authoritative"
+        and "historical prompt-context 489-node Harness replay"
         in stagec_scope
         and "1,461 ordinary reports" in stagec_scope
-        and "zero warnings/errors/deselections" in stagec_scope
+        and "current authoritative Harness replay collected, started, and finished 508 nodes"
+        in stagec_scope
+        and "502 all-phase PASS" in stagec_scope
+        and "1,518 ordinary reports" in stagec_scope
+        and "zero warnings, collection or internal errors, or deselections"
+        in stagec_scope
+        and "Exact current-receipt digests bind ordinary outcomes" in stagec_scope
         and "no p0/p1 inside the declared structure_only / non_authority scope"
         in stagec_scope_lower
         and "Execution remains blocked" in stagec_scope,
@@ -7538,7 +8021,8 @@ def verify_review_matrix(
             "timeout_claim_effect",
             "authoritative_harness_full_suite",
             "authoritative_worker_full_suite",
-            "authoritative_current_harness_full_suite",
+            "historical_prompt_context_harness_receipt",
+            "authoritative_current_harness_receipt",
             "focused_harness",
             "worker_archive_admission",
             "packaged_kernel",
@@ -7555,8 +8039,8 @@ def verify_review_matrix(
     require(
         diagnostic_receipt.get("status")
         == (
-            "STRUCTURE_ONLY / NON_AUTHORITY / AUTHORITATIVE FULL-SUITE "
-            "RECEIPTS ESTABLISHED"
+            "STRUCTURE_ONLY / NON_AUTHORITY / CURRENT AUTHORITATIVE HARNESS "
+            "RECEIPT 508 / HISTORICAL PROMPT-CONTEXT RECEIPT 489 PRESERVED"
         )
         and diagnostic_receipt.get("same_process_timeout_seconds")
         == SAME_RUN_PYTEST_TIMEOUT_SECONDS
@@ -7613,7 +8097,7 @@ def verify_review_matrix(
                 "AUTHORITATIVE SAME-PROCESS PASS / STRUCTURE_ONLY / NON_AUTHORITY"
             ),
         }
-        and diagnostic_receipt.get("authoritative_current_harness_full_suite")
+        and diagnostic_receipt.get("historical_prompt_context_harness_receipt")
         == {
             "collected_nodes": 489,
             "started_nodes": 489,
@@ -7628,9 +8112,52 @@ def verify_review_matrix(
             "deselections": 0,
             "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
             "pytest_exit_status": 0,
+            "node_ids_sha256": (
+                "a24a129f295810836dae12a3345670a41e3500fb2dfcfbec27dac6cdc65bb225"
+            ),
+            "setup_skipped_nodeids": REQUIRED_TEST_SUITES[
+                "Harness v2 kernel and history"
+            ]["expected_setup_skipped_nodeids"],
+            "receipt_status": (
+                "PRESERVED HISTORICAL AUTHORITATIVE SAME-PROCESS PASS WITH "
+                "SIX EXACT SETUP SKIPS / "
+                "SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / "
+                "NON_AUTHORITY"
+            ),
+        }
+        and diagnostic_receipt.get("authoritative_current_harness_receipt")
+        == {
+            "collected_nodes": 508,
+            "started_nodes": 508,
+            "finished_nodes": 508,
+            "all_phase_pass_nodes": 502,
+            "setup_skipped_nodes": 6,
+            "ordinary_reports": 1518,
+            "passed_subtests": 163,
+            "warning_count": 0,
+            "collection_errors": 0,
+            "internal_errors": 0,
+            "deselections": 0,
+            "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+            "pytest_exit_status": 0,
             "node_ids_sha256": REQUIRED_TEST_SUITES[
                 "Harness v2 kernel and history"
             ]["expected_test_ids_sha256"].lower(),
+            "ordinary_outcomes_sha256": (
+                "4a9d6f31d341f51bbc7d339750bdcb69b444827cf58b08439bf05bc3a86dd766"
+            ),
+            "subtest_outcomes_sha256": (
+                "6c2afb12d8f1dbc529c9493967b1cbb06ae98228b318da724d093d3c84721109"
+            ),
+            "locked_import_origins_sha256": (
+                "3e1424e6bdba7b6ae417189ef951e7502d108626eb5482277a627c9d6a29887a"
+            ),
+            "pre_test_loaded_code_sha256": (
+                "0cbcb82dcf24426a868cfca8dbc334661d1504a23c882dd342d5ec6767b30d98"
+            ),
+            "loaded_code_sha256": (
+                "61b3498ca938329fad5ba181199f658db5bf53712d890d3a9095711074e91846"
+            ),
             "setup_skipped_nodeids": REQUIRED_TEST_SUITES[
                 "Harness v2 kernel and history"
             ]["expected_setup_skipped_nodeids"],
@@ -7656,6 +8183,7 @@ def verify_review_matrix(
             "prompt_context_inventory",
             "prompt_context_union",
             "prompt_context_with_diagnostic_study",
+            "stagec_prerequisite_intake",
         },
         label="review-matrix diagnostic focused Harness receipt",
     )
@@ -7796,6 +8324,28 @@ def verify_review_matrix(
             "focused_receipt": (
                 "98 / 98 PASS IN 33.77 SECONDS / STRUCTURE_ONLY / NON_AUTHORITY"
             ),
+        }
+        and focused_harness.get("stagec_prerequisite_intake")
+        == {
+            "source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "src/cas_harness_v2/diagnostic_stagec_prerequisite_admission.py"
+            ][0].lower(),
+            "test_source_sha256": DIAGNOSTIC_RUNTIME_FILE_BINDINGS[
+                "tests/cas_harness_v2/test_diagnostic_stagec_prerequisite_admission.py"
+            ][0].lower(),
+            "collected_nodes": 19,
+            "node_ids_sha256": REQUIRED_SUBSUITE_DIGESTS[
+                "Stage C prerequisite intake and prospective admission"
+            ]["expected_test_ids_sha256"].lower(),
+            "schema_media_pairs": 18,
+            "public_exports": 62,
+            "status": (
+                "OWNER_ASSERTED_CANDIDATE_STRUCTURAL_REPLAY_ONLY / NON_AUTHORITY"
+            ),
+            "external_trust_authentication": (
+                "NOT_ESTABLISHED_BY_SERIALIZED_CANDIDATES"
+            ),
+            "runtime_authority": "NOT_GRANTED",
         },
         "review-matrix diagnostic focused Harness receipts drifted",
     )
@@ -7833,10 +8383,10 @@ def verify_review_matrix(
                 PACKAGED_HARNESS_V2_PROVENANCE_SHA256.lower()
             ),
             "canonical_and_mirror_init_sha256": (
-                "332d59841596d6aaec091fdd63924e8f25dcb0e2b4f52bb6d27947340ba101b5"
+                "9dbc74d91e2787f436b1dbc192de6bf876414a9fb3b7b2eb79b5c45e20ad7cf9"
             ),
             "packaging_allowlist_source_sha256": (
-                "b13a5a5d7cf2656c55be313fa2a20f252935744a23334b9c6e2eca48cec9bbce"
+                "fdd2182e22bda65c941974b4d358650dfe326bbdd806d11b373b9e273a2b473c"
             ),
             "focused_mirror_tests": "13 / 13 PASS",
         }
@@ -7851,8 +8401,18 @@ def verify_review_matrix(
     require(
         isinstance(diagnostic_scope, str)
         and "LOCAL STRUCTURAL ENGINEERING RECEIPTS ONLY" in diagnostic_scope
-        and "authoritative same-process full-suite" in diagnostic_scope
+        and "historical prompt-context 489-node Harness replay" in diagnostic_scope
+        and "current authoritative Harness replay collected, started, and finished 508 nodes"
+        in diagnostic_scope
+        and "502 all-phase PASS" in diagnostic_scope
+        and "1,518 ordinary reports" in diagnostic_scope
+        and "Exact current-receipt digests bind ordinary outcomes"
+        in diagnostic_scope
         and "six unchanged setup skips retained as mismatch evidence rather than PASS"
+        in diagnostic_scope
+        and "OWNER_ASSERTED_CANDIDATE_STRUCTURAL_REPLAY_ONLY / NON_AUTHORITY"
+        in diagnostic_scope
+        and "do not authenticate external trust or grant runtime authority"
         in diagnostic_scope
         and "separate exact Python 3.12 lock" in diagnostic_scope
         and "no performance claim" in diagnostic_scope
@@ -8704,9 +9264,20 @@ def verify_adversarial_review() -> None:
         "prospective execution ceiling is prefill-only",
         "only after activation",
         "C-Cal and C-Eval require separate activation receipts",
-        "19 byte-mirrored files",
-        "343 unique exports",
-        "66D567C3C4E31C2FE1925AF0F9E0CAD89DAF91A87C59591C469C7017B13087B2",
+        "20 byte-mirrored files",
+        "405 unique exports",
+        "BC1DB23BD6132CB7AF9011292B7191038187D1BE7E40FC6684C5F66C8F0B9C37",
+        "Stage C prerequisite-intake adversarial disposition",
+        "serialized candidate bodies are not an external trust root",
+        "ADMITTED_FOR_PROSPECTIVE_PREREGISTRATION_ONLY",
+        "AD46AA964240C98D5C12070872C60B26E2310B35A88DD6FA50F68C10C62F09B3",
+        "56A9BCE442405EE57BFF95A735F5D80724A0F72B06136A8B4AEEC36A41F336A3",
+        "3785ADB97900ABAB40242DFD6DF1D0665B9996BAE94EC2697672A8506DCBE863",
+        "current authoritative locked same-process Harness replay collected",
+        "started, and finished 508 nodes",
+        "8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2",
+        "502 had exact all-phase PASS",
+        "1,518 ordinary reports and 163 passing subtests",
         "newer diagnostic runtime tranche",
         "7C16F098046E533176A1FC37B1F3D303C028B9750CD4132DECE1768858E3623F",
         "C4A592645136E2FAE4D215E85E0427EB52C7CCEE6DB6E800EF8D372C5FBC5199",
@@ -8731,8 +9302,8 @@ def verify_adversarial_review() -> None:
         "passed 594/594 nodes",
         "1,782 ordinary reports and zero subtests",
         "B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B",
-        "authoritative same-process Harness replay collected, started, and finished 489",
-        "Exactly 483 had all phases pass",
+        "prior prompt-context Harness checkpoint is preserved historically at 489",
+        "prompt-context checkpoint is also preserved historical evidence",
         "1,461 ordinary reports and 163 passing subtests",
         "A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225",
         "authoritative same-process 99/99 PASS receipt",
@@ -14358,8 +14929,8 @@ def verify_test_suites(
             suite["expected_tests"]
             for suite in REQUIRED_TEST_SUITES.values()
         )
-        == 1_571,
-        "configured Gate 5 test-suite node total drifted from 1,571",
+        == 1_590,
+        "configured Gate 5 test-suite node total drifted from 1,590",
     )
     suites = manifest.get("test_suites")
     require(isinstance(suites, list), "manifest test_suites is not a list")

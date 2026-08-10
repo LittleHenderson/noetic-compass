@@ -43,12 +43,76 @@ operations are `SOURCE` and ordered `UTF8_CONCAT`; normalization and declared
 origin-to-chat-role coercion are forbidden.
 
 These are companion artifacts, not a preregistration amendment or execution
-authority. A future diagnostic preregistration must place the exact aggregate
-inventory ref in `design.input_artifacts`; the deterministic DRC and admitted
-runtime must require and replay it before activation. Until then corpus freeze
-is `NOT_ESTABLISHED`. Focused structural receipts are 30/30, 22/22, 52/52, and
+authority. The additive Stage C prerequisite helper now requires the exact
+aggregate inventory ref in any future immutable diagnostic base
+`design.input_artifacts`. No actual base, deterministic DRC execution, or
+admitted runtime consumes that helper yet. Corpus freeze remains
+`NOT_ESTABLISHED`. Focused structural receipts are 30/30, 22/22, 52/52, and
 98/98 with the diagnostic Study. They create no detector, Packet v2, claim,
 license, product route, trusted time, WORM proof, or scientific conclusion.
+
+### Stage C prerequisite-admission companion
+
+`diagnostic_stagec_prerequisite_admission.py` adds a separate exact-key
+structural intake before diagnostic preregistration. It does not modify
+`cas_harness_v2.preregistration.v1` or
+`cas_harness_v2.diagnostic_preregistration.v1`. Six primary schema/media pairs
+cover the detector DRC receipt, frozen-corpus bundle, trusted-storage receipt,
+execution-authorization candidate, owner-intake assertion, and prerequisite
+admission. Twelve additional schema/media pairs cover the exact role-specific
+dependency bodies, for 18 pairs total and 62 public exports.
+
+The factory first full-replays the one exact 160-group/480-row C-Cal split and
+prompt-context inventory. Its target includes their raw identities and ordered
+digests, the full prompt dependency count/digest, model and capture-profile
+digests, and capture-request closure. Candidate loaders then require:
+
+- a Stage C detector DRC profile, frozen closed ruleset, and known-fault fixture
+  with every fixture rejected and zero false accepts;
+- an exact 320-group/960-row three-variant corpus with disjoint 160/80/80 group
+  assignment, adjudication, and surface bundle;
+- corpus-bound Object Lock, readback, trusted-time, and verifier-identity
+  candidate bodies; and
+- a C-Cal-only authorization instrument, one prospective window, exact
+  480-attempt/zero-generation/zero-intervention scope, and an unconsumed
+  canonical 32-byte nonce.
+
+The prospective subject is derived from the target plus DRC, corpus, and
+storage refs before authorization, avoiding a cyclic self-binding. The owner
+intake records `OWNER_ASSERTS_PRESENT` and binds all four exact candidates. The
+only admission decision is
+`ADMITTED_FOR_PROSPECTIVE_PREREGISTRATION_ONLY`.
+
+`require_stagec_prerequisite_admission_in_preregistration` requires 19 exact
+prerequisite refs in the immutable diagnostic base `design.input_artifacts`:
+the prompt inventory; four primary candidates; their 12 dependencies; owner
+intake; and admission. The exact C-Cal split remains the base split source.
+These refs cannot be supplied only by amendment. Prompt/candidate/intake/
+admission creation, base creation, ordered amendments, verifier observation,
+authorization window, and storage retention must remain in strict prospective
+order.
+
+The focused receipt is 19/19 PASS with source SHA-256
+`AD46AA964240C98D5C12070872C60B26E2310B35A88DD6FA50F68C10C62F09B3`,
+test SHA-256
+`56A9BCE442405EE57BFF95A735F5D80724A0F72B06136A8B4AEEC36A41F336A3`,
+and node-ID SHA-256
+`3785ADB97900ABAB40242DFD6DF1D0665B9996BAE94EC2697672A8506DCBE863`.
+The current authoritative locked same-process Harness replay collected,
+started, and finished 508 nodes. Exactly 502 had exact all-phase PASS; the same
+six exact nodes setup-skipped as runtime-lock mismatch evidence, not PASS. It
+emitted 1,518 ordinary reports and 163 passing subtests, recorded zero warnings,
+collection or internal errors, or deselections, left the isolated pycache
+empty, exited pytest 0, and bound node-ID SHA-256
+`8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
+
+The receipt uses structural fixtures. Candidate JSON is not a provider trust
+root and does not establish an actual DRC run, actual 960-row corpus freeze,
+Object Lock/readback/trusted-time authenticity, authoritative runtime
+authorization or nonce consumption, out-of-band prevention, or execution.
+Gate 5 remains `OPEN / KEEP_OPEN`; Stage C remains
+`DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`; `NOT LICENSED / HELD / NOT FROZEN`
+is unchanged.
 
 ## 1. Normative executable schemas
 
@@ -297,14 +361,14 @@ The former 204-test/110-subtest receipt is historical pre-expansion evidence.
 All of these are repository-local controls, not live execution, independent
 reproduction, scientific evidence, or product authority.
 
-The current packaged kernel has 19 byte-mirrored files, 343 unique exports, and
-1,148,019 bytes.
+The current packaged kernel has 20 byte-mirrored files, 405 unique exports, and
+1,236,504 bytes.
 Its packaging-provenance SHA-256 is
-`66D567C3C4E31C2FE1925AF0F9E0CAD89DAF91A87C59591C469C7017B13087B2`;
+`BC1DB23BD6132CB7AF9011292B7191038187D1BE7E40FC6684C5F66C8F0B9C37`;
 13 focused mirror tests pass. Canonical/mirror `__init__.py` SHA-256 is
-`332D59841596D6AAEC091FDD63924E8F25DCB0E2B4F52BB6D27947340BA101B5`,
+`9DBC74D91E2787F436B1DBC192DE6BF876414A9FB3B7B2EB79B5C45E20AD7CF9`,
 and the packaging allowlist source SHA-256 is
-`B13A5A5D7CF2656C55BE313FA2A20F252935744A23334B9C6E2ECA48CEC9BBCE`.
+`FDD2182E22BDA65C941974B4D358650DFE326BBDD806D11B373B9E273A2B473C`.
 
 The narrower Stage B joined-executor and runner-preparation suites pass 34/34
 and 17/17 with same-process executed-node digests
@@ -558,14 +622,22 @@ pycache empty, exited pytest 0, and bound exact node-ID digest
 Positive exact numerical evidence remains separate under Python 3.12: fit 10/10
 and eligible disposition 3/3.
 
-That 437-node receipt is preserved historical evidence. The current
-authoritative same-process Harness replay collected, started, and finished 489
-nodes. Exactly 483 had all phases pass; the same six exact fit/disposition nodes
+That 437-node receipt is preserved historical evidence. The later 489-node
+prompt-context checkpoint is also preserved historically. Exactly 483 had all
+phases pass; the same six exact fit/disposition nodes
 setup-skipped as runtime-lock mismatch evidence rather than PASS. It emitted
 1,461 ordinary reports and 163 passing subtests, recorded zero warnings,
 collection or internal errors, or deselections, left the isolated pycache
 empty, exited pytest 0, and bound exact node-ID digest
 `A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`.
+
+The current authoritative locked same-process Harness replay collected,
+started, and finished 508 nodes. Exactly 502 had exact all-phase PASS; the same
+six exact fit/disposition nodes setup-skipped as runtime-lock mismatch evidence,
+not PASS. It emitted 1,518 ordinary reports and 163 passing subtests, recorded
+zero warnings, collection or internal errors, or deselections, left the
+isolated pycache empty, exited pytest 0, and bound exact node-ID digest
+`8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
 
 The authoritative same-process worker receipt collected, started, finished,
 and passed 594/594 nodes, emitted 1,782 ordinary reports and zero subtests,

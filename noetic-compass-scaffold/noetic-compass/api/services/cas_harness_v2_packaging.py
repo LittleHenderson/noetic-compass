@@ -24,6 +24,7 @@ PACKAGED_KERNEL_FILES = frozenset(
         "diagnostic_preregistration.py",
         "diagnostic_prompt_context_inventory.py",
         "diagnostic_prompt_context_provenance.py",
+        "diagnostic_stagec_prerequisite_admission.py",
         "diagnostic_study_protocol.py",
         "evidence_packet.py",
         "evidence_packet_builder.py",

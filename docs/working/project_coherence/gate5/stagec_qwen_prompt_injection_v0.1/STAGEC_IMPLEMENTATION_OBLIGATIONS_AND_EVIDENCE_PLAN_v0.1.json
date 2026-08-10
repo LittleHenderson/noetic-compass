@@ -20,7 +20,7 @@
     "evidence_packet_status": "NOT CREATED"
   },
   "current_validation_receipts": {
-    "full_suite_receipt_boundary": "THE 576-WORKER AND 306-HARNESS RECEIPTS BELOW REMAIN THE EXACT LAST-COMMITTED b96c2c12 CHECKPOINT RECEIPTS. THE DIAGNOSTIC RUNTIME TRANCHE HAS SEPARATE AUTHORITATIVE SAME-PROCESS RECEIPTS. THE PRESERVED HISTORICAL HARNESS REPLAY COLLECTED, STARTED, AND FINISHED 437 NODES: 431 HAD EXACT ALL-PHASE PASS AND THE SIX EXACT NAMED FIT/DISPOSITION NODES SETUP-SKIPPED AS RUNTIME-LOCK MISMATCH EVIDENCE, NOT PASS; IT EMITTED 1305 ORDINARY REPORTS AND 163 PASSING SUBTESTS, RECORDED ZERO COLLECTION OR INTERNAL ERRORS OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, EXITED PYTEST 0, AND BOUND NODE-ID SHA-256 85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8. WORKER COLLECTED, STARTED, FINISHED, AND PASSED 594/594 NODES, EMITTED 1782 ORDINARY REPORTS AND ZERO SUBTESTS, WARNINGS, ERRORS, OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, EXITED PYTEST 0, AND BOUND NODE-ID SHA-256 B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B. THE ADDITIVE AUDIT-ONLY PROMPT-CONTEXT PROVENANCE AND EXACT-480-ROW INVENTORY FOCUSED SURFACES PASS 30/30 AND 22/22, WITH EXACT COMBINED 52-NODE DIGEST DDEC58BA0B12A8699BDCB7BEB43B6D8656AD96D9E95347B37FAEA22ED3A572C0. THE CURRENT AUTHORITATIVE HARNESS REPLAY COLLECTED, STARTED, AND FINISHED 489 NODES WITH NODE-ID SHA-256 A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225: 483 HAD EXACT ALL-PHASE PASS; THE SIX UNCHANGED FIT/DISPOSITION NODES SETUP-SKIPPED AS RUNTIME-LOCK MISMATCH EVIDENCE, NOT PASS; IT EMITTED 1461 ORDINARY REPORTS AND 163 PASSING SUBTESTS, RECORDED ZERO WARNINGS, COLLECTION OR INTERNAL ERRORS, OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, AND EXITED PYTEST 0. POSITIVE EXACT NUMERICAL EVIDENCE REMAINS THE SEPARATE PYTHON-3.12 LOCKED FIT 10/10 AND ELIGIBLE DISPOSITION 3/3 RECEIPTS. ALL OF THESE LOCAL RECEIPTS REMAIN STRUCTURE_ONLY / NON_AUTHORITY",
+    "full_suite_receipt_boundary": "THE 576-WORKER AND 306-HARNESS RECEIPTS BELOW REMAIN THE EXACT LAST-COMMITTED b96c2c12 CHECKPOINT RECEIPTS. THE DIAGNOSTIC RUNTIME TRANCHE HAS SEPARATE AUTHORITATIVE SAME-PROCESS RECEIPTS. THE PRESERVED HISTORICAL HARNESS REPLAY COLLECTED, STARTED, AND FINISHED 437 NODES: 431 HAD EXACT ALL-PHASE PASS AND THE SIX EXACT NAMED FIT/DISPOSITION NODES SETUP-SKIPPED AS RUNTIME-LOCK MISMATCH EVIDENCE, NOT PASS; IT EMITTED 1305 ORDINARY REPORTS AND 163 PASSING SUBTESTS, RECORDED ZERO COLLECTION OR INTERNAL ERRORS OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, EXITED PYTEST 0, AND BOUND NODE-ID SHA-256 85AACF5BD7909979F4EC8DB7680B279D0795D32525973BC00BE16EC0157CF5E8. WORKER COLLECTED, STARTED, FINISHED, AND PASSED 594/594 NODES, EMITTED 1782 ORDINARY REPORTS AND ZERO SUBTESTS, WARNINGS, ERRORS, OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, EXITED PYTEST 0, AND BOUND NODE-ID SHA-256 B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B. THE ADDITIVE AUDIT-ONLY PROMPT-CONTEXT PROVENANCE AND EXACT-480-ROW INVENTORY FOCUSED SURFACES PASS 30/30 AND 22/22, WITH EXACT COMBINED 52-NODE DIGEST DDEC58BA0B12A8699BDCB7BEB43B6D8656AD96D9E95347B37FAEA22ED3A572C0. THE 489-NODE PROMPT-CONTEXT CHECKPOINT IS PRESERVED HISTORICALLY AT NODE-ID SHA-256 A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225: 483 HAD EXACT ALL-PHASE PASS; THE SIX UNCHANGED FIT/DISPOSITION NODES SETUP-SKIPPED AS RUNTIME-LOCK MISMATCH EVIDENCE, NOT PASS; IT EMITTED 1461 ORDINARY REPORTS AND 163 PASSING SUBTESTS, RECORDED ZERO WARNINGS, COLLECTION OR INTERNAL ERRORS, OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, AND EXITED PYTEST 0. THE CURRENT AUTHORITATIVE LOCKED SAME-PROCESS HARNESS REPLAY COLLECTED, STARTED, AND FINISHED 508 NODES WITH NODE-ID SHA-256 8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2: 502 HAD EXACT ALL-PHASE PASS; THE SAME SIX EXACT NODES SETUP-SKIPPED AS RUNTIME-LOCK MISMATCH EVIDENCE, NOT PASS; IT EMITTED 1518 ORDINARY REPORTS AND 163 PASSING SUBTESTS, RECORDED ZERO WARNINGS, COLLECTION OR INTERNAL ERRORS, OR DESELECTIONS, LEFT THE ISOLATED PYCACHE EMPTY, AND EXITED PYTEST 0. POSITIVE EXACT NUMERICAL EVIDENCE REMAINS THE SEPARATE PYTHON-3.12 LOCKED FIT 10/10 AND ELIGIBLE DISPOSITION 3/3 RECEIPTS. ALL OF THESE LOCAL RECEIPTS REMAIN STRUCTURE_ONLY / NON_AUTHORITY",
     "worker_authoritative": {
       "status": "PASS",
       "passed": 576,
@@ -133,8 +133,8 @@
         "pytest_exit_status": 0,
         "python_ordinal_node_id_sha256": "B822D8EFC57C45712FD960BC14E2FB271FDD72C91CF29D665EBAB7ED27AE0D9B"
       },
-      "authoritative_current_harness_receipt": {
-        "status": "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+      "historical_prompt_context_harness_receipt": {
+        "status": "PRESERVED HISTORICAL AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY",
         "collected": 489,
         "started": 489,
         "finished": 489,
@@ -149,6 +149,36 @@
         "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
         "pytest_exit_status": 0,
         "python_ordinal_node_id_sha256": "A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225",
+        "exact_setup_skipped_node_ids": [
+          "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_exact_locked_runtime_two_independent_fits",
+          "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_arbitrary_coefficient_rejected_by_full_refit_binding",
+          "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_altered_candidate_set_or_prediction_is_rejected_without_refit",
+          "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_exact_locked_fit_freezes_only_dual_layer18_layer0_nonreporting",
+          "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_exact_locked_projection_guards_cover_analysis_bundle_and_terminal",
+          "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_clean_phase_cannot_take_early_rejection_or_null_bundle_path"
+        ]
+      },
+      "authoritative_current_harness_receipt": {
+        "status": "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+        "collected": 508,
+        "started": 508,
+        "finished": 508,
+        "all_phase_passed": 502,
+        "setup_skipped": 6,
+        "ordinary_reports": 1518,
+        "passed_subtests": 163,
+        "warning_count": 0,
+        "collection_errors": 0,
+        "internal_errors": 0,
+        "deselections": 0,
+        "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+        "pytest_exit_status": 0,
+        "python_ordinal_node_id_sha256": "8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2",
+        "ordinary_outcomes_sha256": "4A9D6F31D341F51BBC7D339750BDCB69B444827CF58B08439BF05BC3A86DD766",
+        "subtest_outcomes_sha256": "6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109",
+        "locked_import_origins_sha256": "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A",
+        "pre_test_loaded_code_sha256": "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98",
+        "loaded_code_sha256": "61B3498CA938329FAD5BA181199F658DB5BF53712D890D3A9095711074E91846",
         "exact_setup_skipped_node_ids": [
           "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_exact_locked_runtime_two_independent_fits",
           "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_arbitrary_coefficient_rejected_by_full_refit_binding",
@@ -265,20 +295,61 @@
         "elapsed_seconds": "33.77",
         "python_ordinal_node_id_sha256": "C573CE9C70496C9FE0D1E7A3516E07F8454CF4F7085A26BDC5364342CA7A085E",
         "status": "AUTHORITATIVE FOCUSED PASS / STRUCTURE_ONLY / NON_AUTHORITY"
+      },
+      "stagec_prerequisite_intake": {
+        "source_sha256": "AD46AA964240C98D5C12070872C60B26E2310B35A88DD6FA50F68C10C62F09B3",
+        "test_source_sha256": "56A9BCE442405EE57BFF95A735F5D80724A0F72B06136A8B4AEEC36A41F336A3",
+        "passed": 19,
+        "total": 19,
+        "python_ordinal_node_id_sha256": "3785ADB97900ABAB40242DFD6DF1D0665B9996BAE94EC2697672A8506DCBE863",
+        "schema_media_pairs": 18,
+        "public_exports": 62,
+        "status": "OWNER_ASSERTED_CANDIDATE_STRUCTURAL_REPLAY_ONLY / NON_AUTHORITY",
+        "authoritative_full_harness_replay": {
+          "status": "AUTHORITATIVE SAME-PROCESS PASS WITH SIX EXACT SETUP SKIPS / SKIPS ARE MISMATCH EVIDENCE, NOT PASS / STRUCTURE_ONLY / NON_AUTHORITY",
+          "collected": 508,
+          "started": 508,
+          "finished": 508,
+          "all_phase_passed": 502,
+          "setup_skipped": 6,
+          "ordinary_reports": 1518,
+          "passed_subtests": 163,
+          "warning_count": 0,
+          "collection_errors": 0,
+          "internal_errors": 0,
+          "deselections": 0,
+          "pycache_status": "EMPTY AFTER AUTHORITATIVE REPLAY",
+          "pytest_exit_status": 0,
+          "python_ordinal_node_id_sha256": "8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2",
+          "ordinary_outcomes_sha256": "4A9D6F31D341F51BBC7D339750BDCB69B444827CF58B08439BF05BC3A86DD766",
+          "subtest_outcomes_sha256": "6C2AFB12D8F1DBC529C9493967B1CBB06AE98228B318DA724D093D3C84721109",
+          "locked_import_origins_sha256": "3E1424E6BDBA7B6AE417189EF951E7502D108626EB5482277A627C9D6A29887A",
+          "pre_test_loaded_code_sha256": "0CBCB82DCF24426A868CFCA8DBC334661D1504A23C882DD342D5EC6767B30D98",
+          "loaded_code_sha256": "61B3498CA938329FAD5BA181199F658DB5BF53712D890D3A9095711074E91846",
+          "exact_setup_skipped_node_ids": [
+            "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_exact_locked_runtime_two_independent_fits",
+            "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_arbitrary_coefficient_rejected_by_full_refit_binding",
+            "tests/cas_harness_v2/test_diagnostic_calibration_fit.py::test_altered_candidate_set_or_prediction_is_rejected_without_refit",
+            "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_exact_locked_fit_freezes_only_dual_layer18_layer0_nonreporting",
+            "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_exact_locked_projection_guards_cover_analysis_bundle_and_terminal",
+            "tests/cas_harness_v2/test_diagnostic_calibration_disposition.py::test_clean_phase_cannot_take_early_rejection_or_null_bundle_path"
+          ]
+        }
       }
     },
     "packaged_kernel": {
-      "byte_mirrored_files": 19,
-      "unique_exports": 343,
-      "packaging_provenance_sha256": "66D567C3C4E31C2FE1925AF0F9E0CAD89DAF91A87C59591C469C7017B13087B2",
-      "canonical_and_mirror_init_sha256": "332D59841596D6AAEC091FDD63924E8F25DCB0E2B4F52BB6D27947340BA101B5",
-      "packaging_allowlist_source_sha256": "B13A5A5D7CF2656C55BE313FA2A20F252935744A23334B9C6E2ECA48CEC9BBCE",
+      "byte_mirrored_files": 20,
+      "unique_exports": 405,
+      "packaging_provenance_sha256": "BC1DB23BD6132CB7AF9011292B7191038187D1BE7E40FC6684C5F66C8F0B9C37",
+      "canonical_and_mirror_init_sha256": "9DBC74D91E2787F436B1DBC192DE6BF876414A9FB3B7B2EB79B5C45E20AD7CF9",
+      "packaging_allowlist_source_sha256": "FDD2182E22BDA65C941974B4D358650DFE326BBDD806D11B373B9E273A2B473C",
       "focused_mirror_tests_passed": 13
     }
   },
   "non_authority": [
     "This carrier is not cas_harness_v2.preregistration.v1.",
     "This design artifact does not activate or consume any worker authorization.",
+    "An owner assertion and structurally replayed candidate set do not authenticate an external DRC run, corpus freeze, storage provider, trusted clock, or runtime authorization.",
     "No prompt, model, Docker, provider, or RunPod execution is authorized.",
     "No detector, threshold, result, replication, or scientific conclusion exists.",
     "No steering, ablation, suppression, blocking, rewriting, or detect-then-intervene policy is in scope."
@@ -526,6 +597,39 @@
         "dependency_projection": "COUNT PLUS ORDERED DIGEST / 4321-DEPENDENCY REGRESSION COVERED WITHOUT EMBEDDING THE FULL REF LIST",
         "prospective_binding": "THE AGGREGATE REF MUST ENTER DIAGNOSTIC PREREGISTRATION design.input_artifacts AND FUTURE DRC AND RUNTIME ADMISSION MUST REQUIRE IT",
         "boundary": "CORPUS FREEZE NOT ESTABLISHED / SOURCE BYTES REMAIN EXTERNAL / NO EXECUTION, PACKET, CLAIM, LICENSE, OR PRODUCT AUTHORITY"
+      },
+      "stagec_prerequisite_intake": {
+        "source_sha256": "AD46AA964240C98D5C12070872C60B26E2310B35A88DD6FA50F68C10C62F09B3",
+        "test_source_sha256": "56A9BCE442405EE57BFF95A735F5D80724A0F72B06136A8B4AEEC36A41F336A3",
+        "schema_media_pairs": 18,
+        "public_exports": 62,
+        "primary_carrier_schemas": [
+          "cas_harness_v2.stagec_detector_drc_receipt.v1",
+          "cas_harness_v2.stagec_frozen_corpus_bundle.v1",
+          "cas_harness_v2.stagec_trusted_storage_receipt.v1",
+          "cas_harness_v2.stagec_execution_authorization_candidate.v1",
+          "cas_harness_v2.stagec_prerequisite_owner_intake.v1",
+          "cas_harness_v2.stagec_prerequisite_admission.v1"
+        ],
+        "dependency_roles": [
+          "drc_profile",
+          "detector_ruleset",
+          "known_fault_fixture",
+          "corpus_rows",
+          "adjudication",
+          "split_assignment",
+          "surface_bundle",
+          "object_lock_receipt",
+          "readback_receipt",
+          "trusted_time_receipt",
+          "verifier_identity",
+          "authorization_instrument"
+        ],
+        "target_binding": "EXACT C-CAL SPLIT AND 480-ROW PROMPT-CONTEXT INVENTORY PLUS MODEL, CAPTURE-PROFILE, CAPTURE-REQUEST, AND PROMPT-DEPENDENCY IDENTITIES",
+        "owner_assertion": "OWNER_ASSERTS_PRESENT / INTAKE ACTION NOT_PERFORMED_BY_INTAKE",
+        "admission_decision": "ADMITTED_FOR_PROSPECTIVE_PREREGISTRATION_ONLY",
+        "base_binding_rule": "A FUTURE IMMUTABLE DIAGNOSTIC BASE MUST CONTAIN THE EXACT PROMPT INVENTORY, FOUR CANDIDATES, ALL TWELVE CANDIDATE DEPENDENCIES, OWNER INTAKE, AND ADMISSION; AMENDMENT-ONLY BINDING IS FORBIDDEN",
+        "boundary": "STRUCTURAL REPLAY ONLY / SERIALIZED CANDIDATES ARE NOT AN EXTERNAL TRUST ROOT / NO ACTUAL DRC RUN, CORPUS FREEZE, PROVIDER AUTHENTICATION, WORM AUTHENTICITY, NONCE CONSUMPTION, RUNTIME INTEGRATION, EXECUTION, PACKET, CLAIM, LICENSE, DISCLOSURE, OR PRODUCT AUTHORITY"
       }
     },
     "future_runnable_requirements_status": "PREFILL-ONLY / ZERO GENERATION / ZERO INTERVENTION REQUIREMENTS REMAIN PROSPECTIVE AND ARE NOT PROGRAM-LEVEL EXECUTION ATTESTATIONS FROM THE STRUCTURE_ONLY CANDIDATE",
@@ -1077,13 +1181,18 @@
     },
     {
       "obligation_id": "stagec-obligation-prompt-context-provenance",
-      "status": "STRUCTURE_ONLY PROVENANCE AND EXACT-480 INVENTORY CANDIDATES COMPLETE / PREREGISTRATION, DRC, RUNTIME, AND CORPUS FREEZE BINDING OPEN",
-      "requirement": "Retain exact external UTF-8 source bytes and the SOURCE plus ordered UTF8_CONCAT DAG for every prompt. Prospectively place the exact aggregate prompt-context inventory ref in diagnostic preregistration design.input_artifacts; the future deterministic DRC and admitted runtime must both require and replay it before any activation. The current companion artifacts are audit-only, change no request, Study, authorization, or worker schema, and do not establish corpus freeze, execution, a detector, an Evidence Packet, a claim, a license, or product authority."
+      "status": "STRUCTURE_ONLY PROVENANCE, EXACT-480 INVENTORY, AND PROSPECTIVE BASE-BINDING ENFORCER COMPLETE / ACTUAL BASE, DRC, RUNTIME, AND CORPUS FREEZE OPEN",
+      "requirement": "Retain exact external UTF-8 source bytes and the SOURCE plus ordered UTF8_CONCAT DAG for every prompt. The additive prerequisite helper now requires the exact aggregate prompt-context inventory ref in a future immutable diagnostic base together with the admitted candidate set. No actual base preregistration or runtime consumes that helper yet; the deterministic DRC and admitted runtime must still require and replay it before activation. These audit-only companions do not establish corpus freeze, execution, a detector, an Evidence Packet, a claim, a license, or product authority."
+    },
+    {
+      "obligation_id": "stagec-obligation-prerequisite-intake",
+      "status": "STRUCTURE_ONLY EXACT INTAKE AND PROSPECTIVE ADMISSION CONTRACT COMPLETE / REAL EXTERNAL INTAKE, PROVIDER TRUST, AND RUNTIME ENFORCEMENT OPEN",
+      "requirement": "Use the six typed candidate/intake/admission carriers and twelve typed dependency bodies to ingest, canonicalize, hash, full-replay, and role-check the owner-asserted detector DRC, 320-group/960-row corpus bundle, storage receipt set, and Stage C authorization candidate. Derive the prospective subject before authorization, bind all four candidates in the owner intake, and permit only ADMITTED_FOR_PROSPECTIVE_PREREGISTRATION_ONLY. Then create a new immutable diagnostic base containing the exact prompt inventory, candidate/dependency, intake, and admission refs before its execution window. The current 19/19 receipt uses structural fixtures; no external/provider authenticity, actual DRC run, actual corpus freeze, WORM/readback/trusted-time truth, authoritative runtime nonce issuance or consumption, or execution is established."
     },
     {
       "obligation_id": "stagec-obligation-corpus",
-      "status": "OPEN / BLOCKS CALIBRATION",
-      "requirement": "Author, double-adjudicate, secret-scan, surface-screen, split, and exact-hash all 960 prompt rows."
+      "status": "OWNER ASSERTS PRESENT / STRUCTURAL INTAKE CONTRACT COMPLETE / ACTUAL 960-ROW EXTERNAL FREEZE NOT ESTABLISHED / BLOCKS CALIBRATION",
+      "requirement": "Ingest and freshly replay the owner-supplied exact 320-group/960-row bundle, including adjudication, secret/surface screening, disjoint 160/80/80 group assignment, ordered content identities, and independently authenticated storage retention. Do not substitute the 672-row TKS corpus or synthetic test fixtures."
     },
     {
       "obligation_id": "stagec-obligation-power",
@@ -1108,7 +1217,7 @@
     {
       "obligation_id": "stagec-obligation-runtime-binding",
       "status": "OPEN / BLOCKS ACTIVATION",
-      "requirement": "Bind a final clean executable commit, complete source manifest, tests, exact runtime image, local hardware profile, and archive registry before activation; after a valid activation receipt, execute the one-forward runtime canary as the first counted diagnostic Study action with zero corpus or outcome access."
+      "requirement": "Bind a final clean executable commit, complete source manifest, tests, exact runtime image, local hardware profile, archive registry, and the exact prerequisite admission to the controller/worker path before activation. Authenticate the actual authorization issuer and nonce state and consume it once at runtime; a serialized authorization candidate or owner assertion is insufficient. After a valid activation receipt, execute the one-forward runtime canary as the first counted diagnostic Study action with zero corpus or outcome access."
     },
     {
       "obligation_id": "stagec-obligation-verifier",
@@ -1159,8 +1268,13 @@
     },
     {
       "blocker_id": "prompt-context-companions-are-not-yet-preregistered-or-runtime-required",
-      "source": "src/cas_harness_v2/diagnostic_prompt_context_provenance.py and diagnostic_prompt_context_inventory.py",
-      "fact": "The audit-only companions preserve exact external UTF-8 source bytes, SOURCE plus ordered UTF8_CONCAT lineage, and exact split-order 480-row coverage without changing the single-user-message rendering path. Corpus freeze remains NOT_ESTABLISHED. No current diagnostic preregistration design.input_artifacts, deterministic DRC, HTTP/container controller, or worker runtime requires the aggregate ref yet; those fail-closed bindings remain OPEN before activation."
+      "source": "src/cas_harness_v2/diagnostic_prompt_context_provenance.py, diagnostic_prompt_context_inventory.py, and diagnostic_stagec_prerequisite_admission.py",
+      "fact": "The audit-only companions preserve exact external UTF-8 source bytes, SOURCE plus ordered UTF8_CONCAT lineage, and exact split-order 480-row coverage without changing the single-user-message rendering path. The additive prerequisite helper now rejects a future diagnostic base that omits the exact aggregate ref and admitted candidate/dependency set. No actual diagnostic base, deterministic DRC execution, HTTP/container controller, or worker runtime consumes this helper yet. Corpus freeze remains NOT_ESTABLISHED and those runtime bindings remain OPEN before activation."
+    },
+    {
+      "blocker_id": "stagec-owner-asserted-candidates-are-not-external-trust-or-runtime-authority",
+      "source": "src/cas_harness_v2/diagnostic_stagec_prerequisite_admission.py",
+      "fact": "The owner assertion records four candidate roles as OWNER_ASSERTS_PRESENT, and the additive contract can canonicalize and full-replay exact Stage C-shaped candidate/dependency bytes before admitting them for prospective preregistration only. Its 19/19 tests use structural fixtures. Serialized candidate claims cannot authenticate a DRC execution, prove that the real 960-row corpus was externally frozen, authenticate Object Lock/readback/trusted-time provider facts, issue or consume a runtime nonce, prove out-of-band prevention, or execute Stage C. External/provider trust and runtime enforcement remain NOT_ESTABLISHED / NOT_PERFORMED."
     },
     {
       "blocker_id": "mandatory-heldout-role-does-not-establish-independence",
@@ -1189,10 +1303,18 @@
     },
     "carrier_limit_bytes": 2000000,
     "large_artifact_policy": "EXTERNAL CONTENT-ADDRESSED FILE-BACKED REGISTRY / NO LARGE BLOBS UNDER THE GIT-BOUND GATE 5 PACKAGE",
+    "prerequisite_intake_binding_rule": "OWNER ASSERTS FOUR CANDIDATES PRESENT; AN ACTUAL FUTURE C-CAL BASE MUST HASH/LENGTH/MEDIA BIND THE EXACT PROMPT INVENTORY, DRC RECEIPT PLUS THREE DEPENDENCIES, CORPUS BUNDLE PLUS FOUR DEPENDENCIES, STORAGE RECEIPT PLUS FOUR DEPENDENCIES, AUTHORIZATION CANDIDATE PLUS ITS INSTRUMENT, OWNER INTAKE, AND PROSPECTIVE-ONLY ADMISSION. STRUCTURAL TEST FIXTURES AND SERIALIZED CLAIMS DO NOT ESTABLISH EXTERNAL TRUST OR RUNTIME AUTHORITY.",
+    "current_prerequisite_instance_status": "CONTRACT IMPLEMENTED AND FOCUSED 19/19 PASS / REAL EXTERNAL 4-OF-4 INTAKE NOT PERFORMED / NO ACTUAL BASE PREREGISTRATION / NO RUNTIME CONSUMPTION",
     "base_preregistration_artifact_ids": [
       "stagec-claim-ledger-001",
       "stagec-corpus-manifest-001",
       "stagec-prompt-context-inventory-001",
+      "stagec-detector-drc-receipt-001",
+      "stagec-frozen-corpus-bundle-001",
+      "stagec-trusted-storage-receipt-001",
+      "stagec-execution-authorization-candidate-001",
+      "stagec-prerequisite-owner-intake-001",
+      "stagec-prerequisite-admission-001",
       "stagec-label-adjudication-001",
       "stagec-surface-readiness-001",
       "stagec-confirmatory-split-001",
@@ -1318,7 +1440,7 @@
     "methodological_negative_prior": "Mandatory character-level surface baseline and surface-indistinguishable corpus design."
   },
   "execution_activation_precondition": {
-    "stagec-calibration": "FORBIDDEN UNTIL THE C-CAL BLOCKING OBLIGATIONS ARE CLOSED, THE CORPUS AND SURFACE BUNDLE ARE FROZEN, THE COMPLETED STRUCTURE_ONLY EXECUTION-V2, SAME-HOST LIFECYCLE, 480-ROW COORDINATOR, WORKER-LOCAL ARCHIVE ADMISSION, LOCKED FIT, AND FREEZE-OR-REJECT CANDIDATES ARE WIRED THROUGH AN AUTHORIZED HTTP/CONTAINER RUNTIME, TRUSTED EXECUTION/TIME AND INDEPENDENT WORM/EXTERNAL ANCHORING PLUS OUT-OF-BAND PREVENTION ARE ESTABLISHED, AN AUTHORITATIVE FULL-SUITE INTEGRATION RECEIPT IS GREEN, ITS FINAL EXECUTION IDENTITY IS ADDED PROSPECTIVELY, AND A SEPARATE C-CAL ACTIVATION RECEIPT IS VALID.",
+    "stagec-calibration": "FORBIDDEN UNTIL THE C-CAL BLOCKING OBLIGATIONS ARE CLOSED, THE OWNER-ASSERTED FOUR CANDIDATES AND THEIR TWELVE DEPENDENCIES ARE ACTUALLY INGESTED AND EXTERNALLY AUTHENTICATED, THE EXACT PROSPECTIVE-ONLY ADMISSION IS BOUND IN A NEW IMMUTABLE C-CAL BASE, THE CORPUS AND SURFACE BUNDLE ARE REALLY FROZEN, THE COMPLETED STRUCTURE_ONLY EXECUTION-V2, SAME-HOST LIFECYCLE, 480-ROW COORDINATOR, WORKER-LOCAL ARCHIVE ADMISSION, LOCKED FIT, AND FREEZE-OR-REJECT CANDIDATES ARE WIRED THROUGH AN AUTHORIZED HTTP/CONTAINER RUNTIME, TRUSTED EXECUTION/TIME AND INDEPENDENT WORM/EXTERNAL ANCHORING PLUS OUT-OF-BAND PREVENTION ARE ESTABLISHED, AN AUTHORITATIVE 508-NODE OR LATER FULL-SUITE INTEGRATION RECEIPT IS GREEN, ITS FINAL EXECUTION IDENTITY IS ADDED PROSPECTIVELY, AND A SEPARATE C-CAL ACTIVATION RECEIPT IS VALID.",
     "stagec-evaluation": "FORBIDDEN UNTIL C-CAL IS TERMINAL AND RECONCILED, ITS DIAGNOSTIC NONREPORTING DISPOSITION AND ELIGIBLE FROZEN DETECTOR BUNDLE ARE RETAINED, A NEW EXACT C-EVAL PREREGISTRATION BINDS THOSE ARTIFACTS, ITS FINAL EXECUTION IDENTITY IS ADDED PROSPECTIVELY, AND A SEPARATE C-EVAL ACTIVATION RECEIPT IS VALID."
   }
 }

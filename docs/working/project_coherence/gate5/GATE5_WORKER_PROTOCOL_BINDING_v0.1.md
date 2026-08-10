@@ -35,13 +35,14 @@ Declared origins are labels only and never coerce system, developer, retrieval,
 or tool authority into the rendered channel.
 
 The companion sources passed 30/30 and 22/22 focused tests (52/52 union), and
-the union with the diagnostic Study passed 98/98 in 33.77 seconds. Runtime
-admission is still absent. Before any activation, the aggregate ref must enter
-diagnostic preregistration `design.input_artifacts`; the future deterministic
-DRC and worker/controller runtime must reject its absence or replay failure.
+the union with the diagnostic Study passed 98/98 in 33.77 seconds. The new
+prerequisite helper requires the aggregate ref in any future immutable
+diagnostic base `design.input_artifacts`; actual runtime admission is still
+absent, and the worker/controller path does not call this helper yet.
 Corpus freeze remains `NOT_ESTABLISHED`; exact source bytes remain external.
 The updated Harness and adapter surfaces now have authoritative same-process
-receipts. Harness collected, started, and finished 489 nodes: 483 had all
+receipts. The prior prompt-context Harness checkpoint is preserved historically
+at 489 collected/started/finished nodes: 483 had all
 phases pass, six unchanged runtime-lock nodes setup-skipped as mismatch evidence
 rather than PASS, 1,461 ordinary reports and 163 passing subtests were emitted,
 zero warnings/errors/deselections occurred, the isolated pycache remained empty,
@@ -50,6 +51,46 @@ pytest exited 0, and the digest is
 The adapter passed 99/99 with 297 ordinary reports, zero subtests, one warning,
 zero errors or deselections, empty isolated pycache, pytest exit 0, and digest
 `DB5F9FD886A1714D4E9FE2CE4A2F2336DA3B0A414D5115D1B86B5A885EECDC39`.
+
+## Stage C prerequisite admission boundary
+
+The owner asserts that a detector DRC, frozen corpus, trusted storage, and
+Stage C execution authorization are supplied candidates. The isolated kernel
+now gives those four roles a strict structural intake: six primary carriers,
+12 typed dependency carriers, 18 exact schema/media-type pairs, and 62 public
+exports. It full-replays their canonical bytes and exact artifact references,
+binds them to the C-Cal split and 480-row prompt-context target, derives one
+prospective subject, and permits only
+`ADMITTED_FOR_PROSPECTIVE_PREREGISTRATION_ONLY`.
+
+This admission is upstream of worker execution. A
+`StageCExecutionAuthorizationArtifact` is a serialized prospective candidate;
+it is not the worker-protocol `WorkerAuthorizationArtifact`, a Fleet callback
+authentication receipt, provider attestation, or proof of one-use runtime
+consumption. The base-binding helper can reject a future diagnostic base that
+omits the exact prompt inventory, four candidates, 12 dependencies, owner
+intake, or admission. It is not yet called by the HTTP router, controller,
+worker, diagnostic coordinator, lifecycle service, or archive admission path.
+
+Focused structural verification is 19/19 PASS with source SHA-256
+`AD46AA964240C98D5C12070872C60B26E2310B35A88DD6FA50F68C10C62F09B3`,
+test SHA-256
+`56A9BCE442405EE57BFF95A735F5D80724A0F72B06136A8B4AEEC36A41F336A3`,
+and node-ID SHA-256
+`3785ADB97900ABAB40242DFD6DF1D0665B9996BAE94EC2697672A8506DCBE863`.
+The current authoritative locked same-process Harness replay collected,
+started, and finished 508 nodes. Exactly 502 had exact all-phase PASS; the same
+six exact nodes setup-skipped as runtime-lock mismatch evidence, not PASS. It
+emitted 1,518 ordinary reports and 163 passing subtests, recorded zero warnings,
+collection or internal errors, or deselections, left the isolated pycache
+empty, exited pytest 0, and bound node-ID SHA-256
+`8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
+
+The fixtures do not establish an actual DRC run, the real 960-row freeze,
+Object Lock/readback/trusted-time authenticity, external/provider trust,
+authoritative nonce issuance or consumption, or execution. Gate 5 remains
+`OPEN / KEEP_OPEN`; Stage C remains `DESIGN_ONLY / UNAUTHORIZED / NOT_STARTED`;
+`NOT LICENSED / HELD / NOT FROZEN` is unchanged.
 
 ## 1. Purpose and source boundary
 
@@ -72,6 +113,7 @@ The current source surfaces are:
 | Diagnostic per-attempt lifecycle | `src/cas_harness_v2/diagnostic_lifecycle.py` | one-attempt memory/same-host-SQLite state, all five terminal branches, exact reconciliation |
 | Diagnostic 480-row phase coordinator | `src/cas_harness_v2/diagnostic_phase_coordinator.py` | exact roster/store binding, activation admission, rejected/clean reconciliation, aggregate access |
 | Diagnostic calibration fit and terminal disposition | `src/cas_harness_v2/diagnostic_calibration_fit.py`, `src/cas_harness_v2/diagnostic_calibration_disposition.py` | exact locked target/wrong-layer fit and one same-file freeze-or-reject nonreporting slot |
+| Stage C prerequisite intake/admission | `src/cas_harness_v2/diagnostic_stagec_prerequisite_admission.py` | exact four-role structural replay, owner intake, prospective-only admission, and immutable diagnostic-base binding; not external trust or runtime authority |
 | Worker-local diagnostic archive admission | `noetic-compass-scaffold/noetic-compass/live-trace-worker/app/runtime/stagec_diagnostic_archive_admission.py` | fresh seven-member archive replay and small diagnostic-v2 admission document; not HTTP/container wired |
 | Tenant/audit/fleet/worker callback identity | `noetic-compass-scaffold/noetic-compass/api/services/fleet_service_auth.py` | `FleetServicePrincipal`, `FleetServiceBoundIntakeReceipt`, `FleetServiceAuthStore.authenticate_with_bound_intake_receipt`, `verify_authenticated_callback` |
 | Fleet lease and receipt state | `noetic-compass-scaffold/noetic-compass/api/services/cas_harness_fleet_executor.py` | `FleetJobRecord`, `ActiveFleetJobLease`, `validate_active_fleet_job_lease`, `lease_next_job`, `submit_job_receipt` |
@@ -537,14 +579,22 @@ isolated pycache empty, exited pytest 0, and bound exact node-ID digest
 The separate Python-3.12 exact-lock receipts remain the positive fit 10/10 and
 eligible-disposition 3/3 evidence.
 
-That 437-node receipt remains preserved historical evidence. The current
-authoritative same-process Harness replay collected, started, and finished 489
-nodes; 483 had all phases pass and the same six exact fit/disposition nodes
+That 437-node receipt remains preserved historical evidence. The later
+489-node prompt-context checkpoint is also preserved historically; 483 had all
+phases pass and the same six exact fit/disposition nodes
 setup-skipped as runtime-lock mismatch evidence rather than PASS. It emitted
 1,461 ordinary reports and 163 passing subtests, recorded zero warnings,
 collection or internal errors, or deselections, left the isolated pycache
 empty, exited pytest 0, and bound exact node-ID digest
 `A24A129F295810836DAE12A3345670A41E3500FB2DFCFBEC27DAC6CDC65BB225`.
+
+The current authoritative locked same-process Harness replay collected,
+started, and finished 508 nodes. Exactly 502 had exact all-phase PASS; the same
+six exact fit/disposition nodes setup-skipped as runtime-lock mismatch evidence,
+not PASS. It emitted 1,518 ordinary reports and 163 passing subtests, recorded
+zero warnings, collection or internal errors, or deselections, left the
+isolated pycache empty, exited pytest 0, and bound exact node-ID digest
+`8CDBA8F539912573D04723F39AD819C413F8AE5B69006BDC43E653F6AF6CCAE2`.
 
 The authoritative same-process worker receipt collected, started, finished,
 and passed 594/594 nodes, emitted 1,782 ordinary reports and zero subtests,
